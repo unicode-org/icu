@@ -323,8 +323,6 @@ copying that version number into the $ICU_SRC/.bazeliskrc config file.
 
 TODO: investigate UCA-shifted conformance test failures
 
-TODO
-
 * update Java data files
 - refresh just the UCD/UCA-related/derived files, just to be safe
 - see (ICU4C)/source/data/icu4j-readme.txt
@@ -337,7 +335,7 @@ TODO
     make[1]: Entering directory '/usr/local/google/home/mscherer/icu/uni/dbg/icu4c/data'
     mkdir -p ./out/icu4j/com/ibm/icu/impl/data/icudata
     mkdir -p ./out/icu4j/tzdata/com/ibm/icu/impl/data/icudata
-    LD_LIBRARY_PATH=../lib:../stubdata:../tools/ctestfw:$LD_LIBRARY_PATH  ../bin/icupkg ./out/tmp/icudt78l.dat ./out/icu4j/icudt78b.dat -s ./out/build/icudt78l -x '*' -tb -d ./out/icu4j/com/ibm/icu/impl/data/icudata
+    LD_LIBRARY_PATH=../lib:../stubdata:../tools/ctestfw:$LD_LIBRARY_PATH  ../bin/icupkg ./out/tmp/icudt79l.dat ./out/icu4j/icudt79b.dat -s ./out/build/icudt79l -x '*' -tb -d ./out/icu4j/com/ibm/icu/impl/data/icudata
     mv ./out/icu4j/"com/ibm/icu/impl/data/icudata/zoneinfo64.res" ./out/icu4j/"com/ibm/icu/impl/data/icudata/metaZones.res" ./out/icu4j/"com/ibm/icu/impl/data/icudata/timezoneTypes.res" ./out/icu4j/"com/ibm/icu/impl/data/icudata/windowsZones.res" "./out/icu4j/tzdata/com/ibm/icu/impl/data/icudata"
     jar cf ./out/icu4j/icudata.jar -C ./out/icu4j com/ibm/icu/impl/data/icudata/
     mkdir -p /tmp/icu4j/main/shared/data
@@ -368,6 +366,8 @@ TODO
     cd ../../test/testdata
     cp -v BidiCharacterTest.txt BidiTest.txt IdnaTestV2.txt $ICU_SRC/icu4j/main/core/src/test/resources/com/ibm/icu/dev/data/unicode
     cp -v $UNICODE_DATA/ucd/CompositionExclusions.txt $ICU_SRC/icu4j/main/core/src/test/resources/com/ibm/icu/dev/data/unicode
+
+TODO
 
 * run & fix ICU4J tests
 
