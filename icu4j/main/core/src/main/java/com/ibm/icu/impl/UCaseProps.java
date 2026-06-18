@@ -360,8 +360,9 @@ public final class UCaseProps {
 
             /* add each code point in the closure string */
             int limit = closureOffset + closureLength;
-            for (int index = closureOffset; index < limit; index += UTF16.getCharCount(c)) {
+            for (int index = closureOffset; index < limit; ) {
                 int mapping = exceptions.codePointAt(index);
+                index += Character.charCount(mapping);
                 set.add(mapping);
             }
         }
@@ -457,8 +458,9 @@ public final class UCaseProps {
 
             // Add each code point in the closure string whose scf maps back to c.
             int limit = closureOffset + closureLength;
-            for (int index = closureOffset; index < limit; index += UTF16.getCharCount(c)) {
+            for (int index = closureOffset; index < limit; ) {
                 int mapping = exceptions.codePointAt(index);
+                index += Character.charCount(mapping);
                 set.add(mapping);
             }
         }

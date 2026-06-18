@@ -386,7 +386,12 @@ public class AlphabeticIndexTest extends TestFmwk {
         // Exclude scripts like Braille and Sutton SignWriting
         // because they only have symbols, not letters.
         UnicodeSet missingScripts =
-                new UnicodeSet("[^[:inherited:][:unknown:][:common:][:Braille:][:SignWriting:]]");
+                new UnicodeSet(
+                        "[^"
+                                + "[:inherited:][:unknown:][:common:][:Braille:][:SignWriting:]"
+                                // Unicode 18 adds the first Proto-Cuneiform characters, but only
+                                // gc=Nl, no letters.
+                                + "[[:Pcun:]-[:L:]]]");
         String last = "";
         for (String index : firsts) {
             if (collator.compare(last, index) >= 0) {
