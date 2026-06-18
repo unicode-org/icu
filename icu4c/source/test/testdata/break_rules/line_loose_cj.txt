@@ -103,6 +103,7 @@ eaFWHminusCMOPGL   = [ eaFWH - [CMS OP GL] ];
 eaFWHminusCM     = [ eaFWH - CMS ];
 eaFWHBreakableAtLB19 = [ eaFWH - [NS BA EX CL IN IS GL CMS] ];
 BAminuseaFWH = [BA - eaFWH ];
+BAminusEnDash = [BA - [\u2013]];
 
 PiQU = [\p{Pi}&QU];
 PfQU = [\p{Pf}&QU];
@@ -238,7 +239,7 @@ LB20a.1:     ^(HY | HH) CM* (AL | HL);
 LB21a:       HL CM* (HY | HH) CM* [^CM CB HL];
 
 LB21.1:      [^ID] CM* [BA HY HH NS];
-LB21.2:      ID CM* [BA HY NS];
+LB21.2:      ID CM* [BAminusEnDash HY NS];
 LB21.3:      BB CM* [^CM CB];
 
 LB21b:       SY CM* HL;

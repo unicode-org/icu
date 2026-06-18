@@ -17,7 +17,8 @@
 #         line-break=loose (BCP47 -u-lb-loose) as defined for Chinese & Japanese.
 #         It sets characters of class CJ to behave like ID.
 #         In addition, it allows breaks:
-#         * between ID and hyphens 2010 & 2013 (as well as the rest of the HH class)
+#         * between ID and HYPHEN 2010 (as well as the rest of the HH class),
+#           and between ID and 2013 EN DASH;
 #         * before 301C, 30A0 (both NS)
 #         * before iteration marks 3005, 303B, 309D, 309E, 30FD, 30FE (all NS)
 #         * between characters of LineBreak class IN such as 2026
@@ -346,8 +347,9 @@ $CAN_CM $CM*  [\p{Pf} & $QU] $CM* ([\p{Pi} & $QU] $CM* $SP*)+ $SP ($HY | $HH) $C
 #
 # DO allow breaks here before $NSX, so don't include it.
 # And DO allow breaks between ID and $HH, so split out the handling of ID and do not include $HH for them.
+# U+2013 is BA but should be treated like HH in this rule (the CSS specification calls it a hyphen).
 [$LB20NonBreaks - $ID] $CM* ($BA | $HH | $HY | $NS);
-$ID $CM* ($BA | $HY | $NS);
+$ID $CM* ([$BA-[\u2013]] | $HY | $NS);
 
 
 ^$CM+ ($BA | $HH | $HY | $NS);
