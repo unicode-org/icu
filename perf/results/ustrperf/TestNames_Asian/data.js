@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1781689711100,
+  "lastUpdate": 1781741007902,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -153789,6 +153789,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 43.1114,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "fmalita@gmail.com",
+            "name": "Florin Malita",
+            "username": "fmalita"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "4ff7238b06d7f941450e243499ca366e7885c66d",
+          "message": "ICU-23438 Fix RuleBasedBreakIterator cloning for phrase-breaking\n\nRuleBasedBreakIterator::operator= and operator== were missing the\nfIsPhraseBreaking configuration field. This caused cloned or assigned\niterators to lose their phrase-breaking setting and fall back to\nstandard line breaking.\n\nThis change adds fIsPhraseBreaking to the assignment and equality\noperators and adds unit tests in RBBIAPITest to verify that the\nsetting is correctly preserved during clone and assignment.",
+          "timestamp": "2026-06-17T16:10:14-07:00",
+          "tree_id": "847997f95903660c9711b0c7cf779f4128f134fc",
+          "url": "https://github.com/unicode-org/icu/commit/4ff7238b06d7f941450e243499ca366e7885c66d"
+        },
+        "date": 1781740509975,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 19.8716,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 22.5628,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 25.3851,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 27.5315,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 33.6781,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 35.2934,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 20.9845,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 15.9721,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 76.6998,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 20.9821,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 36.3434,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 40.4768,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
