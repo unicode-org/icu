@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1781740518642,
+  "lastUpdate": 1781883894870,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -126045,6 +126045,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 3407.9201,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "distinct": true,
+          "id": "fc47e8bf7798c49e7af944c77bddde6fc7c11e0b",
+          "message": "ICU-23343 fix/adjust Java code & tests\n\n- UCharacterCaseTest: parse supplementary code points\n- fix case closure: Java+supplementary\n- AlphabeticIndexTest: adjust for Pcun with no letters\n- CollationRegressionTest: un-hardcode a sort key:\n  Old test which has been checking for a specific sort key only since\n  https://github.com/unicode-org/icu/pull/3562",
+          "timestamp": "2026-06-19T16:33:32+02:00",
+          "tree_id": "19eea6e9d52bfc2bd42f473469f26ff05bd34dbb",
+          "url": "https://github.com/unicode-org/icu/commit/fc47e8bf7798c49e7af944c77bddde6fc7c11e0b"
+        },
+        "date": 1781883409356,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 75768.6111,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 176933.8581,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.559,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 10.5384,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 6.8415,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 19580.0066,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 65139.4433,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 3296.4591,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
