@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1781741178866,
+  "lastUpdate": 1781884264769,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -153885,6 +153885,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 32.3694,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "distinct": true,
+          "id": "fc47e8bf7798c49e7af944c77bddde6fc7c11e0b",
+          "message": "ICU-23343 fix/adjust Java code & tests\n\n- UCharacterCaseTest: parse supplementary code points\n- fix case closure: Java+supplementary\n- AlphabeticIndexTest: adjust for Pcun with no letters\n- CollationRegressionTest: un-hardcode a sort key:\n  Old test which has been checking for a specific sort key only since\n  https://github.com/unicode-org/icu/pull/3562",
+          "timestamp": "2026-06-19T16:33:32+02:00",
+          "tree_id": "19eea6e9d52bfc2bd42f473469f26ff05bd34dbb",
+          "url": "https://github.com/unicode-org/icu/commit/fc47e8bf7798c49e7af944c77bddde6fc7c11e0b"
+        },
+        "date": 1781883788734,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 23.3862,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 26.3134,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 30.4013,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 32.4275,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 38.9499,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 38.804,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 23.9742,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 17.8711,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 90.1981,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 24.0752,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 38.5957,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 44.5906,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
