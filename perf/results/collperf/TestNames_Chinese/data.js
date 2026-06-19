@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1781740457253,
+  "lastUpdate": 1781883984043,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -87693,6 +87693,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 2043101.4888,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "distinct": true,
+          "id": "fc47e8bf7798c49e7af944c77bddde6fc7c11e0b",
+          "message": "ICU-23343 fix/adjust Java code & tests\n\n- UCharacterCaseTest: parse supplementary code points\n- fix case closure: Java+supplementary\n- AlphabeticIndexTest: adjust for Pcun with no letters\n- CollationRegressionTest: un-hardcode a sort key:\n  Old test which has been checking for a specific sort key only since\n  https://github.com/unicode-org/icu/pull/3562",
+          "timestamp": "2026-06-19T16:33:32+02:00",
+          "tree_id": "19eea6e9d52bfc2bd42f473469f26ff05bd34dbb",
+          "url": "https://github.com/unicode-org/icu/commit/fc47e8bf7798c49e7af944c77bddde6fc7c11e0b"
+        },
+        "date": 1781883483614,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 155.5658,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 8759842.7446,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 2095643.9233,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 8151451.1728,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 2069556.9908,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
