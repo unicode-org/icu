@@ -158,6 +158,7 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
     TESTCASE_AUTO(TestBug22585);
     TESTCASE_AUTO(TestBug22602);
     TESTCASE_AUTO(TestBug22636);
+    TESTCASE_AUTO(TestLookaheadPolychromy);
 
 #if U_ENABLE_TRACING
     TESTCASE_AUTO(TestTraceCreateCharacter);
@@ -4931,4 +4932,93 @@ void RBBITest::TestBug22581() {
 
     RuleBasedBreakIterator bi(ruleStr, pe, ec);
 }
+
+/*
+ * Tests some rule sets that require the lookaheads to occupy different slots.
+ */
+void RBBITest::TestLookaheadPolychromy() {
+
+    UErrorCode status = U_ZERO_ERROR;
+    UParseError parseError;
+    // The first lookahead must occupy a different slot from the other two, because after
+    // encountering x y two different break positions can be returned depending on the third
+    // character: the graph of lookahead reachability is a cherry (🍒, the first one with an edge
+    // from the other two, the last two with no edge between each other).  Its chromatic number
+    // is 2.
+    RuleBasedBreakIterator lookaheadCherry(uR"(
+                                               [x] / [wy]   [z];
+                                               [x]   [y]  / [t];
+                                               [x]   [w]  / [u];
+                                               .*;
+                                           )",
+                                           parseError, status);
+    for (auto const &[text, firstSegment] :
+         std::vector<std::pair<UnicodeString, std::u16string_view>>{
+             // If lookaheads 1 and 2 use the same slot, 2 stomps over 1 and we get xy instead of x
+             // here.
+             {u"xyz", u"x"},
+             // If lookaheads 1 and 3 use the same slot, 3 stomps over 1 and we get xw instead of x
+             // here.
+             {u"xwz", u"x"},
+             {u"xyt", u"xy"},
+             {u"xwt", u"xwt"},
+             {u"xyu", u"xyu"},
+             {u"xwu", u"xw"},
+         }) {
+        lookaheadCherry.setText(text);
+        std::u16string_view actual = text.tempSubString(0, lookaheadCherry.next());
+        if (actual != firstSegment)
+            errln(UnicodeString(u"First segment of ") + text + " with lookaheadCherry: expected " +
+                  firstSegment + ", got " + actual);
+    }
+    // The state that accepts lookahead 1 is reachable from those that set lookaheads 2 and 3, and
+    // the set that accepts lookahead 2 is reachable from the one that sets lookahead 3: the graph
+    // of lookaheads is a triangle, its chromatic number is 3; the lookaheads all need different
+    // slots.
+    RuleBasedBreakIterator lookaheadTriangle(uR"(
+                                                 [x] / [y]   [z]    [1];
+                                                 [x]   [y] / [z]    [2];
+                                                 [x]   [y]   [z] /  [3];
+                                                 .*;
+                                             )",
+                                             parseError, status);
+    for (auto const &[text, firstSegment] :
+         std::vector<std::pair<UnicodeString, std::u16string_view>>{
+             {u"xyz1", u"x"},
+             {u"xyz2", u"xy"},
+             {u"xyz3", u"xyz"},
+             {u"xyzn", u"xyzn"},
+         }) {
+        lookaheadTriangle.setText(UnicodeString::readOnlyAlias(text));
+        std::u16string_view actual = text.tempSubString(0, lookaheadTriangle.next());
+        if (actual != firstSegment)
+            errln(UnicodeString(u"First segment of ") + text + " with lookaheadTriangle: expected " +
+                  firstSegment + ", got " + actual);
+    }
+    // Consecutive lookaheads must occupy different slots ; the graph of lookahead reachability is a
+    // path graph.  Its chromatic number is 2.
+    RuleBasedBreakIterator lookaheadPath(uR"(
+                                             [x]  / [y]   [z]   [1];
+                                             [x]?   [y] / [z]   [2];
+                                                     [y]   [z] / [t]   [1];
+                                                     [y]   [z]   [t] / [2];
+                                             .*;
+                                         )",
+                                         parseError, status);
+    for (auto const &[text, firstSegment] :
+         std::vector<std::pair<UnicodeString, std::u16string_view>>{
+             {u"xyz1", u"x"},
+             {u"xyz2", u"xy"},
+             {u"yz2", u"y"},
+             {u"yzt1", u"yz"},
+             {u"yzt2", u"yzt"},
+         }) {
+        lookaheadPath.setText(UnicodeString::readOnlyAlias(text));
+        std::u16string_view actual = text.tempSubString(0, lookaheadPath.next());
+        if (actual != firstSegment)
+            errln(UnicodeString(u"First segment of ") + text + " with lookaheadPath: expected " +
+                  firstSegment + ", got " + actual);
+    }
+}
+
 #endif // #if !UCONFIG_NO_BREAK_ITERATION
