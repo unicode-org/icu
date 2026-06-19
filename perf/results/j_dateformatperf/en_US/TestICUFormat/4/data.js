@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1781881933446,
+  "lastUpdate": 1781898543694,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -45897,6 +45897,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 227.33001218819726,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "committer": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "distinct": true,
+          "id": "7b909a7d356c7dad8892fa002c89580fa1f38cbd",
+          "message": "ICU-23437 Test rules with lookaheads that must coëxist",
+          "timestamp": "2026-06-19T21:25:50+02:00",
+          "tree_id": "3a96ef10855195a0870f20fc6c7d407f8cf9c544",
+          "url": "https://github.com/unicode-org/icu/commit/7b909a7d356c7dad8892fa002c89580fa1f38cbd"
+        },
+        "date": 1781898049431,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 228.56567381082678,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
