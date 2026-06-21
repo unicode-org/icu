@@ -177,7 +177,7 @@ also mark every API with whether it is `@draft`, `@stable`, `@deprecated` or
 `@internal`. (Where `@internal` is used when something is not actually supported
 API but needs to be physically public anyway.) A new API is usually marked with
 "`@draft ICU 4.8`". For details of how we mark APIs see the "ICU API
-compatibility" section of the [ICU Architectural Design](../design.md) page. In
+compatibility" section of the [ICU Architectural Design](../icu/design.md) page. In
 Java, also see existing @draft APIs for complete examples.
 
 Functions that override a base class or interface definition take the API status
