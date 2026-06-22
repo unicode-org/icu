@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1781899021653,
+  "lastUpdate": 1782164055095,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -46017,6 +46017,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 2.2640011293146913,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "committer": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "distinct": true,
+          "id": "a5020e1432e630725b5842ba843ccfd1a7d74204",
+          "message": "ICU-23435 Grapheme clusters are regular",
+          "timestamp": "2026-06-22T23:01:16+02:00",
+          "tree_id": "fe62c72834dc9e1b0c771b3e9cca0679019d13ca",
+          "url": "https://github.com/unicode-org/icu/commit/a5020e1432e630725b5842ba843ccfd1a7d74204"
+        },
+        "date": 1782163547937,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 2.2833360344325886,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
