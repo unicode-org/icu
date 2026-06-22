@@ -37,5 +37,5 @@ parent: C++ Setup
 
 NOTE:
 Run the
-[`./runConfigureICU` command](https://unicode-org.github.io/icu/userguide/icufaq)
+[`./runConfigureICU` command](../../userguide/icu4c/faq.md)
 before building `icu4c` from VSCode.

@@ -81,7 +81,7 @@ details.*
 ### References
 
 The ICU system time zones are derived from the tz database (also known as the
-“Olson” database) at [ftp://elsie.nci.nih.gov/pub](ftp://elsie.nci.nih.gov/pub).
+“Olson” database) at <https://www.iana.org/time-zones>.
 This is the data used across much of the industry, including by UNIX systems,
 and is usually updated several times each year. ICU (since version 2.8) and base
 Java (since Java 1.4) contain code and tz data supporting both current and

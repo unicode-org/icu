@@ -70,7 +70,7 @@ See the [User Guide, ICU Architectural Design, ICU API
 compatibility](https://unicode-org.github.io/icu/userguide/icu/design#icu-api-compatibility).
 
 On ICU4J, run
-[com.ibm.icu.dev.tool.docs.CheckTags](https://github.com/unicode-org/icu/blob/main/icu4j/tools/build/src/com/ibm/icu/dev/tool/docs/CheckTags.java)
+[com.ibm.icu.dev.tool.docs.CheckTags](https://github.com/unicode-org/icu/blob/main/icu4j/tools/build/src/main/java/com/ibm/icu/dev/tool/docs/CheckTags.java)
 (see file for instructions). This requires a JDK with javadoc available, i.e, JDK11. The
 tool will need to change to reflect the release number to search for.
 
@@ -303,7 +303,7 @@ Instructions ***for ICU4C 4.8.x and earlier***:
 
 Run the ICU4J versus JDK API comparison tool against the target JDK (anything
 that will come out before our next release, basically) with the tool
-[com.ibm.icu.dev.tool.docs.ICUJDKCompare](https://github.com/unicode-org/icu/blob/main/icu4j/tools/build/src/com/ibm/icu/dev/tool/docs/ICUJDKCompare.java)
+[com.ibm.icu.dev.tool.docs.ICUJDKCompare](https://github.com/unicode-org/icu/blob/main/icu4j/tools/build/src/main/java/com/ibm/icu/dev/tool/docs/ICUJDKCompare.java)
 and make sure ICU4J adequately covers the JDK API for the classes we replicate.
 
 ---

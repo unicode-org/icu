@@ -290,7 +290,7 @@ ant proddata 2>&1 | tee $NOTES/cldr-newData-proddataLog.txt
 
 > Note, for CLDR development, at this point tests are sometimes run on the
    production data, see
-   [BRS: Run tests on production data](https://cldr.unicode.org/development/cldr-big-red-switch/brs-run-tests-on-production-data)
+   [BRS: Run tests on production data](https://cldr.unicode.org/development/cldr-big-red-switch/)
 
 > Note, also for CLDR development, periodically at this point the CompareResolved
   tool should be run to compare the fully-resolved data generated from `$CLDR_DIR/common/main`

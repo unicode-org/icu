@@ -46,9 +46,9 @@ to programming language restrictions. These features include the following:
 
 Locale IDs are composed of language, country, and variant information. The
 following links provide additional useful information regarding ISO standards:
-[ISO-639](http://lcweb.loc.gov/standards/iso639-2/englangn.html), and an ISO
+[ISO-639](https://www.iso.org/iso-639-language-code), and an ISO
 Country Code,
-[ISO-3166](http://www.iso.org/iso/en/prods-services/iso3166ma/02iso-3166-code-lists/list-en1.html).
+[ISO-3166](https://www.iso.org/iso-3166-country-codes.html).
 For example, Italian, Italy, and Euro are designated as: it_IT_EURO.
 
 ### Data-driven Services
@@ -211,7 +211,7 @@ the pool.
 ICU4C APIs are designed to allow separate heaps for its libraries vs. the
 application. This is achieved by providing functions to allocate and release
 objects owned by ICU4C using only ICU4C library functions. For more details see
-the Memory Usage section in the [Coding Guidelines](dev/codingguidelines.md#memory-usage).
+the Memory Usage section in the [Coding Guidelines](../dev/codingguidelines.md#memory-usage).
 
 ### ICU4C Initialization and Termination
 
@@ -229,7 +229,7 @@ any other use of ICU. This functionality is not commonly used.
 `u_setAppData()`. One or more of these functions will be required when ICU is
 configured to load its data directly from files rather than taking it from the
 default data DLL, and the files are not in the default location. Again, this is
-not common. See [ICU Data](icudata#icu-data-directory).
+not common. See [ICU Data](../icu_data/index#icu-data-directory).
 
 3. Sanity check that ICU is functioning and able to access data. This is
 important because configuration or installation problems that leave ICU unable

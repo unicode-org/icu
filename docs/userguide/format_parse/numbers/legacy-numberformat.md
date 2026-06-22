@@ -131,10 +131,6 @@ and display name, but also the correct number of fraction digits and the correct
 [rounding mode](rounding-modes.md). This is not the case with the base JDK. See
 the API references for more details.
 
-There is ICU4C sample code at
-[icu4c/source/samples/numfmt/main.cpp](https://github.com/unicode-org/icu/blob/main/icu4c/source/samples/numfmt/main.cpp)
-which illustrates the use of `NumberFormat.setCurrency()`.
-
 #### Displaying Numbers
 
 You can also control the display of numbers with methods such as
@@ -206,10 +202,3 @@ locale data. The `DecimalFormatSymbols` can be adopted by a `DecimalFormat`
 instance, or it can be specified when a `DecimalFormat` is created. If you need to
 change any of these symbols, can get the `DecimalFormatSymbols` object from your
 `DecimalFormat` and then modify it.
-
-## Additional Sample Code
-
-C/C++: See
-[icu4c/source/samples/numfmt/](https://github.com/unicode-org/icu/blob/main/icu4c/source/samples/numfmt/)
-in the ICU source distribution for code samples showing the use of ICU number
-formatting.

@@ -28,7 +28,7 @@ For additional Unicode terms, please see the official
 **- B -** |  
 **base character** | A base character is a Unicode character that does not graphically combine with any preceding character. This does not include control or formatting characters. This is a characteristic of most Unicode characters.
 **baseline** | A conceptual line with respect to which successive characters are aligned.
-**Basic Multilingual Plane** | As defined by International Standard [ISO/IEC 10646](http://std.dkuug.dk/jtc1/sc2/wg2/), Unicode values `0000` through `FFFF`. This range covers all of the major living languages around the world.
+**Basic Multilingual Plane** | As defined by International Standard [ISO/IEC 10646](https://en.wikipedia.org/wiki/Universal_Coded_Character_Set), Unicode values `0000` through `FFFF`. This range covers all of the major living languages around the world.
 **bidi** | See bidirectional.
 **bidirectional** | Text which has a mixture of languages that read and write either left-to-right or right-to-left. Languages such as Arabic, Hebrew, and Yiddish have a general flow of text that proceeds horizontally from right to left, but numbers and Latin based languages like English are written from left to right.
 **big-endian** | A computer architecture that stores multiple-byte numerical values with the most significant byte (MSB or big end) values first in a computer's addressable memory. This is the opposite from little-endian.

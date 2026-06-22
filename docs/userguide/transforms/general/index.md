@@ -83,8 +83,8 @@ underlying words. The following shows a sample of script transliteration:
 > :point_right: **Note**: *Some of the characters may not be
 visible on the screen unless you have a Unicode font with all the Greek letters.
 If you have a licensed copy of Microsoft® Office, you can use the "Arial Unicode
-MS" font, or you can download the [CODE2000](http://www.code2000.net/) font for
-free. For more information, see [Display
+MS" font, or you can download the [Noto fonts](https://fonts.google.com/noto)
+for free. For more information, see [Display
 Problems?](http://www.unicode.org/help/display_problems.html) on the Unicode web
 site.*
 
@@ -1415,4 +1415,4 @@ For more information, see:
 
 6.  [ISO-15915 (Kannada)](http://transliteration.eki.ee/pdf/Kannada.pdf)
 
-7.  [ISCII-91](http://www.cdacindia.com/html/gist/down/iscii_d.asp)
+7.  [ISCII-91](https://cdac.in/index.aspx?id=mlc_gist_iscii)

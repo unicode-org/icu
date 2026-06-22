@@ -178,9 +178,3 @@ text under iteration:
 This text (and the length) may include more than the actual iteration area
 because the start and end indexes may not be the start and end of the entire
 text. The text and the iteration range are set in the implementing subclasses.
-
-## Additional Sample Code
-
-C/C++: See
-[icu4c/source/samples/citer/](https://github.com/unicode-org/icu/blob/main/icu4c/source/samples/citer/)
-in the ICU source distribution for code samples.

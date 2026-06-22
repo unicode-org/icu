@@ -31,7 +31,7 @@ for Jekyll sites.
 
 Because ICU User Guide source files are now contained within the main
 repository, changes can now be made through the same process for contributing 
-code patches. See [Contributions to the ICU Library](constributions.md) for the
+code patches. See [Contributions to the ICU Library](index.md) for the
 current process of filing an issue and submitting a pull request.
 
 In the case of a single file edit (ex: typo correction), a convenient way to
@@ -52,7 +52,7 @@ prevent the changes from being rendered.
 
 Jekyll site-wide configurations are stored
 in the `_config.yml` file. The current theme being used is
-[Just the Docs](https://pmarsceill.github.io/just-the-docs/).
+[Just the Docs](https://github.com/just-the-docs/just-the-docs/).
 
 Due to incompatibilities between this theme and GitHub’s built-in implementation of the
 CommonMark Markdown parser, the default Jekyll Markdown parser, Kramdown, is
@@ -63,7 +63,7 @@ used.
 Major chapters have Introduction pages, and further sections in a chapter are
 subpages of that main chapter page. The navigation bar is generated from the
 information provided in the header section of the Markdown file according to
-the theme's [navigation annotations](https://pmarsceill.github.io/just-the-docs/docs/navigation-structure/).
+the theme's [navigation annotations](https://just-the-docs.com/docs/navigation/).
 
 ## Syntax
 

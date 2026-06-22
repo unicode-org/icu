@@ -102,7 +102,7 @@ There are many resources available to help you work with git, here are a few:
 *   <https://try.github.io/> - Resources to learn Git
 
 Want to contribute back to ICU? See
-[How to contribute](../../userguide/processes/contribute.md).
+[How to contribute](../../userguide/dev/index.md).
 
 ## Repository Layout
 
@@ -138,7 +138,7 @@ There are other tags and branches which may be cleaned up/deleted at any time.
 *   long running shared feature branches (In general, feature work is done on
     personal forks of the repository.)
 
-See also the [Tips (for developers)](repository/tips/index.md) subpage.
+See also the [git and Github for ICU Developers](../../userguide/dev/gitdev.md) subpage.
 
 ## A Bit of History
 

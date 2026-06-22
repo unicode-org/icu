@@ -339,7 +339,7 @@ That new flow overlaps with _"Using the output from the build bots"_ below.
 
 *   Manual process:
     *   Build with MSVC x64 Release. (See the ICU
-        [readme.html](https://github.com/unicode-org/icu/main/blob/icu4c/readme.html)
+        [readme.html](https://github.com/unicode-org/icu/blob/main/icu4c/readme.html)
         file for details).
     *   Open a command prompt.
         ```
@@ -522,8 +522,8 @@ Note that updating ICU4C demos online requires Gcloud access.
 
 ### Online information update
 
-Collation and [comparison](../../../../charts/comparison/index.md) charts need
-to be updated. See [charts/Performance & Size](../../../../charts/index.md).
+Collation and [comparison](https://icu.unicode.org/charts/comparison) charts need
+to be updated. See [charts/Performance & Size](https://icu.unicode.org/charts).
 
 ### Old sensitive tickets
 
@@ -581,9 +581,9 @@ Jira.
 ## Update readme
 
 Update [ICU4C
-readme.html](https://github.com/unicode-org/icu/main/icu4c/readme.html)
+readme.html](https://github.com/unicode-org/icu/blob/main/icu4c/readme.html)
 and [ICU4J
-readme.html](https://github.com/unicode-org/icu/main/icu4j/readme.html)
+readme.html](https://github.com/unicode-org/icu/blob/main/icu4j/readme.html)
 before every milestone (GA / RC / Milestone-N). Make sure the following items
 are up to date.
 

@@ -55,7 +55,7 @@ manually editing them is not usually recommended.
 
 Data which is NOT sourced from CLDR includes:
 
-*   [Conversion Data](conversion/data.md)
+*   [Conversion Data](../conversion/data.md)
 *   Break Iterator Dictionary Data ( Thai, CJK, etc )
 *   Break Iterator Rule Data (as of this writing, it is manually kept in sync
     with the CLDR datasets)
@@ -737,7 +737,7 @@ A much less radical approach is to keep the collation data tables but remove the
 tailoring rule strings from which they were built. Those rule strings are
 rarely used at runtime. For documentation about their use and how to remove
 them see the section "Building on Existing Locales" in the
-[Collation Customization chapter](collation/customization/index.md).
+[Collation Customization chapter](../collation/customization/index.md).
 
 ### Adding Locale Data to ICU's Data
 You need to write a resource bundle file for it with a structure like the
@@ -896,7 +896,7 @@ Emoji properties of strings added.
     [genrb](https://github.com/unicode-org/icu/blob/main/icu4c/source/tools/genrb)
 
 #### Rule-based break iterator data
-*   Source format: .txt: [Boundary Analysis chapter](boundaryanalysis/index.md)
+*   Source format: .txt: [Boundary Analysis chapter](../boundaryanalysis/index.md)
 *   Binary format: .brk:
     [source/common/rbbidata.h](https://github.com/unicode-org/icu/blob/main/icu4c/source/common/rbbidata.h)
 *   Generator tool:
@@ -911,7 +911,7 @@ Emoji properties of strings added.
     [gendict](https://github.com/unicode-org/icu/blob/main/icu4c/source/tools/gendict)
 
 #### Rule-based transform (transliterator) data
-*   Source format: .txt (in resource bundles): [Transform Rule Tutorial chapter](transforms/general/rules.md)
+*   Source format: .txt (in resource bundles): [Transform Rule Tutorial chapter](../transforms/general/rules.md)
 *   Binary format: Uses genrb to make binary format
 *   Generator tool: Does not apply
 
@@ -943,7 +943,7 @@ Emoji properties of strings added.
 
 #### Unicode Character Data (Normalization before ICU 4.4; for Java only: was hardcoded in C common library)
 *   Source format:
-    [source/data/unidata/*.txt]((https://github.com/unicode-org/icu/blob/main/icu4c/source/data/unidata):
+    [source/data/unidata/*.txt](https://github.com/unicode-org/icu/blob/main/icu4c/source/data/unidata):
     [Unicode Character Database](http://www.unicode.org/onlinedat/online.html)
 *   Binary format: unorm.icu:
     [source/common/unormimp.h](https://github.com/unicode-org/icu/blob/main/icu4c/source/common/unormimp.h)

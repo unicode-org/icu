@@ -129,7 +129,7 @@ Unicode.
         date.
 
     5.  ICU's default build includes about 200 conversion tables. See the [ICU
-        Data](../icudata.md) chapter for how to add or remove conversion tables
+        Data](../icu_data/index.md) chapter for how to add or remove conversion tables
         and other data.
 
     6.  In ICU, you can (and should) also use APIs that map a charset name
@@ -146,9 +146,7 @@ Unicode.
     8.  For some text formats, especially XML and HTML, it is possible to set an
         "escape callback" function that turns unmappable Unicode code points
         into corresponding escape sequences, preventing data loss. See the API
-        references and the [ucnv sample
-        code](https://github.com/unicode-org/icu/tree/main/icu4c/source/samples/ucnv/)
-        .
+        references.
 
     9.  **Never modify a conversion table.** Instead, use existing ones that
         match precisely those in systems with which you communicate. "Modifying"

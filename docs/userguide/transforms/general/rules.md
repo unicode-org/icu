@@ -60,7 +60,7 @@ transliterate the Greek accents that are no longer in use in modern Greek.
 > :point_right: **Note**: *Some of the characters may not be visible on the screen unless you have a
 Unicode font with all the Greek letters. If you have a licensed copy of
 Microsoft® Office, you can use the "Arial Unicode MS" font, or you can download
-the [CODE2000](http://www.code2000.net/) font for free. For more information,
+the [Noto fonts](https://fonts.google.com/noto) for free. For more information,
 see [Display Problems?](http://www.unicode.org/help/display_problems.html) on
 the Unicode web site.*
 

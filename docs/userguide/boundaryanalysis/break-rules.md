@@ -416,12 +416,6 @@ Here is the syntax for the boundary rules. (The EBNF Syntax is given below.)
    used by the standard rules for word, line and sentence breaking. An
    alternative is probably needed. The existing implementation is incomplete.
 
-## Additional Sample Code
-
-**C/C++**
-See [icu/source/samples/break/](https://github.com/unicode-org/icu/tree/main/icu4c/source/samples/break/)
-in the ICU source distribution for code samples showing the use of ICU boundary analysis.
-
 ## Details about Dictionary-Based Break Iteration
 
 > :point_right: **Note**: This section below is originally from August 2012.

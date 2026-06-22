@@ -25,7 +25,7 @@ License & terms of use: http://www.unicode.org/copyright.html#License
 
 Scan the source code to make sure that every file that was touched recently has
 the current year in the copyright statement. See the [ICU Copyright
-Scanner](../../../copyright-scan.md) page and follow the link to the scripts and
+Scanner](https://icu.unicode.org/processes/copyright-scan) page and follow the link to the scripts and
 the readme.
 
 Scan the source code to include third-party company names in copyright notices

@@ -31,9 +31,7 @@ notes to all characters. It defines standard algorithms for critical text
 processing, and the data is publicly provided and kept up-to-date. See
 https://www.unicode.org/ and https://www.unicode.org/main.html for more information.
 
-Sample code is available in the ICU source code library at
-[icu4c/source/samples/props/props.cpp](https://github.com/unicode-org/icu/blob/main/icu4c/source/samples/props/props.cpp).
-See also the source code for the [Unicode
+For an example see the source code for the [Unicode
 browser](https://github.com/unicode-org/icu-demos/tree/main/ubrowse) demo
 application, which can be used
 [online](https://icu4c-demos.unicode.org/icu-bin/ubrowse) to browse Unicode

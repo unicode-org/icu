@@ -64,8 +64,7 @@ If you need values different than that, you can specify them as the command line
 
 #### Since ICU 68
 
-In
-[tools/cldr/cldr-to-icu/build-icu-data.xml](https://github.com/unicode-org/icu/blob/main/tools/cldr/cldr-to-icu/build-icu-data.xml)
+In `tools/cldr/cldr-to-icu/build-icu-data.xml`
 edit `<property name="icuVersion" value="67.1.0.0"/>` and `<property
 name="icuDataVersion" value="67.1.0.0"/>`.
 
@@ -265,7 +264,7 @@ Time Zone Data Version: 2011g
 
 For updating ICU version numbers, follow the steps below.
 
-1. [icu4j/main/shared/build/common.properties](https://github.com/unicode-org/icu/blob/main/icu4j/main/shared/build/common.properties)
+1. `icu4j/main/shared/build/common.properties`
 
     *   icu4j.spec.version: This is API spec version, therefore, 2-digit major
         version only. The version number won't be changed for maintenance
@@ -282,7 +281,7 @@ For updating ICU version numbers, follow the steps below.
         is updated to the current year for a new release (also applicable to a
         maintenance release).
 
-2. icu4j/build.properties (For API change report and release target)
+2. `icu4j/build.properties` (For API change report and release target)
 
     *   api.report.version: 2 digit release number. Note: If necessary, we may
         include maintenance release number. (e.g "54", "481")
@@ -384,8 +383,7 @@ For updating ICU version numbers, follow the steps below.
     ***Note: We no longer use time bombs since ICU4J 52. In the trunk,
     logKnownIssue() is used for skipping known test failures. The new scheme no
     longer depends on the current ICU4J version, so there are no updates
-    necessary in test codes when version number is updated. See [Skipping Known
-    Test Failures](../../../setup/eclipse/time.md) for more details.***
+    necessary in test codes when version number is updated.***
 
     There might be some test cases intentionally skipped for the current ICU4J
     version. When ICU4J version is updated, these time bombed test cases may
@@ -423,12 +421,11 @@ For updating ICU version numbers, follow the steps below.
    ICU4J Eclipse plug-in use the standard Eclipse versioning scheme -
    X.Y.Z.v<build date>, for example, com.ibm.icu_4.2.1.v20100412.jar. By
    default, the build script compose the version string from
-   icu4j.plugin.impl.version.string property in
-   [eclipse-build/build.properties](https://github.com/unicode-org/icu/blob/main/icu4j/eclipse-build/build.properties)
+   icu4j.plugin.impl.version.string property in `eclipse-build/build.properties`
    with current date at the build time. However, when we tag a version, we want
    to freeze the build date part. To force a fixed version string, we add a
-   property - icu4j.eclipse.build.version.string in the build.properties. For
-   example, see
+   property - `icu4j.eclipse.build.version.string` in the `build.properties`.
+   For example, see
    [tags/release-4-4-2-eclipse37-20110208/eclipse-build/build.properties](http://source.icu-project.org/repos/icu/tags/icu4j/release-4-4-2-eclipse37-20110208/eclipse-build/build.properties).
 
 7. [DebugUtilitiesData.java](https://github.com/unicode-org/icu/blob/main/icu4j/main/core/src/test/java/com/ibm/icu/dev/test/util/DebugUtilities.java)

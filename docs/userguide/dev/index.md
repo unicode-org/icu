@@ -16,6 +16,6 @@ details:
 
 [Coding Guidelines](codingguidelines.md)
 
-[Contributions to the ICU library](contributions.md)
+[Contributions to the ICU library](https://github.com/unicode-org/icu/blob/main/CONTRIBUTING.md)
 
 [Synchronization Issues](sync/index.md)

@@ -15,10 +15,6 @@ License & terms of use: http://www.unicode.org/copyright.html
 
 This section explains how to handle Unicode strings with ICU in C and C++.
 
-Sample code is available in the ICU source code library at
-[icu/source/samples/ustring/ustring.cpp](https://github.com/unicode-org/icu/blob/main/icu4c/source/samples/ustring/ustring.cpp)
-.
-
 ## Text Access Overview
 
 Strings are the most common and fundamental form of handling text in software.
