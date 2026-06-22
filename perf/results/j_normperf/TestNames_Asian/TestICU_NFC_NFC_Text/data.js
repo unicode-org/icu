@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1781898432885,
+  "lastUpdate": 1782162984675,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -46137,6 +46137,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_NFC_Text",
             "value": 3.2722535568297015,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "committer": {
+            "email": "egg.robin.leroy@gmail.com",
+            "name": "Robin Leroy",
+            "username": "eggrobin"
+          },
+          "distinct": true,
+          "id": "a5020e1432e630725b5842ba843ccfd1a7d74204",
+          "message": "ICU-23435 Grapheme clusters are regular",
+          "timestamp": "2026-06-22T23:01:16+02:00",
+          "tree_id": "fe62c72834dc9e1b0c771b3e9cca0679019d13ca",
+          "url": "https://github.com/unicode-org/icu/commit/a5020e1432e630725b5842ba843ccfd1a7d74204"
+        },
+        "date": 1782162707230,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 1.7728814289261248,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
