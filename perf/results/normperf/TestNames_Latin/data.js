@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1782185379957,
+  "lastUpdate": 1782242918503,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -96957,6 +96957,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 4.6423,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "vichang@google.com",
+            "name": "Victor Chang",
+            "username": "gvictor"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "3ffacba19e6e4cc9ce8204a223c08ceabfd9bdaf",
+          "message": "ICU-23371 Intern subdivision strings with a local pool instead of String.intern()\n\nA local temporary pool is faster than String.intern() and\nthe memory used by the table could be released by the GC.",
+          "timestamp": "2026-06-23T11:51:48-07:00",
+          "tree_id": "336edce66554c8368eaa9eca0c2432c47a2e0c94",
+          "url": "https://github.com/unicode-org/icu/commit/3ffacba19e6e4cc9ce8204a223c08ceabfd9bdaf"
+        },
+        "date": 1782242435248,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 4.8862,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 4.766,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 4.7758,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 4.7568,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 4.8271,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 4.696,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
