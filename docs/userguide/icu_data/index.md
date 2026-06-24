@@ -760,7 +760,7 @@ formats.
 
 Each ICU data object begins with a header before the actual, specific data. The
 header consists of a 16-bit header length value, the two "magic" bytes DA 27 and
-a [UDataInfo](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/structUDataInfo.html#_details)
+a [UDataInfo](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/structUDataInfo.html)
 structure which specifies the data object's endianness, charset family, format,
 data version, etc.
 
@@ -884,8 +884,7 @@ Emoji properties of strings added.
     [CLDR Root Collation Data Files](http://www.unicode.org/reports/tr35/tr35-collation.html#Root_Data_Files)
     processed into
     [source/data/unidata/FractionalUCA.txt](https://github.com/unicode-org/icu/blob/main/icu4c/source/data/unidata/FractionalUCA.txt)
-    by
-    [tool at unicode.org maintained by Mark Davis](https://sites.google.com/site/unicodetools/#TOC-UCA)
+    by [tool at unicode.org maintained by Mark Davis](https://github.com/unicode-org/unicodetools/tree/main/unicodetools/src/main/java/org/unicode/text/UCA/)
     (call the Main class with option writeFractionalUCA); source tailorings (text rules) in
     [source/data/coll/*.txt](https://github.com/unicode-org/icu/blob/main/icu4c/source/data/coll)
     resource bundles: [Collation Customization chapter](../collation/customization/index.md).

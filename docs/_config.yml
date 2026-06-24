@@ -55,7 +55,7 @@ color_scheme: nil
 # Aux links for the upper right navigation
 aux_links:
   "API Docs":
-    - "https://unicode-org.github.io/icu-docs"
+    - "https://unicode-org.github.io/icu-docs/"
   "ICU on GitHub":
     - "https://github.com/unicode-org/icu"
   "ICU Home Page":

@@ -128,9 +128,9 @@ Unicode.
         example nice-looking charts: They are usually incomplete and out of
         date.
 
-    5.  ICU's default build includes about 200 conversion tables. See the [ICU
-        Data](../icu_data/index.md) chapter for how to add or remove conversion tables
-        and other data.
+    5.  ICU's default build includes about 200 conversion tables. See the
+        [ICU Data](../icu_data/) chapter for how to add or remove
+        conversion tables and other data.
 
     6.  In ICU, you can (and should) also use APIs that map a charset name
         together with a standard/platform name. This allows you to get different

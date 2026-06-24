@@ -16,7 +16,7 @@ License & terms of use: http://www.unicode.org/copyright.html
 
 ## ICU User Guide
 
-The [ICU User Guide](./userguide) provides information on i18n topics for which ICU has services, and
+The [ICU User Guide](./userguide/) provides information on i18n topics for which ICU has services, and
 includes details that go beyond the C, C++, and Java API docs (and avoids some duplication between them).
 
 This is the new home of the User Guide (since 2020 August).
@@ -31,7 +31,7 @@ The migrated sections and pages from the ICU Site are visible in the navigation 
 
 ## Downloading ICU
 
-The [Downloading ICU](download) page has been migrated here.
+The [Downloading ICU](download/) page has been migrated here.
 
 ### Latest Release
 

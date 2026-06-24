@@ -114,7 +114,7 @@ behind the character it read and returns the character read. ICU can use
 nextPostInc() or next32PostInc() calls with hasNext() to perform Forward
 Iteration. These calls are the only character access methods provided by the
 ForwardCharacterIterator. An iteration loop can be started with the
-setToStart(), firstPostInc() or first32PostInc()calls . (The setToStart() call
+setToStart(), firstPostInc() or first32PostInc() calls. (The setToStart() call
 is implied after instantiating the iterator or setting the text.)
 
 The less efficient forward iteration mechanism that is available for
@@ -132,7 +132,7 @@ Backward Iteration has pre-decrement semantics, which are the exact opposite of
 the post-increment Forward Iteration. The current index reads the character that
 precedes the index, the character is returned, and the index is left at the
 beginning of this character. The methods used for Backward Iteration are the
-previous() or previous32() calls with the hasPrevious() call . An iteration loop
+previous() or previous32() calls with the hasPrevious() call. An iteration loop
 can be started with setToEnd(), last(), or last32() calls.
 
 ### Direct index manipulation

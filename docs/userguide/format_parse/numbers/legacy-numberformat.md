@@ -102,8 +102,8 @@ names for a currency, then the 3-letter ISO code itself is displayed.
 The locale ID and the currency code are effectively independent: The locale ID
 defines the general format for the numbers, and whether the currency symbol or
 name is displayed before or after the number, while the currency code selects
-the actual currency with its symbol, name, number of digits, and [rounding
-mode](rounding-modes.md).
+the actual currency with its symbol, name, number of digits, and
+[rounding mode](rounding-modes.md).
 
 In ICU and Java, the currency is specified in the form of a 3-letter ISO 4217
 code. For example, the code "USD" represents the US Dollar and "EUR" represents

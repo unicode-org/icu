@@ -24,9 +24,9 @@ UTF-16 and UTF-8.
 For UTF-8 strings, ICU normally uses `(const) char *` pointers and `int32_t`
 lengths, normally with semantics parallel to UTF-16 handling. (Input length=-1
 means NUL-terminated, output is NUL-terminated if there is space, output
-overflow is handled with preflighting; for details see the parent [Strings
-page](index.md).) Some newer APIs take an `icu::StringPiece` argument and write
-to an `icu::ByteSink` or to a string class object like `std::string`.
+overflow is handled with preflighting; for details see the parent
+[Strings page](index.md).) Some newer APIs take an `icu::StringPiece` argument
+and write to an `icu::ByteSink` or to a string class object like `std::string`.
 
 ## Conversion Between UTF-8 and UTF-16
 

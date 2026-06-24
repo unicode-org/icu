@@ -28,7 +28,7 @@ operating system.
 
 There are many ways that a person can package ICU with their software products. Usually only the libraries need to be considered for packaging.
 
-On UNIX, you should use `gmake install` to make it easier to develop and package ICU. The bin, lib and include directories are needed to develop applications that use ICU. These directories will be created relative to the `--prefix=`dir" configure option (See the [UNIX build instructions](#how-to-build-and-install-on-unix)). When ICU is built on Windows, a similar directory structure is built.
+On UNIX, you should use `gmake install` to make it easier to develop and package ICU. The bin, lib and include directories are needed to develop applications that use ICU. These directories will be created relative to the `--prefix=`dir" configure option (See the [UNIX build instructions](./build#how-to-build-and-install-on-unix)). When ICU is built on Windows, a similar directory structure is built.
 
 When changes have been made to the standard ICU distribution, it is recommended that at least one of the following guidelines be followed for special packaging.
 

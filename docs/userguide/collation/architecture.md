@@ -73,8 +73,8 @@ when opening collators:
 When a collator is created from a locale, the collation service (like all ICU
 services) must map the requested locale to the localized collation data
 available to ICU at the time. It does so using the standard ICU locale fallback
-mechanism. See the fallback section of the [locale
-chapter](../locale/index.md) for more details.
+mechanism. See the fallback section of the [locale chapter](../locale/)
+for more details.
 
 If you pass a regular locale in, like "en_US", the collation service first
 searches with fallback for "collations/default" key. The first such key it finds
@@ -529,7 +529,7 @@ performance.
 For Sort Keys, most of these options either leave the storage alone or reduce
 it. Shifting can reduce the storage by about 10%-20%; case level + primary-only
 can decrease it about 20% to 40%. Using no French accents can reduce the storage
-by about 38% , but only for languages like French and Catalan that turn it on by
+by about 38%, but only for languages like French and Catalan that turn it on by
 default. On the other hand, using Shifted + Quaternary can increase the storage by
 10%-15%. (The Identical Level also increases the length, but this option is not
 recommended).
@@ -537,7 +537,7 @@ recommended).
 > :point_right: **Note** All of the above numbers are based on
 > tests run on a particular machine, with a particular set of data.
 > (The data for each language is a large number of names
-> in that language in the format <first_name>, <last name>.)
+> in that language in the format `<first_name>`, `<last name>`.)
 > The performance and storage may vary, depending on the particular computer,
 > operating system, and data.
 

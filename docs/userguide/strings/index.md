@@ -259,8 +259,8 @@ characters. Such strings do not require the full Unicode repertoire and are
 easier to handle in C and C++ with `char *` string literals and standard C
 library functions. Their useful character repertoire is actually smaller than
 the set of graphic ASCII characters; for details, see
-[utypes.h](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/utypes_8h.html) . Examples of
-`char *` identifier uses are converter names, locale IDs, and resource bundle
+[utypes.h](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/utypes_8h.html).
+Examples of `char *` identifier uses are converter names, locale IDs, and resource bundle
 table keys.
 
 There is another, less efficient way to have human-readable Unicode string

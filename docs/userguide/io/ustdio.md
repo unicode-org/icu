@@ -11,11 +11,11 @@ License & terms of use: http://www.unicode.org/copyright.html
 
 # C: ustdio
 
-This API provides a `<stdio.h>`-like API wrapper around ICU's other [formatting
-and parsing](../format_parse/index.md) APIs. It is meant to ease the transition of adding
-Unicode support to a preexisting applications using stdio. The following is a
-small list of noticeable differences between stdio and ICU I/O's ustdio
-implementation.
+This API provides a `<stdio.h>`-like API wrapper around ICU's other
+[formatting and parsing](../format_parse/index.md) APIs. It is meant to ease the
+transition of adding Unicode support to a preexisting applications using stdio.
+The following is a small list of noticeable differences between stdio and ICU
+I/O's ustdio implementation.
 
 *   Locale specific formatting and parsing is only done with file IO.
 *   `u_fstropen` can be used to simulate file IO with strings. This is similar

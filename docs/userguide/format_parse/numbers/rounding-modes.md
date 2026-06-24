@@ -140,13 +140,13 @@ error if the value cannot be represented exactly without rounding.
 ## **Other References/Comparison**
 
 *   Decimal Context docs (used by ICU4C to implement rounding):
-    <http://speleotrove.com/decimal/decifaq1.html#rounding>
+    <https://speleotrove.com/decimal/decifaq1.html#rounding>
 *   Java 7 docs:
     <http://docs.oracle.com/javase/7/docs/api/java/math/RoundingMode.html>
 *   IEEE 754 rounding rules:
-    <http://en.wikipedia.org/wiki/IEEE_754-2008#Rounding_rules>
+    <https://en.wikipedia.org/wiki/IEEE_754-2008_revision#Clause_4:_Attributes_and_rounding>
 *   Wikipedia article on Rounding:
-    <http://en.wikipedia.org/wiki/Rounding#Tie-breaking>
+    <https://en.wikipedia.org/wiki/Rounding#Tie-breaking>
 *   Live rounding mode chart: [Rounding Mode
     Chart](https://htmlpreview.github.io/?https://github.com/unicode-org/icu-demos/blob/main/roundmode/round.html)
     and [Source

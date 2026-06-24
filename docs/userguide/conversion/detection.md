@@ -197,7 +197,7 @@ match = detector.detect();
 ```
 
 If you want to know which character set matches your input data in C, you can
-use the `ucsdet_detect(UCharsetDetector *csd , UErrorCode *status)` method.
+use the `ucsdet_detect(UCharsetDetector *csd, UErrorCode *status)` method.
 
 ```c
 UCharsetDetector *csd;
@@ -226,7 +226,7 @@ for (int m = 0; m < matches.length; m += 1) {
 }
 ```
 
-> :point_right: **Note**: The `ucsdet_detectALL(UCharsetDetector *csd , int32_t *matchesFound, UErrorCode *status)` 
+> :point_right: **Note**: The `ucsdet_detectALL(UCharsetDetector *csd, int32_t *matchesFound, UErrorCode *status)` 
 > method can be used in C in order to detect all of the character sets where `matchesFound` is a pointer
 > to a variable that will be set to the number of charsets identified that are consistent with the input data.
 

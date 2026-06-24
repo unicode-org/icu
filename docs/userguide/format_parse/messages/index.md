@@ -243,4 +243,4 @@ was a disturbance in the Force on planet 7."
 ```
 
 There are several more usage examples for the `MessageFormat` and `ChoiceFormat`
-classes in [C , C++ and Java](examples.md).
+classes in [C, C++ and Java](examples.md).

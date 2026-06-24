@@ -22,7 +22,7 @@ in ICU is described below.
 ## StringPrep
 
 StringPrep, the process of preparing Unicode strings for use in network
-protocols is defined in RFC 3454 (<http://www.rfc-editor.org/rfc/rfc3454.txt> ).
+protocols is defined in RFC 3454 (<https://www.rfc-editor.org/rfc/rfc3454.txt>).
 The RFC defines a broad framework and rules for processing the strings.
 
 Protocols that prescribe use of StringPrep must define a profile of StringPrep,
@@ -73,7 +73,7 @@ steps:
 ## NamePrep
 
 NamePrep is a profile of StringPrep for use in IDNA. This profile in defined in
-RFC 3491(<http://www.rfc-editor.org/rfc/rfc3491.txt> ).
+RFC 3491(<https://www.rfc-editor.org/rfc/rfc3491.txt>).
 
 The profile specifies the following rules:
 
@@ -92,7 +92,7 @@ The profile specifies the following rules:
 Punycode is an encoding scheme for Unicode for use in IDNA. Punycode converts
 Unicode text to unique sequence of ASCII text and back to Unicode. It is an
 ASCII Compatible Encoding (ACE). Punycode is described in RFC 3492
-(<http://www.rfc-editor.org/rfc/rfc3492.txt> ).
+(<https://www.rfc-editor.org/rfc/rfc3492.txt>).
 
 The Punycode algorithm is a form of a general Bootstring algorithm which allows
 strings composed of smaller set of code points to uniquely represent any string
@@ -111,7 +111,7 @@ dealt with differently. When the server name is displayed to the user then
 Unicode text should be displayed. When Unicode text is stored in lookup tables,
 for compatibility with older DNS protocol and the resolver libraries, the text
 should be the ASCII equivalent. The IDNA protocol, defined by RFC 3490
-(<http://www.rfc-editor.org/rfc/rfc3490.txt> ), satisfies the above
+(<https://www.rfc-editor.org/rfc/rfc3490.txt>), satisfies the above
 requirements.
 
 Server names stored in the DNS lookup tables are usually formed by concatenating
@@ -359,7 +359,7 @@ available at <https://github.com/unicode-org/icu-demos/tree/main/idnbrowser>.
 #### NFS Version 4 Profiles
 
 Network File System Version 4 defined by RFC 3530
-(<http://www.rfc-editor.org/rfc/rfc3530.txt> ) defines use of Unicode text in
+(<https://www.rfc-editor.org/rfc/rfc3530.txt>) defines use of Unicode text in
 the protocol. ICU provides the requisite profiles as part of test suite and code
 for processing the strings according the profiles as a part of samples.
 

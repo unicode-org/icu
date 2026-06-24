@@ -233,7 +233,7 @@ The `msgfmt` utility compiles .po files into "message object files" (extension
 .mo). The charset is determined from the locale ID in `LC_CTYPE`. There are
 additional supporting tools for .po files.
 
-*Note: The OpenI18N specification also requires POSIX `gencat`/`catgets` support. See the [POSIX](#posixcatsgets) (§) section below.*
+*Note: The OpenI18N specification also requires POSIX `gencat`/`catgets` support. See the [POSIX](#posixcatgets) (§) section below.*
 
 Defined at: Annex C of the Li18nux-2000 specification, see above.
 

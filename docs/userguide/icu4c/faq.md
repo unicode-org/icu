@@ -69,8 +69,8 @@ MSVC compiler. See the [Building ICU4C](./build) page.
 
 #### Can you help me build ICU4C for ...
 
-We can try ... make sure you read the [Building ICU4C](./build) section and also the [ICU
-Data](../icu_data/index.md) section. You might also [searching the icu-support
+We can try ... make sure you read the [Building ICU4C](./build) section and also the
+[ICU Data](../icu_data/index.md) section. You might also [searching the icu-support
 archives](https://icu.unicode.org/contacts), and then posting a question
 there. Additionally, sites such as
 [StackOverflow](http://stackoverflow.com/search?q=icu) may have helpful tips for
@@ -104,7 +104,7 @@ ICU 1.8.1–ICU 57 and ICU4J 1.3.1–ICU4J 57 are covered by the [ICU
 license](https://github.com/unicode-org/icu/blob/release-57-1/icu4c/LICENSE),
 a simple, permissive non-copyleft free software license, compatible with the GNU
 GPL. The ICU license is identical to the version of the X license that was
-formerly available at <http://www.x.org/Downloads_terms.html> . (This site no
+formerly available at <http://www.x.org/Downloads_terms.html>. (This site no
 longer exists, but can still be retrieved through internet archive services.)
 
 #### Can I use ICU from other languages besides C/C++ and Java?
@@ -404,8 +404,8 @@ uses 3 characters to represent that part of the locale. All three parts are
 separated by an underscore "_". For example, US English is "en_US", and German
 in Germany with the Euro symbol is represented as "de_DE_EURO". Traditionally
 the language part of the locale is lowercase, the country is uppercase and the
-variant is uppercase. More details are available from the [Locale
-Chapter](../locale/index.md) of this User's Guide.
+variant is uppercase. More details are available from the
+[Locale Chapter](../locale/index.md) of this User's Guide.
 
 #### How is ICU versioned?
 

@@ -420,7 +420,7 @@ If the error is caused by bad CLDR data, then file a CLDR bug (or use the existi
 ticket under which you are performing the integration, if you have one), fix the data,
 and regenerate from step 4.
 
-If the data is OK , other sources of failure can include:
+If the data is OK, other sources of failure can include:
 
 * Problems with the CLDR-ICU conversion process (perhaps some locale data is not getting
   converted properly; go back to step 3, adjust and repeat from there.

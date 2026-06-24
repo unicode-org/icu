@@ -315,7 +315,7 @@ makes it unsuitable for internal processing. It also uses all possible byte
 values, which might require additional processing for protocols such as SMTP
 (email).
 
-See also <https://www.unicode.org/reports/tr6/> .
+See also <https://www.unicode.org/reports/tr6/>.
 
 ## Other Unicode Encodings
 
@@ -328,28 +328,28 @@ of them are implemented in ICU, see
     smaller amount of state. Unlike SCSU, it preserves code point order and can
     be used in 8bit emails without a transfer encoding. BOCU-1 does **not**
     preserve ASCII characters in ASCII-readable form. See [Unicode Technical
-    Note #6](http://www.unicode.org/notes/tn6/) .
+    Note #6](http://www.unicode.org/notes/tn6/).
 
 2.  UTF-7: Designed for 7bit emails; simple and not very compact. Since email
     systems have been 8-bit safe for several years, UTF-7 is not necessary any
     more and not recommended. Most ASCII characters are readable, others are
-    base64-encoded. See [RFC 2152](http://www.ietf.org/rfc/rfc2152.txt) .
+    base64-encoded. See [RFC 2152](https://www.ietf.org/rfc/rfc2152.txt).
 
 3.  IMAP-mailbox-name: A variant of UTF-7 that is suitable for expressing
     Unicode strings as ASCII characters for Unix filenames.
     **The name "IMAP-mailbox-name" is specific to ICU!**
     See [RFC 2060 INTERNET MESSAGE ACCESS PROTOCOL - VERSION
-    4rev1](http://www.ietf.org/rfc/rfc2060.txt) section 5.1.3. Mailbox
+    4rev1](https://www.ietf.org/rfc/rfc2060.txt) section 5.1.3. Mailbox
     International Naming Convention.
 
 4.  UTF-EBCDIC: An EBCDIC-friendly encoding that is similar to UTF-8. See
-    [Unicode Technical Report #16](http://www.unicode.org/reports/tr16/) . **As
-    of ICU 2.6, UTF-EBCDIC is not implemented in ICU.**
+    [Unicode Technical Report #16](http://www.unicode.org/reports/tr16/).
+    **As of ICU 2.6, UTF-EBCDIC is not implemented in ICU.**
 
 5.  CESU-8: Compatibility Encoding Scheme for UTF-16: 8-Bit
     An incompatible variant of UTF-8 that preserves 16-bit-Unicode (UTF-16)
     string order instead of code point order. Not for open interchange. See
-    [Unicode Technical Report #26](http://www.unicode.org/reports/tr26/) .
+    [Unicode Technical Report #26](http://www.unicode.org/reports/tr26/).
 
 ## Programming using UTFs
 

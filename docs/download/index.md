@@ -90,7 +90,7 @@ ICU 78 and CLDR 48 are major releases, including a new version of Unicode and ma
 | [**ICU 51**](https://icu.unicode.org/download/51) | [**51.3**](https://icu.unicode.org/download/51#h.ae67vrvucf1k) | [**51.3**](https://icu.unicode.org/download/51#h.p2kuuvx5ko5z) | CLDR 23, short weekday names, new time zone format patterns, display context for date format and locale display names |
 | [ICU 50](https://icu.unicode.org/download/50) | [50.2](https://icu.unicode.org/download/50#h.au7pfptnrbk0) | [50.2](https://icu.unicode.org/download/50#h.h2lsiy5b0om3) | CLDR 22.1, Unicode 6.2, ordinal number support, dictionary-based break iterators for Chinese & Japanese… |
 | [ICU 49](https://icu.unicode.org/download/49) | [49.1.2](https://icu.unicode.org/download/49#h.8kgchrymg08d) | [49.1](https://icu.unicode.org/download/49#h.plyzynidar2c) | CLDR 21.0.1, Unicode 6.1, simpler ICU4C build without generated platform.h, many small API additions |
-|  |   |   | Note: We have changed the [ICU release version numbering](https://unicode-org.github.io/icu/userguide/icu/design.html#version-numbers-in-icu) , combining the former first two fields into one, thus the major release sequence is ICU 4.8, ICU 49, ICU 50, … |
+|  |   |   | Note: We have changed the [ICU release version numbering](https://unicode-org.github.io/icu/userguide/icu/design.html#version-numbers-in-icu), combining the former first two fields into one, thus the major release sequence is ICU 4.8, ICU 49, ICU 50, … |
 
 For more details on building ICU once you've checked out the code, please see the ICU4C or ICU4J readme (linked from the nav bar).
 

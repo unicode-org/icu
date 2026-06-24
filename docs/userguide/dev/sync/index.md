@@ -41,8 +41,8 @@ The ICU4C synchronization primitives are for internal use only; they are not
 exported as API to normal users of ICU.
 
 ICU provides implementations of its synchronization functions for Windows, POSIX
-and C++11 platforms, and provides a build-time interface to allow [custom
-implementations](custom.md) for other platforms.
+and C++11 platforms, and provides a build-time interface to allow
+[custom implementations](custom.md) for other platforms.
 
 ## ICU4C Synchronization Primitives
 

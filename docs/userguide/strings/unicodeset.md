@@ -256,7 +256,7 @@ Locale and then getting the UnicodeSet based on the generated pattern.
     UScriptCode script[10] = {USCRIPT_INVALID_CODE};
     UScriptCode scriptcode = USCRIPT_INVALID_CODE;
     num = uscript_getCode("ja",script,capacity, &err);
-    printf("%s %d \n" ,"Number of script code associated are :", num);
+    printf("%s %d \n", "Number of script code associated are :", num);
     UnicodeString temp = UnicodeString("[", 1, US_INV);
     UnicodeString pattern;
     for(j=0;j<num;j++){

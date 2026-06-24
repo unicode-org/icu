@@ -34,7 +34,7 @@ License & terms of use: http://www.unicode.org/copyright.html
 
     Or, to install manually
     1.  To update Doxygen, first [download binary or source release
-        here](http://doxygen.org/download.html#latestsrc)
+        here](https://www.doxygen.nl/download.html)
     2.  Unpack the release, and run something like<br>
         "`configure --prefix /usr/local`" (to install into /usr/local/bin etc)<br>
         (Note for the binary release, 'configure' just builds an installer.)

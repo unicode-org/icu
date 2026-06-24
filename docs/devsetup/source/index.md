@@ -107,7 +107,7 @@ Want to contribute back to ICU? See
 ## Repository Layout
 
 The top level
-[README.md](https://github.com/unicode-org/icu#international-components-for-unicode)
+[README.md](https://github.com/unicode-org/icu)
 contains the latest information about the repository’s layout. Currently:
 
 *   **icu4c**/ ICU for C/C++

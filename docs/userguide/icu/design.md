@@ -367,7 +367,7 @@ There are 3 major extensibility elements in ICU:
    chapter for more information.
 2. **Code Extensibility**:
    The classes, data, and design are fully extensible. Examples of this
-   extensibility include the BreakIterator , RuleBasedBreakIterator and
+   extensibility include the BreakIterator, RuleBasedBreakIterator and
    DictionaryBasedBreakIterator classes.
 3. **Error Handling Extensibility**:
    There are mechanisms available to enhance the built-in error handling when
@@ -607,7 +607,7 @@ Starting with ICU 49, the dependencies of code files (.o files compiled from
 .c/.cpp) are documented in
 [source/test/depstest/dependencies.txt](https://github.com/unicode-org/icu/blob/main/icu4c/source/test/depstest/dependencies.txt).
 Adjacent Python code is used to parse this file and to
-[verify](https://icu.unicode.org/processes/release/tasks/healthy-code#TOC-Check-library-dependencies)
+[verify](https://icu.unicode.org/processes/release/tasks/healthy-code#h.cqdl8quqth1a)
 that it matches the actual dependencies of the code files.
 
 The dependency list can be used to build subset libraries. In addition, by
