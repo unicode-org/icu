@@ -279,6 +279,8 @@ namespace message2 {
              *        and the caller must ensure its lifetime contains
              *        the lifetime of the `MessageFormatter` object built by this
              *        builder.
+             *        Functions with the same name as standard functions will
+             *        override the standard functions.
              * @return       A reference to the builder.
              *
              * @internal ICU 75 technology preview

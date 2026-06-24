@@ -53,6 +53,7 @@ public:
     void testBidiAPI(void);
     void testAPI(void);
     void testAPISimple(void);
+    void testOverrideFunctions(void);
 
 private:
     void jsonTestsFromFiles(IcuTestErrorCode&);

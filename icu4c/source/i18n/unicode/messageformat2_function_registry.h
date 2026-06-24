@@ -121,6 +121,8 @@ namespace message2 {
              * @param functionName Name of the formatter being registered.
              * @param function A pointer to a Function object.
              *                 This argument is adopted.
+             *                 Functions with the same name as standard functions will
+             *                 override the standard functions.
              * @param errorCode Input/output error code
              * @return A reference to the builder.
              *

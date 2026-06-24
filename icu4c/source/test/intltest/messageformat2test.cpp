@@ -31,6 +31,7 @@ TestMessageFormat2::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO(testLowLoneSurrogate);
     TESTCASE_AUTO(testLoneSurrogateInQuotedLiteral);
     TESTCASE_AUTO(dataDrivenTests);
+    TESTCASE_AUTO(testOverrideFunctions);
     TESTCASE_AUTO_END;
 }
 
@@ -477,6 +478,112 @@ void TestMessageFormat2::dataDrivenTests() {
     IcuTestErrorCode errorCode(*this, "jsonTests");
 
     jsonTestsFromFiles(errorCode);
+}
+
+class FixedDateValue : public FunctionValue {
+    public:
+    UnicodeString formatToString(UErrorCode&) const override;
+    FixedDateValue();
+    virtual ~FixedDateValue();
+    private:
+    friend class FixedDateFunction;
+
+    UnicodeString formattedString;
+    FixedDateValue(const FunctionValue&, const FunctionOptions&, UErrorCode&);
+};
+
+UnicodeString FixedDateValue::formatToString(UErrorCode& status) const {
+    (void) status;
+    // This is a test class, it just outputs a silly fixed value.
+    return u"A Day ending in Y";
+}
+FixedDateValue::~FixedDateValue() {}
+
+FixedDateValue::FixedDateValue(const FunctionValue& arg,
+                                 const FunctionOptions& options,
+                                 UErrorCode& errorCode) {
+    (void)arg;
+    (void)options;
+    if (U_FAILURE(errorCode)) {
+        return;
+    }
+
+    // no input, no options
+}
+
+class FixedDateFunction : public Function {
+  public:
+    FixedDateFunction(UErrorCode& status);
+    LocalPointer<FunctionValue> call(const FunctionContext &, const FunctionValue &,
+                                     const FunctionOptions &, UErrorCode &) override;
+    virtual ~FixedDateFunction();
+};
+
+FixedDateFunction::FixedDateFunction(UErrorCode& status) {
+    (void)status;
+}
+
+LocalPointer<FunctionValue> FixedDateFunction::call(const FunctionContext &context,
+                                                 const FunctionValue &arg,
+                                                 const FunctionOptions &opts,
+                                                 UErrorCode &errorCode) {
+    (void)context;
+
+    if (U_FAILURE(errorCode)) {
+        return LocalPointer<FunctionValue>();
+    }
+    LocalPointer<FunctionValue> v(new FixedDateValue(arg, std::move(opts), errorCode));
+    return v;
+}
+
+FixedDateFunction::~FixedDateFunction() {}
+
+void TestMessageFormat2::testOverrideFunctions() {
+    IcuTestErrorCode errorCode(*this, "testOverrideFunctions");
+    UParseError parseError;
+
+    std::map<UnicodeString, icu::message2::Formattable> argsBuilder;
+    argsBuilder["count"] = message2::Formattable((int64_t)13);
+    argsBuilder["name"] = message2::Formattable("US");
+    argsBuilder["birthday"] = message2::Formattable("1776-07-04");
+    icu::message2::MessageArguments args(argsBuilder, errorCode);
+        UnicodeString expectedResult(u"PASS 13 @ \u2068A Day ending in Y\u2069");
+
+    const UnicodeString orig_pattern(
+        u""
+        ".input {$count :number} .input {$name :string} .input {$birthday :date}\n"
+        ".match $count\n"
+        "many {{PASS {$count} @ {$birthday :date style=short}}}\n"
+        "* {{FAIL wrong bucket {$count} @ {$birthday :date style=short}}}\n");
+
+    {
+        // build the function registry
+        icu::message2::MFFunctionRegistry::Builder builder(errorCode);
+        MFFunctionRegistry functionRegistry =
+            builder
+                .adoptFunction(data_model::FunctionName("date"), // override
+                               new FixedDateFunction(errorCode), errorCode)
+                .build();
+
+        icu::message2::MessageFormatter mf =
+            MessageFormatter::Builder(errorCode)
+                .setErrorHandlingBehavior(MessageFormatter::U_MF_BEST_EFFORT)
+                .setPattern(orig_pattern, parseError, errorCode)
+                .setFunctionRegistry(functionRegistry)
+                .setLocale(Locale("pl"))
+                .build(errorCode);
+
+        if (errorCode.errIfFailureAndReset("build")) {
+            errln("UParseError = %d:%d", parseError.line, parseError.offset);
+            return;
+        }
+
+        UnicodeString result = mf.formatToString(args, errorCode);
+        if (errorCode.errIfFailureAndReset("formatToString")) {
+            return;
+        }
+        assertEquals("testSetFormatLocale", expectedResult, result);
+    }
 }
 
 TestCase::~TestCase() {}

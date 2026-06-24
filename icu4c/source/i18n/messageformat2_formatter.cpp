@@ -281,15 +281,15 @@ namespace message2 {
                                      UErrorCode& status) const {
         NULL_ON_ERROR(status);
 
-        if (isBuiltInFunction(functionName)) {
-            return standardMFFunctionRegistry.getFunction(functionName);
-        }
         if (hasCustomMFFunctionRegistry()) {
             const MFFunctionRegistry& customMFFunctionRegistry = getCustomMFFunctionRegistry();
             Function* function = customMFFunctionRegistry.getFunction(functionName);
             if (function != nullptr) {
                 return function;
             }
+        }
+        if (isBuiltInFunction(functionName)) {
+            return standardMFFunctionRegistry.getFunction(functionName);
         }
         // Either there is no custom function registry and the function
         // isn't built-in, or the function doesn't exist in either the built-in
