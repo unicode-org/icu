@@ -1147,6 +1147,40 @@ void RBBIAPITest::TestGetBinaryRules() {
 }
 
 
+void RBBIAPITest::TestMalformedBinaryData() {
+    // Crafted binary data with out-of-bounds offset fields (fTrie = 0x66666666).
+    // Before the fix, this caused a SEGV in ucptrie_openFromBinary() via wild pointer.
+    // After the fix, the constructor must return U_INVALID_FORMAT_ERROR.
+    static const uint8_t data[] = {
+        0xa0, 0xb1, 0x00, 0x00, 0x06, 0x00, 0xff, 0xff, 0x14, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66,
+        0x66, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00, 0x51, 0x00, 0x00, 0x66, 0x66,
+        0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x66, 0x0c, 0x0c, 0x0c, 0x0c,
+        0x0c, 0x0c, 0x0c, 0x0c, 0x0c, 0x0c, 0x0c, 0x0c, 0x0c, 0x0c, 0x0c, 0x0c,
+        0x0c, 0x0c, 0x0c, 0x0c, 0x0c, 0x0c, 0x0c, 0x0c, 0x0c, 0x0c, 0x0c, 0x0c,
+        0x0c, 0x0c, 0x0c, 0x0c, 0x0c, 0x66, 0xd5, 0xd5, 0xd5, 0xd5, 0xd5, 0xd5,
+        0xd5, 0xd5, 0xd5, 0xd5, 0x66, 0x66, 0x66, 0x62, 0x66, 0x66, 0x66, 0x66,
+        0x66, 0x66, 0x9a, 0x99, 0xb9, 0x99, 0x99, 0x9a, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x0a, 0x0a
+    };
+    UErrorCode status = U_ZERO_ERROR;
+    RuleBasedBreakIterator bi(data, sizeof(data), status);
+    if (status != U_INVALID_FORMAT_ERROR) {
+        errln("%s:%d Expected U_INVALID_FORMAT_ERROR from malformed binary data, got %s",
+              __FILE__, __LINE__, u_errorName(status));
+    }
+
+    // Also test a truncated header (less than sizeof(RBBIDataHeader)).
+    static const uint8_t shortData[] = {0xa0, 0xb1, 0x00, 0x00, 0x06, 0x00};
+    status = U_ZERO_ERROR;
+    RuleBasedBreakIterator bi2(shortData, sizeof(shortData), status);
+    if (status != U_INVALID_FORMAT_ERROR) {
+        errln("%s:%d Expected U_INVALID_FORMAT_ERROR from truncated data, got %s",
+              __FILE__, __LINE__, u_errorName(status));
+    }
+}
+
+
 void RBBIAPITest::TestRefreshInputText() {
     /*
      *  RefreshInput changes out the input of a Break Iterator without
@@ -1467,6 +1501,7 @@ void RBBIAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
     TESTCASE_AUTO(TestRoundtripRules);
     TESTCASE_AUTO(TestGetBinaryRules);
 #endif
+    TESTCASE_AUTO(TestMalformedBinaryData);
     TESTCASE_AUTO(TestRefreshInputText);
 #if !UCONFIG_NO_BREAK_ITERATION
     TESTCASE_AUTO(TestFilteredBreakIteratorBuilder);

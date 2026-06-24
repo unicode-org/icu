@@ -77,6 +77,11 @@ public:
     void TestGetBinaryRules();
 
     /**
+     * Test that malformed binary RBBI data returns U_INVALID_FORMAT_ERROR.
+     **/
+    void TestMalformedBinaryData();
+
+    /**
      * Tests grouping effect of 'single quotes' in rules.
      **/
     void TestQuoteGrouping();

@@ -19,6 +19,8 @@ import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.RuleBasedBreakIterator;
 import com.ibm.icu.util.CodePointTrie;
 import com.ibm.icu.util.ULocale;
+import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.text.CharacterIterator;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1234,6 +1236,36 @@ public class RBBITest extends CoreTestFmwk {
             assertEquals("following" + idx, fns.expectedFollow(idx), bi.following(idx));
             idx = fns.randomStringIndex();
             assertEquals("preceding" + idx, fns.expectedPreceding(idx), bi.preceding(idx));
+        }
+    }
+
+    @Test
+    public void TestMalformedBinaryData() {
+        // Crafted RBBI data with out-of-bounds offsets (fTrie = 0x66666666).
+        // RBBIDataWrapper.get() must throw IOException, not crash.
+        byte[] data = {
+            (byte)0x00, (byte)0x00, (byte)0xb1, (byte)0xa0,  // magic (big-endian)
+            (byte)0x06, (byte)0x00, (byte)0x00, (byte)0x00,  // format version
+            (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x74,  // fLength = 116
+            (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00,  // fCatCount
+            (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x50,  // fFTable offset
+            (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00,  // fFTableLen
+            (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x50,  // fRTable offset
+            (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00,  // fRTableLen
+            (byte)0x66, (byte)0x66, (byte)0x66, (byte)0x66,  // fTrie = 0x66666666 (OOB)
+            (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x10,  // fTrieLen
+            (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x50,  // fRuleSource offset
+            (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00,  // fRuleSourceLen
+            (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x50,  // fStatusTable offset
+            (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00,  // fStatusTableLen
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 // reserved
+        };
+        ByteBuffer buf = ByteBuffer.wrap(data);
+        try {
+            RBBIDataWrapper.get(buf);
+            errln("Expected IOException from malformed RBBI binary data");
+        } catch (IOException e) {
+            // Expected
         }
     }
 }
