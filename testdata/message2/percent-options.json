@@ -1,0 +1,234 @@
+{
+  "$schema": "../../schemas/v0/tests.schema.json",
+  "scenario": "Percent function",
+  "description": "The built-in formatter for percentages.",
+  "defaultTestProperties": {
+    "tags": [":percent"],
+    "bidiIsolation": "none",
+    "locale": "en-US",
+    "expErrors": []
+  },
+  "tests": [
+    {
+      "src": "{0.42 :percent}",
+      "exp": "42%"
+    },
+    {
+      "src": ".local $n = {0.42 :number} {{{$n :percent}}}",
+      "exp": "42%"
+    },
+    {
+      "src": ".local $n = {0.42 :percent} {{{$n :percent}}}",
+      "exp": "42%"
+    },
+    {
+      "src": "{0.421 :percent maximumFractionDigits=0}",
+      "exp": "42%"
+    },
+    {
+      "src": "{0.42 :percent minimumFractionDigits=2}",
+      "exp": "42.00%"
+    },
+    {
+      "src": "{$x :percent}",
+      "params": [{ "name": "x", "value": 0.41 }],
+      "exp": "41%"
+    },
+    {
+      "src": ".local $n = {-0.42 :percent trailingZeroDisplay=stripIfInteger} {{{$n :percent}}}",
+      "exp": "-42%"
+    },
+    {
+      "src": "{0.42 :percent minimumIntegerDigits=3}",
+      "exp": "042%"
+    },
+    {
+      "src": "{0.4275 :percent minimumSignificantDigits=5}",
+      "exp": "42.750%"
+    },
+    {
+      "src": "{0.4275 :percent maximumSignificantDigits=3}",
+      "exp": "42.8%"
+    },
+    {
+      "src": "{0.4275 :percent minimumFractionDigits=5 minimumSignificantDigits=2 roundingPriority=auto}",
+      "exp": "42.75%"
+    },
+    {
+      "src": "{0.4275 :percent maximumFractionDigits=5 maximumSignificantDigits=2 roundingPriority=auto}",
+      "exp": "43%"
+    },
+    {
+      "src": "{0.4275 :percent maximumFractionDigits=5 minimumSignificantDigits=2 roundingPriority=morePrecision}",
+      "exp": "42.75%"
+    },
+    {
+      "src": "{0.4275 :percent minimumFractionDigits=5 maximumSignificantDigits=2 roundingPriority=morePrecision}",
+      "exp": "42.75000%"
+    },
+    {
+      "src": "{0.4275 :percent minimumFractionDigits=5 minimumSignificantDigits=2 roundingPriority=lessPrecision}",
+      "exp": "42.75%"
+    },
+    {
+      "src": "{0.4275 :percent minimumFractionDigits=5 maximumSignificantDigits=2 roundingPriority=lessPrecision}",
+      "exp": "43%"
+    },
+    {
+      "src": "{0.4275 :percent minimumFractionDigits=2 roundingPriority=morePrecision}",
+      "exp": "42.75%"
+    },
+    {
+      "src": "{0.4275 :percent minimumFractionDigits=2 roundingPriority=lessPrecision}",
+      "exp": "42.75%"
+    },
+    {
+      "src": "{0.4275 :percent roundingMode=ceil}",
+      "exp": "43%"
+    },
+    {
+      "src": "{0.4275 :percent roundingMode=floor}",
+      "exp": "42%"
+    },
+    {
+      "src": "{0.4275 :percent roundingMode=expand}",
+      "exp": "43%"
+    },
+    {
+      "src": "{-0.4275 :percent roundingMode=expand}",
+      "exp": "-43%"
+    },
+    {
+      "src": "{-0.4275 :percent roundingMode=ceil}",
+      "exp": "-42%"
+    },
+    {
+      "src": "{-0.4275 :percent roundingMode=floor}",
+      "exp": "-43%"
+    },
+    {
+      "src": "{0.425 :percent roundingMode=halfCeil}",
+      "exp": "43%"
+    },
+    {
+      "src": "{0.423 :percent roundingMode=halfCeil}",
+      "exp": "42%"
+    },
+    {
+      "src": "{0.425 :percent roundingMode=halfCeil}",
+      "exp": "43%"
+    },
+    {
+      "src": "{0.4274 :percent roundingMode=ceil}",
+      "exp": "43%"
+    },
+    {
+      "src": "{0.4275 :percent roundingMode=trunc}",
+      "exp": "42%"
+    },
+    {
+      "src": "{-0.4275 :percent roundingMode=trunc}",
+      "exp": "-42%"
+    },
+    {
+      "src": "{0.4275 :percent roundingMode=halfFloor}",
+      "exp": "43%"
+    },
+    {
+      "src": "{0.423 :percent roundingMode=halfFloor}",
+      "exp": "42%"
+    },
+    {
+      "src": "{0.425 :percent roundingMode=halfFloor}",
+      "exp": "42%"
+    },
+    {
+      "src": "{0.4275 :percent roundingMode=halfExpand}",
+      "exp": "43%"
+    },
+    {
+      "src": "{0.423 :percent roundingMode=halfExpand}",
+      "exp": "42%"
+    },
+    {
+      "src": "{0.425 :percent roundingMode=halfExpand}",
+      "exp": "43%"
+    },
+    {
+      "src": "{-0.4274 :percent roundingMode=halfExpand}",
+      "exp": "-43%"
+    },
+    {
+      "src": "{-0.425 :percent roundingMode=halfExpand}",
+      "exp": "-43%"
+    },
+    {
+      "src": "{-0.423 :percent roundingMode=halfExpand}",
+      "exp": "-42%"
+    },
+    {
+      "src": "{0.4274 :percent roundingMode=halfTrunc}",
+      "exp": "43%"
+    },
+    {
+      "src": "{0.425 :percent roundingMode=halfTrunc}",
+      "exp": "42%"
+    },
+    {
+      "src": "{0.423 :percent roundingMode=halfTrunc}",
+      "exp": "42%"
+    },
+    {
+      "src": "{-0.425 :percent roundingMode=halfTrunc}",
+      "exp": "-42%"
+    },
+    {
+      "src": "{-0.423 :percent roundingMode=halfTrunc}",
+      "exp": "-42%"
+    },
+    {
+      "src": "{0.4274 :percent roundingMode=halfEven}",
+      "exp": "43%"
+    },
+    {
+      "src": "{0.425 :percent roundingMode=halfEven}",
+      "exp": "42%"
+    },
+    {
+      "src": "{0.423 :percent roundingMode=halfEven}",
+      "exp": "42%"
+    },
+    {
+      "src": "{-0.4274 :percent roundingMode=halfEven}",
+      "exp": "-43%"
+    },
+    {
+      "src": "{-0.425 :percent roundingMode=halfEven}",
+      "exp": "-42%"
+    },
+    {
+      "src": "{-0.423 :percent roundingMode=halfEven}",
+      "exp": "-42%"
+    },
+    {
+      "src": "{0.4275 :percent minimumSignificantDigits=3 maximumSignificantDigits=7}",
+      "exp": "42.75%"
+    },
+    {
+      "src": "{0.4275 :percent minimumSignificantDigits=2 maximumSignificantDigits=3 minimumFractionDigits=3}",
+      "exp": "42.8%"
+    },
+    {
+      "src": "{0.4275 :percent minimumSignificantDigits=2 maximumSignificantDigits=3 maximumFractionDigits=3 roundingPriority=morePrecision}",
+      "exp": "42.75%"
+    },
+    {
+      "src": "{0.4275 :percent minimumSignificantDigits=2 maximumSignificantDigits=3 maximumFractionDigits=3 roundingPriority=lessPrecision}",
+      "exp": "42.8%"
+    },
+    {
+      "src": "{0.4275 :percent minimumFractionDigits=6}",
+      "exp": "42.750000%"
+    }
+  ]
+}

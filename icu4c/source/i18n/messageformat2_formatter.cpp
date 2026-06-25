@@ -163,6 +163,8 @@ namespace message2 {
         LocalPointer<Function> time(StandardFunctions::DateTime::time(success));
         LocalPointer<Function> currency(StandardFunctions::Number::currency(success));
         LocalPointer<Function> number(StandardFunctions::Number::number(success));
+        LocalPointer<Function> offset(StandardFunctions::Number::offset(success));
+        LocalPointer<Function> percent(StandardFunctions::Number::percent(success));
         LocalPointer<Function> integer(StandardFunctions::Number::integer(success));
         LocalPointer<Function> string(StandardFunctions::String::string(success));
         LocalPointer<Function> testFunction(StandardFunctions::TestFunction::testFunction(success));
@@ -178,6 +180,10 @@ namespace message2 {
                                   number.orphan(), success)
             .adoptFunction(FunctionName(functions::INTEGER),
                                   integer.orphan(), success)
+            .adoptFunction(FunctionName(functions::OFFSET),
+                                  offset.orphan(), success)
+            .adoptFunction(FunctionName(functions::PER_CENT),
+                                  percent.orphan(), success)
             .adoptFunction(FunctionName(functions::STRING),
                                   string.orphan(), success)
             .adoptFunction(FunctionName(functions::TEST_FUNCTION),
