@@ -461,6 +461,16 @@ ucurr_getKeywordValuesForLocale(const char* key,
 U_CAPI int32_t U_EXPORT2
 ucurr_getNumericCode(const UChar* currency);
 
+/**
+ * The number of digits to be used when formatting
+ * a currency amount when the default number of
+ * digits cannot be determined from the currency name.
+ *
+ * @internal ICU 79 technology preview
+ * @deprecated This API is for technology preview only.
+ */
+#define U_CURR_DEFAULT_DIGITS 2
+
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif

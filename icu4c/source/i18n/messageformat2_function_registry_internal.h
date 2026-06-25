@@ -27,6 +27,7 @@ namespace message2 {
 // Constants for option names
 namespace options {
 static constexpr std::u16string_view ACCOUNTING = u"accounting";
+static constexpr std::u16string_view ADD = u"add";
 static constexpr std::u16string_view ALWAYS = u"always";
 static constexpr std::u16string_view AUTO = u"auto";
 static constexpr std::u16string_view CEIL = u"ceil";
@@ -92,6 +93,7 @@ static constexpr std::u16string_view SHORT_UPPER = u"SHORT";
 static constexpr std::u16string_view SIGN_DISPLAY = u"signDisplay";
 static constexpr std::u16string_view STRIP_IF_INTEGER = u"stripIfInteger";
 static constexpr std::u16string_view STYLE = u"style";
+static constexpr std::u16string_view SUBTRACT = u"subtract";
 static constexpr std::u16string_view TIME_STYLE = u"timeStyle";
 static constexpr std::u16string_view TRAILING_ZERO_DISPLAY = u"trailingZeroDisplay";
 static constexpr std::u16string_view TRUNC = u"trunc";
@@ -113,7 +115,9 @@ static constexpr std::u16string_view YEAR = u"year";
         typedef enum NumberType {
             kCurrency,
             kInteger,
-            kNumber
+            kNumber,
+            kOffset,
+            kPercent
         } NumberType;
 
         class DigitSizeOption {
@@ -140,7 +144,7 @@ static constexpr std::u16string_view YEAR = u"year";
 
         private:
         static void requireNoRoundingIncrement(const FunctionOptions&, UErrorCode&);
-        static number::Precision withRoundingIncrement(const FunctionOptions&, bool&, const DigitSizeOption&, const UChar*, UErrorCode&);
+        static number::Precision withRoundingIncrement(const FunctionOptions&, bool&, int32_t, UErrorCode&);
         static void validateDigitSizeOptions(const FunctionOptions&, UErrorCode&);
         static void checkSelectOption(const FunctionOptions&, UErrorCode&);
         static UnicodeString getStringOption(const FunctionOptions& opts,
@@ -190,6 +194,8 @@ static constexpr std::u16string_view YEAR = u"year";
             static Number* currency(UErrorCode& success);
             static Number* integer(UErrorCode& success);
             static Number* number(UErrorCode& success);
+            static Number* offset(UErrorCode& success);
+            static Number* percent(UErrorCode& success);
 
             LocalPointer<FunctionValue> call(const FunctionContext& context,
                                 const FunctionValue& operand,
@@ -211,7 +217,7 @@ static constexpr std::u16string_view YEAR = u"year";
             Number(NumberType t) : numberType(t) {}
 
         // These options have their own accessor methods, since they have different default values.
-            DigitSizeOption digitSizeOption(const FunctionOptions&, std::u16string_view, bool) const;
+            DigitSizeOption digitSizeOption(const FunctionOptions&, std::u16string_view, bool, UErrorCode&) const;
             DigitSizeOption digitSizeOptionWithAuto(const FunctionOptions&,
                                                     std::u16string_view) const;
             int32_t digitSizeOptionNoAuto(const FunctionOptions&,
@@ -222,7 +228,8 @@ static constexpr std::u16string_view YEAR = u"year";
             int32_t minimumSignificantDigits(const FunctionOptions& options) const;
             int32_t maximumSignificantDigits(const FunctionOptions& options) const;
             int32_t minimumIntegerDigits(const FunctionOptions& options) const;
-
+            int32_t addOption(const FunctionOptions&, UErrorCode&) const;
+            int32_t subtractOption(const FunctionOptions&, UErrorCode&) const;
             bool usePercent(const FunctionOptions& options) const;
             const NumberType numberType = NumberType::kNumber;
             const number::LocalizedNumberFormatter icuFormatter;
@@ -233,6 +240,7 @@ static constexpr std::u16string_view YEAR = u"year";
         static number::LocalizedNumberFormatter formatterForOptions(const Number& number,
                                                                     const Locale& locale,
                                                                     const FunctionOptions& opts,
+                                                                    bool,
                                                                     UErrorCode& status);
 
 
@@ -253,6 +261,8 @@ static constexpr std::u16string_view YEAR = u"year";
 
             NumberType numberType = NumberType::kNumber;
             number::FormattedNumber formattedNumber;
+            number::FormattedNumber scaledFormattedNumber;
+            number::FormattedNumber percentFormattedNumber;
             NumberValue(const Number&,
                         const FunctionContext&,
                         const FunctionValue&,
