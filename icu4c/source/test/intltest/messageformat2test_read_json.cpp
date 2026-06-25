@@ -354,6 +354,8 @@ void TestMessageFormat2::jsonTestsFromFiles(IcuTestErrorCode& errorCode) {
     runCldrConformanceTestFromJsonFile(*this, "functions/datetime.json", errorCode);
     runCldrConformanceTestFromJsonFile(*this, "functions/integer.json", errorCode);
     runCldrConformanceTestFromJsonFile(*this, "functions/number.json", errorCode);
+    runCldrConformanceTestFromJsonFile(*this, "functions/offset.json", errorCode);
+    runCldrConformanceTestFromJsonFile(*this, "functions/percent.json", errorCode);
     runCldrConformanceTestFromJsonFile(*this, "functions/string.json", errorCode);
     runCldrConformanceTestFromJsonFile(*this, "functions/time.json", errorCode);
 

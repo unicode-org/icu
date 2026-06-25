@@ -38,6 +38,8 @@ namespace message2 {
     static constexpr std::u16string_view TIME = u"time";
     static constexpr std::u16string_view NUMBER = u"number";
     static constexpr std::u16string_view INTEGER = u"integer";
+    static constexpr std::u16string_view OFFSET = u"offset";
+    static constexpr std::u16string_view PER_CENT = u"percent";
     static constexpr std::u16string_view TEST_FUNCTION = u"test:function";
     static constexpr std::u16string_view TEST_FORMAT = u"test:format";
     static constexpr std::u16string_view TEST_SELECT = u"test:select";
