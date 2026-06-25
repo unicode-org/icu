@@ -32,6 +32,7 @@ U_NAMESPACE_BEGIN
 namespace message2 {
 
     namespace functions {
+    static constexpr std::u16string_view CURRENCY = u"currency";
     static constexpr std::u16string_view DATETIME = u"datetime";
     static constexpr std::u16string_view DATE = u"date";
     static constexpr std::u16string_view TIME = u"time";

@@ -161,6 +161,7 @@ namespace message2 {
         LocalPointer<Function> dateTime(StandardFunctions::DateTime::dateTime(success));
         LocalPointer<Function> date(StandardFunctions::DateTime::date(success));
         LocalPointer<Function> time(StandardFunctions::DateTime::time(success));
+        LocalPointer<Function> currency(StandardFunctions::Number::currency(success));
         LocalPointer<Function> number(StandardFunctions::Number::number(success));
         LocalPointer<Function> integer(StandardFunctions::Number::integer(success));
         LocalPointer<Function> string(StandardFunctions::String::string(success));
@@ -172,6 +173,7 @@ namespace message2 {
                                                       dateTime.orphan(), success)
             .adoptFunction(FunctionName(functions::DATE), date.orphan(), success)
             .adoptFunction(FunctionName(functions::TIME), time.orphan(), success)
+            .adoptFunction(FunctionName(functions::CURRENCY), currency.orphan(), success)
             .adoptFunction(FunctionName(functions::NUMBER),
                                   number.orphan(), success)
             .adoptFunction(FunctionName(functions::INTEGER),

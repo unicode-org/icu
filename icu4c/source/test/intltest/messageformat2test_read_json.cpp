@@ -329,6 +329,7 @@ void TestMessageFormat2::jsonTestsFromFiles(IcuTestErrorCode& errorCode) {
     runTestsFromJsonFile(*this, "spec/pattern-selection.json", errorCode);
 
     // Do valid function tests
+    runTestsFromJsonFile(*this, "spec/functions/currency.json", errorCode);
     runTestsFromJsonFile(*this, "spec/functions/date.json", errorCode);
     runTestsFromJsonFile(*this, "spec/functions/datetime.json", errorCode);
     runTestsFromJsonFile(*this, "spec/functions/integer.json", errorCode);
@@ -337,6 +338,7 @@ void TestMessageFormat2::jsonTestsFromFiles(IcuTestErrorCode& errorCode) {
     runTestsFromJsonFile(*this, "spec/functions/time.json", errorCode);
 
     // Other tests (non-spec)
+    runTestsFromJsonFile(*this, "currency-options.json", errorCode);
     runTestsFromJsonFile(*this, "more-functions.json", errorCode);
     runTestsFromJsonFile(*this, "valid-tests.json", errorCode);
     runTestsFromJsonFile(*this, "resolution-errors.json", errorCode);
