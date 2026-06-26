@@ -3617,6 +3617,18 @@ public class CollationMiscTest extends TestFmwk {
     }
 
     @Test
+    public void TestDigitReordering() {
+        String[] str1 = {"123", "123", "ABC"};
+        String[] str2 = {"ABC", "124", "ABD"};
+        int[] exp = {1, -1, -1};
+
+        Collator coll = Collator.getInstance(new ULocale("en_US@colReorder=latn-digit"));
+        for (int i = 0; i < str1.length; i++) {
+            CollationTest.doTest(this, (RuleBasedCollator) coll, str1[i], str2[i], exp[i]);
+        }
+    }
+
+    @Test
     public void TestFrozeness() {
         Collator myCollation = Collator.getInstance(ULocale.CANADA);
         boolean exceptionCaught = false;

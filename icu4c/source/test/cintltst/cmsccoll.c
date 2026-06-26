@@ -5386,6 +5386,28 @@ static void TestReorderWithNumericCollation(void)
     ucol_close(myReorderCollation);
 }
 
+static void TestDigitReordering(void)
+{
+    const UChar *str1[] = {u"123", u"123", u"ABC"};
+    const UChar *str2[] = {u"ABC", u"124", u"ABD"};
+    const UCollationResult exp[] = {UCOL_GREATER, UCOL_LESS, UCOL_LESS};
+
+    UErrorCode status = U_ZERO_ERROR;
+    UCollator *coll;
+    int32_t i;
+
+    coll = ucol_open("en_US@colReorder=latn-digit", &status);
+    if (U_FAILURE(status)) {
+        log_err_status(status, "ERROR: in creation of collator: %s\n", myErrorName(status));
+        return;
+    }
+    for (i = 0; i < 3; i++) {
+        doTest(coll, str1[i], str2[i], exp[i]);
+    }
+    ucol_close(coll);
+}
+
+
 static int compare_uint8_t_arrays(const uint8_t* a, const uint8_t* b)
 {
   for (; *a == *b; ++a, ++b) {
@@ -5966,6 +5988,7 @@ void addMiscCollTest(TestNode** root)
     TEST(TestMultipleReorder);
     TEST(TestReorderingAcrossCloning);
     TEST(TestReorderWithNumericCollation);
+    TEST(TestDigitReordering);
     
     TEST(TestCaseLevelBufferOverflow);
     TEST(TestNextSortKeyPartJaIdentical);

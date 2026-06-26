@@ -280,8 +280,15 @@ public final class CollationFastLatin /* all static */ {
             }
         }
 
+        // NUMERIC flag is also used for indicating digits are reordered
+        // in fast-Latin options.
+        int options =
+                digitsAreReordered
+                        ? CollationSettings.NUMERIC | settings.options
+                        : settings.options;
+
         // Shift the miniVarTop above other options.
-        return (miniVarTop << 16) | settings.options;
+        return (miniVarTop << 16) | options;
     }
 
     public static int compareUTF16(

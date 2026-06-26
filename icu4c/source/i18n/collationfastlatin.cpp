@@ -101,8 +101,13 @@ CollationFastLatin::getOptions(const CollationData *data, const CollationSetting
         for(UChar32 c = 0x30; c <= 0x39; ++c) { primaries[c] = 0; }
     }
 
+    // NUMERIC flag is also used for indicating digits are reordered
+    // in fast-Latin options.
+    int options = digitsAreReordered ?
+        settings.options | CollationSettings::NUMERIC : settings.options;
+
     // Shift the miniVarTop above other options.
-    return (static_cast<int32_t>(miniVarTop) << 16) | settings.options;
+    return (static_cast<int32_t>(miniVarTop) << 16) | options;
 }
 
 int32_t
