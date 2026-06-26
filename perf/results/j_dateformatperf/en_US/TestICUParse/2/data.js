@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1782320735153,
+  "lastUpdate": 1782501332271,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -46047,6 +46047,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 130.0231793719239,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "y.umaoka@gmail.com",
+            "name": "Yoshito Umaoka",
+            "username": "yumaoka"
+          },
+          "committer": {
+            "email": "yumaoka@users.noreply.github.com",
+            "name": "Yoshito Umaoka",
+            "username": "yumaoka"
+          },
+          "distinct": true,
+          "id": "883482887c29103f5d2e80186dfc4ba5af577caf",
+          "message": "ICU-22926 Update the link to CLDR Zone-Tzid mapping data page",
+          "timestamp": "2026-06-26T14:47:16-04:00",
+          "tree_id": "622b48b9f425cca57aad7f0198c51f1ea39c8cb7",
+          "url": "https://github.com/unicode-org/icu/commit/883482887c29103f5d2e80186dfc4ba5af577caf"
+        },
+        "date": 1782500842646,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 145.44213863369686,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
