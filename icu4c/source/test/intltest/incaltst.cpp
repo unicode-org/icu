@@ -579,8 +579,8 @@ void IntlCalendarTest::TestJapaneseFormat() {
     
     // Now, try in Japanese
     {
-        UnicodeString expect = u"平成13年9月8日土曜日";
-        UDate         expectDate = 999932400000.0; // Testing a recent date
+        UnicodeString expect = u"令和8年6月5日金曜日";
+        UDate         expectDate = 1780642800000.0; // Testing a recent date
         Locale        loc("ja_JP@calendar=japanese");
         
         status = U_ZERO_ERROR;
@@ -588,20 +588,19 @@ void IntlCalendarTest::TestJapaneseFormat() {
     }
     {
         UnicodeString expect = u"平成13年9月8日土曜日";
-        UDate         expectDate = 999932400000.0; // Testing a recent date
+        UDate         expectDate = 999932400000.0;
         Locale        loc("ja_JP@calendar=japanese");
         
         status = U_ZERO_ERROR;
         simpleTest(loc, expect, expectDate, status);
     }
-    if (!logKnownIssue("ICU-23108", "ICU needs to implement era inheritance")) {
+    {
         UnicodeString expect = u"西暦1776年7月4日木曜日";
         UDate         expectDate = -6106032422000.0; // 1776-07-04T00:00:00Z-075258
         Locale        loc("ja_JP@calendar=japanese");
         
         status = U_ZERO_ERROR;
         simpleTest(loc, expect, expectDate, status);    
-        
     }
     {
         UnicodeString expect = u"昭和64年1月6日金曜日";
@@ -610,7 +609,6 @@ void IntlCalendarTest::TestJapaneseFormat() {
         
         status = U_ZERO_ERROR;
         simpleTest(loc, expect, expectDate, status);    
-        
     }
     {   // 1989 Jan 9 Monday = Heisei 1; full is Gy年M月d日EEEE
         UnicodeString expect = u"平成元年1月9日月曜日";
@@ -619,16 +617,22 @@ void IntlCalendarTest::TestJapaneseFormat() {
         
         status = U_ZERO_ERROR;
         simpleTest(loc, expect, expectDate, status);    
-        
     }
-    if (!logKnownIssue("ICU-23108", "ICU needs to implement era inheritance")) {
+    {
         UnicodeString expect = u"西暦1456年2月29日日曜日";
-        UDate         expectDate =  -16214400422000.0;  // 1456-03-09T00:00Z-075258
+        UDate         expectDate =  -16214400422000.0;  // 1456-03-09T00:00-075258
         Locale        loc("ja_JP@calendar=japanese");
         
         status = U_ZERO_ERROR;
         simpleTest(loc, expect, expectDate, status);    
+    }
+    {
+        UnicodeString expect = u"紀元前15年7月10日火曜日";
+        UDate         expectDate =  -62592710822000.0;  // 00:00 (UTC 07:52:58) on July 10, BC 15 
+        Locale        loc("ja_JP@calendar=japanese");
         
+        status = U_ZERO_ERROR;
+        simpleTest(loc, expect, expectDate, status);    
     }
 }
 

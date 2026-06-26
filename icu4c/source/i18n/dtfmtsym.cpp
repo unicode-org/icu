@@ -1896,6 +1896,31 @@ CalendarDataSink::~CalendarDataSink() {
 }
 
 //------------------------------------------------------
+static CharString
+&buildResourcePath(CharString &path, const char* segment1, UErrorCode &errorCode) {
+    return path.clear().append(segment1, -1, errorCode);
+}
+
+static CharString
+&buildResourcePath(CharString &path, const char* segment1, const char* segment2,
+                   UErrorCode &errorCode) {
+    return buildResourcePath(path, segment1, errorCode).append('/', errorCode)
+                                                       .append(segment2, -1, errorCode);
+}
+
+static CharString
+&buildResourcePath(CharString &path, const char* segment1, const char* segment2,
+                   const char* segment3, UErrorCode &errorCode) {
+    return buildResourcePath(path, segment1, segment2, errorCode).append('/', errorCode)
+                                                                 .append(segment3, -1, errorCode);
+}
+
+static CharString
+&buildResourcePath(CharString &path, const char* segment1, const char* segment2,
+                   const char* segment3, const char* segment4, UErrorCode &errorCode) {
+    return buildResourcePath(path, segment1, segment2, segment3, errorCode).append('/', errorCode)
+                                                                           .append(segment4, -1, errorCode);
+}
 
 static void
 initField(UnicodeString **field, int32_t& length, const char16_t *data, LastResortSize numStr, LastResortSize strLen, UErrorCode &status) {
@@ -1957,48 +1982,77 @@ initField(UnicodeString **field, int32_t& length, CalendarDataSink &sink, CharSt
 }
 
 static void
-initEras(UnicodeString **field, int32_t& length, CalendarDataSink &sink, CharString &key, const UResourceBundle *ctebPtr, const char* eraWidth, int32_t maxEra, UErrorCode &status) {
-    if (U_SUCCESS(status)) {
-        length = 0;
-        UnicodeString keyUString(key.data(), -1, US_INV);
-        Hashtable *eraNamesTable = static_cast<Hashtable*>(sink.maps.get(keyUString));
+loadEraNames(UnicodeString *eras, int32_t length, Hashtable *eraNamesTable, UResourceBundle *calBaseBundle,
+        const char *eraWidth, const EraRules *eraRules, UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return;
+    }
+    int32_t maxEra = eraRules->getMaxEraCode();
+    U_ASSERT(maxEra < length);
+    const char *calType = eraRules->getCalendarType();
 
-        if (eraNamesTable != nullptr) {
-            UErrorCode resStatus = U_ZERO_ERROR;
-            LocalUResourceBundlePointer ctewb(ures_getByKeyWithFallback(ctebPtr, eraWidth, nullptr, &resStatus));
-            const UResourceBundle *ctewbPtr = (U_SUCCESS(resStatus))? ctewb.getAlias() : nullptr;
-            *field = new UnicodeString[maxEra + 1];
-            if (*field == nullptr) {
-                status = U_MEMORY_ALLOCATION_ERROR;
-                return;
-            }
-            length = maxEra + 1;
-            for (int32_t eraCode = 0; eraCode <= maxEra; eraCode++) {
-                char eraCodeStr[12]; // T_CString_integerToString is documented to generate at most 12 bytes including nul terminator
-                int32_t eraCodeStrLen = T_CString_integerToString(eraCodeStr, eraCode, 10);
-                UnicodeString eraCodeKey = UnicodeString(eraCodeStr, eraCodeStrLen, US_INV);
-                UnicodeString *eraName = static_cast<UnicodeString*>(eraNamesTable->get(eraCodeKey));
-                (*field)[eraCode].remove();
-                if (eraName != nullptr) {
-                    // Get eraName from map (created by CalendarSink)
-                    (*field)[eraCode].fastCopyFrom(*eraName);
-                } else if (ctewbPtr != nullptr) {
-                    // Try filling in missing items from parent locale(s)
-                    resStatus = U_ZERO_ERROR;
-                    LocalUResourceBundlePointer ctewkb(ures_getByKeyWithFallback(ctewbPtr, eraCodeStr, nullptr, &resStatus));
-                    if (U_SUCCESS(resStatus)) {
-                        int32_t eraNameLen;
-                        const UChar* eraNamePtr = ures_getString(ctewkb.getAlias(), &eraNameLen, &resStatus);
-                        if (U_SUCCESS(resStatus)) {
-                            (*field)[eraCode].setTo(false, eraNamePtr, eraNameLen);
-                        }
-                    }
+    UErrorCode resStatus = U_ZERO_ERROR;
+    LocalUResourceBundlePointer ctb(ures_getByKeyWithFallback(calBaseBundle, calType, nullptr, &resStatus));
+    LocalUResourceBundlePointer cteb(ures_getByKeyWithFallback(ctb.getAlias(), gErasTag, nullptr, &resStatus));
+    LocalUResourceBundlePointer ctewb(ures_getByKeyWithFallback(cteb.getAlias(), eraWidth, nullptr, &resStatus));
+    const UResourceBundle *ctewbPtr = (U_SUCCESS(resStatus))? ctewb.getAlias() : nullptr;
+
+    for (int32_t eraCode = 0; eraCode <= maxEra; eraCode++) {
+        char eraCodeStr[12]; // T_CString_integerToString is documented to generate at most 12 bytes including nul terminator
+        int32_t eraCodeStrLen = T_CString_integerToString(eraCodeStr, eraCode, 10);
+        UnicodeString eraCodeKey = UnicodeString(eraCodeStr, eraCodeStrLen, US_INV);
+        UnicodeString *eraName = static_cast<UnicodeString*>(eraNamesTable->get(eraCodeKey));
+        eras[eraCode].remove();
+        if (eraName != nullptr) {
+            // Get eraName from map (created by CalendarSink)
+            eras[eraCode].fastCopyFrom(*eraName);
+        } else if (ctewbPtr != nullptr) {
+            // Try filling in missing items from parent locale(s)
+            resStatus = U_ZERO_ERROR;
+            LocalUResourceBundlePointer ctewkb(ures_getByKeyWithFallback(ctewbPtr, eraCodeStr, nullptr, &resStatus));
+            if (U_SUCCESS(resStatus)) {
+                int32_t eraNameLen;
+                const UChar* eraNamePtr = ures_getString(ctewkb.getAlias(), &eraNameLen, &resStatus);
+                if (U_SUCCESS(resStatus)) {
+                    eras[eraCode].setTo(false, eraNamePtr, eraNameLen);
                 }
             }
-            return;
         }
-        status = U_MISSING_RESOURCE_ERROR;
     }
+
+    // Also load era names from resource corresponding to the inherited era rules if any.
+    const EraRules *inheritEraRules = eraRules->getInheritEraRules();
+    if (inheritEraRules != nullptr) {
+        loadEraNames(eras, length, eraNamesTable, calBaseBundle, eraWidth, inheritEraRules, status);
+    }
+}
+
+static void initEras(UnicodeString **field, int32_t& length, CalendarDataSink &sink, UResourceBundle *calBaseBundle,
+        const char *eraWidth, EraRules *eraRules, UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return;
+    }
+    CharString key;
+    buildResourcePath(key, gErasTag, eraWidth, status);
+    if (U_FAILURE(status)) {
+        return;
+    }
+    UnicodeString keyUString(key.data(), -1, US_INV);
+    Hashtable *eraNamesTable = static_cast<Hashtable*>(sink.maps.get(keyUString));
+    if (eraNamesTable == nullptr) {
+        status = U_MISSING_RESOURCE_ERROR;
+        return;
+    }
+
+    // Note: maxEra value should be from the primary EraRules.
+    int32_t maxEra = eraRules->getMaxEraCode();
+    *field = new UnicodeString[maxEra + 1];
+    if (*field == nullptr) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+    length = maxEra + 1;
+    loadEraNames(*field, length, eraNamesTable, calBaseBundle, eraWidth, eraRules, status);
 }
 
 static void
@@ -2019,32 +2073,6 @@ initLeapMonthPattern(UnicodeString *field, int32_t index, CalendarDataSink &sink
         }
         status = U_MISSING_RESOURCE_ERROR;
     }
-}
-
-static CharString
-&buildResourcePath(CharString &path, const char* segment1, UErrorCode &errorCode) {
-    return path.clear().append(segment1, -1, errorCode);
-}
-
-static CharString
-&buildResourcePath(CharString &path, const char* segment1, const char* segment2,
-                   UErrorCode &errorCode) {
-    return buildResourcePath(path, segment1, errorCode).append('/', errorCode)
-                                                       .append(segment2, -1, errorCode);
-}
-
-static CharString
-&buildResourcePath(CharString &path, const char* segment1, const char* segment2,
-                   const char* segment3, UErrorCode &errorCode) {
-    return buildResourcePath(path, segment1, segment2, errorCode).append('/', errorCode)
-                                                                 .append(segment3, -1, errorCode);
-}
-
-static CharString
-&buildResourcePath(CharString &path, const char* segment1, const char* segment2,
-                   const char* segment3, const char* segment4, UErrorCode &errorCode) {
-    return buildResourcePath(path, segment1, segment2, segment3, errorCode).append('/', errorCode)
-                                                                           .append(segment4, -1, errorCode);
 }
 
 typedef struct {
@@ -2407,26 +2435,18 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
     if (type == nullptr) {
         type = "gregorian";
     }
-    LocalPointer<EraRules> eraRules(EraRules::createInstance(type, false, status));
-    int32_t maxEra = (U_SUCCESS(status))? eraRules->getMaxEraCode(): 0;
-    UErrorCode resStatus = U_ZERO_ERROR;
-    LocalUResourceBundlePointer ctpb(ures_getByKeyWithFallback(cb.getAlias(), type, nullptr, &resStatus));
-    LocalUResourceBundlePointer cteb(ures_getByKeyWithFallback(ctpb.getAlias(), gErasTag, nullptr, &resStatus));
-    const UResourceBundle *ctebPtr = (U_SUCCESS(resStatus))? cteb.getAlias() : nullptr;
     // Load eras
-    initEras(&fEras, fErasCount, calendarSink, buildResourcePath(path, gErasTag, gNamesAbbrTag, status),
-            ctebPtr, gNamesAbbrTag, maxEra, status);
+    LocalPointer<EraRules> eraRules(EraRules::createInstance(type, false, status));
+    initEras(&fEras, fErasCount, calendarSink, cb.getAlias(), gNamesAbbrTag, eraRules.getAlias(), status);
     UErrorCode oldStatus = status;
-    initEras(&fEraNames, fEraNamesCount, calendarSink, buildResourcePath(path, gErasTag, gNamesWideTag, status),
-            ctebPtr, gNamesWideTag, maxEra, status);
+    initEras(&fEraNames, fEraNamesCount, calendarSink, cb.getAlias(), gNamesWideTag, eraRules.getAlias(), status);
     if (status == U_MISSING_RESOURCE_ERROR) { // Workaround because eras/wide was omitted from CLDR 1.3
         status = oldStatus;
         assignArray(fEraNames, fEraNamesCount, fEras, fErasCount);
     }
     // current ICU4J falls back to abbreviated if narrow eras are missing, so we will too
     oldStatus = status;
-    initEras(&fNarrowEras, fNarrowErasCount, calendarSink, buildResourcePath(path, gErasTag, gNamesNarrowTag, status),
-            ctebPtr, gNamesNarrowTag, maxEra, status);
+    initEras(&fNarrowEras, fNarrowErasCount, calendarSink, cb.getAlias(), gNamesNarrowTag, eraRules.getAlias(), status);
     if (status == U_MISSING_RESOURCE_ERROR) { // Workaround because eras/wide was omitted from CLDR 1.3
         status = oldStatus;
         assignArray(fNarrowEras, fNarrowErasCount, fEras, fErasCount);

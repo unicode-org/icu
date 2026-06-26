@@ -1980,40 +1980,66 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     protected String[] initEras(
             String erasKey,
             Map<String, Map<String, String>> maps,
-            ICUResourceBundle calBundle,
-            int maxEra) {
+            ICUResourceBundle calBaseBundle,
+            EraRules eraRules) {
         Map<String, String> eraNamesTable = maps.get(erasKey);
         if (eraNamesTable == null) {
             return null;
         }
-        ICUResourceBundle calErasWidthBundle = calBundle.findWithFallback(erasKey);
+
+        // Note: maxEra value should be from the primary EraRules.
+        int maxEra = eraRules.getMaxEraCode();
         String[] eraArray = new String[maxEra + 1];
-        if (eraArray != null) {
-            for (int eraCode = 0; eraCode <= maxEra; eraCode++) {
-                String eraKey = Integer.toString(eraCode);
-                String eraName = eraNamesTable.get(eraKey);
-                if (eraName != null) {
-                    eraArray[eraCode] = eraName;
-                } else {
-                    // For a map, the sink does not seem to fill in parent entries for keys
-                    // that do not exist in the current bundle, that is why we need to explicitly
-                    // fill these in. Also true in ICU4C. Also pre-set to empty string in case
-                    // there is no parent entry.
-                    eraArray[eraCode] = "";
-                    if (calErasWidthBundle != null) {
-                        ICUResourceBundle calErasWidthKeyBundle =
-                                calErasWidthBundle.findWithFallback(eraKey);
-                        if (calErasWidthKeyBundle != null) {
-                            eraName = calErasWidthKeyBundle.getString();
-                            if (eraName != null) {
-                                eraArray[eraCode] = eraName;
-                            }
+        loadEraNames(eraArray, eraNamesTable, calBaseBundle, erasKey, eraRules);
+        return eraArray;
+    }
+
+    private void loadEraNames(
+            String[] eraArray,
+            Map<String, String> eraNamesTable,
+            ICUResourceBundle calBaseBundle,
+            String erasKey,
+            EraRules eraRules) {
+        int maxEra = eraRules.getMaxEraCode();
+        assert maxEra <= eraArray.length;
+        ICUResourceBundle calTypeBundle =
+                calBaseBundle.findWithFallback(eraRules.getCalendarTypeId());
+        ICUResourceBundle calErasWidthBundle = calTypeBundle.findWithFallback(erasKey);
+        for (int eraCode = 0; eraCode <= maxEra; eraCode++) {
+            if (eraArray[eraCode] != null && !eraArray[eraCode].isEmpty()) {
+                // Do not overwrite value if already filled in.
+                // Note: This can only happen when inherited era rules has
+                // duplicated era codes with primary era rules.
+                continue;
+            }
+            String eraKey = Integer.toString(eraCode);
+            String eraName = eraNamesTable.get(eraKey);
+            if (eraName != null) {
+                eraArray[eraCode] = eraName;
+            } else {
+                // For a map, the sink does not seem to fill in parent entries for keys
+                // that do not exist in the current bundle, that is why we need to explicitly
+                // fill these in. Also true in ICU4C. Also pre-set to empty string in case
+                // there is no parent entry.
+                eraArray[eraCode] = "";
+                if (calErasWidthBundle != null) {
+                    ICUResourceBundle calErasWidthKeyBundle =
+                            calErasWidthBundle.findWithFallback(eraKey);
+                    if (calErasWidthKeyBundle != null) {
+                        eraName = calErasWidthKeyBundle.getString();
+                        if (eraName != null) {
+                            eraArray[eraCode] = eraName;
                         }
                     }
                 }
             }
         }
-        return eraArray;
+
+        // Also load era names from resource corresponding to the inherited era rules if any.
+        EraRules inheritEraRules = eraRules.getInheritEraRules();
+        if (inheritEraRules != null) {
+            loadEraNames(eraArray, eraNamesTable, calBaseBundle, erasKey, inheritEraRules);
+        }
     }
 
     /**
@@ -2088,12 +2114,11 @@ public class DateFormatSymbols implements Serializable, Cloneable {
             calTypeForEras = "gregorian";
             eraRules = EraRules.getInstance(calTypeForEras, false);
         }
-        int maxEra = (eraRules != null) ? eraRules.getMaxEraCode() : 0;
-        ICUResourceBundle calBundle = b.findWithFallback("calendar/" + calTypeForEras);
+        ICUResourceBundle calBaseBundle = b.findWithFallback("calendar");
 
-        eras = initEras("eras/abbreviated", maps, calBundle, maxEra);
-        eraNames = initEras("eras/wide", maps, calBundle, maxEra);
-        narrowEras = initEras("eras/narrow", maps, calBundle, maxEra);
+        eras = initEras("eras/abbreviated", maps, calBaseBundle, eraRules);
+        eraNames = initEras("eras/wide", maps, calBaseBundle, eraRules);
+        narrowEras = initEras("eras/narrow", maps, calBaseBundle, eraRules);
 
         months = arrays.get("monthNames/format/wide");
         shortMonths = arrays.get("monthNames/format/abbreviated");
