@@ -47,6 +47,13 @@ and see the change logs below.
 
 ---------------------------------------------------------------------------- ***
 
+* TODO: (carry-over from 2025)
+  Error when upgrading from Bazel 7.2.1 to Bazel 8.2.1:
+    ERROR: Skipping '//icu4c/source/tools/gennorm2': error loading package 'icu4c/source/tools/gennorm2': Unable to find package for @@[unknown repo 'rules_cc' requested from @@]//cc:defs.bzl: The repository '@@[unknown repo 'rules_cc' requested from @@]' could not be resolved: No repository visible as '@rules_cc' from main repository. Was the repository introduced in WORKSPACE? The WORKSPACE file is disabled by default in Bazel 8 (late 2024) and will be removed in Bazel 9 (late 2025), please migrate to Bzlmod. See https://bazel.build/external/migration.
+  Need to revisit!
+
+---------------------------------------------------------------------------- ***
+
 Unicode 18.0 update for ICU 79
 
 https://www.unicode.org/versions/Unicode18.0.0/
@@ -206,11 +213,6 @@ to find out the latest `bazel` version, and
 copying that version number into the $ICU_SRC/.bazeliskrc config file.
 (Revert if you find incompatibilities, or, better, update our build & config files.)
 
-* TODO: (carry-over from 2025)
-  Error when upgrading from Bazel 7.2.1 to Bazel 8.2.1:
-    ERROR: Skipping '//icu4c/source/tools/gennorm2': error loading package 'icu4c/source/tools/gennorm2': Unable to find package for @@[unknown repo 'rules_cc' requested from @@]//cc:defs.bzl: The repository '@@[unknown repo 'rules_cc' requested from @@]' could not be resolved: No repository visible as '@rules_cc' from main repository. Was the repository introduced in WORKSPACE? The WORKSPACE file is disabled by default in Bazel 8 (late 2024) and will be removed in Bazel 9 (late 2025), please migrate to Bzlmod. See https://bazel.build/external/migration.
-  Need to revisit!
-
 * generate data files
 
 - remember to define the environment variables
@@ -321,8 +323,6 @@ copying that version number into the $ICU_SRC/.bazeliskrc config file.
   utility/MultithreadTest/TestCollators will fail as well;
   fix the conformance test before looking into the multi-thread test
 
-TODO: investigate UCA-shifted conformance test failures
-
 * update Java data files
 - refresh just the UCD/UCA-related/derived files, just to be safe
 - see (ICU4C)/source/data/icu4j-readme.txt
@@ -366,8 +366,6 @@ TODO: investigate UCA-shifted conformance test failures
     cd ../../test/testdata
     cp -v BidiCharacterTest.txt BidiTest.txt IdnaTestV2.txt $ICU_SRC/icu4j/main/core/src/test/resources/com/ibm/icu/dev/data/unicode
     cp -v $UNICODE_DATA/ucd/CompositionExclusions.txt $ICU_SRC/icu4j/main/core/src/test/resources/com/ibm/icu/dev/data/unicode
-
-TODO
 
 * run & fix ICU4J tests
 

@@ -305,7 +305,6 @@ void UCAConformanceTest::TestTableShifted(/* par */) {
         dataerrln("Error running UCA Conformance Test: %s", u_errorName(status));
         return;
     }
-    if(logKnownIssue("ICU-23343", "UCA 18 beta: investigate")) { return; }
     setCollShifted(UCA);
     openTestFile("SHIFTED");
     testConformance(UCA);
