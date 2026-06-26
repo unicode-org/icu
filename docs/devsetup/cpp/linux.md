@@ -41,10 +41,6 @@ optimization level for debugging.
 Release builds can use `-O3` for best performance. See
 <http://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html>
 
-`clang` might even benefit from `-O4` where "whole program optimization is done
-at link time". See
-<http://developer.apple.com/library/mac/#documentation/Darwin/Reference/Manpages/man1/clang.1.html>
-
 ## Other build flags
 
 On a modern Linux you can configure with `CPPFLAGS="-DU_CHARSET_IS_UTF8=1"`.

@@ -171,7 +171,8 @@ update the reference in the code. Then communicate the problems with the Unicode
 tech team.
 
 (5) If all tests have passed so far, run the exhaustive tests with the update.
-[See Exhaustive Tests](https://unicode-org.github.io/icu/userguide/dev/ci.html#:~:text=Exhaustive%20tests%20run%20tests%20on,and%20click%20'Run%20workflow') for details.
+[See Exhaustive Tests](https://unicode-org.github.io/icu/userguide/dev/ci.html#exhaustive-tests)
+for details.
 
 If any test does not pass, the JIRA status is incorrect. Raise this problem with
 the Unicode tech team as noted above.

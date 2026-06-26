@@ -279,10 +279,10 @@ We had the following HTML on the main download page for ICU 4.8M1 = 4.7.1:
 
 ## Upload Release Source / Binaries
 
-Download Directories are located at, for example,
-`icu-project.org:/home/htdocs/ex/files/icu4c/4.4.2`
-corresponding to <http://download.icu-project.org/ex/files/icu4c/4.4.2/>
-Look at previous releases for an example.
+Modern ICU releases (starting with version 56.1, released on April 30, 2020)
+are available on GitHub: <https://github.com/unicode-org/icu/releases>.
+
+For older ICU releases see <https://unicode-org.github.io/icu/download/>.
 
 ### Java Source/Bin
 
@@ -471,7 +471,7 @@ binaries.
 3.  Click on the "gear" icon.
 4.  Update the URL field with the new URL.
     1.  For example: The ICU4C 63.1 Binaries URL was:
-        <http://apps.icu-project.org/icu-jsp/downloadSection.jsp?ver=63.1&base=c&svn=release-63-1>
+        <https://github.com/unicode-org/icu/releases/tag/release-63-1>
 
 #### Check the ICU public site for the new release
 

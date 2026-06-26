@@ -51,8 +51,8 @@ variable-element placeholders (called "arguments" in the API docs) enclosed in
 default format is used. For details about the pattern syntax and the formatting
 behavior see the `MessageFormat` API docs
 ([Java](https://unicode-org.github.io/icu-docs/apidoc/released/icu4j/com/ibm/icu/text/MessageFormat.html),
-[C++](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classMessageFormat.html#_details),
-[C](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/umsg_8h.html#_details)).
+[C++](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classMessageFormat.html),
+[C](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/umsg_8h.html)).
 
 ### Complex Argument Types
 

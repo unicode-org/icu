@@ -500,7 +500,8 @@ Normally, in the course of a build, ICU needs to run the tools that it builds in
 
 To reduce confusion, we will here refer to the "A" and the "B" system. System "A" is the actual system we will be running on - the only requirements on it is are it is able to build ICU from the command line targeting itself (with `configure` or `runConfigureICU`), and secondly, that it also contain the correct toolchain for compiling and linking for the resultant platform, referred to as the "B" system.
 
-The autoconf docs use the term "build" for A, and "host" for B. More details at: [http://www.gnu.org/software/autoconf/manual/html_node/Specifying-Names.html](http://www.gnu.org/software/autoconf/manual/html_node/Specifying-Names.html#Specifying-Names)
+The autoconf docs use the term "build" for A, and "host" for B. More details at:
+<https://www.gnu.org/savannah-checkouts/gnu/autoconf/manual/autoconf-2.73/html_node/Specifying-Target-Triplets.html>
 
 Three initially-empty directories will be used in this example:
 

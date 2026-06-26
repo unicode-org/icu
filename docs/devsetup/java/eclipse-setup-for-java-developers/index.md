@@ -122,7 +122,7 @@ repository directory. (It looks this does not work well with
 1.  Goto <http://www.eclipse.org/subversive/downloads.php>
 2.  Goto "latest release" on that page
 3.  Copy the update site, eg
-    "<http://download.eclipse.org/technology/subversive/0.7/update-site/> "
+    `http://download.eclipse.org/technology/subversive/0.7/update-site/` (broken site)
 4.  Go to Eclipse, then Help > Install New Software...
 5.  Into "Work with...", paste the update site.
 6.  Set the checkbox on Plug-ins. Hit Next and Finish until you are done.

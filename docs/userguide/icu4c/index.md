@@ -406,7 +406,8 @@ ICU 3.6 removes the requirement that ICU be completely built in the native opera
 
 #### Adapting Makefiles For a New Platform
 
-Try to follow the build steps from the [UNIX](#how-to-build-and-install-on-unix) build instructions. If the configure script fails, then you will need to modify some files. Here are the usual steps for porting to a new platform:
+Try to follow the build steps from the [UNIX](build.md#how-to-build-and-install-on-unix) build instructions.
+If the configure script fails, then you will need to modify some files. Here are the usual steps for porting to a new platform:
 
 1.  Create an mh file in `<ICU>/source/config/`. You can use mh-linux or a similar mh file as your base configuration.
 2.  Modify `<ICU>/source/aclocal.m4` to recognize your platform's mh file.

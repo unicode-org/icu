@@ -118,9 +118,8 @@ Andy's method (from email 2019-sep-05):
 1.  Create a new GitHub branch.
 2.  In directory icu/icu4j, run this script: `releases_tools/api_reports.sh`
 3.  This script generates a tab-separated values file at target/draftAPIs.tsv.
-4.  Import the TSV file to Google spread sheet - for example, [ICU4J 74 Draft
-    API
-    Promotion](https://docs.google.com/spreadsheets/d/135RDyY6cWKBBvNuVE9ne8HfsItZu_CvLh47hKjr3UqM/edit#gid=1384666589).
+4.  Import the TSV file to a Google spreadsheet - for example, "ICU4J 74 Draft API
+    Promotion."
     *   Create the spreadsheet in the shared ***ICU Projects*** folder.
 5.  Review all APIs introduced in 2 releases ago or older. For example, 72 or
     older for ICU 74 release.

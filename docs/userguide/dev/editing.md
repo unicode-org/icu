@@ -41,7 +41,7 @@ and create the new pull request.
 
 After the source branch for a potential pull request is made, the changes can 
 be previewed using the fork repository that contains the source branch.  The
-fork repository must be [configured to serve GitHub Pages](https://docs.github.com/en/github/working-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site#choosing-a-publishing-source)
+fork repository must be [configured to serve GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site#about-publishing-sources)
 from the branch and the Markdown pages root directory (`/docs`).
 > :point_right: **Note**:  there is a
 latency of several minutes before GitHub Pages renders new changes, and 

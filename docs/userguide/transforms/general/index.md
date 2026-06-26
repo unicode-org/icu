@@ -1405,14 +1405,11 @@ For more information, see:
 2.  [Transliteration of Non-Roman Alphabets and Scripts (Søren
     Binks)](http://transliteration.eki.ee/)
 
-3.  [Standards for Archival Description:
-    Romanization](http://www.archivists.org/catalog/stds99/chapter8.html)
-
-4.  [ISO-15915
+3.  [ISO-15915
     (Hindi)](http://transliteration.eki.ee/pdf/Hindi-Marathi-Nepali.pdf)
 
-5.  [ISO-15915 (Gujarati)](http://transliteration.eki.ee/pdf/Gujarati.pdf)
+4.  [ISO-15915 (Gujarati)](http://transliteration.eki.ee/pdf/Gujarati.pdf)
 
-6.  [ISO-15915 (Kannada)](http://transliteration.eki.ee/pdf/Kannada.pdf)
+5.  [ISO-15915 (Kannada)](http://transliteration.eki.ee/pdf/Kannada.pdf)
 
-7.  [ISCII-91](https://cdac.in/index.aspx?id=mlc_gist_iscii)
+6.  [ISCII-91](https://cdac.in/index.aspx?id=mlc_gist_iscii)

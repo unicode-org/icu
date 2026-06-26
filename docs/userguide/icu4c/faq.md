@@ -104,7 +104,7 @@ ICU 1.8.1–ICU 57 and ICU4J 1.3.1–ICU4J 57 are covered by the [ICU
 license](https://github.com/unicode-org/icu/blob/release-57-1/icu4c/LICENSE),
 a simple, permissive non-copyleft free software license, compatible with the GNU
 GPL. The ICU license is identical to the version of the X license that was
-formerly available at <http://www.x.org/Downloads_terms.html>. (This site no
+formerly available at `http://www.x.org/Downloads_terms.html`. (This site no
 longer exists, but can still be retrieved through internet archive services.)
 
 #### Can I use ICU from other languages besides C/C++ and Java?
@@ -217,17 +217,7 @@ be using a platform that ICU does not support. If the first two answers do not
 apply to you, then you should send an e-mail to the
 [ICU4C Support List](https://icu.unicode.org/contacts).
 
-Here are some places you can find gmake:
-
-1.  GNU: <http://www.gnu.org/software/make/>
-
-2.  Sun® Source/Binaries: <http://www.sunfreeware.com>
-
-3.  z/OS (OS/390) Source/Binaries:
-    <http://www.ibm.com/servers/eserver/zseries/zos/unix/bpxa1ty1.html#opensrc>
-
-4.  IBM i (OS/400) Source/Binaries:
-    <http://www.ibm.com/servers/enable/site/porting/iseries/overview/gnu_utilities.html>
+Here is one of the places where you can find gmake: <http://www.gnu.org/software/make/>
 
 Due to differences in every platform's make program, we will not support other
 versions of our make files.

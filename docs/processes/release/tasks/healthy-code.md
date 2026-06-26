@@ -43,7 +43,7 @@ look for "UClassID" or similar.
 *   Latest trunk report:
     [icu/icu4c/APIChangeReport.html](https://github.com/unicode-org/icu/blob/main/icu4c/APIChangeReport.html)
 *   ~~The automated build system creates a new report:
-    <https://cldr-build.unicode.org/jenkins/job/icu/job/icu-apidocs/>~~
+    `https://cldr-build.unicode.org/jenkins/job/icu/job/icu-apidocs/`~~
     *   Click "ICU4C API Change Report vs Latest"
 *   Old: was http://bugs.icu-project.org/trac/build/icu4cdocs
     *   Go into the latest successful build, the report is an attachment there.
