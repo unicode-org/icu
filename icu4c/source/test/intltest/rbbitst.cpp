@@ -159,6 +159,7 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
     TESTCASE_AUTO(TestBug22602);
     TESTCASE_AUTO(TestBug22636);
     TESTCASE_AUTO(TestLookaheadPolychromy);
+    TESTCASE_AUTO(TestBug23449);
 
 #if U_ENABLE_TRACING
     TESTCASE_AUTO(TestTraceCreateCharacter);
@@ -4996,6 +4997,25 @@ void RBBITest::TestLookaheadPolychromy() {
         if (actual != firstSegment)
             errln(UnicodeString(u"First segment of ") + text + " with lookaheadPath: expected " +
                   firstSegment + ", got " + actual);
+    }
+}
+
+void RBBITest::TestBug23449() {
+    // Construct a rules string with long concatenation to trigger depth limit.
+    UnicodeString rules;
+    int length = 3600;
+    for (int i = 0; i < length; ++i) {
+        rules.append(u"[a]");
+    }
+    rules.append(u';'); // Rule terminator
+
+    UErrorCode status = U_ZERO_ERROR;
+    UParseError parseError;
+    // We expect this to fail with U_INPUT_TOO_LONG_ERROR during rule compilation, not crash.
+    LocalPointer<RuleBasedBreakIterator> bi(new RuleBasedBreakIterator(rules, parseError, status));
+    
+    if (status != U_INPUT_TOO_LONG_ERROR) {
+        errln("Expected U_INPUT_TOO_LONG_ERROR, but got: %s", u_errorName(status));
     }
 }
 

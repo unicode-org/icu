@@ -125,6 +125,9 @@ void  RBBITableBuilder::buildForwardTable() {
     //      expression.
     //
     fTree->flattenSets(*fStatus, 0);
+    if (U_FAILURE(*fStatus)) {
+        return;
+    }
 #ifdef RBBI_DEBUG
     if (fRB->fDebugEnv && uprv_strstr(fRB->fDebugEnv, "stree")) {
         RBBIDebugPuts("\nParse tree after flattening Unicode Set references.");

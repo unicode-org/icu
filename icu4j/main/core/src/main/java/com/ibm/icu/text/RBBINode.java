@@ -149,22 +149,29 @@ class RBBINode {
     //
     // -------------------------------------------------------------------------
     RBBINode cloneTree() {
+        return cloneTree(0);
+    }
+
+    RBBINode cloneTree(int depth) {
+        if (depth > kRecursiveDepthLimit) {
+            throw new IllegalArgumentException("The input is too long");
+        }
         RBBINode n;
 
         if (fType == RBBINode.varRef) {
             // If the current node is a variable reference, skip over it
             //   and clone the definition of the variable instead.
-            n = fLeftChild.cloneTree();
+            n = fLeftChild.cloneTree(depth + 1);
         } else if (fType == RBBINode.uset) {
             n = this;
         } else {
             n = new RBBINode(this);
             if (fLeftChild != null) {
-                n.fLeftChild = fLeftChild.cloneTree();
+                n.fLeftChild = fLeftChild.cloneTree(depth + 1);
                 n.fLeftChild.fParent = n;
             }
             if (fRightChild != null) {
-                n.fRightChild = fRightChild.cloneTree();
+                n.fRightChild = fRightChild.cloneTree(depth + 1);
                 n.fRightChild.fParent = n;
             }
         }
@@ -196,7 +203,7 @@ class RBBINode {
             throw new IllegalArgumentException("The input is too long");
         }
         if (fType == varRef) {
-            RBBINode retNode = fLeftChild.cloneTree();
+            RBBINode retNode = fLeftChild.cloneTree(depth + 1);
             retNode.fRuleRoot = this.fRuleRoot;
             retNode.fChainIn = this.fChainIn;
             return retNode;
@@ -222,6 +229,13 @@ class RBBINode {
     //
     // -------------------------------------------------------------------------
     void flattenSets() {
+        flattenSets(0);
+    }
+
+    void flattenSets(int depth) {
+        if (depth > kRecursiveDepthLimit) {
+            throw new IllegalArgumentException("The input is too long");
+        }
         Assert.assrt(fType != setRef);
 
         if (fLeftChild != null) {
@@ -229,10 +243,10 @@ class RBBINode {
                 RBBINode setRefNode = fLeftChild;
                 RBBINode usetNode = setRefNode.fLeftChild;
                 RBBINode replTree = usetNode.fLeftChild;
-                fLeftChild = replTree.cloneTree();
+                fLeftChild = replTree.cloneTree(depth + 1);
                 fLeftChild.fParent = this;
             } else {
-                fLeftChild.flattenSets();
+                fLeftChild.flattenSets(depth + 1);
             }
         }
 
@@ -241,11 +255,11 @@ class RBBINode {
                 RBBINode setRefNode = fRightChild;
                 RBBINode usetNode = setRefNode.fLeftChild;
                 RBBINode replTree = usetNode.fLeftChild;
-                fRightChild = replTree.cloneTree();
+                fRightChild = replTree.cloneTree(depth + 1);
                 fRightChild.fParent = this;
                 // delete setRefNode;
             } else {
-                fRightChild.flattenSets();
+                fRightChild.flattenSets(depth + 1);
             }
         }
     }

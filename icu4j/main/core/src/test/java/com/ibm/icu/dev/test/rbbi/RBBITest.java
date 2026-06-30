@@ -1342,4 +1342,22 @@ public class RBBITest extends CoreTestFmwk {
                                 + actual);
         }
     }
+
+    @Test
+    public void TestBug23449() {
+        StringBuilder rules = new StringBuilder();
+        int length = 3600;
+        for (int i = 0; i < length; ++i) {
+            rules.append("[a]");
+        }
+        rules.append(";");
+
+        try {
+            new RuleBasedBreakIterator(rules.toString());
+            fail("Expected IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+            // Expected
+            assertEquals("Exception message", "The input is too long", e.getMessage());
+        }
+    }
 }
