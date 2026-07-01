@@ -52,6 +52,7 @@ static void TestExtraneousCharacters(void);
 static void TestParseTooStrict(void);
 static void TestHourCycle(void);
 static void TestLocaleNameCrash(void);
+static void TestInvalidStyles(void);
 
 void addDateForTest(TestNode** root);
 
@@ -78,6 +79,7 @@ void addDateForTest(TestNode** root)
     TESTCASE(TestParseTooStrict);
     TESTCASE(TestHourCycle);
     TESTCASE(TestLocaleNameCrash);
+    TESTCASE(TestInvalidStyles);
 }
 /* Testing the DateFormat API */
 static void TestDateFormat(void)
@@ -2156,6 +2158,19 @@ static void TestLocaleNameCrash(void) {
         log_err("FAIL: didn't crash on udat_open(locale=\"notalanguage\"), but got %s.\n", u_errorName(status));
     }
     udat_close(icudf);
+}
+
+static void TestInvalidStyles(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    UDateFormat* df = udat_open((UDateFormatStyle)543976820, (UDateFormatStyle)1748765246, "en", NULL, 0, NULL, 0, &status);
+    if (df != NULL) {
+        log_err("FAIL: udat_open with invalid styles should return NULL\n");
+        udat_close(df);
+    } else if (status != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("FAIL: udat_open with invalid styles should set status to U_ILLEGAL_ARGUMENT_ERROR, but got %s\n", u_errorName(status));
+    } else {
+        log_verbose("PASS: udat_open with invalid styles returned NULL and set status to U_ILLEGAL_ARGUMENT_ERROR\n");
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

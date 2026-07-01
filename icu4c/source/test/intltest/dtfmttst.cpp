@@ -144,6 +144,7 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
     TESTCASE_AUTO(TestAmPmLengths23114);
     
     TESTCASE_AUTO(TestDayPeriodFallback);
+    TESTCASE_AUTO(TestInvalidStyles);
 
     TESTCASE_AUTO_END;
 }
@@ -6056,6 +6057,26 @@ void DateFormatTest::TestDayPeriodFallback() {
     
     if (assertSuccess("Failed to set up date formatter", status)) {
         assertEquals("Wrong formatting result", u"11:58 PM", formattedDate);
+    }
+}
+
+void DateFormatTest::TestInvalidStyles() {
+    DateFormat* df1 = DateFormat::createDateTimeInstance((DateFormat::EStyle)100000, (DateFormat::EStyle)100000);
+    if (df1 != nullptr) {
+        errln("FAIL: createDateTimeInstance with invalid styles should return nullptr");
+        delete df1;
+    }
+    
+    DateFormat* df2 = DateFormat::createDateTimeInstance((DateFormat::EStyle)-100, (DateFormat::EStyle)-100);
+    if (df2 != nullptr) {
+        errln("FAIL: createDateTimeInstance with invalid styles should return nullptr");
+        delete df2;
+    }
+    
+    DateFormat* df3 = DateFormat::createDateTimeInstance((DateFormat::EStyle)2147483644, (DateFormat::EStyle)2147483644);
+    if (df3 != nullptr) {
+        errln("FAIL: createDateTimeInstance with invalid styles should return nullptr");
+        delete df3;
     }
 }
 
