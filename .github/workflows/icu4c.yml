@@ -47,7 +47,7 @@ jobs:
   icu4c-docs-build:
     runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
 
@@ -72,7 +72,7 @@ jobs:
   gcc-debug-build-and-test:
     runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
 
@@ -101,7 +101,7 @@ jobs:
           - '-std=c++20'
           - '-std=c++23'
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
       - name: Install GCC-14
@@ -128,7 +128,7 @@ jobs:
   clang-release-build-and-test:
     runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
 
@@ -179,7 +179,7 @@ jobs:
          # --disable-shared has a build problem.
     runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
 
@@ -199,7 +199,7 @@ jobs:
   gcc-10-stdlib17:
     runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
 
@@ -223,7 +223,7 @@ jobs:
   clang-asan:
     runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
 
@@ -239,7 +239,7 @@ jobs:
   clang-lsan:
     runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
 
@@ -256,7 +256,7 @@ jobs:
   clang-ubsan:
     runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
 
@@ -273,7 +273,7 @@ jobs:
   clang-cfi:
     runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
 
@@ -294,7 +294,7 @@ jobs:
   clang-tsan:
     runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
 
@@ -318,7 +318,7 @@ jobs:
   clang-datafilter:
     runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
       - name: Extract ICU version
@@ -342,7 +342,7 @@ jobs:
   clang-cpp17:
     runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
       - name: Build ICU4C with CPP 17
@@ -355,7 +355,7 @@ jobs:
   clang-lang-with-extn-tags:
     runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
       - name: Linux Clang - LANG has extension tags
@@ -386,7 +386,7 @@ jobs:
             - clang-version: '18'
               flags: '-std=c++20 -stdlib=libc++'
       steps:
-        - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
           with:
             persist-credentials: false
         - name: Install Modern Clang
@@ -409,7 +409,7 @@ jobs:
   macos-clang:
     runs-on: macos-15  # Updated in BRS
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
       - name: ICU4C with clang on MacOS
@@ -438,7 +438,7 @@ jobs:
           - test_flags: 'x64 Release'
             build_flags: '/p:Configuration=Release /p:Platform=x64'
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
       - name: Set up MSBuild
@@ -469,7 +469,7 @@ jobs:
     runs-on: windows-2025  # Updated in BRS
     timeout-minutes: 30
     steps:
-    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+    - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       with:
         persist-credentials: false
     - name: Set ICU_DATA_FILTER_FILE variable
@@ -502,7 +502,7 @@ jobs:
             plat: 'ARM64'
             win_ver: 'WinARM64'
     steps:
-    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+    - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       with:
         persist-credentials: false
     - name: Set up MSBuild
@@ -568,11 +568,11 @@ jobs:
       run:
         shell: msys2 {0}
     steps:
-    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+    - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       with:
         persist-credentials: false
     - name: Set up MSYS2
-      uses: msys2/setup-msys2@e9898307ac31d1a803454791be09ab9973336e1c # v2.31.1
+      uses: msys2/setup-msys2@66cd2cce69caa17b53920067426061ca1de3a884 # v2.32.0
       id: msys2
       with:
         update: true
@@ -604,7 +604,7 @@ jobs:
   wasm-wasi-sdk:
     runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
 
@@ -650,7 +650,7 @@ jobs:
   run-with-stubdata:
     runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
 
@@ -695,7 +695,7 @@ jobs:
   u-charset-is-utf8-test:
     runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
       - run: |
@@ -707,7 +707,7 @@ jobs:
   u-override-cxx-allocation-is-0-test:
     runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
       - run: |
@@ -720,7 +720,7 @@ jobs:
   lstm-test:
     runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
       - run: |
@@ -733,7 +733,7 @@ jobs:
   adaboost-test:
     runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
       - run: |
@@ -746,7 +746,7 @@ jobs:
   testmap:
     runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
       - run: |
@@ -761,7 +761,7 @@ jobs:
   copyright-scan:
     runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
       - run: perl tools/scripts/cpysearch/cpyscan.pl
@@ -770,7 +770,7 @@ jobs:
   internal-header-compilation:
     runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
       - run: cd icu4c/source; test/hdrtst/testinternalheaders.sh
@@ -779,7 +779,7 @@ jobs:
   valid-UTF-8-and-no-BOM-check:
     runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
       - run: tools/scripts/icu-file-utf8-check.py
@@ -810,7 +810,7 @@ jobs:
          - "-DUCONFIG_NO_LEGACY_CONVERSION=1 -DUCONFIG_NO_NORMALIZATION=1 -DUCONFIG_NO_BREAK_ITERATION=1 -DUCONFIG_NO_IDNA=1 -DUCONFIG_NO_COLLATION=1 -DUCONFIG_NO_FORMATTING=1 -DUCONFIG_NO_MF2=1 -DUCONFIG_NO_TRANSLITERATION=1 -DUCONFIG_NO_REGULAR_EXPRESSIONS=1 -DUCONFIG_NO_SERVICE=1 -DUCONFIG_NO_FILTERED_BREAK_ITERATION=1"
     steps:
       - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
       - name: Verify no additional new UCONFIG_NO_xxx added
@@ -859,7 +859,7 @@ jobs:
          - "-DUCONFIG_NO_LEGACY_CONVERSION=1 -DUCONFIG_NO_NORMALIZATION=1 -DUCONFIG_NO_BREAK_ITERATION=1 -DUCONFIG_NO_IDNA=1 -DUCONFIG_NO_COLLATION=1 -DUCONFIG_NO_FORMATTING=1 -DUCONFIG_NO_MF2=1 -DUCONFIG_NO_TRANSLITERATION=1 -DUCONFIG_NO_REGULAR_EXPRESSIONS=1 -DUCONFIG_NO_SERVICE=1 -DUCONFIG_NO_FILTERED_BREAK_ITERATION=1"
     steps:
       - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
       - name: Verify no additional new UCONFIG_NO_xxx added
@@ -890,7 +890,7 @@ jobs:
   unicode-update-tools:
     runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+    - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       with:
         persist-credentials: false
     - uses: bazel-contrib/setup-bazel@c5acdfb288317d0b5c0bbd7a396a3dc868bb0f86 # 0.19.0
@@ -899,7 +899,7 @@ jobs:
       run: |
         echo "LINUX_VERSION=$(grep -F VERSION_ID /etc/os-release | cut -d'"' -f2)" >> $GITHUB_OUTPUT
     - name: Mount bazel cache
-      uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
         path: "~/.cache/bazel"
         key: bazel-${{ runner.os }}-${{ steps.linux-version.outputs.LINUX_VERSION }}
@@ -931,7 +931,7 @@ jobs:
   icu4c-test-samples:
       runs-on: ubuntu-24.04  # Updated in BRS
       steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
 
@@ -958,7 +958,7 @@ jobs:
   icu4c-without-collation-rule-strings:
     runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
       - name: Install hjson dependency
@@ -1000,7 +1000,7 @@ jobs:
   icu4c-uconfig-no-conversion:
     runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
       - name: Set UCONFIG_NO_CONVERSION and configure ICU4C
@@ -1025,7 +1025,7 @@ jobs:
       contents: write # So that we can upload to release
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
       - name: Build
