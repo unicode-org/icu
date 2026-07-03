@@ -417,14 +417,12 @@ namespace message2 {
             U_I18N_API virtual ~Builder();
         }; // class MessageFormatter::Builder
 
-        // TODO(ICU-23428): Shouldn't be public; only used for testing
         /**
          * Returns a string consisting of the input with optional spaces removed.
          *
          * @return        A normalized string representation of the input
          *
-         * @internal ICU 75 technology preview
-         * @deprecated This API is for technology preview only.
+         * @internal ICU 75: This API is ICU internal only.
          */
         U_I18N_API const UnicodeString& getNormalizedPattern() const { return normalizedInput; }
 
