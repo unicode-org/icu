@@ -126,6 +126,18 @@ namespace message2 {
          */
         U_I18N_API const Locale& getLocale() const { return locale; }
 
+	/**
+	 * Acceses the formatting locale that this `MessageFormatter` object
+	 * was created with.  If no formatting locale was explicitly set,
+	 * returns the same locale as getLocale().
+	 *
+	 * @return A reference to the formatting locale.
+	 *
+	 * @internal ICU 79 technology preview
+	 * @deprecated This API is for technology preview only.
+	 */
+	U_I18N_API const Locale& getFormattingLocale() { return formattingLocale; }
+
         /**
          * Serializes the data model as a string in MessageFormat 2.0 syntax.
          *
@@ -230,6 +242,7 @@ namespace message2 {
             // Ignored if `setPattern()` wasn't called
             StaticErrors* errors;
             Locale locale;
+	    Locale formattingLocale;
             // Not owned
             const MFFunctionRegistry* customMFFunctionRegistry;
             // Error behavior; see comment in `MessageFormatter` class
@@ -244,7 +257,7 @@ namespace message2 {
             void clearState();
         public:
             /**
-             * Sets the locale to use for formatting.
+             * Sets the locale to use for this context
              *
              * @param locale The desired locale.
              * @return       A reference to the builder.
@@ -253,6 +266,18 @@ namespace message2 {
              * @deprecated This API is for technology preview only.
              */
             U_I18N_API Builder& setLocale(const Locale& locale);
+	    /**
+	     * Sets the locale used by formatter factories (:number, :date,
+	     * etc.) for rendering output. Selector factories (plural rules)
+	     * continue to use the locale set via setLocale().
+	     * The formatting locale defaults to the same one set by setLocale().
+	     * @param locale The desired locale
+	     * @return       A reference to the builder.
+	     *
+	     * @internal ICU 79 technology preview
+	     * @deprecated This API is for technology preview only.
+	     */
+	    U_I18N_API Builder& setFormattingLocale(const Locale& locale);
             /**
              * Sets the pattern (contents of the message) and parses it
              * into a data model. If a data model was
@@ -499,8 +524,10 @@ namespace message2 {
         void clearErrors() const;
         void cleanup() noexcept;
 
-        // The locale this MessageFormatter was created with
-        /* const */ Locale locale;
+        // The locale set by setLocale()
+	Locale locale;
+	// The locale set by setformattinglocale()
+	Locale formattingLocale;
 
         // Registry for built-in functions
         MFFunctionRegistry standardMFFunctionRegistry;

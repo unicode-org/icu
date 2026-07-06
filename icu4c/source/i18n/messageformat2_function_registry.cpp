@@ -731,15 +731,16 @@ StandardFunctions::NumberValue::NumberValue(const Number& parent,
         return;
     }
 
+    formattingLocale = context.getFormattingLocale();
     locale = context.getLocale();
     opts = options.mergeOptions(arg.getResolvedOptions(), errorCode);
     innerValue = arg.unwrap();
     functionName = UnicodeString(parent.isInteger ? "integer" : "number");
     inputDir = context.getDirection();
-    dir = outputDirectionalityFromUDir(inputDir, locale);
+    dir = outputDirectionalityFromUDir(inputDir, formattingLocale);
 
     number::LocalizedNumberFormatter realFormatter;
-    realFormatter = formatterForOptions(parent, locale, opts, errorCode);
+    realFormatter = formatterForOptions(parent, formattingLocale, opts, errorCode);
 
     int64_t integerValue = 0;
 
@@ -1060,6 +1061,7 @@ StandardFunctions::DateTimeValue::DateTimeValue(DateTime::DateTimeType type,
     }
 
     locale = context.getLocale();
+    formattingLocale = context.getFormattingLocale();
     opts = options.mergeOptions(arg.getResolvedOptions(), errorCode);
     innerValue = arg.unwrap();
     switch (type) {
@@ -1074,7 +1076,7 @@ StandardFunctions::DateTimeValue::DateTimeValue(DateTime::DateTimeType type,
         break;
     }
     inputDir = context.getDirection();
-    dir = outputDirectionalityFromUDir(inputDir, locale);
+    dir = outputDirectionalityFromUDir(inputDir, formattingLocale);
 
     const Formattable* source = &innerValue;
 
@@ -1116,19 +1118,19 @@ StandardFunctions::DateTimeValue::DateTimeValue(DateTime::DateTimeType type,
             timeStyle = stringToStyle(opts.getStringFunctionOption(timeStyleName), errorCode);
 
             if (useDate && !useTime) {
-                df.adoptInstead(DateFormat::createDateInstance(dateStyle, locale));
+                df.adoptInstead(DateFormat::createDateInstance(dateStyle, formattingLocale));
             } else if (useTime && !useDate) {
-                df.adoptInstead(DateFormat::createTimeInstance(timeStyle, locale));
+                df.adoptInstead(DateFormat::createTimeInstance(timeStyle, formattingLocale));
             } else {
-                df.adoptInstead(DateFormat::createDateTimeInstance(dateStyle, timeStyle, locale));
+                df.adoptInstead(DateFormat::createDateTimeInstance(dateStyle, timeStyle, formattingLocale));
             }
         } else if (type == DateTimeType::kDate) {
             dateStyle = stringToStyle(opts.getStringFunctionOption(styleName), errorCode);
-            df.adoptInstead(DateFormat::createDateInstance(dateStyle, locale));
+            df.adoptInstead(DateFormat::createDateInstance(dateStyle, formattingLocale));
         } else {
             // :time
             timeStyle = stringToStyle(opts.getStringFunctionOption(styleName), errorCode);
-            df.adoptInstead(DateFormat::createTimeInstance(timeStyle, locale));
+            df.adoptInstead(DateFormat::createTimeInstance(timeStyle, formattingLocale));
         }
     } else {
         // Build up a skeleton based on the field options, then use that to
@@ -1480,6 +1482,7 @@ StandardFunctions::StringValue::StringValue(const FunctionContext& context,
                                             const FunctionOptions&,
                                             UErrorCode& status) {
     CHECK_ERROR(status);
+    formattingLocale = context.getFormattingLocale();
     locale = context.getLocale();
     innerValue = val.unwrap();
     functionName = UnicodeString("string");
@@ -1487,7 +1490,7 @@ StandardFunctions::StringValue::StringValue(const FunctionContext& context,
     dir = stringOutputDirection(inputDir);
     // No options
     // Convert to string
-    formattedString = formattableToString(context.getLocale(), innerValue, status);
+    formattedString = formattableToString(formattingLocale, innerValue, status);
 }
 
 void StandardFunctions::StringValue::selectKeys(const UnicodeString* keys,

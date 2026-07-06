@@ -31,6 +31,7 @@ TestMessageFormat2::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO(testLowLoneSurrogate);
     TESTCASE_AUTO(testLoneSurrogateInQuotedLiteral);
     TESTCASE_AUTO(dataDrivenTests);
+    TESTCASE_AUTO(testSetFormatLocale);
     TESTCASE_AUTO_END;
 }
 
@@ -478,6 +479,43 @@ void TestMessageFormat2::dataDrivenTests() {
 
     jsonTestsFromFiles(errorCode);
 }
+
+void TestMessageFormat2::testSetFormatLocale() {
+    IcuTestErrorCode errorCode(*this, "testSetFormatLocale");
+    UParseError parseError;
+
+    UnicodeString pattern(u""
+                          ".input {$count :number} .input {$name :string} .input {$birthday :date}\n"
+                          ".match $count\n"
+                          "many {{PASS {$count} @ {$birthday :date style=short}}}\n"
+			  "* {{FAIL wrong bucket {$count} @ {$birthday :date style=short}}}\n"
+                          );
+    MessageFormatter mf = MessageFormatter::Builder(errorCode)
+      .setErrorHandlingBehavior(MessageFormatter::U_MF_BEST_EFFORT)
+      .setPattern(pattern, parseError, errorCode)
+      .setLocale(Locale("pl"))
+      .setFormattingLocale(Locale("en"))
+      .build(errorCode);
+
+    if (errorCode.errIfFailureAndReset("build")) {
+      errln("UParseError = %d:%d", parseError.line, parseError.offset);
+      return;
+    }
+
+    std::map<UnicodeString, message2::Formattable> argsBuilder;
+    argsBuilder["count"] = message2::Formattable((int64_t)13);
+    argsBuilder["name"] = message2::Formattable("US");
+    argsBuilder["birthday"] = message2::Formattable("1776-07-04");
+    MessageArguments args(argsBuilder, errorCode);
+
+    UnicodeString result = mf.formatToString(args, errorCode);
+    if (errorCode.errIfFailureAndReset("formatToString")) {
+        return;
+    }
+    UnicodeString expectedResult(u"PASS 13 @ 7/4/76");
+    assertEquals("testSetFormatLocale", expectedResult, result);
+}
+
 
 TestCase::~TestCase() {}
 TestCase::Builder::~Builder() {}

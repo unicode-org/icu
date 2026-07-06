@@ -305,7 +305,7 @@ FunctionContext MessageFormatter::makeFunctionContext(const FunctionOptions& opt
     UMFBidiOption dir = ubidi_getMFOption(options.getStringFunctionOption(options::U_DIR));
     UnicodeString id = options.getStringFunctionOption(options::U_ID);
 
-    return FunctionContext(locale, dir, id);
+    return FunctionContext(locale, formattingLocale, dir, id);
 }
 
 // Resolves a function's options

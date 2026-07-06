@@ -76,6 +76,11 @@ namespace message2 {
         return *this;
     }
 
+    MessageFormatter::Builder& MessageFormatter::Builder::setFormattingLocale(const Locale& loc) {
+      formattingLocale = loc;
+      return *this;
+    }
+
     MessageFormatter::Builder& MessageFormatter::Builder::setDataModel(MFDataModel&& newDataModel) {
         clearState();
         hasPattern = false;
@@ -119,7 +124,11 @@ namespace message2 {
         return MessageFormatter(*this, errorCode);
     }
 
-    MessageFormatter::Builder::Builder(UErrorCode& errorCode) : locale(Locale::getDefault()), customMFFunctionRegistry(nullptr) {
+    MessageFormatter::Builder::Builder(UErrorCode& errorCode) :
+      locale(Locale::getDefault()),
+      formattingLocale(),
+      customMFFunctionRegistry(nullptr) {
+      formattingLocale.setToBogus(); // indicating setFormattingLocale was not called
         // Initialize errors
         errors = new StaticErrors(errorCode);
         CHECK_ERROR(errorCode);
@@ -152,7 +161,10 @@ namespace message2 {
 
     // MessageFormatter
 
-    MessageFormatter::MessageFormatter(const MessageFormatter::Builder& builder, UErrorCode &success) : locale(builder.locale), customMFFunctionRegistry(builder.customMFFunctionRegistry) {
+    MessageFormatter::MessageFormatter(const MessageFormatter::Builder& builder, UErrorCode &success) :
+      locale(builder.locale),
+      formattingLocale(builder.formattingLocale.isBogus() ? builder.locale : builder.formattingLocale),
+      customMFFunctionRegistry(builder.customMFFunctionRegistry) {
         CHECK_ERROR(success);
 
         // Set up the standard function registry
@@ -236,6 +248,7 @@ namespace message2 {
         cleanup();
 
         locale = std::move(other.locale);
+        formattingLocale = std::move(other.formattingLocale);
         standardMFFunctionRegistry = std::move(other.standardMFFunctionRegistry);
         customMFFunctionRegistry = other.customMFFunctionRegistry;
         dataModel = std::move(other.dataModel);

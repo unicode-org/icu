@@ -248,6 +248,15 @@ namespace message2 {
              */
             U_I18N_API const Locale& getLocale() const { return locale; }
             /**
+             * Returns the formatting locale from this context.
+             *
+             * @return Formatting Locale the context was created with.
+             *
+             * @internal ICU 79 technology preview
+             * @deprecated This API is for technology preview only.
+             */
+            U_I18N_API const Locale& getFormattingLocale() const { return formattingLocale; }
+            /**
              * Returns the text direction from this context.
              *
              * @return A UMFBidiOption indicating the text direction.
@@ -270,11 +279,12 @@ namespace message2 {
             friend class MessageFormatter;
 
             Locale locale;
+            Locale formattingLocale;
             UMFBidiOption dir;
             UnicodeString id;
 
-            FunctionContext(const Locale& loc, UMFBidiOption d, UnicodeString i)
-                : locale(loc), dir(d), id(i) {}
+            FunctionContext(const Locale& loc, const Locale& formatLoc, UMFBidiOption d, UnicodeString i)
+	      : locale(loc), formattingLocale(formatLoc), dir(d), id(i) {}
     }; // class FunctionContext
 
     class FunctionValue;
@@ -515,13 +525,21 @@ namespace message2 {
              */
             UnicodeString fallback;
             /**
-             * Locale from u:locale option.
+             * Locale from function context.
              * Must be set from function context.
              *
              * @internal ICU 79 technology preview
              * @deprecated This API is for technology preview only.
              */
             Locale locale;
+            /**
+             * Formatting Locale from function context.
+             * Must be set from function context.
+             *
+             * @internal ICU 79 technology preview
+             * @deprecated This API is for technology preview only.
+             */
+            Locale formattingLocale;
             /**
              * Directionality of formatted result.
              * Defaults to U_MF_DIRECTIONALITY_UNKNOWN if not set
