@@ -1085,6 +1085,32 @@ static void u_property_read(void* cookie, const char* name, const char* value,
 }
 #endif
 
+#if defined(CHECK_LOCALTIME_LINK) && !defined(DEBUG_SKIP_LOCALTIME_LINK)
+/* Attempt to extract a valid Olson ID from the path of a zoneinfo file, i.e.
+ * the part following TZZONEINFOTAIL ("/zoneinfo/"). The path is first copied
+ * into gTimeZoneBuffer so that the ID pointed to by gTimeZoneBufferPtr stays
+ * valid after the caller's string is gone. Caller must handle threading
+ * issues. */
+static bool extractOlsonIdFromPath(const char* path) {
+    U_ASSERT(gTimeZoneBufferPtr == nullptr);
+    if (uprv_strlen(path) >= sizeof(gTimeZoneBuffer)) {
+        return false;
+    }
+    uprv_strcpy(gTimeZoneBuffer, path);
+    const char* tzZoneInfoTailPtr = uprv_strstr(gTimeZoneBuffer, TZZONEINFOTAIL);
+    if (tzZoneInfoTailPtr == nullptr) {
+        return false;
+    }
+    tzZoneInfoTailPtr += uprv_strlen(TZZONEINFOTAIL);
+    skipZoneIDPrefix(&tzZoneInfoTailPtr);
+    if (!isValidOlsonID(tzZoneInfoTailPtr)) {
+        return false;
+    }
+    gTimeZoneBufferPtr = tzZoneInfoTailPtr;
+    return true;
+}
+#endif
+
 U_CAPI void U_EXPORT2
 uprv_tzname_clear_cache()
 {
@@ -1158,19 +1184,46 @@ uprv_tzname(int n)
 #else
     tzid = getenv("TZ");
 #endif
-    if (tzid != nullptr && isValidOlsonID(tzid)
+    if (tzid != nullptr && (isValidOlsonID(tzid)
+#if defined(CHECK_LOCALTIME_LINK) && !defined(DEBUG_SKIP_LOCALTIME_LINK)
+        /* TZ can also hold the full path of a zoneinfo file, with or without
+           a leading colon, in which case it need not look like an Olson ID
+           (e.g. the zoneinfo directory itself may contain digits). */
+        || tzid[0] == '/' || (tzid[0] == ':' && tzid[1] == '/')
+#endif
+        )
 #if U_PLATFORM == U_PF_SOLARIS
     /* Don't misinterpret TZ "localtime" on Solaris as a time zone name. */
         && uprv_strcmp(tzid, TZ_ENV_CHECK) != 0
 #endif
     ) {
-        /* The colon forces tzset() to treat the remainder as zoneinfo path */
+        /* The colon forces tzset() to treat the remainder as a zoneinfo path.
+           At least glibc also accepts an absolute path without the leading
+           colon. */
         if (tzid[0] == ':') {
             tzid++;
         }
         /* This might be a good Olson ID. */
         skipZoneIDPrefix(&tzid);
+#if defined(CHECK_LOCALTIME_LINK) && !defined(DEBUG_SKIP_LOCALTIME_LINK)
+        if (tzid[0] != '/') {
+            return tzid;
+        }
+        /* TZ can also hold the full path of a zoneinfo file, e.g.
+           TZ=:/usr/share/zoneinfo/America/New_York. Try to extract the Olson
+           ID following TZZONEINFOTAIL in the path. If the path does not
+           contain TZZONEINFOTAIL (e.g. TZ=:/etc/localtime, possibly a symlink
+           to a zoneinfo file), fall through to the TZDEFAULT handling below.
+           Caller must handle threading issues. */
+        if (gTimeZoneBufferPtr != nullptr) {
+            return gTimeZoneBufferPtr;
+        }
+        if (extractOlsonIdFromPath(tzid)) {
+            return gTimeZoneBufferPtr;
+        }
+#else
         return tzid;
+#endif
     }
     /* else U_TZNAME will give a better result. */
 #endif
