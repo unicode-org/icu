@@ -2346,4 +2346,16 @@ public class RbnfTest extends CoreTestFmwk {
 
         doParsingTest(formatter, lpTestData, true);
     }
+
+    @Test
+    public void Test23407NullDereferenceREAD() {
+        // This is "garbage" from a fuzzer run. We test that the code does not crash.
+        String fuzzstr = "x0x:>%䀾>Ā;%䀾:>;>;;<0<<>";
+        try {
+            RuleBasedNumberFormat rbfmt = new RuleBasedNumberFormat(fuzzstr, Locale.US);
+            rbfmt.parse(fuzzstr);
+        } catch (IllegalArgumentException | ParseException e) {
+            // Expected exception or parse failure is fine, but not others like NPE.
+        }
+    }
 }

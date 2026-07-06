@@ -30,6 +30,7 @@ class IntlTestRBNFParse : public IntlTest {
    */
   virtual void TestParse();
   virtual void TestNullRuleSet();
+  virtual void Test23407NullDereferenceREAD();
 
   void testfmt(RuleBasedNumberFormat* formatter, double val, UErrorCode& status);
   void testfmt(RuleBasedNumberFormat* formatter, int val, UErrorCode& status);

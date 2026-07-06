@@ -1305,7 +1305,7 @@ NumeratorSubstitution::doParse(const UnicodeString& text,
     int32_t zeroCount = 0;
     UnicodeString workText(text);
 
-    if (withZeros) {
+    if (withZeros && getRuleSet() != nullptr) {
         ParsePosition workPos(1);
         Formattable temp;
 

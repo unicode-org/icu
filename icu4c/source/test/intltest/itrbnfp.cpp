@@ -39,6 +39,7 @@ void IntlTestRBNFParse::runIndexedTest(int32_t index, UBool exec, const char* &n
 #if U_HAVE_RBNF
         TESTCASE(0, TestParse);
         TESTCASE(1, TestNullRuleSet);
+        TESTCASE(2, Test23407NullDereferenceREAD);
 #else
         TESTCASE(0, TestRBNFParseDisabled);
 #endif
@@ -152,6 +153,22 @@ IntlTestRBNFParse::TestNullRuleSet() {
    if (status != U_PARSE_ERROR) {
         logln("should get U_PARSE_ERROR");
    }
+}
+
+void
+IntlTestRBNFParse::Test23407NullDereferenceREAD() {
+    // This is "garbage" from a fuzzer run. We test that the code does not crash.
+    // Parse failure is expected.
+    logln("Test23407NullDereferenceREAD");
+    icu::UnicodeString fuzzstr(u"x0x:>%䀾>Ā;%䀾:>;>;;<0<<>");
+
+    UErrorCode status = U_ZERO_ERROR;
+    UParseError perror;
+    icu::RuleBasedNumberFormat rbfmt(fuzzstr, Locale::getUS(), perror, status);
+    icu::Formattable result;
+    if (U_SUCCESS(status)) {
+        rbfmt.parse(fuzzstr, result, status);
+    }
 }
 
 void

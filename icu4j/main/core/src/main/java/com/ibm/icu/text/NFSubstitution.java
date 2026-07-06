@@ -1669,7 +1669,7 @@ class NumeratorSubstitution extends NFSubstitution {
         // if withZeros is true, we need to count the zeros
         // and use that to adjust the parse result
         int zeroCount = 0;
-        if (withZeros) {
+        if (withZeros && ruleSet != null) {
             String workText = text;
             ParsePosition workPos = new ParsePosition(1);
 
@@ -1714,7 +1714,7 @@ class NumeratorSubstitution extends NFSubstitution {
                         nonNumericalExecutedRuleMask,
                         recursionCount);
 
-        if (withZeros) {
+        if (withZeros && result != null) {
             // any base value will do in this case.  is there a way to
             // force this to not bother trying all the base values?
 
