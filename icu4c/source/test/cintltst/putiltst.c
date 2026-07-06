@@ -547,6 +547,69 @@ static void TestString(void)
   Test_aestrncpy(__LINE__, str_exp3, str_tst, 8);
 }
 
+/* Test uprv_tzname() handling of the TZ environment variable, including a
+   full zoneinfo file path (ICU-13694). Restrict to the platforms where
+   putil.cpp defines CHECK_LOCALTIME_LINK (except Android, which reads the
+   timezone from a system property instead of TZ, and iOS, where
+   CHECK_LOCALTIME_LINK may not be defined). uprv_tzname() extracts the Olson
+   ID from a path without checking that the file exists, so the fabricated
+   paths below keep this test hermetic. */
+#if !UCONFIG_NO_FILE_IO && U_PLATFORM != U_PF_ANDROID && U_PLATFORM != U_PF_IPHONE && \
+    (U_PLATFORM_IS_DARWIN_BASED || U_PLATFORM_IS_LINUX_BASED || U_PLATFORM == U_PF_BSD || U_PLATFORM == U_PF_SOLARIS)
+#define TEST_TZNAME_ENV 1
+#include <stdlib.h>
+#endif
+
+#ifdef TEST_TZNAME_ENV
+static void expectTZName(int32_t line, const char* tzval, const char* expected) {
+    if (setenv("TZ", tzval, 1) != 0) {
+        log_err("setenv(TZ=%s) failed (line %d)\n", tzval, (int)line);
+        return;
+    }
+    uprv_tzname_clear_cache();
+    const char* id = uprv_tzname(0);
+    if (id == NULL || uprv_strcmp(id, expected) != 0) {
+        log_err("uprv_tzname(0) for TZ=%s gave \"%s\", expected \"%s\" (line %d)\n",
+                tzval, id == NULL ? "(null)" : id, expected, (int)line);
+    }
+}
+
+static void TestTZNameEnv(void) {
+    char savedTZ[200];
+    UBool hadTZ = false;
+    const char* env = getenv("TZ");
+    if (env != NULL) {
+        if (uprv_strlen(env) >= sizeof(savedTZ)) {
+            log_verbose("TZ value too long, skipping TestTZNameEnv\n");
+            return;
+        }
+        uprv_strcpy(savedTZ, env);
+        hadTZ = true;
+    }
+
+    /* Plain Olson IDs, with and without the leading colon. */
+    expectTZName(__LINE__, "America/New_York", "America/New_York");
+    expectTZName(__LINE__, ":Asia/Seoul", "Asia/Seoul");
+    expectTZName(__LINE__, "posix/Asia/Seoul", "Asia/Seoul");
+    expectTZName(__LINE__, "PST8PDT", "PST8PDT");
+    /* Full zoneinfo file paths, with and without the leading colon
+       (ICU-13694). */
+    expectTZName(__LINE__, ":/icutest/zoneinfo/America/New_York", "America/New_York");
+    expectTZName(__LINE__, "/icutest/zoneinfo/Asia/Seoul", "Asia/Seoul");
+    expectTZName(__LINE__, ":/icutest/zoneinfo/posix/Asia/Tokyo", "Asia/Tokyo");
+    /* The directories above the Olson ID may contain digits, e.g. a tzdata
+       version, and need not look like an Olson ID themselves. */
+    expectTZName(__LINE__, ":/icutest-2026a/zoneinfo/Europe/Paris", "Europe/Paris");
+
+    if (hadTZ) {
+        setenv("TZ", savedTZ, 1);
+    } else {
+        unsetenv("TZ");
+    }
+    uprv_tzname_clear_cache();
+}
+#endif
+
 void addPUtilTest(TestNode** root);
 
 static void addToolUtilTests(TestNode** root);
@@ -560,6 +623,9 @@ addPUtilTest(TestNode** root)
     addTest(root, &TestErrorName, "putiltst/TestErrorName");
     addTest(root, &TestPUtilAPI,       "putiltst/TestPUtilAPI");
     addTest(root, &TestString,    "putiltst/TestString");
+#ifdef TEST_TZNAME_ENV
+    addTest(root, &TestTZNameEnv, "putiltst/TestTZNameEnv");
+#endif
     addToolUtilTests(root);
 }
 
