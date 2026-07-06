@@ -1734,17 +1734,30 @@ const char *IntlTest::getSharedTestData(UErrorCode& err) {
 #else
         // Try ../../../../testdata (if we're in icu/source/test/intltest)
         // and ../../../../../../testdata (if we're in icu/source/test/intltest/Platform/(Debug|Release)
-#define TOP ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING
-#define TOP_TOP ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING TOP
-        srcDataDir = TOP "testdata" U_FILE_SEP_STRING;
-        testFile = TOP "testdata" FILE_NAME;
-        if (!fileExists(testFile)) {
-            srcDataDir = TOP_TOP "testdata" U_FILE_SEP_STRING;
-            testFile = TOP_TOP "testdata" FILE_NAME;
-            if (!fileExists(testFile)) {
-                err = U_FILE_ACCESS_ERROR;
-                srcDataDir = nullptr;
-            }
+        // and ../../../../../testdata (if we're in a source tarball on Windows)
+        // and ../../../testdata (if we're in a source tarball on Unix)
+#define TOP3 ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING
+#define TOP4 ".." U_FILE_SEP_STRING TOP3
+#define TOP5 ".." U_FILE_SEP_STRING TOP4
+#define TOP6 ".." U_FILE_SEP_STRING TOP5
+#define SEARCH(DIR) \
+    srcDataDir = DIR "testdata" U_FILE_SEP_STRING; \
+    testFile = DIR "testdata" FILE_NAME; \
+    if (!fileExists(testFile)) { \
+        srcDataDir = nullptr; \
+    }
+        SEARCH(TOP3);
+        if (srcDataDir == nullptr) {
+            SEARCH(TOP4);
+        }
+        if (srcDataDir == nullptr) {
+            SEARCH(TOP5);
+        }
+        if (srcDataDir == nullptr) {
+            SEARCH(TOP6);
+        }
+        if (srcDataDir == nullptr) {
+            err = U_FILE_ACCESS_ERROR;
         }
 #endif
     }
