@@ -1722,10 +1722,18 @@ class NumeratorSubstitution extends NFSubstitution {
             long n = result.longValue();
             long d = 1;
             while (d <= n) {
+                if (d > Long.MAX_VALUE / 10) {
+                    parsePosition.setIndex(0);
+                    return 0;
+                }
                 d *= 10;
             }
             // now add the zeros
             while (zeroCount > 0) {
+                if (d > Long.MAX_VALUE / 10) {
+                    parsePosition.setIndex(0);
+                    return 0;
+                }
                 d *= 10;
                 --zeroCount;
             }

@@ -88,6 +88,7 @@ void IntlTestRBNF::runIndexedTest(int32_t index, UBool exec, const char* &name, 
         TESTCASE(38, TestAmbiguousDelimiter);
         TESTCASE(39, TestDividedByZero);
         TESTCASE(40, TestTurkishSpellout);
+        TESTCASE(41, TestNumeratorSubstitutionOverflow);
 #else
         TESTCASE(0, TestRBNFDisabled);
 #endif
@@ -2862,6 +2863,27 @@ IntlTestRBNF::TestTurkishSpellout() {
         };
         doLenientParseTest(&formatter, lpTestData);
 	}
+}
+
+void
+IntlTestRBNF::TestNumeratorSubstitutionOverflow() {
+    // This test case comes from a fuzzer (Bug 471607891).
+    // The goal is to make sure that the code does not crash or trigger UBSan
+    // (Undefined Behavior Sanitizer) with invalid/extreme inputs,
+    // rather than looking for a particular result value.
+    UnicodeString rulesStr(
+        u"> \u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+        u"\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+        u"\u0001a;x0x:>%a>a;%a:a;>;\u00024<;<<<a\u0089;"
+        u"\u0010a\u0000\u0300<<<\u0003>;\u0000;\u001faz>;a;>;\u00024<;<<<Ya",
+        77);
+    UParseError perror;
+    UErrorCode status = U_ZERO_ERROR;
+    RuleBasedNumberFormat rbfmt(rulesStr, Locale::getUS(), perror, status);
+    if (U_SUCCESS(status)) {
+        Formattable result;
+        rbfmt.parse(rulesStr, result, status);
+    }
 }
 
 /* U_HAVE_RBNF */
