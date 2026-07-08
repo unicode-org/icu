@@ -5520,6 +5520,14 @@ void CalendarTest::TestChineseCalendarMonthInSpecialYear() {
         { 1890, UCAL_APRIL, 18, 2-1, 29, true},
         { 1890, UCAL_APRIL, 19, 3-1, 1, false},
         { 1890, UCAL_APRIL, 20, 3-1, 2, false},
+        // Edge cases in 2057 and 2097 where New Moon occurs near midnight (00:10 on 2057-09-29 and 23:55 on 2097-08-07).
+        // Highlighted in Y.T. Liu's 200-year ephemeris comparison as near-midnight conjunction edge cases.
+        { 2057, UCAL_SEPTEMBER, 28, 8-1, 30, false},
+        { 2057, UCAL_SEPTEMBER, 29, 9-1, 1, false},
+        { 2057, UCAL_SEPTEMBER, 30, 9-1, 2, false},
+        { 2097, UCAL_AUGUST, 6, 6-1, 29, false},
+        { 2097, UCAL_AUGUST, 7, 7-1, 1, false},
+        { 2097, UCAL_AUGUST, 8, 7-1, 2, false},
     };
     for (auto& cas : cases) {
         gc.set(cas.gyear, cas.gmonth, cas.gdate);
@@ -5532,10 +5540,6 @@ void CalendarTest::TestChineseCalendarMonthInSpecialYear() {
         if (cas.cmonth != actual_month ||
             cas.cdate != actual_date ||
             cas.cleapmonth != (actual_in_leap_month != 0)) {
-            if (cas.gyear == 1890 &&
-                logKnownIssue("ICU-22230", "Problem between 1890/1/21 and 1890/4/18")) {
-                  continue;
-            }
             errln("Fail: Gregorian(%d/%d/%d) should be Chinese %d%s/%d but got %d%s/%d",
                   cas.gyear, cas.gmonth+1, cas.gdate,
                   cas.cmonth+1, cas.cleapmonth ? "L" : "" , cas.cdate,
