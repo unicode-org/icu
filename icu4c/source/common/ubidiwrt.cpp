@@ -37,8 +37,7 @@
  *   ("minimum-length-problem" of UTF-8)
  * - The BiDi control characters need only one code unit each
  *
- * Further assumptions for all UTFs:
- * - u_charMirror(c) needs the same number of code units as c
+ * Note: Since Unicode 18, u_charMirror(c) may change the number of code units.
  */
 #if defined(UTF_SIZE) && UTF_SIZE==8
 # error reimplement ubidi_writeReordered() for UTF-8, see comment above
@@ -243,7 +242,7 @@ doWriteReverse(const char16_t *src, int32_t srcLength,
             } while(j<i);
         } while(srcLength>0);
         break;
-    default:
+    default: {
         /*
          * With several "complicated" options set, this is the most
          * general and the slowest copying of an RTL run.
@@ -251,31 +250,7 @@ doWriteReverse(const char16_t *src, int32_t srcLength,
          * keep combining characters with their base characters
          * as requested.
          */
-        if(!(options&UBIDI_REMOVE_BIDI_CONTROLS)) {
-            i=srcLength;
-        } else {
-            /* we need to find out the destination length of the run,
-               which will not include the BiDi control characters */
-            int32_t length=srcLength;
-            char16_t ch;
-
-            i=0;
-            do {
-                ch=*src++;
-                if(!IS_BIDI_CONTROL_CHAR(ch)) {
-                    ++i;
-                }
-            } while(--length>0);
-            src-=srcLength;
-        }
-
-        if(destSize<i) {
-            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-            return i;
-        }
-        destSize=i;
-
-        /* preserve character integrity */
+        int32_t destLength=0;
         do {
             /* i is always after the last code unit known to need to be kept in this segment */
             i=srcLength;
@@ -294,21 +269,33 @@ doWriteReverse(const char16_t *src, int32_t srcLength,
                 continue;
             }
 
-            /* copy this "user character" */
+            int32_t origBaseLen=U16_LENGTH(c);
             j=srcLength;
             if(options&UBIDI_DO_MIRRORING) {
                 /* mirror only the base character */
-                int32_t k=0;
                 c=u_charMirror(c);
-                U16_APPEND_UNSAFE(dest, k, c);
-                dest+=k;
-                j+=k;
+                int32_t k=U16_LENGTH(c);
+                if(destLength+k<=destSize) {
+                    int32_t temp=destLength;
+                    U16_APPEND_UNSAFE(dest, temp, c);
+                }
+                destLength+=k;
+                j+=origBaseLen;
             }
             while(j<i) {
-                *dest++=src[j++];
+                if(destLength<destSize) {
+                    dest[destLength]=src[j];
+                }
+                destLength++;
+                j++;
             }
         } while(srcLength>0);
-        break;
+
+        if(destSize<destLength) {
+            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+        }
+        return destLength;
+    }
     } /* end of switch */
 
     return destSize;

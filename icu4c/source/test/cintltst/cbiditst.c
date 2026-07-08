@@ -94,6 +94,7 @@ static void testBracketOverflow(void);
 static void TestExplicitLevel0(void);
 static void testUBidiWriteReorderedBufferOverflow(void);
 static void testUBidiGetRunsBufferOverflow(void);
+static void testUBidiWriteReverseOverflow(void);
 
 /* new BIDI API */
 static void testReorderingMode(void);
@@ -145,6 +146,7 @@ addComplexTest(TestNode** root) {
     addTest(root, TestExplicitLevel0, "complex/bidi/TestExplicitLevel0");
     addTest(root, testUBidiWriteReorderedBufferOverflow, "complex/bidi/writeReorderedBufferOverflow");
     addTest(root, testUBidiGetRunsBufferOverflow, "complex/bidi/getRunsBufferOverflow");
+    addTest(root, testUBidiWriteReverseOverflow, "complex/bidi/writeReverseOverflow");
 
     addTest(root, doArabicShapingTest, "complex/arabic-shaping/ArabicShapingTest");
     addTest(root, doLamAlefSpecialVLTRArabicShapingTest, "complex/arabic-shaping/lamalef");
@@ -5005,4 +5007,52 @@ static void TestExplicitLevel0(void) {
         }
     }
     ubidi_close(bidi);
+}
+
+static void
+testUBidiWriteReverseOverflow(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    static const UChar src[] = { 0x05D0, 0x221D, 0x05D1 };
+    int32_t srcLen = 3;
+    UChar dest[10];
+    int32_t outLen = ubidi_writeReverse(src, srcLen, dest, 3, 
+                                        UBIDI_DO_MIRRORING | UBIDI_KEEP_BASE_COMBINING, 
+                                        &status);
+    if (status != U_BUFFER_OVERFLOW_ERROR || outLen != 4) {
+        log_err("testUBidiWriteReverseOverflow failed: expected U_BUFFER_OVERFLOW_ERROR and outLen=4, got %s and outLen=%d\n",
+                u_errorName(status), outLen);
+    }
+
+    status = U_ZERO_ERROR;
+    u_memset(dest, 0, 10);
+    outLen = ubidi_writeReverse(src, srcLen, dest, 10,
+                                UBIDI_DO_MIRRORING | UBIDI_KEEP_BASE_COMBINING,
+                                &status);
+    static const UChar expectedDest[] = { 0x05D1, 0xD836, 0xDF10, 0x05D0 };
+    if (U_FAILURE(status) || outLen != 4 || u_strncmp(dest, expectedDest, 4) != 0) {
+        log_err("testUBidiWriteReverseOverflow actual chars (221D->1DB10) failed: status=%s, outLen=%d\n",
+                u_errorName(status), outLen);
+    }
+
+    status = U_ZERO_ERROR;
+    static const UChar src2[] = { 0x05D0, 0xD836, 0xDF10, 0x05D1 };
+    int32_t src2Len = 4;
+    outLen = ubidi_writeReverse(src2, src2Len, dest, 2,
+                                UBIDI_DO_MIRRORING | UBIDI_KEEP_BASE_COMBINING,
+                                &status);
+    if (status != U_BUFFER_OVERFLOW_ERROR || outLen != 3) {
+        log_err("testUBidiWriteReverseOverflow (1DB10->221D overflow) failed: expected U_BUFFER_OVERFLOW_ERROR and outLen=3, got %s and outLen=%d\n",
+                u_errorName(status), outLen);
+    }
+
+    status = U_ZERO_ERROR;
+    u_memset(dest, 0, 10);
+    outLen = ubidi_writeReverse(src2, src2Len, dest, 10,
+                                UBIDI_DO_MIRRORING | UBIDI_KEEP_BASE_COMBINING,
+                                &status);
+    static const UChar expectedDest2[] = { 0x05D1, 0x221D, 0x05D0 };
+    if (U_FAILURE(status) || outLen != 3 || u_strncmp(dest, expectedDest2, 3) != 0) {
+        log_err("testUBidiWriteReverseOverflow actual chars (1DB10->221D) failed: status=%s, outLen=%d\n",
+                u_errorName(status), outLen);
+    }
 }
