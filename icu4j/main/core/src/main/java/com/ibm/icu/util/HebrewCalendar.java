@@ -626,21 +626,22 @@ public class HebrewCalendar extends Calendar {
                                     YEARS_IN_CYCLE);
 
             long frac = months * MONTH_FRACT + BAHARAD; // Fractional part of day #
-            day = months * 29 + (frac / DAY_PARTS); // Whole # part of calculation
-            frac = frac % DAY_PARTS; // Time of day
+            long fracDiv = floorDivide(frac, DAY_PARTS);
+            day = months * 29 + fracDiv; // Whole # part of calculation
+            frac = frac - (fracDiv * DAY_PARTS); // Time of day
 
-            int wd = (int) (day % 7); // Day of week (0 == Monday)
+            int wd = (int) ((day % 7 + 7) % 7); // Day of week (0 == Monday)
 
             if (wd == 2 || wd == 4 || wd == 6) {
                 // If the 1st is on Sun, Wed, or Fri, postpone to the next day
                 day += 1;
-                wd = (int) (day % 7);
-            } else if (wd == 1 && frac > 15 * HOUR_PARTS + 204 && !isLeapYear(year)) {
+                wd = (int) ((day % 7 + 7) % 7);
+            } else if (wd == 1 && frac >= 15 * HOUR_PARTS + 204 && !isLeapYear(year)) {
                 // If the new moon falls after 3:11:20am (15h204p from the previous noon)
                 // on a Tuesday and it is not a leap year, postpone by 2 days.
                 // This prevents 356-day years.
                 day += 2;
-            } else if (wd == 0 && frac > 21 * HOUR_PARTS + 589 && isLeapYear(year - 1)) {
+            } else if (wd == 0 && frac >= 21 * HOUR_PARTS + 589 && isLeapYear(year - 1)) {
                 // If the new moon falls after 9:32:43 1/3am (21h589p from yesterday noon)
                 // on a Monday and *last* year was a leap year, postpone by 1 day.
                 // Prevents 382-day years.
@@ -704,9 +705,8 @@ public class HebrewCalendar extends Calendar {
      */
     @Deprecated
     public static boolean isLeapYear(int year) {
-        // return (year * 12 + 17) % 19 >= 12;
-        int x = (year * 12 + 17) % YEARS_IN_CYCLE;
-        return x >= ((x < 0) ? -7 : 12);
+        int x = ((year * 12 + 17) % YEARS_IN_CYCLE + YEARS_IN_CYCLE) % YEARS_IN_CYCLE;
+        return x >= 12;
     }
 
     private static int monthsInYear(int year) {

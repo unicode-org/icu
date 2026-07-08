@@ -209,6 +209,9 @@ void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
 
     TESTCASE_AUTO(Test22633HebrewLargeNegativeDay);
     TESTCASE_AUTO(Test23069HebrewHanukkah);
+    TESTCASE_AUTO(Test23007HebrewYearZero);
+    TESTCASE_AUTO(Test23070HebrewGaRadMaT);
+    TESTCASE_AUTO(Test22441Year88369);
     TESTCASE_AUTO(Test22730JapaneseOverflow);
     TESTCASE_AUTO(Test22730CopticOverflow);
     TESTCASE_AUTO(Test22962ComputeJulianDayOverflow);
@@ -6034,6 +6037,102 @@ void CalendarTest::Test23069HebrewHanukkah() {
                    cas.hebrewYear, 1+icu::HebrewCalendar::KISLEV);
         }
     }
+}
+
+void CalendarTest::Test23007HebrewYearZero() {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> gc(Calendar::createInstance(*TimeZone::getGMT(), Locale("en_US@calendar=gregorian"), status));
+    LocalPointer<Calendar> hc(Calendar::createInstance(*TimeZone::getGMT(), Locale("he_IL@calendar=hebrew"), status));
+    if (failure(status, "Create calendar instances", true)) return;
+
+    // Gregorian 16 Dec -3761 (year -3761 in astronomical/ICU = 3762 BCE)
+    gc->set(-3761, UCAL_DECEMBER, 16, 0, 0, 0);
+    UDate instant = gc->getTime(status);
+    hc->setTime(instant, status);
+    if (failure(status, "Set time", true)) return;
+
+    int32_t year = hc->get(UCAL_YEAR, status);
+    int32_t month = hc->get(UCAL_MONTH, status);
+    int32_t day = hc->get(UCAL_DATE, status);
+    assertEquals("Hebrew year for -3761-12-16", 0, year);
+    assertEquals("Hebrew month for -3761-12-16", HebrewCalendar::KISLEV, month);
+    assertEquals("Hebrew day for -3761-12-16", 30, day);
+
+    gc->set(-3761, UCAL_DECEMBER, 17, 0, 0, 0);
+    instant = gc->getTime(status);
+    hc->setTime(instant, status);
+    if (failure(status, "Set time 2", true)) return;
+
+    year = hc->get(UCAL_YEAR, status);
+    month = hc->get(UCAL_MONTH, status);
+    day = hc->get(UCAL_DATE, status);
+    assertEquals("Hebrew year for -3761-12-17", 0, year);
+    assertEquals("Hebrew month for -3761-12-17", HebrewCalendar::TEVET, month);
+    assertEquals("Hebrew day for -3761-12-17", 1, day);
+}
+
+void CalendarTest::Test23070HebrewGaRadMaT() {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> hc(Calendar::createInstance(*TimeZone::getGMT(), Locale("he_IL@calendar=hebrew"), status));
+    LocalPointer<Calendar> gc(Calendar::createInstance(*TimeZone::getGMT(), Locale("en_US@calendar=gregorian"), status));
+    if (failure(status, "Create calendar instances", true)) return;
+
+    // Test Hebrew year 193151, which triggers Dechiya GaRadMaT (Tuesday 15h204p).
+    // Before our fix (using > instead of >=), year 193151 was not postponed by 2 days,
+    // causing an illegal 356-day year and empty strings on 189393-11-23 and 189393-11-24.
+    // With >=, year 193151 is postponed by 2 days (length 354 days, Normal year, Elul 29 days).
+    gc->set(189393, UCAL_NOVEMBER, 22, 0, 0, 0);
+    hc->setTime(gc->getTime(status), status);
+    if (failure(status, "Set time 1", true)) return;
+
+    assertEquals("Hebrew year for 189393-11-22", 193151, hc->get(UCAL_YEAR, status));
+    assertEquals("Hebrew month for 189393-11-22", HebrewCalendar::ELUL, hc->get(UCAL_MONTH, status));
+    assertEquals("Hebrew day for 189393-11-22", 27, hc->get(UCAL_DATE, status));
+
+    gc->set(189393, UCAL_NOVEMBER, 23, 0, 0, 0);
+    hc->setTime(gc->getTime(status), status);
+    if (failure(status, "Set time 2", true)) return;
+
+    assertEquals("Hebrew year for 189393-11-23", 193151, hc->get(UCAL_YEAR, status));
+    assertEquals("Hebrew month for 189393-11-23", HebrewCalendar::ELUL, hc->get(UCAL_MONTH, status));
+    assertEquals("Hebrew day for 189393-11-23", 28, hc->get(UCAL_DATE, status));
+
+    gc->set(189393, UCAL_NOVEMBER, 24, 0, 0, 0);
+    hc->setTime(gc->getTime(status), status);
+    if (failure(status, "Set time 3", true)) return;
+
+    assertEquals("Hebrew year for 189393-11-24", 193151, hc->get(UCAL_YEAR, status));
+    assertEquals("Hebrew month for 189393-11-24", HebrewCalendar::ELUL, hc->get(UCAL_MONTH, status));
+    assertEquals("Hebrew day for 189393-11-24", 29, hc->get(UCAL_DATE, status));
+
+    gc->set(189393, UCAL_NOVEMBER, 25, 0, 0, 0);
+    hc->setTime(gc->getTime(status), status);
+    if (failure(status, "Set time 4", true)) return;
+
+    assertEquals("Hebrew year for 189393-11-25", 193152, hc->get(UCAL_YEAR, status));
+    assertEquals("Hebrew month for 189393-11-25", HebrewCalendar::TISHRI, hc->get(UCAL_MONTH, status));
+    assertEquals("Hebrew day for 189393-11-25", 1, hc->get(UCAL_DATE, status));
+}
+
+void CalendarTest::Test22441Year88369() {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> hc(Calendar::createInstance(*TimeZone::getGMT(), Locale("he_IL@calendar=hebrew"), status));
+    if (failure(status, "Create calendar instance", true)) return;
+
+    // Test Hebrew year 88369, which triggers Dechiya BaTuTaKPaT (Monday 21h589p) at the start of 88370.
+    // Before our fix (using > instead of >=), Dechiya 3 did not trigger for year 88370,
+    // causing year 88369 to have an illegal length of 382 days (which evaluated to 352 after subtracting 30).
+    // With >=, year 88370 is postponed by 1 day, giving year 88369 a valid Deficient leap year length of 383 days.
+    hc->set(88369, HebrewCalendar::TISHRI, 1, 0, 0, 0);
+    UDate start88369 = hc->getTime(status);
+    if (failure(status, "Get time for 88369-01-01", true)) return;
+
+    hc->set(88370, HebrewCalendar::TISHRI, 1, 0, 0, 0);
+    UDate start88370 = hc->getTime(status);
+    if (failure(status, "Get time for 88370-01-01", true)) return;
+
+    int32_t yearLengthDays = static_cast<int32_t>((start88370 - start88369) / 86400000.0 + 0.5);
+    assertEquals("Hebrew year 88369 length in days", 383, yearLengthDays);
 }
 
 void CalendarTest::Test22730JapaneseOverflow() {

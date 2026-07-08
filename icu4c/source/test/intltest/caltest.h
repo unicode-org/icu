@@ -364,6 +364,9 @@ public: // package
     void TestChineseCalendarComputeMonthStart();
     void Test22633HebrewLargeNegativeDay();
     void Test23069HebrewHanukkah();
+    void Test23007HebrewYearZero();
+    void Test23070HebrewGaRadMaT();
+    void Test22441Year88369();
 
     void RunChineseCalendarInTemporalLeapYearTest(Calendar* cal);
     void RunIslamicCalendarInTemporalLeapYearTest(Calendar* cal);

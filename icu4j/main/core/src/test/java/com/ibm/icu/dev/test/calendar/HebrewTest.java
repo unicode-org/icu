@@ -671,4 +671,78 @@ public class HebrewTest extends CalendarTestFmwk {
             }
         }
     }
+
+    @Test
+    public void Test23007HebrewYearZero() {
+        GregorianCalendar gc = new GregorianCalendar(UTC, Locale.US);
+        gc.clear();
+        gc.set(Calendar.ERA, GregorianCalendar.BC);
+        gc.set(Calendar.YEAR, 3762); // 3762 BC = astronomical -3761
+        gc.set(Calendar.MONTH, Calendar.DECEMBER);
+        gc.set(Calendar.DATE, 16);
+        long instant = gc.getTimeInMillis();
+
+        HebrewCalendar hc = new HebrewCalendar(UTC, Locale.US);
+        hc.setTimeInMillis(instant);
+        assertEquals("Hebrew year for -3761-12-16", 0, hc.get(Calendar.YEAR));
+        assertEquals("Hebrew month for -3761-12-16", KISLEV, hc.get(Calendar.MONTH));
+        assertEquals("Hebrew day for -3761-12-16", 30, hc.get(Calendar.DATE));
+
+        gc.set(Calendar.DATE, 17);
+        instant = gc.getTimeInMillis();
+        hc.setTimeInMillis(instant);
+        assertEquals("Hebrew year for -3761-12-17", 0, hc.get(Calendar.YEAR));
+        assertEquals("Hebrew month for -3761-12-17", TEVET, hc.get(Calendar.MONTH));
+        assertEquals("Hebrew day for -3761-12-17", 1, hc.get(Calendar.DATE));
+    }
+
+    @Test
+    public void Test23070HebrewGaRadMaT() {
+        GregorianCalendar gc = new GregorianCalendar(UTC, Locale.US);
+        gc.clear();
+        gc.set(189393, Calendar.NOVEMBER, 22);
+        long instant = gc.getTimeInMillis();
+
+        HebrewCalendar hc = new HebrewCalendar(UTC, Locale.US);
+        hc.setTimeInMillis(instant);
+        assertEquals("Hebrew year for 189393-11-22", 193151, hc.get(Calendar.YEAR));
+        assertEquals("Hebrew month for 189393-11-22", ELUL, hc.get(Calendar.MONTH));
+        assertEquals("Hebrew day for 189393-11-22", 27, hc.get(Calendar.DATE));
+
+        gc.set(189393, Calendar.NOVEMBER, 23);
+        instant = gc.getTimeInMillis();
+        hc.setTimeInMillis(instant);
+        assertEquals("Hebrew year for 189393-11-23", 193151, hc.get(Calendar.YEAR));
+        assertEquals("Hebrew month for 189393-11-23", ELUL, hc.get(Calendar.MONTH));
+        assertEquals("Hebrew day for 189393-11-23", 28, hc.get(Calendar.DATE));
+
+        gc.set(189393, Calendar.NOVEMBER, 24);
+        instant = gc.getTimeInMillis();
+        hc.setTimeInMillis(instant);
+        assertEquals("Hebrew year for 189393-11-24", 193151, hc.get(Calendar.YEAR));
+        assertEquals("Hebrew month for 189393-11-24", ELUL, hc.get(Calendar.MONTH));
+        assertEquals("Hebrew day for 189393-11-24", 29, hc.get(Calendar.DATE));
+
+        gc.set(189393, Calendar.NOVEMBER, 25);
+        instant = gc.getTimeInMillis();
+        hc.setTimeInMillis(instant);
+        assertEquals("Hebrew year for 189393-11-25", 193152, hc.get(Calendar.YEAR));
+        assertEquals("Hebrew month for 189393-11-25", TISHRI, hc.get(Calendar.MONTH));
+        assertEquals("Hebrew day for 189393-11-25", 1, hc.get(Calendar.DATE));
+    }
+
+    @Test
+    public void Test22441Year88369() {
+        HebrewCalendar hc = new HebrewCalendar(UTC, Locale.US);
+        hc.clear();
+        hc.set(88369, TISHRI, 1);
+        long start88369 = hc.getTimeInMillis();
+
+        hc.clear();
+        hc.set(88370, TISHRI, 1);
+        long start88370 = hc.getTimeInMillis();
+
+        long yearLengthDays = (start88370 - start88369) / (24 * 60 * 60 * 1000L);
+        assertEquals("Hebrew year 88369 length in days", 383, yearLengthDays);
+    }
 }
