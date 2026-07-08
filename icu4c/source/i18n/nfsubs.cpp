@@ -1343,10 +1343,18 @@ NumeratorSubstitution::doParse(const UnicodeString& text,
         int64_t n = result.getLong(status); // force conversion!
         int64_t d = 1;
         while (d <= n) {
+            if (d > U_INT64_MAX / 10) {
+              // Will cause int64_t overflow
+              return false;
+            }
             d *= 10;
         }
         // now add the zeros
         while (zeroCount > 0) {
+            if (d > U_INT64_MAX / 10) {
+              // Will cause int64_t overflow
+              return false;
+            }
             d *= 10;
             --zeroCount;
         }
