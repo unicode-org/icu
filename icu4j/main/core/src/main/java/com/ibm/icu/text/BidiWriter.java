@@ -212,13 +212,14 @@ final class BidiWriter {
                         continue;
                     }
 
+                    int origBaseLen = UTF16.getCharCount(c);
                     /* copy this "user character" */
                     int j = srcLength;
                     if ((options & Bidi.DO_MIRRORING) != 0) {
                         /* mirror only the base character */
                         c = UCharacter.getMirror(c);
                         UTF16.append(dest, c);
-                        j += UTF16.getCharCount(c);
+                        j += origBaseLen;
                     }
                     dest.append(src.substring(j, i));
                 } while (srcLength > 0);
