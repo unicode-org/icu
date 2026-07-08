@@ -1055,7 +1055,7 @@ expandCompositCharAtNear(char16_t *dest, int32_t sourceLength, int32_t destSize,
 
                     *pErrorCode=U_NO_SPACE_AVAILABLE;
                 }
-            }else if(lamAlefOption && isLamAlefChar(dest[i+1])) {
+            }else if(lamAlefOption && i < sourceLength - 1 && isLamAlefChar(dest[i+1])) {
                 if(dest[i] == SPACE_CHAR){
                     lamalefChar = dest[i+1];
                     dest[i+1] = LAM_CHAR;

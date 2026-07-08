@@ -92,6 +92,7 @@ static void doTailTest(void);
 
 static void testBracketOverflow(void);
 static void TestExplicitLevel0(void);
+static void TestExpandCompositCharAtNearOOB(void);
 static void testUBidiWriteReorderedBufferOverflow(void);
 static void testUBidiGetRunsBufferOverflow(void);
 
@@ -156,6 +157,7 @@ addComplexTest(TestNode** root) {
     addTest(root, testReorderArabicMathSymbols, "complex/bidi/bug-9024");
     addTest(root, doArabicShapingTestForBug9024, "complex/arabic-shaping/bug-9024");
     addTest(root, doArabicShapingTestForNewCharacters, "complex/arabic-shaping/shaping2");
+    addTest(root, TestExpandCompositCharAtNearOOB, "complex/arabic-shaping/ICU-23395");
 }
 
 static void
@@ -5005,4 +5007,65 @@ static void TestExplicitLevel0(void) {
         }
     }
     ubidi_close(bidi);
+}
+
+/*
+ * ICU-23395: expandCompositCharAtNear reads dest[i+1] when i == sourceLength-1.
+ * With sourceLength=300 the read goes past the stack buffer[300].
+ * With sourceLength=301 the read goes past the heap-allocated tempBuffer.
+ */
+static void
+TestExpandCompositCharAtNearOOB(void) {
+    UErrorCode errorCode;
+    int32_t length;
+
+    /* Test 1: sourceLength=300 (stack buffer path) */
+    {
+        UChar source300[300];
+        UChar dest300[300];
+        int32_t i;
+        for (i = 0; i < 299; ++i) {
+            source300[i] = 0x0020;  /* space */
+        }
+        source300[299] = 0xFEF5;  /* lam-alef ligature */
+
+        errorCode = U_ZERO_ERROR;
+        length = u_shapeArabic(source300, 300,
+                               dest300, 300,
+                               U_SHAPE_LETTERS_UNSHAPE | U_SHAPE_LENGTH_FIXED_SPACES_NEAR |
+                               U_SHAPE_TEXT_DIRECTION_LOGICAL,
+                               &errorCode);
+
+        if (U_FAILURE(errorCode)) {
+            log_err("ICU-23395 stack buffer path: u_shapeArabic failed with %s\n",
+                    u_errorName(errorCode));
+        } else if (length != 300) {
+            log_err("ICU-23395 stack buffer path: expected length 300, got %d\n", length);
+        }
+    }
+
+    /* Test 2: sourceLength=301 (heap buffer path) */
+    {
+        UChar source301[301];
+        UChar dest301[301];
+        int32_t i;
+        for (i = 0; i < 300; ++i) {
+            source301[i] = 0x0020;  /* space */
+        }
+        source301[300] = 0xFEF5;  /* lam-alef ligature */
+
+        errorCode = U_ZERO_ERROR;
+        length = u_shapeArabic(source301, 301,
+                               dest301, 301,
+                               U_SHAPE_LETTERS_UNSHAPE | U_SHAPE_LENGTH_FIXED_SPACES_NEAR |
+                               U_SHAPE_TEXT_DIRECTION_LOGICAL,
+                               &errorCode);
+
+        if (U_FAILURE(errorCode)) {
+            log_err("ICU-23395 heap buffer path: u_shapeArabic failed with %s\n",
+                    u_errorName(errorCode));
+        } else if (length != 301) {
+            log_err("ICU-23395 heap buffer path: expected length 301, got %d\n", length);
+        }
+    }
 }
