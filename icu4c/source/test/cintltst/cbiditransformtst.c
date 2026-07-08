@@ -56,6 +56,7 @@ void addBidiTransformTest(TestNode** root);
 static void testAutoDirection(void);
 
 static void testAllTransformOptions(void);
+static void testUnicode18Mirroring(void);
 
 static char* pseudoScript(const UChar *str);
 
@@ -431,8 +432,76 @@ addBidiTransformTest(TestNode** root)
 {
     addTest(root, testAutoDirection, "complex/bidi-transform/TestAutoDirection");
     addTest(root, testAllTransformOptions, "complex/bidi-transform/TestAllTransformOptions");
+    addTest(root, testUnicode18Mirroring, "complex/bidi-transform/TestUnicode18Mirroring");
 }
 
 #ifdef __cplusplus
 }
 #endif
+
+static void
+testUnicode18Mirroring(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    UBiDiTransform* transform = ubiditransform_open(&status);
+    if (U_FAILURE(status)) {
+        log_err("ubiditransform_open failed: %s\n", u_errorName(status));
+        return;
+    }
+    static const UChar testSrc[] = { 0x05D0, 0x221D, 0x05D1 };
+    int32_t srcLen = 3;
+    UChar testDest[10];
+    
+    uint32_t destLen = ubiditransform_transform(transform, testSrc, srcLen, testDest, 3,
+                             UBIDI_RTL, UBIDI_LOGICAL,
+                             UBIDI_LTR, UBIDI_LOGICAL,
+                             UBIDI_MIRRORING_ON,
+                             0,
+                             &status);
+    if (status != U_BUFFER_OVERFLOW_ERROR || destLen != 4) {
+        log_err("testUnicode18Mirroring overflow check failed: expected U_BUFFER_OVERFLOW_ERROR and destLen=4, got %s and destLen=%u\n",
+                u_errorName(status), destLen);
+    }
+
+    status = U_ZERO_ERROR;
+    u_memset(testDest, 0, 10);
+    destLen = ubiditransform_transform(transform, testSrc, srcLen, testDest, 10,
+                             UBIDI_RTL, UBIDI_LOGICAL,
+                             UBIDI_LTR, UBIDI_LOGICAL,
+                             UBIDI_MIRRORING_ON,
+                             0,
+                             &status);
+    static const UChar expectedDest[] = { 0x05D1, 0xD836, 0xDF10, 0x05D0 };
+    if (U_FAILURE(status) || destLen != 4 || u_strncmp(testDest, expectedDest, 4) != 0) {
+        log_err("testUnicode18Mirroring actual chars (221D->1DB10) failed: status=%s, destLen=%u\n",
+                u_errorName(status), destLen);
+    }
+
+    status = U_ZERO_ERROR;
+    static const UChar testSrc2[] = { 0x05D0, 0xD836, 0xDF10, 0x05D1 };
+    int32_t src2Len = 4;
+    destLen = ubiditransform_transform(transform, testSrc2, src2Len, testDest, 2,
+                             UBIDI_RTL, UBIDI_LOGICAL,
+                             UBIDI_LTR, UBIDI_LOGICAL,
+                             UBIDI_MIRRORING_ON,
+                             0,
+                             &status);
+    if (status != U_BUFFER_OVERFLOW_ERROR || destLen != 3) {
+        log_err("testUnicode18Mirroring (1DB10->221D overflow) failed: expected U_BUFFER_OVERFLOW_ERROR and destLen=3, got %s and destLen=%u\n",
+                u_errorName(status), destLen);
+    }
+
+    status = U_ZERO_ERROR;
+    u_memset(testDest, 0, 10);
+    destLen = ubiditransform_transform(transform, testSrc2, src2Len, testDest, 10,
+                             UBIDI_RTL, UBIDI_LOGICAL,
+                             UBIDI_LTR, UBIDI_LOGICAL,
+                             UBIDI_MIRRORING_ON,
+                             0,
+                             &status);
+    static const UChar expectedDest2[] = { 0x05D1, 0x221D, 0x05D0 };
+    if (U_FAILURE(status) || destLen != 3 || u_strncmp(testDest, expectedDest2, 3) != 0) {
+        log_err("testUnicode18Mirroring actual chars (1DB10->221D) failed: status=%s, destLen=%u\n",
+                u_errorName(status), destLen);
+    }
+    ubiditransform_close(transform);
+}
