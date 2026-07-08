@@ -490,4 +490,14 @@ public class TestBidiTransform extends CoreTestFmwk {
             }
         }
     }
+
+    @Test
+    public void testMirroringUnicode18() {
+        BidiTransform transform = new BidiTransform();
+        String in = "\u05D0\u221D\u05D1\u05D2";
+        String out =
+                transform.transform(
+                        in, Bidi.RTL, Order.LOGICAL, Bidi.LTR, Order.LOGICAL, Mirroring.ON, 0);
+        assertEquals("testMirroringUnicode18 output", "\u05D1\u05D2\uD836\uDF10\u05D0", out);
+    }
 }

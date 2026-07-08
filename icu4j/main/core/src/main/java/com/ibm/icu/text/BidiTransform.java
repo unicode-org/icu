@@ -307,16 +307,18 @@ public class BidiTransform {
         if ((reorderingOptions & Bidi.DO_MIRRORING) == 0) {
             return;
         }
-        StringBuffer sb = new StringBuffer(text);
+        StringBuffer dest = new StringBuffer(text.length() * 2);
         byte[] levels = bidi.getLevels();
         for (int i = 0, n = levels.length; i < n; ) {
-            int ch = UTF16.charAt(sb, i);
+            int ch = UTF16.charAt(text, i);
+            int origLen = UTF16.getCharCount(ch);
             if ((levels[i] & 1) != 0) {
-                UTF16.setCharAt(sb, i, UCharacter.getMirror(ch));
+                ch = UCharacter.getMirror(ch);
             }
-            i += UTF16.getCharCount(ch);
+            UTF16.append(dest, ch);
+            i += origLen;
         }
-        text = sb.toString();
+        text = dest.toString();
         reorderingOptions &= ~Bidi.DO_MIRRORING;
     }
 
