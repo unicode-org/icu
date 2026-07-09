@@ -739,6 +739,20 @@ public class Bidi {
      */
     public static final short OUTPUT_REVERSE = 16;
 
+    /*
+     * Internal option bit for writeReordered() and BidiWriter.writeReverse():
+     * Used exclusively by setParaRunsOnly() during BidiTransform Scheme 9 (LOGICAL, RTL => LOGICAL, LTR)
+     * transformations. When mirroring changes code point length (e.g., U+1DB10 contracting to U+221D),
+     * setParaRunsOnly() requires that the temporary visualText maintain 1-to-1 code unit synchronization
+     * with this.length (4) to prevent array desynchronization in the subsequent setPara() call.
+     *
+     * When this flag is set, BidiWriter.writeReverse() steps source indices by destination code unit
+     * length (j += UTF16.getCharCount(c)) instead of original base character length (j += origBaseLen),
+     * preserving legacy ICU behavior where the trailing surrogate half (Bidi class LTR) is copied into
+     * visualText to split the run for reordering.
+     */
+    static final short INTERNAL_RUNS_ONLY = 64;
+
     /**
      * Reordering mode: Regular Logical to Visual Bidi algorithm according to Unicode.
      *
@@ -3690,8 +3704,15 @@ public class Bidi {
          * to setPara (but must make provision for possible removal of
          * Bidi controls.  Alternatively, only use the dirProps array via
          * customized classifier callback.
+         *
+         * Note: We pass INTERNAL_RUNS_ONLY so that if mirroring changes code point
+         * length (e.g., U+1DB10 contracting back to U+221D), BidiWriter.writeReverse() uses legacy
+         * 1-to-1 code unit stepping (j += UTF16.getCharCount(c)) rather than character stepping
+         * (j += origBaseLen). This ensures visualText length remains synchronized with this.length
+         * and allows the trailing surrogate half (Bidi class LTR) to act as a run boundary splitter
+         * in the subsequent setPara call.
          */
-        visualText = writeReordered(DO_MIRRORING);
+        visualText = writeReordered((saveOptions & DO_MIRRORING) | INTERNAL_RUNS_ONLY);
         visualMap = getVisualMap();
         this.reorderingOptions = saveOptions;
         saveLength = this.length;

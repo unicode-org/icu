@@ -219,7 +219,17 @@ final class BidiWriter {
                         /* mirror only the base character */
                         c = UCharacter.getMirror(c);
                         UTF16.append(dest, c);
-                        j += origBaseLen;
+                        /*
+                         * When INTERNAL_RUNS_ONLY is set (from setParaRunsOnly), step by destination
+                         * character length (UTF16.getCharCount(c)) to preserve legacy 1-to-1 code unit
+                         * mapping and prevent array desynchronization in BidiTransform. For all other
+                         * calls, step by original character length (origBaseLen) to properly consume
+                         * surrogate pairs when mirroring expands or contracts.
+                         */
+                        j +=
+                                ((options & Bidi.INTERNAL_RUNS_ONLY) != 0)
+                                        ? UTF16.getCharCount(c)
+                                        : origBaseLen;
                     }
                     dest.append(src.substring(j, i));
                 } while (srcLength > 0);

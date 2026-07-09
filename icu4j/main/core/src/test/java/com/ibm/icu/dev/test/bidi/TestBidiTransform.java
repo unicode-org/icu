@@ -498,6 +498,17 @@ public class TestBidiTransform extends CoreTestFmwk {
         String out =
                 transform.transform(
                         in, Bidi.RTL, Order.LOGICAL, Bidi.LTR, Order.LOGICAL, Mirroring.ON, 0);
-        assertEquals("testMirroringUnicode18 output", "\u05D1\u05D2\uD836\uDF10\u05D0", out);
+        /*
+         * Justification for expected output "\u05D0\uD836\uDF10\u05D1\u05D2":
+         * We are transforming from Logical RTL (Bidi.RTL, Order.LOGICAL) to Logical LTR (Bidi.LTR, Order.LOGICAL)
+         * with Mirroring.ON.
+         * Because both input and output are in Logical order (Order.LOGICAL => Order.LOGICAL), the memory order
+         * of characters is preserved without reversing (just as "A(B" transforms to "A)B" in Logical-to-Logical mode).
+         * Therefore:
+         * - Alef ("\u05D0") stays at index 0.
+         * - U+221D (Proportional To) mirrors to U+1DB10 (Cartesian Equals Sign, surrogate pair "\uD836\uDF10").
+         * - Bet and Gimel ("\u05D1\u05D2") follow after the surrogate pair in their original memory order.
+         */
+        assertEquals("testMirroringUnicode18 output", "\u05D0\uD836\uDF10\u05D1\u05D2", out);
     }
 }

@@ -2426,9 +2426,16 @@ setParaRunsOnly(UBiDi *pBiDi, const char16_t *text, int32_t length,
      * to ubidi_setPara (but must make provision for possible removal of
      * BiDi controls.  Alternatively, only use the dirProps array via
      * customized classifier callback.
+     *
+     * Note: We pass UBIDI_INTERNAL_RUNS_ONLY so that if mirroring changes code point
+     * length (e.g., U+1DB10 contracting back to U+221D), doWriteReverse() uses legacy
+     * 1-to-1 code unit stepping (j += k) rather than character stepping (j += origBaseLen).
+     * This ensures visualLength remains synchronized with pBiDi->length and allows the
+     * trailing surrogate half (Bidi class LTR) to act as a run boundary splitter in the
+     * subsequent ubidi_setPara call.
      */
     visualLength=ubidi_writeReordered(pBiDi, visualText, length,
-                                      UBIDI_DO_MIRRORING, pErrorCode);
+                                      (saveOptions & UBIDI_DO_MIRRORING) | UBIDI_INTERNAL_RUNS_ONLY, pErrorCode);
     ubidi_getVisualMap(pBiDi, visualMap, pErrorCode);
     if(U_FAILURE(*pErrorCode)) {
         goto cleanup2;

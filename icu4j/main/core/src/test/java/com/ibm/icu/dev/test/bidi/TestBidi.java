@@ -750,4 +750,69 @@ public class TestBidi extends BidiFmwk {
         assertEquals("java.text resolved level at 0", 1, jb.getLevelAt(0));
         assertEquals("java.text resolved level at 1", 1, jb.getLevelAt(1));
     }
+
+    @Test
+    public void testWriteReorderedUndefinedShift() {
+        Bidi bidi = new Bidi();
+        bidi.setReorderingMode(Bidi.REORDER_INVERSE_LIKE_DIRECT);
+        // Alef (RTL), Proportional To (ON)
+        String text = "\u05D0\u221D";
+        try {
+            bidi.setPara(text, Bidi.LEVEL_DEFAULT_RTL, null);
+        } catch (Exception e) {
+            errln("Bidi.setPara failed: " + e.getMessage());
+            return;
+        }
+        int opt = Bidi.INSERT_LRM_FOR_NUMERIC | Bidi.OUTPUT_REVERSE | Bidi.DO_MIRRORING;
+        String out = bidi.writeReordered(opt);
+
+        /*
+         * Justification for expected:
+         * Input is "\u05D0\u221D" (Alef, Proportional To) in REORDER_INVERSE_LIKE_DIRECT mode with LEVEL_DEFAULT_RTL.
+         * Options: INSERT_LRM_FOR_NUMERIC | OUTPUT_REVERSE | DO_MIRRORING.
+         * 1. Mirroring: U+221D (Proportional To) mirrors to U+1DB10 ("\uD836\uDF10", expanding to 2 code units).
+         * 2. Reordering & Visual order: In RTL paragraph, Alef (R) and U+1DB10 (ON) form an RTL run from right to left.
+         *    OUTPUT_REVERSE reverses the visual output sequence.
+         * 3. Mark insertion: With REORDER_INVERSE_LIKE_DIRECT and INSERT_LRM_FOR_NUMERIC on an RTL run,
+         *    a Right-to-Left Mark (RLM, U+200F) is appended at the run boundary per Bidi mark insertion rules.
+         * Output string: Alef ("\u05D0"), U+1DB10 ("\uD836\uDF10"), and RLM ("\u200F").
+         */
+        String expected = "\u05D0\uD836\uDF10\u200F";
+        assertEquals("Wrong result for writeReordered with mirroring and reverse", expected, out);
+    }
+
+    @Test
+    public void testWriteReorderedReverseMirrorCombining() {
+        Bidi bidi = new Bidi();
+        // A, Alef (RTL), Proportional To (ON), Combining Grave (NSM), Bet (RTL), B
+        String text = "A\u05D0\u221D\u0300\u05D1B";
+        try {
+            bidi.setPara(text, Bidi.LEVEL_DEFAULT_LTR, null);
+        } catch (Exception e) {
+            errln("Bidi.setPara failed: " + e.getMessage());
+            return;
+        }
+        int opt = Bidi.KEEP_BASE_COMBINING | Bidi.DO_MIRRORING;
+        String out = bidi.writeReordered(opt);
+
+        /*
+         * Justification for expected:
+         * Input text: "A\u05D0\u221D\u0300\u05D1B" (A, Alef, Proportional To + Combining Grave, Bet, B).
+         * Paragraph direction is LTR (LEVEL_DEFAULT_LTR). Options: KEEP_BASE_COMBINING | DO_MIRRORING.
+         * 1. Run breakdown:
+         *    - LTR run 0: 'A'
+         *    - RTL run 1: Alef ("\u05D0"), Proportional To ("\u221D") + Combining Grave ("\u0300"), Bet ("\u05D1").
+         *    - LTR run 2: 'B'
+         * 2. Mirroring & Combining preservation inside RTL run:
+         *    - Reversing the RTL run to visual order (writeReverse), Bet ("\u05D1") comes first.
+         *    - Next is the base character U+221D with its combining grave ("\u0300"). Because KEEP_BASE_COMBINING is set,
+         *      the combining grave must stay immediately after its base character in the output sequence.
+         *    - U+221D mirrors to U+1DB10 ("\uD836\uDF10"), expanding from 1 to 2 code units.
+         *    - Thus the base+combining sequence written in visual order is: "\uD836\uDF10\u0300".
+         *    - Finally, Alef ("\u05D0") is written at the end of the RTL run.
+         * Resulting output: 'A', Bet ("\u05D1"), U+1DB10 ("\uD836\uDF10"), Combining Grave ("\u0300"), Alef ("\u05D0"), 'B'.
+         */
+        String expected = "A\u05D1\uD836\uDF10\u0300\u05D0B";
+        assertEquals("Wrong result for writeReordered with combining and mirroring", expected, out);
+    }
 }

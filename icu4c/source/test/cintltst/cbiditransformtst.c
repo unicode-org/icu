@@ -470,7 +470,18 @@ testUnicode18Mirroring(void) {
                              UBIDI_MIRRORING_ON,
                              0,
                              &status);
-    static const UChar expectedDest[] = { 0x05D1, 0xD836, 0xDF10, 0x05D0 };
+    /*
+     * Justification for expectedDest:
+     * We are transforming from Logical RTL (UBIDI_LOGICAL, UBIDI_RTL) to Logical LTR (UBIDI_LOGICAL, UBIDI_LTR)
+     * with mirroring ON (UBIDI_MIRRORING_ON).
+     * Because both input and output are in Logical order (Order.LOGICAL => Order.LOGICAL), the memory order
+     * of characters is preserved without reversing (just as "A(B" transforms to "A)B" in Logical-to-Logical mode).
+     * Therefore:
+     * - Alef (0x05D0) stays at index 0.
+     * - U+221D (Proportional To) mirrors to U+1DB10 (Cartesian Equals Sign, surrogate pair 0xD836, 0xDF10).
+     * - Bet (0x05D1) follows after the surrogate pair.
+     */
+    static const UChar expectedDest[] = { 0x05D0, 0xD836, 0xDF10, 0x05D1 };
     if (U_FAILURE(status) || destLen != 4 || u_strncmp(testDest, expectedDest, 4) != 0) {
         log_err("testUnicode18Mirroring actual chars (221D->1DB10) failed: status=%s, destLen=%u\n",
                 u_errorName(status), destLen);
@@ -498,7 +509,16 @@ testUnicode18Mirroring(void) {
                              UBIDI_MIRRORING_ON,
                              0,
                              &status);
-    static const UChar expectedDest2[] = { 0x05D1, 0x221D, 0x05D0 };
+    /*
+     * Justification for expectedDest2:
+     * We are transforming back from Logical RTL to Logical LTR with mirroring ON on the 4-code-unit
+     * string { 0x05D0, 0xD836, 0xDF10, 0x05D1 }.
+     * Because Logical-to-Logical order preserves memory sequence without reversing:
+     * - Alef (0x05D0) stays at index 0.
+     * - U+1DB10 (surrogate pair 0xD836, 0xDF10) mirrors back to U+221D (1 code unit 0x221D), contracting the string.
+     * - Bet (0x05D1) stays at the final position.
+     */
+    static const UChar expectedDest2[] = { 0x05D0, 0x221D, 0x05D1 };
     if (U_FAILURE(status) || destLen != 3 || u_strncmp(testDest, expectedDest2, 3) != 0) {
         log_err("testUnicode18Mirroring actual chars (1DB10->221D) failed: status=%s, destLen=%u\n",
                 u_errorName(status), destLen);
