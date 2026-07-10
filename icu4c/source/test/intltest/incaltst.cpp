@@ -91,6 +91,8 @@ void IntlCalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &n
     TESTCASE_AUTO(TestPersianJan1ToGregorian);
     TESTCASE_AUTO(TestGregorianToPersian);
     TESTCASE_AUTO(TestPersianFormat);
+    TESTCASE_AUTO(TestMyanmar);
+    TESTCASE_AUTO(TestMyanmarFormat);
     TESTCASE_AUTO(TestTaiwan);
     TESTCASE_AUTO(TestConsistencyGregorian);
     TESTCASE_AUTO(TestConsistencyCoptic);
