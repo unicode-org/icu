@@ -2834,6 +2834,15 @@ IntlTestRBNF::TestDividedByZero() {
     UErrorCode status = U_ZERO_ERROR;
     RuleBasedNumberFormat rbnf(u"7060920374060940374/4:[]", Locale::getUS(), perror, status);
     assertEquals("base is too large", U_NUMBER_ARG_OUTOFBOUNDS_ERROR, status);
+
+    // A $(cardinal,...)$ rule whose radix^exponent overflows 64 bits: the
+    // divisor is zero, so doFormat() would divide the number by it. The rule
+    // must be rejected at construction instead of dividing by zero.
+    status = U_ZERO_ERROR;
+    RuleBasedNumberFormat pluralDivisor(
+        u"0: zero;\n4611686018427387904/16: big $(cardinal,one{a}other{b})$;",
+        Locale::getEnglish(), perror, status);
+    assertEquals("zero divisor from overflow", U_PARSE_ERROR, status);
 }
 
 void

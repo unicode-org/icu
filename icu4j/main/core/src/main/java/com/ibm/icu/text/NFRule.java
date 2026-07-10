@@ -412,6 +412,12 @@ final class NFRule {
             rulePatternFormat =
                     formatter.createPluralFormat(
                             pluralType, ruleText.substring(endType + 1, pluralRuleEnd));
+            if (getDivisor() <= 0) {
+                // radix^exponent overflowed 64 bits, so doFormat() would divide the
+                // number by a zero (or wrapped-negative) divisor. Reject the rule, like
+                // the modulus and integral-part substitutions already do for a zero divisor.
+                throw new IllegalStateException("Rule with divisor " + getDivisor());
+            }
         }
     }
 
