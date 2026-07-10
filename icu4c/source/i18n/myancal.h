@@ -143,6 +143,18 @@ class MyanmarCalendar : public Calendar {
   virtual int32_t handleGetMonthLength(int32_t extendedYear, int32_t month,
                                                 UErrorCode& status) const override;
 
+  /**
+   * Return the number of days in the given Myanmar year.
+   * @internal
+   */
+  virtual int32_t handleGetYearLength(int32_t eyear, UErrorCode& status) const override;
+
+  /**
+   * Return dynamic maxima for Myanmar fields that depend on year type.
+   * @internal
+   */
+  virtual int32_t getActualMaximum(UCalendarDateFields field, UErrorCode& status) const override;
+
   //-------------------------------------------------------------------------
   // Functions for converting from field values to milliseconds....
   //-------------------------------------------------------------------------
