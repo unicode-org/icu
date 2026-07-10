@@ -1,14 +1,14 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /********************************************************************
- * COPYRIGHT:
+ * COPYRIGHT: 
  * Copyright (c) 1997-2007, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
 #ifndef __IntlCalendarTest__
 #define __IntlCalendarTest__
-
+ 
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
@@ -39,7 +39,7 @@ public:
     void TestJapaneseFormat();
     void TestJapanese3860();
     void TestForceGannenNumbering();
-
+    
     void TestPersian();
     void TestPersianJulianDayToYMD();
     void TestPersianYMDToJulianDay();
@@ -76,14 +76,14 @@ public:
     void checkConsistency(const char* locale);
 
     int32_t daysToCheckInConsistency;
-
+ 
 public: // package
     // internal routine for checking date
     static UnicodeString value(Calendar* calendar);
-
+ 
 };
 
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
-
+ 
 #endif // __IntlCalendarTest__

@@ -1,7 +1,7 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /***********************************************************************
- * COPYRIGHT:
+ * COPYRIGHT: 
  * Copyright (c) 1997-2015, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
@@ -72,9 +72,9 @@ CalendarLimitTest::test(UDate millis, icu::Calendar* cal, icu::DateFormat* fmt)
             logln(UnicodeString("OK: got ") + dt + ", wanted " + millis);
             logln(UnicodeString("    ") + theDate);
         }
-    }
+    }        
 }
-
+ 
 // -------------------------------------
 
 // bug 986c: deprecate nextDouble/previousDouble
@@ -93,7 +93,7 @@ CalendarLimitTest::test(UDate millis, icu::Calendar* cal, icu::DateFormat* fmt)
 UBool
 CalendarLimitTest::withinErr(double a, double b, double err)
 {
-    return ( uprv_fabs(a - b) < uprv_fabs(a * err) );
+    return ( uprv_fabs(a - b) < uprv_fabs(a * err) ); 
 }
 
 void
@@ -151,7 +151,7 @@ struct TestCase {
     UDate actualTestStart;
     int32_t actualTestEnd;
 };
-
+    
 const UDate DEFAULT_START = 944006400000.0; // 1999-12-01T00:00Z
 const int32_t DEFAULT_END = -120; // Default for non-quick is run 2 minutes
 
@@ -162,7 +162,7 @@ TestCase TestCases[] = {
         {"roc",             false,      DEFAULT_START, DEFAULT_END},
         {"persian",         false,      DEFAULT_START, DEFAULT_END},
         {"islamic-civil",   false,      DEFAULT_START, DEFAULT_END},
-        {"islamic",         false,      DEFAULT_START, 800000}, // Approx. 2250 years from now, after which
+        {"islamic",         false,      DEFAULT_START, 800000}, // Approx. 2250 years from now, after which 
                                                                 // some rounding errors occur in Islamic calendar
         {"hebrew",          true,       DEFAULT_START, DEFAULT_END},
         {"chinese",         true,       DEFAULT_START, DEFAULT_END},
@@ -173,7 +173,7 @@ TestCase TestCases[] = {
         {"ethiopic-amete-alem", false,  DEFAULT_START, DEFAULT_END},
         {"myanmar",         false,      DEFAULT_START, DEFAULT_END}
 };
-
+    
 struct {
     int32_t fIndex;
     UBool next (int32_t &rIndex) {
@@ -227,7 +227,7 @@ void CalendarLimitTest::TestLimitsThread(int32_t threadNum) {
     }
 }
 
-
+    
 void
 CalendarLimitTest::doTheoreticalLimitsTest(Calendar& cal, UBool leapMonth) {
     const char* calType = cal.getType();
