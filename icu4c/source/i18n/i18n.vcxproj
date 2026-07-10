@@ -184,6 +184,7 @@
     <ClCompile Include="messageformat2_parser.cpp" />
     <ClCompile Include="messageformat2_serializer.cpp" />
     <ClCompile Include="msgfmt.cpp" />
+    <ClCompile Include="myancal.cpp" />
     <ClCompile Include="nfrs.cpp" />
     <ClCompile Include="nfrule.cpp" />
     <ClCompile Include="nfsubs.cpp" />
@@ -399,6 +400,7 @@
     <ClInclude Include="japancal.h" />
     <ClInclude Include="measunit_impl.h" />
     <ClInclude Include="msgfmt_impl.h" />
+    <ClInclude Include="myancal.h" />
     <ClInclude Include="nfrlist.h" />
     <ClInclude Include="nfrs.h" />
     <ClInclude Include="nfrule.h" />
