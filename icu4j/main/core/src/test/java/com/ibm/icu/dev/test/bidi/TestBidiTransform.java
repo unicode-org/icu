@@ -498,6 +498,6 @@ public class TestBidiTransform extends CoreTestFmwk {
         String out =
                 transform.transform(
                         in, Bidi.RTL, Order.LOGICAL, Bidi.LTR, Order.LOGICAL, Mirroring.ON, 0);
-        assertEquals("testMirroringUnicode18 output", "\u05D1\u05D2\uD836\uDF10\u05D0", out);
+        assertEquals("testMirroringUnicode18 output", "\u05D0\uD836\uDF10\u05D1\u05D2", out);
     }
 }

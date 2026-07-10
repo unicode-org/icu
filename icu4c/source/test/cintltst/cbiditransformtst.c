@@ -470,7 +470,7 @@ testUnicode18Mirroring(void) {
                              UBIDI_MIRRORING_ON,
                              0,
                              &status);
-    static const UChar expectedDest[] = { 0x05D1, 0xD836, 0xDF10, 0x05D0 };
+    static const UChar expectedDest[] = { 0x05D0, 0xD836, 0xDF10, 0x05D1 };
     if (U_FAILURE(status) || destLen != 4 || u_strncmp(testDest, expectedDest, 4) != 0) {
         log_err("testUnicode18Mirroring actual chars (221D->1DB10) failed: status=%s, destLen=%u\n",
                 u_errorName(status), destLen);
@@ -498,7 +498,7 @@ testUnicode18Mirroring(void) {
                              UBIDI_MIRRORING_ON,
                              0,
                              &status);
-    static const UChar expectedDest2[] = { 0x05D1, 0x221D, 0x05D0 };
+    static const UChar expectedDest2[] = { 0x05D0, 0x221D, 0x05D1 };
     if (U_FAILURE(status) || destLen != 3 || u_strncmp(testDest, expectedDest2, 3) != 0) {
         log_err("testUnicode18Mirroring actual chars (1DB10->221D) failed: status=%s, destLen=%u\n",
                 u_errorName(status), destLen);

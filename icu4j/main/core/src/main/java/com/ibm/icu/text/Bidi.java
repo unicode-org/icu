@@ -3691,7 +3691,7 @@ public class Bidi {
          * Bidi controls.  Alternatively, only use the dirProps array via
          * customized classifier callback.
          */
-        visualText = writeReordered(DO_MIRRORING);
+        visualText = writeReordered(saveOptions & DO_MIRRORING);
         visualMap = getVisualMap();
         this.reorderingOptions = saveOptions;
         saveLength = this.length;

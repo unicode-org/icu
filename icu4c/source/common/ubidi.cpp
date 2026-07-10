@@ -2428,7 +2428,7 @@ setParaRunsOnly(UBiDi *pBiDi, const char16_t *text, int32_t length,
      * customized classifier callback.
      */
     visualLength=ubidi_writeReordered(pBiDi, visualText, length,
-                                      UBIDI_DO_MIRRORING, pErrorCode);
+                                      saveOptions & UBIDI_DO_MIRRORING, pErrorCode);
     ubidi_getVisualMap(pBiDi, visualMap, pErrorCode);
     if(U_FAILURE(*pErrorCode)) {
         goto cleanup2;
