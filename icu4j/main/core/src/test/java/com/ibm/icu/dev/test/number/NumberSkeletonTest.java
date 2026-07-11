@@ -6,6 +6,7 @@ import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.number.LocalizedNumberFormatter;
 import com.ibm.icu.number.NumberFormatter;
 import com.ibm.icu.number.SkeletonSyntaxException;
+import com.ibm.icu.number.UnlocalizedNumberFormatter;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.ULocale;
 import java.math.RoundingMode;
@@ -588,6 +589,18 @@ public class NumberSkeletonTest extends CoreTestFmwk {
             } catch (SkeletonSyntaxException e) {
                 fail(testCase.skeleton);
             }
+        }
+    }
+
+    @Test
+    public void testIssue23144() {
+        UnlocalizedNumberFormatter nf = NumberFormatter.forSkeleton("scale/1e200000000");
+        try {
+            nf.locale(Locale.US).format(1.0);
+            fail(
+                    "Expected IllegalArgumentException when formatting hugely out-of-bounds magnitude");
+        } catch (IllegalArgumentException e) {
+            // expected
         }
     }
 }

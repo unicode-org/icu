@@ -307,6 +307,7 @@ class NumberSkeletonTest : public IntlTest {
     void measurementSystemOverride();
     void longSkeletonCrash();
     void unitAliases();
+    void testIssue23144();
 
     void runIndexedTest(int32_t index, UBool exec, const char*& name, char* par = nullptr) override;
 

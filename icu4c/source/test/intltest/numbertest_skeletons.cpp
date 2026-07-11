@@ -37,6 +37,7 @@ void NumberSkeletonTest::runIndexedTest(int32_t index, UBool exec, const char*& 
         TESTCASE_AUTO(measurementSystemOverride);
         TESTCASE_AUTO(longSkeletonCrash);
         TESTCASE_AUTO(unitAliases);
+        TESTCASE_AUTO(testIssue23144);
     TESTCASE_AUTO_END;
 }
 
@@ -607,6 +608,18 @@ void NumberSkeletonTest::unitAliases() {
             assertEquals(testCase.skeleton, testCase.expectedResult, actualResult);
         }
     }
+}
+
+void NumberSkeletonTest::testIssue23144() {
+    IcuTestErrorCode status(*this, "testIssue23144");
+    UErrorCode err = U_ZERO_ERROR;
+    UnlocalizedNumberFormatter nf = NumberFormatter::forSkeleton(u"scale/1e200000000", err);
+    if (!assertSuccess("forSkeleton", err)) {
+        return;
+    }
+    FormattedNumber fn = nf.locale("en").formatDouble(1.0, err);
+    assertEquals("Expected U_ILLEGAL_ARGUMENT_ERROR when formatting hugely out-of-bounds magnitude",
+                 U_ILLEGAL_ARGUMENT_ERROR, err);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
