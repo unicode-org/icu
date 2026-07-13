@@ -78,6 +78,7 @@ void MultithreadTest::runIndexedTest( int32_t index, UBool exec,
 #if !UCONFIG_NO_FORMATTING
     TESTCASE_AUTO(Test20104);
 #endif /* #if !UCONFIG_NO_FORMATTING */
+    TESTCASE_AUTO(TestTransliteratorAliasCompoundFilterRace);
 #endif /* #if !UCONFIG_NO_TRANSLITERATION */
     TESTCASE_AUTO_END;
 }
@@ -1366,5 +1367,82 @@ void MultithreadTest::Test20104() {
     // Note: failure is reported by Thread Sanitizer. Test itself succeeds.
 }
 #endif /* !UCONFIG_NO_FORMATTING */
+
+
+//
+//  TestTransliteratorAliasCompoundFilterRace
+//
+//  Verify that concurrent createInstance() and unregister() of a transliterator
+//  whose ID includes a compound filter (e.g. "[:Latin:]Lower") does not trigger
+//  a use-after-free.  Before the fix, TransliteratorAlias stored a raw pointer
+//  to the entry's compoundFilter; a concurrent unregister() could delete the
+//  entry while the alias still referenced the filter.
+//
+//  With the fix, TransliteratorAlias clones the compoundFilter, so this test
+//  should pass cleanly.  Without the fix, Thread Sanitizer or ASan would report
+//  a use-after-free.
+//
+
+static const UnicodeString kRaceAliasID(u"Any-RaceTestCF");
+static const UnicodeString kRaceTargetID(u"[:Latin:]Lower");
+
+class TranslitCreateThread : public SimpleThread {
+public:
+    TranslitCreateThread() : fSuccess(true) {}
+    virtual void run() override;
+    UBool fSuccess;
+};
+
+void TranslitCreateThread::run() {
+    for (int32_t i = 0; i < 50; ++i) {
+        UErrorCode status = U_ZERO_ERROR;
+        UParseError pe;
+        Transliterator *t = Transliterator::createInstance(kRaceAliasID, UTRANS_FORWARD, pe, status);
+        // The instance may or may not be created depending on timing relative
+        // to unregister.  Either outcome is fine; the goal is no crash / UAF.
+        delete t;
+    }
+}
+
+class TranslitUnregisterThread : public SimpleThread {
+public:
+    TranslitUnregisterThread() {}
+    virtual void run() override;
+};
+
+void TranslitUnregisterThread::run() {
+    for (int32_t i = 0; i < 50; ++i) {
+        Transliterator::unregister(kRaceAliasID);
+    }
+}
+
+void MultithreadTest::TestTransliteratorAliasCompoundFilterRace() {
+    // Run several rounds to increase the chance of exposing the race.
+    static constexpr int NUM_ROUNDS = 5;
+    static constexpr int NUM_CREATE_THREADS = 4;
+
+    for (int32_t round = 0; round < NUM_ROUNDS; ++round) {
+        // Register the alias fresh each round.
+        Transliterator::registerAlias(kRaceAliasID, kRaceTargetID);
+
+        TranslitCreateThread createThreads[NUM_CREATE_THREADS];
+        TranslitUnregisterThread unregThread;
+
+        for (auto &t : createThreads) {
+            t.start();
+        }
+        unregThread.start();
+
+        for (auto &t : createThreads) {
+            t.join();
+        }
+        unregThread.join();
+
+        // Clean up in case unregister didn't run yet.
+        Transliterator::unregister(kRaceAliasID);
+    }
+    // Success = no crash / sanitizer report.
+    logln("TestTransliteratorAliasCompoundFilterRace: passed (no crash/UAF detected)");
+}
 
 #endif /* !UCONFIG_NO_TRANSLITERATION */
