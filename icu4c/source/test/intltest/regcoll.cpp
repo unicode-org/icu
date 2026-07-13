@@ -1448,7 +1448,20 @@ void CollationRegressionTest::runIndexedTest(int32_t index, UBool exec, const ch
     TESTCASE_AUTO(TestICU22517);
     TESTCASE_AUTO(TestICU22555InfinityLoop);
     TESTCASE_AUTO(TestICU23280IntOverFlow);
+    TESTCASE_AUTO(TestICU23467);
     TESTCASE_AUTO_END;
+}
+
+void CollationRegressionTest::TestICU23467() {
+    IcuTestErrorCode errorCode(*this, "TestICU23467");
+    // ICU-23467: RuleBasedCollator constructor timeout/overflow on long closure rules
+    char16_t data[] = u"&㜀=̫&웴=産싂싂싂Į혏훖훖걁";
+    icu::UnicodeString rule(true, data, -1);
+    UErrorCode status = U_ZERO_ERROR;
+    icu::LocalPointer<icu::RuleBasedCollator> col(new icu::RuleBasedCollator(rule, status));
+    if (status != U_INPUT_TOO_LONG_ERROR && status != U_BUFFER_OVERFLOW_ERROR && U_SUCCESS(status)) {
+        // Either error or fast completion is acceptable without hanging
+    }
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */

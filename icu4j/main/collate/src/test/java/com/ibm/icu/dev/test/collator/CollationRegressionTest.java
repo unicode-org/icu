@@ -1301,6 +1301,18 @@ public class CollationRegressionTest extends TestFmwk {
         try {
             RuleBasedCollator coll = new RuleBasedCollator(rule);
         } catch (Exception expected) {
+            // expected exception
+        }
+    }
+
+    @Test
+    public void TestICU23467() {
+        // ICU-23467: RuleBasedCollator constructor timeout/overflow on long closure rules
+        String rule = "&㜀=̫&웴=産싂싂싂Į혏훖훖걁";
+        try {
+            RuleBasedCollator coll = new RuleBasedCollator(rule);
+        } catch (Exception expected) {
+            // expected exception or quick completion without hanging
         }
     }
 

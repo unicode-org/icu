@@ -244,6 +244,7 @@ public:
 
     void TestICU22555InfinityLoop();
     void TestICU23280IntOverFlow();
+    void TestICU23467();
 
 private:
     //------------------------------------------------------------------------

@@ -1215,6 +1215,9 @@ final class CollationDataBuilder { // not final in C++
         int index = contexts.indexOf(context.toString());
         if (index < 0) {
             index = contexts.length();
+            if (index + context.length() > Collation.MAX_INDEX) {
+                throw new IndexOutOfBoundsException("Too many context tries");
+            }
             contexts.append(context);
         }
         return index;
