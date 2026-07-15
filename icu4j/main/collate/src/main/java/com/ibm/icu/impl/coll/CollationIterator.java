@@ -18,6 +18,7 @@ import com.ibm.icu.impl.Trie2_32;
 import com.ibm.icu.util.BytesTrie;
 import com.ibm.icu.util.CharsTrie;
 import com.ibm.icu.util.ICUException;
+import com.ibm.icu.util.ICUInputTooLongException;
 
 /**
  * Collation element iterator and abstract character iterator.
@@ -406,6 +407,7 @@ public abstract class CollationIterator {
         if (skipped != null) {
             skipped.clear();
         }
+        discontiguousLoopCount = 0;
     }
 
     /**
@@ -780,6 +782,9 @@ public abstract class CollationIterator {
         }
         BytesTrie.Result match = suffixes.firstForCodePoint(c);
         for (; ; ) {
+            if (++discontiguousLoopCount >= kDiscontiguousLoopLimit) {
+                throw new ICUInputTooLongException("Discontiguous contraction loop limit exceeded");
+            }
             int nextCp;
             if (match.hasValue()) {
                 ce32 = suffixes.getValue();
@@ -837,6 +842,10 @@ public abstract class CollationIterator {
 
     private final int nextCE32FromDiscontiguousContraction(
             CollationData d, CharsTrie suffixes, int ce32, int lookAhead, int c) {
+        if (++discontiguousLoopCount >= kDiscontiguousLoopLimit) {
+            throw new ICUInputTooLongException("Discontiguous contraction loop limit exceeded");
+        }
+
         // UCA section 3.3.2 Contractions:
         // Contractions that end with non-starter characters
         // are known as discontiguous contractions.
@@ -900,6 +909,9 @@ public abstract class CollationIterator {
         int sinceMatch = 2;
         c = nextCp;
         for (; ; ) {
+            if (++discontiguousLoopCount >= kDiscontiguousLoopLimit) {
+                throw new ICUInputTooLongException("Discontiguous contraction loop limit exceeded");
+            }
             BytesTrie.Result match;
             // "If C is not blocked from S, find if S + C has a match in the table." (S2.1.2)
             if (prevCC < (fcd16 >> 8) && (match = suffixes.nextForCodePoint(c)).hasValue()) {
@@ -939,6 +951,9 @@ public abstract class CollationIterator {
             c = Collation.SENTINEL_CP;
             for (; ; ) {
                 appendCEsFromCE32(d, c, ce32, true);
+                if (++discontiguousLoopCount >= kDiscontiguousLoopLimit) {
+                    throw new ICUInputTooLongException("Discontiguous contraction loop limit exceeded");
+                }
                 // Fetch CE32s for skipped combining marks from the normal data, with fallback,
                 // rather than from the CollationData where we found the contraction.
                 if (!skipped.hasNext()) {
@@ -1211,4 +1226,7 @@ public abstract class CollationIterator {
     private int numCpFwd;
     // Numeric collation (CollationSettings.NUMERIC).
     private boolean isNumeric;
+
+    private static final int kDiscontiguousLoopLimit = 2400;
+    private int discontiguousLoopCount = 0;
 }

@@ -148,6 +148,7 @@ CollationIterator::CollationIterator(const CollationIterator &other)
         : UObject(other),
           trie(other.trie),
           data(other.data),
+          discontiguousLoopCount(other.discontiguousLoopCount),
           cesIndex(other.cesIndex),
           skipped(nullptr),
           numCpFwd(other.numCpFwd),
@@ -192,6 +193,7 @@ void
 CollationIterator::reset() {
     cesIndex = ceBuffer.length = 0;
     if(skipped != nullptr) { skipped->clear(); }
+    discontiguousLoopCount = 0;
 }
 
 int32_t
@@ -504,6 +506,10 @@ CollationIterator::nextCE32FromContraction(const CollationData *d, uint32_t cont
     if(skipped != nullptr && !skipped->isEmpty()) { skipped->saveTrieState(suffixes); }
     UStringTrieResult match = suffixes.firstForCodePoint(c);
     for(;;) {
+        if(++discontiguousLoopCount >= kDiscontiguousLoopLimit) {
+            errorCode = U_INPUT_TOO_LONG_ERROR;
+            break;
+        }
         UChar32 nextCp;
         if(USTRINGTRIE_HAS_VALUE(match)) {
             ce32 = static_cast<uint32_t>(suffixes.getValue());
@@ -559,6 +565,10 @@ CollationIterator::nextCE32FromDiscontiguousContraction(
         int32_t lookAhead, UChar32 c,
         UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return 0; }
+    if(++discontiguousLoopCount >= kDiscontiguousLoopLimit) {
+        errorCode = U_INPUT_TOO_LONG_ERROR;
+        return ce32;
+    }
 
     // UCA section 3.3.2 Contractions:
     // Contractions that end with non-starter characters
@@ -627,6 +637,10 @@ CollationIterator::nextCE32FromDiscontiguousContraction(
     int32_t sinceMatch = 2;
     c = nextCp;
     for(;;) {
+        if(++discontiguousLoopCount >= kDiscontiguousLoopLimit) {
+            errorCode = U_INPUT_TOO_LONG_ERROR;
+            break;
+        }
         UStringTrieResult match;
         // "If C is not blocked from S, find if S + C has a match in the table." (S2.1.2)
         if(prevCC < (fcd16 >> 8) && USTRINGTRIE_HAS_VALUE(match = suffixes.nextForCodePoint(c))) {
@@ -662,6 +676,11 @@ CollationIterator::nextCE32FromDiscontiguousContraction(
         c = U_SENTINEL;
         for(;;) {
             appendCEsFromCE32(d, c, ce32, true, errorCode);
+            if(U_FAILURE(errorCode)) { break; }
+            if(++discontiguousLoopCount >= kDiscontiguousLoopLimit) {
+                errorCode = U_INPUT_TOO_LONG_ERROR;
+                break;
+            }
             // Fetch CE32s for skipped combining marks from the normal data, with fallback,
             // rather than from the CollationData where we found the contraction.
             if(!skipped->hasNext()) { break; }

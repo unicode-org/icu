@@ -90,6 +90,7 @@ public:
     CollationIterator(const CollationData *d, UBool numeric)
             : trie(d->trie),
               data(d),
+              discontiguousLoopCount(0),
               cesIndex(0),
               skipped(nullptr),
               numCpFwd(-1),
@@ -264,6 +265,11 @@ protected:
     // Main lookup trie of the data object.
     const UTrie2 *trie;
     const CollationData *data;
+
+    // Limit on discontiguous contraction loop iterations and nested calls
+    // to prevent infinite or quadratic/exponential loop on pathological input.
+    static constexpr int32_t kDiscontiguousLoopLimit = 2400;
+    int32_t discontiguousLoopCount = 0;
 
 private:
     U_I18N_API int64_t nextCEFromCE32(const CollationData *d, UChar32 c, uint32_t ce32,

@@ -22,6 +22,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import com.ibm.icu.util.ULocale;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -1311,6 +1312,20 @@ public class CollationRegressionTest extends TestFmwk {
         String rule = "&㜀=̫&웴=産싂싂싂Į혏훖훖걁";
         try {
             RuleBasedCollator coll = new RuleBasedCollator(rule);
+        } catch (Exception expected) {
+            // expected exception or quick completion without hanging
+        }
+    }
+
+    @Test
+    public void TestICU22511() {
+        // ICU-22511 / OSS-Fuzz 448806762: Infinite loop/timeout in CollationIterator on pathological discontiguous contractions
+        String s1 = "̀à̰〭Ǡ̜𑄂\u0010Āāāāāāāāāāāāāāāāāāāāāāāāāāāāāāāāāāāāāā́āāā";
+        String s2 = "āāāāāāāāāāāāāāāāāāāāāāāāāāāāāāāāāāāāāāāāāāāà̰〭Ǡ̜𑄂";
+        try {
+            Collator coll = Collator.getInstance(new ULocale("vi_VN"));
+            coll.setStrength(Collator.TERTIARY);
+            coll.compare(s1, s2);
         } catch (Exception expected) {
             // expected exception or quick completion without hanging
         }
