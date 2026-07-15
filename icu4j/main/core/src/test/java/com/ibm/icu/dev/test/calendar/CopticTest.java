@@ -470,6 +470,9 @@ public class CopticTest extends CalendarTestFmwk {
 
         cal.set(Calendar.EXTENDED_YEAR, -283);
         assertEquals("Era for negative extended year should be CE (1)", 1, cal.get(Calendar.ERA));
-        assertEquals("Year for negative extended year should equal extended year", -283, cal.get(Calendar.YEAR));
+        assertEquals(
+                "Year for negative extended year should equal extended year",
+                -283,
+                cal.get(Calendar.YEAR));
     }
 }
