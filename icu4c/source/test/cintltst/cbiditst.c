@@ -97,6 +97,7 @@ static void testUBidiWriteReorderedUndefinedShift(void);
 static void testUBidiWriteReorderedReverseMirrorCombining(void);
 static void testUBidiGetRunsBufferOverflow(void);
 static void testUBidiWriteReverseOverflow(void);
+static void testUBidiWriteReverseInternalRunsOnlyOverflow(void);
 
 /* new BIDI API */
 static void testReorderingMode(void);
@@ -151,6 +152,7 @@ addComplexTest(TestNode** root) {
     addTest(root, testUBidiWriteReorderedReverseMirrorCombining, "complex/bidi/writeReorderedReverseMirrorCombining");
     addTest(root, testUBidiGetRunsBufferOverflow, "complex/bidi/getRunsBufferOverflow");
     addTest(root, testUBidiWriteReverseOverflow, "complex/bidi/writeReverseOverflow");
+    addTest(root, testUBidiWriteReverseInternalRunsOnlyOverflow, "complex/bidi/writeReverseInternalRunsOnlyOverflow");
 
     addTest(root, doArabicShapingTest, "complex/arabic-shaping/ArabicShapingTest");
     addTest(root, doLamAlefSpecialVLTRArabicShapingTest, "complex/arabic-shaping/lamalef");
@@ -5169,3 +5171,34 @@ testUBidiWriteReverseOverflow(void) {
                 u_errorName(status), outLen);
     }
 }
+
+static void
+testUBidiWriteReverseInternalRunsOnlyOverflow(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    static const UChar src[] = { 0x05D0, 0x221D, 0x05D1 };
+    int32_t srcLen = 3;
+    UChar dest[10];
+    /* 64 is UBIDI_INTERNAL_RUNS_ONLY from ubidiimp.h. When UBIDI_DO_MIRRORING causes expansion
+     * (U+221D expanding to U+1DB10, 2 code units), case UBIDI_INTERNAL_RUNS_ONLY must check destination
+     * capacity to avoid out-of-bounds writes into dest when destSize <= srcLen.
+     */
+    int32_t outLen = ubidi_writeReverse(src, srcLen, dest, 3,
+                                        UBIDI_DO_MIRRORING | 64 /* UBIDI_INTERNAL_RUNS_ONLY */,
+                                        &status);
+    if (status != U_BUFFER_OVERFLOW_ERROR || outLen != 4) {
+        log_err("testUBidiWriteReverseInternalRunsOnlyOverflow failed: expected U_BUFFER_OVERFLOW_ERROR and outLen=4, got %s and outLen=%d\n",
+                u_errorName(status), outLen);
+    }
+
+    status = U_ZERO_ERROR;
+    u_memset(dest, 0, 10);
+    outLen = ubidi_writeReverse(src, srcLen, dest, 10,
+                                UBIDI_DO_MIRRORING | 64 /* UBIDI_INTERNAL_RUNS_ONLY */,
+                                &status);
+    static const UChar expectedDest[] = { 0x05D1, 0xD836, 0xDF10, 0x05D0 };
+    if (U_FAILURE(status) || outLen != 4 || u_strncmp(dest, expectedDest, 4) != 0) {
+        log_err("testUBidiWriteReverseInternalRunsOnlyOverflow actual chars failed: status=%s, outLen=%d\n",
+                u_errorName(status), outLen);
+    }
+}
+

@@ -287,7 +287,8 @@ doWriteReverse(const char16_t *src, int32_t srcLength,
                 *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
                 return i;
             }
-            destSize=i;
+            char16_t *saveDest=dest;
+            int32_t destLength=0;
             /* Loop backward across the source run segment by segment, using legacy 1-to-1 code unit stepping
              * to extract and reverse character clusters for internal setPara classification.
              */
@@ -305,22 +306,33 @@ doWriteReverse(const char16_t *src, int32_t srcLength,
                 if(options&UBIDI_REMOVE_BIDI_CONTROLS && IS_BIDI_CONTROL_CHAR(c)) {
                     continue;
                 }
+                int32_t origBaseLen=U16_LENGTH(c);
                 j=srcLength;
                 if(options&UBIDI_DO_MIRRORING) {
-                    int32_t k=0;
                     c=u_charMirror(c);
-                    U16_APPEND_UNSAFE(dest, k, c);
-                    dest+=k;
-                    j+=k;
+                    int32_t k=U16_LENGTH(c);
+                    if(destLength+k<=destSize) {
+                        int32_t temp=destLength;
+                        U16_APPEND_UNSAFE(saveDest, temp, c);
+                    }
+                    destLength+=k;
+                    j+=origBaseLen;
                 }
                 /* Loop forward from the current segment index to copy any unmirrored code units (such as combining marks
                  * or surrogate halves) into dest in forward visual order.
                  */
                 while(j<i) {
-                    *dest++=src[j++];
+                    if(destLength<destSize) {
+                        saveDest[destLength]=src[j];
+                    }
+                    destLength++;
+                    j++;
                 }
             } while(srcLength>0);
-            return destSize;
+            if(destSize<destLength) {
+                *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+            }
+            return destLength;
         }
         int32_t destLength=0;
         do {
