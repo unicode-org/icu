@@ -107,15 +107,15 @@ public class CopticTest extends CalendarTestFmwk {
             new TestCase(2402708.5, 1, 1582, 8, 10, TUE, 0, 0, 0), // Gregorian: 17/04/1866
             new TestCase(2402971.5, 1, 1583, 4, 28, SAT, 0, 0, 0), // Gregorian: 05/01/1867
             new TestCase(2403344.5, 1, 1584, 5, 5, MON, 0, 0, 0), // Gregorian: 13/01/1868
-            new TestCase(1721059.5, 0, 285, 5, 7, SAT, 0, 0, 0), // Gregorian: 01/01/0000
-            new TestCase(1721425.5, 0, 284, 5, 8, MON, 0, 0, 0), // Gregorian: 01/01/0001
-            new TestCase(1824663.5, 0, 2, 13, 6, WED, 0, 0, 0), // Gregorian: 29/08/0283
-            new TestCase(1824664.5, 0, 1, 1, 1, THU, 0, 0, 0), // Gregorian: 30/08/0283
+            new TestCase(1721059.5, 1, -284, 5, 7, SAT, 0, 0, 0), // Gregorian: 01/01/0000
+            new TestCase(1721425.5, 1, -283, 5, 8, MON, 0, 0, 0), // Gregorian: 01/01/0001
+            new TestCase(1824663.5, 1, -1, 13, 6, WED, 0, 0, 0), // Gregorian: 29/08/0283
+            new TestCase(1824664.5, 1, 0, 1, 1, THU, 0, 0, 0), // Gregorian: 30/08/0283
             new TestCase(1825029.5, 1, 1, 1, 1, FRI, 0, 0, 0), // Gregorian: 29/08/0284
             new TestCase(1825394.5, 1, 2, 1, 1, SAT, 0, 0, 0), // Gregorian: 29/08/0285
             new TestCase(1825759.5, 1, 3, 1, 1, SUN, 0, 0, 0), // Gregorian: 29/08/0286
             new TestCase(1826125.5, 1, 4, 1, 1, TUE, 0, 0, 0), // Gregorian: 30/08/0287
-            new TestCase(1825028.5, 0, 1, 13, 5, THU, 0, 0, 0), // Gregorian: 28/08/0284
+            new TestCase(1825028.5, 1, 0, 13, 5, THU, 0, 0, 0), // Gregorian: 28/08/0284
             new TestCase(1825393.5, 1, 1, 13, 5, FRI, 0, 0, 0), // Gregorian: 28/08/0285
             new TestCase(1825758.5, 1, 2, 13, 5, SAT, 0, 0, 0), // Gregorian: 28/08/0286
             new TestCase(1826123.5, 1, 3, 13, 5, SUN, 0, 0, 0), // Gregorian: 28/08/0287
@@ -183,9 +183,8 @@ public class CopticTest extends CalendarTestFmwk {
         assertEquals("Coptic Date", "Fri Jan 01, 0001 AD", copticFmt.format(cal));
         assertEquals("Gregorian Date", "Fri Aug 29, 0284 AD", fmt.format(cal.getTime()));
 
-        cal.set(Calendar.ERA, 0);
-        cal.set(Calendar.YEAR, 1);
-        assertEquals("Coptic Date", "Thu Jan 01, 0001 BC", copticFmt.format(cal));
+        cal.set(Calendar.EXTENDED_YEAR, 0);
+        assertEquals("Coptic Date", "Thu Jan 01, 0000 AD", copticFmt.format(cal));
         assertEquals("Gregorian Date", "Thu Aug 30, 0283 AD", fmt.format(cal.getTime()));
     }
 
@@ -457,5 +456,20 @@ public class CopticTest extends CalendarTestFmwk {
                                 + endDay);
             }
         }
+    }
+
+    @Test
+    public void TestBug23277() {
+        CopticCalendar cal = new CopticCalendar(ULocale.forLanguageTag("en-u-ca-coptic"));
+        assertEquals("Minimum era should be CE (1)", 1, cal.getMinimum(Calendar.ERA));
+        assertEquals("Maximum era should be CE (1)", 1, cal.getMaximum(Calendar.ERA));
+
+        cal.set(Calendar.EXTENDED_YEAR, 1716);
+        assertEquals("Era for positive extended year should be CE (1)", 1, cal.get(Calendar.ERA));
+        assertEquals("Year should be 1716", 1716, cal.get(Calendar.YEAR));
+
+        cal.set(Calendar.EXTENDED_YEAR, -283);
+        assertEquals("Era for negative extended year should be CE (1)", 1, cal.get(Calendar.ERA));
+        assertEquals("Year for negative extended year should equal extended year", -283, cal.get(Calendar.YEAR));
     }
 }
