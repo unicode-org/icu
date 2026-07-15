@@ -6182,6 +6182,11 @@ void LocaleTest::TestForLanguageTag() {
       {"und-x-private", "@x=private"},
       {"de-1994-biske-rozaj-x-private", "de__1994_BISKE_ROZAJ@x=private"},
       {"und-1994-biske-rozaj-x-private", "__1994_BISKE_ROZAJ@x=private"},
+      // ICU-22486
+      {"en-US-POSIX", "en_US_POSIX"},
+      {"de-DE-POSIX", "de_DE_POSIX"},
+      {"en-GB-POSIX", "en_GB_POSIX"},
+      {"en-US-u-va-posix", "en_US_POSIX"},
     };
     int32_t i;
     for (i=0; i < UPRV_LENGTHOF(testCases); i++) {

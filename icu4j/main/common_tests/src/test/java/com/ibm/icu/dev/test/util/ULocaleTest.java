@@ -3409,6 +3409,10 @@ public class ULocaleTest extends CoreTestFmwk {
             {"und-us", "_US", NOERROR},
             {"und-latn", "_Latn", NOERROR},
             {"en-us-posix", "en_US_POSIX", NOERROR},
+            /* ICU-22486 */
+            {"en-US-POSIX", "en_US_POSIX", NOERROR},
+            {"de-DE-POSIX", "de_DE_POSIX", NOERROR},
+            {"en-GB-POSIX", "en_GB_POSIX", NOERROR},
             {"de-de_euro", "de", 3},
             {"kok-in", "kok_IN", NOERROR},
             {"123", "", 0},
