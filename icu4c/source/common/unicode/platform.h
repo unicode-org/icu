@@ -408,6 +408,17 @@
 #else
 #   define UPRV_HAS_FEATURE(x) 0
 #endif
+#if UPRV_HAS_FEATURE(address_sanitizer) || \
+    UPRV_HAS_FEATURE(memory_sanitizer) || \
+    UPRV_HAS_FEATURE(thread_sanitizer) || \
+    UPRV_HAS_FEATURE(undefined_sanitizer) || \
+    defined(__SANITIZE_ADDRESS__) || \
+    defined(__SANITIZE_THREAD__) || \
+    defined(__SANITIZE_UNDEFINED__)
+#   define UPRV_HAS_SANITIZER 1
+#else
+#   define UPRV_HAS_SANITIZER 0
+#endif
 #ifdef __has_extension
 #   define UPRV_HAS_EXTENSION(x) __has_extension(x)
 #else

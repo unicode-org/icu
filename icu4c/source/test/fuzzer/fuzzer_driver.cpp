@@ -16,10 +16,7 @@ int main(int argc, char* argv[])
 {
     bool show_warning = true;
     bool show_error = true;
-#if UPRV_HAS_FEATURE(address_sanitizer)
-    show_warning = false;
-#endif
-#if UPRV_HAS_FEATURE(memory_sanitizer)
+#if UPRV_HAS_SANITIZER
     show_warning = false;
 #endif
     if (argc > 2 && strcmp(argv[2], "-q") == 0) {

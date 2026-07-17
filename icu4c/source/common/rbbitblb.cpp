@@ -985,7 +985,7 @@ void RBBITableBuilder::minimizeStates() {
         return;
     }
 
-#if UPRV_HAS_FEATURE(address_sanitizer) || UPRV_HAS_FEATURE(undefined_behavior_sanitizer)
+#if UPRV_HAS_SANITIZER
     if (fDStates->size() > 512) {
         // This algorithm is sluggish on large state machines, and even more sluggish with
         // sanitizers, which leads the fuzzer into the weeds, see
