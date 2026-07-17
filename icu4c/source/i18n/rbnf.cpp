@@ -943,25 +943,22 @@ RuleBasedNumberFormat::getRuleSetDisplayName(int32_t index, const Locale& locale
         UnicodeString localeName(localeParam.getBaseName(), -1, UnicodeString::kInvariant); 
         int32_t len = localeName.length();
         char16_t* localeStr = localeName.getBuffer(len + 1);
-        if (localeStr == nullptr) {
-            UnicodeString bogus;
-            bogus.setToBogus();
-            return bogus;
-        }
-        while (len >= 0) {
-            localeStr[len] = 0;
-            int32_t ix = localizations->indexForLocale(localeStr);
-            if (ix >= 0) {
-                UnicodeString name(true, localizations->getDisplayName(ix, index), -1);
-                return name;
+        if (localeStr != nullptr) {
+            while (len >= 0) {
+                localeStr[len] = 0;
+                int32_t ix = localizations->indexForLocale(localeStr);
+                if (ix >= 0) {
+                    UnicodeString name(true, localizations->getDisplayName(ix, index), -1);
+                    return name;
+                }
+                
+                // trim trailing portion, skipping over omitted sections
+                do { --len;} while (len > 0 && localeStr[len] != 0x005f); // underscore
+                while (len > 0 && localeStr[len-1] == 0x005F) --len;
             }
-            
-            // trim trailing portion, skipping over omitted sections
-            do { --len;} while (len > 0 && localeStr[len] != 0x005f); // underscore
-            while (len > 0 && localeStr[len-1] == 0x005F) --len;
+            UnicodeString name(true, localizations->getRuleSetName(index), -1);
+            return name;
         }
-        UnicodeString name(true, localizations->getRuleSetName(index), -1);
-        return name;
     }
     UnicodeString bogus;
     bogus.setToBogus();
