@@ -439,7 +439,7 @@ Before you start building ICU, ICU requires the following:
 
 *   QSHELL interpreter installed (install base option 30, operating system)
 *   ILE C/C++ Compiler installed on the system
-*   The latest IBM tools for Developers for IBM i — [https://www-356.ibm.com/partnerworld/wps/servlet/ContentHandler/pw_com_porting_tools_index](https://www-356.ibm.com/partnerworld/wps/servlet/ContentHandler/pw_com_porting_tools_index)
+*   The latest IBM tools for Developers for IBM i — <https://www-356.ibm.com/partnerworld/wps/servlet/ContentHandler/pw_com_porting_tools_index>
 
 The following describes how to setup and build ICU. For background information, you should look at the [UNIX build instructions](#how-to-build-and-install-on-unix).
 
@@ -529,5 +529,5 @@ gnumake
 
 * * *
 
-Copyright © 2016 and later: Unicode, Inc. and others. License & terms of use: [http://www.unicode.org/copyright.html](http://www.unicode.org/copyright.html)
+Copyright © 2016 and later: Unicode, Inc. and others. License & terms of use: <http://www.unicode.org/copyright.html>
 Copyright © 1997-2016 International Business Machines Corporation and others. All Rights Reserved.

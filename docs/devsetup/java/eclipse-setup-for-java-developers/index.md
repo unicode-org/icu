@@ -104,7 +104,7 @@ repository directory. (It looks this does not work well with
 
 1.  Select \[Help\] - \[Install New Software...\] from menu
 2.  Select the appropriate Eclipse update site in "Work with:" field - for
-    example, select "Indigo - http://download.eclipse.org/releases/indigo" for
+    example, select "Indigo - <http://download.eclipse.org/releases/indigo>" for
     Eclipse 3.7.x and hit enter key.
 3.  Expand "Collaboration" and check "Subversive SVN Team Provider
     (Incubation)", then click "Next >". Confirm the item selected in the next

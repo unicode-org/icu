@@ -65,12 +65,12 @@ can be added at any time.
 
 We add script codes used in CLDR or in the spoof checker.
 This includes combination/alias codes like Hanb and Jamo.
-See https://unicode.org/reports/tr35/#unicode_script_subtag_validity
-and look for "alias" on https://unicode.org/iso15924/iso15924-codes.html
+See <https://unicode.org/reports/tr35/#unicode_script_subtag_validity>
+and look for "alias" on <https://unicode.org/iso15924/iso15924-codes.html>.
 
 We add special Z* script codes like Zsye.
 
-For new script codes see https://www.unicode.org/iso15924/codechanges.html
+For new script codes see <https://www.unicode.org/iso15924/codechanges.html>
 Check for recent changes with the code highlighted in the left column and
 "Add" in the right column.
 

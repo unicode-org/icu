@@ -20,7 +20,7 @@ proper copyright notice is in place. For example,
 
 ```
 © 2016 and later: Unicode, Inc. and others.
-License & terms of use: http://www.unicode.org/copyright.html#License
+License & terms of use: https://www.unicode.org/copyright.html
 ```
 
 Scan the source code to make sure that every file that was touched recently has

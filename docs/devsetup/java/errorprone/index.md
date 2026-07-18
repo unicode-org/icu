@@ -21,16 +21,17 @@ License & terms of use: http://www.unicode.org/copyright.html
 
 ---
 
-Error Prone is a static analysis tool for Java that catches common programming mistakes at compile-time. See https://errorprone.info/
+Error Prone is a static analysis tool for Java that catches common programming mistakes at compile-time.
+See <https://errorprone.info/>.
 
 ICU4J runs it in CI for each pull request to prevent problems from being
 introduced, and to periodically generate a report, posted at
-https://github.com/unicode-org/icu, under the “Quality Reports (main branch)”
+<https://github.com/unicode-org/icu>, under the “Quality Reports (main branch)”
 → “Java static analysis” section).
 
 ## Integration with IDEs
 
-See https://errorprone.info/docs/installation
+See <https://errorprone.info/docs/installation>.
 
 ## Running the checks
 
@@ -61,7 +62,7 @@ tail /tmp/errorprone_all.log
 
 ## Patching
 
-See https://errorprone.info/docs/patching. \
+See <https://errorprone.info/docs/patching>. \
 But we will summarize here how to use it from Maven, for ICU4J.
 
 > :point_right: **Note**: This is the patching mechanism provided by errorprone itself.

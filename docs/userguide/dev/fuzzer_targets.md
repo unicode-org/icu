@@ -159,7 +159,7 @@ OSS-Fuzz project downloaded in a local git client.
      ```
 
 **Limitations:** When reproducing a fuzzer finding in the way outlined above the fuzzer environment
-will use the current ICU trunk from https://github.com/unicode-org/icu.git. Thus it is not possible
+will use the current ICU trunk from <https://github.com/unicode-org/icu.git>. Thus it is not possible
 to modify the code to try out a possible fix. What can be done is to redirect Docker to download ICU
 from a forked ICU repository. Open the file oss-fuzz/projects/icu/Dockerfile and adjust the line
 with `git clone --depth 1 https://github.com/unicode-org/icu.git icu` accordingly. Then modify

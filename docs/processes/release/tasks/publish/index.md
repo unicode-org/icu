@@ -357,7 +357,7 @@ That new flow overlaps with _"Using the output from the build bots"_ below.
 *   Using the output from the build bots:
     *   Navigate to the GitHub page for the commits on the
         `maint/maint-<version>` branch.
-        *   Ex: https://github.com/unicode-org/icu/commits/maint/maint-64
+        *   Ex: <https://github.com/unicode-org/icu/commits/maint/maint-64>
     *   Click on the green check mark (✔) on the most recent/last commit. (It
         might be a red X if the builds failed, hopefully not).
         *   This will open up a pop-up with links to various CI builds.

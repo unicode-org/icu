@@ -72,7 +72,7 @@ Changes in previous releases can also be found on the main [ICU download page](h
 There are two ways to download ICU releases:
 
 *   **Official Release Snapshot:**
-    If you want to use ICU (as opposed to developing it), you should download an official packaged version of the ICU source code. These versions are tested more thoroughly than day-to-day development builds of the system, and they are packaged in zip and tar files for convenient download. These packaged files can be found at [https://unicode-org.github.io/icu/download](https://unicode-org.github.io/icu/download).
+    If you want to use ICU (as opposed to developing it), you should download an official packaged version of the ICU source code. These versions are tested more thoroughly than day-to-day development builds of the system, and they are packaged in zip and tar files for convenient download. These packaged files can be found at <https://unicode-org.github.io/icu/download>.
     The packaged snapshots are named `icu-nnnn.zip` or `icu-nnnn.tgz`, where `nnnn` is the version number. The .zip file is used for Windows platforms, while the .tgz file is preferred on most other platforms.
     Please unzip this file.
     > :point_right: **Note**: There may be additional commits on the `maint-*` branch for a particular version that are not included in the prepackaged download files.
@@ -361,10 +361,10 @@ In order to avoid synchronization and threading issues, developers are **suggest
 Failure to do this may cause spurious lock conflicts, recursive mutex failure, and deadlock.
 
 Source: "_Multithreaded Programming Guide, Compiling and Debugging_", Sun Microsystems, 2002
-[https://docs.oracle.com/cd/E19683-01/806-6867/compile-74765/index.html](https://docs.oracle.com/cd/E19683-01/806-6867/compile-74765/index.html)
+<https://docs.oracle.com/cd/E19683-01/806-6867/compile-74765/index.html>
 
 Note, a version of that chapter from a 2008 document update covering both Solaris 9 and Solaris 10 is available here:
-[http://docs.oracle.com/cd/E19253-01/816-5137/compile-94179/index.html](http://docs.oracle.com/cd/E19253-01/816-5137/compile-94179/index.html)
+<http://docs.oracle.com/cd/E19253-01/816-5137/compile-94179/index.html>
 
 ### Windows Platform
 
@@ -437,5 +437,5 @@ The platform dependencies have been mostly isolated into the following files in 
 
 * * *
 
-Copyright © 2016 and later: Unicode, Inc. and others. License & terms of use: [http://www.unicode.org/copyright.html](http://www.unicode.org/copyright.html)
+Copyright © 2016 and later: Unicode, Inc. and others. License & terms of use: <http://www.unicode.org/copyright.html>
 Copyright © 1997-2016 International Business Machines Corporation and others. All Rights Reserved.

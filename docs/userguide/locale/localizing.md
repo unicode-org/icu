@@ -55,7 +55,7 @@ data types (e.g., integers or binaries) are supported. There is no way to
 specify a charset, therefore .properties files must be in ISO 8859-1 with \u
 escape sequences (see the Java `native2ascii` tool).
 
-Defined at: http://java.sun.com/j2se/1.4/docs/api/java/util/PropertyResourceBundle.html
+Defined at: <http://java.sun.com/j2se/1.4/docs/api/java/util/PropertyResourceBundle.html>.
 
 Example: (`example_de.properties`)
 
@@ -76,7 +76,7 @@ Although the Java compiler allows to specify a charset on the command line, this
 is uncommon, and .java resource bundle files are therefore usually encoded in
 ISO 8859-1 with \u escapes like .properties files.
 
-Defined at: http://java.sun.com/j2se/1.4/docs/api/java/util/ListResourceBundle.html
+Defined at: <http://java.sun.com/j2se/1.4/docs/api/java/util/ListResourceBundle.html>.
 
 Example: (`example_de.java`)
 
@@ -170,7 +170,7 @@ Features:
 5.  XLIFF is independent of actual build-time or runtime resource bundle
     formats. .xlf files must be converted to native formats at build time.
 
-Defined at: http://www.oasis-open.org/committees/xliff/
+Defined at: <http://www.oasis-open.org/committees/xliff/>.
 
 Example: (`example.xlf`)
 
@@ -212,7 +212,7 @@ topic-oriented information". It is a family of XML formats for several types of
 publications including manuals and resource bundles. It is extensible. For
 example, subformats can be defined by refining DTDs. One design feature is to
 provide cross-document references for reuse of existing contents. For more
-information see http://www.ibm.com/developerworks/xml/library/x-dita4/index.html
+information see <http://www.ibm.com/developerworks/xml/library/x-dita4/index.html>.
 
 While it is certainly possible to define resource bundle formats via DTDs in the
 DITA framework, there currently (2002-Nov-27) do not appear to be resource
@@ -222,7 +222,7 @@ bundle formats actually defined, or tools available specifically for them.
 
 The OpenI18N specification requires support for message handling functions
 (mostly variants of `gettext()`) as defined in `libintl.h`. See Tables 3-5 and 3-6
-and Annex C in http://www.openi18n.org/docs/html/LI18NUX-2000-amd4.htm
+and Annex C in <http://www.openi18n.org/docs/html/LI18NUX-2000-amd4.htm>.
 
 Resource bundles ("portable object files", extension .po) are plain text files
 with key-value pairs for string values. The format and functions support a
@@ -256,8 +256,8 @@ are strings. Strings can span multiple lines. The charset is determined from the
 locale ID in `LC_CTYPE`.
 
 Defined at:
-https://pubs.opengroup.org/onlinepubs/009695399/utilities/gencat.html and
-https://pubs.opengroup.org/onlinepubs/009695399/functions/catgets.html
+<https://pubs.opengroup.org/onlinepubs/009695399/utilities/gencat.html> and
+<https://pubs.opengroup.org/onlinepubs/009695399/functions/catgets.html>.
 
 Example: (`example.txt`)
 
@@ -396,10 +396,10 @@ de {
 1.  TMX: "The purpose of TMX is to allow easier exchange of translation memory
     data between tools and/or translation vendors with little or no loss of
     critical data during the process."
-    http://www.lisa.org/tmx/
+    <http://www.lisa.org/tmx/>
 
 2.  LISA: Localisation Industry Standards Association
-    http://www.lisa.org/
+    <http://www.lisa.org/>
 
 ## Sample Windows .rc file
 

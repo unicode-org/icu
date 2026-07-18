@@ -29,7 +29,7 @@ It is one of the strengths of Unicode that it not only defines a very large
 character set, but also assigns a comprehensive set of properties and usage
 notes to all characters. It defines standard algorithms for critical text
 processing, and the data is publicly provided and kept up-to-date. See
-https://www.unicode.org/ and https://www.unicode.org/main.html for more information.
+<https://www.unicode.org/> and <https://www.unicode.org/main.html> for more information.
 
 For an example see the source code for the [Unicode
 browser](https://github.com/unicode-org/icu-demos/tree/main/ubrowse) demo
@@ -218,11 +218,11 @@ Notes:
 
 3.  When a property name is followed by a star (*), it is a property of strings;
     for example, Basic_Emoji and RGI_Emoji.
-    See https://www.unicode.org/reports/tr51/#Emoji_Sets
+    See <https://www.unicode.org/reports/tr51/#Emoji_Sets>.
     Properties of strings are not yet supported in ICU regular expressions.
 
 4.  UnicodeSet `[:scx=Arab:]` is a superset of `[:sc=Arab:]`;
-    see https://www.unicode.org/reports/tr18/#Script_Property
+    see <https://www.unicode.org/reports/tr18/#Script_Property>.
 
 5.  Full case mapping properties (e.g., Lowercase_Mapping) are complex.
     The string case mapping functions that implement them handle language-specific

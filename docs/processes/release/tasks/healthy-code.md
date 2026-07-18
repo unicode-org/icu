@@ -45,10 +45,10 @@ look for "UClassID" or similar.
 *   ~~The automated build system creates a new report:
     `https://cldr-build.unicode.org/jenkins/job/icu/job/icu-apidocs/`~~
     *   Click "ICU4C API Change Report vs Latest"
-*   Old: was http://bugs.icu-project.org/trac/build/icu4cdocs
+*   Old: was <http://bugs.icu-project.org/trac/build/icu4cdocs>
     *   Go into the latest successful build, the report is an attachment there.
     *   Download the style sheet next to it:
-        https://github.com/unicode-org/icu/blob/main/icu4c/icu4c.css
+        <https://github.com/unicode-org/icu/blob/main/icu4c/icu4c.css>
 
 ---
 
@@ -365,7 +365,7 @@ The command line is simply
 ~/git.icu/icu4c/source$ test/hdrtst/testinternalheaders.sh
 ```
 
-See https://unicode-org.atlassian.net/browse/ICU-12141 "every header file should
+See <https://unicode-org.atlassian.net/browse/ICU-12141> "every header file should
 include all other headers if it depends on definitions from them"
 
 <span style="color:red">**As of ICU 68, the internal header test is now

@@ -34,7 +34,7 @@ License & terms of use: http://www.unicode.org/copyright.html
 >
 > HarfBuzz has its own active mailing lists, please use those for discussion of
 > HarfBuzz and its use as a replacement for the ICU layout engine.
-> See: [https://harfbuzz.github.io/](https://harfbuzz.github.io/).
+> See: <https://harfbuzz.github.io/>.
 > 
 
 
