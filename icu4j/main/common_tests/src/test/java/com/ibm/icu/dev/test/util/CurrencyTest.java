@@ -1049,7 +1049,7 @@ public class CurrencyTest extends CoreTestFmwk {
      * CurrencyMetaInfo is defined as 'protected', no instance of this class can be created
      * directly.
      */
-    public class TestCurrencyMetaInfo extends CurrencyMetaInfo {}
+    public static class TestCurrencyMetaInfo extends CurrencyMetaInfo {}
 
     final TestCurrencyMetaInfo tcurrMetaInfo = new TestCurrencyMetaInfo();
 

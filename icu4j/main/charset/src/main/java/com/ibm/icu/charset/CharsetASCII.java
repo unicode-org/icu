@@ -27,7 +27,7 @@ class CharsetASCII extends CharsetICU {
         maxCharsPerByte = 1;
     }
 
-    class CharsetDecoderASCII extends CharsetDecoderICU {
+    static class CharsetDecoderASCII extends CharsetDecoderICU {
 
         public CharsetDecoderASCII(CharsetICU cs) {
             super(cs);

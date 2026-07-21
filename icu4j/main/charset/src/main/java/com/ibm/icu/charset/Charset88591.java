@@ -20,7 +20,7 @@ class Charset88591 extends CharsetASCII {
         super(icuCanonicalName, javaCanonicalName, aliases);
     }
 
-    class CharsetDecoder88591 extends CharsetDecoderASCII {
+    static class CharsetDecoder88591 extends CharsetDecoderASCII {
         public CharsetDecoder88591(CharsetICU cs) {
             super(cs);
         }

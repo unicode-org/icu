@@ -231,7 +231,7 @@ public class TestUCharacterIterator extends CoreTestFmwk {
         }
     }
 
-    class UCharIterator {
+    static class UCharIterator {
 
         public UCharIterator(int[] src, int len, int index) {
 

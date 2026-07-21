@@ -2535,7 +2535,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
     //        return string.substring(0,97) + "...";
     //    }
 
-    public class TokenSymbolTable implements SymbolTable {
+    public static class TokenSymbolTable implements SymbolTable {
         HashMap<String, char[]> contents = new HashMap<>();
 
         /**

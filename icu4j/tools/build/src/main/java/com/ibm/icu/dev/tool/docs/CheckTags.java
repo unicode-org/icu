@@ -52,7 +52,7 @@ public class CheckTags implements Doclet {
     private boolean isShort;
     private DocStack stack = new DocStack();
 
-    class DocNode {
+    static class DocNode {
         private String header;
         private boolean printed;
         private boolean reportError;

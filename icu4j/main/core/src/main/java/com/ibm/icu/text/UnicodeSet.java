@@ -4778,7 +4778,7 @@ public class UnicodeSet extends UnicodeFilter
         return new CodePointIterable(this);
     }
 
-    private class CodePointIterable implements Iterable<Integer> {
+    private static class CodePointIterable implements Iterable<Integer> {
         private final UnicodeSet unicodeSet;
 
         CodePointIterable(UnicodeSet unicodeSet) {
@@ -4791,7 +4791,7 @@ public class UnicodeSet extends UnicodeFilter
         }
     }
 
-    private class CodePointIterator implements Iterator<Integer> {
+    private static class CodePointIterator implements Iterator<Integer> {
         private final CodePointIteratorInt cpi;
 
         CodePointIterator(UnicodeSet unicodeSet) {

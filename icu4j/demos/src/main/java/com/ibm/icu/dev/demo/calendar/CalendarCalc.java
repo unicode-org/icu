@@ -479,7 +479,7 @@ class CalendarCalcFrame extends Frame implements ActionListener {
 
     private static final int FIELD_COLUMNS = 35;
 
-    class CalendarRec {
+    static class CalendarRec {
         public CalendarRec(String nameStr, Calendar cal) {
             name = nameStr;
             calendar = cal;

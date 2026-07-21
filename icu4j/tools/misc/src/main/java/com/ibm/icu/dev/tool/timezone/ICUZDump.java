@@ -129,7 +129,7 @@ public class ICUZDump {
         return cutovers;
     }
 
-    private class TimeZoneImpl {
+    private static class TimeZoneImpl {
         private Object tzobj;
 
         public TimeZoneImpl(Object tzobj) {
@@ -180,7 +180,7 @@ public class ICUZDump {
         }
     }
 
-    public class DumpFormatter {
+    public static class DumpFormatter {
         private SimpleTimeZone stz = new SimpleTimeZone(0, "");
         private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd EEE HH:mm:ss", ULocale.US);
         private DecimalFormat decf;

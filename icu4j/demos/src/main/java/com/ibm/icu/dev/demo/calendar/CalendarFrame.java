@@ -391,7 +391,7 @@ class CalendarFrame extends Frame {
         }
     }
 
-    class CalendarRec {
+    static class CalendarRec {
         public CalendarRec(String nameStr, Calendar cal) {
             name = nameStr;
             calendar = cal;

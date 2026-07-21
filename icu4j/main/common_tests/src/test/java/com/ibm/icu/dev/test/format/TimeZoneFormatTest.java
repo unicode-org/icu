@@ -1519,7 +1519,7 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
         assertTrue("No cases were tested", casesTested > 0);
     }
 
-    class TimeZoneNamesInheriter extends TimeZoneNames {
+    static class TimeZoneNamesInheriter extends TimeZoneNames {
         private static final long serialVersionUID = 1L;
 
         @Override

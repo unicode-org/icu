@@ -145,7 +145,7 @@ public class LSTMBreakEngine extends DictionaryBreakEngine {
     // Minimum number of characters for two words
     private static final byte MIN_WORD_SPAN = MIN_WORD * 2;
 
-    abstract class Vectorizer {
+    abstract static class Vectorizer {
         public Vectorizer(Map<String, Integer> dict) {
             this.fDict = dict;
         }
@@ -165,7 +165,7 @@ public class LSTMBreakEngine extends DictionaryBreakEngine {
         private Map<String, Integer> fDict;
     }
 
-    class CodePointsVectorizer extends Vectorizer {
+    static class CodePointsVectorizer extends Vectorizer {
         public CodePointsVectorizer(Map<String, Integer> dict) {
             super(dict);
         }
@@ -187,7 +187,7 @@ public class LSTMBreakEngine extends DictionaryBreakEngine {
         }
     }
 
-    class GraphemeClusterVectorizer extends Vectorizer {
+    static class GraphemeClusterVectorizer extends Vectorizer {
         public GraphemeClusterVectorizer(Map<String, Integer> dict) {
             super(dict);
         }

@@ -17,7 +17,7 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public class AbstractBreakIteratorTests extends CoreTestFmwk {
 
-    private class AbstractBreakIterator extends BreakIterator {
+    private static class AbstractBreakIterator extends BreakIterator {
         private int position = 0;
         private static final int LIMIT = 100;
 

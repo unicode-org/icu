@@ -901,7 +901,7 @@ public class NumberRangeFormatterTest extends CoreTestFmwk {
 
     static final String[] allNSNames = NumberingSystem.getAvailableNames();
 
-    private class RangePatternSink extends UResource.Sink {
+    private static class RangePatternSink extends UResource.Sink {
         Map<String, String> rangePatterns = new HashMap<>();
         Map<String, String> approxPatterns = new HashMap<>();
 

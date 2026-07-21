@@ -881,7 +881,7 @@ public class ChineseCalendar extends Calendar {
         internalSet(DAY_OF_YEAR, days - newYear + 1);
     }
 
-    class MonthInfo {
+    static class MonthInfo {
         int month;
         int ordinalMonth;
         int thisMoon;

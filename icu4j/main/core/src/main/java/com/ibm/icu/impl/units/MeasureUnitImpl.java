@@ -462,7 +462,7 @@ public class MeasureUnitImpl {
     public static class UnitsParser {
 
         /** Contains a single unit or a constant. */
-        private class SingleUnitOrConstant {
+        private static class SingleUnitOrConstant {
             SingleUnitImpl singleUnit;
             Long constant;
 

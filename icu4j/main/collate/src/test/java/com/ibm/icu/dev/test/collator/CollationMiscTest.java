@@ -2478,7 +2478,7 @@ public class CollationMiscTest extends TestFmwk {
     }
 
     /** Stores a test case for collation testing. */
-    private class OneTestCase {
+    private static class OneTestCase {
         /** The first value to compare. * */
         public String m_source_;
 

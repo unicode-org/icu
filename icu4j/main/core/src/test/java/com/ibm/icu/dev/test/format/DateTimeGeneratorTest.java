@@ -1214,7 +1214,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
         }
     }
 
-    private final class AppendItemName {
+    private static final class AppendItemName {
         public int field;
         public String name;
 
@@ -1548,7 +1548,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
      * hms{"h:mm:ss a"} en/gregorian has Hm{"H:mm"} Hms{"H:mm:ss"} hm{"h:mm a"} be/gregorian has
      * HHmmss{"HH.mm.ss"} Hm{"HH.mm"} hm{"h.mm a"} hms{"h.mm.ss a"}
      */
-    private final class TestOptionsItem {
+    private static final class TestOptionsItem {
         public String locale;
         public String skeleton;
         public String expectedPattern;
@@ -1726,7 +1726,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
     }
 
     /** Test that DTPG can handle all valid pattern character / length combinations */
-    private final class AllFieldsTestItem {
+    private static final class AllFieldsTestItem {
         public char patternChar;
         public int[] fieldLengths;
         public String mustIncludeOneOf;
@@ -1973,7 +1973,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
         assertEquals(message, "d-MM-y, G", dtpg.getBestPattern(skeleton));
     }
 
-    private final class FieldDisplayNameData {
+    private static final class FieldDisplayNameData {
         public String locale;
         public int field;
         public DateTimePatternGenerator.DisplayWidth width;
@@ -2314,7 +2314,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
 
     private static final int NUM_DATE_TIME_PATTERNS = 4;
 
-    private final class DTPLocaleAndResults {
+    private static final class DTPLocaleAndResults {
         public String localeID;
         public String[] expectPat;
 

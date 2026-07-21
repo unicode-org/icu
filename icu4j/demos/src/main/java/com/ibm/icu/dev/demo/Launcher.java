@@ -44,7 +44,7 @@ public class Launcher extends DemoApplet {
                     "rbnf.RbnfDemo",
                     "translit.Demo");
 
-    public class LauncherFrame extends Frame implements ActionListener {
+    public static class LauncherFrame extends Frame implements ActionListener {
         private static final long serialVersionUID = -8054963875776183878L;
 
         public Button buttonList[] = new Button[demoList.size()]; // one button for each demo

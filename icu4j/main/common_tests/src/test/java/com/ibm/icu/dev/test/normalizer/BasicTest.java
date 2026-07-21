@@ -1383,7 +1383,7 @@ public class BasicTest extends CoreTestFmwk {
     // --------------------------------------------------------------------------
     // helper class for TestPreviousNext()
     // simple UTF-32 character iterator
-    class UCharIterator {
+    static class UCharIterator {
 
         public UCharIterator(int[] src, int len, int index) {
 
@@ -2136,7 +2136,7 @@ public class BasicTest extends CoreTestFmwk {
 
     // all combinations of options
     // UNORM_INPUT_IS_FCD is set automatically if both input strings fulfill FCD conditions
-    final class Temp {
+    static final class Temp {
         int options;
         String name;
 
@@ -3317,7 +3317,7 @@ public class BasicTest extends CoreTestFmwk {
      * Abstract class Normalizer2 has non-abstract methods which are overwritten by
      * its derived classes. To test these methods a derived class is defined here.
      */
-    public class TestNormalizer2 extends Normalizer2 {
+    public static class TestNormalizer2 extends Normalizer2 {
 
         public TestNormalizer2() {}
 

@@ -18,7 +18,7 @@ import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.UnicodeSet;
 
 public class ArabicCharacterData {
-    public class Record {
+    public static class Record {
         public int getCodePoint() {
             return codePoint;
         }

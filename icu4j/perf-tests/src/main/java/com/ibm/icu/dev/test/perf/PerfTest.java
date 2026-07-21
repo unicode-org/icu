@@ -258,7 +258,7 @@ public abstract class PerfTest {
         private int id;
     }
 
-    private class FunctionRunner implements Runnable {
+    private static class FunctionRunner implements Runnable {
         private final Function f;
         private final long loops;
         private final int id;

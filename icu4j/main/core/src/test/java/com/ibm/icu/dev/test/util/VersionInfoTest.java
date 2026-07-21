@@ -358,7 +358,7 @@ public final class VersionInfoTest extends CoreTestFmwk {
         }
     }
 
-    private class GetInstanceWorker extends Thread {
+    private static class GetInstanceWorker extends Thread {
         private VersionInfo[] results;
 
         GetInstanceWorker(int serialNumber, VersionInfo[] results) {

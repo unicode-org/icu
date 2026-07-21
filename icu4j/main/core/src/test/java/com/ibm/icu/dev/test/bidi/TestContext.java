@@ -19,7 +19,7 @@ import org.junit.Test;
  */
 public class TestContext extends BidiFmwk {
 
-    private class ContextCase {
+    private static class ContextCase {
         String prologue;
         String source;
         String epilogue;
