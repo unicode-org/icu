@@ -185,6 +185,7 @@ public class TransliteratorInputMethod implements InputMethod {
 
     private void statusWindowAction(ActionEvent e) {
         if (TRACE_MESSAGES) dumpStatus(">>status window action");
+        @SuppressWarnings("unchecked")
         JComboBox<JLabel> cb = (JComboBox<JLabel>) e.getSource();
         int si = cb.getSelectedIndex();
         if (si != selectedIndex) { // otherwise, we don't need to change

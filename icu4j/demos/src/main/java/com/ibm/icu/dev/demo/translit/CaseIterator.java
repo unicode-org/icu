@@ -850,6 +850,7 @@ public class CaseIterator {
      *
      * @param source The string to get case variants for
      */
+    @SuppressWarnings("unchecked")
     public void reset(String source) {
 
         // allocate arrays to store pieces

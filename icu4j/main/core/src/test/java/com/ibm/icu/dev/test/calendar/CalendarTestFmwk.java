@@ -281,6 +281,7 @@ public class CalendarTestFmwk extends CoreTestFmwk {
 
         // Keep a record of minima and maxima that we actually see.
         // These are kept in an array of arrays of hashes.
+        @SuppressWarnings("unchecked")
         Map<Integer, Object>[][] limits = new Map[fieldsToTest.length][2];
         Object nub = new Object(); // Meaningless placeholder
 

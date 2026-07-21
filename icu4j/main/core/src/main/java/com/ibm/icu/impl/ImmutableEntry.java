@@ -40,7 +40,8 @@ public class ImmutableEntry<K, V> implements Map.Entry<K, V> {
     @Override
     public boolean equals(Object o) {
         try {
-            Map.Entry e = (Map.Entry) o;
+            @SuppressWarnings("unchecked")
+            Map.Entry<K, V> e = (Map.Entry<K, V>) o;
             return UnicodeMap.areEqual(e.getKey(), k) && UnicodeMap.areEqual(e.getValue(), v);
         } catch (ClassCastException e) {
             return false;

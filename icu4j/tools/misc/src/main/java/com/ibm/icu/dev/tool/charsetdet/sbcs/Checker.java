@@ -16,7 +16,7 @@ package com.ibm.icu.dev.tool.charsetdet.sbcs;
  *     Java - Code Style - Code Templates
  */
 public class Checker implements NGramParser.NGramParserClient {
-    private NGramList ngrams;
+    private NGramList<Integer> ngrams;
     private int totalNGrams;
     private int totalHits;
 
@@ -34,7 +34,7 @@ public class Checker implements NGramParser.NGramParserClient {
     private NGramParser parser;
 
     /** TODO This should take cumulative percent and the name... */
-    public Checker(NGramList list, InputFile dataFile) {
+    public Checker(NGramList<Integer> list, InputFile dataFile) {
         ngrams = list;
         ngrams.setMapper(dataFile);
 

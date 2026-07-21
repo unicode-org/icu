@@ -8,11 +8,6 @@
  */
 package com.ibm.icu.dev.test.rbbi;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.lang.UnicodeSetTest.ShakespeareanSymbolTable;
 import com.ibm.icu.impl.RBBIDataWrapper;
