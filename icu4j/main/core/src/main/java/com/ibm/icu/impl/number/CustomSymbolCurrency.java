@@ -5,6 +5,7 @@ package com.ibm.icu.impl.number;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.ULocale;
+import java.util.Objects;
 
 public class CustomSymbolCurrency extends Currency {
     private static final long serialVersionUID = 2497493016770137670L;
@@ -68,9 +69,17 @@ public class CustomSymbolCurrency extends Currency {
     }
 
     @Override
-    public boolean equals(Object other) {
-        return super.equals(other)
-                && ((CustomSymbolCurrency) other).symbol1.equals(symbol1)
-                && ((CustomSymbolCurrency) other).symbol2.equals(symbol2);
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (!(obj instanceof CustomSymbolCurrency)) {
+            return false;
+        }
+        CustomSymbolCurrency other = (CustomSymbolCurrency) obj;
+        return Objects.equals(symbol1, other.symbol1) && Objects.equals(symbol2, other.symbol2);
     }
 }
