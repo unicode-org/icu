@@ -108,7 +108,7 @@ public class ICUJDKCompare {
         return this;
     }
 
-    public ICUJDKCompare setClassPairs(Class[] classPairs) {
+    public ICUJDKCompare setClassPairs(Class<?>[] classPairs) {
         this.classPairs = classPairs;
         return this;
     }
@@ -290,13 +290,13 @@ public class ICUJDKCompare {
 
     static class MorC {
         private Method mref;
-        private Constructor cref;
+        private Constructor<?> cref;
 
         MorC(Method m) {
             mref = m;
         }
 
-        MorC(Constructor c) {
+        MorC(Constructor<?> c) {
             cref = c;
         }
 
@@ -304,11 +304,11 @@ public class ICUJDKCompare {
             return mref == null ? cref.getModifiers() : mref.getModifiers();
         }
 
-        Class getReturnType() {
+        Class<?> getReturnType() {
             return mref == null ? void.class : mref.getReturnType();
         }
 
-        Class[] getParameterTypes() {
+        Class<?>[] getParameterTypes() {
             return mref == null ? cref.getParameterTypes() : mref.getParameterTypes();
         }
 
@@ -477,22 +477,22 @@ public class ICUJDKCompare {
                 return false;
             }
 
-            Class tr = pairClassEquivalent(t.getReturnType());
-            Class mr = pairClassEquivalent(m.getReturnType());
+            Class<?> tr = pairClassEquivalent(t.getReturnType());
+            Class<?> mr = pairClassEquivalent(m.getReturnType());
             if (!assignableFrom(mr, tr)) { // t return type must be same or narrower than m
                 if (DEBUG) debugmsg(t, m, "return value mismatch");
                 return false;
             }
-            Class[] tts = t.getParameterTypes();
-            Class[] mts = m.getParameterTypes();
+            Class<?>[] tts = t.getParameterTypes();
+            Class<?>[] mts = m.getParameterTypes();
             if (tts.length != mts.length) {
                 if (DEBUG) debugmsg(t, m, "param count mismatch");
                 return false;
             }
 
             for (int i = 0; i < tts.length; ++i) {
-                Class tc = pairClassEquivalent(tts[i]);
-                Class mc = pairClassEquivalent(mts[i]);
+                Class<?> tc = pairClassEquivalent(tts[i]);
+                Class<?> mc = pairClassEquivalent(mts[i]);
                 if (!assignableFrom(tc, mc)) { // m param must be same or narrower than t
                     if (DEBUG)
                         debugmsg(
@@ -519,7 +519,7 @@ public class ICUJDKCompare {
             buf.append(" ");
             buf.append(m.getName());
             buf.append("(");
-            Class[] ptypes = m.getParameterTypes();
+            Class<?>[] ptypes = m.getParameterTypes();
             for (int j = 0; j < ptypes.length; ++j) {
                 if (j > 0) {
                     buf.append(", ");
@@ -544,7 +544,7 @@ public class ICUJDKCompare {
         }
     }
 
-    public static String nameOf(Class c) {
+    public static String nameOf(Class<?> c) {
         if (c.isArray()) {
             return nameOf(c.getComponentType()) + "[]";
         }
@@ -552,7 +552,7 @@ public class ICUJDKCompare {
         return name.substring(name.lastIndexOf('.') + 1);
     }
 
-    static MorC[] getMorCArray(Constructor[] cons) {
+    static MorC[] getMorCArray(Constructor<?>[] cons) {
         MorC[] result = new MorC[cons.length];
         for (int i = 0; i < cons.length; ++i) {
             result[i] = new MorC(cons[i]);
@@ -786,7 +786,7 @@ public class ICUJDKCompare {
         return target;
     }
 
-    private Class pairClassEquivalent(Class target) {
+    private Class<?> pairClassEquivalent(Class<?> target) {
         for (int i = 0; i < classPairs.length; i += 2) {
             if (target.equals(classPairs[i])) {
                 return classPairs[i + 1];
