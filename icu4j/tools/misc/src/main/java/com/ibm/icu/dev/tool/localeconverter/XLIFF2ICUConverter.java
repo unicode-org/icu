@@ -14,6 +14,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.util.Date;
 import javax.xml.XMLConstants;
@@ -159,7 +161,7 @@ public final class XLIFF2ICUConverter {
     private static final String ALIAS = "alias";
     private static final String LINESEP = System.getProperty("line.separator");
     private static final String BOM = "\uFEFF";
-    private static final String CHARSET = "UTF-8";
+    private static final Charset CHARSET = StandardCharsets.UTF_8;
     private static final String OPENBRACE = "{";
     private static final String CLOSEBRACE = "}";
     private static final String COLON = ":";

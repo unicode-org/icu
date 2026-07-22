@@ -19,6 +19,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.TreeMap;
@@ -124,7 +125,7 @@ public class TestCharsetDetector extends CoreTestFmwk {
     public void TestInputFilter() throws Exception {
         String s =
                 "<a> <lot> <of> <English> <inside> <the> <markup> Un tr\u00E8s petit peu de Fran\u00E7ais. <to> <confuse> <the> <detector>";
-        byte[] bytes = s.getBytes("ISO-8859-1");
+        byte[] bytes = s.getBytes(StandardCharsets.ISO_8859_1);
         CharsetDetector det = new CharsetDetector();
         CharsetMatch m;
 
@@ -157,7 +158,7 @@ public class TestCharsetDetector extends CoreTestFmwk {
                         + "be converted to UTF-8, then shoved through the detection process.  "
                         + "\u0391\u0392\u0393\u0394\u0395"
                         + "Sure would be nice if our source could contain Unicode directly!";
-        byte[] bytes = s.getBytes("UTF-8");
+        byte[] bytes = s.getBytes(StandardCharsets.UTF_8);
         CharsetDetector det = new CharsetDetector();
         String retrievedS;
         Reader reader;
@@ -180,6 +181,8 @@ public class TestCharsetDetector extends CoreTestFmwk {
                 "u0623\u0648\u0631\u0648\u0628\u0627, \u0628\u0631\u0645\u062c\u064a\u0627\u062a "
                         + "\u0627\u0644\u062d\u0627\u0633\u0648\u0628 \u002b\u0020\u0627\u0646\u062a\u0631\u0646\u064a\u062a";
 
+        // The bytes for "UnicodeBig*" contain a BOM, the ones from StandardCharsets.UTF_16* do not
+        @SuppressWarnings("StringCharset")
         byte[] beBytes = source.getBytes("UnicodeBig");
         byte[] leBytes = source.getBytes("UnicodeLittle");
         CharsetDetector det = new CharsetDetector();
@@ -214,7 +217,7 @@ public class TestCharsetDetector extends CoreTestFmwk {
         String sWindows =
                 "This is another small sample of some English text. Just enough to be sure that it detects correctly. It also includes some \u201CC1\u201D bytes.";
 
-        byte[] bISO = sISO.getBytes("ISO-8859-1");
+        byte[] bISO = sISO.getBytes(StandardCharsets.ISO_8859_1);
         byte[] bWindows = sWindows.getBytes("windows-1252");
 
         CharsetDetector det = new CharsetDetector();
@@ -1330,7 +1333,7 @@ public class TestCharsetDetector extends CoreTestFmwk {
                 "This is another small sample of some English text. Just enough to be sure that it detects correctly."
                         + "It also includes some \u201CC1\u201D bytes.";
 
-        byte[] bISO = sISO.getBytes("ISO-8859-1");
+        byte[] bISO = sISO.getBytes(StandardCharsets.ISO_8859_1);
         byte[] bWindows = sWindows.getBytes("windows-1252");
 
         // First do a plain vanilla detect of 1252 text
@@ -1366,7 +1369,7 @@ public class TestCharsetDetector extends CoreTestFmwk {
                 "This is a small sample of some English text. Just enough to be sure that it detects correctly.";
         byte[] textBytes;
         try {
-            textBytes = text.getBytes("ISO-8859-1");
+            textBytes = text.getBytes(StandardCharsets.ISO_8859_1);
         } catch (Exception e) {
             fail("Unexpected exception " + e.toString());
             return;
@@ -1389,7 +1392,7 @@ public class TestCharsetDetector extends CoreTestFmwk {
         String s = "This is some random plain text to run charset detection on.";
         final byte[] bytes;
         try {
-            bytes = s.getBytes("ISO-8859-1");
+            bytes = s.getBytes(StandardCharsets.ISO_8859_1);
         } catch (Exception e) {
             fail("Unexpected exception " + e.toString());
             return;

@@ -10,6 +10,7 @@ package com.ibm.icu.dev.test.stringprep;
 
 import com.ibm.icu.text.IDNA;
 import com.ibm.icu.text.StringPrepParseException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author ram
@@ -498,9 +499,9 @@ public class TestData {
             try {
                 comment = comt;
                 byte[] bytes = getBytes(in);
-                input = new String(bytes, "UTF-8");
+                input = new String(bytes, StandardCharsets.UTF_8);
                 bytes = getBytes(out);
-                output = (bytes == null) ? null : new String(bytes, "UTF-8");
+                output = (bytes == null) ? null : new String(bytes, StandardCharsets.UTF_8);
                 profile = prof;
                 flags = flg;
                 expected = ex;

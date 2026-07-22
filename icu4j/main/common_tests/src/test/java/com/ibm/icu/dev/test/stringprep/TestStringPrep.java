@@ -11,6 +11,7 @@ package com.ibm.icu.dev.test.stringprep;
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.text.StringPrep;
 import com.ibm.icu.text.StringPrepParseException;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -106,8 +107,8 @@ public class TestStringPrep extends CoreTestFmwk {
         for (int i = 0; i < mixed_prep_data.length; i++) {
             try {
                 String src = mixed_prep_data[i];
-                byte[] dest = NFS4StringPrep.mixed_prepare(src.getBytes("UTF-8"));
-                String destString = new String(dest, "UTF-8");
+                byte[] dest = NFS4StringPrep.mixed_prepare(src.getBytes(StandardCharsets.UTF_8));
+                String destString = new String(dest, StandardCharsets.UTF_8);
                 int destIndex = destString.indexOf('@');
                 if (destIndex < 0) {
                     errln("Delimiter @ disappeared from the output!");
@@ -124,7 +125,7 @@ public class TestStringPrep extends CoreTestFmwk {
         {
             String src = "OWNER@oss.software.ibm.com";
             try {
-                byte[] dest = NFS4StringPrep.mixed_prepare(src.getBytes("UTF-8"));
+                byte[] dest = NFS4StringPrep.mixed_prepare(src.getBytes(StandardCharsets.UTF_8));
                 if (dest != null) {
                     errln("Did not get the expected exception");
                 }
@@ -143,8 +144,8 @@ public class TestStringPrep extends CoreTestFmwk {
             Exception expected = testCase.expected;
             String expectedDest = testCase.output;
             try {
-                byte[] dest = NFS4StringPrep.cis_prepare(src.getBytes("UTF-8"));
-                String destString = new String(dest, "UTF-8");
+                byte[] dest = NFS4StringPrep.cis_prepare(src.getBytes(StandardCharsets.UTF_8));
+                String destString = new String(dest, StandardCharsets.UTF_8);
                 if (!expectedDest.equalsIgnoreCase(destString)) {
                     errln("Did not get the expected output for nfs4_cis_prep at index " + i);
                 }
@@ -163,7 +164,7 @@ public class TestStringPrep extends CoreTestFmwk {
         String src =
                 "\uC138\uACC4\uC758\uBAA8\uB4E0\uC0AC\uB78C\uB4E4\uC774\u0644\u064A\u0647\uD55C\uAD6D\uC5B4\uB97C\uC774\uD574\uD55C\uB2E4\uBA74";
         try {
-            NFS4StringPrep.cs_prepare(src.getBytes("UTF-8"), false);
+            NFS4StringPrep.cs_prepare(src.getBytes(StandardCharsets.UTF_8), false);
         } catch (Exception e) {
             errln("Got unexpected exception: " + e.toString());
         }
@@ -171,8 +172,8 @@ public class TestStringPrep extends CoreTestFmwk {
         // normalization is turned off
         try {
             src = "www.\u00E0\u00B3\u00AF.com";
-            byte[] dest = NFS4StringPrep.cs_prepare(src.getBytes("UTF-8"), false);
-            String destStr = new String(dest, "UTF-8");
+            byte[] dest = NFS4StringPrep.cs_prepare(src.getBytes(StandardCharsets.UTF_8), false);
+            String destStr = new String(dest, StandardCharsets.UTF_8);
             if (!src.equals(destStr)) {
                 errln(
                         "Did not get expected output. Expected: "
@@ -187,8 +188,8 @@ public class TestStringPrep extends CoreTestFmwk {
         // test case insensitive string
         try {
             src = "THISISATEST";
-            byte[] dest = NFS4StringPrep.cs_prepare(src.getBytes("UTF-8"), false);
-            String destStr = new String(dest, "UTF-8");
+            byte[] dest = NFS4StringPrep.cs_prepare(src.getBytes(StandardCharsets.UTF_8), false);
+            String destStr = new String(dest, StandardCharsets.UTF_8);
             if (!src.toLowerCase().equals(destStr)) {
                 errln(
                         "Did not get expected output. Expected: "
@@ -202,8 +203,8 @@ public class TestStringPrep extends CoreTestFmwk {
         // test case sensitive string
         try {
             src = "THISISATEST";
-            byte[] dest = NFS4StringPrep.cs_prepare(src.getBytes("UTF-8"), true);
-            String destStr = new String(dest, "UTF-8");
+            byte[] dest = NFS4StringPrep.cs_prepare(src.getBytes(StandardCharsets.UTF_8), true);
+            String destStr = new String(dest, StandardCharsets.UTF_8);
             if (!src.equals(destStr)) {
                 errln(
                         "Did not get expected output. Expected: "

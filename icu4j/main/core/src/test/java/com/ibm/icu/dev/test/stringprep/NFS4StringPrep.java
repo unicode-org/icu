@@ -14,6 +14,7 @@ import com.ibm.icu.text.UCharacterIterator;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.MissingResourceException;
 
 /**
@@ -65,10 +66,10 @@ public final class NFS4StringPrep {
 
     private static byte[] prepare(byte[] src, StringPrep strprep)
             throws StringPrepParseException, UnsupportedEncodingException {
-        String s = new String(src, "UTF-8");
+        String s = new String(src, StandardCharsets.UTF_8);
         UCharacterIterator iter = UCharacterIterator.getInstance(s);
         StringBuffer out = strprep.prepare(iter, StringPrep.DEFAULT);
-        return out.toString().getBytes("UTF-8");
+        return out.toString().getBytes(StandardCharsets.UTF_8);
     }
 
     public static byte[] cs_prepare(byte[] src, boolean isCaseSensitive)
@@ -125,7 +126,7 @@ public final class NFS4StringPrep {
 
     public static byte[] mixed_prepare(byte[] src)
             throws IOException, StringPrepParseException, UnsupportedEncodingException {
-        String s = new String(src, "UTF-8");
+        String s = new String(src, StandardCharsets.UTF_8);
         int index = s.indexOf(AT_SIGN);
         StringBuffer out = new StringBuffer();
 
@@ -148,6 +149,6 @@ public final class NFS4StringPrep {
             UCharacterIterator iter = UCharacterIterator.getInstance(s);
             out.append(prep.nfsmxp.prepare(iter, StringPrep.DEFAULT));
         }
-        return out.toString().getBytes("UTF-8");
+        return out.toString().getBytes(StandardCharsets.UTF_8);
     }
 }
