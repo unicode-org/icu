@@ -9,11 +9,10 @@
 package com.ibm.icu.impl;
 
 import com.ibm.icu.text.TimeZoneNames;
-import com.ibm.icu.text.TimeZoneNames.Factory;
 import com.ibm.icu.util.ULocale;
 
 /** The implementation class of <code>TimeZoneNames.Factory</code> */
-public class TimeZoneNamesFactoryImpl extends Factory {
+public class TimeZoneNamesFactoryImpl extends TimeZoneNames.Factory {
 
     /* (non-Javadoc)
      * @see com.ibm.icu.text.TimeZoneNames.Factory#getTimeZoneNames(com.ibm.icu.util.ULocale)

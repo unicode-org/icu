@@ -15,7 +15,6 @@ import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.CaseMap;
 import com.ibm.icu.text.DisplayContext;
-import com.ibm.icu.text.DisplayContext.Type;
 import com.ibm.icu.text.LocaleDisplayNames;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
@@ -642,7 +641,7 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
     @Override
     public List<UiListItem> getUiListCompareWholeItems(
             Set<ULocale> localeSet, Comparator<UiListItem> comparator) {
-        DisplayContext capContext = getContext(Type.CAPITALIZATION);
+        DisplayContext capContext = getContext(DisplayContext.Type.CAPITALIZATION);
 
         List<UiListItem> result = new ArrayList<UiListItem>();
         Map<ULocale, Set<ULocale>> baseToLocales = new HashMap<ULocale, Set<ULocale>>();

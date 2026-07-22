@@ -10,7 +10,6 @@ import com.ibm.icu.message2.FunctionFactory;
 import com.ibm.icu.message2.MFFunctionRegistry;
 import com.ibm.icu.message2.PlainStringFormattedValue;
 import com.ibm.icu.text.ListFormatter;
-import com.ibm.icu.text.ListFormatter.Type;
 import com.ibm.icu.text.ListFormatter.Width;
 import java.util.Arrays;
 import java.util.Collection;
@@ -37,7 +36,7 @@ public class CustomFunctionListTest extends CoreTestFmwk {
 
             ListFunctionImpl(Locale locale, Map<String, ?> fixedOptions) {
                 Object oType = fixedOptions.get("type");
-                Type type =
+                ListFormatter.Type type =
                         oType == null
                                 ? ListFormatter.Type.AND
                                 : ListFormatter.Type.valueOf(oType.toString());

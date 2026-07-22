@@ -17,8 +17,6 @@ import com.ibm.icu.impl.ICUNotifier;
 import com.ibm.icu.impl.ICURWLock;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.ICUService;
-import com.ibm.icu.impl.ICUService.Factory;
-import com.ibm.icu.impl.ICUService.Key;
 import com.ibm.icu.impl.ICUService.ServiceListener;
 import com.ibm.icu.impl.ICUService.SimpleFactory;
 import com.ibm.icu.impl.LocaleUtility;
@@ -136,7 +134,7 @@ public class ICUServiceTest extends CoreTestFmwk {
         confirmIdentical("3) en_US_BAR -> en_US", result, singleton0);
 
         // get a list of the factories, should be two
-        List<Factory> factories = service.factories();
+        List<ICUService.Factory> factories = service.factories();
         confirmIdentical("4) factory size", factories.size(), 2);
 
         // register a new object with yet another locale
@@ -164,7 +162,7 @@ public class ICUServiceTest extends CoreTestFmwk {
 
         // remove new factory
         // should have fewer factories again
-        service.unregisterFactory((Factory) factories.get(0));
+        service.unregisterFactory((ICUService.Factory) factories.get(0));
         factories = service.factories();
         confirmIdentical("11) factory size", factories.size(), 3);
 
@@ -201,15 +199,16 @@ public class ICUServiceTest extends CoreTestFmwk {
         service.reset();
         // an anonymous factory than handles all ids
         {
-            Factory factory =
-                    new Factory() {
+            ICUService.Factory factory =
+                    new ICUService.Factory() {
                         @Override
-                        public Object create(Key key, ICUService unusedService) {
+                        public Object create(ICUService.Key key, ICUService unusedService) {
                             return new ULocale(key.currentID());
                         }
 
                         @Override
-                        public void updateVisibleIDs(Map<String, Factory> unusedResult) {}
+                        public void updateVisibleIDs(
+                                Map<String, ICUService.Factory> unusedResult) {}
 
                         @Override
                         public String getDisplayName(String id, ULocale l) {
@@ -778,8 +777,8 @@ public class ICUServiceTest extends CoreTestFmwk {
 
         {
             int n = 0;
-            List<Factory> factories = service.factories();
-            Iterator<Factory> iter = factories.iterator();
+            List<ICUService.Factory> factories = service.factories();
+            Iterator<ICUService.Factory> iter = factories.iterator();
             while (iter.hasNext()) {
                 logln("[" + n++ + "] " + iter.next());
             }
@@ -815,9 +814,9 @@ public class ICUServiceTest extends CoreTestFmwk {
 
         logln("test one: " + service.get(greetingID));
 
-        class WrapFactory implements Factory {
+        class WrapFactory implements ICUService.Factory {
             @Override
-            public Object create(Key key, ICUService serviceArg) {
+            public Object create(ICUService.Key key, ICUService serviceArg) {
                 if (key.currentID().equals(greetingID)) {
                     Object previous = serviceArg.getKey(key, null, this);
                     return "A different greeting: \"" + previous + "\"";
@@ -826,7 +825,7 @@ public class ICUServiceTest extends CoreTestFmwk {
             }
 
             @Override
-            public void updateVisibleIDs(Map<String, Factory> result) {
+            public void updateVisibleIDs(Map<String, ICUService.Factory> result) {
                 result.put("greeting", this);
             }
 
@@ -847,7 +846,7 @@ public class ICUServiceTest extends CoreTestFmwk {
     @Test
     public void TestCoverage() {
         // Key
-        Key key = new Key("foobar");
+        ICUService.Key key = new ICUService.Key("foobar");
         logln("ID: " + key.id());
         logln("canonicalID: " + key.canonicalID());
         logln("currentID: " + key.currentID());

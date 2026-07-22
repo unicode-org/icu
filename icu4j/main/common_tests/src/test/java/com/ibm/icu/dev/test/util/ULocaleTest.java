@@ -28,7 +28,6 @@ import com.ibm.icu.util.IllformedLocaleException;
 import com.ibm.icu.util.LocaleData;
 import com.ibm.icu.util.LocalePriorityList;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.ULocale.Builder;
 import com.ibm.icu.util.ULocale.Category;
 import com.ibm.icu.util.ULocale.Minimize;
 import com.ibm.icu.util.UResourceBundle;
@@ -3548,7 +3547,7 @@ public class ULocaleTest extends CoreTestFmwk {
             int errorIdx = ((Integer) langtag_to_locale[i][2]).intValue();
 
             try {
-                Builder bld = new Builder();
+                ULocale.Builder bld = new ULocale.Builder();
                 bld.setLanguageTag(tag);
                 ULocale loc = bld.build();
 
@@ -4325,11 +4324,11 @@ public class ULocaleTest extends CoreTestFmwk {
 
         ULocale root_new = new ULocale(root);
         ULocale root_tag = ULocale.forLanguageTag(root);
-        ULocale root_build = new Builder().setLanguageTag(root).build();
+        ULocale root_build = new ULocale.Builder().setLanguageTag(root).build();
 
         ULocale und_new = new ULocale(und);
         ULocale und_tag = ULocale.forLanguageTag(und);
-        ULocale und_build = new Builder().setLanguageTag(und).build();
+        ULocale und_build = new ULocale.Builder().setLanguageTag(und).build();
 
         Assert.assertEquals(empty, empty_new.getName());
         Assert.assertEquals(empty, root_new.getName());
@@ -4397,7 +4396,7 @@ public class ULocaleTest extends CoreTestFmwk {
         ULocale locale_new = new ULocale(id);
         ULocale locale_legacy = new ULocale(tag);
         ULocale locale_tag = ULocale.forLanguageTag(tag);
-        ULocale locale_build = new Builder().setScript(script).build();
+        ULocale locale_build = new ULocale.Builder().setScript(script).build();
 
         Assert.assertEquals(id, locale_new.getName());
         Assert.assertEquals(id, locale_legacy.getName());
@@ -4432,7 +4431,7 @@ public class ULocaleTest extends CoreTestFmwk {
         ULocale locale_new = new ULocale(id);
         ULocale locale_legacy = new ULocale(tag);
         ULocale locale_tag = ULocale.forLanguageTag(tag);
-        ULocale locale_build = new Builder().setRegion(region).build();
+        ULocale locale_build = new ULocale.Builder().setRegion(region).build();
 
         Assert.assertEquals(id, locale_new.getName());
         Assert.assertEquals(id, locale_legacy.getName());

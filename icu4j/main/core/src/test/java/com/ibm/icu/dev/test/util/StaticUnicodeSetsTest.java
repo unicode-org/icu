@@ -5,7 +5,7 @@ package com.ibm.icu.dev.test.util;
 import static com.ibm.icu.impl.StaticUnicodeSets.get;
 import static org.junit.Assert.assertTrue;
 
-import com.ibm.icu.impl.StaticUnicodeSets.Key;
+import com.ibm.icu.impl.StaticUnicodeSets;
 import org.junit.Test;
 
 /**
@@ -17,14 +17,14 @@ public class StaticUnicodeSetsTest {
 
     @Test
     public void testFrozen() {
-        for (Key key : Key.values()) {
+        for (StaticUnicodeSets.Key key : StaticUnicodeSets.Key.values()) {
             assertTrue(get(key).isFrozen());
         }
     }
 
     @Test
     public void testNonEmpty() {
-        for (Key key : Key.values()) {
+        for (StaticUnicodeSets.Key key : StaticUnicodeSets.Key.values()) {
             // NOTE: No key EMPTY in Java
             assertTrue(get(key).isFrozen());
         }

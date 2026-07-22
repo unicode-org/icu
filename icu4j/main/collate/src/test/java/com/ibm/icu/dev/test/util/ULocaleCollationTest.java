@@ -15,7 +15,6 @@ package com.ibm.icu.dev.test.util;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.DisplayContext;
-import com.ibm.icu.text.DisplayContext.Type;
 import com.ibm.icu.text.LocaleDisplayNames;
 import com.ibm.icu.text.LocaleDisplayNames.UiListItem;
 import com.ibm.icu.util.IllformedLocaleException;
@@ -324,7 +323,7 @@ public class ULocaleCollationTest extends TestFmwk {
             LocaleDisplayNames names =
                     LocaleDisplayNames.getInstance(
                             french, DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU);
-            for (Type type : DisplayContext.Type.values()) {
+            for (DisplayContext.Type type : DisplayContext.Type.values()) {
                 logln("Contexts: " + names.getContext(type).toString());
             }
             Collator collator = Collator.getInstance(french);

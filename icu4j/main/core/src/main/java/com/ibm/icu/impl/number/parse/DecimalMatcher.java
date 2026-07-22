@@ -3,7 +3,6 @@
 package com.ibm.icu.impl.number.parse;
 
 import com.ibm.icu.impl.StaticUnicodeSets;
-import com.ibm.icu.impl.StaticUnicodeSets.Key;
 import com.ibm.icu.impl.StringSegment;
 import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
 import com.ibm.icu.impl.number.Grouper;
@@ -65,14 +64,19 @@ public class DecimalMatcher implements NumberParseMatcher {
         // like an ignorable grouping separator, and we want it to be excluded.
         // We keep the public behavior when strictParse is false, but when it is true
         // we restrict grouping separators to the smaller set of equivalents.
-        Key groupingKey =
+        StaticUnicodeSets.Key groupingKey =
                 StaticUnicodeSets.chooseFrom(
                         groupingSeparator,
-                        strictSeparators ? Key.STRICT_COMMA : Key.ALL_SEPARATORS,
-                        strictSeparators ? Key.STRICT_PERIOD : Key.ALL_SEPARATORS);
+                        strictSeparators
+                                ? StaticUnicodeSets.Key.STRICT_COMMA
+                                : StaticUnicodeSets.Key.ALL_SEPARATORS,
+                        strictSeparators
+                                ? StaticUnicodeSets.Key.STRICT_PERIOD
+                                : StaticUnicodeSets.Key.ALL_SEPARATORS);
         if (groupingKey == null) {
             groupingKey =
-                    StaticUnicodeSets.chooseFrom(groupingSeparator, Key.OTHER_GROUPING_SEPARATORS);
+                    StaticUnicodeSets.chooseFrom(
+                            groupingSeparator, StaticUnicodeSets.Key.OTHER_GROUPING_SEPARATORS);
         }
         if (groupingKey != null) {
             // Attempt to find separators in the static cache
@@ -83,11 +87,15 @@ public class DecimalMatcher implements NumberParseMatcher {
             groupingUniSet = UnicodeSet.EMPTY;
         }
 
-        Key decimalKey =
+        StaticUnicodeSets.Key decimalKey =
                 StaticUnicodeSets.chooseFrom(
                         decimalSeparator,
-                        strictSeparators ? Key.STRICT_COMMA : Key.COMMA,
-                        strictSeparators ? Key.STRICT_PERIOD : Key.PERIOD);
+                        strictSeparators
+                                ? StaticUnicodeSets.Key.STRICT_COMMA
+                                : StaticUnicodeSets.Key.COMMA,
+                        strictSeparators
+                                ? StaticUnicodeSets.Key.STRICT_PERIOD
+                                : StaticUnicodeSets.Key.PERIOD);
         if (decimalKey != null) {
             decimalUniSet = StaticUnicodeSets.get(decimalKey);
         } else if (!decimalSeparator.isEmpty()) {
@@ -102,8 +110,8 @@ public class DecimalMatcher implements NumberParseMatcher {
             leadSet =
                     StaticUnicodeSets.get(
                             strictSeparators
-                                    ? Key.DIGITS_OR_ALL_SEPARATORS
-                                    : Key.DIGITS_OR_STRICT_ALL_SEPARATORS);
+                                    ? StaticUnicodeSets.Key.DIGITS_OR_ALL_SEPARATORS
+                                    : StaticUnicodeSets.Key.DIGITS_OR_STRICT_ALL_SEPARATORS);
         } else {
             separatorSet = new UnicodeSet().addAll(groupingUniSet).addAll(decimalUniSet).freeze();
             leadSet = null;

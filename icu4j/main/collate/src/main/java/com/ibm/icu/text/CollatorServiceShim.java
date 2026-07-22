@@ -13,7 +13,6 @@ import com.ibm.icu.impl.ICULocaleService;
 import com.ibm.icu.impl.ICULocaleService.LocaleKeyFactory;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.ICUService;
-import com.ibm.icu.impl.ICUService.Factory;
 import com.ibm.icu.impl.coll.CollationLoader;
 import com.ibm.icu.impl.coll.CollationTailoring;
 import com.ibm.icu.text.Collator.CollatorFactory;
@@ -87,7 +86,7 @@ final class CollatorServiceShim extends Collator.ServiceShim {
 
     @Override
     boolean unregister(Object registryKey) {
-        return service.unregisterFactory((Factory) registryKey);
+        return service.unregisterFactory((ICUService.Factory) registryKey);
     }
 
     @Override

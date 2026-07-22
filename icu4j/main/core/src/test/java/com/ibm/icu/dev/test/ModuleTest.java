@@ -10,7 +10,6 @@ package com.ibm.icu.dev.test;
 
 import com.ibm.icu.dev.test.TestDataModule.DataMap;
 import com.ibm.icu.dev.test.TestDataModule.DataModuleFormatError;
-import com.ibm.icu.dev.test.TestDataModule.Factory;
 import com.ibm.icu.dev.test.TestDataModule.TestData;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -42,7 +41,7 @@ public class ModuleTest {
      */
     public static TestDataModule loadTestData(String baseName, String testName)
             throws DataModuleFormatError {
-        return Factory.get(baseName, testName);
+        return TestDataModule.Factory.get(baseName, testName);
     }
 
     static TestData openTestData(TestDataModule module, String name) throws DataModuleFormatError {

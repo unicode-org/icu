@@ -14,8 +14,6 @@ import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.impl.UResource;
-import com.ibm.icu.impl.UResource.Key;
-import com.ibm.icu.impl.UResource.Value;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.Freezable;
 import com.ibm.icu.util.ICUCloneNotSupportedException;
@@ -29,7 +27,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.MissingResourceException;
 import java.util.Objects;
 import java.util.Set;
@@ -393,7 +390,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
         }
 
         @Override
-        public void put(Key key, Value value, boolean noFallback) {
+        public void put(UResource.Key key, UResource.Value value, boolean noFallback) {
             // Iterate over all the calendar entries and only pick the 'intervalFormats' table.
             UResource.Table dateIntervalData = value.getTable();
             for (int i = 0; dateIntervalData.getKeyAndValue(i, key, value); i++) {
@@ -422,7 +419,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
         }
 
         /** Processes the patterns for a skeleton table. */
-        public void processSkeletonTable(Key key, Value value) {
+        public void processSkeletonTable(UResource.Key key, UResource.Value value) {
             // Iterate over all the patterns in the current skeleton table
             String currentSkeleton = key.toString();
             UResource.Table patternData = value.getTable();
@@ -515,7 +512,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
          * @param intervalPattern
          */
         private void setIntervalPatternIfAbsent(
-                String currentSkeleton, String lrgDiffCalUnit, Value intervalPattern) {
+                String currentSkeleton, String lrgDiffCalUnit, UResource.Value intervalPattern) {
             // Check if the pattern has already been stored on the data structure.
             Map<String, PatternInfo> patternsOfOneSkeleton =
                     dateIntervalInfo.fIntervalPatterns.get(currentSkeleton);
@@ -910,11 +907,11 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
     private static Map<String, Map<String, PatternInfo>> cloneIntervalPatterns(
             Map<String, Map<String, PatternInfo>> patterns) {
         Map<String, Map<String, PatternInfo>> result = new HashMap<>();
-        for (Entry<String, Map<String, PatternInfo>> skeletonEntry : patterns.entrySet()) {
+        for (Map.Entry<String, Map<String, PatternInfo>> skeletonEntry : patterns.entrySet()) {
             String skeleton = skeletonEntry.getKey();
             Map<String, PatternInfo> patternsOfOneSkeleton = skeletonEntry.getValue();
             Map<String, PatternInfo> oneSetPtn = new HashMap<>();
-            for (Entry<String, PatternInfo> calEntry : patternsOfOneSkeleton.entrySet()) {
+            for (Map.Entry<String, PatternInfo> calEntry : patternsOfOneSkeleton.entrySet()) {
                 String calField = calEntry.getKey();
                 PatternInfo value = calEntry.getValue();
                 oneSetPtn.put(calField, value);
@@ -1116,7 +1113,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
     @Deprecated
     public Map<String, Set<String>> getPatterns() {
         LinkedHashMap<String, Set<String>> result = new LinkedHashMap<>();
-        for (Entry<String, Map<String, PatternInfo>> entry : fIntervalPatterns.entrySet()) {
+        for (Map.Entry<String, Map<String, PatternInfo>> entry : fIntervalPatterns.entrySet()) {
             result.put(entry.getKey(), new LinkedHashSet<>(entry.getValue().keySet()));
         }
         return result;
@@ -1131,7 +1128,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
     @Deprecated
     public Map<String, Map<String, PatternInfo>> getRawPatterns() {
         LinkedHashMap<String, Map<String, PatternInfo>> result = new LinkedHashMap<>();
-        for (Entry<String, Map<String, PatternInfo>> entry : fIntervalPatterns.entrySet()) {
+        for (Map.Entry<String, Map<String, PatternInfo>> entry : fIntervalPatterns.entrySet()) {
             result.put(entry.getKey(), new LinkedHashMap<>(entry.getValue()));
         }
         return result;

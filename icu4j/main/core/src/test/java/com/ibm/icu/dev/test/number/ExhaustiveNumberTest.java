@@ -5,7 +5,7 @@ package com.ibm.icu.dev.test.number;
 import static com.ibm.icu.impl.StaticUnicodeSets.get;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
-import com.ibm.icu.impl.StaticUnicodeSets.Key;
+import com.ibm.icu.impl.StaticUnicodeSets;
 import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.number.NumberFormatter;
@@ -40,20 +40,27 @@ public class ExhaustiveNumberTest extends CoreTestFmwk {
         // it also makes the coverage logic cheaper.
         assertTrue(
                 "COMMA should be superset of STRICT_COMMA",
-                get(Key.COMMA).containsAll(get(Key.STRICT_COMMA)));
+                get(StaticUnicodeSets.Key.COMMA)
+                        .containsAll(get(StaticUnicodeSets.Key.STRICT_COMMA)));
         assertTrue(
                 "PERIOD should be superset of STRICT_PERIOD",
-                get(Key.PERIOD).containsAll(get(Key.STRICT_PERIOD)));
+                get(StaticUnicodeSets.Key.PERIOD)
+                        .containsAll(get(StaticUnicodeSets.Key.STRICT_PERIOD)));
 
         UnicodeSet decimals =
-                get(Key.STRICT_COMMA).cloneAsThawed().addAll(get(Key.STRICT_PERIOD)).freeze();
+                get(StaticUnicodeSets.Key.STRICT_COMMA)
+                        .cloneAsThawed()
+                        .addAll(get(StaticUnicodeSets.Key.STRICT_PERIOD))
+                        .freeze();
         UnicodeSet grouping =
-                decimals.cloneAsThawed().addAll(get(Key.OTHER_GROUPING_SEPARATORS)).freeze();
-        UnicodeSet plusSign = get(Key.PLUS_SIGN);
-        UnicodeSet minusSign = get(Key.MINUS_SIGN);
-        UnicodeSet percent = get(Key.PERCENT_SIGN);
-        UnicodeSet permille = get(Key.PERMILLE_SIGN);
-        UnicodeSet infinity = get(Key.INFINITY_SIGN);
+                decimals.cloneAsThawed()
+                        .addAll(get(StaticUnicodeSets.Key.OTHER_GROUPING_SEPARATORS))
+                        .freeze();
+        UnicodeSet plusSign = get(StaticUnicodeSets.Key.PLUS_SIGN);
+        UnicodeSet minusSign = get(StaticUnicodeSets.Key.MINUS_SIGN);
+        UnicodeSet percent = get(StaticUnicodeSets.Key.PERCENT_SIGN);
+        UnicodeSet permille = get(StaticUnicodeSets.Key.PERMILLE_SIGN);
+        UnicodeSet infinity = get(StaticUnicodeSets.Key.INFINITY_SIGN);
 
         for (ULocale locale : ULocale.getAvailableLocales()) {
             DecimalFormatSymbols dfs = DecimalFormatSymbols.getInstance(locale);
