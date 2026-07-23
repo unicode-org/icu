@@ -8,8 +8,10 @@
  */
 package com.ibm.icu.dev.test.lang;
 
-import static com.ibm.icu.dev.test.lang.UnicodeSetTest.LookupSymbolTableTestCase.*;
-import static com.ibm.icu.dev.test.lang.UnicodeSetTest.SymbolTableTestCase.*;
+import static com.ibm.icu.dev.test.lang.UnicodeSetTest.LookupSymbolTableTestCase.newVariable;
+import static com.ibm.icu.dev.test.lang.UnicodeSetTest.SymbolTableTestCase.error;
+import static com.ibm.icu.dev.test.lang.UnicodeSetTest.SymbolTableTestCase.success;
+import static com.ibm.icu.dev.test.lang.UnicodeSetTest.SymbolTableTestCase.variable;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.TestFmwk;

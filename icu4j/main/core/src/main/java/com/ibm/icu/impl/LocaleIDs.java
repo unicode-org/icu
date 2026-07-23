@@ -8,8 +8,6 @@
  */
 package com.ibm.icu.impl;
 
-import java.util.MissingResourceException;
-
 /**
  * Utilities for mapping between old and new language, country, and other locale ID related names.
  */
@@ -43,8 +41,8 @@ public class LocaleIDs {
      * empty, returns the empty string. Otherwise, returns an uppercase ISO 3166 3-letter country
      * code.
      *
-     * @exception MissingResourceException Throws MissingResourceException if the three-letter
-     *     country abbreviation is not available for this locale.
+     * @exception java.util.MissingResourceException Throws MissingResourceException if the
+     *     three-letter country abbreviation is not available for this locale.
      * @stable ICU 3.0
      */
     public static String getISO3Country(String country) {
@@ -67,8 +65,8 @@ public class LocaleIDs {
      * codes can be found on-line at <a href="ftp://dkuug.dk/i18n/iso-639-2.txt"><code>
      * ftp://dkuug.dk/i18n/iso-639-2.txt</code></a>
      *
-     * @exception MissingResourceException Throws MissingResourceException if the three-letter
-     *     language abbreviation is not available for this locale.
+     * @exception java.util.MissingResourceException Throws MissingResourceException if the
+     *     three-letter language abbreviation is not available for this locale.
      * @stable ICU 3.0
      */
     public static String getISO3Language(String language) {

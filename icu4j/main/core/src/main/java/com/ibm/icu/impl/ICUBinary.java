@@ -23,7 +23,6 @@ import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.MissingResourceException;
 import java.util.Set;
 
 public final class ICUBinary {
@@ -441,7 +440,8 @@ public final class ICUBinary {
      *
      * @param itemPath Relative ICU data item path, for example "root.res" or "coll/ucadata.icu".
      * @return The data as a read-only ByteBuffer.
-     * @throws MissingResourceException if required==true and the resource could not be found
+     * @throws java.util.MissingResourceException if required==true and the resource could not be
+     *     found
      */
     public static ByteBuffer getRequiredData(String itemPath) {
         return getData(null, null, itemPath, true);
@@ -458,7 +458,8 @@ public final class ICUBinary {
      *     throws an exception (required).
      * @return The data as a read-only ByteBuffer, or null if required==false and the resource could
      *     not be found.
-     * @throws MissingResourceException if required==true and the resource could not be found
+     * @throws java.util.MissingResourceException if required==true and the resource could not be
+     *     found
      */
     private static ByteBuffer getData(
             ClassLoader loader, String resourceName, String itemPath, boolean required) {

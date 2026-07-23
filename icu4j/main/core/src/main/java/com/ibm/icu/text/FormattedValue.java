@@ -2,7 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.text;
 
-import com.ibm.icu.util.ICUUncheckedIOException;
 import java.text.AttributedCharacterIterator;
 
 /**
@@ -28,11 +27,11 @@ public interface FormattedValue extends CharSequence {
      * Appends the formatted string to an Appendable.
      *
      * <p>If an IOException occurs when appending to the Appendable, an unchecked {@link
-     * ICUUncheckedIOException} is thrown instead.
+     * com.ibm.icu.util.ICUUncheckedIOException} is thrown instead.
      *
      * @param appendable The Appendable to which to append the string output.
      * @return The same Appendable, for chaining.
-     * @throws ICUUncheckedIOException if the Appendable throws IOException
+     * @throws com.ibm.icu.util.ICUUncheckedIOException if the Appendable throws IOException
      * @stable ICU 64
      */
     public <A extends Appendable> A appendTo(A appendable);

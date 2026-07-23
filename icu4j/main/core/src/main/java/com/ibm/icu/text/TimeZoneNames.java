@@ -12,7 +12,6 @@ import com.ibm.icu.impl.ICUConfig;
 import com.ibm.icu.impl.SoftCache;
 import com.ibm.icu.impl.TZDBTimeZoneNames;
 import com.ibm.icu.impl.TimeZoneNamesImpl;
-import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 import java.io.Serializable;
 import java.util.Collection;
@@ -53,8 +52,8 @@ import java.util.Set;
  * <p>The methods in this class assume that time zone IDs are already canonicalized. For example,
  * you may not get proper result returned by a method with time zone ID
  * "America/Indiana/Indianapolis", because it's not a canonical time zone ID (the canonical time
- * zone ID for the time zone is "America/Indianapolis". See {@link TimeZone#getCanonicalID(String)}
- * about ICU canonical time zone IDs.
+ * zone ID for the time zone is "America/Indianapolis". See {@link
+ * com.ibm.icu.util.TimeZone#getCanonicalID(String)} about ICU canonical time zone IDs.
  *
  * <p>In CLDR, most of time zone display names except location names are provided through meta
  * zones. But a time zone may have a specific name that is not shared with other time zones.

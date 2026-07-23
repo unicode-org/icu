@@ -45,7 +45,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.MissingResourceException;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
@@ -2158,8 +2157,8 @@ public final class ULocale implements Serializable, Comparable<ULocale>, Cloneab
      * code. The ISO 639-2 language codes can be found on-line at <a
      * href="ftp://dkuug.dk/i18n/iso-639-2.txt"><code>ftp://dkuug.dk/i18n/iso-639-2.txt</code></a>
      *
-     * @exception MissingResourceException Throws MissingResourceException if the three-letter
-     *     language abbreviation is not available for this locale.
+     * @exception java.util.MissingResourceException Throws MissingResourceException if the
+     *     three-letter language abbreviation is not available for this locale.
      * @stable ICU 3.0
      */
     public String getISO3Language() {
@@ -2172,8 +2171,8 @@ public final class ULocale implements Serializable, Comparable<ULocale>, Cloneab
      * language code. The ISO 639-2 language codes can be found on-line at <a
      * href="ftp://dkuug.dk/i18n/iso-639-2.txt"><code>ftp://dkuug.dk/i18n/iso-639-2.txt</code></a>
      *
-     * @exception MissingResourceException Throws MissingResourceException if the three-letter
-     *     language abbreviation is not available for this locale.
+     * @exception java.util.MissingResourceException Throws MissingResourceException if the
+     *     three-letter language abbreviation is not available for this locale.
      * @stable ICU 3.0
      */
     public static String getISO3Language(String localeID) {
@@ -2185,8 +2184,8 @@ public final class ULocale implements Serializable, Comparable<ULocale>, Cloneab
      * specify a country, returns the empty string. Otherwise, returns an uppercase ISO 3166
      * 3-letter country code.
      *
-     * @exception MissingResourceException Throws MissingResourceException if the three-letter
-     *     country abbreviation is not available for this locale.
+     * @exception java.util.MissingResourceException Throws MissingResourceException if the
+     *     three-letter country abbreviation is not available for this locale.
      * @stable ICU 3.0
      */
     public String getISO3Country() {
@@ -2198,8 +2197,8 @@ public final class ULocale implements Serializable, Comparable<ULocale>, Cloneab
      * doesn't specify a country, returns the empty string. Otherwise, returns an uppercase ISO 3166
      * 3-letter country code.
      *
-     * @exception MissingResourceException Throws MissingResourceException if the three-letter
-     *     country abbreviation is not available for this locale.
+     * @exception java.util.MissingResourceException Throws MissingResourceException if the
+     *     three-letter country abbreviation is not available for this locale.
      * @stable ICU 3.0
      */
     public static String getISO3Country(String localeID) {

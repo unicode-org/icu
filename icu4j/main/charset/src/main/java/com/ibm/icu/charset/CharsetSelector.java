@@ -24,8 +24,6 @@ import com.ibm.icu.impl.PropsVectors;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 import java.nio.charset.Charset;
-import java.nio.charset.IllegalCharsetNameException;
-import java.nio.charset.UnsupportedCharsetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -147,9 +145,9 @@ public final class CharsetSelector {
      *     also fallbacks, e.g. CharsetICU.ROUNDTRIP_SET. See CharsetICU.java for the constants that
      *     are currently supported.
      * @throws IllegalArgumentException if the parameters is invalid.
-     * @throws IllegalCharsetNameException If the given charset name is illegal.
-     * @throws UnsupportedCharsetException If no support for the named charset is available in this
-     *     instance of the Java virtual machine.
+     * @throws java.nio.charset.IllegalCharsetNameException If the given charset name is illegal.
+     * @throws java.nio.charset.UnsupportedCharsetException If no support for the named charset is
+     *     available in this instance of the Java virtual machine.
      * @stable ICU 4.2
      */
     public CharsetSelector(

@@ -17,7 +17,6 @@ import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
-import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -726,7 +725,7 @@ public class DecimalFormatProperties implements Cloneable, Serializable {
      * PARSING: Whether to require that the presence of decimal point matches the pattern. If a
      * decimal point is not present, but the pattern contained a decimal point, parse will not
      * succeed: null will be returned from <code>parse()</code>, and an error index will be set in
-     * the {@link ParsePosition}.
+     * the {@link java.text.ParsePosition}.
      *
      * @param decimalPatternMatchRequired true to set an error if decimal is not present
      * @return The property bag, for chaining.

@@ -4,7 +4,6 @@ package com.ibm.icu.number;
 
 import com.ibm.icu.impl.number.CompactData;
 import com.ibm.icu.impl.number.CompactData.CompactType;
-import com.ibm.icu.impl.number.DecimalFormatProperties;
 import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.impl.number.MicroProps;
 import com.ibm.icu.impl.number.MicroPropsGenerator;
@@ -41,7 +40,7 @@ public class CompactNotation extends Notation {
      *
      * @internal
      * @deprecated This API is ICU internal only.
-     * @see DecimalFormatProperties#setCompactCustomData
+     * @see com.ibm.icu.impl.number.DecimalFormatProperties#setCompactCustomData
      */
     @Deprecated
     public static CompactNotation forCustomData(

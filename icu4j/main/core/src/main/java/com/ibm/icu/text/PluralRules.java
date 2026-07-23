@@ -16,7 +16,6 @@ import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
 import com.ibm.icu.impl.number.range.StandardPluralRanges;
 import com.ibm.icu.number.FormattedNumber;
 import com.ibm.icu.number.FormattedNumberRange;
-import com.ibm.icu.number.NumberFormatter;
 import com.ibm.icu.util.Output;
 import com.ibm.icu.util.ULocale;
 import java.io.IOException;
@@ -2222,7 +2221,8 @@ public class PluralRules implements Serializable {
      * Given a formatted number, returns the keyword of the first rule that applies to the number.
      *
      * <p>A FormattedNumber allows you to specify an exponent or trailing zeros, which can affect
-     * the plural category. To get a FormattedNumber, see {@link NumberFormatter}.
+     * the plural category. To get a FormattedNumber, see {@link
+     * com.ibm.icu.number.NumberFormatter}.
      *
      * @param number The number for which the rule has to be determined.
      * @return The keyword of the selected rule.

@@ -16,7 +16,6 @@ import com.ibm.icu.impl.number.PatternStringParser;
 import com.ibm.icu.impl.number.PatternStringUtils;
 import com.ibm.icu.impl.number.parse.NumberParserImpl;
 import com.ibm.icu.impl.number.parse.ParsedNumber;
-import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.math.MathContext;
 import com.ibm.icu.number.FormattedNumber;
@@ -27,7 +26,6 @@ import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Currency.CurrencyUsage;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.ULocale.Category;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -193,10 +191,10 @@ import java.text.ParsePosition;
  * validation. The default is lenient mode. For more information, see {@link #setParseStrict}.
  *
  * <p><code>DecimalFormat</code> parses all Unicode characters that represent decimal digits, as
- * defined by {@link UCharacter#digit}. In addition, <code>DecimalFormat</code> also recognizes as
- * digits the ten consecutive characters starting with the localized zero digit defined in the
- * {@link DecimalFormatSymbols} object. During formatting, the {@link DecimalFormatSymbols}-based
- * digits are output.
+ * defined by {@link com.ibm.icu.lang.UCharacter#digit}. In addition, <code>DecimalFormat</code>
+ * also recognizes as digits the ten consecutive characters starting with the localized zero digit
+ * defined in the {@link DecimalFormatSymbols} object. During formatting, the {@link
+ * DecimalFormatSymbols}-based digits are output.
  *
  * <p>Grouping separators are ignored in lenient mode (default). In strict mode, grouping separators
  * must match the locale-specified grouping sizes.
@@ -308,7 +306,7 @@ public class DecimalFormat extends NumberFormat implements Cloneable {
      * @see NumberFormat#getNumberInstance
      * @see NumberFormat#getCurrencyInstance
      * @see NumberFormat#getPercentInstance
-     * @see Category#FORMAT
+     * @see ULocale.Category#FORMAT
      * @stable ICU 2.0
      */
     public DecimalFormat() {
@@ -340,7 +338,7 @@ public class DecimalFormat extends NumberFormat implements Cloneable {
      * @see NumberFormat#getNumberInstance
      * @see NumberFormat#getCurrencyInstance
      * @see NumberFormat#getPercentInstance
-     * @see Category#FORMAT
+     * @see ULocale.Category#FORMAT
      * @stable ICU 2.0
      */
     public DecimalFormat(String pattern) {
@@ -2406,7 +2404,7 @@ public class DecimalFormat extends NumberFormat implements Cloneable {
     /**
      * {@icu} Specifies whether parsing should require cases to match in affixes, exponent
      * separators, and currency codes. Case mapping is performed for each code point using {@link
-     * UCharacter#foldCase}.
+     * com.ibm.icu.lang.UCharacter#foldCase}.
      *
      * @param value true to force case (uppercase/lowercase) to match when parsing; false to ignore
      *     case and perform case folding.

@@ -9,11 +9,8 @@ import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
 import com.ibm.icu.impl.number.LocalizedNumberFormatterAsFormat;
 import com.ibm.icu.impl.number.MacroProps;
 import com.ibm.icu.impl.number.MicroProps;
-import com.ibm.icu.math.BigDecimal;
-import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
-import java.math.BigInteger;
 import java.text.Format;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLongFieldUpdater;
@@ -68,8 +65,9 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
     }
 
     /**
-     * Format the given {@link BigInteger}, {@link BigDecimal}, or other {@link Number} to a string
-     * using the settings specified in the NumberFormatter fluent setting chain.
+     * Format the given {@link java.math.BigInteger}, {@link com.ibm.icu.math.BigDecimal}, or other
+     * {@link Number} to a string using the settings specified in the NumberFormatter fluent setting
+     * chain.
      *
      * @param input The number to format.
      * @return A FormattedNumber object; call .toString() to get the string.
@@ -81,8 +79,8 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
     }
 
     /**
-     * Format the given {@link Measure} or {@link CurrencyAmount} to a string using the settings
-     * specified in the NumberFormatter fluent setting chain.
+     * Format the given {@link Measure} or {@link com.ibm.icu.util.CurrencyAmount} to a string using
+     * the settings specified in the NumberFormatter fluent setting chain.
      *
      * <p>The unit specified here overrides any unit that may have been specified in the setter
      * chain. This method is intended for cases when each input to the number formatter has a

@@ -2,12 +2,10 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.util;
 
-import com.ibm.icu.number.NumberFormatter;
-
 /**
  * Dimensionless unit for percent and permille.
  *
- * @see NumberFormatter
+ * @see com.ibm.icu.number.NumberFormatter
  * @stable ICU 68
  */
 public final class NoUnit {

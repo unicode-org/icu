@@ -10,7 +10,6 @@ package com.ibm.icu.text;
 
 import com.ibm.icu.impl.ICUConfig;
 import com.ibm.icu.lang.UScript;
-import com.ibm.icu.util.IllformedLocaleException;
 import com.ibm.icu.util.ULocale;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -294,7 +293,8 @@ public abstract class LocaleDisplayNames {
      * @param localeSet a list of locales to present in a UI list. The casing uses the settings in
      *     the LocaleDisplayNames instance.
      * @return an ordered list of UiListItems.
-     * @throws IllformedLocaleException if any of the locales in localeSet are malformed.
+     * @throws com.ibm.icu.util.IllformedLocaleException if any of the locales in localeSet are
+     *     malformed.
      * @stable ICU 55
      */
     public List<UiListItem> getUiList(
@@ -310,7 +310,8 @@ public abstract class LocaleDisplayNames {
      * @param localeSet a list of locales to present in a UI list. The casing uses the settings in
      *     the LocaleDisplayNames instance.
      * @return an ordered list of UiListItems.
-     * @throws IllformedLocaleException if any of the locales in localeSet are malformed.
+     * @throws com.ibm.icu.util.IllformedLocaleException if any of the locales in localeSet are
+     *     malformed.
      * @stable ICU 55
      */
     public abstract List<UiListItem> getUiListCompareWholeItems(

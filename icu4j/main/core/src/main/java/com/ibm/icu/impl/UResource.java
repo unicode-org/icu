@@ -9,7 +9,6 @@
 package com.ibm.icu.impl;
 
 import com.ibm.icu.util.UResourceBundle;
-import com.ibm.icu.util.UResourceTypeMismatchException;
 import java.nio.ByteBuffer;
 
 // Class UResource is named consistently with the public class UResourceBundle,
@@ -303,46 +302,50 @@ public final class UResource {
 
         /**
          * @see UResourceBundle#getString()
-         * @throws UResourceTypeMismatchException if this is not a string resource
+         * @throws com.ibm.icu.util.UResourceTypeMismatchException if this is not a string resource
          */
         public abstract String getString();
 
         /**
-         * @throws UResourceTypeMismatchException if this is not an alias resource
+         * @throws com.ibm.icu.util.UResourceTypeMismatchException if this is not an alias resource
          */
         public abstract String getAliasString();
 
         /**
          * @see UResourceBundle#getInt()
-         * @throws UResourceTypeMismatchException if this is not an integer resource
+         * @throws com.ibm.icu.util.UResourceTypeMismatchException if this is not an integer
+         *     resource
          */
         public abstract int getInt();
 
         /**
          * @see UResourceBundle#getUInt()
-         * @throws UResourceTypeMismatchException if this is not an integer resource
+         * @throws com.ibm.icu.util.UResourceTypeMismatchException if this is not an integer
+         *     resource
          */
         public abstract int getUInt();
 
         /**
          * @see UResourceBundle#getIntVector()
-         * @throws UResourceTypeMismatchException if this is not an intvector resource
+         * @throws com.ibm.icu.util.UResourceTypeMismatchException if this is not an intvector
+         *     resource
          */
         public abstract int[] getIntVector();
 
         /**
          * @see UResourceBundle#getBinary()
-         * @throws UResourceTypeMismatchException if this is not a binary-blob resource
+         * @throws com.ibm.icu.util.UResourceTypeMismatchException if this is not a binary-blob
+         *     resource
          */
         public abstract ByteBuffer getBinary();
 
         /**
-         * @throws UResourceTypeMismatchException if this is not an array resource
+         * @throws com.ibm.icu.util.UResourceTypeMismatchException if this is not an array resource
          */
         public abstract Array getArray();
 
         /**
-         * @throws UResourceTypeMismatchException if this is not a table resource
+         * @throws com.ibm.icu.util.UResourceTypeMismatchException if this is not a table resource
          */
         public abstract Table getTable();
 
@@ -358,8 +361,8 @@ public final class UResource {
         /**
          * @return the array of strings in this array resource.
          * @see UResourceBundle#getStringArray()
-         * @throws UResourceTypeMismatchException if this is not an array resource or if any of the
-         *     array items is not a string
+         * @throws com.ibm.icu.util.UResourceTypeMismatchException if this is not an array resource
+         *     or if any of the array items is not a string
          */
         public abstract String[] getStringArray();
 
@@ -376,8 +379,8 @@ public final class UResource {
          *
          * @see #getString()
          * @see #getStringArray()
-         * @throws UResourceTypeMismatchException if this is neither a string resource nor an array
-         *     resource containing strings
+         * @throws com.ibm.icu.util.UResourceTypeMismatchException if this is neither a string
+         *     resource nor an array resource containing strings
          */
         public abstract String[] getStringArrayOrStringAsArray();
 
@@ -394,8 +397,8 @@ public final class UResource {
          *
          * @see #getString()
          * @see #getStringArray()
-         * @throws UResourceTypeMismatchException if this is neither a string resource nor an array
-         *     resource containing strings
+         * @throws com.ibm.icu.util.UResourceTypeMismatchException if this is neither a string
+         *     resource nor an array resource containing strings
          */
         public abstract String getStringOrFirstOfArray();
 

@@ -5,7 +5,6 @@ package com.ibm.icu.impl.number;
 import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.number.Modifier.Signum;
 import com.ibm.icu.text.PluralRules;
-import com.ibm.icu.text.UFieldPosition;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.text.FieldPosition;
@@ -241,11 +240,11 @@ public interface DecimalQuantity extends PluralRules.IFixedDecimal {
     public long getPositionFingerprint();
 
     /**
-     * If the given {@link FieldPosition} is a {@link UFieldPosition}, populates it with the
-     * fraction length and fraction long value. If the argument is not a {@link UFieldPosition},
-     * nothing happens.
+     * If the given {@link FieldPosition} is a {@link com.ibm.icu.text.UFieldPosition}, populates it
+     * with the fraction length and fraction long value. If the argument is not a {@link
+     * com.ibm.icu.text.UFieldPosition}, nothing happens.
      *
-     * @param fp The {@link UFieldPosition} to populate.
+     * @param fp The {@link com.ibm.icu.text.UFieldPosition} to populate.
      */
     public void populateUFieldPosition(FieldPosition fp);
 }

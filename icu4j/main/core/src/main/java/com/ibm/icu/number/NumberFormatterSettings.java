@@ -12,10 +12,7 @@ import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.DisplayOptions;
 import com.ibm.icu.text.DisplayOptions.GrammaticalCase;
 import com.ibm.icu.text.NumberingSystem;
-import com.ibm.icu.util.Currency;
-import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
-import com.ibm.icu.util.NoUnit;
 import com.ibm.icu.util.ULocale;
 import java.math.RoundingMode;
 
@@ -99,10 +96,11 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
      *   <li>Percent: "12.3%"
      * </ul>
      *
-     * <p><strong>Note:</strong> The unit can also be specified by passing a {@link Measure} to
-     * {@link LocalizedNumberFormatter#format(Measure)}. Units specified via the format method take
-     * precedence over units specified here. This setter is designed for situations when the unit is
-     * constant for the duration of the number formatting process.
+     * <p><strong>Note:</strong> The unit can also be specified by passing a {@link
+     * com.ibm.icu.util.Measure} to {@link
+     * LocalizedNumberFormatter#format(com.ibm.icu.util.Measure)}. Units specified via the format
+     * method take precedence over units specified here. This setter is designed for situations when
+     * the unit is constant for the duration of the number formatting process.
      *
      * <p>All units will be properly localized with locale data, and all units are compatible with
      * notation styles, rounding strategies, and other number formatter settings.
@@ -127,7 +125,8 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
      *
      * <p>See {@link #perUnit} for information on how to format strings like "5 meters per second".
      *
-     * <p>The default is to render without units (equivalent to {@link NoUnit#BASE}).
+     * <p>The default is to render without units (equivalent to {@link
+     * com.ibm.icu.util.NoUnit#BASE}).
      *
      * <p>If the input usage is correctly set the output unit <b>will change</b> according to {@code
      * usage}, {@code locale} and {@code unit} value.
@@ -135,8 +134,8 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
      * @param unit The unit to render.
      * @return The fluent chain.
      * @see MeasureUnit
-     * @see Currency
-     * @see NoUnit
+     * @see com.ibm.icu.util.Currency
+     * @see com.ibm.icu.util.NoUnit
      * @see #perUnit
      * @stable ICU 60
      */

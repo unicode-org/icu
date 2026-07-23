@@ -3,7 +3,10 @@
 
 package com.ibm.icu.dev.test.impl;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;

@@ -5,7 +5,6 @@ package com.ibm.icu.segmenter;
 
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.RuleBasedBreakIterator;
-import java.io.InputStream;
 
 /**
  * Performs segmentation according to the provided rule string. The rule string must follow the same
@@ -60,7 +59,7 @@ public class RuleBasedSegmenter implements Segmenter {
          * Sets the rule string for segmentation.
          *
          * @param rules rule string. The rule string must follow the same guidelines as for {@link
-         *     RuleBasedBreakIterator#getInstanceFromCompiledRules(InputStream)}.
+         *     RuleBasedBreakIterator#getInstanceFromCompiledRules(java.io.InputStream)}.
          * @draft ICU 78
          */
         public Builder setRules(String rules) {

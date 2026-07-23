@@ -12,7 +12,6 @@ package com.ibm.icu.impl;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.util.RangeValueIterator;
-import java.util.NoSuchElementException;
 
 /**
  * <p>Class enabling iteration of the values in a Trie.</p>
@@ -115,7 +114,7 @@ public class TrieIterator implements RangeValueIterator {
      *
      * @param element return result
      * @return true if we are not at the end of the iteration, false otherwise.
-     * @exception NoSuchElementException - if no more elements exist.
+     * @exception java.util.NoSuchElementException - if no more elements exist.
      * @see com.ibm.icu.util.RangeValueIterator.Element
      */
     @Override

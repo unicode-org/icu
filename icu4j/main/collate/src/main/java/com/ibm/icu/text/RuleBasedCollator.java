@@ -28,13 +28,11 @@ import com.ibm.icu.impl.coll.FCDUTF16CollationIterator;
 import com.ibm.icu.impl.coll.SharedObject;
 import com.ibm.icu.impl.coll.TailoredSet;
 import com.ibm.icu.impl.coll.UTF16CollationIterator;
-import com.ibm.icu.lang.UScript;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.VersionInfo;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.CharacterIterator;
-import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.concurrent.locks.Lock;
@@ -207,9 +205,9 @@ public final class RuleBasedCollator extends Collator implements Cloneable {
      * Customization</a> for details on the rule syntax.
      *
      * @param rules the collation rules to build the collation table from.
-     * @exception ParseException and IOException thrown. ParseException thrown when argument rules
-     *     have an invalid syntax. IOException thrown when an error occurred while reading internal
-     *     data.
+     * @exception java.text.ParseException and IOException thrown. ParseException thrown when
+     *     argument rules have an invalid syntax. IOException thrown when an error occurred while
+     *     reading internal data.
      * @stable ICU 2.8
      */
     public RuleBasedCollator(String rules) throws Exception {
@@ -958,7 +956,7 @@ public final class RuleBasedCollator extends Collator implements Cloneable {
      * @see #getReorderCodes
      * @see Collator#getEquivalentReorderCodes
      * @see Collator.ReorderCodes
-     * @see UScript
+     * @see com.ibm.icu.lang.UScript
      * @stable ICU 4.8
      */
     @Override

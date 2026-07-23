@@ -5,7 +5,6 @@ package com.ibm.icu.text;
 import com.ibm.icu.impl.CaseMapImpl;
 import com.ibm.icu.impl.UCaseProps;
 import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.util.ULocale;
 import java.util.Locale;
 
 /**
@@ -104,7 +103,7 @@ public abstract class CaseMap {
          * longer or shorter than the original.
          *
          * @param locale The locale ID. Can be null for {@link Locale#getDefault}. (See {@link
-         *     ULocale#toLocale}.)
+         *     com.ibm.icu.util.ULocale#toLocale}.)
          * @param src The original string.
          * @return the result string.
          * @see UCharacter#toLowerCase(Locale, String)
@@ -120,7 +119,7 @@ public abstract class CaseMap {
          * original.
          *
          * @param locale The locale ID. Can be null for {@link Locale#getDefault}. (See {@link
-         *     ULocale#toLocale}.)
+         *     com.ibm.icu.util.ULocale#toLocale}.)
          * @param src The original string.
          * @param dest A buffer for the result string. Must not be null.
          * @param edits Records edits for index mapping, working with styled text, and getting only
@@ -164,7 +163,7 @@ public abstract class CaseMap {
          * longer or shorter than the original.
          *
          * @param locale The locale ID. Can be null for {@link Locale#getDefault}. (See {@link
-         *     ULocale#toLocale}.)
+         *     com.ibm.icu.util.ULocale#toLocale}.)
          * @param src The original string.
          * @return the result string.
          * @see UCharacter#toUpperCase(Locale, String)
@@ -180,7 +179,7 @@ public abstract class CaseMap {
          * original.
          *
          * @param locale The locale ID. Can be null for {@link Locale#getDefault}. (See {@link
-         *     ULocale#toLocale}.)
+         *     com.ibm.icu.util.ULocale#toLocale}.)
          * @param src The original string.
          * @param dest A buffer for the result string. Must not be null.
          * @param edits Records edits for index mapping, working with styled text, and getting only
@@ -324,7 +323,7 @@ public abstract class CaseMap {
          * modified with options bits.)
          *
          * @param locale The locale ID. Can be null for {@link Locale#getDefault}. (See {@link
-         *     ULocale#toLocale}.)
+         *     com.ibm.icu.util.ULocale#toLocale}.)
          * @param iter A break iterator to find the first characters of words that are to be
          *     titlecased. It is set to the source string (setText()) and used one or more times for
          *     iteration (first() and next()). If null, then a word break iterator for the locale is
@@ -353,7 +352,7 @@ public abstract class CaseMap {
          * modified with options bits.)
          *
          * @param locale The locale ID. Can be null for {@link Locale#getDefault}. (See {@link
-         *     ULocale#toLocale}.)
+         *     com.ibm.icu.util.ULocale#toLocale}.)
          * @param iter A break iterator to find the first characters of words that are to be
          *     titlecased. It is set to the source string (setText()) and used one or more times for
          *     iteration (first() and next()). If null, then a word break iterator for the locale is

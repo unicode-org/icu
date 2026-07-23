@@ -3,17 +3,15 @@
 
 package com.ibm.icu.segmenter;
 
-import com.ibm.icu.text.BreakIterator;
-
 /**
  * An interface that defines APIs for segmentation in terms of segments and boundaries, and enforces
  * immutable stateless iteration over the segmentation result yielded from an input {@code
  * CharSequence}.
  *
- * <p>{@code Segmenter} is designed to be a followup to the {@code BreakIterator} in providing
- * segmentation functionality. {@code Segmenter} provides immutable iteration, higher level
- * constructs like {@code Segment}s and {@code CharSequence}s as return types, and Java programmer
- * conveniences like {@code Stream}s in its APIs.
+ * <p>{@code Segmenter} is designed to be a followup to the {@code com.ibm.icu.text.BreakIterator}
+ * in providing segmentation functionality. {@code Segmenter} provides immutable iteration, higher
+ * level constructs like {@code Segment}s and {@code CharSequence}s as return types, and Java
+ * programmer conveniences like {@code Stream}s in its APIs.
  *
  * <p>Iteration over the input sequences is made immutable by separating the design into two parts,
  * each represented by an interface. The {@code Segmenter} interface represents the construction of
@@ -23,7 +21,7 @@ import com.ibm.icu.text.BreakIterator;
  * results in a stateless manner.
  *
  * @see Segments
- * @see BreakIterator
+ * @see com.ibm.icu.text.BreakIterator
  * @draft ICU 78
  */
 public interface Segmenter {

@@ -106,7 +106,7 @@
         on 3.5.1 or higher, we can remove this override.
     -->
     <plexus-io.version>3.6.0</plexus-io.version>
-    <spotless-maven-plugin.version>3.1.0</spotless-maven-plugin.version>
+    <spotless-maven-plugin.version>3.8.0</spotless-maven-plugin.version>
     <versions-maven-plugin.version>2.21.0</versions-maven-plugin.version>
     <!-- Plugin versions - END -->
 
@@ -626,6 +626,8 @@
             <ratchetFrom>NONE</ratchetFrom>
             <!-- define a language-specific format -->
             <java>
+              <forbidWildcardImports />
+              <removeUnusedImports />
               <toggleOffOn />
               <!-- no need to specify files, inferred automatically, but you can if you want -->
               <!-- apply a specific flavor of google-java-format and reflow long strings -->

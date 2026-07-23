@@ -11,7 +11,6 @@ package com.ibm.icu.text;
 
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.number.NumberFormatter;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Currency.CurrencyUsage;
 import com.ibm.icu.util.CurrencyAmount;
@@ -36,14 +35,14 @@ import java.util.Set;
  * {@icuenhanced java.text.NumberFormat}.{@icu _usage_}
  *
  * <p><strong>IMPORTANT:</strong> New users are strongly encouraged to see if {@link
- * NumberFormatter} fits their use case. Although not deprecated, this class, NumberFormat, is only
- * provided for java.text.NumberFormat compatibility. <hr> <code>NumberFormat</code> is the abstract
- * base class for all number formats. This class provides the interface for formatting and parsing
- * numbers. <code>NumberFormat</code> also provides methods for determining which locales have
- * number formats, and what their names are. <code>NumberFormat</code> helps you to format and parse
- * numbers for any locale. Your code can be completely independent of the locale conventions for
- * decimal points, thousands-separators, or even the particular decimal digits used, or whether the
- * number format is even decimal.
+ * com.ibm.icu.number.NumberFormatter} fits their use case. Although not deprecated, this class,
+ * NumberFormat, is only provided for java.text.NumberFormat compatibility. <hr> <code>NumberFormat
+ * </code> is the abstract base class for all number formats. This class provides the interface for
+ * formatting and parsing numbers. <code>NumberFormat</code> also provides methods for determining
+ * which locales have number formats, and what their names are. <code>NumberFormat</code> helps you
+ * to format and parse numbers for any locale. Your code can be completely independent of the locale
+ * conventions for decimal points, thousands-separators, or even the particular decimal digits used,
+ * or whether the number format is even decimal.
  *
  * <p>To format a number for the current Locale, use one of the factory class methods:
  *
@@ -587,11 +586,11 @@ public abstract class NumberFormat extends UFormat implements Cloneable {
     // ============== Locale Stuff =====================
 
     /**
-     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link NumberFormatter}
-     * instead of NumberFormat. <hr> Returns the default number format for the current default
-     * <code>FORMAT</code> locale. The default format is one of the styles provided by the other
-     * factory methods: getNumberInstance, getIntegerInstance, getCurrencyInstance or
-     * getPercentInstance. Exactly which one is locale-dependent.
+     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link
+     * com.ibm.icu.number.NumberFormatter} instead of NumberFormat. <hr> Returns the default number
+     * format for the current default <code>FORMAT</code> locale. The default format is one of the
+     * styles provided by the other factory methods: getNumberInstance, getIntegerInstance,
+     * getCurrencyInstance or getPercentInstance. Exactly which one is locale-dependent.
      *
      * @see Category#FORMAT
      * @stable ICU 2.0
@@ -602,10 +601,11 @@ public abstract class NumberFormat extends UFormat implements Cloneable {
     }
 
     /**
-     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link NumberFormatter}
-     * instead of NumberFormat. <hr> Returns the default number format for the specified locale. The
-     * default format is one of the styles provided by the other factory methods: getNumberInstance,
-     * getCurrencyInstance or getPercentInstance. Exactly which one is locale-dependent.
+     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link
+     * com.ibm.icu.number.NumberFormatter} instead of NumberFormat. <hr> Returns the default number
+     * format for the specified locale. The default format is one of the styles provided by the
+     * other factory methods: getNumberInstance, getCurrencyInstance or getPercentInstance. Exactly
+     * which one is locale-dependent.
      *
      * @stable ICU 2.0
      */
@@ -614,11 +614,11 @@ public abstract class NumberFormat extends UFormat implements Cloneable {
     }
 
     /**
-     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link NumberFormatter}
-     * instead of NumberFormat. <hr> {@icu} Returns the default number format for the specified
-     * locale. The default format is one of the styles provided by the other factory methods:
-     * getNumberInstance, getCurrencyInstance or getPercentInstance. Exactly which one is
-     * locale-dependent.
+     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link
+     * com.ibm.icu.number.NumberFormatter} instead of NumberFormat. <hr> {@icu} Returns the default
+     * number format for the specified locale. The default format is one of the styles provided by
+     * the other factory methods: getNumberInstance, getCurrencyInstance or getPercentInstance.
+     * Exactly which one is locale-dependent.
      *
      * @stable ICU 3.2
      */
@@ -627,9 +627,9 @@ public abstract class NumberFormat extends UFormat implements Cloneable {
     }
 
     /**
-     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link NumberFormatter}
-     * instead of NumberFormat. <hr> {@icu} Returns a specific style number format for default
-     * <code>FORMAT</code> locale.
+     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link
+     * com.ibm.icu.number.NumberFormatter} instead of NumberFormat. <hr> {@icu} Returns a specific
+     * style number format for default <code>FORMAT</code> locale.
      *
      * @param style number format style
      * @see Category#FORMAT
@@ -640,9 +640,9 @@ public abstract class NumberFormat extends UFormat implements Cloneable {
     }
 
     /**
-     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link NumberFormatter}
-     * instead of NumberFormat. <hr> {@icu} Returns a specific style number format for a specific
-     * locale.
+     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link
+     * com.ibm.icu.number.NumberFormatter} instead of NumberFormat. <hr> {@icu} Returns a specific
+     * style number format for a specific locale.
      *
      * @param inLocale the specific locale.
      * @param style number format style
@@ -653,9 +653,9 @@ public abstract class NumberFormat extends UFormat implements Cloneable {
     }
 
     /**
-     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link NumberFormatter}
-     * instead of NumberFormat. <hr> Returns a general-purpose number format for the current default
-     * <code>FORMAT</code> locale.
+     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link
+     * com.ibm.icu.number.NumberFormatter} instead of NumberFormat. <hr> Returns a general-purpose
+     * number format for the current default <code>FORMAT</code> locale.
      *
      * @see Category#FORMAT
      * @stable ICU 2.0
@@ -665,9 +665,9 @@ public abstract class NumberFormat extends UFormat implements Cloneable {
     }
 
     /**
-     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link NumberFormatter}
-     * instead of NumberFormat. <hr> Returns a general-purpose number format for the specified
-     * locale.
+     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link
+     * com.ibm.icu.number.NumberFormatter} instead of NumberFormat. <hr> Returns a general-purpose
+     * number format for the specified locale.
      *
      * @stable ICU 2.0
      */
@@ -676,9 +676,9 @@ public abstract class NumberFormat extends UFormat implements Cloneable {
     }
 
     /**
-     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link NumberFormatter}
-     * instead of NumberFormat. <hr> {@icu} Returns a general-purpose number format for the
-     * specified locale.
+     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link
+     * com.ibm.icu.number.NumberFormatter} instead of NumberFormat. <hr> {@icu} Returns a
+     * general-purpose number format for the specified locale.
      *
      * @stable ICU 3.2
      */
@@ -687,8 +687,9 @@ public abstract class NumberFormat extends UFormat implements Cloneable {
     }
 
     /**
-     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link NumberFormatter}
-     * instead of NumberFormat. <hr> Returns an integer number format for the current default <code>
+     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link
+     * com.ibm.icu.number.NumberFormatter} instead of NumberFormat. <hr> Returns an integer number
+     * format for the current default <code>
      * FORMAT</code> locale. The returned number format is configured to round floating point
      * numbers to the nearest integer using IEEE half-even rounding (see {@link
      * com.ibm.icu.math.BigDecimal#ROUND_HALF_EVEN ROUND_HALF_EVEN}) for formatting, and to parse
@@ -705,12 +706,13 @@ public abstract class NumberFormat extends UFormat implements Cloneable {
     }
 
     /**
-     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link NumberFormatter}
-     * instead of NumberFormat. <hr> Returns an integer number format for the specified locale. The
-     * returned number format is configured to round floating point numbers to the nearest integer
-     * using IEEE half-even rounding (see {@link com.ibm.icu.math.BigDecimal#ROUND_HALF_EVEN
-     * ROUND_HALF_EVEN}) for formatting, and to parse only the integer part of an input string (see
-     * {@link #isParseIntegerOnly isParseIntegerOnly}).
+     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link
+     * com.ibm.icu.number.NumberFormatter} instead of NumberFormat. <hr> Returns an integer number
+     * format for the specified locale. The returned number format is configured to round floating
+     * point numbers to the nearest integer using IEEE half-even rounding (see {@link
+     * com.ibm.icu.math.BigDecimal#ROUND_HALF_EVEN ROUND_HALF_EVEN}) for formatting, and to parse
+     * only the integer part of an input string (see {@link #isParseIntegerOnly
+     * isParseIntegerOnly}).
      *
      * @param inLocale the locale for which a number format is needed
      * @return a number format for integer values
@@ -722,10 +724,10 @@ public abstract class NumberFormat extends UFormat implements Cloneable {
     }
 
     /**
-     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link NumberFormatter}
-     * instead of NumberFormat. <hr> {@icu} Returns an integer number format for the specified
-     * locale. The returned number format is configured to round floating point numbers to the
-     * nearest integer using IEEE half-even rounding (see {@link
+     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link
+     * com.ibm.icu.number.NumberFormatter} instead of NumberFormat. <hr> {@icu} Returns an integer
+     * number format for the specified locale. The returned number format is configured to round
+     * floating point numbers to the nearest integer using IEEE half-even rounding (see {@link
      * com.ibm.icu.math.BigDecimal#ROUND_HALF_EVEN ROUND_HALF_EVEN}) for formatting, and to parse
      * only the integer part of an input string (see {@link #isParseIntegerOnly
      * isParseIntegerOnly}).
@@ -739,8 +741,9 @@ public abstract class NumberFormat extends UFormat implements Cloneable {
     }
 
     /**
-     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link NumberFormatter}
-     * instead of NumberFormat. <hr> Returns a currency format for the current default <code>FORMAT
+     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link
+     * com.ibm.icu.number.NumberFormatter} instead of NumberFormat. <hr> Returns a currency format
+     * for the current default <code>FORMAT
      * </code> locale.
      *
      * @return a number format for currency
@@ -752,8 +755,9 @@ public abstract class NumberFormat extends UFormat implements Cloneable {
     }
 
     /**
-     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link NumberFormatter}
-     * instead of NumberFormat. <hr> Returns a currency format for the specified locale.
+     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link
+     * com.ibm.icu.number.NumberFormatter} instead of NumberFormat. <hr> Returns a currency format
+     * for the specified locale.
      *
      * @return a number format for currency
      * @stable ICU 2.0
@@ -763,8 +767,9 @@ public abstract class NumberFormat extends UFormat implements Cloneable {
     }
 
     /**
-     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link NumberFormatter}
-     * instead of NumberFormat. <hr> {@icu} Returns a currency format for the specified locale.
+     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link
+     * com.ibm.icu.number.NumberFormatter} instead of NumberFormat. <hr> {@icu} Returns a currency
+     * format for the specified locale.
      *
      * @return a number format for currency
      * @stable ICU 3.2
@@ -774,8 +779,9 @@ public abstract class NumberFormat extends UFormat implements Cloneable {
     }
 
     /**
-     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link NumberFormatter}
-     * instead of NumberFormat. <hr> Returns a percentage format for the current default <code>
+     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link
+     * com.ibm.icu.number.NumberFormatter} instead of NumberFormat. <hr> Returns a percentage format
+     * for the current default <code>
      * FORMAT</code> locale.
      *
      * @return a number format for percents
@@ -787,8 +793,9 @@ public abstract class NumberFormat extends UFormat implements Cloneable {
     }
 
     /**
-     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link NumberFormatter}
-     * instead of NumberFormat. <hr> Returns a percentage format for the specified locale.
+     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link
+     * com.ibm.icu.number.NumberFormatter} instead of NumberFormat. <hr> Returns a percentage format
+     * for the specified locale.
      *
      * @return a number format for percents
      * @stable ICU 2.0
@@ -798,8 +805,9 @@ public abstract class NumberFormat extends UFormat implements Cloneable {
     }
 
     /**
-     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link NumberFormatter}
-     * instead of NumberFormat. <hr> {@icu} Returns a percentage format for the specified locale.
+     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link
+     * com.ibm.icu.number.NumberFormatter} instead of NumberFormat. <hr> {@icu} Returns a percentage
+     * format for the specified locale.
      *
      * @return a number format for percents
      * @stable ICU 3.2
@@ -809,9 +817,9 @@ public abstract class NumberFormat extends UFormat implements Cloneable {
     }
 
     /**
-     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link NumberFormatter}
-     * instead of NumberFormat. <hr> {@icu} Returns a scientific format for the current default
-     * <code>FORMAT</code> locale.
+     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link
+     * com.ibm.icu.number.NumberFormatter} instead of NumberFormat. <hr> {@icu} Returns a scientific
+     * format for the current default <code>FORMAT</code> locale.
      *
      * @return a scientific number format
      * @see Category#FORMAT
@@ -822,8 +830,9 @@ public abstract class NumberFormat extends UFormat implements Cloneable {
     }
 
     /**
-     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link NumberFormatter}
-     * instead of NumberFormat. <hr> {@icu} Returns a scientific format for the specified locale.
+     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link
+     * com.ibm.icu.number.NumberFormatter} instead of NumberFormat. <hr> {@icu} Returns a scientific
+     * format for the specified locale.
      *
      * @return a scientific number format
      * @stable ICU 2.0
@@ -833,8 +842,9 @@ public abstract class NumberFormat extends UFormat implements Cloneable {
     }
 
     /**
-     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link NumberFormatter}
-     * instead of NumberFormat. <hr> {@icu} Returns a scientific format for the specified locale.
+     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link
+     * com.ibm.icu.number.NumberFormatter} instead of NumberFormat. <hr> {@icu} Returns a scientific
+     * format for the specified locale.
      *
      * @return a scientific number format
      * @stable ICU 3.2
@@ -1390,8 +1400,9 @@ public abstract class NumberFormat extends UFormat implements Cloneable {
     }
 
     /**
-     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link NumberFormatter}
-     * instead of NumberFormat. <hr> Returns a specific style number format for a specific locale.
+     * <strong>NOTE:</strong> New users are strongly encouraged to use {@link
+     * com.ibm.icu.number.NumberFormatter} instead of NumberFormat. <hr> Returns a specific style
+     * number format for a specific locale.
      *
      * @param desiredLocale the specific locale.
      * @param choice number format style
