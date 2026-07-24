@@ -9,7 +9,6 @@ import com.ibm.icu.impl.locale.LSR;
 import com.ibm.icu.impl.locale.LikelySubtags;
 import com.ibm.icu.impl.locale.LocaleDistance;
 import com.ibm.icu.impl.locale.XCldrStub.Multimap;
-import com.ibm.icu.impl.locale.XCldrStub.Predicate;
 import com.ibm.icu.impl.locale.XCldrStub.Splitter;
 import com.ibm.icu.impl.locale.XCldrStub.TreeMultimap;
 import com.ibm.icu.util.BytesTrieBuilder;
@@ -34,6 +33,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.function.Predicate;
 
 public final class LocaleDistanceBuilder {
     private static final String ANY = "�"; // matches any character. Uses value above any subtag.
@@ -272,6 +272,7 @@ public final class LocaleDistanceBuilder {
         }
 
         /** add table for each subitem that matches and doesn't have a table already */
+        @SuppressWarnings("unused")
         void addSubtables(String desired, String supported, Predicate<DistanceTable> action) {
             DistanceTable node = getNode(desired, supported);
             if (node == null) {
@@ -285,7 +286,7 @@ public final class LocaleDistanceBuilder {
                     node.copy(nextTable);
                 }
             }
-            action.test(node);
+            var unused = action.test(node);
         }
 
         void addSubtables(

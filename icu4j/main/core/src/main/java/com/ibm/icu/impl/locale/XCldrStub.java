@@ -13,6 +13,7 @@ import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -21,11 +22,14 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.NavigableMap;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /** Stub class to make migration easier until we get either Guava or a higher level of Java. */
 public class XCldrStub {
@@ -132,6 +136,15 @@ public class XCldrStub {
         public int hashCode() {
             return map.hashCode();
         }
+
+        @Override
+        public String toString() {
+            return "["
+                    + asMap().entrySet().stream()
+                            .map(Entry::toString)
+                            .collect(Collectors.joining(", "))
+                    + "]";
+        }
     }
 
     public static class Multimaps {
@@ -179,6 +192,7 @@ public class XCldrStub {
                 Entry<K, Set<V>> e = it1.next();
                 entry.key = e.getKey();
                 it2 = e.getValue().iterator();
+                entry.value = it2.next();
             }
             return entry;
         }
@@ -195,8 +209,8 @@ public class XCldrStub {
     }
 
     private static class ReusableEntry<K, V> implements Entry<K, V> {
-        K key;
-        V value;
+        private K key;
+        private V value;
 
         @Override
         public K getKey() {
@@ -314,12 +328,20 @@ public class XCldrStub {
             this(Pattern.compile("\\Q" + c + "\\E"));
         }
 
+        public Splitter(String s) {
+            this(Pattern.compile("\\Q" + s + "\\E"));
+        }
+
         public Splitter(Pattern p) {
             pattern = p;
         }
 
         public static Splitter on(char c) {
             return new Splitter(c);
+        }
+
+        public static Splitter on(String sub) {
+            return new Splitter(sub);
         }
 
         public static Splitter on(Pattern p) {
@@ -334,6 +356,10 @@ public class XCldrStub {
                 }
             }
             return Arrays.asList(items);
+        }
+
+        public Stream<String> splitToStream(String input) {
+            return splitToList(input).stream();
         }
 
         public Splitter trimResults() {
@@ -449,13 +475,30 @@ public class XCldrStub {
         }
     }
 
-    public interface Predicate<T> {
-        /**
-         * Evaluates this predicate on the given argument.
-         *
-         * @param t the input argument
-         * @return {@code true} if the input argument matches the predicate, otherwise {@code false}
-         */
-        boolean test(T t);
+    /** Utilities because regular java doesn't have some nice Guava features */
+    @SafeVarargs
+    public static <T> Set<T> setofOrdered(T... source) {
+        return Arrays.stream(source)
+                .collect(
+                        Collectors.collectingAndThen(
+                                Collectors.toCollection(LinkedHashSet::new), Set::copyOf));
     }
+
+    /** Not as good as Guava, since it makes a new set instead of a view */
+    public static <T> Set<T> setsDifference(Set<T> set1, Set<T> set2) {
+        return set1.stream()
+                .filter(element -> !set2.contains(element))
+                .collect(
+                        Collectors.collectingAndThen(
+                                Collectors.toCollection(LinkedHashSet::new), Set::copyOf));
+    }
+
+    public static <K, V> NavigableMap<K, V> immutableSortedMap(Map<K, V> existingMap) {
+        return Collections.unmodifiableNavigableMap(new TreeMap<>(existingMap));
+    }
+
+    public static final Comparator<String> LONGEST_FIRST =
+            Comparator.<String>comparingInt(x -> x.length())
+                    .reversed()
+                    .thenComparing(Comparator.naturalOrder());
 }
