@@ -73,20 +73,12 @@
         <artifactId>maven-shade-plugin</artifactId>
         <executions>
           <execution>
-            <id>source-jar</id>
-            <goals>
-              <goal>shade</goal>
-            </goals>
-            <configuration>
-              <createSourcesJar>true</createSourcesJar>
-            </configuration>
-          </execution>
-          <execution>
             <goals>
               <goal>shade</goal>
             </goals>
             <phase>package</phase>
             <configuration>
+              <createSourcesJar>true</createSourcesJar>
               <createDependencyReducedPom>true</createDependencyReducedPom>
               <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml</dependencyReducedPomLocation>
               <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
@@ -97,6 +89,8 @@
                   <excludes>
                     <!-- Exclude taglets code -->
                     <exclude>com/ibm/icu/dev/tool/docs/**</exclude>
+                    <!-- We exclude the manifests in dependencies -->
+                    <exclude>META-INF/MANIFEST.MF</exclude>
                     <!-- Exclude maven info for unpublished artifacts -->
                     <exclude>META-INF/maven/com.ibm.icu/core/**</exclude>
                     <exclude>META-INF/maven/com.ibm.icu/tools_taglets/**</exclude>

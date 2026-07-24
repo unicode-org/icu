@@ -133,7 +133,7 @@
     <mf.Specification-Version>${icu.major.version}</mf.Specification-Version>
     <mf.Implementation-Version>${project.version}</mf.Implementation-Version>
     <mf.Bundle-Version>${project.version}</mf.Bundle-Version>
-    <mf.Bundle-RequiredExecutionEnvironment>JavaSE-1.8</mf.Bundle-RequiredExecutionEnvironment>
+    <mf.Bundle-RequiredExecutionEnvironment>JavaSE-${maven.compiler.release}</mf.Bundle-RequiredExecutionEnvironment>
 
     <!-- For most modules artifactId does not have an "icu4j" prefix, so this is a good default -->
     <module-name>${project.artifactId}</module-name>
