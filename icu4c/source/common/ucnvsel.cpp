@@ -175,7 +175,7 @@ ucnvsel_open(const char* const*  converterList, int32_t converterListSize,
     converterListSize = ucnv_countAvailable();
   }
   newSelector->encodings =
-    (char**)uprv_malloc(converterListSize * sizeof(char*));
+    (char**)uprv_calloc(converterListSize, sizeof(char*));
   if (!newSelector->encodings) {
     *status = U_MEMORY_ALLOCATION_ERROR;
     return nullptr;
@@ -716,7 +716,7 @@ static UEnumeration *selectForMask(const UConverterSelector* sel,
   int16_t numOnes = countOnes(mask.getAlias(), columns);
   // now, we know the exact space we need for index
   if (numOnes > 0) {
-    result->index = static_cast<int16_t*>(uprv_malloc(numOnes * sizeof(int16_t)));
+    result->index = static_cast<int16_t*>(uprv_calloc(numOnes, sizeof(int16_t)));
     if (result->index == nullptr) {
       *status = U_MEMORY_ALLOCATION_ERROR;
       return nullptr;

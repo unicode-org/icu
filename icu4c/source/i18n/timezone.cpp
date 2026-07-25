@@ -630,7 +630,7 @@ static void U_CALLCONV initMap(USystemTimeZoneType type, UErrorCode& ec) {
     res = ures_getByKey(res, kNAMES, res, &ec); // dereference Zones section
     if (U_SUCCESS(ec)) {
         int32_t size = ures_getSize(res);
-        int32_t* m = static_cast<int32_t*>(uprv_malloc(size * sizeof(int32_t)));
+        int32_t* m = static_cast<int32_t*>(uprv_calloc(size, sizeof(int32_t)));
         if (m == nullptr) {
             ec = U_MEMORY_ALLOCATION_ERROR;
         } else {
@@ -845,7 +845,7 @@ public:
 
         if (region != nullptr || rawOffset != nullptr) {
             int32_t filteredMapSize = DEFAULT_FILTERED_MAP_SIZE;
-            filteredMap = static_cast<int32_t*>(uprv_malloc(filteredMapSize * sizeof(int32_t)));
+            filteredMap = static_cast<int32_t*>(uprv_calloc(filteredMapSize, sizeof(int32_t)));
             if (filteredMap == nullptr) {
                 ec = U_MEMORY_ALLOCATION_ERROR;
                 return nullptr;
@@ -932,7 +932,7 @@ public:
 
     TZEnumeration(const TZEnumeration &other) : StringEnumeration(), map(nullptr), localMap(nullptr), len(0), pos(0) {
         if (other.localMap != nullptr) {
-            localMap = static_cast<int32_t*>(uprv_malloc(other.len * sizeof(int32_t)));
+            localMap = static_cast<int32_t*>(uprv_calloc(other.len, sizeof(int32_t)));
             if (localMap != nullptr) {
                 len = other.len;
                 uprv_memcpy(localMap, other.localMap, len * sizeof(int32_t));

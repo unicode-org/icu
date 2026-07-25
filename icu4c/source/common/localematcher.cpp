@@ -372,7 +372,7 @@ LocaleMatcher::LocaleMatcher(const Builder &builder, UErrorCode &errorCode) :
         // so that when different types are used (e.g., language tag strings)
         // we can return those by parallel index.
         supportedLocales = static_cast<const Locale **>(
-            uprv_malloc(supportedLocalesLength * sizeof(const Locale *)));
+            uprv_calloc(supportedLocalesLength, sizeof(const Locale *)));
         // Supported LRSs in input order.
         // In C++, we store these permanently to simplify ownership management
         // in the hash tables. Duplicate LSRs (if any) are unused overhead.
@@ -406,9 +406,9 @@ LocaleMatcher::LocaleMatcher(const Builder &builder, UErrorCode &errorCode) :
                                              supportedLocalesLength, &errorCode);
         if (U_FAILURE(errorCode)) { return; }
         supportedLSRs = static_cast<const LSR **>(
-            uprv_malloc(supportedLocalesLength * sizeof(const LSR *)));
+            uprv_calloc(supportedLocalesLength, sizeof(const LSR *)));
         supportedIndexes = static_cast<int32_t *>(
-            uprv_malloc(supportedLocalesLength * sizeof(int32_t)));
+            uprv_calloc(supportedLocalesLength, sizeof(int32_t)));
         if (supportedLSRs == nullptr || supportedIndexes == nullptr) {
             errorCode = U_MEMORY_ALLOCATION_ERROR;
             return;
