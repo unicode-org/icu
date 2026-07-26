@@ -143,6 +143,7 @@ void MFFunctionRegistry::checkStandard() const {
     checkFunction(functions::CURRENCY);
     checkFunction(functions::NUMBER);
     checkFunction(functions::INTEGER);
+    checkFunction(functions::OFFSET);
     checkFunction(functions::STRING);
     checkFunction(functions::TEST_FUNCTION);
     checkFunction(functions::TEST_FORMAT);
@@ -387,7 +388,9 @@ bool isDigitSizeOption(std::u16string_view s) {
         || s == options::MINIMUM_FRACTION_DIGITS
         || s == options::MAXIMUM_FRACTION_DIGITS
         || s == options::MINIMUM_SIGNIFICANT_DIGITS
-        || s == options::MAXIMUM_SIGNIFICANT_DIGITS;
+        || s == options::MAXIMUM_SIGNIFICANT_DIGITS
+        || s == options::ADD
+        || s == options::SUBTRACT;
 }
 
 /* static */ void StandardFunctions::validateDigitSizeOptions(const FunctionOptions& opts,
@@ -536,6 +539,16 @@ StandardFunctions::Number::number(UErrorCode& success) {
 }
 
 /* static */ StandardFunctions::Number*
+StandardFunctions::Number::offset(UErrorCode& success) {
+    return create(NumberType::kOffset, success);
+}
+
+/* static */ StandardFunctions::Number*
+StandardFunctions::Number::percent(UErrorCode& success) {
+    return create(NumberType::kPercent, success);
+}
+
+/* static */ StandardFunctions::Number*
 StandardFunctions::Number::create(StandardFunctions::NumberType numberType, UErrorCode& success) {
     NULL_ON_ERROR(success);
 
@@ -603,7 +616,7 @@ static number::Precision significantDigitsWithRoundingPriority(int32_t min, int3
     return result;
 }
 
-number::Precision StandardFunctions::withRoundingIncrement(const FunctionOptions& opts, bool& hasIncrement, const DigitSizeOption& fractionDigits, const UChar* currency, UErrorCode& status) {
+number::Precision StandardFunctions::withRoundingIncrement(const FunctionOptions& opts, bool& hasIncrement, int32_t minFractionDigits, UErrorCode& status) {
     using namespace number;
 
     UErrorCode localStatus = U_ZERO_ERROR;
@@ -619,28 +632,14 @@ number::Precision StandardFunctions::withRoundingIncrement(const FunctionOptions
     if (increment != 1) {
         hasIncrement = true;
     }
-    // Divide by 100 to get cents-based rounding
-    // The default for currency formatting is the number of minor
-    // unit digits provided by the ISO 4217 currency code list
-    // (2 if the list doesn't provide that information)
-    int32_t minFractionToUse = 2;
-    localStatus = U_ZERO_ERROR;
-    if (fractionDigits.isAuto()) {
-        minFractionToUse = ucurr_getDefaultFractionDigits(currency, &localStatus);
-        if (U_FAILURE(localStatus)) {
-            localStatus = U_ZERO_ERROR;
-            minFractionToUse = 2;
-        }
-    } else {
-        minFractionToUse = fractionDigits.value();
-    }
     double incrementToUse = U_SUCCESS(localStatus) ? increment / 100.0 : 0.01;
-    return Precision::increment(incrementToUse).withMinFraction(minFractionToUse);
+    return Precision::increment(incrementToUse).withMinFraction(minFractionDigits);
 }
 
 /* static */ number::LocalizedNumberFormatter StandardFunctions::formatterForOptions(const Number& number,
                                                                                      const Locale& locale,
                                                                                      const FunctionOptions& opts,
+bool usePercent,
                                                                                      UErrorCode& status) {
     number::UnlocalizedNumberFormatter nf;
 
@@ -679,7 +678,7 @@ number::Precision StandardFunctions::withRoundingIncrement(const FunctionOptions
         }
 
         // Notation options
-        if (number.numberType == NumberType::kNumber) {
+        if (number.numberType == NumberType::kNumber || number.numberType == NumberType::kPercent) {
             // These options only apply to `:number`
 
             // Default notation is simple
@@ -702,13 +701,13 @@ number::Precision StandardFunctions::withRoundingIncrement(const FunctionOptions
             }
             nf = nf.notation(notation);
 
-            if (number.usePercent(opts)) {
+            if (number.numberType == NumberType::kPercent && usePercent) {
                 nf = nf.unit(NoUnit::percent()).scale(Scale::powerOfTen(2));
             }
         }
 
         int32_t maxSignificantDigits = number.maximumSignificantDigits(opts);
-        if (number.numberType != NumberType::kInteger) {
+        if (number.numberType != NumberType::kInteger && number.numberType != NumberType::kOffset) {
             int32_t minFractionDigits = number.minimumFractionDigits(opts);
             int32_t maxFractionDigits = number.maximumFractionDigits(opts);
             int32_t minSignificantDigits = number.minimumSignificantDigits(opts);
@@ -716,24 +715,53 @@ number::Precision StandardFunctions::withRoundingIncrement(const FunctionOptions
             Precision p = Precision::unlimited();
             bool precisionOptions = false;
             bool noSignificantDigits = minSignificantDigits == -1 && maxSignificantDigits == -1;
-
+            if (number.numberType == NumberType::kPercent) {
+                if (minFractionDigits == -1) {
+                    minFractionDigits = 0;
+                }
+                if (maxFractionDigits == -1 && minSignificantDigits == -1) {
+                    maxFractionDigits = minFractionDigits;
+                }
+            }
             // Returning -1 means the option wasn't provided
-            if (number.numberType == NumberType::kNumber) {
+            if (number.numberType == NumberType::kNumber || number.numberType == NumberType::kPercent) {
                 if (maxFractionDigits != -1 && minFractionDigits != -1) {
                     precisionOptions = true;
                     fractionPrecision = Precision::minMaxFraction(minFractionDigits, maxFractionDigits);
                 } else if (minFractionDigits != -1) {
                     precisionOptions = true;
                     fractionPrecision = Precision::minFraction(minFractionDigits);
+                    maxFractionDigits = minFractionDigits;
                 } else if (maxFractionDigits != -1) {
                     precisionOptions = true;
                     fractionPrecision = Precision::maxFraction(maxFractionDigits);
+                    minFractionDigits = 0;
                 }
             }
 
-            if (number.numberType == NumberType::kCurrency) {
-                DigitSizeOption fractionDigits = number.fractionDigits(opts);
-                bool noFractionDigits = fractionDigits.isInvalid();
+            if (number.numberType == NumberType::kNumber || number.numberType == NumberType::kCurrency || number.numberType == NumberType::kPercent) {
+                bool noFractionDigits = false;
+                if (number.numberType == NumberType::kCurrency) {
+                    DigitSizeOption fractionDigits = number.fractionDigits(opts);
+                    noFractionDigits = fractionDigits.isAuto() || fractionDigits.isInvalid();
+                    // Divide by 100 to get cents-based rounding
+                    // The default for currency formatting is the number of minor
+                    // unit digits provided by the ISO 4217 currency code list
+                    // (2 if the list doesn't provide that information)
+                    UErrorCode localStatus = U_ZERO_ERROR;
+                    if (fractionDigits.isAuto() || fractionDigits.isInvalid()) {
+                        minFractionDigits = ucurr_getDefaultFractionDigits(currency.getBuffer(), &localStatus);
+                        if (U_FAILURE(localStatus)) {
+                            localStatus = U_ZERO_ERROR;
+                            minFractionDigits = 2;
+                        }
+                    } else {
+                        minFractionDigits = fractionDigits.value();
+                    }
+                    maxFractionDigits = minFractionDigits;
+                } else {
+                    noFractionDigits = (minFractionDigits == 0 || minFractionDigits == -1) && (maxFractionDigits == 0 || maxFractionDigits == -1);
+                }
 
                 if (!noSignificantDigits) {
                     // Can't specify rounding increment if significant digits are specified
@@ -746,7 +774,11 @@ number::Precision StandardFunctions::withRoundingIncrement(const FunctionOptions
 
                 // No fraction digits and no significant digits
                 if (noFractionDigits && noSignificantDigits) {
-                    p = withRoundingIncrement(opts, precisionOptions, DigitSizeOption::autoVal(), currency.getBuffer(), status);
+                    if (number.numberType == NumberType::kCurrency) {
+                        p = withRoundingIncrement(opts, precisionOptions, minFractionDigits, status);
+                    } else {
+                        p = Precision::fixedFraction(0);
+                    }
                     if (U_FAILURE(status)) {
                         status = U_MF_BAD_OPTION;
                         return {};
@@ -764,27 +796,28 @@ number::Precision StandardFunctions::withRoundingIncrement(const FunctionOptions
                     // use roundingPriority to resolve conflict
 
                     precisionOptions = true;
-                    if (fractionDigits.isAuto()) {
-                        p = significantDigits(minSignificantDigits, maxSignificantDigits);
-                    } else {
-                        fractionPrecision = FractionPrecision::fixedFraction(fractionDigits.value());
+                    fractionPrecision = FractionPrecision::minMaxFraction(minFractionDigits, maxFractionDigits);
 
-                        UnicodeString roundingPriority = opts.getStringFunctionOption(options::ROUNDING_PRIORITY);
-                        if (roundingPriority == options::MORE_PRECISION) {
-                            precisionOptions = true;
-                            p = significantDigitsWithRoundingPriority(minSignificantDigits, maxSignificantDigits, fractionPrecision, UNumberRoundingPriority::UNUM_ROUNDING_PRIORITY_RELAXED);
-                        } else if (roundingPriority == options::LESS_PRECISION) {
-                            precisionOptions = true;
-                            p = significantDigitsWithRoundingPriority(minSignificantDigits, maxSignificantDigits, fractionPrecision, UNumberRoundingPriority::UNUM_ROUNDING_PRIORITY_STRICT);
-                        } else {
-                            p = significantDigits(minSignificantDigits, maxSignificantDigits);
-                        }
+                    UnicodeString roundingPriority = opts.getStringFunctionOption(options::ROUNDING_PRIORITY);
+                    if (roundingPriority == options::MORE_PRECISION) {
+                        precisionOptions = true;
+                        p = significantDigitsWithRoundingPriority(minSignificantDigits, maxSignificantDigits, fractionPrecision, UNumberRoundingPriority::UNUM_ROUNDING_PRIORITY_RELAXED);
+                    } else if (roundingPriority == options::LESS_PRECISION) {
+                        precisionOptions = true;
+                        p = significantDigitsWithRoundingPriority(minSignificantDigits, maxSignificantDigits, fractionPrecision, UNumberRoundingPriority::UNUM_ROUNDING_PRIORITY_STRICT);
+                    } else {
+                        p = significantDigits(minSignificantDigits, maxSignificantDigits);
                     }
                 } else {
                     precisionOptions = true;
 
                     // Fraction digits and no significant digits
-                    p = withRoundingIncrement(opts, precisionOptions, fractionDigits, currency.getBuffer(), status);
+                    if (number.numberType == NumberType::kCurrency) {
+                        p = withRoundingIncrement(opts, precisionOptions, minFractionDigits, status);
+                    } else {
+                        p = Precision::minMaxFraction(minFractionDigits, maxFractionDigits);
+                    }
+
                     if (U_FAILURE(status)) {
                         status = U_MF_BAD_OPTION;
                         return {};                    }
@@ -803,15 +836,6 @@ number::Precision StandardFunctions::withRoundingIncrement(const FunctionOptions
                     p = p.trailingZeroDisplay(UNumberTrailingZeroDisplay::UNUM_TRAILING_ZERO_AUTO);
                 }
 
-            } else {
-                if (minSignificantDigits != -1) {
-                    precisionOptions = true;
-                    p = p.minSignificantDigits(minSignificantDigits);
-                }
-                if (maxSignificantDigits != -1) {
-                    precisionOptions = true;
-                    p = p.maxSignificantDigits(maxSignificantDigits);
-                }
             }
 
             if (precisionOptions) {
@@ -903,7 +927,9 @@ number::Precision StandardFunctions::withRoundingIncrement(const FunctionOptions
         } else {
             nf = nf.unitWidth(UNumberUnitWidth::UNUM_UNIT_WIDTH_FORMAL);
         }
+    }
 
+    if (number.numberType == NumberType::kCurrency || number.numberType == NumberType::kPercent) {
         UnicodeString roundingMode = opts.getStringFunctionOption(options::ROUNDING_MODE);
         UNumberFormatRoundingMode mode = validateRoundingMode(roundingMode, status);
         if (U_FAILURE(status)) {
@@ -912,7 +938,6 @@ number::Precision StandardFunctions::withRoundingIncrement(const FunctionOptions
         }
         nf = nf.roundingMode(mode);
     }
-
     return nf.locale(locale);
 }
 
@@ -953,14 +978,20 @@ static UChar32 digitToChar(int32_t val, UErrorCode errorCode) {
 
 StandardFunctions::DigitSizeOption StandardFunctions::Number::digitSizeOptionWithAuto(const FunctionOptions& opts,
                                                                                       std::u16string_view k) const {
-    return digitSizeOption(opts, k, true);
+    UErrorCode localStatus = U_ZERO_ERROR;
+    DigitSizeOption result = digitSizeOption(opts, k, true, localStatus);
+    if (U_FAILURE(localStatus)) {
+        return DigitSizeOption::invalid();
+    }
+    return result;
 }
 
 int32_t StandardFunctions::Number::digitSizeOptionNoAuto(const FunctionOptions& opts,
                                                          std::u16string_view k) const {
-    StandardFunctions::DigitSizeOption result = digitSizeOption(opts, k, false);
+    UErrorCode localStatus = U_ZERO_ERROR;
+    StandardFunctions::DigitSizeOption result = digitSizeOption(opts, k, false, localStatus);
     U_ASSERT(!result.isAuto());
-    if (result.isInvalid()) {
+    if (result.isInvalid() || U_FAILURE(localStatus)) {
         return -1;
     }
     return result.value();
@@ -968,7 +999,11 @@ int32_t StandardFunctions::Number::digitSizeOptionNoAuto(const FunctionOptions& 
 
 StandardFunctions::DigitSizeOption StandardFunctions::Number::digitSizeOption(const FunctionOptions& opts,
                                                                               const std::u16string_view k,
-                                                                              bool allowAuto) const {
+                                                                              bool allowAuto,
+                                                                              UErrorCode& status) const {
+    if (U_FAILURE(status)) {
+        return DigitSizeOption::invalid();
+    }
     UErrorCode localStatus = U_ZERO_ERROR;
     const FunctionValue* opt = opts.getFunctionOption(k, localStatus);
     if (U_SUCCESS(localStatus)) {
@@ -1006,6 +1041,7 @@ StandardFunctions::DigitSizeOption StandardFunctions::Number::digitSizeOption(co
     // Returning -1 indicates that the option wasn't provided or was a non-integer.
     // The caller needs to check for that case, since passing -1 to Precision::maxFraction()
     // is an error.
+    status = U_MF_BAD_OPTION;
     return DigitSizeOption::invalid();
 }
 
@@ -1049,12 +1085,30 @@ int32_t StandardFunctions::Number::maximumSignificantDigits(const FunctionOption
     return digitSizeOptionNoAuto(opts, options::MAXIMUM_SIGNIFICANT_DIGITS);
 }
 
-bool StandardFunctions::Number::usePercent(const FunctionOptions& opts) const {
-    const UnicodeString& style = opts.getStringFunctionOption(UnicodeString("style"));
-    if ((numberType == NumberType::kInteger) || style.length() == 0) {
-        return false;
+int32_t StandardFunctions::Number::addOption(const FunctionOptions& opts, UErrorCode& errorCode) const {
+    if (U_FAILURE(errorCode)) {
+        return -1;
     }
-    return (style == UnicodeString("percent"));
+    DigitSizeOption result = digitSizeOption(opts, options::ADD, false, errorCode);
+    U_ASSERT(!result.isAuto());
+    if (result.isInvalid()) {
+        errorCode = U_MF_BAD_OPTION;
+        return -1;
+    }
+    return result.value();
+}
+
+int32_t StandardFunctions::Number::subtractOption(const FunctionOptions& opts, UErrorCode& errorCode) const {
+    if (U_FAILURE(errorCode)) {
+        return -1;
+    }
+    DigitSizeOption result = digitSizeOption(opts, options::SUBTRACT, false, errorCode);
+    U_ASSERT(!result.isAuto());
+    if (result.isInvalid()) {
+        errorCode = U_MF_BAD_OPTION;
+        return -1;
+    }
+    return result.value();
 }
 
 StandardFunctions::NumberValue::NumberValue(const Number& parent,
@@ -1075,6 +1129,7 @@ StandardFunctions::NumberValue::NumberValue(const Number& parent,
     functionName = functions::NUMBER;
     numberType = parent.numberType;
 
+    int64_t offset = 0;
     switch (numberType) {
         case NumberType::kInteger:
             functionName = functions::INTEGER;
@@ -1082,17 +1137,39 @@ StandardFunctions::NumberValue::NumberValue(const Number& parent,
         case NumberType::kCurrency:
             functionName = functions::CURRENCY;
             break;
+        case NumberType::kOffset: {
+            functionName = functions::OFFSET;
+            UErrorCode localStatus = U_ZERO_ERROR;
+            int32_t addOptionValue = parent.addOption(opts, localStatus);
+            bool hasAdd = U_SUCCESS(localStatus);
+            localStatus = U_ZERO_ERROR;
+            int32_t subtractOptionValue = parent.subtractOption(opts, localStatus);
+            bool hasSubtract = U_SUCCESS(localStatus);
+            if ((hasAdd && hasSubtract) || (!hasAdd && !hasSubtract)) {
+                // Either add or subtract must be provided,
+                // but not both
+                errorCode = U_MF_BAD_OPTION;
+                return;
+            }
+            offset = hasAdd ? addOptionValue : (-1 * subtractOptionValue);
+            break;
+        }
+        case NumberType::kPercent: {
+            functionName = functions::PER_CENT;
+            break;
+        }
         default:
             break;
     }
     inputDir = context.getDirection();
     dir = outputDirectionalityFromUDir(inputDir, locale);
 
-    number::LocalizedNumberFormatter realFormatter;
     UErrorCode localStatus = U_ZERO_ERROR;
-    realFormatter = formatterForOptions(parent, locale, opts, localStatus);
+    number::LocalizedNumberFormatter realFormatter = formatterForOptions(parent, locale, opts, false, localStatus);
+    number::LocalizedNumberFormatter percentFormatter = formatterForOptions(parent, locale, opts, true, localStatus);
 
     int64_t integerValue = 0;
+    double valueWithOffset = 0;
 
     // Need to validate operand before validating options
     if (U_SUCCESS(errorCode)) {
@@ -1101,7 +1178,10 @@ StandardFunctions::NumberValue::NumberValue(const Number& parent,
             double d = innerValue.getDouble(errorCode);
             U_ASSERT(U_SUCCESS(errorCode));
             if (U_SUCCESS(localStatus)) {
-                formattedNumber = realFormatter.formatDouble(d, errorCode);
+                valueWithOffset = d + offset;
+                formattedNumber = realFormatter.formatDouble(valueWithOffset, errorCode);
+                scaledFormattedNumber = realFormatter.formatDouble(valueWithOffset * 100, errorCode);
+                percentFormattedNumber = percentFormatter.formatDouble(valueWithOffset, errorCode);
                 integerValue = static_cast<int64_t>(std::round(d));
             }
             break;
@@ -1110,7 +1190,10 @@ StandardFunctions::NumberValue::NumberValue(const Number& parent,
             int32_t l = innerValue.getLong(errorCode);
             U_ASSERT(U_SUCCESS(errorCode));
             if (U_SUCCESS(localStatus)) {
-                formattedNumber = realFormatter.formatInt(l, errorCode);
+                valueWithOffset = l + offset;
+                formattedNumber = realFormatter.formatInt(valueWithOffset, errorCode);
+                scaledFormattedNumber = realFormatter.formatInt(valueWithOffset * 100, errorCode);
+                percentFormattedNumber = percentFormatter.formatInt(valueWithOffset, errorCode);
                 integerValue = l;
             }
             break;
@@ -1119,7 +1202,10 @@ StandardFunctions::NumberValue::NumberValue(const Number& parent,
             int64_t i = innerValue.getInt64(errorCode);
             U_ASSERT(U_SUCCESS(errorCode));
             if (U_SUCCESS(localStatus)) {
-                formattedNumber = realFormatter.formatInt(i, errorCode);
+                valueWithOffset = i + offset;
+                formattedNumber = realFormatter.formatInt(valueWithOffset, errorCode);
+                scaledFormattedNumber = realFormatter.formatInt(valueWithOffset * 100, errorCode);
+                percentFormattedNumber = percentFormatter.formatInt(valueWithOffset, errorCode);
                 integerValue = i;
             }
             break;
@@ -1132,7 +1218,10 @@ StandardFunctions::NumberValue::NumberValue(const Number& parent,
             if (U_FAILURE(errorCode))
                 return;
             if (U_SUCCESS(localStatus)) {
-                formattedNumber = realFormatter.formatDouble(d, errorCode);
+                valueWithOffset = d + offset;
+                formattedNumber = realFormatter.formatDouble(valueWithOffset, errorCode);
+                scaledFormattedNumber = realFormatter.formatDouble(valueWithOffset * 100, errorCode);
+                percentFormattedNumber = percentFormatter.formatDouble(valueWithOffset, errorCode);
                 integerValue = static_cast<int64_t>(std::round(d));
             }
             break;
@@ -1158,6 +1247,11 @@ StandardFunctions::NumberValue::NumberValue(const Number& parent,
     if (numberType == NumberType::kInteger) {
         innerValue = Formattable(integerValue);
     }
+
+    // Need to set the offsetted value if invoked as :offset
+    if (numberType == NumberType::kOffset) {
+        innerValue = Formattable(valueWithOffset);
+    }
 }
 
 UnicodeString StandardFunctions::NumberValue::formatToString(UErrorCode& errorCode) const {
@@ -1165,7 +1259,9 @@ UnicodeString StandardFunctions::NumberValue::formatToString(UErrorCode& errorCo
         return {};
     }
 
-    return formattedNumber.toString(errorCode);
+    return (numberType == kPercent)
+        ? percentFormattedNumber.toString(errorCode)
+        : formattedNumber.toString(errorCode);
 }
 
 StandardFunctions::Number::~Number() {}
@@ -1198,7 +1294,8 @@ void StandardFunctions::NumberValue::selectKeys(const UnicodeString* keys,
 
     // See  https://github.com/unicode-org/message-format-wg/blob/main/spec/registry.md#number-selection
     // 1. Let exact be the JSON string representation of the numeric value of resolvedSelector
-    UnicodeString exact = formattedNumber.toString(errorCode);
+    const number::FormattedNumber& numberToUse = (numberType == NumberType::kPercent) ? scaledFormattedNumber : formattedNumber;
+    UnicodeString exact = numberToUse.toString(errorCode);
 
     if (U_FAILURE(errorCode)) {
         // Non-number => selector error
@@ -1215,7 +1312,7 @@ void StandardFunctions::NumberValue::selectKeys(const UnicodeString* keys,
         LocalPointer<PluralRules> rules(PluralRules::forLocale(locale, t, errorCode));
         CHECK_ERROR(errorCode);
 
-        keyword = rules->select(formattedNumber, errorCode);
+        keyword = rules->select(numberToUse, errorCode);
     }
 
     // Steps 3-4 elided:

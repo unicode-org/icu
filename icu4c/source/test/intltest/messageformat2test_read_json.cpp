@@ -334,11 +334,14 @@ void TestMessageFormat2::jsonTestsFromFiles(IcuTestErrorCode& errorCode) {
     runTestsFromJsonFile(*this, "spec/functions/datetime.json", errorCode);
     runTestsFromJsonFile(*this, "spec/functions/integer.json", errorCode);
     runTestsFromJsonFile(*this, "spec/functions/number.json", errorCode);
+    runTestsFromJsonFile(*this, "spec/functions/offset.json", errorCode);
+    runTestsFromJsonFile(*this, "spec/functions/percent.json", errorCode);
     runTestsFromJsonFile(*this, "spec/functions/string.json", errorCode);
     runTestsFromJsonFile(*this, "spec/functions/time.json", errorCode);
 
     // Other tests (non-spec)
     runTestsFromJsonFile(*this, "currency-options.json", errorCode);
+    runTestsFromJsonFile(*this, "percent-options.json", errorCode);
     runTestsFromJsonFile(*this, "more-functions.json", errorCode);
     runTestsFromJsonFile(*this, "valid-tests.json", errorCode);
     runTestsFromJsonFile(*this, "resolution-errors.json", errorCode);
