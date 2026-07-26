@@ -235,16 +235,24 @@ public class TestUtils {
         return unit.toString();
     }
 
-    static Reader jsonReader(String jsonFileName) throws URISyntaxException, IOException {
-        Path json = getTestFile(TestUtils.class, jsonFileName);
+    static Reader jsonReader(boolean isCldrTest, String jsonFileName)
+            throws URISyntaxException, IOException {
+        Path json = getTestFile(TestUtils.class, isCldrTest, jsonFileName);
         return Files.newBufferedReader(json, StandardCharsets.UTF_8);
     }
 
-    private static Path getTestFile(Class<?> cls, String fileName)
+    private static Path getTestFile(Class<?> cls, boolean isCldrTest, String fileName)
             throws URISyntaxException, IOException {
-        String packageName = cls.getPackage().getName().replace('.', '/');
-        URI getPath = cls.getClassLoader().getResource(packageName).toURI();
-        Path filePath = Paths.get(getPath);
+        Path filePath;
+        if (isCldrTest) {
+            URI getPath = cls.getClassLoader().getResource(".").toURI();
+            filePath = Paths.get(getPath).resolve("com/ibm/icu/dev/data/cldr/messageFormat/tests");
+        } else {
+            String packageName = cls.getPackage().getName().replace('.', '/');
+            URI getPath = cls.getClassLoader().getResource(packageName).toURI();
+            filePath = Paths.get(getPath);
+        }
+
         Path json = Paths.get(fileName);
         return filePath.resolve(json);
     }
