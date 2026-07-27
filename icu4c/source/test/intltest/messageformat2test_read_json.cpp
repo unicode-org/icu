@@ -239,16 +239,22 @@ static void runValidTest(TestMessageFormat2& icuTest,
     TestUtils::runTestCase(icuTest, t, errorCode);
 }
 
-// File name is relative to message2/ in the test data directory
+// File name relative location depends on isCldrConformanceTest
 static void runTestsFromJsonFile(TestMessageFormat2& t,
+                                      bool isCldrConformanceTest,
                                       const std::string& fileName,
                                       IcuTestErrorCode& errorCode) {
-    const char* testDataDirectory = IntlTest::getSharedTestData(errorCode);
+    const char* testDataDirectory = IntlTest::getSourceTestData(errorCode);
     CHECK_ERROR(errorCode);
 
     std::string testFileName(testDataDirectory);
-    testFileName.append("message2/");
+    if (isCldrConformanceTest) {
+        testFileName.append("cldr/messageFormat/tests/");
+    } else {
+        testFileName.append("message2/");
+    }
     testFileName.append(fileName);
+
     std::ifstream testFile(testFileName);
     json data = json::parse(testFile);
 
@@ -305,6 +311,20 @@ static void runTestsFromJsonFile(TestMessageFormat2& t,
     }
 }
 
+// File name is relative to cldr/messageFormat/tests/ in the test data directory
+static void runCldrConformanceTestFromJsonFile(TestMessageFormat2& t,
+                                      const std::string& fileName,
+                                      IcuTestErrorCode& errorCode) {
+    runTestsFromJsonFile(t, true, fileName, errorCode);
+}
+
+// File name is relative to message2/ in the test data directory
+static void runIcuTestFromJsonFile(TestMessageFormat2& t,
+                                      const std::string& fileName,
+                                      IcuTestErrorCode& errorCode) {
+    runTestsFromJsonFile(t, false, fileName, errorCode);
+}
+
 void TestMessageFormat2::jsonTestsFromFiles(IcuTestErrorCode& errorCode) {
     // Spec tests are fairly limited as the spec doesn't dictate formatter
     // output. Tests under testdata/message2/spec are taken from
@@ -312,56 +332,56 @@ void TestMessageFormat2::jsonTestsFromFiles(IcuTestErrorCode& errorCode) {
     // Tests directly under testdata/message2 are specific to ICU4C.
 
     // Do spec tests for syntax errors
-    runTestsFromJsonFile(*this, "spec/syntax-errors.json", errorCode);
-    runTestsFromJsonFile(*this, "unsupported-expressions.json", errorCode);
-    runTestsFromJsonFile(*this, "unsupported-statements.json", errorCode);
-    runTestsFromJsonFile(*this, "syntax-errors-reserved.json", errorCode);
+    runCldrConformanceTestFromJsonFile(*this, "syntax-errors.json", errorCode);
+    runIcuTestFromJsonFile(*this, "unsupported-expressions.json", errorCode);
+    runIcuTestFromJsonFile(*this, "unsupported-statements.json", errorCode);
+    runIcuTestFromJsonFile(*this, "syntax-errors-reserved.json", errorCode);
 
     // Do tests for data model errors
-    runTestsFromJsonFile(*this, "spec/data-model-errors.json", errorCode);
-    runTestsFromJsonFile(*this, "more-data-model-errors.json", errorCode);
+    runCldrConformanceTestFromJsonFile(*this, "data-model-errors.json", errorCode);
+    runIcuTestFromJsonFile(*this, "more-data-model-errors.json", errorCode);
 
     // Do valid spec tests
-    runTestsFromJsonFile(*this, "spec/syntax.json", errorCode);
-    runTestsFromJsonFile(*this, "spec/fallback.json", errorCode);
-    runTestsFromJsonFile(*this, "spec/u-options.json", errorCode);
-    runTestsFromJsonFile(*this, "spec/bidi.json", errorCode);
-    runTestsFromJsonFile(*this, "spec/pattern-selection.json", errorCode);
+    runCldrConformanceTestFromJsonFile(*this, "syntax.json", errorCode);
+    runCldrConformanceTestFromJsonFile(*this, "fallback.json", errorCode);
+    runCldrConformanceTestFromJsonFile(*this, "u-options.json", errorCode);
+    runCldrConformanceTestFromJsonFile(*this, "bidi.json", errorCode);
+    runCldrConformanceTestFromJsonFile(*this, "pattern-selection.json", errorCode);
 
     // Do valid function tests
-    runTestsFromJsonFile(*this, "spec/functions/currency.json", errorCode);
-    runTestsFromJsonFile(*this, "spec/functions/date.json", errorCode);
-    runTestsFromJsonFile(*this, "spec/functions/datetime.json", errorCode);
-    runTestsFromJsonFile(*this, "spec/functions/integer.json", errorCode);
-    runTestsFromJsonFile(*this, "spec/functions/number.json", errorCode);
-    runTestsFromJsonFile(*this, "spec/functions/string.json", errorCode);
-    runTestsFromJsonFile(*this, "spec/functions/time.json", errorCode);
+    runCldrConformanceTestFromJsonFile(*this, "functions/currency.json", errorCode);
+    runCldrConformanceTestFromJsonFile(*this, "functions/date.json", errorCode);
+    runCldrConformanceTestFromJsonFile(*this, "functions/datetime.json", errorCode);
+    runCldrConformanceTestFromJsonFile(*this, "functions/integer.json", errorCode);
+    runCldrConformanceTestFromJsonFile(*this, "functions/number.json", errorCode);
+    runCldrConformanceTestFromJsonFile(*this, "functions/string.json", errorCode);
+    runCldrConformanceTestFromJsonFile(*this, "functions/time.json", errorCode);
 
     // Other tests (non-spec)
-    runTestsFromJsonFile(*this, "currency-options.json", errorCode);
-    runTestsFromJsonFile(*this, "more-functions.json", errorCode);
-    runTestsFromJsonFile(*this, "valid-tests.json", errorCode);
-    runTestsFromJsonFile(*this, "resolution-errors.json", errorCode);
-    runTestsFromJsonFile(*this, "matches-whitespace.json", errorCode);
-    runTestsFromJsonFile(*this, "alias-selector-annotations.json", errorCode);
-    runTestsFromJsonFile(*this, "tricky-declarations.json", errorCode);
+    runIcuTestFromJsonFile(*this, "currency-options.json", errorCode);
+    runIcuTestFromJsonFile(*this, "more-functions.json", errorCode);
+    runIcuTestFromJsonFile(*this, "valid-tests.json", errorCode);
+    runIcuTestFromJsonFile(*this, "resolution-errors.json", errorCode);
+    runIcuTestFromJsonFile(*this, "matches-whitespace.json", errorCode);
+    runIcuTestFromJsonFile(*this, "alias-selector-annotations.json", errorCode);
+    runIcuTestFromJsonFile(*this, "tricky-declarations.json", errorCode);
 
     // Markup is ignored when formatting to string
-    runTestsFromJsonFile(*this, "markup.json", errorCode);
+    runIcuTestFromJsonFile(*this, "markup.json", errorCode);
 
-    runTestsFromJsonFile(*this, "duplicate-declarations.json", errorCode);
+    runIcuTestFromJsonFile(*this, "duplicate-declarations.json", errorCode);
 
-    runTestsFromJsonFile(*this, "invalid-options.json", errorCode);
+    runIcuTestFromJsonFile(*this, "invalid-options.json", errorCode);
 
-    runTestsFromJsonFile(*this, "syntax-errors-end-of-input.json", errorCode);
-    runTestsFromJsonFile(*this, "syntax-errors-diagnostics.json", errorCode);
-    runTestsFromJsonFile(*this, "syntax-errors-diagnostics-multiline.json", errorCode);
+    runIcuTestFromJsonFile(*this, "syntax-errors-end-of-input.json", errorCode);
+    runIcuTestFromJsonFile(*this, "syntax-errors-diagnostics.json", errorCode);
+    runIcuTestFromJsonFile(*this, "syntax-errors-diagnostics-multiline.json", errorCode);
 
     // ICU4J tests
-    runTestsFromJsonFile(*this, "icu-test-functions.json", errorCode);
-    runTestsFromJsonFile(*this, "icu-parser-tests.json", errorCode);
-    runTestsFromJsonFile(*this, "icu-test-selectors.json", errorCode);
-    runTestsFromJsonFile(*this, "icu-test-previous-release.json", errorCode);
+    runIcuTestFromJsonFile(*this, "icu-test-functions.json", errorCode);
+    runIcuTestFromJsonFile(*this, "icu-parser-tests.json", errorCode);
+    runIcuTestFromJsonFile(*this, "icu-test-selectors.json", errorCode);
+    runIcuTestFromJsonFile(*this, "icu-test-previous-release.json", errorCode);
 
     // TODO(ICU-23429) (not yet implemented): currency and offset
 }

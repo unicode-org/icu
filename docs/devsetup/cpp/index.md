@@ -100,11 +100,12 @@ For example:
 
 ### Run individual test suites
 
-*   `cd ~/icu/mine/icu4c/dbg/test/intltest`
+*   `cd ~/icu/mine/icu4c/source/test/intltest`
     *   `export LD_LIBRARY_PATH=../../lib:../../stubdata:../../tools/ctestfw`
+    *   `export DYLD_LIBRARY_PATH=$LD_LIBRARY_PATH
     *   `make -j5 && ./intltest utility/ByteTrieTest utility/UCharTrieTest`
-*   `cd ~/icu/mine/icu4c/dbg/test/cintltst`
-    *   same relative `LD_LIBRARY_PATH` as for intltest
+*   `cd ~/icu/mine/icu4c/source/test/cintltst`
+    *   same relative `LD_LIBRARY_PATH` and `DYLD_LIBRARY_PATH` as for intltest
     *   `make -j5 && ./cintltst`
 
 ## gdb pretty-printing
