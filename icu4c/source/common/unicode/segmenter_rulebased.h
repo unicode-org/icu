@@ -10,6 +10,7 @@
 
 #if !UCONFIG_NO_BREAK_ITERATION
 
+#include "unicode/brkiter.h"
 #include "unicode/segmenter.h"
 
 #ifndef U_HIDE_DRAFT_API
@@ -20,6 +21,8 @@ namespace segmenter {
 
 class U_COMMON_API_CLASS RuleBasedSegmenterBuilder;
 
+// ---------------------------------------------
+
 class U_COMMON_API_CLASS RuleBasedSegmenter : public Segmenter {
 
 friend RuleBasedSegmenterBuilder;
@@ -27,11 +30,24 @@ friend RuleBasedSegmenterBuilder;
 public:
     ~RuleBasedSegmenter() override;
 
-    // Segments segment(const std::u16string_view &s) override;
+    // TODO: implement
+    // TODO: create a test
+    RuleBasedSegmenter(RuleBasedSegmenter&& other) noexcept;
+
+    // TODO: implement
+    // TODO: create a test
+    RuleBasedSegmenter& operator=(RuleBasedSegmenter&& other) noexcept;
+
+    // move constructor to allow builder to build from a configured BreakIterator instance
+    RuleBasedSegmenter(std::unique_ptr<BreakIterator> && other) noexcept;
 
 private:
+    std::unique_ptr<BreakIterator> breakIter_;
+
     RuleBasedSegmenter();
 };
+
+// ---------------------------------------------
 
 class U_COMMON_API_CLASS RuleBasedSegmenterBuilder : public UObject {
 public:
@@ -50,6 +66,8 @@ private:
 
     UErrorCode errorCode_;
 };
+
+// ---------------------------------------------
 
 }  // namespace segmenter
 
