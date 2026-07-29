@@ -15,6 +15,7 @@
 package com.ibm.icu.dev.test.timezone;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
+import com.ibm.icu.impl.locale.XCldrStub;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.Calendar;
@@ -1434,11 +1435,7 @@ public class TimeZoneRegressionTest extends CoreTestFmwk {
             wk.start();
         }
         for (Thread wk : workers) {
-            try {
-                wk.join();
-            } catch (InterruptedException ie) {
-
-            }
+            XCldrStub.joinUninterruptibly(wk);
         }
     }
 

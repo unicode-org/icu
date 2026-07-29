@@ -327,7 +327,7 @@ public class PatternTokenizer {
                                 quoteStatus = NONE;
                             }
                     }
-                    break; // fall through to NONE
+                    break;
                 case HEX:
                     hexValue <<= 4;
                     hexValue += cp;
@@ -380,7 +380,7 @@ public class PatternTokenizer {
                         continue main;
                     }
                     quoteStatus = NONE;
-                    break; // fall through to NONE
+                    break;
                 case START_QUOTE:
                     // if we are at the very start of a quote, and we hit another quote mark then we
                     // emit a literal quote character and end the quote

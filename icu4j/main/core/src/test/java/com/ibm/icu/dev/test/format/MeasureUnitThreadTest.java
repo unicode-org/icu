@@ -5,6 +5,7 @@ package com.ibm.icu.dev.test.format;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.DontCareFieldPosition;
+import com.ibm.icu.impl.locale.XCldrStub;
 import com.ibm.icu.text.MeasureFormat;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Measure;
@@ -31,11 +32,7 @@ public class MeasureUnitThreadTest extends CoreTestFmwk {
                 };
         thread.start();
         Currency.getInstance(ULocale.ENGLISH);
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-        }
-        ;
+        XCldrStub.joinUninterruptibly(thread);
     }
 
     static class NumericMeasureThread extends Thread {

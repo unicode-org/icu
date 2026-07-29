@@ -10,6 +10,7 @@ package com.ibm.icu.dev.test.util;
 
 import com.ibm.icu.impl.ICULocaleService;
 import com.ibm.icu.impl.ICUService;
+import com.ibm.icu.impl.locale.XCldrStub;
 import com.ibm.icu.util.ULocale;
 import java.text.Collator;
 import java.util.EventListener;
@@ -23,10 +24,7 @@ public class ICUServiceTestSample {
 
         Thread t = new HelloUpdateThread();
         t.start();
-        try {
-            t.join();
-        } catch (InterruptedException e) {
-        }
+        XCldrStub.joinUninterruptibly(t);
         System.out.println("done");
     }
 

@@ -501,4 +501,22 @@ public class XCldrStub {
             Comparator.<String>comparingInt(x -> x.length())
                     .reversed()
                     .thenComparing(Comparator.naturalOrder());
+
+    public static final void joinUninterruptibly(Thread toJoin) {
+        boolean interrupted = false;
+        try {
+            while (true) {
+                try {
+                    toJoin.join();
+                    return;
+                } catch (InterruptedException e) {
+                    interrupted = true;
+                }
+            }
+        } finally {
+            if (interrupted) {
+                Thread.currentThread().interrupt();
+            }
+        }
+    }
 }
