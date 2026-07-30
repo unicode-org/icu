@@ -36,7 +36,10 @@ RuleBasedSegmenter& RuleBasedSegmenter::operator=(RuleBasedSegmenter&& other) no
     return *this;
 }
 
-RuleBasedSegmenter::~RuleBasedSegmenter() {}
+RuleBasedSegmenter::~RuleBasedSegmenter() {
+    
+    breakIter_ = nullptr;
+}
 
 // ---------------------------------------------
 

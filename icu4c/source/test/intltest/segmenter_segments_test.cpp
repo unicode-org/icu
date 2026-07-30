@@ -26,6 +26,8 @@ void SegmentsTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
     TESTCASE_AUTO_BEGIN;
 
     TESTCASE_AUTO(testHelloWorld);
+    TESTCASE_AUTO(testMoveConstructor);
+    TESTCASE_AUTO(testMoveAssignment);
 
     TESTCASE_AUTO_END;
 }
@@ -64,6 +66,46 @@ void SegmentsTest::testHelloWorld() {
     auto someSegmenter = std::make_unique<icu::segmenter::Segmenter>(builder.build(errorCode));
 
     assertEquals("this assertion should fail", 0, 1);
+}
+
+void SegmentsTest::testMoveConstructor() {
+    IcuTestErrorCode errorCode(*this, "testMoveConstructor");
+
+    icu::segmenter::RuleBasedSegmenterBuilder builder;
+    builder.setRules(u"[A-Za-züä]+;");
+    icu::segmenter::RuleBasedSegmenter rbSegmenter1 = builder.build(errorCode);
+
+    errorCode.errIfFailureAndReset();
+
+    icu::segmenter::RuleBasedSegmenter rbSegmenter2(std::move(rbSegmenter1));
+
+    rbSegmenter2.segment(u"Kühlschränke kühlen Getränke", errorCode);
+
+    assertEquals("segment() is temporarily unsupported", U_UNSUPPORTED_ERROR, errorCode);
+    errorCode.reset();
+
+    // TODO: uncomment once segment() is implemented
+    // errorCode.errIfFailureAndReset();
+}
+
+void SegmentsTest::testMoveAssignment() {
+    IcuTestErrorCode errorCode(*this, "testMoveAssignment");
+
+    icu::segmenter::RuleBasedSegmenterBuilder builder;
+    builder.setRules(u"[A-Za-züä]+;");
+    icu::segmenter::RuleBasedSegmenter rbSegmenter1 = builder.build(errorCode);
+
+    errorCode.errIfFailureAndReset();
+
+    icu::segmenter::RuleBasedSegmenter rbSegmenter2 = std::move(rbSegmenter1);
+
+    rbSegmenter2.segment(u"Kühlschränke kühlen Getränke", errorCode);
+
+    assertEquals("segment() is temporarily unsupported", U_UNSUPPORTED_ERROR, errorCode);
+    errorCode.reset();
+
+    // TODO: uncomment once segment() is implemented
+    // errorCode.errIfFailureAndReset();
 }
 
 #endif /* #if !UCONFIG_NO_BREAK_ITERATION */

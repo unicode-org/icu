@@ -20,6 +20,10 @@ public:
 
     void testHelloWorld();
 
+    void testMoveConstructor();
+
+    void testMoveAssignment();
+
 private:
     // Test parameters, from the test framework and test invocation.
     const char* fTestParams;
