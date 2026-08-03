@@ -1330,14 +1330,13 @@ AliasReplacer::parseLanguageReplacement(
         return;
     }
     // We have multiple field so we have to allocate and parse
-    CharString* str =
-        new CharString(replacement, static_cast<int32_t>(uprv_strlen(replacement)), status);
-    LocalPointer<CharString> lpStr(str, status);
-    toBeFreed.adoptElement(lpStr.orphan(), status);
+    auto str = prv::make_unique<CharString>(
+        replacement, static_cast<int32_t>(uprv_strlen(replacement)), status, status);
+    char* data = str->data();
+    toBeFreed.adoptElement(str.release(), status);
     if (U_FAILURE(status)) {
         return;
     }
-    char* data = str->data();
     replacedLanguage = (const char*) data;
     char* endOfField = uprv_strchr(data, '_');
     *endOfField = '\0'; // null terminiate it.
@@ -1523,7 +1522,7 @@ AliasReplacer::replaceTerritory(UVector& toBeFreed, UErrorCode& status)
             .build(status);
         l.addLikelySubtags(status);
         const char* likelyRegion = l.getCountry();
-        LocalPointer<CharString> item;
+        prv::unique_ptr<CharString> item;
         if (likelyRegion != nullptr && uprv_strlen(likelyRegion) > 0) {
             size_t len = uprv_strlen(likelyRegion);
             const char* foundInReplacement = uprv_strstr(replacement,
@@ -1535,18 +1534,17 @@ AliasReplacer::replaceTerritory(UVector& toBeFreed, UErrorCode& status)
                          *(foundInReplacement-1) == ' ');
                 U_ASSERT(foundInReplacement[len] == ' ' ||
                          foundInReplacement[len] == '\0');
-                item.adoptInsteadAndCheckErrorCode(
-                    new CharString(foundInReplacement, static_cast<int32_t>(len), status), status);
+                item = prv::make_unique<CharString>(
+                    foundInReplacement, static_cast<int32_t>(len), status, status);
             }
         }
-        if (item.isNull() && U_SUCCESS(status)) {
-            item.adoptInsteadAndCheckErrorCode(
-                new CharString(replacement,
-                               static_cast<int32_t>(firstSpace - replacement), status), status);
+        if (!item && U_SUCCESS(status)) {
+            item = prv::make_unique<CharString>(
+                replacement, static_cast<int32_t>(firstSpace - replacement), status, status);
         }
         if (U_FAILURE(status)) { return false; }
         replacedRegion = item->data();
-        toBeFreed.adoptElement(item.orphan(), status);
+        toBeFreed.adoptElement(item.release(), status);
         if (U_FAILURE(status)) { return false; }
     }
     U_ASSERT(!same(region, replacedRegion));
