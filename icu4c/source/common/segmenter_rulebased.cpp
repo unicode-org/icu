@@ -88,7 +88,11 @@ RuleBasedSegmenter RuleBasedSegmenterBuilder::build(UErrorCode& errorCode) {
 
     this->breakIter_ = std::make_unique<icu::RuleBasedBreakIterator>(rulesUniStr, parseError, this->errorCode_);
 
-    return makeEmptySegmenter();
+    RuleBasedSegmenter rbSegmenter(std::move(this->breakIter_));
+
+    // Q (elango): this inefficiently incurs a copy, right?
+
+    return rbSegmenter;
 }
 
 // ---------------------------------------------

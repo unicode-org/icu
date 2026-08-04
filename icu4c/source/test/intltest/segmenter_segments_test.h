@@ -6,8 +6,6 @@
 
 #include "intltest.h"
 
-// TODO: include in RBBI test along with other test classes. copy other test class setup
-
 /**
  * Segments test
  */

@@ -51,21 +51,26 @@ SegmentsTest::~SegmentsTest() {
 //---------------------------------------------
 
 void SegmentsTest::testHelloWorld() {
-    std::cout << "hello" << std::endl;
-
     IcuTestErrorCode errorCode(*this, "testHelloWorld");
 
     std::unique_ptr<icu::segmenter::Segment> segment(new icu::segmenter::Segment());
 
     // TODO: modify signature to match ICU4J Segmenter API design
     icu::segmenter::RuleBasedSegmenterBuilder builder;
+    builder.setRules(u"[A-Za-züä]+;");
     icu::segmenter::RuleBasedSegmenter rbSegmenter = builder.build(errorCode);
 
     errorCode.errIfFailureAndReset();
 
     auto someSegmenter = std::make_unique<icu::segmenter::Segmenter>(builder.build(errorCode));
 
-    assertEquals("this assertion should fail", 0, 1);
+    someSegmenter->segment(u"Kühlschränke kühlen Getränke", errorCode);
+
+    assertEquals("segment() is temporarily unsupported", U_UNSUPPORTED_ERROR, errorCode);
+    errorCode.reset();
+
+    // TODO: uncomment once segment() is implemented
+    // errorCode.errIfFailureAndReset();
 }
 
 void SegmentsTest::testMoveConstructor() {
