@@ -11,9 +11,10 @@ namespace segmenter {
 
 // ---------------------------------------------
 
-RuleBasedSegmenter::RuleBasedSegmenter()
+RuleBasedSegmenter::RuleBasedSegmenter():
+    breakIter_(nullptr)
 {
-    breakIter_ = nullptr;
+    
 }
 
 RuleBasedSegmenter::RuleBasedSegmenter(std::unique_ptr<BreakIterator> && other) noexcept 
