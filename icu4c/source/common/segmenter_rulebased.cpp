@@ -2,6 +2,8 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 
 #include "unicode/brkiter.h"
+#include "unicode/parseerr.h"
+#include "unicode/rbbi.h"
 #include "unicode/segmenter_rulebased.h"
 #include "unicode/utypes.h"
 
@@ -45,6 +47,7 @@ RuleBasedSegmenter::~RuleBasedSegmenter() {
 // ---------------------------------------------
 
 RuleBasedSegmenterBuilder::RuleBasedSegmenterBuilder() :
+    breakIter_(nullptr),
     UObject(),
     rules_(u""),
     errorCode_(U_ZERO_ERROR)
@@ -78,6 +81,12 @@ RuleBasedSegmenter RuleBasedSegmenterBuilder::build(UErrorCode& errorCode) {
 
     // TODO: implement builder validation logic here & remove
     // placeholder return statement
+
+    UParseError parseError;
+
+    UnicodeString rulesUniStr(this->rules_);
+
+    this->breakIter_ = std::make_unique<icu::RuleBasedBreakIterator>(rulesUniStr, parseError, this->errorCode_);
 
     return makeEmptySegmenter();
 }

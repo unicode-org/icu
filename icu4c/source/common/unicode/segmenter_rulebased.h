@@ -11,6 +11,7 @@
 #if !UCONFIG_NO_BREAK_ITERATION
 
 #include "unicode/brkiter.h"
+#include "unicode/parseerr.h"
 #include "unicode/segmenter.h"
 
 #ifndef U_HIDE_DRAFT_API
@@ -60,6 +61,8 @@ public:
     RuleBasedSegmenter build(UErrorCode& errorCode);
 
 private:
+    std::unique_ptr<BreakIterator> breakIter_;
+
     std::u16string_view rules_;
 
     RuleBasedSegmenter makeEmptySegmenter();
