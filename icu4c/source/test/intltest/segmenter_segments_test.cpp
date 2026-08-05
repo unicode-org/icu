@@ -66,8 +66,7 @@ void SegmentsTest::testHelloWorld() {
 
     someSegmenter->segment(u"Kühlschränke kühlen Getränke", errorCode);
 
-    assertEquals("segment() is temporarily unsupported", U_UNSUPPORTED_ERROR, errorCode);
-    errorCode.reset();
+    assertEquals("segment() is temporarily unsupported", U_UNSUPPORTED_ERROR, errorCode.reset());
 
     // TODO: uncomment once segment() is implemented
     // errorCode.errIfFailureAndReset();
@@ -86,8 +85,7 @@ void SegmentsTest::testMoveConstructor() {
 
     rbSegmenter2.segment(u"Kühlschränke kühlen Getränke", errorCode);
 
-    assertEquals("segment() is temporarily unsupported", U_UNSUPPORTED_ERROR, errorCode);
-    errorCode.reset();
+    assertEquals("segment() is temporarily unsupported", U_UNSUPPORTED_ERROR, errorCode.reset());
 
     // TODO: uncomment once segment() is implemented
     // errorCode.errIfFailureAndReset();
@@ -106,8 +104,7 @@ void SegmentsTest::testMoveAssignment() {
 
     rbSegmenter2.segment(u"Kühlschränke kühlen Getränke", errorCode);
 
-    assertEquals("segment() is temporarily unsupported", U_UNSUPPORTED_ERROR, errorCode);
-    errorCode.reset();
+    assertEquals("segment() is temporarily unsupported", U_UNSUPPORTED_ERROR, errorCode.reset());
 
     // TODO: uncomment once segment() is implemented
     // errorCode.errIfFailureAndReset();
