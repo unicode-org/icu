@@ -26,8 +26,6 @@ class U_COMMON_API_CLASS RuleBasedSegmenterBuilder;
 
 class U_COMMON_API_CLASS RuleBasedSegmenter : public Segmenter {
 
-friend RuleBasedSegmenterBuilder;
-
 public:
     ~RuleBasedSegmenter() override;
 
@@ -39,13 +37,15 @@ public:
     // TODO: create a test
     RuleBasedSegmenter& operator=(RuleBasedSegmenter&& other) noexcept;
 
+private:
+    friend RuleBasedSegmenterBuilder;
+    
+    RuleBasedSegmenter();
+
     // move constructor to allow builder to build from a configured BreakIterator instance
     RuleBasedSegmenter(std::unique_ptr<BreakIterator> && other) noexcept;
 
-private:
     std::unique_ptr<BreakIterator> breakIter_;
-
-    RuleBasedSegmenter();
 };
 
 // ---------------------------------------------
