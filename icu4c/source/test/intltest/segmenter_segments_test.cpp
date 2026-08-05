@@ -28,6 +28,7 @@ void SegmentsTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
     TESTCASE_AUTO(testHelloWorld);
     TESTCASE_AUTO(testMoveConstructor);
     TESTCASE_AUTO(testMoveAssignment);
+    TESTCASE_AUTO(testEmptyRules);
 
     TESTCASE_AUTO_END;
 }
@@ -70,6 +71,15 @@ void SegmentsTest::testHelloWorld() {
 
     // TODO: uncomment once segment() is implemented
     // errorCode.errIfFailureAndReset();
+}
+
+void SegmentsTest::testEmptyRules() {
+    IcuTestErrorCode errorCode(*this, "testEmptyRules");
+
+    icu::segmenter::RuleBasedSegmenterBuilder builder;
+    icu::segmenter::RuleBasedSegmenter rbSegmenter = builder.build(errorCode);
+
+    assertEquals("RuleBasedSegmenter needs non-empty rules", U_ILLEGAL_ARGUMENT_ERROR, errorCode.reset());
 }
 
 void SegmentsTest::testMoveConstructor() {

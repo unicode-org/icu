@@ -66,7 +66,6 @@ RuleBasedSegmenterBuilder& RuleBasedSegmenterBuilder::setRules(std::u16string_vi
 
 RuleBasedSegmenter RuleBasedSegmenterBuilder::makeEmptySegmenter() {
     icu::segmenter::RuleBasedSegmenter empty;
-    // Q (elango): this inefficiently incurs a copy, right?
     return empty;
 }
 
@@ -78,19 +77,23 @@ RuleBasedSegmenter RuleBasedSegmenterBuilder::build(UErrorCode& errorCode) {
         errorCode = errorCode_;
         return makeEmptySegmenter();
     }
-
-    // TODO: implement builder validation logic here & remove
-    // placeholder return statement
+    if (rules_.empty()) {
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return makeEmptySegmenter();
+    }
 
     UParseError parseError;
 
-    UnicodeString rulesUniStr(this->rules_);
+    UnicodeString rulesUniStr(rules_);
 
-    this->breakIter_ = std::make_unique<icu::RuleBasedBreakIterator>(rulesUniStr, parseError, this->errorCode_);
+    breakIter_ = std::make_unique<icu::RuleBasedBreakIterator>(rulesUniStr, parseError, errorCode_);
 
-    RuleBasedSegmenter rbSegmenter(std::move(this->breakIter_));
+    if (U_FAILURE(errorCode_)) {
+        errorCode = errorCode_;
+        return makeEmptySegmenter();
+    }
 
-    // Q (elango): this inefficiently incurs a copy, right?
+    RuleBasedSegmenter rbSegmenter(std::move(breakIter_));
 
     return rbSegmenter;
 }

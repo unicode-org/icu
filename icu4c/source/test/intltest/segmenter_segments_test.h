@@ -18,6 +18,8 @@ public:
 
     void testHelloWorld();
 
+    void testEmptyRules();
+
     void testMoveConstructor();
 
     void testMoveAssignment();
