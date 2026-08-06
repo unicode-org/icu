@@ -1588,7 +1588,7 @@ public final class CollationBuilder extends CollationRuleParser.Sink {
     }
 
     private static long nodeFromNextIndex(int next) {
-        return next << 8;
+        return (long) next << 8;
     }
 
     private static long nodeFromStrength(int strength) {
