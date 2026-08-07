@@ -46,11 +46,6 @@
       "exp": "one"
     },
     {
-      "src": ".match $foo 1 {{one}} * {{other}}",
-      "params": [{ "name": "foo", "value": null }],
-      "exp": "other"
-    },
-    {
       "src": ".input {$foo :number} .match $foo 1 {{one}} * {{other}}",
       "exp": "other",
       "expErrors": [{ "type":  "unresolved-variable" }]

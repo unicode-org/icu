@@ -411,15 +411,21 @@ class NumberFunctionFactory implements FunctionFactory {
 
             strOption = OptUtils.getString(fixedOptions, "style", "decimal");
 
-            option = OptUtils.getInteger(fixedOptions, reportErrors, "minimumFractionDigits");
+            option =
+                    OptUtils.getDigitSizeOption(
+                            fixedOptions, reportErrors, "minimumFractionDigits");
             if (option != null) {
                 nf = nf.precision(Precision.minFraction(option));
             }
-            option = OptUtils.getInteger(fixedOptions, reportErrors, "maximumFractionDigits");
+            option =
+                    OptUtils.getDigitSizeOption(
+                            fixedOptions, reportErrors, "maximumFractionDigits");
             if (option != null) {
                 nf = nf.precision(Precision.maxFraction(option));
             }
-            option = OptUtils.getInteger(fixedOptions, reportErrors, "minimumSignificantDigits");
+            option =
+                    OptUtils.getDigitSizeOption(
+                            fixedOptions, reportErrors, "minimumSignificantDigits");
             if (option != null) {
                 nf = nf.precision(Precision.minSignificantDigits(option));
             }
@@ -434,11 +440,12 @@ class NumberFunctionFactory implements FunctionFactory {
         }
 
         // The options below apply to both `:number` and `:integer`
-        option = OptUtils.getInteger(fixedOptions, reportErrors, "minimumIntegerDigits");
+        option = OptUtils.getDigitSizeOption(fixedOptions, reportErrors, "minimumIntegerDigits");
         if (option != null) {
             // TODO! Ask Shane. nf.integerWidth(null) ?
         }
-        option = OptUtils.getInteger(fixedOptions, reportErrors, "maximumSignificantDigits");
+        option =
+                OptUtils.getDigitSizeOption(fixedOptions, reportErrors, "maximumSignificantDigits");
         if (option != null) {
             nf = nf.precision(Precision.maxSignificantDigits(option));
         }
@@ -557,8 +564,8 @@ class NumberFunctionFactory implements FunctionFactory {
             boolean reportErrors = OptUtils.reportErrors(options);
 
             int operand = 0;
-            Integer addOption = OptUtils.getInteger(options, reportErrors, "add");
-            Integer subtractOption = OptUtils.getInteger(options, reportErrors, "subtract");
+            Integer addOption = OptUtils.getDigitSizeOption(options, reportErrors, "add");
+            Integer subtractOption = OptUtils.getDigitSizeOption(options, reportErrors, "subtract");
 
             if (addOption == null) {
                 if (subtractOption == null) { // both null

@@ -204,10 +204,10 @@
       "type": "array",
       "items": {
         "enum": [
+          ":currency",
           ":percent",
           "u:dir",
-          "u:id",
-          "u:locale"
+          "u:id"
         ]
       }
     },

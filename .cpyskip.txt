@@ -98,6 +98,7 @@ icu4j/eclipse-build/pdebuild/allElements.xml
 icu4j/eclipse-build/pdebuild/customTargets.xml
 icu4j/main/core/src/test/resources/com/ibm/icu/dev/data/IDNATestInput.txt
 icu4j/main/core/src/test/resources/com/ibm/icu/dev/data/cldr/localeIdentifiers/README.md
+icu4j/main/core/src/test/resources/com/ibm/icu/dev/data/cldr/messageFormat/README.md
 icu4j/main/core/src/test/resources/com/ibm/icu/dev/data/cldr/personNameTest/README.md
 icu4j/main/core/src/test/resources/com/ibm/icu/dev/data/cldr/units/README.md
 icu4j/main/core/src/test/resources/com/ibm/icu/dev/data/unicode/confusablesWholeScript.txt

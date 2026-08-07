@@ -1,8 +1,9 @@
 {
   "$schema": "../../schemas/v0/tests.schema.json",
   "scenario": "Currency function",
-  "description": "The built-in formatter and selector for currencies.",
+  "description": "The built-in formatter for currencies.",
   "defaultTestProperties": {
+    "tags": [":currency"],
     "bidiIsolation": "none",
     "locale": "en-US",
     "expErrors": []

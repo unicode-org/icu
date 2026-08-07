@@ -72,6 +72,17 @@ class OptUtils {
         return null;
     }
 
+    static Integer getDigitSizeOption(Map<String, ?> options, boolean reportErrors, String key) {
+        Integer value = getInteger(options, reportErrors, key);
+        if (value == null) {
+            return null;
+        }
+        if (value < 0) {
+            throw new IllegalArgumentException("bad-option: `" + key + "` must be >= 0.");
+        }
+        return value;
+    }
+
     static String getString(Map<String, ?> options, String key, String defaultVal) {
         Object value = options.get(key);
         if (value instanceof CharSequence) {

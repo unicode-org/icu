@@ -21,23 +21,7 @@
       "tags": ["u:dir"],
       "src": "{#tag u:dir=rtl}content{/ns:tag}",
       "exp": "content",
-//      "expErrors": [{ "type": "bad-option" }],
-      "expParts": [
-        { "type": "markup", "kind": "open", "name": "tag" },
-        { "type": "text", "value": "content" },
-        { "type": "markup", "kind": "close", "name": "ns:tag" }
-      ]
-    },
-    {
-      "tags": ["u:locale"],
-      "src": "hello {4.2 :number u:locale=fr}",
-      "exp": "hello 4,2"
-    },
-    {
-      "tags": ["u:dir", "u:locale"],
-      "src": "{#tag u:dir=rtl u:locale=ar}content{/ns:tag}",
-      "exp": "content",
-//      "expErrors": [{ "type": "bad-option" }, { "type": "bad-option" }],
+      "expErrors": [{ "type": "bad-option" }],
       "expParts": [
         { "type": "markup", "kind": "open", "name": "tag" },
         { "type": "text", "value": "content" },

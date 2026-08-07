@@ -5,7 +5,6 @@ package com.ibm.icu.dev.test.message2;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.ICUDebug;
-
 import java.io.Reader;
 import java.util.Map;
 import java.util.Set;
@@ -79,10 +78,7 @@ public class CoreTest extends CoreTestFmwk {
                     // CLDR
                     "functions/integer.json", Set.of(8, 9, 11, 12), // ICU-23225
                     "functions/number.json", Set.of(35, 36, 38, 39), // ICU-23225
-                    "u-options.json", Set.of(1), // `:u:dir` on markup, MF2 issue #1005
-                    // ICU only
-                    "icu-test-previous-release.json", Set.of(8),
-                    "invalid-options.json", Set.of(0)
+                    "u-options.json", Set.of(1) // `:u:dir` on markup, MF2 issue #1005
                     );
 
     private void runJsonTests(boolean isCldrTest, String[] fileList) throws Exception {
