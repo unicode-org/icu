@@ -155,7 +155,7 @@ public class TestUtils {
     }
 
     static void runTestCase(DefaultTestProperties defaults, Unit unit, Param[] params) {
-        if (unit == null || unit.ignoreJava != null) {
+        if (unit == null) {
             return;
         }
 

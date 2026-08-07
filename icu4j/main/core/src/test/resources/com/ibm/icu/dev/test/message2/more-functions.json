@@ -42,8 +42,7 @@
       "locale": "en-IN",
       "params": [{ "name": "val", "value": 1234567890.97531 }],
       "expErrors": [{"type": "bad-operand"}],
-      "comment": "Should fail because number literals are not treated as localized numbers",
-      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+      "comment": "Should fail because number literals are not treated as localized numbers"
     },
     {
       "src": "From literal: {|123456789.531| :number}!",

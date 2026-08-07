@@ -33,8 +33,7 @@
     {
       "src": ".input {$foo :number} .match $foo 1 {{one}} * {{other}}",
       "params": [{ "name": "foo", "value": "1" }],
-      "exp": "one",
-      "ignoreJava": "See ICU-22809"
+      "exp": "one"
     },
     {
       "src": ".input {$foo :string} .match $foo 1 {{one}} * {{other}}",
@@ -47,8 +46,6 @@
       "exp": "one"
     },
     {
-      "ignoreJava": "Can't pass null in a map",
-      "ignoreCpp": "Same as Java",
       "src": ".match $foo 1 {{one}} * {{other}}",
       "params": [{ "name": "foo", "value": null }],
       "exp": "other"
@@ -77,8 +74,7 @@
       "src": ".local $bar = {$none :number} .input {$foo :string} .match $foo one {{one}} * {{{$bar}}}",
       "params": [{ "name": "foo", "value": 2 }],
       "exp": "{$none}",
-      "expErrors": [{ "type": "unresolved-variable" }],
-      "ignoreJava": "See https://github.com/unicode-org/message-format-wg/issues/782"
+      "expErrors": [{ "type": "unresolved-variable" }]
     },
     {
       "src": "{{#tag}}",
@@ -105,8 +101,7 @@
     {
       "src": "empty { }",
       "exp": "empty ",
-      "expErrors": [{ "type": "syntax-error" }],
-      "ignoreCpp": "Fallback is unclear. See https://github.com/unicode-org/message-format-wg/issues/703"
+      "expErrors": [{ "type": "syntax-error" }]
     },
     {
       "src": "bad {:}",
@@ -116,8 +111,7 @@
     {
       "src": "{bad {$placeholder option}}",
       "exp": "bad {$placeholder}",
-      "expErrors": [{ "type": "syntax-error"}, { "type": "unresolved-variable" }],
-      "ignoreCpp": "Fallback is unclear. See https://github.com/unicode-org/message-format-wg/issues/703"
+      "expErrors": [{ "type": "syntax-error"}, { "type": "unresolved-variable" }]
     },
     {
       "src": ".local $f = {|foo| :string} .match $f *{{foo}}",
@@ -126,14 +120,12 @@
     {
       "src": ".input {$foo :string} .match $foo * * {{foo}}",
       "exp": "foo",
-      "expErrors": [{ "type": "variant-key-mismatch" }, { "type": "unresolved-variable" }],
-      "ignoreCpp": "Fallback is unclear. See https://github.com/unicode-org/message-format-wg/issues/735"
+      "expErrors": [{ "type": "variant-key-mismatch" }, { "type": "unresolved-variable" }]
     },
     {
       "src": ".input {$foo :string} .input {$bar :string} .match $foo $bar * {{foo}}",
       "exp": "foo",
-      "expErrors": [{ "type": "variant-key-mismatch" }, { "type": "unresolved-variable" }],
-      "ignoreCpp": "Fallback is unclear. See https://github.com/unicode-org/message-format-wg/issues/735"
+      "expErrors": [{ "type": "variant-key-mismatch" }, { "type": "unresolved-variable" }]
     }
   ]
 }
