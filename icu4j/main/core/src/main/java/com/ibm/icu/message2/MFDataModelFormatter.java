@@ -221,9 +221,9 @@ class MFDataModelFormatter {
                     functionName = ((FunctionRef) le.function).name;
                 }
             }
-            FunctionFactory funcFactory = standardFunctions.getFunction(functionName);
+            FunctionFactory funcFactory = customFunctions.getFunction(functionName);
             if (funcFactory == null) {
-                funcFactory = customFunctions.getFunction(functionName);
+                funcFactory = standardFunctions.getFunction(functionName);
             }
             // spec: If selection is supported for `rv`:
             if (funcFactory != null) {
@@ -463,9 +463,9 @@ class MFDataModelFormatter {
                 return null;
             }
             Class<?> clazz = toFormat.getClass();
-            functionName = standardFunctions.getDefaultFunctionNameForType(clazz);
+            functionName = customFunctions.getDefaultFunctionNameForType(clazz);
             if (functionName == null) {
-                functionName = customFunctions.getDefaultFunctionNameForType(clazz);
+                functionName = standardFunctions.getDefaultFunctionNameForType(clazz);
             }
             if (functionName == null) {
                 fatalFormattingError(
@@ -474,9 +474,9 @@ class MFDataModelFormatter {
             }
         }
 
-        FunctionFactory func = standardFunctions.getFunction(functionName);
+        FunctionFactory func = customFunctions.getFunction(functionName);
         if (func == null) {
-            func = customFunctions.getFunction(functionName);
+            func = standardFunctions.getFunction(functionName);
         }
         return func;
     }
