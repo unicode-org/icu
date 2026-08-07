@@ -48,7 +48,6 @@ RuleBasedSegmenter::~RuleBasedSegmenter() {
 
 RuleBasedSegmenterBuilder::RuleBasedSegmenterBuilder() :
     breakIter_(nullptr),
-    UObject(),
     rules_(u""),
     errorCode_(U_ZERO_ERROR)
 {

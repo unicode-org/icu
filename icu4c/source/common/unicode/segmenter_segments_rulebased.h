@@ -1,0 +1,67 @@
+// © 2026 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+
+#ifndef __SEGMENTER_SEGMENTS_RULEBASED_H__
+#define __SEGMENTER_SEGMENTS_RULEBASED_H__
+
+/**
+ * \file
+ * \brief C++ API: Segmenter base class.
+ */
+
+#include "unicode/utypes.h"
+
+#if U_SHOW_CPLUSPLUS_API
+
+#if UCONFIG_NO_BREAK_ITERATION
+
+U_NAMESPACE_BEGIN
+
+/*
+ * Allow the declaration of APIs with pointers to BreakIterator
+ * and Segmenter
+ * even when break iteration is removed from the build.
+ */
+class BreakIterator;
+class Segmenter;
+
+U_NAMESPACE_END
+
+#else
+
+#include "unicode/segmenter.h"
+#include "unicode/uobject.h"
+#include "unicode/unistr.h"
+
+#include <memory>
+
+#ifndef U_HIDE_DRAFT_API
+
+U_NAMESPACE_BEGIN
+
+namespace segmenter {
+
+class U_COMMON_API_CLASS RuleBasedSegments : public Segments {
+public:
+
+private:
+    friend class Segments;
+
+    bool isBoundary(int32_t i);
+
+    std::u16string_view source_;
+    std::unique_ptr<BreakIterator> breakIterProrotype_;
+
+};
+
+}  // namespace segmenter
+
+U_NAMESPACE_END
+
+#endif // U_HIDE_DRAFT_API
+
+#endif /* #if !UCONFIG_NO_BREAK_ITERATION */
+
+#endif /* U_SHOW_CPLUSPLUS_API */
+
+#endif // __SEGMENTER_SEGMENTS_RULEBASED_H__

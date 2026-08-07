@@ -38,8 +38,8 @@ public:
     RuleBasedSegmenter& operator=(RuleBasedSegmenter&& other) noexcept;
 
 private:
-    friend RuleBasedSegmenterBuilder;
-    
+    friend class RuleBasedSegmenterBuilder;
+
     RuleBasedSegmenter();
 
     // move constructor to allow builder to build from a configured BreakIterator instance
