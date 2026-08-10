@@ -37,6 +37,8 @@ public:
     // TODO: create a test
     RuleBasedSegmenter& operator=(RuleBasedSegmenter&& other) noexcept;
 
+    std::unique_ptr<Segments> segment(std::u16string_view s, UErrorCode &errorCode) override;
+
 private:
     friend class RuleBasedSegmenterBuilder;
 

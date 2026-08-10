@@ -30,6 +30,7 @@ U_NAMESPACE_END
 #else
 
 #include "unicode/segmenter.h"
+#include "unicode/segmenter_rulebased.h"
 #include "unicode/uobject.h"
 #include "unicode/unistr.h"
 
@@ -45,7 +46,10 @@ class U_COMMON_API_CLASS RuleBasedSegments : public Segments {
 public:
 
 private:
-    friend class Segments;
+
+    friend class RuleBasedSegmenter;
+
+    RuleBasedSegments(const BreakIterator & breakIter, std::u16string_view source);
 
     bool isBoundary(int32_t i);
 

@@ -9,6 +9,14 @@ U_NAMESPACE_BEGIN
 
 namespace segmenter {
 
+RuleBasedSegments::RuleBasedSegments(const BreakIterator & breakIter, std::u16string_view source)
+    : breakIterProrotype_(std::unique_ptr<BreakIterator>(breakIter.clone())),
+    source_(source)
+{
+    UnicodeString sourceUstr(source_);
+    breakIterProrotype_->setText(sourceUstr);
+}
+
 bool RuleBasedSegments::isBoundary(int32_t i) {
     return breakIterProrotype_->clone()->isBoundary(i);
 }
