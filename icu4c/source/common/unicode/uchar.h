@@ -2007,17 +2007,15 @@ enum UBlockCode {
     /** @stable ICU 79 */
     UBLOCK_BENGALI_SUPPLEMENT = 348, /*[11DF0]*/
     /** @stable ICU 79 */
-    UBLOCK_CHISOI = 349, /*[16D80]*/
+    UBLOCK_JURCHEN = 349, /*[18E00]*/
     /** @stable ICU 79 */
-    UBLOCK_JURCHEN = 350, /*[18E00]*/
+    UBLOCK_JURCHEN_RADICALS = 350, /*[191A0]*/
     /** @stable ICU 79 */
-    UBLOCK_JURCHEN_RADICALS = 351, /*[191A0]*/
+    UBLOCK_MISCELLANEOUS_SYMBOLS_AND_ARROWS_EXTENDED = 351, /*[1DB00]*/
     /** @stable ICU 79 */
-    UBLOCK_MISCELLANEOUS_SYMBOLS_AND_ARROWS_EXTENDED = 352, /*[1DB00]*/
+    UBLOCK_MUSICAL_SYMBOLS_SUPPLEMENT = 352, /*[1D250]*/
     /** @stable ICU 79 */
-    UBLOCK_MUSICAL_SYMBOLS_SUPPLEMENT = 353, /*[1D250]*/
-    /** @stable ICU 79 */
-    UBLOCK_SEAL = 354, /*[3D000]*/
+    UBLOCK_SEAL = 353, /*[3D000]*/
 
 #ifndef U_HIDE_DEPRECATED_API
     /**
@@ -2026,7 +2024,7 @@ enum UBlockCode {
      *
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
-    UBLOCK_COUNT = 355,
+    UBLOCK_COUNT = 354,
 #endif  // U_HIDE_DEPRECATED_API
 
     /** @stable ICU 2.0 */

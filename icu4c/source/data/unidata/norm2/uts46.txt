@@ -1,6 +1,6 @@
 # Original file:
 # IdnaMappingTable.txt
-# Date: 2026-04-29, 20:29:13 GMT
+# Date: 2026-06-29, 15:25:07 GMT
 # © 2026 Unicode®, Inc.
 # Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
 # For terms of use and license, see https://www.unicode.org/terms_of_use.html
@@ -6741,11 +6741,7 @@ FFFE..FFFF    >FFFD                     # 1.1  <noncharacter-FFFE>..<noncharacte
 # 16D40..16D6Cvalid                     # 16.0 KIRAT RAI SIGN ANUSVARA..KIRAT RAI SIGN SAAT
 # 16D6D..16D6Fvalid                     # 16.0 KIRAT RAI SIGN YUPI..KIRAT RAI DOUBLE DANDA
 # 16D70..16D79valid                     # 16.0 KIRAT RAI DIGIT ZERO..KIRAT RAI DIGIT NINE
-16D7A..16D7F  >FFFD                     # NA   <reserved-16D7A>..<reserved-16D7F>
-# 16D80..16D9Dvalid                     # 18.0 CHISOI LETTER A..CHISOI SIGN SISO
-16D9E..16D9F  >FFFD                     # NA   <reserved-16D9E>..<reserved-16D9F>
-# 16DA0..16DA9valid                     # 18.0 CHISOI DIGIT ZERO..CHISOI DIGIT NINE
-16DAA..16E3F  >FFFD                     # NA   <reserved-16DAA>..<reserved-16E3F>
+16D7A..16E3F  >FFFD                     # NA   <reserved-16D7A>..<reserved-16E3F>
 16E40         >16E60                    # 11.0 MEDEFAIDRIN CAPITAL LETTER M
 16E41         >16E61                    # 11.0 MEDEFAIDRIN CAPITAL LETTER S
 16E42         >16E62                    # 11.0 MEDEFAIDRIN CAPITAL LETTER V
@@ -9411,7 +9407,7 @@ FFFE..FFFF    >FFFD                     # 1.1  <noncharacter-FFFE>..<noncharacte
 # 31350..323AFvalid                     # 15.0 CJK UNIFIED IDEOGRAPH-31350..CJK UNIFIED IDEOGRAPH-323AF
 # 323B0..33479valid                     # 17.0 CJK UNIFIED IDEOGRAPH-323B0..CJK UNIFIED IDEOGRAPH-33479
 3347A..3CFFF  >FFFD                     # NA   <reserved-3347A>..<reserved-3CFFF>
-# 3D000..3FC3Fvalid                     # 18.0 SEAL CHARACTER-3D000..SEAL CHARACTER-3FC3F
+# 3D000..3FC3Fvalid                     # 18.0 SMALL SEAL CHARACTER-3D000..SMALL SEAL CHARACTER-3FC3F
 3FC40..3FFFD  >FFFD                     # NA   <reserved-3FC40>..<reserved-3FFFD>
 3FFFE..3FFFF  >FFFD                     # 2.0  <noncharacter-3FFFE>..<noncharacter-3FFFF>
 40000..4FFFD  >FFFD                     # NA   <reserved-40000>..<reserved-4FFFD>

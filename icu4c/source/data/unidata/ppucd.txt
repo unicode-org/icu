@@ -270,7 +270,6 @@ value;blk;Cham;Cham
 value;blk;Cherokee;Cherokee
 value;blk;Cherokee_Sup;Cherokee_Supplement
 value;blk;Chess_Symbols;Chess_Symbols
-value;blk;Chisoi;Chisoi
 value;blk;Chorasmian;Chorasmian
 value;blk;Compat_Jamo;Hangul_Compatibility_Jamo
 value;blk;Control_Pictures;Control_Pictures
@@ -1101,7 +1100,6 @@ value;sc;Cans;Canadian_Aboriginal
 value;sc;Cari;Carian
 value;sc;Cham;Cham
 value;sc;Cher;Cherokee
-value;sc;Chis;Chisoi
 value;sc;Chrs;Chorasmian
 value;sc;Cirt;Cirt
 value;sc;Copt;Coptic;Qaac
@@ -1581,7 +1579,7 @@ cp;00B3;bc=EN;CWKCF;dm=0033;dt=Sup;ea=A;gc=No;ID_Compat_Math_Continue;ID_Type=No
 cp;00B4;bc=ON;CI;CWKCF;Dia;dm=0020 0301;dt=Com;ea=A;gc=Sk;ID_Type=Not_NFKC;lb=BB;na=ACUTE ACCENT;NFKC_CF=0020 0301;NFKC_QC=N;NFKC_SCF=0020 0301;sc=Zyyy;WB=XX
 cp;00B5;Alpha;Cased;cf=03BC;CWCF;CWCM;CWKCF;CWT;CWU;dm=03BC;dt=Com;IDC;IDS;ID_Type=Not_NFKC;Lower;na=MICRO SIGN;NFKC_CF=03BC;NFKC_QC=N;NFKC_SCF=03BC;SB=LO;sc=Zyyy;scf=03BC;stc=039C;suc=039C;XIDC;XIDS
 cp;00B6;bc=ON;ea=A;gc=Po;ID_Type=Not_XID;lb=AI;na=PILCROW SIGN;NFKD_QC=Y;Pat_Syn;sc=Zyyy;WB=XX
-cp;00B7;bc=ON;CI;Dia;ea=A;Ext;gc=Po;IDC;ID_Status=Allowed;ID_Type=Inclusion;lb=AI;na=MIDDLE DOT;NFKD_QC=Y;sc=Zyyy;scx=Avst Cari Copt Dupl Elba Geor Glag Gong Goth Grek Hani Latn Lydi Mahj Perm Shaw;WB=ML;XIDC
+cp;00B7;bc=ON;CI;Dia;ea=A;Ext;gc=Po;IDC;ID_Status=Allowed;ID_Type=Inclusion;lb=IS;na=MIDDLE DOT;NFKD_QC=Y;sc=Zyyy;scx=Avst Cari Copt Dupl Elba Geor Glag Gong Goth Grek Hani Latn Lydi Mahj Perm Shaw;WB=ML;XIDC
 cp;00B8;bc=ON;CI;CWKCF;Dia;dm=0020 0327;dt=Com;ea=A;gc=Sk;ID_Type=Not_NFKC;lb=AI;na=CEDILLA;NFKC_CF=0020 0327;NFKC_QC=N;NFKC_SCF=0020 0327;sc=Zyyy
 cp;00B9;bc=EN;CWKCF;dm=0031;dt=Sup;ea=A;gc=No;ID_Compat_Math_Continue;ID_Type=Not_NFKC;lb=AI;na=SUPERSCRIPT ONE;NFKC_CF=0031;NFKC_QC=N;NFKC_SCF=0031;nt=Di;nv=1;sc=Zyyy;WB=XX
 cp;00BA;Alpha;Cased;CWKCF;dm=006F;dt=Sup;ea=A;gc=Lo;IDC;IDS;ID_Type=Not_NFKC;lb=AI;Lower;na=MASCULINE ORDINAL INDICATOR;NFKC_CF=006F;NFKC_QC=N;NFKC_SCF=006F;SB=LO;XIDC;XIDS
@@ -2379,7 +2377,7 @@ cp;0385;-Alpha;bc=ON;-Cased;CI;-CWCM;Dia;dm=00A8 0301;dt=Can;gc=Sk;-IDC;-IDS;ID_
 # Letter
 cp;0386;cf=03AC;CWCF;CWL;dm=0391 0301;dt=Can;gc=Lu;ID_Status=Allowed;na=GREEK CAPITAL LETTER ALPHA WITH TONOS;NFD_QC=N;NFKC_CF=03AC;NFKC_SCF=03AC;NFKD_QC=N;SB=UP;scf=03AC;slc=03AC;Upper
 # Punctuation
-cp;0387;-Alpha;bc=ON;-Cased;CI;Comp_Ex;-CWCM;dm=00B7;dt=Can;gc=Po;-IDS;ID_Type=Not_NFKC;na=GREEK ANO TELEIA;NFC_QC=N;NFD_QC=N;NFKC_CF=00B7;NFKC_QC=N;NFKC_SCF=00B7;NFKD_QC=N;SB=XX;sc=Zyyy;Term;WB=ML;-XIDS
+cp;0387;-Alpha;bc=ON;-Cased;CI;Comp_Ex;-CWCM;dm=00B7;dt=Can;gc=Po;-IDS;ID_Type=Not_NFKC;lb=IS;na=GREEK ANO TELEIA;NFC_QC=N;NFD_QC=N;NFKC_CF=00B7;NFKC_QC=N;NFKC_SCF=00B7;NFKD_QC=N;SB=XX;sc=Zyyy;Term;WB=ML;-XIDS
 # Letters
 cp;0388;cf=03AD;CWCF;CWL;dm=0395 0301;dt=Can;gc=Lu;ID_Status=Allowed;na=GREEK CAPITAL LETTER EPSILON WITH TONOS;NFD_QC=N;NFKC_CF=03AD;NFKC_SCF=03AD;NFKD_QC=N;SB=UP;scf=03AD;slc=03AD;Upper
 cp;0389;cf=03AE;CWCF;CWL;dm=0397 0301;dt=Can;gc=Lu;ID_Status=Allowed;na=GREEK CAPITAL LETTER ETA WITH TONOS;NFD_QC=N;NFKC_CF=03AE;NFKC_SCF=03AE;NFKD_QC=N;SB=UP;scf=03AE;slc=03AE;Upper
@@ -3015,7 +3013,7 @@ cp;05C7;age=4.1;ccc=18;na=HEBREW POINT QAMATS QATAN
 cp;05C8;age=18.0;ccc=10;na=HEBREW POINT SHEVA NA MUDGASH
 cp;05C9;age=18.0;ccc=21;na=HEBREW POINT DAGESH HAZAQ MUDGASH
 unassigned;05CA..05CF;bc=R
-# Based on ISO 8859-8
+# Based on ISO/IEC 8859-8
 cp;05D0;bc=R;-CI;-Dia;gc=Lo;GCB=XX;Gr_Base;-Gr_Ext;IDS;ID_Status=Allowed;ID_Type=Recommended;InCB=None;jt=U;lb=HL;na=HEBREW LETTER ALEF;SB=LE;WB=HL;XIDS
 cp;05D1;bc=R;-CI;-Dia;gc=Lo;GCB=XX;Gr_Base;-Gr_Ext;IDS;ID_Status=Allowed;ID_Type=Recommended;InCB=None;jt=U;lb=HL;na=HEBREW LETTER BET;SB=LE;WB=HL;XIDS
 cp;05D2;bc=R;-CI;-Dia;gc=Lo;GCB=XX;Gr_Base;-Gr_Ext;IDS;ID_Status=Allowed;ID_Type=Recommended;InCB=None;jt=U;lb=HL;na=HEBREW LETTER GIMEL;SB=LE;WB=HL;XIDS
@@ -3106,7 +3104,7 @@ cp;061E;age=4.1;-Alpha;gc=Po;-IDC;-IDS;ID_Status=Restricted;ID_Type=Not_XID;jt=U
 cp;061F;-Alpha;gc=Po;-IDC;-IDS;ID_Status=Restricted;ID_Type=Not_XID;jt=U;lb=EX;na=ARABIC QUESTION MARK;SB=ST;sc=Zyyy;scx=Adlm Arab Gara Nkoo Rohg Syrc Thaa Yezi;STerm;Term;WB=XX;-XIDC;-XIDS
 # Addition for Kashmiri
 cp;0620;age=6.0;jg=Kashmiri_Yeh;na=ARABIC LETTER KASHMIRI YEH
-# Based on ISO 8859-6
+# Based on ISO/IEC 8859-6
 cp;0621;jt=U;na=ARABIC LETTER HAMZA
 cp;0622;dm=0627 0653;dt=Can;jg=Alef;jt=R;na=ARABIC LETTER ALEF WITH MADDA ABOVE;NFD_QC=N;NFKD_QC=N
 cp;0623;dm=0627 0654;dt=Can;jg=Alef;jt=R;na=ARABIC LETTER ALEF WITH HAMZA ABOVE;NFD_QC=N;NFKD_QC=N
@@ -3139,7 +3137,7 @@ cp;063C;age=5.1;ID_Status=Restricted;ID_Type=Obsolete;jg=Gaf;na=ARABIC LETTER KE
 cp;063D;age=5.1;jg=Farsi_Yeh;na=ARABIC LETTER FARSI YEH WITH INVERTED V
 cp;063E;age=5.1;ID_Status=Restricted;ID_Type=Obsolete;jg=Farsi_Yeh;na=ARABIC LETTER FARSI YEH WITH TWO DOTS ABOVE
 cp;063F;age=5.1;ID_Status=Restricted;ID_Type=Obsolete;jg=Farsi_Yeh;na=ARABIC LETTER FARSI YEH WITH THREE DOTS ABOVE
-# Based on ISO 8859-6
+# Based on ISO/IEC 8859-6
 cp;0640;CI;Ext;gc=Lm;ID_Status=Restricted;ID_Type=Obsolete;jt=C;na=ARABIC TATWEEL;sc=Zyyy;scx=Adlm Arab Mand Mani Ougr Phlp Rohg Sogd Syrc
 cp;0641;jg=Feh;na=ARABIC LETTER FEH
 cp;0642;jg=Qaf;na=ARABIC LETTER QAF
@@ -3151,7 +3149,7 @@ cp;0647;jg=Heh;na=ARABIC LETTER HEH
 cp;0648;jg=Waw;jt=R;na=ARABIC LETTER WAW
 cp;0649;jg=Yeh;na=ARABIC LETTER ALEF MAKSURA
 cp;064A;jg=Yeh;na=ARABIC LETTER YEH
-# Tashkil from ISO 8859-6
+# Tashkil from ISO/IEC 8859-6
 cp;064B;bc=NSM;ccc=27;CI;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;-IDS;InCB=Extend;jt=T;lb=CM;na=ARABIC FATHATAN;SB=EX;sc=Zinh;scx=Arab Syrc;WB=Extend;-XIDS
 cp;064C;bc=NSM;ccc=28;CI;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;-IDS;InCB=Extend;jt=T;lb=CM;na=ARABIC DAMMATAN;SB=EX;sc=Zinh;scx=Arab Syrc;WB=Extend;-XIDS
 cp;064D;bc=NSM;ccc=29;CI;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;-IDS;InCB=Extend;jt=T;lb=CM;na=ARABIC KASRATAN;SB=EX;sc=Zinh;scx=Arab Syrc;WB=Extend;-XIDS
@@ -4049,8 +4047,8 @@ cp;0961;ID_Status=Restricted;ID_Type=Obsolete;InCB=None;InSC=Vowel_Independent;n
 cp;0962;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;-IDS;ID_Status=Restricted;ID_Type=Obsolete;InCB=Extend;InPC=Bottom;InSC=Vowel_Dependent;jt=T;lb=CM;na=DEVANAGARI VOWEL SIGN VOCALIC L;SB=EX;WB=Extend;-XIDS
 cp;0963;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;-IDS;ID_Status=Restricted;ID_Type=Obsolete;InCB=Extend;InPC=Bottom;InSC=Vowel_Dependent;jt=T;lb=CM;na=DEVANAGARI VOWEL SIGN VOCALIC LL;SB=EX;WB=Extend;-XIDS
 # Generic punctuation for scripts of India
-cp;0964;-Alpha;gc=Po;-IDC;-IDS;ID_Status=Restricted;ID_Type=Not_XID;InCB=None;InSC=Other;lb=BA;na=DEVANAGARI DANDA;SB=ST;sc=Zyyy;scx=Beng Chis Deva Dogr Gong Gonm Gran Gujr Guru Knda Mahj Mlym Nand Onao Orya Sind Sinh Sylo Takr Taml Telu Tirh;STerm;Term;WB=XX;-XIDC;-XIDS
-cp;0965;-Alpha;gc=Po;-IDC;-IDS;ID_Status=Restricted;ID_Type=Not_XID;InCB=None;InSC=Other;lb=BA;na=DEVANAGARI DOUBLE DANDA;SB=ST;sc=Zyyy;scx=Beng Chis Deva Dogr Gong Gonm Gran Gujr Gukh Guru Knda Limb Mahj Mlym Nand Onao Orya Sind Sinh Sylo Takr Taml Telu Tirh;STerm;Term;WB=XX;-XIDC;-XIDS
+cp;0964;-Alpha;gc=Po;-IDC;-IDS;ID_Status=Restricted;ID_Type=Not_XID;InCB=None;InSC=Other;lb=BA;na=DEVANAGARI DANDA;SB=ST;sc=Zyyy;scx=Beng Deva Dogr Gong Gonm Gran Gujr Guru Knda Mahj Mlym Nand Onao Orya Sind Sinh Sylo Takr Taml Telu Tirh;STerm;Term;WB=XX;-XIDC;-XIDS
+cp;0965;-Alpha;gc=Po;-IDC;-IDS;ID_Status=Restricted;ID_Type=Not_XID;InCB=None;InSC=Other;lb=BA;na=DEVANAGARI DOUBLE DANDA;SB=ST;sc=Zyyy;scx=Beng Deva Dogr Gong Gonm Gran Gujr Gukh Guru Knda Limb Mahj Mlym Nand Onao Orya Sind Sinh Sylo Takr Taml Telu Tirh;STerm;Term;WB=XX;-XIDC;-XIDS
 # Digits
 cp;0966;-Alpha;gc=Nd;-IDS;InCB=None;InSC=Number;lb=NU;na=DEVANAGARI DIGIT ZERO;nt=De;nv=0;SB=NU;scx=Deva Dogr Kthi Mahj;WB=NU;-XIDS
 cp;0967;-Alpha;gc=Nd;-IDS;InCB=None;InSC=Number;lb=NU;na=DEVANAGARI DIGIT ONE;nt=De;nv=1;SB=NU;scx=Deva Dogr Kthi Mahj;WB=NU;-XIDS
@@ -4587,7 +4585,7 @@ block;0B80..0BFF;age=1.1;Alpha;blk=Tamil;gc=Lo;Gr_Base;IDC;ID_Status=Allowed;ID_
 unassigned;0B80..0B81
 # Various signs
 cp;0B82;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;ID_Status=Restricted;ID_Type=Technical;InCB=Extend;InPC=Top;InSC=Bindu;jt=T;lb=CM;na=TAMIL SIGN ANUSVARA;SB=EX;WB=Extend
-cp;0B83;IDS;InSC=Modifying_Letter;na=TAMIL SIGN VISARGA;XIDS
+cp;0B83;IDS;InSC=Modifying_Letter;na=TAMIL SIGN VISARGA;scx=Knda Mlym Taml Telu;XIDS
 unassigned;0B84
 # Independent vowels
 cp;0B85;IDS;InSC=Vowel_Independent;na=TAMIL LETTER A;XIDS
@@ -8625,15 +8623,15 @@ cp;1B36;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InCB=Extend;InPC=Top;InSC=Vowel_D
 cp;1B37;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InCB=Extend;InPC=Top;InSC=Vowel_Dependent;jt=T;lb=CM;na=BALINESE VOWEL SIGN ULU SARI;SB=EX;WB=Extend
 cp;1B38;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InCB=Extend;InPC=Bottom;InSC=Vowel_Dependent;jt=T;lb=CM;na=BALINESE VOWEL SIGN SUKU;SB=EX;WB=Extend
 cp;1B39;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InCB=Extend;InPC=Bottom;InSC=Vowel_Dependent;jt=T;lb=CM;na=BALINESE VOWEL SIGN SUKU ILUT;SB=EX;WB=Extend
-cp;1B3A;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InCB=Extend;InPC=Bottom;InSC=Vowel_Dependent;jt=T;lb=CM;na=BALINESE VOWEL SIGN RA REPA;SB=EX;WB=Extend
+cp;1B3A;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InCB=Extend;InPC=Bottom;InSC=Vowel_Dependent;jt=T;lb=CM;na=BALINESE VOWEL SIGN RA REPA;SB=EX;WB=Extend
 cp;1B3B;dm=1B3A 1B35;dt=Can;gc=Mc;GCB=EX;-Gr_Base;Gr_Ext;InCB=Extend;InPC=Bottom_And_Right;InSC=Vowel_Dependent;lb=CM;na=BALINESE VOWEL SIGN RA REPA TEDUNG;NFD_QC=N;NFKD_QC=N;SB=EX;WB=Extend
-cp;1B3C;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InCB=Extend;InPC=Top_And_Bottom;InSC=Vowel_Dependent;jt=T;lb=CM;na=BALINESE VOWEL SIGN LA LENGA;SB=EX;WB=Extend
+cp;1B3C;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InCB=Extend;InPC=Top_And_Bottom;InSC=Vowel_Dependent;jt=T;lb=CM;na=BALINESE VOWEL SIGN LA LENGA;SB=EX;WB=Extend
 cp;1B3D;dm=1B3C 1B35;dt=Can;gc=Mc;GCB=EX;-Gr_Base;Gr_Ext;InCB=Extend;InPC=Top_And_Bottom_And_Right;InSC=Vowel_Dependent;lb=CM;na=BALINESE VOWEL SIGN LA LENGA TEDUNG;NFD_QC=N;NFKD_QC=N;SB=EX;WB=Extend
 cp;1B3E;gc=Mc;GCB=SM;InCB=None;InPC=Left;InSC=Vowel_Dependent;lb=CM;na=BALINESE VOWEL SIGN TALING;SB=EX;WB=Extend
 cp;1B3F;gc=Mc;GCB=SM;InCB=None;InPC=Left;InSC=Vowel_Dependent;lb=CM;na=BALINESE VOWEL SIGN TALING REPA;SB=EX;WB=Extend
 cp;1B40;dm=1B3E 1B35;dt=Can;gc=Mc;GCB=SM;InCB=None;InPC=Left_And_Right;InSC=Vowel_Dependent;lb=CM;na=BALINESE VOWEL SIGN TALING TEDUNG;NFD_QC=N;NFKD_QC=N;SB=EX;WB=Extend
 cp;1B41;dm=1B3F 1B35;dt=Can;gc=Mc;GCB=SM;InCB=None;InPC=Left_And_Right;InSC=Vowel_Dependent;lb=CM;na=BALINESE VOWEL SIGN TALING REPA TEDUNG;NFD_QC=N;NFKD_QC=N;SB=EX;WB=Extend
-cp;1B42;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InCB=Extend;InPC=Top;InSC=Vowel_Dependent;jt=T;lb=CM;na=BALINESE VOWEL SIGN PEPET;SB=EX;WB=Extend
+cp;1B42;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InCB=Extend;InPC=Top;InSC=Vowel_Dependent;jt=T;lb=CM;na=BALINESE VOWEL SIGN PEPET;SB=EX;WB=Extend
 cp;1B43;dm=1B42 1B35;dt=Can;gc=Mc;GCB=EX;-Gr_Base;Gr_Ext;InCB=Extend;InPC=Top_And_Right;InSC=Vowel_Dependent;lb=CM;na=BALINESE VOWEL SIGN PEPET TEDUNG;NFD_QC=N;NFKD_QC=N;SB=EX;WB=Extend
 # Sign
 cp;1B44;-Alpha;ccc=9;Dia;gc=Mc;GCB=EX;-Gr_Base;Gr_Ext;Gr_Link;InCB=Linker;InPC=Right;InSC=Virama;lb=VI;na=BALINESE ADEG ADEG;SB=EX;WB=Extend
@@ -10960,7 +10958,7 @@ cp;237C;age=3.2;gc=Sm;Math;na=RIGHT ANGLE WITH DOWNWARDS ZIGZAG ARROW
 cp;237D;age=3.0;na=SHOULDERED OPEN BOX;vo=U
 cp;237E;age=3.0;na=BELL SYMBOL;vo=U
 cp;237F;age=3.0;na=VERTICAL LINE WITH MIDDLE DOT;vo=U
-# Keyboard symbols from ISO 9995-7
+# Keyboard symbols from ISO/IEC 9995-7
 cp;2380;age=3.0;na=INSERTION SYMBOL;vo=U
 cp;2381;age=3.0;na=CONTINUOUS UNDERLINE SYMBOL;vo=U
 cp;2382;age=3.0;na=DISCONTINUOUS UNDERLINE SYMBOL;vo=U
@@ -10985,7 +10983,7 @@ cp;2393;age=3.0;na=DIRECT CURRENT SYMBOL FORM TWO;vo=U
 cp;2394;age=3.0;na=SOFTWARE-FUNCTION SYMBOL;vo=U
 # APL
 cp;2395;age=3.0;bc=L;na=APL FUNCTIONAL SYMBOL QUAD;vo=U
-# Keyboard symbols from ISO 9995-7
+# Keyboard symbols from ISO/IEC 9995-7
 cp;2396;age=3.0;na=DECIMAL SEPARATOR KEY SYMBOL;vo=U
 cp;2397;age=3.0;na=PREVIOUS PAGE;vo=U
 cp;2398;age=3.0;na=NEXT PAGE;vo=U
@@ -38025,7 +38023,7 @@ unassigned;14647..1467F;vo=U
 block;16100..1613F;age=16.0;Alpha;blk=Gurung_Khema;gc=Lo;Gr_Base;IDC;ID_Type=Exclusion;InSC=Consonant;lb=AS;SB=LE;sc=Gukh;WB=LE;XIDC
 # 16100..1613F Gurung Khema
 # Vowel carrier
-cp;16100;IDS;InSC=Vowel_Independent;na=GURUNG KHEMA LETTER A;XIDS
+cp;16100;IDS;na=GURUNG KHEMA LETTER A;XIDS
 # Consonants
 cp;16101;IDS;na=GURUNG KHEMA LETTER KA;XIDS
 cp;16102;IDS;na=GURUNG KHEMA LETTER KHA;XIDS
@@ -39076,56 +39074,6 @@ cp;16D77;-Alpha;gc=Nd;-IDS;InSC=Number;lb=NU;na=KIRAT RAI DIGIT SEVEN;nt=De;nv=7
 cp;16D78;-Alpha;gc=Nd;-IDS;InSC=Number;lb=NU;na=KIRAT RAI DIGIT EIGHT;nt=De;nv=8;SB=NU;WB=NU;-XIDS
 cp;16D79;-Alpha;gc=Nd;-IDS;InSC=Number;lb=NU;na=KIRAT RAI DIGIT NINE;nt=De;nv=9;SB=NU;WB=NU;-XIDS
 unassigned;16D7A..16D7F
-
-block;16D80..16DAF;age=18.0;Alpha;blk=Chisoi;gc=Lo;Gr_Base;IDC;IDS;ID_Type=Exclusion;InSC=Consonant;lb=AL;SB=LE;sc=Chis;WB=LE;XIDC;XIDS
-# 16D80..16DAF Chisoi
-# Letters
-cp;16D80;InSC=Vowel;na=CHISOI LETTER A
-cp;16D81;na=CHISOI LETTER BA
-cp;16D82;InSC=Vowel;na=CHISOI LETTER AAI
-cp;16D83;InSC=Vowel;na=CHISOI LETTER AA
-cp;16D84;na=CHISOI LETTER GA
-cp;16D85;na=CHISOI LETTER TA
-cp;16D86;InSC=Vowel;na=CHISOI LETTER E
-cp;16D87;na=CHISOI LETTER SA
-cp;16D88;na=CHISOI LETTER NA
-cp;16D89;InSC=Vowel;na=CHISOI LETTER I
-cp;16D8A;na=CHISOI LETTER KA
-cp;16D8B;na=CHISOI LETTER RA
-cp;16D8C;na=CHISOI LETTER MA
-cp;16D8D;na=CHISOI LETTER HA
-cp;16D8E;na=CHISOI LETTER RRA
-cp;16D8F;InSC=Vowel;na=CHISOI LETTER U
-cp;16D90;na=CHISOI LETTER DA
-cp;16D91;na=CHISOI LETTER LA
-cp;16D92;InSC=Vowel;na=CHISOI LETTER O
-cp;16D93;na=CHISOI LETTER NYA
-cp;16D94;na=CHISOI LETTER NGA
-cp;16D95;na=CHISOI LETTER CA
-cp;16D96;na=CHISOI LETTER JA
-cp;16D97;na=CHISOI LETTER PA
-# Sign
-cp;16D98;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;-IDS;InCB=Extend;InPC=Top;InSC=Bindu;jt=T;lb=CM;na=CHISOI SIGN ANUSVARA;SB=EX;WB=Extend;-XIDS
-# Letters
-cp;16D99;na=CHISOI LETTER YA
-cp;16D9A;na=CHISOI LETTER DDA
-cp;16D9B;na=CHISOI LETTER TTA
-cp;16D9C;na=CHISOI LETTER JARAHA
-# Sign
-cp;16D9D;-Alpha;bc=NSM;ccc=9;CI;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;Gr_Link;-IDS;InCB=Extend;InPC=Bottom;InSC=Pure_Killer;jt=T;lb=CM;na=CHISOI SIGN SISO;SB=EX;WB=Extend;-XIDS
-unassigned;16D9E..16D9F
-# Digits
-cp;16DA0;-Alpha;gc=Nd;-IDS;InSC=Number;lb=NU;na=CHISOI DIGIT ZERO;nt=De;nv=0;SB=NU;WB=NU;-XIDS
-cp;16DA1;-Alpha;gc=Nd;-IDS;InSC=Number;lb=NU;na=CHISOI DIGIT ONE;nt=De;nv=1;SB=NU;WB=NU;-XIDS
-cp;16DA2;-Alpha;gc=Nd;-IDS;InSC=Number;lb=NU;na=CHISOI DIGIT TWO;nt=De;nv=2;SB=NU;WB=NU;-XIDS
-cp;16DA3;-Alpha;gc=Nd;-IDS;InSC=Number;lb=NU;na=CHISOI DIGIT THREE;nt=De;nv=3;SB=NU;WB=NU;-XIDS
-cp;16DA4;-Alpha;gc=Nd;-IDS;InSC=Number;lb=NU;na=CHISOI DIGIT FOUR;nt=De;nv=4;SB=NU;WB=NU;-XIDS
-cp;16DA5;-Alpha;gc=Nd;-IDS;InSC=Number;lb=NU;na=CHISOI DIGIT FIVE;nt=De;nv=5;SB=NU;WB=NU;-XIDS
-cp;16DA6;-Alpha;gc=Nd;-IDS;InSC=Number;lb=NU;na=CHISOI DIGIT SIX;nt=De;nv=6;SB=NU;WB=NU;-XIDS
-cp;16DA7;-Alpha;gc=Nd;-IDS;InSC=Number;lb=NU;na=CHISOI DIGIT SEVEN;nt=De;nv=7;SB=NU;WB=NU;-XIDS
-cp;16DA8;-Alpha;gc=Nd;-IDS;InSC=Number;lb=NU;na=CHISOI DIGIT EIGHT;nt=De;nv=8;SB=NU;WB=NU;-XIDS
-cp;16DA9;-Alpha;gc=Nd;-IDS;InSC=Number;lb=NU;na=CHISOI DIGIT NINE;nt=De;nv=9;SB=NU;WB=NU;-XIDS
-unassigned;16DAA..16DAF
 
 block;16E40..16E9F;age=11.0;Alpha;blk=Medefaidrin;Cased;CWCM;gc=Ll;Gr_Base;IDC;IDS;ID_Type=Exclusion;lb=AL;SB=LO;sc=Medf;WB=LE;XIDC;XIDS
 # 16E40..16E9F Medefaidrin
@@ -48992,7 +48940,7 @@ cp;1F7D9;age=15.0;lb=ID;na=NINE POINTED WHITE STAR
 # Symbol used in Japanese traditional calendars
 cp;1F7DA;age=18.0;bc=L;ea=W;lb=ID;na=BLACK CIRCLE WITH WHITE VERTICAL BAR
 # Circle
-cp;1F7DB;age=18.0;lb=ID;na=BULLET IN DOUBLE CIRCLE
+cp;1F7DB;age=18.0;Math;na=BULLET IN DOUBLE CIRCLE
 unassigned;1F7DC..1F7DF;ExtPict;lb=ID;vo=U
 # Colored circles
 cp;1F7E0;age=12.0;ea=W;Emoji;EPres;ExtPict;lb=ID;na=LARGE ORANGE CIRCLE
@@ -49012,25 +48960,25 @@ unassigned;1F7EC..1F7EF;ExtPict;lb=ID;vo=U
 # Miscellaneous symbol
 cp;1F7F0;age=14.0;ea=W;Emoji;EPres;ExtPict;lb=ID;na=HEAVY EQUALS SIGN
 # Circles
-cp;1F7F1;age=18.0;lb=ID;na=CIRCLE WITH DOUBLE VERTICAL AND HORIZONTAL LINE
-cp;1F7F2;age=18.0;lb=ID;na=DOUBLE CIRCLE WITH DOUBLE HORIZONTAL LINE
-cp;1F7F3;age=18.0;lb=ID;na=CIRCLED BOTTOM RIGHT OBLIQUE HALF BLACK CIRCLE
+cp;1F7F1;age=18.0;Math;na=CIRCLE WITH DOUBLE VERTICAL AND HORIZONTAL LINE
+cp;1F7F2;age=18.0;Math;na=DOUBLE CIRCLE WITH DOUBLE HORIZONTAL LINE
+cp;1F7F3;age=18.0;Math;na=CIRCLED BOTTOM RIGHT OBLIQUE HALF BLACK CIRCLE
 # Half circles
-cp;1F7F4;age=18.0;lb=ID;na=LEFT HALF WHITE CIRCLE
-cp;1F7F5;age=18.0;lb=ID;na=RIGHT HALF WHITE CIRCLE
+cp;1F7F4;age=18.0;Math;na=LEFT HALF WHITE CIRCLE
+cp;1F7F5;age=18.0;Math;na=RIGHT HALF WHITE CIRCLE
 # Cubes
-cp;1F7F6;age=18.0;lb=ID;na=TRANSPARENT CUBE
-cp;1F7F7;age=18.0;lb=ID;na=WHITE CUBE
+cp;1F7F6;age=18.0;Math;na=TRANSPARENT CUBE
+cp;1F7F7;age=18.0;Math;na=WHITE CUBE
 # Squares
-cp;1F7F8;age=18.0;lb=ID;na=HORIZONTAL DOUBLE WHITE SMALL SQUARE
-cp;1F7F9;age=18.0;lb=ID;na=VERTICAL DOUBLE WHITE SMALL SQUARE
-cp;1F7FA;age=18.0;lb=ID;na=WHITE SQUARE WITH BOTTOM HALF BISECTED
-cp;1F7FB;age=18.0;lb=ID;na=WHITE SQUARE WITH TOP HALF BISECTED
-cp;1F7FC;age=18.0;lb=ID;na=WHITE SQUARE WITH HORIZONTAL AND VERTICAL BISECTING LINES
+cp;1F7F8;age=18.0;Math;na=HORIZONTAL DOUBLE WHITE SMALL SQUARE
+cp;1F7F9;age=18.0;Math;na=VERTICAL DOUBLE WHITE SMALL SQUARE
+cp;1F7FA;age=18.0;Math;na=WHITE SQUARE WITH BOTTOM HALF BISECTED
+cp;1F7FB;age=18.0;Math;na=WHITE SQUARE WITH TOP HALF BISECTED
+cp;1F7FC;age=18.0;Math;na=WHITE SQUARE WITH HORIZONTAL AND VERTICAL BISECTING LINES
 # Triangles and rhombus
-cp;1F7FD;age=18.0;lb=ID;na=LOWER LEFT FLATTENED RIGHT TRIANGLE
-cp;1F7FE;age=18.0;lb=ID;na=LOWER RIGHT FLATTENED RIGHT TRIANGLE
-cp;1F7FF;age=18.0;lb=ID;na=RHOMBUS
+cp;1F7FD;age=18.0;Math;na=LOWER LEFT FLATTENED RIGHT TRIANGLE
+cp;1F7FE;age=18.0;Math;na=LOWER RIGHT FLATTENED RIGHT TRIANGLE
+cp;1F7FF;age=18.0;Math;na=RHOMBUS
 
 block;1F800..1F8FF;age=7.0;bc=ON;blk=Sup_Arrows_C;gc=So;Gr_Base;ID_Type=Not_XID;lb=AL;sc=Zyyy
 # 1F800..1F8FF Supplemental Arrows-C

@@ -460,7 +460,6 @@ public class TestUScript extends CoreTestFmwk {
                     "Tolong_Siki",
                     "Hntl",
                     // new in ICU 79
-                    "Chisoi",
                     "Proto_Cuneiform",
                     "Seal",
                 };
@@ -635,7 +634,6 @@ public class TestUScript extends CoreTestFmwk {
                     "Tols",
                     "Hntl",
                     // new in ICU 79
-                    "Chis",
                     "Pcun",
                     "Seal",
                 };

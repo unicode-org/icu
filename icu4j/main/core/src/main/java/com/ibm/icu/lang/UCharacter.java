@@ -1997,32 +1997,27 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         /**
          * @stable ICU 79
          */
-        public static final int CHISOI_ID = 349; /*[16D80]*/
+        public static final int JURCHEN_ID = 349; /*[18E00]*/
 
         /**
          * @stable ICU 79
          */
-        public static final int JURCHEN_ID = 350; /*[18E00]*/
+        public static final int JURCHEN_RADICALS_ID = 350; /*[191A0]*/
 
         /**
          * @stable ICU 79
          */
-        public static final int JURCHEN_RADICALS_ID = 351; /*[191A0]*/
+        public static final int MISCELLANEOUS_SYMBOLS_AND_ARROWS_EXTENDED_ID = 351; /*[1DB00]*/
 
         /**
          * @stable ICU 79
          */
-        public static final int MISCELLANEOUS_SYMBOLS_AND_ARROWS_EXTENDED_ID = 352; /*[1DB00]*/
+        public static final int MUSICAL_SYMBOLS_SUPPLEMENT_ID = 352; /*[1D250]*/
 
         /**
          * @stable ICU 79
          */
-        public static final int MUSICAL_SYMBOLS_SUPPLEMENT_ID = 353; /*[1D250]*/
-
-        /**
-         * @stable ICU 79
-         */
-        public static final int SEAL_ID = 354; /*[3D000]*/
+        public static final int SEAL_ID = 353; /*[3D000]*/
 
         /**
          * One more than the highest normal UnicodeBlock value. The highest value is available via
@@ -2030,7 +2025,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          *
          * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
          */
-        @Deprecated public static final int COUNT = 355;
+        @Deprecated public static final int COUNT = 354;
 
         // blocks objects ---------------------------------------------------
 
@@ -4191,11 +4186,6 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          */
         public static final UnicodeBlock BENGALI_SUPPLEMENT =
                 new UnicodeBlock("BENGALI_SUPPLEMENT", BENGALI_SUPPLEMENT_ID);
-
-        /**
-         * @stable ICU 79
-         */
-        public static final UnicodeBlock CHISOI = new UnicodeBlock("CHISOI", CHISOI_ID);
 
         /**
          * @stable ICU 79

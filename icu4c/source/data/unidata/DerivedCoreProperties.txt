@@ -1,5 +1,5 @@
 # DerivedCoreProperties-18.0.0.txt
-# Date: 2026-05-12, 22:09:55 GMT
+# Date: 2026-08-07, 16:19:42 GMT
 # © 2026 Unicode®, Inc.
 # Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
 # For terms of use and license, see https://www.unicode.org/terms_of_use.html
@@ -256,9 +256,11 @@ FFE9..FFEC    ; Math
 1EEA5..1EEA9  ; Math
 1EEAB..1EEBB  ; Math
 1EEF0..1EEF1  ; Math
+1F7DB         ; Math
+1F7F1..1F7FF  ; Math
 1F8D0..1F8D8  ; Math
 
-# Total code points: 2368
+# Total code points: 2384
 
 # ================================================
 
@@ -1336,9 +1338,6 @@ FFDA..FFDC    ; Alphabetic
 16D40..16D42  ; Alphabetic
 16D43..16D6A  ; Alphabetic
 16D6B..16D6C  ; Alphabetic
-16D80..16D97  ; Alphabetic
-16D98         ; Alphabetic
-16D99..16D9C  ; Alphabetic
 16E40..16E7F  ; Alphabetic
 16EA0..16EB8  ; Alphabetic
 16EBB..16ED3  ; Alphabetic
@@ -1489,7 +1488,7 @@ FFDA..FFDC    ; Alphabetic
 31350..33479  ; Alphabetic
 3D000..3FC3F  ; Alphabetic
 
-# Total code points: 160283
+# Total code points: 160254
 
 # ================================================
 
@@ -3562,8 +3561,6 @@ FFF9..FFFB    ; Case_Ignorable
 16B40..16B43  ; Case_Ignorable
 16D40..16D42  ; Case_Ignorable
 16D6B..16D6C  ; Case_Ignorable
-16D98         ; Case_Ignorable
-16D9D         ; Case_Ignorable
 16F4F         ; Case_Ignorable
 16F8F..16F92  ; Case_Ignorable
 16F93..16F9F  ; Case_Ignorable
@@ -3620,7 +3617,7 @@ E0001         ; Case_Ignorable
 E0020..E007F  ; Case_Ignorable
 E0100..E01EF  ; Case_Ignorable
 
-# Total code points: 2892
+# Total code points: 2890
 
 # ================================================
 
@@ -7079,8 +7076,6 @@ FFDA..FFDC    ; ID_Start
 16D40..16D42  ; ID_Start
 16D43..16D6A  ; ID_Start
 16D6B..16D6C  ; ID_Start
-16D80..16D97  ; ID_Start
-16D99..16D9C  ; ID_Start
 16E40..16E7F  ; ID_Start
 16EA0..16EB8  ; ID_Start
 16EBB..16ED3  ; ID_Start
@@ -7212,7 +7207,7 @@ FFDA..FFDC    ; ID_Start
 31350..33479  ; ID_Start
 3D000..3FC3F  ; ID_Start
 
-# Total code points: 158767
+# Total code points: 158739
 
 # ================================================
 
@@ -8481,11 +8476,6 @@ FFDA..FFDC    ; ID_Continue
 16D43..16D6A  ; ID_Continue
 16D6B..16D6C  ; ID_Continue
 16D70..16D79  ; ID_Continue
-16D80..16D97  ; ID_Continue
-16D98         ; ID_Continue
-16D99..16D9C  ; ID_Continue
-16D9D         ; ID_Continue
-16DA0..16DA9  ; ID_Continue
 16E40..16E7F  ; ID_Continue
 16EA0..16EB8  ; ID_Continue
 16EBB..16ED3  ; ID_Continue
@@ -8669,7 +8659,7 @@ FFDA..FFDC    ; ID_Continue
 3D000..3FC3F  ; ID_Continue
 E0100..E01EF  ; ID_Continue
 
-# Total code points: 162140
+# Total code points: 162100
 
 # ================================================
 
@@ -9342,8 +9332,6 @@ FFDA..FFDC    ; XID_Start
 16D40..16D42  ; XID_Start
 16D43..16D6A  ; XID_Start
 16D6B..16D6C  ; XID_Start
-16D80..16D97  ; XID_Start
-16D99..16D9C  ; XID_Start
 16E40..16E7F  ; XID_Start
 16EA0..16EB8  ; XID_Start
 16EBB..16ED3  ; XID_Start
@@ -9475,7 +9463,7 @@ FFDA..FFDC    ; XID_Start
 31350..33479  ; XID_Start
 3D000..3FC3F  ; XID_Start
 
-# Total code points: 158744
+# Total code points: 158716
 
 # ================================================
 
@@ -10745,11 +10733,6 @@ FFDA..FFDC    ; XID_Continue
 16D43..16D6A  ; XID_Continue
 16D6B..16D6C  ; XID_Continue
 16D70..16D79  ; XID_Continue
-16D80..16D97  ; XID_Continue
-16D98         ; XID_Continue
-16D99..16D9C  ; XID_Continue
-16D9D         ; XID_Continue
-16DA0..16DA9  ; XID_Continue
 16E40..16E7F  ; XID_Continue
 16EA0..16EB8  ; XID_Continue
 16EBB..16ED3  ; XID_Continue
@@ -10933,7 +10916,7 @@ FFDA..FFDC    ; XID_Continue
 3D000..3FC3F  ; XID_Continue
 E0100..E01EF  ; XID_Continue
 
-# Total code points: 162121
+# Total code points: 162081
 
 # ================================================
 
@@ -11374,8 +11357,6 @@ FF9E..FF9F    ; Grapheme_Extend
 1612D..1612F  ; Grapheme_Extend
 16AF0..16AF4  ; Grapheme_Extend
 16B30..16B36  ; Grapheme_Extend
-16D98         ; Grapheme_Extend
-16D9D         ; Grapheme_Extend
 16F4F         ; Grapheme_Extend
 16F8F..16F92  ; Grapheme_Extend
 16FE4         ; Grapheme_Extend
@@ -11421,7 +11402,7 @@ FF9E..FF9F    ; Grapheme_Extend
 E0020..E007F  ; Grapheme_Extend
 E0100..E01EF  ; Grapheme_Extend
 
-# Total code points: 2271
+# Total code points: 2269
 
 # ================================================
 
@@ -13011,9 +12992,6 @@ FFFC..FFFD    ; Grapheme_Base
 16D6B..16D6C  ; Grapheme_Base
 16D6D..16D6F  ; Grapheme_Base
 16D70..16D79  ; Grapheme_Base
-16D80..16D97  ; Grapheme_Base
-16D99..16D9C  ; Grapheme_Base
-16DA0..16DA9  ; Grapheme_Base
 16E40..16E7F  ; Grapheme_Base
 16E80..16E96  ; Grapheme_Base
 16E97..16E9A  ; Grapheme_Base
@@ -13253,7 +13231,7 @@ FFFC..FFFD    ; Grapheme_Base
 31350..33479  ; Grapheme_Base
 3D000..3FC3F  ; Grapheme_Base
 
-# Total code points: 170502
+# Total code points: 170464
 
 # ================================================
 
@@ -13325,9 +13303,8 @@ ABED          ; Grapheme_Link
 11F41         ; Grapheme_Link
 11F42         ; Grapheme_Link
 1612F         ; Grapheme_Link
-16D9D         ; Grapheme_Link
 
-# Total code points: 70
+# Total code points: 69
 
 # ================================================
 
@@ -13829,8 +13806,6 @@ FF9E..FF9F    ; InCB; Extend
 1612D..1612F  ; InCB; Extend
 16AF0..16AF4  ; InCB; Extend
 16B30..16B36  ; InCB; Extend
-16D98         ; InCB; Extend
-16D9D         ; InCB; Extend
 16F4F         ; InCB; Extend
 16F8F..16F92  ; InCB; Extend
 16FE4         ; InCB; Extend
@@ -13877,6 +13852,6 @@ FF9E..FF9F    ; InCB; Extend
 E0020..E007F  ; InCB; Extend
 E0100..E01EF  ; InCB; Extend
 
-# Total code points: 2256
+# Total code points: 2254
 
 # EOF

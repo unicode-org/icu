@@ -40,7 +40,7 @@ static const Value VALUES_bc[23] = {
     Value(U_POP_DIRECTIONAL_ISOLATE, "PDI Pop_Directional_Isolate"),
 };
 
-static const Value VALUES_blk[355] = {
+static const Value VALUES_blk[354] = {
     Value(UBLOCK_NO_BLOCK, "NB No_Block"),
     Value(UBLOCK_BASIC_LATIN, "ASCII Basic_Latin"),
     Value(UBLOCK_LATIN_1_SUPPLEMENT, "Latin_1_Sup Latin_1_Supplement Latin_1"),
@@ -390,7 +390,6 @@ static const Value VALUES_blk[355] = {
     Value(UBLOCK_TOLONG_SIKI, "Tolong_Siki Tolong_Siki"),
     Value(UBLOCK_ARCHAIC_CUNEIFORM_NUMERALS, "Archaic_Cuneiform_Numerals Archaic_Cuneiform_Numerals"),
     Value(UBLOCK_BENGALI_SUPPLEMENT, "Bengali_Sup Bengali_Supplement"),
-    Value(UBLOCK_CHISOI, "Chisoi Chisoi"),
     Value(UBLOCK_JURCHEN, "Jurchen Jurchen"),
     Value(UBLOCK_JURCHEN_RADICALS, "Jurchen_Radicals Jurchen_Radicals"),
     Value(UBLOCK_MISCELLANEOUS_SYMBOLS_AND_ARROWS_EXTENDED, "Misc_Arrows_Ext Miscellaneous_Symbols_And_Arrows_Extended"),
@@ -709,7 +708,7 @@ static const Value VALUES_nt[4] = {
     Value(U_NT_NUMERIC, "Nu Numeric"),
 };
 
-static const Value VALUES_sc[216] = {
+static const Value VALUES_sc[215] = {
     Value(USCRIPT_COMMON, "Zyyy Common"),
     Value(USCRIPT_INHERITED, "Zinh Inherited Qaai"),
     Value(USCRIPT_ARABIC, "Arab Arabic"),
@@ -923,7 +922,6 @@ static const Value VALUES_sc[216] = {
     Value(USCRIPT_TAI_YO, "Tayo Tai_Yo"),
     Value(USCRIPT_TOLONG_SIKI, "Tols Tolong_Siki"),
     Value(USCRIPT_TRADITIONAL_HAN_WITH_LATIN, "Hntl Hntl"),
-    Value(USCRIPT_CHISOI, "Chis Chisoi"),
     Value(USCRIPT_PROTO_CUNEIFORM, "Pcun Proto_Cuneiform"),
     Value(USCRIPT_SEAL, "Seal Seal"),
 };
@@ -1364,7 +1362,7 @@ static const Property PROPERTIES[121] = {
     Property(UCHAR_ID_COMPAT_MATH_CONTINUE, "ID_Compat_Math_Continue ID_Compat_Math_Continue"),
     Property(UCHAR_MODIFIER_COMBINING_MARK, "MCM Modifier_Combining_Mark"),
     Property(UCHAR_BIDI_CLASS, "bc Bidi_Class", VALUES_bc, 23),
-    Property(UCHAR_BLOCK, "blk Block", VALUES_blk, 355),
+    Property(UCHAR_BLOCK, "blk Block", VALUES_blk, 354),
     Property(UCHAR_CANONICAL_COMBINING_CLASS, "ccc Canonical_Combining_Class", VALUES_ccc, 58),
     Property(UCHAR_DECOMPOSITION_TYPE, "dt Decomposition_Type", VALUES_dt, 18),
     Property(UCHAR_EAST_ASIAN_WIDTH, "ea East_Asian_Width", VALUES_ea, 6),
@@ -1373,7 +1371,7 @@ static const Property PROPERTIES[121] = {
     Property(UCHAR_JOINING_TYPE, "jt Joining_Type", VALUES_jt, 6),
     Property(UCHAR_LINE_BREAK, "lb Line_Break", VALUES_lb, 49),
     Property(UCHAR_NUMERIC_TYPE, "nt Numeric_Type", VALUES_nt, 4),
-    Property(UCHAR_SCRIPT, "sc Script", VALUES_sc, 216),
+    Property(UCHAR_SCRIPT, "sc Script", VALUES_sc, 215),
     Property(UCHAR_HANGUL_SYLLABLE_TYPE, "hst Hangul_Syllable_Type", VALUES_hst, 6),
     Property(UCHAR_NFD_QUICK_CHECK, "NFD_QC NFD_Quick_Check", VALUES_NFD_QC, 2),
     Property(UCHAR_NFKD_QUICK_CHECK, "NFKD_QC NFKD_Quick_Check", VALUES_NFKD_QC, 2),

@@ -530,11 +530,9 @@ typedef enum UScriptCode {
       USCRIPT_TRADITIONAL_HAN_WITH_LATIN    = 212, /* Hntl */
 
       /** @stable ICU 79 */
-      USCRIPT_CHISOI                        = 213, /* Chis */
+      USCRIPT_PROTO_CUNEIFORM               = 213, /* Pcun */
       /** @stable ICU 79 */
-      USCRIPT_PROTO_CUNEIFORM               = 214, /* Pcun */
-      /** @stable ICU 79 */
-      USCRIPT_SEAL                          = 215, /* Seal */
+      USCRIPT_SEAL                          = 214, /* Seal */
 
 #ifndef U_HIDE_DEPRECATED_API
     /**
@@ -543,7 +541,7 @@ typedef enum UScriptCode {
      *
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
-    USCRIPT_CODE_LIMIT    = 216
+    USCRIPT_CODE_LIMIT    = 215
 #endif  // U_HIDE_DEPRECATED_API
 } UScriptCode;
 

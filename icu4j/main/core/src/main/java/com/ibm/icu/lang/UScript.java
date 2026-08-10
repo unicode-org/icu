@@ -1514,17 +1514,12 @@ public final class UScript {
     /**
      * @stable ICU 79
      */
-    public static final int CHISOI = 213; /* Chis */
+    public static final int PROTO_CUNEIFORM = 213; /* Pcun */
 
     /**
      * @stable ICU 79
      */
-    public static final int PROTO_CUNEIFORM = 214; /* Pcun */
-
-    /**
-     * @stable ICU 79
-     */
-    public static final int SEAL = 215; /* Seal */
+    public static final int SEAL = 214; /* Seal */
 
     /**
      * One more than the highest normal UScript code. The highest value is available via
@@ -1532,7 +1527,7 @@ public final class UScript {
      *
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
-    @Deprecated public static final int CODE_LIMIT = 216;
+    @Deprecated public static final int CODE_LIMIT = 215;
 
     private static int[] getCodesFromLocale(ULocale locale) {
         // Multi-script languages, equivalent to the LocaleScript data
@@ -2043,7 +2038,6 @@ public final class UScript {
             0x1E6D5 | EXCLUSION | LB_LETTERS, // Tayo
             0x11DC6 | EXCLUSION, // Tols
             0,
-            0x16D93 | EXCLUSION, // Chis
             0x125AD | EXCLUSION, // Pcun
             0x3EA10 | EXCLUSION | LB_LETTERS, // Seal
             // End copy-paste from parsescriptmetadata.py

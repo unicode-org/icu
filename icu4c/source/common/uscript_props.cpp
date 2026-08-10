@@ -257,7 +257,6 @@ const int32_t SCRIPT_PROPS[] = {
     0x1E6D5 | EXCLUSION | LB_LETTERS,  // Tayo
     0x11DC6 | EXCLUSION,  // Tols
     0,
-    0x16D93 | EXCLUSION,  // Chis
     0x125AD | EXCLUSION,  // Pcun
     0x3EA10 | EXCLUSION | LB_LETTERS,  // Seal
     // End copy-paste from parsescriptmetadata.py

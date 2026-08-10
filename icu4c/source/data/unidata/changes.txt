@@ -56,6 +56,9 @@ and see the change logs below.
 
 Unicode 18.0 update for ICU 79
 
+Note: Between Unicode 18 beta and Unicode 18 final, the Chisoi script was removed.
+The log below reflects its addition as of the beta.
+
 https://www.unicode.org/versions/Unicode18.0.0/
 https://www.unicode.org/versions/beta-18.0.0.html
 https://www.unicode.org/Public/draft/
@@ -70,7 +73,7 @@ https://unicode-org.atlassian.net/browse/CLDR-19339 BRS Unicode 18
 Markus:
 
 export UNIDATA_ROOT=~/unidata
-export UNICODE_DATA=$UNIDATA_ROOT/uni18/beta
+export UNICODE_DATA=$UNIDATA_ROOT/uni18/final
 export CLDR_SRC=~/cldr/uni/src
 export ICU_ROOT=~/icu/uni
 export ICU_SRC=$ICU_ROOT/src
