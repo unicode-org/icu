@@ -66,6 +66,7 @@ public:
 };
 
 class U_COMMON_API_CLASS Segments : public UObject {
+public:
     virtual bool isBoundary(int32_t offset) = 0;
 };
 

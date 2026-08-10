@@ -5,6 +5,8 @@
 #if !UCONFIG_NO_BREAK_ITERATION
 
 
+#include "unicode/rbbi.h"
+
 #include "unicode/segmenter.h"
 #include "unicode/segmenter_rulebased.h"
 #include "segmenter_segments_test.h"
@@ -54,7 +56,17 @@ SegmentsTest::~SegmentsTest() {
 void SegmentsTest::testHelloWorld() {
     IcuTestErrorCode errorCode(*this, "testHelloWorld");
 
-    std::unique_ptr<icu::segmenter::Segment> segment(new icu::segmenter::Segment());
+
+    UnicodeString ustrRules(u"[A-Za-züä]+;");
+    UnicodeString ustrText(u"Kühlschränke kühlen Getränke");
+    UParseError parseError;
+    std::unique_ptr<BreakIterator> iter = std::make_unique<RuleBasedBreakIterator>(ustrRules, parseError, errorCode);
+    iter->setText(ustrText);
+    int32_t firstBoundary = iter->next();
+    assertTrue("Index 0 is boundary", iter->isBoundary(firstBoundary));
+
+
+    // std::unique_ptr<icu::segmenter::Segment> segment(new icu::segmenter::Segment());
 
     // TODO: modify signature to match ICU4J Segmenter API design
     icu::segmenter::RuleBasedSegmenterBuilder builder;
@@ -64,10 +76,11 @@ void SegmentsTest::testHelloWorld() {
     errorCode.errIfFailureAndReset();
 
     auto someSegmenter = std::make_unique<icu::segmenter::Segmenter>(builder.build(errorCode));
+    auto segments = someSegmenter->segment(u"Kühlschränke kühlen Getränke", errorCode);
 
-    someSegmenter->segment(u"Kühlschränke kühlen Getränke", errorCode);
+    errorCode.errIfFailureAndReset();
 
-    assertEquals("segment() is temporarily unsupported", U_UNSUPPORTED_ERROR, errorCode.reset());
+    assertTrue("Index 0 is boundary", segments->isBoundary(0));
 
     // TODO: uncomment once segment() is implemented
     // errorCode.errIfFailureAndReset();

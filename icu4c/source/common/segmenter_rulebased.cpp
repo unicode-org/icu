@@ -65,7 +65,7 @@ RuleBasedSegmenterBuilder::~RuleBasedSegmenterBuilder()
 {}
 
 RuleBasedSegmenterBuilder& RuleBasedSegmenterBuilder::setRules(std::u16string_view rules) {
-    this->rules_ = rules;
+    rules_ = rules;
 
     return *this;
 }

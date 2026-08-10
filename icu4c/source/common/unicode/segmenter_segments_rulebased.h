@@ -44,14 +44,12 @@ namespace segmenter {
 
 class U_COMMON_API_CLASS RuleBasedSegments : public Segments {
 public:
-
+    bool isBoundary(int32_t i);
 private:
 
     friend class RuleBasedSegmenter;
 
     RuleBasedSegments(const BreakIterator & breakIter, std::u16string_view source);
-
-    bool isBoundary(int32_t i);
 
     std::u16string_view source_;
     std::unique_ptr<BreakIterator> breakIterProrotype_;
