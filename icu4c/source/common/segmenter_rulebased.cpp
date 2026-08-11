@@ -84,7 +84,7 @@ RuleBasedSegmenter RuleBasedSegmenterBuilder::build(UErrorCode& errorCode) {
         return makeEmptySegmenter();
     }
     if (rules_.empty()) {
-        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        errorCode = U_BRK_RULE_SYNTAX;
         return makeEmptySegmenter();
     }
 

@@ -76,7 +76,7 @@ void SegmentsTest::testEmptyRules() {
     icu::segmenter::RuleBasedSegmenterBuilder builder;
     icu::segmenter::RuleBasedSegmenter rbSegmenter = builder.build(errorCode);
 
-    assertEquals("RuleBasedSegmenter needs non-empty rules", U_ILLEGAL_ARGUMENT_ERROR, errorCode.reset());
+    assertEquals("RuleBasedSegmenter needs non-empty rules", U_BRK_RULE_SYNTAX, errorCode.reset());
 }
 
 void SegmentsTest::testMoveConstructor() {
