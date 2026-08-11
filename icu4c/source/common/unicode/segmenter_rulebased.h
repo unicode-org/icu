@@ -64,8 +64,6 @@ public:
     RuleBasedSegmenter build(UErrorCode& errorCode);
 
 private:
-    std::unique_ptr<BreakIterator> breakIter_;
-
     std::u16string_view rules_;
 
     RuleBasedSegmenter makeEmptySegmenter();

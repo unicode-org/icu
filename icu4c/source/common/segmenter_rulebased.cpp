@@ -54,7 +54,6 @@ std::unique_ptr<Segments> RuleBasedSegmenter::segment(std::u16string_view s, UEr
 // ---------------------------------------------
 
 RuleBasedSegmenterBuilder::RuleBasedSegmenterBuilder() :
-    breakIter_(nullptr),
     rules_(u""),
     errorCode_(U_ZERO_ERROR)
 {
@@ -92,14 +91,14 @@ RuleBasedSegmenter RuleBasedSegmenterBuilder::build(UErrorCode& errorCode) {
 
     UnicodeString rulesUniStr(rules_);
 
-    breakIter_ = std::make_unique<icu::RuleBasedBreakIterator>(rulesUniStr, parseError, errorCode_);
+    auto breakIter = std::make_unique<RuleBasedBreakIterator>(rulesUniStr, parseError, errorCode_);
 
     if (U_FAILURE(errorCode_)) {
         errorCode = errorCode_;
         return makeEmptySegmenter();
     }
 
-    RuleBasedSegmenter rbSegmenter(std::move(breakIter_));
+    RuleBasedSegmenter rbSegmenter(std::move(breakIter));
 
     return rbSegmenter;
 }
