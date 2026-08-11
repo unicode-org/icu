@@ -140,7 +140,7 @@ cd "$ICU_DIR"
 mvn clean install -f icu4j -DskipTests -DskipITs
 # Build the CLDR library
 cd "$CLDR_DIR"
-mvn clean install -pl :cldr-all,:cldr-code -DskipTests -DskipITs
+mvn clean install -pl :cldr-code -DskipTests -DskipITs
 # Build the conversion tool
 cd "$ICU_DIR/tools/cldr/cldr-to-icu/"
 mvn clean package -DskipTests -DskipITs

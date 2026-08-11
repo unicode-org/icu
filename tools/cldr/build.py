@@ -94,7 +94,25 @@ def reset_cldr_testdata():
   icuproc.run_with_logging(f"git checkout -- {test_data_dir_4c}")
   icuproc.run_with_logging(f"git checkout -- {test_data_dir_4j}")
 
+def build_prereqs():
+  """build all prereqs"""
+  _init_args()
+  iculog.title("Build Prereqs")
+  icuproc.run_with_logging(f"cd {icu_dir} && mvn clean install -f icu4j -DskipTests -DskipITs")
+  icuproc.run_with_logging(f"cd {cldr_dir} && mvn clean install -pl :cldr-code -DskipTests -DskipITs")
+  build()
+  
+def build():
+  """build all prereqs"""
+  _init_args()
+  icuproc.run_with_logging(f"cd {icu_dir}/tools/cldr/cldr-to-icu/ && mvn clean package -DskipTests -DskipITs")
 
+def convert_data():
+  """Convert CLDR to ICU"""
+  _init_args()
+  iculog.title("Convert CLDR to ICU")
+  icuproc.run_with_logging(f"cd {icu_dir}/tools/cldr/cldr-to-icu && java -jar target/cldr-to-icu-1.0-SNAPSHOT-jar-with-dependencies.jar")
+  
 def main() -> int:
   parser = argparse.ArgumentParser()
   parser.add_argument(
@@ -116,6 +134,21 @@ def main() -> int:
       help="Restores the CLDR test data from git",
       action="store_true",
   )
+  parser.add_argument(
+    "--build-prereqs",
+    help="Build ICU and CLDR prereqs (and the tool)",
+    action="store_true",
+  )
+  parser.add_argument(
+    "--build",
+    help="Build tooling",
+    action="store_true",
+  )
+  parser.add_argument(
+    "--convert",
+    help="Convert CLDR to ICU data",
+    action="store_true",
+  )
   cmd = parser.parse_args()
 
   if cmd.copy_cldr_testdata:
@@ -124,6 +157,16 @@ def main() -> int:
     clean_cldr_testdata()
   elif cmd.reset_cldr_testdata:
     reset_cldr_testdata()
+  elif cmd.convert:
+    if cmd.build_prereqs:
+      build_prereqs()
+    elif cmd.build:
+      build()
+    convert_data()
+  elif cmd.build_prereqs:
+    build_prereqs()
+  elif cmd.build:
+    build()
   else:
     parser.print_help()
   return 0

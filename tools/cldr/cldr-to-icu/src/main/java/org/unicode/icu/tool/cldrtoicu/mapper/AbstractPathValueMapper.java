@@ -177,7 +177,13 @@ abstract class AbstractPathValueMapper {
             }
         }
         // This works because insertion order is maintained for values of each path.
-        map.forEach((p, v) -> icuData.add(p, v.resolve(map)));
+        map.forEach((p, v) -> {
+		try {
+		    icuData.add(p, v.resolve(map));
+		} catch(Throwable t) {
+		    throw new IllegalArgumentException("Processing " + p, t);
+		}
+	    });
     }
 
     /*

@@ -339,7 +339,11 @@ public final class LdmlConverter {
                     ListMultimap<IcuLocaleDir, RbPath> splitPaths = LinkedListMultimap.create();
                     for (RbPath p : icuData.getPaths()) {
                         String rootName = getBaseSegmentName(p.getSegment(0));
-                        splitPaths.put(LOCALE_SPLIT_INFO.getOrDefault(rootName, LOCALES), p);
+			try {
+			    splitPaths.put(LOCALE_SPLIT_INFO.getOrDefault(rootName, LOCALES), p);
+			} catch(Throwable t) {
+			    throw new IllegalArgumentException("While proewssing " + "?" + ":" + p, t);
+			}
                     }
 
                     Optional<String> parent = supplementalData.getExplicitParentLocaleOf(id);
