@@ -51,8 +51,8 @@ private:
 
     RuleBasedSegments(const BreakIterator & breakIter, std::u16string_view source);
 
-    std::u16string_view source_;
-    std::unique_ptr<BreakIterator> breakIterProrotype_;
+    UnicodeString source_;
+    std::unique_ptr<BreakIterator> breakIterPrototype_;
 
 };
 

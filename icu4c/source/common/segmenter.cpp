@@ -11,6 +11,8 @@ namespace segmenter {
 // Segmenter
 //----------
 
+Segmenter::Segmenter() {}
+
 Segmenter::~Segmenter() {}
 
 std::unique_ptr<Segments> Segmenter::segment(std::u16string_view /*s*/, UErrorCode &errorCode) {

@@ -29,12 +29,8 @@ class U_COMMON_API_CLASS RuleBasedSegmenter : public Segmenter {
 public:
     ~RuleBasedSegmenter() override;
 
-    // TODO: implement
-    // TODO: create a test
     RuleBasedSegmenter(RuleBasedSegmenter&& other) noexcept;
 
-    // TODO: implement
-    // TODO: create a test
     RuleBasedSegmenter& operator=(RuleBasedSegmenter&& other) noexcept;
 
     std::unique_ptr<Segments> segment(std::u16string_view s, UErrorCode &errorCode) override;

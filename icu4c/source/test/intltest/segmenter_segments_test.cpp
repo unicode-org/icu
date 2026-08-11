@@ -56,18 +56,6 @@ SegmentsTest::~SegmentsTest() {
 void SegmentsTest::testHelloWorld() {
     IcuTestErrorCode errorCode(*this, "testHelloWorld");
 
-
-    UnicodeString ustrRules(u"[A-Za-züä]+;");
-    UnicodeString ustrText(u"Kühlschränke kühlen Getränke");
-    UParseError parseError;
-    std::unique_ptr<BreakIterator> iter = std::make_unique<RuleBasedBreakIterator>(ustrRules, parseError, errorCode);
-    iter->setText(ustrText);
-    int32_t firstBoundary = iter->next();
-    assertTrue("Index 0 is boundary", iter->isBoundary(firstBoundary));
-
-
-    // std::unique_ptr<icu::segmenter::Segment> segment(new icu::segmenter::Segment());
-
     // TODO: modify signature to match ICU4J Segmenter API design
     icu::segmenter::RuleBasedSegmenterBuilder builder;
     builder.setRules(u"[A-Za-züä]+;");
@@ -75,15 +63,12 @@ void SegmentsTest::testHelloWorld() {
 
     errorCode.errIfFailureAndReset();
 
-    auto someSegmenter = std::make_unique<icu::segmenter::Segmenter>(builder.build(errorCode));
-    auto segments = someSegmenter->segment(u"Kühlschränke kühlen Getränke", errorCode);
+    auto segmenter = builder.build(errorCode);
+    auto segments = segmenter.segment(u"Kühlschränke kühlen Getränke", errorCode);
 
     errorCode.errIfFailureAndReset();
 
     assertTrue("Index 0 is boundary", segments->isBoundary(0));
-
-    // TODO: uncomment once segment() is implemented
-    // errorCode.errIfFailureAndReset();
 }
 
 void SegmentsTest::testEmptyRules() {
@@ -100,37 +85,57 @@ void SegmentsTest::testMoveConstructor() {
 
     icu::segmenter::RuleBasedSegmenterBuilder builder;
     builder.setRules(u"[A-Za-züä]+;");
-    icu::segmenter::RuleBasedSegmenter rbSegmenter1 = builder.build(errorCode);
-
+    icu::segmenter::RuleBasedSegmenter segmenter1 = builder.build(errorCode);
     errorCode.errIfFailureAndReset();
+    auto segments1 = segmenter1.segment(u"Kühlschränke kühlen Getränke", errorCode);
+    errorCode.errIfFailureAndReset();
+    assertTrue( "Index 0  is a boundary",     segments1->isBoundary(0));
+    assertFalse("Index 1  is not a boundary", segments1->isBoundary(1));
+    assertFalse("Index 2  is not a boundary", segments1->isBoundary(2));
+    assertTrue( "Index 12 is a boundary",     segments1->isBoundary(12));
 
-    icu::segmenter::RuleBasedSegmenter rbSegmenter2(std::move(rbSegmenter1));
+    icu::segmenter::RuleBasedSegmenter segmenter2(std::move(segmenter1));
 
-    rbSegmenter2.segment(u"Kühlschränke kühlen Getränke", errorCode);
-
-    assertEquals("segment() is temporarily unsupported", U_UNSUPPORTED_ERROR, errorCode.reset());
-
-    // TODO: uncomment once segment() is implemented
-    // errorCode.errIfFailureAndReset();
+    auto segments2 = segmenter2.segment(u"Kühlschränke kühlen Getränke", errorCode);
+    errorCode.errIfFailureAndReset();
+    assertTrue( "Index 0  is a boundary",     segments1->isBoundary(0));
+    assertFalse("Index 1  is not a boundary", segments1->isBoundary(1));
+    assertFalse("Index 2  is not a boundary", segments1->isBoundary(2));
+    assertTrue( "Index 12 is a boundary",     segments1->isBoundary(12));
 }
 
 void SegmentsTest::testMoveAssignment() {
     IcuTestErrorCode errorCode(*this, "testMoveAssignment");
 
-    icu::segmenter::RuleBasedSegmenterBuilder builder;
-    builder.setRules(u"[A-Za-züä]+;");
-    icu::segmenter::RuleBasedSegmenter rbSegmenter1 = builder.build(errorCode);
-
+    icu::segmenter::RuleBasedSegmenterBuilder builder1;
+    builder1.setRules(u"[A-Za-züä]+;");
+    icu::segmenter::RuleBasedSegmenter segmenter1 = builder1.build(errorCode);
     errorCode.errIfFailureAndReset();
+    auto segments1 = segmenter1.segment(u"Kühlschränke kühlen Getränke", errorCode);
+    errorCode.errIfFailureAndReset();
+    assertTrue( "Index 0  is a boundary",     segments1->isBoundary(0));
+    assertFalse("Index 1  is not a boundary", segments1->isBoundary(1));
+    assertFalse("Index 2  is not a boundary", segments1->isBoundary(2));
+    assertTrue( "Index 12 is a boundary",     segments1->isBoundary(12));
 
-    icu::segmenter::RuleBasedSegmenter rbSegmenter2 = std::move(rbSegmenter1);
+    icu::segmenter::RuleBasedSegmenterBuilder builder2;
+    builder2.setRules(u"[a-z]+;");
+    icu::segmenter::RuleBasedSegmenter segmenter2 = builder2.build(errorCode);
+    errorCode.errIfFailureAndReset();
+    auto segments2 = segmenter2.segment(u"Kühlschränke kühlen Getränke", errorCode);
+    errorCode.errIfFailureAndReset();
+    assertTrue("Index 0  is a boundary", segments2->isBoundary(0));
+    assertTrue("Index 1  is a boundary", segments2->isBoundary(1));
+    assertTrue("Index 2  is a boundary", segments2->isBoundary(2));
+    assertTrue("Index 12 is a boundary", segments2->isBoundary(12));
 
-    rbSegmenter2.segment(u"Kühlschränke kühlen Getränke", errorCode);
-
-    assertEquals("segment() is temporarily unsupported", U_UNSUPPORTED_ERROR, errorCode.reset());
-
-    // TODO: uncomment once segment() is implemented
-    // errorCode.errIfFailureAndReset();
+    segmenter2 = std::move(segmenter1);
+    segments2 = segmenter2.segment(u"Kühlschränke kühlen Getränke", errorCode);
+    errorCode.errIfFailureAndReset();
+    assertTrue( "Index 0  is a boundary",     segments2->isBoundary(0));
+    assertFalse("Index 1  is not a boundary", segments2->isBoundary(1));
+    assertFalse("Index 2  is not a boundary", segments2->isBoundary(2));
+    assertTrue( "Index 12 is a boundary",     segments2->isBoundary(12));
 }
 
 #endif /* #if !UCONFIG_NO_BREAK_ITERATION */

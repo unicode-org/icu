@@ -63,6 +63,8 @@ public:
     // Classic ICU: return a pointer, and by convention the caller takes ownership.
     // We *could* do something new and return a
     // LocalPointer<Segments> or std::unique_ptr<Segments> for explicit ownership.
+protected:
+    Segmenter();
 };
 
 class U_COMMON_API_CLASS Segments : public UObject {
