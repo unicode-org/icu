@@ -3,21 +3,21 @@
 
 #include "unicode/utypes.h"
 #include "unicode/brkiter.h"
-#include "unicode/segmenter_segments_rulebased.h"
+#include "unicode/segmenter_segments_impl.h"
 #include "unicode/unistr.h"
 
 U_NAMESPACE_BEGIN
 
 namespace segmenter {
 
-RuleBasedSegments::RuleBasedSegments(const BreakIterator & breakIter, std::u16string_view source)
+SegmentsImpl::SegmentsImpl(const BreakIterator & breakIter, std::u16string_view source)
     : breakIterPrototype_(std::unique_ptr<BreakIterator>(breakIter.clone())),
     source_(UnicodeString::readOnlyAlias(source))
 {
     breakIterPrototype_->setText(source_);
 }
 
-bool RuleBasedSegments::isBoundary(int32_t i) {
+bool SegmentsImpl::isBoundary(int32_t i) {
     return breakIterPrototype_->clone()->isBoundary(i);
 }
 

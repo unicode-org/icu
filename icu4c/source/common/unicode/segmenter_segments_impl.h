@@ -1,12 +1,12 @@
 // © 2026 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-#ifndef __SEGMENTER_SEGMENTS_RULEBASED_H__
-#define __SEGMENTER_SEGMENTS_RULEBASED_H__
+#ifndef __SEGMENTER_SEGMENTS_IMPL_H__
+#define __SEGMENTER_SEGMENTS_IMPL_H__
 
 /**
  * \file
- * \brief C++ API: Segmenter base class.
+ * \brief C++ API: Common Segments impl class that can be used by all specific types of Segments impls.
  */
 
 #include "unicode/utypes.h"
@@ -42,14 +42,14 @@ U_NAMESPACE_BEGIN
 
 namespace segmenter {
 
-class U_COMMON_API_CLASS RuleBasedSegments : public Segments {
+class U_COMMON_API_CLASS SegmentsImpl : public Segments {
 public:
     bool isBoundary(int32_t i);
 private:
 
     friend class RuleBasedSegmenter;
 
-    RuleBasedSegments(const BreakIterator & breakIter, std::u16string_view source);
+    SegmentsImpl(const BreakIterator & breakIter, std::u16string_view source);
 
     UnicodeString source_;
     std::unique_ptr<BreakIterator> breakIterPrototype_;
@@ -66,4 +66,4 @@ U_NAMESPACE_END
 
 #endif /* U_SHOW_CPLUSPLUS_API */
 
-#endif // __SEGMENTER_SEGMENTS_RULEBASED_H__
+#endif // __SEGMENTER_SEGMENTS_IMPL_H__

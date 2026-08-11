@@ -59,11 +59,10 @@ void SegmentsTest::testHelloWorld() {
     // TODO: modify signature to match ICU4J Segmenter API design
     icu::segmenter::RuleBasedSegmenterBuilder builder;
     builder.setRules(u"[A-Za-züä]+;");
-    icu::segmenter::RuleBasedSegmenter rbSegmenter = builder.build(errorCode);
+    auto segmenter = builder.build(errorCode);
 
     errorCode.errIfFailureAndReset();
 
-    auto segmenter = builder.build(errorCode);
     auto segments = segmenter.segment(u"Kühlschränke kühlen Getränke", errorCode);
 
     errorCode.errIfFailureAndReset();
@@ -85,7 +84,7 @@ void SegmentsTest::testMoveConstructor() {
 
     icu::segmenter::RuleBasedSegmenterBuilder builder;
     builder.setRules(u"[A-Za-züä]+;");
-    icu::segmenter::RuleBasedSegmenter segmenter1 = builder.build(errorCode);
+    auto segmenter1 = builder.build(errorCode);
     errorCode.errIfFailureAndReset();
     auto segments1 = segmenter1.segment(u"Kühlschränke kühlen Getränke", errorCode);
     errorCode.errIfFailureAndReset();
@@ -94,7 +93,7 @@ void SegmentsTest::testMoveConstructor() {
     assertFalse("Index 2  is not a boundary", segments1->isBoundary(2));
     assertTrue( "Index 12 is a boundary",     segments1->isBoundary(12));
 
-    icu::segmenter::RuleBasedSegmenter segmenter2(std::move(segmenter1));
+    auto segmenter2(std::move(segmenter1));
 
     auto segments2 = segmenter2.segment(u"Kühlschränke kühlen Getränke", errorCode);
     errorCode.errIfFailureAndReset();
@@ -109,7 +108,7 @@ void SegmentsTest::testMoveAssignment() {
 
     icu::segmenter::RuleBasedSegmenterBuilder builder1;
     builder1.setRules(u"[A-Za-züä]+;");
-    icu::segmenter::RuleBasedSegmenter segmenter1 = builder1.build(errorCode);
+    auto segmenter1 = builder1.build(errorCode);
     errorCode.errIfFailureAndReset();
     auto segments1 = segmenter1.segment(u"Kühlschränke kühlen Getränke", errorCode);
     errorCode.errIfFailureAndReset();
@@ -120,7 +119,7 @@ void SegmentsTest::testMoveAssignment() {
 
     icu::segmenter::RuleBasedSegmenterBuilder builder2;
     builder2.setRules(u"[a-z]+;");
-    icu::segmenter::RuleBasedSegmenter segmenter2 = builder2.build(errorCode);
+    auto segmenter2 = builder2.build(errorCode);
     errorCode.errIfFailureAndReset();
     auto segments2 = segmenter2.segment(u"Kühlschränke kühlen Getränke", errorCode);
     errorCode.errIfFailureAndReset();

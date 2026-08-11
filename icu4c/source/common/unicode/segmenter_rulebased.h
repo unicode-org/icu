@@ -4,6 +4,11 @@
 #ifndef __SEGEMENTER_RULEBASED_H__
 #define __SEGEMENTER_RULEBASED_H__
 
+/**
+ * \file
+ * \brief C++ API: Rule based Segmenter impl class.
+ */
+
 #include "unicode/utypes.h"
 
 #if U_SHOW_CPLUSPLUS_API

@@ -5,7 +5,7 @@
 #include "unicode/parseerr.h"
 #include "unicode/rbbi.h"
 #include "unicode/segmenter_rulebased.h"
-#include "unicode/segmenter_segments_rulebased.h"
+#include "unicode/segmenter_segments_impl.h"
 #include "unicode/utypes.h"
 
 U_NAMESPACE_BEGIN
@@ -46,8 +46,8 @@ RuleBasedSegmenter::~RuleBasedSegmenter() {
 }
 
 std::unique_ptr<Segments> RuleBasedSegmenter::segment(std::u16string_view s, UErrorCode &errorCode) {
-    RuleBasedSegments segments((*breakIter_), s);
-    std::unique_ptr<RuleBasedSegments> segmentsPtr = std::make_unique<RuleBasedSegments>(std::move(segments));
+    SegmentsImpl segments((*breakIter_), s);
+    std::unique_ptr<SegmentsImpl> segmentsPtr = std::make_unique<SegmentsImpl>(std::move(segments));
     return segmentsPtr;
 }
 
