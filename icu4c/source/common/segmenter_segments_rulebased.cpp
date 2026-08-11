@@ -12,7 +12,7 @@ namespace segmenter {
 
 RuleBasedSegments::RuleBasedSegments(const BreakIterator & breakIter, std::u16string_view source)
     : breakIterPrototype_(std::unique_ptr<BreakIterator>(breakIter.clone())),
-    source_(std::move(UnicodeString::readOnlyAlias(source)))
+    source_(UnicodeString::readOnlyAlias(source))
 {
     breakIterPrototype_->setText(source_);
 }
