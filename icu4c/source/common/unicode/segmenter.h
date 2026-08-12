@@ -43,6 +43,7 @@ namespace segmenter {
 class Segments;
 class SegmentsUTF8;
 class Segment;
+class SegmentsImpl;
 
 class U_COMMON_API_CLASS Segmenter : public UObject {
 public:
@@ -69,14 +70,16 @@ protected:
 
 class U_COMMON_API_CLASS Segments : public UObject {
 public:
-    virtual bool isBoundary(int32_t offset) = 0;
+    virtual bool isBoundary(int32_t i) = 0;
+
+    virtual Segment segmentAt(int32_t i, UErrorCode &errorCode) = 0;
 };
 
 // Note: this class is mentioned in the design doc as describing
 // an iterator of `char*`, but no details, such as whether there should be
 // a templated class based on the encoding form / code unit size
 class U_COMMON_API_CLASS SegmentsUTF8 : public UObject {
-    virtual bool isBoundary(int32_t offset) = 0;
+    virtual bool isBoundary(int32_t i) = 0;
 
     // all other APIs the same as Segments
     //
@@ -90,6 +93,13 @@ public:
     const int32_t start;
     const int32_t limit;
     const int32_t ruleStatus;
+    const std::u16string_view source;
+
+    static Segment emptySegment();
+private:
+    friend class SegmentsImpl;
+
+    Segment(int32_t start, int32_t limit, int32_t ruleStatus, std::u16string_view source);
 };
 
 class U_COMMON_API_CLASS SegmentIterator : public UObject {

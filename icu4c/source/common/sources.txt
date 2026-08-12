@@ -71,6 +71,7 @@ restrace.cpp
 ruleiter.cpp
 schriter.cpp
 segmenter.cpp
+segmenter_localized.cpp
 segmenter_rulebased.cpp
 segmenter_segments_impl.cpp
 serv.cpp

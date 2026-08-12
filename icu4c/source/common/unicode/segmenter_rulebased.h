@@ -38,7 +38,7 @@ public:
 
     RuleBasedSegmenter& operator=(RuleBasedSegmenter&& other) noexcept;
 
-    std::unique_ptr<Segments> segment(std::u16string_view s, UErrorCode &errorCode) override;
+    std::unique_ptr<Segments> segment(std::u16string_view s, UErrorCode & /*errorCode*/) override;
 
 private:
     friend class RuleBasedSegmenterBuilder;
@@ -48,7 +48,7 @@ private:
     // move constructor to allow builder to build from a configured BreakIterator instance
     RuleBasedSegmenter(std::unique_ptr<BreakIterator> && other) noexcept;
 
-    std::unique_ptr<BreakIterator> breakIter_;
+    std::unique_ptr<BreakIterator> breakIterPrototype_;
 };
 
 // ---------------------------------------------

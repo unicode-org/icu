@@ -15,26 +15,26 @@ namespace segmenter {
 // ---------------------------------------------
 
 RuleBasedSegmenter::RuleBasedSegmenter():
-    breakIter_(nullptr)
+    breakIterPrototype_(nullptr)
 {
     
 }
 
 RuleBasedSegmenter::RuleBasedSegmenter(std::unique_ptr<BreakIterator> && other) noexcept 
-    : breakIter_(std::move(other))
+    : breakIterPrototype_(std::move(other))
 {
     
 }
 
 RuleBasedSegmenter::RuleBasedSegmenter(RuleBasedSegmenter&& other) noexcept
-    : breakIter_(std::move(other.breakIter_))
+    : breakIterPrototype_(std::move(other.breakIterPrototype_))
 {
 
 }
 
 RuleBasedSegmenter& RuleBasedSegmenter::operator=(RuleBasedSegmenter&& other) noexcept {
     if (this != &other) {
-        breakIter_ = std::move(other.breakIter_);
+        breakIterPrototype_ = std::move(other.breakIterPrototype_);
     }
 
     return *this;
@@ -42,11 +42,11 @@ RuleBasedSegmenter& RuleBasedSegmenter::operator=(RuleBasedSegmenter&& other) no
 
 RuleBasedSegmenter::~RuleBasedSegmenter() {
     
-    breakIter_ = nullptr;
+    breakIterPrototype_ = nullptr;
 }
 
-std::unique_ptr<Segments> RuleBasedSegmenter::segment(std::u16string_view s, UErrorCode &errorCode) {
-    SegmentsImpl segments((*breakIter_), s);
+std::unique_ptr<Segments> RuleBasedSegmenter::segment(std::u16string_view s, UErrorCode & /*errorCode*/) {
+    SegmentsImpl segments((*breakIterPrototype_), s);
     std::unique_ptr<SegmentsImpl> segmentsPtr = std::make_unique<SegmentsImpl>(std::move(segments));
     return segmentsPtr;
 }

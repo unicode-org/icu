@@ -39,8 +39,23 @@ Segment::~Segment() {}
 Segment::Segment()
 :start(-1),
 limit(-1),
-ruleStatus(-1)
+ruleStatus(-1),
+source(u"")
 {}
+
+Segment::Segment(int32_t start, int32_t limit, int32_t ruleStatus, std::u16string_view source)
+:start(start),
+limit(limit),
+ruleStatus(ruleStatus),
+source(source)
+{
+}
+
+
+Segment Segment::emptySegment() {
+    Segment s;
+    return s;
+}
 
 }  // namespace segmenter
 

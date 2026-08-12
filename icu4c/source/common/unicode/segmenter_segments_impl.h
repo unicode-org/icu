@@ -45,9 +45,12 @@ namespace segmenter {
 class U_COMMON_API_CLASS SegmentsImpl : public Segments {
 public:
     bool isBoundary(int32_t i);
+
+    Segment segmentAt(int32_t i, UErrorCode &errorCode);
 private:
 
     friend class RuleBasedSegmenter;
+    friend class LocalizedSegmenter;
 
     SegmentsImpl(const BreakIterator & breakIter, std::u16string_view source);
 
