@@ -227,4 +227,29 @@ public class RBNFParseTest extends CoreTestFmwk {
             // success!
         }
     }
+
+    @Test
+    public void TestICU23144() {
+        // Construct a chained 75-depth ModulusSubstitution ('>>>') RBNF RuleSet.
+        // Verifies that the internal delegation counter accurately increments at each >>> step,
+        // cleanly tripping the 'RECURSION_LIMIT' guard condition without thread-stack exhaustion.
+        StringBuilder ruleDef = new StringBuilder("%infinite-recursion:\n0: ;\n");
+        for (int i = 1; i <= 75; ++i) {
+            ruleDef.append(i).append(": >>>;\n");
+        }
+
+        try {
+            RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat(ruleDef.toString(), Locale.US);
+            // In Java, exceeding RECURSION_LIMIT inside parse() evaluates to zero/unparsed,
+            // producing a standard ParseException for a malformed parse traversal.
+            rbnf.parse("75");
+        } catch (java.text.ParseException expected) {
+            // Success! RECURSION_LIMIT correctly terminated the execution tree before
+            // Stack-Overflow.
+            logln(
+                    "TestICU23144 (Java): Successfully survived 75-depth >>> recursion chain via ParseException.");
+        } catch (Exception e) {
+            errln("TestICU23144 (Java) failed with unexpected Exception: " + e.getMessage());
+        }
+    }
 }

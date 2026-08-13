@@ -1027,7 +1027,7 @@ class ModulusSubstitution extends NFSubstitution {
                             false,
                             upperBound,
                             nonNumericalExecutedRuleMask,
-                            recursionCount);
+                            recursionCount + 1);
 
             if (parsePosition.getIndex() != 0) {
                 double result = tempResult.doubleValue();

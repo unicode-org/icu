@@ -972,7 +972,7 @@ ModulusSubstitution::doParse(const UnicodeString& text,
         // use the specific rule's doParse() method, and then we have to
         // do some of the other work of NFRuleSet.parse()
     } else {
-        ruleToUse->doParse(text, parsePosition, false, upperBound, nonNumericalExecutedRuleMask, recursionCount, result);
+        ruleToUse->doParse(text, parsePosition, false, upperBound, nonNumericalExecutedRuleMask, recursionCount + 1, result);
 
         if (parsePosition.getIndex() != 0) {
             UErrorCode status = U_ZERO_ERROR;
