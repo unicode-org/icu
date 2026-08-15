@@ -2363,6 +2363,11 @@ public final class UCharacterTest extends CoreTestFmwk {
                 != (UCharacter.EastAsianWidth.COUNT - 1)) {
             errln("error: UCharacter.getIntPropertyMaxValue(UProperty.EAST_ASIAN_WIDTH) wrong\n");
         }
+        if (UCharacter.getIntPropertyMaxValue(UProperty.INDIC_CONJUNCT_BREAK)
+                != (UCharacter.IndicConjunctBreak.values().length - 1)) {
+            errln(
+                    "error: UCharacter.getIntPropertyMaxValue(UProperty.INDIC_CONJUNCT_BREAK) wrong\n");
+        }
 
         VersionInfo version = UCharacter.getUnicodeVersion();
 

@@ -315,6 +315,8 @@ Props vector 0 bits shuffled so that script and script extensions bits are conti
 Used 2 bits from props vector 0 to add Indic_Conjunct_Break. The bits used were freed up
 by the preceding move of the Block property out of props vector 0 and the bit shuffling
 ("defragmentation") of Script and Script_Extensions.
+- Initially, the InCB maximum value was omitted from the maxValues.
+  Fixed in ICU 79 via ICU-23092.
 
 ----------------------------------------------------------------------------- */
 
@@ -965,7 +967,7 @@ CorePropsBuilder::build(UErrorCode &errorCode) {
     totalSize=4*offset;
 
     indexes[UPROPS_MAX_VALUES_INDEX]=
-        (((int32_t)U_INCB_COUNT-1)<<UPROPS_INCB_SHIFT)|
+        (((int32_t)U_INTERNAL_INCB_COUNT-1)<<UPROPS_INCB_SHIFT)|
         (((int32_t)U_EA_COUNT-1)<<UPROPS_EA_SHIFT)|
         ((int32_t)USCRIPT_CODE_LIMIT-1);
     indexes[UPROPS_MAX_VALUES_2_INDEX]=
