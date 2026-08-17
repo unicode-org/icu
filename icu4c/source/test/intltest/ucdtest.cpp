@@ -853,8 +853,33 @@ void UnicodeTest::TestBinaryCharacterProperties() {
             }
         }
     }
+
+    // Binary properties all have an integer max value of 1 = TRUE.
+    for (int32_t prop = 0; prop < UCHAR_BINARY_LIMIT; ++prop) {
+        assertEquals(UnicodeString("u_getIntPropertyMaxValue(") + prop + u")",
+                     1, u_getIntPropertyMaxValue(static_cast<UProperty>(prop)));
+    }
 #endif
 }
+
+namespace {
+
+int32_t expectedIntPropertyLeastMaxValue(UProperty prop) {
+    switch(prop) {
+        case UCHAR_NFD_QUICK_CHECK:
+        case UCHAR_NFKD_QUICK_CHECK:
+            // no & yes
+            return 1;
+        case UCHAR_IDENTIFIER_STATUS:
+            // restricted & allowed
+            return 1;
+        default:
+            // otherwise 3 or more values
+            return 2;
+    }
+}
+
+}  // namespace
 
 void UnicodeTest::TestIntCharacterProperties() {
 #if !UCONFIG_NO_NORMALIZATION
@@ -880,6 +905,16 @@ void UnicodeTest::TestIntCharacterProperties() {
         assertEquals(
             "int property upcmap_get(U+0061)",
             u_getIntPropertyValue(0x61, static_cast<UProperty>(prop)), ucpmap_get(map, 0x61));
+    }
+
+    // Almost all enumerated properties have at least three enumerated values.
+    for (int32_t prop = UCHAR_INT_START; prop < UCHAR_INT_LIMIT; ++prop) {
+        int32_t max = u_getIntPropertyMaxValue(static_cast<UProperty>(prop));
+        int32_t least = expectedIntPropertyLeastMaxValue(static_cast<UProperty>(prop));
+        if (max < least) {
+            errln(UnicodeString("u_getIntPropertyMaxValue(") + TestUtility::hex(prop) +
+                  u") too small: " + max);
+        }
     }
 #endif
 }

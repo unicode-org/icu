@@ -4304,6 +4304,29 @@ public final class UCharacterTest extends CoreTestFmwk {
                 }
             }
         }
+
+        // Binary properties all have an integer max value of 1 = TRUE.
+        for (int prop = 0; prop < UProperty.BINARY_LIMIT; ++prop) {
+            assertEquals(
+                    "getIntPropertyMaxValue(" + prop + ')',
+                    1,
+                    UCharacter.getIntPropertyMaxValue(prop));
+        }
+    }
+
+    private static int expectedIntPropertyLeastMaxValue(int prop) {
+        switch (prop) {
+            case UProperty.NFD_QUICK_CHECK:
+            case UProperty.NFKD_QUICK_CHECK:
+                // no & yes
+                return 1;
+            case UProperty.IDENTIFIER_STATUS:
+                // restricted & allowed
+                return 1;
+            default:
+                // otherwise 3 or more values
+                return 2;
+        }
     }
 
     @Test
@@ -4331,6 +4354,15 @@ public final class UCharacterTest extends CoreTestFmwk {
                     "int property later range value at " + Utility.hex(end),
                     UCharacter.getIntPropertyValue(end, prop),
                     range.getValue());
+        }
+
+        // Almost all enumerated properties have at least three enumerated values.
+        for (int prop = UProperty.INT_START; prop < UProperty.INT_LIMIT; ++prop) {
+            int max = UCharacter.getIntPropertyMaxValue(prop);
+            int least = expectedIntPropertyLeastMaxValue(prop);
+            if (max < least) {
+                errln("u_getIntPropertyMaxValue(" + Utility.hex(prop) + ") too small: " + max);
+            }
         }
     }
 
