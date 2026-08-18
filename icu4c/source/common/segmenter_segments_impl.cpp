@@ -12,8 +12,8 @@ U_NAMESPACE_BEGIN
 namespace segmenter {
 
 SegmentsImpl::SegmentsImpl(const BreakIterator & breakIter, std::u16string_view source)
-    : breakIterPrototype_(std::unique_ptr<BreakIterator>(breakIter.clone())),
-    source_(UnicodeString::readOnlyAlias(source))
+: source_(UnicodeString::readOnlyAlias(source)),
+breakIterPrototype_(std::unique_ptr<BreakIterator>(breakIter.clone()))
 {
     breakIterPrototype_->setText(source_);
 }
@@ -56,6 +56,13 @@ Segment SegmentsImpl::segmentAt(int32_t i, UErrorCode &errorCode) {
     Segment s(start, limit, ruleStatus, source_);
 
     return s;
+}
+
+SegmentIterator SegmentsImpl::segmentsFrom(int32_t i) {
+    auto breakIter = std::unique_ptr<BreakIterator>(breakIterPrototype_->clone());
+    SegmentIterator segIter(std::move(breakIter), i, source_);
+
+    return segIter;
 }
 
 

@@ -43,6 +43,9 @@ namespace segmenter {
 class SegmentIterator;
 class SegmentsImpl;
 
+// ---------------------------------------------
+// Segment
+// ---------------------------------------------
 
 class U_COMMON_API_CLASS Segment : public UObject {
 public:
@@ -56,6 +59,7 @@ public:
 
     static Segment emptySegment();
 private:
+    friend class SegmentIterator;
     friend class SegmentsImpl;
 
     const int32_t start_;
@@ -65,6 +69,10 @@ private:
 
     Segment(int32_t start, int32_t limit, int32_t ruleStatus, std::u16string_view source);
 };
+
+// ---------------------------------------------
+// Segments
+// ---------------------------------------------
 
 class U_COMMON_API_CLASS Segments : public UObject {
 public:
@@ -77,6 +85,10 @@ public:
     virtual SegmentIterator segmentsFrom(int32_t i) = 0;
 };
 
+// ---------------------------------------------
+// SegmentsUTF8
+// ---------------------------------------------
+
 // Note: this class is mentioned in the design doc as describing
 // an iterator of `char*`, but no details, such as whether there should be
 // a templated class based on the encoding form / code unit size
@@ -87,6 +99,10 @@ class U_COMMON_API_CLASS SegmentsUTF8 : public UObject {
     //
     // (if the class is templated, then that automatically becomes true)
 };
+
+// ---------------------------------------------
+// Segmenter
+// ---------------------------------------------
 
 class U_COMMON_API_CLASS Segmenter : public UObject {
 public:

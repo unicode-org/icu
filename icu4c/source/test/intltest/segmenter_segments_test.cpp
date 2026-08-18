@@ -10,6 +10,7 @@
 #include "unicode/segmenter.h"
 #include "unicode/segmenter_localized.h"
 #include "unicode/segmenter_rulebased.h"
+#include "unicode/segmenter_segmentiter.h"
 #include "segmenter_segments_test.h"
 
 #include <iostream>
@@ -32,6 +33,7 @@ void SegmentsTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
     TESTCASE_AUTO(testMoveConstructor);
     TESTCASE_AUTO(testMoveAssignment);
     TESTCASE_AUTO(testEmptyRules);
+    TESTCASE_AUTO(testSegmentAt);
     TESTCASE_AUTO(testSegments);
 
     TESTCASE_AUTO_END;
@@ -140,8 +142,8 @@ void SegmentsTest::testMoveAssignment() {
 
 // TODO: create tests for move {constructor, assignment} for LocalizedSegmenter, too
 
-void SegmentsTest::testSegments() {
-    IcuTestErrorCode errorCode(*this, "testSegments");
+void SegmentsTest::testSegmentAt() {
+    IcuTestErrorCode errorCode(*this, "testSegmentAt");
 
     icu::segmenter::LocalizedSegmenter enWordSegmenter =
         icu::segmenter::LocalizedSegmenterBuilder()
@@ -161,9 +163,34 @@ void SegmentsTest::testSegments() {
 
     icu::segmenter::Segment secondSegment = segments1->segmentAt(3, errorCode);
     errorCode.errIfFailureAndReset();
-    assertEquals("first segment start", 3, secondSegment.getStart());
-    assertEquals("first segment limit", 4, secondSegment.getLimit());
-    
+    assertEquals("second segment start", 3, secondSegment.getStart());
+    assertEquals("second segment limit", 4, secondSegment.getLimit());   
+}
+
+void SegmentsTest::testSegments() {
+    IcuTestErrorCode errorCode(*this, "testSegments");
+
+    icu::segmenter::LocalizedSegmenter enWordSegmenter =
+        icu::segmenter::LocalizedSegmenterBuilder()
+            .setLocale(Locale::getEnglish())
+            .setSegmentationType(icu::segmenter::SegmentationType::WORD)
+            .build(errorCode);
+
+    std::u16string_view source1 = u"The quick brown fox jumped over the lazy dog.";
+
+    // Create new Segments for source1
+    auto segments1 = enWordSegmenter.segment(source1, errorCode);
+    auto segmentIter = segments1->segments();
+
+    icu::segmenter::Segment firstSegment = *segmentIter;
+    assertEquals("first segment start", 0, firstSegment.getStart());
+    assertEquals("first segment limit", 3, firstSegment.getLimit());
+
+    ++segmentIter;
+
+    icu::segmenter::Segment secondSegment = *segmentIter;
+    assertEquals("second segment start", 3, secondSegment.getStart());
+    assertEquals("second segment limit", 4, secondSegment.getLimit());   
 }
 
 #endif /* #if !UCONFIG_NO_BREAK_ITERATION */

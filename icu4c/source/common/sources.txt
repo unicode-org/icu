@@ -73,6 +73,7 @@ schriter.cpp
 segmenter.cpp
 segmenter_localized.cpp
 segmenter_rulebased.cpp
+segmenter_segmentiter.cpp
 segmenter_segments_impl.cpp
 serv.cpp
 servlk.cpp

@@ -29,8 +29,10 @@ U_NAMESPACE_END
 
 #else
 
+#include "unicode/brkiter.h"
 #include "unicode/segmenter.h"
 #include "unicode/segmenter_rulebased.h"
+#include "unicode/segmenter_segmentiter.h"
 #include "unicode/uobject.h"
 #include "unicode/unistr.h"
 
@@ -44,9 +46,12 @@ namespace segmenter {
 
 class U_COMMON_API_CLASS SegmentsImpl : public Segments {
 public:
-    bool isBoundary(int32_t i);
+    bool isBoundary(int32_t i) override;
 
-    Segment segmentAt(int32_t i, UErrorCode &errorCode);
+    Segment segmentAt(int32_t i, UErrorCode &errorCode) override;
+
+    SegmentIterator segmentsFrom(int32_t i) override;
+
 private:
 
     friend class RuleBasedSegmenter;

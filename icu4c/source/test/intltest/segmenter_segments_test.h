@@ -24,6 +24,8 @@ public:
 
     void testMoveAssignment();
 
+    void testSegmentAt();
+
     void testSegments();
 
 private:

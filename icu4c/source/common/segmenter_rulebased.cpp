@@ -1,11 +1,11 @@
 // © 2026 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
+#include "unicode/utypes.h"
 #include "unicode/brkiter.h"
 #include "unicode/parseerr.h"
 #include "unicode/rbbi.h"
 #include "unicode/segmenter_rulebased.h"
-#include "unicode/utypes.h"
 
 #include "segmenter_segments_impl.h"
 
