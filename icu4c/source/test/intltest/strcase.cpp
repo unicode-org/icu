@@ -72,6 +72,7 @@ public:
     void TestInPlaceTitle();
     void TestCaseMapEditsIteratorDocs();
     void TestCaseMapGreekExtended();
+    void TestCmpFoldStackBufferUnderflow();
 
 private:
     void assertGreekUpper(const char16_t *s, const char16_t *expected);
@@ -122,6 +123,7 @@ StringCaseTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
 #endif
     TESTCASE_AUTO(TestCaseMapEditsIteratorDocs);
     TESTCASE_AUTO(TestCaseMapGreekExtended);
+    TESTCASE_AUTO(TestCmpFoldStackBufferUnderflow);
     TESTCASE_AUTO_END;
 }
 
@@ -1844,6 +1846,30 @@ void StringCaseTest::TestCaseMapGreekExtended() {
     result.toTitle(nullptr, Locale::getRoot());
     assertEquals(u"title", u"\u1F88\u1F80\u1FF3", result);
 #endif
+}
+
+
+void StringCaseTest::TestCmpFoldStackBufferUnderflow() {
+    static constexpr char16_t s1_chars[] = {
+        0xd801,          // Standalone / Intervening Lead Surrogate
+        0xd801, 0xdc01,  // U+10401 (Lead + Trail) -> Generates 'fold' entry at absolute zero-index boundary
+        0xd801, 0xdc01,
+        0xdc02,          // Trail Surrogate boundary anchor
+        0
+    };
+
+    static constexpr char16_t s2_chars[] = {
+        0xd801, 0xdc01,
+        0xd801, 0xdc01,
+        0xd801, 0xdc02,
+        0
+    };
+
+    UnicodeString s1 = UnicodeString::readOnlyAlias(s1_chars);
+    UnicodeString s2 = UnicodeString::readOnlyAlias(s2_chars);
+
+    int8_t cmpResult = s1.caseCompare(s2, U_FOLD_CASE_DEFAULT);
+    assertEquals("s1.caseCompare(s2, U_FOLD_CASE_DEFAULT)", 1, cmpResult);
 }
 
 //#endif
