@@ -5,8 +5,9 @@
 #include "unicode/parseerr.h"
 #include "unicode/rbbi.h"
 #include "unicode/segmenter_rulebased.h"
-#include "unicode/segmenter_segments_impl.h"
 #include "unicode/utypes.h"
+
+#include "segmenter_segments_impl.h"
 
 U_NAMESPACE_BEGIN
 
