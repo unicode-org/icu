@@ -90,14 +90,20 @@ class U_COMMON_API_CLASS Segment : public UObject {
 public:
     Segment();
     ~Segment() override;
-    const int32_t start;
-    const int32_t limit;
-    const int32_t ruleStatus;
-    const std::u16string_view source;
+
+    int32_t getStart();
+    int32_t getLimit();
+    int32_t getRuleStatus();
+    std::u16string_view getSource();
 
     static Segment emptySegment();
 private:
     friend class SegmentsImpl;
+
+    const int32_t start_;
+    const int32_t limit_;
+    const int32_t ruleStatus_;
+    const std::u16string_view source_;
 
     Segment(int32_t start, int32_t limit, int32_t ruleStatus, std::u16string_view source);
 };

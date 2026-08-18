@@ -156,13 +156,13 @@ void SegmentsTest::testSegments() {
 
     icu::segmenter::Segment firstSegment = segments1->segmentAt(0, errorCode);
     errorCode.errIfFailureAndReset();
-    assertEquals("first segment start", 0, firstSegment.start);
-    assertEquals("first segment limit", 3, firstSegment.limit);
+    assertEquals("first segment start", 0, firstSegment.getStart());
+    assertEquals("first segment limit", 3, firstSegment.getLimit());
 
     icu::segmenter::Segment secondSegment = segments1->segmentAt(3, errorCode);
     errorCode.errIfFailureAndReset();
-    assertEquals("first segment start", 3, secondSegment.start);
-    assertEquals("first segment limit", 4, secondSegment.limit);
+    assertEquals("first segment start", 3, secondSegment.getStart());
+    assertEquals("first segment limit", 4, secondSegment.getLimit());
     
 }
 

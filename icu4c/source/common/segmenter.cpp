@@ -37,20 +37,35 @@ std::unique_ptr<SegmentsUTF8> Segmenter::segment(StringPiece /*s*/, UErrorCode &
 Segment::~Segment() {}
 
 Segment::Segment()
-:start(-1),
-limit(-1),
-ruleStatus(-1),
-source(u"")
+:start_(-1),
+limit_(-1),
+ruleStatus_(-1),
+source_(u"")
 {}
 
 Segment::Segment(int32_t start, int32_t limit, int32_t ruleStatus, std::u16string_view source)
-:start(start),
-limit(limit),
-ruleStatus(ruleStatus),
-source(source)
+:start_(start),
+limit_(limit),
+ruleStatus_(ruleStatus),
+source_(source)
 {
 }
 
+int32_t Segment::getStart() {
+    return start_;
+}
+
+int32_t Segment::getLimit() {
+    return limit_;
+}
+
+int32_t Segment::getRuleStatus() {
+    return ruleStatus_;
+}
+
+std::u16string_view Segment::getSource() {
+    return source_;
+}
 
 Segment Segment::emptySegment() {
     Segment s;
