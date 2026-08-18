@@ -40,10 +40,53 @@ U_NAMESPACE_BEGIN
 
 namespace segmenter {
 
-class Segments;
-class SegmentsUTF8;
-class Segment;
+class SegmentIterator;
 class SegmentsImpl;
+
+
+class U_COMMON_API_CLASS Segment : public UObject {
+public:
+    Segment();
+    ~Segment() override;
+
+    int32_t getStart();
+    int32_t getLimit();
+    int32_t getRuleStatus();
+    std::u16string_view getSource();
+
+    static Segment emptySegment();
+private:
+    friend class SegmentsImpl;
+
+    const int32_t start_;
+    const int32_t limit_;
+    const int32_t ruleStatus_;
+    const std::u16string_view source_;
+
+    Segment(int32_t start, int32_t limit, int32_t ruleStatus, std::u16string_view source);
+};
+
+class U_COMMON_API_CLASS Segments : public UObject {
+public:
+    virtual bool isBoundary(int32_t i) = 0;
+
+    virtual Segment segmentAt(int32_t i, UErrorCode &errorCode) = 0;
+
+    virtual SegmentIterator segments();
+
+    virtual SegmentIterator segmentsFrom(int32_t i) = 0;
+};
+
+// Note: this class is mentioned in the design doc as describing
+// an iterator of `char*`, but no details, such as whether there should be
+// a templated class based on the encoding form / code unit size
+class U_COMMON_API_CLASS SegmentsUTF8 : public UObject {
+    virtual bool isBoundary(int32_t i) = 0;
+
+    // all other APIs the same as Segments
+    //
+    // (if the class is templated, then that automatically becomes true)
+};
 
 class U_COMMON_API_CLASS Segmenter : public UObject {
 public:
@@ -68,54 +111,6 @@ protected:
     Segmenter();
 };
 
-class U_COMMON_API_CLASS Segments : public UObject {
-public:
-    virtual bool isBoundary(int32_t i) = 0;
-
-    virtual Segment segmentAt(int32_t i, UErrorCode &errorCode) = 0;
-};
-
-// Note: this class is mentioned in the design doc as describing
-// an iterator of `char*`, but no details, such as whether there should be
-// a templated class based on the encoding form / code unit size
-class U_COMMON_API_CLASS SegmentsUTF8 : public UObject {
-    virtual bool isBoundary(int32_t i) = 0;
-
-    // all other APIs the same as Segments
-    //
-    // (if the class is templated, then that automatically becomes true)
-};
-
-class U_COMMON_API_CLASS Segment : public UObject {
-public:
-    Segment();
-    ~Segment() override;
-
-    int32_t getStart();
-    int32_t getLimit();
-    int32_t getRuleStatus();
-    std::u16string_view getSource();
-
-    static Segment emptySegment();
-private:
-    friend class SegmentsImpl;
-
-    const int32_t start_;
-    const int32_t limit_;
-    const int32_t ruleStatus_;
-    const std::u16string_view source_;
-
-    Segment(int32_t start, int32_t limit, int32_t ruleStatus, std::u16string_view source);
-};
-
-class U_COMMON_API_CLASS SegmentIterator : public UObject {
-public:
-    SegmentIterator(const SegmentIterator &other) = default;
-    bool operator==(const SegmentIterator &other) const;
-    bool operator!=(const SegmentIterator &other) const;
-    Segment operator*() const;
-    SegmentIterator &operator++();
-};
 
 }  // namespace segmenter
 
