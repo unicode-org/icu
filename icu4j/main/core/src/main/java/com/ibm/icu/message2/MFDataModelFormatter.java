@@ -22,13 +22,7 @@ import com.ibm.icu.message2.MFDataModel.VariableRef;
 import com.ibm.icu.message2.MFDataModel.Variant;
 import com.ibm.icu.message2.MessageFormatter.BidiIsolation;
 import com.ibm.icu.message2.MessageFormatter.ErrorHandlingBehavior;
-import com.ibm.icu.util.Calendar;
-import com.ibm.icu.util.CurrencyAmount;
-import java.time.DayOfWeek;
-import java.time.Month;
-import java.time.temporal.Temporal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -51,8 +45,9 @@ class MFDataModelFormatter {
     private final BidiIsolation bidiIsolation;
     private final MFDataModel.Message dm;
 
-    private final MFFunctionRegistry standardFunctions;
     private final MFFunctionRegistry customFunctions;
+    private static final MFFunctionRegistry standardFunctions =
+            MFFunctionRegistry.getStandardFunctionsRegistry();
     private static final MFFunctionRegistry EMPTY_REGISTY = MFFunctionRegistry.builder().build();
 
     MFDataModelFormatter(
@@ -70,39 +65,6 @@ class MFDataModelFormatter {
         this.dm = dm;
         this.customFunctions =
                 customFunctionRegistry == null ? EMPTY_REGISTY : customFunctionRegistry;
-
-        standardFunctions =
-                MFFunctionRegistry.builder()
-                        // Date/time formatting. No selection.
-                        .setFunction("datetime", new DateTimeFunctionFactory("datetime"))
-                        .setFunction("date", new DateTimeFunctionFactory("date"))
-                        .setFunction("time", new DateTimeFunctionFactory("time"))
-                        .setDefaultFunctionNameForType(Date.class, "datetime")
-                        .setDefaultFunctionNameForType(Calendar.class, "datetime")
-                        .setDefaultFunctionNameForType(java.util.Calendar.class, "datetime")
-                        .setDefaultFunctionNameForType(Temporal.class, "datetime")
-                        .setDefaultFunctionNameForType(DayOfWeek.class, "date")
-                        .setDefaultFunctionNameForType(Month.class, "date")
-
-                        // Number formatting and selection
-                        .setFunction("number", new NumberFunctionFactory("number"))
-                        .setFunction("integer", new NumberFunctionFactory("integer"))
-                        .setFunction("currency", new NumberFunctionFactory("currency"))
-                        .setFunction("percent", new NumberFunctionFactory("percent"))
-                        .setFunction("offset", new NumberFunctionFactory("offset"))
-                        .setDefaultFunctionNameForType(Integer.class, "number")
-                        .setDefaultFunctionNameForType(Double.class, "number")
-                        .setDefaultFunctionNameForType(Number.class, "number")
-                        .setDefaultFunctionNameForType(CurrencyAmount.class, "currency")
-
-                        // Function that returns "to string" and selects on string equality
-                        .setFunction("string", new TextFunctionFactory())
-                        .setDefaultFunctionNameForType(String.class, "string")
-                        .setDefaultFunctionNameForType(CharSequence.class, "string")
-
-                        // Register some custom selector
-                        .setFunction("icu:gender", new TextFunctionFactory())
-                        .build();
     }
 
     String format(Map<String, ?> arguments) {

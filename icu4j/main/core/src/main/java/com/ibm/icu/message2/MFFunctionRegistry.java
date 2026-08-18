@@ -3,6 +3,12 @@
 
 package com.ibm.icu.message2;
 
+import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.CurrencyAmount;
+import java.time.DayOfWeek;
+import java.time.Month;
+import java.time.temporal.Temporal;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -35,9 +41,45 @@ public class MFFunctionRegistry {
     private final Map<String, FunctionFactory> functionMap;
     private final Map<Class<?>, String> classToFunction;
 
+    private static final MFFunctionRegistry STANDARD_FUNCTIONS = initStandardFunctions();
+
     private MFFunctionRegistry(Builder builder) {
         this.functionMap = new HashMap<>(builder.functionMap);
         this.classToFunction = new HashMap<>(builder.classToFunction);
+    }
+
+    private static MFFunctionRegistry initStandardFunctions() {
+        return MFFunctionRegistry.builder()
+                // Date/time formatting. No selection.
+                .setFunction("datetime", new DateTimeFunctionFactory("datetime"))
+                .setFunction("date", new DateTimeFunctionFactory("date"))
+                .setFunction("time", new DateTimeFunctionFactory("time"))
+                .setDefaultFunctionNameForType(Date.class, "datetime")
+                .setDefaultFunctionNameForType(Calendar.class, "datetime")
+                .setDefaultFunctionNameForType(java.util.Calendar.class, "datetime")
+                .setDefaultFunctionNameForType(Temporal.class, "datetime")
+                .setDefaultFunctionNameForType(DayOfWeek.class, "date")
+                .setDefaultFunctionNameForType(Month.class, "date")
+
+                // Number formatting and selection
+                .setFunction("number", new NumberFunctionFactory("number"))
+                .setFunction("integer", new NumberFunctionFactory("integer"))
+                .setFunction("currency", new NumberFunctionFactory("currency"))
+                .setFunction("percent", new NumberFunctionFactory("percent"))
+                .setFunction("offset", new NumberFunctionFactory("offset"))
+                .setDefaultFunctionNameForType(Integer.class, "number")
+                .setDefaultFunctionNameForType(Double.class, "number")
+                .setDefaultFunctionNameForType(Number.class, "number")
+                .setDefaultFunctionNameForType(CurrencyAmount.class, "currency")
+
+                // Function that returns "to string" and selects on string equality
+                .setFunction("string", new TextFunctionFactory())
+                .setDefaultFunctionNameForType(String.class, "string")
+                .setDefaultFunctionNameForType(CharSequence.class, "string")
+
+                // Register some custom selector
+                .setFunction("icu:gender", new TextFunctionFactory())
+                .build();
     }
 
     /**
@@ -50,6 +92,22 @@ public class MFFunctionRegistry {
     @Deprecated
     public static Builder builder() {
         return new Builder();
+    }
+
+    /**
+     * Returns an immutable MFFunctionRegistry that gives access to the standard functions.
+     *
+     * <p>This is useful for implementers of custom functions wanting to reproduce the behavior of
+     * the standard functions without re-implementing everything. They might need to "tinker" with
+     * input and options, chain to the original implementation, and then "tinker" with the result.
+     *
+     * @return a MFFunctionRegistry that contains the standard functions
+     * @internal ICU 79 technology preview
+     * @deprecated This API is for technology preview only.
+     */
+    @Deprecated
+    public static MFFunctionRegistry getStandardFunctionsRegistry() {
+        return STANDARD_FUNCTIONS;
     }
 
     /**
