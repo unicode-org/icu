@@ -16,11 +16,15 @@
 #include "unicode/bytestrie.h"
 #include "unicode/bytestriebuilder.h"
 #include "unicode/putil.h"
+#include "unicode/uchar.h"
 #include "unicode/uclean.h"
+#include "unicode/unorm2.h"
+#include "unicode/uscript.h"
 #include "charstr.h"
 #include "cstring.h"
 #include "denseranges.h"
 #include "genprops.h"
+#include "pnames_impl.h"
 #include "propname.h"
 #include "toolutil.h"
 #include "uhash.h"
@@ -40,114 +44,83 @@ U_NAMESPACE_USE
 
 //----------------------------------------------------------------------
 // BEGIN DATA
-// 
-// This is the raw data to be output.  We define the data structure,
-// then include a machine-generated header that contains the actual
-// data.
-
-#include "unicode/uchar.h"
-#include "unicode/unorm2.h"
-#include "unicode/uscript.h"
-
-// Dilemma: We want to use MAX_ALIASES to define fields in the Value class.
-// However, we need to define the class before including the data header
-// and we can use MAX_ALIASES only after including it.
-// So we define a second constant and at runtime check that it's >=MAX_ALIASES.
-static const int32_t VALUE_MAX_ALIASES=4;
-
-static const int32_t JOINED_ALIASES_CAPACITY=100;
-
-class Value {
-public:
-    Value(int32_t enumValue, const char *joinedAliases)
-            : enumValue(enumValue), joinedAliases(joinedAliases), count(0) {
-        if(uprv_strlen(joinedAliases)>=JOINED_ALIASES_CAPACITY) {
-            fprintf(stderr,
-                    "genprops error: pnamesbuilder.cpp Value::Value(%ld, \"%s\"): "
-                    "joined aliases too long: "
-                    "increase JOINED_ALIASES_CAPACITY, to at least %ld\n",
-                    (long)enumValue, joinedAliases, uprv_strlen(joinedAliases)+1);
-            exit(U_BUFFER_OVERFLOW_ERROR);
-        }
-        // Copy the space-separated aliases into NUL-separated ones and count them.
-        // Write a normalized version of each one.
-        const char *j=joinedAliases;
-        char *a=aliasesBuffer;
-        char *n=normalizedBuffer;
-        char c;
-        do {
-            aliases[count]=a;
-            normalized[count++]=n;
-            while((c=*j++)!=' ' && c!=0) {
-                *a++=c;
-                // Ignore delimiters '-' and '_'.
-                if(!(c=='-' || c=='_')) {
-                    *n++=uprv_tolower(c);
-                }
-            }
-            *a++=0;
-            *n++=0;
-        } while(c!=0);
-    }
-
-    /**
-     * Writes at most MAX_ALIASES pointers for unique normalized aliases
-     * (no empty strings) to dest and returns how many there are.
-     */
-    int32_t getUniqueNormalizedAliases(const char *dest[]) const {
-        int32_t numUnique=0;
-        for(int32_t i=0; i<count; ++i) {
-            const char *s=normalized[i];
-            if(*s!=0) {  // Omit empty strings.
-                for(int32_t j=0;; ++j) {
-                    if(j==numUnique) {
-                        // s is a new unique alias.
-                        dest[numUnique++]=s;
-                        break;
-                    }
-                    if(0==uprv_strcmp(s, dest[j])) {
-                        // s is equal or equivalent to an earlier alias.
-                        break;
-                    }
-                }
-            }
-        }
-        return numUnique;
-    }
-
-    int32_t enumValue;
-    const char *joinedAliases;
-    char aliasesBuffer[JOINED_ALIASES_CAPACITY];
-    char normalizedBuffer[JOINED_ALIASES_CAPACITY];
-    const char *aliases[VALUE_MAX_ALIASES];
-    const char *normalized[VALUE_MAX_ALIASES];
-    int32_t count;
-};
-
-class Property : public Value {
-public:
-    // A property with a values array.
-    Property(int32_t enumValue, const char *joinedAliases,
-             const Value *values, int32_t valueCount)
-            : Value(enumValue, joinedAliases),
-              values(values), valueCount(valueCount) {}
-    // A binary property (enumValue<UCHAR_BINARY_LIMIT), or one without values.
-    Property(int32_t enumValue, const char *joinedAliases);
-
-    const Value *values;
-    int32_t valueCount;
-};
+//
+// This is the raw data to be output.
+// We define the data structure by including pnames_impl.h above,
+// then include a machine-generated header that contains the actual data.
 
 // *** Include the data header ***
 #include "pnames_data.h"
 
-Property::Property(int32_t enumValue, const char *joinedAliases)
-        : Value(enumValue, joinedAliases),
+// END DATA
+//----------------------------------------------------------------------
+
+Value::Value(int32_t enumValue, const char *apiName, const char *joinedAliases)
+        : enumValue(enumValue), apiName(apiName), joinedAliases(joinedAliases), count(0) {
+    if(uprv_strlen(joinedAliases)>=JOINED_ALIASES_CAPACITY) {
+        fprintf(stderr,
+                "genprops error: pnamesbuilder.cpp Value::Value(%ld, \"%s\"): "
+                "joined aliases too long: "
+                "increase JOINED_ALIASES_CAPACITY, to at least %ld\n",
+                (long)enumValue, joinedAliases, uprv_strlen(joinedAliases)+1);
+        exit(U_BUFFER_OVERFLOW_ERROR);
+    }
+    // Copy the space-separated aliases into NUL-separated ones and count them.
+    // Write a normalized version of each one.
+    const char *j=joinedAliases;
+    char *a=aliasesBuffer;
+    char *n=normalizedBuffer;
+    char c;
+    do {
+        aliases[count]=a;
+        normalized[count++]=n;
+        while((c=*j++)!=' ' && c!=0) {
+            *a++=c;
+            // Ignore delimiters '-' and '_'.
+            if(!(c=='-' || c=='_')) {
+                *n++=uprv_tolower(c);
+            }
+        }
+        *a++=0;
+        *n++=0;
+    } while(c!=0);
+}
+
+int32_t Value::getUniqueNormalizedAliases(const char *dest[]) const {
+    int32_t numUnique=0;
+    for(int32_t i=0; i<count; ++i) {
+        const char *s=normalized[i];
+        if(*s!=0) {  // Omit empty strings.
+            for(int32_t j=0;; ++j) {
+                if(j==numUnique) {
+                    // s is a new unique alias.
+                    dest[numUnique++]=s;
+                    break;
+                }
+                if(0==uprv_strcmp(s, dest[j])) {
+                    // s is equal or equivalent to an earlier alias.
+                    break;
+                }
+            }
+        }
+    }
+    return numUnique;
+}
+
+Property::Property(int32_t enumValue, const char *apiName, const char *joinedAliases,
+                   const Value *values, int32_t valueCount)
+        : Value(enumValue, apiName, joinedAliases),
+          values(values), valueCount(valueCount) {}
+
+Property::Property(int32_t enumValue, const char *apiName, const char *joinedAliases)
+        : Value(enumValue, apiName, joinedAliases),
           values(enumValue<UCHAR_BINARY_LIMIT ? VALUES_binprop : nullptr),
           valueCount(enumValue<UCHAR_BINARY_LIMIT ? 2 : 0) {}
 
-// END DATA
-//----------------------------------------------------------------------
+const Property *getPNamesProperties(int32_t &length) {
+    length = LENGTHOF(PROPERTIES);
+    return PROPERTIES;
+}
 
 class PNamesPropertyNames : public PropertyNames {
 public:
