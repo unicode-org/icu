@@ -104,7 +104,7 @@ pseudoScript(const UChar *str) {
                 case U_RIGHT_TO_LEFT:
                     substituteByPseudoChar(str, p, MIN_HEB_LETTER, 'K', 'Z');
                     break;
-                case U_RIGHT_TO_LEFT_ARABIC:
+                case U_ARABIC_LETTER:
                     if (*str > 0xFE00) {
                         substituteByPseudoChar(str, p, MIN_SHAPED_LETTER, 'F', 'J');
                     } else {

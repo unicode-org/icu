@@ -969,7 +969,7 @@ UTS46::markBadACELabel(UnicodeString &dest,
 }
 
 const uint32_t L_MASK=U_MASK(U_LEFT_TO_RIGHT);
-const uint32_t R_AL_MASK=U_MASK(U_RIGHT_TO_LEFT)|U_MASK(U_RIGHT_TO_LEFT_ARABIC);
+const uint32_t R_AL_MASK=U_MASK(U_RIGHT_TO_LEFT)|U_MASK(U_ARABIC_LETTER);
 const uint32_t L_R_AL_MASK=L_MASK|R_AL_MASK;
 
 const uint32_t R_AL_AN_MASK=R_AL_MASK|U_MASK(U_ARABIC_NUMBER);
@@ -979,12 +979,12 @@ const uint32_t R_AL_EN_AN_MASK=R_AL_MASK|EN_AN_MASK;
 const uint32_t L_EN_MASK=L_MASK|U_MASK(U_EUROPEAN_NUMBER);
 
 const uint32_t ES_CS_ET_ON_BN_NSM_MASK=
-    U_MASK(U_EUROPEAN_NUMBER_SEPARATOR)|
-    U_MASK(U_COMMON_NUMBER_SEPARATOR)|
-    U_MASK(U_EUROPEAN_NUMBER_TERMINATOR)|
+    U_MASK(U_EUROPEAN_SEPARATOR)|
+    U_MASK(U_COMMON_SEPARATOR)|
+    U_MASK(U_EUROPEAN_TERMINATOR)|
     U_MASK(U_OTHER_NEUTRAL)|
     U_MASK(U_BOUNDARY_NEUTRAL)|
-    U_MASK(U_DIR_NON_SPACING_MARK);
+    U_MASK(U_NONSPACING_MARK);
 const uint32_t L_EN_ES_CS_ET_ON_BN_NSM_MASK=L_EN_MASK|ES_CS_ET_ON_BN_NSM_MASK;
 const uint32_t R_AL_AN_EN_ES_CS_ET_ON_BN_NSM_MASK=R_AL_MASK|EN_AN_MASK|ES_CS_ET_ON_BN_NSM_MASK;
 
@@ -1016,7 +1016,7 @@ UTS46::checkLabelBiDi(const char16_t *label, int32_t labelLength, IDNAInfo &info
         }
         U16_PREV_UNSAFE(label, labelLength, c);
         UCharDirection dir=u_charDirection(c);
-        if(dir!=U_DIR_NON_SPACING_MARK) {
+        if(dir!=U_NONSPACING_MARK) {
             lastMask=U_MASK(dir);
             break;
         }

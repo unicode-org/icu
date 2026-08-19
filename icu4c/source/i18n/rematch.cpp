@@ -2557,7 +2557,7 @@ UBool RegexMatcher::isWordBoundary(int64_t pos) {
         // If we're off the end of the string, behave as though we're not at a word char.
         UTEXT_SETNATIVEINDEX(fInputText, pos);
         UChar32  c = UTEXT_CURRENT32(fInputText);
-        if (u_hasBinaryProperty(c, UCHAR_GRAPHEME_EXTEND) || u_charType(c) == U_FORMAT_CHAR) {
+        if (u_hasBinaryProperty(c, UCHAR_GRAPHEME_EXTEND) || u_charType(c) == U_FORMAT) {
             // Current char is a combining one.  Not a boundary.
             return false;
         }
@@ -2573,7 +2573,7 @@ UBool RegexMatcher::isWordBoundary(int64_t pos) {
         }
         UChar32 prevChar = UTEXT_PREVIOUS32(fInputText);
         if (!(u_hasBinaryProperty(prevChar, UCHAR_GRAPHEME_EXTEND)
-              || u_charType(prevChar) == U_FORMAT_CHAR)) {
+              || u_charType(prevChar) == U_FORMAT)) {
             prevCIsWord = RegexStaticSets::gStaticSets->fPropSets[URX_ISWORD_SET].contains(prevChar);
             break;
         }
@@ -2595,7 +2595,7 @@ UBool RegexMatcher::isChunkWordBoundary(int32_t pos) {
         // If we're off the end of the string, behave as though we're not at a word char.
         UChar32 c;
         U16_GET(inputBuf, fLookStart, pos, fLookLimit, c);
-        if (u_hasBinaryProperty(c, UCHAR_GRAPHEME_EXTEND) || u_charType(c) == U_FORMAT_CHAR) {
+        if (u_hasBinaryProperty(c, UCHAR_GRAPHEME_EXTEND) || u_charType(c) == U_FORMAT) {
             // Current char is a combining one.  Not a boundary.
             return false;
         }
@@ -2612,7 +2612,7 @@ UBool RegexMatcher::isChunkWordBoundary(int32_t pos) {
         UChar32 prevChar;
         U16_PREV(inputBuf, fLookStart, pos, prevChar);
         if (!(u_hasBinaryProperty(prevChar, UCHAR_GRAPHEME_EXTEND)
-              || u_charType(prevChar) == U_FORMAT_CHAR)) {
+              || u_charType(prevChar) == U_FORMAT)) {
             prevCIsWord = RegexStaticSets::gStaticSets->fPropSets[URX_ISWORD_SET].contains(prevChar);
             break;
         }
@@ -3145,7 +3145,7 @@ void RegexMatcher::MatchAt(int64_t startIdx, UBool toEnd, UErrorCode &status) {
 
                 UChar32 c = UTEXT_NEXT32(fInputText);
                 int8_t ctype = u_charType(c);     // TODO:  make a unicode set for this.  Will be faster.
-                UBool success = (ctype == U_DECIMAL_DIGIT_NUMBER);
+                UBool success = (ctype == U_DECIMAL_NUMBER);
                 success ^= static_cast<UBool>(opValue != 0); // flip sense for \D
                 if (success) {
                     fp->fInputIdx = UTEXT_GETNATIVEINDEX(fInputText);
@@ -4657,7 +4657,7 @@ void RegexMatcher::MatchChunkAt(int32_t startIdx, UBool toEnd, UErrorCode &statu
                 UChar32 c;
                 U16_NEXT(inputBuf, fp->fInputIdx, fActiveLimit, c);
                 int8_t ctype = u_charType(c);     // TODO:  make a unicode set for this.  Will be faster.
-                UBool success = (ctype == U_DECIMAL_DIGIT_NUMBER);
+                UBool success = (ctype == U_DECIMAL_NUMBER);
                 success ^= static_cast<UBool>(opValue != 0); // flip sense for \D
                 if (!success) {
                     fp = reinterpret_cast<REStackFrame*>(fStack->popFrame(fFrameSize));

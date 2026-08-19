@@ -206,28 +206,28 @@ UBool BiDiConformanceTest::parseInputStringFromBiDiClasses(const char *&start) {
             if(start[1]=='N') {
                 biDiClass=U_EUROPEAN_NUMBER;
             } else if(start[1]=='S') {
-                biDiClass=U_EUROPEAN_NUMBER_SEPARATOR;
+                biDiClass=U_EUROPEAN_SEPARATOR;
             } else if(start[1]=='T') {
-                biDiClass=U_EUROPEAN_NUMBER_TERMINATOR;
+                biDiClass=U_EUROPEAN_TERMINATOR;
             }
         } else if(start[0]=='A') {
             if(start[1]=='L') {
-                biDiClass=U_RIGHT_TO_LEFT_ARABIC;
+                biDiClass=U_ARABIC_LETTER;
             } else if(start[1]=='N') {
                 biDiClass=U_ARABIC_NUMBER;
             }
         } else if(start[0]=='C' && start[1]=='S') {
-            biDiClass=U_COMMON_NUMBER_SEPARATOR;
+            biDiClass=U_COMMON_SEPARATOR;
         } else if(start[0]=='B') {
             if(start[1]=='N') {
                 biDiClass=U_BOUNDARY_NEUTRAL;
             } else {
-                biDiClass=U_BLOCK_SEPARATOR;
+                biDiClass=U_PARAGRAPH_SEPARATOR;
             }
         } else if(start[0]=='S') {
             biDiClass=U_SEGMENT_SEPARATOR;
         } else if(start[0]=='W' && start[1]=='S') {
-            biDiClass=U_WHITE_SPACE_NEUTRAL;
+            biDiClass=U_WHITE_SPACE;
         } else if(start[0]=='O' && start[1]=='N') {
             biDiClass=U_OTHER_NEUTRAL;
         } else if(start[0]=='P' && start[1]=='D') {
@@ -237,7 +237,7 @@ UBool BiDiConformanceTest::parseInputStringFromBiDiClasses(const char *&start) {
                 biDiClass=U_POP_DIRECTIONAL_ISOLATE;
             }
         } else if(start[0]=='N' && start[1]=='S' && start[2]=='M') {
-            biDiClass=U_DIR_NON_SPACING_MARK;
+            biDiClass=U_NONSPACING_MARK;
         } else if(start[0]=='F' && start[1]=='S' && start[2]=='I') {
             biDiClass=U_FIRST_STRONG_ISOLATE;
         }

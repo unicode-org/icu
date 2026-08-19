@@ -738,7 +738,7 @@ void UnicodeTest::TestIndicPositionalCategory() {
     assertTrue("mostly NA", 1000000 <= na.size() && na.size() <= UCHAR_MAX_VALUE - 500);
     UnicodeSet vol(u"[:InPC=Visual_Order_Left:]", errorCode);
     assertTrue("some Visual_Order_Left", 19 <= vol.size() && vol.size() <= 100);
-    assertEquals("U+08FF: NA", U_INPC_NA,
+    assertEquals("U+08FF: NA", U_INPC_NOT_APPLICABLE,
                  u_getIntPropertyValue(0x08FF, UCHAR_INDIC_POSITIONAL_CATEGORY));
     assertEquals("U+0900: Top", U_INPC_TOP,
                  u_getIntPropertyValue(0x0900, UCHAR_INDIC_POSITIONAL_CATEGORY));
@@ -982,7 +982,7 @@ void UnicodeTest::TestPropertyNames() {
     assertEquals("ccc=230: index 2", "null", getValueName(prop, 230, 2));
 
     prop = UCHAR_GENERAL_CATEGORY;
-    value = U_DECIMAL_DIGIT_NUMBER;
+    value = U_DECIMAL_NUMBER;
     assertEquals("gc=Nd: index -1", "null", getValueName(prop, value, -1));
     assertEquals("gc=Nd: short", "Nd", getValueName(prop, value, SHORT));
     assertEquals("gc=Nd: long", "Decimal_Number", getValueName(prop, value, LONG));

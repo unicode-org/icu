@@ -261,7 +261,7 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
  * Digit shaping option:
  * Replace European digits (U+0030...) by Arabic-Indic digits if the most recent
  * strongly directional character is an Arabic letter
- * (<code>u_charDirection()</code> result <code>U_RIGHT_TO_LEFT_ARABIC</code> [AL]).<br>
+ * (<code>u_charDirection()</code> result <code>U_ARABIC_LETTER</code> [AL]).<br>
  * The direction of "preceding" depends on the direction indicator option.
  * For the first characters, the preceding strongly directional character
  * (initial state) is assumed to be not an Arabic letter
@@ -274,7 +274,7 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
  * Digit shaping option:
  * Replace European digits (U+0030...) by Arabic-Indic digits if the most recent
  * strongly directional character is an Arabic letter
- * (<code>u_charDirection()</code> result <code>U_RIGHT_TO_LEFT_ARABIC</code> [AL]).<br>
+ * (<code>u_charDirection()</code> result <code>U_ARABIC_LETTER</code> [AL]).<br>
  * The direction of "preceding" depends on the direction indicator option.
  * For the first characters, the preceding strongly directional character
  * (initial state) is assumed to be an Arabic letter.

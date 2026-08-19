@@ -367,7 +367,7 @@ int32_t length){
         dir = u_charDirection(uchar);
         if( dir == U_LEFT_TO_RIGHT )
                 return UBIDI_LTR;
-        if( dir == U_RIGHT_TO_LEFT || dir ==U_RIGHT_TO_LEFT_ARABIC )
+        if( dir == U_RIGHT_TO_LEFT || dir ==U_ARABIC_LETTER )
                 return UBIDI_RTL;
     }
     return UBIDI_NEUTRAL;

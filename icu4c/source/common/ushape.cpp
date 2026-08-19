@@ -357,7 +357,7 @@ _shapeToArabicDigitsWithContext(char16_t *s, int32_t length,
             case U_RIGHT_TO_LEFT: /* R */
                 lastStrongWasAL=false;
                 break;
-            case U_RIGHT_TO_LEFT_ARABIC: /* AL */
+            case U_ARABIC_LETTER: /* AL */
                 lastStrongWasAL=true;
                 break;
             case U_EUROPEAN_NUMBER: /* EN */
@@ -377,7 +377,7 @@ _shapeToArabicDigitsWithContext(char16_t *s, int32_t length,
             case U_RIGHT_TO_LEFT: /* R */
                 lastStrongWasAL=false;
                 break;
-            case U_RIGHT_TO_LEFT_ARABIC: /* AL */
+            case U_ARABIC_LETTER: /* AL */
                 lastStrongWasAL=true;
                 break;
             case U_EUROPEAN_NUMBER: /* EN */

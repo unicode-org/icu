@@ -115,7 +115,7 @@ U_CAPI UBool U_EXPORT2
 u_isdigit(UChar32 c) {
     uint32_t props;
     GET_PROPS(c, props);
-    return GET_CATEGORY(props)==U_DECIMAL_DIGIT_NUMBER;
+    return GET_CATEGORY(props)==U_DECIMAL_NUMBER;
 }
 
 U_CAPI UBool U_EXPORT2
@@ -131,7 +131,7 @@ u_isxdigit(UChar32 c) {
     }
 
     GET_PROPS(c, props);
-    return GET_CATEGORY(props)==U_DECIMAL_DIGIT_NUMBER;
+    return GET_CATEGORY(props)==U_DECIMAL_NUMBER;
 }
 
 /* Checks if the Unicode character is a letter.*/
@@ -311,7 +311,7 @@ u_isIDIgnorable(UChar32 c) {
     } else {
         uint32_t props;
         GET_PROPS(c, props);
-        return GET_CATEGORY(props)==U_FORMAT_CHAR;
+        return GET_CATEGORY(props)==U_FORMAT;
     }
 }
 

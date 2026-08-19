@@ -3595,7 +3595,7 @@ static void initCharFromDirProps(void) {
     u_getUnicodeVersion(ucdVersion);
     if(memcmp(ucdVersion, ucd401, sizeof(UVersionInfo))>=0) {
         /* Unicode 4.0.1 changes bidi classes for +-/ */
-        charFromDirProp[U_EUROPEAN_NUMBER_SEPARATOR]=0x2b; /* change ES character from / to + */
+        charFromDirProp[U_EUROPEAN_SEPARATOR]=0x2b; /* change ES character from / to + */
     }
 }
 

@@ -741,7 +741,7 @@ usprep_prepare(   const UStringPrepProfile* profile,
                 leftToRight = true;
                 ltrPos = b2Index-1;
             }
-            if(direction == U_RIGHT_TO_LEFT || direction == U_RIGHT_TO_LEFT_ARABIC){
+            if(direction == U_RIGHT_TO_LEFT || direction == U_ARABIC_LETTER){
                 rightToLeft = true;
                 rtlPos = b2Index-1;
             }
@@ -757,8 +757,8 @@ usprep_prepare(   const UStringPrepProfile* profile,
 
         //satisfy 3
         if( rightToLeft && 
-            !((firstCharDir == U_RIGHT_TO_LEFT || firstCharDir == U_RIGHT_TO_LEFT_ARABIC) &&
-              (direction == U_RIGHT_TO_LEFT || direction == U_RIGHT_TO_LEFT_ARABIC))
+            !((firstCharDir == U_RIGHT_TO_LEFT || firstCharDir == U_ARABIC_LETTER) &&
+              (direction == U_RIGHT_TO_LEFT || direction == U_ARABIC_LETTER))
            ){
             *status = U_STRINGPREP_CHECK_BIDI_ERROR;
             uprv_syntaxError(b2, rtlPos, b2Len, parseError);

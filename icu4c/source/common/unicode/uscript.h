@@ -251,8 +251,10 @@ typedef enum UScriptCode {
       USCRIPT_MEROITIC                      = USCRIPT_MEROITIC_HIEROGLYPHS,
       /** @stable ICU 3.6 */
       USCRIPT_NKO                           = 87, /* Nkoo */
+      /** @stable ICU 79 */
+      USCRIPT_OLD_TURKIC                    = 88, /* Orkh */
       /** @stable ICU 3.6 */
-      USCRIPT_ORKHON                        = 88, /* Orkh */
+      USCRIPT_ORKHON                        = USCRIPT_OLD_TURKIC, /* Orkh */
       /** @stable ICU 3.6 */
       USCRIPT_OLD_PERMIC                    = 89, /* Perm */
       /** @stable ICU 3.6 */
@@ -290,8 +292,10 @@ typedef enum UScriptCode {
       USCRIPT_CARIAN                        = 104,/* Cari */
       /** @stable ICU 3.8 */
       USCRIPT_JAPANESE                      = 105,/* Jpan */
+      /** @stable ICU 79 */
+      USCRIPT_TAI_THAM                      = 106,/* Lana */
       /** @stable ICU 3.8 */
-      USCRIPT_LANNA                         = 106,/* Lana */
+      USCRIPT_LANNA                         = USCRIPT_TAI_THAM,/* Lana */
       /** @stable ICU 3.8 */
       USCRIPT_LYCIAN                        = 107,/* Lyci */
       /** @stable ICU 3.8 */
@@ -308,8 +312,10 @@ typedef enum UScriptCode {
       USCRIPT_SUNDANESE                     = 113,/* Sund */
       /** @stable ICU 3.8 */
       USCRIPT_MOON                          = 114,/* Moon */
+      /** @stable ICU 79 */
+      USCRIPT_MEETEI_MAYEK                  = 115,/* Mtei */
       /** @stable ICU 3.8 */
-      USCRIPT_MEITEI_MAYEK                  = 115,/* Mtei */
+      USCRIPT_MEITEI_MAYEK                  = USCRIPT_MEETEI_MAYEK,/* Mtei */
 
       /** @stable ICU 4.0 */
       USCRIPT_IMPERIAL_ARAMAIC              = 116,/* Armi */
@@ -365,8 +371,10 @@ typedef enum UScriptCode {
       USCRIPT_KPELLE                        = 138,/* Kpel */
       /** @stable ICU 4.6 */
       USCRIPT_LOMA                          = 139,/* Loma */
+      /** Mende Kikakui @stable ICU 79 */
+      USCRIPT_MENDE_KIKAKUI                 = 140,/* Mend */
       /** Mende Kikakui @stable ICU 4.6 */
-      USCRIPT_MENDE                         = 140,/* Mend */
+      USCRIPT_MENDE                         = USCRIPT_MENDE_KIKAKUI,/* Mend */
       /** @stable ICU 4.6 */
       USCRIPT_MEROITIC_CURSIVE              = 141,/* Merc */
       /** @stable ICU 4.6 */

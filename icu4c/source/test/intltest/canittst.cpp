@@ -87,7 +87,7 @@ void CanonicalIteratorTest::TestExhaustive() {
         
         // skip characters we know don't have decomps
         int8_t type = u_charType(i);
-        if (type == U_UNASSIGNED || type == U_PRIVATE_USE_CHAR
+        if (type == U_UNASSIGNED || type == U_PRIVATE_USE
             || type == U_SURROGATE) continue;
         
         s = i;

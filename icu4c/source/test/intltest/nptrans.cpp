@@ -241,7 +241,7 @@ int32_t NamePrepTransform::process( const char16_t* src, int32_t srcLength,
         if(direction == U_LEFT_TO_RIGHT){
             leftToRight = true;
         }
-        if(direction == U_RIGHT_TO_LEFT || direction == U_RIGHT_TO_LEFT_ARABIC){
+        if(direction == U_RIGHT_TO_LEFT || direction == U_ARABIC_LETTER){
             rightToLeft = true;
         }
     }       
@@ -255,8 +255,8 @@ int32_t NamePrepTransform::process( const char16_t* src, int32_t srcLength,
 
     //satisfy 3
     if( rightToLeft == true && 
-        !((firstCharDir == U_RIGHT_TO_LEFT || firstCharDir == U_RIGHT_TO_LEFT_ARABIC) &&
-          (direction == U_RIGHT_TO_LEFT || direction == U_RIGHT_TO_LEFT_ARABIC))
+        !((firstCharDir == U_RIGHT_TO_LEFT || firstCharDir == U_ARABIC_LETTER) &&
+          (direction == U_RIGHT_TO_LEFT || direction == U_ARABIC_LETTER))
        ){
         status = U_IDNA_CHECK_BIDI_ERROR;
         return false;

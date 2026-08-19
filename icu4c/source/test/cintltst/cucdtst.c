@@ -112,18 +112,18 @@ static const char tagStrings[] = "MnMcMeNdNlNoZsZlZpCcCfCsCoCnLuLlLtLmLoPcPdPsPe
 static const int32_t tagValues[] =
     {
     /* Mn */ U_NON_SPACING_MARK,
-    /* Mc */ U_COMBINING_SPACING_MARK,
+    /* Mc */ U_SPACING_MARK,
     /* Me */ U_ENCLOSING_MARK,
-    /* Nd */ U_DECIMAL_DIGIT_NUMBER,
+    /* Nd */ U_DECIMAL_NUMBER,
     /* Nl */ U_LETTER_NUMBER,
     /* No */ U_OTHER_NUMBER,
     /* Zs */ U_SPACE_SEPARATOR,
     /* Zl */ U_LINE_SEPARATOR,
     /* Zp */ U_PARAGRAPH_SEPARATOR,
-    /* Cc */ U_CONTROL_CHAR,
-    /* Cf */ U_FORMAT_CHAR,
+    /* Cc */ U_CONTROL,
+    /* Cf */ U_FORMAT,
     /* Cs */ U_SURROGATE,
-    /* Co */ U_PRIVATE_USE_CHAR,
+    /* Co */ U_PRIVATE_USE,
     /* Cn */ U_UNASSIGNED,
     /* Lu */ U_UPPERCASE_LETTER,
     /* Ll */ U_LOWERCASE_LETTER,
@@ -132,8 +132,8 @@ static const int32_t tagValues[] =
     /* Lo */ U_OTHER_LETTER,
     /* Pc */ U_CONNECTOR_PUNCTUATION,
     /* Pd */ U_DASH_PUNCTUATION,
-    /* Ps */ U_START_PUNCTUATION,
-    /* Pe */ U_END_PUNCTUATION,
+    /* Ps */ U_OPEN_PUNCTUATION,
+    /* Pe */ U_CLOSE_PUNCTUATION,
     /* Po */ U_OTHER_PUNCTUATION,
     /* Sm */ U_MATH_SYMBOL,
     /* Sc */ U_CURRENCY_SYMBOL,
@@ -1184,8 +1184,8 @@ enumTypeRange(const void *context, UChar32 start, UChar32 limit, UCharCategory t
     static const UChar32 test[][2]={
         {0x41, U_UPPERCASE_LETTER},
         {0x308, U_NON_SPACING_MARK},
-        {0xfffe, U_GENERAL_OTHER_TYPES},
-        {0xe0041, U_FORMAT_CHAR},
+        {0xfffe, U_UNASSIGNED},
+        {0xe0041, U_FORMAT},
         {0xeffff, U_UNASSIGNED}
     };
 
@@ -1225,35 +1225,35 @@ enumDefaultsRange(const void *context, UChar32 start, UChar32 limit, UCharCatego
     static const int32_t defaultBidi[][2]={ /* { limit, class } */
         { 0x0590, U_LEFT_TO_RIGHT },
         { 0x0600, U_RIGHT_TO_LEFT },
-        { 0x07C0, U_RIGHT_TO_LEFT_ARABIC },
+        { 0x07C0, U_ARABIC_LETTER },
         { 0x0860, U_RIGHT_TO_LEFT },
-        { 0x0870, U_RIGHT_TO_LEFT_ARABIC },  // Unicode 10 changes U+0860..U+086F from R to AL.
-        { 0x08A0, U_RIGHT_TO_LEFT_ARABIC },  // Unicode 14 changes U+0870..U+089F from R to AL.
-        { 0x0900, U_RIGHT_TO_LEFT_ARABIC },  /* Unicode 6.1 changes U+08A0..U+08FF from R to AL */
+        { 0x0870, U_ARABIC_LETTER },  // Unicode 10 changes U+0860..U+086F from R to AL.
+        { 0x08A0, U_ARABIC_LETTER },  // Unicode 14 changes U+0870..U+089F from R to AL.
+        { 0x0900, U_ARABIC_LETTER },  /* Unicode 6.1 changes U+08A0..U+08FF from R to AL */
         { 0x20A0, U_LEFT_TO_RIGHT },
-        { 0x20D0, U_EUROPEAN_NUMBER_TERMINATOR },  /* Unicode 6.3 changes the currency symbols block U+20A0..U+20CF to default to ET not L */
+        { 0x20D0, U_EUROPEAN_TERMINATOR },  /* Unicode 6.3 changes the currency symbols block U+20A0..U+20CF to default to ET not L */
         { 0xFB1D, U_LEFT_TO_RIGHT },
         { 0xFB50, U_RIGHT_TO_LEFT },
-        { 0xFE00, U_RIGHT_TO_LEFT_ARABIC },
+        { 0xFE00, U_ARABIC_LETTER },
         { 0xFE70, U_LEFT_TO_RIGHT },
-        { 0xFF00, U_RIGHT_TO_LEFT_ARABIC },
+        { 0xFF00, U_ARABIC_LETTER },
 
         { 0x10800, U_LEFT_TO_RIGHT },
         { 0x10D00, U_RIGHT_TO_LEFT },  // Unicode 11 changes U+10D00..U+10D3F from R to AL.
-        { 0x10D40, U_RIGHT_TO_LEFT_ARABIC },
+        { 0x10D40, U_ARABIC_LETTER },
         { 0x10EC0, U_RIGHT_TO_LEFT },  // Unicode 15 changes U+10EC0..U+10EFF from R to AL.
-        { 0x10F00, U_RIGHT_TO_LEFT_ARABIC },
+        { 0x10F00, U_ARABIC_LETTER },
         { 0x10F30, U_RIGHT_TO_LEFT },  // Unicode 11 changes U+10F30..U+10F6F from R to AL.
-        { 0x10F70, U_RIGHT_TO_LEFT_ARABIC },
+        { 0x10F70, U_ARABIC_LETTER },
         { 0x11000, U_RIGHT_TO_LEFT },
 
         { 0x1E800, U_LEFT_TO_RIGHT },  /* new default-R range in Unicode 5.2: U+1E800 - U+1EFFF */
         { 0x1EC70, U_RIGHT_TO_LEFT },  // Unicode 11 changes U+1EC70..U+1ECBF from R to AL.
-        { 0x1ECC0, U_RIGHT_TO_LEFT_ARABIC },
+        { 0x1ECC0, U_ARABIC_LETTER },
         { 0x1ED00, U_RIGHT_TO_LEFT },  // Unicode 12 changes U+1ED00..U+1ED4F from R to AL.
-        { 0x1ED50, U_RIGHT_TO_LEFT_ARABIC },
+        { 0x1ED50, U_ARABIC_LETTER },
         { 0x1EE00, U_RIGHT_TO_LEFT },
-        { 0x1EF00, U_RIGHT_TO_LEFT_ARABIC },  /* Unicode 6.1 changes U+1EE00..U+1EEFF from R to AL */
+        { 0x1EF00, U_ARABIC_LETTER },  /* Unicode 6.1 changes U+1EE00..U+1EEFF from R to AL */
         { 0x1F000, U_RIGHT_TO_LEFT },
         { 0x110000, U_LEFT_TO_RIGHT }
     };
@@ -1271,7 +1271,7 @@ enumDefaultsRange(const void *context, UChar32 start, UChar32 limit, UCharCatego
      * PUA characters are listed explicitly with "XX".
      * Verify that no assigned character has "XX".
      */
-    if(type!=U_UNASSIGNED && type!=U_PRIVATE_USE_CHAR) {
+    if(type!=U_UNASSIGNED && type!=U_PRIVATE_USE) {
         c=start;
         while(c<limit) {
             if(0==u_getIntPropertyValue(c, UCHAR_LINE_BREAK)) {
@@ -1285,7 +1285,7 @@ enumDefaultsRange(const void *context, UChar32 start, UChar32 limit, UCharCatego
      * Verify default Bidi classes.
      * See DerivedBidiClass.txt, especially for unassigned code points.
      */
-    if(type==U_UNASSIGNED || type==U_PRIVATE_USE_CHAR) {
+    if(type==U_UNASSIGNED || type==U_PRIVATE_USE) {
         /* enumerate the intersections of defaultBidi ranges with [start..limit[ */
         c=start;
         for(i=0; i<UPRV_LENGTHOF(defaultBidi) && c<limit; ++i) {
@@ -1382,7 +1382,7 @@ static void TestUnicodeData(void)
         }
         if(type==U_UNASSIGNED) {
             log_err("error: u_charType(U+%04lx)==U_UNASSIGNED\n", c);
-        } else if(type!=U_PRIVATE_USE_CHAR) {
+        } else if(type!=U_PRIVATE_USE) {
             log_verbose("PUA override: u_charType(U+%04lx)=%d\n", c, type);
         }
         if(c==0xf8ff) {
@@ -2570,7 +2570,7 @@ TestAdditionalProperties(void) {
         { 0x0590, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT },
         { 0x05cf, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT },
         { 0x05ed, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT },
-        { 0x07f2, UCHAR_BIDI_CLASS, U_DIR_NON_SPACING_MARK }, /* Nko, new in Unicode 5.0 */
+        { 0x07f2, UCHAR_BIDI_CLASS, U_NONSPACING_MARK }, /* Nko, new in Unicode 5.0 */
         { 0x07fe, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT }, /* unassigned R */
         { 0xfb37, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT },
         { 0xfb42, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT },
@@ -2578,13 +2578,13 @@ TestAdditionalProperties(void) {
         { 0x10909, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT },
         { 0x10fe4, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT },
 
-        { 0x061d, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT_ARABIC },
-        { 0x063f, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT_ARABIC },
-        { 0x070e, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT_ARABIC },
-        { 0x0775, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT_ARABIC },
-        { 0xfbc2, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT_ARABIC },
-        { 0xfd92, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT_ARABIC },
-        { 0xfefe, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT_ARABIC },
+        { 0x061d, UCHAR_BIDI_CLASS, U_ARABIC_LETTER },
+        { 0x063f, UCHAR_BIDI_CLASS, U_ARABIC_LETTER },
+        { 0x070e, UCHAR_BIDI_CLASS, U_ARABIC_LETTER },
+        { 0x0775, UCHAR_BIDI_CLASS, U_ARABIC_LETTER },
+        { 0xfbc2, UCHAR_BIDI_CLASS, U_ARABIC_LETTER },
+        { 0xfd92, UCHAR_BIDI_CLASS, U_ARABIC_LETTER },
+        { 0xfefe, UCHAR_BIDI_CLASS, U_ARABIC_LETTER },
 
         { 0x02AF, UCHAR_BLOCK, UBLOCK_IPA_EXTENSIONS },
         { 0x0C4E, UCHAR_BLOCK, UBLOCK_TELUGU },
@@ -2786,14 +2786,14 @@ TestAdditionalProperties(void) {
         { -1, 0x610, 0 }, /* version break for Unicode 6.1 */
 
         /* unassigned code points in new/changed default Bidi AL blocks */
-        { 0x08ba, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT_ARABIC },
-        { 0x1eee4, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT_ARABIC },
+        { 0x08ba, UCHAR_BIDI_CLASS, U_ARABIC_LETTER },
+        { 0x1eee4, UCHAR_BIDI_CLASS, U_ARABIC_LETTER },
 
         { -1, 0x630, 0 }, /* version break for Unicode 6.3 */
 
         /* unassigned code points in the currency symbols block now default to ET */
-        { 0x20C0, UCHAR_BIDI_CLASS, U_EUROPEAN_NUMBER_TERMINATOR },
-        { 0x20CF, UCHAR_BIDI_CLASS, U_EUROPEAN_NUMBER_TERMINATOR },
+        { 0x20C0, UCHAR_BIDI_CLASS, U_EUROPEAN_TERMINATOR },
+        { 0x20CF, UCHAR_BIDI_CLASS, U_EUROPEAN_TERMINATOR },
 
         /* new property in Unicode 6.3 */
         { 0x0027, UCHAR_BIDI_PAIRED_BRACKET_TYPE, U_BPT_NONE },

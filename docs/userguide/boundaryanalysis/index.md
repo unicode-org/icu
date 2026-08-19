@@ -456,7 +456,7 @@ int32_t wrapParagraph(const UnicodeString& s,
             c = s[q];
             while (q < s.length()
                    && (u_isspace(c)
-                       || u_charType(c) == U_CONTROL_CHAR
+                       || u_charType(c) == U_CONTROL
                        || u_charType(c) == U_NON_SPACING_MARK
             )) {
                 ++q;
@@ -489,7 +489,7 @@ int32_t wrapParagraph(const UnicodeString& s,
             for (q--; q > p; q--) {
                 c = s[q];
                 if (!(u_isspace(c)
-                       || u_charType(c) == U_CONTROL_CHAR
+                       || u_charType(c) == U_CONTROL
                        || u_charType(c) == U_NON_SPACING_MARK)) {
                     break;
                 }

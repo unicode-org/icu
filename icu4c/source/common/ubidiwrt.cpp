@@ -43,7 +43,7 @@
 # error reimplement ubidi_writeReordered() for UTF-8, see comment above
 #endif
 
-#define IS_COMBINING(type) ((1UL<<(type))&(1UL<<U_NON_SPACING_MARK|1UL<<U_COMBINING_SPACING_MARK|1UL<<U_ENCLOSING_MARK))
+#define IS_COMBINING(type) ((1UL<<(type))&(1UL<<U_NON_SPACING_MARK|1UL<<U_SPACING_MARK|1UL<<U_ENCLOSING_MARK))
 
 /*
  * When we have UBIDI_OUTPUT_REVERSE set on ubidi_writeReordered(), then we

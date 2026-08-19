@@ -302,7 +302,7 @@ void SpoofImpl::getNumerics(const UnicodeString& input, UnicodeSet& result, UErr
         codePoint = input.char32At(i);
 
         // Store a representative character for each kind of decimal digit
-        if (u_charType(codePoint) == U_DECIMAL_DIGIT_NUMBER) {
+        if (u_charType(codePoint) == U_DECIMAL_NUMBER) {
             // Store the zero character as a representative for comparison.
             // Unicode guarantees it is codePoint - value
             result.add(codePoint - static_cast<UChar32>(u_getNumericValue(codePoint)));

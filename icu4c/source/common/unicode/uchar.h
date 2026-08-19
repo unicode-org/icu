@@ -121,12 +121,12 @@ U_CDECL_BEGIN
  * - lower:     u_isULowercase(c) or u_hasBinaryProperty(c, UCHAR_LOWERCASE)
  * - upper:     u_isUUppercase(c) or u_hasBinaryProperty(c, UCHAR_UPPERCASE)
  * - punct:     u_ispunct(c)
- * - digit:     u_isdigit(c) or u_charType(c)==U_DECIMAL_DIGIT_NUMBER
+ * - digit:     u_isdigit(c) or u_charType(c)==U_DECIMAL_NUMBER
  * - xdigit:    u_isxdigit(c) or u_hasBinaryProperty(c, UCHAR_POSIX_XDIGIT)
  * - alnum:     u_hasBinaryProperty(c, UCHAR_POSIX_ALNUM)
  * - space:     u_isUWhiteSpace(c) or u_hasBinaryProperty(c, UCHAR_WHITE_SPACE)
  * - blank:     u_isblank(c) or u_hasBinaryProperty(c, UCHAR_POSIX_BLANK)
- * - cntrl:     u_charType(c)==U_CONTROL_CHAR
+ * - cntrl:     u_charType(c)==U_CONTROL
  * - graph:     u_hasBinaryProperty(c, UCHAR_POSIX_GRAPH)
  * - print:     u_hasBinaryProperty(c, UCHAR_POSIX_PRINT)
  *
@@ -835,7 +835,7 @@ typedef enum UCharCategory
     /** Non-category for unassigned and non-character code points. @stable ICU 2.0 */
     U_UNASSIGNED              = 0,
     /** Cn "Other, Not Assigned (no characters in [UnicodeData.txt] have this property)" (same as U_UNASSIGNED!) @stable ICU 2.0 */
-    U_GENERAL_OTHER_TYPES     = 0,
+    U_GENERAL_OTHER_TYPES     = U_UNASSIGNED,
     /** Lu @stable ICU 2.0 */
     U_UPPERCASE_LETTER        = 1,
     /** Ll @stable ICU 2.0 */
@@ -850,10 +850,14 @@ typedef enum UCharCategory
     U_NON_SPACING_MARK        = 6,
     /** Me @stable ICU 2.0 */
     U_ENCLOSING_MARK          = 7,
+    /** Mc @stable ICU 79 */
+    U_SPACING_MARK  = 8,
     /** Mc @stable ICU 2.0 */
-    U_COMBINING_SPACING_MARK  = 8,
+    U_COMBINING_SPACING_MARK  = U_SPACING_MARK,
+    /** Nd @stable ICU 79 */
+    U_DECIMAL_NUMBER    = 9,
     /** Nd @stable ICU 2.0 */
-    U_DECIMAL_DIGIT_NUMBER    = 9,
+    U_DECIMAL_DIGIT_NUMBER    = U_DECIMAL_NUMBER,
     /** Nl @stable ICU 2.0 */
     U_LETTER_NUMBER           = 10,
     /** No @stable ICU 2.0 */
@@ -864,20 +868,30 @@ typedef enum UCharCategory
     U_LINE_SEPARATOR          = 13,
     /** Zp @stable ICU 2.0 */
     U_PARAGRAPH_SEPARATOR     = 14,
+    /** Cc @stable ICU 79 */
+    U_CONTROL                 = 15,
     /** Cc @stable ICU 2.0 */
-    U_CONTROL_CHAR            = 15,
+    U_CONTROL_CHAR            = U_CONTROL,
+    /** Cf @stable ICU 79 */
+    U_FORMAT                  = 16,
     /** Cf @stable ICU 2.0 */
-    U_FORMAT_CHAR             = 16,
+    U_FORMAT_CHAR             = U_FORMAT,
+    /** Co @stable ICU 79 */
+    U_PRIVATE_USE             = 17,
     /** Co @stable ICU 2.0 */
-    U_PRIVATE_USE_CHAR        = 17,
+    U_PRIVATE_USE_CHAR        = U_PRIVATE_USE,
     /** Cs @stable ICU 2.0 */
     U_SURROGATE               = 18,
     /** Pd @stable ICU 2.0 */
     U_DASH_PUNCTUATION        = 19,
+    /** Ps @stable ICU 79 */
+    U_OPEN_PUNCTUATION        = 20,
     /** Ps @stable ICU 2.0 */
-    U_START_PUNCTUATION       = 20,
+    U_START_PUNCTUATION       = U_OPEN_PUNCTUATION,
+    /** Pe @stable ICU 79 */
+    U_CLOSE_PUNCTUATION       = 21,
     /** Pe @stable ICU 2.0 */
-    U_END_PUNCTUATION         = 21,
+    U_END_PUNCTUATION         = U_CLOSE_PUNCTUATION,
     /** Pc @stable ICU 2.0 */
     U_CONNECTOR_PUNCTUATION   = 22,
     /** Po @stable ICU 2.0 */
@@ -918,7 +932,7 @@ typedef enum UCharCategory
  * @see UCharCategory
  * @stable ICU 2.1
  */
-#define U_GC_CN_MASK    U_MASK(U_GENERAL_OTHER_TYPES)
+#define U_GC_CN_MASK    U_MASK(U_UNASSIGNED)
 
 /** Mask constant for a UCharCategory. @stable ICU 2.1 */
 #define U_GC_LU_MASK    U_MASK(U_UPPERCASE_LETTER)
@@ -936,10 +950,10 @@ typedef enum UCharCategory
 /** Mask constant for a UCharCategory. @stable ICU 2.1 */
 #define U_GC_ME_MASK    U_MASK(U_ENCLOSING_MARK)
 /** Mask constant for a UCharCategory. @stable ICU 2.1 */
-#define U_GC_MC_MASK    U_MASK(U_COMBINING_SPACING_MARK)
+#define U_GC_MC_MASK    U_MASK(U_SPACING_MARK)
 
 /** Mask constant for a UCharCategory. @stable ICU 2.1 */
-#define U_GC_ND_MASK    U_MASK(U_DECIMAL_DIGIT_NUMBER)
+#define U_GC_ND_MASK    U_MASK(U_DECIMAL_NUMBER)
 /** Mask constant for a UCharCategory. @stable ICU 2.1 */
 #define U_GC_NL_MASK    U_MASK(U_LETTER_NUMBER)
 /** Mask constant for a UCharCategory. @stable ICU 2.1 */
@@ -953,20 +967,20 @@ typedef enum UCharCategory
 #define U_GC_ZP_MASK    U_MASK(U_PARAGRAPH_SEPARATOR)
 
 /** Mask constant for a UCharCategory. @stable ICU 2.1 */
-#define U_GC_CC_MASK    U_MASK(U_CONTROL_CHAR)
+#define U_GC_CC_MASK    U_MASK(U_CONTROL)
 /** Mask constant for a UCharCategory. @stable ICU 2.1 */
-#define U_GC_CF_MASK    U_MASK(U_FORMAT_CHAR)
+#define U_GC_CF_MASK    U_MASK(U_FORMAT)
 /** Mask constant for a UCharCategory. @stable ICU 2.1 */
-#define U_GC_CO_MASK    U_MASK(U_PRIVATE_USE_CHAR)
+#define U_GC_CO_MASK    U_MASK(U_PRIVATE_USE)
 /** Mask constant for a UCharCategory. @stable ICU 2.1 */
 #define U_GC_CS_MASK    U_MASK(U_SURROGATE)
 
 /** Mask constant for a UCharCategory. @stable ICU 2.1 */
 #define U_GC_PD_MASK    U_MASK(U_DASH_PUNCTUATION)
 /** Mask constant for a UCharCategory. @stable ICU 2.1 */
-#define U_GC_PS_MASK    U_MASK(U_START_PUNCTUATION)
+#define U_GC_PS_MASK    U_MASK(U_OPEN_PUNCTUATION)
 /** Mask constant for a UCharCategory. @stable ICU 2.1 */
-#define U_GC_PE_MASK    U_MASK(U_END_PUNCTUATION)
+#define U_GC_PE_MASK    U_MASK(U_CLOSE_PUNCTUATION)
 /** Mask constant for a UCharCategory. @stable ICU 2.1 */
 #define U_GC_PC_MASK    U_MASK(U_CONNECTOR_PUNCTUATION)
 /** Mask constant for a UCharCategory. @stable ICU 2.1 */
@@ -1034,36 +1048,50 @@ typedef enum UCharDirection {
     U_RIGHT_TO_LEFT               = 1,
     /** EN @stable ICU 2.0 */
     U_EUROPEAN_NUMBER             = 2,
+    /** ES @stable ICU 79 */
+    U_EUROPEAN_SEPARATOR          = 3,
     /** ES @stable ICU 2.0 */
-    U_EUROPEAN_NUMBER_SEPARATOR   = 3,
+    U_EUROPEAN_NUMBER_SEPARATOR   = U_EUROPEAN_SEPARATOR,
+    /** ET @stable ICU 79 */
+    U_EUROPEAN_TERMINATOR         = 4,
     /** ET @stable ICU 2.0 */
-    U_EUROPEAN_NUMBER_TERMINATOR  = 4,
+    U_EUROPEAN_NUMBER_TERMINATOR  = U_EUROPEAN_TERMINATOR,
     /** AN @stable ICU 2.0 */
     U_ARABIC_NUMBER               = 5,
+    /** CS @stable ICU 79 */
+    U_COMMON_SEPARATOR            = 6,
     /** CS @stable ICU 2.0 */
-    U_COMMON_NUMBER_SEPARATOR     = 6,
-    /** B @stable ICU 2.0 */
-    U_BLOCK_SEPARATOR             = 7,
+    U_COMMON_NUMBER_SEPARATOR     = U_COMMON_SEPARATOR,
+    /** B @stable ICU 79 */
+    U_PARAGRAPH_SEPARATOR         = 7,
+    /** CS @stable ICU 2.0 */
+    U_BLOCK_SEPARATOR             = U_PARAGRAPH_SEPARATOR,
     /** S @stable ICU 2.0 */
     U_SEGMENT_SEPARATOR           = 8,
-    /** WS @stable ICU 2.0 */
-    U_WHITE_SPACE_NEUTRAL         = 9,
+    /** WS @stable ICU 79 */
+    U_WHITE_SPACE                 = 9,
+    /** CS @stable ICU 2.0 */
+    U_WHITE_SPACE_NEUTRAL         = U_WHITE_SPACE,
     /** ON @stable ICU 2.0 */
     U_OTHER_NEUTRAL               = 10,
     /** LRE @stable ICU 2.0 */
     U_LEFT_TO_RIGHT_EMBEDDING     = 11,
     /** LRO @stable ICU 2.0 */
     U_LEFT_TO_RIGHT_OVERRIDE      = 12,
+    /** AL @stable ICU 79 */
+    U_ARABIC_LETTER               = 13,
     /** AL @stable ICU 2.0 */
-    U_RIGHT_TO_LEFT_ARABIC        = 13,
+    U_RIGHT_TO_LEFT_ARABIC        = U_ARABIC_LETTER,
     /** RLE @stable ICU 2.0 */
     U_RIGHT_TO_LEFT_EMBEDDING     = 14,
     /** RLO @stable ICU 2.0 */
     U_RIGHT_TO_LEFT_OVERRIDE      = 15,
     /** PDF @stable ICU 2.0 */
     U_POP_DIRECTIONAL_FORMAT      = 16,
+    /** NSM @stable ICU 79 */
+    U_NONSPACING_MARK             = 17,
     /** NSM @stable ICU 2.0 */
-    U_DIR_NON_SPACING_MARK        = 17,
+    U_DIR_NON_SPACING_MARK        = U_NONSPACING_MARK,
     /** BN @stable ICU 2.0 */
     U_BOUNDARY_NEUTRAL            = 18,
     /** FSI @stable ICU 52 */
@@ -1150,11 +1178,14 @@ enum UBlockCode {
     /** @stable ICU 2.0 */
     UBLOCK_COMBINING_DIACRITICAL_MARKS =7, /*[0300]*/
 
+    /** @stable ICU 79 */
+    UBLOCK_GREEK_AND_COPTIC =8, /*[0370]*/
+
     /**
      * Unicode 3.2 renames this block to "Greek and Coptic".
      * @stable ICU 2.0
      */
-    UBLOCK_GREEK =8, /*[0370]*/
+    UBLOCK_GREEK =UBLOCK_GREEK_AND_COPTIC, /*[0370]*/
 
     /** @stable ICU 2.0 */
     UBLOCK_CYRILLIC =9, /*[0400]*/
@@ -1258,11 +1289,14 @@ enum UBlockCode {
     /** @stable ICU 2.0 */
     UBLOCK_CURRENCY_SYMBOLS =42, /*[20A0]*/
 
+    /** @stable ICU 79 */
+    UBLOCK_COMBINING_DIACRITICAL_MARKS_FOR_SYMBOLS =43, /*[20D0]*/
+
     /**
      * Unicode 3.2 renames this block to "Combining Diacritical Marks for Symbols".
      * @stable ICU 2.0
      */
-    UBLOCK_COMBINING_MARKS_FOR_SYMBOLS =43, /*[20D0]*/
+    UBLOCK_COMBINING_MARKS_FOR_SYMBOLS =UBLOCK_COMBINING_DIACRITICAL_MARKS_FOR_SYMBOLS, /*[20D0]*/
 
     /** @stable ICU 2.0 */
     UBLOCK_LETTERLIKE_SYMBOLS =44, /*[2100]*/
@@ -2665,8 +2699,10 @@ typedef enum UIndicPositionalCategory {
      *     U_INPC_<Unicode Indic_Positional_Category value name>
      */
 
+    /** @stable ICU 79 */
+    U_INPC_NOT_APPLICABLE,
     /** @stable ICU 63 */
-    U_INPC_NA,
+    U_INPC_NA = U_INPC_NOT_APPLICABLE,
     /** @stable ICU 63 */
     U_INPC_BOTTOM,
     /** @stable ICU 63 */
@@ -3518,8 +3554,8 @@ u_isWhitespace(UChar32 c);
  * (as defined by this function).
  * A control character is one of the following:
  * - ISO 8-bit control character (U+0000..U+001f and U+007f..U+009f)
- * - U_CONTROL_CHAR (Cc)
- * - U_FORMAT_CHAR (Cf)
+ * - U_CONTROL (Cc)
+ * - U_FORMAT (Cf)
  * - U_LINE_SEPARATOR (Zl)
  * - U_PARAGRAPH_SEPARATOR (Zp)
  *
