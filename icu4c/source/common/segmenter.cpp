@@ -3,15 +3,15 @@
 
 #include "unicode/brkiter.h"
 #include "unicode/segmenter.h"
-#include "unicode/segmenter_segmentiter.h"
+#include "unicode/segmenter_segment_iter.h"
 
 U_NAMESPACE_BEGIN
 
 namespace segmenter {
 
-//----------
+// ---------------------------------------------
 // Segment
-//----------
+// ---------------------------------------------
 
 Segment::~Segment() {}
 
@@ -55,17 +55,17 @@ Segment Segment::emptySegment() {
     return s;
 }
 
-//----------
+// ---------------------------------------------
 // Segments
-//----------
+// ---------------------------------------------
 
 SegmentIterator Segments::segments() {
     return segmentsFrom(0);
 }
 
-//----------
+// ---------------------------------------------
 // Segmenter
-//----------
+// ---------------------------------------------
 
 Segmenter::Segmenter() {}
 

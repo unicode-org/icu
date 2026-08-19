@@ -3,7 +3,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/brkiter.h"
-#include "unicode/segmenter_segmentiter.h"
+#include "unicode/segmenter_segment_iter.h"
 
 
 U_NAMESPACE_BEGIN

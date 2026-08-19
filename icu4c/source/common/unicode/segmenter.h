@@ -52,6 +52,8 @@ public:
     Segment();
     ~Segment() override;
 
+    Segment(int32_t start, int32_t limit, int32_t ruleStatus, std::u16string_view source);
+
     int32_t getStart();
     int32_t getLimit();
     int32_t getRuleStatus();
@@ -60,15 +62,10 @@ public:
 
     static Segment emptySegment();
 private:
-    friend class SegmentIterator;
-    friend class SegmentsImpl;
-
     const int32_t start_;
     const int32_t limit_;
     const int32_t ruleStatus_;
     const std::u16string_view source_;
-
-    Segment(int32_t start, int32_t limit, int32_t ruleStatus, std::u16string_view source);
 };
 
 // ---------------------------------------------

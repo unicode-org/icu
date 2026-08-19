@@ -1,8 +1,8 @@
 // © 2026 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-#ifndef __SEGMENTER_SEGMENTITER_H__
-#define __SEGMENTER_SEGMENTITER_H__
+#ifndef __SEGMENTER_SEGMENT_ITER_H__
+#define __SEGMENTER_SEGMENT_ITER_H__
 
 /**
  * \file
@@ -85,4 +85,4 @@ U_NAMESPACE_END
 
 #endif /* U_SHOW_CPLUSPLUS_API */
 
-#endif // __SEGMENTER_SEGMENTITER_H__
+#endif // __SEGMENTER_SEGMENT_ITER_H__

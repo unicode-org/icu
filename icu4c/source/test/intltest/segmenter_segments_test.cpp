@@ -10,7 +10,7 @@
 #include "unicode/segmenter.h"
 #include "unicode/segmenter_localized.h"
 #include "unicode/segmenter_rulebased.h"
-#include "unicode/segmenter_segmentiter.h"
+#include "unicode/segmenter_segment_iter.h"
 #include "segmenter_segments_test.h"
 
 #include <iostream>

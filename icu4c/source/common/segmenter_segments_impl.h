@@ -32,7 +32,7 @@ U_NAMESPACE_END
 #include "unicode/brkiter.h"
 #include "unicode/segmenter.h"
 #include "unicode/segmenter_rulebased.h"
-#include "unicode/segmenter_segmentiter.h"
+#include "unicode/segmenter_segment_iter.h"
 #include "unicode/uobject.h"
 #include "unicode/unistr.h"
 
