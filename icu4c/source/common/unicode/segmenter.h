@@ -56,6 +56,7 @@ public:
     int32_t getLimit();
     int32_t getRuleStatus();
     std::u16string_view getSource();
+    std::u16string_view getSubstr();
 
     static Segment emptySegment();
 private:

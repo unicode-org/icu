@@ -28,6 +28,8 @@ public:
 
     void testSegments();
 
+    void testSubstr();
+
 private:
     // Test parameters, from the test framework and test invocation.
     const char* fTestParams;

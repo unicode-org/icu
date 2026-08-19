@@ -35,6 +35,7 @@ void SegmentsTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
     TESTCASE_AUTO(testEmptyRules);
     TESTCASE_AUTO(testSegmentAt);
     TESTCASE_AUTO(testSegments);
+    TESTCASE_AUTO(testSubstr);
 
     TESTCASE_AUTO_END;
 }
@@ -191,6 +192,30 @@ void SegmentsTest::testSegments() {
     icu::segmenter::Segment secondSegment = *segmentIter;
     assertEquals("second segment start", 3, secondSegment.getStart());
     assertEquals("second segment limit", 4, secondSegment.getLimit());   
+}
+
+void SegmentsTest::testSubstr() {
+    IcuTestErrorCode errorCode(*this, "testSubstr");
+
+    icu::segmenter::LocalizedSegmenter enWordSegmenter =
+        icu::segmenter::LocalizedSegmenterBuilder()
+            .setLocale(Locale::getEnglish())
+            .setSegmentationType(icu::segmenter::SegmentationType::WORD)
+            .build(errorCode);
+
+    std::u16string_view source1 = u"The quick brown fox jumped over the lazy dog.";
+
+    // Create new Segments for source1
+    auto segments1 = enWordSegmenter.segment(source1, errorCode);
+    auto segmentIter = segments1->segments();
+
+    icu::segmenter::Segment firstSegment = *segmentIter;
+    assertEquals("first segment substr", u"The", firstSegment.getSubstr());
+
+    ++segmentIter;
+
+    icu::segmenter::Segment secondSegment = *segmentIter;
+    assertEquals("second segment substr", u" ", secondSegment.getSubstr());
 }
 
 #endif /* #if !UCONFIG_NO_BREAK_ITERATION */

@@ -46,6 +46,10 @@ std::u16string_view Segment::getSource() {
     return source_;
 }
 
+std::u16string_view Segment::getSubstr() {
+    return source_.substr(start_, (limit_ - start_));
+}
+
 Segment Segment::emptySegment() {
     Segment s;
     return s;
