@@ -68,9 +68,12 @@ private:
     int32_t ruleStatus_;
     std::u16string_view source_;
     std::unique_ptr<BreakIterator> breakIter_;
-    CurrentSegmentValidType prevSegValid_;
-    CurrentSegmentValidType currSegValid_;
-    CurrentSegmentValidType nextSegValid_;
+
+    void resetToBegin();
+
+    // CurrentSegmentValidType prevSegValid_;
+    // CurrentSegmentValidType currSegValid_;
+    // CurrentSegmentValidType nextSegValid_;
 
     bool isCurrentSegmentValid() const;
 };
