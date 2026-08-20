@@ -462,8 +462,6 @@ public abstract class BreakIterator implements Cloneable {
      * <p>For break iterator types that do not support a rule status, a default value of 0 is
      * returned.
      *
-     * <p>
-     *
      * @return The status from the break rule that determined the boundary at the current iteration
      *     position.
      * @stable ICU 52

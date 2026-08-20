@@ -350,8 +350,6 @@ public final class Normalizer implements Cloneable {
      * use {@code NO_OP} for the cases where you want raw text, rather than having a separate code
      * path that bypasses {@code Normalizer} altogether.
      *
-     * <p>
-     *
      * @see #setMode
      * @deprecated ICU 2.8. Use Nomalizer.NONE
      * @see #NONE
@@ -366,8 +364,6 @@ public final class Normalizer implements Cloneable {
      * <p>If all optional features (<i>e.g.</i> {@link #IGNORE_HANGUL}) are turned off, this
      * operation produces output that is in <a href=https://www.unicode.org/reports/tr15/>Unicode
      * Canonical Form</a> <b>C</b>.
-     *
-     * <p>
      *
      * @see #setMode
      * @deprecated ICU 2.8. Use Normalier.NFC
@@ -384,8 +380,6 @@ public final class Normalizer implements Cloneable {
      * operation produces output that is in <a href=https://www.unicode.org/reports/tr15/>Unicode
      * Canonical Form</a> <b>KC</b>.
      *
-     * <p>
-     *
      * @see #setMode
      * @deprecated ICU 2.8. Use Normalizer.NFKC
      * @see #NFKC
@@ -401,8 +395,6 @@ public final class Normalizer implements Cloneable {
      * operation produces output that is in <a href=https://www.unicode.org/reports/tr15/>Unicode
      * Canonical Form</a> <b>D</b>.
      *
-     * <p>
-     *
      * @see #setMode
      * @deprecated ICU 2.8. Use Normalizer.NFD
      * @see #NFD
@@ -417,8 +409,6 @@ public final class Normalizer implements Cloneable {
      * <p>If all optional features (<i>e.g.</i> {@link #IGNORE_HANGUL}) are turned off, this
      * operation produces output that is in <a href=https://www.unicode.org/reports/tr15/>Unicode
      * Canonical Form</a> <b>KD</b>.
-     *
-     * <p>
      *
      * @see #setMode
      * @deprecated ICU 2.8. Use Normalizer.NFKD
@@ -437,8 +427,6 @@ public final class Normalizer implements Cloneable {
      * this option must be turned <b>off</b> if you wish to transform strings into one of the
      * standard <a href="https://www.unicode.org/reports/tr15/" target="unicode"> Unicode
      * Normalization Forms</a>.
-     *
-     * <p>
      *
      * @see #setOption
      * @deprecated ICU 2.8. This option is no longer supported.
@@ -555,8 +543,6 @@ public final class Normalizer implements Cloneable {
      * <p>The {@code options} parameter specifies which optional {@code Normalizer} features are to
      * be enabled for this object.
      *
-     * <p>
-     *
      * @param str The string to be normalized. The normalization will start at the beginning of the
      *     string.
      * @param mode The normalization mode.
@@ -578,8 +564,6 @@ public final class Normalizer implements Cloneable {
      * Creates a new {@code Normalizer} object for iterating over the normalized form of the given
      * text.
      *
-     * <p>
-     *
      * @param iter The input text to be normalized. The normalization will start at the beginning of
      *     the string.
      * @param mode The normalization mode.
@@ -600,8 +584,6 @@ public final class Normalizer implements Cloneable {
     /**
      * Creates a new {@code Normalizer} object for iterating over the normalized form of the given
      * text.
-     *
-     * <p>
      *
      * @param iter The input text to be normalized. The normalization will start at the beginning of
      *     the string.
@@ -829,8 +811,6 @@ public final class Normalizer implements Cloneable {
      * be enabled for this operation. Currently the only available option is {@link #UNICODE_3_2}.
      * If you want the default behavior corresponding to one of the standard Unicode Normalization
      * Forms, use 0 for this argument.
-     *
-     * <p>
      *
      * @param str the input string to be normalized.
      * @param mode the normalization mode
@@ -1499,8 +1479,6 @@ public final class Normalizer implements Cloneable {
      * by {@code next} and {@code previous} and the indices passed to and returned from {@code
      * setIndex} and {@link #getIndex}.
      *
-     * <p>
-     *
      * @param index the desired index in the input text.
      * @return the first normalized character that is the result of iterating forward starting at
      *     the given index.
@@ -1632,8 +1610,6 @@ public final class Normalizer implements Cloneable {
      * safest to call {@link #setText setText()}, {@link #first}, {@link #last}, etc. after calling
      * {@code setMode}.
      *
-     * <p>
-     *
      * @param newMode the new mode for this {@code Normalizer}. The supported modes are:
      *     <ul>
      *       <li>{@link #NFC} - Unicode canonical decompositiion followed by canonical composition.
@@ -1691,8 +1667,6 @@ public final class Normalizer implements Cloneable {
 
     /**
      * Determine whether an option is turned on or off.
-     *
-     * <p>
      *
      * @see #setOption
      * @deprecated ICU 56

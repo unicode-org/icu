@@ -572,7 +572,6 @@ public class Currency extends MeasureUnit {
      *     longer supported
      * @return display string for this currency. If the resource data contains no entry for this
      *     currency, then the ISO 4217 code is returned.
-     *     <p>
      * @throws IllegalArgumentException if the nameStyle is not SYMBOL_NAME or LONG_NAME.
      * @see #getName(ULocale, int, String, boolean[])
      * @stable ICU 3.2

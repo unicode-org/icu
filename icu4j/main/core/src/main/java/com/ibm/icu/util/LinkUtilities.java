@@ -42,8 +42,8 @@ public class LinkUtilities {
      *     before the domain_name.
      * @return the start of the email locale part, or limit if no email local part is found
      */
-    public static int scanBackEmailLocalPart(CharSequence s, int start, int limit) {
-        return LinkHandlingUtilities.scanEmailBackwards(s, start, limit);
+    public static int scanBackEmailLocalPart(CharSequence source, int start, int limit) {
+        return LinkHandlingUtilities.scanEmailBackwards(source, start, limit);
     }
 
     /** Enum for determining whether any percent-escaping is minimal or maximal, for use */

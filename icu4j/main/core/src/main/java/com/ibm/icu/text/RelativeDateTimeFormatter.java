@@ -497,8 +497,6 @@ public final class RelativeDateTimeFormatter {
      * <p>There is no public constructor to this class; the only instances are the constants defined
      * here.
      *
-     * <p>
-     *
      * @stable ICU 64
      */
     public static class Field extends Format.Field {

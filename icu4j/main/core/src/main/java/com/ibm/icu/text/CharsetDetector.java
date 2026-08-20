@@ -31,8 +31,6 @@ import java.util.List;
  * The detection process will attempt to ignore html or xml style markup that could otherwise
  * obscure the content.
  *
- * <p>
- *
  * @stable ICU 3.4
  */
 public class CharsetDetector {

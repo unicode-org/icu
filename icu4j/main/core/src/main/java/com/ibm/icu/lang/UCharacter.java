@@ -8515,7 +8515,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     }
 
     /**
-     * {@icu} Returns an IterableOfInt over all Unicode scalar values U+0000..U+D7FF &
+     * {@icu} Returns an IterableOfInt over all Unicode scalar values U+0000..U+D7FF &amp;
      * U+E000..U+10FFFF. See <a
      * href="https://www.unicode.org/glossary/#unicode_scalar_value">Unicode Glossary: Unicode
      * Scalar Value</a>.
@@ -8547,9 +8547,10 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     }
 
     /**
-     * {@icu} Returns an IntStream over all Unicode scalar values U+0000..U+D7FF & U+E000..U+10FFFF.
-     * See <a href="https://www.unicode.org/glossary/#unicode_scalar_value">Unicode Glossary:
-     * Unicode Scalar Value</a>.
+     * {@icu} Returns an IntStream over all Unicode scalar values U+0000..U+D7FF &amp;
+     * U+E000..U+10FFFF. See <a
+     * href="https://www.unicode.org/glossary/#unicode_scalar_value">Unicode Glossary: Unicode
+     * Scalar Value</a>.
      *
      * <p>Intended for test and builder code.
      *

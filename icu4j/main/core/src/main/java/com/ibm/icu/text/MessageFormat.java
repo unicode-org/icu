@@ -990,8 +990,6 @@ public class MessageFormat extends UFormat implements Cloneable {
      * Creates a MessageFormat with the given pattern and uses it to format the given arguments. The
      * pattern must identifyarguments by name instead of by number.
      *
-     * <p>
-     *
      * @throws IllegalArgumentException if the pattern is invalid
      * @throws IllegalArgumentException if a value in the <code>arguments</code> array is not of the
      *     type expected by the corresponding argument or custom Format object.
