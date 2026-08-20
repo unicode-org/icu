@@ -59,10 +59,6 @@ Segment Segment::emptySegment() {
 // Segments
 // ---------------------------------------------
 
-SegmentIterator Segments::segments() {
-    return segmentsFrom(0);
-}
-
 // ---------------------------------------------
 // Segmenter
 // ---------------------------------------------

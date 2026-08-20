@@ -69,8 +69,6 @@ private:
     std::u16string_view source_;
     std::unique_ptr<BreakIterator> breakIter_;
 
-    void resetToBegin();
-
     // CurrentSegmentValidType prevSegValid_;
     // CurrentSegmentValidType currSegValid_;
     // CurrentSegmentValidType nextSegValid_;

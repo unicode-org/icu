@@ -41,10 +41,15 @@ namespace segmenter {
 class U_COMMON_API_CLASS SegmentRange : public UObject {
 public:
     ~SegmentRange() override;
-    virtual SegmentIterator begin() = 0;
-    virtual SegmentIterator end() = 0;
-protected:
-    SegmentRange();
+    SegmentRange(SegmentRange && other);
+
+    SegmentRange(const BreakIterator & breakIter, std::u16string_view source);
+
+    SegmentIterator begin();
+    SegmentIterator end();
+private:
+    std::unique_ptr<BreakIterator> breakIterPrototype_;
+    std::u16string_view source_;
 };
 
 }  // namespace segmenter

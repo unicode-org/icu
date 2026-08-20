@@ -33,6 +33,7 @@ U_NAMESPACE_END
 #include "unicode/segmenter.h"
 #include "unicode/segmenter_rulebased.h"
 #include "unicode/segmenter_segment_iter.h"
+#include "unicode/segmenter_segment_range.h"
 #include "unicode/uobject.h"
 #include "unicode/unistr.h"
 
@@ -49,6 +50,8 @@ public:
     bool isBoundary(int32_t i) override;
 
     Segment segmentAt(int32_t i, UErrorCode &errorCode) override;
+
+    SegmentRange segments() override;
 
     SegmentIterator segmentsFrom(int32_t i) override;
 

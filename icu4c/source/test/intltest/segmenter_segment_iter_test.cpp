@@ -6,6 +6,8 @@
 
 #include "segmenter_segment_iter_test.h"
 
+#include "unicode/segmenter.h"
+#include "unicode/segmenter_localized.h"
 #include "unicode/segmenter_segment_iter.h"
 
 //---------------------------------------------
