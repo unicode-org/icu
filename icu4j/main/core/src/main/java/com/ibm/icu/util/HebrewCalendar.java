@@ -454,8 +454,6 @@ public class HebrewCalendar extends Calendar {
      * {@link #MONTH MONTH} field behaves discontinuously in non-leap years, simple arithmetic can
      * give invalid results.
      *
-     * <p>
-     *
      * @param field the time field.
      * @param amount the amount to add to the field.
      * @exception IllegalArgumentException if the field is invalid or refers to a field that cannot
@@ -537,8 +535,6 @@ public class HebrewCalendar extends Calendar {
      * perform arithmetic operations directly on the fields of a {@code HebrewCalendar}. Since the
      * {@link #MONTH MONTH} field behaves discontinuously in non-leap years, simple arithmetic can
      * give invalid results.
-     *
-     * <p>
      *
      * @param field the time field.
      * @param amount the amount by which the field should be rolled.

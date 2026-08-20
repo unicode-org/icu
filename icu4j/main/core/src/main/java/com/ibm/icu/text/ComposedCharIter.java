@@ -77,8 +77,6 @@ public final class ComposedCharIter {
     /**
      * Constructs a non-default {@code ComposedCharIter} with optional behavior.
      *
-     * <p>
-     *
      * @param compat {@code false} for canonical decompositions only; {@code true} for both
      *     canonical and compatibility decompositions.
      * @param options Optional decomposition features. None are supported, so this is ignored.

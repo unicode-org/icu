@@ -54,8 +54,6 @@ import java.util.TreeMap;
  *   }
  * </pre>
  *
- * <p>
- *
  * @see TimeUnitAmount
  * @see MeasureFormat
  * @author markdavis

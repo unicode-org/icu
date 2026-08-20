@@ -1880,8 +1880,6 @@ public abstract class NumberFormat extends UFormat implements Cloneable {
      * <p>There is no public constructor to this class, the only instances are the constants defined
      * here.
      *
-     * <p>
-     *
      * @stable ICU 3.6
      */
     public static class Field extends Format.Field {

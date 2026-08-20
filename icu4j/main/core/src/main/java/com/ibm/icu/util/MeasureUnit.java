@@ -728,8 +728,6 @@ public class MeasureUnit implements Serializable {
      * the constant denominator. To obtain the constant denominator, retrieve it from the original
      * unit.
      *
-     * <p>
-     *
      * @return An unmodifiable list of single units
      * @stable ICU 68
      */

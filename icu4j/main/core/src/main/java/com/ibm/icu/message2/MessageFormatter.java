@@ -149,8 +149,6 @@ import java.util.Map;
  * be found at <a target="github"
  * href="https://github.com/unicode-org/message-format-wg/blob/main/spec/registry.md">here</a>.
  *
- * <p>
- *
  * @draft ICU 78
  */
 public class MessageFormatter {

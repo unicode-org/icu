@@ -934,8 +934,6 @@ public abstract class Transliterator implements StringTransform {
      * transliterate()</code> instead of this method. Subclass code should call <code>
      * filteredTransliterate()</code> instead of this method.
      *
-     * <p>
-     *
      * @param text the buffer holding transliterated and untransliterated text
      * @param pos the indices indicating the start, limit, context start, and context limit of the
      *     text.

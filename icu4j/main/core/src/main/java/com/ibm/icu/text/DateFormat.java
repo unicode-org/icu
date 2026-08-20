@@ -2016,8 +2016,6 @@ public abstract class DateFormat extends UFormat {
      * Creates a {@link DateFormat} object that can be used to format dates in the calendar system
      * specified by <code>cal</code>.
      *
-     * <p>
-     *
      * @param cal The calendar system for which a date format is desired.
      * @param dateStyle The type of date format desired. This can be {@link DateFormat#SHORT},
      *     {@link DateFormat#MEDIUM}, etc.
@@ -2031,8 +2029,6 @@ public abstract class DateFormat extends UFormat {
     /**
      * Creates a {@link DateFormat} object that can be used to format dates in the calendar system
      * specified by <code>cal</code>.
-     *
-     * <p>
      *
      * @param cal The calendar system for which a date format is desired.
      * @param dateStyle The type of date format desired. This can be {@link DateFormat#SHORT},
@@ -2149,8 +2145,6 @@ public abstract class DateFormat extends UFormat {
     /**
      * Creates a {@link DateFormat} object for the default locale that can be used to format dates
      * in the calendar system specified by <code>cal</code>.
-     *
-     * <p>
      *
      * @param cal The calendar system for which a date format is desired.
      * @param dateStyle The type of date format desired. This can be {@link DateFormat#SHORT},
@@ -2357,8 +2351,6 @@ public abstract class DateFormat extends UFormat {
      *
      * <p>There is no public constructor to this class, the only instances are the constants defined
      * here.
-     *
-     * <p>
      *
      * @stable ICU 3.8
      */

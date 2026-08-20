@@ -1322,8 +1322,6 @@ public class BigDecimal extends java.lang.Number
      * <p>The length of the decimal part (the scale) of the result will therefore be the same as the
      * scale of the current object, if the latter were formatted without exponential notation.
      *
-     * <p>
-     *
      * @param rhs The <code>BigDecimal</code> for the right hand side of the division.
      * @param round The <code>int</code> rounding mode to be used for the division (see the {@link
      *     MathContext} class).
@@ -1355,8 +1353,6 @@ public class BigDecimal extends java.lang.Number
      *
      * <p>The length of the decimal part (the scale) of the result will be the same as the scale of
      * the current object, if the latter were formatted without exponential notation.
-     *
-     * <p>
      *
      * @param rhs The <code>BigDecimal</code> for the right hand side of the division.
      * @param scale The <code>int</code> scale to be used for the result.

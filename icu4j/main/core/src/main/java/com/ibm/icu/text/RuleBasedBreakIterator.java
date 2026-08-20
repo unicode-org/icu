@@ -600,8 +600,6 @@ public class RuleBasedBreakIterator extends BreakIterator implements Cloneable {
      * <p>Note that <code>getRuleStatus()</code> returns the value corresponding to <code>current()
      * </code> index even after <code>next()</code> has returned DONE.
      *
-     * <p>
-     *
      * @return the status from the break rule that determined the boundary at the current iteration
      *     position.
      * @stable ICU 60

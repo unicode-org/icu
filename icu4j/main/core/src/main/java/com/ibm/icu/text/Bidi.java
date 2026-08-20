@@ -4249,8 +4249,6 @@ public class Bidi {
      * than the surrounding text according to the algorithm. This implementation may set all
      * resolved levels to the same value in such a case.
      *
-     * <p>
-     *
      * @param paragraph a paragraph of text with optional character and paragraph attribute
      *     information
      * @stable ICU 3.8
@@ -4493,8 +4491,6 @@ public class Bidi {
      *
      * <p>This method returns information about a paragraph.
      *
-     * <p>
-     *
      * @param paraIndex is the number of the paragraph, in the range <code>[0..countParagraphs()-1]
      *     </code>.
      * @return a BidiRun object with the details of the paragraph:<br>
@@ -4533,8 +4529,6 @@ public class Bidi {
      * Note: if the paragraph index is known, it is more efficient to retrieve the paragraph
      * information using getParagraphByIndex().
      *
-     * <p>
-     *
      * @param charIndex is the index of a character within the text, in the range <code>
      *     [0..getProcessedLength()-1]</code>.
      * @return a BidiRun object with the details of the paragraph:<br>
@@ -4561,8 +4555,6 @@ public class Bidi {
 
     /**
      * Get the index of a paragraph, given a position within the text.
-     *
-     * <p>
      *
      * @param charIndex is the index of a character within the text, in the range <code>
      *     [0..getProcessedLength()-1]</code>.

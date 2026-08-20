@@ -211,8 +211,6 @@ public class ChineseDateFormat extends SimpleDateFormat {
      * <p>There is no public constructor to this class, the only instances are the constants defined
      * here.
      *
-     * <p>
-     *
      * @deprecated ICU 50
      */
     @Deprecated
