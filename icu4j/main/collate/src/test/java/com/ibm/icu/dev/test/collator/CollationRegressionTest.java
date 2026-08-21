@@ -1332,6 +1332,35 @@ public class CollationRegressionTest extends TestFmwk {
         }
     }
 
+    @Test
+    public void TestICU21992() {
+        RuleBasedCollator coll =
+                (RuleBasedCollator) Collator.getInstance(Locale.forLanguageTag("bn"));
+        coll.setStrength(Collator.TERTIARY);
+        coll.setAlternateHandlingShifted(true);
+        coll.setMaxVariable(Collator.ReorderCodes.SPACE);
+
+        String str1 = "\u0002\u2000湢";
+        String str2 = "ô\u0B00\u0B03";
+
+        int res1 = coll.compare(str1, str2);
+
+        CollationKey key1 = coll.getCollationKey(str1);
+        CollationKey key2 = coll.getCollationKey(str2);
+        int res2 = key1.compareTo(key2);
+
+        int sign1 = Integer.signum(res1);
+        int sign2 = Integer.signum(res2);
+        assertEquals(
+                "compare()="
+                        + res1
+                        + " and collation key comparison result="
+                        + res2
+                        + " must be equivalent",
+                sign1,
+                sign2);
+    }
+
     /*
      * Compare two strings - "aaa...A" and "aaa...a" with
      * Collation#compare and CollationKey#compareTo, called from
