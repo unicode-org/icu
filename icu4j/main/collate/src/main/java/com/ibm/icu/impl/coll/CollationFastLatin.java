@@ -218,6 +218,8 @@ public final class CollationFastLatin /* all static */ {
                 return -1; // variableTop >= digits, should not occur
             }
             miniVarTop = header[i];
+            // Turn the max long-primary for the group into a max CE.
+            miniVarTop |= TERTIARY_MASK;
         }
 
         boolean digitsAreReordered = false;
@@ -263,15 +265,15 @@ public final class CollationFastLatin /* all static */ {
 
         char[] table = data.fastLatinTable; // skip the header
         for (int c = 0; c < LATIN_LIMIT; ++c) {
-            int p = table[c];
-            if (p >= MIN_SHORT) {
-                p &= SHORT_PRIMARY_MASK;
-            } else if (p > miniVarTop) {
-                p &= LONG_PRIMARY_MASK;
+            int ce = table[c];
+            if (ce >= MIN_SHORT) {
+                ce &= SHORT_PRIMARY_MASK;
+            } else if (ce > miniVarTop) {
+                ce &= LONG_PRIMARY_MASK;
             } else {
-                p = 0;
+                ce = 0;
             }
-            primaries[c] = (char) p;
+            primaries[c] = (char) ce;
         }
         if (digitsAreReordered || (settings.options & CollationSettings.NUMERIC) != 0) {
             // Bail out for digits.
