@@ -100,6 +100,8 @@ CalendarRegressionTest::runIndexedTest( int32_t index, UBool exec, const char* &
         CASE(56,TestUTCWrongAMPM22023);
         CASE(57,TestAsiaManilaAfterSetGregorianChange22043);
         CASE(58,TestRespectUExtensionFw);
+        CASE(59,TestExplicitCutoverMatchesDefault23489);
+        CASE(60,TestWeekOfMonthInCutoverYear23489);
     default: name = ""; break;
     }
 }
@@ -3277,4 +3279,285 @@ void CalendarRegressionTest::TestRespectUExtensionFw() { // ICU-22226
             + localeId + "' locale", expected, actual);
     }
 }
+void CalendarRegressionTest::TestExplicitCutoverMatchesDefault23489() {
+    // A calendar explicitly given the standard papal cutover date must
+    // compute the same instants as the default calendar, which uses that
+    // same date implicitly. This is not automatic: fCutoverJulianDay holds a
+    // true Julian Day by default, so setGregorianChange() must convert to
+    // that same unit for the two calendars to agree.
+    UErrorCode status = U_ZERO_ERROR;
+    SimpleDateFormat sdf(UnicodeString("yyyy-MM-dd"), Locale::getUS(), status);
+    sdf.setTimeZone(*TimeZone::getGMT());
+    if (failure(status, "initializing SimpleDateFormat")) {
+        return;
+    }
+
+    for (int32_t month = UCAL_JANUARY; month <= UCAL_DECEMBER; ++month) {
+        for (int32_t wom = 1; wom <= 5; ++wom) {
+            status = U_ZERO_ERROR;
+            GregorianCalendar defaultCal(*TimeZone::getGMT(), status);
+            GregorianCalendar explicitCal(*TimeZone::getGMT(), status);
+            if (U_FAILURE(status)) {
+                dataerrln("Error creating Calendar: %s", u_errorName(status));
+                return;
+            }
+            explicitCal.setGregorianChange(-12219292800000.0, status);
+            if (failure(status, "setGregorianChange")) {
+                return;
+            }
+
+            defaultCal.setFirstDayOfWeek(UCAL_SUNDAY);
+            defaultCal.setMinimalDaysInFirstWeek(1);
+            defaultCal.clear();
+            defaultCal.set(UCAL_YEAR, 1582);
+            defaultCal.set(UCAL_MONTH, month);
+            defaultCal.set(UCAL_WEEK_OF_MONTH, wom);
+            UDate expected = defaultCal.getTime(status);
+            if (failure(status, "computing the default calendar date")) {
+                continue;
+            }
+
+            explicitCal.setFirstDayOfWeek(UCAL_SUNDAY);
+            explicitCal.setMinimalDaysInFirstWeek(1);
+            explicitCal.clear();
+            explicitCal.set(UCAL_YEAR, 1582);
+            explicitCal.set(UCAL_MONTH, month);
+            explicitCal.set(UCAL_WEEK_OF_MONTH, wom);
+            UDate actual = explicitCal.getTime(status);
+            if (failure(status, "computing the setGregorianChange date")) {
+                continue;
+            }
+
+            if (actual != expected) {
+                UnicodeString actualStr, expectedStr;
+                sdf.format(actual, actualStr);
+                sdf.format(expected, expectedStr);
+                errln(UnicodeString("FAIL: explicit setGregorianChange, MONTH=") + (month + 1) +
+                      ", WEEK_OF_MONTH=" + wom + ": got " + actualStr + ", expected " + expectedStr);
+            }
+        }
+    }
+}
+// Test case for ticket 23489.
+// In the year of the Gregorian cutover, only the month that contains the
+// cutover point loses days, so only that month's weeks are shifted. Every
+// other month of that year must resolve WEEK_OF_MONTH like an ordinary
+// month, as ICU4J does.
+void CalendarRegressionTest::TestWeekOfMonthInCutoverYear23489() {
+    struct {
+        int32_t year;
+        int32_t month;
+        int32_t wom;
+        int32_t expYear;
+        int32_t expMonth;
+        int32_t expDay;
+    } const kData[] = {
+        // October 1582: the only month that actually loses days to the
+        // cutover (October 5-14, 1582 do not exist), so it needs the
+        // compensating shift that other months of the same year do not.
+        // Week 1 falls entirely before the cutover point (October 15,
+        // 1582), so it is expressed as a Julian calendar date; that same
+        // moment in time is printed here as September 30, 1582.
+        { 1582, UCAL_OCTOBER, 1, 1582, UCAL_SEPTEMBER, 30 },
+        { 1582, UCAL_OCTOBER, 2, 1582, UCAL_OCTOBER,   17 },
+        { 1582, UCAL_OCTOBER, 3, 1582, UCAL_OCTOBER,   24 },
+        { 1582, UCAL_OCTOBER, 4, 1582, UCAL_OCTOBER,   31 },
+        { 1582, UCAL_OCTOBER, 5, 1582, UCAL_NOVEMBER,   7 },
+        // November 1582
+        { 1582, UCAL_NOVEMBER, 1, 1582, UCAL_OCTOBER,  31 },
+        { 1582, UCAL_NOVEMBER, 2, 1582, UCAL_NOVEMBER,  7 },
+        { 1582, UCAL_NOVEMBER, 3, 1582, UCAL_NOVEMBER, 14 },
+        { 1582, UCAL_NOVEMBER, 4, 1582, UCAL_NOVEMBER, 21 },
+        { 1582, UCAL_NOVEMBER, 5, 1582, UCAL_NOVEMBER, 28 },
+        // December 1582
+        { 1582, UCAL_DECEMBER, 1, 1582, UCAL_NOVEMBER, 28 },
+        { 1582, UCAL_DECEMBER, 2, 1582, UCAL_DECEMBER,  5 },
+        { 1582, UCAL_DECEMBER, 3, 1582, UCAL_DECEMBER, 12 },
+        { 1582, UCAL_DECEMBER, 4, 1582, UCAL_DECEMBER, 19 },
+        { 1582, UCAL_DECEMBER, 5, 1582, UCAL_DECEMBER, 26 },
+        // January 1583
+        { 1583, UCAL_JANUARY, 1, 1582, UCAL_DECEMBER, 26 },
+        { 1583, UCAL_JANUARY, 2, 1583, UCAL_JANUARY,   2 },
+        { 1583, UCAL_JANUARY, 3, 1583, UCAL_JANUARY,   9 },
+        { 1583, UCAL_JANUARY, 4, 1583, UCAL_JANUARY,  16 },
+        { 1583, UCAL_JANUARY, 5, 1583, UCAL_JANUARY,  23 },
+        // January 2024 (sanity check well outside the cutover year)
+        { 2024, UCAL_JANUARY, 1, 2023, UCAL_DECEMBER, 31 },
+        { 2024, UCAL_JANUARY, 2, 2024, UCAL_JANUARY,   7 },
+        { 2024, UCAL_JANUARY, 3, 2024, UCAL_JANUARY,  14 },
+        { 2024, UCAL_JANUARY, 4, 2024, UCAL_JANUARY,  21 },
+        { 2024, UCAL_JANUARY, 5, 2024, UCAL_JANUARY,  28 },
+    };
+
+    UErrorCode status = U_ZERO_ERROR;
+    SimpleDateFormat sdf(UnicodeString("yyyy-MM-dd"), Locale::getUS(), status);
+    sdf.setTimeZone(*TimeZone::getGMT());
+    if (failure(status, "initializing SimpleDateFormat")) {
+        return;
+    }
+
+    for (int32_t i = 0; i < UPRV_LENGTHOF(kData); ++i) {
+        status = U_ZERO_ERROR;
+        GregorianCalendar cal(*TimeZone::getGMT(), status);
+        if (U_FAILURE(status)) {
+            dataerrln("Error creating Calendar: %s", u_errorName(status));
+            return;
+        }
+        cal.setFirstDayOfWeek(UCAL_SUNDAY);
+        cal.setMinimalDaysInFirstWeek(1);
+        cal.clear();
+        cal.set(UCAL_YEAR, kData[i].year);
+        cal.set(UCAL_MONTH, kData[i].month);
+        cal.set(UCAL_WEEK_OF_MONTH, kData[i].wom);
+        UDate actual = cal.getTime(status);
+        if (failure(status, "computing the date")) {
+            continue;
+        }
+
+        GregorianCalendar expCal(*TimeZone::getGMT(), status);
+        if (U_FAILURE(status)) {
+            dataerrln("Error creating Calendar: %s", u_errorName(status));
+            return;
+        }
+        expCal.clear();
+        expCal.set(kData[i].expYear, kData[i].expMonth, kData[i].expDay);
+        UDate expected = expCal.getTime(status);
+        if (failure(status, "computing the expected date")) {
+            continue;
+        }
+
+        if (actual != expected) {
+            UnicodeString actualStr, expectedStr;
+            sdf.format(actual, actualStr);
+            sdf.format(expected, expectedStr);
+            errln(UnicodeString("FAIL: year=") + kData[i].year +
+                  ", month=" + (kData[i].month + 1) +
+                  ", WEEK_OF_MONTH=" + kData[i].wom +
+                  ": got " + actualStr + ", expected " + expectedStr);
+        }
+    }
+
+    // The five weeks of October 1582 must be five distinct moments in time,
+    // each exactly 7 days after the previous one. This specifically catches
+    // a regression where weeks 4 and 5 collapse onto the same instants as
+    // weeks 2 and 3 (i.e. WEEK_OF_MONTH=4 and 2 -- and 5 and 3 -- resolving
+    // to the same date).
+    UDate previous = 0;
+    UBool havePrevious = false;
+    for (int32_t wom = 1; wom <= 5; ++wom) {
+        status = U_ZERO_ERROR;
+        GregorianCalendar cal(*TimeZone::getGMT(), status);
+        if (U_FAILURE(status)) {
+            dataerrln("Error creating Calendar: %s", u_errorName(status));
+            return;
+        }
+        cal.setFirstDayOfWeek(UCAL_SUNDAY);
+        cal.setMinimalDaysInFirstWeek(1);
+        cal.clear();
+        cal.set(UCAL_YEAR, 1582);
+        cal.set(UCAL_MONTH, UCAL_OCTOBER);
+        cal.set(UCAL_WEEK_OF_MONTH, wom);
+        UDate current = cal.getTime(status);
+        if (failure(status, "computing October 1582 week boundaries")) {
+            havePrevious = false;
+            continue;
+        }
+
+        if (havePrevious) {
+            UDate diff = current - previous;
+            if (diff != 7.0 * U_MILLIS_PER_DAY) {
+                errln(UnicodeString("FAIL: October 1582 WEEK_OF_MONTH=") + (wom - 1) +
+                      " to WEEK_OF_MONTH=" + wom + " should be exactly 7 days apart, got " +
+                      (diff / U_MILLIS_PER_DAY) + " days");
+            }
+        }
+        previous = current;
+        havePrevious = true;
+    }
+
+    // The month can be resolved from UCAL_ORDINAL_MONTH rather than
+    // UCAL_MONTH. Both paths must name the same month to the cutover check,
+    // and so must produce the same instant.
+    {
+        status = U_ZERO_ERROR;
+        GregorianCalendar monthCal(*TimeZone::getGMT(), status);
+        GregorianCalendar ordinalCal(*TimeZone::getGMT(), status);
+        if (U_FAILURE(status)) {
+            dataerrln("Error creating Calendar: %s", u_errorName(status));
+            return;
+        }
+        monthCal.setFirstDayOfWeek(UCAL_SUNDAY);
+        monthCal.setMinimalDaysInFirstWeek(1);
+        monthCal.clear();
+        monthCal.set(UCAL_YEAR, 1582);
+        monthCal.set(UCAL_MONTH, UCAL_NOVEMBER);
+        monthCal.set(UCAL_WEEK_OF_MONTH, 3);
+        UDate expected = monthCal.getTime(status);
+        if (failure(status, "computing the MONTH date")) {
+            return;
+        }
+
+        ordinalCal.setFirstDayOfWeek(UCAL_SUNDAY);
+        ordinalCal.setMinimalDaysInFirstWeek(1);
+        ordinalCal.clear();
+        ordinalCal.set(UCAL_YEAR, 1582);
+        ordinalCal.set(UCAL_ORDINAL_MONTH, 10);
+        ordinalCal.set(UCAL_WEEK_OF_MONTH, 3);
+        UDate actual = ordinalCal.getTime(status);
+        if (failure(status, "computing the ORDINAL_MONTH date")) {
+            return;
+        }
+
+        if (actual != expected) {
+            UnicodeString actualStr, expectedStr;
+            sdf.format(actual, actualStr);
+            sdf.format(expected, expectedStr);
+            errln(UnicodeString("FAIL: YEAR=1582, ORDINAL_MONTH=10, WEEK_OF_MONTH=3: got ") +
+                  actualStr + ", expected " + expectedStr);
+        }
+    }
+
+    // Regression test: a month value outside 0..11 must not be treated as
+    // the cutover month even if it would normalize into it -- the guard
+    // compares the raw requested month with no range normalization.
+    {
+        status = U_ZERO_ERROR;
+        GregorianCalendar overflowCal(*TimeZone::getGMT(), status);
+        GregorianCalendar normalizedCal(*TimeZone::getGMT(), status);
+        if (U_FAILURE(status)) {
+            dataerrln("Error creating Calendar: %s", u_errorName(status));
+            return;
+        }
+        overflowCal.setFirstDayOfWeek(UCAL_SUNDAY);
+        overflowCal.setMinimalDaysInFirstWeek(1);
+        overflowCal.clear();
+        overflowCal.set(UCAL_YEAR, 1582);
+        overflowCal.set(UCAL_MONTH, 14);
+        overflowCal.set(UCAL_WEEK_OF_MONTH, 1);
+        UDate actual = overflowCal.getTime(status);
+        if (failure(status, "computing the out-of-range month date")) {
+            return;
+        }
+
+        normalizedCal.setFirstDayOfWeek(UCAL_SUNDAY);
+        normalizedCal.setMinimalDaysInFirstWeek(1);
+        normalizedCal.clear();
+        normalizedCal.set(UCAL_YEAR, 1583);
+        normalizedCal.set(UCAL_MONTH, UCAL_MARCH);
+        normalizedCal.set(UCAL_WEEK_OF_MONTH, 1);
+        UDate expected = normalizedCal.getTime(status);
+        if (failure(status, "computing the out-of-range month date")) {
+            return;
+        }
+
+        if (actual != expected) {
+            UnicodeString actualStr, expectedStr;
+            sdf.format(actual, actualStr);
+            sdf.format(expected, expectedStr);
+            errln(UnicodeString("FAIL: YEAR=1582, MONTH=14, WEEK_OF_MONTH=1: got ") +
+                  actualStr + ", expected " + expectedStr);
+        }
+    }
+}
+
 #endif /* #if !UCONFIG_NO_FORMATTING */
