@@ -172,6 +172,7 @@ public abstract class BasicTimeZone extends TimeZone {
      *     is not a <code>BasicTimeZone</code>, this method returns false.
      * @stable ICU 3.8
      */
+    @SuppressWarnings("ReferenceEquality")
     public boolean hasEquivalentTransitions(
             TimeZone tz, long start, long end, boolean ignoreDstAmount) {
         if (this == tz) {

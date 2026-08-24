@@ -1400,6 +1400,7 @@ public class UnicodeSet extends UnicodeFilter
         return this;
     }
 
+    @SuppressWarnings("ReferenceEquality")
     private void addString(CharSequence s) {
         if (strings == EMPTY_STRINGS) {
             strings = new TreeSet<>();
@@ -2266,6 +2267,7 @@ public class UnicodeSet extends UnicodeFilter
      * @param c set whose elements are to be added to this set.
      * @stable ICU 2.0
      */
+    @SuppressWarnings("ReferenceEquality")
     public UnicodeSet addAll(UnicodeSet c) {
         checkFrozen();
         add(c.list, c.len, 0);
@@ -2325,6 +2327,7 @@ public class UnicodeSet extends UnicodeFilter
      * @param c set that defines which elements will be complemented from this set.
      * @stable ICU 2.0
      */
+    @SuppressWarnings("ReferenceEquality")
     public UnicodeSet complementAll(UnicodeSet c) {
         checkFrozen();
         xor(c.list, c.len, 0);
@@ -2397,6 +2400,7 @@ public class UnicodeSet extends UnicodeFilter
      *
      * @stable ICU 2.0
      */
+    @SuppressWarnings("ReferenceEquality")
     public UnicodeSet compact() {
         checkFrozen();
         if ((len + 7) < list.length) {

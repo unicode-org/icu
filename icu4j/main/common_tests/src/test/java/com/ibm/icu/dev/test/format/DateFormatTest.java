@@ -3707,7 +3707,6 @@ public class DateFormatTest extends CoreTestFmwk {
 
     // internal test subroutine, used by TestPartialParse994
     public void tryPat994(SimpleDateFormat format, String pat, String str, Date expected) {
-        Date Null = null;
         logln("Pattern \"" + pat + "\"   String \"" + str + "\"");
         try {
             format.applyPattern(pat);
@@ -3715,12 +3714,12 @@ public class DateFormatTest extends CoreTestFmwk {
             String f = ((DateFormat) format).format(date);
             logln(" parse(" + str + ") -> " + date);
             logln(" format -> " + f);
-            if (expected.equals(Null) || !date.equals(expected))
+            if (expected.equals(null) || !date.equals(expected))
                 errln("FAIL: Expected null"); // " + expected);
             if (!f.equals(str)) errln("FAIL: Expected " + str);
         } catch (ParseException e) {
             logln("ParseException: " + e.getMessage());
-            if (!(expected == Null)) errln("FAIL: Expected " + expected);
+            if (!(expected == null)) errln("FAIL: Expected " + expected);
         } catch (Exception e) {
             errln("*** Exception:");
             e.printStackTrace();
@@ -6056,19 +6055,7 @@ public class DateFormatTest extends CoreTestFmwk {
                 }
             }
 
-            if (got == exp || (got != null && got.equals(exp))) {
-                logln("Ok: " + input + " x " + currentPat + " => " + gotstr);
-            } else {
-                errln(
-                        "FAIL: "
-                                + input
-                                + " x "
-                                + currentPat
-                                + " => "
-                                + gotstr
-                                + ", expected "
-                                + expstr);
-            }
+            assertEquals("", got, exp);
         }
     }
 
@@ -6440,15 +6427,7 @@ public class DateFormatTest extends CoreTestFmwk {
             int calField = DATEFORMAT_FIELDS[i].getCalendarField();
             if (calField != -1) {
                 DateFormat.Field field = DateFormat.Field.ofCalendarField(calField);
-                if (field != DATEFORMAT_FIELDS[i]) {
-                    errln(
-                            "FAIL: "
-                                    + field
-                                    + " is returned for a Calendar field "
-                                    + calField
-                                    + " - Expected: "
-                                    + DATEFORMAT_FIELDS[i]);
-                }
+                assertSame("Calendar field", field, DATEFORMAT_FIELDS[i]);
             }
         }
 
@@ -6467,23 +6446,22 @@ public class DateFormatTest extends CoreTestFmwk {
 
         // ChineseDateFormat.Field#ofCalendarField and getCalendarField
         int ccalField = ChineseDateFormat.Field.IS_LEAP_MONTH.getCalendarField();
-        if (ccalField != Calendar.IS_LEAP_MONTH) {
-            errln(
-                    "FAIL: ChineseCalendar field "
-                            + ccalField
-                            + " is returned for ChineseDateFormat.Field.IS_LEAP_MONTH.getCalendarField()");
-        } else {
-            DateFormat.Field cfield = ChineseDateFormat.Field.ofCalendarField(ccalField);
-            if (cfield != ChineseDateFormat.Field.IS_LEAP_MONTH) {
-                errln(
-                        "FAIL: "
-                                + cfield
-                                + " is returned for a ChineseCalendar field "
-                                + ccalField
-                                + " - Expected: "
-                                + ChineseDateFormat.Field.IS_LEAP_MONTH);
-            }
-        }
+        assertSame(
+                "FAIL: ChineseCalendar field "
+                        + ccalField
+                        + " is returned for ChineseDateFormat.Field.IS_LEAP_MONTH.getCalendarField()",
+                ccalField,
+                Calendar.IS_LEAP_MONTH);
+        DateFormat.Field cfield = ChineseDateFormat.Field.ofCalendarField(ccalField);
+        assertSame(
+                "FAIL: "
+                        + cfield
+                        + " is returned for a ChineseCalendar field "
+                        + ccalField
+                        + " - Expected: "
+                        + ChineseDateFormat.Field.IS_LEAP_MONTH,
+                cfield,
+                ChineseDateFormat.Field.IS_LEAP_MONTH);
     }
 
     /*
@@ -7046,24 +7024,27 @@ public class DateFormatTest extends CoreTestFmwk {
             fmt = new SimpleDateFormat("MM d", new ULocale("en_US"));
             String field = DATA[i][0];
 
-            if (field == "") { // use the one w/o field
-                fmt.setNumberFormat(override);
-            } else if (field
-                    == "mixed") { // set 1 field at first but then full override, both(M & d) should
-                // be override
-                NumberFormat single_override =
-                        NumberFormat.getInstance(new ULocale("en@numbers=hebr"));
-                fmt.setNumberFormat("M", single_override);
-                fmt.setNumberFormat(override);
-            } else if (field == "Mo") { // o is invalid field
-                try {
+            switch (field) {
+                case "": // use the one w/o field
+                    fmt.setNumberFormat(override);
+                    break;
+                case "mixed": // set 1 field at first but then full override, both(M & d) should
+                    // be override
+                    NumberFormat single_override =
+                            NumberFormat.getInstance(new ULocale("en@numbers=hebr"));
+                    fmt.setNumberFormat("M", single_override);
+                    fmt.setNumberFormat(override);
+                    break;
+                case "Mo": // o is invalid field
+                    try {
+                        fmt.setNumberFormat(field, override);
+                    } catch (IllegalArgumentException e) {
+                        logln("IllegalArgumentException is thrown for invalid fields");
+                        continue;
+                    }
+                    break;
+                default:
                     fmt.setNumberFormat(field, override);
-                } catch (IllegalArgumentException e) {
-                    logln("IllegalArgumentException is thrown for invalid fields");
-                    continue;
-                }
-            } else {
-                fmt.setNumberFormat(field, override);
             }
             String result = fmt.format(test_date);
             String expected = DATA[i][1];

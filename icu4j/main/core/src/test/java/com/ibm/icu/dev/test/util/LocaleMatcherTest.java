@@ -148,7 +148,7 @@ public class LocaleMatcherTest extends CoreTestFmwk {
 
         ULocale udesired = new ULocale("en_GB"); // distinct object from ULocale.UK
         LocaleMatcher.Result result = matcher.getBestMatchResult(udesired);
-        assertTrue("exactly desired en-GB object", udesired == result.getDesiredULocale());
+        assertSame("exactly desired en-GB object", udesired, result.getDesiredULocale());
         assertEquals(Locale.UK, result.getDesiredLocale());
         assertEquals(0, result.getDesiredIndex());
         assertEquals(ULocale.UK, result.getSupportedULocale());
@@ -163,7 +163,7 @@ public class LocaleMatcherTest extends CoreTestFmwk {
         Locale desired = new Locale("en", "US"); // distinct object from Locale.US
         result = matcher.getBestLocaleResult(desired);
         assertEquals(ULocale.US, result.getDesiredULocale());
-        assertTrue("exactly desired en-US object", desired == result.getDesiredLocale());
+        assertSame("exactly desired en-US object", desired, result.getDesiredLocale());
         assertEquals(0, result.getDesiredIndex());
         assertEquals(ULocale.ENGLISH, result.getSupportedULocale());
         assertEquals(Locale.ENGLISH, result.getSupportedLocale());

@@ -351,9 +351,10 @@ public final class VersionInfoTest extends CoreTestFmwk {
         // Check if singleton for each
         for (int i = 1; i < results.length; i++) {
             for (int j = 0; j < results[0].length; j++) {
-                if (results[0][j] != results[i][j]) {
-                    errln("Different instance at index " + j + " Thread#" + i);
-                }
+                assertSame(
+                        "Different instance at index " + j + " Thread#" + i,
+                        results[0][j],
+                        results[i][j]);
             }
         }
     }

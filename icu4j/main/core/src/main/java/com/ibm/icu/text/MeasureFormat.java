@@ -393,6 +393,7 @@ public class MeasureFormat extends UFormat {
         return appendTo;
     }
 
+    @SuppressWarnings("ReferenceEquality")
     private void formatMeasuresInternal(
             Appendable appendTo, FieldPosition fieldPosition, Measure... measures) {
         // fast track for trivial cases

@@ -1215,6 +1215,7 @@ class FractionalPartSubstitution extends NFSubstitution {
      * format by digits or not. In addition, it marks the rule set it calls (if any) as a fraction
      * rule set.
      */
+    @SuppressWarnings("ReferenceEquality")
     FractionalPartSubstitution(int pos, NFRuleSet ruleSet, String description) {
         super(pos, ruleSet, description);
         if (description.equals(">>") || description.equals(">>>") || ruleSet == this.ruleSet) {

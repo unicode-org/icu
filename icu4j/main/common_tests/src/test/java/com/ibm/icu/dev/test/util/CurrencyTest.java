@@ -414,67 +414,42 @@ public class CurrencyTest extends CoreTestFmwk {
     public void TestCurrencyData() {
         CurrencyData.DefaultInfo info_fallback =
                 (CurrencyData.DefaultInfo) CurrencyData.DefaultInfo.getWithFallback(true);
-        if (info_fallback == null) {
-            errln("getWithFallback() returned null.");
-            return;
-        }
+        assertNotNull("getWithFallback() returned null.", info_fallback);
 
         CurrencyData.DefaultInfo info_nofallback =
                 (CurrencyData.DefaultInfo) CurrencyData.DefaultInfo.getWithFallback(false);
-        if (info_nofallback == null) {
-            errln("getWithFallback() returned null.");
-            return;
+        assertNotNull("getWithFallback() returned null.", info_nofallback);
+
+        assertEquals("Error calling getName().", info_fallback.getName("isoCode"), "isoCode");
+        assertNull("Error calling getName().", info_nofallback.getName("isoCode"));
+
+        assertEquals(
+                "Error calling getPluralName().",
+                info_fallback.getPluralName("isoCode", "type"),
+                "isoCode");
+        assertNull(
+                "Error calling getPluralName().", info_nofallback.getPluralName("isoCode", "type"));
+
+        assertEquals("Error calling getSymbol().", info_fallback.getSymbol("isoCode"), "isoCode");
+        assertNull("Error calling getSymbol().", info_nofallback.getSymbol("isoCode"));
+
+        assertTrue("symbolMap() should return empty map.", info_fallback.symbolMap().isEmpty());
+
+        assertTrue("nameMap() should return empty map.", info_fallback.nameMap().isEmpty());
+
+        if (!info_fallback.getUnitPatterns().isEmpty()) {
+            assertNull("Error calling getUnitPatterns().", info_nofallback.getUnitPatterns());
         }
 
-        if (!info_fallback.getName("isoCode").equals("isoCode")
-                || info_nofallback.getName("isoCode") != null) {
-            errln("Error calling getName().");
-            return;
-        }
+        assertEquals(
+                "Error calling getSpacingInfo().",
+                info_fallback.getSpacingInfo(),
+                CurrencyData.CurrencySpacingInfo.DEFAULT);
+        assertNull("Error calling getSpacingInfo().", info_nofallback.getSpacingInfo());
 
-        if (!info_fallback.getPluralName("isoCode", "type").equals("isoCode")
-                || info_nofallback.getPluralName("isoCode", "type") != null) {
-            errln("Error calling getPluralName().");
-            return;
-        }
+        assertSame("Error calling getLocale().", info_fallback.getULocale(), ULocale.ROOT);
 
-        if (!info_fallback.getSymbol("isoCode").equals("isoCode")
-                || info_nofallback.getSymbol("isoCode") != null) {
-            errln("Error calling getSymbol().");
-            return;
-        }
-
-        if (!info_fallback.symbolMap().isEmpty()) {
-            errln("symbolMap() should return empty map.");
-            return;
-        }
-
-        if (!info_fallback.nameMap().isEmpty()) {
-            errln("nameMap() should return empty map.");
-            return;
-        }
-
-        if (!info_fallback.getUnitPatterns().isEmpty()
-                || info_nofallback.getUnitPatterns() != null) {
-            errln("Error calling getUnitPatterns().");
-            return;
-        }
-
-        if (!info_fallback.getSpacingInfo().equals((CurrencyData.CurrencySpacingInfo.DEFAULT))
-                || info_nofallback.getSpacingInfo() != null) {
-            errln("Error calling getSpacingInfo().");
-            return;
-        }
-
-        if (info_fallback.getULocale() != ULocale.ROOT) {
-            errln("Error calling getLocale().");
-            return;
-        }
-
-        if (info_fallback.getFormatInfo("isoCode") != null) {
-            errln("Error calling getFormatInfo().");
-            return;
-        }
+        assertNull("Error calling getFormatInfo().", info_fallback.getFormatInfo("isoCode"));
     }
 
     // A real test of CurrencyMetaInfo.

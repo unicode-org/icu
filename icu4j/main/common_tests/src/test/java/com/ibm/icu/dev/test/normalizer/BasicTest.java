@@ -2426,6 +2426,7 @@ public class BasicTest extends CoreTestFmwk {
     }
 
     // verify that case-folding does not un-FCD strings
+    @SuppressWarnings("ReferenceEquality")
     int countFoldFCDExceptions(int foldingOptions) {
         String s, d;
         int c;

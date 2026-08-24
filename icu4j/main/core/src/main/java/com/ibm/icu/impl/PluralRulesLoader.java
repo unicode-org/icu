@@ -163,6 +163,7 @@ public class PluralRulesLoader extends PluralRules.Factory {
     }
 
     /** Gets the rule from the rulesId. If there is no rule for this rulesId, return null. */
+    @SuppressWarnings("ReferenceEquality")
     public PluralRules getOrCreateRulesForLocale(ULocale locale, PluralRules.PluralType type) {
         String rulesId = getRulesIdForLocale(locale, type);
         if (rulesId == null || rulesId.trim().length() == 0) {

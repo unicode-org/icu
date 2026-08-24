@@ -294,6 +294,7 @@ public class FormattedStringBuilder implements CharSequence, Appendable {
      * @return The number of chars added, which is the length of the other {@link
      *     FormattedStringBuilder}.
      */
+    @SuppressWarnings("ReferenceEquality")
     public int insert(int index, FormattedStringBuilder other) {
         if (this == other) {
             throw new IllegalArgumentException("Cannot call insert/append on myself");
@@ -538,6 +539,7 @@ public class FormattedStringBuilder implements CharSequence, Appendable {
      * @see #toCharArray
      * @see #toFieldArray
      */
+    @SuppressWarnings("ReferenceEquality")
     public boolean contentEquals(char[] chars, Object[] fields) {
         if (chars.length != length) return false;
         if (fields.length != length) return false;
@@ -556,6 +558,7 @@ public class FormattedStringBuilder implements CharSequence, Appendable {
      * @param other The instance to compare.
      * @return Whether the contents of this instance is currently equal to the given instance.
      */
+    @SuppressWarnings("ReferenceEquality")
     public boolean contentEquals(FormattedStringBuilder other) {
         if (length != other.length) return false;
         for (int i = 0; i < length; i++) {

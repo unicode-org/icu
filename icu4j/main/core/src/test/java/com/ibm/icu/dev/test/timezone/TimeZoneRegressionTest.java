@@ -59,7 +59,7 @@ public class TimeZoneRegressionTest extends CoreTestFmwk {
     public void Test4073209() {
         TimeZone z1 = TimeZone.getTimeZone("PST");
         TimeZone z2 = TimeZone.getTimeZone("PST");
-        if (z1 == z2) errln("Fail: TimeZone should return clones");
+        assertNotSame("Fail: TimeZone should return clones", z1, z2);
     }
 
     @Test

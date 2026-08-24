@@ -82,6 +82,7 @@ public class ConstantAffixModifier implements Modifier {
     }
 
     @Override
+    @SuppressWarnings("ReferenceEquality")
     public boolean strictEquals(Modifier other) {
         if (!(other instanceof ConstantAffixModifier)) {
             return false;

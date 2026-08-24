@@ -2470,6 +2470,7 @@ public class NumberFormatTest extends CoreTestFmwk {
     };
 
     @Test
+    @SuppressWarnings("ReferenceEquality")
     public void TestCases() throws IOException {
         String caseFileName = "NumberFormatTestCases.txt";
         try (InputStream is = NumberFormatTest.class.getResourceAsStream(caseFileName);

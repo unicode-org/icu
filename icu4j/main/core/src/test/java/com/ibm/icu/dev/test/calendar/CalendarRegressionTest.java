@@ -1028,33 +1028,25 @@ public class CalendarRegressionTest extends CoreTestFmwk {
          */
         Calendar a = Calendar.getInstance();
         Calendar b = a.clone();
-        if (a.hashCode() != b.hashCode()) {
-            errln("Calendar hash code unequal for cloned objects");
-        }
+        assertEquals("Calendar hash code unequal for cloned objects", a.hashCode(), b.hashCode());
         TimeZone atz1 = a.getTimeZone();
         TimeZone atz2 = atz1.clone();
-        if (!atz1.equals(atz2)) {
-            errln("The clone timezones are not equal");
-        }
-        if (atz1.hashCode() != atz2.hashCode()) {
-            errln("TimeZone hash code unequal for cloned objects");
-        }
+        assertEquals("The clone timezones are not equal", atz1, atz2);
+        assertEquals(
+                "TimeZone hash code unequal for cloned objects", atz1.hashCode(), atz2.hashCode());
         b.setMinimalDaysInFirstWeek(7 - a.getMinimalDaysInFirstWeek());
-        if (a.hashCode() == b.hashCode()) {
-            errln("Calendar hash code ignores minimal days in first week");
-        }
+        assertNotEquals(
+                "Calendar hash code ignores minimal days in first week",
+                a.hashCode(),
+                b.hashCode());
         b.setMinimalDaysInFirstWeek(a.getMinimalDaysInFirstWeek());
 
         b.setFirstDayOfWeek((a.getFirstDayOfWeek() % 7) + 1); // Next day
-        if (a.hashCode() == b.hashCode()) {
-            errln("Calendar hash code ignores first day of week");
-        }
+        assertNotEquals("Calendar hash code ignores first day of week", a.hashCode(), b.hashCode());
         b.setFirstDayOfWeek(a.getFirstDayOfWeek());
 
         b.setLenient(!a.isLenient());
-        if (a.hashCode() == b.hashCode()) {
-            errln("Calendar hash code ignores lenient setting");
-        }
+        assertNotEquals("Calendar hash code ignores lenient setting", a.hashCode(), b.hashCode());
         b.setLenient(a.isLenient());
 
         // Assume getTimeZone() returns a reference, not a clone
@@ -1063,24 +1055,21 @@ public class CalendarRegressionTest extends CoreTestFmwk {
         TimeZone btz = b.getTimeZone();
 
         btz.setRawOffset(atz.getRawOffset() + 60 * 60 * 1000);
-        if (atz.hashCode() == btz.hashCode()) {
-            errln(atz.hashCode() + "==" + btz.hashCode());
-        }
-        if (a.getTimeZone() != b.getTimeZone() && a.hashCode() == b.hashCode()) {
-            errln("Calendar hash code ignores zone");
+        assertNotEquals(atz.hashCode() + "==" + btz.hashCode(), atz.hashCode(), btz.hashCode());
+        if (a.hashCode() == b.hashCode()) {
+            assertEquals("Calendar hash code ignores zone", a.getTimeZone(), b.getTimeZone());
         }
         b.getTimeZone().setRawOffset(a.getTimeZone().getRawOffset());
 
         GregorianCalendar c = new GregorianCalendar();
         GregorianCalendar d = c.clone();
-        if (c.hashCode() != d.hashCode()) {
-            errln("GregorianCalendar hash code unequal for clones objects");
-        }
+        assertEquals(
+                "GregorianCalendar hash code unequal for clones objects",
+                c.hashCode(),
+                d.hashCode());
         Date cutover = c.getGregorianChange();
         d.setGregorianChange(new Date(cutover.getTime() + 24 * 60 * 60 * 1000));
-        if (c.hashCode() == d.hashCode()) {
-            errln("GregorianCalendar hash code ignores cutover");
-        }
+        assertNotEquals("GregorianCalendar hash code ignores cutover", c.hashCode(), d.hashCode());
     }
 
     /** GregorianCalendar.equals() ignores cutover date */
@@ -2333,7 +2322,7 @@ public class CalendarRegressionTest extends CoreTestFmwk {
         String[] ALL = Calendar.getKeywordValuesForLocale("calendar", ULocale.getDefault(), false);
         HashSet<String> ALLSET = new HashSet<>();
         for (int i = 0; i < ALL.length; i++) {
-            if (ALL[i] == "unknown") {
+            if (ALL[i].equals("unknown")) {
                 errln("Calendar.getKeywordValuesForLocale should not return \"unknown\"");
             }
             ALLSET.add(ALL[i]);

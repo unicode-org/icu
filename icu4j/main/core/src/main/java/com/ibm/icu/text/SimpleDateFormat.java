@@ -1179,6 +1179,7 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
     }
 
     /** Internal formatting method that accepts an attributes list. */
+    @SuppressWarnings("ReferenceEquality")
     StringBuffer format(
             Calendar cal,
             StringBuffer toAppendTo,
@@ -1506,7 +1507,7 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
-    @SuppressWarnings("fallthrough")
+    @SuppressWarnings({"fallthrough", "ReferenceEquality"})
     protected void subFormat(
             StringBuffer buf,
             char ch,
@@ -2461,6 +2462,7 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
      * @stable ICU 2.0
      */
     @Override
+    @SuppressWarnings("ReferenceEquality")
     public void parse(String text, Calendar cal, ParsePosition parsePos) {
         TimeZone backupTZ = null;
         Calendar resultCal = null;

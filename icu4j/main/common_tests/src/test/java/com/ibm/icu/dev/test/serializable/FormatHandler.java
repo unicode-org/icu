@@ -1619,7 +1619,7 @@ public class FormatHandler {
             MessageFormat mfb = (MessageFormat) b;
             Object arguments[] = {123456};
 
-            return mfa.format(arguments) != mfb.format(arguments);
+            return Objects.equals(mfa.format(arguments), mfb.format(arguments));
         }
     }
 
@@ -2079,7 +2079,7 @@ public class FormatHandler {
             SelectFormat sfb = (SelectFormat) b;
             String argument = "keyword";
 
-            return sfa.format(argument) != sfb.format(argument);
+            return Objects.equals(sfa.format(argument), sfb.format(argument));
         }
     }
 

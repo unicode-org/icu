@@ -567,9 +567,7 @@ public class IntlTestDateFormatSymbols extends CoreTestFmwk {
         for (int i = 0; i < rowCount; i++) {
             columnCount = strings[i].length;
             for (int j = 0; j < columnCount; j++) {
-                if (strings[i][j] != strings1[i][j]) {
-                    errln("ERROR: setZoneStrings() failed");
-                }
+                assertSame("ERROR: setZoneStrings() failed", strings[i][j], strings1[i][j]);
             }
         }
 

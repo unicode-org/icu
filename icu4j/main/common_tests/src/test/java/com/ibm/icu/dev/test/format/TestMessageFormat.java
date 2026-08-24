@@ -2112,7 +2112,7 @@ public class TestMessageFormat extends CoreTestFmwk {
         MessagePattern thawed = pattern.cloneAsThawed();
         assertFalse("thawed", thawed.isFrozen());
         assertTrue("still frozen", pattern.isFrozen());
-        assertTrue("frozen!=thawed", pattern != thawed);
+        assertNotSame("frozen!=thawed", pattern, thawed);
         thawed.parse("fo");
         assertEquals("thawed+parse", "fo", thawed.autoQuoteApostropheDeep());
     }

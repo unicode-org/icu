@@ -19,6 +19,7 @@ import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.util.ULocale;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Random;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -179,8 +180,8 @@ public class IntlTestNumberFormat extends CoreTestFmwk {
                     dump = true;
                     break;
                 }
-                if (stringMatch == 0 && string[i] == string[i - 1]) stringMatch = i;
-                else if (stringMatch > 0 && string[i] != string[i - 1]) {
+                if (stringMatch == 0 && Objects.equals(string[i], string[i - 1])) stringMatch = i;
+                else if (stringMatch > 0 && !Objects.equals(string[i], string[i - 1])) {
                     errln("**** FAIL: String mismatch after match: " + message);
                     dump = true;
                     break;

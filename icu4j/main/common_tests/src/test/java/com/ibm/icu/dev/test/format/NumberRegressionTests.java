@@ -36,6 +36,7 @@ import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -1414,7 +1415,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
         }
         sym.setInternationalCurrencySymbol("USD");
 
-        if (VersionInfo.ICU_VERSION == VersionInfo.getInstance(2, 2)) {
+        if (VersionInfo.ICU_VERSION.equals(VersionInfo.getInstance(2, 2))) {
             // bug in 2.2 that fails this test
             // to be fixed in the later versions
             System.out.println("\n        Test skipped for release 2.2");
@@ -1444,7 +1445,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
                 String pat = df.toPattern();
                 DecimalFormatSymbols symb = new DecimalFormatSymbols(avail[i]);
                 DecimalFormat f2 = new DecimalFormat(pat, symb);
-                if (df.getCurrency() != Currency.getInstance("XXX") && j == 1) {
+                if (!Objects.equals(df.getCurrency(), Currency.getInstance("XXX")) && j == 1) {
                     // Currency does not travel with the pattern string
                     f2.setCurrency(df.getCurrency());
                 }

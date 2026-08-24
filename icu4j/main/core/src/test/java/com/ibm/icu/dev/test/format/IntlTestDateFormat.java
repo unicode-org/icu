@@ -27,6 +27,7 @@ import com.ibm.icu.util.ULocale;
 import java.text.FieldPosition;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Random;
 import org.junit.Before;
 import org.junit.Test;
@@ -176,8 +177,8 @@ public class IntlTestDateFormat extends CoreTestFmwk {
             FieldPosition position = new FieldPosition(0);
             fFormat.format(date[i], string[i], position);
             if (i > 0) {
-                if (dateMatch == 0 && date[i] == date[i - 1]) dateMatch = i;
-                else if (dateMatch > 0 && date[i] != date[i - 1]) {
+                if (dateMatch == 0 && Objects.equals(date[i], date[i - 1])) dateMatch = i;
+                else if (dateMatch > 0 && !Objects.equals(date[i], date[i - 1])) {
                     describeTest();
                     errln("********** FAIL: Date mismatch after match.");
                     dump = true;

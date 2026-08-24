@@ -181,7 +181,7 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
             cal.set(1809, Calendar.DECEMBER, 25);
             Date start = cal.getTime();
             fmt.set2DigitYearStart(start);
-            if ((fmt.get2DigitYearStart() != start)) errln("get2DigitYearStart broken");
+            assertSame("get2DigitYearStart broken", fmt.get2DigitYearStart(), start);
             cal.clear();
             cal.set(1809, Calendar.DECEMBER, 25);
             Date d1 = cal.getTime();
@@ -1291,26 +1291,26 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
                             + islamicTwelfthMonth);
             if (gregorianTwelfthMonth.equalsIgnoreCase(islamicTwelfthMonth)) {
                 // Simplified Chinese uses numeric month for both Gregorian/Islamic calendars
-                if (locales[i] != CHINESE_SIMPLIFIED) {
-                    errln(
-                            locales[i]
-                                    + ": gregorian and islamic are same: "
-                                    + gregorianTwelfthMonth
-                                    + ", "
-                                    + islamicTwelfthMonth);
-                }
+                assertSame(
+                        locales[i]
+                                + ": gregorian and islamic are same: "
+                                + gregorianTwelfthMonth
+                                + ", "
+                                + islamicTwelfthMonth,
+                        locales[i],
+                        CHINESE_SIMPLIFIED);
             }
 
             if (gregorianTwelfthMonth.equalsIgnoreCase(islamicCivilTwelfthMonth)) {
                 // Simplified Chinese uses numeric month for both Gregorian/Islamic calendars
-                if (locales[i] != CHINESE_SIMPLIFIED) {
-                    errln(
-                            locales[i]
-                                    + ": gregorian and islamic-civil are same: "
-                                    + gregorianTwelfthMonth
-                                    + ", "
-                                    + islamicCivilTwelfthMonth);
-                }
+                assertSame(
+                        locales[i]
+                                + ": gregorian and islamic-civil are same: "
+                                + gregorianTwelfthMonth
+                                + ", "
+                                + islamicCivilTwelfthMonth,
+                        locales[i],
+                        CHINESE_SIMPLIFIED);
             }
             if (!islamicTwelfthMonth.equalsIgnoreCase(islamicCivilTwelfthMonth)) {
                 errln(
@@ -1339,14 +1339,14 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
             errln("Fail parsing:  " + e);
         }
 
-        if (cal.get(Calendar.DAY_OF_MONTH) != expectedDay) {
-            errln(
-                    "Parsing failed: day of month should be '7' with pattern: \""
-                            + pattern
-                            + "\" for text: \""
-                            + text
-                            + "\"");
-        }
+        assertEquals(
+                "Parsing failed: day of month should be '7' with pattern: \""
+                        + pattern
+                        + "\" for text: \""
+                        + text
+                        + "\"",
+                expectedDay,
+                cal.get(Calendar.DAY_OF_MONTH));
     }
 
     // Date formatting with Dangi calendar in en locale (#9987)

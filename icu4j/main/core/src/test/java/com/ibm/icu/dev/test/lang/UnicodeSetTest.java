@@ -1541,6 +1541,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
         values.add(t);
     }
 
+    @SuppressWarnings("ReferenceEquality")
     private void addIfAbsent(
             Map<Integer, Collection<Integer>> closure,
             Integer c,
@@ -3265,6 +3266,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
         }
     }
 
+    @SuppressWarnings("ReferenceEquality")
     void expectToPattern(UnicodeSet set, String expPat, String[] expStrings) {
         String pat = set.toPattern(true);
         if (pat.equals(expPat)) {

@@ -3520,6 +3520,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @param calType Calendar type to retrieve. If not found will fallback to gregorian.
      * @return PatternData object for this locale and calendarType.
      */
+    @SuppressWarnings("ReferenceEquality")
     private static PatternData getPatternData(ULocale locale, String calType) {
         ICUResourceBundle rb =
                 (ICUResourceBundle)

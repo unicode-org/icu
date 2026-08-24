@@ -1657,22 +1657,16 @@ public class SpoofChecker {
             return false;
         }
         SpoofChecker otherSC = (SpoofChecker) other;
-        if (fSpoofData != otherSC.fSpoofData
-                && fSpoofData != null
-                && !fSpoofData.equals(otherSC.fSpoofData)) {
+        if (fSpoofData != null && !fSpoofData.equals(otherSC.fSpoofData)) {
             return false;
         }
         if (fChecks != otherSC.fChecks) {
             return false;
         }
-        if (fAllowedLocales != otherSC.fAllowedLocales
-                && fAllowedLocales != null
-                && !fAllowedLocales.equals(otherSC.fAllowedLocales)) {
+        if (fAllowedLocales != null && !fAllowedLocales.equals(otherSC.fAllowedLocales)) {
             return false;
         }
-        if (fAllowedCharsSet != otherSC.fAllowedCharsSet
-                && fAllowedCharsSet != null
-                && !fAllowedCharsSet.equals(otherSC.fAllowedCharsSet)) {
+        if (fAllowedCharsSet != null && !fAllowedCharsSet.equals(otherSC.fAllowedCharsSet)) {
             return false;
         }
         if (fRestrictionLevel != otherSC.fRestrictionLevel) {

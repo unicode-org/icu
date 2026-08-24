@@ -40,191 +40,173 @@ public class IntlTestDecimalFormatSymbols extends CoreTestFmwk {
 
         DecimalFormatSymbols en = new DecimalFormatSymbols(Locale.ENGLISH);
 
-        if (en.equals(fr)) {
-            errln("ERROR: English DecimalFormatSymbols equal to French");
-        }
+        assertNotEquals("ERROR: English DecimalFormatSymbols equal to French", en, fr);
 
         // just do some VERY basic tests to make sure that get/set work
 
-        if (!en.getLocale().equals(Locale.ENGLISH)) {
-            errln("ERROR: getLocale failed");
-        }
-        if (!en.getULocale().equals(ULocale.ENGLISH)) {
-            errln("ERROR: getULocale failed");
-        }
-
-        if (!en.getLocale().equals(Locale.ENGLISH)) {
-            errln("ERROR: getLocale failed");
-        }
-        if (!en.getULocale().equals(ULocale.ENGLISH)) {
-            errln("ERROR: getULocale failed");
-        }
+        assertEquals("ERROR: getLocale failed", en.getLocale(), Locale.ENGLISH);
+        assertEquals("ERROR: getULocale failed", en.getULocale(), ULocale.ENGLISH);
+        assertEquals("ERROR: getLocale failed", en.getLocale(), Locale.ENGLISH);
+        assertEquals("ERROR: getULocale failed", en.getULocale(), ULocale.ENGLISH);
 
         char zero = en.getZeroDigit();
         fr.setZeroDigit(zero);
-        if (fr.getZeroDigit() != en.getZeroDigit()) {
-            errln("ERROR: get/set ZeroDigit failed");
-        }
+        assertEquals("ERROR: get/set ZeroDigit failed", fr.getZeroDigit(), en.getZeroDigit());
 
         String[] digits = en.getDigitStrings();
         fr.setDigitStrings(digits);
-        if (!Arrays.equals(fr.getDigitStrings(), en.getDigitStrings())) {
-            errln("ERROR: get/set DigitStrings failed");
-        }
+        assertEquals(
+                "ERROR: get/set DigitStrings failed", fr.getDigitStrings(), en.getDigitStrings());
 
         char sigDigit = en.getSignificantDigit();
         fr.setSignificantDigit(sigDigit);
-        if (fr.getSignificantDigit() != en.getSignificantDigit()) {
-            errln("ERROR: get/set SignificantDigit failed");
-        }
+        assertEquals(
+                "ERROR: get/set SignificantDigit failed",
+                fr.getSignificantDigit(),
+                en.getSignificantDigit());
 
         Currency currency = Currency.getInstance("USD");
         fr.setCurrency(currency);
-        if (!fr.getCurrency().equals(currency)) {
-            errln("ERROR: get/set Currency failed");
-        }
+        assertEquals("ERROR: get/set Currency failed", fr.getCurrency(), currency);
 
         char group = en.getGroupingSeparator();
         fr.setGroupingSeparator(group);
-        if (fr.getGroupingSeparator() != en.getGroupingSeparator()) {
-            errln("ERROR: get/set GroupingSeparator failed");
-        }
+        assertEquals(
+                "ERROR: get/set GroupingSeparator failed",
+                fr.getGroupingSeparator(),
+                en.getGroupingSeparator());
 
         String groupStr = en.getGroupingSeparatorString();
         fr.setGroupingSeparatorString(groupStr);
-        if (!fr.getGroupingSeparatorString().equals(en.getGroupingSeparatorString())) {
-            errln("ERROR: get/set GroupingSeparatorString failed");
-        }
+        assertEquals(
+                "ERROR: get/set GroupingSeparatorString failed",
+                fr.getGroupingSeparatorString(),
+                en.getGroupingSeparatorString());
 
         char decimal = en.getDecimalSeparator();
         fr.setDecimalSeparator(decimal);
-        if (fr.getDecimalSeparator() != en.getDecimalSeparator()) {
-            errln("ERROR: get/set DecimalSeparator failed");
-        }
+        assertEquals(
+                "ERROR: get/set DecimalSeparator failed",
+                fr.getDecimalSeparator(),
+                en.getDecimalSeparator());
 
         String decimalStr = en.getDecimalSeparatorString();
         fr.setDecimalSeparatorString(decimalStr);
-        if (!fr.getDecimalSeparatorString().equals(en.getDecimalSeparatorString())) {
-            errln("ERROR: get/set DecimalSeparatorString failed");
-        }
+        assertEquals(
+                "ERROR: get/set DecimalSeparatorString failed",
+                fr.getDecimalSeparatorString(),
+                en.getDecimalSeparatorString());
 
         char monetaryGroup = en.getMonetaryGroupingSeparator();
         fr.setMonetaryGroupingSeparator(monetaryGroup);
-        if (fr.getMonetaryGroupingSeparator() != en.getMonetaryGroupingSeparator()) {
-            errln("ERROR: get/set MonetaryGroupingSeparator failed");
-        }
+        assertEquals(
+                "ERROR: get/set MonetaryGroupingSeparator failed",
+                fr.getMonetaryGroupingSeparator(),
+                en.getMonetaryGroupingSeparator());
 
         String monetaryGroupStr = en.getMonetaryGroupingSeparatorString();
         fr.setMonetaryGroupingSeparatorString(monetaryGroupStr);
-        if (!fr.getMonetaryGroupingSeparatorString()
-                .equals(en.getMonetaryGroupingSeparatorString())) {
-            errln("ERROR: get/set MonetaryGroupingSeparatorString failed");
-        }
+        assertEquals(
+                "ERROR: get/set MonetaryGroupingSeparatorString failed",
+                fr.getMonetaryGroupingSeparatorString(),
+                en.getMonetaryGroupingSeparatorString());
 
         char monetaryDecimal = en.getMonetaryDecimalSeparator();
         fr.setMonetaryDecimalSeparator(monetaryDecimal);
-        if (fr.getMonetaryDecimalSeparator() != en.getMonetaryDecimalSeparator()) {
-            errln("ERROR: get/set MonetaryDecimalSeparator failed");
-        }
+        assertEquals(
+                "ERROR: get/set MonetaryDecimalSeparator failed",
+                fr.getMonetaryDecimalSeparator(),
+                en.getMonetaryDecimalSeparator());
 
         String monetaryDecimalStr = en.getMonetaryDecimalSeparatorString();
         fr.setMonetaryDecimalSeparatorString(monetaryDecimalStr);
-        if (!fr.getMonetaryDecimalSeparatorString()
-                .equals(en.getMonetaryDecimalSeparatorString())) {
-            errln("ERROR: get/set MonetaryDecimalSeparatorString failed");
-        }
+        assertEquals(
+                "ERROR: get/set MonetaryDecimalSeparatorString failed",
+                fr.getMonetaryDecimalSeparatorString(),
+                en.getMonetaryDecimalSeparatorString());
 
         char perMill = en.getPerMill();
         fr.setPerMill(perMill);
-        if (fr.getPerMill() != en.getPerMill()) {
-            errln("ERROR: get/set PerMill failed");
-        }
+        assertEquals("ERROR: get/set PerMill failed", fr.getPerMill(), en.getPerMill());
 
         String perMillStr = en.getPerMillString();
         fr.setPerMillString(perMillStr);
-        if (!fr.getPerMillString().equals(en.getPerMillString())) {
-            errln("ERROR: get/set PerMillString failed");
-        }
+        assertEquals(
+                "ERROR: get/set PerMillString failed",
+                fr.getPerMillString(),
+                en.getPerMillString());
 
         char percent = en.getPercent();
         fr.setPercent(percent);
-        if (fr.getPercent() != en.getPercent()) {
-            errln("ERROR: get/set Percent failed");
-        }
+        assertEquals("ERROR: get/set Percent failed", fr.getPercent(), en.getPercent());
 
         String percentStr = en.getPercentString();
         fr.setPercentString(percentStr);
-        if (!fr.getPercentString().equals(en.getPercentString())) {
-            errln("ERROR: get/set PercentString failed");
-        }
+        assertEquals(
+                "ERROR: get/set PercentString failed",
+                fr.getPercentString(),
+                en.getPercentString());
 
         char digit = en.getDigit();
         fr.setDigit(digit);
-        if (fr.getDigit() != en.getDigit()) {
-            errln("ERROR: get/set Digit failed");
-        }
+        assertEquals("ERROR: get/set Digit failed", fr.getDigit(), en.getDigit());
 
         char patternSeparator = en.getPatternSeparator();
         fr.setPatternSeparator(patternSeparator);
-        if (fr.getPatternSeparator() != en.getPatternSeparator()) {
-            errln("ERROR: get/set PatternSeparator failed");
-        }
+        assertEquals(
+                "ERROR: get/set PatternSeparator failed",
+                fr.getPatternSeparator(),
+                en.getPatternSeparator());
 
         String infinity = en.getInfinity();
         fr.setInfinity(infinity);
         String infinity2 = fr.getInfinity();
-        if (!infinity.equals(infinity2)) {
-            errln("ERROR: get/set Infinity failed");
-        }
+        assertEquals("ERROR: get/set Infinity failed", infinity, infinity2);
 
         String nan = en.getNaN();
         fr.setNaN(nan);
         String nan2 = fr.getNaN();
-        if (!nan.equals(nan2)) {
-            errln("ERROR: get/set NaN failed");
-        }
+        assertEquals("ERROR: get/set NaN failed", nan, nan2);
 
         char minusSign = en.getMinusSign();
         fr.setMinusSign(minusSign);
-        if (fr.getMinusSign() != en.getMinusSign()) {
-            errln("ERROR: get/set MinusSign failed");
-        }
+        assertEquals("ERROR: get/set MinusSign failed", fr.getMinusSign(), en.getMinusSign());
 
         String minusSignStr = en.getMinusSignString();
         fr.setMinusSignString(minusSignStr);
-        if (!fr.getMinusSignString().equals(en.getMinusSignString())) {
-            errln("ERROR: get/set MinusSignString failed");
-        }
+        assertEquals(
+                "ERROR: get/set MinusSignString failed",
+                fr.getMinusSignString(),
+                en.getMinusSignString());
 
         char plusSign = en.getPlusSign();
         fr.setPlusSign(plusSign);
-        if (fr.getPlusSign() != en.getPlusSign()) {
-            errln("ERROR: get/set PlusSign failed");
-        }
+        assertEquals("ERROR: get/set PlusSign failed", fr.getPlusSign(), en.getPlusSign());
 
         String plusSignStr = en.getPlusSignString();
         fr.setPlusSignString(plusSignStr);
-        if (!fr.getPlusSignString().equals(en.getPlusSignString())) {
-            errln("ERROR: get/set PlusSignString failed");
-        }
+        assertEquals(
+                "ERROR: get/set PlusSignString failed",
+                fr.getPlusSignString(),
+                en.getPlusSignString());
 
         char padEscape = en.getPadEscape();
         fr.setPadEscape(padEscape);
-        if (fr.getPadEscape() != en.getPadEscape()) {
-            errln("ERROR: get/set PadEscape failed");
-        }
+        assertSame("ERROR: get/set PadEscape failed", fr.getPadEscape(), en.getPadEscape());
 
         String exponential = en.getExponentSeparator();
         fr.setExponentSeparator(exponential);
-        if (fr.getExponentSeparator() != en.getExponentSeparator()) {
-            errln("ERROR: get/set Exponential failed");
-        }
+        assertSame(
+                "ERROR: get/set Exponential failed",
+                fr.getExponentSeparator(),
+                en.getExponentSeparator());
 
         String exponentMultiplicationSign = en.getExponentMultiplicationSign();
         fr.setExponentMultiplicationSign(exponentMultiplicationSign);
-        if (fr.getExponentMultiplicationSign() != en.getExponentMultiplicationSign()) {
-            errln("ERROR: get/set ExponentMultiplicationSign failed");
-        }
+        assertSame(
+                "ERROR: get/set ExponentMultiplicationSign failed",
+                fr.getExponentMultiplicationSign(),
+                en.getExponentMultiplicationSign());
 
         // Test CurrencySpacing.
         // In CLDR 1.7, only root.txt has CurrencySpacing data. This data might
@@ -232,31 +214,28 @@ public class IntlTestDecimalFormatSymbols extends CoreTestFmwk {
         for (int i = DecimalFormatSymbols.CURRENCY_SPC_CURRENCY_MATCH;
                 i <= DecimalFormatSymbols.CURRENCY_SPC_INSERT;
                 i++) {
-            if (en.getPatternForCurrencySpacing(i, true)
-                    != fr.getPatternForCurrencySpacing(i, true)) {
-                errln("ERROR: get currency spacing item:" + i + " before the currency");
-                if (en.getPatternForCurrencySpacing(i, false)
-                        != fr.getPatternForCurrencySpacing(i, false)) {
-                    errln("ERROR: get currency spacing item:" + i + " after currency");
-                }
-            }
+            assertEquals(
+                    "ERROR: get currency spacing item:" + i + " before the currency",
+                    en.getPatternForCurrencySpacing(i, true),
+                    fr.getPatternForCurrencySpacing(i, true));
+            assertEquals(
+                    "ERROR: get currency spacing item:" + i + " after currency",
+                    en.getPatternForCurrencySpacing(i, false),
+                    fr.getPatternForCurrencySpacing(i, false));
         }
 
         String dash = "-";
         en.setPatternForCurrencySpacing(DecimalFormatSymbols.CURRENCY_SPC_INSERT, true, dash);
-        if (dash
-                != en.getPatternForCurrencySpacing(
-                        DecimalFormatSymbols.CURRENCY_SPC_INSERT, true)) {
-            errln("ERROR: set currency spacing pattern for before currency.");
-        }
+        assertEquals(
+                "ERROR: set currency spacing pattern for before currency.",
+                dash,
+                en.getPatternForCurrencySpacing(DecimalFormatSymbols.CURRENCY_SPC_INSERT, true));
 
         // DecimalFormatSymbols foo = new DecimalFormatSymbols(); //The variable is never used
 
         en = fr.clone();
 
-        if (!en.equals(fr)) {
-            errln("ERROR: Clone failed");
-        }
+        assertEquals("ERROR: Clone failed", en, fr);
     }
 
     @Test

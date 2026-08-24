@@ -1783,12 +1783,13 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
         uTestCase = "unitUsage() en-US road";
         formatter = unloc_formatter.locale(new ULocale("en-US"));
         formattedNum = formatter.format(321d);
-        assertTrue(
+        assertSame(
                 uTestCase
                         + ", got outputUnit: \""
                         + formattedNum.getOutputUnit().getIdentifier()
                         + "\"",
-                MeasureUnit.FOOT == formattedNum.getOutputUnit());
+                MeasureUnit.FOOT,
+                formattedNum.getOutputUnit());
         assertEquals(uTestCase, "1,050 ft", formattedNum.toString());
         {
             final Object[][] expectedFieldPositions = {

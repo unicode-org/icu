@@ -347,6 +347,7 @@ public abstract class StringTrieBuilder {
         }
 
         @Override
+        @SuppressWarnings("ReferenceEquality")
         public boolean equals(Object other) {
             if (this == other) {
                 return true;
@@ -389,6 +390,7 @@ public abstract class StringTrieBuilder {
         }
 
         @Override
+        @SuppressWarnings("ReferenceEquality")
         public boolean equals(Object other) {
             if (this == other) {
                 return true;
@@ -654,6 +656,7 @@ public abstract class StringTrieBuilder {
         }
 
         @Override
+        @SuppressWarnings("ReferenceEquality")
         public boolean equals(Object other) {
             if (this == other) {
                 return true;
@@ -777,6 +780,7 @@ public abstract class StringTrieBuilder {
         }
 
         @Override
+        @SuppressWarnings("ReferenceEquality")
         public boolean equals(Object other) {
             if (this == other) {
                 return true;
@@ -834,6 +838,7 @@ public abstract class StringTrieBuilder {
         }
 
         @Override
+        @SuppressWarnings("ReferenceEquality")
         public boolean equals(Object other) {
             if (this == other) {
                 return true;

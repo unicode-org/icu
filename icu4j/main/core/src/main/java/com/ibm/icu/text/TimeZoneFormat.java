@@ -1657,6 +1657,7 @@ public class TimeZoneFormat extends UFormat
      * @stable ICU 49
      */
     @Override
+    @SuppressWarnings("ReferenceEquality")
     public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
         TimeZone tz = null;
         long date = System.currentTimeMillis();

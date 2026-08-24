@@ -167,6 +167,7 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
      * @stable ICU 3.8
      */
     @Override
+    @SuppressWarnings("ReferenceEquality")
     public boolean hasSameRules(TimeZone other) {
         if (this == other) {
             return true;
@@ -370,6 +371,7 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
      * @stable ICU 3.8
      */
     @Override
+    @SuppressWarnings("ReferenceEquality")
     public boolean hasEquivalentTransitions(TimeZone other, long start, long end) {
         if (this == other) {
             return true;
@@ -842,7 +844,7 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
                     }
                 }
                 TimeZoneRule newRule;
-                if (start == finalStart) {
+                if (start.equals(finalStart)) {
                     // Transform this into a single transition
                     newRule =
                             new TimeArrayTimeZoneRule(

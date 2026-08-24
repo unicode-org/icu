@@ -159,6 +159,7 @@ public final class RBBIDataWrapper {
     }
 
     /** Equals helper for state tables, including null handling. */
+    @SuppressWarnings("ReferenceEquality")
     public static boolean equals(RBBIStateTable left, RBBIStateTable right) {
         if (left == right) {
             return true;

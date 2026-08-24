@@ -553,28 +553,28 @@ public class TimeZoneTest extends CoreTestFmwk {
         TimeZone saveDefault = TimeZone.getDefault();
         TimeZone.setDefault(zone);
         TimeZone defaultzone = TimeZone.getDefault();
-        if (defaultzone == zone) {
-            errln("FAIL: Default object is identical, not clone");
-        }
-        if (!defaultzone.equals(zone)) {
-            errln("FAIL: Default object is not equal");
-        }
+        assertNotSame("FAIL: Default object is identical, not clone", defaultzone, zone);
+        assertEquals("FAIL: Default object is not equal", defaultzone, zone);
         java.util.TimeZone javaDefault = java.util.TimeZone.getDefault();
-        if (offset != javaDefault.getRawOffset() || !id.equals(javaDefault.getID())) {
-            errln("FAIL: Java runtime default time zone is not synchronized");
-        }
+        assertEquals(
+                "FAIL: Java runtime default time zone is not synchronized",
+                offset,
+                javaDefault.getRawOffset());
+        assertEquals(
+                "FAIL: Java runtime default time zone is not synchronized",
+                id,
+                javaDefault.getID());
 
         String anotheId = "AnotherZone";
         int anotherOffset = 23456;
         SimpleTimeZone anotherZone = new SimpleTimeZone(anotherOffset, anotheId);
         TimeZone.setICUDefault(anotherZone);
         TimeZone newICUDefaultZone = TimeZone.getDefault();
-        if (newICUDefaultZone == anotherZone) {
-            errln("FAIL: New ICU default object is identical, not clone");
-        }
-        if (!newICUDefaultZone.equals(anotherZone)) {
-            errln("FAIL: New ICU default object is not equal");
-        }
+        assertNotSame(
+                "FAIL: New ICU default object is identical, not clone",
+                newICUDefaultZone,
+                anotherZone);
+        assertEquals("FAIL: New ICU default object is not equal", newICUDefaultZone, anotherZone);
         javaDefault = java.util.TimeZone.getDefault();
         if (offset != javaDefault.getRawOffset() || !id.equals(javaDefault.getID())) {
             errln("FAIL: Java runtime default time zone was updated");
@@ -2300,9 +2300,11 @@ public class TimeZoneTest extends CoreTestFmwk {
 
             // clone
             TimeZone copy = thawedZones[i].clone();
-            if (thawedZones[i] == copy || !thawedZones[i].equals(copy)) {
-                errln("Fail: " + zaName + "[" + i + "] - clone does not work.");
-            }
+
+            assertNotSame(
+                    "Fail: " + zaName + "[" + i + "] - clone does not work.", thawedZones[i], copy);
+            assertEquals(
+                    "Fail: " + zaName + "[" + i + "] - clone does not work.", thawedZones[i], copy);
 
             // cloneAsThawed
             TimeZone thawed = thawedZones[i].cloneAsThawed();
@@ -2487,9 +2489,10 @@ public class TimeZoneTest extends CoreTestFmwk {
 
             // clone
             TimeZone copy = frozenZones[i].clone();
-            if (frozenZones[i] != copy) {
-                errln("Fail: " + zaName + "[" + i + "] - clone does not return the object itself.");
-            }
+            assertSame(
+                    "Fail: " + zaName + "[" + i + "] - clone does not return the object itself.",
+                    frozenZones[i],
+                    copy);
 
             // cloneAsThawed
             TimeZone thawed = frozenZones[i].cloneAsThawed();

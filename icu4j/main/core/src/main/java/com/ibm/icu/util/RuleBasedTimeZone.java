@@ -243,6 +243,7 @@ public class RuleBasedTimeZone extends BasicTimeZone implements Cloneable {
      * @stable ICU 3.8
      */
     @Override
+    @SuppressWarnings("ReferenceEquality")
     public boolean hasSameRules(TimeZone other) {
         if (this == other) {
             return true;

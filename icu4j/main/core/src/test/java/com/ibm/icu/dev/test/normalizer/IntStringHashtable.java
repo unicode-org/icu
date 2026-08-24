@@ -22,6 +22,7 @@ public class IntStringHashtable {
         this.defaultValue = defaultValue;
     }
 
+    @SuppressWarnings("ReferenceEquality")
     public void put(int key, String value) {
         if (value == defaultValue) {
             table.remove(key);
@@ -31,11 +32,9 @@ public class IntStringHashtable {
     }
 
     public String get(int key) {
-        String value = table.get(key);
-        if (value == null) return defaultValue;
-        return value;
+        return table.getOrDefault(key, defaultValue);
     }
 
-    private String defaultValue;
-    private Map<Integer, String> table = new HashMap<Integer, String>();
+    private final String defaultValue;
+    private final Map<Integer, String> table = new HashMap<>();
 }

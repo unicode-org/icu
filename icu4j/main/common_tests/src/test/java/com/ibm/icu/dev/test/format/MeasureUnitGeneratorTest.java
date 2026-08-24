@@ -598,6 +598,7 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
         return allUnits;
     }
 
+    @SuppressWarnings("ReferenceEquality")
     private static void generateCXXConstants() throws IOException {
         String fullOutputPath = "${icuroot}/icu4c/source/i18n/measunit.cpp";
         try (PrintStream out = createAndStartOutputFile(fullOutputPath)) {

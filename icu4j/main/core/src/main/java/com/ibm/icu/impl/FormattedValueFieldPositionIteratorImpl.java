@@ -77,6 +77,7 @@ public class FormattedValueFieldPositionIteratorImpl {
         return as.getIterator();
     }
 
+    @SuppressWarnings("ReferenceEquality")
     public static void addOverlapSpans(
             List<FieldPosition> attributes, Format.Field spanField, int firstIndex) {
         // In order to avoid fancy data structures, this is an O(N^2) algorithm,
@@ -114,6 +115,7 @@ public class FormattedValueFieldPositionIteratorImpl {
         }
     }
 
+    @SuppressWarnings("ReferenceEquality")
     public static void sort(List<FieldPosition> attributes) {
         // Use bubble sort, O(N^2) but easy and no fancy data structures.
         int numFields = attributes.size();

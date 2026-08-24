@@ -948,12 +948,12 @@ public class PluralRulesTest extends CoreTestFmwk {
     @Test
     public void TestParseDescription() {
         try {
-            if (PluralRules.DEFAULT != PluralRules.parseDescription("")) {
-                errln(
-                        "PluralRules.parseDescription(String) was suppose "
-                                + "to return PluralRules.DEFAULT when String is of "
-                                + "length 0.");
-            }
+            assertSame(
+                    "PluralRules.parseDescription(String) was suppose "
+                            + "to return PluralRules.DEFAULT when String is of "
+                            + "length 0.",
+                    PluralRules.DEFAULT,
+                    PluralRules.parseDescription(""));
         } catch (ParseException e) {
             errln(
                     "PluralRules.parseDescription(String) was not suppose "
@@ -1074,7 +1074,7 @@ public class PluralRulesTest extends CoreTestFmwk {
             PluralRules rules = factory.forLocale(locale);
             logln(
                     "\nlocale: "
-                            + (locale == ULocale.ROOT ? "root" : locale.toString())
+                            + (locale.equals(ULocale.ROOT) ? "root" : locale.toString())
                             + ", rules: "
                             + rules);
             Set<String> keywords = rules.getKeywords();
@@ -1138,6 +1138,7 @@ public class PluralRulesTest extends CoreTestFmwk {
      * the actual return plural keyword matches what we expect based on the plural rule string.
      */
     @Test
+    @SuppressWarnings("ReferenceEquality")
     public void TestGetDecimalQuantitySamples() {
         Set<ULocale> uniqueRuleSet = new HashSet<>();
         for (ULocale locale : factory.getAvailableULocales()) {
@@ -1147,7 +1148,7 @@ public class PluralRulesTest extends CoreTestFmwk {
             PluralRules rules = factory.forLocale(locale);
             logln(
                     "\nlocale: "
-                            + (locale == ULocale.ROOT ? "root" : locale.toString())
+                            + (locale.equals(ULocale.ROOT) ? "root" : locale.toString())
                             + ", rules: "
                             + rules);
             Set<String> keywords = rules.getKeywords();

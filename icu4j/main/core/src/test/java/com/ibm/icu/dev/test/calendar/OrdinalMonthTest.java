@@ -57,9 +57,8 @@ public class OrdinalMonthTest extends CoreTestFmwk {
         String[] calendars = Calendar.getKeywordValuesForLocale("calendar", ULocale.ROOT, false);
         for (String calendar : calendars) {
             // Test these three calendars differently.
-            if (calendar == "chinese") continue; // work around ICU-22444
-            if (calendar == "dangi") continue; // work around ICU-22444
-            if (calendar == "hebrew") continue; // work around ICU-22444
+            if (calendar.equals("chinese") || calendar.equals("dangi") || calendar.equals("hebrew"))
+                continue; // work around ICU-22444
             Calendar cc1 = Calendar.getInstance(ULocale.ROOT.setKeywordValue("calendar", calendar));
             Calendar cc2 = cc1.clone();
             Calendar cc3 = cc1.clone();
@@ -111,9 +110,9 @@ public class OrdinalMonthTest extends CoreTestFmwk {
 
             cc1.set(Calendar.DATE, 3);
             // For "M13", do not return error for these three calendars.
-            if (calendar == "coptic"
-                    || calendar == "ethiopic"
-                    || calendar == "ethiopic-amete-alem") {
+            if (calendar.equals("coptic")
+                    || calendar.equals("ethiopic")
+                    || calendar.equals("ethiopic-amete-alem")) {
                 cc1.setTemporalMonthCode("M13");
                 assertEquals(
                         "get(Calendar.MONTH) after setTemporalMonthCode(\"M13\")",
