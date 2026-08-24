@@ -276,7 +276,6 @@
   <reporting>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
         <reportSets>
           <reportSet>
@@ -291,6 +290,24 @@
             <reports>
               <report>javadoc</report>
             </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+      <plugin>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <reportSets>
+          <reportSet>
+            <!-- No reports, except the javadoc above.
+              Without this the `mvn site` tries to create many reports:
+              Dependencies, Plugin Management, SCM, Mailing Lists, etc.
+              See https://maven.apache.org/plugins/maven-project-info-reports-plugin/plugin-info.html
+              Some (for example, the "Dependencies" report) throw a
+              `java.nio.file.NoSuchFileException` because something
+              that was needed for the report was not build / installed.
+              We can build everything before `site`, but we don't need any
+              of these reports, so we just disable them instead.
+            -->
+            <reports />
           </reportSet>
         </reportSets>
       </plugin>

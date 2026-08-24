@@ -34,13 +34,18 @@ on:
         type: string
 
 env:
-  SHARED_MVN_ARGS: '--no-transfer-progress --show-version --batch-mode'
+  SHARED_MVN_ARGS: '--show-version --batch-mode'
   RELEASE_FOLDER: '${{ github.workspace }}/releaseDist'
 
 permissions:
   contents: read
 
 jobs:
+  # This job builds and tests Maven Central artifacts (compiled, source, javadoc, signatures, checksums)
+  # Then the artifacts are:
+  #   - Published to Maven Cental (if `deployToMaven` set)
+  #   - Attached as Github Action artifacts
+  #   - Uploaded to the GitHub release (at `gitReleaseTag`)
   publish:
     runs-on: ubuntu-24.04  # Updated in BRS
     environment: release-env
@@ -121,20 +126,75 @@ jobs:
         mv ${RELEASE_FOLDER}/icu4j-charset-javadoc.jar ${RELEASE_FOLDER}/icu4j-charset-${github_rel_version}-javadoc.jar
         mv ${RELEASE_FOLDER}/icu4j-charset-sources.jar ${RELEASE_FOLDER}/icu4j-charset-${github_rel_version}-sources.jar
 
-        # Build the full javadoc to be posted on the public site
-        mvn site \
-          ${SHARED_MVN_ARGS} \
-          -DskipITs -DskipTests \
-          -P with_full_javadoc
-        # Archive the full doc in a jar. Should also be posted to the web as official doc.
-        jar -Mcf ${RELEASE_FOLDER}/icu4j-${github_rel_version}-fulljavadoc.jar \
-          -C target/site/apidocs/ .
         popd # out of icu4j
 
     - name: Upload build results
       uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
       with:
         name: icu4j-binaries
+        path: ${{ env.RELEASE_FOLDER }}
+        retention-days: 3 # TBD if we want to keep them longer
+        overwrite: true
+
+    - name: Upload to release
+      if: ${{ inputs.gitReleaseTag && startsWith(inputs.gitReleaseTag, 'release-') }}
+      run: |
+        gh release upload ${INPUTS_GITRELEASETAG} ${RELEASE_FOLDER}/* --clobber --repo=${{ github.repository }}
+      env:
+        GH_TOKEN: ${{ github.token }}
+        INPUTS_GITRELEASETAG: ${{ inputs.gitReleaseTag }}
+
+  # Builds everything we need to for the unified javadoc (icu4j + icu4j-charset) for web publishing.
+  # No testing, the only thing we use from this is the javadoc for the site.
+  # The results are:
+  #   - Attached as Github Action artifacts
+  #   - Uploaded to the GitHub release
+  # This job was split from `publish` so that we can use the jdk 26 version of javadoc,
+  # which has some really nice improvements.
+  javadoc_for_website_publishing:
+    runs-on: ubuntu-24.04  # Updated in BRS
+    environment: release-env
+
+    permissions:
+      contents: write # So that we can upload to release
+
+    steps:
+
+    - name: Checkout repo files
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        persist-credentials: false
+
+    - name: Set up JDK
+      uses: actions/setup-java@03ad4de0992f5dab5e18fcb136590ce7c4a0ac95 # v5.6.0
+      with:
+        java-version: '26'
+        distribution: 'temurin'
+
+    - name: Build and install everything so that `site` can find the artifacts for reporting
+      run: |
+        mvn install --file icu4j \
+          ${SHARED_MVN_ARGS} \
+          -DskipTests -DskipITs
+
+    # These files will end in the "Release" section of the GitHub repo and on apidoc site
+    - name: Prepare site with full javadoc
+      run: |
+        # Get the ICU release version in github_rel_version
+        source icu4j/releases_tools/shared.sh
+        # Build the full javadoc to be posted on the public site
+        mvn site --file icu4j \
+          ${SHARED_MVN_ARGS} \
+          -DskipITs -DskipTests \
+          -P with_full_javadoc
+        # Archive the full doc in a jar. Should also be posted to the web as official doc.
+        jar -Mcf ${RELEASE_FOLDER}/icu4j-${github_rel_version}-fulljavadoc.jar \
+          -C icu4j/target/site/apidocs/ .
+
+    - name: Upload build results
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      with:
+        name: icu4j-fulljavadoc
         path: ${{ env.RELEASE_FOLDER }}
         retention-days: 3 # TBD if we want to keep them longer
         overwrite: true
