@@ -33,6 +33,7 @@ U_NAMESPACE_END
 #include "unicode/unistr.h"
 
 #include <memory>
+#include <string_view>
 
 #ifndef U_HIDE_DRAFT_API
 

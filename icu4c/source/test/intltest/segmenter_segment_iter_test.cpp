@@ -6,9 +6,12 @@
 
 #include "segmenter_segment_iter_test.h"
 
+#include <string_view>
+
 #include "unicode/segmenter.h"
 #include "unicode/segmenter_localized.h"
 #include "unicode/segmenter_segment_iter.h"
+#include "unicode/segmenter_segment_range.h"
 
 //---------------------------------------------
 //
@@ -47,7 +50,29 @@ SegmentIterTest::~SegmentIterTest() {
 //---------------------------------------------
 
 void SegmentIterTest::testHelloWorld() {
+    IcuTestErrorCode errorCode(*this, "testHelloWorld");
 
+    icu::segmenter::LocalizedSegmenter enWordSegmenter =
+        icu::segmenter::LocalizedSegmenterBuilder()
+            .setLocale(Locale::getEnglish())
+            .setSegmentationType(icu::segmenter::SegmentationType::WORD)
+            .build(errorCode);
+
+    std::u16string_view source1 = u"The quick brown fox jumped over the lazy dog.";
+
+    // Create new Segments for source1
+    auto segments1 = enWordSegmenter.segment(source1, errorCode);
+    auto segmentRange = segments1->segments();
+
+    std::vector<std::u16string_view> segmentStrs;
+
+    for (auto segmentIter = segmentRange.begin(); segmentIter != segmentRange.end(); ++segmentIter) {
+        segmentStrs.push_back((*segmentIter).getSubstr());
+    }
+
+    std::vector<std::u16string_view> expected{u"The", u" ", u"quick", u" ", u"brown", u" ", u"fox", u" ", u"jumped", u" ", u"over",
+                        u" ", u"the", u" ", u"lazy", u" ", u"dog", u"."};
+    assertTrue("segment strings from SegmentIterator", segmentStrs == expected);
 }
 
 //---------------------------------------------
