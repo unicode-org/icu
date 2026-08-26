@@ -1,0 +1,148 @@
+# Copyright (C) 2016 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+#
+# GitHub Action configuration script for ICU continuous integration tasks.
+
+name: GHA ICU4X - ICU Export Data
+
+on:
+  push:
+    branches:
+      - main
+      - 'maint/maint*'
+    paths:
+      - 'icu4c/**'
+      - 'testdata/**'
+      - '.github/workflows/**'
+  pull_request:
+    branches: '**'
+    paths:
+      - 'icu4c/**'
+      - 'testdata/**'
+      - '.github/workflows/**'
+  workflow_dispatch:
+    # To trigger the Env Test workflow manually, follow the instructions in
+    # https://docs.github.com/en/actions/managing-workflow-runs/manually-running-a-workflow
+    inputs:
+      gitReleaseTag:
+        description: 'Release tag to upload to. Must start with "release-" or "icu4x/"'
+        type: string
+      gitReleaseFilename:
+        description: 'Release tag with no slashes, to be used in file names'
+        type: string
+
+# For non-release branches (namely: PRs), only run CI on the most recent commit. Cancel
+# runs on previous commits mid-flight when new commits are pushed.
+# https://docs.github.com/en/actions/using-jobs/using-concurrency#example-only-cancel-in-progress-jobs-on-specific-branches
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ !contains(github.ref, 'maint/') && github.ref != 'main' }}
+
+permissions:
+  contents: read
+
+jobs:
+
+  # Workflow for ICU Export Data for ICU4X
+  icu4x-icuexportdata:
+    runs-on: ubuntu-24.04  # Updated in BRS
+    permissions:
+      contents: write # So that we can upload to release
+      id-token: write # For artifact attestation
+      attestations: write # For artifact attestation
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Build
+        run: |
+          cd icu4c/source && ./runConfigureICU Linux && make -j -l4.5
+        env:
+          CC: clang
+          CXX: clang++
+      - name: Build property data files
+        run: |
+          cd icu4c/source
+          mkdir -p icuexportdata/uprops/fast
+          ./bin/icuexportdata --mode uprops --index --copyright --verbose --destdir icuexportdata/uprops/fast --trie-type fast --all
+          mkdir -p icuexportdata/uprops/small
+          ./bin/icuexportdata --mode uprops --index --copyright --verbose --destdir icuexportdata/uprops/small --trie-type small --all
+        env:
+          LD_LIBRARY_PATH: lib
+      - name: Build normalization data files
+        run: |
+          cd icu4c/source
+          mkdir -p icuexportdata/norm/fast
+          ./bin/icuexportdata --mode norm --index --copyright --verbose --destdir icuexportdata/norm/fast --trie-type fast --all
+          mkdir -p icuexportdata/norm/small
+          ./bin/icuexportdata --mode norm --index --copyright --verbose --destdir icuexportdata/norm/small --trie-type small --all
+        env:
+          LD_LIBRARY_PATH: lib
+      - name: Build case data files
+        run: |
+          cd icu4c/source
+          mkdir -p icuexportdata/ucase/fast
+          ./bin/icuexportdata --mode ucase --index --copyright --verbose --destdir icuexportdata/ucase/fast --trie-type fast --all
+          mkdir -p icuexportdata/ucase/small
+          ./bin/icuexportdata --mode ucase --index --copyright --verbose --destdir icuexportdata/ucase/small --trie-type small --all
+        env:
+          LD_LIBRARY_PATH: lib
+      - name: Build collation data files
+        run: |
+          cd icu4c/source
+          cd data/coll
+          FILES=$(ls *.txt)
+          cd ../../
+          mkdir -p icuexportdata/collation/unihan
+          ./bin/genrb -X -s data/coll --ucadata data/in/coll/ucadata-unihan-icu4x.icu -d icuexportdata/collation/unihan $FILES
+          rm icuexportdata/collation/unihan/*.res
+          mkdir -p icuexportdata/collation/implicithan
+          ./bin/genrb -X -s data/coll --ucadata data/in/coll/ucadata-implicithan-icu4x.icu -d icuexportdata/collation/implicithan $FILES
+          rm icuexportdata/collation/implicithan/*.res
+        env:
+          LD_LIBRARY_PATH: lib
+      - name: Build segmenter dictionary files
+        run: |
+          cd icu4c/source
+          mkdir -p icuexportdata/segmenter/dictionary
+          for FILE in $(ls data/brkitr/dictionaries | xargs -n 1 basename); do
+            ./bin/gendict --uchars --toml data/brkitr/dictionaries/$FILE icuexportdata/segmenter/dictionary/$(basename $FILE .txt).toml
+          done
+        env:
+          LD_LIBRARY_PATH: lib
+      - name: Zip
+        run: |
+          cd icu4c/source/icuexportdata
+          newZipName="icu4x-icuexportdata-${INPUTS_GITRELEASEFILENAME}.zip"
+          echo "newZipName=$newZipName" >> $GITHUB_ENV
+          zip -r ../../../${newZipName} .
+        env:
+          INPUTS_GITRELEASEFILENAME: ${{ inputs.gitReleaseFilename }}
+      - name: Publish Artifact
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: icuexportdata_output
+          path: icu4x-icuexportdata-*.zip
+      - name: Upload to release tag
+        if: ${{ inputs.gitReleaseTag && startsWith(inputs.gitReleaseTag, 'release-') }}
+        run: |
+          zipVer=$(echo ${INPUTS_GITRELEASETAG} | sed 's/^release-//')
+          newZipName="icu4x-icuexportdata-${zipVer}.zip"
+          echo "newZipName=$newZipName" >> $GITHUB_ENV
+          mv icu4x-icuexportdata-*.zip ${newZipName}
+          gh release upload ${INPUTS_GITRELEASETAG} ${newZipName} --clobber
+        env:
+          GH_TOKEN: ${{ github.token }}
+          INPUTS_GITRELEASETAG: ${{ inputs.gitReleaseTag }}
+      - name: Upload to icu4x tag
+        if: ${{ inputs.gitReleaseTag && startsWith(inputs.gitReleaseTag, 'icu4x/') }}
+        run: |
+          gh release upload ${INPUTS_GITRELEASETAG} ${newZipName} --clobber
+        env:
+          GH_TOKEN: ${{ github.token }}
+          INPUTS_GITRELEASETAG: ${{ inputs.gitReleaseTag }}
+      - name: Generate artifact attestation
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
+        with:
+          subject-path: ${{ env.newZipName }}

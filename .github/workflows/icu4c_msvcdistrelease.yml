@@ -1,0 +1,125 @@
+# Copyright (C) 2016 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+#
+# GitHub Action configuration script for ICU continuous integration tasks.
+
+name: GHA ICU4C - MS VC Dist Release
+
+on:
+  push:
+    branches:
+      - main
+      - 'maint/maint*'
+    paths:
+      - 'icu4c/**'
+      - 'testdata/**'
+      - '.github/workflows/**'
+  pull_request:
+    branches: '**'
+    paths:
+      - 'icu4c/**'
+      - 'testdata/**'
+      - '.github/workflows/**'
+  workflow_dispatch:
+    # To trigger the Env Test workflow manually, follow the instructions in
+    # https://docs.github.com/en/actions/managing-workflow-runs/manually-running-a-workflow
+    inputs:
+      gitReleaseTag:
+        description: 'Release tag to upload to. Must start with "release-" or "icu4x/"'
+        type: string
+
+# For non-release branches (namely: PRs), only run CI on the most recent commit. Cancel
+# runs on previous commits mid-flight when new commits are pushed.
+# https://docs.github.com/en/actions/using-jobs/using-concurrency#example-only-cancel-in-progress-jobs-on-specific-branches
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ !contains(github.ref, 'maint/') && github.ref != 'main' }}
+
+permissions:
+  contents: read
+
+jobs:
+
+  # Windows MSVC distribution release
+  windows-msvc-dist-release:
+    runs-on: windows-2025  # Updated in BRS
+    permissions:
+      contents: write # So that we can upload to release
+      id-token: write # For artifact attestation
+      attestations: write # For artifact attestation
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: 'x64'
+            plat: 'x64'
+            win_ver: 'Win64'
+          - arch: 'x86'
+            plat: 'Win32'
+            win_ver: 'Win32'
+          - arch: 'arm64'
+            plat: 'ARM64'
+            win_ver: 'WinARM64'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up MSBuild
+        uses: microsoft/setup-msbuild@30375c66a4eea26614e0d39710365f22f8b0af57 # v3.0.0
+      - name: Install Windows SDK 10.0.22621.0
+        # See https://github.com/actions/runner-images/issues/13339.
+        if: contains(matrix.win_ver, 'ARM64')
+        run: |
+          $installPath = &"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -products * -latest -property installationPath
+          Write-Host $installPath
+          &"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vs_installer.exe" modify `
+            --installPath "$installPath" `
+            --add Microsoft.VisualStudio.Component.Windows11SDK.22621 `
+            --norestart --quiet --force | Out-Host
+      - name: Build Solution x64
+        if: contains(matrix.win_ver, 'ARM64')
+        run: msbuild icu4c/source/allinone/allinone.sln /p:Configuration=Release /p:Platform=x64
+      - name: Build Solution
+        run: msbuild icu4c/source/allinone/allinone.sln /p:Configuration=Release /p:Platform=${{ matrix.plat }}
+      - name: Run Tests (icucheck.bat)
+        if: contains(matrix.win_ver, 'ARM64') == false
+        run: icu4c/source/allinone/icucheck.bat ${{ matrix.arch }} Release
+      - name: "Run PowerShell: Distrelease script (${{ matrix.arch }})"
+        run: |
+          cd ./icu4c/
+          ./packaging/distrelease.ps1 -arch ${{ matrix.arch }}
+        shell: pwsh
+      - name: Extract ICU version and rename zip file
+        id: set-zip-name
+        run: |
+          # Extract ICU version from the release tag
+          $releaseTag = $env:INPUTS_GITRELEASETAG.replace('release-','')
+          # Determine the new file name based on the version
+          $newZipName = "icu4c-${releaseTag}-${{ matrix.win_ver }}-MSVC2026"
+          # Debugging: Print the new zip name
+          Write-Host "New Zip Name: $newZipName"
+          # Rename the existing zip file
+          cd icu4c\source\dist\ && ls -l .
+          Rename-Item -Path icu-windows.zip -NewName "${newZipName}.zip"
+          echo $newZipName
+          ls -l .
+          echo "newZipName=$newZipName" | Out-File -FilePath $env:GITHUB_ENV -Append
+        env:
+          INPUTS_GITRELEASETAG: ${{ inputs.gitReleaseTag }}
+      - name: Upload artifact
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: icu4c.${{ matrix.win_ver }}.run_#${{ github.run_number }}
+          path: icu4c/source/dist/${{ env.newZipName }}.zip
+      - name: Upload to release
+        if: ${{ inputs.gitReleaseTag && startsWith(inputs.gitReleaseTag, 'release-') }}
+        run: |
+          gh release upload $env:INPUTS_GITRELEASETAG icu4c/source/dist/$env:newZipName.zip --clobber
+        env:
+          GH_TOKEN: ${{ github.token }}
+          INPUTS_GITRELEASETAG: ${{ inputs.gitReleaseTag }}
+      - name: Generate artifact attestation
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
+        with:
+          subject-path: icu4c/source/dist/${{ env.newZipName }}.zip
