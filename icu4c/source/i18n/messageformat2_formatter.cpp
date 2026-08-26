@@ -19,11 +19,103 @@
 #include "messageformat2_parser.h"
 #include "messageformat2_serializer.h"
 #include "uvector.h" // U_ASSERT
+#include "mutex.h"
+#include "ucln_in.h"
 
 U_NAMESPACE_BEGIN
 
 namespace message2 {
 
+// Singleton for the standard function registry
+class MF2RegistrySingleton : public UObject {
+public:
+  MF2RegistrySingleton(UErrorCode &success);
+  ~MF2RegistrySingleton(){}
+  /** @return an alias to the standard registry */
+  const MFFunctionRegistry* getStandardFunctionsRegistry() const {
+    return &standardMFFunctionRegistry;
+  }
+private:
+  MFFunctionRegistry standardMFFunctionRegistry;
+};
+
+MF2RegistrySingleton::MF2RegistrySingleton(UErrorCode &success) {
+  // Set up the standard function registry
+  MFFunctionRegistry::Builder standardFunctionsBuilder(success);
+  
+  LocalPointer<Function> dateTime(StandardFunctions::DateTime::dateTime(success));
+  LocalPointer<Function> date(StandardFunctions::DateTime::date(success));
+  LocalPointer<Function> time(StandardFunctions::DateTime::time(success));
+  LocalPointer<Function> currency(StandardFunctions::Number::currency(success));
+  LocalPointer<Function> number(StandardFunctions::Number::number(success));
+  LocalPointer<Function> integer(StandardFunctions::Number::integer(success));
+  LocalPointer<Function> string(StandardFunctions::String::string(success));
+  LocalPointer<Function> testFunction(StandardFunctions::TestFunction::testFunction(success));
+  LocalPointer<Function> testFormat(StandardFunctions::TestFunction::testFormat(success));
+  LocalPointer<Function> testSelect(StandardFunctions::TestFunction::testSelect(success));
+  CHECK_ERROR(success);
+  standardFunctionsBuilder.adoptFunction(FunctionName(functions::DATETIME),
+					 dateTime.orphan(), success)
+    .adoptFunction(FunctionName(functions::DATE), date.orphan(), success)
+    .adoptFunction(FunctionName(functions::TIME), time.orphan(), success)
+    .adoptFunction(FunctionName(functions::CURRENCY), currency.orphan(), success)
+    .adoptFunction(FunctionName(functions::NUMBER),
+		   number.orphan(), success)
+    .adoptFunction(FunctionName(functions::INTEGER),
+		   integer.orphan(), success)
+    .adoptFunction(FunctionName(functions::STRING),
+		   string.orphan(), success)
+    .adoptFunction(FunctionName(functions::TEST_FUNCTION),
+		   testFunction.orphan(), success)
+    .adoptFunction(FunctionName(functions::TEST_FORMAT),
+		   testFormat.orphan(), success)
+    .adoptFunction(FunctionName(functions::TEST_SELECT),
+		   testSelect.orphan(), success);
+  CHECK_ERROR(success);
+  standardMFFunctionRegistry = standardFunctionsBuilder.build();
+  CHECK_ERROR(success);
+  standardMFFunctionRegistry.checkStandard();
+}
+
+static MF2RegistrySingleton* mf2RegistrySingleton = nullptr;
+static icu::UInitOnce gMF2RegistryInitOnce {};
+
+// Clean up shared Registry objects
+static UBool mf2_registry_cleanup() {
+    if (mf2RegistrySingleton != nullptr) {
+        delete mf2RegistrySingleton;
+        mf2RegistrySingleton = nullptr;
+    }
+    return true;
+}
+
+static void initRegistryOnce(UErrorCode& errorCode) {
+    U_ASSERT(mf2RegistrySingleton == nullptr);
+
+    mf2RegistrySingleton = new MF2RegistrySingleton( errorCode);
+
+    if (mf2RegistrySingleton == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        mf2_registry_cleanup();
+        return;
+    }
+    ucln_i18n_registerCleanup(UCLN_I18N_MF2_REGISTRY, mf2_registry_cleanup);
+}
+
+  static void initRegistry(UErrorCode& errorCode) {
+    CHECK_ERROR(errorCode);
+
+    umtx_initOnce(gMF2RegistryInitOnce, &initRegistryOnce, errorCode);
+  }
+
+  const MFFunctionRegistry *MFFunctionRegistry::getStandardFunctionsRegistry(UErrorCode& errorCode) {
+    initRegistry(errorCode);
+    if (U_FAILURE(errorCode) || mf2RegistrySingleton == nullptr) {
+      return nullptr;
+    }
+    return mf2RegistrySingleton->getStandardFunctionsRegistry();
+  }
+  
     // MessageFormatter::Builder
 
     // -------------------------------------
@@ -153,44 +245,9 @@ namespace message2 {
     // MessageFormatter
 
     MessageFormatter::MessageFormatter(const MessageFormatter::Builder& builder, UErrorCode &success) : locale(builder.locale), customMFFunctionRegistry(builder.customMFFunctionRegistry) {
+        standardMFFunctionRegistry = MFFunctionRegistry::getStandardFunctionsRegistry(success);
         CHECK_ERROR(success);
-
-        // Set up the standard function registry
-        MFFunctionRegistry::Builder standardFunctionsBuilder(success);
-
-        LocalPointer<Function> dateTime(StandardFunctions::DateTime::dateTime(success));
-        LocalPointer<Function> date(StandardFunctions::DateTime::date(success));
-        LocalPointer<Function> time(StandardFunctions::DateTime::time(success));
-        LocalPointer<Function> currency(StandardFunctions::Number::currency(success));
-        LocalPointer<Function> number(StandardFunctions::Number::number(success));
-        LocalPointer<Function> integer(StandardFunctions::Number::integer(success));
-        LocalPointer<Function> string(StandardFunctions::String::string(success));
-        LocalPointer<Function> testFunction(StandardFunctions::TestFunction::testFunction(success));
-        LocalPointer<Function> testFormat(StandardFunctions::TestFunction::testFormat(success));
-        LocalPointer<Function> testSelect(StandardFunctions::TestFunction::testSelect(success));
-        CHECK_ERROR(success);
-        standardFunctionsBuilder.adoptFunction(FunctionName(functions::DATETIME),
-                                                      dateTime.orphan(), success)
-            .adoptFunction(FunctionName(functions::DATE), date.orphan(), success)
-            .adoptFunction(FunctionName(functions::TIME), time.orphan(), success)
-            .adoptFunction(FunctionName(functions::CURRENCY), currency.orphan(), success)
-            .adoptFunction(FunctionName(functions::NUMBER),
-                                  number.orphan(), success)
-            .adoptFunction(FunctionName(functions::INTEGER),
-                                  integer.orphan(), success)
-            .adoptFunction(FunctionName(functions::STRING),
-                                  string.orphan(), success)
-            .adoptFunction(FunctionName(functions::TEST_FUNCTION),
-                                  testFunction.orphan(), success)
-            .adoptFunction(FunctionName(functions::TEST_FORMAT),
-                                  testFormat.orphan(), success)
-            .adoptFunction(FunctionName(functions::TEST_SELECT),
-                                  testSelect.orphan(), success);
-        CHECK_ERROR(success);
-        standardMFFunctionRegistry = standardFunctionsBuilder.build();
-        CHECK_ERROR(success);
-        standardMFFunctionRegistry.checkStandard();
-
+	
         normalizedInput = builder.normalizedInput;
         signalErrors = builder.signalErrors;
         bidiIsolationStrategy = builder.bidiIsolationStrategy;
@@ -275,7 +332,7 @@ namespace message2 {
     // Function registry
 
     bool MessageFormatter::isBuiltInFunction(const FunctionName& functionName) const {
-        return standardMFFunctionRegistry.hasFunction(functionName);
+        return standardMFFunctionRegistry->hasFunction(functionName);
     }
 
     const Function*
@@ -291,7 +348,7 @@ namespace message2 {
             }
         }
         if (isBuiltInFunction(functionName)) {
-            return standardMFFunctionRegistry.getFunction(functionName);
+            return standardMFFunctionRegistry->getFunction(functionName);
         }
         // Either there is no custom function registry and the function
         // isn't built-in, or the function doesn't exist in either the built-in

@@ -106,7 +106,7 @@ static constexpr std::u16string_view YEAR = u"year";
     // Built-in functions
     // See https://github.com/unicode-org/message-format-wg/blob/main/spec/functions/README.md
     class StandardFunctions {
-        friend class MessageFormatter;
+      friend class MF2RegistrySingleton;
 
         public:
 

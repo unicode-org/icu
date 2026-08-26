@@ -204,9 +204,19 @@ namespace message2 {
          */
         virtual ~MFFunctionRegistry();
 
+	/**
+	 * Get the standard function registry.
+	 * @internal ICU 79 technology preview
+	 * @deprecated This API is for technology preview only.
+	 * @param status Input/output error code
+	 * @return A const alias to the registry, or nullptr on error
+	 */
+	static const MFFunctionRegistry* getStandardFunctionsRegistry(UErrorCode &status);
+	
     private:
         friend class MessageContext;
         friend class MessageFormatter;
+	friend class MF2RegistrySingleton;
 
         // Do not define copy constructor or copy assignment operator
         MFFunctionRegistry& operator=(const MFFunctionRegistry&) = delete;
@@ -267,15 +277,39 @@ namespace message2 {
              * @deprecated This API is for technology preview only.
              */
             U_I18N_API const UnicodeString& getID() const { return id; }
+
+            /**
+             * Returns the original called function name from this context.
+             *
+             * @return The function name, as registered, used for this function
+             *
+             * @internal ICU 79 technology preview
+             * @deprecated This API is for technology preview only.
+             */
+            U_I18N_API const FunctionName& getCalledFunctionName() const { return calledFunction; }
+
+            /**
+             * Returns a new context with the specified locale.
+             *
+             * @return a new locale
+             *
+             * @internal ICU 79 technology preview
+             * @deprecated This API is for technology preview only.
+             */
+            U_I18N_API FunctionContext withLocale(const Locale& loc) const {
+                return FunctionContext(loc, getDirection(), getID(), getCalledFunctionName());
+            }
+
         private:
             friend class MessageFormatter;
 
             Locale locale;
             UMFBidiOption dir;
             UnicodeString id;
+            const FunctionName& calledFunction;
 
-            FunctionContext(const Locale& loc, UMFBidiOption d, UnicodeString i)
-                : locale(loc), dir(d), id(i) {}
+            FunctionContext(const Locale& loc, UMFBidiOption d, UnicodeString i, const FunctionName& calledFn)
+                : locale(loc), dir(d), id(i), calledFunction(calledFn) {}
     }; // class FunctionContext
 
     class FunctionValue;
@@ -465,7 +499,7 @@ namespace message2 {
              * @internal ICU 79 technology preview
              * @deprecated This API is for technology preview only.
              */
-            U_I18N_API virtual const UnicodeString& getFunctionName() const { return functionName; }
+            U_I18N_API virtual const FunctionName& getFunctionName() const { return functionName; }
             /**
              * Returns a fallback string that can be used as output
              * if processing this function results in an error.
@@ -506,7 +540,7 @@ namespace message2 {
              * @internal ICU 79 technology preview
              * @deprecated This API is for technology preview only.
              */
-            UnicodeString functionName;
+            FunctionName functionName;
             /**
              * Fallback string that can be used if a later function encounters
              * an error when processing this FunctionValue.

@@ -32,6 +32,7 @@ TestMessageFormat2::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO(testLoneSurrogateInQuotedLiteral);
     TESTCASE_AUTO(dataDrivenTests);
     TESTCASE_AUTO(testOverrideFunctions);
+    TESTCASE_AUTO(testComposeInternalFunctions);
     TESTCASE_AUTO_END;
 }
 
@@ -541,13 +542,12 @@ FixedDateFunction::~FixedDateFunction() {}
 void TestMessageFormat2::testOverrideFunctions() {
     IcuTestErrorCode errorCode(*this, "testOverrideFunctions");
     UParseError parseError;
-
     std::map<UnicodeString, icu::message2::Formattable> argsBuilder;
     argsBuilder["count"] = message2::Formattable((int64_t)13);
     argsBuilder["name"] = message2::Formattable("US");
     argsBuilder["birthday"] = message2::Formattable("1776-07-04");
     icu::message2::MessageArguments args(argsBuilder, errorCode);
-        UnicodeString expectedResult(u"PASS 13 @ \u2068A Day ending in Y\u2069");
+    UnicodeString expectedResult(u"PASS 13 @ \u2068A Day ending in Y\u2069");
 
     const UnicodeString orig_pattern(
         u""
@@ -584,6 +584,123 @@ void TestMessageFormat2::testOverrideFunctions() {
         }
         assertEquals("testSetFormatLocale", expectedResult, result);
     }
+}
+
+namespace ComposableFunctionTest {
+
+    class LocaleOverrideFunction : public Function {
+  public:
+    LocaleOverrideFunction(const Locale &loc, UErrorCode &status);
+    LocalPointer<FunctionValue> call(const FunctionContext &, const FunctionValue &,
+                                     const FunctionOptions &, UErrorCode &) const override;
+    virtual ~LocaleOverrideFunction();
+
+  private:
+    Locale overrideLocale;
+};
+
+LocaleOverrideFunction::LocaleOverrideFunction(const Locale &loc, UErrorCode &/*status*/)
+    : overrideLocale(loc) {}
+
+LocalPointer<FunctionValue> LocaleOverrideFunction::call(const FunctionContext &context,
+                                                 const FunctionValue &arg,
+                                                 const FunctionOptions &opts,
+                                                 UErrorCode &errorCode) const {
+    const FunctionName& myFunction = context.getCalledFunctionName();
+    const FunctionName& stdFunction = myFunction.tempSubString(1); // _date -> date
+
+    const MFFunctionRegistry* standardRegistry = MFFunctionRegistry::getStandardFunctionsRegistry(errorCode);
+ 
+    if (U_FAILURE(errorCode)) {
+        return LocalPointer<FunctionValue>();
+    }
+    
+    //    const Function *delegateFunction = context.getStandardFunction(stdFunction, errorCode);
+    const Function *delegateFunction = standardRegistry->getFunction(stdFunction);
+    
+    if (U_FAILURE(errorCode)) {
+        return LocalPointer<FunctionValue>();
+    }
+    // create a new context, with our updated locale
+    FunctionContext myContext = context.withLocale(overrideLocale);
+    // call the delegated function
+    return delegateFunction->call(myContext, arg, opts, errorCode);
+}
+
+LocaleOverrideFunction::~LocaleOverrideFunction() {}
+} // namespace ComposableFunctionTest
+
+void TestMessageFormat2::testComposeInternalFunctions() {
+    IcuTestErrorCode errorCode(*this, "testComposeInternalFunctions");
+    UParseError parseError;
+    std::map<UnicodeString, icu::message2::Formattable> argsBuilder;
+    argsBuilder["pop"] = message2::Formattable((int64_t)2148076);
+    argsBuilder["count"] = message2::Formattable((int64_t)13);
+    argsBuilder["name"] = message2::Formattable("US");
+    argsBuilder["birthday"] = message2::Formattable("1776-07-04");
+    icu::message2::MessageArguments args(argsBuilder, errorCode);
+    if (errorCode.errIfFailureAndReset("args")) {
+        errln("%s:%d: err %s", __FILE__, __LINE__, errorCode.errorName());
+        return;
+    }
+
+    // Note on what's happening here:
+    // - 'pl' plurals are used (thus PASS)
+    // - US date format 7/4/76
+    // - US number format 2,148,076
+    UnicodeString expectedResult(u"PASS 13 2,148,076 @ 7/4/76");
+
+    // Function _number and _date turn around and call number and date, but with the fixed Locale
+    // myLocale. Overriding standard functions is another concern, in a separate PR.
+    const UnicodeString orig_pattern(
+        u""
+        ".input {$count :number} .input {$name :string} .input {$birthday :date} .input {$pop "
+        ":number}\n"
+        ".match $count\n"
+        "many {{PASS {$count :_number} {$pop :_number} @ {$birthday :_date style=short}}}\n"
+        "* {{FAIL wrong bucket {$count :_number} {$pop :_number} @ {$birthday :_date "
+        "style=short}}}\n");
+
+    // try with a modified pattern
+    // build the function registry
+    const Locale myLocale(Locale::getUS());
+    icu::message2::MFFunctionRegistry::Builder builder(errorCode);
+    if (errorCode.errIfFailureAndReset("MFFunctionRegistry::Builder")) {
+        errln("%s:%d: err %s", __FILE__, __LINE__, errorCode.errorName());
+        return;
+    }
+    MFFunctionRegistry functionRegistry =
+        builder
+            .adoptFunction(data_model::FunctionName("_date"),
+                           new ComposableFunctionTest::LocaleOverrideFunction(myLocale, errorCode),
+                           errorCode)
+            .adoptFunction(data_model::FunctionName("_number"),
+                           new ComposableFunctionTest::LocaleOverrideFunction(myLocale, errorCode),
+                           errorCode)
+            .build();
+    if (errorCode.errIfFailureAndReset("something")) {
+        errln("%s:%d: err %s", __FILE__, __LINE__, errorCode.errorName());
+        return;
+    }
+
+    icu::message2::MessageFormatter mf =
+        MessageFormatter::Builder(errorCode)
+            .setErrorHandlingBehavior(MessageFormatter::U_MF_BEST_EFFORT)
+            .setPattern(orig_pattern, parseError, errorCode)
+            .setFunctionRegistry(functionRegistry)
+            .setLocale(Locale("pl"))
+            .build(errorCode);
+
+    if (errorCode.errIfFailureAndReset("build")) {
+        errln("UParseError = %d:%d", parseError.line, parseError.offset);
+        return;
+    }
+
+    UnicodeString result = mf.formatToString(args, errorCode);
+    if (errorCode.errIfFailureAndReset("formatToString")) {
+        return;
+    }
+    assertEquals("testComposeInternalFunctions", expectedResult, result);
 }
 
 TestCase::~TestCase() {}

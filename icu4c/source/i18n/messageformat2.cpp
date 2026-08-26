@@ -269,7 +269,7 @@ static UnicodeString reserialize(const UnicodeString& s) {
     U_ASSERT(U_SUCCESS(status));
     // Call the function
     LocalPointer<FunctionValue>
-        functionResult(function->call(makeFunctionContext(options),
+        functionResult(function->call(makeFunctionContext(options, functionName),
                                       *functionArg,
                                       std::move(options),
                                       status));
@@ -299,13 +299,13 @@ static UnicodeString reserialize(const UnicodeString& s) {
 // Function options and context
 // ----------------------------
 
-FunctionContext MessageFormatter::makeFunctionContext(const FunctionOptions& options) const {
+FunctionContext MessageFormatter::makeFunctionContext(const FunctionOptions& options, const FunctionName& calledFunction) const {
     // Look up "u:dir", and "u:id" in the options
 
     UMFBidiOption dir = ubidi_getMFOption(options.getStringFunctionOption(options::U_DIR));
     UnicodeString id = options.getStringFunctionOption(options::U_ID);
 
-    return FunctionContext(locale, dir, id);
+    return FunctionContext(locale, dir, id, calledFunction);
 }
 
 // Resolves a function's options

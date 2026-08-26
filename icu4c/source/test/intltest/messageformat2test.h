@@ -54,6 +54,7 @@ public:
     void testAPI(void);
     void testAPISimple(void);
     void testOverrideFunctions(void);
+    void testComposeInternalFunctions(void);
 
 private:
     void jsonTestsFromFiles(IcuTestErrorCode&);
