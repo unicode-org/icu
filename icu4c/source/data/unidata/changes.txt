@@ -389,6 +389,7 @@ copying that version number into the $ICU_SRC/.bazeliskrc config file.
     -->
       +16DA0..16DA9  ; Nd #  [10] CHISOI DIGIT ZERO..CHISOI DIGIT NINE
   --> https://github.com/unicode-org/cldr/pull/5530 CLDR-19339 bring back Chisoi script for Unicode 18
+  --> removed once more from Unicode 18
 
 *** merge the Unicode update branch back onto the main branch
 - make sure that changes to Unicode tools are checked in:
