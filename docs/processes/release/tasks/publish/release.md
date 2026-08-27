@@ -19,7 +19,7 @@ License & terms of use: http://www.unicode.org/copyright.html
 
 ---
 
-## Most artifacts are now built in the GitHub CI. Work in Progress!!!
+## Most artifacts are now built in the GitHub CI
 
 Many of the tasks that used to be done before "by hand" are now at least
 partially done by GitHub Actions.
@@ -46,11 +46,16 @@ Some actions will have an "Run the tests." option. \
 Most will have a "Release tag to upload to." option. \
 Here you should use the release tag.
 
-1. **GHA ICU4C** \
+Also, see ["Start the artifact building actions from CLI"](#start-from-cli) at the bottom.
+
+1. **GHA ICU4X - ICU Export Data** (`icu4x_icuexportdata.yml`) \
+   This will create and add to release: \
+   * The packaged data for ICU4X (`icu4x-icuexportdata-<tag-goes-here>.zip`)
+
+1. **GHA ICU4C - MS VC Dist Release** (`icu4c_msvcdistrelease.yml`) \
    This will create and add to release: \
    * The Windows binaries (`icu4c-{icuver}-Win32-MSVC20??.zip`,
    `icu4c-{icuver}-Win64-MSVC20??.zip`, `icu4c-{icuver}-WinARM64-MSVC20??.zip`)
-   * The packaged data for ICU4X (`icuexportdata_tag-goes-here.zip`)
 
 1. **Release - ICU4C artifacts on Fedora** (`release-icu4c-fedora.yml`) \
    This will create and add to release:
@@ -113,3 +118,61 @@ Here you should use the release tag.
       * the file sizes didn't drastically change from the previous release
     * Once you confirm that everything looks reasonable, approve the deployment
       (click **Publish**).
+
+<a name="start-from-cli"></a>
+## Start the artifact building actions from CLI
+
+An alternative is to trigger the GitHub release workflows from command line.
+
+### Releasing ICU
+
+```sh
+REPO=unicode-org/icu
+BRANCH=maint/maint-79
+RELEASE_TAG=release-79.1
+
+gh workflow run icu4c_msvcdistrelease.yml \
+  -f gitReleaseTag=${RELEASE_TAG} \
+  --ref ${BRANCH} -R ${REPO}
+gh workflow run icu4x_icuexportdata.yml \
+  -f gitReleaseTag=${RELEASE_TAG} \
+  --ref ${BRANCH} -R ${REPO}
+gh workflow run release-icu4c-fedora.yml \
+  -f gitReleaseTag=${RELEASE_TAG} \
+  --ref ${BRANCH} -R ${REPO}
+gh workflow run release-icu4c-ubuntu.yml \
+  -f gitReleaseTag=${RELEASE_TAG} \
+  --ref ${BRANCH} -R ${REPO}
+gh workflow run release-icu4j-maven.yml \
+  -f gitReleaseTag=${RELEASE_TAG} \
+  -f deployToMaven=true \
+  --ref ${BRANCH} -R ${REPO}
+
+# WAIT for all actions above to successfully finish
+
+gh workflow run release-check-sign.yml \
+  -f gitReleaseTag=${RELEASE_TAG} \
+  --ref ${BRANCH} -R ${REPO}
+```
+
+### Releasing ICU4X export data
+
+```sh
+REPO=unicode-org/icu
+BRANCH=main
+RELEASE_TAG=icu4x/2026-08-27/79.x
+RELEASE_FILENAME=2026-07-01-79.x
+
+gh workflow run icu4x_icuexportdata.yml \
+  -f gitReleaseTag=${RELEASE_TAG}
+  -f gitReleaseFilename=${RELEASE_FILENAME} \
+  --ref ${BRANCH} -R ${REPO}
+
+# WAIT for the above action to successfully finish
+
+gh workflow run release-check-sign.yml \
+  -f gitReleaseTag=${RELEASE_TAG} \
+  --ref ${BRANCH} -R ${REPO}
+```
+
+The login to Sonatype and approval should still be done "by hand", no CLI.

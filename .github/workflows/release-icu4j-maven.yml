@@ -52,6 +52,8 @@ jobs:
 
     permissions:
       contents: write # So that we can upload to release
+      id-token: write # For artifact attestation
+      attestations: write # For artifact attestation
 
     steps:
 
@@ -144,6 +146,11 @@ jobs:
         GH_TOKEN: ${{ github.token }}
         INPUTS_GITRELEASETAG: ${{ inputs.gitReleaseTag }}
 
+    - name: Generate artifact attestation
+      uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
+      with:
+        subject-path: ${{ env.RELEASE_FOLDER }}
+
   # Builds everything we need to for the unified javadoc (icu4j + icu4j-charset) for web publishing.
   # No testing, the only thing we use from this is the javadoc for the site.
   # The results are:
@@ -157,6 +164,8 @@ jobs:
 
     permissions:
       contents: write # So that we can upload to release
+      id-token: write # For artifact attestation
+      attestations: write # For artifact attestation
 
     steps:
 
@@ -206,3 +215,8 @@ jobs:
       env:
         GH_TOKEN: ${{ github.token }}
         INPUTS_GITRELEASETAG: ${{ inputs.gitReleaseTag }}
+
+    - name: Generate artifact attestation
+      uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
+      with:
+        subject-path: ${{ env.RELEASE_FOLDER }}
