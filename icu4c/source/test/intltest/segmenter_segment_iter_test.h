@@ -17,7 +17,8 @@ public:
 
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = nullptr ) override;
 
-    void testHelloWorld();
+    void testSegments();
+    void testMultipleSegmentObjectsFromSegmenter();
 
 private:
     // Test parameters, from the test framework and test invocation.

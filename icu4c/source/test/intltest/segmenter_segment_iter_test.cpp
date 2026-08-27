@@ -26,7 +26,8 @@ void SegmentIterTest::runIndexedTest( int32_t index, UBool exec, const char* &na
 
     TESTCASE_AUTO_BEGIN;
 
-    TESTCASE_AUTO(testHelloWorld);
+    TESTCASE_AUTO(testSegments);
+    TESTCASE_AUTO(testMultipleSegmentObjectsFromSegmenter);
 
     TESTCASE_AUTO_END;
 }
@@ -49,8 +50,8 @@ SegmentIterTest::~SegmentIterTest() {
 //
 //---------------------------------------------
 
-void SegmentIterTest::testHelloWorld() {
-    IcuTestErrorCode errorCode(*this, "testHelloWorld");
+void SegmentIterTest::testSegments() {
+    IcuTestErrorCode errorCode(*this, "testSegments");
 
     icu::segmenter::LocalizedSegmenter enWordSegmenter =
         icu::segmenter::LocalizedSegmenterBuilder()
@@ -64,15 +65,94 @@ void SegmentIterTest::testHelloWorld() {
     auto segments1 = enWordSegmenter.segment(source1, errorCode);
     auto segmentRange = segments1->segments();
 
-    std::vector<std::u16string_view> segmentStrs;
-
+    std::vector<icu::segmenter::Segment> segmentVec;
     for (auto segmentIter = segmentRange.begin(); segmentIter != segmentRange.end(); ++segmentIter) {
-        segmentStrs.push_back((*segmentIter).getSubstr());
+        segmentVec.push_back(*segmentIter);
     }
+    assertEquals("first segment start", 0, segmentVec[0].getStart());
+    assertEquals("first segment limit", 3, segmentVec[0].getLimit());
+    assertEquals("second segment start", 3, segmentVec[1].getStart());
+    assertEquals("second segment limit", 4, segmentVec[1].getLimit());
+}
 
-    std::vector<std::u16string_view> expected{u"The", u" ", u"quick", u" ", u"brown", u" ", u"fox", u" ", u"jumped", u" ", u"over",
+void SegmentIterTest::testMultipleSegmentObjectsFromSegmenter() {
+    IcuTestErrorCode errorCode(*this, "testMultipleSegmentObjectsFromSegmenter");
+
+    icu::segmenter::LocalizedSegmenter enWordSegmenter =
+        icu::segmenter::LocalizedSegmenterBuilder()
+            .setLocale(Locale::getEnglish())
+            .setSegmentationType(icu::segmenter::SegmentationType::WORD)
+            .build(errorCode);
+    
+    std::u16string_view source1 = u"The quick brown fox jumped over the lazy dog.";
+    std::u16string_view source2 = u"Sphinx of black quartz, judge my vow.";
+    std::u16string_view source3 = u"How vexingly quick daft zebras jump!";
+
+    std::vector<std::u16string_view> exp1{u"The", u" ", u"quick", u" ", u"brown", u" ", u"fox", u" ", u"jumped", u" ", u"over",
                         u" ", u"the", u" ", u"lazy", u" ", u"dog", u"."};
-    assertTrue("segment strings from SegmentIterator", segmentStrs == expected);
+    std::vector<std::u16string_view> exp2{u"Sphinx", u" ", u"of", u" ", u"black", u" ", u"quartz", u",", u" ", u"judge", u" ",
+                        u"my", u" ", u"vow", u"."};
+    std::vector<std::u16string_view> exp3{
+                        u"How",
+                        u" ",
+                        u"vexingly",
+                        u" ",
+                        u"quick",
+                        u" ",
+                        u"daft",
+                        u" ",
+                        u"zebras",
+                        u" ",
+                        u"jump",
+                        u"!"};
+
+    // Create new Segments for source1
+    auto segments1 = enWordSegmenter.segment(source1, errorCode);
+    auto segmentRange1 = segments1->segments();
+    std::vector<std::u16string_view> segmentStrVec1;
+    for (auto segmentIter = segmentRange1.begin(); segmentIter != segmentRange1.end(); ++segmentIter) {
+        segmentStrVec1.push_back((*segmentIter).getSubstr());
+    }   
+    assertTrue("segment strings from SegmentIterator 1", segmentStrVec1 == exp1);
+
+    // Create new Segments for source2
+    auto segments2 = enWordSegmenter.segment(source2, errorCode);
+    auto segmentRange2 = segments2->segments();
+    std::vector<std::u16string_view> segmentStrVec2;
+    for (auto segmentIter = segmentRange2.begin(); segmentIter != segmentRange2.end(); ++segmentIter) {
+        segmentStrVec2.push_back((*segmentIter).getSubstr());
+    }   
+    assertTrue("segment strings from SegmentIterator 2", segmentStrVec2 == exp2);
+
+    // Check that Segments for source1 is unaffected
+    segmentStrVec1.clear();
+    for (auto segmentIter = segmentRange1.begin(); segmentIter != segmentRange1.end(); ++segmentIter) {
+        segmentStrVec1.push_back((*segmentIter).getSubstr());
+    }   
+    assertTrue("segment strings from SegmentIterator 1 unaffected after 2", segmentStrVec1 == exp1);
+
+    // Create new Segments for source3
+    auto segments3 = enWordSegmenter.segment(source3, errorCode);
+    auto segmentRange3 = segments3->segments();
+    std::vector<std::u16string_view> segmentStrVec3;
+    for (auto segmentIter = segmentRange3.begin(); segmentIter != segmentRange3.end(); ++segmentIter) {
+        segmentStrVec3.push_back((*segmentIter).getSubstr());
+    }
+    assertTrue("segment strings from SegmentIterator 3", segmentStrVec3 == exp3);
+
+    // Check that Segments for source1 is unaffected
+    segmentStrVec1.clear();
+    for (auto segmentIter = segmentRange1.begin(); segmentIter != segmentRange1.end(); ++segmentIter) {
+        segmentStrVec1.push_back((*segmentIter).getSubstr());
+    }   
+    assertTrue("segment strings from SegmentIterator unaffected after 3", segmentStrVec1 == exp1);
+
+    // Check that Segments for source2 is unaffected
+    segmentStrVec2.clear();
+    for (auto segmentIter = segmentRange2.begin(); segmentIter != segmentRange2.end(); ++segmentIter) {
+        segmentStrVec2.push_back((*segmentIter).getSubstr());
+    }   
+    assertTrue("segment strings from SegmentIterator 2 unaffected after 3", segmentStrVec2 == exp2);
 }
 
 //---------------------------------------------
