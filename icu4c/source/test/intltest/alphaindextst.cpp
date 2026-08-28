@@ -68,6 +68,8 @@ void AlphabeticIndexTest::runIndexedTest( int32_t index, UBool exec, const char*
     TESTCASE_AUTO(TestJapaneseKanji);
     TESTCASE_AUTO(TestChineseUnihan);
     TESTCASE_AUTO(testHasBuckets);
+    TESTCASE_AUTO(TestMaxLabelCountRange);
+    TESTCASE_AUTO(TestBucketCountAfterSetMaxLabelCount);
     TESTCASE_AUTO_END;
 }
 
@@ -757,4 +759,79 @@ void AlphabeticIndexTest::checkHasBuckets(const Locale &locale, UScriptCode scri
             uscript_getScript(bucket->getLabel().char32At(0), errorCode));
 }
 
+void AlphabeticIndexTest::TestMaxLabelCountRange() {
+    UErrorCode status = U_ZERO_ERROR;
+    AlphabeticIndex index(Locale("en"), status);
+    TEST_CHECK_STATUS;
+    int32_t maxLabelCount = index.getMaxLabelCount();
+
+    // 0 is not a valid value for maxLabelCount
+    index.setMaxLabelCount(0, status);
+    assertEquals("Status returned for maxLabelCount=0", U_ILLEGAL_ARGUMENT_ERROR, status);
+    assertEquals("Max label count should remain unchanged (0)", maxLabelCount, index.getMaxLabelCount());
+
+    // Negative values are not valid for maxLabelCount
+    status = U_ZERO_ERROR;
+    index.setMaxLabelCount(-100, status);
+    assertEquals("Status returned for maxLabelCount=-100", U_ILLEGAL_ARGUMENT_ERROR, status);
+    assertEquals("Max label count should remain unchanged (-100)", maxLabelCount, index.getMaxLabelCount());
+
+    // MAX_INT32 should be accepted
+    status = U_ZERO_ERROR;
+    index.setMaxLabelCount(INT32_MAX, status);
+    TEST_CHECK_STATUS;
+    assertEquals("Max label count should be set to INT32_MAX", INT32_MAX, index.getMaxLabelCount());
+}
+
+void AlphabeticIndexTest::TestBucketCountAfterSetMaxLabelCount() {
+    checkBucketCountAfterSetMaxLabelCount(Locale("en_US"));
+    checkBucketCountAfterSetMaxLabelCount(Locale("de_DE"));
+    checkBucketCountAfterSetMaxLabelCount(Locale("ja_JP"));
+    checkBucketCountAfterSetMaxLabelCount(Locale("ko_KR"));
+    checkBucketCountAfterSetMaxLabelCount(Locale("zh_CN"));
+    checkBucketCountAfterSetMaxLabelCount(Locale("ru_RU"));
+}
+
+void AlphabeticIndexTest::checkBucketCountAfterSetMaxLabelCount(const Locale &loc) {
+    const char16_t* records[] = {
+        u"Hello", u"Bye",
+        u"Hallo", u"Tschüss",
+        u"こんにちは", u"さよなら",
+        u"안녕하세요", u"안녕",
+        u"你好", u"안녕",
+        u"Привет", u"Пока"
+    };
+    int32_t numRecords = std::size(records);
+
+    UErrorCode status = U_ZERO_ERROR;
+    AlphabeticIndex index(loc, status);
+    int32_t prevBucketCount = index.getBucketCount(status);
+    TEST_CHECK_STATUS;
+
+    for (int32_t i = 0; i < numRecords; ++i) {
+        index.addRecord(records[i], records[i], status);
+        TEST_CHECK_STATUS;
+    }
+
+    for (int32_t maxLabelCount = index.getMaxLabelCount() - 1; maxLabelCount > 0; maxLabelCount--) {
+        index.setMaxLabelCount(maxLabelCount, status);
+        int32_t bucketCount = index.getBucketCount(status);
+        TEST_CHECK_STATUS;
+        assertEquals(UnicodeString("New max label count - ") + loc.getName(), index.getMaxLabelCount(), maxLabelCount);
+        assertTrue(UnicodeString("New bucket count is less than or equal to the previous count - ") + loc.getName(),
+            bucketCount <= prevBucketCount);
+
+        // Total number of records collected from all buckets should be unchanged.
+        int32_t count = 0;
+        index.resetBucketIterator(status);
+        TEST_CHECK_STATUS;
+        while(index.nextBucket(status)) {
+            TEST_CHECK_STATUS;
+            count += index.getBucketRecordCount();
+        }
+        assertEquals(UnicodeString("Total number of records from all buckets - ") + loc.getName(), numRecords, count);
+
+        prevBucketCount = bucketCount;
+    }
+}
 #endif

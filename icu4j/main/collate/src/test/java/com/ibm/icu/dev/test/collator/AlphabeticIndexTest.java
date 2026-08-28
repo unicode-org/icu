@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -2465,5 +2466,90 @@ public class AlphabeticIndexTest extends TestFmwk {
                 loc + " expected script",
                 script,
                 UScript.getScript(bucket.getLabel().codePointAt(0)));
+    }
+
+    @Test
+    public void testMaxLabelCountRange() {
+        AlphabeticIndex<String> index = new AlphabeticIndex<>(Locale.ENGLISH);
+        int maxLabelCount = index.getMaxLabelCount();
+
+        // 0 is not a valid value for maxLabelCount
+        try {
+            index.setMaxLabelCount(0);
+            fail("IllegalArgumentException should be thrown when maxLabelCount=0");
+        } catch (IllegalArgumentException e) {
+            // Expected. maxLabelCount should remain unchanged
+            assertEquals(
+                    "Max label count should remain unchanged (0)",
+                    maxLabelCount,
+                    index.getMaxLabelCount());
+        }
+
+        // Negative values are not valid for maxLabelCount
+        try {
+            index.setMaxLabelCount(-100);
+            fail("IllegalArgumentException should be thrown when maxLabelCount=-100");
+        } catch (IllegalArgumentException e) {
+            // Expected. maxLabelCount should remain unchanged
+            assertEquals(
+                    "Max label count should remain unchanged (-100)",
+                    maxLabelCount,
+                    index.getMaxLabelCount());
+        }
+
+        index.setMaxLabelCount(Integer.MAX_VALUE);
+        assertEquals(
+                "Max label count should be set to Integer.MAX_VALUE",
+                Integer.MAX_VALUE,
+                index.getMaxLabelCount());
+    }
+
+    @Test
+    public void testBucketCountAfterSetMaxLabelCount() {
+        checkBucketCountAfterSetMaxLabelCount(Locale.US);
+        checkBucketCountAfterSetMaxLabelCount(Locale.GERMAN);
+        checkBucketCountAfterSetMaxLabelCount(Locale.JAPAN);
+        checkBucketCountAfterSetMaxLabelCount(Locale.KOREA);
+        checkBucketCountAfterSetMaxLabelCount(Locale.PRC);
+        checkBucketCountAfterSetMaxLabelCount(Locale.forLanguageTag("ru-RU"));
+    }
+
+    private void checkBucketCountAfterSetMaxLabelCount(Locale loc) {
+        final String[] records = {
+            "Hello", "Bye", "Hallo", "Tschüss", "こんにちは", "さよなら", "안녕하세요", "안녕", "你好", "再见",
+            "Привет", "Пока"
+        };
+        int numRecords = records.length;
+
+        AlphabeticIndex<String> index = new AlphabeticIndex<>(loc);
+        int prevBucketCount = index.getBucketCount();
+
+        for (String record : records) {
+            index.addRecord(record, record);
+        }
+
+        // Decrement the max label count and check if bucket count is less than or equal to
+        // the previous bucket count. Also check if the total number of records collected from
+        // all buckets is unchanged.
+        for (int maxLabelCount = index.getMaxLabelCount() - 1; maxLabelCount > 0; maxLabelCount--) {
+            index.setMaxLabelCount(maxLabelCount);
+            assertEquals("New max label count - " + loc, maxLabelCount, index.getMaxLabelCount());
+            int bucketCount = index.getBucketCount();
+            assertTrue(
+                    "New bucket count is less than or equal to the previous count - " + loc,
+                    bucketCount <= prevBucketCount);
+            // Total number of records collected from all buckets should be unchanged.
+            final AtomicInteger count = new AtomicInteger(0);
+            index.forEach(
+                    b -> {
+                        count.addAndGet(b.size());
+                    });
+            assertEquals(
+                    "Total number of records from all buckets - " + loc,
+                    numRecords,
+                    count.intValue());
+
+            prevBucketCount = bucketCount;
+        }
     }
 }
