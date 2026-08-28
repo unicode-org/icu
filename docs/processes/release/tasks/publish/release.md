@@ -44,13 +44,20 @@ Some actions will have an "Run the tests." option. \
 **KEEP IT ON!** It is there for development, but you MUST run the tests for release.
 
 Most will have a "Release tag to upload to." option. \
-Here you should use the release tag.
+
+**For ICU releases** the tag convention is `release-<icuFullVersion_withDots>`,
+for example `release-79.1` or `release-79.0.1` or `even release-79.1-rc2`. \
+The branch is `maint/maint-<icuMajorVersion>`, for example `maint/maint-79`.
+
+**For ICU4X releases** the tag convention is `icu4x/<isoDate>/<icuMajorVersion>.x`,
+for example `icu4x/2026-08-27/79.x`. \
+The branch is `main`.
+
+Also, for **ICU4X releases** you only need to run the last 2 actions:
+_"GHA ICU4X - ICU Export Data (icu4x_icuexportdata.yml)"_ and
+_"Release - Create checksums and GPG sign"_ (see the list below).
 
 Also, see ["Start the artifact building actions from CLI"](#start-from-cli) at the bottom.
-
-1. **GHA ICU4X - ICU Export Data** (`icu4x_icuexportdata.yml`) \
-   This will create and add to release: \
-   * The packaged data for ICU4X (`icu4x-icuexportdata-<tag-goes-here>.zip`)
 
 1. **GHA ICU4C - MS VC Dist Release** (`icu4c_msvcdistrelease.yml`) \
    This will create and add to release: \
@@ -85,6 +92,10 @@ Also, see ["Start the artifact building actions from CLI"](#start-from-cli) at t
        for a real deployment and not doing just a sanity check
      * **Release tag to upload to:** should be the GitHub draft release prepared
        in a previous BRS step.
+
+1. **GHA ICU4X - ICU Export Data** (`icu4x_icuexportdata.yml`) \
+   This will create and add to release: \
+   * The packaged data for ICU4X (`icu4x-icuexportdata-<tag-goes-here>.zip`)
 
 1. **Release - Create checksums and GPG sign** (`release-check-sign.yml`) \
    THIS SHOULD BE THE LAST ACTION YOU RUN. \
@@ -134,9 +145,6 @@ RELEASE_TAG=release-79.1
 gh workflow run icu4c_msvcdistrelease.yml \
   -f gitReleaseTag=${RELEASE_TAG} \
   --ref ${BRANCH} -R ${REPO}
-gh workflow run icu4x_icuexportdata.yml \
-  -f gitReleaseTag=${RELEASE_TAG} \
-  --ref ${BRANCH} -R ${REPO}
 gh workflow run release-icu4c-fedora.yml \
   -f gitReleaseTag=${RELEASE_TAG} \
   --ref ${BRANCH} -R ${REPO}
@@ -146,6 +154,9 @@ gh workflow run release-icu4c-ubuntu.yml \
 gh workflow run release-icu4j-maven.yml \
   -f gitReleaseTag=${RELEASE_TAG} \
   -f deployToMaven=true \
+  --ref ${BRANCH} -R ${REPO}
+gh workflow run icu4x_icuexportdata.yml \
+  -f gitReleaseTag=${RELEASE_TAG} \
   --ref ${BRANCH} -R ${REPO}
 
 # WAIT for all actions above to successfully finish
@@ -161,11 +172,9 @@ gh workflow run release-check-sign.yml \
 REPO=unicode-org/icu
 BRANCH=main
 RELEASE_TAG=icu4x/2026-08-27/79.x
-RELEASE_FILENAME=2026-07-01-79.x
 
 gh workflow run icu4x_icuexportdata.yml \
   -f gitReleaseTag=${RELEASE_TAG}
-  -f gitReleaseFilename=${RELEASE_FILENAME} \
   --ref ${BRANCH} -R ${REPO}
 
 # WAIT for the above action to successfully finish

@@ -27,9 +27,6 @@ on:
       gitReleaseTag:
         description: 'Release tag to upload to. Must start with "release-" or "icu4x/"'
         type: string
-      gitReleaseFilename:
-        description: 'Release tag with no slashes, to be used in file names'
-        type: string
 
 # For non-release branches (namely: PRs), only run CI on the most recent commit. Cancel
 # runs on previous commits mid-flight when new commits are pushed.
@@ -114,30 +111,28 @@ jobs:
       - name: Zip
         run: |
           cd icu4c/source/icuexportdata
-          newZipName="icu4x-icuexportdata-${INPUTS_GITRELEASEFILENAME}.zip"
+          newZipName="icu4x-icuexportdata.zip"
           echo "newZipName=$newZipName" >> $GITHUB_ENV
           zip -r ../../../${newZipName} .
-        env:
-          INPUTS_GITRELEASEFILENAME: ${{ inputs.gitReleaseFilename }}
       - name: Publish Artifact
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: icuexportdata_output
-          path: icu4x-icuexportdata-*.zip
+          path: icu4x-icuexportdata.zip
       - name: Upload to release tag
-        if: ${{ inputs.gitReleaseTag && startsWith(inputs.gitReleaseTag, 'release-') }}
+        if: inputs.gitReleaseTag && (startsWith(inputs.gitReleaseTag, 'release-') || startsWith(inputs.gitReleaseTag, 'icu4x/'))
         run: |
-          zipVer=$(echo ${INPUTS_GITRELEASETAG} | sed 's/^release-//')
+          zipVer=${INPUTS_GITRELEASETAG}
+          # ICU4X release tag convention: icu4x/<isoDate>/<icuMajorVersion>.x
+          # For example: icu4x/2026-08-27/79.x
+          zipVer=$(echo ${zipVer} | sed 's/^icu4x\///' | sed 's/\//-/')
+          # ICU main release tag convention: release-<icuFullVersion_withDots>
+          # For example: release-79.1 or release-79.0.1 or even release-79.1-rc2
+          zipVer=$(echo ${zipVer} | sed 's/^release-//')
           newZipName="icu4x-icuexportdata-${zipVer}.zip"
+          # Remember newZipName for `actions/attest`, which (currently) does not allow wildcards
           echo "newZipName=$newZipName" >> $GITHUB_ENV
-          mv icu4x-icuexportdata-*.zip ${newZipName}
-          gh release upload ${INPUTS_GITRELEASETAG} ${newZipName} --clobber
-        env:
-          GH_TOKEN: ${{ github.token }}
-          INPUTS_GITRELEASETAG: ${{ inputs.gitReleaseTag }}
-      - name: Upload to icu4x tag
-        if: ${{ inputs.gitReleaseTag && startsWith(inputs.gitReleaseTag, 'icu4x/') }}
-        run: |
+          mv icu4x-icuexportdata.zip ${newZipName}
           gh release upload ${INPUTS_GITRELEASETAG} ${newZipName} --clobber
         env:
           GH_TOKEN: ${{ github.token }}
