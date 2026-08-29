@@ -246,6 +246,48 @@ void dumpBidiMirroringGlyph(FILE* f) {
     usrc_writeUCPTrie(f, shortPropName, utrie.getAlias(), UPRV_TARGET_SYNTAX_TOML);
 }
 
+/*
+* Export Numeric_Value values in a similar way to how enumerated
+* properties are dumped to file.
+*/
+void dumpNumericValue(FILE* f) {
+    IcuToolErrorCode status("icuexportdata: dumpNumericValue");
+    UProperty uproperty = UCHAR_NUMERIC_VALUE;
+    const char* fullPropName = u_getPropertyName(uproperty, U_LONG_PROPERTY_NAME);
+    const char* shortPropName = u_getPropertyName(uproperty, U_SHORT_PROPERTY_NAME);
+
+    UCPTrieValueWidth width = UCPTRIE_VALUE_BITS_32;
+    LocalUMutableCPTriePointer builder(umutablecptrie_open(0, 0, status));
+
+    for(UChar32 c = UCHAR_MIN_VALUE; c <= UCHAR_MAX_VALUE; c++) {
+        int32_t ntv = static_cast<int32_t>(GET_NUMERIC_TYPE_VALUE(u_getMainProperties(c)));
+
+        if (ntv != UPROPS_NTV_NONE) {
+            umutablecptrie_set(builder.getAlias(), c, ntv, status);
+        }
+    }
+
+    LocalUCPTriePointer utrie(umutablecptrie_buildImmutable(
+        builder.getAlias(),
+        trieType,
+        width,
+        status));
+    handleError(status, __LINE__, fullPropName);
+
+    fputs("[[enum_property]]\n", f);
+    fprintf(f, "long_name = \"%s\"\n", fullPropName);
+    if (shortPropName) fprintf(f, "short_name = \"%s\"\n", shortPropName);
+    fprintf(f, "upropert_discr = 0x%X\n", uproperty);
+    dumpPropertyAliases(uproperty, f);
+
+    const UCPMap* umap = reinterpret_cast<UCPMap *>(utrie.getAlias());
+    usrc_writeUCPMap(f, umap, nullptr, UPRV_TARGET_SYNTAX_TOML);
+    fputs("\n", f);
+
+    fputs("[enum_property.code_point_trie]\n", f);
+    usrc_writeUCPTrie(f, shortPropName, utrie.getAlias(), UPRV_TARGET_SYNTAX_TOML);
+}
+
 // After printing property value `v`, print `mask` if and only if `mask` comes immediately
 // after the property in the listing
 void maybeDumpMaskValue(UProperty uproperty, uint32_t v, uint32_t mask, FILE* f) {
@@ -1109,6 +1151,9 @@ int exportUprops(int argc, char* argv[]) {
                 i = UCHAR_SCRIPT_EXTENSIONS;
             }
             if (i == UCHAR_SCRIPT_EXTENSIONS + 1) {
+                i = UCHAR_NUMERIC_VALUE;
+            }
+            if (i == UCHAR_NUMERIC_VALUE + 1) {
                 break;
             }
             UProperty uprop = static_cast<UProperty>(i);
@@ -1195,6 +1240,8 @@ int exportUprops(int argc, char* argv[]) {
             dumpBidiMirroringGlyph(f);
         } else if (propEnum == UCHAR_SCRIPT_EXTENSIONS) {
             dumpScriptExtensions(f);
+        } else if (propEnum == UCHAR_NUMERIC_VALUE) {
+            dumpNumericValue(f);
         } else {
             std::cerr << "Don't know how to write property: " << propEnum << std::endl;
             return U_INTERNAL_PROGRAM_ERROR;

@@ -488,7 +488,7 @@ u_getUnicodeVersion(UVersionInfo versionArray) {
     }
 }
 
-U_CFUNC uint32_t
+U_CAPI uint32_t
 u_getMainProperties(UChar32 c) {
     uint32_t props;
     GET_PROPS(c, props);
