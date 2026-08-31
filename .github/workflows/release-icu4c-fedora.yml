@@ -2,7 +2,7 @@ name: Release - ICU4C artifacts on Fedora
 
 on:
   workflow_dispatch:
-    inputs:
+    inputs: &all_inputs
       runTests:
         description: 'Run the tests.'
         type: boolean
@@ -10,6 +10,8 @@ on:
       gitReleaseTag:
         description: 'Release tag to upload to. Must start with "release-"'
         type: string
+  workflow_call:
+    inputs: *all_inputs
 
 env:
   RELEASE_FOLDER: '${{ github.workspace }}/releaseDist'
@@ -93,7 +95,7 @@ jobs:
         INPUTS_GITRELEASETAG: ${{ inputs.gitReleaseTag }}
 
     - name: Generate artifact attestation
-      if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+      if: github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call'
       uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
       with:
         subject-path: ${{ env.RELEASE_FOLDER }}

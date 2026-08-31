@@ -311,13 +311,17 @@ and make sure ICU4J adequately covers the JDK API for the classes we replicate.
 
 ### **ICU4C**
 
+#### Create the ICU4C docs zip file - Post 71.1
+
+Download the `icu4c-{icuver}-docs.zip` asset from the GitHub release.
+
+#### Create the ICU4C docs zip file - Pre 71.1
+
 Build the API documentation pages for the new release. Run Doxygen to create the
 javadoc files. Create icu4c-X_X_X-docs.zip
 
 **Note: for ICU4C 49m2 or later, requires Doxygen 1.7.5.1 or later ( see
 [ICU-8862](https://unicode-org.atlassian.net/browse/ICU-8862) )**
-
-#### Create the ICU4C docs zip file:
 
 1.  Go to .../icu4c/source
 2.  Generate the API document pages:<br>
@@ -367,7 +371,11 @@ Note: This is also referenced below [Upload API documentations](docs.md#upload-a
 
 ### ICU4J
 
-Build the API documentation pages for the new release:
+#### Build the API documentation pages for the new release - Post 71.1
+
+Download the `icu4j-{icuver}-fulljavadoc.jar` asset from the GitHub release.
+
+#### Build the API documentation pages for the new release - Pre 71.1
 
 ```
 cd icu4j
@@ -396,6 +404,7 @@ See <https://unicode-org.github.io/icu-docs/HOWTO-Update.html> for instructions
 to upload to <https://unicode-org.github.io/icu-docs/>
 
 #### Update table of API docs:
+
 1. Edit [README.md in icu-docs](https://github.com/unicode-org/icu-docs/blob/main/README.md).
 2. Update the table under "API docs" at the top of README.md with the new version in column "J" in row "Dev" for the release candidate or "Released" for the final release.
 3. Add the updated README.md to the pull request with the new API documentation.

@@ -108,16 +108,18 @@ Run the following command at the command line, adjusting the values for
 the branch, release tag name, and release title accordingly.
 
 ```shell
+export REPO=unicode-org/icu
 export BRANCH=maint/maint-78
-export REL_TAG=release-78.3
+export RELEASE_TAG=release-78.3
 export TITLE="ICU 78.3"
 
-gh release create "${REL_TAG}" \
+gh release create "${RELEASE_TAG}" \
         --draft \
         --prerelease \
         --target "${BRANCH}" \
         --title "${TITLE}" \
-        --repo unicode-org/icu
+        --notes "" \
+        --repo ${REPO}
 ```
 
 ##### Manual Tagging & Release Creation
@@ -149,6 +151,9 @@ which has the effect of converting the release into  a regular release.
 > :point_right: **Note**: The release tag name convention changed with ICU 78.
 Prior, the convention was like `release-63-rc` or `release-63-1`.
 Afterwards, the convention is like `release-63.1rc` or `release-63.1`.
+
+> :point_right: **Note**: For **ICU4X releases** the tag convention is
+> `icu4x/<isoDate>/<icuMajorVersion>.x`, for example `icu4x/2026-08-27/79.x`.
 
 > :point_right: **Note**: The "latest" tag is no longer updated. It was agreed by the ICU-TC to be
 deleted around the 64.2 time-frame, as it doesn't work well with with Git. (You

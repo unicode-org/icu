@@ -2,10 +2,12 @@ name: Release - Create checksums and GPG sign
 
 on:
   workflow_dispatch:
-    inputs:
+    inputs: &all_inputs
       gitReleaseTag:
         description: 'Release tag to upload to. Must start with "release-"'
         type: string
+  workflow_call:
+    inputs: *all_inputs
 
 env:
   RELEASE_FOLDER: '${{ github.workspace }}/releaseDist'
