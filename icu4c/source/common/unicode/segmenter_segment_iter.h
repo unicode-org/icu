@@ -62,6 +62,7 @@ public:
     bool operator!=(const SegmentIterator &other) const;
     Segment operator*() const;
     SegmentIterator & operator++();
+    SegmentIterator & operator--();
 private:
     int32_t startIdx_;
     int32_t limitIdx_;

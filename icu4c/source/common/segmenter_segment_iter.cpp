@@ -63,6 +63,24 @@ SegmentIterator & SegmentIterator::operator++() {
     return *this;
 }
 
+SegmentIterator & SegmentIterator::operator--() {
+    if (startIdx_ <= 0 || startIdx_ == BreakIterator::DONE) {
+        // at the beginning, return sentinel as a 0-length empty segment
+        startIdx_ = 0;
+        limitIdx_ = 0;
+        ruleStatus_ = UBRK_DONE;
+
+        return *this;
+    } else {
+        // move backwards
+        limitIdx_ = breakIter_->current();
+        ruleStatus_ = breakIter_->getRuleStatus();
+        startIdx_ = breakIter_->previous();
+
+        return *this;
+    }
+}
+
 bool SegmentIterator::isCurrentSegmentValid() const {
     return (
         startIdx_ != BreakIterator::DONE

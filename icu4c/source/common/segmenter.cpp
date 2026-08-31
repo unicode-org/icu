@@ -43,7 +43,7 @@ int32_t Segment::getRuleStatus() {
 }
 
 std::u16string_view Segment::getSource() {
-    return source_;
+    return source_.substr(start_, (limit_ - start_));
 }
 
 std::u16string_view Segment::getSubstr() {

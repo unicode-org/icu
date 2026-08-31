@@ -28,6 +28,7 @@ void SegmentIterTest::runIndexedTest( int32_t index, UBool exec, const char* &na
 
     TESTCASE_AUTO(testSegments);
     TESTCASE_AUTO(testMultipleSegmentObjectsFromSegmenter);
+    TESTCASE_AUTO(testRuleStatus);
 
     TESTCASE_AUTO_END;
 }
@@ -153,6 +154,86 @@ void SegmentIterTest::testMultipleSegmentObjectsFromSegmenter() {
         segmentStrVec2.push_back((*segmentIter).getSubstr());
     }   
     assertTrue("segment strings from SegmentIterator 2 unaffected after 3", segmentStrVec2 == exp2);
+}
+
+void SegmentIterTest::testRuleStatus() {
+    IcuTestErrorCode errorCode(*this, "testRuleStatus");
+
+    icu::segmenter::LocalizedSegmenter frWordSegmenter =
+        icu::segmenter::LocalizedSegmenterBuilder()
+            .setLocale(Locale::getFrench())
+            .setSegmentationType(icu::segmenter::SegmentationType::WORD)
+            .build(errorCode);
+
+    std::u16string_view source = u"Portez ce vieux whisky au juge blond qui fume.";
+    auto segments = frWordSegmenter.segment(source, errorCode);
+
+    assertEquals("segmentAt(0)", segments->segmentAt(0, errorCode).getSource(), u"Portez");
+    assertTrue(
+            "segmentAt(0) is a word",
+            segments->segmentAt(0, errorCode).getRuleStatus() > UBRK_WORD_NONE_LIMIT);
+    assertEquals("segmentAt(1)", segments->segmentAt(1, errorCode).getSource(), u"Portez");
+    assertTrue(
+            "segmentAt(1) is a word",
+            segments->segmentAt(1, errorCode).getRuleStatus() > UBRK_WORD_NONE_LIMIT);
+    assertEquals("segmentAt(6)", segments->segmentAt(6, errorCode).getSource(), u" ");
+    assertTrue(
+            "segmentAt(6) is not a word",
+            segments->segmentAt(6, errorCode).getRuleStatus() < UBRK_WORD_NONE_LIMIT);
+    assertEquals("segmentAt(16)", segments->segmentAt(16, errorCode).getSource(), u"whisky");
+    assertTrue(
+            "segmentAt(16) is a word",
+            segments->segmentAt(16, errorCode).getRuleStatus() > UBRK_WORD_NONE_LIMIT);
+    assertEquals("segmentAt(21)", segments->segmentAt(21, errorCode).getSource(), u"whisky");
+    assertTrue(
+            "segmentAt(21) is a word",
+            segments->segmentAt(21, errorCode).getRuleStatus() > UBRK_WORD_NONE_LIMIT);
+
+    auto segmentRange = segments->segments();
+
+    // words 
+
+    std::vector<std::u16string_view> words;
+    for (auto segmentIter = segmentRange.begin(); segmentIter != segmentRange.end(); ++segmentIter) {
+        // filter (keep) words where ruleStatus > UBRK_WORD_NONE_LIMIT
+        if ((*segmentIter).getRuleStatus() > UBRK_WORD_NONE_LIMIT) {
+            words.push_back((*segmentIter).getSubstr());
+        }
+    }
+
+    std::vector<std::u16string_view> expWords{u"Portez", u"ce", u"vieux", u"whisky", u"au", u"juge", u"blond", u"qui", u"fume"};
+    assertTrue( "segmented word strings", words == expWords);
+
+    // non words
+
+    std::vector<std::u16string_view> nonWords;
+    for (auto segmentIter = segmentRange.begin(); segmentIter != segmentRange.end(); ++segmentIter) {
+        auto segment = *segmentIter;
+        // filter (keep) words where ruleStatus <= UBRK_WORD_NONE_LIMIT
+        if (segment.getRuleStatus() <= UBRK_WORD_NONE_LIMIT) {
+            nonWords.push_back(segment.getSubstr());
+        }
+    }
+
+    std::vector<std::u16string_view> expNonWords{u" ", u" ", u" ", u" ", u" ", u" ", u" ", u" ", u"."};
+    assertTrue( "segmented non-word strings", nonWords == expNonWords);
+
+    // words backward
+
+    std::vector<std::u16string_view> wordsBackward;
+    for (auto segmentIter = segmentRange.end(); segmentIter != segmentRange.begin(); ) {
+        --segmentIter;
+        auto segment = *segmentIter;
+        // filter (keep) words where ruleStatus > UBRK_WORD_NONE_LIMIT
+        if (segment.getRuleStatus() > UBRK_WORD_NONE_LIMIT) {
+            wordsBackward.push_back(segment.getSubstr());
+        }
+    }
+
+    std::vector<std::u16string_view> expWordsBackward{u"fume", u"qui", u"blond", u"juge", u"au", u"whisky", u"vieux", u"ce",
+                                u"Portez"};
+    assertTrue( "segmented word strings backwards", wordsBackward == expWordsBackward);
+
 }
 
 //---------------------------------------------
