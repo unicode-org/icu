@@ -1367,6 +1367,7 @@ static UBool mf2_date_parsers_cleanup() {
         delete dateTimeZoneParser;
         dateTimeZoneParser = nullptr;
     }
+    gMF2DateParsersInitOnce.reset();
     return true;
 }
 

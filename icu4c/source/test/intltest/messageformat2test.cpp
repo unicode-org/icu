@@ -588,7 +588,8 @@ void TestMessageFormat2::testOverrideFunctions() {
 
 namespace ComposableFunctionTest {
 
-    class LocaleOverrideFunction : public Function {
+  class LocaleOverrideFunction : public Function {
+
   public:
     LocaleOverrideFunction(const Locale &loc, UErrorCode &status);
     LocalPointer<FunctionValue> call(const FunctionContext &, const FunctionValue &,
@@ -597,12 +598,12 @@ namespace ComposableFunctionTest {
 
   private:
     Locale overrideLocale;
-};
+  };
 
-LocaleOverrideFunction::LocaleOverrideFunction(const Locale &loc, UErrorCode &/*status*/)
+  LocaleOverrideFunction::LocaleOverrideFunction(const Locale &loc, UErrorCode &/*status*/)
     : overrideLocale(loc) {}
 
-LocalPointer<FunctionValue> LocaleOverrideFunction::call(const FunctionContext &context,
+  LocalPointer<FunctionValue> LocaleOverrideFunction::call(const FunctionContext &context,
                                                  const FunctionValue &arg,
                                                  const FunctionOptions &opts,
                                                  UErrorCode &errorCode) const {
@@ -610,24 +611,25 @@ LocalPointer<FunctionValue> LocaleOverrideFunction::call(const FunctionContext &
     const FunctionName& stdFunction = myFunction.tempSubString(1); // _date -> date
 
     const MFFunctionRegistry* standardRegistry = MFFunctionRegistry::getStandardFunctionsRegistry(errorCode);
- 
-    if (U_FAILURE(errorCode)) {
-        return LocalPointer<FunctionValue>();
-    }
-    
-    //    const Function *delegateFunction = context.getStandardFunction(stdFunction, errorCode);
-    const Function *delegateFunction = standardRegistry->getFunction(stdFunction);
-    
-    if (U_FAILURE(errorCode)) {
-        return LocalPointer<FunctionValue>();
-    }
-    // create a new context, with our updated locale
-    FunctionContext myContext = context.withLocale(overrideLocale);
-    // call the delegated function
-    return delegateFunction->call(myContext, arg, opts, errorCode);
-}
 
-LocaleOverrideFunction::~LocaleOverrideFunction() {}
+    if (U_FAILURE(errorCode)) {
+      return LocalPointer<FunctionValue>();
+    }
+    const Function *delegateFunction = standardRegistry->getFunction(stdFunction);
+
+    if (delegateFunction == nullptr && U_SUCCESS(errorCode)) {
+      errorCode = U_MF_UNKNOWN_FUNCTION_ERROR;  // function not found
+    }
+    if (U_FAILURE(errorCode)) {
+      return LocalPointer<FunctionValue>();
+    }
+    // create a new context, with our overridden locale
+    FunctionContext myContext = context.withLocale(overrideLocale);
+    // call the delegated function with the fixed-locale context
+    return delegateFunction->call(myContext, arg, opts, errorCode);
+  }
+
+  LocaleOverrideFunction::~LocaleOverrideFunction() {}
 } // namespace ComposableFunctionTest
 
 void TestMessageFormat2::testComposeInternalFunctions() {

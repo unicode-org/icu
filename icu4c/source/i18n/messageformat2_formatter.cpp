@@ -42,7 +42,7 @@ private:
 MF2RegistrySingleton::MF2RegistrySingleton(UErrorCode &success) {
   // Set up the standard function registry
   MFFunctionRegistry::Builder standardFunctionsBuilder(success);
-  
+
   LocalPointer<Function> dateTime(StandardFunctions::DateTime::dateTime(success));
   LocalPointer<Function> date(StandardFunctions::DateTime::date(success));
   LocalPointer<Function> time(StandardFunctions::DateTime::time(success));
@@ -80,16 +80,17 @@ MF2RegistrySingleton::MF2RegistrySingleton(UErrorCode &success) {
 static MF2RegistrySingleton* mf2RegistrySingleton = nullptr;
 static icu::UInitOnce gMF2RegistryInitOnce {};
 
-// Clean up shared Registry objects
-static UBool mf2_registry_cleanup() {
+  // Clean up shared Registry objects
+  static UBool mf2_registry_cleanup() {
     if (mf2RegistrySingleton != nullptr) {
         delete mf2RegistrySingleton;
         mf2RegistrySingleton = nullptr;
     }
+    gMF2RegistryInitOnce.reset();
     return true;
-}
+  }
 
-static void initRegistryOnce(UErrorCode& errorCode) {
+  static void initRegistryOnce(UErrorCode& errorCode) {
     U_ASSERT(mf2RegistrySingleton == nullptr);
 
     mf2RegistrySingleton = new MF2RegistrySingleton( errorCode);
@@ -100,22 +101,27 @@ static void initRegistryOnce(UErrorCode& errorCode) {
         return;
     }
     ucln_i18n_registerCleanup(UCLN_I18N_MF2_REGISTRY, mf2_registry_cleanup);
-}
+  }
 
+  // ensure the registry is available
   static void initRegistry(UErrorCode& errorCode) {
     CHECK_ERROR(errorCode);
-
     umtx_initOnce(gMF2RegistryInitOnce, &initRegistryOnce, errorCode);
   }
 
+  // API:
   const MFFunctionRegistry *MFFunctionRegistry::getStandardFunctionsRegistry(UErrorCode& errorCode) {
     initRegistry(errorCode);
-    if (U_FAILURE(errorCode) || mf2RegistrySingleton == nullptr) {
+    if (U_FAILURE(errorCode)) {
+      return nullptr;
+    } else if(mf2RegistrySingleton == nullptr) {
+      // return error if we are about to return nullptr
+      errorCode = U_MEMORY_ALLOCATION_ERROR;
       return nullptr;
     }
     return mf2RegistrySingleton->getStandardFunctionsRegistry();
   }
-  
+
     // MessageFormatter::Builder
 
     // -------------------------------------
@@ -247,7 +253,7 @@ static void initRegistryOnce(UErrorCode& errorCode) {
     MessageFormatter::MessageFormatter(const MessageFormatter::Builder& builder, UErrorCode &success) : locale(builder.locale), customMFFunctionRegistry(builder.customMFFunctionRegistry) {
         standardMFFunctionRegistry = MFFunctionRegistry::getStandardFunctionsRegistry(success);
         CHECK_ERROR(success);
-	
+
         normalizedInput = builder.normalizedInput;
         signalErrors = builder.signalErrors;
         bidiIsolationStrategy = builder.bidiIsolationStrategy;
