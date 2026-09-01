@@ -9450,4 +9450,28 @@ public class DateFormatTest extends CoreTestFmwk {
             }
         }
     }
+
+    @Test
+    public void TestBadErasMakesBadMonthNamesBug() {
+        // Regression test for ICU-23262
+        final String[][] testCases = {
+            {"EEEE MMMM d, y G 'at' h:mm:ss a z", "Monday June 10, 1996 AD at 4:05:00 PM GMT"},
+            {
+                "EEEE MMMM d, y GGGG 'at' h:mm:ss a z",
+                "Monday June 10, 1996 Anno Domini at 4:05:00 PM GMT"
+            },
+            {"EEEE MMMM d, y GGGGG 'at' h:mm:ss a z", "Monday June 10, 1996 A at 4:05:00 PM GMT"},
+            {"EEEE MMMM d, y 'at' h:mm:ss a z", "Monday June 10, 1996 at 4:05:00 PM GMT"},
+        };
+
+        Date dateToFormat = new Date(834422700000L); // July 10, 1996 4:05 PM GMT
+        Locale locale = Locale.forLanguageTag("en-US-u-ca-iso8601");
+        for (String[] testCase : testCases) {
+            DateFormat df = new SimpleDateFormat(testCase[0], locale);
+            DateFormatSymbols dfs;
+            df.setTimeZone(TimeZone.GMT_ZONE);
+            String result = df.format(dateToFormat);
+            assertEquals("Wrong formatting result for " + testCase[0], testCase[1], result);
+        }
+    }
 }

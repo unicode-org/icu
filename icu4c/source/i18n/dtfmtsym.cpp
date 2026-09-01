@@ -2529,9 +2529,19 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
         type = "gregorian";
     }
     // Load eras
-    LocalPointer<EraRules> eraRules(EraRules::createInstance(type, false, status));
-    initEras(&fEras, fErasCount, calendarSink, cb.getAlias(), gNamesAbbrTag, eraRules.getAlias(), status);
+    UErrorCode preErasStatus = status;
     UErrorCode oldStatus = status;
+    LocalPointer<EraRules> eraRules(EraRules::createInstance(type, false, status));
+    if (status == U_MISSING_RESOURCE_ERROR) {
+        // call IDs unsupported in supplmental era rules such as
+        // "iso8601" or bogus "unknown". Similar code in Java.
+        status = oldStatus;
+        type = "gregorian";
+        LocalPointer<EraRules> eraRulesRetry(EraRules::createInstance(type, false, status));
+        eraRules = std::move(eraRulesRetry);
+    }
+    initEras(&fEras, fErasCount, calendarSink, cb.getAlias(), gNamesAbbrTag, eraRules.getAlias(), status);
+    oldStatus = status;
     initEras(&fEraNames, fEraNamesCount, calendarSink, cb.getAlias(), gNamesWideTag, eraRules.getAlias(), status);
     if (status == U_MISSING_RESOURCE_ERROR) { // Workaround because eras/wide was omitted from CLDR 1.3
         status = oldStatus;
@@ -2544,6 +2554,18 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
         status = oldStatus;
         assignArray(fNarrowEras, fNarrowErasCount, fEras, fErasCount);
     }
+    if (status == U_MISSING_RESOURCE_ERROR) {
+        // If we still can't load any era names, we restore the pre-eras status
+        // so that we can continue loading the rest of the data.
+        // The era names will be empty strings. Not great, but having the era names
+        // AND month names AND day of week AND am/pm be empty strings is worse.
+        status = preErasStatus;
+    }
+    // if the error was something other (worse) than U_MISSING_RESOURCE_ERROR
+    // the code goes on to load the rest of the data (doing nothing, because
+    // the status is already set to an error code) and it is handled by the
+    // if (U_FAILURE(status)) { if (useLastResortData) { ... } }
+    // block at the end of this function.
 
     // Load month names
     initField(&fMonths, fMonthsCount, calendarSink,

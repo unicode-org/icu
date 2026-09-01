@@ -54,6 +54,7 @@ static void TestHourCycle(void);
 static void TestLocaleNameCrash(void);
 static void TestInvalidStyles(void);
 static void TestDayNames(void);
+static void TestBadErasMakesBadMonthNamesBug(void);
 
 void addDateForTest(TestNode** root);
 
@@ -82,6 +83,7 @@ void addDateForTest(TestNode** root)
     TESTCASE(TestLocaleNameCrash);
     TESTCASE(TestInvalidStyles);
     TESTCASE(TestDayNames);
+    TESTCASE(TestBadErasMakesBadMonthNamesBug);
 }
 /* Testing the DateFormat API */
 static void TestDateFormat(void)
@@ -2240,6 +2242,35 @@ static void TestDayNames(void) {
             udat_close(df);
         }
         udatpg_close(dtpg);
+    }
+}
+
+// Test case for ICU-23262
+static void TestBadErasMakesBadMonthNamesBug(void) {
+    struct TestCase {
+        const UChar* pattern;
+        const UChar* expectedResult;
+    } testCases[] = {
+        { u"EEEE MMMM d, y G 'at' h:mm:ss a z",     u"Monday June 10, 1996 AD at 4:05:00 PM GMT" },
+        { u"EEEE MMMM d, y GGGG 'at' h:mm:ss a z",  u"Monday June 10, 1996 Anno Domini at 4:05:00 PM GMT" },
+        { u"EEEE MMMM d, y GGGGG 'at' h:mm:ss a z", u"Monday June 10, 1996 A at 4:05:00 PM GMT" },
+        { u"EEEE MMMM d, y 'at' h:mm:ss a z", u"Monday June 10, 1996 at 4:05:00 PM GMT" },
+    };
+    UDate dateToFormat = 834422700000.0; // July 10, 1996 4:05 PM GMT
+    for (int32_t i = 0; i < UPRV_LENGTHOF(testCases); i++) {
+        UErrorCode err = U_ZERO_ERROR;
+        UChar result[2000];
+        UDateFormat* df = udat_open(UDAT_PATTERN, UDAT_PATTERN,
+                "en-US-u-ca-iso8601", u"GMT", -1, testCases[i].pattern, -1, &err);
+        udat_format(df, dateToFormat, result, UPRV_LENGTHOF(result), NULL, &err);
+        udat_close(df);
+
+        char errorMessage[2000];
+        snprintf(errorMessage, UPRV_LENGTHOF(errorMessage),
+                 "Wrong formatting result for %s (%d %s)",
+                 austrdup(testCases[i].pattern), err, u_errorName(err));
+        assertTrue(errorMessage, U_SUCCESS(err));
+        assertUEquals(errorMessage, testCases[i].expectedResult, result);
     }
 }
 
