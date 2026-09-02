@@ -2351,6 +2351,23 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         }
     }
 
+    /**
+     * A pattern whose skeleton specifies a two-digit year (such as the en availableFormats entry
+     * yyMMMd{"MMM d, ’yy"}) can contain literal text that only makes sense with a two-digit year,
+     * so it's only a valid match for a request that also asks for a two-digit year. Without this
+     * check, a request for "yyyyMMMd" would match the "yyMMMd" entry-- its year field length is
+     * closer to the requested 4 than the "yMMMd" entry's is --and produce "MMM d, ’yyyy".
+     */
+    private static boolean yearLengthIsCompatible(DateTimeMatcher request, DateTimeMatcher trial) {
+        // we only do this for numeric years (y/Y/u/r, as opposed to the cyclic year U); we don't
+        // want to interfere with matching of the non-numeric years
+        if (!request.fieldIsNumeric(YEAR) || !trial.fieldIsNumeric(YEAR)) {
+            return true;
+        }
+        return trial.original.getFieldLength(YEAR) != 2
+                || request.original.getFieldLength(YEAR) == 2;
+    }
+
     private PatternWithMatcher getBestRaw(
             DateTimeMatcher source,
             int includeMask,
@@ -2364,6 +2381,9 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         DistanceInfo tempInfo = new DistanceInfo();
         for (DateTimeMatcher trial : skeleton2pattern.keySet()) {
             if (trial.equals(skipMatcher)) {
+                continue;
+            }
+            if (!yearLengthIsCompatible(source, trial)) {
                 continue;
             }
             int distance = source.getDistance(trial, includeMask, tempInfo);

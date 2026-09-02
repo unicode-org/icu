@@ -50,6 +50,7 @@ void IntlTestDateTimePatternGeneratorAPI::runIndexedTest( int32_t index, UBool e
         TESTCASE(14, testISO8601);
         TESTCASE(15, testRegionOverride);
         TESTCASE(16, testAlphabeticSubstitution23114);
+        TESTCASE(17, testTwoDigitYear);
         default: name = ""; break;
     }
 }
@@ -366,12 +367,12 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString(""),
     };
     UnicodeString patternResults2[] = {
-        UnicodeString(u"Oct 14, \u20191999", -1),
+        UnicodeString("Oct 14, 1999"),
         UnicodeString("4th quarter 1999"),
         UnicodeString("Oct 14, 1999"),
         UnicodeString("Thu, Oct 14, 1999"),
         UnicodeString("10/14/1999"),
-        UnicodeString(u"Oct \u20191999", -1),
+        UnicodeString("Oct 1999"),
         UnicodeString("10/1999"),
         UnicodeString("10/99"),
         UnicodeString("O 14, 1999"),
@@ -381,7 +382,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString(u"Thu, Oct 14, 6:58:59\u202FAM", -1),
         UnicodeString(u"10/14, 6:58\u202FAM", -1),
         UnicodeString(u"Thursday, Oct 14, 6:58:59\u202FAM", -1),
-        UnicodeString(u"Oct 14, \u20191999, 6:58:59\u202FAM", -1),
+        UnicodeString(u"Oct 14, 1999, 6:58:59\u202FAM", -1),
         UnicodeString(u"Thu, Oct 14, 1999, 6:58:59\u202FAM", -1),
         UnicodeString(u"6:58\u202FAM", -1),
         UnicodeString(u"6:58\u202FAM", -1),
@@ -919,8 +920,8 @@ void IntlTestDateTimePatternGeneratorAPI::testOptions(/*char *par*/)
         { "da", "HHmm", u"HH.mm",        UDATPG_MATCH_HOUR_FIELD_LENGTH },
         { "da", "hhmm", u"hh.mm\u202Fa", UDATPG_MATCH_HOUR_FIELD_LENGTH },
         //
-        { "en",                   "yyyy",  u"’yyyy",  UDATPG_MATCH_NO_OPTIONS },
-        { "en",                   "YYYY",  u"’YYYY",  UDATPG_MATCH_NO_OPTIONS },
+        { "en",                   "yyyy",  u"yyyy",  UDATPG_MATCH_NO_OPTIONS },
+        { "en",                   "YYYY",  u"YYYY",  UDATPG_MATCH_NO_OPTIONS },
         { "en",                   "U",     u"y",     UDATPG_MATCH_NO_OPTIONS },
         { "en@calendar=japanese", "yyyy",  u"y G",   UDATPG_MATCH_NO_OPTIONS },
         { "en@calendar=japanese", "YYYY",  u"Y G",   UDATPG_MATCH_NO_OPTIONS },
@@ -1868,6 +1869,59 @@ void IntlTestDateTimePatternGeneratorAPI::testAlphabeticSubstitution23114() {
     UnicodeString bestPattern = dtpg->getBestPattern(u"GyMEd", status);
     status.assertSuccess();
     assertEquals("Should not substitute numeric for alpha", u"EEE, MMM d, y G", bestPattern);
+}
+
+/**
+ * Test that a two-digit year in the requested skeleton produces a two-digit year in
+ * the resulting pattern (and that other year field lengths are preserved as well).
+ */
+typedef struct DTPtnGenTwoDigitYearData {
+    const char *locale;
+    const char *skel;
+    const char16_t *expectedPattern;
+} DTPtnGenTwoDigitYearData;
+void IntlTestDateTimePatternGeneratorAPI::testTwoDigitYear()
+{
+    DTPtnGenTwoDigitYearData testData[] = {
+        //   locale  skel   expectedPattern
+        { "en", "yMMMd",    u"MMM d, y"    },
+        { "en", "yyMMMd",   u"MMM d, ’yy"  },
+        { "en", "yyyyMMMd", u"MMM d, yyyy" }, // NOT "MMM d,’yyyy"
+        { "de", "yMMMd",    u"d. MMM y"    },
+        { "de", "yyMMMd",   u"d. MMM yy"   },
+        { "de", "yyyyMMMd", u"d. MMM yyyy" },
+    };
+
+    int count = UPRV_LENGTHOF(testData);
+    const DTPtnGenTwoDigitYearData * testDataPtr = testData;
+
+    for (; count-- > 0; ++testDataPtr) {
+        UErrorCode status = U_ZERO_ERROR;
+
+        Locale locale(testDataPtr->locale);
+        UnicodeString skel(testDataPtr->skel);
+        UnicodeString expectedPattern(testDataPtr->expectedPattern, -1);
+
+        LocalPointer<DateTimePatternGenerator> dtpgen(
+            DateTimePatternGenerator::createInstance(locale, status));
+        if (U_FAILURE(status)) {
+            dataerrln("Unable to create DateTimePatternGenerator instance for locale(%s): %s",
+                      locale.getName(), u_errorName(status));
+            continue;
+        }
+        UnicodeString pattern = dtpgen->getBestPattern(skel, UDATPG_MATCH_NO_OPTIONS, status);
+        if (U_FAILURE(status)) {
+            errln("ERROR in getBestPattern, locale %s, skeleton %s: %s",
+                  testDataPtr->locale, testDataPtr->skel, u_errorName(status));
+            continue;
+        }
+        if (pattern.compare(expectedPattern) != 0) {
+            errln( UnicodeString("ERROR in getBestPattern, locale ") + UnicodeString(testDataPtr->locale) +
+                   UnicodeString(", skeleton ") + skel +
+                   UnicodeString(", expected pattern ") + expectedPattern +
+                   UnicodeString(", got ") + pattern );
+        }
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

@@ -65,7 +65,7 @@
     },
     {
       "src": "Expires on {$exp :datetime year=numeric month=medium day=numeric weekday=long hour=numeric minute=numeric}",
-      "exp": "Expires on 3 Saturday ’2024, 9:43 PM",
+      "exp": "Expires on 3 Saturday 2024, 9:43 PM",
       "params": [{ "name": "exp", "value": { "date": 1722746637000 } }]
     },
     {

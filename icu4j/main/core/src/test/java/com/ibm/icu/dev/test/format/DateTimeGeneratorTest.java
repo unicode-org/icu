@@ -217,12 +217,12 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
                                 DateFormat.FULL, DateFormat.FULL, ULocale.ENGLISH);
         enFormat.setTimeZone(enZone);
         String[][] tests = {
-            {"yyyyMMMdd", "Oct 14, \u20191999"},
+            {"yyyyMMMdd", "Oct 14, 1999"},
             {"yyyyqqqq", "4th quarter 1999"},
             {"yMMMdd", "Oct 14, 1999"},
             {"EyyyyMMMdd", "Thu, Oct 14, 1999"},
             {"yyyyMMdd", "10/14/1999"},
-            {"yyyyMMM", "Oct \u20191999"},
+            {"yyyyMMM", "Oct 1999"},
             {"yyyyMM", "10/1999"},
             {"yyMM", "10/99"},
             {"yMMMMMd", "O 14, 1999"}, // narrow format
@@ -233,7 +233,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
             {"MMdhmm", "10/14, 6:58\u202FAM"},
             {"EEEEMMMdhmms", "Thursday, Oct 14, 6:58:59\u202FAM"},
             {
-                "yyyyMMMddhhmmss", "Oct 14, \u20191999, 6:58:59\u202FAM"
+                "yyyyMMMddhhmmss", "Oct 14, 1999, 6:58:59\u202FAM"
             }, // (fixed expected result per ticket 6872<-7180)
             {
                 "EyyyyMMMddhhmmss", "Thu, Oct 14, 1999, 6:58:59\u202FAM"
@@ -447,7 +447,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
         new String[] {"HHmm", "23:58"},
         new String[] {"jjmm", "11:58\u202FPM"},
         new String[] {"mmss", "58:59"},
-        new String[] {"yyyyMMMM", "January \u20191999"}, // (new item for testing 6872<-5702)
+        new String[] {"yyyyMMMM", "January 1999"}, // (new item for testing 6872<-5702)
         new String[] {"MMMEd", "Wed, Jan 13"},
         new String[] {"Ed", "13 Wed"},
         new String[] {"jmmssSSS", "11:58:59.123\u202FPM"},
@@ -1585,10 +1585,8 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
             new TestOptionsItem(
                     "da", "hhmm", "hh.mm\u202Fa", DateTimePatternGenerator.MATCH_HOUR_FIELD_LENGTH),
             //
-            new TestOptionsItem(
-                    "en", "yyyy", "\u2019yyyy", DateTimePatternGenerator.MATCH_NO_OPTIONS),
-            new TestOptionsItem(
-                    "en", "YYYY", "\u2019YYYY", DateTimePatternGenerator.MATCH_NO_OPTIONS),
+            new TestOptionsItem("en", "yyyy", "yyyy", DateTimePatternGenerator.MATCH_NO_OPTIONS),
+            new TestOptionsItem("en", "YYYY", "YYYY", DateTimePatternGenerator.MATCH_NO_OPTIONS),
             new TestOptionsItem("en", "U", "y", DateTimePatternGenerator.MATCH_NO_OPTIONS),
             new TestOptionsItem(
                     "en@calendar=japanese",
@@ -1722,6 +1720,32 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
                                 + ", got "
                                 + pattern);
             }
+        }
+    }
+
+    /**
+     * Test that a two-digit year in the requested skeleton produces a two-digit year in the
+     * resulting pattern (and that other year field lengths are preserved as well).
+     */
+    @Test
+    public void TestTwoDigitYear() {
+        String[][] testData = {
+            //  locale, skeleton, expected pattern
+            {"en", "yMMMd", "MMM d, y"},
+            {"en", "yyMMMd", "MMM d, ’yy"},
+            {"en", "yyyyMMMd", "MMM d, yyyy"},
+            {"de", "yMMMd", "d. MMM y"},
+            {"de", "yyMMMd", "d. MMM yy"},
+            {"de", "yyyyMMMd", "d. MMM yyyy"},
+        };
+
+        for (String[] testCase : testData) {
+            DateTimePatternGenerator dtpgen =
+                    DateTimePatternGenerator.getInstance(new ULocale(testCase[0]));
+            String pattern =
+                    dtpgen.getBestPattern(testCase[1], DateTimePatternGenerator.MATCH_NO_OPTIONS);
+            assertEquals(
+                    "Locale " + testCase[0] + ", skeleton " + testCase[1], testCase[2], pattern);
         }
     }
 
