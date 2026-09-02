@@ -43,12 +43,6 @@ namespace segmenter {
 // enums
 // ---------------------------------------------
 
-enum CurrentSegmentValidType {
-    CURRENT_SEGMENT_UNKNOWN = 0,
-    CURRENT_SEGMENT_VALID = 1,
-    CURRENT_SEGMENT_INVALID = 2,
-};
-
 // ---------------------------------------------
 // SegmentIterator
 // ---------------------------------------------
@@ -64,15 +58,27 @@ public:
     SegmentIterator & operator++();
     SegmentIterator & operator--();
 private:
-    int32_t startIdx_;
-    int32_t limitIdx_;
-    int32_t ruleStatus_;
+    enum IterLogicalState {
+        // breakIter_->current() < startIdx_  => 
+        //   actual position is before logical position <=>
+        //   breakIter position is before current segment
+        ITER_BEFORE_LOGICAL_POS = -1,
+        // breakIter_->current() == startIdx_  => 
+        //   actual position is same logical position <=>
+        //   breakIter position on start boundary of current segment
+        ITER_AT_LOGICAL_POS = 0,
+        // breakIter_->current() > startIdx_  => 
+        //   actual position is after logical position <=>
+        //   breakIter position is after current segment
+        ITER_AFTER_LOGICAL_POS = 1,
+    };
+
+    mutable int32_t startIdx_;
+    mutable int32_t limitIdx_;
+    mutable int32_t ruleStatus_;
     std::u16string_view source_;
     std::unique_ptr<BreakIterator> breakIter_;
-
-    // CurrentSegmentValidType prevSegValid_;
-    // CurrentSegmentValidType currSegValid_;
-    // CurrentSegmentValidType nextSegValid_;
+    mutable IterLogicalState iterLogicState_;
 
     bool isCurrentSegmentValid() const;
 };
