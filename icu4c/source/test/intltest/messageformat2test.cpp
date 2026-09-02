@@ -33,6 +33,7 @@ TestMessageFormat2::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO(dataDrivenTests);
     TESTCASE_AUTO(testOverrideFunctions);
     TESTCASE_AUTO(testComposeInternalFunctions);
+	TESTCASE_AUTO(testCrasherOnSelect);
     TESTCASE_AUTO_END;
 }
 
@@ -703,6 +704,50 @@ void TestMessageFormat2::testComposeInternalFunctions() {
         return;
     }
     assertEquals("testComposeInternalFunctions", expectedResult, result);
+}
+
+void TestMessageFormat2::testCrasherOnSelect() {
+    const icu::UnicodeString SELECT_CRASHER(".input {$count :number} .match $count many {{ many {$count} }} * {{ "
+                            "star {$count} }}");
+    std::map<UnicodeString, icu::message2::Formattable> argsBuilder;
+    // "count" is missing, but we shouldn't crash
+    // argsBuilder["count"] = message2::Formattable((int64_t)13);
+    // The issue exercised needed at least *one* arg.
+    argsBuilder["IGNORED"] = message2::Formattable((int64_t)999);
+
+    // U_MF_BEST_EFFORT - should fallback
+    {
+        IcuTestErrorCode errorCode(*this, "testCrasherOnSelect-U_MF_BEST_EFFORT");
+        UParseError parseError;
+        icu::message2::MessageFormatter mf =
+            MessageFormatter::Builder(errorCode)
+                .setErrorHandlingBehavior(MessageFormatter::U_MF_BEST_EFFORT)
+                .setPattern(SELECT_CRASHER, parseError, errorCode)
+                .setLocale(Locale("pl"))
+                .build(errorCode);
+        icu::message2::MessageArguments args(argsBuilder, errorCode);
+        UnicodeString result = mf.formatToString(args, errorCode);
+        if (errorCode.errIfFailureAndReset("formatToString")) {
+            return;
+        }
+        UnicodeString expectedResult(" star {$count} ");
+        assertEquals("testCrasherOnSelect-U_MF_BEST_EFFORT", expectedResult, result);
+    }
+    // U_MF_STRICT - will error out
+    {
+        IcuTestErrorCode errorCode(*this, "testCrasherOnSelect-U_MF_STRICT");
+        UParseError parseError;
+        icu::message2::MessageFormatter mf =
+            MessageFormatter::Builder(errorCode)
+                .setErrorHandlingBehavior(MessageFormatter::U_MF_STRICT)
+                .setPattern(SELECT_CRASHER, parseError, errorCode)
+                .setLocale(Locale("pl"))
+                .build(errorCode);
+        icu::message2::MessageArguments args(argsBuilder, errorCode);
+        UnicodeString result = mf.formatToString(args, errorCode);
+        errorCode.expectErrorAndReset(U_MF_UNRESOLVED_VARIABLE_ERROR, "testCrasherOnSelect-U_MF_STRICT: expect error");
+        (void)result; // ignored
+    }
 }
 
 TestCase::~TestCase() {}

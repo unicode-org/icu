@@ -151,8 +151,7 @@ static UnicodeString reserialize(const UnicodeString& s) {
         // The name of this local variable is the fallback for its RHS.
         UnicodeString newFallback(DOLLAR);
         newFallback += var;
-
-        if (!rhs.isEvaluated()) {
+        if (rhs.isClosure()) {
             Closure& c = rhs.asClosure();
             InternalValue& result = evalExpression(newFallback,
                                                    c.getEnv(),
@@ -184,7 +183,6 @@ static UnicodeString reserialize(const UnicodeString& s) {
                 // by evalExpression()
                 rhs.update(ref);
             }
-            return rhs;
         }
         // If it's already evaluated, just return the value
         return rhs;
