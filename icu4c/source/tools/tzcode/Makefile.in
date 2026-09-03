@@ -17,6 +17,9 @@ endif
 ifeq ($(TZCODE),)
 TZCODE = $(firstword $(wildcard ./tzcode*.tar.gz) $(wildcard $(srcdir)/tzcode*.tar.gz))
 endif
+METAZONES = $(CLDR_DIR)/common/supplemental/metaZones.xml
+
+
 
 
 PRIMARY_DATA = africa antarctica asia australasia europe northamerica southamerica
@@ -61,12 +64,18 @@ TZ2ICUEXEC=$(TOOLBINDIR)/tz2icu$(TOOLEXEEXT)
 ICUZDUMPTARG=$(BINDIR)/icuzdump$(EXEEXT)
 ICUZDUMPEXEC=$(TOOLBINDIR)/icuzdump$(TOOLEXEEXT)
 
+ifeq ($(CLDR_DIR),)
+all:
+	@echo ERROR "CLDR_DIR" can\'t be found. Please set the CLDR_DIR environment variable.
+	@false
+else
 ifeq ($(TZDATA),)
 all: 
 	@echo ERROR "tzdata*.tar.gz" can\'t be found.
 	@false
 else
 all: icu_data
+endif
 endif
 
 TZCODE_TARGETS= tzorig check-dump
@@ -153,8 +162,8 @@ posix_only:	$(ZICEXEC) $(TDATA) $(srcdir)/icuzones
 
 
 icu_data:	$(TZ2ICUEXEC) posix_only
-		$(TZ2ICUEXEC) $(TZDIR) zone.tab `echo $(TZDATA) | sed -e "s/.*\/tzdata//;s/\.tar\.gz$$//"`
-		$(TZ2ICUEXEC) $(TZDIR) zone.tab `echo $(TZDATA) | sed -e "s/.*\/tzdata//;s/\.tar\.gz$$//"` --old
+		$(TZ2ICUEXEC) $(TZDIR) zone.tab `echo $(TZDATA) | sed -e "s/.*\/tzdata//;s/\.tar\.gz$$//"` $(METAZONES)
+		$(TZ2ICUEXEC) $(TZDIR) zone.tab `echo $(TZDATA) | sed -e "s/.*\/tzdata//;s/\.tar\.gz$$//"` $(METAZONES) --old
 
 clean:
 		-rm -f core *.o *.out zdump${EXEEXT} $(ZICTARG) date $(TZ2ICUTARG)
