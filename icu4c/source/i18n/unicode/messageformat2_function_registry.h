@@ -503,7 +503,7 @@ namespace message2 {
             /**
              * Returns a fallback string that can be used as output
              * if processing this function results in an error.
-             *             *
+             *
              * @returns A string determined by the creator of this FunctionValue.
              *
              * @internal ICU 79 technology preview

@@ -5,476 +5,304 @@
  License & terms of use: http://www.unicode.org/copyright.html
 -->
 
-# ICU4C API Comparison: ICU 77 with ICU 78
+# ICU4C API Comparison: ICU 78 with ICU 79
 
 > _Note_ Markdown format of this document is new for ICU 65.
 
-- [Removed from ICU 77](#removed)
-- [Deprecated or Obsoleted in ICU 78](#deprecated)
-- [Changed in  ICU 78](#changed)
-- [Promoted to stable in ICU 78](#promoted)
-- [Added in ICU 78](#added)
-- [Other existing drafts in ICU 78](#other)
+- [Removed from ICU 78](#removed)
+- [Deprecated or Obsoleted in ICU 79](#deprecated)
+- [Changed in  ICU 79](#changed)
+- [Promoted to stable in ICU 79](#promoted)
+- [Added in ICU 79](#added)
+- [Other existing drafts in ICU 79](#other)
 - [Signature Simplifications](#simplifications)
 
 ## Removed
 
-Removed from ICU 77
+Removed from ICU 78
   
-| File | API | ICU 77 | ICU 78 |
+| File | API | ICU 78 | ICU 79 |
 |---|---|---|---|
-| fmtable.h | CharString* icu::Formattable::internalGetCharString(UErrorCode&amp;) |  Internal | (missing)
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getPortionPer1E9() |  DraftICU 77 | (missing)
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createPortionPer1E9(UErrorCode&amp;) |  DraftICU 77 | (missing)
-| messageformat2_data_model.h | Builder&amp; icu::message2::MFDataModel::Builder::addBinding(Binding&amp;&amp;, UErrorCode&amp;) |  InternalICU 75 | (missing)
-| messageformat2_data_model.h | Builder&amp; icu::message2::MFDataModel::Builder::addSelector(VariableName&amp;&amp;, UErrorCode&amp;) |  InternalICU 75 | (missing)
-| messageformat2_data_model.h | Builder&amp; icu::message2::MFDataModel::Builder::addVariant(SelectorKeys&amp;&amp;, Pattern&amp;&amp;, UErrorCode&amp;) |  InternalICU 75 | (missing)
-| messageformat2_data_model.h | Builder&amp; icu::message2::MFDataModel::Builder::operator=(Builder&amp;&amp;)=delete |   *untagged*  | (missing)
-| messageformat2_data_model.h | Builder&amp; icu::message2::MFDataModel::Builder::operator=(const Builder&amp;)=delete |   *untagged*  | (missing)
-| messageformat2_data_model.h | Builder&amp; icu::message2::MFDataModel::Builder::setPattern(Pattern&amp;&amp;) |  InternalICU 75 | (missing)
-| messageformat2_data_model.h | MFDataModel icu::message2::MFDataModel::Builder::build(UErrorCode&amp;) const |  InternalICU 75 | (missing)
-| messageformat2_data_model.h | icu::message2::MFDataModel::Builder::Builder(Builder&amp;&amp;)=delete |   *untagged*  | (missing)
-| messageformat2_data_model.h | icu::message2::MFDataModel::Builder::Builder(UErrorCode&amp;) |  InternalICU 75 | (missing)
-| messageformat2_data_model.h | icu::message2::MFDataModel::Builder::Builder(const Builder&amp;)=delete |   *untagged*  | (missing)
-| messageformat2_data_model.h | icu::message2::MFDataModel::Builder::~Builder() |  InternalICU 75 | (missing)
-| messageformat2_formattable.h | UDate icu::message2::Formattable::getDate(UErrorCode&amp;) const |  InternalICU 75 | (missing)
-| messageformat2_formattable.h | <tt>static</tt> Formattable icu::message2::Formattable::forDate(UDate) |  InternalICU 75 | (missing)
-| platform.h | <tt>#define</tt> U_HAVE_PLACEMENT_NEW |  StableICU 2.6 | (missing)
+| messageformat2_formattable.h | FormattedPlaceholder&amp; icu::message2::FormattedPlaceholder::operator=(FormattedPlaceholder&amp;&amp;) |  InternalICU 75 | (missing)
+| messageformat2_formattable.h | FormattedValue&amp; icu::message2::FormattedValue::operator=(FormattedValue&amp;&amp;) |  InternalICU 75 | (missing)
+| messageformat2_formattable.h | FunctionOptions&amp; icu::message2::FunctionOptions::operator=(FunctionOptions&amp;&amp;) |  InternalICU 75 | (missing)
+| messageformat2_formattable.h | FunctionOptions&amp; icu::message2::FunctionOptions::operator=(const FunctionOptions&amp;)=delete |  InternalICU 75 | (missing)
+| messageformat2_formattable.h | UnicodeString icu::message2::FormattedPlaceholder::formatToString(const Locale&amp;, UErrorCode&amp;) const |  InternalICU 75 | (missing)
+| messageformat2_formattable.h | bool icu::message2::FormattedPlaceholder::canFormat() const |  InternalICU 75 | (missing)
+| messageformat2_formattable.h | bool icu::message2::FormattedPlaceholder::isEvaluated() const |  InternalICU 75 | (missing)
+| messageformat2_formattable.h | bool icu::message2::FormattedPlaceholder::isFallback() const |  InternalICU 75 | (missing)
+| messageformat2_formattable.h | bool icu::message2::FormattedPlaceholder::isNullOperand() const |  InternalICU 75 | (missing)
+| messageformat2_formattable.h | bool icu::message2::FormattedValue::isNumber() const |  InternalICU 75 | (missing)
+| messageformat2_formattable.h | bool icu::message2::FormattedValue::isString() const |  InternalICU 75 | (missing)
+| messageformat2_formattable.h | const FormattedValue &amp; icu::message2::FormattedPlaceholder::output() const |  InternalICU 75 | (missing)
+| messageformat2_formattable.h | const FunctionOptions &amp; icu::message2::FormattedPlaceholder::options() const |  InternalICU 75 | (missing)
+| messageformat2_formattable.h | const UnicodeString &amp; icu::message2::FormattedPlaceholder::getFallback() const |  InternalICU 75 | (missing)
+| messageformat2_formattable.h | const UnicodeString &amp; icu::message2::FormattedValue::getString() const |  InternalICU 75 | (missing)
+| messageformat2_formattable.h | const message2::Formattable &amp; icu::message2::FormattedPlaceholder::asFormattable() const |  InternalICU 75 | (missing)
+| messageformat2_formattable.h | const number::FormattedNumber &amp; icu::message2::FormattedValue::getNumber() const |  InternalICU 75 | (missing)
+| messageformat2_formattable.h | icu::message2::FormattedPlaceholder::FormattedPlaceholder() |  InternalICU 75 | (missing)
+| messageformat2_formattable.h | icu::message2::FormattedPlaceholder::FormattedPlaceholder(FormattedPlaceholder&amp;&amp;) |  InternalICU 75 | (missing)
+| messageformat2_formattable.h | icu::message2::FormattedPlaceholder::FormattedPlaceholder(const Formattable&amp;, const UnicodeString&amp;) |  InternalICU 75 | (missing)
+| messageformat2_formattable.h | icu::message2::FormattedPlaceholder::FormattedPlaceholder(const FormattedPlaceholder&amp;, FormattedValue&amp;&amp;) |  InternalICU 75 | (missing)
+| messageformat2_formattable.h | icu::message2::FormattedPlaceholder::FormattedPlaceholder(const FormattedPlaceholder&amp;, FunctionOptions&amp;&amp;, FormattedValue&amp;&amp;) |  InternalICU 75 | (missing)
+| messageformat2_formattable.h | icu::message2::FormattedPlaceholder::FormattedPlaceholder(const UnicodeString&amp;) |  InternalICU 75 | (missing)
+| messageformat2_formattable.h | icu::message2::FormattedValue::FormattedValue() |  InternalICU 75 | (missing)
+| messageformat2_formattable.h | icu::message2::FormattedValue::FormattedValue(FormattedValue&amp;&amp;) |  InternalICU 75 | (missing)
+| messageformat2_formattable.h | icu::message2::FormattedValue::FormattedValue(const UnicodeString&amp;) |  InternalICU 75 | (missing)
+| messageformat2_formattable.h | icu::message2::FormattedValue::FormattedValue(number::FormattedNumber&amp;&amp;) |  InternalICU 75 | (missing)
+| messageformat2_formattable.h | icu::message2::FormattedValue::~FormattedValue() |  InternalICU 75 | (missing)
+| messageformat2_formattable.h | icu::message2::FunctionOptions::FunctionOptions(FunctionOptions&amp;&amp;) |  InternalICU 75 | (missing)
+| messageformat2_function_registry.h | Builder&amp; icu::message2::MFFunctionRegistry::Builder::adoptFormatter(const data_model::FunctionName&amp;, FormatterFactory*, UErrorCode&amp;) |  InternalICU 75 | (missing)
+| messageformat2_function_registry.h | Builder&amp; icu::message2::MFFunctionRegistry::Builder::adoptSelector(const data_model::FunctionName&amp;, SelectorFactory*, UErrorCode&amp;) |  InternalICU 75 | (missing)
+| messageformat2_function_registry.h | FormattedPlaceholder icu::message2::Formatter::format(FormattedPlaceholder&amp;&amp;, FunctionOptions&amp;&amp;, UErrorCode&amp;) const |  InternalICU 75 | (missing)
+| messageformat2_function_registry.h | Formatter* icu::message2::FormatterFactory::createFormatter(const Locale&amp;, UErrorCode&amp;) |  InternalICU 75 | (missing)
+| messageformat2_function_registry.h | FormatterFactory&amp; icu::message2::FormatterFactory::operator=(const FormatterFactory&amp;)=delete |  InternalICU 75 | (missing)
+| messageformat2_function_registry.h | FormatterFactory* icu::message2::MFFunctionRegistry::getFormatter(const FunctionName&amp;) const |  InternalICU 75 | (missing)
+| messageformat2_function_registry.h | Selector* icu::message2::SelectorFactory::createSelector(const Locale&amp;, UErrorCode&amp;) const |  InternalICU 75 | (missing)
+| messageformat2_function_registry.h | SelectorFactory&amp; icu::message2::SelectorFactory::operator=(const SelectorFactory&amp;)=delete |  InternalICU 75 | (missing)
+| messageformat2_function_registry.h | const SelectorFactory* icu::message2::MFFunctionRegistry::getSelector(const FunctionName&amp;) const |  InternalICU 75 | (missing)
+| messageformat2_function_registry.h | icu::message2::Formatter::~Formatter() |  InternalICU 75 | (missing)
+| messageformat2_function_registry.h | icu::message2::FormatterFactory::~FormatterFactory() |  InternalICU 75 | (missing)
+| messageformat2_function_registry.h | icu::message2::Selector::~Selector() |  InternalICU 75 | (missing)
+| messageformat2_function_registry.h | icu::message2::SelectorFactory::~SelectorFactory() |  InternalICU 75 | (missing)
+| messageformat2_function_registry.h | void icu::message2::Selector::selectKey(FormattedPlaceholder&amp;&amp;, FunctionOptions&amp;&amp;, const UnicodeString*, int32_t, UnicodeString*, int32_t&amp;, UErrorCode&amp;) const |  InternalICU 75 | (missing)
+| numberformatter.h | int16_t icu::number::impl::StringProp::length() const |  Internal | (missing)
 
 ## Deprecated
 
-Deprecated or Obsoleted in ICU 78
+Deprecated or Obsoleted in ICU 79
   
-| File | API | ICU 77 | ICU 78 |
+| File | API | ICU 78 | ICU 79 |
 |---|---|---|---|
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getMetricTon() |  StableICU 64 | DeprecatedICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getMilligramPerDeciliter() |  StableICU 64 | DeprecatedICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createMetricTon(UErrorCode&amp;) |  StableICU 54 | DeprecatedICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createMilligramPerDeciliter(UErrorCode&amp;) |  StableICU 57 | DeprecatedICU 78
 
 ## Changed
 
-Changed in  ICU 78 (old, new)
+Changed in  ICU 79 (old, new)
 
 
   
-| File | API | ICU 77 | ICU 78 |
+| File | API | ICU 78 | ICU 79 |
 |---|---|---|---|
-| coll.h | auto icu::Collator::equal_to() const |  Draft→StableICU 76
-| coll.h | auto icu::Collator::greater() const |  Draft→StableICU 76
-| coll.h | auto icu::Collator::greater_equal() const |  Draft→StableICU 76
-| coll.h | auto icu::Collator::less() const |  Draft→StableICU 76
-| coll.h | auto icu::Collator::less_equal() const |  Draft→StableICU 76
-| coll.h | auto icu::Collator::not_equal_to() const |  Draft→StableICU 76
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getLightSpeed() |  Draft→StableICU 76
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getMetricTon() |  StableICU 64 | DeprecatedICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getMilligramPerDeciliter() |  StableICU 64 | DeprecatedICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getNight() |  Draft→StableICU 76
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createLightSpeed(UErrorCode&amp;) |  Draft→StableICU 76
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createMetricTon(UErrorCode&amp;) |  StableICU 54 | DeprecatedICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createMilligramPerDeciliter(UErrorCode&amp;) |  StableICU 57 | DeprecatedICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createNight(UErrorCode&amp;) |  Draft→StableICU 76
-| uchar.h | <tt>enum</tt> UIndicConjunctBreak::U_INCB_CONSONANT |  Draft→StableICU 76
-| uchar.h | <tt>enum</tt> UIndicConjunctBreak::U_INCB_EXTEND |  Draft→StableICU 76
-| uchar.h | <tt>enum</tt> UIndicConjunctBreak::U_INCB_LINKER |  Draft→StableICU 76
-| uchar.h | <tt>enum</tt> UIndicConjunctBreak::U_INCB_NONE |  Draft→StableICU 76
-| uchar.h | <tt>enum</tt> UProperty::UCHAR_INDIC_CONJUNCT_BREAK |  Draft→StableICU 76
-| uchar.h | <tt>enum</tt> UProperty::UCHAR_MODIFIER_COMBINING_MARK |  Draft→StableICU 76
-| uniset.h | U_HEADER_NESTED_NAMESPACE::USetCodePoints icu::UnicodeSet::codePoints() const |  Draft→StableICU 76
-| uniset.h | U_HEADER_NESTED_NAMESPACE::USetRanges icu::UnicodeSet::ranges() const |  Draft→StableICU 76
-| uniset.h | U_HEADER_NESTED_NAMESPACE::USetStrings icu::UnicodeSet::strings() const |  Draft→StableICU 76
-| unistr.h | UNISTR_FROM_STRING_EXPLICIT icu::UnicodeString::UnicodeString(const S&amp;) |  Draft→StableICU 76
-| unistr.h | UnicodeString&amp; icu::UnicodeString::append(const S&amp;) |  Draft→StableICU 76
-| unistr.h | UnicodeString&amp; icu::UnicodeString::operator+=(const S&amp;) |  Draft→StableICU 76
-| unistr.h | UnicodeString&amp; icu::UnicodeString::operator=(const S&amp;) |  Draft→StableICU 76
-| unistr.h | bool icu::UnicodeString::operator!=(const S&amp;) const |  Draft→StableICU 76
-| unistr.h | bool icu::UnicodeString::operator==(const S&amp;) const |  Draft→StableICU 76
-| unistr.h | icu::UnicodeString::operator std::u16string_view() const |  Draft→StableICU 76
-| unistr.h | icu::UnicodeString::operator std::wstring_view() const |  Draft→StableICU 76
-| unistr.h | <tt>static</tt> UnicodeString icu::UnicodeString::readOnlyAlias(const S&amp;) |  Draft→StableICU 76
-| unistr.h | <tt>static</tt> UnicodeString icu::UnicodeString::readOnlyAlias(const UnicodeString&amp;) |  Draft→StableICU 76
-| uset.h | CodePointRange U_HEADER_ONLY_NAMESPACE::USetRangeIterator::operator* () const |  Draft→StableICU 76
-| uset.h | USetCodePointIterator &amp; U_HEADER_ONLY_NAMESPACE::USetCodePointIterator::operator++() |  Draft→StableICU 76
-| uset.h | USetCodePointIterator U_HEADER_ONLY_NAMESPACE::USetCodePointIterator::operator++(int) |  Draft→StableICU 76
-| uset.h | USetCodePointIterator U_HEADER_ONLY_NAMESPACE::USetCodePoints::begin() const |  Draft→StableICU 76
-| uset.h | USetCodePointIterator U_HEADER_ONLY_NAMESPACE::USetCodePoints::end() const |  Draft→StableICU 76
-| uset.h | USetRangeIterator &amp; U_HEADER_ONLY_NAMESPACE::USetRangeIterator::operator++() |  Draft→StableICU 76
-| uset.h | USetRangeIterator U_HEADER_ONLY_NAMESPACE::USetRangeIterator::operator++(int) |  Draft→StableICU 76
-| uset.h | USetRangeIterator U_HEADER_ONLY_NAMESPACE::USetRanges::begin() const |  Draft→StableICU 76
-| uset.h | USetRangeIterator U_HEADER_ONLY_NAMESPACE::USetRanges::end() const |  Draft→StableICU 76
-| uset.h | USetStringIterator &amp; U_HEADER_ONLY_NAMESPACE::USetStringIterator::operator++() |  Draft→StableICU 76
-| uset.h | USetStringIterator U_HEADER_ONLY_NAMESPACE::USetStringIterator::operator++(int) |  Draft→StableICU 76
-| uset.h | USetStringIterator U_HEADER_ONLY_NAMESPACE::USetStrings::begin() const |  Draft→StableICU 76
-| uset.h | USetStringIterator U_HEADER_ONLY_NAMESPACE::USetStrings::end() const |  Draft→StableICU 76
-| uset.h | U_HEADER_ONLY_NAMESPACE::USetCodePointIterator::USetCodePointIterator(const USetCodePointIterator&amp;)=default |  Draft→StableICU 76
-| uset.h | U_HEADER_ONLY_NAMESPACE::USetCodePoints::USetCodePoints(const USet*) |  Draft→StableICU 76
-| uset.h | U_HEADER_ONLY_NAMESPACE::USetCodePoints::USetCodePoints(const USetCodePoints&amp;)=default |  Draft→StableICU 76
-| uset.h | U_HEADER_ONLY_NAMESPACE::USetRangeIterator::USetRangeIterator(const USetRangeIterator&amp;)=default |  Draft→StableICU 76
-| uset.h | U_HEADER_ONLY_NAMESPACE::USetRanges::USetRanges(const USet*) |  Draft→StableICU 76
-| uset.h | U_HEADER_ONLY_NAMESPACE::USetRanges::USetRanges(const USetRanges&amp;)=default |  Draft→StableICU 76
-| uset.h | U_HEADER_ONLY_NAMESPACE::USetStringIterator::USetStringIterator(const USetStringIterator&amp;)=default |  Draft→StableICU 76
-| uset.h | U_HEADER_ONLY_NAMESPACE::USetStrings::USetStrings(const USet*) |  Draft→StableICU 76
-| uset.h | U_HEADER_ONLY_NAMESPACE::USetStrings::USetStrings(const USetStrings&amp;)=default |  Draft→StableICU 76
-| uset.h | bool U_HEADER_ONLY_NAMESPACE::USetCodePointIterator::operator!=(const USetCodePointIterator&amp;) const |  Draft→StableICU 76
-| uset.h | bool U_HEADER_ONLY_NAMESPACE::USetCodePointIterator::operator==(const USetCodePointIterator&amp;) const |  Draft→StableICU 76
-| uset.h | bool U_HEADER_ONLY_NAMESPACE::USetRangeIterator::operator!=(const USetRangeIterator&amp;) const |  Draft→StableICU 76
-| uset.h | bool U_HEADER_ONLY_NAMESPACE::USetRangeIterator::operator==(const USetRangeIterator&amp;) const |  Draft→StableICU 76
-| uset.h | bool U_HEADER_ONLY_NAMESPACE::USetStringIterator::operator!=(const USetStringIterator&amp;) const |  Draft→StableICU 76
-| uset.h | bool U_HEADER_ONLY_NAMESPACE::USetStringIterator::operator==(const USetStringIterator&amp;) const |  Draft→StableICU 76
-| uset.h | UChar32 U_HEADER_ONLY_NAMESPACE::USetCodePointIterator::operator* () const |  Draft→StableICU 76
-| uset.h | const UChar* uset_getString(const USet*, int32_t, int32_t*) |  Draft→StableICU 76
-| uset.h | int32_t uset_getStringCount(const USet*) |  Draft→StableICU 76
-| uset.h | std::u16string_view U_HEADER_ONLY_NAMESPACE::USetStringIterator::operator* () const |  Draft→StableICU 76
+| messageformat2_data_model.h | bool icu::message2::data_model::Binding::isLocal() const |  InternalICU 78 | InternalICU 79
 
 ## Promoted
 
-Promoted to stable in ICU 78
+Promoted to stable in ICU 79
   
-| File | API | ICU 77 | ICU 78 |
+| File | API | ICU 78 | ICU 79 |
 |---|---|---|---|
-| coll.h | auto icu::Collator::equal_to() const |  Draft→StableICU 76
-| coll.h | auto icu::Collator::greater() const |  Draft→StableICU 76
-| coll.h | auto icu::Collator::greater_equal() const |  Draft→StableICU 76
-| coll.h | auto icu::Collator::less() const |  Draft→StableICU 76
-| coll.h | auto icu::Collator::less_equal() const |  Draft→StableICU 76
-| coll.h | auto icu::Collator::not_equal_to() const |  Draft→StableICU 76
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getLightSpeed() |  Draft→StableICU 76
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getNight() |  Draft→StableICU 76
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createLightSpeed(UErrorCode&amp;) |  Draft→StableICU 76
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createNight(UErrorCode&amp;) |  Draft→StableICU 76
-| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_BERIA_ERFE |  (missing) | StableICU 78| *(Born Stable)* |
-| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_J |  (missing) | StableICU 78| *(Born Stable)* |
-| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_MISCELLANEOUS_SYMBOLS_SUPPLEMENT |  (missing) | StableICU 78| *(Born Stable)* |
-| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_SHARADA_SUPPLEMENT |  (missing) | StableICU 78| *(Born Stable)* |
-| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_SIDETIC |  (missing) | StableICU 78| *(Born Stable)* |
-| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_TAI_YO |  (missing) | StableICU 78| *(Born Stable)* |
-| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_TANGUT_COMPONENTS_SUPPLEMENT |  (missing) | StableICU 78| *(Born Stable)* |
-| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_TOLONG_SIKI |  (missing) | StableICU 78| *(Born Stable)* |
-| uchar.h | <tt>enum</tt> UIndicConjunctBreak::U_INCB_CONSONANT |  Draft→StableICU 76
-| uchar.h | <tt>enum</tt> UIndicConjunctBreak::U_INCB_EXTEND |  Draft→StableICU 76
-| uchar.h | <tt>enum</tt> UIndicConjunctBreak::U_INCB_LINKER |  Draft→StableICU 76
-| uchar.h | <tt>enum</tt> UIndicConjunctBreak::U_INCB_NONE |  Draft→StableICU 76
-| uchar.h | <tt>enum</tt> UJoiningGroup::U_JG_THIN_NOON |  (missing) | StableICU 78| *(Born Stable)* |
-| uchar.h | <tt>enum</tt> ULineBreak::U_LB_UNAMBIGUOUS_HYPHEN |  (missing) | StableICU 78| *(Born Stable)* |
-| uchar.h | <tt>enum</tt> UProperty::UCHAR_INDIC_CONJUNCT_BREAK |  Draft→StableICU 76
-| uchar.h | <tt>enum</tt> UProperty::UCHAR_MODIFIER_COMBINING_MARK |  Draft→StableICU 76
-| uniset.h | U_HEADER_NESTED_NAMESPACE::USetCodePoints icu::UnicodeSet::codePoints() const |  Draft→StableICU 76
-| uniset.h | U_HEADER_NESTED_NAMESPACE::USetRanges icu::UnicodeSet::ranges() const |  Draft→StableICU 76
-| uniset.h | U_HEADER_NESTED_NAMESPACE::USetStrings icu::UnicodeSet::strings() const |  Draft→StableICU 76
-| unistr.h | UNISTR_FROM_STRING_EXPLICIT icu::UnicodeString::UnicodeString(const S&amp;) |  Draft→StableICU 76
-| unistr.h | UnicodeString&amp; icu::UnicodeString::append(const S&amp;) |  Draft→StableICU 76
-| unistr.h | UnicodeString&amp; icu::UnicodeString::operator+=(const S&amp;) |  Draft→StableICU 76
-| unistr.h | UnicodeString&amp; icu::UnicodeString::operator=(const S&amp;) |  Draft→StableICU 76
-| unistr.h | bool icu::UnicodeString::operator!=(const S&amp;) const |  Draft→StableICU 76
-| unistr.h | bool icu::UnicodeString::operator==(const S&amp;) const |  Draft→StableICU 76
-| unistr.h | icu::UnicodeString::operator std::u16string_view() const |  Draft→StableICU 76
-| unistr.h | icu::UnicodeString::operator std::wstring_view() const |  Draft→StableICU 76
-| unistr.h | <tt>static</tt> UnicodeString icu::UnicodeString::readOnlyAlias(const S&amp;) |  Draft→StableICU 76
-| unistr.h | <tt>static</tt> UnicodeString icu::UnicodeString::readOnlyAlias(const UnicodeString&amp;) |  Draft→StableICU 76
-| uscript.h | <tt>enum</tt> UScriptCode::USCRIPT_BERIA_ERFE |  (missing) | StableICU 78| *(Born Stable)* |
-| uscript.h | <tt>enum</tt> UScriptCode::USCRIPT_SIDETIC |  (missing) | StableICU 78| *(Born Stable)* |
-| uscript.h | <tt>enum</tt> UScriptCode::USCRIPT_TAI_YO |  (missing) | StableICU 78| *(Born Stable)* |
-| uscript.h | <tt>enum</tt> UScriptCode::USCRIPT_TOLONG_SIKI |  (missing) | StableICU 78| *(Born Stable)* |
-| uscript.h | <tt>enum</tt> UScriptCode::USCRIPT_TRADITIONAL_HAN_WITH_LATIN |  (missing) | StableICU 78| *(Born Stable)* |
-| uset.h | CodePointRange U_HEADER_ONLY_NAMESPACE::USetRangeIterator::operator* () const |  Draft→StableICU 76
-| uset.h | USetCodePointIterator &amp; U_HEADER_ONLY_NAMESPACE::USetCodePointIterator::operator++() |  Draft→StableICU 76
-| uset.h | USetCodePointIterator U_HEADER_ONLY_NAMESPACE::USetCodePointIterator::operator++(int) |  Draft→StableICU 76
-| uset.h | USetCodePointIterator U_HEADER_ONLY_NAMESPACE::USetCodePoints::begin() const |  Draft→StableICU 76
-| uset.h | USetCodePointIterator U_HEADER_ONLY_NAMESPACE::USetCodePoints::end() const |  Draft→StableICU 76
-| uset.h | USetRangeIterator &amp; U_HEADER_ONLY_NAMESPACE::USetRangeIterator::operator++() |  Draft→StableICU 76
-| uset.h | USetRangeIterator U_HEADER_ONLY_NAMESPACE::USetRangeIterator::operator++(int) |  Draft→StableICU 76
-| uset.h | USetRangeIterator U_HEADER_ONLY_NAMESPACE::USetRanges::begin() const |  Draft→StableICU 76
-| uset.h | USetRangeIterator U_HEADER_ONLY_NAMESPACE::USetRanges::end() const |  Draft→StableICU 76
-| uset.h | USetStringIterator &amp; U_HEADER_ONLY_NAMESPACE::USetStringIterator::operator++() |  Draft→StableICU 76
-| uset.h | USetStringIterator U_HEADER_ONLY_NAMESPACE::USetStringIterator::operator++(int) |  Draft→StableICU 76
-| uset.h | USetStringIterator U_HEADER_ONLY_NAMESPACE::USetStrings::begin() const |  Draft→StableICU 76
-| uset.h | USetStringIterator U_HEADER_ONLY_NAMESPACE::USetStrings::end() const |  Draft→StableICU 76
-| uset.h | U_HEADER_ONLY_NAMESPACE::USetCodePointIterator::USetCodePointIterator(const USetCodePointIterator&amp;)=default |  Draft→StableICU 76
-| uset.h | U_HEADER_ONLY_NAMESPACE::USetCodePoints::USetCodePoints(const USet*) |  Draft→StableICU 76
-| uset.h | U_HEADER_ONLY_NAMESPACE::USetCodePoints::USetCodePoints(const USetCodePoints&amp;)=default |  Draft→StableICU 76
-| uset.h | U_HEADER_ONLY_NAMESPACE::USetRangeIterator::USetRangeIterator(const USetRangeIterator&amp;)=default |  Draft→StableICU 76
-| uset.h | U_HEADER_ONLY_NAMESPACE::USetRanges::USetRanges(const USet*) |  Draft→StableICU 76
-| uset.h | U_HEADER_ONLY_NAMESPACE::USetRanges::USetRanges(const USetRanges&amp;)=default |  Draft→StableICU 76
-| uset.h | U_HEADER_ONLY_NAMESPACE::USetStringIterator::USetStringIterator(const USetStringIterator&amp;)=default |  Draft→StableICU 76
-| uset.h | U_HEADER_ONLY_NAMESPACE::USetStrings::USetStrings(const USet*) |  Draft→StableICU 76
-| uset.h | U_HEADER_ONLY_NAMESPACE::USetStrings::USetStrings(const USetStrings&amp;)=default |  Draft→StableICU 76
-| uset.h | bool U_HEADER_ONLY_NAMESPACE::USetCodePointIterator::operator!=(const USetCodePointIterator&amp;) const |  Draft→StableICU 76
-| uset.h | bool U_HEADER_ONLY_NAMESPACE::USetCodePointIterator::operator==(const USetCodePointIterator&amp;) const |  Draft→StableICU 76
-| uset.h | bool U_HEADER_ONLY_NAMESPACE::USetRangeIterator::operator!=(const USetRangeIterator&amp;) const |  Draft→StableICU 76
-| uset.h | bool U_HEADER_ONLY_NAMESPACE::USetRangeIterator::operator==(const USetRangeIterator&amp;) const |  Draft→StableICU 76
-| uset.h | bool U_HEADER_ONLY_NAMESPACE::USetStringIterator::operator!=(const USetStringIterator&amp;) const |  Draft→StableICU 76
-| uset.h | bool U_HEADER_ONLY_NAMESPACE::USetStringIterator::operator==(const USetStringIterator&amp;) const |  Draft→StableICU 76
-| uset.h | UChar32 U_HEADER_ONLY_NAMESPACE::USetCodePointIterator::operator* () const |  Draft→StableICU 76
-| uset.h | const UChar* uset_getString(const USet*, int32_t, int32_t*) |  Draft→StableICU 76
-| uset.h | int32_t uset_getStringCount(const USet*) |  Draft→StableICU 76
-| uset.h | std::u16string_view U_HEADER_ONLY_NAMESPACE::USetStringIterator::operator* () const |  Draft→StableICU 76
+| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_ARCHAIC_CUNEIFORM_NUMERALS |  (missing) | StableICU 79| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_BENGALI_SUPPLEMENT |  (missing) | StableICU 79| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_JURCHEN_RADICALS |  (missing) | StableICU 79| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_JURCHEN |  (missing) | StableICU 79| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_MISCELLANEOUS_SYMBOLS_AND_ARROWS_EXTENDED |  (missing) | StableICU 79| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_MUSICAL_SYMBOLS_SUPPLEMENT |  (missing) | StableICU 79| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_SEAL |  (missing) | StableICU 79| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UJoiningGroup::U_JG_CROWN_AIN |  (missing) | StableICU 79| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UJoiningGroup::U_JG_CROWN_BEH |  (missing) | StableICU 79| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UJoiningGroup::U_JG_CROWN_FEH |  (missing) | StableICU 79| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UJoiningGroup::U_JG_CROWN_HAH |  (missing) | StableICU 79| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UJoiningGroup::U_JG_CROWN_HEH |  (missing) | StableICU 79| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UJoiningGroup::U_JG_CROWN_KAF |  (missing) | StableICU 79| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UJoiningGroup::U_JG_CROWN_MEEM |  (missing) | StableICU 79| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UJoiningGroup::U_JG_CROWN_SAD |  (missing) | StableICU 79| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UJoiningGroup::U_JG_CROWN_SEEN |  (missing) | StableICU 79| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UJoiningGroup::U_JG_CROWN_TAH |  (missing) | StableICU 79| *(Born Stable)* |
+| uscript.h | <tt>enum</tt> UScriptCode::USCRIPT_PROTO_CUNEIFORM |  (missing) | StableICU 79| *(Born Stable)* |
+| uscript.h | <tt>enum</tt> UScriptCode::USCRIPT_SEAL |  (missing) | StableICU 79| *(Born Stable)* |
 
 ## Added
 
-Added in ICU 78
+Added in ICU 79
   
-| File | API | ICU 77 | ICU 78 |
+| File | API | ICU 78 | ICU 79 |
 |---|---|---|---|
-| dtfmtsym.h | const UnicodeString* icu::DateFormatSymbols::getAmPmStrings(int32_t&amp;, DtContextType, DtWidthType) const |  (missing) | DraftICU 78
-| dtfmtsym.h | void icu::DateFormatSymbols::setAmPmStrings(const UnicodeString*, int32_t, DtContextType, DtWidthType) |  (missing) | DraftICU 78
-| dtptngen.h | UDateTimePatternConflict icu::DateTimePatternGenerator::addPatternWithSkeleton(const UnicodeString&amp;, const UnicodeString&amp;, bool, UnicodeString&amp;, UErrorCode&amp;) |  (missing) | InternalICU 78
-| fmtable.h | FixedString* icu::Formattable::internalGetFixedString(UErrorCode&amp;) |  (missing) | Internal
-| localpointer.h | <tt>static</tt> void* icu::LocalPointerBase&lt; T &gt;::operator new(size_t, void*)=delete |  (missing) | *untagged*
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getBecquerel() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getBritishThermalUnitIt() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getBuJp() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getCalorieIt() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getChain() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getCho() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getCoulomb() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getCupImperial() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getCupJp() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getFarad() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getFluidOunceMetric() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getFortnight() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getFun() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getGray() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getHenry() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getJoJp() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getKatal() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getKen() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getKilogramForce() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getKoku() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getKosaji() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getOfglucose() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getOfhg() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getOsaji() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getPart() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getPartPer1E6() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getPartPer1E9() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getPintImperial() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getRankine() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getRiJp() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getRin() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getRod() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getSai() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getSeJp() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getShaku() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getShakuCloth() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getShakuLength() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getSiemens() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getSievert() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getSlug() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getSteradian() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getSun() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getTesla() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getToJp() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getWeber() |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createBecquerel(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createBritishThermalUnitIt(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createBuJp(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createCalorieIt(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createChain(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createCho(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createCoulomb(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createCupImperial(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createCupJp(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createFarad(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createFluidOunceMetric(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createFortnight(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createFun(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createGray(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createHenry(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createJoJp(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createKatal(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createKen(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createKilogramForce(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createKoku(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createKosaji(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createOfglucose(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createOfhg(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createOsaji(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createPart(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createPartPer1E6(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createPartPer1E9(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createPintImperial(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createRankine(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createRiJp(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createRin(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createRod(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createSai(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createSeJp(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createShaku(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createShakuCloth(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createShakuLength(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createSiemens(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createSievert(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createSlug(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createSteradian(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createSun(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createTesla(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createToJp(UErrorCode&amp;) |  (missing) | DraftICU 78
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createWeber(UErrorCode&amp;) |  (missing) | DraftICU 78
-| messageformat2_data_model.h | Binding&amp; icu::message2::data_model::Binding::operator=(Binding) |  (missing) | InternalICU 75
-| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::MFDataModel::Builder::addBinding(Binding&amp;&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75
-| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::MFDataModel::Builder::addSelector(VariableName&amp;&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75
-| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::MFDataModel::Builder::addVariant(SelectorKeys&amp;&amp;, Pattern&amp;&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75
-| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::MFDataModel::Builder::operator=(Builder&amp;&amp;)=delete |  (missing) | *untagged*
-| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::MFDataModel::Builder::operator=(const Builder&amp;)=delete |  (missing) | *untagged*
-| messageformat2_data_model.h | Builder&amp; icu::message2::data_model::MFDataModel::Builder::setPattern(Pattern&amp;&amp;) |  (missing) | InternalICU 75
-| messageformat2_data_model.h | Iterator icu::message2::data_model::Pattern::begin() const |  (missing) | InternalICU 75
-| messageformat2_data_model.h | Iterator icu::message2::data_model::Pattern::end() const |  (missing) | InternalICU 75
-| messageformat2_data_model.h | Key&amp; icu::message2::data_model::Key::operator=(Key) |  (missing) | InternalICU 75
-| messageformat2_data_model.h | MFDataModel icu::message2::data_model::MFDataModel::Builder::build(UErrorCode&amp;) const |  (missing) | InternalICU 75
-| messageformat2_data_model.h | MFDataModel&amp; icu::message2::data_model::MFDataModel::operator=(MFDataModel) |  (missing) | InternalICU 75
-| messageformat2_data_model.h | Operand&amp; icu::message2::data_model::Operand::operator=(Operand) |  (missing) | InternalICU 75
-| messageformat2_data_model.h | Operator&amp; icu::message2::data_model::Operator::operator=(Operator) |  (missing) | InternalICU 75
-| messageformat2_data_model.h | Pattern&amp; icu::message2::data_model::Pattern::operator=(Pattern) |  (missing) | InternalICU 75
-| messageformat2_data_model.h | SelectorKeys&amp; icu::message2::data_model::SelectorKeys::operator=(SelectorKeys) |  (missing) | InternalICU 75
-| messageformat2_data_model.h | Variant&amp; icu::message2::data_model::Variant::operator=(Variant) |  (missing) | InternalICU 75
-| messageformat2_data_model.h | bool icu::message2::data_model::Binding::isLocal() const |  (missing) | InternalICU 78
-| messageformat2_data_model.h | bool icu::message2::data_model::Key::isWildcard() const |  (missing) | InternalICU 75
-| messageformat2_data_model.h | bool icu::message2::data_model::Key::operator&lt;(const Key&amp;) const |  (missing) | InternalICU 75
-| messageformat2_data_model.h | bool icu::message2::data_model::Key::operator==(const Key&amp;) const |  (missing) | InternalICU 75
-| messageformat2_data_model.h | bool icu::message2::data_model::Operand::isLiteral() const |  (missing) | InternalICU 75
-| messageformat2_data_model.h | bool icu::message2::data_model::Operand::isNull() const |  (missing) | InternalICU 75
-| messageformat2_data_model.h | bool icu::message2::data_model::Operand::isVariable() const |  (missing) | InternalICU 75
-| messageformat2_data_model.h | bool icu::message2::data_model::SelectorKeys::operator&lt;(const SelectorKeys&amp;) const |  (missing) | InternalICU 75
-| messageformat2_data_model.h | const Expression &amp; icu::message2::data_model::Binding::getValue() const |  (missing) | InternalICU 75
-| messageformat2_data_model.h | const FunctionName &amp; icu::message2::data_model::Operator::getFunctionName() const |  (missing) | InternalICU 75
-| messageformat2_data_model.h | const Literal &amp; icu::message2::data_model::Key::asLiteral() const |  (missing) | InternalICU 75
-| messageformat2_data_model.h | const Literal &amp; icu::message2::data_model::Operand::asLiteral() const |  (missing) | InternalICU 75
-| messageformat2_data_model.h | const Pattern &amp; icu::message2::data_model::MFDataModel::getPattern() const |  (missing) | InternalICU 75
-| messageformat2_data_model.h | const Pattern &amp; icu::message2::data_model::Variant::getPattern() const |  (missing) | InternalICU 75
-| messageformat2_data_model.h | const SelectorKeys &amp; icu::message2::data_model::Variant::getKeys() const |  (missing) | InternalICU 75
-| messageformat2_data_model.h | const UnicodeString &amp; icu::message2::data_model::Operand::asVariable() const |  (missing) | InternalICU 75
-| messageformat2_data_model.h | const VariableName &amp; icu::message2::data_model::Binding::getVariable() const |  (missing) | InternalICU 75
-| messageformat2_data_model.h | icu::message2::data_model::Binding::Binding() |  (missing) | InternalICU 75
-| messageformat2_data_model.h | icu::message2::data_model::Binding::Binding(const Binding&amp;) |  (missing) | InternalICU 75
-| messageformat2_data_model.h | icu::message2::data_model::Binding::Binding(const VariableName&amp;, Expression&amp;&amp;) |  (missing) | InternalICU 75
-| messageformat2_data_model.h | icu::message2::data_model::Binding::~Binding() |  (missing) | InternalICU 75
-| messageformat2_data_model.h | icu::message2::data_model::Key::Key() |  (missing) | InternalICU 75
-| messageformat2_data_model.h | icu::message2::data_model::Key::Key(const Key&amp;) |  (missing) | InternalICU 75
-| messageformat2_data_model.h | icu::message2::data_model::Key::Key(const Literal&amp;) |  (missing) | InternalICU 75
-| messageformat2_data_model.h | icu::message2::data_model::Key::~Key() |  (missing) | InternalICU 75
-| messageformat2_data_model.h | icu::message2::data_model::MFDataModel::Builder::Builder(Builder&amp;&amp;)=delete |  (missing) | *untagged*
-| messageformat2_data_model.h | icu::message2::data_model::MFDataModel::Builder::Builder(UErrorCode&amp;) |  (missing) | InternalICU 75
-| messageformat2_data_model.h | icu::message2::data_model::MFDataModel::Builder::Builder(const Builder&amp;)=delete |  (missing) | *untagged*
-| messageformat2_data_model.h | icu::message2::data_model::MFDataModel::Builder::~Builder() |  (missing) | InternalICU 75
-| messageformat2_data_model.h | icu::message2::data_model::MFDataModel::MFDataModel() |  (missing) | InternalICU 75
-| messageformat2_data_model.h | icu::message2::data_model::MFDataModel::MFDataModel(const MFDataModel&amp;) |  (missing) | InternalICU 75
-| messageformat2_data_model.h | icu::message2::data_model::MFDataModel::~MFDataModel() |  (missing) | InternalICU 75
-| messageformat2_data_model.h | icu::message2::data_model::Operand::Operand() |  (missing) | InternalICU 75
-| messageformat2_data_model.h | icu::message2::data_model::Operand::Operand(const Literal&amp;) |  (missing) | InternalICU 75
-| messageformat2_data_model.h | icu::message2::data_model::Operand::Operand(const Operand&amp;) |  (missing) | InternalICU 75
-| messageformat2_data_model.h | icu::message2::data_model::Operand::Operand(const UnicodeString&amp;) |  (missing) | InternalICU 75
-| messageformat2_data_model.h | icu::message2::data_model::Operand::~Operand() |  (missing) | InternalICU 75
-| messageformat2_data_model.h | icu::message2::data_model::Operator::Operator() |  (missing) | InternalICU 75
-| messageformat2_data_model.h | icu::message2::data_model::Operator::Operator(const Operator&amp;) |  (missing) | InternalICU 75
-| messageformat2_data_model.h | icu::message2::data_model::Operator::~Operator() |  (missing) | InternalICU 75
-| messageformat2_data_model.h | icu::message2::data_model::Pattern::Pattern() |  (missing) | InternalICU 75
-| messageformat2_data_model.h | icu::message2::data_model::Pattern::Pattern(const Pattern&amp;) |  (missing) | InternalICU 75
-| messageformat2_data_model.h | icu::message2::data_model::Pattern::~Pattern() |  (missing) | InternalICU 75
-| messageformat2_data_model.h | icu::message2::data_model::SelectorKeys::SelectorKeys() |  (missing) | InternalICU 75
-| messageformat2_data_model.h | icu::message2::data_model::SelectorKeys::SelectorKeys(const SelectorKeys&amp;) |  (missing) | InternalICU 75
-| messageformat2_data_model.h | icu::message2::data_model::SelectorKeys::~SelectorKeys() |  (missing) | InternalICU 75
-| messageformat2_data_model.h | icu::message2::data_model::Variant::Variant()=default |  (missing) | InternalICU 75
-| messageformat2_data_model.h | icu::message2::data_model::Variant::Variant(const SelectorKeys&amp;, Pattern&amp;&amp;) |  (missing) | InternalICU 75
-| messageformat2_data_model.h | icu::message2::data_model::Variant::Variant(const Variant&amp;) |  (missing) | InternalICU 75
-| messageformat2_data_model.h | icu::message2::data_model::Variant::~Variant() |  (missing) | InternalICU 75
-| messageformat2_data_model.h | <tt>static</tt> Binding icu::message2::data_model::Binding::input(UnicodeString&amp;&amp;, Expression&amp;&amp;, UErrorCode&amp;) |  (missing) | InternalICU 75
-| messageformat2_data_model.h | std::vector&lt; Binding &gt; icu::message2::data_model::MFDataModel::getLocalVariables() const |  (missing) | InternalICU 75
-| messageformat2_data_model.h | std::vector&lt; Key &gt; icu::message2::data_model::SelectorKeys::getKeys() const |  (missing) | InternalICU 75
-| messageformat2_data_model.h | std::vector&lt; Option &gt; icu::message2::data_model::Operator::getOptions() const |  (missing) | InternalICU 75
-| messageformat2_data_model.h | std::vector&lt; VariableName &gt; icu::message2::data_model::MFDataModel::getSelectors() const |  (missing) | InternalICU 75
-| messageformat2_data_model.h | std::vector&lt; Variant &gt; icu::message2::data_model::MFDataModel::getVariants() const |  (missing) | InternalICU 75
-| messageformat2_formattable.h | const DateInfo* icu::message2::Formattable::getDate(UErrorCode&amp;) const |  (missing) | InternalICU 75
-| messageformat2_formattable.h | icu::message2::Formattable::Formattable(DateInfo&amp;&amp;) |  (missing) | InternalICU 75
-| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_BERIA_ERFE |  (missing) | StableICU 78| *(Born Stable)* |
-| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_J |  (missing) | StableICU 78| *(Born Stable)* |
-| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_MISCELLANEOUS_SYMBOLS_SUPPLEMENT |  (missing) | StableICU 78| *(Born Stable)* |
-| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_SHARADA_SUPPLEMENT |  (missing) | StableICU 78| *(Born Stable)* |
-| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_SIDETIC |  (missing) | StableICU 78| *(Born Stable)* |
-| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_TAI_YO |  (missing) | StableICU 78| *(Born Stable)* |
-| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_TANGUT_COMPONENTS_SUPPLEMENT |  (missing) | StableICU 78| *(Born Stable)* |
-| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_TOLONG_SIKI |  (missing) | StableICU 78| *(Born Stable)* |
-| uchar.h | <tt>enum</tt> UJoiningGroup::U_JG_THIN_NOON |  (missing) | StableICU 78| *(Born Stable)* |
-| uchar.h | <tt>enum</tt> ULineBreak::U_LB_UNAMBIGUOUS_HYPHEN |  (missing) | StableICU 78| *(Born Stable)* |
-| udat.h | <tt>enum</tt> UDateFormatSymbolType::UDAT_AM_PMS_NARROW |  (missing) | DraftICU 78
-| udat.h | <tt>enum</tt> UDateFormatSymbolType::UDAT_AM_PMS_WIDE |  (missing) | DraftICU 78
-| umachine.h | <tt>#define</tt> U_FORCE_INLINE |  (missing) | Internal
-| unistr.h | StringClass icu::UnicodeString::toUTF8String() const |  (missing) | DraftICU 78
-| unistr.h | unspecified_iterator icu::UnicodeString::begin() const |  (missing) | DraftICU 78
-| unistr.h | unspecified_iterator icu::UnicodeString::end() const |  (missing) | DraftICU 78
-| unistr.h | unspecified_reverse_iterator icu::UnicodeString::rbegin() const |  (missing) | DraftICU 78
-| unistr.h | unspecified_reverse_iterator icu::UnicodeString::rend() const |  (missing) | DraftICU 78
-| unistr.h | void icu::UnicodeString::push_back(char16_t) |  (missing) | DraftICU 78
-| uscript.h | <tt>enum</tt> UScriptCode::USCRIPT_BERIA_ERFE |  (missing) | StableICU 78| *(Born Stable)* |
-| uscript.h | <tt>enum</tt> UScriptCode::USCRIPT_SIDETIC |  (missing) | StableICU 78| *(Born Stable)* |
-| uscript.h | <tt>enum</tt> UScriptCode::USCRIPT_TAI_YO |  (missing) | StableICU 78| *(Born Stable)* |
-| uscript.h | <tt>enum</tt> UScriptCode::USCRIPT_TOLONG_SIKI |  (missing) | StableICU 78| *(Born Stable)* |
-| uscript.h | <tt>enum</tt> UScriptCode::USCRIPT_TRADITIONAL_HAN_WITH_LATIN |  (missing) | StableICU 78| *(Born Stable)* |
-| utf.h | <tt>#define</tt> U_IS_CODE_POINT |  (missing) | DraftICU 78
-| utf.h | <tt>#define</tt> U_IS_SCALAR_VALUE |  (missing) | DraftICU 78
-| utf8.h | <tt>#define</tt> U8_LENGTH_FROM_LEAD_BYTE_UNSAFE |  (missing) | DraftICU 78
-| utf8.h | <tt>#define</tt> U8_LENGTH_FROM_LEAD_BYTE |  (missing) | DraftICU 78
-| utfiterator.h | CP32 U_HEADER_ONLY_NAMESPACE::UnsafeCodeUnits&lt; CP32, UnitIter, typename &gt;::codePoint() const |  (missing) | DraftICU 78
-| utfiterator.h | CP32 U_HEADER_ONLY_NAMESPACE::prv::CodePointsIterator&lt; CP32, skipSurrogates &gt;::operator* () const |  (missing) | Internal
-| utfiterator.h | CodePointsIterator &amp; U_HEADER_ONLY_NAMESPACE::prv::CodePointsIterator&lt; CP32, skipSurrogates &gt;::operator++() |  (missing) | Internal
-| utfiterator.h | CodePointsIterator U_HEADER_ONLY_NAMESPACE::prv::CodePointsIterator&lt; CP32, skipSurrogates &gt;::operator++(int) |  (missing) | Internal
-| utfiterator.h | CodeUnits&amp; U_HEADER_ONLY_NAMESPACE::CodeUnits&lt; CP32, UnitIter, typename &gt;::operator=(const CodeUnits&amp;)=default |  (missing) | DraftICU 78
-| utfiterator.h | U_FORCE_INLINE CodeUnits&lt; CP32, UnitIter &gt; U_HEADER_ONLY_NAMESPACE::UTFIterator&lt; CP32, behavior, UnitIter, LimitIter, typename &gt;::operator* () const |  (missing) | DraftICU 78
-| utfiterator.h | U_FORCE_INLINE Proxy U_HEADER_ONLY_NAMESPACE::UTFIterator&lt; CP32, behavior, UnitIter, LimitIter, typename &gt;::operator-&gt;() const |  (missing) | DraftICU 78
-| utfiterator.h | U_FORCE_INLINE UTFIterator &amp; U_HEADER_ONLY_NAMESPACE::UTFIterator&lt; CP32, behavior, UnitIter, LimitIter, typename &gt;::operator++() |  (missing) | DraftICU 78
-| utfiterator.h | U_FORCE_INLINE UTFIterator U_HEADER_ONLY_NAMESPACE::UTFIterator&lt; CP32, behavior, UnitIter, LimitIter, typename &gt;::operator++(int) |  (missing) | DraftICU 78
-| utfiterator.h | U_FORCE_INLINE UTFIterator&amp; U_HEADER_ONLY_NAMESPACE::UTFIterator&lt; CP32, behavior, UnitIter, LimitIter, typename &gt;::operator=(UTFIterator&amp;&amp;)=default |  (missing) | DraftICU 78
-| utfiterator.h | U_FORCE_INLINE UTFIterator&amp; U_HEADER_ONLY_NAMESPACE::UTFIterator&lt; CP32, behavior, UnitIter, LimitIter, typename &gt;::operator=(const UTFIterator&amp;)=default |  (missing) | DraftICU 78
-| utfiterator.h | U_FORCE_INLINE U_HEADER_ONLY_NAMESPACE::UTFIterator&lt; CP32, behavior, UnitIter, LimitIter, typename &gt;::UTFIterator() |  (missing) | DraftICU 78
-| utfiterator.h | U_FORCE_INLINE U_HEADER_ONLY_NAMESPACE::UTFIterator&lt; CP32, behavior, UnitIter, LimitIter, typename &gt;::UTFIterator(UTFIterator&amp;&amp;)=default |  (missing) | DraftICU 78
-| utfiterator.h | U_FORCE_INLINE U_HEADER_ONLY_NAMESPACE::UTFIterator&lt; CP32, behavior, UnitIter, LimitIter, typename &gt;::UTFIterator(UnitIter) |  (missing) | DraftICU 78
-| utfiterator.h | U_FORCE_INLINE U_HEADER_ONLY_NAMESPACE::UTFIterator&lt; CP32, behavior, UnitIter, LimitIter, typename &gt;::UTFIterator(UnitIter, LimitIter) |  (missing) | DraftICU 78
-| utfiterator.h | U_FORCE_INLINE U_HEADER_ONLY_NAMESPACE::UTFIterator&lt; CP32, behavior, UnitIter, LimitIter, typename &gt;::UTFIterator(UnitIter, UnitIter, LimitIter) |  (missing) | DraftICU 78
-| utfiterator.h | U_FORCE_INLINE U_HEADER_ONLY_NAMESPACE::UTFIterator&lt; CP32, behavior, UnitIter, LimitIter, typename &gt;::UTFIterator(const UTFIterator&amp;)=default |  (missing) | DraftICU 78
-| utfiterator.h | U_FORCE_INLINE bool U_HEADER_ONLY_NAMESPACE::UTFIterator&lt; CP32, behavior, UnitIter, LimitIter, typename &gt;::operator!=(const UTFIterator&amp;) const |  (missing) | DraftICU 78
-| utfiterator.h | U_FORCE_INLINE bool U_HEADER_ONLY_NAMESPACE::UTFIterator&lt; CP32, behavior, UnitIter, LimitIter, typename &gt;::operator==(const UTFIterator&amp;) const |  (missing) | DraftICU 78
-| utfiterator.h | U_FORCE_INLINE std::enable_if_t&lt; prv::bidirectional_iterator&lt; Iter &gt;, UTFIterator &amp; &gt; U_HEADER_ONLY_NAMESPACE::UTFIterator&lt; CP32, behavior, UnitIter, LimitIter, typename &gt;::operator--() |  (missing) | DraftICU 78
-| utfiterator.h | U_FORCE_INLINE std::enable_if_t&lt; prv::bidirectional_iterator&lt; Iter &gt;, UTFIterator &gt; U_HEADER_ONLY_NAMESPACE::UTFIterator&lt; CP32, behavior, UnitIter, LimitIter, typename &gt;::operator--(int) |  (missing) | DraftICU 78
-| utfiterator.h | U_HEADER_ONLY_NAMESPACE::AllCodePoints&lt; CP32 &gt;::AllCodePoints() |  (missing) | DraftICU 78
-| utfiterator.h | U_HEADER_ONLY_NAMESPACE::AllScalarValues&lt; CP32 &gt;::AllScalarValues() |  (missing) | DraftICU 78
-| utfiterator.h | U_HEADER_ONLY_NAMESPACE::CodeUnits&lt; CP32, UnitIter, typename &gt;::CodeUnits(CP32, uint8_t, bool, UnitIter, UnitIter) |  (missing) | Internal
-| utfiterator.h | U_HEADER_ONLY_NAMESPACE::CodeUnits&lt; CP32, UnitIter, typename &gt;::CodeUnits(const CodeUnits&amp;)=default |  (missing) | DraftICU 78
-| utfiterator.h | U_HEADER_ONLY_NAMESPACE::UnsafeCodeUnits&lt; CP32, UnitIter, typename &gt;::UnsafeCodeUnits(CP32, uint8_t, UnitIter, UnitIter) |  (missing) | Internal
-| utfiterator.h | U_HEADER_ONLY_NAMESPACE::UnsafeCodeUnits&lt; CP32, UnitIter, typename &gt;::UnsafeCodeUnits(const UnsafeCodeUnits&amp;)=default |  (missing) | DraftICU 78
-| utfiterator.h | U_HEADER_ONLY_NAMESPACE::prv::CodePointsIterator&lt; CP32, skipSurrogates &gt;::CodePointsIterator(CP32) |  (missing) | Internal
-| utfiterator.h | UnitIter U_HEADER_ONLY_NAMESPACE::UnsafeCodeUnits&lt; CP32, UnitIter, typename &gt;::begin() const |  (missing) | DraftICU 78
-| utfiterator.h | UnitIter U_HEADER_ONLY_NAMESPACE::UnsafeCodeUnits&lt; CP32, UnitIter, typename &gt;::end() const |  (missing) | DraftICU 78
-| utfiterator.h | UnsafeCodeUnits&amp; U_HEADER_ONLY_NAMESPACE::UnsafeCodeUnits&lt; CP32, UnitIter, typename &gt;::operator=(const UnsafeCodeUnits&amp;)=default |  (missing) | DraftICU 78
-| utfiterator.h | auto U_HEADER_ONLY_NAMESPACE::AllCodePoints&lt; CP32 &gt;::begin() const |  (missing) | DraftICU 78
-| utfiterator.h | auto U_HEADER_ONLY_NAMESPACE::AllCodePoints&lt; CP32 &gt;::end() const |  (missing) | DraftICU 78
-| utfiterator.h | auto U_HEADER_ONLY_NAMESPACE::AllScalarValues&lt; CP32 &gt;::begin() const |  (missing) | DraftICU 78
-| utfiterator.h | auto U_HEADER_ONLY_NAMESPACE::AllScalarValues&lt; CP32 &gt;::end() const |  (missing) | DraftICU 78
-| utfiterator.h | bool U_HEADER_ONLY_NAMESPACE::CodeUnits&lt; CP32, UnitIter, typename &gt;::wellFormed() const |  (missing) | DraftICU 78
-| utfiterator.h | bool U_HEADER_ONLY_NAMESPACE::prv::CodePointsIterator&lt; CP32, skipSurrogates &gt;::operator!=(const CodePointsIterator&amp;) const |  (missing) | Internal
-| utfiterator.h | bool U_HEADER_ONLY_NAMESPACE::prv::CodePointsIterator&lt; CP32, skipSurrogates &gt;::operator==(const CodePointsIterator&amp;) const |  (missing) | Internal
-| utfiterator.h | <tt>enum</tt> UTFIllFormedBehavior::UTF_BEHAVIOR_FFFD |  (missing) | DraftICU 78
-| utfiterator.h | <tt>enum</tt> UTFIllFormedBehavior::UTF_BEHAVIOR_NEGATIVE |  (missing) | DraftICU 78
-| utfiterator.h | <tt>enum</tt> UTFIllFormedBehavior::UTF_BEHAVIOR_SURROGATE |  (missing) | DraftICU 78
-| utfiterator.h | std::enable_if_t&lt; std::is_pointer_v&lt; Iter &gt;|| std::is_same_v&lt; Iter, typename std::basic_string&lt; Unit &gt;::iterator &gt;|| std::is_same_v&lt; Iter, typename std::basic_string&lt; Unit &gt;::const_iterator &gt;|| std::is_same_v&lt; Iter, typename std::basic_string_view&lt; Unit &gt;::iterator &gt;|| std::is_same_v&lt; Iter, typename std::basic_string_view&lt; Unit &gt;::const_iterator &gt;, std::basic_string_view&lt; Unit &gt; &gt; U_HEADER_ONLY_NAMESPACE::UnsafeCodeUnits&lt; CP32, UnitIter, typename &gt;::stringView() const |  (missing) | DraftICU 78
-| utfiterator.h | uint8_t U_HEADER_ONLY_NAMESPACE::UnsafeCodeUnits&lt; CP32, UnitIter, typename &gt;::length() const |  (missing) | DraftICU 78
-| utypes.h | <tt>#define</tt> U_DATA_API_CLASS |  (missing) | DraftICU 78
-| utypes.h | <tt>#define</tt> U_IO_API_CLASS |  (missing) | DraftICU 78
-| utypes.h | <tt>#define</tt> U_LAYOUTEX_API_CLASS |  (missing) | DraftICU 78
-| utypes.h | <tt>#define</tt> U_LAYOUT_API_CLASS |  (missing) | DraftICU 78
-| utypes.h | <tt>#define</tt> U_TOOLUTIL_API_CLASS |  (missing) | DraftICU 78
-| utypes.h | <tt>#define</tt> _CLASS |  (missing) | DraftICU 78
-| utypes.h | <tt>#define</tt> _CLASS |  (missing) | DraftICU 78
+| dtfmtsym.h | const UnicodeString* icu::DateFormatSymbols::getDayOfMonthCardinalNames(int32_t&amp;, DtContextType, DtWidthType) const |  (missing) | Internal
+| dtfmtsym.h | const UnicodeString* icu::DateFormatSymbols::getDayOfMonthOrdinalNames(DtContextType, DtWidthType) const |  (missing) | Internal
+| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getDyne() |  (missing) | DraftICU 79
+| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getMilliinch() |  (missing) | DraftICU 79
+| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getPoundal() |  (missing) | DraftICU 79
+| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createDyne(UErrorCode&amp;) |  (missing) | DraftICU 79
+| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createMilliinch(UErrorCode&amp;) |  (missing) | DraftICU 79
+| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createPoundal(UErrorCode&amp;) |  (missing) | DraftICU 79
+| measunit.h | <tt>static</tt> bool icu::MeasureUnit::validateAndGet(StringPiece, StringPiece, MeasureUnit&amp;) |  (missing) | Internal
+| messageformat2_formattable.h | FunctionOptions icu::message2::FunctionOptions::mergeOptions(const FunctionOptions&amp;, UErrorCode&amp;) const |  (missing) | InternalICU 79
+| messageformat2_formattable.h | FunctionOptions&amp; icu::message2::FunctionOptions::operator=(FunctionOptions) |  (missing) | InternalICU 75
+| messageformat2_formattable.h | icu::message2::FunctionOptions::FunctionOptions(const FunctionOptions&amp;) |  (missing) | InternalICU 75
+| messageformat2_function_registry.h | Builder&amp; icu::message2::MFFunctionRegistry::Builder::adoptFunction(const data_model::FunctionName&amp;, Function*, UErrorCode&amp;) |  (missing) | InternalICU 79
+| messageformat2_function_registry.h | FunctionContext icu::message2::FunctionContext::withLocale(const Locale&amp;) const |  (missing) | InternalICU 79
+| messageformat2_function_registry.h | LocalPointer&lt; FunctionValue &gt; icu::message2::Function::call(const FunctionContext&amp;, const FunctionValue&amp;, const FunctionOptions&amp;, UErrorCode&amp;) const |  (missing) | InternalICU 79
+| messageformat2_function_registry.h | UMFBidiOption icu::message2::FunctionContext::getDirection() const |  (missing) | InternalICU 79
+| messageformat2_function_registry.h | UMFBidiOption icu::message2::FunctionValue::getDirectionAnnotation() const |  (missing) | InternalICU 79
+| messageformat2_function_registry.h | UMFDirectionality icu::message2::FunctionValue::getDirection() const |  (missing) | InternalICU 79
+| messageformat2_function_registry.h | UnicodeString icu::message2::FunctionValue::formatToString(UErrorCode&amp;) const |  (missing) | InternalICU 79
+| messageformat2_function_registry.h | bool icu::message2::FunctionValue::isNullOperand() const |  (missing) | InternalICU 79
+| messageformat2_function_registry.h | bool icu::message2::FunctionValue::isSelectable() const |  (missing) | InternalICU 79
+| messageformat2_function_registry.h | const Formattable &amp; icu::message2::FunctionValue::unwrap() const |  (missing) | InternalICU 79
+| messageformat2_function_registry.h | const Function* icu::message2::MFFunctionRegistry::getFunction(const FunctionName&amp;) const |  (missing) | InternalICU 79
+| messageformat2_function_registry.h | const FunctionName &amp; icu::message2::FunctionContext::getCalledFunctionName() const |  (missing) | InternalICU 79
+| messageformat2_function_registry.h | const FunctionName &amp; icu::message2::FunctionValue::getFunctionName() const |  (missing) | InternalICU 79
+| messageformat2_function_registry.h | const FunctionOptions &amp; icu::message2::FunctionValue::getResolvedOptions() const |  (missing) | InternalICU 79
+| messageformat2_function_registry.h | const Locale &amp; icu::message2::FunctionContext::getLocale() const |  (missing) | InternalICU 79
+| messageformat2_function_registry.h | const UnicodeString &amp; icu::message2::FunctionContext::getID() const |  (missing) | InternalICU 79
+| messageformat2_function_registry.h | const UnicodeString &amp; icu::message2::FunctionValue::getFallback() const |  (missing) | InternalICU 79
+| messageformat2_function_registry.h | icu::message2::Function::~Function() |  (missing) | InternalICU 79
+| messageformat2_function_registry.h | icu::message2::FunctionValue::~FunctionValue() |  (missing) | InternalICU 79
+| messageformat2_function_registry.h | <tt>static</tt> const MFFunctionRegistry* icu::message2::MFFunctionRegistry::getStandardFunctionsRegistry(UErrorCode&amp;) |  (missing) | InternalICU 79
+| messageformat2_function_registry.h | void icu::message2::FunctionValue::selectKeys(const UnicodeString*, int32_t, int32_t*, int32_t&amp;, UErrorCode&amp;) const |  (missing) | InternalICU 79
+| messageformat2.h | Builder&amp; icu::message2::MessageFormatter::Builder::setBidiContext(UMFBidiContext) |  (missing) | InternalICU 79
+| messageformat2.h | Builder&amp; icu::message2::MessageFormatter::Builder::setBidiIsolationStrategy(UMFBidiIsolationStrategy) |  (missing) | InternalICU 79
+| messageformat2.h | Builder&amp; icu::message2::MessageFormatter::Builder::setBidiIsolationStyle(UMFBidiIsolationStyle) |  (missing) | InternalICU 79
+| messageformat2.h | <tt>enum</tt>  							icu::message2::MessageFormatter::UMFBidiContext {} |  (missing) | InternalICU 79
+| messageformat2.h | <tt>enum</tt>  							icu::message2::MessageFormatter::UMFBidiContext::U_MF_BIDI_CONTEXT_AUTO |  (missing) | InternalICU 79
+| messageformat2.h | <tt>enum</tt>  							icu::message2::MessageFormatter::UMFBidiContext::U_MF_BIDI_CONTEXT_DEFAULT |  (missing) | InternalICU 79
+| messageformat2.h | <tt>enum</tt>  							icu::message2::MessageFormatter::UMFBidiContext::U_MF_BIDI_CONTEXT_LTR |  (missing) | InternalICU 79
+| messageformat2.h | <tt>enum</tt>  							icu::message2::MessageFormatter::UMFBidiContext::U_MF_BIDI_CONTEXT_RTL |  (missing) | InternalICU 79
+| numberformatter.h | int32_t icu::number::impl::StringProp::length() const |  (missing) | Internal
+| platform.h | <tt>#define</tt> UPRV_HAS_SANITIZER |  (missing) | Internal
+| platform.h | <tt>#define</tt> UPRV_NO_SANITIZE_FUNCTION |  (missing) | Internal
+| platform.h | <tt>#define</tt> U_LIFETIME_BOUND |  (missing) | Internal
+| rbbi.h | int32_t icu::RuleBasedBreakIterator::handleSafePrevious(int32_t) |  (missing) | Internal
+| symtable.h | const UnicodeSet* icu::SymbolTable::lookupSet(const UnicodeString&amp;) const |  (missing) | Internal
+| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_ARCHAIC_CUNEIFORM_NUMERALS |  (missing) | StableICU 79| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_BENGALI_SUPPLEMENT |  (missing) | StableICU 79| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_JURCHEN_RADICALS |  (missing) | StableICU 79| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_JURCHEN |  (missing) | StableICU 79| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_MISCELLANEOUS_SYMBOLS_AND_ARROWS_EXTENDED |  (missing) | StableICU 79| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_MUSICAL_SYMBOLS_SUPPLEMENT |  (missing) | StableICU 79| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_SEAL |  (missing) | StableICU 79| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UIndicConjunctBreak::_INCB_COUNT |  (missing) | Internal
+| uchar.h | <tt>enum</tt> UJoiningGroup::U_JG_CROWN_AIN |  (missing) | StableICU 79| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UJoiningGroup::U_JG_CROWN_BEH |  (missing) | StableICU 79| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UJoiningGroup::U_JG_CROWN_FEH |  (missing) | StableICU 79| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UJoiningGroup::U_JG_CROWN_HAH |  (missing) | StableICU 79| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UJoiningGroup::U_JG_CROWN_HEH |  (missing) | StableICU 79| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UJoiningGroup::U_JG_CROWN_KAF |  (missing) | StableICU 79| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UJoiningGroup::U_JG_CROWN_MEEM |  (missing) | StableICU 79| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UJoiningGroup::U_JG_CROWN_SAD |  (missing) | StableICU 79| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UJoiningGroup::U_JG_CROWN_SEEN |  (missing) | StableICU 79| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UJoiningGroup::U_JG_CROWN_TAH |  (missing) | StableICU 79| *(Born Stable)* |
+| uscript.h | <tt>enum</tt> UScriptCode::USCRIPT_PROTO_CUNEIFORM |  (missing) | StableICU 79| *(Born Stable)* |
+| uscript.h | <tt>enum</tt> UScriptCode::USCRIPT_SEAL |  (missing) | StableICU 79| *(Born Stable)* |
+| utfiterator.h | U_FORCE_INLINE UnitIter U_HEADER_ONLY_NAMESPACE::UTFIterator&lt; CP32, behavior, UnitIter, LimitIter, typename &gt;::base() const |  (missing) | DraftICU 79
+| utfiterator.h | U_FORCE_INLINE UnitIter U_HEADER_ONLY_NAMESPACE::UnsafeUTFIterator&lt; CP32, UnitIter, typename &gt;::base() const |  (missing) | DraftICU 79
+| utfiterator.h | auto U_HEADER_ONLY_NAMESPACE::UTFStringCodePoints&lt; CP32, behavior, Range &gt;::back() const |  (missing) | DraftICU 79
+| utfiterator.h | auto U_HEADER_ONLY_NAMESPACE::UTFStringCodePoints&lt; CP32, behavior, Range &gt;::front() const |  (missing) | DraftICU 79
+| utfiterator.h | auto U_HEADER_ONLY_NAMESPACE::UnsafeUTFStringCodePoints&lt; CP32, Range &gt;::back() const |  (missing) | DraftICU 79
+| utfiterator.h | auto U_HEADER_ONLY_NAMESPACE::UnsafeUTFStringCodePoints&lt; CP32, Range &gt;::front() const |  (missing) | DraftICU 79
+| utypes.h | <tt>#define</tt> U_MF_RECOVERABLE_ERROR |  (missing) | InternalICU 79
 
 ## Other
 
-Other existing drafts in ICU 78
+Other existing drafts in ICU 79
 
-| File | API | ICU 77 | ICU 78 |
+| File | API | ICU 78 | ICU 79 |
 |---|---|---|---|
+| dtfmtsym.h |  const UnicodeString* icu::DateFormatSymbols::getAmPmStrings(int32_t&amp;, DtContextType, DtWidthType) const | DraftICU 78 | 
+| dtfmtsym.h |  void icu::DateFormatSymbols::setAmPmStrings(const UnicodeString*, int32_t, DtContextType, DtWidthType) | DraftICU 78 | 
 | measfmt.h |  void icu::MeasureFormat::parseObject(const UnicodeString&amp;, Formattable&amp;, ParsePosition&amp;) const | DraftICU 53 | 
 | measunit.h |  MeasureUnit icu::MeasureUnit::withConstantDenominator(uint64_t, UErrorCode&amp;) const | DraftICU 77 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getBecquerel() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getBritishThermalUnitIt() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getBuJp() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getCalorieIt() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getChain() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getCho() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getCoulomb() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getCupImperial() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getCupJp() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getFarad() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getFluidOunceMetric() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getFortnight() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getFun() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getGray() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getHenry() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getJoJp() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getKatal() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getKen() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getKilogramForce() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getKoku() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getKosaji() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getOfglucose() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getOfhg() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getOsaji() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getPart() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getPartPer1E6() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getPartPer1E9() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getPintImperial() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getRankine() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getRiJp() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getRin() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getRod() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getSai() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getSeJp() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getShaku() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getShakuCloth() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getShakuLength() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getSiemens() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getSievert() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getSlug() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getSteradian() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getSun() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getTesla() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getToJp() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getWeber() | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createBecquerel(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createBritishThermalUnitIt(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createBuJp(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createCalorieIt(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createChain(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createCho(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createCoulomb(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createCupImperial(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createCupJp(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createFarad(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createFluidOunceMetric(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createFortnight(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createFun(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createGray(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createHenry(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createJoJp(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createKatal(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createKen(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createKilogramForce(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createKoku(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createKosaji(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createOfglucose(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createOfhg(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createOsaji(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createPart(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createPartPer1E6(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createPartPer1E9(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createPintImperial(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createRankine(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createRiJp(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createRin(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createRod(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createSai(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createSeJp(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createShaku(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createShakuCloth(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createShakuLength(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createSiemens(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createSievert(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createSlug(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createSteradian(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createSun(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createTesla(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createToJp(UErrorCode&amp;) | DraftICU 78 | 
+| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createWeber(UErrorCode&amp;) | DraftICU 78 | 
 | measunit.h |  uint64_t icu::MeasureUnit::getConstantDenominator(UErrorCode&amp;) const | DraftICU 77 | 
+| udat.h |  <tt>enum</tt> UDateFormatSymbolType::UDAT_AM_PMS_NARROW | DraftICU 78 | 
+| udat.h |  <tt>enum</tt> UDateFormatSymbolType::UDAT_AM_PMS_WIDE | DraftICU 78 | 
 | uniset.h |  U_HEADER_NESTED_NAMESPACE::USetElementIterator icu::UnicodeSet::begin() const | DraftICU 77 | 
 | uniset.h |  U_HEADER_NESTED_NAMESPACE::USetElementIterator icu::UnicodeSet::end() const | DraftICU 77 | 
+| unistr.h |  StringClass icu::UnicodeString::toUTF8String() const | DraftICU 78 | 
+| unistr.h |  unspecified_iterator icu::UnicodeString::begin() const | DraftICU 78 | 
+| unistr.h |  unspecified_iterator icu::UnicodeString::end() const | DraftICU 78 | 
+| unistr.h |  unspecified_reverse_iterator icu::UnicodeString::rbegin() const | DraftICU 78 | 
+| unistr.h |  unspecified_reverse_iterator icu::UnicodeString::rend() const | DraftICU 78 | 
+| unistr.h |  void icu::UnicodeString::push_back(char16_t) | DraftICU 78 | 
 | uregex.h |  <tt>enum</tt> URegexpFlag::UREGEX_CANON_EQ | DraftICU 2.4 | 
 | uset.h |  USetElementIterator &amp; U_HEADER_ONLY_NAMESPACE::USetElementIterator::operator++() | DraftICU 77 | 
 | uset.h |  USetElementIterator U_HEADER_ONLY_NAMESPACE::USetElementIterator::operator++(int) | DraftICU 77 | 
@@ -486,6 +314,88 @@ Other existing drafts in ICU 78
 | uset.h |  bool U_HEADER_ONLY_NAMESPACE::USetElementIterator::operator!=(const USetElementIterator&amp;) const | DraftICU 77 | 
 | uset.h |  bool U_HEADER_ONLY_NAMESPACE::USetElementIterator::operator==(const USetElementIterator&amp;) const | DraftICU 77 | 
 | uset.h |  std::u16string U_HEADER_ONLY_NAMESPACE::USetElementIterator::operator* () const | DraftICU 77 | 
+| utf.h |  <tt>#define</tt> U_IS_CODE_POINT | DraftICU 78 | 
+| utf.h |  <tt>#define</tt> U_IS_SCALAR_VALUE | DraftICU 78 | 
+| utf8.h |  <tt>#define</tt> U8_LENGTH_FROM_LEAD_BYTE_UNSAFE | DraftICU 78 | 
+| utf8.h |  <tt>#define</tt> U8_LENGTH_FROM_LEAD_BYTE | DraftICU 78 | 
+| utfiterator.h |  CP32 U_HEADER_ONLY_NAMESPACE::UnsafeCodeUnits&lt; CP32, UnitIter, typename &gt;::codePoint() const | DraftICU 78 | 
+| utfiterator.h |  CodeUnits&amp; U_HEADER_ONLY_NAMESPACE::CodeUnits&lt; CP32, UnitIter, typename &gt;::operator=(const CodeUnits&amp;)=default | DraftICU 78 | 
+| utfiterator.h |  UTFStringCodePoints&amp; U_HEADER_ONLY_NAMESPACE::UTFStringCodePoints&lt; CP32, behavior, Range &gt;::operator=(const UTFStringCodePoints&amp;)=default | DraftICU 78 | 
+| utfiterator.h |  U_FORCE_INLINE CodeUnits&lt; CP32, UnitIter &gt; U_HEADER_ONLY_NAMESPACE::UTFIterator&lt; CP32, behavior, UnitIter, LimitIter, typename &gt;::operator* () const | DraftICU 78 | 
+| utfiterator.h |  U_FORCE_INLINE Proxy U_HEADER_ONLY_NAMESPACE::UTFIterator&lt; CP32, behavior, UnitIter, LimitIter, typename &gt;::operator-&gt;() const | DraftICU 78 | 
+| utfiterator.h |  U_FORCE_INLINE Proxy U_HEADER_ONLY_NAMESPACE::UnsafeUTFIterator&lt; CP32, UnitIter, typename &gt;::operator-&gt;() const | DraftICU 78 | 
+| utfiterator.h |  U_FORCE_INLINE UTFIterator &amp; U_HEADER_ONLY_NAMESPACE::UTFIterator&lt; CP32, behavior, UnitIter, LimitIter, typename &gt;::operator++() | DraftICU 78 | 
+| utfiterator.h |  U_FORCE_INLINE UTFIterator U_HEADER_ONLY_NAMESPACE::UTFIterator&lt; CP32, behavior, UnitIter, LimitIter, typename &gt;::operator++(int) | DraftICU 78 | 
+| utfiterator.h |  U_FORCE_INLINE UTFIterator&amp; U_HEADER_ONLY_NAMESPACE::UTFIterator&lt; CP32, behavior, UnitIter, LimitIter, typename &gt;::operator=(UTFIterator&amp;&amp;)=default | DraftICU 78 | 
+| utfiterator.h |  U_FORCE_INLINE UTFIterator&amp; U_HEADER_ONLY_NAMESPACE::UTFIterator&lt; CP32, behavior, UnitIter, LimitIter, typename &gt;::operator=(const UTFIterator&amp;)=default | DraftICU 78 | 
+| utfiterator.h |  U_FORCE_INLINE U_HEADER_ONLY_NAMESPACE::UTFIterator&lt; CP32, behavior, UnitIter, LimitIter, typename &gt;::UTFIterator() | DraftICU 78 | 
+| utfiterator.h |  U_FORCE_INLINE U_HEADER_ONLY_NAMESPACE::UTFIterator&lt; CP32, behavior, UnitIter, LimitIter, typename &gt;::UTFIterator(UTFIterator&amp;&amp;)=default | DraftICU 78 | 
+| utfiterator.h |  U_FORCE_INLINE U_HEADER_ONLY_NAMESPACE::UTFIterator&lt; CP32, behavior, UnitIter, LimitIter, typename &gt;::UTFIterator(UnitIter) | DraftICU 78 | 
+| utfiterator.h |  U_FORCE_INLINE U_HEADER_ONLY_NAMESPACE::UTFIterator&lt; CP32, behavior, UnitIter, LimitIter, typename &gt;::UTFIterator(UnitIter, LimitIter) | DraftICU 78 | 
+| utfiterator.h |  U_FORCE_INLINE U_HEADER_ONLY_NAMESPACE::UTFIterator&lt; CP32, behavior, UnitIter, LimitIter, typename &gt;::UTFIterator(UnitIter, UnitIter, LimitIter) | DraftICU 78 | 
+| utfiterator.h |  U_FORCE_INLINE U_HEADER_ONLY_NAMESPACE::UTFIterator&lt; CP32, behavior, UnitIter, LimitIter, typename &gt;::UTFIterator(const UTFIterator&amp;)=default | DraftICU 78 | 
+| utfiterator.h |  U_FORCE_INLINE U_HEADER_ONLY_NAMESPACE::UnsafeUTFIterator&lt; CP32, UnitIter, typename &gt;::UnsafeUTFIterator() | DraftICU 78 | 
+| utfiterator.h |  U_FORCE_INLINE U_HEADER_ONLY_NAMESPACE::UnsafeUTFIterator&lt; CP32, UnitIter, typename &gt;::UnsafeUTFIterator(UnitIter) | DraftICU 78 | 
+| utfiterator.h |  U_FORCE_INLINE U_HEADER_ONLY_NAMESPACE::UnsafeUTFIterator&lt; CP32, UnitIter, typename &gt;::UnsafeUTFIterator(UnsafeUTFIterator&amp;&amp;)=default | DraftICU 78 | 
+| utfiterator.h |  U_FORCE_INLINE U_HEADER_ONLY_NAMESPACE::UnsafeUTFIterator&lt; CP32, UnitIter, typename &gt;::UnsafeUTFIterator(const UnsafeUTFIterator&amp;)=default | DraftICU 78 | 
+| utfiterator.h |  U_FORCE_INLINE UnsafeCodeUnits&lt; CP32, UnitIter &gt; U_HEADER_ONLY_NAMESPACE::UnsafeUTFIterator&lt; CP32, UnitIter, typename &gt;::operator* () const | DraftICU 78 | 
+| utfiterator.h |  U_FORCE_INLINE UnsafeUTFIterator &amp; U_HEADER_ONLY_NAMESPACE::UnsafeUTFIterator&lt; CP32, UnitIter, typename &gt;::operator++() | DraftICU 78 | 
+| utfiterator.h |  U_FORCE_INLINE UnsafeUTFIterator U_HEADER_ONLY_NAMESPACE::UnsafeUTFIterator&lt; CP32, UnitIter, typename &gt;::operator++(int) | DraftICU 78 | 
+| utfiterator.h |  U_FORCE_INLINE UnsafeUTFIterator&amp; U_HEADER_ONLY_NAMESPACE::UnsafeUTFIterator&lt; CP32, UnitIter, typename &gt;::operator=(UnsafeUTFIterator&amp;&amp;)=default | DraftICU 78 | 
+| utfiterator.h |  U_FORCE_INLINE UnsafeUTFIterator&amp; U_HEADER_ONLY_NAMESPACE::UnsafeUTFIterator&lt; CP32, UnitIter, typename &gt;::operator=(const UnsafeUTFIterator&amp;)=default | DraftICU 78 | 
+| utfiterator.h |  U_FORCE_INLINE bool U_HEADER_ONLY_NAMESPACE::UTFIterator&lt; CP32, behavior, UnitIter, LimitIter, typename &gt;::operator!=(const UTFIterator&amp;) const | DraftICU 78 | 
+| utfiterator.h |  U_FORCE_INLINE bool U_HEADER_ONLY_NAMESPACE::UTFIterator&lt; CP32, behavior, UnitIter, LimitIter, typename &gt;::operator==(const UTFIterator&amp;) const | DraftICU 78 | 
+| utfiterator.h |  U_FORCE_INLINE bool U_HEADER_ONLY_NAMESPACE::UnsafeUTFIterator&lt; CP32, UnitIter, typename &gt;::operator!=(const UnsafeUTFIterator&amp;) const | DraftICU 78 | 
+| utfiterator.h |  U_FORCE_INLINE bool U_HEADER_ONLY_NAMESPACE::UnsafeUTFIterator&lt; CP32, UnitIter, typename &gt;::operator==(const UnsafeUTFIterator&amp;) const | DraftICU 78 | 
+| utfiterator.h |  U_FORCE_INLINE std::enable_if_t&lt; prv::bidirectional_iterator&lt; Iter &gt;, UTFIterator &amp; &gt; U_HEADER_ONLY_NAMESPACE::UTFIterator&lt; CP32, behavior, UnitIter, LimitIter, typename &gt;::operator--() | DraftICU 78 | 
+| utfiterator.h |  U_FORCE_INLINE std::enable_if_t&lt; prv::bidirectional_iterator&lt; Iter &gt;, UTFIterator &gt; U_HEADER_ONLY_NAMESPACE::UTFIterator&lt; CP32, behavior, UnitIter, LimitIter, typename &gt;::operator--(int) | DraftICU 78 | 
+| utfiterator.h |  U_FORCE_INLINE std::enable_if_t&lt; prv::bidirectional_iterator&lt; Iter &gt;, UnsafeUTFIterator &amp; &gt; U_HEADER_ONLY_NAMESPACE::UnsafeUTFIterator&lt; CP32, UnitIter, typename &gt;::operator--() | DraftICU 78 | 
+| utfiterator.h |  U_FORCE_INLINE std::enable_if_t&lt; prv::bidirectional_iterator&lt; Iter &gt;, UnsafeUTFIterator &gt; U_HEADER_ONLY_NAMESPACE::UnsafeUTFIterator&lt; CP32, UnitIter, typename &gt;::operator--(int) | DraftICU 78 | 
+| utfiterator.h |  U_HEADER_ONLY_NAMESPACE::AllCodePoints&lt; CP32 &gt;::AllCodePoints() | DraftICU 78 | 
+| utfiterator.h |  U_HEADER_ONLY_NAMESPACE::AllScalarValues&lt; CP32 &gt;::AllScalarValues() | DraftICU 78 | 
+| utfiterator.h |  U_HEADER_ONLY_NAMESPACE::CodeUnits&lt; CP32, UnitIter, typename &gt;::CodeUnits(const CodeUnits&amp;)=default | DraftICU 78 | 
+| utfiterator.h |  U_HEADER_ONLY_NAMESPACE::UTFStringCodePoints&lt; CP32, behavior, Range &gt;::UTFStringCodePoints()=default | DraftICU 78 | 
+| utfiterator.h |  U_HEADER_ONLY_NAMESPACE::UTFStringCodePoints&lt; CP32, behavior, Range &gt;::UTFStringCodePoints(Range) | DraftICU 78 | 
+| utfiterator.h |  U_HEADER_ONLY_NAMESPACE::UTFStringCodePoints&lt; CP32, behavior, Range &gt;::UTFStringCodePoints(Range) | DraftICU 78 | 
+| utfiterator.h |  U_HEADER_ONLY_NAMESPACE::UTFStringCodePoints&lt; CP32, behavior, Range &gt;::UTFStringCodePoints(const UTFStringCodePoints&amp;)=default | DraftICU 78 | 
+| utfiterator.h |  U_HEADER_ONLY_NAMESPACE::UnsafeCodeUnits&lt; CP32, UnitIter, typename &gt;::UnsafeCodeUnits(const UnsafeCodeUnits&amp;)=default | DraftICU 78 | 
+| utfiterator.h |  U_HEADER_ONLY_NAMESPACE::UnsafeUTFStringCodePoints&lt; CP32, Range &gt;::UnsafeUTFStringCodePoints()=default | DraftICU 78 | 
+| utfiterator.h |  U_HEADER_ONLY_NAMESPACE::UnsafeUTFStringCodePoints&lt; CP32, Range &gt;::UnsafeUTFStringCodePoints(Range) | DraftICU 78 | 
+| utfiterator.h |  U_HEADER_ONLY_NAMESPACE::UnsafeUTFStringCodePoints&lt; CP32, Range &gt;::UnsafeUTFStringCodePoints(Range) | DraftICU 78 | 
+| utfiterator.h |  U_HEADER_ONLY_NAMESPACE::UnsafeUTFStringCodePoints&lt; CP32, Range &gt;::UnsafeUTFStringCodePoints(const UnsafeUTFStringCodePoints&amp;)=default | DraftICU 78 | 
+| utfiterator.h |  UnitIter U_HEADER_ONLY_NAMESPACE::UnsafeCodeUnits&lt; CP32, UnitIter, typename &gt;::begin() const | DraftICU 78 | 
+| utfiterator.h |  UnitIter U_HEADER_ONLY_NAMESPACE::UnsafeCodeUnits&lt; CP32, UnitIter, typename &gt;::end() const | DraftICU 78 | 
+| utfiterator.h |  UnsafeCodeUnits&amp; U_HEADER_ONLY_NAMESPACE::UnsafeCodeUnits&lt; CP32, UnitIter, typename &gt;::operator=(const UnsafeCodeUnits&amp;)=default | DraftICU 78 | 
+| utfiterator.h |  UnsafeUTFStringCodePoints&amp; U_HEADER_ONLY_NAMESPACE::UnsafeUTFStringCodePoints&lt; CP32, Range &gt;::operator=(const UnsafeUTFStringCodePoints&amp;)=default | DraftICU 78 | 
+| utfiterator.h |  auto U_HEADER_ONLY_NAMESPACE::AllCodePoints&lt; CP32 &gt;::begin() const | DraftICU 78 | 
+| utfiterator.h |  auto U_HEADER_ONLY_NAMESPACE::AllCodePoints&lt; CP32 &gt;::end() const | DraftICU 78 | 
+| utfiterator.h |  auto U_HEADER_ONLY_NAMESPACE::AllScalarValues&lt; CP32 &gt;::begin() const | DraftICU 78 | 
+| utfiterator.h |  auto U_HEADER_ONLY_NAMESPACE::AllScalarValues&lt; CP32 &gt;::end() const | DraftICU 78 | 
+| utfiterator.h |  auto U_HEADER_ONLY_NAMESPACE::UTFStringCodePoints&lt; CP32, behavior, Range &gt;::begin() const | DraftICU 78 | 
+| utfiterator.h |  auto U_HEADER_ONLY_NAMESPACE::UTFStringCodePoints&lt; CP32, behavior, Range &gt;::begin() | DraftICU 78 | 
+| utfiterator.h |  auto U_HEADER_ONLY_NAMESPACE::UTFStringCodePoints&lt; CP32, behavior, Range &gt;::end() const | DraftICU 78 | 
+| utfiterator.h |  auto U_HEADER_ONLY_NAMESPACE::UTFStringCodePoints&lt; CP32, behavior, Range &gt;::end() | DraftICU 78 | 
+| utfiterator.h |  auto U_HEADER_ONLY_NAMESPACE::UTFStringCodePoints&lt; CP32, behavior, Range &gt;::rbegin() const | DraftICU 78 | 
+| utfiterator.h |  auto U_HEADER_ONLY_NAMESPACE::UTFStringCodePoints&lt; CP32, behavior, Range &gt;::rend() const | DraftICU 78 | 
+| utfiterator.h |  auto U_HEADER_ONLY_NAMESPACE::UnsafeUTFStringCodePoints&lt; CP32, Range &gt;::begin() const | DraftICU 78 | 
+| utfiterator.h |  auto U_HEADER_ONLY_NAMESPACE::UnsafeUTFStringCodePoints&lt; CP32, Range &gt;::begin() | DraftICU 78 | 
+| utfiterator.h |  auto U_HEADER_ONLY_NAMESPACE::UnsafeUTFStringCodePoints&lt; CP32, Range &gt;::end() const | DraftICU 78 | 
+| utfiterator.h |  auto U_HEADER_ONLY_NAMESPACE::UnsafeUTFStringCodePoints&lt; CP32, Range &gt;::end() | DraftICU 78 | 
+| utfiterator.h |  auto U_HEADER_ONLY_NAMESPACE::UnsafeUTFStringCodePoints&lt; CP32, Range &gt;::rbegin() const | DraftICU 78 | 
+| utfiterator.h |  auto U_HEADER_ONLY_NAMESPACE::UnsafeUTFStringCodePoints&lt; CP32, Range &gt;::rend() const | DraftICU 78 | 
+| utfiterator.h |  bool U_HEADER_ONLY_NAMESPACE::CodeUnits&lt; CP32, UnitIter, typename &gt;::wellFormed() const | DraftICU 78 | 
+| utfiterator.h |  <tt>enum</tt> UTFIllFormedBehavior::UTF_BEHAVIOR_FFFD | DraftICU 78 | 
+| utfiterator.h |  <tt>enum</tt> UTFIllFormedBehavior::UTF_BEHAVIOR_NEGATIVE | DraftICU 78 | 
+| utfiterator.h |  <tt>enum</tt> UTFIllFormedBehavior::UTF_BEHAVIOR_SURROGATE | DraftICU 78 | 
+| utfiterator.h |  std::enable_if_t&lt; std::is_pointer_v&lt; Iter &gt;||std::is_same_v&lt; Iter, typename std::basic_string&lt; Unit &gt;::iterator &gt;||std::is_same_v&lt; Iter, typename std::basic_string&lt; Unit &gt;::const_iterator &gt;||std::is_same_v&lt; Iter, typename std::basic_string_view&lt; Unit &gt;::iterator &gt;||std::is_same_v&lt; Iter, typename std::basic_string_view&lt; Unit &gt;::const_iterator &gt;, std::basic_string_view&lt; Unit &gt; &gt; U_HEADER_ONLY_NAMESPACE::UnsafeCodeUnits&lt; CP32, UnitIter, typename &gt;::stringView() const | DraftICU 78 | 
+| utfiterator.h |  uint8_t U_HEADER_ONLY_NAMESPACE::UnsafeCodeUnits&lt; CP32, UnitIter, typename &gt;::length() const | DraftICU 78 | 
+| utypes.h |  <tt>#define</tt> U_DATA_API_CLASS | DraftICU 78 | 
+| utypes.h |  <tt>#define</tt> U_IO_API_CLASS | DraftICU 78 | 
+| utypes.h |  <tt>#define</tt> U_LAYOUTEX_API_CLASS | DraftICU 78 | 
+| utypes.h |  <tt>#define</tt> U_LAYOUT_API_CLASS | DraftICU 78 | 
+| utypes.h |  <tt>#define</tt> U_TOOLUTIL_API_CLASS | DraftICU 78 | 
+| utypes.h |  <tt>#define</tt> _CLASS | DraftICU 78 | 
+| utypes.h |  <tt>#define</tt> _CLASS | DraftICU 78 | 
 
 ## Simplifications
 
@@ -495,7 +405,7 @@ This section shows cases where the signature was "simplified" for the sake of co
 
 ## Colophon
 
-Contents generated by StableAPI tool on Fri Oct 24 17:48:52 PDT 2025
+Contents generated by StableAPI tool on Thu Sep 03 12:59:33 PDT 2026
 
 Copyright © 2019 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
