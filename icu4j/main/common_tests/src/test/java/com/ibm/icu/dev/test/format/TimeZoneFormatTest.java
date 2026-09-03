@@ -600,19 +600,7 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
                                                     id,
                                                     PATTERNS[patidx],
                                                     testTimes[testidx])) {
-                                        if (("America/Punta_Arenas".equals(id)
-                                                        || "America/Coyhaique".equals(id))
-                                                && ("zzzz".equals(PATTERNS[patidx])
-                                                        || "vvvv".equals(PATTERNS[patidx]))
-                                                && logKnownIssue(
-                                                        "ICU-23500",
-                                                        "CLDR-18625 maps Punta_Arenas and Coyhaique to the Chile"
-                                                                + " metazone with no end bound; cldr-to-icu discards"
-                                                                + " the stdOffset/dstOffset override")) {
-                                            logln(msg.toString());
-                                        } else {
-                                            errln("FAIL: " + msg.toString());
-                                        }
+                                        errln("FAIL: " + msg.toString());
                                     } else if (REALLY_VERBOSE_LOG) {
                                         logln(msg.toString());
                                     }

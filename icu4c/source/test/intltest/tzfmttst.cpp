@@ -685,17 +685,7 @@ void TimeZoneFormatTest::RunTimeRoundTripTests(int32_t threadNumber) {
                         if (expectedRoundTrip[testidx]
                                 && !isSpecialTimeRoundTripCase(gLocaleData->locales[locidx].getName(), *tzid,
                                         PATTERNS[patidx], testTimes[testidx])) {
-                            if ((tzid->compare(u"America/Punta_Arenas", -1) == 0
-                                        || tzid->compare(u"America/Coyhaique", -1) == 0)
-                                    && (uprv_strcmp(PATTERNS[patidx], "zzzz") == 0
-                                        || uprv_strcmp(PATTERNS[patidx], "vvvv") == 0)
-                                    && logKnownIssue("ICU-23500",
-                                            "CLDR-18625 maps Punta_Arenas and Coyhaique to the Chile metazone with "
-                                            "no end bound; cldr-to-icu discards the stdOffset/dstOffset override")) {
-                                logln(msg);
-                            } else {
-                                errln(UnicodeString("FAIL: ") + msg);
-                            }
+                            errln(UnicodeString("FAIL: ") + msg);
                         } else if (REALLY_VERBOSE) {
                             logln(msg);
                         }
