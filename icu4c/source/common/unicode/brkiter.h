@@ -483,9 +483,10 @@ public:
      * @return user-displayable name
      * @stable ICU 2.0
      */
-    U_COMMON_API static UnicodeString& U_EXPORT2 getDisplayName(const Locale& objectLocale,
-                                                                const Locale& displayLocale,
-                                                                UnicodeString& name);
+    U_COMMON_API static UnicodeString& U_EXPORT2
+    getDisplayName(const Locale& objectLocale,
+                   const Locale& displayLocale,
+                   UnicodeString& name U_LIFETIME_BOUND);
 
     /**
      * Get name of the object for the desired Locale, in the language of the
@@ -495,8 +496,9 @@ public:
      * @return user-displayable name
      * @stable ICU 2.0
      */
-    U_COMMON_API static UnicodeString& U_EXPORT2 getDisplayName(const Locale& objectLocale,
-                                                                UnicodeString& name);
+    U_COMMON_API static UnicodeString& U_EXPORT2
+    getDisplayName(const Locale& objectLocale,
+                   UnicodeString& name U_LIFETIME_BOUND);
 
 #ifndef U_FORCE_HIDE_DEPRECATED_API
     /**
