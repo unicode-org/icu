@@ -450,6 +450,7 @@
 #define ubidi_getLogicalIndex U_ICU_ENTRY_POINT_RENAME(ubidi_getLogicalIndex)
 #define ubidi_getLogicalMap U_ICU_ENTRY_POINT_RENAME(ubidi_getLogicalMap)
 #define ubidi_getLogicalRun U_ICU_ENTRY_POINT_RENAME(ubidi_getLogicalRun)
+#define ubidi_getMFOption U_ICU_ENTRY_POINT_RENAME(ubidi_getMFOption)
 #define ubidi_getMaxValue U_ICU_ENTRY_POINT_RENAME(ubidi_getMaxValue)
 #define ubidi_getMemory U_ICU_ENTRY_POINT_RENAME(ubidi_getMemory)
 #define ubidi_getMirror U_ICU_ENTRY_POINT_RENAME(ubidi_getMirror)
