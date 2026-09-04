@@ -551,8 +551,6 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     UMeasurePrefix getPrefix(UErrorCode& status) const;
 
-#ifndef U_HIDE_DRAFT_API
-
     /**
      * Creates a new MeasureUnit with a specified constant denominator.
      *
@@ -565,7 +563,7 @@ class U_I18N_API MeasureUnit: public UObject {
      * @param denominator The constant denominator to set.
      * @param status Set if this is not a COMPOUND or SINGLE unit or if another error occurs.
      * @return A new MeasureUnit with the specified constant denominator.
-     * @draft ICU 77
+     * @stable ICU 77
      */
     MeasureUnit withConstantDenominator(uint64_t denominator, UErrorCode &status) const;
 
@@ -583,11 +581,9 @@ class U_I18N_API MeasureUnit: public UObject {
      *
      * @param status Set if this is not a COMPOUND or SINGLE unit or if another error occurs.
      * @return The value of the constant denominator.
-     * @draft ICU 77
+     * @stable ICU 77
      */
     uint64_t getConstantDenominator(UErrorCode &status) const;
-
-#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Creates a MeasureUnit which is this SINGLE unit augmented with the specified dimensionality

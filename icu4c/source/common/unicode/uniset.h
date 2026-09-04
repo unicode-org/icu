@@ -1173,7 +1173,6 @@ public:
         return U_HEADER_NESTED_NAMESPACE::USetStrings(toUSet());
     }
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns a C++ iterator for iterating over all of the elements of this set.
      * Convenient all-in one iteration, but creates a std::u16string for each
@@ -1192,7 +1191,7 @@ public:
      * \endcode
      *
      * @return an all-elements iterator.
-     * @draft ICU 77
+     * @stable ICU 77
      * @see end
      * @see codePoints
      * @see ranges
@@ -1204,7 +1203,7 @@ public:
 
     /**
      * @return an exclusive-end sentinel for iterating over all of the elements of this set.
-     * @draft ICU 77
+     * @stable ICU 77
      * @see begin
      * @see codePoints
      * @see ranges
@@ -1213,7 +1212,6 @@ public:
     inline U_HEADER_NESTED_NAMESPACE::USetElementIterator end() const {
         return U_HEADER_NESTED_NAMESPACE::USetElements(toUSet()).end();
     }
-#endif  // U_HIDE_DRAFT_API
 
     /**
      * Adds the specified range to this set if it is not already

@@ -1735,17 +1735,16 @@ private:
     int32_t count;
 };
 
-#ifndef U_HIDE_DRAFT_API
 /**
  * Iterator returned by USetElements.
- * @draft ICU 77
+ * @stable ICU 77
  */
 class USetElementIterator {
 public:
-    /** @draft ICU 77 */
+    /** @stable ICU 77 */
     USetElementIterator(const USetElementIterator &other) = default;
 
-    /** @draft ICU 77 */
+    /** @stable ICU 77 */
     bool operator==(const USetElementIterator &other) const {
         // No need to compare rangeCount & end given private constructor
         // and assuming we don't compare iterators across the set being modified.
@@ -1754,10 +1753,10 @@ public:
         return uset == other.uset && c == other.c && index == other.index;
     }
 
-    /** @draft ICU 77 */
+    /** @stable ICU 77 */
     bool operator!=(const USetElementIterator &other) const { return !operator==(other); }
 
-    /** @draft ICU 77 */
+    /** @stable ICU 77 */
     std::u16string operator*() const {
         if (c >= 0) {
             return c <= 0xffff ?
@@ -1775,7 +1774,7 @@ public:
 
     /**
      * Pre-increment.
-     * @draft ICU 77
+     * @stable ICU 77
      */
     USetElementIterator &operator++() {
         if (c < end) {
@@ -1800,7 +1799,7 @@ public:
 
     /**
      * Post-increment.
-     * @draft ICU 77
+     * @stable ICU 77
      */
     USetElementIterator operator++(int) {
         USetElementIterator result(*this);
@@ -1860,7 +1859,7 @@ private:
  * C++ UnicodeSet has member functions for iteration, including begin() and end().
  *
  * @return an all-elements iterator.
- * @draft ICU 77
+ * @stable ICU 77
  * @see USetCodePoints
  * @see USetRanges
  * @see USetStrings
@@ -1869,21 +1868,21 @@ class USetElements {
 public:
     /**
      * Constructs a C++ "range" object over all of the elements of the USet.
-     * @draft ICU 77
+     * @stable ICU 77
      */
     USetElements(const USet *pUset)
         : uset(pUset), rangeCount(uset_getRangeCount(pUset)),
             stringCount(uset_getStringCount(pUset)) {}
 
-    /** @draft ICU 77 */
+    /** @stable ICU 77 */
     USetElements(const USetElements &other) = default;
 
-    /** @draft ICU 77 */
+    /** @stable ICU 77 */
     USetElementIterator begin() const {
         return USetElementIterator(uset, 0, rangeCount, rangeCount + stringCount);
     }
 
-    /** @draft ICU 77 */
+    /** @stable ICU 77 */
     USetElementIterator end() const {
         return USetElementIterator(uset, rangeCount + stringCount, rangeCount, rangeCount + stringCount);
     }
@@ -1892,8 +1891,6 @@ private:
     const USet *uset;
     int32_t rangeCount, stringCount;
 };
-
-#endif  // U_HIDE_DRAFT_API
 
 }  // namespace U_HEADER_ONLY_NAMESPACE
 
