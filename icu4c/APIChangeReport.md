@@ -83,7 +83,21 @@ Changed in  ICU 79 (old, new)
   
 | File | API | ICU 78 | ICU 79 |
 |---|---|---|---|
+| measunit.h | MeasureUnit icu::MeasureUnit::withConstantDenominator(uint64_t, UErrorCode&amp;) const |  Draft→StableICU 77
+| measunit.h | uint64_t icu::MeasureUnit::getConstantDenominator(UErrorCode&amp;) const |  Draft→StableICU 77
 | messageformat2_data_model.h | bool icu::message2::data_model::Binding::isLocal() const |  InternalICU 78 | InternalICU 79
+| uniset.h | U_HEADER_NESTED_NAMESPACE::USetElementIterator icu::UnicodeSet::begin() const |  Draft→StableICU 77
+| uniset.h | U_HEADER_NESTED_NAMESPACE::USetElementIterator icu::UnicodeSet::end() const |  Draft→StableICU 77
+| uset.h | USetElementIterator &amp; U_HEADER_ONLY_NAMESPACE::USetElementIterator::operator++() |  Draft→StableICU 77
+| uset.h | USetElementIterator U_HEADER_ONLY_NAMESPACE::USetElementIterator::operator++(int) |  Draft→StableICU 77
+| uset.h | USetElementIterator U_HEADER_ONLY_NAMESPACE::USetElements::begin() const |  Draft→StableICU 77
+| uset.h | USetElementIterator U_HEADER_ONLY_NAMESPACE::USetElements::end() const |  Draft→StableICU 77
+| uset.h | U_HEADER_ONLY_NAMESPACE::USetElementIterator::USetElementIterator(const USetElementIterator&amp;)=default |  Draft→StableICU 77
+| uset.h | U_HEADER_ONLY_NAMESPACE::USetElements::USetElements(const USet*) |  Draft→StableICU 77
+| uset.h | U_HEADER_ONLY_NAMESPACE::USetElements::USetElements(const USetElements&amp;)=default |  Draft→StableICU 77
+| uset.h | bool U_HEADER_ONLY_NAMESPACE::USetElementIterator::operator!=(const USetElementIterator&amp;) const |  Draft→StableICU 77
+| uset.h | bool U_HEADER_ONLY_NAMESPACE::USetElementIterator::operator==(const USetElementIterator&amp;) const |  Draft→StableICU 77
+| uset.h | std::u16string U_HEADER_ONLY_NAMESPACE::USetElementIterator::operator* () const |  Draft→StableICU 77
 
 ## Promoted
 
@@ -91,6 +105,8 @@ Promoted to stable in ICU 79
   
 | File | API | ICU 78 | ICU 79 |
 |---|---|---|---|
+| measunit.h | MeasureUnit icu::MeasureUnit::withConstantDenominator(uint64_t, UErrorCode&amp;) const |  Draft→StableICU 77
+| measunit.h | uint64_t icu::MeasureUnit::getConstantDenominator(UErrorCode&amp;) const |  Draft→StableICU 77
 | uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_ARCHAIC_CUNEIFORM_NUMERALS |  (missing) | StableICU 79| *(Born Stable)* |
 | uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_BENGALI_SUPPLEMENT |  (missing) | StableICU 79| *(Born Stable)* |
 | uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_JURCHEN_RADICALS |  (missing) | StableICU 79| *(Born Stable)* |
@@ -108,8 +124,20 @@ Promoted to stable in ICU 79
 | uchar.h | <tt>enum</tt> UJoiningGroup::U_JG_CROWN_SAD |  (missing) | StableICU 79| *(Born Stable)* |
 | uchar.h | <tt>enum</tt> UJoiningGroup::U_JG_CROWN_SEEN |  (missing) | StableICU 79| *(Born Stable)* |
 | uchar.h | <tt>enum</tt> UJoiningGroup::U_JG_CROWN_TAH |  (missing) | StableICU 79| *(Born Stable)* |
+| uniset.h | U_HEADER_NESTED_NAMESPACE::USetElementIterator icu::UnicodeSet::begin() const |  Draft→StableICU 77
+| uniset.h | U_HEADER_NESTED_NAMESPACE::USetElementIterator icu::UnicodeSet::end() const |  Draft→StableICU 77
 | uscript.h | <tt>enum</tt> UScriptCode::USCRIPT_PROTO_CUNEIFORM |  (missing) | StableICU 79| *(Born Stable)* |
 | uscript.h | <tt>enum</tt> UScriptCode::USCRIPT_SEAL |  (missing) | StableICU 79| *(Born Stable)* |
+| uset.h | USetElementIterator &amp; U_HEADER_ONLY_NAMESPACE::USetElementIterator::operator++() |  Draft→StableICU 77
+| uset.h | USetElementIterator U_HEADER_ONLY_NAMESPACE::USetElementIterator::operator++(int) |  Draft→StableICU 77
+| uset.h | USetElementIterator U_HEADER_ONLY_NAMESPACE::USetElements::begin() const |  Draft→StableICU 77
+| uset.h | USetElementIterator U_HEADER_ONLY_NAMESPACE::USetElements::end() const |  Draft→StableICU 77
+| uset.h | U_HEADER_ONLY_NAMESPACE::USetElementIterator::USetElementIterator(const USetElementIterator&amp;)=default |  Draft→StableICU 77
+| uset.h | U_HEADER_ONLY_NAMESPACE::USetElements::USetElements(const USet*) |  Draft→StableICU 77
+| uset.h | U_HEADER_ONLY_NAMESPACE::USetElements::USetElements(const USetElements&amp;)=default |  Draft→StableICU 77
+| uset.h | bool U_HEADER_ONLY_NAMESPACE::USetElementIterator::operator!=(const USetElementIterator&amp;) const |  Draft→StableICU 77
+| uset.h | bool U_HEADER_ONLY_NAMESPACE::USetElementIterator::operator==(const USetElementIterator&amp;) const |  Draft→StableICU 77
+| uset.h | std::u16string U_HEADER_ONLY_NAMESPACE::USetElementIterator::operator* () const |  Draft→StableICU 77
 
 ## Added
 
@@ -201,7 +229,6 @@ Other existing drafts in ICU 79
 | dtfmtsym.h |  const UnicodeString* icu::DateFormatSymbols::getAmPmStrings(int32_t&amp;, DtContextType, DtWidthType) const | DraftICU 78 | 
 | dtfmtsym.h |  void icu::DateFormatSymbols::setAmPmStrings(const UnicodeString*, int32_t, DtContextType, DtWidthType) | DraftICU 78 | 
 | measfmt.h |  void icu::MeasureFormat::parseObject(const UnicodeString&amp;, Formattable&amp;, ParsePosition&amp;) const | DraftICU 53 | 
-| measunit.h |  MeasureUnit icu::MeasureUnit::withConstantDenominator(uint64_t, UErrorCode&amp;) const | DraftICU 77 | 
 | measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getBecquerel() | DraftICU 78 | 
 | measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getBritishThermalUnitIt() | DraftICU 78 | 
 | measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getBuJp() | DraftICU 78 | 
@@ -292,11 +319,8 @@ Other existing drafts in ICU 79
 | measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createTesla(UErrorCode&amp;) | DraftICU 78 | 
 | measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createToJp(UErrorCode&amp;) | DraftICU 78 | 
 | measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createWeber(UErrorCode&amp;) | DraftICU 78 | 
-| measunit.h |  uint64_t icu::MeasureUnit::getConstantDenominator(UErrorCode&amp;) const | DraftICU 77 | 
 | udat.h |  <tt>enum</tt> UDateFormatSymbolType::UDAT_AM_PMS_NARROW | DraftICU 78 | 
 | udat.h |  <tt>enum</tt> UDateFormatSymbolType::UDAT_AM_PMS_WIDE | DraftICU 78 | 
-| uniset.h |  U_HEADER_NESTED_NAMESPACE::USetElementIterator icu::UnicodeSet::begin() const | DraftICU 77 | 
-| uniset.h |  U_HEADER_NESTED_NAMESPACE::USetElementIterator icu::UnicodeSet::end() const | DraftICU 77 | 
 | unistr.h |  StringClass icu::UnicodeString::toUTF8String() const | DraftICU 78 | 
 | unistr.h |  unspecified_iterator icu::UnicodeString::begin() const | DraftICU 78 | 
 | unistr.h |  unspecified_iterator icu::UnicodeString::end() const | DraftICU 78 | 
@@ -304,16 +328,6 @@ Other existing drafts in ICU 79
 | unistr.h |  unspecified_reverse_iterator icu::UnicodeString::rend() const | DraftICU 78 | 
 | unistr.h |  void icu::UnicodeString::push_back(char16_t) | DraftICU 78 | 
 | uregex.h |  <tt>enum</tt> URegexpFlag::UREGEX_CANON_EQ | DraftICU 2.4 | 
-| uset.h |  USetElementIterator &amp; U_HEADER_ONLY_NAMESPACE::USetElementIterator::operator++() | DraftICU 77 | 
-| uset.h |  USetElementIterator U_HEADER_ONLY_NAMESPACE::USetElementIterator::operator++(int) | DraftICU 77 | 
-| uset.h |  USetElementIterator U_HEADER_ONLY_NAMESPACE::USetElements::begin() const | DraftICU 77 | 
-| uset.h |  USetElementIterator U_HEADER_ONLY_NAMESPACE::USetElements::end() const | DraftICU 77 | 
-| uset.h |  U_HEADER_ONLY_NAMESPACE::USetElementIterator::USetElementIterator(const USetElementIterator&amp;)=default | DraftICU 77 | 
-| uset.h |  U_HEADER_ONLY_NAMESPACE::USetElements::USetElements(const USet*) | DraftICU 77 | 
-| uset.h |  U_HEADER_ONLY_NAMESPACE::USetElements::USetElements(const USetElements&amp;)=default | DraftICU 77 | 
-| uset.h |  bool U_HEADER_ONLY_NAMESPACE::USetElementIterator::operator!=(const USetElementIterator&amp;) const | DraftICU 77 | 
-| uset.h |  bool U_HEADER_ONLY_NAMESPACE::USetElementIterator::operator==(const USetElementIterator&amp;) const | DraftICU 77 | 
-| uset.h |  std::u16string U_HEADER_ONLY_NAMESPACE::USetElementIterator::operator* () const | DraftICU 77 | 
 | utf.h |  <tt>#define</tt> U_IS_CODE_POINT | DraftICU 78 | 
 | utf.h |  <tt>#define</tt> U_IS_SCALAR_VALUE | DraftICU 78 | 
 | utf8.h |  <tt>#define</tt> U8_LENGTH_FROM_LEAD_BYTE_UNSAFE | DraftICU 78 | 
@@ -405,7 +419,7 @@ This section shows cases where the signature was "simplified" for the sake of co
 
 ## Colophon
 
-Contents generated by StableAPI tool on Thu Sep 03 12:59:33 PDT 2026
+Contents generated by StableAPI tool on Fri Sep 04 15:28:07 PDT 2026
 
 Copyright © 2019 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
