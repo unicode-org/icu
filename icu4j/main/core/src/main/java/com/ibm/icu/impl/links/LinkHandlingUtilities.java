@@ -153,19 +153,19 @@ public class LinkHandlingUtilities {
                     .addAll(EMAIL_ASCII_INCLUDES)
                     .freeze();
 
-    public static int scanEmailBackwards(CharSequence source, int hardStart, int domainStart) {
-        if (UCharacter.codePointBefore(source, domainStart) != '@') {
+    public static int scanEmailBackwards(CharSequence source, int hardStart, int beforeAtSign) {
+        if (UCharacter.codePointAt(source, beforeAtSign) != '@') {
             throw new IllegalArgumentException("Scanning must start after an '@' sign");
         }
-        int result = VALID_EMAIL_LOCAL_PART.spanBack(source, domainStart - 1, SpanCondition.SIMPLE);
-        if (result == domainStart - 1) {
-            return domainStart;
+        int result = VALID_EMAIL_LOCAL_PART.spanBack(source, beforeAtSign, SpanCondition.SIMPLE);
+        if (result == beforeAtSign) {
+            return beforeAtSign;
         } else if (result < hardStart) {
             result = hardStart;
         }
-        String localPart = source.subSequence(result, domainStart - 1).toString();
+        String localPart = source.subSequence(result, beforeAtSign).toString();
         if (localPart.startsWith(".") || localPart.endsWith(".") || localPart.contains("..")) {
-            return domainStart;
+            return beforeAtSign;
         }
         if (source.toString().substring(0, result).endsWith("mailto:")) {
             result -= "mailto:".length();

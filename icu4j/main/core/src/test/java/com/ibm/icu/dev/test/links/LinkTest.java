@@ -132,8 +132,8 @@ public class LinkTest extends CoreTestFmwk {
     }
 
     private void checkEmail(String source, int start, String localPartStart) {
-        int end = source.indexOf('@') + 1;
-        int expected = localPartStart == null ? source.length() : source.indexOf(localPartStart);
+        int end = source.indexOf('@');
+        int expected = localPartStart == null ? end : source.indexOf(localPartStart);
         int actual = LinkUtilities.scanBackEmailLocalPart(source, start, end);
         assertEquals(source, expected, actual);
     }
@@ -179,10 +179,10 @@ public class LinkTest extends CoreTestFmwk {
                                 && UCharacter.codePointBefore(rawLine2, domain.start) == '@') {
                             // handle email
                             // check backwards for email
+                            int atStart = domain.start - 1;
                             int local_part_start =
-                                    LinkUtilities.scanBackEmailLocalPart(
-                                            rawLine2, start, domain.start);
-                            if (local_part_start != domain.start) {
+                                    LinkUtilities.scanBackEmailLocalPart(rawLine2, start, atStart);
+                            if (local_part_start != atStart) {
                                 domain.start = local_part_start;
                                 haveEmail = true;
                             } else {
@@ -215,8 +215,8 @@ public class LinkTest extends CoreTestFmwk {
                                         domainAtDomain)) {
                                     domain.start =
                                             LinkUtilities.scanBackEmailLocalPart(
-                                                    rawLine2, start, domain.end + 1);
-                                    boolean failing = domain.start == domain.end + 1;
+                                                    rawLine2, start, domain.end);
+                                    boolean failing = domain.start == domain.end;
                                     if (!failing) {
                                         // slash is a valid email character, so check
                                         // two characters after

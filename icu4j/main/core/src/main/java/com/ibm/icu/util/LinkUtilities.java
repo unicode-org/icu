@@ -12,6 +12,8 @@ import com.ibm.icu.text.UnicodeSet;
  * for display, implementing the algorithms in https://www.unicode.org/reports/tr58/ to handle
  * Unicode characters properly. It supplies lower level APIs for use in augmenting existing scanners
  * and formatters.
+ *
+ * @draft ICU 78
  */
 public class LinkUtilities {
 
@@ -25,6 +27,7 @@ public class LinkUtilities {
      * @param start the position in the text to be scanned from. It should be immediately after a
      *     domain name.
      * @return the end position of the PQF, or the start value if there is none.
+     * @draft ICU 78
      */
     public static int scanPathQueryFragment(CharSequence source, int start, int limit) {
         return LinkHandlingUtilities.parsePathQueryFragment(source.toString(), start);
@@ -38,19 +41,32 @@ public class LinkUtilities {
      *
      * @param source the text to be scanned
      * @param start the position that is the earliest that should be considered in a backwards scan
-     * @param limit the position to start scanning backwards from — should be just after @ and just
-     *     before the domain_name.
+     * @param limit the position to start scanning backwards from — should be just before the @
+     *     (which is just before the domain_name)
      * @return the start of the email locale part, or limit if no email local part is found
+     * @draft ICU 78
      */
     public static int scanBackEmailLocalPart(CharSequence source, int start, int limit) {
         return LinkHandlingUtilities.scanEmailBackwards(source, start, limit);
     }
 
-    /** Enum for determining whether any percent-escaping is minimal or maximal, for use */
+    /**
+     * Enum for determining whether any percent-escaping is minimal or maximal, for use
+     *
+     * @draft ICU 78
+     */
     public enum Extent {
-        /** Minimal percent-escaping only percent-escapes non-ASCII where necessary. */
+        /**
+         * Minimal percent-escaping only percent-escapes non-ASCII where necessary.
+         *
+         * @draft ICU 78
+         */
         MINIMAL,
-        /** Maximal percent-escaping percent-escapes all non-ASCII. */
+        /**
+         * Maximal percent-escaping percent-escapes all non-ASCII.
+         *
+         * @draft ICU 78
+         */
         MAXIMAL
     }
 
@@ -62,6 +78,7 @@ public class LinkUtilities {
      *     percent-escaped. For more information, see https://www.unicode.org/reports/tr58/.
      * @param extent either MINIMAL or MAXIMAL
      * @return an escaped string according to the extent parameter.
+     * @draft ICU 78
      */
     public static String escapePathQueryFragment(String source, Extent extent) {
         UrlInternals ui = UrlInternals.from(source.toString());
