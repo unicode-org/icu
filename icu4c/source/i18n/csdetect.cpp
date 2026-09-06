@@ -23,6 +23,7 @@
 #include "ucln_in.h"
 #include "uarrsort.h"
 #include "inputext.h"
+#include "csrascii.h"
 #include "csrsbcs.h"
 #include "csrmbcs.h"
 #include "csrutf8.h"
@@ -85,6 +86,8 @@ static void U_CALLCONV initRecognizers(UErrorCode &status) {
     U_NAMESPACE_USE
     ucln_i18n_registerCleanup(UCLN_I18N_CSDET, csdet_cleanup);
     CSRecognizerInfo *tempArray[] = {
+        new CSRecognizerInfo(new CharsetRecog_ASCII(), true),
+
         new CSRecognizerInfo(new CharsetRecog_UTF8(), true),
 
         new CSRecognizerInfo(new CharsetRecog_UTF_16_BE(), true),

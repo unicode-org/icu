@@ -267,8 +267,9 @@ static void TestC1Bytes(void)
 
     name  = ucsdet_getName(match, &status);
 
-    if (strcmp(name, "ISO-8859-1") != 0) {
-        log_err("English text without C1 bytes does not detect as ISO-8859-1, but as %s\n", name);
+    if (strcmp(name, "ASCII") != 0) {
+        /* note, it could also be ISO-8859-1; if the text contains 7bit characters only */
+        log_err("English text without C1 bytes does not detect as ASCII, but as %s\n", name);
     }
 
 bail:
@@ -386,7 +387,7 @@ static void TestBufferOverflow(void) {
         "windows-1252",
         "windows-1252",
         "windows-1252",
-        "ISO-2022-JP",
+        "ASCII",
         NULL,
         NULL,
         "ISO-8859-1"

@@ -511,8 +511,9 @@ void CharsetDetectionTest::C1BytesTest()
 
     name  = ucsdet_getName(match, &status);
 
-    if (strcmp(name, "ISO-8859-1") != 0) {
-        errln("English text without C1 bytes does not detect as ISO-8859-1, but as %s", name);
+    if (strcmp(name, "ASCII") != 0) {
+        // note, it could also be ISO-8859-1; if the text contains 7bit characters only
+        errln("English text without C1 bytes does not detect as ASCII, but as %s", name);
     }
 
 bail:
@@ -826,14 +827,14 @@ void CharsetDetectionTest::Ticket6954Test() {
     TEST_ASSERT_SUCCESS(status);
     TEST_ASSERT(strcmp(name1, "windows-1252")==0);
 
-    // Next, using a completely separate detector, detect some 8859-1 text
+    // Next, using a completely separate detector, detect some ASCII text
 
     LocalUCharsetDetectorPointer csd2(ucsdet_open(&status));
     ucsdet_setText(csd2.getAlias(), bISO.get(), lISO, &status);
     const UCharsetMatch *match2 = ucsdet_detect(csd2.getAlias(), &status);
     const char *name2 = ucsdet_getName(match2, &status);
     TEST_ASSERT_SUCCESS(status);
-    TEST_ASSERT(strcmp(name2, "ISO-8859-1")==0);
+    TEST_ASSERT(strcmp(name2, "ASCII")==0);
 
     // Recheck the 1252 results from the first detector, which should not have been
     //  altered by the use of a different detector.
