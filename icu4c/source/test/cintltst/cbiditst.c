@@ -76,6 +76,8 @@ static void _testPresentationForms(const UChar *in);
 
 static void doArabicShapingTestForNewCharacters(void);
 
+static void doArabicShapingTestForBufferOverflow(void);
+
 static void testReorder(void);
 
 static void testReorderArabicMathSymbols(void);
@@ -164,6 +166,7 @@ addComplexTest(TestNode** root) {
     addTest(root, testReorderArabicMathSymbols, "complex/bidi/bug-9024");
     addTest(root, doArabicShapingTestForBug9024, "complex/arabic-shaping/bug-9024");
     addTest(root, doArabicShapingTestForNewCharacters, "complex/arabic-shaping/shaping2");
+    addTest(root, doArabicShapingTestForBufferOverflow, "complex/arabic-shaping/overflow");
 }
 
 static void
@@ -3179,6 +3182,58 @@ doArabicShapingTestForBug8703(void) {
 
     if(U_FAILURE(errorCode) || length!=UPRV_LENGTHOF(letters_dest8) || memcmp(dest, letters_dest8, length*U_SIZEOF_UCHAR)!=0) {
         log_err("failure in u_shapeArabic(letters_source8)\n");
+    }
+}
+
+static void
+doArabicShapingTestForBufferOverflow(void) {
+    /*
+     * The internal shaping work buffer holds exactly sourceLength UChars when
+     * no resizing option is used, so a length above the 300-element stack
+     * buffer forces a heap allocation of that exact size. The lamalef/tashkeel
+     * "begin" space handling and the near lamalef expansion used to read one
+     * element past that buffer; exercise both paths with such a length.
+     */
+    enum { LEN = 400 };
+    UChar shapeSource[LEN];   /* LAM + ALEF + SPACE + presentation LAM-ALEF */
+    UChar unshapeSource[LEN]; /* SPACE + presentation LAM-ALEF, ready to expand */
+    UChar dest[2 * LEN];
+    UErrorCode errorCode;
+    int32_t length;
+    int32_t i;
+
+    for(i = 0; i < LEN; ++i) {
+        switch(i & 3) {
+        case 0:  shapeSource[i] = 0x0644; break; /* LAM  */
+        case 1:  shapeSource[i] = 0x0627; break; /* ALEF */
+        case 2:  shapeSource[i] = 0x0020; break; /* SPACE */
+        default: shapeSource[i] = 0xFEFB; break; /* LAM-ALEF */
+        }
+        unshapeSource[i] = (i & 1) ? 0xFEFB : 0x0020;
+    }
+
+    errorCode = U_ZERO_ERROR;
+    length = u_shapeArabic(shapeSource, LEN, dest, UPRV_LENGTHOF(dest),
+                           U_SHAPE_TEXT_DIRECTION_LOGICAL | U_SHAPE_LAMALEF_BEGIN | U_SHAPE_LETTERS_SHAPE,
+                           &errorCode);
+    if(U_FAILURE(errorCode) || length > UPRV_LENGTHOF(dest)) {
+        log_err("failure in u_shapeArabic(LAMALEF_BEGIN, length %d): %s\n", (int)LEN, u_errorName(errorCode));
+    }
+
+    errorCode = U_ZERO_ERROR;
+    length = u_shapeArabic(shapeSource, LEN, dest, UPRV_LENGTHOF(dest),
+                           U_SHAPE_TEXT_DIRECTION_LOGICAL | U_SHAPE_TASHKEEL_BEGIN | U_SHAPE_LETTERS_SHAPE,
+                           &errorCode);
+    if(U_FAILURE(errorCode) || length > UPRV_LENGTHOF(dest)) {
+        log_err("failure in u_shapeArabic(TASHKEEL_BEGIN, length %d): %s\n", (int)LEN, u_errorName(errorCode));
+    }
+
+    errorCode = U_ZERO_ERROR;
+    length = u_shapeArabic(unshapeSource, LEN, dest, UPRV_LENGTHOF(dest),
+                           U_SHAPE_LAMALEF_NEAR | U_SHAPE_LETTERS_UNSHAPE,
+                           &errorCode);
+    if(U_FAILURE(errorCode) || length > UPRV_LENGTHOF(dest)) {
+        log_err("failure in u_shapeArabic(UNSHAPE|LAMALEF_NEAR, length %d): %s\n", (int)LEN, u_errorName(errorCode));
     }
 }
 
