@@ -24,7 +24,7 @@
 #include <exception>
 using std::exception;
 #endif
-#if defined(__GLIBCXX__)
+#if defined(__GLIBCXX__) && !defined(_GLIBCXX_RELEASE)
 namespace std { class type_info; } // WORKAROUND: http://llvm.org/bugs/show_bug.cgi?id=13364
 #endif
 #include <typeinfo>  // for 'typeid' to work
