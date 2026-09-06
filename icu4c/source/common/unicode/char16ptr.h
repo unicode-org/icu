@@ -394,10 +394,12 @@ constexpr bool ConvertibleToU16StringView =
 
 namespace internal {
 /**
- * Pass-through overload.
+ * Pass-through overload for anything which is already implicitly convertible (including std::u16string_view itself).
  * @internal
  */
-inline std::u16string_view toU16StringView(std::u16string_view sv) { return sv; }
+template <typename T,
+          typename = typename std::enable_if_t<std::is_convertible_v<T, std::u16string_view>>>
+std::u16string_view toU16StringView(const T& text) { return text; }
 
 #if !U_CHAR16_IS_TYPEDEF && (!defined(_LIBCPP_VERSION) || _LIBCPP_VERSION < 180000)
 /**
@@ -427,7 +429,7 @@ inline std::u16string_view toU16StringView(std::wstring_view sv) {
  */
 template <typename T,
           typename = typename std::enable_if_t<!std::is_pointer_v<std::remove_reference_t<T>>>>
-inline std::u16string_view toU16StringViewNullable(const T& text) {
+std::u16string_view toU16StringViewNullable(const T& text) {
     return toU16StringView(text);
 }
 
@@ -438,7 +440,7 @@ inline std::u16string_view toU16StringViewNullable(const T& text) {
 template <typename T,
           typename = typename std::enable_if_t<std::is_pointer_v<std::remove_reference_t<T>>>,
           typename = void>
-inline std::u16string_view toU16StringViewNullable(const T& text) {
+std::u16string_view toU16StringViewNullable(const T& text) {
     if (text == nullptr) return {};  // For backward compatibility.
     return toU16StringView(text);
 }
