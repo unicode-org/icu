@@ -1277,15 +1277,29 @@ _LMBCSToUnicodeWithOffsets(UConverterToUnicodeArgs*    args,
 
       if (args->converter->toULength) /* reassemble char from previous call */
       {
-        const char *saveSourceLimit; 
+        const char *saveSourceLimit;
         size_t size_old = args->converter->toULength;
 
          /* limit from source is either remainder of temp buffer, or user limit on source */
+        /* `size_old` is read from a UConverter that may have been reused
+         * across encodings without ucnv_reset(); guard against any caller
+         * (or callback chain) that left `toULength` larger than the LMBCS
+         * reassembly buffer. Without this guard, the memcpy at
+         * `LMBCS + size_old` overflows the 3-byte stack buffer and the
+         * subsequent `sizeof(LMBCS) - size_old` arithmetic wraps to a
+         * huge size_t. Reset the partial-state fields before returning so
+         * a caller that ignores the error and continues using the
+         * converter does not immediately re-enter this path. */
+        if (size_old > sizeof(LMBCS)) {
+            args->converter->toULength = 0;
+            *err = U_INVALID_STATE_ERROR;
+            return;
+        }
         size_t size_new_maybe_1 = sizeof(LMBCS) - size_old;
         size_t size_new_maybe_2 = args->sourceLimit - args->source;
         size_t size_new = (size_new_maybe_1 < size_new_maybe_2) ? size_new_maybe_1 : size_new_maybe_2;
-         
-      
+
+
         uprv_memcpy(LMBCS, args->converter->toUBytes, size_old);
         uprv_memcpy(LMBCS + size_old, args->source, size_new);
         saveSourceLimit = args->sourceLimit;
