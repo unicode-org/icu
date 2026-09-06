@@ -472,9 +472,9 @@ LocalizedNumberFormatter::LocalizedNumberFormatter(const NFS<LNF>& other)
 LocalizedNumberFormatter::LocalizedNumberFormatter(LocalizedNumberFormatter&& src) noexcept
         : LNF(static_cast<NFS<LNF>&&>(src)) {}
 
-LocalizedNumberFormatter::LocalizedNumberFormatter(NFS<LNF>&& src) noexcept
-        : NFS<LNF>(std::move(src)) {
-    lnfMoveHelper(std::move(static_cast<LNF&&>(src)));
+LocalizedNumberFormatter::LocalizedNumberFormatter(NFS<LNF>&& src) noexcept {
+    lnfMoveHelper(static_cast<LNF&&>(src)); // Call before moving src
+    static_cast<NFS<LNF>&>(*this) = std::move(src); // Move after
 }
 
 LocalizedNumberFormatter& LocalizedNumberFormatter::operator=(const LNF& other) {
