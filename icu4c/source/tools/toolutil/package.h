@@ -53,6 +53,8 @@ public:
     /* Destructor. */
     ~Package();
 
+    void clear();
+
     /**
      * Uses the prefix of the first entry of the package in readPackage(),
      * rather than the package basename.
@@ -123,6 +125,8 @@ public:
 
     /* This variant extracts an item to a specific filename. */
     void extractItem(const char *filesPath, const char *outName, int32_t itemIndex, char outType);
+
+    void keepItems(const Package &listPkg);
 
     int32_t getItemCount() const;
     const Item *getItem(int32_t idx) const;
