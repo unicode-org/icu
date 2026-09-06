@@ -687,6 +687,52 @@ void SpoofData::initPtrs(UErrorCode &status) {
     if (U_FAILURE(status)) {
         return;
     }
+
+    int32_t totalLen = fRawData->fLength;
+    if (totalLen < static_cast<int32_t>(sizeof(SpoofDataHeader))) {
+        status = U_INVALID_FORMAT_ERROR;
+        return;
+    }
+
+    // Validate all offset+size pairs against the total data length.
+    if (fRawData->fCFUKeys < 0 || fRawData->fCFUKeys > totalLen ||
+        fRawData->fCFUKeysSize < 0 ||
+        fRawData->fCFUKeysSize > (totalLen - fRawData->fCFUKeys) / static_cast<int32_t>(sizeof(int32_t))) {
+        status = U_INVALID_FORMAT_ERROR;
+        return;
+    }
+    if (fRawData->fCFUStringIndex < 0 || fRawData->fCFUStringIndex > totalLen ||
+        fRawData->fCFUStringIndexSize < 0 ||
+        fRawData->fCFUStringIndexSize > (totalLen - fRawData->fCFUStringIndex) / static_cast<int32_t>(sizeof(uint16_t))) {
+        status = U_INVALID_FORMAT_ERROR;
+        return;
+    }
+    if (fRawData->fCFUStringTable < 0 || fRawData->fCFUStringTable > totalLen ||
+        fRawData->fCFUStringTableLen < 0 ||
+        fRawData->fCFUStringTableLen > (totalLen - fRawData->fCFUStringTable) / static_cast<int32_t>(sizeof(char16_t))) {
+        status = U_INVALID_FORMAT_ERROR;
+        return;
+    }
+
+    // Ensure consistency: offsets and sizes must agree.
+    // If keys exist, the value index and string table must also exist.
+    if (fRawData->fCFUKeysSize > 0 &&
+        (fRawData->fCFUKeys == 0 || fRawData->fCFUStringIndex == 0 || fRawData->fCFUStringTable == 0)) {
+        status = U_INVALID_FORMAT_ERROR;
+        return;
+    }
+    // If offset is zero, size must also be zero.
+    if ((fRawData->fCFUKeys == 0) != (fRawData->fCFUKeysSize == 0)) {
+        status = U_INVALID_FORMAT_ERROR;
+        return;
+    }
+    // Value index table must have at least as many entries as the keys table,
+    // since both are accessed by the same index from binary search.
+    if (fRawData->fCFUKeysSize > 0 && fRawData->fCFUStringIndexSize < fRawData->fCFUKeysSize) {
+        status = U_INVALID_FORMAT_ERROR;
+        return;
+    }
+
     if (fRawData->fCFUKeys != 0) {
         fCFUKeys = reinterpret_cast<int32_t*>(reinterpret_cast<char*>(fRawData) + fRawData->fCFUKeys);
     }
@@ -768,6 +814,10 @@ int32_t SpoofData::confusableLookup(UChar32 inChar, UnicodeString &dest) const {
     // The result after the loop will be in lo.
     int32_t lo = 0;
     int32_t hi = length();
+    if (hi == 0 || fCFUKeys == nullptr) {
+        dest.append(inChar);
+        return 1;
+    }
     do {
         int32_t mid = (lo + hi) / 2;
         if (codePointAt(mid) > inChar) {
@@ -808,6 +858,12 @@ int32_t SpoofData::appendValueTo(int32_t index, UnicodeString& dest) const {
     if (stringLength == 1) {
         dest.append(static_cast<char16_t>(value));
     } else {
+        int32_t tableLen = fRawData->fCFUStringTableLen;
+        if (fCFUStrings == nullptr || value > tableLen ||
+            stringLength > tableLen - value) {
+            dest.append(static_cast<UChar32>(0xFFFD));
+            return 1;
+        }
         dest.append(fCFUStrings + value, stringLength);
     }
 
