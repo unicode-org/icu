@@ -673,10 +673,11 @@ void LocalizedNumberFormatter::getAffixImpl(bool isPrefix, bool isNegative, Unic
         prefixLength = NumberFormatterImpl::getPrefixSuffixStatic(fMacros, signum, plural, string, status);
     }
     result.remove();
+    const auto tempUnicodeString = string.toTempUnicodeString();
     if (isPrefix) {
-        result.append(string.toTempUnicodeString().tempSubStringBetween(0, prefixLength));
+        result.append(tempUnicodeString.tempSubStringBetween(0, prefixLength));
     } else {
-        result.append(string.toTempUnicodeString().tempSubStringBetween(prefixLength, string.length()));
+        result.append(tempUnicodeString.tempSubStringBetween(prefixLength, string.length()));
     }
 }
 
