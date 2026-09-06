@@ -52,8 +52,7 @@
 #define USE_SINGLE_CCODE_FILE
 #endif
 
-/* Need to fix the file seperator character when using MinGW. */
-#if defined(WINDOWS_WITH_GNUC) || defined(USING_CYGWIN)
+#if defined(WINDOWS_WITH_GNUC) || defined(USING_CYGWIN) || U_PLATFORM == U_PF_MINGW
 #define PKGDATA_FILE_SEP_STRING "/"
 #else
 #define PKGDATA_FILE_SEP_STRING U_FILE_SEP_STRING
