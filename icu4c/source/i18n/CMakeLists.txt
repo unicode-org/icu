@@ -1,0 +1,5 @@
+add_library(icui18n)
+icu_add_sources(icui18n)
+target_link_libraries(icui18n PRIVATE icu_lib_defaults icuuc)
+target_compile_definitions(icui18n PRIVATE U_I18N_IMPLEMENTATION)
+target_include_directories(icui18n PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
