@@ -27,9 +27,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class LinkHandlingUtilities {
-
-    private static final UnicodeSet SOFAR = new UnicodeSet();
-
     /**
      * Based on https://url.spec.whatwg.org/#percent-encoded-bytes. Is the default for maximal
      * encoding, but can be customized
@@ -88,29 +85,37 @@ public class LinkHandlingUtilities {
         return cp == '>' ? '<' : UCharacter.getBidiPairedBracket(cp);
     }
 
+    // Used for computing LinkTermination.INCLUDE. Frozen when done.
+    private static final UnicodeSet SOFAR = new UnicodeSet();
+
     /**
      * Defines the LinkTermination property<br>
      * These will be replaced once we have a real property value in ICU.
      */
     private enum LinkTermination {
+        // All enum constants except INCLUDE build a UnicodeSet from their set pattern strings
+        // and add their set to the SOFAR set.
         HARD("[\\p{whitespace}\\p{NChar}[\\p{C}-\\p{Cf}]\\p{deprecated}]"),
         SOFT("[\\p{Term}\\p{lb=qu}-\\p{deprecated}]"),
         CLOSE("[\\p{Bidi_Paired_Bracket_Type=Close}[>]-\\p{deprecated}]"),
         OPEN("[\\p{Bidi_Paired_Bracket_Type=Open}[<]-\\p{deprecated}]"),
-        INCLUDE(null), // all else
-        ;
+        // The INCLUDE constant gets the set of all code points not covered by the other constants.
+        INCLUDE(null);
 
         private final UnicodeSet base;
 
         private LinkTermination(String uset) {
-            if (uset == null) { // only called with Include, the "none of the above" option
-                this.base = SOFAR.complement().freeze();
+            if (uset == null) {
+                // Only called for the INCLUDE constant, the "none of the above" option.
+                base = SOFAR.complement().freeze();
             } else {
-                this.base = new UnicodeSet(uset).freeze();
-                SOFAR.addAll(this.base);
+                base = new UnicodeSet(uset).freeze();
+                // Add this constant's set to SOFAR, removing its code points from INCLUDE.
+                SOFAR.addAll(base);
             }
         }
 
+        // TODO: We should not use UnicodeMap in runtime code.
         private static final UnicodeMap<LinkTermination> PROPERTY_MAP = new UnicodeMap<>();
 
         static {
@@ -153,20 +158,30 @@ public class LinkHandlingUtilities {
                     .addAll(EMAIL_ASCII_INCLUDES)
                     .freeze();
 
-    public static int scanEmailBackwards(CharSequence source, int hardStart, int beforeAtSign) {
-        if (UCharacter.codePointAt(source, beforeAtSign) != '@') {
-            throw new IllegalArgumentException("Scanning must start after an '@' sign");
+    public static int scanEmailBackwards(CharSequence source, int hardStart, int atSignPos) {
+        // TODO: Markus: The API doc says that we _assume_ that atSignPos is before @,
+        // but does not say that we _require_ it. Not clear to me that we need to.
+        // It seems like a caller should be able to give us what they believe to be an email local
+        // part without giving us a whole email address.
+        // It should be possible that atSignPos == source.length().
+        if (source.charAt(atSignPos) != '@') {
+            throw new IllegalArgumentException(
+                    "Scanning must start backwards from the '@' sign position");
         }
-        int result = VALID_EMAIL_LOCAL_PART.spanBack(source, beforeAtSign, SpanCondition.SIMPLE);
-        if (result == beforeAtSign) {
-            return beforeAtSign;
+        int result = VALID_EMAIL_LOCAL_PART.spanBack(source, atSignPos, SpanCondition.SIMPLE);
+        if (result == atSignPos) {
+            return atSignPos;
         } else if (result < hardStart) {
             result = hardStart;
         }
-        String localPart = source.subSequence(result, beforeAtSign).toString();
+        // TODO: Try to avoid CharSequence.toString() in the following code,
+        // especially source.toString() which could be long.
+        String localPart = source.subSequence(result, atSignPos).toString();
         if (localPart.startsWith(".") || localPart.endsWith(".") || localPart.contains("..")) {
-            return beforeAtSign;
+            return atSignPos;
         }
+        // TODO: This looks wrong. The API doc says “It does not scan back through "mailto:".”
+        // This code does the opposite: It _extends back to include an adjacent "mailto:"_.
         if (source.toString().substring(0, result).endsWith("mailto:")) {
             result -= "mailto:".length();
         }
@@ -644,8 +659,9 @@ public class LinkHandlingUtilities {
      * Otherwise, stop linkification and return lastSafe<br>
      */
     public static int parsePathQueryFragment(String source, int codePointOffset) {
-        // For simplicity, and to match the spec, we just get the code points
+        // For simplicity, and to match the spec, we just get the code points.
         // Production code would be optimized, of course.
+        // TODO: This is production code now...
 
         int[] codePoints = source.codePoints().toArray();
         int lastSafe = codePointOffset;
