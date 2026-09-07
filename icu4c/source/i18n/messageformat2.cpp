@@ -445,12 +445,12 @@ void MessageFormatter::formatPattern(MessageContext& context,
 
                   // Apply bidi isolation to the formatted result
                   UMFDirectionality dir = val->getDirection();
-                  result += ubidi_isolate(bidiIsolationStrategy,
-                                          msgdir,
-                                          bidiIsolationStyle,
-                                          val->getDirectionAnnotation(),
-                                          dir,
-                                          fmt);
+                  result += *(ubidi_isolate(bidiIsolationStrategy,
+                                            msgdir,
+                                            bidiIsolationStyle,
+                                            val->getDirectionAnnotation(),
+                                            dir,
+                                            fmt));
 
                   if (badSelectOption) {
                       context.getErrors().setBadOption(val->getFunctionName(), status);

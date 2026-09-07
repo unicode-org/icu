@@ -3079,7 +3079,7 @@ ubidi_getMFOption(const UnicodeString& s) {
 // `dir` is the directionality of `fmt`. This is determined from the resolved
 // value that `fmt` is part of; that is, each function can set the directionality
 // of the resolved value of its result.
-U_COMMON_API UnicodeString U_EXPORT2
+U_CAPI UnicodeString* U_EXPORT2
 ubidi_isolate(UMFBidiIsolationStrategy bidiIsolationStrategy,
                             UMFDirectionality msgdir,
                             UMFBidiIsolationStyle bidiIsolationStyle,
@@ -3091,7 +3091,7 @@ ubidi_isolate(UMFBidiIsolationStrategy bidiIsolationStrategy,
 
     // If strategy is 'none', just return the string
     if (bidiIsolationStrategy == U_MF_BIDI_OFF)
-        return fmt;
+        return &fmt;
 
     /* 1. Let msgdir be the directionality of the whole message, one of « 'LTR', 'RTL', 'unknown' ». These correspond to the message having left-to-right directionality, right-to-left directionality, and to the message's directionality not being known. */
 
@@ -3112,7 +3112,7 @@ ubidi_isolate(UMFBidiIsolationStrategy bidiIsolationStrategy,
         case U_MF_DIRECTIONALITY_LTR:
             if (msgdir == U_MF_DIRECTIONALITY_LTR && !isolate) {
                 // 2iv(a). If msgdir is 'LTR' in the formatted output, let fmt be itself
-                return fmt;
+                return &fmt;
             }
             // 2iii(b) Else, in the formatted output, prefix fmt with U+2066 LEFT-TO-RIGHT ISOLATE and postfix it with U+2069 POP DIRECTIONAL ISOLATE.
             if (bidiIsolationStyle == U_MF_BIDI_STYLE_CONTROL) {
@@ -3146,7 +3146,7 @@ ubidi_isolate(UMFBidiIsolationStrategy bidiIsolationStrategy,
             }
             break; // End of 2v
     } // `fmt` now contains the isolated string
-    return fmt;
+    return &fmt;
 }
 
 U_NAMESPACE_END
