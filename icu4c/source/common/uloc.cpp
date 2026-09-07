@@ -522,8 +522,8 @@ inline bool UPRV_OK_VALUE_PUNCTUATION(char c) { return c == '_' || c == '-' || c
 #define ULOC_KEYWORD_BUFFER_LEN 25
 #define ULOC_MAX_NO_KEYWORDS 25
 
-U_CAPI const char * U_EXPORT2
-locale_getKeywordsStart(std::string_view localeID) {
+U_CAPI const char* U_EXPORT2
+locale_getKeywordsStart(std::string_view localeID U_LIFETIME_BOUND) {
     if (size_t pos = localeID.find('@'); pos != std::string_view::npos) {
         return localeID.data() + pos;
     }
@@ -1195,12 +1195,12 @@ std::optional<int16_t> _findIndex(const char* const* list, const char* key)
 }  // namespace
 
 U_CFUNC const char*
-uloc_getCurrentCountryID(const char* oldID){
+uloc_getCurrentCountryID(const char* oldID U_LIFETIME_BOUND) {
     std::optional<int16_t> offset = _findIndex(DEPRECATED_COUNTRIES, oldID);
     return offset.has_value() ? REPLACEMENT_COUNTRIES[*offset] : oldID;
 }
 U_CFUNC const char*
-uloc_getCurrentLanguageID(const char* oldID){
+uloc_getCurrentLanguageID(const char* oldID U_LIFETIME_BOUND) {
     std::optional<int16_t> offset = _findIndex(DEPRECATED_LANGUAGES, oldID);
     return offset.has_value() ? REPLACEMENT_LANGUAGES[*offset] : oldID;
 }
@@ -2374,7 +2374,7 @@ uloc_getISOCountries()
 }
 
 U_CAPI const char* U_EXPORT2
-uloc_toUnicodeLocaleKey(const char* keyword)
+uloc_toUnicodeLocaleKey(const char* keyword U_LIFETIME_BOUND)
 {
     if (keyword == nullptr || *keyword == '\0') { return nullptr; }
     std::optional<std::string_view> result = ulocimp_toBcpKeyWithFallback(keyword);
@@ -2382,7 +2382,7 @@ uloc_toUnicodeLocaleKey(const char* keyword)
 }
 
 U_EXPORT std::optional<std::string_view>
-ulocimp_toBcpKeyWithFallback(std::string_view keyword)
+ulocimp_toBcpKeyWithFallback(std::string_view keyword U_LIFETIME_BOUND)
 {
     std::optional<std::string_view> bcpKey = ulocimp_toBcpKey(keyword);
     if (!bcpKey.has_value() &&
@@ -2394,7 +2394,7 @@ ulocimp_toBcpKeyWithFallback(std::string_view keyword)
 }
 
 U_CAPI const char* U_EXPORT2
-uloc_toUnicodeLocaleType(const char* keyword, const char* value)
+uloc_toUnicodeLocaleType(const char* keyword, const char* value U_LIFETIME_BOUND)
 {
     if (keyword == nullptr || *keyword == '\0' ||
         value == nullptr || *value == '\0') { return nullptr; }
@@ -2403,7 +2403,7 @@ uloc_toUnicodeLocaleType(const char* keyword, const char* value)
 }
 
 U_EXPORT std::optional<std::string_view>
-ulocimp_toBcpTypeWithFallback(std::string_view keyword, std::string_view value)
+ulocimp_toBcpTypeWithFallback(std::string_view keyword, std::string_view value U_LIFETIME_BOUND)
 {
     std::optional<std::string_view> bcpType = ulocimp_toBcpType(keyword, value);
     if (!bcpType.has_value() &&
@@ -2444,7 +2444,7 @@ isWellFormedLegacyType(std::string_view legacyType)
 }  // namespace
 
 U_CAPI const char* U_EXPORT2
-uloc_toLegacyKey(const char* keyword)
+uloc_toLegacyKey(const char* keyword U_LIFETIME_BOUND)
 {
     if (keyword == nullptr || *keyword == '\0') { return nullptr; }
     std::optional<std::string_view> result = ulocimp_toLegacyKeyWithFallback(keyword);
@@ -2452,7 +2452,7 @@ uloc_toLegacyKey(const char* keyword)
 }
 
 U_EXPORT std::optional<std::string_view>
-ulocimp_toLegacyKeyWithFallback(std::string_view keyword)
+ulocimp_toLegacyKeyWithFallback(std::string_view keyword U_LIFETIME_BOUND)
 {
     std::optional<std::string_view> legacyKey = ulocimp_toLegacyKey(keyword);
     if (!legacyKey.has_value() && isWellFormedLegacyKey(keyword)) {
@@ -2469,7 +2469,7 @@ ulocimp_toLegacyKeyWithFallback(std::string_view keyword)
 }
 
 U_CAPI const char* U_EXPORT2
-uloc_toLegacyType(const char* keyword, const char* value)
+uloc_toLegacyType(const char* keyword, const char* value U_LIFETIME_BOUND)
 {
     if (keyword == nullptr || *keyword == '\0' ||
         value == nullptr || *value == '\0') { return nullptr; }
@@ -2478,7 +2478,7 @@ uloc_toLegacyType(const char* keyword, const char* value)
 }
 
 U_EXPORT std::optional<std::string_view>
-ulocimp_toLegacyTypeWithFallback(std::string_view keyword, std::string_view value)
+ulocimp_toLegacyTypeWithFallback(std::string_view keyword, std::string_view value U_LIFETIME_BOUND)
 {
     std::optional<std::string_view> legacyType = ulocimp_toLegacyType(keyword, value);
     if (!legacyType.has_value() && isWellFormedLegacyType(value)) {
