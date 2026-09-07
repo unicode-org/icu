@@ -99,7 +99,7 @@ void LocaleMatcherTest::testEmpty() {
     LocaleMatcher matcher = LocaleMatcher::Builder().build(errorCode);
     const Locale *best = matcher.getBestMatch(Locale::getFrench(), errorCode);
     assertEquals("getBestMatch(fr)", "(null)", locString(best));
-    LocaleMatcher::Result result = matcher.getBestMatchResult("fr", errorCode);
+    LocaleMatcher::Result result = matcher.getBestMatchResult(Locale::getFrench(), errorCode);
     assertEquals("getBestMatchResult(fr).des", "(null)", locString(result.getDesiredLocale()));
     assertEquals("getBestMatchResult(fr).desIndex", -1, result.getDesiredIndex());
     assertEquals("getBestMatchResult(fr).supp",
@@ -275,7 +275,7 @@ void LocaleMatcherTest::testSupportedDefault() {
     assertEquals("getBestMatch(fr_FR)", "fr", locString(best));
     best = matcher.getBestMatch("ja_JP", errorCode);
     assertEquals("getBestMatch(ja_JP)", "en_GB", locString(best));
-    LocaleMatcher::Result result = matcher.getBestMatchResult("ja_JP", errorCode);
+    LocaleMatcher::Result result = matcher.getBestMatchResult(Locale::getJapan(), errorCode);
     assertEquals("getBestMatchResult(ja_JP).supp",
                  "en_GB", locString(result.getSupportedLocale()));
     assertEquals("getBestMatchResult(ja_JP).suppIndex",
@@ -299,7 +299,7 @@ void LocaleMatcherTest::testUnsupportedDefault() {
     assertEquals("getBestMatch(fr_FR)", "fr", locString(best));
     best = matcher.getBestMatch("ja_JP", errorCode);
     assertEquals("getBestMatch(ja_JP)", "de", locString(best));
-    LocaleMatcher::Result result = matcher.getBestMatchResult("ja_JP", errorCode);
+    LocaleMatcher::Result result = matcher.getBestMatchResult(Locale::getJapan(), errorCode);
     assertEquals("getBestMatchResult(ja_JP).supp",
                  "de", locString(result.getSupportedLocale()));
     assertEquals("getBestMatchResult(ja_JP).suppIndex",
@@ -322,7 +322,7 @@ void LocaleMatcherTest::testNoDefault() {
     assertEquals("getBestMatch(fr_FR)", "fr", locString(best));
     best = matcher.getBestMatch("ja_JP", errorCode);
     assertEquals("getBestMatch(ja_JP)", "(null)", locString(best));
-    LocaleMatcher::Result result = matcher.getBestMatchResult("ja_JP", errorCode);
+    LocaleMatcher::Result result = matcher.getBestMatchResult(Locale::getJapan(), errorCode);
     assertEquals("getBestMatchResult(ja_JP).supp",
                  "(null)", locString(result.getSupportedLocale()));
     assertEquals("getBestMatchResult(ja_JP).suppIndex",
