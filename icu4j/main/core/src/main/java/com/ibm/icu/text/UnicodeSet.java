@@ -46,8 +46,8 @@ import java.util.stream.StreamSupport;
 
 /**
  * A mutable set of Unicode characters and multicharacter strings. Objects of this class represent
- * <em>character classes</em> used in regular expressions. A character specifies a subset of Unicode
- * code points. Legal code points are U+0000 to U+10FFFF, inclusive.
+ * <em>character classes</em> used in regular expressions. A UnicodeSet specifies a finite set of Unicode
+ * code points sequences.
  *
  * <p>Note: method freeze() will not only make the set immutable, but also makes important methods
  * much higher performance: contains(c), containsNone(...), span(...), spanBack(...) etc. After the
@@ -60,7 +60,7 @@ import java.util.stream.StreamSupport;
  * the caller to modify the value of a <code>UnicodeSet</code> object. It conforms to Java 2's
  * <code>java.util.Set</code> interface, although <code>UnicodeSet</code> does not actually
  * implement that interface. All methods of <code>Set</code> are supported, with the modification
- * that they take a character range or single character instead of an <code>Object</code>, and they
+ * that they take a character range, a single character, or a string instead of an <code>Object</code>, and they
  * take a <code>UnicodeSet</code> instead of a <code>Collection</code>. The operand API may be
  * thought of in terms of boolean logic: a boolean OR is implemented by <code>add</code>, a boolean
  * AND is implemented by <code>retain</code>, a boolean XOR is implemented by <code>complement
@@ -68,9 +68,9 @@ import java.util.stream.StreamSupport;
  * argument. In terms of traditional set theory function names, <code>add</code> is a union, <code>
  * retain</code> is an intersection, <code>remove</code> is an asymmetric difference, and <code>
  * complement</code> with no argument is a set complement with respect to the superset range <code>
- * MIN_VALUE-MAX_VALUE</code>
+ * MIN_VALUE-MAX_VALUE</code>.
  *
- * <p>The second API is the <code>applyPattern()</code>/<code>toPattern()</code> API from the <code>
+ * <p>The second API for building up a UnicodeSet is the <code>applyPattern()</code>/<code>toPattern()</code> API from the <code>
  * java.text.Format</code>-derived classes. Unlike the methods that add characters, add categories,
  * and control the logic of the set, the method <code>applyPattern()</code> sets all attributes of a
  * <code>UnicodeSet</code> at once, based on a string pattern.
@@ -78,8 +78,7 @@ import java.util.stream.StreamSupport;
  * <p><b>Pattern syntax</b> Patterns are accepted by the constructors and the <code>applyPattern()
  * </code> methods and returned by the <code>toPattern()</code> method. These patterns follow the
  * UnicodeSet syntax defined by <a href="https://www.unicode.org/reports/tr61/">Draft Unicode
- * Technical Standard #61, UnicodeSet notation.</a> syntax similar to that employed by version 8
- * regular expression character classes. Here are some simple examples:
+ * Technical Standard #61, UnicodeSet notation.</a>
  *
  * <blockquote>
  *
@@ -112,6 +111,22 @@ import java.util.stream.StreamSupport;
  *       <td style="white-space: nowrap; vertical-align: top; horizontal-align: left;"><code>[\p{Lu}]</code></td>
  *       <td style="vertical-align: top;">All characters in the general category Uppercase Letter</td>
  *     </tr>
+ *     <tr>
+ *       <td style="white-space: nowrap; vertical-align: top; horizontal-align: left;"><code>[[:Letter:][:Number_Letter:]]</code></td>
+ *       <td style="vertical-align: top;">All have General_Category in the Letter grouping or have the General_Category Number_Letter</td>
+ *     </tr>
+ *     <tr>
+ *       <td style="white-space: nowrap; vertical-align: top; horizontal-align: left;"><code>[[:Word_Break=ALetter:]-[:Letter:]]</code></td>
+ *       <td style="vertical-align: top;">All characters with a Word_Break property assignment of ALetter that do not have a General_Category in the Letter grouping</td>
+ *     </tr>
+ *     <tr>
+ *       <td style="white-space: nowrap; vertical-align: top; horizontal-align: left;"><code>[\p{Greek}&\p{Letter}]</code></td>
+ *       <td style="vertical-align: top;">All characters with a Script property assignment of Greek whose General_Category is in the Letter grouping</td>
+ *     </tr>
+ *     <tr>
+ *       <td style="white-space: nowrap; vertical-align: top; horizontal-align: left;"><code>[^a]</code></td>
+ *       <td style="vertical-align: top;">All code points except U+0061 'a'.</td>
+ *     </tr>
  *   </table>
  *
  * </blockquote>
@@ -122,45 +137,14 @@ import java.util.stream.StreamSupport;
  *
  * <p>Property queries specify a set of characters having a certain property as defined by the
  * Unicode standard. Both the POSIX-like "[:Lu:]" and the Perl-like syntax "\p{Lu}" are recognized.
- * For a complete list of supported property queries, see the User's Guide for UnicodeSet at <a
- * href="https://unicode-org.github.io/icu/userguide/strings/unicodeset">
- * https://unicode-org.github.io/icu/userguide/strings/unicodeset</a>. Actual determination of
- * property data is defined by the underlying Unicode database as implemented by UCharacter.
  *
- * <p>UnicodeSet syntax supports some set operations: the union of sets 𝑋 and 𝑌 union is written
+ * <p>As shown in the examples above, UnicodeSet syntax supports some set operations: the union of sets 𝑋 and 𝑌 union is written
  * [𝑋𝑌], their intersection [𝑋&amp;𝑌], and their asymmetric set difference (the complement of 𝑌
  * in 𝑋) is [𝑋-𝑌]. The code point complement of 𝑋, equivalent to .{@link #complement()}.{@link
  * #removeAllStrings()}, is written [^𝑋].
  *
  * <p>Ranges are indicated by placing a '-' between two characters, as in "a-z". This specifies the
- * range of all characters from the left to the right, in code point order. If the left character is
- * greater than or equal to the right character it is a syntax error. If a '-' occurs as the first
- * character after the opening '[' or '[^', or if it occurs as the last character before the closing
- * ']', then it is taken as a literal. Thus "[a\\-b]", "[-ab]", and "[ab-]" all indicate the same
- * set of three characters, 'a', 'b', and '-'.
- *
- * <table>
- * <tr style="vertical-align: top;"><td style="white-space: nowrap;"><code>[a]</code><td>The set containing 'a'
- * <tr style="vertical-align: top;"><td style="white-space: nowrap;"><code>[a-z]</code><td>The set containing 'a'
- * through 'z' and all letters in between, in code point order
- * <tr style="vertical-align: top;"><td style="white-space: nowrap;"><code>[^a-z]</code><td>The set containing
- * all characters but 'a' through 'z',
- * that is, U+0000 through 'a'-1 and 'z'+1 through U+10FFFF
- * <tr style="vertical-align: top;"><td style="white-space: nowrap;"><code>[[<em>pat1</em>][<em>pat2</em>]]</code>
- * <td>The union of sets specified by <em>pat1</em> and <em>pat2</em>
- * <tr style="vertical-align: top;"><td style="white-space: nowrap;"><code>[[<em>pat1</em>]&amp;[<em>pat2</em>]]</code>
- * <td>The intersection of sets specified by <em>pat1</em> and <em>pat2</em>
- * <tr style="vertical-align: top;"><td style="white-space: nowrap;"><code>[[<em>pat1</em>]-[<em>pat2</em>]]</code>
- * <td>The asymmetric difference of sets specified by <em>pat1</em> and
- * <em>pat2</em>
- * <tr style="vertical-align: top;"><td style="white-space: nowrap;"><code>[:Lu:] or \p{Lu}</code>
- * <td>The set of characters having the specified
- * Unicode property; in
- * this case, Unicode uppercase letters
- * <tr style="vertical-align: top;"><td style="white-space: nowrap;"><code>[:^Lu:] or \P{Lu}</code>
- * <td>The set of characters <em>not</em> having the given
- * Unicode property
- * </table>
+ * range of all characters from the left to the right, in code point order.
  *
  * <p><b>Formal specification</b>
  *
@@ -187,6 +171,8 @@ import java.util.stream.StreamSupport;
  *       href="https://www.unicode.org/reports/tr61/#escaped-element">escaped-element</a>
  *       representing the supplementary code point whose UTF-16 encoding is that sequence of
  *       surrogates.
+ *   <li>A <a href="https://www.unicode.org/reports/tr61/#string-literal">string-literal</a> is allowed to contain <a
+ *       href="https://www.unicode.org/reports/tr61/#escaped-element">escaped-element</a>s representing surrogate code points.
  *   <li><code>$</code> is added as a <a
  *       href="https://www.unicode.org/reports/tr61/#set-operator">set-operator</a>, and the
  *       following alternatives are added to <a
