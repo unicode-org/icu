@@ -39,236 +39,126 @@ class UVector;
 class RuleCharacterIterator;
 
 /**
- * A mutable set of Unicode characters and multicharacter strings.  Objects of this class
- * represent <em>character classes</em> used in regular expressions.
- * A character specifies a subset of Unicode code points.  Legal
- * code points are U+0000 to U+10FFFF, inclusive.
+ * A mutable set of Unicode characters and multicharacter strings. Objects of this class represent
+ * <em>character classes</em> used in regular expressions. A UnicodeSet specifies a finite set of
+ * Unicode code point sequences, optimized for single code points.
+ *
+ * <p>Note: method freeze() will not only make the set immutable, but also makes important methods
+ * much higher performance: contains(c), containsNone(...), span(...), spanBack(...) etc. After the
+ * object is frozen, any subsequent call that wants to change the object will throw
+ * UnsupportedOperationException.
  *
  * <p>The UnicodeSet class is not designed to be subclassed.
  *
- * <p><code>UnicodeSet</code> supports two APIs. The first is the
- * <em>operand</em> API that allows the caller to modify the value of
- * a <code>UnicodeSet</code> object. It conforms to Java 2's
- * <code>java.util.Set</code> interface, although
- * <code>UnicodeSet</code> does not actually implement that
- * interface. All methods of <code>Set</code> are supported, with the
- * modification that they take a character range or single character
- * instead of an <code>Object</code>, and they take a
- * <code>UnicodeSet</code> instead of a <code>Collection</code>.  The
- * operand API may be thought of in terms of boolean logic: a boolean
- * OR is implemented by <code>add</code>, a boolean AND is implemented
- * by <code>retain</code>, a boolean XOR is implemented by
- * <code>complement</code> taking an argument, and a boolean NOT is
- * implemented by <code>complement</code> with no argument.  In terms
- * of traditional set theory function names, <code>add</code> is a
- * union, <code>retain</code> is an intersection, <code>remove</code>
- * is an asymmetric difference, and <code>complement</code> with no
- * argument is a set complement with respect to the superset range
- * <code>MIN_VALUE-MAX_VALUE</code>
+ * <p><code>UnicodeSet</code> supports two APIs. The first is the <em>operand</em> API that allows
+ * the caller to modify the value of a <code>UnicodeSet</code> object. It conforms to Java 2's
+ * <code>java.util.Set</code> interface, although <code>UnicodeSet</code> does not actually
+ * implement that interface. All methods of <code>Set</code> are supported, with the modification
+ * that they take a character range, a single character, or a string instead of an <code>Object
+ * </code>, and they take a <code>UnicodeSet</code> instead of a <code>Collection</code>. The
+ * operand API may be thought of in terms of boolean logic: a boolean OR is implemented by <code>add
+ * </code>, a boolean AND is implemented by <code>retain</code>, a boolean XOR is implemented by
+ * <code>complement
+ * </code> taking an argument, and a boolean NOT is implemented by <code>complement</code> with no
+ * argument. In terms of traditional set theory function names, <code>add</code> is a union, <code>
+ * retain</code> is an intersection, <code>remove</code> is an asymmetric difference, and <code>
+ * complement</code> with no argument is a set complement with respect to the superset range <code>
+ * MIN_VALUE-MAX_VALUE</code>.
  *
- * <p>The second API is the
- * <code>applyPattern()</code>/<code>toPattern()</code> API from the
- * <code>java.text.Format</code>-derived classes.  Unlike the
- * methods that add characters, add categories, and control the logic
- * of the set, the method <code>applyPattern()</code> sets all
- * attributes of a <code>UnicodeSet</code> at once, based on a
- * string pattern.
+ * <p>The second API for building up a UnicodeSet is the <code>applyPattern()</code>/<code>
+ * toPattern()</code> API from the <code>
+ * java.text.Format</code>-derived classes. Unlike the methods that add characters, add categories,
+ * and control the logic of the set, the method <code>applyPattern()</code> sets all attributes of a
+ * <code>UnicodeSet</code> at once, based on a pattern string.
  *
- * <p><b>Pattern syntax</b></p>
+ * <p><b>Pattern syntax</b> Pattern strings are accepted by the constructors and the {@link
+ * #applyPattern()} methods and returned by the {@link #toPattern()} method. These patterns follow
+ * the UnicodeSet syntax defined by <a href="https://www.unicode.org/reports/tr61/">Draft Unicode
+ * Technical Standard #61, UnicodeSet notation.</a>
  *
- * Patterns are accepted by the constructors and the
- * <code>applyPattern()</code> methods and returned by the
- * <code>toPattern()</code> method.  These patterns follow a syntax
- * similar to that employed by version 8 regular expression character
- * classes.  Here are some simple examples:
+ * <blockquote>
  *
- * \htmlonly<blockquote>\endhtmlonly
- *   <table>
- *     <tr align="top">
- *       <td nowrap valign="top" align="left"><code>[]</code></td>
- *       <td valign="top">No characters</td>
- *     </tr><tr align="top">
- *       <td nowrap valign="top" align="left"><code>[a]</code></td>
- *       <td valign="top">The character 'a'</td>
- *     </tr><tr align="top">
- *       <td nowrap valign="top" align="left"><code>[ae]</code></td>
- *       <td valign="top">The characters 'a' and 'e'</td>
+ * <table>
+ *     <tr style="vertical-align: top">
+ *       <td style="white-space: nowrap; vertical-align: top; horizontal-align: left;"><code>[]</code></td>
+ *       <td style="vertical-align: top;">No characters</td>
+ *     </tr><tr style="vertical-align: top">
+ *       <td style="white-space: nowrap; vertical-align: top; horizontal-align: left;"><code>[a]</code></td>
+ *       <td style="vertical-align: top;">The character 'a'</td>
+ *     </tr><tr style="vertical-align: top">
+ *       <td style="white-space: nowrap; vertical-align: top; horizontal-align: left;"><code>[ae]</code></td>
+ *       <td style="vertical-align: top;">The characters 'a' and 'e'</td>
  *     </tr>
  *     <tr>
- *       <td nowrap valign="top" align="left"><code>[a-e]</code></td>
- *       <td valign="top">The characters 'a' through 'e' inclusive, in Unicode code
+ *       <td style="white-space: nowrap; vertical-align: top; horizontal-align: left;"><code>[a-e]</code></td>
+ *       <td style="vertical-align: top;">The characters 'a' through 'e' inclusive, in Unicode code
  *       point order</td>
  *     </tr>
  *     <tr>
- *       <td nowrap valign="top" align="left"><code>[\\u4E01]</code></td>
- *       <td valign="top">The character U+4E01</td>
+ *       <td style="white-space: nowrap; vertical-align: top; horizontal-align: left;"><code>[\\u4E01]</code></td>
+ *       <td style="vertical-align: top;">The character U+4E01</td>
  *     </tr>
  *     <tr>
- *       <td nowrap valign="top" align="left"><code>[a{ab}{ac}]</code></td>
- *       <td valign="top">The character 'a' and the multicharacter strings &quot;ab&quot; and
+ *       <td style="white-space: nowrap; vertical-align: top; horizontal-align: left;"><code>[a{ab}{ac}]</code></td>
+ *       <td style="vertical-align: top;">The character 'a' and the multicharacter strings &quot;ab&quot; and
  *       &quot;ac&quot;</td>
  *     </tr>
  *     <tr>
- *       <td nowrap valign="top" align="left"><code>[\\p{Lu}]</code></td>
- *       <td valign="top">All characters in the general category Uppercase Letter</td>
- *     </tr>
- *   </table>
- * \htmlonly</blockquote>\endhtmlonly
- *
- * Any character may be preceded by a backslash in order to remove any special
- * meaning.  White space characters, as defined by UCharacter.isWhitespace(), are
- * ignored, unless they are escaped.
- *
- * <p>Property patterns specify a set of characters having a certain
- * property as defined by the Unicode standard.  Both the POSIX-like
- * "[:Lu:]" and the Perl-like syntax "\\p{Lu}" are recognized.  For a
- * complete list of supported property patterns, see the User's Guide
- * for UnicodeSet at
- * <a href="https://unicode-org.github.io/icu/userguide/strings/unicodeset">
- * https://unicode-org.github.io/icu/userguide/strings/unicodeset</a>.
- * Actual determination of property data is defined by the underlying
- * Unicode database as implemented by UCharacter.
- *
- * <p>Patterns specify individual characters, ranges of characters, and
- * Unicode property sets.  When elements are concatenated, they
- * specify their union.  To complement a set, place a '^' immediately
- * after the opening '['.  Property patterns are inverted by modifying
- * their delimiters; "[:^foo]" and "\\P{foo}".  In any other location,
- * '^' has no special meaning.
- *
- * <p>Since ICU 70, "[^...]", "[:^foo]", "\\P{foo}", and "[:binaryProperty=No:]"
- * perform a “code point complement” (all code points minus the original set),
- * removing all multicharacter strings,
- * equivalent to <code>.complement().removeAllStrings()</code>.
- * The complement() API function continues to perform a
- * symmetric difference with all code points and thus retains all multicharacter strings.
- *
- * <p>Ranges are indicated by placing two a '-' between two
- * characters, as in "a-z".  This specifies the range of all
- * characters from the left to the right, in Unicode order.  If the
- * left character is greater than or equal to the
- * right character it is a syntax error.  If a '-' occurs as the first
- * character after the opening '[' or '[^', or if it occurs as the
- * last character before the closing ']', then it is taken as a
- * literal.  Thus "[a\-b]", "[-ab]", and "[ab-]" all indicate the same
- * set of three characters, 'a', 'b', and '-'.
- *
- * <p>Sets may be intersected using the '&' operator or the asymmetric
- * set difference may be taken using the '-' operator, for example,
- * "[[:L:]&[\\u0000-\\u0FFF]]" indicates the set of all Unicode letters
- * with values less than 4096.  Operators ('&' and '|') have equal
- * precedence and bind left-to-right.  Thus
- * "[[:L:]-[a-z]-[\\u0100-\\u01FF]]" is equivalent to
- * "[[[:L:]-[a-z]]-[\\u0100-\\u01FF]]".  This only really matters for
- * difference; intersection is commutative.
- *
- * <table>
- * <tr valign=top><td nowrap><code>[a]</code><td>The set containing 'a'
- * <tr valign=top><td nowrap><code>[a-z]</code><td>The set containing 'a'
- * through 'z' and all letters in between, in Unicode order
- * <tr valign=top><td nowrap><code>[^a-z]</code><td>The set containing
- * all characters but 'a' through 'z',
- * that is, U+0000 through 'a'-1 and 'z'+1 through U+10FFFF
- * <tr valign=top><td nowrap><code>[[<em>pat1</em>][<em>pat2</em>]]</code>
- * <td>The union of sets specified by <em>pat1</em> and <em>pat2</em>
- * <tr valign=top><td nowrap><code>[[<em>pat1</em>]&[<em>pat2</em>]]</code>
- * <td>The intersection of sets specified by <em>pat1</em> and <em>pat2</em>
- * <tr valign=top><td nowrap><code>[[<em>pat1</em>]-[<em>pat2</em>]]</code>
- * <td>The asymmetric difference of sets specified by <em>pat1</em> and
- * <em>pat2</em>
- * <tr valign=top><td nowrap><code>[:Lu:] or \\p{Lu}</code>
- * <td>The set of characters having the specified
- * Unicode property; in
- * this case, Unicode uppercase letters
- * <tr valign=top><td nowrap><code>[:^Lu:] or \\P{Lu}</code>
- * <td>The set of characters <em>not</em> having the given
- * Unicode property
- * </table>
- *
- * <p><b>Formal syntax</b></p>
- *
- * \htmlonly<blockquote>\endhtmlonly
- *   <table>
- *     <tr align="top">
- *       <td nowrap valign="top" align="right"><code>pattern :=&nbsp; </code></td>
- *       <td valign="top"><code>('[' '^'? item* ']') |
- *       property</code></td>
- *     </tr>
- *     <tr align="top">
- *       <td nowrap valign="top" align="right"><code>item :=&nbsp; </code></td>
- *       <td valign="top"><code>char | (char '-' char) | pattern-expr<br>
- *       </code></td>
- *     </tr>
- *     <tr align="top">
- *       <td nowrap valign="top" align="right"><code>pattern-expr :=&nbsp; </code></td>
- *       <td valign="top"><code>pattern | pattern-expr pattern |
- *       pattern-expr op pattern<br>
- *       </code></td>
- *     </tr>
- *     <tr align="top">
- *       <td nowrap valign="top" align="right"><code>op :=&nbsp; </code></td>
- *       <td valign="top"><code>'&amp;' | '-'<br>
- *       </code></td>
- *     </tr>
- *     <tr align="top">
- *       <td nowrap valign="top" align="right"><code>special :=&nbsp; </code></td>
- *       <td valign="top"><code>'[' | ']' | '-'<br>
- *       </code></td>
- *     </tr>
- *     <tr align="top">
- *       <td nowrap valign="top" align="right"><code>char :=&nbsp; </code></td>
- *       <td valign="top"><em>any character that is not</em><code> special<br>
- *       | ('\' </code><em>any character</em><code>)<br>
- *       | ('\\u' hex hex hex hex)<br>
- *       </code></td>
- *     </tr>
- *     <tr align="top">
- *       <td nowrap valign="top" align="right"><code>hex :=&nbsp; </code></td>
- *       <td valign="top"><code>'0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' |<br>
- *       &nbsp;&nbsp;&nbsp;&nbsp;'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'a' | 'b' | 'c' | 'd' | 'e' | 'f'</code></td>
+ *       <td style="white-space: nowrap; vertical-align: top; horizontal-align: left;"><code>[\\p{Lu}]</code></td>
+ *       <td style="vertical-align: top;">All characters in the general category Uppercase Letter</td>
  *     </tr>
  *     <tr>
- *       <td nowrap valign="top" align="right"><code>property :=&nbsp; </code></td>
- *       <td valign="top"><em>a Unicode property set pattern</em></td>
+ *       <td style="white-space: nowrap; vertical-align: top; horizontal-align: left;"><code>[[:Letter:][:Number_Letter:]]</code></td>
+ *       <td style="vertical-align: top;">All characters that have a General_Category in the Letter grouping or have the General_Category Number_Letter</td>
  *     </tr>
- *   </table>
- *   <br>
- *   <table border="1">
  *     <tr>
- *       <td>Legend: <table>
- *         <tr>
- *           <td nowrap valign="top"><code>a := b</code></td>
- *           <td width="20" valign="top">&nbsp; </td>
- *           <td valign="top"><code>a</code> may be replaced by <code>b</code> </td>
- *         </tr>
- *         <tr>
- *           <td nowrap valign="top"><code>a?</code></td>
- *           <td valign="top"></td>
- *           <td valign="top">zero or one instance of <code>a</code><br>
- *           </td>
- *         </tr>
- *         <tr>
- *           <td nowrap valign="top"><code>a*</code></td>
- *           <td valign="top"></td>
- *           <td valign="top">one or more instances of <code>a</code><br>
- *           </td>
- *         </tr>
- *         <tr>
- *           <td nowrap valign="top"><code>a | b</code></td>
- *           <td valign="top"></td>
- *           <td valign="top">either <code>a</code> or <code>b</code><br>
- *           </td>
- *         </tr>
- *         <tr>
- *           <td nowrap valign="top"><code>'a'</code></td>
- *           <td valign="top"></td>
- *           <td valign="top">the literal string between the quotes </td>
- *         </tr>
- *       </table>
- *       </td>
+ *       <td style="white-space: nowrap; vertical-align: top; horizontal-align: left;"><code>[[:Word_Break=ALetter:]-[:Letter:]]</code></td>
+ *       <td style="vertical-align: top;">All characters with a Word_Break property assignment of ALetter that do not have a General_Category in the Letter grouping</td>
+ *     </tr>
+ *     <tr>
+ *       <td style="white-space: nowrap; vertical-align: top; horizontal-align: left;"><code>[\\p{Greek}&\\p{Letter}]</code></td>
+ *       <td style="vertical-align: top;">All characters with a Script property assignment of Greek whose General_Category is in the Letter grouping</td>
+ *     </tr>
+ *     <tr>
+ *       <td style="white-space: nowrap; vertical-align: top; horizontal-align: left;"><code>[^a]</code></td>
+ *       <td style="vertical-align: top;">All code points except U+0061 'a'.</td>
  *     </tr>
  *   </table>
- * \htmlonly</blockquote>\endhtmlonly
+ *
+ * </blockquote>
+ *
+ * Most characters may be preceded by a backslash in order to remove any special meaning. Unescaped
+ * white space characters, as defined by the Unicode Pattern_White_Space property, are ignored
+ * outside of string literals, except insofar as they separate lexical elements.
+ *
+ * <p>Property queries specify a set of characters having a certain property as defined by the
+ * Unicode standard. Both the POSIX-like "[:Lu:]" and the Perl-like syntax "\\p{Lu}" are recognized.
+ *
+ * <p>As shown in the examples above, UnicodeSet syntax supports some set operations: the union of
+ * sets 𝑋 and 𝑌 union is written [𝑋𝑌], their intersection [𝑋&amp;𝑌], and their asymmetric set
+ * difference (the complement of 𝑌 in 𝑋) is [𝑋-𝑌]. The code point complement of 𝑋, equivalent
+ * to .{@link #complement()}.{@link #removeAllStrings()}, is written [^𝑋].
+ *
+ * <p>Ranges are indicated by placing a '-' between two characters, as in "a-z". This specifies the
+ * range of all characters from the left to the right, in code point order.
+ *
+ * <p><b>Formal specification</b>
+ *
+ * <p>This class is a conformant and consistent implementation of UnicodeSet notation as defined in
+ * <a href="https://www.unicode.org/reports/tr61/">Draft Unicode Technical Standard #61, UnicodeSet
+ * notation</a>. It supports only property queries that are recommended for general-purpose APIs
+ * (that is, it does not support the productions with a gray background in the grammar). The set of
+ * supported properties, and additional restrictions, are described in the User Guide <a
+ * href="https://unicode-org.github.io/icu/userguide/strings/unicodeset#Restrictions">UnicodeSet /
+ * Restrictions</a>.
+ *
+ * <p>It implements a number of pure extensions documented in the User Guide at <a
+ * href="https://unicode-org.github.io/icu/userguide/strings/unicodeset#Extensions">UnicodeSet /
+ * Extensions</a>. In particular, the support for variables interacts with the API: If a {@link
+ * SymbolTable} is passed to the constructor of {@code UnicodeSet}, a lexical element <a
+ * href=https://unicode-org.github.io/icu/userguide/strings/unicodeset#variable>variable</a> is
+ * introduced, whose definition is given by the implementation of {@link
+ * SymbolTable#parseReference}.
  * 
  * <p>Note:
  *  - Most UnicodeSet methods do not take a UErrorCode parameter because
