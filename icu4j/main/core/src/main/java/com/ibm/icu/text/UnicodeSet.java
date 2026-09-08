@@ -76,9 +76,10 @@ import java.util.stream.StreamSupport;
  * <code>UnicodeSet</code> at once, based on a string pattern.
  *
  * <p><b>Pattern syntax</b> Patterns are accepted by the constructors and the <code>applyPattern()
- * </code> methods and returned by the <code>toPattern()</code> method. These patterns follow a
- * syntax similar to that employed by version 8 regular expression character classes. Here are some
- * simple examples:
+ * </code> methods and returned by the <code>toPattern()</code> method. These patterns follow the
+ * UnicodeSet syntax defined by <a href="https://www.unicode.org/reports/tr61/">Draft Unicode
+ * Technical Standard #61, UnicodeSet notation.</a> syntax similar to that employed by version 8
+ * regular expression character classes. Here are some simple examples:
  *
  * <blockquote>
  *
@@ -115,46 +116,33 @@ import java.util.stream.StreamSupport;
  *
  * </blockquote>
  *
- * Any character may be preceded by a backslash in order to remove any special meaning. White space
- * characters, as defined by the Unicode Pattern_White_Space property, are ignored, unless they are
- * escaped.
+ * Most characters may be preceded by a backslash in order to remove any special meaning. Unescaped
+ * white space characters, as defined by the Unicode Pattern_White_Space property, are ignored
+ * outside of string literals, except insofar as they separate lexical elements.
  *
- * <p>Property patterns specify a set of characters having a certain property as defined by the
+ * <p>Property queries specify a set of characters having a certain property as defined by the
  * Unicode standard. Both the POSIX-like "[:Lu:]" and the Perl-like syntax "\p{Lu}" are recognized.
- * For a complete list of supported property patterns, see the User's Guide for UnicodeSet at <a
+ * For a complete list of supported property queries, see the User's Guide for UnicodeSet at <a
  * href="https://unicode-org.github.io/icu/userguide/strings/unicodeset">
  * https://unicode-org.github.io/icu/userguide/strings/unicodeset</a>. Actual determination of
  * property data is defined by the underlying Unicode database as implemented by UCharacter.
  *
- * <p>Patterns specify individual characters, ranges of characters, and Unicode property sets. When
- * elements are concatenated, they specify their union. To complement a set, place a '^' immediately
- * after the opening '['. Property patterns are inverted by modifying their delimiters; "[:^foo]"
- * and "\P{foo}". In any other location, '^' has no special meaning.
+ * <p>UnicodeSet syntax supports some set operations: the union of sets 𝑋 and 𝑌 union is written
+ * [𝑋𝑌], their intersection [𝑋&amp;𝑌], and their asymmetric set difference (the complement of 𝑌
+ * in 𝑋) is [𝑋-𝑌]. The code point complement of 𝑋, equivalent to .{@link #complement()}.{@link
+ * #removeAllStrings()}, is written [^𝑋].
  *
- * <p>Since ICU 70, "[^...]", "[:^foo]", "\P{foo}", and "[:binaryProperty=No:]" perform a “code
- * point complement” (all code points minus the original set), removing all multicharacter strings,
- * equivalent to .{@link #complement()}.{@link #removeAllStrings()} . The {@link #complement()} API
- * function continues to perform a symmetric difference with all code points and thus retains all
- * multicharacter strings.
- *
- * <p>Ranges are indicated by placing two a '-' between two characters, as in "a-z". This specifies
- * the range of all characters from the left to the right, in Unicode order. If the left character
- * is greater than or equal to the right character it is a syntax error. If a '-' occurs as the
- * first character after the opening '[' or '[^', or if it occurs as the last character before the
- * closing ']', then it is taken as a literal. Thus "[a\\-b]", "[-ab]", and "[ab-]" all indicate the
- * same set of three characters, 'a', 'b', and '-'.
- *
- * <p>Sets may be intersected using the '&amp;' operator or the asymmetric set difference may be
- * taken using the '-' operator, for example, "[[:L:]&amp;[\\u0000-\\u0FFF]]" indicates the set of
- * all Unicode letters with values less than 4096. Operators ('&amp;' and '|') have equal precedence
- * and bind left-to-right. Thus "[[:L:]-[a-z]-[\\u0100-\\u01FF]]" is equivalent to
- * "[[[:L:]-[a-z]]-[\\u0100-\\u01FF]]". This only really matters for difference; intersection is
- * commutative.
+ * <p>Ranges are indicated by placing a '-' between two characters, as in "a-z". This specifies the
+ * range of all characters from the left to the right, in code point order. If the left character is
+ * greater than or equal to the right character it is a syntax error. If a '-' occurs as the first
+ * character after the opening '[' or '[^', or if it occurs as the last character before the closing
+ * ']', then it is taken as a literal. Thus "[a\\-b]", "[-ab]", and "[ab-]" all indicate the same
+ * set of three characters, 'a', 'b', and '-'.
  *
  * <table>
  * <tr style="vertical-align: top;"><td style="white-space: nowrap;"><code>[a]</code><td>The set containing 'a'
  * <tr style="vertical-align: top;"><td style="white-space: nowrap;"><code>[a-z]</code><td>The set containing 'a'
- * through 'z' and all letters in between, in Unicode order
+ * through 'z' and all letters in between, in code point order
  * <tr style="vertical-align: top;"><td style="white-space: nowrap;"><code>[^a-z]</code><td>The set containing
  * all characters but 'a' through 'z',
  * that is, U+0000 through 'a'-1 and 'z'+1 through U+10FFFF
@@ -174,94 +162,66 @@ import java.util.stream.StreamSupport;
  * Unicode property
  * </table>
  *
- * <p><b>Formal syntax</b>
+ * <p><b>Formal specification</b>
  *
- * <blockquote>
+ * <p>This class is a conformant and consistent implementation of UnicodeSet notation as defined in
+ * <a href="https://www.unicode.org/reports/tr61/">Draft Unicode Technical Standard #61, UnicodeSet
+ * notation</a>. It supports only property queries that are recommended for general-purpose APIs
+ * (that is, it does not support the productions with a gray background in the grammar). The set of
+ * supported properties, and additional restrictions, are described in the User’s Guide <a
+ * href="https://unicode-org.github.io/icu/userguide/strings/unicodeset">
+ * https://unicode-org.github.io/icu/userguide/strings/unicodeset</a>.
  *
- * <table>
- *     <tr style="vertical-align: top">
- *       <td style="white-space: nowrap; vertical-align: top;text-align:right;"><code>pattern :=&nbsp; </code></td>
- *       <td style="vertical-align: top;"><code>('[' '^'? item* ']') |
- *       property</code></td>
- *     </tr>
- *     <tr style="vertical-align: top">
- *       <td style="white-space: nowrap; vertical-align: top;text-align:right;"><code>item :=&nbsp; </code></td>
- *       <td style="vertical-align: top;"><code>char | (char '-' char) | pattern-expr<br>
- *       </code></td>
- *     </tr>
- *     <tr style="vertical-align: top">
- *       <td style="white-space: nowrap; vertical-align: top;text-align:right;"><code>pattern-expr :=&nbsp; </code></td>
- *       <td style="vertical-align: top;"><code>pattern | pattern-expr pattern |
- *       pattern-expr op pattern<br>
- *       </code></td>
- *     </tr>
- *     <tr style="vertical-align: top">
- *       <td style="white-space: nowrap; vertical-align: top;text-align:right;"><code>op :=&nbsp; </code></td>
- *       <td style="vertical-align: top;"><code>'&amp;' | '-'<br>
- *       </code></td>
- *     </tr>
- *     <tr style="vertical-align: top">
- *       <td style="white-space: nowrap; vertical-align: top;text-align:right;"><code>special :=&nbsp; </code></td>
- *       <td style="vertical-align: top;"><code>'[' | ']' | '-'<br>
- *       </code></td>
- *     </tr>
- *     <tr style="vertical-align: top">
- *       <td style="white-space: nowrap; vertical-align: top;text-align:right;"><code>char :=&nbsp; </code></td>
- *       <td style="vertical-align: top;"><em>any character that is not</em><code> special<br>
- *       | ('\\' </code><em>any character</em><code>)<br>
- *       | ('&#92;u' hex hex hex hex)<br>
- *       </code></td>
- *     </tr>
- *     <tr style="vertical-align: top">
- *       <td style="white-space: nowrap; vertical-align: top;text-align:right;"><code>hex :=&nbsp; </code></td>
- *       <td style="vertical-align: top;"><code>'0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' |<br>
- *       &nbsp;&nbsp;&nbsp;&nbsp;'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'a' | 'b' | 'c' | 'd' | 'e' | 'f'</code></td>
- *     </tr>
- *     <tr>
- *       <td style="white-space: nowrap; vertical-align: top;text-align:right;"><code>property :=&nbsp; </code></td>
- *       <td style="vertical-align: top;"><em>a Unicode property set pattern</em></td>
- *     </tr>
- *   </table>
+ * <p>It implements the following pure extensions:
  *
- * <br>
- *
- * <table border="1">
- *     <tr>
- *       <td>Legend: <table>
- *         <tr>
- *           <td style="white-space: nowrap; vertical-align: top;"><code>a := b</code></td>
- *           <td style="width: 20; vertical-align: top;">&nbsp; </td>
- *           <td style="vertical-align: top;"><code>a</code> may be replaced by <code>b</code> </td>
- *         </tr>
- *         <tr>
- *           <td style="white-space: nowrap; vertical-align: top;"><code>a?</code></td>
- *           <td style="vertical-align: top;"></td>
- *           <td style="vertical-align: top;">zero or one instance of <code>a</code><br>
- *           </td>
- *         </tr>
- *         <tr>
- *           <td style="white-space: nowrap; vertical-align: top;"><code>a*</code></td>
- *           <td style="vertical-align: top;"></td>
- *           <td style="vertical-align: top;">one or more instances of <code>a</code><br>
- *           </td>
- *         </tr>
- *         <tr>
- *           <td style="white-space: nowrap; vertical-align: top;"><code>a | b</code></td>
- *           <td style="vertical-align: top;"></td>
- *           <td style="vertical-align: top;">either <code>a</code> or <code>b</code><br>
- *           </td>
- *         </tr>
- *         <tr>
- *           <td style="white-space: nowrap; vertical-align: top;"><code>'a'</code></td>
- *           <td style="vertical-align: top;"></td>
- *           <td style="vertical-align: top;">the literal string between the quotes </td>
- *         </tr>
- *       </table>
- *       </td>
- *     </tr>
- *   </table>
- *
- * </blockquote>
+ * <ul>
+ *   <li><code>&bsol;u</code> <a
+ *       href="https://www.unicode.org/reports/tr61/#four-hexadecimal-digits">four-hexadecimal-digits</a>
+ *       <code>&bsol;u</code> <a
+ *       href="https://www.unicode.org/reports/tr61/#four-hexadecimal-digits">four-hexadecimal-digits</a>
+ *       where the first constituent <a
+ *       href="https://www.unicode.org/reports/tr61/#four-hexadecimal-digits">four-hexadecimal-digits</a>
+ *       represent a high surrogate and the second constituent <a
+ *       href="https://www.unicode.org/reports/tr61/#four-hexadecimal-digits">four-hexadecimal-digits</a>
+ *       represent a low surrogate is an <a
+ *       href="https://www.unicode.org/reports/tr61/#escaped-element">escaped-element</a>
+ *       representing the supplementary code point whose UTF-16 encoding is that sequence of
+ *       surrogates.
+ *   <li><code>$</code> is added as a <a
+ *       href="https://www.unicode.org/reports/tr61/#set-operator">set-operator</a>, and the
+ *       following alternatives are added to <a
+ *       href="https://www.unicode.org/reports/tr61/#Union">Union</a>:<br>
+ *       | <code>$</code><br>
+ *       | <a href="https://www.unicode.org/reports/tr61/#Terms">Terms</a> <code>$</code><br>
+ *       | <a
+ *       href="https://www.unicode.org/reports/tr61/#UnescapedHyphenMinus">UnescapedHyphenMinus</a>
+ *       <a href="https://www.unicode.org/reports/tr61/#Terms">Terms</a> <code>$</code><br>
+ *       When <code>$</code> is present as an immediate constituent of a <a
+ *       href="https://www.unicode.org/reports/tr61/#Union">Union</a>, it represents the
+ *       noncharacter code point U+FFFF.
+ *   <li>If a {@link SymbolTable} is passed to the constructor of {@code UnicodeSet}, a new lexical
+ *       element is introduced: variable ⩴ <code>$</code> reference<br>
+ *       where the function {@link SymbolTable#parseReference} defines the syntactic category
+ *       reference. The expansion of a variable is defined by {@link SymbolTable#lookup}; it
+ *       disambiguates the syntactic category as follows:
+ *       <ul>
+ *         <li>If the expansion is a <a
+ *             href="https://www.unicode.org/reports/tr61/#UnicodeSet">UnicodeSet</a>, the variable
+ *             is a <i>set-valued_</i>variable.
+ *         <li>If the expansion is a <a
+ *             href="https://www.unicode.org/reports/tr61/#RangeElement">RangeElement</a>, the
+ *             variable is a <i>code-point-valued_</i>variable.
+ *         <li>If the expansion is a <a
+ *             href="https://www.unicode.org/reports/tr61/#string-literal">string-literal</a>, the
+ *             variable is a <i>string-valued_</i>variable.
+ *       </ul>
+ *       An alternative <i>set-valued_</i>variable is added to <a
+ *       href="https://www.unicode.org/reports/tr61/#UnicodeSet">UnicodeSet</a>, an alternative
+ *       <i>code-point-valued_</i>variable is added to <a
+ *       href="https://www.unicode.org/reports/tr61/#RangeElement">RangeElement</a>, and an
+ *       alternative <i>string-valued_</i>variable is added to <a
+ *       href="https://www.unicode.org/reports/tr61/#Element">Element</a>.
+ * </ul>
  *
  * <p>To iterate over contents of {@code UnicodeSet}, the following are available:
  *
