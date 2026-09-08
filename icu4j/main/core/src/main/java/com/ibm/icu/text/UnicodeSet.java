@@ -46,8 +46,8 @@ import java.util.stream.StreamSupport;
 
 /**
  * A mutable set of Unicode characters and multicharacter strings. Objects of this class represent
- * <em>character classes</em> used in regular expressions. A UnicodeSet specifies a finite set of Unicode
- * code points sequences.
+ * <em>character classes</em> used in regular expressions. A UnicodeSet specifies a finite set of
+ * Unicode code points sequences.
  *
  * <p>Note: method freeze() will not only make the set immutable, but also makes important methods
  * much higher performance: contains(c), containsNone(...), span(...), spanBack(...) etc. After the
@@ -60,17 +60,19 @@ import java.util.stream.StreamSupport;
  * the caller to modify the value of a <code>UnicodeSet</code> object. It conforms to Java 2's
  * <code>java.util.Set</code> interface, although <code>UnicodeSet</code> does not actually
  * implement that interface. All methods of <code>Set</code> are supported, with the modification
- * that they take a character range, a single character, or a string instead of an <code>Object</code>, and they
- * take a <code>UnicodeSet</code> instead of a <code>Collection</code>. The operand API may be
- * thought of in terms of boolean logic: a boolean OR is implemented by <code>add</code>, a boolean
- * AND is implemented by <code>retain</code>, a boolean XOR is implemented by <code>complement
+ * that they take a character range, a single character, or a string instead of an <code>Object
+ * </code>, and they take a <code>UnicodeSet</code> instead of a <code>Collection</code>. The
+ * operand API may be thought of in terms of boolean logic: a boolean OR is implemented by <code>add
+ * </code>, a boolean AND is implemented by <code>retain</code>, a boolean XOR is implemented by
+ * <code>complement
  * </code> taking an argument, and a boolean NOT is implemented by <code>complement</code> with no
  * argument. In terms of traditional set theory function names, <code>add</code> is a union, <code>
  * retain</code> is an intersection, <code>remove</code> is an asymmetric difference, and <code>
  * complement</code> with no argument is a set complement with respect to the superset range <code>
  * MIN_VALUE-MAX_VALUE</code>.
  *
- * <p>The second API for building up a UnicodeSet is the <code>applyPattern()</code>/<code>toPattern()</code> API from the <code>
+ * <p>The second API for building up a UnicodeSet is the <code>applyPattern()</code>/<code>
+ * toPattern()</code> API from the <code>
  * java.text.Format</code>-derived classes. Unlike the methods that add characters, add categories,
  * and control the logic of the set, the method <code>applyPattern()</code> sets all attributes of a
  * <code>UnicodeSet</code> at once, based on a string pattern.
@@ -113,7 +115,7 @@ import java.util.stream.StreamSupport;
  *     </tr>
  *     <tr>
  *       <td style="white-space: nowrap; vertical-align: top; horizontal-align: left;"><code>[[:Letter:][:Number_Letter:]]</code></td>
- *       <td style="vertical-align: top;">All have General_Category in the Letter grouping or have the General_Category Number_Letter</td>
+ *       <td style="vertical-align: top;">All characters that have a General_Category in the Letter grouping or have the General_Category Number_Letter</td>
  *     </tr>
  *     <tr>
  *       <td style="white-space: nowrap; vertical-align: top; horizontal-align: left;"><code>[[:Word_Break=ALetter:]-[:Letter:]]</code></td>
@@ -138,10 +140,10 @@ import java.util.stream.StreamSupport;
  * <p>Property queries specify a set of characters having a certain property as defined by the
  * Unicode standard. Both the POSIX-like "[:Lu:]" and the Perl-like syntax "\p{Lu}" are recognized.
  *
- * <p>As shown in the examples above, UnicodeSet syntax supports some set operations: the union of sets 𝑋 and 𝑌 union is written
- * [𝑋𝑌], their intersection [𝑋&amp;𝑌], and their asymmetric set difference (the complement of 𝑌
- * in 𝑋) is [𝑋-𝑌]. The code point complement of 𝑋, equivalent to .{@link #complement()}.{@link
- * #removeAllStrings()}, is written [^𝑋].
+ * <p>As shown in the examples above, UnicodeSet syntax supports some set operations: the union of
+ * sets 𝑋 and 𝑌 union is written [𝑋𝑌], their intersection [𝑋&amp;𝑌], and their asymmetric set
+ * difference (the complement of 𝑌 in 𝑋) is [𝑋-𝑌]. The code point complement of 𝑋, equivalent
+ * to .{@link #complement()}.{@link #removeAllStrings()}, is written [^𝑋].
  *
  * <p>Ranges are indicated by placing a '-' between two characters, as in "a-z". This specifies the
  * range of all characters from the left to the right, in code point order.
@@ -171,8 +173,10 @@ import java.util.stream.StreamSupport;
  *       href="https://www.unicode.org/reports/tr61/#escaped-element">escaped-element</a>
  *       representing the supplementary code point whose UTF-16 encoding is that sequence of
  *       surrogates.
- *   <li>A <a href="https://www.unicode.org/reports/tr61/#string-literal">string-literal</a> is allowed to contain <a
- *       href="https://www.unicode.org/reports/tr61/#escaped-element">escaped-element</a>s representing surrogate code points.
+ *   <li>A <a href="https://www.unicode.org/reports/tr61/#string-literal">string-literal</a> is
+ *       allowed to contain <a
+ *       href="https://www.unicode.org/reports/tr61/#escaped-element">escaped-element</a>s
+ *       representing surrogate code points.
  *   <li><code>$</code> is added as a <a
  *       href="https://www.unicode.org/reports/tr61/#set-operator">set-operator</a>, and the
  *       following alternatives are added to <a
