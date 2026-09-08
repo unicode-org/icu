@@ -13,8 +13,8 @@ License & terms of use: http://www.unicode.org/copyright.html
 
 ## Overview
 
-A UnicodeSet is an object that represents a set of Unicode characters or
-character strings. The contents of that object can be specified either by
+A UnicodeSet is an object that represents a finite set of Unicode code point
+sequences.  The contents of that object can be specified either by
 patterns or by building them programmatically.
 
 Here are a few examples of sets:
@@ -71,8 +71,8 @@ a given kind. For example, `[:^Letter:]` matches all characters that are not
 
 |  | Positive | Negative |
 |--------------------|------------------|-------------------|
-| POSIX-style Syntax | `[:type=value:]` | `[:^type=value:]` |
-| Perl-style Syntax  | `\p{type=value}` | `\P{type=value}`  |
+| POSIX-style Syntax | `[:type=value:]` | `[:^type=value:]` or `[:type=≠value:]` |
+| Perl-style Syntax  | `\p{type=value}` | `\P{type=value}` or `\p{type=≠value}` |
 
 These following low-level lists or properties then can be freely combined with
 the normal set operations (union, inverse, difference, and intersection):
@@ -82,7 +82,7 @@ the normal set operations (union, inverse, difference, and intersection):
 | A B | `[[:letter:] [:number:]]` | `A.addAll(B)` | To union two sets A and B, simply concatenate them |
 | A & B | `[[:letter:] & [a-z]]` | `A.retainAll(B)` | To intersect two sets A and B, use the '&' operator. |
 | A - B | `[[:letter:] - [a-z]]` | `A.removeAll(B)` | To take the set-difference of two sets  A and B, use the '-' operator. |
-| [^A] | `[^a-z]` | `A.complement(B)` | To invert a set A, place a '^' immediately after the opening '['.  Note that the complement only affects code points, not string values. In any other location, the '^' does not have a special meaning. |
+| [^A] | `[^a-z]` | `A.complement(B).removeAllStrings()` | To invert a set A, place a '^' immediately after the opening '['.  Note that this is a code point complement: `[^𝐴]` is equivalent to `[[\x{0000}-\x{10FFFF}]-𝐴]`, and contains no strings, regardless of whether 𝐴 contains strings. |
 
 ### Precedence
 
