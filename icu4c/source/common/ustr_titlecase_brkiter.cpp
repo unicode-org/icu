@@ -216,19 +216,20 @@ ucasemap_toTitle(UCaseMap *csm,
     if (U_FAILURE(*pErrorCode)) {
         return 0;
     }
-    if (csm->iter == nullptr) {
+    auto *impl = reinterpret_cast<UCaseMapImpl *>(csm);
+    if (impl->iter == nullptr) {
         LocalPointer<BreakIterator> ownedIter;
         BreakIterator *iter = ustrcase_getTitleBreakIterator(
-            nullptr, csm->locale, csm->options, nullptr, ownedIter, *pErrorCode);
+            nullptr, impl->locale, impl->options, nullptr, ownedIter, *pErrorCode);
         if (iter == nullptr) {
             return 0;
         }
-        csm->iter = ownedIter.orphan();
+        impl->iter = ownedIter.orphan();
     }
     UnicodeString s(srcLength<0, src, srcLength);
-    csm->iter->setText(s);
+    impl->iter->setText(s);
     return ustrcase_map(
-        csm->caseLocale, csm->options, csm->iter,
+        impl->caseLocale, impl->options, impl->iter,
         dest, destCapacity,
         src, srcLength,
         ustrcase_internalToTitle, nullptr, *pErrorCode);
