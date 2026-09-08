@@ -99,7 +99,7 @@ import java.util.stream.StreamSupport;
  *       point order</td>
  *     </tr>
  *     <tr>
- *       <td style="white-space: nowrap; vertical-align: top; horizontal-align: left;"><code>[\\u4E01]</code></td>
+ *       <td style="white-space: nowrap; vertical-align: top; horizontal-align: left;"><code>[&bsol;u4E01]</code></td>
  *       <td style="vertical-align: top;">The character U+4E01</td>
  *     </tr>
  *     <tr>
