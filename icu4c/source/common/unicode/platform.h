@@ -520,6 +520,7 @@
 #   define U_FALLTHROUGH
 #endif
 
+#ifndef U_IN_DOXYGEN
 /**
  * \def U_LIFETIME_BOUND
  *
@@ -547,6 +548,7 @@
 
 #ifndef U_LIFETIME_BOUND
 #   define U_LIFETIME_BOUND
+#endif
 #endif
 
 /** @} */
