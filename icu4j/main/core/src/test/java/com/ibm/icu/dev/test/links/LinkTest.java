@@ -138,13 +138,13 @@ public class LinkTest extends CoreTestFmwk {
         assertEquals(source, expected, actual);
     }
 
-	private int fullScanBackEmailPart(String source, int start, int end) {
-		int result = LinkUtilities.scanBackEmailLocalPart(source, start, end);
+    private int fullScanBackEmailPart(String source, int start, int end) {
+        int result = LinkUtilities.scanBackEmailLocalPart(source, start, end);
         if (source.toString().substring(0, result).endsWith("mailto:")) {
             result -= "mailto:".length();
         }
         return result;
-	}
+    }
 
     @Test
     public void testHackDomainName() {
@@ -188,8 +188,7 @@ public class LinkTest extends CoreTestFmwk {
                             // handle email
                             // check backwards for email
                             int atStart = domain.start - 1;
-                            int local_part_start =
-                                    fullScanBackEmailPart(rawLine2, start, atStart);
+                            int local_part_start = fullScanBackEmailPart(rawLine2, start, atStart);
                             if (local_part_start != atStart) {
                                 domain.start = local_part_start;
                                 haveEmail = true;
@@ -222,8 +221,7 @@ public class LinkTest extends CoreTestFmwk {
                                         true,
                                         domainAtDomain)) {
                                     domain.start =
-                                    		fullScanBackEmailPart(
-                                                    rawLine2, start, domain.end);
+                                            fullScanBackEmailPart(rawLine2, start, domain.end);
                                     boolean failing = domain.start == domain.end;
                                     if (!failing) {
                                         // slash is a valid email character, so check
@@ -486,9 +484,9 @@ public class LinkTest extends CoreTestFmwk {
 
     /**
      * The UTS58 tests take whole domain names, because that is the easiest for clients to test. We
-     * have to hack it because ICU UTS46.java doesn't provide enough API to scan for possibly valid domainNames,
-     * to which one could then apply the IDNA validity tests to.
-     * Returns true if found, with the range in result.
+     * have to hack it because ICU UTS46.java doesn't provide enough API to scan for possibly valid
+     * domainNames, to which one could then apply the IDNA validity tests to. Returns true if found,
+     * with the range in result.
      *
      * @param mustBeAtStart TODO check with isValidDomain
      */
@@ -542,9 +540,9 @@ public class LinkTest extends CoreTestFmwk {
     }
 
     /**
-     * This is a hack, because the data is not publicly available through the ICU UTS46 APIs. What we
-     * really want to do is through something that could be a domain name, and then validate it with
-     * the IDNA APIs. The hack is good enough for now, because the test data isn't exhaustive.
+     * This is a hack, because the data is not publicly available through the ICU UTS46 APIs. What
+     * we really want to do is through something that could be a domain name, and then validate it
+     * with the IDNA APIs. The hack is good enough for now, because the test data isn't exhaustive.
      */
     private final UnicodeSet HACK_DOMAIN_SET =
             new UnicodeSet(
