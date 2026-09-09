@@ -167,9 +167,6 @@ public class LinkHandlingUtilities {
         if (localPart.startsWith(".") || localPart.endsWith(".") || localPart.contains("..")) {
             return beforeAtSign;
         }
-        if (source.toString().substring(0, result).endsWith("mailto:")) {
-            result -= "mailto:".length();
-        }
         return result;
     }
 
