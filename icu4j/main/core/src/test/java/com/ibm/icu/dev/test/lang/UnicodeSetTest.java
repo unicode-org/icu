@@ -4341,7 +4341,9 @@ public class UnicodeSetTest extends CoreTestFmwk {
                     new TestCase("[\\007F]", "[\\u0007F]"),
                     new TestCase("[\\07F]", "[\\u0007F]"),
                     new TestCase("[\\7F]", "[\\u0007F]"),
-                    new TestCase("[\\u200E007]", "[07\\u200E]"),
+                    new TestCase("[\\u200E007]", "[07\\\u200E]"),
+                    new TestCase("[\\\u200E007]", "[07\\\u200E]"),
+                    new TestCase("[{\\\u200E}]", "[\\\u200E]"),
                     new TestCase("[ :Greek:]", "[\\:Gekr]"),
                     new TestCase("[\\uDBFF \\uDFFF]", "[\\uDFFF\\uDBFF]"),
                     // ICU-2906, ICU extension to UnicodeSet.
@@ -4442,10 +4444,6 @@ public class UnicodeSetTest extends CoreTestFmwk {
                     {
                         "[{Provence-Al\\pes-Côte d'Azur}]",
                         "Invalid escape sequence \\p in UnicodeSet string [{Provence-Al\\p☜es-Côte d'Azur}]"
-                    },
-                    {
-                        "[{\\\u200E}]",
-                        "Invalid escape sequence \\<U+200E> in UnicodeSet string [{\\‎☜}]"
                     },
                     // This was a well-formed set in ICU 78 and earlier; now it must be enclosed in
                     // square

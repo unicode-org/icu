@@ -582,13 +582,6 @@ class UnicodeSet::Lexer {
                 std::u16string_view(pattern_).substr(start, parsePosition_.getIndex() - start),
                 separated, preceding);
         case u'\\': {
-            const UChar32 second = chars_.next(charsOptions_ & ~(RuleCharacterIterator::PARSE_ESCAPES |
-                                                                 RuleCharacterIterator::SKIP_WHITESPACE),
-                                               unusedEscaped, errorCode);
-            if (second == u'\u200E' || second == u'\u200F') {
-                // Prohibit \<LRM> and \<RLM>.
-                errorCode = U_MALFORMED_UNICODE_ESCAPE;
-            }
             // Now try to parse the escape.
             chars_.setPos(before);
             UChar32 codePoint = chars_.next(charsOptions_, unusedEscaped, errorCode);
@@ -630,8 +623,7 @@ class UnicodeSet::Lexer {
                     if (afterBackslash == u'N') {
                         next = scanNamedElementBrackets(errorCode);
                         escaped = true;
-                    } else if (afterBackslash == u'p' || afterBackslash == u'P' ||
-                               afterBackslash == u'\u200E' || afterBackslash == u'\u200F') {
+                    } else if (afterBackslash == u'p' || afterBackslash == u'P') {
                         return LexicalElement(LexicalElement::STRING_LITERAL, {}, getPos(),
                                               U_MALFORMED_SET,
                                               /*precomputedSet=*/nullptr,
