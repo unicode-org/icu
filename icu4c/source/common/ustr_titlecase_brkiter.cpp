@@ -131,9 +131,12 @@ WholeStringBreakIterator::refreshInputText(UText* /*input*/,
 }
 
 U_CFUNC
-BreakIterator *ustrcase_getTitleBreakIterator(
-        const Locale *locale, const char *locID, uint32_t options, BreakIterator *iter,
-        LocalPointer<BreakIterator> &ownedIter, UErrorCode &errorCode) {
+BreakIterator* ustrcase_getTitleBreakIterator(const Locale* locale,
+                                              const char* locID,
+                                              uint32_t options,
+                                              BreakIterator* iter U_LIFETIME_BOUND,
+                                              LocalPointer<BreakIterator>& ownedIter,
+                                              UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) { return nullptr; }
     options &= U_TITLECASE_ITERATOR_MASK;
     if (options != 0 && iter != nullptr) {
