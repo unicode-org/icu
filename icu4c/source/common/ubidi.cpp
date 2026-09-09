@@ -2896,8 +2896,8 @@ ubidi_getDirection(const UBiDi *pBiDi) {
     }
 }
 
-U_CAPI const char16_t * U_EXPORT2
-ubidi_getText(const UBiDi *pBiDi) {
+U_CAPI const char16_t* U_EXPORT2
+ubidi_getText(const UBiDi* pBiDi U_LIFETIME_BOUND) {
     if(IS_VALID_PARA_OR_LINE(pBiDi)) {
         return pBiDi->text;
     } else {

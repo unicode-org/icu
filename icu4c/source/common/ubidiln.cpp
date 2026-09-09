@@ -258,8 +258,8 @@ ubidi_getLevelAt(const UBiDi *pBiDi, int32_t charIndex) {
     }
 }
 
-U_CAPI const UBiDiLevel * U_EXPORT2
-ubidi_getLevels(UBiDi *pBiDi, UErrorCode *pErrorCode) {
+U_CAPI const UBiDiLevel* U_EXPORT2
+ubidi_getLevels(UBiDi* pBiDi U_LIFETIME_BOUND, UErrorCode* pErrorCode) {
     int32_t start, length;
 
     RETURN_IF_NULL_OR_FAILING_ERRCODE(pErrorCode, nullptr);
