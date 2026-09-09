@@ -4884,7 +4884,7 @@ public class UnicodeSet extends UnicodeFilter
     }
 
     private static class GrammaticalConstructProperties {
-        boolean containsRestriction = false;
+        boolean containsSetOperation = false;
     }
 
     void parseUnicodeSet(UnicodeSetLexer lexer, StringBuilder rebuiltPat, int options, int depth) {
@@ -4913,17 +4913,17 @@ public class UnicodeSet extends UnicodeFilter
             lexer.advance();
             preserveSyntaxInPattern = true;
         } else {
-            // UnicodeSet ::=                [   Union ]
-            //              | Complement ::= [ ^ Union ]
+            // UnicodeSet ::=                [   Content ]
+            //              | Complement ::= [ ^ Content ]
             if (lexer.acceptSetOperator('[')) {
                 prettyPrintedPattern.append('[');
                 if (lexer.acceptSetOperator('^')) {
                     prettyPrintedPattern.append('^');
                     isComplement = true;
                 }
-                final var unionProperties = new GrammaticalConstructProperties();
-                parseUnion(lexer, prettyPrintedPattern, options, depth, unionProperties);
-                preserveSyntaxInPattern |= unionProperties.containsRestriction;
+                final var contentProperties = new GrammaticalConstructProperties();
+                parseContent(lexer, prettyPrintedPattern, options, depth, contentProperties);
+                preserveSyntaxInPattern |= contentProperties.containsSetOperation;
                 if (!lexer.acceptSetOperator(']')) {
                     throw lexer.syntaxError("]", lexer.lookahead().debugString());
                 }
@@ -4953,29 +4953,38 @@ public class UnicodeSet extends UnicodeFilter
         }
     }
 
-    void parseUnion(
+    void parseContent(
             UnicodeSetLexer lexer,
             StringBuilder rebuiltPat,
             int options,
             int depth,
             GrammaticalConstructProperties properties) {
-        // Union ::= Terms
-        //         | UnescapedHyphenMinus Terms
-        //         | Terms UnescapedHyphenMinus
-        //         | UnescapedHyphenMinus Terms UnescapedHyphenMinus
-        // Terms ::= ""
-        //         | Terms Term
+        // Content ::= ""
+        //           | ElementList
+        //           | UnescapedHyphenMinus ElementList
+        //           | UnescapedHyphenMinus
+        //           | ElementList UnescapedHyphenMinus
+        //           | UnescapedHyphenMinus ElementList UnescapedHyphenMinus
+        // ElementList ::= Elements
+        //               | ElementList Elements
+        //               | SetOperation
+        // SetOperation ::= Union
+        //                | Intersection
+        //                | Difference
+        // Union ::= UnicodeSet
+        //         | ElementList UnicodeSet
+        // But that is not LL (we cannot tell if we have a SetOperation or not by looking at the
+        // first Elements), so we parse it as described in the note,
+        // ElementList ::= Mutation Mutations
         if (lexer.acceptSetOperator('-')) {
             add('-');
             // When we otherwise preserve the syntax, we escape an initial UnescapedHyphenMinus, but
-            // not a
-            // final one, for consistency with older ICU behaviour.
+            // not a final one, for consistency with older ICU behaviour.
             rebuiltPat.append("\\-");
         }
         while (!lexer.atEnd()) {
             // Note that while a HYPHEN-MINUS mapped by the symbol table is treated as a literal at
-            // the
-            // beginning of the Union, it is treated as a set elsewhere, including at the end.
+            // the beginning of the Content, it is treated as a set elsewhere, including at the end.
             if (lexer.acceptSetOperator('-')) {
                 // We can be here on the first iteration: [--] is allowed by the
                 // grammar and by the old parser.
@@ -4990,42 +4999,48 @@ public class UnicodeSet extends UnicodeFilter
                     // Consume the dollar.
                     lexer.advance();
                     add(ETHER);
-                    properties.containsRestriction = true;
+                    properties.containsSetOperation = true;
                     return;
                 }
             }
             if (lexer.lookahead().isSetOperator(']')) {
                 return;
             }
-            parseTerm(lexer, rebuiltPat, options, depth, properties);
+            parseMutation(lexer, rebuiltPat, options, depth, properties);
         }
     }
 
-    void parseTerm(
+    void parseMutation(
             UnicodeSetLexer lexer,
             StringBuilder rebuiltPat,
             int options,
             int depth,
             GrammaticalConstructProperties properties) {
-        // Term ::= Elements
-        //        | Restriction
+        // Mutation ::= Elements
+        //            | SetOperations
+        // SetOperations ::= UnicodeSet RightHandSides
+        // So if we see the beginning of a UnicodeSet, we have SetOperations.
         if (lexer.lookahead().isSetOperator('[') || lexer.lookahead().set() != null) {
-            properties.containsRestriction = true;
-            parseRestriction(lexer, rebuiltPat, options, depth);
+            properties.containsSetOperation = true;
+            parseSetOperations(lexer, rebuiltPat, options, depth);
         } else {
             parseElements(lexer, rebuiltPat);
         }
     }
 
-    void parseRestriction(UnicodeSetLexer lexer, StringBuilder rebuiltPat, int options, int depth) {
-        // Parse a https://www.unicode.org/reports/tr61/#Restriction:
-        //   Restriction  ::= UnicodeSet
+    void parseSetOperations(UnicodeSetLexer lexer, StringBuilder rebuiltPat, int options, int depth) {
+        // https://www.unicode.org/reports/tr61/#SetOperation:
+        //   SetOperation ::= Union
         //                  | Intersection
         //                  | Difference
-        //   Intersection ::= Restriction & UnicodeSet
-        //   Difference   ::= Restriction - UnicodeSet
-        // or, rewritten to be LL,
-        //   Restriction    ::= UnicodeSet RightHandSides
+        //   Union ::= UnicodeSet
+        //           | ElementList UnicodeSet
+        //   Intersection ::= SetOperation & UnicodeSet
+        //   Difference   ::= SetOperation - UnicodeSet
+        // since we parse top-down, we have already gone past any ElementList in the Union and added
+        // those to this set, and we end up with the UnicodeSet of the Union following by any right
+        // hand sides. In the LL grammar from the note, this is:
+        //   SetOperations  ::= UnicodeSet RightHandSides
         //   RightHandSides ::= ""
         //                    | & UnicodeSet RightHandSides
         //                    | - UnicodeSet RightHandSides
@@ -5035,21 +5050,22 @@ public class UnicodeSet extends UnicodeFilter
         final var leftHandSide = new UnicodeSet();
         leftHandSide.parseUnicodeSet(lexer, rebuiltPat, options, depth + 1);
         addAll(leftHandSide);
-        // Now keep looking for an operator that would continue the RightHandSide.
+        // Now this set is the Union, which is a SetOperation; it might be the SetOperation of an
+        // Intersection or a Difference.
+
+        // Keep looking for an operator that would continue the RightHandSide in the LL grammar.
         // The loop terminates because when we run out of source text, the lookahead token will not
-        // be a set
-        // operator, so that we hit the else branch and return.
+        // be a set operator, so that we hit the else branch and return.
         for (; ; ) {
             if (lexer.acceptSetOperator('&')) {
-                // Intersection ::= Restriction & UnicodeSet
+                // Intersection ::= SetOperation & UnicodeSet
                 rebuiltPat.append('&');
                 final var rightHandSide = new UnicodeSet();
                 rightHandSide.parseUnicodeSet(lexer, rebuiltPat, options, depth + 1);
                 retainAll(rightHandSide);
             } else if (lexer.lookahead().isSetOperator('-')) {
                 // Here the grammar requires two tokens of lookahead to figure out whether the - is
-                // the operator
-                // of a Difference or an UnescapedHyphenMinus in the enclosing Union.
+                // the operator of a Difference or an UnescapedHyphenMinus in the enclosing Union.
                 if (lexer.lookahead2().isSetOperator(']')) {
                     // The operator is actually an UnescapedHyphenMinus; terminate the Restriction
                     // before it.  We return to parseTerm, which immediately returns to parseUnion,
@@ -5058,7 +5074,7 @@ public class UnicodeSet extends UnicodeFilter
                 }
                 // Consume the hyphen-minus.
                 lexer.advance();
-                // Difference ::= Restriction - UnicodeSet
+                // Difference ::= SetOperation - UnicodeSet
                 rebuiltPat.append('-');
                 final var rightHandSide = new UnicodeSet();
                 rightHandSide.parseUnicodeSet(lexer, rebuiltPat, options, depth + 1);
