@@ -32,6 +32,7 @@ cc_library(
         "double-conversion/strtod.h",
         "double-conversion/utils.h",
     ],
+    includes = ["."],
     linkopts = [
         "-lm",
     ],
