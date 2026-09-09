@@ -59,18 +59,48 @@ public:
     SegmentIterator & operator--();
 private:
     enum IterLogicalState {
-        // breakIter_->current() < startIdx_  => 
-        //   actual position is before logical position <=>
-        //   breakIter position is before current segment
-        ITER_BEFORE_LOGICAL_POS = -1,
-        // breakIter_->current() == startIdx_  => 
-        //   actual position is same logical position <=>
-        //   breakIter position on start boundary of current segment
-        ITER_AT_LOGICAL_POS = 0,
-        // breakIter_->current() > startIdx_  => 
-        //   actual position is after logical position <=>
-        //   breakIter position is after current segment
-        ITER_AFTER_LOGICAL_POS = 1,
+        // Represents the state in which we know both the start
+        // and limit of the segment that we are logically "at"
+        // (more precisely: the iterator is logically at the start
+        // index), and the actual index of the breakIter_ is at
+        // the start
+        //
+        // Invariant:
+        // startIdx_ == breakIter_->current()
+        // we have computed startIdx_ and limitIdx_
+        BACKWARDS = -1,
+        // Represents the state in which we only know the
+        // current index (both the logical index of the iterator
+        // and the actual index of the breakIter_ are the same),
+        // meaning that we don't know the full info needed yet
+        // for operator* to return its Segment.
+        //
+        // Invariant:
+        // startIdx_ == limitIdx_ == breakIter_->current()
+        //
+        // Note: you can think of the logical position of the iterator
+        // as tracking the startIdx_.
+        // This, in turn, implies that operator== only should & only needs to
+        // compare startIdx_.
+        // Ex: an iterator in the HERE state with the iterator initialized
+        // to index 0 will have
+        // startIdx_ == limitIdx_ == breakIter_->current() == 0,
+        // while the last segment when iterating backwards will have
+        // start = 0, limit = x when the state = BACKWARDS, for some x
+        // (length of first segment is x-1),
+        // yet they both represent the logical position of the iterator being
+        // at the start of the text.
+        HERE = 0,
+        // Represents the state in which we know both the start
+        // and limit of the segment that we are logically "at"
+        // (more precisely: the iterator is logically at the start
+        // index), and the actual index of the breakIter_ is at
+        // the limit
+        //
+        // Invariant:
+        // limitIdx_ == breakIter_->current()
+        // we have computed startIdx_ and limitIdx_
+        FORWARDS = 1,
     };
 
     mutable int32_t startIdx_;

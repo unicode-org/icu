@@ -89,23 +89,54 @@ void SegmentIterTest::testMultipleSegmentObjectsFromSegmenter() {
     std::u16string_view source2 = u"Sphinx of black quartz, judge my vow.";
     std::u16string_view source3 = u"How vexingly quick daft zebras jump!";
 
-    std::vector<std::u16string_view> exp1{u"The", u" ", u"quick", u" ", u"brown", u" ", u"fox", u" ", u"jumped", u" ", u"over",
-                        u" ", u"the", u" ", u"lazy", u" ", u"dog", u"."};
-    std::vector<std::u16string_view> exp2{u"Sphinx", u" ", u"of", u" ", u"black", u" ", u"quartz", u",", u" ", u"judge", u" ",
-                        u"my", u" ", u"vow", u"."};
+    std::vector<std::u16string_view> exp1{
+        u"The",
+        u" ",
+        u"quick",
+        u" ",
+        u"brown",
+        u" ",
+        u"fox",
+        u" ",
+        u"jumped",
+        u" ",
+        u"over",
+        u" ",
+        u"the",
+        u" ",
+        u"lazy",
+        u" ",
+        u"dog",
+        u"."};
+    std::vector<std::u16string_view> exp2{
+        u"Sphinx",
+        u" ",
+        u"of",
+        u" ",
+        u"black",
+        u" ",
+        u"quartz",
+        u",",
+        u" ",
+        u"judge",
+        u" ",
+        u"my",
+        u" ",
+        u"vow",
+        u"."};
     std::vector<std::u16string_view> exp3{
-                        u"How",
-                        u" ",
-                        u"vexingly",
-                        u" ",
-                        u"quick",
-                        u" ",
-                        u"daft",
-                        u" ",
-                        u"zebras",
-                        u" ",
-                        u"jump",
-                        u"!"};
+        u"How",
+        u" ",
+        u"vexingly",
+        u" ",
+        u"quick",
+        u" ",
+        u"daft",
+        u" ",
+        u"zebras",
+        u" ",
+        u"jump",
+        u"!"};
 
     // Create new Segments for source1
     auto segments1 = enWordSegmenter.segment(source1, errorCode);
@@ -191,7 +222,7 @@ void SegmentIterTest::testRuleStatus() {
 
     auto segmentRange = segments->segments();
 
-    // words 
+    // words
 
     std::vector<std::u16string_view> words;
     for (auto segmentIter = segmentRange.begin(); segmentIter != segmentRange.end(); ++segmentIter) {
