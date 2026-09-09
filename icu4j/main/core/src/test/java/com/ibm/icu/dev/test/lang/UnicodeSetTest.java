@@ -4422,7 +4422,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
                     },
                     {
                         "[a-a]", "Expected first < last in Range, got a-a [a-☞a]"
-                    }, // TODO(egg): Exclude in PDUTS61.
+                    },
                     {"[z-a]", "Expected first < last in Range, got a-z [z-☞a]"},
                     {"[[a]-z]", "Expected property-query | [, got literal-element 'z' [[a]-☞z]"},
                     {"[[a]&z]", "Expected property-query | [, got literal-element 'z' [[a]&☞z]"},

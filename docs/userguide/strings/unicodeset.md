@@ -15,7 +15,9 @@ License & terms of use: http://www.unicode.org/copyright.html
 
 A UnicodeSet is an object that represents a finite set of Unicode code point
 sequences.  The contents of that object can be specified either by
-patterns or by building them programmatically.
+patterns using the UnicodeSet syntax defined in 
+[Draft Unicode Technical Standard #61, Unicode Set Notation](https://www.unicode.org/reports/tr61/),
+or by building them programmatically.
 
 Here are a few examples of sets:
 
@@ -47,44 +49,46 @@ however, it is ignored in matching functions such as `span(string)`.
 
 ## UnicodeSet Patterns
 
-Patterns are a series of characters bounded by square brackets that contain
-lists of characters and Unicode property sets. Lists are a sequence of
-characters that may have ranges indicated by a '-' between two characters, as in
-"a-z". The sequence specifies the range of all characters from the left to the
-right, in Unicode order. For example, `[a c d-f m]` is equivalent to `[a c d e f m]`.
-Whitespace can be freely used for clarity as `[a c d-f m]` means the same
+UnicodeSet objects can be constructed from patterns in the notation defined in
+[Draft Unicode Technical Standard #61, Unicode Set Notation](https://www.unicode.org/reports/tr61/);
+see the [#Conformance] section for specifics.
+
+### General
+At a high level, these are built up from lists of elements and Unicode property queries.
+
+Element lists are sequences of characters,
+character ranges indicated by a '-' between two characters, as in
+`a-z`, and strings enclosed in curly brackets, as in `{abc}`.
+For example, `[a c d-f m {cat}]` is equivalent to `[a c d e f m {cat}]`;
+this set contains six letters, as well as the three-letter string "cat".
+Whitespace can be freely used for clarity: `[a c d-f m]` means the same
 as `[acd-fm]`.
 
-Unicode property sets are specified by a Unicode property, such as `[:Letter:]`.
-For a list of supported properties, see the [Properties](properties.md) chapter.
-For details on the use of short vs. long property and property value names, see
-the end of this section. The syntax for specifying the property names is an
-extension of either POSIX or Perl syntax with the addition of "=value". For
-example, you can match letters by using the POSIX syntax `[:Letter:]`, or by
-using the Perl-style syntax \\p{Letter}. The type can be omitted for the
-Category and Script properties, but is required for other properties.
-
-The table below shows the two kinds of syntax: POSIX and Perl style. Also, the
-table shows the "Negative", which is a property that excludes all characters of
+Unicode property queries are specified
+by a Unicode property, such as `[:Letter:]`.
+The table below shows the two kinds of syntax: POSIX and Perl style, as well as the
+equivalent API calls.
+Also, the table shows the "Negative", which is a property that excludes all characters of
 a given kind. For example, `[:^Letter:]` matches all characters that are not
 `[:Letter:]`.
 
-|  | Positive | Negative |
+|  | POSIX-style Syntax | Perl-style Syntax | Corresponding method
 |--------------------|------------------|-------------------|
-| POSIX-style Syntax | `[:type=value:]` | `[:^type=value:]` or `[:type=≠value:]` |
-| Perl-style Syntax  | `\p{type=value}` | `\P{type=value}` or `\p{type=≠value}` |
+| Positive | `[:type=value:]` | `\p{type=value}` | .applyPropertyAlias​(type, value)
+| Negative  | `[:^type=value:]` or `[:type=≠value:]` | `\P{type=value}` or `\p{type=≠value}` | .applyPropertyAlias​(type, value).complement().removeAllStrings() |
 
-These following low-level lists or properties then can be freely combined with
-the normal set operations (union, inverse, difference, and intersection):
+These low-level lists or properties then can be freely combined with
+the normal set operations (union, intersection, difference, and complement).
+
 
 |  | Example | Corresponding Method | Meaning |
 |-------|-------------------------|----------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | A B | `[[:letter:] [:number:]]` | `A.addAll(B)` | To union two sets A and B, simply concatenate them |
 | A & B | `[[:letter:] & [a-z]]` | `A.retainAll(B)` | To intersect two sets A and B, use the '&' operator. |
 | A - B | `[[:letter:] - [a-z]]` | `A.removeAll(B)` | To take the set-difference of two sets  A and B, use the '-' operator. |
-| [^A] | `[^a-z]` | `A.complement(B).removeAllStrings()` | To invert a set A, place a '^' immediately after the opening '['.  Note that this is a code point complement: `[^𝐴]` is equivalent to `[[\x{0000}-\x{10FFFF}]-𝐴]`, and contains no strings, regardless of whether 𝐴 contains strings. |
+| [^A] | `[^a-z]` | `A.complement(B).removeAllStrings()` | To invert a set A, place a '^' immediately after the opening '['.  Note that this is a code point complement: `[^[𝐴]]` is equivalent to `[[\x{0000}-\x{10FFFF}]-[𝐴]]`, and contains no strings, regardless of whether 𝐴 contains strings. |
 
-### Precedence
+#### Precedence
 
 The binary operators of union, intersection, and set-difference have equal
 precedence and bind left-to-right. Thus the following are equivalent:
@@ -92,7 +96,7 @@ precedence and bind left-to-right. Thus the following are equivalent:
 *   `[[:letter:] - [a-z] [:number:] & [\u0100-\u01FF]]`
 *   `[[[[[:letter:] - [a-z]] [:number:]] & [\u0100-\u01FF]]`
 
-Another example is that the set `[[ace][bdf\] - [abc][def]]` is **not**
+Another example is that the set `[[ace][bdf] - [abc][def]]` is **not**
 the empty set, but instead the set `[def]`. That is because the syntax
 corresponds to the following UnicodeSet operations:
 
@@ -101,96 +105,39 @@ corresponds to the following UnicodeSet operations:
 3.  removeAll `[abc]` *-- we now have `[def]`*
 4.  addAll `[def]` *-- no effect, we still have `[def]`*
 
-This only really matters where there are the difference and intersection
-operations, as the union operation is commutative. To make sure that the - is
+This only really matters when the union and intersection operation are used together,
+operation, or when the difference operation is used, as union and intersection operation are
+associative. To make sure that the - is
 the main operator, add brackets to group the operations as desired, such as
 `[[ace][bdf] - [[abc][def]]]`.
 
 Another caveat with the '&' and '-' operators is that they operate between
 **sets**. That is, they must be immediately preceded and immediately followed by
-a set. For example, the pattern `[[:Lu:]-A]` is illegal, since it is
-interpreted as the set `[:Lu:]` followed by the incomplete range `-A`. To specify
+a set. For example, the pattern `[[:Lu:]-A]` is illegal. To specify
 the set of uppercase letters except for 'A', enclose the 'A' in a set:
 `[[:Lu:]-[A]]`.
 
-### Examples
 
-| `[a]` | The set containing 'a' |
-|------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `[a-z]` | The set containing 'a' through 'z' and all letters in between, in Unicode order |
-| `[^a-z]` | The set containing all characters but 'a' through 'z', that is, U+0000 through 'a'-1 and 'z'+1 through U+FFFF |
-| `[[pat1][pat2]]` | The union of sets specified by pat1 and pat2 |
-| `[[pat1]& [pat2]]` | The intersection of sets specified by pat1 and pat2 |
-| `[[pat1]- [pat2]]` | The asymmetric difference of sets specified by pat1 and pat2 |
-| `[:Lu:]` | The set of characters belonging to the given Unicode category, as defined by  `Character.getType()`; in this case, Unicode uppercase letters. The long form for this is  `[:UppercaseLetter:]`. |
-| `[:L:]` | The set of characters belonging to all Unicode categories starting with 'L', that is,  `[[:Lu:][:Ll:][:Lt:][:Lm:][:Lo:]]`. The long form for this is  `[:Letter:]`. |
+### Conformance
 
-### String Values in Sets
+The ICU UnicodeSet class is a conformant and consistent implementation of the
+UnicodeSet notation as defined in
+[Draft Unicode Technical Standard #61, Unicode Set Notation](https://www.unicode.org/reports/tr61/).
+It imposes some restrictions to the set of lexical elements defined in that standard, as described
+below.
 
-String values are enclosed in {curly brackets}.
+#### Restrictions
 
-| Set expression | Description |
-|------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `[abc{def}]` | A set containing four members, the single characters a, b and c, and the string “def” |
-| `[{abc}{def}]` | A set containing two members, the string “abc” and the string “def”. |
-| `[{a}{b}{c}]` `[abc]` | These two sets are equivalent. Each contains three items, the three individual characters a, b and c. A {string} containing a single character is equivalent to that same character specified in any other way. |
+ICU supports only property queries that are recommended for general-purpose APIs:
+the productions with a gray background in the [property-query](https://www.unicode.org/reports/tr61/#property-query)
+grammar are not supported.
 
-### Character Quoting and Escaping in Unicode Set Patterns
 
-#### Single Quote
+For a list of supported properties, see the [Properties](properties.md) chapter.
+For details on the syntax, see the section of the UnicodeSet standard
+on [property queries](https://www.unicode.org/reports/tr61/#Property-Queries).
 
-Two single quotes represents a single quote, either inside or outside single
-quotes.
-
-Text within single quotes is not interpreted in any way (except for two adjacent
-single quotes). It is taken as literal text (special characters become
-non-special).
-
-These quoting conventions for ICU UnicodeSets differ from those of regular
-expression character set expressions. In regular expressions, single quotes have
-no special meaning and are treated like any other literal character.
-
-#### Backslash Escapes
-
-Outside of single quotes, certain backslashed characters have special meaning:
-
-| `\uhhhh` | Exactly 4 hex digits; h in [0-9A-Fa-f] |
-|------------|----------------------------------------|
-| `\Uhhhhhhhh` | Exactly 8 hex digits |
-| `\xhh` | 1-2 hex digits |
-| `\ooo` | 1-3 octal digits; o in [0-7] |
-| `\a` | U+0007 (BELL) |
-| `\b` | U+0008 (BACKSPACE) |
-| `\t` | U+0009 (HORIZONTAL TAB) |
-| `\n` | U+000A (LINE FEED) |
-| `\v` | U+000B (VERTICAL TAB) |
-| `\f` | U+000C (FORM FEED) |
-| `\r` | U+000D (CARRIAGE RETURN) |
-| `\\` | U+005C (BACKSLASH) |
-
-Anything else following a backslash is mapped to itself, except in an
-environment where it is defined to have some special meaning. For example,
-`\\p{Lu}` is the set of uppercase letters in UnicodeSet.
-
-Any character formed as the result of a backslash escape loses any special
-meaning and is treated as a literal. In particular, note that \\u and \\U
-escapes create literal characters. (In contrast, the Java compiler treats
-Unicode escapes as just a way to represent arbitrary characters in an ASCII
-source file, and any resulting characters are **not** tagged as literals.)
-
-#### Whitespace
-
-Whitespace (as defined by our API) is ignored unless it is quoted or
-backslashed.
-
-> :point_right: **Note**: *The rules for quoting and white space handling are common to most ICU APIs that
-process rule or expression strings, including UnicodeSet, Transliteration and
-Break Iterators.*
-
-> :point_right: **Note**:*ICU Regular Expression set expressions have a different (but similar) syntax,
-and a different set of recognized backslash escapes. \[Sets\] in ICU Regular
-Expressions follow the conventions from Perl and Java regular expressions rather
-than the pattern syntax from ICU UnicodeSet.*
+#### Extensions
 
 ## Using a UnicodeSet
 
@@ -212,32 +159,6 @@ chapter.
 ICU users can programmatically build a UnicodeSet by adding or removing ranges
 of characters or by using the retain (intersection), remove (difference), and
 add (union) operations.
-
-## Property Values
-
-The following property value variants are recognized:
-
-| Format | Description | Example |
-|--------|-----------------------------------------------------------------------------------------------------|-----------------------------------|
-| short | omits the type (used to prevent ambiguity and only allowed with the Category and Script properties) | Lu |
-| medium | uses an abbreviated type and value | gc=Lu |
-| long | uses a full type and value | General_Category=Uppercase_Letter |
-
-If the type or value is omitted, then the equals sign is also omitted. The short
-style is only
-used for Category and Script properties because these properties are very common
-and their omission is unambiguous.
-
-In actual practice, you can mix type names and values that are omitted,
-abbreviated, or full. For example, if Category=Unassigned you could use what is
-in the table explicitly, `\p{gc=Unassigned}`, `\p{Category=Cn}`, or
-`\p{Unassigned}`.
-
-When these are processed, case and whitespace are ignored so you may use them
-for clarity, if desired. For example, `\p{Category = Uppercase Letter}` or
-`\p{Category = uppercase letter}`.
-
-For a list of supported properties, see the [Properties](properties.md) chapter.
 
 ## Getting UnicodeSet from Script
 
