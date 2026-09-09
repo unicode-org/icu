@@ -1070,16 +1070,16 @@ void UnicodeSet::parseUnicodeSet(Lexer &lexer,
         lexer.advance();
         preserveSyntaxInPattern = true;
     } else {
-        // UnicodeSet ::=                [   Union ]
-        //              | Complement ::= [ ^ Union ]
+        // UnicodeSet ::=                [   Content ]
+        //              | Complement ::= [ ^ Content ]
         if (lexer.acceptSetOperator(u'[')) {
             prettyPrintedPattern.append(u'[');
             if (lexer.acceptSetOperator(u'^')) {
                 prettyPrintedPattern.append(u'^');
                 isComplement = true;
             }
-            parseUnion(lexer, prettyPrintedPattern, options, caseClosure, depth,
-                       /*containsRestrictions=*/preserveSyntaxInPattern, ec);
+            parseContent(lexer, prettyPrintedPattern, options, caseClosure, depth,
+                         /*containsSetOperation=*/preserveSyntaxInPattern, ec);
             U_UNICODESET_RETURN_IF_ERROR(ec);
             if (!lexer.acceptSetOperator(u']')) {
                 U_UNICODESET_RETURN_WITH_PARSE_ERROR("]", lexer.lookahead().debugString(), lexer, ec);
@@ -1111,19 +1111,30 @@ void UnicodeSet::parseUnicodeSet(Lexer &lexer,
     }
 }
 
-void UnicodeSet::parseUnion(Lexer &lexer,
-                            UnicodeString &rebuiltPat,
-                            uint32_t options,
-                            UnicodeSet &(UnicodeSet::*caseClosure)(int32_t attribute),
-                            int32_t depth,
-                            bool &containsRestrictions,
-                            UErrorCode &ec) {
-    // Union ::= Terms
-    //         | UnescapedHyphenMinus Terms
-    //         | Terms UnescapedHyphenMinus
-    //         | UnescapedHyphenMinus Terms UnescapedHyphenMinus
-    // Terms ::= ""
-    //         | Terms Term
+void UnicodeSet::parseContent(Lexer &lexer,
+                              UnicodeString &rebuiltPat,
+                              uint32_t options,
+                              UnicodeSet &(UnicodeSet::*caseClosure)(int32_t attribute),
+                              int32_t depth,
+                              bool &containsSetOperation,
+                              UErrorCode &ec) {
+    // Content ::= ""
+    //           | ElementList
+    //           | UnescapedHyphenMinus ElementList
+    //           | UnescapedHyphenMinus
+    //           | ElementList UnescapedHyphenMinus
+    //           | UnescapedHyphenMinus ElementList UnescapedHyphenMinus
+    // ElementList ::= Elements
+    //               | ElementList Elements
+    //               | SetOperation
+    // SetOperation ::= Union
+    //                | Intersection
+    //                | Difference
+    // Union ::= UnicodeSet
+    //         | ElementList UnicodeSet
+    // But that is not LL (we cannot tell if we have a SetOperation or not by looking at the
+    // first Elements), so we parse it as described in the note,
+    // ElementList ::= Mutation Mutations
     if (lexer.acceptSetOperator(u'-')) {
         add(u'-');
         // When we otherwise preserve the syntax, we escape an initial UnescapedHyphenMinus, but not a
@@ -1142,35 +1153,35 @@ void UnicodeSet::parseUnion(Lexer &lexer,
         } else if (lexer.lookahead().isSetOperator(u'$')) {
             if (lexer.lookahead2().isSetOperator(u']')) {
                 // ICU extensions: A $ is allowed as a literal-element.
-                // A Term at the end of a Union consisting of a single $ is an anchor.
+                // A $ at the end of a Content is an anchor.
                 rebuiltPat.append(u'$');
                 // Consume the dollar.
                 lexer.advance();
                 add(U_ETHER);
-                containsRestrictions = true;
+                containsSetOperation = true;
                 return;
             }
         }
         if (lexer.lookahead().isSetOperator(u']')) {
             return;
         }
-        parseTerm(lexer, rebuiltPat, options, caseClosure, depth, containsRestrictions, ec);
+        parseMutation(lexer, rebuiltPat, options, caseClosure, depth, containsSetOperation, ec);
         U_UNICODESET_RETURN_IF_ERROR(ec);
     }
 }
 
-void UnicodeSet::parseTerm(Lexer &lexer,
-                           UnicodeString &rebuiltPat,
-                           uint32_t options,
-                           UnicodeSet &(UnicodeSet::*caseClosure)(int32_t attribute),
-                           int32_t depth,
-                           bool &containsRestriction,
-                           UErrorCode &ec) {
-    // Term ::= Elements
-    //        | Restriction
+void UnicodeSet::parseMutation(Lexer &lexer,
+                               UnicodeString &rebuiltPat,
+                               uint32_t options,
+                               UnicodeSet &(UnicodeSet::*caseClosure)(int32_t attribute),
+                               int32_t depth,
+                               bool &containsSetOperation,
+                               UErrorCode &ec) {
+    // Mutation ::= Elements
+    //            | SetOperations
     if (lexer.lookahead().isSetOperator('[') || lexer.lookahead().set() != nullptr) {
-        containsRestriction = true;
-        parseRestriction(lexer, rebuiltPat, options, caseClosure, depth, ec);
+        containsSetOperation = true;
+        parseSetOperations(lexer, rebuiltPat, options, caseClosure, depth, ec);
         U_UNICODESET_RETURN_IF_ERROR(ec);
     } else {
         parseElements(lexer, rebuiltPat, ec);
@@ -1178,20 +1189,25 @@ void UnicodeSet::parseTerm(Lexer &lexer,
     }
 }
 
-void UnicodeSet::parseRestriction(Lexer &lexer,
-                                  UnicodeString &rebuiltPat,
-                                  uint32_t options,
-                                  UnicodeSet &(UnicodeSet::*caseClosure)(int32_t attribute),
-                                  int32_t depth,
-                                  UErrorCode &ec) {
-    // Parse a https://www.unicode.org/reports/tr61/#Restriction:
-    //   Restriction  ::= UnicodeSet
+void UnicodeSet::parseSetOperations(Lexer &lexer,
+                                    UnicodeString &rebuiltPat,
+                                    uint32_t options,
+                                    UnicodeSet &(UnicodeSet::*caseClosure)(int32_t attribute),
+                                    int32_t depth,
+                                    UErrorCode &ec) {
+    // When we return from this object, this function represents a
+    // https://www.unicode.org/reports/tr61/#SetOperation:
+    //   SetOperation ::= Union
     //                  | Intersection
     //                  | Difference
-    //   Intersection ::= Restriction & UnicodeSet
-    //   Difference   ::= Restriction - UnicodeSet
-    // or, rewritten to be LL,
-    //   Restriction    ::= UnicodeSet RightHandSides
+    //   Union ::= UnicodeSet
+    //           | ElementList UnicodeSet
+    //   Intersection ::= SetOperation & UnicodeSet
+    //   Difference   ::= SetOperation - UnicodeSet
+    // since we parse top-down, we have already gone past any ElementList in the Union and added
+    // those to this set, and we end up with the UnicodeSet of the Union following by any right
+    // hand sides. In the LL grammar from the note, this is:
+    //   SetOperations  ::= UnicodeSet RightHandSides
     //   RightHandSides ::= ""
     //                    | & UnicodeSet RightHandSides
     //                    | - UnicodeSet RightHandSides
@@ -1202,36 +1218,40 @@ void UnicodeSet::parseRestriction(Lexer &lexer,
     leftHandSide.parseUnicodeSet(lexer, rebuiltPat, options, caseClosure, depth + 1, ec);
     addAll(leftHandSide);
     U_UNICODESET_RETURN_IF_ERROR(ec);
-    // Now keep looking for an operator that would continue the RightHandSide.
-    // The loop terminates because when we run out of source text, the lookahead token will not be a set
-    // operator, so that we hit the else branch and return.
+    // Now this object is the Union, which is a SetOperation; it might be the SetOperation of an
+    // Intersection or a Difference.
+
+    // Keep looking for an operator that would continue the RightHandSides in the LL grammar.
+    // The loop terminates because when we run out of source text, the lookahead token will not be a
+    // set operator, so that we hit the else branch and return.
     for (;;) {
         if (lexer.acceptSetOperator(u'&')) {
-            // Intersection ::= Restriction & UnicodeSet
+            // Intersection ::= SetOperation & UnicodeSet
             rebuiltPat.append(u'&');
             UnicodeSet rightHandSide;
             rightHandSide.parseUnicodeSet(lexer, rebuiltPat, options, caseClosure, depth + 1, ec);
             U_UNICODESET_RETURN_IF_ERROR(ec);
             retainAll(rightHandSide);
         } else if (lexer.lookahead().isSetOperator(u'-')) {
-            // Here the grammar requires two tokens of lookahead to figure out whether the - is the operator
-            // of a Difference or an UnescapedHyphenMinus in the enclosing Union.
+            // Here the grammar requires two tokens of lookahead to figure out whether the - is
+            // the operator of a Difference or an UnescapedHyphenMinus in the enclosing Union.
             if (lexer.lookahead2().isSetOperator(u']')) {
-                // The operator is actually an UnescapedHyphenMinus; terminate the Restriction
-                // before it.  We return to parseTerm, which immediately returns to parseUnion,
-                // which will accept the - and add it to *this.
+                // The operator is actually an UnescapedHyphenMinus; terminate the SetOperation
+                // before it.  We return to parseMutation, which immediately returns to
+                // parseContent, which will accept the - and add it to *this.
                 return;
             }
             // Consume the hyphen-minus.
             lexer.advance();
-            // Difference ::= Restriction - UnicodeSet
+            // Difference ::= SetOperation - UnicodeSet
             rebuiltPat.append(u'-');
             UnicodeSet rightHandSide;
             rightHandSide.parseUnicodeSet(lexer, rebuiltPat, options, caseClosure, depth + 1, ec);
             U_UNICODESET_RETURN_IF_ERROR(ec);
             removeAll(rightHandSide);
         } else {
-            // Not an operator, end of the Restriction.
+            // Not an operator, end of the SetOperation (and of the SetOperations in the LL
+            // grammar).
             return;
         }
     }
@@ -1294,7 +1314,7 @@ void UnicodeSet::parseElements(Lexer &lexer,
         // This is an extension.
         last = u'$';
         if (lexer.lookahead2().isSetOperator(u']')) {
-            U_UNICODESET_RETURN_WITH_PARSE_ERROR("Term after Range ending in unescaped $",
+            U_UNICODESET_RETURN_WITH_PARSE_ERROR("Elements or UnicodeSet after Range ending in unescaped $",
                                                  lexer.lookahead().debugString() + u" followed by " +
                                                      lexer.lookahead2().debugString(),
                                                  lexer, ec);
