@@ -389,18 +389,6 @@ class UnicodeSetLexer {
                         this);
             case '\\':
                 {
-                    int second =
-                            chars_.next(
-                                    charsOptions_
-                                            & ~(RuleCharacterIterator.PARSE_ESCAPES
-                                                    | RuleCharacterIterator.SKIP_WHITESPACE));
-                    if (second == '\u200E' || second == '\u200F') {
-                        // Prohibit \<LRM> and \<RLM>.
-                        throw lexicalError(
-                                "ignorable-format-control U+"
-                                        + Utility.hex(second)
-                                        + " is not an escapable-character");
-                    }
                     // Now try to parse the escape.
                     chars_.setPos(before);
                     int codePoint = chars_.next(charsOptions_);
@@ -457,11 +445,6 @@ class UnicodeSetLexer {
                                         "Invalid escape sequence \\"
                                                 + Character.toString(afterBackslash)
                                                 + " in UnicodeSet string");
-                            } else if (afterBackslash == '\u200E' || afterBackslash == '\u200F') {
-                                throw lexicalError(
-                                        "Invalid escape sequence \\<U+"
-                                                + Utility.hex(afterBackslash)
-                                                + "> in UnicodeSet string");
                             } else {
                                 chars_.setPos(beforeNext);
                                 // Parse the escape.

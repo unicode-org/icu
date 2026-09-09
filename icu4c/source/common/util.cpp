@@ -76,10 +76,6 @@ UBool ICU_Utility::shouldAlwaysBeEscaped(UChar32 c) {
         return false;  // printable ASCII
     } else if (c <= 0x9f) {
         return true;  // C1 control codes
-    } else if (c == 0x200E || c == 0x200F) {
-        // LRM and RLM are ignorable-format-controls and thus not escapable-characters in the
-        // UnicodeSet grammar: https://www.unicode.org/reports/tr61/#escapable-character.
-        return true;
     } else if (c < 0xd800) {
         return false;  // most of the BMP
     } else if (c <= 0xdfff || (0xfdd0 <= c && c <= 0xfdef) || (c & 0xfffe) == 0xfffe) {
