@@ -64,22 +64,23 @@ this set contains six letters, as well as the three-letter string "cat".
 Whitespace can be freely used for clarity: `[a c d-f m]` means the same
 as `[acd-fm]`.
 
-Unicode property queries are specified
-by a Unicode property, such as `[:Letter:]`.
+Unicode [property queries](https://www.unicode.org/reports/tr61/#Property-Queries)
+refer to the set of characters that have a Unicode property value, such as `[:Letter:]`.
 The table below shows the two kinds of syntax: POSIX and Perl style, as well as the
 equivalent API calls.
 Also, the table shows the "Negative", which is a property that excludes all characters of
 a given kind. For example, `[:^Letter:]` matches all characters that are not
-`[:Letter:]`.
+`[:Letter:]`.  The property name can be omitted when it is General_Category (as
+for Letter) or Script; the property value Yes can be omitted for a binary property,
+as in `[:White_Space:]`.
 
 |  | POSIX-style Syntax | Perl-style Syntax | Corresponding method
 |--------------------|------------------|-------------------|
-| Positive | `[:type=value:]` | `\p{type=value}` | .applyPropertyAlias​(type, value)
-| Negative  | `[:^type=value:]` or `[:type=≠value:]` | `\P{type=value}` or `\p{type=≠value}` | .applyPropertyAlias​(type, value).complement().removeAllStrings() |
+| Positive | `[:propertyName=value:]` | `\p{propertyName=value}` | .applyPropertyAlias​(propertyName, value)
+| Negative  | `[:^propertyName=value:]` or `[:propertyName=≠value:]` | `\P{propertyName=value}` or `\p{propertyName=≠value}` | .applyPropertyAlias​(propertyName, value).complement().removeAllStrings() |
 
 These low-level lists or properties then can be freely combined with
 the normal set operations (union, intersection, difference, and complement).
-
 
 |  | Example | Corresponding Method | Meaning |
 |-------|-------------------------|----------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -88,9 +89,10 @@ the normal set operations (union, intersection, difference, and complement).
 | A - B | `[[:letter:] - [a-z]]` | `A.removeAll(B)` | To take the set-difference of two sets  A and B, use the '-' operator. |
 | [^A] | `[^a-z]` | `A.complement(B).removeAllStrings()` | To invert a set A, place a '^' immediately after the opening '['.  Note that this is a code point complement: `[^[𝐴]]` is equivalent to `[[\x{0000}-\x{10FFFF}]-[𝐴]]`, and contains no strings, regardless of whether 𝐴 contains strings. |
 
-#### Precedence
+#### Precedence of set operations
 
-The binary operators of union, intersection, and set-difference have equal
+As described [in the UnicodeSet grammar](https://www.unicode.org/reports/tr61/#SetOperation),
+the binary operators of union, intersection, and set-difference have equal
 precedence and bind left-to-right. Thus the following are equivalent:
 
 *   `[[:letter:] - [a-z] [:number:] & [\u0100-\u01FF]]`
@@ -106,7 +108,7 @@ corresponds to the following UnicodeSet operations:
 4.  addAll `[def]` *-- no effect, we still have `[def]`*
 
 This only really matters when the union and intersection operation are used together,
-operation, or when the difference operation is used, as union and intersection operation are
+operation, or when the difference operation is used, as union and intersection are
 associative. To make sure that the - is
 the main operator, add brackets to group the operations as desired, such as
 `[[ace][bdf] - [[abc][def]]]`.
@@ -117,7 +119,6 @@ a set. For example, the pattern `[[:Lu:]-A]` is illegal. To specify
 the set of uppercase letters except for 'A', enclose the 'A' in a set:
 `[[:Lu:]-[A]]`.
 
-
 ### Conformance
 
 The ICU UnicodeSet class is a conformant and consistent implementation of the
@@ -125,6 +126,8 @@ UnicodeSet notation as defined in
 [Draft Unicode Technical Standard #61, Unicode Set Notation](https://www.unicode.org/reports/tr61/).
 It imposes some restrictions to the set of lexical elements defined in that standard, as described
 below.
+It also implements some pure extensions: some expressions that are
+ill-formed according the UnicodeSet standard are defined by ICU. 
 
 #### Restrictions
 
@@ -132,12 +135,72 @@ ICU supports only property queries that are recommended for general-purpose APIs
 the productions with a gray background in the [property-query](https://www.unicode.org/reports/tr61/#property-query)
 grammar are not supported.
 
+The list of supported properties is given in the [Properties](properties.md) chapter.
 
-For a list of supported properties, see the [Properties](properties.md) chapter.
-For details on the syntax, see the section of the UnicodeSet standard
-on [property queries](https://www.unicode.org/reports/tr61/#Property-Queries).
+Doubly-negated property queries, as defined in the section on
+[Negations](https://www.unicode.org/reports/tr61/#Negations),
+are disallowed.
+
+When matching property names and property values in property queries,
+ICU uses an older version of rule UAX44-LM3 which does not ignore the prefix `is`:
+thus `\p{isSpaceSeparator}` is ill-formed.
+The remainder of rule UAX44-LM3 is supported:
+`[:general-category = SPACE SEPARATOR:]` accepted, and equivalent to
+`[:General_Category=Space_Separator:]`.
+
+When matching character names in property queries for the `Name` property
+and in [named-element](https://www.unicode.org/reports/tr61/#named-element)s,
+formal aliases of type other than `correction` are ignored.
+For instance, `\N{BEL}` is not supported. This is a known defect tracked by ticket
+[ICU-8963](https://unicode-org.atlassian.net/browse/ICU-8963).
 
 #### Extensions
+
+ICU interprets some expressions that are ill-formed according to the UnicodeSet standard:
+
+* Some non-UCD properties, such as RGI_Emoji, are supported in
+  [property-query](https://www.unicode.org/reports/tr61/#property-query).
+  See the list in the [Properties](properties.md) chapter.
+* `\u` [four-hexadecimal-digits](https://www.unicode.org/reports/tr61/#four-hexadecimal-digits)
+  `\u` [four-hexadecimal-digits](https://www.unicode.org/reports/tr61/#four-hexadecimal-digits)
+  where the first constituent  [four-hexadecimal-digits](https://www.unicode.org/reports/tr61/#four-hexadecimal-digits)
+  represent a high surrogate and the second constituent
+  [four-hexadecimal-digits](https://www.unicode.org/reports/tr61/#four-hexadecimal-digits)
+  represent a low surrogate is an [escaped-element](https://www.unicode.org/reports/tr61/#escaped-element)
+  representing the supplementary code point whose UTF-16 encoding is that sequence of
+  surrogates.
+* A [string-literal](https://www.unicode.org/reports/tr61/#string-literal) is
+  allowed to contain [escaped-element](https://www.unicode.org/reports/tr61/#escaped-element)s
+  representing surrogate code points.
+* `$` is added as a [set-operator](https://www.unicode.org/reports/tr61/#set-operator), and the
+  following alternatives are added to [Content](https://www.unicode.org/reports/tr61/#Content)</a>:
+  > | `$`  
+  > | [ElementList](https://www.unicode.org/reports/tr61/#ElementList) `$`  
+  > | [UnescapedHyphenMinus](https://www.unicode.org/reports/tr61/#UnescapedHyphenMinus) [ElementList](https://www.unicode.org/reports/tr61/#ElementList) `$`
+  The following alternative is added to [ElementList](https://www.unicode.org/reports/tr61/#ElementList):
+  > | `$` [Elements](https://www.unicode.org/reports/tr61/#Elements)
+  The following alternative is added to [Union](https://www.unicode.org/reports/tr61/#Union):
+  > | `$` [UnicodeSet](https://www.unicode.org/reports/tr61/#UnicodeSet)
+  When the [set-operator](https://www.unicode.org/reports/tr61/#set-operator) `$` occurs
+  as an immediate constituent of a [Content](https://www.unicode.org/reports/tr61/#Content)</a>,
+  it represents the noncharacter code point U+FFFF.
+  When it occurs anywhere else, it represents the character U+0024 $ DOLLAR SIGN.
+* If a `SymbolTable` is passed to the constructor of `UnicodeSet`, a new lexical
+  element is introduced:
+  > variable ⩴ $ reference
+  where the function `SymbolTable::parseReference` defines the syntactic category
+  reference. The expansion of a variable is defined by `SymbolTable::lookup`; it
+  disambiguates the syntactic category as follows:
+  * If the expansion is a [UnicodeSet](https://www.unicode.org/reports/tr61/#UnicodeSet), the variable
+    is a *set-valued*-variable.
+  * If the expansion is a [RangeElement](https://www.unicode.org/reports/tr61/#RangeElement), the
+     variable is a *code-point-valued*-variable.
+  * If the expansion is a [string-literal](https://www.unicode.org/reports/tr61/#string-literal), the
+     variable is a *string-valued*-variable.
+  * Otherwise, the variable is ill-defined, and the `UnicodeSet` constructor fails.
+  An alternative *set-valued*-variable is added to [UnicodeSet](https://www.unicode.org/reports/tr61/#UnicodeSet),
+  an alternative *code-point-valued*-variable is added to [RangeElement](https://www.unicode.org/reports/tr61/#RangeElement),
+  and an alternative *string-valued*-variable is added to [Element](https://www.unicode.org/reports/tr61/#Element).
 
 ## Using a UnicodeSet
 

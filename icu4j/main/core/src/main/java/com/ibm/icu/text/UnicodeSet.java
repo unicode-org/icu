@@ -155,63 +155,42 @@ import java.util.stream.StreamSupport;
  * notation</a>. It supports only property queries that are recommended for general-purpose APIs
  * (that is, it does not support the productions with a gray background in the grammar). The set of
  * supported properties, and additional restrictions, are described in the User’s Guide <a
- * href="https://unicode-org.github.io/icu/userguide/strings/unicodeset">
- * https://unicode-org.github.io/icu/userguide/strings/unicodeset</a>.
+ * href="https://unicode-org.github.io/icu/userguide/strings/unicodeset#Restrictions">
+ * https://unicode-org.github.io/icu/userguide/strings/unicodeset#Restrictions</a>.
  *
- * <p>It implements the following pure extensions:
+ * <p>It implements a number of pure extensions documented in the User’s guide at <a
+ * href="https://unicode-org.github.io/icu/userguide/strings/unicodeset#Extensions">. In particular,
+ * the support for variables interacts with the API: If a {@link SymbolTable} is passed to the
+ * constructor of {@code UnicodeSet}, a new lexical element is introduced:
+ *
+ * <blockquote>
+ *
+ * variable ⩴ <code>$</code> reference
+ *
+ * </blockquote>
+ *
+ * where the function {@link SymbolTable#parseReference} defines the syntactic category reference.
+ * The expansion of a variable is defined by {@link SymbolTable#lookup}; it disambiguates the
+ * syntactic category as follows:
  *
  * <ul>
- *   <li><code>&bsol;u</code> <a
- *       href="https://www.unicode.org/reports/tr61/#four-hexadecimal-digits">four-hexadecimal-digits</a>
- *       <code>&bsol;u</code> <a
- *       href="https://www.unicode.org/reports/tr61/#four-hexadecimal-digits">four-hexadecimal-digits</a>
- *       where the first constituent <a
- *       href="https://www.unicode.org/reports/tr61/#four-hexadecimal-digits">four-hexadecimal-digits</a>
- *       represent a high surrogate and the second constituent <a
- *       href="https://www.unicode.org/reports/tr61/#four-hexadecimal-digits">four-hexadecimal-digits</a>
- *       represent a low surrogate is an <a
- *       href="https://www.unicode.org/reports/tr61/#escaped-element">escaped-element</a>
- *       representing the supplementary code point whose UTF-16 encoding is that sequence of
- *       surrogates.
- *   <li>A <a href="https://www.unicode.org/reports/tr61/#string-literal">string-literal</a> is
- *       allowed to contain <a
- *       href="https://www.unicode.org/reports/tr61/#escaped-element">escaped-element</a>s
- *       representing surrogate code points.
- *   <li><code>$</code> is added as a <a
- *       href="https://www.unicode.org/reports/tr61/#set-operator">set-operator</a>, and the
- *       following alternatives are added to <a
- *       href="https://www.unicode.org/reports/tr61/#Union">Union</a>:<br>
- *       | <code>$</code><br>
- *       | <a href="https://www.unicode.org/reports/tr61/#Terms">Terms</a> <code>$</code><br>
- *       | <a
- *       href="https://www.unicode.org/reports/tr61/#UnescapedHyphenMinus">UnescapedHyphenMinus</a>
- *       <a href="https://www.unicode.org/reports/tr61/#Terms">Terms</a> <code>$</code><br>
- *       When <code>$</code> is present as an immediate constituent of a <a
- *       href="https://www.unicode.org/reports/tr61/#Union">Union</a>, it represents the
- *       noncharacter code point U+FFFF.
- *   <li>If a {@link SymbolTable} is passed to the constructor of {@code UnicodeSet}, a new lexical
- *       element is introduced: variable ⩴ <code>$</code> reference<br>
- *       where the function {@link SymbolTable#parseReference} defines the syntactic category
- *       reference. The expansion of a variable is defined by {@link SymbolTable#lookup}; it
- *       disambiguates the syntactic category as follows:
- *       <ul>
- *         <li>If the expansion is a <a
- *             href="https://www.unicode.org/reports/tr61/#UnicodeSet">UnicodeSet</a>, the variable
- *             is a <i>set-valued_</i>variable.
- *         <li>If the expansion is a <a
- *             href="https://www.unicode.org/reports/tr61/#RangeElement">RangeElement</a>, the
- *             variable is a <i>code-point-valued_</i>variable.
- *         <li>If the expansion is a <a
- *             href="https://www.unicode.org/reports/tr61/#string-literal">string-literal</a>, the
- *             variable is a <i>string-valued_</i>variable.
- *       </ul>
- *       An alternative <i>set-valued_</i>variable is added to <a
- *       href="https://www.unicode.org/reports/tr61/#UnicodeSet">UnicodeSet</a>, an alternative
- *       <i>code-point-valued_</i>variable is added to <a
- *       href="https://www.unicode.org/reports/tr61/#RangeElement">RangeElement</a>, and an
- *       alternative <i>string-valued_</i>variable is added to <a
- *       href="https://www.unicode.org/reports/tr61/#Element">Element</a>.
+ *   <li>If the expansion is a <a
+ *       href="https://www.unicode.org/reports/tr61/#UnicodeSet">UnicodeSet</a>, the variable is a
+ *       <i>set-valued-</i>variable.
+ *   <li>If the expansion is a <a
+ *       href="https://www.unicode.org/reports/tr61/#RangeElement">RangeElement</a>, the variable is
+ *       a <i>code-point-valued-</i>variable.
+ *   <li>If the expansion is a <a
+ *       href="https://www.unicode.org/reports/tr61/#string-literal">string-literal</a>, the
+ *       variable is a <i>string-valued-</i>variable.
  * </ul>
+ *
+ * An alternative <i>set-valued-</i>variable is added to <a
+ * href="https://www.unicode.org/reports/tr61/#UnicodeSet">UnicodeSet</a>, an alternative
+ * <i>code-point-valued-</i>variable is added to <a
+ * href="https://www.unicode.org/reports/tr61/#RangeElement">RangeElement</a>, and an alternative
+ * <i>string-valued-</i>variable is added to <a
+ * href="https://www.unicode.org/reports/tr61/#Element">Element</a>.
  *
  * <p>To iterate over contents of {@code UnicodeSet}, the following are available:
  *
