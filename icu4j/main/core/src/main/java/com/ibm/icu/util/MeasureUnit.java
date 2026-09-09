@@ -545,7 +545,7 @@ public class MeasureUnit implements Serializable {
      * @param denominator The constant denominator to set.
      * @return A new MeasureUnit with the specified constant denominator.
      * @throws UnsupportedOperationException if the unit is not a COMPOUND unit.
-     * @draft ICU 77
+     * @stable ICU 77
      */
     public MeasureUnit withConstantDenominator(long denominator) {
         if (denominator < 0) {
@@ -586,7 +586,7 @@ public class MeasureUnit implements Serializable {
      *
      * @return The value of the constant denominator.
      * @throws UnsupportedOperationException if the unit is not a COMPOUND unit.
-     * @draft ICU 77
+     * @stable ICU 77
      */
     public long getConstantDenominator() {
         // TODO(ICU-23219)
