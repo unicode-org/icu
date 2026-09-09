@@ -20,7 +20,9 @@ parent: C++ Setup
 
 ---
 
-
+  - Install the [`C/C++` extension by Microsoft](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools)
+    * This provides editing support, VS Code debugging support, including
+    the `cppdbg` debug type used in the configuration `.json` files below.
   - Create a `.vscode` folder in icu4c/source
   - Copy the [`tasks.json`](tasks.json), [`launch.json`](launch.json) and [`c_cpp_properties.json`](c_cpp_properties.json) files into
     the `.vscode` folder.
@@ -35,7 +37,6 @@ parent: C++ Setup
       load average takes a while to respond, reducing this number helps the
       initial bad system performance when a new build is launched.
 
-NOTE:
-Run the
+> :point_right: **Note**: Run the
 [`./runConfigureICU` command](../../userguide/icu4c/faq.md)
 before building `icu4c` from VSCode.
