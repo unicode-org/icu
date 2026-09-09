@@ -48,7 +48,7 @@ public:
     WholeStringBreakIterator *clone() const override;
     static UClassID U_EXPORT2 getStaticClassID();
     UClassID getDynamicClassID() const override;
-    CharacterIterator &getText() const override;
+    CharacterIterator& getText() const U_LIFETIME_BOUND override;
     UText *getUText(UText *fillIn, UErrorCode &errorCode) const override;
     void  setText(const UnicodeString &text) override;
     void  setText(UText *text, UErrorCode &errorCode) override;
@@ -64,7 +64,8 @@ public:
     int32_t next(int32_t n) override;
     WholeStringBreakIterator *createBufferClone(void *stackBuffer, int32_t &BufferSize,
                                                 UErrorCode &errorCode) override;
-    WholeStringBreakIterator &refreshInputText(UText *input, UErrorCode &errorCode) override;
+    WholeStringBreakIterator& refreshInputText(UText* input,
+                                               UErrorCode& errorCode) U_LIFETIME_BOUND override;
 
 private:
     int32_t length;
@@ -76,7 +77,7 @@ WholeStringBreakIterator::~WholeStringBreakIterator() {}
 bool WholeStringBreakIterator::operator==(const BreakIterator&) const { return false; }
 WholeStringBreakIterator *WholeStringBreakIterator::clone() const { return nullptr; }
 
-CharacterIterator &WholeStringBreakIterator::getText() const {
+CharacterIterator& WholeStringBreakIterator::getText() const U_LIFETIME_BOUND {
     UPRV_UNREACHABLE_EXIT;  // really should not be called
 }
 UText *WholeStringBreakIterator::getUText(UText * /*fillIn*/, UErrorCode &errorCode) const {
@@ -120,8 +121,9 @@ WholeStringBreakIterator *WholeStringBreakIterator::createBufferClone(
     }
     return nullptr;
 }
-WholeStringBreakIterator &WholeStringBreakIterator::refreshInputText(
-        UText * /*input*/, UErrorCode &errorCode) {
+WholeStringBreakIterator&
+WholeStringBreakIterator::refreshInputText(UText* /*input*/,
+                                           UErrorCode& errorCode) U_LIFETIME_BOUND {
     if (U_SUCCESS(errorCode)) {
         errorCode = U_UNSUPPORTED_ERROR;
     }
