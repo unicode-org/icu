@@ -482,7 +482,7 @@ public:
      * A frozen set will not be modified.
      * @stable ICU 2.0
      */
-    UnicodeSet& operator=(const UnicodeSet& o);
+    UnicodeSet& operator=(const UnicodeSet& o) U_LIFETIME_BOUND;
 
     /**
      * Compares the specified object with this set for equality.  Returns
@@ -532,7 +532,7 @@ public:
      *
      * @stable ICU 4.2
      */
-    inline static UnicodeSet *fromUSet(USet *uset);
+    inline static UnicodeSet* fromUSet(USet* uset U_LIFETIME_BOUND);
 
     /**
      * Get a UnicodeSet pointer from a const USet
@@ -542,8 +542,8 @@ public:
      *
      * @stable ICU 4.2
      */
-    inline static const UnicodeSet *fromUSet(const USet *uset);
-    
+    inline static const UnicodeSet* fromUSet(const USet* uset U_LIFETIME_BOUND);
+
     /**
      * Produce a USet * pointer for this UnicodeSet.
      * USet is the plain C type for UnicodeSet
@@ -551,8 +551,7 @@ public:
      * @return a USet pointer for this UnicodeSet
      * @stable ICU 4.2
      */
-    inline USet *toUSet();
-
+    inline USet* toUSet() U_LIFETIME_BOUND;
 
     /**
      * Produce a const USet * pointer for this UnicodeSet.
@@ -561,7 +560,7 @@ public:
      * @return a const USet pointer for this UnicodeSet
      * @stable ICU 4.2
      */
-    inline const USet * toUSet() const;
+    inline const USet* toUSet() const U_LIFETIME_BOUND;
 
 
     //----------------------------------------------------------------
@@ -591,7 +590,7 @@ public:
      * @see cloneAsThawed
      * @stable ICU 3.8
      */
-    UnicodeSet *freeze();
+    UnicodeSet* freeze() U_LIFETIME_BOUND;
 
     /**
      * Clone the set and make the clone mutable.
@@ -616,7 +615,7 @@ public:
      * @param end last character in the set, inclusive
      * @stable ICU 2.4
      */
-    UnicodeSet& set(UChar32 start, UChar32 end);
+    UnicodeSet& set(UChar32 start, UChar32 end) U_LIFETIME_BOUND;
 
     /**
      * Return true if the given position, in the given pattern, appears
@@ -638,8 +637,7 @@ public:
      * @return a reference to this
      * @stable ICU 2.0
      */
-    UnicodeSet& applyPattern(const UnicodeString& pattern,
-                             UErrorCode& status);
+    UnicodeSet& applyPattern(const UnicodeString& pattern, UErrorCode& status) U_LIFETIME_BOUND;
 
 #ifndef U_HIDE_INTERNAL_API
     /**
@@ -663,7 +661,7 @@ public:
     UnicodeSet& applyPattern(const UnicodeString& pattern,
                              uint32_t options,
                              const SymbolTable* symbols,
-                             UErrorCode& status);
+                             UErrorCode& status) U_LIFETIME_BOUND;
 #endif  /* U_HIDE_INTERNAL_API */
 
     /**
@@ -703,7 +701,7 @@ public:
                              ParsePosition& pos,
                              uint32_t options,
                              const SymbolTable* symbols,
-                             UErrorCode& status);
+                             UErrorCode& status) U_LIFETIME_BOUND;
 
     /**
      * Returns a string representation of this set.  If the result of
@@ -718,7 +716,7 @@ public:
      * U+000A, U+0020..U+007E.
      * @stable ICU 2.0
      */
-    virtual UnicodeString& toPattern(UnicodeString& result,
+    virtual UnicodeString& toPattern(UnicodeString& result U_LIFETIME_BOUND,
                                      UBool escapeUnprintable = false) const override;
 
     /**
@@ -745,7 +743,7 @@ public:
      */
     UnicodeSet& applyIntPropertyValue(UProperty prop,
                                       int32_t value,
-                                      UErrorCode& ec);
+                                      UErrorCode& ec) U_LIFETIME_BOUND;
 
     /**
      * Modifies this set to contain those code points which have the
@@ -778,7 +776,7 @@ public:
      */
     UnicodeSet& applyPropertyAlias(const UnicodeString& prop,
                                    const UnicodeString& value,
-                                   UErrorCode& ec);
+                                   UErrorCode& ec) U_LIFETIME_BOUND;
 
     /**
      * Returns the number of elements in this set (its cardinality).
@@ -1119,7 +1117,7 @@ public:
      * @see begin
      * @see end
      */
-    inline U_HEADER_NESTED_NAMESPACE::USetCodePoints codePoints() const {
+    inline U_HEADER_NESTED_NAMESPACE::USetCodePoints codePoints() const U_LIFETIME_BOUND {
         return U_HEADER_NESTED_NAMESPACE::USetCodePoints(toUSet());
     }
 
@@ -1145,7 +1143,7 @@ public:
      * @see begin
      * @see end
      */
-    inline U_HEADER_NESTED_NAMESPACE::USetRanges ranges() const {
+    inline U_HEADER_NESTED_NAMESPACE::USetRanges ranges() const U_LIFETIME_BOUND {
         return U_HEADER_NESTED_NAMESPACE::USetRanges(toUSet());
     }
 
@@ -1169,7 +1167,7 @@ public:
      * @see begin
      * @see end
      */
-    inline U_HEADER_NESTED_NAMESPACE::USetStrings strings() const {
+    inline U_HEADER_NESTED_NAMESPACE::USetStrings strings() const U_LIFETIME_BOUND {
         return U_HEADER_NESTED_NAMESPACE::USetStrings(toUSet());
     }
 
@@ -1197,7 +1195,7 @@ public:
      * @see ranges
      * @see strings
      */
-    inline U_HEADER_NESTED_NAMESPACE::USetElementIterator begin() const {
+    inline U_HEADER_NESTED_NAMESPACE::USetElementIterator begin() const U_LIFETIME_BOUND {
         return U_HEADER_NESTED_NAMESPACE::USetElements(toUSet()).begin();
     }
 
@@ -1209,7 +1207,7 @@ public:
      * @see ranges
      * @see strings
      */
-    inline U_HEADER_NESTED_NAMESPACE::USetElementIterator end() const {
+    inline U_HEADER_NESTED_NAMESPACE::USetElementIterator end() const U_LIFETIME_BOUND {
         return U_HEADER_NESTED_NAMESPACE::USetElements(toUSet()).end();
     }
 
@@ -1227,7 +1225,7 @@ public:
      * to this set.
      * @stable ICU 2.0
      */
-    UnicodeSet& add(UChar32 start, UChar32 end);
+    UnicodeSet& add(UChar32 start, UChar32 end) U_LIFETIME_BOUND;
 
     /**
      * Adds the specified character to this set if it is not already
@@ -1239,7 +1237,7 @@ public:
      * @return this object, for chaining
      * @stable ICU 2.0
      */
-    UnicodeSet& add(UChar32 c);
+    UnicodeSet& add(UChar32 c) U_LIFETIME_BOUND;
 
     /**
      * Adds the specified multicharacter to this set if it is not already
@@ -1252,7 +1250,7 @@ public:
      * @return this object, for chaining
      * @stable ICU 2.4
      */
-    UnicodeSet& add(const UnicodeString& s);
+    UnicodeSet& add(const UnicodeString& s) U_LIFETIME_BOUND;
 
  private:
     /**
@@ -1273,7 +1271,7 @@ public:
      * @return this object, for chaining
      * @stable ICU 2.4
      */
-    UnicodeSet& addAll(const UnicodeString& s);
+    UnicodeSet& addAll(const UnicodeString& s) U_LIFETIME_BOUND;
 
     /**
      * Retains EACH of the characters in this string. Note: "ch" == {"c", "h"}
@@ -1282,7 +1280,7 @@ public:
      * @return this object, for chaining
      * @stable ICU 2.4
      */
-    UnicodeSet& retainAll(const UnicodeString& s);
+    UnicodeSet& retainAll(const UnicodeString& s) U_LIFETIME_BOUND;
 
     /**
      * Complement EACH of the characters in this string. Note: "ch" == {"c", "h"}
@@ -1291,7 +1289,7 @@ public:
      * @return this object, for chaining
      * @stable ICU 2.4
      */
-    UnicodeSet& complementAll(const UnicodeString& s);
+    UnicodeSet& complementAll(const UnicodeString& s) U_LIFETIME_BOUND;
 
     /**
      * Remove EACH of the characters in this string. Note: "ch" == {"c", "h"}
@@ -1300,7 +1298,7 @@ public:
      * @return this object, for chaining
      * @stable ICU 2.4
      */
-    UnicodeSet& removeAll(const UnicodeString& s);
+    UnicodeSet& removeAll(const UnicodeString& s) U_LIFETIME_BOUND;
 
     /**
      * Makes a set from a multicharacter string. Thus "ch" => {"ch"}
@@ -1333,7 +1331,7 @@ public:
      * @param end last character, inclusive, of range
      * @stable ICU 2.0
      */
-    UnicodeSet& retain(UChar32 start, UChar32 end);
+    UnicodeSet& retain(UChar32 start, UChar32 end) U_LIFETIME_BOUND;
 
 
     /**
@@ -1344,7 +1342,7 @@ public:
      * @return this object, for chaining
      * @stable ICU 2.0
      */
-    UnicodeSet& retain(UChar32 c);
+    UnicodeSet& retain(UChar32 c) U_LIFETIME_BOUND;
 
     /**
      * Retains only the specified string from this set if it is present.
@@ -1356,7 +1354,7 @@ public:
      * @return this object, for chaining
      * @stable ICU 69
      */
-    UnicodeSet& retain(const UnicodeString &s);
+    UnicodeSet& retain(const UnicodeString& s) U_LIFETIME_BOUND;
 
     /**
      * Removes the specified range from this set if it is present.
@@ -1371,7 +1369,7 @@ public:
      * from this set.
      * @stable ICU 2.0
      */
-    UnicodeSet& remove(UChar32 start, UChar32 end);
+    UnicodeSet& remove(UChar32 start, UChar32 end) U_LIFETIME_BOUND;
 
     /**
      * Removes the specified character from this set if it is present.
@@ -1383,7 +1381,7 @@ public:
      * @return this object, for chaining
      * @stable ICU 2.0
      */
-    UnicodeSet& remove(UChar32 c);
+    UnicodeSet& remove(UChar32 c) U_LIFETIME_BOUND;
 
     /**
      * Removes the specified string from this set if it is present.
@@ -1394,7 +1392,7 @@ public:
      * @return this object, for chaining
      * @stable ICU 2.4
      */
-    UnicodeSet& remove(const UnicodeString& s);
+    UnicodeSet& remove(const UnicodeString& s) U_LIFETIME_BOUND;
 
     /**
      * This is equivalent to
@@ -1408,7 +1406,7 @@ public:
      * A frozen set will not be modified.
      * @stable ICU 2.0
      */
-    UnicodeSet& complement();
+    UnicodeSet& complement() U_LIFETIME_BOUND;
 
     /**
      * Complements the specified range in this set.  Any character in
@@ -1422,7 +1420,7 @@ public:
      * @param end last character, inclusive, of range
      * @stable ICU 2.0
      */
-    UnicodeSet& complement(UChar32 start, UChar32 end);
+    UnicodeSet& complement(UChar32 start, UChar32 end) U_LIFETIME_BOUND;
 
     /**
      * Complements the specified character in this set.  The character
@@ -1434,7 +1432,7 @@ public:
      * @return this object, for chaining
      * @stable ICU 2.0
      */
-    UnicodeSet& complement(UChar32 c);
+    UnicodeSet& complement(UChar32 c) U_LIFETIME_BOUND;
 
     /**
      * Complement the specified string in this set.
@@ -1445,7 +1443,7 @@ public:
      * @return this object, for chaining
      * @stable ICU 2.4
      */
-    UnicodeSet& complement(const UnicodeString& s);
+    UnicodeSet& complement(const UnicodeString& s) U_LIFETIME_BOUND;
 
     /**
      * Adds all of the elements in the specified set to this set if
@@ -1459,7 +1457,7 @@ public:
      * @see #add(UChar32, UChar32)
      * @stable ICU 2.0
      */
-    UnicodeSet& addAll(const UnicodeSet& c);
+    UnicodeSet& addAll(const UnicodeSet& c) U_LIFETIME_BOUND;
 
     /**
      * Retains only the elements in this set that are contained in the
@@ -1472,7 +1470,7 @@ public:
      * @param c set that defines which elements this set will retain.
      * @stable ICU 2.0
      */
-    UnicodeSet& retainAll(const UnicodeSet& c);
+    UnicodeSet& retainAll(const UnicodeSet& c) U_LIFETIME_BOUND;
 
     /**
      * Removes from this set all of its elements that are contained in the
@@ -1485,7 +1483,7 @@ public:
      *          this set.
      * @stable ICU 2.0
      */
-    UnicodeSet& removeAll(const UnicodeSet& c);
+    UnicodeSet& removeAll(const UnicodeSet& c) U_LIFETIME_BOUND;
 
     /**
      * Complements in this set all elements contained in the specified
@@ -1497,7 +1495,7 @@ public:
      *          this set.
      * @stable ICU 2.4
      */
-    UnicodeSet& complementAll(const UnicodeSet& c);
+    UnicodeSet& complementAll(const UnicodeSet& c) U_LIFETIME_BOUND;
 
     /**
      * Removes all of the elements from this set.  This set will be
@@ -1505,7 +1503,7 @@ public:
      * A frozen set will not be modified.
      * @stable ICU 2.0
      */
-    UnicodeSet& clear();
+    UnicodeSet& clear() U_LIFETIME_BOUND;
 
     /**
      * Close this set over the given attribute.  For the attribute
@@ -1534,7 +1532,7 @@ public:
      * @return a reference to this set.
      * @stable ICU 4.2
      */
-    UnicodeSet& closeOver(int32_t attribute);
+    UnicodeSet& closeOver(int32_t attribute) U_LIFETIME_BOUND;
 
     /**
      * Remove all strings from this set.
@@ -1542,7 +1540,7 @@ public:
      * @return a reference to this set.
      * @stable ICU 4.2
      */
-    UnicodeSet &removeAllStrings();
+    UnicodeSet& removeAllStrings() U_LIFETIME_BOUND;
 
     /**
      * Iteration method that returns the number of ranges contained in
@@ -1627,7 +1625,7 @@ public:
      * A frozen set will not be modified.
      * @stable ICU 2.4
      */
-    UnicodeSet& compact();
+    UnicodeSet& compact() U_LIFETIME_BOUND;
 
     /**
      * Return the class ID for this class.  This is useful only for
@@ -1658,7 +1656,7 @@ public:
 
     friend class USetAccess;
 
-    const UnicodeString* getString(int32_t index) const;
+    const UnicodeString* getString(int32_t index) const U_LIFETIME_BOUND;
 
     //----------------------------------------------------------------
     // RuleBasedTransliterator support
@@ -1681,7 +1679,7 @@ private:
     //----------------------------------------------------------------
 
     UnicodeSet(const UnicodeSet& o, UBool /* asThawed */);
-    UnicodeSet& copyFrom(const UnicodeSet& o, UBool asThawed);
+    UnicodeSet& copyFrom(const UnicodeSet& o, UBool asThawed) U_LIFETIME_BOUND;
 
     //----------------------------------------------------------------
     // Implementation: Pattern parsing
@@ -1764,10 +1762,10 @@ private:
     int32_t stringsSize() const;
     UBool stringsContains(const UnicodeString &s) const;
 
-    UnicodeString& _toPattern(UnicodeString& result,
+    UnicodeString& _toPattern(UnicodeString& result U_LIFETIME_BOUND,
                               UBool escapeUnprintable) const;
 
-    UnicodeString& _generatePattern(UnicodeString& result,
+    UnicodeString& _generatePattern(UnicodeString& result U_LIFETIME_BOUND,
                                     UBool escapeUnprintable) const;
 
     static void _appendToPat(UnicodeString& buf, const UnicodeString& s, UBool escapeUnprintable);
@@ -1836,7 +1834,7 @@ private:
      */
     UnicodeSet& applyPropertyPattern(const UnicodeString& pattern,
                                      ParsePosition& ppos,
-                                     UErrorCode &ec);
+                                     UErrorCode& ec) U_LIFETIME_BOUND;
 
     /**
      * A filter that returns true if the given code point should be
@@ -1899,19 +1897,19 @@ inline UBool UnicodeSet::isBogus() const {
     return fFlags & kIsBogus;
 }
 
-inline UnicodeSet *UnicodeSet::fromUSet(USet *uset) {
+inline UnicodeSet* UnicodeSet::fromUSet(USet* uset U_LIFETIME_BOUND) {
     return reinterpret_cast<UnicodeSet *>(uset);
 }
 
-inline const UnicodeSet *UnicodeSet::fromUSet(const USet *uset) {
+inline const UnicodeSet* UnicodeSet::fromUSet(const USet* uset U_LIFETIME_BOUND) {
     return reinterpret_cast<const UnicodeSet *>(uset);
 }
 
-inline USet *UnicodeSet::toUSet() {
-    return reinterpret_cast<USet *>(this);
+inline USet* UnicodeSet::toUSet() U_LIFETIME_BOUND {
+    return reinterpret_cast<USet*>(this);
 }
 
-inline const USet *UnicodeSet::toUSet() const {
+inline const USet* UnicodeSet::toUSet() const U_LIFETIME_BOUND {
     return reinterpret_cast<const USet *>(this);
 }
 
