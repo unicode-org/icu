@@ -5028,7 +5028,8 @@ public class UnicodeSet extends UnicodeFilter
         }
     }
 
-    void parseSetOperations(UnicodeSetLexer lexer, StringBuilder rebuiltPat, int options, int depth) {
+    void parseSetOperations(
+            UnicodeSetLexer lexer, StringBuilder rebuiltPat, int options, int depth) {
         // https://www.unicode.org/reports/tr61/#SetOperation:
         //   SetOperation ::= Union
         //                  | Intersection
