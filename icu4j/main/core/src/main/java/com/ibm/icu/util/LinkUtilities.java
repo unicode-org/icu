@@ -16,6 +16,9 @@ import com.ibm.icu.impl.links.LinkHandlingUtilities.UrlInternals.EndStatus;
  */
 public class LinkUtilities {
 
+    // private constructor to prevent default construction
+    private LinkUtilities() {}
+
     /**
      * Lower level utility for finding the end of a PathQueryFragment (PQF) in text. It assumes that
      * the start position is immediately after an identified domain name. The purpose of this
