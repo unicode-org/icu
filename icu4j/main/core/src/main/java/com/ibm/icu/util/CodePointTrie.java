@@ -228,6 +228,13 @@ public abstract class CodePointTrie extends CodePointMap {
             dataLength |= ((options & OPTIONS_DATA_LENGTH_MASK) << 4);
             dataNullOffset |= ((options & OPTIONS_DATA_NULL_OFFSET_MASK) << 8);
 
+            // Validate minimum lengths.
+            if (indexLength <= 0 || dataLength <= ASCII_LIMIT
+                    || dataLength < HIGH_VALUE_NEG_DATA_OFFSET) {
+                throw new ICUUncheckedIOException(
+                        "CodePointTrie data header has invalid index or data length");
+            }
+
             int highStart = shiftedHighStart << SHIFT_2;
 
             // Calculate the actual length, minus the header.
@@ -244,6 +251,16 @@ public abstract class CodePointTrie extends CodePointMap {
             }
 
             char[] index = ICUBinary.getChars(bytes, indexLength, 0);
+
+            // Validate index entries: each value + FAST_DATA_MASK must be < dataLength.
+            int maxDataIndex = dataLength - 1;
+            for (int i = 0; i < indexLength; ++i) {
+                if ((int) index[i] + FAST_DATA_MASK > maxDataIndex) {
+                    throw new ICUUncheckedIOException(
+                            "CodePointTrie index entry out of range at " + i);
+                }
+            }
+
             switch (valueWidth) {
                 case BITS_16:
                     {

@@ -1202,4 +1202,26 @@ public final class CodePointTrieTest extends CoreTestFmwk {
     public void BlockPropertyTest() {
         testIntProperty("block", "[:^blk=No_Block:]", UProperty.BLOCK);
     }
+
+    @Test
+    public void TestMalformedSerializedCPTrie() {
+        // Crafted UCPTrie data with out-of-range index entries.
+        // Must throw an exception, not produce out-of-bounds reads.
+        byte[] data = {
+            0x54, 0x72, 0x69, 0x33,  // signature "Tri3" (big-endian)
+            0x00, 0x00,              // options
+            0x00, 0x0f,              // indexLength = 15
+            0x00, 0x00,              // dataLength bits 15..0 = 0 (too small)
+            0x00, 0x00,              // index3NullOffset
+            0x00, 0x00,              // dataNullOffset
+            0x00, 0x00               // shiftedHighStart
+        };
+        ByteBuffer buf = ByteBuffer.wrap(data);
+        try {
+            CodePointTrie.fromBinary(null, null, buf);
+            errln("Expected exception from malformed CodePointTrie data");
+        } catch (Exception e) {
+            // Expected
+        }
+    }
 }
