@@ -1140,7 +1140,11 @@ SimpleTimeZone::initTransitionRules(UErrorCode& status) {
         }
  
         // Calculate the first DST start time
-        dstRule->getFirstStart(getRawOffset(), 0, firstDstStart);
+        if (!dstRule->getFirstStart(getRawOffset(), 0, firstDstStart)) {
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            deleteTransitionRules();
+            return;
+        }
 
         // Create a TimeZoneRule for standard time
         timeRuleType = (endTimeMode == STANDARD_TIME) ? DateTimeRule::STANDARD_TIME :
@@ -1178,7 +1182,11 @@ SimpleTimeZone::initTransitionRules(UErrorCode& status) {
         }
 
         // Calculate the first STD start time
-        stdRule->getFirstStart(getRawOffset(), dstRule->getDSTSavings(), firstStdStart);
+        if (!stdRule->getFirstStart(getRawOffset(), dstRule->getDSTSavings(), firstStdStart)) {
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            deleteTransitionRules();
+            return;
+        }
 
         // Create a TimeZoneRule for initial time
         if (firstStdStart < firstDstStart) {

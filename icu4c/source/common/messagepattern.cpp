@@ -1150,6 +1150,10 @@ MessagePattern::setParseError(UParseError *parseError, int32_t index) {
     if(parseError==nullptr) {
         return;
     }
+    if (msg.length() < index) {
+        U_ASSERT(msg.length() >= index);
+        return;
+    }
     parseError->offset=index;
 
     // Set preContext to some of msg before index.

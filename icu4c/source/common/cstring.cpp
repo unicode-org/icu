@@ -329,12 +329,14 @@ uprv_strndup(const char *src, int32_t n) {
 
     if(n < 0) {
         dup = uprv_strdup(src);
-    } else {
+    } else if (n < INT32_MAX) {
         dup = (char*)uprv_malloc(n+1);
         if (dup) { 
             uprv_memcpy(dup, src, n);
             dup[n] = 0;
         }
+    } else {
+        dup = nullptr;
     }
 
     return dup;
