@@ -74,10 +74,10 @@ a given kind. For example, `[:^Letter:]` matches all characters that are not
 for Letter) or Script; the property value Yes can be omitted for a binary property,
 as in `[:White_Space:]`.
 
-|  | POSIX-style Syntax | Perl-style Syntax | Corresponding method
-|--------------------|------------------|-------------------|
-| Positive | `[:propertyName=value:]` | `\p{propertyName=value}` | .applyPropertyAlias​(propertyName, value)
-| Negative  | `[:^propertyName=value:]` or `[:propertyName≠value:]` | `\P{propertyName=value}` or `\p{propertyName≠value}` | .applyPropertyAlias​(propertyName, value).complement().removeAllStrings() |
+|          | POSIX-style Syntax       | Perl-style Syntax        | Corresponding method                     |
+|----------|--------------------------|--------------------------|------------------------------------------|
+| Positive | `[:propertyName=value:]` | `\p{propertyName=value}` | .applyPropertyAlias​(propertyName, value) |
+| Negative | `[:^propertyName=value:]` or `[:propertyName≠value:]` | `\P{propertyName=value}` or `\p{propertyName≠value}` | .applyPropertyAlias(propertyName, value).complement().removeAllStrings() |
 
 These low-level lists or properties then can be freely combined with
 the normal set operations (union, intersection, difference, and complement).
