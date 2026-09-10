@@ -1344,7 +1344,7 @@ void UnicodeSet::parseElements(Lexer &lexer,
     rebuiltPat.append(u'-');
     UChar32 last;
     if (lexer.lookahead().isSetOperator(u'$')) {
-        // Disallowed by UTS #61, but historically accepted by ICU except at the end of a Union.
+        // Disallowed by UTS #61, but historically accepted by ICU except at the end of a Content.
         // This is an extension.
         last = u'$';
         if (lexer.lookahead2().isSetOperator(u']')) {
