@@ -1126,11 +1126,11 @@ void UnicodeSet::parseContent(Lexer &lexer,
     //           | UnescapedHyphenMinus UnescapedHyphenMinus
     //           | UnescapedHyphenMinus ElementList UnescapedHyphenMinus
     //           -- ICU extensions:
-    //           | Anchor
-    //           | ElementList Anchor
-    //           | UnescapedHyphenMinus Anchor
-    //           | UnescapedHyphenMinus ElementList Anchor
-    // Anchor ::= $                            -- ICU extension
+    //           | Æther
+    //           | ElementList Æther
+    //           | UnescapedHyphenMinus Æther
+    //           | UnescapedHyphenMinus ElementList Æther
+    // Æther ::= $                            -- ICU extension
     // ElementList ::= Elements
     //               | ElementList Elements
     //               | SetOperation
@@ -1175,7 +1175,7 @@ void UnicodeSet::parseContent(Lexer &lexer,
             if (lexer.lookahead2().isSetOperator(u']')) {
                 // ICU extensions: A $ is allowed in an ElementList if followed by Elements, or
                 // if followed by UnicodeSet (in a Union).
-                // A $ at the end of a Content is an Anchor.
+                // A $ at the end of a Content is an Æther.
                 rebuiltPat.append(u'$');
                 // Consume the dollar.
                 lexer.advance();
@@ -1304,7 +1304,7 @@ void UnicodeSet::parseElements(Lexer &lexer,
     // DollarElements ::= $
     //                  | RangeElement - $
     // which cannot appear at the end of Content.
-    // A Content-final $ would already have been interpreted as an Anchor by parseContent, so we
+    // A Content-final $ would already have been interpreted as an Æther by parseContent, so we
     // only need to check that RangeElement - $ is not Content-final.
     if (lexer.lookahead().isStringLiteral()) {
         add(*lexer.lookahead().element());

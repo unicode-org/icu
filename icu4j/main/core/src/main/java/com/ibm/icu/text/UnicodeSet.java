@@ -4967,21 +4967,21 @@ public class UnicodeSet extends UnicodeFilter
         //           | UnescapedHyphenMinus UnescapedHyphenMinus
         //           | UnescapedHyphenMinus ElementList UnescapedHyphenMinus
         //           -- ICU extensions:
-        //           | Anchor
-        //           | ElementList Anchor
-        //           | UnescapedHyphenMinus Anchor
-        //           | UnescapedHyphenMinus ElementList Anchor
-        // Anchor ::= $                            -- ICU extension
+        //           | Æther
+        //           | ElementList Æther
+        //           | UnescapedHyphenMinus Æther
+        //           | UnescapedHyphenMinus ElementList Æther
+        // Æther ::= $                              -- ICU extension
         // ElementList ::= Elements
         //               | ElementList Elements
         //               | SetOperation
-        //               | DollarElements Elements -- ICU extension
+        //               | DollarElements Elements  -- ICU extension
         // SetOperation ::= Union
         //                | Intersection
         //                | Difference
         // Union ::= UnicodeSet
         //         | ElementList UnicodeSet
-        //         | DollarElements UnicodeSet     -- ICU extension
+        //         | DollarElements UnicodeSet      -- ICU extension
         // -- ICU extension:
         // DollarElements ::= $
         //                  | RangeElement-$
@@ -5016,7 +5016,7 @@ public class UnicodeSet extends UnicodeFilter
                 if (lexer.lookahead2().isSetOperator(']')) {
                     // ICU extensions: A $ is allowed in an ElementList if followed by Elements, or
                     // if followed by UnicodeSet (in a Union).
-                    // A $ at the end of a Content is an Anchor.
+                    // A $ at the end of a Content is an Æther.
                     rebuiltPat.append('$');
                     // Consume the dollar.
                     lexer.advance();
@@ -5132,7 +5132,7 @@ public class UnicodeSet extends UnicodeFilter
         // DollarElements ::= $
         //                  | RangeElement - $
         // which cannot appear at the end of Content.
-        // A Content-final $ would already have been interpreted as an Anchor by parseContent, so we
+        // A Content-final $ would already have been interpreted as an Æther by parseContent, so we
         // only need to check that RangeElement - $ is not Content-final.
         if (lexer.lookahead().isStringLiteral()) {
             add(lexer.lookahead().element());
