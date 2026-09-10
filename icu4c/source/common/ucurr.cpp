@@ -637,7 +637,7 @@ static UBool fallback(CharString& loc) {
 
 
 U_CAPI const char16_t* U_EXPORT2
-ucurr_getName(const char16_t* currency,
+ucurr_getName(const char16_t* currency U_LIFETIME_BOUND,
               const char* locale,
               UCurrNameStyle nameStyle,
               UBool* isChoiceFormat, // fillin
@@ -754,7 +754,7 @@ ucurr_getName(const char16_t* currency,
 }
 
 U_CAPI const char16_t* U_EXPORT2
-ucurr_getPluralName(const char16_t* currency,
+ucurr_getPluralName(const char16_t* currency U_LIFETIME_BOUND,
                     const char* locale,
                     UBool* isChoiceFormat,
                     const char* pluralCount,

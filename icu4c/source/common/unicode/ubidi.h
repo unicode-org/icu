@@ -1349,8 +1349,8 @@ ubidi_getBaseDirection(const UChar *text,  int32_t length );
  * @see ubidi_setLine
  * @stable ICU 2.0
  */
-U_CAPI const UChar * U_EXPORT2
-ubidi_getText(const UBiDi *pBiDi);
+U_CAPI const UChar* U_EXPORT2
+ubidi_getText(const UBiDi* pBiDi U_LIFETIME_BOUND);
 
 /**
  * Get the length of the text.
@@ -1499,8 +1499,8 @@ ubidi_getLevelAt(const UBiDi *pBiDi, int32_t charIndex);
  * @see ubidi_getProcessedLength
  * @stable ICU 2.0
  */
-U_CAPI const UBiDiLevel * U_EXPORT2
-ubidi_getLevels(UBiDi *pBiDi, UErrorCode *pErrorCode);
+U_CAPI const UBiDiLevel* U_EXPORT2
+ubidi_getLevels(UBiDi* pBiDi U_LIFETIME_BOUND, UErrorCode* pErrorCode);
 
 /**
  * Get a logical run.

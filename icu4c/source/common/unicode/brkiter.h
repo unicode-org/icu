@@ -152,7 +152,7 @@ public:
      * Return a CharacterIterator over the text being analyzed.
      * @stable ICU 2.0
      */
-    U_COMMON_API virtual CharacterIterator& getText() const = 0;
+    U_COMMON_API virtual CharacterIterator& getText() const U_LIFETIME_BOUND = 0;
 
     /**
       *  Get a UText for the text being analyzed.
@@ -595,7 +595,8 @@ public:
      *  @return the locale
      *  @internal
      */
-    U_COMMON_API const char* getLocaleID(ULocDataLocaleType type, UErrorCode& status) const;
+    U_COMMON_API const char* getLocaleID(ULocDataLocaleType type,
+                                         UErrorCode& status) const U_LIFETIME_BOUND;
 #endif  /* U_HIDE_INTERNAL_API */
 
     /**
@@ -623,7 +624,8 @@ public:
      *
      * @stable ICU 49
      */
-    U_COMMON_API virtual BreakIterator& refreshInputText(UText* input, UErrorCode& status) = 0;
+    U_COMMON_API virtual BreakIterator& refreshInputText(UText* input,
+                                                         UErrorCode& status) U_LIFETIME_BOUND = 0;
 
  private:
     static BreakIterator* buildInstance(const Locale& loc, const char *type, UErrorCode& status);
@@ -644,7 +646,7 @@ protected:
     /** @internal */
     U_COMMON_API BreakIterator(const Locale& valid, const Locale& actual);
     /** @internal. Assignment Operator, used by RuleBasedBreakIterator. */
-    U_COMMON_API BreakIterator& operator=(const BreakIterator& other);
+    U_COMMON_API BreakIterator& operator=(const BreakIterator& other) U_LIFETIME_BOUND;
 #endif  /* U_HIDE_INTERNAL_API */
 
 private:
