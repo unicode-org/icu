@@ -4422,9 +4422,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
                         "[!-$]",
                         "Expected Term after Range ending in unescaped $, got set-operator '$' followed by set-operator ']' [!-☞$]"
                     },
-                    {
-                        "[a-a]", "Expected first < last in Range, got a-a [a-☞a]"
-                    }, // TODO(egg): Exclude in PDUTS61.
+                    {"[a-a]", "Expected first < last in Range, got a-a [a-☞a]"},
                     {"[z-a]", "Expected first < last in Range, got a-z [z-☞a]"},
                     {"[[a]-z]", "Expected property-query | [, got literal-element 'z' [[a]-☞z]"},
                     {"[[a]&z]", "Expected property-query | [, got literal-element 'z' [[a]&☞z]"},
