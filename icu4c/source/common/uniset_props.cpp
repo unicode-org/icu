@@ -1202,6 +1202,8 @@ void UnicodeSet::parseMutation(Lexer &lexer,
                                UErrorCode &ec) {
     // Mutation ::= Elements
     //            | SetOperations
+    // SetOperations ::= UnicodeSet RightHandSides
+    // So if we see the beginning of a UnicodeSet, we have SetOperations.
     if (lexer.lookahead().isSetOperator('[') || lexer.lookahead().set() != nullptr) {
         containsSetOperation = true;
         parseSetOperations(lexer, rebuiltPat, options, caseClosure, depth, ec);
