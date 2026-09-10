@@ -105,10 +105,19 @@ Edit icuver.txt directly.
 > :point_right: **Note**: The maven commands _must_ be executed from the
 root of the ICU project, not from `<ICU>/icu4j`. This is a slight change from ICU versions 74-78.
 
+WARNING: the `newVersion` should have `-SNAPSHOT` in the `main` branch,
+that will be removed in `maint-{ver}`.
+
 ```sh
 cd $ICU_DIR
-mvn versions:set -DnewVersion=79.1 -DgenerateBackupPoms=false
+export newVersion=79.1-SNAPSHOT
+# In `maint-{ver}`, before releasing
+export newVersion=79.1
+mvn versions:set -DnewVersion=${newVersion} -DgenerateBackupPoms=false
 ```
+
+Manually edit and update the parent version in `tools/cldr/cldr-to-icu/pom.xml`
+and `tools/release/java/pom.xml` (this is something to fix).
 
 #### Since ICU 74
 
