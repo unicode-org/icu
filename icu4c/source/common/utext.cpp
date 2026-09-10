@@ -2101,6 +2101,7 @@ unistrTextClone(UText *dest, const UText *src, UBool deep, UErrorCode *status) {
     if (deep && U_SUCCESS(*status)) {
         const UnicodeString *srcString = (const UnicodeString *)src->context;
         dest->context = new UnicodeString(*srcString);
+        dest->chunkContents = ((const UnicodeString *)dest->context)->getBuffer();
         dest->providerProperties |= I32_FLAG(UTEXT_PROVIDER_OWNS_TEXT);
 
         // with deep clone, the copy is writable, even when the source is not.
@@ -2376,6 +2377,7 @@ ucstrTextClone(UText *dest, const UText * src, UBool deep, UErrorCode * status) 
             }
             copyStr[len] = 0;
             dest->context = copyStr;
+            dest->chunkContents = copyStr;
             dest->providerProperties |= I32_FLAG(UTEXT_PROVIDER_OWNS_TEXT);
         }
     }
