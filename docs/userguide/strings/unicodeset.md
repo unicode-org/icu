@@ -175,7 +175,7 @@ ICU interprets some expressions that are ill-formed according to the UnicodeSet 
 * A `$` at the end of [Content](https://www.unicode.org/reports/tr61/#Content) (that is, preceding a
   closing bracket `]`) represents the noncharacter code point U+FFFF.
   This is used as an anchor for the start or end of text in transform rules, see Section
-  [Æther](../transforms/general/rules.html#%C3%A6therrules.md#%C3%A6ther) of
+  [Æther](../transforms/general/rules.md#%C3%A6ther) of
   the transform rule tutorial.
 
   Anywhere else, a `$` is allowed as if it were a
