@@ -14,8 +14,8 @@ License & terms of use: http://www.unicode.org/copyright.html
 ## Overview
 
 A UnicodeSet is an object that represents a finite set of Unicode code point
-sequences.  The contents of that object can be specified either by
-patterns using the UnicodeSet syntax defined in 
+sequences, optimized for single code points.  The contents of that object can be specified either by
+pattern strings using the UnicodeSet syntax defined in 
 [Draft Unicode Technical Standard #61, Unicode Set Notation](https://www.unicode.org/reports/tr61/),
 or by building them programmatically.
 
@@ -49,7 +49,7 @@ however, it is ignored in matching functions such as `span(string)`.
 
 ## UnicodeSet Patterns
 
-UnicodeSet objects can be constructed from patterns in the notation defined in
+UnicodeSet objects can be constructed from pattern strings using the notation defined in
 [Draft Unicode Technical Standard #61, Unicode Set Notation](https://www.unicode.org/reports/tr61/);
 see the [#Conformance] section for specifics.
 
@@ -107,9 +107,9 @@ corresponds to the following UnicodeSet operations:
 3.  removeAll `[abc]` *-- we now have `[def]`*
 4.  addAll `[def]` *-- no effect, we still have `[def]`*
 
-This only really matters when the union and intersection operation are used together,
-operation, or when the difference operation is used, as union and intersection are
-associative. To make sure that the - is
+This only really matters when the union and intersection operations are used together,
+or when the difference operation is used, as union and intersection are
+each associative. To make sure that the - is
 the main operator, add brackets to group the operations as desired, such as
 `[[ace][bdf] - [[abc][def]]]`.
 
@@ -145,7 +145,7 @@ When matching property names and property values in property queries,
 ICU uses an older version of rule UAX44-LM3 which does not ignore the prefix `is`:
 thus `\p{isSpaceSeparator}` is ill-formed.
 The remainder of rule UAX44-LM3 is supported:
-`[:general-category = SPACE SEPARATOR:]` accepted, and equivalent to
+`[:general-category = SPACE SEPARATOR:]` is accepted, and equivalent to
 `[:General_Category=Space_Separator:]`.
 
 When matching character names in property queries for the `Name` property
