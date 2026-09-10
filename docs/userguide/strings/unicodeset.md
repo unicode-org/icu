@@ -153,6 +153,14 @@ The remainder of rule UAX44-LM3 is supported:
 `[:general-category = SPACE SEPARATOR:]` is accepted, and equivalent to
 `[:General_Category=Space_Separator:]`.
 
+When querying the Age property, only values matching `[0-9]+(\.[0-9]+(\.[0-9]+)?)?`
+are supported: other values matching aliases for the Age property under UAX44-LM3,
+such as `V17_0`, `v170`, or `1 7.0`, are not supported.
+
+When querying numeric properties, rational values are not supported;
+see section [Valid Values and Resolved Sets](https://unicode-org.github.io/unicode-reports/tr61/tr61.html#Valid-Values-and-Resolved-Sets) of DUTS #61.
+Only binary64 floating-point values are supported.
+
 When matching character names in property queries for the `Name` property
 and in [named-element](https://www.unicode.org/reports/tr61/#named-element)s,
 formal aliases of type other than `correction` are ignored.
