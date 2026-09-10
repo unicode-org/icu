@@ -172,35 +172,81 @@ ICU interprets some expressions that are ill-formed according to the UnicodeSet 
 * A [string-literal](https://www.unicode.org/reports/tr61/#string-literal) is
   allowed to contain [escaped-element](https://www.unicode.org/reports/tr61/#escaped-element)s
   representing surrogate code points.
-* `$` is added as a [set-operator](https://www.unicode.org/reports/tr61/#set-operator), and the
-  following alternatives are added to [Content](https://www.unicode.org/reports/tr61/#Content)</a>:
-  > | `$`  
-  > | [ElementList](https://www.unicode.org/reports/tr61/#ElementList) `$`  
-  > | [UnescapedHyphenMinus](https://www.unicode.org/reports/tr61/#UnescapedHyphenMinus) [ElementList](https://www.unicode.org/reports/tr61/#ElementList) `$`
-  The following alternative is added to [ElementList](https://www.unicode.org/reports/tr61/#ElementList):
-  > | `$` [Elements](https://www.unicode.org/reports/tr61/#Elements)
-  The following alternative is added to [Union](https://www.unicode.org/reports/tr61/#Union):
-  > | `$` [UnicodeSet](https://www.unicode.org/reports/tr61/#UnicodeSet)
+* A `$` at the end of [Content](https://www.unicode.org/reports/tr61/#Content) (that is, preceding a
+  closing bracket `]`) represents the noncharacter code point U+FFFF.
+  This is used as an anchor for the start or end of text in transform rules, see Section
+  [Æther](../transforms/general/rules.html#%C3%A6therrules.md#%C3%A6ther) of
+  the transform rule tutorial.
+
+  Anywhere else, a `$` is allowed as if it were a
+  [literal-element](https://www.unicode.org/reports/tr61/#literal-element),
+  representing the character U+0024 `$` DOLLAR SIGN either alone in element lists or in a range.
+
+  Formally, the situation is a little more complicated: adding `$` representing itself to
+  [literal-element](https://www.unicode.org/reports/tr61/#literal-element) would allow it at the end
+  of [Content](https://www.unicode.org/reports/tr61/#Content), and adding alternatives to the
+  [Content](https://www.unicode.org/reports/tr61/#Content) production with a final `$` representing
+  U+FFFF would make the grammar ambiguous.
+
+  Instead, `$` is added as a [set-operator](https://www.unicode.org/reports/tr61/#set-operator),
+  and the grammar is modified as follows.
+
+  The following syntactic categories are introduced:
+  > <dfn id="Anchor">[Anchor](#Anchor)</dfn> ⩴ `$`  
+  > <dfn id="DollarElements"> ⩴ `$` | [RangeElement](https://www.unicode.org/reports/tr61/#RangeElement) `-` `$`
+
+  The following alternatives are added to the
+  [Content](https://www.unicode.org/reports/tr61/#Content) production:
+  > | [Anchor](#Anchor)  
+  > | [ElementList](https://www.unicode.org/reports/tr61/#ElementList) [Anchor](#Anchor)  
+  > | [UnescapedHyphenMinus](https://www.unicode.org/reports/tr61/#UnescapedHyphenMinus) [Anchor](#Anchor)  
+  > | [UnescapedHyphenMinus](https://www.unicode.org/reports/tr61/#UnescapedHyphenMinus) [ElementList](https://www.unicode.org/reports/tr61/#ElementList) [Anchor](#Anchor)
+
+  The following alternative is added to the [ElementList](https://www.unicode.org/reports/tr61/#ElementList) production:
+  > | [DollarElements](#DollarElements) [Elements](https://www.unicode.org/reports/tr61/#Elements)
+
+  The following alternative is added to the [Union](https://www.unicode.org/reports/tr61/#Union) production:
+  > | [DollarElements](#DollarElements) [UnicodeSet](https://www.unicode.org/reports/tr61/#UnicodeSet)
+
+  The following alternative is added to the [Range](https://www.unicode.org/reports/tr61/#Range) production:
+  > | `$` - [RangeElement](https://www.unicode.org/reports/tr61/#RangeElement)
+
   When the [set-operator](https://www.unicode.org/reports/tr61/#set-operator) `$` occurs
-  as an immediate constituent of a [Content](https://www.unicode.org/reports/tr61/#Content)</a>,
+  as an immediate constituent of an [Anchor](#Anchor)</a>,
   it represents the noncharacter code point U+FFFF.
+
   When it occurs anywhere else, it represents the character U+0024 $ DOLLAR SIGN.
+
+  A [DollarElements](#DollarElements) construct of the form 𝑥 `-` `$`, where 𝑥 is a
+  [RangeElement](https://www.unicode.org/reports/tr61/#RangeElement),
+  is equivalent to the [Range](#Range) 𝑥 `-` `\N{0024:$:DOLLAR SIGN}`.
+
 * If a `SymbolTable` is passed to the constructor of `UnicodeSet`, a new lexical
   element is introduced:
-  > variable ⩴ $ reference
+  > <dfn id="variable">[variable](#variable)</dfn> ⩴ $ [reference](#reference)
+
   where the function `SymbolTable::parseReference` defines the syntactic category
-  reference. The expansion of a variable is defined by `SymbolTable::lookup`; it
+  <dfn id="reference">[reference](#reference)<dfn>.
+
+  The expansion of a [variable](#variable) is defined by `SymbolTable::lookup`; it
   disambiguates the syntactic category as follows:
   * If the expansion is a [UnicodeSet](https://www.unicode.org/reports/tr61/#UnicodeSet), the variable
-    is a *set-valued*-variable.
+    is a *set-valued*-[variable](#variable).
   * If the expansion is a [RangeElement](https://www.unicode.org/reports/tr61/#RangeElement), the
-     variable is a *code-point-valued*-variable.
+    variable is a *code-point-valued*-[variable](#variable).
   * If the expansion is a [string-literal](https://www.unicode.org/reports/tr61/#string-literal), the
-     variable is a *string-valued*-variable.
+    variable is a *string-valued*-[variable](#variable).
   * Otherwise, the variable is ill-defined, and the `UnicodeSet` constructor fails.
-  An alternative *set-valued*-variable is added to [UnicodeSet](https://www.unicode.org/reports/tr61/#UnicodeSet),
-  an alternative *code-point-valued*-variable is added to [RangeElement](https://www.unicode.org/reports/tr61/#RangeElement),
-  and an alternative *string-valued*-variable is added to [Element](https://www.unicode.org/reports/tr61/#Element).
+  The following alternative is added to the [UnicodeSet](https://www.unicode.org/reports/tr61/#UnicodeSet) production:
+  > | *set-valued*-[variable](#variable)
+
+  The following alternative is added to the [RangeElement](https://www.unicode.org/reports/tr61/#RangeElement) production:
+  > | *code-point-valued*-[variable](#variable)
+
+  The following alternative is added to the [Element](https://www.unicode.org/reports/tr61/#Element):
+  > | *string-valued*-[variable](#variable)
+
+  The [variable](#variable) represents the same set of code point sequences as its expansion.
 
 ## Using a UnicodeSet
 
