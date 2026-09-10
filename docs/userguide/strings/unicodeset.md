@@ -77,7 +77,7 @@ as in `[:White_Space:]`.
 |  | POSIX-style Syntax | Perl-style Syntax | Corresponding method
 |--------------------|------------------|-------------------|
 | Positive | `[:propertyName=value:]` | `\p{propertyName=value}` | .applyPropertyAlias​(propertyName, value)
-| Negative  | `[:^propertyName=value:]` or `[:propertyName=≠value:]` | `\P{propertyName=value}` or `\p{propertyName=≠value}` | .applyPropertyAlias​(propertyName, value).complement().removeAllStrings() |
+| Negative  | `[:^propertyName=value:]` or `[:propertyName≠value:]` | `\P{propertyName=value}` or `\p{propertyName≠value}` | .applyPropertyAlias​(propertyName, value).complement().removeAllStrings() |
 
 These low-level lists or properties then can be freely combined with
 the normal set operations (union, intersection, difference, and complement).
