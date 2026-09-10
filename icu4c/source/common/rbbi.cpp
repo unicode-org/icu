@@ -73,7 +73,7 @@ RuleBasedBreakIterator::RuleBasedBreakIterator(RBBIDataHeader* data, UErrorCode 
     }
     if (fData->fForwardTable->fLookAheadResultsSize > 0) {
         fLookAheadMatches = static_cast<int32_t *>(
-            uprv_malloc(fData->fForwardTable->fLookAheadResultsSize * sizeof(int32_t)));
+            uprv_calloc(fData->fForwardTable->fLookAheadResultsSize, sizeof(int32_t)));
         if (fLookAheadMatches == nullptr) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
@@ -123,7 +123,7 @@ RuleBasedBreakIterator::RuleBasedBreakIterator(const uint8_t *compiledRules,
     }
     if (fData->fForwardTable->fLookAheadResultsSize > 0) {
         fLookAheadMatches = static_cast<int32_t *>(
-            uprv_malloc(fData->fForwardTable->fLookAheadResultsSize * sizeof(int32_t)));
+            uprv_calloc(fData->fForwardTable->fLookAheadResultsSize, sizeof(int32_t)));
         if (fLookAheadMatches == nullptr) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
@@ -149,7 +149,7 @@ RuleBasedBreakIterator::RuleBasedBreakIterator(UDataMemory* udm, UErrorCode &sta
     }
     if (fData->fForwardTable->fLookAheadResultsSize > 0) {
         fLookAheadMatches = static_cast<int32_t *>(
-            uprv_malloc(fData->fForwardTable->fLookAheadResultsSize * sizeof(int32_t)));
+            uprv_calloc(fData->fForwardTable->fLookAheadResultsSize, sizeof(int32_t)));
         if (fLookAheadMatches == nullptr) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
@@ -319,7 +319,7 @@ RuleBasedBreakIterator::operator=(const RuleBasedBreakIterator& that) {
     fLookAheadMatches = nullptr;
     if (fData && fData->fForwardTable->fLookAheadResultsSize > 0) {
         fLookAheadMatches = static_cast<int32_t *>(
-            uprv_malloc(fData->fForwardTable->fLookAheadResultsSize * sizeof(int32_t)));
+            uprv_calloc(fData->fForwardTable->fLookAheadResultsSize, sizeof(int32_t)));
     }
 
 
