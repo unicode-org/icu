@@ -1150,11 +1150,12 @@ void UnicodeSet::parseContent(Lexer &lexer,
     //               | DollarElements Mutation Mutations  -- ICU extension
     // Mutations ::= ""
     //             | Mutation Mutations
-    //             | DollarElements Mutation Mutations  -- ICU extension
-    // Where a Mutation is not a subexpression, but a modification of the enclosing ElementList
-    // (either adding or removing characters).
-    // This means that parseMutation adds or removes elements to this object, instead of returning a
-    // set.
+    //             | DollarElements Mutation Mutations    -- ICU extension
+    // Where a Mutation is not a subexpression, but a modification of the enclosing ElementList,
+    // either adding or removing characters; this means that parseMutation adds to or removes from
+    // this object, instead of returning a set.
+    // In parseSetOperations below, we will describe the logic both in terms of the LR expression
+    // grammar, and in terms of the LL grammar.
     if (lexer.acceptSetOperator(u'-')) {
         add(u'-');
         // When we otherwise preserve the syntax, we escape an initial UnescapedHyphenMinus, but not a
@@ -1241,13 +1242,17 @@ void UnicodeSet::parseSetOperations(Lexer &lexer,
     leftHandSide.parseUnicodeSet(lexer, rebuiltPat, options, caseClosure, depth + 1, ec);
     addAll(leftHandSide);
     U_UNICODESET_RETURN_IF_ERROR(ec);
-    // Now this object is the Union, which is a SetOperation; it might be the SetOperation of an
-    // Intersection or a Difference.
+    // In terms of the LR expression grammar, at this point this object is the Union, which is a
+    // SetOperation (strictly speaking this object can also contain an additional - from a
+    // Content-initial UnescapedHyphenMinus).
 
     // Keep looking for an operator that would continue the RightHandSides in the LL grammar.
     // The loop terminates because when we run out of source text, the lookahead token will not be a
     // set operator, so that we hit the else branch and return.
     for (;;) {
+        // In terms of the LR expression grammar, ignoring Content-initial UnescapedHyphenMinus, at
+        // this point this object is a SetOperation; if & follows, we have an Intersection; if -
+        // follows, we have a Difference.
         if (lexer.acceptSetOperator(u'&')) {
             // Intersection ::= SetOperation & UnicodeSet
             rebuiltPat.append(u'&');
