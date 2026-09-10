@@ -192,8 +192,8 @@ ICU interprets some expressions that are ill-formed according to the UnicodeSet 
   and the grammar is modified as follows.
 
   The following syntactic categories are introduced:
-  > <dfn id="Anchor">[Anchor](#Anchor)</dfn> ⩴ `$`  
-  > <dfn id="DollarElements"> ⩴ `$` | [RangeElement](https://www.unicode.org/reports/tr61/#RangeElement) `-` `$`
+  > <a id="Anchor"></a>[Anchor](#Anchor) ⩴ `$`  
+  > <a id="DollarElements"></a>[DollarElements](#DollarElements) ⩴ `$` | [RangeElement](https://www.unicode.org/reports/tr61/#RangeElement) `-` `$`
 
   The following alternatives are added to the
   [Content](https://www.unicode.org/reports/tr61/#Content) production:
@@ -223,10 +223,10 @@ ICU interprets some expressions that are ill-formed according to the UnicodeSet 
 
 * If a `SymbolTable` is passed to the constructor of `UnicodeSet`, a new lexical
   element is introduced:
-  > <dfn id="variable">[variable](#variable)</dfn> ⩴ $ [reference](#reference)
+  > <a id="variable"></a>[variable](#variable) ⩴ $ [reference](#reference)
 
   where the function `SymbolTable::parseReference` defines the syntactic category
-  <dfn id="reference">[reference](#reference)<dfn>.
+  <a id="reference"></a>[reference](#reference).
 
   The expansion of a [variable](#variable) is defined by `SymbolTable::lookup`; it
   disambiguates the syntactic category as follows:
