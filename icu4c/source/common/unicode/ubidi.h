@@ -2367,12 +2367,12 @@ ubidi_getMFOption(const UnicodeString& s);
  *        directionality of the resolved value of its result.
  * @param fmt String to isolate.
  *
- * @return A string bidi-isolated according to bidiIsolationStrategy.
+ * @return A pointer to a string bidi-isolated according to bidiIsolationStrategy.
  *
  * @internal ICU 79 technology preview
  * @deprecated This API is for technology preview only.
  */
-U_COMMON_API UnicodeString U_EXPORT2
+U_CAPI UnicodeString* U_EXPORT2
 ubidi_isolate(UMFBidiIsolationStrategy bidiIsolationStrategy,
               UMFDirectionality msgdir,
               UMFBidiIsolationStyle bidiIsolationStyle,
