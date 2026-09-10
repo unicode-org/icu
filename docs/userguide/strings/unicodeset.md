@@ -89,6 +89,11 @@ the normal set operations (union, intersection, difference, and complement).
 | A - B | `[[:letter:] - [a-z]]` | `A.removeAll(B)` | To take the set-difference of two sets  A and B, use the '-' operator. |
 | [^A] | `[^a-z]` | `A.complement(B).removeAllStrings()` | To invert a set A, place a '^' immediately after the opening '['.  Note that this is a code point complement: `[^[𝐴]]` is equivalent to `[[\x{0000}-\x{10FFFF}]-[𝐴]]`, and contains no strings, regardless of whether 𝐴 contains strings. |
 
+> :point_right: **Note**:*ICU Regular Expression set expressions have a different (but similar) syntax,
+and a different set of recognized backslash escapes. \[Sets\] in ICU Regular
+Expressions follow the conventions from Perl and Java regular expressions rather
+than the pattern syntax from ICU UnicodeSet.*
+
 #### Precedence of set operations
 
 As described [in the UnicodeSet grammar](https://www.unicode.org/reports/tr61/#SetOperation),
