@@ -180,11 +180,6 @@ public class LinkHandlingUtilities {
         if (localPart.startsWith(".") || localPart.endsWith(".") || localPart.contains("..")) {
             return atSignPos;
         }
-        // TODO: This looks wrong. The API doc says “It does not scan back through "mailto:".”
-        // This code does the opposite: It _extends back to include an adjacent "mailto:"_.
-        if (source.toString().substring(0, result).endsWith("mailto:")) {
-            result -= "mailto:".length();
-        }
         return result;
     }
 
