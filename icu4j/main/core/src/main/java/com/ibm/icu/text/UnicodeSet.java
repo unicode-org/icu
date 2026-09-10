@@ -4992,6 +4992,10 @@ public class UnicodeSet extends UnicodeFilter
         // Mutations ::= ""
         //             | Mutation Mutations
         //             | DollarElements Mutation Mutations  -- ICU extension
+        // Where a Mutation is not a subexpression, but a modification of the enclosing ElementList
+        // (either adding or removing characters).
+        // This means that parseMutation adds or removes elements to this object, instead of
+        // returning a set.
         if (lexer.acceptSetOperator('-')) {
             add('-');
             // When we otherwise preserve the syntax, we escape an initial UnescapedHyphenMinus, but
@@ -5112,7 +5116,7 @@ public class UnicodeSet extends UnicodeFilter
         // Elements     ::= Element
         //                | Range
         // Range        ::= RangeElement - RangeElement
-        //                  $ - RangeElement             -- ICU extension
+        //                | $ - RangeElement             -- ICU extension
         // RangeElement ::= literal-element
         //                | escaped-element
         //                | named-element
@@ -5125,7 +5129,6 @@ public class UnicodeSet extends UnicodeFilter
         // which cannot appear at the end of Content.
         // A $ would already have been interpreted as an Anchor by parseContent, so we only need to
         // check that RangeElement - $ is not Content-final.
-        // codePoint().has_value() on a lexical element if it is a RangeElement.
         if (lexer.lookahead().isStringLiteral()) {
             add(lexer.lookahead().element());
             rebuiltPat.append('{');

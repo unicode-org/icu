@@ -1120,21 +1120,41 @@ void UnicodeSet::parseContent(Lexer &lexer,
                               UErrorCode &ec) {
     // Content ::= ""
     //           | ElementList
-    //           | UnescapedHyphenMinus ElementList
     //           | UnescapedHyphenMinus
+    //           | UnescapedHyphenMinus ElementList
     //           | ElementList UnescapedHyphenMinus
+    //           | UnescapedHyphenMinus UnescapedHyphenMinus
     //           | UnescapedHyphenMinus ElementList UnescapedHyphenMinus
+    //           -- ICU extensions:
+    //           | Anchor
+    //           | ElementList Anchor
+    //           | UnescapedHyphenMinus Anchor
+    //           | UnescapedHyphenMinus ElementList Anchor
+    // Anchor ::= $                            -- ICU extension
     // ElementList ::= Elements
     //               | ElementList Elements
     //               | SetOperation
+    //               | DollarElements Elements -- ICU extension
     // SetOperation ::= Union
     //                | Intersection
     //                | Difference
     // Union ::= UnicodeSet
     //         | ElementList UnicodeSet
+    //         | DollarElements UnicodeSet     -- ICU extension
+    // -- ICU extension:
+    // DollarElements ::= $
+    //                  | RangeElement-$
     // But that is not LL (we cannot tell if we have a SetOperation or not by looking at the
     // first Elements), so we parse it as described in the note,
     // ElementList ::= Mutation Mutations
+    //               | DollarElements Mutation Mutations  -- ICU extension
+    // Mutations ::= ""
+    //             | Mutation Mutations
+    //             | DollarElements Mutation Mutations  -- ICU extension
+    // Where a Mutation is not a subexpression, but a modification of the enclosing ElementList
+    // (either adding or removing characters).
+    // This means that parseMutation adds or removes elements to this object, instead of returning a
+    // set.
     if (lexer.acceptSetOperator(u'-')) {
         add(u'-');
         // When we otherwise preserve the syntax, we escape an initial UnescapedHyphenMinus, but not a
@@ -1152,8 +1172,9 @@ void UnicodeSet::parseContent(Lexer &lexer,
             return;
         } else if (lexer.lookahead().isSetOperator(u'$')) {
             if (lexer.lookahead2().isSetOperator(u']')) {
-                // ICU extensions: A $ is allowed as a literal-element.
-                // A $ at the end of a Content is an anchor.
+                // ICU extensions: A $ is allowed in an ElementList if followed by Elements, or
+                // if followed by UnicodeSet (in a Union).
+                // A $ at the end of a Content is an Anchor.
                 rebuiltPat.append(u'$');
                 // Consume the dollar.
                 lexer.advance();
@@ -1165,6 +1186,7 @@ void UnicodeSet::parseContent(Lexer &lexer,
         if (lexer.lookahead().isSetOperator(u']')) {
             return;
         }
+        // Also handles DollarElements.
         parseMutation(lexer, rebuiltPat, options, caseClosure, depth, containsSetOperation, ec);
         U_UNICODESET_RETURN_IF_ERROR(ec);
     }
@@ -1184,6 +1206,7 @@ void UnicodeSet::parseMutation(Lexer &lexer,
         parseSetOperations(lexer, rebuiltPat, options, caseClosure, depth, ec);
         U_UNICODESET_RETURN_IF_ERROR(ec);
     } else {
+        // Also handles DollarElements.
         parseElements(lexer, rebuiltPat, ec);
         U_UNICODESET_RETURN_IF_ERROR(ec);
     }
@@ -1263,13 +1286,19 @@ void UnicodeSet::parseElements(Lexer &lexer,
     // Elements     ::= Element
     //                | Range
     // Range        ::= RangeElement - RangeElement
+    //                | $ - RangeElement             -- ICU extension
     // RangeElement ::= literal-element
     //                | escaped-element
     //                | named-element
     //                | bracketed-element
     // Element      ::= RangeElement
     //                | string-literal
-    // codePoint().has_value() on a lexical element if it is a RangeElement.
+    // In addition, this function handles the following ICU extension:
+    // DollarElements ::= $
+    //                  | RangeElement - $
+    // which cannot appear at the end of Content.
+    // A Content-final $ would already have been interpreted as an Anchor by parseContent, so we
+    // only need to check that RangeElement - $ is not Content-final.
     if (lexer.lookahead().isStringLiteral()) {
         add(*lexer.lookahead().element());
         rebuiltPat.append(u'{');
