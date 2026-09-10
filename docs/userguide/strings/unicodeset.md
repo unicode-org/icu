@@ -179,7 +179,7 @@ ICU interprets some expressions that are ill-formed according to the UnicodeSet 
   representing surrogate code points.
 * A `$` at the end of [Content](https://www.unicode.org/reports/tr61/#Content) (that is, preceding a
   closing bracket `]`) represents the noncharacter code point U+FFFF.
-  This is used as an anchor for the start or end of text in transform rules, see Section
+  This is used to represent the start or end of text in transform rules, see Section
   [Æther](../transforms/general/rules.md#%C3%A6ther) of
   the transform rule tutorial.
 
@@ -197,15 +197,15 @@ ICU interprets some expressions that are ill-formed according to the UnicodeSet 
   and the grammar is modified as follows.
 
   The following syntactic categories are introduced:
-  > <a id="Anchor"></a>[Anchor](#Anchor) ⩴ `$`  
+  > <a id="Æther"></a>[Æther](#Æther) ⩴ `$`  
   > <a id="DollarElements"></a>[DollarElements](#DollarElements) ⩴ `$` | [RangeElement](https://www.unicode.org/reports/tr61/#RangeElement) `-` `$`
 
   The following alternatives are added to the
   [Content](https://www.unicode.org/reports/tr61/#Content) production:
-  > | [Anchor](#Anchor)  
-  > | [ElementList](https://www.unicode.org/reports/tr61/#ElementList) [Anchor](#Anchor)  
-  > | [UnescapedHyphenMinus](https://www.unicode.org/reports/tr61/#UnescapedHyphenMinus) [Anchor](#Anchor)  
-  > | [UnescapedHyphenMinus](https://www.unicode.org/reports/tr61/#UnescapedHyphenMinus) [ElementList](https://www.unicode.org/reports/tr61/#ElementList) [Anchor](#Anchor)
+  > | [Æther](#Æther)  
+  > | [ElementList](https://www.unicode.org/reports/tr61/#ElementList) [Æther](#Æther)  
+  > | [UnescapedHyphenMinus](https://www.unicode.org/reports/tr61/#UnescapedHyphenMinus) [Æther](#Æther)  
+  > | [UnescapedHyphenMinus](https://www.unicode.org/reports/tr61/#UnescapedHyphenMinus) [ElementList](https://www.unicode.org/reports/tr61/#ElementList) [Æther](#Æther)
 
   The following alternative is added to the [ElementList](https://www.unicode.org/reports/tr61/#ElementList) production:
   > | [DollarElements](#DollarElements) [Elements](https://www.unicode.org/reports/tr61/#Elements)
@@ -217,7 +217,7 @@ ICU interprets some expressions that are ill-formed according to the UnicodeSet 
   > | `$` - [RangeElement](https://www.unicode.org/reports/tr61/#RangeElement)
 
   When the [set-operator](https://www.unicode.org/reports/tr61/#set-operator) `$` occurs
-  as an immediate constituent of an [Anchor](#Anchor)</a>,
+  as an immediate constituent of an [Æther](#Æther)</a>,
   it represents the noncharacter code point U+FFFF.
 
   When it occurs anywhere else, it represents the character U+0024 $ DOLLAR SIGN.
