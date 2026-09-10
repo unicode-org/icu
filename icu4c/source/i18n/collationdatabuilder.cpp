@@ -164,9 +164,13 @@ protected:
 };
 
 DataBuilderCollationIterator::DataBuilderCollationIterator(CollationDataBuilder &b)
-        : CollationIterator(&builderData, /*numeric=*/ false),
+        : CollationIterator(&builderData, /*nullTrie=*/ nullptr, /*numeric=*/ false),
           builder(b), builderData(b.nfcImpl),
           s(nullptr), pos(0) {
+    // With the base class constuctor taking nullptr for the trie, this class
+    // must set the trie pointer before calling iteration methods.
+    trie = builder.trie;
+
     builderData.base = builder.base;
     // Set all of the jamoCE32s[] to indirection CE32s.
     for(int32_t j = 0; j < CollationData::JAMO_CE32S_LENGTH; ++j) {  // Count across Jamo types.

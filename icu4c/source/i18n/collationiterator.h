@@ -212,6 +212,19 @@ public:
 protected:
     CollationIterator(const CollationIterator &other);
 
+    /**
+     * A special constructor that defers setting the trie after construction.
+     * This is currently used only by DataBuilderCollationIterator, which initiazes
+     * the trie in the constructor.
+     */
+    CollationIterator(const CollationData *d, std::nullptr_t nullTrie, UBool numeric)
+            : trie(nullTrie),
+              data(d),
+              cesIndex(0),
+              skipped(nullptr),
+              numCpFwd(-1),
+              isNumeric(numeric) {}
+
     void reset();
 
     /**
