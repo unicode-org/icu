@@ -4416,11 +4416,11 @@ public class UnicodeSetTest extends CoreTestFmwk {
                     {"[{aa]", "String literal was not terminated: {aa] [{aa]☜"},
                     {
                         "[a-$]",
-                        "Expected Term after Range ending in unescaped $, got set-operator '$' followed by set-operator ']' [a-☞$]"
+                        "Expected Elements or UnicodeSet after Range ending in unescaped $, got set-operator '$' followed by set-operator ']' [a-☞$]"
                     },
                     {
                         "[!-$]",
-                        "Expected Term after Range ending in unescaped $, got set-operator '$' followed by set-operator ']' [!-☞$]"
+                        "Expected Elements or UnicodeSet after Range ending in unescaped $, got set-operator '$' followed by set-operator ']' [!-☞$]"
                     },
                     {
                         "[a-a]", "Expected first < last in Range, got a-a [a-☞a]"

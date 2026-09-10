@@ -1717,28 +1717,28 @@ private:
                          int32_t depth,
                          UErrorCode &ec);
 
-    void parseUnion(Lexer &lexer,
-                    UnicodeString &rebuiltPat,
-                    uint32_t options,
-                    UnicodeSet &(UnicodeSet::*caseClosure)(int32_t attribute),
-                    int32_t depth,
-                    bool &containsRestrictions,
-                    UErrorCode &ec);
+    void parseContent(Lexer &lexer,
+                      UnicodeString &rebuiltPat,
+                      uint32_t options,
+                      UnicodeSet &(UnicodeSet::*caseClosure)(int32_t attribute),
+                      int32_t depth,
+                      bool &containsSetOperation,
+                      UErrorCode &ec);
 
-    void parseTerm(Lexer &lexer,
-                   UnicodeString &rebuiltPat,
-                   uint32_t options,
-                   UnicodeSet &(UnicodeSet::*caseClosure)(int32_t attribute),
-                   int32_t depth,
-                   bool &containsRestrictions,
-                   UErrorCode &ec);
+    void parseMutation(Lexer &lexer,
+                       UnicodeString &rebuiltPat,
+                       uint32_t options,
+                       UnicodeSet &(UnicodeSet::*caseClosure)(int32_t attribute),
+                       int32_t depth,
+                       bool &containsSetOperation,
+                       UErrorCode &ec);
 
-    void parseRestriction(Lexer &lexer,
-                          UnicodeString &rebuiltPat,
-                          uint32_t options,
-                          UnicodeSet &(UnicodeSet::*caseClosure)(int32_t attribute),
-                          int32_t depth,
-                          UErrorCode &ec);
+    void parseSetOperations(Lexer &lexer,
+                            UnicodeString &rebuiltPat,
+                            uint32_t options,
+                            UnicodeSet &(UnicodeSet::*caseClosure)(int32_t attribute),
+                            int32_t depth,
+                            UErrorCode &ec);
 
     void parseElements(Lexer &lexer,
                        UnicodeString &rebuiltPat,
