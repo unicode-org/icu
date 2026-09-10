@@ -137,8 +137,22 @@ public final class FCDUTF16CollationIterator extends UTF16CollationIterator {
                 }
                 c = seq.charAt(--pos);
                 if (CollationFCD.hasLccc(c)) {
-                    if (CollationFCD.maybeTibetanCompositeVowel(c)
-                            || (pos != start && CollationFCD.hasTccc(seq.charAt(pos - 1)))) {
+                    boolean normalizePrevSegment = CollationFCD.maybeTibetanCompositeVowel(c);
+                    if (!normalizePrevSegment && pos != start) {
+                        if (Character.isLowSurrogate(seq.charAt(pos - 1))) {
+                            // CollationFCD.hasTccc(<low-surrogate>) always returns false.
+                            // To test possible trailing ccc, we need to check high surrogate
+                            // (or previous character for broken surrogate pair).
+                            if (pos - 1 != start) {
+                                normalizePrevSegment =
+                                        Character.isHighSurrogate(seq.charAt(pos - 2))
+                                                && CollationFCD.hasTccc(seq.charAt(pos - 2));
+                            }
+                        } else {
+                            normalizePrevSegment = CollationFCD.hasTccc(seq.charAt(pos - 1));
+                        }
+                    }
+                    if (normalizePrevSegment) {
                         ++pos;
                         previousSegment();
                         c = seq.charAt(--pos);
