@@ -2058,11 +2058,11 @@ UnicodeStringAppendable::reserveAppendCapacity(int32_t appendCapacity) {
   return str.cloneArrayIfNeeded(str.length() + appendCapacity);
 }
 
-char16_t *
-UnicodeStringAppendable::getAppendBuffer(int32_t minCapacity,
-                                         int32_t desiredCapacityHint,
-                                         char16_t *scratch, int32_t scratchCapacity,
-                                         int32_t *resultCapacity) {
+char16_t* UnicodeStringAppendable::getAppendBuffer(int32_t minCapacity,
+                                                   int32_t desiredCapacityHint,
+                                                   char16_t* scratch U_LIFETIME_BOUND,
+                                                   int32_t scratchCapacity,
+                                                   int32_t* resultCapacity) U_LIFETIME_BOUND {
   if(minCapacity < 1 || scratchCapacity < minCapacity) {
     *resultCapacity = 0;
     return nullptr;
