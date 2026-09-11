@@ -24,7 +24,14 @@ public:
     void testSegmentsFromOnBoundary();
     void testSegmentsBeforeMiddleOfSegment();
     void testSegmentsBeforeOnBoundary();
-    void testBidiIter();
+    void testPreIncrementOp();
+    void testPreIncrementOpModifiesOriginal();
+    void testPostIncrementOp();
+    void testPostIncrementOpCopiesOriginal();
+    void testPreDecrementOp();
+    void testPreDecrementOpModifiesOriginal();
+    void testPostDecrementOp();
+    void testPostDecrementOpCopiesOriginal();
 
 private:
     // Test parameters, from the test framework and test invocation.

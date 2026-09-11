@@ -28,6 +28,22 @@ bool SegmentIterator::operator!=(const SegmentIterator &other) const {
     return !(*this == other);
 }
 
+SegmentIterator::SegmentIterator(const SegmentIterator & other)
+: startIdx_(other.startIdx_),
+limitIdx_(other.limitIdx_),
+source_(other.source_),
+iterLogicState_(other.iterLogicState_)
+{
+    auto tempBreakIter = std::unique_ptr<BreakIterator>(other.breakIter_->clone());
+    breakIter_ = std::move(tempBreakIter);
+}
+
+SegmentIterator & SegmentIterator::operator=(const SegmentIterator & other) {
+    SegmentIterator temp(other);
+    std::swap(*this, temp);
+    return *this;
+}
+
 Segment SegmentIterator::operator*() const {    
     if (iterLogicState_ == IterLogicalState::HERE) {
 
@@ -84,7 +100,10 @@ SegmentIterator & SegmentIterator::operator++() {
 SegmentIterator & SegmentIterator::operator--() {
     if (iterLogicState_ == IterLogicalState::FORWARDS) {
         breakIter_->isBoundary(startIdx_);
-        iterLogicState_ = IterLogicalState::HERE;
+        ruleStatus_ = breakIter_->getRuleStatus();
+        limitIdx_ = startIdx_;
+        startIdx_ = breakIter_->previous();
+        iterLogicState_ = IterLogicalState::BACKWARDS;
     } else {
         limitIdx_ = startIdx_;
 
@@ -101,6 +120,18 @@ SegmentIterator & SegmentIterator::operator--() {
     }
 
     return *this;
+}
+
+SegmentIterator SegmentIterator::operator++(int) {
+    auto tmp = *this;
+    ++*this;
+    return tmp;
+}
+
+SegmentIterator SegmentIterator::operator--(int) {
+    auto tmp = *this;
+    --*this;
+    return tmp;
 }
 
 bool SegmentIterator::isCurrentSegmentValid() const {

@@ -33,7 +33,14 @@ void SegmentIterTest::runIndexedTest( int32_t index, UBool exec, const char* &na
     TESTCASE_AUTO(testSegmentsFromOnBoundary);
     TESTCASE_AUTO(testSegmentsBeforeMiddleOfSegment);
     TESTCASE_AUTO(testSegmentsBeforeOnBoundary);
-    TESTCASE_AUTO(testBidiIter);
+    TESTCASE_AUTO(testPreIncrementOp);
+    TESTCASE_AUTO(testPreIncrementOpModifiesOriginal);
+    TESTCASE_AUTO(testPostIncrementOp);
+    TESTCASE_AUTO(testPostIncrementOpCopiesOriginal);
+    TESTCASE_AUTO(testPreDecrementOp);
+    TESTCASE_AUTO(testPreDecrementOpModifiesOriginal);
+    TESTCASE_AUTO(testPostDecrementOp);
+    TESTCASE_AUTO(testPostDecrementOpCopiesOriginal);
 
     TESTCASE_AUTO_END;
 }
@@ -384,8 +391,8 @@ void SegmentIterTest::testSegmentsBeforeOnBoundary() {
     assertEquals("second segment limit", 4, segmentVec1[1].getLimit());
 }
 
-void SegmentIterTest::testBidiIter() {
-    IcuTestErrorCode errorCode(*this, "testBidiIter");
+void SegmentIterTest::testPreIncrementOp() {
+    IcuTestErrorCode errorCode(*this, "testPreIncrementOp");
 
     icu::segmenter::LocalizedSegmenter enWordSegmenter =
         icu::segmenter::LocalizedSegmenterBuilder()
@@ -394,7 +401,61 @@ void SegmentIterTest::testBidiIter() {
             .build(errorCode);
     
     std::u16string_view source1 = u"The quick brown fox jumped over the lazy dog.";
-    int32_t startIdx = 9;
+
+    // Create new Segments for source1
+    auto segments1 = enWordSegmenter.segment(source1, errorCode);
+    auto segmentRange1 = segments1->segments();
+    auto segmentIter = segmentRange1.begin();
+
+    auto expInitialSubstr = u"The";
+    assertEquals("segmentIter[0] * substr", expInitialSubstr, (*segmentIter).getSubstr());
+    // TODO: replace with operator->
+    // assertEquals("segmentIter[0] -> substr", u"The", segmentIter->getSubstr());
+    ++segmentIter;  // pre-increment
+    auto segment = *segmentIter;
+    auto expSubstr = u" ";
+    assertEquals("segmentIter[1] * substr", expSubstr, segment.getSubstr());
+    ++segmentIter;
+    assertEquals("segmentIter[2] * substr", u"quick", (*segmentIter).getSubstr());
+}
+
+void SegmentIterTest::testPreIncrementOpModifiesOriginal() {
+    IcuTestErrorCode errorCode(*this, "testPreIncrementOpModifiesOriginal");
+
+    icu::segmenter::LocalizedSegmenter enWordSegmenter =
+        icu::segmenter::LocalizedSegmenterBuilder()
+            .setLocale(Locale::getEnglish())
+            .setSegmentationType(icu::segmenter::SegmentationType::WORD)
+            .build(errorCode);
+    
+    std::u16string_view source1 = u"The quick brown fox jumped over the lazy dog.";
+
+    // Create new Segments for source1
+    auto segments1 = enWordSegmenter.segment(source1, errorCode);
+    auto segmentRange1 = segments1->segments();
+    auto segmentIter = segmentRange1.begin();
+
+    auto expInitialSubstr = u"The";
+    assertEquals("segmentIter[0] * substr", expInitialSubstr, (*segmentIter).getSubstr());
+    // TODO: replace with operator->
+    // assertEquals("segmentIter[0] -> substr", u"The", segmentIter->getSubstr());
+    auto incrementedSegmentIterCopy = ++segmentIter;  // pre-increment
+    auto nextSegment = *segmentIter;
+    auto expNextSubstr = u" ";
+    assertEquals("segmentIter[1] * substr", expNextSubstr, nextSegment.getSubstr());
+    assertEquals("incrementedSegmentIterCopy[1] * substr", expNextSubstr, (*incrementedSegmentIterCopy).getSubstr());
+}
+
+void SegmentIterTest::testPostIncrementOp() {
+    IcuTestErrorCode errorCode(*this, "testPostIncrementOp");
+
+    icu::segmenter::LocalizedSegmenter enWordSegmenter =
+        icu::segmenter::LocalizedSegmenterBuilder()
+            .setLocale(Locale::getEnglish())
+            .setSegmentationType(icu::segmenter::SegmentationType::WORD)
+            .build(errorCode);
+    
+    std::u16string_view source1 = u"The quick brown fox jumped over the lazy dog.";
 
     // Create new Segments for source1
     auto segments1 = enWordSegmenter.segment(source1, errorCode);
@@ -404,12 +465,144 @@ void SegmentIterTest::testBidiIter() {
     assertEquals("segmentIter[0] * substr", u"The", (*segmentIter).getSubstr());
     // TODO: replace with operator->
     // assertEquals("segmentIter[0] -> substr", u"The", segmentIter->getSubstr());
-    ++segmentIter;  // pre-increment
+    segmentIter++;  // post-increment
     auto segment = *segmentIter;
     auto expSubstr = u" ";
     assertEquals("segmentIter[1] * substr", expSubstr, segment.getSubstr());
-    ++segmentIter;
+    segmentIter++;
     assertEquals("segmentIter[2] * substr", u"quick", (*segmentIter).getSubstr());
+}
+
+void SegmentIterTest::testPostIncrementOpCopiesOriginal() {
+    IcuTestErrorCode errorCode(*this, "testPostIncrementOpCopiesOriginal");
+
+    icu::segmenter::LocalizedSegmenter enWordSegmenter =
+        icu::segmenter::LocalizedSegmenterBuilder()
+            .setLocale(Locale::getEnglish())
+            .setSegmentationType(icu::segmenter::SegmentationType::WORD)
+            .build(errorCode);
+    
+    std::u16string_view source1 = u"The quick brown fox jumped over the lazy dog.";
+
+    // Create new Segments for source1
+    auto segments1 = enWordSegmenter.segment(source1, errorCode);
+    auto segmentRange1 = segments1->segments();
+    auto segmentIter = segmentRange1.begin();
+
+    auto expInitialSubstr = u"The";
+    assertEquals("segmentIter[0] * substr", expInitialSubstr, (*segmentIter).getSubstr());
+    // TODO: replace with operator->
+    // assertEquals("segmentIter[0] -> substr", u"The", segmentIter->getSubstr());
+    auto initialSegmentIterCopy = segmentIter++;  // post-increment
+    auto nextSegment = *segmentIter;
+    auto expNextSubstr = u" ";
+    assertEquals("segmentIter[1] * substr", expNextSubstr, nextSegment.getSubstr());
+    assertEquals("initialSegmentIterCopy[0] * substr", expInitialSubstr, (*initialSegmentIterCopy).getSubstr());
+}
+
+void SegmentIterTest::testPreDecrementOp() {
+    IcuTestErrorCode errorCode(*this, "testPreDecrementOp");
+
+    icu::segmenter::LocalizedSegmenter enWordSegmenter =
+        icu::segmenter::LocalizedSegmenterBuilder()
+            .setLocale(Locale::getEnglish())
+            .setSegmentationType(icu::segmenter::SegmentationType::WORD)
+            .build(errorCode);
+    
+    std::u16string_view source1 = u"The quick brown fox jumped over the lazy dog.";
+
+    // Create new Segments for source1
+    auto segments1 = enWordSegmenter.segment(source1, errorCode);
+    auto segmentIter = segments1->segmentsFrom(4);
+
+    auto expInitialSubstr = u"quick";
+    assertEquals("segmentIter[2] * substr", expInitialSubstr, (*segmentIter).getSubstr());
+    // TODO: replace with operator->
+    // assertEquals("segmentIter[2] -> substr", expInitialSubstr, segmentIter->getSubstr());
+    --segmentIter;  // pre-decrement
+    auto segment = *segmentIter;
+    auto expSubstr = u" ";
+    assertEquals("segmentIter[1] * substr", expSubstr, segment.getSubstr());
+    --segmentIter;
+    assertEquals("segmentIter[0] * substr", u"The", (*segmentIter).getSubstr());
+}
+
+void SegmentIterTest::testPreDecrementOpModifiesOriginal() {
+    IcuTestErrorCode errorCode(*this, "testPreDecrementOpModifiesOriginal");
+
+    icu::segmenter::LocalizedSegmenter enWordSegmenter =
+        icu::segmenter::LocalizedSegmenterBuilder()
+            .setLocale(Locale::getEnglish())
+            .setSegmentationType(icu::segmenter::SegmentationType::WORD)
+            .build(errorCode);
+    
+    std::u16string_view source1 = u"The quick brown fox jumped over the lazy dog.";
+
+    // Create new Segments for source1
+    auto segments1 = enWordSegmenter.segment(source1, errorCode);
+    auto segmentIter = segments1->segmentsFrom(4);
+
+    auto expInitialSubstr = u"quick";
+    assertEquals("segmentIter[2] * substr", expInitialSubstr, (*segmentIter).getSubstr());
+    // TODO: replace with operator->
+    // assertEquals("segmentIter[2] -> substr", expInitialSubstr, segmentIter->getSubstr());
+    auto decrementedSegmentIterCopy = --segmentIter;  // pre-decrement
+    auto prevSegment = *segmentIter;
+    auto expPrevSubstr = u" ";
+    assertEquals("segmentIter[1] * substr", expPrevSubstr, prevSegment.getSubstr());
+    assertEquals("decrementedSegmentIterCopy[1] * substr", expPrevSubstr, (*decrementedSegmentIterCopy).getSubstr());
+}
+
+void SegmentIterTest::testPostDecrementOp() {
+    IcuTestErrorCode errorCode(*this, "testPostDecrementOp");
+
+    icu::segmenter::LocalizedSegmenter enWordSegmenter =
+        icu::segmenter::LocalizedSegmenterBuilder()
+            .setLocale(Locale::getEnglish())
+            .setSegmentationType(icu::segmenter::SegmentationType::WORD)
+            .build(errorCode);
+    
+    std::u16string_view source1 = u"The quick brown fox jumped over the lazy dog.";
+
+    // Create new Segments for source1
+    auto segments1 = enWordSegmenter.segment(source1, errorCode);
+    auto segmentIter = segments1->segmentsFrom(4);
+
+    assertEquals("segmentIter[2] * substr", u"quick", (*segmentIter).getSubstr());
+    // TODO: replace with operator->
+    // assertEquals("segmentIter[2] -> substr", expInitialSubstr, segmentIter->getSubstr());
+    segmentIter--;  // post-decrement
+    auto segment = *segmentIter;
+    auto expSubstr = u" ";
+    assertEquals("segmentIter[1] * substr", expSubstr, segment.getSubstr());
+    segmentIter--;
+    assertEquals("segmentIter[0] * substr", u"The", (*segmentIter).getSubstr());
+}
+
+void SegmentIterTest::testPostDecrementOpCopiesOriginal() {
+    IcuTestErrorCode errorCode(*this, "testPostDecrementOpCopiesOriginal");
+
+    icu::segmenter::LocalizedSegmenter enWordSegmenter =
+        icu::segmenter::LocalizedSegmenterBuilder()
+            .setLocale(Locale::getEnglish())
+            .setSegmentationType(icu::segmenter::SegmentationType::WORD)
+            .build(errorCode);
+    
+    std::u16string_view source1 = u"The quick brown fox jumped over the lazy dog.";
+
+    // Create new Segments for source1
+    auto segments1 = enWordSegmenter.segment(source1, errorCode);
+    auto segmentIter = segments1->segmentsFrom(4);
+
+    auto expInitialSubstr = u"quick";
+    assertEquals("segmentIter[2] * substr", expInitialSubstr, (*segmentIter).getSubstr());
+    // TODO: replace with operator->
+    // assertEquals("segmentIter[2] -> substr", expInitialSubstr, segmentIter->getSubstr());
+    auto initialSegmentIterCopy = segmentIter--;  // post-decrement
+    auto prevSegment = *segmentIter;
+    auto expPrevSubstr = u" ";
+    assertEquals("segmentIter[1] * substr", expPrevSubstr, prevSegment.getSubstr());
+    assertEquals("initialSegmentIterCopy[2] * substr", expInitialSubstr, (*initialSegmentIterCopy).getSubstr());
 }
 
 //---------------------------------------------

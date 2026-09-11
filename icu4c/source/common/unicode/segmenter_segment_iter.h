@@ -52,12 +52,22 @@ public:
     SegmentIterator() = delete;
     SegmentIterator(std::unique_ptr<BreakIterator> breakIter, int32_t startIdx, std::u16string_view source);
 
+    // TODO: add doc saying this is expensive since it needs to clone BreakIterator
+    SegmentIterator(const SegmentIterator & other);
+    // TODO: add doc saying this is expensive since it needs to clone BreakIterator
+    SegmentIterator& operator=(const SegmentIterator & other);
+
     bool operator==(const SegmentIterator &other) const;
     bool operator!=(const SegmentIterator &other) const;
     Segment operator*() const;
     SegmentIterator & operator++();
     SegmentIterator & operator--();
     // TODO: implement operator->()
+
+    // TODO: add doc saying this is expensive since it needs to clone BreakIterator
+    SegmentIterator operator++(int);
+    // TODO: add doc saying this is expensive since it needs to clone BreakIterator
+    SegmentIterator operator--(int);
 private:
     enum IterLogicalState {
         // Represents the state in which we know both the start
