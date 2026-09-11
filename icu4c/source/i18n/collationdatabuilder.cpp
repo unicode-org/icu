@@ -164,7 +164,7 @@ protected:
 };
 
 DataBuilderCollationIterator::DataBuilderCollationIterator(CollationDataBuilder &b)
-        : CollationIterator(&builderData, /*numeric=*/ false),
+        : CollationIterator(&builderData, /*nullTrie=*/ nullptr, /*numeric=*/ false),
           builder(b), builderData(b.nfcImpl),
           s(nullptr), pos(0) {
     builderData.base = builder.base;
