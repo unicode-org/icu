@@ -205,8 +205,10 @@ utext_close(UText* ut U_LIFETIME_BOUND);
  * @stable ICU 3.4
  */
 U_CAPI UText* U_EXPORT2
-utext_openUTF8(UText* ut U_LIFETIME_BOUND, const char* s, int64_t length, UErrorCode* status);
-
+utext_openUTF8(UText* ut U_LIFETIME_BOUND,
+               const char* s U_LIFETIME_BOUND,
+               int64_t length,
+               UErrorCode* status);
 
 /**
  * Open a read-only UText for UChar * string.
@@ -223,8 +225,10 @@ utext_openUTF8(UText* ut U_LIFETIME_BOUND, const char* s, int64_t length, UError
  * @stable ICU 3.4
  */
 U_CAPI UText* U_EXPORT2
-utext_openUChars(UText* ut U_LIFETIME_BOUND, const UChar* s, int64_t length, UErrorCode* status);
-
+utext_openUChars(UText* ut U_LIFETIME_BOUND,
+                 const UChar* s U_LIFETIME_BOUND,
+                 int64_t length,
+                 UErrorCode* status);
 
 #if U_SHOW_CPLUSPLUS_API
 /**
@@ -240,8 +244,9 @@ utext_openUChars(UText* ut U_LIFETIME_BOUND, const UChar* s, int64_t length, UEr
  * @stable ICU 3.4
  */
 U_CAPI UText* U_EXPORT2
-utext_openUnicodeString(UText* ut U_LIFETIME_BOUND, icu::UnicodeString* s, UErrorCode* status);
-
+utext_openUnicodeString(UText* ut U_LIFETIME_BOUND,
+                        icu::UnicodeString* s U_LIFETIME_BOUND,
+                        UErrorCode* status);
 
 /**
  * Open a UText for a const UnicodeString.   The resulting UText will not be writable.
@@ -257,7 +262,7 @@ utext_openUnicodeString(UText* ut U_LIFETIME_BOUND, icu::UnicodeString* s, UErro
  */
 U_CAPI UText* U_EXPORT2
 utext_openConstUnicodeString(UText* ut U_LIFETIME_BOUND,
-                             const icu::UnicodeString* s,
+                             const icu::UnicodeString* s U_LIFETIME_BOUND,
                              UErrorCode* status);
 
 
@@ -274,7 +279,9 @@ utext_openConstUnicodeString(UText* ut U_LIFETIME_BOUND,
  * @stable ICU 3.4
  */
 U_CAPI UText* U_EXPORT2
-utext_openReplaceable(UText* ut U_LIFETIME_BOUND, icu::Replaceable* rep, UErrorCode* status);
+utext_openReplaceable(UText* ut U_LIFETIME_BOUND,
+                      icu::Replaceable* rep U_LIFETIME_BOUND,
+                      UErrorCode* status);
 
 /**
  * Open a  UText implementation over an ICU CharacterIterator.
@@ -290,7 +297,7 @@ utext_openReplaceable(UText* ut U_LIFETIME_BOUND, icu::Replaceable* rep, UErrorC
  */
 U_CAPI UText* U_EXPORT2
 utext_openCharacterIterator(UText* ut U_LIFETIME_BOUND,
-                            icu::CharacterIterator* ci,
+                            icu::CharacterIterator* ci U_LIFETIME_BOUND,
                             UErrorCode* status);
 
 #endif

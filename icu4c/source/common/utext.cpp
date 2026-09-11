@@ -1633,7 +1633,10 @@ static const struct UTextFuncs utf8Funcs =
 static const char gEmptyString[] = {0};
 
 U_CAPI UText* U_EXPORT2
-utext_openUTF8(UText* ut U_LIFETIME_BOUND, const char* s, int64_t length, UErrorCode* status) {
+utext_openUTF8(UText* ut U_LIFETIME_BOUND,
+               const char* s U_LIFETIME_BOUND,
+               int64_t length,
+               UErrorCode* status) {
     if(U_FAILURE(*status)) {
         return nullptr;
     }
@@ -2040,7 +2043,9 @@ static const struct UTextFuncs repFuncs =
 
 
 U_CAPI UText* U_EXPORT2
-utext_openReplaceable(UText* ut U_LIFETIME_BOUND, Replaceable* rep, UErrorCode* status) {
+utext_openReplaceable(UText* ut U_LIFETIME_BOUND,
+                      Replaceable* rep U_LIFETIME_BOUND,
+                      UErrorCode* status) {
     if(U_FAILURE(*status)) {
         return nullptr;
     }
@@ -2297,7 +2302,9 @@ U_CDECL_END
 
 
 U_CAPI UText* U_EXPORT2
-utext_openUnicodeString(UText* ut U_LIFETIME_BOUND, UnicodeString* s, UErrorCode* status) {
+utext_openUnicodeString(UText* ut U_LIFETIME_BOUND,
+                        UnicodeString* s U_LIFETIME_BOUND,
+                        UErrorCode* status) {
     ut = utext_openConstUnicodeString(ut, s, status);
     if (U_SUCCESS(*status)) {
         ut->providerProperties |= I32_FLAG(UTEXT_PROVIDER_WRITABLE);
@@ -2309,7 +2316,7 @@ utext_openUnicodeString(UText* ut U_LIFETIME_BOUND, UnicodeString* s, UErrorCode
 
 U_CAPI UText* U_EXPORT2
 utext_openConstUnicodeString(UText* ut U_LIFETIME_BOUND,
-                             const UnicodeString* s,
+                             const UnicodeString* s U_LIFETIME_BOUND,
                              UErrorCode* status) {
     if (U_SUCCESS(*status) && s->isBogus()) {
         // The UnicodeString is bogus, but we still need to detach the UText
@@ -2618,7 +2625,7 @@ static const char16_t gEmptyUString[] = {0};
 
 U_CAPI UText* U_EXPORT2
 utext_openUChars(UText* ut U_LIFETIME_BOUND,
-                 const char16_t* s,
+                 const char16_t* s U_LIFETIME_BOUND,
                  int64_t length,
                  UErrorCode* status) {
     if (U_FAILURE(*status)) {
@@ -2844,7 +2851,9 @@ static const struct UTextFuncs charIterFuncs =
 U_CDECL_END
 
 U_CAPI UText* U_EXPORT2
-utext_openCharacterIterator(UText* ut U_LIFETIME_BOUND, CharacterIterator* ci, UErrorCode* status) {
+utext_openCharacterIterator(UText* ut U_LIFETIME_BOUND,
+                            CharacterIterator* ci U_LIFETIME_BOUND,
+                            UErrorCode* status) {
     if (U_FAILURE(*status)) {
         return nullptr;
     }
