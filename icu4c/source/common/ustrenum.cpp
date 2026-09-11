@@ -210,7 +210,7 @@ ustrenum_count(UEnumeration* en,
  * Wrapper API to make StringEnumeration look like UEnumeration.
  */
 static const char16_t* U_CALLCONV
-ustrenum_unext(UEnumeration* en,
+ustrenum_unext(UEnumeration* en U_LIFETIME_BOUND,
                int32_t* resultLength,
                UErrorCode* ec)
 {
@@ -221,7 +221,7 @@ ustrenum_unext(UEnumeration* en,
  * Wrapper API to make StringEnumeration look like UEnumeration.
  */
 static const char* U_CALLCONV
-ustrenum_next(UEnumeration* en,
+ustrenum_next(UEnumeration* en U_LIFETIME_BOUND,
               int32_t* resultLength,
               UErrorCode* ec)
 {
@@ -298,7 +298,7 @@ ucharstrenum_count(UEnumeration* en,
 }
 
 static const char16_t* U_CALLCONV
-ucharstrenum_unext(UEnumeration* en,
+ucharstrenum_unext(UEnumeration* en U_LIFETIME_BOUND,
                   int32_t* resultLength,
                   UErrorCode* /*ec*/) {
     UCharStringEnumeration *e = (UCharStringEnumeration*) en;
@@ -314,7 +314,7 @@ ucharstrenum_unext(UEnumeration* en,
 
 
 static const char* U_CALLCONV
-ucharstrenum_next(UEnumeration* en,
+ucharstrenum_next(UEnumeration* en U_LIFETIME_BOUND,
                   int32_t* resultLength,
                   UErrorCode* /*ec*/) {
     UCharStringEnumeration *e = (UCharStringEnumeration*) en;
@@ -357,7 +357,8 @@ static const UEnumeration UCHARSTRENUM_U_VT = {
 U_CDECL_END
 
 U_CAPI UEnumeration* U_EXPORT2
-uenum_openCharStringsEnumeration(const char* const strings[], int32_t count,
+uenum_openCharStringsEnumeration(const char* const* const strings U_LIFETIME_BOUND,
+                                 int32_t count,
                                  UErrorCode* ec) {
     UCharStringEnumeration* result = nullptr;
     if (U_SUCCESS(*ec) && count >= 0 && (count == 0 || strings != nullptr)) {
@@ -376,8 +377,9 @@ uenum_openCharStringsEnumeration(const char* const strings[], int32_t count,
 }
 
 U_CAPI UEnumeration* U_EXPORT2
-uenum_openUCharStringsEnumeration(const char16_t* const strings[], int32_t count,
-                                 UErrorCode* ec) {
+uenum_openUCharStringsEnumeration(const char16_t* const* const strings U_LIFETIME_BOUND,
+                                  int32_t count,
+                                  UErrorCode* ec) {
     UCharStringEnumeration* result = nullptr;
     if (U_SUCCESS(*ec) && count >= 0 && (count == 0 || strings != nullptr)) {
         result = (UCharStringEnumeration*) uprv_malloc(sizeof(UCharStringEnumeration));
