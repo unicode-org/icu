@@ -215,7 +215,7 @@ public:
      * @param src source smart pointer
      * @return *this
      */
-    LocalMemory<T> &operator=(LocalMemory<T> &&src) noexcept {
+    LocalMemory<T>& operator=(LocalMemory<T>&& src) noexcept U_LIFETIME_BOUND {
         uprv_free(LocalPointerBase<T>::ptr);
         LocalPointerBase<T>::ptr=src.ptr;
         src.ptr=nullptr;
@@ -255,7 +255,7 @@ public:
      * @param newCapacity must be >0
      * @return the allocated array pointer, or nullptr if the allocation failed
      */
-    inline T *allocateInsteadAndReset(int32_t newCapacity=1);
+    inline T* allocateInsteadAndReset(int32_t newCapacity = 1) U_LIFETIME_BOUND;
     /**
      * Deletes the array it owns and allocates a new one, copying length T items.
      * Returns the new array pointer.
@@ -267,18 +267,18 @@ public:
      *               which the caller must track because the LocalMemory does not track it
      * @return the allocated array pointer, or nullptr if the allocation failed
      */
-    inline T *allocateInsteadAndCopy(int32_t newCapacity=1, int32_t length=0);
+    inline T* allocateInsteadAndCopy(int32_t newCapacity = 1, int32_t length = 0) U_LIFETIME_BOUND;
     /**
      * Array item access (writable).
      * No index bounds check.
      * @param i array index
      * @return reference to the array item
      */
-    T &operator[](ptrdiff_t i) const { return LocalPointerBase<T>::ptr[i]; }
+    T& operator[](ptrdiff_t i) const U_LIFETIME_BOUND { return LocalPointerBase<T>::ptr[i]; }
 };
 
-template<typename T>
-inline T *LocalMemory<T>::allocateInsteadAndReset(int32_t newCapacity) {
+template <typename T>
+inline T* LocalMemory<T>::allocateInsteadAndReset(int32_t newCapacity) U_LIFETIME_BOUND {
     if(newCapacity>0) {
         T *p=(T *)uprv_malloc(newCapacity*sizeof(T));
         if(p!=nullptr) {
@@ -292,9 +292,9 @@ inline T *LocalMemory<T>::allocateInsteadAndReset(int32_t newCapacity) {
     }
 }
 
-
-template<typename T>
-inline T *LocalMemory<T>::allocateInsteadAndCopy(int32_t newCapacity, int32_t length) {
+template <typename T>
+inline T* LocalMemory<T>::allocateInsteadAndCopy(int32_t newCapacity,
+                                                 int32_t length) U_LIFETIME_BOUND {
     if(newCapacity>0) {
         T *p=(T *)uprv_malloc(newCapacity*sizeof(T));
         if(p!=nullptr) {
@@ -369,7 +369,8 @@ public:
     /**
      * Move assignment: transfers ownership or copies the stack array.
      */
-    MaybeStackArray<T, stackCapacity> &operator=(MaybeStackArray<T, stackCapacity> &&src) noexcept;
+    MaybeStackArray<T, stackCapacity>&
+    operator=(MaybeStackArray<T, stackCapacity>&& src) noexcept U_LIFETIME_BOUND;
     /**
      * Returns the array capacity (number of T items).
      * @return array capacity
@@ -379,12 +380,12 @@ public:
      * Access without ownership change.
      * @return the array pointer
      */
-    T *getAlias() const { return ptr; }
+    T* getAlias() const U_LIFETIME_BOUND { return ptr; }
     /**
      * Returns the array limit. Simple convenience method.
      * @return getAlias()+getCapacity()
      */
-    T *getArrayLimit() const { return getAlias()+capacity; }
+    T* getArrayLimit() const U_LIFETIME_BOUND { return getAlias() + capacity; }
     // No "operator T *() const" because that can make
     // expressions like mbs[index] ambiguous for some compilers.
     /**
@@ -393,14 +394,14 @@ public:
      * @param i array index
      * @return reference to the array item
      */
-    const T &operator[](ptrdiff_t i) const { return ptr[i]; }
+    const T& operator[](ptrdiff_t i) const U_LIFETIME_BOUND { return ptr[i]; }
     /**
      * Array item access (writable).
      * No index bounds check.
      * @param i array index
      * @return reference to the array item
      */
-    T &operator[](ptrdiff_t i) { return ptr[i]; }
+    T& operator[](ptrdiff_t i) U_LIFETIME_BOUND { return ptr[i]; }
     /**
      * Deletes the array (if owned) and aliases another one, no transfer of ownership.
      * If the arguments are illegal, then the current array is unchanged.
@@ -425,7 +426,7 @@ public:
      * @param length number of T items to be copied from the old array to the new one
      * @return the allocated array pointer, or nullptr if the allocation failed
      */
-    inline T *resize(int32_t newCapacity, int32_t length=0);
+    inline T* resize(int32_t newCapacity, int32_t length = 0) U_LIFETIME_BOUND;
     /**
      * Gives up ownership of the array if owned, or else clones it,
      * copying length T items; resets itself to the internal stack array.
@@ -486,9 +487,9 @@ icu::MaybeStackArray<T, stackCapacity>::MaybeStackArray(
     }
 }
 
-template<typename T, int32_t stackCapacity>
-inline MaybeStackArray <T, stackCapacity>&
-MaybeStackArray<T, stackCapacity>::operator=(MaybeStackArray <T, stackCapacity>&& src) noexcept {
+template <typename T, int32_t stackCapacity>
+inline MaybeStackArray<T, stackCapacity>& MaybeStackArray<T, stackCapacity>::operator=(
+    MaybeStackArray<T, stackCapacity>&& src) noexcept U_LIFETIME_BOUND {
     releaseArray();  // in case this instance had its own memory allocated
     capacity = src.capacity;
     needToRelease = src.needToRelease;
@@ -502,8 +503,9 @@ MaybeStackArray<T, stackCapacity>::operator=(MaybeStackArray <T, stackCapacity>&
     return *this;
 }
 
-template<typename T, int32_t stackCapacity>
-inline T *MaybeStackArray<T, stackCapacity>::resize(int32_t newCapacity, int32_t length) {
+template <typename T, int32_t stackCapacity>
+inline T* MaybeStackArray<T, stackCapacity>::resize(int32_t newCapacity,
+                                                    int32_t length) U_LIFETIME_BOUND {
     if(newCapacity>0) {
 #if U_DEBUG && defined(UPRV_MALLOC_COUNT)
         ::fprintf(::stderr, "MaybeStackArray (resize) alloc %d * %lu\n", newCapacity, sizeof(T));
@@ -590,30 +592,30 @@ public:
      * Access without ownership change.
      * @return the header pointer
      */
-    H *getAlias() const { return ptr; }
+    H* getAlias() const U_LIFETIME_BOUND { return ptr; }
     /**
      * Returns the array start.
      * @return array start, same address as getAlias()+1
      */
-    T *getArrayStart() const { return reinterpret_cast<T *>(getAlias()+1); }
+    T* getArrayStart() const U_LIFETIME_BOUND { return reinterpret_cast<T*>(getAlias() + 1); }
     /**
      * Returns the array limit.
      * @return array limit
      */
-    T *getArrayLimit() const { return getArrayStart()+capacity; }
+    T* getArrayLimit() const U_LIFETIME_BOUND { return getArrayStart() + capacity; }
     /**
      * Access without ownership change. Same as getAlias().
      * A class instance can be used directly in expressions that take a T *.
      * @return the header pointer
      */
-    operator H *() const { return ptr; }
+    operator H*() const U_LIFETIME_BOUND { return ptr; }
     /**
      * Array item access (writable).
      * No index bounds check.
      * @param i array index
      * @return reference to the array item
      */
-    T &operator[](ptrdiff_t i) { return getArrayStart()[i]; }
+    T& operator[](ptrdiff_t i) U_LIFETIME_BOUND { return getArrayStart()[i]; }
     /**
      * Deletes the memory block (if owned) and aliases another one, no transfer of ownership.
      * If the arguments are illegal, then the current memory is unchanged.
@@ -639,7 +641,7 @@ public:
      * @param length number of T items to be copied from the old array to the new one
      * @return the allocated pointer, or nullptr if the allocation failed
      */
-    inline H *resize(int32_t newCapacity, int32_t length=0);
+    inline H* resize(int32_t newCapacity, int32_t length = 0) U_LIFETIME_BOUND;
     /**
      * Gives up ownership of the memory if owned, or else clones it,
      * copying the header and length T array items; resets itself to the internal memory.
@@ -671,9 +673,9 @@ private:
     void operator=(const MaybeStackHeaderAndArray & /*other*/) {}
 };
 
-template<typename H, typename T, int32_t stackCapacity>
-inline H *MaybeStackHeaderAndArray<H, T, stackCapacity>::resize(int32_t newCapacity,
-                                                                int32_t length) {
+template <typename H, typename T, int32_t stackCapacity>
+inline H* MaybeStackHeaderAndArray<H, T, stackCapacity>::resize(int32_t newCapacity,
+                                                                int32_t length) U_LIFETIME_BOUND {
     if(newCapacity>=0) {
 #if U_DEBUG && defined(UPRV_MALLOC_COUNT)
       ::fprintf(::stderr,"MaybeStackHeaderAndArray alloc %d + %d * %ul\n", sizeof(H),newCapacity,sizeof(T));
@@ -772,7 +774,7 @@ public:
         other.fCount = 0;
     }
 
-    MemoryPool& operator=(MemoryPool&& other) noexcept {
+    MemoryPool& operator=(MemoryPool&& other) noexcept U_LIFETIME_BOUND {
         // Since `this` may contain instances that need to be deleted, we can't
         // just throw them away and replace them with `other`. The normal way of
         // dealing with this in C++ is to swap `this` and `other`, rather than
@@ -791,8 +793,8 @@ public:
      * @param args Arguments to be forwarded to the typename T constructor.
      * @return A pointer to the newly created object, or nullptr on error.
      */
-    template<typename... Args>
-    T* create(Args&&... args) {
+    template <typename... Args>
+    T* create(Args&&... args) U_LIFETIME_BOUND {
         int32_t capacity = fPool.getCapacity();
         if (fCount == capacity &&
             fPool.resize(capacity == stackCapacity ? 4 * capacity : 2 * capacity,
@@ -803,7 +805,7 @@ public:
     }
 
     template <typename... Args>
-    T* createAndCheckErrorCode(UErrorCode &status, Args &&... args) {
+    T* createAndCheckErrorCode(UErrorCode& status, Args&&... args) U_LIFETIME_BOUND {
         if (U_FAILURE(status)) {
             return nullptr;
         }
@@ -849,13 +851,13 @@ protected:
 template<typename T, int32_t stackCapacity = 8>
 class MaybeStackVector : protected MemoryPool<T, stackCapacity> {
 public:
-    template<typename... Args>
-    T* emplaceBack(Args&&... args) {
+    template <typename... Args>
+    T* emplaceBack(Args&&... args) U_LIFETIME_BOUND {
         return this->create(args...);
     }
 
     template <typename... Args>
-    T *emplaceBackAndCheckErrorCode(UErrorCode &status, Args &&... args) {
+    T* emplaceBackAndCheckErrorCode(UErrorCode& status, Args&&... args) U_LIFETIME_BOUND {
         return this->createAndCheckErrorCode(status, args...);
     }
 
@@ -863,11 +865,11 @@ public:
         return this->fCount;
     }
 
-    T** getAlias() {
+    T** getAlias() U_LIFETIME_BOUND {
         return this->fPool.getAlias();
     }
 
-    const T *const *getAlias() const {
+    const T* const* getAlias() const U_LIFETIME_BOUND {
         return this->fPool.getAlias();
     }
 
@@ -877,7 +879,7 @@ public:
      * @param i array index
      * @return reference to the array item
      */
-    const T* operator[](ptrdiff_t i) const {
+    const T* operator[](ptrdiff_t i) const U_LIFETIME_BOUND {
         return this->fPool[i];
     }
 
@@ -887,7 +889,7 @@ public:
      * @param i array index
      * @return reference to the array item
      */
-    T* operator[](ptrdiff_t i) {
+    T* operator[](ptrdiff_t i) U_LIFETIME_BOUND {
         return this->fPool[i];
     }
 };
