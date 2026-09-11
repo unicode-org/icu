@@ -57,6 +57,7 @@ public:
     Segment operator*() const;
     SegmentIterator & operator++();
     SegmentIterator & operator--();
+    // TODO: implement operator->()
 private:
     enum IterLogicalState {
         // Represents the state in which we know both the start

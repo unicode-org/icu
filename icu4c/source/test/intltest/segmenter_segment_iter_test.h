@@ -24,6 +24,7 @@ public:
     void testSegmentsFromOnBoundary();
     void testSegmentsBeforeMiddleOfSegment();
     void testSegmentsBeforeOnBoundary();
+    void testBidiIter();
 
 private:
     // Test parameters, from the test framework and test invocation.

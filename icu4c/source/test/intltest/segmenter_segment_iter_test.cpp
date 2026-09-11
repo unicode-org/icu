@@ -33,6 +33,7 @@ void SegmentIterTest::runIndexedTest( int32_t index, UBool exec, const char* &na
     TESTCASE_AUTO(testSegmentsFromOnBoundary);
     TESTCASE_AUTO(testSegmentsBeforeMiddleOfSegment);
     TESTCASE_AUTO(testSegmentsBeforeOnBoundary);
+    TESTCASE_AUTO(testBidiIter);
 
     TESTCASE_AUTO_END;
 }
@@ -147,6 +148,7 @@ void SegmentIterTest::testMultipleSegmentObjectsFromSegmenter() {
     auto segmentRange1 = segments1->segments();
     std::vector<std::u16string_view> segmentStrVec1;
     for (auto segmentIter = segmentRange1.begin(); segmentIter != segmentRange1.end(); ++segmentIter) {
+        // TODO: replace with operator->
         segmentStrVec1.push_back((*segmentIter).getSubstr());
     }   
     assertTrue("segment strings from SegmentIterator 1", segmentStrVec1 == exp1);
@@ -156,6 +158,7 @@ void SegmentIterTest::testMultipleSegmentObjectsFromSegmenter() {
     auto segmentRange2 = segments2->segments();
     std::vector<std::u16string_view> segmentStrVec2;
     for (auto segmentIter = segmentRange2.begin(); segmentIter != segmentRange2.end(); ++segmentIter) {
+        // TODO: replace with operator->
         segmentStrVec2.push_back((*segmentIter).getSubstr());
     }   
     assertTrue("segment strings from SegmentIterator 2", segmentStrVec2 == exp2);
@@ -163,6 +166,7 @@ void SegmentIterTest::testMultipleSegmentObjectsFromSegmenter() {
     // Check that Segments for source1 is unaffected
     segmentStrVec1.clear();
     for (auto segmentIter = segmentRange1.begin(); segmentIter != segmentRange1.end(); ++segmentIter) {
+        // TODO: replace with operator->
         segmentStrVec1.push_back((*segmentIter).getSubstr());
     }   
     assertTrue("segment strings from SegmentIterator 1 unaffected after 2", segmentStrVec1 == exp1);
@@ -172,6 +176,7 @@ void SegmentIterTest::testMultipleSegmentObjectsFromSegmenter() {
     auto segmentRange3 = segments3->segments();
     std::vector<std::u16string_view> segmentStrVec3;
     for (auto segmentIter = segmentRange3.begin(); segmentIter != segmentRange3.end(); ++segmentIter) {
+        // TODO: replace with operator->
         segmentStrVec3.push_back((*segmentIter).getSubstr());
     }
     assertTrue("segment strings from SegmentIterator 3", segmentStrVec3 == exp3);
@@ -179,6 +184,7 @@ void SegmentIterTest::testMultipleSegmentObjectsFromSegmenter() {
     // Check that Segments for source1 is unaffected
     segmentStrVec1.clear();
     for (auto segmentIter = segmentRange1.begin(); segmentIter != segmentRange1.end(); ++segmentIter) {
+        // TODO: replace with operator->
         segmentStrVec1.push_back((*segmentIter).getSubstr());
     }   
     assertTrue("segment strings from SegmentIterator unaffected after 3", segmentStrVec1 == exp1);
@@ -186,6 +192,7 @@ void SegmentIterTest::testMultipleSegmentObjectsFromSegmenter() {
     // Check that Segments for source2 is unaffected
     segmentStrVec2.clear();
     for (auto segmentIter = segmentRange2.begin(); segmentIter != segmentRange2.end(); ++segmentIter) {
+        // TODO: replace with operator->
         segmentStrVec2.push_back((*segmentIter).getSubstr());
     }   
     assertTrue("segment strings from SegmentIterator 2 unaffected after 3", segmentStrVec2 == exp2);
@@ -231,6 +238,7 @@ void SegmentIterTest::testRuleStatus() {
     std::vector<std::u16string_view> words;
     for (auto segmentIter = segmentRange.begin(); segmentIter != segmentRange.end(); ++segmentIter) {
         // filter (keep) words where ruleStatus > UBRK_WORD_NONE_LIMIT
+        // TODO: replace with operator->
         if ((*segmentIter).getRuleStatus() > UBRK_WORD_NONE_LIMIT) {
             words.push_back((*segmentIter).getSubstr());
         }
@@ -243,10 +251,10 @@ void SegmentIterTest::testRuleStatus() {
 
     std::vector<std::u16string_view> nonWords;
     for (auto segmentIter = segmentRange.begin(); segmentIter != segmentRange.end(); ++segmentIter) {
-        auto segment = *segmentIter;
         // filter (keep) words where ruleStatus <= UBRK_WORD_NONE_LIMIT
-        if (segment.getRuleStatus() <= UBRK_WORD_NONE_LIMIT) {
-            nonWords.push_back(segment.getSubstr());
+        // TODO: replace with operator->
+        if ((*segmentIter).getRuleStatus() <= UBRK_WORD_NONE_LIMIT) {
+            nonWords.push_back((*segmentIter).getSubstr());
         }
     }
 
@@ -258,10 +266,10 @@ void SegmentIterTest::testRuleStatus() {
     std::vector<std::u16string_view> wordsBackward;
     for (auto segmentIter = segmentRange.end(); segmentIter != segmentRange.begin(); ) {
         --segmentIter;
-        auto segment = *segmentIter;
         // filter (keep) words where ruleStatus > UBRK_WORD_NONE_LIMIT
-        if (segment.getRuleStatus() > UBRK_WORD_NONE_LIMIT) {
-            wordsBackward.push_back(segment.getSubstr());
+        // TODO: replace with operator->
+        if ((*segmentIter).getRuleStatus() > UBRK_WORD_NONE_LIMIT) {
+            wordsBackward.push_back((*segmentIter).getSubstr());
         }
     }
 
@@ -374,6 +382,34 @@ void SegmentIterTest::testSegmentsBeforeOnBoundary() {
     assertEquals("first segment limit", 9, segmentVec1[0].getLimit());
     assertEquals("second segment start", 3, segmentVec1[1].getStart());
     assertEquals("second segment limit", 4, segmentVec1[1].getLimit());
+}
+
+void SegmentIterTest::testBidiIter() {
+    IcuTestErrorCode errorCode(*this, "testBidiIter");
+
+    icu::segmenter::LocalizedSegmenter enWordSegmenter =
+        icu::segmenter::LocalizedSegmenterBuilder()
+            .setLocale(Locale::getEnglish())
+            .setSegmentationType(icu::segmenter::SegmentationType::WORD)
+            .build(errorCode);
+    
+    std::u16string_view source1 = u"The quick brown fox jumped over the lazy dog.";
+    int32_t startIdx = 9;
+
+    // Create new Segments for source1
+    auto segments1 = enWordSegmenter.segment(source1, errorCode);
+    auto segmentRange1 = segments1->segments();
+    auto segmentIter = segmentRange1.begin();
+
+    assertEquals("segmentIter[0] * substr", u"The", (*segmentIter).getSubstr());
+    // TODO: replace with operator->
+    // assertEquals("segmentIter[0] -> substr", u"The", segmentIter->getSubstr());
+    ++segmentIter;  // pre-increment
+    auto segment = *segmentIter;
+    auto expSubstr = u" ";
+    assertEquals("segmentIter[1] * substr", expSubstr, segment.getSubstr());
+    ++segmentIter;
+    assertEquals("segmentIter[2] * substr", u"quick", (*segmentIter).getSubstr());
 }
 
 //---------------------------------------------
