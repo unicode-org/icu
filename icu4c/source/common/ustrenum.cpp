@@ -40,8 +40,8 @@ StringEnumeration::clone() const {
   return nullptr;
 }
 
-const char *
-StringEnumeration::next(int32_t *resultLength, UErrorCode &status) {
+const char*
+StringEnumeration::next(int32_t* resultLength, UErrorCode& status) U_LIFETIME_BOUND {
     const UnicodeString *s=snext(status);
     if(U_SUCCESS(status) && s!=nullptr) {
         unistr=*s;
@@ -58,8 +58,8 @@ StringEnumeration::next(int32_t *resultLength, UErrorCode &status) {
     return nullptr;
 }
 
-const char16_t *
-StringEnumeration::unext(int32_t *resultLength, UErrorCode &status) {
+const char16_t*
+StringEnumeration::unext(int32_t* resultLength, UErrorCode& status) U_LIFETIME_BOUND {
     const UnicodeString *s=snext(status);
     if(U_SUCCESS(status) && s!=nullptr) {
         unistr=*s;
@@ -72,8 +72,8 @@ StringEnumeration::unext(int32_t *resultLength, UErrorCode &status) {
     return nullptr;
 }
 
-const UnicodeString *
-StringEnumeration::snext(UErrorCode &status) {
+const UnicodeString*
+StringEnumeration::snext(UErrorCode& status) U_LIFETIME_BOUND {
     int32_t length;
     const char *s=next(&length, status);
     return setChars(s, length, status);
@@ -100,8 +100,8 @@ StringEnumeration::ensureCharsCapacity(int32_t capacity, UErrorCode &status) {
     }
 }
 
-UnicodeString *
-StringEnumeration::setChars(const char *s, int32_t length, UErrorCode &status) {
+UnicodeString*
+StringEnumeration::setChars(const char* s, int32_t length, UErrorCode& status) U_LIFETIME_BOUND {
     if(U_SUCCESS(status) && s!=nullptr) {
         if(length<0) {
             length = static_cast<int32_t>(uprv_strlen(s));
@@ -161,11 +161,11 @@ int32_t UStringEnumeration::count(UErrorCode& status) const {
     return uenum_count(uenum, &status);
 }
 
-const char *UStringEnumeration::next(int32_t *resultLength, UErrorCode &status) {
+const char* UStringEnumeration::next(int32_t* resultLength, UErrorCode& status) U_LIFETIME_BOUND {
     return uenum_next(uenum, resultLength, &status);
 }
 
-const UnicodeString* UStringEnumeration::snext(UErrorCode& status) {
+const UnicodeString* UStringEnumeration::snext(UErrorCode& status) U_LIFETIME_BOUND {
     int32_t length;
     const char16_t* str = uenum_unext(uenum, &length, &status);
     if (str == nullptr || U_FAILURE(status)) {

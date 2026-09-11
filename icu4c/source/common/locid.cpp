@@ -2592,7 +2592,7 @@ public:
         return result;
     }
 
-    virtual const char* next(int32_t* resultLength, UErrorCode& status) override {
+    virtual const char* next(int32_t* resultLength, UErrorCode& status) U_LIFETIME_BOUND override {
         const char* result;
         int32_t len;
         if(U_SUCCESS(status) && *current != 0) {
@@ -2611,7 +2611,7 @@ public:
         return result;
     }
 
-    virtual const UnicodeString* snext(UErrorCode& status) override {
+    virtual const UnicodeString* snext(UErrorCode& status) U_LIFETIME_BOUND override {
         if (U_FAILURE(status)) { return nullptr; }
         int32_t resultLength = 0;
         const char *s = next(&resultLength, status);
@@ -2636,7 +2636,7 @@ public:
     using KeywordEnumeration::KeywordEnumeration;
     virtual ~UnicodeKeywordEnumeration();
 
-    virtual const char* next(int32_t* resultLength, UErrorCode& status) override {
+    virtual const char* next(int32_t* resultLength, UErrorCode& status) U_LIFETIME_BOUND override {
         const char* legacy_key = KeywordEnumeration::next(nullptr, status);
         while (U_SUCCESS(status) && legacy_key != nullptr) {
             const char* key = uloc_toUnicodeLocaleKey(legacy_key);

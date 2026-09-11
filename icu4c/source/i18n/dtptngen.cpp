@@ -2930,7 +2930,7 @@ DTSkeletonEnumeration::DTSkeletonEnumeration(PatternMap& patternMap, dtStrEnum t
 }
 
 const UnicodeString*
-DTSkeletonEnumeration::snext(UErrorCode& status) {
+DTSkeletonEnumeration::snext(UErrorCode& status) U_LIFETIME_BOUND {
     if (U_SUCCESS(status) && fSkeletons.isValid() && pos < fSkeletons->size()) {
         return static_cast<const UnicodeString*>(fSkeletons->elementAt(pos++));
     }
@@ -2997,7 +2997,7 @@ DTRedundantEnumeration::add(const UnicodeString& pattern, UErrorCode& status) {
 }
 
 const UnicodeString*
-DTRedundantEnumeration::snext(UErrorCode& status) {
+DTRedundantEnumeration::snext(UErrorCode& status) U_LIFETIME_BOUND {
     if (U_SUCCESS(status) && fPatterns.isValid() && pos < fPatterns->size()) {
         return static_cast<const UnicodeString*>(fPatterns->elementAt(pos++));
     }

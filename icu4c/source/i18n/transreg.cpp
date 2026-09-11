@@ -762,7 +762,7 @@ const UnicodeString& TransliteratorRegistry::getAvailableID(int32_t index) const
     return fBogus;
 }
 
-StringEnumeration* TransliteratorRegistry::getAvailableIDs() const {
+StringEnumeration* TransliteratorRegistry::getAvailableIDs() const U_LIFETIME_BOUND {
     return new Enumeration(*this);
 }
 
@@ -869,7 +869,7 @@ UnicodeString& TransliteratorRegistry::getAvailableVariant(int32_t index,
 // class TransliteratorRegistry::Enumeration
 //----------------------------------------------------------------------
 
-TransliteratorRegistry::Enumeration::Enumeration(const TransliteratorRegistry& _reg) :
+TransliteratorRegistry::Enumeration::Enumeration(const TransliteratorRegistry& _reg U_LIFETIME_BOUND) :
     pos(UHASH_FIRST), size(_reg.availableIDs.count()), reg(_reg) {
 }
 
@@ -880,7 +880,7 @@ int32_t TransliteratorRegistry::Enumeration::count(UErrorCode& /*status*/) const
     return size;
 }
 
-const UnicodeString* TransliteratorRegistry::Enumeration::snext(UErrorCode& status) {
+const UnicodeString* TransliteratorRegistry::Enumeration::snext(UErrorCode& status) U_LIFETIME_BOUND {
     // This is sloppy but safe -- if we get out of sync with the underlying
     // registry, we will still return legal strings, but they might not
     // correspond to the snapshot at construction time.  So there could be

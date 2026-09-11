@@ -961,7 +961,7 @@ public:
         return U_FAILURE(status) ? 0 : len;
     }
 
-    virtual const UnicodeString* snext(UErrorCode& status) override {
+    virtual const UnicodeString* snext(UErrorCode& status) U_LIFETIME_BOUND override {
         if (U_SUCCESS(status) && map != nullptr && pos < len) {
             getID(map[pos], status);
             ++pos;
