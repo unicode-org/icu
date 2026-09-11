@@ -1350,7 +1350,7 @@ ubidi_getBaseDirection(const UChar *text,  int32_t length );
  * @stable ICU 2.0
  */
 U_CAPI const UChar* U_EXPORT2
-ubidi_getText(const UBiDi* pBiDi U_LIFETIME_BOUND);
+ubidi_getText(const UBiDi* pBiDi);
 
 /**
  * Get the length of the text.
@@ -1500,7 +1500,7 @@ ubidi_getLevelAt(const UBiDi *pBiDi, int32_t charIndex);
  * @stable ICU 2.0
  */
 U_CAPI const UBiDiLevel* U_EXPORT2
-ubidi_getLevels(UBiDi* pBiDi U_LIFETIME_BOUND, UErrorCode* pErrorCode);
+ubidi_getLevels(UBiDi* pBiDi, UErrorCode* pErrorCode);
 
 /**
  * Get a logical run.
