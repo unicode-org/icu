@@ -28,6 +28,10 @@
 #include "sharedobject.h"
 #include "unifiedcache.h"
 #include "uassert.h"
+#if !UCONFIG_NO_COLLATION && !UCONFIG_NO_BREAK_ITERATION
+#include "unicode/stsearch.h"
+#include "unicode/uclean.h"
+#endif
 
 
 MultithreadTest::MultithreadTest()
@@ -79,6 +83,9 @@ void MultithreadTest::runIndexedTest( int32_t index, UBool exec,
     TESTCASE_AUTO(Test20104);
 #endif /* #if !UCONFIG_NO_FORMATTING */
 #endif /* #if !UCONFIG_NO_TRANSLITERATION */
+#if !UCONFIG_NO_COLLATION && !UCONFIG_NO_BREAK_ITERATION
+    TESTCASE_AUTO(TestInitializeFCD);
+#endif /* #if !UCONFIG_NO_COLLATION && !UCONFIG_NO_BREAK_ITERATION */
     TESTCASE_AUTO_END;
 }
 
@@ -1368,3 +1375,41 @@ void MultithreadTest::Test20104() {
 #endif /* !UCONFIG_NO_FORMATTING */
 
 #endif /* !UCONFIG_NO_TRANSLITERATION */
+
+#if !UCONFIG_NO_COLLATION && !UCONFIG_NO_BREAK_ITERATION
+// Verify that initializeFCD is thread safe by constructing the first StringSearch object
+// from multiple threads simultaneously.
+class TestInitializeFCDThread : public SimpleThread {
+public:
+    u_atomic_int32_t *fGate;
+    int32_t fNumThreads;
+
+    TestInitializeFCDThread() : fGate(nullptr), fNumThreads(0) {}
+    virtual void run() override {
+        // Wait until all threads are ready to call initializeFCD together.
+        umtx_atomic_inc(fGate);
+        while (umtx_loadAcquire(*fGate) < fNumThreads) {}
+        UErrorCode status = U_ZERO_ERROR;
+        UnicodeString pattern("a");
+        UnicodeString target("banana");
+        StringSearch search(pattern, target, Locale::getEnglish(), nullptr, status);
+    }
+};
+
+void MultithreadTest::TestInitializeFCD() {
+    // Force g_nfcImpl back to null so every thread must call initializeFCD.
+    u_cleanup();
+    static constexpr int32_t NUM_THREADS = 16;
+    u_atomic_int32_t gate{0};
+    TestInitializeFCDThread threads[NUM_THREADS];
+    for (auto &thread : threads) {
+        thread.fGate = &gate;
+        thread.fNumThreads = NUM_THREADS;
+        thread.start();
+    }
+    for (auto &thread : threads) {
+        thread.join();
+    }
+    // Note: failure is reported by ThreadSanitizer. Test body itself succeeds.
+}
+#endif /* !UCONFIG_NO_COLLATION && !UCONFIG_NO_BREAK_ITERATION */
