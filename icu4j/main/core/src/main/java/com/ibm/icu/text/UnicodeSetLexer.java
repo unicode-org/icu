@@ -657,10 +657,14 @@ class UnicodeSetLexer {
         final var variableToken = expressionLexer.lookahead();
         if (variableToken.isSetOperator('[')) {
             final var rebuiltPattern = new StringBuilder();
-            final var expressionValue = new UnicodeSet();
+            final UnicodeSet expressionValue;
             try {
-                expressionValue.parseUnicodeSet(
-                        expressionLexer, rebuiltPattern, unicodeSetOptions_, /* depth= */ 0);
+                expressionValue =
+                        UnicodeSet.parseUnicodeSet(
+                                expressionLexer,
+                                rebuiltPattern,
+                                unicodeSetOptions_,
+                                /* depth= */ 0);
             } catch (IllegalArgumentException e) {
                 throw lexicalError(
                         "The value of variable "
