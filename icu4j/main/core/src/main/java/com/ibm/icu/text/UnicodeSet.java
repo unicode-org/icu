@@ -2556,7 +2556,7 @@ public class UnicodeSet extends UnicodeFilter
             int options,
             int depth) {
         final var lexer = new UnicodeSetLexer(pattern, parsePosition, chars, options, symbols);
-        parseUnicodeSet(lexer, rebuiltPat, options, depth);
+        set(parseUnicodeSet(lexer, rebuiltPat, options, depth));
     }
 
     private static void syntaxError(RuleCharacterIterator chars, String msg) {
@@ -4887,8 +4887,9 @@ public class UnicodeSet extends UnicodeFilter
         boolean containsSetOperation = false;
     }
 
-    void parseUnicodeSet(UnicodeSetLexer lexer, StringBuilder rebuiltPat, int options, int depth) {
-        clear();
+    static UnicodeSet parseUnicodeSet(
+            UnicodeSetLexer lexer, StringBuilder rebuiltPat, int options, int depth) {
+        final UnicodeSet result;
 
         if (depth > MAX_DEPTH) {
             throw lexer.syntaxError("depth <= " + MAX_DEPTH, "depth = " + depth);
@@ -4908,8 +4909,8 @@ public class UnicodeSet extends UnicodeFilter
             // UnicodeSet ::= property-query
             // Extension:
             //              | set-valued-variable
-            set(lexer.lookahead().set());
-            _toPattern(prettyPrintedPattern, /* escapeUnprintable= */ false);
+            result = lexer.lookahead().set();
+            result._toPattern(prettyPrintedPattern, /* escapeUnprintable= */ false);
             lexer.advance();
             preserveSyntaxInPattern = true;
         } else {
@@ -4922,7 +4923,9 @@ public class UnicodeSet extends UnicodeFilter
                     isComplement = true;
                 }
                 final var contentProperties = new GrammaticalConstructProperties();
-                parseContent(lexer, prettyPrintedPattern, options, depth, contentProperties);
+                result =
+                        parseContent(
+                                lexer, prettyPrintedPattern, options, depth, contentProperties);
                 preserveSyntaxInPattern |= contentProperties.containsSetOperation;
                 if (!lexer.acceptSetOperator(']')) {
                     throw lexer.syntaxError("]", lexer.lookahead().debugString());
@@ -4939,26 +4942,28 @@ public class UnicodeSet extends UnicodeFilter
          * makes patterns like /[^abc]/i work.
          */
         if ((options & CASE_MASK) != 0) {
-            closeOver(options);
+            result.closeOver(options);
         }
         if (isComplement) {
-            complement().removeAllStrings(); // code point complement
+            result.complement().removeAllStrings(); // code point complement
         }
         if (preserveSyntaxInPattern) {
             rebuiltPat.append(prettyPrintedPattern);
         } else {
             final var sb = new StringBuffer();
-            _generatePattern(sb, /* escapeUnprintable= */ false);
+            result._generatePattern(sb, /* escapeUnprintable= */ false);
             rebuiltPat.append(sb);
         }
+        return result;
     }
 
-    void parseContent(
+    static UnicodeSet parseContent(
             UnicodeSetLexer lexer,
             StringBuilder rebuiltPat,
             int options,
             int depth,
             GrammaticalConstructProperties properties) {
+        final UnicodeSet result = new UnicodeSet();
         //   Content ::= ""
         //             | ElementList
         //             | ElementList UnescapedHyphenMinus
@@ -4990,8 +4995,8 @@ public class UnicodeSet extends UnicodeFilter
         //   Mutations   ::= "" | Mutation Mutations
         //   Mutation    ::= Elements  | SetOperations
         // Where a Mutation is not a subexpression, but a modification of the enclosing ElementList,
-        // either adding or removing characters; this means that parseMutation adds to or removes
-        // from this object, instead of returning a set.
+        // either adding or removing characters; this means that `result.parseMutation` adds to or
+        // removes from `result`, instead of being static returning a set.
         // In parseSetOperations below, we will describe the logic both in terms of the LR
         // expression grammar, and in terms of the LL grammar.
         // With the DollarElements ICU extension, a non-final Mutation can be DollarElements, so
@@ -5005,20 +5010,18 @@ public class UnicodeSet extends UnicodeFilter
         //   FinalMutation ::= Elements
         //                   | SetOperations
         if (lexer.acceptSetOperator('-')) {
-            add('-');
+            result.add('-');
             // When we otherwise preserve the syntax, we escape an initial UnescapedHyphenMinus, but
             // not a final one, for consistency with older ICU behaviour.
             rebuiltPat.append("\\-");
         }
         while (!lexer.atEnd()) {
-            // Note that while a HYPHEN-MINUS mapped by the symbol table is treated as a literal at
-            // the beginning of the Content, it is treated as a set elsewhere, including at the end.
             if (lexer.acceptSetOperator('-')) {
                 // We can be here on the first iteration: [--] is allowed by the
                 // grammar and by the old parser.
                 rebuiltPat.append('-');
-                add('-');
-                return;
+                result.add('-');
+                return result;
             } else if (lexer.lookahead().isSetOperator('$')) {
                 if (lexer.lookahead2().isSetOperator(']')) {
                     // ICU extensions: A $ is allowed in an ElementList if followed by Elements, or
@@ -5027,17 +5030,18 @@ public class UnicodeSet extends UnicodeFilter
                     rebuiltPat.append('$');
                     // Consume the dollar.
                     lexer.advance();
-                    add(ETHER);
+                    result.add(ETHER);
                     properties.containsSetOperation = true;
-                    return;
+                    return result;
                 }
             }
             if (lexer.lookahead().isSetOperator(']')) {
-                return;
+                return result;
             }
             // Also handles FinalMutation.
-            parseMutation(lexer, rebuiltPat, options, depth, properties);
+            result.parseMutation(lexer, rebuiltPat, options, depth, properties);
         }
+        return result;
     }
 
     void parseMutation(
@@ -5058,7 +5062,7 @@ public class UnicodeSet extends UnicodeFilter
             parseSetOperations(lexer, rebuiltPat, options, depth);
         } else {
             // Also handles DollarElements.
-            parseElements(lexer, rebuiltPat);
+            addAll(parseElements(lexer, rebuiltPat));
         }
     }
 
@@ -5084,8 +5088,7 @@ public class UnicodeSet extends UnicodeFilter
         // but note that the tree resulting from this LL version is not an expression tree: the
         // operations are left-associative.
         // Start by parsing the first UnicodeSet.
-        final var leftHandSide = new UnicodeSet();
-        leftHandSide.parseUnicodeSet(lexer, rebuiltPat, options, depth + 1);
+        final var leftHandSide = parseUnicodeSet(lexer, rebuiltPat, options, depth + 1);
         addAll(leftHandSide);
         // In terms of the LR expression grammar, at this point this object is the
         // Union, which is a SetOperation.
@@ -5099,8 +5102,7 @@ public class UnicodeSet extends UnicodeFilter
             if (lexer.acceptSetOperator('&')) {
                 // Intersection ::= SetOperation & UnicodeSet
                 rebuiltPat.append('&');
-                final var rightHandSide = new UnicodeSet();
-                rightHandSide.parseUnicodeSet(lexer, rebuiltPat, options, depth + 1);
+                final var rightHandSide = parseUnicodeSet(lexer, rebuiltPat, options, depth + 1);
                 retainAll(rightHandSide);
             } else if (lexer.lookahead().isSetOperator('-')) {
                 // Here the grammar requires two tokens of lookahead to figure out whether the - is
@@ -5115,8 +5117,7 @@ public class UnicodeSet extends UnicodeFilter
                 lexer.advance();
                 // Difference ::= SetOperation - UnicodeSet
                 rebuiltPat.append('-');
-                final var rightHandSide = new UnicodeSet();
-                rightHandSide.parseUnicodeSet(lexer, rebuiltPat, options, depth + 1);
+                final var rightHandSide = parseUnicodeSet(lexer, rebuiltPat, options, depth + 1);
                 removeAll(rightHandSide);
             } else {
                 // Not an operator, end of the SetOperation (and of the SetOperations in the LL
@@ -5126,7 +5127,7 @@ public class UnicodeSet extends UnicodeFilter
         }
     }
 
-    void parseElements(UnicodeSetLexer lexer, StringBuilder rebuiltPat) {
+    static UnicodeSet parseElements(UnicodeSetLexer lexer, StringBuilder rebuiltPat) {
         // Elements     ::= Element
         //                | Range
         // Range        ::= RangeElement - RangeElement
@@ -5144,12 +5145,12 @@ public class UnicodeSet extends UnicodeFilter
         // A Content-final $ would already have been interpreted as an Æther by parseContent, so we
         // only need to check that RangeElement - $ is not Content-final.
         if (lexer.lookahead().isStringLiteral()) {
-            add(lexer.lookahead().element());
+            final String element = lexer.lookahead().element();
             rebuiltPat.append('{');
-            _appendToPat(rebuiltPat, lexer.lookahead().element(), /* escapeUnprintable= */ false);
+            _appendToPat(rebuiltPat, element, /* escapeUnprintable= */ false);
             rebuiltPat.append('}');
             lexer.advance();
-            return;
+            return UnicodeSet.from(element);
         }
         int first;
         if (lexer.lookahead().isSetOperator('$')) {
@@ -5166,15 +5167,13 @@ public class UnicodeSet extends UnicodeFilter
         if (!lexer.lookahead().isSetOperator('-')) {
             // No operator,
             // Elements ::= Element
-            add(first);
-            return;
+            return new UnicodeSet(first, first);
         }
         // Here the grammar requires two tokens of lookahead to figure out whether the - is the
         // operator of a Range or an UnescapedHyphenMinus in the enclosing Content.
         if (lexer.lookahead2().isSetOperator(']')) {
             // The operator is actually an UnescapedHyphenMinus; terminate the Elements before it.
-            add(first);
-            return;
+            return new UnicodeSet(first, first);
         }
         // Consume the hyphen-minus.
         lexer.advance();
@@ -5204,8 +5203,7 @@ public class UnicodeSet extends UnicodeFilter
         }
         lexer.advance();
         _appendToPat(rebuiltPat, last, /* escapeUnprintable= */ false);
-        add(first, last);
-        return;
+        return new UnicodeSet(first, last);
     }
 }
 // eof

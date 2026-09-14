@@ -1708,20 +1708,20 @@ private:
 
     class Lexer;
 
-    void parseUnicodeSet(Lexer &lexer,
-                         UnicodeString &rebuiltPat,
-                         uint32_t options,
-                         UnicodeSet &(UnicodeSet::*caseClosure)(int32_t attribute),
-                         int32_t depth,
-                         UErrorCode &ec);
+    static UnicodeSet parseUnicodeSet(Lexer &lexer,
+                                      UnicodeString &rebuiltPat,
+                                      uint32_t options,
+                                      UnicodeSet &(UnicodeSet::*caseClosure)(int32_t attribute),
+                                      int32_t depth,
+                                      UErrorCode &ec);
 
-    void parseContent(Lexer &lexer,
-                      UnicodeString &rebuiltPat,
-                      uint32_t options,
-                      UnicodeSet &(UnicodeSet::*caseClosure)(int32_t attribute),
-                      int32_t depth,
-                      bool &containsSetOperation,
-                      UErrorCode &ec);
+    static UnicodeSet parseContent(Lexer &lexer,
+                                   UnicodeString &rebuiltPat,
+                                   uint32_t options,
+                                   UnicodeSet &(UnicodeSet::*caseClosure)(int32_t attribute),
+                                   int32_t depth,
+                                   bool &containsSetOperation,
+                                   UErrorCode &ec);
 
     void parseMutation(Lexer &lexer,
                        UnicodeString &rebuiltPat,
@@ -1738,9 +1738,9 @@ private:
                             int32_t depth,
                             UErrorCode &ec);
 
-    void parseElements(Lexer &lexer,
-                       UnicodeString &rebuiltPat,
-                       UErrorCode &ec);
+    static UnicodeSet parseElements(Lexer &lexer,
+                                    UnicodeString &rebuiltPat,
+                                    UErrorCode &ec);
 
 
     void closeOverCaseInsensitive(bool simple);
