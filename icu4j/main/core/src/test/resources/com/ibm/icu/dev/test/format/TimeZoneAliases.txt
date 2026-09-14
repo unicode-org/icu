@@ -43,7 +43,6 @@ Brazil/Acre ; America/Porto_Acre
 Brazil/DeNoronha ; America/Noronha
 Brazil/East ; America/Sao_Paulo
 Brazil/West ; America/Manaus
-CST6CDT ; America/Chicago
 Canada/Atlantic ; America/Halifax
 Canada/Central ; America/Winnipeg
 Canada/East-Saskatchewan ; America/Regina
@@ -57,7 +56,6 @@ Chile/Continental ; America/Santiago
 Chile/EasterIsland ; Pacific/Easter
 Cuba ; America/Havana
 EST ; America/Indianapolis
-EST5EDT ; America/New_York
 Egypt ; Africa/Cairo
 Eire ; Europe/Dublin
 Etc/GMT+0 ; Etc/GMT
@@ -92,7 +90,6 @@ Japan ; Asia/Tokyo
 Kwajalein ; Pacific/Kwajalein
 Libya ; Africa/Tripoli
 MST ; America/Phoenix
-MST7MDT ; America/Denver
 Mexico/BajaNorte ; America/Tijuana
 Mexico/BajaSur ; America/Mazatlan
 Mexico/General ; America/Mexico_City
@@ -103,7 +100,6 @@ NZ ; Pacific/Auckland
 NZ-CHAT ; Pacific/Chatham
 Navajo ; America/Denver
 PRC ; Asia/Shanghai
-PST8PDT ; America/Los_Angeles
 Pacific/Samoa ; Pacific/Pago_Pago
 Poland ; Europe/Warsaw
 Portugal ; Europe/Lisbon
