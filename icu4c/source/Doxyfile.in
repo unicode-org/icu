@@ -2163,6 +2163,7 @@ PREDEFINED             = U_EXPORT2= \
                          U_SYSTEM= \
                          U_DEPRECATED= \
                          U_OBSOLETE= \
+                         U_LIFETIME_BOUND= \
                          U_CALLCONV_FPTR= \
                          U_CALLCONV= \
                          U_CDECL_BEGIN= \
