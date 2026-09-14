@@ -84,8 +84,8 @@ U_NAMESPACE_END
 
 U_NAMESPACE_USE
 
-U_CAPI const UBreakIterator * U_EXPORT2
-ucasemap_getBreakIterator(const UCaseMap *csm) {
+U_CAPI const UBreakIterator* U_EXPORT2
+ucasemap_getBreakIterator(const UCaseMap* csm U_LIFETIME_BOUND) {
     auto *impl = reinterpret_cast<const UCaseMapImpl *>(csm);
     return reinterpret_cast<UBreakIterator *>(impl->iter);
 }

@@ -80,7 +80,7 @@ public:
      * there is no mapping for s.
      * @stable ICU 2.8
      */
-    virtual const UnicodeString* lookup(const UnicodeString& s) const = 0;
+    virtual const UnicodeString* lookup(const UnicodeString& s) const U_LIFETIME_BOUND = 0;
 
     /**
      * Returns a pointer to a pre-parsed set associated with the variable with
@@ -100,7 +100,7 @@ public:
      * character, or nullptr if there is no mapping for ch.
      * @stable ICU 2.8
      */
-    virtual const UnicodeFunctor* lookupMatcher(UChar32 ch) const = 0;
+    virtual const UnicodeFunctor* lookupMatcher(UChar32 ch) const U_LIFETIME_BOUND = 0;
 
     /**
      * Parse a symbol reference name from the given string, starting

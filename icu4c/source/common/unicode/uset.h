@@ -1010,7 +1010,7 @@ uset_getStringCount(const USet *set);
  * @see uset_getStringCount
  */
 U_CAPI const UChar* U_EXPORT2
-uset_getString(const USet *set, int32_t index, int32_t *pLength);
+uset_getString(const USet* set U_LIFETIME_BOUND, int32_t index, int32_t* pLength);
 
 /**
  * Returns the number of items in this set.  An item is either a range
@@ -1387,7 +1387,9 @@ public:
 private:
     friend class USetCodePoints;
 
-    USetCodePointIterator(const USet *pUset, int32_t nRangeIndex, int32_t nRangeCount)
+    USetCodePointIterator(const USet* pUset U_LIFETIME_BOUND,
+                          int32_t nRangeIndex,
+                          int32_t nRangeCount)
             : uset(pUset), rangeIndex(nRangeIndex), rangeCount(nRangeCount),
                 c(U_SENTINEL), end(U_SENTINEL) {
         // Fetch the first range.
@@ -1424,7 +1426,8 @@ public:
      * Constructs a C++ "range" object over the code points of the USet.
      * @stable ICU 76
      */
-    USetCodePoints(const USet *pUset) : uset(pUset), rangeCount(uset_getRangeCount(pUset)) {}
+    USetCodePoints(const USet* pUset U_LIFETIME_BOUND)
+            : uset(pUset), rangeCount(uset_getRangeCount(pUset)) {}
 
     /** @stable ICU 76 */
     USetCodePoints(const USetCodePoints &other) = default;
@@ -1568,7 +1571,7 @@ public:
 private:
     friend class USetRanges;
 
-    USetRangeIterator(const USet *pUset, int32_t nRangeIndex, int32_t nRangeCount)
+    USetRangeIterator(const USet* pUset U_LIFETIME_BOUND, int32_t nRangeIndex, int32_t nRangeCount)
             : uset(pUset), rangeIndex(nRangeIndex), rangeCount(nRangeCount) {}
 
     const USet *uset;
@@ -1605,7 +1608,8 @@ public:
      * Constructs a C++ "range" object over the code point ranges of the USet.
      * @stable ICU 76
      */
-    USetRanges(const USet *pUset) : uset(pUset), rangeCount(uset_getRangeCount(pUset)) {}
+    USetRanges(const USet* pUset U_LIFETIME_BOUND)
+            : uset(pUset), rangeCount(uset_getRangeCount(pUset)) {}
 
     /** @stable ICU 76 */
     USetRanges(const USetRanges &other) = default;
@@ -1679,7 +1683,7 @@ public:
 private:
     friend class USetStrings;
 
-    USetStringIterator(const USet *pUset, int32_t nIndex, int32_t nCount)
+    USetStringIterator(const USet* pUset U_LIFETIME_BOUND, int32_t nIndex, int32_t nCount)
             : uset(pUset), index(nIndex), count(nCount) {}
 
     const USet *uset;
@@ -1715,7 +1719,8 @@ public:
      * Constructs a C++ "range" object over the strings of the USet.
      * @stable ICU 76
      */
-    USetStrings(const USet *pUset) : uset(pUset), count(uset_getStringCount(pUset)) {}
+    USetStrings(const USet* pUset U_LIFETIME_BOUND)
+            : uset(pUset), count(uset_getStringCount(pUset)) {}
 
     /** @stable ICU 76 */
     USetStrings(const USetStrings &other) = default;
@@ -1810,7 +1815,10 @@ public:
 private:
     friend class USetElements;
 
-    USetElementIterator(const USet *pUset, int32_t nIndex, int32_t nRangeCount, int32_t nTotalCount)
+    USetElementIterator(const USet* pUset U_LIFETIME_BOUND,
+                        int32_t nIndex,
+                        int32_t nRangeCount,
+                        int32_t nTotalCount)
             : uset(pUset), index(nIndex), rangeCount(nRangeCount), totalCount(nTotalCount),
                 c(U_SENTINEL), end(U_SENTINEL) {
         if (index < rangeCount) {
@@ -1870,7 +1878,7 @@ public:
      * Constructs a C++ "range" object over all of the elements of the USet.
      * @stable ICU 77
      */
-    USetElements(const USet *pUset)
+    USetElements(const USet* pUset U_LIFETIME_BOUND)
         : uset(pUset), rangeCount(uset_getRangeCount(pUset)),
             stringCount(uset_getStringCount(pUset)) {}
 

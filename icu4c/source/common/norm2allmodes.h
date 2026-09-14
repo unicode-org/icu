@@ -35,10 +35,10 @@ public:
     virtual ~Normalizer2WithImpl();
 
     // normalize
-    virtual UnicodeString &
-    normalize(const UnicodeString &src,
-              UnicodeString &dest,
-              UErrorCode &errorCode) const override {
+    virtual UnicodeString&
+    normalize(const UnicodeString& src,
+              UnicodeString& dest U_LIFETIME_BOUND,
+              UErrorCode& errorCode) const override {
         if(U_FAILURE(errorCode)) {
             dest.setToBogus();
             return dest;
@@ -61,23 +61,23 @@ public:
               ReorderingBuffer &buffer, UErrorCode &errorCode) const = 0;
 
     // normalize and append
-    virtual UnicodeString &
-    normalizeSecondAndAppend(UnicodeString &first,
-                             const UnicodeString &second,
-                             UErrorCode &errorCode) const override {
+    virtual UnicodeString&
+    normalizeSecondAndAppend(UnicodeString& first U_LIFETIME_BOUND,
+                             const UnicodeString& second,
+                             UErrorCode& errorCode) const override {
         return normalizeSecondAndAppend(first, second, true, errorCode);
     }
-    virtual UnicodeString &
-    append(UnicodeString &first,
-           const UnicodeString &second,
-           UErrorCode &errorCode) const override {
+    virtual UnicodeString&
+    append(UnicodeString& first U_LIFETIME_BOUND,
+           const UnicodeString& second,
+           UErrorCode& errorCode) const override {
         return normalizeSecondAndAppend(first, second, false, errorCode);
     }
-    UnicodeString &
-    normalizeSecondAndAppend(UnicodeString &first,
-                             const UnicodeString &second,
+    UnicodeString&
+    normalizeSecondAndAppend(UnicodeString& first U_LIFETIME_BOUND,
+                             const UnicodeString& second,
                              UBool doNormalize,
-                             UErrorCode &errorCode) const {
+                             UErrorCode& errorCode) const {
         uprv_checkCanGetBuffer(first, errorCode);
         if(U_FAILURE(errorCode)) {
             return first;
@@ -176,8 +176,10 @@ public:
         }
         return static_cast<int32_t>(spanQuickCheckYes(sArray, sArray + s.length(), errorCode) - sArray);
     }
-    virtual const char16_t *
-    spanQuickCheckYes(const char16_t *src, const char16_t *limit, UErrorCode &errorCode) const = 0;
+    virtual const char16_t*
+    spanQuickCheckYes(const char16_t* src U_LIFETIME_BOUND,
+                      const char16_t* limit,
+                      UErrorCode& errorCode) const = 0;
 
     virtual UNormalizationCheckResult getQuickCheck(UChar32) const {
         return UNORM_YES;
@@ -228,8 +230,10 @@ private:
         return sLimit == impl.decomposeUTF8(0, s, sLimit, nullptr, nullptr, errorCode);
     }
 
-    virtual const char16_t *
-    spanQuickCheckYes(const char16_t *src, const char16_t *limit, UErrorCode &errorCode) const override {
+    virtual const char16_t*
+    spanQuickCheckYes(const char16_t* src U_LIFETIME_BOUND,
+                      const char16_t* limit,
+                      UErrorCode& errorCode) const override {
         return impl.decompose(src, limit, nullptr, errorCode);
     }
     using Normalizer2WithImpl::spanQuickCheckYes;  // Avoid warning about hiding base class function.
@@ -322,8 +326,10 @@ private:
         impl.composeQuickCheck(sArray, sArray+s.length(), onlyContiguous, &qcResult);
         return qcResult;
     }
-    virtual const char16_t *
-    spanQuickCheckYes(const char16_t *src, const char16_t *limit, UErrorCode &) const override {
+    virtual const char16_t*
+    spanQuickCheckYes(const char16_t* src U_LIFETIME_BOUND,
+                      const char16_t* limit,
+                      UErrorCode&) const override {
         return impl.composeQuickCheck(src, limit, onlyContiguous, nullptr);
     }
     using Normalizer2WithImpl::spanQuickCheckYes;  // Avoid warning about hiding base class function.
@@ -361,8 +367,10 @@ private:
                        ReorderingBuffer &buffer, UErrorCode &errorCode) const override {
         impl.makeFCDAndAppend(src, limit, doNormalize, safeMiddle, buffer, errorCode);
     }
-    virtual const char16_t *
-    spanQuickCheckYes(const char16_t *src, const char16_t *limit, UErrorCode &errorCode) const override {
+    virtual const char16_t*
+    spanQuickCheckYes(const char16_t* src U_LIFETIME_BOUND,
+                      const char16_t* limit,
+                      UErrorCode& errorCode) const override {
         return impl.makeFCD(src, limit, nullptr, errorCode);
     }
     using Normalizer2WithImpl::spanQuickCheckYes;  // Avoid warning about hiding base class function.

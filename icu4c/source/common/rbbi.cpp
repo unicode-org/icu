@@ -277,7 +277,7 @@ RuleBasedBreakIterator::~RuleBasedBreakIterator() {
  * TODO: needs better handling of memory allocation errors.
  */
 RuleBasedBreakIterator&
-RuleBasedBreakIterator::operator=(const RuleBasedBreakIterator& that) {
+RuleBasedBreakIterator::operator=(const RuleBasedBreakIterator& that) U_LIFETIME_BOUND {
     if (this == &that) {
         return *this;
     }
@@ -445,7 +445,7 @@ UText *RuleBasedBreakIterator::getUText(UText *fillIn, UErrorCode &status) const
  * Return a CharacterIterator over the text being analyzed.
  */
 CharacterIterator&
-RuleBasedBreakIterator::getText() const {
+RuleBasedBreakIterator::getText() const U_LIFETIME_BOUND {
     return *fCharIter;
 }
 
@@ -510,7 +510,8 @@ RuleBasedBreakIterator::setText(const UnicodeString& newText) {
  *  Intended for use with text data originating in Java (garbage collected) environments
  *  where the data may be moved in memory at arbitrary times.
  */
-RuleBasedBreakIterator &RuleBasedBreakIterator::refreshInputText(UText *input, UErrorCode &status) {
+RuleBasedBreakIterator&
+RuleBasedBreakIterator::refreshInputText(UText* input, UErrorCode& status) U_LIFETIME_BOUND {
     if (U_FAILURE(status)) {
         return *this;
     }
@@ -1084,7 +1085,7 @@ int32_t RuleBasedBreakIterator::getRuleStatusVec(
 //                         for standard iterator types.
 //
 //-------------------------------------------------------------------------------
-const uint8_t  *RuleBasedBreakIterator::getBinaryRules(uint32_t &length) {
+const uint8_t* RuleBasedBreakIterator::getBinaryRules(uint32_t& length) U_LIFETIME_BOUND {
     const uint8_t  *retPtr = nullptr;
     length = 0;
 
@@ -1201,8 +1202,8 @@ getLanguageBreakEngineFromFactory(UChar32 c, const char* locale)
 //                          the character c.
 //
 //-------------------------------------------------------------------------------
-const LanguageBreakEngine *
-RuleBasedBreakIterator::getLanguageBreakEngine(UChar32 c, const char* locale) {
+const LanguageBreakEngine*
+RuleBasedBreakIterator::getLanguageBreakEngine(UChar32 c, const char* locale) U_LIFETIME_BOUND {
     const LanguageBreakEngine *lbe = nullptr;
     UErrorCode status = U_ZERO_ERROR;
 
@@ -1287,7 +1288,7 @@ void RuleBasedBreakIterator::dumpTables() {
  */
 
 const UnicodeString&
-RuleBasedBreakIterator::getRules() const {
+RuleBasedBreakIterator::getRules() const U_LIFETIME_BOUND {
     if (fData != nullptr) {
         return fData->getRuleSourceString();
     } else {

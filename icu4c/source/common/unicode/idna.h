@@ -116,9 +116,11 @@ public:
      * @return dest
      * @stable ICU 4.6
      */
-    virtual UnicodeString &
-    labelToASCII(const UnicodeString &label, UnicodeString &dest,
-                 IDNAInfo &info, UErrorCode &errorCode) const = 0;
+    virtual UnicodeString&
+    labelToASCII(const UnicodeString& label,
+                 UnicodeString& dest U_LIFETIME_BOUND,
+                 IDNAInfo& info,
+                 UErrorCode& errorCode) const = 0;
 
     /**
      * Converts a single domain name label into its Unicode form for human-readable display.
@@ -138,9 +140,11 @@ public:
      * @return dest
      * @stable ICU 4.6
      */
-    virtual UnicodeString &
-    labelToUnicode(const UnicodeString &label, UnicodeString &dest,
-                   IDNAInfo &info, UErrorCode &errorCode) const = 0;
+    virtual UnicodeString&
+    labelToUnicode(const UnicodeString& label,
+                   UnicodeString& dest U_LIFETIME_BOUND,
+                   IDNAInfo& info,
+                   UErrorCode& errorCode) const = 0;
 
     /**
      * Converts a whole domain name into its ASCII form for DNS lookup.
@@ -162,9 +166,11 @@ public:
      * @return dest
      * @stable ICU 4.6
      */
-    virtual UnicodeString &
-    nameToASCII(const UnicodeString &name, UnicodeString &dest,
-                IDNAInfo &info, UErrorCode &errorCode) const = 0;
+    virtual UnicodeString&
+    nameToASCII(const UnicodeString& name,
+                UnicodeString& dest U_LIFETIME_BOUND,
+                IDNAInfo& info,
+                UErrorCode& errorCode) const = 0;
 
     /**
      * Converts a whole domain name into its Unicode form for human-readable display.
@@ -184,9 +190,11 @@ public:
      * @return dest
      * @stable ICU 4.6
      */
-    virtual UnicodeString &
-    nameToUnicode(const UnicodeString &name, UnicodeString &dest,
-                  IDNAInfo &info, UErrorCode &errorCode) const = 0;
+    virtual UnicodeString&
+    nameToUnicode(const UnicodeString& name,
+                  UnicodeString& dest U_LIFETIME_BOUND,
+                  IDNAInfo& info,
+                  UErrorCode& errorCode) const = 0;
 
     // UTF-8 versions of the processing methods ---------------------------- ***
 

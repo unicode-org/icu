@@ -190,7 +190,7 @@ ucurr_unregister(UCurrRegistryKey key, UErrorCode* status);
  * @stable ICU 2.6
  */
 U_CAPI const UChar* U_EXPORT2
-ucurr_getName(const UChar* currency,
+ucurr_getName(const UChar* currency U_LIFETIME_BOUND,
               const char* locale,
               UCurrNameStyle nameStyle,
               UBool* isChoiceFormat,
@@ -215,7 +215,7 @@ ucurr_getName(const UChar* currency,
  * @stable ICU 4.2
  */
 U_CAPI const UChar* U_EXPORT2
-ucurr_getPluralName(const UChar* currency,
+ucurr_getPluralName(const UChar* currency U_LIFETIME_BOUND,
                     const char* locale,
                     UBool* isChoiceFormat,
                     const char* pluralCount,

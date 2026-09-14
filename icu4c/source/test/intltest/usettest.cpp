@@ -4760,7 +4760,9 @@ void UnicodeSetTest::TestToPatternOutput() {
             {uR"([\007F])", uR"([\u0007F])"},
             {uR"([\07F])", uR"([\u0007F])"},
             {uR"([\7F])", uR"([\u0007F])"},
-            {uR"([\u200E007])", uR"([07\u200E])"},
+            {uR"([\u200E007])", u"[07\\\u200E]"},
+            {u"[\\\u200E007]", u"[07\\\u200E]"},
+            {u"[{\\\u200E}]", u"[\\\u200E]"},
             {uR"([ :Greek:])", uR"([\:Gekr])"},
             {uR"([\uDBFF \uDFFF])", uR"([\uDFFF\uDBFF])"},
             // ICU-2906, ICU extension to UnicodeSet.
@@ -4782,8 +4784,6 @@ void UnicodeSetTest::TestParseErrors() {
     for (const auto expression : std::vector<std::u16string_view>{
             uR"([\u])",
             uR"([\x{}])",
-            // ICU-23497: the ignorable-format-control characters are not escapable-characters.
-            u"[\\\u200E007]",
         }) {
         UErrorCode errorCode = U_ZERO_ERROR;
         const UnicodeSet set(expression, errorCode);
@@ -4833,7 +4833,6 @@ void UnicodeSetTest::TestParseErrors() {
             uR"([{\Normandie}])",
             uR"([{\Picardie}])",
             uR"([{Provence-Al\pes-Côte d'Azur}])",
-            u"[{\\\u200E}]",
             // This was a well-formed set in ICU 78 and earlier; now it must be enclosed in square
             // brackets.
             uR"(\N{ latin small letter a })",

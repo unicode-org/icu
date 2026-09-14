@@ -339,7 +339,7 @@ public:
      * @return the newly created RuleBasedBreakIterator
      *  @stable ICU 2.0
      */
-    RuleBasedBreakIterator& operator=(const RuleBasedBreakIterator& that);
+    RuleBasedBreakIterator& operator=(const RuleBasedBreakIterator& that) U_LIFETIME_BOUND;
 
     /**
      * Equality operator.  Returns true if both BreakIterators are of the
@@ -386,7 +386,7 @@ public:
      * @return the description used to create this iterator
      *  @stable ICU 2.0
      */
-    virtual const UnicodeString& getRules() const;
+    virtual const UnicodeString& getRules() const U_LIFETIME_BOUND;
 
     //=======================================================================
     // BreakIterator overrides
@@ -416,7 +416,7 @@ public:
      * @return An iterator over the text being analyzed.
      * @stable ICU 2.0
      */
-    virtual CharacterIterator& getText() const override;
+    virtual CharacterIterator& getText() const U_LIFETIME_BOUND override;
 
     /**
       *  Get a UText for the text being analyzed.
@@ -682,7 +682,7 @@ public:
      *           caller, and must not be modified or deleted.
      * @stable ICU 4.8
      */
-    virtual const uint8_t *getBinaryRules(uint32_t &length);
+    virtual const uint8_t* getBinaryRules(uint32_t& length) U_LIFETIME_BOUND;
 
     /**
      *  Set the subject text string upon which the break iterator is operating
@@ -709,7 +709,8 @@ public:
      *
      * @stable ICU 49
      */
-    virtual RuleBasedBreakIterator &refreshInputText(UText *input, UErrorCode &status) override;
+    virtual RuleBasedBreakIterator& refreshInputText(UText* input,
+                                                     UErrorCode& status) U_LIFETIME_BOUND override;
 
 
 private:
@@ -775,7 +776,8 @@ private:
      * @param c         A character in the dictionary set
      * @param locale    The locale.
      */
-    const LanguageBreakEngine *getLanguageBreakEngine(UChar32 c, const char* locale);
+    const LanguageBreakEngine* getLanguageBreakEngine(UChar32 c,
+                                                      const char* locale) U_LIFETIME_BOUND;
 
   public:
 #ifndef U_HIDE_INTERNAL_API

@@ -209,11 +209,13 @@ Normalizer::isNormalized(const UnicodeString& source,
     }
 }
 
-UnicodeString & U_EXPORT2
-Normalizer::concatenate(const UnicodeString &left, const UnicodeString &right,
-                        UnicodeString &result,
-                        UNormalizationMode mode, int32_t options,
-                        UErrorCode &errorCode) {
+UnicodeString& U_EXPORT2
+Normalizer::concatenate(const UnicodeString& left,
+                        const UnicodeString& right,
+                        UnicodeString& result U_LIFETIME_BOUND,
+                        UNormalizationMode mode,
+                        int32_t options,
+                        UErrorCode& errorCode) {
     if(left.isBogus() || right.isBogus() || U_FAILURE(errorCode)) {
         result.setToBogus();
         if(U_SUCCESS(errorCode)) {

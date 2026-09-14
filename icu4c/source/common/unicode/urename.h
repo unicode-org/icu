@@ -475,6 +475,7 @@
 #define ubidi_isJoinControl U_ICU_ENTRY_POINT_RENAME(ubidi_isJoinControl)
 #define ubidi_isMirrored U_ICU_ENTRY_POINT_RENAME(ubidi_isMirrored)
 #define ubidi_isOrderParagraphsLTR U_ICU_ENTRY_POINT_RENAME(ubidi_isOrderParagraphsLTR)
+#define ubidi_isolate U_ICU_ENTRY_POINT_RENAME(ubidi_isolate)
 #define ubidi_open U_ICU_ENTRY_POINT_RENAME(ubidi_open)
 #define ubidi_openSized U_ICU_ENTRY_POINT_RENAME(ubidi_openSized)
 #define ubidi_orderParagraphsLTR U_ICU_ENTRY_POINT_RENAME(ubidi_orderParagraphsLTR)

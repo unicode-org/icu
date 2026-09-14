@@ -93,9 +93,12 @@ inline UBool ustrcase_isLNS(UChar32 c) {
 
 /** Returns nullptr if error. Pass in either locale or locID, not both. */
 U_CFUNC
-BreakIterator *ustrcase_getTitleBreakIterator(
-        const Locale *locale, const char *locID, uint32_t options, BreakIterator *iter,
-        LocalPointer<BreakIterator> &ownedIter, UErrorCode &errorCode);
+BreakIterator* ustrcase_getTitleBreakIterator(const Locale* locale,
+                                              const char* locID,
+                                              uint32_t options,
+                                              BreakIterator* iter U_LIFETIME_BOUND,
+                                              LocalPointer<BreakIterator>& ownedIter,
+                                              UErrorCode& errorCode);
 
 #endif
 

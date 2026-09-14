@@ -88,8 +88,8 @@ ucasemap_close(UCaseMap *csm) {
     delete reinterpret_cast<UCaseMapImpl *>(csm);
 }
 
-U_CAPI const char * U_EXPORT2
-ucasemap_getLocale(const UCaseMap *csm) {
+U_CAPI const char* U_EXPORT2
+ucasemap_getLocale(const UCaseMap* csm U_LIFETIME_BOUND) {
     return reinterpret_cast<const UCaseMapImpl *>(csm)->locale;
 }
 

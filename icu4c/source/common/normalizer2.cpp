@@ -84,10 +84,10 @@ Normalizer2::isNormalizedUTF8(StringPiece s, UErrorCode &errorCode) const {
 class NoopNormalizer2 : public Normalizer2 {
     virtual ~NoopNormalizer2();
 
-    virtual UnicodeString &
-    normalize(const UnicodeString &src,
-              UnicodeString &dest,
-              UErrorCode &errorCode) const override {
+    virtual UnicodeString&
+    normalize(const UnicodeString& src,
+              UnicodeString& dest U_LIFETIME_BOUND,
+              UErrorCode& errorCode) const override {
         if(U_SUCCESS(errorCode)) {
             if(&dest!=&src) {
                 dest=src;
@@ -114,10 +114,10 @@ class NoopNormalizer2 : public Normalizer2 {
         }
     }
 
-    virtual UnicodeString &
-    normalizeSecondAndAppend(UnicodeString &first,
-                             const UnicodeString &second,
-                             UErrorCode &errorCode) const override {
+    virtual UnicodeString&
+    normalizeSecondAndAppend(UnicodeString& first U_LIFETIME_BOUND,
+                             const UnicodeString& second,
+                             UErrorCode& errorCode) const override {
         if(U_SUCCESS(errorCode)) {
             if(&first!=&second) {
                 first.append(second);
@@ -127,10 +127,10 @@ class NoopNormalizer2 : public Normalizer2 {
         }
         return first;
     }
-    virtual UnicodeString &
-    append(UnicodeString &first,
-           const UnicodeString &second,
-           UErrorCode &errorCode) const override {
+    virtual UnicodeString&
+    append(UnicodeString& first U_LIFETIME_BOUND,
+           const UnicodeString& second,
+           UErrorCode& errorCode) const override {
         if(U_SUCCESS(errorCode)) {
             if(&first!=&second) {
                 first.append(second);
@@ -203,8 +203,8 @@ const Normalizer2 *Normalizer2Factory::getNoopInstance(UErrorCode &errorCode) {
     return noopSingleton;
 }
 
-const Normalizer2Impl *
-Normalizer2Factory::getImpl(const Normalizer2 *norm2) {
+const Normalizer2Impl*
+Normalizer2Factory::getImpl(const Normalizer2* norm2 U_LIFETIME_BOUND) {
     return &((Normalizer2WithImpl *)norm2)->impl;
 }
 

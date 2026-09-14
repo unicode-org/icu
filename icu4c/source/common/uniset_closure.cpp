@@ -67,7 +67,7 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
 UnicodeSet& UnicodeSet::applyPattern(const UnicodeString& pattern,
                                      uint32_t options,
                                      const SymbolTable* symbols,
-                                     UErrorCode& status) {
+                                     UErrorCode& status) U_LIFETIME_BOUND {
     ParsePosition pos(0);
     applyPattern(pattern, pos, options, symbols, status);
     if (U_FAILURE(status)) return *this;
@@ -86,10 +86,10 @@ UnicodeSet& UnicodeSet::applyPattern(const UnicodeString& pattern,
 }
 
 UnicodeSet& UnicodeSet::applyPattern(const UnicodeString& pattern,
-                              ParsePosition& pos,
-                              uint32_t options,
-                              const SymbolTable* symbols,
-                              UErrorCode& status) {
+                                     ParsePosition& pos,
+                                     uint32_t options,
+                                     const SymbolTable* symbols,
+                                     UErrorCode& status) U_LIFETIME_BOUND {
     if (U_FAILURE(status)) {
         return *this;
     }
@@ -212,7 +212,7 @@ bool scfString(const UnicodeString &s, UnicodeString &scf) {
 
 }  // namespace
 
-UnicodeSet& UnicodeSet::closeOver(int32_t attribute) {
+UnicodeSet& UnicodeSet::closeOver(int32_t attribute) U_LIFETIME_BOUND {
     if (isFrozen() || isBogus()) {
         return *this;
     }

@@ -1021,6 +1021,10 @@ blueprint_helpers::parseExponentSignOption(const StringSegment& segment, MacroPr
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdangling-pointer"
 #endif
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdangling"
+#endif
 void blueprint_helpers::parseCurrencyOption(const StringSegment& segment, MacroProps& macros,
                                             UErrorCode& status) {
     // Unlike ICU4J, have to check length manually because ICU4C CurrencyUnit does not check it for us
@@ -1040,6 +1044,9 @@ void blueprint_helpers::parseCurrencyOption(const StringSegment& segment, MacroP
     // Slicing is OK
     macros.unit = currency; // NOLINT
 }
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
 #if U_GCC_MAJOR_MINOR >= 1204
 #pragma GCC diagnostic pop
 #endif

@@ -885,7 +885,6 @@ typedef struct DefaultTZInfo {
     char* defaultTZBuffer;
     int64_t defaultTZFileSize;
     FILE* defaultTZFilePtr;
-    UBool defaultTZstatus;
     int32_t defaultTZPosition;
 } DefaultTZInfo;
 
@@ -893,7 +892,7 @@ typedef struct DefaultTZInfo {
  * This method compares the two files given to see if they are a match.
  * It is currently use to compare two TZ files.
  */
-static UBool compareBinaryFiles(const char* defaultTZFileName, const char* TZFileName, DefaultTZInfo* tzInfo) {
+static UBool compareBinaryFiles(const char* TZFileName, DefaultTZInfo* tzInfo) {
     FILE* file;
     int64_t sizeFile;
     int64_t sizeFileLeft;
@@ -902,14 +901,12 @@ static UBool compareBinaryFiles(const char* defaultTZFileName, const char* TZFil
     char bufferFile[MAX_READ_SIZE];
     UBool result = true;
 
-    if (tzInfo->defaultTZFilePtr == nullptr) {
-        tzInfo->defaultTZFilePtr = fopen(defaultTZFileName, "r");
-    }
+    U_ASSERT(tzInfo->defaultTZFilePtr != nullptr);
     file = fopen(TZFileName, "r");
 
     tzInfo->defaultTZPosition = 0; /* reset position to begin search */
 
-    if (file != nullptr && tzInfo->defaultTZFilePtr != nullptr) {
+    if (file != nullptr) {
         /* First check that the file size are equal. */
         if (tzInfo->defaultTZFileSize == 0) {
             fseek(tzInfo->defaultTZFilePtr, 0, SEEK_END);
@@ -989,6 +986,11 @@ static char* searchForTZFile(const char* path, DefaultTZInfo* tzInfo) {
     char* result = nullptr;
     UErrorCode status = U_ZERO_ERROR;
 
+    /* There is no reference file to compare against, so do not traverse the zoneinfo tree. */
+    if (tzInfo->defaultTZFilePtr == nullptr) {
+        return nullptr;
+    }
+
     /* Save the current path */
     CharString curpath(path, -1, status);
     if (U_FAILURE(status)) {
@@ -1040,7 +1042,7 @@ static char* searchForTZFile(const char* path, DefaultTZInfo* tzInfo) {
                 if (result != nullptr)
                     break;
             } else {
-                if(compareBinaryFiles(TZDEFAULT, newpath.data(), tzInfo)) {
+                if(compareBinaryFiles(newpath.data(), tzInfo)) {
                     int32_t amountToSkip = sizeof(TZZONEINFO) - 1;
                     if (amountToSkip > newpath.length()) {
                         amountToSkip = newpath.length();
@@ -1215,8 +1217,7 @@ uprv_tzname(int n)
             if (tzInfo != nullptr) {
                 tzInfo->defaultTZBuffer = nullptr;
                 tzInfo->defaultTZFileSize = 0;
-                tzInfo->defaultTZFilePtr = nullptr;
-                tzInfo->defaultTZstatus = false;
+                tzInfo->defaultTZFilePtr = fopen(TZDEFAULT, "r");
                 tzInfo->defaultTZPosition = 0;
 
                 gTimeZoneBufferPtr = searchForTZFile(TZZONEINFO, tzInfo);

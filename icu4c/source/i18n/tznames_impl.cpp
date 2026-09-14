@@ -862,12 +862,12 @@ ZNames::ZNamesLoader::~ZNamesLoader() {}
 class MetaZoneIDsEnumeration : public StringEnumeration {
 public:
     MetaZoneIDsEnumeration();
-    MetaZoneIDsEnumeration(const UVector& mzIDs);
+    MetaZoneIDsEnumeration(const UVector& mzIDs U_LIFETIME_BOUND);
     MetaZoneIDsEnumeration(LocalPointer<UVector> mzIDs);
     virtual ~MetaZoneIDsEnumeration();
     static UClassID U_EXPORT2 getStaticClassID();
     virtual UClassID getDynamicClassID() const override;
-    virtual const UnicodeString* snext(UErrorCode& status) override;
+    virtual const UnicodeString* snext(UErrorCode& status) U_LIFETIME_BOUND override;
     virtual void reset(UErrorCode& status) override;
     virtual int32_t count(UErrorCode& status) const override;
 private:
@@ -883,7 +883,7 @@ MetaZoneIDsEnumeration::MetaZoneIDsEnumeration()
 : fLen(0), fPos(0), fMetaZoneIDs(nullptr), fLocalVector(nullptr) {
 }
 
-MetaZoneIDsEnumeration::MetaZoneIDsEnumeration(const UVector& mzIDs) 
+MetaZoneIDsEnumeration::MetaZoneIDsEnumeration(const UVector& mzIDs U_LIFETIME_BOUND) 
 : fPos(0), fMetaZoneIDs(&mzIDs), fLocalVector(nullptr) {
     fLen = fMetaZoneIDs->size();
 }
@@ -897,7 +897,7 @@ MetaZoneIDsEnumeration::MetaZoneIDsEnumeration(LocalPointer<UVector> mzIDs)
 }
 
 const UnicodeString*
-MetaZoneIDsEnumeration::snext(UErrorCode& status) {
+MetaZoneIDsEnumeration::snext(UErrorCode& status) U_LIFETIME_BOUND {
     if (U_SUCCESS(status) && fMetaZoneIDs != nullptr && fPos < fLen) {
         unistr.setTo(static_cast<const char16_t*>(fMetaZoneIDs->elementAt(fPos++)), -1);
         return &unistr;

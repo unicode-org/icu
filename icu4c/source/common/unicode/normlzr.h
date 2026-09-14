@@ -377,11 +377,13 @@ public:
    *
    * @deprecated ICU 56 Use Normalizer2 instead.
    */
-  static UnicodeString &
-  U_EXPORT2 concatenate(const UnicodeString &left, const UnicodeString &right,
-              UnicodeString &result,
-              UNormalizationMode mode, int32_t options,
-              UErrorCode &errorCode);
+  static UnicodeString& U_EXPORT2
+  concatenate(const UnicodeString& left,
+              const UnicodeString& right,
+              UnicodeString& result U_LIFETIME_BOUND,
+              UNormalizationMode mode,
+              int32_t options,
+              UErrorCode& errorCode);
 #endif  /* U_HIDE_DEPRECATED_API */
 
   /**
