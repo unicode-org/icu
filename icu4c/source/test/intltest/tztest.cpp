@@ -2465,7 +2465,7 @@ void TimeZoneTest::TestGetRegion()
         {"America/Indiana/Indianapolis",    "US"},  // CLDR alias
         {"Mexico/General",                  "MX"},  // Link America/Mexico_City, Olson backward
         {"Etc/UTC",                         "001"},
-        {"EST5EDT",                         "US"},
+        {"EST5EDT",                         "001"},
         {"PST",                             "US"},  // Link America/Los_Angeles
         {"Europe/Helsinki",                 "FI"},
         {"Europe/Mariehamn",                "AX"},  // Link Europe/Helsinki, but in zone.tab
@@ -2671,7 +2671,7 @@ void TimeZoneTest::TestGetIanaID() {
         {u"Europe/Zaporozhye",  u"Europe/Kyiv"},
         {u"Etc/GMT-1",          u"Etc/GMT-1"},
         {u"Etc/GMT+20",         UNKNOWN},
-        {u"PST8PDT",            u"America/Los_Angeles"},
+        {u"PST8PDT",            u"PST8PDT"},
         {u"GMT-08:00",          UNKNOWN},
         {nullptr,               nullptr}
     };

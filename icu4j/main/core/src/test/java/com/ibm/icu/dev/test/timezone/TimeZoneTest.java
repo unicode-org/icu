@@ -1367,7 +1367,6 @@ public class TimeZoneTest extends CoreTestFmwk {
         "Brazil/DeNoronha", "America/Noronha",
         "Brazil/East", "America/Sao_Paulo",
         "Brazil/West", "America/Manaus",
-        "CST6CDT", "America/Chicago",
         "Canada/Atlantic", "America/Halifax",
         "Canada/Central", "America/Winnipeg",
         "Canada/East-Saskatchewan", "America/Regina",
@@ -1381,7 +1380,6 @@ public class TimeZoneTest extends CoreTestFmwk {
         "Chile/EasterIsland", "Pacific/Easter",
         "Cuba", "America/Havana",
         "EST", "America/Indianapolis",
-        "EST5EDT", "America/New_York",
         "Egypt", "Africa/Cairo",
         "Eire", "Europe/Dublin",
         "Etc/GMT+0", "Etc/GMT",
@@ -1411,7 +1409,6 @@ public class TimeZoneTest extends CoreTestFmwk {
         "Kwajalein", "Pacific/Kwajalein",
         "Libya", "Africa/Tripoli",
         "MST", "America/Phoenix",
-        "MST7MDT", "America/Denver",
         "Mexico/BajaNorte", "America/Tijuana",
         "Mexico/BajaSur", "America/Mazatlan",
         "Mexico/General", "America/Mexico_City",
@@ -1419,7 +1416,6 @@ public class TimeZoneTest extends CoreTestFmwk {
         "NZ-CHAT", "Pacific/Chatham",
         "Navajo", "America/Shiprock", /* fixed from Mark's original */
         "PRC", "Asia/Shanghai",
-        "PST8PDT", "America/Los_Angeles",
         "Pacific/Samoa", "Pacific/Pago_Pago",
         "Poland", "Europe/Warsaw",
         "Portugal", "Europe/Lisbon",
@@ -2189,7 +2185,7 @@ public class TimeZoneTest extends CoreTestFmwk {
             {"America/Indiana/Indianapolis", "US"}, // CLDR alias
             {"Mexico/General", "MX"}, // Link America/Mexico_City, Olson backward
             {"Etc/UTC", "001"},
-            {"EST5EDT", "US"},
+            {"EST5EDT", "001"},
             {"PST", "US"}, // Link America/Los_Angeles
             {"Europe/Helsinki", "FI"},
             {"Europe/Mariehamn", "AX"}, // Link Europe/Helsinki, but in zone.tab
@@ -2879,7 +2875,7 @@ public class TimeZoneTest extends CoreTestFmwk {
             {"Europe/Zaporozhye", "Europe/Kyiv"},
             {"Etc/GMT-1", "Etc/GMT-1"},
             {"Etc/GMT+20", UNKNOWN},
-            {"PST8PDT", "America/Los_Angeles"},
+            {"PST8PDT", "PST8PDT"},
             {"GMT-08:00", UNKNOWN},
         };
 
