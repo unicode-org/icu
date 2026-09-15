@@ -1357,7 +1357,7 @@ public:
      * Pre-increment.
      * @stable ICU 76
      */
-    USetCodePointIterator &operator++() {
+    USetCodePointIterator& operator++() U_LIFETIME_BOUND {
         if (c < end) {
             ++c;
         } else if (rangeIndex < rangeCount) {
@@ -1472,7 +1472,7 @@ struct CodePointRange {
          * Pre-increment.
          * @stable ICU 76
          */
-        iterator &operator++() {
+        iterator& operator++() U_LIFETIME_BOUND {
             ++c;
             return *this;
         }
@@ -1553,7 +1553,7 @@ public:
      * Pre-increment.
      * @stable ICU 76
      */
-    USetRangeIterator &operator++() {
+    USetRangeIterator& operator++() U_LIFETIME_BOUND {
         ++rangeIndex;
         return *this;
     }
@@ -1665,7 +1665,7 @@ public:
      * Pre-increment.
      * @stable ICU 76
      */
-    USetStringIterator &operator++() {
+    USetStringIterator& operator++() U_LIFETIME_BOUND {
         ++index;
         return *this;
     }
@@ -1781,7 +1781,7 @@ public:
      * Pre-increment.
      * @stable ICU 77
      */
-    USetElementIterator &operator++() {
+    USetElementIterator& operator++() U_LIFETIME_BOUND {
         if (c < end) {
             ++c;
         } else if (index < rangeCount) {

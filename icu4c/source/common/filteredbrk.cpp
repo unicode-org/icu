@@ -207,7 +207,9 @@ public:
   virtual void setText(const UnicodeString &text) override { fDelegate->setText(text); }
 
   /* -- other functions that are just delegated -- */
-  virtual UText *getUText(UText *fillIn, UErrorCode &status) const override { return fDelegate->getUText(fillIn,status); }
+  virtual UText* getUText(UText* fillIn U_LIFETIME_BOUND, UErrorCode& status) const override {
+      return fDelegate->getUText(fillIn, status);
+  }
   virtual CharacterIterator& getText() const U_LIFETIME_BOUND override {
       return fDelegate->getText();
   }

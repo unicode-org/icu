@@ -412,10 +412,8 @@ u_strspn(const UChar *string, const UChar *matchSet);
  *         when there are no more tokens.
  * @stable ICU 2.0
  */
-U_CAPI UChar * U_EXPORT2
-u_strtok_r(UChar    *src, 
-     const UChar    *delim,
-           UChar   **saveState);
+U_CAPI UChar* U_EXPORT2
+u_strtok_r(UChar* src U_LIFETIME_BOUND, const UChar* delim, UChar** saveState);
 
 /**
  * Compare two Unicode strings for bitwise equality (code unit order).

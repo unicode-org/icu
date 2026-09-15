@@ -22,8 +22,9 @@
 
 U_NAMESPACE_BEGIN
 
-BytesTrie::Iterator::Iterator(const void *trieBytes, int32_t maxStringLength,
-                              UErrorCode &errorCode)
+BytesTrie::Iterator::Iterator(const void* trieBytes U_LIFETIME_BOUND,
+                              int32_t maxStringLength,
+                              UErrorCode& errorCode)
         : bytes_(static_cast<const uint8_t *>(trieBytes)),
           pos_(bytes_), initialPos_(bytes_),
           remainingMatchLength_(-1), initialRemainingMatchLength_(-1),
