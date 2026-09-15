@@ -3,6 +3,8 @@
 
 # By default, build ICU4C as C11 & C++17.
 
+common --enable_bzlmod
+
 build --enable_platform_specific_config
 
 build:android --conlyopt=-std=c11
