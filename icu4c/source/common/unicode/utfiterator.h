@@ -274,7 +274,7 @@ public:
     /** @internal */
     inline CP32 operator*() const { return c_; }
     /** @internal */
-    inline CodePointsIterator &operator++() {  // pre-increment
+    inline CodePointsIterator& operator++() U_LIFETIME_BOUND {  // pre-increment
         ++c_;
         if (skipSurrogates && c_ == 0xd800) {
             c_ = 0xe000;
@@ -1114,8 +1114,8 @@ class UTFIterator {
     class Proxy {
     public:
         explicit Proxy(CodeUnits<CP32, UnitIter> &units) : units_(units) {}
-        CodeUnits<CP32, UnitIter> &operator*() { return units_; }
-        CodeUnits<CP32, UnitIter> *operator->() { return &units_; }
+        CodeUnits<CP32, UnitIter>& operator*() U_LIFETIME_BOUND { return units_; }
+        CodeUnits<CP32, UnitIter>* operator->() U_LIFETIME_BOUND { return &units_; }
     private:
         CodeUnits<CP32, UnitIter> units_;
     };
@@ -1315,7 +1315,7 @@ public:
      * @return this iterator
      * @draft ICU 78
      */
-    U_FORCE_INLINE UTFIterator &operator++() {  // pre-increment
+    U_FORCE_INLINE UTFIterator& operator++() U_LIFETIME_BOUND {  // pre-increment
         if (state_ > 0) {
             // operator*() called readAndInc() so p_ is already ahead.
             state_ = 0;
@@ -1366,10 +1366,10 @@ public:
      * @return this iterator
      * @draft ICU 78
      */
-    template<typename Iter = UnitIter>
+    template <typename Iter = UnitIter>
     U_FORCE_INLINE
-    std::enable_if_t<prv::bidirectional_iterator<Iter>, UTFIterator &>
-    operator--() {  // pre-decrement
+    std::enable_if_t<prv::bidirectional_iterator<Iter>, UTFIterator&>
+    operator--() U_LIFETIME_BOUND {  // pre-decrement
         if (state_ > 0) {
             // operator*() called readAndInc() so p_ is ahead of the logical position.
             p_ = units_.begin();
@@ -1430,8 +1430,8 @@ class UTFIterator<
     class Proxy {
     public:
         explicit Proxy(CodeUnits<CP32, UnitIter> &units) : units_(units) {}
-        CodeUnits<CP32, UnitIter> &operator*() { return units_; }
-        CodeUnits<CP32, UnitIter> *operator->() { return &units_; }
+        CodeUnits<CP32, UnitIter>& operator*() U_LIFETIME_BOUND { return units_; }
+        CodeUnits<CP32, UnitIter>* operator->() U_LIFETIME_BOUND { return &units_; }
     private:
         CodeUnits<CP32, UnitIter> units_;
     };
@@ -1508,7 +1508,7 @@ public:
         return Proxy(units_);
     }
 
-    U_FORCE_INLINE UTFIterator &operator++() {  // pre-increment
+    U_FORCE_INLINE UTFIterator& operator++() U_LIFETIME_BOUND {  // pre-increment
         if (ahead_) {
             // operator*() called readAndInc() so p_ is already ahead.
             ahead_ = false;
@@ -1562,8 +1562,8 @@ class std::reverse_iterator<U_HEADER_ONLY_NAMESPACE::UTFIterator<CP32, behavior,
     class Proxy {
     public:
         explicit Proxy(CodeUnits_ units) : units_(units) {}
-        CodeUnits_ &operator*() { return units_; }
-        CodeUnits_ *operator->() { return &units_; }
+        CodeUnits_& operator*() U_LIFETIME_BOUND { return units_; }
+        CodeUnits_* operator->() U_LIFETIME_BOUND { return &units_; }
     private:
         CodeUnits_ units_;
     };
@@ -1612,7 +1612,7 @@ public:
         return Proxy(units_);
     }
 
-    U_FORCE_INLINE reverse_iterator &operator++() {  // pre-increment
+    U_FORCE_INLINE reverse_iterator& operator++() U_LIFETIME_BOUND {  // pre-increment
         if (state_ < 0) {
             // operator*() called decAndRead() so p_ is already behind.
             state_ = 0;
@@ -1647,7 +1647,7 @@ public:
         }
     }
 
-    U_FORCE_INLINE reverse_iterator &operator--() {  // pre-decrement
+    U_FORCE_INLINE reverse_iterator& operator--() U_LIFETIME_BOUND {  // pre-decrement
         if (state_ < 0) {
             // operator*() called decAndRead() so p_ is behind the logical position.
             p_ = units_.end();
@@ -1829,7 +1829,7 @@ public:
      * @draft ICU 78
      */
     template<typename R = Range, typename = std::enable_if_t<std::is_reference_v<R>>, typename = void>
-    explicit UTFStringCodePoints(Range unitRange) : unitRange(unitRange) {}
+    explicit UTFStringCodePoints(Range unitRange U_LIFETIME_BOUND) : unitRange(unitRange) {}
 
     /** Copy constructor. @draft ICU 78 */
     UTFStringCodePoints(const UTFStringCodePoints &other) = default;
@@ -2010,8 +2010,8 @@ class UnsafeUTFIterator {
     class Proxy {
     public:
         explicit Proxy(UnsafeCodeUnits<CP32, UnitIter> &units) : units_(units) {}
-        UnsafeCodeUnits<CP32, UnitIter> &operator*() { return units_; }
-        UnsafeCodeUnits<CP32, UnitIter> *operator->() { return &units_; }
+        UnsafeCodeUnits<CP32, UnitIter>& operator*() U_LIFETIME_BOUND { return units_; }
+        UnsafeCodeUnits<CP32, UnitIter>* operator->() U_LIFETIME_BOUND { return &units_; }
     private:
         UnsafeCodeUnits<CP32, UnitIter> units_;
     };
@@ -2175,7 +2175,7 @@ public:
      * @return this iterator
      * @draft ICU 78
      */
-    U_FORCE_INLINE UnsafeUTFIterator &operator++() {  // pre-increment
+    U_FORCE_INLINE UnsafeUTFIterator& operator++() U_LIFETIME_BOUND {  // pre-increment
         if (state_ > 0) {
             // operator*() called readAndInc() so p_ is already ahead.
             state_ = 0;
@@ -2226,10 +2226,10 @@ public:
      * @return this iterator
      * @draft ICU 78
      */
-    template<typename Iter = UnitIter>
+    template <typename Iter = UnitIter>
     U_FORCE_INLINE
-    std::enable_if_t<prv::bidirectional_iterator<Iter>, UnsafeUTFIterator &>
-    operator--() {  // pre-decrement
+    std::enable_if_t<prv::bidirectional_iterator<Iter>, UnsafeUTFIterator&>
+    operator--() U_LIFETIME_BOUND {  // pre-decrement
         if (state_ > 0) {
             // operator*() called readAndInc() so p_ is ahead of the logical position.
             p_ = units_.begin();
@@ -2286,8 +2286,8 @@ class UnsafeUTFIterator<
     class Proxy {
     public:
         explicit Proxy(UnsafeCodeUnits<CP32, UnitIter> &units) : units_(units) {}
-        UnsafeCodeUnits<CP32, UnitIter> &operator*() { return units_; }
-        UnsafeCodeUnits<CP32, UnitIter> *operator->() { return &units_; }
+        UnsafeCodeUnits<CP32, UnitIter>& operator*() U_LIFETIME_BOUND { return units_; }
+        UnsafeCodeUnits<CP32, UnitIter>* operator->() U_LIFETIME_BOUND { return &units_; }
     private:
         UnsafeCodeUnits<CP32, UnitIter> units_;
     };
@@ -2360,7 +2360,7 @@ public:
         return Proxy(units_);
     }
 
-    U_FORCE_INLINE UnsafeUTFIterator &operator++() {  // pre-increment
+    U_FORCE_INLINE UnsafeUTFIterator& operator++() U_LIFETIME_BOUND {  // pre-increment
         if (ahead_) {
             // operator*() called readAndInc() so p_ is already ahead.
             ahead_ = false;
@@ -2411,8 +2411,8 @@ class std::reverse_iterator<U_HEADER_ONLY_NAMESPACE::UnsafeUTFIterator<CP32, Uni
     class Proxy {
     public:
         explicit Proxy(UnsafeCodeUnits_ units) : units_(units) {}
-        UnsafeCodeUnits_ &operator*() { return units_; }
-        UnsafeCodeUnits_ *operator->() { return &units_; }
+        UnsafeCodeUnits_& operator*() U_LIFETIME_BOUND { return units_; }
+        UnsafeCodeUnits_* operator->() U_LIFETIME_BOUND { return &units_; }
     private:
         UnsafeCodeUnits_ units_;
     };
@@ -2460,7 +2460,7 @@ public:
         return Proxy(units_);
     }
 
-    U_FORCE_INLINE reverse_iterator &operator++() {  // pre-increment
+    U_FORCE_INLINE reverse_iterator& operator++() U_LIFETIME_BOUND {  // pre-increment
         if (state_ < 0) {
             // operator*() called decAndRead() so p_ is already behind.
             state_ = 0;
@@ -2495,7 +2495,7 @@ public:
         }
     }
 
-    U_FORCE_INLINE reverse_iterator &operator--() {  // pre-decrement
+    U_FORCE_INLINE reverse_iterator& operator--() U_LIFETIME_BOUND {  // pre-decrement
         if (state_ < 0) {
             // operator*() called decAndRead() so p_ is behind the logical position.
             p_ = units_.end();
@@ -2608,7 +2608,7 @@ public:
      * @draft ICU 78
      */
     template<typename R = Range, typename = std::enable_if_t<std::is_reference_v<R>>, typename = void>
-    explicit UnsafeUTFStringCodePoints(Range unitRange) : unitRange(unitRange) {}
+    explicit UnsafeUTFStringCodePoints(Range unitRange U_LIFETIME_BOUND) : unitRange(unitRange) {}
 
     /** Copy constructor. @draft ICU 78 */
     UnsafeUTFStringCodePoints(const UnsafeUTFStringCodePoints &other) = default;

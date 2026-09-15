@@ -49,7 +49,7 @@ public:
     static UClassID U_EXPORT2 getStaticClassID();
     UClassID getDynamicClassID() const override;
     CharacterIterator& getText() const U_LIFETIME_BOUND override;
-    UText *getUText(UText *fillIn, UErrorCode &errorCode) const override;
+    UText* getUText(UText* fillIn U_LIFETIME_BOUND, UErrorCode& errorCode) const override;
     void  setText(const UnicodeString &text) override;
     void  setText(UText *text, UErrorCode &errorCode) override;
     void  adoptText(CharacterIterator* it) override;

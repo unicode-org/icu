@@ -431,7 +431,7 @@ void RuleBasedBreakIterator::setText(UText *ut, UErrorCode &status) {
 }
 
 
-UText *RuleBasedBreakIterator::getUText(UText *fillIn, UErrorCode &status) const {
+UText* RuleBasedBreakIterator::getUText(UText* fillIn U_LIFETIME_BOUND, UErrorCode& status) const {
     UText *result = utext_clone(fillIn, &fText, false, true, &status);
     return result;
 }
