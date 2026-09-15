@@ -13,9 +13,11 @@ License & terms of use: http://www.unicode.org/copyright.html
 
 ## Overview
 
-A UnicodeSet is an object that represents a set of Unicode characters or
-character strings. The contents of that object can be specified either by
-patterns or by building them programmatically.
+A UnicodeSet is an object that represents a finite set of Unicode code point
+sequences, optimized for single code points.  The contents of that object can be specified either by
+pattern strings using the UnicodeSet syntax defined in 
+[Draft Unicode Technical Standard #61, Unicode Set Notation](https://www.unicode.org/reports/tr61/),
+or by building them programmatically.
 
 Here are a few examples of sets:
 
@@ -47,52 +49,67 @@ however, it is ignored in matching functions such as `span(string)`.
 
 ## UnicodeSet Patterns
 
-Patterns are a series of characters bounded by square brackets that contain
-lists of characters and Unicode property sets. Lists are a sequence of
-characters that may have ranges indicated by a '-' between two characters, as in
-"a-z". The sequence specifies the range of all characters from the left to the
-right, in Unicode order. For example, `[a c d-f m]` is equivalent to `[a c d e f m]`.
-Whitespace can be freely used for clarity as `[a c d-f m]` means the same
+UnicodeSet objects can be constructed from pattern strings using the notation defined in
+[Draft Unicode Technical Standard #61, Unicode Set Notation](https://www.unicode.org/reports/tr61/);
+see the [Conformance](#Conformance) section for specifics.
+
+### General
+At a high level, these are built up from lists of elements and Unicode property queries.
+
+Element lists are sequences of characters,
+character ranges indicated by a '-' between two characters, as in
+`a-z`, and strings enclosed in curly brackets, as in `{abc}`.
+For example, `[a c d-f m {cat}]` is equivalent to `[a c d e f m {cat}]`;
+this set contains six letters, as well as the three-letter string "cat".
+By default, whitespace can be freely used for clarity: `[a c d-f m]` means the same
 as `[acd-fm]`.
 
-Unicode property sets are specified by a Unicode property, such as `[:Letter:]`.
-For a list of supported properties, see the [Properties](properties.md) chapter.
-For details on the use of short vs. long property and property value names, see
-the end of this section. The syntax for specifying the property names is an
-extension of either POSIX or Perl syntax with the addition of "=value". For
-example, you can match letters by using the POSIX syntax `[:Letter:]`, or by
-using the Perl-style syntax \\p{Letter}. The type can be omitted for the
-Category and Script properties, but is required for other properties.
+> Note: When explicit options are passed to UnicodeSet,
+> if IGNORE_SPACE is not set, whitespace is not ignored,
+> but instead is interpreted literally.
+> See the [Space-sensitive parsing](#space-sensitive) section
+> for specifics.
 
-The table below shows the two kinds of syntax: POSIX and Perl style. Also, the
-table shows the "Negative", which is a property that excludes all characters of
+Unicode [property queries](https://www.unicode.org/reports/tr61/#Property-Queries)
+refer to the set of characters that have a Unicode property value, such as `[:Letter:]`.
+The table below shows the two kinds of syntax: POSIX and Perl style, as well as the
+equivalent API calls.
+Also, the table shows the "Negative", which is a property that excludes all characters of
 a given kind. For example, `[:^Letter:]` matches all characters that are not
-`[:Letter:]`.
+`[:Letter:]`.  The property name can be omitted when it is General_Category (as
+for Letter) or Script; the property value Yes can be omitted for a binary property,
+as in `[:White_Space:]`.
 
-|  | Positive | Negative |
-|--------------------|------------------|-------------------|
-| POSIX-style Syntax | `[:type=value:]` | `[:^type=value:]` |
-| Perl-style Syntax  | `\p{type=value}` | `\P{type=value}`  |
+|          | POSIX-style Syntax       | Perl-style Syntax        | Corresponding method                     |
+|----------|--------------------------|--------------------------|------------------------------------------|
+| Positive | `[:propertyName=value:]` | `\p{propertyName=value}` | .applyPropertyAlias​(propertyName, value) |
+| Negative | `[:^propertyName=value:]` or `[:propertyName≠value:]` | `\P{propertyName=value}` or `\p{propertyName≠value}` | .applyPropertyAlias(propertyName, value).complement().removeAllStrings() |
 
-These following low-level lists or properties then can be freely combined with
-the normal set operations (union, inverse, difference, and intersection):
+These low-level lists or properties then can be freely combined with
+the normal set operations (union, intersection, difference, and complement).
 
 |  | Example | Corresponding Method | Meaning |
 |-------|-------------------------|----------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | A B | `[[:letter:] [:number:]]` | `A.addAll(B)` | To union two sets A and B, simply concatenate them |
 | A & B | `[[:letter:] & [a-z]]` | `A.retainAll(B)` | To intersect two sets A and B, use the '&' operator. |
 | A - B | `[[:letter:] - [a-z]]` | `A.removeAll(B)` | To take the set-difference of two sets  A and B, use the '-' operator. |
-| [^A] | `[^a-z]` | `A.complement(B)` | To invert a set A, place a '^' immediately after the opening '['.  Note that the complement only affects code points, not string values. In any other location, the '^' does not have a special meaning. |
+| [^A] | `[^a-z]` | `A.complement(B).removeAllStrings()` | To invert a set A, place a '^' immediately after the opening '['.  Note that this is a code point complement: `[^[𝐴]]` is equivalent to `[[\x{0000}-\x{10FFFF}]-[𝐴]]`, and contains no strings, regardless of whether 𝐴 contains strings. |
 
-### Precedence
+> :point_right: **Note**: *ICU Regular Expression set expressions have a different (but similar) syntax,
+and a different set of recognized backslash escapes. \[Sets\] in ICU Regular
+Expressions follow the conventions from Perl and Java regular expressions rather
+than the pattern syntax from ICU UnicodeSet.*
 
-The binary operators of union, intersection, and set-difference have equal
+#### Precedence of set operations
+
+As described [in the UnicodeSet grammar](https://www.unicode.org/reports/tr61/#SetOperation),
+the binary operators of union, intersection, and set-difference have equal
 precedence and bind left-to-right. Thus the following are equivalent:
 
 *   `[[:letter:] - [a-z] [:number:] & [\u0100-\u01FF]]`
 *   `[[[[[:letter:] - [a-z]] [:number:]] & [\u0100-\u01FF]]`
 
-Another example is that the set `[[ace][bdf\] - [abc][def]]` is **not**
+Another example is that the set `[[ace][bdf] - [abc][def]]` is **not**
 the empty set, but instead the set `[def]`. That is because the syntax
 corresponds to the following UnicodeSet operations:
 
@@ -101,96 +118,263 @@ corresponds to the following UnicodeSet operations:
 3.  removeAll `[abc]` *-- we now have `[def]`*
 4.  addAll `[def]` *-- no effect, we still have `[def]`*
 
-This only really matters where there are the difference and intersection
-operations, as the union operation is commutative. To make sure that the - is
+This only really matters when the union and intersection operations are used together,
+or when the difference operation is used, as union and intersection are
+each associative. To make sure that the - is
 the main operator, add brackets to group the operations as desired, such as
 `[[ace][bdf] - [[abc][def]]]`.
 
 Another caveat with the '&' and '-' operators is that they operate between
 **sets**. That is, they must be immediately preceded and immediately followed by
-a set. For example, the pattern `[[:Lu:]-A]` is illegal, since it is
-interpreted as the set `[:Lu:]` followed by the incomplete range `-A`. To specify
+a set. For example, the pattern `[[:Lu:]-A]` is illegal. To specify
 the set of uppercase letters except for 'A', enclose the 'A' in a set:
 `[[:Lu:]-[A]]`.
 
-### Examples
+### Recent changes
 
-| `[a]` | The set containing 'a' |
-|------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `[a-z]` | The set containing 'a' through 'z' and all letters in between, in Unicode order |
-| `[^a-z]` | The set containing all characters but 'a' through 'z', that is, U+0000 through 'a'-1 and 'z'+1 through U+FFFF |
-| `[[pat1][pat2]]` | The union of sets specified by pat1 and pat2 |
-| `[[pat1]& [pat2]]` | The intersection of sets specified by pat1 and pat2 |
-| `[[pat1]- [pat2]]` | The asymmetric difference of sets specified by pat1 and pat2 |
-| `[:Lu:]` | The set of characters belonging to the given Unicode category, as defined by  `Character.getType()`; in this case, Unicode uppercase letters. The long form for this is  `[:UppercaseLetter:]`. |
-| `[:L:]` | The set of characters belonging to all Unicode categories starting with 'L', that is,  `[[:Lu:][:Ll:][:Lt:][:Lm:][:Lo:]]`. The long form for this is  `[:Letter:]`. |
+In ICU 79, as part of the work on standardizing UnicodeSet notation in
+[Draft Unicode Technical Standard #61, Unicode Set Notation](https://www.unicode.org/reports/tr61/),
+a number of changes were made to UnicodeSet parsing in ICU.
 
-### String Values in Sets
+These changes add some new features, such as `\N{hex:name}` escapes.
 
-String values are enclosed in {curly brackets}.
+In some corner cases, they change the behaviour of the UnicodeSet class on
+pattern strings that were previously accepted:
+1. Spaces are no longer ignored in string literals.
+   This change comes with a migration period:
+   * In ICU 78, the sets `[{a b}]` and `[{ab}]` were equal, both contaning the
+     two-character string `ab`.
+   * In ICU 79 the set `[{a b}]` is ill-formed.
+   * In ICU 81, the pattern string `[{a b}]` will be accepted, representing a
+     set that contains the three-character string `a b`.
+2. `\N` escapes now represent characters, rather than sets containing a single
+   character:
+   * In ICU 78, `\N{LATIN SMALL LETTER A}` was a well-formed pattern string
+     representing the one-element set containing the character `a`.  
+     In ICU 79, it is ill-formed; `[\N{LATIN SMALL LETTER A}]` should be used.
+   * In ICU 78, `[[a-z]-\N{LATIN SMALL LETTER A}]` was a well-formed pattern
+     string representing the twenty-five element set `[b-z]`.  
+     In ICU 79, it is ill-formed; `[[a-z]-[\N{LATIN SMALL LETTER A}]]` should be used.
+   * In ICU 78, `[\N{LATIN SMALL LETTER A}-\N{LATIN SMALL LETTER Z}]` was a
+     well-formed pattern string representing the empty set
+     (equivalent to `[[a]-[z]]`).  
+     In ICU 79, it represents the twenty-six element set `[a-z]`.
+3. Variables are now grammatical.
+   * In ICU 78, the following transform rules were valid, equivalent to `[a-z] > A;`:
+     ```
+     $a = a;
+     $z = z;
+     $hyphen = '-';
+     [$a$hyphen$z] > A;
+     ```
+   * In ICU 79, this is ill-formed: variables must represent elements or sets;
+     they cannot expand to operators nor any other substring.
+     See the formal syntax of [variable](#variable) in the
+     [Extensions](#Extensions) section below.
+4. String ranges are disallowed.
+   * In ICU4J 78 (but not ICU4C), `[{aa}-{zz}]` was a well-formed pattern string
+     containing 26×26=676 two-character strings (`aa`, `ab`, `ac`, …, `az`, `ba`, `bb`, …, `zy`, `zz`).
+   * In ICU 79 (both C and J), it is disallowed.
+5. `\p` and `\P` are disallowed in string literals.
+   * In ICU 78, `[\p]` was ill-formed, but `[{\p}]` was well-formed, equal to `[p]`.
+   * In ICU 79, `[{\p}]` is ill-formed.
+6. `\N` in string literal now starts a named-element.
+   * In ICU 78, `[\N]` was ill-formed, but `[{\N}]` was well-formed, equal to `[N]`.  
+     In ICU 79, `[{\N}]` is ill-formed.
+   * In ICU 78, `[{\N{LATIN SMALL LETTER A}\N{LATIN SMALL LETTER B}}]` was well-formed containing three elements: U+007D RIGHT CURLY BRACKET, U+0062 LATIN SMALL LETTER B, and the 19-character string `N{LATINSMALLLETTERA`.  
+     In ICU 79, `[{\N{LATIN SMALL LETTER A}\N{LATIN SMALL LETTER B}}]` contains a single element, the two-character string `ab`.
+7. Ranges cannot contain an unescaped HYPHEN-MINUS.
+   * In ICU 78, `[--a]` was a well-formed pattern string equal to `[\--a]`,
+     but `[\0--]` and `[b--a]` were ill-formed.
+   * In ICU 79, `[--a]` becomes ill-formed.
+8. Spaces are disallowed between `[:` and `^`, line breaks and tabs are disallowed inside `[::]`.
+   * In ICU 78, `[: ^XID_Continue:]` was well-formed, equivalent to `[:^XID_Continue:]`.  
+     In ICU 79, it is ill-formed. Use `[:^XID_Continue]`.
+   * In ICU 78,
+     ```
+     [:
+     XID continue:]
+     ```
+     was well-formed, equivalent to `[:XID_Continue:]`.  
+     In ICU 79, it is ill-formed. Use `[:XID continue:]`.
+9. A trailing equals sign does not mean =Yes, nor does it mean =gc nor =sc.
+   * In ICU 78, `\p{XID_Continue=}` is well-formed, equivalent to `\p{XID_Continue=Yes}` or `\p{XID_Continue}`.  
+     In ICU 79, it is ill-formed; use `\p{XID_Continue=Yes}` or `\p{XID_Continue}`.
+   * In ICU 78, `\p{Uppercase_Letter=}` is well-formed, equivalent to `\p{General_Category=Uppercase_Letter}` or `\p{Uppercase_Letter}`.  
+     In ICU 79, it is ill-formed; use `\p{General_Category=Uppercase_Letter}` or `\p{Uppercase_Letter}`.
+10. Escapes for surrogate pairs in formats other than `\u` are deprecated.
+    * In ICU4C 78, `[\x{DBFF}\x{DFFF}]` was a two-element set containing the surrogate
+      code points U+DBFF and U+DFFF.  
+      In ICU4C 79, it is ill-formed; use `[\x{DBFF} \x{DFFF}]`.
+    * In ICU4J 78 and 79, `[\x{DBFF}\x{DFFF}]` is the one-element set containing the
+      supplementary code point U+10FFFF.
+      In a future version of ICU, this may be made ill-formed in Java as well.
+    * In both ICU4C and ICU4J, `[\uDBFF\uDFFF]` has long been equivalent to
+      `[\x{10FFFF}]`. This remains the case.
+11. Implicit Directional Marks can no longer separate lexical elements.
+    * In ICU 78, `[\xD‎F]` (that’s `[\xD`&lt;U+200E&gt;`F]`,
+      with a LEFT-TO-RIGHT MARK between the D and the F), was the two-element set
+      containing U+000D (CARRIAGE RETURN) and U+0046 F LATIN CAPITAL LETTER F.
+      In ICU 79, it is ill-formed. Use `[\xD F]`.  
+    * In ICU 78, `[\00‎7]` (that’s `[\00`&lt;U+200E&gt;`7]`,
+      with a LEFT-TO-RIGHT MARK between the 0 and the 7), was the two-element set
+      containing U+0000 (NULL) and U+0037 7 DIGIT SEVEN.  
+      In ICU 79, it is ill-formed. Use `[\x00 7]`.
 
-| Set expression | Description |
-|------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `[abc{def}]` | A set containing four members, the single characters a, b and c, and the string “def” |
-| `[{abc}{def}]` | A set containing two members, the string “abc” and the string “def”. |
-| `[{a}{b}{c}]` `[abc]` | These two sets are equivalent. Each contains three items, the three individual characters a, b and c. A {string} containing a single character is equivalent to that same character specified in any other way. |
+### Conformance
 
-### Character Quoting and Escaping in Unicode Set Patterns
+The ICU UnicodeSet class is a conformant and consistent implementation of the
+UnicodeSet notation as defined in
+[Draft Unicode Technical Standard #61, Unicode Set Notation](https://www.unicode.org/reports/tr61/).
+It imposes some restrictions to the set of lexical elements defined in that standard, as described
+below.
+It also implements some pure extensions: some expressions that are
+ill-formed according the UnicodeSet standard are defined by ICU. 
 
-#### Single Quote
+#### Restrictions
 
-Two single quotes represents a single quote, either inside or outside single
-quotes.
+ICU supports only property queries that are recommended for general-purpose APIs:
+the productions with a gray background in the [property-query](https://www.unicode.org/reports/tr61/#property-query)
+grammar are not supported.
 
-Text within single quotes is not interpreted in any way (except for two adjacent
-single quotes). It is taken as literal text (special characters become
-non-special).
+The list of supported properties is given in the [Properties](properties.md) chapter.
 
-These quoting conventions for ICU UnicodeSets differ from those of regular
-expression character set expressions. In regular expressions, single quotes have
-no special meaning and are treated like any other literal character.
+Doubly-negated property queries, as defined in the section on
+[Negations](https://www.unicode.org/reports/tr61/#Negations),
+are disallowed.
 
-#### Backslash Escapes
+When matching property names and property values in property queries,
+ICU uses an older version of rule UAX44-LM3 which does not ignore the prefix `is`:
+thus `\p{isSpaceSeparator}` is ill-formed.
+The remainder of rule UAX44-LM3 is supported:
+`[:general-category = SPACE SEPARATOR:]` is accepted, and equivalent to
+`[:General_Category=Space_Separator:]`.
 
-Outside of single quotes, certain backslashed characters have special meaning:
+When querying the Age property, only values matching `[0-9]+(\.[0-9]+(\.[0-9]+)?)?`
+are supported: other values matching aliases for the Age property under UAX44-LM3,
+such as `V17_0`, `v170`, or `1 7.0`, are not supported.
 
-| `\uhhhh` | Exactly 4 hex digits; h in [0-9A-Fa-f] |
-|------------|----------------------------------------|
-| `\Uhhhhhhhh` | Exactly 8 hex digits |
-| `\xhh` | 1-2 hex digits |
-| `\ooo` | 1-3 octal digits; o in [0-7] |
-| `\a` | U+0007 (BELL) |
-| `\b` | U+0008 (BACKSPACE) |
-| `\t` | U+0009 (HORIZONTAL TAB) |
-| `\n` | U+000A (LINE FEED) |
-| `\v` | U+000B (VERTICAL TAB) |
-| `\f` | U+000C (FORM FEED) |
-| `\r` | U+000D (CARRIAGE RETURN) |
-| `\\` | U+005C (BACKSLASH) |
+When querying numeric properties, rational values are not supported;
+see section [Valid Values and Resolved Sets](https://www.unicode.org/reports/tr61#Valid-Values-and-Resolved-Sets) of DUTS #61.
+Only 64-bit floating-point values are supported (IEEE 754 binary64).
 
-Anything else following a backslash is mapped to itself, except in an
-environment where it is defined to have some special meaning. For example,
-`\\p{Lu}` is the set of uppercase letters in UnicodeSet.
+When matching character names in property queries for the `Name` property
+and in [named-element](https://www.unicode.org/reports/tr61/#named-element)s,
+formal aliases of type other than `correction` are ignored.
+For instance, `\N{BEL}` is not supported. This is a known defect tracked by ticket
+[ICU-8963](https://unicode-org.atlassian.net/browse/ICU-8963).
 
-Any character formed as the result of a backslash escape loses any special
-meaning and is treated as a literal. In particular, note that \\u and \\U
-escapes create literal characters. (In contrast, the Java compiler treats
-Unicode escapes as just a way to represent arbitrary characters in an ASCII
-source file, and any resulting characters are **not** tagged as literals.)
+#### Extensions
 
-#### Whitespace
+ICU interprets some expressions that are ill-formed according to the UnicodeSet standard:
 
-Whitespace (as defined by our API) is ignored unless it is quoted or
-backslashed.
+* Some non-UCD properties, such as RGI_Emoji, are supported in
+  [property-query](https://www.unicode.org/reports/tr61/#property-query).
+  See the list in the [Properties](properties.md) chapter.
+* `\u` [four-hexadecimal-digits](https://www.unicode.org/reports/tr61/#four-hexadecimal-digits)
+  `\u` [four-hexadecimal-digits](https://www.unicode.org/reports/tr61/#four-hexadecimal-digits)
+  where the first constituent  [four-hexadecimal-digits](https://www.unicode.org/reports/tr61/#four-hexadecimal-digits)
+  represent a high surrogate and the second constituent
+  [four-hexadecimal-digits](https://www.unicode.org/reports/tr61/#four-hexadecimal-digits)
+  represent a low surrogate is an [escaped-element](https://www.unicode.org/reports/tr61/#escaped-element)
+  representing the supplementary code point whose UTF-16 encoding is that sequence of
+  surrogates.
+* A [string-literal](https://www.unicode.org/reports/tr61/#string-literal) is
+  allowed to contain [escaped-element](https://www.unicode.org/reports/tr61/#escaped-element)s
+  representing surrogate code points.
+* U+007D } RIGHT CURLY BRACKET is allowed as a [literal-element](https://www.unicode.org/reports/tr61/#literal-element), thus `[}]` is equal to `[\}]`.
+* A `$` at the end of [Content](https://www.unicode.org/reports/tr61/#Content) (that is, preceding a
+  closing bracket `]`) represents the noncharacter code point U+FFFF.
+  This is used to represent the start or end of text in transform rules, see Section
+  [Æther](../transforms/general/rules.md#%C3%A6ther) of
+  the transform rule tutorial.
 
-> :point_right: **Note**: *The rules for quoting and white space handling are common to most ICU APIs that
-process rule or expression strings, including UnicodeSet, Transliteration and
-Break Iterators.*
+  Anywhere else, a `$` is allowed as if it were a
+  [literal-element](https://www.unicode.org/reports/tr61/#literal-element),
+  representing the character U+0024 `$` DOLLAR SIGN either alone in element lists or in a range.
 
-> :point_right: **Note**:*ICU Regular Expression set expressions have a different (but similar) syntax,
-and a different set of recognized backslash escapes. \[Sets\] in ICU Regular
-Expressions follow the conventions from Perl and Java regular expressions rather
-than the pattern syntax from ICU UnicodeSet.*
+  Formally, the situation is a little more complicated: adding `$` representing itself to
+  [literal-element](https://www.unicode.org/reports/tr61/#literal-element) would allow it at the end
+  of [Content](https://www.unicode.org/reports/tr61/#Content), and adding alternatives to the
+  [Content](https://www.unicode.org/reports/tr61/#Content) production with a final `$` representing
+  U+FFFF would make the grammar ambiguous.
+
+  Instead, `$` is added as a [set-operator](https://www.unicode.org/reports/tr61/#set-operator),
+  and the grammar is modified as follows.
+
+  The following syntactic categories are introduced:
+  > <a id="Æther"></a>[Æther](#Æther) ⩴ `$`  
+  > <a id="DollarElements"></a>[DollarElements](#DollarElements) ⩴ `$` | [RangeElement](https://www.unicode.org/reports/tr61/#RangeElement) `-` `$`
+
+  The following alternatives are added to the
+  [Content](https://www.unicode.org/reports/tr61/#Content) production:
+  > | [Æther](#Æther)  
+  > | [ElementList](https://www.unicode.org/reports/tr61/#ElementList) [Æther](#Æther)  
+  > | [DollarElements](https://www.unicode.org/reports/tr61/#DollarElements) [UnescapedHyphenMinus](https://www.unicode.org/reports/tr61/#UnescapedHyphenMinus)  
+  > | [DollarElements](https://www.unicode.org/reports/tr61/#DollarElements) [Æther](https://www.unicode.org/reports/tr61/#Æther)  
+  > | [ElementList](https://www.unicode.org/reports/tr61/#ElementList) [DollarElements](https://www.unicode.org/reports/tr61/#DollarElements) [UnescapedHyphenMinus](https://www.unicode.org/reports/tr61/#UnescapedHyphenMinus)  
+  > |  [ElementList](https://www.unicode.org/reports/tr61/#ElementList) [DollarElements](https://www.unicode.org/reports/tr61/#DollarElements) [Æther](https://www.unicode.org/reports/tr61/#Æther)  
+
+  The following alternative is added to the [ElementList](https://www.unicode.org/reports/tr61/#ElementList) production:
+  > | [ElementList](https://www.unicode.org/reports/tr61/#ElementList) [DollarElements](#DollarElements) [Elements](https://www.unicode.org/reports/tr61/#Elements)
+
+  The following alternative is added to the [Union](https://www.unicode.org/reports/tr61/#Union) production:
+  > | [ElementList](https://www.unicode.org/reports/tr61/#ElementList) [DollarElements](#DollarElements) [UnicodeSet](https://www.unicode.org/reports/tr61/#UnicodeSet)
+
+  The following alternative is added to the [Range](https://www.unicode.org/reports/tr61/#Range) production:
+  > | `$` - [RangeElement](https://www.unicode.org/reports/tr61/#RangeElement)
+
+  When the [set-operator](https://www.unicode.org/reports/tr61/#set-operator) `$` occurs
+  as an immediate constituent of an [Æther](#Æther)</a>,
+  it represents the noncharacter code point U+FFFF.
+
+  When it occurs anywhere else, it represents the character U+0024 $ DOLLAR SIGN.
+
+  A [DollarElements](#DollarElements) construct of the form 𝑥 `-` `$`, where 𝑥 is a
+  [RangeElement](https://www.unicode.org/reports/tr61/#RangeElement),
+  is equivalent to the [Range](#Range) 𝑥 `-` `\N{0024:$:DOLLAR SIGN}`.
+
+* If a `SymbolTable` is passed to the constructor of `UnicodeSet`, a new lexical
+  element is introduced:
+  > <a id="variable"></a>[variable](#variable) ⩴ $ [reference](#reference)
+
+  where the function `SymbolTable::parseReference` defines the syntactic category
+  <a id="reference"></a>[reference](#reference).
+
+  The expansion of a [variable](#variable) is defined by `SymbolTable::lookup`; it
+  disambiguates the syntactic category as follows:
+  * If the expansion is a [UnicodeSet](https://www.unicode.org/reports/tr61/#UnicodeSet), the variable
+    is a *set-valued*-[variable](#variable).
+  * If the expansion is a [RangeElement](https://www.unicode.org/reports/tr61/#RangeElement), the
+    variable is a *code-point-valued*-[variable](#variable).
+  * If the expansion is a [string-literal](https://www.unicode.org/reports/tr61/#string-literal), the
+    variable is a *string-valued*-[variable](#variable).
+  * Otherwise, the variable is ill-defined, and the `UnicodeSet` constructor fails.
+  The following alternative is added to the [UnicodeSet](https://www.unicode.org/reports/tr61/#UnicodeSet) production:
+  > | *set-valued*-[variable](#variable)
+
+  The following alternative is added to the [RangeElement](https://www.unicode.org/reports/tr61/#RangeElement) production:
+  > | *code-point-valued*-[variable](#variable)
+
+  The following alternative is added to the [Element](https://www.unicode.org/reports/tr61/#Element):
+  > | *string-valued*-[variable](#variable)
+
+  The [variable](#variable) represents the same set of code point sequences as its expansion.
+
+#### Space-sensitive parsing {#space-sensitive}
+
+When sets are parsed with explicit options and the IGNORE_SPACE bit is not set,
+all characters in the
+[white-space](https://www.unicode.org/reports/tr61/#white-space)
+syntactic category of the UnicodeSet grammar are removed from that syntactic
+category, and are added to the
+[literal-element](https://www.unicode.org/reports/tr61/#literal-element)
+syntactic category.
+
+In that configuration, the UnicodeSet class is a conformant but inconsistent
+implementation of UnicodeSet notation: those expressions that contain a
+[literal-element](https://www.unicode.org/reports/tr61/#literal-element)
+with the Pattern_Syntax property are interpreted differently from the standard.
 
 ## Using a UnicodeSet
 
@@ -212,32 +396,6 @@ chapter.
 ICU users can programmatically build a UnicodeSet by adding or removing ranges
 of characters or by using the retain (intersection), remove (difference), and
 add (union) operations.
-
-## Property Values
-
-The following property value variants are recognized:
-
-| Format | Description | Example |
-|--------|-----------------------------------------------------------------------------------------------------|-----------------------------------|
-| short | omits the type (used to prevent ambiguity and only allowed with the Category and Script properties) | Lu |
-| medium | uses an abbreviated type and value | gc=Lu |
-| long | uses a full type and value | General_Category=Uppercase_Letter |
-
-If the type or value is omitted, then the equals sign is also omitted. The short
-style is only
-used for Category and Script properties because these properties are very common
-and their omission is unambiguous.
-
-In actual practice, you can mix type names and values that are omitted,
-abbreviated, or full. For example, if Category=Unassigned you could use what is
-in the table explicitly, `\p{gc=Unassigned}`, `\p{Category=Cn}`, or
-`\p{Unassigned}`.
-
-When these are processed, case and whitespace are ignored so you may use them
-for clarity, if desired. For example, `\p{Category = Uppercase Letter}` or
-`\p{Category = uppercase letter}`.
-
-For a list of supported properties, see the [Properties](properties.md) chapter.
 
 ## Getting UnicodeSet from Script
 
