@@ -46,7 +46,7 @@ Normalizer::Normalizer(const UnicodeString& str, UNormalizationMode mode) :
     init();
 }
 
-Normalizer::Normalizer(ConstChar16Ptr str, int32_t length, UNormalizationMode mode) :
+Normalizer::Normalizer(ConstChar16Ptr str U_LIFETIME_BOUND, int32_t length, UNormalizationMode mode) :
     UObject(), fFilteredNorm2(nullptr), fNorm2(nullptr), fUMode(mode), fOptions(0),
     text(new UCharCharacterIterator(str, length)),
     currentIndex(0), nextIndex(0),
