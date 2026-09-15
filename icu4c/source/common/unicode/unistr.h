@@ -2165,7 +2165,7 @@ public:
    * @stable ICU 2.0
    */
   UnicodeString& setTo(UBool isTerminated,
-                       ConstChar16Ptr text,
+                       ConstChar16Ptr text U_LIFETIME_BOUND,
                        int32_t textLength) U_LIFETIME_BOUND;
 
   /**
@@ -2187,7 +2187,7 @@ public:
    * @return a reference to this
    * @stable ICU 2.0
    */
-  UnicodeString& setTo(char16_t* buffer,
+  UnicodeString& setTo(char16_t* buffer U_LIFETIME_BOUND,
                        int32_t buffLength,
                        int32_t buffCapacity) U_LIFETIME_BOUND;
 
@@ -3362,7 +3362,7 @@ public:
    * @stable ICU 2.0
    */
   UnicodeString(UBool isTerminated,
-                ConstChar16Ptr text,
+                ConstChar16Ptr text U_LIFETIME_BOUND,
                 int32_t textLength);
 
   /**
@@ -3383,7 +3383,7 @@ public:
    * @param buffCapacity The size of `buffer` in char16_ts.
    * @stable ICU 2.0
    */
-  UnicodeString(char16_t *buffer, int32_t buffLength, int32_t buffCapacity);
+  UnicodeString(char16_t* buffer U_LIFETIME_BOUND, int32_t buffLength, int32_t buffCapacity);
 
 #if !U_CHAR16_IS_TYPEDEF
   /**
@@ -3394,7 +3394,7 @@ public:
    * @param buffCapacity buffer capacity
    * @stable ICU 59
    */
-  UnicodeString(uint16_t *buffer, int32_t buffLength, int32_t buffCapacity) :
+  UnicodeString(uint16_t* buffer U_LIFETIME_BOUND, int32_t buffLength, int32_t buffCapacity) :
       UnicodeString(Char16Ptr(buffer), buffLength, buffCapacity) {}
 #endif
 
@@ -3408,7 +3408,7 @@ public:
    * @param buffCapacity buffer capacity
    * @stable ICU 59
    */
-  UnicodeString(wchar_t *buffer, int32_t buffLength, int32_t buffCapacity) :
+  UnicodeString(wchar_t* buffer U_LIFETIME_BOUND, int32_t buffLength, int32_t buffCapacity) :
       UnicodeString(Char16Ptr(buffer), buffLength, buffCapacity) {}
 #endif
 

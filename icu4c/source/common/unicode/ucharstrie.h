@@ -66,7 +66,7 @@ public:
      * @param trieUChars The char16_t array that contains the serialized trie.
      * @stable ICU 4.8
      */
-    UCharsTrie(ConstChar16Ptr trieUChars)
+    UCharsTrie(ConstChar16Ptr trieUChars U_LIFETIME_BOUND)
             : ownedArray_(nullptr), uchars_(trieUChars),
               pos_(uchars_), remainingMatchLength_(-1) {}
 
@@ -304,7 +304,7 @@ public:
          *                  function chaining. (See User Guide for details.)
          * @stable ICU 4.8
          */
-        Iterator(ConstChar16Ptr trieUChars, int32_t maxStringLength, UErrorCode &errorCode);
+        Iterator(ConstChar16Ptr trieUChars U_LIFETIME_BOUND, int32_t maxStringLength, UErrorCode& errorCode);
 
         /**
          * Iterates from the current state of the specified UCharsTrie.
