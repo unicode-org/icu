@@ -58,7 +58,7 @@ UCharCharacterIterator::UCharCharacterIterator(const UCharCharacterIterator& tha
 }
 
 UCharCharacterIterator&
-UCharCharacterIterator::operator=(const UCharCharacterIterator& that) {
+UCharCharacterIterator::operator=(const UCharCharacterIterator& that) U_LIFETIME_BOUND {
     CharacterIterator::operator=(that);
     text = that.text;
     return *this;
