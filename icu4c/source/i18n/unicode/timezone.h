@@ -470,8 +470,9 @@ public:
      * @return  A reference to the result.
      * @stable ICU 74
      */
-    static UnicodeString& U_EXPORT2 getIanaID(const UnicodeString&id, UnicodeString& ianaID,
-        UErrorCode& status);
+    static UnicodeString& U_EXPORT2 getIanaID(const UnicodeString& id,
+                                              UnicodeString& ianaID U_LIFETIME_BOUND,
+                                              UErrorCode& status);
 
     /**
     * Converts a system time zone ID to an equivalent Windows time zone ID. For example,

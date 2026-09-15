@@ -327,7 +327,9 @@ public:
     StringBaseResource(int8_t type, const char16_t *value, int32_t len, UErrorCode &errorCode);
     virtual ~StringBaseResource();
 
-    const char16_t *getBuffer() const { return icu::toUCharPtr(fString.getBuffer()); }
+    const char16_t* getBuffer() const U_LIFETIME_BOUND {
+        return icu::toUCharPtr(fString.getBuffer());
+    }
     int32_t length() const { return fString.length(); }
 
     virtual void handlePreWrite(uint32_t *byteOffset) override;

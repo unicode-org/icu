@@ -237,7 +237,7 @@ UnicodeString::UnicodeString(const char16_t *text,
 }
 
 UnicodeString::UnicodeString(UBool isTerminated,
-                             ConstChar16Ptr textPtr,
+                             ConstChar16Ptr textPtr U_LIFETIME_BOUND,
                              int32_t textLength) {
   fUnion.fFields.fLengthAndFlags = kReadonlyAlias;
   const char16_t *text = textPtr;
@@ -259,7 +259,7 @@ UnicodeString::UnicodeString(UBool isTerminated,
   }
 }
 
-UnicodeString::UnicodeString(char16_t *buff,
+UnicodeString::UnicodeString(char16_t* buff U_LIFETIME_BOUND,
                              int32_t buffLength,
                              int32_t buffCapacity) {
   fUnion.fFields.fLengthAndFlags = kWritableAlias;
@@ -1339,7 +1339,7 @@ UnicodeString::getTerminatedBuffer() U_LIFETIME_BOUND {
 // setTo() analogous to the readonly-aliasing constructor with the same signature
 UnicodeString&
 UnicodeString::setTo(UBool isTerminated,
-                     ConstChar16Ptr textPtr,
+                     ConstChar16Ptr textPtr U_LIFETIME_BOUND,
                      int32_t textLength) U_LIFETIME_BOUND
 {
   if(fUnion.fFields.fLengthAndFlags & kOpenGetBuffer) {
@@ -1377,7 +1377,7 @@ UnicodeString::setTo(UBool isTerminated,
 // setTo() analogous to the writable-aliasing constructor with the same signature
 UnicodeString&
 UnicodeString::setTo(char16_t* buffer,
-                     int32_t buffLength,
+                     int32_t buffLength U_LIFETIME_BOUND,
                      int32_t buffCapacity) U_LIFETIME_BOUND {
   if(fUnion.fFields.fLengthAndFlags & kOpenGetBuffer) {
     // do not modify a string that has an "open" getBuffer(minCapacity)
