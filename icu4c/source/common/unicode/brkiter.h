@@ -168,7 +168,7 @@ public:
       *           UText was provided, it will always be returned.
       * @stable ICU 3.4
       */
-    U_COMMON_API virtual UText* getUText(UText* fillIn, UErrorCode& status) const = 0;
+    U_COMMON_API virtual UText* getUText(UText* fillIn U_LIFETIME_BOUND, UErrorCode& status) const = 0;
 
     /**
      * Change the text over which this operates. The text boundary is

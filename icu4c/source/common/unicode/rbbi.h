@@ -432,7 +432,7 @@ public:
       *           UText was provided, it will always be returned.
       * @stable ICU 3.4
       */
-     virtual UText *getUText(UText *fillIn, UErrorCode &status) const override;
+    virtual UText* getUText(UText* fillIn U_LIFETIME_BOUND, UErrorCode& status) const override;
 
     /**
      * Set the iterator to analyze a new piece of text.  This function resets

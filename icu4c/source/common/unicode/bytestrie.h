@@ -68,7 +68,7 @@ public:
      * @param trieBytes The byte array that contains the serialized trie.
      * @stable ICU 4.8
      */
-    BytesTrie(const void *trieBytes)
+    BytesTrie(const void* trieBytes U_LIFETIME_BOUND)
             : ownedArray_(nullptr), bytes_(static_cast<const uint8_t *>(trieBytes)),
               pos_(bytes_), remainingMatchLength_(-1) {}
 
@@ -292,7 +292,9 @@ public:
          *                  function chaining. (See User Guide for details.)
          * @stable ICU 4.8
          */
-        Iterator(const void *trieBytes, int32_t maxStringLength, UErrorCode &errorCode);
+        Iterator(const void* trieBytes U_LIFETIME_BOUND,
+                 int32_t maxStringLength,
+                 UErrorCode& errorCode);
 
         /**
          * Iterates from the current state of the specified BytesTrie.

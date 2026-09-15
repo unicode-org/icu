@@ -579,9 +579,7 @@ u_strspn(const char16_t *string, const char16_t *matchSet)
 /* ----- Text manipulation functions --- */
 
 U_CAPI char16_t* U_EXPORT2
-u_strtok_r(char16_t *src,
-     const char16_t *delim,
-           char16_t   **saveState)
+u_strtok_r(char16_t* src U_LIFETIME_BOUND, const char16_t* delim, char16_t** saveState)
 {
     char16_t *tokSource;
     char16_t *nextToken;
