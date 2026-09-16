@@ -28,6 +28,7 @@
 #ifndef CCTEST_H_
 #define CCTEST_H_
 
+#include <cinttypes>
 #include <stdio.h>
 #include <string.h>
 #include <inttypes.h>
