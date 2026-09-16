@@ -9,20 +9,36 @@ jobs:
   build:
     strategy:
       matrix:
-        container:  # Updated in BRS
-        - ubuntu-24.04
-        - macos-15
-        - windows-2025
+        container: [ ubuntu-latest, macos-latest, windows-latest ]
         build_type: [ Debug, Release ]
+        # When updating the CMake version, make sure to also update the CMakeLists.txt.
+        cmake_version: ["3.29", "4.0.1", latest, latestrc]
 
-
-    # The CMake configure and build commands are platform agnostic and should work equally well on Windows or Mac.
-    # You can convert this to a matrix build if you need cross-platform coverage.
-    # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
     runs-on: ${{ matrix.container }}
 
+    name: ${{ matrix.container }} - ${{ matrix.build_type }} - CMake ${{ matrix.cmake_version }}
+
     steps:
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+
+      - name: Set up CMake
+        uses: lukka/get-cmake@bb2faa721a800324b726fec00f7c1ff7641964d1  # v4.02
+        with:
+          cmakeVersion: ${{ matrix.cmake_version }}
+
+      - name: Check for cmake warnings
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          mkdir -p build-warning
+          cd build-warning
+          cmake -S .. 2>&1 | tee cmake-warnings.log
+          # Check for warnings in the log file.
+          if grep -q "CMake Warning" cmake-warnings.log; then
+            echo "CMake warnings found!"
+            cat cmake-warnings.log
+            exit 1
+          fi
 
       - name: Configure
         shell: bash
@@ -32,7 +48,8 @@ jobs:
         run: |
           mkdir -p buildX
           cd buildX
-          cmake -DBUILD_TESTING=ON \
+          cmake \
+            -DBUILD_TESTING=ON \
             -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
             -DCMAKE_INSTALL_PREFIX:PATH=${{ github.workspace }}/install_dir \
             -DBUILD_SHARED_LIBS=ON \
