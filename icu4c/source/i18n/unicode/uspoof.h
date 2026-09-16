@@ -691,9 +691,11 @@ uspoof_open(UErrorCode *status);
  * @see uspoof_serialize
  * @stable ICU 4.2
  */
-U_CAPI USpoofChecker * U_EXPORT2
-uspoof_openFromSerialized(const void *data, int32_t length, int32_t *pActualLength,
-                          UErrorCode *pErrorCode);
+U_CAPI USpoofChecker* U_EXPORT2
+uspoof_openFromSerialized(const void* data U_LIFETIME_BOUND,
+                          int32_t length,
+                          int32_t* pActualLength,
+                          UErrorCode* pErrorCode);
 
 /**
   * Open a Spoof Checker from the source form of the spoof data.
@@ -900,8 +902,8 @@ uspoof_setAllowedLocales(USpoofChecker *sc, const char *localesList, UErrorCode 
  *
  * @stable ICU 4.2
  */
-U_CAPI const char * U_EXPORT2
-uspoof_getAllowedLocales(USpoofChecker *sc, UErrorCode *status);
+U_CAPI const char* U_EXPORT2
+uspoof_getAllowedLocales(USpoofChecker* sc U_LIFETIME_BOUND, UErrorCode* status);
 
 
 /**
@@ -946,8 +948,8 @@ uspoof_setAllowedChars(USpoofChecker *sc, const USet *chars, UErrorCode *status)
  *                 the USPOOF_CHAR_LIMIT test.
  * @stable ICU 4.2
  */
-U_CAPI const USet * U_EXPORT2
-uspoof_getAllowedChars(const USpoofChecker *sc, UErrorCode *status);
+U_CAPI const USet* U_EXPORT2
+uspoof_getAllowedChars(const USpoofChecker* sc U_LIFETIME_BOUND, UErrorCode* status);
 
 
 /**
@@ -1172,7 +1174,8 @@ uspoof_getCheckResultRestrictionLevel(const USpoofCheckResult *checkResult, UErr
  * @stable ICU 58
  */
 U_CAPI const USet* U_EXPORT2
-uspoof_getCheckResultNumerics(const USpoofCheckResult *checkResult, UErrorCode *status);
+uspoof_getCheckResultNumerics( const USpoofCheckResult* checkResult U_LIFETIME_BOUND,
+                               UErrorCode* status);
 
 
 /**
@@ -1633,8 +1636,8 @@ uspoof_setAllowedUnicodeSet(USpoofChecker *sc, const icu::UnicodeSet *chars, UEr
  *                 the USPOOF_CHAR_LIMIT test.
  * @stable ICU 4.2
  */
-U_CAPI const icu::UnicodeSet * U_EXPORT2
-uspoof_getAllowedUnicodeSet(const USpoofChecker *sc, UErrorCode *status);
+U_CAPI const icu::UnicodeSet* U_EXPORT2
+uspoof_getAllowedUnicodeSet(const USpoofChecker* sc U_LIFETIME_BOUND, UErrorCode* status);
 
 /**
  * Check the specified string for possible security issues.
@@ -1780,12 +1783,12 @@ U_CAPI uint32_t U_EXPORT2 uspoof_areBidiConfusableUnicodeString(const USpoofChec
  *
  * @stable ICU 4.2
  */
-U_I18N_API icu::UnicodeString & U_EXPORT2
-uspoof_getSkeletonUnicodeString(const USpoofChecker *sc,
+U_I18N_API icu::UnicodeString& U_EXPORT2
+uspoof_getSkeletonUnicodeString(const USpoofChecker* sc,
                                 uint32_t type,
-                                const icu::UnicodeString &id,
-                                icu::UnicodeString &dest,
-                                UErrorCode *status);
+                                const icu::UnicodeString& id,
+                                icu::UnicodeString& dest U_LIFETIME_BOUND,
+                                UErrorCode* status);
 
 /**
  *  Get the "bidiSkeleton" for an identifier and a direction.
@@ -1811,9 +1814,12 @@ uspoof_getSkeletonUnicodeString(const USpoofChecker *sc,
  *
  * @stable ICU 74
  */
-U_I18N_API icu::UnicodeString &U_EXPORT2 uspoof_getBidiSkeletonUnicodeString(
-    const USpoofChecker *sc, UBiDiDirection direction, const icu::UnicodeString &id,
-    icu::UnicodeString &dest, UErrorCode *status);
+U_I18N_API icu::UnicodeString& U_EXPORT2
+uspoof_getBidiSkeletonUnicodeString(const USpoofChecker* sc,
+                                    UBiDiDirection direction,
+                                    const icu::UnicodeString& id,
+                                    icu::UnicodeString& dest U_LIFETIME_BOUND,
+                                    UErrorCode* status);
 
 /**
   * Get the set of Candidate Characters for Inclusion in Identifiers, as defined

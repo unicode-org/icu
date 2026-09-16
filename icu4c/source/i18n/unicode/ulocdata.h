@@ -177,8 +177,11 @@ ulocdata_getNoSubstitute(ULocaleData *uld);
  * @stable ICU 3.4
  */
 U_CAPI USet* U_EXPORT2
-ulocdata_getExemplarSet(ULocaleData *uld, USet *fillIn,
-                        uint32_t options, ULocaleDataExemplarSetType extype, UErrorCode *status);
+ulocdata_getExemplarSet(ULocaleData* uld,
+                        USet* fillIn U_LIFETIME_BOUND,
+                        uint32_t options,
+                        ULocaleDataExemplarSetType extype,
+                        UErrorCode* status);
 
 /**
  * Returns one of the delimiter strings associated with a locale.
