@@ -260,7 +260,7 @@ public:
      * @return text string to be searched.
      * @stable ICU 2.0
      */
-    const UnicodeString& getText() const;
+    const UnicodeString& getText() const U_LIFETIME_BOUND;
 
     // operator overloading ----------------------------------------------
 
@@ -457,8 +457,7 @@ protected:
      * @see #handlePrev
      * @stable ICU 2.0
      */
-    SearchIterator(const UnicodeString &text, 
-                         BreakIterator *breakiter = nullptr);
+    SearchIterator(const UnicodeString& text, BreakIterator* breakiter U_LIFETIME_BOUND = nullptr);
 
     /**
      * Constructor for use by subclasses.
@@ -479,7 +478,7 @@ protected:
      * @see #handlePrev
      * @stable ICU 2.0
      */
-    SearchIterator(CharacterIterator &text, BreakIterator *breakiter = nullptr);
+    SearchIterator(CharacterIterator& text, BreakIterator* breakiter U_LIFETIME_BOUND = nullptr);
 
     // protected methods --------------------------------------------------
 
@@ -489,7 +488,7 @@ protected:
      * @param that instance to be copied.
      * @stable ICU 2.0
      */
-    SearchIterator & operator=(const SearchIterator &that);
+    SearchIterator& operator=(const SearchIterator& that) U_LIFETIME_BOUND;
 
     /**
      * Abstract method which subclasses override to provide the mechanism

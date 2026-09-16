@@ -159,10 +159,11 @@ public:
      *               U_ILLEGAL_ARGUMENT_ERROR is returned.
      * @stable ICU 2.0
      */
-    StringSearch(const UnicodeString &pattern, const UnicodeString &text,
-                 const Locale        &locale,       
-                       BreakIterator *breakiter,
-                       UErrorCode    &status);
+    StringSearch(const UnicodeString& pattern,
+                 const UnicodeString& text,
+                 const Locale& locale,
+                 BreakIterator* breakiter U_LIFETIME_BOUND,
+                 UErrorCode& status);
 
     /**
      * Creating a <tt>StringSearch</tt> instance using the argument collator 
@@ -185,11 +186,11 @@ public:
      *               text is 0 then an U_ILLEGAL_ARGUMENT_ERROR is returned.
      * @stable ICU 2.0
      */
-    StringSearch(const UnicodeString     &pattern, 
-                 const UnicodeString     &text,
-                       RuleBasedCollator *coll,       
-                       BreakIterator     *breakiter,
-                       UErrorCode        &status);
+    StringSearch(const UnicodeString& pattern,
+                 const UnicodeString& text,
+                 RuleBasedCollator* coll U_LIFETIME_BOUND,
+                 BreakIterator* breakiter U_LIFETIME_BOUND,
+                 UErrorCode& status);
 
     /**
      * Creating a <tt>StringSearch</tt> instance using the argument locale 
@@ -287,7 +288,7 @@ public:
      * @param that instance to be copied.
      * @stable ICU 2.0
      */
-    StringSearch & operator=(const StringSearch &that);
+    StringSearch& operator=(const StringSearch& that) U_LIFETIME_BOUND;
 
     /**
      * Equality operator. 
@@ -391,7 +392,7 @@ public:
      * @return pattern used for matching
      * @stable ICU 2.0
      */
-    const UnicodeString & getPattern() const;
+    const UnicodeString& getPattern() const U_LIFETIME_BOUND;
 
     // public methods ----------------------------------------------------
 
