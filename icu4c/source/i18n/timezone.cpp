@@ -227,7 +227,10 @@ static int32_t findInStringArray(UResourceBundle* array, const UnicodeString& id
  * @param oldbundle Bundle for reuse (or nullptr).   see 'ures_open()'
  * @return the zone's bundle if found, or undefined if error.  Reuses oldbundle.
  */
-static UResourceBundle* getZoneByName(const UResourceBundle* top, const UnicodeString& id, UResourceBundle *oldbundle, UErrorCode& status) {
+static UResourceBundle* getZoneByName(const UResourceBundle* top,
+                                      const UnicodeString& id,
+                                      UResourceBundle* oldbundle U_LIFETIME_BOUND,
+                                      UErrorCode& status) {
     // load the Rules object
     UResourceBundle *tmp = ures_getByKey(top, kNAMES, nullptr, &status);
 
@@ -256,7 +259,10 @@ static UResourceBundle* getZoneByName(const UResourceBundle* top, const UnicodeS
 }
 
 
-UResourceBundle* TimeZone::loadRule(const UResourceBundle* top, const UnicodeString& ruleid, UResourceBundle* oldbundle, UErrorCode& status) {
+UResourceBundle* TimeZone::loadRule(const UResourceBundle* top,
+                                    const UnicodeString& ruleid,
+                                    UResourceBundle* oldbundle U_LIFETIME_BOUND,
+                                    UErrorCode& status) {
     char key[64];
     ruleid.extract(0, sizeof(key) - 1, key, static_cast<int32_t>(sizeof(key)) - 1, US_INV);
     U_DEBUG_TZ_MSG(("loadRule(%s)\n", key));
@@ -368,8 +374,8 @@ TimeZone::TimeZone(const TimeZone &source)
 
 // -------------------------------------
 
-TimeZone &
-TimeZone::operator=(const TimeZone &right)
+TimeZone&
+TimeZone::operator=(const TimeZone& right) U_LIFETIME_BOUND
 {
     if (this != &right) fID = right.fID;
     return *this;
@@ -1214,19 +1220,21 @@ TimeZone::getRegion(const UnicodeString& id, char *region, int32_t capacity, UEr
 
 
 UnicodeString&
-TimeZone::getDisplayName(UnicodeString& result) const
+TimeZone::getDisplayName(UnicodeString& result U_LIFETIME_BOUND) const
 {
     return getDisplayName(false,LONG,Locale::getDefault(), result);
 }
 
 UnicodeString&
-TimeZone::getDisplayName(const Locale& locale, UnicodeString& result) const
+TimeZone::getDisplayName(const Locale& locale, UnicodeString& result U_LIFETIME_BOUND) const
 {
     return getDisplayName(false, LONG, locale, result);
 }
 
 UnicodeString&
-TimeZone::getDisplayName(UBool inDaylight, EDisplayType style, UnicodeString& result)  const
+TimeZone::getDisplayName(UBool inDaylight,
+                         EDisplayType style,
+                         UnicodeString& result U_LIFETIME_BOUND) const
 {
     return getDisplayName(inDaylight,style, Locale::getDefault(), result);
 }
@@ -1240,7 +1248,10 @@ TimeZone::getDSTSavings()const {
 }
 //---------------------------------------
 UnicodeString&
-TimeZone::getDisplayName(UBool inDaylight, EDisplayType style, const Locale& locale, UnicodeString& result) const
+TimeZone::getDisplayName(UBool inDaylight,
+                         EDisplayType style,
+                         const Locale& locale,
+                         UnicodeString& result U_LIFETIME_BOUND) const
 {
     UErrorCode status = U_ZERO_ERROR;
     UDate date = Calendar::getNow();
@@ -1355,7 +1366,9 @@ TimeZone::createCustomTimeZone(const UnicodeString& id)
 }
 
 UnicodeString&
-TimeZone::getCustomID(const UnicodeString& id, UnicodeString& normalized, UErrorCode& status) {
+TimeZone::getCustomID(const UnicodeString& id,
+                      UnicodeString& normalized U_LIFETIME_BOUND,
+                      UErrorCode& status) {
     normalized.remove();
     if (U_FAILURE(status)) {
         return normalized;
@@ -1463,8 +1476,11 @@ TimeZone::parseCustomID(const UnicodeString& id, int32_t& sign,
 }
 
 UnicodeString&
-TimeZone::formatCustomID(int32_t hour, int32_t min, int32_t sec,
-                         UBool negative, UnicodeString& id) {
+TimeZone::formatCustomID(int32_t hour,
+                         int32_t min,
+                         int32_t sec,
+                         UBool negative,
+                         UnicodeString& id U_LIFETIME_BOUND) {
     // Create time zone ID - GMT[+|-]hhmm[ss]
     id.setTo(GMT_ID, GMT_ID_LENGTH);
     if (hour | min | sec) {
@@ -1533,15 +1549,18 @@ TimeZone::getTZDataVersion(UErrorCode& status)
 }
 
 UnicodeString&
-TimeZone::getCanonicalID(const UnicodeString& id, UnicodeString& canonicalID, UErrorCode& status)
+TimeZone::getCanonicalID(const UnicodeString& id,
+                         UnicodeString& canonicalID U_LIFETIME_BOUND,
+                         UErrorCode& status)
 {
     UBool isSystemID = false;
     return getCanonicalID(id, canonicalID, isSystemID, status);
 }
 
 UnicodeString&
-TimeZone::getCanonicalID(const UnicodeString& id, UnicodeString& canonicalID, UBool& isSystemID,
-                         UErrorCode& status)
+TimeZone::getCanonicalID(const UnicodeString& id,
+                         UnicodeString& canonicalID U_LIFETIME_BOUND,
+                         UBool& isSystemID, UErrorCode& status)
 {
     canonicalID.remove();
     isSystemID = false;
@@ -1584,7 +1603,9 @@ TimeZone::getIanaID(const UnicodeString& id,
 }
 
 UnicodeString&
-TimeZone::getWindowsID(const UnicodeString& id, UnicodeString& winid, UErrorCode& status) {
+TimeZone::getWindowsID(const UnicodeString& id,
+                       UnicodeString& winid U_LIFETIME_BOUND,
+                       UErrorCode& status) {
     winid.remove();
     if (U_FAILURE(status)) {
         return winid;
@@ -1666,7 +1687,10 @@ TimeZone::getWindowsID(const UnicodeString& id, UnicodeString& winid, UErrorCode
 #define MAX_WINDOWS_ID_SIZE 128
 
 UnicodeString&
-TimeZone::getIDForWindowsID(const UnicodeString& winid, const char* region, UnicodeString& id, UErrorCode& status) {
+TimeZone::getIDForWindowsID(const UnicodeString& winid,
+                            const char* region,
+                            UnicodeString& id U_LIFETIME_BOUND,
+                            UErrorCode& status) {
     id.remove();
     if (U_FAILURE(status)) {
         return id;

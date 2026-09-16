@@ -44,7 +44,7 @@ TimeZoneRule::~TimeZoneRule() {
 }
 
 TimeZoneRule&
-TimeZoneRule::operator=(const TimeZoneRule& right) {
+TimeZoneRule::operator=(const TimeZoneRule& right) U_LIFETIME_BOUND {
     if (this != &right) {
         fName = right.fName;
         fRawOffset = right.fRawOffset;
@@ -68,7 +68,7 @@ TimeZoneRule::operator!=(const TimeZoneRule& that) const {
 }
 
 UnicodeString&
-TimeZoneRule::getName(UnicodeString& name) const {
+TimeZoneRule::getName(UnicodeString& name U_LIFETIME_BOUND) const {
     name = fName;
     return name;
 }
@@ -113,7 +113,7 @@ InitialTimeZoneRule::clone() const {
 }
 
 InitialTimeZoneRule&
-InitialTimeZoneRule::operator=(const InitialTimeZoneRule& right) {
+InitialTimeZoneRule::operator=(const InitialTimeZoneRule& right) U_LIFETIME_BOUND {
     if (this != &right) {
         TimeZoneRule::operator=(right);
     }
@@ -215,7 +215,7 @@ AnnualTimeZoneRule::clone() const {
 }
 
 AnnualTimeZoneRule&
-AnnualTimeZoneRule::operator=(const AnnualTimeZoneRule& right) {
+AnnualTimeZoneRule::operator=(const AnnualTimeZoneRule& right) U_LIFETIME_BOUND {
     if (this != &right) {
         TimeZoneRule::operator=(right);
         delete fDateTimeRule;
@@ -246,7 +246,7 @@ AnnualTimeZoneRule::operator!=(const TimeZoneRule& that) const {
 }
 
 const DateTimeRule*
-AnnualTimeZoneRule::getRule() const {
+AnnualTimeZoneRule::getRule() const U_LIFETIME_BOUND {
     return fDateTimeRule;
 }
 
@@ -436,7 +436,7 @@ TimeArrayTimeZoneRule::clone() const {
 
 
 TimeArrayTimeZoneRule&
-TimeArrayTimeZoneRule::operator=(const TimeArrayTimeZoneRule& right) {
+TimeArrayTimeZoneRule::operator=(const TimeArrayTimeZoneRule& right) U_LIFETIME_BOUND {
     if (this != &right) {
         TimeZoneRule::operator=(right);
         UErrorCode status = U_ZERO_ERROR;
