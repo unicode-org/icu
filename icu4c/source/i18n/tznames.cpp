@@ -114,13 +114,22 @@ public:
 
     StringEnumeration* getAvailableMetaZoneIDs(UErrorCode& status) const override;
     StringEnumeration* getAvailableMetaZoneIDs(const UnicodeString& tzID, UErrorCode& status) const override;
-    UnicodeString& getMetaZoneID(const UnicodeString& tzID, UDate date, UnicodeString& mzID) const override;
-    UnicodeString& getReferenceZoneID(const UnicodeString& mzID, const char* region, UnicodeString& tzID) const override;
+    UnicodeString& getMetaZoneID(const UnicodeString& tzID,
+                                 UDate date,
+                                 UnicodeString& mzID U_LIFETIME_BOUND) const override;
+    UnicodeString& getReferenceZoneID(const UnicodeString& mzID,
+                                      const char* region,
+                                      UnicodeString& tzID U_LIFETIME_BOUND) const override;
 
-    UnicodeString& getMetaZoneDisplayName(const UnicodeString& mzID, UTimeZoneNameType type, UnicodeString& name) const override;
-    UnicodeString& getTimeZoneDisplayName(const UnicodeString& tzID, UTimeZoneNameType type, UnicodeString& name) const override;
+    UnicodeString& getMetaZoneDisplayName(const UnicodeString& mzID,
+                                          UTimeZoneNameType type,
+                                          UnicodeString& name U_LIFETIME_BOUND) const override;
+    UnicodeString& getTimeZoneDisplayName(const UnicodeString& tzID,
+                                          UTimeZoneNameType type,
+                                          UnicodeString& name U_LIFETIME_BOUND) const override;
 
-    UnicodeString& getExemplarLocationName(const UnicodeString& tzID, UnicodeString& name) const override;
+    UnicodeString& getExemplarLocationName(const UnicodeString& tzID,
+                                           UnicodeString& name U_LIFETIME_BOUND) const override;
 
     void loadAllDisplayNames(UErrorCode& status) override;
     void getDisplayNames(const UnicodeString& tzID, const UTimeZoneNameType types[], int32_t numTypes, UDate date, UnicodeString dest[], UErrorCode& status) const override;
@@ -267,27 +276,36 @@ TimeZoneNamesDelegate::getAvailableMetaZoneIDs(const UnicodeString& tzID, UError
 }
 
 UnicodeString&
-TimeZoneNamesDelegate::getMetaZoneID(const UnicodeString& tzID, UDate date, UnicodeString& mzID) const {
+TimeZoneNamesDelegate::getMetaZoneID(const UnicodeString& tzID,
+                                     UDate date,
+                                     UnicodeString& mzID U_LIFETIME_BOUND) const {
     return fTZnamesCacheEntry->names->getMetaZoneID(tzID, date, mzID);
 }
 
 UnicodeString&
-TimeZoneNamesDelegate::getReferenceZoneID(const UnicodeString& mzID, const char* region, UnicodeString& tzID) const {
+TimeZoneNamesDelegate::getReferenceZoneID(const UnicodeString& mzID,
+                                          const char* region,
+                                          UnicodeString& tzID U_LIFETIME_BOUND) const {
     return fTZnamesCacheEntry->names->getReferenceZoneID(mzID, region, tzID);
 }
 
 UnicodeString&
-TimeZoneNamesDelegate::getMetaZoneDisplayName(const UnicodeString& mzID, UTimeZoneNameType type, UnicodeString& name) const {
+TimeZoneNamesDelegate::getMetaZoneDisplayName(const UnicodeString& mzID,
+                                              UTimeZoneNameType type,
+                                              UnicodeString& name U_LIFETIME_BOUND) const {
     return fTZnamesCacheEntry->names->getMetaZoneDisplayName(mzID, type, name);
 }
 
 UnicodeString&
-TimeZoneNamesDelegate::getTimeZoneDisplayName(const UnicodeString& tzID, UTimeZoneNameType type, UnicodeString& name) const {
+TimeZoneNamesDelegate::getTimeZoneDisplayName(const UnicodeString& tzID,
+                                              UTimeZoneNameType type,
+                                              UnicodeString& name U_LIFETIME_BOUND) const {
     return fTZnamesCacheEntry->names->getTimeZoneDisplayName(tzID, type, name);
 }
 
 UnicodeString&
-TimeZoneNamesDelegate::getExemplarLocationName(const UnicodeString& tzID, UnicodeString& name) const {
+TimeZoneNamesDelegate::getExemplarLocationName(const UnicodeString& tzID,
+                                               UnicodeString& name U_LIFETIME_BOUND) const {
     return fTZnamesCacheEntry->names->getExemplarLocationName(tzID, name);
 }
 
@@ -337,12 +355,16 @@ TimeZoneNames::createTZDBInstance(const Locale& locale, UErrorCode& status) {
 }
 
 UnicodeString&
-TimeZoneNames::getExemplarLocationName(const UnicodeString& tzID, UnicodeString& name) const {
+TimeZoneNames::getExemplarLocationName(const UnicodeString& tzID,
+                                       UnicodeString& name U_LIFETIME_BOUND) const {
     return TimeZoneNamesImpl::getDefaultExemplarLocationName(tzID, name);
 }
 
 UnicodeString&
-TimeZoneNames::getDisplayName(const UnicodeString& tzID, UTimeZoneNameType type, UDate date, UnicodeString& name) const {
+TimeZoneNames::getDisplayName(const UnicodeString& tzID,
+                              UTimeZoneNameType type,
+                              UDate date,
+                              UnicodeString& name U_LIFETIME_BOUND) const {
     getTimeZoneDisplayName(tzID, type, name);
     if (name.isEmpty()) {
         char16_t mzIDBuf[32];
@@ -491,7 +513,7 @@ TimeZoneNames::MatchInfoCollection::getMetaZoneIDAt(int32_t idx, UnicodeString& 
 }
 
 UVector*
-TimeZoneNames::MatchInfoCollection::matches(UErrorCode& status) {
+TimeZoneNames::MatchInfoCollection::matches(UErrorCode& status) U_LIFETIME_BOUND {
     if (U_FAILURE(status)) {
         return nullptr;
     }

@@ -66,7 +66,7 @@ public:
      * @param right The object to be copied.
      * @stable ICU 3.8
      */
-    RuleBasedTimeZone& operator=(const RuleBasedTimeZone& right);
+    RuleBasedTimeZone& operator=(const RuleBasedTimeZone& right) U_LIFETIME_BOUND;
 
     /**
      * Return true if the given <code>TimeZone</code> objects are
@@ -316,8 +316,10 @@ private:
     void deleteRules();
     void deleteTransitions();
     UVector* copyRules(UVector* source);
-    TimeZoneRule* findRuleInFinal(UDate date, UBool local,
-        int32_t NonExistingTimeOpt, int32_t DuplicatedTimeOpt) const;
+    TimeZoneRule* findRuleInFinal(UDate date,
+                                  UBool local,
+                                  int32_t NonExistingTimeOpt,
+                                  int32_t DuplicatedTimeOpt) const U_LIFETIME_BOUND;
     UBool findNext(UDate base, UBool inclusive, UDate& time, TimeZoneRule*& from, TimeZoneRule*& to) const;
     UBool findPrev(UDate base, UBool inclusive, UDate& time, TimeZoneRule*& from, TimeZoneRule*& to) const;
     int32_t getLocalDelta(int32_t rawBefore, int32_t dstBefore, int32_t rawAfter, int32_t dstAfter,
