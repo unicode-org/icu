@@ -526,7 +526,13 @@ public class Bidi {
         byte contextDir; /* L or R according to last strong char before opening */
     }
 
+    // BD16 counts pending brackets, excluding resolved pairs and synonyms.
+    private static final int MAX_BRACKET_STACK_SIZE = 63;
+
     static class IsoRun {
+        int firstPosition; // identifies this isolating run sequence
+        char[] bracketStack = new char[MAX_BRACKET_STACK_SIZE];
+        int bracketCount;
         int contextPos; /* position of char determining context */
         short start; /* index of first opening entry for this run */
         short limit; /* index after last opening entry for this run */
@@ -537,6 +543,7 @@ public class Bidi {
     }
 
     static class BracketData {
+        boolean[] overflowRuns; // lazily allocated, indexed by firstPosition
         Opening[] openings = new Opening[SIMPLE_OPENINGS_COUNT];
         int isoRunLast; /* index of last used entry */
         /* array of nested isolated sequence entries; can never excess UBIDI_MAX_EXPLICIT_LEVEL
@@ -973,6 +980,10 @@ public class Bidi {
     static final byte PDI = UCharacterDirection.POP_DIRECTIONAL_ISOLATE; /* 22 */
     static final byte ENL = PDI + 1; /* EN after W7 */ /* 23 */
     static final byte ENR = ENL + 1; /* EN not subject to W7 */ /* 24 */
+    static final byte PDIL = ENR + 1; // matched PDI overridden to L
+    static final byte PDIR = PDIL + 1; // matched PDI overridden to R
+    static final byte WSL = PDIR + 1; // unmatched/overflow PDI overridden to L
+    static final byte WSR = WSL + 1; // unmatched/overflow PDI overridden to R
 
     /**
      * Value returned by <code>BidiClassifier</code> when there is no need to override the standard
@@ -1192,14 +1203,20 @@ public class Bidi {
     static final int MASK_BN_EXPLICIT = DirPropFlag(BN) | MASK_EXPLICIT;
 
     /* explicit isolate codes */
-    static final int MASK_ISO =
-            DirPropFlag(LRI) | DirPropFlag(RLI) | DirPropFlag(FSI) | DirPropFlag(PDI);
+    static final int MASK_PDI = DirPropFlag(PDI) | DirPropFlag(PDIL) | DirPropFlag(PDIR);
+    static final int MASK_ISO = DirPropFlag(LRI) | DirPropFlag(RLI) | DirPropFlag(FSI) | MASK_PDI;
 
     /* paragraph and segment separators */
     static final int MASK_B_S = DirPropFlag(B) | DirPropFlag(S);
 
     /* all types that are counted as White Space or Neutral in some steps */
-    static final int MASK_WS = MASK_B_S | DirPropFlag(WS) | MASK_BN_EXPLICIT | MASK_ISO;
+    static final int MASK_WS =
+            MASK_B_S
+                    | DirPropFlag(WS)
+                    | DirPropFlag(WSL)
+                    | DirPropFlag(WSR)
+                    | MASK_BN_EXPLICIT
+                    | MASK_ISO;
 
     /* types that are neutrals or could becomes neutrals in (Wn) */
     static final int MASK_POSSIBLE_N =
@@ -1990,8 +2007,10 @@ public class Bidi {
     }
 
     /* paragraph boundary */
-    private void bracketProcessB(BracketData bd, byte level) {
+    private void bracketProcessB(BracketData bd, byte level, int position) {
         bd.isoRunLast = 0;
+        bd.isoRuns[0].firstPosition = position + 1;
+        bd.isoRuns[0].bracketCount = 0;
         bd.isoRuns[0].limit = 0;
         bd.isoRuns[0].level = level;
         bd.isoRuns[0].lastStrong =
@@ -2001,11 +2020,13 @@ public class Bidi {
 
     /* LRE, LRO, RLE, RLO, PDF */
     private void bracketProcessBoundary(
-            BracketData bd, int lastCcPos, byte contextLevel, byte embeddingLevel) {
+            BracketData bd, int lastCcPos, byte contextLevel, byte embeddingLevel, int position) {
         IsoRun pLastIsoRun = bd.isoRuns[bd.isoRunLast];
         if ((DirPropFlag(dirProps[lastCcPos]) & MASK_ISO) != 0) /* after an isolate */ return;
         if (NoOverride(embeddingLevel) > NoOverride(contextLevel)) /* not a PDF */
             contextLevel = embeddingLevel;
+        pLastIsoRun.firstPosition = position;
+        pLastIsoRun.bracketCount = 0;
         pLastIsoRun.limit = pLastIsoRun.start;
         pLastIsoRun.level = embeddingLevel;
         pLastIsoRun.lastStrong =
@@ -2014,7 +2035,7 @@ public class Bidi {
     }
 
     /* LRI or RLI */
-    private void bracketProcessLRI_RLI(BracketData bd, byte level) {
+    private void bracketProcessLRI_RLI(BracketData bd, byte level, int position) {
         IsoRun pLastIsoRun = bd.isoRuns[bd.isoRunLast];
         short lastLimit;
         pLastIsoRun.lastBase = ON;
@@ -2022,6 +2043,8 @@ public class Bidi {
         bd.isoRunLast++;
         pLastIsoRun = bd.isoRuns[bd.isoRunLast];
         if (pLastIsoRun == null) pLastIsoRun = bd.isoRuns[bd.isoRunLast] = new IsoRun();
+        pLastIsoRun.firstPosition = position + 1;
+        pLastIsoRun.bracketCount = 0;
         pLastIsoRun.start = pLastIsoRun.limit = lastLimit;
         pLastIsoRun.level = level;
         pLastIsoRun.lastStrong = pLastIsoRun.lastBase = pLastIsoRun.contextDir = (byte) (level & 1);
@@ -2034,6 +2057,33 @@ public class Bidi {
         bd.isoRunLast--;
         pLastIsoRun = bd.isoRuns[bd.isoRunLast];
         pLastIsoRun.lastBase = ON;
+    }
+
+    /* Track BD16 separately from the N0 entries, which also contain synonyms and
+    resolved pairs that may still need their direction adjusted. */
+    private void bracketCheckOverflow(BracketData bd, int position) {
+        if ((levels[position] & LEVEL_OVERRIDE) != 0) return; // BD14/BD15
+        IsoRun run = bd.isoRuns[bd.isoRunLast];
+        char c = text[position];
+        int type = UCharacter.getIntPropertyValue(c, UProperty.BIDI_PAIRED_BRACKET_TYPE);
+        if (type == UCharacter.BidiPairedBracketType.OPEN) {
+            if (run.bracketCount == MAX_BRACKET_STACK_SIZE) {
+                if (bd.overflowRuns == null) bd.overflowRuns = new boolean[length];
+                bd.overflowRuns[run.firstPosition] = true;
+                run.limit = run.start;
+            } else {
+                char match = (char) UCharacter.getBidiPairedBracket(c);
+                run.bracketStack[run.bracketCount++] = match == 0x232A ? 0x3009 : match;
+            }
+        } else if (type == UCharacter.BidiPairedBracketType.CLOSE) {
+            if (c == 0x232A) c = 0x3009;
+            for (int i = run.bracketCount; i > 0; ) {
+                if (run.bracketStack[--i] == c) {
+                    run.bracketCount = i;
+                    break;
+                }
+            }
+        }
     }
 
     /* newly found opening bracket: create an openings entry */
@@ -2163,7 +2213,15 @@ public class Bidi {
         byte dirProp, newProp;
         byte level;
         dirProp = dirProps[position];
-        if (dirProp == ON) {
+        // Keep the isolate/whitespace identity in dirProps for X10 and L1.
+        if (dirProp == PDIL || dirProp == WSL) dirProp = L;
+        else if (dirProp == PDIR || dirProp == WSR) dirProp = R;
+        boolean overflow = bd.overflowRuns != null && bd.overflowRuns[pLastIsoRun.firstPosition];
+        if (dirProp == ON && !overflow) {
+            bracketCheckOverflow(bd, position);
+            overflow = bd.overflowRuns != null && bd.overflowRuns[pLastIsoRun.firstPosition];
+        }
+        if (dirProp == ON && !overflow) {
             char c, match;
             int idx;
             /* First see if it is a matching closing bracket. Hopefully, this is
@@ -2338,7 +2396,22 @@ public class Bidi {
      * Returns the direction
      *
      */
-    private byte resolveExplicitLevels() {
+    private byte resolveExplicitLevels(byte paraLevel) {
+        BracketData bracketData = new BracketData();
+        byte dirct = resolveExplicitLevelsPass(bracketData);
+        if (bracketData.overflowRuns == null) return dirct;
+
+        // BD16 discards every pair in an overflowing isolating run sequence,
+        // including pairs already resolved by N0. Rebuild the properties and run
+        // once more, suppressing bracket matching throughout those sequences.
+        this.paraLevel = paraLevel;
+        paraCount = 1;
+        length = originalLength;
+        getDirProps();
+        return resolveExplicitLevelsPass(bracketData);
+    }
+
+    private byte resolveExplicitLevelsPass(BracketData bracketData) {
         int i = 0;
         byte dirProp;
         byte level = GetParaLevelAt(0);
@@ -2370,7 +2443,6 @@ public class Bidi {
             /* no embeddings, set all levels to the paragraph level */
             /* we still have to perform bracket matching */
             int paraIndex, start, limit;
-            BracketData bracketData = new BracketData();
             bracketInit(bracketData);
             for (paraIndex = 0; paraIndex < paraCount; paraIndex++) {
                 if (paraIndex == 0) start = 0;
@@ -2385,7 +2457,7 @@ public class Bidi {
                         if ((i + 1) < length) {
                             if (text[i] == CR && text[i + 1] == LF)
                                 continue; /* skip CR when followed by LF */
-                            bracketProcessB(bracketData, level);
+                            bracketProcessB(bracketData, level, i);
                         }
                         continue;
                     }
@@ -2411,7 +2483,6 @@ public class Bidi {
         int overflowIsolateCount = 0;
         int overflowEmbeddingCount = 0;
         int validIsolateCount = 0;
-        BracketData bracketData = new BracketData();
         bracketInit(bracketData);
         stack[0] = level; /* initialize base entry to para level, no override, no isolate */
 
@@ -2475,8 +2546,7 @@ public class Bidi {
                     levels[i] = NoOverride(embeddingLevel);
                     if (NoOverride(embeddingLevel) != NoOverride(previousLevel)) {
                         bracketProcessBoundary(
-                                bracketData, lastCcPos,
-                                previousLevel, embeddingLevel);
+                                bracketData, lastCcPos, previousLevel, embeddingLevel, i);
                         flags |= DirPropFlagMultiRuns;
                     }
                     previousLevel = embeddingLevel;
@@ -2499,7 +2569,7 @@ public class Bidi {
                         will exceed UBIDI_MAX_EXPLICIT_LEVEL before stackLast overflows */
                         stackLast++;
                         stack[stackLast] = (short) (embeddingLevel + ISOLATE);
-                        bracketProcessLRI_RLI(bracketData, embeddingLevel);
+                        bracketProcessLRI_RLI(bracketData, embeddingLevel, i);
                     } else {
                         /* make it WS so that it is handled by adjustWSLevels() */
                         dirProps[i] = WS;
@@ -2509,8 +2579,7 @@ public class Bidi {
                 case PDI:
                     if (NoOverride(embeddingLevel) != NoOverride(previousLevel)) {
                         bracketProcessBoundary(
-                                bracketData, lastCcPos,
-                                previousLevel, embeddingLevel);
+                                bracketData, lastCcPos, previousLevel, embeddingLevel, i);
                         flags |= DirPropFlagMultiRuns;
                     }
                     /* (X6a) */
@@ -2534,6 +2603,14 @@ public class Bidi {
                     flags |= DirPropFlag(ON) | DirPropFlagLR(embeddingLevel);
                     previousLevel = embeddingLevel;
                     levels[i] = NoOverride(embeddingLevel);
+                    if ((embeddingLevel & LEVEL_OVERRIDE) != 0) {
+                        // X6a applies the override even when this PDI is unmatched.
+                        // Preserve whether it closes an isolate, and its L1 treatment.
+                        dirProps[i] =
+                                (byte) ((dirProps[i] == PDI ? PDIL : WSL) + (embeddingLevel & 1));
+                        flags |= DirPropFlag(dirProps[i]);
+                        bracketProcessChar(bracketData, i);
+                    }
                     break;
                 case B:
                     flags |= DirPropFlag(B);
@@ -2547,7 +2624,7 @@ public class Bidi {
                         previousLevel = embeddingLevel = GetParaLevelAt(i + 1);
                         stack[0] =
                                 embeddingLevel; /* initialize base entry to para level, no override, no isolate */
-                        bracketProcessB(bracketData, embeddingLevel);
+                        bracketProcessB(bracketData, embeddingLevel, i);
                     }
                     break;
                 case BN:
@@ -2560,8 +2637,7 @@ public class Bidi {
                     /* all other types are normal characters and get the "real" level */
                     if (NoOverride(embeddingLevel) != NoOverride(previousLevel)) {
                         bracketProcessBoundary(
-                                bracketData, lastCcPos,
-                                previousLevel, embeddingLevel);
+                                bracketData, lastCcPos, previousLevel, embeddingLevel, i);
                         flags |= DirPropFlagMultiRuns;
                         if ((embeddingLevel & LEVEL_OVERRIDE) != 0)
                             flags |= DirPropFlagO(embeddingLevel);
@@ -2683,8 +2759,36 @@ public class Bidi {
     }
 
     private static final short groupProp[] = /* dirProp regrouped */ {
-        /*  L   R   EN  ES  ET  AN  CS  B   S   WS  ON  LRE LRO AL  RLE RLO PDF NSM BN  FSI LRI RLI PDI ENL ENR */
-        0, 1, 2, 7, 8, 3, 9, 6, 5, 4, 4, 10, 10, 12, 10, 10, 10, 11, 10, 4, 4, 4, 4, 13, 14
+        /*  L   R   EN  ES  ET  AN  CS  B   S   WS  ON  LRE LRO AL  RLE RLO PDF NSM BN  FSI LRI RLI PDI ENL ENR PDIL PDIR WSL WSR */
+        0,
+        1,
+        2,
+        7,
+        8,
+        3,
+        9,
+        6,
+        5,
+        4,
+        4,
+        10,
+        10,
+        12,
+        10,
+        10,
+        10,
+        11,
+        10,
+        4,
+        4,
+        4,
+        4,
+        13,
+        14,
+        0,
+        1,
+        0,
+        1
     };
     private static final short _L = 0;
     private static final short _R = 1;
@@ -3120,7 +3224,7 @@ public class Bidi {
         int isolateCount = 0, k;
         for (k = start; k < limit; k++) {
             dirProp = dirProps[k];
-            if (dirProp == PDI) isolateCount--;
+            if ((DirPropFlag(dirProp) & MASK_PDI) != 0) isolateCount--;
             if (isolateCount == 0) levels[k] = level;
             if (dirProp == LRI || dirProp == RLI) isolateCount++;
         }
@@ -3424,7 +3528,7 @@ public class Bidi {
         /* The isolates[] entries contain enough information to
         resume the bidi algorithm in the same state as it was
         when it was interrupted by an isolate sequence. */
-        if (dirProps[start] == PDI) {
+        if ((DirPropFlag(dirProps[start]) & MASK_PDI) != 0) {
             levState.startON = isolates[isolateCount].startON;
             start1 = isolates[isolateCount].start1;
             stateImp = isolates[isolateCount].stateImp;
@@ -4030,7 +4134,7 @@ public class Bidi {
             /* no: determine explicit levels according to the (Xn) rules */
             getLevelsMemory(length);
             levels = levelsMemory;
-            direction = resolveExplicitLevels();
+            direction = resolveExplicitLevels(paraLevel);
         } else {
             /* set BN for all explicit codes, check that all levels are 0 or paraLevel..MAX_EXPLICIT_LEVEL */
             levels = embeddingLevels;
