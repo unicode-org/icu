@@ -199,16 +199,14 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
     if (macros.symbols.isDecimalFormatSymbols()) {
         fMicros.simple.symbols = macros.symbols.getDecimalFormatSymbols();
     } else {
+        auto localeWithCurrency = macros.locale;
+        CharString currency8;
+        currency8.appendInvariantChars(currency.getISOCurrency(), 3, status);
+        localeWithCurrency.setKeywordValue("currency", currency8.data(), status);
         LocalPointer<DecimalFormatSymbols> newSymbols(
-            new DecimalFormatSymbols(macros.locale, *ns, status), status);
+            new DecimalFormatSymbols(localeWithCurrency, *ns, status), status);
         if (U_FAILURE(status)) {
             return nullptr;
-        }
-        if (isCurrency) {
-            newSymbols->setCurrency(currency.getISOCurrency(), status);
-            if (U_FAILURE(status)) {
-                return nullptr;
-            }
         }
         fMicros.simple.symbols = newSymbols.getAlias();
         fSymbols.adoptInstead(newSymbols.orphan());

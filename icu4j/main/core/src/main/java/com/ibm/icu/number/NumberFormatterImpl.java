@@ -36,6 +36,7 @@ import com.ibm.icu.text.NumberingSystem;
 import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.MeasureUnit;
+import com.ibm.icu.util.ULocale;
 
 /**
  * This is the "brain" of the number formatting pipeline. It ties all the pieces together, taking in
@@ -237,10 +238,9 @@ class NumberFormatterImpl {
         if (macros.symbols instanceof DecimalFormatSymbols) {
             micros.symbols = (DecimalFormatSymbols) macros.symbols;
         } else {
-            micros.symbols = DecimalFormatSymbols.forNumberingSystem(macros.loc, ns);
-            if (isCurrency) {
-                micros.symbols.setCurrency(currency);
-            }
+            ULocale localeWithCurrency =
+                    macros.loc.setKeywordValue("currency", currency.toString());
+            micros.symbols = DecimalFormatSymbols.forNumberingSystem(localeWithCurrency, ns);
         }
 
         // Load and parse the pattern string. It is used for grouping sizes and affixes only.
