@@ -23,11 +23,11 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(StringSearch)
 
 // public constructors and destructors -----------------------------------
 
-StringSearch::StringSearch(const UnicodeString &pattern,
-                           const UnicodeString &text,
-                           const Locale        &locale,
-                                 BreakIterator *breakiter,
-                                 UErrorCode    &status) :
+StringSearch::StringSearch(const UnicodeString& pattern,
+                           const UnicodeString& text,
+                           const Locale& locale,
+                           BreakIterator* breakiter U_LIFETIME_BOUND,
+                           UErrorCode& status) :
                            SearchIterator(text, breakiter),
                            m_pattern_(pattern)
 {
@@ -49,11 +49,11 @@ StringSearch::StringSearch(const UnicodeString &pattern,
     }
 }
 
-StringSearch::StringSearch(const UnicodeString     &pattern,
-                           const UnicodeString     &text,
-                                 RuleBasedCollator *coll,
-                                 BreakIterator     *breakiter,
-                                 UErrorCode        &status) :
+StringSearch::StringSearch(const UnicodeString& pattern,
+                           const UnicodeString& text,
+                           RuleBasedCollator* coll U_LIFETIME_BOUND,
+                           BreakIterator* breakiter U_LIFETIME_BOUND,
+                           UErrorCode& status) :
                            SearchIterator(text, breakiter),
                            m_pattern_(pattern)
 {
@@ -182,7 +182,7 @@ StringSearch::clone() const {
 }
 
 // operator overloading ---------------------------------------------
-StringSearch & StringSearch::operator=(const StringSearch &that)
+StringSearch& StringSearch::operator=(const StringSearch& that) U_LIFETIME_BOUND
 {
     if (this != &that) {
         UErrorCode status = U_ZERO_ERROR;
@@ -271,7 +271,7 @@ void StringSearch::setPattern(const UnicodeString &pattern,
     }
 }
 
-const UnicodeString & StringSearch::getPattern() const
+const UnicodeString& StringSearch::getPattern() const U_LIFETIME_BOUND
 {
     return m_pattern_;
 }
