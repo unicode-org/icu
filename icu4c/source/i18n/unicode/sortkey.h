@@ -137,7 +137,7 @@ public:
     * @param other    the object to be copied.
     * @stable ICU 2.0
     */
-    const   CollationKey&   operator=(const CollationKey& other);
+    const CollationKey& operator=(const CollationKey& other) U_LIFETIME_BOUND;
 
     /**
     * Compare if two collation keys are the same.
@@ -173,7 +173,7 @@ public:
     * @return a pointer to the collation key values.
     * @stable ICU 2.0
     */
-    const    uint8_t*       getByteArray(int32_t& count) const;
+    const uint8_t* getByteArray(int32_t& count) const U_LIFETIME_BOUND;
 
 #ifdef U_USE_COLLATION_KEY_DEPRECATES
     /**
@@ -251,16 +251,16 @@ private:
      * and copies length bytes from the old buffer to the new one.
      * @return the new buffer, or nullptr if the allocation failed
      */
-    uint8_t *reallocate(int32_t newCapacity, int32_t length);
+    uint8_t* reallocate(int32_t newCapacity, int32_t length) U_LIFETIME_BOUND;
     /**
      * Set a new length for a new sort key in the existing fBytes.
      */
     void setLength(int32_t newLength);
 
-    uint8_t *getBytes() {
+    uint8_t* getBytes() U_LIFETIME_BOUND {
         return (fFlagAndLength >= 0) ? fUnion.fStackBuffer : fUnion.fFields.fBytes;
     }
-    const uint8_t *getBytes() const {
+    const uint8_t* getBytes() const U_LIFETIME_BOUND {
         return (fFlagAndLength >= 0) ? fUnion.fStackBuffer : fUnion.fFields.fBytes;
     }
     int32_t getCapacity() const {
@@ -272,12 +272,12 @@ private:
     * Set the CollationKey to a "bogus" or invalid state
     * @return this CollationKey
     */
-    CollationKey& setToBogus();
+    CollationKey& setToBogus() U_LIFETIME_BOUND;
     /**
     * Resets this CollationKey to an empty state
     * @return this CollationKey
     */
-    CollationKey& reset();
+    CollationKey& reset() U_LIFETIME_BOUND;
 
     /**
     * Allow private access to RuleBasedCollator
@@ -329,7 +329,7 @@ CollationKey::isBogus() const
 }
 
 inline const uint8_t*
-CollationKey::getByteArray(int32_t &count) const
+CollationKey::getByteArray(int32_t& count) const U_LIFETIME_BOUND
 {
     count = getLength();
     return getBytes();

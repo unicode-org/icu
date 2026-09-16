@@ -199,9 +199,9 @@ public:
     *  @see cloneBinary
     *  @stable ICU 3.4
     */
-    U_I18N_API RuleBasedCollator(const uint8_t* bin,
+    U_I18N_API RuleBasedCollator(const uint8_t* bin U_LIFETIME_BOUND,
                                  int32_t length,
-                                 const RuleBasedCollator* base,
+                                 const RuleBasedCollator* base U_LIFETIME_BOUND,
                                  UErrorCode& status);
 
     /**
@@ -215,7 +215,7 @@ public:
      * @param other other RuleBasedCollator object to copy from.
      * @stable ICU 2.0
      */
-    U_I18N_API RuleBasedCollator& operator=(const RuleBasedCollator& other);
+    U_I18N_API RuleBasedCollator& operator=(const RuleBasedCollator& other) U_LIFETIME_BOUND;
 
     /**
      * Returns true if argument is the same as this object.
@@ -243,7 +243,7 @@ public:
      * @stable ICU 2.2
      */
     U_I18N_API CollationElementIterator*
-    createCollationElementIterator(const UnicodeString& source) const;
+    createCollationElementIterator(const UnicodeString& source) const U_LIFETIME_BOUND;
 
     /**
      * Creates a collation element iterator for the source. The caller of this
@@ -255,7 +255,7 @@ public:
      * @stable ICU 2.2
      */
     U_I18N_API CollationElementIterator*
-    createCollationElementIterator(const CharacterIterator& source) const;
+    createCollationElementIterator(const CharacterIterator& source) const U_LIFETIME_BOUND;
 
     // Make deprecated versions of Collator::compare() visible.
     using Collator::compare;
@@ -361,7 +361,7 @@ public:
      * @stable ICU 2.0
      */
     U_I18N_API virtual CollationKey& getCollationKey(const UnicodeString& source,
-                                                     CollationKey& key,
+                                                     CollationKey& key U_LIFETIME_BOUND,
                                                      UErrorCode& status) const override;
 
     /**
@@ -381,7 +381,7 @@ public:
      */
     U_I18N_API virtual CollationKey& getCollationKey(const char16_t* source,
                                                      int32_t sourceLength,
-                                                     CollationKey& key,
+                                                     CollationKey& key U_LIFETIME_BOUND,
                                                      UErrorCode& status) const override;
 
     /**
@@ -410,7 +410,7 @@ public:
      * @return the collation tailoring from which this collator was created
      * @stable ICU 2.0
      */
-    U_I18N_API const UnicodeString& getRules() const;
+    U_I18N_API const UnicodeString& getRules() const U_LIFETIME_BOUND;
 
     /**
      * Gets the version information for a Collator.
@@ -540,7 +540,8 @@ public:
      * @see getMaxVariable
      * @stable ICU 53
      */
-    U_I18N_API virtual Collator& setMaxVariable(UColReorderCode group, UErrorCode& errorCode) override;
+    U_I18N_API virtual Collator& setMaxVariable(UColReorderCode group,
+                                                UErrorCode& errorCode) U_LIFETIME_BOUND override;
 
     /**
      * Returns the maximum reordering group whose characters are affected by UCOL_ALTERNATE_HANDLING.
@@ -753,7 +754,8 @@ public:
      * getLocale() returns a copy of a Locale, with minimal lifetime in a C wrapper.
      * @internal
      */
-    U_I18N_API const char* internalGetLocaleID(ULocDataLocaleType type, UErrorCode& errorCode) const;
+    U_I18N_API const char* internalGetLocaleID(ULocDataLocaleType type,
+                                               UErrorCode& errorCode) const U_LIFETIME_BOUND;
 
     /**
      * Implements ucol_getContractionsAndExpansions().
@@ -791,11 +793,11 @@ public:
                                            UErrorCode& errorCode);
 
     /** @internal */
-    static inline RuleBasedCollator *rbcFromUCollator(UCollator *uc) {
+    static inline RuleBasedCollator* rbcFromUCollator(UCollator* uc U_LIFETIME_BOUND) {
         return dynamic_cast<RuleBasedCollator *>(fromUCollator(uc));
     }
     /** @internal */
-    static inline const RuleBasedCollator *rbcFromUCollator(const UCollator *uc) {
+    static inline const RuleBasedCollator* rbcFromUCollator(const UCollator* uc U_LIFETIME_BOUND) {
         return dynamic_cast<const RuleBasedCollator *>(fromUCollator(uc));
     }
 
@@ -850,7 +852,7 @@ private:
     void writeIdenticalLevel(const char16_t *s, const char16_t *limit,
                              SortKeyByteSink &sink, UErrorCode &errorCode) const;
 
-    const CollationSettings &getDefaultSettings() const;
+    const CollationSettings& getDefaultSettings() const U_LIFETIME_BOUND;
 
     void setAttributeDefault(int32_t attribute) {
         explicitlySetAttributes &= ~(static_cast<uint32_t>(1) << attribute);

@@ -117,7 +117,7 @@ CollatorFactory::visible() const {
 UnicodeString& 
 CollatorFactory::getDisplayName(const Locale& objectLocale, 
                                 const Locale& displayLocale,
-                                UnicodeString& result)
+                                UnicodeString& result U_LIFETIME_BOUND)
 {
   return objectLocale.getDisplayName(displayLocale, result);
 }
@@ -573,8 +573,8 @@ const Locale* U_EXPORT2 Collator::getAvailableLocales(int32_t& count)
 }
 
 UnicodeString& U_EXPORT2 Collator::getDisplayName(const Locale& objectLocale,
-                                        const Locale& displayLocale,
-                                        UnicodeString& name)
+                                                  const Locale& displayLocale,
+                                                  UnicodeString& name U_LIFETIME_BOUND)
 {
 #if !UCONFIG_NO_SERVICE
     if (hasService()) {
@@ -587,8 +587,8 @@ UnicodeString& U_EXPORT2 Collator::getDisplayName(const Locale& objectLocale,
 }
 
 UnicodeString& U_EXPORT2 Collator::getDisplayName(const Locale& objectLocale,
-                                        UnicodeString& name)
-{   
+                                                  UnicodeString& name U_LIFETIME_BOUND)
+{
     return getDisplayName(objectLocale, Locale::getDefault(), name);
 }
 
@@ -725,16 +725,17 @@ public:
     virtual UObject* create(const ICUServiceKey& key, const ICUService* service, UErrorCode& status) const override;
     
 protected:
-    virtual const Hashtable* getSupportedIDs(UErrorCode& status) const override
+    virtual const Hashtable* getSupportedIDs(UErrorCode& status) const U_LIFETIME_BOUND override
     {
         if (U_SUCCESS(status)) {
             return _ids;
         }
         return nullptr;
     }
-    
-    virtual UnicodeString&
-        getDisplayName(const UnicodeString& id, const Locale& locale, UnicodeString& result) const override;
+
+    virtual UnicodeString& getDisplayName(const UnicodeString& id,
+                                          const Locale& locale,
+                                          UnicodeString& result U_LIFETIME_BOUND) const override;
 };
 
 CFactory::~CFactory()
@@ -757,7 +758,9 @@ CFactory::create(const ICUServiceKey& key, const ICUService* /* service */, UErr
 }
 
 UnicodeString&
-CFactory::getDisplayName(const UnicodeString& id, const Locale& locale, UnicodeString& result) const 
+CFactory::getDisplayName(const UnicodeString& id,
+                         const Locale& locale,
+                         UnicodeString& result U_LIFETIME_BOUND) const
 {
     if ((_coverage & 0x1) == 0) {
         UErrorCode status = U_ZERO_ERROR;
@@ -925,8 +928,8 @@ Collator::setStrength(ECollationStrength newStrength) {
     setAttribute(UCOL_STRENGTH, static_cast<UColAttributeValue>(newStrength), intStatus);
 }
 
-Collator &
-Collator::setMaxVariable(UColReorderCode /*group*/, UErrorCode &errorCode) {
+Collator&
+Collator::setMaxVariable(UColReorderCode /*group*/, UErrorCode& errorCode) U_LIFETIME_BOUND {
     if (U_SUCCESS(errorCode)) {
         errorCode = U_UNSUPPORTED_ERROR;
     }
