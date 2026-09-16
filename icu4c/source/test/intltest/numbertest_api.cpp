@@ -37,6 +37,7 @@ NumberFormatterApiTest::NumberFormatterApiTest(UErrorCode& status)
         : USD(u"USD", status),
           GBP(u"GBP", status),
           CZK(u"CZK", status),
+          CHF(u"CHF", status),
           CAD(u"CAD", status),
           ESP(u"ESP", status),
           PTE(u"PTE", status),
@@ -2279,6 +2280,15 @@ void NumberFormatterApiTest::unitCurrency() {
             Locale("ro-RO"),
             24,
             u"24,00 lei românești");
+
+    assertFormatSingle(
+            u"Swiss long currency (ICU-23503)",
+            u"currency/CHF unit-width-full-name",
+            u"currency/CHF unit-width-full-name",
+            NumberFormatter::with().unit(CHF).unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
+            Locale("en-DE"),
+            5.43,
+            u"5,43 Swiss francs");
 
     assertFormatSingle(
             u"Currency spacing in suffix (ICU-20954)",

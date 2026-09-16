@@ -113,6 +113,7 @@ class NumberFormatterApiTest : public IntlTestWithFieldPosition {
     CurrencyUnit USD;
     CurrencyUnit GBP;
     CurrencyUnit CZK;
+    CurrencyUnit CHF;
     CurrencyUnit CAD;
     CurrencyUnit ESP;
     CurrencyUnit PTE;

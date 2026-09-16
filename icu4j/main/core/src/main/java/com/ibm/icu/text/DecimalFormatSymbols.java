@@ -949,6 +949,10 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
             setMonetaryDecimalSeparatorString(formatInfo.monetaryDecimalSeparator);
             setMonetaryGroupingSeparatorString(formatInfo.monetaryGroupingSeparator);
             currencyPattern = formatInfo.currencyPattern;
+        } else {
+            // TODO: At this point we should reset the pattern and the separators to the
+            // locale default, in case the previous currency overrode them. This requires
+            // either reopening the resource bundle or caching the symbols.
         }
     }
 

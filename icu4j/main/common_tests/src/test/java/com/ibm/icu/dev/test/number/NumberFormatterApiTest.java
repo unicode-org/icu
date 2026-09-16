@@ -63,6 +63,7 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
 
     private static final Currency USD = Currency.getInstance("USD");
     private static final Currency GBP = Currency.getInstance("GBP");
+    private static final Currency CHF = Currency.getInstance("CHF");
     private static final Currency CZK = Currency.getInstance("CZK");
     private static final Currency CAD = Currency.getInstance("CAD");
     private static final Currency ESP = Currency.getInstance("ESP");
@@ -2586,6 +2587,15 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
                 ULocale.forLanguageTag("ro-RO"),
                 24,
                 "24,00 lei românești");
+
+        assertFormatSingle(
+                "Swiss long currency (ICU-23503)",
+                "currency/CHF unit-width-full-name",
+                "currency/CHF unit-width-full-name",
+                NumberFormatter.with().unit(CHF).unitWidth(UnitWidth.FULL_NAME),
+                ULocale.forLanguageTag("en-DE"),
+                5.43,
+                "5,43 Swiss francs");
 
         assertFormatSingle(
                 "Currency spacing in suffix (ICU-20954)",
