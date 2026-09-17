@@ -284,6 +284,8 @@
             <retain path="en.txt"/>
             <retain path="el.txt"/>
         </dir>
+        <!-- Not ICU runtime data: only read offline by the "tz2icu" tool. -->
+        <dir name="tzdata"/>
         <dir name="unit"/>
         <dir name="zone">
             <!-- Manually edited to support TZ database name compatibility. -->

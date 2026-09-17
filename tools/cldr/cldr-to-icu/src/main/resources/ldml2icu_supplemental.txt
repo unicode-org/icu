@@ -325,8 +325,9 @@
 //supplementalData/metaZones/metazoneInfo/timezone[@type="(%W)"]/usesMetazone[@from="(%A)"][@mzone="(%W)"] ; /metazoneInfo/"$1"/<$2> ; values=$3 "&date_round_sec($2, UP)" "9999-12-31 23:59"
 //supplementalData/metaZones/metazoneInfo/timezone[@type="(%W)"]/usesMetazone[@from="(%A)"][@to="(%A)"][@mzone="(%W)"] ; /metazoneInfo/"$1"/<$2> ; values=$4 "&date_round_sec($2, UP)" "&date_round_sec($3, DOWN)"
 //supplementalData/metaZones/metazoneInfo/timezone[@type="(%W)"]/usesMetazone[@to="(%A)"][@mzone="(%W)"] ; /metazoneInfo/"$1"/<1970-01-01 00:00> ; values=$3 "1970-01-01 00:00" "&date_round_sec($2, DOWN)"
-# If we have stdOffset and dstOffset, then we produce the same as above (metazone only or plus from/to) and currently just ignore the stdOffset and dstOffset.
+# If we have stdOffset and dstOffset, then we produce the same as above (metazone only or plus from/to) and ignore the stdOffset and dstOffset here.
 # We cannot add them as 4th/5th elements or the resulting metaZones.txt would not be compatible with ICU versions < 79.
+# They are instead written to the non-packaged tzdata/metazoneOffsets.txt file (see MetazoneOffsetsMapper), which is only used offline by the tz2icu tool.
 //supplementalData/metaZones/metazoneInfo/timezone[@type="(%W)"]/usesMetazone[@mzone="(%W)"][@stdOffset="(%A)"][@dstOffset="(%A)"] ; /metazoneInfo/"$1"/<$2> ; values=$2
 //supplementalData/metaZones/metazoneInfo/timezone[@type="(%W)"]/usesMetazone[@from="(%A)"][@mzone="(%W)"][@stdOffset="(%A)"][@dstOffset="(%A)"] ; /metazoneInfo/"$1"/<$2> ; values=$3 "&date_round_sec($2, UP)" "9999-12-31 23:59"
 //supplementalData/metaZones/metazoneInfo/timezone[@type="(%W)"]/usesMetazone[@from="(%A)"][@to="(%A)"][@mzone="(%W)"][@stdOffset="(%A)"][@dstOffset="(%A)"] ; /metazoneInfo/"$1"/<$2> ; values=$4 "&date_round_sec($2, UP)" "&date_round_sec($3, DOWN)"
