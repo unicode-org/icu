@@ -18,6 +18,11 @@ ifeq ($(TZCODE),)
 TZCODE = $(firstword $(wildcard ./tzcode*.tar.gz) $(wildcard $(srcdir)/tzcode*.tar.gz))
 endif
 
+# Metazone standard/DST offsets, generated into the ICU source tree by the
+# CLDR-to-ICU conversion tool (see tools/cldr/cldr-to-icu/). This data is only
+# used here, when generating zoneinfo64.txt; it is not part of ICU's runtime data.
+METAZONE_OFFSETS = $(top_srcdir)/data/tzdata/metazoneOffsets.txt
+
 
 PRIMARY_DATA = africa antarctica asia australasia europe northamerica southamerica
 SUPPLEMENTAL_DATA = etcetera factory backward
@@ -130,8 +135,8 @@ $(ICUZDUMPOUT): $(ICUZDUMPEXEC)
 $(ZICTARG):		$(OBJECTS) $(TDATA) $(srcdir)/tz2icu.h
 		$(CC) $(CFLAGS) $(TZORIG_EXTRA_CFLAGS) $(LFLAGS) -I$(srcdir) $(OBJECTS) $(LDLIBS) -o $@
 
-$(TZ2ICUTARG):	$(srcdir)/tz2icu.cpp $(srcdir)/tz2icu.h
-		$(CXX) $(CXXFLAGS) -I$(srcdir) -I$(top_srcdir)/common $(srcdir)/tz2icu.cpp -o $@
+$(TZ2ICUTARG):	$(srcdir)/tz2icu.cpp $(srcdir)/tz2icu.h $(METAZONE_OFFSETS)
+		$(CXX) $(CXXFLAGS) -DICU_METAZONE_OFFSETS=\"$(METAZONE_OFFSETS)\" -I$(srcdir) -I$(top_srcdir)/common $(srcdir)/tz2icu.cpp -o $@
 
 $(ICUZDUMPTARG):	$(srcdir)/icuzdump.cpp
 		$(LINK.cc)  -I$(srcdir) -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/tools/toolutil -I$(top_srcdir)/io  -pedantic $(srcdir)/icuzdump.cpp $(LIBICUUC) $(LIBICUDT) $(LIBICUI18N) $(LIBICUIO) $(LIBICUTOOLUTIL) -o $@
