@@ -32,6 +32,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cctype>
 #include <ctime>
 #include <fstream>
 #include <iomanip>
@@ -109,6 +110,72 @@ int32_t secondsToYear(int64_t seconds) {
         }
     }
     return y;
+}
+
+const int32_t DAYS_BEFORE_MONTH[] = {0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334};
+
+/**
+ * Given calendar year, month (1-12), day (1-31), hour (0-23), minute (0-59),
+ * and second (0-59) in UTC, return GMT epoch seconds.
+ */
+int64_t dateTimeToSeconds(int32_t year, int32_t month, int32_t day, int32_t hour, int32_t min, int32_t sec) {
+    int64_t s = yearToSeconds(year);
+    int32_t d = DAYS_BEFORE_MONTH[month - 1] + (day - 1);
+    if (month > 2 && isLeap(year)) {
+        d++;
+    }
+    s += static_cast<int64_t>(d) * 86400 + hour * 3600 + min * 60 + sec;
+    return s;
+}
+
+/**
+ * Parse a UTC datetime string formatted as "YYYY-MM-DD HH:MM[:SS]"
+ * and return epoch seconds.
+ */
+int64_t parseUtcDateTime(const string& str) {
+    int32_t year = 0, mon = 0, day = 0, hour = 0, min = 0, sec = 0;
+    if (sscanf(str.c_str(), "%d-%d-%d %d:%d:%d", &year, &mon, &day, &hour, &min, &sec) < 5) {
+        throw invalid_argument("Invalid datetime format: " + str);
+    }
+    return dateTimeToSeconds(year, mon, day, hour, min, sec);
+}
+
+/**
+ * Parse an offset string in format "[+-]HH(:MM(:SS)?)?" or "[+-]HHMM(SS)?"
+ * and return offset in seconds.
+ */
+int64_t parseOffset(const string& str) {
+    if (str.empty()) return 0;
+    int sign = 1;
+    size_t i = 0;
+    if (str[0] == '-') {
+        sign = -1;
+        i = 1;
+    } else if (str[0] == '+') {
+        sign = 1;
+        i = 1;
+    }
+    int hours = 0, mins = 0, secs = 0;
+    string rest = str.substr(i);
+    if (rest.find(':') != string::npos) {
+        if (sscanf(rest.c_str(), "%d:%d:%d", &hours, &mins, &secs) < 2) {
+            sscanf(rest.c_str(), "%d:%d", &hours, &mins);
+        }
+    } else {
+        if (rest.length() <= 2) {
+            hours = atoi(rest.c_str());
+        } else if (rest.length() == 4) {
+            hours = atoi(rest.substr(0, 2).c_str());
+            mins = atoi(rest.substr(2, 2).c_str());
+        } else if (rest.length() == 6) {
+            hours = atoi(rest.substr(0, 2).c_str());
+            mins = atoi(rest.substr(2, 2).c_str());
+            secs = atoi(rest.substr(4, 2).c_str());
+        } else {
+            hours = atoi(rest.c_str());
+        }
+    }
+    return sign * (static_cast<int64_t>(hours) * 3600 + mins * 60 + secs);
 }
 
 //--------------------------------------------------------------------
@@ -1421,36 +1488,253 @@ void FinalRule::print(ostream& os) const {
     os << part[whichpart].offset << endl;
 }
 
+struct CldrMetazoneRule {
+    int64_t from; // epoch seconds (inclusive)
+    int64_t to;   // epoch seconds (exclusive)
+    int64_t stdOffset; // seconds
+    int64_t dstOffset; // seconds
+};
+
+typedef map<string, vector<CldrMetazoneRule> > CldrMetazoneMap;
+
+map<string, string> parseXmlAttributes(const string& tag) {
+    map<string, string> attrs;
+    size_t i = 0;
+    while (i < tag.size() && (tag[i] == ' ' || tag[i] == '\t' || tag[i] == '\r' || tag[i] == '\n' || tag[i] == '<')) i++;
+    while (i < tag.size() && !isspace(tag[i]) && tag[i] != '>' && tag[i] != '/') i++;
+
+    while (i < tag.size()) {
+        while (i < tag.size() && (isspace(tag[i]) || tag[i] == '/' || tag[i] == '>')) i++;
+        if (i >= tag.size()) break;
+        size_t keyStart = i;
+        while (i < tag.size() && tag[i] != '=' && !isspace(tag[i]) && tag[i] != '/' && tag[i] != '>') i++;
+        string key = tag.substr(keyStart, i - keyStart);
+        while (i < tag.size() && (isspace(tag[i]) || tag[i] == '=')) i++;
+        if (i >= tag.size()) break;
+        char quote = tag[i];
+        if (quote == '"' || quote == '\'') {
+            i++;
+            size_t valStart = i;
+            while (i < tag.size() && tag[i] != quote) i++;
+            string val = tag.substr(valStart, i - valStart);
+            if (i < tag.size()) i++;
+            attrs[key] = val;
+        }
+    }
+    return attrs;
+}
+
+void readCldrMetaZones(const string& filepath, CldrMetazoneMap& metazoneRules) {
+    ifstream in(filepath.c_str());
+    if (!in) {
+        throw runtime_error("Unable to open " + filepath);
+    }
+    string line;
+    string currentZone;
+    while (getline(in, line)) {
+        size_t tzPos = line.find("<timezone ");
+        if (tzPos != string::npos) {
+            map<string, string> attrs = parseXmlAttributes(line.substr(tzPos));
+            if (attrs.find("type") != attrs.end()) {
+                currentZone = attrs["type"];
+            }
+        }
+        if (!currentZone.empty()) {
+            size_t uPos = line.find("<usesMetazone ");
+            if (uPos != string::npos) {
+                map<string, string> attrs = parseXmlAttributes(line.substr(uPos));
+                if (attrs.find("stdOffset") != attrs.end() && attrs.find("dstOffset") != attrs.end()) {
+                    CldrMetazoneRule rule;
+                    rule.stdOffset = parseOffset(attrs["stdOffset"]);
+                    rule.dstOffset = parseOffset(attrs["dstOffset"]);
+                    if (attrs.find("from") != attrs.end()) {
+                        rule.from = parseUtcDateTime(attrs["from"]);
+                    } else {
+                        rule.from = numeric_limits<int64_t>::min();
+                    }
+                    if (attrs.find("to") != attrs.end()) {
+                        rule.to = parseUtcDateTime(attrs["to"]);
+                    } else {
+                        rule.to = numeric_limits<int64_t>::max();
+                    }
+                    // Offsets from metazone.xml should only be taken into account after 1970-01-01
+                    if (rule.to <= 0) {
+                        continue;
+                    }
+                    if (rule.from < 0) {
+                        rule.from = 0;
+                    }
+                    metazoneRules[currentZone].push_back(rule);
+                }
+            }
+            if (line.find("</timezone>") != string::npos) {
+                currentZone.clear();
+            }
+        }
+    }
+}
+
+void applyCldrMetazonePatches(ZoneMap& zoneInfo, const CldrMetazoneMap& metazoneRules, const map<string, set<string> >& links) {
+    int32_t patchedTransitions = 0;
+    for (ZoneMap::iterator zi = zoneInfo.begin(); zi != zoneInfo.end(); ++zi) {
+        const string& id = zi->first;
+        ZoneInfo& info = zi->second;
+        if (info.isAlias()) continue;
+
+        vector<CldrMetazoneRule> rules;
+        CldrMetazoneMap::const_iterator it = metazoneRules.find(id);
+        if (it != metazoneRules.end()) {
+            rules = it->second;
+        }
+        map<string, set<string> >::const_iterator lit = links.find(id);
+        if (lit != links.end()) {
+            for (set<string>::const_iterator ait = lit->second.begin(); ait != lit->second.end(); ++ait) {
+                CldrMetazoneMap::const_iterator aitRules = metazoneRules.find(*ait);
+                if (aitRules != metazoneRules.end()) {
+                    rules.insert(rules.end(), aitRules->second.begin(), aitRules->second.end());
+                }
+            }
+        }
+        if (rules.empty()) {
+            continue;
+        }
+
+        // Apply rules to initial type (only after 1970-01-01)
+        if (!info.types.empty()) {
+            int64_t initialTime = info.transitions.empty() ? 0 : info.transitions[0].time - 1;
+            if (initialTime >= 0) {
+                for (size_t r = 0; r < rules.size(); ++r) {
+                    const CldrMetazoneRule& rule = rules[r];
+                    if (initialTime >= rule.from && initialTime < rule.to) {
+                        ZoneType& initType = info.types[0];
+                        int64_t totalOffset = initType.rawoffset + initType.dstoffset;
+                        if (totalOffset == rule.stdOffset) {
+                            initType.rawoffset = rule.stdOffset;
+                            initType.dstoffset = 0;
+                            initType.isdst = false;
+                        } else if (totalOffset == rule.dstOffset) {
+                            initType.rawoffset = rule.stdOffset;
+                            initType.dstoffset = rule.dstOffset - rule.stdOffset;
+                            initType.isdst = (initType.dstoffset != 0);
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Apply rules to transitions on or after 1970-01-01
+        for (size_t t = 0; t < info.transitions.size(); ++t) {
+            Transition& trn = info.transitions[t];
+            if (trn.time < 0) {
+                continue;
+            }
+            assert(trn.type < (int32_t)info.types.size());
+            const ZoneType& curType = info.types[trn.type];
+            int64_t totalOffset = curType.rawoffset + curType.dstoffset;
+
+            for (size_t r = 0; r < rules.size(); ++r) {
+                const CldrMetazoneRule& rule = rules[r];
+                if (trn.time >= rule.from && trn.time < rule.to) {
+                    int64_t targetRaw = curType.rawoffset;
+                    int64_t targetDst = curType.dstoffset;
+                    bool match = false;
+
+                    if (totalOffset == rule.stdOffset) {
+                        targetRaw = rule.stdOffset;
+                        targetDst = 0;
+                        match = true;
+                    } else if (totalOffset == rule.dstOffset) {
+                        targetRaw = rule.stdOffset;
+                        targetDst = rule.dstOffset - rule.stdOffset;
+                        match = true;
+                    }
+
+                    if (match && (targetRaw != curType.rawoffset || targetDst != curType.dstoffset)) {
+                        int32_t targetTypeIdx = -1;
+                        for (size_t idx = 0; idx < info.types.size(); ++idx) {
+                            if (info.types[idx].rawoffset == targetRaw &&
+                                info.types[idx].dstoffset == targetDst) {
+                                targetTypeIdx = static_cast<int32_t>(idx);
+                                break;
+                            }
+                        }
+                        if (targetTypeIdx == -1) {
+                            ZoneType newType;
+                            newType.rawoffset = targetRaw;
+                            newType.dstoffset = targetDst;
+                            newType.isdst = (targetDst != 0);
+                            newType.abbr = curType.abbr;
+                            info.types.push_back(newType);
+                            targetTypeIdx = static_cast<int32_t>(info.types.size() - 1);
+                        }
+                        trn.type = targetTypeIdx;
+                        patchedTransitions++;
+                    }
+                    break;
+                }
+            }
+        }
+    }
+    cout << "Finished applying CLDR metazone patches (" << patchedTransitions << " transitions patched)" << endl;
+}
+
 #define ICU_ZONE_OVERRIDE_SUFFIX "--ICU"
 #define ICU_ZONE_OVERRIDE_SUFFIX_LEN 5
 
 int main(int argc, char *argv[]) {
     string rootpath, zonetab, version;
+    string metazonesPath;
     bool validArgs = false;
 
-    if (argc == 4 || argc == 5) {
+    if (argc >= 5) {
         validArgs = true;
         rootpath = argv[1];
         zonetab = argv[2];
         version = argv[3];
-        if (argc == 5) {
-            if (strcmp(argv[4], "--old") == 0) {
+        for (int i = 4; i < argc; ++i) {
+            if (strcmp(argv[i], "--old") == 0) {
                 ICU44PLUS = false;
                 TZ_RESOURCE_NAME = ICU_TZ_RESOURCE_OLD;
+            } else if (strcmp(argv[i], "--metazones") == 0 && i + 1 < argc) {
+                metazonesPath = argv[++i];
+            } else if (strncmp(argv[i], "--metazones=", 12) == 0) {
+                metazonesPath = argv[i] + 12;
+            } else if (argv[i][0] != '-' && metazonesPath.empty()) {
+                metazonesPath = argv[i];
             } else {
                 validArgs = false;
+                break;
             }
+        }
+        if (metazonesPath.empty()) {
+            validArgs = false;
         }
     }
     if (!validArgs) {
-        cout << "Usage: tz2icu <dir> <cmap> <tzver> [--old]" << endl
-             << " <dir>    path to zoneinfo file tree generated by" << endl
-             << "          ICU-patched version of zic" << endl
-             << " <cmap>   country map, from tzdata archive," << endl
-             << "          typically named \"zone.tab\"" << endl
-             << " <tzver>  version string, such as \"2003e\"" << endl
-             << " --old    generating resource format before ICU4.4" << endl;
+        cout << "Usage: tz2icu <dir> <cmap> <tzver> <metazones> [--old]" << endl
+             << " <dir>        path to zoneinfo file tree generated by" << endl
+             << "              ICU-patched version of zic" << endl
+             << " <cmap>       country map, from tzdata archive," << endl
+             << "              typically named \"zone.tab\"" << endl
+             << " <tzver>      version string, such as \"2003e\"" << endl
+             << " <metazones>  path to CLDR metaZones.xml (or --metazones <path>)" << endl
+             << " --old        generating resource format before ICU4.4" << endl;
         exit(1);
+    }
+
+    CldrMetazoneMap metazoneRules;
+    try {
+        readCldrMetaZones(metazonesPath, metazoneRules);
+        cout << "Finished reading " << metazoneRules.size()
+             << " timezone rules with offsets from " << metazonesPath << endl;
+    } catch (const exception& error) {
+        cerr << "Error: While reading " << metazonesPath << ": " << error.what() << endl;
+        return 1;
+    }
+    if (metazoneRules.empty()) {
+        cerr << "Error: No metazone offset rules found in " << metazonesPath << endl;
+        return 1;
     }
 
     cout << "Olson data version: " << version << endl;
@@ -1645,6 +1929,9 @@ int main(int argc, char *argv[]) {
             ZONEINFO[olson].addAlias(zoneIDs[*j]);
         }
     }
+
+    // Patch tm_isdst and offsets based on CLDR metaZones.xml
+    applyCldrMetazonePatches(ZONEINFO, metazoneRules, links);
 
     // Once merging of final data is complete, we can optimize the type list
     for (ZoneMap::iterator i=ZONEINFO.begin(); i!=ZONEINFO.end(); ++i) {
