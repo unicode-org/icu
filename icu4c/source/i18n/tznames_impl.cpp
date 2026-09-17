@@ -1695,15 +1695,10 @@ void TimeZoneNamesImpl::internalLoadAllDisplayNames(UErrorCode& status) {
 
 
 
-static const char16_t gEtcPrefix[]         = { 0x45, 0x74, 0x63, 0x2F }; // "Etc/"
-static const int32_t gEtcPrefixLen      = 4;
-static const char16_t gSystemVPrefix[]     = { 0x53, 0x79, 0x73, 0x74, 0x65, 0x6D, 0x56, 0x2F }; // "SystemV/
-static const int32_t gSystemVPrefixLen  = 8;
-
 UnicodeString& U_EXPORT2
 TimeZoneNamesImpl::getDefaultExemplarLocationName(const UnicodeString& tzID, UnicodeString& name) {
-    if (tzID.isEmpty() || tzID.startsWith(gEtcPrefix, gEtcPrefixLen)
-        || tzID.startsWith(gSystemVPrefix, gSystemVPrefixLen)) {
+    UnicodeString country;
+    if (tzID.isEmpty() || ZoneMeta::getCanonicalCountry(tzID, country).isEmpty()) {
         name.setToBogus();
         return name;
     }
