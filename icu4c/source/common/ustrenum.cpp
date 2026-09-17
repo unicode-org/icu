@@ -357,7 +357,7 @@ static const UEnumeration UCHARSTRENUM_U_VT = {
 U_CDECL_END
 
 U_CAPI UEnumeration* U_EXPORT2
-uenum_openCharStringsEnumeration(const char* const* const strings U_LIFETIME_BOUND,
+uenum_openCharStringsEnumeration(U_LIFETIME_BOUND const char* const strings[],
                                  int32_t count,
                                  UErrorCode* ec) {
     UCharStringEnumeration* result = nullptr;
@@ -377,7 +377,7 @@ uenum_openCharStringsEnumeration(const char* const* const strings U_LIFETIME_BOU
 }
 
 U_CAPI UEnumeration* U_EXPORT2
-uenum_openUCharStringsEnumeration(const char16_t* const* const strings U_LIFETIME_BOUND,
+uenum_openUCharStringsEnumeration(U_LIFETIME_BOUND const char16_t* const strings[],
                                   int32_t count,
                                   UErrorCode* ec) {
     UCharStringEnumeration* result = nullptr;

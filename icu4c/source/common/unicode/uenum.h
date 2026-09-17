@@ -188,7 +188,7 @@ uenum_openFromStringEnumeration(icu::StringEnumeration* adopted, UErrorCode* ec)
  * @stable ICU 50
  */
 U_CAPI UEnumeration* U_EXPORT2
-uenum_openUCharStringsEnumeration(const UChar* const* const strings U_LIFETIME_BOUND,
+uenum_openUCharStringsEnumeration(U_LIFETIME_BOUND const UChar* const strings[],
                                   int32_t count,
                                   UErrorCode* ec);
 
@@ -204,7 +204,7 @@ uenum_openUCharStringsEnumeration(const UChar* const* const strings U_LIFETIME_B
  * @stable ICU 50
  */
 U_CAPI UEnumeration* U_EXPORT2
-uenum_openCharStringsEnumeration(const char* const* const strings U_LIFETIME_BOUND,
+uenum_openCharStringsEnumeration(U_LIFETIME_BOUND const char* const strings[],
                                  int32_t count,
                                  UErrorCode* ec);
 
