@@ -1,0 +1,19 @@
+# © 2016 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+# Generated using tools/cldr/cldr-to-icu/
+#
+# Standard and daylight-savings offsets from CLDR's metaZones.xml.
+#
+# This file is NOT packaged into ICU's data; it is only read offline by the
+# "tz2icu" tool (icu4c/source/tools/tzcode/) when generating zoneinfo64.txt.
+#
+# Fields (tab separated):
+#   <zone ID> <from> <to> <stdOffset> <dstOffset>
+# where <from> (inclusive) and <to> (exclusive) are UTC date-times formatted
+# as "yyyy-MM-dd HH:mm", and the offsets are in CLDR's "[+-]HH[:mm]" format.
+Africa/Windhoek	1994-03-20 22:00	2017-10-23 22:00	+01	+02
+America/Coyhaique	1970-01-01 00:00	9999-12-31 23:59	-04	-03
+America/Edmonton	1970-01-01 00:00	9999-12-31 23:59	-07	-06
+America/Punta_Arenas	1970-01-01 00:00	9999-12-31 23:59	-04	-03
+America/Vancouver	1970-01-01 00:00	9999-12-31 23:59	-08	-07
+Europe/Dublin	1971-10-31 02:00	9999-12-31 23:59	+00	+01
