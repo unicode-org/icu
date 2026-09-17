@@ -96,9 +96,6 @@ MST7MDT ; America/Denver
 Mexico/BajaNorte ; America/Tijuana
 Mexico/BajaSur ; America/Mazatlan
 Mexico/General ; America/Mexico_City
-Mideast/Riyadh87 ; Asia/Riyadh87
-Mideast/Riyadh88 ; Asia/Riyadh88
-Mideast/Riyadh89 ; Asia/Riyadh89
 NZ ; Pacific/Auckland
 NZ-CHAT ; Pacific/Chatham
 Navajo ; America/Denver

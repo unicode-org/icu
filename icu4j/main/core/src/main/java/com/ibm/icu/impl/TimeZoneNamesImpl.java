@@ -991,7 +991,7 @@ public class TimeZoneNamesImpl extends TimeZoneNames {
     }
 
     private static final Pattern LOC_EXCLUSION_PATTERN =
-            Pattern.compile("Etc/.*|SystemV/.*|.*/Riyadh8[7-9]");
+            Pattern.compile("Etc/.*|SystemV/.*");
 
     /**
      * Default exemplar location name based on time zone ID. For example, "America/New_York" -> "New

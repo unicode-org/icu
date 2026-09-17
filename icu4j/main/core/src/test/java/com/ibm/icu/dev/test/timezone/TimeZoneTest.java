@@ -2194,9 +2194,6 @@ public class TimeZoneTest extends CoreTestFmwk {
             {"Europe/Helsinki", "FI"},
             {"Europe/Mariehamn", "AX"}, // Link Europe/Helsinki, but in zone.tab
             {"Asia/Riyadh", "SA"},
-            // tz file solar87 was removed from tzdata2013i
-            // {"Asia/Riyadh87",                   "001"}, // this should be "SA" actually, but not
-            // in zone.tab
             {"Atlantic/Jan_Mayen", "SJ"},
             {"Pacific/Truk", "FM"},
             {"Etc/Unknown", null}, // CLDR canonical, but not a sysmte zone ID

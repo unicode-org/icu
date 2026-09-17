@@ -54,7 +54,6 @@ import org.junit.runners.JUnit4;
 public class TimeZoneFormatTest extends CoreTestFmwk {
 
     private static boolean JDKTZ = (TimeZone.getDefaultTimeZoneType() == TimeZone.TIMEZONE_JDK);
-    private static final Pattern EXCL_TZ_PATTERN = Pattern.compile(".*/Riyadh8[7-9]");
 
     private static final String[] PATTERNS = {
         "z", "zzzz", "Z", // equivalent to "xxxx"
@@ -137,9 +136,6 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
                 SimpleDateFormat sdf = new SimpleDateFormat(PATTERNS[patidx], LOCALES[locidx]);
 
                 for (int tzidx = 0; tzidx < tzids.length; tzidx++) {
-                    if (EXCL_TZ_PATTERN.matcher(tzids[tzidx]).matches()) {
-                        continue;
-                    }
                     TimeZone tz = TimeZone.getTimeZone(tzids[tzidx]);
 
                     for (int datidx = 0; datidx < DATES.length; datidx++) {
@@ -171,7 +167,7 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
                             String canonicalID = TimeZone.getCanonicalID(tzids[tzidx]);
                             if (!outtz.getID().equals(canonicalID)) {
                                 if (outtz.getID().equals("Etc/Unknown")) {
-                                    // Note that some zones like Asia/Riyadh87 does not have
+                                    // Note that some zones do not have
                                     // short zone ID and "unk" is used as the fallback
                                     if (REALLY_VERBOSE_LOG) {
                                         logln(
@@ -409,7 +405,7 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
         List<String> MINUTES_OFFSET = Arrays.asList("X", "XX", "XXX", "x", "xx", "xxx");
 
         // Regex pattern used for filtering zone IDs without exemplar location
-        final Pattern LOC_EXCLUSION_PATTERN = Pattern.compile("Etc/.*|SystemV/.*|.*/Riyadh8[7-9]");
+        final Pattern LOC_EXCLUSION_PATTERN = Pattern.compile("Etc/.*|SystemV/.*");
 
         final String BASEPATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS";
 
@@ -471,9 +467,6 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
                     ids = new TreeSet<>();
                     String[] jdkIDs = java.util.TimeZone.getAvailableIDs();
                     for (String jdkID : jdkIDs) {
-                        if (EXCL_TZ_PATTERN.matcher(jdkID).matches()) {
-                            continue;
-                        }
                         String tmpID = TimeZone.getCanonicalID(jdkID);
                         if (tmpID != null) {
                             ids.add(tmpID);
@@ -495,7 +488,7 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
                     }
 
                     if (PATTERNS[patidx].equals("V")) {
-                        // Some zones do not have short ID assigned, such as Asia/Riyadh87.
+                        // Some zones do not have short ID assigned.
                         // The time roundtrip will fail for such zones with pattern "V" (short zone
                         // ID).
                         // This is expected behavior.
