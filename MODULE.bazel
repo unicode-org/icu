@@ -1,0 +1,13 @@
+module(
+    name = "icu",
+    version = "77.2-dev",
+)
+
+bazel_dep(
+    name = "rules_cc",
+    version = "0.2.2",
+)
+bazel_dep(
+    name = "platforms",
+    version = "1.0.0",
+)
