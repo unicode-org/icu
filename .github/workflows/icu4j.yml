@@ -161,7 +161,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        java-version: [ '11', '17', '21', '25' ]
+        java-version: [ '11', '17', '21', '27' ]
     runs-on: ubuntu-24.04  # Updated in BRS
     steps:
       - name: Checkout and setup
