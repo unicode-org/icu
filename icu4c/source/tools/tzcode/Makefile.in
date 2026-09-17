@@ -26,8 +26,6 @@ METAZONE_OFFSETS = $(top_srcdir)/data/tzdata/metazoneOffsets.txt
 
 PRIMARY_DATA = africa antarctica asia australasia europe northamerica southamerica
 SUPPLEMENTAL_DATA = etcetera factory backward
-#DEPRECATED_DATA = pacificnew systemv solar87 solar88 solar89
-#TDATA =	$(PRIMARY_DATA) $(SUPPLEMENTAL_DATA) $(DEPRECATED_DATA)
 TDATA =	$(PRIMARY_DATA) $(SUPPLEMENTAL_DATA)
 
 TZDIR=zoneinfo

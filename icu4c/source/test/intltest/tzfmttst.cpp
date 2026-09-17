@@ -59,7 +59,6 @@ static const char16_t ETC_UNKNOWN[] = {0x45, 0x74, 0x63, 0x2F, 0x55, 0x6E, 0x6B,
 
 static const char16_t ETC_SLASH[] = { 0x45, 0x74, 0x63, 0x2F, 0 }; // "Etc/"
 static const char16_t SYSTEMV_SLASH[] = { 0x53, 0x79, 0x73, 0x74, 0x65, 0x6D, 0x56, 0x2F, 0 }; // "SystemV/
-static const char16_t RIYADH8[] = { 0x52, 0x69, 0x79, 0x61, 0x64, 0x68, 0x38, 0 }; // "Riyadh8"
 
 static UBool contains(const char** list, const char* str) {
     for (int32_t i = 0; list[i]; i++) {
@@ -237,7 +236,7 @@ TimeZoneFormatTest::TestTimeZoneRoundTrip() {
                             status = U_ZERO_ERROR;
                         } else if (outtzid != canonicalID) {
                             if (outtzid.compare(ETC_UNKNOWN, -1) == 0) {
-                                // Note that some zones like Asia/Riyadh87 does not have
+                                // Note that some zones do not have
                                 // short zone ID and "unk" is used as fallback
                                 logln(UnicodeString("Canonical round trip failed (probably as expected); tz=") + *tzid
                                         + ", locale=" + LOCALES[locidx].getName() + ", pattern=" + PATTERNS[patidx]
@@ -586,7 +585,7 @@ void TimeZoneFormatTest::RunTimeRoundTripTests(int32_t threadNumber) {
             // NOTE: This test only fails in the exhaustive tests.  If you take out this check,
             // make sure you run the exhaustive tests!
             if (uprv_strcmp(PATTERNS[patidx], "V") == 0) {
-                // Some zones do not have short ID assigned, such as Asia/Riyadh87.
+                // Some zones do not have short ID assigned.
                 // The time roundtrip will fail for such zones with pattern "V" (short zone ID).
                 // This is expected behavior.
                 const char16_t* shortZoneID = ZoneMeta::getShortID(*tzid);
@@ -598,7 +597,7 @@ void TimeZoneFormatTest::RunTimeRoundTripTests(int32_t threadNumber) {
                 // The time roundtrip will fail for such zone with pattern "VVV" (exemplar location).
                 // This is expected behavior.
                 if (tzid->indexOf(static_cast<char16_t>(0x2F)) < 0 || tzid->indexOf(ETC_SLASH, -1, 0) >= 0
-                    || tzid->indexOf(SYSTEMV_SLASH, -1, 0) >= 0 || tzid->indexOf(RIYADH8, -1, 0) >= 0) {
+                    || tzid->indexOf(SYSTEMV_SLASH, -1, 0) >= 0) {
                     continue;
                 }
             }
