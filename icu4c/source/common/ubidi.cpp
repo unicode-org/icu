@@ -889,6 +889,10 @@ bracketProcessChar(BracketData *bd, int32_t position) {
     UBiDiLevel level;
     dirProps=bd->pBiDi->dirProps;
     dirProp=dirProps[position];
+    /* Preserve the stored PDI/WS identity for X10 and L1. */
+    if(dirProp==PDIL || dirProp==WSL) dirProp=L;
+    else if(dirProp==PDIR || dirProp==WSR) dirProp=R;
+
     if(dirProp==ON) {
         char16_t c, match;
         int32_t idx;
@@ -1289,6 +1293,14 @@ resolveExplicitLevels(UBiDi *pBiDi, UErrorCode *pErrorCode) {
                 flags|=(DIRPROP_FLAG(ON)|DIRPROP_FLAG_LR(embeddingLevel));
                 previousLevel=embeddingLevel;
                 levels[i]=NO_OVERRIDE(embeddingLevel);
+                if(embeddingLevel&UBIDI_LEVEL_OVERRIDE) {
+                    /* X6a: apply the override, retaining the PDI's X10/L1 identity. */
+                    dirProps[i]=static_cast<DirProp>((dirProps[i]==PDI ? PDIL : WSL)+(embeddingLevel&1));
+                    flags|=DIRPROP_FLAG(dirProps[i]);
+                    if(!bracketProcessChar(&bracketData, i))
+                        return static_cast<UBiDiDirection>(-1);
+                }
+
                 break;
             case B:
                 flags|=DIRPROP_FLAG(B);
@@ -1841,7 +1853,7 @@ setLevelsOutsideIsolates(UBiDi *pBiDi, int32_t start, int32_t limit, UBiDiLevel 
     int32_t isolateCount=0, k;
     for(k=start; k<limit; k++) {
         dirProp=dirProps[k];
-        if(dirProp==PDI)
+        if(DIRPROP_FLAG(dirProp)&MASK_PDI)
             isolateCount--;
         if(isolateCount==0)
             levels[k]=level;
@@ -2172,7 +2184,7 @@ resolveImplicitLevels(UBiDi *pBiDi,
     /* The isolates[] entries contain enough information to
        resume the bidi algorithm in the same state as it was
        when it was interrupted by an isolate sequence. */
-    if(dirProps[start]==PDI  && pBiDi->isolateCount >= 0) {
+    if((DIRPROP_FLAG(dirProps[start])&MASK_PDI) && pBiDi->isolateCount >= 0) {
         levState.startON=pBiDi->isolates[pBiDi->isolateCount].startON;
         start1=pBiDi->isolates[pBiDi->isolateCount].start1;
         stateImp=pBiDi->isolates[pBiDi->isolateCount].stateImp;
@@ -2228,6 +2240,8 @@ resolveImplicitLevels(UBiDi *pBiDi,
                     }
                 }
             }
+            if(prop==PDIL || prop==WSL) prop=L;
+            else if(prop==PDIR || prop==WSR) prop=R;
             gprop=groupProp[prop];
         }
         oldStateImp=stateImp;

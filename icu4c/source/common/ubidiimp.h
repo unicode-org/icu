@@ -81,6 +81,10 @@ enum {
     PDI=U_POP_DIRECTIONAL_ISOLATE,      /* 22 */
     ENL,    /* EN after W7 */           /* 23 */
     ENR,    /* EN not subject to W7 */  /* 24 */
+    PDIL,   /* matched PDI overridden to L */             /* 25 */
+    PDIR,   /* matched PDI overridden to R */             /* 26 */
+    WSL,    /* unmatched/overflow PDI overridden to L */  /* 27 */
+    WSR,    /* unmatched/overflow PDI overridden to R */  /* 28 */
     dirPropCount
 };
 
@@ -105,7 +109,8 @@ enum {
 #define MASK_EXPLICIT (DIRPROP_FLAG(LRE)|DIRPROP_FLAG(LRO)|DIRPROP_FLAG(RLE)|DIRPROP_FLAG(RLO)|DIRPROP_FLAG(PDF))
 
 /* explicit isolate codes */
-#define MASK_ISO (DIRPROP_FLAG(LRI)|DIRPROP_FLAG(RLI)|DIRPROP_FLAG(FSI)|DIRPROP_FLAG(PDI))
+#define MASK_PDI (DIRPROP_FLAG(PDI)|DIRPROP_FLAG(PDIL)|DIRPROP_FLAG(PDIR))
+#define MASK_ISO (DIRPROP_FLAG(LRI)|DIRPROP_FLAG(RLI)|DIRPROP_FLAG(FSI)|MASK_PDI)
 
 #define MASK_BN_EXPLICIT (DIRPROP_FLAG(BN)|MASK_EXPLICIT)
 
@@ -113,7 +118,7 @@ enum {
 #define MASK_B_S (DIRPROP_FLAG(B)|DIRPROP_FLAG(S))
 
 /* all types that are counted as White Space or Neutral in some steps */
-#define MASK_WS (MASK_B_S|DIRPROP_FLAG(WS)|MASK_BN_EXPLICIT|MASK_ISO)
+#define MASK_WS (MASK_B_S|DIRPROP_FLAG(WS)|DIRPROP_FLAG(WSL)|DIRPROP_FLAG(WSR)|MASK_BN_EXPLICIT|MASK_ISO)
 
 /* types that are neutrals or could becomes neutrals in (Wn) */
 #define MASK_POSSIBLE_N (DIRPROP_FLAG(ON)|DIRPROP_FLAG(CS)|DIRPROP_FLAG(ES)|DIRPROP_FLAG(ET)|MASK_WS)
