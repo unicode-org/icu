@@ -31,7 +31,6 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.regex.Pattern;
 
 /** The standard ICU implementation of TimeZoneNames */
 public class TimeZoneNamesImpl extends TimeZoneNames {
@@ -990,9 +989,6 @@ public class TimeZoneNamesImpl extends TimeZoneNames {
         }
     }
 
-    private static final Pattern LOC_EXCLUSION_PATTERN =
-            Pattern.compile("Etc/.*|SystemV/.*|.*/Riyadh8[7-9]");
-
     /**
      * Default exemplar location name based on time zone ID. For example, "America/New_York" -> "New
      * York"
@@ -1001,7 +997,7 @@ public class TimeZoneNamesImpl extends TimeZoneNames {
      * @return the exemplar location name or null if location is not available.
      */
     public static String getDefaultExemplarLocationName(String tzID) {
-        if (tzID == null || tzID.length() == 0 || LOC_EXCLUSION_PATTERN.matcher(tzID).matches()) {
+        if (tzID == null || tzID.length() == 0 || ZoneMeta.getCanonicalCountry(tzID) == null) {
             return null;
         }
 

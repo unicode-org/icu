@@ -67576,33 +67576,6 @@ structLocale:table(nofallback){
             ss{""}
             ec{""}
         }
-        "Asia:Riyadh87"{
-            ld{""}
-            lg{""}
-            ls{""}
-            sd{""}
-            sg{""}
-            ss{""}
-            ec{""}
-        }
-        "Asia:Riyadh88"{
-            ld{""}
-            lg{""}
-            ls{""}
-            sd{""}
-            sg{""}
-            ss{""}
-            ec{""}
-        }
-        "Asia:Riyadh89"{
-            ld{""}
-            lg{""}
-            ls{""}
-            sd{""}
-            sg{""}
-            ss{""}
-            ec{""}
-        }
         "Asia:Saigon"{
             ld{""}
             lg{""}
@@ -69548,33 +69521,6 @@ structLocale:table(nofallback){
             ec{""}
         }
         "Mexico:General"{
-            ld{""}
-            lg{""}
-            ls{""}
-            sd{""}
-            sg{""}
-            ss{""}
-            ec{""}
-        }
-        "Mideast:Riyadh87"{
-            ld{""}
-            lg{""}
-            ls{""}
-            sd{""}
-            sg{""}
-            ss{""}
-            ec{""}
-        }
-        "Mideast:Riyadh88"{
-            ld{""}
-            lg{""}
-            ls{""}
-            sd{""}
-            sg{""}
-            ss{""}
-            ec{""}
-        }
-        "Mideast:Riyadh89"{
             ld{""}
             lg{""}
             ls{""}
