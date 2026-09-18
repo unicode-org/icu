@@ -110,7 +110,7 @@ jobs:
           # Remember newZipName for `actions/attest`, which (currently) does not allow wildcards
           echo "newZipName=$newZipName" >> $GITHUB_ENV
           mv icu4x-icuexportdata.zip ${newZipName}
-          gh release upload ${INPUTS_GITRELEASETAG} ${newZipName} --clobber
+          bash .github/scripts/upload-release-asset.sh "${INPUTS_GITRELEASETAG}" "${newZipName}"
         env:
           GH_TOKEN: ${{ github.token }}
           INPUTS_GITRELEASETAG: ${{ inputs.gitReleaseTag }}

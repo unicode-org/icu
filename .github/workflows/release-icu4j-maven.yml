@@ -143,7 +143,7 @@ jobs:
     - name: Upload to release
       if: ${{ inputs.gitReleaseTag && startsWith(inputs.gitReleaseTag, 'release-') }}
       run: |
-        gh release upload ${INPUTS_GITRELEASETAG} ${RELEASE_FOLDER}/* --clobber --repo=${{ github.repository }}
+        bash .github/scripts/upload-release-asset.sh "${INPUTS_GITRELEASETAG}" ${RELEASE_FOLDER}/*
       env:
         GH_TOKEN: ${{ github.token }}
         INPUTS_GITRELEASETAG: ${{ inputs.gitReleaseTag }}
@@ -213,7 +213,7 @@ jobs:
     - name: Upload to release
       if: ${{ inputs.gitReleaseTag && startsWith(inputs.gitReleaseTag, 'release-') }}
       run: |
-        gh release upload ${INPUTS_GITRELEASETAG} ${RELEASE_FOLDER}/* --clobber --repo=${{ github.repository }}
+        bash .github/scripts/upload-release-asset.sh "${INPUTS_GITRELEASETAG}" ${RELEASE_FOLDER}/*
       env:
         GH_TOKEN: ${{ github.token }}
         INPUTS_GITRELEASETAG: ${{ inputs.gitReleaseTag }}

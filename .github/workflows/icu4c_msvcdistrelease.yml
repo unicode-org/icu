@@ -116,8 +116,9 @@ jobs:
           path: icu4c/source/dist/${{ env.newZipName }}.zip
       - name: Upload to release
         if: ${{ inputs.gitReleaseTag && startsWith(inputs.gitReleaseTag, 'release-') }}
+        shell: bash
         run: |
-          gh release upload $env:INPUTS_GITRELEASETAG icu4c/source/dist/$env:newZipName.zip --clobber
+          bash .github/scripts/upload-release-asset.sh "$INPUTS_GITRELEASETAG" "icu4c/source/dist/$newZipName.zip"
         env:
           GH_TOKEN: ${{ github.token }}
           INPUTS_GITRELEASETAG: ${{ inputs.gitReleaseTag }}
