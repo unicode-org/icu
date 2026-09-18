@@ -4563,6 +4563,9 @@ printf "%s\n" "no" >&6; }
 		PKG_CONFIG=""
 	fi
 fi
+if test -z "$PKG_CONFIG"; then
+	as_fn_error $? "pkg-config not found" "$LINENO" 5
+fi
 
 pkg_failed=no
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for icu-le-hb" >&5
@@ -4935,12 +4938,12 @@ test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
 
 
 
-# make sure install is relative to srcdir - if a script
-if test "$srcdir" = "."; then
-  # If srcdir isn't just ., then (srcdir) is already prepended.
-  if test "${ac_install_sh}" = "${INSTALL}"; then
-   INSTALL="\\\$(top_srcdir)/${ac_install_sh}"
-  fi
+# If using the included install-sh, make INSTALL work from any build dir.
+if test "${ac_install_sh}" = "${INSTALL}"; then
+    case "$srcdir" in
+        .|./*|../*)  INSTALL="\\\$(top_builddir)/${ac_install_sh}" ;;
+        *) ;;
+    esac
 fi
 
 # TODO(ICU-20301): Remove fallback to Python 2.

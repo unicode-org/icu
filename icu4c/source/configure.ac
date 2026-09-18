@@ -186,12 +186,12 @@ AC_PROG_INSTALL
 
 AC_SUBST(cross_compiling)
 
-# make sure install is relative to srcdir - if a script
-if test "$srcdir" = "."; then
-  # If srcdir isn't just ., then (srcdir) is already prepended.
-  if test "${ac_install_sh}" = "${INSTALL}"; then
-   INSTALL="\\\$(top_srcdir)/${ac_install_sh}"
-  fi
+# If using the included install-sh, make INSTALL work from any build dir.
+if test "${ac_install_sh}" = "${INSTALL}"; then
+    case "$srcdir" in
+        .|./*|../*)  INSTALL="\\\$(top_builddir)/${ac_install_sh}" ;;
+        *) ;;
+    esac
 fi
 
 # TODO(ICU-20301): Remove fallback to Python 2.
