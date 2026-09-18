@@ -735,6 +735,116 @@ public class TestBidi extends BidiFmwk {
     }
 
     @Test
+    public void testPdiOverride() {
+        String[] texts = {
+            "\u202Aa\u202C\u202E\u2069\u202Ab",
+            "\u202B\u05D0\u202C\u202D\u2069\u202B\u05D1",
+            "\u202Aa\u202C\u202E\u2066x\u2069\u202Ab",
+            "\u202B\u05D0\u202C\u202D\u2067\u05D1\u2069\u202B\u05D2",
+            "\u202Ea\u2069 ",
+            "\u202D\u05D0\u2069"
+        };
+        byte[] paraLevels = {0, 1, 0, 1, 0, 1};
+        int[] pdis = {4, 4, 6, 6, 2, 2};
+        byte[] expectedLevels = {1, 2, 1, 2, 0, 1};
+        String[] expectedVisual = {
+            "ba", "\u05D0\u05D1", "bxa", "\u05D0\u05D1\u05D2", "a ", "\u05D0"
+        };
+        Bidi bidi = new Bidi();
+        for (int i = 0; i < texts.length; ++i) {
+            bidi.setPara(texts[i], paraLevels[i], null);
+            assertEquals(
+                    "PDI override level, case " + i, expectedLevels[i], bidi.getLevelAt(pdis[i]));
+            assertEquals(
+                    "PDI override visual order, case " + i,
+                    expectedVisual[i],
+                    bidi.writeReordered(Bidi.REMOVE_BIDI_CONTROLS));
+            // X10 must still recognize matched PDIs. L1 must reset all PDIs at line ends.
+            Bidi line = bidi.setLine(0, pdis[i] + 1);
+            assertEquals("PDI at line end, case " + i, paraLevels[i], line.getLevelAt(pdis[i]));
+        }
+    }
+
+    @Test
+    public void testBracketStackLimit() {
+        Bidi bidi = new Bidi();
+        // Canonical synonyms occupy two N0 entries, but only one BD16 stack slot.
+        for (char opener : new char[] {'(', '\u3008'}) {
+            for (int count = 63; count <= 64; ++count) {
+                StringBuilder text = new StringBuilder("a(b)");
+                for (int i = 0; i < count; ++i) text.append(opener);
+                bidi.setPara(text.toString(), (byte) 1, null);
+                int[] map = bidi.getVisualMap();
+                int neutralCount = count + (count == 64 ? 1 : 0);
+                for (int i = 0; i < text.length(); ++i) {
+                    int expectedLevel = i < 3 || (i == 3 && count == 63) ? 2 : 1;
+                    int expectedIndex = i < neutralCount ? text.length() - 1 - i : i - neutralCount;
+                    String context = "opener " + (int) opener + ", count " + count + ", index " + i;
+                    assertEquals("BD16 level: " + context, expectedLevel, bidi.getLevelAt(i));
+                    assertEquals("BD16 visual index: " + context, expectedIndex, map[i]);
+                }
+                if (opener == '\u3008' && count == 63) {
+                    text.append('\u232A').append('\u3008');
+                    bidi.setPara(text.toString(), (byte) 1, null);
+                    assertEquals("Canonical closer frees a BD16 slot", 2, bidi.getLevelAt(3));
+                }
+            }
+        }
+
+        String[] before = {
+            "a",
+            "a(b)",
+            "a(b)\u2067c(d)",
+            "a(b)",
+            "a(b)",
+            "a(b)",
+            "a(b)",
+            "a(b)",
+            "\u202Ba(b)\u202C\u202E"
+        };
+        String[] after = {
+            "\u2066x\u2069b)",
+            "\u2066x\u2069(",
+            "\u2069",
+            "\u2067c(d)\u2069",
+            "\u202Bc(d)\u202C",
+            "\u2029c(d)",
+            ")(",
+            "](",
+            ""
+        };
+        int[] counts = {64, 63, 64, 64, 64, 64, 63, 63, 64};
+        int[] indices = {69, 3, 3, 3, 3, 3, 3, 3, 4};
+        int[] expectedLevels = {1, 1, 2, 1, 1, 1, 2, 1, 4};
+        int[] otherIndices = {-1, -1, 8, 72, 72, 72, -1, -1, -1};
+        int[] otherLevels = {0, 0, 3, 4, 4, 2, 0, 0, 0};
+        for (int i = 0; i < before.length; ++i) {
+            StringBuilder text = new StringBuilder(before[i]);
+            for (int j = 0; j < counts[i]; ++j) text.append('(');
+            text.append(after[i]);
+            bidi.setPara(text.toString(), (byte) 1, null);
+            assertEquals(
+                    "BD16 overflow, case " + i, expectedLevels[i], bidi.getLevelAt(indices[i]));
+            if (otherIndices[i] >= 0) {
+                assertEquals(
+                        "BD16 other sequence, case " + i,
+                        otherLevels[i],
+                        bidi.getLevelAt(otherIndices[i]));
+            }
+        }
+        StringBuilder text = new StringBuilder("\u200Fa(b)");
+        for (int i = 0; i < 64; ++i) text.append('(');
+        text.append("\u2029a(b)");
+        bidi.setPara(text.toString(), Bidi.LEVEL_DEFAULT_LTR, null);
+        assertEquals("BD16 retry: first paragraph", 1, bidi.getLevelAt(4));
+        assertEquals("BD16 retry: second paragraph", 0, bidi.getLevelAt(73));
+        bidi.setReorderingOptions(Bidi.OPTION_STREAMING);
+        bidi.setPara(text.toString(), Bidi.LEVEL_DEFAULT_LTR, null);
+        assertEquals("BD16 retry: streaming boundary", 70, bidi.getProcessedLength());
+        assertEquals("BD16 retry: streaming levels", 1, bidi.getLevelAt(4));
+    }
+
+    @Test
     public void testExplicitLevel0() {
         // The following used to fail with an error, see ICU ticket #12922.
         String text = "\u202d\u05d0";
