@@ -2202,6 +2202,20 @@ public class RbnfTest extends CoreTestFmwk {
         }
     }
 
+    @Test
+    public void TestDivisorOverflow() {
+        // A $(cardinal,...)$ rule whose radix^exponent overflows 64 bits: the divisor is
+        // zero, so doFormat() would divide the number by it (ArithmeticException: / by zero).
+        // The rule must be rejected at construction instead, like a zero-divisor substitution.
+        try {
+            new RuleBasedNumberFormat(
+                    "0: zero;\n4611686018427387904/16: big $(cardinal,one{a}other{b})$;");
+            errln("Rule with a zero divisor from overflow should have been rejected");
+        } catch (IllegalStateException e) {
+            // expected
+        }
+    }
+
     /**
      * This test is a little contrived for English, but the grammar is relevant for several
      * languages, including: Latin, Germanic, Slavic and Indic. It's pretty common, especially for
