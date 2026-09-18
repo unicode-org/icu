@@ -94,7 +94,7 @@ public:
      * @param right    the object to be copied.
      * @stable ICU 2.0
      */
-    SimpleTimeZone& operator=(const SimpleTimeZone& right);
+    SimpleTimeZone& operator=(const SimpleTimeZone& right) U_LIFETIME_BOUND;
 
     /**
      * Destructor

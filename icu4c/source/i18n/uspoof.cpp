@@ -108,9 +108,11 @@ uspoof_open(UErrorCode *status) {
 }
 
 
-U_CAPI USpoofChecker * U_EXPORT2
-uspoof_openFromSerialized(const void *data, int32_t length, int32_t *pActualLength,
-                          UErrorCode *status) {
+U_CAPI USpoofChecker* U_EXPORT2
+uspoof_openFromSerialized(const void* data U_LIFETIME_BOUND,
+                          int32_t length,
+                          int32_t* pActualLength,
+                          UErrorCode* status) {
     if (U_FAILURE(*status)) {
         return nullptr;
     }
@@ -239,8 +241,8 @@ uspoof_setAllowedLocales(USpoofChecker *sc, const char *localesList, UErrorCode 
     This->setAllowedLocales(localesList, *status);
 }
 
-U_CAPI const char * U_EXPORT2
-uspoof_getAllowedLocales(USpoofChecker *sc, UErrorCode *status) {
+U_CAPI const char* U_EXPORT2
+uspoof_getAllowedLocales(USpoofChecker* sc U_LIFETIME_BOUND, UErrorCode* status) {
     SpoofImpl *This = SpoofImpl::validateThis(sc, *status);
     if (This == nullptr) {
         return nullptr;
@@ -249,14 +251,14 @@ uspoof_getAllowedLocales(USpoofChecker *sc, UErrorCode *status) {
 }
 
 
-U_CAPI const USet * U_EXPORT2
-uspoof_getAllowedChars(const USpoofChecker *sc, UErrorCode *status) {
+U_CAPI const USet* U_EXPORT2
+uspoof_getAllowedChars(const USpoofChecker* sc U_LIFETIME_BOUND, UErrorCode* status) {
     const UnicodeSet *result = uspoof_getAllowedUnicodeSet(sc, status);
     return result->toUSet();
 }
 
-U_CAPI const UnicodeSet * U_EXPORT2
-uspoof_getAllowedUnicodeSet(const USpoofChecker *sc, UErrorCode *status) {
+U_CAPI const UnicodeSet* U_EXPORT2
+uspoof_getAllowedUnicodeSet(const USpoofChecker* sc U_LIFETIME_BOUND, UErrorCode* status) {
     const SpoofImpl *This = SpoofImpl::validateThis(sc, *status);
     if (This == nullptr) {
         return nullptr;
@@ -724,11 +726,12 @@ U_CAPI int32_t U_EXPORT2 uspoof_getBidiSkeleton(const USpoofChecker *sc, UBiDiDi
 
 
 
-U_I18N_API UnicodeString &U_EXPORT2 uspoof_getBidiSkeletonUnicodeString(const USpoofChecker *sc,
-                                                                        UBiDiDirection direction,
-                                                                        const UnicodeString &id,
-                                                                        UnicodeString &dest,
-                                                                        UErrorCode *status) {
+U_I18N_API UnicodeString& U_EXPORT2
+uspoof_getBidiSkeletonUnicodeString(const USpoofChecker* sc,
+                                    UBiDiDirection direction,
+                                    const UnicodeString& id,
+                                    UnicodeString& dest U_LIFETIME_BOUND,
+                                    UErrorCode* status) {
     dest.remove();
     if (direction != UBIDI_LTR && direction != UBIDI_RTL) {
       *status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -765,12 +768,12 @@ U_I18N_API UnicodeString &U_EXPORT2 uspoof_getBidiSkeletonUnicodeString(const US
 
 
 
-U_I18N_API UnicodeString &  U_EXPORT2
-uspoof_getSkeletonUnicodeString(const USpoofChecker *sc,
+U_I18N_API UnicodeString& U_EXPORT2
+uspoof_getSkeletonUnicodeString(const USpoofChecker* sc,
                                 uint32_t /*type*/,
-                                const UnicodeString &id,
-                                UnicodeString &dest,
-                                UErrorCode *status) {
+                                const UnicodeString& id,
+                                UnicodeString& dest U_LIFETIME_BOUND,
+                                UErrorCode* status) {
     const SpoofImpl *This = SpoofImpl::validateThis(sc, *status);
     if (U_FAILURE(*status)) {
         return dest;
@@ -914,7 +917,8 @@ uspoof_getCheckResultRestrictionLevel(const USpoofCheckResult *checkResult, UErr
 }
 
 U_CAPI const USet* U_EXPORT2
-uspoof_getCheckResultNumerics(const USpoofCheckResult *checkResult, UErrorCode *status) {
+uspoof_getCheckResultNumerics(const USpoofCheckResult* checkResult U_LIFETIME_BOUND,
+                              UErrorCode* status) {
     const CheckResult* This = CheckResult::validateThis(checkResult, *status);
     if (U_FAILURE(*status)) { return nullptr; }
     return This->fNumerics.toUSet();

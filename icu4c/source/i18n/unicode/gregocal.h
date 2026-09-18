@@ -296,7 +296,7 @@ public:
      * @param right    the object to be copied.
      * @stable ICU 2.0
      */
-    GregorianCalendar& operator=(const GregorianCalendar& right);
+    GregorianCalendar& operator=(const GregorianCalendar& right) U_LIFETIME_BOUND;
 
     /**
      * Create and return a polymorphic copy of this calendar.
