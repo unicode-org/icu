@@ -2960,5 +2960,243 @@ public class CalendarRegressionTest extends CoreTestFmwk {
                 30,
                 actualMaximumBeforeCallingGet);
     }
+
+    // A calendar explicitly given the standard papal cutover date must
+    // compute the same instants as the default calendar, which uses that
+    // same date implicitly. This is not automatic: cutoverJulianDay holds a
+    // true Julian Day by default, so setGregorianChange() must convert to
+    // that same unit for the two calendars to agree.
+    @Test
+    public void TestExplicitCutoverMatchesDefault23489() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        sdf.setTimeZone(TimeZone.GMT_ZONE);
+
+        GregorianCalendar defaultCal = new GregorianCalendar(TimeZone.GMT_ZONE);
+        GregorianCalendar explicitCal = new GregorianCalendar(TimeZone.GMT_ZONE);
+        explicitCal.setGregorianChange(new Date(-12219292800000L));
+
+        for (int month = Calendar.JANUARY; month <= Calendar.DECEMBER; ++month) {
+            for (int wom = 1; wom <= 5; ++wom) {
+                defaultCal.setFirstDayOfWeek(Calendar.SUNDAY);
+                defaultCal.setMinimalDaysInFirstWeek(1);
+                defaultCal.clear();
+                defaultCal.set(Calendar.YEAR, 1582);
+                defaultCal.set(Calendar.MONTH, month);
+                defaultCal.set(Calendar.WEEK_OF_MONTH, wom);
+                Date expected = defaultCal.getTime();
+
+                explicitCal.setFirstDayOfWeek(Calendar.SUNDAY);
+                explicitCal.setMinimalDaysInFirstWeek(1);
+                explicitCal.clear();
+                explicitCal.set(Calendar.YEAR, 1582);
+                explicitCal.set(Calendar.MONTH, month);
+                explicitCal.set(Calendar.WEEK_OF_MONTH, wom);
+                Date actual = explicitCal.getTime();
+
+                assertEquals("Explicit setGregorianChange, MONTH=" + month, expected, actual);
+            }
+        }
+    }
+
+    // Test case for ticket 23489.
+    // In the year of the Gregorian cutover, only the month that contains the
+    // cutover point loses days, so only that month's weeks are shifted. Every
+    // other month of that year must resolve WEEK_OF_MONTH like an ordinary
+    // month, as ICU4J does.
+    @Test
+    public void TestWeekOfMonthInCutoverYear23489() {
+        class TestData {
+            int year;
+            int month;
+            int wom;
+            int expYear;
+            int expMonth;
+            int expDay;
+
+            TestData(int year, int month, int wom, int expYear, int expMonth, int expDay) {
+                this.year = year;
+                this.month = month;
+                this.wom = wom;
+                this.expYear = expYear;
+                this.expMonth = expMonth;
+                this.expDay = expDay;
+            }
+        }
+        ;
+
+        TestData[] kData = {
+            // October 1582: the only month that actually loses days to the
+            // cutover (October 5-14, 1582 do not exist), so it needs the
+            // compensating shift that other months of the same year do not.
+            // Week 1 falls entirely before the cutover point (October 15,
+            // 1582), so it is expressed as a Julian calendar date; that same
+            // moment in time is printed here as September 30, 1582.
+            new TestData(1582, Calendar.OCTOBER, 1, 1582, Calendar.SEPTEMBER, 30),
+            new TestData(1582, Calendar.OCTOBER, 2, 1582, Calendar.OCTOBER, 17),
+            new TestData(1582, Calendar.OCTOBER, 3, 1582, Calendar.OCTOBER, 24),
+            new TestData(1582, Calendar.OCTOBER, 4, 1582, Calendar.OCTOBER, 31),
+            new TestData(1582, Calendar.OCTOBER, 5, 1582, Calendar.NOVEMBER, 7),
+            // November 1582
+            new TestData(1582, Calendar.NOVEMBER, 1, 1582, Calendar.OCTOBER, 31),
+            new TestData(1582, Calendar.NOVEMBER, 2, 1582, Calendar.NOVEMBER, 7),
+            new TestData(1582, Calendar.NOVEMBER, 3, 1582, Calendar.NOVEMBER, 14),
+            new TestData(1582, Calendar.NOVEMBER, 4, 1582, Calendar.NOVEMBER, 21),
+            new TestData(1582, Calendar.NOVEMBER, 5, 1582, Calendar.NOVEMBER, 28),
+            // December 1582
+            new TestData(1582, Calendar.DECEMBER, 1, 1582, Calendar.NOVEMBER, 28),
+            new TestData(1582, Calendar.DECEMBER, 2, 1582, Calendar.DECEMBER, 5),
+            new TestData(1582, Calendar.DECEMBER, 3, 1582, Calendar.DECEMBER, 12),
+            new TestData(1582, Calendar.DECEMBER, 4, 1582, Calendar.DECEMBER, 19),
+            new TestData(1582, Calendar.DECEMBER, 5, 1582, Calendar.DECEMBER, 26),
+            // January 1583
+            new TestData(1583, Calendar.JANUARY, 1, 1582, Calendar.DECEMBER, 26),
+            new TestData(1583, Calendar.JANUARY, 2, 1583, Calendar.JANUARY, 2),
+            new TestData(1583, Calendar.JANUARY, 3, 1583, Calendar.JANUARY, 9),
+            new TestData(1583, Calendar.JANUARY, 4, 1583, Calendar.JANUARY, 16),
+            new TestData(1583, Calendar.JANUARY, 5, 1583, Calendar.JANUARY, 23),
+            // January 2024 (sanity check well outside the cutover year)
+            new TestData(2024, Calendar.JANUARY, 1, 2023, Calendar.DECEMBER, 31),
+            new TestData(2024, Calendar.JANUARY, 2, 2024, Calendar.JANUARY, 7),
+            new TestData(2024, Calendar.JANUARY, 3, 2024, Calendar.JANUARY, 14),
+            new TestData(2024, Calendar.JANUARY, 4, 2024, Calendar.JANUARY, 21),
+            new TestData(2024, Calendar.JANUARY, 5, 2024, Calendar.JANUARY, 28),
+        };
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+
+        {
+            GregorianCalendar cal = new GregorianCalendar(TimeZone.GMT_ZONE);
+            cal.setFirstDayOfWeek(Calendar.SUNDAY);
+            cal.setMinimalDaysInFirstWeek(1);
+
+            GregorianCalendar expCal = new GregorianCalendar(TimeZone.GMT_ZONE);
+
+            for (int i = 0; i < kData.length; ++i) {
+                cal.clear();
+                cal.set(Calendar.YEAR, kData[i].year);
+                cal.set(Calendar.MONTH, kData[i].month);
+                cal.set(Calendar.WEEK_OF_MONTH, kData[i].wom);
+                Date actual = cal.getTime();
+
+                expCal.clear();
+                expCal.set(kData[i].expYear, kData[i].expMonth, kData[i].expDay);
+                Date expected = expCal.getTime();
+
+                assertEquals(
+                        "year="
+                                + kData[i].year
+                                + ", month="
+                                + (kData[i].month + 1)
+                                + ", WEEK_OF_MONTH="
+                                + kData[i].wom
+                                + ": got "
+                                + sdf.format(actual)
+                                + ", expected "
+                                + sdf.format(expected),
+                        expected,
+                        actual);
+            }
+        }
+
+        // The five weeks of October 1582 must be five distinct moments in time,
+        // each exactly 7 days after the previous one. This specifically catches
+        // a regression where weeks 4 and 5 collapse onto the same instants as
+        // weeks 2 and 3 (i.e. WEEK_OF_MONTH=4 and 2 -- and 5 and 3 -- resolving
+        // to the same date).
+        {
+            Date previous = null;
+            for (int wom = 1; wom <= 5; ++wom) {
+                GregorianCalendar cal = new GregorianCalendar(TimeZone.GMT_ZONE);
+
+                cal.setFirstDayOfWeek(Calendar.SUNDAY);
+                cal.setMinimalDaysInFirstWeek(1);
+                cal.clear();
+                cal.set(Calendar.YEAR, 1582);
+                cal.set(Calendar.MONTH, Calendar.OCTOBER);
+                cal.set(Calendar.WEEK_OF_MONTH, wom);
+                Date current = cal.getTime();
+
+                if (previous != null) {
+                    long diffMillis = current.getTime() - previous.getTime();
+                    long diffDays = diffMillis / (24L * 60 * 60 * 1000);
+                    assertEquals(
+                            "October 1582 WEEK_OF_MONTH="
+                                    + (wom - 1)
+                                    + " to WEEK_OF_MONTH="
+                                    + wom
+                                    + " should be exactly 7 days apart, got "
+                                    + diffDays
+                                    + " days",
+                            7,
+                            diffDays);
+                }
+                previous = current;
+            }
+        }
+
+        // The month can be resolved from Calendar.ORDINAL_MONTH rather than
+        // Calendar.MONTH. Both paths must name the same month to the cutover check,
+        // and so must produce the same instant.
+        {
+            GregorianCalendar monthCal = new GregorianCalendar(TimeZone.GMT_ZONE);
+            GregorianCalendar ordinalCal = new GregorianCalendar(TimeZone.GMT_ZONE);
+
+            monthCal.setFirstDayOfWeek(Calendar.SUNDAY);
+            monthCal.setMinimalDaysInFirstWeek(1);
+            monthCal.clear();
+            monthCal.set(Calendar.YEAR, 1582);
+            monthCal.set(Calendar.MONTH, Calendar.NOVEMBER);
+            monthCal.set(Calendar.WEEK_OF_MONTH, 3);
+            Date expected = monthCal.getTime();
+
+            ordinalCal.setFirstDayOfWeek(Calendar.SUNDAY);
+            ordinalCal.setMinimalDaysInFirstWeek(1);
+            ordinalCal.clear();
+            ordinalCal.set(Calendar.YEAR, 1582);
+            ordinalCal.set(Calendar.ORDINAL_MONTH, 10);
+            ordinalCal.set(Calendar.WEEK_OF_MONTH, 3);
+            Date actual = ordinalCal.getTime();
+
+            assertEquals(
+                    "YEAR=1582, ORDINAL_MONTH=10, WEEK_OF_MONTH=3: got "
+                            + sdf.format(actual)
+                            + ", expected "
+                            + sdf.format(expected),
+                    expected,
+                    actual);
+        }
+
+        // Regression test: a month value outside 0..11 must not be treated as
+        // the cutover month even if it would normalize into it -- the guard
+        // compares the raw requested month with no range normalization.
+        {
+            GregorianCalendar overflowCal = new GregorianCalendar(TimeZone.GMT_ZONE);
+            GregorianCalendar normalizedCal = new GregorianCalendar(TimeZone.GMT_ZONE);
+
+            overflowCal.setFirstDayOfWeek(Calendar.SUNDAY);
+            overflowCal.setMinimalDaysInFirstWeek(1);
+            overflowCal.clear();
+            overflowCal.set(Calendar.YEAR, 1582);
+            overflowCal.set(Calendar.MONTH, 14);
+            overflowCal.set(Calendar.WEEK_OF_MONTH, 1);
+            Date actual = overflowCal.getTime();
+
+            normalizedCal.setFirstDayOfWeek(Calendar.SUNDAY);
+            normalizedCal.setMinimalDaysInFirstWeek(1);
+            normalizedCal.clear();
+            normalizedCal.set(Calendar.YEAR, 1583);
+            normalizedCal.set(Calendar.MONTH, Calendar.MARCH);
+            normalizedCal.set(Calendar.WEEK_OF_MONTH, 1);
+            Date expected = normalizedCal.getTime();
+
+            assertEquals(
+                    "YEAR=1582, MONTH=14, WEEK_OF_MONTH=1: got "
+                            + sdf.format(actual)
+                            + ", expected "
+                            + sdf.format(expected),
+                    expected,
+                    actual);
+        }
+    }
 }
 // eof

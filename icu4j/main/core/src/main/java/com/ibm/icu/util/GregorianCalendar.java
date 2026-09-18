@@ -7,6 +7,7 @@
 
 package com.ibm.icu.util;
 
+import com.ibm.icu.impl.Grego;
 import com.ibm.icu.util.ULocale.Category;
 import java.util.Date;
 import java.util.Locale;
@@ -319,8 +320,11 @@ public class GregorianCalendar extends Calendar implements Cloneable {
      */
     private long gregorianCutover = -12219292800000L;
 
+    private static final int kEpochStartAsJulianDay = 2440588; // January 1, 1970 (Gregorian)
+    private static final int kCutoverJulianDay = 2299161;
+
     /** Julian day number of the Gregorian cutover. */
-    private transient int cutoverJulianDay = 2299161;
+    private transient int cutoverJulianDay = kCutoverJulianDay;
 
     /** The year of the gregorianCutover, with 0 representing 1 BC, -1 representing 2 BC, etc. */
     private transient int gregorianCutoverYear = 1582;
@@ -508,15 +512,20 @@ public class GregorianCalendar extends Calendar implements Cloneable {
         } else if (gregorianCutover >= MAX_MILLIS) {
             gregorianCutoverYear = cutoverJulianDay = Integer.MAX_VALUE;
         } else {
-            // Precompute two internal variables which we use to do the actual
-            // cutover computations.  These are the Julian day of the cutover
-            // and the cutover year.
-            cutoverJulianDay = (int) floorDivide(gregorianCutover, ONE_DAY);
-
             // Convert cutover millis to extended year
             GregorianCalendar cal = new GregorianCalendar(getTimeZone());
             cal.setTime(date);
             gregorianCutoverYear = cal.get(EXTENDED_YEAR);
+
+            long tmpCutoverJulianDay =
+                    floorDivide(gregorianCutover, ONE_DAY) + kEpochStartAsJulianDay;
+            if (tmpCutoverJulianDay <= Integer.MIN_VALUE) {
+                cutoverJulianDay = Integer.MIN_VALUE;
+            } else if (tmpCutoverJulianDay >= Integer.MAX_VALUE) {
+                cutoverJulianDay = Integer.MAX_VALUE;
+            } else {
+                cutoverJulianDay = (int) tmpCutoverJulianDay;
+            }
         }
     }
 
@@ -864,13 +873,45 @@ public class GregorianCalendar extends Calendar implements Cloneable {
 
         int jd = super.handleComputeJulianDay(bestField);
 
+        if ((bestField == WEEK_OF_YEAR)
+                && // if we are doing WOY calculations, we are counting relative to Jan 1 *julian*
+                (internalGet(EXTENDED_YEAR) == gregorianCutoverYear)
+                && jd >= cutoverJulianDay) {
+            invertGregorian =
+                    true; // So that the Julian Jan 1 will be used in handleComputeMonthStart
+            return super.handleComputeJulianDay(bestField);
+        }
+
         // The following check handles portions of the cutover year BEFORE the
         // cutover itself happens.
-        if (isGregorian != (jd >= cutoverJulianDay)) {
+        if ((isGregorian) != (jd >= cutoverJulianDay)) {
             invertGregorian = true;
             jd = super.handleComputeJulianDay(bestField);
         }
 
+        if (isGregorian && (internalGet(EXTENDED_YEAR) == gregorianCutoverYear)) {
+            int gregShift = Grego.gregorianShift(internalGet(EXTENDED_YEAR));
+            if (bestField == DAY_OF_YEAR) {
+                jd -= gregShift;
+            } else if (bestField == WEEK_OF_MONTH) {
+                // Only the month that actually contains the cutover point loses
+                // days (10 days vanish from the transition month), so only that
+                // month's weeks need to be pushed forward to avoid colliding
+                // with the weeks before the gap. The requested month is compared
+                // against the month the cutover falls in, derived from
+                // fGregorianCutover (whose units, milliseconds, are unambiguous;
+                // fCutoverJulianDay is not usable here since its units depend on
+                // how the cutover was set). No range normalization is applied to
+                // the requested month, so an out-of-range month is by definition
+                // not the cutover month and gets no shift.
+                int requestedMonth = internalGetMonth();
+                int[] fields = Grego.timeToFields(gregorianCutover, null);
+                if (requestedMonth == fields[1] /* month */) {
+                    final int weekShift = 14;
+                    jd += weekShift; // shift by weeks for week based fields.
+                }
+            }
+        }
         return jd;
     }
 
