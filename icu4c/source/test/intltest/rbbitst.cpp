@@ -5104,7 +5104,6 @@ void RBBITest::TestBug22581() {
  * Tests some rule sets that require the lookaheads to occupy different slots.
  */
 void RBBITest::TestLookaheadPolychromy() {
-
     UErrorCode status = U_ZERO_ERROR;
     UParseError parseError;
     // The first lookahead must occupy a different slot from the other two, because after
@@ -5173,8 +5172,8 @@ void RBBITest::TestLookaheadPolychromy() {
     RuleBasedBreakIterator lookaheadPath(uR"(
                                              [x]  / [y]   [z]   [1];
                                              [x]?   [y] / [z]   [2];
-                                                     [y]   [z] / [t]   [1];
-                                                     [y]   [z]   [t] / [2];
+                                                    [y]   [z] / [t]   [1];
+                                                    [y]   [z]   [t] / [2];
                                              .*;
                                          )",
                                          parseError, status);
@@ -5193,6 +5192,60 @@ void RBBITest::TestLookaheadPolychromy() {
         std::u16string_view actual = text.tempSubString(0, lookaheadPath.next());
         if (actual != firstSegment)
             errln(UnicodeString(u"First segment of ") + text + " with lookaheadPath: expected " +
+                  firstSegment + ", got " + actual);
+    }
+    // The graph of lookaheads here is obviously an edge, with chromatic number 2.
+    // Because of the chaining, the first rule is really .* a / b a, which encompasses both a / b a;
+    // and a redundant a b a / b a; in turn this means that the state reached from a b a both
+    // accepts the lookahead of the first rule and (pointlessly) sets it.
+    // Thus, starting from the state reached from "ab", which sets lookahead 2, it is possible to
+    // reach a state that accepts lookahead 1 without *going through* a state that sets lookahead 1
+    // (transition on 'a'), but in so doing one *reaches* a state that sets lookahead 1.
+    // If “going through an excluded state” in the computation of lookahead reachability is replaced
+    // by “reaching an excluded state”, the lookaheads will erroneously be found to be mergeable.
+    RuleBasedBreakIterator selfAccepting(uR"(
+                                             !!chain;
+                                             [a] / [b]   [a];
+                                             [a]   [b] / [c];
+                                             . .;
+                                         )",
+                                         parseError, status);
+    assertEquals("selfAccepting chromatic number", 2,
+                 selfAccepting.fData->fForwardTable->fLookAheadResultsSize -
+                     ACCEPTING_UNCONDITIONAL - 1);
+    for (auto const &[text, firstSegment] :
+         std::vector<std::pair<UnicodeString, std::u16string_view>>{
+             {u"aba", u"a"},
+             {u"abc", u"ab"},
+         }) {
+        selfAccepting.setText(UnicodeString::readOnlyAlias(text));
+        std::u16string_view actual = text.tempSubString(0, selfAccepting.next());
+        if (actual != firstSegment)
+            errln(UnicodeString(u"First segment of ") + text + " with selfAccepting: expected " +
+                  firstSegment + ", got " + actual);
+    }
+    // Same as above, with the self accepting state two transitions away from the state that sets
+    // the second lookahead, so we cover both the initialization of the boundary and the traversal
+    // loop.
+    RuleBasedBreakIterator longSelfAccepting(uR"(
+                                             !!chain;
+                                             [a] / [b]   [x]   [a];
+                                             [a]   [b] / [c];
+                                             . .;
+                                         )",
+                                         parseError, status);
+    assertEquals("longSelfAccepting chromatic number", 2,
+                 longSelfAccepting.fData->fForwardTable->fLookAheadResultsSize -
+                     ACCEPTING_UNCONDITIONAL - 1);
+    for (auto const &[text, firstSegment] :
+         std::vector<std::pair<UnicodeString, std::u16string_view>>{
+             {u"abxa", u"a"},
+             {u"abc", u"ab"},
+         }) {
+        longSelfAccepting.setText(UnicodeString::readOnlyAlias(text));
+        std::u16string_view actual = text.tempSubString(0, longSelfAccepting.next());
+        if (actual != firstSegment)
+            errln(UnicodeString(u"First segment of ") + text + " with longSelfAccepting: expected " +
                   firstSegment + ", got " + actual);
     }
 }

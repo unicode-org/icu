@@ -1564,6 +1564,82 @@ public class RBBITest extends CoreTestFmwk {
                                 + ", got "
                                 + actual);
         }
+        // The graph of lookaheads here is obviously an edge, with chromatic number 2.
+        // Because of the chaining, the first rule is really .* a / b a, which encompasses both
+        // a / b a; and a redundant a b a / b a; in turn this means that the state reached from a b
+        // a both accepts the lookahead of the first rule and (pointlessly) sets it.
+        // Thus, starting from the state reached from "ab", which sets lookahead 2, it is possible
+        // to reach a state that accepts lookahead 1 without *going through* a state that sets
+        // lookahead 1 (transition on 'a'), but in so doing one *reaches* a state that sets
+        // lookahead 1.
+        // If “going through an excluded state” in the computation of lookahead reachability is
+        // replaced by “reaching an excluded state”, the lookaheads will erroneously be found to be
+        // mergeable.
+        final var selfAccepting =
+                new RuleBasedBreakIterator(
+                        "" //
+                                + "!!chain;"
+                                + "[a] / [b]   [a];"
+                                + "[a]   [b] / [c];"
+                                + ". .;");
+        assertEquals(
+                "selfAccepting chromatic number",
+                2,
+                selfAccepting.fRData.fFTable.fLookAheadResultsSize
+                        - selfAccepting.fRData.ACCEPTING_UNCONDITIONAL
+                        - 1);
+        for (final var textAndFirstSegment :
+                new String[][] {
+                    {"aba", "a"},
+                    {"abc", "ab"},
+                }) {
+            String text = textAndFirstSegment[0];
+            String firstSegment = textAndFirstSegment[1];
+            selfAccepting.setText(text);
+            final var actual = text.substring(0, selfAccepting.next());
+            if (!actual.equals(firstSegment))
+                errln(
+                        "First segment of "
+                                + text
+                                + " with selfAccepting: expected "
+                                + firstSegment
+                                + ", got "
+                                + actual);
+        }
+        // Same as above, with the self accepting state two transitions away from the state that
+        // sets the second lookahead, so we cover both the initialization of the boundary and the
+        // traversal loop.
+        final var longSelfAccepting =
+                new RuleBasedBreakIterator(
+                        "" //
+                                + "!!chain;"
+                                + "[a] / [b]   [x]   [a];"
+                                + "[a]   [b] / [c];"
+                                + ". .;");
+        assertEquals(
+                "longSelfAccepting chromatic number",
+                2,
+                longSelfAccepting.fRData.fFTable.fLookAheadResultsSize
+                        - longSelfAccepting.fRData.ACCEPTING_UNCONDITIONAL
+                        - 1);
+        for (final var textAndFirstSegment :
+                new String[][] {
+                    {"abxa", "a"},
+                    {"abc", "ab"},
+                }) {
+            String text = textAndFirstSegment[0];
+            String firstSegment = textAndFirstSegment[1];
+            longSelfAccepting.setText(text);
+            final var actual = text.substring(0, longSelfAccepting.next());
+            if (!actual.equals(firstSegment))
+                errln(
+                        "First segment of "
+                                + text
+                                + " with longSelfAccepting: expected "
+                                + firstSegment
+                                + ", got "
+                                + actual);
+        }
     }
 
     @Test
