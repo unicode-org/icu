@@ -61,6 +61,24 @@ public final class CollationFCD {
         c >= 0xc0 && (i = tcccIndex[c >> 5]) != 0 && (tcccBits[i] & (1 << (c & 0x1f))) != 0;
     }
 
+    static boolean hasTcccBefore(CharSequence seq, int start, int pos) {
+        if (pos != start) {
+            char prev = seq.charAt(--pos);
+            if (Character.isLowSurrogate(prev)) {
+                // hasTccc(<low-surrogate>) always returns false.
+                // To test possible trailing ccc, we need to check the high surrogate
+                // (or previous character for unpaired surrogate).
+                if (pos != start) {
+                    char prev2 = seq.charAt(pos - 1);
+                    return Character.isHighSurrogate(prev2) && hasTccc(prev2);
+                }
+            } else {
+                return hasTccc(prev);
+            }
+        }
+        return false;
+    }
+
     static boolean mayHaveLccc(int c) {
         // Handles all of Unicode 0..10FFFF.
         // c can be negative, e.g., Collation.SENTINEL_CP.

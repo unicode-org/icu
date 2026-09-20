@@ -295,27 +295,14 @@ FCDUTF16CollationIterator::previousCodePoint(UErrorCode &errorCode) {
                 return U_SENTINEL;
             }
             c = *--pos;
-            if (CollationFCD::hasLccc(c)) {
-                UBool normalizePrevSegment = CollationFCD::maybeTibetanCompositeVowel(c);
-                if (!normalizePrevSegment && pos != start) {
-                    if (U16_IS_TRAIL(*(pos - 1))) {
-                        // CollationFCD::hasTccc(<low-surrogate>) always returns false.
-                        // To test possible trailing ccc, we need to check high surrogate
-                        // (or previous character for broken surrogate pair).
-                        if (pos - 1 != start) {
-                            normalizePrevSegment = U16_IS_LEAD(*(pos - 2)) && CollationFCD::hasTccc(*(pos - 2));
-                        }
-                    } else {
-                        normalizePrevSegment = CollationFCD::hasTccc(*(pos - 1));
-                    }
+            if (CollationFCD::hasLccc(c) &&
+                    (CollationFCD::maybeTibetanCompositeVowel(c) ||
+                        CollationFCD::hasTcccBefore(start, pos))) {
+                ++pos;
+                if(!previousSegment(errorCode)) {
+                    return U_SENTINEL;
                 }
-                if (normalizePrevSegment) {
-                    ++pos;
-                    if(!previousSegment(errorCode)) {
-                        return U_SENTINEL;
-                    }
-                    c = *--pos;
-                }
+                c = *--pos;
             }
             break;
         } else if(checkDir == 0 && pos != start) {
