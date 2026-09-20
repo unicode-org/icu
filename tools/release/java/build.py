@@ -1,4 +1,4 @@
-#!/usr/bin/env python3 -B
+#!/usr/bin/env -S PYTHONPATH=../../py python3 -B
 #
 # Copyright (C) 2026 and later: Unicode, Inc. and others.
 # License & terms of use: http://www.unicode.org/copyright.html

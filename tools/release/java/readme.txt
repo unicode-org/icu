@@ -12,8 +12,7 @@ Requirements:
   - Doxygen (for generating docs).
      Doxygen 1.8.13 or newer is recommended for ICU API docs,
      but an older Doxygen may work for the API Change Report.
-  - Java JDK 1.8+
-  - Apache Ant
+  - Java JDK 11+
   - Maven
 
 To use the utility:
@@ -23,8 +22,8 @@ To use the utility:
   Doxygen must be found during the configure phase, but you do not need to build the standard API docs.
 
    ** Then in each directory, run `make doc` to create the doc/ directory.
-   
-3. Create a Makefile.local in this readme's directory (tools/release/java/) 
+
+3. Create a Makefile.local in this readme's directory (tools/release/java/)
             with just these two lines, for example:
 			OLD_ICU=/xsrl/E/icu-6.7/icu4c/source
 			NEW_ICU=/xsrl/E/icu-6.8/icu4c/source
@@ -35,17 +34,19 @@ To use the utility:
            Set these paths to the location of parent directory of the
 	   ICU4C sources in the previous version (OLD) and the
 	   source of the current release (NEW)
-	   
+
            If your ICU is an out-of-source-build, add these two lines
            indicating the build location:
                         OLD_ICU_BUILD=/xsrl/E/icu-build-m48/icu4c/source
                         NEW_ICU_BUILD=/xsrl/E/icu-build/icu4c/source
-			
-4. From this directory, (tools/release/java/) run Make to build docs: (the tool will be built automatically)
+
+4. Build the jar, as the Python build and makefile do not attempt do it.
+   You will also have to do that if you are developing on the Java tool.
+            mvn package
+
+5. From this directory, (tools/release/java/) run Make to build docs: (the tool will be built automatically)
             make APIChangeReport.html
             make APIChangeReport.md
 
-5. This will create 'APIChangeReport.html' and 'APIChangeReport.md" files in
+6. This will create 'APIChangeReport.html' and 'APIChangeReport.md" files in
 this directory. Look them over, and then check them into ${NEW_ICU}/APIChangeReport.* (parent of icu4c's source).
-
-Note: the ant build and makefile do not attempt to rebuild the jar. Run 'mvn package' separately if developing on the Java tool.
