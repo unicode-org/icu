@@ -34,6 +34,8 @@ namespace {
 // Given the `RBBITableBuilder::fDStates` vector of `RBBIStateDescriptor`s, returns
 // true if a state for which `isSink` returns true is reachable from state `source` by following
 // transitions without going through any state for which `excludedState` returns true.
+// Note that “going through” is distinct from “reaching”, and means entering and then leaving: A
+// state can be both a sink and excluded, and can still be reachable.
 bool reachableByTransitions(const UVector &states, const int32_t source,
                             const std::function<bool(int32_t)> isSink,
                             const std::function<bool(int32_t)> excludedState, UErrorCode &status) {
@@ -46,7 +48,7 @@ bool reachableByTransitions(const UVector &states, const int32_t source,
         // only need k and l to occupy distinct slots if there is a `source`-to-`source` path.
         for (int32_t symbol = 0; symbol < transitionsFromSource.size(); ++symbol) {
             const int32_t state = transitionsFromSource.elementAti(symbol);
-            if (state != 0 && !excludedState(state)) {
+            if (state != 0) {
                 boundary.push(state, status);
             }
         }
@@ -57,14 +59,14 @@ bool reachableByTransitions(const UVector &states, const int32_t source,
         if (isSink(s)) {
             return true;
         }
-        if (visited[s]) {
+        if (excludedState(s) || visited[s]) {
             continue;
         }
         visited[s] = true;
         UVector32 &transitions = *static_cast<RBBIStateDescriptor *>(states.elementAt(s))->fDtran;
         for (int32_t symbol = 0; symbol < transitions.size(); ++symbol) {
             const int32_t t = transitions.elementAti(symbol);
-            if (t != 0 && !visited[t] && !excludedState(t)) {
+            if (t != 0 && !visited[t]) {
                 boundary.push(t, status);
             }
         }

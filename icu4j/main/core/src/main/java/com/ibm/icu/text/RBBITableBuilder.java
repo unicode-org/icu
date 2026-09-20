@@ -1733,12 +1733,14 @@ class RBBITableBuilder {
     /**
      * Returns true if a state for which `isSink` returns true is reachable from state `source` by
      * following transitions without going through any state for which `excludedState` returns true.
+     * Note that “going through” is distinct from “reaching”, and means entering and then leaving: A
+     * state can be both a sink and excluded, and can still be reachable.
      */
     private boolean reachableByTransitions(
             int source, Predicate<Integer> isSink, Predicate<Integer> excludedState) {
         Stack<Integer> boundary = new Stack<>();
         for (final int state : fDStates.get(source).fDtran) {
-            if (state != 0 && !excludedState.test(state)) {
+            if (state != 0) {
                 boundary.push(state);
             }
         }
@@ -1748,12 +1750,12 @@ class RBBITableBuilder {
             if (isSink.test(s)) {
                 return true;
             }
-            if (visited[s]) {
+            if (visited[s] || excludedState.test(s)) {
                 continue;
             }
             visited[s] = true;
             for (final int t : fDStates.get(s).fDtran) {
-                if (t != 0 && !visited[t] && !excludedState.test(t)) {
+                if (t != 0 && !visited[t]) {
                     boundary.push(t);
                 }
             }
