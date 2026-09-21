@@ -82,6 +82,9 @@ static void TestGetAvailableLocalesByType(void);
 
  /* Test uloc_getLocaleForLCID */
  static void TestGetLocaleForLCID(void);
+#if !(U_PLATFORM_HAS_WIN32_API && UCONFIG_USE_WINDOWS_LCID_MAPPING_API)
+ static void TestBug23495(void);
+#endif
 
 /**
  * routine to perform subtests, used by TestDisplayNames

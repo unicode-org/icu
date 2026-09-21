@@ -1004,7 +1004,7 @@ getHostID(const ILcidPosixMap *this_0, const char* posixID, UErrorCode& status)
 
     /*no match found */
     status = U_ILLEGAL_ARGUMENT_ERROR;
-    return locmap_root->hostID;
+    return this_0->regionMaps->hostID;
 }
 
 const char*
