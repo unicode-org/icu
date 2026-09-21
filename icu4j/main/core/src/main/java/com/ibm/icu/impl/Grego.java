@@ -266,10 +266,4 @@ public class Grego {
                 sec,
                 millis);
     }
-
-    public static int gregorianShift(int eyear) {
-        long y = eyear - 1;
-        long gregShift = floorDivide(y, 400L) - floorDivide(y, 100L) + 2;
-        return (int) gregShift;
-    }
 }

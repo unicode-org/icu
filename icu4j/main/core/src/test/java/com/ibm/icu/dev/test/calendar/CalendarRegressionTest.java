@@ -3218,37 +3218,29 @@ public class CalendarRegressionTest extends CoreTestFmwk {
         GregorianCalendar proleptic = new GregorianCalendar(TimeZone.GMT_ZONE);
         proleptic.setGregorianChange(new Date(Long.MIN_VALUE));
 
-        // Known limitation, same in ICU4C and ICU4J, tracked in ICU-3350:
-        // with Monday/4, the WEEK_OF_YEAR round trip fails on January 1-2
-        // after some cutover years, because the cutover year's length is
-        // reported as 365 instead of its true, shorter length. Those two
-        // dates are skipped for the cutovers where this happens, and nothing
-        // else is.
         class Cutover {
             final int year; // the resulting gregorianCutoverYear
             final Date change;
-            final HashSet<Integer> mondayFourWoySkips = new HashSet<>();
 
-            Cutover(int year, int month, int day, boolean skipJanuary1And2After) {
+            Cutover(int year, int month, int day) {
                 this.year = year;
                 proleptic.clear();
                 proleptic.set(year, month, day);
                 this.change = proleptic.getTime();
-                if (skipJanuary1And2After) {
-                    for (int dom = 1; dom <= 2; ++dom) {
-                        proleptic.clear();
-                        proleptic.set(year + 1, Calendar.JANUARY, dom);
-                        mondayFourWoySkips.add(proleptic.get(Calendar.JULIAN_DAY));
-                    }
-                }
             }
         }
 
         Cutover[] cutovers = {
-            new Cutover(1582, Calendar.OCTOBER, 15, true), // default cutover
-            new Cutover(1700, Calendar.MARCH, 1, true),
-            new Cutover(1752, Calendar.SEPTEMBER, 14, false),
-            new Cutover(1918, Calendar.FEBRUARY, 14, false),
+            new Cutover(1582, Calendar.OCTOBER, 15), // default cutover
+            new Cutover(
+                    1584,
+                    Calendar.JANUARY,
+                    5), // hybrid year 1584 starts on the cutover day itself; 1583 is truncated on
+            // the Julian side
+            new Cutover(1600, Calendar.JANUARY, 1), // cutover year starts on the Gregorian side
+            new Cutover(1700, Calendar.MARCH, 1),
+            new Cutover(1752, Calendar.SEPTEMBER, 14),
+            new Cutover(1918, Calendar.FEBRUARY, 14),
         };
 
         int[][] weekSettings = {
@@ -3258,8 +3250,6 @@ public class CalendarRegressionTest extends CoreTestFmwk {
 
         for (Cutover cutover : cutovers) {
             for (int[] weekSetting : weekSettings) {
-                boolean isMondayFour = weekSetting[0] == Calendar.MONDAY && weekSetting[1] == 4;
-
                 GregorianCalendar cal = new GregorianCalendar(TimeZone.GMT_ZONE);
                 // Leave the 1582 calendar on its built-in default cutover, so that
                 // the default-constructed state is what gets tested there.
@@ -3304,10 +3294,6 @@ public class CalendarRegressionTest extends CoreTestFmwk {
                             jd,
                             byDoy.get(Calendar.JULIAN_DAY));
 
-                    if (isMondayFour && cutover.mondayFourWoySkips.contains(jd)) {
-                        continue;
-                    }
-
                     GregorianCalendar byWoy = (GregorianCalendar) cal.clone();
                     byWoy.clear();
                     byWoy.set(Calendar.YEAR_WOY, yearWoy);
@@ -3317,6 +3303,53 @@ public class CalendarRegressionTest extends CoreTestFmwk {
                             label + ": YEAR_WOY/WEEK_OF_YEAR/DAY_OF_WEEK round trip",
                             jd,
                             byWoy.get(Calendar.JULIAN_DAY));
+
+                    // ICU4J resolves WEEK_OF_YEAR/DAY_OF_WEEK from the start of
+                    // week 1 of the plain YEAR field (with its ERA), with no
+                    // "stay in the real year" correction; it need not equal jd
+                    // when the week straddles the hybrid year boundary. Predict
+                    // that resolved day independently (not via the calendar
+                    // under test) and check the calendar matches the
+                    // prediction.
+                    int era = cal.get(Calendar.ERA);
+                    int year = cal.get(Calendar.YEAR);
+
+                    GregorianCalendar yearStartCal = (GregorianCalendar) cal.clone();
+                    yearStartCal.clear();
+                    yearStartCal.set(Calendar.EXTENDED_YEAR, extYear);
+                    yearStartCal.set(Calendar.DAY_OF_YEAR, 1);
+                    int yearStartJd = yearStartCal.get(Calendar.JULIAN_DAY);
+                    int yearStartDow = yearStartCal.get(Calendar.DAY_OF_WEEK);
+
+                    int firstDow = weekSetting[0];
+                    int minDays = weekSetting[1];
+                    int leadDays = yearStartDow - firstDow;
+                    if (leadDays < 0) {
+                        leadDays += 7;
+                    }
+                    int week1Start = yearStartJd - leadDays;
+                    if ((7 - leadDays) < minDays) {
+                        week1Start += 7;
+                    }
+
+                    int dowOffset = dow - firstDow;
+                    if (dowOffset < 0) {
+                        dowOffset += 7;
+                    }
+                    int expectedJdFromYear = week1Start + 7 * (woy - 1) + dowOffset;
+
+                    GregorianCalendar byYear = (GregorianCalendar) cal.clone();
+                    byYear.clear();
+                    byYear.set(Calendar.ERA, era);
+                    byYear.set(Calendar.YEAR, year);
+                    byYear.set(Calendar.WEEK_OF_YEAR, woy);
+                    byYear.set(Calendar.DAY_OF_WEEK, dow);
+                    assertEquals(
+                            label
+                                    + ": ERA/YEAR/WEEK_OF_YEAR/DAY_OF_WEEK resolves to the"
+                                    + " independently predicted day",
+                            expectedJdFromYear,
+                            byYear.get(Calendar.JULIAN_DAY));
                 }
             }
         }
@@ -3336,7 +3369,7 @@ public class CalendarRegressionTest extends CoreTestFmwk {
         assertEquals("1582-10-15 WEEK_OF_YEAR", 40, defaultCal.get(Calendar.WEEK_OF_YEAR));
 
         GregorianCalendar britishCal = new GregorianCalendar(TimeZone.GMT_ZONE);
-        britishCal.setGregorianChange(cutovers[2].change);
+        britishCal.setGregorianChange(cutovers[4].change);
         britishCal.clear();
         britishCal.set(1752, Calendar.SEPTEMBER, 14);
         assertEquals(
@@ -4008,6 +4041,104 @@ public class CalendarRegressionTest extends CoreTestFmwk {
                         + sdf.format(expected),
                 expected,
                 defaultCutover.getTime());
+    }
+
+    // Test case for ticket 3350. The cutover year, and a neighboring year
+    // truncated by the cutover, have a true length set by the hybrid year
+    // boundaries, not the plain 365/366 rule; this governs
+    // getActualMaximum(DAY_OF_YEAR), DAY_OF_YEAR, WEEK_OF_YEAR,
+    // roll(DAY_OF_YEAR), and inTemporalLeapYear() for those years.
+    @Test
+    public void TestDayOfYearAndWeekOfYearInCutoverYear3350() {
+        GregorianCalendar defaultCal = new GregorianCalendar(TimeZone.GMT_ZONE);
+        defaultCal.setFirstDayOfWeek(Calendar.SUNDAY);
+        defaultCal.setMinimalDaysInFirstWeek(1);
+        defaultCal.clear();
+        defaultCal.set(1582, Calendar.JANUARY, 1);
+        assertEquals(
+                "1582 getActualMaximum(DAY_OF_YEAR), default cutover",
+                355,
+                defaultCal.getActualMaximum(Calendar.DAY_OF_YEAR));
+
+        defaultCal.clear();
+        defaultCal.set(1582, Calendar.DECEMBER, 31);
+        assertEquals("1582-12-31 DAY_OF_YEAR", 355, defaultCal.get(Calendar.DAY_OF_YEAR));
+
+        defaultCal.clear();
+        defaultCal.set(1582, Calendar.OCTOBER, 15);
+        assertEquals(
+                "1582-10-15 WEEK_OF_YEAR, default cutover",
+                40,
+                defaultCal.get(Calendar.WEEK_OF_YEAR));
+
+        defaultCal.clear();
+        defaultCal.set(1582, Calendar.DECEMBER, 31);
+        defaultCal.roll(Calendar.DAY_OF_YEAR, 1);
+        assertEquals(
+                "1582-12-31 rolled DAY_OF_YEAR by +1, YEAR", 1582, defaultCal.get(Calendar.YEAR));
+        assertEquals(
+                "1582-12-31 rolled DAY_OF_YEAR by +1, MONTH",
+                Calendar.JANUARY,
+                defaultCal.get(Calendar.MONTH));
+        assertEquals(
+                "1582-12-31 rolled DAY_OF_YEAR by +1, DAY_OF_MONTH",
+                1,
+                defaultCal.get(Calendar.DAY_OF_MONTH));
+
+        // A cutover of 1600-01-01: the cutover year itself starts on the
+        // Gregorian side, so its length is a normal Gregorian leap year
+        // (366), and the preceding year (1599) is 10 days short (355).
+        GregorianCalendar proleptic = new GregorianCalendar(TimeZone.GMT_ZONE);
+        proleptic.setGregorianChange(new Date(Long.MIN_VALUE));
+        proleptic.clear();
+        proleptic.set(1600, Calendar.JANUARY, 1);
+        Date jan1600 = proleptic.getTime();
+
+        GregorianCalendar cutover1600 = new GregorianCalendar(TimeZone.GMT_ZONE);
+        cutover1600.setGregorianChange(jan1600);
+        cutover1600.clear();
+        cutover1600.set(1600, Calendar.JANUARY, 1);
+        assertEquals(
+                "1600-01-01 DAY_OF_YEAR, 1600 cutover", 1, cutover1600.get(Calendar.DAY_OF_YEAR));
+
+        cutover1600.clear();
+        cutover1600.set(1599, Calendar.JANUARY, 1);
+        assertEquals(
+                "1599 getActualMaximum(DAY_OF_YEAR), 1600 cutover",
+                355,
+                cutover1600.getActualMaximum(Calendar.DAY_OF_YEAR));
+
+        cutover1600.clear();
+        cutover1600.set(1600, Calendar.JANUARY, 1);
+        assertEquals(
+                "1600 getActualMaximum(DAY_OF_YEAR), 1600 cutover",
+                366,
+                cutover1600.getActualMaximum(Calendar.DAY_OF_YEAR));
+
+        // inTemporalLeapYear() is defined as "a year that contains more days
+        // than other years" (getActualMaximum(DAY_OF_YEAR) == 366). A
+        // 1752-09-14 cutover truncates 1752 to 355 days, so it is not a
+        // temporal leap year even though an ordinary year of that length
+        // (2000) is.
+        GregorianCalendar prolepticBritish = new GregorianCalendar(TimeZone.GMT_ZONE);
+        prolepticBritish.setGregorianChange(new Date(Long.MIN_VALUE));
+        prolepticBritish.clear();
+        prolepticBritish.set(1752, Calendar.SEPTEMBER, 14);
+        Date sep1752 = prolepticBritish.getTime();
+
+        GregorianCalendar britishCal = new GregorianCalendar(TimeZone.GMT_ZONE);
+        britishCal.setGregorianChange(sep1752);
+        britishCal.clear();
+        britishCal.set(1752, Calendar.SEPTEMBER, 14);
+        assertFalse(
+                "1752 inTemporalLeapYear, 1752-09-14 cutover (355 days)",
+                britishCal.inTemporalLeapYear());
+
+        GregorianCalendar ordinaryLeap = new GregorianCalendar(TimeZone.GMT_ZONE);
+        ordinaryLeap.clear();
+        ordinaryLeap.set(2000, Calendar.JANUARY, 1);
+        assertTrue(
+                "2000 inTemporalLeapYear, ordinary leap year", ordinaryLeap.inTemporalLeapYear());
     }
 }
 // eof
