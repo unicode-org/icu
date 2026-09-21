@@ -102,6 +102,7 @@ CalendarRegressionTest::runIndexedTest( int32_t index, UBool exec, const char* &
         CASE(58,TestRespectUExtensionFw);
         CASE(59,TestExplicitCutoverMatchesDefault23489);
         CASE(60,TestWeekOfMonthInCutoverYear23489);
+        CASE(61,TestDayOfYearRoundTripInCutoverYear23489);
     default: name = ""; break;
     }
 }
@@ -3544,6 +3545,185 @@ void CalendarRegressionTest::TestWeekOfMonthInCutoverYear23489() {
                   actualStr + ", expected " + expectedStr);
         }
     }
+}
+
+// Test case for ticket 23489.
+// handleComputeJulianDay (fields -> time) numbers DAY_OF_YEAR continuously
+// across the gap in the cutover year (the missing days are not counted).
+// handleComputeFields (time -> fields) must mirror that same shift, or
+// get() and set() disagree for every day after the cutover in the cutover
+// year. WEEK_OF_YEAR, which Calendar::computeWeekFields derives from
+// DAY_OF_YEAR, breaks the same way when this is missed.
+void CalendarRegressionTest::TestDayOfYearRoundTripInCutoverYear23489() {
+    UErrorCode status = U_ZERO_ERROR;
+
+    // A pure proleptic Gregorian calendar (cutover pushed to the beginning
+    // of time) used only to build the Gregorian-change instants below and
+    // to locate physical Julian Days by calendar date; JULIAN_DAY itself is
+    // a plain physical day count, so it means the same thing on this
+    // calendar as on the calendars under test.
+    GregorianCalendar proleptic(*TimeZone::getGMT(), status);
+    if (U_FAILURE(status)) {
+        dataerrln("Error creating Calendar: %s", u_errorName(status));
+        return;
+    }
+    proleptic.setGregorianChange(EARLIEST_SUPPORTED_MILLIS, status);
+    if (failure(status, "setGregorianChange")) {
+        return;
+    }
+
+    struct Cutover {
+        int32_t year;   // the resulting gregorianCutoverYear
+        int32_t month;
+        int32_t day;
+        UBool skipJanuary1And2After;
+    };
+
+    Cutover cutoverDefs[] = {
+        { 1582, UCAL_OCTOBER,   15, true },   // default cutover
+        { 1700, UCAL_MARCH,      1, true },
+        { 1752, UCAL_SEPTEMBER, 14, false },
+        { 1918, UCAL_FEBRUARY,  14, false },
+    };
+
+    int32_t weekSettings[][2] = {
+        { UCAL_SUNDAY, 1 },
+        { UCAL_MONDAY, 4 },
+    };
+
+    // Known limitation, same in ICU4C and ICU4J, tracked in ICU-3350: with
+    // Monday/4, the WEEK_OF_YEAR round trip fails on January 1-2 after some
+    // cutover years, because the cutover year's length is reported as 365
+    // instead of its true, shorter length. Those two dates are skipped for
+    // the cutovers where this happens, and nothing else is.
+    UDate cutoverChanges[UPRV_LENGTHOF(cutoverDefs)];
+    int32_t mondayFourWoySkips[UPRV_LENGTHOF(cutoverDefs)][2];
+
+    for (int32_t c = 0; c < UPRV_LENGTHOF(cutoverDefs); ++c) {
+        proleptic.clear();
+        proleptic.set(cutoverDefs[c].year, cutoverDefs[c].month, cutoverDefs[c].day);
+        cutoverChanges[c] = proleptic.getTime(status);
+
+        mondayFourWoySkips[c][0] = mondayFourWoySkips[c][1] = -1;
+        if (cutoverDefs[c].skipJanuary1And2After) {
+            for (int32_t dom = 1; dom <= 2; ++dom) {
+                proleptic.clear();
+                proleptic.set(cutoverDefs[c].year + 1, UCAL_JANUARY, dom);
+                mondayFourWoySkips[c][dom - 1] = proleptic.get(UCAL_JULIAN_DAY, status);
+            }
+        }
+    }
+    if (failure(status, "computing the cutover instants")) {
+        return;
+    }
+
+    for (int32_t c = 0; c < UPRV_LENGTHOF(cutoverDefs); ++c) {
+        for (int32_t w = 0; w < UPRV_LENGTHOF(weekSettings); ++w) {
+            UBool isMondayFour = weekSettings[w][0] == UCAL_MONDAY && weekSettings[w][1] == 4;
+
+            status = U_ZERO_ERROR;
+            GregorianCalendar cal(*TimeZone::getGMT(), status);
+            if (U_FAILURE(status)) {
+                dataerrln("Error creating Calendar: %s", u_errorName(status));
+                return;
+            }
+            // Leave the 1582 calendar on its built-in default cutover, so
+            // that the default-constructed state is what gets tested there.
+            if (cutoverDefs[c].year != 1582) {
+                cal.setGregorianChange(cutoverChanges[c], status);
+            }
+            cal.setFirstDayOfWeek(static_cast<UCalendarDaysOfWeek>(weekSettings[w][0]));
+            cal.setMinimalDaysInFirstWeek(static_cast<uint8_t>(weekSettings[w][1]));
+            if (failure(status, "configuring the calendar under test")) {
+                continue;
+            }
+
+            proleptic.clear();
+            proleptic.set(cutoverDefs[c].year - 1, UCAL_JANUARY, 1);
+            int32_t startJd = proleptic.get(UCAL_JULIAN_DAY, status);
+            proleptic.clear();
+            proleptic.set(cutoverDefs[c].year + 1, UCAL_DECEMBER, 31);
+            int32_t endJd = proleptic.get(UCAL_JULIAN_DAY, status);
+            if (failure(status, "computing the test range")) {
+                continue;
+            }
+
+            for (int32_t jd = startJd; jd <= endJd; ++jd) {
+                status = U_ZERO_ERROR;
+                cal.clear();
+                cal.set(UCAL_JULIAN_DAY, jd);
+                int32_t extYear = cal.get(UCAL_EXTENDED_YEAR, status);
+                int32_t doy = cal.get(UCAL_DAY_OF_YEAR, status);
+                int32_t yearWoy = cal.get(UCAL_YEAR_WOY, status);
+                int32_t woy = cal.get(UCAL_WEEK_OF_YEAR, status);
+                int32_t dow = cal.get(UCAL_DAY_OF_WEEK, status);
+                if (failure(status, "reading fields from the calendar under test")) {
+                    continue;
+                }
+
+                char label[128];
+                snprintf(label, sizeof(label),
+                    "cutover=%d, firstDayOfWeek=%d, minimalDaysInFirstWeek=%d, julianDay=%d",
+                    (int)cutoverDefs[c].year, (int)weekSettings[w][0], (int)weekSettings[w][1],
+                    (int)jd);
+                char msg[192];
+
+                LocalPointer<GregorianCalendar> byDoy(cal.clone());
+                byDoy->clear();
+                byDoy->set(UCAL_EXTENDED_YEAR, extYear);
+                byDoy->set(UCAL_DAY_OF_YEAR, doy);
+                snprintf(msg, sizeof(msg), "%s: EXTENDED_YEAR/DAY_OF_YEAR round trip", label);
+                assertEquals(msg, jd, byDoy->get(UCAL_JULIAN_DAY, status));
+
+                if (isMondayFour &&
+                        (jd == mondayFourWoySkips[c][0] || jd == mondayFourWoySkips[c][1])) {
+                    continue;
+                }
+
+                LocalPointer<GregorianCalendar> byWoy(cal.clone());
+                byWoy->clear();
+                byWoy->set(UCAL_YEAR_WOY, yearWoy);
+                byWoy->set(UCAL_WEEK_OF_YEAR, woy);
+                byWoy->set(UCAL_DAY_OF_WEEK, dow);
+                snprintf(msg, sizeof(msg), "%s: YEAR_WOY/WEEK_OF_YEAR/DAY_OF_WEEK round trip", label);
+                assertEquals(msg, jd, byWoy->get(UCAL_JULIAN_DAY, status));
+            }
+        }
+    }
+
+    // Pin absolute values too. ICU4C and ICU4J agree on these, and they are
+    // also what java.util.GregorianCalendar returns for the default cutover.
+    status = U_ZERO_ERROR;
+    GregorianCalendar defaultCal(*TimeZone::getGMT(), status);
+    if (U_FAILURE(status)) {
+        dataerrln("Error creating Calendar: %s", u_errorName(status));
+        return;
+    }
+    defaultCal.setFirstDayOfWeek(UCAL_SUNDAY);
+    defaultCal.setMinimalDaysInFirstWeek(1);
+    defaultCal.clear();
+    defaultCal.set(1582, UCAL_OCTOBER, 4);
+    assertEquals("1582-10-04 DAY_OF_YEAR", 277, defaultCal.get(UCAL_DAY_OF_YEAR, status));
+
+    defaultCal.clear();
+    defaultCal.set(1582, UCAL_OCTOBER, 15);
+    assertEquals("1582-10-15 DAY_OF_YEAR", 278, defaultCal.get(UCAL_DAY_OF_YEAR, status));
+    assertEquals("1582-10-15 WEEK_OF_YEAR", 40, defaultCal.get(UCAL_WEEK_OF_YEAR, status));
+    if (failure(status, "reading fields from the default calendar")) {
+        return;
+    }
+
+    GregorianCalendar britishCal(*TimeZone::getGMT(), status);
+    if (U_FAILURE(status)) {
+        dataerrln("Error creating Calendar: %s", u_errorName(status));
+        return;
+    }
+    britishCal.setGregorianChange(cutoverChanges[2], status);
+    britishCal.clear();
+    britishCal.set(1752, UCAL_SEPTEMBER, 14);
+    assertEquals("1752-09-14 DAY_OF_YEAR, 1752 cutover", 247,
+        britishCal.get(UCAL_DAY_OF_YEAR, status));
+    failure(status, "reading fields from the 1752-cutover calendar");
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
