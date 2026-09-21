@@ -36,7 +36,7 @@ jobs:
         dnf install -y gh
 
     - name: Checkout and setup
-      uses: actions/checkout@v5
+      uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
 
     - name: Config and build ICU4C proper
       run: |
@@ -70,7 +70,7 @@ jobs:
         popd
 
     - name: Upload build results
-      uses: actions/upload-artifact@v4.3.6
+      uses: actions/upload-artifact@834a144ee995460fba8ed112a2fc961b36a5ec5a # v4.3.6
       with:
         name: icu4c-fedora-binaries
         path: ${{ env.RELEASE_FOLDER }}
