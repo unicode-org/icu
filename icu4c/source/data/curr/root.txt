@@ -205,6 +205,9 @@ root{
         ZMW{"ZK"}
     }
     Currencies%variant{
+        AED{"⃃"}
+        MVR{"⃂"}
+        OMR{"⃄"}
         SAR{"⃁"}
         TRY{"TL"}
     }

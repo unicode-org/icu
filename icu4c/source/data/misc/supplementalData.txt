@@ -24026,6 +24026,7 @@ supplementalData:table(nofallback){
             EZ{
                 "AT",
                 "BE",
+                "BG",
                 "CY",
                 "DE",
                 "EE",
@@ -24033,6 +24034,7 @@ supplementalData:table(nofallback){
                 "FI",
                 "FR",
                 "GR",
+                "HR",
                 "IE",
                 "IT",
                 "LT",
