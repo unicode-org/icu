@@ -2188,7 +2188,7 @@ public class TimeZoneTest extends CoreTestFmwk {
             {"EST5EDT", "001"},
             {"PST", "US"}, // Link America/Los_Angeles
             {"Europe/Helsinki", "FI"},
-            {"Europe/Mariehamn", "AX"}, // Link Europe/Helsinki, but in zone.tab
+            {"Europe/Mariehamn", "AX"}, // Link Europe/Helsinki, but its own CLDR zone
             {"Asia/Riyadh", "SA"},
             {"Atlantic/Jan_Mayen", "SJ"},
             {"Pacific/Truk", "FM"},
