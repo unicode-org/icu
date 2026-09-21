@@ -29,7 +29,7 @@ jobs:
         sudo apt-get -y install doxygen
 
     - name: Checkout and setup
-      uses: actions/checkout@v5
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
     - name: Config and build ICU4C proper
       run: |
@@ -67,7 +67,7 @@ jobs:
         mv icu4c/source/dist/icu4c-${github_rel_version}-sources.* ${RELEASE_FOLDER}
 
     - name: Upload build results
-      uses: actions/upload-artifact@v4.3.6
+      uses: actions/upload-artifact@0b2256b8c012f0828dc542b3febcab082c67f72b # v4.3.4
       with:
         name: icu4c-ubuntu-binaries
         path: ${{ env.RELEASE_FOLDER }}
