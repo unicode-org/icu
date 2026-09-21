@@ -93,6 +93,9 @@ public:
     void TestWeekOfMonthOutOfRangeMonth3350();
     void TestWeekOfMonthDefaultMonth3350();
     void TestWeekOfMonthTimeZoneDependentCutover3350();
+    void TestRollInCutoverMonth3350();
+    void TestRollDstAcrossCutoverMonth3350();
+    void TestRollEarlyEraCutover3350();
 
     void printdate(GregorianCalendar *cal, const char *string);
     void dowTest(UBool lenient) ;
