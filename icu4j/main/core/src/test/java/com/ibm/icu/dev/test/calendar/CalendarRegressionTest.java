@@ -3198,5 +3198,148 @@ public class CalendarRegressionTest extends CoreTestFmwk {
                     actual);
         }
     }
+
+    // Test case for ticket 23489.
+    // handleComputeJulianDay (fields -> time) numbers DAY_OF_YEAR
+    // continuously across the gap in the cutover year (the missing days are
+    // not counted). handleComputeFields (time -> fields) must mirror that
+    // same shift, or get() and set() disagree for every day after the
+    // cutover in the cutover year. WEEK_OF_YEAR, which
+    // Calendar.computeWeekFields derives from DAY_OF_YEAR, breaks the same
+    // way when this is missed.
+    @Test
+    public void TestDayOfYearRoundTripInCutoverYear23489() {
+        // A pure proleptic Gregorian calendar (cutover pushed to the
+        // beginning of time) used only to build the Gregorian-change
+        // instants below and to locate physical Julian Days by calendar
+        // date; JULIAN_DAY itself is a plain physical day count, so it means
+        // the same thing on this calendar as on the calendars under test.
+        GregorianCalendar proleptic = new GregorianCalendar(TimeZone.GMT_ZONE);
+        proleptic.setGregorianChange(new Date(Long.MIN_VALUE));
+
+        // Known limitation, same in ICU4C and ICU4J, tracked in ICU-3350:
+        // with Monday/4, the WEEK_OF_YEAR round trip fails on January 1-2
+        // after some cutover years, because the cutover year's length is
+        // reported as 365 instead of its true, shorter length. Those two
+        // dates are skipped for the cutovers where this happens, and nothing
+        // else is.
+        class Cutover {
+            final int year; // the resulting gregorianCutoverYear
+            final Date change;
+            final HashSet<Integer> mondayFourWoySkips = new HashSet<>();
+
+            Cutover(int year, int month, int day, boolean skipJanuary1And2After) {
+                this.year = year;
+                proleptic.clear();
+                proleptic.set(year, month, day);
+                this.change = proleptic.getTime();
+                if (skipJanuary1And2After) {
+                    for (int dom = 1; dom <= 2; ++dom) {
+                        proleptic.clear();
+                        proleptic.set(year + 1, Calendar.JANUARY, dom);
+                        mondayFourWoySkips.add(proleptic.get(Calendar.JULIAN_DAY));
+                    }
+                }
+            }
+        }
+
+        Cutover[] cutovers = {
+            new Cutover(1582, Calendar.OCTOBER, 15, true), // default cutover
+            new Cutover(1700, Calendar.MARCH, 1, true),
+            new Cutover(1752, Calendar.SEPTEMBER, 14, false),
+            new Cutover(1918, Calendar.FEBRUARY, 14, false),
+        };
+
+        int[][] weekSettings = {
+            {Calendar.SUNDAY, 1},
+            {Calendar.MONDAY, 4},
+        };
+
+        for (Cutover cutover : cutovers) {
+            for (int[] weekSetting : weekSettings) {
+                boolean isMondayFour = weekSetting[0] == Calendar.MONDAY && weekSetting[1] == 4;
+
+                GregorianCalendar cal = new GregorianCalendar(TimeZone.GMT_ZONE);
+                // Leave the 1582 calendar on its built-in default cutover, so that
+                // the default-constructed state is what gets tested there.
+                if (cutover.year != 1582) {
+                    cal.setGregorianChange(cutover.change);
+                }
+                cal.setFirstDayOfWeek(weekSetting[0]);
+                cal.setMinimalDaysInFirstWeek(weekSetting[1]);
+
+                proleptic.clear();
+                proleptic.set(cutover.year - 1, Calendar.JANUARY, 1);
+                int startJd = proleptic.get(Calendar.JULIAN_DAY);
+                proleptic.clear();
+                proleptic.set(cutover.year + 1, Calendar.DECEMBER, 31);
+                int endJd = proleptic.get(Calendar.JULIAN_DAY);
+
+                for (int jd = startJd; jd <= endJd; ++jd) {
+                    cal.clear();
+                    cal.set(Calendar.JULIAN_DAY, jd);
+                    int extYear = cal.get(Calendar.EXTENDED_YEAR);
+                    int doy = cal.get(Calendar.DAY_OF_YEAR);
+                    int yearWoy = cal.get(Calendar.YEAR_WOY);
+                    int woy = cal.get(Calendar.WEEK_OF_YEAR);
+                    int dow = cal.get(Calendar.DAY_OF_WEEK);
+
+                    String label =
+                            "cutover="
+                                    + cutover.year
+                                    + ", firstDayOfWeek="
+                                    + weekSetting[0]
+                                    + ", minimalDaysInFirstWeek="
+                                    + weekSetting[1]
+                                    + ", julianDay="
+                                    + jd;
+
+                    GregorianCalendar byDoy = (GregorianCalendar) cal.clone();
+                    byDoy.clear();
+                    byDoy.set(Calendar.EXTENDED_YEAR, extYear);
+                    byDoy.set(Calendar.DAY_OF_YEAR, doy);
+                    assertEquals(
+                            label + ": EXTENDED_YEAR/DAY_OF_YEAR round trip",
+                            jd,
+                            byDoy.get(Calendar.JULIAN_DAY));
+
+                    if (isMondayFour && cutover.mondayFourWoySkips.contains(jd)) {
+                        continue;
+                    }
+
+                    GregorianCalendar byWoy = (GregorianCalendar) cal.clone();
+                    byWoy.clear();
+                    byWoy.set(Calendar.YEAR_WOY, yearWoy);
+                    byWoy.set(Calendar.WEEK_OF_YEAR, woy);
+                    byWoy.set(Calendar.DAY_OF_WEEK, dow);
+                    assertEquals(
+                            label + ": YEAR_WOY/WEEK_OF_YEAR/DAY_OF_WEEK round trip",
+                            jd,
+                            byWoy.get(Calendar.JULIAN_DAY));
+                }
+            }
+        }
+
+        // Pin absolute values too. ICU4C and ICU4J agree on these, and they are
+        // also what java.util.GregorianCalendar returns for the default cutover.
+        GregorianCalendar defaultCal = new GregorianCalendar(TimeZone.GMT_ZONE);
+        defaultCal.setFirstDayOfWeek(Calendar.SUNDAY);
+        defaultCal.setMinimalDaysInFirstWeek(1);
+        defaultCal.clear();
+        defaultCal.set(1582, Calendar.OCTOBER, 4);
+        assertEquals("1582-10-04 DAY_OF_YEAR", 277, defaultCal.get(Calendar.DAY_OF_YEAR));
+
+        defaultCal.clear();
+        defaultCal.set(1582, Calendar.OCTOBER, 15);
+        assertEquals("1582-10-15 DAY_OF_YEAR", 278, defaultCal.get(Calendar.DAY_OF_YEAR));
+        assertEquals("1582-10-15 WEEK_OF_YEAR", 40, defaultCal.get(Calendar.WEEK_OF_YEAR));
+
+        GregorianCalendar britishCal = new GregorianCalendar(TimeZone.GMT_ZONE);
+        britishCal.setGregorianChange(cutovers[2].change);
+        britishCal.clear();
+        britishCal.set(1752, Calendar.SEPTEMBER, 14);
+        assertEquals(
+                "1752-09-14 DAY_OF_YEAR, 1752 cutover", 247, britishCal.get(Calendar.DAY_OF_YEAR));
+    }
 }
 // eof

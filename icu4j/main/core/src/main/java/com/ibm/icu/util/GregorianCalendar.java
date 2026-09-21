@@ -825,6 +825,14 @@ public class GregorianCalendar extends Calendar implements Cloneable {
             dayOfMonth = dayOfYear - MONTH_COUNT[month][isLeap ? 3 : 2] + 1; // one-based DOM
             ++dayOfYear;
         }
+
+        // [j81] if we are after the cutover in its year, shift the day of the year
+        if ((eyear == gregorianCutoverYear) && (julianDay >= cutoverJulianDay)) {
+            // from handleComputeMonthStart
+            int gregShift = Grego.gregorianShift(eyear);
+            dayOfYear += gregShift;
+        }
+
         internalSet(MONTH, month);
         internalSet(ORDINAL_MONTH, month);
         internalSet(DAY_OF_MONTH, dayOfMonth);
