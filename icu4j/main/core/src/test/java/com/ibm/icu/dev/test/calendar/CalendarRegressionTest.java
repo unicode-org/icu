@@ -4009,5 +4009,962 @@ public class CalendarRegressionTest extends CoreTestFmwk {
                 expected,
                 defaultCutover.getTime());
     }
+
+    private static final long ONE_DAY_MILLIS = 24L * 60 * 60 * 1000;
+
+    // Local (test-only) reproduction of the "phantom day" block algorithm
+    // documented in GregorianCalendar.roll()'s WEEK_OF_MONTH case
+    // (calendar-agnostic, driven only by day-of-week/day-of-month/month
+    // length), to independently check that cDayOfMonth/cMonthLen are correct
+    // for a hybrid month.
+    private static int expectedRolledDom(
+            int dom, int dow, int monthLen, int amount, int minimalDaysInFirstWeek) {
+        int fdm = (dow - dom + 1) % 7;
+        if (fdm < 0) fdm += 7;
+        int start = ((7 - fdm) < minimalDaysInFirstWeek) ? (8 - fdm) : (1 - fdm);
+        int ldm = (monthLen - dom + dow) % 7;
+        int limit = monthLen + 7 - ldm;
+        int gap = limit - start;
+        // amount*7L: amount*7 can overflow an int for |amount| > 306783378.
+        int newDom = (int) ((dom + amount * 7L - start) % gap);
+        if (newDom < 0) {
+            newDom += gap;
+        }
+        newDom += start;
+        if (newDom < 1) {
+            newDom = 1;
+        }
+        if (newDom > monthLen) {
+            newDom = monthLen;
+        }
+        return newDom;
+    }
+
+    // roll(DAY_OF_MONTH) and roll(WEEK_OF_MONTH) within a month of the
+    // cutover year (or of the year immediately before or after it) that is
+    // shortened or split by an arbitrary (non-1582) cutover must cycle over
+    // exactly that month's existing days, staying within the hybrid month's
+    // Julian Day range. For every scenario below the resulting MONTH label
+    // also never changes; that stops being guaranteed only for a very
+    // early-era cutover whose repeated day labels cross a month boundary
+    // (see TestRollEarlyEraCutover3350).
+    @Test
+    public void TestRollInCutoverMonth3350() {
+        class Scenario {
+            final String name;
+            final boolean useDefaultCutover;
+            final int cutY, cutM, cutD; // Gregorian date of the first Gregorian day
+            final int year, month;
+            final int firstDOM; // DAY_OF_MONTH of the hybrid month's first existing day
+            final int length; // expected length, in days, of the hybrid month
+
+            Scenario(
+                    String name,
+                    boolean useDefaultCutover,
+                    int cutY,
+                    int cutM,
+                    int cutD,
+                    int year,
+                    int month,
+                    int firstDOM,
+                    int length) {
+                this.name = name;
+                this.useDefaultCutover = useDefaultCutover;
+                this.cutY = cutY;
+                this.cutM = cutM;
+                this.cutD = cutD;
+                this.year = year;
+                this.month = month;
+                this.firstDOM = firstDOM;
+                this.length = length;
+            }
+        }
+
+        Scenario[] scenarios = {
+            new Scenario("1582-10 (default cutover)", true, 0, 0, 0, 1582, Calendar.OCTOBER, 1, 21),
+            new Scenario(
+                    "Denmark 1700-02",
+                    false,
+                    1700,
+                    Calendar.MARCH,
+                    1,
+                    1700,
+                    Calendar.FEBRUARY,
+                    1,
+                    18),
+            new Scenario(
+                    "GB 1752-09",
+                    false,
+                    1752,
+                    Calendar.SEPTEMBER,
+                    14,
+                    1752,
+                    Calendar.SEPTEMBER,
+                    1,
+                    19),
+            new Scenario(
+                    "Russia 1918-02",
+                    false,
+                    1918,
+                    Calendar.FEBRUARY,
+                    14,
+                    1918,
+                    Calendar.FEBRUARY,
+                    14,
+                    15),
+            // The affected month is DECEMBER OF THE PREVIOUS YEAR, since the
+            // cutover falls on January 1.
+            new Scenario(
+                    "1600-01-01 cutover: Dec 1599",
+                    false,
+                    1600,
+                    Calendar.JANUARY,
+                    1,
+                    1599,
+                    Calendar.DECEMBER,
+                    1,
+                    21),
+            new Scenario(
+                    "1584-01-05 cutover: Dec 1583",
+                    false,
+                    1584,
+                    Calendar.JANUARY,
+                    5,
+                    1583,
+                    Calendar.DECEMBER,
+                    1,
+                    25),
+            new Scenario(
+                    "1584-01-05 cutover: Jan 1584",
+                    false,
+                    1584,
+                    Calendar.JANUARY,
+                    5,
+                    1584,
+                    Calendar.JANUARY,
+                    5,
+                    27),
+        };
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        sdf.setTimeZone(TimeZone.GMT_ZONE);
+
+        for (Scenario sc : scenarios) {
+            GregorianCalendar cal = new GregorianCalendar(TimeZone.GMT_ZONE);
+            if (!sc.useDefaultCutover) {
+                GregorianCalendar cutoverCal = new GregorianCalendar(TimeZone.GMT_ZONE);
+                cutoverCal.clear();
+                cutoverCal.set(sc.cutY, sc.cutM, sc.cutD);
+                cal.setGregorianChange(cutoverCal.getTime());
+            }
+            // Fixed (not locale-default) so that the roll(WEEK_OF_MONTH)
+            // expectations below, computed for firstDayOfWeek == SUNDAY and
+            // minimalDaysInFirstWeek == 1, are deterministic.
+            cal.setFirstDayOfWeek(Calendar.SUNDAY);
+            cal.setMinimalDaysInFirstWeek(1);
+            cal.clear();
+            cal.set(sc.year, sc.month, sc.firstDOM);
+            long first = cal.getTimeInMillis();
+
+            // roll(DAY_OF_MONTH, +1) from every existing day visits exactly
+            // length(m) distinct days and returns to the start; it never
+            // changes the YEAR or MONTH.
+            for (int i = 0; i < sc.length; i++) {
+                cal.setTimeInMillis(first + i * ONE_DAY_MILLIS);
+                cal.roll(Calendar.DAY_OF_MONTH, 1);
+                long actual = cal.getTimeInMillis();
+                long expected = first + ((i + 1) % sc.length) * ONE_DAY_MILLIS;
+                int rolledYear = cal.get(Calendar.EXTENDED_YEAR);
+                int rolledMonth = cal.get(Calendar.MONTH);
+                String label = "[" + sc.name + "]: roll(DAY_OF_MONTH,+1) from day " + i;
+                assertEquals(
+                        label
+                                + ": got offset "
+                                + ((actual - first) / ONE_DAY_MILLIS)
+                                + " days, extended year "
+                                + rolledYear
+                                + ", month "
+                                + (rolledMonth + 1)
+                                + "; expected offset "
+                                + ((expected - first) / ONE_DAY_MILLIS)
+                                + " days",
+                        expected,
+                        actual);
+                assertEquals(label + ": changed the year", sc.year, rolledYear);
+                assertEquals(label + ": changed the month", sc.month, rolledMonth);
+            }
+
+            // roll(DAY_OF_MONTH, -1) from the first day wraps around to the
+            // last day of the (hybrid) month.
+            {
+                cal.setTimeInMillis(first);
+                cal.roll(Calendar.DAY_OF_MONTH, -1);
+                long actual = cal.getTimeInMillis();
+                long expected = first + (sc.length - 1) * ONE_DAY_MILLIS;
+                assertEquals(
+                        "["
+                                + sc.name
+                                + "]: roll(DAY_OF_MONTH,-1) from the first day: got "
+                                + sdf.format(new Date(actual))
+                                + ", expected "
+                                + sdf.format(new Date(expected)),
+                        expected,
+                        actual);
+            }
+
+            // roll(DAY_OF_MONTH, amount) for amounts near the int range
+            // boundary: amount*7 (used internally by the WEEK_OF_MONTH case)
+            // overflows for |amount| > 306783378, so Integer.MAX_VALUE/
+            // MIN_VALUE are exercised for both fields; the DOM computation
+            // itself uses long arithmetic throughout and is not itself at
+            // risk, but is checked here too since it shares the same
+            // starting position.
+            for (int amount : new int[] {Integer.MAX_VALUE, Integer.MIN_VALUE}) {
+                cal.setTimeInMillis(first); // cDayOfMonth == 1, 0-based position 0
+                cal.roll(Calendar.DAY_OF_MONTH, amount);
+                long actual = cal.getTimeInMillis();
+                long pos = (long) amount % sc.length;
+                if (pos < 0) {
+                    pos += sc.length;
+                }
+                long expected = first + pos * ONE_DAY_MILLIS;
+                assertEquals(
+                        "["
+                                + sc.name
+                                + "]: roll(DAY_OF_MONTH,"
+                                + amount
+                                + ") from day 1: got "
+                                + sdf.format(new Date(actual))
+                                + ", expected "
+                                + sdf.format(new Date(expected)),
+                        expected,
+                        actual);
+            }
+
+            // roll(WEEK_OF_MONTH, amount) from several start days, for
+            // several amounts (not just +-1, and including the int range
+            // boundary): the exact resulting day is pinned via the
+            // independent expectedRolledDom() re-implementation of the
+            // documented algorithm, not just checked to have stayed in the
+            // same year/month (which would pass even with cMonthLen off by
+            // a couple of days).
+            int[] startDomIndices = {1, sc.length / 2 + 1, sc.length};
+            int[] amounts = {-2, -1, 1, 2, Integer.MAX_VALUE, Integer.MIN_VALUE};
+            for (int startDom : startDomIndices) {
+                for (int amount : amounts) {
+                    cal.setTimeInMillis(first + (startDom - 1) * ONE_DAY_MILLIS);
+                    int dowField = cal.get(Calendar.DAY_OF_WEEK);
+                    int dow0 = dowField - Calendar.SUNDAY; // 0-based, 0 == firstDayOfWeek
+
+                    cal.roll(Calendar.WEEK_OF_MONTH, amount);
+                    long actual = cal.getTimeInMillis();
+                    int rolledYear = cal.get(Calendar.EXTENDED_YEAR);
+                    int rolledMonth = cal.get(Calendar.MONTH);
+
+                    int expectedDom = expectedRolledDom(startDom, dow0, sc.length, amount, 1);
+                    long expected = first + (expectedDom - 1) * ONE_DAY_MILLIS;
+
+                    String label =
+                            "["
+                                    + sc.name
+                                    + "]: roll(WEEK_OF_MONTH,"
+                                    + amount
+                                    + ") from day "
+                                    + startDom;
+                    assertEquals(
+                            label
+                                    + ": got "
+                                    + sdf.format(new Date(actual))
+                                    + " (extended year "
+                                    + rolledYear
+                                    + ", month "
+                                    + (rolledMonth + 1)
+                                    + "), expected "
+                                    + sdf.format(new Date(expected)),
+                            expected,
+                            actual);
+                    assertEquals(label + ": changed the year", sc.year, rolledYear);
+                    assertEquals(label + ": changed the month", sc.month, rolledMonth);
+                }
+            }
+        }
+
+        // [ICU-3350 code review] set(JULIAN_DAY) alone (without complete()) left DAY_OF_MONTH and
+        // other date fields stale, so a subsequent set() of a different field, with no intervening
+        // get(), silently discarded the preceding roll(). Default cutover, GMT, SUNDAY/1 week
+        // settings.
+        {
+            GregorianCalendar cal = new GregorianCalendar(TimeZone.GMT_ZONE);
+            cal.setFirstDayOfWeek(Calendar.SUNDAY);
+            cal.setMinimalDaysInFirstWeek(1);
+
+            cal.clear();
+            cal.set(1582, Calendar.OCTOBER, 20);
+            cal.getTime();
+            cal.roll(Calendar.DATE, 1);
+            cal.set(Calendar.MONTH, Calendar.OCTOBER);
+            assertEquals(
+                    "roll(DATE,+1) then set(MONTH,OCTOBER) from 1582-10-20",
+                    21,
+                    cal.get(Calendar.DATE));
+
+            cal.clear();
+            cal.set(1582, Calendar.OCTOBER, 20);
+            cal.getTime();
+            cal.roll(Calendar.WEEK_OF_MONTH, 1);
+            cal.set(Calendar.MONTH, Calendar.OCTOBER);
+            assertEquals(
+                    "roll(WEEK_OF_MONTH,+1) then set(MONTH,OCTOBER) from 1582-10-20",
+                    27,
+                    cal.get(Calendar.DATE));
+        }
+    }
+
+    // [ICU-3350 code review] GregorianCalendar.roll(field, 0) must behave exactly like it did
+    // before this class grew cutover-month handling for DAY_OF_MONTH/WEEK_OF_MONTH: a pure no-op
+    // for every field, identical to the base Calendar.roll(field, 0). Java-only: ICU4C's
+    // GregorianCalendar::roll() already returns immediately for amount == 0 (pre-existing, not
+    // touched by this change), so it has no equivalent regression to guard against.
+    @Test
+    public void TestRollZeroAmount3350() {
+        // Lenient: a pending out-of-range DAY_OF_MONTH must survive roll(HOUR, 0) untouched, then
+        // resolve normally against the field set afterward.
+        GregorianCalendar c = new GregorianCalendar(TimeZone.GMT_ZONE);
+        c.clear();
+        c.set(2023, Calendar.FEBRUARY, 1);
+        c.getTime();
+        c.set(Calendar.DAY_OF_MONTH, 31);
+        c.roll(Calendar.HOUR, 0);
+        c.set(Calendar.MONTH, Calendar.MARCH);
+        assertEquals(
+                "roll(HOUR,0) must not resolve a pending DATE=31 via February",
+                31,
+                c.get(Calendar.DATE));
+        assertEquals(
+                "roll(HOUR,0) must not resolve a pending DATE=31 via February",
+                Calendar.MARCH,
+                c.get(Calendar.MONTH));
+
+        // Non-lenient: roll(MINUTE, 0) on a calendar with a pending invalid field must not validate
+        // (and thus must not throw), matching the base Calendar.roll(field, 0)'s early return.
+        GregorianCalendar d = new GregorianCalendar(TimeZone.GMT_ZONE);
+        d.setLenient(false);
+        d.clear();
+        d.set(2023, Calendar.FEBRUARY, 1);
+        d.getTime();
+        d.set(Calendar.DAY_OF_MONTH, 31);
+        d.roll(Calendar.MINUTE, 0);
+
+        // [ICU-3350 code review] In an affected month (default cutover, October 1582),
+        // roll(DATE, 0) and roll(WEEK_OF_MONTH, 0) must be pure no-ops too: they must not run the
+        // cutover-month logic (which calls set(JULIAN_DAY) + complete()) just because amount == 0,
+        // matching the "if (amount != 0)" skip around the cutover-month detection in roll(). A
+        // pending, out-of-range DAY_OF_MONTH (October 1582 has no 5-14) must survive both rolls
+        // untouched, then resolve normally against the field set afterward.
+        GregorianCalendar e = new GregorianCalendar(TimeZone.GMT_ZONE);
+        e.clear();
+        e.set(1582, Calendar.OCTOBER, 1);
+        e.getTime();
+        e.set(Calendar.DAY_OF_MONTH, 10);
+        e.roll(Calendar.DATE, 0);
+        e.set(Calendar.MONTH, Calendar.NOVEMBER);
+        assertEquals(
+                "roll(DATE,0) in October 1582 must not resolve a pending DATE=10",
+                10,
+                e.get(Calendar.DATE));
+        assertEquals(
+                "roll(DATE,0) in October 1582 must not resolve a pending DATE=10",
+                Calendar.NOVEMBER,
+                e.get(Calendar.MONTH));
+
+        GregorianCalendar f = new GregorianCalendar(TimeZone.GMT_ZONE);
+        f.clear();
+        f.set(1582, Calendar.OCTOBER, 1);
+        f.getTime();
+        f.set(Calendar.DAY_OF_MONTH, 10);
+        f.roll(Calendar.WEEK_OF_MONTH, 0);
+        f.set(Calendar.MONTH, Calendar.NOVEMBER);
+        assertEquals(
+                "roll(WEEK_OF_MONTH,0) in October 1582 must not resolve a pending DATE=10",
+                10,
+                f.get(Calendar.DATE));
+        assertEquals(
+                "roll(WEEK_OF_MONTH,0) in October 1582 must not resolve a pending DATE=10",
+                Calendar.NOVEMBER,
+                f.get(Calendar.MONTH));
+
+        // Non-lenient: roll(DATE, 0) / roll(WEEK_OF_MONTH, 0) in the same affected month, with a
+        // pending invalid field, must not validate (and thus must not throw).
+        GregorianCalendar g = new GregorianCalendar(TimeZone.GMT_ZONE);
+        g.setLenient(false);
+        g.clear();
+        g.set(1582, Calendar.OCTOBER, 1);
+        g.getTime();
+        g.set(Calendar.DAY_OF_MONTH, 32);
+        g.roll(Calendar.DATE, 0);
+
+        GregorianCalendar h = new GregorianCalendar(TimeZone.GMT_ZONE);
+        h.setLenient(false);
+        h.clear();
+        h.set(1582, Calendar.OCTOBER, 1);
+        h.getTime();
+        h.set(Calendar.DAY_OF_MONTH, 32);
+        h.roll(Calendar.WEEK_OF_MONTH, 0);
+    }
+
+    // roll(DAY_OF_MONTH) and roll(WEEK_OF_MONTH) in a month shortened or
+    // split by the cutover must keep local wall time invariant across a DST
+    // transition, and must resolve a repeated or skipped wall time exactly
+    // like Calendar.roll() does for an ordinary month: honoring
+    // getRepeatedWallTimeOption()/getSkippedWallTimeOption().
+    @Test
+    public void TestRollDstAcrossCutoverMonth3350() {
+        // America/New_York, cutover Gregorian 2000-06-01T00:00Z: March 2000 is
+        // entirely before the cutover, but an intact, ordinary Julian month
+        // (not shortened or split), so this rolls via plain Calendar.roll() --
+        // a control confirming the setup is DST-safe to begin with.
+        {
+            GregorianCalendar cutoverCal =
+                    new GregorianCalendar(TimeZone.getTimeZone("America/New_York"));
+            cutoverCal.clear();
+            cutoverCal.set(2000, Calendar.JUNE, 1);
+            Date cutoverMillis = cutoverCal.getTime();
+
+            GregorianCalendar cal = new GregorianCalendar(TimeZone.getTimeZone("America/New_York"));
+            cal.setGregorianChange(cutoverMillis);
+
+            class Check {
+                final int startMonth, startDay, startHour, startMinute;
+                final int field, amount;
+                final int expMonth, expDay, expHour, expMinute;
+
+                Check(
+                        int startMonth,
+                        int startDay,
+                        int startHour,
+                        int startMinute,
+                        int field,
+                        int amount,
+                        int expMonth,
+                        int expDay,
+                        int expHour,
+                        int expMinute) {
+                    this.startMonth = startMonth;
+                    this.startDay = startDay;
+                    this.startHour = startHour;
+                    this.startMinute = startMinute;
+                    this.field = field;
+                    this.amount = amount;
+                    this.expMonth = expMonth;
+                    this.expDay = expDay;
+                    this.expHour = expHour;
+                    this.expMinute = expMinute;
+                }
+            }
+
+            // DST begins 2000-04-02 02:00 local (spring forward).
+            Check[] checks = {
+                new Check(Calendar.MARCH, 25, 0, 30, Calendar.DATE, -24, Calendar.MARCH, 1, 0, 30),
+                new Check(Calendar.MARCH, 1, 23, 30, Calendar.DATE, 25, Calendar.MARCH, 26, 23, 30),
+                new Check(
+                        Calendar.MARCH,
+                        4,
+                        0,
+                        30,
+                        Calendar.WEEK_OF_MONTH,
+                        3,
+                        Calendar.MARCH,
+                        25,
+                        0,
+                        30),
+            };
+            for (Check c : checks) {
+                cal.clear();
+                cal.set(2000, c.startMonth, c.startDay, c.startHour, c.startMinute);
+                cal.roll(c.field, c.amount);
+                String label =
+                        "America/New_York, 2000-"
+                                + (c.startMonth + 1)
+                                + "-"
+                                + c.startDay
+                                + " "
+                                + c.startHour
+                                + ":"
+                                + c.startMinute
+                                + ", roll("
+                                + c.field
+                                + ","
+                                + c.amount
+                                + ")";
+                assertEquals(label + ": month", c.expMonth, cal.get(Calendar.MONTH));
+                assertEquals(label + ": day", c.expDay, cal.get(Calendar.DATE));
+                assertEquals(label + ": hour", c.expHour, cal.get(Calendar.HOUR_OF_DAY));
+                assertEquals(label + ": minute", c.expMinute, cal.get(Calendar.MINUTE));
+            }
+        }
+
+        // Default 1582-10-15 cutover, with a zone whose DST starts the 2nd
+        // Sunday of March: March 1582 is not affected by the cutover (far from
+        // it), so this is again a plain Calendar.roll() control, with a zone
+        // whose DST rules apply even to a date this old.
+        {
+            int oneHourMs = 60 * 60 * 1000;
+            SimpleTimeZone stz =
+                    new SimpleTimeZone(
+                            -5 * oneHourMs,
+                            "StaticDstTest",
+                            Calendar.MARCH,
+                            8,
+                            -Calendar.SUNDAY,
+                            2 * oneHourMs,
+                            Calendar.NOVEMBER,
+                            1,
+                            -Calendar.SUNDAY,
+                            2 * oneHourMs);
+            GregorianCalendar cal = new GregorianCalendar(stz); // default 1582-10-15 cutover
+            cal.clear();
+            cal.set(1582, Calendar.MARCH, 25, 0, 30);
+            cal.roll(Calendar.DATE, -24);
+
+            String label = "default cutover, 1582-03-25 00:30, roll(DATE,-24)";
+            assertEquals(label + ": year", 1582, cal.get(Calendar.YEAR));
+            assertEquals(label + ": month", Calendar.MARCH, cal.get(Calendar.MONTH));
+            assertEquals(label + ": day", 1, cal.get(Calendar.DATE));
+            assertEquals(label + ": hour", 0, cal.get(Calendar.HOUR_OF_DAY));
+            assertEquals(label + ": minute", 30, cal.get(Calendar.MINUTE));
+        }
+
+        // Default 1582-10-15 cutover, with a zone whose DST transition falls
+        // inside October 1582 itself (the split cutover month, Oct 1..4 and
+        // Oct 15..31): rolling across the transition must still preserve local
+        // wall time and land on the correct day of the (21-day) hybrid month.
+        {
+            int oneHourMs = 60 * 60 * 1000;
+            SimpleTimeZone stz =
+                    new SimpleTimeZone(
+                            -5 * oneHourMs,
+                            "SplitMonthDstTest",
+                            Calendar.OCTOBER,
+                            3,
+                            Calendar.THURSDAY,
+                            2 * oneHourMs,
+                            Calendar.DECEMBER,
+                            1,
+                            Calendar.THURSDAY,
+                            2 * oneHourMs);
+            GregorianCalendar cal = new GregorianCalendar(stz); // default 1582-10-15 cutover
+            cal.clear();
+            cal.set(1582, Calendar.OCTOBER, 31, 0, 30);
+            cal.roll(Calendar.DATE, -20); // day 21 of 21 -> day 1
+
+            String label = "default cutover, 1582-10-31 00:30, roll(DATE,-20)";
+            assertEquals(label + ": year", 1582, cal.get(Calendar.YEAR));
+            assertEquals(label + ": month", Calendar.OCTOBER, cal.get(Calendar.MONTH));
+            assertEquals(label + ": day", 1, cal.get(Calendar.DATE));
+            assertEquals(label + ": hour", 0, cal.get(Calendar.HOUR_OF_DAY));
+            assertEquals(label + ": minute", 30, cal.get(Calendar.MINUTE));
+        }
+
+        // Default 1582-10-15 cutover, rolling across a REPEATED wall time
+        // (fall-back) within the split October 1582 month: DOM and WOM, under
+        // both WALLTIME_LAST and WALLTIME_FIRST, compared against the
+        // identical roll on an ordinary month (1600) in the same zone.
+        {
+            int oneHourMs = 60 * 60 * 1000;
+            for (int rep : new int[] {Calendar.WALLTIME_LAST, Calendar.WALLTIME_FIRST}) {
+                SimpleTimeZone stzHybrid =
+                        new SimpleTimeZone(
+                                -5 * oneHourMs,
+                                "RepeatedWallTimeTest",
+                                Calendar.MARCH,
+                                8,
+                                -Calendar.SUNDAY,
+                                2 * oneHourMs,
+                                Calendar.OCTOBER,
+                                15,
+                                -Calendar.THURSDAY,
+                                2 * oneHourMs);
+                GregorianCalendar hybrid =
+                        new GregorianCalendar(stzHybrid); // default 1582-10-15 cutover
+                hybrid.setRepeatedWallTimeOption(rep);
+                hybrid.setFirstDayOfWeek(Calendar.SUNDAY);
+                hybrid.setMinimalDaysInFirstWeek(1);
+
+                SimpleTimeZone stzOrdinary =
+                        new SimpleTimeZone(
+                                -5 * oneHourMs,
+                                "RepeatedWallTimeTest",
+                                Calendar.MARCH,
+                                8,
+                                -Calendar.SUNDAY,
+                                2 * oneHourMs,
+                                Calendar.OCTOBER,
+                                15,
+                                -Calendar.THURSDAY,
+                                2 * oneHourMs);
+                GregorianCalendar ordinary = new GregorianCalendar(stzOrdinary);
+                ordinary.setRepeatedWallTimeOption(rep);
+                ordinary.setFirstDayOfWeek(Calendar.SUNDAY);
+                ordinary.setMinimalDaysInFirstWeek(1);
+
+                class Check {
+                    final String name;
+                    final int startDay;
+                    final int field;
+                    final int amount;
+                    final int expDay;
+                    final int expOffsetHours; // combined zone+DST offset, in hours
+
+                    Check(
+                            String name,
+                            int startDay,
+                            int field,
+                            int amount,
+                            int expDay,
+                            int expOffsetHours) {
+                        this.name = name;
+                        this.startDay = startDay;
+                        this.field = field;
+                        this.amount = amount;
+                        this.expDay = expDay;
+                        this.expOffsetHours = expOffsetHours;
+                    }
+                }
+
+                // 1582-10-17 (unambiguous) -> roll to 1582-10-21, which falls
+                // in the repeated hour (DST ends "the Thursday on or before
+                // Oct 15", computed per-year, landing on Oct 21 for 1582 and
+                // Oct 19 for the ordinary month's year 1600).
+                int expOffset = rep == Calendar.WALLTIME_LAST ? -5 : -4;
+                Check[] checks = {
+                    new Check("DOM", 17, Calendar.DATE, 4, 21, expOffset),
+                    new Check("WOM", 28, Calendar.WEEK_OF_MONTH, -1, 21, expOffset),
+                };
+                for (Check c : checks) {
+                    hybrid.clear();
+                    hybrid.set(1582, Calendar.OCTOBER, c.startDay, 1, 30);
+                    hybrid.roll(c.field, c.amount);
+                    int hDay = hybrid.get(Calendar.DATE);
+                    int hHour = hybrid.get(Calendar.HOUR_OF_DAY);
+                    int hMinute = hybrid.get(Calendar.MINUTE);
+                    int hOffset =
+                            (hybrid.get(Calendar.ZONE_OFFSET) + hybrid.get(Calendar.DST_OFFSET))
+                                    / oneHourMs;
+
+                    int ordStartDay = c.startDay - 2; // 1600's transition falls 2 days earlier
+                    ordinary.clear();
+                    ordinary.set(1600, Calendar.OCTOBER, ordStartDay, 1, 30);
+                    ordinary.roll(c.field, c.amount);
+                    int oHour = ordinary.get(Calendar.HOUR_OF_DAY);
+                    int oMinute = ordinary.get(Calendar.MINUTE);
+                    int oOffset =
+                            (ordinary.get(Calendar.ZONE_OFFSET) + ordinary.get(Calendar.DST_OFFSET))
+                                    / oneHourMs;
+
+                    String repName = rep == Calendar.WALLTIME_LAST ? "LAST" : "FIRST";
+                    String label = "repeated wall time, rep=" + repName + ", " + c.name;
+                    assertEquals(label + ": day", c.expDay, hDay);
+                    assertEquals(label + ": hour", 1, hHour);
+                    assertEquals(label + ": minute", 30, hMinute);
+                    assertEquals(label + ": offset", c.expOffsetHours, hOffset);
+                    // The 1582 and 1600 transitions fall on different absolute
+                    // days (offset by 2, since the rule is computed per year),
+                    // so only wall-clock time and offset -- not the day number
+                    // -- must match between the hybrid and ordinary months.
+                    assertEquals(label + ": hybrid vs ordinary hour", oHour, hHour);
+                    assertEquals(label + ": hybrid vs ordinary minute", oMinute, hMinute);
+                    assertEquals(label + ": hybrid vs ordinary offset", oOffset, hOffset);
+                }
+            }
+        }
+
+        // Default 1582-10-15 cutover, rolling across a SKIPPED wall time
+        // (spring-forward) within the split October 1582 month: DOM and WOM,
+        // under all three skipped-wall-time options, compared against the
+        // identical roll on an ordinary month (1600) in the same zone.
+        {
+            int oneHourMs = 60 * 60 * 1000;
+            for (int sk :
+                    new int[] {
+                        Calendar.WALLTIME_LAST,
+                        Calendar.WALLTIME_FIRST,
+                        Calendar.WALLTIME_NEXT_VALID
+                    }) {
+                SimpleTimeZone stzHybrid =
+                        new SimpleTimeZone(
+                                -5 * oneHourMs,
+                                "SkippedWallTimeTest",
+                                Calendar.OCTOBER,
+                                15,
+                                -Calendar.THURSDAY,
+                                2 * oneHourMs,
+                                Calendar.DECEMBER,
+                                1,
+                                -Calendar.SUNDAY,
+                                2 * oneHourMs);
+                GregorianCalendar hybrid =
+                        new GregorianCalendar(stzHybrid); // default 1582-10-15 cutover
+                hybrid.setSkippedWallTimeOption(sk);
+                hybrid.setFirstDayOfWeek(Calendar.SUNDAY);
+                hybrid.setMinimalDaysInFirstWeek(1);
+
+                SimpleTimeZone stzOrdinary =
+                        new SimpleTimeZone(
+                                -5 * oneHourMs,
+                                "SkippedWallTimeTest",
+                                Calendar.OCTOBER,
+                                15,
+                                -Calendar.THURSDAY,
+                                2 * oneHourMs,
+                                Calendar.DECEMBER,
+                                1,
+                                -Calendar.SUNDAY,
+                                2 * oneHourMs);
+                GregorianCalendar ordinary = new GregorianCalendar(stzOrdinary);
+                ordinary.setSkippedWallTimeOption(sk);
+                ordinary.setFirstDayOfWeek(Calendar.SUNDAY);
+                ordinary.setMinimalDaysInFirstWeek(1);
+
+                int expHour, expMinute, expOffsetHours;
+                switch (sk) {
+                    case Calendar.WALLTIME_LAST:
+                        expHour = 3;
+                        expMinute = 30;
+                        expOffsetHours = -4;
+                        break;
+                    case Calendar.WALLTIME_FIRST:
+                        expHour = 1;
+                        expMinute = 30;
+                        expOffsetHours = -5;
+                        break;
+                    default: // NEXT_VALID
+                        expHour = 3;
+                        expMinute = 0;
+                        expOffsetHours = -4;
+                        break;
+                }
+
+                class Check {
+                    final String name;
+                    final int startDay;
+                    final int field;
+                    final int amount;
+
+                    Check(String name, int startDay, int field, int amount) {
+                        this.name = name;
+                        this.startDay = startDay;
+                        this.field = field;
+                        this.amount = amount;
+                    }
+                }
+
+                // The 2:00-3:00 wall-clock hour on 1582-10-21 (1600-10-19 for
+                // the ordinary month) does not exist.
+                Check[] checks = {
+                    new Check("DOM", 25, Calendar.DATE, -4),
+                    new Check("WOM", 28, Calendar.WEEK_OF_MONTH, -1),
+                };
+                for (Check c : checks) {
+                    hybrid.clear();
+                    hybrid.set(1582, Calendar.OCTOBER, c.startDay, 2, 30);
+                    hybrid.roll(c.field, c.amount);
+                    int hDay = hybrid.get(Calendar.DATE);
+                    int hHour = hybrid.get(Calendar.HOUR_OF_DAY);
+                    int hMinute = hybrid.get(Calendar.MINUTE);
+                    int hOffset =
+                            (hybrid.get(Calendar.ZONE_OFFSET) + hybrid.get(Calendar.DST_OFFSET))
+                                    / oneHourMs;
+
+                    ordinary.clear();
+                    ordinary.set(1600, Calendar.OCTOBER, c.startDay - 2, 2, 30);
+                    ordinary.roll(c.field, c.amount);
+                    int oHour = ordinary.get(Calendar.HOUR_OF_DAY);
+                    int oMinute = ordinary.get(Calendar.MINUTE);
+                    int oOffset =
+                            (ordinary.get(Calendar.ZONE_OFFSET) + ordinary.get(Calendar.DST_OFFSET))
+                                    / oneHourMs;
+
+                    String skName =
+                            sk == Calendar.WALLTIME_LAST
+                                    ? "LAST"
+                                    : (sk == Calendar.WALLTIME_FIRST ? "FIRST" : "NEXT_VALID");
+                    String label = "skipped wall time, sk=" + skName + ", " + c.name;
+                    assertEquals(label + ": day", 21, hDay);
+                    assertEquals(label + ": hour", expHour, hHour);
+                    assertEquals(label + ": minute", expMinute, hMinute);
+                    assertEquals(label + ": offset", expOffsetHours, hOffset);
+                    // (See the repeated-wall-time block above: only wall-clock
+                    // time and offset need to match, not the day number.)
+                    assertEquals(label + ": hybrid vs ordinary hour", oHour, hHour);
+                    assertEquals(label + ": hybrid vs ordinary minute", oMinute, hMinute);
+                    assertEquals(label + ": hybrid vs ordinary offset", oOffset, hOffset);
+                }
+            }
+        }
+    }
+
+    // Two eras where a cutover does not remove days: a cutover year where the
+    // Julian and Gregorian calendars agree on the day count but disagree on
+    // leap status (a non-400 century year is a Julian leap year but not a
+    // Gregorian one, so an intact Julian February must still roll correctly
+    // rather than fall back to Calendar.roll(), which would use the wrong,
+    // Gregorian-reported length); and an era where the cutover repeats day
+    // labels instead of removing them, giving a month whose hybrid range spans
+    // more days than either calendar's own version of that month (year 50's
+    // hybrid March is 33 consecutive Julian Days, with some Julian and
+    // Gregorian labels repeating). A third case below shows that this label
+    // repeat can straddle a month boundary: roll() then moves the MONTH field
+    // even though it stays within the hybrid month's own Julian Day range.
+    @Test
+    public void TestRollEarlyEraCutover3350() {
+        class Scenario {
+            final String name;
+            final int cutY, cutM, cutD; // Gregorian date of the first Gregorian day
+            final int firstJD; // Julian Day of the hybrid month's first day
+            final int length; // length, in days, of the hybrid month
+
+            Scenario(String name, int cutY, int cutM, int cutD, int firstJD, int length) {
+                this.name = name;
+                this.cutY = cutY;
+                this.cutM = cutM;
+                this.cutD = cutD;
+                this.firstJD = firstJD;
+                this.length = length;
+            }
+        }
+
+        Scenario[] scenarios = {
+            // Hybrid March 50 = Julian Mar 1, Mar 2, Gregorian Mar 1..31: 33
+            // consecutive (but label-repeating) Julian Days.
+            new Scenario(
+                    "year 50 cutover (Gregorian 0050-03-01)", 50, Calendar.MARCH, 1, 1739380, 33),
+            // Hybrid February -100 is an intact, pure Julian February (the
+            // cutover is in June): 29 days, since -100 is a Julian leap year.
+            new Scenario(
+                    "year -100 cutover (Gregorian -100-06-01)",
+                    -100,
+                    Calendar.JUNE,
+                    1,
+                    1684564,
+                    29),
+        };
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        sdf.setTimeZone(TimeZone.GMT_ZONE);
+
+        for (Scenario sc : scenarios) {
+            // A *default*-cutover calendar would misinterpret set(cutY, cutM,
+            // cutD) as Julian for these (pre-1582) years, giving the wrong
+            // instant; force pure-Gregorian interpretation instead with an
+            // extreme (very early) cutover of its own.
+            GregorianCalendar cutoverCal = new GregorianCalendar(TimeZone.GMT_ZONE);
+            cutoverCal.setGregorianChange(new Date(Long.MIN_VALUE));
+            cutoverCal.clear();
+            cutoverCal.set(sc.cutY, sc.cutM, sc.cutD);
+            Date cutoverMillis = cutoverCal.getTime();
+
+            GregorianCalendar cal = new GregorianCalendar(TimeZone.GMT_ZONE);
+            cal.setGregorianChange(cutoverMillis);
+
+            cal.clear();
+            cal.set(Calendar.JULIAN_DAY, sc.firstJD);
+            long first = cal.getTimeInMillis();
+
+            // roll(DAY_OF_MONTH, +1) from every existing day visits exactly
+            // length(m) distinct, consecutive Julian Days and returns to the
+            // start.
+            for (int i = 0; i < sc.length; i++) {
+                cal.setTimeInMillis(first + i * ONE_DAY_MILLIS);
+                cal.roll(Calendar.DAY_OF_MONTH, 1);
+                long actual = cal.getTimeInMillis();
+                long expected = first + ((i + 1) % sc.length) * ONE_DAY_MILLIS;
+                assertEquals(
+                        "["
+                                + sc.name
+                                + "]: roll(DAY_OF_MONTH,+1) from JD "
+                                + (sc.firstJD + i)
+                                + ": got "
+                                + sdf.format(new Date(actual))
+                                + ", expected "
+                                + sdf.format(new Date(expected)),
+                        expected,
+                        actual);
+            }
+        }
+
+        // Specific check for year 50: rolling +1 day from the instant labelled
+        // Gregorian March 9 (JD 1739390, offset 10 into the 33-day hybrid
+        // month) lands on the instant labelled Gregorian March 10 (JD 1739391).
+        {
+            GregorianCalendar cutoverCal = new GregorianCalendar(TimeZone.GMT_ZONE);
+            cutoverCal.setGregorianChange(new Date(Long.MIN_VALUE));
+            cutoverCal.clear();
+            cutoverCal.set(50, Calendar.MARCH, 1);
+            Date cutoverMillis = cutoverCal.getTime();
+
+            GregorianCalendar cal = new GregorianCalendar(TimeZone.GMT_ZONE);
+            cal.setGregorianChange(cutoverMillis);
+            cal.clear();
+            cal.set(Calendar.JULIAN_DAY, 1739390); // Gregorian March 9, 50
+            long before = cal.getTimeInMillis();
+
+            cal.roll(Calendar.DAY_OF_MONTH, 1);
+            long after = cal.getTimeInMillis();
+
+            long expected = before + ONE_DAY_MILLIS;
+            assertEquals(
+                    "year 50 cutover, G Mar 9: roll(DAY_OF_MONTH,+1) from "
+                            + sdf.format(new Date(before))
+                            + " got "
+                            + sdf.format(new Date(after))
+                            + ", expected "
+                            + sdf.format(new Date(expected)),
+                    expected,
+                    after);
+        }
+
+        // The cutover need not fall exactly on a month boundary: with the
+        // cutover one day earlier (Gregorian 0050-02-28), the instant
+        // labelled 0050-03-01 in the hybrid calendar is the LAST JULIAN day
+        // (the repeated Gregorian instant, two days later, is also labelled
+        // 0050-03-01). Rolling DAY_OF_MONTH by +1 from there stays within
+        // hybrid March's own Julian Day range (see computeHybridMonth() in
+        // GregorianCalendar), but that range extends one Julian Day into
+        // what is labelled February, so the result is 0050-02-28: an
+        // early-era repeat that crosses a month boundary. This is
+        // documented, expected behaviour: for a cutover early enough that
+        // the switch repeats day labels (roughly before 200 AD),
+        // roll(DAY_OF_MONTH)/roll(WEEK_OF_MONTH) around the cutover may
+        // land on a day labelled with an adjacent month or year, or skip
+        // days; this test pins this specific case as current behavior, not
+        // a general guarantee that roll() stays within the hybrid month's
+        // own JD range.
+        {
+            GregorianCalendar cutoverCal = new GregorianCalendar(TimeZone.GMT_ZONE);
+            cutoverCal.setGregorianChange(new Date(Long.MIN_VALUE));
+            cutoverCal.clear();
+            cutoverCal.set(50, Calendar.FEBRUARY, 28);
+            Date cutoverMillis = cutoverCal.getTime();
+
+            GregorianCalendar cal = new GregorianCalendar(TimeZone.GMT_ZONE);
+            cal.setGregorianChange(cutoverMillis);
+            cal.clear();
+            cal.set(Calendar.JULIAN_DAY, 1739380); // hybrid-labelled 0050-03-01 (last Julian day)
+
+            cal.roll(Calendar.DATE, 1);
+
+            int year = cal.get(Calendar.EXTENDED_YEAR);
+            int month = cal.get(Calendar.MONTH);
+            int day = cal.get(Calendar.DATE);
+            int jd = cal.get(Calendar.JULIAN_DAY);
+            String label =
+                    "year 50 cutover Gregorian 0050-02-28, roll(DATE,+1) from the instant labelled"
+                            + " 0050-03-01 (JD 1739380)";
+            assertEquals(label + ": year", 50, year);
+            assertEquals(label + ": month", Calendar.FEBRUARY, month);
+            assertEquals(label + ": day", 28, day);
+            assertEquals(label + ": JD", 1739381, jd);
+        }
+    }
 }
 // eof
