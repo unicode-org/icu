@@ -766,6 +766,20 @@ public class GregorianCalendar extends Calendar implements Cloneable {
      */
     @Override
     protected int handleGetYearLength(int eyear) {
+        // The cutover year, and its immediate neighbors, can be shorter or
+        // longer than a normal Julian/Gregorian year: days are skipped at the
+        // cutover (or, for a cutover early enough in the era that the
+        // proleptic Gregorian calendar trails the Julian one, repeated), and
+        // for a cutover on other than January 1 the two neighboring years
+        // are truncated on one side (e.g. with a 1600-01-01 cutover, 1599
+        // has only 355 days). Compute the true length from the hybrid year
+        // boundaries instead of the fixed 365/366 rule.
+        if (cutoverJulianDay != Integer.MIN_VALUE
+                && cutoverJulianDay != Integer.MAX_VALUE
+                && Math.abs((long) eyear - gregorianCutoverYear) <= 1) {
+            return cutoverMonthStart(cutoverJulianDay, eyear + 1, 0)
+                    - cutoverMonthStart(cutoverJulianDay, eyear, 0);
+        }
         return isLeapYear(eyear) ? 366 : 365;
     }
 
@@ -826,11 +840,19 @@ public class GregorianCalendar extends Calendar implements Cloneable {
             ++dayOfYear;
         }
 
-        // [j81] if we are after the cutover in its year, shift the day of the year
-        if ((eyear == gregorianCutoverYear) && (julianDay >= cutoverJulianDay)) {
-            // from handleComputeMonthStart
-            int gregShift = Grego.gregorianShift(eyear);
-            dayOfYear += gregShift;
+        // DAY_OF_YEAR counts from the hybrid year's own start, which can
+        // differ from the January 1 used above (of whichever calendar the
+        // julianDay >= cutoverJulianDay branch picked) when the cutover year
+        // itself starts on the other calendar. Recompute it directly from
+        // the hybrid year start rather than shifting, mirroring
+        // handleComputeJulianDay's DAY_OF_YEAR handling. (The one-year
+        // window assumes the Julian/Gregorian difference stays well under a
+        // year; the year numbering is consistent for cutovers after roughly
+        // year -44000.)
+        if (cutoverJulianDay != Integer.MIN_VALUE
+                && cutoverJulianDay != Integer.MAX_VALUE
+                && Math.abs((long) eyear - gregorianCutoverYear) <= 1) {
+            dayOfYear = julianDay - cutoverMonthStart(cutoverJulianDay, eyear, 0) + 1;
         }
 
         internalSet(MONTH, month);
@@ -909,13 +931,41 @@ public class GregorianCalendar extends Calendar implements Cloneable {
             return jd;
         }
 
-        if ((bestField == WEEK_OF_YEAR)
-                && // if we are doing WOY calculations, we are counting relative to Jan 1 *julian*
-                (internalGet(EXTENDED_YEAR) == gregorianCutoverYear)
-                && jd >= cutoverJulianDay) {
-            invertGregorian =
-                    true; // So that the Julian Jan 1 will be used in handleComputeMonthStart
-            return super.handleComputeJulianDay(bestField);
+        if (bestField == DAY_OF_YEAR) {
+            // DAY_OF_YEAR counts from the hybrid year's own first day. The
+            // isGregorian/invertGregorian inversion below picks one calendar
+            // for the whole year from a single day, which goes wrong when
+            // the cutover falls after January 1 (leaving days before it on
+            // the Julian side) or the year itself starts on the Gregorian
+            // side, so it is bypassed here: shift jd (already computed with
+            // isGregorian's calendar for y) to the hybrid year start; zero
+            // unless y is within a year of gregorianCutoverYear.
+            int y = internalGet(EXTENDED_YEAR);
+            if (cutoverJulianDay != Integer.MIN_VALUE
+                    && cutoverJulianDay != Integer.MAX_VALUE
+                    && Math.abs((long) y - gregorianCutoverYear) <= 1) {
+                int baseStart = isGregorian ? gregorianMonthStart(y, 0) : julianMonthStart(y, 0);
+                int hybridStart = cutoverMonthStart(cutoverJulianDay, y, 0);
+                return jd + hybridStart - baseStart;
+            }
+            return jd;
+        }
+
+        if (bestField == WEEK_OF_YEAR) {
+            // WEEK_OF_YEAR counts from the first week of the hybrid year, for
+            // the same reason DAY_OF_YEAR does above, so the inversion is
+            // bypassed here too: shift jd to the first week of the hybrid
+            // year's start instead of the first week of isGregorian's year;
+            // zero unless y is within a year of gregorianCutoverYear.
+            int y = internalGet(EXTENDED_YEAR);
+            if (cutoverJulianDay != Integer.MIN_VALUE
+                    && cutoverJulianDay != Integer.MAX_VALUE
+                    && Math.abs((long) y - gregorianCutoverYear) <= 1) {
+                int baseStart = isGregorian ? gregorianMonthStart(y, 0) : julianMonthStart(y, 0);
+                int hybridStart = cutoverMonthStart(cutoverJulianDay, y, 0);
+                return jd + firstWeekStart(hybridStart) - firstWeekStart(baseStart);
+            }
+            return jd;
         }
 
         // The following check handles portions of the cutover year BEFORE the
@@ -925,12 +975,6 @@ public class GregorianCalendar extends Calendar implements Cloneable {
             jd = super.handleComputeJulianDay(bestField);
         }
 
-        if (isGregorian && (internalGet(EXTENDED_YEAR) == gregorianCutoverYear)) {
-            int gregShift = Grego.gregorianShift(internalGet(EXTENDED_YEAR));
-            if (bestField == DAY_OF_YEAR) {
-                jd -= gregShift;
-            }
-        }
         return jd;
     }
 
@@ -938,8 +982,9 @@ public class GregorianCalendar extends Calendar implements Cloneable {
      * Julian day of the first day of the hybrid month (year, month): J1(year, month) if that Julian
      * first day precedes the cutover, else the later of G1(year, month) and the cutover itself.
      * Computed directly, independent of the hybrid calendar's own month lengths. Requires 0 <=
-     * month <= 11. The sentinel branches below are defensive: the only caller,
-     * handleComputeJulianDay(), already excludes them, so they are unreachable today.
+     * month <= 11. The sentinel branches below are defensive: callers (handleGetYearLength(),
+     * handleComputeFields(), and handleComputeJulianDay()) already exclude a pure-Julian or
+     * pure-Gregorian cutoverJulianDay, so they are unreachable today.
      */
     private static int cutoverMonthStart(int cutoverJulianDay, int year, int month) {
         if (cutoverJulianDay == Integer.MAX_VALUE) {
@@ -978,9 +1023,9 @@ public class GregorianCalendar extends Calendar implements Cloneable {
     }
 
     /**
-     * Julian day of the first day of week 1 of a month that starts on Julian day {@code
+     * Julian day of the first day of week 1 of a month or year that starts on Julian day {@code
      * monthStart}, using {@link #getFirstDayOfWeek()} and {@link #getMinimalDaysInFirstWeek()}
-     * exactly as Calendar does for an ordinary month.
+     * exactly as Calendar does for an ordinary month or year.
      */
     private int firstWeekStart(int monthStart) {
         int firstDOW = getFirstDayOfWeek();
