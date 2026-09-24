@@ -181,10 +181,14 @@ U_NAMESPACE_BEGIN
 
 /**
  * "Smart pointer" class, deletes memory via uprv_free().
+ * ICU 79+: Use prv::make_unique & prv::make_unique_for_overwrite instead.
+ *
  * For most methods see the LocalPointerBase base class.
  * Adds operator[] for array item access.
  *
  * @see LocalPointerBase
+ * @see prv::make_unique
+ * @deprecated use prv::make_unique & prv::make_unique_for_overwrite
  */
 template<typename T>
 class LocalMemory : public LocalPointerBase<T> {
@@ -959,6 +963,9 @@ using std::unique_ptr;
 /**
  * Helper for make_unique<T, Args...>; forwards all but the last of args to the constructor of
  * T, uses the last of args as the error code for allocation errors.
+ *
+ * As usual, does nothing if the incoming UErrorCode already is U_FAILURE.
+ *
  * @internal
  */
 template <typename T, typename... Args, std::size_t... i>
@@ -966,9 +973,12 @@ unique_ptr<T> make_unique_impl(std::tuple<Args...> args,
                                std::index_sequence<i...> constructor_arg_indices) {
     static_assert(std::is_same_v<decltype(constructor_arg_indices),
                                  std::make_index_sequence<sizeof...(Args) - 1>>);
-#if U_OVERRIDE_CXX_ALLOCATION
     auto &&error = std::get<sizeof...(Args) - 1>(args);
     static_assert(std::is_same_v<decltype(error), UErrorCode &>);
+    if (U_FAILURE(error)) {
+        return nullptr;
+    }
+#if U_OVERRIDE_CXX_ALLOCATION
     void *const buffer = uprv_malloc(sizeof(T));
     if (buffer == nullptr) {
         error = U_MEMORY_ALLOCATION_ERROR;
@@ -983,12 +993,14 @@ unique_ptr<T> make_unique_impl(std::tuple<Args...> args,
 /**
  * A version of std::make_unique<T> that is compatible with ICU allocation error handling.
  * If U_OVERRIDE_CXX_ALLOCATION, allocates using uprv_malloc, and sets a UErrorCode on failure.
- * Otherwise, equivalent to std::make_unique<T>; the trailing UErrorCode& parameter is not used.
+ * Otherwise, equivalent to std::make_unique<T>.
  *   prv::make_unique<T>(Args... args, UErrorCode& status)
  * corresponds to
  *   std::make_unique<T>(Args... args)
  * and
  *   new T(Args... args).
+ *
+ * As usual, does nothing if the incoming UErrorCode already is U_FAILURE.
  *
  * With empty args, this corresponds to new T(), and the allocated object is value-initialized; in
  * particular, scalar types are zero-initialized; cf. make_unique_for_overwrite which
@@ -1005,12 +1017,14 @@ unique_ptr<T> make_unique(Args &&...args) {
 /**
  * A version of std::make_unique<T[]> that is compatible with ICU allocation error handling.
  * If U_OVERRIDE_CXX_ALLOCATION, allocates using uprv_malloc, and sets a UErrorCode on failure.
- * Otherwise, equivalent to std::make_unique<T[]>; the trailing UErrorCode& parameter is not used.
+ * Otherwise, equivalent to std::make_unique<T[]>.
  *   prv::make_unique<T[]>(std::size_t n, UErrorCode& status)
  * corresponds to
  *   std::make_unique<T[]>(std::size_t n)
  * and
  *   new T[std::size_t n]().
+ *
+ * As usual, does nothing if the incoming UErrorCode already is U_FAILURE.
  *
  * The allocated objects are value-initialized; in particular, scalar types are zero-initialized;
  * cf. make_unique_for_overwrite which corresponds to new T[n].
@@ -1020,14 +1034,17 @@ unique_ptr<T> make_unique(Args &&...args) {
 template <typename T,
           // In C++20, this could require is_unbounded_array_v<T>.
           typename = std::enable_if_t<std::is_same_v<std::remove_extent_t<T>[], T>>>
-unique_ptr<T> make_unique(const std::size_t n, [[maybe_unused]] UErrorCode &error) {
-#if U_OVERRIDE_CXX_ALLOCATION
+unique_ptr<T> make_unique(const std::size_t n, UErrorCode &error) {
+    if (U_FAILURE(error)) {
+        return nullptr;
+    }
     // In C23/C++26, we could use ckd_mul.
     constexpr std::size_t maxSize = SIZE_MAX / sizeof(std::remove_extent_t<T>);
     if (n > maxSize) {
         error = U_ILLEGAL_ARGUMENT_ERROR;
         return nullptr;
     }
+#if U_OVERRIDE_CXX_ALLOCATION
     void *const buffer = uprv_malloc(sizeof(std::remove_extent_t<T>) * n);
     if (buffer == nullptr) {
         error = U_MEMORY_ALLOCATION_ERROR;
@@ -1051,13 +1068,14 @@ unique_ptr<T> make_unique(const std::size_t n, [[maybe_unused]] UErrorCode &erro
  * A version of std::make_unique_for_overwrite<T> that is compatible with ICU allocation error
  * handling.
  * If U_OVERRIDE_CXX_ALLOCATION, allocates using uprv_malloc, and sets a UErrorCode on failure.
- * Otherwise, equivalent to std::make_unique_for_overwrite<T>; the trailing UErrorCode& parameter is
- * not used.
+ * Otherwise, equivalent to std::make_unique_for_overwrite<T>.
  *   prv::make_unique_for_overwrite<T>(UErrorCode& status)
  * corresponds to
  *   std::make_unique_for_overwrite<T>()
  * and
  *   new T.
+ *
+ * As usual, does nothing if the incoming UErrorCode already is U_FAILURE.
  *
  * The allocated object is default-initialized.  For some types, e.g., scalar types, this means it
  * has an indeterminate value, or an erroneous value since C++26 (in plain English, the memory is
@@ -1066,7 +1084,10 @@ unique_ptr<T> make_unique(const std::size_t n, [[maybe_unused]] UErrorCode &erro
  * @internal
  */
 template <typename T, typename = std::enable_if_t<!std::is_array_v<T>>>
-unique_ptr<T> make_unique_for_overwrite([[maybe_unused]] UErrorCode &error) {
+unique_ptr<T> make_unique_for_overwrite(UErrorCode &error) {
+    if (U_FAILURE(error)) {
+        return nullptr;
+    }
 #if U_OVERRIDE_CXX_ALLOCATION
     void *const buffer = uprv_malloc(sizeof(T));
     if (buffer == nullptr) {
@@ -1085,13 +1106,14 @@ unique_ptr<T> make_unique_for_overwrite([[maybe_unused]] UErrorCode &error) {
  * A version of std::make_unique_for_overwrite<T[]> that is compatible with ICU allocation error
  * handling.
  * If U_OVERRIDE_CXX_ALLOCATION, allocates using uprv_malloc, and sets a UErrorCode on failure.
- * Otherwise, equivalent to std::make_unique_for_overwrite<T[]>; the trailing UErrorCode& parameter
- * is not used.
+ * Otherwise, equivalent to std::make_unique_for_overwrite<T[]>.
  *   prv::make_unique_for_overwrite<T[]>(std::size_t n, UErrorCode& status)
  * corresponds to
  *   std::make_unique_for_overwrite<T[]>(std::size_t n)
  * and
  *   new T[std::size_t n].
+ *
+ * As usual, does nothing if the incoming UErrorCode already is U_FAILURE.
  *
  * The allocated objects are default-initialized.  For some types, e.g., scalar types, this means
  * they have indeterminate values, or erroneous values since C++26 (in plain English, the memory is
@@ -1102,14 +1124,17 @@ unique_ptr<T> make_unique_for_overwrite([[maybe_unused]] UErrorCode &error) {
 template <typename T,
           // In C++20, this could require is_unbounded_array_v<T>.
           typename = std::enable_if_t<std::is_same_v<std::remove_extent_t<T>[], T>>>
-unique_ptr<T> make_unique_for_overwrite(const std::size_t n, [[maybe_unused]] UErrorCode &error) {
-#if U_OVERRIDE_CXX_ALLOCATION
+unique_ptr<T> make_unique_for_overwrite(const std::size_t n, UErrorCode &error) {
+    if (U_FAILURE(error)) {
+        return nullptr;
+    }
     // In C23/C++26, we could use ckd_mul.
     constexpr std::size_t maxSize = SIZE_MAX / sizeof(std::remove_extent_t<T>);
     if (n > maxSize) {
         error = U_ILLEGAL_ARGUMENT_ERROR;
         return nullptr;
     }
+#if U_OVERRIDE_CXX_ALLOCATION
     void *const buffer = uprv_malloc(sizeof(std::remove_extent_t<T>) * n);
     if (buffer == nullptr) {
         error = U_MEMORY_ALLOCATION_ERROR;
