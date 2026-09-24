@@ -5643,6 +5643,7 @@ structLocale:table(nofallback){
         dak{""}
         dar{""}
         dav{""}
+        day{""}
         de{""}
         del{""}
         den{""}
@@ -5650,6 +5651,7 @@ structLocale:table(nofallback){
         din{""}
         dje{""}
         doi{""}
+        dra{""}
         dsb{""}
         dtp{""}
         dua{""}
@@ -5683,6 +5685,7 @@ structLocale:table(nofallback){
         fi{""}
         fil{""}
         fit{""}
+        fiu{""}
         fj{""}
         fo{""}
         fon{""}
@@ -5703,6 +5706,7 @@ structLocale:table(nofallback){
         gba{""}
         gbz{""}
         gd{""}
+        gem{""}
         gez{""}
         gil{""}
         gl{""}
@@ -5731,6 +5735,7 @@ structLocale:table(nofallback){
         hi{""}
         hif{""}
         hil{""}
+        him{""}
         hit{""}
         hmn{""}
         ho{""}
@@ -5749,10 +5754,15 @@ structLocale:table(nofallback){
         ie{""}
         ig{""}
         ii{""}
+        ijo{""}
         ik{""}
         ilo{""}
+        inc{""}
+        ine{""}
         inh{""}
         io{""}
+        ira{""}
+        iro{""}
         is{""}
         it{""}
         iu{""}
@@ -5772,6 +5782,7 @@ structLocale:table(nofallback){
         kac{""}
         kaj{""}
         kam{""}
+        kar{""}
         kaw{""}
         kbd{""}
         kbl{""}
@@ -5783,6 +5794,7 @@ structLocale:table(nofallback){
         kg{""}
         kgp{""}
         kha{""}
+        khi{""}
         kho{""}
         khq{""}
         khw{""}
@@ -5806,6 +5818,7 @@ structLocale:table(nofallback){
         kri{""}
         krj{""}
         krl{""}
+        kro{""}
         kru{""}
         ks{""}
         ksb{""}
@@ -5855,6 +5868,7 @@ structLocale:table(nofallback){
         mai{""}
         mak{""}
         man{""}
+        map{""}
         mas{""}
         mde{""}
         mdf{""}
@@ -5873,10 +5887,12 @@ structLocale:table(nofallback){
         min{""}
         mis{""}
         mk{""}
+        mkh{""}
         ml{""}
         mn{""}
         mnc{""}
         mni{""}
+        mno{""}
         moh{""}
         mos{""}
         mr{""}
@@ -5885,15 +5901,19 @@ structLocale:table(nofallback){
         mt{""}
         mua{""}
         mul{""}
+        mun{""}
         mus{""}
         mwl{""}
         mwr{""}
         mwv{""}
         my{""}
         mye{""}
+        myn{""}
         myv{""}
         mzn{""}
         na{""}
+        nah{""}
+        nai{""}
         nan{""}
         nap{""}
         naq{""}
@@ -5904,6 +5924,7 @@ structLocale:table(nofallback){
         new{""}
         ng{""}
         nia{""}
+        nic{""}
         niu{""}
         njo{""}
         nl{""}
@@ -5917,6 +5938,7 @@ structLocale:table(nofallback){
         nqo{""}
         nr{""}
         nso{""}
+        nub{""}
         nus{""}
         nv{""}
         nwc{""}
@@ -5932,7 +5954,9 @@ structLocale:table(nofallback){
         os{""}
         osa{""}
         ota{""}
+        oto{""}
         pa{""}
+        paa{""}
         pag{""}
         pal{""}
         pam{""}
@@ -5944,12 +5968,14 @@ structLocale:table(nofallback){
         pdt{""}
         peo{""}
         pfl{""}
+        phi{""}
         phn{""}
         pi{""}
         pl{""}
         pms{""}
         pnt{""}
         pon{""}
+        pra{""}
         prg{""}
         pro{""}
         ps{""}
@@ -5965,9 +5991,9 @@ structLocale:table(nofallback){
         rm{""}
         rn{""}
         ro{""}
+        roa{""}
         rof{""}
         rom{""}
-        root{""}
         rtm{""}
         ru{""}
         rue{""}
@@ -5978,6 +6004,8 @@ structLocale:table(nofallback){
         sa{""}
         sad{""}
         sah{""}
+        sai{""}
+        sal{""}
         sam{""}
         saq{""}
         sas{""}
@@ -5996,22 +6024,27 @@ structLocale:table(nofallback){
         seh{""}
         sei{""}
         sel{""}
+        sem{""}
         ses{""}
         sg{""}
         sga{""}
+        sgn{""}
         sgs{""}
-        sh{""}
         shi{""}
         shn{""}
         shu{""}
         si{""}
         sid{""}
+        sio{""}
+        sit{""}
         sk{""}
         sl{""}
+        sla{""}
         sli{""}
         sly{""}
         sm{""}
         sma{""}
+        smi{""}
         smj{""}
         smn{""}
         sms{""}
@@ -6019,11 +6052,13 @@ structLocale:table(nofallback){
         snk{""}
         so{""}
         sog{""}
+        son{""}
         sq{""}
         sr{""}
         srn{""}
         srr{""}
         ss{""}
+        ssa{""}
         ssy{""}
         st{""}
         stq{""}
@@ -6038,6 +6073,7 @@ structLocale:table(nofallback){
         syr{""}
         szl{""}
         ta{""}
+        tai{""}
         tcy{""}
         te{""}
         tem{""}
@@ -6070,6 +6106,8 @@ structLocale:table(nofallback){
         tt{""}
         ttt{""}
         tum{""}
+        tup{""}
+        tut{""}
         tvl{""}
         tw{""}
         twq{""}
@@ -6098,10 +6136,12 @@ structLocale:table(nofallback){
         vun{""}
         wa{""}
         wae{""}
+        wak{""}
         wal{""}
         war{""}
         was{""}
         wbp{""}
+        wen{""}
         wo{""}
         wuu{""}
         xal{""}
@@ -6115,6 +6155,7 @@ structLocale:table(nofallback){
         ybb{""}
         yi{""}
         yo{""}
+        ypk{""}
         yrl{""}
         yue{""}
         za{""}
@@ -6124,6 +6165,7 @@ structLocale:table(nofallback){
         zen{""}
         zgh{""}
         zh{""}
+        znd{""}
         zu{""}
         zun{""}
         zxx{""}

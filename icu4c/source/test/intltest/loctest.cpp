@@ -997,7 +997,7 @@ LocaleTest::TestGetLangsAndCountries()
       ;
 
     /* TODO: Change this test to be more like the cloctst version? */
-    if (testCount != 601)
+    if (testCount != 645)
         errln("Expected getISOLanguages() to return 601 languages; it returned %d", testCount);
     else {
         for (i = 0; i < 15; i++) {
