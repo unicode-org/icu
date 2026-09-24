@@ -103,6 +103,10 @@ CalendarRegressionTest::runIndexedTest( int32_t index, UBool exec, const char* &
         CASE(59,TestExplicitCutoverMatchesDefault23489);
         CASE(60,TestWeekOfMonthInCutoverYear23489);
         CASE(61,TestDayOfYearRoundTripInCutoverYear23489);
+        CASE(62,TestWeekOfMonthNon1582Cutover3350);
+        CASE(63,TestWeekOfMonthOutOfRangeMonth3350);
+        CASE(64,TestWeekOfMonthDefaultMonth3350);
+        CASE(65,TestWeekOfMonthTimeZoneDependentCutover3350);
     default: name = ""; break;
     }
 }
@@ -3724,6 +3728,403 @@ void CalendarRegressionTest::TestDayOfYearRoundTripInCutoverYear23489() {
     assertEquals("1752-09-14 DAY_OF_YEAR, 1752 cutover", 247,
         britishCal.get(UCAL_DAY_OF_YEAR, status));
     failure(status, "reading fields from the 1752-cutover calendar");
+}
+
+// Test case for ticket 3350.
+// Verifies WEEK_OF_MONTH around real and edge-case cutovers, for two week
+// settings: the default 1582-10-15 cutover (October, plus March, September
+// and November as months that must not shift); Great Britain 1752-09-14,
+// where the gap falls in the middle of one month; Denmark 1700-03-01 and
+// Sweden 1753-03-01, where the gap ends a month; Russia 1918-02-14, where it
+// starts one; and cutovers on or near January 1 (1600-01-01, 1584-01-05),
+// where the month that loses days is December of the previous year.
+// Expected values follow the plain definition of WEEK_OF_MONTH applied to
+// the actual (possibly split or truncated) hybrid month.
+void CalendarRegressionTest::TestWeekOfMonthNon1582Cutover3350() {
+    UErrorCode status = U_ZERO_ERROR;
+    SimpleDateFormat sdf(UnicodeString("yyyy-MM-dd"), Locale::getUS(), status);
+    sdf.setTimeZone(*TimeZone::getGMT());
+    if (failure(status, "initializing SimpleDateFormat")) {
+        return;
+    }
+
+    struct WeekStart { int32_t y, m, d; };
+    struct Scenario {
+        const char* name;
+        UBool useDefaultCutover;
+        int32_t cutY, cutM, cutD;  // Gregorian date of the first Gregorian day
+        int32_t year, month;       // hybrid year/month under test
+        WeekStart sun1[5];         // firstDayOfWeek=SUNDAY, minimalDaysInFirstWeek=1
+        WeekStart mon4[5];         // firstDayOfWeek=MONDAY, minimalDaysInFirstWeek=4
+    } const kScenarios[] = {
+        { "1582-10 (default cutover, affected)", true, 0, 0, 0, 1582, UCAL_OCTOBER,
+          { {1582,UCAL_SEPTEMBER,30}, {1582,UCAL_OCTOBER,17}, {1582,UCAL_OCTOBER,24},
+            {1582,UCAL_OCTOBER,31}, {1582,UCAL_NOVEMBER,7} },
+          { {1582,UCAL_OCTOBER,1}, {1582,UCAL_OCTOBER,18}, {1582,UCAL_OCTOBER,25},
+            {1582,UCAL_NOVEMBER,1}, {1582,UCAL_NOVEMBER,8} } },
+        // November 1582 is not affected by the cutover (control).
+        { "1582-11 (default cutover, unaffected control)", true, 0, 0, 0, 1582, UCAL_NOVEMBER,
+          { {1582,UCAL_OCTOBER,31}, {1582,UCAL_NOVEMBER,7}, {1582,UCAL_NOVEMBER,14},
+            {1582,UCAL_NOVEMBER,21}, {1582,UCAL_NOVEMBER,28} },
+          { {1582,UCAL_NOVEMBER,1}, {1582,UCAL_NOVEMBER,8}, {1582,UCAL_NOVEMBER,15},
+            {1582,UCAL_NOVEMBER,22}, {1582,UCAL_NOVEMBER,29} } },
+        // March and September 1582 are ordinary, entirely Julian months of
+        // the cutover year: their weeks start from the Julian 1st.
+        { "1582-03 (default cutover, entirely Julian)", true, 0, 0, 0, 1582, UCAL_MARCH,
+          { {1582,UCAL_FEBRUARY,25}, {1582,UCAL_MARCH,4}, {1582,UCAL_MARCH,11},
+            {1582,UCAL_MARCH,18}, {1582,UCAL_MARCH,25} },
+          { {1582,UCAL_FEBRUARY,26}, {1582,UCAL_MARCH,5}, {1582,UCAL_MARCH,12},
+            {1582,UCAL_MARCH,19}, {1582,UCAL_MARCH,26} } },
+        { "1582-09 (default cutover, entirely Julian)", true, 0, 0, 0, 1582, UCAL_SEPTEMBER,
+          { {1582,UCAL_AUGUST,26}, {1582,UCAL_SEPTEMBER,2}, {1582,UCAL_SEPTEMBER,9},
+            {1582,UCAL_SEPTEMBER,16}, {1582,UCAL_SEPTEMBER,23} },
+          { {1582,UCAL_SEPTEMBER,3}, {1582,UCAL_SEPTEMBER,10}, {1582,UCAL_SEPTEMBER,17},
+            {1582,UCAL_SEPTEMBER,24}, {1582,UCAL_OCTOBER,1} } },
+        { "Denmark 1700-02 (affected, tail missing)", false, 1700, UCAL_MARCH, 1, 1700, UCAL_FEBRUARY,
+          { {1700,UCAL_JANUARY,28}, {1700,UCAL_FEBRUARY,4}, {1700,UCAL_FEBRUARY,11},
+            {1700,UCAL_FEBRUARY,18}, {1700,UCAL_MARCH,7} },
+          { {1700,UCAL_JANUARY,29}, {1700,UCAL_FEBRUARY,5}, {1700,UCAL_FEBRUARY,12},
+            {1700,UCAL_MARCH,1}, {1700,UCAL_MARCH,8} } },
+        // March 1700 is an intact, ordinary Gregorian month (the whole gap
+        // falls inside February), yet its week 1 starts before the
+        // cutover, on the last Julian day of February. Its weeks resolve
+        // like any ordinary month's.
+        { "Denmark 1700-03 (not affected by the cutover)", false, 1700, UCAL_MARCH, 1, 1700, UCAL_MARCH,
+          { {1700,UCAL_FEBRUARY,18}, {1700,UCAL_MARCH,7}, {1700,UCAL_MARCH,14},
+            {1700,UCAL_MARCH,21}, {1700,UCAL_MARCH,28} },
+          { {1700,UCAL_MARCH,1}, {1700,UCAL_MARCH,8}, {1700,UCAL_MARCH,15},
+            {1700,UCAL_MARCH,22}, {1700,UCAL_MARCH,29} } },
+        // September 1752 loses days in the middle (a split month):
+        // Sep 3..13 do not exist.
+        { "GB 1752-09 (affected, split month)", false, 1752, UCAL_SEPTEMBER, 14, 1752, UCAL_SEPTEMBER,
+          { {1752,UCAL_AUGUST,30}, {1752,UCAL_SEPTEMBER,17}, {1752,UCAL_SEPTEMBER,24},
+            {1752,UCAL_OCTOBER,1}, {1752,UCAL_OCTOBER,8} },
+          { {1752,UCAL_AUGUST,31}, {1752,UCAL_SEPTEMBER,18}, {1752,UCAL_SEPTEMBER,25},
+            {1752,UCAL_OCTOBER,2}, {1752,UCAL_OCTOBER,9} } },
+        // January 1918 is not affected by the cutover (control): the gap
+        // falls exactly on the Julian/Gregorian month boundary.
+        { "Russia 1918-01 (unaffected control)", false, 1918, UCAL_FEBRUARY, 14, 1918, UCAL_JANUARY,
+          { {1917,UCAL_DECEMBER,31}, {1918,UCAL_JANUARY,7}, {1918,UCAL_JANUARY,14},
+            {1918,UCAL_JANUARY,21}, {1918,UCAL_JANUARY,28} },
+          { {1918,UCAL_JANUARY,1}, {1918,UCAL_JANUARY,8}, {1918,UCAL_JANUARY,15},
+            {1918,UCAL_JANUARY,22}, {1918,UCAL_JANUARY,29} } },
+        { "Russia 1918-02 (affected, head missing)", false, 1918, UCAL_FEBRUARY, 14, 1918, UCAL_FEBRUARY,
+          { {1918,UCAL_JANUARY,28}, {1918,UCAL_FEBRUARY,17}, {1918,UCAL_FEBRUARY,24},
+            {1918,UCAL_MARCH,3}, {1918,UCAL_MARCH,10} },
+          { {1918,UCAL_JANUARY,29}, {1918,UCAL_FEBRUARY,18}, {1918,UCAL_FEBRUARY,25},
+            {1918,UCAL_MARCH,4}, {1918,UCAL_MARCH,11} } },
+        { "Sweden 1753-02 (affected, tail missing)", false, 1753, UCAL_MARCH, 1, 1753, UCAL_FEBRUARY,
+          { {1753,UCAL_JANUARY,31}, {1753,UCAL_FEBRUARY,7}, {1753,UCAL_FEBRUARY,14},
+            {1753,UCAL_MARCH,4}, {1753,UCAL_MARCH,11} },
+          { {1753,UCAL_FEBRUARY,1}, {1753,UCAL_FEBRUARY,8}, {1753,UCAL_FEBRUARY,15},
+            {1753,UCAL_MARCH,5}, {1753,UCAL_MARCH,12} } },
+        // Same situation as Denmark's March 1700 above.
+        { "Sweden 1753-03 (not affected by the cutover)", false, 1753, UCAL_MARCH, 1, 1753, UCAL_MARCH,
+          { {1753,UCAL_FEBRUARY,14}, {1753,UCAL_MARCH,4}, {1753,UCAL_MARCH,11},
+            {1753,UCAL_MARCH,18}, {1753,UCAL_MARCH,25} },
+          { {1753,UCAL_FEBRUARY,15}, {1753,UCAL_MARCH,5}, {1753,UCAL_MARCH,12},
+            {1753,UCAL_MARCH,19}, {1753,UCAL_MARCH,26} } },
+        // The first Gregorian day falls on January 1, so the month that
+        // loses days is December of the previous year (1599), one year
+        // before fGregorianCutoverYear (1600).
+        { "1600-01-01 cutover: Dec 1599 (affected, tail missing)", false, 1600, UCAL_JANUARY, 1, 1599, UCAL_DECEMBER,
+          { {1599,UCAL_NOVEMBER,25}, {1599,UCAL_DECEMBER,2}, {1599,UCAL_DECEMBER,9},
+            {1599,UCAL_DECEMBER,16}, {1600,UCAL_JANUARY,2} },
+          { {1599,UCAL_DECEMBER,3}, {1599,UCAL_DECEMBER,10}, {1599,UCAL_DECEMBER,17},
+            {1600,UCAL_JANUARY,3}, {1600,UCAL_JANUARY,10} } },
+        // January 1600 (unaffected control): entirely Gregorian.
+        { "1600-01-01 cutover: Jan 1600 (unaffected control)", false, 1600, UCAL_JANUARY, 1, 1600, UCAL_JANUARY,
+          { {1599,UCAL_DECEMBER,16}, {1600,UCAL_JANUARY,2}, {1600,UCAL_JANUARY,9},
+            {1600,UCAL_JANUARY,16}, {1600,UCAL_JANUARY,23} },
+          { {1600,UCAL_JANUARY,3}, {1600,UCAL_JANUARY,10}, {1600,UCAL_JANUARY,17},
+            {1600,UCAL_JANUARY,24}, {1600,UCAL_JANUARY,31} } },
+        // The first Gregorian day is itself split away from January 1: December
+        // 1583 is Julian Dec 1..25 and January 1584 is Gregorian Jan 5..31, both
+        // within fGregorianCutoverYear-1/fGregorianCutoverYear.
+        { "1584-01-05 cutover: Dec 1583 (affected, tail missing)", false, 1584, UCAL_JANUARY, 5, 1583, UCAL_DECEMBER,
+          { {1583,UCAL_DECEMBER,1}, {1583,UCAL_DECEMBER,8}, {1583,UCAL_DECEMBER,15},
+            {1583,UCAL_DECEMBER,22}, {1584,UCAL_JANUARY,8} },
+          { {1583,UCAL_DECEMBER,2}, {1583,UCAL_DECEMBER,9}, {1583,UCAL_DECEMBER,16},
+            {1583,UCAL_DECEMBER,23}, {1584,UCAL_JANUARY,9} } },
+        { "1584-01-05 cutover: Jan 1584 (affected, head missing)", false, 1584, UCAL_JANUARY, 5, 1584, UCAL_JANUARY,
+          { {1583,UCAL_DECEMBER,22}, {1584,UCAL_JANUARY,8}, {1584,UCAL_JANUARY,15},
+            {1584,UCAL_JANUARY,22}, {1584,UCAL_JANUARY,29} },
+          { {1583,UCAL_DECEMBER,23}, {1584,UCAL_JANUARY,9}, {1584,UCAL_JANUARY,16},
+            {1584,UCAL_JANUARY,23}, {1584,UCAL_JANUARY,30} } },
+    };
+
+    for (int32_t s = 0; s < UPRV_LENGTHOF(kScenarios); ++s) {
+        const Scenario& sc = kScenarios[s];
+        status = U_ZERO_ERROR;
+        UDate cutoverMillis = 0;
+        if (!sc.useDefaultCutover) {
+            GregorianCalendar cutoverCal(*TimeZone::getGMT(), status);
+            if (U_FAILURE(status)) {
+                dataerrln("Error creating Calendar: %s", u_errorName(status));
+                return;
+            }
+            cutoverCal.clear();
+            cutoverCal.set(sc.cutY, sc.cutM, sc.cutD);
+            cutoverMillis = cutoverCal.getTime(status);
+            if (failure(status, "computing the cutover date")) {
+                continue;
+            }
+        }
+
+        for (int32_t setting = 0; setting < 2; ++setting) {
+            UCalendarDaysOfWeek fdow = (setting == 0) ? UCAL_SUNDAY : UCAL_MONDAY;
+            uint8_t mdw = (setting == 0) ? 1 : 4;
+            const WeekStart* starts = (setting == 0) ? sc.sun1 : sc.mon4;
+            const char* settingName = (setting == 0) ? "Sun/1" : "Mon/4";
+            // A second, non-first, day of week to probe within each week
+            // (wraps around within the 1..7 UCalendarDaysOfWeek range).
+            int32_t dow2 = ((static_cast<int32_t>(fdow) - 1 + 3) % 7) + 1;
+
+            status = U_ZERO_ERROR;
+            GregorianCalendar cal(*TimeZone::getGMT(), status);
+            GregorianCalendar expCal(*TimeZone::getGMT(), status);
+            if (U_FAILURE(status)) {
+                dataerrln("Error creating Calendar: %s", u_errorName(status));
+                return;
+            }
+            if (!sc.useDefaultCutover) {
+                cal.setGregorianChange(cutoverMillis, status);
+                expCal.setGregorianChange(cutoverMillis, status);
+                if (failure(status, "setGregorianChange")) {
+                    continue;
+                }
+            }
+            cal.setFirstDayOfWeek(fdow);
+            cal.setMinimalDaysInFirstWeek(mdw);
+
+            for (int32_t wi = 0; wi < 5; ++wi) {
+                int32_t wom = wi + 1;
+                for (int32_t which = 0; which < 2; ++which) {
+                    int32_t dow = (which == 0) ? static_cast<int32_t>(fdow) : dow2;
+                    int32_t deltaDays = (which == 0) ? 0 : 3;
+
+                    status = U_ZERO_ERROR;
+                    cal.clear();
+                    cal.set(UCAL_YEAR, sc.year);
+                    cal.set(UCAL_MONTH, sc.month);
+                    cal.set(UCAL_WEEK_OF_MONTH, wom);
+                    cal.set(UCAL_DAY_OF_WEEK, dow);
+                    UDate actual = cal.getTime(status);
+                    if (failure(status, "computing the date")) {
+                        continue;
+                    }
+
+                    status = U_ZERO_ERROR;
+                    expCal.clear();
+                    expCal.set(starts[wi].y, starts[wi].m, starts[wi].d);
+                    UDate expected = expCal.getTime(status) + deltaDays * U_MILLIS_PER_DAY;
+                    if (failure(status, "computing the expected date")) {
+                        continue;
+                    }
+
+                    if (actual != expected) {
+                        UnicodeString actualStr, expectedStr;
+                        sdf.format(actual, actualStr);
+                        sdf.format(expected, expectedStr);
+                        errln(UnicodeString("FAIL[") + sc.name + "/" + settingName +
+                              "]: WEEK_OF_MONTH=" + wom + ", DAY_OF_WEEK=" + dow +
+                              ": got " + actualStr + ", expected " + expectedStr);
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Test case for ticket 3350.
+// setGregorianChange() derives fGregorianCutoverYear from the LOCAL time of
+// the cutover instant: 1600-01-01T00:00:00Z is still 1599-12-31 in
+// America/New_York, so fGregorianCutoverYear there is 1599, one less than
+// in GMT (1600). WEEK_OF_MONTH must resolve to the same local calendar day
+// in both zones regardless.
+void CalendarRegressionTest::TestWeekOfMonthTimeZoneDependentCutover3350() {
+    UErrorCode status = U_ZERO_ERROR;
+    GregorianCalendar cutoverCal(*TimeZone::getGMT(), status);
+    cutoverCal.clear();
+    cutoverCal.set(1600, UCAL_JANUARY, 1);
+    UDate cutoverMillis = cutoverCal.getTime(status);
+    if (failure(status, "computing the cutover date")) {
+        return;
+    }
+
+    LocalPointer<TimeZone> ny(TimeZone::createTimeZone("America/New_York"));
+    UnicodeString nyID;
+    ny->getID(nyID);
+    if (nyID == UnicodeString("Etc/Unknown")) {
+        dataerrln("Unable to create the America/New_York time zone (missing zone data)");
+        return;
+    }
+
+    GregorianCalendar expCal(*TimeZone::getGMT(), status);
+    expCal.setGregorianChange(cutoverMillis, status);
+    expCal.clear();
+    expCal.set(1599, UCAL_DECEMBER, 16);
+    int32_t expectedJD = expCal.get(UCAL_JULIAN_DAY, status);
+
+    GregorianCalendar calGMT(*TimeZone::getGMT(), status);
+    calGMT.setGregorianChange(cutoverMillis, status);
+    calGMT.setFirstDayOfWeek(UCAL_SUNDAY);
+    calGMT.setMinimalDaysInFirstWeek(1);
+    calGMT.clear();
+    calGMT.set(UCAL_YEAR, 1600);
+    calGMT.set(UCAL_MONTH, UCAL_JANUARY);
+    calGMT.set(UCAL_WEEK_OF_MONTH, 1);
+    calGMT.set(UCAL_DAY_OF_WEEK, UCAL_SUNDAY);
+    int32_t gmtJD = calGMT.get(UCAL_JULIAN_DAY, status);
+
+    GregorianCalendar calNY(*ny, status);
+    calNY.setGregorianChange(cutoverMillis, status);
+    calNY.setFirstDayOfWeek(UCAL_SUNDAY);
+    calNY.setMinimalDaysInFirstWeek(1);
+    calNY.clear();
+    calNY.set(UCAL_YEAR, 1600);
+    calNY.set(UCAL_MONTH, UCAL_JANUARY);
+    calNY.set(UCAL_WEEK_OF_MONTH, 1);
+    calNY.set(UCAL_DAY_OF_WEEK, UCAL_SUNDAY);
+    int32_t nyJD = calNY.get(UCAL_JULIAN_DAY, status);
+
+    if (failure(status, "computing WEEK_OF_MONTH=1 for January 1600")) {
+        return;
+    }
+
+    if (gmtJD != expectedJD) {
+        errln(UnicodeString("FAIL: GMT, January 1600 WEEK_OF_MONTH=1, DAY_OF_WEEK=Sunday: got JD ") +
+              gmtJD + ", expected JD " + expectedJD + " (1599-12-16)");
+    }
+    if (nyJD != expectedJD) {
+        errln(UnicodeString("FAIL: America/New_York, January 1600 WEEK_OF_MONTH=1, DAY_OF_WEEK=Sunday: got JD ") +
+              nyJD + ", expected JD " + expectedJD + " (1599-12-16)");
+    }
+}
+
+// Test case for ticket 3350.
+// A MONTH value outside 0..11 must normalize into the adjacent year exactly
+// like Calendar::handleComputeMonthStart() does elsewhere: YEAR=1583,
+// MONTH=-3 is October of the previous (cutover) year.
+void CalendarRegressionTest::TestWeekOfMonthOutOfRangeMonth3350() {
+    UErrorCode status = U_ZERO_ERROR;
+    GregorianCalendar cal(*TimeZone::getGMT(), status);
+    if (U_FAILURE(status)) {
+        dataerrln("Error creating Calendar: %s", u_errorName(status));
+        return;
+    }
+    cal.setFirstDayOfWeek(UCAL_SUNDAY);
+    cal.setMinimalDaysInFirstWeek(1);
+    cal.clear();
+    cal.set(UCAL_YEAR, 1583);
+    cal.set(UCAL_MONTH, -3);
+    cal.set(UCAL_WEEK_OF_MONTH, 1);
+    UDate actual = cal.getTime(status);
+    if (failure(status, "computing the out-of-range month date")) {
+        return;
+    }
+
+    GregorianCalendar expCal(*TimeZone::getGMT(), status);
+    expCal.setFirstDayOfWeek(UCAL_SUNDAY);
+    expCal.setMinimalDaysInFirstWeek(1);
+    expCal.clear();
+    expCal.set(UCAL_YEAR, 1582);
+    expCal.set(UCAL_MONTH, UCAL_OCTOBER);
+    expCal.set(UCAL_WEEK_OF_MONTH, 1);
+    UDate expected = expCal.getTime(status);
+    if (failure(status, "computing the expected date")) {
+        return;
+    }
+
+    if (actual != expected) {
+        SimpleDateFormat sdf(UnicodeString("yyyy-MM-dd"), Locale::getUS(), status);
+        sdf.setTimeZone(*TimeZone::getGMT());
+        UnicodeString actualStr, expectedStr;
+        sdf.format(actual, actualStr);
+        sdf.format(expected, expectedStr);
+        errln(UnicodeString("FAIL: YEAR=1583, MONTH=-3, WEEK_OF_MONTH=1: got ") +
+              actualStr + ", expected " + expectedStr);
+    }
+}
+
+// Test case for ticket 3350.
+// When MONTH/ORDINAL_MONTH are unset, WEEK_OF_MONTH must be resolved for
+// the month Calendar::handleComputeJulianDay() actually picks via
+// getDefaultMonthInYear() -- overridden by JapaneseCalendar to be the
+// era's start month in the era's first year -- not for January.
+void CalendarRegressionTest::TestWeekOfMonthDefaultMonth3350() {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> base(Calendar::createInstance(
+        TimeZone::getGMT()->clone(), Locale("en_US@calendar=japanese"), status));
+    if (failure(status, "creating the Japanese calendar")) {
+        return;
+    }
+    GregorianCalendar* cal = dynamic_cast<GregorianCalendar*>(base.getAlias());
+    if (cal == nullptr) {
+        errln("FAIL: expected a GregorianCalendar-derived Japanese calendar");
+        return;
+    }
+
+    GregorianCalendar cutoverCal(*TimeZone::getGMT(), status);
+    cutoverCal.clear();
+    cutoverCal.set(1868, UCAL_MARCH, 1);
+    UDate cutoverMillis = cutoverCal.getTime(status);
+    cal->setGregorianChange(cutoverMillis, status);
+    if (failure(status, "setGregorianChange")) {
+        return;
+    }
+
+    cal->clear();
+    cal->set(UCAL_ERA, 232);  // Meiji
+    cal->set(UCAL_YEAR, 1);
+    cal->set(UCAL_WEEK_OF_MONTH, 3);
+    cal->set(UCAL_DAY_OF_WEEK, UCAL_WEDNESDAY);
+    UDate actual = cal->getTime(status);
+    if (failure(status, "computing the date")) {
+        return;
+    }
+
+    // Meiji year 1 starts in October 1868, so its default month is October.
+    SimpleDateFormat ymd(UnicodeString("yyyy-MM-dd"), Locale::getUS(), status);
+    if (failure(status, "initializing SimpleDateFormat")) {
+        return;
+    }
+    ymd.setTimeZone(*TimeZone::getGMT());
+    UnicodeString actualYmd;
+    ymd.format(actual, actualYmd);
+    if (actualYmd != UnicodeString("1868-10-14")) {
+        errln(UnicodeString("FAIL: Japanese calendar, Meiji year 1, WEEK_OF_MONTH=3, "
+                             "DAY_OF_WEEK=Wednesday, MONTH unset: got ") +
+              actualYmd + ", expected 1868-10-14");
+    }
+
+    // The same computation under the default cutover resolves the same
+    // month selection without going through the custom-cutover code path.
+    LocalPointer<Calendar> controlBase(Calendar::createInstance(
+        TimeZone::getGMT()->clone(), Locale("en_US@calendar=japanese"), status));
+    if (failure(status, "creating the control calendar")) {
+        return;
+    }
+    controlBase->clear();
+    controlBase->set(UCAL_ERA, 232);
+    controlBase->set(UCAL_YEAR, 1);
+    controlBase->set(UCAL_WEEK_OF_MONTH, 3);
+    controlBase->set(UCAL_DAY_OF_WEEK, UCAL_WEDNESDAY);
+    UDate expected = controlBase->getTime(status);
+    if (failure(status, "computing the expected date")) {
+        return;
+    }
+
+    if (actual != expected) {
+        SimpleDateFormat sdf(UnicodeString("yyyy-MM-dd"), Locale::getUS(), status);
+        sdf.setTimeZone(*TimeZone::getGMT());
+        UnicodeString actualStr, expectedStr;
+        sdf.format(actual, actualStr);
+        sdf.format(expected, expectedStr);
+        errln(UnicodeString("FAIL: Japanese calendar, Meiji year 1, WEEK_OF_MONTH=3, "
+                             "DAY_OF_WEEK=Wednesday, MONTH unset: got ") +
+              actualStr + ", expected " + expectedStr);
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
