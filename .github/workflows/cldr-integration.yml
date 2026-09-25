@@ -1,0 +1,276 @@
+name: Update ICU from CLDR
+
+env:
+  ICU_DIR: ${{ github.workspace }}/icu
+  CLDR_DIR: ${{ github.workspace }}/cldr
+  ICU4C_DIR: ${{ github.workspace }}/icu/icu4c
+  TOOLS_ROOT: ${{ github.workspace }}/icu/tools
+  ICU4J_DIR: ${{ github.workspace }}/icu/icu4j
+  CLDR_DATA_DIR: ${{ github.workspace }}/cldr-prod
+  JDK_VERSION: 21
+  JDK_DISTRO: temurin
+
+on:
+  workflow_dispatch:
+    inputs:
+      cldr-ref:
+        description: CLDR ref to build
+        required: true
+        default: 'main'
+      cldr-repo:
+        description: CLDR repo to build
+        required: true
+        default: 'unicode-org/cldr'
+      icu-repo:
+        description: ICU repo
+        required: true
+        default: 'unicode-org/icu'
+      icu-ref:
+        description: ICU branch/tag
+        required: true
+        default: 'main'
+jobs:
+  proddata:
+    # TODO CLDR-15060: This is ripe for caching
+    name: Build Production Data
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone CLDR
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.event.inputs.cldr-ref }}
+          lfs: false
+          repository: ${{ github.event.inputs.cldr-repo }}
+      - name: Set up JDK
+        uses: actions/setup-java@0f481fcb613427c0f801b606911222b5b6f3083a # v5
+        with:
+          java-version: ${{ JDK_VERSION }}
+          distribution: ${{ JDK_DISTRO }}
+      - name: Cache local Maven repository
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('tools/**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Build with Maven
+        run: >
+          mvn -s .github/workflows/mvn-settings.xml -B compile install package --file tools/pom.xml
+          -DskipTests=true -pl cldr-code
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload cldr-code
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: cldr-code
+          path: tools/cldr-code/target/cldr-code.jar
+      - name: Build prod Data
+        run: |
+          rm -rf target/cldr-prod
+          mkdir -p target/cldr-prod/common
+          mvn  -s .github/workflows/mvn-settings.xml -B  -DCLDR_DIR=$(pwd) -DCLDR_GITHUB_ANNOTATIONS=true --file=tools/pom.xml -pl cldr-code  \
+            exec:java -Dexec.mainClass=org.unicode.cldr.tool.GenerateProductionData \
+            -Dexec.args="-d target/cldr-prod/common/"
+          (cd target/cldr-prod/ && zip -r ../cldr-prod.zip *)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload cldr-prod
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: cldr-prod
+          path: target/cldr-prod.zip
+  genicudata:
+    name: Generate ICU4C Data
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    needs: proddata
+    steps:
+      - name: Download CLDR Production Artifact
+        id: downloadprod
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: cldr-prod
+          path: .
+      - name: Download CLDR tools
+        id: downloadtools
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: cldr-code
+          path: cldr-code
+      - name: Set up JDK
+        uses: actions/setup-java@0f481fcb613427c0f801b606911222b5b6f3083a # v5
+        with:
+          java-version: ${{ JDK_VERSION }}
+          distribution: ${{ JDK_DISTRO }}
+      - name: Setup Maven Settings
+        uses: s4u/maven-settings-action@60912582505985be4cc55d2b890eb32767f8de5f # v2.8.0
+        with:
+          servers: |
+            [{
+                "id": "github",
+                "username": "${{ github.actor }}",
+                "password": "${{ github.token }}"
+            },{
+                "id": "githubicu",
+                "username": "${{ github.actor }}",
+                "password": "${{ github.token }}"
+            },{
+                "id": "githubcldr",
+                "username": "${{ github.actor }}",
+                "password": "${{ github.token }}"
+            }]
+      - name: Create empty CLDR dir, unpack cldr-prod
+        run: mkdir -p cldr cldr-prod && cd cldr-prod && unzip ../cldr-prod.zip
+      - name: Clone CLDR
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.event.inputs.cldr-ref }}
+          lfs: false
+          repository: ${{ github.event.inputs.cldr-repo }}
+          path: cldr
+      - name: Clone ICU
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          repository: ${{ github.event.inputs.icu-repo }}
+          ref: ${{ github.event.inputs.icu-ref }}
+          lfs: false # not needed here
+          path: icu
+      - name: Cache local Maven repository
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('icu/tools/**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      # TODO: update DTDs https://github.com/unicode-org/icu/blob/main/docs/processes/cldr-icu.md#3-make-pre-adjustments
+      # TODO: update ICU4J build version and locales https://github.com/unicode-org/icu/blob/main/docs/processes/cldr-icu.md#3-make-pre-adjustments
+      - name: Build and Install CLDR jar
+        run: >
+          env
+          mvn --file=cldr/tools/pom.xml -B clean install -pl :cldr-all,:cldr-code -DskipTests -DskipITs
+      - name: Generate ICU4C Data
+        run: >
+          env
+          mvn -B --file=$TOOLS_ROOT/cldr/cldr-to-icu/pom.xml clean package -DskipTests -DskipITs &&
+          cd $TOOLS_ROOT/cldr/cldr-to-icu && java -jar target/cldr-to-icu-1.0-SNAPSHOT-jar-with-dependencies.jar --cldrDataDir="$CLDR_DATA_DIR"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: copy test data
+        run: >
+          cd $TOOLS_ROOT/cldr ; ant copy-cldr-testdata
+      - name: Zip up icu-data.zip
+        run: 'cd icu/icu4c/source && zip -rlq ../../../icu-data.zip data'
+      - name: Upload icu-data.zip
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: icu-data
+          path: icu-data.zip
+      - name: Update branch
+        run: |
+          cd $ICU4C_DIR
+          git config user.name 'Steven R. Loomis [bot]'
+          git config user.email 'srloomis@unicode.org'
+          git add source/data
+          git commit -am 'ICU-00000 integration from CLDR'
+          git checkout -b srl295/auto-cldr-update
+          git remote set-url origin "https://srl295:${GH_TOKEN}@github.com/srl295/icu.git"
+          git push --set-upstream -f origin srl295/auto-cldr-update
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  # clang release build with some options to enforce useful constraints.
+  # Includes dependency checker on an in-source, optimized build.
+  # Includes checking @draft etc. API tags vs. ifndef guards like
+  # U_HIDE_DRAFT_API and U_FORCE_HIDE_DRAFT_API.
+  # (FORCE guards make this tool pass but won't compile to working code.
+  # See the testtagsguards.sh script for details.)
+  icu4c-clang:
+    name: ICU4C Build/Test, Ubuntu/Clang, new data
+    runs-on: ubuntu-latest
+    needs: genicudata
+    steps:
+      - name: Clone ICU
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          repository: ${{ github.event.inputs.icu-repo }}
+          ref: ${{ github.event.inputs.icu-ref }}
+          lfs: false
+      - name: Download icu-data.zip
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: icu-data
+          path: .
+      - name: Unpack icu-data.zip
+        run: cd icu4c/source && rm -rf data && unzip -o ../../icu-data.zip
+      - name: ICU4C with clang
+        env:
+          CPPFLAGS: -DU_NO_DEFAULT_INCLUDE_UTF_HEADERS=1
+          CFLAGS: -Wimplicit-fallthrough
+          CXXFLAGS: -Wimplicit-fallthrough
+        run: |
+          sudo apt-get -y install doxygen;
+          cd icu4c/source;
+          ./runConfigureICU Linux;
+          make -j 2;
+          make dist
+      - name: Upload icu4c
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: icu4c
+          path: icu4c/source/dist
+      - name: ICU4C with clang test
+        env:
+          CPPFLAGS: -DU_NO_DEFAULT_INCLUDE_UTF_HEADERS=1
+          CFLAGS: -Wimplicit-fallthrough
+          CXXFLAGS: -Wimplicit-fallthrough
+        run: |
+          cd icu4c/source;
+          make -j 2 check;
+          ( cd test/depstest && python3 depstest.py ../../../source/ );
+          ( cd .. && source/test/hdrtst/testtagsguards.sh );
+  icu4j-java:
+    name: ICU4J Build/Test, Java, new data
+    runs-on: ubuntu-latest
+    needs: genicudata
+    steps:
+      - name: Clone ICU
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          repository: ${{ github.event.inputs.icu-repo }}
+          ref: ${{ github.event.inputs.icu-ref }}
+          lfs: true
+      - name: Checkout lfs objects
+        run: git lfs pull
+      - name: Download icu-data.zip
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: icu-data
+          path: .
+      - name: Unpack icu-data.zip
+        run: cd icu4c/source && rm -rf data && unzip -o ../../icu-data.zip
+      - name: Generate ICU4J data
+        run: cd icu4c/source && ./runConfigureICU Linux && make -j2 && make -C data icu4j-data-install ICU4J_ROOT=$(cd ../../icu4j ; pwd)
+      - uses: actions/setup-java@0f481fcb613427c0f801b606911222b5b6f3083a # v5
+        with:
+          java-version: ${{ JDK_VERSION }}
+          distribution: ${{ JDK_DISTRO }}
+      - name: ICU4J Build
+        run: |
+          cd icu4j;
+          ant init;
+          ant jar;
+          ant releaseBinaries;
+      - name: Upload icu4j
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: icu4j
+          path: icu4j/release
+      - name: ICU4J Test
+        run: |
+          ant check;
+          ant localespiCheck;
+      - name: List failures (if any)
+        run: |
+          [ -d icu4j/out/junit-results ] && cd icu4j && cat `find out/junit-results -name "*.txt" -exec grep -l FAILED {} \;`;
+        if: ${{ failure() }}
