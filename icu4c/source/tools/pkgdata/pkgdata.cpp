@@ -573,106 +573,110 @@ normal_command_mode:
 
 static int32_t pkg_executeOptions(UPKGOptions *o) {
     int32_t result = 0;
+    UErrorCode status = U_ZERO_ERROR;
 
     const char mode = o->mode[0];
-    char targetDir[SMALL_BUFFER_MAX_SIZE] = "";
-    char tmpDir[SMALL_BUFFER_MAX_SIZE] = "";
-    char datFileName[SMALL_BUFFER_MAX_SIZE] = "";
-    char datFileNamePath[LARGE_BUFFER_MAX_SIZE] = "";
-    char checkLibFile[LARGE_BUFFER_MAX_SIZE] = "";
+    icu::CharString targetDir;
+    icu::CharString tmpDir;
+    icu::CharString datFileName;
+    icu::CharString datFileNamePath;
+    icu::CharString checkLibFile;
 
     initializePkgDataFlags(o);
 
     if (IN_FILES_MODE(mode)) {
         /* Copy the raw data to the installation directory. */
         if (o->install != nullptr) {
-            uprv_strcpy(targetDir, o->install);
+            targetDir.append(o->install, status);
             if (o->shortName != nullptr) {
-                uprv_strcat(targetDir, PKGDATA_FILE_SEP_STRING);
-                uprv_strcat(targetDir, o->shortName);
+                targetDir.append(PKGDATA_FILE_SEP_STRING, status);
+                targetDir.append(o->shortName, status);
+            }
+            if (U_FAILURE(status)) {
+                fprintf(stderr, "Unable to build target path. status = %s\n", u_errorName(status));
+                return status;
             }
             
             if(o->verbose) {
-              fprintf(stdout, "# Install: Files mode, copying files to %s..\n", targetDir);
+              fprintf(stdout, "# Install: Files mode, copying files to %s..\n", targetDir.data());
             }
-            result = pkg_installFileMode(targetDir, o->srcDir, o->fileListFiles->str);
+            result = pkg_installFileMode(targetDir.data(), o->srcDir, o->fileListFiles->str);
         }
         return result;
     } else /* if (IN_COMMON_MODE(mode) || IN_DLL_MODE(mode) || IN_STATIC_MODE(mode)) */ {
         UBool noVersion = false;
 
-        uprv_strcpy(targetDir, o->targetDir);
-        uprv_strcat(targetDir, PKGDATA_FILE_SEP_STRING);
-
-        uprv_strcpy(tmpDir, o->tmpDir);
-        uprv_strcat(tmpDir, PKGDATA_FILE_SEP_STRING);
-
-        uprv_strcpy(datFileNamePath, tmpDir);
-
-        uprv_strcpy(datFileName, o->shortName);
-        uprv_strcat(datFileName, UDATA_CMN_SUFFIX);
-
-        uprv_strcat(datFileNamePath, datFileName);
+        targetDir.append(o->targetDir, status).append(PKGDATA_FILE_SEP_STRING, status);
+        tmpDir.append(o->tmpDir, status).append(PKGDATA_FILE_SEP_STRING, status);
+        datFileName.append(o->shortName, status).append(UDATA_CMN_SUFFIX, status);
+        datFileNamePath.append(tmpDir, status).append(datFileName, status);
+        if (U_FAILURE(status)) {
+            fprintf(stderr, "Unable to build package paths. status = %s\n", u_errorName(status));
+            return status;
+        }
 
         if(o->verbose) {
-          fprintf(stdout, "# Writing package file %s ..\n", datFileNamePath);
+          fprintf(stdout, "# Writing package file %s ..\n", datFileNamePath.data());
         }
-        result = writePackageDatFile(datFileNamePath, o->comment, o->srcDir, o->fileListFiles->str, nullptr, U_CHARSET_FAMILY ? 'e' :  U_IS_BIG_ENDIAN ? 'b' : 'l');
+        result = writePackageDatFile(datFileNamePath.data(), o->comment, o->srcDir, o->fileListFiles->str, nullptr, U_CHARSET_FAMILY ? 'e' :  U_IS_BIG_ENDIAN ? 'b' : 'l');
         if (result != 0) {
             fprintf(stderr,"Error writing package dat file.\n");
             return result;
         }
 
         if (IN_COMMON_MODE(mode)) {
-            char targetFileNamePath[LARGE_BUFFER_MAX_SIZE] = "";
-
-            uprv_strcpy(targetFileNamePath, targetDir);
-            uprv_strcat(targetFileNamePath, datFileName);
+            icu::CharString targetFileNamePath;
+            targetFileNamePath.append(targetDir, status).append(datFileName, status);
+            if (U_FAILURE(status)) {
+                fprintf(stderr, "Unable to build target file path. status = %s\n", u_errorName(status));
+                return status;
+            }
 
             /* Move the dat file created to the target directory. */
-            if (uprv_strcmp(datFileNamePath, targetFileNamePath) != 0) {
-                if (T_FileStream_file_exists(targetFileNamePath)) {
-                    if ((result = remove(targetFileNamePath)) != 0) {
+            if (uprv_strcmp(datFileNamePath.data(), targetFileNamePath.data()) != 0) {
+                if (T_FileStream_file_exists(targetFileNamePath.data())) {
+                    if ((result = remove(targetFileNamePath.data())) != 0) {
                         fprintf(stderr, "Unable to remove old dat file: %s\n",
-                                targetFileNamePath);
+                                targetFileNamePath.data());
                         return result;
                     }
                 }
 
-                result = rename(datFileNamePath, targetFileNamePath);
+                result = rename(datFileNamePath.data(), targetFileNamePath.data());
 
                 if (o->verbose) {
                     fprintf(stdout, "# Moving package file to %s ..\n",
-                            targetFileNamePath);
+                            targetFileNamePath.data());
                 }
                 if (result != 0) {
                     fprintf(
                             stderr,
                             "Unable to move dat file (%s) to target location (%s).\n",
-                            datFileNamePath, targetFileNamePath);
+                            datFileNamePath.data(), targetFileNamePath.data());
                     return result;
                 }
             }
 
             if (o->install != nullptr) {
-                result = pkg_installCommonMode(o->install, targetFileNamePath);
+                result = pkg_installCommonMode(o->install, targetFileNamePath.data());
             }
 
             return result;
         } else /* if (IN_STATIC_MODE(mode) || IN_DLL_MODE(mode)) */ {
             char gencFilePath[SMALL_BUFFER_MAX_SIZE] = "";
-            char version_major[10] = "";
+            icu::CharString versionMajor;
             UBool reverseExt = false;
 
 #if !defined(WINDOWS_WITH_MSVC) || defined(USING_CYGWIN)
             /* Get the version major number. */
             if (o->version != nullptr) {
-                for (uint32_t i = 0;i < sizeof(version_major);i++) {
-                    if (o->version[i] == '.') {
-                        version_major[i] = 0;
-                        break;
-                    }
-                    version_major[i] = o->version[i];
+                const char *separator = uprv_strchr(o->version, '.');
+                const int32_t length = static_cast<int32_t>(
+                        separator == nullptr ? uprv_strlen(o->version) : separator - o->version);
+                versionMajor.append(o->version, length, status);
+                if (U_FAILURE(status)) {
+                    fprintf(stderr, "Unable to build major version. status = %s\n", u_errorName(status));
+                    return status;
                 }
             } else {
                 noVersion = true;
@@ -690,29 +694,33 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
             }
 #endif
             /* Using the base libName and version number, generate the library file names. */
-            createFileNames(o, mode, version_major, o->version == nullptr ? "" : o->version, o->libName, reverseExt, noVersion);
+            createFileNames(o, mode, versionMajor.data(), o->version == nullptr ? "" : o->version, o->libName, reverseExt, noVersion);
 
             if ((o->version!=nullptr || IN_STATIC_MODE(mode)) && o->rebuild == false && o->pdsbuild == false) {
                 /* Check to see if a previous built data library file exists and check if it is the latest. */
-                snprintf(checkLibFile, sizeof(checkLibFile), "%s%s", targetDir, libFileNames[LIB_FILE_VERSION]);
-                if (T_FileStream_file_exists(checkLibFile)) {
-                    if (isFileModTimeLater(checkLibFile, o->srcDir, true) && isFileModTimeLater(checkLibFile, o->options)) {
+                checkLibFile.append(targetDir, status).append(libFileNames[LIB_FILE_VERSION], status);
+                if (U_FAILURE(status)) {
+                    fprintf(stderr, "Unable to build library file path. status = %s\n", u_errorName(status));
+                    return status;
+                }
+                if (T_FileStream_file_exists(checkLibFile.data())) {
+                    if (isFileModTimeLater(checkLibFile.data(), o->srcDir, true) && isFileModTimeLater(checkLibFile.data(), o->options)) {
                         if (o->install != nullptr) {
                           if(o->verbose) {
                             fprintf(stdout, "# Installing already-built library into %s\n", o->install);
                           }
-                          result = pkg_installLibrary(o->install, targetDir, noVersion);
+                          result = pkg_installLibrary(o->install, targetDir.data(), noVersion);
                         } else {
                           if(o->verbose) {
-                            printf("# Not rebuilding %s - up to date.\n", checkLibFile);
+                            printf("# Not rebuilding %s - up to date.\n", checkLibFile.data());
                           }
                         }
                         return result;
                     } else if (o->verbose && (o->install!=nullptr)) {
-                      fprintf(stdout, "# Not installing up-to-date library %s into %s\n", checkLibFile, o->install);
+                      fprintf(stdout, "# Not installing up-to-date library %s into %s\n", checkLibFile.data(), o->install);
                     }
                 } else if(o->verbose && (o->install!=nullptr)) {
-                  fprintf(stdout, "# Not installing missing %s into %s\n", checkLibFile, o->install);
+                  fprintf(stdout, "# Not installing missing %s into %s\n", checkLibFile.data(), o->install);
                 }
             }
 
@@ -734,14 +742,14 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
                     (uprv_strlen(genccodeAssembly)>3) &&
                     checkAssemblyHeaderName(genccodeAssembly+3)) {
                     writeAssemblyCode(
-                        datFileNamePath,
+                        datFileNamePath.data(),
                         o->tmpDir,
                         o->entryName,
                         nullptr,
                         gencFilePath,
                         sizeof(gencFilePath));
 
-                    result = pkg_createWithAssemblyCode(targetDir, mode, gencFilePath);
+                    result = pkg_createWithAssemblyCode(targetDir.data(), mode, gencFilePath);
                     if (result != 0) {
                         fprintf(stderr, "Error generating assembly code for data.\n");
                         return result;
@@ -750,7 +758,7 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
                         if(o->verbose) {
                           fprintf(stdout, "# Installing static library into %s\n", o->install);
                         }
-                        result = pkg_installLibrary(o->install, targetDir, noVersion);
+                        result = pkg_installLibrary(o->install, targetDir.data(), noVersion);
                       }
                       return result;
                     }
@@ -764,7 +772,7 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
                 }
                 if (o->withoutAssembly) {
 #ifdef BUILD_DATA_WITHOUT_ASSEMBLY
-                    result = pkg_createWithoutAssemblyCode(o, targetDir, mode);
+                    result = pkg_createWithoutAssemblyCode(o, targetDir.data(), mode);
 #else
                     /* This error should not occur. */
                     fprintf(stderr, "Error- BUILD_DATA_WITHOUT_ASSEMBLY is not defined. Internal error.\n");
@@ -775,7 +783,7 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
                     char optMatchArch[10] = { 0 };
                     pkg_createOptMatchArch(optMatchArch);
                     writeObjectCode(
-                        datFileNamePath,
+                        datFileNamePath.data(),
                         o->tmpDir,
                         o->entryName,
                         (optMatchArch[0] == 0 ? nullptr : optMatchArch),
@@ -786,12 +794,12 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
                         true);
                     pkg_destroyOptMatchArch(optMatchArch);
 #if U_PLATFORM_IS_LINUX_BASED
-                    result = pkg_generateLibraryFile(targetDir, mode, gencFilePath);
+                    result = pkg_generateLibraryFile(targetDir.data(), mode, gencFilePath);
 #elif defined(WINDOWS_WITH_MSVC)
                     result = pkg_createWindowsDLL(mode, gencFilePath, o);
 #endif
 #elif defined(BUILD_DATA_WITHOUT_ASSEMBLY)
-                    result = pkg_createWithoutAssemblyCode(o, targetDir, mode);
+                    result = pkg_createWithoutAssemblyCode(o, targetDir.data(), mode);
 #else
                     fprintf(stderr, "Error- neither CAN_WRITE_OBJ_CODE nor BUILD_DATA_WITHOUT_ASSEMBLY are defined. Internal error.\n");
                     return 1;
@@ -809,7 +817,7 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
                 if(o->verbose) {
                   fprintf(stdout, "# Creating data archive library file ..\n");
                 }
-                result = pkg_archiveLibrary(targetDir, o->version, reverseExt);
+                result = pkg_archiveLibrary(targetDir.data(), o->version, reverseExt);
                 if (result != 0) {
                     fprintf(stderr, "Error creating data archive library file.\n");
                    return result;
@@ -818,9 +826,9 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
                 if (!noVersion) {
                     /* Create symbolic links for the final library file. */
 #if U_PLATFORM == U_PF_OS390
-                    result = pkg_createSymLinks(targetDir, o->pdsbuild);
+                    result = pkg_createSymLinks(targetDir.data(), o->pdsbuild);
 #else
-                    result = pkg_createSymLinks(targetDir, noVersion);
+                    result = pkg_createSymLinks(targetDir.data(), noVersion);
 #endif
                     if (result != 0) {
                         fprintf(stderr, "Error creating symbolic links of the data library file.\n");
@@ -837,7 +845,7 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
                 if(o->verbose) {
                   fprintf(stdout, "# Installing library file to %s ..\n", o->install);
                 }
-                result = pkg_installLibrary(o->install, targetDir, noVersion);
+                result = pkg_installLibrary(o->install, targetDir.data(), noVersion);
                 if (result != 0) {
                     fprintf(stderr, "Error installing the data library.\n");
                     return result;
