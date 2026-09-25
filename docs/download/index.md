@@ -14,9 +14,16 @@ License & terms of use: http://www.unicode.org/copyright.html
 
 If you want to use ICU (as opposed to developing it), it is recommended that you download an official packaged version of the ICU source code. These versions are tested more thoroughly than day-to-day development builds of the system, and they are packaged in zip and tar files for convenient download. Here are several recent releases of ICU that are available:
 
+## Release Candidate
+
+***2026-09-25: [ICU 79 release candidate](79.md) is now available*** —
+[releases/tag/release-79.1rc](https://github.com/unicode-org/icu/releases/tag/release-79.1rc)
+- Unicode 18, CLDR 49, performance improvements, etc.
+- Please use it for testing but not in production.
+
 ## Latest Release
 
-***2026-03-17: [ICU 78.3](78.md) is now available*** —
+2026-03-17: [ICU 78.3](78.md) —
 [releases/tag/release-78.3](https://github.com/unicode-org/icu/releases/tag/release-78.3) —
 Maven: [com.ibm.icu / icu4j / version 78.3](https://mvnrepository.com/artifact/com.ibm.icu/icu4j/78.3)
 
