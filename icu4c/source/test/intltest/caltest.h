@@ -247,6 +247,7 @@ public: // package
     void TestTimeZoneInLocale();
 
     void TestHebrewMonthValidation();
+    void TestHebrewLargeYear23070();
 
     /*
      * utility methods for TestIslamicUmAlQura
