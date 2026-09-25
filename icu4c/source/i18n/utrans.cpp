@@ -227,9 +227,9 @@ utrans_close(UTransliterator* trans) {
     delete (Transliterator*) trans;
 }
 
-U_CAPI const char16_t * U_EXPORT2
-utrans_getUnicodeID(const UTransliterator *trans,
-                    int32_t *resultLength) {
+U_CAPI const char16_t* U_EXPORT2
+utrans_getUnicodeID(const UTransliterator* trans U_LIFETIME_BOUND,
+                    int32_t* resultLength) {
     // Transliterator keeps its ID NUL-terminated
     const UnicodeString &ID=((Transliterator*) trans)->getID();
     if(resultLength!=nullptr) {
@@ -515,7 +515,7 @@ utrans_toRules(     const UTransliterator* trans,
 U_CAPI USet* U_EXPORT2
 utrans_getSourceSet(const UTransliterator* trans,
                     UBool ignoreFilter,
-                    USet* fillIn,
+                    USet* fillIn U_LIFETIME_BOUND,
                     UErrorCode* status) {
     utrans_ENTRY(status) fillIn;
 

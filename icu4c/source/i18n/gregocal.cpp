@@ -267,8 +267,8 @@ GregorianCalendar* GregorianCalendar::clone() const
 
 // -------------------------------------
 
-GregorianCalendar &
-GregorianCalendar::operator=(const GregorianCalendar &right)
+GregorianCalendar&
+GregorianCalendar::operator=(const GregorianCalendar& right) U_LIFETIME_BOUND
 {
     if (this != &right)
     {

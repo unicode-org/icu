@@ -350,8 +350,8 @@ CollationElementIterator::CollationElementIterator(
 
 /* CollationElementIterator private methods -------------------------------- */
 
-const CollationElementIterator& CollationElementIterator::operator=(
-                                         const CollationElementIterator& other)
+const CollationElementIterator&
+CollationElementIterator::operator=(const CollationElementIterator& other) U_LIFETIME_BOUND
 {
     if (this == &other) {
         return *this;

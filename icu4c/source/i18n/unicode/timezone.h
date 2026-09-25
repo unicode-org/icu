@@ -424,7 +424,8 @@ public:
      * @stable ICU 4.0
      */
     static UnicodeString& U_EXPORT2 getCanonicalID(const UnicodeString& id,
-        UnicodeString& canonicalID, UErrorCode& status);
+                                                   UnicodeString& canonicalID U_LIFETIME_BOUND,
+                                                   UErrorCode& status);
 
     /**
      * Returns the canonical system time zone ID or the normalized
@@ -442,8 +443,9 @@ public:
      * @stable ICU 4.0
      */
     static UnicodeString& U_EXPORT2 getCanonicalID(const UnicodeString& id,
-        UnicodeString& canonicalID, UBool& isSystemID, UErrorCode& status);
-
+                                                   UnicodeString& canonicalID U_LIFETIME_BOUND,
+                                                   UBool& isSystemID,
+                                                   UErrorCode& status);
 
     /**
      * Returns the preferred time zone ID in the IANA time zone database for the given time zone ID.
@@ -497,7 +499,8 @@ public:
     * @stable ICU 52
     */
     static UnicodeString& U_EXPORT2 getWindowsID(const UnicodeString& id,
-        UnicodeString& winid, UErrorCode& status);
+                                                 UnicodeString& winid U_LIFETIME_BOUND,
+                                                 UErrorCode& status);
 
     /**
     * Converts a Windows time zone ID to an equivalent system time zone ID
@@ -525,8 +528,10 @@ public:
     *
     * @stable ICU 52
     */
-    static UnicodeString& U_EXPORT2 getIDForWindowsID(const UnicodeString& winid, const char* region,
-        UnicodeString& id, UErrorCode& status);
+    static UnicodeString& U_EXPORT2 getIDForWindowsID(const UnicodeString& winid,
+                                                      const char* region,
+                                                      UnicodeString& id U_LIFETIME_BOUND,
+                                                      UErrorCode& status);
 
     /**
      * Returns true if the two TimeZones are equal.  (The TimeZone version only compares
@@ -652,7 +657,7 @@ public:
      * @return    A reference to 'ID'
      * @stable ICU 2.0
      */
-    UnicodeString& getID(UnicodeString& ID) const;
+    UnicodeString& getID(UnicodeString& ID U_LIFETIME_BOUND) const;
 
     /**
      * Sets the TimeZone's ID to the specified value.  This doesn't affect any other
@@ -731,7 +736,7 @@ public:
      * @return       A reference to 'result'.
      * @stable ICU 2.0
      */
-    UnicodeString& getDisplayName(UnicodeString& result) const;
+    UnicodeString& getDisplayName(UnicodeString& result U_LIFETIME_BOUND) const;
 
     /**
      * Returns a name of this time zone suitable for presentation to the user
@@ -746,7 +751,8 @@ public:
      * @return       A reference to 'result'.
      * @stable ICU 2.0
      */
-    UnicodeString& getDisplayName(const Locale& locale, UnicodeString& result) const;
+    UnicodeString& getDisplayName(const Locale& locale,
+                                  UnicodeString& result U_LIFETIME_BOUND) const;
 
     /**
      * Returns a name of this time zone suitable for presentation to the user
@@ -760,7 +766,9 @@ public:
      * @return       A reference to 'result'.
      * @stable ICU 2.0
      */
-    UnicodeString& getDisplayName(UBool inDaylight, EDisplayType style, UnicodeString& result) const;
+    UnicodeString& getDisplayName(UBool inDaylight,
+                                  EDisplayType style,
+                                  UnicodeString& result U_LIFETIME_BOUND) const;
 
     /**
      * Returns a name of this time zone suitable for presentation to the user
@@ -776,8 +784,11 @@ public:
      * @return       A reference to 'result'.
      * @stable ICU 2.0
      */
-    UnicodeString& getDisplayName(UBool inDaylight, EDisplayType style, const Locale& locale, UnicodeString& result) const;
-    
+    UnicodeString& getDisplayName(UBool inDaylight,
+                                  EDisplayType style,
+                                  const Locale& locale,
+                                  UnicodeString& result U_LIFETIME_BOUND) const;
+
     /**
      * Queries if this time zone uses daylight savings time.
      * @return true if this time zone uses daylight savings time,
@@ -935,7 +946,7 @@ protected:
      * @param right the object to be copied.
      * @stable ICU 2.0
      */
-    TimeZone& operator=(const TimeZone& right);
+    TimeZone& operator=(const TimeZone& right) U_LIFETIME_BOUND;
 
 #ifndef U_HIDE_INTERNAL_API
     /**
@@ -947,7 +958,10 @@ protected:
      * @return either a new bundle or *oldbundle
      * @internal
      */
-    static UResourceBundle* loadRule(const UResourceBundle* top, const UnicodeString& ruleid, UResourceBundle* oldbundle, UErrorCode&status);
+    static UResourceBundle* loadRule(const UResourceBundle* top,
+                                     const UnicodeString& ruleid,
+                                     UResourceBundle* oldbundle U_LIFETIME_BOUND,
+                                     UErrorCode& status);
 #endif  /* U_HIDE_INTERNAL_API */
 
 private:
@@ -1021,8 +1035,9 @@ private:
      * U_ILLEGAL_ARGUMENT_ERROR is set.
      * @return The normalized custom id string.
     */
-    static UnicodeString& getCustomID(const UnicodeString& id, UnicodeString& normalized,
-        UErrorCode& status);
+    static UnicodeString& getCustomID(const UnicodeString& id,
+                                      UnicodeString& normalized U_LIFETIME_BOUND,
+                                      UErrorCode& status);
 
     /**
      * Returns the normalized custom time zone ID for the given offset fields.
@@ -1033,8 +1048,11 @@ private:
      * @param id Receives the format result (normalized custom ID)
      * @return The reference to id
      */
-    static UnicodeString& formatCustomID(int32_t hour, int32_t min, int32_t sec,
-        UBool negative, UnicodeString& id);
+    static UnicodeString& formatCustomID(int32_t hour,
+                                         int32_t min,
+                                         int32_t sec,
+                                         UBool negative,
+                                         UnicodeString& id U_LIFETIME_BOUND);
 
     UnicodeString           fID;    // this time zone's ID
 
@@ -1045,7 +1063,7 @@ private:
 // -------------------------------------
 
 inline UnicodeString&
-TimeZone::getID(UnicodeString& ID) const
+TimeZone::getID(UnicodeString& ID U_LIFETIME_BOUND) const
 {
     ID = fID;
     return ID;

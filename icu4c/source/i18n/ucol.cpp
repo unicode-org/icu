@@ -39,9 +39,10 @@
 U_NAMESPACE_USE
 
 U_CAPI UCollator* U_EXPORT2
-ucol_openBinary(const uint8_t *bin, int32_t length,
-                const UCollator *base,
-                UErrorCode *status)
+ucol_openBinary(const uint8_t* bin U_LIFETIME_BOUND,
+                int32_t length,
+                const UCollator* base U_LIFETIME_BOUND,
+                UErrorCode* status)
 {
     if(U_FAILURE(*status)) { return nullptr; }
     RuleBasedCollator *coll = new RuleBasedCollator(
@@ -548,8 +549,8 @@ ucol_getUCAVersion(const UCollator* coll, UVersionInfo info) {
     }
 }
 
-U_CAPI const char16_t * U_EXPORT2
-ucol_getRules(const UCollator *coll, int32_t *length) {
+U_CAPI const char16_t* U_EXPORT2
+ucol_getRules(const UCollator* coll U_LIFETIME_BOUND, int32_t* length) {
     const RuleBasedCollator *rbc = RuleBasedCollator::rbcFromUCollator(coll);
     // OK to crash if coll==nullptr: We do not want to check "this" pointers.
     if(rbc != nullptr || coll == nullptr) {
@@ -578,13 +579,17 @@ ucol_getRulesEx(const UCollator *coll, UColRuleOption delta, char16_t *buffer, i
     }
 }
 
-U_CAPI const char * U_EXPORT2
-ucol_getLocale(const UCollator *coll, ULocDataLocaleType type, UErrorCode *status) {
+U_CAPI const char* U_EXPORT2
+ucol_getLocale(const UCollator* coll U_LIFETIME_BOUND,
+               ULocDataLocaleType type,
+               UErrorCode* status) {
     return ucol_getLocaleByType(coll, type, status);
 }
 
-U_CAPI const char * U_EXPORT2
-ucol_getLocaleByType(const UCollator *coll, ULocDataLocaleType type, UErrorCode *status) {
+U_CAPI const char* U_EXPORT2
+ucol_getLocaleByType(const UCollator* coll U_LIFETIME_BOUND,
+                     ULocDataLocaleType type,
+                     UErrorCode* status) {
     if(U_FAILURE(*status)) {
         return nullptr;
     }

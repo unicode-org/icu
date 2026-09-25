@@ -117,7 +117,7 @@ class StringReplacer : public UnicodeFunctor, public UnicodeReplacer {
      * UnicodeFunctor API.  Cast 'this' to a UnicodeReplacer* pointer
      * and return the pointer.
      */
-    virtual UnicodeReplacer* toReplacer() const override;
+    virtual UnicodeReplacer* toReplacer() const U_LIFETIME_BOUND override;
 
     /**
      * UnicodeReplacer API
@@ -130,7 +130,7 @@ class StringReplacer : public UnicodeFunctor, public UnicodeReplacer {
     /**
      * UnicodeReplacer API
      */
-    virtual UnicodeString& toReplacerPattern(UnicodeString& result,
+    virtual UnicodeString& toReplacerPattern(UnicodeString& result U_LIFETIME_BOUND,
                                              UBool escapeUnprintable) const override;
 
     /**

@@ -108,8 +108,11 @@ ulocdata_getNoSubstitute(ULocaleData *uld)
 }
 
 U_CAPI USet* U_EXPORT2
-ulocdata_getExemplarSet(ULocaleData *uld, USet *fillIn,
-                        uint32_t options, ULocaleDataExemplarSetType extype, UErrorCode *status){
+ulocdata_getExemplarSet(ULocaleData* uld,
+                        USet* fillIn U_LIFETIME_BOUND,
+                        uint32_t options,
+                        ULocaleDataExemplarSetType extype,
+                        UErrorCode* status) {
 
     static const char* const exemplarSetTypes[] = { "ExemplarCharacters", 
                                                     "AuxExemplarCharacters", 

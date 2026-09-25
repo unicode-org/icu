@@ -82,7 +82,7 @@ RuleBasedTimeZone::~RuleBasedTimeZone() {
 }
 
 RuleBasedTimeZone&
-RuleBasedTimeZone::operator=(const RuleBasedTimeZone& right) {
+RuleBasedTimeZone::operator=(const RuleBasedTimeZone& right) U_LIFETIME_BOUND {
     if (*this != right) {
         BasicTimeZone::operator=(right);
         deleteRules();
@@ -662,8 +662,10 @@ RuleBasedTimeZone::copyRules(UVector* source) {
 }
 
 TimeZoneRule*
-RuleBasedTimeZone::findRuleInFinal(UDate date, UBool local,
-                                   int32_t NonExistingTimeOpt, int32_t DuplicatedTimeOpt) const {
+RuleBasedTimeZone::findRuleInFinal(UDate date,
+                                   UBool local,
+                                   int32_t NonExistingTimeOpt,
+                                   int32_t DuplicatedTimeOpt) const U_LIFETIME_BOUND {
     if (fFinalRules == nullptr) {
         return nullptr;
     }
