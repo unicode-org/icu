@@ -95,8 +95,8 @@ import java.util.MissingResourceException;
  * seconds to milliseconds.
  *
  * <p>3. Regions. An array specifies mapping between zones and regions. Each item is either a
- * 2-letter ISO country code or "001" (UN M.49 - World). This data is generated from "zone.tab" in
- * the tz database.
+ * 2-letter ISO country code or "001" (UN M.49 - World). This data is generated from
+ * "common/bcp47/timezone.xml" in CLDR.
  */
 public class OlsonTimeZone extends BasicTimeZone implements Cloneable {
 
