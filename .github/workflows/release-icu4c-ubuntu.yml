@@ -71,9 +71,16 @@ jobs:
         tar -czf icu4c-${github_rel_version}-Ubuntu${VERSION_ID}-x64.tgz icu
         rm -fr icu
         popd
-        mv icu4c/source/dist/icu4c-${github_rel_version}-data*     ${RELEASE_FOLDER}
-        mv icu4c/source/dist/icu4c-${github_rel_version}-docs*     ${RELEASE_FOLDER}
-        mv icu4c/source/dist/icu4c-${github_rel_version}-sources.* ${RELEASE_FOLDER}
+        pushd icu4c/source/dist
+        # Remove symlinks
+        find . -type l -delete
+        cp icu4c-*-data-bin-b.zip ${RELEASE_FOLDER}/icu4c-${github_rel_version}-data-bin-b.zip
+        cp icu4c-*-data-bin-l.zip ${RELEASE_FOLDER}/icu4c-${github_rel_version}-data-bin-l.zip
+        cp icu4c-*-data.zip       ${RELEASE_FOLDER}/icu4c-${github_rel_version}-data.zip
+        cp icu4c-*-docs.zip       ${RELEASE_FOLDER}/icu4c-${github_rel_version}-docs.zip
+        cp icu4c-*-sources.tgz    ${RELEASE_FOLDER}/icu4c-${github_rel_version}-sources.tgz
+        cp icu4c-*-sources.zip    ${RELEASE_FOLDER}/icu4c-${github_rel_version}-sources.zip
+        popd
 
     - name: Upload build results
       uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
