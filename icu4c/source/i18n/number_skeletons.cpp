@@ -140,6 +140,10 @@ void U_CALLCONV initNumberSkeletons(UErrorCode& status) {
     // Copy the result into the global constant pointer
     size_t numBytes = result.length() * sizeof(char16_t);
     kSerializedStemTrie = static_cast<char16_t*>(uprv_malloc(numBytes));
+    if (kSerializedStemTrie == nullptr) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
     uprv_memcpy(kSerializedStemTrie, result.getBuffer(), numBytes);
 }
 
