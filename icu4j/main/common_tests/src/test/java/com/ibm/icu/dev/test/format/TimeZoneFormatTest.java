@@ -477,16 +477,6 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
                 }
 
                 for (String id : ids) {
-                    // NOTE: This test only fails in the exhaustive tests.  If you take out this
-                    // check,
-                    // make sure you run the exhaustive tests!
-                    if (logKnownIssue(
-                                    "CLDR-18924",
-                                    "Time round trip issues for Pacific/Apia in various locales")
-                            && id.equals("Pacific/Apia")) {
-                        continue;
-                    }
-
                     if (PATTERNS[patidx].equals("V")) {
                         // Some zones do not have short ID assigned.
                         // The time roundtrip will fail for such zones with pattern "V" (short zone
