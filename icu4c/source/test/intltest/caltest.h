@@ -351,6 +351,7 @@ public: // package
     void Test22633RollTwiceGetTimeOverflow();
     void Test22730JapaneseOverflow();
     void Test22730CopticOverflow();
+    void TestBug23277();
     void Test22962ComputeJulianDayOverflow();
     void Test22962MonthAddOneOverflow();
 
