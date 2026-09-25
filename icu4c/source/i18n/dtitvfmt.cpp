@@ -55,8 +55,8 @@ static const char16_t gDateFormatSkeleton[][11] = {
 {LOW_Y, CAP_M, LOW_D, 0} };
 
 
-static const char gCalendarTag[] = "calendar";
-static const char gGregorianTag[] = "gregorian";
+static const char gIntervalCalendarTag[] = "calendar";
+static const char gIntervalGregorianTag[] = "gregorian";
 static const char gDateTimePatternsTag[] = "DateTimePatterns";
 
 
@@ -819,9 +819,9 @@ DateIntervalFormat::initializePattern(UErrorCode& status) {
         // The date/time pattern ( such as {0} {1} ) is saved in
         // calendar, that is why need to get the CalendarData here.
         LocalUResourceBundlePointer dateTimePatternsRes(ures_open(nullptr, locale.getBaseName(), &status));
-        ures_getByKey(dateTimePatternsRes.getAlias(), gCalendarTag,
+        ures_getByKey(dateTimePatternsRes.getAlias(), gIntervalCalendarTag,
                       dateTimePatternsRes.getAlias(), &status);
-        ures_getByKeyWithFallback(dateTimePatternsRes.getAlias(), gGregorianTag,
+        ures_getByKeyWithFallback(dateTimePatternsRes.getAlias(), gIntervalGregorianTag,
                                   dateTimePatternsRes.getAlias(), &status);
         ures_getByKeyWithFallback(dateTimePatternsRes.getAlias(), gDateTimePatternsTag,
                                   dateTimePatternsRes.getAlias(), &status);
@@ -972,7 +972,7 @@ DateIntervalFormat::normalizeHourMetacharacters(const UnicodeString& skeleton) c
     int32_t dayPeriodLength = 0;
     for (int32_t i = 0; i < result.length(); i++) {
         char16_t c = result[i];
-        if (c == LOW_J || c == CAP_J || c == CAP_C || c == LOW_H || c == CAP_H || c == LOW_K || c == CAP_K) {
+        if (c == DTITV_LOW_J || c == CAP_J || c == CAP_C || c == LOW_H || c == CAP_H || c == LOW_K || c == CAP_K) {
             if (hourMetachar == u'\0') {
                 hourMetachar = c;
                 hourFieldStart = i;
@@ -1131,7 +1131,7 @@ DateIntervalFormat::getDateTimeSkeleton(const UnicodeString& skeleton,
           case LOW_A:
           case CAP_V:
           case CAP_Z:
-          case LOW_J:
+          case DTITV_LOW_J:
           case LOW_S:
           case CAP_S:
           case CAP_A:

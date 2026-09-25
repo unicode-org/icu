@@ -31,7 +31,7 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(TaiwanCalendar)
 
 static const int32_t kTaiwanEraStart = 1911;  // 1911 (Gregorian)
 
-static const int32_t kGregorianEpoch = 1970;
+static const int32_t kTaiwanGregorianEpoch = 1970;
 
 TaiwanCalendar::TaiwanCalendar(const Locale& aLocale, UErrorCode& success)
 :   GregorianCalendar(aLocale, success)
@@ -67,7 +67,7 @@ int32_t TaiwanCalendar::handleGetExtendedYear(UErrorCode& status)
     // The default value of EXTENDED_YEAR is 1970 (Minguo 59)
     if (newerField(UCAL_EXTENDED_YEAR, UCAL_YEAR) == UCAL_EXTENDED_YEAR
         && newerField(UCAL_EXTENDED_YEAR, UCAL_ERA) == UCAL_EXTENDED_YEAR) {
-        return internalGet(UCAL_EXTENDED_YEAR, kGregorianEpoch);
+        return internalGet(UCAL_EXTENDED_YEAR, kTaiwanGregorianEpoch);
     }
     int32_t era = internalGet(UCAL_ERA, MINGUO);
     int32_t year = internalGet(UCAL_YEAR, 1);

@@ -37,7 +37,7 @@ U_NAMESPACE_BEGIN
 
 namespace {
 
-int32_t getIndex(const int32_t *indexes, int32_t length, int32_t i) {
+int32_t getCollationIndex(const int32_t *indexes, int32_t length, int32_t i) {
     return (i < length) ? indexes[i] : -1;
 }
 
@@ -108,8 +108,8 @@ CollationDataReader::read(const CollationTailoring *base, const uint8_t *inBytes
     const uint32_t *reorderRanges = nullptr;
     int32_t reorderRangesLength = 0;
     index = IX_REORDER_CODES_OFFSET;
-    offset = getIndex(inIndexes, indexesLength, index);
-    length = getIndex(inIndexes, indexesLength, index + 1) - offset;
+    offset = getCollationIndex(inIndexes, indexesLength, index);
+    length = getCollationIndex(inIndexes, indexesLength, index + 1) - offset;
     if(length >= 4) {
         if(baseData == nullptr) {
             // We assume for collation settings that
@@ -140,8 +140,8 @@ CollationDataReader::read(const CollationTailoring *base, const uint8_t *inBytes
     // the data size.
     const uint8_t *reorderTable = nullptr;
     index = IX_REORDER_TABLE_OFFSET;
-    offset = getIndex(inIndexes, indexesLength, index);
-    length = getIndex(inIndexes, indexesLength, index + 1) - offset;
+    offset = getCollationIndex(inIndexes, indexesLength, index);
+    length = getCollationIndex(inIndexes, indexesLength, index + 1) - offset;
     if(length >= 256) {
         if(reorderCodesLength == 0) {
             errorCode = U_INVALID_FORMAT_ERROR;  // Reordering table without reordering codes.
@@ -160,8 +160,8 @@ CollationDataReader::read(const CollationTailoring *base, const uint8_t *inBytes
     CollationData *data = nullptr;  // Remains nullptr if there are no mappings.
 
     index = IX_TRIE_OFFSET;
-    offset = getIndex(inIndexes, indexesLength, index);
-    length = getIndex(inIndexes, indexesLength, index + 1) - offset;
+    offset = getCollationIndex(inIndexes, indexesLength, index);
+    length = getCollationIndex(inIndexes, indexesLength, index + 1) - offset;
     if(length >= 8) {
         if(!tailoring.ensureOwnedData(errorCode)) { return; }
         data = tailoring.ownedData;
@@ -180,8 +180,8 @@ CollationDataReader::read(const CollationTailoring *base, const uint8_t *inBytes
     }
 
     index = IX_CES_OFFSET;
-    offset = getIndex(inIndexes, indexesLength, index);
-    length = getIndex(inIndexes, indexesLength, index + 1) - offset;
+    offset = getCollationIndex(inIndexes, indexesLength, index);
+    length = getCollationIndex(inIndexes, indexesLength, index + 1) - offset;
     if(length >= 8) {
         if(data == nullptr) {
             errorCode = U_INVALID_FORMAT_ERROR;  // Tailored ces without tailored trie.
@@ -192,8 +192,8 @@ CollationDataReader::read(const CollationTailoring *base, const uint8_t *inBytes
     }
 
     index = IX_CE32S_OFFSET;
-    offset = getIndex(inIndexes, indexesLength, index);
-    length = getIndex(inIndexes, indexesLength, index + 1) - offset;
+    offset = getCollationIndex(inIndexes, indexesLength, index);
+    length = getCollationIndex(inIndexes, indexesLength, index + 1) - offset;
     if(length >= 4) {
         if(data == nullptr) {
             errorCode = U_INVALID_FORMAT_ERROR;  // Tailored ce32s without tailored trie.
@@ -203,7 +203,7 @@ CollationDataReader::read(const CollationTailoring *base, const uint8_t *inBytes
         data->ce32sLength = length / 4;
     }
 
-    int32_t jamoCE32sStart = getIndex(inIndexes, indexesLength, IX_JAMO_CE32S_START);
+    int32_t jamoCE32sStart = getCollationIndex(inIndexes, indexesLength, IX_JAMO_CE32S_START);
     if(jamoCE32sStart >= 0) {
         if(data == nullptr || data->ce32s == nullptr) {
             errorCode = U_INVALID_FORMAT_ERROR;  // Index into non-existent ce32s[].
@@ -220,8 +220,8 @@ CollationDataReader::read(const CollationTailoring *base, const uint8_t *inBytes
     }
 
     index = IX_ROOT_ELEMENTS_OFFSET;
-    offset = getIndex(inIndexes, indexesLength, index);
-    length = getIndex(inIndexes, indexesLength, index + 1) - offset;
+    offset = getCollationIndex(inIndexes, indexesLength, index);
+    length = getCollationIndex(inIndexes, indexesLength, index + 1) - offset;
     if(length >= 4) {
         length /= 4;
         if(data == nullptr || length <= CollationRootElements::IX_SEC_TER_BOUNDARIES) {
@@ -245,8 +245,8 @@ CollationDataReader::read(const CollationTailoring *base, const uint8_t *inBytes
     }
 
     index = IX_CONTEXTS_OFFSET;
-    offset = getIndex(inIndexes, indexesLength, index);
-    length = getIndex(inIndexes, indexesLength, index + 1) - offset;
+    offset = getCollationIndex(inIndexes, indexesLength, index);
+    length = getCollationIndex(inIndexes, indexesLength, index + 1) - offset;
     if(length >= 2) {
         if(data == nullptr) {
             errorCode = U_INVALID_FORMAT_ERROR;  // Tailored contexts without tailored trie.
@@ -257,8 +257,8 @@ CollationDataReader::read(const CollationTailoring *base, const uint8_t *inBytes
     }
 
     index = IX_UNSAFE_BWD_OFFSET;
-    offset = getIndex(inIndexes, indexesLength, index);
-    length = getIndex(inIndexes, indexesLength, index + 1) - offset;
+    offset = getCollationIndex(inIndexes, indexesLength, index);
+    length = getCollationIndex(inIndexes, indexesLength, index + 1) - offset;
     if(length >= 2) {
         if(data == nullptr) {
             errorCode = U_INVALID_FORMAT_ERROR;
@@ -342,8 +342,8 @@ CollationDataReader::read(const CollationTailoring *base, const uint8_t *inBytes
         data->fastLatinTableLength = 0;
         if(((inIndexes[IX_OPTIONS] >> 16) & 0xff) == CollationFastLatin::VERSION) {
             index = IX_FAST_LATIN_TABLE_OFFSET;
-            offset = getIndex(inIndexes, indexesLength, index);
-            length = getIndex(inIndexes, indexesLength, index + 1) - offset;
+            offset = getCollationIndex(inIndexes, indexesLength, index);
+            length = getCollationIndex(inIndexes, indexesLength, index + 1) - offset;
             if(length >= 2) {
                 data->fastLatinTable = reinterpret_cast<const uint16_t *>(inBytes + offset);
                 data->fastLatinTableLength = length / 2;
@@ -359,8 +359,8 @@ CollationDataReader::read(const CollationTailoring *base, const uint8_t *inBytes
     }
 
     index = IX_SCRIPTS_OFFSET;
-    offset = getIndex(inIndexes, indexesLength, index);
-    length = getIndex(inIndexes, indexesLength, index + 1) - offset;
+    offset = getCollationIndex(inIndexes, indexesLength, index);
+    length = getCollationIndex(inIndexes, indexesLength, index + 1) - offset;
     if(length >= 2) {
         if(data == nullptr) {
             errorCode = U_INVALID_FORMAT_ERROR;
@@ -395,8 +395,8 @@ CollationDataReader::read(const CollationTailoring *base, const uint8_t *inBytes
     }
 
     index = IX_COMPRESSIBLE_BYTES_OFFSET;
-    offset = getIndex(inIndexes, indexesLength, index);
-    length = getIndex(inIndexes, indexesLength, index + 1) - offset;
+    offset = getCollationIndex(inIndexes, indexesLength, index);
+    length = getCollationIndex(inIndexes, indexesLength, index + 1) - offset;
     if(length >= 256) {
         if(data == nullptr) {
             errorCode = U_INVALID_FORMAT_ERROR;

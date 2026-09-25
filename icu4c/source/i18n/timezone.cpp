@@ -1732,3 +1732,24 @@ U_NAMESPACE_END
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 //eof
+
+// Keep file-local macros from leaking into other unity sources.
+#undef U_DEBUG_TZ_STR
+#undef U_DEBUG_TZ_MSG
+#undef kZONEINFO
+#undef kREGIONS
+#undef kZONES
+#undef kRULES
+#undef kNAMES
+#undef kTZVERSION
+#undef kLINKS
+#undef kMAX_CUSTOM_HOUR
+#undef kMAX_CUSTOM_MIN
+#undef kMAX_CUSTOM_SEC
+#undef MINUS
+#undef PLUS
+#undef ZERO_DIGIT
+#undef COLON
+#undef DEFAULT_FILTERED_MAP_SIZE
+#undef MAP_INCREMENT_SIZE
+#undef MAX_WINDOWS_ID_SIZE

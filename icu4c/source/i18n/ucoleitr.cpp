@@ -529,3 +529,11 @@ ucol_tertiaryOrder (int32_t order)
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
+
+// Keep file-local macros from leaking into other unity sources.
+#undef BUFFER_LENGTH
+#undef DEFAULT_BUFFER_SIZE
+#undef BUFFER_GROW
+#undef ARRAY_COPY
+#undef NEW_ARRAY
+#undef DELETE_ARRAY

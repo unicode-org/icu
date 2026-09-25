@@ -168,3 +168,6 @@ void InputText::MungeInput(UBool fStripTags) {
 U_NAMESPACE_END
 #endif
 
+#undef BUFFER_SIZE
+#undef NEW_ARRAY
+#undef DELETE_ARRAY

@@ -26,8 +26,8 @@ U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(UnicodeNameTransliterator)
 
-static const char16_t OPEN_DELIM[] = {92,78,123,0}; // "\N{"
-static const char16_t CLOSE_DELIM  = 125; // "}"
+static const char16_t UNICODE_NAME_OPEN_DELIM[] = {92,78,123,0}; // "\N{"
+static const char16_t UNICODE_NAME_CLOSE_DELIM  = 125; // "}"
 #define OPEN_DELIM_LEN 3
 
 /**
@@ -91,7 +91,7 @@ void UnicodeNameTransliterator::handleTransliterate(Replaceable& text, UTransPos
     int32_t cursor = offsets.start;
     int32_t limit = offsets.limit;
 
-    UnicodeString str(false, OPEN_DELIM, OPEN_DELIM_LEN);
+    UnicodeString str(false, UNICODE_NAME_OPEN_DELIM, OPEN_DELIM_LEN);
     UErrorCode status;
     int32_t len;
 
@@ -101,7 +101,7 @@ void UnicodeNameTransliterator::handleTransliterate(Replaceable& text, UTransPos
         status = U_ZERO_ERROR;
         if ((len = u_charName(c, U_EXTENDED_CHAR_NAME, buf, maxLen, &status)) >0 && !U_FAILURE(status)) {
             str.truncate(OPEN_DELIM_LEN);
-            str.append(UnicodeString(buf, len, US_INV)).append(CLOSE_DELIM);
+            str.append(UnicodeString(buf, len, US_INV)).append(UNICODE_NAME_CLOSE_DELIM);
             text.handleReplaceBetween(cursor, cursor+clen, str);
             len += OPEN_DELIM_LEN + 1; // adjust for delimiters
             cursor += len; // advance cursor and adjust for new text

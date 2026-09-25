@@ -1890,3 +1890,6 @@ void DecimalFormat::doFastFormatInt32(int32_t input, bool isNegative, UnicodeStr
 
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
+
+#undef UBOOL_TO_BOOL
+#undef trace

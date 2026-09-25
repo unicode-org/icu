@@ -203,3 +203,7 @@ U_CDECL_END
 
 
 #endif
+
+// Keep file-local macros from leaking into other unity sources.
+#undef NEW_ARRAY
+#undef DELETE_ARRAY

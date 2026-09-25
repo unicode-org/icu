@@ -32,7 +32,7 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(NameUnicodeTransliterator)
 static const char16_t OPEN[] = {92,78,126,123,126,0}; // "\N~{~"
 static const char16_t OPEN_DELIM  = 92;  // '\\' first char of OPEN
 static const char16_t CLOSE_DELIM = 125; // '}'
-static const char16_t SPACE       = 32;  // ' '
+static const char16_t NAME2UNI_SPACE       = 32;  // ' '
 
 U_CDECL_BEGIN
 
@@ -164,13 +164,13 @@ void NameUnicodeTransliterator::handleTransliterate(Replaceable& text, UTransPos
             // the loop.  If any other character is found, exit the
             // loop.  If the limit is reached, exit the loop.
 
-            // Convert \s+ => SPACE.  This assumes there are no
+            // Convert \s+ => NAME2UNI_SPACE.  This assumes there are no
             // runs of >1 space characters in names.
             if (PatternProps::isWhiteSpace(c)) {
                 // Ignore leading whitespace
                 if (name.length() > 0 &&
-                    name.charAt(name.length()-1) != SPACE) {
-                    name.append(SPACE);
+                    name.charAt(name.length()-1) != NAME2UNI_SPACE) {
+                    name.append(NAME2UNI_SPACE);
                     // If we are too long then abort.  maxLen includes
                     // temporary trailing space, so use '>'.
                     if (name.length() > maxLen) {
@@ -185,7 +185,7 @@ void NameUnicodeTransliterator::handleTransliterate(Replaceable& text, UTransPos
 
                 // Delete trailing space, if any
                 if (len > 0 &&
-                    name.charAt(len-1) == SPACE) {
+                    name.charAt(len-1) == NAME2UNI_SPACE) {
                     --len;
                 }
 

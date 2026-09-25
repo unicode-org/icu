@@ -33,7 +33,7 @@ as of the following commit from 2023-05-09:
 using namespace data_model;
 
 void TestMessageFormat2::testPersonFormatter(IcuTestErrorCode& errorCode) {
-    CHECK_ERROR(errorCode);
+    MF2_CHECK_ERROR(errorCode);
 
     MFFunctionRegistry customRegistry(MFFunctionRegistry::Builder(errorCode)
                                       .adoptFunction(FunctionName("person"),
@@ -102,7 +102,7 @@ void TestMessageFormat2::testPersonFormatter(IcuTestErrorCode& errorCode) {
 }
 
 void TestMessageFormat2::testCustomFunctionsComplexMessage(IcuTestErrorCode& errorCode) {
-    CHECK_ERROR(errorCode);
+    MF2_CHECK_ERROR(errorCode);
 
     MFFunctionRegistry customRegistry(MFFunctionRegistry::Builder(errorCode)
                                       .adoptFunction(FunctionName("person"),
@@ -196,7 +196,7 @@ void TestMessageFormat2::testCustomFunctionsComplexMessage(IcuTestErrorCode& err
 }
 
 void TestMessageFormat2::testComplexOptions(IcuTestErrorCode& errorCode) {
-    CHECK_ERROR(errorCode);
+    MF2_CHECK_ERROR(errorCode);
 
     MFFunctionRegistry customRegistry(MFFunctionRegistry::Builder(errorCode)
                                       .adoptFunction(FunctionName("noun"),
@@ -468,7 +468,7 @@ GrammarCasesValue::GrammarCasesValue(const FunctionValue& val,
 }
 
 void TestMessageFormat2::testGrammarCasesFormatter(IcuTestErrorCode& errorCode) {
-    CHECK_ERROR(errorCode);
+    MF2_CHECK_ERROR(errorCode);
 
     MFFunctionRegistry customRegistry = MFFunctionRegistry::Builder(errorCode)
         .adoptFunction(FunctionName("grammarBB"), new GrammarCasesFunction(), errorCode)
@@ -637,7 +637,7 @@ void TestMessageFormat2::testListFormatter(IcuTestErrorCode& errorCode) {
     MFFunctionRegistry reg = MFFunctionRegistry::Builder(errorCode)
         .adoptFunction(FunctionName("listformat"), new ListFunction(), errorCode)
         .build();
-    CHECK_ERROR(errorCode);
+    MF2_CHECK_ERROR(errorCode);
 
     testBuilder.setLocale(Locale("en"));
     testBuilder.setFunctionRegistry(&reg);
@@ -662,7 +662,7 @@ void TestMessageFormat2::testListFormatter(IcuTestErrorCode& errorCode) {
 */
 
 /* static */ Hashtable* message2::ResourceManager::properties(UErrorCode& errorCode) {
-    NULL_ON_ERROR(errorCode);
+    MF2_NULL_ON_ERROR(errorCode);
 
     UnicodeString* firefox = new UnicodeString(".input {$gcase :string} .match $gcase  genitive {{Firefoxin}}  * {{Firefox}}");
     UnicodeString* chrome = new UnicodeString(".input {$gcase :string} .match $gcase genitive {{Chromen}}  * {{Chrome}}");
@@ -802,10 +802,10 @@ ResourceManager::~ResourceManager() {}
 ResourceManagerValue::~ResourceManagerValue() {}
 
 void TestMessageFormat2::testMessageRefFormatter(IcuTestErrorCode& errorCode) {
-    CHECK_ERROR(errorCode);
+    MF2_CHECK_ERROR(errorCode);
 
     Hashtable* properties = ResourceManager::properties(errorCode);
-    CHECK_ERROR(errorCode);
+    MF2_CHECK_ERROR(errorCode);
     LocalPointer<FormattableProperties> fProperties(new FormattableProperties(properties));
     if (!fProperties.isValid()) {
         ((UErrorCode&) errorCode) = U_MEMORY_ALLOCATION_ERROR;
@@ -814,7 +814,7 @@ void TestMessageFormat2::testMessageRefFormatter(IcuTestErrorCode& errorCode) {
     MFFunctionRegistry reg = MFFunctionRegistry::Builder(errorCode)
         .adoptFunction(FunctionName("msgRef"), new ResourceManager(), errorCode)
         .build();
-    CHECK_ERROR(errorCode);
+    MF2_CHECK_ERROR(errorCode);
 
     TestCase::Builder testBuilder;
     testBuilder.setLocale(Locale("ro"));
@@ -1010,7 +1010,7 @@ NounValue::~NounValue() {}
 AdjectiveValue::~AdjectiveValue() {}
 
 void TestMessageFormat2::testSingleEvaluation(IcuTestErrorCode& errorCode) {
-    CHECK_ERROR(errorCode);
+    MF2_CHECK_ERROR(errorCode);
 
     MFFunctionRegistry customRegistry(MFFunctionRegistry::Builder(errorCode)
                                       .adoptFunction(FunctionName("counter"),

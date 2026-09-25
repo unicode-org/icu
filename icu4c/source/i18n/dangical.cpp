@@ -25,29 +25,29 @@
 
 // --- The cache --
 // Lazy Creation & Access synchronized by class CalendarCache with a mutex.
-static icu::CalendarCache *gWinterSolsticeCache = nullptr;
-static icu::CalendarCache *gNewYearCache = nullptr;
+static icu::CalendarCache *gDangiWinterSolsticeCache = nullptr;
+static icu::CalendarCache *gDangiNewYearCache = nullptr;
 
-// gAstronomerTimeZone
-static icu::TimeZone *gAstronomerTimeZone = nullptr;
-static icu::UInitOnce gAstronomerTimeZoneInitOnce {};
+// gDangiAstronomerTimeZone
+static icu::TimeZone *gDangiAstronomerTimeZone = nullptr;
+static icu::UInitOnce gDangiAstronomerTimeZoneInitOnce {};
 
 U_CDECL_BEGIN
 static UBool calendar_dangi_cleanup() {
-    if (gWinterSolsticeCache) {
-        delete gWinterSolsticeCache;
-        gWinterSolsticeCache = nullptr;
+    if (gDangiWinterSolsticeCache) {
+        delete gDangiWinterSolsticeCache;
+        gDangiWinterSolsticeCache = nullptr;
     }
-    if (gNewYearCache) {
-        delete gNewYearCache;
-        gNewYearCache = nullptr;
+    if (gDangiNewYearCache) {
+        delete gDangiNewYearCache;
+        gDangiNewYearCache = nullptr;
     }
 
-    if (gAstronomerTimeZone) {
-        delete gAstronomerTimeZone;
-        gAstronomerTimeZone = nullptr;
+    if (gDangiAstronomerTimeZone) {
+        delete gDangiAstronomerTimeZone;
+        gDangiAstronomerTimeZone = nullptr;
     }
-    gAstronomerTimeZoneInitOnce.reset();
+    gDangiAstronomerTimeZoneInitOnce.reset();
     return true;
 }
 U_CDECL_END
@@ -115,7 +115,7 @@ const char *DangiCalendar::getType() const {
  * 1912-    : GMT+9 
  */
 static void U_CALLCONV initAstronomerTimeZone(UErrorCode &status) {
-    U_ASSERT(gAstronomerTimeZone == nullptr);
+    U_ASSERT(gDangiAstronomerTimeZone == nullptr);
     const UDate millis1897[] = { static_cast<UDate>((1897 - 1970) * 365 * kOneDay) }; // some days of error is not a problem here
     const UDate millis1898[] = { static_cast<UDate>((1898 - 1970) * 365 * kOneDay) }; // some days of error is not a problem here
     const UDate millis1912[] = { static_cast<UDate>((1912 - 1970) * 365 * kOneDay) }; // this doesn't create an issue for 1911/12/20
@@ -142,20 +142,20 @@ static void U_CALLCONV initAstronomerTimeZone(UErrorCode &status) {
     zone->addTransitionRule(ruleFrom1912.orphan(), status);
     zone->complete(status);
     if (U_SUCCESS(status)) {
-        gAstronomerTimeZone = zone.orphan();
+        gDangiAstronomerTimeZone = zone.orphan();
     }
     ucln_i18n_registerCleanup(UCLN_I18N_DANGI_CALENDAR, calendar_dangi_cleanup);
 }
 
 const TimeZone* getAstronomerTimeZone(UErrorCode &status) {
-    umtx_initOnce(gAstronomerTimeZoneInitOnce, &initAstronomerTimeZone, status);
-    return gAstronomerTimeZone;
+    umtx_initOnce(gDangiAstronomerTimeZoneInitOnce, &initAstronomerTimeZone, status);
+    return gDangiAstronomerTimeZone;
 }
 
 ChineseCalendar::Setting DangiCalendar::getSetting(UErrorCode& status) const {
   return {
     getAstronomerTimeZone(status),
-    &gWinterSolsticeCache, &gNewYearCache
+    &gDangiWinterSolsticeCache, &gDangiNewYearCache
   };
 }
 

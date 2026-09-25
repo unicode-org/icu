@@ -365,11 +365,11 @@ inline int32_t Grego::gregorianShift(int32_t eyear) {
    * century date and year are set, they do not change \
    */ \
   namespace { \
-  static UDate           gSystemDefaultCenturyStart       = DBL_MIN; \
-  static int32_t         gSystemDefaultCenturyStartYear   = -1; \
-  static icu::UInitOnce  gSystemDefaultCenturyInit        {}; \
+  static UDate           gSystemDefaultCenturyStart##T       = DBL_MIN; \
+  static int32_t         gSystemDefaultCenturyStartYear##T   = -1; \
+  static icu::UInitOnce  gSystemDefaultCenturyInit##T        {}; \
   static void U_CALLCONV \
-  initializeSystemDefaultCentury() { \
+  initializeSystemDefaultCentury##T() { \
       UErrorCode status = U_ZERO_ERROR; \
       T calendar(U, status); \
       /* initialize systemDefaultCentury and systemDefaultCenturyYear based */ \
@@ -380,21 +380,21 @@ inline int32_t Grego::gregorianShift(int32_t eyear) {
       } \
       calendar.setTime(Calendar::getNow(), status); \
       calendar.add(UCAL_YEAR, -80, status); \
-      gSystemDefaultCenturyStart = calendar.getTime(status); \
-      gSystemDefaultCenturyStartYear = calendar.get(UCAL_YEAR, status); \
+      gSystemDefaultCenturyStart##T = calendar.getTime(status); \
+      gSystemDefaultCenturyStartYear##T = calendar.get(UCAL_YEAR, status); \
       /* We have no recourse upon failure unless we want to propagate the */ \
       /* failure out. */ \
   } \
   }  /* namespace */ \
   UDate T::defaultCenturyStart() const { \
       /* lazy-evaluate systemDefaultCenturyStart */ \
-      umtx_initOnce(gSystemDefaultCenturyInit, &initializeSystemDefaultCentury); \
-      return gSystemDefaultCenturyStart; \
+      umtx_initOnce(gSystemDefaultCenturyInit##T, &initializeSystemDefaultCentury##T); \
+      return gSystemDefaultCenturyStart##T; \
   }   \
   int32_t T::defaultCenturyStartYear() const { \
       /* lazy-evaluate systemDefaultCenturyStart */ \
-      umtx_initOnce(gSystemDefaultCenturyInit, &initializeSystemDefaultCentury); \
-      return gSystemDefaultCenturyStartYear; \
+      umtx_initOnce(gSystemDefaultCenturyInit##T, &initializeSystemDefaultCentury##T); \
+      return gSystemDefaultCenturyStartYear##T; \
   } \
   UBool T::haveDefaultCentury() const { return true; }
 

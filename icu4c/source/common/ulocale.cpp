@@ -94,3 +94,7 @@ bool ulocale_isBogus(const ULocale* locale) {
 }
 
 /*eof*/
+
+#undef EXTERNAL
+#undef INTERNAL
+#undef CONST_INTERNAL

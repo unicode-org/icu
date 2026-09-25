@@ -112,3 +112,11 @@ utmscale_toInt64(int64_t universalTime, UDateTimeScale timeScale, UErrorCode *st
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
+
+#undef ticks
+#undef microseconds
+#undef milliseconds
+#undef seconds
+#undef minutes
+#undef hours
+#undef days

@@ -53,7 +53,7 @@ const char *IndianCalendar::getType() const {
    return "indian";
 }
   
-static const int32_t LIMITS[UCAL_FIELD_COUNT][4] = {
+static const int32_t INDIAN_LIMITS[UCAL_FIELD_COUNT][4] = {
     // Minimum  Greatest     Least   Maximum
     //           Minimum   Maximum
     {        0,        0,        0,        0}, // ERA
@@ -86,7 +86,7 @@ static const int32_t INDIAN_ERA_START  = 78;
 static const int32_t INDIAN_YEAR_START = 80;
 
 int32_t IndianCalendar::handleGetLimit(UCalendarDateFields field, ELimitType limitType) const {
-  return LIMITS[field][limitType];
+  return INDIAN_LIMITS[field][limitType];
 }
 
 /*

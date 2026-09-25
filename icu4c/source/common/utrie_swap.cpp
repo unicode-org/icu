@@ -18,7 +18,7 @@
 
 namespace {
 
-constexpr int32_t ASCII_LIMIT = 0x80;
+constexpr int32_t UTRIE_SWAP_ASCII_LIMIT = 0x80;
 
 }  // namespace
 
@@ -220,7 +220,7 @@ ucptrie_swap(const UDataSwapper *ds,
         (trie.options & UCPTRIE_OPTIONS_RESERVED_MASK) != 0 ||
         valueWidth > UCPTRIE_VALUE_BITS_8 ||
         trie.indexLength < minIndexLength ||
-        dataLength < ASCII_LIMIT
+        dataLength < UTRIE_SWAP_ASCII_LIMIT
     ) {
         *pErrorCode=U_INVALID_FORMAT_ERROR; /* not a UCPTrie */
         return 0;

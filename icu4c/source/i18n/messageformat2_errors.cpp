@@ -78,11 +78,11 @@ namespace message2 {
     }
 
     StaticErrors::StaticErrors(const StaticErrors& other, UErrorCode& errorCode) {
-        CHECK_ERROR(errorCode);
+        MF2_CHECK_ERROR(errorCode);
 
         U_ASSERT(other.syntaxAndDataModelErrors.isValid());
         syntaxAndDataModelErrors.adoptInstead(createUVector(errorCode));
-        CHECK_ERROR(errorCode);
+        MF2_CHECK_ERROR(errorCode);
         for (int32_t i = 0; i < other.syntaxAndDataModelErrors->size(); i++) {
             StaticError* e = static_cast<StaticError*>(other.syntaxAndDataModelErrors->elementAt(i));
             U_ASSERT(e != nullptr);
@@ -165,7 +165,7 @@ namespace message2 {
     }
 
     void StaticErrors::addError(StaticError&& e, UErrorCode& status) {
-        CHECK_ERROR(status);
+        MF2_CHECK_ERROR(status);
 
         StaticErrorType type = e.type;
 
@@ -207,7 +207,7 @@ namespace message2 {
     }
 
     void DynamicErrors::addError(DynamicError&& e, UErrorCode& status) {
-        CHECK_ERROR(status);
+        MF2_CHECK_ERROR(status);
 
         DynamicErrorType type = e.type;
 

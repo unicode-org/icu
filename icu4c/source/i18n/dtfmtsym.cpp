@@ -254,7 +254,7 @@ static const char gAmPmMarkersTag[]="AmPmMarkers";
 static const char gAmPmMarkersAbbrTag[]="AmPmMarkersAbbr";
 static const char gAmPmMarkersNarrowTag[]="AmPmMarkersNarrow";
 static const char gQuartersTag[]="quarters";
-static const char gNumberElementsTag[]="NumberElements";
+static const char gDateNumberElementsTag[]="NumberElements";
 static const char gSymbolsTag[]="symbols";
 static const char gTimeSeparatorTag[]="timeSeparator";
 static const char gDayPeriodTag[]="dayPeriod";
@@ -2450,7 +2450,7 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
             // do nothing unless U_SUCCESS(tempStatus), so it's only necessary
             // to check for errors once after all calls are made.
             const LocalUResourceBundlePointer numberElementsData(ures_getByKeyWithFallback(
-                    localeBundle.getAlias(), gNumberElementsTag, nullptr, &tempStatus));
+                    localeBundle.getAlias(), gDateNumberElementsTag, nullptr, &tempStatus));
             const LocalUResourceBundlePointer nsNameData(ures_getByKeyWithFallback(
                     numberElementsData.getAlias(), numberingSystem->getName(), nullptr, &tempStatus));
             const LocalUResourceBundlePointer symbolsData(ures_getByKeyWithFallback(
@@ -2786,3 +2786,65 @@ U_NAMESPACE_END
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 //eof
+
+// Keep file-local macros from leaking into other unity sources.
+#undef QUOTE
+#undef LOW_LINE
+#undef COLON
+#undef LEFT_CURLY_BRACKET
+#undef RIGHT_CURLY_BRACKET
+#undef SPACE
+#undef EN_DASH
+#undef SOLIDUS
+#undef PERCENT
+#undef DIGIT_ZERO
+#undef DIGIT_ONE
+#undef LOW_A
+#undef LOW_B
+#undef LOW_C
+#undef LOW_D
+#undef LOW_E
+#undef LOW_F
+#undef LOW_G
+#undef LOW_H
+#undef LOW_I
+#undef LOW_J
+#undef LOW_K
+#undef LOW_L
+#undef LOW_M
+#undef LOW_N
+#undef LOW_O
+#undef LOW_P
+#undef LOW_Q
+#undef LOW_R
+#undef LOW_S
+#undef LOW_T
+#undef LOW_U
+#undef LOW_V
+#undef LOW_W
+#undef LOW_Y
+#undef LOW_Z
+#undef CAP_A
+#undef CAP_C
+#undef CAP_D
+#undef CAP_E
+#undef CAP_F
+#undef CAP_G
+#undef CAP_H
+#undef CAP_K
+#undef CAP_L
+#undef CAP_M
+#undef CAP_N
+#undef CAP_O
+#undef CAP_P
+#undef CAP_Q
+#undef CAP_S
+#undef CAP_T
+#undef CAP_U
+#undef CAP_V
+#undef CAP_W
+#undef CAP_Y
+#undef CAP_Z
+#undef PATTERN_CHARS_LEN
+#undef kSUPPLEMENTAL
+#undef ZONE_SET

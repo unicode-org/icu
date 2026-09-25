@@ -1633,3 +1633,43 @@ const UConverterSharedData _ISCIIData=
         UCNV_IMMUTABLE_SHARED_DATA_INITIALIZER(&_ISCIIStaticData, &_ISCIIImpl);
 
 #endif /* #if !UCONFIG_NO_LEGACY_CONVERSION */
+
+// Keep file-local macros from leaking into other unity sources.
+#undef UCNV_OPTIONS_VERSION_MASK
+#undef NUKTA
+#undef HALANT
+#undef ZWNJ
+#undef ZWJ
+#undef INVALID_CHAR
+#undef ATR
+#undef EXT
+#undef DANDA
+#undef DOUBLE_DANDA
+#undef ISCII_NUKTA
+#undef ISCII_HALANT
+#undef ISCII_DANDA
+#undef ISCII_INV
+#undef ISCII_VOWEL_SIGN_E
+#undef INDIC_BLOCK_BEGIN
+#undef INDIC_BLOCK_END
+#undef INDIC_RANGE
+#undef VOCALLIC_RR
+#undef LF
+#undef ASCII_END
+#undef NO_CHAR_MARKER
+#undef TELUGU_DELTA
+#undef DEV_ABBR_SIGN
+#undef DEV_ANUDATTA
+#undef EXT_RANGE_BEGIN
+#undef EXT_RANGE_END
+#undef PNJ_DELTA
+#undef PNJ_BINDI
+#undef PNJ_TIPPI
+#undef PNJ_SIGN_VIRAMA
+#undef PNJ_ADHAK
+#undef PNJ_HA
+#undef PNJ_RRA
+#undef ISCII_CNV_PREFIX
+#undef WRITE_TO_TARGET_FROM_U
+#undef WRITE_TO_TARGET_TO_U
+#undef GET_MAPPING

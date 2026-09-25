@@ -457,7 +457,7 @@ DateTimePatternGenerator::~DateTimePatternGenerator() {
 
 namespace {
 
-UInitOnce initOnce {};
+UInitOnce initDateTimePatternOnce {};
 UHashtable *localeToAllowedHourFormatsMap = nullptr;
 
 // Value deleter for hashmap.
@@ -506,7 +506,7 @@ DateTimePatternGenerator::initData(const Locale& locale, UErrorCode &status, UBo
     addCLDRData(locale, status);
     setDateTimeFromCalendar(locale, status);
     setDecimalSymbols(locale, status);
-    umtx_initOnce(initOnce, loadAllowedHourFormatsData, status);
+    umtx_initOnce(initDateTimePatternOnce, loadAllowedHourFormatsData, status);
     getAllowedHourFormats(locale, status);
     // If any of the above methods failed then the object is in an invalid state.
     internalErrorCode = status;
@@ -3044,3 +3044,83 @@ U_NAMESPACE_END
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 //eof
+
+// Keep file-local macros from leaking into other unity sources.
+#undef U_USE_ASCII_BUNDLE_ITERATOR
+#undef U_SORT_ASCII_BUNDLE_ITERATOR
+#undef ULOC_LOCALE_IDENTIFIER_CAPACITY
+#undef MAX_PATTERN_ENTRIES
+#undef MAX_CLDR_FIELD_LEN
+#undef MAX_DT_TOKEN
+#undef MAX_RESOURCE_FIELD
+#undef MAX_AVAILABLE_FORMATS
+#undef NONE
+#undef EXTRA_FIELD
+#undef MISSING_FIELD
+#undef MAX_STRING_ENUMERATION
+#undef SINGLE_QUOTE
+#undef FORWARDSLASH
+#undef BACKSLASH
+#undef SPACE
+#undef QUOTATION_MARK
+#undef ASTERISK
+#undef PLUSSITN
+#undef COMMA
+#undef HYPHEN
+#undef DOT
+#undef COLON
+#undef CAP_A
+#undef CAP_B
+#undef CAP_C
+#undef CAP_D
+#undef CAP_E
+#undef CAP_F
+#undef CAP_G
+#undef CAP_H
+#undef CAP_J
+#undef CAP_K
+#undef CAP_L
+#undef CAP_M
+#undef CAP_O
+#undef CAP_Q
+#undef CAP_S
+#undef CAP_T
+#undef CAP_U
+#undef CAP_V
+#undef CAP_W
+#undef CAP_X
+#undef CAP_Y
+#undef CAP_Z
+#undef LOWLINE
+#undef LOW_A
+#undef LOW_B
+#undef LOW_C
+#undef LOW_D
+#undef LOW_E
+#undef LOW_F
+#undef LOW_G
+#undef LOW_H
+#undef LOW_I
+#undef LOW_J
+#undef LOW_K
+#undef LOW_L
+#undef LOW_M
+#undef LOW_N
+#undef LOW_O
+#undef LOW_P
+#undef LOW_Q
+#undef LOW_R
+#undef LOW_S
+#undef LOW_T
+#undef LOW_U
+#undef LOW_V
+#undef LOW_W
+#undef LOW_X
+#undef LOW_Y
+#undef LOW_Z
+#undef DT_NARROW
+#undef DT_SHORTER
+#undef DT_SHORT
+#undef DT_LONG
+#undef DT_NUMERIC
+#undef DT_DELTA

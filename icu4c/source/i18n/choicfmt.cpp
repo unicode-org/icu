@@ -61,13 +61,10 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(ChoiceFormat)
 static const char16_t LEFT_CURLY_BRACE = 0x7B;     /*{*/
 static const char16_t RIGHT_CURLY_BRACE = 0x7D;    /*}*/
 
-#ifdef INFINITY
-#undef INFINITY
-#endif
-#define INFINITY     ((char16_t)0x221E)
+static constexpr char16_t kChoiceInfinitySign = 0x221E;
 
-//static const char16_t gPositiveInfinity[] = {INFINITY, 0};
-//static const char16_t gNegativeInfinity[] = {MINUS, INFINITY, 0};
+//static const char16_t gPositiveInfinity[] = {kChoiceInfinitySign, 0};
+//static const char16_t gNegativeInfinity[] = {MINUS, kChoiceInfinitySign, 0};
 #define POSITIVE_INF_STRLEN 1
 #define NEGATIVE_INF_STRLEN 2
 
@@ -294,10 +291,10 @@ ChoiceFormat::setChoices(const double* limits,
         }
         UnicodeString buf;
         if (uprv_isPositiveInfinity(limits[i])) {
-            result += INFINITY;
+            result += kChoiceInfinitySign;
         } else if (uprv_isNegativeInfinity(limits[i])) {
             result += MINUS;
-            result += INFINITY;
+            result += kChoiceInfinitySign;
         } else {
             result += dtos(limits[i], buf);
         }
@@ -575,3 +572,13 @@ U_NAMESPACE_END
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 //eof
+
+// Keep file-local macros from leaking into other unity sources.
+#undef SINGLE_QUOTE
+#undef LESS_THAN
+#undef LESS_EQUAL
+#undef LESS_EQUAL2
+#undef VERTICAL_BAR
+#undef MINUS
+#undef POSITIVE_INF_STRLEN
+#undef NEGATIVE_INF_STRLEN

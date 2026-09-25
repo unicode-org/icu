@@ -536,3 +536,12 @@ cleanup:
     }
     return (U_FAILURE(*pErrorCode) && *pErrorCode != U_BUFFER_OVERFLOW_ERROR) ? 0 : destLength;
 }
+
+#undef LTR
+#undef RTL
+#undef LOGICAL
+#undef VISUAL
+#undef SHAPE_LOGICAL
+#undef SHAPE_VISUAL
+#undef CHECK_LEN
+#undef MAX_ACTIONS

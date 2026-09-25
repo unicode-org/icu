@@ -218,7 +218,7 @@ IslamicCalendar::~IslamicCalendar()
 // a month as having 31 days. Since date parsing now uses range checks based
 // on the table below, we need to change the range for last day of month to
 // include 31 as a workaround until the implementation is fixed.
-static const int32_t LIMITS[UCAL_FIELD_COUNT][4] = {
+static const int32_t ISLAMIC_LIMITS[UCAL_FIELD_COUNT][4] = {
     // Minimum  Greatest    Least  Maximum
     //           Minimum  Maximum
     {        0,        0,        0,        0}, // ERA
@@ -251,7 +251,7 @@ static const int32_t LIMITS[UCAL_FIELD_COUNT][4] = {
 * @draft ICU 2.4
 */
 int32_t IslamicCalendar::handleGetLimit(UCalendarDateFields field, ELimitType limitType) const {
-    return LIMITS[field][limitType];
+    return ISLAMIC_LIMITS[field][limitType];
 }
 
 //-------------------------------------------------------------------------

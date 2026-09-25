@@ -47,7 +47,7 @@ static const char16_t LOCALE_SEP  = 95; // '_'
 //static const char16_t VARIANT_SEP = 0x002F; // '/'
 
 // String constants
-static const char16_t ANY[] = { 0x41, 0x6E, 0x79, 0 }; // Any
+static const char16_t TRANSREG_ANY[] = { 0x41, 0x6E, 0x79, 0 }; // Any
 static const char16_t LAT[] = { 0x4C, 0x61, 0x74, 0 }; // Lat
 
 // empty string
@@ -933,7 +933,7 @@ void TransliteratorRegistry::registerEntry(const UnicodeString& source,
     UnicodeString ID;
     UnicodeString s(source);
     if (s.length() == 0) {
-        s.setTo(true, ANY, 3);
+        s.setTo(true, TRANSREG_ANY, 3);
     }
     TransliteratorIDParser::STVtoID(source, target, variant, ID);
     registerEntry(ID, s, target, variant, adopted, visible);
@@ -990,7 +990,7 @@ void TransliteratorRegistry::registerSTV(const UnicodeString& source,
     Hashtable* targets = static_cast<Hashtable*>(specDAG.get(source));
     if (targets == nullptr) {
         int32_t size = 3;
-        if (source.compare(ANY,3) == 0) {
+        if (source.compare(TRANSREG_ANY,3) == 0) {
             size = ANY_TARGETS_INIT_SIZE;
         } else if (source.compare(LAT,3) == 0) {
             size = LAT_TARGETS_INIT_SIZE;

@@ -30,36 +30,36 @@ using namespace pluralimpl;
 // Tokens for parser and serializer
 
 // Syntactically significant characters
-#define LEFT_CURLY_BRACE ((UChar32)0x007B)
-#define RIGHT_CURLY_BRACE ((UChar32)0x007D)
-#define HTAB ((UChar32)0x0009)
-#define IDEOGRAPHIC_SPACE ((UChar32)0x3000)
+inline constexpr UChar32 MF2_LEFT_CURLY_BRACE = 0x007B;
+inline constexpr UChar32 MF2_RIGHT_CURLY_BRACE = 0x007D;
+inline constexpr UChar32 MF2_HTAB = 0x0009;
+inline constexpr UChar32 MF2_IDEOGRAPHIC_SPACE = 0x3000;
 
-#define PIPE ((UChar32)0x007C)
-#define EQUALS ((UChar32)0x003D)
-#define DOLLAR ((UChar32)0x0024)
-#define COLON ((UChar32)0x003A)
-#define PLUS ((UChar32)0x002B)
-#define HYPHEN ((UChar32)0x002D)
-#define PERIOD ((UChar32)0x002E)
-#define UNDERSCORE ((UChar32)0x005F)
+inline constexpr UChar32 MF2_PIPE = 0x007C;
+inline constexpr UChar32 MF2_EQUALS = 0x003D;
+inline constexpr UChar32 MF2_DOLLAR = 0x0024;
+inline constexpr UChar32 MF2_COLON = 0x003A;
+inline constexpr UChar32 MF2_PLUS = 0x002B;
+inline constexpr UChar32 MF2_HYPHEN = 0x002D;
+inline constexpr UChar32 MF2_PERIOD = 0x002E;
+inline constexpr UChar32 MF2_UNDERSCORE = 0x005F;
 
-#define LOWERCASE_E ((UChar32)0x0065)
-#define UPPERCASE_E ((UChar32)0x0045)
+inline constexpr UChar32 MF2_LOWERCASE_E = 0x0065;
+inline constexpr UChar32 MF2_UPPERCASE_E = 0x0045;
 
 // Reserved sigils
-#define BANG ((UChar32)0x0021)
-#define AT ((UChar32)0x0040)
-#define PERCENT ((UChar32)0x0025)
-#define CARET ((UChar32)0x005E)
-#define AMPERSAND ((UChar32)0x0026)
-#define LESS_THAN ((UChar32)0x003C)
-#define GREATER_THAN ((UChar32)0x003E)
-#define QUESTION ((UChar32)0x003F)
-#define TILDE ((UChar32)0x007E)
+inline constexpr UChar32 MF2_BANG = 0x0021;
+inline constexpr UChar32 MF2_AT = 0x0040;
+inline constexpr UChar32 MF2_PERCENT = 0x0025;
+inline constexpr UChar32 MF2_CARET = 0x005E;
+inline constexpr UChar32 MF2_AMPERSAND = 0x0026;
+inline constexpr UChar32 MF2_LESS_THAN = 0x003C;
+inline constexpr UChar32 MF2_GREATER_THAN = 0x003E;
+inline constexpr UChar32 MF2_QUESTION = 0x003F;
+inline constexpr UChar32 MF2_TILDE = 0x007E;
 
 // Fallback
-#define REPLACEMENT ((UChar32) 0xFFFD)
+inline constexpr UChar32 MF2_REPLACEMENT = 0xFFFD;
 
 // MessageFormat2 uses three keywords: `.input`, `.local`, and `.match`.
 
@@ -68,25 +68,25 @@ static constexpr std::u16string_view ID_LOCAL = u".local";
 static constexpr std::u16string_view ID_MATCH = u".match";
 
 // Returns immediately if `errorCode` indicates failure
-#define CHECK_ERROR(errorCode)                                                                          \
+#define MF2_CHECK_ERROR(errorCode)                                                                          \
     if (U_FAILURE(errorCode)) {                                                                         \
         return;                                                                                         \
     }
 
 // Returns immediately if `errorCode` indicates failure
-#define NULL_ON_ERROR(errorCode)                                                                          \
+#define MF2_NULL_ON_ERROR(errorCode)                                                                          \
     if (U_FAILURE(errorCode)) {                                                                         \
         return nullptr;                                                                                         \
     }
 
 // Returns immediately if `errorCode` indicates failure
-#define THIS_ON_ERROR(errorCode)                                                                          \
+#define MF2_THIS_ON_ERROR(errorCode)                                                                          \
     if (U_FAILURE(errorCode)) {                                                                         \
         return *this; \
     }
 
 // Returns immediately if `errorCode` indicates failure
-#define EMPTY_ON_ERROR(errorCode)                                                                          \
+#define MF2_EMPTY_ON_ERROR(errorCode)                                                                          \
     if (U_FAILURE(errorCode)) {                                                                         \
         return {}; \
     }

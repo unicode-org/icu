@@ -173,7 +173,7 @@ typedef struct UAliasContext {
 } UAliasContext;
 
 static const char DATA_NAME[] = "cnvalias";
-static const char DATA_TYPE[] = "icu";
+static const char UCNV_IO_DATA_TYPE[] = "icu";
 
 static UDataMemory *gAliasData=nullptr;
 static icu::UInitOnce gAliasDataInitOnce {};
@@ -242,7 +242,7 @@ static void U_CALLCONV initAliasData(UErrorCode &errCode) {
     ucln_common_registerCleanup(UCLN_COMMON_UCNV_IO, ucnv_io_cleanup);
 
     U_ASSERT(gAliasData == nullptr);
-    data = udata_openChoice(nullptr, DATA_TYPE, DATA_NAME, isAcceptable, nullptr, &errCode);
+    data = udata_openChoice(nullptr, UCNV_IO_DATA_TYPE, DATA_NAME, isAcceptable, nullptr, &errCode);
     if (U_FAILURE(errCode)) {
         return;
     }
@@ -364,7 +364,7 @@ static uint32_t getTagNumber(const char *tagname) {
 /* character types relevant for ucnv_compareNames() */
 enum {
     UIGNORE,
-    ZERO,
+    UCNV_IO_ZERO,
     NONZERO,
     MINLETTER /* any values from here on are lowercase letter mappings */
 };
@@ -374,7 +374,7 @@ static const uint8_t asciiTypes[128] = {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    ZERO, NONZERO, NONZERO, NONZERO, NONZERO, NONZERO, NONZERO, NONZERO, NONZERO, NONZERO, 0, 0, 0, 0, 0, 0,
+    UCNV_IO_ZERO, NONZERO, NONZERO, NONZERO, NONZERO, NONZERO, NONZERO, NONZERO, NONZERO, NONZERO, 0, 0, 0, 0, 0, 0,
     0, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69, 0x6a, 0x6b, 0x6c, 0x6d, 0x6e, 0x6f,
     0x70, 0x71, 0x72, 0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7a, 0, 0, 0, 0, 0,
     0, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69, 0x6a, 0x6b, 0x6c, 0x6d, 0x6e, 0x6f,
@@ -392,7 +392,7 @@ static const uint8_t ebcdicTypes[128] = {
     0,    0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, 0x88, 0x89, 0, 0, 0, 0, 0, 0,
     0,    0x91, 0x92, 0x93, 0x94, 0x95, 0x96, 0x97, 0x98, 0x99, 0, 0, 0, 0, 0, 0,
     0,    0,    0xa2, 0xa3, 0xa4, 0xa5, 0xa6, 0xa7, 0xa8, 0xa9, 0, 0, 0, 0, 0, 0,
-    ZERO, NONZERO, NONZERO, NONZERO, NONZERO, NONZERO, NONZERO, NONZERO, NONZERO, NONZERO, 0, 0, 0, 0, 0, 0
+    UCNV_IO_ZERO, NONZERO, NONZERO, NONZERO, NONZERO, NONZERO, NONZERO, NONZERO, NONZERO, NONZERO, 0, 0, 0, 0, 0, 0
 };
 
 #define GET_EBCDIC_TYPE(c) ((int8_t)(c) < 0 ? ebcdicTypes[(c)&0x7f] : (uint8_t)UIGNORE)
@@ -420,10 +420,10 @@ ucnv_io_stripASCIIForCompare(char* dst U_LIFETIME_BOUND, const char* name) {
         case UIGNORE:
             afterDigit = false;
             continue; /* ignore all but letters and digits */
-        case ZERO:
+        case UCNV_IO_ZERO:
             if (!afterDigit) {
                 nextType = GET_ASCII_TYPE(*name);
-                if (nextType == ZERO || nextType == NONZERO) {
+                if (nextType == UCNV_IO_ZERO || nextType == NONZERO) {
                     continue; /* ignore leading zero before another digit */
                 }
             }
@@ -455,10 +455,10 @@ ucnv_io_stripEBCDICForCompare(char* dst U_LIFETIME_BOUND, const char* name) {
         case UIGNORE:
             afterDigit = false;
             continue; /* ignore all but letters and digits */
-        case ZERO:
+        case UCNV_IO_ZERO:
             if (!afterDigit) {
                 nextType = GET_EBCDIC_TYPE(*name);
-                if (nextType == ZERO || nextType == NONZERO) {
+                if (nextType == UCNV_IO_ZERO || nextType == NONZERO) {
                     continue; /* ignore leading zero before another digit */
                 }
             }
@@ -512,10 +512,10 @@ ucnv_compareNames(const char *name1, const char *name2) {
             case UIGNORE:
                 afterDigit1 = false;
                 continue; /* ignore all but letters and digits */
-            case ZERO:
+            case UCNV_IO_ZERO:
                 if (!afterDigit1) {
                     nextType = GET_CHAR_TYPE(*name1);
-                    if (nextType == ZERO || nextType == NONZERO) {
+                    if (nextType == UCNV_IO_ZERO || nextType == NONZERO) {
                         continue; /* ignore leading zero before another digit */
                     }
                 }
@@ -536,10 +536,10 @@ ucnv_compareNames(const char *name1, const char *name2) {
             case UIGNORE:
                 afterDigit2 = false;
                 continue; /* ignore all but letters and digits */
-            case ZERO:
+            case UCNV_IO_ZERO:
                 if (!afterDigit2) {
                     nextType = GET_CHAR_TYPE(*name2);
-                    if (nextType == ZERO || nextType == NONZERO) {
+                    if (nextType == UCNV_IO_ZERO || nextType == NONZERO) {
                         continue; /* ignore leading zero before another digit */
                     }
                 }

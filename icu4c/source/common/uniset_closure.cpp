@@ -357,3 +357,5 @@ void UnicodeSet::closeOverAddCaseMappings() {
 }
 
 U_NAMESPACE_END
+
+#undef _dbgct

@@ -34,7 +34,7 @@ U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(BreakTransliterator)
 
-static const char16_t SPACE       = 32;  // ' '
+static const char16_t BRKTRANS_SPACE       = 32;  // ' '
 
 
 /**
@@ -43,7 +43,7 @@ static const char16_t SPACE       = 32;  // ' '
  */
 BreakTransliterator::BreakTransliterator(UnicodeFilter* adoptedFilter) :
         Transliterator(UNICODE_STRING("Any-BreakInternal", 17), adoptedFilter),
-        cachedBI(nullptr), cachedBoundaries(nullptr), fInsertion(SPACE) {
+        cachedBI(nullptr), cachedBoundaries(nullptr), fInsertion(BRKTRANS_SPACE) {
     }
 
 

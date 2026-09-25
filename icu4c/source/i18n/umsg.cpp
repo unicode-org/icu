@@ -706,3 +706,13 @@ int32_t umsg_autoQuoteApostrophe(const char16_t* pattern,
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
+
+// Keep file-local macros from leaking into other unity sources.
+#undef SINGLE_QUOTE
+#undef CURLY_BRACE_LEFT
+#undef CURLY_BRACE_RIGHT
+#undef STATE_INITIAL
+#undef STATE_SINGLE_QUOTE
+#undef STATE_IN_QUOTE
+#undef STATE_MSG_ELEMENT
+#undef MAppend

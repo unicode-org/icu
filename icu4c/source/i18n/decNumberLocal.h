@@ -21,8 +21,12 @@
 /* This header file is included by all modules in the decNumber       */
 /* library, and contains local type definitions, tuning parameters,   */
 /* etc.  It should not need to be used by application programs.       */
-/* decNumber.h or one of decDouble (etc.) must be included first.     */
+/* decNumber.h must be included first.                                */
 /* ------------------------------------------------------------------ */
+
+#ifndef DECNUMBER
+  #error decNumber.h must be included before decNumberLocal.h
+#endif
 
 #if !defined(DECNUMBERLOC)
   #define DECNUMBERLOC
@@ -723,6 +727,4 @@
   /* [end of format-dependent macros and constants]                   */
   #endif
 
-#else
-  #error decNumberLocal included more than once
 #endif

@@ -54,9 +54,9 @@
 #include "cstring.h"
 #include "uinvchar.h"
 
-static const char16_t TARGET_SEP  = 0x002D; /*-*/
-static const char16_t ID_DELIM    = 0x003B; /*;*/
-static const char16_t VARIANT_SEP = 0x002F; // '/'
+static const char16_t TRANSLIT_TARGET_SEP  = 0x002D; /*-*/
+static const char16_t TRANSLIT_ID_DELIM    = 0x003B; /*;*/
+static const char16_t TRANSLIT_VARIANT_SEP = 0x002F; // '/'
 
 /**
  * Prefix for resource bundle key for the display name for a
@@ -724,7 +724,7 @@ UnicodeString& U_EXPORT2 Transliterator::getDisplayName(const UnicodeString& ID,
  * arguments to this pattern are an integer followed by one or two
  * strings.  The integer is the number of strings, either 1 or 2.
  * The strings are formed by splitting the ID for this
- * transliterator at the first TARGET_SEP.  If there is no TARGET_SEP, then the
+ * transliterator at the first '-' separator. If there is no separator, then the
  * entire ID forms the only string.
  * @param inLocale the Locale in which the display name should be
  * localized.
@@ -750,10 +750,10 @@ UnicodeString& U_EXPORT2 Transliterator::getDisplayName(const UnicodeString& id,
         return result;
     }
     if (variant.length() > 0) { // Change "Foo" to "/Foo"
-        variant.insert(0, VARIANT_SEP);
+        variant.insert(0, TRANSLIT_VARIANT_SEP);
     }
     UnicodeString ID(source);
-    ID.append(TARGET_SEP).append(target).append(variant);
+    ID.append(TRANSLIT_TARGET_SEP).append(target).append(variant);
 
     // build the char* key
     if (uprv_isInvariantUString(ID.getBuffer(), ID.length())) {
@@ -940,7 +940,7 @@ Transliterator::createInstance(const UnicodeString& ID,
     U_ASSERT(list.size() > 0);
     Transliterator* t = nullptr;
     
-    if (list.size() > 1 || canonID.indexOf(ID_DELIM) >= 0) {
+    if (list.size() > 1 || canonID.indexOf(TRANSLIT_ID_DELIM) >= 0) {
         // [NOTE: If it's a compoundID, we instantiate a CompoundTransliterator even if it only
         // has one child transliterator.  This is so that toRules() will return the right thing
         // (without any inactive ID), but our main ID still comes out correct.  That is, if we
@@ -1078,7 +1078,7 @@ Transliterator::createFromRules(const UnicodeString& ID,
         if (parser.compoundFilter != nullptr) {
             UnicodeString filterPattern;
             parser.compoundFilter->toPattern(filterPattern, false);
-            t = createInstance(filterPattern + UnicodeString(ID_DELIM)
+            t = createInstance(filterPattern + UnicodeString(TRANSLIT_ID_DELIM)
                     + *static_cast<UnicodeString*>(parser.idBlockVector.elementAt(0)), UTRANS_FORWARD, parseError, status);
         }
         else
@@ -1174,7 +1174,7 @@ UnicodeString& Transliterator::toRules(UnicodeString& rulesSource,
     }
     // KEEP in sync with rbt_pars
     rulesSource.insert(0, UNICODE_STRING_SIMPLE("::"));
-    rulesSource.append(ID_DELIM);
+    rulesSource.append(TRANSLIT_ID_DELIM);
     return rulesSource;
 }
 

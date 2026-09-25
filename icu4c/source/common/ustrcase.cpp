@@ -1459,10 +1459,10 @@ U_NAMESPACE_END
  */
 
 /* stack element for previous-level source/decomposition pointers */
-struct CmpEquivLevel {
+struct StrCaseCmpEquivLevel {
     const char16_t *start, *s, *limit;
 };
-typedef struct CmpEquivLevel CmpEquivLevel;
+typedef struct StrCaseCmpEquivLevel StrCaseCmpEquivLevel;
 
 /**
  * Internal implementation code comparing string with case fold.
@@ -1500,7 +1500,7 @@ static int32_t _cmpFold(
     int32_t length;
 
     /* stacks of previous-level start/current/limit */
-    CmpEquivLevel stack1[2], stack2[2];
+    StrCaseCmpEquivLevel stack1[2], stack2[2];
 
     /* case folding buffers, only use current-level start/limit */
     char16_t fold1[UCASE_MAX_STRING_LENGTH+1], fold2[UCASE_MAX_STRING_LENGTH+1];

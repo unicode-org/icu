@@ -245,7 +245,7 @@ static void runTestsFromJsonFile(TestMessageFormat2& t,
                                       const std::string& fileName,
                                       IcuTestErrorCode& errorCode) {
     const char* testDataDirectory = IntlTest::getSourceTestData(errorCode);
-    CHECK_ERROR(errorCode);
+    MF2_CHECK_ERROR(errorCode);
 
     std::string testFileName(testDataDirectory);
     if (isCldrConformanceTest) {

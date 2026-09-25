@@ -130,7 +130,7 @@ udat_unregisterOpener(UDateFormatOpener opener, UErrorCode *status)
 
 namespace {
 
-UBool isValidStyle(int32_t style) {
+UBool isValidDateStyle(int32_t style) {
     return (style >= UDAT_FULL && style <= UDAT_SHORT) ||
            (style >= UDAT_FULL_RELATIVE && style <= UDAT_SHORT_RELATIVE) ||
            style == UDAT_NONE ||
@@ -156,7 +156,7 @@ udat_open(UDateFormatStyle  timeStyle,
     int32_t timeStyleInt = timeStyle;
     int32_t dateStyleInt = dateStyle;
 
-    if (!isValidStyle(timeStyleInt) || !isValidStyle(dateStyleInt)) {
+    if (!isValidDateStyle(timeStyleInt) || !isValidDateStyle(dateStyleInt)) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return nullptr;
     }

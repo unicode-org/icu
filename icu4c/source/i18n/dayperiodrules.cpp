@@ -302,7 +302,7 @@ DayPeriodRulesCountSink::~DayPeriodRulesCountSink() {}
 
 namespace {
 
-UInitOnce initOnce {};
+UInitOnce initDayPeriodRulesOnce {};
 
 U_CFUNC UBool U_CALLCONV dayPeriodRulesCleanup() {
     delete[] data->rules;
@@ -335,7 +335,7 @@ void U_CALLCONV DayPeriodRules::load(UErrorCode &errorCode) {
 }
 
 const DayPeriodRules *DayPeriodRules::getInstance(const Locale &locale, UErrorCode &errorCode) {
-    umtx_initOnce(initOnce, DayPeriodRules::load, errorCode);
+    umtx_initOnce(initDayPeriodRulesOnce, DayPeriodRules::load, errorCode);
 
     // If the entire day period rules data doesn't conform to spec (even if the part we want
     // does), return nullptr.

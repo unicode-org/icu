@@ -41,17 +41,17 @@ Duplicate Declaration
 // -----------------
 
 TypeEnvironment::TypeEnvironment(UErrorCode& status) {
-    CHECK_ERROR(status);
+    MF2_CHECK_ERROR(status);
 
     UVector* temp;
     temp = createStringVectorNoAdopt(status);
-    CHECK_ERROR(status);
+    MF2_CHECK_ERROR(status);
     annotated.adoptInstead(temp);
     temp = createStringVectorNoAdopt(status);
-    CHECK_ERROR(status);
+    MF2_CHECK_ERROR(status);
     unannotated.adoptInstead(temp);
     temp = createStringVectorNoAdopt(status);
-    CHECK_ERROR(status);
+    MF2_CHECK_ERROR(status);
     freeVars.adoptInstead(temp);
 }
 
@@ -128,7 +128,7 @@ static bool areDefaultKeys(const Key* keys, int32_t len) {
 }
 
 void Checker::addFreeVars(TypeEnvironment& t, const Operand& rand, UErrorCode& status) {
-    CHECK_ERROR(status);
+    MF2_CHECK_ERROR(status);
 
     if (rand.isVariable()) {
         const VariableName& v = rand.asVariable();
@@ -141,19 +141,19 @@ void Checker::addFreeVars(TypeEnvironment& t, const Operand& rand, UErrorCode& s
 void Checker::addFreeVars(TypeEnvironment& t, const OptionMap& opts, UErrorCode& status) {
     for (int32_t i = 0; i < opts.size(); i++) {
         const Option& o = opts.getOption(i, status);
-        CHECK_ERROR(status);
+        MF2_CHECK_ERROR(status);
         addFreeVars(t, o.getValue(), status);
     }
 }
 
 void Checker::addFreeVars(TypeEnvironment& t, const Operator& rator, UErrorCode& status) {
-    CHECK_ERROR(status);
+    MF2_CHECK_ERROR(status);
 
     addFreeVars(t, rator.getOptionsInternal(), status);
 }
 
 void Checker::addFreeVars(TypeEnvironment& t, const Expression& rhs, UErrorCode& status) {
-    CHECK_ERROR(status);
+    MF2_CHECK_ERROR(status);
 
     if (rhs.isFunctionCall()) {
         const Operator* rator = rhs.getOperator(status);
@@ -164,7 +164,7 @@ void Checker::addFreeVars(TypeEnvironment& t, const Expression& rhs, UErrorCode&
 }
 
 void Checker::checkVariants(UErrorCode& status) {
-    CHECK_ERROR(status);
+    MF2_CHECK_ERROR(status);
 
     U_ASSERT(!dataModel.hasPattern());
 
@@ -221,7 +221,7 @@ void Checker::checkVariants(UErrorCode& status) {
 void Checker::requireAnnotated(const TypeEnvironment& t,
                                const VariableName& selectorVar,
                                UErrorCode& status) {
-    CHECK_ERROR(status);
+    MF2_CHECK_ERROR(status);
 
     if (t.get(selectorVar) == TypeEnvironment::Type::Annotated) {
         return; // No error
@@ -255,7 +255,7 @@ TypeEnvironment::Type typeOf(TypeEnvironment& t, const Expression& expr) {
 }
 
 void Checker::checkDeclarations(TypeEnvironment& t, UErrorCode& status) {
-    CHECK_ERROR(status);
+    MF2_CHECK_ERROR(status);
 
     // For each declaration, extend the type environment with its type
     // Only a very simple type system is necessary: variables
@@ -301,7 +301,7 @@ void Checker::checkDeclarations(TypeEnvironment& t, UErrorCode& status) {
 }
 
 void Checker::check(UErrorCode& status) {
-    CHECK_ERROR(status);
+    MF2_CHECK_ERROR(status);
 
     TypeEnvironment typeEnv(status);
     checkDeclarations(typeEnv, status);

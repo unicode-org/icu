@@ -1599,11 +1599,9 @@ struct U_I18N_API_CLASS MacroProps : public UMemory {
 } // namespace impl
 
 #if (U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN) && defined(_MSC_VER)
-// Ignore MSVC warning 4661. This is generated for NumberFormatterSettings<>::toSkeleton() as this method
-// is defined elsewhere (in number_skeletons.cpp). The compiler is warning that the explicit template instantiation
-// inside this single translation unit (CPP file) is incomplete, and thus it isn't sure if the template class is
-// fully defined. However, since each translation unit explicitly instantiates all the necessary template classes,
-// they will all be passed to the linker, and the linker will still find and export all the class members.
+// MSVC warns when a translation unit instantiates this class without the
+// toSkeleton() definition. That member is instantiated in number_skeletons.cpp;
+// the remaining members are instantiated in number_fluent.cpp.
 #pragma warning(push)
 #pragma warning(disable: 4661)
 #endif
@@ -2415,7 +2413,8 @@ class U_I18N_API NumberFormatterSettings {
     friend class impl::NumberRangeFormatterImpl;
 };
 
-// Explicit instantiations in source/i18n/number_fluent.cpp.
+// The class members are instantiated in number_fluent.cpp, except toSkeleton(),
+// which is instantiated in number_skeletons.cpp.
 // (MSVC treats imports/exports of explicit instantiations differently.)
 #ifndef _MSC_VER
 extern template class NumberFormatterSettings<UnlocalizedNumberFormatter>;

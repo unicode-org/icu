@@ -83,7 +83,7 @@ MFFunctionRegistry::Builder::setDefaultFormatterNameByType(const UnicodeString& 
  }
 
 MFFunctionRegistry::Builder::Builder(UErrorCode& errorCode) {
-    CHECK_ERROR(errorCode);
+    MF2_CHECK_ERROR(errorCode);
 
     functions = new Hashtable();
     formattersByType = new Hashtable();
@@ -175,15 +175,15 @@ void MFFunctionRegistry::checkStandard() const {
 
 // Converts `s` to a double, indicating failure via `errorCode`
 static void strToDouble(const UnicodeString& s, double& result, UErrorCode& errorCode) {
-    CHECK_ERROR(errorCode);
+    MF2_CHECK_ERROR(errorCode);
 
     // Using en-US locale because it happens to correspond to the spec:
     // https://github.com/unicode-org/message-format-wg/blob/main/spec/registry.md#number-operands
     LocalPointer<NumberFormat> numberFormat(NumberFormat::createInstance(Locale("en-US"), errorCode));
-    CHECK_ERROR(errorCode);
+    MF2_CHECK_ERROR(errorCode);
     icu::Formattable asNumber;
     numberFormat->parse(s, asNumber, errorCode);
-    CHECK_ERROR(errorCode);
+    MF2_CHECK_ERROR(errorCode);
     result = asNumber.getDouble(errorCode);
 }
 
@@ -303,7 +303,7 @@ bool validateNumberLiteral(const UnicodeString& s) {
 
     // Parse optional sign
     // ["-"]
-    if (s[0] == HYPHEN) {
+    if (s[0] == MF2_HYPHEN) {
         i++;
     }
 
@@ -314,7 +314,7 @@ bool validateNumberLiteral(const UnicodeString& s) {
     // Parse integer digits
     // (%x30 / (%x31-39 *DIGIT))
     if (s[i] == '0') {
-        if (inBounds(s, i + 1) && s[i + 1] != PERIOD) {
+        if (inBounds(s, i + 1) && s[i + 1] != MF2_PERIOD) {
             return false;
         }
         i++;
@@ -330,7 +330,7 @@ bool validateNumberLiteral(const UnicodeString& s) {
 
     // Parse optional decimal digits
     // ["." 1*DIGIT]
-    if (s[i] == PERIOD) {
+    if (s[i] == MF2_PERIOD) {
         i++;
         if (!parseDigits(s, i)) {
             return false;
@@ -349,7 +349,7 @@ bool validateNumberLiteral(const UnicodeString& s) {
             return false;
         }
         // Parse optional sign
-        if (s[i] == HYPHEN || s[i] == PLUS) {
+        if (s[i] == MF2_HYPHEN || s[i] == MF2_PLUS) {
             i++;
         }
         if (!inBounds(s, i)) {
@@ -394,7 +394,7 @@ bool isDigitSizeOption(std::u16string_view s) {
 
 /* static */ void StandardFunctions::validateDigitSizeOptions(const FunctionOptions& opts,
                                                               UErrorCode& status) {
-    CHECK_ERROR(status);
+    MF2_CHECK_ERROR(status);
     for (int32_t i = 0; i < opts.optionsCount(); i++) {
         const ResolvedFunctionOption& opt = opts.options[i];
         if (opt.getName() == options::FRACTION_DIGITS) {
@@ -549,7 +549,7 @@ StandardFunctions::Number::percent(UErrorCode& success) {
 
 /* static */ StandardFunctions::Number*
 StandardFunctions::Number::create(StandardFunctions::NumberType numberType, UErrorCode& success) {
-    NULL_ON_ERROR(success);
+    MF2_NULL_ON_ERROR(success);
 
     LocalPointer<Number> result(new Number(numberType));
     if (!result.isValid()) {
@@ -1127,7 +1127,7 @@ StandardFunctions::NumberValue::NumberValue(const Number& parent,
                                             const FunctionValue& arg,
                                             const FunctionOptions& options,
                                             UErrorCode& errorCode) {
-    CHECK_ERROR(errorCode);
+    MF2_CHECK_ERROR(errorCode);
     // Must have an argument
     if (arg.isNullOperand()) {
         errorCode = U_MF_OPERAND_MISMATCH_ERROR;
@@ -1297,7 +1297,7 @@ void StandardFunctions::NumberValue::selectKeys(const UnicodeString* keys,
                                                 int32_t* prefs,
                                                 int32_t& prefsLen,
                                                 UErrorCode& errorCode) const {
-    CHECK_ERROR(errorCode);
+    MF2_CHECK_ERROR(errorCode);
 
     Number::PluralType type = Number::pluralType(opts);
 
@@ -1321,7 +1321,7 @@ void StandardFunctions::NumberValue::selectKeys(const UnicodeString* keys,
         UPluralType t = type == Number::PluralType::PLURAL_ORDINAL ? UPLURAL_TYPE_ORDINAL : UPLURAL_TYPE_CARDINAL;
         // Look up plural rules by locale and type
         LocalPointer<PluralRules> rules(PluralRules::forLocale(locale, t, errorCode));
-        CHECK_ERROR(errorCode);
+        MF2_CHECK_ERROR(errorCode);
 
         keyword = rules->select(numberToUse, errorCode);
     }
@@ -1398,7 +1398,7 @@ StandardFunctions::DateTime::dateTime(UErrorCode& success) {
 /* static */ StandardFunctions::DateTime*
 StandardFunctions::DateTime::create(DateTime::DateTimeType type,
                                     UErrorCode& success) {
-    NULL_ON_ERROR(success);
+    MF2_NULL_ON_ERROR(success);
 
     LocalPointer<DateTime> result(new DateTime(type));
     if (!result.isValid()) {
@@ -1505,7 +1505,7 @@ static void initDateParsersOnce(UErrorCode& errorCode) {
 }
 
 static void initDateParsers(UErrorCode& errorCode) {
-    CHECK_ERROR(errorCode);
+    MF2_CHECK_ERROR(errorCode);
 
     umtx_initOnce(gMF2DateParsersInitOnce, &initDateParsersOnce, errorCode);
 }
@@ -1523,7 +1523,7 @@ StandardFunctions::DateTimeValue::DateTimeValue(DateTime::DateTimeType type,
                                                 const FunctionValue& arg,
                                                 const FunctionOptions& options,
                                                 UErrorCode& errorCode) {
-    CHECK_ERROR(errorCode);
+    MF2_CHECK_ERROR(errorCode);
     using DateTimeType = DateTime::DateTimeType;
 
     // Function requires an operand
@@ -1727,7 +1727,7 @@ StandardFunctions::DateTimeValue::DateTimeValue(DateTime::DateTimeType type,
     case UFMT_STRING: {
         // Lazily initialize date parsers used for parsing date literals
         initDateParsers(errorCode);
-        CHECK_ERROR(errorCode);
+        MF2_CHECK_ERROR(errorCode);
 
         const UnicodeString& sourceStr = source->getString(errorCode);
         U_ASSERT(U_SUCCESS(errorCode));
@@ -1813,8 +1813,8 @@ static bool hasTzOffset(const UnicodeString& sourceStr) {
     if (len <= 6) {
         return false;
     }
-    return ((sourceStr[len - 6] == PLUS || sourceStr[len - 6] == HYPHEN)
-            && sourceStr[len - 3] == COLON);
+    return ((sourceStr[len - 6] == MF2_PLUS || sourceStr[len - 6] == MF2_HYPHEN)
+            && sourceStr[len - 3] == MF2_COLON);
 }
 
 // Note: `calendar` option to :datetime not implemented yet;
@@ -1898,7 +1898,7 @@ StandardFunctions::DateTimeValue::~DateTimeValue() {}
 
 /* static */ StandardFunctions::String*
 StandardFunctions::String::string(UErrorCode& success) {
-    NULL_ON_ERROR(success);
+    MF2_NULL_ON_ERROR(success);
 
     LocalPointer<String> result(new String());
     if (!result.isValid()) {
@@ -1952,7 +1952,7 @@ StandardFunctions::StringValue::StringValue(const FunctionContext& context,
                                             const FunctionValue& val,
                                             const FunctionOptions&,
                                             UErrorCode& status) {
-    CHECK_ERROR(status);
+    MF2_CHECK_ERROR(status);
     locale = context.getLocale();
     innerValue = val.unwrap();
     functionName = UnicodeString("string");
@@ -1968,7 +1968,7 @@ void StandardFunctions::StringValue::selectKeys(const UnicodeString* keys,
                                                 int32_t* prefs,
                                                 int32_t& prefsLen,
                                                 UErrorCode& errorCode) const {
-    CHECK_ERROR(errorCode);
+    MF2_CHECK_ERROR(errorCode);
 
     // Just compares the key and value as strings
 
@@ -2104,7 +2104,7 @@ static void setFailsFromFunctionValue(const FunctionValue& optionValue,
                                                                           bool& failsSelect,
                                                                           double& input,
                                                                           UErrorCode& status) const {
-    CHECK_ERROR(status);
+    MF2_CHECK_ERROR(status);
 
     // 1. Let DecimalPlaces be 0.
     decimalPlaces = 0;
@@ -2210,7 +2210,7 @@ StandardFunctions::TestFunctionValue::TestFunctionValue(const TestFunction& pare
                                                         UErrorCode& status) {
     parent.testFunctionParameters(arg, options, decimalPlaces,
                                   failsFormat, failsSelect, input, status);
-    CHECK_ERROR(status);
+    MF2_CHECK_ERROR(status);
     opts = options.mergeOptions(arg.getResolvedOptions(), status);
     innerValue = arg.unwrap();
     canFormat = parent.canFormat;
@@ -2220,7 +2220,7 @@ StandardFunctions::TestFunctionValue::TestFunctionValue(const TestFunction& pare
                                  : canFormat ? "test:format"
                                  : "test:select");
 
-    CHECK_ERROR(status);
+    MF2_CHECK_ERROR(status);
 
     // If FailsFormat is true, attempting to format the placeholder to any
     // formatting target will fail.
@@ -2233,7 +2233,7 @@ StandardFunctions::TestFunctionValue::TestFunctionValue(const TestFunction& pare
     // with a :test:function expression is formatted as a concatenation of the following parts:
     // 1. If Input is less than 0, the character - U+002D Hyphen-Minus.
     if (input < 0) {
-        formattedString += HYPHEN;
+        formattedString += MF2_HYPHEN;
     }
     // 2. The truncated absolute integer value of Input, i.e. floor(abs(Input)), formatted as a
     // sequence of decimal digit characters (U+0030...U+0039).

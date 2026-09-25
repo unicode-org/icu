@@ -78,7 +78,7 @@ namespace message2 {
     }
 
     const Formattable* Formattable::getArray(int32_t& len, UErrorCode& status) const {
-        NULL_ON_ERROR(status);
+        MF2_NULL_ON_ERROR(status);
 
         if (getType() != UFMT_ARRAY) {
             len = 0;
@@ -173,8 +173,8 @@ namespace message2 {
         return number::NumberFormatter::withLocale(locale).formatDecimal(toFormat, errorCode);
     }
 
-    static DateFormat* defaultDateTimeInstance(const Locale& locale, UErrorCode& errorCode) {
-        NULL_ON_ERROR(errorCode);
+    static DateFormat* createFormattableDefaultDateTimeInstance(const Locale& locale, UErrorCode& errorCode) {
+        MF2_NULL_ON_ERROR(errorCode);
         LocalPointer<DateFormat> df(DateFormat::createDateTimeInstance(DateFormat::SHORT, DateFormat::SHORT, locale));
         if (!df.isValid()) {
             errorCode = U_MEMORY_ALLOCATION_ERROR;
@@ -184,7 +184,7 @@ namespace message2 {
     }
 
     TimeZone* createTimeZone(const DateInfo& dateInfo, UErrorCode& errorCode) {
-        NULL_ON_ERROR(errorCode);
+        MF2_NULL_ON_ERROR(errorCode);
 
         TimeZone* tz;
         if (dateInfo.zoneId.isEmpty()) {
@@ -203,20 +203,20 @@ namespace message2 {
                                 const DateInfo& dateInfo,
                                 UnicodeString& result,
                                 UErrorCode& errorCode) {
-        CHECK_ERROR(errorCode);
+        MF2_CHECK_ERROR(errorCode);
 
-        LocalPointer<DateFormat> df(defaultDateTimeInstance(locale, errorCode));
-        CHECK_ERROR(errorCode);
+        LocalPointer<DateFormat> df(createFormattableDefaultDateTimeInstance(locale, errorCode));
+        MF2_CHECK_ERROR(errorCode);
 
         df->adoptTimeZone(createTimeZone(dateInfo, errorCode));
-        CHECK_ERROR(errorCode);
+        MF2_CHECK_ERROR(errorCode);
         df->format(dateInfo.date, result, nullptr, errorCode);
     }
 
     UnicodeString formattableToString(const Locale& locale,
                                       const Formattable& toFormat,
                                       UErrorCode& status) {
-        EMPTY_ON_ERROR(status);
+        MF2_EMPTY_ON_ERROR(status);
 
         // Try as decimal number first
         if (toFormat.isNumeric()) {

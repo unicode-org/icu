@@ -701,7 +701,7 @@ utrie2_set32ForLeadSurrogateCodeUnit(UTrie2 *trie,
 }
 
 static void
-writeBlock(uint32_t *block, uint32_t value) {
+writeTrie2Block(uint32_t *block, uint32_t value) {
     uint32_t *limit=block+UTRIE2_DATA_BLOCK_LENGTH;
     while(block<limit) {
         *block++=value;
@@ -863,7 +863,7 @@ utrie2_setRange32(UTrie2 *trie,
                     *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
                     return;
                 }
-                writeBlock(newTrie->data+repeatBlock, value);
+                writeTrie2Block(newTrie->data+repeatBlock, value);
             }
         }
 
@@ -895,7 +895,7 @@ equal_int32(const int32_t *s, const int32_t *t, int32_t length) {
 }
 
 static inline UBool
-equal_uint32(const uint32_t *s, const uint32_t *t, int32_t length) {
+trie2EqualUint32(const uint32_t *s, const uint32_t *t, int32_t length) {
     while(length>0 && *s==*t) {
         ++s;
         ++t;
@@ -927,7 +927,7 @@ findSameDataBlock(const uint32_t *data, int32_t dataLength, int32_t otherBlock, 
     dataLength-=blockLength;
 
     for(block=0; block<=dataLength; block+=UTRIE2_DATA_GRANULARITY) {
-        if(equal_uint32(data+block, data+otherBlock, blockLength)) {
+        if(trie2EqualUint32(data+block, data+otherBlock, blockLength)) {
             return block;
         }
     }
@@ -1089,7 +1089,7 @@ compactData(UNewTrie2 *trie) {
         /* see if the beginning of this block can be overlapped with the end of the previous block */
         /* look for maximum overlap (modulo granularity) with the previous, adjacent block */
         for(overlap=blockLength-UTRIE2_DATA_GRANULARITY;
-            overlap>0 && !equal_uint32(trie->data+(newStart-overlap), trie->data+start, overlap);
+            overlap>0 && !trie2EqualUint32(trie->data+(newStart-overlap), trie->data+start, overlap);
             overlap-=UTRIE2_DATA_GRANULARITY) {}
 
 #ifdef UTRIE2_DEBUG

@@ -25,6 +25,7 @@
 #include <string.h>           /* for strcmp  */
 #include <stdio.h>            /* for printf if DECCHECK  */
 #include "decContext.h"       /* context and base types  */
+#include "decNumber.h"        /* set DECDPUN before decNumberLocal.h */
 #include "decNumberLocal.h"   /* decNumber local types, etc.  */
 
 #if 0  /* ICU: No need to test endianness at runtime. */
@@ -429,4 +430,3 @@ U_CAPI decContext * U_EXPORT2 uprv_decContextZeroStatus(decContext *context) {
   context->status=0;
   return context;
   } /* decContextZeroStatus  */
-

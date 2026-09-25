@@ -146,7 +146,7 @@ static icu::UInitOnce nfkc_cfInitOnce {};
 static Norm2AllModes *nfkc_scfSingleton;
 static icu::UInitOnce nfkc_scfInitOnce {};
 
-static UHashtable    *cache=nullptr;
+static UHashtable    *normalizerCache=nullptr;
 
 // UInitOnce singleton initialization function
 static void U_CALLCONV initSingletons(const char *what, UErrorCode &errorCode) {
@@ -192,8 +192,8 @@ static UBool U_CALLCONV uprv_loaded_normalizer2_cleanup() {
     nfkc_scfSingleton = nullptr;
     nfkc_scfInitOnce.reset();
 
-    uhash_close(cache);
-    cache=nullptr;
+    uhash_close(normalizerCache);
+    normalizerCache=nullptr;
     return true;
 }
 
@@ -310,8 +310,8 @@ Normalizer2::getInstance(const char *packageName,
     if(allModes==nullptr && U_SUCCESS(errorCode)) {
         {
             Mutex lock;
-            if(cache!=nullptr) {
-                allModes = static_cast<Norm2AllModes*>(uhash_get(cache, name));
+            if(normalizerCache!=nullptr) {
+                allModes = static_cast<Norm2AllModes*>(uhash_get(normalizerCache, name));
             }
         }
         if(allModes==nullptr) {
@@ -320,15 +320,15 @@ Normalizer2::getInstance(const char *packageName,
                 Norm2AllModes::createInstance(packageName, name, errorCode));
             if(U_SUCCESS(errorCode)) {
                 Mutex lock;
-                if(cache==nullptr) {
-                    cache=uhash_open(uhash_hashChars, uhash_compareChars, nullptr, &errorCode);
+                if(normalizerCache==nullptr) {
+                    normalizerCache=uhash_open(uhash_hashChars, uhash_compareChars, nullptr, &errorCode);
                     if(U_FAILURE(errorCode)) {
                         return nullptr;
                     }
-                    uhash_setKeyDeleter(cache, uprv_free);
-                    uhash_setValueDeleter(cache, deleteNorm2AllModes);
+                    uhash_setKeyDeleter(normalizerCache, uprv_free);
+                    uhash_setValueDeleter(normalizerCache, deleteNorm2AllModes);
                 }
-                void *temp=uhash_get(cache, name);
+                void *temp=uhash_get(normalizerCache, name);
                 if(temp==nullptr) {
                     int32_t keyLength= static_cast<int32_t>(uprv_strlen(name)+1);
                     char* nameCopy = static_cast<char*>(uprv_malloc(keyLength));
@@ -338,7 +338,7 @@ Normalizer2::getInstance(const char *packageName,
                     }
                     uprv_memcpy(nameCopy, name, keyLength);
                     allModes=localAllModes.getAlias();
-                    uhash_put(cache, nameCopy, localAllModes.orphan(), &errorCode);
+                    uhash_put(normalizerCache, nameCopy, localAllModes.orphan(), &errorCode);
                 } else {
                     // race condition
                     allModes = static_cast<Norm2AllModes*>(temp);

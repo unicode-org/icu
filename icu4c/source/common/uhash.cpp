@@ -1095,3 +1095,8 @@ U_CAPI UBool U_EXPORT2
 uhash_compareLong(const UHashTok key1, const UHashTok key2) {
     return key1.integer == key2.integer;
 }
+
+#undef HINT_BOTH_INTEGERS
+#undef HINT_KEY_POINTER
+#undef HINT_VALUE_POINTER
+#undef HINT_ALLOW_ZERO

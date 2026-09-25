@@ -84,7 +84,7 @@ int32_t StandardPlural::indexOrNegativeFromString(const char *keyword) {
     return -1;
 }
 
-static const char16_t gZero[] = u"zero";
+static const char16_t gStandardPluralZero[] = u"zero";
 static const char16_t gOne[] = u"one";
 static const char16_t gTwo[] = u"two";
 static const char16_t gFew[] = u"few";
@@ -121,7 +121,7 @@ int32_t StandardPlural::indexOrNegativeFromString(const UnicodeString &keyword) 
     case 4:
         if (keyword.compare(gMany, 4) == 0) {
             return MANY;
-        } else if (keyword.compare(gZero, 4) == 0) {
+        } else if (keyword.compare(gStandardPluralZero, 4) == 0) {
             return ZERO;
         }
         break;

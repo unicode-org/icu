@@ -46,7 +46,7 @@
 #define LOW_G             ((char16_t)0x0067)
 #define LOW_H             ((char16_t)0x0068)
 #define LOW_I             ((char16_t)0x0069)
-#define LOW_J             ((char16_t)0x006a)
+#define DTITV_LOW_J       ((char16_t)0x006a)
 #define LOW_K             ((char16_t)0x006B)
 #define LOW_L             ((char16_t)0x006C)
 #define LOW_M             ((char16_t)0x006D)

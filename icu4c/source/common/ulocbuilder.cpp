@@ -149,3 +149,7 @@ UBool ulocbld_copyErrorTo(const ULocaleBuilder* builder, UErrorCode *outErrorCod
     }
     return CONST_INTERNAL(builder)->copyErrorTo(*outErrorCode);
 }
+
+#undef EXTERNAL
+#undef INTERNAL
+#undef CONST_INTERNAL

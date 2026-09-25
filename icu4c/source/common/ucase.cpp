@@ -36,7 +36,7 @@
 /* set of property starts for UnicodeSet ------------------------------------ */
 
 static UBool U_CALLCONV
-_enumPropertyStartsRange(const void *context, UChar32 start, UChar32 /*end*/, uint32_t /*value*/) {
+ucase_enumPropertyStartsRange(const void *context, UChar32 start, UChar32 /*end*/, uint32_t /*value*/) {
     /* add the start code point to the USet */
     const USetAdder* sa = static_cast<const USetAdder*>(context);
     sa->add(sa->set, start);
@@ -50,7 +50,7 @@ ucase_addPropertyStarts(const USetAdder *sa, UErrorCode *pErrorCode) {
     }
 
     /* add the start code point of each same-value range of the trie */
-    utrie2_enum(&ucase_props_singleton.trie, nullptr, _enumPropertyStartsRange, sa);
+    utrie2_enum(&ucase_props_singleton.trie, nullptr, ucase_enumPropertyStartsRange, sa);
 
     /* add code points with hardcoded properties, plus the ones following them */
 

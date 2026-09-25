@@ -120,9 +120,9 @@ bool Literal::operator==(const Literal& other) const {
 }
 
 UnicodeString Literal::quoted() const {
-    UnicodeString result(PIPE);
+    UnicodeString result(MF2_PIPE);
     result += unquoted();
-    result += PIPE;
+    result += MF2_PIPE;
     return result;
 }
 
@@ -294,7 +294,7 @@ static UBool hasOptionNamed(const UVector& v, const UnicodeString& s) {
 }
 
 OptionMap::Builder& OptionMap::Builder::add(Option&& opt, UErrorCode& status) {
-    THIS_ON_ERROR(status);
+    MF2_THIS_ON_ERROR(status);
 
     // If the option name is already in the map, emit a data model error
     if (checkDuplicates && hasOptionNamed(*options, opt.getName())) {
@@ -337,7 +337,7 @@ const FunctionName& Operator::getFunctionName() const {
 }
 
 Operator::Builder& Operator::Builder::addOption(const UnicodeString &key, Operand&& value, UErrorCode& errorCode) noexcept {
-    THIS_ON_ERROR(errorCode);
+    MF2_THIS_ON_ERROR(errorCode);
 
     options.add(Option(key, std::move(value)), errorCode);
     return *this;
@@ -426,7 +426,7 @@ UBool Expression::isFunctionCall() const {
 }
 
 const Operator* Expression::getOperator(UErrorCode& status) const {
-    NULL_ON_ERROR(status);
+    MF2_NULL_ON_ERROR(status);
 
     if (!isFunctionCall()) {
         status = U_INVALID_STATE_ERROR;
@@ -532,7 +532,7 @@ Pattern::Pattern(const UVector& ps, UErrorCode& status) : len(ps.size()) {
         return;
     }
     PatternPart* result = copyVectorToArray<PatternPart>(ps, status);
-    CHECK_ERROR(status);
+    MF2_CHECK_ERROR(status);
     parts.adoptInstead(result);
 }
 
@@ -746,7 +746,7 @@ MFDataModel::Builder::Builder(UErrorCode& status) {
 
 // Invalidate pattern and create selectors/variants if necessary
 void MFDataModel::Builder::buildSelectorsMessage(UErrorCode& status) {
-    CHECK_ERROR(status);
+    MF2_CHECK_ERROR(status);
 
     if (hasPattern) {
         selectors = createUVector(status);
@@ -758,7 +758,7 @@ void MFDataModel::Builder::buildSelectorsMessage(UErrorCode& status) {
 }
 
 void MFDataModel::Builder::checkDuplicate(const VariableName& var, UErrorCode& status) const {
-    CHECK_ERROR(status);
+    MF2_CHECK_ERROR(status);
 
     // This means that handling declarations is quadratic in the number of variables,
     // but the `UVector` of locals in the builder could be changed to a `Hashtable`
@@ -792,7 +792,7 @@ MFDataModel::Builder& MFDataModel::Builder::addBinding(Binding&& b, UErrorCode& 
 
 MFDataModel::Builder& MFDataModel::Builder::addSelector(VariableName&& selector,
                                                         UErrorCode& status) {
-    THIS_ON_ERROR(status);
+    MF2_THIS_ON_ERROR(status);
 
     buildSelectorsMessage(status);
     U_ASSERT(selectors != nullptr);
@@ -855,7 +855,7 @@ MFDataModel::MFDataModel(const MFDataModel& other) : body(Pattern()) {
 }
 
 MFDataModel::MFDataModel(const MFDataModel::Builder& builder, UErrorCode& errorCode) noexcept : body(Pattern()) {
-    CHECK_ERROR(errorCode);
+    MF2_CHECK_ERROR(errorCode);
 
     if (builder.hasPattern) {
         body.emplace<Pattern>(builder.pattern);

@@ -55,7 +55,7 @@ MF2RegistrySingleton::MF2RegistrySingleton(UErrorCode &success) {
   LocalPointer<Function> testFunction(StandardFunctions::TestFunction::testFunction(success));
   LocalPointer<Function> testFormat(StandardFunctions::TestFunction::testFormat(success));
   LocalPointer<Function> testSelect(StandardFunctions::TestFunction::testSelect(success));
-  CHECK_ERROR(success);
+  MF2_CHECK_ERROR(success);
   standardFunctionsBuilder.adoptFunction(FunctionName(functions::DATETIME),
 					 dateTime.orphan(), success)
     .adoptFunction(FunctionName(functions::DATE), date.orphan(), success)
@@ -77,9 +77,9 @@ MF2RegistrySingleton::MF2RegistrySingleton(UErrorCode &success) {
 		   testFormat.orphan(), success)
     .adoptFunction(FunctionName(functions::TEST_SELECT),
 		   testSelect.orphan(), success);
-  CHECK_ERROR(success);
+  MF2_CHECK_ERROR(success);
   standardMFFunctionRegistry = standardFunctionsBuilder.build();
-  CHECK_ERROR(success);
+  MF2_CHECK_ERROR(success);
   standardMFFunctionRegistry.checkStandard();
 }
 
@@ -111,7 +111,7 @@ static icu::UInitOnce gMF2RegistryInitOnce {};
 
   // ensure the registry is available
   static void initRegistry(UErrorCode& errorCode) {
-    CHECK_ERROR(errorCode);
+    MF2_CHECK_ERROR(errorCode);
     umtx_initOnce(gMF2RegistryInitOnce, &initRegistryOnce, errorCode);
   }
 
@@ -145,7 +145,7 @@ static icu::UInitOnce gMF2RegistryInitOnce {};
         clearState();
         // Create errors
         errors = create<StaticErrors>(StaticErrors(errorCode), errorCode);
-        THIS_ON_ERROR(errorCode);
+        MF2_THIS_ON_ERROR(errorCode);
 
         // Parse the pattern
         MFDataModel::Builder tree(errorCode);
@@ -226,7 +226,7 @@ static icu::UInitOnce gMF2RegistryInitOnce {};
     MessageFormatter::Builder::Builder(UErrorCode& errorCode) : locale(Locale::getDefault()), customMFFunctionRegistry(nullptr) {
         // Initialize errors
         errors = new StaticErrors(errorCode);
-        CHECK_ERROR(errorCode);
+        MF2_CHECK_ERROR(errorCode);
         if (errors == nullptr) {
             errorCode = U_MEMORY_ALLOCATION_ERROR;
         }
@@ -258,7 +258,7 @@ static icu::UInitOnce gMF2RegistryInitOnce {};
 
     MessageFormatter::MessageFormatter(const MessageFormatter::Builder& builder, UErrorCode &success) : locale(builder.locale), customMFFunctionRegistry(builder.customMFFunctionRegistry) {
         standardMFFunctionRegistry = MFFunctionRegistry::getStandardFunctionsRegistry(success);
-        CHECK_ERROR(success);
+        MF2_CHECK_ERROR(success);
 
         normalizedInput = builder.normalizedInput;
         signalErrors = builder.signalErrors;
@@ -282,7 +282,7 @@ static icu::UInitOnce gMF2RegistryInitOnce {};
         } else {
             // Initialize errors
             LocalPointer<StaticErrors> errorsNew(new StaticErrors(success));
-            CHECK_ERROR(success);
+            MF2_CHECK_ERROR(success);
             errors = errorsNew.orphan();
         }
 
@@ -350,7 +350,7 @@ static icu::UInitOnce gMF2RegistryInitOnce {};
     const Function*
     MessageFormatter::lookupFunction(const FunctionName& functionName,
                                      UErrorCode& status) const {
-        NULL_ON_ERROR(status);
+        MF2_NULL_ON_ERROR(status);
 
         if (hasCustomMFFunctionRegistry()) {
             const MFFunctionRegistry& customMFFunctionRegistry = getCustomMFFunctionRegistry();

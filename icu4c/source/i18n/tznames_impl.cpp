@@ -42,7 +42,7 @@ U_NAMESPACE_BEGIN
 #define ZID_KEY_MAX  128
 #define MZ_PREFIX_LEN 5
 
-static const char gZoneStrings[]        = "zoneStrings";
+static const char gTZNamesZoneStrings[]        = "zoneStrings";
 static const char gMZPrefix[]           = "meta:";
 
 static const char EMPTY[]               = "<empty>";   // place holder for empty ZNames
@@ -1042,7 +1042,7 @@ TimeZoneNamesImpl::initialize(const Locale& locale, UErrorCode& status) {
     // Load zoneStrings bundle
     UErrorCode tmpsts = U_ZERO_ERROR;   // OK with fallback warning..
     fZoneStrings = ures_open(U_ICUDATA_ZONE, locale.getName(), &tmpsts);
-    fZoneStrings = ures_getByKeyWithFallback(fZoneStrings, gZoneStrings, fZoneStrings, &tmpsts);
+    fZoneStrings = ures_getByKeyWithFallback(fZoneStrings, gTZNamesZoneStrings, fZoneStrings, &tmpsts);
     if (U_FAILURE(tmpsts)) {
         status = tmpsts;
         cleanup();
@@ -2269,7 +2269,7 @@ TZDBTimeZoneNames::getMetaZoneNames(const UnicodeString& mzID, UErrorCode& statu
         void *cacheVal = uhash_get(gTZDBNamesMap, mzIDKey);
         if (cacheVal == nullptr) {
             UResourceBundle *zoneStringsRes = ures_openDirect(U_ICUDATA_ZONE, "tzdbNames", &status);
-            zoneStringsRes = ures_getByKey(zoneStringsRes, gZoneStrings, zoneStringsRes, &status);
+            zoneStringsRes = ures_getByKey(zoneStringsRes, gTZNamesZoneStrings, zoneStringsRes, &status);
             char key[ZID_KEY_MAX + 1];
             mergeTimeZoneKey(mzID, key, sizeof(key), status);
             if (U_SUCCESS(status)) {

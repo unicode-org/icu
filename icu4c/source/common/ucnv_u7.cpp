@@ -1485,3 +1485,20 @@ const UConverterSharedData _IMAPData=
         UCNV_IMMUTABLE_SHARED_DATA_INITIALIZER(&_IMAPStaticData, &_IMAPImpl);
 
 #endif
+
+#undef inSetD
+#undef inSetO
+#undef isCRLFTAB
+#undef isCRLFSPTAB
+#undef PLUS
+#undef MINUS
+#undef BACKSLASH
+#undef TILDE
+#undef isLegalUTF7
+#undef AMPERSAND
+#undef COMMA
+#undef SLASH
+#undef isLegalIMAP
+#undef inSetDIMAP
+#undef TO_BASE64_IMAP
+#undef FROM_BASE64_IMAP

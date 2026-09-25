@@ -64,8 +64,8 @@
 static icu::Locale* availableLocaleList = nullptr;
 static int32_t  availableLocaleListCount;
 #if !UCONFIG_NO_SERVICE
-static icu::ICULocaleService* gService = nullptr;
-static icu::UInitOnce gServiceInitOnce {};
+static icu::ICULocaleService* gCollationService = nullptr;
+static icu::UInitOnce gCollationServiceInitOnce {};
 #endif
 static icu::UInitOnce gAvailableLocaleListInitOnce {};
 
@@ -75,11 +75,11 @@ static icu::UInitOnce gAvailableLocaleListInitOnce {};
 U_CDECL_BEGIN
 static UBool U_CALLCONV collator_cleanup() {
 #if !UCONFIG_NO_SERVICE
-    if (gService) {
-        delete gService;
-        gService = nullptr;
+    if (gCollationService) {
+        delete gCollationService;
+        gCollationService = nullptr;
     }
-    gServiceInitOnce.reset();
+    gCollationServiceInitOnce.reset();
 #endif
     if (availableLocaleList) {
         delete []availableLocaleList;
@@ -198,7 +198,7 @@ ICUCollatorService::~ICUCollatorService() {}
 // -------------------------------------
 
 static void U_CALLCONV initService() {
-    gService = new ICUCollatorService();
+    gCollationService = new ICUCollatorService();
     ucln_i18n_registerCleanup(UCLN_I18N_COLLATOR, collator_cleanup);
 }
 
@@ -206,8 +206,8 @@ static void U_CALLCONV initService() {
 static ICULocaleService* 
 getService()
 {
-    umtx_initOnce(gServiceInitOnce, &initService);
-    return gService;
+    umtx_initOnce(gCollationServiceInitOnce, &initService);
+    return gCollationService;
 }
 
 // -------------------------------------
@@ -215,7 +215,7 @@ getService()
 static inline UBool
 hasService() 
 {
-    UBool retVal = !gServiceInitOnce.isReset() && (getService() != nullptr);
+    UBool retVal = !gCollationServiceInitOnce.isReset() && (getService() != nullptr);
     return retVal;
 }
 
@@ -442,7 +442,7 @@ Collator* U_EXPORT2 Collator::createInstance(const Locale& desiredLocale,
 #if !UCONFIG_NO_SERVICE
     if (hasService()) {
         Locale actualLoc;
-        coll = (Collator*)gService->get(desiredLocale, &actualLoc, status);
+        coll = (Collator*)gCollationService->get(desiredLocale, &actualLoc, status);
     } else
 #endif
     {
@@ -580,7 +580,7 @@ UnicodeString& U_EXPORT2 Collator::getDisplayName(const Locale& objectLocale,
     if (hasService()) {
         UnicodeString locNameStr;
         LocaleUtility::initNameFromLocale(objectLocale, locNameStr);
-        return gService->getDisplayName(locNameStr, name, displayLocale);
+        return gCollationService->getDisplayName(locNameStr, name, displayLocale);
     }
 #endif
     return objectLocale.getDisplayName(displayLocale, name);
@@ -792,7 +792,7 @@ Collator::unregister(URegistryKey key, UErrorCode& status)
 {
     if (U_SUCCESS(status)) {
         if (hasService()) {
-            return gService->unregister(key, status);
+            return gCollationService->unregister(key, status);
         }
         status = U_ILLEGAL_ARGUMENT_ERROR;
     }

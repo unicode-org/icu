@@ -150,8 +150,8 @@ ubidi_getParaLevelAtIndex(const UBiDi *pBiDi, int32_t index);
 /* number of isolate run entries for paired brackets allocated initially without malloc */
 #define SIMPLE_OPENINGS_COUNT   20
 
-#define CR  0x000D
-#define LF  0x000A
+#define UBIDI_CR  0x000D
+#define UBIDI_LF  0x000A
 
 /* Run structure for reordering --------------------------------------------- */
 enum {

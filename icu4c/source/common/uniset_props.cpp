@@ -56,7 +56,7 @@ namespace {
 
 // Special property set IDs
 constexpr char ANY[]   = "ANY";   // [\u0000-\U0010FFFF]
-constexpr char ASCII[] = "ASCII"; // [\u0000-\u007F]
+constexpr char ASCII_PROPERTY_NAME[] = "ASCII"; // [\u0000-\u007F]
 constexpr char ASSIGNED[] = "Assigned"; // [:^Cn:]
 
 }  // namespace
@@ -1649,7 +1649,7 @@ UnicodeSet::applyPropertyAlias(const UnicodeString& prop,
                 } else if (0 == uprv_comparePropertyNames(ANY, pname.data())) {
                     set(MIN_VALUE, MAX_VALUE);
                     return *this;
-                } else if (0 == uprv_comparePropertyNames(ASCII, pname.data())) {
+                } else if (0 == uprv_comparePropertyNames(ASCII_PROPERTY_NAME, pname.data())) {
                     set(0, 0x7F);
                     return *this;
                 } else if (0 == uprv_comparePropertyNames(ASSIGNED, pname.data())) {

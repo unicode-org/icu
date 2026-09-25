@@ -422,7 +422,7 @@ utrie2_serialize(const UTrie2 *trie,
 
 /* default UTrie2EnumValue() returns the input value itself */
 static uint32_t U_CALLCONV
-enumSameValue(const void * /*context*/, uint32_t value) {
+trie2EnumSameValue(const void * /*context*/, uint32_t value) {
     return value;
 }
 
@@ -454,7 +454,7 @@ enumEitherTrie(const UTrie2 *trie,
         return;
     }
     if(enumValue==nullptr) {
-        enumValue=enumSameValue;
+        enumValue=trie2EnumSameValue;
     }
 
     if(trie->newTrie==nullptr) {

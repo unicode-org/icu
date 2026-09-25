@@ -159,8 +159,8 @@ static UHashtable * NumberingSystem_cache = nullptr;
 static icu::UInitOnce gNSCacheInitOnce {};
 
 #if !UCONFIG_NO_SERVICE
-static icu::ICULocaleService* gService = nullptr;
-static icu::UInitOnce gServiceInitOnce {};
+static icu::ICULocaleService* gNumberService = nullptr;
+static icu::UInitOnce gNumberServiceInitOnce {};
 #endif
 
 /**
@@ -174,10 +174,10 @@ deleteNumberingSystem(void *obj) {
 
 static UBool U_CALLCONV numfmt_cleanup() {
 #if !UCONFIG_NO_SERVICE
-    gServiceInitOnce.reset();
-    if (gService) {
-        delete gService;
-        gService = nullptr;
+    gNumberServiceInitOnce.reset();
+    if (gNumberService) {
+        delete gNumberService;
+        gNumberService = nullptr;
     }
 #endif
     gNSCacheInitOnce.reset();
@@ -975,20 +975,20 @@ ICUNumberFormatService::~ICUNumberFormatService() {}
 // -------------------------------------
 
 static void U_CALLCONV initNumberFormatService() {
-    U_ASSERT(gService == nullptr);
+    U_ASSERT(gNumberService == nullptr);
     ucln_i18n_registerCleanup(UCLN_I18N_NUMFMT, numfmt_cleanup);
-    gService = new ICUNumberFormatService();
+    gNumberService = new ICUNumberFormatService();
 }
 
 static ICULocaleService*
 getNumberFormatService()
 {
-    umtx_initOnce(gServiceInitOnce, &initNumberFormatService);
-    return gService;
+    umtx_initOnce(gNumberServiceInitOnce, &initNumberFormatService);
+    return gNumberService;
 }
 
 static UBool haveService() {
-    return !gServiceInitOnce.isReset() && (getNumberFormatService() != nullptr);
+    return !gNumberServiceInitOnce.isReset() && (getNumberFormatService() != nullptr);
 }
 
 // -------------------------------------
@@ -1020,7 +1020,7 @@ NumberFormat::unregister(URegistryKey key, UErrorCode& status)
         return false;
     }
     if (haveService()) {
-        return gService->unregister(key, status);
+        return gNumberService->unregister(key, status);
     } else {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return false;
@@ -1054,7 +1054,7 @@ NumberFormat::internalCreateInstance(const Locale& loc, UNumberFormatStyle kind,
     }
 #if !UCONFIG_NO_SERVICE
     if (haveService()) {
-        return (NumberFormat*)gService->get(loc, kind, status);
+        return (NumberFormat*)gNumberService->get(loc, kind, status);
     }
 #endif
     return makeInstance(loc, kind, status);

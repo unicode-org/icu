@@ -2007,3 +2007,9 @@ U_NAMESPACE_END
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 //eof
+
+// Keep file-local macros from leaking into other unity sources.
+#undef SINGLE_QUOTE
+#undef COMMA
+#undef LEFT_CURLY_BRACE
+#undef RIGHT_CURLY_BRACE

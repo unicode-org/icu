@@ -111,7 +111,7 @@ static void U_CALLCONV cloneUnicodeString(UElement *dst, UElement *src) {
     dst->pointer = new UnicodeString(*static_cast<UnicodeString*>(src->pointer));
 }
 
-static int32_t U_CALLCONV compareUnicodeString(UElement t1, UElement t2) {
+static int32_t U_CALLCONV compareUnicodeSetStrings(UElement t1, UElement t2) {
     const UnicodeString& a = *static_cast<const UnicodeString*>(t1.pointer);
     const UnicodeString& b = *static_cast<const UnicodeString*>(t2.pointer);
     return a.compare(b);
@@ -979,7 +979,7 @@ void UnicodeSet::_add(const UnicodeString& s) {
         setToBogus();
         return;
     }
-    strings_->sortedInsert(t.orphan(), compareUnicodeString, ec);
+    strings_->sortedInsert(t.orphan(), compareUnicodeSetStrings, ec);
     if (U_FAILURE(ec)) {
         setToBogus();
     }
@@ -2351,3 +2351,6 @@ int32_t UnicodeSet::spanBackUTF8(const char *s, int32_t length, USetSpanConditio
 }
 
 U_NAMESPACE_END
+
+#undef _dbgct
+#undef _dbgdt

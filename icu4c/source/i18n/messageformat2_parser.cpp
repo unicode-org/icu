@@ -44,7 +44,7 @@ using namespace data_model;
 // Increments the line number and updates the "characters seen before
 // current line" count in `parseError`, iff `peek()` is a newline
 void Parser::maybeAdvanceLine() {
-    if (peek() == LF) {
+    if (peek() == u'\n') {
         parseError.line++;
         // add 1 to index to get the number of characters seen so far
         // (including the newline)
@@ -142,10 +142,10 @@ UnicodeSet* initWhitespace(UErrorCode& status) {
         return nullptr;
     }
     result->add(SPACE);
-    result->add(HTAB);
-    result->add(CR);
-    result->add(LF);
-    result->add(IDEOGRAPHIC_SPACE);
+    result->add(MF2_HTAB);
+    result->add(u'\r');
+    result->add(u'\n');
+    result->add(MF2_IDEOGRAPHIC_SPACE);
     result->freeze();
     return result;
 }
@@ -245,8 +245,8 @@ UnicodeSet* initNameChars(UErrorCode& status) {
     };
     result->addAll(*nameStart);
     result->addAll(*digit);
-    result->add(HYPHEN);
-    result->add(PERIOD);
+    result->add(MF2_HYPHEN);
+    result->add(MF2_PERIOD);
     result->freeze();
     return result;
 }
@@ -268,9 +268,9 @@ UnicodeSet* initTextChars(UErrorCode& status) {
     };
     result->addAll(*content);
     result->addAll(*whitespace);
-    result->add(PERIOD);
-    result->add(AT);
-    result->add(PIPE);
+    result->add(MF2_PERIOD);
+    result->add(MF2_AT);
+    result->add(MF2_PIPE);
     result->freeze();
     return result;
 }
@@ -302,10 +302,10 @@ UnicodeSet* initQuotedChars(UErrorCode& status) {
         return nullptr;
     }
     result->addAll(*whitespace);
-    result->add(PERIOD);
-    result->add(AT);
-    result->add(LEFT_CURLY_BRACE);
-    result->add(RIGHT_CURLY_BRACE);
+    result->add(MF2_PERIOD);
+    result->add(MF2_AT);
+    result->add(MF2_LEFT_CURLY_BRACE);
+    result->add(MF2_RIGHT_CURLY_BRACE);
     result->freeze();
     return result;
 }
@@ -320,10 +320,10 @@ UnicodeSet* initEscapableChars(UErrorCode& status) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return nullptr;
     }
-    result->add(PIPE);
+    result->add(MF2_PIPE);
     result->add(BACKSLASH);
-    result->add(LEFT_CURLY_BRACE);
-    result->add(RIGHT_CURLY_BRACE);
+    result->add(MF2_LEFT_CURLY_BRACE);
+    result->add(MF2_RIGHT_CURLY_BRACE);
     result->freeze();
     return result;
 }
@@ -449,7 +449,7 @@ bool Parser::isEscapableChar(UChar32 c) const {
 // Returns true iff `c` can begin a `function` nonterminal
 static bool isFunctionStart(UChar32 c) {
     switch (c) {
-    case COLON: {
+    case MF2_COLON: {
         return true;
     }
     default: {
@@ -465,7 +465,7 @@ static bool isAnnotationStart(UChar32 c) {
 
 // Returns true iff `c` can begin a `literal` nonterminal
 bool Parser::isLiteralStart(UChar32 c) const {
-    return (c == PIPE || isNameStart(c) || c == HYPHEN || isDigit(c));
+    return (c == MF2_PIPE || isNameStart(c) || c == MF2_HYPHEN || isDigit(c));
 }
 
 // Returns true iff `c` can begin a `key` nonterminal
@@ -823,7 +823,7 @@ VariableName Parser::parseVariableName(UErrorCode& errorCode) {
 
     U_ASSERT(inBounds());
 
-    parseToken(DOLLAR, errorCode);
+    parseToken(MF2_DOLLAR, errorCode);
     if (!inBounds()) {
         ERROR(errorCode);
         return result;
@@ -850,13 +850,13 @@ UnicodeString Parser::parseIdentifier(UErrorCode& errorCode) {
     // Parse namespace
     result += parseName(errorCode);
     int32_t firstColon = -1;
-    while (inBounds() && peek() == COLON) {
+    while (inBounds() && peek() == MF2_COLON) {
         // Parse ':' separator
         if (firstColon == -1) {
             firstColon = index;
         }
-        parseToken(COLON, errorCode);
-        result += COLON;
+        parseToken(MF2_COLON, errorCode);
+        result += MF2_COLON;
         // Check for message ending with something like "foo:"
         if (!inBounds()) {
             ERROR(errorCode);
@@ -870,7 +870,7 @@ UnicodeString Parser::parseIdentifier(UErrorCode& errorCode) {
     // to the end of the name to check for multiple ':'s
     if (firstColon != -1) {
         for (int32_t i = firstColon + 1; i < result.length(); i++) {
-            if (result[i] == COLON) {
+            if (result[i] == MF2_COLON) {
                 ERROR_AT(errorCode, i);
                 return {};
             }
@@ -920,9 +920,9 @@ UnicodeString Parser::parseEscapeSequence(UErrorCode& errorCode) {
     if (inBounds()) {
         // Expect a '{', '|' or '}'
         switch (peek()) {
-        case LEFT_CURLY_BRACE:
-        case RIGHT_CURLY_BRACE:
-        case PIPE:
+        case MF2_LEFT_CURLY_BRACE:
+        case MF2_RIGHT_CURLY_BRACE:
+        case MF2_PIPE:
         case BACKSLASH: {
             /* Append to the output string */
             str += peek();
@@ -953,7 +953,7 @@ Literal Parser::parseQuotedLiteral(UErrorCode& errorCode) {
     UnicodeString contents;
     if (U_SUCCESS(errorCode)) {
         // Parse the opening '|'
-        parseToken(PIPE, errorCode);
+        parseToken(MF2_PIPE, errorCode);
         if (!inBounds()) {
             ERROR(errorCode);
             error = true;
@@ -994,7 +994,7 @@ Literal Parser::parseQuotedLiteral(UErrorCode& errorCode) {
     }
 
     // Parse the closing '|'
-    parseToken(PIPE, errorCode);
+    parseToken(MF2_PIPE, errorCode);
 
     return Literal(true, contents);
 }
@@ -1047,7 +1047,7 @@ Literal Parser::parseLiteral(UErrorCode& errorCode) {
     if (!inBounds()) {
         ERROR(errorCode);
     } else {
-        if (peek() == PIPE) {
+        if (peek() == MF2_PIPE) {
             result = parseQuotedLiteral(errorCode);
         } else {
             result = parseUnquotedLiteral(errorCode);
@@ -1070,9 +1070,9 @@ template<class T>
 void Parser::parseAttribute(AttributeAdder<T>& attrAdder, UErrorCode& errorCode) {
     U_ASSERT(inBounds());
 
-    U_ASSERT(peek() == AT);
+    U_ASSERT(peek() == MF2_AT);
     // Consume the '@'
-    parseToken(AT, errorCode);
+    parseToken(MF2_AT, errorCode);
 
     // Parse LHS
     UnicodeString lhs = parseIdentifier(errorCode);
@@ -1084,9 +1084,9 @@ void Parser::parseAttribute(AttributeAdder<T>& attrAdder, UErrorCode& errorCode)
     parseOptionalWhitespace();
 
     Operand rand;
-    if (peek() == EQUALS) {
+    if (peek() == MF2_EQUALS) {
         // Parse '='
-        parseTokenWithWhitespace(EQUALS, errorCode);
+        parseTokenWithWhitespace(MF2_EQUALS, errorCode);
 
         UnicodeString rhsStr;
         // Parse RHS, which must be a literal
@@ -1115,13 +1115,13 @@ void Parser::parseOption(OptionAdder<T>& addOption, UErrorCode& errorCode) {
     UnicodeString lhs = parseIdentifier(errorCode);
 
     // Parse '='
-    parseTokenWithWhitespace(EQUALS, errorCode);
+    parseTokenWithWhitespace(MF2_EQUALS, errorCode);
 
     UnicodeString rhsStr;
     Operand rand;
     // Parse RHS, which is either a literal or variable
     switch (peek()) {
-    case DOLLAR: {
+    case MF2_DOLLAR: {
         rand = Operand(parseVariableName(errorCode));
         break;
     }
@@ -1272,7 +1272,7 @@ Arbitrary lookahead is required to parse attribute lists, similarly to option li
         // and can exit.
         // Note that exiting is sort of like backtracking: "(s attributes)" doesn't apply,
         // so we back out to [s].
-        if (peek() != AT) {
+        if (peek() != MF2_AT) {
             // We've consumed all the attributes (meaning that either we consumed non-empty
             // whitespace, or consumed at least one attribute.)
             // Done.
@@ -1318,7 +1318,7 @@ Operator Parser::parseAnnotation(UErrorCode& status) {
 void Parser::parseLiteralOrVariableWithAnnotation(bool isVariable,
                                                   Expression::Builder& builder,
                                                   UErrorCode& status) {
-    CHECK_ERROR(status);
+    MF2_CHECK_ERROR(status);
 
     U_ASSERT(inBounds());
 
@@ -1401,7 +1401,7 @@ the comment in `parseOptions()` for details.
 static void exprFallback(Expression::Builder& exprBuilder) {
     // Construct a literal consisting just of  The U+FFFD REPLACEMENT CHARACTER
     // per https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#fallback-resolution
-    exprBuilder.setOperand(Operand(Literal(false, UnicodeString(REPLACEMENT))));
+    exprBuilder.setOperand(Operand(Literal(false, UnicodeString(MF2_REPLACEMENT))));
 }
 
 static Expression exprFallback(UErrorCode& status) {
@@ -1411,7 +1411,7 @@ static Expression exprFallback(UErrorCode& status) {
         if (U_SUCCESS(status)) {
             // Construct a literal consisting just of  The U+FFFD REPLACEMENT CHARACTER
             // per https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#fallback-resolution
-            exprBuilder.setOperand(Operand(Literal(false, UnicodeString(REPLACEMENT))));
+            exprBuilder.setOperand(Operand(Literal(false, UnicodeString(MF2_REPLACEMENT))));
             UErrorCode status = U_ZERO_ERROR;
             result = exprBuilder.build(status);
             // An operand was set, so there can't be an error
@@ -1430,7 +1430,7 @@ Expression Parser::parseExpression(UErrorCode& status) {
     U_ASSERT(inBounds());
 
     // Parse opening brace
-    parseToken(LEFT_CURLY_BRACE, status);
+    parseToken(MF2_LEFT_CURLY_BRACE, status);
     // Optional whitespace after opening brace
     parseOptionalWhitespace();
 
@@ -1441,12 +1441,12 @@ Expression Parser::parseExpression(UErrorCode& status) {
     } else {
         // literal '|', variable '$' or annotation
         switch (peek()) {
-        case PIPE: {
+        case MF2_PIPE: {
             // Quoted literal
             parseLiteralOrVariableWithAnnotation(false, exprBuilder, status);
             break;
         }
-        case DOLLAR: {
+        case MF2_DOLLAR: {
             // Variable
             parseLiteralOrVariableWithAnnotation(true, exprBuilder, status);
             break;
@@ -1488,7 +1488,7 @@ Expression Parser::parseExpression(UErrorCode& status) {
         ERROR(status);
     } else {
         // Otherwise, it's safe to check for the '}'
-        parseToken(RIGHT_CURLY_BRACE, status);
+        parseToken(MF2_RIGHT_CURLY_BRACE, status);
     }
     return result;
 }
@@ -1508,7 +1508,7 @@ void Parser::parseLocalDeclaration(UErrorCode& status) {
     // Restore precondition
     CHECK_BOUNDS(status);
     VariableName lhs = parseVariableName(status);
-    parseTokenWithWhitespace(EQUALS, status);
+    parseTokenWithWhitespace(MF2_EQUALS, status);
     // Restore precondition before calling parseExpression()
     CHECK_BOUNDS(status);
 
@@ -1529,7 +1529,7 @@ void Parser::parseLocalDeclaration(UErrorCode& status) {
        https://github.com/unicode-org/message-format-wg/issues/703
        is resolved differently.
     */
-    CHECK_ERROR(status);
+    MF2_CHECK_ERROR(status);
     if (!errors.hasSyntaxError()) {
         dataModel.addBinding(Binding(std::move(lhs), std::move(rhs)), status);
         // Check if status is U_DUPLICATE_DECLARATION_ERROR
@@ -1575,7 +1575,7 @@ void Parser::parseInputDeclaration(UErrorCode& status) {
     // argument referred to, which is harmless.
     // When evaluating the RHS, the new local is not in scope
     // and the message argument will be correctly referred to.
-    CHECK_ERROR(status);
+    MF2_CHECK_ERROR(status);
     if (!errors.hasSyntaxError()) {
         dataModel.addBinding(Binding::input(std::move(lhs), std::move(rhs), status), status);
         // Check if status is U_MF_DUPLICATE_DECLARATION_ERROR
@@ -1598,7 +1598,7 @@ void Parser::parseDeclarations(UErrorCode& status) {
     // declarations must be followed by a body
     CHECK_BOUNDS(status);
 
-    while (peek() == PERIOD) {
+    while (peek() == MF2_PERIOD) {
         CHECK_BOUNDS_1(status);
         if (peek(1) == ID_LOCAL[1]) {
             parseLocalDeclaration(status);
@@ -1610,7 +1610,7 @@ void Parser::parseDeclarations(UErrorCode& status) {
         }
 
         // Avoid looping infinitely
-        CHECK_ERROR(status);
+        MF2_CHECK_ERROR(status);
 
         parseOptionalWhitespace();
         // Restore precondition
@@ -1722,7 +1722,7 @@ This is addressed using "backtracking" (similarly to `parseOptions()`).
 
     // We've seen at least one whitespace-key pair, so now we can parse
     // *(s key) [s]
-    while (peek() != LEFT_CURLY_BRACE || isWhitespace(peek()) || isBidiControl(peek())) {
+    while (peek() != MF2_LEFT_CURLY_BRACE || isWhitespace(peek()) || isBidiControl(peek())) {
         bool wasWhitespace = isWhitespace(peek()) || isBidiControl(peek());
         parseRequiredWhitespace(status);
         if (!wasWhitespace) {
@@ -1739,7 +1739,7 @@ This is addressed using "backtracking" (similarly to `parseOptions()`).
 
         // At this point, it's ambiguous whether we are inside (s key) or [s].
         // This check resolves that ambiguity.
-        if (peek() == LEFT_CURLY_BRACE) {
+        if (peek() == MF2_LEFT_CURLY_BRACE) {
             // A pattern follows, so what we just parsed was the optional
             // trailing whitespace. All the keys have been parsed.
 
@@ -1756,11 +1756,11 @@ This is addressed using "backtracking" (similarly to `parseOptions()`).
 Pattern Parser::parseQuotedPattern(UErrorCode& status) {
     U_ASSERT(inBounds());
 
-    parseToken(LEFT_CURLY_BRACE, status);
-    parseToken(LEFT_CURLY_BRACE, status);
+    parseToken(MF2_LEFT_CURLY_BRACE, status);
+    parseToken(MF2_LEFT_CURLY_BRACE, status);
     Pattern p = parseSimpleMessage(status);
-    parseToken(RIGHT_CURLY_BRACE, status);
-    parseToken(RIGHT_CURLY_BRACE, status);
+    parseToken(MF2_RIGHT_CURLY_BRACE, status);
+    parseToken(MF2_RIGHT_CURLY_BRACE, status);
     return p;
 }
 
@@ -1771,7 +1771,7 @@ Pattern Parser::parseQuotedPattern(UErrorCode& status) {
 Markup Parser::parseMarkup(UErrorCode& status) {
     U_ASSERT(inBounds(1));
 
-    U_ASSERT(peek() == LEFT_CURLY_BRACE);
+    U_ASSERT(peek() == MF2_LEFT_CURLY_BRACE);
 
     Markup::Builder builder(status);
     if (U_FAILURE(status)) {
@@ -1780,7 +1780,7 @@ Markup Parser::parseMarkup(UErrorCode& status) {
 
     // Consume the '{'
     next();
-    normalizedInput += LEFT_CURLY_BRACE;
+    normalizedInput += MF2_LEFT_CURLY_BRACE;
     parseOptionalWhitespace();
     bool closing = false;
     switch (peek()) {
@@ -1832,7 +1832,7 @@ Markup Parser::parseMarkup(UErrorCode& status) {
         }
     }
 
-    parseToken(RIGHT_CURLY_BRACE, status);
+    parseToken(MF2_RIGHT_CURLY_BRACE, status);
 
     if (standalone) {
         builder.setStandalone();
@@ -1850,7 +1850,7 @@ Markup Parser::parseMarkup(UErrorCode& status) {
   No postcondition (a placeholder can end a message)
 */
 std::variant<Expression, Markup> Parser::parsePlaceholder(UErrorCode& status) {
-    U_ASSERT(peek() == LEFT_CURLY_BRACE);
+    U_ASSERT(peek() == MF2_LEFT_CURLY_BRACE);
 
     if (!inBounds()) {
         ERROR(status);
@@ -1892,7 +1892,7 @@ Pattern Parser::parseSimpleMessage(UErrorCode& status) {
         Expression expression;
         while (inBounds()) {
             switch (peek()) {
-            case LEFT_CURLY_BRACE: {
+            case MF2_LEFT_CURLY_BRACE: {
                 // Must be placeholder
                 std::variant<Expression, Markup> piece = parsePlaceholder(status);
                 if (std::holds_alternative<Expression>(piece)) {
@@ -1909,7 +1909,7 @@ Pattern Parser::parseSimpleMessage(UErrorCode& status) {
                 result.add(parseEscapeSequence(status), status);
                 break;
             }
-            case RIGHT_CURLY_BRACE: {
+            case MF2_RIGHT_CURLY_BRACE: {
                 // Distinguish unescaped '}' from end of quoted pattern
                 break;
             }
@@ -1919,7 +1919,7 @@ Pattern Parser::parseSimpleMessage(UErrorCode& status) {
                 break;
             }
             }
-            if (peek() == RIGHT_CURLY_BRACE) {
+            if (peek() == MF2_RIGHT_CURLY_BRACE) {
                 // End of quoted pattern
                 break;
             }
@@ -1933,7 +1933,7 @@ Pattern Parser::parseSimpleMessage(UErrorCode& status) {
 }
 
 void Parser::parseVariant(UErrorCode& status) {
-    CHECK_ERROR(status);
+    MF2_CHECK_ERROR(status);
 
     // At least one key is required
     SelectorKeys keyList(parseNonEmptyKeys(status));
@@ -1957,7 +1957,7 @@ void Parser::parseVariant(UErrorCode& status) {
   because a message can end with a variant)
 */
 void Parser::parseSelectors(UErrorCode& status) {
-    CHECK_ERROR(status);
+    MF2_CHECK_ERROR(status);
 
     U_ASSERT(inBounds());
 
@@ -1967,12 +1967,12 @@ void Parser::parseSelectors(UErrorCode& status) {
     // Parse selectors
     // "Backtracking" is required here. It's not clear if whitespace is
     // (`[s]` selector) or (`[s]` variant)
-    while (isWhitespace(peek()) || isBidiControl(peek()) || peek() == DOLLAR) {
+    while (isWhitespace(peek()) || isBidiControl(peek()) || peek() == MF2_DOLLAR) {
         int32_t whitespaceStart = index;
         parseRequiredWhitespace(status);
         // Restore precondition
         CHECK_BOUNDS(status);
-        if (peek() != DOLLAR) {
+        if (peek() != MF2_DOLLAR) {
             // This is not necessarily an error, but rather,
             // means the whitespace we parsed was the optional
             // whitespace preceding the first variant, not the
@@ -1986,7 +1986,7 @@ void Parser::parseSelectors(UErrorCode& status) {
         empty = false;
 
         dataModel.addSelector(std::move(var), status);
-        CHECK_ERROR(status);
+        MF2_CHECK_ERROR(status);
     }
 
     // At least one selector is required
@@ -2038,23 +2038,23 @@ void Parser::errorPattern(UErrorCode& status) {
     errors.addSyntaxError(status);
     // Set to empty pattern
     Pattern::Builder result = Pattern::Builder(status);
-    CHECK_ERROR(status);
+    MF2_CHECK_ERROR(status);
 
     // If still in bounds, then add the remaining input as a single text part
     // to the pattern
-    UnicodeString partStr(LEFT_CURLY_BRACE);
+    UnicodeString partStr(MF2_LEFT_CURLY_BRACE);
     while (inBounds()) {
         partStr += peek();
         next();
     }
     // Add curly braces around the entire output (same comment as above)
-    partStr += RIGHT_CURLY_BRACE;
+    partStr += MF2_RIGHT_CURLY_BRACE;
     result.add(std::move(partStr), status);
     dataModel.setPattern(result.build(status));
 }
 
 void Parser::parseBody(UErrorCode& status) {
-    CHECK_ERROR(status);
+    MF2_CHECK_ERROR(status);
 
     // Out-of-input is a syntax warning
     if (!inBounds()) {
@@ -2064,7 +2064,7 @@ void Parser::parseBody(UErrorCode& status) {
 
     // Body must be either a pattern or selectors
     switch (peek()) {
-    case LEFT_CURLY_BRACE: {
+    case MF2_LEFT_CURLY_BRACE: {
         // Pattern
         dataModel.setPattern(parseQuotedPattern(status));
         break;
@@ -2086,7 +2086,7 @@ void Parser::parseBody(UErrorCode& status) {
 // Parses the source pattern.
 
 void Parser::parse(UParseError &parseErrorResult, UErrorCode& status) {
-    CHECK_ERROR(status);
+    MF2_CHECK_ERROR(status);
 
     bool complex = false;
     // First, "look ahead" to determine if this is a simple or complex
@@ -2098,10 +2098,10 @@ void Parser::parse(UParseError &parseErrorResult, UErrorCode& status) {
     // Message can be empty, so we need to only look ahead
     // if we know it's non-empty
     if (inBounds()) {
-        if (peek() == PERIOD
+        if (peek() == MF2_PERIOD
             || (inBounds(1)
-                && peek() == LEFT_CURLY_BRACE
-                && peek(1) == LEFT_CURLY_BRACE)) {
+                && peek() == MF2_LEFT_CURLY_BRACE
+                && peek(1) == MF2_LEFT_CURLY_BRACE)) {
             complex = true;
         }
     }
@@ -2118,14 +2118,14 @@ void Parser::parse(UParseError &parseErrorResult, UErrorCode& status) {
     } else {
         // Simple message
         // For normalization, quote the pattern
-        normalizedInput += LEFT_CURLY_BRACE;
-        normalizedInput += LEFT_CURLY_BRACE;
+        normalizedInput += MF2_LEFT_CURLY_BRACE;
+        normalizedInput += MF2_LEFT_CURLY_BRACE;
         dataModel.setPattern(parseSimpleMessage(status));
-        normalizedInput += RIGHT_CURLY_BRACE;
-        normalizedInput += RIGHT_CURLY_BRACE;
+        normalizedInput += MF2_RIGHT_CURLY_BRACE;
+        normalizedInput += MF2_RIGHT_CURLY_BRACE;
     }
 
-    CHECK_ERROR(status);
+    MF2_CHECK_ERROR(status);
 
     // There are no errors; finally, check that the entire input was consumed
     if (!allConsumed()) {
@@ -2147,3 +2147,8 @@ U_NAMESPACE_END
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif /* #if !UCONFIG_NO_NORMALIZATION */
+
+#undef ERROR
+#undef ERROR_AT
+#undef CHECK_BOUNDS
+#undef CHECK_BOUNDS_1

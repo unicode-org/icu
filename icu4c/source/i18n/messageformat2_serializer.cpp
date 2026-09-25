@@ -43,16 +43,16 @@ void Serializer::emit(const std::u16string_view& token) {
 
 void Serializer::emit(const Literal& l) {
     if (l.isQuoted()) {
-      emit(PIPE);
+      emit(MF2_PIPE);
     }
     const UnicodeString& contents = l.unquoted();
     for (int32_t i = 0; ((int32_t) i) < contents.length(); i++) {
         // Re-escape any escaped-char characters
         switch(contents[i]) {
         case BACKSLASH:
-        case PIPE:
-        case LEFT_CURLY_BRACE:
-        case RIGHT_CURLY_BRACE: {
+        case MF2_PIPE:
+        case MF2_LEFT_CURLY_BRACE:
+        case MF2_RIGHT_CURLY_BRACE: {
             emit(BACKSLASH);
             break;
         }
@@ -63,7 +63,7 @@ void Serializer::emit(const Literal& l) {
         emit(contents[i]);
     }
     if (l.isQuoted()) {
-        emit(PIPE);
+        emit(MF2_PIPE);
     }
 }
 
@@ -94,7 +94,7 @@ void Serializer::emit(const Operand& rand) {
     U_ASSERT(!rand.isNull());
 
     if (rand.isVariable()) {
-        emit(DOLLAR);
+        emit(MF2_DOLLAR);
         emit(rand.asVariable());
     } else {
         // Literal: quoted or unquoted
@@ -112,7 +112,7 @@ void Serializer::emit(const OptionMap& options) {
         // that !bogus
         whitespace();
         emit(opt.getName());
-        emit(EQUALS);
+        emit(MF2_EQUALS);
         emit(opt.getValue());
     }
 }
@@ -126,18 +126,18 @@ void Serializer::emitAttributes(const OptionMap& attributes) {
         // No need to check error code, since we already checked
         // that !bogus
         whitespace();
-        emit(AT);
+        emit(MF2_AT);
         emit(attr.getName());
         const Operand& v = attr.getValue();
         if (!v.isNull()) {
-            emit(EQUALS);
+            emit(MF2_EQUALS);
             emit(v);
         }
     }
 }
 
  void Serializer::emit(const Expression& expr) {
-    emit(LEFT_CURLY_BRACE);
+    emit(MF2_LEFT_CURLY_BRACE);
 
     if (!expr.isFunctionCall()) {
         // Literal or variable, no annotation
@@ -152,7 +152,7 @@ void Serializer::emitAttributes(const OptionMap& attributes) {
         UErrorCode localStatus = U_ZERO_ERROR;
         const Operator* rator = expr.getOperator(localStatus);
         U_ASSERT(U_SUCCESS(localStatus));
-        emit(COLON);
+        emit(MF2_COLON);
         emit(rator->getFunctionName());
         // No whitespace after function name, in case it has
         // no options. (when there are options, emit(OptionMap) will
@@ -160,7 +160,7 @@ void Serializer::emitAttributes(const OptionMap& attributes) {
         emit(rator->getOptionsInternal());
     }
     emitAttributes(expr.getAttributesInternal());
-    emit(RIGHT_CURLY_BRACE);
+    emit(MF2_RIGHT_CURLY_BRACE);
 }
 
 void Serializer::emit(const PatternPart& part) {
@@ -170,10 +170,10 @@ void Serializer::emit(const PatternPart& part) {
         // Re-escape '{'/'}'/'\''|'
         for (int32_t i = 0; ((int32_t) i) < text.length(); i++) {
           switch(text[i]) {
-          case PIPE:
+          case MF2_PIPE:
           case BACKSLASH:
-          case LEFT_CURLY_BRACE:
-          case RIGHT_CURLY_BRACE: {
+          case MF2_LEFT_CURLY_BRACE:
+          case MF2_RIGHT_CURLY_BRACE: {
             emit(BACKSLASH);
             break;
           }
@@ -187,7 +187,7 @@ void Serializer::emit(const PatternPart& part) {
     // Markup
     if (part.isMarkup()) {
         const Markup& markup = part.asMarkup();
-        emit(LEFT_CURLY_BRACE);
+        emit(MF2_LEFT_CURLY_BRACE);
         if (markup.isClose()) {
             emit(SLASH);
             } else {
@@ -199,7 +199,7 @@ void Serializer::emit(const PatternPart& part) {
         if (markup.isStandalone()) {
             emit(SLASH);
         }
-        emit(RIGHT_CURLY_BRACE);
+        emit(MF2_RIGHT_CURLY_BRACE);
         return;
     }
     // Expression
@@ -210,14 +210,14 @@ void Serializer::emit(const Pattern& pat) {
     int32_t len = pat.numParts();
     // Always quote pattern, which should match the normalized input
     // if the parser is constructing it correctly
-    emit(LEFT_CURLY_BRACE);
-    emit(LEFT_CURLY_BRACE);
+    emit(MF2_LEFT_CURLY_BRACE);
+    emit(MF2_LEFT_CURLY_BRACE);
     for (int32_t i = 0; i < len; i++) {
         // No whitespace is needed here -- see the `pattern` nonterminal in the grammar
         emit(pat.getPart(i));
     }
-    emit(RIGHT_CURLY_BRACE);
-    emit(RIGHT_CURLY_BRACE);
+    emit(MF2_RIGHT_CURLY_BRACE);
+    emit(MF2_RIGHT_CURLY_BRACE);
 }
 
 void Serializer::serializeDeclarations() {
@@ -230,10 +230,10 @@ void Serializer::serializeDeclarations() {
             // No whitespace needed here -- see `message` in the grammar
             emit(ID_LOCAL);
             whitespace();
-            emit(DOLLAR);
+            emit(MF2_DOLLAR);
             emit(b.getVariable());
             // No whitespace needed here -- see `local-declaration` in the grammar
-            emit(EQUALS);
+            emit(MF2_EQUALS);
             // No whitespace needed here -- see `local-declaration` in the grammar
         } else {
             // Input declaration
@@ -251,7 +251,7 @@ void Serializer::serializeSelectors() {
     emit(ID_MATCH);
     for (int32_t i = 0; i < dataModel.numSelectors(); i++) {
         whitespace();
-        emit(DOLLAR);
+        emit(MF2_DOLLAR);
         emit(selectors[i]);
     }
 }

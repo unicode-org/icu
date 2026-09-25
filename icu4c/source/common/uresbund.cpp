@@ -50,7 +50,7 @@ TODO: This cache should probably be removed when the deprecated code is
       completely removed.
 */
 static UHashtable *cache = nullptr;
-static icu::UInitOnce gCacheInitOnce {};
+static icu::UInitOnce gResourceCacheInitOnce {};
 
 static UMutex resbMutex;
 
@@ -469,7 +469,7 @@ static UBool U_CALLCONV ures_cleanup()
         uhash_close(cache);
         cache = nullptr;
     }
-    gCacheInitOnce.reset();
+    gResourceCacheInitOnce.reset();
     return true;
 }
 
@@ -481,7 +481,7 @@ static void U_CALLCONV createCache(UErrorCode &status) {
 }
      
 static void initCache(UErrorCode *status) {
-    umtx_initOnce(gCacheInitOnce, &createCache, *status);
+    umtx_initOnce(gResourceCacheInitOnce, &createCache, *status);
 }
 
 /** INTERNAL: sets the name (locale) of the resource bundle to given name */

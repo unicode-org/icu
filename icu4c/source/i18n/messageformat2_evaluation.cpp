@@ -30,9 +30,9 @@ using namespace data_model;
 BaseValue::BaseValue(const Locale& loc, const UnicodeString& fb, const Formattable& source, bool wasCreatedFromLiteral)
     : locale(loc), fromLiteral(wasCreatedFromLiteral) {
     innerValue = source;
-    fallback += LEFT_CURLY_BRACE;
+    fallback += MF2_LEFT_CURLY_BRACE;
     fallback += fb;
-    fallback += RIGHT_CURLY_BRACE;
+    fallback += MF2_RIGHT_CURLY_BRACE;
 }
 
 /* static */ BaseValue* BaseValue::create(const Locale& locale,
@@ -112,7 +112,7 @@ const ResolvedFunctionOption* FunctionOptions::getResolvedFunctionOptions(int32_
 }
 
 FunctionOptions::FunctionOptions(UVector&& optionsVector, UErrorCode& status) {
-    CHECK_ERROR(status);
+    MF2_CHECK_ERROR(status);
 
     functionOptionsLen = optionsVector.size();
     options = moveVectorToArray<ResolvedFunctionOption>(optionsVector, status);
@@ -260,7 +260,7 @@ InternalValue::InternalValue(InternalValue&& other) {
 }
 
 InternalValue::InternalValue(UErrorCode& errorCode) {
-    CHECK_ERROR(errorCode);
+    MF2_CHECK_ERROR(errorCode);
 
     LocalPointer<FunctionValue> nv(new NullValue());
     if (!nv.isValid()) {
@@ -395,7 +395,7 @@ PrioritizedVariant::~PrioritizedVariant() {}
     Environment* Environment::create(const VariableName& var, Closure* c,
                                      const UnicodeString& fallbackStr,
                                      Environment* parent, UErrorCode& errorCode) {
-        NULL_ON_ERROR(errorCode);
+        MF2_NULL_ON_ERROR(errorCode);
         Environment* result = new NonEmptyEnvironment(var, InternalValue::closure(c, fallbackStr), parent);
         if (result == nullptr) {
             errorCode = U_MEMORY_ALLOCATION_ERROR;
@@ -405,7 +405,7 @@ PrioritizedVariant::~PrioritizedVariant() {}
     }
 
     Environment* Environment::create(UErrorCode& errorCode) {
-        NULL_ON_ERROR(errorCode);
+        MF2_NULL_ON_ERROR(errorCode);
         Environment* result = new EmptyEnvironment(errorCode);
         if (U_SUCCESS(errorCode) && result == nullptr) {
             errorCode = U_MEMORY_ALLOCATION_ERROR;
@@ -498,7 +498,7 @@ PrioritizedVariant::~PrioritizedVariant() {}
 
     /* static */ Closure* Closure::create(const Expression& expr, Environment& env,
                                           UErrorCode& status) {
-        NULL_ON_ERROR(status);
+        MF2_NULL_ON_ERROR(status);
 
         Closure* result = new Closure(expr, env);
         if (result == nullptr) {
@@ -512,7 +512,7 @@ PrioritizedVariant::~PrioritizedVariant() {}
     // MessageContext methods
 
     void MessageContext::checkErrors(UErrorCode& status) const {
-        CHECK_ERROR(status);
+        MF2_CHECK_ERROR(status);
         errors.checkErrors(status);
     }
 

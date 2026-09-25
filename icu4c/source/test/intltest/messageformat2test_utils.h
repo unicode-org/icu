@@ -126,7 +126,7 @@ class TestCase : public UMemory {
             return *this;
         }
         Builder& setDecimalArgument(const UnicodeString& k, std::string_view decimal, UErrorCode& errorCode) {
-            THIS_ON_ERROR(errorCode);
+            MF2_THIS_ON_ERROR(errorCode);
             arguments[k] = Formattable::forDecimal(decimal, errorCode);
             return *this;
         }
@@ -255,7 +255,7 @@ class TestUtils {
     static void runTestCase(IntlTest& tmsg,
                             const TestCase& testCase,
                             IcuTestErrorCode& errorCode) {
-        CHECK_ERROR(errorCode);
+        MF2_CHECK_ERROR(errorCode);
 
         UParseError parseError;
 	MessageFormatter::Builder mfBuilder(errorCode);

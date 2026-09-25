@@ -91,7 +91,7 @@ void TestMessageFormat2::testSelectFormatToPattern(TestCase::Builder& testBuilde
 }
 
 void TestMessageFormat2::testMf1Behavior(TestCase::Builder& testBuilder, IcuTestErrorCode& errorCode) {
-    CHECK_ERROR(errorCode);
+    MF2_CHECK_ERROR(errorCode);
 
     UDate testDate = UDate(1671782400000); // 2022-12-23
     UnicodeString user = "John";
@@ -107,7 +107,7 @@ void TestMessageFormat2::testMf1Behavior(TestCase::Builder& testBuilder, IcuTest
     UnicodeString expectedGood = "Hello John, today is December 23, 2022.";
 
     LocalPointer<MessageFormat> mf1(new MessageFormat("Hello {user}, today is {today,date,long}.", errorCode));
-    CHECK_ERROR(errorCode);
+    MF2_CHECK_ERROR(errorCode);
 
     UnicodeString result;
     mf1->format(badArgumentsNames, oldArgumentsValues, 2, result, errorCode);

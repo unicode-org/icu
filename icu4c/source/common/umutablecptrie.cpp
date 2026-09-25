@@ -1801,7 +1801,7 @@ umutablecptrie_get(const UMutableCPTrie *trie, UChar32 c) {
 
 namespace {
 
-UChar32 getRange(const void *trie, UChar32 start,
+UChar32 getMutableRange(const void *trie, UChar32 start,
                  UCPMapValueFilter *filter, const void *context, uint32_t *pValue) {
     return reinterpret_cast<const MutableCodePointTrie *>(trie)->
         getRange(start, filter, context, pValue);
@@ -1813,7 +1813,7 @@ U_CAPI UChar32 U_EXPORT2
 umutablecptrie_getRange(const UMutableCPTrie *trie, UChar32 start,
                         UCPMapRangeOption option, uint32_t surrogateValue,
                         UCPMapValueFilter *filter, const void *context, uint32_t *pValue) {
-    return ucptrie_internalGetRange(getRange, trie, start,
+    return ucptrie_internalGetRange(getMutableRange, trie, start,
                                     option, surrogateValue,
                                     filter, context, pValue);
 }

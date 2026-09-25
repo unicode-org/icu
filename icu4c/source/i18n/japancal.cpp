@@ -58,7 +58,7 @@ U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(JapaneseCalendar)
 
-static const int32_t kGregorianEpoch = 1970;    // used as the default value of EXTENDED_YEAR
+static const int32_t kJapaneseGregorianEpoch = 1970;    // used as the default value of EXTENDED_YEAR
 static const char* TENTATIVE_ERA_VAR_NAME = "ICU_ENABLE_TENTATIVE_ERA";
 
 
@@ -206,7 +206,7 @@ int32_t JapaneseCalendar::handleGetExtendedYear(UErrorCode& status)
     // The default value of EXTENDED_YEAR is 1970 (Showa 45)
     if (newerField(UCAL_EXTENDED_YEAR, UCAL_YEAR) == UCAL_EXTENDED_YEAR &&
         newerField(UCAL_EXTENDED_YEAR, UCAL_ERA) == UCAL_EXTENDED_YEAR) {
-        return internalGet(UCAL_EXTENDED_YEAR, kGregorianEpoch);
+        return internalGet(UCAL_EXTENDED_YEAR, kJapaneseGregorianEpoch);
     }
 
     // extended year is a gregorian year, where 1 = 1AD,  0 = 1BC, -1 = 2BC, etc

@@ -37,7 +37,7 @@ using namespace data_model;
 //-----------------------
 
 static UnicodeString varFallback(const VariableName& var) {
-    UnicodeString str(DOLLAR);
+    UnicodeString str(MF2_DOLLAR);
     str += var;
     return str;
 }
@@ -47,7 +47,7 @@ static UnicodeString functionFallback(const InternalValue& operand,
     UnicodeString fallbackStr;
     // Create the fallback string for this function call
     if (operand.isNullOperand()) {
-        fallbackStr = UnicodeString(COLON);
+        fallbackStr = UnicodeString(MF2_COLON);
         fallbackStr += functionName;
     } else {
         fallbackStr = operand.asFallback();
@@ -69,7 +69,7 @@ static UnicodeString functionFallback(const InternalValue& operand,
             // the fallback for $bar is "$foo".
             UnicodeString fallbackToUse = fallback;
             if (fallbackToUse.isEmpty()) {
-                fallbackToUse += DOLLAR;
+                fallbackToUse += MF2_DOLLAR;
                 fallbackToUse += var;
             }
             // If it exists, create a BaseValue (FunctionValue) for it
@@ -85,13 +85,13 @@ static UnicodeString functionFallback(const InternalValue& operand,
 
 // Helper function to re-escape any escaped-char characters
 static UnicodeString reserialize(const UnicodeString& s) {
-    UnicodeString result(PIPE);
+    UnicodeString result(MF2_PIPE);
     for (int32_t i = 0; i < s.length(); i++) {
         switch(s[i]) {
         case BACKSLASH:
-        case PIPE:
-        case LEFT_CURLY_BRACE:
-        case RIGHT_CURLY_BRACE: {
+        case MF2_PIPE:
+        case MF2_LEFT_CURLY_BRACE:
+        case MF2_RIGHT_CURLY_BRACE: {
             result += BACKSLASH;
             break;
         }
@@ -100,7 +100,7 @@ static UnicodeString reserialize(const UnicodeString& s) {
         }
         result += s[i];
     }
-    result += PIPE;
+    result += MF2_PIPE;
     return result;
 }
 
@@ -149,7 +149,7 @@ static UnicodeString reserialize(const UnicodeString& s) {
         InternalValue& rhs = env.lookup(normalized);
         // Evaluate the expression using the environment from the closure
         // The name of this local variable is the fallback for its RHS.
-        UnicodeString newFallback(DOLLAR);
+        UnicodeString newFallback(MF2_DOLLAR);
         newFallback += var;
         if (rhs.isClosure()) {
             Closure& c = rhs.asClosure();
@@ -339,7 +339,7 @@ FunctionOptions MessageFormatter::resolveOptions(Environment& env,
         ResolvedFunctionOption resolvedOpt(k, *optVal, false);
         LocalPointer<ResolvedFunctionOption>
             p(create<ResolvedFunctionOption>(std::move(resolvedOpt), status));
-        EMPTY_ON_ERROR(status);
+        MF2_EMPTY_ON_ERROR(status);
         optionsVector->adoptElement(p.orphan(), status);
     }
     // Return a new FunctionOptions constructed from the vector of options
@@ -416,7 +416,7 @@ void MessageFormatter::formatPattern(MessageContext& context,
                                      Environment& globalEnv,
                                      const Pattern& pat,
                                      UErrorCode &status, UnicodeString& result) const {
-    CHECK_ERROR(status);
+    MF2_CHECK_ERROR(status);
 
     for (int32_t i = 0; i < pat.numParts(); i++) {
         const PatternPart& part = pat.getPart(i);
@@ -428,9 +428,9 @@ void MessageFormatter::formatPattern(MessageContext& context,
 	      // Format the expression
 	      InternalValue& partVal = evalExpression({}, globalEnv, part.contents(), context, status);
               if (partVal.isFallback()) {
-                  result += LEFT_CURLY_BRACE;
+                  result += MF2_LEFT_CURLY_BRACE;
                   result += partVal.asFallback();
-                  result += RIGHT_CURLY_BRACE;
+                  result += MF2_RIGHT_CURLY_BRACE;
               } else {
                   // Get the `FunctionValue` corresponding to this part
                   const FunctionValue* val = partVal.getValue(status);
@@ -454,7 +454,7 @@ void MessageFormatter::formatPattern(MessageContext& context,
 
                   if (badSelectOption) {
                       context.getErrors().setBadOption(val->getFunctionName(), status);
-                      CHECK_ERROR(status);
+                      MF2_CHECK_ERROR(status);
                   }
 
                   // Handle formatting errors. `formatToString()` can't take a context and thus can't
@@ -480,7 +480,7 @@ void MessageFormatter::formatPattern(MessageContext& context,
 // See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#resolve-selectors
 // `res` is a vector of ResolvedSelectors
 void MessageFormatter::resolveSelectors(MessageContext& context, Environment& env, UErrorCode &status, UVector& res) const {
-    CHECK_ERROR(status);
+    MF2_CHECK_ERROR(status);
     U_ASSERT(!dataModel.hasPattern());
 
     const VariableName* selectors = dataModel.getSelectorsInternal();
@@ -504,7 +504,7 @@ void MessageFormatter::resolveSelectors(MessageContext& context, Environment& en
         // 2ii(a). Append rv as the last element of the list res.
         // (Also fulfills 2iii)
         LocalPointer<InternalValue> v(create<InternalValue>(std::move(rv), status));
-        CHECK_ERROR(status);
+        MF2_CHECK_ERROR(status);
         res.adoptElement(v.orphan(), status);
     }
 }
@@ -540,7 +540,7 @@ void MessageFormatter::matchSelectorKeys(const UVector& keys,
 					 InternalValue&& rv,
 					 UVector& keysOut,
 					 UErrorCode& status) const {
-    CHECK_ERROR(status);
+    MF2_CHECK_ERROR(status);
 
     if (!rv.isSelectable()) {
         return;
@@ -584,7 +584,7 @@ void MessageFormatter::matchSelectorKeys(const UVector& keys,
 
     if (badSelectOption) {
         context.getErrors().setBadOption(rvVal->getFunctionName(), status);
-        CHECK_ERROR(status);
+        MF2_CHECK_ERROR(status);
         // In this case, only the `*` variant should match
         prefsLen = 0;
     }
@@ -600,7 +600,7 @@ void MessageFormatter::matchSelectorKeys(const UVector& keys,
         }
     }
 
-    CHECK_ERROR(status);
+    MF2_CHECK_ERROR(status);
 
     // Copy the resulting keys (if there was no error)
     keysOut.removeAllElements();
@@ -612,7 +612,7 @@ void MessageFormatter::matchSelectorKeys(const UVector& keys,
             return;
         }
         keysOut.adoptElement(k, status);
-        CHECK_ERROR(status);
+        MF2_CHECK_ERROR(status);
     }
 
     uprv_free(prefsArr);
@@ -625,7 +625,7 @@ void MessageFormatter::resolvePreferences(MessageContext& context,
                                           UVector& res,
                                           UVector& pref,
                                           UErrorCode &status) const {
-    CHECK_ERROR(status);
+    MF2_CHECK_ERROR(status);
 
     // 1. Let pref be a new empty list of lists of strings.
     // (Implicit, since `pref` is an out-parameter)
@@ -637,7 +637,7 @@ void MessageFormatter::resolvePreferences(MessageContext& context,
     for (int32_t i = 0; i < res.size(); i++) {
         // 2i. Let keys be a new empty list of strings.
         LocalPointer<UVector> keys(createUVector(status));
-        CHECK_ERROR(status);
+        MF2_CHECK_ERROR(status);
         // 2ii. For each variant `var` of the message
         for (int32_t variantNum = 0; variantNum < numVariants; variantNum++) {
             const SelectorKeys& selectorKeys = variants[variantNum].getKeys();
@@ -656,7 +656,7 @@ void MessageFormatter::resolvePreferences(MessageContext& context,
                 ks = StandardFunctions::normalizeNFC(key.asLiteral().unquoted());
                 // 2ii(b)(c) Append `ks` as the last element of the list `keys`.
                 ksP.adoptInstead(create<UnicodeString>(std::move(ks), status));
-                CHECK_ERROR(status);
+                MF2_CHECK_ERROR(status);
                 keys->adoptElement(ksP.orphan(), status);
             }
         }
@@ -730,7 +730,7 @@ void MessageFormatter::filterVariants(const UVector& pref, UVector& vars, UError
         if (!noMatch) {
             // Append `var` as the last element of the list `vars`.
 	    PrioritizedVariant* tuple = create<PrioritizedVariant>(PrioritizedVariant(-1, selectorKeys, p), status);
-            CHECK_ERROR(status);
+            MF2_CHECK_ERROR(status);
             vars.adoptElement(tuple, status);
         }
     }
@@ -741,7 +741,7 @@ void MessageFormatter::filterVariants(const UVector& pref, UVector& vars, UError
 // Note: this sorts in-place, so `sortable` is just `vars`
 // `pref` is a vector of vectors of strings; `vars` is a vector of PrioritizedVariants
 void MessageFormatter::sortVariants(const UVector& pref, UVector& vars, UErrorCode& status) const {
-    CHECK_ERROR(status);
+    MF2_CHECK_ERROR(status);
 
 // Note: steps 1 and 2 are omitted since we use `vars` as `sortable` (we sort in-place)
     // 1. Let `sortable` be a new empty list of (integer, variant) tuples.
@@ -786,7 +786,7 @@ void MessageFormatter::sortVariants(const UVector& pref, UVector& vars, UErrorCo
         }
         // 5iv. Set `sortable` to be the result of calling the method SortVariants(`sortable`)
         vars.sort(comparePrioritizedVariants, status);
-        CHECK_ERROR(status);
+        MF2_CHECK_ERROR(status);
         // 5v. Set `i` to be `i` - 1.
         i--;
     }
@@ -799,26 +799,26 @@ void MessageFormatter::formatSelectors(MessageContext& context,
                                        Environment& env,
                                        UErrorCode &status,
                                        UnicodeString& result) const {
-    CHECK_ERROR(status);
+    MF2_CHECK_ERROR(status);
 
     // See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#pattern-selection
 
     // Resolve Selectors
     // res is a vector of InternalValues
     LocalPointer<UVector> res(createUVector(status));
-    CHECK_ERROR(status);
+    MF2_CHECK_ERROR(status);
     resolveSelectors(context, env, status, *res);
 
     // Resolve Preferences
     // pref is a vector of vectors of strings
     LocalPointer<UVector> pref(createUVector(status));
-    CHECK_ERROR(status);
+    MF2_CHECK_ERROR(status);
     resolvePreferences(context, *res, *pref, status);
 
     // Filter Variants
     // vars is a vector of PrioritizedVariants
     LocalPointer<UVector> vars(createUVector(status));
-    CHECK_ERROR(status);
+    MF2_CHECK_ERROR(status);
     filterVariants(*pref, *vars, status);
 
     // Sort Variants and select the final pattern
@@ -826,7 +826,7 @@ void MessageFormatter::formatSelectors(MessageContext& context,
     // which is sorted in-place
     sortVariants(*pref, *vars, status);
 
-    CHECK_ERROR(status);
+    MF2_CHECK_ERROR(status);
 
     // 6. Let `var` be the `variant` element of the first element of `sortable`.
     U_ASSERT(vars->size() > 0); // This should have been checked earlier (having 0 variants would be a data model error)
@@ -842,7 +842,7 @@ void MessageFormatter::formatSelectors(MessageContext& context,
 // --------------------
 
 UnicodeString MessageFormatter::formatToString(const MessageArguments& arguments, UErrorCode &status) {
-    EMPTY_ON_ERROR(status);
+    MF2_EMPTY_ON_ERROR(status);
 
     // Create a new environment that will store closures for all local variables
     Environment* env = Environment::create(status);
@@ -865,7 +865,7 @@ UnicodeString MessageFormatter::formatToString(const MessageArguments& arguments
             // See https://www.unicode.org/reports/tr35/tr35-messageFormat.html#pattern-selection
             const DynamicErrors& err = context.getErrors();
             if (err.hasSyntaxError() || err.hasDataModelError()) {
-                result += REPLACEMENT;
+                result += MF2_REPLACEMENT;
             } else {
                 formatSelectors(context, *globalEnv, status, result);
             }
@@ -892,10 +892,10 @@ bool MessageFormatter::operandToStringWithBadOptionError(MessageContext& context
                                                          const Operand& rand,
                                                          UnicodeString& result,
                                                          UErrorCode& status) const {
-    EMPTY_ON_ERROR(status);
+    MF2_EMPTY_ON_ERROR(status);
 
     InternalValue& iVal = evalOperand({}, globalEnv, rand, context, status);
-    EMPTY_ON_ERROR(status);
+    MF2_EMPTY_ON_ERROR(status);
     const FunctionValue* val = iVal.getValue(status);
     U_ASSERT(U_SUCCESS(status));
 
@@ -914,7 +914,7 @@ void MessageFormatter::validateUOptionsOnMarkup(MessageContext& context,
                                                 Environment& globalEnv,
                                                 const Markup& markupPart,
                                                 UErrorCode& status) const {
-    CHECK_ERROR(status);
+    MF2_CHECK_ERROR(status);
 
     const OptionMap& opts = markupPart.getOptionsInternal();
     for (int32_t i = 0; i < opts.len; i++) {
@@ -940,7 +940,7 @@ void MessageFormatter::check(MessageContext& context, const Environment& localEn
     // Check the RHS of each option
     for (int32_t i = 0; i < options.size(); i++) {
         const Option& opt = options.getOption(i, status);
-        CHECK_ERROR(status);
+        MF2_CHECK_ERROR(status);
         check(context, localEnv, opt.getValue(), status);
     }
 }
@@ -983,7 +983,7 @@ void MessageFormatter::check(MessageContext& context, const Environment& localEn
 
 // Check for resolution errors
 void MessageFormatter::checkDeclarations(MessageContext& context, Environment*& env, UErrorCode &status) const {
-    CHECK_ERROR(status);
+    MF2_CHECK_ERROR(status);
 
     const Binding* decls = getDataModel().getLocalVariablesInternal();
     U_ASSERT(env != nullptr && (decls != nullptr || getDataModel().bindingsLen == 0));
@@ -1003,7 +1003,7 @@ void MessageFormatter::checkDeclarations(MessageContext& context, Environment*& 
                                   varFallback(lhs),
                                   env,
                                   status);
-        CHECK_ERROR(status);
+        MF2_CHECK_ERROR(status);
     }
 }
 } // namespace message2

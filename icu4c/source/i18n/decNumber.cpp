@@ -8183,3 +8183,6 @@ static void decFree(void *alloc) {
 #define malloc(a) decMalloc(a)
 #define free(a) decFree(a)
 #endif
+
+#undef malloc
+#undef free

@@ -38,7 +38,7 @@
 #define SURROGATE_LOW_BASE      9216
 
 enum {
-    UCNV_NEED_TO_WRITE_BOM=1
+    UCNV_U32_NEED_TO_WRITE_BOM=1
 };
 
 /* UTF-32BE ----------------------------------------------------------------- */
@@ -227,7 +227,7 @@ T_UConverter_fromUnicode_UTF32_BE(UConverterFromUnicodeArgs * args,
     }
 
     /* write the BOM if necessary */
-    if(args->converter->fromUnicodeStatus==UCNV_NEED_TO_WRITE_BOM) {
+    if(args->converter->fromUnicodeStatus==UCNV_U32_NEED_TO_WRITE_BOM) {
         static const char bom[]={ 0, 0, (char)0xfeu, (char)0xffu };
         ucnv_fromUWriteBytes(args->converter,
                              bom, 4,
@@ -330,7 +330,7 @@ T_UConverter_fromUnicode_UTF32_BE_OFFSET_LOGIC(UConverterFromUnicodeArgs * args,
     }
 
     /* write the BOM if necessary */
-    if(args->converter->fromUnicodeStatus==UCNV_NEED_TO_WRITE_BOM) {
+    if(args->converter->fromUnicodeStatus==UCNV_U32_NEED_TO_WRITE_BOM) {
         static const char bom[]={ 0, 0, (char)0xfeu, (char)0xffu };
         ucnv_fromUWriteBytes(args->converter,
                              bom, 4,
@@ -705,7 +705,7 @@ T_UConverter_fromUnicode_UTF32_LE(UConverterFromUnicodeArgs * args,
     }
 
     /* write the BOM if necessary */
-    if(args->converter->fromUnicodeStatus==UCNV_NEED_TO_WRITE_BOM) {
+    if(args->converter->fromUnicodeStatus==UCNV_U32_NEED_TO_WRITE_BOM) {
         static const char bom[]={ (char)0xffu, (char)0xfeu, 0, 0 };
         ucnv_fromUWriteBytes(args->converter,
                              bom, 4,
@@ -816,7 +816,7 @@ T_UConverter_fromUnicode_UTF32_LE_OFFSET_LOGIC(UConverterFromUnicodeArgs * args,
     }
 
     /* write the BOM if necessary */
-    if(args->converter->fromUnicodeStatus==UCNV_NEED_TO_WRITE_BOM) {
+    if(args->converter->fromUnicodeStatus==UCNV_U32_NEED_TO_WRITE_BOM) {
         static const char bom[]={ (char)0xffu, (char)0xfeu, 0, 0 };
         ucnv_fromUWriteBytes(args->converter,
                              bom, 4,
@@ -1030,7 +1030,7 @@ _UTF32Reset(UConverter *cnv, UConverterResetChoice choice) {
     }
     if(choice!=UCNV_RESET_TO_UNICODE) {
         /* reset fromUnicode: prepare to output the UTF-32PE BOM */
-        cnv->fromUnicodeStatus=UCNV_NEED_TO_WRITE_BOM;
+        cnv->fromUnicodeStatus=UCNV_U32_NEED_TO_WRITE_BOM;
     }
 }
 

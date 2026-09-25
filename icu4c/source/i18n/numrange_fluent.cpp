@@ -191,24 +191,24 @@ LocalizedNumberRangeFormatter NumberRangeFormatter::withLocale(const Locale& loc
 }
 
 
-template<typename T> using NFS = NumberRangeFormatterSettings<T>;
-using LNF = LocalizedNumberRangeFormatter;
-using UNF = UnlocalizedNumberRangeFormatter;
+template<typename T> using NRFS = NumberRangeFormatterSettings<T>;
+using LNRF = LocalizedNumberRangeFormatter;
+using UNRF = UnlocalizedNumberRangeFormatter;
 
-UnlocalizedNumberRangeFormatter::UnlocalizedNumberRangeFormatter(const UNF& other)
-        : UNF(static_cast<const NFS<UNF>&>(other)) {}
+UnlocalizedNumberRangeFormatter::UnlocalizedNumberRangeFormatter(const UNRF& other)
+        : UNRF(static_cast<const NRFS<UNRF>&>(other)) {}
 
-UnlocalizedNumberRangeFormatter::UnlocalizedNumberRangeFormatter(const NFS<UNF>& other)
-        : NFS<UNF>(other) {
+UnlocalizedNumberRangeFormatter::UnlocalizedNumberRangeFormatter(const NRFS<UNRF>& other)
+        : NRFS<UNRF>(other) {
     // No additional fields to assign
 }
 
 // Make default copy constructor call the NumberRangeFormatterSettings copy constructor.
-UnlocalizedNumberRangeFormatter::UnlocalizedNumberRangeFormatter(UNF&& src) noexcept
-        : UNF(static_cast<NFS<UNF>&&>(src)) {}
+UnlocalizedNumberRangeFormatter::UnlocalizedNumberRangeFormatter(UNRF&& src) noexcept
+        : UNRF(static_cast<NRFS<UNRF>&&>(src)) {}
 
-UnlocalizedNumberRangeFormatter::UnlocalizedNumberRangeFormatter(NFS<UNF>&& src) noexcept
-        : NFS<UNF>(std::move(src)) {
+UnlocalizedNumberRangeFormatter::UnlocalizedNumberRangeFormatter(NRFS<UNRF>&& src) noexcept
+        : NRFS<UNRF>(std::move(src)) {
     // No additional fields to assign
 }
 
@@ -220,48 +220,48 @@ UnlocalizedNumberRangeFormatter::UnlocalizedNumberRangeFormatter(impl::RangeMacr
     fMacros = macros;
 }
 
-UnlocalizedNumberRangeFormatter& UnlocalizedNumberRangeFormatter::operator=(const UNF& other) {
-    NFS<UNF>::operator=(static_cast<const NFS<UNF>&>(other));
+UnlocalizedNumberRangeFormatter& UnlocalizedNumberRangeFormatter::operator=(const UNRF& other) {
+    NRFS<UNRF>::operator=(static_cast<const NRFS<UNRF>&>(other));
     // No additional fields to assign
     return *this;
 }
 
-UnlocalizedNumberRangeFormatter& UnlocalizedNumberRangeFormatter::operator=(UNF&& src) noexcept {
-    NFS<UNF>::operator=(static_cast<NFS<UNF>&&>(src));
+UnlocalizedNumberRangeFormatter& UnlocalizedNumberRangeFormatter::operator=(UNRF&& src) noexcept {
+    NRFS<UNRF>::operator=(static_cast<NRFS<UNRF>&&>(src));
     // No additional fields to assign
     return *this;
 }
 
 // Make default copy constructor call the NumberRangeFormatterSettings copy constructor.
-LocalizedNumberRangeFormatter::LocalizedNumberRangeFormatter(const LNF& other)
-        : LNF(static_cast<const NFS<LNF>&>(other)) {}
+LocalizedNumberRangeFormatter::LocalizedNumberRangeFormatter(const LNRF& other)
+        : LNRF(static_cast<const NRFS<LNRF>&>(other)) {}
 
-LocalizedNumberRangeFormatter::LocalizedNumberRangeFormatter(const NFS<LNF>& other)
-        : NFS<LNF>(other) {
+LocalizedNumberRangeFormatter::LocalizedNumberRangeFormatter(const NRFS<LNRF>& other)
+        : NRFS<LNRF>(other) {
     // No additional fields to assign
 }
 
 LocalizedNumberRangeFormatter::LocalizedNumberRangeFormatter(LocalizedNumberRangeFormatter&& src) noexcept
-        : LNF(static_cast<NFS<LNF>&&>(src)) {}
+        : LNRF(static_cast<NRFS<LNRF>&&>(src)) {}
 
-LocalizedNumberRangeFormatter::LocalizedNumberRangeFormatter(NFS<LNF>&& src) noexcept
-        : NFS<LNF>(std::move(src)) {
+LocalizedNumberRangeFormatter::LocalizedNumberRangeFormatter(NRFS<LNRF>&& src) noexcept
+        : NRFS<LNRF>(std::move(src)) {
     // Steal the compiled formatter
-    LNF&& _src = static_cast<LNF&&>(src);
+    LNRF&& _src = static_cast<LNRF&&>(src);
     auto* stolen = _src.fAtomicFormatter.exchange(nullptr);
     delete fAtomicFormatter.exchange(stolen);
 }
 
-LocalizedNumberRangeFormatter& LocalizedNumberRangeFormatter::operator=(const LNF& other) {
+LocalizedNumberRangeFormatter& LocalizedNumberRangeFormatter::operator=(const LNRF& other) {
     if (this == &other) { return *this; }  // self-assignment: no-op
-    NFS<LNF>::operator=(static_cast<const NFS<LNF>&>(other));
+    NRFS<LNRF>::operator=(static_cast<const NRFS<LNRF>&>(other));
     // Do not steal; just clear
     delete fAtomicFormatter.exchange(nullptr);
     return *this;
 }
 
-LocalizedNumberRangeFormatter& LocalizedNumberRangeFormatter::operator=(LNF&& src) noexcept {
-    NFS<LNF>::operator=(static_cast<NFS<LNF>&&>(src));
+LocalizedNumberRangeFormatter& LocalizedNumberRangeFormatter::operator=(LNRF&& src) noexcept {
+    NRFS<LNRF>::operator=(static_cast<NRFS<LNRF>&&>(src));
     // Steal the compiled formatter
     auto* stolen = src.fAtomicFormatter.exchange(nullptr);
     delete fAtomicFormatter.exchange(stolen);
@@ -355,7 +355,7 @@ void LocalizedNumberRangeFormatter::formatImpl(
     results.getStringRef().writeTerminator(status);
 }
 
-const impl::NumberRangeFormatterImpl*
+const icu::number::impl::NumberRangeFormatterImpl*
 LocalizedNumberRangeFormatter::getFormatter(UErrorCode& status) const {
     // TODO: Move this into umutex.h? (similar logic also in decimfmt.cpp)
     // See ICU-20146

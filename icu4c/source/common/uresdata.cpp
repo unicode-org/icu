@@ -64,7 +64,7 @@ static const struct {
     int32_t length;
     char16_t nul;
     char16_t pad;
-} gEmptyString={ 0, 0, 0 };
+} gEmptyResourceString={ 0, 0, 0 };
 
 /*
  * All the type-access functions assume that
@@ -136,7 +136,7 @@ _res_findTable32Item(const ResourceData *pResData, const int32_t *keyOffsets, in
 /* helper for res_load() ---------------------------------------------------- */
 
 static UBool U_CALLCONV
-isAcceptable(void *context,
+isAcceptableResourceData(void *context,
              const char * /*type*/, const char * /*name*/,
              const UDataInfo *pInfo) {
     uprv_memcpy(context, pInfo->formatVersion, 4);
@@ -248,7 +248,7 @@ res_read(ResourceData *pResData,
     if(U_FAILURE(*errorCode)) {
         return;
     }
-    if(!isAcceptable(formatVersion, nullptr, nullptr, pInfo)) {
+    if(!isAcceptableResourceData(formatVersion, nullptr, nullptr, pInfo)) {
         *errorCode=U_INVALID_FORMAT_ERROR;
         return;
     }
@@ -263,7 +263,7 @@ res_load(ResourceData *pResData,
     uprv_memset(pResData, 0, sizeof(ResourceData));
 
     /* load the ResourceBundle file */
-    pResData->data=udata_openChoice(path, "res", name, isAcceptable, formatVersion, errorCode);
+    pResData->data=udata_openChoice(path, "res", name, isAcceptableResourceData, formatVersion, errorCode);
     if(U_FAILURE(*errorCode)) {
         return;
     }
@@ -333,7 +333,7 @@ res_getStringNoTrace(const ResourceData *pResData, Resource res, int32_t *pLengt
             p+=3;
         }
     } else if(res==offset) /* RES_GET_TYPE(res)==URES_STRING */ {
-        const int32_t *p32= res==0 ? &gEmptyString.length : pResData->pRoot+res;
+        const int32_t *p32= res==0 ? &gEmptyResourceString.length : pResData->pRoot+res;
         length=*p32++;
         p=(const char16_t *)p32;
     } else {
@@ -422,7 +422,7 @@ res_getAlias(const ResourceData *pResData, Resource res, int32_t *pLength) {
     uint32_t offset=RES_GET_OFFSET(res);
     int32_t length;
     if(RES_GET_TYPE(res)==URES_ALIAS) {
-        const int32_t *p32= offset==0 ? &gEmptyString.length : pResData->pRoot+offset;
+        const int32_t *p32= offset==0 ? &gEmptyResourceString.length : pResData->pRoot+offset;
         length=*p32++;
         p=(const char16_t *)p32;
     } else {
@@ -1034,7 +1034,7 @@ typedef struct TempTable {
 } TempTable;
 
 enum {
-    STACK_ROW_CAPACITY=200
+    RESOURCE_STACK_ROW_CAPACITY=200
 };
 
 /* The table item key string is not locally available. */
@@ -1331,8 +1331,8 @@ ures_swap(const UDataSwapper *ds,
     Resource rootRes;
     int32_t headerSize, maxTableLength;
 
-    Row rows[STACK_ROW_CAPACITY];
-    int32_t resort[STACK_ROW_CAPACITY];
+    Row rows[RESOURCE_STACK_ROW_CAPACITY];
+    int32_t resort[RESOURCE_STACK_ROW_CAPACITY];
     TempTable tempTable;
 
     const int32_t *inIndexes;
@@ -1419,7 +1419,7 @@ ures_swap(const UDataSwapper *ds,
         Resource *outBundle=(Resource *)((char *)outData+headerSize);
 
         /* track which resources we have already swapped */
-        uint32_t stackResFlags[STACK_ROW_CAPACITY];
+        uint32_t stackResFlags[RESOURCE_STACK_ROW_CAPACITY];
         int32_t resFlagsLength;
 
         /*
@@ -1474,7 +1474,7 @@ ures_swap(const UDataSwapper *ds,
 
         /* allocate the temporary table for sorting resource tables */
         tempTable.keyChars=(const char *)outBundle; /* sort by outCharset */
-        if(tempTable.majorFormatVersion>1 || maxTableLength<=STACK_ROW_CAPACITY) {
+        if(tempTable.majorFormatVersion>1 || maxTableLength<=RESOURCE_STACK_ROW_CAPACITY) {
             tempTable.rows=rows;
             tempTable.resort=resort;
         } else {

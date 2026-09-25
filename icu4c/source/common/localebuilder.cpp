@@ -15,8 +15,8 @@
 
 namespace {
 
-inline bool UPRV_ISDIGIT(char c) { return c >= '0' && c <= '9'; }
-inline bool UPRV_ISALPHANUM(char c) { return uprv_isASCIILetter(c) || UPRV_ISDIGIT(c); }
+inline bool isLocaleBuilderDigit(char c) { return c >= '0' && c <= '9'; }
+inline bool isLocaleBuilderAlphanum(char c) { return uprv_isASCIILetter(c) || isLocaleBuilderDigit(c); }
 
 constexpr const char* kAttributeKey = "attribute";
 
@@ -155,7 +155,7 @@ _isKeywordValue(const char* key, const char* value, int32_t value_len)
 {
     if (key[1] == '\0') {
         // one char key
-        return (UPRV_ISALPHANUM(uprv_tolower(key[0])) &&
+        return (isLocaleBuilderAlphanum(uprv_tolower(key[0])) &&
                 _isExtensionSubtags(key[0], value, value_len));
     } else if (uprv_strcmp(key, kAttributeKey) == 0) {
         // unicode attributes
@@ -236,7 +236,7 @@ _setUnicodeExtensions(Locale& locale, const CharString& value, UErrorCode& error
 LocaleBuilder& LocaleBuilder::setExtension(char key, StringPiece value) U_LIFETIME_BOUND
 {
     if (U_FAILURE(status_)) { return *this; }
-    if (!UPRV_ISALPHANUM(key)) {
+    if (!isLocaleBuilderAlphanum(key)) {
         status_ = U_ILLEGAL_ARGUMENT_ERROR;
         return *this;
     }

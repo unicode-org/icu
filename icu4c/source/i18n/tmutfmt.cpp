@@ -69,7 +69,7 @@ static const char gTimeUnitWeek[] = "week";
 static const char gTimeUnitHour[] = "hour";
 static const char gTimeUnitMinute[] = "minute";
 static const char gTimeUnitSecond[] = "second";
-static const char gPluralCountOther[] = "other";
+static const char gTimeUnitPluralCountOther[] = "other";
 
 static const char16_t DEFAULT_PATTERN_FOR_SECOND[] = {LEFT_CURLY_BRACKET, DIGIT_ZERO, RIGHT_CURLY_BRACKET, SPACE, LOW_S, 0};
 static const char16_t DEFAULT_PATTERN_FOR_MINUTE[] = {LEFT_CURLY_BRACKET, DIGIT_ZERO, RIGHT_CURLY_BRACKET, SPACE, LOW_M, LOW_I, LOW_N, 0};
@@ -623,7 +623,7 @@ TimeUnitFormat::searchInLocaleChain(UTimeUnitFormatStyle style, const char* key,
 
     // if not found the pattern for this plural count at all,
     // fall-back to plural count "other"
-    if ( uprv_strcmp(searchPluralCount, gPluralCountOther) == 0 ) {
+    if ( uprv_strcmp(searchPluralCount, gTimeUnitPluralCountOther) == 0 ) {
         // set default fall back the same as the resource in root
         LocalPointer<MessageFormat> messageFormat;
         const char16_t *pattern = nullptr;
@@ -669,7 +669,7 @@ TimeUnitFormat::searchInLocaleChain(UTimeUnitFormatStyle style, const char* key,
     } else {
         // fall back to rule "other", and search in parents
         searchInLocaleChain(style, key, localeName, srcTimeUnitField, srcPluralCount,
-                            gPluralCountOther, countToPatterns, err);
+                            gTimeUnitPluralCountOther, countToPatterns, err);
     }
 }
 

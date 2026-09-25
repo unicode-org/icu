@@ -525,3 +525,6 @@ UBool CharsetRecog_gb_18030::match(InputText *det, CharsetMatch *results) const
 
 U_NAMESPACE_END
 #endif
+
+// Keep file-local macros from leaking into other unity sources.
+#undef min

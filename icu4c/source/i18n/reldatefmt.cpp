@@ -647,7 +647,7 @@ static UBool loadUnitData(
     return U_SUCCESS(status);
 }
 
-static const int32_t cTypeBufMax = 32;
+static const int32_t kRelativeDateTypeBufMax = 32;
 
 static UBool getDateTimePattern(
         Locale locale,
@@ -657,9 +657,9 @@ static UBool getDateTimePattern(
     if (U_FAILURE(status)) {
         return false;
     }
-    char cType[cTypeBufMax + 1];
-    Calendar::getCalendarTypeFromLocale(locale, cType, cTypeBufMax, status);
-    cType[cTypeBufMax] = 0;
+    char cType[kRelativeDateTypeBufMax + 1];
+    Calendar::getCalendarTypeFromLocale(locale, cType, kRelativeDateTypeBufMax, status);
+    cType[kRelativeDateTypeBufMax] = 0;
     if (U_FAILURE(status) || cType[0] == 0) {
         status = U_ZERO_ERROR;
         uprv_strcpy(cType, "gregorian");

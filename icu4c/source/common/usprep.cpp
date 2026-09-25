@@ -44,7 +44,7 @@ U_CDECL_BEGIN
 /*
 Static cache for already opened StringPrep profiles
 */
-static UHashtable *SHARED_DATA_HASHTABLE = nullptr;
+static UHashtable *USPREP_SHARED_DATA_HASHTABLE = nullptr;
 static icu::UInitOnce gSharedDataInitOnce {};
 
 static UMutex usprepMutex;
@@ -52,7 +52,7 @@ static UMutex usprepMutex;
 //static uint8_t formatVersion[4]={ 0, 0, 0, 0 };
 
 /* the Unicode version of the sprep data */
-static UVersionInfo dataVersion={ 0, 0, 0, 0 };
+static UVersionInfo usprepDataVersion={ 0, 0, 0, 0 };
 
 /* Profile names must be aligned to UStringPrepProfileType */
 static const char * const PROFILE_NAMES[] = {
@@ -90,7 +90,7 @@ isSPrepAcceptable(void * /* context */,
         pInfo->formatVersion[3]==UTRIE_INDEX_SHIFT
     ) {
         //uprv_memcpy(formatVersion, pInfo->formatVersion, 4);
-        uprv_memcpy(dataVersion, pInfo->dataVersion, 4);
+        uprv_memcpy(usprepDataVersion, pInfo->dataVersion, 4);
         return true;
     } else {
         return false;
@@ -106,7 +106,7 @@ getSPrepFoldingOffset(uint32_t data) {
 
 /* hashes an entry  */
 static int32_t U_CALLCONV 
-hashEntry(const UHashTok parm) {
+usprepHashEntry(const UHashTok parm) {
     UStringPrepKey *b = (UStringPrepKey *)parm.pointer;
     UHashTok namekey, pathkey;
     namekey.pointer = b->name;
@@ -118,7 +118,7 @@ hashEntry(const UHashTok parm) {
 
 /* compares two entries */
 static UBool U_CALLCONV 
-compareEntries(const UHashTok p1, const UHashTok p2) {
+usprepCompareEntries(const UHashTok p1, const UHashTok p2) {
     UStringPrepKey *b1 = (UStringPrepKey *)p1.pointer;
     UStringPrepKey *b2 = (UStringPrepKey *)p2.pointer;
     UHashTok name1, name2, path1, path2;
@@ -147,13 +147,13 @@ usprep_internal_flushCache(UBool noRefCount){
      * return 0
      */
     umtx_lock(&usprepMutex);
-    if (SHARED_DATA_HASHTABLE == nullptr) {
+    if (USPREP_SHARED_DATA_HASHTABLE == nullptr) {
         umtx_unlock(&usprepMutex);
         return 0;
     }
 
     /*creates an enumeration to iterate through every element in the table */
-    while ((e = uhash_nextElement(SHARED_DATA_HASHTABLE, &pos)) != nullptr)
+    while ((e = uhash_nextElement(USPREP_SHARED_DATA_HASHTABLE, &pos)) != nullptr)
     {
         profile = (UStringPrepProfile *) e->value.pointer;
         key  = (UStringPrepKey *) e->key.pointer;
@@ -161,7 +161,7 @@ usprep_internal_flushCache(UBool noRefCount){
         if ((noRefCount== false && profile->refCount == 0) || 
              noRefCount) {
             deletedNum++;
-            uhash_removeElement(SHARED_DATA_HASHTABLE, e);
+            uhash_removeElement(USPREP_SHARED_DATA_HASHTABLE, e);
 
             /* unload the data */
             usprep_unload(profile);
@@ -192,32 +192,32 @@ usprep_flushCache(){
 */
 
 static UBool U_CALLCONV usprep_cleanup(){
-    if (SHARED_DATA_HASHTABLE != nullptr) {
+    if (USPREP_SHARED_DATA_HASHTABLE != nullptr) {
         usprep_internal_flushCache(true);
-        if (SHARED_DATA_HASHTABLE != nullptr && uhash_count(SHARED_DATA_HASHTABLE) == 0) {
-            uhash_close(SHARED_DATA_HASHTABLE);
-            SHARED_DATA_HASHTABLE = nullptr;
+        if (USPREP_SHARED_DATA_HASHTABLE != nullptr && uhash_count(USPREP_SHARED_DATA_HASHTABLE) == 0) {
+            uhash_close(USPREP_SHARED_DATA_HASHTABLE);
+            USPREP_SHARED_DATA_HASHTABLE = nullptr;
         }
     }
     gSharedDataInitOnce.reset();
-    return (SHARED_DATA_HASHTABLE == nullptr);
+    return (USPREP_SHARED_DATA_HASHTABLE == nullptr);
 }
 U_CDECL_END
 
 
 /** Initializes the cache for resources */
 static void U_CALLCONV
-createCache(UErrorCode &status) {
-    SHARED_DATA_HASHTABLE = uhash_open(hashEntry, compareEntries, nullptr, &status);
+usprepCreateCache(UErrorCode &status) {
+    USPREP_SHARED_DATA_HASHTABLE = uhash_open(usprepHashEntry, usprepCompareEntries, nullptr, &status);
     if (U_FAILURE(status)) {
-        SHARED_DATA_HASHTABLE = nullptr;
+        USPREP_SHARED_DATA_HASHTABLE = nullptr;
     }
     ucln_common_registerCleanup(UCLN_COMMON_USPREP, usprep_cleanup);
 }
 
 static void 
-initCache(UErrorCode *status) {
-    umtx_initOnce(gSharedDataInitOnce, &createCache, *status);
+usprepInitCache(UErrorCode *status) {
+    umtx_initOnce(gSharedDataInitOnce, &usprepCreateCache, *status);
 }
 
 static UBool U_CALLCONV
@@ -273,8 +273,8 @@ loadData(UStringPrepProfile* profile,
     u_getUnicodeVersion(normUnicodeVersion);
     normUniVer = (normUnicodeVersion[0] << 24) + (normUnicodeVersion[1] << 16) + 
                  (normUnicodeVersion[2] << 8 ) + (normUnicodeVersion[3]);
-    sprepUniVer = (dataVersion[0] << 24) + (dataVersion[1] << 16) + 
-                  (dataVersion[2] << 8 ) + (dataVersion[3]);
+    sprepUniVer = (usprepDataVersion[0] << 24) + (usprepDataVersion[1] << 16) +
+                  (usprepDataVersion[2] << 8 ) + (usprepDataVersion[3]);
     normCorrVer = profile->indexes[_SPREP_NORM_CORRECTNS_LAST_UNI_VERSION];
     
     if(U_FAILURE(*errorCode)){
@@ -307,7 +307,7 @@ usprep_getProfile(const char* path,
 
     UStringPrepProfile* profile = nullptr;
 
-    initCache(status);
+    usprepInitCache(status);
 
     if(U_FAILURE(*status)){
         return nullptr;
@@ -324,7 +324,7 @@ usprep_getProfile(const char* path,
 
     /* fetch the data from the cache */
     umtx_lock(&usprepMutex);
-    profile = static_cast<UStringPrepProfile*>(uhash_get(SHARED_DATA_HASHTABLE, &stackKey));
+    profile = static_cast<UStringPrepProfile*>(uhash_get(USPREP_SHARED_DATA_HASHTABLE, &stackKey));
     if(profile != nullptr) {
         profile->refCount++;
     }
@@ -362,7 +362,7 @@ usprep_getProfile(const char* path,
 
         umtx_lock(&usprepMutex);
         // If another thread already inserted the same key/value, refcount and cleanup our thread data
-        profile = static_cast<UStringPrepProfile*>(uhash_get(SHARED_DATA_HASHTABLE, &stackKey));
+        profile = static_cast<UStringPrepProfile*>(uhash_get(USPREP_SHARED_DATA_HASHTABLE, &stackKey));
         if(profile != nullptr) {
             profile->refCount++;
             usprep_unload(newProfile.getAlias());
@@ -379,7 +379,7 @@ usprep_getProfile(const char* path,
     
             /* add the data object to the cache */
             profile->refCount = 1;
-            uhash_put(SHARED_DATA_HASHTABLE, key.orphan(), profile, status);
+            uhash_put(USPREP_SHARED_DATA_HASHTABLE, key.orphan(), profile, status);
         }
         umtx_unlock(&usprepMutex);
     }

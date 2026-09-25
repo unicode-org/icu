@@ -168,7 +168,7 @@ const TimeZone* getAstronomerTimeZone() {
 //-------------------------------------------------------------------------
 
 
-static const int32_t LIMITS[UCAL_FIELD_COUNT][4] = {
+static const int32_t CHINESE_LIMITS[UCAL_FIELD_COUNT][4] = {
     // Minimum  Greatest     Least    Maximum
     //           Minimum   Maximum
     {        1,        1,    83333,    83333}, // ERA
@@ -202,7 +202,7 @@ static const int32_t LIMITS[UCAL_FIELD_COUNT][4] = {
 * @draft ICU 2.4
 */
 int32_t ChineseCalendar::handleGetLimit(UCalendarDateFields field, ELimitType limitType) const {
-    return LIMITS[field][limitType];
+    return CHINESE_LIMITS[field][limitType];
 }
 
 

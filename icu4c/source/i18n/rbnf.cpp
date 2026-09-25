@@ -290,10 +290,10 @@ private:
 enum {
     OPEN_ANGLE = 0x003c, /* '<' */
     CLOSE_ANGLE = 0x003e, /* '>' */
-    COMMA = 0x002c,
+    RBNF_COMMA = 0x002c,
     TICK = 0x0027,
-    QUOTE = 0x0022,
-    SPACE = 0x0020
+    RBNF_QUOTE = 0x0022,
+    RBNF_SPACE = 0x0020
 };
 
 /**
@@ -340,7 +340,7 @@ private:
         }
     }
     inline UBool inList(char16_t c, const char16_t* list) const {
-        if (*list == SPACE && PatternProps::isWhiteSpace(c)) {
+        if (*list == RBNF_SPACE && PatternProps::isWhiteSpace(c)) {
             return true;
         }
         while (*list && *list != c) {
@@ -372,7 +372,7 @@ private:
         
 
 static const char16_t DQUOTE_STOPLIST[] = {
-    QUOTE, 0
+    RBNF_QUOTE, 0
 };
 
 static const char16_t SQUOTE_STOPLIST[] = {
@@ -380,7 +380,7 @@ static const char16_t SQUOTE_STOPLIST[] = {
 };
 
 static const char16_t NOQUOTE_STOPLIST[] = {
-    SPACE, COMMA, CLOSE_ANGLE, OPEN_ANGLE, TICK, QUOTE, 0
+    RBNF_SPACE, RBNF_COMMA, CLOSE_ANGLE, OPEN_ANGLE, TICK, RBNF_QUOTE, 0
 };
 
 static void
@@ -433,7 +433,7 @@ LocDataParser::doParse() {
             mightHaveNext = false;
             char16_t** elem = nextArray(requiredLength);
             skipWhitespace();
-            UBool haveComma = check(COMMA);
+            UBool haveComma = check(RBNF_COMMA);
             if (elem) {
                 array.add(elem, ec);
                 if (haveComma) {
@@ -488,7 +488,7 @@ LocDataParser::nextArray(int32_t& requiredLength) {
         mightHaveNext = false;
         char16_t* elem = nextString();
         skipWhitespace();
-        UBool haveComma = check(COMMA);
+        UBool haveComma = check(RBNF_COMMA);
         if (elem) {
             array.add(elem, ec);
             if (haveComma) {
@@ -530,10 +530,10 @@ LocDataParser::nextString() {
     if (p < e) {
         const char16_t* terminators;
         char16_t c = *p;
-        UBool haveQuote = c == QUOTE || c == TICK;
+        UBool haveQuote = c == RBNF_QUOTE || c == TICK;
         if (haveQuote) {
             inc();
-            terminators = c == QUOTE ? DQUOTE_STOPLIST : SQUOTE_STOPLIST;
+            terminators = c == RBNF_QUOTE ? DQUOTE_STOPLIST : SQUOTE_STOPLIST;
         } else {
             terminators = NOQUOTE_STOPLIST;
         }
@@ -556,7 +556,7 @@ LocDataParser::nextString() {
                 ERROR("Empty string");
             }
             inc();
-        } else if (x == OPEN_ANGLE || x == TICK || x == QUOTE) {
+        } else if (x == OPEN_ANGLE || x == TICK || x == RBNF_QUOTE) {
             ERROR("Unexpected character in string");
         }
     }

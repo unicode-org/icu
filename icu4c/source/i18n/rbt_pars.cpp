@@ -1789,3 +1789,29 @@ utrans_stripRules(const char16_t *source, int32_t sourceLen, char16_t *target, U
 }
 
 #endif /* #if !UCONFIG_NO_TRANSLITERATION */
+
+// Keep file-local macros from leaking into other unity sources.
+#undef VARIABLE_DEF_OP
+#undef FORWARD_RULE_OP
+#undef REVERSE_RULE_OP
+#undef FWDREV_RULE_OP
+#undef QUOTE
+#undef ESCAPE
+#undef END_OF_RULE
+#undef RULE_COMMENT_CHAR
+#undef SEGMENT_OPEN
+#undef SEGMENT_CLOSE
+#undef CONTEXT_ANTE
+#undef CONTEXT_POST
+#undef CURSOR_POS
+#undef CURSOR_OFFSET
+#undef ANCHOR_START
+#undef KLEENE_STAR
+#undef ONE_OR_MORE
+#undef ZERO_OR_ONE
+#undef DOT
+#undef FUNCTION
+#undef ALT_REVERSE_RULE_OP
+#undef ALT_FORWARD_RULE_OP
+#undef ALT_FWDREV_RULE_OP
+#undef ALT_FUNCTION

@@ -264,7 +264,7 @@ void RegexMatcher::init2(UText *input, UErrorCode &status) {
 }
 
 
-static const char16_t BACKSLASH  = 0x5c;
+static const char16_t REMATCH_BACKSLASH  = 0x5c;
 static const char16_t DOLLARSIGN = 0x24;
 static const char16_t LEFTBRACKET = 0x7b;
 static const char16_t RIGHTBRACKET = 0x7d;
@@ -344,7 +344,7 @@ RegexMatcher &RegexMatcher::appendReplacement(UText *dest,
     //         move entire ranges not containing substitutions.
     UTEXT_SETNATIVEINDEX(replacement, 0);
     for (UChar32 c = UTEXT_NEXT32(replacement); U_SUCCESS(status) && c != U_SENTINEL;  c = UTEXT_NEXT32(replacement)) {
-        if (c == BACKSLASH) {
+        if (c == REMATCH_BACKSLASH) {
             // Backslash Escape.  Copy the following char out without further checks.
             //                    Note:  Surrogate pairs don't need any special handling
             //                           The second half wont be a '$' or a '\', and

@@ -24,7 +24,7 @@ static const char16_t APOSTROPHE = 0x0027; // '\''
 static const char16_t SPACE      = 0x0020; // ' '
 
 // "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-static const char16_t DIGITS[] = {
+static const char16_t UTILITY_DIGITS[] = {
     48,49,50,51,52,53,54,55,56,57,
     65,66,67,68,69,70,71,72,73,74,
     75,76,77,78,79,80,81,82,83,84,
@@ -54,11 +54,11 @@ UnicodeString& ICU_Utility::appendNumber(UnicodeString& result, int32_t n,
     }
     // Now generate the digits
     while (--minDigits > 0) {
-        result.append(DIGITS[0]);
+        result.append(UTILITY_DIGITS[0]);
     }
     while (r > 0) {
         int32_t digit = n / r;
-        result.append(DIGITS[digit]);
+        result.append(UTILITY_DIGITS[digit]);
         n -= digit * r;
         r /= radix;
     }
@@ -99,17 +99,17 @@ UnicodeString &ICU_Utility::escape(UnicodeString& result, UChar32 c) {
     result.append(BACKSLASH);
     if (c & ~0xFFFF) {
         result.append(UPPER_U);
-        result.append(DIGITS[0xF&(c>>28)]);
-        result.append(DIGITS[0xF&(c>>24)]);
-        result.append(DIGITS[0xF&(c>>20)]);
-        result.append(DIGITS[0xF&(c>>16)]);
+        result.append(UTILITY_DIGITS[0xF&(c>>28)]);
+        result.append(UTILITY_DIGITS[0xF&(c>>24)]);
+        result.append(UTILITY_DIGITS[0xF&(c>>20)]);
+        result.append(UTILITY_DIGITS[0xF&(c>>16)]);
     } else {
         result.append(LOWER_U);
     }
-    result.append(DIGITS[0xF&(c>>12)]);
-    result.append(DIGITS[0xF&(c>>8)]);
-    result.append(DIGITS[0xF&(c>>4)]);
-    result.append(DIGITS[0xF&c]);
+    result.append(UTILITY_DIGITS[0xF&(c>>12)]);
+    result.append(UTILITY_DIGITS[0xF&(c>>8)]);
+    result.append(UTILITY_DIGITS[0xF&(c>>4)]);
+    result.append(UTILITY_DIGITS[0xF&c]);
     return result;
 }
 

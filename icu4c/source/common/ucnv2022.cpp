@@ -82,11 +82,10 @@ static const char SHIFT_IN_STR[]  = "\x0F";
 // static const char SHIFT_OUT_STR[] = "\x0E";
 #endif
 
-#define CR      0x0D
-#define LF      0x0A
+#define UCNV2022_CR      0x0D
+#define UCNV2022_LF      0x0A
 #define H_TAB   0x09
 #define V_TAB   0x0B
-#define SPACE   0x20
 
 enum {
     HWKANA_START=0xff61,
@@ -1973,7 +1972,7 @@ getTrail:
                 break;
             }
 
-            if(sourceChar == CR || sourceChar == LF) {
+            if(sourceChar == UCNV2022_CR || sourceChar == UCNV2022_LF) {
                 /* reset the G2 state at the end of a line (conversion got us into ASCII or JISX201 already) */
                 pFromU2022State->cs[2] = 0;
                 choiceCount = 0;
@@ -2170,8 +2169,8 @@ escape:
 
             /* ISO-2022-JP does not use single-byte (C1) SS2 and SS3 */
 
-            case CR:
-            case LF:
+            case UCNV2022_CR:
+            case UCNV2022_LF:
                 /* automatically reset to single-byte mode */
                 if (static_cast<StateEnum>(pToU2022State->cs[0]) != ASCII &&
                     static_cast<StateEnum>(pToU2022State->cs[0]) != JISX201) {
@@ -3002,7 +3001,7 @@ getTrail:
                     pFromU2022State->g = 0;
                     choiceCount = 0;
                 }
-                if(sourceChar == CR || sourceChar == LF) {
+                if(sourceChar == UCNV2022_CR || sourceChar == UCNV2022_LF) {
                     /* reset the state at the end of a line */
                     uprv_memset(pFromU2022State, 0, sizeof(ISO2022State));
                     choiceCount = 0;
@@ -3353,8 +3352,8 @@ escape:
 
             /* ISO-2022-CN does not use single-byte (C1) SS2 and SS3 */
 
-            case CR:
-            case LF:
+            case UCNV2022_CR:
+            case UCNV2022_LF:
                 uprv_memset(pToU2022State, 0, sizeof(ISO2022State));
                 U_FALLTHROUGH;
             default:
@@ -3972,3 +3971,15 @@ const UConverterSharedData _ISO2022CNData=
 #endif /* #if !UCONFIG_ONLY_HTML_CONVERSION */
 
 #endif /* #if !UCONFIG_NO_LEGACY_CONVERSION */
+
+#undef UCNV2022_CR
+#undef UCNV2022_LF
+#undef H_TAB
+#undef V_TAB
+#undef IS_2022_CONTROL
+#undef IS_JP_DBCS
+#undef CSM
+#undef UCNV_OPTIONS_VERSION_MASK
+#undef UCNV_2022_MAX_CONVERTERS
+#undef ESC_2022
+#undef MAX_STATES_2022

@@ -575,7 +575,7 @@ getDirProps(UBiDi *pBiDi) {
             continue;
         }
         if(dirProp==B) {
-            if(i<originalLength && uchar==CR && text[i]==LF) /* do nothing on the CR */
+            if(i<originalLength && uchar==UBIDI_CR && text[i]==UBIDI_LF) /* do nothing on the CR */
                 continue;
             pBiDi->paras[pBiDi->paraCount-1].limit=i;
             if(isDefaultLevelInverse && lastStrong==R)
@@ -1136,7 +1136,7 @@ resolveExplicitLevels(UBiDi *pBiDi, UErrorCode *pErrorCode) {
                     continue;
                 if(dirProp==B) {
                     if((i+1)<length) {
-                        if(text[i]==CR && text[i+1]==LF)
+                        if(text[i]==UBIDI_CR && text[i+1]==UBIDI_LF)
                             continue;   /* skip CR when followed by LF */
                         bracketProcessB(&bracketData, level);
                     }
@@ -1294,7 +1294,7 @@ resolveExplicitLevels(UBiDi *pBiDi, UErrorCode *pErrorCode) {
                 flags|=DIRPROP_FLAG(B);
                 levels[i]=GET_PARALEVEL(pBiDi, i);
                 if((i+1)<length) {
-                    if(text[i]==CR && text[i+1]==LF)
+                    if(text[i]==UBIDI_CR && text[i+1]==UBIDI_LF)
                         break;          /* skip CR when followed by LF */
                     overflowEmbeddingCount=overflowIsolateCount=0;
                     validIsolateCount=0;
@@ -3152,4 +3152,3 @@ ubidi_isolate(UMFBidiIsolationStrategy bidiIsolationStrategy,
 U_NAMESPACE_END
 
 #endif // #if SHOW_CPLUSPLUS_API
-

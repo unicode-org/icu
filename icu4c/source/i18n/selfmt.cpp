@@ -195,3 +195,60 @@ U_NAMESPACE_END
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 //eof
+
+// Keep file-local macros from leaking into other unity sources.
+#undef DOT
+#undef SINGLE_QUOTE
+#undef SLASH
+#undef BACKSLASH
+#undef SPACE
+#undef TAB
+#undef QUOTATION_MARK
+#undef ASTERISK
+#undef COMMA
+#undef HYPHEN
+#undef U_ZERO
+#undef U_ONE
+#undef U_TWO
+#undef U_THREE
+#undef U_FOUR
+#undef U_FIVE
+#undef U_SIX
+#undef U_SEVEN
+#undef U_EIGHT
+#undef U_NINE
+#undef COLON
+#undef SEMI_COLON
+#undef CAP_A
+#undef CAP_B
+#undef CAP_R
+#undef CAP_Z
+#undef LOWLINE
+#undef LEFTBRACE
+#undef RIGHTBRACE
+#undef LOW_A
+#undef LOW_B
+#undef LOW_C
+#undef LOW_D
+#undef LOW_E
+#undef LOW_F
+#undef LOW_G
+#undef LOW_H
+#undef LOW_I
+#undef LOW_J
+#undef LOW_K
+#undef LOW_L
+#undef LOW_M
+#undef LOW_N
+#undef LOW_O
+#undef LOW_P
+#undef LOW_Q
+#undef LOW_R
+#undef LOW_S
+#undef LOW_T
+#undef LOW_U
+#undef LOW_V
+#undef LOW_W
+#undef LOW_X
+#undef LOW_Y
+#undef LOW_Z

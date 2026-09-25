@@ -343,14 +343,14 @@ namespace {
 
 LikelySubtags *gLikelySubtags = nullptr;
 UVector *gMacroregions = nullptr;
-UInitOnce gInitOnce {};
+UInitOnce gLikelySubtagsInitOnce {};
 
-UBool U_CALLCONV cleanup() {
+UBool U_CALLCONV cleanupLikelySubtags() {
     delete gLikelySubtags;
     gLikelySubtags = nullptr;
     delete gMacroregions;
     gMacroregions = nullptr;
-    gInitOnce.reset();
+    gLikelySubtagsInitOnce.reset();
     return true;
 }
 
@@ -468,12 +468,12 @@ void U_CALLCONV LikelySubtags::initLikelySubtags(UErrorCode &errorCode) {
         return;
     }
 
-    ucln_common_registerCleanup(UCLN_COMMON_LIKELY_SUBTAGS, cleanup);
+    ucln_common_registerCleanup(UCLN_COMMON_LIKELY_SUBTAGS, cleanupLikelySubtags);
 }
 
 const LikelySubtags *LikelySubtags::getSingleton(UErrorCode &errorCode) {
     if (U_FAILURE(errorCode)) { return nullptr; }
-    umtx_initOnce(gInitOnce, &LikelySubtags::initLikelySubtags, errorCode);
+    umtx_initOnce(gLikelySubtagsInitOnce, &LikelySubtags::initLikelySubtags, errorCode);
     return gLikelySubtags;
 }
 
@@ -621,7 +621,7 @@ bool LikelySubtags::isMacroregion(StringPiece& region, UErrorCode& errorCode) co
     // In Java, we use Region class. In C++, since Region is under i18n,
     // we read the same data used by Region into gMacroregions avoid dependency
     // from common to i18n/region.cpp
-    umtx_initOnce(gInitOnce, &LikelySubtags::initLikelySubtags, errorCode);
+    umtx_initOnce(gLikelySubtagsInitOnce, &LikelySubtags::initLikelySubtags, errorCode);
     if (U_FAILURE(errorCode)) { return false; }
     UnicodeString str(UnicodeString::fromUTF8(region));
     return gMacroregions->contains((void *)&str);

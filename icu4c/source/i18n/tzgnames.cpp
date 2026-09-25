@@ -110,7 +110,7 @@ deleteGNameInfo(void *obj) {
 typedef struct GNameInfo {
     UTimeZoneGenericNameType    type;
     const char16_t*                tzID;
-} ZNameInfo;
+} TZGenericNameInfo;
 
 /**
  * GMatchInfo stores zone name match information used by find method
@@ -119,7 +119,7 @@ typedef struct GMatchInfo {
     const GNameInfo*    gnameInfo;
     int32_t             matchLength;
     UTimeZoneFormatTimeType   timeType;
-} ZMatchInfo;
+} TZGenericMatchInfo;
 
 U_CDECL_END
 
@@ -167,7 +167,7 @@ TimeZoneGenericNameMatchInfo::getGenericNameType(int32_t index) const {
 
 int32_t
 TimeZoneGenericNameMatchInfo::getMatchLength(int32_t index) const {
-    ZMatchInfo* minfo = static_cast<ZMatchInfo*>(fMatches->elementAt(index));
+    TZGenericMatchInfo* minfo = static_cast<TZGenericMatchInfo*>(fMatches->elementAt(index));
     if (minfo != nullptr) {
         return minfo->matchLength;
     }
@@ -218,7 +218,7 @@ GNameSearchHandler::handleMatch(int32_t matchLength, const CharacterNode *node, 
     if (node->hasValues()) {
         int32_t valuesCount = node->countValues();
         for (int32_t i = 0; i < valuesCount; i++) {
-            GNameInfo *nameinfo = (ZNameInfo *)node->getValue(i);
+            GNameInfo *nameinfo = (TZGenericNameInfo *)node->getValue(i);
             if (nameinfo == nullptr) {
                 break;
             }
@@ -265,7 +265,7 @@ GNameSearchHandler::getMatches(int32_t& maxMatchLen) {
     return results;
 }
 
-static UMutex gLock;
+static UMutex gTZGenericNamesLock;
 
 class TZGNCore : public UMemory {
 public:
@@ -484,11 +484,11 @@ TZGNCore::getGenericLocationName(const UnicodeString& tzCanonicalID, UnicodeStri
 
     const char16_t *locname = nullptr;
     TZGNCore *nonConstThis = const_cast<TZGNCore *>(this);
-    umtx_lock(&gLock);
+    umtx_lock(&gTZGenericNamesLock);
     {
         locname = nonConstThis->getGenericLocationName(tzCanonicalID);
     }
-    umtx_unlock(&gLock);
+    umtx_unlock(&gTZGenericNamesLock);
 
     if (locname == nullptr) {
         name.setToBogus();
@@ -573,7 +573,7 @@ TZGNCore::getGenericLocationName(const UnicodeString& tzCanonicalID) {
                 locname = nullptr;
             } else {
                 // put the name info into the trie
-                GNameInfo* nameinfo = static_cast<ZNameInfo*>(uprv_malloc(sizeof(GNameInfo)));
+                GNameInfo* nameinfo = static_cast<TZGenericNameInfo*>(uprv_malloc(sizeof(GNameInfo)));
                 if (nameinfo != nullptr) {
                     nameinfo->type = UTZGNM_LOCATION;
                     nameinfo->tzID = cacheID;
@@ -739,11 +739,11 @@ TZGNCore::getPartialLocationName(const UnicodeString& tzCanonicalID,
 
     const char16_t *uplname = nullptr;
     TZGNCore *nonConstThis = const_cast<TZGNCore *>(this);
-    umtx_lock(&gLock);
+    umtx_lock(&gTZGenericNamesLock);
     {
         uplname = nonConstThis->getPartialLocationName(tzCanonicalID, mzID, isLong, mzDisplayName);
     }
-    umtx_unlock(&gLock);
+    umtx_unlock(&gTZGenericNamesLock);
 
     if (uplname == nullptr) {
         name.setToBogus();
@@ -822,7 +822,7 @@ TZGNCore::getPartialLocationName(const UnicodeString& tzCanonicalID,
                 uprv_free(cacheKey);
             } else {
                 // put the name to the local trie as well
-                GNameInfo* nameinfo = static_cast<ZNameInfo*>(uprv_malloc(sizeof(GNameInfo)));
+                GNameInfo* nameinfo = static_cast<TZGenericNameInfo*>(uprv_malloc(sizeof(GNameInfo)));
                 if (nameinfo != nullptr) {
                     nameinfo->type = isLong ? UTZGNM_LONG : UTZGNM_SHORT;
                     nameinfo->tzID = key.tzID;
@@ -1004,11 +1004,11 @@ TZGNCore::findLocal(const UnicodeString& text, int32_t start, uint32_t types, UE
 
     TZGNCore *nonConstThis = const_cast<TZGNCore *>(this);
 
-    umtx_lock(&gLock);
+    umtx_lock(&gTZGenericNamesLock);
     {
         fGNamesTrie.search(text, start, (TextTrieMapSearchResultHandler *)&handler, status);
     }
-    umtx_unlock(&gLock);
+    umtx_unlock(&gTZGenericNamesLock);
 
     if (U_FAILURE(status)) {
         return nullptr;
@@ -1033,7 +1033,7 @@ TZGNCore::findLocal(const UnicodeString& text, int32_t start, uint32_t types, UE
 
     // All names are not yet loaded into the local trie.
     // Load all available names into the trie. This could be very heavy.
-    umtx_lock(&gLock);
+    umtx_lock(&gTZGenericNamesLock);
     {
         if (!fGNamesTrieFullyLoaded) {
             StringEnumeration *tzIDs = TimeZone::createTimeZoneIDEnumeration(UCAL_ZONE_TYPE_CANONICAL, nullptr, nullptr, status);
@@ -1053,18 +1053,18 @@ TZGNCore::findLocal(const UnicodeString& text, int32_t start, uint32_t types, UE
             }
         }
     }
-    umtx_unlock(&gLock);
+    umtx_unlock(&gTZGenericNamesLock);
 
     if (U_FAILURE(status)) {
         return nullptr;
     }
 
-    umtx_lock(&gLock);
+    umtx_lock(&gTZGenericNamesLock);
     {
         // now try it again
         fGNamesTrie.search(text, start, (TextTrieMapSearchResultHandler *)&handler, status);
     }
-    umtx_unlock(&gLock);
+    umtx_unlock(&gTZGenericNamesLock);
 
     results = handler.getMatches(maxLen);
     if (results != nullptr && maxLen > 0) {
@@ -1111,7 +1111,7 @@ static UBool gTZGNCoreCacheInitialized = false;
 
 // Access count - incremented every time up to SWEEP_INTERVAL,
 // then reset to 0
-static int32_t gAccessCount = 0;
+static int32_t gTZGenericNamesAccessCount = 0;
 
 // Interval for calling the cache sweep function - every 100 times
 #define SWEEP_INTERVAL 100
@@ -1152,7 +1152,7 @@ U_CDECL_END
  * the expiration time. This function must be called with in the mutex
  * block.
  */
-static void sweepCache() {
+static void sweepTZGenericNamesCache() {
     int32_t pos = UHASH_FIRST;
     const UHashElement* elem;
     double now = static_cast<double>(uprv_getUTCtime());
@@ -1256,11 +1256,11 @@ TimeZoneGenericNames::createInstance(const Locale& locale, UErrorCode& status) {
             cacheEntry->refCount++;
             cacheEntry->lastAccess = static_cast<double>(uprv_getUTCtime());
         }
-        gAccessCount++;
-        if (gAccessCount >= SWEEP_INTERVAL) {
+        gTZGenericNamesAccessCount++;
+        if (gTZGenericNamesAccessCount >= SWEEP_INTERVAL) {
             // sweep
-            sweepCache();
-            gAccessCount = 0;
+            sweepTZGenericNamesCache();
+            gTZGenericNamesAccessCount = 0;
         }
     }  // End of mutex locked block
 

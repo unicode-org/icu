@@ -66,7 +66,7 @@ NFRule::~NFRule()
 static const char16_t gLeftBracket = 0x005b;
 static const char16_t gRightBracket = 0x005d;
 static const char16_t gVerticalLine = 0x007C;
-static const char16_t gColon = 0x003a;
+static const char16_t gRuleColon = 0x003a;
 static const char16_t gZero = 0x0030;
 static const char16_t gNine = 0x0039;
 static const char16_t gSpace = 0x0020;
@@ -77,7 +77,7 @@ static const char16_t gComma = 0x002c;
 static const char16_t gDot = 0x002e;
 static const char16_t gTick = 0x0027;
 //static const char16_t gMinus = 0x002d;
-static const char16_t gSemicolon = 0x003b;
+static const char16_t gRuleSemicolon = 0x003b;
 static const char16_t gX = 0x0078;
 
 static const char16_t gMinusX[] =                  {0x2D, 0x78, 0};    /* "-x" */
@@ -288,7 +288,7 @@ NFRule::parseRuleDescriptor(UnicodeString& description, UErrorCode& status)
     // the description consists of a rule descriptor and a rule body,
     // separated by a colon.  The rule descriptor is optional.  If
     // it's omitted, just set the base value to 0.
-    int32_t p = description.indexOf(gColon);
+    int32_t p = description.indexOf(gRuleColon);
     if (p != -1) {
         // copy the descriptor out into its own string and strip it,
         // along with any trailing whitespace, out of the original
@@ -739,7 +739,7 @@ NFRule::_appendRuleText(UnicodeString& result) const
         }
         break;
     }
-    result.append(gColon);
+    result.append(gRuleColon);
     result.append(gSpace);
 
     // if the rule text begins with a space, write an apostrophe
@@ -768,7 +768,7 @@ NFRule::_appendRuleText(UnicodeString& result) const
 
     // and finally, top the whole thing off with a semicolon and
     // return the result
-    result.append(gSemicolon);
+    result.append(gRuleSemicolon);
 }
 
 int64_t NFRule::getDivisor() const

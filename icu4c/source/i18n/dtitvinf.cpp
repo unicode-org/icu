@@ -50,8 +50,8 @@ U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(DateIntervalInfo)
 
-static const char gCalendarTag[]="calendar";
-static const char gGregorianTag[]="gregorian";
+static const char gIntervalInfoCalendarTag[]="calendar";
+static const char gIntervalInfoGregorianTag[]="gregorian";
 static const char gIntervalDateTimePatternTag[]="intervalFormats";
 static const char gFallbackPatternTag[]="fallback";
 
@@ -397,7 +397,7 @@ DateIntervalInfo::initializeData(const Locale& locale, UErrorCode& status)
     const char *locName = locale.getName();
 
     // Get the correct calendar type
-    const char * calendarTypeToUse = gGregorianTag; // initial default
+    const char * calendarTypeToUse = gIntervalInfoGregorianTag; // initial default
     char         localeWithCalendarKey[ULOC_LOCALE_IDENTIFIER_CAPACITY];
     // obtain a locale that always has the calendar key value that should be used
     (void)ures_getFunctionalEquivalent(localeWithCalendarKey, ULOC_LOCALE_IDENTIFIER_CAPACITY, nullptr,
@@ -416,7 +416,7 @@ DateIntervalInfo::initializeData(const Locale& locale, UErrorCode& status)
     if (U_FAILURE(status)) {
         return;
     }
-    calBundle = ures_getByKeyWithFallback(rb, gCalendarTag, nullptr, &status);
+    calBundle = ures_getByKeyWithFallback(rb, gIntervalInfoCalendarTag, nullptr, &status);
 
 
     if (U_SUCCESS(status)) {

@@ -39,7 +39,7 @@ U_NAMESPACE_BEGIN
 
 #define DEFAULT_DIGITS UNICODE_STRING_SIMPLE("0123456789")
 static const char gNumberingSystems[] = "numberingSystems";
-static const char gNumberElements[] = "NumberElements";
+static const char gNumberingSystemElements[] = "NumberElements";
 static const char gDefault[] = "default";
 static const char gNative[] = "native";
 static const char gTraditional[] = "traditional";
@@ -47,7 +47,7 @@ static const char gFinance[] = "finance";
 static const char gDesc[] = "desc";
 static const char gRadix[] = "radix";
 static const char gAlgorithmic[] = "algorithmic";
-static const char gLatn[] = "latn";
+static const char gNumberingSystemLatn[] = "latn";
 
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(NumberingSystem)
@@ -64,7 +64,7 @@ NumberingSystem::NumberingSystem() {
      algorithmic = false;
      UnicodeString defaultDigits = DEFAULT_DIGITS;
      desc.setTo(defaultDigits);
-     uprv_strcpy(name,gLatn);
+     uprv_strcpy(name,gNumberingSystemLatn);
 }
 
     /**
@@ -140,7 +140,7 @@ NumberingSystem::createInstance(const Locale & inLocale, UErrorCode& status) {
     if (!nsResolved) { // Resolve the numbering system ( default, native, traditional or finance ) into a "real" numbering system
         UErrorCode localStatus = U_ZERO_ERROR;
         LocalUResourceBundlePointer resource(ures_open(nullptr, inLocale.getName(), &localStatus));
-        LocalUResourceBundlePointer numberElementsRes(ures_getByKey(resource.getAlias(), gNumberElements, nullptr, &localStatus));
+        LocalUResourceBundlePointer numberElementsRes(ures_getByKey(resource.getAlias(), gNumberingSystemElements, nullptr, &localStatus));
         // Don't stomp on the catastrophic failure of OOM.
         if (localStatus == U_MEMORY_ALLOCATION_ERROR) {
             status = U_MEMORY_ALLOCATION_ERROR;
