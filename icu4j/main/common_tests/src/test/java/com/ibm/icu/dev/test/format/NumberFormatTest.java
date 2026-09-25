@@ -8670,4 +8670,41 @@ public class NumberFormatTest extends CoreTestFmwk {
             }
         }
     }
+
+    /**
+     * Test that BigDecimal scale is correctly preserved when parsing numbers with trailing zeros.
+     * This is a regression test for ICU-22872.
+     */
+    @Test
+    public void TestParseBigDecimalScale() throws ParseException {
+        DecimalFormat df = new DecimalFormat("0.00");
+        df.setParseBigDecimal(true);
+
+        // Test cases: input string, expected scale
+        Object[][] testCases = {
+            {"0.0", 1},
+            {"1.0", 1},
+            {"1.00", 2},
+            {"1.10", 2},
+            {"0.10", 2},
+            {"123.450", 3},
+            {"5.0000", 4},
+        };
+
+        for (Object[] testCase : testCases) {
+            String input = (String) testCase[0];
+            int expectedScale = (Integer) testCase[1];
+            Number result = df.parse(input);
+            assertTrue(
+                    "Result should be BigDecimal for input: " + input,
+                    result instanceof BigDecimal);
+            BigDecimal bd = (BigDecimal) result;
+            assertEquals("Scale mismatch for input: " + input, expectedScale, bd.scale());
+        }
+
+        // Verify values are correct, not just scales
+        assertEquals("Value check for 0.0", new BigDecimal("0.0"), df.parse("0.0"));
+        assertEquals("Value check for 1.00", new BigDecimal("1.00"), df.parse("1.00"));
+        assertEquals("Value check for 123.450", new BigDecimal("123.450"), df.parse("123.450"));
+    }
 }
