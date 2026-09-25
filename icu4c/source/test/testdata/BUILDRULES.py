@@ -28,6 +28,7 @@ def generate(config, io, common_vars):
 def generate_rb(config, io, common_vars):
     basenames = [
         "calendar",
+        "chinesecalendar",
         "casing",
         "conversion",
         "format",

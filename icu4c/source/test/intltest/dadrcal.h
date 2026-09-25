@@ -45,8 +45,15 @@ private:
 	void testConvert(int32_t n, const CalendarFieldsSet &fromSet,
 			Calendar *fromCal, const CalendarFieldsSet &toSet, Calendar *toCal,
 			UBool fwd);
-private:
+protected:
+	DataDrivenCalendarTest(const char* bundleName);
 	TestDataModule *driver;
+};
+
+class DataDrivenChineseCalendarTest : public DataDrivenCalendarTest {
+public:
+	DataDrivenChineseCalendarTest();
+	virtual ~DataDrivenChineseCalendarTest();
 };
 
 #endif /* #if !UCONFIG_NO_COLLATION */
