@@ -16,6 +16,15 @@
 
 U_NAMESPACE_BEGIN
 
+#ifndef FALSE
+#define FALSE false
+#endif
+
+#ifndef TRUE
+#define TRUE true
+#endif
+
+
 const char RunArray::fgClassID = 0;
 
 RunArray::RunArray(le_int32 initialCapacity)
