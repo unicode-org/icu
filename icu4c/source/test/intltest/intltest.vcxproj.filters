@@ -76,6 +76,9 @@
     <ClCompile Include="rbbimonkeytest.cpp">
       <Filter>break iteration</Filter>
     </ClCompile>
+    <ClCompile Include="segmenter_stub_deleteme.cpp">
+      <Filter>break iteration</Filter>
+    </ClCompile>
     <ClCompile Include="itspoof.cpp">
       <Filter>spoof detection</Filter>
     </ClCompile>
@@ -607,6 +610,9 @@
       <Filter>break iteration</Filter>
     </ClInclude>
     <ClInclude Include="rbbitst.h">
+      <Filter>break iteration</Filter>
+    </ClInclude>
+    <ClInclude Include="segmenter.h">
       <Filter>break iteration</Filter>
     </ClInclude>
     <ClInclude Include="rbbimonkeytest.h">
