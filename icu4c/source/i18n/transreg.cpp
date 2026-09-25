@@ -86,7 +86,7 @@ TransliteratorAlias::TransliteratorAlias(const UnicodeString& theAliasID,
     ID(),
     aliasesOrRules(theAliasID),
     transes(nullptr),
-    compoundFilter(cpdFilter),
+    compoundFilter(cpdFilter ? cpdFilter->clone() : nullptr),
     direction(UTRANS_FORWARD),
     type(TransliteratorAlias::SIMPLE) {
 }
@@ -98,7 +98,7 @@ TransliteratorAlias::TransliteratorAlias(const UnicodeString& theID,
     ID(theID),
     aliasesOrRules(idBlocks),
     transes(adoptedTransliterators),
-    compoundFilter(cpdFilter),
+    compoundFilter(cpdFilter ? cpdFilter->clone() : nullptr),
     direction(UTRANS_FORWARD),
     type(TransliteratorAlias::COMPOUND) {
 }
@@ -116,6 +116,7 @@ TransliteratorAlias::TransliteratorAlias(const UnicodeString& theID,
 
 TransliteratorAlias::~TransliteratorAlias() {
     delete transes;
+    delete compoundFilter;
 }
 
 
@@ -132,7 +133,7 @@ Transliterator* TransliteratorAlias::create(UParseError& pe,
             return nullptr;
         }
         if (compoundFilter != nullptr)
-            t->adoptFilter(compoundFilter->clone());
+            t->adoptFilter(static_cast<UnicodeSet*>(compoundFilter->clone()));
         break;
     case COMPOUND:
         {
