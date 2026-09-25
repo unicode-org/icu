@@ -1644,7 +1644,7 @@ bool UnicodeSet::ensureCapacity(int32_t newLen) {
         return true;
     }
     int32_t newCapacity = nextCapacity(newLen);
-    UChar32* temp = static_cast<UChar32*>(uprv_malloc(newCapacity * sizeof(UChar32)));
+    UChar32* temp = static_cast<UChar32*>(uprv_calloc(newCapacity, sizeof(UChar32)));
     if (temp == nullptr) {
         setToBogus(); // set the object to bogus state if an OOM failure occurred.
         return false;
@@ -1667,7 +1667,7 @@ bool UnicodeSet::ensureBufferCapacity(int32_t newLen) {
         return true;
     }
     int32_t newCapacity = nextCapacity(newLen);
-    UChar32* temp = static_cast<UChar32*>(uprv_malloc(newCapacity * sizeof(UChar32)));
+    UChar32* temp = static_cast<UChar32*>(uprv_calloc(newCapacity, sizeof(UChar32)));
     if (temp == nullptr) {
         setToBogus();
         return false;
