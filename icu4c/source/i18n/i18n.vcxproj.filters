@@ -525,6 +525,9 @@
     <ClCompile Include="csrucode.cpp">
       <Filter>charset detect</Filter>
     </ClCompile>
+    <ClCompile Include="csrascii.cpp">
+      <Filter>charset detect</Filter>
+    </ClCompile>
     <ClCompile Include="csrutf8.cpp">
       <Filter>charset detect</Filter>
     </ClCompile>
@@ -1218,6 +1221,9 @@
       <Filter>charset detect</Filter>
     </ClInclude>
     <ClInclude Include="csrucode.h">
+      <Filter>charset detect</Filter>
+    </ClInclude>
+    <ClInclude Include="csrascii.h">
       <Filter>charset detect</Filter>
     </ClInclude>
     <ClInclude Include="csrutf8.h">
