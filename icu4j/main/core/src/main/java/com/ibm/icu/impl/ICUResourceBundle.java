@@ -30,6 +30,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.MissingResourceException;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -1548,7 +1549,9 @@ public class ICUResourceBundle extends UResourceBundle {
                                                 localOpenType);
                             } else {
                                 if (localOpenType == OpenType.LOCALE_DEFAULT_ROOT
-                                        && !localeIDStartsWithLangSubtag(defaultID, localeName)) {
+                                        && !localeIDStartsWithLangSubtag(defaultID, localeName)
+                                        && (!Objects.equals(localeID, defaultID)
+                                                || origLocaleID != null)) {
                                     // Go to the default locale before root.
                                     b =
                                             instantiateBundle(
