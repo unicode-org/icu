@@ -52,6 +52,24 @@ search_enabled: true
 # Color scheme currently only supports "dark" or nil (light).
 color_scheme: nil
 
+# Callouts are colored informational boxes like "note", "warning", etc.
+callouts:
+  highlight:
+    color: purple
+  important:
+    title: Important
+    color: yellow
+  tip:
+    title: Tip
+    color: green
+  note:
+    title: Note
+    color: blue
+  warning:
+    title: Warning
+    color: red
+
+
 # Aux links for the upper right navigation
 aux_links:
   "API Docs":

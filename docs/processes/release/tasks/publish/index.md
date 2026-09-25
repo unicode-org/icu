@@ -18,61 +18,17 @@ License & terms of use: http://www.unicode.org/copyright.html
 {: .no_toc .text-delta }
 
 1. TOC
-{:toc}OnlineDemosHowToUpdate
-
----
-
-## Create a release branch in GitHub
-
-Once the branch is created, only changes necessary for the target release are
-merged in from the trunk.
-
----
-
-## Upgrade LocaleExplorer and other demos/samples
-
-... to the ICU project site.
-
-Build the icu-demos module following the README's. Update code and/or docs as
-needed. "Reference" platforms for icu-demos are: RedHat Linux and win32. On Linux,
-icu-demos is built against the "make install "'ed ICU. So, run ICU4C's configure
-with --prefix=/some/where pointing to where ICU4C should be installed, and also
-follow icu-demos's README.
-
-Install the new locale explorer and other demos/samples onto the public demo
-hosting site.
-
----
-
-## ICU Collation Demo
-
-Update the ICU collation demo's `index.html` with the new ICU version’s
-available collators.
-
-1.  Do a clean build (configure, make clean, make install, make check).
-    1.  Otherwise, the data build may not pick up a new locale into the
-        coll/res_index.txt file.
-2.  Run [icu-demos >
-    webdemo/collation/build.sh](https://github.com/unicode-org/icu-demos/blob/main/webdemo/collation/build.sh)
-    (after modifying it for your system).
-3.  Copy-paste the output `available-collators.txt` into `index.html`.
-    1.  Or, easier: Use a GUI difftool (e.g., meld) to compare the two and move
-        the changes into index.html.
-    2.  `meld webdemo/collation/index.html ../available-collators.txt`
-4.  See for example the changes for
-    [ICU-11355](https://unicode-org.atlassian.net/browse/ICU-11355)
-
-For details see the comments at the start of the build.sh file.
+{: toc }
 
 ---
 
 ## Repository Branch and Tags
 
-⚠ Careful! The following examples contain specific version, revision and ticket
-numbers. Adjust them for the current release! Easiest: Paste into an editor,
-fix, then paste into the terminal.
+> :point_right: **Note**:  The following examples contain specific version, revision and ticket
+> numbers. Adjust them for the current release! Easiest: Paste into an editor,
+> fix, then paste into the terminal.
 
-### Creating Maintenance Branch.
+### Creating Maintenance Branch
 
 Sanity check: Update to the latest repository revision. (Main branch if you
 copy from main, maintenance branch if you copy from there.)
@@ -96,13 +52,13 @@ git checkout -b maint/maint-63
 git push -u upstream maint/maint-63
 ```
 
-#### Tagging
+### Tagging
 
 Creating a Github release can be done through the command line or manually through
 Github's UI.
 It is preferred to use the command line since it makes the work easier and less error prone.
 
-##### Command Line Tagging & Release Creation
+#### Command Line Tagging & Release Creation
 
 Run the following command at the command line, adjusting the values for
 the branch, release tag name, and release title accordingly.
@@ -122,31 +78,34 @@ gh release create "${RELEASE_TAG}" \
         --repo ${REPO}
 ```
 
-##### Manual Tagging & Release Creation
+#### Manual Tagging & Release Creation
 
-Use the GitHub GUI to create both the "release" and the "tag" at the same time:
+{: .note }
+> Manual UI-based instructions for release/tagging. Use CLI-based instructions if possible.
+> 
+> Use the GitHub GUI to create both the "release" and the "tag" at the same time:
+> 
+> <https://github.com/unicode-org/icu/releases/new>
+> 
+> 1. Fill in the tag name, such as `release-63.1rc` or `release-63.1`, and make the
+> target the "maint/maint-xx" branch (such as `maint/maint-63`).
+> 1. Set the title to `ICU 63 RC` or `ICU 63.1`.
+> 1. Fill in the description using the
+> text from the announcement email. (You can also look at previous releases and
+> possibly re-use some of the generic text, such as links to the API docs, etc.)
+> 1. Your screen should look like this:
+>     ![image](maint-63-rc-screenshot.png)
+> 1. Check the box that says "Set as a pre-release".
+> 1. Click the "Publish Release" button to make the tag.
+> 1. Additional step only for the GA release:
+> After completing the step above to mark the release as "pre-release",
+> the second step is to wait for the day of the official announcement of the release,
+> and then to edit the Github release entry's settings.
+>     1.  The first Github release settings change should uncheck the "Set as a pre-release" checkbox,
+> which has the effect of converting the release into  a regular release.
+>     1. The next settings change should check the box that says "Set as the latest release".
 
-<https://github.com/unicode-org/icu/releases/new>
-
-1. Fill in the tag name, such as `release-63.1rc` or `release-63.1`, and make the
-target the "maint/maint-xx" branch (such as `maint/maint-63`).
-1. Set the title to `ICU 63 RC` or `ICU 63.1`.
-1. Fill in the description using the
-text from the announcement email. (You can also look at previous releases and
-possibly re-use some of the generic text, such as links to the API docs, etc.)
-1. Your screen should look like this:
-    ![image](maint-63-rc-screenshot.png)
-1. Check the box that says "Set as a pre-release".
-1. Click the "Publish Release" button to make the tag.
-1. Additional step only for the GA release:
-After completing the step above to mark the release as "pre-release",
-the second step is to wait for the day of the official announcement of the release,
-and then to edit the Github release entry's settings.
-    1.  The first Github release settings change should uncheck the "Set as a pre-release" checkbox,
-which has the effect of converting the release into  a regular release.
-    1. The next settings change should check the box that says "Set as the latest release".
-
-##### Notes on Tags and Release Pages
+#### Notes on Tags and Release Pages
 
 > :point_right: **Note**: The release tag name convention changed with ICU 78.
 Prior, the convention was like `release-63-rc` or `release-63-1`.
@@ -165,11 +124,11 @@ points to the latest release.
 > :point_right: **Note**: We no longer need to add the note about Git LFS files, as GitHub now includes
 them in the auto-generated .zip downloads.
 
-#### Maintenance release
+### Maintenance release
 
-Create the maintenance release tag from the maintenance branch, as above.
-
-Update the "latest" tag.
+If/when creating a maintenance release, 
+then create the maintenance release tag from the maintenance branch,
+as above.
 
 ### ~~ICU 58 and earlier~~
 
@@ -249,12 +208,6 @@ Also update:
 - The [main download page](https://unicode-org.github.io/icu/download/)
 - The [main docs page](https://unicode-org.github.io/icu/)
 - The [ICU Sites page](https://icu.unicode.org/)
-
-### Maintenance release
-
-For a maintenance release, look at the ICU 60 page which includes 60.2.
-
----
 
 ## Milestone on the main download page
 
@@ -484,22 +437,9 @@ Make sure that, aside from download pages, homepages, news items, feature lists
 and feature comparisons, etc. are updated. Upload the new API references. Update
 the User Guide.
 
-#### Update the Trac release number list for ICU4C and ICU4J. <<?? STILL VALID ??>>
-
-Update the ICU release number list by going to "Admin>Versions" in Trac, and add
-the new ICU version.
-
 #### Post-release cleanup
 
-*   Cleanup the milestone in the ICU Trac. Move left over items to future
-    milestones. Close the milestone.
 *   Look for TODO comments in the source code and file new tickets as required.
-*   Delete and retag
-    [latest](http://source.icu-project.org/repos/icu/tags/latest/) (**ONLY**
-    after GA release, including maintenance!) << IS THIS STILL VALID WITH GIT?
-    >>
-
----
 
 ## Update online demos
 
@@ -524,11 +464,45 @@ Note that updating ICU4C demos online requires Gcloud access.
 
 * [Instructions for building and deploying updates](https://github.com/unicode-org/icu-demos/blob/main/icu4jweb/README.md)
 
-
 ### Online information update
 
 Collation and [comparison](https://icu.unicode.org/charts/comparison) charts need
 to be updated. See [charts/Performance & Size](https://icu.unicode.org/charts).
+
+## Upgrade LocaleExplorer and other demos/samples
+
+... to the ICU project site.
+
+Build the icu-demos module following the README's. Update code and/or docs as
+needed. "Reference" platforms for icu-demos are: RedHat Linux and win32. On Linux,
+icu-demos is built against the "make install "'ed ICU. So, run ICU4C's configure
+with --prefix=/some/where pointing to where ICU4C should be installed, and also
+follow icu-demos's README.
+
+Install the new locale explorer and other demos/samples onto the public demo
+hosting site.
+
+## ICU Collation Demo
+
+Update the ICU collation demo's `index.html` with the new ICU version’s
+available collators.
+
+1.  Do a clean build (configure, make clean, make install, make check).
+    1.  Otherwise, the data build may not pick up a new locale into the
+        coll/res_index.txt file.
+2.  Run [icu-demos >
+    webdemo/collation/build.sh](https://github.com/unicode-org/icu-demos/blob/main/webdemo/collation/build.sh)
+    (after modifying it for your system).
+3.  Copy-paste the output `available-collators.txt` into `index.html`.
+    1.  Or, easier: Use a GUI difftool (e.g., meld) to compare the two and move
+        the changes into index.html.
+    2.  `meld webdemo/collation/index.html ../available-collators.txt`
+4.  See for example the changes for
+    [ICU-11355](https://unicode-org.atlassian.net/browse/ICU-11355)
+
+For details see the comments at the start of the build.sh file.
+
+## Update tickets
 
 ### Old sensitive tickets
 
@@ -555,9 +529,7 @@ For removing the flag:
     *   No notification emails
 *   Confirm bulk edit.
 
----
-
-## Punt tickets
+### Punt tickets
 
 Double-check that tickets with commits in this release are closed/fixed. Close
 as needed. (Hopefully none misticketed at this point...)
