@@ -475,7 +475,7 @@
                 [ERROR] com\ibm\icu\util\ULocale.java:100: error: reference not found
                 [ERROR]  * {@link com.ibm.icu.text.Collator}
             -->
-            <doclint>html</doclint>
+            <doclint>html,syntax</doclint>
             <notimestamp>true</notimestamp>
             <nodeprecatedlist>true</nodeprecatedlist>
             <quiet>true</quiet>
