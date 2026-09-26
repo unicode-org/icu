@@ -54,7 +54,7 @@ public class LinkUtilities {
 
     /**
      * Enum for determining whether any percent-escaping is minimal or maximal, for use with {@link
-     * #escapePathQueryFragment()}.
+     * #escapePathQueryFragment(String,Extent)}.
      *
      * @draft ICU 79
      */
