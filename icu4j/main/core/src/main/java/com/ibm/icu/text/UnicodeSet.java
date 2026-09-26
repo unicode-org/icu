@@ -78,7 +78,7 @@ import java.util.stream.StreamSupport;
  * <code>UnicodeSet</code> at once, based on a pattern string.
  *
  * <p><b>Pattern syntax</b> Pattern strings are accepted by the constructors and the {@link
- * #applyPattern()} methods and returned by the {@link #toPattern()} method. These patterns follow
+ * #applyPattern(String)} methods and returned by the {@link #toPattern(boolean)} method. These patterns follow
  * the UnicodeSet syntax defined by <a href="https://www.unicode.org/reports/tr61/">Draft Unicode
  * Technical Standard #61, UnicodeSet notation.</a>
  *
@@ -122,7 +122,7 @@ import java.util.stream.StreamSupport;
  *       <td style="vertical-align: top;">All characters with a Word_Break property assignment of ALetter that do not have a General_Category in the Letter grouping</td>
  *     </tr>
  *     <tr>
- *       <td style="white-space: nowrap; vertical-align: top; horizontal-align: left;"><code>[\p{Greek}&\p{Letter}]</code></td>
+ *       <td style="white-space: nowrap; vertical-align: top; horizontal-align: left;"><code>[\p{Greek}&amp;\p{Letter}]</code></td>
  *       <td style="vertical-align: top;">All characters with a Script property assignment of Greek whose General_Category is in the Letter grouping</td>
  *     </tr>
  *     <tr>
