@@ -836,6 +836,128 @@ StringTest::TestCharString() {
         s.extract(buffer, 2, errorCode);
         assertEquals("abc.extract(2) overflow", U_BUFFER_OVERFLOW_ERROR, errorCode.reset());
     }
+
+    {
+        errorCode.reset();
+        CharString s("abc", errorCode);
+        int32_t capacity = -1;
+
+        assertTrue("getAppendBuffer(minCapacity<0)",
+                   s.getAppendBuffer(-1, 10, capacity, errorCode) == nullptr);
+        assertEquals("getAppendBuffer(minCapacity<0) error",
+                     U_ILLEGAL_ARGUMENT_ERROR, errorCode.reset());
+        assertEquals("getAppendBuffer(minCapacity<0) capacity", 0, capacity);
+
+        capacity = -1;
+        assertTrue("getAppendBuffer(desiredCapacityHint<0)",
+                   s.getAppendBuffer(10, -1, capacity, errorCode) == nullptr);
+        assertEquals("getAppendBuffer(desiredCapacityHint<0) error",
+                     U_ILLEGAL_ARGUMENT_ERROR, errorCode.reset());
+        assertEquals("getAppendBuffer(desiredCapacityHint<0) capacity", 0, capacity);
+
+        capacity = -1;
+        assertTrue("getAppendBuffer(INT32_MAX)",
+                   s.getAppendBuffer(INT32_MAX, 0, capacity, errorCode) == nullptr);
+        assertEquals("getAppendBuffer(INT32_MAX) error",
+                     U_MEMORY_ALLOCATION_ERROR, errorCode.reset());
+        assertEquals("getAppendBuffer(INT32_MAX) capacity", 0, capacity);
+
+        capacity = -1;
+        assertTrue("getAppendBuffer(INT32_MAX - len)",
+                   s.getAppendBuffer(INT32_MAX - s.length(), 0, capacity, errorCode) == nullptr);
+        assertEquals("getAppendBuffer(INT32_MAX - len) error",
+                     U_MEMORY_ALLOCATION_ERROR, errorCode.reset());
+        assertEquals("getAppendBuffer(INT32_MAX - len) capacity", 0, capacity);
+
+        assertTrue("getAppendBuffer(hint=INT32_MAX)",
+                   s.getAppendBuffer(50, INT32_MAX, capacity, errorCode) != nullptr);
+        assertEquals("getAppendBuffer(hint=INT32_MAX) success",
+                     U_ZERO_ERROR, errorCode.reset());
+        assertTrue("getAppendBuffer(hint=INT32_MAX) capacity", capacity >= 50);
+
+        assertTrue("getAppendBuffer(hint=INT32_MAX - len)",
+                   s.getAppendBuffer(150, INT32_MAX - s.length(), capacity, errorCode) != nullptr);
+        assertEquals("getAppendBuffer(hint=INT32_MAX - len) success",
+                     U_ZERO_ERROR, errorCode.reset());
+        assertTrue("getAppendBuffer(hint=INT32_MAX - len) capacity", capacity >= 150);
+
+        s.appendInvariantChars(u"abc", -1, errorCode);
+        assertEquals("appendInvariantChars(ucharsLen<0)",
+                     U_ILLEGAL_ARGUMENT_ERROR, errorCode.reset());
+
+        s.appendInvariantChars(nullptr, 1, errorCode);
+        assertEquals("appendInvariantChars(nullptr, 1)",
+                     U_ILLEGAL_ARGUMENT_ERROR, errorCode.reset());
+
+        s.append("x", INT32_MAX, errorCode);
+        assertEquals("append(INT32_MAX)", U_MEMORY_ALLOCATION_ERROR, errorCode.reset());
+        assertEquals("append(INT32_MAX) length unchanged", 3, s.length());
+
+        s.append("x", INT32_MAX - s.length(), errorCode);
+        assertEquals("append(INT32_MAX - len)", U_MEMORY_ALLOCATION_ERROR, errorCode.reset());
+        assertEquals("append(INT32_MAX - len) length unchanged", 3, s.length());
+
+        constexpr int32_t kChunkLen = 0x30000000;
+        CharString chunk;
+        char* buf = chunk.getAppendBuffer(kChunkLen, kChunkLen, capacity, errorCode);
+        if (buf != nullptr && errorCode.isSuccess()) {
+            uprv_memset(buf, 'a', kChunkLen);
+            chunk.append(buf, kChunkLen, errorCode);
+            CharString dest;
+            int64_t total = 0;
+            for (int32_t i = 0; i < 3; ++i) {
+                int32_t prevLen = dest.length();
+                dest.append(chunk, errorCode);
+                total += kChunkLen;
+                if (total < INT32_MAX) {
+                    if (errorCode.isFailure()) {
+                        assertEquals("append allocation failure",
+                                     U_MEMORY_ALLOCATION_ERROR, errorCode.reset());
+                        break;
+                    }
+                    assertEquals("dest.length()", static_cast<int32_t>(total), dest.length());
+                } else {
+                    assertEquals("append overflow", U_MEMORY_ALLOCATION_ERROR, errorCode.reset());
+                    assertEquals("dest.length() unchanged", prevLen, dest.length());
+                }
+            }
+            if (dest.length() == 2 * kChunkLen) {
+                int32_t remain = (INT32_MAX - 1) - dest.length();
+                dest.append(chunk.data(), remain, errorCode);
+                if (errorCode.isSuccess()) {
+                    assertEquals("dest at max length", INT32_MAX - 1, dest.length());
+
+                    dest.append('a', errorCode);
+                    assertEquals("append(char) overflow",
+                                 U_MEMORY_ALLOCATION_ERROR, errorCode.reset());
+                    assertEquals("dest.length() after append(char)", INT32_MAX - 1, dest.length());
+
+                    dest.append("a", 1, errorCode);
+                    assertEquals("append(char*, 1) overflow",
+                                 U_MEMORY_ALLOCATION_ERROR, errorCode.reset());
+                    assertEquals("dest.length() after append(char*, 1)",
+                                 INT32_MAX - 1, dest.length());
+
+                    dest.appendInvariantChars(u"a", 1, errorCode);
+                    assertEquals("appendInvariantChars(1) overflow",
+                                 U_MEMORY_ALLOCATION_ERROR, errorCode.reset());
+                    assertEquals("dest.length() after appendInvariantChars(1)",
+                                 INT32_MAX - 1, dest.length());
+
+                    dest.appendInvariantChars(u"ab", 2, errorCode);
+                    assertEquals("appendInvariantChars(2) overflow",
+                                 U_MEMORY_ALLOCATION_ERROR, errorCode.reset());
+                    assertEquals("dest.length() after appendInvariantChars(2)",
+                                 INT32_MAX - 1, dest.length());
+                } else {
+                    assertEquals("append remain allocation failure",
+                                 U_MEMORY_ALLOCATION_ERROR, errorCode.reset());
+                }
+            }
+        } else {
+            errorCode.reset();
+        }
+    }
 }
 
 void
