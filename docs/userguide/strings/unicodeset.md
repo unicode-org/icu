@@ -315,24 +315,24 @@ ICU interprets some expressions that are ill-formed according to the UnicodeSet 
 
   The following alternatives are added to the
   [Content](https://www.unicode.org/reports/tr61/#Content) production:
-  > | [Æther](#Æther)  
-  > | [ElementList](https://www.unicode.org/reports/tr61/#ElementList) [Æther](#Æther)  
-  > | [DollarElements](#DollarElements) [UnescapedHyphenMinus](https://www.unicode.org/reports/tr61/#UnescapedHyphenMinus)  
-  > | [DollarElements](#DollarElements) [Æther](https://www.unicode.org/reports/tr61/#Æther)  
-  > | [ElementList](https://www.unicode.org/reports/tr61/#ElementList) [DollarElements](#DollarElements) [UnescapedHyphenMinus](https://www.unicode.org/reports/tr61/#UnescapedHyphenMinus)  
-  > |  [ElementList](https://www.unicode.org/reports/tr61/#ElementList) [DollarElements](#DollarElements) [Æther](https://www.unicode.org/reports/tr61/#Æther)  
+  > \| [Æther](#Æther)  
+  > \| [ElementList](https://www.unicode.org/reports/tr61/#ElementList) [Æther](#Æther)  
+  > \| [DollarElements](#DollarElements) [UnescapedHyphenMinus](https://www.unicode.org/reports/tr61/#UnescapedHyphenMinus)  
+  > \| [DollarElements](#DollarElements) [Æther](https://www.unicode.org/reports/tr61/#Æther)  
+  > \| [ElementList](https://www.unicode.org/reports/tr61/#ElementList) [DollarElements](#DollarElements) [UnescapedHyphenMinus](https://www.unicode.org/reports/tr61/#UnescapedHyphenMinus)  
+  > \|  [ElementList](https://www.unicode.org/reports/tr61/#ElementList) [DollarElements](#DollarElements) [Æther](https://www.unicode.org/reports/tr61/#Æther)  
 
   The following alternative is added to the [ElementList](https://www.unicode.org/reports/tr61/#ElementList) production:
-  > | [ElementList](https://www.unicode.org/reports/tr61/#ElementList) [DollarElements](#DollarElements) [Elements](https://www.unicode.org/reports/tr61/#Elements)
+  > \| [ElementList](https://www.unicode.org/reports/tr61/#ElementList) [DollarElements](#DollarElements) [Elements](https://www.unicode.org/reports/tr61/#Elements)
 
   The following alternative is added to the [Union](https://www.unicode.org/reports/tr61/#Union) production:
-  > | [ElementList](https://www.unicode.org/reports/tr61/#ElementList) [DollarElements](#DollarElements) [UnicodeSet](https://www.unicode.org/reports/tr61/#UnicodeSet)
+  > \| [ElementList](https://www.unicode.org/reports/tr61/#ElementList) [DollarElements](#DollarElements) [UnicodeSet](https://www.unicode.org/reports/tr61/#UnicodeSet)
 
   The following alternative is added to the [Range](https://www.unicode.org/reports/tr61/#Range) production:
-  > | `$` - [RangeElement](https://www.unicode.org/reports/tr61/#RangeElement)
+  > \| `$` - [RangeElement](https://www.unicode.org/reports/tr61/#RangeElement)
 
   When the [set-operator](https://www.unicode.org/reports/tr61/#set-operator) `$` occurs
-  as an immediate constituent of an [Æther](#Æther)</a>,
+  as an immediate constituent of an [Æther](#Æther),
   it represents the noncharacter code point U+FFFF.
 
   When it occurs anywhere else, it represents the character U+0024 $ DOLLAR SIGN.
@@ -366,13 +366,13 @@ ICU interprets some expressions that are ill-formed according to the UnicodeSet 
     variable is a *string-valued*-[variable](#variable).
   * Otherwise, the variable is ill-defined, and the `UnicodeSet` constructor fails.
   The following alternative is added to the [UnicodeSet](https://www.unicode.org/reports/tr61/#UnicodeSet) production:
-  > | *set-valued*-[variable](#variable)
+  > \| *set-valued*-[variable](#variable)
 
   The following alternative is added to the [RangeElement](https://www.unicode.org/reports/tr61/#RangeElement) production:
-  > | *code-point-valued*-[variable](#variable)
+  > \| *code-point-valued*-[variable](#variable)
 
   The following alternative is added to the [Element](https://www.unicode.org/reports/tr61/#Element):
-  > | *string-valued*-[variable](#variable)
+  > \| *string-valued*-[variable](#variable)
 
   The [variable](#variable) represents the same set of code point sequences as its expansion.
 
