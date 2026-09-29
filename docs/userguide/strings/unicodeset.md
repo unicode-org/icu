@@ -365,6 +365,7 @@ ICU interprets some expressions that are ill-formed according to the UnicodeSet 
   * If the expansion is a [string-literal](https://www.unicode.org/reports/tr61/#string-literal), the
     variable is a *string-valued*-[variable](#variable).
   * Otherwise, the variable is ill-defined, and the `UnicodeSet` constructor fails.
+
   The following alternative is added to the [UnicodeSet](https://www.unicode.org/reports/tr61/#UnicodeSet) production:
   > \| *set-valued*-[variable](#variable)
 
