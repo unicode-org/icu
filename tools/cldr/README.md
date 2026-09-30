@@ -1,4 +1,4 @@
-<!--- © 2020 and later: Unicode, Inc. and others. ---> 
+<!--- © 2020 and later: Unicode, Inc. and others. --->
 <!--- License & terms of use: http://www.unicode.org/copyright.html --->
 
 # Tools and build scripts for updating data originating from CLDR
@@ -8,6 +8,8 @@
 The Python [build.py](build.py) file takes care of copying some CLDR
 test data directories to both the ICU4C and ICU4J source trees. To add
 more directories to the list, modify the `cldr_test_data` fileset.
+
+You can run `build.py --help` to list options.
 
 ANT-TO-REMOVE-START
 
