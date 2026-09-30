@@ -6,11 +6,5 @@ zh_Hans_SG{
         "America:Scoresbysund"{
             ec{"斯考斯伯松德"}
         }
-        "meta:Malaysia"{
-            ss{"MYT"}
-        }
-        "meta:Singapore"{
-            ss{"SGT"}
-        }
     }
 }

@@ -1447,8 +1447,6 @@ blo{
         }
     }
     CurrencyUnitPatterns{
-        one{"{1} {0}"}
         other{"{1} {0}"}
-        zero{"{1} {0}"}
     }
 }

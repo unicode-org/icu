@@ -57,7 +57,6 @@ es_419{
         FKP{"FK£"}
         SSP{"SD£"}
         SYP{"S£"}
-        VEF{"BsF"}
     }
     CurrencyPlurals{
         ANG{
@@ -74,7 +73,6 @@ es_419{
         }
         KZT{
             one{"tenge kazajo"}
-            other{"tengues kazajos"}
         }
         NIO{
             one{"córdoba nicaragüense"}
@@ -98,7 +96,6 @@ es_419{
         }
         XXX{
             one{"(unidad de moneda desconocida)"}
-            other{"(moneda desconocida)"}
         }
     }
 }

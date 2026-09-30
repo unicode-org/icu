@@ -524,20 +524,10 @@ eu{
                 one{"{0} Lurraren erradio"}
                 other{"{0} Lurraren erradio"}
             }
-            fathom{
-                dnam{"besoa"}
-                one{"{0} beso"}
-                other{"{0} beso"}
-            }
             foot{
                 one{"{0} oin"}
                 other{"{0} oin"}
                 per{"{0} oin bakoitzeko"}
-            }
-            furlong{
-                dnam{"fulong"}
-                one{"{0} furlong"}
-                other{"{0} furlong"}
             }
             inch{
                 one{"{0} hazbete"}
@@ -682,11 +672,6 @@ eu{
                 other{"{0} libra"}
                 per{"{0} libra bakoitzeko"}
             }
-            stone{
-                dnam{"stone-a"}
-                one{"{0} stone"}
-                other{"{0} stone"}
-            }
             ton{
                 dnam{"AEBko tonak"}
             }
@@ -805,7 +790,6 @@ eu{
             }
             generic{
                 one{"{0} °"}
-                other{"{0} °"}
             }
             kelvin{
                 dnam{"kelvin graduak"}
@@ -824,10 +808,6 @@ eu{
             }
         }
         volume{
-            bushel{
-                one{"{0} bushel"}
-                other{"{0} bushel"}
-            }
             centiliter{
                 dnam{"zentilitro"}
                 one{"{0} zentilitro"}
@@ -979,8 +959,6 @@ eu{
             }
             part-per-1e9{
                 dnam{"zati / m. m."}
-                one{"{0} zati / m. m."}
-                other{"{0} zati / m. m."}
             }
         }
         consumption{
@@ -1227,12 +1205,10 @@ eu{
         angle{
             arc-minute{
                 dnam{"arku-min"}
-                one{"{0} arku-min"}
                 other{"{0} arku-min"}
             }
             arc-second{
                 dnam{"arku-seg."}
-                one{"{0} arku-seg."}
                 other{"{0} arku-seg."}
             }
             degree{
@@ -1240,19 +1216,16 @@ eu{
             }
             revolution{
                 dnam{"bira"}
-                one{"{0} bira"}
                 other{"{0} bira"}
             }
             steradian{
                 dnam{"estereorradian"}
-                one{"{0} sr"}
                 other{"{0} sr"}
             }
         }
         area{
             acre{
                 dnam{"akre"}
-                one{"{0} akre"}
                 other{"{0} akre"}
             }
             hectare{
@@ -1268,22 +1241,18 @@ eu{
         concentr{
             item{
                 dnam{"elementua"}
-                one{"{0} elementu"}
                 other{"{0} elementu"}
             }
             katal{
                 dnam{"katal"}
-                one{"{0} katal"}
                 other{"{0} katal"}
             }
             milligram-ofglucose-per-deciliter{
                 dnam{"mg/dl"}
-                one{"{0} mg/dl"}
                 other{"{0} mg/dl"}
             }
             millimole-per-liter{
                 dnam{"milimole/litro"}
-                one{"{0} mmol/l"}
                 other{"{0} mmol/l"}
             }
             mole{
@@ -1291,12 +1260,10 @@ eu{
             }
             ofglucose{
                 dnam{"glukosa-unitate"}
-                one{"{0} glukosa-unitate"}
                 other{"{0} glukosa-unitate"}
             }
             part{
                 dnam{"zati"}
-                one{"{0} zati"}
                 other{"{0} zati"}
             }
             part-per-1e6{
@@ -1304,31 +1271,25 @@ eu{
             }
             part-per-1e9{
                 dnam{"zati / mila milioi"}
-                one{"{0} zati / m. m."}
                 other{"{0} zati / m. m."}
             }
             percent{
-                one{"% {0}"}
                 other{"% {0}"}
             }
             permille{
-                one{"‰ {0}"}
                 other{"‰ {0}"}
             }
             permyriad{
-                one{"‱ {0}"}
                 other{"‱ {0}"}
             }
         }
         consumption{
             liter-per-100-kilometer{
                 dnam{"l/100 km"}
-                one{"{0} l/100 km"}
                 other{"{0} l/100 km"}
             }
             liter-per-kilometer{
                 dnam{"l/km"}
-                one{"{0} l/km"}
                 other{"{0} l/km"}
             }
             mile-per-gallon{
@@ -1338,7 +1299,6 @@ eu{
             }
             mile-per-gallon-imperial{
                 dnam{"milia/galoi britainiar"}
-                one{"{0} mi gal brit."}
                 other{"{0} mi gal brit."}
             }
         }
@@ -1352,18 +1312,15 @@ eu{
         duration{
             century{
                 dnam{"m."}
-                one{"{0} m."}
                 other{"{0} m."}
             }
             day{
                 dnam{"egun"}
-                one{"{0} egun"}
                 other{"{0} egun"}
                 per{"{0}/e."}
             }
             decade{
                 dnam{"hamarkada"}
-                one{"{0} hamark."}
                 other{"{0} hamark."}
             }
             hour{
@@ -1374,19 +1331,16 @@ eu{
             }
             month{
                 dnam{"hilabete"}
-                one{"{0} hilabete"}
                 other{"{0} hilabete"}
                 per{"{0}/hil"}
             }
             night{
                 dnam{"gau"}
-                one{"{0} gau"}
                 other{"{0} gau"}
                 per{"{0}/gau"}
             }
             quarter{
                 dnam{"laurden"}
-                one{"{0} laur."}
                 other{"{0} laur."}
                 per{"{0}/laurden"}
             }
@@ -1395,13 +1349,11 @@ eu{
             }
             week{
                 dnam{"aste"}
-                one{"{0} aste"}
                 other{"{0} aste"}
                 per{"{0}/a."}
             }
             year{
                 dnam{"urte"}
-                one{"{0} urte"}
                 other{"{0} urte"}
                 per{"{0}/u."}
             }
@@ -1412,17 +1364,14 @@ eu{
             }
             coulomb{
                 dnam{"coulomb"}
-                one{"{0} coulomb"}
                 other{"{0} coulomb"}
             }
             farad{
                 dnam{"farad"}
-                one{"{0} farad"}
                 other{"{0} farad"}
             }
             henry{
                 dnam{"henry"}
-                one{"{0} henry"}
                 other{"{0} henry"}
             }
             ohm{
@@ -1430,7 +1379,6 @@ eu{
             }
             siemens{
                 dnam{"siemens"}
-                one{"{0} siemens"}
                 other{"{0} siemens"}
             }
             volt{
@@ -1440,17 +1388,14 @@ eu{
         energy{
             becquerel{
                 dnam{"becquerel"}
-                one{"{0} becquerel"}
                 other{"{0} becquerel"}
             }
             calorie-it{
                 dnam{"kaloria [IT]"}
-                one{"{0} kaloria [IT]"}
                 other{"{0} kaloria [IT]"}
             }
             gray{
                 dnam{"gray"}
-                one{"{0} gray"}
                 other{"{0} gray"}
             }
             joule{
@@ -1458,24 +1403,20 @@ eu{
             }
             sievert{
                 dnam{"sievert"}
-                one{"{0} sievert"}
                 other{"{0} sievert"}
             }
             therm-us{
                 dnam{"AEBko termia"}
-                one{"{0} AEBko termia"}
                 other{"{0} AEBko termia"}
             }
         }
         force{
             kilogram-force{
                 dnam{"kilopond"}
-                one{"{0} kilopond"}
                 other{"{0} kilopond"}
             }
             kilowatt-hour-per-100-kilometer{
                 dnam{"kWh / 100 km"}
-                one{"{0} kWh / 100 km"}
                 other{"{0} kWh / 100 km"}
             }
             newton{
@@ -1516,18 +1457,10 @@ eu{
         length{
             astronomical-unit{
                 dnam{"ua"}
-                one{"{0} ua"}
                 other{"{0} ua"}
-            }
-            fathom{
-                one{"{0} fm"}
-                other{"{0} fm"}
             }
             foot{
                 dnam{"oin"}
-            }
-            furlong{
-                dnam{"furlong"}
             }
             inch{
                 dnam{"hazbete"}
@@ -1554,7 +1487,6 @@ eu{
         light{
             lux{
                 dnam{"lux"}
-                one{"{0} lux"}
                 other{"{0} lux"}
             }
             solar-luminosity{
@@ -1564,7 +1496,6 @@ eu{
         magnetic{
             tesla{
                 dnam{"tesla"}
-                one{"{0} tesla"}
                 other{"{0} tesla"}
             }
             weber{
@@ -1574,7 +1505,6 @@ eu{
         mass{
             carat{
                 dnam{"kilate"}
-                one{"{0} kilate"}
                 other{"{0} kilate"}
             }
             dalton{
@@ -1582,12 +1512,10 @@ eu{
             }
             earth-mass{
                 dnam{"lur-masa"}
-                one{"{0} lur-masa"}
                 other{"{0} lur-masa"}
             }
             grain{
                 dnam{"alea"}
-                one{"{0} ale"}
                 other{"{0} ale"}
             }
             gram{
@@ -1595,23 +1523,19 @@ eu{
             }
             ounce{
                 dnam{"ontza"}
-                one{"{0} ontza"}
                 other{"{0} ontza"}
                 per{"{0}/ontza"}
             }
             ounce-troy{
                 dnam{"troy ontza"}
-                one{"{0} troy ontza"}
                 other{"{0} troy ontza"}
             }
             solar-mass{
                 dnam{"eguzki-masa"}
-                one{"{0} eguzki-masa"}
                 other{"{0} eguzki-masa"}
             }
             ton{
                 dnam{"AEBko tona"}
-                one{"{0} AEBko tona"}
                 other{"{0} AEBko tona"}
             }
         }
@@ -1623,17 +1547,14 @@ eu{
         pressure{
             atmosphere{
                 dnam{"atmosfera"}
-                one{"{0} atmosfera"}
                 other{"{0} atmosfera"}
             }
             millibar{
                 dnam{"mb"}
-                one{"{0} mb"}
                 other{"{0} mb"}
             }
             ofhg{
                 dnam{"merkurio-unitate"}
-                one{"{0} merkurio-unitate"}
                 other{"{0} merkurio-unitate"}
             }
         }
@@ -1643,89 +1564,70 @@ eu{
             }
             knot{
                 dnam{"korapilo"}
-                one{"{0} korapilo"}
                 other{"{0} korapilo"}
             }
             light-speed{
                 dnam{"argia"}
-                one{"{0} argi"}
                 other{"{0} argi"}
             }
             meter-per-second{
                 dnam{"metro segundoko"}
             }
             mile-per-hour{
-                one{"{0} mph"}
                 other{"{0} mph"}
             }
         }
         temperature{
             celsius{
-                one{"{0} °C"}
                 other{"{0} °C"}
             }
             fahrenheit{
-                one{"{0} °F"}
                 other{"{0} °F"}
             }
             generic{
-                one{"{0} °"}
                 other{"{0} °"}
             }
         }
         torque{
             newton-meter{
-                one{"{0} N·m"}
                 other{"{0} N·m"}
             }
             pound-force-foot{
                 dnam{"oin-libra"}
-                one{"{0} oin-libra"}
                 other{"{0} oin-libra"}
             }
         }
         volume{
             acre-foot{
                 dnam{"akre-oin"}
-                one{"{0} akre-oin"}
                 other{"{0} akre-oin"}
             }
             barrel{
                 dnam{"upel"}
-                one{"{0} upel"}
                 other{"{0} upel"}
-            }
-            bushel{
-                dnam{"bushelak"}
             }
             centiliter{
                 dnam{"cl"}
-                one{"{0} cl"}
                 other{"{0} cl"}
             }
             cup{
                 dnam{"katilukada"}
-                one{"{0} katilukada"}
                 other{"{0} katilukada"}
             }
             cup-metric{
                 dnam{"katilukada metriko"}
-                one{"{0} katilukada metriko"}
                 other{"{0} katilukada metriko"}
             }
             deciliter{
                 dnam{"dl"}
-                one{"{0} dl"}
                 other{"{0} dl"}
             }
             dessert-spoon{
                 dnam{"postre-koilar."}
-                one{"{0} postre-koilar."}
                 other{"{0} postre-koilar."}
             }
             dessert-spoon-imperial{
                 dnam{"postre-koilar. inp."}
-                one{"{0} postre-koilar. inp."}
                 other{"{0} postre-koilar. inp."}
             }
             dram{
@@ -1733,44 +1635,36 @@ eu{
             }
             drop{
                 dnam{"tanta"}
-                one{"{0} tanta"}
                 other{"{0} tanta"}
             }
             fluid-ounce{
                 dnam{"likido-ontza"}
-                one{"{0} likido-ontza"}
                 other{"{0} likido-ontza"}
             }
             fluid-ounce-imperial{
                 dnam{"likido-ontza inperial"}
-                one{"{0} likido-ontza inperial"}
                 other{"{0} likido-ontza inperial"}
             }
             fluid-ounce-metric{
                 dnam{"likido-ontza metriko"}
-                one{"{0} likido-ontza metriko"}
                 other{"{0} likido-ontza metriko"}
             }
             gallon{
                 dnam{"galoi"}
-                one{"{0} galoi"}
                 other{"{0} galoi"}
                 per{"{0}/galoi estatubatuar"}
             }
             gallon-imperial{
                 dnam{"gal brit."}
-                one{"{0} gal brit."}
                 other{"{0} gal brit."}
                 per{"{0}/gal brit."}
             }
             hectoliter{
                 dnam{"hl"}
-                one{"{0} hl"}
                 other{"{0} hl"}
             }
             jigger{
                 dnam{"txupitoa"}
-                one{"{0} txupito"}
                 other{"{0} txupito"}
             }
             liter{
@@ -1778,12 +1672,10 @@ eu{
             }
             megaliter{
                 dnam{"Ml"}
-                one{"{0} Ml"}
                 other{"{0} Ml"}
             }
             milliliter{
                 dnam{"ml"}
-                one{"{0} ml"}
                 other{"{0} ml"}
             }
             pinch{
@@ -1791,27 +1683,22 @@ eu{
             }
             pint{
                 dnam{"pinta"}
-                one{"{0} pinta"}
                 other{"{0} pinta"}
             }
             pint-metric{
                 dnam{"pinta metriko"}
-                one{"{0} pinta metriko"}
                 other{"{0} pinta metriko"}
             }
             quart{
                 dnam{"galoi-laurden"}
-                one{"{0} galoi-laurden"}
                 other{"{0} galoi-laurden"}
             }
             tablespoon{
                 dnam{"koilarakada"}
-                one{"{0} koilarakada"}
                 other{"{0} koilarakada"}
             }
             teaspoon{
                 dnam{"koilaratxokada"}
-                one{"{0} koilaratxokada"}
                 other{"{0} koilaratxokada"}
             }
         }

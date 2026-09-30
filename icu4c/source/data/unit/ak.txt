@@ -128,7 +128,6 @@ ak{
             }
             mile-per-gallon{
                 one{"mile galɔn biara {0}"}
-                other{"{0} mpg US"}
             }
             mile-per-gallon-imperial{
                 one{"mile Imp. galɔn biara {0}"}
@@ -144,7 +143,6 @@ ak{
         digital{
             gigabit{
                 dnam{"gigabit"}
-                one{"{0} Gb"}
                 other{"{0} gigabit"}
             }
             gigabyte{
@@ -197,7 +195,6 @@ ak{
             decade{
                 dnam{"mfenhyia du"}
                 one{"mfenhyia du {0}"}
-                other{"{0} dec"}
             }
             hour{
                 one{"dɔnhwere {0}"}
@@ -225,21 +222,17 @@ ak{
             }
             nanosecond{
                 one{"{0} nanosɛkɛn"}
-                other{"{0} ns"}
             }
             night{
                 one{"{0} anadwo"}
-                other{"anadwo{0}"}
                 per{"anadwo biara{0}"}
             }
             quarter{
                 dnam{"kɔta"}
                 one{"kɔta {0}"}
-                other{"{0} q"}
             }
             second{
                 dnam{"sima sini"}
-                one{"{0} s"}
                 other{"sima sini {0}"}
             }
             week{
@@ -293,7 +286,6 @@ ak{
         length{
             astronomical-unit{
                 dnam{"astrɔnɔmikaa winit"}
-                one{"{0} au"}
                 other{"astrɔnɔmikaa winit {0}"}
             }
             centimeter{
@@ -311,18 +303,9 @@ ak{
                 one{"asaase radiɔs {0}"}
                 other{"asaase radiɔs{0}"}
             }
-            fathom{
-                one{"fatɔmse {0}"}
-                other{"fatɔmse {0}"}
-            }
             foot{
                 one{"ananmɔn {0}"}
-                other{"{0} ft"}
                 per{"ananmɔn biara {0}"}
-            }
-            furlong{
-                one{"fɛɛlɔɔne {0}"}
-                other{"fɛɛlɔɔne {0}"}
             }
             inch{
                 one{"inkyisi {0}"}
@@ -362,7 +345,6 @@ ak{
             millimeter{
                 dnam{"milimita"}
                 one{"milimita {0}"}
-                other{"{0} mm"}
             }
             nanometer{
                 dnam{"nanomita"}
@@ -412,7 +394,6 @@ ak{
         }
         mass{
             carat{
-                one{"{0} CD"}
                 other{"karat {0}"}
             }
             dalton{
@@ -425,7 +406,6 @@ ak{
             }
             gram{
                 one{"grame {0}"}
-                other{"{0} g"}
                 per{"grame biara {0}"}
             }
             kilogram{
@@ -437,7 +417,6 @@ ak{
             microgram{
                 dnam{"mikrograme"}
                 one{"mikrograme {0}"}
-                other{"{0} μg"}
             }
             milligram{
                 dnam{"miligrame"}
@@ -476,12 +455,10 @@ ak{
         pressure{
             ofhg{
                 one{"Mεεkuri {0}"}
-                other{"{0} Hg"}
             }
         }
         speed{
             knot{
-                one{"{0} kn"}
                 other{"Pɔ {0}"}
             }
         }
@@ -522,11 +499,9 @@ ak{
                 other{"drɔm fl {0}"}
             }
             drop{
-                one{"ko {0}"}
                 other{"koko {0}"}
             }
             liter{
-                one{"{0} l"}
                 other{"{0} lita"}
             }
             tablespoon{
@@ -574,7 +549,6 @@ ak{
         length{
             foot{
                 one{"{0}′"}
-                other{"{0} ft"}
             }
             inch{
                 one{"{0}″"}
@@ -598,12 +572,10 @@ ak{
         }
         volume{
             dessert-spoon{
-                one{"{0} dsp"}
                 other{"{0}dsp"}
             }
             dram{
                 dnam{"fl.dr."}
-                one{"drɔm {0}"}
                 other{"drɔm fl {0}"}
             }
             drop{
@@ -627,7 +599,6 @@ ak{
             }
             arc-second{
                 dnam{"aakesɛkɛnse"}
-                one{"{0} aakesɛkɛnse"}
                 other{"{0} aakesɛkɛnse"}
             }
             degree{
@@ -645,7 +616,6 @@ ak{
         concentr{
             item{
                 dnam{"adeɛ"}
-                one{"adeɛ {0}"}
                 other{"adeɛ {0}"}
             }
             karat{
@@ -733,7 +703,6 @@ ak{
             }
             night{
                 dnam{"anadwo"}
-                one{"anadwo{0}"}
                 other{"anadwo{0}"}
                 per{"{0}/anadwo"}
             }
@@ -764,14 +733,8 @@ ak{
             earth-radius{
                 dnam{"asaase radiɔs"}
             }
-            fathom{
-                dnam{"fatɔmse"}
-            }
             foot{
                 dnam{"ananmɔn"}
-            }
-            furlong{
-                dnam{"fɛɛlɔɔne"}
             }
             inch{
                 dnam{"inkyisi"}
@@ -823,7 +786,6 @@ ak{
                 dnam{"Asaase mass"}
             }
             grain{
-                one{"{0} gr"}
                 other{"{0} gr"}
             }
             gram{
@@ -842,18 +804,15 @@ ak{
         pressure{
             bar{
                 dnam{"poma"}
-                one{"{0}poma"}
                 other{"{0}poma"}
             }
         }
         speed{
             light-speed{
                 dnam{"kanea"}
-                one{"kanea {0}"}
                 other{"kanea {0}"}
             }
             mile-per-hour{
-                one{"{0} mph"}
                 other{"{0} mph"}
             }
         }
@@ -871,28 +830,23 @@ ak{
             }
             dessert-spoon{
                 dnam{"atere"}
-                one{"{0} dsp"}
                 other{"{0} dsp"}
             }
             dram{
-                one{"drɔm {0}"}
                 other{"drɔm {0}"}
             }
             drop{
                 dnam{"koko"}
-                one{"ko {0}"}
                 other{"ko {0}"}
             }
             jigger{
                 dnam{"gyega"}
-                one{"gyega {0}"}
                 other{"gyega {0}"}
             }
             liter{
                 dnam{"lita"}
             }
             pinch{
-                one{"{0} pn"}
                 other{"{0} pn"}
             }
             pint{

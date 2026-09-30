@@ -3,9 +3,4 @@
 // Generated using tools/cldr/cldr-to-icu/
 es_BO{
     %%Parent{"es_419"}
-    zoneStrings{
-        "meta:Bolivia"{
-            ss{"BOT"}
-        }
-    }
 }

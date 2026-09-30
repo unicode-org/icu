@@ -13,10 +13,7 @@ pa{
     NumberElements{
         arab{
             patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##,##0.00"}
                 currencyFormat{"¤#,##,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##,##0.00"}
-                currencyFormat%noCurrency{"#,##,##0.00"}
             }
             rationalFormats{
                 rationalUsage{"never"}
@@ -32,9 +29,6 @@ pa{
             }
         }
         arabext{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
             rationalFormats{
                 rationalUsage{"never"}
             }
@@ -42,11 +36,6 @@ pa{
                 group{","}
                 minusSign{"-"}
                 plusSign{"+"}
-            }
-        }
-        guru{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
             }
         }
         latn{
@@ -120,51 +109,39 @@ pa{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"¤0 ਹਜ਼ਾਰ"}
                         other{"¤0 ਹਜ਼ਾਰ"}
                     }
                     10000{
-                        one{"¤00 ਹਜ਼ਾਰ"}
                         other{"¤00 ਹਜ਼ਾਰ"}
                     }
                     100000{
-                        one{"¤0 ਲੱਖ"}
                         other{"¤0 ਲੱਖ"}
                     }
                     1000000{
-                        one{"¤00 ਲੱਖ"}
                         other{"¤00 ਲੱਖ"}
                     }
                     10000000{
-                        one{"¤0 ਕਰੋੜ"}
                         other{"¤0 ਕਰੋੜ"}
                     }
                     100000000{
-                        one{"¤00 ਕਰੋੜ"}
                         other{"¤00 ਕਰੋੜ"}
                     }
                     1000000000{
-                        one{"¤0 ਅਰਬ"}
                         other{"¤0 ਅਰਬ"}
                     }
                     10000000000{
-                        one{"¤00 ਅਰਬ"}
                         other{"¤00 ਅਰਬ"}
                     }
                     100000000000{
-                        one{"¤0 ਖਰਬ"}
                         other{"¤0 ਖਰਬ"}
                     }
                     1000000000000{
-                        one{"¤00 ਖਰਬ"}
                         other{"¤00 ਖਰਬ"}
                     }
                     10000000000000{
-                        one{"¤0 ਨੀਲ"}
                         other{"¤0 ਨੀਲ"}
                     }
                     100000000000000{
-                        one{"¤00 ਨੀਲ"}
                         other{"¤00 ਨੀਲ"}
                     }
                 }
@@ -220,51 +197,39 @@ pa{
                 }
                 decimalFormat{
                     1000{
-                        one{"0 ਹਜ਼ਾਰ"}
                         other{"0 ਹਜ਼ਾਰ"}
                     }
                     10000{
-                        one{"00 ਹਜ਼ਾਰ"}
                         other{"00 ਹਜ਼ਾਰ"}
                     }
                     100000{
-                        one{"0 ਲੱਖ"}
                         other{"0 ਲੱਖ"}
                     }
                     1000000{
-                        one{"00 ਲੱਖ"}
                         other{"00 ਲੱਖ"}
                     }
                     10000000{
-                        one{"0 ਕਰੋੜ"}
                         other{"0 ਕਰੋੜ"}
                     }
                     100000000{
-                        one{"00 ਕਰੋੜ"}
                         other{"00 ਕਰੋੜ"}
                     }
                     1000000000{
-                        one{"0 ਅਰਬ"}
                         other{"0 ਅਰਬ"}
                     }
                     10000000000{
-                        one{"00 ਅਰਬ"}
                         other{"00 ਅਰਬ"}
                     }
                     100000000000{
-                        one{"0 ਖਰਬ"}
                         other{"0 ਖਰਬ"}
                     }
                     1000000000000{
-                        one{"00 ਖਰਬ"}
                         other{"00 ਖਰਬ"}
                     }
                     10000000000000{
-                        one{"0 ਨੀਲ"}
                         other{"0 ਨੀਲ"}
                     }
                     100000000000000{
-                        one{"00 ਨੀਲ"}
                         other{"00 ਨੀਲ"}
                     }
                 }
@@ -290,79 +255,6 @@ pa{
         native{"guru"}
     }
     calendar{
-        buddhist{
-            DateTimePatterns{
-                "h:mm:ss a zzzz",
-                "h:mm:ss a z",
-                "h:mm:ss a",
-                "h:mm a",
-                "EEEE, dd MMMM y G",
-                "d MMMM y G",
-                "d MMM y G",
-                "dd/MM/y GGGGG",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-            }
-            DateTimePatterns%atTime{
-                "{0} ਵਿਖੇ {1}",
-                "{0} ਵਿਖੇ {1}",
-                "{1}, {0}",
-                "{1}, {0}",
-            }
-            eras{
-                abbreviated{
-                    0{"ਈਸਵੀ ਪੂਰਵ"}
-                }
-                narrow{
-                    0{"ਈ. ਪੂ."}
-                }
-            }
-        }
-        coptic{
-            monthNames{
-                format{
-                    wide{
-                        "ਟੋਉਟ",
-                        "ਬਾਬਾ",
-                        "ਹੇਟਰ",
-                        "ਕੀਅਕ",
-                        "ਤੋਬਾ",
-                        "ਅਮਸ਼ੀਰ",
-                        "ਬ੍ਰਾਮਹਟ",
-                        "ਬਾਰਾਮੂਡਾ",
-                        "ਬਾਸ਼ਨਸ",
-                        "ਪਾਓਨਾ",
-                        "ਅਪੈਪ",
-                        "ਮੈਸਰਾ",
-                        "ਨੇਜ਼ੀ",
-                    }
-                }
-            }
-        }
-        ethiopic{
-            monthNames{
-                format{
-                    wide{
-                        "ਮੇਸਕੇਰੇਮ",
-                        "ਟੇਕੇਮਟ",
-                        "ਹੈਡਰ",
-                        "ਤਾਹਸਸ",
-                        "ਟਰ",
-                        "ਯਕੇਟਿਤ",
-                        "ਮੇਗਾਬਿਟ",
-                        "ਮਿਆਜਿਆ",
-                        "ਜੇਨਬੋਟ",
-                        "ਸੀਨ",
-                        "ਹਮਲੇ",
-                        "ਨੇਹਾਸੇ",
-                        "ਪਾਗੂਮੇਨ",
-                    }
-                }
-            }
-        }
         generic{
             DateTimePatterns{
                 "h:mm:ss a zzzz",
@@ -384,16 +276,6 @@ pa{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
-            }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "GyMMMMEEEEdd",
-                "GyMMMMd",
-                "GyMMMd",
-                "GGGGGyMMdd",
             }
             availableFormats{
                 Bh{"B h"}
@@ -516,16 +398,6 @@ pa{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yyMd",
-            }
             appendItems{
                 Era{"{0} {1}"}
             }
@@ -549,7 +421,6 @@ pa{
                 MMMEd{"E, d MMM"}
                 MMMMEd{"E, d MMMM"}
                 MMMMW{
-                    one{"MMMM ਦਾ W ਹਫ਼ਤਾ"}
                     other{"MMMM ਦਾ W ਹਫ਼ਤਾ"}
                 }
                 MMMd{"d MMM"}
@@ -567,7 +438,6 @@ pa{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    one{"Y ਦਾ w ਹਫ਼ਤਾ"}
                     other{"Y ਦਾ w ਹਫ਼ਤਾ"}
                 }
             }
@@ -625,9 +495,7 @@ pa{
                 }
                 stand-alone{
                     wide{
-                        afternoon1{"ਦੁਪਹਿਰੇ"}
                         evening1{"ਸ਼ਾਮ"}
-                        morning1{"ਸਵੇਰੇ"}
                         night1{"ਰਾਤ"}
                     }
                 }
@@ -639,12 +507,6 @@ pa{
                 }
                 abbreviated%variant{
                     1{"ਈ. ਸੰ."}
-                }
-                narrow{
-                    0{"ਈ.ਪੂ."}
-                }
-                narrow%variant{
-                    1{"ਈ.ਸੰ."}
                 }
                 wide{
                     0{"ਈਸਵੀ ਪੂਰਵ"}
@@ -792,28 +654,6 @@ pa{
                 }
             }
         }
-        hebrew{
-            monthNames{
-                format{
-                    wide{
-                        "ਤਿਸ਼ਰੀ",
-                        "ਹੇਸ਼ਵਨ",
-                        "ਕਿਸਲੇਵ",
-                        "ਟੇਵਟ",
-                        "ਸ਼ੇਵਟ",
-                        "ਅਦਰ I",
-                        "ਅਦਰ",
-                        "ਨਿਸਾਨ",
-                        "ਅਇਯਰ",
-                        "ਸਿਵਾਨ",
-                        "ਤਾਮੁਜ਼",
-                        "ਅਵ",
-                        "ਏਲੁਲ",
-                        "ਅਦਰ II",
-                    }
-                }
-            }
-        }
         indian{
             eras{
                 abbreviated{
@@ -907,37 +747,6 @@ pa{
                         "ਦੂ-ਅਲ-ਕੀਦਾਹ",
                         "ਦੂ-ਅਲ-ਹਿਜ੍ਹਾ",
                     }
-                }
-            }
-        }
-        persian{
-            monthNames{
-                format{
-                    wide{
-                        "ਫਾਰਵਰਡੀਨ",
-                        "ਔਰਡਾਈਬਹੈਸ਼ਟ",
-                        "ਖੋਡਰਡ",
-                        "ਟਿਰ",
-                        "ਮੋਰਡਾਦ",
-                        "ਸ਼ਰਾਇਵਰ",
-                        "ਮੇਹਰ",
-                        "ਅਬਾਨ",
-                        "ਅਜ਼ਾਰ",
-                        "ਡੇਅ",
-                        "ਬਾਹਮਨ",
-                        "ਐਸਫੰਡ",
-                    }
-                }
-            }
-        }
-        roc{
-            eras{
-                abbreviated{
-                    0{"ਆਰ.ਓ.ਸੀ ਤੋਂ ਪਹਿਲਾਂ"}
-                    1{"ਮਿੰਗ"}
-                }
-                wide{
-                    0{"ਚੀਨ ਦੇ ਗਣਰਾਜ ਤੋਂ ਪਹਿਲਾਂ"}
                 }
             }
         }
@@ -1044,7 +853,6 @@ pa{
                     other{"{0} ਦਿਨਾਂ ਵਿੱਚ"}
                 }
                 past{
-                    one{"{0} ਦਿਨ ਪਹਿਲਾਂ"}
                     other{"{0} ਦਿਨ ਪਹਿਲਾਂ"}
                 }
             }
@@ -1070,7 +878,6 @@ pa{
                     other{"{0} ਸ਼ੁੱਕਰਵਾਰਾਂ ਵਿੱਚ"}
                 }
                 past{
-                    one{"{0} ਸ਼ੁੱਕਰਵਾਰ ਪਹਿਲਾਂ"}
                     other{"{0} ਸ਼ੁੱਕਰਵਾਰ ਪਹਿਲਾਂ"}
                 }
             }
@@ -1091,7 +898,6 @@ pa{
             relativeTime{
                 future{
                     one{"{0} ਸ਼ੁੱਕਰਵਾਰਾਂ ਵਿੱਚ"}
-                    other{"{0} ਸ਼ੁੱਕਰਵਾਰਾਂ ਵਿੱਚ"}
                 }
             }
         }
@@ -1125,7 +931,6 @@ pa{
                     other{"{0} ਮਿੰਟਾਂ ਵਿੱਚ"}
                 }
                 past{
-                    one{"{0} ਮਿੰਟ ਪਹਿਲਾਂ"}
                     other{"{0} ਮਿੰਟ ਪਹਿਲਾਂ"}
                 }
             }
@@ -1142,7 +947,6 @@ pa{
                     other{"{0} ਸੋਮਵਾਰਾਂ ਵਿੱਚ"}
                 }
                 past{
-                    one{"{0} ਸੋਮਵਾਰ ਪਹਿਲਾਂ"}
                     other{"{0} ਸੋਮਵਾਰ ਪਹਿਲਾਂ"}
                 }
             }
@@ -1190,13 +994,6 @@ pa{
                 }
             }
         }
-        quarter-short{
-            relative{
-                "-1"{"ਪਿਛਲੀ ਤਿਮਾਹੀ"}
-                "0"{"ਇਹ ਤਿਮਾਹੀ"}
-                "1"{"ਅਗਲੀ ਤਿਮਾਹੀ"}
-            }
-        }
         sat{
             relative{
                 "-1"{"ਪਿਛਲੇ ਸ਼ਨੀਵਾਰ"}
@@ -1209,7 +1006,6 @@ pa{
                     other{"{0} ਸ਼ਨੀਵਾਰਾਂ ਬਾਅਦ"}
                 }
                 past{
-                    one{"{0} ਸ਼ਨੀਵਾਰ ਪਹਿਲਾਂ"}
                     other{"{0} ਸ਼ਨੀਵਾਰ ਪਹਿਲਾਂ"}
                 }
             }
@@ -1244,7 +1040,6 @@ pa{
                     other{"{0} ਸਕਿੰਟਾਂ ਵਿੱਚ"}
                 }
                 past{
-                    one{"{0} ਸਕਿੰਟ ਪਹਿਲਾਂ"}
                     other{"{0} ਸਕਿੰਟ ਪਹਿਲਾਂ"}
                 }
             }
@@ -1261,7 +1056,6 @@ pa{
                     other{"{0} ਐਤਵਾਰਾਂ ਵਿੱਚ"}
                 }
                 past{
-                    one{"{0} ਐਤਵਾਰ ਪਹਿਲਾਂ"}
                     other{"{0} ਐਤਵਾਰ ਪਹਿਲਾਂ"}
                 }
             }
@@ -1270,7 +1064,6 @@ pa{
             relativeTime{
                 future{
                     one{"{0} ਐਤਵਾਰ ਵਿੱਚ"}
-                    other{"{0} ਐਤਵਾਰਾਂ ਵਿੱਚ"}
                 }
             }
         }
@@ -1283,7 +1076,6 @@ pa{
             relativeTime{
                 future{
                     one{"{0} ਐਤਵਾਰਾਂ ਵਿੱਚ"}
-                    other{"{0} ਐਤਵਾਰਾਂ ਵਿੱਚ"}
                 }
             }
         }
@@ -1299,7 +1091,6 @@ pa{
                     other{"{0} ਵੀਰਵਾਰਾਂ ਵਿੱਚ"}
                 }
                 past{
-                    one{"{0} ਵੀਰਵਾਰ ਪਹਿਲਾਂ"}
                     other{"{0} ਵੀਰਵਾਰ ਪਹਿਲਾਂ"}
                 }
             }
@@ -1313,7 +1104,6 @@ pa{
             relativeTime{
                 future{
                     one{"{0} ਵੀਰਵਾਰਾਂ ਵਿੱਚ"}
-                    other{"{0} ਵੀਰਵਾਰਾਂ ਵਿੱਚ"}
                 }
             }
         }
@@ -1329,7 +1119,6 @@ pa{
                     other{"{0} ਮੰਗਲਵਾਰਾਂ ਵਿੱਚ"}
                 }
                 past{
-                    one{"{0} ਮੰਗਲਵਾਰ ਪਹਿਲਾਂ"}
                     other{"{0} ਮੰਗਲਵਾਰ ਪਹਿਲਾਂ"}
                 }
             }
@@ -1353,7 +1142,6 @@ pa{
                     other{"{0} ਬੁੱਧਵਾਰਾਂ ਵਿੱਚ"}
                 }
                 past{
-                    one{"{0} ਬੁੱਧਵਾਰ ਪਹਿਲਾਂ"}
                     other{"{0} ਬੁੱਧਵਾਰ ਪਹਿਲਾਂ"}
                 }
             }
@@ -1406,7 +1194,6 @@ pa{
                     other{"{0} ਸਾਲਾਂ ਵਿੱਚ"}
                 }
                 past{
-                    one{"{0} ਸਾਲ ਪਹਿਲਾਂ"}
                     other{"{0} ਸਾਲ ਪਹਿਲਾਂ"}
                 }
             }

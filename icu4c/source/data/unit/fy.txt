@@ -286,7 +286,6 @@ fy{
             }
             hour{
                 dnam{"oere"}
-                one{"{0} oere"}
                 other{"{0} oere"}
             }
             millisecond{
@@ -297,12 +296,10 @@ fy{
             }
             month{
                 dnam{"moanneen"}
-                one{"{0} mn"}
                 other{"{0} mn"}
             }
             second{
                 dnam{"sekonden"}
-                one{"{0} sek."}
                 other{"{0} sek."}
             }
             week{
@@ -312,14 +309,12 @@ fy{
             }
             year{
                 dnam{"jier"}
-                one{"{0} jr"}
                 other{"{0} jr"}
             }
         }
         length{
             centimeter{
                 dnam{"sentimeter"}
-                one{"{0} sm"}
                 other{"{0} sm"}
             }
             foot{
@@ -327,7 +322,6 @@ fy{
             }
             inch{
                 dnam{"tommen"}
-                one{"{0} tm"}
                 other{"{0} tm"}
             }
             kilometer{
@@ -335,7 +329,6 @@ fy{
             }
             light-year{
                 dnam{"ljochtjier"}
-                one{"{0} lj"}
                 other{"{0} lj"}
             }
             mile{
@@ -359,7 +352,6 @@ fy{
         power{
             horsepower{
                 dnam{"hynstekrêften"}
-                one{"{0} pk"}
                 other{"{0} pk"}
             }
             kilowatt{

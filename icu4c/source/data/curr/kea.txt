@@ -50,11 +50,6 @@ kea{
         CVE{
             "​",
             "Skudu Kabuverdianu",
-            {
-                "#,##0.00 ¤",
-                "$",
-                " ",
-            }
         }
         DJF{
             "DJF",
@@ -88,17 +83,9 @@ kea{
             "£",
             "Libra britániku",
         }
-        GHC{
-            "GHC",
-            "Sedi di Gana (1979–2007)",
-        }
         GMD{
             "GMD",
             "Dalasi",
-        }
-        GNS{
-            "GNS",
-            "Sili",
         }
         HKD{
             "HK$",
@@ -148,10 +135,6 @@ kea{
             "MGA",
             "Ariari di Madagaskar",
         }
-        MRO{
-            "MRO",
-            "Ougia (1973–2017)",
-        }
         MRU{
             "MRU",
             "Ougia",
@@ -167,10 +150,6 @@ kea{
         MXN{
             "MX$",
             "Pezu mexikanu",
-        }
-        MZM{
-            "MZM",
-            "Metikal",
         }
         NAD{
             "NAD",
@@ -208,10 +187,6 @@ kea{
             "SDG",
             "Libra sudanes",
         }
-        SDP{
-            "SDP",
-            "Libra sudanes antigu (1957–1998)",
-        }
         SEK{
             "SEK",
             "Kuroa sueku",
@@ -231,10 +206,6 @@ kea{
         SOS{
             "SOS",
             "Xelin somalianu",
-        }
-        STD{
-            "STD",
-            "Dobra di San Tume i Prínsipi (1977–2017)",
         }
         STN{
             "STN",
@@ -288,17 +259,9 @@ kea{
             "ZAR",
             "Rand sulafrikanu",
         }
-        ZMK{
-            "ZMK",
-            "Kuaxa zambianu (1968–2012)",
-        }
         ZMW{
             "ZMW",
             "Kuaxa zambianu",
-        }
-        ZWD{
-            "ZWD",
-            "Dola di Zimbabue (1980–2008)",
         }
     }
     CurrencyPlurals{

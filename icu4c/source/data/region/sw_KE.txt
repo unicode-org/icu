@@ -69,7 +69,4 @@ sw_KE{
         YT{"Mayote"}
         ZZ{"Eneo Lisilojulikana"}
     }
-    Countries%short{
-        US{"Marekani"}
-    }
 }

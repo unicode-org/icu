@@ -50,7 +50,6 @@ rm{
                 other{"{0} acras"}
             }
             dunam{
-                one{"{0} dunam"}
                 other{"{0} dunams"}
             }
             hectare{
@@ -186,7 +185,6 @@ rm{
             }
             mole{
                 dnam{"mols"}
-                one{"{0} mol"}
                 other{"{0} mols"}
             }
             ofglucose{
@@ -196,7 +194,6 @@ rm{
             }
             part{
                 dnam{"parts"}
-                one{"{0} part"}
                 other{"{0} parts"}
             }
             part-per-1e6{
@@ -253,12 +250,10 @@ rm{
         digital{
             bit{
                 dnam{"bits"}
-                one{"{0} bit"}
                 other{"{0} bits"}
             }
             byte{
                 dnam{"bytes"}
-                one{"{0} byte"}
                 other{"{0} bytes"}
             }
             gigabit{
@@ -969,10 +964,6 @@ rm{
                 dnam{"hectoliters"}
                 one{"{0} hectoliter"}
                 other{"{0} hectoliters"}
-            }
-            jigger{
-                one{"{0} jigger"}
-                other{"{0} jiggers"}
             }
             liter{
                 dnam{"liters"}
@@ -1860,11 +1851,9 @@ rm{
             }
             revolution{
                 dnam{"rot"}
-                one{"{0} rot"}
                 other{"{0} rot"}
             }
             steradian{
-                one{"{0} sr"}
                 other{"{0} sr"}
             }
         }
@@ -1882,23 +1871,19 @@ rm{
         concentr{
             item{
                 dnam{"elem."}
-                one{"{0} elem."}
                 other{"{0} elem."}
             }
             karat{
                 dnam{"carats"}
             }
             katal{
-                one{"{0} kat"}
                 other{"{0} kat"}
             }
             ofglucose{
                 dnam{"Glc"}
-                one{"{0} Glc"}
                 other{"{0} Glc"}
             }
             part{
-                one{"{0} part"}
                 other{"{0} part"}
             }
             part-per-1e6{
@@ -1920,17 +1905,14 @@ rm{
         consumption{
             liter-per-100-kilometer{
                 dnam{"l/100 km"}
-                one{"{0} l/100 km"}
                 other{"{0} l/100 km"}
             }
             liter-per-kilometer{
                 dnam{"l/km"}
-                one{"{0} l/km"}
                 other{"{0} l/km"}
             }
             mile-per-gallon{
                 dnam{"miglias/gallun"}
-                one{"{0} mpg"}
                 other{"{0} mpg"}
             }
             mile-per-gallon-imperial{
@@ -1952,7 +1934,6 @@ rm{
         duration{
             century{
                 dnam{"tsch."}
-                one{"{0} tsch."}
                 other{"{0} tsch."}
             }
             day{
@@ -1963,7 +1944,6 @@ rm{
             }
             decade{
                 dnam{"dec."}
-                one{"{0} dec."}
                 other{"{0} dec."}
             }
             hour{
@@ -1975,7 +1955,6 @@ rm{
             }
             month{
                 dnam{"mais"}
-                one{"{0} mais"}
                 other{"{0} mais"}
                 per{"{0}/mais"}
             }
@@ -1987,13 +1966,11 @@ rm{
             }
             quarter{
                 dnam{"quart."}
-                one{"{0} quart."}
                 other{"{0} quart."}
                 per{"{0}/quart."}
             }
             second{
                 dnam{"secundas"}
-                one{"{0} sec"}
                 other{"{0} sec"}
             }
             week{
@@ -2011,19 +1988,15 @@ rm{
         }
         electric{
             coulomb{
-                one{"{0} C"}
                 other{"{0} C"}
             }
             farad{
-                one{"{0} F"}
                 other{"{0} F"}
             }
             henry{
-                one{"{0} H"}
                 other{"{0} H"}
             }
             siemens{
-                one{"{0} S"}
                 other{"{0} S"}
             }
             volt{
@@ -2032,31 +2005,26 @@ rm{
         }
         energy{
             becquerel{
-                one{"{0} Bq"}
                 other{"{0} Bq"}
             }
             calorie-it{
                 dnam{"cal-IT"}
-                one{"{0} cal-IT"}
                 other{"{0} cal-IT"}
             }
             electronvolt{
                 dnam{"electronvolt"}
             }
             gray{
-                one{"{0} Gy"}
                 other{"{0} Gy"}
             }
             joule{
                 dnam{"joules"}
             }
             sievert{
-                one{"{0} Sv"}
                 other{"{0} Sv"}
             }
             therm-us{
                 dnam{"therm US"}
-                one{"{0} therm US"}
                 other{"{0} therm US"}
             }
         }
@@ -2118,11 +2086,9 @@ rm{
         }
         magnetic{
             tesla{
-                one{"{0} T"}
                 other{"{0} T"}
             }
             weber{
-                one{"{0} Wb"}
                 other{"{0} Wb"}
             }
         }
@@ -2132,7 +2098,6 @@ rm{
             }
             grain{
                 dnam{"grauns"}
-                one{"{0} gr"}
                 other{"{0} gr"}
             }
             gram{
@@ -2145,7 +2110,6 @@ rm{
         power{
             horsepower{
                 dnam{"PS"}
-                one{"{0} PS"}
                 other{"{0} PS"}
             }
             watt{
@@ -2155,19 +2119,16 @@ rm{
         pressure{
             millimeter-ofhg{
                 dnam{"mmHg"}
-                one{"{0} mmHg"}
                 other{"{0} mmHg"}
             }
             ofhg{
                 dnam{"da Hg"}
-                one{"{0} da Hg"}
                 other{"{0} da Hg"}
             }
         }
         speed{
             light-speed{
                 dnam{"glisch"}
-                one{"{0} glisch"}
                 other{"{0} glisch"}
             }
         }
@@ -2177,7 +2138,6 @@ rm{
             }
             centiliter{
                 dnam{"cl"}
-                one{"{0} cl"}
                 other{"{0} cl"}
             }
             cup{
@@ -2185,17 +2145,14 @@ rm{
             }
             deciliter{
                 dnam{"dl"}
-                one{"{0} dl"}
                 other{"{0} dl"}
             }
             dessert-spoon{
                 dnam{"td"}
-                one{"{0} td"}
                 other{"{0} td"}
             }
             dessert-spoon-imperial{
                 dnam{"Imp. dessert spoons"}
-                one{"{0} dsp-Imp."}
                 other{"{0} dsp-Imp."}
             }
             dram{
@@ -2205,29 +2162,24 @@ rm{
             }
             drop{
                 dnam{"guts"}
-                one{"{0} gt"}
                 other{"{0} gt"}
             }
             fluid-ounce{
                 dnam{"fl oz"}
-                one{"{0} fl oz"}
                 other{"{0} fl oz"}
             }
             gallon{
                 dnam{"gal"}
-                one{"{0} gal"}
                 other{"{0} gal"}
                 per{"{0}/gal"}
             }
             gallon-imperial{
                 dnam{"gal imp"}
-                one{"{0} gal imp"}
                 other{"{0} gal imp"}
                 per{"{0}/gal imp"}
             }
             hectoliter{
                 dnam{"hl"}
-                one{"{0} hl"}
                 other{"{0} hl"}
             }
             jigger{
@@ -2240,32 +2192,26 @@ rm{
             }
             megaliter{
                 dnam{"Ml"}
-                one{"{0} Ml"}
                 other{"{0} Ml"}
             }
             milliliter{
                 dnam{"ml"}
-                one{"{0} ml"}
                 other{"{0} ml"}
             }
             pinch{
                 dnam{"presas"}
-                one{"{0} pr"}
                 other{"{0} pr"}
             }
             quart-imperial{
                 dnam{"qt imp"}
-                one{"{0} qt imp"}
                 other{"{0} qt imp"}
             }
             tablespoon{
                 dnam{"tg"}
-                one{"{0} tg"}
                 other{"{0} tg"}
             }
             teaspoon{
                 dnam{"tp"}
-                one{"{0} tp"}
                 other{"{0} tp"}
             }
         }

@@ -10,18 +10,8 @@ kxv_Orya{
     ExemplarCharactersNumbers{"[\\- ‑ , . % ‰ + 0 ୧ ୨ ୩ ୪ ୫ ୬ ୭ ୮ ୯]"}
     ExemplarCharactersPunctuation{"[\\- ‐‑ – — , ; \\: ! ? . … '‘’ \u0022“” ( ) \\[ \\] § @ * / \\& # † ‡ ′ ″]"}
     NumberElements{
-        deva{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##,##0.00"}
-                accountingFormat%noCurrency{"#,##,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##,##0.00"}
-                currencyFormat%noCurrency{"#,##,##0.00"}
-            }
-        }
         latn{
             patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##,##0.00"}
-                accountingFormat%noCurrency{"#,##,##0.00"}
                 currencyFormat{"¤#,##,##0.00"}
                 currencyFormat%alphaNextToNumber{"¤ #,##,##0.00"}
                 currencyFormat%noCurrency{"#,##,##0.00"}
@@ -168,16 +158,6 @@ kxv_Orya{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yMMdd",
-            }
             availableFormats{
                 Bh{"B h"}
                 Bhm{"B h:mm"}
@@ -254,14 +234,6 @@ kxv_Orya{
             }
             dayPeriod{
                 stand-alone{
-                    abbreviated{
-                        am{"ଏ ଏମ"}
-                        pm{"ପି ଏମ"}
-                    }
-                    narrow{
-                        am{"ଏ ଏମ"}
-                        pm{"ପି ଏମ"}
-                    }
                     wide{
                         am{"ଏ ଏମ"}
                         pm{"ପି ଏମ"}
@@ -426,9 +398,6 @@ kxv_Orya{
                 "1"{"ୱି ଏ"}
             }
         }
-        day-short{
-            dn{"ଦିନା"}
-        }
         dayperiod{
             dn{"AM/PM"}
         }
@@ -454,9 +423,6 @@ kxv_Orya{
             dn{"ଲେ"}
         }
         quarter{
-            dn{"କ୍ୱାଟର"}
-        }
-        quarter-short{
             dn{"କ୍ୱାଟର"}
         }
         second{
@@ -490,10 +456,6 @@ kxv_Orya{
             end{"{0}, ଆଆତେଁ {1}"}
         }
         standard{
-            2{"{0} ଅଡ଼େ {1}"}
-            end{"{0}, ଅଡ଼େ {1}"}
-        }
-        standard-short{
             2{"{0} ଅଡ଼େ {1}"}
             end{"{0}, ଅଡ଼େ {1}"}
         }

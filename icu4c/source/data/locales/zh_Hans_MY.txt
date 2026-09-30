@@ -19,16 +19,6 @@ zh_Hans_MY{
                 "{1} {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "yMMMEEEEd",
-                "yMMMd",
-                "yMMMd",
-                "yMd",
-            }
         }
     }
 }

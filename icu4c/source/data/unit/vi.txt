@@ -192,12 +192,6 @@ vi{
                 other{"{0} terabyte"}
             }
         }
-        duration{
-            hour{
-                dnam{"tiếng"}
-                other{"{0} tiếng"}
-            }
-        }
         electric{
             ampere{
                 dnam{"ampe"}
@@ -236,10 +230,6 @@ vi{
             becquerel{
                 dnam{"becquerel"}
                 other{"{0} becquerel"}
-            }
-            british-thermal-unit{
-                dnam{"đơn vị nhiệt Anh"}
-                other{"{0} đơn vị nhiệt Anh"}
             }
             calorie{
                 dnam{"calo"}
@@ -332,17 +322,9 @@ vi{
                 dnam{"bán kính trái đất"}
                 other{"{0} bán kính trái đất"}
             }
-            fathom{
-                dnam{"sải"}
-                other{"{0} sải"}
-            }
             foot{
                 dnam{"feet"}
                 other{"{0} feet"}
-            }
-            furlong{
-                dnam{"fulông"}
-                other{"{0} fulông"}
             }
             inch{
                 per{"{0}/inch"}
@@ -713,12 +695,6 @@ vi{
                 dnam{"PB"}
             }
         }
-        duration{
-            hour{
-                dnam{"tiếng"}
-                other{"{0} tiếng"}
-            }
-        }
         energy{
             electronvolt{
                 dnam{"eV"}
@@ -1004,9 +980,6 @@ vi{
         energy{
             becquerel{
                 other{"{0} Bq"}
-            }
-            british-thermal-unit{
-                dnam{"BTU"}
             }
             calorie-it{
                 dnam{"cal-IT"}

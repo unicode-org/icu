@@ -150,11 +150,6 @@ yo{
         }
     }
     calendar{
-        buddhist{
-            availableFormats{
-                yyyyMd{"G dd-MM-y"}
-            }
-        }
         generic{
             DateTimePatterns{
                 "HH:mm:ss zzzz",
@@ -182,16 +177,6 @@ yo{
                 "{1} 'ní' {0}",
                 "{1}, {0}",
                 "{1}, {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "Hmmssz",
-                "Hms",
-                "Hm",
-                "GyMMEEEEd",
-                "GyMMd",
-                "GyMMd",
-                "GyMMdd",
             }
             availableFormats{
                 GyM{"M/y G"}
@@ -267,16 +252,6 @@ yo{
                 "{1} 'ní' {0}",
                 "{1}, {0}",
                 "{1}, {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "Hmmssz",
-                "Hms",
-                "Hm",
-                "yMMMEEEEd",
-                "yMMMd",
-                "yMMd",
-                "yMd",
             }
             appendItems{
                 Day-Of-Week{"{1}, {0}"}
@@ -613,12 +588,6 @@ yo{
         era{
             dn{"Sáà"}
         }
-        era-narrow{
-            dn{"Sáà"}
-        }
-        era-short{
-            dn{"Sáà"}
-        }
         fri{
             relative{
                 "-1"{"E̩tì tóko̩já"}
@@ -635,15 +604,7 @@ yo{
             }
         }
         fri-narrow{
-            relative{
-                "-1"{"E̩tì tóko̩já"}
-                "0"{"E̩tì èyí"}
-                "1"{"E̩tì tómbò̩"}
-            }
             relativeTime{
-                future{
-                    other{"{0} Àwo̩n Eti"}
-                }
                 past{
                     other{"{0} F tẹ́lẹ̀"}
                 }
@@ -669,20 +630,6 @@ yo{
             }
         }
         mon{
-            relative{
-                "-1"{"ọjọ́ Ajé tó kọjá"}
-                "0"{"ọjọ́ Ajé yìí"}
-                "1"{"Ọjọ́ ajé tó ń bọ̀"}
-            }
-        }
-        mon-narrow{
-            relative{
-                "-1"{"ọjọ́ Ajé tó kọjá"}
-                "0"{"ọjọ́ Ajé yìí"}
-                "1"{"Ọjọ́ ajé tó ń bọ̀"}
-            }
-        }
-        mon-short{
             relative{
                 "-1"{"ọjọ́ Ajé tó kọjá"}
                 "0"{"ọjọ́ Ajé yìí"}
@@ -723,21 +670,6 @@ yo{
                 }
             }
         }
-        sat-narrow{
-            relative{
-                "-1"{"Abameta tóko̩já"}
-                "0"{"Abameta eyi"}
-                "1"{"Abameta tombo"}
-            }
-            relativeTime{
-                future{
-                    other{"{0} Awon Abameta"}
-                }
-                past{
-                    other{"{0} Abameta tokoja"}
-                }
-            }
-        }
         second{
             dn{"Ìsẹ́jú Ààyá"}
             relative{
@@ -759,21 +691,6 @@ yo{
             }
         }
         thu{
-            relative{
-                "-1"{"Ojọ́bọ̀ kẹyìn"}
-                "0"{"Ojọ́bọ̀ eyì"}
-                "1"{"Ojọ́bọ̀ tónbọ̀"}
-            }
-            relativeTime{
-                future{
-                    other{"+{0} Ojọ́bọ̀"}
-                }
-                past{
-                    other{"-{0} Àwọn Ojọ́bọ̀"}
-                }
-            }
-        }
-        thu-narrow{
             relative{
                 "-1"{"Ojọ́bọ̀ kẹyìn"}
                 "0"{"Ojọ́bọ̀ eyì"}
@@ -850,8 +767,6 @@ yo{
         }
         wed-short{
             relative{
-                "-1"{"Ojọ́rú àná"}
-                "0"{"Ojọ́rú yì"}
                 "1"{"Ojọ́rú tóńbọ̀"}
             }
             relativeTime{
@@ -878,19 +793,10 @@ yo{
         weekday{
             dn{"Ọjọ́ tó wà láàárín ọ̀sẹ̀"}
         }
-        weekday-narrow{
-            dn{"Ọjọ́ inú ọ̀ṣẹ̀"}
-        }
         weekday-short{
             dn{"Ọjọ́ inú ọ̀ṣẹ̀"}
         }
         weekdayOfMonth{
-            dn{"Ọjọ́ ọ̀ṣẹ̀ inú oṣù"}
-        }
-        weekdayOfMonth-narrow{
-            dn{"Ọjọ́ ọ̀ṣẹ̀ inú oṣù"}
-        }
-        weekdayOfMonth-short{
             dn{"Ọjọ́ ọ̀ṣẹ̀ inú oṣù"}
         }
         year{
@@ -912,7 +818,6 @@ yo{
         year-short{
             relative{
                 "-1"{"Ọdún tó kọjá"}
-                "0"{"Ọdún yìí"}
                 "1"{"Ọdún tó ńbọ̀"}
             }
             relativeTime{

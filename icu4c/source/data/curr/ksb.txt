@@ -75,17 +75,9 @@ ksb{
             "£",
             "pauni ya Uingeeza",
         }
-        GHC{
-            "GHC",
-            "sedi ya Ghana",
-        }
         GMD{
             "GMD",
             "dalasi ya Gambia",
-        }
-        GNS{
-            "GNS",
-            "falanga ya Gine",
         }
         INR{
             "₹",
@@ -123,10 +115,6 @@ ksb{
             "MGA",
             "falanga ya Bukini",
         }
-        MRO{
-            "MRO",
-            "ugwiya ya Molitania (1973–2017)",
-        }
         MRU{
             "MRU",
             "ugwiya ya Molitania",
@@ -138,10 +126,6 @@ ksb{
         MWK{
             "MWK",
             "kwacha ya Malawi",
-        }
-        MZM{
-            "MZM",
-            "metikali ya Msumbiji",
         }
         NAD{
             "NAD",
@@ -167,10 +151,6 @@ ksb{
             "SDG",
             "dinali ya Sudani",
         }
-        SDP{
-            "SDP",
-            "pauni ya Sudani",
-        }
         SHP{
             "SHP",
             "pauni ya Santahelena",
@@ -186,10 +166,6 @@ ksb{
         SOS{
             "SOS",
             "shilingi ya Somalia",
-        }
-        STD{
-            "STD",
-            "dobla ya Sao Tome na Plincipe (1977–2017)",
         }
         STN{
             "STN",
@@ -227,17 +203,9 @@ ksb{
             "ZAR",
             "landi ya Aflika Kusini",
         }
-        ZMK{
-            "ZMK",
-            "kwacha ya Zambia (1968–2012)",
-        }
         ZMW{
             "ZMW",
             "kwacha ya Zambia",
-        }
-        ZWD{
-            "ZWD",
-            "dola ya Zimbabwe",
         }
     }
 }

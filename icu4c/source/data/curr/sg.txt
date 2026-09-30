@@ -75,17 +75,9 @@ sg{
             "£",
             "pôndo tî Anglëe",
         }
-        GHC{
-            "GHC",
-            "sêdi tî Ganäa",
-        }
         GMD{
             "GMD",
             "dalasi tî gambïi",
-        }
-        GNS{
-            "GNS",
-            "sili tî Ginëe",
         }
         INR{
             "₹",
@@ -123,10 +115,6 @@ sg{
             "MGA",
             "ariâri tî Madagasikära",
         }
-        MRO{
-            "MRO",
-            "ugîya tî Moritanïi (1973–2017)",
-        }
         MRU{
             "MRU",
             "ugîya tî Moritanïi",
@@ -138,10 +126,6 @@ sg{
         MWK{
             "MWK",
             "kwâtia tî Malawïi",
-        }
-        MZM{
-            "MZM",
-            "metikala tî Mozambîka",
         }
         NAD{
             "NAD",
@@ -183,10 +167,6 @@ sg{
             "SOS",
             "shilîngi tî Somalïi",
         }
-        STD{
-            "STD",
-            "dôbra tî Sâô Tomë na Prinsîpe (1977–2017)",
-        }
         STN{
             "STN",
             "dôbra tî Sâô Tomë na Prinsîpe",
@@ -223,17 +203,9 @@ sg{
             "ZAR",
             "rânde tî Mbongo-Afrîka",
         }
-        ZMK{
-            "ZMK",
-            "kwâtia tî Zambïi (1968–2012)",
-        }
         ZMW{
             "ZMW",
             "kwâtia tî Zambïi",
-        }
-        ZWD{
-            "ZWD",
-            "dolära tî Zimbäbwe",
         }
     }
 }

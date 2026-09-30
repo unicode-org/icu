@@ -690,9 +690,6 @@ ig{
         CUP{
             other{"Ego pesos obodo Cuba"}
         }
-        CVE{
-            other{"Ego escudos Cape Verdean"}
-        }
         DJF{
             other{"ego francs obodo Djibouti"}
         }

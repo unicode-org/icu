@@ -117,15 +117,6 @@ ki{
                         "WTO",
                         "MŨT",
                     }
-                    short{
-                        "KMA",
-                        "MWA",
-                        "WAĨ",
-                        "WETŨ",
-                        "WEN",
-                        "WETO",
-                        "NJU",
-                    }
                     wide{
                         "Kiumia",
                         "Mwambĩrĩrio",
@@ -164,30 +155,12 @@ ki{
                         "WETO",
                         "MŨT",
                     }
-                    wide{
-                        "Kiumia",
-                        "Mwambĩrĩrio",
-                        "Waĩrĩ",
-                        "Wetatũ",
-                        "Wena",
-                        "Wetano",
-                        "Njuuma",
-                    }
                 }
             }
             dayPeriod{
                 stand-alone{
                     abbreviated{
                         am{"Kĩroko"}
-                        pm{"Hwaĩ-inĩ"}
-                    }
-                    narrow{
-                        am{"Kĩroko"}
-                        pm{"Hwaĩ-inĩ"}
-                    }
-                    wide{
-                        am{"Kĩroko"}
-                        pm{"Hwaĩ-inĩ"}
                     }
                 }
             }
@@ -238,20 +211,6 @@ ki{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        "MGA",
-                        "MGE",
-                        "KH",
-                        "MŨTH",
-                        "MGNJ",
-                        "GATH",
-                        "GATHN",
-                        "MWNY",
-                        "MŨGK",
-                        "MWTH",
-                        "KNY",
-                        "GAT",
-                    }
                     narrow{
                         "J",
                         "K",
@@ -326,38 +285,10 @@ ki{
                 "1"{"mweri mũku"}
             }
         }
-        month-narrow{
-            relative{
-                "-1"{"mweri mũhĩtũku"}
-                "0"{"mweri ũyũ"}
-                "1"{"mweri mũku"}
-            }
-        }
-        month-short{
-            relative{
-                "-1"{"mweri mũhĩtũku"}
-                "0"{"mweri ũyũ"}
-                "1"{"mweri mũku"}
-            }
-        }
         second{
             dn{"ica"}
         }
         sun{
-            relative{
-                "-1"{"Kiumia gĩthiru"}
-                "0"{"Kiumia gĩkĩ"}
-                "1"{"Kiumia gĩũku"}
-            }
-        }
-        sun-narrow{
-            relative{
-                "-1"{"Kiumia gĩthiru"}
-                "0"{"Kiumia gĩkĩ"}
-                "1"{"Kiumia gĩũku"}
-            }
-        }
-        sun-short{
             relative{
                 "-1"{"Kiumia gĩthiru"}
                 "0"{"Kiumia gĩkĩ"}
@@ -379,35 +310,12 @@ ki{
                 "0"{"kiumia ĩno"}
                 "1"{"kiumia njũku"}
             }
-            relativePeriod{"kiumia kĩa {0}"}
-        }
-        week-short{
-            relative{
-                "-1"{"kiumia kĩhĩtũku"}
-                "0"{"kiumia tũrĩ"}
-                "1"{"kiumia kĩroka"}
-            }
-            relativePeriod{"kiumia kĩa {0}"}
         }
         weekday{
             dn{"Mũthenya kiumia-inĩ"}
         }
         year{
             dn{"Mwaka"}
-            relative{
-                "-1"{"mwaka mũhĩtũku"}
-                "0"{"mwaka ũyũ"}
-                "1"{"mwaka ũroka"}
-            }
-        }
-        year-narrow{
-            relative{
-                "-1"{"mwaka mũhĩtũku"}
-                "0"{"mwaka ũyũ"}
-                "1"{"mwaka ũroka"}
-            }
-        }
-        year-short{
             relative{
                 "-1"{"mwaka mũhĩtũku"}
                 "0"{"mwaka ũyũ"}

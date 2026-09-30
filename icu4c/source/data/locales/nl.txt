@@ -7,137 +7,6 @@ nl{
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]"}
     ExemplarCharactersPunctuation{"[\\- ‐‑ – — , ; \\: ! ? . … '‘’ \u0022“” ( ) \\[ \\] § @ * / \\& # † ‡ ′ ″]"}
     NumberElements{
-        adlm{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
-            }
-        }
-        arab{
-            patterns{
-                percentFormat{"#,##0 %"}
-            }
-        }
-        arabext{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
-            }
-        }
-        bali{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
-            }
-        }
-        beng{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
-            }
-        }
-        brah{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
-            }
-        }
-        cakm{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
-            }
-        }
-        cham{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
-            }
-        }
-        deva{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
-            }
-        }
-        fullwide{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
-            }
-        }
-        gong{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
-            }
-        }
-        gonm{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
-            }
-        }
-        gujr{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
-            }
-        }
-        guru{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
-            }
-        }
-        hanidec{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
-            }
-        }
-        java{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
-            }
-        }
-        kali{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
-            }
-        }
-        khmr{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
-            }
-        }
-        knda{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
-            }
-        }
-        lana{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
-            }
-        }
-        lanatham{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
-            }
-        }
-        laoo{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
-            }
-        }
         latn{
             miscPatterns{
                 atLeast{"{0}+"}
@@ -205,77 +74,59 @@ nl{
             patternsShort{
                 currencyFormat{
                     1000000{
-                        one{"¤ 0 mln'.'"}
                         other{"¤ 0 mln'.'"}
                     }
                     10000000{
-                        one{"¤ 00 mln'.'"}
                         other{"¤ 00 mln'.'"}
                     }
                     100000000{
-                        one{"¤ 000 mln'.'"}
                         other{"¤ 000 mln'.'"}
                     }
                     1000000000{
-                        one{"¤ 0 mld'.'"}
                         other{"¤ 0 mld'.'"}
                     }
                     10000000000{
-                        one{"¤ 00 mld'.'"}
                         other{"¤ 00 mld'.'"}
                     }
                     100000000000{
-                        one{"¤ 000 mld'.'"}
                         other{"¤ 000 mld'.'"}
                     }
                     1000000000000{
-                        one{"¤ 0 bln'.'"}
                         other{"¤ 0 bln'.'"}
                     }
                     10000000000000{
-                        one{"¤ 00 bln'.'"}
                         other{"¤ 00 bln'.'"}
                     }
                     100000000000000{
-                        one{"¤ 000 bln'.'"}
                         other{"¤ 000 bln'.'"}
                     }
                 }
                 decimalFormat{
                     1000000{
-                        one{"0 mln'.'"}
                         other{"0 mln'.'"}
                     }
                     10000000{
-                        one{"00 mln'.'"}
                         other{"00 mln'.'"}
                     }
                     100000000{
-                        one{"000 mln'.'"}
                         other{"000 mln'.'"}
                     }
                     1000000000{
-                        one{"0 mld'.'"}
                         other{"0 mld'.'"}
                     }
                     10000000000{
-                        one{"00 mld'.'"}
                         other{"00 mld'.'"}
                     }
                     100000000000{
-                        one{"000 mld'.'"}
                         other{"000 mld'.'"}
                     }
                     1000000000000{
-                        one{"0 bln'.'"}
                         other{"0 bln'.'"}
                     }
                     10000000000000{
-                        one{"00 bln'.'"}
                         other{"00 bln'.'"}
                     }
                     100000000000000{
-                        one{"000 bln'.'"}
                         other{"000 bln'.'"}
                     }
                 }
@@ -283,18 +134,6 @@ nl{
             symbols{
                 decimal{","}
                 group{"."}
-            }
-        }
-        lepc{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
-            }
-        }
-        limb{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
             }
         }
         minimalPairs{
@@ -310,431 +149,8 @@ nl{
                 other{"{0} dagen"}
             }
         }
-        mlym{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
-            }
-        }
-        mong{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
-            }
-        }
-        mtei{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
-            }
-        }
-        mymr{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
-            }
-        }
-        mymrshan{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
-            }
-        }
-        nkoo{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
-            }
-        }
-        olck{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
-            }
-        }
-        orya{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
-            }
-        }
-        osma{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
-            }
-        }
-        rohg{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
-            }
-        }
-        saur{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
-            }
-        }
-        shrd{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
-            }
-        }
-        sora{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
-            }
-        }
-        sund{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
-            }
-        }
-        takr{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
-            }
-        }
-        talu{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
-            }
-        }
-        tamldec{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
-            }
-        }
-        telu{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
-            }
-        }
-        thai{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
-            }
-        }
-        tibt{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
-            }
-        }
-        vaii{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
-            }
-        }
     }
     calendar{
-        buddhist{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE d MMMM y G",
-                "d MMMM y G",
-                "d MMM y G",
-                "dd-MM-yy GGGGG",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-        }
-        chinese{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE d MMMM U",
-                "d MMMM U",
-                "d MMM U",
-                "dd-MM-yy",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "UMMMMEEEEd",
-                "UMMMMd",
-                "UMMMd",
-                "yyMMdd",
-            }
-            availableFormats{
-                Ed{"E d"}
-                Gy{"U"}
-                GyMMM{"MMM U"}
-                GyMMMEd{"E d MMM U"}
-                GyMMMM{"MMMM r(U)"}
-                GyMMMMEd{"E d MMMM r(U)"}
-                GyMMMMd{"d MMMM r(U)"}
-                GyMMMd{"d MMM U"}
-                MEd{"E d-M"}
-                MMMEd{"E d MMM"}
-                MMMMd{"d MMMM"}
-                MMMd{"d MMM"}
-                Md{"d-M"}
-                h{"h a"}
-                hm{"h:mm a"}
-                hms{"h:mm:ss a"}
-                y{"U"}
-                yMd{"y-MM-dd"}
-                yyyy{"U"}
-                yyyyM{"M-y"}
-                yyyyMEd{"E d-M-y"}
-                yyyyMMM{"MMM U"}
-                yyyyMMMEd{"E d MMM U"}
-                yyyyMMMM{"MMMM U"}
-                yyyyMMMMEd{"E d MMMM r(U)"}
-                yyyyMMMMd{"d MMMM r(U)"}
-                yyyyMMMd{"d MMM U"}
-                yyyyMd{"d-M-y"}
-                yyyyQQQ{"QQQ U"}
-                yyyyQQQQ{"QQQQ U"}
-            }
-            cyclicNameSets{
-                solarTerms{
-                    format{
-                        abbreviated{
-                            "begin van de lente",
-                            "regenwater",
-                            "insecten ontwaken",
-                            "lentepunt",
-                            "licht en helder",
-                            "nat graan",
-                            "begin van de zomer",
-                            "vol graan",
-                            "oogst graan",
-                            "zomerpunt",
-                            "warm",
-                            "heet",
-                            "begin van de herfst",
-                            "einde van de hitte",
-                            "witte dauw",
-                            "herfstpunt",
-                            "koude dauw",
-                            "eerste vorst",
-                            "begin van de winter",
-                            "lichte sneeuw",
-                            "zware sneeuw",
-                            "winterpunt",
-                            "koel",
-                            "koud",
-                        }
-                    }
-                }
-                zodiacs{
-                    format{
-                        abbreviated{
-                            "Rat",
-                            "Os",
-                            "Tijger",
-                            "Konijn",
-                            "Draak",
-                            "Slang",
-                            "Paard",
-                            "Geit",
-                            "Aap",
-                            "Haan",
-                            "Hond",
-                            "Varken",
-                        }
-                    }
-                }
-            }
-            intervalFormats{
-                hm{
-                    a{"h:mm a – h:mm a"}
-                    h{"h:mm–h:mm a"}
-                    m{"h:mm–h:mm a"}
-                }
-                hmv{
-                    a{"h:mm a – h:mm a v"}
-                    h{"h:mm–h:mm a v"}
-                    m{"h:mm–h:mm a v"}
-                }
-            }
-            monthNames{
-                format{
-                    abbreviated{
-                        "mnd 1",
-                        "mnd 2",
-                        "mnd 3",
-                        "mnd 4",
-                        "mnd 5",
-                        "mnd 6",
-                        "mnd 7",
-                        "mnd 8",
-                        "mnd 9",
-                        "mnd 10",
-                        "mnd 11",
-                        "mnd 12",
-                    }
-                    wide{
-                        "maand 1",
-                        "maand 2",
-                        "maand 3",
-                        "maand 4",
-                        "maand 5",
-                        "maand 6",
-                        "maand 7",
-                        "maand 8",
-                        "maand 9",
-                        "maand 10",
-                        "maand 11",
-                        "maand 12",
-                    }
-                }
-            }
-        }
-        coptic{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE d MMMM y G",
-                "d MMMM y G",
-                "d MMM y G",
-                "dd-MM-yy GGGGG",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            monthNames{
-                format{
-                    wide{
-                        "Tut",
-                        "Babah",
-                        "Hatur",
-                        "Kiyahk",
-                        "Tubah",
-                        "Amshir",
-                        "Baramhat",
-                        "Baramundah",
-                        "Bashans",
-                        "Ba’unah",
-                        "Abib",
-                        "Misra",
-                        "Nasi",
-                    }
-                }
-            }
-        }
-        dangi{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE d MMMM r (U)",
-                "d MMMM r (U)",
-                "d MMM r",
-                "dd-MM-r",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            DateTimePatterns%atTime{
-                "{1} 'om' {0}",
-                "{1} 'om' {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "rMMMMEEEEd",
-                "rMMMMd",
-                "rMMMd",
-                "rMMdd",
-            }
-            availableFormats{
-                Gy{"r (U)"}
-                GyMMM{"MMM r (U)"}
-                GyMMMEd{"E d MMM r (U)"}
-                GyMMMd{"d MMM r"}
-                UM{"MM U"}
-                UMMM{"MMM U"}
-                UMMMd{"d MMM U"}
-                UMd{"d-MM U"}
-                y{"r (U)"}
-                yMd{"d-M-r"}
-                yyyy{"r (U)"}
-                yyyyM{"M-r"}
-                yyyyMEd{"E d-M-r"}
-                yyyyMMM{"MMM r (U)"}
-                yyyyMMMEd{"E d MMM r (U)"}
-                yyyyMMMM{"MMMM r (U)"}
-                yyyyMMMd{"d MMM r"}
-                yyyyMd{"d-M-r"}
-                yyyyQQQ{"QQQ r (U)"}
-                yyyyQQQQ{"QQQQ r (U)"}
-            }
-        }
-        ethiopic{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE d MMMM y G",
-                "d MMMM y G",
-                "d MMM y G",
-                "dd-MM-yy GGGGG",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            monthNames{
-                format{
-                    wide{
-                        "Mäskäräm",
-                        "Teqemt",
-                        "Hedar",
-                        "Tahsas",
-                        "T’er",
-                        "Yäkatit",
-                        "Mägabit",
-                        "Miyazya",
-                        "Genbot",
-                        "Säne",
-                        "Hamle",
-                        "Nähase",
-                        "Pagumän",
-                    }
-                }
-            }
-        }
         generic{
             DateTimePatterns{
                 "HH:mm:ss zzzz",
@@ -762,16 +178,6 @@ nl{
                 "{1} 'om' {0}",
                 "{1}, {0}",
                 "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMMd",
-                "GGGGGyyMMdd",
             }
             availableFormats{
                 Ed{"E d"}
@@ -867,24 +273,6 @@ nl{
                     M{"dd-MM – dd-MM"}
                     d{"dd-MM – dd-MM"}
                 }
-                h{
-                    a{"h a – h a"}
-                    h{"h–h a"}
-                }
-                hm{
-                    a{"h:mm a – h:mm a"}
-                    h{"h:mm–h:mm a"}
-                    m{"h:mm–h:mm a"}
-                }
-                hmv{
-                    a{"h:mm a – h:mm a v"}
-                    h{"h:mm–h:mm a v"}
-                    m{"h:mm–h:mm a v"}
-                }
-                hv{
-                    a{"h a – h a v"}
-                    h{"h–h a v"}
-                }
                 y{
                     y{"y–y G"}
                 }
@@ -973,7 +361,6 @@ nl{
                 MMMEd{"E d MMM"}
                 MMMMEd{"E d MMMM"}
                 MMMMW{
-                    one{"'week' W 'van' MMMM"}
                     other{"'week' W 'van' MMMM"}
                 }
                 MMMMd{"d MMMM"}
@@ -991,7 +378,6 @@ nl{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    one{"'week' w 'in' Y"}
                     other{"'week' w 'in' Y"}
                 }
             }
@@ -1055,14 +441,6 @@ nl{
                 abbreviated%variant{
                     0{"v.g.j."}
                     1{"g.j."}
-                }
-                narrow{
-                    0{"v.C."}
-                    1{"n.C."}
-                }
-                narrow%variant{
-                    0{"vgj"}
-                    1{"gj"}
                 }
                 wide{
                     0{"voor Christus"}
@@ -1239,194 +617,6 @@ nl{
                 }
             }
         }
-        hebrew{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE d MMMM y G",
-                "d MMMM y G",
-                "d MMM y G",
-                "dd-MM-yy GGGGG",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            availableFormats{
-                MEd{"E d MMM"}
-                Md{"d MMM"}
-                y{"y"}
-            }
-            monthNames{
-                format{
-                    wide{
-                        "Tisjrie",
-                        "Chesjwan",
-                        "Kislev",
-                        "Tevet",
-                        "Sjevat",
-                        "Adar A",
-                        "Adar",
-                        "Nisan",
-                        "Ijar",
-                        "Sivan",
-                        "Tammoez",
-                        "Av",
-                        "Elloel",
-                        "Adar B",
-                    }
-                }
-            }
-        }
-        indian{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE d MMMM y G",
-                "d MMMM y G",
-                "d MMM y G",
-                "dd-MM-yy GGGGG",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            monthNames{
-                format{
-                    wide{
-                        "Chaitra",
-                        "Vaishakha",
-                        "Jyeshtha",
-                        "Aashaadha",
-                        "Shraavana",
-                        "Bhaadrapada",
-                        "Ashvina",
-                        "Kaartika",
-                        "Agrahayana",
-                        "Pausha",
-                        "Maagha",
-                        "Phaalguna",
-                    }
-                }
-            }
-        }
-        islamic{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE d MMMM y G",
-                "d MMMM y G",
-                "d MMM y G",
-                "dd-MM-yy GGGGG",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            eras{
-                wide{
-                    0{"Saʻna Hizjria"}
-                }
-            }
-            monthNames{
-                format{
-                    abbreviated{
-                        "Moeh.",
-                        "Saf.",
-                        "Rab. I",
-                        "Rab. II",
-                        "Joem. I",
-                        "Joem. II",
-                        "Raj.",
-                        "Sja.",
-                        "Ram.",
-                        "Sjaw.",
-                        "Doe al k.",
-                        "Doe al h.",
-                    }
-                    wide{
-                        "Moeharram",
-                        "Safar",
-                        "Rabiʻa al awal",
-                        "Rabiʻa al thani",
-                        "Joemadʻal awal",
-                        "Joemadʻal thani",
-                        "Rajab",
-                        "Sjaʻaban",
-                        "Ramadan",
-                        "Sjawal",
-                        "Doe al kaʻaba",
-                        "Doe al hizja",
-                    }
-                }
-            }
-        }
-        japanese{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE d MMMM y G",
-                "d MMMM y G",
-                "d MMM y G",
-                "dd-MM-yy GGGGG",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-        }
-        persian{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE d MMMM y G",
-                "d MMMM y G",
-                "d MMM y G",
-                "dd-MM-yy GGGGG",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-        }
-        roc{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE d MMMM y G",
-                "d MMMM y G",
-                "d MMM y G",
-                "dd-MM-yy GGGGG",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            eras{
-                abbreviated{
-                    0{"voor R.O.C."}
-                    1{"Minguo"}
-                }
-            }
-        }
     }
     characterLabel{
         activities{"activiteit"}
@@ -1508,32 +698,6 @@ nl{
         western_asian_scripts{"West-Aziatisch schrift"}
         whitespace{"witruimte"}
     }
-    contextTransforms{
-        day-format-except-narrow:intvector{
-            1,
-            1,
-        }
-        day-standalone-except-narrow:intvector{
-            1,
-            1,
-        }
-        month-format-except-narrow:intvector{
-            1,
-            1,
-        }
-        month-standalone-except-narrow:intvector{
-            1,
-            1,
-        }
-        relative:intvector{
-            1,
-            1,
-        }
-        typographicNames:intvector{
-            1,
-            1,
-        }
-    }
     delimiters{
         quotationEnd{"’"}
         quotationStart{"‘"}
@@ -1562,11 +726,9 @@ nl{
         day-short{
             relativeTime{
                 future{
-                    one{"over {0} dag"}
                     other{"over {0} dgn"}
                 }
                 past{
-                    one{"{0} dag geleden"}
                     other{"{0} dgn geleden"}
                 }
             }
@@ -1644,11 +806,9 @@ nl{
             }
             relativeTime{
                 future{
-                    one{"over {0} uur"}
                     other{"over {0} uur"}
                 }
                 past{
-                    one{"{0} uur geleden"}
                     other{"{0} uur geleden"}
                 }
             }
@@ -2154,11 +1314,9 @@ nl{
             }
             relativeTime{
                 future{
-                    one{"over {0} jaar"}
                     other{"over {0} jaar"}
                 }
                 past{
-                    one{"{0} jaar geleden"}
                     other{"{0} jaar geleden"}
                 }
             }

@@ -1287,9 +1287,6 @@ chr{
             ld{"ᎠᎳᏍᎦ ᎪᎯ ᎢᎦ ᎠᏟᎢᎵᏒ"}
             lg{"ᎠᎳᏍᎦ ᎠᏟᎢᎵᏒ"}
             ls{"ᎠᎳᏍᎦ ᎠᏟᎶᏍᏗ ᎠᏟᎢᎵᏒ"}
-            sd{"AKDT"}
-            sg{"AKT"}
-            ss{"AKST"}
         }
         "meta:Amazon"{
             ld{"ᎠᎺᏌᏂ ᎪᎩ ᎠᏟᎢᎵᏒ"}
@@ -1300,33 +1297,21 @@ chr{
             ld{"ᎠᏰᏟ ᎪᎯ ᎢᎦ ᎠᏟᎢᎵᏒ"}
             lg{"ᎠᏰᏟ ᎠᏟᎢᎵᏒ"}
             ls{"ᎠᏰᏟ ᎠᏟᎶᏍᏗ ᎠᏟᎢᎵᏒ"}
-            sd{"CDT"}
-            sg{"CT"}
-            ss{"CST"}
         }
         "meta:America_Eastern"{
             ld{"ᏗᎧᎸᎬ ᏗᏜ ᎪᎯ ᎢᎦ ᎠᏟᎢᎵᏒ"}
             lg{"ᏗᎧᎸᎬ ᏗᏜ ᎠᏟᎢᎵᏒ"}
             ls{"ᏗᎧᎸᎬ ᏗᏜ ᎠᏟᎶᏍᏗ ᎠᏟᎢᎵᏒ"}
-            sd{"EDT"}
-            sg{"ET"}
-            ss{"EST"}
         }
         "meta:America_Mountain"{
             ld{"ᎣᏓᎸ ᎪᎯ ᎢᎦ ᎠᏟᎢᎵᏒ"}
             lg{"ᎣᏓᎸ ᎠᏟᎢᎵᏒ"}
             ls{"ᎣᏓᎸ ᎠᏟᎶᏍᏗ ᎠᏟᎢᎵᏒ"}
-            sd{"MDT"}
-            sg{"MT"}
-            ss{"MST"}
         }
         "meta:America_Pacific"{
             ld{"ᏭᏕᎵᎬ ᎪᎯ ᎢᎦ ᎠᏟᎢᎵᏒ"}
             lg{"ᏭᏕᎵᎬ ᎠᏟᎢᎵᏒ"}
             ls{"ᏭᏕᎵᎬ ᎠᏟᎶᏍᏗ ᎠᏟᎢᎵᏒ"}
-            sd{"PDT"}
-            sg{"PT"}
-            ss{"PST"}
         }
         "meta:Apia"{
             ld{"ᎠᏈᎠ ᎪᎯ ᎢᎦ ᎠᏟᎢᎵᏒ"}
@@ -1357,9 +1342,6 @@ chr{
             ld{"ᏗᎧᎸᎬ ᎪᎯ ᎢᎦ ᎠᏟᎢᎵᏒ"}
             lg{"ᏗᎧᎸᎬ ᎠᏟᎢᎵᏒ"}
             ls{"ᏗᎧᎸᎬ ᎠᏟᎶᏍᏗ ᎠᏟᎢᎵᏒ"}
-            sd{"ADT"}
-            sg{"AT"}
-            ss{"AST"}
         }
         "meta:Australia_Central"{
             ld{"ᎠᏰᏟ ᎡᎳᏗᏜ ᎪᎯ ᎢᎦ ᎠᏟᎢᎵᏒ"}
@@ -1549,15 +1531,11 @@ chr{
         }
         "meta:Hawaii"{
             ls{"ᎭᏩᏱ ᎠᏟᎶᏍᏗ ᎠᏟᎢᎵᏒ"}
-            ss{"HAST"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"ᎭᏩᏱ-ᎠᎵᏳᏏᎠᏂ ᎪᎯ ᎢᎦ ᎠᏟᎢᎵᏒ"}
             lg{"ᎭᏩᏱ-ᎠᎵᏳᏏᎠᏂ ᎠᏟᎢᎵᏒ"}
             ls{"ᎭᏩᏱ-ᎠᎵᏳᏏᎠᏂ ᎠᏟᎶᏍᏗ ᎠᏟᎢᎵᏒ"}
-            sd{"HADT"}
-            sg{"HAT"}
-            ss{"HAST"}
         }
         "meta:Hong_Kong"{
             ld{"ᎰᏂᎩ ᎪᏂᎩ ᎪᎩ ᎠᏟᎢᎵᏒ"}

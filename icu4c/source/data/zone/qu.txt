@@ -180,9 +180,6 @@ qu{
         "Asia:Yerevan"{
             ec{"Ereván"}
         }
-        "Atlantic:Canary"{
-            ec{"Canarias"}
-        }
         "Atlantic:Cape_Verde"{
             ec{"Cabo Verde"}
         }
@@ -248,9 +245,6 @@ qu{
         }
         "Europe:Stockholm"{
             ec{"Estocolmo"}
-        }
-        "Europe:Tirane"{
-            ec{"Tirana"}
         }
         "Europe:Vatican"{
             ec{"El Vaticano"}
@@ -741,9 +735,6 @@ qu{
             ld{"Hora de Verano de Perú"}
             lg{"Hora de Perú"}
             ls{"Hora Estandar de Perú"}
-            sd{"PEST"}
-            sg{"PET"}
-            ss{"PET"}
         }
         "meta:Philippines"{
             ld{"Hora de Verano de Filipinas"}

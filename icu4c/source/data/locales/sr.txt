@@ -82,113 +82,77 @@ sr{
             patternsShort{
                 currencyFormat{
                     1000{
-                        few{"0 хиљ'.' ¤"}
-                        one{"0 хиљ'.' ¤"}
                         other{"0 хиљ'.' ¤"}
                     }
                     10000{
-                        few{"00 хиљ'.' ¤"}
-                        one{"00 хиљ'.' ¤"}
                         other{"00 хиљ'.' ¤"}
                     }
                     100000{
-                        few{"000 хиљ'.' ¤"}
-                        one{"000 хиљ'.' ¤"}
                         other{"000 хиљ'.' ¤"}
                     }
                     1000000{
-                        few{"0 мил'.' ¤"}
-                        one{"0 мил'.' ¤"}
                         other{"0 мил'.' ¤"}
                     }
                     10000000{
-                        few{"00 мил'.' ¤"}
-                        one{"00 мил'.' ¤"}
                         other{"00 мил'.' ¤"}
                     }
                     100000000{
-                        few{"000 мил'.' ¤"}
-                        one{"000 мил'.' ¤"}
                         other{"000 мил'.' ¤"}
                     }
                     1000000000{
-                        few{"0 млрд'.' ¤"}
-                        one{"0 млрд'.' ¤"}
                         other{"0 млрд'.' ¤"}
                     }
                     10000000000{
-                        few{"00 млрд'.' ¤"}
-                        one{"00 млрд'.' ¤"}
                         other{"00 млрд'.' ¤"}
                     }
                     100000000000{
-                        few{"000 млрд'.' ¤"}
-                        one{"000 млрд'.' ¤"}
                         other{"000 млрд'.' ¤"}
                     }
                     1000000000000{
-                        few{"0 бил'.' ¤"}
-                        one{"0 бил'.' ¤"}
                         other{"0 бил'.' ¤"}
                     }
                     10000000000000{
-                        few{"00 бил'.' ¤"}
-                        one{"00 бил'.' ¤"}
                         other{"00 бил'.' ¤"}
                     }
                     100000000000000{
-                        few{"000 бил'.' ¤"}
-                        one{"000 бил'.' ¤"}
                         other{"000 бил'.' ¤"}
                     }
                 }
                 decimalFormat{
                     1000{
-                        one{"0 хиљ'.'"}
                         other{"0 хиљ'.'"}
                     }
                     10000{
-                        one{"00 хиљ'.'"}
                         other{"00 хиљ'.'"}
                     }
                     100000{
-                        one{"000 хиљ'.'"}
                         other{"000 хиљ'.'"}
                     }
                     1000000{
-                        one{"0 мил'.'"}
                         other{"0 мил'.'"}
                     }
                     10000000{
-                        one{"00 мил'.'"}
                         other{"00 мил'.'"}
                     }
                     100000000{
-                        one{"000 мил'.'"}
                         other{"000 мил'.'"}
                     }
                     1000000000{
-                        one{"0 млрд'.'"}
                         other{"0 млрд'.'"}
                     }
                     10000000000{
-                        one{"00 млрд'.'"}
                         other{"00 млрд'.'"}
                     }
                     100000000000{
-                        one{"000 млрд'.'"}
                         other{"000 млрд'.'"}
                     }
                     1000000000000{
-                        one{"0 бил'.'"}
                         other{"0 бил'.'"}
                     }
                     10000000000000{
-                        one{"00 бил'.'"}
                         other{"00 бил'.'"}
                     }
                     100000000000000{
-                        one{"000 бил'.'"}
                         other{"000 бил'.'"}
                     }
                 }
@@ -221,55 +185,6 @@ sr{
         }
     }
     calendar{
-        buddhist{
-            eras{
-                abbreviated{
-                    0{"БЕ"}
-                }
-            }
-        }
-        coptic{
-            monthNames{
-                format{
-                    wide{
-                        "Таут",
-                        "Баба",
-                        "Хатор",
-                        "Киахк",
-                        "Тоба",
-                        "Амшир",
-                        "Барамхат",
-                        "Барамуда",
-                        "Башанс",
-                        "Паона",
-                        "Епеп",
-                        "Месра",
-                        "Наси",
-                    }
-                }
-            }
-        }
-        ethiopic{
-            monthNames{
-                format{
-                    wide{
-                        "Мескерем",
-                        "Текемт",
-                        "Хедар",
-                        "Тахсас",
-                        "Тер",
-                        "Јекатит",
-                        "Мегабит",
-                        "Миазиа",
-                        "Генбот",
-                        "Сене",
-                        "Хамле",
-                        "Нехасе",
-                        "Пагумен",
-                    }
-                }
-            }
-        }
         generic{
             DateTimePatterns{
                 "HH:mm:ss zzzz",
@@ -285,16 +200,6 @@ sr{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMd",
-                "GGGGGyMd",
             }
             availableFormats{
                 Bhm{"hh:mm B"}
@@ -317,7 +222,6 @@ sr{
                 MMMMd{"d. MMMM"}
                 MMMd{"d. MMM"}
                 MMMdd{"d.MMM"}
-                MMdd{"MM-dd"}
                 Md{"d.M."}
                 hm{"hh:mm a"}
                 hms{"hh:mm:ss a"}
@@ -325,12 +229,10 @@ sr{
                 yyyy{"y. G"}
                 yyyyM{"M.y. GGGGG"}
                 yyyyMEd{"E, d.M.y. GGGGG"}
-                yyyyMM{"MM.y. G"}
                 yyyyMMM{"MMM y. G"}
                 yyyyMMMEd{"E, d. MMM y. G"}
                 yyyyMMMM{"MMMM y. G"}
                 yyyyMMMd{"d. MMM y. G"}
-                yyyyMMdd{"dd.MM.y. G"}
                 yyyyMd{"d.M.y. GGGGG"}
                 yyyyQQQ{"QQQ, y. G"}
                 yyyyQQQQ{"QQQQ y. G"}
@@ -363,23 +265,6 @@ sr{
                     d{"d.M – d.M"}
                 }
                 fallback{"{0} – {1}"}
-                h{
-                    a{"h a – h a"}
-                }
-                hm{
-                    a{"h:mm a – h:mm a"}
-                    h{"h:mm–h:mm a"}
-                    m{"h:mm–h:mm a"}
-                }
-                hmv{
-                    a{"h:mm a – h:mm a v"}
-                    h{"h:mm–h:mm a v"}
-                    m{"h:mm–h:mm a v"}
-                }
-                hv{
-                    a{"h a – h a v"}
-                    h{"h–h a v"}
-                }
                 y{
                     y{"y – y. G"}
                 }
@@ -433,16 +318,6 @@ sr{
                 "{1} {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "yMMMMEEEEdd",
-                "yMMMMdd",
-                "yMMdd",
-                "yyMd",
-            }
             availableFormats{
                 Bhm{"hh:mm B"}
                 Bhms{"hh:mm:ss B"}
@@ -466,8 +341,6 @@ sr{
                 MMMEd{"E d. MMM"}
                 MMMMEd{"E d. MMMM"}
                 MMMMW{
-                    few{"MMMM: W. 'недеља'"}
-                    one{"MMMM: W. 'недеља'"}
                     other{"MMMM: W. 'недеља'"}
                 }
                 MMMMd{"d. MMMM"}
@@ -494,8 +367,6 @@ sr{
                 yQQQ{"QQQ y."}
                 yQQQQ{"QQQQ y."}
                 yw{
-                    few{"w. 'недеља' 'у' Y."}
-                    one{"w. 'недеља' 'у' Y."}
                     other{"w. 'недеља' 'у' Y."}
                 }
             }
@@ -565,10 +436,6 @@ sr{
                 abbreviated{
                     0{"п. н. е."}
                     1{"н. е."}
-                }
-                narrow{
-                    0{"п.н.е."}
-                    1{"н.е."}
                 }
                 wide{
                     0{"пре нове ере"}
@@ -732,56 +599,8 @@ sr{
                 }
             }
         }
-        hebrew{
-            monthNames{
-                format{
-                    wide{
-                        "Тишри",
-                        "Хешван",
-                        "Кислев",
-                        "Тевет",
-                        "Шеват",
-                        "Адар I",
-                        "Адар",
-                        "Нисан",
-                        "Ијар",
-                        "Сиван",
-                        "Тамуз",
-                        "Ав",
-                        "Елул",
-                        "Адар II",
-                    }
-                }
-            }
-        }
-        indian{
-            eras{
-                abbreviated{
-                    0{"САКА"}
-                }
-            }
-            monthNames{
-                format{
-                    wide{
-                        "Чаитра",
-                        "Ваисака",
-                        "Јиаиста",
-                        "Асада",
-                        "Сравана",
-                        "Бадра",
-                        "Асвина",
-                        "Картика",
-                        "Аргајана",
-                        "Пауза",
-                        "Мага",
-                        "Фалгуна",
-                    }
-                }
-            }
-        }
         islamic{
             availableFormats{
-                MMMEd{"E d. MMM"}
                 MMMdd{"d. MMM"}
             }
             eras{
@@ -835,70 +654,6 @@ sr{
                         "Зул-каде",
                         "Зул-хиџе",
                     }
-                }
-            }
-        }
-        japanese{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE, MMMM d, y G",
-                "MMMM d, y G",
-                "MMM d, y G",
-                "M/d/yy G",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMMd",
-                "GyyMd",
-            }
-            eras{
-                abbreviated{
-                    232{"Меиђи"}
-                    233{"Таишо"}
-                    234{"Шова"}
-                    235{"Хаисеи"}
-                    236{"Реива"}
-                }
-            }
-        }
-        persian{
-            monthNames{
-                format{
-                    wide{
-                        "Фаравадин",
-                        "Ордибехешт",
-                        "Кордад",
-                        "Тир",
-                        "Мордад",
-                        "Шахривар",
-                        "Мехр",
-                        "Абан",
-                        "Азар",
-                        "Деј",
-                        "Бахман",
-                        "Есфанд",
-                    }
-                }
-            }
-        }
-        roc{
-            eras{
-                abbreviated{
-                    0{"Пре РК"}
-                    1{"РК"}
                 }
             }
         }
@@ -1007,13 +762,10 @@ sr{
             }
             relativeTime{
                 future{
-                    few{"за {0} дана"}
                     one{"за {0} дан"}
                     other{"за {0} дана"}
                 }
                 past{
-                    few{"пре {0} дана"}
-                    one{"пре {0} дана"}
                     other{"пре {0} дана"}
                 }
             }
@@ -1114,13 +866,10 @@ sr{
             }
             relativeTime{
                 future{
-                    few{"за {0} минута"}
                     one{"за {0} минут"}
                     other{"за {0} минута"}
                 }
                 past{
-                    few{"пре {0} минута"}
-                    one{"пре {0} минута"}
                     other{"пре {0} минута"}
                 }
             }
@@ -1163,8 +912,6 @@ sr{
             relativeTime{
                 future{
                     few{"за {0} понедељкa"}
-                    one{"за {0} понедељак"}
-                    other{"за {0} понедељака"}
                 }
             }
         }
@@ -1238,13 +985,10 @@ sr{
             }
             relativeTime{
                 future{
-                    few{"за {0} квартала"}
                     one{"за {0} квартал"}
                     other{"за {0} квартала"}
                 }
                 past{
-                    few{"пре {0} квартала"}
-                    one{"пре {0} квартала"}
                     other{"пре {0} квартала"}
                 }
             }

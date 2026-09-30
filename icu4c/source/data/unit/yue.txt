@@ -659,10 +659,6 @@ yue{
                 dnam{"貝克"}
                 other{"{0} 貝克"}
             }
-            british-thermal-unit{
-                dnam{"英制熱量單位"}
-                other{"{0} 英制熱量單位"}
-            }
             calorie{
                 dnam{"卡路里"}
                 other{"{0} 卡路里"}
@@ -788,18 +784,10 @@ yue{
                 dnam{"地球半徑"}
                 other{"{0} 地球半徑"}
             }
-            fathom{
-                dnam{"英尋"}
-                other{"{0} 英尋"}
-            }
             foot{
                 dnam{"英呎"}
                 other{"{0} 英呎"}
                 per{"每英呎{0}"}
-            }
-            furlong{
-                dnam{"化朗"}
-                other{"{0} 化朗"}
             }
             inch{
                 dnam{"英吋"}
@@ -946,10 +934,6 @@ yue{
                 dnam{"太陽質量"}
                 other{"{0} 太陽質量"}
             }
-            stone{
-                dnam{"英石"}
-                other{"{0} 英石"}
-            }
             ton{
                 dnam{"英噸"}
                 other{"{0} 英噸"}
@@ -1082,10 +1066,6 @@ yue{
             barrel{
                 dnam{"桶"}
                 other{"{0} 桶"}
-            }
-            bushel{
-                dnam{"蒲式耳"}
-                other{"{0} 蒲式耳"}
             }
             centiliter{
                 dnam{"釐升"}

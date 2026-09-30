@@ -75,17 +75,9 @@ nmg{
             "£",
             "Mɔn Ngɛ̄lɛ̄n",
         }
-        GHC{
-            "GHC",
-            "Mɔn Gana",
-        }
         GMD{
             "GMD",
             "Mɔn Gambia",
-        }
-        GNS{
-            "GNS",
-            "Fraŋ Guiné",
         }
         INR{
             "₹",
@@ -123,10 +115,6 @@ nmg{
             "MGA",
             "Mɔn Madagaskar",
         }
-        MRO{
-            "MRO",
-            "Mɔn Moritania (1973–2017)",
-        }
         MRU{
             "MRU",
             "Mɔn Moritania",
@@ -138,10 +126,6 @@ nmg{
         MWK{
             "MWK",
             "Mɔn Malawi",
-        }
-        MZM{
-            "MZM",
-            "Mɔn Mozambik",
         }
         NAD{
             "NAD",
@@ -167,10 +151,6 @@ nmg{
             "SDG",
             "Mɔn Sudan",
         }
-        SDP{
-            "SDP",
-            "Mɔn Sudan (1957–1998)",
-        }
         SHP{
             "SHP",
             "Mɔn má Saint Lina",
@@ -186,10 +166,6 @@ nmg{
         SOS{
             "SOS",
             "Mɔn Somalía",
-        }
-        STD{
-            "STD",
-            "Mɔn Sao tomé na prinship (1977–2017)",
         }
         STN{
             "STN",
@@ -227,17 +203,9 @@ nmg{
             "ZAR",
             "Mɔn Afrik yí sí",
         }
-        ZMK{
-            "ZMK",
-            "Mɔn Zambia (1968–2012)",
-        }
         ZMW{
             "ZMW",
             "Mɔn Zambia",
-        }
-        ZWD{
-            "ZWD",
-            "Dɔ́llɔ Zimbabwǝ (1980–2008)",
         }
     }
 }

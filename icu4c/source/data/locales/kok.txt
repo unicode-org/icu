@@ -15,313 +15,9 @@ kok{
     ExemplarCharactersNumbers{"[\\- ‑ , . % ‰ + 0० 1१ 2२ 3३ 4४ 5५ 6६ 7७ 8८ 9९]"}
     ExemplarCharactersPunctuation{"[\\- ‐‑ – — , ; \\: ! ? . … '‘’ \u0022“” ( ) \\[ \\] § @ * / \\& # † ‡ ′ ″]"}
     NumberElements{
-        adlm{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        ahom{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        arabext{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        bali{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        beng{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        bhks{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        brah{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        cakm{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        cham{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
         deva{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##,##0.00"}
-                accountingFormat%noCurrency{"#,##,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##,##0.00"}
-                currencyFormat%noCurrency{"#,##,##0.00"}
-            }
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
             symbols{
                 nan{"0/0"}
-            }
-        }
-        diak{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        fullwide{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        gara{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        gong{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        gonm{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        gujr{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        gukh{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        guru{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        hanidec{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        hmng{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        hmnp{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        java{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        kali{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        kawi{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        khmr{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        knda{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        krai{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        lana{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        lanatham{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        laoo{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
             }
         }
         latn{
@@ -329,9 +25,6 @@ kok{
                 atLeast{"{0}+"}
             }
             patterns{
-                accountingFormat{"¤#,##,##0.00"}
-                accountingFormat%alphaNextToNumber{"¤ #,##,##0.00"}
-                accountingFormat%noCurrency{"#,##,##0.00"}
                 currencyFormat{"¤#,##,##0.00"}
                 currencyFormat%alphaNextToNumber{"¤ #,##,##0.00"}
                 currencyFormat%noCurrency{"#,##,##0.00"}
@@ -340,51 +33,39 @@ kok{
             patternsLong{
                 decimalFormat{
                     1000{
-                        one{"0हज"}
                         other{"0 हजार"}
                     }
                     10000{
-                        one{"00हज"}
                         other{"00 हजार"}
                     }
                     100000{
-                        one{"0लाख"}
                         other{"0 लाख"}
                     }
                     1000000{
-                        one{"00लाख"}
                         other{"00 लाख"}
                     }
                     10000000{
-                        one{"0कोटी"}
                         other{"0 कोटी"}
                     }
                     100000000{
-                        one{"00कोटी"}
                         other{"00 कोटी"}
                     }
                     1000000000{
-                        one{"0अब्ज"}
                         other{"0 अब्ज"}
                     }
                     10000000000{
-                        one{"00अब्ज"}
                         other{"00 अब्ज"}
                     }
                     100000000000{
-                        one{"0निख"}
                         other{"0 निखर्व"}
                     }
                     1000000000000{
-                        one{"00निख"}
                         other{"00 निखर्व"}
                     }
                     10000000000000{
-                        one{"000निख"}
                         other{"000 निखर्व"}
                     }
                     100000000000000{
-                        one{"0हज'.'निख'.'"}
                         other{"0 हजार निखर्व"}
                     }
                 }
@@ -392,51 +73,39 @@ kok{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"¤0हज"}
                         other{"¤0हज"}
                     }
                     10000{
-                        one{"¤00हज"}
                         other{"¤00हज"}
                     }
                     100000{
-                        one{"¤0लाख"}
                         other{"¤0लाख"}
                     }
                     1000000{
-                        one{"¤00लाख"}
                         other{"¤00लाख"}
                     }
                     10000000{
-                        one{"¤0कोटी"}
                         other{"¤0कोटी"}
                     }
                     100000000{
-                        one{"¤00कोटी"}
                         other{"¤00कोटी"}
                     }
                     1000000000{
-                        one{"¤0अब्ज"}
                         other{"¤0अब्ज"}
                     }
                     10000000000{
-                        one{"¤00अब्ज"}
                         other{"¤00अब्ज"}
                     }
                     100000000000{
-                        one{"¤0निख"}
                         other{"¤0निख"}
                     }
                     1000000000000{
-                        one{"¤00निख"}
                         other{"¤00निख"}
                     }
                     10000000000000{
-                        one{"¤000निख"}
                         other{"¤000निख"}
                     }
                     100000000000000{
-                        one{"¤0हज'.'निख'.'"}
                         other{"¤0हज'.'निख'.'"}
                     }
                 }
@@ -492,122 +161,40 @@ kok{
                 }
                 decimalFormat{
                     1000{
-                        one{"0हज"}
                         other{"0हज"}
                     }
                     10000{
-                        one{"00हज"}
                         other{"00हज"}
                     }
                     100000{
-                        one{"0लाख"}
                         other{"0लाख"}
                     }
                     1000000{
-                        one{"00लाख"}
                         other{"00लाख"}
                     }
                     10000000{
-                        one{"0कोटी"}
                         other{"0कोटी"}
                     }
                     100000000{
-                        one{"00कोटी"}
                         other{"00कोटी"}
                     }
                     1000000000{
-                        one{"0अब्ज"}
                         other{"0अब्ज"}
                     }
                     10000000000{
-                        one{"00अब्ज"}
                         other{"00अब्ज"}
                     }
                     100000000000{
-                        one{"0निख"}
                         other{"0निख"}
                     }
                     1000000000000{
-                        one{"00निख"}
                         other{"00निख"}
                     }
                     10000000000000{
-                        one{"000निख"}
                         other{"000निख"}
                     }
                     100000000000000{
-                        one{"0हज'.'निख'.'"}
                         other{"0हज'.'निख'.'"}
-                    }
-                }
-            }
-        }
-        lepc{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        limb{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        mathbold{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        mathdbl{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        mathmono{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        mathsanb{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        mathsans{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
                     }
                 }
             }
@@ -624,397 +211,7 @@ kok{
                 other{"{0} वांटे"}
             }
         }
-        mlym{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        modi{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        mong{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        mroo{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        mtei{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        mymr{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        mymrepka{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        mymrpao{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        mymrshan{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        mymrtlng{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        nagm{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
         native{"deva"}
-        newa{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        nkoo{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        olck{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        onao{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        orya{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        osma{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        outlined{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        rohg{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        saur{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        segment{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        shrd{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        sind{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        sinh{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        sora{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        sund{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        sunu{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        takr{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        talu{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        tamldec{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        telu{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        thai{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        tibt{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        tirh{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        tnsa{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        tols{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        vaii{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        wara{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
-        wcho{
-            patternsShort{
-                currencyFormat%alphaNextToNumber{
-                    100000000000000{
-                        one{"¤000LCr"}
-                        other{"¤000LCr"}
-                    }
-                }
-            }
-        }
     }
     calendar{
         generic{
@@ -1038,16 +235,6 @@ kok{
                 "{1} {0} वरांचेर",
                 "{1}, {0}",
                 "{1}, {0}",
-            }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMd",
-                "GGGGGyMd",
             }
             availableFormats{
                 Ed{"E, d"}
@@ -1120,20 +307,6 @@ kok{
                     d{"d-M-y GGGGG – d-M-y"}
                     y{"d-M-y – d-M-y GGGGG"}
                 }
-                H{
-                    H{"HH – HH"}
-                }
-                Hm{
-                    H{"HH:mm – HH:mm"}
-                    m{"HH:mm – HH:mm"}
-                }
-                Hmv{
-                    H{"HH:mm – HH:mm v"}
-                    m{"HH:mm – HH:mm v"}
-                }
-                Hv{
-                    H{"HH – HH v"}
-                }
                 MEd{
                     M{"E, d-M, E d-M"}
                     d{"E, d-M – E, d-M"}
@@ -1154,24 +327,6 @@ kok{
                     d{"d/M – d/M"}
                 }
                 fallback{"{0} – {1}"}
-                h{
-                    a{"a h – a h"}
-                    h{"a h – h"}
-                }
-                hm{
-                    a{"a h:mm – a h:mm"}
-                    h{"a h:mm – h:mm"}
-                    m{"a h:mm – h:mm"}
-                }
-                hmv{
-                    a{"a h:mm – a h:mm v"}
-                    h{"a h:mm – h:mm v"}
-                    m{"a h:mm – h:mm v"}
-                }
-                hv{
-                    a{"a h – a h v"}
-                    h{"a h – h v"}
-                }
                 y{
                     y{"y – y G"}
                 }
@@ -1240,16 +395,6 @@ kok{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yyMd",
-            }
             availableFormats{
                 Bhm{"B h:mm"}
                 Bhms{"B h:mm:ss"}
@@ -1263,7 +408,6 @@ kok{
                 MEd{"d-M, E"}
                 MMMEd{"E, d MMM"}
                 MMMMW{
-                    one{"MMMM हाचो सप्तक W"}
                     other{"MMMM हाचो सप्तक W"}
                 }
                 MMMMd{"d MMMM"}
@@ -1283,7 +427,6 @@ kok{
                 yMMMd{"d MMM, y"}
                 yMd{"d-M-y"}
                 yw{
-                    one{"Y हाचो सप्तक w"}
                     other{"Y हाचो सप्तक w"}
                 }
             }
@@ -1374,13 +517,6 @@ kok{
                 }
                 abbreviated%variant{
                     0{"BCE"}
-                }
-                narrow{
-                    0{"क्रि.आ."}
-                }
-                narrow%variant{
-                    0{"BC"}
-                    1{"AD"}
                 }
                 wide{
                     0{"क्रिस्ता आदीं"}
@@ -1603,20 +739,6 @@ kok{
             }
             monthNames{
                 format{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                    }
                     wide{
                         "चैत्र",
                         "वैशाख",
@@ -1632,11 +754,6 @@ kok{
                         "फाल्गुन",
                     }
                 }
-            }
-        }
-        iso8601{
-            availableFormats{
-                Bh{"h वाजतां B"}
             }
         }
     }
@@ -1742,7 +859,6 @@ kok{
                     other{"{0} दिसानीं"}
                 }
                 past{
-                    one{"{0} दीस आदीं"}
                     other{"{0} दीस आदीं"}
                 }
             }
@@ -1856,9 +972,6 @@ kok{
             }
         }
         minute-narrow{
-            relative{
-                "0"{"हो मिन"}
-            }
             relativeTime{
                 future{
                     one{"{0}मिणटान"}
@@ -1871,12 +984,8 @@ kok{
             }
         }
         minute-short{
-            relative{
-                "0"{"हो मिन."}
-            }
             relativeTime{
                 future{
-                    one{"{0} मिणटान"}
                     other{"{0} मिण."}
                 }
                 past{
@@ -1995,11 +1104,6 @@ kok{
             }
         }
         quarter-narrow{
-            relative{
-                "-1"{"फाटलें तिम्ह"}
-                "0"{"हें तिम्ह"}
-                "1"{"फुडलें तिम्ह"}
-            }
             relativeTime{
                 future{
                     one{"{0}तिम्हयनाळ्यान"}
@@ -2012,11 +1116,6 @@ kok{
             }
         }
         quarter-short{
-            relative{
-                "-1"{"फाटलें तिम्ह."}
-                "0"{"हें तिम्ह."}
-                "1"{"फुडलें तिम्ह."}
-            }
             relativeTime{
                 past{
                     one{"{0} तिम्ह. आदीं"}
@@ -2078,7 +1177,6 @@ kok{
                     other{"{0} सॅकंडानीं"}
                 }
                 past{
-                    one{"{0} सॅकंड आदीं"}
                     other{"{0} सॅकंड आदीं"}
                 }
             }
@@ -2340,11 +1438,6 @@ kok{
             }
         }
         year-narrow{
-            relative{
-                "-1"{"पोरूं"}
-                "0"{"औंदू"}
-                "1"{"फुडलें वर्स"}
-            }
             relativeTime{
                 future{
                     one{"{0}वर्सान"}
@@ -2354,13 +1447,6 @@ kok{
                     one{"{0}वर्स आदीं"}
                     other{"{0}वर्सां आदीं"}
                 }
-            }
-        }
-        year-short{
-            relative{
-                "-1"{"पोरूं"}
-                "0"{"औंदू"}
-                "1"{"फुडलें वर्स"}
             }
         }
         zone{
@@ -2374,9 +1460,6 @@ kok{
         or{
             2{"{0} वा {1}"}
             end{"{0}, वा {1}"}
-        }
-        or-narrow{
-            2{"{0} वा {1}"}
         }
         standard-narrow{
             2{"{0}, {1}"}

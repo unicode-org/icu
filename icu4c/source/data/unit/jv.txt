@@ -280,10 +280,6 @@ jv{
             }
         }
         energy{
-            british-thermal-unit{
-                dnam{"takeran panas Britania"}
-                other{"{0} takeran panas Britania"}
-            }
             calorie{
                 dnam{"kalori"}
                 other{"{0} kalori"}
@@ -386,14 +382,8 @@ jv{
                 dnam{"radius donya"}
                 other{"{0} radius donya"}
             }
-            fathom{
-                other{"{0} fathoms"}
-            }
             foot{
                 per{"{0} saben kaki"}
-            }
-            furlong{
-                other{"{0} furlongs"}
             }
             inch{
                 other{"{0} inci"}
@@ -998,9 +988,6 @@ jv{
             }
         }
         energy{
-            british-thermal-unit{
-                dnam{"BTU"}
-            }
             calorie{
                 dnam{"kal"}
                 other{"{0} kal"}
@@ -1061,16 +1048,10 @@ jv{
                 dnam{"ua"}
                 other{"{0} ua"}
             }
-            fathom{
-                dnam{"fathoms"}
-            }
             foot{
                 dnam{"kaki"}
                 other{"{0} kaki"}
                 per{"{0}/kaki"}
-            }
-            furlong{
-                dnam{"furlongs"}
             }
             inch{
                 dnam{"inci"}
@@ -1152,10 +1133,6 @@ jv{
             solar-mass{
                 dnam{"massa srengenge"}
             }
-            stone{
-                dnam{"watu"}
-                other{"{0} watu"}
-            }
             ton{
                 dnam{"ton"}
                 other{"{0} ton"}
@@ -1205,10 +1182,6 @@ jv{
             }
             barrel{
                 dnam{"barel"}
-            }
-            bushel{
-                dnam{"gantang"}
-                other{"{0} gantang"}
             }
             centiliter{
                 dnam{"sentiliter"}

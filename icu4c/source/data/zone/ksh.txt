@@ -297,25 +297,16 @@ ksh{
             ld{"Meddel-Europpa sing Summerzick"}
             lg{"Meddel-Europpa sing Zick"}
             ls{"Meddel-Europpa sing jewöhnlijje Zick"}
-            sd{"MESZ"}
-            sg{"MEZ"}
-            ss{"MEZ"}
         }
         "meta:Europe_Eastern"{
             ld{"Oß-Europpa sing Summerzick"}
             lg{"Oß-Europpa sing Zick"}
             ls{"Oß-Europpa sing jewöhnlijje Zick"}
-            sd{"OESZ"}
-            sg{"OEZ"}
-            ss{"OEZ"}
         }
         "meta:Europe_Western"{
             ld{"Weß-Europpa sing Summerzick"}
             lg{"Weß-Europpa sing Zick"}
             ls{"Weß-Europpa sing jewöhnlijje Zick"}
-            sd{"WESZ"}
-            sg{"WEZ"}
-            ss{"WEZ"}
         }
         "meta:GMT"{
             ls{"Greenwich sing Standat-Zick"}

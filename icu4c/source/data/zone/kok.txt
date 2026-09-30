@@ -1547,7 +1547,6 @@ kok{
         }
         "meta:India"{
             ls{"भारतीय प्रमाणित वेळ"}
-            ss{"IST"}
         }
         "meta:Indian_Ocean"{
             ls{"हिंद म्हासागर वेळ"}

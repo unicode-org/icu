@@ -3,10 +3,4 @@
 // Generated using tools/cldr/cldr-to-icu/
 pt_LU{
     %%Parent{"pt_PT"}
-    Currencies{
-        LUF{
-            "F",
-            "Franco luxemburguês",
-        }
-    }
 }

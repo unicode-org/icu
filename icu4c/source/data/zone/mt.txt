@@ -81,9 +81,6 @@ mt{
         "Europe:Stockholm"{
             ec{"Stokkolma"}
         }
-        "Europe:Tirane"{
-            ec{"Tirana"}
-        }
         "Europe:Vatican"{
             ec{"il-Belt tal-Vatikan"}
         }
@@ -103,23 +100,9 @@ mt{
             ld{"Ħin Ċentrali Ewropew tas-Sajf"}
             lg{"Ħin Ċentrali Ewropew"}
             ls{"Ħin Ċentrali Ewropew Standard"}
-            sd{"CEST"}
-            sg{"CET"}
-            ss{"CET"}
-        }
-        "meta:Europe_Eastern"{
-            sd{"EEST"}
-            sg{"EET"}
-            ss{"EET"}
-        }
-        "meta:Europe_Western"{
-            sd{"WEST"}
-            sg{"WET"}
-            ss{"WET"}
         }
         "meta:GMT"{
             ls{"Greenwich Mean Time"}
-            ss{"GMT"}
         }
         regionFormat{"Ħin ta’ {0}"}
         regionFormatStandard{"{0} Ħin Standard"}

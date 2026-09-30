@@ -30,9 +30,6 @@ br{
         "Africa:Tunis"{
             ec{"Tuniz"}
         }
-        "America:Asuncion"{
-            ec{"Asunción"}
-        }
         "America:El_Salvador"{
             ec{"Salvador"}
         }
@@ -261,9 +258,6 @@ br{
         "Pacific:Fiji"{
             ec{"Fidji"}
         }
-        "Pacific:Galapagos"{
-            ec{"Galápagos"}
-        }
         "Pacific:Honolulu"{
             ec{"Honolulu"}
         }
@@ -334,11 +328,6 @@ br{
             ld{"eur hañv an Habask"}
             lg{"eur an Habask"}
             ls{"eur cʼhoañv an Habask"}
-        }
-        "meta:Anadyr"{
-            ld{"eur hañv Anadyrʼ"}
-            lg{"eur Anadyrʼ"}
-            ls{"eur cʼhoañv Anadyrʼ"}
         }
         "meta:Apia"{
             ld{"eur hañv Samoa"}

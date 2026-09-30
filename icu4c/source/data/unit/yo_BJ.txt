@@ -107,14 +107,6 @@ yo_BJ{
                 dnam{"ìdinwɔ̀n ayé"}
                 other{"{0} ìdinwɔ̀n ayé"}
             }
-            fathom{
-                dnam{"fátɔ́ɔ̀mu"}
-                other{"{0} fátɔ́ɔ̀mù"}
-            }
-            furlong{
-                dnam{"àwɔn fɔ́lɔ́ɔ̀ngì"}
-                other{"{0} àwɔn fɔ́lɔ́ɔ̀ngì"}
-            }
         }
         light{
             candela{
@@ -131,10 +123,6 @@ yo_BJ{
             }
         }
         volume{
-            bushel{
-                dnam{"búsɛ́ɛ̀li"}
-                other{"{0} búsɛ́ɛ̀li"}
-            }
             cup{
                 dnam{"àwɔn ife"}
             }
@@ -163,11 +151,6 @@ yo_BJ{
                 per{"{0}/ɔ̀shɛ̀"}
             }
         }
-        length{
-            fathom{
-                dnam{"fatɔ́"}
-            }
-        }
         light{
             lux{
                 dnam{"lɔ́s"}
@@ -176,12 +159,6 @@ yo_BJ{
         speed{
             light-speed{
                 other{"{0}ìmɔ́lɛ̀"}
-            }
-        }
-        volume{
-            bushel{
-                dnam{"búsɛ́li"}
-                other{"{0}búsɛ́ɛ̀li"}
             }
         }
     }
@@ -260,13 +237,6 @@ yo_BJ{
                 dnam{"àmì ìdínwɔ̀n ayé"}
                 other{"{0} àmì ìdínwɔ̀n ayé"}
             }
-            fathom{
-                dnam{"fátɔ́mù"}
-            }
-            furlong{
-                dnam{"fɔ́lɔ́ɔ̀ngì"}
-                other{"{0} fɔ́"}
-            }
         }
         light{
             candela{
@@ -284,9 +254,6 @@ yo_BJ{
             }
         }
         volume{
-            bushel{
-                dnam{"Búsɛ́ɛ̀li"}
-            }
             dessert-spoon{
                 dnam{"shíbí oúnjɛ́ kékeré"}
                 other{"{0} shíbí oúnjɛ́ kékeré"}

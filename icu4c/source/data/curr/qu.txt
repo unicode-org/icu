@@ -966,9 +966,6 @@ qu{
         SHP{
             other{"Libra de santa helena"}
         }
-        SLE{
-            other{"Leone qullqi de Sierra Leona"}
-        }
         SLL{
             other{"Leones qullqi de Sierra Leona (1964–2022)"}
         }

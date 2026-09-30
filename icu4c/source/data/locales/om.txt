@@ -65,51 +65,39 @@ om{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"¤0K"}
                         other{"¤0K"}
                     }
                     10000{
-                        one{"¤00K"}
                         other{"¤00K"}
                     }
                     100000{
-                        one{"¤000K"}
                         other{"¤000K"}
                     }
                     1000000{
-                        one{"¤0M"}
                         other{"¤0M"}
                     }
                     10000000{
-                        one{"¤00M"}
                         other{"¤00M"}
                     }
                     100000000{
-                        one{"¤000M"}
                         other{"¤000M"}
                     }
                     1000000000{
-                        one{"¤0G"}
                         other{"¤0G"}
                     }
                     10000000000{
-                        one{"¤00G"}
                         other{"¤00G"}
                     }
                     100000000000{
-                        one{"¤000G"}
                         other{"¤000G"}
                     }
                     1000000000000{
-                        one{"¤0T"}
                         other{"¤0T"}
                     }
                     10000000000000{
-                        one{"¤00T"}
                         other{"¤00T"}
                     }
                     100000000000000{
-                        one{"¤000T"}
                         other{"¤000T"}
                     }
                 }
@@ -193,16 +181,6 @@ om{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "GyMMMMEEEEd",
-                "GyMMMMdd",
-                "GyMMMdd",
-                "GGGGGyyMMdd",
-            }
             availableFormats{
                 Gy{"y G"}
                 GyMMM{"MMM y G"}
@@ -212,10 +190,8 @@ om{
                 MEd{"E, M/d"}
                 MMMEd{"E, MMM d"}
                 MMMMdd{"dd MMMM"}
-                MMdd{"dd/MM"}
                 Md{"M/d"}
                 y{"y G"}
-                yMM{"MM/y"}
                 yMMMM{"MMMM y"}
                 yQQQ{"QQQ y"}
                 yyyy{"y G"}
@@ -349,16 +325,6 @@ om{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "yMMMMEEEEd",
-                "yMMMMdd",
-                "yMMMdd",
-                "yyMMdd",
-            }
             availableFormats{
                 Ehm{"E h:mm a"}
                 Ehms{"E h:mm:ss a"}
@@ -369,7 +335,6 @@ om{
                 MEd{"E, M/d"}
                 MMMEd{"E, MMM d"}
                 MMMMW{
-                    one{"'torbee' W 'kan' MMMM"}
                     other{"'torbee' W 'kan' MMMM"}
                 }
                 MMMMdd{"MMMM dd"}
@@ -390,7 +355,6 @@ om{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    one{"'torbee' w 'kan' Y"}
                     other{"'torbee' w 'kan' Y"}
                 }
             }
@@ -435,10 +399,6 @@ om{
                 abbreviated%variant{
                     0{"BWD"}
                     1{"BW"}
-                }
-                narrow{
-                    0{"Dh"}
-                    1{"B"}
                 }
                 wide{
                     0{"Dhaloota Kiristoos Dura"}
@@ -778,9 +738,6 @@ om{
         }
         minute-short{
             dn{"dq."}
-            relative{
-                "0"{"daqiiqaa kana"}
-            }
             relativeTime{
                 future{
                     one{"daq. {0} keessatti"}
@@ -912,11 +869,6 @@ om{
         }
         quarter-narrow{
             dn{"kr"}
-            relative{
-                "-1"{"q darbe"}
-                "0"{"q kana"}
-                "1"{"q dhufu"}
-            }
             relativeTime{
                 future{
                     one{"q {0} keessatti"}
@@ -930,11 +882,6 @@ om{
         }
         quarter-short{
             dn{"kr."}
-            relative{
-                "-1"{"kr. darbe"}
-                "0"{"kr. kana"}
-                "1"{"kr. dhufu"}
-            }
             relativeTime{
                 future{
                     one{"kr. {0} keessatti"}

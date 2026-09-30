@@ -308,11 +308,6 @@ ro{
             lg{"Ora zonei Pacific nord-americane"}
             ls{"Ora standard în zona Pacific nord-americană"}
         }
-        "meta:Anadyr"{
-            ld{"Ora de vară din Anadyr"}
-            lg{"Ora din Anadyr"}
-            ls{"Ora standard din Anadyr"}
-        }
         "meta:Apia"{
             ld{"Ora de vară din Samoa de Vest"}
             lg{"Ora din Samoa de Vest"}
@@ -461,17 +456,11 @@ ro{
             ld{"Ora de vară a Europei Centrale"}
             lg{"Ora Europei Centrale"}
             ls{"Ora standard a Europei Centrale"}
-            sd{"CEST"}
-            sg{"CET"}
-            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"Ora de vară a Europei de Est"}
             lg{"Ora Europei de Est"}
             ls{"Ora standard a Europei de Est"}
-            sd{"EEST"}
-            sg{"EET"}
-            ss{"EET"}
         }
         "meta:Europe_Further_Eastern"{
             ls{"Ora Europei de Est îndepărtate"}
@@ -480,9 +469,6 @@ ro{
             ld{"Ora de vară a Europei de Vest"}
             lg{"Ora Europei de Vest"}
             ls{"Ora standard a Europei de Vest"}
-            sd{"WEST"}
-            sg{"WET"}
-            ss{"WET"}
         }
         "meta:Falkland"{
             ld{"Ora de vară din Insulele Falkland"}
@@ -502,7 +488,6 @@ ro{
         }
         "meta:GMT"{
             ls{"Ora de Greenwich"}
-            ss{"GMT"}
         }
         "meta:Galapagos"{
             ls{"Ora din Galapagos"}

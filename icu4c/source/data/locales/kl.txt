@@ -9,11 +9,8 @@ kl{
     NumberElements{
         latn{
             patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;¤-#,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
                 currencyFormat{"¤#,##0.00;¤-#,##0.00"}
                 currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤-#,##0.00"}
-                currencyFormat%noCurrency{"#,##0.00"}
                 percentFormat{"#,##0 %"}
             }
             symbols{
@@ -121,11 +118,9 @@ kl{
         day{
             relativeTime{
                 future{
-                    one{"om {0} ulloq unnuarlu"}
                     other{"om {0} ulloq unnuarlu"}
                 }
                 past{
-                    one{"for {0} ulloq unnuarlu siden"}
                     other{"for {0} ulloq unnuarlu siden"}
                 }
             }
@@ -133,11 +128,9 @@ kl{
         hour{
             relativeTime{
                 future{
-                    one{"om {0} nalunaaquttap-akunnera"}
                     other{"om {0} nalunaaquttap-akunnera"}
                 }
                 past{
-                    one{"for {0} nalunaaquttap-akunnera siden"}
                     other{"for {0} nalunaaquttap-akunnera siden"}
                 }
             }
@@ -145,11 +138,9 @@ kl{
         minute{
             relativeTime{
                 future{
-                    one{"om {0} minutsi"}
                     other{"om {0} minutsi"}
                 }
                 past{
-                    one{"for {0} minutsi siden"}
                     other{"for {0} minutsi siden"}
                 }
             }
@@ -157,11 +148,9 @@ kl{
         month{
             relativeTime{
                 future{
-                    one{"om {0} qaammat"}
                     other{"om {0} qaammat"}
                 }
                 past{
-                    one{"for {0} qaammat siden"}
                     other{"for {0} qaammat siden"}
                 }
             }
@@ -169,11 +158,9 @@ kl{
         second{
             relativeTime{
                 future{
-                    one{"om {0} sekundi"}
                     other{"om {0} sekundi"}
                 }
                 past{
-                    one{"for {0} sekundi siden"}
                     other{"for {0} sekundi siden"}
                 }
             }
@@ -181,11 +168,9 @@ kl{
         week{
             relativeTime{
                 future{
-                    one{"om {0} sapaatip-akunnera"}
                     other{"om {0} sapaatip-akunnera"}
                 }
                 past{
-                    one{"for {0} sapaatip-akunnera siden"}
                     other{"for {0} sapaatip-akunnera siden"}
                 }
             }
@@ -193,11 +178,9 @@ kl{
         year{
             relativeTime{
                 future{
-                    one{"om {0} ukioq"}
                     other{"om {0} ukioq"}
                 }
                 past{
-                    one{"for {0} ukioq siden"}
                     other{"for {0} ukioq siden"}
                 }
             }

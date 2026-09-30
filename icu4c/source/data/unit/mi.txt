@@ -361,10 +361,6 @@ mi{
             }
         }
         length{
-            fathom{
-                dnam{"mārō"}
-                other{"{0} mārō"}
-            }
             foot{
                 dnam{"pūtu"}
                 other{"{0} pūtu"}

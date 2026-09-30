@@ -9,11 +9,6 @@ tk{
     ExemplarCharactersPunctuation{"[\\- ‑ – — , ; \\: ! ? . … ' \u0022“” ( ) \\[ \\] \\{ \\} § @ * / {\\&,} #]"}
     NumberElements{
         arabext{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
             symbols{
                 nan{"San däl"}
             }
@@ -80,101 +75,77 @@ tk{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"0 müň ¤"}
                         other{"0 müň ¤"}
                     }
                     10000{
-                        one{"00 müň ¤"}
                         other{"00 müň ¤"}
                     }
                     100000{
-                        one{"000 müň ¤"}
                         other{"000 müň ¤"}
                     }
                     1000000{
-                        one{"0 mln ¤"}
                         other{"0 mln ¤"}
                     }
                     10000000{
-                        one{"00 mln ¤"}
                         other{"00 mln ¤"}
                     }
                     100000000{
-                        one{"000 mln ¤"}
                         other{"000 mln ¤"}
                     }
                     1000000000{
-                        one{"0 mlrd ¤"}
                         other{"0 mlrd ¤"}
                     }
                     10000000000{
-                        one{"00 mlrd ¤"}
                         other{"00 mlrd ¤"}
                     }
                     100000000000{
-                        one{"000 mlrd ¤"}
                         other{"000 mlrd ¤"}
                     }
                     1000000000000{
-                        one{"0 trln ¤"}
                         other{"0 trln ¤"}
                     }
                     10000000000000{
-                        one{"00 trln ¤"}
                         other{"00 trln ¤"}
                     }
                     100000000000000{
-                        one{"000 trln ¤"}
                         other{"000 trln ¤"}
                     }
                 }
                 decimalFormat{
                     1000{
-                        one{"0 müň"}
                         other{"0 müň"}
                     }
                     10000{
-                        one{"00 müň"}
                         other{"00 müň"}
                     }
                     100000{
-                        one{"000 müň"}
                         other{"000 müň"}
                     }
                     1000000{
-                        one{"0 mln"}
                         other{"0 mln"}
                     }
                     10000000{
-                        one{"00 mln"}
                         other{"00 mln"}
                     }
                     100000000{
-                        one{"000 mln"}
                         other{"000 mln"}
                     }
                     1000000000{
-                        one{"0 mlrd"}
                         other{"0 mlrd"}
                     }
                     10000000000{
-                        one{"00 mlrd"}
                         other{"00 mlrd"}
                     }
                     100000000000{
-                        one{"000 mlrd"}
                         other{"000 mlrd"}
                     }
                     1000000000000{
-                        one{"0 trln"}
                         other{"0 trln"}
                     }
                     10000000000000{
-                        one{"00 trln"}
                         other{"00 trln"}
                     }
                     100000000000000{
-                        one{"000 trln"}
                         other{"000 trln"}
                     }
                 }
@@ -197,11 +168,6 @@ tk{
         }
     }
     calendar{
-        ethiopic{
-            availableFormats{
-                yyyyMd{"d.M.y"}
-            }
-        }
         generic{
             DateTimePatterns{
                 "HH:mm:ss zzzz",
@@ -275,14 +241,6 @@ tk{
                 yyyyMMMd{"G d MMM y"}
                 yyyyMMMddd{"G ddd MMM y"}
                 yyyyMd{"G dd.MM.y"}
-            }
-            dayOfMonthNames{
-                format{
-                    abbreviated{
-                        few{"{0}-njy"}
-                        other{"{0}-nji"}
-                    }
-                }
             }
             intervalFormats{
                 GyM{
@@ -447,7 +405,6 @@ tk{
                 MMMMEd{"d MMMM, E"}
                 MMMMEddd{"ddd MMMM, E"}
                 MMMMW{
-                    one{"'hepde' W, MMMM"}
                     other{"'hepde' W, MMMM"}
                 }
                 MMMMd{"d MMMM"}
@@ -474,7 +431,6 @@ tk{
                 yMMMddd{"ddd MMM y"}
                 yMd{"dd.MM.y"}
                 yw{
-                    one{"'hepde' w, Y"}
                     other{"'hepde' w, Y"}
                 }
             }
@@ -788,16 +744,6 @@ tk{
                 }
             }
         }
-        hebrew{
-            availableFormats{
-                yyyyMd{"d.M.y"}
-            }
-        }
-        indian{
-            availableFormats{
-                yyyyMd{"d.M.y"}
-            }
-        }
         islamic{
             DateTimePatterns{
                 "HH:mm:ss zzzz",
@@ -815,25 +761,18 @@ tk{
                 "{1} {0}",
             }
             availableFormats{
-                Ed{"d, E"}
                 Gy{"y G"}
                 GyM{"M.y G"}
                 GyMEd{"E, d.M.y G"}
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, d MMM, y G"}
-                GyMMMEddd{"G ddd MMM y, E"}
                 GyMMMd{"d MMM, y G"}
                 GyMMMddd{"ddd MMM, y G"}
                 GyMd{"d.M.y G"}
                 MEd{"E, d.M"}
                 MMMEd{"E, d MMM"}
-                MMMEddd{"ddd MMM, E"}
-                MMMMEd{"d MMMM, E"}
-                MMMMddd{"ddd MMMM"}
-                MMMddd{"ddd MMM"}
                 Md{"d.M"}
                 y{"y G"}
-                yMEd{"dd.MM.y, E"}
                 yMMM{"MMM, y"}
                 yMMMEd{"d MMM, y, E"}
                 yMMMM{"MMMM, y"}
@@ -843,7 +782,6 @@ tk{
                 yyyyMEd{"E, d.M.y GGGGG"}
                 yyyyMMM{"MMM y G"}
                 yyyyMMMEd{"E, d MMM, y G"}
-                yyyyMMMEddd{"G ddd MMM y, E"}
                 yyyyMMMM{"MMMM, y G"}
                 yyyyMMMd{"d MMM, y G"}
                 yyyyMMMddd{"ddd MMM y G"}
@@ -887,16 +825,6 @@ tk{
                         "Gurban",
                     }
                 }
-            }
-        }
-        persian{
-            availableFormats{
-                yyyyMd{"d.M.y"}
-            }
-        }
-        roc{
-            availableFormats{
-                yyyyMd{"d.M.y"}
             }
         }
     }
@@ -982,12 +910,6 @@ tk{
         western_asian_scripts{"Günbatar Aziýa elipbiýi"}
         whitespace{"boşluk"}
     }
-    contextTransforms{
-        languages:intvector{
-            0,
-            1,
-        }
-    }
     delimiters{
         alternateQuotationEnd{"”"}
         alternateQuotationStart{"“"}
@@ -1002,11 +924,9 @@ tk{
             }
             relativeTime{
                 future{
-                    one{"{0} günden"}
                     other{"{0} günden"}
                 }
                 past{
-                    one{"{0} gün öň"}
                     other{"{0} gün öň"}
                 }
             }
@@ -1046,11 +966,9 @@ tk{
             }
             relativeTime{
                 future{
-                    one{"{0} annadan"}
                     other{"{0} annadan"}
                 }
                 past{
-                    one{"{0} anna öň"}
                     other{"{0} anna öň"}
                 }
             }
@@ -1092,11 +1010,9 @@ tk{
             }
             relativeTime{
                 future{
-                    one{"{0} sagatdan"}
                     other{"{0} sagatdan"}
                 }
                 past{
-                    one{"{0} sagat öň"}
                     other{"{0} sagat öň"}
                 }
             }
@@ -1121,11 +1037,9 @@ tk{
             }
             relativeTime{
                 future{
-                    one{"{0} minutdan"}
                     other{"{0} minutdan"}
                 }
                 past{
-                    one{"{0} minut öň"}
                     other{"{0} minut öň"}
                 }
             }
@@ -1151,11 +1065,9 @@ tk{
             }
             relativeTime{
                 future{
-                    one{"{0} duşenbeden"}
                     other{"{0} duşenbeden"}
                 }
                 past{
-                    one{"{0} duşenbe öň"}
                     other{"{0} duşenbe öň"}
                 }
             }
@@ -1203,11 +1115,9 @@ tk{
             }
             relativeTime{
                 future{
-                    one{"{0} aýdan"}
                     other{"{0} aýdan"}
                 }
                 past{
-                    one{"{0} aý öň"}
                     other{"{0} aý öň"}
                 }
             }
@@ -1221,11 +1131,9 @@ tk{
             }
             relativeTime{
                 future{
-                    one{"{0} çärýekden"}
                     other{"{0} çärýekden"}
                 }
                 past{
-                    one{"{0} çärýek öň"}
                     other{"{0} çärýek öň"}
                 }
             }
@@ -1263,11 +1171,9 @@ tk{
             }
             relativeTime{
                 future{
-                    one{"{0} şenbeden"}
                     other{"{0} şenbeden"}
                 }
                 past{
-                    one{"{0} şenbe öň"}
                     other{"{0} şenbe öň"}
                 }
             }
@@ -1313,11 +1219,9 @@ tk{
             }
             relativeTime{
                 future{
-                    one{"{0} sekuntdan"}
                     other{"{0} sekuntdan"}
                 }
                 past{
-                    one{"{0} sekunt öň"}
                     other{"{0} sekunt öň"}
                 }
             }
@@ -1347,7 +1251,6 @@ tk{
                     other{"{0} ýekşenbe"}
                 }
                 past{
-                    one{"{0} ýekşenbe öň"}
                     other{"{0} ýekşenbe öň"}
                 }
             }
@@ -1394,11 +1297,9 @@ tk{
             }
             relativeTime{
                 future{
-                    one{"{0} penşenbeden"}
                     other{"{0} penşenbeden"}
                 }
                 past{
-                    one{"{0} penşenbe öň"}
                     other{"{0} penşenbe öň"}
                 }
             }
@@ -1445,11 +1346,9 @@ tk{
             }
             relativeTime{
                 future{
-                    one{"{0} sişenbeden"}
                     other{"{0} sişenbeden"}
                 }
                 past{
-                    one{"{0} sişenbe öň"}
                     other{"{0} sişenbe öň"}
                 }
             }
@@ -1496,11 +1395,9 @@ tk{
             }
             relativeTime{
                 future{
-                    one{"{0} çarşenbeden"}
                     other{"{0} çarşenbeden"}
                 }
                 past{
-                    one{"{0} çarşenbe öň"}
                     other{"{0} çarşenbe öň"}
                 }
             }
@@ -1549,11 +1446,9 @@ tk{
             relativePeriod{"{0} hepdesi"}
             relativeTime{
                 future{
-                    one{"{0} hepdeden"}
                     other{"{0} hepdeden"}
                 }
                 past{
-                    one{"{0} hepde öň"}
                     other{"{0} hepde öň"}
                 }
             }
@@ -1610,11 +1505,9 @@ tk{
             }
             relativeTime{
                 future{
-                    one{"{0} ýyldan"}
                     other{"{0} ýyldan"}
                 }
                 past{
-                    one{"{0} ýyl öň"}
                     other{"{0} ýyl öň"}
                 }
             }

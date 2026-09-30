@@ -35,16 +35,6 @@ shi_Latn{
                 "{1} {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMMd",
-                "GGGGGyMd",
-            }
             availableFormats{
                 M{"M"}
                 MMM{"MMM"}
@@ -52,8 +42,6 @@ shi_Latn{
                 MMMMEd{"E d MMMM"}
                 MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
-                MMd{"d/MM"}
-                MMdd{"dd/MM"}
                 Md{"d/M"}
                 ms{"m:ss"}
                 y{"y"}
@@ -85,16 +73,6 @@ shi_Latn{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yMd",
             }
             availableFormats{
                 M{"M"}

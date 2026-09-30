@@ -72,101 +72,77 @@ af{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"¤0 k"}
                         other{"¤0 k"}
                     }
                     10000{
-                        one{"¤00 k"}
                         other{"¤00 k"}
                     }
                     100000{
-                        one{"¤000 k"}
                         other{"¤000 k"}
                     }
                     1000000{
-                        one{"¤0 m'.'"}
                         other{"¤0 m'.'"}
                     }
                     10000000{
-                        one{"¤00 m'.'"}
                         other{"¤00 m'.'"}
                     }
                     100000000{
-                        one{"¤000 m'.'"}
                         other{"¤000 m'.'"}
                     }
                     1000000000{
-                        one{"¤0 mjd'.'"}
                         other{"¤0 mjd'.'"}
                     }
                     10000000000{
-                        one{"¤00 mjd'.'"}
                         other{"¤00 mjd'.'"}
                     }
                     100000000000{
-                        one{"¤000 mjd'.'"}
                         other{"¤000 mjd'.'"}
                     }
                     1000000000000{
-                        one{"¤0 bn'.'"}
                         other{"¤0 bn'.'"}
                     }
                     10000000000000{
-                        one{"¤00 bn'.'"}
                         other{"¤00 bn'.'"}
                     }
                     100000000000000{
-                        one{"¤000 bn'.'"}
                         other{"¤000 bn'.'"}
                     }
                 }
                 decimalFormat{
                     1000{
-                        one{"0 k"}
                         other{"0 k"}
                     }
                     10000{
-                        one{"00 k"}
                         other{"00 k"}
                     }
                     100000{
-                        one{"000 k"}
                         other{"000 k"}
                     }
                     1000000{
-                        one{"0 m'.'"}
                         other{"0 m'.'"}
                     }
                     10000000{
-                        one{"00 m'.'"}
                         other{"00 m'.'"}
                     }
                     100000000{
-                        one{"000 m'.'"}
                         other{"000 m'.'"}
                     }
                     1000000000{
-                        one{"0 mjd'.'"}
                         other{"0 mjd'.'"}
                     }
                     10000000000{
-                        one{"00 mjd'.'"}
                         other{"00 mjd'.'"}
                     }
                     100000000000{
-                        one{"000 mjd'.'"}
                         other{"000 mjd'.'"}
                     }
                     1000000000000{
-                        one{"0 bn'.'"}
                         other{"0 bn'.'"}
                     }
                     10000000000000{
-                        one{"00 bn'.'"}
                         other{"00 bn'.'"}
                     }
                     100000000000000{
-                        one{"000 bn'.'"}
                         other{"000 bn'.'"}
                     }
                 }
@@ -215,16 +191,6 @@ af{
                 "{1} 'om' {0}",
                 "{1} {0}",
                 "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEdd",
-                "GyMMMMdd",
-                "GyMMMdd",
-                "GGGGGyMMdd",
             }
             availableFormats{
                 Bhm{"hh:mm B"}
@@ -327,24 +293,6 @@ af{
                 d{
                     d{"d – d"}
                 }
-                h{
-                    a{"h a – h a"}
-                    h{"h–h a"}
-                }
-                hm{
-                    a{"h:mm a – h:mm a"}
-                    h{"h:mm–h:mm a"}
-                    m{"h:mm–h:mm a"}
-                }
-                hmv{
-                    a{"h:mm a – h:mm a v"}
-                    h{"h:mm–h:mm a v"}
-                    m{"h:mm–h:mm a v"}
-                }
-                hv{
-                    a{"h a – h a v"}
-                    h{"h–h a v"}
-                }
                 y{
                     y{"y – y G"}
                 }
@@ -418,16 +366,6 @@ af{
                 "{1} {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "yMMMMEEEEdd",
-                "yMMMMdd",
-                "yMMMdd",
-                "yMMdd",
-            }
             appendItems{
                 Era{"{0} {1}"}
             }
@@ -453,7 +391,6 @@ af{
                 MMMEd{"E d MMM"}
                 MMMMEd{"E d MMMM"}
                 MMMMW{
-                    one{"'week' W 'van' MMMM"}
                     other{"'week' W 'van' MMMM"}
                 }
                 MMMMd{"d MMMM"}
@@ -474,7 +411,6 @@ af{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    one{"'week' w 'van' Y"}
                     other{"'week' w 'van' Y"}
                 }
             }
@@ -521,11 +457,7 @@ af{
                         night1{"die nag"}
                     }
                     narrow{
-                        afternoon1{"die middag"}
-                        evening1{"die aand"}
                         midnight{"mn"}
-                        morning1{"die oggend"}
-                        night1{"die nag"}
                     }
                 }
                 stand-alone{
@@ -873,8 +805,6 @@ af{
         }
         fri-narrow{
             relative{
-                "-1"{"verlede Vr."}
-                "0"{"hierdie Vr."}
                 "1"{"volgende Vr."}
             }
         }
@@ -902,11 +832,9 @@ af{
             }
             relativeTime{
                 future{
-                    one{"oor {0} uur"}
                     other{"oor {0} uur"}
                 }
                 past{
-                    one{"{0} uur gelede"}
                     other{"{0} uur gelede"}
                 }
             }
@@ -1076,9 +1004,7 @@ af{
         }
         sat-narrow{
             relative{
-                "-1"{"verlede Sa."}
                 "0"{"hierdie Sa."}
-                "1"{"volgende Sa."}
             }
         }
         sat-short{
@@ -1180,7 +1106,6 @@ af{
         }
         thu-narrow{
             relative{
-                "-1"{"verlede Do."}
                 "0"{"dié Do."}
                 "1"{"vlg. Do."}
             }
@@ -1221,9 +1146,7 @@ af{
         }
         tue-narrow{
             relative{
-                "-1"{"verlede Di."}
                 "0"{"dié Di."}
-                "1"{"volgende Di."}
             }
         }
         tue-short{
@@ -1262,7 +1185,6 @@ af{
         }
         wed-narrow{
             relative{
-                "-1"{"verlede Wo."}
                 "0"{"dié Wo."}
                 "1"{"vlg. Wo."}
             }
@@ -1348,11 +1270,9 @@ af{
             }
             relativeTime{
                 future{
-                    one{"oor {0} jaar"}
                     other{"oor {0} jaar"}
                 }
                 past{
-                    one{"{0} jaar gelede"}
                     other{"{0} jaar gelede"}
                 }
             }

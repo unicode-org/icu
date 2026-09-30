@@ -1258,7 +1258,6 @@ vec{
             other{"franchi CFP"}
         }
         XXX{
-            one{"(moneda desconosùa)"}
             other{"(moneda desconosùa)"}
         }
         YER{
@@ -1279,7 +1278,6 @@ vec{
         }
     }
     CurrencyUnitPatterns{
-        one{"{0} {1}"}
         other{"{0} {1}"}
     }
 }

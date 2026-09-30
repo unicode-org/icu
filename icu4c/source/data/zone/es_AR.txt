@@ -3,16 +3,4 @@
 // Generated using tools/cldr/cldr-to-icu/
 es_AR{
     %%Parent{"es_419"}
-    zoneStrings{
-        "meta:Argentina"{
-            sd{"ARST"}
-            sg{"ART"}
-            ss{"ART"}
-        }
-        "meta:Argentina_Western"{
-            sd{"WARST"}
-            sg{"WART"}
-            ss{"WART"}
-        }
-    }
 }

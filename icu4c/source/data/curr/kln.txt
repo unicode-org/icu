@@ -75,17 +75,9 @@ kln{
             "£",
             "pounditab Uingereza",
         }
-        GHC{
-            "GHC",
-            "Rabisiekab Ghana",
-        }
         GMD{
             "GMD",
             "Rabisiekab Gambia",
-        }
-        GNS{
-            "GNS",
-            "Rabisiekab Guinea",
         }
         INR{
             "₹",
@@ -123,10 +115,6 @@ kln{
             "MGA",
             "Rabisiekab Malagasy",
         }
-        MRO{
-            "MRO",
-            "Rabisiekab Mauritania (1973–2017)",
-        }
         MRU{
             "MRU",
             "Rabisiekab Mauritania",
@@ -138,10 +126,6 @@ kln{
         MWK{
             "MWK",
             "Rabisiekaby Malawi",
-        }
-        MZM{
-            "MZM",
-            "Rabisiekab Msumbiji",
         }
         NAD{
             "NAD",
@@ -183,10 +167,6 @@ kln{
             "SOS",
             "siligitab Somalia",
         }
-        STD{
-            "STD",
-            "Rabisiekab Sao Tome ak Principe (1977–2017)",
-        }
         STN{
             "STN",
             "Rabisiekab Sao Tome ak Principe",
@@ -223,17 +203,9 @@ kln{
             "ZAR",
             "Randitab Afrika nebo murot tai",
         }
-        ZMK{
-            "ZMK",
-            "Kwachaitab Zambia (1968–2012)",
-        }
         ZMW{
             "ZMW",
             "Kwachaitab Zambia",
-        }
-        ZWD{
-            "ZWD",
-            "Dolaitab ya Zimbabwe",
         }
     }
 }

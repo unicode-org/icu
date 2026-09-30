@@ -73,51 +73,39 @@ fil{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"¤0K"}
                         other{"¤0K"}
                     }
                     10000{
-                        one{"¤00K"}
                         other{"¤00K"}
                     }
                     100000{
-                        one{"¤000K"}
                         other{"¤000K"}
                     }
                     1000000{
-                        one{"¤0M"}
                         other{"¤0M"}
                     }
                     10000000{
-                        one{"¤00M"}
                         other{"¤00M"}
                     }
                     100000000{
-                        one{"¤000M"}
                         other{"¤000M"}
                     }
                     1000000000{
-                        one{"¤0B"}
                         other{"¤0B"}
                     }
                     10000000000{
-                        one{"¤00B"}
                         other{"¤00B"}
                     }
                     100000000000{
-                        one{"¤000B"}
                         other{"¤000B"}
                     }
                     1000000000000{
-                        one{"¤0T"}
                         other{"¤0T"}
                     }
                     10000000000000{
-                        one{"¤00T"}
                         other{"¤00T"}
                     }
                     100000000000000{
-                        one{"¤000T"}
                         other{"¤000T"}
                     }
                 }
@@ -173,15 +161,12 @@ fil{
                 }
                 decimalFormat{
                     1000000000{
-                        one{"0B"}
                         other{"0B"}
                     }
                     10000000000{
-                        one{"00B"}
                         other{"00B"}
                     }
                     100000000000{
-                        one{"000B"}
                         other{"000B"}
                     }
                 }
@@ -227,16 +212,6 @@ fil{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMMd",
-                "GGGGGyMd",
-            }
             availableFormats{
                 Ed{"d E"}
                 Ehm{"E h:mm a"}
@@ -258,7 +233,6 @@ fil{
                 yyyy{"y G"}
                 yyyyM{"M/y GGGGG"}
                 yyyyMEd{"E, M/d/y GGGGG"}
-                yyyyMM{"MM-y G"}
                 yyyyMMM{"MMM y G"}
                 yyyyMMMEd{"E, MMM d, y G"}
                 yyyyMMMM{"MMMM y G"}
@@ -334,16 +308,6 @@ fil{
                     M{"M/d – M/d"}
                     d{"M/d – M/d"}
                 }
-                hm{
-                    a{"h:mm a – h:mm a"}
-                    h{"h:mm–h:mm a"}
-                    m{"h:mm–h:mm a"}
-                }
-                hmv{
-                    a{"h:mm a – h:mm a v"}
-                    h{"h:mm–h:mm a v"}
-                    m{"h:mm–h:mm a v"}
-                }
                 y{
                     y{"y–y G"}
                 }
@@ -407,16 +371,6 @@ fil{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yyMd",
-            }
             appendItems{
                 Day-Of-Week{"{1}, {0}"}
                 Era{"{0} {1}"}
@@ -440,7 +394,6 @@ fil{
                 MMMEd{"E, MMM d"}
                 MMMMEd{"E, MMMM d"}
                 MMMMW{
-                    one{"'linggo' W 'ng' MMMM"}
                     other{"'linggo' W 'ng' MMMM"}
                 }
                 Md{"M/d"}
@@ -515,7 +468,6 @@ fil{
                         afternoon1{"hapon"}
                         evening1{"gabi"}
                         morning1{"umaga"}
-                        morning2{"madaling-araw"}
                         night1{"gabi"}
                     }
                 }
@@ -727,87 +679,6 @@ fil{
                 }
             }
         }
-        hebrew{
-            DateTimePatterns{
-                "h:mm:ss a zzzz",
-                "h:mm:ss a z",
-                "h:mm:ss a",
-                "h:mm a",
-                "EEEE, MMMM d y",
-                "MMMM d y",
-                "MMM d y",
-                "MMM d y",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-            }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yMMMd",
-            }
-            availableFormats{
-                MEd{"E, MMM d"}
-                Md{"MMM d"}
-                y{"y"}
-            }
-            intervalFormats{
-                MEd{
-                    M{"E, MMM d – E, MMM d"}
-                    d{"E, MMM d – E, MMM d"}
-                }
-                Md{
-                    M{"MMM d – MMM d"}
-                }
-                yM{
-                    M{"MMM – MMM y"}
-                    y{"MMM y – MMM y"}
-                }
-                yMEd{
-                    M{"E, MMM d – E, MMM d y"}
-                    d{"E, MMM d – E, MMM d y"}
-                    y{"E, MMM d y – E, MMM d y"}
-                }
-                yMMM{
-                    M{"MMM – MMM y"}
-                    y{"MMM y – MMM y"}
-                }
-                yMMMEd{
-                    M{"E, MMM d – E, MMM d y"}
-                    d{"E, MMM d – E, MMM d y"}
-                    y{"E, MMM d y – E, MMM d y"}
-                }
-                yMMMM{
-                    M{"MMMM – MMMM y"}
-                    y{"MMMM y – MMMM y"}
-                }
-                yMMMd{
-                    M{"MMM d – MMM d y"}
-                    d{"d – MMM d y"}
-                    y{"MMM d y – MMM d y"}
-                }
-                yMd{
-                    M{"MMM d – MMM d y"}
-                    d{"d – MMM d y"}
-                    y{"MMM d y – MMM d y"}
-                }
-            }
-        }
-        roc{
-            eras{
-                abbreviated{
-                    0{"Bago ang R.O.C."}
-                    1{"Minguo"}
-                }
-            }
-        }
     }
     characterLabel{
         activities{"aktibidad"}
@@ -883,11 +754,9 @@ fil{
             }
             relativeTime{
                 future{
-                    one{"sa {0} araw"}
                     other{"sa {0} araw"}
                 }
                 past{
-                    one{"{0} araw ang nakalipas"}
                     other{"{0} araw ang nakalipas"}
                 }
             }
@@ -896,10 +765,8 @@ fil{
             relativeTime{
                 future{
                     one{"sa {0} araw"}
-                    other{"sa {0} araw"}
                 }
                 past{
-                    one{"{0} araw ang nakalipas"}
                     other{"{0} araw ang nakalipas"}
                 }
             }
@@ -908,10 +775,8 @@ fil{
             relativeTime{
                 future{
                     one{"sa {0} (na) araw"}
-                    other{"sa {0} araw"}
                 }
                 past{
-                    one{"{0} araw ang nakalipas"}
                     other{"{0} (na) araw ang nakalipas"}
                 }
             }
@@ -963,7 +828,6 @@ fil{
             relativeTime{
                 past{
                     one{"{0} Biy. ang nakalipas"}
-                    other{"{0} (na) Biyernes ang nakalipas"}
                 }
             }
         }
@@ -974,11 +838,9 @@ fil{
             }
             relativeTime{
                 future{
-                    one{"sa {0} oras"}
                     other{"sa {0} oras"}
                 }
                 past{
-                    one{"{0} oras ang nakalipas"}
                     other{"{0} oras ang nakalipas"}
                 }
             }
@@ -986,7 +848,6 @@ fil{
         hour-narrow{
             relativeTime{
                 future{
-                    one{"sa {0} oras"}
                     other{"sa {0} oras"}
                 }
             }
@@ -994,7 +855,6 @@ fil{
         hour-short{
             relativeTime{
                 future{
-                    one{"sa {0} oras"}
                     other{"sa {0} (na) oras"}
                 }
             }
@@ -1006,11 +866,9 @@ fil{
             }
             relativeTime{
                 future{
-                    one{"sa {0} minuto"}
                     other{"sa {0} minuto"}
                 }
                 past{
-                    one{"{0} minuto ang nakalipas"}
                     other{"{0} minuto ang nakalipas"}
                 }
             }
@@ -1062,11 +920,9 @@ fil{
             relativeTime{
                 future{
                     one{"sa {0} Lun."}
-                    other{"sa {0} (na) Lunes"}
                 }
                 past{
                     one{"{0} Lun. ang nakalipas"}
-                    other{"{0} (na) Lunes ang nakalipas"}
                 }
             }
         }
@@ -1079,11 +935,9 @@ fil{
             }
             relativeTime{
                 future{
-                    one{"sa {0} buwan"}
                     other{"sa {0} buwan"}
                 }
                 past{
-                    one{"{0} buwan ang nakalipas"}
                     other{"{0} buwan ang nakalipas"}
                 }
             }
@@ -1097,11 +951,9 @@ fil{
             }
             relativeTime{
                 future{
-                    one{"sa {0} quarter"}
                     other{"sa {0} quarter"}
                 }
                 past{
-                    one{"{0} quarter ang nakalipas"}
                     other{"{0} quarter ang nakalipas"}
                 }
             }
@@ -1129,7 +981,6 @@ fil{
         sat-narrow{
             relativeTime{
                 future{
-                    one{"sa {0} Sab."}
                     other{"sa {0} (na) Sabado ang nakalipas"}
                 }
             }
@@ -1143,11 +994,9 @@ fil{
             relativeTime{
                 future{
                     one{"sa {0} Sab."}
-                    other{"sa {0} (na) Sabado"}
                 }
                 past{
                     one{"{0} Sab. ang nakalipas"}
-                    other{"{0} (na) Sabado ang nakalipas"}
                 }
             }
         }
@@ -1158,11 +1007,9 @@ fil{
             }
             relativeTime{
                 future{
-                    one{"sa {0} segundo"}
                     other{"sa {0} segundo"}
                 }
                 past{
-                    one{"{0} segundo ang nakalipas"}
                     other{"{0} segundo ang nakalipas"}
                 }
             }
@@ -1188,7 +1035,6 @@ fil{
             }
             relativeTime{
                 future{
-                    one{"sa {0} Linggo"}
                     other{"sa {0} Linggo"}
                 }
                 past{
@@ -1210,7 +1056,6 @@ fil{
                 }
                 past{
                     one{"{0} Lin. ang nakalipas"}
-                    other{"{0} (na) Linggo ang nakalipas"}
                 }
             }
         }
@@ -1240,11 +1085,9 @@ fil{
             relativeTime{
                 future{
                     one{"sa {0} Huw."}
-                    other{"sa {0} (na) Huwebes"}
                 }
                 past{
                     one{"{0} Huw. ang nakalipas"}
-                    other{"{0} (na) Huwebes ang nakalipas"}
                 }
             }
         }
@@ -1268,7 +1111,6 @@ fil{
         tue-narrow{
             relativeTime{
                 future{
-                    one{"sa {0} Martes"}
                     other{"sa {0} (na) Martes ang nakalipas"}
                 }
             }
@@ -1306,11 +1148,9 @@ fil{
             relativeTime{
                 future{
                     one{"sa {0} Miy."}
-                    other{"sa {0} (na) Miyerkules"}
                 }
                 past{
                     one{"{0} Miy. ang nakalipas"}
-                    other{"{0} (na) Miyerkules ang nakalipas"}
                 }
             }
         }
@@ -1324,11 +1164,9 @@ fil{
             relativePeriod{"linggo ng {0}"}
             relativeTime{
                 future{
-                    one{"sa {0} linggo"}
                     other{"sa {0} linggo"}
                 }
                 past{
-                    one{"{0} linggo ang nakalipas"}
                     other{"{0} linggo ang nakalipas"}
                 }
             }
@@ -1336,7 +1174,6 @@ fil{
         week-narrow{
             relativeTime{
                 past{
-                    one{"{0} linggo ang nakalipas"}
                     other{"{0} linggo ang nakalipas"}
                 }
             }
@@ -1345,11 +1182,9 @@ fil{
             relative{
                 "-1"{"nakaraang linggo"}
                 "0"{"ngayong linggo"}
-                "1"{"susunod na linggo"}
             }
             relativeTime{
                 past{
-                    one{"{0} linggo ang nakalipas"}
                     other{"{0} (na) linggo ang nakalipas"}
                 }
             }
@@ -1372,11 +1207,9 @@ fil{
             }
             relativeTime{
                 future{
-                    one{"sa {0} taon"}
                     other{"sa {0} taon"}
                 }
                 past{
-                    one{"{0} taon ang nakalipas"}
                     other{"{0} taon ang nakalipas"}
                 }
             }

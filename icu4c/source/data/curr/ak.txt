@@ -199,10 +199,6 @@ ak{
             "GEL",
             "Gyɔɔgyia lari",
         }
-        GHC{
-            "GHC",
-            "Ghana Sidi (1979–2007)",
-        }
         GHS{
             "GH₵",
             "Ghana Sidi",
@@ -218,10 +214,6 @@ ak{
         GNF{
             "GNF",
             "Gini franke",
-        }
-        GNS{
-            "GNS",
-            "Gini Frank",
         }
         GTQ{
             "GTQ",
@@ -375,10 +367,6 @@ ak{
             "MOP",
             "Makaw pataka",
         }
-        MRO{
-            "MRO",
-            "Mɔretenia Ouguiya (1973–2017)",
-        }
         MRU{
             "MRU",
             "Mɔretenia Ouguiya",
@@ -402,10 +390,6 @@ ak{
         MYR{
             "MYR",
             "Malaahyia ringgit",
-        }
-        MZM{
-            "MZM",
-            "Mozambik Metical",
         }
         MZN{
             "MZN",
@@ -503,10 +487,6 @@ ak{
             "SDG",
             "Sudan Dina",
         }
-        SDP{
-            "SDP",
-            "Sudan Pɔn",
-        }
         SEK{
             "SEK",
             "Sweden Krona",
@@ -538,10 +518,6 @@ ak{
         SSP{
             "SSP",
             "Sudan Anaafoɔ Pɔn",
-        }
-        STD{
-            "STD",
-            "Sao Tome ne Principe Dobra (1977–2017)",
         }
         STN{
             "STN",
@@ -659,17 +635,9 @@ ak{
             "ZAR",
             "Afrika Anaafo Rand",
         }
-        ZMK{
-            "ZMK",
-            "Zambia Kwacha (1968–2012)",
-        }
         ZMW{
             "ZMW",
             "Zambia Kwakya",
-        }
-        ZWD{
-            "ZWD",
-            "Zimbabwe Dɔla",
         }
         ZWG{
             "ZWG",
@@ -694,7 +662,6 @@ ak{
             other{"Krohyia kunas"}
         }
         ISK{
-            one{"Icelandfoɔ krónur"}
             other{"Icelandfoɔ krónur"}
         }
         MDL{
@@ -718,19 +685,16 @@ ak{
             other{"Sweden kronor"}
         }
         TOP{
-            one{"Tonga paʻanga"}
             other{"Tonga paʻanga"}
         }
         TWD{
             one{"Taelanfoɔ dɔla foforɔ"}
-            other{"Taewanfoɔ dɔla foforɔ"}
         }
         VES{
             one{"Venezuelan bolívar"}
             other{"Venezuelan bolívars"}
         }
         WST{
-            one{"Samoa tala"}
             other{"Samoa tala"}
         }
         XCG{
@@ -742,7 +706,6 @@ ak{
             other{"CFP francs"}
         }
         XXX{
-            one{"(sika a yɛnnim)"}
             other{"(sika a yɛnnim)"}
         }
     }

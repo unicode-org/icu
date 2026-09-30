@@ -73,51 +73,39 @@ tr{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"¤0 B"}
                         other{"¤0 B"}
                     }
                     10000{
-                        one{"¤00 B"}
                         other{"¤00 B"}
                     }
                     100000{
-                        one{"¤000 B"}
                         other{"¤000 B"}
                     }
                     1000000{
-                        one{"¤0 Mn"}
                         other{"¤0 Mn"}
                     }
                     10000000{
-                        one{"¤00 Mn"}
                         other{"¤00 Mn"}
                     }
                     100000000{
-                        one{"¤000 Mn"}
                         other{"¤000 Mn"}
                     }
                     1000000000{
-                        one{"¤0 Mr"}
                         other{"¤0 Mr"}
                     }
                     10000000000{
-                        one{"¤00 Mr"}
                         other{"¤00 Mr"}
                     }
                     100000000000{
-                        one{"¤000 Mr"}
                         other{"¤000 Mr"}
                     }
                     1000000000000{
-                        one{"¤0 Tn"}
                         other{"¤0 Tn"}
                     }
                     10000000000000{
-                        one{"¤00 Tn"}
                         other{"¤00 Tn"}
                     }
                     100000000000000{
-                        one{"¤000 Tn"}
                         other{"¤000 Tn"}
                     }
                 }
@@ -173,51 +161,39 @@ tr{
                 }
                 decimalFormat{
                     1000{
-                        one{"0 B"}
                         other{"0 B"}
                     }
                     10000{
-                        one{"00 B"}
                         other{"00 B"}
                     }
                     100000{
-                        one{"000 B"}
                         other{"000 B"}
                     }
                     1000000{
-                        one{"0 Mn"}
                         other{"0 Mn"}
                     }
                     10000000{
-                        one{"00 Mn"}
                         other{"00 Mn"}
                     }
                     100000000{
-                        one{"000 Mn"}
                         other{"000 Mn"}
                     }
                     1000000000{
-                        one{"0 Mr"}
                         other{"0 Mr"}
                     }
                     10000000000{
-                        one{"00 Mr"}
                         other{"00 Mr"}
                     }
                     100000000000{
-                        one{"000 Mr"}
                         other{"000 Mr"}
                     }
                     1000000000000{
-                        one{"0 Tn"}
                         other{"0 Tn"}
                     }
                     10000000000000{
-                        one{"00 Tn"}
                         other{"00 Tn"}
                     }
                     100000000000000{
-                        one{"000 Tn"}
                         other{"000 Tn"}
                     }
                 }
@@ -238,48 +214,6 @@ tr{
         }
     }
     calendar{
-        coptic{
-            monthNames{
-                format{
-                    wide{
-                        "Tût",
-                        "Bâbe",
-                        "Hatur",
-                        "Keyhek",
-                        "Tûbe",
-                        "Imşir",
-                        "Bermuhat",
-                        "Bermude",
-                        "Peyştes",
-                        "Bune",
-                        "Ebip",
-                        "Mısrî",
-                        "Nesî",
-                    }
-                }
-            }
-        }
-        ethiopic{
-            monthNames{
-                format{
-                    wide{
-                        "Meskerem",
-                        "Tikimt",
-                        "Hidar",
-                        "Tahsas",
-                        "Tir",
-                        "Yakatit",
-                        "Magabit",
-                        "Miyazya",
-                        "Ginbot",
-                        "Sene",
-                        "Hamle",
-                        "Nehasa",
-                        "Pagumiene",
-                    }
-                }
-            }
-        }
         generic{
             DateTimePatterns{
                 "HH:mm:ss zzzz",
@@ -295,16 +229,6 @@ tr{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMMd",
-                "GGGGGyMMd",
             }
             availableFormats{
                 Bh{"B h"}
@@ -330,10 +254,8 @@ tr{
                 Md{"dd/MM"}
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
-                mmss{"mm:ss"}
                 yyyyM{"GGGGG M/y"}
                 yyyyMEd{"GGGGG dd.MM.y E"}
-                yyyyMM{"MM.y G"}
                 yyyyMMM{"G MMM y"}
                 yyyyMMMEd{"G d MMM y E"}
                 yyyyMMMM{"G MMMM y"}
@@ -409,16 +331,6 @@ tr{
                     M{"dd/MM – dd/MM"}
                     d{"dd/MM – dd/MM"}
                 }
-                hm{
-                    a{"h:mm a – h:mm a"}
-                    h{"h:mm–h:mm a"}
-                    m{"h:mm–h:mm a"}
-                }
-                hmv{
-                    a{"h:mm a – h:mm a v"}
-                    h{"h:mm–h:mm a v"}
-                    m{"h:mm–h:mm a v"}
-                }
                 yM{
                     M{"GGGGG M/y – M/y"}
                     y{"GGGGG M/y – M/y"}
@@ -477,16 +389,6 @@ tr{
                 "{1} {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yMMd",
-            }
             appendItems{
                 Day-Of-Week{"{0} {1}"}
             }
@@ -513,7 +415,6 @@ tr{
                 MMMEd{"d MMM E"}
                 MMMMEd{"d MMMM E"}
                 MMMMW{
-                    one{"MMMM 'ayının' W. 'haftası'"}
                     other{"MMMM 'ayının' W. 'haftası'"}
                 }
                 MMMMd{"d MMMM"}
@@ -537,7 +438,6 @@ tr{
                 yMMMd{"d MMM y"}
                 yMd{"d.M.y"}
                 yw{
-                    one{"Y 'yılının' w. 'haftası'"}
                     other{"Y 'yılının' w. 'haftası'"}
                 }
             }
@@ -596,13 +496,7 @@ tr{
                         noon{"öğle"}
                     }
                     narrow{
-                        afternoon1{"öğleden sonra"}
-                        afternoon2{"akşamüstü"}
-                        evening1{"akşam"}
                         midnight{"gece"}
-                        morning1{"sabah"}
-                        morning2{"öğleden önce"}
-                        night1{"gece"}
                         noon{"ö"}
                     }
                 }
@@ -819,28 +713,6 @@ tr{
                 }
             }
         }
-        hebrew{
-            monthNames{
-                format{
-                    wide{
-                        "Tişri",
-                        "Heşvan",
-                        "Kislev",
-                        "Tevet",
-                        "Şevat",
-                        "Adar Rişon",
-                        "Adar",
-                        "Nisan",
-                        "İyar",
-                        "Sivan",
-                        "Tamuz",
-                        "Av",
-                        "Elul",
-                        "Veadar",
-                    }
-                }
-            }
-        }
         islamic{
             availableFormats{
                 GyMEd{"G d/M/y E"}
@@ -881,63 +753,6 @@ tr{
                         "Zilkade",
                         "Zilhicce",
                     }
-                }
-            }
-        }
-        japanese{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "d MMMM y G EEEE",
-                "d MMMM y G",
-                "d MMM y G",
-                "d.MM.y G",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMMd",
-                "GyMMd",
-            }
-        }
-        persian{
-            monthNames{
-                format{
-                    wide{
-                        "Ferverdin",
-                        "Ordibeheşt",
-                        "Hordad",
-                        "Tir",
-                        "Mordad",
-                        "Şehriver",
-                        "Mehr",
-                        "Aban",
-                        "Azer",
-                        "Dey",
-                        "Behmen",
-                        "Esfend",
-                    }
-                }
-            }
-        }
-        roc{
-            eras{
-                abbreviated{
-                    1{"Minguo"}
-                }
-                wide{
-                    0{"R.O.C. Öncesi"}
                 }
             }
         }
@@ -1028,16 +843,6 @@ tr{
         western_asian_scripts{"Batı Asya alfabesi"}
         whitespace{"boşluk"}
     }
-    contextTransforms{
-        relative:intvector{
-            1,
-            1,
-        }
-        typographicNames:intvector{
-            1,
-            1,
-        }
-    }
     fields{
         day{
             dn{"gün"}
@@ -1050,11 +855,9 @@ tr{
             }
             relativeTime{
                 future{
-                    one{"{0} gün sonra"}
                     other{"{0} gün sonra"}
                 }
                 past{
-                    one{"{0} gün önce"}
                     other{"{0} gün önce"}
                 }
             }
@@ -1076,11 +879,9 @@ tr{
             }
             relativeTime{
                 future{
-                    one{"{0} cuma sonra"}
                     other{"{0} cuma sonra"}
                 }
                 past{
-                    one{"{0} cuma önce"}
                     other{"{0} cuma önce"}
                 }
             }
@@ -1092,11 +893,9 @@ tr{
             }
             relativeTime{
                 future{
-                    one{"{0} saat sonra"}
                     other{"{0} saat sonra"}
                 }
                 past{
-                    one{"{0} saat önce"}
                     other{"{0} saat önce"}
                 }
             }
@@ -1121,11 +920,9 @@ tr{
             }
             relativeTime{
                 future{
-                    one{"{0} dakika sonra"}
                     other{"{0} dakika sonra"}
                 }
                 past{
-                    one{"{0} dakika önce"}
                     other{"{0} dakika önce"}
                 }
             }
@@ -1151,11 +948,9 @@ tr{
             }
             relativeTime{
                 future{
-                    one{"{0} pazartesi sonra"}
                     other{"{0} pazartesi sonra"}
                 }
                 past{
-                    one{"{0} pazartesi önce"}
                     other{"{0} pazartesi önce"}
                 }
             }
@@ -1186,11 +981,9 @@ tr{
             }
             relativeTime{
                 future{
-                    one{"{0} ay sonra"}
                     other{"{0} ay sonra"}
                 }
                 past{
-                    one{"{0} ay önce"}
                     other{"{0} ay önce"}
                 }
             }
@@ -1204,22 +997,15 @@ tr{
             }
             relativeTime{
                 future{
-                    one{"{0} çeyrek sonra"}
                     other{"{0} çeyrek sonra"}
                 }
                 past{
-                    one{"{0} çeyrek önce"}
                     other{"{0} çeyrek önce"}
                 }
             }
         }
         quarter-short{
             dn{"çyr."}
-            relative{
-                "-1"{"geçen çyr."}
-                "0"{"bu çyr."}
-                "1"{"gelecek çyr."}
-            }
             relativeTime{
                 future{
                     one{"{0} çyr. sonra"}
@@ -1239,11 +1025,9 @@ tr{
             }
             relativeTime{
                 future{
-                    one{"{0} cumartesi sonra"}
                     other{"{0} cumartesi sonra"}
                 }
                 past{
-                    one{"{0} cumartesi önce"}
                     other{"{0} cumartesi önce"}
                 }
             }
@@ -1272,11 +1056,9 @@ tr{
             }
             relativeTime{
                 future{
-                    one{"{0} saniye sonra"}
                     other{"{0} saniye sonra"}
                 }
                 past{
-                    one{"{0} saniye önce"}
                     other{"{0} saniye önce"}
                 }
             }
@@ -1302,11 +1084,9 @@ tr{
             }
             relativeTime{
                 future{
-                    one{"{0} pazar sonra"}
                     other{"{0} pazar sonra"}
                 }
                 past{
-                    one{"{0} pazar önce"}
                     other{"{0} pazar önce"}
                 }
             }
@@ -1336,11 +1116,9 @@ tr{
             }
             relativeTime{
                 future{
-                    one{"{0} perşembe sonra"}
                     other{"{0} perşembe sonra"}
                 }
                 past{
-                    one{"{0} perşembe önce"}
                     other{"{0} perşembe önce"}
                 }
             }
@@ -1370,11 +1148,9 @@ tr{
             }
             relativeTime{
                 future{
-                    one{"{0} salı sonra"}
                     other{"{0} salı sonra"}
                 }
                 past{
-                    one{"{0} salı önce"}
                     other{"{0} salı önce"}
                 }
             }
@@ -1387,11 +1163,9 @@ tr{
             }
             relativeTime{
                 future{
-                    one{"{0} çarşamba sonra"}
                     other{"{0} çarşamba sonra"}
                 }
                 past{
-                    one{"{0} çarşamba önce"}
                     other{"{0} çarşamba önce"}
                 }
             }
@@ -1423,11 +1197,9 @@ tr{
             relativePeriod{"{0} haftası"}
             relativeTime{
                 future{
-                    one{"{0} hafta sonra"}
                     other{"{0} hafta sonra"}
                 }
                 past{
-                    one{"{0} hafta önce"}
                     other{"{0} hafta önce"}
                 }
             }
@@ -1468,11 +1240,9 @@ tr{
             }
             relativeTime{
                 future{
-                    one{"{0} yıl sonra"}
                     other{"{0} yıl sonra"}
                 }
                 past{
-                    one{"{0} yıl önce"}
                     other{"{0} yıl önce"}
                 }
             }

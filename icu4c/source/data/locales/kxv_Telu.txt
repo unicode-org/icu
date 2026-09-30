@@ -10,18 +10,8 @@ kxv_Telu{
     ExemplarCharactersNumbers{"[\\- ‑ , . % ‰ + 0 ౧ ౨ ౩ ౪ ౫ ౬ ౭ ౮ ౯]"}
     ExemplarCharactersPunctuation{"[\\- ‐‑ – — , ; \\: ! ? . … '‘’ \u0022“” ( ) \\[ \\] § @ * / \\& # † ‡ ′ ″]"}
     NumberElements{
-        deva{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##,##0.00"}
-                accountingFormat%noCurrency{"#,##,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##,##0.00"}
-                currencyFormat%noCurrency{"#,##,##0.00"}
-            }
-        }
         latn{
             patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##,##0.00"}
-                accountingFormat%noCurrency{"#,##,##0.00"}
                 currencyFormat{"¤#,##,##0.00"}
                 currencyFormat%alphaNextToNumber{"¤ #,##,##0.00"}
                 currencyFormat%noCurrency{"#,##,##0.00"}
@@ -168,16 +158,6 @@ kxv_Telu{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yMMdd",
-            }
             availableFormats{
                 Bh{"B h"}
                 Bhm{"B h:mm"}
@@ -236,14 +216,6 @@ kxv_Telu{
             }
             dayPeriod{
                 stand-alone{
-                    abbreviated{
-                        am{"ఎ ఎమ్"}
-                        pm{"పి ఎమ్"}
-                    }
-                    narrow{
-                        am{"ఎ ఎమ్"}
-                        pm{"పి ఎమ్"}
-                    }
                     wide{
                         am{"ఎ ఎమ్"}
                         pm{"పి ఎమ్"}
@@ -390,9 +362,6 @@ kxv_Telu{
                 "1"{"రేపు"}
             }
         }
-        day-short{
-            dn{"దినం"}
-        }
         dayperiod{
             dn{"AM/PM"}
         }
@@ -412,9 +381,6 @@ kxv_Telu{
             dn{"నిమి."}
         }
         month{
-            dn{"నెల"}
-        }
-        month-short{
             dn{"నెల"}
         }
         quarter{

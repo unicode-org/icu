@@ -15,11 +15,6 @@ gl{
         "\\& # † ‡ ′ ″]"
     }
     NumberElements{
-        deva{
-            miscPatterns{
-                range{"{0}-{1}"}
-            }
-        }
         latn{
             miscPatterns{
                 range{"{0}-{1}"}
@@ -76,23 +71,18 @@ gl{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"0"}
                         other{"0"}
                     }
                     10000{
-                        one{"0"}
                         other{"0"}
                     }
                     100000{
-                        one{"0"}
                         other{"0"}
                     }
                     1000000{
-                        one{"0 M ¤"}
                         other{"0 M ¤"}
                     }
                     10000000{
-                        one{"00 M ¤"}
                         other{"00 M ¤"}
                     }
                     100000000{
@@ -100,83 +90,64 @@ gl{
                         other{"000 M ¤"}
                     }
                     1000000000{
-                        one{"0000 M ¤"}
                         other{"0000 M ¤"}
                     }
                     10000000000{
-                        one{"00000 M ¤"}
                         other{"00000 M ¤"}
                     }
                     100000000000{
-                        one{"000000 M ¤"}
                         other{"000000 M ¤"}
                     }
                     1000000000000{
-                        one{"0 B ¤"}
                         other{"0 B ¤"}
                     }
                     10000000000000{
-                        one{"00 B ¤"}
                         other{"00 B ¤"}
                     }
                     100000000000000{
-                        one{"000 B ¤"}
                         other{"000 B ¤"}
                     }
                 }
                 currencyFormat%alphaNextToNumber{
                     100000000000{
-                        one{"000000 M ¤"}
                         other{"000000 M¤"}
                     }
                 }
                 decimalFormat{
                     1000{
-                        one{"0"}
                         other{"0"}
                     }
                     10000{
-                        one{"0"}
                         other{"0"}
                     }
                     100000{
-                        one{"0"}
                         other{"0"}
                     }
                     1000000{
-                        one{"0 M"}
                         other{"0 M"}
                     }
                     10000000{
-                        one{"00 M"}
                         other{"00 M"}
                     }
                     100000000{
-                        one{"000 M"}
                         other{"000 M"}
                     }
                     1000000000{
-                        one{"0000 M"}
                         other{"0000 M"}
                     }
                     10000000000{
-                        one{"00000 M"}
                         other{"00000 M"}
                     }
                     100000000000{
-                        one{"000000 M"}
                         other{"000000 M"}
                     }
                     1000000000000{
-                        one{"0 B"}
                         other{"0 B"}
                     }
                     10000000000000{
-                        one{"00 B"}
                         other{"00 B"}
                     }
                     100000000000000{
-                        one{"000 B"}
                         other{"000 B"}
                     }
                 }
@@ -214,16 +185,6 @@ gl{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GYMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMMd",
-                "GGGGGyMMdd",
-            }
             availableFormats{
                 EBhm{"E, h:mm B"}
                 EBhms{"E, h:mm:ss B"}
@@ -245,14 +206,12 @@ gl{
                 MMMMEd{"E, d 'de' MMMM"}
                 MMMMd{"d 'de' MMMM"}
                 MMMd{"d 'de' MMM"}
-                MMdd{"dd/MM"}
                 Md{"dd/MM"}
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
                 y{"y G"}
                 yM{"M-y"}
                 yMEd{"E, d/M/y"}
-                yMM{"MM/y"}
                 yMMM{"MMM 'de' y"}
                 yMMMEd{"E, d 'de' MMMM 'de' y"}
                 yMMMM{"MMMM 'de' y"}
@@ -336,24 +295,6 @@ gl{
                     M{"d/M – d/M"}
                     d{"d/M – d/M"}
                 }
-                h{
-                    a{"h a – h a"}
-                    h{"h–h a"}
-                }
-                hm{
-                    a{"h:mm a – h:mm a"}
-                    h{"h:mm–h:mm a"}
-                    m{"h:mm–h:mm a"}
-                }
-                hmv{
-                    a{"h:mm a – h:mm a v"}
-                    h{"h:mm–h:mm a v"}
-                    m{"h:mm–h:mm a v"}
-                }
-                hv{
-                    a{"h a – h a v"}
-                    h{"h–h a v"}
-                }
                 y{
                     y{"y–y G"}
                 }
@@ -411,16 +352,6 @@ gl{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yyMMdd",
-            }
             appendItems{
                 Era{"{0} {1}"}
             }
@@ -451,7 +382,6 @@ gl{
                 MMMEd{"E, d 'de' MMM"}
                 MMMMEd{"E, d 'de' MMMM"}
                 MMMMW{
-                    one{"W.'ª' 'semana' 'de' MMMM"}
                     other{"W.'ª' 'semana' 'de' MMMM"}
                 }
                 MMMMd{"d 'de' MMMM"}
@@ -475,7 +405,6 @@ gl{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ 'de' y"}
                 yw{
-                    one{"w.'ª' 'semana' 'de' Y"}
                     other{"w.'ª' 'semana' 'de' Y"}
                 }
             }
@@ -881,11 +810,9 @@ gl{
             }
             relativeTime{
                 future{
-                    one{"en {0} venres"}
                     other{"en {0} venres"}
                 }
                 past{
-                    one{"hai {0} venres"}
                     other{"hai {0} venres"}
                 }
             }
@@ -893,7 +820,6 @@ gl{
         fri-narrow{
             relative{
                 "-1"{"o ven. pas."}
-                "0"{"este ven."}
                 "1"{"o próx. ven."}
             }
         }
@@ -980,11 +906,9 @@ gl{
             }
             relativeTime{
                 future{
-                    one{"en {0} luns"}
                     other{"en {0} luns"}
                 }
                 past{
-                    one{"hai {0} luns"}
                     other{"hai {0} luns"}
                 }
             }
@@ -992,7 +916,6 @@ gl{
         mon-short{
             relative{
                 "-1"{"o luns pas."}
-                "0"{"este luns"}
                 "1"{"o próx. luns"}
             }
         }
@@ -1017,7 +940,6 @@ gl{
         month-narrow{
             relative{
                 "-1"{"o mes pas."}
-                "0"{"este mes"}
                 "1"{"o próx. mes"}
             }
         }
@@ -1041,11 +963,6 @@ gl{
         }
         quarter-short{
             dn{"trim."}
-            relative{
-                "-1"{"trim. pasado"}
-                "0"{"este trim."}
-                "1"{"trim. seguinte"}
-            }
             relativeTime{
                 future{
                     one{"en {0} trim."}
@@ -1077,7 +994,6 @@ gl{
         sat-narrow{
             relative{
                 "-1"{"o sáb. pas."}
-                "0"{"este sáb."}
                 "1"{"o próx. sáb."}
             }
         }
@@ -1147,7 +1063,6 @@ gl{
         sun-narrow{
             relative{
                 "-1"{"o dom. pas."}
-                "0"{"este dom."}
                 "1"{"o próx. dom."}
             }
         }
@@ -1176,11 +1091,9 @@ gl{
             }
             relativeTime{
                 future{
-                    one{"en {0} xoves"}
                     other{"en {0} xoves"}
                 }
                 past{
-                    one{"hai {0} xoves"}
                     other{"hai {0} xoves"}
                 }
             }
@@ -1188,7 +1101,6 @@ gl{
         thu-narrow{
             relative{
                 "-1"{"o xov. pas."}
-                "0"{"este xov."}
                 "1"{"o próx. xov."}
             }
         }
@@ -1217,11 +1129,9 @@ gl{
             }
             relativeTime{
                 future{
-                    one{"en {0} martes"}
                     other{"en {0} martes"}
                 }
                 past{
-                    one{"hai {0} martes"}
                     other{"hai {0} martes"}
                 }
             }
@@ -1229,7 +1139,6 @@ gl{
         tue-narrow{
             relative{
                 "-1"{"o mar. pas."}
-                "0"{"este mar."}
                 "1"{"o próx. mar."}
             }
         }
@@ -1258,11 +1167,9 @@ gl{
             }
             relativeTime{
                 future{
-                    one{"en {0} mércores"}
                     other{"en {0} mércores"}
                 }
                 past{
-                    one{"hai {0} mércores"}
                     other{"hai {0} mércores"}
                 }
             }
@@ -1270,7 +1177,6 @@ gl{
         wed-narrow{
             relative{
                 "-1"{"o mér. pas."}
-                "0"{"este mér."}
                 "1"{"o próx. mér."}
             }
         }
@@ -1313,7 +1219,6 @@ gl{
         week-narrow{
             relative{
                 "-1"{"a sem. pas."}
-                "0"{"esta sem."}
                 "1"{"a próx. sem."}
             }
         }
@@ -1374,7 +1279,6 @@ gl{
         year-narrow{
             relative{
                 "-1"{"o ano pas."}
-                "0"{"este ano"}
                 "1"{"o próx. ano"}
             }
         }

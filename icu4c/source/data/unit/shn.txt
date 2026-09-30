@@ -233,14 +233,6 @@ shn{
             becquerel{
                 other{"{0} ပႅၵ်ႉၶႄႇရႄႇလ်"}
             }
-            british-thermal-unit{
-                dnam{"ယူႇၼိတ်ႉတၢင်းမႆးဢိင်းၵလဵတ်ႈ"}
-                other{"{0} ယူႇၼိတ်ႉတၢင်းမႆးဢိင်းၵလဵတ်ႈ"}
-            }
-            british-thermal-unit-it{
-                dnam{"ယူႇၼိတ်ႉတၢင်းမႆးဢိင်းၵလဵတ်ႈ [ဢၢႆႇထီႇ]"}
-                other{"{0} ယူႇၼိတ်ႉတၢင်းမႆးဢိင်းၵလဵတ်ႈ [ဢၢႆႇထီႇ]"}
-            }
             electronvolt{
                 other{"{0} ဢီႇလႅတ်ႇထရွၼ်ႇဝူဝ်ႉ"}
             }
@@ -406,18 +398,12 @@ shn{
             solar-mass{
                 other{"{0} ၼႅၼ်ႈၼႃလႅတ်ႇ"}
             }
-            stone{
-                other{"{0} သတူၼ်း"}
-            }
             tonne{
                 dnam{"မႅတ်ႉထရိတ်ႉတၢၼ်ႇ"}
                 other{"{0} မႅတ်ႉထရိတ်ႉ တၢၼ်ႇ"}
             }
         }
         pressure{
-            gasoline-energy-density{
-                other{"{0} ဢၼ်မိူၼ်ၵၼ်တင်း ၵႅတ်ႉသ်"}
-            }
             hectopascal{
                 dnam{"ႁႅၵ်ႇတူဝ်ႇပၢတ်ႉသၵႄးလ်"}
                 other{"{0} ႁႅၵ်ႇတူဝ်ႇပၢတ်ႉသၵႄးလ်'"}
@@ -466,10 +452,6 @@ shn{
             kelvin{
                 dnam{"ၶႄႇလ်ဝိၼ်ႇ"}
                 other{"{0} ၶႄႇလ်ဝိၼ်ႇ"}
-            }
-            rankine{
-                dnam{"ရႅၼ်ႇၵိၼ်ႇ"}
-                other{"{0} ရႅၼ်ႇၵိၼ်ႇ"}
             }
         }
         torque{
@@ -543,9 +525,6 @@ shn{
                 dnam{"မီႇလီႇလီႇတႃႇ"}
                 other{"{0} မီႇလီႇလီႇတႃႇ"}
             }
-            pint-imperial{
-                other{"{0}ပၢႆး ဢိင်းၵလဵတ်ႈ"}
-            }
         }
     }
     unitsNarrow{
@@ -566,20 +545,11 @@ shn{
             acre{
                 other{"{0}ဢေႇၵ"}
             }
-            bu-jp{
-                other{"{0}ပု [ၵပ.]"}
-            }
-            cho{
-                other{"{0}ၶျူဝ် [ၵပ.]"}
-            }
             dunam{
                 other{"{0}တူးၼမ်ႇ"}
             }
             hectare{
                 other{"{0}ႁႅၵ်ႇတႃႇ"}
-            }
-            se-jp{
-                other{"{0}သႄ [ၵပ.]"}
             }
             square-centimeter{
                 other{"{0}သမ.²"}
@@ -731,9 +701,6 @@ shn{
             }
         }
         energy{
-            british-thermal-unit-it{
-                other{"{0}ပီႇထီႇယူႇ-ဢၢႆႇထီႇ"}
-            }
             calorie{
                 other{"{0}ၵႄႇလူဝ်ႇရီႇ"}
             }
@@ -785,29 +752,14 @@ shn{
             centimeter{
                 other{"{0}သမ."}
             }
-            chain{
-                other{"{0}ၶျဵၼ်း"}
-            }
             decimeter{
                 other{"{0}တမ."}
-            }
-            fathom{
-                other{"{0}ၾႃႇထွမ်ႇ"}
             }
             foot{
                 other{"{0}′"}
             }
-            furlong{
-                other{"{0}ၾႃႇလူင်ႇ"}
-            }
             inch{
                 other{"{0}″"}
-            }
-            jo-jp{
-                other{"{0}ၸူဝ်း [ၵပ.]"}
-            }
-            ken{
-                other{"{0}ၵႅၼ်း [ၵပ.]"}
             }
             light-year{
                 other{"{0}ပီလႅင်း"}
@@ -837,24 +789,6 @@ shn{
             point{
                 other{"{0}ၸုတ်း"}
             }
-            ri-jp{
-                other{"{0}ရီ [ၵပ.]"}
-            }
-            rin{
-                other{"{0}ရိၼ်း [ၵပ.]"}
-            }
-            rod{
-                other{"{0}ရွတ်ႉ"}
-            }
-            shaku-cloth{
-                other{"{0}သျၵ်ၵု [ၶူဝ်း၊ ၵပ.]"}
-            }
-            shaku-length{
-                other{"{0}သျၵ်ၵု [ၵပ.]"}
-            }
-            sun{
-                other{"{0}သုၼ်း [ၵပ.]"}
-            }
             yard{
                 other{"{0}ဝၢႆႈ"}
             }
@@ -865,9 +799,6 @@ shn{
             }
             dalton{
                 other{"{0}Da"}
-            }
-            fun{
-                other{"{0}ၾုၼ်ႉ [ၵပ.]"}
             }
             grain{
                 other{"{0}မဵတ်ႉၽၼ်း"}
@@ -891,12 +822,6 @@ shn{
             }
             pound{
                 other{"{0}ပွၼ်း"}
-            }
-            slug{
-                other{"{0}သလၢၵ်ႉ"}
-            }
-            stone{
-                other{"{0}သတ."}
             }
         }
         power{
@@ -925,9 +850,6 @@ shn{
             }
             bar{
                 other{"{0}ပႃးရ်"}
-            }
-            gasoline-energy-density{
-                other{"{0}gas-equiv"}
             }
             hectopascal{
                 other{"{0}hPa"}
@@ -980,9 +902,6 @@ shn{
             barrel{
                 other{"{0}ပႃႇရႄႇလ်"}
             }
-            bushel{
-                other{"{0}ၶႂၢႆး"}
-            }
             centiliter{
                 other{"{0}သလ."}
             }
@@ -1009,9 +928,6 @@ shn{
             }
             cup{
                 other{"{0}ၵွၵ်း"}
-            }
-            cup-imperial{
-                other{"{0}ၵွၵ်း ဢိင်းၵလဵတ်ႈ"}
             }
             cup-metric{
                 other{"{0}ၵွၵ်းမႅတ်ႉထရိတ်ႉ"}
@@ -1040,9 +956,6 @@ shn{
             jigger{
                 other{"{0}ၸိၵ်ႇၵႃႇ"}
             }
-            kosaji{
-                other{"{0}ၵူဝ်ၸႃးၵျိ [ၵပ.]"}
-            }
             liter{
                 other{"{0}လ."}
             }
@@ -1057,9 +970,6 @@ shn{
             }
             pint{
                 other{"{0}ပၢႆး"}
-            }
-            pint-imperial{
-                other{"{0}ပၢႆး ဢိင်းၵလဵတ်ႈ"}
             }
             pint-metric{
                 other{"{0}ပၢႆးမႅတ်ႉထရိတ်ႉ"}
@@ -1113,14 +1023,6 @@ shn{
                 dnam{"ဢေႇၵ"}
                 other{"{0} ဢေႇၵ"}
             }
-            bu-jp{
-                dnam{"ပု [ၵပ.]"}
-                other{"{0} ပု [ၵပ.]"}
-            }
-            cho{
-                dnam{"ၶျူဝ် [ၵပ.]"}
-                other{"{0} ၶျူဝ် [ၵပ.]"}
-            }
             dunam{
                 dnam{"တူးၼမ်ႇ"}
                 other{"{0} တူးၼမ်ႇ"}
@@ -1128,10 +1030,6 @@ shn{
             hectare{
                 dnam{"ႁႅၵ်ႇတႃႇ"}
                 other{"{0} ႁႅၵ်ႇတႃႇ"}
-            }
-            se-jp{
-                dnam{"သႄ [ၵပ.]"}
-                other{"{0} သႄ [ၵပ.]"}
             }
             square-centimeter{
                 dnam{"သမ.²"}
@@ -1296,10 +1194,6 @@ shn{
                 dnam{"ႁူဝ်သိပ်းပီ"}
                 other{"{0} ႁူဝ်သိပ်းပီ"}
             }
-            fortnight{
-                dnam{"ၽၢၵ်ႇလိူၼ်"}
-                other{"{0} ၽၢၵ်ႇလိူၼ်"}
-            }
             hour{
                 dnam{"မူင်း"}
                 other{"{0} မူင်း"}
@@ -1384,14 +1278,6 @@ shn{
                 dnam{"ပႅၵ်ႉၶႄႇရႄႇလ်"}
                 other{"{0} Bq"}
             }
-            british-thermal-unit{
-                dnam{"ပီႇထီႇယူႇ"}
-                other{"{0} ပီႇထီႇယူႇ"}
-            }
-            british-thermal-unit-it{
-                dnam{"ပီႇထီႇယူႇ-ဢၢႆႇထီႇ"}
-                other{"{0} ပီႇထီႇယူႇ-ဢၢႆႇထီႇ"}
-            }
             calorie{
                 dnam{"ၵႄႇလူဝ်ႇရီႇ"}
                 other{"{0} ၵႄႇလူဝ်ႇရီႇ"}
@@ -1457,39 +1343,19 @@ shn{
                 other{"{0} သမ."}
                 per{"{0}/သမ."}
             }
-            chain{
-                dnam{"ၶျဵၼ်း"}
-                other{"{0} ၶျဵၼ်း"}
-            }
             decimeter{
                 dnam{"တမ."}
                 other{"{0} တမ."}
-            }
-            fathom{
-                dnam{"ၾႃႇထွမ်ႇ"}
-                other{"{0} ၾႃႇထွမ်ႇ"}
             }
             foot{
                 dnam{"ထတ်း"}
                 other{"{0} ထတ်း"}
                 per{"{0}/ထတ်း"}
             }
-            furlong{
-                dnam{"ၾႃႇလူင်ႇ"}
-                other{"{0} ၾႃႇလူင်ႇ"}
-            }
             inch{
                 dnam{"ၼိဝ်ႉ"}
                 other{"{0} ၼိဝ်ႉ"}
                 per{"{0}/ၼိဝ်ႉ"}
-            }
-            jo-jp{
-                dnam{"ၸူဝ်း [ၵပ.]"}
-                other{"{0} ၸူဝ်း [ၵပ.]"}
-            }
-            ken{
-                dnam{"ၵႅၼ်း [ၵပ.]"}
-                other{"{0} ၵႅၼ်း [ၵပ.]"}
             }
             kilometer{
                 dnam{"ၵမ."}
@@ -1539,32 +1405,8 @@ shn{
                 dnam{"ၸုတ်း"}
                 other{"{0} ၸုတ်း"}
             }
-            ri-jp{
-                dnam{"ရီ [ၵပ.]"}
-                other{"{0} ရီ [ၵပ.]"}
-            }
-            rin{
-                dnam{"ရိၼ်း [ၵပ.]"}
-                other{"{0} ရိၼ်း [ၵပ.]"}
-            }
-            rod{
-                dnam{"ရွတ်ႉ"}
-                other{"{0} ရွတ်ႉ"}
-            }
-            shaku-cloth{
-                dnam{"သျၵ်ၵု [ၶူဝ်း၊ ၵပ.]"}
-                other{"{0} သျၵ်ၵု [ၶူဝ်း၊ ၵပ.]"}
-            }
-            shaku-length{
-                dnam{"သျၵ်ၵု [ၵပ.]"}
-                other{"{0} သျၵ်ၵု [ၵပ.]"}
-            }
             solar-radius{
                 dnam{"ထႅဝ်ၽိတ်ႇလႅတ်ႇ"}
-            }
-            sun{
-                dnam{"သုၼ်း [ၵပ.]"}
-                other{"{0} သုၼ်း [ၵပ.]"}
             }
             yard{
                 dnam{"ဝၢႆႈ"}
@@ -1604,10 +1446,6 @@ shn{
             earth-mass{
                 dnam{"ၼႅၼ်ႈၼႃလုမ်ႈၾႃႉ"}
             }
-            fun{
-                dnam{"ၾုၼ်ႉ [ၵပ.]"}
-                other{"{0} ၾုၼ်ႉ [ၵပ.]"}
-            }
             grain{
                 dnam{"မဵတ်ႉၽၼ်း"}
                 other{"{0} မဵတ်ႉၽၼ်း"}
@@ -1644,16 +1482,8 @@ shn{
                 other{"{0} ပွၼ်း"}
                 per{"{0}/ပွၼ်း"}
             }
-            slug{
-                dnam{"သလၢၵ်ႉ"}
-                other{"{0} သလၢၵ်ႉ"}
-            }
             solar-mass{
                 dnam{"ၼႅၼ်ႈၼႃလႅတ်ႇ"}
-            }
-            stone{
-                dnam{"သတူၼ်း"}
-                other{"{0} သတ."}
             }
             ton{
                 dnam{"တၢၼ်ႇ"}
@@ -1698,10 +1528,6 @@ shn{
             bar{
                 dnam{"ပႃးရ်"}
                 other{"{0} ပႃးရ်"}
-            }
-            gasoline-energy-density{
-                dnam{"ဢၼ်မိူၼ်ၵၼ်တင်း ၵႅတ်ႉသ်"}
-                other{"{0} gas-equiv"}
             }
             inch-ofhg{
                 dnam{"ၼိဝ်ႉမႃႇၵျူႇရီႇ"}
@@ -1766,10 +1592,6 @@ shn{
                 dnam{"ပႃႇရႄႇလ်"}
                 other{"{0} ပႃႇရႄႇလ်"}
             }
-            bushel{
-                dnam{"ၶႂၢႆး"}
-                other{"{0} ၶႂၢႆး"}
-            }
             centiliter{
                 dnam{"သလ."}
                 other{"{0} သလ."}
@@ -1807,14 +1629,6 @@ shn{
             cup{
                 dnam{"ၵွၵ်း"}
                 other{"{0} ၵွၵ်း"}
-            }
-            cup-imperial{
-                dnam{"ၵွၵ်း ဢိင်းၵလဵတ်ႈ"}
-                other{"{0} ၵွၵ်း ဢိင်းၵလဵတ်ႈ"}
-            }
-            cup-jp{
-                dnam{"ၵွပ်း [ၵပ.]"}
-                other{"{0} ၵွပ်း [ၵပ.]"}
             }
             cup-metric{
                 dnam{"ၵွၵ်းမႅတ်ႉထရိတ်ႉ"}
@@ -1866,14 +1680,6 @@ shn{
                 dnam{"ၸိၵ်ႇၵႃႇ"}
                 other{"{0} ၸိၵ်ႇၵႃႇ"}
             }
-            koku{
-                dnam{"ၵွၵ်ၵု [ၵပ.]"}
-                other{"{0} ၵွၵ်ၵု [ၵပ.]"}
-            }
-            kosaji{
-                dnam{"ၵူဝ်ၸႃးၵျိ [ၵပ.]"}
-                other{"{0} ၵူဝ်ၸႃးၵျိ [ၵပ.]"}
-            }
             liter{
                 dnam{"လီႇတႃႇ"}
                 other{"{0} လ."}
@@ -1887,10 +1693,6 @@ shn{
                 dnam{"မလ."}
                 other{"{0} မလ."}
             }
-            osaji{
-                dnam{"ဢူဝ်ၸႃးၵျိ [ၵပ.]"}
-                other{"{0} ဢူဝ်ၸႃးၵျိ [ၵပ.]"}
-            }
             pinch{
                 dnam{"ယွပ်း"}
                 other{"{0} ယွပ်း"}
@@ -1898,10 +1700,6 @@ shn{
             pint{
                 dnam{"ပၢႆး"}
                 other{"{0} ပၢႆး"}
-            }
-            pint-imperial{
-                dnam{"ပၢႆး ဢိင်းၵလဵတ်ႈ"}
-                other{"{0} ပၢႆး ဢိင်းၵလဵတ်ႈ"}
             }
             pint-metric{
                 dnam{"ပၢႆးမႅတ်ႉထရိတ်ႉ"}
@@ -1915,14 +1713,6 @@ shn{
                 dnam{"ၶွတ်ႉ ဢိင်းၵလဵတ်ႈ"}
                 other{"{0} ၶွတ်ႉ ဢိင်းၵလဵတ်ႈ"}
             }
-            sai{
-                dnam{"သၢႆႉ [ၵပ.]"}
-                other{"{0} သၢႆႉ [ၵပ.]"}
-            }
-            shaku{
-                dnam{"သျၵ်ၵု [ၼႅၼ်ႈၼႃ၊ ၵပ.]"}
-                other{"{0} သျၵ်ၵု [ၼႅၼ်ႈၼႃ၊ ၵပ.]"}
-            }
             tablespoon{
                 dnam{"ၸေႃႉၵိၼ်ၶဝ်ႈ"}
                 other{"{0} ၸေႃႉၵိၼ်ၶဝ်ႈ"}
@@ -1930,10 +1720,6 @@ shn{
             teaspoon{
                 dnam{"ၸေႃႉၼမ်ႉၼဵင်ႈ"}
                 other{"{0} ၸေႃႉၼမ်ႉၼဵင်ႈ"}
-            }
-            to-jp{
-                dnam{"တူဝ်ႇ [ၵပ.]"}
-                other{"{0} တူဝ်ႇ [ၵပ.]"}
             }
         }
     }

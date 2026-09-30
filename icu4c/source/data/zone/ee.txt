@@ -35,19 +35,15 @@ ee{
         }
         "meta:Africa_Central"{
             ls{"Central Africa gaƒoƒo me"}
-            ss{"CAT"}
         }
         "meta:Africa_Eastern"{
             ls{"East Africa gaƒoƒo me"}
-            ss{"EAT"}
         }
         "meta:Africa_Southern"{
             ls{"South Africa nutome gaƒoƒo me"}
-            ss{"SAST"}
         }
         "meta:Africa_Western"{
             ls{"West Africa game"}
-            ss{"WAT"}
         }
         "meta:Alaska"{
             ld{"Alaska kele gaƒoƒo me"}

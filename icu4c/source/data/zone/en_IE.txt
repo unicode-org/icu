@@ -3,10 +3,4 @@
 // Generated using tools/cldr/cldr-to-icu/
 en_IE{
     %%Parent{"en_001"}
-    zoneStrings{
-        "meta:Irish"{
-            sd{"IST"}
-            ss{"GMT"}
-        }
-    }
 }

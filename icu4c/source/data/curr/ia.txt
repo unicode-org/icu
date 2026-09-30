@@ -151,10 +151,6 @@ ia{
             "CZK",
             "corona chec",
         }
-        DEM{
-            "DEM",
-            "Marco geman",
-        }
         DJF{
             "DJF",
             "franco djibutian",
@@ -170,10 +166,6 @@ ia{
         DZD{
             "DZD",
             "dinar algerin",
-        }
-        EEK{
-            "EEK",
-            "Corona estonian",
         }
         EGP{
             "EGP",
@@ -191,10 +183,6 @@ ia{
             "€",
             "euro",
         }
-        FIM{
-            "FIM",
-            "Marco finnese",
-        }
         FJD{
             "FJD",
             "dollar fijian",
@@ -202,10 +190,6 @@ ia{
         FKP{
             "FKP",
             "libra falklandese",
-        }
-        FRF{
-            "FRF",
-            "Franco francese",
         }
         GBP{
             "£",
@@ -262,10 +246,6 @@ ia{
         IDR{
             "IDR",
             "rupia indonesian",
-        }
-        IEP{
-            "IEP",
-            "Libra irlandese",
         }
         ILS{
             "₪",
@@ -387,10 +367,6 @@ ia{
             "MOP",
             "pataca de Macao",
         }
-        MRO{
-            "MRO",
-            "ouguiya mauritan (1973–2017)",
-        }
         MRU{
             "MRU",
             "ouguiya mauritan",
@@ -430,10 +406,6 @@ ia{
         NIO{
             "NIO",
             "cordoba nicaraguan",
-        }
-        NLG{
-            "ƒ",
-            "Florino nederlandese",
         }
         NOK{
             "NOK",
@@ -614,10 +586,6 @@ ia{
         UZS{
             "UZS",
             "som uzbek",
-        }
-        VEF{
-            "VEF",
-            "bolivar venezuelan (2008–2018)",
         }
         VES{
             "VES",
@@ -817,10 +785,6 @@ ia{
             one{"corona chec"}
             other{"coronas chec"}
         }
-        DEM{
-            one{"marco german"}
-            other{"marcos german"}
-        }
         DJF{
             one{"franco djibutian"}
             other{"francos djibutian"}
@@ -836,10 +800,6 @@ ia{
         DZD{
             one{"dinar algerin"}
             other{"dinares algerin"}
-        }
-        EEK{
-            one{"corona estonian"}
-            other{"coronas estonian"}
         }
         EGP{
             one{"libra egyptie"}
@@ -857,10 +817,6 @@ ia{
             one{"euro"}
             other{"euros"}
         }
-        FIM{
-            one{"marco finnese"}
-            other{"marcos finnese"}
-        }
         FJD{
             one{"dollar fijian"}
             other{"dollares fijian"}
@@ -868,10 +824,6 @@ ia{
         FKP{
             one{"libra falklandese"}
             other{"libras falklandese"}
-        }
-        FRF{
-            one{"franco francese"}
-            other{"francos francese"}
         }
         GBP{
             one{"libra sterling"}
@@ -928,10 +880,6 @@ ia{
         IDR{
             one{"rupia indonesian"}
             other{"rupias indonesian"}
-        }
-        IEP{
-            one{"libra irlandese"}
-            other{"libras irlandese"}
         }
         ILS{
             one{"nove shekel israeli"}
@@ -1037,10 +985,6 @@ ia{
             one{"pataca de Macao"}
             other{"patacas de Macao"}
         }
-        MRO{
-            one{"ouguiya mauritan (1973–2017)"}
-            other{"ouguiyas mauritan (1973–2017)"}
-        }
         MRU{
             one{"ouguiya mauritan"}
             other{"ouguiyas mauritan"}
@@ -1076,10 +1020,6 @@ ia{
         NIO{
             one{"cordoba nicaraguan"}
             other{"cordobas nicaraguan"}
-        }
-        NLG{
-            one{"florino nederlandese"}
-            other{"florinos nederlandese"}
         }
         NOK{
             one{"corona norvegian"}
@@ -1261,10 +1201,6 @@ ia{
             one{"som uzbek"}
             other{"soms uzbek"}
         }
-        VEF{
-            one{"bolivar venezuelan (2008–2018)"}
-            other{"bolivares venezuelan (2008–2018)"}
-        }
         VES{
             one{"bolivar venezuelan"}
             other{"bolivares venezuelan"}
@@ -1302,7 +1238,6 @@ ia{
             other{"francos CFP"}
         }
         XXX{
-            one{"(moneta incognite)"}
             other{"(moneta incognite)"}
         }
         YER{

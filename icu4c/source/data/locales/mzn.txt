@@ -11,11 +11,6 @@ mzn{
     ExemplarCharactersPunctuation{"[\\- ‐‑ ، ٫ ٬ ؛ \\: ! ؟ . … ‹ › « » ( ) \\[ \\] * / \\\\]"}
     MoreInformation{"؟"}
     NumberElements{
-        arabext{
-            symbols{
-                timeSeparator{":"}
-            }
-        }
         default{"arabext"}
         native{"arabext"}
     }
@@ -199,14 +194,12 @@ mzn{
         sun-narrow{
             relative{
                 "-1"{"قبلی یکشنبه"}
-                "0"{"این یکشنبه"}
                 "1"{"بعدی یکشنبه"}
             }
         }
         sun-short{
             relative{
                 "-1"{"یکشنبه قبل"}
-                "0"{"این یکشنبه"}
                 "1"{"یکشنبه بعد"}
             }
         }
@@ -269,9 +262,6 @@ mzn{
         zone{
             dn{"زمونی منقطه"}
         }
-    }
-    layout{
-        characters{"right-to-left"}
     }
     measurementSystemNames{
         UK{"بریتانیایی"}

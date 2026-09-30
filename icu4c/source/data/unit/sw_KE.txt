@@ -47,39 +47,10 @@ sw_KE{
         }
     }
     unitsNarrow{
-        area{
-            square-centimeter{
-                dnam{"cm²"}
-            }
-        }
-        consumption{
-            mile-per-gallon-imperial{
-                dnam{"maili/gal Imp"}
-            }
-        }
         length{
-            astronomical-unit{
-                dnam{"kipimo cha astronomia"}
-            }
-            micrometer{
-                dnam{"maikromita"}
-                one{"maikromita {0}"}
-                other{"maikromita {0}"}
-            }
             millimeter{
                 one{"mm{0}"}
                 other{"mm{0}"}
-            }
-        }
-        pressure{
-            bar{
-                dnam{"baa"}
-                one{"baa {0}"}
-                other{"baa {0}"}
-            }
-            millimeter-ofhg{
-                one{"mm Hg {0}"}
-                other{"mm Hg {0}"}
             }
         }
     }
@@ -105,7 +76,6 @@ sw_KE{
             }
             pixel{
                 one{"pikseli {0}"}
-                other{"px {0}"}
             }
         }
         length{
@@ -114,22 +84,18 @@ sw_KE{
             }
             micrometer{
                 dnam{"maikromita"}
-                one{"maikromita {0}"}
                 other{"maikromita {0}"}
             }
             parsec{
-                one{"kila sekunde {0}"}
                 other{"kila sekunde {0}"}
             }
         }
         pressure{
             bar{
                 dnam{"baa"}
-                one{"baa {0}"}
                 other{"baa {0}"}
             }
             millimeter-ofhg{
-                one{"mm Hg {0}"}
                 other{"mm Hg {0}"}
             }
         }

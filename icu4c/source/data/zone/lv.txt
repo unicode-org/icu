@@ -1160,11 +1160,6 @@ lv{
             lg{"Klusā okeāna laiks"}
             ls{"Klusā okeāna ziemas laiks"}
         }
-        "meta:Anadyr"{
-            ld{"Anadiras vasaras laiks"}
-            lg{"Anadiras laiks"}
-            ls{"Anadiras ziemas laiks"}
-        }
         "meta:Apia"{
             ld{"Apijas vasaras laiks"}
             lg{"Apijas laiks"}
@@ -1313,17 +1308,11 @@ lv{
             ld{"Centrāleiropas vasaras laiks"}
             lg{"Centrāleiropas laiks"}
             ls{"Centrāleiropas ziemas laiks"}
-            sd{"CEST"}
-            sg{"CET"}
-            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"Austrumeiropas vasaras laiks"}
             lg{"Austrumeiropas laiks"}
             ls{"Austrumeiropas ziemas laiks"}
-            sd{"EEST"}
-            sg{"EET"}
-            ss{"EET"}
         }
         "meta:Europe_Further_Eastern"{
             ls{"Austrumeiropas laika josla (FET)"}
@@ -1332,9 +1321,6 @@ lv{
             ld{"Rietumeiropas vasaras laiks"}
             lg{"Rietumeiropas laiks"}
             ls{"Rietumeiropas ziemas laiks"}
-            sd{"WEST"}
-            sg{"WET"}
-            ss{"WET"}
         }
         "meta:Falkland"{
             ld{"Folklenda (Malvinu) salu vasaras laiks"}

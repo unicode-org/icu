@@ -572,11 +572,6 @@ pl{
             lg{"czas pacyficzny"}
             ls{"czas pacyficzny standardowy"}
         }
-        "meta:Anadyr"{
-            ld{"czas Anadyr letni"}
-            lg{"czas Anadyr"}
-            ls{"czas standardowy Anadyr"}
-        }
         "meta:Apia"{
             ld{"Apia (czas letni)"}
             lg{"czas Apia"}
@@ -725,17 +720,11 @@ pl{
             ld{"czas środkowoeuropejski letni"}
             lg{"czas środkowoeuropejski"}
             ls{"czas środkowoeuropejski standardowy"}
-            sd{"CEST"}
-            sg{"CET"}
-            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"czas wschodnioeuropejski letni"}
             lg{"czas wschodnioeuropejski"}
             ls{"czas wschodnioeuropejski standardowy"}
-            sd{"EEST"}
-            sg{"EET"}
-            ss{"EET"}
         }
         "meta:Europe_Further_Eastern"{
             ls{"czas wschodnioeuropejski dalszy"}
@@ -744,9 +733,6 @@ pl{
             ld{"czas zachodnioeuropejski letni"}
             lg{"czas zachodnioeuropejski"}
             ls{"czas zachodnioeuropejski standardowy"}
-            sd{"WEST"}
-            sg{"WET"}
-            ss{"WET"}
         }
         "meta:Falkland"{
             ld{"Falklandy (czas letni)"}

@@ -97,16 +97,6 @@ dz{
                 "{1} {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "GyMMMMEEEEdd",
-                "GyMMMMdd",
-                "GyMMMdd",
-                "GGGGGyMMdd",
-            }
             availableFormats{
                 Ed{"d E"}
                 GyMMM{"G y སྤྱི་ཟླ་MMM"}
@@ -201,16 +191,6 @@ dz{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "yMMMMEEEEdd",
-                "yMMMMdd",
-                "yMMMdd",
-                "yMMdd",
             }
             availableFormats{
                 Ed{"d E"}

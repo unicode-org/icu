@@ -3,17 +3,9 @@
 // Generated using tools/cldr/cldr-to-icu/
 bn_IN{
     Ellipsis{
-        final{"{0}…"}
-        initial{"…{0}"}
-        medial{"{0}…{1}"}
         word-medial{"{0}…{1}"}
     }
     NumberElements{
-        beng{
-            patterns{
-                currencyFormat%alphaNextToNumber{"¤ #,##,##0.00"}
-            }
-        }
         default{"latn"}
         latn{
             patterns{
@@ -34,7 +26,6 @@ bn_IN{
         gregorian{
             availableFormats{
                 MMMMW{
-                    one{"MMMM এর W নম্বর সপ্তাহ"}
                     other{"MMMM এর W নম্বর সপ্তাহ"}
                 }
             }
@@ -54,11 +45,6 @@ bn_IN{
             dayPeriod{
                 format{
                     wide{
-                        afternoon1{"দুপুরবেলায়"}
-                        afternoon2{"বিকাল"}
-                        evening1{"সন্ধ্যাবেলায়"}
-                        morning1{"ভোরবেলায়"}
-                        morning2{"সকালবেলায়"}
                         night1{"রাত্রি"}
                     }
                 }

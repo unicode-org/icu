@@ -57,9 +57,6 @@ vec{
         "Africa:Khartoum"{
             ec{"Cartum"}
         }
-        "Africa:Lome"{
-            ec{"Lomé"}
-        }
         "Africa:Lubumbashi"{
             ec{"Lubunbashi"}
         }
@@ -135,9 +132,6 @@ vec{
         "America:Dominica"{
             ec{"Doménega"}
         }
-        "America:Eirunepe"{
-            ec{"Eirunepé"}
-        }
         "America:Grenada"{
             ec{"Granada"}
         }
@@ -180,9 +174,6 @@ vec{
         "America:Los_Angeles"{
             ec{"Los Àngeles"}
         }
-        "America:Maceio"{
-            ec{"Maceió"}
-        }
         "America:Martinique"{
             ec{"Martiniga"}
         }
@@ -197,9 +188,6 @@ vec{
         }
         "America:Montserrat"{
             ec{"Montserat"}
-        }
-        "America:Noronha"{
-            ec{"Fernando de Noronha"}
         }
         "America:North_Dakota:Beulah"{
             ec{"Beulah (Nord Dakota)"}
@@ -465,9 +453,6 @@ vec{
         "Europe:Bucharest"{
             ec{"Bucarest"}
         }
-        "Europe:Busingen"{
-            ec{"Büsingen"}
-        }
         "Europe:Copenhagen"{
             ec{"Copenaghen"}
         }
@@ -531,9 +516,6 @@ vec{
         "Europe:Tallinn"{
             ec{"Talin"}
         }
-        "Europe:Tirane"{
-            ec{"Tirana"}
-        }
         "Europe:Ulyanovsk"{
             ec{"Uliànosk"}
         }
@@ -563,9 +545,6 @@ vec{
         }
         "Indian:Comoro"{
             ec{"Ìzole Comore"}
-        }
-        "Indian:Mahe"{
-            ec{"Mahé"}
         }
         "Indian:Maldives"{
             ec{"Ìzole Maldive"}
@@ -632,9 +611,6 @@ vec{
         }
         "Pacific:Norfolk"{
             ec{"Ìzola Norfolk"}
-        }
-        "Pacific:Noumea"{
-            ec{"Nouméa"}
         }
         "Pacific:Pago_Pago"{
             ec{"Pango Pango"}

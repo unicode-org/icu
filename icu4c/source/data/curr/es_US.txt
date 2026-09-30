@@ -46,7 +46,6 @@ es_US{
         RON{"lei"}
         SSP{"£"}
         SYP{"£"}
-        VEF{"Bs"}
     }
     CurrencyPlurals{
         BTN{
@@ -72,10 +71,6 @@ es_US{
         ZMW{
             one{"kwacha zambiano"}
             other{"kwachas zambianos"}
-        }
-        ZWG{
-            one{"oro de Zimbabue"}
-            other{"oro de Zimbabue"}
         }
     }
 }

@@ -14,39 +14,30 @@ de_CH{
             patternsShort{
                 currencyFormat{
                     1000000{
-                        one{"¤ 0 Mio'.'"}
                         other{"¤ 0 Mio'.'"}
                     }
                     10000000{
-                        one{"¤ 00 Mio'.'"}
                         other{"¤ 00 Mio'.'"}
                     }
                     100000000{
-                        one{"¤ 000 Mio'.'"}
                         other{"¤ 000 Mio'.'"}
                     }
                     1000000000{
-                        one{"¤ 0 Mrd'.'"}
                         other{"¤ 0 Mrd'.'"}
                     }
                     10000000000{
-                        one{"¤ 00 Mrd'.'"}
                         other{"¤ 00 Mrd'.'"}
                     }
                     100000000000{
-                        one{"¤ 000 Mrd'.'"}
                         other{"¤ 000 Mrd'.'"}
                     }
                     1000000000000{
-                        one{"¤ 0 Bio'.'"}
                         other{"¤ 0 Bio'.'"}
                     }
                     10000000000000{
-                        one{"¤ 00 Bio'.'"}
                         other{"¤ 00 Bio'.'"}
                     }
                     100000000000000{
-                        one{"¤ 000 Bio'.'"}
                         other{"¤ 000 Bio'.'"}
                     }
                 }

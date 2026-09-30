@@ -75,17 +75,9 @@ rn{
             "£",
             "Ipawundi ryo mu Bwongereza",
         }
-        GHC{
-            "GHC",
-            "Icedi ryo muri Gana",
-        }
         GMD{
             "GMD",
             "Idalasi ryo muri Gambiya",
-        }
-        GNS{
-            "GNS",
-            "Ifaranga ryo muri Gineya",
         }
         INR{
             "₹",
@@ -123,10 +115,6 @@ rn{
             "MGA",
             "Iriyari ryo muri Madagasikari",
         }
-        MRO{
-            "MRO",
-            "Ugwiya ryo muri Moritaniya (1973–2017)",
-        }
         MRU{
             "MRU",
             "Ugwiya ryo muri Moritaniya",
@@ -138,10 +126,6 @@ rn{
         MWK{
             "MWK",
             "Ikwaca ryo muri Malawi",
-        }
-        MZM{
-            "MZM",
-            "Irimetikali ryo muri Mozambike",
         }
         NAD{
             "NAD",
@@ -183,10 +167,6 @@ rn{
             "SOS",
             "Ishilingi ryo muri Somaliya",
         }
-        STD{
-            "STD",
-            "Idobura ryo muri Sawotome na Perensipe (1977–2017)",
-        }
         STN{
             "STN",
             "Idobura ryo muri Sawotome na Perensipe",
@@ -215,17 +195,9 @@ rn{
             "ZAR",
             "Irandi ryo muri Afurika y’Epfo",
         }
-        ZMK{
-            "ZMK",
-            "Ikwaca ryo muri Zambiya (1968–2012)",
-        }
         ZMW{
             "ZMW",
             "Ikwaca ryo muri Zambiya",
-        }
-        ZWD{
-            "ZWD",
-            "Idolari ryo muri Zimbabwe",
         }
     }
 }

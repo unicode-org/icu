@@ -12,12 +12,9 @@ sat{
                     1000{
                         one{"¤0 ᱜᱮᱞᱥᱟᱭ"}
                         other{"¤ 0 ᱜᱮᱞᱥᱟᱭ"}
-                        two{"¤ 0 ᱜᱮᱞᱥᱟᱭ"}
                     }
                     100000{
-                        one{"¤ 000 ᱜᱮᱞᱥᱟᱭ"}
                         other{"¤ 000 ᱜᱮᱞᱥᱟᱭ"}
-                        two{"¤ 000 ᱜᱮᱞᱥᱟᱭ"}
                     }
                 }
             }
@@ -43,16 +40,6 @@ sat{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yyMd",
             }
             availableFormats{
                 yMMMMEd{"y MMMM d, EEE"}

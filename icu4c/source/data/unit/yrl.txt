@@ -310,11 +310,6 @@ yrl{
             }
         }
         energy{
-            british-thermal-unit{
-                dnam{"yepesawa sakusawa biritãnika-ita"}
-                one{"{0} yepesawa sakusawa biritãnika"}
-                other{"{0} yepesawa sakusawa biritãnika-ita"}
-            }
             calorie{
                 dnam{"karuria"}
                 one{"{0} karuria"}
@@ -427,20 +422,10 @@ yrl{
                 one{"{0} desimeturu"}
                 other{"{0} desimeturu-ita"}
             }
-            fathom{
-                dnam{"barasa-ita"}
-                one{"{0} barasa"}
-                other{"{0} barasa-ita"}
-            }
             foot{
                 dnam{"pí-ita"}
                 other{"{0} pí-ita"}
                 per{"{0} pí rupi"}
-            }
-            furlong{
-                dnam{"furlong-ita"}
-                one{"{0} furlong"}
-                other{"{0} furlong-ita"}
             }
             inch{
                 dnam{"puregada-ita"}
@@ -590,11 +575,6 @@ yrl{
                 dnam{"kuarasí susuẽga-ita"}
                 one{"{0} kuarasí susuẽga"}
                 other{"{0} kuarasí susuẽga-ita"}
-            }
-            stone{
-                dnam{"stone-ita"}
-                one{"{0} stone"}
-                other{"{0} stone-ita"}
             }
             ton{
                 dnam{"tonerada-ita"}
@@ -951,10 +931,6 @@ yrl{
             }
         }
         length{
-            fathom{
-                one{"{0} bsa."}
-                other{"{0} bsa."}
-            }
             foot{
                 dnam{"pí-ita"}
             }
@@ -980,9 +956,6 @@ yrl{
             kilogram{
                 one{"{0}kg"}
                 other{"{0}kg"}
-            }
-            stone{
-                dnam{"stone"}
             }
             ton{
                 dnam{"ton"}
@@ -1201,10 +1174,6 @@ yrl{
             }
         }
         energy{
-            british-thermal-unit{
-                dnam{"BTU"}
-                other{"{0} BTU"}
-            }
             electronvolt{
                 dnam{"elétron-volt"}
             }
@@ -1240,17 +1209,10 @@ yrl{
                 dnam{"ua"}
                 other{"{0} ua"}
             }
-            fathom{
-                dnam{"barasa"}
-                other{"{0} brs."}
-            }
             foot{
                 dnam{"pí-itá"}
                 other{"{0} pí"}
                 per{"{0}/pí"}
-            }
-            furlong{
-                dnam{"furlong"}
             }
             inch{
                 dnam{"pur."}
@@ -1314,9 +1276,6 @@ yrl{
             }
             solar-mass{
                 dnam{"kuarasí susuẽga"}
-            }
-            stone{
-                dnam{"stones"}
             }
             ton{
                 dnam{"tonerada"}

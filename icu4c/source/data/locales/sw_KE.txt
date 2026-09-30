@@ -5,17 +5,9 @@ sw_KE{
     ExemplarCharacters{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     NumberElements{
         latn{
-            patterns{
-                accountingFormat%noCurrency{"#,##0.00"}
-            }
             patternsLong{
                 decimalFormat{
-                    1000{
-                        one{"elfu 0;elfu -0"}
-                        other{"elfu 0;elfu -0"}
-                    }
                     10000{
-                        one{"elfu 00;elfu -00"}
                         other{"elfu 00"}
                     }
                     100000{
@@ -63,15 +55,12 @@ sw_KE{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"¤ elfu 0"}
                         other{"¤ elfu 0"}
                     }
                     10000{
-                        one{"¤ elfu 00"}
                         other{"¤ elfu 00"}
                     }
                     100000{
-                        one{"¤ elfu 000"}
                         other{"¤ elfu 000"}
                     }
                     1000000{
@@ -87,15 +76,12 @@ sw_KE{
                         other{"¤ M000"}
                     }
                     1000000000{
-                        one{"¤ B0"}
                         other{"¤ B0"}
                     }
                     10000000000{
-                        one{"¤ B00"}
                         other{"¤ B00"}
                     }
                     100000000000{
-                        one{"¤ B000"}
                         other{"¤ B000"}
                     }
                     1000000000000{
@@ -113,19 +99,15 @@ sw_KE{
                 }
                 decimalFormat{
                     1000{
-                        one{"elfu 0"}
                         other{"elfu 0"}
                     }
                     10000{
-                        one{"elfu 00"}
                         other{"elfu 00"}
                     }
                     100000{
-                        one{"elfu 000"}
                         other{"elfu 000"}
                     }
                     1000000{
-                        one{"M0"}
                         other{"M0"}
                     }
                     10000000{
@@ -137,15 +119,12 @@ sw_KE{
                         other{"M000"}
                     }
                     1000000000{
-                        one{"B0"}
                         other{"B0"}
                     }
                     10000000000{
-                        one{"B00"}
                         other{"B00"}
                     }
                     100000000000{
-                        one{"B000"}
                         other{"B000"}
                     }
                     1000000000000{
@@ -189,21 +168,6 @@ sw_KE{
             }
         }
         gregorian{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE, d MMMM y",
-                "d MMMM y",
-                "d MMM y",
-                "dd/MM/y",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
             DateTimePatterns%atTime{
                 "{1} 'saa' {0}",
                 "{1} 'saa' {0}",

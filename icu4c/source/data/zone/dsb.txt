@@ -443,17 +443,11 @@ dsb{
             ld{"Srjejźnoeuropejski lěśojski cas"}
             lg{"Srjejźnoeuropejski cas"}
             ls{"Srjejźnoeuropejski standardny cas"}
-            sd{"MESZ"}
-            sg{"MEZ"}
-            ss{"MEZ"}
         }
         "meta:Europe_Eastern"{
             ld{"Pódzajtšnoeuropejski lěśojski cas"}
             lg{"Pódzajtšnoeuropejski cas"}
             ls{"Pódzajtšnoeuropejski standardny cas"}
-            sd{"OESZ"}
-            sg{"OEZ"}
-            ss{"OEZ"}
         }
         "meta:Europe_Further_Eastern"{
             ls{"Kaliningradski cas"}
@@ -462,9 +456,6 @@ dsb{
             ld{"Pódwjacornoeuropejski lěśojski cas"}
             lg{"Pódwjacornoeuropejski cas"}
             ls{"Pódwjacornoeuropejski standardny cas"}
-            sd{"WESZ"}
-            sg{"WEZ"}
-            ss{"WEZ"}
         }
         "meta:Falkland"{
             ld{"Falklandski lěśojski cas"}

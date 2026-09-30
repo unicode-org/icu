@@ -647,11 +647,9 @@ kk_Arab{
     }
     CurrencyPlurals{
         AED{
-            one{"ب ا ءا ديرحامى"}
             other{"ب ا ءا ديرحامى"}
         }
         XXX{
-            one{"(بەلگىسىز اقشا)"}
             other{"(بەلگىسىز اقشا)"}
         }
     }

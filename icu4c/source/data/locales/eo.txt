@@ -82,65 +82,50 @@ eo{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"0k ¤"}
                         other{"0k ¤"}
                     }
                     10000{
-                        one{"00k ¤"}
                         other{"00k ¤"}
                     }
                     100000{
-                        one{"000k ¤"}
                         other{"000k ¤"}
                     }
                     1000000{
-                        one{"0M ¤"}
                         other{"0M ¤"}
                     }
                     10000000{
-                        one{"00M ¤"}
                         other{"00M ¤"}
                     }
                     100000000{
-                        one{"000M ¤"}
                         other{"000M ¤"}
                     }
                     1000000000{
-                        one{"0G ¤"}
                         other{"0G ¤"}
                     }
                     10000000000{
-                        one{"00G ¤"}
                         other{"00G ¤"}
                     }
                     100000000000{
-                        one{"000G ¤"}
                         other{"000G ¤"}
                     }
                     1000000000000{
-                        one{"0T ¤"}
                         other{"0T ¤"}
                     }
                     10000000000000{
-                        one{"00T ¤"}
                         other{"00T ¤"}
                     }
                     100000000000000{
-                        one{"000T ¤"}
                         other{"000T ¤"}
                     }
                 }
                 decimalFormat{
                     1000{
-                        one{"0k"}
                         other{"0k"}
                     }
                     10000{
-                        one{"00k"}
                         other{"00k"}
                     }
                     100000{
-                        one{"000k"}
                         other{"000k"}
                     }
                 }
@@ -162,56 +147,6 @@ eo{
         }
     }
     calendar{
-        buddhist{
-            eras{
-                wide{
-                    0{"de budaisma erao"}
-                }
-            }
-        }
-        coptic{
-            eras{
-                wide{
-                    1{"de erao de martiroj"}
-                }
-            }
-            monthNames{
-                format{
-                    wide{
-                        "Toto",
-                        "Paofio",
-                        "Hatoro",
-                        "Ĥojako",
-                        "Tobio",
-                        "Meĥiro",
-                        "Famenuto",
-                        "Farmutio",
-                        "Pahono",
-                        "Paonio",
-                        "Epifio",
-                        "Misorio",
-                        "Nasio",
-                    }
-                }
-                stand-alone{
-                    wide{
-                        "Toto",
-                        "Paofio",
-                        "Hatoro",
-                        "Ĥojako",
-                        "Tobio",
-                        "Meĥiro",
-                        "Famenuto",
-                        "Farmutio",
-                        "Pahono",
-                        "Paonio",
-                        "Epifio",
-                        "Misorio",
-                        "Nasio",
-                    }
-                }
-            }
-        }
         generic{
             DateTimePatterns{
                 "HH:mm:ss zzzz",
@@ -239,16 +174,6 @@ eo{
                 "{1} 'je' {0}",
                 "{1}, {0}",
                 "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "Hmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEd",
-                "GyMMMMdd",
-                "GyMMMdd",
-                "GGGGGyMMdd",
             }
             availableFormats{
                 Ehm{"E h:mm a"}
@@ -423,16 +348,6 @@ eo{
                 "{1}, {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "Hmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "yMMMMEEEEd",
-                "yMMMMdd",
-                "yMMMdd",
-                "yyMMdd",
-            }
             appendItems{
                 Day-Of-Week{"{1}, {0}"}
                 Era{"{0} {1}"}
@@ -458,7 +373,6 @@ eo{
                 MMMEd{"E, d MMM"}
                 MMMMEd{"E, d MMMM"}
                 MMMMW{
-                    one{"W-'a' 'semajno' 'de' MMMM"}
                     other{"W-'a' 'semajno' 'de' MMMM"}
                 }
                 MMMMd{"d MMMM"}
@@ -477,7 +391,6 @@ eo{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ 'de' y"}
                 yw{
-                    one{"w-'a' 'semajno' 'de' Y"}
                     other{"w-'a' 'semajno' 'de' Y"}
                 }
             }
@@ -729,162 +642,6 @@ eo{
                         "2-a jarkvarono",
                         "3-a jarkvarono",
                         "4-a jarkvarono",
-                    }
-                }
-            }
-        }
-        hebrew{
-            eras{
-                wide{
-                    0{"de juda erao"}
-                }
-            }
-            monthNames{
-                format{
-                    wide{
-                        "Tiŝrio",
-                        "Ĥeŝvano",
-                        "Kislevo",
-                        "Tebeto",
-                        "Ŝebato",
-                        "Adaro I",
-                        "Adaro",
-                        "Nisano",
-                        "Ijaro",
-                        "Sivano",
-                        "Tamuzo",
-                        "Abo",
-                        "Elulo",
-                        "Adaro II",
-                    }
-                }
-                stand-alone{
-                    wide{
-                        "Tiŝrio",
-                        "Ĥeŝvano",
-                        "Kislevo",
-                        "Tebeto",
-                        "Ŝebato",
-                        "Adaro I",
-                        "Adaro",
-                        "Nisano",
-                        "Ijaro",
-                        "Sivano",
-                        "Tamuzo",
-                        "Abo",
-                        "Elulo",
-                        "Adaro II",
-                    }
-                }
-            }
-        }
-        indian{
-            eras{
-                wide{
-                    0{"de erao Śaka"}
-                }
-            }
-            monthNames{
-                format{
-                    wide{
-                        "Ĉaitra",
-                        "Vaiŝakha",
-                        "Ĝjaiŝtha",
-                        "Aŝadha",
-                        "Ŝravana",
-                        "Bhadra",
-                        "Aŝvina",
-                        "Kartika",
-                        "Agrahajana",
-                        "Paŭŝa",
-                        "Magha",
-                        "Phalguna",
-                    }
-                }
-                stand-alone{
-                    wide{
-                        "Ĉaitra",
-                        "Vaiŝakha",
-                        "Ĝjaiŝtha",
-                        "Aŝadha",
-                        "Ŝravana",
-                        "Bhadra",
-                        "Aŝvina",
-                        "Kartika",
-                        "Agrahajana",
-                        "Paŭŝa",
-                        "Magha",
-                        "Phalguna",
-                    }
-                }
-            }
-        }
-        islamic{
-            eras{
-                wide{
-                    0{"de araba erao"}
-                    1{"antaŭ heĝiro"}
-                }
-            }
-            monthNames{
-                format{
-                    abbreviated{
-                        "Muh.",
-                        "Saf.",
-                        "Rab. I",
-                        "Rab. II",
-                        "Ĝum. I",
-                        "Ĝum. II",
-                        "Raĝ.",
-                        "Ŝab.",
-                        "Ram.",
-                        "Ŝav.",
-                        "Dulk.",
-                        "Dulh.",
-                    }
-                    wide{
-                        "Muharamo",
-                        "Safaro",
-                        "Rabio I",
-                        "Rabio II",
-                        "Ĝumado I",
-                        "Ĝumado II",
-                        "Raĝabo",
-                        "Ŝabano",
-                        "Ramadano",
-                        "Ŝavalo",
-                        "Dulkago",
-                        "Dulhiĝo",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "Muh.",
-                        "Saf.",
-                        "Rab. I",
-                        "Rab. II",
-                        "Ĝum. I",
-                        "Ĝum. II",
-                        "Raĝ.",
-                        "Ŝab.",
-                        "Ram.",
-                        "Ŝav.",
-                        "Dulk.",
-                        "Dulh.",
-                    }
-                    wide{
-                        "Muharamo",
-                        "Safaro",
-                        "Rabio I",
-                        "Rabio II",
-                        "Ĝumado I",
-                        "Ĝumado II",
-                        "Raĝabo",
-                        "Ŝabano",
-                        "Ramadano",
-                        "Ŝavalo",
-                        "Dulkago",
-                        "Dulhiĝo",
                     }
                 }
             }
@@ -1485,9 +1242,7 @@ eo{
         }
         tue-narrow{
             relative{
-                "-1"{"pasinta ma."}
                 "0"{"nuna ma."}
-                "1"{"venonta ma."}
             }
         }
         tue-short{
@@ -1526,9 +1281,7 @@ eo{
         }
         wed-narrow{
             relative{
-                "-1"{"pasinta me."}
                 "0"{"nuna me."}
-                "1"{"venonta me."}
             }
         }
         wed-short{
