@@ -575,6 +575,10 @@ ubidi_getRuns(UBiDi *pBiDi, UErrorCode* pErrorCode) {
          * levels[]!=paraLevel but we have to treat it like it were so.
          */
         limit=pBiDi->trailingWSStart;
+        if (limit <= 0) {
+            *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
+            return false;
+        }
         /* count the runs, there is at least one non-WS run, and limit>0 */
         runCount=0;
         for(i=0; i<limit; ++i) {
