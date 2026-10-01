@@ -49,7 +49,7 @@ jobs:
       contents: write # So that we can upload to release
       id-token: write # For artifact attestation
       attestations: write # For artifact attestation
-    timeout-minutes: 30
+    timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
