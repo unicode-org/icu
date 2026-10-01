@@ -109,6 +109,7 @@ void IntlTestSpoof::runIndexedTest( int32_t index, UBool exec, const char* &name
     TESTCASE_AUTO(testBug13314_MixedNumbers);
     TESTCASE_AUTO(testBug13328_MixedCombiningMarks);
     TESTCASE_AUTO(testCombiningDot);
+    TESTCASE_AUTO(testMalformedSpoofData);
     TESTCASE_AUTO_END;
 }
 
@@ -843,6 +844,44 @@ void IntlTestSpoof::testCombiningDot() {
         TEST_ASSERT_SUCCESS(status);
         int32_t expected = cas.shouldFail ? USPOOF_HIDDEN_OVERLAY : 0;
         assertEquals(cas.input, expected, failedChecks);
+    }
+}
+
+void IntlTestSpoof::testMalformedSpoofData() {
+    // Crafted serialized spoof data that triggers a NULL deref in confusableLookup()
+    // when fCFUKeys is nullptr but fCFUKeysSize > 0. Before the fix, uspoof_check()
+    // would SEGV. After the fix, uspoof_openFromSerialized must return U_INVALID_FORMAT_ERROR.
+    static const uint8_t nullDerefData[] = {
+        0xef, 0xfd, 0x45, 0x38, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x6f, 0x00, 0x00, 0x00, 0xaf,
+        0xaf, 0xaf, 0xaf, 0xaf, 0xaf, 0xaf, 0xaf, 0x4a, 0xaf, 0xaf, 0xaf, 0xaf,
+        0xa9, 0xaf, 0xaf, 0xaf, 0xaf, 0xaf, 0xaf, 0xaf, 0xaf, 0xaf, 0xaf, 0x6f,
+        0x00, 0x00, 0x00, 0xaf, 0xaf, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+        0xfb, 0xff, 0xff, 0xff, 0xff, 0x0a, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+        0xff, 0xff, 0xff, 0xff
+    };
+
+    UErrorCode status = U_ZERO_ERROR;
+    int32_t actualLength = 0;
+    USpoofChecker *sc = uspoof_openFromSerialized(
+        nullDerefData, sizeof(nullDerefData), &actualLength, &status);
+    if (U_SUCCESS(status)) {
+        // If it somehow opened, close it, but this is a test failure.
+        uspoof_close(sc);
+        errln("%s:%d Expected U_INVALID_FORMAT_ERROR from malformed spoof data (null deref case), got %s",
+              __FILE__, __LINE__, u_errorName(status));
+    }
+
+    // Truncated header: less than sizeof(SpoofDataHeader).
+    static const uint8_t shortData[] = {0xef, 0xfd, 0x45, 0x38, 0x02, 0x00};
+    status = U_ZERO_ERROR;
+    sc = uspoof_openFromSerialized(shortData, sizeof(shortData), &actualLength, &status);
+    if (U_SUCCESS(status)) {
+        uspoof_close(sc);
+        errln("%s:%d Expected U_INVALID_FORMAT_ERROR from truncated spoof data, got %s",
+              __FILE__, __LINE__, u_errorName(status));
     }
 }
 
