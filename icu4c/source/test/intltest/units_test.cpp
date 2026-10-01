@@ -55,6 +55,7 @@ class UnitsTest : public IntlTest {
     void testMeasureUnit_withConstantDenominator();
     void testUnitsConstantsDenomenator_getIdentifier();
     void testConverter();
+    void testForIdentifierEmbeddedNul();
 };
 
 extern IntlTest *createUnitsTest() { return new UnitsTest(); }
@@ -75,7 +76,18 @@ void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO(testMeasureUnit_withConstantDenominator);
     TESTCASE_AUTO(testUnitsConstantsDenomenator_getIdentifier);
     TESTCASE_AUTO(testConverter);
+    TESTCASE_AUTO(testForIdentifierEmbeddedNul);
     TESTCASE_AUTO_END;
+}
+
+// ICU-23392: a unit identifier substring containing an embedded NUL must be
+// rejected without an OOB read inside double-conversion's StringToIeee.
+void UnitsTest::testForIdentifierEmbeddedNul() {
+    IcuTestErrorCode status(*this, "testForIdentifierEmbeddedNul");
+    (void) MeasureUnit::forIdentifier(StringPiece("\0", 1), status);
+    assertEquals("forIdentifier(\"\\0\") must reject",
+                 U_ILLEGAL_ARGUMENT_ERROR, status.get());
+    status.reset();
 }
 
 // Tests the hard-coded constants in the code against constants that appear in
