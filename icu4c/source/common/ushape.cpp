@@ -822,8 +822,8 @@ handleGeneratedSpaces(char16_t *dest, int32_t sourceLength,
     if(lamAlefOption || tashkeelOption){
         uprv_memset(tempbuffer, 0, (sourceLength+1)*U_SIZEOF_UCHAR);
         
-        i = j = sourceLength; count = 0;
-        
+        i = j = sourceLength-1; count = 0;
+
         while(i >= 0) {
             if ( (lamAlefOption && dest[i] == LAMALEF_SPACE_SUB) ||
                  (tashkeelOption && dest[i] == TASHKEEL_SPACE_SUB) ){
@@ -1055,7 +1055,7 @@ expandCompositCharAtNear(char16_t *dest, int32_t sourceLength, int32_t destSize,
 
                     *pErrorCode=U_NO_SPACE_AVAILABLE;
                 }
-            }else if(lamAlefOption && isLamAlefChar(dest[i+1])) {
+            }else if(lamAlefOption && (i < sourceLength-1) && isLamAlefChar(dest[i+1])) {
                 if(dest[i] == SPACE_CHAR){
                     lamalefChar = dest[i+1];
                     dest[i+1] = LAM_CHAR;
