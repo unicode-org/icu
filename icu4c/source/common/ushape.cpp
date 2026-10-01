@@ -752,7 +752,7 @@ handleGeneratedSpaces(char16_t *dest, int32_t sourceLength,
         *pErrorCode = U_INDEX_OUTOFBOUNDS_ERROR;
         return 0;
     }
-    tempbuffer = static_cast<char16_t*>(uprv_malloc((sourceLength + 1) * U_SIZEOF_UCHAR));
+    tempbuffer = static_cast<char16_t*>(uprv_malloc((static_cast<size_t>(sourceLength) + 1) * U_SIZEOF_UCHAR));
     /* Test for nullptr */
     if(tempbuffer == nullptr) {
         *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
@@ -761,7 +761,7 @@ handleGeneratedSpaces(char16_t *dest, int32_t sourceLength,
 
 
     if (lamAlefOption || tashkeelOption){
-        uprv_memset(tempbuffer, 0, (sourceLength+1)*U_SIZEOF_UCHAR);
+        uprv_memset(tempbuffer, 0, (static_cast<size_t>(sourceLength)+1)*U_SIZEOF_UCHAR);
 
         i = j = 0; count = 0;
         while(i < sourceLength) {
@@ -820,7 +820,7 @@ handleGeneratedSpaces(char16_t *dest, int32_t sourceLength,
     }
 
     if(lamAlefOption || tashkeelOption){
-        uprv_memset(tempbuffer, 0, (sourceLength+1)*U_SIZEOF_UCHAR);
+        uprv_memset(tempbuffer, 0, (static_cast<size_t>(sourceLength)+1)*U_SIZEOF_UCHAR);
         
         i = j = sourceLength; count = 0;
         
@@ -861,7 +861,7 @@ handleGeneratedSpaces(char16_t *dest, int32_t sourceLength,
     }
 
     if(lamAlefOption || tashkeelOption){
-        uprv_memset(tempbuffer, 0, (sourceLength+1)*U_SIZEOF_UCHAR);
+        uprv_memset(tempbuffer, 0, (static_cast<size_t>(sourceLength)+1)*U_SIZEOF_UCHAR);
 
         i = j = 0; count = 0;
         while(i < sourceLength) {
@@ -910,7 +910,11 @@ expandCompositCharAtBegin(char16_t *dest, int32_t sourceLength, int32_t destSize
     int32_t      countl = 0;
     char16_t *tempbuffer=nullptr;
 
-    tempbuffer = static_cast<char16_t*>(uprv_malloc((sourceLength + 1) * U_SIZEOF_UCHAR));
+    if (static_cast<size_t>(sourceLength) + 1 > std::numeric_limits<size_t>::max() / U_SIZEOF_UCHAR) {
+        *pErrorCode = U_INDEX_OUTOFBOUNDS_ERROR;
+        return 0;
+    }
+    tempbuffer = static_cast<char16_t*>(uprv_malloc((static_cast<size_t>(sourceLength) + 1) * U_SIZEOF_UCHAR));
 
     /* Test for nullptr */
     if(tempbuffer == nullptr) {
@@ -918,7 +922,7 @@ expandCompositCharAtBegin(char16_t *dest, int32_t sourceLength, int32_t destSize
         return 0;
     }
 
-        uprv_memset(tempbuffer, 0, (sourceLength+1)*U_SIZEOF_UCHAR);
+        uprv_memset(tempbuffer, 0, (static_cast<size_t>(sourceLength)+1)*U_SIZEOF_UCHAR);
 
         i = 0;
         while(dest[i] == SPACE_CHAR) {
@@ -972,7 +976,11 @@ expandCompositCharAtEnd(char16_t *dest, int32_t sourceLength, int32_t destSize,U
     int32_t  inpsize = sourceLength;
 
     char16_t *tempbuffer=nullptr;
-    tempbuffer = static_cast<char16_t*>(uprv_malloc((sourceLength + 1) * U_SIZEOF_UCHAR));
+    if (static_cast<size_t>(sourceLength) + 1 > std::numeric_limits<size_t>::max() / U_SIZEOF_UCHAR) {
+        *pErrorCode = U_INDEX_OUTOFBOUNDS_ERROR;
+        return 0;
+    }
+    tempbuffer = static_cast<char16_t*>(uprv_malloc((static_cast<size_t>(sourceLength) + 1) * U_SIZEOF_UCHAR));
 
     /* Test for nullptr */
     if(tempbuffer == nullptr) {
@@ -980,7 +988,7 @@ expandCompositCharAtEnd(char16_t *dest, int32_t sourceLength, int32_t destSize,U
          return 0;
     }
 
-    uprv_memset(tempbuffer, 0, (sourceLength+1)*U_SIZEOF_UCHAR);
+    uprv_memset(tempbuffer, 0, (static_cast<size_t>(sourceLength)+1)*U_SIZEOF_UCHAR);
 
     while(inpsize>0 && dest[inpsize-1] == SPACE_CHAR) {
         countr++;
@@ -1159,7 +1167,11 @@ expandCompositChar(char16_t *dest, int32_t sourceLength,
     if (shapingMode == 1){
         if ( (options&U_SHAPE_LAMALEF_MASK) == U_SHAPE_LAMALEF_RESIZE){
             destSize = calculateSize(dest,sourceLength,destSize,options);
-            tempbuffer = static_cast<char16_t*>(uprv_malloc((destSize + 1) * U_SIZEOF_UCHAR));
+            if (static_cast<size_t>(destSize) + 1 > std::numeric_limits<size_t>::max() / U_SIZEOF_UCHAR) {
+                *pErrorCode = U_INDEX_OUTOFBOUNDS_ERROR;
+                return 0;
+            }
+            tempbuffer = static_cast<char16_t*>(uprv_malloc((static_cast<size_t>(destSize) + 1) * U_SIZEOF_UCHAR));
 
             /* Test for nullptr */
             if(tempbuffer == nullptr) {
@@ -1167,7 +1179,7 @@ expandCompositChar(char16_t *dest, int32_t sourceLength,
                 return 0;
             }
 
-            uprv_memset(tempbuffer, 0, (destSize+1)*U_SIZEOF_UCHAR);
+            uprv_memset(tempbuffer, 0, (static_cast<size_t>(destSize)+1)*U_SIZEOF_UCHAR);
 
             i = j = 0;
             while(i < destSize && j < destSize) {
