@@ -12,7 +12,7 @@
 
 
 void TestPluralRules(icu::PluralRules* pp, int32_t number, double dbl,  UErrorCode& status) {
-    if (U_FAILURE(status)) {
+    if (U_FAILURE(status) || pp == nullptr) {
         return;
     }
     pp->select(number);
@@ -31,8 +31,8 @@ void TestPluralRulesWithLocale(
     pp.reset(icu::PluralRules::forLocale(locale, type, status));
     TestPluralRules(pp.get(), number, dbl, status);
 
-    type = static_cast<UPluralType>(
-        static_cast<int>(type) % (static_cast<int>(UPLURAL_TYPE_COUNT)));
+    // Clamp type to valid values: 0 (CARDINAL) or 1 (ORDINAL)
+    type = static_cast<UPluralType>(static_cast<int>(type) % 2);
 
     status = U_ZERO_ERROR;
     pp.reset(icu::PluralRules::forLocale(locale, type, status));
@@ -62,6 +62,9 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
 
     std::memcpy(&type, fuzzData.data(), sizeof(type));
     fuzzData.remove_prefix(sizeof(type));
+
+    // Clamp type to valid values: 0 (CARDINAL) or 1 (ORDINAL)
+    type = static_cast<UPluralType>(static_cast<int>(type) % 2);
 
     size_t len = fuzzData.size() / sizeof(char16_t);
     icu::UnicodeString text(false, reinterpret_cast<const char16_t*>(fuzzData.data()), len);
