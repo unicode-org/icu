@@ -927,10 +927,17 @@ class ModulusSubstitution extends NFSubstitution {
         if (ruleToUse == null) {
             super.doSubstitution(number, toInsertInto, position, recursionCount);
         } else {
+            // Bound explicit >>> rule delegation (ICU-23144 fixed the parse path;
+            // the format path had the same flaw): without incrementing the count
+            // and enforcing the limit here, a long chain of >>> rules bypasses the
+            // RECURSION_LIMIT check in NFRuleSet.format and exhausts the stack.
+            if (recursionCount >= NFRuleSet.RECURSION_LIMIT) {
+                throw new IllegalStateException("Recursion limit exceeded in RBNF formatting");
+            }
             // a >>> substitution goes straight to a particular rule to
             // format the substitution value
             long numberToFormat = transformNumber(number);
-            ruleToUse.doFormat(numberToFormat, toInsertInto, position + pos, recursionCount);
+            ruleToUse.doFormat(numberToFormat, toInsertInto, position + pos, recursionCount + 1);
         }
     }
 
@@ -952,11 +959,18 @@ class ModulusSubstitution extends NFSubstitution {
             super.doSubstitution(number, toInsertInto, position, recursionCount);
 
         } else {
+            // Bound explicit >>> rule delegation (ICU-23144 fixed the parse path;
+            // the format path had the same flaw): without incrementing the count
+            // and enforcing the limit here, a long chain of >>> rules bypasses the
+            // RECURSION_LIMIT check in NFRuleSet.format and exhausts the stack.
+            if (recursionCount >= NFRuleSet.RECURSION_LIMIT) {
+                throw new IllegalStateException("Recursion limit exceeded in RBNF formatting");
+            }
             // a >>> substitution goes straight to a particular rule to
             // format the substitution value
             double numberToFormat = transformNumber(number);
 
-            ruleToUse.doFormat(numberToFormat, toInsertInto, position + pos, recursionCount);
+            ruleToUse.doFormat(numberToFormat, toInsertInto, position + pos, recursionCount + 1);
         }
     }
 
