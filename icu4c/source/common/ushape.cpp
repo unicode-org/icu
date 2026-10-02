@@ -1507,6 +1507,10 @@ u_shapeArabic(const char16_t *source, int32_t sourceLength,
             int32_t aggregate_tashkeel =
                         (options&(U_SHAPE_AGGREGATE_TASHKEEL_MASK+U_SHAPE_LETTERS_SHAPE_TASHKEEL_ISOLATED)) ==
                         (U_SHAPE_AGGREGATE_TASHKEEL+U_SHAPE_LETTERS_SHAPE_TASHKEEL_ISOLATED);
+            if (sourceLength > std::numeric_limits<int32_t>::max() / (2 * U_SIZEOF_UCHAR)) {
+                *pErrorCode = U_INDEX_OUTOFBOUNDS_ERROR;
+                return 0;
+            }
             int step=logical_order?1:-1;
             int j=logical_order?-1:2*sourceLength;
             int i=logical_order?-1:sourceLength;
