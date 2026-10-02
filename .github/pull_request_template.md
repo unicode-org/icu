@@ -1,6 +1,9 @@
 TODO: Please describe your changes here.
 
-TODO: Please read the following on ICU Contributing, and then delete these instructions.
+TODO:
+1. Read the following on ICU Contributing
+2. Then delete these instructions
+3. _But do not delete the checklist at the bottom!_ Fill it out.
 
 Thank you for your pull request!
 
@@ -8,8 +11,8 @@ Thank you for your pull request!
 * Associating PRs with Jira issues
   - We require each pull request to be associated with a [Jira issue](https://icu.unicode.org/bugs).
   - Reuse existing issues for minor changes:
-    * ICU 79 docs minor fixes: ICU-23248 — User Guide & API docs typos etc., and version updates (e.g., dependabot for User Guide)
-    * ICU 79 code warnings/version updates: ICU-23247 — Fix compiler warnings. Update versions of code-related dependencies (e.g., dependabot).
+    * ICU 80 docs minor fixes: ICU-23544 — User Guide & API docs typos etc., and version updates (e.g., dependabot for User Guide)
+    * ICU 80 code warnings/version updates: ICU-23543 — Fix compiler warnings. Update versions of code-related dependencies (e.g., dependabot).
 * Contributors license agreement (CLA):
   - You will be automatically asked to sign the CLA before the PR is accepted.
   - To sign the CLA: https://cla-assistant.io/unicode-org/icu
