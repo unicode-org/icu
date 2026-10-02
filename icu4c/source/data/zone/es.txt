@@ -530,11 +530,6 @@ es{
             lg{"hora del Pacífico"}
             ls{"hora estándar del Pacífico"}
         }
-        "meta:Anadyr"{
-            ld{"hora de verano de Anadyr"}
-            lg{"hora de Anadyr"}
-            ls{"hora estándar de Anadyr"}
-        }
         "meta:Apia"{
             ld{"horario de verano de Apia"}
             lg{"hora de Apia"}
@@ -683,17 +678,11 @@ es{
             ld{"hora de verano de Europa central"}
             lg{"hora de Europa central"}
             ls{"hora estándar de Europa central"}
-            sd{"CEST"}
-            sg{"CET"}
-            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"hora de verano de Europa oriental"}
             lg{"hora de Europa oriental"}
             ls{"hora estándar de Europa oriental"}
-            sd{"EEST"}
-            sg{"EET"}
-            ss{"EET"}
         }
         "meta:Europe_Further_Eastern"{
             ls{"hora del extremo oriental de Europa"}
@@ -702,9 +691,6 @@ es{
             ld{"hora de verano de Europa occidental"}
             lg{"hora de Europa occidental"}
             ls{"hora estándar de Europa occidental"}
-            sd{"WEST"}
-            sg{"WET"}
-            ss{"WET"}
         }
         "meta:Falkland"{
             ld{"hora de verano de las islas Malvinas"}
@@ -724,7 +710,6 @@ es{
         }
         "meta:GMT"{
             ls{"hora del meridiano de Greenwich"}
-            ss{"GMT"}
         }
         "meta:Galapagos"{
             ls{"hora de Galápagos"}

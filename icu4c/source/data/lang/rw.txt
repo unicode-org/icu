@@ -33,7 +33,6 @@ rw{
         ga{"Ikirilandi"}
         gd{"Ikigaluwa cy’Igisweduwa"}
         gl{"Ikigalisiya"}
-        gn{"Inyaguwarani"}
         gu{"Inyegujarati"}
         he{"Igiheburayo"}
         hi{"Igihindi"}
@@ -53,8 +52,6 @@ rw{
         ko{"Igikoreya"}
         ku{"Inyekuridishi"}
         ky{"Inkerigizi"}
-        la{"Ikilatini"}
-        ln{"Ilingala"}
         lo{"Ikilawotiyani"}
         lt{"Ikilituwaniya"}
         lv{"Ikinyaletoviyani"}
@@ -81,7 +78,6 @@ rw{
         rw{"Ikinyarwanda"}
         sa{"Igisansikiri"}
         sd{"Igisindi"}
-        sh{"Inyeseribiya na Korowasiya"}
         si{"Inyesimpaleze"}
         sk{"Igisilovaki"}
         sl{"Ikinyasiloveniya"}
@@ -97,16 +93,13 @@ rw{
         th{"Igitayi"}
         ti{"Inyatigirinya"}
         tk{"Inyeturukimeni"}
-        tlh{"Inyekilingoni"}
         tr{"Igiturukiya"}
-        tw{"Inyetuwi"}
         ug{"Ikiwiguri"}
         uk{"Ikinyayukereni"}
         ur{"Inyeyurudu"}
         uz{"Inyeyuzubeki"}
         vi{"Ikinyaviyetinamu"}
         xh{"Inyehawusa"}
-        yi{"Inyeyidishi"}
         zu{"Inyezulu"}
     }
     Scripts{

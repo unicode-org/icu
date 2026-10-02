@@ -7,25 +7,13 @@ smn{
             "DKK",
             "Tanska ruvnâ",
         }
-        EEK{
-            "EEK",
-            "Eesti ruvnâ",
-        }
         EUR{
             "€",
             "euro",
         }
-        FIM{
-            "FIM",
-            "Suomâ märkki",
-        }
         ISK{
             "ISK",
             "Island ruvnâ",
-        }
-        LVR{
-            "LVR",
-            "Latvia ruble",
         }
         NOK{
             "NOK",
@@ -35,10 +23,5 @@ smn{
             "SEK",
             "Ruotâ ruvnâ",
         }
-    }
-    CurrencyUnitPatterns{
-        one{"{0} {1}"}
-        other{"{0} {1}"}
-        two{"{0} {1}"}
     }
 }

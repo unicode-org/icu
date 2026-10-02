@@ -20,16 +20,6 @@ es_PR{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMdd",
-                "GGGGGyyMMdd",
-            }
             availableFormats{
                 MEd{"E, MM/dd"}
                 Md{"MM/dd"}
@@ -62,16 +52,6 @@ es_PR{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMdd",
-                "yyMMdd",
-            }
             availableFormats{
                 MEd{"E, MM/dd"}
                 Md{"MM/dd"}
@@ -81,14 +61,6 @@ es_PR{
             }
             dayPeriod{
                 stand-alone{
-                    abbreviated{
-                        am{"a. m."}
-                        pm{"p. m."}
-                    }
-                    narrow{
-                        am{"a. m."}
-                        pm{"p. m."}
-                    }
                     wide{
                         am{"a. m."}
                         pm{"p. m."}

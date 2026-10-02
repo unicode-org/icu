@@ -21,83 +21,18 @@ nn{
         t0{"maskinomsett"}
     }
     Languages{
-        alt{"sør-altaj"}
-        ang{"gammalengelsk"}
-        asa{"asu (Tanzania)"}
-        bas{"basa"}
-        bss{"bakossi"}
-        car{"carib"}
-        chg{"tsjagataisk"}
-        ckb{"sorani"}
-        crj{"sørleg aust-cree"}
-        crl{"nordleg aust-cree"}
-        crs{"seselwa (fransk-kreolsk)"}
-        cu{"kyrkjeslavisk"}
         cv{"tsjuvansk"}
-        den{"slavej"}
         dsb{"lågsorbisk"}
-        ebu{"embu"}
-        egy{"gammalegyptisk"}
-        elx{"elamite"}
-        fro{"gammalfransk"}
-        frs{"austfrisisk"}
-        fur{"friulisk"}
-        gmh{"mellomhøgtysk"}
-        goh{"gammalhøgtysk"}
-        grc{"gammalgresk"}
-        gv{"manx"}
-        hax{"sørleg haida"}
         hsb{"høgsorbisk"}
-        ikt{"vestleg kanadisk inuktitut"}
-        kl{"grønlandsk (kalaallisut)"}
-        krc{"karatsjaiisk-balkarsk"}
-        kum{"kumyk"}
-        lad{"ladino"}
-        lez{"lezghian"}
-        lrc{"nord-lurisk"}
-        lus{"lushai"}
-        luy{"olulujia"}
-        mfe{"morisyen"}
-        mg{"madagassisk"}
         mul{"fleire språk"}
-        mzn{"mazanderani"}
         nds{"lågtysk"}
-        nds_NL{"lågsaksisk"}
         ne{"nepalsk"}
-        niu{"niuisk"}
-        nog{"nogai"}
-        non{"gammalnorsk"}
         nqo{"n’ko"}
         nso{"nordsotho"}
-        nwc{"klassisk newarisk"}
-        ojb{"nordvestleg ojibwa"}
-        ojw{"vestleg ojibwa"}
         pcm{"nigeriansk pidgin"}
-        peo{"gammalpersisk"}
-        pro{"gammalprovençalsk"}
-        quc{"k’iche"}
-        ro_MD{"moldavisk"}
-        rup{"arumensk"}
         sc{"sardinsk"}
-        sga{"gammalirsk"}
-        slh{"sørleg lushootseed"}
-        srn{"sranan tongo"}
         st{"sørsotho"}
-        swb{"shimaore"}
         syr{"syrisk"}
-        tce{"sørleg tutchone"}
-        tiv{"tivi"}
-        tkl{"tokelau"}
-        tog{"tonga (Nyasa)"}
-        ttm{"nordleg tutchone"}
-        tvl{"tuvalu"}
-        tzm{"sentral-tamazight"}
-        udm{"udmurt"}
-        war{"waray"}
-        xal{"kalmykisk"}
-        zap{"zapotec"}
-        zbl{"blissymbol"}
-        zgh{"standard marokkansk tamazight"}
         zh_Hans{"forenkla kinesisk"}
         zxx{"utan språkleg innhald"}
     }
@@ -105,32 +40,11 @@ nn{
         zh_Hans{"forenkla mandarinkinesisk"}
     }
     Scripts{
-        Armi{"armisk"}
         Cans{"felles kanadiske urspråksstavingar"}
-        Cyrs{"kyrillisk (kyrkjeslavisk variant)"}
-        Egyp{"egyptiske hieroglyfar"}
-        Geok{"khutsuri (asomtavruli og nuskhuri)"}
         Hanb{"hanb"}
         Hans{"forenkla"}
-        Hmng{"pahawk hmong"}
         Hrkt{"japanske stavingsskrifter"}
-        Hung{"gammalungarsk"}
-        Ital{"gammalitalisk"}
-        Latf{"latinsk (frakturvariant)"}
-        Latg{"latinsk (gælisk variant)"}
-        Limb{"lumbu"}
-        Maya{"maya-hieroglyfar"}
-        Perm{"gammalpermisk"}
-        Phlp{"salmepahlavi"}
-        Sgnw{"teiknskrift"}
-        Syre{"syriakisk (estrangelo-variant)"}
-        Syrj{"syriakisk (vestleg variant)"}
-        Syrn{"syriakisk (austleg variant)"}
         Thaa{"thaana"}
-        Visp{"synleg tale"}
-        Xpeo{"gammalpersisk"}
-        Xsux{"sumero-akkadisk kileskrift"}
-        Zinh{"nedarva"}
         Zsym{"symbol"}
         Zxxx{"språk utan skrift"}
         Zzzz{"ukjend skrift"}
@@ -162,7 +76,6 @@ nn{
         }
         collation{
             ducet{"standard Unicode-sorteringsrekkjefølgje"}
-            pinyin{"pinyin-sortering"}
         }
         collation%core{
             eor{"europeiske reglar"}
@@ -172,8 +85,6 @@ nn{
             hwidth{"halv breidd"}
         }
         hc{
-            c12{"12-timarssystem"}
-            c24{"24-timarssystem"}
             h11{"12-timarssystem (0–11)"}
             h12{"12-timarssystem (1–12)"}
             h23{"24-timarssystem (0–23)"}
@@ -263,20 +174,6 @@ nn{
             und{"uspesifisert maskinomsetting"}
         }
     }
-    Variants{
-        1606NICT{"nyare mellomfransk til 1606"}
-        1996{"tysk ortografi frå 1996"}
-        AREVELA{"austarmensk"}
-        AREVMDA{"vestarmensk"}
-        BAKU1926{"samla tyrkisk-latinsk alfabet"}
-        FONIPA{"det internasjonale fonetiske alfabetet (IPA)"}
-        FONUPA{"det uralske fonetiske alfabetet (UPA)"}
-        LIPAW{"resian, lipovazdialekt"}
-        REVISED{"revidert rettskriving"}
-        SAAHO{"saaho-dialekt"}
-        SCOUSE{"scouse-dialekt"}
-        VALENCIA{"valensisk dialekt"}
-    }
     characterLabelPattern{
         enclosed{"{0} – omslutta"}
         extended{"{0} – utvida"}
@@ -284,7 +181,6 @@ nn{
         other{"{0} – anna"}
         scripts{"skriftsystem – {0}"}
         strokes{
-            one{"{0} strek"}
             other{"{0} strekar"}
         }
         subscript{"senka {0}"}

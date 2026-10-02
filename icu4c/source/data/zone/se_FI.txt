@@ -108,9 +108,6 @@ se_FI{
         "Europe:Rome"{
             ec{"Roma"}
         }
-        "Europe:Tirane"{
-            ec{"Tirana"}
-        }
         "Europe:Ulyanovsk"{
             ec{"Uljanovsk"}
         }

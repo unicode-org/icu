@@ -136,18 +136,10 @@ ku{
                 one{"{0} nîvçapa dinyayê"}
                 other{"{0} nîvçapa dinyayê"}
             }
-            fathom{
-                one{"{0} fathom"}
-                other{"{0} fathom"}
-            }
             foot{
                 one{"{0} fît"}
                 other{"{0} fît"}
                 per{"{0} serê fîtê"}
-            }
-            furlong{
-                one{"{0} furlong"}
-                other{"{0} furlong"}
             }
             inch{
                 one{"{0} înç"}
@@ -333,7 +325,6 @@ ku{
             }
             revolution{
                 dnam{"dwr"}
-                one{"{0} dwr"}
                 other{"{0} dwr"}
             }
         }
@@ -343,7 +334,6 @@ ku{
             }
             dunam{
                 dnam{"donim"}
-                one{"{0} donim"}
                 other{"{0} donim"}
             }
             hectare{
@@ -370,19 +360,16 @@ ku{
                 dnam{"qerat"}
             }
             percent{
-                one{"%{0}"}
                 other{"%{0}"}
             }
         }
         consumption{
             liter-per-100-kilometer{
                 dnam{"l/100 km"}
-                one{"{0} l/100 km"}
                 other{"{0} l/100 km"}
             }
             liter-per-kilometer{
                 dnam{"l/km"}
-                one{"{0} l/km"}
                 other{"{0} l/km"}
             }
         }
@@ -396,29 +383,24 @@ ku{
         duration{
             century{
                 dnam{"ss"}
-                one{"{0} ss"}
                 other{"{0} ss"}
             }
             day{
                 dnam{"roj"}
-                one{"{0} roj"}
                 other{"{0} roj"}
                 per{"{0}/r"}
             }
             decade{
                 dnam{"dehsal"}
-                one{"{0} dehsal"}
                 other{"{0} dehsal"}
             }
             hour{
                 dnam{"saet"}
-                one{"{0} st"}
                 other{"{0} st"}
                 per{"{0}/st"}
             }
             minute{
                 dnam{"d"}
-                one{"{0} d"}
                 other{"{0} d"}
                 per{"{0}/d"}
             }
@@ -427,31 +409,26 @@ ku{
             }
             night{
                 dnam{"şev"}
-                one{"{0} şev"}
                 other{"{0} şev"}
                 per{"{0}/şev"}
             }
             quarter{
                 dnam{"çaryek"}
-                one{"{0} çaryek"}
                 other{"{0} çaryek"}
                 per{"{0}/çaryek"}
             }
             second{
                 dnam{"sn"}
-                one{"{0} sn"}
                 other{"{0} sn"}
                 per{"{0}/sn"}
             }
             week{
                 dnam{"hf"}
-                one{"{0} hf"}
                 other{"{0} hf"}
                 per{"{0}/hf"}
             }
             year{
                 dnam{"sal"}
-                one{"{0} sal"}
                 other{"{0} sal"}
                 per{"{0}/sal"}
             }
@@ -460,21 +437,14 @@ ku{
             earth-radius{
                 dnam{"nîvçapa dinyayê"}
             }
-            fathom{
-                dnam{"fathom"}
-            }
             foot{
                 dnam{"fît"}
-            }
-            furlong{
-                dnam{"furlong"}
             }
             inch{
                 dnam{"înç"}
             }
             light-year{
                 dnam{"sala rnh"}
-                one{"{0} sala rnh"}
                 other{"{0} sala rnh"}
             }
             meter{
@@ -499,7 +469,6 @@ ku{
         speed{
             kilometer-per-hour{
                 dnam{"km/st"}
-                one{"{0} km/st"}
                 other{"{0} km/st"}
             }
         }

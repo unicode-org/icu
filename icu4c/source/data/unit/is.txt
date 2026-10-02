@@ -6,12 +6,7 @@ is{
         acceleration{
             g-force{
                 case{
-                    accusative{
-                        one{"{0} þyngdarhröðun"}
-                        other{"{0} þyngdarhraðanir"}
-                    }
                     dative{
-                        one{"{0} þyngdarhröðun"}
                         other{"{0} þyngdarhröðunum"}
                     }
                     genitive{
@@ -50,7 +45,6 @@ is{
                 case{
                     accusative{
                         one{"{0} bogamínútu"}
-                        other{"{0} bogamínútur"}
                     }
                     dative{
                         one{"{0} bogamínútu"}
@@ -70,7 +64,6 @@ is{
                 case{
                     accusative{
                         one{"{0} bogasekúndu"}
-                        other{"{0} bogasekúndur"}
                     }
                     dative{
                         one{"{0} bogasekúndu"}
@@ -90,7 +83,6 @@ is{
                 case{
                     accusative{
                         one{"{0} gráðu"}
-                        other{"{0} gráður"}
                     }
                     dative{
                         one{"{0} gráðu"}
@@ -108,7 +100,6 @@ is{
             radian{
                 case{
                     accusative{
-                        one{"{0} radían"}
                         other{"{0} radíana"}
                     }
                     dative{
@@ -157,7 +148,6 @@ is{
                 other{"{0} ekrur"}
             }
             dunam{
-                one{"{0} dúnam"}
                 other{"{0} dúnöm"}
             }
             hectare{
@@ -288,41 +278,11 @@ is{
                 one{
                     _{
                         _{"fer{0}"}
-                        accusative{"fer{0}"}
-                        dative{"fer{0}"}
-                        genitive{"fer{0}"}
-                    }
-                    feminine{
-                        _{"fer{0}"}
-                        accusative{"fer{0}"}
-                        dative{"fer{0}"}
-                        genitive{"fer{0}"}
-                    }
-                    masculine{
-                        _{"fer{0}"}
-                        accusative{"fer{0}"}
-                        dative{"fer{0}"}
-                        genitive{"fer{0}"}
                     }
                 }
                 other{
                     _{
                         _{"fer{0}"}
-                        accusative{"fer{0}"}
-                        dative{"fer{0}"}
-                        genitive{"fer{0}"}
-                    }
-                    feminine{
-                        _{"fer{0}"}
-                        accusative{"fer{0}"}
-                        dative{"fer{0}"}
-                        genitive{"fer{0}"}
-                    }
-                    masculine{
-                        _{"fer{0}"}
-                        accusative{"fer{0}"}
-                        dative{"fer{0}"}
-                        genitive{"fer{0}"}
                     }
                 }
             }
@@ -330,41 +290,11 @@ is{
                 one{
                     _{
                         _{"rúm{0}"}
-                        accusative{"rúm{0}"}
-                        dative{"rúm{0}"}
-                        genitive{"rúm{0}"}
-                    }
-                    feminine{
-                        _{"rúm{0}"}
-                        accusative{"rúm{0}"}
-                        dative{"rúm{0}"}
-                        genitive{"rúm{0}"}
-                    }
-                    masculine{
-                        _{"rúm{0}"}
-                        accusative{"rúm{0}"}
-                        dative{"rúm{0}"}
-                        genitive{"rúm{0}"}
                     }
                 }
                 other{
                     _{
                         _{"rúm{0}"}
-                        accusative{"rúm{0}"}
-                        dative{"rúm{0}"}
-                        genitive{"rúm{0}"}
-                    }
-                    feminine{
-                        _{"rúm{0}"}
-                        accusative{"rúm{0}"}
-                        dative{"rúm{0}"}
-                        genitive{"rúm{0}"}
-                    }
-                    masculine{
-                        _{"rúm{0}"}
-                        accusative{"rúm{0}"}
-                        dative{"rúm{0}"}
-                        genitive{"rúm{0}"}
                     }
                 }
             }
@@ -372,12 +302,7 @@ is{
         concentr{
             item{
                 case{
-                    accusative{
-                        one{"{0} atriði"}
-                        other{"{0} atriði"}
-                    }
                     dative{
-                        one{"{0} atriði"}
                         other{"{0} atriðum"}
                     }
                     genitive{
@@ -386,15 +311,9 @@ is{
                     }
                 }
                 gender{"neuter"}
-                one{"{0} atriði"}
-                other{"{0} atriði"}
             }
             karat{
                 case{
-                    accusative{
-                        one{"{0} karat"}
-                        other{"{0} karöt"}
-                    }
                     dative{
                         one{"{0} karati"}
                         other{"{0} karötum"}
@@ -416,10 +335,6 @@ is{
             }
             milligram-ofglucose-per-deciliter{
                 case{
-                    accusative{
-                        one{"{0} milligramm á desílítra"}
-                        other{"{0} milligrömm á desílítra"}
-                    }
                     dative{
                         one{"{0} milligrammi á desílítra"}
                         other{"{0} milligrömmum á desílítra"}
@@ -436,10 +351,6 @@ is{
             }
             millimole-per-liter{
                 case{
-                    accusative{
-                        one{"{0} millimól á lítra"}
-                        other{"{0} millimól á lítra"}
-                    }
                     dative{
                         one{"{0} millimóli á lítra"}
                         other{"{0} millimólum á lítra"}
@@ -456,10 +367,6 @@ is{
             }
             mole{
                 case{
-                    accusative{
-                        one{"{0} mól"}
-                        other{"{0} mól"}
-                    }
                     dative{
                         one{"{0} móli"}
                         other{"{0} mólum"}
@@ -470,8 +377,6 @@ is{
                     }
                 }
                 gender{"neuter"}
-                one{"{0} mól"}
-                other{"{0} mól"}
             }
             ofglucose{
                 dnam{"af glúkósa"}
@@ -522,10 +427,6 @@ is{
             }
             percent{
                 case{
-                    accusative{
-                        one{"{0} prósent"}
-                        other{"{0} prósent"}
-                    }
                     dative{
                         one{"{0} prósenti"}
                         other{"{0} prósentum"}
@@ -541,10 +442,6 @@ is{
             }
             permille{
                 case{
-                    accusative{
-                        one{"{0} prómill"}
-                        other{"{0} prómill"}
-                    }
                     dative{
                         one{"{0} prómilli"}
                         other{"{0} prómillum"}
@@ -560,10 +457,6 @@ is{
             }
             permyriad{
                 case{
-                    accusative{
-                        one{"{0} permyriad"}
-                        other{"{0} permyriad"}
-                    }
                     dative{
                         one{"{0} permyriadi"}
                         other{"{0} permyriadum"}
@@ -655,17 +548,10 @@ is{
                 }
                 dnam{"bitar"}
                 gender{"masculine"}
-                one{"{0} biti"}
-                other{"{0} bitar"}
             }
             byte{
                 case{
-                    accusative{
-                        one{"{0} bæti"}
-                        other{"{0} bæti"}
-                    }
                     dative{
-                        one{"{0} bæti"}
                         other{"{0} bætum"}
                     }
                     genitive{
@@ -674,8 +560,6 @@ is{
                     }
                 }
                 gender{"neuter"}
-                one{"{0} bæti"}
-                other{"{0} bæti"}
             }
             gigabit{
                 case{
@@ -699,12 +583,7 @@ is{
             }
             gigabyte{
                 case{
-                    accusative{
-                        one{"{0} gígabæti"}
-                        other{"{0} gígabæti"}
-                    }
                     dative{
-                        one{"{0} gígabæti"}
                         other{"{0} gígabætum"}
                     }
                     genitive{
@@ -739,12 +618,7 @@ is{
             }
             kilobyte{
                 case{
-                    accusative{
-                        one{"{0} kílóbæti"}
-                        other{"{0} kílóbæti"}
-                    }
                     dative{
-                        one{"{0} kílóbæti"}
                         other{"{0} kílóbætum"}
                     }
                     genitive{
@@ -779,12 +653,7 @@ is{
             }
             megabyte{
                 case{
-                    accusative{
-                        one{"{0} megabæti"}
-                        other{"{0} megabæti"}
-                    }
                     dative{
-                        one{"{0} megabæti"}
                         other{"{0} megabætum"}
                     }
                     genitive{
@@ -799,12 +668,7 @@ is{
             }
             petabyte{
                 case{
-                    accusative{
-                        one{"{0} petabæti"}
-                        other{"{0} petabæti"}
-                    }
                     dative{
-                        one{"{0} petabæti"}
                         other{"{0} petabætum"}
                     }
                     genitive{
@@ -839,12 +703,7 @@ is{
             }
             terabyte{
                 case{
-                    accusative{
-                        one{"{0} terabæti"}
-                        other{"{0} terabæti"}
-                    }
                     dative{
-                        one{"{0} terabæti"}
                         other{"{0} terabætum"}
                     }
                     genitive{
@@ -861,12 +720,7 @@ is{
         duration{
             century{
                 case{
-                    accusative{
-                        one{"{0} öld"}
-                        other{"{0} aldir"}
-                    }
                     dative{
-                        one{"{0} öld"}
                         other{"{0} öldum"}
                     }
                     genitive{
@@ -895,8 +749,6 @@ is{
                     }
                 }
                 gender{"masculine"}
-                one{"{0} dagur"}
-                other{"{0} dagar"}
                 per{"{0} á dag"}
             }
             day-person{
@@ -915,8 +767,6 @@ is{
                     }
                 }
                 gender{"masculine"}
-                one{"{0} dagur"}
-                other{"{0} dagar"}
             }
             decade{
                 case{
@@ -940,12 +790,7 @@ is{
             }
             hour{
                 case{
-                    accusative{
-                        one{"{0} klukkustund"}
-                        other{"{0} klukkustundir"}
-                    }
                     dative{
-                        one{"{0} klukkustund"}
                         other{"{0} klukkustundum"}
                     }
                     genitive{
@@ -962,7 +807,6 @@ is{
                 case{
                     accusative{
                         one{"{0} míkrósekúndu"}
-                        other{"{0} míkrósekúndur"}
                     }
                     dative{
                         one{"{0} míkrósekúndu"}
@@ -982,7 +826,6 @@ is{
                 case{
                     accusative{
                         one{"{0} millisekúndu"}
-                        other{"{0} millisekúndur"}
                     }
                     dative{
                         one{"{0} millisekúndu"}
@@ -1002,7 +845,6 @@ is{
                 case{
                     accusative{
                         one{"{0} mínútu"}
-                        other{"{0} mínútur"}
                     }
                     dative{
                         one{"{0} mínútu"}
@@ -1043,7 +885,6 @@ is{
                 case{
                     accusative{
                         one{"{0} nanósekúndu"}
-                        other{"{0} nanósekúndur"}
                     }
                     dative{
                         one{"{0} nanósekúndu"}
@@ -1061,12 +902,7 @@ is{
             }
             night{
                 case{
-                    accusative{
-                        one{"{0} nótt"}
-                        other{"{0} nætur"}
-                    }
                     dative{
-                        one{"{0} nótt"}
                         other{"{0} nóttum"}
                     }
                     genitive{
@@ -1076,7 +912,6 @@ is{
                 }
                 dnam{"nætur"}
                 gender{"feminine"}
-                one{"{0} nótt"}
                 other{"{0} nætur"}
             }
             quarter{
@@ -1104,7 +939,6 @@ is{
                 case{
                     accusative{
                         one{"{0} sekúndu"}
-                        other{"{0} sekúndur"}
                     }
                     dative{
                         one{"{0} sekúndu"}
@@ -1125,7 +959,6 @@ is{
                 case{
                     accusative{
                         one{"{0} viku"}
-                        other{"{0} vikur"}
                     }
                     dative{
                         one{"{0} viku"}
@@ -1137,16 +970,10 @@ is{
                     }
                 }
                 gender{"feminine"}
-                one{"{0} vika"}
-                other{"{0} vikur"}
                 per{"{0} á viku"}
             }
             year{
                 case{
-                    accusative{
-                        one{"{0} ár"}
-                        other{"{0} ár"}
-                    }
                     dative{
                         one{"{0} ári"}
                         other{"{0} árum"}
@@ -1157,18 +984,12 @@ is{
                     }
                 }
                 gender{"neuter"}
-                one{"{0} ár"}
-                other{"{0} ár"}
                 per{"{0} á ári"}
             }
         }
         electric{
             ampere{
                 case{
-                    accusative{
-                        one{"{0} amper"}
-                        other{"{0} amper"}
-                    }
                     dative{
                         one{"{0} amperi"}
                         other{"{0} amperum"}
@@ -1200,10 +1021,6 @@ is{
             }
             milliampere{
                 case{
-                    accusative{
-                        one{"{0} milliamper"}
-                        other{"{0} milliamper"}
-                    }
                     dative{
                         one{"{0} milliamperi"}
                         other{"{0} milliamperum"}
@@ -1220,10 +1037,6 @@ is{
             }
             ohm{
                 case{
-                    accusative{
-                        one{"{0} óm"}
-                        other{"{0} óm"}
-                    }
                     dative{
                         one{"{0} ómi"}
                         other{"{0} ómum"}
@@ -1244,10 +1057,6 @@ is{
             }
             volt{
                 case{
-                    accusative{
-                        one{"{0} volt"}
-                        other{"{0} volt"}
-                    }
                     dative{
                         one{"{0} volti"}
                         other{"{0} voltum"}
@@ -1268,16 +1077,10 @@ is{
                 one{"{0} bekerel"}
                 other{"{0} bekerel"}
             }
-            british-thermal-unit{
-                dnam{"Breskar varmaeiningar"}
-                one{"{0} Bresk varmaeining"}
-                other{"{0} Breskar varmaeiningar"}
-            }
             calorie{
                 case{
                     accusative{
                         one{"{0} kaloríu"}
-                        other{"{0} kaloríur"}
                     }
                     dative{
                         one{"{0} kaloríu"}
@@ -1314,10 +1117,6 @@ is{
             }
             joule{
                 case{
-                    accusative{
-                        one{"{0} júl"}
-                        other{"{0} júl"}
-                    }
                     dative{
                         one{"{0} júli"}
                         other{"{0} júlum"}
@@ -1335,7 +1134,6 @@ is{
                 case{
                     accusative{
                         one{"{0} kílókaloríu"}
-                        other{"{0} kílókaloríur"}
                     }
                     dative{
                         one{"{0} kílókaloríu"}
@@ -1353,10 +1151,6 @@ is{
             }
             kilojoule{
                 case{
-                    accusative{
-                        one{"{0} kílójúl"}
-                        other{"{0} kílójúl"}
-                    }
                     dative{
                         one{"{0} kílójúli"}
                         other{"{0} kílójúlum"}
@@ -1372,12 +1166,7 @@ is{
             }
             kilowatt-hour{
                 case{
-                    accusative{
-                        one{"{0} kílóvattstund"}
-                        other{"{0} kílóvattstundir"}
-                    }
                     dative{
-                        one{"{0} kílóvattstund"}
                         other{"{0} kílóvattstundum"}
                     }
                     genitive{
@@ -1409,10 +1198,6 @@ is{
             }
             kilowatt-hour-per-100-kilometer{
                 case{
-                    accusative{
-                        one{"{0} kílóvatt á 100 kílómetra"}
-                        other{"{0} kílóvött á 100 kílómetra"}
-                    }
                     dative{
                         one{"{0} kílóvatti á 100 kílómetra"}
                         other{"{0} kílóvöttum á 100 kílómetra"}
@@ -1428,10 +1213,6 @@ is{
             }
             newton{
                 case{
-                    accusative{
-                        one{"{0} njúton"}
-                        other{"{0} njúton"}
-                    }
                     dative{
                         one{"{0} njútoni"}
                         other{"{0} njútoni"}
@@ -1454,16 +1235,11 @@ is{
         frequency{
             gigahertz{
                 case{
-                    accusative{
-                        one{"{0} gígahertz"}
-                        other{"{0} gígahertz"}
-                    }
                     dative{
                         one{"{0} gígahertzi"}
                         other{"{0} gígahertzum"}
                     }
                     genitive{
-                        one{"{0} gígahertz"}
                         other{"{0} gígahertza"}
                     }
                 }
@@ -1474,16 +1250,11 @@ is{
             }
             hertz{
                 case{
-                    accusative{
-                        one{"{0} hertz"}
-                        other{"{0} hertz"}
-                    }
                     dative{
                         one{"{0} hertzi"}
                         other{"{0} hertzum"}
                     }
                     genitive{
-                        one{"{0} hertz"}
                         other{"{0} hertza"}
                     }
                 }
@@ -1494,16 +1265,11 @@ is{
             }
             kilohertz{
                 case{
-                    accusative{
-                        one{"{0} kílóhertz"}
-                        other{"{0} kílóhertz"}
-                    }
                     dative{
                         one{"{0} kílóhertzi"}
                         other{"{0} kílóhertzum"}
                     }
                     genitive{
-                        one{"{0} kílóhertz"}
                         other{"{0} kílóhertza"}
                     }
                 }
@@ -1514,16 +1280,11 @@ is{
             }
             megahertz{
                 case{
-                    accusative{
-                        one{"{0} megahertz"}
-                        other{"{0} megahertz"}
-                    }
                     dative{
                         one{"{0} megahertzi"}
                         other{"{0} megahertzum"}
                     }
                     genitive{
-                        one{"{0} megahertz"}
                         other{"{0} megahertza"}
                     }
                 }
@@ -1667,16 +1428,8 @@ is{
                 one{"{0} geisli jarðar"}
                 other{"{0} geisli jarðar"}
             }
-            fathom{
-                one{"{0} faðmur"}
-                other{"{0} faðmar"}
-            }
             foot{
                 per{"{0} á fet"}
-            }
-            furlong{
-                one{"{0} furlong"}
-                other{"{0} furlong"}
             }
             inch{
                 one{"{0} tomma"}
@@ -1753,7 +1506,6 @@ is{
                 case{
                     accusative{
                         one{"{0} sænska mílu"}
-                        other{"{0} sænskar mílur"}
                     }
                     dative{
                         one{"{0} sænskri mílu"}
@@ -1840,10 +1592,6 @@ is{
             }
             point{
                 case{
-                    accusative{
-                        one{"{0} stig"}
-                        other{"{0} stig"}
-                    }
                     dative{
                         one{"{0} stigi"}
                         other{"{0} stigum"}
@@ -1854,8 +1602,6 @@ is{
                     }
                 }
                 gender{"neuter"}
-                one{"{0} stig"}
-                other{"{0} stig"}
             }
             solar-radius{
                 one{"{0} sólarradíus"}
@@ -1869,12 +1615,7 @@ is{
         light{
             candela{
                 case{
-                    accusative{
-                        one{"{0} kerti"}
-                        other{"{0} kerti"}
-                    }
                     dative{
-                        one{"{0} kerti"}
                         other{"{0} kertum"}
                     }
                     genitive{
@@ -1883,15 +1624,9 @@ is{
                     }
                 }
                 gender{"neuter"}
-                one{"{0} kerti"}
-                other{"{0} kerti"}
             }
             lumen{
                 case{
-                    accusative{
-                        one{"{0} lúmen"}
-                        other{"{0} lúmen"}
-                    }
                     dative{
                         one{"{0} lúmeni"}
                         other{"{0} lúmenum"}
@@ -1908,16 +1643,11 @@ is{
             }
             lux{
                 case{
-                    accusative{
-                        one{"{0} lúx"}
-                        other{"{0} lúx"}
-                    }
                     dative{
                         one{"{0} lúxi"}
                         other{"{0} lúxum"}
                     }
                     genitive{
-                        one{"{0} lúx"}
                         other{"{0} lúxa"}
                     }
                 }
@@ -1945,10 +1675,6 @@ is{
         mass{
             carat{
                 case{
-                    accusative{
-                        one{"{0} karat"}
-                        other{"{0} karöt"}
-                    }
                     dative{
                         one{"{0} karati"}
                         other{"{0} karötum"}
@@ -1972,10 +1698,6 @@ is{
             }
             gram{
                 case{
-                    accusative{
-                        one{"{0} gramm"}
-                        other{"{0} grömm"}
-                    }
                     dative{
                         one{"{0} grammi"}
                         other{"{0} grömmum"}
@@ -1992,10 +1714,6 @@ is{
             }
             kilogram{
                 case{
-                    accusative{
-                        one{"{0} kílógramm"}
-                        other{"{0} kílógrömm"}
-                    }
                     dative{
                         one{"{0} kílógrammi"}
                         other{"{0} kílógrömmum"}
@@ -2013,10 +1731,6 @@ is{
             }
             microgram{
                 case{
-                    accusative{
-                        one{"{0} míkrógramm"}
-                        other{"{0} míkrógrömm"}
-                    }
                     dative{
                         one{"{0} míkrógrammi"}
                         other{"{0} míkrógrömmum"}
@@ -2033,10 +1747,6 @@ is{
             }
             milligram{
                 case{
-                    accusative{
-                        one{"{0} milligramm"}
-                        other{"{0} milligrömm"}
-                    }
                     dative{
                         one{"{0} milligrammi"}
                         other{"{0} milligrömmum"}
@@ -2071,10 +1781,6 @@ is{
                 one{"{0} sólmassi"}
                 other{"{0} sólmassar"}
             }
-            stone{
-                one{"{0} stone"}
-                other{"{0} stones"}
-            }
             ton{
                 dnam{"bandarísk tonn"}
                 one{"{0} bandarískt tonn"}
@@ -2082,10 +1788,6 @@ is{
             }
             tonne{
                 case{
-                    accusative{
-                        one{"{0} tonn"}
-                        other{"{0} tonn"}
-                    }
                     dative{
                         one{"{0} tonni"}
                         other{"{0} tonnum"}
@@ -2104,10 +1806,6 @@ is{
         power{
             gigawatt{
                 case{
-                    accusative{
-                        one{"{0} gígavatt"}
-                        other{"{0} gígavött"}
-                    }
                     dative{
                         one{"{0} gígavatti"}
                         other{"{0} gígavöttum"}
@@ -2129,10 +1827,6 @@ is{
             }
             kilowatt{
                 case{
-                    accusative{
-                        one{"{0} kílóvatt"}
-                        other{"{0} kílóvött"}
-                    }
                     dative{
                         one{"{0} kílóvatti"}
                         other{"{0} kílóvöttum"}
@@ -2149,10 +1843,6 @@ is{
             }
             megawatt{
                 case{
-                    accusative{
-                        one{"{0} megavatt"}
-                        other{"{0} megavött"}
-                    }
                     dative{
                         one{"{0} megavatti"}
                         other{"{0} megavöttum"}
@@ -2169,10 +1859,6 @@ is{
             }
             milliwatt{
                 case{
-                    accusative{
-                        one{"{0} millivatt"}
-                        other{"{0} millivött"}
-                    }
                     dative{
                         one{"{0} millivatti"}
                         other{"{0} millivöttum"}
@@ -2189,10 +1875,6 @@ is{
             }
             watt{
                 case{
-                    accusative{
-                        one{"{0} vatt"}
-                        other{"{0} vött"}
-                    }
                     dative{
                         one{"{0} vatti"}
                         other{"{0} vöttum"}
@@ -2210,12 +1892,7 @@ is{
         pressure{
             atmosphere{
                 case{
-                    accusative{
-                        one{"{0} loftþyngd"}
-                        other{"{0} loftþyngdir"}
-                    }
                     dative{
-                        one{"{0} loftþyngd"}
                         other{"{0} loftþyngdum"}
                     }
                     genitive{
@@ -2230,10 +1907,6 @@ is{
             }
             bar{
                 case{
-                    accusative{
-                        one{"{0} bar"}
-                        other{"{0} bör"}
-                    }
                     dative{
                         one{"{0} bari"}
                         other{"{0} börum"}
@@ -2245,15 +1918,9 @@ is{
                 }
                 dnam{"bör"}
                 gender{"neuter"}
-                one{"{0} bar"}
-                other{"{0} bör"}
             }
             hectopascal{
                 case{
-                    accusative{
-                        one{"{0} hektópaskal"}
-                        other{"{0} hektópasköl"}
-                    }
                     dative{
                         one{"{0} hektópaskali"}
                         other{"{0} hektópaskölum"}
@@ -2275,10 +1942,6 @@ is{
             }
             kilopascal{
                 case{
-                    accusative{
-                        one{"{0} kílópaskal"}
-                        other{"{0} kílópasköl"}
-                    }
                     dative{
                         one{"{0} kílópaskali"}
                         other{"{0} kílópaskölum"}
@@ -2295,10 +1958,6 @@ is{
             }
             megapascal{
                 case{
-                    accusative{
-                        one{"{0} megapaskal"}
-                        other{"{0} megapasköl"}
-                    }
                     dative{
                         one{"{0} megapaskali"}
                         other{"{0} megapaskölum"}
@@ -2315,10 +1974,6 @@ is{
             }
             millibar{
                 case{
-                    accusative{
-                        one{"{0} millibar"}
-                        other{"{0} millibör"}
-                    }
                     dative{
                         one{"{0} millibari"}
                         other{"{0} millibörum"}
@@ -2360,10 +2015,6 @@ is{
             }
             pascal{
                 case{
-                    accusative{
-                        one{"{0} paskal"}
-                        other{"{0} pasköl"}
-                    }
                     dative{
                         one{"{0} paskali"}
                         other{"{0} paskölum"}
@@ -2445,7 +2096,6 @@ is{
                 case{
                     accusative{
                         one{"{0} gráðu á Celsíus"}
-                        other{"{0} gráður á Celsíus"}
                     }
                     dative{
                         one{"{0} gráðu á Celsíus"}
@@ -2469,7 +2119,6 @@ is{
                 case{
                     accusative{
                         one{"{0} gráðu"}
-                        other{"{0} gráður"}
                     }
                     dative{
                         one{"{0} gráðu"}
@@ -2486,12 +2135,7 @@ is{
             }
             kelvin{
                 case{
-                    accusative{
-                        one{"{0} kelvin"}
-                        other{"{0} kelvin"}
-                    }
                     dative{
-                        one{"{0} kelvin"}
                         other{"{0} kelvinum"}
                     }
                     genitive{
@@ -2917,7 +2561,6 @@ is{
             }
             percent{
                 dnam{"%"}
-                one{"{0}%"}
                 other{"{0}%"}
             }
             permyriad{
@@ -2991,7 +2634,6 @@ is{
         }
         force{
             kilowatt-hour-per-100-kilometer{
-                one{"{0} kWh/100km"}
                 other{"{0}kWh/100km"}
             }
         }
@@ -3009,15 +2651,6 @@ is{
             centimeter{
                 one{"{0}cm"}
                 other{"{0}cm"}
-            }
-            fathom{
-                dnam{"faðmur"}
-                one{"{0}fth"}
-                other{"{0}fth"}
-            }
-            furlong{
-                one{"{0}fur"}
-                other{"{0}fur"}
             }
             inch{
                 one{"{0}″"}
@@ -3057,11 +2690,6 @@ is{
                 one{"{0} p."}
                 other{"{0} p."}
             }
-            stone{
-                dnam{"stone"}
-                one{"{0}st"}
-                other{"{0}st"}
-            }
             ton{
                 one{"{0}tn"}
                 other{"{0}tn"}
@@ -3091,7 +2719,6 @@ is{
                 dnam{"m/sek."}
             }
             mile-per-hour{
-                one{"{0} míla/klst."}
                 other{"{0} míl./klst."}
             }
         }
@@ -3107,9 +2734,6 @@ is{
             }
         }
         volume{
-            bushel{
-                dnam{"skeppa"}
-            }
             cubic-mile{
                 one{"{0}mi³"}
                 other{"{0}mi³"}
@@ -3151,12 +2775,10 @@ is{
         angle{
             arc-minute{
                 dnam{"bogamín."}
-                one{"{0} bogamín."}
                 other{"{0} bogamín."}
             }
             arc-second{
                 dnam{"bogasek."}
-                one{"{0} bogasek."}
                 other{"{0} bogasek."}
             }
             degree{
@@ -3164,19 +2786,16 @@ is{
             }
             revolution{
                 dnam{"sn."}
-                one{"{0} sn."}
                 other{"{0} sn."}
             }
         }
         area{
             acre{
                 dnam{"ekrur"}
-                one{"{0} ek."}
                 other{"{0} ek."}
             }
             dunam{
                 dnam{"dúnöm"}
-                one{"{0} dúnam"}
                 other{"{0} dúnam"}
             }
             hectare{
@@ -3184,12 +2803,10 @@ is{
             }
             square-foot{
                 dnam{"ferfet"}
-                one{"{0} ferfet"}
                 other{"{0} ferfet"}
             }
             square-inch{
                 dnam{"tommur²"}
-                one{"{0} t²"}
                 other{"{0} t²"}
                 per{"{0}/t²"}
             }
@@ -3215,22 +2832,18 @@ is{
         concentr{
             item{
                 dnam{"atriði"}
-                one{"{0} atriði"}
                 other{"{0} atriði"}
             }
             milligram-ofglucose-per-deciliter{
                 dnam{"mg/dl"}
-                one{"{0} mg/dl"}
                 other{"{0} mg/dl"}
             }
             millimole-per-liter{
                 dnam{"millimól/lítri"}
-                one{"{0} mmól/l"}
                 other{"{0} mmól/l"}
             }
             mole{
                 dnam{"mól"}
-                one{"{0} mól"}
                 other{"{0} mól"}
             }
             ofglucose{
@@ -3259,22 +2872,18 @@ is{
         consumption{
             liter-per-100-kilometer{
                 dnam{"l/100 km"}
-                one{"{0} l/100 km"}
                 other{"{0} l/100 km"}
             }
             liter-per-kilometer{
                 dnam{"lítrar/km"}
-                one{"{0} l/km"}
                 other{"{0} l/km"}
             }
             mile-per-gallon{
                 dnam{"mílur/gallon"}
-                one{"{0} mí./gal."}
                 other{"{0} mí./gal."}
             }
             mile-per-gallon-imperial{
                 dnam{"mílur/breskt gal."}
-                one{"{0} mí./br.g."}
                 other{"{0} mí./br.g."}
             }
         }
@@ -3293,7 +2902,6 @@ is{
             }
             byte{
                 dnam{"bæti"}
-                one{"{0} bæti"}
                 other{"{0} bæti"}
             }
             petabyte{
@@ -3303,7 +2911,6 @@ is{
         duration{
             century{
                 dnam{"árh"}
-                one{"{0} árh"}
                 other{"{0} árh"}
             }
             day{
@@ -3314,12 +2921,10 @@ is{
             }
             decade{
                 dnam{"árat."}
-                one{"{0} árat."}
                 other{"{0} árat."}
             }
             hour{
                 dnam{"klukkustundir"}
-                one{"{0} klst."}
                 other{"{0} klst."}
                 per{"{0}/klst."}
             }
@@ -3331,13 +2936,11 @@ is{
             }
             minute{
                 dnam{"mín."}
-                one{"{0} mín."}
                 other{"{0} mín."}
                 per{"{0}/mín."}
             }
             month{
                 dnam{"mánuðir"}
-                one{"{0} mán."}
                 other{"{0} mán."}
             }
             nanosecond{
@@ -3351,13 +2954,11 @@ is{
             }
             quarter{
                 dnam{"ársfj."}
-                one{"{0} ársfj."}
                 other{"{0} ársfj."}
                 per{"{0}/ársfj."}
             }
             second{
                 dnam{"sek."}
-                one{"{0} sek."}
                 other{"{0} sek."}
                 per{"{0}/sek."}
             }
@@ -3369,7 +2970,6 @@ is{
             }
             year{
                 dnam{"ár"}
-                one{"{0} ár"}
                 other{"{0} ár"}
                 per{"{0}/ári"}
             }
@@ -3383,12 +2983,8 @@ is{
             }
         }
         energy{
-            british-thermal-unit{
-                dnam{"BTU"}
-            }
             calorie-it{
                 dnam{"kal-IT"}
-                one{"{0} kal-IT"}
                 other{"{0} kal-IT"}
             }
             electronvolt{
@@ -3443,30 +3039,20 @@ is{
         length{
             astronomical-unit{
                 dnam{"se"}
-                one{"{0} se"}
                 other{"{0} se"}
-            }
-            fathom{
-                dnam{"faðmar"}
             }
             foot{
                 dnam{"fet"}
-                one{"{0} fet"}
                 other{"{0} fet"}
                 per{"{0}/fet"}
             }
-            furlong{
-                dnam{"furlong"}
-            }
             inch{
                 dnam{"tommur"}
-                one{"{0} t."}
                 other{"{0} t."}
                 per{"{0}/t."}
             }
             light-year{
                 dnam{"ljósár"}
-                one{"{0} ljósár"}
                 other{"{0} ljósár"}
             }
             meter{
@@ -3477,17 +3063,14 @@ is{
             }
             mile{
                 dnam{"mílur"}
-                one{"{0} mí"}
                 other{"{0} mí"}
             }
             mile-scandinavian{
                 dnam{"sæ. míl."}
-                one{"{0} sæ. míl."}
                 other{"{0} sæ. míl."}
             }
             nautical-mile{
                 dnam{"sml"}
-                one{"{0} sml"}
                 other{"{0} sml"}
             }
             parsec{
@@ -3495,12 +3078,10 @@ is{
             }
             point{
                 dnam{"stig"}
-                one{"{0} stig"}
                 other{"{0} stig"}
             }
             solar-radius{
                 dnam{"sólarradíusar"}
-                one{"{0} Rsól"}
                 other{"{0} Rsól"}
             }
             yard{
@@ -3510,7 +3091,6 @@ is{
         light{
             candela{
                 dnam{"kerti"}
-                one{"{0} kerti"}
                 other{"{0} kerti"}
             }
             lux{
@@ -3518,14 +3098,12 @@ is{
             }
             solar-luminosity{
                 dnam{"ljósafl sólar"}
-                one{"{0} Lsól"}
                 other{"{0} Lsól"}
             }
         }
         mass{
             carat{
                 dnam{"karöt"}
-                one{"{0} kt."}
                 other{"{0} kt."}
             }
             dalton{
@@ -3550,27 +3128,20 @@ is{
             }
             solar-mass{
                 dnam{"sólmassar"}
-                one{"{0} Msól"}
                 other{"{0} Msól"}
-            }
-            stone{
-                dnam{"stones"}
             }
             ton{
                 dnam{"BNA tonn"}
-                one{"{0} BNA tn"}
                 other{"{0} BNA tn"}
             }
             tonne{
                 dnam{"tn"}
-                one{"{0} tn"}
                 other{"{0} tn"}
             }
         }
         power{
             horsepower{
                 dnam{"hö"}
-                one{"{0} hö"}
                 other{"{0} hö"}
             }
             watt{
@@ -3584,7 +3155,6 @@ is{
             }
             inch-ofhg{
                 dnam{"to Hg"}
-                one{"{0} to Hg"}
                 other{"{0} to Hg"}
             }
             millibar{
@@ -3593,18 +3163,15 @@ is{
             }
             ofhg{
                 dnam{"af Hg"}
-                one{"{0} af Hg"}
                 other{"{0} af Hg"}
             }
         }
         speed{
             beaufort{
-                one{"{0} B"}
                 other{"{0} B"}
             }
             kilometer-per-hour{
                 dnam{"kílómetrar á klukkustund"}
-                one{"{0} km/klst."}
                 other{"{0} km/klst."}
             }
             light-speed{
@@ -3629,7 +3196,6 @@ is{
         volume{
             acre-foot{
                 dnam{"ekrufet"}
-                one{"{0} ekrufet"}
                 other{"{0} ekrufet"}
             }
             barrel{
@@ -3637,29 +3203,20 @@ is{
                 one{"{0} tunna"}
                 other{"{0} tunnur"}
             }
-            bushel{
-                dnam{"skeppur"}
-                one{"{0} skeppa"}
-                other{"{0} skeppur"}
-            }
             centiliter{
                 dnam{"cl"}
-                one{"{0} cl"}
                 other{"{0} cl"}
             }
             cubic-foot{
                 dnam{"fet³"}
-                one{"{0} fet³"}
                 other{"{0} fet³"}
             }
             cubic-inch{
                 dnam{"tommur³"}
-                one{"{0} t³"}
                 other{"{0} t³"}
             }
             cubic-mile{
                 dnam{"mí³"}
-                one{"{0} mí³"}
                 other{"{0} mí³"}
             }
             cubic-yard{
@@ -3677,17 +3234,14 @@ is{
             }
             deciliter{
                 dnam{"dl"}
-                one{"{0} dl"}
                 other{"{0} dl"}
             }
             dessert-spoon{
                 dnam{"ábætissk."}
-                one{"{0} ábætissk."}
                 other{"{0} ábætissk."}
             }
             dessert-spoon-imperial{
                 dnam{"bresk ábætissk."}
-                one{"{0} bresk ábætissk."}
                 other{"{0} bresk ábætissk."}
             }
             dram{
@@ -3702,7 +3256,6 @@ is{
             }
             fluid-ounce{
                 dnam{"fl oz"}
-                one{"{0} fl oz"}
                 other{"{0} fl oz"}
             }
             fluid-ounce-imperial{
@@ -3712,19 +3265,16 @@ is{
             }
             gallon{
                 dnam{"gal"}
-                one{"{0} gal"}
                 other{"{0} gal"}
                 per{"{0}/gal"}
             }
             gallon-imperial{
                 dnam{"breskt gal."}
-                one{"{0} breskt gal."}
                 other{"{0} breskt gal."}
                 per{"{0} breskt gal."}
             }
             hectoliter{
                 dnam{"hl"}
-                one{"{0} hl"}
                 other{"{0} hl"}
             }
             jigger{
@@ -3737,12 +3287,10 @@ is{
             }
             megaliter{
                 dnam{"Ml"}
-                one{"{0} Ml"}
                 other{"{0} Ml"}
             }
             milliliter{
                 dnam{"ml"}
-                one{"{0} ml"}
                 other{"{0} ml"}
             }
             pinch{
@@ -3752,7 +3300,6 @@ is{
             }
             pint{
                 dnam{"hálfp."}
-                one{"{0} hálfp."}
                 other{"{0} hálfp."}
             }
             quart{
@@ -3760,17 +3307,14 @@ is{
             }
             quart-imperial{
                 dnam{"lagarmál"}
-                one{"{0} lagarmál"}
                 other{"{0} lagarmál"}
             }
             tablespoon{
                 dnam{"msk"}
-                one{"{0} msk"}
                 other{"{0} msk"}
             }
             teaspoon{
                 dnam{"tsk"}
-                one{"{0} tsk"}
                 other{"{0} tsk"}
             }
         }

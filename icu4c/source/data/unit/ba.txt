@@ -45,18 +45,6 @@ ba{
             acre{
                 dnam{"акрҙар"}
             }
-            bu-jp{
-                dnam{"бу [JP]"}
-                other{"{0} бу [JP]"}
-            }
-            cho{
-                dnam{"чо [JP]"}
-                other{"{0} чо [JP]"}
-            }
-            se-jp{
-                dnam{"се [JP]"}
-                other{"{0} се [JP]"}
-            }
             square-centimeter{
                 dnam{"квадрат сантиметрҙар"}
                 other{"{0} квадрат сантиметр"}
@@ -265,9 +253,6 @@ ba{
             decade{
                 dnam{"йыл тиҫтәләре"}
             }
-            fortnight{
-                dnam{"фортнайттар"}
-            }
             hour{
                 per{"{0}/сәғәт"}
             }
@@ -345,14 +330,6 @@ ba{
             becquerel{
                 dnam{"беккерелдәр"}
                 other{"{0} беккерель"}
-            }
-            british-thermal-unit{
-                dnam{"Британия йылылыҡ берәмектәре"}
-                other{"{0} Британия йылылыҡ берәмеге"}
-            }
-            british-thermal-unit-it{
-                dnam{"Британия йылылыҡ берәмектәре [IT]"}
-                other{"{0} Британия йылылыҡ берәмеге [IT]"}
             }
             calorie{
                 dnam{"калориялар"}
@@ -459,19 +436,12 @@ ba{
                 dnam{"сантиметрҙар"}
                 other{"{0} сантиметр"}
             }
-            chain{
-                dnam{"сылбырҙар"}
-                other{"{0} сылбыр"}
-            }
             decimeter{
                 dnam{"дециметрҙар"}
                 other{"{0} дециметр"}
             }
             earth-radius{
                 other{"{0} ер радиусы"}
-            }
-            fathom{
-                other{"{0} сажин"}
             }
             foot{
                 dnam{"футтар"}
@@ -480,14 +450,6 @@ ba{
             inch{
                 dnam{"дюймдар"}
                 per{"дюймға {0}"}
-            }
-            jo-jp{
-                dnam{"джо [JP]"}
-                other{"{0} джо [JP]"}
-            }
-            ken{
-                dnam{"кен [JP]"}
-                other{"{0} кен [JP]"}
             }
             kilometer{
                 dnam{"километрҙар"}
@@ -530,31 +492,8 @@ ba{
                 dnam{"пункттар"}
                 other{"{0} пункт"}
             }
-            ri-jp{
-                dnam{"ри [JP]"}
-                other{"{0} ри [JP]"}
-            }
-            rin{
-                dnam{"рин [JP]"}
-            }
-            rod{
-                dnam{"родтар"}
-                other{"{0} род"}
-            }
-            shaku-cloth{
-                dnam{"шаку [туҡыма, JP]"}
-                other{"{0} шаку [туҡыма, JP]"}
-            }
-            shaku-length{
-                dnam{"шаку [JP]"}
-                other{"{0} шаку [JP]"}
-            }
             solar-radius{
                 other{"{0} ҡояш радиусы"}
-            }
-            sun{
-                dnam{"сун [JP]"}
-                other{"{0} сун [JP]"}
             }
             yard{
                 dnam{"ярдтар"}
@@ -599,10 +538,6 @@ ba{
             earth-mass{
                 other{"{0} Ер массаһы"}
             }
-            fun{
-                dnam{"фун [JP]"}
-                other{"{0} фун [JP]"}
-            }
             grain{
                 dnam{"грандар"}
             }
@@ -636,15 +571,8 @@ ba{
                 other{"{0} фунт"}
                 per{"{0} фунтҡа"}
             }
-            slug{
-                dnam{"слагтар"}
-                other{"{0} слаг"}
-            }
             solar-mass{
                 other{"{0} ҡояш массаһы"}
-            }
-            stone{
-                dnam{"стоундар"}
             }
             ton{
                 dnam{"АҠШ тонналары"}
@@ -682,10 +610,6 @@ ba{
             }
             bar{
                 dnam{"барҙар"}
-            }
-            gasoline-energy-density{
-                dnam{"бензин эквиваленты"}
-                other{"{0} бензин эквиваленты"}
             }
             hectopascal{
                 dnam{"гектопаскалдәр"}
@@ -761,10 +685,6 @@ ba{
                 dnam{"кельвиндар"}
                 other{"{0} кельвин"}
             }
-            rankine{
-                dnam{"ранкиндар"}
-                other{"{0} ранкин"}
-            }
         }
         torque{
             newton-meter{
@@ -780,10 +700,6 @@ ba{
             barrel{
                 dnam{"баррелдәр"}
                 other{"{0} баррель"}
-            }
-            bushel{
-                dnam{"бушелдәр"}
-                other{"{0} бушель"}
             }
             centiliter{
                 dnam{"сантилитрҙар"}
@@ -821,10 +737,6 @@ ba{
             }
             cup{
                 dnam{"сынаяҡтар"}
-            }
-            cup-jp{
-                dnam{"сынаяҡ [JP]"}
-                other{"{0} сынаяҡ [JP]"}
             }
             cup-metric{
                 dnam{"метрик сынаяҡтар"}
@@ -867,14 +779,6 @@ ba{
             jigger{
                 dnam{"джиггерҙар"}
             }
-            koku{
-                dnam{"коку [JP]"}
-                other{"{0} коку [JP]"}
-            }
-            kosaji{
-                dnam{"косажи [JP]"}
-                other{"{0} косажи [JP]"}
-            }
             liter{
                 other{"{0} литр"}
                 per{"{0} литрға"}
@@ -887,19 +791,11 @@ ba{
                 dnam{"миллилитрҙар"}
                 other{"{0} миллилитр"}
             }
-            osaji{
-                dnam{"осажи [JP]"}
-                other{"{0} осажи [JP]"}
-            }
             pinch{
                 dnam{"семтемдәр"}
             }
             pint{
                 dnam{"пинталар"}
-            }
-            pint-imperial{
-                dnam{"Империя пинталары"}
-                other{"{0} Империя пинтаһы"}
             }
             pint-metric{
                 dnam{"метрик пинталар"}
@@ -909,23 +805,11 @@ ba{
                 dnam{"Империя кварталары"}
                 other{"{0} империя квартаһы"}
             }
-            sai{
-                dnam{"сай [JP]"}
-                other{"{0} сай [JP]"}
-            }
-            shaku{
-                dnam{"шаку [күләм, JP]"}
-                other{"{0} шаку [күләм, JP]"}
-            }
             tablespoon{
                 dnam{"аш ҡалаҡтары"}
             }
             teaspoon{
                 dnam{"сәй ҡалаҡтары"}
-            }
-            to-jp{
-                dnam{"то [JP]"}
-                other{"{0} то [JP]"}
             }
         }
     }
@@ -1057,20 +941,6 @@ ba{
             astronomical-unit{
                 dnam{"а. е."}
             }
-            fathom{
-                dnam{"саж."}
-            }
-            furlong{
-                dnam{"фрл"}
-                other{"{0} фрл"}
-            }
-            jo-jp{
-                dnam{"джо [JP]"}
-                other{"{0} jo [JP]"}
-            }
-            ken{
-                dnam{"кен [JP]"}
-            }
             light-year{
                 dnam{"яҡт. й."}
             }
@@ -1083,18 +953,6 @@ ba{
             }
             parsec{
                 dnam{"пк"}
-            }
-            rin{
-                dnam{"рин [JP]"}
-            }
-            shaku-cloth{
-                dnam{"шаку [туҡыма, JP]"}
-            }
-            shaku-length{
-                dnam{"шаку [JP]"}
-            }
-            sun{
-                dnam{"сун [JP]"}
             }
         }
         light{
@@ -1116,9 +974,6 @@ ba{
             earth-mass{
                 other{"{0}M⊕"}
             }
-            fun{
-                dnam{"фун [JP]"}
-            }
             gram{
                 dnam{"г"}
             }
@@ -1128,12 +983,6 @@ ba{
             solar-mass{
                 other{"{0}M☉"}
             }
-            stone{
-                dnam{"стн"}
-            }
-            ton{
-                other{"{0} АҠШ т"}
-            }
         }
         power{
             watt{
@@ -1141,9 +990,6 @@ ba{
             }
         }
         pressure{
-            gasoline-energy-density{
-                dnam{"бензин эквиваленты"}
-            }
             inch-ofhg{
                 dnam{"тер. бағ. д."}
             }
@@ -1172,10 +1018,6 @@ ba{
                 dnam{"барр."}
                 other{"{0} баррель"}
             }
-            bushel{
-                dnam{"буш."}
-                other{"{0} бушель"}
-            }
             cup-metric{
                 dnam{"м. сынаяҡ"}
             }
@@ -1202,17 +1044,8 @@ ba{
             gallon-imperial{
                 dnam{"имп. галл."}
             }
-            koku{
-                dnam{"коку [JP]"}
-            }
-            kosaji{
-                dnam{"косажи [JP]"}
-            }
             liter{
                 dnam{"л"}
-            }
-            osaji{
-                dnam{"осажи [JP]"}
             }
             pint{
                 dnam{"пинт."}
@@ -1223,20 +1056,11 @@ ba{
             quart-imperial{
                 other{"{0} имп. кварта"}
             }
-            sai{
-                dnam{"сай [JP]"}
-            }
-            shaku{
-                dnam{"шаку [күләм, JP]"}
-            }
             tablespoon{
                 dnam{"аш ҡ."}
             }
             teaspoon{
                 dnam{"сәй ҡ."}
-            }
-            to-jp{
-                dnam{"то [JP]"}
             }
         }
     }
@@ -1480,10 +1304,6 @@ ba{
                 dnam{"йый тиҫт."}
                 other{"{0} йыл тиҫтәһе"}
             }
-            fortnight{
-                dnam{"фртнт."}
-                other{"{0} фортнайт"}
-            }
             hour{
                 dnam{"сәғәт"}
                 other{"{0} сәғәт"}
@@ -1575,10 +1395,6 @@ ba{
             becquerel{
                 dnam{"Бк"}
                 other{"{0} Бк"}
-            }
-            british-thermal-unit{
-                dnam{"БТЕ"}
-                other{"{0} БТЕ"}
             }
             calorie{
                 dnam{"кал"}
@@ -1689,9 +1505,6 @@ ba{
                 other{"{0} см"}
                 per{"{0}/см"}
             }
-            chain{
-                other{"{0} сылбыр"}
-            }
             decimeter{
                 dnam{"дм"}
                 other{"{0} дм"}
@@ -1703,10 +1516,6 @@ ba{
                 dnam{"фут"}
                 other{"{0} фут"}
                 per{"{0}/фут"}
-            }
-            furlong{
-                dnam{"фурлонг"}
-                other{"{0} фурлонг"}
             }
             inch{
                 dnam{"дюйм"}
@@ -1762,10 +1571,6 @@ ba{
             point{
                 dnam{"пкт"}
                 other{"{0} пкт"}
-            }
-            rod{
-                dnam{"род"}
-                other{"{0} род"}
             }
             solar-radius{
                 dnam{"ҡояш радиустары"}
@@ -1850,16 +1655,8 @@ ba{
                 other{"{0} фнт"}
                 per{"{0}/фнт"}
             }
-            slug{
-                dnam{"слаг"}
-                other{"{0} слаг"}
-            }
             solar-mass{
                 dnam{"ҡояш массалары"}
-            }
-            stone{
-                dnam{"стоун"}
-                other{"{0} стоун"}
             }
             ton{
                 dnam{"АҠШ тоннаһы"}
@@ -1904,10 +1701,6 @@ ba{
             bar{
                 dnam{"бар"}
                 other{"{0} бар"}
-            }
-            gasoline-energy-density{
-                dnam{"газ эквиваленты"}
-                other{"{0} газ эквиваленты"}
             }
             hectopascal{
                 dnam{"гПа"}
@@ -1999,10 +1792,6 @@ ba{
             barrel{
                 dnam{"баррель"}
                 other{"{0} барр."}
-            }
-            bushel{
-                dnam{"бушель"}
-                other{"{0} буш."}
             }
             centiliter{
                 dnam{"сл"}

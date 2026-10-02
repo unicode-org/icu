@@ -199,10 +199,6 @@ ha{
             "GEL",
             "Lari na Georgia",
         }
-        GHC{
-            "GHC",
-            "Cedi",
-        }
         GHS{
             "GHS",
             "Sidi na Ghana",
@@ -218,10 +214,6 @@ ha{
         GNF{
             "GNF",
             "Franc na Guinea",
-        }
-        GNS{
-            "GNS",
-            "Kuɗin Gini",
         }
         GTQ{
             "GTQ",
@@ -375,10 +367,6 @@ ha{
             "MOP",
             "Pataca na ƙasar Macao",
         }
-        MRO{
-            "MRO",
-            "Kuɗin Moritaniya (1973–2017)",
-        }
         MRU{
             "MRU",
             "Ouguiya na Moritaniya",
@@ -402,10 +390,6 @@ ha{
         MYR{
             "MYR",
             "Ringgit na ƙasar Malaysia",
-        }
-        MZM{
-            "MZM",
-            "Kuɗin Mozambik",
         }
         MZN{
             "MZN",
@@ -535,10 +519,6 @@ ha{
             "SSP",
             "Fam na Kudancin Sudan",
         }
-        STD{
-            "STD",
-            "Kuɗin Sawo Tome da Paransip (1977–2017)",
-        }
         STN{
             "STN",
             "Dobra na Sawo Tome",
@@ -655,17 +635,9 @@ ha{
             "ZAR",
             "Rand na Afirka ta Kudu",
         }
-        ZMK{
-            "ZMK",
-            "Kuɗin Zambiya (1968–2012)",
-        }
         ZMW{
             "ZMW",
             "Kwacha na Zambiya",
-        }
-        ZWD{
-            "ZWD",
-            "Dalar zimbabuwe",
         }
         ZWG{
             "ZWG",
@@ -679,11 +651,9 @@ ha{
         }
         ANG{
             one{"Antillean guilder na ƙasar Netherlands"}
-            other{"Antillean Guilder na ƙasar Netherlands"}
         }
         ARS{
             one{"peso na ƙasar Argentina"}
-            other{"Peso na ƙasar Argentina"}
         }
         AUD{
             one{"Dalar Ostareliya"}
@@ -691,7 +661,6 @@ ha{
         }
         AWG{
             one{"florin na yankin Aruba"}
-            other{"Florin na yankin Aruba"}
         }
         BGN{
             one{"Lev na Bulgeria"}
@@ -702,39 +671,30 @@ ha{
             other{"Dalolin Brunei"}
         }
         BRL{
-            one{"Ril Kuɗin Birazil"}
             other{"Ril Kuɗin Birazil"}
         }
         BSD{
             one{"dalar ƙasar Bahamas"}
-            other{"Dalar ƙasar Bahamas"}
         }
         CHF{
             one{"Franc na Suwizalan"}
-            other{"Franc na Suwizilan"}
         }
         CUP{
             one{"peso na ƙasar Cuba"}
-            other{"Peso na ƙasar Kuba"}
         }
         CVE{
             one{"Escudo na Cape Verd"}
-            other{"Escudo na Cape Verde"}
         }
         DKK{
             one{"krone na ƙasar Denmark"}
-            other{"Krone na ƙasar Denmark"}
         }
         DOP{
             one{"peso na jamhuriyar Dominica"}
-            other{"Peso na jamhuriyar Dominica"}
         }
         ERN{
-            one{"Nafka na Eritrea"}
             other{"Nafka na Eritrea"}
         }
         EUR{
-            one{"yuro"}
             other{"yuro"}
         }
         FJD{
@@ -743,11 +703,9 @@ ha{
         }
         GTQ{
             one{"quetzal na ƙasar Guatemala"}
-            other{"Quetzal na ƙasar Guatemala"}
         }
         HNL{
             one{"lempira na ƙasar Honduras"}
-            other{"Lempira na ƙasar Honduras"}
         }
         HRK{
             one{"Kuna na Croatia"}
@@ -755,11 +713,9 @@ ha{
         }
         HTG{
             one{"gourde na ƙasar Haiti"}
-            other{"Gourde na ƙasar Haiti"}
         }
         IQD{
             one{"dinarin Iraqi"}
-            other{"Dinarin Iraqi"}
         }
         IRR{
             one{"Riyal na ƙasar Iran"}
@@ -767,26 +723,20 @@ ha{
         }
         ISK{
             one{"króna na ƙasar Iceland"}
-            other{"Króna na ƙasar Iceland"}
         }
         JMD{
             one{"dalar Jamaica"}
-            other{"Dalar Jamaica"}
         }
         JOD{
             one{"dinarin Jordan"}
-            other{"Dinarin Jordan"}
         }
         KWD{
             one{"dinarin Kuwaiti"}
-            other{"Dinarin Kuwaiti"}
         }
         KYD{
             one{"dalar ƙasar Tsibirai na Cayman"}
-            other{"Dalar ƙasar Tsibirai na Cayman"}
         }
         LYD{
-            one{"Dinarin Libiya"}
             other{"Dinarin Libiya"}
         }
         MAD{
@@ -798,12 +748,10 @@ ha{
             other{"Lei na Moldova"}
         }
         MXN{
-            one{"peso na ƙasar Mekziko"}
             other{"peso na ƙasar Mekziko"}
         }
         MZN{
             one{"metical na ƙasar Mozambique"}
-            other{"Metical na ƙasar Mozambique"}
         }
         NGN{
             one{"Nairar Nijeriya"}
@@ -811,19 +759,16 @@ ha{
         }
         NOK{
             one{"krone na ƙasar Norway"}
-            other{"Krone na ƙasar Norway"}
         }
         NZD{
             one{"Dalar New Zealand"}
             other{"Dalolin New Zealand"}
         }
         PLN{
-            one{"zloty na Polan"}
             other{"zloty na Polan"}
         }
         RSD{
             one{"dinarin Serbia"}
-            other{"Dinarin Serbia"}
         }
         SBD{
             one{"Dalar Tsibiran Solomon"}
@@ -831,7 +776,6 @@ ha{
         }
         SEK{
             one{"krona na ƙasar Sweden"}
-            other{"Krona na ƙasar Sweden"}
         }
         SGD{
             one{"Dalar Singapore"}
@@ -843,35 +787,27 @@ ha{
         }
         SSP{
             one{"fam na Kudancin Sudan"}
-            other{"Fam na Kudancin Sudan"}
         }
         SZL{
             one{"Lilangeni na Swazi"}
-            other{"Emalangeni na Swazi"}
         }
         TTD{
             one{"dalar ƙasar Trinidad da Tobago"}
-            other{"Dalar ƙasar Trinidad da Tobago"}
         }
         UGX{
-            one{"Sulallan Yuganda"}
             other{"Sulallan Yuganda"}
         }
         UYU{
             one{"peso na ƙasar Uruguay"}
-            other{"Peso na ƙasar Uruguay"}
         }
         XCD{
-            one{"dalar Gabashin Karebiyan"}
             other{"dalar Gabashin Karebiyan"}
         }
         XXX{
             one{"(sashin kuɗi da ba a sani ba)"}
-            other{"Kudin da ba a sani ba"}
         }
         YER{
             one{"riyal ɗin Yemen"}
-            other{"Riyal ɗin Yemen"}
         }
     }
 }

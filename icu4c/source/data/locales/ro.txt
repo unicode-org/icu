@@ -91,113 +91,77 @@ ro{
             patternsShort{
                 currencyFormat{
                     1000{
-                        few{"0 K ¤"}
-                        one{"0 K ¤"}
                         other{"0 K ¤"}
                     }
                     10000{
-                        few{"00 K ¤"}
-                        one{"00 K ¤"}
                         other{"00 K ¤"}
                     }
                     100000{
-                        few{"000 K ¤"}
-                        one{"000 K ¤"}
                         other{"000 K ¤"}
                     }
                     1000000{
-                        few{"0 mil'.' ¤"}
-                        one{"0 mil'.' ¤"}
                         other{"0 mil'.' ¤"}
                     }
                     10000000{
-                        few{"00 mil'.' ¤"}
-                        one{"00 mil'.' ¤"}
                         other{"00 mil'.' ¤"}
                     }
                     100000000{
-                        few{"000 mil'.' ¤"}
-                        one{"000 mil'.' ¤"}
                         other{"000 mil'.' ¤"}
                     }
                     1000000000{
-                        few{"0 mld'.' ¤"}
-                        one{"0 mld'.' ¤"}
                         other{"0 mld'.' ¤"}
                     }
                     10000000000{
-                        few{"00 mld'.' ¤"}
-                        one{"00 mld'.' ¤"}
                         other{"00 mld'.' ¤"}
                     }
                     100000000000{
-                        few{"000 mld'.' ¤"}
-                        one{"000 mld'.' ¤"}
                         other{"000 mld'.' ¤"}
                     }
                     1000000000000{
-                        few{"0 tril'.' ¤"}
-                        one{"0 tril'.' ¤"}
                         other{"0 tril'.' ¤"}
                     }
                     10000000000000{
-                        few{"00 tril'.' ¤"}
-                        one{"00 tril'.' ¤"}
                         other{"00 tril'.' ¤"}
                     }
                     100000000000000{
-                        few{"000 tril'.' ¤"}
-                        one{"000 tril'.' ¤"}
                         other{"000 tril'.' ¤"}
                     }
                 }
                 decimalFormat{
                     1000{
-                        one{"0 K"}
                         other{"0 K"}
                     }
                     10000{
-                        one{"00 K"}
                         other{"00 K"}
                     }
                     100000{
-                        one{"000 K"}
                         other{"000 K"}
                     }
                     1000000{
-                        one{"0 mil'.'"}
                         other{"0 mil'.'"}
                     }
                     10000000{
-                        one{"00 mil'.'"}
                         other{"00 mil'.'"}
                     }
                     100000000{
-                        one{"000 mil'.'"}
                         other{"000 mil'.'"}
                     }
                     1000000000{
-                        one{"0 mld'.'"}
                         other{"0 mld'.'"}
                     }
                     10000000000{
-                        one{"00 mld'.'"}
                         other{"00 mld'.'"}
                     }
                     100000000000{
-                        one{"000 mld'.'"}
                         other{"000 mld'.'"}
                     }
                     1000000000000{
-                        one{"0 tril'.'"}
                         other{"0 tril'.'"}
                     }
                     10000000000000{
-                        one{"00 tril'.'"}
                         other{"00 tril'.'"}
                     }
                     100000000000000{
-                        one{"000 tril'.'"}
                         other{"000 tril'.'"}
                     }
                 }
@@ -229,110 +193,6 @@ ro{
         }
     }
     calendar{
-        buddhist{
-            eras{
-                abbreviated{
-                    0{"e.b."}
-                }
-                wide{
-                    0{"era budistă"}
-                }
-            }
-            intervalFormats{
-                Bh{
-                    B{"h B – h B"}
-                }
-                Bhm{
-                    B{"h:mm B – h:mm B"}
-                }
-            }
-        }
-        chinese{
-            monthNames{
-                format{
-                    abbreviated{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                    }
-                }
-                stand-alone{
-                    wide{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                    }
-                }
-            }
-        }
-        coptic{
-            eras{
-                abbreviated{
-                    1{"A.M."}
-                }
-                wide{
-                    1{"după Anno Martyrum"}
-                }
-            }
-            monthNames{
-                format{
-                    wide{
-                        "Thout",
-                        "Paopi",
-                        "Hathor",
-                        "Koiak",
-                        "Tobi",
-                        "Meshir",
-                        "Paremhat",
-                        "Paremoude",
-                        "Pashons",
-                        "Paoni",
-                        "Epip",
-                        "Mesori",
-                        "Pi Kogi Enavot",
-                    }
-                }
-            }
-        }
-        ethiopic{
-            monthNames{
-                format{
-                    wide{
-                        "meskerem",
-                        "taqemt",
-                        "hedar",
-                        "tahsas",
-                        "ter",
-                        "yekatit",
-                        "megabit",
-                        "miazia",
-                        "genbot",
-                        "sene",
-                        "hamle",
-                        "nehase",
-                        "pagumen",
-                    }
-                }
-            }
-        }
         generic{
             DateTimePatterns{
                 "HH:mm:ss zzzz",
@@ -360,16 +220,6 @@ ro{
                 "{1} 'la' {0}",
                 "{1}, {0}",
                 "{1}, {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMdd",
-                "GGGGGyMMdd",
             }
             availableFormats{
                 Ed{"E d"}
@@ -467,24 +317,6 @@ ro{
                     M{"dd.MM – dd.MM"}
                     d{"dd.MM – dd.MM"}
                 }
-                h{
-                    a{"h a – h a"}
-                    h{"h–h a"}
-                }
-                hm{
-                    a{"h:mm a – h:mm a"}
-                    h{"h:mm–h:mm a"}
-                    m{"h:mm–h:mm a"}
-                }
-                hmv{
-                    a{"h:mm a – h:mm a v"}
-                    h{"h:mm–h:mm a v"}
-                    m{"h:mm–h:mm a v"}
-                }
-                hv{
-                    a{"h a – h a v"}
-                    h{"h–h a v"}
-                }
                 y{
                     y{"y–y G"}
                 }
@@ -577,8 +409,6 @@ ro{
                 MMMEd{"E, d MMM"}
                 MMMMEd{"E, d MMMM"}
                 MMMMW{
-                    few{"'săptămâna' W 'din' MMMM"}
-                    one{"'săptămâna' W 'din' MMMM"}
                     other{"'săptămâna' W 'din' MMMM"}
                 }
                 MMMMd{"d MMMM"}
@@ -602,8 +432,6 @@ ro{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    few{"'săptămâna' w 'din' Y"}
-                    one{"'săptămâna' w 'din' Y"}
                     other{"'săptămâna' w 'din' Y"}
                 }
             }
@@ -660,11 +488,7 @@ ro{
                         noon{"amiază"}
                     }
                     wide{
-                        afternoon1{"după-amiaza"}
-                        evening1{"seara"}
                         midnight{"la miezul nopții"}
-                        morning1{"dimineața"}
-                        night1{"noaptea"}
                         noon{"la amiază"}
                     }
                 }
@@ -874,100 +698,6 @@ ro{
                 }
             }
         }
-        hebrew{
-            eras{
-                abbreviated{
-                    0{"A.M."}
-                }
-            }
-            monthNames{
-                format{
-                    wide{
-                        "Tișrei",
-                        "Heșvan",
-                        "Kislev",
-                        "Tevet",
-                        "Șevat",
-                        "Adar I",
-                        "Adar",
-                        "Nisan",
-                        "Iyar",
-                        "Sivan",
-                        "Tammuz",
-                        "Av",
-                        "Elul",
-                        "Adar II",
-                    }
-                }
-            }
-        }
-        indian{
-            monthNames{
-                format{
-                    wide{
-                        "Chaitra",
-                        "Vaisakha",
-                        "Jyeshta",
-                        "Aashaadha",
-                        "Shraavana",
-                        "Bhadrapada",
-                        "Ashwin",
-                        "Kartik",
-                        "Margashirsha",
-                        "Pausha",
-                        "Magh",
-                        "Phalguna",
-                    }
-                }
-            }
-        }
-        islamic{
-            eras{
-                wide{
-                    0{"A.H."}
-                }
-            }
-        }
-        persian{
-            eras{
-                abbreviated{
-                    0{"A.P."}
-                }
-                wide{
-                    0{"Anno Persico"}
-                }
-            }
-            monthNames{
-                format{
-                    wide{
-                        "Farvardin",
-                        "Ordibehesht",
-                        "Khordad",
-                        "Tir",
-                        "A-Mordad",
-                        "Shahrivar",
-                        "Mehr",
-                        "Aban",
-                        "Azar",
-                        "Dey",
-                        "Bahman",
-                        "Esfand",
-                    }
-                }
-            }
-        }
-        roc{
-            eras{
-                abbreviated{
-                    0{"î.R.C."}
-                    1{"R.C."}
-                }
-                wide{
-                    0{"înainte de Republica China"}
-                    1{"Republica China"}
-                }
-            }
-        }
     }
     characterLabel{
         activities{"activitate"}
@@ -1050,12 +780,6 @@ ro{
         weather{"vreme"}
         western_asian_scripts{"scriere vest-asiatică"}
         whitespace{"spațiu alb"}
-    }
-    contextTransforms{
-        typographicNames:intvector{
-            1,
-            1,
-        }
     }
     delimiters{
         alternateQuotationEnd{"»"}
@@ -1387,11 +1111,6 @@ ro{
         }
         quarter-short{
             dn{"trim."}
-            relative{
-                "-1"{"trim. trecut"}
-                "0"{"trim. acesta"}
-                "1"{"trim. viitor"}
-            }
             relativeTime{
                 future{
                     few{"peste {0} trim."}

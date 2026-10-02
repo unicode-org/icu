@@ -10,15 +10,9 @@ uz_Arab{
     }
     ExemplarCharactersNumbers{"[\u200E \\- ‑ , ٫ ٬ . % ٪ ‰ ؉ + − 0۰ 1۱ 2۲ 3۳ 4۴ 5۵ 6۶ 7۷ 8۸ 9۹]"}
     NumberElements{
-        arabext{
-            symbols{
-                timeSeparator{":"}
-            }
-        }
         default{"arabext"}
         latn{
             patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
             }
             symbols{
@@ -88,8 +82,5 @@ uz_Arab{
                 }
             }
         }
-    }
-    layout{
-        characters{"right-to-left"}
     }
 }

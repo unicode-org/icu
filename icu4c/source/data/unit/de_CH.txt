@@ -5,7 +5,6 @@ de_CH{
     units{
         angle{
             steradian{
-                one{"{0} Steradiant"}
                 other{"{0} Steradianten"}
             }
         }
@@ -14,7 +13,6 @@ de_CH{
                 case{
                     genitive{
                         one{"{0} Quadratfusses"}
-                        other{"{0} Quadratfuss"}
                     }
                 }
                 dnam{"Quadratfuss"}
@@ -26,15 +24,12 @@ de_CH{
             mole{
                 case{
                     accusative{
-                        one{"{0} Mol"}
                         other{"{0} Mole"}
                     }
                     dative{
-                        one{"{0} Mol"}
                         other{"{0} Molen"}
                     }
                     genitive{
-                        one{"{0} Mol"}
                         other{"{0} Mole"}
                     }
                 }
@@ -46,7 +41,6 @@ de_CH{
             }
             part{
                 dnam{"Punkte"}
-                one{"{0} Punkt"}
                 other{"{0} Punkte"}
             }
         }
@@ -58,7 +52,6 @@ de_CH{
         electric{
             coulomb{
                 dnam{"Coulombs"}
-                one{"{0} Coulomb"}
                 other{"{0} Coulombs"}
             }
         }
@@ -81,7 +74,6 @@ de_CH{
                 case{
                     genitive{
                         one{"{0} Fusses"}
-                        other{"{0} Fuss"}
                     }
                 }
                 one{"{0} Fuss"}
@@ -127,14 +119,12 @@ de_CH{
     unitsNarrow{
         concentr{
             part{
-                dnam{"Punkt"}
                 one{"{0} Punkt"}
                 other{"{0} Punkte"}
             }
         }
         energy{
             calorie-it{
-                dnam{"kcal [IT]"}
                 one{"{0} kcal [IT]"}
                 other{"{0} kcal [IT]"}
             }
@@ -150,10 +140,8 @@ de_CH{
         concentr{
             katal{
                 one{"{0} kat"}
-                other{"{0} kat"}
             }
             ofglucose{
-                one{"{0} Glc"}
                 other{"{0} Glc"}
             }
             part{
@@ -169,12 +157,10 @@ de_CH{
         }
         energy{
             becquerel{
-                one{"{0} Bq"}
                 other{"{0} Bq"}
             }
             calorie-it{
                 dnam{"kcal [IT]"}
-                one{"{0} kcal [IT]"}
                 other{"{0} kcal [IT]"}
             }
         }
@@ -186,32 +172,26 @@ de_CH{
         pressure{
             ofhg{
                 one{"{0} Hg"}
-                other{"{0} Hg"}
             }
         }
         speed{
             beaufort{
-                one{"{0} Bft"}
                 other{"{0} Bft"}
             }
         }
         volume{
             dram{
                 dnam{"Dram"}
-                one{"{0} dr."}
                 other{"{0} dr."}
             }
             fluid-ounce-metric{
-                one{"{0} m. fl. oz."}
                 other{"{0} m. fl. oz."}
             }
             jigger{
                 dnam{"Schuss"}
-                one{"{0} Schuss"}
                 other{"{0} Schuss"}
             }
             pinch{
-                one{"{0} Prise"}
                 other{"{0} Prise"}
             }
         }

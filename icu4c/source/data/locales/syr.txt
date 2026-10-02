@@ -213,7 +213,6 @@ syr{
                 MEd{"EEEE، dd/MM"}
                 MMMEd{"E، d ܒMMM"}
                 MMMMW{
-                    one{"ܫܒܘܥܐ W ܒMMMM"}
                     other{"ܫܒܘܥܐ W ܒMMMM"}
                 }
                 MMMMd{"d ܒMMMM"}
@@ -229,7 +228,6 @@ syr{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    one{"ܫܒܘܥܐ w ܕܫܢܬܐ Y"}
                     other{"ܫܒܘܥܐ w ܕܫܢܬܐ Y"}
                 }
             }
@@ -493,7 +491,6 @@ syr{
             dn{"܏ܝܘܡ"}
             relative{
                 "-1"{"܏ܬܡܠ"}
-                "0"{"ܐܕܝܘܡ"}
                 "1"{"܏ܩܘܕܡ"}
             }
         }
@@ -611,7 +608,6 @@ syr{
             }
             relativeTime{
                 past{
-                    one{"ܡ̣ܢ ܩܕܡ ܚܕ ܝܪܚܐ"}
                     other{"ܡ̣ܢ ܩܕܡ {0} ܝܖ̈ܚܐ"}
                 }
             }
@@ -681,7 +677,6 @@ syr{
             }
             relativeTime{
                 future{
-                    one{"ܒ{0} ܚܕܒܫܒ̈ܐ"}
                     other{"ܒ{0} ܚܕܒܫܒ̈ܐ"}
                 }
                 past{
@@ -820,9 +815,6 @@ syr{
             dn{"ܦܢܝܬܐ ܕܙܒܢܐ"}
         }
     }
-    layout{
-        characters{"right-to-left"}
-    }
     listPattern{
         or{
             2{"{0} ܐܘ {1}"}
@@ -847,19 +839,6 @@ syr{
             lenient{
                 "[\\- ‑ . /]",
                 "[\\: ∶]",
-            }
-        }
-        general{
-            lenient{
-                "[.．․﹒ 。｡︒]",
-                "['＇’ ՚ ᾽᾿ ʼ]",
-                "[%％﹪ ٪]",
-                "[‰ ؉]",
-                "[\$＄﹩]",
-                "[£￡ ₤]",
-                "[¥￥]",
-                "[₩￦]",
-                "[₹ {Rp} {Rs}₨]",
             }
         }
         number{

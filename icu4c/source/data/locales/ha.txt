@@ -89,77 +89,56 @@ ha{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"¤0K"}
                         other{"¤0K"}
                     }
                     10000{
-                        one{"¤00D"}
                         other{"¤00D"}
                     }
                     100000{
-                        one{"¤000D"}
                         other{"¤000D"}
                     }
                     1000000{
-                        one{"¤0M"}
                         other{"¤0M"}
                     }
                     10000000{
-                        one{"¤00M"}
                         other{"¤00M"}
                     }
                     100000000{
-                        one{"¤000M"}
                         other{"¤000M"}
                     }
                     1000000000{
-                        one{"¤0B"}
                         other{"¤0B"}
                     }
                     10000000000{
-                        one{"¤00B"}
                         other{"¤00B"}
                     }
                     100000000000{
-                        one{"¤000B"}
                         other{"¤000B"}
                     }
                     1000000000000{
-                        one{"¤0T"}
                         other{"¤0T"}
                     }
                     10000000000000{
-                        one{"¤00T"}
                         other{"¤00T"}
                     }
                     100000000000000{
-                        one{"¤000T"}
                         other{"¤000T"}
                     }
                 }
                 decimalFormat{
-                    1000{
-                        one{"0K"}
-                        other{"0K"}
-                    }
                     10000{
-                        one{"00D"}
                         other{"00D"}
                     }
                     100000{
-                        one{"000D"}
                         other{"000D"}
                     }
                     1000000000{
-                        one{"0B"}
                         other{"0B"}
                     }
                     10000000000{
-                        one{"00B"}
                         other{"00B"}
                     }
                     100000000000{
-                        one{"000B"}
                         other{"000B"}
                     }
                 }
@@ -203,16 +182,6 @@ ha{
                 "{1} 'a' {0}",
                 "{1}, {0}",
                 "{1}, {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMMd",
-                "GGGGGyyMd",
             }
             availableFormats{
                 MEd{"E, M/d"}
@@ -265,16 +234,6 @@ ha{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yyMd",
-            }
             appendItems{
                 Day-Of-Week{"{1}, {0}"}
                 Era{"{0} {1}"}
@@ -291,7 +250,6 @@ ha{
                 MMMEd{"E, MMM d"}
                 MMMMEd{"E, MMMM d"}
                 MMMMW{
-                    one{"'satin' W 'cikin' MMMM"}
                     other{"'satin' W 'cikin' MMMM"}
                 }
                 Md{"M/d"}
@@ -307,7 +265,6 @@ ha{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    one{"'sati' w 'cikin' Y"}
                     other{"'sati' w 'cikin' Y"}
                 }
             }
@@ -604,7 +561,6 @@ ha{
             }
             relativeTime{
                 future{
-                    one{"a cikin kwanaki {0}"}
                     other{"a cikin kwanaki {0}"}
                 }
                 past{
@@ -630,7 +586,6 @@ ha{
             }
             relativeTime{
                 future{
-                    one{"cikin Jumaʼa {0}"}
                     other{"cikin Jumaʼa {0}"}
                 }
                 past{
@@ -679,7 +634,6 @@ ha{
             }
             relativeTime{
                 future{
-                    one{"cikin Litinin {0}"}
                     other{"cikin Litinin {0}"}
                 }
                 past{
@@ -709,7 +663,6 @@ ha{
         month-short{
             relativeTime{
                 future{
-                    one{"a cikin watan {0}"}
                     other{"a cikin watan {0}"}
                 }
             }
@@ -727,7 +680,6 @@ ha{
                     other{"a cikin kwatas {0}"}
                 }
                 past{
-                    one{"kwata {0} da suka gabata"}
                     other{"kwata {0} da suka gabata"}
                 }
             }
@@ -740,11 +692,9 @@ ha{
             }
             relativeTime{
                 future{
-                    one{"cikin Asabar {0}"}
                     other{"cikin Asabar {0}"}
                 }
                 past{
-                    one{"Asabar {0} da ta wuce"}
                     other{"Asabar {0} da ta wuce"}
                 }
             }
@@ -752,7 +702,6 @@ ha{
         sat-short{
             relativeTime{
                 past{
-                    one{"Asabar {0} da ta wuce"}
                     other{"Asabar {0} da suka wuce"}
                 }
             }
@@ -781,7 +730,6 @@ ha{
             }
             relativeTime{
                 future{
-                    one{"cikin Lahadi {0}"}
                     other{"cikin Lahadi {0}"}
                 }
                 past{
@@ -792,9 +740,7 @@ ha{
         }
         sun-narrow{
             relative{
-                "-1"{"Lahadin da ya gabata"}
                 "0"{"wannan Lahadin"}
-                "1"{"Lahadi mai zuwa"}
             }
         }
         thu{
@@ -805,7 +751,6 @@ ha{
             }
             relativeTime{
                 future{
-                    one{"cikin Alhamis {0}"}
                     other{"cikin Alhamis {0}"}
                 }
                 past{
@@ -822,7 +767,6 @@ ha{
             }
             relativeTime{
                 future{
-                    one{"cikin Talata {0}"}
                     other{"cikin Talata {0}"}
                 }
                 past{
@@ -839,7 +783,6 @@ ha{
             }
             relativeTime{
                 future{
-                    one{"cikin Laraba {0}"}
                     other{"cikin Laraba {0}"}
                 }
                 past{
@@ -870,7 +813,6 @@ ha{
         week-narrow{
             relativeTime{
                 past{
-                    one{"mako {0} da ya gabata"}
                     other{"mako {0} da ya gabata"}
                 }
             }

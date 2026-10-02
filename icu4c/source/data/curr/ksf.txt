@@ -75,17 +75,9 @@ ksf{
             "£",
             "mɔni mǝ á ingɛrís",
         }
-        GHC{
-            "GHC",
-            "mɔni mǝ á gána",
-        }
         GMD{
             "GMD",
             "mɔni mǝ á gambí",
-        }
-        GNS{
-            "GNS",
-            "mɔni mǝ á ginɛ́",
         }
         INR{
             "₹",
@@ -123,10 +115,6 @@ ksf{
             "MGA",
             "mɔni mǝ á madagaska",
         }
-        MRO{
-            "MRO",
-            "mɔni mǝ á mwaritaní (1973–2017)",
-        }
         MRU{
             "MRU",
             "mɔni mǝ á mwaritaní",
@@ -138,10 +126,6 @@ ksf{
         MWK{
             "MWK",
             "mɔni mǝ á malawi",
-        }
-        MZM{
-            "MZM",
-            "mɔni mǝ á mosambík",
         }
         NAD{
             "NAD",
@@ -183,10 +167,6 @@ ksf{
             "SOS",
             "mɔni mǝ á somalí",
         }
-        STD{
-            "STD",
-            "mɔni mǝ á saotomɛ́ ri priŋsib (1977–2017)",
-        }
         STN{
             "STN",
             "mɔni mǝ á saotomɛ́ ri priŋsib",
@@ -223,17 +203,9 @@ ksf{
             "ZAR",
             "mɔni mǝ á afrik anǝ a sud",
         }
-        ZMK{
-            "ZMK",
-            "mɔni mǝ á zambí (1968–2012)",
-        }
         ZMW{
             "ZMW",
             "mɔni mǝ á zambí",
-        }
-        ZWD{
-            "ZWD",
-            "mɔni mǝ á zimbabwɛ́",
         }
     }
 }

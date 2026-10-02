@@ -66,102 +66,75 @@ sw{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"¤ elfu 0;¤ elfu -0"}
                         other{"¤ elfu 0;¤ elfu -0"}
                     }
                     10000{
-                        one{"¤ elfu 00;¤ elfu -00"}
                         other{"¤ elfu 00;¤ elfu -00"}
                     }
                     100000{
-                        one{"¤ elfu 000;¤ elfu -000"}
                         other{"¤ elfu 000;¤ elfu -000"}
                     }
                     1000000{
                         one{"¤ 0M;¤ -0M"}
-                        other{"¤ 0M"}
                     }
                     10000000{
                         one{"¤ 00M;¤ -00M"}
-                        other{"¤ 00M"}
                     }
                     100000000{
                         one{"¤ 000M;¤ -000M"}
-                        other{"¤ 000M"}
                     }
                     1000000000{
-                        one{"¤ 0B;¤ -0B"}
                         other{"¤ 0B;¤ -0B"}
                     }
                     10000000000{
-                        one{"¤ 00B;¤ -00B"}
                         other{"¤ 00B;¤ -00B"}
                     }
                     100000000000{
-                        one{"¤ 000B;¤ -000B"}
                         other{"¤ 000B;¤ -000B"}
                     }
                     1000000000000{
                         one{"¤ 0T;¤ -0T"}
-                        other{"¤ 0T"}
                     }
                     10000000000000{
                         one{"¤ 00T;¤ -00T"}
-                        other{"¤ 00T"}
                     }
                     100000000000000{
                         one{"¤ 000T;¤ -000T"}
-                        other{"¤ 000T"}
                     }
                 }
                 decimalFormat{
                     1000{
-                        one{"elfu 0;elfu -0"}
                         other{"elfu 0;elfu -0"}
                     }
                     10000{
-                        one{"elfu 00;elfu -00"}
                         other{"elfu 00;elfu -00"}
                     }
                     100000{
-                        one{"elfu 000;elfu -000"}
                         other{"elfu 000;elfu -000"}
-                    }
-                    1000000{
-                        one{"0M"}
-                        other{"0M"}
                     }
                     10000000{
                         one{"00M;-00M"}
-                        other{"00M"}
                     }
                     100000000{
                         one{"000M;-000M"}
-                        other{"000M"}
                     }
                     1000000000{
-                        one{"0B;-0B"}
                         other{"0B;-0B"}
                     }
                     10000000000{
-                        one{"00B;-00B"}
                         other{"00B;-00B"}
                     }
                     100000000000{
-                        one{"000B;-000B"}
                         other{"000B;-000B"}
                     }
                     1000000000000{
                         one{"0T;-0T"}
-                        other{"0T"}
                     }
                     10000000000000{
                         one{"00T;-00T"}
-                        other{"00T"}
                     }
                     100000000000000{
                         one{"000T;-000T"}
-                        other{"000T"}
                     }
                 }
             }
@@ -177,40 +150,6 @@ sw{
         }
     }
     calendar{
-        chinese{
-            monthNames{
-                stand-alone{
-                    abbreviated{
-                        "M01",
-                        "M02",
-                        "M03",
-                        "M04",
-                        "M05",
-                        "M06",
-                        "M07",
-                        "M08",
-                        "M09",
-                        "M10",
-                        "Mw11",
-                        "Mw12",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "Mw3",
-                        "4",
-                        "5",
-                        "6",
-                        "Mw7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                    }
-                }
-            }
-        }
         generic{
             DateTimePatterns{
                 "HH:mm:ss zzzz",
@@ -309,20 +248,6 @@ sw{
                     d{"d/M/y – d/M/y GGGGG"}
                     y{"d/M/y – d/M/y GGGGG"}
                 }
-                H{
-                    H{"HH – HH"}
-                }
-                Hm{
-                    H{"HH:mm – HH:mm"}
-                    m{"HH:mm – HH:mm"}
-                }
-                Hmv{
-                    H{"HH:mm – HH:mm v"}
-                    m{"HH:mm – HH:mm v"}
-                }
-                Hv{
-                    H{"HH – HH v"}
-                }
                 M{
                     M{"M – M"}
                 }
@@ -350,24 +275,6 @@ sw{
                 }
                 d{
                     d{"d – d"}
-                }
-                h{
-                    a{"h a – h a"}
-                    h{"h – h a"}
-                }
-                hm{
-                    a{"h:mm a – h:mm a"}
-                    h{"h:mm – h:mm a"}
-                    m{"h:mm – h:mm a"}
-                }
-                hmv{
-                    a{"h:mm a – h:mm a v"}
-                    h{"h:mm – h:mm a v"}
-                    m{"h:mm – h:mm a v"}
-                }
-                hv{
-                    a{"h a – h a v"}
-                    h{"h – h a v"}
                 }
                 y{
                     y{"y – y G"}
@@ -450,7 +357,6 @@ sw{
                 MMMEd{"E, d MMM"}
                 MMMMEd{"E, d MMMM"}
                 MMMMW{
-                    one{"'wiki' W 'ya' MMMM"}
                     other{"'wiki' W 'ya' MMMM"}
                 }
                 MMMMd{"d MMMM"}
@@ -472,7 +378,6 @@ sw{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    one{"'wiki' w 'ya' Y"}
                     other{"'wiki' w 'ya' Y"}
                 }
             }
@@ -501,46 +406,23 @@ sw{
                         noon{"adhuhuri"}
                     }
                     narrow{
-                        afternoon1{"mchana"}
-                        evening1{"jioni"}
                         midnight{"usiku"}
-                        morning1{"alfajiri"}
-                        morning2{"asubuhi"}
-                        night1{"usiku"}
                         noon{"mchana"}
                     }
                     wide{
-                        afternoon1{"mchana"}
-                        evening1{"jioni"}
-                        midnight{"saa sita za usiku"}
-                        morning1{"alfajiri"}
-                        morning2{"asubuhi"}
-                        night1{"usiku"}
                         noon{"saa sita za mchana"}
                     }
                 }
                 stand-alone{
                     abbreviated{
                         afternoon1{"alasiri"}
-                        evening1{"jioni"}
-                        morning1{"alfajiri"}
-                        morning2{"asubuhi"}
-                        night1{"usiku"}
                     }
                     narrow{
                         afternoon1{"mchana"}
-                        evening1{"jioni"}
-                        morning1{"alfajiri"}
-                        morning2{"asubuhi"}
-                        night1{"usiku"}
                         noon{"saa sita za mchana"}
                     }
                     wide{
                         afternoon1{"mchana"}
-                        evening1{"jioni"}
-                        morning1{"alfajiri"}
-                        morning2{"asubuhi"}
-                        night1{"usiku"}
                     }
                 }
             }
@@ -748,14 +630,6 @@ sw{
                 }
             }
         }
-        iso8601{
-            availableFormats{
-                yw{
-                    one{"Y 'wiki' 'ya' w"}
-                    other{"Y 'wiki' 'ya' w"}
-                }
-            }
-        }
     }
     characterLabel{
         activities{"shughuli"}
@@ -855,7 +729,6 @@ sw{
             }
             relativeTime{
                 future{
-                    one{"baada ya siku {0}"}
                     other{"baada ya siku {0}"}
                 }
                 past{
@@ -881,7 +754,6 @@ sw{
             }
             relativeTime{
                 future{
-                    one{"baada ya Ijumaa {0}"}
                     other{"baada ya Ijumaa {0}"}
                 }
                 past{
@@ -897,7 +769,6 @@ sw{
             }
             relativeTime{
                 future{
-                    one{"baada ya saa {0}"}
                     other{"baada ya saa {0}"}
                 }
                 past{
@@ -921,7 +792,6 @@ sw{
             }
             relativeTime{
                 future{
-                    one{"baada ya dakika {0}"}
                     other{"baada ya dakika {0}"}
                 }
                 past{
@@ -941,7 +811,6 @@ sw{
             }
             relativeTime{
                 future{
-                    one{"baada ya Jumatatu {0}"}
                     other{"baada ya Jumatatu {0}"}
                 }
                 past{
@@ -977,7 +846,6 @@ sw{
             }
             relativeTime{
                 future{
-                    one{"baada ya robo {0}"}
                     other{"baada ya robo {0}"}
                 }
                 past{
@@ -994,7 +862,6 @@ sw{
             }
             relativeTime{
                 future{
-                    one{"baada ya Jumamosi {0}"}
                     other{"baada ya Jumamosi {0}"}
                 }
                 past{
@@ -1010,7 +877,6 @@ sw{
             }
             relativeTime{
                 future{
-                    one{"baada ya sekunde {0}"}
                     other{"baada ya sekunde {0}"}
                 }
                 past{
@@ -1030,7 +896,6 @@ sw{
             }
             relativeTime{
                 future{
-                    one{"baada ya Jumapili {0}"}
                     other{"baada ya Jumapili {0}"}
                 }
                 past{
@@ -1047,7 +912,6 @@ sw{
             }
             relativeTime{
                 future{
-                    one{"baada ya Alhamisi {0}"}
                     other{"baada ya Alhamisi {0}"}
                 }
                 past{
@@ -1064,7 +928,6 @@ sw{
             }
             relativeTime{
                 future{
-                    one{"baada ya Jumanne {0}"}
                     other{"baada ya Jumanne {0}"}
                 }
                 past{
@@ -1081,7 +944,6 @@ sw{
             }
             relativeTime{
                 future{
-                    one{"baada ya Jumatano {0}"}
                     other{"baada ya Jumatano {0}"}
                 }
                 past{
@@ -1100,7 +962,6 @@ sw{
             relativePeriod{"wiki ya {0}"}
             relativeTime{
                 future{
-                    one{"baada ya wiki {0}"}
                     other{"baada ya wiki {0}"}
                 }
                 past{

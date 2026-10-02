@@ -99,125 +99,77 @@ ru{
             patternsShort{
                 currencyFormat{
                     1000{
-                        few{"0 тыс'.' ¤"}
-                        many{"0 тыс'.' ¤"}
-                        one{"0 тыс'.' ¤"}
                         other{"0 тыс'.' ¤"}
                     }
                     10000{
-                        few{"00 тыс'.' ¤"}
-                        many{"00 тыс'.' ¤"}
-                        one{"00 тыс'.' ¤"}
                         other{"00 тыс'.' ¤"}
                     }
                     100000{
-                        few{"000 тыс'.' ¤"}
-                        many{"000 тыс'.' ¤"}
-                        one{"000 тыс'.' ¤"}
                         other{"000 тыс'.' ¤"}
                     }
                     1000000{
-                        few{"0 млн ¤"}
-                        many{"0 млн ¤"}
-                        one{"0 млн ¤"}
                         other{"0 млн ¤"}
                     }
                     10000000{
-                        few{"00 млн ¤"}
-                        many{"00 млн ¤"}
-                        one{"00 млн ¤"}
                         other{"00 млн ¤"}
                     }
                     100000000{
-                        few{"000 млн ¤"}
-                        many{"000 млн ¤"}
-                        one{"000 млн ¤"}
                         other{"000 млн ¤"}
                     }
                     1000000000{
-                        few{"0 млрд ¤"}
-                        many{"0 млрд ¤"}
-                        one{"0 млрд ¤"}
                         other{"0 млрд ¤"}
                     }
                     10000000000{
-                        few{"00 млрд ¤"}
-                        many{"00 млрд ¤"}
-                        one{"00 млрд ¤"}
                         other{"00 млрд ¤"}
                     }
                     100000000000{
-                        few{"000 млрд ¤"}
-                        many{"000 млрд ¤"}
-                        one{"000 млрд ¤"}
                         other{"000 млрд ¤"}
                     }
                     1000000000000{
-                        few{"0 трлн ¤"}
-                        many{"0 трлн ¤"}
-                        one{"0 трлн ¤"}
                         other{"0 трлн ¤"}
                     }
                     10000000000000{
-                        few{"00 трлн ¤"}
-                        many{"00 трлн ¤"}
-                        one{"00 трлн ¤"}
                         other{"00 трлн ¤"}
                     }
                     100000000000000{
-                        few{"000 трлн ¤"}
-                        many{"000 трлн ¤"}
-                        one{"000 трлн ¤"}
                         other{"000 трлн ¤"}
                     }
                 }
                 decimalFormat{
                     1000{
-                        one{"0 тыс'.'"}
                         other{"0 тыс'.'"}
                     }
                     10000{
-                        one{"00 тыс'.'"}
                         other{"00 тыс'.'"}
                     }
                     100000{
-                        one{"000 тыс'.'"}
                         other{"000 тыс'.'"}
                     }
                     1000000{
-                        one{"0 млн"}
                         other{"0 млн"}
                     }
                     10000000{
-                        one{"00 млн"}
                         other{"00 млн"}
                     }
                     100000000{
-                        one{"000 млн"}
                         other{"000 млн"}
                     }
                     1000000000{
-                        one{"0 млрд"}
                         other{"0 млрд"}
                     }
                     10000000000{
-                        one{"00 млрд"}
                         other{"00 млрд"}
                     }
                     100000000000{
-                        one{"000 млрд"}
                         other{"000 млрд"}
                     }
                     1000000000000{
-                        one{"0 трлн"}
                         other{"0 трлн"}
                     }
                     10000000000000{
-                        one{"00 трлн"}
                         other{"00 трлн"}
                     }
                     100000000000000{
-                        one{"000 трлн"}
                         other{"000 трлн"}
                     }
                 }
@@ -260,155 +212,6 @@ ru{
         }
     }
     calendar{
-        buddhist{
-            eras{
-                narrow{
-                    0{"бэ"}
-                }
-                wide{
-                    0{"буддийская эра"}
-                }
-            }
-        }
-        chinese{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE, d MMMM U",
-                "d MMMM U",
-                "dd.MM U",
-                "dd.MM.y",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "UMMMMEEEEd",
-                "UMMMMd",
-                "UMMdd",
-                "yMMdd",
-            }
-            availableFormats{
-                Ed{"E, d"}
-                Gy{"U"}
-                GyMMM{"LLL U"}
-                GyMMMEd{"E, d MMM U"}
-                GyMMMd{"d MMM U"}
-                H{"H"}
-                Hm{"H:mm"}
-                Hms{"H:mm:ss"}
-                MEd{"E, dd.MM"}
-                MMMEd{"ccc, d MMM"}
-                MMMd{"d MMM"}
-                Md{"dd.MM"}
-                h{"h a"}
-                hm{"h:mm a"}
-                hms{"h:mm:ss a"}
-                y{"U"}
-                yyyy{"U"}
-                yyyyM{"MM.y"}
-                yyyyMEd{"E, dd.MM.y"}
-                yyyyMMM{"LLL U"}
-                yyyyMMMEd{"E, d MMM U"}
-                yyyyMMMM{"LLLL U"}
-                yyyyMMMd{"d MMM U"}
-                yyyyMd{"dd.MM.y"}
-                yyyyQQQ{"QQQ U"}
-                yyyyQQQQ{"QQQQ U"}
-            }
-            monthNames{
-                format{
-                    abbreviated{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                    }
-                }
-                stand-alone{
-                    wide{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                    }
-                }
-            }
-        }
-        coptic{
-            eras{
-                abbreviated{
-                    1{"от Диокл."}
-                }
-                wide{
-                    1{"от Диоклетиана"}
-                }
-            }
-            monthNames{
-                format{
-                    wide{
-                        "тот",
-                        "бабэ",
-                        "хатур",
-                        "кихак",
-                        "тубэ",
-                        "амшир",
-                        "барамхат",
-                        "бармуда",
-                        "башнас",
-                        "бауна",
-                        "абиб",
-                        "мисра",
-                        "наси",
-                    }
-                }
-            }
-        }
-        ethiopic{
-            monthNames{
-                format{
-                    wide{
-                        "мескерем",
-                        "текемт",
-                        "хедар",
-                        "тахсас",
-                        "тер",
-                        "якатит",
-                        "магабит",
-                        "миазия",
-                        "генбот",
-                        "сэнэ",
-                        "хамлэ",
-                        "нахасэ",
-                        "эпагомен",
-                    }
-                }
-            }
-        }
         generic{
             DateTimePatterns{
                 "HH:mm:ss zzzz",
@@ -436,16 +239,6 @@ ru{
                 "{1} 'в' {0}",
                 "{1}, {0}",
                 "{1}, {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMMd",
-                "GyMMdd",
             }
             availableFormats{
                 EBh{"E, h B"}
@@ -531,20 +324,6 @@ ru{
                     d{"dd.MM.y — dd.MM.y G"}
                     y{"dd.MM.y — dd.MM.y G"}
                 }
-                H{
-                    H{"H–H"}
-                }
-                Hm{
-                    H{"H:mm–H:mm"}
-                    m{"H:mm–H:mm"}
-                }
-                Hmv{
-                    H{"H:mm–H:mm v"}
-                    m{"H:mm–H:mm v"}
-                }
-                Hv{
-                    H{"H–H v"}
-                }
                 M{
                     M{"M–M"}
                 }
@@ -575,24 +354,6 @@ ru{
                     d{"dd.MM — dd.MM"}
                 }
                 fallback{"{0} — {1}"}
-                h{
-                    a{"h a – h a"}
-                    h{"h–h a"}
-                }
-                hm{
-                    a{"h:mm a – h:mm a"}
-                    h{"h:mm–h:mm a"}
-                    m{"h:mm–h:mm a"}
-                }
-                hmv{
-                    a{"h:mm a – h:mm a v"}
-                    h{"h:mm–h:mm a v"}
-                    m{"h:mm–h:mm a v"}
-                }
-                hv{
-                    a{"h a – h a v"}
-                    h{"h–h a v"}
-                }
                 y{
                     y{"y–y 'гг'. G"}
                 }
@@ -686,9 +447,6 @@ ru{
                 MMMEd{"ccc, d MMM"}
                 MMMMEd{"E, d MMMM"}
                 MMMMW{
-                    few{"W-'я' 'неделя' MMMM"}
-                    many{"W-'я' 'неделя' MMMM"}
-                    one{"W-'я' 'неделя' MMMM"}
                     other{"W-'я' 'неделя' MMMM"}
                 }
                 MMMMd{"d MMMM"}
@@ -713,9 +471,6 @@ ru{
                 yQQQ{"QQQ y 'г'."}
                 yQQQQ{"QQQQ y 'г'."}
                 yw{
-                    few{"w-'я' 'неделя' Y 'г'."}
-                    many{"w-'я' 'неделя' Y 'г'."}
-                    one{"w-'я' 'неделя' Y 'г'."}
                     other{"w-'я' 'неделя' Y 'г'."}
                 }
             }
@@ -763,19 +518,10 @@ ru{
                         noon{"полд."}
                     }
                     narrow{
-                        afternoon1{"дня"}
                         evening1{"веч."}
-                        midnight{"полн."}
-                        morning1{"утра"}
-                        night1{"ночи"}
-                        noon{"полд."}
                     }
                     wide{
-                        afternoon1{"дня"}
-                        evening1{"вечера"}
                         midnight{"полночь"}
-                        morning1{"утра"}
-                        night1{"ночи"}
                         noon{"полдень"}
                     }
                 }
@@ -787,11 +533,8 @@ ru{
                         night1{"ночь"}
                     }
                     wide{
-                        afternoon1{"день"}
                         evening1{"вечер"}
                         midnight{"полночь"}
-                        morning1{"утро"}
-                        night1{"ночь"}
                         noon{"полдень"}
                     }
                 }
@@ -803,10 +546,6 @@ ru{
                 }
                 abbreviated%variant{
                     1{"н. э."}
-                }
-                narrow{
-                    0{"до н.э."}
-                    1{"н.э."}
                 }
                 wide{
                     0{"до Рождества Христова"}
@@ -1059,150 +798,6 @@ ru{
                 }
             }
         }
-        hebrew{
-            eras{
-                wide{
-                    0{"от сотворения мира"}
-                }
-            }
-            monthNames{
-                format{
-                    wide{
-                        "тишрей",
-                        "хешван",
-                        "кислев",
-                        "тевет",
-                        "шеват",
-                        "адар I",
-                        "адар",
-                        "нисан",
-                        "ияр",
-                        "сиван",
-                        "таммуз",
-                        "ав",
-                        "элул",
-                        "адар II",
-                    }
-                }
-            }
-        }
-        indian{
-            eras{
-                abbreviated{
-                    0{"Сака"}
-                }
-            }
-            monthNames{
-                format{
-                    wide{
-                        "чайтра",
-                        "ваисакха",
-                        "джанштха",
-                        "асадха",
-                        "сравана",
-                        "бхадра",
-                        "азвина",
-                        "картика",
-                        "аграхайана",
-                        "пауза",
-                        "магха",
-                        "пхалгуна",
-                    }
-                }
-            }
-        }
-        islamic{
-            eras{
-                wide{
-                    0{"после хиджры"}
-                }
-            }
-            monthNames{
-                format{
-                    abbreviated{
-                        "мух.",
-                        "саф.",
-                        "раб. I",
-                        "раб. II",
-                        "джум. I",
-                        "джум. II",
-                        "радж.",
-                        "шааб.",
-                        "рам.",
-                        "шав.",
-                        "зуль-к.",
-                        "зуль-х.",
-                    }
-                    wide{
-                        "мухаррам",
-                        "сафар",
-                        "раби-уль-авваль",
-                        "раби-уль-ахир",
-                        "джумад-уль-авваль",
-                        "джумад-уль-ахир",
-                        "раджаб",
-                        "шаабан",
-                        "рамадан",
-                        "шавваль",
-                        "зуль-каада",
-                        "зуль-хиджжа",
-                    }
-                }
-            }
-        }
-        japanese{
-            eras{
-                abbreviated{
-                    232{"Эпоха Мэйдзи"}
-                    233{"Эпоха Тайсьо"}
-                    234{"Сьова"}
-                    235{"Эпоха Хэйсэй"}
-                    236{"Рэйва"}
-                }
-            }
-        }
-        persian{
-            eras{
-                abbreviated{
-                    0{"перс. год"}
-                }
-                wide{
-                    0{"персидский год"}
-                }
-            }
-            monthNames{
-                format{
-                    wide{
-                        "фарвардин",
-                        "ордибехешт",
-                        "хордад",
-                        "тир",
-                        "мордад",
-                        "шахривер",
-                        "мехр",
-                        "абан",
-                        "азер",
-                        "дей",
-                        "бахман",
-                        "эсфанд",
-                    }
-                }
-            }
-        }
-        roc{
-            eras{
-                abbreviated{
-                    1{"Minguo"}
-                }
-                narrow{
-                    1{"Миньго"}
-                }
-                wide{
-                    0{"до основания Китайской республики"}
-                    1{"Миньго"}
-                }
-            }
-        }
     }
     characterLabel{
         activities{"занятия"}
@@ -1292,56 +887,6 @@ ru{
         western_asian_scripts{"письменности Западной Азии"}
         whitespace{"пробелы"}
     }
-    contextTransforms{
-        currencyName:intvector{
-            1,
-            1,
-        }
-        day-format-except-narrow:intvector{
-            1,
-            1,
-        }
-        day-standalone-except-narrow:intvector{
-            1,
-            1,
-        }
-        era-abbr:intvector{
-            1,
-            1,
-        }
-        era-name:intvector{
-            1,
-            1,
-        }
-        keyValue:intvector{
-            1,
-            1,
-        }
-        languages:intvector{
-            1,
-            1,
-        }
-        month-format-except-narrow:intvector{
-            1,
-            1,
-        }
-        month-standalone-except-narrow:intvector{
-            1,
-            1,
-        }
-        relative:intvector{
-            1,
-            1,
-        }
-        script:intvector{
-            1,
-            1,
-        }
-        typographicNames:intvector{
-            1,
-            1,
-        }
-    }
     delimiters{
         alternateQuotationEnd{"“"}
         alternateQuotationStart{"„"}
@@ -1360,13 +905,11 @@ ru{
             }
             relativeTime{
                 future{
-                    few{"через {0} дня"}
                     many{"через {0} дней"}
                     one{"через {0} день"}
                     other{"через {0} дня"}
                 }
                 past{
-                    few{"{0} дня назад"}
                     many{"{0} дней назад"}
                     one{"{0} день назад"}
                     other{"{0} дня назад"}
@@ -1426,13 +969,11 @@ ru{
             }
             relativeTime{
                 future{
-                    few{"через {0} пятницы"}
                     many{"через {0} пятниц"}
                     one{"через {0} пятницу"}
                     other{"через {0} пятницы"}
                 }
                 past{
-                    few{"{0} пятницы назад"}
                     many{"{0} пятниц назад"}
                     one{"{0} пятницу назад"}
                     other{"{0} пятницы назад"}
@@ -1483,13 +1024,11 @@ ru{
             }
             relativeTime{
                 future{
-                    few{"через {0} часа"}
                     many{"через {0} часов"}
                     one{"через {0} час"}
                     other{"через {0} часа"}
                 }
                 past{
-                    few{"{0} часа назад"}
                     many{"{0} часов назад"}
                     one{"{0} час назад"}
                     other{"{0} часа назад"}
@@ -1536,13 +1075,11 @@ ru{
             }
             relativeTime{
                 future{
-                    few{"через {0} минуты"}
                     many{"через {0} минут"}
                     one{"через {0} минуту"}
                     other{"через {0} минуты"}
                 }
                 past{
-                    few{"{0} минуты назад"}
                     many{"{0} минут назад"}
                     one{"{0} минуту назад"}
                     other{"{0} минуты назад"}
@@ -1591,13 +1128,11 @@ ru{
             }
             relativeTime{
                 future{
-                    few{"через {0} понедельника"}
                     many{"через {0} понедельников"}
                     one{"через {0} понедельник"}
                     other{"через {0} понедельника"}
                 }
                 past{
-                    few{"{0} понедельника назад"}
                     many{"{0} понедельников назад"}
                     one{"{0} понедельник назад"}
                     other{"{0} понедельника назад"}
@@ -1650,13 +1185,11 @@ ru{
             }
             relativeTime{
                 future{
-                    few{"через {0} месяца"}
                     many{"через {0} месяцев"}
                     one{"через {0} месяц"}
                     other{"через {0} месяца"}
                 }
                 past{
-                    few{"{0} месяца назад"}
                     many{"{0} месяцев назад"}
                     one{"{0} месяц назад"}
                     other{"{0} месяца назад"}
@@ -1715,13 +1248,11 @@ ru{
             }
             relativeTime{
                 future{
-                    few{"через {0} квартала"}
                     many{"через {0} кварталов"}
                     one{"через {0} квартал"}
                     other{"через {0} квартала"}
                 }
                 past{
-                    few{"{0} квартала назад"}
                     many{"{0} кварталов назад"}
                     one{"{0} квартал назад"}
                     other{"{0} квартала назад"}
@@ -1729,11 +1260,6 @@ ru{
             }
         }
         quarter-narrow{
-            relative{
-                "-1"{"посл. кв."}
-                "0"{"тек. кв."}
-                "1"{"след. кв."}
-            }
             relativeTime{
                 future{
                     few{"+{0} кв."}
@@ -1751,11 +1277,6 @@ ru{
         }
         quarter-short{
             dn{"кв."}
-            relative{
-                "-1"{"последний кв."}
-                "0"{"текущий кв."}
-                "1"{"следующий кв."}
-            }
             relativeTime{
                 future{
                     few{"через {0} кв."}
@@ -1779,13 +1300,11 @@ ru{
             }
             relativeTime{
                 future{
-                    few{"через {0} субботы"}
                     many{"через {0} суббот"}
                     one{"через {0} субботу"}
                     other{"через {0} субботы"}
                 }
                 past{
-                    few{"{0} субботы назад"}
                     many{"{0} суббот назад"}
                     one{"{0} субботу назад"}
                     other{"{0} субботы назад"}
@@ -1836,13 +1355,11 @@ ru{
             }
             relativeTime{
                 future{
-                    few{"через {0} секунды"}
                     many{"через {0} секунд"}
                     one{"через {0} секунду"}
                     other{"через {0} секунды"}
                 }
                 past{
-                    few{"{0} секунды назад"}
                     many{"{0} секунд назад"}
                     one{"{0} секунду назад"}
                     other{"{0} секунды назад"}
@@ -1891,13 +1408,11 @@ ru{
             }
             relativeTime{
                 future{
-                    few{"через {0} воскресенья"}
                     many{"через {0} воскресений"}
                     one{"через {0} воскресенье"}
                     other{"через {0} воскресенья"}
                 }
                 past{
-                    few{"{0} воскресенья назад"}
                     many{"{0} воскресений назад"}
                     one{"{0} воскресенье назад"}
                     other{"{0} воскресенья назад"}
@@ -1949,13 +1464,11 @@ ru{
             }
             relativeTime{
                 future{
-                    few{"через {0} четверга"}
                     many{"через {0} четвергов"}
                     one{"через {0} четверг"}
                     other{"через {0} четверга"}
                 }
                 past{
-                    few{"{0} четверга назад"}
                     many{"{0} четвергов назад"}
                     one{"{0} четверг назад"}
                     other{"{0} четверга назад"}
@@ -2007,13 +1520,11 @@ ru{
             }
             relativeTime{
                 future{
-                    few{"через {0} вторника"}
                     many{"через {0} вторников"}
                     one{"через {0} вторник"}
                     other{"через {0} вторника"}
                 }
                 past{
-                    few{"{0} вторника назад"}
                     many{"{0} вторников назад"}
                     one{"{0} вторник назад"}
                     other{"{0} вторника назад"}
@@ -2065,13 +1576,11 @@ ru{
             }
             relativeTime{
                 future{
-                    few{"через {0} среды"}
                     many{"через {0} сред"}
                     one{"через {0} среду"}
                     other{"через {0} среды"}
                 }
                 past{
-                    few{"{0} среды назад"}
                     many{"{0} сред назад"}
                     one{"{0} среду назад"}
                     other{"{0} среды назад"}
@@ -2125,13 +1634,11 @@ ru{
             relativePeriod{"на неделе {0}"}
             relativeTime{
                 future{
-                    few{"через {0} недели"}
                     many{"через {0} недель"}
                     one{"через {0} неделю"}
                     other{"через {0} недели"}
                 }
                 past{
-                    few{"{0} недели назад"}
                     many{"{0} недель назад"}
                     one{"{0} неделю назад"}
                     other{"{0} недели назад"}
@@ -2218,13 +1725,11 @@ ru{
             }
             relativeTime{
                 future{
-                    few{"через {0} года"}
                     many{"через {0} лет"}
                     one{"через {0} год"}
                     other{"через {0} года"}
                 }
                 past{
-                    few{"{0} года назад"}
                     many{"{0} лет назад"}
                     one{"{0} год назад"}
                     other{"{0} года назад"}

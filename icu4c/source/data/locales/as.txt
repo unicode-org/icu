@@ -17,16 +17,6 @@ as{
         "]"
     }
     NumberElements{
-        beng{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##,##0.00"}
-                currencyFormat%noCurrency{"#,##,##0.00"}
-            }
-            symbols{
-                timeSeparator{":"}
-            }
-        }
         default{"beng"}
         latn{
             miscPatterns{
@@ -98,77 +88,59 @@ as{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"¤ 0 হাজাৰ"}
                         other{"¤ 0 হাজাৰ"}
                     }
                     10000{
-                        one{"¤ 00 হাজাৰ"}
                         other{"¤ 00 হাজাৰ"}
                     }
                     100000{
-                        one{"¤ 0 লাখ"}
                         other{"¤ 0 লাখ"}
                     }
                     1000000{
-                        one{"¤ 0 নিযুত"}
                         other{"¤ 0 নিযুত"}
                     }
                     10000000{
-                        one{"¤ 00 নিযুত"}
                         other{"¤ 00 নিযুত"}
                     }
                     100000000{
-                        one{"¤ 0 নিঃ"}
                         other{"¤ 0 নিঃ"}
                     }
                     1000000000{
-                        one{"¤ 0 শঃ কোঃ"}
                         other{"¤ 0 শঃ কোঃ"}
                     }
                     10000000000{
-                        one{"¤ 00 শঃ কোঃ"}
                         other{"¤ 00 শঃ কোঃ"}
                     }
                     100000000000{
-                        one{"¤ 000 শঃ কঃ"}
                         other{"¤ 000 শঃ কঃ"}
                     }
                     1000000000000{
-                        one{"¤ 0 শঃ পঃ"}
                         other{"¤ 0 শঃ পঃ"}
                     }
                     10000000000000{
-                        one{"¤ 00 শঃ পঃ"}
                         other{"¤ 00 শঃ পঃ"}
                     }
                     100000000000000{
-                        one{"¤ 000 শঃ পঃ"}
                         other{"¤ 000 শঃ পঃ"}
                     }
                 }
                 decimalFormat{
                     1000{
-                        one{"0 হাজাৰ"}
                         other{"0 হাজাৰ"}
                     }
                     10000{
-                        one{"00 হাজাৰ"}
                         other{"00 হাজাৰ"}
                     }
                     100000{
-                        one{"0 লাখ"}
                         other{"0 লাখ"}
                     }
                     1000000{
-                        one{"0 নিযুত"}
                         other{"0 নিযুত"}
                     }
                     10000000{
-                        one{"00 নিযুত"}
                         other{"00 নিযুত"}
                     }
                     100000000{
-                        one{"0 নিঃ"}
                         other{"0 নিঃ"}
                     }
                     1000000000{
@@ -176,19 +148,15 @@ as{
                         other{"0 শঃ কোঃ"}
                     }
                     10000000000{
-                        one{"00 শঃ কোঃ"}
                         other{"00 শঃ কোঃ"}
                     }
                     100000000000{
-                        one{"000 শঃ কঃ"}
                         other{"000 শঃ কঃ"}
                     }
                     1000000000000{
-                        one{"0 শঃ পঃ"}
                         other{"0 শঃ পঃ"}
                     }
                     10000000000000{
-                        one{"00 শঃ পঃ"}
                         other{"00 শঃ পঃ"}
                     }
                     100000000000000{
@@ -281,16 +249,6 @@ as{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMdd",
-                "yMd",
-            }
             availableFormats{
                 Bh{"B h"}
                 Bhm{"B h:mm"}
@@ -302,7 +260,6 @@ as{
                 Ehms{"E a h:mm:ss"}
                 MMMMEd{"d MMMM, E"}
                 MMMMW{
-                    one{"MMMMৰ সপ্তাহ W"}
                     other{"MMMMৰ সপ্তাহ W"}
                 }
                 MMMMd{"d MMMM"}
@@ -323,7 +280,6 @@ as{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    one{"Yৰ সপ্তাহ w"}
                     other{"Yৰ সপ্তাহ w"}
                 }
             }
@@ -337,15 +293,6 @@ as{
                         "বৃহ",
                         "শুক্ৰ",
                         "শনি",
-                    }
-                    narrow{
-                        "দে",
-                        "সো",
-                        "ম",
-                        "বু",
-                        "বৃ",
-                        "শু",
-                        "শ",
                     }
                     wide{
                         "দেওবাৰ",
@@ -599,11 +546,9 @@ as{
             }
             relativeTime{
                 future{
-                    one{"{0} দিনত"}
                     other{"{0} দিনত"}
                 }
                 past{
-                    one{"{0} দিন পূৰ্বে"}
                     other{"{0} দিন পূৰ্বে"}
                 }
             }
@@ -625,27 +570,16 @@ as{
             }
             relativeTime{
                 future{
-                    one{"{0} শুক্ৰবাৰে"}
                     other{"{0} শুক্ৰবাৰে"}
                 }
                 past{
-                    one{"{0} শুক্ৰবাৰৰ পূৰ্বে"}
                     other{"{0} শুক্ৰবাৰৰ পূৰ্বে"}
                 }
-            }
-        }
-        fri-narrow{
-            relative{
-                "-1"{"যোৱা শুক্ৰ"}
-                "0"{"এই শুক্ৰবাৰ"}
-                "1"{"অহা শুক্ৰবাৰ"}
             }
         }
         fri-short{
             relative{
                 "-1"{"যোৱা শুক্ৰ"}
-                "0"{"এই শুক্ৰবাৰ"}
-                "1"{"অহা শুক্ৰবাৰ"}
             }
             relativeTime{
                 future{
@@ -665,11 +599,9 @@ as{
             }
             relativeTime{
                 future{
-                    one{"{0} ঘণ্টাত"}
                     other{"{0} ঘণ্টাত"}
                 }
                 past{
-                    one{"{0} ঘণ্টা পূৰ্বে"}
                     other{"{0} ঘণ্টা পূৰ্বে"}
                 }
             }
@@ -681,11 +613,9 @@ as{
             }
             relativeTime{
                 future{
-                    one{"{0} মিনিটত"}
                     other{"{0} মিনিটত"}
                 }
                 past{
-                    one{"{0} মিনিট পূৰ্বে"}
                     other{"{0} মিনিট পূৰ্বে"}
                 }
             }
@@ -698,11 +628,9 @@ as{
             }
             relativeTime{
                 future{
-                    one{"{0} সোমবাৰে"}
                     other{"{0} সোমবাৰে"}
                 }
                 past{
-                    one{"{0} সোমবাৰৰ পূৰ্বে"}
                     other{"{0} সোমবাৰৰ পূৰ্বে"}
                 }
             }
@@ -733,11 +661,9 @@ as{
             }
             relativeTime{
                 future{
-                    one{"{0} মাহত"}
                     other{"{0} মাহত"}
                 }
                 past{
-                    one{"{0} মাহ পূৰ্বে"}
                     other{"{0} মাহ পূৰ্বে"}
                 }
             }
@@ -746,7 +672,6 @@ as{
             relative{
                 "-1"{"যোৱা মা."}
                 "0"{"এই মা."}
-                "1"{"অহা মাহ"}
             }
         }
         quarter{
@@ -758,11 +683,9 @@ as{
             }
             relativeTime{
                 future{
-                    one{"{0} তিনি মাহত"}
                     other{"{0} তিনি মাহত"}
                 }
                 past{
-                    one{"{0} তিনি মাহ পূৰ্বে"}
                     other{"{0} তিনি মাহ পূৰ্বে"}
                 }
             }
@@ -775,11 +698,9 @@ as{
             }
             relativeTime{
                 future{
-                    one{"{0} শনিবাৰে"}
                     other{"{0} শনিবাৰে"}
                 }
                 past{
-                    one{"{0} শনিবাৰৰ পূৰ্বে"}
                     other{"{0} শনিবাৰৰ পূৰ্বে"}
                 }
             }
@@ -808,11 +729,9 @@ as{
             }
             relativeTime{
                 future{
-                    one{"{0} ছেকেণ্ডত"}
                     other{"{0} ছেকেণ্ডত"}
                 }
                 past{
-                    one{"{0} ছেকেণ্ড পূৰ্বে"}
                     other{"{0} ছেকেণ্ড পূৰ্বে"}
                 }
             }
@@ -825,11 +744,9 @@ as{
             }
             relativeTime{
                 future{
-                    one{"{0} দেওবাৰে"}
                     other{"{0} দেওবাৰে"}
                 }
                 past{
-                    one{"{0} দেওবাৰৰ পূৰ্বে"}
                     other{"{0} দেওবাৰৰ পূৰ্বে"}
                 }
             }
@@ -842,28 +759,9 @@ as{
             }
             relativeTime{
                 future{
-                    one{"{0} বৃহস্পতিবাৰে"}
                     other{"{0} বৃহস্পতিবাৰে"}
                 }
                 past{
-                    one{"{0} বৃহস্পতিবাৰৰ পূৰ্বে"}
-                    other{"{0} বৃহস্পতিবাৰৰ পূৰ্বে"}
-                }
-            }
-        }
-        thu-narrow{
-            relative{
-                "-1"{"যোৱা বৃহস্পতিবাৰ"}
-                "0"{"এই বৃহস্পতিবাৰ"}
-                "1"{"অহা বৃহস্পতিবাৰ"}
-            }
-            relativeTime{
-                future{
-                    one{"{0} বৃহস্পতিবাৰে"}
-                    other{"{0} বৃহস্পতিবাৰে"}
-                }
-                past{
-                    one{"{0} বৃহস্পতিবাৰৰ পূৰ্বে"}
                     other{"{0} বৃহস্পতিবাৰৰ পূৰ্বে"}
                 }
             }
@@ -876,11 +774,9 @@ as{
             }
             relativeTime{
                 future{
-                    one{"{0} মঙ্গলবাৰে"}
                     other{"{0} মঙ্গলবাৰে"}
                 }
                 past{
-                    one{"{0} মঙ্গলবাৰৰ পূৰ্বে"}
                     other{"{0} মঙ্গলবাৰৰ পূৰ্বে"}
                 }
             }
@@ -910,11 +806,9 @@ as{
             }
             relativeTime{
                 future{
-                    one{"{0} বুধবাৰে"}
                     other{"{0} বুধবাৰে"}
                 }
                 past{
-                    one{"{0} বুধবাৰৰ পূৰ্বে"}
                     other{"{0} বুধবাৰৰ পূৰ্বে"}
                 }
             }
@@ -946,11 +840,9 @@ as{
             relativePeriod{"{0}ৰ সপ্তাহ"}
             relativeTime{
                 future{
-                    one{"{0} সপ্তাহত"}
                     other{"{0} সপ্তাহত"}
                 }
                 past{
-                    one{"{0} সপ্তাহ পূৰ্বে"}
                     other{"{0} সপ্তাহ পূৰ্বে"}
                 }
             }
@@ -973,11 +865,9 @@ as{
             }
             relativeTime{
                 future{
-                    one{"{0} বছৰত"}
                     other{"{0} বছৰত"}
                 }
                 past{
-                    one{"{0} বছৰৰ পূৰ্বে"}
                     other{"{0} বছৰৰ পূৰ্বে"}
                 }
             }

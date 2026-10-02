@@ -291,20 +291,10 @@ lb{
                 one{"{0} Dezimeter"}
                 other{"{0} Dezimeter"}
             }
-            fathom{
-                dnam{"Nautesch Fiedem"}
-                one{"{0} Nautesche Fuedem"}
-                other{"{0} Nautesch Fiedem"}
-            }
             foot{
                 dnam{"Fouss"}
                 one{"{0} Fouss"}
                 other{"{0} Fouss"}
-            }
-            furlong{
-                dnam{"Furlongs"}
-                one{"{0} Furlong"}
-                other{"{0} Furlongs"}
             }
             inch{
                 dnam{"Zoll"}
@@ -415,11 +405,6 @@ lb{
                 one{"{0} Pond"}
                 other{"{0} Pond"}
             }
-            stone{
-                dnam{"Stones"}
-                one{"{0} Stone"}
-                other{"{0} Stones"}
-            }
             ton{
                 dnam{"Long tons"}
                 one{"{0} Long ton"}
@@ -509,11 +494,6 @@ lb{
                 dnam{"acre-feet"}
                 one{"{0} acre-foot"}
                 other{"{0} acre-feet"}
-            }
-            bushel{
-                dnam{"Bushels"}
-                one{"{0} Bushel"}
-                other{"{0} Bushels"}
             }
             centiliter{
                 dnam{"Zentiliter"}
@@ -679,63 +659,52 @@ lb{
         consumption{
             liter-per-kilometer{
                 dnam{"l/km"}
-                one{"{0} l/km"}
                 other{"{0} l/km"}
             }
             mile-per-gallon{
                 dnam{"mpg"}
-                one{"{0} mpg"}
                 other{"{0} mpg"}
             }
         }
         digital{
             bit{
                 dnam{"b"}
-                one{"{0} b"}
                 other{"{0} b"}
             }
             byte{
                 dnam{"B"}
-                one{"{0} B"}
                 other{"{0} B"}
             }
         }
         duration{
             day{
                 dnam{"D"}
-                one{"{0} D"}
                 other{"{0} D"}
             }
             hour{
                 dnam{"St."}
-                one{"{0} St."}
                 other{"{0} St."}
                 per{"{0}/St."}
             }
             minute{
                 dnam{"Min."}
-                one{"{0} Min."}
                 other{"{0} Min."}
             }
             month{
                 dnam{"Mnt"}
-                one{"{0} Mnt"}
                 other{"{0} Mnt"}
             }
             second{
                 dnam{"Sek."}
-                one{"{0} Sek."}
                 other{"{0} Sek."}
                 per{"{0}/Sek."}
             }
             week{
                 dnam{"W"}
-                one{"{0} W"}
                 other{"{0} W"}
             }
             year{
                 dnam{"J"}
-                one{"{0} J"}
                 other{"{0} J"}
             }
         }
@@ -761,14 +730,12 @@ lb{
             }
             ounce-troy{
                 dnam{"oz. tr."}
-                one{"{0} oz. tr."}
                 other{"{0} oz. tr."}
             }
         }
         power{
             horsepower{
                 dnam{"PS"}
-                one{"{0} PS"}
                 other{"{0} PS"}
             }
             watt{
@@ -777,17 +744,14 @@ lb{
         }
         volume{
             cup{
-                one{"{0} cup"}
                 other{"{0} cup"}
             }
             fluid-ounce{
                 dnam{"fl oz"}
-                one{"{0} fl oz"}
                 other{"{0} fl oz"}
             }
             gallon{
                 dnam{"gal"}
-                one{"{0} gal"}
                 other{"{0} gal"}
             }
             liter{
@@ -795,12 +759,10 @@ lb{
             }
             tablespoon{
                 dnam{"ZL"}
-                one{"{0} ZL"}
                 other{"{0} ZL"}
             }
             teaspoon{
                 dnam{"TL"}
-                one{"{0} TL"}
                 other{"{0} TL"}
             }
         }

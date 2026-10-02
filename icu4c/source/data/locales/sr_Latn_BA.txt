@@ -37,12 +37,7 @@ sr_Latn_BA{
             dayPeriod{
                 format{
                     narrow{
-                        afternoon1{"po podne"}
-                        evening1{"uveče"}
-                        midnight{"ponoć"}
                         morning1{"ujutro"}
-                        night1{"noću"}
-                        noon{"podne"}
                     }
                 }
                 stand-alone{
@@ -81,8 +76,6 @@ sr_Latn_BA{
         day{
             relativeTime{
                 past{
-                    few{"prije {0} dana"}
-                    one{"prije {0} dana"}
                     other{"prije {0} dana"}
                 }
             }
@@ -104,8 +97,6 @@ sr_Latn_BA{
         }
         fri{
             relative{
-                "-1"{"prošlog petka"}
-                "0"{"u petak"}
                 "1"{"sljedećeg petka"}
             }
             relativeTime{
@@ -118,8 +109,6 @@ sr_Latn_BA{
         }
         fri-short{
             relative{
-                "-1"{"prošlog pet"}
-                "0"{"u pet"}
                 "1"{"sljedećeg pet"}
             }
         }
@@ -144,8 +133,6 @@ sr_Latn_BA{
         minute{
             relativeTime{
                 past{
-                    few{"prije {0} minuta"}
-                    one{"prije {0} minuta"}
                     other{"prije {0} minuta"}
                 }
             }
@@ -182,15 +169,11 @@ sr_Latn_BA{
             relativeTime{
                 future{
                     few{"za {0} ponedjeljka"}
-                    one{"za {0} ponedjeljak"}
-                    other{"za {0} ponedjeljaka"}
                 }
             }
         }
         mon-short{
             relative{
-                "-1"{"prošlog pon"}
-                "0"{"u pon"}
                 "1"{"sljedećeg pon"}
             }
         }
@@ -216,8 +199,6 @@ sr_Latn_BA{
         }
         month-narrow{
             relative{
-                "-1"{"prošlog mjes."}
-                "0"{"ovog mjes."}
                 "1"{"sljedećeg m."}
             }
             relativeTime{
@@ -250,14 +231,10 @@ sr_Latn_BA{
         }
         quarter{
             relative{
-                "-1"{"prošlog kvartala"}
-                "0"{"ovog kvartala"}
                 "1"{"sljedećeg kvartala"}
             }
             relativeTime{
                 past{
-                    few{"prije {0} kvartala"}
-                    one{"prije {0} kvartala"}
                     other{"prije {0} kvartala"}
                 }
             }
@@ -273,8 +250,6 @@ sr_Latn_BA{
         }
         sat{
             relative{
-                "-1"{"prošle subote"}
-                "0"{"u subotu"}
                 "1"{"sljedeće subote"}
             }
             relativeTime{
@@ -287,8 +262,6 @@ sr_Latn_BA{
         }
         sat-short{
             relative{
-                "-1"{"prošle sub"}
-                "0"{"u sub"}
                 "1"{"sljedeće sub"}
             }
         }
@@ -340,15 +313,11 @@ sr_Latn_BA{
         }
         sun-short{
             relative{
-                "-1"{"pr. ned."}
-                "0"{"u ned"}
                 "1"{"slj. ned."}
             }
         }
         thu{
             relative{
-                "-1"{"prošlog četvrtka"}
-                "0"{"u četvrtak"}
                 "1"{"sljedećeg četvrtka"}
             }
             relativeTime{
@@ -361,15 +330,11 @@ sr_Latn_BA{
         }
         thu-short{
             relative{
-                "-1"{"prošlog čet"}
-                "0"{"u čet"}
                 "1"{"sljedećeg čet"}
             }
         }
         tue{
             relative{
-                "-1"{"prošlog utorka"}
-                "0"{"u utorak"}
                 "1"{"sljedećeg utorka"}
             }
             relativeTime{
@@ -382,8 +347,6 @@ sr_Latn_BA{
         }
         tue-short{
             relative{
-                "-1"{"prošlog uto"}
-                "0"{"u uto"}
                 "1"{"sljedećeg uto"}
             }
         }
@@ -490,8 +453,6 @@ sr_Latn_BA{
         }
         year{
             relative{
-                "-1"{"prošle godine"}
-                "0"{"ove godine"}
                 "1"{"sljedeće godine"}
             }
             relativeTime{
@@ -504,8 +465,6 @@ sr_Latn_BA{
         }
         year-narrow{
             relative{
-                "-1"{"prošle g."}
-                "0"{"ove g."}
                 "1"{"sljedeće g."}
             }
             relativeTime{
@@ -518,8 +477,6 @@ sr_Latn_BA{
         }
         year-short{
             relative{
-                "-1"{"prošle god."}
-                "0"{"ove god."}
                 "1"{"sljedeće god."}
             }
             relativeTime{

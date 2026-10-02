@@ -75,17 +75,9 @@ lu{
             "£",
             "Pauni wa Angeletele",
         }
-        GHC{
-            "GHC",
-            "Sedi wa Ngana",
-        }
         GMD{
             "GMD",
             "Ndalasi wa Ngambi",
-        }
-        GNS{
-            "GNS",
-            "Nfalanga wa Ngina",
         }
         INR{
             "₹",
@@ -123,10 +115,6 @@ lu{
             "MGA",
             "Nfalanga wa Madagasikare",
         }
-        MRO{
-            "MRO",
-            "Ugwiya wa Moritani (1973–2017)",
-        }
         MRU{
             "MRU",
             "Ugwiya wa Moritani",
@@ -138,10 +126,6 @@ lu{
         MWK{
             "MWK",
             "Kwasha wa Malawi",
-        }
-        MZM{
-            "MZM",
-            "Metikali wa Mozambiki",
         }
         NAD{
             "NAD",
@@ -167,10 +151,6 @@ lu{
             "SDG",
             "Ndina wa Suda",
         }
-        SDP{
-            "SDP",
-            "Pauni wa Suda",
-        }
         SHP{
             "SHP",
             "Pauni wa Santu Elena",
@@ -186,10 +166,6 @@ lu{
         SOS{
             "SOS",
             "Nshili wa Somali",
-        }
-        STD{
-            "STD",
-            "Dobra wa Sao Tome ne Presipe (1977–2017)",
         }
         STN{
             "STN",
@@ -227,17 +203,9 @@ lu{
             "ZAR",
             "Rande wa Afrika wa Mwinshi",
         }
-        ZMK{
-            "ZMK",
-            "Kwasha wa Zambi (1968–2012)",
-        }
         ZMW{
             "ZMW",
             "Kwasha wa Zambi",
-        }
-        ZWD{
-            "ZWD",
-            "Ndola wa Zimbabwe",
         }
     }
 }

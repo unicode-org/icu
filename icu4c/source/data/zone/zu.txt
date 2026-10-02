@@ -1295,11 +1295,6 @@ zu{
             lg{"Isikhathi sase-North American Pacific"}
             ls{"Isikhathi sase-North American Pacific esijwayelekile"}
         }
-        "meta:Anadyr"{
-            ld{"esase-Anadyr Summer Time"}
-            lg{"esase-Anadyr Time"}
-            ls{"esase-Anadyr Standard Time"}
-        }
         "meta:Apia"{
             ld{"Isikhathi sase-Apia sasemini"}
             lg{"Isikhathi sase-Apia"}

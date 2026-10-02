@@ -17,8 +17,6 @@ ne{
         default{"deva"}
         deva{
             patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##,##0.00"}
                 percentFormat{"#,##,##0%"}
             }
         }
@@ -27,7 +25,6 @@ ne{
                 atLeast{"{0}+"}
             }
             patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##,##0.00"}
                 currencyFormat{"¤ #,##,##0.00"}
                 currencyFormat%alphaNextToNumber{"¤ #,##,##0.00"}
                 currencyFormat%noCurrency{"#,##,##0.00"}
@@ -89,101 +86,77 @@ ne{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"¤ 0 हजार"}
                         other{"¤ 0 हजार"}
                     }
                     10000{
-                        one{"¤ 00 हजार"}
                         other{"¤ 00 हजार"}
                     }
                     100000{
-                        one{"¤ 0 लाख"}
                         other{"¤ 0 लाख"}
                     }
                     1000000{
-                        one{"¤ 00 लाख"}
                         other{"¤ 00 लाख"}
                     }
                     10000000{
-                        one{"¤ 0 करोड"}
                         other{"¤ 0 करोड"}
                     }
                     100000000{
-                        one{"¤ 00 करोड"}
                         other{"¤ 00 करोड"}
                     }
                     1000000000{
-                        one{"¤ 0 अरब"}
                         other{"¤ 0 अरब"}
                     }
                     10000000000{
-                        one{"¤ 00 अरब"}
                         other{"¤ 00 अरब"}
                     }
                     100000000000{
-                        one{"¤ 0 खरब"}
                         other{"¤ 0 खरब"}
                     }
                     1000000000000{
-                        one{"¤ 00 खरब"}
                         other{"¤ 00 खरब"}
                     }
                     10000000000000{
-                        one{"¤ 0 शंख"}
                         other{"¤ 0 शंख"}
                     }
                     100000000000000{
-                        one{"¤ 00 शंख"}
                         other{"¤ 00 शंख"}
                     }
                 }
                 decimalFormat{
                     1000{
-                        one{"0 हजार"}
                         other{"0 हजार"}
                     }
                     10000{
-                        one{"00 हजार"}
                         other{"00 हजार"}
                     }
                     100000{
-                        one{"0 लाख"}
                         other{"0 लाख"}
                     }
                     1000000{
-                        one{"00 लाख"}
                         other{"00 लाख"}
                     }
                     10000000{
-                        one{"0 करोड"}
                         other{"0 करोड"}
                     }
                     100000000{
-                        one{"00 करोड"}
                         other{"00 करोड"}
                     }
                     1000000000{
-                        one{"0 अरब"}
                         other{"0 अरब"}
                     }
                     10000000000{
-                        one{"00 अरब"}
                         other{"00 अरब"}
                     }
                     100000000000{
-                        one{"0 खरब"}
                         other{"0 खरब"}
                     }
                     1000000000000{
-                        one{"00 खरब"}
                         other{"00 खरब"}
                     }
                     10000000000000{
-                        one{"0 शंख"}
                         other{"0 शंख"}
                     }
                     100000000000000{
-                        one{"00 शंख"}
                         other{"00 शंख"}
                     }
                 }
@@ -266,26 +239,14 @@ ne{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yyMd",
-            }
             availableFormats{
                 Ed{"d E"}
                 MMMMW{
-                    one{"MMMM को W हप्ता"}
                     other{"MMMM को W हप्ता"}
                 }
                 yMMMMEd{"y MMMM d, EEE"}
                 yMMMMd{"y MMMM d"}
                 yw{
-                    one{"Y को w हप्ता"}
                     other{"Y को w हप्ता"}
                 }
             }
@@ -594,11 +555,9 @@ ne{
             }
             relativeTime{
                 future{
-                    one{"{0} दिनमा"}
                     other{"{0} दिनमा"}
                 }
                 past{
-                    one{"{0} दिन पहिले"}
                     other{"{0} दिन पहिले"}
                 }
             }
@@ -636,11 +595,9 @@ ne{
             }
             relativeTime{
                 future{
-                    one{"{0} घण्टामा"}
                     other{"{0} घण्टामा"}
                 }
                 past{
-                    one{"{0} घण्टा पहिले"}
                     other{"{0} घण्टा पहिले"}
                 }
             }
@@ -652,11 +609,9 @@ ne{
             }
             relativeTime{
                 future{
-                    one{"{0} मिनेटमा"}
                     other{"{0} मिनेटमा"}
                 }
                 past{
-                    one{"{0} मिनेट पहिले"}
                     other{"{0} मिनेट पहिले"}
                 }
             }
@@ -669,7 +624,6 @@ ne{
             }
             relativeTime{
                 future{
-                    one{"{0} सोमबारहरूमा"}
                     other{"{0} सोमबारहरूमा"}
                 }
                 past{
@@ -681,7 +635,6 @@ ne{
         mon-narrow{
             relativeTime{
                 past{
-                    one{"{0} सोमबार पहिले"}
                     other{"{0}सोमबारहरू पहिले"}
                 }
             }
@@ -695,19 +648,15 @@ ne{
             }
             relativeTime{
                 future{
-                    one{"{0} महिनामा"}
                     other{"{0} महिनामा"}
                 }
                 past{
-                    one{"{0} महिना पहिले"}
                     other{"{0} महिना पहिले"}
                 }
             }
         }
         month-short{
             relative{
-                "-1"{"गत महिना"}
-                "0"{"यो महिना"}
                 "1"{"आगामी महिना"}
             }
         }
@@ -724,7 +673,6 @@ ne{
                     other{"{0}सत्रमा"}
                 }
                 past{
-                    one{"{0}सत्र अघि"}
                     other{"{0}सत्र अघि"}
                 }
             }
@@ -733,7 +681,6 @@ ne{
             relativeTime{
                 future{
                     one{"{0}सत्रमा"}
-                    other{"{0}सत्रमा"}
                 }
             }
         }
@@ -761,11 +708,9 @@ ne{
             }
             relativeTime{
                 future{
-                    one{"{0} सेकेन्डमा"}
                     other{"{0} सेकेन्डमा"}
                 }
                 past{
-                    one{"{0} सेकेन्ड पहिले"}
                     other{"{0} सेकेन्ड पहिले"}
                 }
             }
@@ -791,11 +736,9 @@ ne{
             relativeTime{
                 future{
                     one{"{0} आइतबारहरूमा"}
-                    other{"{0} आइतबारहरूमा"}
                 }
                 past{
                     one{"{0} आइतबारहरू पहिले"}
-                    other{"{0} आइतबारहरू पहिले"}
                 }
             }
         }
@@ -860,11 +803,9 @@ ne{
             relativePeriod{"{0}को हप्ता"}
             relativeTime{
                 future{
-                    one{"{0} हप्तामा"}
                     other{"{0} हप्तामा"}
                 }
                 past{
-                    one{"{0} हप्ता पहिले"}
                     other{"{0} हप्ता पहिले"}
                 }
             }
@@ -890,11 +831,9 @@ ne{
             }
             relativeTime{
                 future{
-                    one{"{0} वर्षमा"}
                     other{"{0} वर्षमा"}
                 }
                 past{
-                    one{"{0} वर्ष अघि"}
                     other{"{0} वर्ष अघि"}
                 }
             }
@@ -914,7 +853,6 @@ ne{
         standard{
             2{"{0} र {1}"}
             end{"{0} र {1}"}
-            start{"{0}, {1}"}
         }
         standard-narrow{
             2{"{0}, {1}"}

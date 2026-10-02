@@ -3,10 +3,6 @@
 // Generated using tools/cldr/cldr-to-icu/
 hsb{
     Currencies{
-        ADP{
-            "ADP",
-            "andorraska peseta",
-        }
         AED{
             "AED",
             "ZAE dirham",
@@ -31,33 +27,9 @@ hsb{
             "AOA",
             "angolska kwanza",
         }
-        AOK{
-            "AOK",
-            "angolska kwanza (1977–1990)",
-        }
-        AON{
-            "AON",
-            "angolska nowa kwanza (1990–2000)",
-        }
-        AOR{
-            "AOR",
-            "angolska kwanza reajustado (1995–1999)",
-        }
-        ARA{
-            "ARA",
-            "argentinski austral",
-        }
-        ARP{
-            "ARP",
-            "argentinski peso (1983–1985)",
-        }
         ARS{
             "ARS",
             "argentinski peso",
-        }
-        ATS{
-            "ATS",
-            "awstriski šiling",
         }
         AUD{
             "AUD",
@@ -67,17 +39,9 @@ hsb{
             "AWG",
             "aruba-florin",
         }
-        AZM{
-            "AZM",
-            "azerbajdźanski manat (1993–2006)",
-        }
         AZN{
             "AZN",
             "azerbajdźanski manat",
-        }
-        BAD{
-            "BAD",
-            "bosniski dinar",
         }
         BAM{
             "BAM",
@@ -90,22 +54,6 @@ hsb{
         BDT{
             "BDT",
             "bangladešska taka",
-        }
-        BEC{
-            "BEC",
-            "belgiski frank (konwertibelny)",
-        }
-        BEF{
-            "BEF",
-            "belgiski frank",
-        }
-        BEL{
-            "BEL",
-            "belgiski finančny frank",
-        }
-        BGL{
-            "BGL",
-            "bołharski lew (1962–1999)",
         }
         BGN{
             "BGN",
@@ -131,37 +79,9 @@ hsb{
             "BOB",
             "boliwiski boliviano",
         }
-        BOP{
-            "BOP",
-            "boliwiski peso",
-        }
-        BOV{
-            "BOV",
-            "boliwiski mvdol",
-        }
-        BRB{
-            "BRB",
-            "brazilski nowy cruzeiro (1967–1986)",
-        }
-        BRC{
-            "BRC",
-            "brazilski cruzado (1986–1989)",
-        }
-        BRE{
-            "BRE",
-            "brazilski cruzeiro (1990–1993)",
-        }
         BRL{
             "R$",
             "brazilski real",
-        }
-        BRN{
-            "BRN",
-            "brazilski nowy cruzado (1989–1990)",
-        }
-        BRR{
-            "BRR",
-            "brazilski cruzeiro (1993–1994)",
         }
         BSD{
             "BSD",
@@ -171,25 +91,13 @@ hsb{
             "BTN",
             "bhutanski ngultrum",
         }
-        BUK{
-            "BUK",
-            "burmaski kyat",
-        }
         BWP{
             "BWP",
             "botswanska pula",
         }
-        BYB{
-            "BYB",
-            "běłoruski rubl (1994–1999)",
-        }
         BYN{
             "BYN",
             "běłoruski rubl",
-        }
-        BYR{
-            "BYR",
-            "běłoruski rubl (2000–2016)",
         }
         BZD{
             "BZD",
@@ -311,10 +219,6 @@ hsb{
             "GTQ",
             "guatemalski quetzal",
         }
-        GWP{
-            "GWP",
-            "ginejsko-bissauski peso",
-        }
         GYD{
             "GYD",
             "guyanski dolar",
@@ -431,14 +335,6 @@ hsb{
             "LSL",
             "lesothiski loti",
         }
-        LTL{
-            "LTL",
-            "litawski litas",
-        }
-        LVL{
-            "LVL",
-            "letiski lat",
-        }
         LYD{
             "LYD",
             "libyski dinar",
@@ -471,10 +367,6 @@ hsb{
             "MOP",
             "macaoska pataka",
         }
-        MRO{
-            "MRO",
-            "mawretanska ouguiya (1973–2017)",
-        }
         MRU{
             "MRU",
             "mawretanska ouguiya",
@@ -498,14 +390,6 @@ hsb{
         MYR{
             "MYR",
             "malajziski ringgit",
-        }
-        MZE{
-            "MZE",
-            "mosambikski escudo",
-        }
-        MZM{
-            "MZM",
-            "mosambikski metical (1980–2006)",
         }
         MZN{
             "MZN",
@@ -635,17 +519,9 @@ hsb{
             "SSP",
             "južnosudanski punt",
         }
-        STD{
-            "STD",
-            "são tomeski dobra (1977–2017)",
-        }
         STN{
             "STN",
             "são tomeski dobra",
-        }
-        SVC{
-            "SVC",
-            "el salvadorski colón",
         }
         SYP{
             "SYP",
@@ -711,10 +587,6 @@ hsb{
             "UZS",
             "uzbekski sum",
         }
-        VEF{
-            "VEF",
-            "venezuelski bolívar (2008–2018)",
-        }
         VES{
             "VES",
             "venezuelski bolívar",
@@ -773,12 +645,6 @@ hsb{
         }
     }
     CurrencyPlurals{
-        ADP{
-            few{"andorraske pesety"}
-            one{"andorraska peseta"}
-            other{"andorraskich pesetow"}
-            two{"andorraskej peseće"}
-        }
         AED{
             few{"SAE dirhamy"}
             one{"ZAE dirham"}
@@ -815,47 +681,11 @@ hsb{
             other{"angolskich kwanzow"}
             two{"angolskej kwanzy"}
         }
-        AOK{
-            few{"angolske kwanzy (1977–1990)"}
-            one{"angolska kwanza (1977–1990)"}
-            other{"angolskich kwanzow (1977–1990)"}
-            two{"angolskej kwanzy (1977–1990)"}
-        }
-        AON{
-            few{"angolske nowe kwanzy (1990–2000)"}
-            one{"angolska nowa kwanza (1990–2000)"}
-            other{"angolskich nowych kwanzow (1990–2000)"}
-            two{"angolskej nowej kwanzy (1990–2000)"}
-        }
-        AOR{
-            few{"angolske kwanzy reajustado (1995–1999)"}
-            one{"angolska kwanza reajustado (1995–1999)"}
-            other{"angolskich kwanzow reajustado (1995–1999)"}
-            two{"angolskej kwanzy reajustado (1995–1999)"}
-        }
-        ARA{
-            few{"argentinske australe"}
-            one{"argentinski austral"}
-            other{"argentinskich australow"}
-            two{"argentinskej australej"}
-        }
-        ARP{
-            few{"argentinske pesa (1983–1985)"}
-            one{"argentinski peso (1983–1985)"}
-            other{"argentinskich pesow (1983–1985)"}
-            two{"argentinskej pesaj (1983–1985)"}
-        }
         ARS{
             few{"argentinske pesa"}
             one{"argentinski peso"}
             other{"argentinskich pesow"}
             two{"argentinskej pesaj"}
-        }
-        ATS{
-            few{"awstriske šilingi"}
-            one{"awstriski šiling"}
-            other{"awstriskich šilingow"}
-            two{"awstriskej šilingaj"}
         }
         AUD{
             few{"awstralske dolary"}
@@ -869,23 +699,11 @@ hsb{
             other{"aruba-florinow"}
             two{"aruba-florinaj"}
         }
-        AZM{
-            few{"azerbajdźanski manaty (1993–2006)"}
-            one{"azerbajdźanski manat (1993–2006)"}
-            other{"azerbajdźanski manatow (1993–2006)"}
-            two{"azerbajdźanski manataj (1993–2006)"}
-        }
         AZN{
             few{"azerbajdźanski manaty"}
             one{"azerbajdźanski manat"}
             other{"azerbajdźanski manatow"}
             two{"azerbajdźanski manataj"}
-        }
-        BAD{
-            few{"bosniske dinary"}
-            one{"bosniski dinar"}
-            other{"bosniskich dinarow"}
-            two{"bosniskej dinaraj"}
         }
         BAM{
             few{"bosniske konwertibelne hriwny"}
@@ -904,30 +722,6 @@ hsb{
             one{"bangladešska taka"}
             other{"bangladešskich takow"}
             two{"bangladešskej tace"}
-        }
-        BEC{
-            few{"belgiske franki (konwertibelne)"}
-            one{"belgiski frank (konwertibelny)"}
-            other{"belgiskich frankow (konwertibelnych)"}
-            two{"belgiskej frankaj (konwertibelnej)"}
-        }
-        BEF{
-            few{"belgiske franki"}
-            one{"belgiski frank"}
-            other{"belgiskich frankow"}
-            two{"belgiskej frankaj"}
-        }
-        BEL{
-            few{"belgiske finančne franki"}
-            one{"belgiski finančny frank"}
-            other{"belgiskich finančnych frankow"}
-            two{"belgiskej finančnej frankaj"}
-        }
-        BGL{
-            few{"bołharske lewy (1962–1999)"}
-            one{"bołharski lew (1962–1999)"}
-            other{"bołharskich lewow (1962–1999)"}
-            two{"bołharskej lewaj (1962–1999)"}
         }
         BGN{
             few{"bołharske lewy"}
@@ -965,53 +759,11 @@ hsb{
             other{"boliwiskich bolivianow"}
             two{"boliwiskej bolivianaj"}
         }
-        BOP{
-            few{"boliwiske pesa"}
-            one{"boliwiski peso"}
-            other{"boliwiskich pesow"}
-            two{"boliwiskej pesaj"}
-        }
-        BOV{
-            few{"boliwiske mvdole"}
-            one{"boliwiski mvdol"}
-            other{"boliwiskich mvdolow"}
-            two{"boliwiskej mvdolej"}
-        }
-        BRB{
-            few{"brazilske nowe cruzeiry (1967–1986)"}
-            one{"brazilski nowy cruzeiro (1967–1986)"}
-            other{"brazilskich nowych cruzeirow (1967–1986)"}
-            two{"brazilskej nowej cruzeiraj (1967–1986)"}
-        }
-        BRC{
-            few{"brazilske cruzady (1986–1989)"}
-            one{"brazilski cruzado (1986–1989)"}
-            other{"brazilskich cruzadow (1986–1989)"}
-            two{"brazilskej cruzadaj (1986–1989)"}
-        }
-        BRE{
-            few{"brazilske cruzeiry (1990–1993)"}
-            one{"brazilski cruzeiro (1990–1993)"}
-            other{"brazilskich cruzeirow (1990–1993)"}
-            two{"brazilskej cruzeiraj (1990–1993)"}
-        }
         BRL{
             few{"brazilske reale"}
             one{"brazilski real"}
             other{"brazilskich realow"}
             two{"brazilskej realej"}
-        }
-        BRN{
-            few{"brazilske nowe cruzady"}
-            one{"brazilski nowy cruzado (1989–1990)"}
-            other{"brazilskich nowych cruzadow"}
-            two{"brazilskej nowej cruzadaj (1989–1990)"}
-        }
-        BRR{
-            few{"brazilske cruzeiry (1993–1994)"}
-            one{"brazilski cruzeiro (1993–1994)"}
-            other{"brazilskich cruzeirow (1993–1994)"}
-            two{"brazilskej cruzeiraj (1993–1994)"}
         }
         BSD{
             few{"bahamaske dolary"}
@@ -1025,35 +777,17 @@ hsb{
             other{"bhutanskich ngultrumow"}
             two{"bhutanskej ngultrumaj"}
         }
-        BUK{
-            few{"burmaske kyaty"}
-            one{"burmaski kyat"}
-            other{"burmaskich kyatow"}
-            two{"burmaskej kyataj"}
-        }
         BWP{
             few{"botswanske pule"}
             one{"botswanska pula"}
             other{"botswanskich pulow"}
             two{"botswanskej puli"}
         }
-        BYB{
-            few{"běłoruske ruble (1994–1999)"}
-            one{"běłoruski rubl (1994–1999)"}
-            other{"běłoruskich rublow (1994–1999)"}
-            two{"běłoruskej rublej (1994–1999)"}
-        }
         BYN{
             few{"běłoruske ruble"}
             one{"běłoruski rubl"}
             other{"běłoruskich rublow"}
             two{"běłoruskej rublej"}
-        }
-        BYR{
-            few{"běłoruske ruble (2000–2016)"}
-            one{"běłoruski rubl (2000–2016)"}
-            other{"běłoruskich rublow (2000–2016)"}
-            two{"běłoruskej rublej (2000–2016)"}
         }
         BZD{
             few{"belizeske dolary"}
@@ -1235,12 +969,6 @@ hsb{
             other{"guatemalskich quetzalow"}
             two{"guatemalskej quetzalej"}
         }
-        GWP{
-            few{"ginejsko-bissauske pesa"}
-            one{"ginejsko-bissauski peso"}
-            other{"ginejsko-bissauskich pesow"}
-            two{"ginejsko-bissauskej pesaj"}
-        }
         GYD{
             few{"guyanske dolary"}
             one{"guyanski dolar"}
@@ -1415,18 +1143,6 @@ hsb{
             other{"lesothiskich lotijow"}
             two{"lesothiskej lotijej"}
         }
-        LTL{
-            few{"litawske litasy"}
-            one{"litawski litas"}
-            other{"litawskich litasow"}
-            two{"litawskej litasaj"}
-        }
-        LVL{
-            few{"letiske laty"}
-            one{"letiski lat"}
-            other{"letiskich latow"}
-            two{"letiskej lataj"}
-        }
         LYD{
             few{"libyske dinary"}
             one{"libyski dinar"}
@@ -1475,12 +1191,6 @@ hsb{
             other{"macaoskich patakow"}
             two{"macaoskej patace"}
         }
-        MRO{
-            few{"mawretanske ouguije (1973–2017)"}
-            one{"mawretanska ouguiya (1973–2017)"}
-            other{"mawretanskich ouguijow (1973–2017)"}
-            two{"mawretanskej ouguiji (1973–2017)"}
-        }
         MRU{
             few{"mawretanske ouguije"}
             one{"mawretanska ouguiya"}
@@ -1516,18 +1226,6 @@ hsb{
             one{"malajziski ringgit"}
             other{"malajziskich ringgitow"}
             two{"malajziskej ringgitaj"}
-        }
-        MZE{
-            few{"mosambikske escuda"}
-            one{"mosambikski escudo"}
-            other{"mosambikskich escudow"}
-            two{"mosambikskej escudaj"}
-        }
-        MZM{
-            few{"mosambikske meticale (1980–2006)"}
-            one{"mosambikski metical (1980–2006)"}
-            other{"mosambikskich meticalow (1980–2006)"}
-            two{"mosambikskej meticalej (1980–2006)"}
         }
         MZN{
             few{"mosambikske meticale"}
@@ -1721,23 +1419,11 @@ hsb{
             other{"južnosudanskich puntow"}
             two{"južnosudanskej puntaj"}
         }
-        STD{
-            few{"são tomeske dobry (1977–2017)"}
-            one{"são tomeski dobra (1977–2017)"}
-            other{"são tomeskich dobrow (1977–2017)"}
-            two{"são tomeskej dobraj (1977–2017)"}
-        }
         STN{
             few{"são tomeske dobry"}
             one{"são tomeski dobra"}
             other{"são tomeskich dobrow"}
             two{"são tomeskej dobraj"}
-        }
-        SVC{
-            few{"el salvadorske colóny"}
-            one{"el salvadorski colón"}
-            other{"el salvadorskich colónow"}
-            two{"el salvadorskej colónaj"}
         }
         SYP{
             few{"syriske punty"}
@@ -1834,12 +1520,6 @@ hsb{
             one{"uzbekski sum"}
             other{"uzbekskich sumow"}
             two{"uzbekskej sumaj"}
-        }
-        VEF{
-            few{"venezuelske bolívary (2008–2018)"}
-            one{"venezuelski bolívar (2008–2018)"}
-            other{"venezuelskich bolívarow (2008–2018)"}
-            two{"venezuelskej bolívaraj (2008–2018)"}
         }
         VES{
             few{"venezuelske bolívary"}

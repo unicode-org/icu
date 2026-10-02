@@ -6,8 +6,6 @@ sat{
         volume{
             dessert-spoon-imperial{
                 one{"{0}dsp-Imp"}
-                other{"{0} dstspn Imp"}
-                two{"{0} dstspn Imp"}
             }
         }
     }

@@ -135,13 +135,7 @@ kok_Latn{
                 one{"{0} dosok"}
                 other{"{0} doskam"}
             }
-            fortnight{
-                dnam{"pondros"}
-                one{"{0} pondros"}
-                other{"{0} pondros"}
-            }
             hour{
-                one{"{0} vor"}
                 other{"{0} voram"}
                 per{"dor vora {0}"}
             }
@@ -377,10 +371,6 @@ kok_Latn{
                 one{"{0}dos"}
                 other{"{0}dos"}
             }
-            fortnight{
-                one{"{0} pondr"}
-                other{"{0} pondr"}
-            }
             hour{
                 dnam{"vor"}
                 one{"{0}vor"}
@@ -435,7 +425,6 @@ kok_Latn{
         angle{
             degree{
                 dnam{"onx"}
-                one{"{0} onx"}
                 other{"{0} onx"}
             }
         }
@@ -449,7 +438,6 @@ kok_Latn{
         digital{
             byte{
                 dnam{"bayt"}
-                one{"{0} bayt"}
                 other{"{0} bayt"}
             }
             gigabit{
@@ -483,50 +471,37 @@ kok_Latn{
         duration{
             century{
                 dnam{"x"}
-                one{"{0} x"}
                 other{"{0} x"}
             }
             day{
                 dnam{"dis"}
-                one{"{0} dis"}
                 other{"{0} dis"}
                 per{"{0}/dis"}
             }
             decade{
                 dnam{"dos"}
-                one{"{0} dos"}
                 other{"{0} dos"}
-            }
-            fortnight{
-                dnam{"pondr"}
-                one{"{0} pondr"}
-                other{"{0} pondr"}
             }
             hour{
                 dnam{"voram"}
-                one{"{0} vor"}
                 other{"{0} vor"}
                 per{"{0}/vor"}
             }
             microsecond{
                 dnam{"μsek"}
-                one{"{0} μsek"}
                 other{"{0} μsek"}
             }
             millisecond{
                 dnam{"msek"}
-                one{"{0} msek"}
                 other{"{0} msek"}
             }
             month{
                 dnam{"mho"}
-                one{"{0} mho"}
                 other{"{0} mho"}
                 per{"{0}/mho"}
             }
             nanosecond{
                 dnam{"nanosek"}
-                one{"{0} nsek"}
                 other{"{0} nsek"}
             }
             night{
@@ -537,19 +512,16 @@ kok_Latn{
             }
             quarter{
                 dnam{"timho"}
-                one{"{0} timho"}
                 other{"{0} timho"}
                 per{"{0}/timho"}
             }
             second{
                 dnam{"sek"}
-                one{"{0} sek"}
                 other{"{0} sek"}
                 per{"{0}/sek"}
             }
             week{
                 dnam{"suman"}
-                one{"{0} suman"}
                 other{"{0} suman"}
                 per{"{0}/suman"}
             }

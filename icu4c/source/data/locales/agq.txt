@@ -37,16 +37,6 @@ agq{
                 "{1} {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMMd",
-                "GGGGGyMd",
-            }
             availableFormats{
                 Ed{"d E"}
                 MEd{"E d/M"}
@@ -86,16 +76,6 @@ agq{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yMd",
             }
             availableFormats{
                 Ed{"d E"}

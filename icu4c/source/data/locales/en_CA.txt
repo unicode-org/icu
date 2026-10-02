@@ -13,68 +13,14 @@ en_CA{
                 "MMMM d, r (U)",
                 "MMM d, r",
                 "M/d/r",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-            }
-            availableFormats{
-                GyMMMEd{"E, MMM d, r(U)"}
-                GyMMMMEd{"E, d MMMM r(U)"}
-                GyMMMMd{"d MMMM r(U)"}
-                M{"LL"}
-                MEd{"E, MM-dd"}
-                Md{"MM-dd"}
-                UMd{"U-MM-dd"}
-                yyyyM{"r-MM"}
-                yyyyMEd{"E, r-MM-dd"}
-                yyyyMMMEd{"E, MMM d, r(U)"}
-                yyyyMMMMEd{"E, d MMMM r(U)"}
-                yyyyMMMMd{"d MMMM r(U)"}
-                yyyyMd{"r-MM-dd"}
-            }
-            intervalFormats{
-                MEd{
-                    M{"E, MM-dd – E, MM-dd"}
-                    d{"E, MM-dd – E, MM-dd"}
-                }
-                Md{
-                    M{"MM-dd – MM-dd"}
-                    d{"MM-dd – MM-dd"}
-                }
-                yM{
-                    M{"y-MM – y-MM"}
-                    y{"y-MM – y-MM"}
-                }
-                yMEd{
-                    M{"E, y-MM-dd – E, y-MM-dd"}
-                    d{"E, y-MM-dd – E, y-MM-dd"}
-                    y{"E, y-MM-dd – E, y-MM-dd"}
-                }
-                yMd{
-                    M{"y-MM-dd – y-MM-dd"}
-                    d{"y-MM-dd – y-MM-dd"}
-                    y{"y-MM-dd – y-MM-dd"}
-                }
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
             }
         }
         generic{
-            DateTimePatterns{
-                "h:mm:ss a zzzz",
-                "h:mm:ss a z",
-                "h:mm:ss a",
-                "h:mm a",
-                "EEEE, MMMM d, y G",
-                "MMMM d, y G",
-                "MMM d, y G",
-                "M/d/y G",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-            }
             availableFormats{
                 Ed{"E d"}
             }
@@ -234,7 +180,6 @@ en_CA{
                         midnight{"mid"}
                         morning1{"mor"}
                         night1{"night"}
-                        noon{"n"}
                     }
                 }
                 stand-alone{
@@ -248,7 +193,6 @@ en_CA{
                         evening1{"eve"}
                         midnight{"mid"}
                         morning1{"mor"}
-                        night1{"night"}
                         pm{"pm"}
                     }
                     wide{
@@ -438,11 +382,9 @@ en_CA{
         fri-narrow{
             relativeTime{
                 future{
-                    one{"in {0} F"}
                     other{"in {0} F’s"}
                 }
                 past{
-                    one{"{0} F ago"}
                     other{"{0} F’s ago"}
                 }
             }
@@ -517,11 +459,9 @@ en_CA{
         mon-narrow{
             relativeTime{
                 future{
-                    one{"in {0} M"}
                     other{"in {0} M’s"}
                 }
                 past{
-                    one{"{0} M ago"}
                     other{"{0} M’s ago"}
                 }
             }
@@ -606,11 +546,9 @@ en_CA{
         sat-narrow{
             relativeTime{
                 future{
-                    one{"in {0} Sa"}
                     other{"in {0} Sa’s"}
                 }
                 past{
-                    one{"{0} Sa ago"}
                     other{"{0} Sa’s ago"}
                 }
             }
@@ -660,11 +598,9 @@ en_CA{
         sun-narrow{
             relativeTime{
                 future{
-                    one{"in {0} Su"}
                     other{"in {0} Su’s"}
                 }
                 past{
-                    one{"{0} Su ago"}
                     other{"{0} Su’s ago"}
                 }
             }
@@ -689,11 +625,9 @@ en_CA{
         thu-narrow{
             relativeTime{
                 future{
-                    one{"in {0} Th"}
                     other{"in {0} Th’s"}
                 }
                 past{
-                    one{"{0} Th ago"}
                     other{"{0} Th’s ago"}
                 }
             }
@@ -718,11 +652,9 @@ en_CA{
         tue-narrow{
             relativeTime{
                 future{
-                    one{"in {0} Tu"}
                     other{"in {0} Tu’s"}
                 }
                 past{
-                    one{"{0} Tu ago"}
                     other{"{0} Tu’s ago"}
                 }
             }
@@ -747,11 +679,9 @@ en_CA{
         wed-narrow{
             relativeTime{
                 future{
-                    one{"in {0} W"}
                     other{"in {0} W’s"}
                 }
                 past{
-                    one{"{0} W ago"}
                     other{"{0} W’s ago"}
                 }
             }

@@ -31,7 +31,6 @@ hi_Latn{
     }
     CurrencyPlurals{
         ALL{
-            one{"Albanian lek"}
             other{"Albanian leke"}
         }
         CRC{
@@ -43,7 +42,6 @@ hi_Latn{
             other{"Icelandic kronur"}
         }
         LSL{
-            one{"Lesotho loti"}
             other{"Lesotho lotis"}
         }
         NIO{
@@ -60,7 +58,6 @@ hi_Latn{
         }
         XXX{
             one{"currency ki unknown unit"}
-            other{"(unknown currency)"}
         }
     }
 }

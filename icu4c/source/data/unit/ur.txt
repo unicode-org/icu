@@ -45,7 +45,6 @@ ur{
         }
         area{
             dunam{
-                one{"{0} دُنام"}
                 other{"{0} دُنامز"}
             }
             hectare{
@@ -128,15 +127,9 @@ ur{
                     _{
                         _{"مربع {0}"}
                     }
-                    feminine{
-                        _{"مربع {0}"}
-                    }
                 }
                 other{
                     _{
-                        _{"مربع {0}"}
-                    }
-                    feminine{
                         _{"مربع {0}"}
                     }
                 }
@@ -146,15 +139,9 @@ ur{
                     _{
                         _{"کیوبک {0}"}
                     }
-                    feminine{
-                        _{"کیوبک {0}"}
-                    }
                 }
                 other{
                     _{
-                        _{"کیوبک {0}"}
-                    }
-                    feminine{
                         _{"کیوبک {0}"}
                     }
                 }
@@ -190,7 +177,6 @@ ur{
             mole{
                 dnam{"مولز"}
                 gender{"feminine"}
-                one{"{0} مول"}
                 other{"{0} مولز"}
             }
             ofglucose{
@@ -200,7 +186,6 @@ ur{
             }
             part{
                 dnam{"پارٹس"}
-                one{"{0} پارٹ"}
                 other{"{0} پارٹس"}
             }
             part-per-1e6{
@@ -343,7 +328,6 @@ ur{
             decade{
                 dnam{"دہائیاں"}
                 gender{"feminine"}
-                one{"{0} دہائی"}
                 other{"{0} دہائیاں"}
             }
             hour{
@@ -352,7 +336,6 @@ ur{
             microsecond{
                 dnam{"مائیکرو سیکنڈز"}
                 gender{"masculine"}
-                one{"{0} مائیکرو سیکنڈ"}
                 other{"{0} مائیکرو سیکنڈز"}
             }
             millisecond{
@@ -437,11 +420,6 @@ ur{
                 dnam{"بیکوریل"}
                 one{"{0} بیکوریل"}
                 other{"{0} بیکوریلز"}
-            }
-            british-thermal-unit{
-                dnam{"برطانوی تھرمل اکائیاں"}
-                one{"{0} برطانوی تھرمل اکائی"}
-                other{"{0} برطانوی تھرمل اکائیاں"}
             }
             calorie{
                 dnam{"کیلوریز"}
@@ -566,7 +544,6 @@ ur{
             em{
                 dnam{"ٹائپوگرافک em"}
                 gender{"masculine"}
-                one{"{0} em"}
                 other{"{0} ems"}
             }
             megapixel{
@@ -612,19 +589,10 @@ ur{
                 one{"{0} زمینی رداس"}
                 other{"{0} زمینی رداس"}
             }
-            fathom{
-                one{"{0} فیدم"}
-                other{"{0} فیدمز"}
-            }
             foot{
                 per{"{0} فی فوٹ"}
             }
-            furlong{
-                one{"{0} فرلانگ"}
-                other{"{0} فرلانگز"}
-            }
             inch{
-                one{"{0} انچ"}
                 other{"{0} انچ"}
                 per{"{0} فی انچ"}
             }
@@ -654,8 +622,6 @@ ur{
             }
             millimeter{
                 gender{"masculine"}
-                one{"{0} ملی میٹر"}
-                other{"{0} ملی میٹر"}
             }
             nanometer{
                 dnam{"نینو میٹر"}
@@ -778,11 +744,6 @@ ur{
             solar-mass{
                 one{"{0} شمسی کمیت"}
                 other{"{0} شمسی کمیتیں"}
-            }
-            stone{
-                dnam{"اسٹونز"}
-                one{"{0} اسٹون"}
-                other{"{0} اسٹونز"}
             }
             ton{
                 one{"{0} ٹن"}
@@ -930,7 +891,6 @@ ur{
                 other{"{0} ڈگری فارن ہائیٹ"}
             }
             generic{
-                dnam{"ڈگری درجۂ حرارت"}
                 gender{"masculine"}
                 one{"{0} ڈگری درجۂ حرارت"}
                 other{"{0} ڈگری درجۂ حرارت"}
@@ -964,10 +924,6 @@ ur{
                 dnam{"بیرلز"}
                 one{"{0} بیرل"}
                 other{"{0} بیرلز"}
-            }
-            bushel{
-                one{"{0} بُشل"}
-                other{"{0} بُشلز"}
             }
             centiliter{
                 gender{"masculine"}
@@ -1298,19 +1254,12 @@ ur{
             decimeter{
                 dnam{"ڈیسی میٹر"}
             }
-            fathom{
-                dnam{"فیدم"}
-            }
             foot{
                 one{"{0}′"}
                 other{"{0}′"}
                 per{"{0} فی فیٹ"}
             }
-            furlong{
-                dnam{"فرلانگ"}
-            }
             inch{
-                one{"{0} انچ"}
                 other{"{0} انچ"}
                 per{"{0} فی انچ"}
             }
@@ -1394,7 +1343,6 @@ ur{
                 other{"{0}mb"}
             }
             ofhg{
-                dnam{"Hg"}
                 one{"{0} Hg"}
                 other{"{0} Hg"}
             }
@@ -1425,9 +1373,6 @@ ur{
             }
         }
         volume{
-            bushel{
-                dnam{"بُشل"}
-            }
             centiliter{
                 dnam{"cL"}
             }
@@ -1500,46 +1445,38 @@ ur{
         angle{
             arc-minute{
                 dnam{"آرک منٹ"}
-                one{"{0} آرک منٹ"}
                 other{"{0} آرک منٹ"}
             }
             arc-second{
                 dnam{"آرک سیکنڈ"}
-                one{"{0} آرک سیکنڈ"}
                 other{"{0} آرک سیکنڈ"}
             }
             degree{
                 dnam{"ڈگری"}
-                one{"{0} ڈگری"}
                 other{"{0} ڈگری"}
             }
             radian{
                 dnam{"ریڈینس"}
             }
             steradian{
-                one{"{0} sr"}
                 other{"{0} sr"}
             }
         }
         area{
             acre{
                 dnam{"ایکڑ"}
-                one{"{0} ایکڑ"}
                 other{"{0} ایکڑ"}
             }
             dunam{
                 dnam{"دُنامز"}
-                one{"{0} دُنام"}
                 other{"{0} دُنام"}
             }
             hectare{
                 dnam{"ہیکٹر"}
-                one{"{0} ہیکٹر"}
                 other{"{0} ہیکٹر"}
             }
             square-foot{
                 dnam{"مربع فٹ"}
-                one{"{0} sq ft"}
                 other{"{0} sq ft"}
             }
             square-inch{
@@ -1550,7 +1487,6 @@ ur{
             }
             square-mile{
                 dnam{"مربع میل"}
-                one{"{0} sq mi"}
                 other{"{0} sq mi"}
             }
             square-yard{
@@ -1577,7 +1513,6 @@ ur{
                 dnam{"قیراط"}
             }
             katal{
-                one{"{0} kat"}
                 other{"{0} kat"}
             }
             millimole-per-liter{
@@ -1585,17 +1520,14 @@ ur{
             }
             mole{
                 dnam{"مول"}
-                one{"{0} مول"}
                 other{"{0} مول"}
             }
             ofglucose{
                 dnam{"Glc"}
-                one{"{0} Glc"}
                 other{"{0} Glc"}
             }
             part{
                 dnam{"پارٹ"}
-                one{"{0} پارٹ"}
                 other{"{0} پارٹ"}
             }
             part-per-1e6{
@@ -1620,7 +1552,6 @@ ur{
             }
             mile-per-gallon{
                 dnam{"mpg"}
-                one{"{0} mpg"}
                 other{"{0} mpg"}
             }
             mile-per-gallon-imperial{
@@ -1648,7 +1579,6 @@ ur{
             }
             petabyte{
                 dnam{"پی بائٹ"}
-                one{"{0} پی بی"}
                 other{"{0} پی بی"}
             }
             terabit{
@@ -1663,13 +1593,11 @@ ur{
             }
             day{
                 dnam{"دن"}
-                one{"{0} دن"}
                 other{"{0} دن"}
                 per{"{0} فی دن"}
             }
             decade{
                 dnam{"دہائی"}
-                one{"{0} دہائی"}
                 other{"{0} دہائی"}
             }
             hour{
@@ -1680,17 +1608,14 @@ ur{
             }
             microsecond{
                 dnam{"مائیکرو سیکنڈ"}
-                one{"{0} مائیکرو سیکنڈ"}
                 other{"{0} مائیکرو سیکنڈ"}
             }
             millisecond{
                 dnam{"ملی سیکنڈ"}
-                one{"{0} ملی سیکنڈ"}
                 other{"{0} ملی سیکنڈ"}
             }
             minute{
                 dnam{"منٹ"}
-                one{"{0} منٹ"}
                 other{"{0} منٹ"}
                 per{"{0} فی منٹ"}
             }
@@ -1701,7 +1626,6 @@ ur{
             }
             nanosecond{
                 dnam{"نینو سیکنڈز"}
-                one{"{0} نینو سیکنڈ"}
                 other{"{0} نینو سیکنڈ"}
             }
             night{
@@ -1718,7 +1642,6 @@ ur{
             }
             second{
                 dnam{"سیکنڈ"}
-                one{"{0} سیکنڈ"}
                 other{"{0} سیکنڈ"}
                 per{"{0} فی سیکنڈ"}
             }
@@ -1730,7 +1653,6 @@ ur{
             }
             year{
                 dnam{"سال"}
-                one{"{0} سال"}
                 other{"{0} سال"}
             }
         }
@@ -1739,15 +1661,12 @@ ur{
                 dnam{"amps"}
             }
             coulomb{
-                one{"{0} C"}
                 other{"{0} C"}
             }
             farad{
-                one{"{0} F"}
                 other{"{0} F"}
             }
             henry{
-                one{"{0} H"}
                 other{"{0} H"}
             }
             milliampere{
@@ -1757,7 +1676,6 @@ ur{
                 dnam{"اوہم"}
             }
             siemens{
-                one{"{0} S"}
                 other{"{0} S"}
             }
             volt{
@@ -1766,15 +1684,10 @@ ur{
         }
         energy{
             becquerel{
-                one{"{0} Bq"}
                 other{"{0} Bq"}
-            }
-            british-thermal-unit{
-                dnam{"BTU"}
             }
             calorie-it{
                 dnam{"cal-IT"}
-                one{"{0} cal-IT"}
                 other{"{0} cal-IT"}
             }
             electronvolt{
@@ -1786,14 +1699,12 @@ ur{
                 other{"{0} Cal"}
             }
             gray{
-                one{"{0} Gy"}
                 other{"{0} Gy"}
             }
             kilowatt-hour{
                 dnam{"kW-hour"}
             }
             sievert{
-                one{"{0} Sv"}
                 other{"{0} Sv"}
             }
             therm-us{
@@ -1804,7 +1715,6 @@ ur{
         }
         force{
             kilogram-force{
-                one{"{0} kgf"}
                 other{"{0} kgf"}
             }
             newton{
@@ -1840,32 +1750,18 @@ ur{
         length{
             centimeter{
                 dnam{"سینٹی میٹر"}
-                one{"{0} سینٹی میٹر"}
                 other{"{0} سینٹی میٹر"}
-            }
-            fathom{
-                dnam{"فیدمز"}
-                one{"{0} فیدم"}
-                other{"{0} فیدم"}
             }
             foot{
                 dnam{"فیٹ"}
-                one{"{0} فیٹ"}
                 other{"{0} فیٹ"}
-            }
-            furlong{
-                dnam{"فرلانگز"}
-                one{"{0} فرلانگ"}
-                other{"{0} فرلانگ"}
             }
             inch{
                 dnam{"انچ"}
                 one{"{0} انچ"}
-                other{"{0} in"}
             }
             kilometer{
                 dnam{"کلو میٹر"}
-                one{"{0} کلو میٹر"}
                 other{"{0} کلو میٹر"}
                 per{"{0} فی کلو میٹر"}
             }
@@ -1874,17 +1770,14 @@ ur{
             }
             meter{
                 dnam{"میٹر"}
-                one{"{0} میٹر"}
                 other{"{0} میٹر"}
             }
             mile{
                 dnam{"میل"}
-                one{"{0} میل"}
                 other{"{0} میل"}
             }
             millimeter{
                 dnam{"ملی میٹر"}
-                one{"{0} ملی میٹر"}
                 other{"{0} ملی میٹر"}
             }
             parsec{
@@ -1892,7 +1785,6 @@ ur{
             }
             picometer{
                 dnam{"پیکو میٹر"}
-                one{"{0} پیکو میٹر"}
                 other{"{0} پیکو میٹر"}
             }
             point{
@@ -1903,7 +1795,6 @@ ur{
             }
             yard{
                 dnam{"گز"}
-                one{"{0} یارڈ"}
                 other{"{0} یارڈ"}
             }
         }
@@ -1917,11 +1808,9 @@ ur{
         }
         magnetic{
             tesla{
-                one{"{0} T"}
                 other{"{0} T"}
             }
             weber{
-                one{"{0} Wb"}
                 other{"{0} Wb"}
             }
         }
@@ -1937,7 +1826,6 @@ ur{
             }
             grain{
                 dnam{"گرین"}
-                one{"{0} گرین"}
                 other{"{0} گرین"}
             }
             gram{
@@ -1955,12 +1843,10 @@ ur{
         }
         power{
             kilowatt{
-                one{"{0} کلو واٹ"}
                 other{"{0} کلو واٹ"}
             }
             watt{
                 dnam{"واٹ"}
-                one{"{0} واٹ"}
                 other{"{0} واٹ"}
             }
         }
@@ -1971,7 +1857,6 @@ ur{
                 other{"{0} بارز"}
             }
             ofhg{
-                one{"{0} Hg"}
                 other{"{0} Hg"}
             }
         }
@@ -1981,12 +1866,10 @@ ur{
             }
             kilometer-per-hour{
                 dnam{"کلومیٹر/گھنٹہ"}
-                one{"{0} kph"}
                 other{"{0} kph"}
             }
             light-speed{
                 dnam{"روشنی"}
-                one{"{0} روشنی"}
                 other{"{0} روشنی"}
             }
             meter-per-second{
@@ -1994,19 +1877,16 @@ ur{
             }
             mile-per-hour{
                 dnam{"میل فی گھنٹہ"}
-                one{"{0} mph"}
                 other{"{0} mph"}
             }
         }
         temperature{
             celsius{
                 dnam{"ڈگری سیلسیس"}
-                one{"{0}‎°C"}
                 other{"{0}‎°C"}
             }
             fahrenheit{
                 dnam{"ڈگری فارن ہائیٹ"}
-                one{"{0}‎°F"}
                 other{"{0}‎°F"}
             }
             generic{
@@ -2019,11 +1899,6 @@ ur{
             }
             barrel{
                 dnam{"بیرل"}
-            }
-            bushel{
-                dnam{"بُشلز"}
-                one{"{0} بو"}
-                other{"{0} بو"}
             }
             centiliter{
                 dnam{"سینٹی لیٹر"}
@@ -2039,7 +1914,6 @@ ur{
             }
             cubic-mile{
                 dnam{"کیوبک میل"}
-                one{"{0} کیوبک میل"}
                 other{"{0} کیوبک میل"}
             }
             cubic-yard{
@@ -2056,43 +1930,35 @@ ur{
             }
             dram{
                 dnam{"ڈرام فلوئیڈ"}
-                one{"{0} ڈرام فلوئیڈ"}
                 other{"{0} ڈرام فلوئیڈ"}
             }
             drop{
                 dnam{"قطرہ"}
-                one{"{0} قطرہ"}
                 other{"{0} قطرہ"}
             }
             fluid-ounce{
                 dnam{"fl oz"}
-                one{"{0} fl oz"}
                 other{"{0} fl oz"}
             }
             fluid-ounce-metric{
-                one{"{0} fl oz m."}
                 other{"{0} fl oz m."}
             }
             gallon{
                 dnam{"gal"}
-                one{"{0} gal"}
                 other{"{0} gal"}
                 per{"{0}/gal"}
             }
             jigger{
                 dnam{"جگر"}
-                one{"{0} جگر"}
                 other{"{0} جگر"}
             }
             liter{
                 dnam{"لیٹر"}
-                one{"{0} لیٹر"}
                 other{"{0} لیٹر"}
                 per{"{0} فی لیٹر"}
             }
             pinch{
                 dnam{"چٹکی"}
-                one{"{0} چٹکی"}
                 other{"{0} چٹکی"}
             }
             quart{

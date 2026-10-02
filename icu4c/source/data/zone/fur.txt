@@ -49,28 +49,16 @@ fur{
             ld{"Ore estive de Europe centrâl"}
             lg{"Ore de Europe centrâl"}
             ls{"Ore standard de Europe centrâl"}
-            sd{"CEST"}
-            sg{"CET"}
-            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"Ore estive de Europe orientâl"}
             lg{"Ore de Europe orientâl"}
             ls{"Ore standard de Europe orientâl"}
-            sd{"EEST"}
-            sg{"EET"}
-            ss{"EET"}
         }
         "meta:Europe_Western"{
             ld{"Ore estive de Europe ocidentâl"}
             lg{"Ore de Europe ocidentâl"}
             ls{"Ore standard de Europe ocidentâl"}
-            sd{"WEST"}
-            sg{"WET"}
-            ss{"WET"}
-        }
-        "meta:GMT"{
-            ss{"GMT"}
         }
         "meta:Moscow"{
             ld{"Ore estive di Mosche"}

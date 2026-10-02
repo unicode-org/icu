@@ -80,7 +80,6 @@ en_CA{
         energy{
             kilowatt-hour{
                 one{"{0} kilowatt-hour"}
-                other{"{0} kilowatt-hours"}
             }
         }
         force{
@@ -119,7 +118,6 @@ en_CA{
                 other{"{0} decimetres"}
             }
             earth-radius{
-                one{"{0} earth radius"}
                 other{"{0} earth radii"}
             }
             kilometer{
@@ -163,19 +161,16 @@ en_CA{
         light{
             candela{
                 dnam{"candelas"}
-                one{"{0} candela"}
                 other{"{0} candelas"}
             }
             lumen{
                 dnam{"lumens"}
-                one{"{0} lumen"}
                 other{"{0} lumens"}
             }
         }
         mass{
             stone{
                 dnam{"stone"}
-                one{"{0} stone"}
                 other{"{0} stone"}
             }
             tonne{
@@ -209,7 +204,6 @@ en_CA{
             }
             kelvin{
                 dnam{"kelvin"}
-                one{"{0} kelvin"}
                 other{"{0} kelvin"}
             }
         }
@@ -320,7 +314,6 @@ en_CA{
     unitsNarrow{
         angle{
             revolution{
-                one{"{0}rev"}
                 other{"{0}revs"}
             }
         }
@@ -346,7 +339,6 @@ en_CA{
         }
         digital{
             bit{
-                one{"{0}bit"}
                 other{"{0}bits"}
             }
         }
@@ -463,7 +455,6 @@ en_CA{
             }
             jigger{
                 dnam{"jiggers"}
-                one{"{0}jigger"}
                 other{"{0}jiggers"}
             }
             liter{
@@ -497,7 +488,6 @@ en_CA{
         }
         angle{
             revolution{
-                one{"{0} rev"}
                 other{"{0} revs"}
             }
         }
@@ -557,17 +547,14 @@ en_CA{
         }
         digital{
             bit{
-                one{"{0} bit"}
                 other{"{0} bits"}
             }
             byte{
-                one{"{0} byte"}
                 other{"{0} bytes"}
             }
         }
         duration{
             hour{
-                one{"{0} hr"}
                 other{"{0} hrs"}
                 per{"{0}/hr"}
             }
@@ -580,7 +567,6 @@ en_CA{
                 other{"{0} millisecs"}
             }
             minute{
-                one{"{0} min"}
                 other{"{0} mins"}
             }
             month{
@@ -593,7 +579,6 @@ en_CA{
                 other{"{0} nanosecs"}
             }
             second{
-                one{"{0} sec"}
                 other{"{0} secs"}
                 per{"{0}/sec"}
             }
@@ -738,7 +723,6 @@ en_CA{
             }
             jigger{
                 one{"{0} jiggers"}
-                other{"{0} jiggers"}
             }
             liter{
                 dnam{"litres"}

@@ -29,16 +29,6 @@ es_DO{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMdd",
-                "GGGGGyyMMdd",
-            }
         }
         gregorian{
             AmPmMarkers{
@@ -63,14 +53,8 @@ es_DO{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        am{"a. m."}
-                        pm{"p. m."}
-                    }
                     narrow{
-                        am{"a. m."}
                         noon{"m."}
-                        pm{"p. m."}
                     }
                     wide{
                         am{"a. m."}

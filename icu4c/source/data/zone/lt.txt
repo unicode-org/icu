@@ -1214,11 +1214,6 @@ lt{
             lg{"Šiaurės Amerikos Ramiojo vandenyno laikas"}
             ls{"Šiaurės Amerikos Ramiojo vandenyno žiemos laikas"}
         }
-        "meta:Anadyr"{
-            ld{"Anadyrės vasaros laikas"}
-            lg{"Anadyrės laikas"}
-            ls{"Anadyrės žiemos laikas"}
-        }
         "meta:Apia"{
             ld{"Apijos vasaros laikas"}
             lg{"Apijos laikas"}
@@ -1306,9 +1301,6 @@ lt{
             ld{"Žaliojo Kyšulio vasaros laikas"}
             lg{"Žaliojo Kyšulio laikas"}
             ls{"Žaliojo Kyšulio žiemos laikas"}
-        }
-        "meta:Casey"{
-            ls{"Keisio laikas"}
         }
         "meta:Chamorro"{
             ls{"Čamoro laikas"}

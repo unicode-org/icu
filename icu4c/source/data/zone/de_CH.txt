@@ -22,7 +22,6 @@ de_CH{
         }
         "meta:Irish"{
             ld{"Irische Normalzeit"}
-            lg{"Irische Zeit"}
         }
         "meta:Solomon"{
             ls{"Salomoninseln-Zeit"}

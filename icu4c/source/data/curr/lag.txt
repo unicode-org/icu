@@ -75,17 +75,9 @@ lag{
             "£",
             "Páundi ya Ʉɨngɨréesa",
         }
-        GHC{
-            "GHC",
-            "Séedi ya Gáana",
-        }
         GMD{
             "GMD",
             "Daláasi ya Gámbia",
-        }
-        GNS{
-            "GNS",
-            "Faráanga ya Gíine",
         }
         INR{
             "₹",
@@ -123,10 +115,6 @@ lag{
             "MGA",
             "Mpía ya bukini",
         }
-        MRO{
-            "MRO",
-            "Ungwíiya ya Moritánia (1973–2017)",
-        }
         MRU{
             "MRU",
             "Ungwíiya ya Moritánia",
@@ -138,10 +126,6 @@ lag{
         MWK{
             "MWK",
             "Kwáacha ya Maláawi",
-        }
-        MZM{
-            "MZM",
-            "Metikáali ya Musumbíiji",
         }
         NAD{
             "NAD",
@@ -183,10 +167,6 @@ lag{
             "SOS",
             "Shilíingi ya Somália",
         }
-        STD{
-            "STD",
-            "Dóbura ya SaoTóome na Pirínsipe (1977–2017)",
-        }
         STN{
             "STN",
             "Dóbura ya SaoTóome na Pirínsipe",
@@ -223,17 +203,9 @@ lag{
             "ZAR",
             "Ráandi ya Afɨrɨka ya Saame",
         }
-        ZMK{
-            "ZMK",
-            "Kwácha ya Sámbia (1968–2012)",
-        }
         ZMW{
             "ZMW",
             "Kwácha ya Sámbia",
-        }
-        ZWD{
-            "ZWD",
-            "Dóola ya Simbáabwe",
         }
     }
 }

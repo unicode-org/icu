@@ -24,12 +24,8 @@ en_ID{
                 Ehms{"E h.mm.ss a"}
                 Hm{"HH.mm"}
                 Hms{"HH.mm.ss"}
-                Hmsv{"HH.mm.ss v"}
-                Hmv{"HH.mm v"}
                 hm{"h.mm a"}
                 hms{"h.mm.ss a"}
-                hmsv{"h.mm.ss. a v"}
-                hmv{"h.mm a v"}
                 ms{"mm.ss"}
             }
         }
@@ -48,16 +44,6 @@ en_ID{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yMMdd",
             }
             availableFormats{
                 Bhm{"h.mm B"}

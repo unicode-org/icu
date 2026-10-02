@@ -290,10 +290,6 @@ to{
             }
         }
         energy{
-            british-thermal-unit{
-                dnam{"ʻiuniti māfana fakapilitānia"}
-                other{"ʻiuniti māfana fakapilitānia ʻe {0}"}
-            }
             calorie{
                 dnam{"kaloli"}
                 other{"kaloli ʻe {0}"}
@@ -407,10 +403,6 @@ to{
                 dnam{"fute"}
                 other{"fute ʻe {0}"}
                 per{"{0} he fute"}
-            }
-            furlong{
-                dnam{"fālongo"}
-                other{"fālongo ʻe {0}"}
             }
             inch{
                 dnam{"ʻinisi"}
@@ -543,10 +535,6 @@ to{
                 dnam{"mamafa ʻo e laʻā"}
                 other{"mamafa ʻo e laʻā ʻe {0}"}
             }
-            stone{
-                dnam{"sitoni"}
-                other{"sitoni ʻe {0}"}
-            }
             ton{
                 dnam{"toni nounou"}
                 other{"toni nounou ʻe {0}"}
@@ -669,10 +657,6 @@ to{
             acre-foot{
                 dnam{"ʻeka-fute"}
                 other{"ʻeka-fute ʻe {0}"}
-            }
-            bushel{
-                dnam{"pūseli"}
-                other{"pūseli ʻe {0}"}
             }
             centiliter{
                 dnam{"senitilita"}
@@ -1023,9 +1007,6 @@ to{
             }
         }
         energy{
-            british-thermal-unit{
-                other{"{0} imfP"}
-            }
             calorie{
                 other{"{0} kal"}
             }
@@ -1120,15 +1101,8 @@ to{
             earth-radius{
                 other{"{0} L⊕"}
             }
-            fathom{
-                dnam{"o"}
-                other{"{0} o"}
-            }
             foot{
                 other{"{0} ft"}
-            }
-            furlong{
-                other{"{0} fāl"}
             }
             inch{
                 other{"{0} in"}
@@ -1225,9 +1199,6 @@ to{
             solar-mass{
                 dnam{"M☉"}
                 other{"{0} M☉"}
-            }
-            stone{
-                other{"{0} st"}
             }
             ton{
                 other{"{0} tn"}
@@ -1332,9 +1303,6 @@ to{
             barrel{
                 dnam{"plo"}
                 other{"{0} plo"}
-            }
-            bushel{
-                other{"{0} pū"}
             }
             centiliter{
                 other{"{0} sl"}
@@ -1691,10 +1659,6 @@ to{
             }
         }
         energy{
-            british-thermal-unit{
-                dnam{"imfP"}
-                other{"imfP ʻe {0}"}
-            }
             calorie{
                 dnam{"kal"}
                 other{"kal ʻe {0}"}
@@ -1800,16 +1764,8 @@ to{
                 dnam{"L⊕"}
                 other{"L⊕ ʻe {0}"}
             }
-            fathom{
-                dnam{"ofa"}
-                other{"ofa ʻe {0}"}
-            }
             foot{
                 other{"ft ʻe {0}"}
-            }
-            furlong{
-                dnam{"fāl"}
-                other{"fāl ʻe {0}"}
             }
             inch{
                 other{"in ʻe {0}"}
@@ -1934,9 +1890,6 @@ to{
                 dnam{"mamafa ☉"}
                 other{"mamafa ☉ ʻe {0}"}
             }
-            stone{
-                other{"st ʻe {0}"}
-            }
             ton{
                 other{"tn ʻe {0}"}
             }
@@ -2051,10 +2004,6 @@ to{
             barrel{
                 dnam{"paelo"}
                 other{"paelo ʻe {0}"}
-            }
-            bushel{
-                dnam{"pū"}
-                other{"pū ʻe {0}"}
             }
             centiliter{
                 dnam{"sl"}

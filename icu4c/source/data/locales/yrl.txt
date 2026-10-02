@@ -111,51 +111,39 @@ yrl{
                 }
                 decimalFormat{
                     1000{
-                        one{"0 miu"}
                         other{"0 miu"}
                     }
                     10000{
-                        one{"00 miu"}
                         other{"00 miu"}
                     }
                     100000{
-                        one{"000 miu"}
                         other{"000 miu"}
                     }
                     1000000{
-                        one{"0 mi"}
                         other{"0 mi"}
                     }
                     10000000{
-                        one{"00 mi"}
                         other{"00 mi"}
                     }
                     100000000{
-                        one{"000 mi"}
                         other{"000 mi"}
                     }
                     1000000000{
-                        one{"0 bi"}
                         other{"0 bi"}
                     }
                     10000000000{
-                        one{"00 bi"}
                         other{"00 bi"}
                     }
                     100000000000{
-                        one{"000 bi"}
                         other{"000 bi"}
                     }
                     1000000000000{
-                        one{"0 tiri"}
                         other{"0 tiri"}
                     }
                     10000000000000{
-                        one{"00 tiri"}
                         other{"00 tiri"}
                     }
                     100000000000000{
-                        one{"000 tiri"}
                         other{"000 tiri"}
                     }
                 }
@@ -176,65 +164,6 @@ yrl{
         }
     }
     calendar{
-        buddhist{
-            eras{
-                narrow{
-                    0{"EB"}
-                }
-                wide{
-                    0{"EB"}
-                }
-            }
-        }
-        chinese{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE, d MMMM U",
-                "d MMMM U",
-                "dd/MM U",
-                "dd/MM/yy",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            monthNames{
-                format{
-                    abbreviated{
-                        "YYE",
-                        "YMU",
-                        "YMS",
-                        "YID",
-                        "YPU",
-                        "YPY",
-                        "YPM",
-                        "YPS",
-                        "YPI",
-                        "YYP",
-                        "YYY",
-                        "YYM",
-                    }
-                    wide{
-                        "Yasí-Yepé",
-                        "Yasí-Mukũi",
-                        "Yasí-Musapíri",
-                        "Yasí-Irũdí",
-                        "Yasí-Pú",
-                        "Yasí-Pú-Yepé",
-                        "Yasí-Pú-Mukũi",
-                        "Yasí-Pú-Musapíri",
-                        "Yasí-Pú-Irũdí",
-                        "Yasí-Yepé-Putimaã",
-                        "Yasí-Yepé-Yepé",
-                        "Yasí-Yepé-Mukũi",
-                    }
-                }
-            }
-        }
         generic{
             DateTimePatterns{
                 "HH:mm:ss zzzz",
@@ -265,7 +194,6 @@ yrl{
                 MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
                 Md{"d/M"}
-                h{"h a"}
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
                 y{"y G"}
@@ -283,12 +211,6 @@ yrl{
             intervalFormats{
                 Bhm{
                     h{"h:mm – h:mm B"}
-                }
-                H{
-                    H{"HH'h' - HH'h'"}
-                }
-                Hv{
-                    H{"HH – HH v"}
                 }
                 M{
                     M{"M–M"}
@@ -311,24 +233,6 @@ yrl{
                 Md{
                     M{"dd/MM – dd/MM"}
                     d{"dd/MM – dd/MM"}
-                }
-                h{
-                    a{"h'h' a – h'h' a"}
-                    h{"h'h' - h'h' a"}
-                }
-                hm{
-                    a{"h:mm a – h:mm a"}
-                    h{"h:mm–h:mm a"}
-                    m{"h:mm–h:mm a"}
-                }
-                hmv{
-                    a{"h:mm a – h:mm a v"}
-                    h{"h:mm–h:mm a v"}
-                    m{"h:mm–h:mm a v"}
-                }
-                hv{
-                    a{"h a – h a v"}
-                    h{"h – h a v"}
                 }
                 y{
                     y{"y – y G"}
@@ -403,7 +307,6 @@ yrl{
                 MMMd{"d MMM"}
                 MMdd{"dd/MM"}
                 Md{"d/M"}
-                h{"h a"}
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
                 hmsv{"h:mm:ss a v"}
@@ -489,16 +392,13 @@ yrl{
             }
             intervalFormats{
                 Bh{
-                    B{"h B – h B"}
                     h{"h – h B"}
                 }
                 Bhm{
-                    B{"h:mm B – h:mm B"}
                     h{"h:mm – h:mm B"}
                     m{"h:mm – h:mm B"}
                 }
                 Gy{
-                    G{"G y – G y"}
                     y{"G y – y"}
                 }
                 GyM{
@@ -575,7 +475,6 @@ yrl{
                     d{"d – d"}
                 }
                 h{
-                    a{"h a – h a"}
                     h{"h – h a"}
                 }
                 hm{
@@ -589,7 +488,6 @@ yrl{
                     m{"h:mm – h:mm a v"}
                 }
                 hv{
-                    a{"h a – h a v"}
                     h{"h – h a v"}
                 }
                 y{
@@ -693,23 +591,6 @@ yrl{
                 }
             }
         }
-        japanese{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE, d MMMM y G",
-                "d MMMM y G",
-                "dd/MM/y G",
-                "dd/MM/yy GGGGG",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-        }
     }
     characterLabel{
         activities{"yatesawa"}
@@ -796,28 +677,6 @@ yrl{
         weather{"kirima"}
         western_asian_scripts{"kuatiasawa asiawara kurasí uwapikasawa"}
         whitespace{"pukusawa ipuraíma"}
-    }
-    contextTransforms{
-        day-format-except-narrow:intvector{
-            1,
-            1,
-        }
-        day-standalone-except-narrow:intvector{
-            1,
-            1,
-        }
-        languages:intvector{
-            1,
-            1,
-        }
-        relative:intvector{
-            1,
-            1,
-        }
-        typographicNames:intvector{
-            1,
-            1,
-        }
     }
     fields{
         day{
@@ -1343,19 +1202,6 @@ yrl{
             lenient{
                 "[\\- ‑ . /]",
                 "[\\: ∶]",
-            }
-        }
-        general{
-            lenient{
-                "[.．․﹒ 。｡︒]",
-                "['＇’ ՚ ᾽᾿ ʼ]",
-                "[%％﹪ ٪]",
-                "[‰ ؉]",
-                "[\$＄﹩]",
-                "[£￡ ₤]",
-                "[¥￥]",
-                "[₩￦]",
-                "[₹ {Rp} {Rs}₨]",
             }
         }
         number{

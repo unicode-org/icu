@@ -11,10 +11,6 @@ se{
             "€",
             "euro",
         }
-        FIM{
-            "FIM",
-            "suoma márkki",
-        }
         NOK{
             "kr",
             "norgga kruvdno",
@@ -27,18 +23,5 @@ se{
             "฿",
             "THB",
         }
-        XAG{
-            "XAG",
-            "uns silba",
-        }
-        XAU{
-            "XAU",
-            "uns golli",
-        }
-    }
-    CurrencyUnitPatterns{
-        one{"{0} {1}"}
-        other{"{0} {1}"}
-        two{"{0} {1}"}
     }
 }

@@ -70,101 +70,77 @@ is{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"0 þ'.' ¤"}
                         other{"0 þ'.' ¤"}
                     }
                     10000{
-                        one{"00 þ'.' ¤"}
                         other{"00 þ'.' ¤"}
                     }
                     100000{
-                        one{"000 þ'.' ¤"}
                         other{"000 þ'.' ¤"}
                     }
                     1000000{
-                        one{"0 m'.' ¤"}
                         other{"0 m'.' ¤"}
                     }
                     10000000{
-                        one{"00 m'.' ¤"}
                         other{"00 m'.' ¤"}
                     }
                     100000000{
-                        one{"000 m'.' ¤"}
                         other{"000 m'.' ¤"}
                     }
                     1000000000{
-                        one{"0 ma'.' ¤"}
                         other{"0 ma'.' ¤"}
                     }
                     10000000000{
-                        one{"00 ma'.' ¤"}
                         other{"00 ma'.' ¤"}
                     }
                     100000000000{
-                        one{"000 ma'.' ¤"}
                         other{"000 ma'.' ¤"}
                     }
                     1000000000000{
-                        one{"0 bn ¤"}
                         other{"0 bn ¤"}
                     }
                     10000000000000{
-                        one{"00 bn ¤"}
                         other{"00 bn ¤"}
                     }
                     100000000000000{
-                        one{"000 bn ¤"}
                         other{"000 bn ¤"}
                     }
                 }
                 decimalFormat{
                     1000{
-                        one{"0 þ'.'"}
                         other{"0 þ'.'"}
                     }
                     10000{
-                        one{"00 þ'.'"}
                         other{"00 þ'.'"}
                     }
                     100000{
-                        one{"000 þ'.'"}
                         other{"000 þ'.'"}
                     }
                     1000000{
-                        one{"0 m'.'"}
                         other{"0 m'.'"}
                     }
                     10000000{
-                        one{"00 m'.'"}
                         other{"00 m'.'"}
                     }
                     100000000{
-                        one{"000 m'.'"}
                         other{"000 m'.'"}
                     }
                     1000000000{
-                        one{"0 ma'.'"}
                         other{"0 ma'.'"}
                     }
                     10000000000{
-                        one{"00 ma'.'"}
                         other{"00 ma'.'"}
                     }
                     100000000000{
-                        one{"000 ma'.'"}
                         other{"000 ma'.'"}
                     }
                     1000000000000{
-                        one{"0 bn"}
                         other{"0 bn"}
                     }
                     10000000000000{
-                        one{"00 bn"}
                         other{"00 bn"}
                     }
                     100000000000000{
-                        one{"000 bn"}
                         other{"000 bn"}
                     }
                 }
@@ -196,58 +172,6 @@ is{
         }
     }
     calendar{
-        buddhist{
-            eras{
-                abbreviated{
-                    0{"BD"}
-                }
-                wide{
-                    0{"búddhadagatal"}
-                }
-            }
-        }
-        coptic{
-            monthNames{
-                format{
-                    wide{
-                        "tout",
-                        "baba",
-                        "hator",
-                        "kiahk",
-                        "toba",
-                        "amshir",
-                        "baramhat",
-                        "baramouda",
-                        "bashans",
-                        "paona",
-                        "epep",
-                        "mesra",
-                        "nasie",
-                    }
-                }
-            }
-        }
-        ethiopic{
-            monthNames{
-                format{
-                    wide{
-                        "meskerem",
-                        "tekemt",
-                        "hedar",
-                        "tahsas",
-                        "ter",
-                        "yekatit",
-                        "megabit",
-                        "miazia",
-                        "genbot",
-                        "sene",
-                        "hamle",
-                        "nehasse",
-                        "pagumen",
-                    }
-                }
-            }
-        }
         generic{
             DateTimePatterns{
                 "HH:mm:ss zzzz",
@@ -275,16 +199,6 @@ is{
                 "{1} 'kl'. {0}",
                 "{1}, {0}",
                 "{1}, {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMd",
-                "GGGGGyMd",
             }
             availableFormats{
                 Ed{"E d."}
@@ -388,16 +302,6 @@ is{
                 d{
                     d{"d.–d."}
                 }
-                hm{
-                    a{"h:mm a – h:mm a"}
-                    h{"h:mm–h:mm a"}
-                    m{"h:mm–h:mm a"}
-                }
-                hmv{
-                    a{"h:mm a – h:mm a v"}
-                    h{"h:mm–h:mm a v"}
-                    m{"h:mm–h:mm a v"}
-                }
                 y{
                     y{"y–y G"}
                 }
@@ -471,16 +375,6 @@ is{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yMd",
-            }
             appendItems{
                 Era{"{0} {1}"}
             }
@@ -507,7 +401,6 @@ is{
                 MMMEd{"E, d. MMM"}
                 MMMMEd{"E, d. MMMM"}
                 MMMMW{
-                    one{"'viku' W 'í' MMMM"}
                     other{"'viku' W 'í' MMMM"}
                 }
                 MMMMd{"d. MMMM"}
@@ -529,7 +422,6 @@ is{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    one{"'viku' w 'af' Y"}
                     other{"'viku' w 'af' Y"}
                 }
             }
@@ -596,7 +488,6 @@ is{
                 }
                 stand-alone{
                     abbreviated{
-                        afternoon1{"síðdegis"}
                         evening1{"kvöld"}
                         morning1{"morgunn"}
                         night1{"nótt"}
@@ -611,9 +502,6 @@ is{
                     }
                     wide{
                         afternoon1{"eftir hádegi"}
-                        evening1{"kvöld"}
-                        morning1{"morgunn"}
-                        night1{"nótt"}
                     }
                 }
             }
@@ -625,14 +513,6 @@ is{
                 abbreviated%variant{
                     0{"f.l.t."}
                     1{"l.t."}
-                }
-                narrow{
-                    0{"f.k."}
-                    1{"e.k."}
-                }
-                narrow%variant{
-                    0{"f.v.t."}
-                    1{"v.t."}
                 }
                 wide{
                     0{"fyrir Krist"}
@@ -819,147 +699,6 @@ is{
                         "3. fjórðungur",
                         "4. fjórðungur",
                     }
-                }
-            }
-        }
-        hebrew{
-            eras{
-                wide{
-                    0{"Anno Mundi"}
-                }
-            }
-            monthNames{
-                format{
-                    wide{
-                        "tishri",
-                        "heshvan",
-                        "kislev",
-                        "tevet",
-                        "shevat",
-                        "adar I",
-                        "adar",
-                        "nisan",
-                        "iyar",
-                        "sivan",
-                        "tamuz",
-                        "av",
-                        "elul",
-                        "adar II",
-                    }
-                }
-                stand-alone{
-                    wide{
-                        "tishri",
-                        "heshvan",
-                        "kislev",
-                        "tevet",
-                        "shevat",
-                        "adar I",
-                        "adar",
-                        "Nisan",
-                        "iyar",
-                        "sivan",
-                        "tamuz",
-                        "av",
-                        "elul",
-                        "adar II",
-                    }
-                }
-            }
-        }
-        indian{
-            monthNames{
-                format{
-                    wide{
-                        "chaitra",
-                        "vaisakha",
-                        "jyaistha",
-                        "asadha",
-                        "sravana",
-                        "bhadra",
-                        "asvina",
-                        "kartika",
-                        "agrahayana",
-                        "pausa",
-                        "magha",
-                        "phalguna",
-                    }
-                }
-            }
-        }
-        islamic{
-            eras{
-                abbreviated{
-                    0{"EH"}
-                }
-                wide{
-                    0{"eftir Hijra"}
-                }
-            }
-            monthNames{
-                format{
-                    abbreviated{
-                        "muh.",
-                        "saf.",
-                        "rab. I",
-                        "rab. II",
-                        "jum. I",
-                        "jum. II",
-                        "raj.",
-                        "sha.",
-                        "ram.",
-                        "shaw.",
-                        "dhuʻl-Q.",
-                        "dhuʻl-H.",
-                    }
-                    wide{
-                        "muharram",
-                        "safar",
-                        "rabiʻ I",
-                        "rabiʻ II",
-                        "jumada I",
-                        "jumada II",
-                        "rajab",
-                        "shaʻban",
-                        "ramadan",
-                        "shawwal",
-                        "dhuʻl-Qiʻdah",
-                        "dhuʻl-Hijjah",
-                    }
-                }
-            }
-        }
-        persian{
-            monthNames{
-                format{
-                    wide{
-                        "farvardin",
-                        "ordibehesht",
-                        "khordad",
-                        "tir",
-                        "mordad",
-                        "shahrivar",
-                        "mehr",
-                        "aban",
-                        "azar",
-                        "dey",
-                        "bahman",
-                        "esfand",
-                    }
-                }
-            }
-        }
-        roc{
-            eras{
-                abbreviated{
-                    0{"fyrir lýðv. Kína"}
-                    1{"Minguo"}
-                }
-                narrow{
-                    0{"fyrir lv.K."}
-                }
-                wide{
-                    0{"fyrir lýðveldi Kína"}
                 }
             }
         }
@@ -1218,7 +957,6 @@ is{
         }
         mon-narrow{
             relative{
-                "-1"{"síðasta mán."}
                 "0"{"á mán."}
                 "1"{"nk. mán."}
             }
@@ -1299,11 +1037,6 @@ is{
         }
         quarter-short{
             dn{"ársfjórð."}
-            relative{
-                "-1"{"síðasti ársfj."}
-                "0"{"þessi ársfj."}
-                "1"{"næsti ársfj."}
-            }
             relativeTime{
                 future{
                     one{"eftir {0} ársfj."}
@@ -1409,8 +1142,6 @@ is{
         }
         sun-narrow{
             relative{
-                "-1"{"síðasta sun."}
-                "0"{"á sun."}
                 "1"{"nk. sun."}
             }
         }
@@ -1450,8 +1181,6 @@ is{
         }
         thu-narrow{
             relative{
-                "-1"{"síðasta fim."}
-                "0"{"á fim."}
                 "1"{"nk. fim."}
             }
         }
@@ -1491,8 +1220,6 @@ is{
         }
         tue-narrow{
             relative{
-                "-1"{"síðasta þri."}
-                "0"{"á þri."}
                 "1"{"nk. þri."}
             }
         }
@@ -1532,8 +1259,6 @@ is{
         }
         wed-narrow{
             relative{
-                "-1"{"síðasta mið."}
-                "0"{"á mið."}
                 "1"{"nk. mið."}
             }
         }
@@ -1600,7 +1325,6 @@ is{
             }
             relativeTime{
                 future{
-                    one{"eftir {0} ár"}
                     other{"eftir {0} ár"}
                 }
                 past{

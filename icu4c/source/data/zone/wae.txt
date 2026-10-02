@@ -132,25 +132,16 @@ wae{
             ld{"Mitteleuropäiši Summerzit"}
             lg{"Mitteleuropäiši Zit"}
             ls{"Mitteleuropäiši Standardzit"}
-            sd{"MESZ"}
-            sg{"MEZ"}
-            ss{"MEZ"}
         }
         "meta:Europe_Eastern"{
             ld{"Ošteuropäiši Summerzit"}
             lg{"Ošteuropäiši Zit"}
             ls{"Ošteuropäiši Standardzit"}
-            sd{"OESZ"}
-            sg{"OEZ"}
-            ss{"OEZ"}
         }
         "meta:Europe_Western"{
             ld{"Wešteuropäiši Summerzit"}
             lg{"Wešteuropäiši Zit"}
             ls{"Wešteuropäiši Standardzit"}
-            sd{"WESZ"}
-            sg{"WEZ"}
-            ss{"WEZ"}
         }
         regionFormat{"{0} zit"}
     }

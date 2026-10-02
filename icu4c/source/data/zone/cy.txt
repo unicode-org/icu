@@ -315,17 +315,11 @@ cy{
             ld{"Amser Haf Canolbarth Ewrop"}
             lg{"Amser Canolbarth Ewrop"}
             ls{"Amser Safonol Canolbarth Ewrop"}
-            sd{"CEST"}
-            sg{"CET"}
-            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"Amser Haf Dwyrain Ewrop"}
             lg{"Amser Dwyrain Ewrop"}
             ls{"Amser Safonol Dwyrain Ewrop"}
-            sd{"EEST"}
-            sg{"EET"}
-            ss{"EET"}
         }
         "meta:Europe_Further_Eastern"{
             ls{"Amser Dwyrain Pell Ewrop"}
@@ -334,9 +328,6 @@ cy{
             ld{"Amser Haf Gorllewin Ewrop"}
             lg{"Amser Gorllewin Ewrop"}
             ls{"Amser Safonol Gorllewin Ewrop"}
-            sd{"WEST"}
-            sg{"WET"}
-            ss{"WET"}
         }
         "meta:Falkland"{
             ld{"Amser Haf Ynysoedd Falklands/Malvinas"}
@@ -356,7 +347,6 @@ cy{
         }
         "meta:GMT"{
             ls{"Amser Safonol Greenwich"}
-            ss{"GMT"}
         }
         "meta:Galapagos"{
             ls{"Amser Galapagos"}

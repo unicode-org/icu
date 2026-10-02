@@ -71,16 +71,6 @@ vai{
                 "{1} {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yMMdd",
-            }
             availableFormats{
                 MEd{"E, M/d"}
                 MMMEd{"E, MMM d"}

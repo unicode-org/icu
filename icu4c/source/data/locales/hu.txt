@@ -85,101 +85,77 @@ hu{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"0 E ¤"}
                         other{"0 E ¤"}
                     }
                     10000{
-                        one{"00 E ¤"}
                         other{"00 E ¤"}
                     }
                     100000{
-                        one{"000 E ¤"}
                         other{"000 E ¤"}
                     }
                     1000000{
-                        one{"0 M ¤"}
                         other{"0 M ¤"}
                     }
                     10000000{
-                        one{"00 M ¤"}
                         other{"00 M ¤"}
                     }
                     100000000{
-                        one{"000 M ¤"}
                         other{"000 M ¤"}
                     }
                     1000000000{
-                        one{"0 Mrd ¤"}
                         other{"0 Mrd ¤"}
                     }
                     10000000000{
-                        one{"00 Mrd ¤"}
                         other{"00 Mrd ¤"}
                     }
                     100000000000{
-                        one{"000 Mrd ¤"}
                         other{"000 Mrd ¤"}
                     }
                     1000000000000{
-                        one{"0 B ¤"}
                         other{"0 B ¤"}
                     }
                     10000000000000{
-                        one{"00 B ¤"}
                         other{"00 B ¤"}
                     }
                     100000000000000{
-                        one{"000 B ¤"}
                         other{"000 B ¤"}
                     }
                 }
                 decimalFormat{
                     1000{
-                        one{"0 E"}
                         other{"0 E"}
                     }
                     10000{
-                        one{"00 E"}
                         other{"00 E"}
                     }
                     100000{
-                        one{"000 E"}
                         other{"000 E"}
                     }
                     1000000{
-                        one{"0 M"}
                         other{"0 M"}
                     }
                     10000000{
-                        one{"00 M"}
                         other{"00 M"}
                     }
                     100000000{
-                        one{"000 M"}
                         other{"000 M"}
                     }
                     1000000000{
-                        one{"0 Mrd"}
                         other{"0 Mrd"}
                     }
                     10000000000{
-                        one{"00 Mrd"}
                         other{"00 Mrd"}
                     }
                     100000000000{
-                        one{"000 Mrd"}
                         other{"000 Mrd"}
                     }
                     1000000000000{
-                        one{"0 B"}
                         other{"0 B"}
                     }
                     10000000000000{
-                        one{"00 B"}
                         other{"00 B"}
                     }
                     100000000000000{
-                        one{"000 B"}
                         other{"000 B"}
                     }
                 }
@@ -209,102 +185,6 @@ hu{
         minimumGroupingDigits{"2"}
     }
     calendar{
-        buddhist{
-            eras{
-                abbreviated{
-                    0{"BK"}
-                }
-            }
-        }
-        chinese{
-            cyclicNameSets{
-                solarTerms{
-                    format{
-                        wide{
-                            "spring begins",
-                            "esővíz",
-                            "insects awaken",
-                            "spring equinox",
-                            "bright and clear",
-                            "grain rain",
-                            "summer begins",
-                            "grain full",
-                            "grain in ear",
-                            "summer solstice",
-                            "minor heat",
-                            "major heat",
-                            "autumn begins",
-                            "end of heat",
-                            "white dew",
-                            "autumn equinox",
-                            "cold dew",
-                            "frost descends",
-                            "winter begins",
-                            "minor snow",
-                            "major snow",
-                            "winter solstice",
-                            "minor cold",
-                            "major cold",
-                        }
-                    }
-                }
-            }
-            monthNames{
-                format{
-                    abbreviated{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                    }
-                }
-                stand-alone{
-                    wide{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                    }
-                }
-            }
-        }
-        coptic{
-            monthNames{
-                format{
-                    wide{
-                        "Thot",
-                        "Paophi",
-                        "Athür",
-                        "Koiak",
-                        "Tübi",
-                        "Mehir",
-                        "Phamenóth",
-                        "Pharmuthi",
-                        "Pakhónsz",
-                        "Pauni",
-                        "Epip",
-                        "Meszoré",
-                        "Pi Kogi Enavot",
-                    }
-                }
-            }
-        }
         generic{
             DateTimePatterns{
                 "H:mm:ss zzzz",
@@ -332,16 +212,6 @@ hu{
                 "{1} {0}",
                 "{1}, {0}",
                 "{1}, {0}",
-            }
-            DateTimeSkeletons{
-                "Hmmsszzzz",
-                "Hmmssz",
-                "Hmmss",
-                "Hmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMMd",
-                "GGGGGyMd",
             }
             availableFormats{
                 Bh{"B h"}
@@ -390,20 +260,6 @@ hu{
                 Bhm{
                     m{"h:mm – h:mm B"}
                 }
-                H{
-                    H{"H–H"}
-                }
-                Hm{
-                    H{"H:mm–H:mm"}
-                    m{"H:mm–H:mm"}
-                }
-                Hmv{
-                    H{"H:mm–H:mm v"}
-                    m{"H:mm–H:mm v"}
-                }
-                Hv{
-                    H{"H–H v"}
-                }
                 M{
                     M{"M–M."}
                 }
@@ -432,24 +288,6 @@ hu{
                 }
                 d{
                     d{"d–d."}
-                }
-                h{
-                    a{"a h – a h"}
-                    h{"a h–h"}
-                }
-                hm{
-                    a{"a h:mm – a h:mm"}
-                    h{"a h:mm–h:mm"}
-                    m{"a h:mm–h:mm"}
-                }
-                hmv{
-                    a{"a h:mm – a h:mm v"}
-                    h{"a h:mm–h:mm v"}
-                    m{"a h:mm–h:mm v"}
-                }
-                hv{
-                    a{"a h – a h v"}
-                    h{"a h–h v"}
                 }
                 y{
                     y{"G y–y."}
@@ -508,16 +346,6 @@ hu{
                 "{1} {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "Hmmsszzzz",
-                "Hmmssz",
-                "Hmmss",
-                "Hmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yMMdd",
-            }
             appendItems{
                 Day-Of-Week{"{0}, {1}"}
                 Time-Day-Of-Week{"{1}, {0}"}
@@ -551,7 +379,6 @@ hu{
                 MMMEd{"MMM d., E"}
                 MMMMEd{"MMMM d., E"}
                 MMMMW{
-                    one{"MMMM W. 'hete'"}
                     other{"MMMM W. 'hete'"}
                 }
                 MMMMd{"MMMM d."}
@@ -577,7 +404,6 @@ hu{
                 yQQQ{"y. QQQ"}
                 yQQQQ{"y. QQQQ"}
                 yw{
-                    one{"Y w. 'hete'"}
                     other{"Y w. 'hete'"}
                 }
             }
@@ -628,41 +454,19 @@ hu{
                     }
                     narrow{
                         afternoon1{"délután"}
-                        evening1{"este"}
-                        midnight{"éjfél"}
-                        morning1{"reggel"}
-                        morning2{"de."}
-                        night1{"éjjel"}
-                        night2{"hajnal"}
-                        noon{"dél"}
                     }
                     wide{
                         afternoon1{"délután"}
-                        evening1{"este"}
-                        midnight{"éjfél"}
-                        morning1{"reggel"}
                         morning2{"délelőtt"}
-                        night1{"éjjel"}
-                        night2{"hajnal"}
-                        noon{"dél"}
                     }
                 }
                 stand-alone{
                     narrow{
                         afternoon1{"délután"}
-                        evening1{"este"}
-                        morning1{"reggel"}
-                        morning2{"de."}
-                        night1{"éjjel"}
-                        night2{"hajnal"}
                     }
                     wide{
                         afternoon1{"délután"}
-                        evening1{"este"}
-                        morning1{"reggel"}
                         morning2{"délelőtt"}
-                        night1{"éjjel"}
-                        night2{"hajnal"}
                     }
                 }
             }
@@ -674,10 +478,6 @@ hu{
                 abbreviated%variant{
                     0{"i.e."}
                     1{"i.sz."}
-                }
-                narrow{
-                    0{"ie."}
-                    1{"isz."}
                 }
                 wide{
                     0{"Krisztus előtt"}
@@ -874,142 +674,6 @@ hu{
                 }
             }
         }
-        hebrew{
-            eras{
-                abbreviated{
-                    0{"TÉ"}
-                }
-            }
-            monthNames{
-                format{
-                    wide{
-                        "Tisri",
-                        "Hesván",
-                        "Kiszlév",
-                        "Tévész",
-                        "Svát",
-                        "Ádár I",
-                        "Ádár",
-                        "Niszán",
-                        "Ijár",
-                        "Sziván",
-                        "Tamuz",
-                        "Áv",
-                        "Elul",
-                        "Ádár II",
-                    }
-                }
-            }
-        }
-        islamic{
-            eras{
-                abbreviated{
-                    0{"MF"}
-                }
-            }
-            monthNames{
-                format{
-                    abbreviated{
-                        "Moh.",
-                        "Saf.",
-                        "Réb. 1",
-                        "Réb. 2",
-                        "Dsem. I",
-                        "Dsem. II",
-                        "Red.",
-                        "Sab.",
-                        "Ram.",
-                        "Sev.",
-                        "Dsül k.",
-                        "Dsül h.",
-                    }
-                    wide{
-                        "Moharrem",
-                        "Safar",
-                        "Rébi el avvel",
-                        "Rébi el accher",
-                        "Dsemádi el avvel",
-                        "Dsemádi el accher",
-                        "Redseb",
-                        "Sabán",
-                        "Ramadán",
-                        "Sevvál",
-                        "Dsül kade",
-                        "Dsül hedse",
-                    }
-                }
-                stand-alone{
-                    wide{
-                        "Moharrem",
-                        "Safar",
-                        "Rébi I",
-                        "Rébi II",
-                        "Dsemádi I",
-                        "Dsemádi II",
-                        "Redseb",
-                        "Sabán",
-                        "Ramadán",
-                        "Sevvál",
-                        "Dsül kade",
-                        "Dsül hedse",
-                    }
-                }
-            }
-        }
-        japanese{
-            DateTimePatterns{
-                "H:mm:ss zzzz",
-                "H:mm:ss z",
-                "H:mm:ss",
-                "H:mm",
-                "G y. MMMM d., EEEE",
-                "G y. MMMM d.",
-                "G y.MM.dd.",
-                "GGGGG y.MM.dd.",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "Hmmsszzzz",
-                "Hmmssz",
-                "Hmmss",
-                "Hmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMdd",
-                "GGGGGyMMdd",
-            }
-        }
-        persian{
-            monthNames{
-                format{
-                    wide{
-                        "farvardin",
-                        "ordibehesht",
-                        "khordad",
-                        "tir",
-                        "mordad",
-                        "shahrivar",
-                        "mehr",
-                        "aban",
-                        "azar",
-                        "dey",
-                        "bahman",
-                        "esfand",
-                    }
-                }
-            }
-        }
-        roc{
-            eras{
-                abbreviated{
-                    0{"R.O.C. előtt"}
-                }
-            }
-        }
     }
     characterLabel{
         activities{"tevékenység"}
@@ -1096,12 +760,6 @@ hu{
         western_asian_scripts{"nyugat-ázsiai írásrendszerek"}
         whitespace{"térköz"}
     }
-    contextTransforms{
-        typographicNames:intvector{
-            1,
-            1,
-        }
-    }
     delimiters{
         alternateQuotationEnd{"«"}
         alternateQuotationStart{"»"}
@@ -1119,11 +777,9 @@ hu{
             }
             relativeTime{
                 future{
-                    one{"{0} nap múlva"}
                     other{"{0} nap múlva"}
                 }
                 past{
-                    one{"{0} nappal ezelőtt"}
                     other{"{0} nappal ezelőtt"}
                 }
             }
@@ -1153,11 +809,9 @@ hu{
             }
             relativeTime{
                 future{
-                    one{"{0} péntek múlva"}
                     other{"{0} péntek múlva"}
                 }
                 past{
-                    one{"{0} péntekkel ezelőtt"}
                     other{"{0} péntekkel ezelőtt"}
                 }
             }
@@ -1169,11 +823,9 @@ hu{
             }
             relativeTime{
                 future{
-                    one{"{0} óra múlva"}
                     other{"{0} óra múlva"}
                 }
                 past{
-                    one{"{0} órával ezelőtt"}
                     other{"{0} órával ezelőtt"}
                 }
             }
@@ -1194,11 +846,9 @@ hu{
             }
             relativeTime{
                 future{
-                    one{"{0} perc múlva"}
                     other{"{0} perc múlva"}
                 }
                 past{
-                    one{"{0} perccel ezelőtt"}
                     other{"{0} perccel ezelőtt"}
                 }
             }
@@ -1220,11 +870,9 @@ hu{
             }
             relativeTime{
                 future{
-                    one{"{0} hétfő múlva"}
                     other{"{0} hétfő múlva"}
                 }
                 past{
-                    one{"{0} hétfővel ezelőtt"}
                     other{"{0} hétfővel ezelőtt"}
                 }
             }
@@ -1238,11 +886,9 @@ hu{
             }
             relativeTime{
                 future{
-                    one{"{0} hónap múlva"}
                     other{"{0} hónap múlva"}
                 }
                 past{
-                    one{"{0} hónappal ezelőtt"}
                     other{"{0} hónappal ezelőtt"}
                 }
             }
@@ -1264,11 +910,9 @@ hu{
             }
             relativeTime{
                 future{
-                    one{"{0} negyedév múlva"}
                     other{"{0} negyedév múlva"}
                 }
                 past{
-                    one{"{0} negyedévvel ezelőtt"}
                     other{"{0} negyedévvel ezelőtt"}
                 }
             }
@@ -1292,11 +936,9 @@ hu{
             }
             relativeTime{
                 future{
-                    one{"{0} szombat múlva"}
                     other{"{0} szombat múlva"}
                 }
                 past{
-                    one{"{0} szombattal ezelőtt"}
                     other{"{0} szombattal ezelőtt"}
                 }
             }
@@ -1308,11 +950,9 @@ hu{
             }
             relativeTime{
                 future{
-                    one{"{0} másodperc múlva"}
                     other{"{0} másodperc múlva"}
                 }
                 past{
-                    one{"{0} másodperccel ezelőtt"}
                     other{"{0} másodperccel ezelőtt"}
                 }
             }
@@ -1334,11 +974,9 @@ hu{
             }
             relativeTime{
                 future{
-                    one{"{0} vasárnap múlva"}
                     other{"{0} vasárnap múlva"}
                 }
                 past{
-                    one{"{0} vasárnappal ezelőtt"}
                     other{"{0} vasárnappal ezelőtt"}
                 }
             }
@@ -1351,11 +989,9 @@ hu{
             }
             relativeTime{
                 future{
-                    one{"{0} csütörtök múlva"}
                     other{"{0} csütörtök múlva"}
                 }
                 past{
-                    one{"{0} csütörtökkel ezelőtt"}
                     other{"{0} csütörtökkel ezelőtt"}
                 }
             }
@@ -1368,11 +1004,9 @@ hu{
             }
             relativeTime{
                 future{
-                    one{"{0} kedd múlva"}
                     other{"{0} kedd múlva"}
                 }
                 past{
-                    one{"{0} keddel ezelőtt"}
                     other{"{0} keddel ezelőtt"}
                 }
             }
@@ -1385,11 +1019,9 @@ hu{
             }
             relativeTime{
                 future{
-                    one{"{0} szerda múlva"}
                     other{"{0} szerda múlva"}
                 }
                 past{
-                    one{"{0} szerdával ezelőtt"}
                     other{"{0} szerdával ezelőtt"}
                 }
             }
@@ -1404,11 +1036,9 @@ hu{
             relativePeriod{"{0} hete"}
             relativeTime{
                 future{
-                    one{"{0} hét múlva"}
                     other{"{0} hét múlva"}
                 }
                 past{
-                    one{"{0} héttel ezelőtt"}
                     other{"{0} héttel ezelőtt"}
                 }
             }
@@ -1439,11 +1069,9 @@ hu{
             }
             relativeTime{
                 future{
-                    one{"{0} év múlva"}
                     other{"{0} év múlva"}
                 }
                 past{
-                    one{"{0} évvel ezelőtt"}
                     other{"{0} évvel ezelőtt"}
                 }
             }

@@ -224,11 +224,6 @@ da{
             lg{"Pacific-tid"}
             ls{"Pacific-normaltid"}
         }
-        "meta:Anadyr"{
-            ld{"Anadyr-sommertid"}
-            lg{"Anadyr-tid"}
-            ls{"Anadyr-normaltid"}
-        }
         "meta:Apia"{
             ld{"Vest-Samoa-sommertid"}
             lg{"Vest-Samoa-tid"}
@@ -377,17 +372,11 @@ da{
             ld{"Centraleuropæisk sommertid"}
             lg{"Centraleuropæisk tid"}
             ls{"Centraleuropæisk normaltid"}
-            sd{"CEST"}
-            sg{"CET"}
-            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"Østeuropæisk sommertid"}
             lg{"Østeuropæisk tid"}
             ls{"Østeuropæisk normaltid"}
-            sd{"EEST"}
-            sg{"EET"}
-            ss{"EET"}
         }
         "meta:Europe_Further_Eastern"{
             ls{"Fjernøsteuropæisk tid"}
@@ -396,9 +385,6 @@ da{
             ld{"Vesteuropæisk sommertid"}
             lg{"Vesteuropæisk tid"}
             ls{"Vesteuropæisk normaltid"}
-            sd{"WEST"}
-            sg{"WET"}
-            ss{"WET"}
         }
         "meta:Falkland"{
             ld{"Falklandsøerne-sommertid"}

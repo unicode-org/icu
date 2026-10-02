@@ -3,9 +3,4 @@
 // Generated using tools/cldr/cldr-to-icu/
 es_EC{
     %%Parent{"es_419"}
-    zoneStrings{
-        "meta:Ecuador"{
-            ss{"ECT"}
-        }
-    }
 }

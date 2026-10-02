@@ -24,11 +24,6 @@ mai{
         native{"deva"}
     }
     calendar{
-        buddhist{
-            availableFormats{
-                yyyyMd{"dd--MM-y G"}
-            }
-        }
         generic{
             DateTimePatterns{
                 "h:mm:ss a zzzz",
@@ -50,16 +45,6 @@ mai{
                 "{1} के {0}",
                 "{1}, {0}",
                 "{1}, {0}",
-            }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMMd",
-                "GyMd",
             }
         }
         gregorian{
@@ -87,16 +72,6 @@ mai{
                 "{1} के {0}",
                 "{1}, {0}",
                 "{1}, {0}",
-            }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yyMd",
             }
             availableFormats{
                 Bh{"B h"}
@@ -302,7 +277,6 @@ mai{
         day-short{
             relative{
                 "-1"{"बीतल काल्हि"}
-                "0"{"आजुक दिन"}
                 "1"{"आबय वला काल्हि"}
             }
             relativeTime{

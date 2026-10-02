@@ -3,11 +3,6 @@
 // Generated using tools/cldr/cldr-to-icu/
 ur_IN{
     NumberElements{
-        arabext{
-            patterns{
-                currencyFormat%noCurrency{"#,##0.00"}
-            }
-        }
         default{"arabext"}
         latn{
             miscPatterns{
@@ -28,7 +23,6 @@ ur_IN{
             relativeTime{
                 future{
                     one{"{0} دنوں میں"}
-                    other{"{0} دنوں میں"}
                 }
             }
         }
@@ -38,15 +32,12 @@ ur_IN{
         fri{
             relative{
                 "-1"{"پچھلے جمعہ"}
-                "0"{"اس جمعہ"}
-                "1"{"اگلے جمعہ"}
             }
         }
         hour-narrow{
             relativeTime{
                 past{
                     one{"{0} گھنٹہ قبل"}
-                    other{"{0} گھنٹے قبل"}
                 }
             }
         }
@@ -61,7 +52,6 @@ ur_IN{
         minute{
             relativeTime{
                 past{
-                    one{"{0} منٹ قبل"}
                     other{"{0} منٹ قبل"}
                 }
             }
@@ -75,8 +65,6 @@ ur_IN{
         }
         month{
             relative{
-                "-1"{"گزشتہ ماہ"}
-                "0"{"اس ماہ"}
                 "1"{"اگلے ماہ"}
             }
             relativeTime{
@@ -104,7 +92,6 @@ ur_IN{
         second{
             relativeTime{
                 past{
-                    one{"{0} سیکنڈ قبل"}
                     other{"{0} سیکنڈ قبل"}
                 }
             }
@@ -112,33 +99,25 @@ ur_IN{
         thu{
             relative{
                 "-1"{"پچھلے جمعرات"}
-                "0"{"اس جمعرات"}
-                "1"{"اگلے جمعرات"}
             }
         }
         tue{
             relative{
                 "-1"{"پچھلے منگل"}
-                "0"{"اس منگل"}
-                "1"{"اگلے منگل"}
             }
         }
         wed{
             relative{
                 "-1"{"پچھلے بدھ"}
-                "0"{"اس بدھ"}
-                "1"{"اگلے بدھ"}
             }
         }
         week{
             relative{
                 "-1"{"گزشتہ ہفتہ"}
-                "0"{"اس ہفتہ"}
                 "1"{"اگلے ہفتہ"}
             }
             relativeTime{
                 future{
-                    one{"{0} ہفتہ میں"}
                     other{"{0} ہفتوں میں"}
                 }
                 past{
@@ -151,7 +130,6 @@ ur_IN{
             relativeTime{
                 past{
                     one{"{0} ہفتہ قبل"}
-                    other{"{0} ہفتے قبل"}
                 }
             }
         }
@@ -159,7 +137,6 @@ ur_IN{
             relativeTime{
                 past{
                     one{"{0} ہفتے قبل"}
-                    other{"{0} ہفتے قبل"}
                 }
             }
         }
@@ -174,7 +151,6 @@ ur_IN{
         year-short{
             relativeTime{
                 past{
-                    one{"{0} سال پہلے"}
                     other{"{0} سالوں پہلے"}
                 }
             }

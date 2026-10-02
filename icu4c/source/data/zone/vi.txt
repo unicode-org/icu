@@ -131,11 +131,6 @@ vi{
             lg{"Giờ Thái Bình Dương"}
             ls{"Giờ chuẩn Thái Bình Dương"}
         }
-        "meta:Anadyr"{
-            ld{"Giờ mùa hè Anadyr"}
-            lg{"Giờ Anadyr"}
-            ls{"Giờ Chuẩn Anadyr"}
-        }
         "meta:Apia"{
             ld{"Giờ mùa hè Apia"}
             lg{"Giờ Apia"}
@@ -223,9 +218,6 @@ vi{
             ld{"Giờ mùa hè Cape Verde"}
             lg{"Giờ Cape Verde"}
             ls{"Giờ Chuẩn Cape Verde"}
-        }
-        "meta:Casey"{
-            ls{"Giờ Casey"}
         }
         "meta:Chamorro"{
             ls{"Giờ Chamorro"}

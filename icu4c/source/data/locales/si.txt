@@ -80,51 +80,39 @@ si{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"¤ද0"}
                         other{"¤ද0"}
                     }
                     10000{
-                        one{"¤ද00"}
                         other{"¤ද00"}
                     }
                     100000{
-                        one{"¤ද000"}
                         other{"¤ද000"}
                     }
                     1000000{
-                        one{"¤මි0"}
                         other{"¤මි0"}
                     }
                     10000000{
-                        one{"¤මි00"}
                         other{"¤මි00"}
                     }
                     100000000{
-                        one{"¤මි000"}
                         other{"¤මි000"}
                     }
                     1000000000{
-                        one{"¤බි0"}
                         other{"¤බි0"}
                     }
                     10000000000{
-                        one{"¤බි00"}
                         other{"¤බි00"}
                     }
                     100000000000{
-                        one{"¤බි000"}
                         other{"¤බි000"}
                     }
                     1000000000000{
-                        one{"¤ට්‍රි0"}
                         other{"¤ට්‍රි0"}
                     }
                     10000000000000{
-                        one{"¤ට්‍රි00"}
                         other{"¤ට්‍රි00"}
                     }
                     100000000000000{
-                        one{"¤ට්‍රි000"}
                         other{"¤ට්‍රි000"}
                     }
                 }
@@ -180,51 +168,39 @@ si{
                 }
                 decimalFormat{
                     1000{
-                        one{"ද0"}
                         other{"ද0"}
                     }
                     10000{
-                        one{"ද00"}
                         other{"ද00"}
                     }
                     100000{
-                        one{"ද000"}
                         other{"ද000"}
                     }
                     1000000{
-                        one{"මි0"}
                         other{"මි0"}
                     }
                     10000000{
-                        one{"මි00"}
                         other{"මි00"}
                     }
                     100000000{
-                        one{"මි000"}
                         other{"මි000"}
                     }
                     1000000000{
-                        one{"බි0"}
                         other{"බි0"}
                     }
                     10000000000{
-                        one{"බි00"}
                         other{"බි00"}
                     }
                     100000000000{
-                        one{"බි000"}
                         other{"බි000"}
                     }
                     1000000000000{
-                        one{"ට්‍රි0"}
                         other{"ට්‍රි0"}
                     }
                     10000000000000{
-                        one{"ට්‍රි00"}
                         other{"ට්‍රි00"}
                     }
                     100000000000000{
-                        one{"ට්‍රි000"}
                         other{"ට්‍රි000"}
                     }
                 }
@@ -308,14 +284,6 @@ si{
                     M{"d/M/y – G d/M/y"}
                     d{"G d/M/y – d/M/y"}
                 }
-                Hm{
-                    H{"HH.mm–HH.mm"}
-                    m{"HH.mm–HH.mm"}
-                }
-                Hmv{
-                    H{"HH.mm–HH.mm v"}
-                    m{"HH.mm–HH.mm v"}
-                }
                 M{
                     M{"M–M"}
                 }
@@ -335,24 +303,6 @@ si{
                     d{"M/d – M/d"}
                 }
                 fallback{"{0} – {1}"}
-                h{
-                    a{"a h – a h"}
-                    h{"a h–h"}
-                }
-                hm{
-                    a{"a h.mm – a h.mm"}
-                    h{"a h.mm – h.mm"}
-                    m{"a h.mm – h.mm"}
-                }
-                hmv{
-                    a{"a h.mm – a h.mm v"}
-                    h{"a h.mm – h.mm v"}
-                    m{"a h.mm – h.mm v"}
-                }
-                hv{
-                    a{"a h – a h v"}
-                    h{"a h – h v"}
-                }
                 yM{
                     M{"G y/M – y/M"}
                     y{"G y/M – y/M"}
@@ -388,21 +338,6 @@ si{
                 "පෙ",
                 "ප",
             }
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "y MMMM d, EEEE",
-                "y MMMM d",
-                "y MMM d",
-                "y-MM-dd",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
             DateTimePatterns%atTime{
                 "{1} දින {0}",
                 "{1} දින {0}",
@@ -435,7 +370,6 @@ si{
                 MEd{"M-d, E"}
                 MMMEd{"MMM d E"}
                 MMMMW{
-                    one{"MMMM සතිය W"}
                     other{"MMMM සතිය W"}
                 }
                 Md{"M-d"}
@@ -451,7 +385,6 @@ si{
                 yMMMMd{"y MMMM d"}
                 yMd{"y-M-d"}
                 yw{
-                    one{"Y සතිය w"}
                     other{"Y සතිය w"}
                 }
             }
@@ -515,7 +448,6 @@ si{
                         midnight{"මැ"}
                         morning1{"පා"}
                         morning2{"උ"}
-                        night1{"රෑ"}
                         night2{"මැ"}
                         noon{"ම"}
                     }
@@ -767,11 +699,9 @@ si{
             }
             relativeTime{
                 future{
-                    one{"දින {0}න්"}
                     other{"දින {0}න්"}
                 }
                 past{
-                    one{"දින {0}කට පෙර"}
                     other{"දින {0}කට පෙර"}
                 }
             }
@@ -806,11 +736,9 @@ si{
             relativeTime{
                 future{
                     one{"සිකුරදාවන් +{0} කින්"}
-                    other{"සිකුරදාවන් +{0} කින්"}
                 }
                 past{
                     one{"සිකුරදාවන් {0} කට පෙර"}
-                    other{"සිකුරදාවන් {0} කට පෙර"}
                 }
             }
         }
@@ -821,11 +749,9 @@ si{
             }
             relativeTime{
                 future{
-                    one{"පැය {0}කින්"}
                     other{"පැය {0}කින්"}
                 }
                 past{
-                    one{"පැය {0}කට පෙර"}
                     other{"පැය {0}කට පෙර"}
                 }
             }
@@ -837,11 +763,9 @@ si{
             }
             relativeTime{
                 future{
-                    one{"මිනිත්තු {0}කින්"}
                     other{"මිනිත්තු {0}කින්"}
                 }
                 past{
-                    one{"මිනිත්තු {0}කට පෙර"}
                     other{"මිනිත්තු {0}කට පෙර"}
                 }
             }
@@ -870,11 +794,9 @@ si{
             relativeTime{
                 future{
                     one{"සඳුදාවන් {0} කින්"}
-                    other{"සඳුදාවන් {0} කින්"}
                 }
                 past{
                     one{"සඳුදාවන් {0} කට පෙර"}
-                    other{"සඳුදාවන් {0} කට පෙර"}
                 }
             }
         }
@@ -887,11 +809,9 @@ si{
             }
             relativeTime{
                 future{
-                    one{"මාස {0}කින්"}
                     other{"මාස {0}කින්"}
                 }
                 past{
-                    one{"මාස {0}කට පෙර"}
                     other{"මාස {0}කට පෙර"}
                 }
             }
@@ -913,22 +833,15 @@ si{
             }
             relativeTime{
                 future{
-                    one{"කාර්තු {0}කින්"}
                     other{"කාර්තු {0}කින්"}
                 }
                 past{
-                    one{"කාර්තු {0}කට පෙර"}
                     other{"කාර්තු {0}කට පෙර"}
                 }
             }
         }
         quarter-short{
             dn{"කාර්."}
-            relative{
-                "-1"{"පසුගිය කාර්."}
-                "0"{"මෙම කාර්."}
-                "1"{"ඊළඟ කාර්."}
-            }
             relativeTime{
                 future{
                     one{"කාර්. {0}කින්"}
@@ -961,11 +874,9 @@ si{
             relativeTime{
                 future{
                     one{"සෙනසුරාදාවන් +{0} කින්"}
-                    other{"සෙනසුරාදාවන් +{0} කින්"}
                 }
                 past{
                     one{"සෙනසුරාදාවන් {0} කට පෙර"}
-                    other{"සෙනසුරාදාවන් {0} කට පෙර"}
                 }
             }
         }
@@ -976,11 +887,9 @@ si{
             }
             relativeTime{
                 future{
-                    one{"තත්පර {0}කින්"}
                     other{"තත්පර {0}කින්"}
                 }
                 past{
-                    one{"තත්පර {0}කට පෙර"}
                     other{"තත්පර {0}කට පෙර"}
                 }
             }
@@ -1009,11 +918,9 @@ si{
             relativeTime{
                 future{
                     one{"ඉරිදාවන් {0} කින්"}
-                    other{"ඉරිදාවන් {0} කින්"}
                 }
                 past{
                     one{"ඉරිදාවන් {0} කට පෙර"}
-                    other{"ඉරිදාවන් {0} කට පෙර"}
                 }
             }
         }
@@ -1038,11 +945,9 @@ si{
             relativeTime{
                 future{
                     one{"බ්‍රහස්පතින්දාවන් {0} කින්"}
-                    other{"බ්‍රහස්පතින්දාවන් {0} කින්"}
                 }
                 past{
                     one{"බ්‍රහස්පතින්දාවන් {0} කට පෙර"}
-                    other{"බ්‍රහස්පතින්දාවන් {0} කට පෙර"}
                 }
             }
         }
@@ -1067,11 +972,9 @@ si{
             relativeTime{
                 future{
                     one{"අඟහරුවාදාවන් {0} කින්"}
-                    other{"අඟහරුවාදාවන් {0} කින්"}
                 }
                 past{
                     one{"අඟහරුවාදාවන් {0} කට පෙර"}
-                    other{"අඟහරුවාදාවන් {0} කට පෙර"}
                 }
             }
         }
@@ -1096,11 +999,9 @@ si{
             relativeTime{
                 future{
                     one{"බදාදාවන් {0} කින්"}
-                    other{"බදාදාවන් {0} කින්"}
                 }
                 past{
                     one{"බදාදාවන් {0} කට පෙර"}
-                    other{"බදාදාවන් {0} කට පෙර"}
                 }
             }
         }
@@ -1114,11 +1015,9 @@ si{
             relativePeriod{"{0} වෙනි සතිය"}
             relativeTime{
                 future{
-                    one{"සති {0}කින්"}
                     other{"සති {0}කින්"}
                 }
                 past{
-                    one{"සති {0}කට පෙර"}
                     other{"සති {0}කට පෙර"}
                 }
             }
@@ -1149,11 +1048,9 @@ si{
             }
             relativeTime{
                 future{
-                    one{"වසර {0}කින්"}
                     other{"වසර {0}කින්"}
                 }
                 past{
-                    one{"වසර {0}කට පෙර"}
                     other{"වසර {0}කට පෙර"}
                 }
             }

@@ -65,24 +65,14 @@ hi_Latn{
             }
         }
         mass{
-            stone{
-                dnam{"stones"}
-                one{"{0} stone"}
-                other{"{0} stones"}
-            }
             ton{
                 one{"{0} tonne"}
-                other{"{0} tons"}
             }
             tonne{
                 one{"{0} metric ton"}
-                other{"{0} tonnes"}
             }
         }
         pressure{
-            gasoline-energy-density{
-                dnam{"gasoline equivalent"}
-            }
             inch-ofhg{
                 one{"{0} inch mercury"}
                 other{"{0} inches mercury"}
@@ -106,7 +96,6 @@ hi_Latn{
             }
             kelvin{
                 dnam{"kelvins"}
-                one{"{0} kelvin"}
                 other{"{0} kelvins"}
             }
         }
@@ -182,7 +171,6 @@ hi_Latn{
         }
         pressure{
             bar{
-                one{"{0}bar"}
                 other{"{0}bars"}
             }
             ofhg{
@@ -231,7 +219,6 @@ hi_Latn{
     unitsShort{
         angle{
             revolution{
-                one{"{0} rev"}
                 other{"{0} rev"}
             }
         }
@@ -269,13 +256,9 @@ hi_Latn{
                 one{"{0} CD"}
                 other{"{0} CD"}
             }
-            stone{
-                dnam{"stones"}
-            }
         }
         pressure{
             bar{
-                one{"{0} bar"}
                 other{"{0} bars"}
             }
             ofhg{
@@ -301,7 +284,6 @@ hi_Latn{
                 other{"{0} dram fl"}
             }
             drop{
-                one{"{0} drop"}
                 other{"{0} drop"}
             }
             fluid-ounce-imperial{
@@ -314,11 +296,9 @@ hi_Latn{
                 other{"{0} gal US"}
             }
             gallon-imperial{
-                one{"{0} gal"}
                 other{"{0} gal Imp."}
             }
             pinch{
-                one{"{0} pinch"}
                 other{"{0} pinch"}
             }
             quart-imperial{
