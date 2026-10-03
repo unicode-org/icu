@@ -27,7 +27,7 @@ case characters for a given language. Case is a normative property of characters
 in specific alphabets (e.g. Latin, Greek, Cyrillic, Armenian, and Georgian)
 whereby characters are considered to be variants of a single letter. ICU refers
 to these variants, which may differ markedly in shape and size, as uppercase
-letters (also known as capital or majuscule) and lower-case letters (also known
+letters (also known as capital or majuscule) and lowercase letters (also known
 as small or minuscule). Alphabets with case differences are called bicameral and
 alphabets without case differences are called unicameral.
 
