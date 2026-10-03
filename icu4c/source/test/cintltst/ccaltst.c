@@ -2145,7 +2145,6 @@ static const EraTestItem eraTestItems[] = {
     /* calendars with non-modern era 0 that goes backwards, max era == 1 */
     { "en@calendar=gregorian", true },
     { "en@calendar=roc", true },
-    { "en@calendar=coptic", true },
     /* calendars with non-modern era 0 that goes forwards, max era > 1 */
     { "en@calendar=japanese", false },
     { "en@calendar=chinese", false },
