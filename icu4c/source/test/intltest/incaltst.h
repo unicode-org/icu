@@ -66,6 +66,8 @@ public:
     void TestConsistencyJapanese();
     void TestIslamicUmalquraCalendarSlow();
     void TestJapaneseLargeEra();
+    void TestMyanmar(void);
+    void TestMyanmarFormat(void);
 
  protected:
     // Test a Gregorian-Like calendar
