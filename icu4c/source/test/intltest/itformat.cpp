@@ -293,6 +293,9 @@ void IntlTestFormat::runIndexedTest( int32_t index, UBool exec, const char* &nam
         TESTCLASS(60,TestMessageFormat2);
 #endif
 #endif
+#if !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
+        TESTCLASS(61,DataDrivenChineseCalendarTest);
+#endif
         default: name = ""; break; //needed to end loop
     }
     if (exec) {
