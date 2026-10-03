@@ -908,8 +908,16 @@ ModulusSubstitution::doSubstitution(int64_t number, UnicodeString& toInsertInto,
         // a >>> substitution goes straight to a particular rule to
         // format the substitution value
     } else {
+        // Bound explicit >>> rule delegation (ICU-23144 fixed the parse path;
+        // the format path had the same flaw): without incrementing the count
+        // and enforcing the limit here, a long chain of >>> rules bypasses the
+        // RECURSION_LIMIT check in NFRuleSet::format and exhausts the stack.
+        if (recursionCount >= RECURSION_LIMIT) {
+            status = U_INVALID_STATE_ERROR;
+            return;
+        }
         int64_t numberToFormat = transformNumber(number);
-        ruleToUse->doFormat(numberToFormat, toInsertInto, _pos + getPos(), recursionCount, status);
+        ruleToUse->doFormat(numberToFormat, toInsertInto, _pos + getPos(), recursionCount + 1, status);
     }
 }
 
@@ -934,9 +942,17 @@ ModulusSubstitution::doSubstitution(double number, UnicodeString& toInsertInto, 
         // a >>> substitution goes straight to a particular rule to
         // format the substitution value
     } else {
+        // Bound explicit >>> rule delegation (ICU-23144 fixed the parse path;
+        // the format path had the same flaw): without incrementing the count
+        // and enforcing the limit here, a long chain of >>> rules bypasses the
+        // RECURSION_LIMIT check in NFRuleSet::format and exhausts the stack.
+        if (recursionCount >= RECURSION_LIMIT) {
+            status = U_INVALID_STATE_ERROR;
+            return;
+        }
         double numberToFormat = transformNumber(number);
 
-        ruleToUse->doFormat(numberToFormat, toInsertInto, _pos + getPos(), recursionCount, status);
+        ruleToUse->doFormat(numberToFormat, toInsertInto, _pos + getPos(), recursionCount + 1, status);
     }
 }
 
