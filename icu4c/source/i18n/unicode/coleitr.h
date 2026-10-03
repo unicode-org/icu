@@ -289,19 +289,21 @@ public:
 
 #ifndef U_HIDE_INTERNAL_API
     /** @internal */
-    static inline CollationElementIterator *fromUCollationElements(UCollationElements *uc) {
+    static inline CollationElementIterator*
+    fromUCollationElements(UCollationElements* uc U_LIFETIME_BOUND) {
         return reinterpret_cast<CollationElementIterator *>(uc);
     }
     /** @internal */
-    static inline const CollationElementIterator *fromUCollationElements(const UCollationElements *uc) {
+    static inline const CollationElementIterator*
+    fromUCollationElements(const UCollationElements* uc U_LIFETIME_BOUND) {
         return reinterpret_cast<const CollationElementIterator *>(uc);
     }
     /** @internal */
-    inline UCollationElements *toUCollationElements() {
+    inline UCollationElements* toUCollationElements() U_LIFETIME_BOUND {
         return reinterpret_cast<UCollationElements *>(this);
     }
     /** @internal */
-    inline const UCollationElements *toUCollationElements() const {
+    inline const UCollationElements* toUCollationElements() const U_LIFETIME_BOUND {
         return reinterpret_cast<const UCollationElements *>(this);
     }
 #endif  // U_HIDE_INTERNAL_API
@@ -348,7 +350,7 @@ private:
     * @param other    the object to be copied
     */
     const CollationElementIterator&
-        operator=(const CollationElementIterator& other);
+    operator=(const CollationElementIterator& other) U_LIFETIME_BOUND;
 
     CollationElementIterator() = delete; // default constructor not implemented
 

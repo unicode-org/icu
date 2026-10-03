@@ -98,7 +98,7 @@ CollationKey::~CollationKey()
     if(fFlagAndLength < 0) { uprv_free(fUnion.fFields.fBytes); }
 }
 
-uint8_t *CollationKey::reallocate(int32_t newCapacity, int32_t length) {
+uint8_t* CollationKey::reallocate(int32_t newCapacity, int32_t length) U_LIFETIME_BOUND {
     uint8_t *newBytes = static_cast<uint8_t *>(uprv_malloc(newCapacity));
     if(newBytes == nullptr) { return nullptr; }
     if(length > 0) {
@@ -119,7 +119,7 @@ void CollationKey::setLength(int32_t newLength) {
 
 // set the key to an empty state
 CollationKey&
-CollationKey::reset()
+CollationKey::reset() U_LIFETIME_BOUND
 {
     fFlagAndLength &= 0x80000000;
     fHashCode = kEmptyHashCode;
@@ -129,7 +129,7 @@ CollationKey::reset()
 
 // set the key to a "bogus" or invalid state
 CollationKey&
-CollationKey::setToBogus()
+CollationKey::setToBogus() U_LIFETIME_BOUND
 {
     fFlagAndLength &= 0x80000000;
     fHashCode = kBogusHashCode;
@@ -146,7 +146,7 @@ CollationKey::operator==(const CollationKey& source) const
 }
 
 const CollationKey&
-CollationKey::operator=(const CollationKey& other)
+CollationKey::operator=(const CollationKey& other) U_LIFETIME_BOUND
 {
     if (this != &other)
     {

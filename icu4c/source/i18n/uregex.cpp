@@ -319,10 +319,10 @@ uregex_clone(const URegularExpression *source2, UErrorCode *status)  {
 //    uregex_pattern
 //
 //------------------------------------------------------------------------------
-U_CAPI const char16_t * U_EXPORT2
-uregex_pattern(const  URegularExpression *regexp2,
-                      int32_t            *patLength,
-                      UErrorCode         *status)  {
+U_CAPI const char16_t* U_EXPORT2
+uregex_pattern(const URegularExpression* regexp2 U_LIFETIME_BOUND,
+               int32_t* patLength,
+               UErrorCode* status) {
     RegularExpression *regexp = (RegularExpression*)regexp2;
 
     if (validateRE(regexp, false, status) == false) {
@@ -340,9 +340,9 @@ uregex_pattern(const  URegularExpression *regexp2,
 //    uregex_patternUText
 //
 //------------------------------------------------------------------------------
-U_CAPI UText * U_EXPORT2
-uregex_patternUText(const URegularExpression *regexp2,
-                          UErrorCode         *status)  {
+U_CAPI UText* U_EXPORT2
+uregex_patternUText(const URegularExpression* regexp2 U_LIFETIME_BOUND,
+                    UErrorCode* status) {
     RegularExpression *regexp = (RegularExpression*)regexp2;
     return regexp->fPat->patternText(*status);
 }
@@ -433,10 +433,10 @@ uregex_setUText(URegularExpression *regexp2,
 //    uregex_getText
 //
 //------------------------------------------------------------------------------
-U_CAPI const char16_t * U_EXPORT2
-uregex_getText(URegularExpression *regexp2,
-               int32_t            *textLength,
-               UErrorCode         *status)  {
+U_CAPI const char16_t* U_EXPORT2
+uregex_getText(URegularExpression* regexp2 U_LIFETIME_BOUND,
+               int32_t* textLength,
+               UErrorCode* status) {
     RegularExpression *regexp = (RegularExpression*)regexp2;
     if (validateRE(regexp, false, status) == false) {
         return nullptr;
@@ -473,10 +473,10 @@ uregex_getText(URegularExpression *regexp2,
 //    uregex_getUText
 //
 //------------------------------------------------------------------------------
-U_CAPI UText * U_EXPORT2
-uregex_getUText(URegularExpression *regexp2,
-                UText              *dest,
-                UErrorCode         *status)  {
+U_CAPI UText* U_EXPORT2
+uregex_getUText(URegularExpression* regexp2,
+                UText* dest U_LIFETIME_BOUND,
+                UErrorCode* status) {
     RegularExpression *regexp = (RegularExpression*)regexp2;
     if (validateRE(regexp, false, status) == false) {
         return dest;
@@ -732,12 +732,12 @@ uregex_group(URegularExpression *regexp2,
 //    uregex_groupUText
 //
 //------------------------------------------------------------------------------
-U_CAPI UText * U_EXPORT2
-uregex_groupUText(URegularExpression *regexp2,
-                  int32_t             groupNum,
-                  UText              *dest,
-                  int64_t            *groupLength,
-                  UErrorCode         *status)  {
+U_CAPI UText* U_EXPORT2
+uregex_groupUText(URegularExpression* regexp2,
+                  int32_t groupNum,
+                  UText* dest U_LIFETIME_BOUND,
+                  int64_t* groupLength,
+                  UErrorCode* status) {
     RegularExpression *regexp = (RegularExpression*)regexp2;
     if (validateRE(regexp, true, status) == false) {
         UErrorCode emptyTextStatus = U_ZERO_ERROR;
@@ -1197,11 +1197,11 @@ uregex_replaceAll(URegularExpression    *regexp2,
 //    uregex_replaceAllUText
 //
 //------------------------------------------------------------------------------
-U_CAPI UText * U_EXPORT2
-uregex_replaceAllUText(URegularExpression    *regexp2,
-                       UText                 *replacementText,
-                       UText                 *dest,
-                       UErrorCode            *status)  {
+U_CAPI UText* U_EXPORT2
+uregex_replaceAllUText(URegularExpression* regexp2,
+                       UText* replacementText,
+                       UText* dest U_LIFETIME_BOUND,
+                       UErrorCode* status) {
     RegularExpression *regexp = (RegularExpression*)regexp2;
     if (validateRE(regexp, true, status) == false) {
         return nullptr;
@@ -1258,11 +1258,11 @@ uregex_replaceFirst(URegularExpression  *regexp2,
 //    uregex_replaceFirstUText
 //
 //------------------------------------------------------------------------------
-U_CAPI UText * U_EXPORT2
-uregex_replaceFirstUText(URegularExpression  *regexp2,
-                         UText                 *replacementText,
-                         UText                 *dest,
-                         UErrorCode            *status)  {
+U_CAPI UText* U_EXPORT2
+uregex_replaceFirstUText(URegularExpression* regexp2,
+                         UText* replacementText,
+                         UText* dest U_LIFETIME_BOUND,
+                         UErrorCode* status) {
     RegularExpression *regexp = (RegularExpression*)regexp2;
     if (validateRE(regexp, true, status) == false) {
         return nullptr;
@@ -1752,10 +1752,10 @@ uregex_appendTail(URegularExpression    *regexp2,
 //
 //   uregex_appendTailUText...can just use the normal C++ method
 //
-U_CAPI UText * U_EXPORT2
-uregex_appendTailUText(URegularExpression    *regexp2,
-                       UText                 *dest,
-                       UErrorCode            *status)  {
+U_CAPI UText* U_EXPORT2
+uregex_appendTailUText(URegularExpression* regexp2,
+                       UText* dest U_LIFETIME_BOUND,
+                       UErrorCode* status) {
     RegularExpression *regexp = (RegularExpression*)regexp2;
     return regexp->fMatcher->appendTail(dest, *status);
 }

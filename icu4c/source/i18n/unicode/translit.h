@@ -582,7 +582,7 @@ protected:
      * Assignment operator.
      * @stable ICU 2.4
      */
-    Transliterator& operator=(const Transliterator&);
+    Transliterator& operator=(const Transliterator&) U_LIFETIME_BOUND;
 
     /**
      * Create a transliterator from a basic ID.  This is an ID
@@ -962,7 +962,7 @@ public:
      * @see #getAvailableIDs
      * @stable ICU 2.0
      */
-    virtual const UnicodeString& getID() const;
+    virtual const UnicodeString& getID() const U_LIFETIME_BOUND;
 
     /**
      * Returns a name for this transliterator that is appropriate for
@@ -974,7 +974,7 @@ public:
      * @stable ICU 2.0
      */
     static UnicodeString& U_EXPORT2 getDisplayName(const UnicodeString& ID,
-                                         UnicodeString& result);
+                                                   UnicodeString& result U_LIFETIME_BOUND);
 
     /**
      * Returns a name for this transliterator that is appropriate for
@@ -998,8 +998,8 @@ public:
      * @stable ICU 2.0
      */
     static UnicodeString& U_EXPORT2 getDisplayName(const UnicodeString& ID,
-                                         const Locale& inLocale,
-                                         UnicodeString& result);
+                                                   const Locale& inLocale,
+                                                   UnicodeString& result U_LIFETIME_BOUND);
 
     /**
      * Returns the filter used by this transliterator, or <tt>nullptr</tt>
@@ -1008,7 +1008,7 @@ public:
      *         if this transliterator uses no filter.
      * @stable ICU 2.0
      */
-    const UnicodeFilter* getFilter() const;
+    const UnicodeFilter* getFilter() const U_LIFETIME_BOUND;
 
     /**
      * Returns the filter used by this transliterator, or <tt>nullptr</tt> if this
@@ -1123,7 +1123,7 @@ public:
      * U+000A, U+0020..U+007E.
      * @stable ICU 2.0
      */
-    virtual UnicodeString& toRules(UnicodeString& result,
+    virtual UnicodeString& toRules(UnicodeString& result U_LIFETIME_BOUND,
                                    UBool escapeUnprintable) const;
 
     /**
@@ -1159,7 +1159,7 @@ public:
      * an index of 0
      * @stable ICU 3.0
      */
-    const Transliterator& getElement(int32_t index, UErrorCode& ec) const;
+    const Transliterator& getElement(int32_t index, UErrorCode& ec) const U_LIFETIME_BOUND;
 
     /**
      * Returns the set of all characters that may be modified in the
@@ -1176,7 +1176,7 @@ public:
      * @see #handleGetSourceSet
      * @stable ICU 2.4
      */
-    UnicodeSet& getSourceSet(UnicodeSet& result) const;
+    UnicodeSet& getSourceSet(UnicodeSet& result U_LIFETIME_BOUND) const;
 
     /**
      * Framework method that returns the set of all characters that
@@ -1205,7 +1205,7 @@ public:
      * @see #getTargetSet
      * @stable ICU 2.4
      */
-    virtual UnicodeSet& getTargetSet(UnicodeSet& result) const;
+    virtual UnicodeSet& getTargetSet(UnicodeSet& result U_LIFETIME_BOUND) const;
 
 public:
 
@@ -1382,7 +1382,7 @@ public:
      * @stable ICU 2.0
      */
     static UnicodeString& U_EXPORT2 getAvailableSource(int32_t index,
-                                             UnicodeString& result);
+                                                       UnicodeString& result U_LIFETIME_BOUND);
 
     /**
      * Return the number of registered target specifiers for a given
@@ -1406,8 +1406,8 @@ public:
      * @stable ICU 2.0
      */
     static UnicodeString& U_EXPORT2 getAvailableTarget(int32_t index,
-                                             const UnicodeString& source,
-                                             UnicodeString& result);
+                                                       const UnicodeString& source,
+                                                       UnicodeString& result U_LIFETIME_BOUND);
 
     /**
      * Return the number of registered variant specifiers for a given
@@ -1433,9 +1433,9 @@ public:
      * @stable ICU 2.0
      */
     static UnicodeString& U_EXPORT2 getAvailableVariant(int32_t index,
-                                              const UnicodeString& source,
-                                              const UnicodeString& target,
-                                              UnicodeString& result);
+                                                        const UnicodeString& source,
+                                                        const UnicodeString& target,
+                                                        UnicodeString& result U_LIFETIME_BOUND);
 
 protected:
 
@@ -1451,7 +1451,7 @@ protected:
      * @internal
      */
     static UnicodeString& _getAvailableSource(int32_t index,
-                                              UnicodeString& result);
+                                              UnicodeString& result U_LIFETIME_BOUND);
 
     /**
      * Non-mutexed internal method
@@ -1465,7 +1465,7 @@ protected:
      */
     static UnicodeString& _getAvailableTarget(int32_t index,
                                               const UnicodeString& source,
-                                              UnicodeString& result);
+                                              UnicodeString& result U_LIFETIME_BOUND);
 
     /**
      * Non-mutexed internal method
@@ -1481,7 +1481,7 @@ protected:
     static UnicodeString& _getAvailableVariant(int32_t index,
                                                const UnicodeString& source,
                                                const UnicodeString& target,
-                                               UnicodeString& result);
+                                               UnicodeString& result U_LIFETIME_BOUND);
 #endif  /* U_HIDE_INTERNAL_API */
 
 protected:

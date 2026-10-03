@@ -73,7 +73,7 @@ public:
      * @return  A reference to "name"
      * @stable ICU 3.8
      */
-    UnicodeString& getName(UnicodeString& name) const;
+    UnicodeString& getName(UnicodeString& name U_LIFETIME_BOUND) const;
 
     /**
      * Gets the standard time offset.
@@ -185,7 +185,7 @@ protected:
      * @param right The object to be copied.
      * @stable ICU 3.8
      */
-    TimeZoneRule& operator=(const TimeZoneRule& right);
+    TimeZoneRule& operator=(const TimeZoneRule& right) U_LIFETIME_BOUND;
 
 private:
     UnicodeString fName; // time name
@@ -238,7 +238,7 @@ public:
      * @param right The object to be copied.
      * @stable ICU 3.8
      */
-    InitialTimeZoneRule& operator=(const InitialTimeZoneRule& right);
+    InitialTimeZoneRule& operator=(const InitialTimeZoneRule& right) U_LIFETIME_BOUND;
 
     /**
      * Return true if the given <code>TimeZoneRule</code> objects are semantically equal. Objects
@@ -435,7 +435,7 @@ public:
      * @param right The object to be copied.
      * @stable ICU 3.8
      */
-    AnnualTimeZoneRule& operator=(const AnnualTimeZoneRule& right);
+    AnnualTimeZoneRule& operator=(const AnnualTimeZoneRule& right) U_LIFETIME_BOUND;
 
     /**
      * Return true if the given <code>TimeZoneRule</code> objects are semantically equal. Objects
@@ -461,7 +461,7 @@ public:
      *          rule used by this time zone rule.
      * @stable ICU 3.8
      */
-    const DateTimeRule* getRule() const;
+    const DateTimeRule* getRule() const U_LIFETIME_BOUND;
 
     /**
      * Gets the first year when this rule takes effect.
@@ -651,7 +651,7 @@ public:
      * @param right The object to be copied.
      * @stable ICU 3.8
      */
-    TimeArrayTimeZoneRule& operator=(const TimeArrayTimeZoneRule& right);
+    TimeArrayTimeZoneRule& operator=(const TimeArrayTimeZoneRule& right) U_LIFETIME_BOUND;
 
     /**
      * Return true if the given <code>TimeZoneRule</code> objects are semantically equal. Objects

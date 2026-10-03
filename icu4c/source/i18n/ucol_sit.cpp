@@ -166,8 +166,10 @@ U_CDECL_END
 
 U_CDECL_BEGIN
 static const char* U_CALLCONV
-_processLocaleElement(CollatorSpec *spec, uint32_t value, const char* string,
-                      UErrorCode *status)
+_processLocaleElement(CollatorSpec* spec,
+                      uint32_t value,
+                      const char* string U_LIFETIME_BOUND,
+                      UErrorCode* status)
 {
     do {
         if(value == UCOL_SIT_LANGUAGE || value == UCOL_SIT_KEYWORD || value == UCOL_SIT_PROVIDER) {
@@ -183,8 +185,10 @@ U_CDECL_END
 
 U_CDECL_BEGIN
 static const char* U_CALLCONV
-_processRFC3066Locale(CollatorSpec *spec, uint32_t, const char* string,
-                      UErrorCode *status)
+_processRFC3066Locale(CollatorSpec* spec,
+                      uint32_t,
+                      const char* string U_LIFETIME_BOUND,
+                      UErrorCode* status)
 {
     char terminator = *string;
     string++;
@@ -202,8 +206,10 @@ U_CDECL_END
 
 U_CDECL_BEGIN
 static const char* U_CALLCONV
-_processCollatorOption(CollatorSpec *spec, uint32_t option, const char* string,
-                       UErrorCode *status)
+_processCollatorOption(CollatorSpec* spec,
+                       uint32_t option,
+                       const char* string U_LIFETIME_BOUND,
+                       UErrorCode* status)
 {
     spec->options[option] = ucol_sit_letterToAttributeValue(*string, status);
     if((*(++string) != '_' && *string) || U_FAILURE(*status)) {
@@ -254,7 +260,10 @@ readHexCodeUnit(const char **string, UErrorCode *status)
 
 U_CDECL_BEGIN
 static const char* U_CALLCONV
-_processVariableTop(CollatorSpec *spec, uint32_t value1, const char* string, UErrorCode *status)
+_processVariableTop(CollatorSpec* spec,
+                    uint32_t value1,
+                    const char* string U_LIFETIME_BOUND,
+                    UErrorCode* status)
 {
     // get four digits
     int32_t i = 0;
@@ -307,8 +316,9 @@ static const ShortStringOptions options[UCOL_SIT_ITEMS_COUNT] =
 
 
 static
-const char* ucol_sit_readOption(const char *start, CollatorSpec *spec,
-                            UErrorCode *status)
+const char* ucol_sit_readOption(const char* start U_LIFETIME_BOUND,
+                                CollatorSpec* spec,
+                                UErrorCode* status)
 {
   int32_t i = 0;
 
@@ -331,8 +341,10 @@ const char* ucol_sit_readOption(const char *start, CollatorSpec *spec,
 }
 
 static const char*
-ucol_sit_readSpecs(CollatorSpec *s, const char *string,
-                        UParseError *parseError, UErrorCode *status)
+ucol_sit_readSpecs(CollatorSpec* s,
+                   const char* string U_LIFETIME_BOUND,
+                   UParseError* parseError,
+                   UErrorCode* status)
 {
     const char *definition = string;
     while(U_SUCCESS(*status) && *string) {

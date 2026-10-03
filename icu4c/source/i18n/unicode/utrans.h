@@ -275,9 +275,9 @@ U_NAMESPACE_END
  *
  * @stable ICU 2.8
  */
-U_CAPI const UChar * U_EXPORT2
-utrans_getUnicodeID(const UTransliterator *trans,
-                    int32_t *resultLength);
+U_CAPI const UChar* U_EXPORT2
+utrans_getUnicodeID(const UTransliterator* trans U_LIFETIME_BOUND,
+                    int32_t* resultLength);
 
 /**
  * Register an open transliterator with the system.  When
@@ -558,7 +558,7 @@ utrans_toRules(     const UTransliterator* trans,
 U_CAPI USet* U_EXPORT2
 utrans_getSourceSet(const UTransliterator* trans,
                     UBool ignoreFilter,
-                    USet* fillIn,
+                    USet* fillIn U_LIFETIME_BOUND,
                     UErrorCode* status);
 
 /* deprecated API ----------------------------------------------------------- */

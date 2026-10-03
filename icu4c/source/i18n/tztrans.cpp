@@ -50,7 +50,7 @@ TimeZoneTransition::clone() const {
 }
 
 TimeZoneTransition&
-TimeZoneTransition::operator=(const TimeZoneTransition& right) {
+TimeZoneTransition::operator=(const TimeZoneTransition& right) U_LIFETIME_BOUND {
     if (this != &right) {
         fTime = right.fTime;
         setFrom(*right.fFrom);
@@ -120,12 +120,12 @@ TimeZoneTransition::getTime() const {
 }
 
 const TimeZoneRule*
-TimeZoneTransition::getTo() const {
+TimeZoneTransition::getTo() const U_LIFETIME_BOUND {
     return fTo;
 }
 
 const TimeZoneRule*
-TimeZoneTransition::getFrom() const {
+TimeZoneTransition::getFrom() const U_LIFETIME_BOUND {
     return fFrom;
 }
 

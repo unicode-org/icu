@@ -178,9 +178,9 @@ ucsdet_setDeclaredEncoding(UCharsetDetector *ucsd, const char *encoding, int32_t
  *
  * @stable ICU 3.6
  */
-U_CAPI const UCharsetMatch * U_EXPORT2
-ucsdet_detect(UCharsetDetector *ucsd, UErrorCode *status);
-    
+U_CAPI const UCharsetMatch* U_EXPORT2
+ucsdet_detect(UCharsetDetector* ucsd U_LIFETIME_BOUND, UErrorCode* status);
+
 
 /**
  *  Find all charset matches that appear to be consistent with the input,
@@ -212,10 +212,10 @@ ucsdet_detect(UCharsetDetector *ucsd, UErrorCode *status);
  *                      the detector is closed or modified.
  * @stable ICU 3.6
  */
-U_CAPI const UCharsetMatch ** U_EXPORT2
-ucsdet_detectAll(UCharsetDetector *ucsd, int32_t *matchesFound, UErrorCode *status);
-
-
+U_CAPI const UCharsetMatch** U_EXPORT2
+ucsdet_detectAll(UCharsetDetector* ucsd U_LIFETIME_BOUND,
+                 int32_t* matchesFound,
+                 UErrorCode* status);
 
 /**
  *  Get the name of the charset represented by a UCharsetMatch.
@@ -232,8 +232,8 @@ ucsdet_detectAll(UCharsetDetector *ucsd, int32_t *matchesFound, UErrorCode *stat
  *
  *  @stable ICU 3.6
  */
-U_CAPI const char * U_EXPORT2
-ucsdet_getName(const UCharsetMatch *ucsm, UErrorCode *status);
+U_CAPI const char* U_EXPORT2
+ucsdet_getName(const UCharsetMatch* ucsm U_LIFETIME_BOUND, UErrorCode* status);
 
 /**
  *  Get a confidence number for the quality of the match of the byte
@@ -290,8 +290,8 @@ ucsdet_getConfidence(const UCharsetMatch *ucsm, UErrorCode *status);
  *
  *  @stable ICU 3.6
  */
-U_CAPI const char * U_EXPORT2
-ucsdet_getLanguage(const UCharsetMatch *ucsm, UErrorCode *status);
+U_CAPI const char* U_EXPORT2
+ucsdet_getLanguage(const UCharsetMatch* ucsm U_LIFETIME_BOUND, UErrorCode* status);
 
 
 /**
@@ -396,8 +396,8 @@ ucsdet_enableInputFilter(UCharsetDetector *ucsd, UBool filter);
   *  the specified charset detector.
   *  @internal
   */
-U_CAPI UEnumeration * U_EXPORT2
-ucsdet_getDetectableCharsets(const UCharsetDetector *ucsd,  UErrorCode *status);
+U_CAPI UEnumeration* U_EXPORT2
+ucsdet_getDetectableCharsets(const UCharsetDetector* ucsd U_LIFETIME_BOUND, UErrorCode* status);
 
 /**
   * Enable or disable individual charset encoding.

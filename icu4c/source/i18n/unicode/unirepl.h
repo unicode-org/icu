@@ -84,7 +84,7 @@ class U_I18N_API UnicodeReplacer /* not : public UObject because this is an inte
      * @return a reference to 'result'.
      * @stable ICU 2.4
      */
-    virtual UnicodeString& toReplacerPattern(UnicodeString& result,
+    virtual UnicodeString& toReplacerPattern(UnicodeString& result U_LIFETIME_BOUND,
                                              UBool escapeUnprintable) const = 0;
 
     /**

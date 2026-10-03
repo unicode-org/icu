@@ -73,7 +73,7 @@ struct PCEBuffer
     void  reset();
     UBool isEmpty() const;
     void  put(uint64_t ce, int32_t ixLow, int32_t ixHigh, UErrorCode &errorCode);
-    const PCEI *get();
+    const PCEI* get() U_LIFETIME_BOUND;
 };
 
 class UCollationPCE : public UMemory {

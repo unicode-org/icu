@@ -510,8 +510,8 @@ public:
      * @see CollationKey#compare
      * @stable ICU 2.0
      */
-    virtual CollationKey& getCollationKey(const UnicodeString&  source,
-                                          CollationKey& key,
+    virtual CollationKey& getCollationKey(const UnicodeString& source,
+                                          CollationKey& key U_LIFETIME_BOUND,
                                           UErrorCode& status) const = 0;
 
     /**
@@ -533,9 +533,9 @@ public:
      * @see CollationKey#compare
      * @stable ICU 2.0
      */
-    virtual CollationKey& getCollationKey(const char16_t*source,
+    virtual CollationKey& getCollationKey(const char16_t* source,
                                           int32_t sourceLength,
-                                          CollationKey& key,
+                                          CollationKey& key U_LIFETIME_BOUND,
                                           UErrorCode& status) const = 0;
     /**
      * Generates the hash code for the collation object
@@ -599,42 +599,54 @@ public:
      * Like <code>std::equal_to</code> but uses the collator instead of <code>operator==</code>.
      * @stable ICU 76
      */
-    inline auto equal_to() const { return Predicate<std::equal_to, UCOL_EQUAL>(*this); }
+    inline auto equal_to() const U_LIFETIME_BOUND {
+        return Predicate<std::equal_to, UCOL_EQUAL>(*this);
+    }
 
     /**
      * Creates a comparison function object that uses this collator.
      * Like <code>std::greater</code> but uses the collator instead of <code>operator&gt;</code>.
      * @stable ICU 76
      */
-    inline auto greater() const { return Predicate<std::equal_to, UCOL_GREATER>(*this); }
+    inline auto greater() const U_LIFETIME_BOUND {
+        return Predicate<std::equal_to, UCOL_GREATER>(*this);
+    }
 
     /**
      * Creates a comparison function object that uses this collator.
      * Like <code>std::less</code> but uses the collator instead of <code>operator&lt;</code>.
      * @stable ICU 76
      */
-    inline auto less() const { return Predicate<std::equal_to, UCOL_LESS>(*this); }
+    inline auto less() const U_LIFETIME_BOUND {
+        return Predicate<std::equal_to, UCOL_LESS>(*this);
+    }
 
     /**
      * Creates a comparison function object that uses this collator.
      * Like <code>std::not_equal_to</code> but uses the collator instead of <code>operator!=</code>.
      * @stable ICU 76
      */
-    inline auto not_equal_to() const { return Predicate<std::not_equal_to, UCOL_EQUAL>(*this); }
+    inline auto not_equal_to() const U_LIFETIME_BOUND {
+        return Predicate<std::not_equal_to, UCOL_EQUAL>(*this);
+    }
 
     /**
      * Creates a comparison function object that uses this collator.
      * Like <code>std::greater_equal</code> but uses the collator instead of <code>operator&gt;=</code>.
      * @stable ICU 76
      */
-    inline auto greater_equal() const { return Predicate<std::not_equal_to, UCOL_LESS>(*this); }
+    inline auto greater_equal() const U_LIFETIME_BOUND {
+        return Predicate<std::not_equal_to, UCOL_LESS>(*this);
+    }
 
     /**
      * Creates a comparison function object that uses this collator.
      * Like <code>std::less_equal</code> but uses the collator instead of <code>operator&lt;=</code>.
      * @stable ICU 76
      */
-    inline auto less_equal() const { return Predicate<std::not_equal_to, UCOL_GREATER>(*this); }
+    inline auto less_equal() const U_LIFETIME_BOUND {
+        return Predicate<std::not_equal_to, UCOL_GREATER>(*this);
+    }
 
 #ifndef U_FORCE_HIDE_DEPRECATED_API
     /**
@@ -743,8 +755,8 @@ public:
      * @stable ICU 2.0
      */
     static UnicodeString& U_EXPORT2 getDisplayName(const Locale& objectLocale,
-                                         const Locale& displayLocale,
-                                         UnicodeString& name);
+                                                   const Locale& displayLocale,
+                                                   UnicodeString& name U_LIFETIME_BOUND);
 
     /**
     * Get name of the object for the desired Locale, in the language of the
@@ -755,7 +767,7 @@ public:
     * @stable ICU 2.0
     */
     static UnicodeString& U_EXPORT2 getDisplayName(const Locale& objectLocale,
-                                         UnicodeString& name);
+                                                   UnicodeString& name U_LIFETIME_BOUND);
 
     /**
      * Get the set of Locales for which Collations are installed.
@@ -954,7 +966,7 @@ public:
      * @see getMaxVariable
      * @stable ICU 53
      */
-    virtual Collator &setMaxVariable(UColReorderCode group, UErrorCode &errorCode);
+    virtual Collator& setMaxVariable(UColReorderCode group, UErrorCode& errorCode) U_LIFETIME_BOUND;
 
     /**
      * Returns the maximum reordering group whose characters are affected by UCOL_ALTERNATE_HANDLING.
@@ -1229,19 +1241,19 @@ public:
 
 #ifndef U_HIDE_INTERNAL_API
     /** @internal */
-    static inline Collator *fromUCollator(UCollator *uc) {
+    static inline Collator* fromUCollator(UCollator* uc U_LIFETIME_BOUND) {
         return reinterpret_cast<Collator *>(uc);
     }
     /** @internal */
-    static inline const Collator *fromUCollator(const UCollator *uc) {
+    static inline const Collator* fromUCollator(const UCollator* uc U_LIFETIME_BOUND) {
         return reinterpret_cast<const Collator *>(uc);
     }
     /** @internal */
-    inline UCollator *toUCollator() {
+    inline UCollator* toUCollator() U_LIFETIME_BOUND {
         return reinterpret_cast<UCollator *>(this);
     }
     /** @internal */
-    inline const UCollator *toUCollator() const {
+    inline const UCollator* toUCollator() const U_LIFETIME_BOUND {
         return reinterpret_cast<const UCollator *>(this);
     }
 #endif  // U_HIDE_INTERNAL_API
@@ -1266,7 +1278,7 @@ private:
     template <template <typename...> typename Compare, UCollationResult result>
     class Predicate {
       public:
-        explicit Predicate(const Collator& parent) : collator(parent) {}
+        explicit Predicate(const Collator& parent U_LIFETIME_BOUND) : collator(parent) {}
 
         template <
             typename T, typename U,
@@ -1353,9 +1365,9 @@ public:
      * @return the display name
      * @stable ICU 2.6
      */
-    virtual  UnicodeString& getDisplayName(const Locale& objectLocale,
-                                           const Locale& displayLocale,
-                                           UnicodeString& result);
+    virtual UnicodeString& getDisplayName(const Locale& objectLocale,
+                                          const Locale& displayLocale,
+                                          UnicodeString& result U_LIFETIME_BOUND);
 
     /**
      * Return an array of all the locale names directly supported by this factory.
@@ -1366,7 +1378,8 @@ public:
      * @return a pointer to an array of count UnicodeStrings.
      * @stable ICU 2.6
      */
-    virtual const UnicodeString * getSupportedIDs(int32_t &count, UErrorCode& status) = 0;
+    virtual const UnicodeString* getSupportedIDs(int32_t& count,
+                                                 UErrorCode& status) U_LIFETIME_BOUND = 0;
 };
 #endif /* UCONFIG_NO_SERVICE */
 

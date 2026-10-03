@@ -213,7 +213,7 @@ public:
          * @return the label string for the bucket
          * @stable ICU 51
          */
-        const UnicodeString &getLabel() const { return label_; }
+        const UnicodeString& getLabel() const U_LIFETIME_BOUND { return label_; }
         /**
          * Returns whether this bucket is a normal, underflow, overflow, or inflow bucket.
          *
@@ -283,7 +283,7 @@ public:
          * @return the index-th bucket
          * @stable ICU 51
          */
-        const Bucket *getBucket(int32_t index) const;
+        const Bucket* getBucket(int32_t index) const U_LIFETIME_BOUND;
 
     private:
         friend class AlphabeticIndex;
@@ -335,7 +335,8 @@ public:
      * @return this, for chaining
      * @stable ICU 4.8
      */
-    virtual AlphabeticIndex &addLabels(const UnicodeSet &additions, UErrorCode &status);
+    virtual AlphabeticIndex& addLabels(const UnicodeSet& additions,
+                                       UErrorCode& status) U_LIFETIME_BOUND;
 
     /**
      * Add the index characters from a Locale to the index.  The labels
@@ -350,7 +351,7 @@ public:
      * @return this, for chaining
      * @stable ICU 4.8
      */
-    virtual AlphabeticIndex &addLabels(const Locale &locale, UErrorCode &status);
+    virtual AlphabeticIndex& addLabels(const Locale& locale, UErrorCode& status) U_LIFETIME_BOUND;
 
      /**
       * Destructor
@@ -378,7 +379,7 @@ public:
      * @return The collator
      * @stable ICU 4.8
      */
-    virtual const RuleBasedCollator &getCollator() const;
+    virtual const RuleBasedCollator& getCollator() const U_LIFETIME_BOUND;
 
 
    /**
@@ -390,7 +391,7 @@ public:
      * @return inflow label
      * @stable ICU 4.8
      */
-    virtual const UnicodeString &getInflowLabel() const;
+    virtual const UnicodeString& getInflowLabel() const U_LIFETIME_BOUND;
 
    /**
      * Set the default label used for abbreviated buckets <i>between</i> other index characters.
@@ -403,7 +404,8 @@ public:
      * @return this
      * @stable ICU 4.8
      */
-    virtual AlphabeticIndex &setInflowLabel(const UnicodeString &inflowLabel, UErrorCode &status);
+    virtual AlphabeticIndex& setInflowLabel(const UnicodeString& inflowLabel,
+                                            UErrorCode& status) U_LIFETIME_BOUND;
 
 
    /**
@@ -413,7 +415,7 @@ public:
      * @return the overflow label
      * @stable ICU 4.8
      */
-    virtual const UnicodeString &getOverflowLabel() const;
+    virtual const UnicodeString& getOverflowLabel() const U_LIFETIME_BOUND;
 
 
    /**
@@ -425,7 +427,8 @@ public:
      * @return this
      * @stable ICU 4.8
      */
-    virtual AlphabeticIndex &setOverflowLabel(const UnicodeString &overflowLabel, UErrorCode &status);
+    virtual AlphabeticIndex& setOverflowLabel(const UnicodeString& overflowLabel,
+                                              UErrorCode& status) U_LIFETIME_BOUND;
 
    /**
      * Get the special label used for items that sort before the first normal label,
@@ -434,7 +437,7 @@ public:
      * @return underflow label
      * @stable ICU 4.8
      */
-    virtual const UnicodeString &getUnderflowLabel() const;
+    virtual const UnicodeString& getUnderflowLabel() const U_LIFETIME_BOUND;
 
    /**
      * Set the label used for items that sort before the first normal label,
@@ -445,8 +448,8 @@ public:
      * @return this
      * @stable ICU 4.8
      */
-    virtual AlphabeticIndex &setUnderflowLabel(const UnicodeString &underflowLabel, UErrorCode &status);
-
+    virtual AlphabeticIndex& setUnderflowLabel(const UnicodeString& underflowLabel,
+                                               UErrorCode& status) U_LIFETIME_BOUND;
 
     /**
      * Get the limit on the number of labels permitted in the index.
@@ -469,8 +472,8 @@ public:
      * @return This, for chaining
      * @stable ICU 4.8
      */
-    virtual AlphabeticIndex &setMaxLabelCount(int32_t maxLabelCount, UErrorCode &status);
-
+    virtual AlphabeticIndex& setMaxLabelCount(int32_t maxLabelCount,
+                                              UErrorCode& status) U_LIFETIME_BOUND;
 
     /**
      * Add a record to the index.  Each record will be associated with an index Bucket
@@ -488,7 +491,9 @@ public:
      * @return        This, for chaining.
      * @stable ICU 4.8
      */
-    virtual AlphabeticIndex &addRecord(const UnicodeString &name, const void *data, UErrorCode &status);
+    virtual AlphabeticIndex& addRecord(const UnicodeString& name,
+                                       const void* data,
+                                       UErrorCode& status) U_LIFETIME_BOUND;
 
     /**
      * Remove all Records from the Index.  The set of Buckets, which define the headings under
@@ -498,7 +503,7 @@ public:
      * @return        This, for chaining.
      * @stable ICU 4.8
      */
-    virtual AlphabeticIndex &clearRecords(UErrorCode &status);
+    virtual AlphabeticIndex& clearRecords(UErrorCode& status) U_LIFETIME_BOUND;
 
 
     /**  Get the number of labels in this index.
@@ -569,7 +574,7 @@ public:
      *   @return the bucket label.
      *   @stable ICU 4.8
      */
-    virtual const UnicodeString &getBucketLabel() const;
+    virtual const UnicodeString& getBucketLabel() const U_LIFETIME_BOUND;
 
     /**
      *  Return the type of the label for the current Bucket (selected by the
@@ -599,7 +604,7 @@ public:
      * @return        this, for chaining.
      * @stable ICU 4.8
      */
-    virtual AlphabeticIndex &resetBucketIterator(UErrorCode &status);
+    virtual AlphabeticIndex& resetBucketIterator(UErrorCode& status) U_LIFETIME_BOUND;
 
     /**
      * Advance to the next record in the current Bucket.
@@ -622,7 +627,7 @@ public:
      *  @return The name of the current index item.
      *  @stable ICU 4.8
      */
-    virtual const UnicodeString &getRecordName() const;
+    virtual const UnicodeString& getRecordName() const U_LIFETIME_BOUND;
 
 
     /**
@@ -642,7 +647,7 @@ public:
      *  @return This, for chaining.
      *  @stable ICU 4.8
      */
-    virtual AlphabeticIndex &resetRecordIterator();
+    virtual AlphabeticIndex& resetRecordIterator() U_LIFETIME_BOUND;
 
 private:
      /**
@@ -653,7 +658,7 @@ private:
      /**
       *   No assignment.
       */
-     AlphabeticIndex &operator =(const AlphabeticIndex & /*other*/) { return *this;}
+     AlphabeticIndex& operator=(const AlphabeticIndex& /*other*/) U_LIFETIME_BOUND { return *this; }
 
     /**
      * No Equality operators.
