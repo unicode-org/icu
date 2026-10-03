@@ -23,6 +23,7 @@
 #include "collation.h"
 #include "normalizer2impl.h"
 #include "utrie2.h"
+#include "uassert.h"
 
 struct UDataMemory;
 
@@ -70,8 +71,15 @@ struct U_I18N_API CollationData : public UMemory {
     }
 
     UBool isDigit(UChar32 c) const {
-        return c < 0x660 ? c <= 0x39 && 0x30 <= c :
-                Collation::hasCE32Tag(getCE32(c), Collation::DIGIT_TAG);
+        if (c < 0x660) {
+            return c <= 0x39 && 0x30 <= c;
+        }
+        int32_t ce32 = getCE32(c);
+        if (ce32 == Collation::FALLBACK_CE32) {
+            U_ASSERT (base != nullptr);
+            return Collation::hasCE32Tag(base->getCE32(c), Collation::DIGIT_TAG);
+        }
+        return Collation::hasCE32Tag(ce32, Collation::DIGIT_TAG);
     }
 
     UBool isUnsafeBackward(UChar32 c, UBool numeric) const {
