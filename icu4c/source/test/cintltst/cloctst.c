@@ -265,6 +265,9 @@ void addLocaleTest(TestNode** root)
     TESTCASE(TestDisplayName); 
     TESTCASE(TestAcceptLanguage); 
     TESTCASE(TestGetLocaleForLCID);
+#if !(U_PLATFORM_HAS_WIN32_API && UCONFIG_USE_WINDOWS_LCID_MAPPING_API)
+    TESTCASE(TestBug23495);
+#endif
     TESTCASE(TestOrientation);
     TESTCASE(TestLikelySubtags);
     TESTCASE(TestToLanguageTag);
@@ -3749,6 +3752,34 @@ static void TestGetLocaleForLCID(void) {
     }
     
 }
+
+#if !(U_PLATFORM_HAS_WIN32_API && UCONFIG_USE_WINDOWS_LCID_MAPPING_API)
+static void TestBug23495(void) {
+    static const struct {
+        const char* localeID;
+        uint32_t expected;
+    } TESTDATA[] = {
+        {"en_US", 0x409},
+        {"en-US", 0x9},
+        {"de_DE", 0x407},
+        {"de-DE", 0x7},
+        {"div", 0x65},
+        {"dv", 0x65},
+        {"dv_MV", 0x465},
+        {"dv-MV", 0x65},
+    };
+
+    for (size_t i = 0; i < UPRV_LENGTHOF(TESTDATA); i++) {
+        const char* const localeID = TESTDATA[i].localeID;
+        const uint32_t expected = TESTDATA[i].expected;
+        uint32_t actual = uloc_getLCID(localeID);
+        if (actual != expected) {
+            log_err("FAIL: uloc_getLCID(\"%s\") == %#x, expected %#x\n",
+                    localeID, actual, expected);
+        }
+    }
+}
+#endif
 
 const char* const basic_maximize_data[][2] = {
   {
