@@ -881,6 +881,34 @@ public class GregorianCalendar extends Calendar implements Cloneable {
 
         int jd = super.handleComputeJulianDay(bestField);
 
+        if (bestField == WEEK_OF_MONTH) {
+            // WEEK_OF_MONTH counts from the hybrid month's own first day. The
+            // isGregorian/invertGregorian inversion below picks one calendar
+            // for the whole month from a single day, which only goes wrong
+            // when a week spills across the cutover, so it is bypassed here:
+            // shift jd (already computed with isGregorian's calendar for (y,
+            // m)) to the hybrid first day; zero unless (y, m) is within a
+            // year of gregorianCutoverYear.
+            int y = internalGet(EXTENDED_YEAR);
+            int m = internalGetMonth(getDefaultMonthInYear(y));
+            if (m < 0 || m > 11) {
+                int[] rem = new int[1];
+                y += floorDivide(m, 12, rem);
+                m = rem[0];
+            }
+            // The +/-1 year window assumes the Julian and Gregorian calendars
+            // never drift a full year apart, true for |year| under roughly
+            // 48000.
+            if (cutoverJulianDay != Integer.MIN_VALUE
+                    && cutoverJulianDay != Integer.MAX_VALUE
+                    && Math.abs((long) y - gregorianCutoverYear) <= 1) {
+                int baseStart = isGregorian ? gregorianMonthStart(y, m) : julianMonthStart(y, m);
+                int hybridStart = cutoverMonthStart(cutoverJulianDay, y, m);
+                return jd + firstWeekStart(hybridStart) - firstWeekStart(baseStart);
+            }
+            return jd;
+        }
+
         if ((bestField == WEEK_OF_YEAR)
                 && // if we are doing WOY calculations, we are counting relative to Jan 1 *julian*
                 (internalGet(EXTENDED_YEAR) == gregorianCutoverYear)
@@ -901,26 +929,70 @@ public class GregorianCalendar extends Calendar implements Cloneable {
             int gregShift = Grego.gregorianShift(internalGet(EXTENDED_YEAR));
             if (bestField == DAY_OF_YEAR) {
                 jd -= gregShift;
-            } else if (bestField == WEEK_OF_MONTH) {
-                // Only the month that actually contains the cutover point loses
-                // days (10 days vanish from the transition month), so only that
-                // month's weeks need to be pushed forward to avoid colliding
-                // with the weeks before the gap. The requested month is compared
-                // against the month the cutover falls in, derived from
-                // fGregorianCutover (whose units, milliseconds, are unambiguous;
-                // fCutoverJulianDay is not usable here since its units depend on
-                // how the cutover was set). No range normalization is applied to
-                // the requested month, so an out-of-range month is by definition
-                // not the cutover month and gets no shift.
-                int requestedMonth = internalGetMonth();
-                int[] fields = Grego.timeToFields(gregorianCutover, null);
-                if (requestedMonth == fields[1] /* month */) {
-                    final int weekShift = 14;
-                    jd += weekShift; // shift by weeks for week based fields.
-                }
             }
         }
         return jd;
+    }
+
+    /**
+     * Julian day of the first day of the hybrid month (year, month): J1(year, month) if that Julian
+     * first day precedes the cutover, else the later of G1(year, month) and the cutover itself.
+     * Computed directly, independent of the hybrid calendar's own month lengths. Requires 0 <=
+     * month <= 11. The sentinel branches below are defensive: the only caller,
+     * handleComputeJulianDay(), already excludes them, so they are unreachable today.
+     */
+    private static int cutoverMonthStart(int cutoverJulianDay, int year, int month) {
+        if (cutoverJulianDay == Integer.MAX_VALUE) {
+            return julianMonthStart(year, month); // pure Julian calendar
+        }
+        if (cutoverJulianDay == Integer.MIN_VALUE) {
+            return gregorianMonthStart(year, month); // pure Gregorian calendar
+        }
+        int julianStart = julianMonthStart(year, month);
+        if (julianStart < cutoverJulianDay) {
+            return julianStart;
+        }
+        return Math.max(gregorianMonthStart(year, month), cutoverJulianDay);
+    }
+
+    /**
+     * Julian day of the first day of the given month (0-based) of the given extended year, in the
+     * pure proleptic Julian calendar, independent of any cutover. Requires 0 <= month <= 11.
+     */
+    private static int julianMonthStart(int year, int month) {
+        boolean isLeap = year % 4 == 0;
+        int y = year - 1;
+        int dayBeforeJan1 = 365 * y + floorDivide(y, 4) + (JAN_1_1_JULIAN_DAY - 3);
+        if (month != 0) {
+            dayBeforeJan1 += MONTH_COUNT[month][isLeap ? 3 : 2];
+        }
+        return dayBeforeJan1 + 1;
+    }
+
+    /**
+     * Julian day of the first day of the given month (0-based) of the given extended year, in the
+     * pure proleptic Gregorian calendar, independent of any cutover. Requires 0 <= month <= 11.
+     */
+    private static int gregorianMonthStart(int year, int month) {
+        return (int) (Grego.fieldsToDay(year, month, 1) + kEpochStartAsJulianDay);
+    }
+
+    /**
+     * Julian day of the first day of week 1 of a month that starts on Julian day {@code
+     * monthStart}, using {@link #getFirstDayOfWeek()} and {@link #getMinimalDaysInFirstWeek()}
+     * exactly as Calendar does for an ordinary month.
+     */
+    private int firstWeekStart(int monthStart) {
+        int firstDOW = getFirstDayOfWeek();
+        int first = julianDayToDayOfWeek(monthStart) - firstDOW;
+        if (first < 0) {
+            first += 7;
+        }
+        int weekStart = monthStart - first;
+        if ((7 - first) < getMinimalDaysInFirstWeek()) {
+            weekStart += 7;
+        }
+        return weekStart;
     }
 
     /**

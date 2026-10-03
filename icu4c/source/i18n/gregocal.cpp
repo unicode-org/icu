@@ -455,6 +455,79 @@ GregorianCalendar::isLeapYear(int32_t year) const
 
 // -------------------------------------
 
+namespace {
+
+// An arbitrary cutover can remove any number of days, and the shortened
+// month need not be the one the cutover instant falls in. These compute the
+// pure proleptic Julian and Gregorian calendars directly, independent of
+// GregorianCalendar's hybrid monthLength()/isLeapYear(); Grego covers the
+// Gregorian side, so only the Julian side needs its own code here.
+
+// Julian Day of the 1st of the given 0-based month of the given extended
+// year, in the pure proleptic Julian calendar.
+int64_t julianMonthStart(int32_t year, int32_t month) {
+    U_ASSERT(0 <= month && month <= 11);
+    UBool isLeap = (year & 0x3) == 0;
+    int64_t y = static_cast<int64_t>(year) - 1;
+    int64_t dayBeforeJan1 = 365LL * y + ClockMath::floorDivideInt64(y, 4LL) + kJan1_1JulianDay - 3LL;
+    if (month != 0) {
+        dayBeforeJan1 += isLeap ? kLeapNumDays[month] : kNumDays[month];
+    }
+    return dayBeforeJan1 + 1;
+}
+
+// Julian Day of the 1st of the given 0-based month of the given extended
+// year, in the pure proleptic Gregorian calendar.
+int64_t gregorianMonthStart(int32_t year, int32_t month) {
+    U_ASSERT(0 <= month && month <= 11);
+    return Grego::fieldsToDay(year, month, 1) + kEpochStartAsJulianDay;
+}
+
+// Julian day of the first day of the hybrid month (year, month): the
+// Julian month's own first day if that precedes the cutover (the month's
+// Julian identity survives, possibly truncated at the end); otherwise the
+// later of the Gregorian month's own first day and the cutover itself.
+// Used by handleComputeJulianDay() (WEEK_OF_MONTH) as the definition of
+// "the hybrid month's first day".
+int64_t cutoverMonthStart(int32_t cutoverJD, int32_t year, int32_t month) {
+    // The caller already excludes INT32_MIN/INT32_MAX (pure Gregorian/
+    // Julian calendar) before calling this, so these branches are
+    // unreachable in practice; kept for robustness.
+    if (cutoverJD == INT32_MIN) {
+        return gregorianMonthStart(year, month);
+    }
+    if (cutoverJD == INT32_MAX) {
+        return julianMonthStart(year, month);
+    }
+    int64_t julianStart = julianMonthStart(year, month);
+    if (julianStart < cutoverJD) {
+        return julianStart;
+    }
+    int64_t gregorianStart = gregorianMonthStart(year, month);
+    return gregorianStart > cutoverJD ? gregorianStart : static_cast<int64_t>(cutoverJD);
+}
+
+// JD of the first day of week 1 of a period whose first day is
+// `firstOfPeriod` with day-of-week `dowOfFirst` (as returned by
+// Calendar::julianDayToDayOfWeek()): back up to the locale's first day of
+// the week, then, if that leaves fewer than `minimalDaysInFirstWeek` days
+// before `firstOfPeriod`, move forward a week. Mirrors what
+// Calendar::handleComputeJulianDay() does for an ordinary month.
+int64_t firstWeekStart(int64_t firstOfPeriod, int32_t dowOfFirst, int32_t firstDayOfWeek,
+                       int32_t minimalDaysInFirstWeek) {
+    int32_t dow = dowOfFirst - firstDayOfWeek;
+    if (dow < 0) {
+        dow += 7;
+    }
+    int64_t start = firstOfPeriod - dow;
+    if ((7 - dow) < minimalDaysInFirstWeek) {
+        start += 7;
+    }
+    return start;
+}
+
+}  // namespace
+
 int32_t GregorianCalendar::handleComputeJulianDay(UCalendarDateFields bestField, UErrorCode& status)
 {
     fInvertGregorian = false;
@@ -471,6 +544,46 @@ int32_t GregorianCalendar::handleComputeJulianDay(UCalendarDateFields bestField,
             return Calendar::handleComputeJulianDay(bestField, status);
         }
 
+        // The fIsGregorian/fInvertGregorian inversion below can only go
+        // wrong for WEEK_OF_MONTH, since a week can spill to the other side
+        // of the cutover from the rest of its month. Bypass it: jd is
+        // already the base result in whichever calendar fIsGregorian used;
+        // shift it to the hybrid month's real first day (zero unless
+        // (year, month) is within a year of the cutover -- this assumes the
+        // Julian/Gregorian difference is under a year, true for |year|
+        // below roughly 48000).
+        if (bestField == UCAL_WEEK_OF_MONTH) {
+            int32_t y = internalGet(UCAL_EXTENDED_YEAR);
+            // Select the month exactly as the base computation above did.
+            int32_t m = (isSet(UCAL_MONTH) || isSet(UCAL_ORDINAL_MONTH))
+                ? internalGetMonth(status) : getDefaultMonthInYear(y, status);
+            if (U_FAILURE(status)) {
+                return 0;
+            }
+            if (m < 0 || m > 11) {
+                if (uprv_add32_overflow(ClockMath::floorDivide(m, 12, &m), y, &y)) {
+                    status = U_ILLEGAL_ARGUMENT_ERROR;
+                    return 0;
+                }
+            }
+            int64_t yearDelta = static_cast<int64_t>(y) - static_cast<int64_t>(fGregorianCutoverYear);
+            if (fCutoverJulianDay != INT32_MIN && fCutoverJulianDay != INT32_MAX &&
+                    yearDelta >= -1 && yearDelta <= 1) {
+                int64_t baseStart = fIsGregorian ? gregorianMonthStart(y, m) : julianMonthStart(y, m);
+                int64_t hybridStart = cutoverMonthStart(fCutoverJulianDay, y, m);
+                int32_t fdow = getFirstDayOfWeek();
+                int32_t minDays = getMinimalDaysInFirstWeek();
+                int32_t baseDow = Calendar::julianDayToDayOfWeek(static_cast<int32_t>(baseStart));
+                int32_t hybridDow = Calendar::julianDayToDayOfWeek(static_cast<int32_t>(hybridStart));
+                int64_t shift = firstWeekStart(hybridStart, hybridDow, fdow, minDays) -
+                    firstWeekStart(baseStart, baseDow, fdow, minDays);
+                if (uprv_add32_overflow(jd, static_cast<int32_t>(shift), &jd)) {
+                    status = U_ILLEGAL_ARGUMENT_ERROR;
+                    return 0;
+                }
+            }
+            return jd;
+        }
 
         // The following check handles portions of the cutover year BEFORE the
         // cutover itself happens.
@@ -506,32 +619,6 @@ int32_t GregorianCalendar::handleComputeJulianDay(UCalendarDateFields bestField,
                     __FILE__, __LINE__, fFields[bestField],jd, gregShift);
 #endif
                 jd -= gregShift;
-            } else if ( bestField == UCAL_WEEK_OF_MONTH ) {
-                // Only the month that actually contains the cutover point loses
-                // days (10 days vanish from the transition month), so only that
-                // month's weeks need to be pushed forward to avoid colliding
-                // with the weeks before the gap. The requested month is compared
-                // against the month the cutover falls in, derived from
-                // fGregorianCutover (whose units, milliseconds, are unambiguous;
-                // fCutoverJulianDay is not usable here since its units depend on
-                // how the cutover was set). No range normalization is applied to
-                // the requested month, so an out-of-range month is by definition
-                // not the cutover month and gets no shift.
-                int32_t requestedMonth = internalGetMonth(status);
-                if (U_SUCCESS(status)) {
-                    int32_t cutoverYear, cutoverMillisInDay;
-                    int8_t cutoverMonth, cutoverDom;
-                    Grego::timeToFields(fGregorianCutover, cutoverYear, cutoverMonth,
-                                        cutoverDom, cutoverMillisInDay, status);
-                    if (U_SUCCESS(status) && requestedMonth == cutoverMonth) {
-                        int32_t weekShift = 14;
-#if defined (U_DEBUG_CAL)
-                        fprintf(stderr, "%s:%d: [WOY/WOM] gregorian week shift of %d += %d\n",
-                            __FILE__, __LINE__, jd, weekShift);
-#endif
-                        jd += weekShift; // shift by weeks for week based fields.
-                    }
-                }
             }
         }
 
