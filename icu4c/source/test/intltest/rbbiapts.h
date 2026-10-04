@@ -77,6 +77,14 @@ public:
     void TestGetBinaryRules();
 
     /**
+     * Test that binary rules with out of bounds row fields
+     * (look-ahead slot, tag index, next state) are rejected
+     * instead of causing out of bounds reads and writes.
+     * See ICU-23531.
+     **/
+    void TestBinaryRuleRowFieldValidation();
+
+    /**
      * Tests grouping effect of 'single quotes' in rules.
      **/
     void TestQuoteGrouping();
