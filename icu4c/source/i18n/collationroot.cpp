@@ -41,8 +41,13 @@ UInitOnce initOnce{};
 U_CDECL_BEGIN
 
 static UBool U_CALLCONV uprv_collation_root_cleanup() {
-    SharedObject::clearPtr(rootSingleton);
+    // Reset initOnce before clearing rootSingleton: a concurrent
+    // CollationRoot::getRoot() that passes umtx_initOnce() while the
+    // pointer is being cleared would dereference freed memory
+    // (ICU-23352). Resetting first sends concurrent callers through
+    // initialization instead.
     initOnce.reset();
+    SharedObject::clearPtr(rootSingleton);
     return true;
 }
 
