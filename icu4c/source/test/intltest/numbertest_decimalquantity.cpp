@@ -33,6 +33,7 @@ void DecimalQuantityTest::runIndexedTest(int32_t index, UBool exec, const char *
         TESTCASE_AUTO(testNickelRounding);
         TESTCASE_AUTO(testScientificAndCompactSuppressedExponent);
         TESTCASE_AUTO(testSuppressedExponentUnchangedByInitialScaling);
+        TESTCASE_AUTO(testToFractionLongWithExtremeScale);
         TESTCASE_AUTO(testDecimalQuantityParseFormatRoundTrip);
     TESTCASE_AUTO_END;
 }
@@ -725,6 +726,65 @@ void DecimalQuantityTest::testSuppressedExponentUnchangedByInitialScaling() {
     }
 }
 
+
+void DecimalQuantityTest::testToFractionLongWithExtremeScale() {
+    // ICU-23530: with a very negative scale, toFractionLong() used to iterate
+    // over hundreds of millions of magnitudes that are all zero because they
+    // lie above the stored digits, making plural-operand computation take
+    // several seconds per format call.
+    IcuTestErrorCode status(*this, "testToFractionLongWithExtremeScale");
+
+    // Unit level: the value is 5 with the decimal point shifted far to the left.
+    {
+        DecimalQuantity fq;
+        fq.setToLong(5);
+        fq.roundToInfinity();
+        fq.adjustMagnitude(-993030305);
+        assertDoubleEquals(
+            UnicodeString(u"toFractionLong(includeTrailingZeros=true) with extreme scale"),
+            5.0,
+            static_cast<double>(fq.toFractionLong(true)));
+        assertDoubleEquals(
+            UnicodeString(u"toFractionLong(includeTrailingZeros=false) with extreme scale"),
+            5.0,
+            static_cast<double>(fq.toFractionLong(false)));
+    }
+
+    // Unit level: unchanged results for an ordinary fractional value.
+    {
+        DecimalQuantity fq;
+        fq.setToLong(1234);
+        fq.roundToInfinity();
+        fq.adjustMagnitude(-2);
+        assertDoubleEquals(
+            UnicodeString(u"toFractionLong(true) for 12.34"),
+            34.0,
+            static_cast<double>(fq.toFractionLong(true)));
+        assertDoubleEquals(
+            UnicodeString(u"toFractionLong(false) for 12.34"),
+            34.0,
+            static_cast<double>(fq.toFractionLong(false)));
+    }
+
+    // End to end, matching the OSS-Fuzz reproducer for ICU-23530: compact
+    // notation with a unit formats through the plural rules path that computes
+    // the f and t operands. Before the fix, each of these format calls ran the
+    // unbounded loop and took several seconds; they still return the same
+    // status as before the fix, but in about a millisecond.
+    {
+        LocalizedNumberFormatter nf =
+            NumberFormatter::forSkeleton(u"K % scale/1E-993030305", status).locale("dsb");
+        assertSuccess("forSkeleton with extreme scale", status);
+        FormattedNumber fnInt = nf.formatInt(5, status);
+        (void) fnInt;
+        assertTrue("formatInt with extreme scale reports an error",
+                   status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR));
+        FormattedNumber fnDouble = nf.formatDouble(5.0, status);
+        (void) fnDouble;
+        assertTrue("formatDouble with extreme scale reports an error",
+                   status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR));
+    }
+}
 
 void DecimalQuantityTest::testDecimalQuantityParseFormatRoundTrip() {
     IcuTestErrorCode status(*this, "testDecimalQuantityParseFormatRoundTrip");
