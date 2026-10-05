@@ -28,7 +28,11 @@ if "%ICU_ARCH%" == "x64" (
     set ICU_BINDIR=%~dp0\..\..\bin64
 ) else if "%ICU_ARCH%" == "ARM64" (
     set ICU_BINDIR=%~dp0\..\..\binARM64
+) else if "%ICU_ARCH%" == "arm64" (
+    set ICU_BINDIR=%~dp0\..\..\binARM64
 ) else if "%ICU_ARCH%" == "ARM" (
+    set ICU_BINDIR=%~dp0\..\..\binARM
+) else if "%ICU_ARCH%" == "arm" (
     set ICU_BINDIR=%~dp0\..\..\binARM
 ) else (
     set ICU_BINDIR=%~dp0\..\..\bin

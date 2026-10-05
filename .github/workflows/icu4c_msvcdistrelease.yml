@@ -45,7 +45,7 @@ jobs:
   # Windows MSVC distribution release
   windows-msvc-dist-release:
     runs-on: windows-2025  # Updated in BRS
-    permissions:
+    permissions: &msvc_permissions
       contents: write # So that we can upload to release
       id-token: write # For artifact attestation
       attestations: write # For artifact attestation
@@ -60,32 +60,15 @@ jobs:
           - arch: 'x86'
             plat: 'Win32'
             win_ver: 'Win32'
-          - arch: 'arm64'
-            plat: 'ARM64'
-            win_ver: 'WinARM64'
-    steps:
+    steps: &msvc_all_steps
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@30375c66a4eea26614e0d39710365f22f8b0af57 # v3.0.0
-      - name: Install Windows SDK 10.0.22621.0
-        # See https://github.com/actions/runner-images/issues/13339.
-        if: contains(matrix.win_ver, 'ARM64')
-        run: |
-          $installPath = &"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -products * -latest -property installationPath
-          Write-Host $installPath
-          &"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vs_installer.exe" modify `
-            --installPath "$installPath" `
-            --add Microsoft.VisualStudio.Component.Windows11SDK.22621 `
-            --norestart --quiet --force | Out-Host
-      - name: Build Solution x64
-        if: contains(matrix.win_ver, 'ARM64')
-        run: msbuild icu4c/source/allinone/allinone.sln /p:Configuration=Release /p:Platform=x64
       - name: Build Solution
         run: msbuild icu4c/source/allinone/allinone.sln /p:Configuration=Release /p:Platform=${{ matrix.plat }}
       - name: Run Tests (icucheck.bat)
-        if: contains(matrix.win_ver, 'ARM64') == false
         run: icu4c/source/allinone/icucheck.bat ${{ matrix.arch }} Release
       - name: "Run PowerShell: Distrelease script (${{ matrix.arch }})"
         run: |
@@ -126,3 +109,17 @@ jobs:
         uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
         with:
           subject-path: icu4c/source/dist/${{ env.newZipName }}.zip
+
+  # Windows MSVC ARM64 distribution release
+  windows-msvc-arm64-dist-release:
+    runs-on: windows-11-vs2026-arm # Updated in BRS
+    permissions: *msvc_permissions
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: 'arm64'
+            plat: 'ARM64'
+            win_ver: 'WinARM64'
+    steps: *msvc_all_steps
