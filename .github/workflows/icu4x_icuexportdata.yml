@@ -83,6 +83,7 @@ jobs:
           for FILE in $(ls data/brkitr/dictionaries | xargs -n 1 basename); do
             ./bin/gendict --uchars --toml data/brkitr/dictionaries/$FILE icuexportdata/segmenter/dictionary/$(basename $FILE .txt).toml
           done
+          cp data/brkitr/dictionaries/*.txt icuexportdata/segmenter/dictionary
         env:
           LD_LIBRARY_PATH: lib
       - name: Zip
