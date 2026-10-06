@@ -260,16 +260,22 @@ gd{
                 }
                 decimalFormat{
                     1000000000{
+                        few{"0B"}
                         one{"0B"}
                         other{"0B"}
+                        two{"0B"}
                     }
                     10000000000{
+                        few{"00B"}
                         one{"00B"}
                         other{"00B"}
+                        two{"00B"}
                     }
                     100000000000{
+                        few{"000B"}
                         one{"000B"}
                         other{"000B"}
+                        two{"000B"}
                     }
                 }
             }

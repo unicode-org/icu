@@ -50,40 +50,76 @@ cy{
                         zero{"000K"}
                     }
                     1000000{
+                        few{"0M"}
+                        many{"0M"}
                         one{"0 miliwn"}
                         other{"0 miliwn"}
+                        two{"0M"}
+                        zero{"0M"}
                     }
                     10000000{
+                        few{"00M"}
+                        many{"00M"}
                         one{"00 miliwn"}
                         other{"00 miliwn"}
+                        two{"00M"}
+                        zero{"00M"}
                     }
                     100000000{
+                        few{"000M"}
+                        many{"000M"}
                         one{"000 miliwn"}
                         other{"000 miliwn"}
+                        two{"000M"}
+                        zero{"000M"}
                     }
                     1000000000{
+                        few{"0B"}
+                        many{"0B"}
                         one{"0 biliwn"}
                         other{"0 biliwn"}
+                        two{"0B"}
+                        zero{"0B"}
                     }
                     10000000000{
+                        few{"00B"}
+                        many{"00B"}
                         one{"00 biliwn"}
                         other{"00 biliwn"}
+                        two{"00B"}
+                        zero{"00B"}
                     }
                     100000000000{
+                        few{"000B"}
+                        many{"000B"}
                         one{"000 biliwn"}
                         other{"000 biliwn"}
+                        two{"000B"}
+                        zero{"000B"}
                     }
                     1000000000000{
+                        few{"0T"}
+                        many{"0T"}
                         one{"0 triliwn"}
                         other{"0 triliwn"}
+                        two{"0T"}
+                        zero{"0T"}
                     }
                     10000000000000{
+                        few{"00T"}
+                        many{"00T"}
                         one{"00 triliwn"}
                         other{"00 triliwn"}
+                        two{"00T"}
+                        zero{"00T"}
                     }
                     100000000000000{
+                        few{"000T"}
+                        many{"000T"}
                         one{"000T"}
                         other{"000 triliwn"}
+                        two{"000T"}
+                        zero{"000T"}
                     }
                 }
             }
@@ -286,16 +322,28 @@ cy{
                 }
                 decimalFormat{
                     1000000000{
+                        few{"0B"}
+                        many{"0B"}
                         one{"0B"}
                         other{"0B"}
+                        two{"0B"}
+                        zero{"0B"}
                     }
                     10000000000{
+                        few{"00B"}
+                        many{"00B"}
                         one{"00B"}
                         other{"00B"}
+                        two{"00B"}
+                        zero{"00B"}
                     }
                     100000000000{
+                        few{"000B"}
+                        many{"000B"}
                         one{"000B"}
                         other{"000B"}
+                        two{"000B"}
+                        zero{"000B"}
                     }
                 }
             }

@@ -204,16 +204,25 @@ br{
                 }
                 decimalFormat{
                     1000{
+                        few{"0k"}
+                        many{"0k"}
                         one{"0k"}
                         other{"0k"}
+                        two{"0k"}
                     }
                     10000{
+                        few{"00k"}
+                        many{"00k"}
                         one{"00k"}
                         other{"00k"}
+                        two{"00k"}
                     }
                     100000{
+                        few{"000k"}
+                        many{"000k"}
                         one{"000k"}
                         other{"000k"}
+                        two{"000k"}
                     }
                 }
             }
