@@ -10,6 +10,58 @@ en_IN{
                 decimalFormat{"#,##,##0.###"}
                 percentFormat{"#,##,##0%"}
             }
+            patternsLong{
+                decimalFormat{
+                    1000{
+                        one{"0 thousand"}
+                        other{"0 thousand"}
+                    }
+                    10000{
+                        one{"00 thousand"}
+                        other{"00 thousand"}
+                    }
+                    100000{
+                        one{"0 lakh"}
+                        other{"0 lakh"}
+                    }
+                    1000000{
+                        one{"00 lakh"}
+                        other{"00 lakh"}
+                    }
+                    10000000{
+                        one{"0 crore"}
+                        other{"0 crore"}
+                    }
+                    100000000{
+                        one{"00 crore"}
+                        other{"00 crore"}
+                    }
+                    1000000000{
+                        one{"000 crore"}
+                        other{"000 crore"}
+                    }
+                    10000000000{
+                        one{"0000 crore"}
+                        other{"0000 crore"}
+                    }
+                    100000000000{
+                        one{"00000 crore"}
+                        other{"00000 crore"}
+                    }
+                    1000000000000{
+                        one{"0 lakh crore"}
+                        other{"0 lakh crore"}
+                    }
+                    10000000000000{
+                        one{"00 lakh crore"}
+                        other{"00 lakh crore"}
+                    }
+                    100000000000000{
+                        one{"000 lakh crore"}
+                        other{"000 lakh crore"}
+                    }
+                }
+            }
             patternsShort{
                 currencyFormat{
                     100000{

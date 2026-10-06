@@ -152,50 +152,62 @@ lv{
                     1000{
                         one{"0 tūkst'.'"}
                         other{"0 tūkst'.'"}
+                        zero{"0 tūkst'.'"}
                     }
                     10000{
                         one{"00 tūkst'.'"}
                         other{"00 tūkst'.'"}
+                        zero{"00 tūkst'.'"}
                     }
                     100000{
                         one{"000 tūkst'.'"}
                         other{"000 tūkst'.'"}
+                        zero{"000 tūkst'.'"}
                     }
                     1000000{
                         one{"0 milj'.'"}
                         other{"0 milj'.'"}
+                        zero{"0 milj'.'"}
                     }
                     10000000{
                         one{"00 milj'.'"}
                         other{"00 milj'.'"}
+                        zero{"00 milj'.'"}
                     }
                     100000000{
                         one{"000 milj'.'"}
                         other{"000 milj'.'"}
+                        zero{"000 milj'.'"}
                     }
                     1000000000{
                         one{"0 mljrd'.'"}
                         other{"0 mljrd'.'"}
+                        zero{"0 mljrd'.'"}
                     }
                     10000000000{
                         one{"00 mljrd'.'"}
                         other{"00 mljrd'.'"}
+                        zero{"00 mljrd'.'"}
                     }
                     100000000000{
                         one{"000 mljrd'.'"}
                         other{"000 mljrd'.'"}
+                        zero{"000 mljrd'.'"}
                     }
                     1000000000000{
                         one{"0 trilj'.'"}
                         other{"0 trilj'.'"}
+                        zero{"0 trilj'.'"}
                     }
                     10000000000000{
                         one{"00 trilj'.'"}
                         other{"00 trilj'.'"}
+                        zero{"00 trilj'.'"}
                     }
                     100000000000000{
                         one{"000 trilj'.'"}
                         other{"000 trilj'.'"}
+                        zero{"000 trilj'.'"}
                     }
                 }
             }
