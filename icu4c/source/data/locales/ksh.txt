@@ -87,50 +87,62 @@ ksh{
                     1000{
                         one{"0 tsd"}
                         other{"0 tsd"}
+                        zero{"0 tsd"}
                     }
                     10000{
                         one{"00 tsd"}
                         other{"00 tsd"}
+                        zero{"00 tsd"}
                     }
                     100000{
                         one{"000 tsd"}
                         other{"000 tsd"}
+                        zero{"000 tsd"}
                     }
                     1000000{
                         one{"0 Mio"}
                         other{"0 Mio"}
+                        zero{"0 Mio"}
                     }
                     10000000{
                         one{"00 Mio"}
                         other{"00 Mio"}
+                        zero{"00 Mio"}
                     }
                     100000000{
                         one{"000 Mio"}
                         other{"000 Mio"}
+                        zero{"000 Mio"}
                     }
                     1000000000{
                         one{"0 Mrd"}
                         other{"0 Mrd"}
+                        zero{"0 Mrd"}
                     }
                     10000000000{
                         one{"00 Mrd"}
                         other{"00 Mrd"}
+                        zero{"00 Mrd"}
                     }
                     100000000000{
                         one{"000 Mrd"}
                         other{"000 Mrd"}
+                        zero{"000 Mrd"}
                     }
                     1000000000000{
                         one{"0 Bio"}
                         other{"0 Bio"}
+                        zero{"0 Bio"}
                     }
                     10000000000000{
                         one{"00 Bio"}
                         other{"00 Bio"}
+                        zero{"00 Bio"}
                     }
                     100000000000000{
                         one{"000 Bio"}
                         other{"000 Bio"}
+                        zero{"000 Bio"}
                     }
                 }
             }
