@@ -1,0 +1,8 @@
+add_subdirectory(cintltst)
+add_subdirectory(compat)
+add_subdirectory(fuzzer)
+add_subdirectory(intltest)
+add_subdirectory(iotest)
+#add_subdirectory(letest)
+add_subdirectory(testmap)
+#add_subdirectory(thaitest)
