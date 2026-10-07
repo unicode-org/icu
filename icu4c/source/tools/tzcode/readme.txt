@@ -78,17 +78,21 @@ HOWTO
 
 3. Build ICU normally. You will see a notice "updating zoneinfo.txt..."
 
-   Note: besides the tzdata archive, tz2icu also reads the metazone standard /
-   DST offsets from
+   Note: besides the tzdata archive, tz2icu also reads two CLDR derived data
+   files from
 
+     {path_to}/icu/source/data/tzdata/zoneRegions.txt
      {path_to}/icu/source/data/tzdata/metazoneOffsets.txt
 
-   Those are the offsets CLDR records in metaZones.xml, which occasionally
-   differ from the TZ database, and they are used to fix up the generated
-   zoneinfo64.txt.  That file is generated into the ICU source tree by the
-   CLDR-to-ICU conversion tool (see ../../../../tools/cldr/cldr-to-icu/), so
-   there is nothing to do here; it is deliberately not packaged into ICU's
-   runtime data, since it is only needed by this tool.
+   The former is the zone/region mapping from CLDR's BCP 47 time zone
+   identifiers (common/bcp47/timezone.xml), which the generated zoneinfo64.txt
+   exposes as its "Regions" array.  The latter are the offsets CLDR records in
+   metaZones.xml, which occasionally differ from the TZ database, and which are
+   used to fix up the generated zoneinfo64.txt.  Both files are generated into
+   the ICU source tree by the CLDR-to-ICU conversion tool (see
+   ../../../../tools/cldr/cldr-to-icu/), so there is nothing to do here; they
+   are deliberately not packaged into ICU's runtime data, since they are only
+   needed by this tool.
 
 
 ### Following instructions for ICU maintainers only ###
