@@ -1103,6 +1103,21 @@ If set, it will REPLACE any automatic list of libraries.],
 		*) AC_MSG_ERROR(bad value ${enableval} for --enable-samples) ;;
 		esac],
 	samples=true)
+
+# Enable Automake-compatible test output format
+AC_ARG_ENABLE([automake-test-format],
+    AS_HELP_STRING([--enable-automake-test-format],
+                   [Generate test output in Automake format (PASS / FAIL: testname) ]),
+    [
+        if test "x$enableval" = "xyes"; then
+            UCONFIG_CPPFLAGS="${UCONFIG_CPPFLAGS} -DU_AUTOMAKE_TEST_FORMAT=1"
+            AC_MSG_RESULT([Automake test format is enabled])
+        else
+            AC_MSG_RESULT([Automake test format is disabled])
+        fi
+    ],
+    [enable_automake_test_format=no])
+
 ICU_CONDITIONAL(SAMPLES, test "$samples" = true)
 
 ICUDATA_CHAR=$U_ENDIAN_CHAR
@@ -1366,3 +1381,5 @@ then
 fi
 
 $as_unset _CXX_CXXSUFFIX
+
+
