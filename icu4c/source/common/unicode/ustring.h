@@ -79,7 +79,6 @@
 
 /**
  * \defgroup ustring_ustrlen String Length
- * \ingroup ustring_strlen
  */
 /*@{*/
 /**

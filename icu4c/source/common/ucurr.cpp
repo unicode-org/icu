@@ -521,7 +521,7 @@ ucurr_forLocale(const char* locale,
         return u_terminateUChars(buff, buffCapacity, resLen, ec);
     }
 
-    // get country or country_variant in `id'
+    // get country or country_variant in `id`
     CharString id = idForLocale(locale, ec);
     if (U_FAILURE(*ec)) {
         return 0;
@@ -2291,7 +2291,7 @@ ucurr_countCurrencies(const char* locale,
         // local variables
         UErrorCode localStatus = U_ZERO_ERROR;
 
-        // get country or country_variant in `id'
+        // get country or country_variant in `id`
         CharString id = idForLocale(locale, ec);
 
         if (U_FAILURE(*ec))
@@ -2395,7 +2395,7 @@ ucurr_forLocaleAndDate(const char* locale,
             // local variables
             UErrorCode localStatus = U_ZERO_ERROR;
 
-            // get country or country_variant in `id'
+            // get country or country_variant in `id`
             CharString id = idForLocale(locale, ec);
             if (U_FAILURE(*ec))
             {
