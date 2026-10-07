@@ -199,9 +199,9 @@ protected:
 
     // Do not conditionalize the following with #ifndef U_HIDE_INTERNAL_API,
     // it is needed for layout of other objects.
+    /// \cond
     /**
      * @internal
-     * \cond
      */
     class Node : public UObject {
     public:
