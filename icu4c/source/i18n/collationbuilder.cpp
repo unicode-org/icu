@@ -254,7 +254,12 @@ CollationBuilder::parseAndBuild(const UnicodeString &ruleString,
     variableTop = base->settings->variableTop;
     parser.setSink(this);
     parser.setImporter(importer);
-    CollationSettings &ownedSettings = *SharedObject::copyOnWrite(tailoring->settings);
+    CollationSettings *ownedSettingsPtr = SharedObject::copyOnWrite(tailoring->settings);
+    if (ownedSettingsPtr == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
+    CollationSettings &ownedSettings = *ownedSettingsPtr;
     parser.parse(ruleString, ownedSettings, outParseError, errorCode);
     errorReason = parser.getErrorReason();
     if(U_FAILURE(errorCode)) { return nullptr; }
