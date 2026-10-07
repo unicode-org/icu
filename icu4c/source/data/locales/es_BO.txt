@@ -38,14 +38,6 @@ es_BO{
             }
             dayPeriod{
                 stand-alone{
-                    abbreviated{
-                        am{"a. m."}
-                        pm{"p. m."}
-                    }
-                    narrow{
-                        am{"a. m."}
-                        pm{"p. m."}
-                    }
                     wide{
                         am{"a. m."}
                         pm{"p. m."}

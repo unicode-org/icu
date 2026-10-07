@@ -45,30 +45,6 @@ pt_PT{
             10p30{"quetâ{0}"}
             10p6{"megâ{0}"}
             10p9{"gigâ{0}"}
-            power2{
-                one{
-                    _{
-                        _{"{0} quadrado"}
-                    }
-                }
-                other{
-                    _{
-                        _{"{0} quadrados"}
-                    }
-                }
-            }
-            power3{
-                one{
-                    _{
-                        _{"{0} cúbico"}
-                    }
-                }
-                other{
-                    _{
-                        _{"{0} cúbicos"}
-                    }
-                }
-            }
         }
         concentr{
             karat{
@@ -104,11 +80,9 @@ pt_PT{
         }
         digital{
             bit{
-                one{"{0} bit"}
                 other{"{0} bits"}
             }
             byte{
-                one{"{0} byte"}
                 other{"{0} bytes"}
             }
         }
@@ -193,13 +167,11 @@ pt_PT{
                 other{"{0} picómetros"}
             }
             point{
-                one{"{0} ponto tipográfico"}
                 other{"{0} pontos tipográficos"}
             }
         }
         light{
             lumen{
-                one{"{0} lúmen"}
                 other{"{0} lúmenes"}
             }
         }
@@ -258,7 +230,6 @@ pt_PT{
     unitsNarrow{
         angle{
             degree{
-                one{"{0}°"}
                 other{"{0}°"}
             }
         }
@@ -301,7 +272,6 @@ pt_PT{
         }
         graphics{
             dot{
-                one{"{0} pt"}
                 other{"{0} pts"}
             }
         }
@@ -342,10 +312,6 @@ pt_PT{
             }
         }
         speed{
-            kilometer-per-hour{
-                one{"{0} km/h"}
-                other{"{0} km/h"}
-            }
             mile-per-hour{
                 dnam{"mi/h"}
             }
@@ -374,10 +340,6 @@ pt_PT{
                 one{"{0} fl oz"}
                 other{"{0} fl oz"}
             }
-            liter{
-                one{"{0} l"}
-                other{"{0} l"}
-            }
         }
     }
     unitsShort{
@@ -398,7 +360,6 @@ pt_PT{
             }
             degree{
                 one{"{0}°"}
-                other{"{0} °"}
             }
         }
         area{
@@ -411,7 +372,6 @@ pt_PT{
             }
             square-inch{
                 dnam{"in²"}
-                one{"{0} in²"}
                 other{"{0} in²"}
                 per{"{0}/in²"}
             }
@@ -428,7 +388,6 @@ pt_PT{
         concentr{
             karat{
                 dnam{"quilates"}
-                one{"{0} kt"}
                 other{"{0} kt"}
             }
             millimole-per-liter{
@@ -436,14 +395,12 @@ pt_PT{
             }
             part-per-1e9{
                 dnam{"partes/mil milhões"}
-                one{"{0} ppmm"}
                 other{"{0} ppmm"}
             }
         }
         consumption{
             liter-per-100-kilometer{
                 dnam{"l/100km"}
-                one{"{0} l/100km"}
                 other{"{0} l/100km"}
             }
             mile-per-gallon{
@@ -458,11 +415,9 @@ pt_PT{
         }
         digital{
             bit{
-                one{"{0} bit"}
                 other{"{0} bit"}
             }
             byte{
-                one{"{0} byte"}
                 other{"{0} byte"}
             }
         }
@@ -484,14 +439,12 @@ pt_PT{
         force{
             kilowatt-hour-per-100-kilometer{
                 dnam{"kWh/100 km"}
-                one{"{0} kWh/100 km"}
                 other{"{0} kWh/100 km"}
             }
         }
         graphics{
             dot{
                 dnam{"pontos"}
-                one{"{0} ponto"}
                 other{"{0} pontos"}
             }
             dot-per-inch{
@@ -507,10 +460,6 @@ pt_PT{
             }
         }
         length{
-            fathom{
-                one{"{0} fth"}
-                other{"{0} fth"}
-            }
             inch{
                 dnam{"polegadas"}
             }
@@ -519,7 +468,6 @@ pt_PT{
             }
             nautical-mile{
                 dnam{"nmi"}
-                one{"{0} nmi"}
                 other{"{0} nmi"}
             }
             parsec{
@@ -534,19 +482,16 @@ pt_PT{
                 dnam{"massas da Terra"}
             }
             ton{
-                one{"{0} ton"}
                 other{"{0} ton"}
             }
         }
         pressure{
             millibar{
-                one{"{0} mb"}
                 other{"{0} mb"}
             }
         }
         speed{
             beaufort{
-                one{"{0} B"}
                 other{"{0} B"}
             }
             knot{
@@ -557,7 +502,6 @@ pt_PT{
             }
             mile-per-hour{
                 dnam{"mi/h"}
-                one{"{0} mi/h"}
                 other{"{0} mi/h"}
             }
         }
@@ -580,7 +524,6 @@ pt_PT{
             }
             cubic-inch{
                 dnam{"in³"}
-                one{"{0} in³"}
                 other{"{0} in³"}
             }
             cubic-yard{
@@ -588,17 +531,14 @@ pt_PT{
             }
             cup{
                 dnam{"chávenas"}
-                one{"{0} cháv."}
                 other{"{0} cháv."}
             }
             cup-metric{
                 dnam{"chám"}
-                one{"{0} chám"}
                 other{"{0} chám"}
             }
             dessert-spoon-imperial{
                 dnam{"csb imp."}
-                one{"{0} csb imp."}
                 other{"{0} csb imp."}
             }
             dram{
@@ -611,7 +551,6 @@ pt_PT{
             }
             gallon-imperial{
                 dnam{"gal imp."}
-                one{"{0} gal imp."}
                 other{"{0} gal imp."}
                 per{"{0}/gal imp."}
             }
@@ -622,7 +561,6 @@ pt_PT{
             }
             megaliter{
                 dnam{"ML"}
-                one{"{0} ML"}
                 other{"{0} ML"}
             }
             quart-imperial{
@@ -632,12 +570,10 @@ pt_PT{
             }
             tablespoon{
                 dnam{"cs"}
-                one{"{0} cs"}
                 other{"{0} cs"}
             }
             teaspoon{
                 dnam{"cc"}
-                one{"{0} cc"}
                 other{"{0} cc"}
             }
         }

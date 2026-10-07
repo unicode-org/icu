@@ -139,12 +139,10 @@ ast{
         digital{
             bit{
                 dnam{"bits"}
-                one{"{0} bit"}
                 other{"{0} bits"}
             }
             byte{
                 dnam{"bytes"}
-                one{"{0} byte"}
                 other{"{0} bytes"}
             }
             gigabit{
@@ -328,18 +326,10 @@ ast{
                 one{"{0} decímetru"}
                 other{"{0} decímetros"}
             }
-            fathom{
-                one{"{0} fathom"}
-                other{"{0} fathoms"}
-            }
             foot{
                 one{"{0} pie"}
                 other{"{0} pies"}
                 per{"{0} per pie"}
-            }
-            furlong{
-                one{"{0} furlong"}
-                other{"{0} furlongs"}
             }
             inch{
                 one{"{0} pulgada"}
@@ -460,10 +450,6 @@ ast{
                 other{"{0} llibres"}
                 per{"{0} per llibra"}
             }
-            stone{
-                one{"{0} piedra"}
-                other{"{0} piedres"}
-            }
             ton{
                 one{"{0} tonelada"}
                 other{"{0} tonelaes"}
@@ -577,10 +563,6 @@ ast{
                 one{"{0} acre-pie"}
                 other{"{0} acre-pies"}
             }
-            bushel{
-                one{"{0} bushel"}
-                other{"{0} bushels"}
-            }
             centiliter{
                 dnam{"centillitros"}
                 one{"{0} centillitru"}
@@ -688,7 +670,6 @@ ast{
             }
             tablespoon{
                 dnam{"cuyares"}
-                one{"{0} cuyar"}
                 other{"{0} cuyares"}
             }
             teaspoon{
@@ -970,19 +951,10 @@ ast{
                 one{"{0}dm"}
                 other{"{0}dm"}
             }
-            fathom{
-                dnam{"fathom"}
-                one{"{0}fth"}
-                other{"{0}fth"}
-            }
             foot{
                 dnam{"ft"}
                 one{"{0}′"}
                 other{"{0}′"}
-            }
-            furlong{
-                one{"{0}fur"}
-                other{"{0}fur"}
             }
             inch{
                 dnam{"in"}
@@ -1083,10 +1055,6 @@ ast{
                 one{"{0}#"}
                 other{"{0}#"}
             }
-            stone{
-                one{"{0}st"}
-                other{"{0}st"}
-            }
             ton{
                 dnam{"ton"}
                 one{"{0}tn"}
@@ -1178,11 +1146,6 @@ ast{
                 one{"{0}ac ft"}
                 other{"{0}ac ft"}
             }
-            bushel{
-                dnam{"bushel"}
-                one{"{0}bu"}
-                other{"{0}bu"}
-            }
             centiliter{
                 one{"{0}cL"}
                 other{"{0}cL"}
@@ -1210,7 +1173,6 @@ ast{
             }
             cubic-mile{
                 one{"{0}mi³"}
-                other{"{0} mi³"}
             }
             cubic-yard{
                 one{"{0}yd³"}
@@ -1325,7 +1287,6 @@ ast{
         consumption{
             liter-per-100-kilometer{
                 dnam{"L/100 km"}
-                one{"{0} L/100 km"}
                 other{"{0} L/100 km"}
             }
             liter-per-kilometer{
@@ -1333,12 +1294,10 @@ ast{
             }
             mile-per-gallon{
                 dnam{"milles/gal"}
-                one{"{0} mpg"}
                 other{"{0} mpg"}
             }
             mile-per-gallon-imperial{
                 dnam{"milles/gal imp."}
-                one{"{0} mpg imp."}
                 other{"{0} mpg imp."}
             }
         }
@@ -1456,17 +1415,10 @@ ast{
         length{
             astronomical-unit{
                 dnam{"ua"}
-                one{"{0} ua"}
                 other{"{0} ua"}
-            }
-            fathom{
-                dnam{"fathoms"}
             }
             foot{
                 dnam{"pies"}
-            }
-            furlong{
-                dnam{"furlongs"}
             }
             inch{
                 dnam{"pulgaes"}
@@ -1504,9 +1456,6 @@ ast{
                 one{"{0} lb"}
                 other{"{0} lbs"}
             }
-            stone{
-                dnam{"piedres"}
-            }
             ton{
                 dnam{"tonelaes"}
             }
@@ -1530,15 +1479,11 @@ ast{
             }
         }
         volume{
-            bushel{
-                dnam{"bushels"}
-            }
             cubic-inch{
                 dnam{"pulgaes³"}
             }
             cup{
                 dnam{"taces"}
-                one{"{0} tz"}
                 other{"{0} tz"}
             }
             cup-metric{
@@ -1546,18 +1491,15 @@ ast{
             }
             fluid-ounce{
                 dnam{"fl oz"}
-                one{"{0} fl oz"}
                 other{"{0} fl oz"}
             }
             gallon{
                 dnam{"gal"}
-                one{"{0} gal"}
                 other{"{0} gal"}
                 per{"{0}/gal"}
             }
             gallon-imperial{
                 dnam{"gal. imp."}
-                one{"{0} gal. imp."}
                 other{"{0} gal. imp."}
                 per{"{0}/gal. imp."}
             }
@@ -1579,12 +1521,10 @@ ast{
             }
             tablespoon{
                 dnam{"cuyar"}
-                one{"{0} cuyar"}
                 other{"{0} cuyar"}
             }
             teaspoon{
                 dnam{"cuyrn"}
-                one{"{0} cuyrn"}
                 other{"{0} cuyrn"}
             }
         }

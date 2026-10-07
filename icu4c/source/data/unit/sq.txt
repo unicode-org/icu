@@ -184,7 +184,6 @@ sq{
             }
             mole{
                 dnam{"molë"}
-                one{"{0} mol"}
                 other{"{0} molë"}
             }
             ofglucose{
@@ -377,11 +376,6 @@ sq{
                 one{"{0} bekuerel"}
                 other{"{0} bekuerelë"}
             }
-            british-thermal-unit{
-                dnam{"njësi termale britanike"}
-                one{"{0} njësi termale britanike"}
-                other{"{0} njësi termale britanike"}
-            }
             calorie{
                 dnam{"kalori"}
                 one{"{0} kalori"}
@@ -546,20 +540,10 @@ sq{
                 one{"{0} rreze toke"}
                 other{"{0} rreze toke"}
             }
-            fathom{
-                dnam{"pashë detare"}
-                one{"{0} pash detar"}
-                other{"{0} pashë detare"}
-            }
             foot{
                 one{"{0} këmbë"}
                 other{"{0} këmbë"}
                 per{"{0}/këmbë"}
-            }
-            furlong{
-                dnam{"furlongë"}
-                one{"{0} furlong"}
-                other{"{0} furlongë"}
             }
             inch{
                 one{"{0} inç"}
@@ -783,7 +767,6 @@ sq{
             }
             bar{
                 dnam{"bare"}
-                one{"{0} bar"}
                 other{"{0} bare"}
             }
             hectopascal{
@@ -986,7 +969,6 @@ sq{
             }
             fluid-ounce-metric{
                 dnam{"onsë të lëngshëm metrikë"}
-                one{"{0} fl oz m."}
                 other{"{0} onsë të lëngshëm metrikë"}
             }
             gallon{
@@ -1008,7 +990,6 @@ sq{
             }
             jigger{
                 dnam{"teke"}
-                one{"{0} teke"}
                 other{"{0} teke"}
             }
             liter{
@@ -1029,7 +1010,6 @@ sq{
             }
             pinch{
                 dnam{"piska"}
-                one{"{0} pisk"}
                 other{"{0} piska"}
             }
             pint{
@@ -1088,7 +1068,6 @@ sq{
         }
         concentr{
             mole{
-                one{"{0} mol"}
                 other{"{0} molë"}
             }
         }
@@ -1156,7 +1135,6 @@ sq{
         energy{
             therm-us{
                 one{"{0} UStu"}
-                other{"{0} UStu"}
             }
         }
         graphics{
@@ -1170,9 +1148,6 @@ sq{
             }
         }
         length{
-            fathom{
-                dnam{"pash detar"}
-            }
             foot{
                 dnam{"ft"}
             }
@@ -1207,12 +1182,8 @@ sq{
             barrel{
                 dnam{"fuçi"}
             }
-            bushel{
-                dnam{"shinik"}
-            }
             dram{
                 dnam{"fl.dr."}
-                one{"{0} fl.dr."}
                 other{"{0} fl.dr."}
             }
             drop{
@@ -1225,12 +1196,10 @@ sq{
             }
             jigger{
                 dnam{"teke"}
-                one{"{0} teke"}
                 other{"{0} teke"}
             }
             pinch{
                 dnam{"piska"}
-                one{"{0} pisk"}
                 other{"{0} piska"}
             }
         }
@@ -1244,12 +1213,10 @@ sq{
         angle{
             arc-minute{
                 dnam{"hark-min."}
-                one{"{0} hark-min."}
                 other{"{0} hark-min."}
             }
             arc-second{
                 dnam{"hark-sek."}
-                one{"{0} hark-sek."}
                 other{"{0} hark-sek."}
             }
             degree{
@@ -1257,7 +1224,6 @@ sq{
             }
             revolution{
                 dnam{"rrot."}
-                one{"{0} rrot."}
                 other{"{0} rrot."}
             }
         }
@@ -1277,7 +1243,6 @@ sq{
         concentr{
             item{
                 dnam{"njësi"}
-                one{"{0} njësi"}
                 other{"{0} njësi"}
             }
             ofglucose{
@@ -1285,7 +1250,6 @@ sq{
             }
             part{
                 dnam{"pjesë"}
-                one{"{0} pjesë"}
                 other{"{0} pjesë"}
             }
             part-per-1e6{
@@ -1298,12 +1262,10 @@ sq{
         consumption{
             mile-per-gallon{
                 dnam{"mi/gal"}
-                one{"{0} mi/gal"}
                 other{"{0} mi/gal"}
             }
             mile-per-gallon-imperial{
                 dnam{"mi/gal Imp."}
-                one{"{0} mi/gal Imp."}
                 other{"{0} mi/gal Imp."}
             }
         }
@@ -1317,7 +1279,6 @@ sq{
         digital{
             byte{
                 dnam{"bajt"}
-                one{"{0} bajt"}
                 other{"{0} bajt"}
             }
             gigabit{
@@ -1351,12 +1312,10 @@ sq{
         duration{
             century{
                 dnam{"shek."}
-                one{"{0} shek."}
                 other{"{0} shek."}
             }
             day{
                 dnam{"ditë"}
-                one{"{0} ditë"}
                 other{"{0} ditë"}
                 per{"{0}/ditë"}
             }
@@ -1367,24 +1326,20 @@ sq{
             }
             hour{
                 dnam{"orë"}
-                one{"{0} orë"}
                 other{"{0} orë"}
                 per{"{0}/orë"}
             }
             millisecond{
                 dnam{"milisek."}
-                one{"{0} milisek."}
                 other{"{0} milisek."}
             }
             minute{
                 dnam{"min."}
-                one{"{0} min."}
                 other{"{0} min."}
                 per{"{0}/min."}
             }
             month{
                 dnam{"muaj"}
-                one{"{0} muaj"}
                 other{"{0} muaj"}
                 per{"{0}/muaj"}
             }
@@ -1402,13 +1357,11 @@ sq{
             }
             second{
                 dnam{"sek."}
-                one{"{0} sek."}
                 other{"{0} sek."}
                 per{"{0}/sek."}
             }
             week{
                 dnam{"javë"}
-                one{"{0} javë"}
                 other{"{0} javë"}
                 per{"{0}/javë"}
             }
@@ -1451,14 +1404,10 @@ sq{
         force{
             kilowatt-hour-per-100-kilometer{
                 dnam{"kWh/100 km"}
-                one{"{0} kWh/100 km"}
                 other{"{0} kWh/100 km"}
             }
         }
         length{
-            fathom{
-                dnam{"fth"}
-            }
             foot{
                 dnam{"këmbë"}
             }
@@ -1489,33 +1438,24 @@ sq{
         }
         speed{
             beaufort{
-                one{"{0} B"}
                 other{"{0} B"}
             }
             kilometer-per-hour{
                 dnam{"km/orë"}
-                one{"{0} km/orë"}
                 other{"{0} km/orë"}
             }
             light-speed{
                 dnam{"dritë"}
-                one{"{0} dritë"}
                 other{"{0} dritë"}
             }
         }
         temperature{
             celsius{
                 dnam{"gradë C"}
-                one{"{0} gradë C"}
                 other{"{0} gradë C"}
             }
         }
         volume{
-            bushel{
-                dnam{"shinikë"}
-                one{"{0} shinik"}
-                other{"{0} shinikë"}
-            }
             cup{
                 dnam{"c"}
             }
@@ -1524,16 +1464,13 @@ sq{
             }
             dram{
                 one{"{0} fl.dr."}
-                other{"{0} dram fl"}
             }
             fluid-ounce{
                 dnam{"fl oz"}
-                one{"{0} fl oz"}
                 other{"{0} fl oz"}
             }
             gallon{
                 dnam{"gallon"}
-                one{"{0} gal"}
                 other{"{0} gal"}
                 per{"{0}/gal"}
             }
@@ -1542,17 +1479,14 @@ sq{
             }
             jigger{
                 one{"{0} teke"}
-                other{"{0} jigger"}
             }
             liter{
                 dnam{"L"}
-                one{"{0} L"}
                 other{"{0} L"}
                 per{"{0}/L"}
             }
             pinch{
                 one{"{0} pisk"}
-                other{"{0} pinch"}
             }
         }
     }

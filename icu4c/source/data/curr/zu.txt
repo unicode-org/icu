@@ -99,10 +99,6 @@ zu{
             "BYN",
             "i-Belarusian Ruble",
         }
-        BYR{
-            "BYR",
-            "i-Belarusian Ruble (2000–2016)",
-        }
         BZD{
             "BZD",
             "i-Belize Dollar",
@@ -339,14 +335,6 @@ zu{
             "LSL",
             "i-Lesotho Loti",
         }
-        LTL{
-            "LTL",
-            "i-Lithuanian Litas",
-        }
-        LVL{
-            "LVL",
-            "i-Latvian Lats",
-        }
         LYD{
             "LYD",
             "i-Libyan Dinar",
@@ -378,10 +366,6 @@ zu{
         MOP{
             "MOP",
             "i-Macanese Pataca",
-        }
-        MRO{
-            "MRO",
-            "i-Mauritanian Ouguiya (1973–2017)",
         }
         MRU{
             "MRU",
@@ -535,10 +519,6 @@ zu{
             "SSP",
             "i-South Sudanese Pound",
         }
-        STD{
-            "STD",
-            "i-São Tomé kanye ne-Príncipe Dobra (1977–2017)",
-        }
         STN{
             "STN",
             "i-São Tomé kanye ne-Príncipe Dobra",
@@ -607,10 +587,6 @@ zu{
             "UZS",
             "i-Uzbekistan Som",
         }
-        VEF{
-            "VEF",
-            "i-Venezuelan Bolívar (2008–2018)",
-        }
         VES{
             "VES",
             "i-Venezuelan Bolívar",
@@ -659,10 +635,6 @@ zu{
             "R",
             "i-South African Rand",
         }
-        ZMK{
-            "ZMK",
-            "i-Zambian Kwacha (1968–2012)",
-        }
         ZMW{
             "ZMW",
             "i-Zambian Kwacha",
@@ -684,7 +656,6 @@ zu{
     }
     CurrencyPlurals{
         CUP{
-            one{"i-Cuban pesos"}
             other{"i-Cuban pesos"}
         }
         CVE{
@@ -716,7 +687,6 @@ zu{
             other{"i-Trinidad & Tobago dollars"}
         }
         XAF{
-            one{"i-CFA Franc BCEA"}
             other{"i-CFA Franc BCEA"}
         }
         XCG{
@@ -726,10 +696,6 @@ zu{
         XOF{
             one{"i-West African CFA Franc"}
             other{"i-West African CFA francs"}
-        }
-        ZWG{
-            one{"igolide laseZimbabwe"}
-            other{"igolide laseZimbabwe"}
         }
     }
 }

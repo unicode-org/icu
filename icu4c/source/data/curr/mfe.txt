@@ -75,17 +75,9 @@ mfe{
             "£",
             "liv sterlin",
         }
-        GHC{
-            "GHC",
-            "sedi ganeen",
-        }
         GMD{
             "GMD",
             "dalasi gambien",
-        }
-        GNS{
-            "GNS",
-            "fran gineen",
         }
         INR{
             "₹",
@@ -123,10 +115,6 @@ mfe{
             "MGA",
             "fran malgas",
         }
-        MRO{
-            "MRO",
-            "ouguiya moritanien (1973–2017)",
-        }
         MRU{
             "MRU",
             "ouguiya moritanien",
@@ -138,10 +126,6 @@ mfe{
         MWK{
             "MWK",
             "kwacha malawit",
-        }
-        MZM{
-            "MZM",
-            "metikal mozanbikin",
         }
         NAD{
             "NAD",
@@ -167,10 +151,6 @@ mfe{
             "SDG",
             "dinar soudane",
         }
-        SDP{
-            "SDP",
-            "liv soudane",
-        }
         SHP{
             "SHP",
             "liv Sainte-Hélène",
@@ -186,10 +166,6 @@ mfe{
         SOS{
             "SOS",
             "shilingi somalien",
-        }
-        STD{
-            "STD",
-            "dobra santomeen (1977–2017)",
         }
         STN{
             "STN",
@@ -227,17 +203,9 @@ mfe{
             "ZAR",
             "rand sid-afrikin",
         }
-        ZMK{
-            "ZMK",
-            "kwacha zanbien (1968–2012)",
-        }
         ZMW{
             "ZMW",
             "kwacha zanbien",
-        }
-        ZWD{
-            "ZWD",
-            "dolar zimbawe",
         }
     }
 }

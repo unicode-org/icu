@@ -348,11 +348,6 @@ to{
             lg{"houa fakaʻamelika-tokelau pasifika"}
             ls{"houa fakaʻamelika-tokelau pasifika taimi totonu"}
         }
-        "meta:Anadyr"{
-            ld{"houa fakalūsia-ʻanatili taimi liliu"}
-            lg{"houa fakalūsia-ʻanatili"}
-            ls{"houa fakalūsia-ʻanatili taimi totonu"}
-        }
         "meta:Apia"{
             ld{"houa fakaapia taimi liliu"}
             lg{"houa fakaapia"}
@@ -440,9 +435,6 @@ to{
             ld{"houa fakamuiʻi-vēte taimi liliu"}
             lg{"houa fakamuiʻi-vēte"}
             ls{"houa fakamuiʻi-vēte taimi totonu"}
-        }
-        "meta:Casey"{
-            ls{"houa fakakeesi"}
         }
         "meta:Chamorro"{
             ls{"houa fakakamolo"}

@@ -251,10 +251,6 @@ km{
                 dnam{"ប៊ែកគ័ររែល"}
                 other{"{0} ប៊ែកគ័ររែល"}
             }
-            british-thermal-unit{
-                dnam{"ឯកតាកម្ដៅអង់គ្លេស"}
-                other{"{0} ឯកតាកម្ដៅអង់គ្លេស"}
-            }
             calorie{
                 dnam{"កាឡូរី"}
                 other{"{0} កាឡូរី"}
@@ -357,15 +353,9 @@ km{
                 dnam{"កាំផែនដី"}
                 other{"{0} កាំផែនដី"}
             }
-            fathom{
-                other{"{0} ហ្វាតឹម"}
-            }
             foot{
                 other{"{0} ហ្វីត"}
                 per{"{0} ក្នុងមួយហ្វីត"}
-            }
-            furlong{
-                other{"{0} ហ្វឺឡង"}
             }
             inch{
                 other{"{0} អ៊ីញ"}
@@ -458,9 +448,6 @@ km{
             pound{
                 other{"{0} ផោន"}
                 per{"{0} ក្នុងមួយផោន"}
-            }
-            stone{
-                other{"{0} ស្តូន"}
             }
             ton{
                 other{"{0} តោនអាមេរិក"}
@@ -567,9 +554,6 @@ km{
         volume{
             acre-foot{
                 other{"{0} អាហ្វីត"}
-            }
-            bushel{
-                other{"{0} ប៊ូសែល"}
             }
             centiliter{
                 dnam{"សង់ទីលីត្រ"}
@@ -988,9 +972,6 @@ km{
             }
         }
         energy{
-            british-thermal-unit{
-                dnam{"BTU"}
-            }
             foodcalorie{
                 dnam{"Cal"}
                 other{"{0} Cal"}
@@ -1018,15 +999,8 @@ km{
                 dnam{"ដម"}
                 other{"{0} ដម"}
             }
-            fathom{
-                dnam{"ហ្វាតឹម"}
-            }
             foot{
                 dnam{"ហ្វីត"}
-            }
-            furlong{
-                dnam{"ហ្វឺឡង"}
-                other{"{0} ហ្វឺ"}
             }
             inch{
                 dnam{"អ៊ីញ"}
@@ -1083,9 +1057,6 @@ km{
             pound{
                 dnam{"ផោន"}
             }
-            stone{
-                dnam{"ស្តូន"}
-            }
             ton{
                 dnam{"តោនអាមេរិក"}
             }
@@ -1119,9 +1090,6 @@ km{
         volume{
             acre-foot{
                 dnam{"អាហ្វីត"}
-            }
-            bushel{
-                dnam{"ប៊ូសែល"}
             }
             cubic-foot{
                 dnam{"ហ្វីត​គូប"}

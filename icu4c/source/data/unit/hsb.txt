@@ -259,7 +259,6 @@ hsb{
             mole{
                 dnam{"mole"}
                 few{"{0} mole"}
-                one{"{0} mol"}
                 other{"{0} molow"}
                 two{"{0} molej"}
             }
@@ -273,7 +272,6 @@ hsb{
             part{
                 dnam{"dźěle"}
                 few{"{0} dźěle"}
-                one{"{0} dźěl"}
                 other{"{0} dźělow"}
                 two{"{0} dźělej"}
             }
@@ -354,14 +352,12 @@ hsb{
             bit{
                 dnam{"bity"}
                 few{"{0} bity"}
-                one{"{0} bit"}
                 other{"{0} bitow"}
                 two{"{0} bitaj"}
             }
             byte{
                 dnam{"bytey"}
                 few{"{0} bytey"}
-                one{"{0} byte"}
                 other{"{0} byteow"}
                 two{"{0} byteaj"}
             }
@@ -603,13 +599,6 @@ hsb{
                 other{"{0} bequerelow"}
                 two{"{0} bequerelej"}
             }
-            british-thermal-unit{
-                dnam{"britiske jednotki ćopłoty"}
-                few{"{0} britiske jednotki ćopłoty"}
-                one{"{0} britiska jednotka ćopłoty"}
-                other{"{0} britiskich jednotkow ćopłoty"}
-                two{"{0} britiskej jednotce ćopłoty"}
-            }
             calorie{
                 dnam{"kalorije"}
                 few{"{0} kalorije"}
@@ -815,13 +804,6 @@ hsb{
                 other{"{0} radiusow zemje"}
                 two{"{0} radiusaj zemje"}
             }
-            fathom{
-                dnam{"sahi"}
-                few{"{0} sahi"}
-                one{"{0} saha"}
-                other{"{0} sahow"}
-                two{"{0} saze"}
-            }
             foot{
                 dnam{"stopy"}
                 few{"{0} stopy"}
@@ -829,13 +811,6 @@ hsb{
                 other{"{0} stopow"}
                 per{"{0} na stopu"}
                 two{"{0} stopje"}
-            }
-            furlong{
-                dnam{"furlongi"}
-                few{"{0} furlongi"}
-                one{"{0} furlong"}
-                other{"{0} furlongow"}
-                two{"{0} furlongaj"}
             }
             inch{
                 dnam{"cóle"}
@@ -1074,13 +1049,6 @@ hsb{
                 other{"{0} masow słónca"}
                 two{"{0} masy słónca"}
             }
-            stone{
-                dnam{"kamjenje"}
-                few{"{0} kamjenje"}
-                one{"{0} kamjeń"}
-                other{"{0} kamjenjow"}
-                two{"{0} kamjenjej"}
-            }
             ton{
                 dnam{"ameriske tony"}
                 few{"{0} ameriske tony"}
@@ -1151,7 +1119,6 @@ hsb{
             bar{
                 dnam{"bary"}
                 few{"{0} bary"}
-                one{"{0} bar"}
                 other{"{0} barow"}
                 two{"{0} baraj"}
             }
@@ -1322,13 +1289,6 @@ hsb{
                 one{"{0} barel"}
                 other{"{0} barelow"}
                 two{"{0} barelej"}
-            }
-            bushel{
-                dnam{"bušle"}
-                few{"{0} bušle"}
-                one{"{0} bušl"}
-                other{"{0} bušlow"}
-                two{"{0} bušlej"}
             }
             centiliter{
                 dnam{"centilitry"}
@@ -1688,38 +1648,23 @@ hsb{
         angle{
             arc-minute{
                 dnam{"′"}
-                few{"{0} ′"}
-                one{"{0} ′"}
                 other{"{0} ′"}
-                two{"{0} ′"}
             }
             arc-second{
                 dnam{"″"}
-                few{"{0} ″"}
-                one{"{0} ″"}
                 other{"{0} ″"}
-                two{"{0} ″"}
             }
             degree{
                 dnam{"°"}
-                few{"{0} °"}
-                one{"{0} °"}
                 other{"{0} °"}
-                two{"{0} °"}
             }
             revolution{
                 dnam{"wobr."}
-                few{"{0} wobr."}
-                one{"{0} wobr."}
                 other{"{0} wobr."}
-                two{"{0} wobr."}
             }
             steradian{
                 dnam{"steradian"}
-                few{"{0} sr"}
-                one{"{0} sr"}
                 other{"{0} sr"}
-                two{"{0} sr"}
             }
         }
         area{
@@ -1728,10 +1673,7 @@ hsb{
             }
             dunam{
                 dnam{"dun."}
-                few{"{0} dun."}
-                one{"{0} dun."}
                 other{"{0} dun."}
-                two{"{0} dun."}
             }
             hectare{
                 dnam{"ha"}
@@ -1746,93 +1688,54 @@ hsb{
                 two{"{0} kusaj"}
             }
             katal{
-                few{"{0} kat"}
-                one{"{0} kat"}
                 other{"{0} kat"}
-                two{"{0} kat"}
             }
             milligram-ofglucose-per-deciliter{
                 dnam{"mg/dl"}
-                few{"{0} mg/dl"}
-                one{"{0} mg/dl"}
                 other{"{0} mg/dl"}
-                two{"{0} mg/dl"}
             }
             millimole-per-liter{
                 dnam{"mmol/l"}
-                few{"{0} mmol/l"}
-                one{"{0} mmol/l"}
                 other{"{0} mmol/l"}
-                two{"{0} mmol/l"}
             }
             ofglucose{
                 dnam{"Glc"}
-                few{"{0} Glc"}
-                one{"{0} Glc"}
                 other{"{0} Glc"}
-                two{"{0} Glc"}
             }
             part{
                 dnam{"dźěl"}
-                few{"{0} dźěl"}
-                one{"{0} dźěl"}
                 other{"{0} dźěl"}
-                two{"{0} dźěl"}
             }
             part-per-1e9{
                 dnam{"nano"}
-                few{"{0} nano"}
-                one{"{0} nano"}
                 other{"{0} nano"}
-                two{"{0} nano"}
             }
             percent{
-                few{"{0} %"}
-                one{"{0} %"}
                 other{"{0} %"}
-                two{"{0} %"}
             }
             permille{
-                few{"{0} ‰"}
-                one{"{0} ‰"}
                 other{"{0} ‰"}
-                two{"{0} ‰"}
             }
             permyriad{
-                few{"{0} ‱"}
-                one{"{0} ‱"}
                 other{"{0} ‱"}
-                two{"{0} ‱"}
             }
         }
         consumption{
             liter-per-100-kilometer{
                 dnam{"l/100km"}
-                few{"{0} l/100km"}
-                one{"{0} l/100km"}
                 other{"{0} l/100km"}
-                two{"{0} l/100km"}
             }
             liter-per-kilometer{
                 dnam{"l/km"}
-                few{"{0} l/km"}
-                one{"{0} l/km"}
                 other{"{0} l/km"}
-                two{"{0} l/km"}
             }
             mile-per-gallon{
                 dnam{"mpg"}
-                few{"{0} mpg"}
-                one{"{0} mpg"}
                 other{"{0} mpg"}
-                two{"{0} mpg"}
             }
             mile-per-gallon-imperial{
                 dnam{"mpg brit."}
-                few{"{0} mpg brit."}
-                one{"{0} mpg brit."}
                 other{"{0} mpg brit."}
-                two{"{0} mpg brit."}
             }
         }
         coordinate{
@@ -1845,48 +1748,31 @@ hsb{
         duration{
             century{
                 dnam{"lětst."}
-                few{"{0} lětst."}
-                one{"{0} lětst."}
                 other{"{0} lětst."}
-                two{"{0} lětst."}
             }
             day{
                 dnam{"dny"}
-                few{"{0} dn."}
                 one{"{0} dź."}
                 other{"{0} dn."}
                 per{"{0}/dź."}
-                two{"{0} dn."}
             }
             decade{
                 dnam{"lětdź."}
-                few{"{0} lětdź."}
-                one{"{0} lětdź."}
                 other{"{0} lětdź."}
-                two{"{0} lětdź."}
             }
             hour{
                 dnam{"hodź."}
-                few{"{0} hodź."}
-                one{"{0} hodź."}
                 other{"{0} hodź."}
-                two{"{0} hodź."}
             }
             minute{
                 dnam{"min."}
-                few{"{0} min."}
-                one{"{0} min."}
                 other{"{0} min."}
                 per{"{0}/min."}
-                two{"{0} min."}
             }
             month{
                 dnam{"měs."}
-                few{"{0} měs."}
-                one{"{0} měs."}
                 other{"{0} měs."}
                 per{"{0}/měs."}
-                two{"{0} měs."}
             }
             night{
                 dnam{"nocy"}
@@ -1898,34 +1784,22 @@ hsb{
             }
             quarter{
                 dnam{"kwart."}
-                few{"{0} kwart."}
-                one{"{0} kwart."}
                 other{"{0} kwart."}
                 per{"{0}/kwart."}
-                two{"{0} kwart."}
             }
             second{
                 dnam{"sek."}
-                few{"{0} sek."}
-                one{"{0} sek."}
                 other{"{0} sek."}
-                two{"{0} sek."}
             }
             week{
                 dnam{"tydź."}
-                few{"{0} tydź."}
-                one{"{0} tydź."}
                 other{"{0} tydź."}
                 per{"{0}/tydź."}
-                two{"{0} tydź."}
             }
             year{
                 dnam{"l."}
-                few{"{0} l."}
-                one{"{0} l."}
                 other{"{0} l."}
                 per{"{0}/l."}
-                two{"{0} l."}
             }
         }
         electric{
@@ -1933,31 +1807,19 @@ hsb{
                 dnam{"A"}
             }
             coulomb{
-                few{"{0} C"}
-                one{"{0} C"}
                 other{"{0} C"}
-                two{"{0} C"}
             }
             farad{
-                few{"{0} F"}
-                one{"{0} F"}
                 other{"{0} F"}
-                two{"{0} F"}
             }
             henry{
-                few{"{0} H"}
-                one{"{0} H"}
                 other{"{0} H"}
-                two{"{0} H"}
             }
             ohm{
                 dnam{"Ω"}
             }
             siemens{
-                few{"{0} S"}
-                one{"{0} S"}
                 other{"{0} S"}
-                two{"{0} S"}
             }
             volt{
                 dnam{"V"}
@@ -1965,52 +1827,32 @@ hsb{
         }
         energy{
             becquerel{
-                few{"{0} Bq"}
-                one{"{0} Bq"}
                 other{"{0} Bq"}
-                two{"{0} Bq"}
             }
             calorie-it{
                 dnam{"cal-IT"}
-                few{"{0} cal-IT"}
-                one{"{0} cal-IT"}
                 other{"{0} cal-IT"}
-                two{"{0} cal-IT"}
             }
             gray{
-                few{"{0} Gy"}
-                one{"{0} Gy"}
                 other{"{0} Gy"}
-                two{"{0} Gy"}
             }
             joule{
                 dnam{"J"}
             }
             sievert{
-                few{"{0} Sv"}
-                one{"{0} Sv"}
                 other{"{0} Sv"}
-                two{"{0} Sv"}
             }
             therm-us{
-                few{"{0} US therms"}
                 one{"{0} US therm"}
                 other{"{0} US therms"}
-                two{"{0} US therms"}
             }
         }
         force{
             kilogram-force{
-                few{"{0} kgf"}
-                one{"{0} kgf"}
                 other{"{0} kgf"}
-                two{"{0} kgf"}
             }
         }
         length{
-            fathom{
-                dnam{"fth"}
-            }
             inch{
                 per{"{0}/cól"}
             }
@@ -2020,25 +1862,16 @@ hsb{
         }
         magnetic{
             tesla{
-                few{"{0} T"}
-                one{"{0} T"}
                 other{"{0} T"}
-                two{"{0} T"}
             }
             weber{
-                few{"{0} Wb"}
-                one{"{0} Wb"}
                 other{"{0} Wb"}
-                two{"{0} Wb"}
             }
         }
         mass{
             carat{
                 dnam{"Kt"}
-                few{"{0} Kt"}
-                one{"{0} Kt"}
                 other{"{0} Kt"}
-                two{"{0} Kt"}
             }
             grain{
                 few{"{0} grainy"}
@@ -2051,10 +1884,7 @@ hsb{
             }
             ounce-troy{
                 dnam{"oz. tr."}
-                few{"{0} oz. tr."}
-                one{"{0} oz. tr."}
                 other{"{0} oz. tr."}
-                two{"{0} oz. tr."}
             }
             ton{
                 dnam{"am.tony"}
@@ -2063,10 +1893,7 @@ hsb{
         power{
             horsepower{
                 dnam{"PS"}
-                few{"{0} PS"}
-                one{"{0} PS"}
                 other{"{0} PS"}
-                two{"{0} PS"}
             }
             watt{
                 dnam{"W"}
@@ -2074,25 +1901,16 @@ hsb{
         }
         pressure{
             ofhg{
-                few{"{0} Hg"}
-                one{"{0} Hg"}
                 other{"{0} Hg"}
-                two{"{0} Hg"}
             }
         }
         speed{
             beaufort{
-                few{"{0} Bft"}
-                one{"{0} Bft"}
                 other{"{0} Bft"}
-                two{"{0} Bft"}
             }
             knot{
                 dnam{"sk"}
-                few{"{0} sk"}
-                one{"{0} sk"}
                 other{"{0} sk"}
-                two{"{0} sk"}
             }
             light-speed{
                 dnam{"sw. spěšnosć"}
@@ -2103,117 +1921,72 @@ hsb{
             }
             mile-per-hour{
                 dnam{"mph"}
-                few{"{0} mph"}
-                one{"{0} mph"}
                 other{"{0} mph"}
-                two{"{0} mph"}
             }
         }
         torque{
             newton-meter{
                 dnam{"Nm"}
-                few{"{0} Nm"}
-                one{"{0} Nm"}
                 other{"{0} Nm"}
-                two{"{0} Nm"}
             }
         }
         volume{
             centiliter{
                 dnam{"cl"}
-                few{"{0} cl"}
-                one{"{0} cl"}
                 other{"{0} cl"}
-                two{"{0} cl"}
             }
             cup{
                 dnam{"š."}
-                few{"{0} š."}
-                one{"{0} š."}
                 other{"{0} š."}
-                two{"{0} š."}
             }
             cup-metric{
                 dnam{"mc"}
             }
             deciliter{
                 dnam{"dl"}
-                few{"{0} dl"}
-                one{"{0} dl"}
                 other{"{0} dl"}
-                two{"{0} dl"}
             }
             dessert-spoon{
                 dnam{"dess. łžk."}
-                few{"{0} dess. łžk."}
-                one{"{0} dess. łžk."}
                 other{"{0} dess. łžk."}
-                two{"{0} dess. łžk."}
             }
             dessert-spoon-imperial{
                 dnam{"imp. łžk."}
-                few{"{0} imp. łžk."}
-                one{"{0} imp. łžk."}
                 other{"{0} imp. łžk."}
-                two{"{0} imp. łžk."}
             }
             dram{
                 dnam{"dr"}
-                few{"{0} dr"}
-                one{"{0} dr"}
                 other{"{0} dr"}
-                two{"{0} dr"}
             }
             drop{
                 dnam{"kpk."}
-                few{"{0} kpk."}
-                one{"{0} kpk."}
                 other{"{0} kpk."}
-                two{"{0} kpk."}
             }
             fluid-ounce{
                 dnam{"fl. oz."}
-                few{"{0} fl. oz."}
-                one{"{0} fl. oz."}
                 other{"{0} fl. oz."}
-                two{"{0} fl. oz."}
             }
             fluid-ounce-imperial{
                 dnam{"brit. fl oz"}
-                few{"{0} brit. fl oz"}
-                one{"{0} brit. fl oz"}
                 other{"{0} brit. fl oz"}
-                two{"{0} brit. fl oz"}
             }
             fluid-ounce-metric{
                 dnam{"m. fl oz"}
-                few{"{0} m. fl oz"}
-                one{"{0} m. fl oz"}
                 other{"{0} m. fl oz"}
-                two{"{0} m. fl oz"}
             }
             gallon{
                 dnam{"gal"}
-                few{"{0} gal"}
-                one{"{0} gal"}
                 other{"{0} gal"}
                 per{"{0}/gal"}
-                two{"{0} gal"}
             }
             gallon-imperial{
                 dnam{"brit. gal."}
-                few{"{0} brit. gal."}
-                one{"{0} brit. gal."}
                 other{"{0} brit. gal."}
                 per{"{0}/brit. gal."}
-                two{"{0} brit. gal."}
             }
             hectoliter{
                 dnam{"hl"}
-                few{"{0} hl"}
-                one{"{0} hl"}
                 other{"{0} hl"}
-                two{"{0} hl"}
             }
             jigger{
                 dnam{"jiggery"}
@@ -2227,17 +2000,11 @@ hsb{
             }
             megaliter{
                 dnam{"Ml"}
-                few{"{0} Ml"}
-                one{"{0} Ml"}
                 other{"{0} Ml"}
-                two{"{0} Ml"}
             }
             milliliter{
                 dnam{"ml"}
-                few{"{0} ml"}
-                one{"{0} ml"}
                 other{"{0} ml"}
-                two{"{0} ml"}
             }
             pinch{
                 dnam{"šćipki"}
@@ -2248,17 +2015,11 @@ hsb{
             }
             tablespoon{
                 dnam{"łž."}
-                few{"{0} łž."}
-                one{"{0} łž."}
                 other{"{0} łž."}
-                two{"{0} łž."}
             }
             teaspoon{
                 dnam{"łžk."}
-                few{"{0} łžk."}
-                one{"{0} łžk."}
                 other{"{0} łžk."}
-                two{"{0} łžk."}
             }
         }
     }

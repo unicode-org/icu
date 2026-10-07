@@ -10,18 +10,8 @@ kok_Latn{
         " ″]"
     }
     NumberElements{
-        deva{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##,##0.00"}
-                accountingFormat%noCurrency{"#,##,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##,##0.00"}
-                currencyFormat%noCurrency{"#,##,##0.00"}
-            }
-        }
         latn{
             patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##,##0.00"}
-                accountingFormat%noCurrency{"#,##,##0.00"}
                 currencyFormat{"¤#,##,##0.00"}
                 currencyFormat%alphaNextToNumber{"¤ #,##,##0.00"}
                 currencyFormat%noCurrency{"#,##,##0.00"}
@@ -310,20 +300,6 @@ kok_Latn{
                     d{"d/M/y – d/M/y GGGGG"}
                     y{"d/M/y – d/M/y GGGGG"}
                 }
-                H{
-                    H{"HH – HH"}
-                }
-                Hm{
-                    H{"HH:mm – HH:mm"}
-                    m{"HH:mm – HH:mm"}
-                }
-                Hmv{
-                    H{"HH:mm – HH:mm v"}
-                    m{"HH:mm – HH:mm v"}
-                }
-                Hv{
-                    H{"HH – HH v"}
-                }
                 M{
                     M{"M – M"}
                 }
@@ -348,24 +324,6 @@ kok_Latn{
                 }
                 d{
                     d{"d – d"}
-                }
-                h{
-                    a{"a h – a h"}
-                    h{"a h – h"}
-                }
-                hm{
-                    a{"a h:mm – a h:mm"}
-                    h{"a h:mm – h:mm"}
-                    m{"a h:mm – h:mm"}
-                }
-                hmv{
-                    a{"a h:mm – a h:mm v"}
-                    h{"a h:mm – h:mm v"}
-                    m{"a h:mm – h:mm v"}
-                }
-                hv{
-                    a{"a h – a h v"}
-                    h{"a h – h v"}
                 }
                 y{
                     y{"y – y G"}
@@ -461,7 +419,6 @@ kok_Latn{
                 MEd{"dd-MM, E"}
                 MMMEd{"E, d MMM"}
                 MMMMW{
-                    one{"MMMM -'acho' 'suman' W"}
                     other{"MMMM -'acho' 'suman' W"}
                 }
                 MMMMd{"d MMMM"}
@@ -485,7 +442,6 @@ kok_Latn{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    one{"Y -'acho' 'suman' w"}
                     other{"Y -'acho' 'suman' w"}
                 }
             }
@@ -578,10 +534,6 @@ kok_Latn{
                 abbreviated{
                     0{"KA"}
                     1{"AD"}
-                }
-                narrow{
-                    0{"K"}
-                    1{"A"}
                 }
                 wide{
                     0{"Krista Adim"}
@@ -790,41 +742,6 @@ kok_Latn{
                 }
             }
         }
-        iso8601{
-            availableFormats{
-                Bh{"h 'vaztam' B"}
-                H{"HH'v'"}
-                MMMMW{
-                    one{"MMMM 'suman' W"}
-                    other{"MMMM 'suman' W"}
-                }
-                h{"h 'vaztam' a"}
-                yw{
-                    one{"Y 'suman' w"}
-                    other{"Y 'suman' w"}
-                }
-            }
-            intervalFormats{
-                Bh{
-                    B{"h 'vaztam' B – h 'vaztam' B"}
-                    h{"h–h 'vaztam' a"}
-                }
-                H{
-                    H{"HH–HH'v'"}
-                }
-                Hv{
-                    H{"HH–HH'v' v"}
-                }
-                h{
-                    a{"h 'vaztam' a – h 'vaztam' a"}
-                    h{"h–h 'vaztam' a"}
-                }
-                hv{
-                    a{"h 'vaztam' a – h 'vaztam' a v"}
-                    h{"h–h 'vaztam' a v"}
-                }
-            }
-        }
     }
     fields{
         day{
@@ -840,7 +757,6 @@ kok_Latn{
                     other{"{0} disanim"}
                 }
                 past{
-                    one{"{0} dis adim"}
                     other{"{0} dis adim"}
                 }
             }
@@ -848,8 +764,6 @@ kok_Latn{
         day-narrow{
             dn{"d"}
             relative{
-                "-1"{"kal"}
-                "0"{"aiz"}
                 "1"{"fal"}
             }
             relativeTime{
@@ -964,9 +878,6 @@ kok_Latn{
         }
         minute-narrow{
             dn{"min"}
-            relative{
-                "0"{"ho min"}
-            }
             relativeTime{
                 future{
                     one{"{0}mintan"}
@@ -980,12 +891,8 @@ kok_Latn{
         }
         minute-short{
             dn{"min."}
-            relative{
-                "0"{"ho min."}
-            }
             relativeTime{
                 future{
-                    one{"{0} mintan"}
                     other{"{0} min."}
                 }
                 past{
@@ -1107,11 +1014,6 @@ kok_Latn{
         }
         quarter-narrow{
             dn{"timh"}
-            relative{
-                "-1"{"fattlem timh"}
-                "0"{"hem timh"}
-                "1"{"fuddlem timh"}
-            }
             relativeTime{
                 future{
                     one{"{0}timhoinallean"}
@@ -1125,11 +1027,6 @@ kok_Latn{
         }
         quarter-short{
             dn{"timho."}
-            relative{
-                "-1"{"fattlem timho."}
-                "0"{"hem timho."}
-                "1"{"fuddlem timho."}
-            }
             relativeTime{
                 past{
                     one{"{0} timho. adim"}
@@ -1191,7 +1088,6 @@ kok_Latn{
                     other{"{0} sekondanim"}
                 }
                 past{
-                    one{"{0} sekond adim"}
                     other{"{0} sekond adim"}
                 }
             }
@@ -1404,7 +1300,6 @@ kok_Latn{
                     other{"{0} sumananim"}
                 }
                 past{
-                    one{"{0} suman adim"}
                     other{"{0} suman adim"}
                 }
             }
@@ -1496,10 +1391,6 @@ kok_Latn{
         standard-short{
             2{"{0} & {1}"}
             end{"{0}, & {1}"}
-        }
-        unit{
-            2{"{0}, {1}"}
-            end{"{0}, {1}"}
         }
         unit-narrow{
             2{"{0} {1}"}

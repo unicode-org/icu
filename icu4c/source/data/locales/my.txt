@@ -156,15 +156,6 @@ my{
                 other{"{0} ရက်"}
             }
         }
-        mymr{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                list{"၊"}
-            }
-        }
         native{"mymr"}
     }
     calendar{
@@ -183,16 +174,6 @@ my{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "Hmm",
-                "GyMMMMEEEEdd",
-                "GyMMMMdd",
-                "GyMMMd",
-                "GGGGGyyMMdd",
             }
             availableFormats{
                 Bh{"B h"}
@@ -322,16 +303,6 @@ my{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "Hmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yyMMdd",
             }
             appendItems{
                 Timezone{"{1} {0}"}
@@ -851,11 +822,6 @@ my{
             }
         }
         quarter-short{
-            relative{
-                "-1"{"ပြီးခဲ့သောသုံးလပတ်"}
-                "0"{"ယခုသုံးလပတ်"}
-                "1"{"နောက်လာမည့်သုံးလပတ်"}
-            }
             relativeTime{
                 future{
                     other{"သုံးလပတ်ကာလ {0} ခုအတွင်း"}
@@ -1004,49 +970,15 @@ my{
             middle{"{0}၊ {1}"}
             start{"{0}၊ {1}"}
         }
-        or-narrow{
-            middle{"{0}၊ {1}"}
-            start{"{0}၊ {1}"}
-        }
-        or-short{
-            middle{"{0}၊ {1}"}
-            start{"{0}၊ {1}"}
-        }
         standard{
             2{"{0} နှင့် {1}"}
             end{"{0} နှင့် {1}"}
             middle{"{0}၊ {1}"}
             start{"{0}၊ {1}"}
         }
-        standard-narrow{
-            2{"{0} နှင့် {1}"}
-            end{"{0} နှင့် {1}"}
-            middle{"{0}၊ {1}"}
-            start{"{0}၊ {1}"}
-        }
-        standard-short{
-            2{"{0} နှင့် {1}"}
-            end{"{0} နှင့် {1}"}
-            middle{"{0}၊ {1}"}
-            start{"{0}၊ {1}"}
-        }
-        unit{
-            2{"{0}၊ {1}"}
-            end{"{0}၊ {1}"}
-            middle{"{0}၊ {1}"}
-            start{"{0}၊ {1}"}
-        }
-        unit-narrow{
-            2{"{0}၊ {1}"}
-            end{"{0}၊ {1}"}
-            middle{"{0}၊ {1}"}
-            start{"{0}၊ {1}"}
-        }
         unit-short{
             2{"{0}၊ {1}"}
             end{"{0}၊ {1}"}
-            middle{"{0}၊ {1}"}
-            start{"{0}၊ {1}"}
         }
     }
     measurementSystemNames{

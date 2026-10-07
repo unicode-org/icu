@@ -30,7 +30,6 @@ tok{
         es_MX{"toki Epanjo pi ma Mesiko"}
         eu{"toki Esuka"}
         fa{"toki Pasi"}
-        fa_AF{"toki Pasi pi ma Akan"}
         fi{"toki Sumi"}
         fil{"toki Takalo"}
         fr{"toki Kanse"}
@@ -43,23 +42,16 @@ tok{
         hu{"toki Maja"}
         ia{"toki Intelinwa"}
         id{"toki Intonesija"}
-        io{"toki Ito"}
         it{"toki Italija"}
         ja{"toki Nijon"}
-        jbo{"toki Losupan"}
         jv{"toki Sowa"}
         km{"toki Kame"}
         ko{"toki Anku"}
-        kw{"toki Kenuwe"}
-        la{"toki Lasina"}
-        mas{"toki Ma"}
         mi{"toki Majoli"}
         mr{"toki Malasi"}
         ms{"toki Melaju"}
         mul{"toki mute"}
         my{"toki Mijama"}
-        nan{"toki Pan pi ma seli"}
-        nb{"toki Nosiki lipu"}
         nl{"toki Netelan"}
         nn{"toki Nosiki sin"}
         no{"toki Nosiki"}
@@ -68,23 +60,18 @@ tok{
         ru{"toki Lusi"}
         so{"toki Somali"}
         sr{"toki Sepi"}
-        ss{"toki Suwasi"}
         sv{"toki Sensa"}
         sw{"toki Suwawili"}
-        sw_CD{"toki Suwawili pi ma Konko"}
         ta{"toki Tami"}
         te{"toki Teluku"}
         th{"toki Tawi"}
         tn{"toki Suwana"}
         tok{"toki pona"}
         tr{"toki Tuki"}
-        ts{"toki Sonka"}
         uk{"toki Ukawina"}
         ur{"toki Utu"}
         uz{"toki Opeki"}
-        ve{"toki Wenta"}
         vi{"toki Wije"}
-        vo{"toki Olapu"}
         xh{"toki Kosa"}
         yo{"toki Jolupa"}
         yue{"toki Ju"}
@@ -113,7 +100,6 @@ tok{
         Hans{"linja lili"}
         Hant{"linja mute"}
         Hebr{"sitelen Iwi"}
-        Java{"sitelen Sowa"}
         Jpan{"sitelen Nijon"}
         Khmr{"sitelen Kame"}
         Kore{"sitelen Koli"}
@@ -121,7 +107,6 @@ tok{
         Mymr{"sitelen Mijama"}
         Telu{"sitelen Teluku"}
         Thai{"sitelen Tawi"}
-        Zinh{"sitelen poka"}
         Zmth{"sitelen nanpa"}
         Zsye{"sitelen Emosi"}
         Zsym{"sitelen ijo"}
@@ -144,8 +129,6 @@ tok{
         }
         collation{
             ducet{"nasin nimi Juniko"}
-            emoji{"nasin nimi Emosi"}
-            pinyin{"nasin nimi Pinin"}
         }
         collation%core{
             ducet{"nasin Juniko"}
@@ -187,10 +170,6 @@ tok{
             thai{"sitelen nanpa Tawi"}
             tibt{"sitelen nanpa Po"}
         }
-    }
-    Variants{
-        FONIPA{"sitelen IPA"}
-        FONUPA{"sitelen UPA"}
     }
     codePatterns{
         language{"toki: {0}"}

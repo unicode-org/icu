@@ -16,19 +16,11 @@ sr_Cyrl_XK{
                 format{
                     abbreviated{
                         afternoon1{"по под."}
-                        evening1{"увече"}
-                        midnight{"поноћ"}
                         morning1{"јутро"}
-                        night1{"ноћу"}
-                        noon{"подне"}
                     }
                     narrow{
-                        afternoon1{"по под."}
                         evening1{"вече"}
-                        midnight{"поноћ"}
-                        morning1{"јутро"}
                         night1{"ноћ"}
-                        noon{"подне"}
                     }
                 }
                 stand-alone{

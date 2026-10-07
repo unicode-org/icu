@@ -55,7 +55,6 @@ es_PY{
             }
             second{
                 dnam{"seg."}
-                one{"{0} seg."}
                 other{"{0} seg."}
                 per{"{0}/seg."}
             }

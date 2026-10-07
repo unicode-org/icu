@@ -75,17 +75,9 @@ kab{
             "£",
             "Apund Aglizi",
         }
-        GHC{
-            "GHC",
-            "Asidi Aɣani",
-        }
         GMD{
             "GMD",
             "Adalasi Agambi",
-        }
-        GNS{
-            "GNS",
-            "Afrank Aɣini",
         }
         INR{
             "₹",
@@ -123,10 +115,6 @@ kab{
             "MGA",
             "Aryari Amalgac",
         }
-        MRO{
-            "MRO",
-            "Agiya Amuriṭani (1973–2017)",
-        }
         MRU{
             "MRU",
             "Agiya Amuriṭani",
@@ -138,10 +126,6 @@ kab{
         MWK{
             "MWK",
             "Akwaca Amalawi",
-        }
-        MZM{
-            "MZM",
-            "Amitikal Amuzembiqi",
         }
         NAD{
             "NAD",
@@ -183,10 +167,6 @@ kab{
             "SOS",
             "Aciling Aṣumali",
         }
-        STD{
-            "STD",
-            "Asw Ṭum d Udubra Amenzay (1977–2017)",
-        }
         STN{
             "STN",
             "Asw Ṭum d Udubra Amenzay",
@@ -223,17 +203,9 @@ kab{
             "ZAR",
             "Arand Afriqi n Wadda",
         }
-        ZMK{
-            "ZMK",
-            "Akwaca Azambi (1968–2012)",
-        }
         ZMW{
             "ZMW",
             "Akwaca Azambi",
-        }
-        ZWD{
-            "ZWD",
-            "Adular Azimbabwi",
         }
     }
 }

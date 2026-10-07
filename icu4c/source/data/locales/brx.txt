@@ -13,12 +13,6 @@ brx{
     }
     ExemplarCharactersPunctuation{"[\\- ‐‑ – — , ; \\: ! ? . … '‘’ \u0022“” ( ) \\[ \\] § @ * / \\& # † ‡ ′ ″]"}
     NumberElements{
-        deva{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                currencyFormat%alphaNextToNumber{"¤ #,##,##0.00"}
-            }
-        }
         latn{
             miscPatterns{
                 atLeast{"{0}+"}
@@ -88,101 +82,77 @@ brx{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"¤ 0के"}
                         other{"¤ 0के"}
                     }
                     10000{
-                        one{"¤ 00के"}
                         other{"¤ 00के"}
                     }
                     100000{
-                        one{"¤ 000के"}
                         other{"¤ 000के"}
                     }
                     1000000{
-                        one{"¤ 0एम"}
                         other{"¤ 0एम"}
                     }
                     10000000{
-                        one{"¤ 00एम"}
                         other{"¤ 00एम"}
                     }
                     100000000{
-                        one{"¤ 000एम"}
                         other{"¤ 000एम"}
                     }
                     1000000000{
-                        one{"¤ 0बि"}
                         other{"¤ 0बि"}
                     }
                     10000000000{
-                        one{"¤ 00बि"}
                         other{"¤ 00बि"}
                     }
                     100000000000{
-                        one{"¤ 000बि"}
                         other{"¤ 000बि"}
                     }
                     1000000000000{
-                        one{"¤ 0ति"}
                         other{"¤ 0ति"}
                     }
                     10000000000000{
-                        one{"¤ 00ति"}
                         other{"¤ 00ति"}
                     }
                     100000000000000{
-                        one{"¤ 000ति"}
                         other{"¤ 000ति"}
                     }
                 }
                 decimalFormat{
                     1000{
-                        one{"0के"}
                         other{"0के"}
                     }
                     10000{
-                        one{"00के"}
                         other{"00के"}
                     }
                     100000{
-                        one{"000के"}
                         other{"000के"}
                     }
                     1000000{
-                        one{"0एम"}
                         other{"0एम"}
                     }
                     10000000{
-                        one{"00एम"}
                         other{"00एम"}
                     }
                     100000000{
-                        one{"000एम"}
                         other{"000एम"}
                     }
                     1000000000{
-                        one{"0बि"}
                         other{"0बि"}
                     }
                     10000000000{
-                        one{"00बि"}
                         other{"00बि"}
                     }
                     100000000000{
-                        one{"000बि"}
                         other{"000बि"}
                     }
                     1000000000000{
-                        one{"0ति"}
                         other{"0ति"}
                     }
                     10000000000000{
-                        one{"00ति"}
                         other{"00ति"}
                     }
                     100000000000000{
-                        one{"000ति"}
                         other{"000ति"}
                     }
                 }
@@ -215,16 +185,6 @@ brx{
                 "{1} नि {0} आव",
                 "{1}, {0}",
                 "{1}, {0}",
-            }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMMd",
-                "GGGGGyyMd",
             }
             availableFormats{
                 Bh{"B h"}
@@ -395,16 +355,6 @@ brx{
                 "{1} नि {0} याव",
                 "{1}, {0}",
                 "{1}, {0}",
-            }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yyMd",
             }
             availableFormats{
                 Bh{"B नि h"}
@@ -718,11 +668,9 @@ brx{
             }
             relativeTime{
                 future{
-                    one{"{0} सानाव"}
                     other{"{0} सानाव"}
                 }
                 past{
-                    one{"{0} सान सिगां"}
                     other{"{0} सान सिगां"}
                 }
             }
@@ -744,11 +692,9 @@ brx{
             }
             relativeTime{
                 future{
-                    one{"{0} सुखुरबाराव"}
                     other{"{0} सुखुरबाराव"}
                 }
                 past{
-                    one{"{0} सुखुरबार सिगां"}
                     other{"{0} सुखुरबार सिगां"}
                 }
             }
@@ -760,11 +706,9 @@ brx{
             }
             relativeTime{
                 future{
-                    one{"{0} घन्टायाव"}
                     other{"{0} घन्टायाव"}
                 }
                 past{
-                    one{"{0} घन्टा सिगां"}
                     other{"{0} घन्टा सिगां"}
                 }
             }
@@ -776,11 +720,9 @@ brx{
             }
             relativeTime{
                 future{
-                    one{"{0} मिनिटआव"}
                     other{"{0} मिनिटआव"}
                 }
                 past{
-                    one{"{0} मिनिट सिगां"}
                     other{"{0} मिनिट सिगां"}
                 }
             }
@@ -793,11 +735,9 @@ brx{
             }
             relativeTime{
                 future{
-                    one{"{0} समबाराव"}
                     other{"{0} समबाराव"}
                 }
                 past{
-                    one{"{0} समबारनि सिगां"}
                     other{"{0} समबारनि सिगां"}
                 }
             }
@@ -811,11 +751,9 @@ brx{
             }
             relativeTime{
                 future{
-                    one{"{0} दानाव"}
                     other{"{0} दानाव"}
                 }
                 past{
-                    one{"{0} दान सिगां"}
                     other{"{0} दान सिगां"}
                 }
             }
@@ -829,11 +767,9 @@ brx{
             }
             relativeTime{
                 future{
-                    one{"{0} खोन्दोसेआव"}
                     other{"{0} खोन्दोसेआव"}
                 }
                 past{
-                    one{"{0} खोन्दोसे सिगां"}
                     other{"{0} खोन्दोसे सिगां"}
                 }
             }
@@ -849,11 +785,9 @@ brx{
             }
             relativeTime{
                 future{
-                    one{"{0} सनिबाराव"}
                     other{"{0} सनिबाराव"}
                 }
                 past{
-                    one{"{0} सनिबार सिगां"}
                     other{"{0} सनिबार सिगां"}
                 }
             }
@@ -865,11 +799,9 @@ brx{
             }
             relativeTime{
                 future{
-                    one{"{0} सेकेण्डआव"}
                     other{"{0} सेकेण्डआव"}
                 }
                 past{
-                    one{"{0} सेकेण्ड सिगां"}
                     other{"{0} सेकेण्ड सिगां"}
                 }
             }
@@ -882,11 +814,9 @@ brx{
             }
             relativeTime{
                 future{
-                    one{"{0} रबिबाराव"}
                     other{"{0} रबिबाराव"}
                 }
                 past{
-                    one{"{0} रबिबारनि सिगां"}
                     other{"{0} रबिबारनि सिगां"}
                 }
             }
@@ -899,11 +829,9 @@ brx{
             }
             relativeTime{
                 future{
-                    one{"{0} बिस्थिबाराव"}
                     other{"{0} बिस्थिबाराव"}
                 }
                 past{
-                    one{"{0} बिस्थिबार सिगां"}
                     other{"{0} बिस्थिबार सिगां"}
                 }
             }
@@ -916,11 +844,9 @@ brx{
             }
             relativeTime{
                 future{
-                    one{"{0} मंगलबाराव"}
                     other{"{0} मंगलबाराव"}
                 }
                 past{
-                    one{"{0} मंगलबार सिगां"}
                     other{"{0} मंगलबार सिगां"}
                 }
             }
@@ -933,11 +859,9 @@ brx{
             }
             relativeTime{
                 future{
-                    one{"{0} बुधबाराव"}
                     other{"{0} बुधबाराव"}
                 }
                 past{
-                    one{"{0} बुधबार सिगां"}
                     other{"{0} बुधबार सिगां"}
                 }
             }
@@ -952,11 +876,9 @@ brx{
             relativePeriod{"{0}नि सप्थाह"}
             relativeTime{
                 future{
-                    one{"{0} सप्थाहयाव"}
                     other{"{0} सप्थाहयाव"}
                 }
                 past{
-                    one{"{0} सप्थाह सिगां"}
                     other{"{0} सप्थाह सिगां"}
                 }
             }
@@ -985,11 +907,9 @@ brx{
             }
             relativeTime{
                 future{
-                    one{"{0} बोसोरआव"}
                     other{"{0} बोसोरआव"}
                 }
                 past{
-                    one{"{0} बोसोर सिगां"}
                     other{"{0} बोसोर सिगां"}
                 }
             }

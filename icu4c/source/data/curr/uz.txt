@@ -99,10 +99,6 @@ uz{
             "BYN",
             "Belarus rubli",
         }
-        BYR{
-            "BYR",
-            "Belarus rubli (2000–2016)",
-        }
         BZD{
             "BZD",
             "Beliz dollari",
@@ -339,14 +335,6 @@ uz{
             "LSL",
             "Lesoto lotisi",
         }
-        LTL{
-            "LTL",
-            "Litva liti",
-        }
-        LVL{
-            "LVL",
-            "Latviya lati",
-        }
         LYD{
             "LYD",
             "Liviya dinori",
@@ -378,10 +366,6 @@ uz{
         MOP{
             "MOP",
             "Makao patakasi",
-        }
-        MRO{
-            "MRO",
-            "Mavritaniya uqiyasi (1973–2017)",
         }
         MRU{
             "MRU",
@@ -535,10 +519,6 @@ uz{
             "SSP",
             "Janubiy Sudan funti",
         }
-        STD{
-            "STD",
-            "San-Tome va Prinsipi dobrasi (1977–2017)",
-        }
         STN{
             "STN",
             "San-Tome va Prinsipi dobrasi",
@@ -607,10 +587,6 @@ uz{
             "soʻm",
             "O‘zbekiston so‘mi",
         }
-        VEF{
-            "VEF",
-            "Venesuela bolivari (2008–2018)",
-        }
         VES{
             "VES",
             "Venesuela bolivari",
@@ -673,19 +649,15 @@ uz{
     }
     CurrencyPlurals{
         AED{
-            one{"BAA dirhami"}
             other{"BAA dirhami"}
         }
         EUR{
-            one{"yevro"}
             other{"yevro"}
         }
         JOD{
             one{"Yordaniya dinori"}
-            other{"Iordaniya dinori"}
         }
         XXX{
-            one{"(noma’lum valyuta)"}
             other{"(noma’lum valyuta)"}
         }
     }

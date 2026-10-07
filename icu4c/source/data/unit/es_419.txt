@@ -15,7 +15,6 @@ es_419{
                 dnam{"ítems"}
             }
             part{
-                one{"{0} parte"}
                 other{"{0} partes"}
             }
             part-per-1e9{
@@ -41,14 +40,12 @@ es_419{
                 other{"{0} ohms"}
             }
             siemens{
-                one{"{0} siemens"}
                 other{"{0} siemens"}
             }
         }
         energy{
             gray{
                 dnam{"grays"}
-                one{"{0} gray"}
                 other{"{0} grays"}
             }
             joule{
@@ -108,7 +105,6 @@ es_419{
             }
             kelvin{
                 dnam{"kelvins"}
-                one{"{0} kelvin"}
                 other{"{0} kelvins"}
             }
         }
@@ -299,7 +295,6 @@ es_419{
         volume{
             acre-foot{
                 one{"{0} ac ft"}
-                other{"{0}ac ft"}
             }
             barrel{
                 one{"{0}bbl"}
@@ -324,7 +319,6 @@ es_419{
         acceleration{
             g-force{
                 dnam{"G"}
-                one{"{0} G"}
                 other{"{0} G"}
             }
         }
@@ -340,23 +334,19 @@ es_419{
             }
             part-per-1e9{
                 dnam{"partes/mil millones"}
-                one{"{0} ppmm"}
                 other{"{0} ppmm"}
             }
             percent{
-                one{"{0}%"}
                 other{"{0}%"}
             }
         }
         consumption{
             mile-per-gallon-imperial{
-                one{"{0} mpg imp."}
                 other{"{0} mpg imp."}
             }
         }
         digital{
             byte{
-                one{"{0} byte"}
                 other{"{0} byte"}
             }
         }
@@ -394,7 +384,6 @@ es_419{
         length{
             astronomical-unit{
                 dnam{"ua"}
-                one{"{0} ua"}
                 other{"{0} ua"}
             }
             light-year{
@@ -404,7 +393,6 @@ es_419{
             }
             nautical-mile{
                 dnam{"nmi"}
-                one{"{0} nmi"}
                 other{"{0} nmi"}
             }
             parsec{
@@ -420,38 +408,29 @@ es_419{
         mass{
             ounce-troy{
                 dnam{"ozt"}
-                one{"{0} ozt"}
                 other{"{0} ozt"}
-            }
-            stone{
-                dnam{"stones"}
             }
             ton{
                 dnam{"ton"}
-                one{"{0} ton"}
                 other{"{0} ton"}
             }
         }
         power{
             horsepower{
                 dnam{"hp"}
-                one{"{0} hp"}
                 other{"{0} hp"}
             }
         }
         volume{
             cup{
-                one{"{0} tza."}
                 other{"{0} tza."}
             }
             fluid-ounce-metric{
                 dnam{"fl oz m"}
-                one{"{0} fl oz m"}
                 other{"{0} fl oz m"}
             }
             pint{
                 dnam{"pintas"}
-                one{"{0} pt"}
                 other{"{0} pt"}
             }
             tablespoon{

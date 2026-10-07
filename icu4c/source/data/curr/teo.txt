@@ -75,17 +75,9 @@ teo{
             "£",
             "Epaunt lok’ Uingereza",
         }
-        GHC{
-            "GHC",
-            "Sedi ya Ghana",
-        }
         GMD{
             "GMD",
             "Dalasi ya Gambia",
-        }
-        GNS{
-            "GNS",
-            "Ango’otol lok’ Gine",
         }
         INR{
             "₹",
@@ -123,10 +115,6 @@ teo{
             "MGA",
             "Ango’otol lok’ Bukini",
         }
-        MRO{
-            "MRO",
-            "Ango’otol lok’ Moritania (1973–2017)",
-        }
         MRU{
             "MRU",
             "Ango’otol lok’ Moritania",
@@ -138,10 +126,6 @@ teo{
         MWK{
             "MWK",
             "Ango’otol lok’ Malawi",
-        }
-        MZM{
-            "MZM",
-            "Ango’otol lok’ Msumbiji",
         }
         NAD{
             "NAD",
@@ -183,10 +167,6 @@ teo{
             "SOS",
             "Ango’otol lok’ Somalia",
         }
-        STD{
-            "STD",
-            "Ango’otol lok’ Sao Tome na Principe (1977–2017)",
-        }
         STN{
             "STN",
             "Ango’otol lok’ Sao Tome na Principe",
@@ -223,17 +203,9 @@ teo{
             "ZAR",
             "Ango’otol lok’ Afrika Kusini",
         }
-        ZMK{
-            "ZMK",
-            "Ango’otol lok’ Zambia (1968–2012)",
-        }
         ZMW{
             "ZMW",
             "Ango’otol lok’ Zambia",
-        }
-        ZWD{
-            "ZWD",
-            "Edola lok’Zimbabwe",
         }
     }
 }

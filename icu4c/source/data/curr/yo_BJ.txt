@@ -139,17 +139,9 @@ yo_BJ{
             "GEL",
             "Lárì Jɔ́jíà",
         }
-        GHC{
-            "GHC",
-            "shidi ti Orílɛ́ède Gana",
-        }
         GIP{
             "GIP",
             "Pɔ́n-ùn Gibúrátà",
-        }
-        GNS{
-            "GNS",
-            "Faransi ti Orílɛ́ède Gini",
         }
         GTQ{
             "GTQ",
@@ -239,10 +231,6 @@ yo_BJ{
             "MKD",
             "Dɛ́nà Masidóníà",
         }
-        MRO{
-            "MRO",
-            "Ouguiya ti Orílɛ́ède Maritania (1973–2017)",
-        }
         MRU{
             "MRU",
             "Ouguiya ti Orílɛ́ède Maritania",
@@ -258,10 +246,6 @@ yo_BJ{
         MYR{
             "MYR",
             "Ríngìtì Màléshíà",
-        }
-        MZM{
-            "MZM",
-            "Metika ti Orílɛ́ède Mosamibiki",
         }
         MZN{
             "MZN",
@@ -307,10 +291,6 @@ yo_BJ{
             "SDG",
             "Pɔ́n-ùn Sùdáànì",
         }
-        SDP{
-            "SDP",
-            "Pɔɔun ti Orílɛ́ède Sudani",
-        }
         SGD{
             "SGD",
             "Dɔ́là Síngápɔ̀",
@@ -330,10 +310,6 @@ yo_BJ{
         SSP{
             "SSP",
             "Pɔ́n-un Gúúsù Sùdáànì",
-        }
-        STD{
-            "STD",
-            "Dobira ti Orílɛ́ède Sao tome Ati Pirisipe (1977–2017)",
         }
         STN{
             "STN",
@@ -406,14 +382,6 @@ yo_BJ{
         YER{
             "YER",
             "Ráyò Yɛ́mɛ̀nì",
-        }
-        ZMK{
-            "ZMK",
-            "Kawasha ti Orílɛ́ède Saabia (1968–2012)",
-        }
-        ZWD{
-            "ZWD",
-            "Dɔla ti Orílɛ́ède Siibabuwe",
         }
     }
     CurrencyPlurals{

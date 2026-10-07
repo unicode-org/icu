@@ -63,17 +63,9 @@ dyo{
             "€",
             "euro",
         }
-        GHC{
-            "GHC",
-            "cedi yati Gaana",
-        }
         GMD{
             "GMD",
             "dalasi yati Gambi",
-        }
-        GNS{
-            "GNS",
-            "sili yati Giné",
         }
         INR{
             "₹",
@@ -102,10 +94,6 @@ dyo{
         MGA{
             "MGA",
             "ariari yati Madagaskaar",
-        }
-        MRO{
-            "MRO",
-            "ugiiya yati Mooritanii (1973–2017)",
         }
         MRU{
             "MRU",

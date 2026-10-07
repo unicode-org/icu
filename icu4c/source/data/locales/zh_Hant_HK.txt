@@ -131,12 +131,6 @@ zh_Hant_HK{
         }
     }
     calendar{
-        buddhist{
-            availableFormats{
-                MEd{"M-d（E）"}
-                Md{"M-d"}
-            }
-        }
         chinese{
             DateTimePatterns{
                 "ah:mm:ss [zzzz]",
@@ -147,21 +141,11 @@ zh_Hant_HK{
                 "U（r）年MMMd",
                 "U年MMMd",
                 "U/M/d",
-                "{1}, {0}",
                 "{1} {0}",
                 "{1} {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-            }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "UMMMEEEEd",
-                "UMMMd",
-                "UMMMd",
-                "UMd",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
             }
             availableFormats{
                 Ed{"d日E"}
@@ -175,26 +159,6 @@ zh_Hant_HK{
                 hv{"ah時 v"}
                 yyyyMMMMEd{"r(U)年MMMMd日 E"}
                 yyyyMMMMd{"r(U)年MMMMd日"}
-            }
-            intervalFormats{
-                h{
-                    a{"ah時至ah時"}
-                    h{"ah時至h時"}
-                }
-                hm{
-                    a{"ah:mm至ah:mm"}
-                    h{"ah:mm至h:mm"}
-                    m{"ah:mm至h:mm"}
-                }
-                hmv{
-                    a{"ah:mm至ah:mm [v]"}
-                    h{"ah:mm至h:mm [v]"}
-                    m{"ah:mm至h:mm [v]"}
-                }
-                hv{
-                    a{"ah時至ah時 [v]"}
-                    h{"ah時至h時 [v]"}
-                }
             }
             monthNames{
                 format{
@@ -281,24 +245,6 @@ zh_Hant_HK{
                     M{"d/M 至 d/M"}
                     d{"d/M 至 d/M"}
                 }
-                h{
-                    a{"ah時至ah時"}
-                    h{"ah時至h時"}
-                }
-                hm{
-                    a{"ah:mm至ah:mm"}
-                    h{"ah:mm至h:mm"}
-                    m{"ah:mm至h:mm"}
-                }
-                hmv{
-                    a{"ah:mm至ah:mm [v]"}
-                    h{"ah:mm至h:mm [v]"}
-                    m{"ah:mm至h:mm [v]"}
-                }
-                hv{
-                    a{"ah時至ah時 [v]"}
-                    h{"ah時至h時 [v]"}
-                }
                 y{
                     y{"Gy年至y年"}
                 }
@@ -352,16 +298,6 @@ zh_Hant_HK{
                 "{1} {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "yMMMEEEEd",
-                "yMMMd",
-                "yMMMd",
-                "yMd",
-            }
             availableFormats{
                 Ehm{"E ah:mm"}
                 Ehms{"E ah:mm:ss"}
@@ -390,13 +326,7 @@ zh_Hant_HK{
             dayPeriod{
                 format{
                     abbreviated{
-                        afternoon1{"中午"}
-                        afternoon2{"下午"}
-                        evening1{"晚上"}
-                        midnight{"午夜"}
                         morning1{"早上"}
-                        morning2{"上午"}
-                        night1{"凌晨"}
                     }
                 }
             }
@@ -453,13 +383,6 @@ zh_Hant_HK{
                         "Q4",
                     }
                 }
-            }
-        }
-        japanese{
-            availableFormats{
-                h{"ah時"}
-                hm{"ah:mm"}
-                hms{"ah:mm:ss"}
             }
         }
         roc{
@@ -579,9 +502,7 @@ zh_Hant_HK{
         }
         quarter{
             relative{
-                "-1"{"上一季"}
                 "0"{"今季"}
-                "1"{"下一季"}
             }
         }
         quarter-narrow{
@@ -592,13 +513,6 @@ zh_Hant_HK{
                 past{
                     other{"-{0}Q"}
                 }
-            }
-        }
-        quarter-short{
-            relative{
-                "-1"{"上季"}
-                "0"{"今季"}
-                "1"{"下季"}
             }
         }
         sat{
@@ -718,7 +632,6 @@ zh_Hant_HK{
         year{
             relative{
                 "-1"{"上年"}
-                "0"{"今年"}
                 "1"{"下年"}
             }
         }

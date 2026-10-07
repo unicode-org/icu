@@ -926,11 +926,6 @@ sq{
             lg{"Ora e Territoreve Amerikane të Bregut të Paqësorit"}
             ls{"Ora standarde e Territoreve Amerikane të Bregut të Paqësorit"}
         }
-        "meta:Anadyr"{
-            ld{"Ora verore e Anadirit"}
-            lg{"Ora e Anadirit"}
-            ls{"Ora standarde e Anadirit"}
-        }
         "meta:Apia"{
             ld{"Ora verore e Samoas Perëndimore"}
             lg{"Ora e Samoas Perëndimore"}
@@ -1018,9 +1013,6 @@ sq{
             ld{"Ora verore e Kepit të Gjelbër"}
             lg{"Ora e Kepit të Gjelbër"}
             ls{"Ora standarde e Kepit të Gjelbër"}
-        }
-        "meta:Casey"{
-            ls{"Ora e Kejsit"}
         }
         "meta:Chamorro"{
             ls{"Ora e Kamorros"}

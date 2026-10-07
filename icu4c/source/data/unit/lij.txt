@@ -28,7 +28,6 @@ lij{
                 other{"{0} de glucòsio"}
             }
             part{
-                dnam{"parte"}
                 one{"{0} parte"}
                 other{"{0} parte"}
             }
@@ -40,9 +39,6 @@ lij{
         }
         duration{
             night{
-                dnam{"neutte"}
-                one{"{0} neutte"}
-                other{"{0} neutte"}
                 per{"{0} pe neutte"}
             }
         }
@@ -120,11 +116,6 @@ lij{
             beaufort{
                 dnam{"Beaufort"}
             }
-            light-speed{
-                dnam{"luxe"}
-                one{"{0} luxe"}
-                other{"{0} luxe"}
-            }
         }
         volume{
             fluid-ounce-metric{
@@ -136,43 +127,18 @@ lij{
     }
     unitsNarrow{
         concentr{
-            ofglucose{
-                dnam{"Glc"}
-            }
-            part{
-                dnam{"parte"}
-                one{"{0} parte"}
-                other{"{0} parte"}
-            }
             part-per-1e9{
                 dnam{"ppmd"}
-                one{"{0} ppmd"}
-                other{"{0} ppmd"}
             }
         }
         duration{
             night{
-                dnam{"neutte"}
                 one{"{0}neutte"}
                 other{"{0}neutte"}
-                per{"{0}/neutte"}
-            }
-        }
-        energy{
-            calorie-it{
-                dnam{"cal-IT"}
-            }
-        }
-        pressure{
-            ofhg{
-                dnam{"de Hg"}
-                one{"{0} de Hg"}
-                other{"{0} de Hg"}
             }
         }
         speed{
             light-speed{
-                dnam{"luxe"}
                 one{"{0}luxe"}
                 other{"{0}luxe"}
             }
@@ -185,23 +151,19 @@ lij{
             }
             part{
                 dnam{"parte"}
-                one{"{0} parte"}
                 other{"{0} parte"}
             }
             part-per-1e9{
                 dnam{"parte/miliardo"}
-                one{"{0} ppmd"}
                 other{"{0} ppmd"}
             }
         }
         duration{
             century{
-                one{"{0} sec."}
                 other{"{0} sec."}
             }
             night{
                 dnam{"neutte"}
-                one{"{0} neutte"}
                 other{"{0} neutte"}
                 per{"{0}/neutte"}
             }
@@ -214,14 +176,12 @@ lij{
         pressure{
             ofhg{
                 dnam{"de Hg"}
-                one{"{0} de Hg"}
                 other{"{0} de Hg"}
             }
         }
         speed{
             light-speed{
                 dnam{"luxe"}
-                one{"{0} luxe"}
                 other{"{0} luxe"}
             }
         }

@@ -503,11 +503,6 @@ hu{
             lg{"csendes-óceáni idő"}
             ls{"csendes-óceáni zónaidő"}
         }
-        "meta:Anadyr"{
-            ld{"Anadíri nyári idő"}
-            lg{"Anadiri idő"}
-            ls{"Anadíri zónaidő"}
-        }
         "meta:Apia"{
             ld{"apiai nyári idő"}
             lg{"apiai idő"}
@@ -596,9 +591,6 @@ hu{
             lg{"zöld-foki-szigeteki időzóna"}
             ls{"zöld-foki-szigeteki téli idő"}
         }
-        "meta:Casey"{
-            ls{"casey-i idő"}
-        }
         "meta:Chamorro"{
             ls{"chamorrói téli idő"}
         }
@@ -659,17 +651,11 @@ hu{
             ld{"közép-európai nyári idő"}
             lg{"közép-európai idő"}
             ls{"közép-európai téli idő"}
-            sd{"CEST"}
-            sg{"CET"}
-            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"kelet-európai nyári idő"}
             lg{"kelet-európai időzóna"}
             ls{"kelet-európai téli idő"}
-            sd{"EEST"}
-            sg{"EET"}
-            ss{"EET"}
         }
         "meta:Europe_Further_Eastern"{
             ls{"minszki idő"}
@@ -678,9 +664,6 @@ hu{
             ld{"nyugat-európai nyári idő"}
             lg{"nyugat-európai időzóna"}
             ls{"nyugat-európai téli idő"}
-            sd{"WEST"}
-            sg{"WET"}
-            ss{"WET"}
         }
         "meta:Falkland"{
             ld{"falkland-szigeteki nyári idő"}
@@ -700,7 +683,6 @@ hu{
         }
         "meta:GMT"{
             ls{"greenwichi középidő, téli idő"}
-            ss{"GMT"}
         }
         "meta:Galapagos"{
             ls{"galápagosi téli idő"}

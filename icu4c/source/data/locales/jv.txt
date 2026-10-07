@@ -6,20 +6,10 @@ jv{
     ExemplarCharacters{"[aâå b c d eéèê g h iì j k l m n oò p r s t uù w y]"}
     ExemplarCharactersIndex{"[AÂÅ B C D EÉÈÊ G H IÌ J K L M N OÒ P R S T UÙ W Y]"}
     NumberElements{
-        java{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
-        }
         latn{
             miscPatterns{
                 atLeast{"⩾{0}"}
                 range{"{0} – {1}"}
-            }
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
             }
             patternsLong{
                 decimalFormat{
@@ -89,15 +79,6 @@ jv{
                     }
                     100000000000{
                         other{"¤ 000M"}
-                    }
-                    1000000000000{
-                        other{"¤ 0T"}
-                    }
-                    10000000000000{
-                        other{"¤ 00T"}
-                    }
-                    100000000000000{
-                        other{"¤ 000T"}
                     }
                 }
                 decimalFormat{
@@ -303,10 +284,6 @@ jv{
             }
         }
         gregorian{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
             AmPmMarkersNarrow{
                 "a",
                 "p",
@@ -415,22 +392,6 @@ jv{
                         "K",
                         "J",
                         "S",
-                    }
-                }
-            }
-            dayPeriod{
-                stand-alone{
-                    abbreviated{
-                        am{"AM"}
-                        pm{"PM"}
-                    }
-                    narrow{
-                        am{"AM"}
-                        pm{"PM"}
-                    }
-                    wide{
-                        am{"AM"}
-                        pm{"PM"}
                     }
                 }
             }
@@ -784,38 +745,10 @@ jv{
                 }
             }
         }
-        day-narrow{
-            dn{"dina"}
-            relative{
-                "-1"{"wingi"}
-                "0"{"dina iki"}
-                "1"{"sesuk"}
-            }
-        }
-        day-short{
-            dn{"dina"}
-            relative{
-                "-1"{"wingi"}
-                "0"{"dina iki"}
-                "1"{"sesuk"}
-            }
-        }
         dayOfYear{
             dn{"dina sajrone setaun"}
         }
-        dayOfYear-narrow{
-            dn{"dina sajrone setaun"}
-        }
-        dayOfYear-short{
-            dn{"dina sajrone setaun"}
-        }
         dayperiod{
-            dn{"AM/PM"}
-        }
-        dayperiod-narrow{
-            dn{"AM/PM"}
-        }
-        dayperiod-short{
             dn{"AM/PM"}
         }
         era{
@@ -839,8 +772,6 @@ jv{
         fri-narrow{
             relative{
                 "-1"{"Jem kepungkur"}
-                "0"{"Jem. iki"}
-                "1"{"Jem. ngarep"}
             }
         }
         fri-short{
@@ -1052,8 +983,6 @@ jv{
         thu-narrow{
             relative{
                 "-1"{"Kms kepungkur"}
-                "0"{"Kms. iki"}
-                "1"{"Kms. ngarep"}
             }
         }
         thu-short{
@@ -1089,8 +1018,6 @@ jv{
         tue-narrow{
             relative{
                 "-1"{"Sel kepungkur"}
-                "0"{"Sel. iki"}
-                "1"{"Sel. ngarep"}
             }
         }
         tue-short{
@@ -1126,8 +1053,6 @@ jv{
         wed-narrow{
             relative{
                 "-1"{"Reb kepungkur"}
-                "0"{"Reb. iki"}
-                "1"{"Reb. ngarep"}
             }
         }
         wed-short{
@@ -1164,18 +1089,9 @@ jv{
         }
         week-narrow{
             dn{"mgg"}
-            relative{
-                "-1"{"mgg. kepungkur"}
-                "0"{"mgg. iki"}
-                "1"{"mgg. ngarep"}
-            }
-            relativePeriod{"mgg. kaping {0}"}
             relativeTime{
                 future{
                     other{"ing {0} minggu"}
-                }
-                past{
-                    other{"{0} mgg. kepungkur"}
                 }
             }
         }
@@ -1199,26 +1115,17 @@ jv{
         weekOfMonth{
             dn{"minggu sajrone sesasi"}
         }
-        weekOfMonth-narrow{
-            dn{"mgg. sajrone sesasi"}
-        }
         weekOfMonth-short{
             dn{"mgg. sajrone sesasi"}
         }
         weekday{
             dn{"dina sajrone seminggu"}
         }
-        weekday-narrow{
-            dn{"dina sajrone semgg."}
-        }
         weekday-short{
             dn{"dina sajrone semgg."}
         }
         weekdayOfMonth{
             dn{"dina kerja sajrone sesasi"}
-        }
-        weekdayOfMonth-narrow{
-            dn{"dn. kerja sajrone sesasi"}
         }
         weekdayOfMonth-short{
             dn{"dn. kerja sajrone sesasi"}

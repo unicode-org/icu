@@ -45,7 +45,6 @@ es_AR{
                 other{"{0}seg."}
             }
             year{
-                one{"{0}a."}
                 other{"{0}a."}
             }
         }
@@ -54,7 +53,6 @@ es_AR{
         duration{
             century{
                 dnam{"s"}
-                one{"{0} s"}
                 other{"{0} s"}
             }
             hour{
@@ -62,7 +60,6 @@ es_AR{
             }
             second{
                 dnam{"seg."}
-                one{"{0} seg."}
                 other{"{0} seg."}
                 per{"{0}/seg."}
             }

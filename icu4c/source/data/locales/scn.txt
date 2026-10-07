@@ -273,7 +273,6 @@ scn{
                 MEd{"E d/M"}
                 MMMEd{"E d MMM"}
                 MMMMW{
-                    one{"'simana' W 'di' MMMM"}
                     other{"'simana' W 'di' MMMM"}
                 }
                 MMMMd{"d MMMM"}
@@ -293,7 +292,6 @@ scn{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ 'dû' y"}
                 yw{
-                    one{"'simana' w 'dû' Y"}
                     other{"'simana' w 'dû' Y"}
                 }
             }
@@ -347,14 +345,6 @@ scn{
                 abbreviated%variant{
                     0{"p.E.C."}
                     1{"E.C."}
-                }
-                narrow{
-                    0{"pC"}
-                    1{"dC"}
-                }
-                narrow%variant{
-                    0{"pEC"}
-                    1{"EC"}
                 }
                 wide{
                     0{"prima di Cristu"}
@@ -620,13 +610,6 @@ scn{
                 }
             }
         }
-        month-narrow{
-            relative{
-                "-1"{"u m. passatu"}
-                "0"{"stu m."}
-                "1"{"u m. vinturu"}
-            }
-        }
         month-short{
             dn{"m."}
             relative{
@@ -792,9 +775,7 @@ scn{
         }
         year-narrow{
             relative{
-                "-1"{"l’a. passatu"}
                 "0"{"st’.a"}
-                "1"{"l’a. vinturu"}
             }
         }
         year-short{

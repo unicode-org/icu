@@ -155,7 +155,6 @@ fil{
         concentr{
             item{
                 dnam{"mga item"}
-                one{"{0} item"}
                 other{"{0} na item"}
             }
             karat{
@@ -188,7 +187,6 @@ fil{
             }
             part{
                 dnam{"parts"}
-                one{"{0} part"}
                 other{"{0} parts"}
             }
             part-per-1e6{
@@ -244,12 +242,10 @@ fil{
         digital{
             bit{
                 dnam{"bits"}
-                one{"{0} bit"}
                 other{"{0} na bit"}
             }
             byte{
                 dnam{"bytes"}
-                one{"{0} byte"}
                 other{"{0} na byte"}
             }
             gigabit{
@@ -303,7 +299,6 @@ fil{
                 dnam{"mga siglo"}
             }
             day{
-                one{"{0} araw"}
                 other{"{0} na araw"}
                 per{"{0} kada araw"}
             }
@@ -345,7 +340,6 @@ fil{
             }
             quarter{
                 dnam{"mga quarter"}
-                one{"{0} qtr"}
                 other{"{0} quarter"}
             }
             second{
@@ -360,7 +354,6 @@ fil{
             }
             year{
                 dnam{"mga taon"}
-                one{"{0} taon"}
                 other{"{0} na taon"}
                 per{"{0} kada taon"}
             }
@@ -410,11 +403,6 @@ fil{
                 dnam{"becquerels"}
                 one{"{0} becquerel"}
                 other{"{0} becquerels"}
-            }
-            british-thermal-unit{
-                dnam{"British thermal unit"}
-                one{"{0} British thermal unit"}
-                other{"{0} British thermal unit"}
             }
             calorie{
                 dnam{"calories"}
@@ -564,18 +552,10 @@ fil{
                 one{"{0} earth radius"}
                 other{"{0} na earth radius"}
             }
-            fathom{
-                one{"{0} fathom"}
-                other{"{0} na fathom"}
-            }
             foot{
                 one{"{0} talampakan"}
                 other{"{0} na talampakan"}
                 per{"{0} kada talampakan"}
-            }
-            furlong{
-                one{"{0} furlong"}
-                other{"{0} na furlong"}
             }
             inch{
                 one{"{0} pulgada"}
@@ -651,12 +631,10 @@ fil{
         }
         light{
             candela{
-                dnam{"candela"}
                 one{"{0} candela"}
                 other{"{0} candela"}
             }
             lumen{
-                dnam{"lumen"}
                 one{"{0} lumen"}
                 other{"{0} lumen"}
             }
@@ -665,7 +643,6 @@ fil{
                 other{"{0} na lux"}
             }
             solar-luminosity{
-                dnam{"mga solar luminosity"}
                 one{"{0} solar luminosity"}
                 other{"{0} solar luminosity"}
             }
@@ -735,10 +712,6 @@ fil{
             solar-mass{
                 one{"{0} solar mass"}
                 other{"{0} solar mass"}
-            }
-            stone{
-                one{"{0} stone"}
-                other{"{0} stones"}
             }
             ton{
                 one{"{0} tonelada"}
@@ -898,10 +871,6 @@ fil{
             barrel{
                 one{"{0} bariles"}
                 other{"{0} bariles"}
-            }
-            bushel{
-                one{"{0} bushel"}
-                other{"{0} mga bushel"}
             }
             centiliter{
                 dnam{"sentilitro"}
@@ -1118,14 +1087,12 @@ fil{
         }
         concentr{
             item{
-                one{"{0} item"}
                 other{"{0}item"}
             }
             mole{
                 dnam{"mol"}
             }
             part{
-                one{"{0} part"}
                 other{"{0} na part"}
             }
             part-per-1e6{
@@ -1150,7 +1117,6 @@ fil{
             }
             mile-per-gallon{
                 dnam{"mpg"}
-                one{"{0} mpg"}
                 other{"{0}mpg"}
             }
             mile-per-gallon-imperial{
@@ -1195,11 +1161,9 @@ fil{
         }
         duration{
             day{
-                one{"{0} araw"}
                 other{"{0} na araw"}
             }
             hour{
-                one{"{0} oras"}
                 other{"{0} oras"}
                 per{"{0}/oras"}
             }
@@ -1214,7 +1178,6 @@ fil{
             }
             month{
                 one{"{0}buwan"}
-                other{"{0} buwan"}
             }
             night{
                 one{"{0}gabi"}
@@ -1306,19 +1269,9 @@ fil{
                 one{"{0}cm"}
                 other{"{0}cm"}
             }
-            fathom{
-                dnam{"fathom"}
-                one{"{0}fth"}
-                other{"{0}fth"}
-            }
             foot{
                 one{"{0}′"}
                 other{"{0}′"}
-            }
-            furlong{
-                dnam{"furlong"}
-                one{"{0}fur"}
-                other{"{0}fur"}
             }
             inch{
                 dnam{"in"}
@@ -1424,11 +1377,6 @@ fil{
             solar-mass{
                 dnam{"M☉"}
             }
-            stone{
-                dnam{"stone"}
-                one{"{0}st"}
-                other{"{0}st"}
-            }
             ton{
                 dnam{"ton"}
                 one{"{0}tn"}
@@ -1518,9 +1466,6 @@ fil{
             barrel{
                 dnam{"bbl"}
             }
-            bushel{
-                dnam{"bushel"}
-            }
             cubic-foot{
                 dnam{"ft³"}
             }
@@ -1539,7 +1484,6 @@ fil{
                 dnam{"yd³"}
             }
             cup-metric{
-                one{"{0} mc"}
                 other{"{0}mc"}
             }
             dessert-spoon{
@@ -1563,7 +1507,6 @@ fil{
                 other{"{0}fl oz Im"}
             }
             jigger{
-                one{"{0} jigger"}
                 other{"{0}jigger"}
             }
             liter{
@@ -1587,7 +1530,6 @@ fil{
             }
             quart-imperial{
                 dnam{"qt Imp"}
-                one{"{0} qt Imp."}
                 other{"{0}qt-Imp."}
             }
             tablespoon{
@@ -1632,7 +1574,6 @@ fil{
                 other{"{0} na rev"}
             }
             steradian{
-                one{"{0} sr"}
                 other{"{0} sr"}
             }
         }
@@ -1648,7 +1589,6 @@ fil{
             }
             square-foot{
                 dnam{"sq feet"}
-                one{"{0} sq ft"}
                 other{"{0} sq ft"}
             }
             square-inch{
@@ -1661,7 +1601,6 @@ fil{
             }
             square-mile{
                 dnam{"sq mile"}
-                one{"{0} sq mi"}
                 other{"{0} sq mi"}
             }
             square-yard{
@@ -1673,7 +1612,6 @@ fil{
                 dnam{"karat"}
             }
             katal{
-                one{"{0} kat"}
                 other{"{0} kat"}
             }
             millimole-per-liter{
@@ -1685,7 +1623,6 @@ fil{
             ofglucose{
                 dnam{"Glc"}
                 one{"{0} Glc"}
-                other{"{0} Glc"}
             }
             part{
                 one{"{0} part"}
@@ -1703,7 +1640,6 @@ fil{
         }
         consumption{
             liter-per-100-kilometer{
-                one{"{0} na L/100km"}
                 other{"{0} na L/100km"}
             }
             liter-per-kilometer{
@@ -1756,12 +1692,10 @@ fil{
         duration{
             century{
                 dnam{"siglo"}
-                one{"{0} siglo"}
                 other{"{0} siglo"}
             }
             day{
                 dnam{"araw"}
-                one{"{0} araw"}
                 other{"{0} araw"}
                 per{"{0}/araw"}
             }
@@ -1779,12 +1713,10 @@ fil{
             }
             minute{
                 dnam{"min."}
-                one{"{0} min."}
                 other{"{0} min."}
             }
             month{
                 dnam{"buwan"}
-                one{"{0} buwan"}
                 other{"{0} buwan"}
                 per{"{0}/buwan"}
             }
@@ -1793,7 +1725,6 @@ fil{
             }
             night{
                 dnam{"mga gabi"}
-                one{"{0} gabi"}
                 other{"{0} gabi"}
                 per{"{0}/gabi"}
             }
@@ -1803,7 +1734,6 @@ fil{
             }
             second{
                 dnam{"seg."}
-                one{"{0} seg."}
                 other{"{0} seg."}
             }
             week{
@@ -1814,7 +1744,6 @@ fil{
             }
             year{
                 dnam{"taon"}
-                one{"{0} taon"}
                 other{"{0} taon"}
                 per{"{0}/taon"}
             }
@@ -1824,15 +1753,12 @@ fil{
                 dnam{"amps"}
             }
             coulomb{
-                one{"{0} C"}
                 other{"{0} C"}
             }
             farad{
-                one{"{0} F"}
                 other{"{0} F"}
             }
             henry{
-                one{"{0} H"}
                 other{"{0} H"}
             }
             milliampere{
@@ -1847,15 +1773,10 @@ fil{
         }
         energy{
             becquerel{
-                one{"{0} Bq"}
                 other{"{0} Bq"}
-            }
-            british-thermal-unit{
-                dnam{"BTU"}
             }
             calorie-it{
                 dnam{"cal-IT"}
-                one{"{0} cal-IT"}
                 other{"{0} cal-IT"}
             }
             electronvolt{
@@ -1867,7 +1788,6 @@ fil{
                 other{"{0} Cal"}
             }
             gray{
-                one{"{0} Gy"}
                 other{"{0} Gy"}
             }
             joule{
@@ -1880,13 +1800,11 @@ fil{
                 dnam{"kW-hour"}
             }
             sievert{
-                one{"{0} Sv"}
                 other{"{0} Sv"}
             }
         }
         force{
             kilogram-force{
-                one{"{0} kgf"}
                 other{"{0} kgf"}
             }
             newton{
@@ -1921,17 +1839,10 @@ fil{
         }
         length{
             earth-radius{
-                one{"{0} na R⊕"}
                 other{"{0} na R⊕"}
-            }
-            fathom{
-                dnam{"fathoms"}
             }
             foot{
                 dnam{"talampakan"}
-            }
-            furlong{
-                dnam{"furlongs"}
             }
             inch{
                 dnam{"pulgada"}
@@ -1991,18 +1902,15 @@ fil{
         }
         magnetic{
             tesla{
-                one{"{0} T"}
                 other{"{0} T"}
             }
             weber{
-                one{"{0} Wb"}
                 other{"{0} Wb"}
             }
         }
         mass{
             carat{
                 dnam{"karat"}
-                one{"{0} KD"}
                 other{"{0} KD"}
             }
             dalton{
@@ -2013,7 +1921,6 @@ fil{
             }
             grain{
                 dnam{"butil"}
-                one{"{0} butil"}
                 other{"{0} butil"}
             }
             gram{
@@ -2030,9 +1937,6 @@ fil{
             solar-mass{
                 dnam{"solar mass"}
             }
-            stone{
-                dnam{"stones"}
-            }
             ton{
                 dnam{"tonelada"}
             }
@@ -2047,19 +1951,16 @@ fil{
                 dnam{"in Hg"}
             }
             millibar{
-                one{"{0} mb"}
                 other{"{0} mb"}
             }
             ofhg{
                 dnam{"ng Hg"}
-                one{"{0} ng Hg"}
                 other{"{0} ng Hg"}
             }
         }
         speed{
             kilometer-per-hour{
                 dnam{"km/hr"}
-                one{"{0} kph"}
                 other{"{0} kph"}
             }
             meter-per-second{
@@ -2067,7 +1968,6 @@ fil{
             }
             mile-per-hour{
                 dnam{"milya/oras"}
-                one{"{0} mph"}
                 other{"{0} mph"}
             }
         }
@@ -2080,7 +1980,6 @@ fil{
             }
             kelvin{
                 dnam{"deg. K"}
-                one{"{0}°K"}
                 other{"{0}°K"}
             }
         }
@@ -2090,9 +1989,6 @@ fil{
             }
             barrel{
                 dnam{"bariles"}
-            }
-            bushel{
-                dnam{"mga bushel"}
             }
             cubic-foot{
                 dnam{"talampakan³"}
@@ -2112,17 +2008,14 @@ fil{
             }
             drop{
                 dnam{"patak"}
-                one{"{0} patak"}
                 other{"{0} patak"}
             }
             fluid-ounce{
                 dnam{"fl oz"}
-                one{"{0} fl oz"}
                 other{"{0} fl oz"}
             }
             fluid-ounce-metric{
                 one{"{0} fl oz m."}
-                other{"{0} fl oz m."}
             }
             gallon{
                 dnam{"gal"}
@@ -2132,19 +2025,16 @@ fil{
             }
             liter{
                 dnam{"litro"}
-                one{"{0} L"}
                 other{"{0} L"}
             }
             pinch{
                 dnam{"karampot"}
-                one{"{0} kurot"}
                 other{"{0} kurot"}
             }
             pint{
                 dnam{"pints"}
             }
             pint-metric{
-                one{"{0} na mpt"}
                 other{"{0} na mpt"}
             }
             quart{

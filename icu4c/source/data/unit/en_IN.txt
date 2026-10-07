@@ -6,7 +6,6 @@ en_IN{
     units{
         length{
             earth-radius{
-                one{"{0} earth radius"}
                 other{"{0} earth radius"}
             }
         }

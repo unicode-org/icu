@@ -210,7 +210,6 @@ pt{
             mole{
                 dnam{"mols"}
                 gender{"masculine"}
-                one{"{0} mol"}
                 other{"{0} mols"}
             }
             ofglucose{
@@ -220,7 +219,6 @@ pt{
             }
             part{
                 dnam{"partes"}
-                one{"{0} parte"}
                 other{"{0} partes"}
             }
             part-per-1e6{
@@ -289,13 +287,11 @@ pt{
                 dnam{"bits"}
                 gender{"masculine"}
                 one{"{0} bit"}
-                other{"{0} bits"}
             }
             byte{
                 dnam{"bytes"}
                 gender{"masculine"}
                 one{"{0} byte"}
-                other{"{0} bytes"}
             }
             gigabit{
                 dnam{"gigabits"}
@@ -485,11 +481,6 @@ pt{
                 one{"{0} becquerel"}
                 other{"{0} becqueréis"}
             }
-            british-thermal-unit{
-                dnam{"unidades térmicas britânicas"}
-                one{"{0} unidade térmica britânica"}
-                other{"{0} unidades térmicas britânicas"}
-            }
             calorie{
                 dnam{"calorias"}
                 gender{"feminine"}
@@ -618,7 +609,6 @@ pt{
             em{
                 dnam{"em tipográfico"}
                 gender{"masculine"}
-                one{"{0} em"}
                 other{"{0} ems"}
             }
             megapixel{
@@ -667,19 +657,11 @@ pt{
                 one{"{0} raio terrestre"}
                 other{"{0} raios terrestres"}
             }
-            fathom{
-                one{"{0} braça"}
-                other{"{0} braças"}
-            }
             foot{
                 gender{"masculine"}
                 one{"{0} pé"}
                 other{"{0} pés"}
                 per{"{0} por pé"}
-            }
-            furlong{
-                one{"{0} furlong"}
-                other{"{0} furlongs"}
             }
             inch{
                 dnam{"polegadas"}
@@ -867,10 +849,6 @@ pt{
                 one{"{0} massa solar"}
                 other{"{0} massas solares"}
             }
-            stone{
-                one{"{0} stone"}
-                other{"{0} stones"}
-            }
             ton{
                 one{"{0} tonelada americana"}
                 other{"{0} toneladas americanas"}
@@ -1054,10 +1032,6 @@ pt{
                 dnam{"barris"}
                 one{"{0} barril"}
                 other{"{0} barris"}
-            }
-            bushel{
-                one{"{0} bushel"}
-                other{"{0} bushels"}
             }
             centiliter{
                 dnam{"centilitros"}
@@ -1327,7 +1301,6 @@ pt{
         digital{
             bit{
                 one{"{0} bit"}
-                other{"{0} bits"}
             }
             byte{
                 dnam{"B"}
@@ -1422,7 +1395,6 @@ pt{
             dot{
                 dnam{"pt"}
                 one{"{0} pt"}
-                other{"{0} pts"}
             }
             megapixel{
                 dnam{"MP"}
@@ -1432,16 +1404,10 @@ pt{
             }
         }
         length{
-            fathom{
-                dnam{"braça"}
-            }
             foot{
                 dnam{"ft"}
                 one{"{0}′"}
                 other{"{0}′"}
-            }
-            furlong{
-                dnam{"furlong"}
             }
             inch{
                 one{"{0}″"}
@@ -1498,9 +1464,6 @@ pt{
             solar-mass{
                 dnam{"M☉"}
             }
-            stone{
-                dnam{"stone"}
-            }
             ton{
                 dnam{"ton"}
             }
@@ -1533,9 +1496,6 @@ pt{
             }
         }
         volume{
-            bushel{
-                dnam{"bushel"}
-            }
             cubic-foot{
                 dnam{"ft³"}
             }
@@ -1586,7 +1546,6 @@ pt{
             }
             degree{
                 dnam{"graus"}
-                one{"{0} °"}
                 other{"{0} °"}
             }
             radian{
@@ -1610,7 +1569,6 @@ pt{
             }
             square-inch{
                 dnam{"polegadas²"}
-                one{"{0} pol²"}
                 other{"{0} pol²"}
                 per{"{0} por pol²"}
             }
@@ -1631,17 +1589,14 @@ pt{
             }
             karat{
                 dnam{"kilates"}
-                one{"{0} k"}
                 other{"{0} k"}
             }
             milligram-ofglucose-per-deciliter{
                 dnam{"mg/dl"}
-                one{"{0} mg/dl"}
                 other{"{0} mg/dl"}
             }
             millimole-per-liter{
                 dnam{"milimol/litro"}
-                one{"{0} mmol/l"}
                 other{"{0} mmol/l"}
             }
             ofglucose{
@@ -1649,7 +1604,6 @@ pt{
             }
             part{
                 dnam{"parte"}
-                one{"{0} parte"}
                 other{"{0} parte"}
             }
             part-per-1e6{
@@ -1671,22 +1625,18 @@ pt{
         consumption{
             liter-per-100-kilometer{
                 dnam{"l/100 km"}
-                one{"{0} l/100 km"}
                 other{"{0} l/100 km"}
             }
             liter-per-kilometer{
                 dnam{"litros/km"}
-                one{"{0} l/km"}
                 other{"{0} l/km"}
             }
             mile-per-gallon{
                 dnam{"milhas/gal"}
-                one{"{0} mpg"}
                 other{"{0} mpg"}
             }
             mile-per-gallon-imperial{
                 dnam{"milhas/gal. imp."}
-                one{"{0} mpg imp."}
                 other{"{0} mpg imp."}
             }
         }
@@ -1699,11 +1649,9 @@ pt{
         }
         digital{
             bit{
-                one{"{0} bits"}
                 other{"{0} bits"}
             }
             byte{
-                one{"{0} bytes"}
                 other{"{0} bytes"}
             }
             gigabit{
@@ -1748,7 +1696,6 @@ pt{
             }
             decade{
                 dnam{"déc."}
-                one{"{0} déc."}
                 other{"{0} déc."}
             }
             hour{
@@ -1771,7 +1718,6 @@ pt{
             }
             quarter{
                 dnam{"trim."}
-                one{"{0} trim."}
                 other{"{0} trim."}
                 per{"{0}/trim."}
             }
@@ -1780,7 +1726,6 @@ pt{
             }
             week{
                 dnam{"semanas"}
-                one{"{0} sem."}
                 other{"{0} sem."}
                 per{"{0}/sem."}
             }
@@ -1806,11 +1751,6 @@ pt{
             }
         }
         energy{
-            british-thermal-unit{
-                dnam{"BTU"}
-                one{"{0} BTU"}
-                other{"{0} BTU"}
-            }
             calorie-it{
                 dnam{"cal-IT"}
             }
@@ -1833,7 +1773,6 @@ pt{
             }
             therm-us{
                 dnam{"thm EUA"}
-                one{"{0} thm EUA"}
                 other{"{0} thm EUA"}
             }
         }
@@ -1866,23 +1805,13 @@ pt{
         length{
             astronomical-unit{
                 dnam{"ua"}
-                one{"{0} ua"}
                 other{"{0} ua"}
-            }
-            fathom{
-                dnam{"braças"}
-                one{"{0} bça."}
-                other{"{0} bça."}
             }
             foot{
                 dnam{"pés"}
             }
-            furlong{
-                dnam{"furlongs"}
-            }
             inch{
                 dnam{"pol."}
-                one{"{0} pol."}
                 other{"{0} pol."}
                 per{"{0}/pol."}
             }
@@ -1899,7 +1828,6 @@ pt{
             }
             nautical-mile{
                 dnam{"mn"}
-                one{"{0} mn"}
                 other{"{0} mn"}
             }
             parsec{
@@ -1926,7 +1854,6 @@ pt{
         mass{
             carat{
                 dnam{"quilates"}
-                one{"{0} ct"}
                 other{"{0} ct"}
             }
             dalton{
@@ -1952,9 +1879,6 @@ pt{
             solar-mass{
                 dnam{"massas solares"}
             }
-            stone{
-                dnam{"stones"}
-            }
             ton{
                 dnam{"toneladas americanas"}
             }
@@ -1962,7 +1886,6 @@ pt{
         power{
             horsepower{
                 dnam{"cv"}
-                one{"{0} cv"}
                 other{"{0} cv"}
             }
             watt{
@@ -1976,18 +1899,15 @@ pt{
             }
             millimeter-ofhg{
                 dnam{"mmHg"}
-                one{"{0} mmHg"}
                 other{"{0} mmHg"}
             }
             ofhg{
                 dnam{"de Hg"}
-                one{"{0} de Hg"}
                 other{"{0} de Hg"}
             }
         }
         speed{
             beaufort{
-                one{"{0}B"}
                 other{"{0}B"}
             }
             knot{
@@ -2005,19 +1925,16 @@ pt{
             }
             mile-per-hour{
                 dnam{"milhas/hora"}
-                one{"{0} mph"}
                 other{"{0} mph"}
             }
         }
         temperature{
             celsius{
                 dnam{"graus C"}
-                one{"{0} °C"}
                 other{"{0} °C"}
             }
             fahrenheit{
                 dnam{"graus F"}
-                one{"{0} °F"}
                 other{"{0} °F"}
             }
         }
@@ -2030,12 +1947,8 @@ pt{
             barrel{
                 dnam{"barril"}
             }
-            bushel{
-                dnam{"bushels"}
-            }
             centiliter{
                 dnam{"cl"}
-                one{"{0} cl"}
                 other{"{0} cl"}
             }
             cubic-foot{
@@ -2043,7 +1956,6 @@ pt{
             }
             cubic-inch{
                 dnam{"polegadas³"}
-                one{"{0} pol³"}
                 other{"{0} pol³"}
             }
             cubic-yard{
@@ -2051,27 +1963,22 @@ pt{
             }
             cup{
                 dnam{"xícaras"}
-                one{"{0} xíc."}
                 other{"{0} xíc."}
             }
             cup-metric{
                 dnam{"xícm"}
-                one{"{0} xícm"}
                 other{"{0} xícm"}
             }
             deciliter{
                 dnam{"dl"}
-                one{"{0} dl"}
                 other{"{0} dl"}
             }
             dessert-spoon{
                 dnam{"csb"}
-                one{"{0} csb"}
                 other{"{0} csb"}
             }
             dessert-spoon-imperial{
                 dnam{"csb imp"}
-                one{"{0} csb imp"}
                 other{"{0} csb imp"}
             }
             dram{
@@ -2084,24 +1991,20 @@ pt{
             }
             fluid-ounce{
                 dnam{"fl oz"}
-                one{"{0} fl oz"}
                 other{"{0} fl oz"}
             }
             gallon{
                 dnam{"gal"}
-                one{"{0} gal"}
                 other{"{0} gal"}
                 per{"{0}/gal"}
             }
             gallon-imperial{
                 dnam{"gal. imp."}
-                one{"{0} gal. imp."}
                 other{"{0} gal. imp."}
                 per{"{0}/gal. imp."}
             }
             hectoliter{
                 dnam{"hl"}
-                one{"{0} hl"}
                 other{"{0} hl"}
             }
             jigger{
@@ -2114,12 +2017,10 @@ pt{
             }
             megaliter{
                 dnam{"Ml"}
-                one{"{0} Ml"}
                 other{"{0} Ml"}
             }
             milliliter{
                 dnam{"ml"}
-                one{"{0} ml"}
                 other{"{0} ml"}
             }
             pinch{
@@ -2132,7 +2033,6 @@ pt{
             }
             pint-metric{
                 dnam{"ptm"}
-                one{"{0} ptm"}
                 other{"{0} ptm"}
             }
             quart{
@@ -2140,17 +2040,14 @@ pt{
             }
             quart-imperial{
                 dnam{"impqt"}
-                one{"{0} impqt"}
                 other{"{0} impqt"}
             }
             tablespoon{
                 dnam{"c. sopa"}
-                one{"{0} c. sopa"}
                 other{"{0} c. sopa"}
             }
             teaspoon{
                 dnam{"c. chá"}
-                one{"{0} c. chá"}
                 other{"{0} c. chá"}
             }
         }

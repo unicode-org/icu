@@ -12,47 +12,14 @@ fy{
         "Africa:Khartoum"{
             ec{"Khartoem"}
         }
-        "Africa:Lome"{
-            ec{"Lomé"}
-        }
         "Africa:Sao_Tome"{
             ec{"Sao Tomé"}
-        }
-        "America:Argentina:Rio_Gallegos"{
-            ec{"Río Gallegos"}
-        }
-        "America:Argentina:Tucuman"{
-            ec{"Tucumán"}
-        }
-        "America:Asuncion"{
-            ec{"Asunción"}
-        }
-        "America:Belem"{
-            ec{"Belém"}
-        }
-        "America:Bogota"{
-            ec{"Bogotá"}
-        }
-        "America:Cordoba"{
-            ec{"Córdoba"}
-        }
-        "America:Cuiaba"{
-            ec{"Cuiabá"}
-        }
-        "America:Curacao"{
-            ec{"Curaçao"}
         }
         "America:El_Salvador"{
             ec{"Salvador"}
         }
         "America:Lower_Princes"{
             ec{"Beneden Prinsen Kwartier"}
-        }
-        "America:Maceio"{
-            ec{"Maceió"}
-        }
-        "America:Mazatlan"{
-            ec{"Mazatlán"}
         }
         "America:Mexico_City"{
             ec{"Mexico-stad"}
@@ -68,9 +35,6 @@ fy{
         }
         "America:Porto_Velho"{
             ec{"Pôrto Velho"}
-        }
-        "America:Sao_Paulo"{
-            ec{"São Paulo"}
         }
         "America:St_Barthelemy"{
             ec{"Saint-Barthélemy"}
@@ -225,9 +189,6 @@ fy{
         "Europe:Prague"{
             ec{"Praach"}
         }
-        "Europe:Tirane"{
-            ec{"Tirana"}
-        }
         "Europe:Vatican"{
             ec{"Fatikaanstêd"}
         }
@@ -252,14 +213,8 @@ fy{
         "Indian:Cocos"{
             ec{"Cocoseilannen"}
         }
-        "Indian:Mahe"{
-            ec{"Mahé"}
-        }
         "Indian:Maldives"{
             ec{"Maldiven"}
-        }
-        "Indian:Reunion"{
-            ec{"Réunion"}
         }
         "Pacific:Easter"{
             ec{"Peaskeeilân"}
@@ -267,17 +222,11 @@ fy{
         "Pacific:Enderbury"{
             ec{"Enderbury-eilân"}
         }
-        "Pacific:Galapagos"{
-            ec{"Galápagos"}
-        }
         "Pacific:Gambier"{
             ec{"Gambiereilannen"}
         }
         "Pacific:Marquesas"{
             ec{"Marquesaseilannen"}
-        }
-        "Pacific:Noumea"{
-            ec{"Nouméa"}
         }
         "meta:Acre"{
             ld{"Acre-simmertiid"}
@@ -328,11 +277,6 @@ fy{
             ld{"Pasifik-simmertiid"}
             lg{"Pasifik-tiid"}
             ls{"Pasifik-standerttiid"}
-        }
-        "meta:Anadyr"{
-            ld{"Anadyr-simmertiid"}
-            lg{"Anadyr-tiid"}
-            ls{"Anadyr-standerttiid"}
         }
         "meta:Arabian"{
             ld{"Arabyske simmertiid"}
@@ -477,25 +421,16 @@ fy{
             ld{"Midden-Europeeske simmertiid"}
             lg{"Midden-Europeeske tiid"}
             ls{"Midden-Europeeske standerttiid"}
-            sd{"CEST"}
-            sg{"CET"}
-            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"East-Europeeske simmertiid"}
             lg{"East-Europeeske tiid"}
             ls{"East-Europeeske standerttiid"}
-            sd{"EEST"}
-            sg{"EET"}
-            ss{"EET"}
         }
         "meta:Europe_Western"{
             ld{"West-Europeeske simmertiid"}
             lg{"West-Europeeske tiid"}
             ls{"West-Europeeske standerttiid"}
-            sd{"WEST"}
-            sg{"WET"}
-            ss{"WET"}
         }
         "meta:Falkland"{
             ld{"Falklâneilânske simmertiid"}

@@ -263,11 +263,6 @@ no{
             lg{"tidssone for den nordamerikanske Stillehavskysten"}
             ls{"normaltid for den nordamerikanske Stillehavskysten"}
         }
-        "meta:Anadyr"{
-            ld{"Russisk (Anadyr) sommertid"}
-            lg{"Russisk (Anadyr) tid"}
-            ls{"Russisk (Anadyr) normaltid"}
-        }
         "meta:Apia"{
             ld{"sommertid for Samoa"}
             lg{"tidssone for Samoa"}
@@ -356,9 +351,6 @@ no{
             lg{"tidssone for Kapp Verde"}
             ls{"normaltid for Kapp Verde"}
         }
-        "meta:Casey"{
-            ls{"Casey-tid"}
-        }
         "meta:Chamorro"{
             ls{"tidssone for Chamorro"}
         }
@@ -419,17 +411,11 @@ no{
             ld{"sommertid for Sentral-Europa"}
             lg{"tidssone for Sentral-Europa"}
             ls{"normaltid for Sentral-Europa"}
-            sd{"CEST"}
-            sg{"CET"}
-            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"sommertid for Øst-Europa"}
             lg{"tidssone for Øst-Europa"}
             ls{"normaltid for Øst-Europa"}
-            sd{"EEST"}
-            sg{"EET"}
-            ss{"EET"}
         }
         "meta:Europe_Further_Eastern"{
             ls{"tidssone for østlige Øst-Europa"}
@@ -438,9 +424,6 @@ no{
             ld{"sommertid for Vest-Europa"}
             lg{"tidssone for Vest-Europa"}
             ls{"normaltid for Vest-Europa"}
-            sd{"WEST"}
-            sg{"WET"}
-            ss{"WET"}
         }
         "meta:Falkland"{
             ld{"sommertid for Falklandsøyene"}
@@ -460,7 +443,6 @@ no{
         }
         "meta:GMT"{
             ls{"Greenwich middeltid"}
-            ss{"GMT"}
         }
         "meta:Galapagos"{
             ls{"tidssone for Galápagosøyene"}

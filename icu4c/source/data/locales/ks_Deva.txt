@@ -29,21 +29,6 @@ ks_Deva{
     }
     calendar{
         generic{
-            DateTimePatterns{
-                "a h:mm:ss zzzz",
-                "a h:mm:ss z",
-                "a h:mm:ss",
-                "a h:mm",
-                "G y MMMM d, EEEE",
-                "G y MMMM d",
-                "G y MMM d",
-                "G y-MM-dd",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
             DateTimePatterns%atTime{
                 "{0} पेठ {1}",
                 "{0} पेठ {1}",

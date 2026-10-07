@@ -7,10 +7,8 @@ es_CL{
         latn{
             patterns{
                 accountingFormat%alphaNextToNumber{"¤ #,##0.00;¤-#,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
                 currencyFormat{"¤#,##0.00;¤-#,##0.00"}
                 currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤-#,##0.00"}
-                currencyFormat%noCurrency{"#,##0.00"}
             }
             symbols{
                 decimal{","}
@@ -34,16 +32,6 @@ es_CL{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMdd",
-                "GGGGGyMMdd",
             }
             availableFormats{
                 MEd{"E, dd-MM"}
@@ -121,16 +109,6 @@ es_CL{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMdd",
-                "yyMMdd",
-            }
             availableFormats{
                 GyMMMd{"d MMM y G"}
                 MEd{"E, dd-MM"}
@@ -154,14 +132,6 @@ es_CL{
             }
             dayPeriod{
                 stand-alone{
-                    abbreviated{
-                        am{"a. m."}
-                        pm{"p. m."}
-                    }
-                    narrow{
-                        am{"a. m."}
-                        pm{"p. m."}
-                    }
                     wide{
                         am{"a. m."}
                         pm{"p. m."}

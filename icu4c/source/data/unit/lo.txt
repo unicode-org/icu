@@ -261,10 +261,6 @@ lo{
             }
         }
         energy{
-            british-thermal-unit{
-                dnam{"ຫົວ​ໜ່ວຍ​ວັດ​ແທກ​ປະ​ລິ​ມານ​ຄວາມ​ຮ້ອນ​ຂ​ອງ​ອັງ​ກິດ"}
-                other{"{0} ຫົວ​ໜ່ວຍ​ວັດ​ແທກ​ປະ​ລິ​ມານ​ຄວາມ​ຮ້ອນ​ຂ​ອງ​ອັງ​ກິດ"}
-            }
             calorie{
                 dnam{"ແຄລໍລີ່"}
                 other{"{0} ແຄລໍລີ່"}
@@ -448,10 +444,6 @@ lo{
             solar-mass{
                 dnam{"ມວນ​ສານດວງ​ຕາ​ເວັນ"}
                 other{"{0} ມວນ​ສານດວງ​ຕາ​ເວັນ"}
-            }
-            stone{
-                dnam{"stones"}
-                other{"{0} stones"}
             }
             ton{
                 dnam{"ໂຕນ"}
@@ -768,9 +760,6 @@ lo{
             kilogram{
                 other{"{0} ກລ"}
             }
-            stone{
-                dnam{"ສະໂຕນ"}
-            }
         }
         power{
             kilowatt{
@@ -1069,10 +1058,6 @@ lo{
             decimeter{
                 dnam{"ດມ"}
                 other{"{0} ດມ"}
-            }
-            fathom{
-                dnam{"ftm"}
-                other{"{0} ftm"}
             }
             foot{
                 dnam{"ຟຸດ"}

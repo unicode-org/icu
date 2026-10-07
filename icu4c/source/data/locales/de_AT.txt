@@ -7,12 +7,10 @@ de_AT{
     NumberElements{
         latn{
             patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
                 currencyFormat{"¤ #,##0.00"}
                 currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
             }
             symbols{
-                currencyGroup{"."}
                 group{" "}
             }
         }

@@ -306,7 +306,6 @@ ga{
         }
         "Europe:Dublin"{
             ec{"Baile Átha Cliath"}
-            sd{"ACÉ"}
         }
         "Europe:Gibraltar"{
             ec{"Giobráltar"}
@@ -337,7 +336,6 @@ ga{
         }
         "Europe:London"{
             ec{"Londain"}
-            sd{"ASB"}
         }
         "Europe:Luxembourg"{
             ec{"Lucsamburg"}
@@ -527,11 +525,6 @@ ga{
             lg{"Am an Aigéin Chiúin"}
             ls{"Am Caighdeánach an Aigéin Chiúin"}
         }
-        "meta:Anadyr"{
-            ld{"Am Samhraidh Anadyr"}
-            lg{"Am Anadyr"}
-            ls{"Am Caighdeánach Anadyr"}
-        }
         "meta:Apia"{
             ld{"Am Samhraidh Shamó"}
             lg{"Am Shamó"}
@@ -620,9 +613,6 @@ ga{
             lg{"Am Rinn Verde"}
             ls{"Am Caighdeánach Rinn Verde"}
         }
-        "meta:Casey"{
-            ls{"Am Stáisiún Casey"}
-        }
         "meta:Chamorro"{
             ls{"Am Caighdeánach Seamórach"}
         }
@@ -683,17 +673,11 @@ ga{
             ld{"Am Samhraidh Lár na hEorpa"}
             lg{"Am Lár na hEorpa"}
             ls{"Am Caighdeánach Lár na hEorpa"}
-            sd{"CEST"}
-            sg{"CET"}
-            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"Am Samhraidh Oirthear na hEorpa"}
             lg{"Am Oirthear na hEorpa"}
             ls{"Am Caighdeánach Oirthear na hEorpa"}
-            sd{"EEST"}
-            sg{"EET"}
-            ss{"EET"}
         }
         "meta:Europe_Further_Eastern"{
             ls{"Am Chianoirthear na hEorpa"}
@@ -702,9 +686,6 @@ ga{
             ld{"Am Samhraidh Iarthar na hEorpa"}
             lg{"Am Iarthar na hEorpa"}
             ls{"Am Caighdeánach Iarthar na hEorpa"}
-            sd{"WEST"}
-            sg{"WET"}
-            ss{"WET"}
         }
         "meta:Falkland"{
             ld{"Am Samhraidh Oileáin Fháclainne"}
@@ -724,7 +705,6 @@ ga{
         }
         "meta:GMT"{
             ls{"Meán-Am Greenwich"}
-            ss{"MAG"}
         }
         "meta:Galapagos"{
             ls{"Am Oileáin Galápagos"}

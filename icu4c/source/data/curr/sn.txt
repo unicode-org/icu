@@ -75,17 +75,9 @@ sn{
             "£",
             "Paundi ye Bhiriteni",
         }
-        GHC{
-            "GHC",
-            "Sedi ye Ghana",
-        }
         GMD{
             "GMD",
             "Dalasi ye Gambia",
-        }
-        GNS{
-            "GNS",
-            "Furenki re Gine",
         }
         INR{
             "₹",
@@ -123,10 +115,6 @@ sn{
             "MGA",
             "Furenki re Malagasi",
         }
-        MRO{
-            "MRO",
-            "Ugwiya ye Moritania (1973–2017)",
-        }
         MRU{
             "MRU",
             "Ugwiya ye Moritania",
@@ -138,10 +126,6 @@ sn{
         MWK{
             "MWK",
             "Kwacha ye Malawi",
-        }
-        MZM{
-            "MZM",
-            "Metika ye Mozambiki",
         }
         NAD{
             "NAD",
@@ -167,10 +151,6 @@ sn{
             "SDG",
             "Dinari re Sudani",
         }
-        SDP{
-            "SDP",
-            "Paundi re Sudani",
-        }
         SHP{
             "SHP",
             "Paundi re Senti Helena",
@@ -186,10 +166,6 @@ sn{
         SOS{
             "SOS",
             "Shiringi re Somalia",
-        }
-        STD{
-            "STD",
-            "Dobra re Sao Tome ne Principe (1977–2017)",
         }
         STN{
             "STN",
@@ -227,21 +203,9 @@ sn{
             "ZAR",
             "Randi",
         }
-        ZMK{
-            "ZMK",
-            "Kwacha ye Zambia (1968–2012)",
-        }
         ZMW{
             "ZMW",
             "Kwacha ye Zambia",
         }
-        ZWD{
-            "ZWD",
-            "Dora re Zimbabwe",
-        }
-    }
-    CurrencyUnitPatterns{
-        one{"{0} {1}"}
-        other{"{0} {1}"}
     }
 }

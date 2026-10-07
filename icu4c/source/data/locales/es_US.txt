@@ -9,11 +9,9 @@ es_US{
             patternsShort{
                 currencyFormat{
                     10000{
-                        one{"¤00 K"}
                         other{"¤00 K"}
                     }
                     100000{
-                        one{"¤000 K"}
                         other{"¤000 K"}
                     }
                 }
@@ -28,16 +26,10 @@ es_US{
                     }
                 }
                 decimalFormat{
-                    1000{
-                        one{"0 K"}
-                        other{"0 K"}
-                    }
                     10000{
-                        one{"00 K"}
                         other{"00 K"}
                     }
                     100000{
-                        one{"000 K"}
                         other{"000 K"}
                     }
                 }
@@ -89,16 +81,6 @@ es_US{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
-            }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yMd",
             }
             availableFormats{
                 EHm{"E HH:mm"}
@@ -227,14 +209,11 @@ es_US{
         wed-short{
             relative{
                 "-1"{"el mie. pasado"}
-                "0"{"este mié."}
-                "1"{"el próximo mié."}
             }
         }
         week-short{
             relative{
                 "-1"{"sem. pasada"}
-                "0"{"esta sem."}
                 "1"{"próxima sem."}
             }
         }

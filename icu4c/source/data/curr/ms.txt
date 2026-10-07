@@ -99,10 +99,6 @@ ms{
             "BYN",
             "Rubel Belarus baharu",
         }
-        BYR{
-            "BYR",
-            "Rubel Belarus (2000–2016)",
-        }
         BZD{
             "BZD",
             "Dolar Belize",
@@ -339,14 +335,6 @@ ms{
             "LSL",
             "Loti Lesotho",
         }
-        LTL{
-            "LTL",
-            "Litas Lithuania",
-        }
-        LVL{
-            "LVL",
-            "Lats Latvia",
-        }
         LYD{
             "LYD",
             "Dinar Libya",
@@ -363,10 +351,6 @@ ms{
             "MGA",
             "Ariary Malagasy",
         }
-        MGF{
-            "MGF",
-            "Franc Malagasy",
-        }
         MKD{
             "MKD",
             "Denar Macedonia",
@@ -382,10 +366,6 @@ ms{
         MOP{
             "MOP",
             "Pataca Macau",
-        }
-        MRO{
-            "MRO",
-            "Ouguiya Mauritania (1973–2017)",
         }
         MRU{
             "MRU",
@@ -410,14 +390,6 @@ ms{
         MYR{
             "RM",
             "Ringgit Malaysia",
-        }
-        MZE{
-            "MZE",
-            "Escudo Mozambique",
-        }
-        MZM{
-            "MZM",
-            "Metical Mozambique (1980–2006)",
         }
         MZN{
             "MZN",
@@ -483,10 +455,6 @@ ms{
             "QAR",
             "Rial Qatar",
         }
-        RHD{
-            "RHD",
-            "Dolar Rhodesia",
-        }
         RON{
             "RON",
             "Leu Romania",
@@ -551,10 +519,6 @@ ms{
             "SSP",
             "Paun Sudan selatan",
         }
-        STD{
-            "STD",
-            "Dobra Sao Tome dan Principe (1977–2017)",
-        }
         STN{
             "STN",
             "Dobra Sao Tome dan Principe",
@@ -607,10 +571,6 @@ ms{
             "UAH",
             "Hryvnia Ukraine",
         }
-        UGS{
-            "UGS",
-            "Shilling Uganda (1966–1987)",
-        }
         UGX{
             "UGX",
             "Syiling Uganda",
@@ -626,10 +586,6 @@ ms{
         UZS{
             "UZS",
             "Som Uzbekistan",
-        }
-        VEF{
-            "VEF",
-            "Bolivar Venezuela (2008–2018)",
         }
         VES{
             "VES",
@@ -679,29 +635,13 @@ ms{
             "ZAR",
             "Rand Afrika Selatan",
         }
-        ZMK{
-            "ZMK",
-            "Kwacha Zambia (1968–2012)",
-        }
         ZMW{
             "ZMW",
             "Kwacha Zambia",
         }
-        ZWD{
-            "ZWD",
-            "Dolar Zimbabwe (1980–2008)",
-        }
         ZWG{
             "ZWG",
             "Emas Zimbabwe",
-        }
-        ZWL{
-            "ZWL",
-            "Dolar Zimbabwe (2009)",
-        }
-        ZWR{
-            "ZWR",
-            "Dolar Zimbabwe (2008)",
         }
     }
     Currencies%narrow{

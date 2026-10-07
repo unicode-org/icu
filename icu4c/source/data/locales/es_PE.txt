@@ -11,15 +11,12 @@ es_PE{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"¤ 0 K"}
                         other{"¤ 0 K"}
                     }
                     10000{
-                        one{"¤ 00 K"}
                         other{"¤ 00 K"}
                     }
                     100000{
-                        one{"¤ 000 K"}
                         other{"¤ 000 K"}
                     }
                     1000000{
@@ -79,16 +76,6 @@ es_PE{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMMd",
-                "GGGGGyyMMd",
-            }
         }
         gregorian{
             AmPmMarkers{
@@ -114,26 +101,8 @@ es_PE{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yyMMd",
-            }
             dayPeriod{
                 stand-alone{
-                    abbreviated{
-                        am{"a. m."}
-                        pm{"p. m."}
-                    }
-                    narrow{
-                        am{"a. m."}
-                        pm{"p. m."}
-                    }
                     wide{
                         am{"a. m."}
                         pm{"p. m."}

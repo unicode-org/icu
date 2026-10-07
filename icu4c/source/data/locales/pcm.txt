@@ -72,51 +72,39 @@ pcm{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"¤0K"}
                         other{"¤0K"}
                     }
                     10000{
-                        one{"¤00K"}
                         other{"¤00K"}
                     }
                     100000{
-                        one{"¤000K"}
                         other{"¤000K"}
                     }
                     1000000{
-                        one{"¤0M"}
                         other{"¤0M"}
                     }
                     10000000{
-                        one{"¤00M"}
                         other{"¤00M"}
                     }
                     100000000{
-                        one{"¤000M"}
                         other{"¤000M"}
                     }
                     1000000000{
-                        one{"¤0B"}
                         other{"¤0B"}
                     }
                     10000000000{
-                        one{"¤00B"}
                         other{"¤00B"}
                     }
                     100000000000{
-                        one{"¤000B"}
                         other{"¤000B"}
                     }
                     1000000000000{
-                        one{"¤0T"}
                         other{"¤0T"}
                     }
                     10000000000000{
-                        one{"¤00T"}
                         other{"¤00T"}
                     }
                     100000000000000{
-                        one{"¤000T"}
                         other{"¤000T"}
                     }
                 }
@@ -172,15 +160,12 @@ pcm{
                 }
                 decimalFormat{
                     1000000000{
-                        one{"0B"}
                         other{"0B"}
                     }
                     10000000000{
-                        one{"00B"}
                         other{"00B"}
                     }
                     100000000000{
-                        one{"000B"}
                         other{"000B"}
                     }
                 }
@@ -268,16 +253,6 @@ pcm{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "Hmmssz",
-                "HHmmss",
-                "HHmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yMMdd",
-            }
             availableFormats{
                 Ed{"d E"}
                 Ehm{"E h:mm a"}
@@ -285,7 +260,6 @@ pcm{
                 MEd{"E, M/d"}
                 MMMEd{"E, d MMM"}
                 MMMMW{
-                    one{"'Wik' W 'fọ' MMMM"}
                     other{"'Wik' W 'fọ' MMMM"}
                 }
                 MMMMd{"d MMMM"}
@@ -610,11 +584,9 @@ pcm{
             }
             relativeTime{
                 future{
-                    one{"Fọ {0}dè wé de kọm"}
                     other{"Fọ {0}dè wé de kọm"}
                 }
                 past{
-                    one{"{0} dè wé dọ́n pas"}
                     other{"{0} dè wé dọ́n pas"}
                 }
             }
@@ -639,11 +611,9 @@ pcm{
             }
             relativeTime{
                 future{
-                    one{"Fọ {0} Fraidè"}
                     other{"Fọ {0} Fraidè"}
                 }
                 past{
-                    one{"{0}Fraidè wé dọ́n pas"}
                     other{"{0}Fraidè wé dọ́n pas"}
                 }
             }
@@ -655,11 +625,9 @@ pcm{
             }
             relativeTime{
                 future{
-                    one{"Fọ {0} áwa wé de kọm"}
                     other{"Fọ {0} áwa wé de kọm"}
                 }
                 past{
-                    one{"{0} áwa wé dọ́n pas"}
                     other{"{0} áwa wé dọ́n pas"}
                 }
             }
@@ -679,11 +647,9 @@ pcm{
             }
             relativeTime{
                 future{
-                    one{"Fọ {0} mínit wé de kọm"}
                     other{"Fọ {0} mínit wé de kọm"}
                 }
                 past{
-                    one{"{0} mínit wé dọ́n pas"}
                     other{"{0} mínit wé dọ́n pas"}
                 }
             }
@@ -696,11 +662,9 @@ pcm{
             }
             relativeTime{
                 future{
-                    one{"Fọ {0} Mọ́ndè"}
                     other{"Fọ {0} Mọ́ndè"}
                 }
                 past{
-                    one{"{0} Mọ́ndè wé dọ́n pas"}
                     other{"{0} Mọ́ndè wé dọ́n pas"}
                 }
             }
@@ -714,11 +678,9 @@ pcm{
             }
             relativeTime{
                 future{
-                    one{"Fọ {0}mọnt wé de kọm"}
                     other{"Fọ {0}mọnt wé de kọm"}
                 }
                 past{
-                    one{"{0} mọnt wé dọ́n pas"}
                     other{"{0} mọnt wé dọ́n pas"}
                 }
             }
@@ -732,11 +694,9 @@ pcm{
             }
             relativeTime{
                 future{
-                    one{"fọ {0} kwọ́ta wé de kọm"}
                     other{"fọ {0} kwọ́ta wé de kọm"}
                 }
                 past{
-                    one{"{0} kwọ́ta wé dọ́n pas"}
                     other{"{0} kwọ́ta wé dọ́n pas"}
                 }
             }
@@ -749,11 +709,9 @@ pcm{
             }
             relativeTime{
                 future{
-                    one{"Fọ {0} Sátọdè"}
                     other{"Fọ {0} Sátọdè"}
                 }
                 past{
-                    one{"{0} Sátọdè wé dọ́n pas"}
                     other{"{0} Sátọdè wé dọ́n pas"}
                 }
             }
@@ -765,11 +723,9 @@ pcm{
             }
             relativeTime{
                 future{
-                    one{"Fọ {0} Sẹ́kọn"}
                     other{"Fọ {0} Sẹ́kọn"}
                 }
                 past{
-                    one{"{0} sẹ́kọn wé dọ́n pas"}
                     other{"{0} sẹ́kọn wé dọ́n pas"}
                 }
             }
@@ -782,11 +738,9 @@ pcm{
             }
             relativeTime{
                 future{
-                    one{"Fọ {0} Sọ́ndè"}
                     other{"Fọ {0} Sọ́ndè"}
                 }
                 past{
-                    one{"{0} Sọ́ndè wé dọ́n pas"}
                     other{"{0} Sọ́ndè wé dọ́n pas"}
                 }
             }
@@ -799,11 +753,9 @@ pcm{
             }
             relativeTime{
                 future{
-                    one{"Fọ {0} Tọ́zdè"}
                     other{"Fọ {0} Tọ́zdè"}
                 }
                 past{
-                    one{"{0}Tọ́zdè wé dọ́n pas"}
                     other{"{0}Tọ́zdè wé dọ́n pas"}
                 }
             }
@@ -816,11 +768,9 @@ pcm{
             }
             relativeTime{
                 future{
-                    one{"Fọ {0} Tiúzdè"}
                     other{"Fọ {0} Tiúzdè"}
                 }
                 past{
-                    one{"{0} Tiúzdè wé dọ́n pas"}
                     other{"{0} Tiúzdè wé dọ́n pas"}
                 }
             }
@@ -833,11 +783,9 @@ pcm{
             }
             relativeTime{
                 future{
-                    one{"Fọ {0} Wẹ́nzdè"}
                     other{"Fọ {0} Wẹ́nzdè"}
                 }
                 past{
-                    one{"{0} Wẹ́nẹdè wé dọ́n pas"}
                     other{"{0} Wẹ́nẹdè wé dọ́n pas"}
                 }
             }
@@ -860,11 +808,9 @@ pcm{
             relativePeriod{"Di wík ọf {0}"}
             relativeTime{
                 future{
-                    one{"Fọ {0}wik wé de kọm"}
                     other{"Fọ {0}wik wé de kọm"}
                 }
                 past{
-                    one{"{0} wik wé dọ́n pas"}
                     other{"{0} wik wé dọ́n pas"}
                 }
             }
@@ -890,11 +836,9 @@ pcm{
             }
             relativeTime{
                 future{
-                    one{"fọ {0} yiẹ wé de kọm"}
                     other{"fọ {0} yiẹ wé de kọm"}
                 }
                 past{
-                    one{"{0} yiẹ wé dọ́n pas"}
                     other{"{0} yiẹ wé dọ́n pas"}
                 }
             }

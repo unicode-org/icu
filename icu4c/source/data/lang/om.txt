@@ -53,7 +53,6 @@ om{
         ga{"Afaan Ayirishii"}
         gd{"Scots Gaelic"}
         gl{"Afaan Galishii"}
-        gn{"Afaan Guarani"}
         gu{"Afaan Gujarati"}
         ha{"Hawusaa"}
         he{"Afaan Hebrew"}
@@ -71,7 +70,6 @@ om{
         ka{"Afaan Georgian"}
         kn{"Afaan Kannada"}
         ko{"Afaan Korea"}
-        la{"Afaan Laatini"}
         lt{"Afaan Liituniyaa"}
         lv{"Afaan Lativiyaa"}
         mk{"Afaan Macedooniyaa"}
@@ -107,7 +105,6 @@ om{
         th{"Afaan Tayii"}
         ti{"Afaan Tigiree"}
         tk{"Lammii Turkii"}
-        tlh{"Afaan Kilingon"}
         tr{"Afaan Turkii"}
         uk{"Afaan Ukreenii"}
         und{"Afaan hin beekamne"}

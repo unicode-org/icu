@@ -320,11 +320,6 @@ de{
             lg{"Nordamerikanische Westküstenzeit"}
             ls{"Nordamerikanische Westküsten-Normalzeit"}
         }
-        "meta:Anadyr"{
-            ld{"Anadyr Sommerzeit"}
-            lg{"Anadyr Zeit"}
-            ls{"Anadyr Normalzeit"}
-        }
         "meta:Apia"{
             ld{"Apia-Sommerzeit"}
             lg{"Apia-Zeit"}
@@ -413,9 +408,6 @@ de{
             lg{"Cabo-Verde-Zeit"}
             ls{"Cabo-Verde-Normalzeit"}
         }
-        "meta:Casey"{
-            ls{"Casey-Zeit"}
-        }
         "meta:Chamorro"{
             ls{"Chamorro-Zeit"}
         }
@@ -476,17 +468,11 @@ de{
             ld{"Mitteleuropäische Sommerzeit"}
             lg{"Mitteleuropäische Zeit"}
             ls{"Mitteleuropäische Normalzeit"}
-            sd{"MESZ"}
-            sg{"MEZ"}
-            ss{"MEZ"}
         }
         "meta:Europe_Eastern"{
             ld{"Osteuropäische Sommerzeit"}
             lg{"Osteuropäische Zeit"}
             ls{"Osteuropäische Normalzeit"}
-            sd{"OESZ"}
-            sg{"OEZ"}
-            ss{"OEZ"}
         }
         "meta:Europe_Further_Eastern"{
             ls{"Kaliningrader Zeit"}
@@ -495,9 +481,6 @@ de{
             ld{"Westeuropäische Sommerzeit"}
             lg{"Westeuropäische Zeit"}
             ls{"Westeuropäische Normalzeit"}
-            sd{"WESZ"}
-            sg{"WEZ"}
-            ss{"WEZ"}
         }
         "meta:Falkland"{
             ld{"Falklandinseln-Sommerzeit"}

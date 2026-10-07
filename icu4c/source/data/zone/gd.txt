@@ -230,7 +230,6 @@ gd{
         }
         "Europe:Dublin"{
             ec{"Baile Àtha Cliath"}
-            sd{"TSÈ (Èirinn)"}
         }
         "Europe:Gibraltar"{
             ec{"Diobraltar"}
@@ -249,7 +248,6 @@ gd{
         }
         "Europe:London"{
             ec{"Dùn Èideann/Lunnainn"}
-            sd{"TSB"}
         }
         "Europe:Luxembourg"{
             ec{"Lugsamburg"}
@@ -373,11 +371,6 @@ gd{
             lg{"Àm a’ Chuain Shèimh"}
             ls{"Bun-àm a’ Chuain Shèimh"}
         }
-        "meta:Anadyr"{
-            ld{"Tìde samhraidh Anadyr"}
-            lg{"Àm Anadyr"}
-            ls{"Bun-àm Anadyr"}
-        }
         "meta:Apia"{
             ld{"Tìde samhraidh Apia"}
             lg{"Àm Apia"}
@@ -466,9 +459,6 @@ gd{
             lg{"Àm a’ Chip Uaine"}
             ls{"Bun-àm a’ Chip Uaine"}
         }
-        "meta:Casey"{
-            ls{"Àm Chasey"}
-        }
         "meta:Chamorro"{
             ls{"Àm Chamorro"}
         }
@@ -529,17 +519,11 @@ gd{
             ld{"Tìde samhraidh Meadhan na Roinn-Eòrpa"}
             lg{"Àm Meadhan na Roinn-Eòrpa"}
             ls{"Bun-àm Meadhan na Roinn-Eòrpa"}
-            sd{"CEST"}
-            sg{"CET"}
-            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"Tìde samhraidh na Roinn-Eòrpa an Ear"}
             lg{"Àm na Roinn-Eòrpa an Ear"}
             ls{"Bun-àm na Roinn-Eòrpa an Ear"}
-            sd{"EEST"}
-            sg{"EET"}
-            ss{"EET"}
         }
         "meta:Europe_Further_Eastern"{
             ls{"Àm na Roinn-Eòrpa nas fhaide ear"}
@@ -548,9 +532,6 @@ gd{
             ld{"Tìde samhraidh na Roinn-Eòrpa an Iar"}
             lg{"Àm na Roinn-Eòrpa an Iar"}
             ls{"Bun-àm na Roinn-Eòrpa an Iar"}
-            sd{"WEST"}
-            sg{"WET"}
-            ss{"WET"}
         }
         "meta:Falkland"{
             ld{"Tìde samhraidh nan Eileanan Fàclannach"}
@@ -570,7 +551,6 @@ gd{
         }
         "meta:GMT"{
             ls{"Greenwich Mean Time"}
-            ss{"GMT"}
         }
         "meta:Galapagos"{
             ls{"Àm Ghalapagos"}

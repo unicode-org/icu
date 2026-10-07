@@ -2,13 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/
 nl_BE{
-    NumberElements{
-        latn{
-            patterns{
-                currencyFormat%noCurrency{"#,##0.00"}
-            }
-        }
-    }
     calendar{
         generic{
             DateTimePatterns{
@@ -25,16 +18,6 @@ nl_BE{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMMd",
-                "GGGGGyyMMd",
             }
             availableFormats{
                 MEd{"E d/M"}
@@ -83,16 +66,6 @@ nl_BE{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yMMd",
             }
             availableFormats{
                 MEd{"E d/M"}

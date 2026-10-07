@@ -15,11 +15,8 @@ fr_RE{
                 format{
                     abbreviated{
                         afternoon1{"ap.m."}
-                        evening1{"soir"}
                         midnight{"min."}
                         morning1{"mat."}
-                        night1{"matin"}
-                        noon{"midi"}
                     }
                 }
             }

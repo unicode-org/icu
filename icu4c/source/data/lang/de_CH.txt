@@ -19,15 +19,7 @@ de_CH{
         x0{"Transformation in Private Use"}
     }
     Languages{
-        ach{"Acholi-Sprache"}
-        bik{"Bikol-Sprache"}
-        chb{"Chibcha-Sprache"}
-        din{"Dinka-Sprache"}
-        fan{"Pangwe-Sprache"}
-        gba{"Gbaya-Sprache"}
         prg{"Altpreussisch"}
-        rhg{"Rohingya"}
-        tgx{"Tagisch"}
     }
     Languages%long{
         zh_Hans{"Hochchinesisch (vereinfacht)"}
@@ -48,17 +40,10 @@ de_CH{
             japanese{"Japanisch"}
             persian{"Persisch"}
         }
-        colCaseFirst{
-            upper{"Grossbuchstaben zuerst aufführen"}
-        }
         colCaseFirst%core{
             lower{"Kleinbuchstaben"}
             no{"Kleinbuchstaben"}
             upper{"Grossbuchstaben"}
-        }
-        colCaseLevel{
-            no{"Ohne Gross-/Kleinschreibung sortieren"}
-            yes{"Nach Gross-/Kleinschreibung sortieren"}
         }
         colReorder%core{
             punct{"Interpunktion"}

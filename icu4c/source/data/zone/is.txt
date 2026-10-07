@@ -401,11 +401,6 @@ is{
             lg{"Tími á Kyrrahafssvæðinu"}
             ls{"Staðaltími á Kyrrahafssvæðinu"}
         }
-        "meta:Anadyr"{
-            ld{"Sumartími í Anadyr"}
-            lg{"Tími í Anadyr"}
-            ls{"Staðaltími í Anadyr"}
-        }
         "meta:Apia"{
             ld{"Sumartími á Vestur-Samóa"}
             lg{"Vestur-Samóatími"}

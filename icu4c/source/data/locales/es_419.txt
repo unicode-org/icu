@@ -5,7 +5,6 @@ es_419{
     NumberElements{
         latn{
             patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
                 currencyFormat{"¤#,##0.00"}
                 currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
                 percentFormat{"#,##0%"}
@@ -13,51 +12,39 @@ es_419{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"¤0 K"}
                         other{"¤0 K"}
                     }
                     10000{
-                        one{"¤00 k"}
                         other{"¤00 k"}
                     }
                     100000{
-                        one{"¤000 k"}
                         other{"¤000 k"}
                     }
                     1000000{
-                        one{"¤0 M"}
                         other{"¤0 M"}
                     }
                     10000000{
-                        one{"¤00 M"}
                         other{"¤00 M"}
                     }
                     100000000{
-                        one{"¤000 M"}
                         other{"¤000 M"}
                     }
                     1000000000{
-                        one{"¤0000 M"}
                         other{"¤0000 M"}
                     }
                     10000000000{
-                        one{"¤00 mil M"}
                         other{"¤00 mil M"}
                     }
                     100000000000{
-                        one{"¤000 mil M"}
                         other{"¤000 mil M"}
                     }
                     1000000000000{
-                        one{"¤0 B"}
                         other{"¤0 B"}
                     }
                     10000000000000{
-                        one{"¤00 B"}
                         other{"¤00 B"}
                     }
                     100000000000000{
-                        one{"¤000 B"}
                         other{"¤000 B"}
                     }
                 }
@@ -113,15 +100,12 @@ es_419{
                 }
                 decimalFormat{
                     1000{
-                        one{"0 K"}
                         other{"0 K"}
                     }
                     10000{
-                        one{"00 k"}
                         other{"00 k"}
                     }
                     100000{
-                        one{"000 k"}
                         other{"000 k"}
                     }
                 }
@@ -139,53 +123,7 @@ es_419{
         minimumGroupingDigits{"1"}
     }
     calendar{
-        coptic{
-            monthNames{
-                format{
-                    wide{
-                        "Tout",
-                        "Baba",
-                        "Hator",
-                        "Kiahk",
-                        "Toba",
-                        "Amshir",
-                        "Baramhat",
-                        "Baramouda",
-                        "Bashans",
-                        "Paona",
-                        "Epep",
-                        "Mesra",
-                        "Nasie",
-                    }
-                }
-            }
-        }
         generic{
-            DateTimePatterns{
-                "h:mm:ss a zzzz",
-                "h:mm:ss a z",
-                "h:mm:ss a",
-                "h:mm a",
-                "EEEE, d 'de' MMMM 'de' y G",
-                "d 'de' MMMM 'de' y G",
-                "d 'de' MMM 'de' y G",
-                "d/M/y GGGGG",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-            }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMMd",
-                "GGGGGyyMMdd",
-            }
             availableFormats{
                 GyMMM{"MMM 'de' y G"}
                 GyMMMEd{"E, d 'de' MMM 'de' y G"}
@@ -252,16 +190,6 @@ es_419{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
-            }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yyMd",
             }
             availableFormats{
                 EHm{"E, HH:mm"}
@@ -406,22 +334,6 @@ es_419{
                         "dic",
                     }
                 }
-                stand-alone{
-                    abbreviated{
-                        "ene",
-                        "feb",
-                        "mar",
-                        "abr",
-                        "may",
-                        "jun",
-                        "jul",
-                        "ago",
-                        "sep",
-                        "oct",
-                        "nov",
-                        "dic",
-                    }
-                }
             }
             quarters{
                 format{
@@ -431,95 +343,6 @@ es_419{
                         "3.º trimestre",
                         "4.º trimestre",
                     }
-                }
-            }
-        }
-        hebrew{
-            monthNames{
-                format{
-                    wide{
-                        "Tishri",
-                        "Heshvan",
-                        "Kislev",
-                        "Tevet",
-                        "Shevat",
-                        "Adar I",
-                        "Adar",
-                        "Nisan",
-                        "Iyar",
-                        "Sivan",
-                        "Tamuz",
-                        "Av",
-                        "Elul",
-                        "Adar II",
-                    }
-                }
-            }
-        }
-        indian{
-            eras{
-                abbreviated{
-                    0{"Saka"}
-                }
-            }
-            monthNames{
-                format{
-                    wide{
-                        "Chaitra",
-                        "Vaisakha",
-                        "Jyaistha",
-                        "Asadha",
-                        "Sravana",
-                        "Bhadra",
-                        "Asvina",
-                        "Kartika",
-                        "Agrahayana",
-                        "Pausa",
-                        "Magha",
-                        "Phalguna",
-                    }
-                }
-            }
-        }
-        islamic{
-            monthNames{
-                format{
-                    abbreviated{
-                        "Muh.",
-                        "Saf.",
-                        "Rab. I",
-                        "Rab. II",
-                        "Jum. I",
-                        "Jum. II",
-                        "Raj.",
-                        "Sha.",
-                        "Ram.",
-                        "Shaw.",
-                        "Dhuʻl-Q.",
-                        "Dhuʻl-H.",
-                    }
-                    wide{
-                        "Muharram",
-                        "Safar",
-                        "Rabiʻ I",
-                        "Rabiʻ II",
-                        "Jumada I",
-                        "Jumada II",
-                        "Rajab",
-                        "Shaʻban",
-                        "Ramadan",
-                        "Shawwal",
-                        "Dhuʻl-Qiʻdah",
-                        "Dhuʻl-Hijjah",
-                    }
-                }
-            }
-        }
-        roc{
-            eras{
-                abbreviated{
-                    0{"antes de R.O.C."}
-                    1{"R.O.C."}
                 }
             }
         }
@@ -554,8 +377,6 @@ es_419{
         week-short{
             relative{
                 "-1"{"sem. pas."}
-                "0"{"esta sem."}
-                "1"{"próx. sem."}
             }
             relativePeriod{"la semana del {0}"}
         }

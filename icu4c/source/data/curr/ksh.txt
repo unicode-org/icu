@@ -39,10 +39,6 @@ ksh{
             "AWG",
             "arubesche Florin",
         }
-        AZM{
-            "AZM",
-            "Asserbaidschaani Manat (1993–2006)",
-        }
         AZN{
             "AZN",
             "Asserbaidschaani Manat",
@@ -102,10 +98,6 @@ ksh{
         BYN{
             "BYN",
             "wiißrußesche Rubel",
-        }
-        BYR{
-            "BYR",
-            "wiißrußesche Rubel (2000–2016)",
         }
         BZD{
             "BZD",
@@ -170,10 +162,6 @@ ksh{
         DZD{
             "DZD",
             "aljeresche Denaa",
-        }
-        EEK{
-            "EEK",
-            "Äßnesche Kruhne",
         }
         EGP{
             "EGP",
@@ -343,14 +331,6 @@ ksh{
             "LSL",
             "lesoothesche Loti",
         }
-        LTL{
-            "LTL",
-            "littouesche Litas",
-        }
-        LVL{
-            "LVL",
-            "lättesche Lats",
-        }
         LYD{
             "LYD",
             "libesche Denaa",
@@ -383,10 +363,6 @@ ksh{
             "MOP",
             "makaneesesche Pataca",
         }
-        MRO{
-            "MRO",
-            "mauretanesche Ouguiya (1973–2017)",
-        }
         MRU{
             "MRU",
             "mauretanesche Ouguiya",
@@ -410,10 +386,6 @@ ksh{
         MYR{
             "MYR",
             "malaisesche Ringgit",
-        }
-        MZM{
-            "MZM",
-            "mosambikaanesche Metical (1980–2006)",
         }
         MZN{
             "MZN",
@@ -479,10 +451,6 @@ ksh{
             "QAR",
             "kataaresche Rijal",
         }
-        ROL{
-            "ROL",
-            "romäänesche Leu (1952–2006)",
-        }
         RON{
             "RON",
             "romäänesche Leu",
@@ -527,10 +495,6 @@ ksh{
             "SHP",
             "Zint-Hellena-Pongk",
         }
-        SKK{
-            "SKK",
-            "ßlovaakesche Kruhne",
-        }
         SLE{
             "SLE",
             "ẞjärra-lejoneesesche Leone",
@@ -551,17 +515,9 @@ ksh{
             "SSP",
             "södsudaneesesche Pongk",
         }
-        STD{
-            "STD",
-            "Dobra vun São Tomé un Príncipe (1977–2017)",
-        }
         STN{
             "STN",
             "Dobra vun São Tomé un Príncipe",
-        }
-        SVC{
-            "SVC",
-            "asalvadorejaanesche Cosan",
         }
         SYP{
             "SYP",
@@ -578,10 +534,6 @@ ksh{
         TJS{
             "TJS",
             "tadschikißtaanesche Somoni",
-        }
-        TMM{
-            "TMM",
-            "turkmeneßtaanesche Manat (1993–2009)",
         }
         TMT{
             "TMT",
@@ -631,10 +583,6 @@ ksh{
             "UZS",
             "ußbeekesche Som",
         }
-        VEF{
-            "VEF",
-            "venezuelaanesche Bolívar (2008–2018)",
-        }
         VES{
             "VES",
             "venezuelaanesche Bolívar",
@@ -655,41 +603,17 @@ ksh{
             "FCFA",
             "Kmmeruhner Frang",
         }
-        XAG{
-            "XAG",
-            "Sellver",
-        }
-        XAU{
-            "XAU",
-            "Jold",
-        }
         XCD{
             "EC$",
             "oß-karribbesche Dollaa",
-        }
-        XFO{
-            "XFO",
-            "franzüüsesche Joldfranke",
         }
         XOF{
             "F CFA",
             "Frang uß de Älfebeinköß",
         }
-        XPD{
-            "XPD",
-            "Palladijum",
-        }
         XPF{
             "CFPF",
             "polineesesche Frang",
-        }
-        XPT{
-            "XPT",
-            "Plaatin",
-        }
-        XTS{
-            "XTS",
-            "Währong zum Prööfe",
         }
         XXX{
             "¤",
@@ -703,93 +627,50 @@ ksh{
             "ZAR",
             "södaffrekaanesche Rand",
         }
-        ZMK{
-            "ZMK",
-            "sambesche Kwacha (1968–2012)",
-        }
         ZMW{
             "ZMW",
             "sambesche Kwacha",
         }
-        ZWD{
-            "ZWD",
-            "simbabwesche Dollaa (1980–2008)",
-        }
-        ZWL{
-            "ZWL",
-            "simbabwesche Dollaa (2009)",
-        }
     }
     CurrencyPlurals{
         ARS{
-            one{"ajentiinesche Peesos"}
             other{"ajentiinesche Peesos"}
-            zero{"ajentiinesche Peesos"}
         }
         BAM{
-            one{"öpmtuuschbaa Mark us Boßnije un dä Hächejovvina"}
             other{"öpmtuuschbaa Mark us Boßnije un dä Hächejovvina"}
-            zero{"öpmtuuschbaa Mark us Boßnije un dä Hächejovvina"}
         }
         BND{
-            one{"Brunei-Dollaaa"}
             other{"Brunei-Dollaaa"}
-            zero{"Brunei-Dollaaa"}
         }
         BTN{
-            one{"Bhutanesesche Ngultrum"}
             other{"Bhutanesesche Ngultrum"}
-            zero{"Bhutanesesche Ngultrum"}
         }
         BZD{
-            one{"Belizjaanesche Dollaa"}
             other{"Belizjaanesche Dollaa"}
-            zero{"Belizjaanesche Dollaa"}
         }
         CLP{
-            one{"schileenesche Peesos"}
             other{"schileenesche Peesos"}
-            zero{"schileenesche Peesos"}
         }
         COP{
-            one{"kolumbesche Pesos"}
             other{"kolumbesche Pesos"}
-            zero{"kolumbesche Pesos"}
         }
         CRC{
-            one{"Kaßtarikaanesche Colón"}
             other{"Kaßtarikaanesche Colón"}
-            zero{"Kaßtarikaanesche Colón"}
         }
         DOP{
             one{"dommenikaanesche Peeso"}
-            other{"dommenikaanesche Peesos"}
-            zero{"dommenikaanesche Peesos"}
         }
         GEL{
-            one{"jeorjesche LAri"}
             other{"jeorjesche LAri"}
-            zero{"jeorjesche LAri"}
         }
         GNF{
-            one{"Jineea-Franke"}
             other{"Jineea-Franke"}
-            zero{"Jineea-Franke"}
         }
         KZT{
-            one{"kasakstaanesche Tenge"}
             other{"kasakstaanesche Tenge"}
-            zero{"kasakstaanesche Tenge"}
         }
         LKR{
-            one{"schri-lankesche Ruupije"}
             other{"schri-lankesche Ruupije"}
-            zero{"schri-lankesche Ruupije"}
         }
-    }
-    CurrencyUnitPatterns{
-        one{"{0} {1}"}
-        other{"{0} {1}"}
-        zero{"{0} {1}"}
     }
 }

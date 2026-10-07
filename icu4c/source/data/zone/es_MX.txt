@@ -36,16 +36,12 @@ es_MX{
         }
         "meta:Apia"{
             ld{"hora de verano de Apia"}
-            lg{"hora de Apia"}
-            ls{"hora estándar de Apia"}
         }
         "meta:Christmas"{
             ls{"hora de la isla de Navidad"}
         }
         "meta:Cook"{
             ld{"hora de verano media de las Islas Cook"}
-            lg{"hora de las Islas Cook"}
-            ls{"hora estándar de las Islas Cook"}
         }
         "meta:Easter"{
             ld{"hora de verano de la isla de Pascua"}

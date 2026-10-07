@@ -10,7 +10,6 @@ sah{
     NumberElements{
         latn{
             patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
                 currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
             }
@@ -156,16 +155,6 @@ sah{
                 "{1} {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMMd",
-                "GGGGGyyMd",
-            }
         }
         gregorian{
             AmPmMarkersAbbr{
@@ -187,16 +176,6 @@ sah{
                 "{1} {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yyMd",
-            }
             availableFormats{
                 Ehm{"E h:mm a"}
                 Ehms{"E h:mm:ss a"}
@@ -204,7 +183,6 @@ sah{
                 MMMMW{
                     other{"MMMM W 'нэдиэлэтэ'"}
                 }
-                h{"h a"}
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
                 hmsv{"h:mm:ss a v"}
@@ -264,7 +242,6 @@ sah{
                 fallback{"{0} – {1}"}
                 h{
                     a{"h a – h a"}
-                    h{"h–h a"}
                 }
                 hm{
                     a{"h:mm a – h:mm a"}
@@ -278,7 +255,6 @@ sah{
                 }
                 hv{
                     a{"h a – h a v"}
-                    h{"h–h a v"}
                 }
                 yM{
                     M{"MM.y – MM.y"}

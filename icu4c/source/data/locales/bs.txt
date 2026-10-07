@@ -11,160 +11,12 @@ bs{
     ExemplarCharactersIndex{"[A B C Č Ć D {DŽ} E F G H I J K L {LJ} M N {NJ} O P Q R S Š T U V W X Y Z Ž]"}
     ExemplarCharactersPunctuation{"[‐ – — , ; \\: ! ? . … '‘’ \u0022“”„ ( ) \\[ \\] @ * / ′ ″]"}
     NumberElements{
-        adlm{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
-            }
-        }
-        arabext{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
-            }
-        }
-        bali{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
-            }
-        }
-        beng{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
-            }
-        }
-        brah{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
-            }
-        }
-        cakm{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
-            }
-        }
-        cham{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
-            }
-        }
-        deva{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
-            }
-        }
-        fullwide{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
-            }
-        }
-        gong{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
-            }
-        }
-        gonm{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
-            }
-        }
-        gujr{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
-            }
-        }
-        guru{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
-            }
-        }
-        hanidec{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
-            }
-        }
-        java{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
-            }
-        }
-        kali{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
-            }
-        }
-        khmr{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
-            }
-        }
-        knda{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
-            }
-        }
-        lana{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
-            }
-        }
-        lanatham{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
-            }
-        }
-        laoo{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
-            }
-        }
         latn{
             miscPatterns{
                 atLeast{"{0}+"}
                 range{"{0} – {1}"}
             }
             patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
                 currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
             }
@@ -235,113 +87,77 @@ bs{
             patternsShort{
                 currencyFormat{
                     1000{
-                        few{"0 hilj'.' ¤"}
-                        one{"0 hilj'.' ¤"}
                         other{"0 hilj'.' ¤"}
                     }
                     10000{
-                        few{"00 hilj'.' ¤"}
-                        one{"00 hilj'.' ¤"}
                         other{"00 hilj'.' ¤"}
                     }
                     100000{
-                        few{"000 hilj'.' ¤"}
-                        one{"000 hilj'.' ¤"}
                         other{"000 hilj'.' ¤"}
                     }
                     1000000{
-                        few{"0 mil'.' ¤"}
-                        one{"0 mil'.' ¤"}
                         other{"0 mil'.' ¤"}
                     }
                     10000000{
-                        few{"00 mil'.' ¤"}
-                        one{"00 mil'.' ¤"}
                         other{"00 mil'.' ¤"}
                     }
                     100000000{
-                        few{"000 mil'.' ¤"}
-                        one{"000 mil'.' ¤"}
                         other{"000 mil'.' ¤"}
                     }
                     1000000000{
-                        few{"0 mlrd'.' ¤"}
-                        one{"0 mlrd'.' ¤"}
                         other{"0 mlrd'.' ¤"}
                     }
                     10000000000{
-                        few{"00 mlrd'.' ¤"}
-                        one{"00 mlrd'.' ¤"}
                         other{"00 mlrd'.' ¤"}
                     }
                     100000000000{
-                        few{"000 mlrd'.' ¤"}
-                        one{"000 mlrd'.' ¤"}
                         other{"000 mlrd'.' ¤"}
                     }
                     1000000000000{
-                        few{"0 bil'.' ¤"}
-                        one{"0 bil'.' ¤"}
                         other{"0 bil'.' ¤"}
                     }
                     10000000000000{
-                        few{"00 bil'.' ¤"}
-                        one{"00 bil'.' ¤"}
                         other{"00 bil'.' ¤"}
                     }
                     100000000000000{
-                        few{"000 bil'.' ¤"}
-                        one{"000 bil'.' ¤"}
                         other{"000 bil'.' ¤"}
                     }
                 }
                 decimalFormat{
                     1000{
-                        one{"0 hilj'.'"}
                         other{"0 hilj'.'"}
                     }
                     10000{
-                        one{"00 hilj'.'"}
                         other{"00 hilj'.'"}
                     }
                     100000{
-                        one{"000 hilj'.'"}
                         other{"000 hilj'.'"}
                     }
                     1000000{
-                        one{"0 mil'.'"}
                         other{"0 mil'.'"}
                     }
                     10000000{
-                        one{"00 mil'.'"}
                         other{"00 mil'.'"}
                     }
                     100000000{
-                        one{"000 mil'.'"}
                         other{"000 mil'.'"}
                     }
                     1000000000{
-                        one{"0 mlrd'.'"}
                         other{"0 mlrd'.'"}
                     }
                     10000000000{
-                        one{"00 mlrd'.'"}
                         other{"00 mlrd'.'"}
                     }
                     100000000000{
-                        one{"000 mlrd'.'"}
                         other{"000 mlrd'.'"}
                     }
                     1000000000000{
-                        one{"0 bil'.'"}
                         other{"0 bil'.'"}
                     }
                     10000000000000{
-                        one{"00 bil'.'"}
                         other{"00 bil'.'"}
                     }
                     100000000000000{
-                        one{"000 bil'.'"}
                         other{"000 bil'.'"}
                     }
                 }
@@ -350,20 +166,6 @@ bs{
                 approximatelySign{"≈"}
                 decimal{","}
                 group{"."}
-            }
-        }
-        lepc{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
-            }
-        }
-        limb{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
             }
         }
         minimalPairs{
@@ -376,276 +178,8 @@ bs{
                 other{"{0} sati"}
             }
         }
-        mlym{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
-            }
-        }
-        mong{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
-            }
-        }
-        mtei{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
-            }
-        }
-        mymr{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
-            }
-        }
-        mymrshan{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
-            }
-        }
-        nkoo{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
-            }
-        }
-        olck{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
-            }
-        }
-        orya{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
-            }
-        }
-        osma{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
-            }
-        }
-        rohg{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
-            }
-        }
-        saur{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
-            }
-        }
-        shrd{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
-            }
-        }
-        sora{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
-            }
-        }
-        sund{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
-            }
-        }
-        takr{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
-            }
-        }
-        talu{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
-            }
-        }
-        tamldec{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
-            }
-        }
-        telu{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
-            }
-        }
-        thai{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
-            }
-        }
-        tibt{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
-            }
-        }
-        vaii{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                percentFormat{"#,##0 %"}
-            }
-        }
     }
     calendar{
-        chinese{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "E, d.M.y.",
-                "d.M.y.",
-                "d.M.y.",
-                "d.M.y.",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-            }
-            DateTimePatterns%atTime{
-                "{1} 'u' {0}",
-                "{1} 'u' {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-            }
-            availableFormats{
-                Ed{"d E"}
-                Gy{"r(U)"}
-            }
-            cyclicNameSets{
-                solarTerms{
-                    format{
-                        abbreviated{
-                            "kreće proljeće",
-                            "kišnica",
-                            "bude se insekti",
-                            "proljetna ravnodnevica",
-                            "vedro",
-                            "kiša zrna",
-                            "kreće ljeto",
-                            "puno zrno",
-                            "zrelo zrno",
-                            "ljetni solsticij",
-                            "blaga vrućina",
-                            "velika vrućina",
-                            "kreće jesen",
-                            "kraj vrućine",
-                            "bijela rosa",
-                            "jesenja ravnodnevnica",
-                            "hladna rosa",
-                            "spušta se mraz",
-                            "kreće zima",
-                            "blagi snijeg",
-                            "veliki snijeg",
-                            "zimski solsticij",
-                            "blaga hladnoća",
-                            "jaka hladnoća",
-                        }
-                    }
-                }
-            }
-            monthNames{
-                format{
-                    abbreviated{
-                        "1. mjesec",
-                        "2. mjesec",
-                        "3. mjesec",
-                        "4. mjesec",
-                        "5. mjesec",
-                        "6. mjesec",
-                        "7. mjesec",
-                        "8. mjesec",
-                        "9. mjesec",
-                        "10. mjesec",
-                        "11. mjesec",
-                        "12. mjesec",
-                    }
-                    wide{
-                        "Prvi mjesec",
-                        "Drugi mjesec",
-                        "Treći mjesec",
-                        "Četvrti mjesec",
-                        "Peti mjesec",
-                        "Šesti mjesec",
-                        "Sedmi mjesec",
-                        "Osmi mjesec",
-                        "Deveti mjesec",
-                        "Deseti mjesec",
-                        "Jedanaesti mjesec",
-                        "Dvanaesti mjesec",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "1. mjesec",
-                        "2. mjesec",
-                        "3. mjesec",
-                        "4. mjesec",
-                        "5. mjesec",
-                        "6. mjesec",
-                        "7. mjesec",
-                        "8. mjesec",
-                        "9. mjesec",
-                        "10.. mjesec",
-                        "11. mjesec",
-                        "12. mjesec",
-                    }
-                }
-            }
-        }
-        dangi{
-            intervalFormats{
-                hm{
-                    a{"h:mm a – h:mm a"}
-                    h{"h:mm–h:mm a"}
-                    m{"h:mm–h:mm a"}
-                }
-                hmv{
-                    a{"h:mm a – h:mm a v"}
-                    h{"h:mm–h:mm a v"}
-                    m{"h:mm–h:mm a v"}
-                }
-            }
-        }
         generic{
             DateTimePatterns{
                 "HH:mm:ss zzzz",
@@ -673,16 +207,6 @@ bs{
                 "{1} 'u' {0}",
                 "{1}, {0}",
                 "{1}, {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEdd",
-                "GyMMMMdd",
-                "GyMMdd",
-                "GGGGGyMMdd",
             }
             availableFormats{
                 Ed{"E, d."}
@@ -720,12 +244,6 @@ bs{
                     h{"h:mm – h:mm B"}
                     m{"h:mm – h:mm B"}
                 }
-                H{
-                    H{"HH – HH'h'"}
-                }
-                Hv{
-                    H{"HH – HH 'h' v"}
-                }
                 M{
                     M{"M. – M."}
                 }
@@ -751,22 +269,6 @@ bs{
                 }
                 d{
                     d{"d. – d."}
-                }
-                h{
-                    h{"h – h'h' a"}
-                }
-                hm{
-                    a{"h:mm a – h:mm a"}
-                    h{"h:mm–h:mm a"}
-                    m{"h:mm–h:mm a"}
-                }
-                hmv{
-                    a{"h:mm a – h:mm a v"}
-                    h{"h:mm–h:mm a v"}
-                    m{"h:mm–h:mm a v"}
-                }
-                hv{
-                    h{"h – h 'h' a v"}
                 }
                 y{
                     y{"y. – y. G"}
@@ -840,16 +342,6 @@ bs{
                 "{1} {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yMd",
-            }
             availableFormats{
                 Ed{"E, d."}
                 Ehm{"E h:mm a"}
@@ -868,8 +360,6 @@ bs{
                 MMMEd{"E, d. MMM"}
                 MMMMEd{"E, d. MMMM"}
                 MMMMW{
-                    few{"W. 'sedmica' 'mjesec' MMMM"}
-                    one{"W. 'sedmica' 'mjesec' MMMM"}
                     other{"W. 'sedmica' 'mjesec' MMMM"}
                 }
                 MMMMd{"d. MMMM"}
@@ -891,8 +381,6 @@ bs{
                 yQQQ{"QQQ y."}
                 yQQQQ{"QQQQ y."}
                 yw{
-                    few{"w. 'sedmica' 'u' Y."}
-                    one{"w. 'sedmica' 'u' Y."}
                     other{"w. 'sedmica' 'u' Y."}
                 }
             }
@@ -964,9 +452,6 @@ bs{
                 abbreviated{
                     0{"p. n. e."}
                     1{"n. e."}
-                }
-                narrow{
-                    0{"p.n.e."}
                 }
                 wide{
                     0{"prije nove ere"}
@@ -1198,106 +683,6 @@ bs{
                 }
             }
         }
-        islamic{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE, dd. MMMM y. G",
-                "dd. MMMM y. G",
-                "dd.MM.y. G",
-                "dd.MM.y. G",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEdd",
-                "GyMMMMdd",
-                "GyMMdd",
-                "GyMMdd",
-            }
-            availableFormats{
-                Ed{"E, dd."}
-                MEd{"E, dd.MM."}
-                MMMEd{"E, dd. MMM"}
-                MMMd{"dd. MMM"}
-                Md{"dd.MM."}
-                yM{"MM.y. G"}
-                yMEd{"E, dd.MM.y. G"}
-                yMMM{"MMM y. G"}
-                yMMMEd{"E, dd. MMM y. G"}
-                yMMMd{"dd. MMM y. G"}
-                yMd{"dd.MM.y. G"}
-                yQQQ{"y G QQQ"}
-                yQQQQ{"y G QQQQ"}
-            }
-            monthNames{
-                format{
-                    abbreviated{
-                        "muh.",
-                        "saf.",
-                        "Rab. I",
-                        "rab. ii",
-                        "džum. i",
-                        "džum. ii",
-                        "redž.",
-                        "ša.",
-                        "ram.",
-                        "še.",
-                        "zul-k.",
-                        "zul-h.",
-                    }
-                    wide{
-                        "muharem",
-                        "safer",
-                        "rabiʻ i",
-                        "rabiʻ ii",
-                        "džumade i",
-                        "džumade ii",
-                        "redžeb",
-                        "Shaʻban",
-                        "ramazan",
-                        "ševal",
-                        "zul-kade",
-                        "zul-hidže",
-                    }
-                }
-            }
-        }
-        japanese{
-            availableFormats{
-                Gy{"y. GGG"}
-                MEd{"E, d. M."}
-                Md{"d. M."}
-                y{"y. GGG"}
-                yM{"M. y. GGGGG"}
-                yMEd{"E, d. M. y. GGGGG"}
-                yMMM{"LLL y. GGGGG"}
-                yMMMEd{"E, d. MMM y. GGGGG"}
-                yMMMd{"d. MMM y. GGGGG"}
-                yMd{"d. M. y. GGGGG"}
-                yQQQ{"QQQ y. GGGGG"}
-            }
-        }
-        roc{
-            availableFormats{
-                M{"L."}
-                d{"d."}
-            }
-            eras{
-                abbreviated{
-                    0{"prije R.O.C."}
-                }
-            }
-        }
     }
     characterLabel{
         activities{"aktivnost"}
@@ -1399,12 +784,10 @@ bs{
             }
             relativeTime{
                 future{
-                    few{"za {0} dana"}
                     one{"za {0} dan"}
                     other{"za {0} dana"}
                 }
                 past{
-                    few{"prije {0} dana"}
                     one{"prije {0} dan"}
                     other{"prije {0} dana"}
                 }
@@ -1604,13 +987,10 @@ bs{
             }
             relativeTime{
                 future{
-                    few{"za {0} kvartala"}
                     one{"za {0} kvartal"}
                     other{"za {0} kvartala"}
                 }
                 past{
-                    few{"prije {0} kvartala"}
-                    one{"prije {0} kvartala"}
                     other{"prije {0} kvartala"}
                 }
             }

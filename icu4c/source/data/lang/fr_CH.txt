@@ -4,7 +4,5 @@
 fr_CH{
     Languages{
         gu{"goudjrati"}
-        pdc{"allemand de Pennsylvanie"}
-        sdh{"kurde méridional"}
     }
 }

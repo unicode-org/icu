@@ -37,10 +37,6 @@ en_AU{
                     M{"E, d/M – E, d/M"}
                     d{"E, d/M – E, d/M"}
                 }
-                MMMEEEEd{
-                    M{"EEEE d MMM – EEEE d MMM"}
-                    d{"EEEE d MMM – EEEE d MMM"}
-                }
                 MMMEd{
                     M{"E, d MMM – E, d MMM"}
                     d{"E, d MMM – E, d MMM"}
@@ -73,16 +69,6 @@ en_AU{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yyMd",
-            }
             availableFormats{
                 GyMMMEEEEd{"EEEE d MMM y G"}
                 GyMMMEddd{"E ddd MMM y G"}
@@ -102,27 +88,13 @@ en_AU{
             dayPeriod{
                 format{
                     abbreviated{
-                        afternoon1{"in the afternoon"}
-                        evening1{"in the evening"}
-                        midnight{"midnight"}
-                        morning1{"in the morning"}
-                        night1{"at night"}
                         noon{"midday"}
                     }
                     narrow{
-                        afternoon1{"in the afternoon"}
-                        evening1{"in the evening"}
                         midnight{"midnight"}
-                        morning1{"in the morning"}
-                        night1{"at night"}
                         noon{"midday"}
                     }
                     wide{
-                        afternoon1{"in the afternoon"}
-                        evening1{"in the evening"}
-                        midnight{"midnight"}
-                        morning1{"in the morning"}
-                        night1{"at night"}
                         noon{"midday"}
                     }
                 }
@@ -171,22 +143,15 @@ en_AU{
                     d{"E dd/MM/y – E dd/MM/y"}
                     y{"E dd/MM/y – E dd/MM/y"}
                 }
-                yMMMEEEEd{
-                    d{"EEEE d – EEEE d MMM y"}
-                }
                 yMMMEd{
                     M{"E d MMM – E d MMM y"}
                     d{"E d MMM – E d MMM y"}
                     y{"E d MMM y – E d MMM y"}
                 }
-                yMMMMEEEEd{
-                    d{"EEEE d – EEEE d MMMM y"}
-                }
             }
         }
         islamic{
             availableFormats{
-                GyMMMEEEEd{"EEEE, d MMM y G"}
                 MMMEd{"E, d MMM"}
                 MMMEddd{"ddd MMM, E"}
                 yyyyMMMEddd{"G y ddd MMM, E"}
@@ -220,11 +185,9 @@ en_AU{
         hour-narrow{
             relativeTime{
                 future{
-                    one{"in {0} hr"}
                     other{"in {0} hrs"}
                 }
                 past{
-                    one{"{0} hr ago"}
                     other{"{0} hrs ago"}
                 }
             }
@@ -232,11 +195,9 @@ en_AU{
         hour-short{
             relativeTime{
                 future{
-                    one{"in {0} hr"}
                     other{"in {0} hrs"}
                 }
                 past{
-                    one{"{0} hr ago"}
                     other{"{0} hrs ago"}
                 }
             }
@@ -244,11 +205,9 @@ en_AU{
         minute-narrow{
             relativeTime{
                 future{
-                    one{"in {0} min"}
                     other{"in {0} mins"}
                 }
                 past{
-                    one{"{0} min ago"}
                     other{"{0} mins ago"}
                 }
             }
@@ -256,11 +215,9 @@ en_AU{
         minute-short{
             relativeTime{
                 future{
-                    one{"in {0} min"}
                     other{"in {0} mins"}
                 }
                 past{
-                    one{"{0} min ago"}
                     other{"{0} mins ago"}
                 }
             }
@@ -268,11 +225,9 @@ en_AU{
         quarter-narrow{
             relativeTime{
                 future{
-                    one{"in {0} qtr"}
                     other{"in {0} qtrs"}
                 }
                 past{
-                    one{"{0} qtr ago"}
                     other{"{0} qtrs ago"}
                 }
             }
@@ -280,11 +235,9 @@ en_AU{
         quarter-short{
             relativeTime{
                 future{
-                    one{"in {0} qtr"}
                     other{"in {0} qtrs"}
                 }
                 past{
-                    one{"{0} qtr ago"}
                     other{"{0} qtrs ago"}
                 }
             }
@@ -292,11 +245,9 @@ en_AU{
         second-narrow{
             relativeTime{
                 future{
-                    one{"in {0} sec"}
                     other{"in {0} secs"}
                 }
                 past{
-                    one{"{0} sec ago"}
                     other{"{0} secs ago"}
                 }
             }
@@ -304,11 +255,9 @@ en_AU{
         second-short{
             relativeTime{
                 future{
-                    one{"in {0} sec"}
                     other{"in {0} secs"}
                 }
                 past{
-                    one{"{0} sec ago"}
                     other{"{0} secs ago"}
                 }
             }
@@ -316,11 +265,9 @@ en_AU{
         week-narrow{
             relativeTime{
                 future{
-                    one{"in {0} wk"}
                     other{"in {0} wks"}
                 }
                 past{
-                    one{"{0} wk ago"}
                     other{"{0} wks ago"}
                 }
             }
@@ -328,11 +275,9 @@ en_AU{
         week-short{
             relativeTime{
                 future{
-                    one{"in {0} wk"}
                     other{"in {0} wks"}
                 }
                 past{
-                    one{"{0} wk ago"}
                     other{"{0} wks ago"}
                 }
             }
@@ -340,11 +285,9 @@ en_AU{
         year-narrow{
             relativeTime{
                 future{
-                    one{"in {0} yr"}
                     other{"in {0} yrs"}
                 }
                 past{
-                    one{"{0} yr ago"}
                     other{"{0} yrs ago"}
                 }
             }
@@ -352,11 +295,9 @@ en_AU{
         year-short{
             relativeTime{
                 future{
-                    one{"in {0} yr"}
                     other{"in {0} yrs"}
                 }
                 past{
-                    one{"{0} yr ago"}
                     other{"{0} yrs ago"}
                 }
             }

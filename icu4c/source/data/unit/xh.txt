@@ -42,7 +42,6 @@ xh{
         }
         pressure{
             pascal{
-                one{"{0} Pa"}
                 other{"{0}Pa"}
             }
         }

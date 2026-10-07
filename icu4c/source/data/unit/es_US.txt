@@ -63,7 +63,6 @@ es_US{
             }
             siemens{
                 dnam{"simens"}
-                one{"{0} siemens"}
                 other{"{0} siemens"}
             }
         }
@@ -143,7 +142,6 @@ es_US{
         power{
             horsepower{
                 one{"{0} caballo de fuerza"}
-                other{"{0} caballos de fuerza"}
             }
         }
         speed{
@@ -154,7 +152,6 @@ es_US{
                 other{"Escala Beaufort {0}"}
             }
             light-speed{
-                one{"{0} de luces"}
                 other{"{0} luces"}
             }
         }
@@ -180,7 +177,6 @@ es_US{
             acre-foot{
                 dnam{"acres-pies"}
                 one{"{0} acre-pie"}
-                other{"{0} acres pies"}
             }
             dram{
                 dnam{"dracma fluida"}
@@ -201,11 +197,9 @@ es_US{
         angle{
             arc-minute{
                 one{"{0} arcmin"}
-                other{"{0}′"}
             }
             arc-second{
                 one{"{0} arcsec"}
-                other{"{0}″"}
             }
         }
         concentr{
@@ -239,12 +233,10 @@ es_US{
         electric{
             farad{
                 one{"{0} F"}
-                other{"{0}F"}
             }
         }
         energy{
             calorie-it{
-                dnam{"cal. IT"}
                 one{"{0} cal. IT"}
                 other{"{0} cal. IT"}
             }
@@ -260,15 +252,8 @@ es_US{
             }
         }
         length{
-            fathom{
-                dnam{"braza"}
-            }
-            furlong{
-                dnam{"furlong"}
-            }
             kilometer{
                 one{"{0} km"}
-                other{"{0}km"}
             }
             mile-scandinavian{
                 dnam{"mil"}
@@ -277,7 +262,6 @@ es_US{
             }
             millimeter{
                 one{"{0} mm"}
-                other{"{0}mm"}
             }
             nautical-mile{
                 one{"{0}mn"}
@@ -295,7 +279,6 @@ es_US{
                 dnam{"B"}
             }
             light-speed{
-                one{"{0}luz"}
                 other{"{0}luces"}
             }
         }
@@ -306,10 +289,6 @@ es_US{
             }
         }
         volume{
-            bushel{
-                one{"{0}bsh"}
-                other{"{0}bsh"}
-            }
             pint-metric{
                 one{"{0}ptm"}
                 other{"{0}ptm"}
@@ -351,55 +330,43 @@ es_US{
             }
             month{
                 one{"{0} m"}
-                other{"{0} mm."}
             }
             year{
                 one{"{0} a"}
-                other{"{0} aa."}
                 per{"{0}/a"}
             }
         }
         electric{
             farad{
                 one{"{0} F"}
-                other{"{0} F"}
             }
         }
         energy{
             calorie-it{
                 dnam{"cal. IT"}
-                one{"{0} cal. IT"}
                 other{"{0} cal. IT"}
             }
             therm-us{
                 dnam{"th US"}
-                one{"{0} th US"}
                 other{"{0} th US"}
             }
         }
         force{
             kilogram-force{
                 dnam{"kp"}
-                one{"{0} kp"}
                 other{"{0} kp"}
             }
         }
         length{
-            furlong{
-                dnam{"furlongs"}
-            }
             light-year{
-                one{"{0} a. l."}
                 other{"{0} a. l."}
             }
             mile-scandinavian{
                 dnam{"mil"}
-                one{"{0} mil"}
                 other{"{0} mil"}
             }
             nautical-mile{
                 dnam{"mn"}
-                one{"{0} mn"}
                 other{"{0} mn"}
             }
             yard{
@@ -409,7 +376,6 @@ es_US{
         speed{
             beaufort{
                 dnam{"Beaufort"}
-                one{"Beaufort {0}"}
                 other{"Beaufort {0}"}
             }
             knot{
@@ -417,31 +383,22 @@ es_US{
                 other{"{0} nudos"}
             }
             light-speed{
-                one{"{0} de luces"}
                 other{"{0} de luces"}
             }
         }
         torque{
             pound-force-foot{
                 dnam{"lbf⋅ft"}
-                one{"{0} lbf⋅ft"}
                 other{"{0} lbf⋅ft"}
             }
         }
         volume{
-            bushel{
-                dnam{"bsh"}
-                one{"{0} bsh"}
-                other{"{0} bsh"}
-            }
             cup{
                 dnam{"tza."}
-                one{"{0} tzas."}
                 other{"{0} tzas."}
             }
             dessert-spoon{
                 dnam{"cdapostre"}
-                one{"{0} cdapostre"}
                 other{"{0} cdapostre"}
             }
             dessert-spoon-imperial{
@@ -456,7 +413,6 @@ es_US{
             }
             pint-metric{
                 dnam{"ptm"}
-                one{"{0} ptm"}
                 other{"{0} ptm"}
             }
         }

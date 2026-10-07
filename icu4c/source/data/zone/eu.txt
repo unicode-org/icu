@@ -368,11 +368,6 @@ eu{
             lg{"Ipar Amerikako Pazifikoko ordua"}
             ls{"Ipar Amerikako Pazifikoko ordu estandarra"}
         }
-        "meta:Anadyr"{
-            ld{"Anadyrreko udako ordua"}
-            lg{"Anadyrreko ordua"}
-            ls{"Anadyrreko ordu estandarra"}
-        }
         "meta:Apia"{
             ld{"Apiako udako ordua"}
             lg{"Apiako ordua"}
@@ -461,9 +456,6 @@ eu{
             lg{"Cabo Verdeko ordua"}
             ls{"Cabo Verdeko ordu estandarra"}
         }
-        "meta:Casey"{
-            ls{"Caseyko ordua"}
-        }
         "meta:Chamorro"{
             ls{"Chamorroko ordu estandarra"}
         }
@@ -524,17 +516,11 @@ eu{
             ld{"Europako erdialdeko udako ordua"}
             lg{"Europako erdialdeko ordua"}
             ls{"Europako erdialdeko ordu estandarra"}
-            sd{"CEST"}
-            sg{"CET"}
-            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"Europako ekialdeko udako ordua"}
             lg{"Europako ekialdeko ordua"}
             ls{"Europako ekialdeko ordu estandarra"}
-            sd{"EEST"}
-            sg{"EET"}
-            ss{"EET"}
         }
         "meta:Europe_Further_Eastern"{
             ls{"Europako ekialde urruneko ordua"}
@@ -543,9 +529,6 @@ eu{
             ld{"Europako mendebaldeko udako ordua"}
             lg{"Europako mendebaldeko ordua"}
             ls{"Europako mendebaldeko ordu estandarra"}
-            sd{"WEST"}
-            sg{"WET"}
-            ss{"WET"}
         }
         "meta:Falkland"{
             ld{"Falkland uharteetako udako ordua"}
@@ -565,7 +548,6 @@ eu{
         }
         "meta:GMT"{
             ls{"Greenwichko meridianoaren ordua"}
-            ss{"GMT"}
         }
         "meta:Galapagos"{
             ls{"Galapagoetako ordua"}

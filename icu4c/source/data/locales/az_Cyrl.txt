@@ -8,7 +8,6 @@ az_Cyrl{
     NumberElements{
         latn{
             patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
                 currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
             }
@@ -117,16 +116,6 @@ az_Cyrl{
                 "{1} {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yyMMdd",
-            }
             availableFormats{
                 Ed{"d E"}
                 GyMMM{"G MMM y"}
@@ -135,7 +124,6 @@ az_Cyrl{
                 MEd{"dd.MM, E"}
                 MMMEd{"d MMM, E"}
                 MMMMW{
-                    one{"MMMM, W 'һәфтә'"}
                     other{"MMMM, W 'һәфтә'"}
                 }
                 MMMd{"d MMM"}
@@ -147,7 +135,6 @@ az_Cyrl{
                 yMMMd{"d MMM y"}
                 yMd{"dd.MM.y"}
                 yw{
-                    one{"Y, w 'һәфтә'"}
                     other{"Y, w 'һәфтә'"}
                 }
             }
@@ -197,13 +184,6 @@ az_Cyrl{
                         noon{"ҝүнорта"}
                     }
                     narrow{
-                        afternoon1{"ҝүндүз"}
-                        evening1{"ахшамүстү"}
-                        midnight{"ҝеҹәјары"}
-                        morning1{"сүбһ"}
-                        morning2{"сәһәр"}
-                        night1{"ахшам"}
-                        night2{"ҝеҹә"}
                         noon{"ҝ"}
                     }
                 }

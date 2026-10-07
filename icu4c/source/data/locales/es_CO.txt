@@ -31,16 +31,6 @@ es_CO{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMd",
-                "GGGGGyyMMd",
-            }
             availableFormats{
                 GyMMMEd{"E, d MMM 'de' y G"}
             }
@@ -132,16 +122,6 @@ es_CO{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMd",
-                "yyMMd",
-            }
             availableFormats{
                 GyMMM{"MMM 'de' y G"}
                 GyMMMEd{"E, d MMM 'de' y G"}
@@ -182,21 +162,12 @@ es_CO{
             dayPeriod{
                 format{
                     abbreviated{
-                        evening1{"de la tarde"}
-                        morning2{"de la mañana"}
-                        night1{"de la noche"}
                         noon{"m."}
                     }
                 }
                 stand-alone{
                     abbreviated{
-                        am{"a. m."}
                         noon{"m."}
-                        pm{"p. m."}
-                    }
-                    narrow{
-                        am{"a. m."}
-                        pm{"p. m."}
                     }
                     wide{
                         am{"a. m."}

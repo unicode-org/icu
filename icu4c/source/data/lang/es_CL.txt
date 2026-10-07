@@ -4,17 +4,11 @@
 es_CL{
     %%Parent{"es_419"}
     Languages{
-        ace{"acehnés"}
-        arp{"arapaho"}
         bho{"bhojpuri"}
         eu{"euskera"}
-        grc{"griego antiguo"}
         nso{"sotho septentrional"}
-        ss{"siswati"}
-        sw_CD{"suajili del Congo"}
         tn{"setswana"}
         wo{"wolof"}
-        zgh{"tamazight marroquí estándar"}
     }
     Types{
         collation{

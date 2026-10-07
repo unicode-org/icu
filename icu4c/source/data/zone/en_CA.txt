@@ -27,18 +27,10 @@ en_CA{
         "meta:French_Southern"{
             ls{"French Southern and Antarctic Time"}
         }
-        "meta:Newfoundland"{
-            sd{"NDT"}
-            sg{"NT"}
-            ss{"NST"}
-        }
         "meta:Pierre_Miquelon"{
             ld{"Saint-Pierre-et-Miquelon Daylight Time"}
             lg{"Saint-Pierre-et-Miquelon Time"}
             ls{"Saint-Pierre-et-Miquelon Standard Time"}
-            sd{"PMDT"}
-            sg{"PMT"}
-            ss{"PMST"}
         }
         "meta:Wallis"{
             ls{"Wallis and Futuna Time"}

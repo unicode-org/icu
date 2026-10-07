@@ -4,12 +4,6 @@
 yue_Hans{
     %%Parent{"root"}
     units{
-        angle{
-            steradian{
-                dnam{"球面度"}
-                other{"{0} 球面度"}
-            }
-        }
         area{
             square-centimeter{
                 per{"每平方厘米 {0}"}
@@ -31,18 +25,6 @@ yue_Hans{
             per{"每 {1} {0}"}
         }
         concentr{
-            katal{
-                dnam{"开特"}
-                other{"{0} 开特"}
-            }
-            ofglucose{
-                dnam{"葡萄糖"}
-                other{"{0} 葡萄糖"}
-            }
-            part{
-                dnam{"等份"}
-                other{"{0} 等份"}
-            }
             part-per-1e9{
                 dnam{"十亿分点浓度"}
                 other{"{0} 十亿分点浓度"}
@@ -117,12 +99,6 @@ yue_Hans{
             sievert{
                 dnam{"希沃特"}
                 other{"{0} 希沃特"}
-            }
-        }
-        force{
-            kilogram-force{
-                dnam{"公斤力"}
-                other{"{0} 公斤力"}
             }
         }
         graphics{
@@ -224,10 +200,6 @@ yue_Hans{
             dessert-spoon-imperial{
                 other{"英制甜品匙{0}匙"}
             }
-            fluid-ounce-metric{
-                dnam{"公制液量安士"}
-                other{"{0} 公制液量安士"}
-            }
             gallon{
                 per{"每加仑 {0}"}
             }
@@ -242,21 +214,17 @@ yue_Hans{
     unitsNarrow{
         angle{
             steradian{
-                dnam{"球面度"}
                 other{"{0} 球面度"}
             }
         }
         concentr{
             katal{
-                dnam{"开特"}
                 other{"{0} 开特"}
             }
             ofglucose{
-                dnam{"葡萄糖"}
                 other{"{0} 葡萄糖"}
             }
             part{
-                dnam{"等份"}
                 other{"{0} 等份"}
             }
             part-per-1e9{
@@ -276,25 +244,20 @@ yue_Hans{
         }
         electric{
             coulomb{
-                dnam{"库"}
                 other{"{0} 库"}
             }
             farad{
-                dnam{"法"}
                 other{"{0} 法"}
             }
             henry{
-                dnam{"亨"}
                 other{"{0} 亨"}
             }
             siemens{
-                dnam{"西"}
                 other{"{0} 西"}
             }
         }
         energy{
             becquerel{
-                dnam{"贝克"}
                 other{"{0} 贝克"}
             }
             calorie-it{
@@ -302,17 +265,14 @@ yue_Hans{
                 other{"{0} 卡路里-IT"}
             }
             gray{
-                dnam{"戈"}
                 other{"{0} 戈"}
             }
             sievert{
-                dnam{"希"}
                 other{"{0} 希"}
             }
         }
         force{
             kilogram-force{
-                dnam{"公斤力"}
                 other{"{0} 公斤力"}
             }
         }
@@ -342,11 +302,9 @@ yue_Hans{
         }
         magnetic{
             tesla{
-                dnam{"特"}
                 other{"{0} 特"}
             }
             weber{
-                dnam{"韦"}
                 other{"{0} 韦"}
             }
         }
@@ -365,9 +323,6 @@ yue_Hans{
             }
         }
         pressure{
-            ofhg{
-                other{"{0} Hg"}
-            }
             pound-force-per-square-inch{
                 other{"每平方吋 {0} 磅"}
             }
@@ -393,7 +348,6 @@ yue_Hans{
         }
         volume{
             fluid-ounce-metric{
-                dnam{"公制液量安士"}
                 other{"{0} 公制液量安士"}
             }
         }
@@ -706,10 +660,6 @@ yue_Hans{
                 dnam{"贝克"}
                 other{"{0} 贝克"}
             }
-            british-thermal-unit{
-                dnam{"英制热量单位"}
-                other{"{0} 英制热量单位"}
-            }
             calorie{
                 dnam{"卡路里"}
                 other{"{0} 卡路里"}
@@ -835,18 +785,10 @@ yue_Hans{
                 dnam{"地球半径"}
                 other{"{0} 地球半径"}
             }
-            fathom{
-                dnam{"英寻"}
-                other{"{0} 英寻"}
-            }
             foot{
                 dnam{"英呎"}
                 other{"{0} 英呎"}
                 per{"每英呎{0}"}
-            }
-            furlong{
-                dnam{"化朗"}
-                other{"{0} 化朗"}
             }
             inch{
                 dnam{"英寸"}
@@ -993,10 +935,6 @@ yue_Hans{
                 dnam{"太阳质量"}
                 other{"{0} 太阳质量"}
             }
-            stone{
-                dnam{"英石"}
-                other{"{0} 英石"}
-            }
             ton{
                 dnam{"英吨"}
                 other{"{0} 英吨"}
@@ -1129,10 +1067,6 @@ yue_Hans{
             barrel{
                 dnam{"桶"}
                 other{"{0} 桶"}
-            }
-            bushel{
-                dnam{"蒲式耳"}
-                other{"{0} 蒲式耳"}
             }
             centiliter{
                 dnam{"厘升"}

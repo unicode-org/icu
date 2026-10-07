@@ -17,12 +17,6 @@ ar_SA{
             dayPeriod{
                 format{
                     abbreviated{
-                        afternoon1{"ظهرًا"}
-                        afternoon2{"بعد الظهر"}
-                        evening1{"مساءً"}
-                        morning1{"فجرًا"}
-                        morning2{"ص"}
-                        night1{"في المساء"}
                         night2{"ل"}
                     }
                 }

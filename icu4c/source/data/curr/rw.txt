@@ -8,7 +8,4 @@ rw{
             "RWF",
         }
     }
-    CurrencyUnitPatterns{
-        other{"{0} {1}"}
-    }
 }

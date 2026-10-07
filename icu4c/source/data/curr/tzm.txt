@@ -75,17 +75,9 @@ tzm{
             "£",
             "Junih Ubriṭani",
         }
-        GHC{
-            "GHC",
-            "Sidi Uɣani",
-        }
         GMD{
             "GMD",
             "Dalasi Agambi",
-        }
-        GNS{
-            "GNS",
-            "Frank Uɣini",
         }
         INR{
             "₹",
@@ -123,10 +115,6 @@ tzm{
             "MGA",
             "Aryari Umalɣaci",
         }
-        MRO{
-            "MRO",
-            "Uqiyya Umuritani (1973–2017)",
-        }
         MRU{
             "MRU",
             "Uqiyya Umuritani",
@@ -138,10 +126,6 @@ tzm{
         MWK{
             "MWK",
             "Kwača Umalawi",
-        }
-        MZM{
-            "MZM",
-            "Mitikal Umuzambiqi",
         }
         NAD{
             "NAD",
@@ -167,10 +151,6 @@ tzm{
             "SDG",
             "Junih Usudani",
         }
-        SDP{
-            "SDP",
-            "Junih Usudani (1956–2007)",
-        }
         SHP{
             "SHP",
             "Junih Usantehilini",
@@ -186,10 +166,6 @@ tzm{
         SOS{
             "SOS",
             "Cilin Uṣumali",
-        }
-        STD{
-            "STD",
-            "Dubra Usawṭumi (1977–2017)",
         }
         STN{
             "STN",
@@ -227,17 +203,9 @@ tzm{
             "ZAR",
             "Rand Ufriki Unzul",
         }
-        ZMK{
-            "ZMK",
-            "Kwača Uzambi (1968–2012)",
-        }
         ZMW{
             "ZMW",
             "Kwača Uzambi",
-        }
-        ZWD{
-            "ZWD",
-            "Ḍular Uzimbabwi",
         }
     }
 }

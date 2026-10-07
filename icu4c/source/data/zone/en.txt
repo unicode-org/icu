@@ -132,9 +132,6 @@ en{
             ld{"Alaska Daylight Time"}
             lg{"Alaska Time"}
             ls{"Alaska Standard Time"}
-            sd{"AKDT"}
-            sg{"AKT"}
-            ss{"AKST"}
         }
         "meta:Amazon"{
             ld{"Amazon Summer Time"}
@@ -145,38 +142,21 @@ en{
             ld{"Central Daylight Time"}
             lg{"Central Time"}
             ls{"Central Standard Time"}
-            sd{"CDT"}
-            sg{"CT"}
-            ss{"CST"}
         }
         "meta:America_Eastern"{
             ld{"Eastern Daylight Time"}
             lg{"Eastern Time"}
             ls{"Eastern Standard Time"}
-            sd{"EDT"}
-            sg{"ET"}
-            ss{"EST"}
         }
         "meta:America_Mountain"{
             ld{"Mountain Daylight Time"}
             lg{"Mountain Time"}
             ls{"Mountain Standard Time"}
-            sd{"MDT"}
-            sg{"MT"}
-            ss{"MST"}
         }
         "meta:America_Pacific"{
             ld{"Pacific Daylight Time"}
             lg{"Pacific Time"}
             ls{"Pacific Standard Time"}
-            sd{"PDT"}
-            sg{"PT"}
-            ss{"PST"}
-        }
-        "meta:Anadyr"{
-            ld{"Anadyr Summer Time"}
-            lg{"Anadyr Time"}
-            ls{"Anadyr Standard Time"}
         }
         "meta:Apia"{
             ld{"West Samoa Daylight Time"}
@@ -207,9 +187,6 @@ en{
             ld{"Atlantic Daylight Time"}
             lg{"Atlantic Time"}
             ls{"Atlantic Standard Time"}
-            sd{"ADT"}
-            sg{"AT"}
-            ss{"AST"}
         }
         "meta:Australia_Central"{
             ld{"Australian Central Daylight Time"}
@@ -268,9 +245,6 @@ en{
             ld{"Cape Verde Summer Time"}
             lg{"Cape Verde Time"}
             ls{"Cape Verde Standard Time"}
-        }
-        "meta:Casey"{
-            ls{"Casey Time"}
         }
         "meta:Chamorro"{
             ls{"Chamorro Standard Time"}
@@ -364,7 +338,6 @@ en{
         }
         "meta:GMT"{
             ls{"Greenwich Mean Time"}
-            ss{"GMT"}
         }
         "meta:Galapagos"{
             ls{"Galapagos Time"}
@@ -403,15 +376,11 @@ en{
         }
         "meta:Hawaii"{
             ls{"Hawaii Time"}
-            ss{"HST"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"Hawaii-Aleutian Daylight Time"}
             lg{"Hawaii-Aleutian Time"}
             ls{"Hawaii-Aleutian Standard Time"}
-            sd{"HADT"}
-            sg{"HAT"}
-            ss{"HAST"}
         }
         "meta:Hong_Kong"{
             ld{"Hong Kong Summer Time"}
@@ -758,9 +727,6 @@ en{
         "meta:Yukon"{
             ls{"Yukon Time"}
         }
-        fallbackFormat{"{1} ({0})"}
-        gmtFormat{"GMT{0}"}
-        hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0} Time"}
         regionFormatDaylight{"{0} Daylight Time"}
         regionFormatStandard{"{0} Standard Time"}

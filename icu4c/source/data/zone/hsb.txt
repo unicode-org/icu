@@ -449,17 +449,11 @@ hsb{
             ld{"srjedźoeuropski lětni čas"}
             lg{"srjedźoeuropski čas"}
             ls{"srjedźoeuropski standardny čas"}
-            sd{"MESZ"}
-            sg{"MEZ"}
-            ss{"MEZ"}
         }
         "meta:Europe_Eastern"{
             ld{"wuchodoeuropski lětni čas"}
             lg{"wuchodoeuropski čas"}
             ls{"wuchodoeuropski standardny čas"}
-            sd{"OESZ"}
-            sg{"OEZ"}
-            ss{"OEZ"}
         }
         "meta:Europe_Further_Eastern"{
             ls{"Kaliningradski čas"}
@@ -468,9 +462,6 @@ hsb{
             ld{"zapadoeuropski lětni čas"}
             lg{"zapadoeuropski čas"}
             ls{"zapadoeuropski standardny čas"}
-            sd{"WESZ"}
-            sg{"WEZ"}
-            ss{"WEZ"}
         }
         "meta:Falkland"{
             ld{"falklandski lětni čas"}

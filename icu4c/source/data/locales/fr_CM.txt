@@ -25,7 +25,6 @@ fr_CM{
                 stand-alone{
                     wide{
                         am{"matin"}
-                        pm{"soir"}
                     }
                 }
             }

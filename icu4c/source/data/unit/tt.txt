@@ -8,10 +8,6 @@ tt{
         }
         coordinate{
             dnam{"кардиналь юнәлеш"}
-            east{"{0} көнчыгыш"}
-            north{"{0} төньяк"}
-            south{"{0} көньяк"}
-            west{"{0} көнбатыш"}
         }
     }
     unitsShort{
