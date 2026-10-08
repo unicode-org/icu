@@ -403,6 +403,7 @@ public class DecimalMatcher implements NumberParseMatcher {
 
         // Adjust for fraction part.
         digitsConsumed.adjustMagnitude(-digitsAfterDecimalPlace);
+        digitsConsumed.setMinFraction(digitsAfterDecimalPlace);
 
         // Set the digits, either normal or exponent.
         if (exponentSign != 0 && segment.getOffset() != initialOffset) {
