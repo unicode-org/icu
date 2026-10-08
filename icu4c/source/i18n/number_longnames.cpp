@@ -1688,8 +1688,9 @@ void MixedUnitLongNameHandler::processQuantity(DecimalQuantity &quantity, MicroP
 const Modifier *MixedUnitLongNameHandler::getMixedUnitModifier(DecimalQuantity &quantity,
                                                                MicroProps &micros,
                                                                UErrorCode &status) const {
-    if (micros.mixedMeasuresCount == 0) {
+    if (micros.mixedMeasuresCount == 0 || micros.mixedMeasuresCount > fMixedUnitCount) {
         U_ASSERT(micros.mixedMeasuresCount > 0); // Mixed unit: we must have more than one unit value
+        U_ASSERT(micros.mixedMeasuresCount <= fMixedUnitCount);
         status = U_UNSUPPORTED_ERROR;
         return &micros.helpers.emptyWeakModifier;
     }
