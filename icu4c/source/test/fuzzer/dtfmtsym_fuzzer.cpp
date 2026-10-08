@@ -12,26 +12,32 @@
 
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
     uint16_t rnd;
-    icu::DateFormatSymbols::DtContextType context;
-    icu::DateFormatSymbols::DtWidthType width;
-    if (size < sizeof(rnd) + sizeof(context) + sizeof(width)) return 0;
+    int32_t raw_context;
+    int32_t raw_width;
+    if (size < sizeof(rnd) + sizeof(raw_context) + sizeof(raw_width)) return 0;
     icu::StringPiece fuzzData(reinterpret_cast<const char *>(data), size);
 
     std::memcpy(&rnd, fuzzData.data(), sizeof(rnd));
     icu::Locale locale = GetRandomLocale(rnd);
     fuzzData.remove_prefix(sizeof(rnd));
 
-    std::memcpy(&context, fuzzData.data(), sizeof(context));
-    fuzzData.remove_prefix(sizeof(context));
-    icu::DateFormatSymbols::DtContextType context_mod =
+    std::memcpy(&raw_context, fuzzData.data(), sizeof(raw_context));
+    fuzzData.remove_prefix(sizeof(raw_context));
+
+    std::memcpy(&raw_width, fuzzData.data(), sizeof(raw_width));
+    fuzzData.remove_prefix(sizeof(raw_width));
+
+    // Ensure non-negative before modulo to avoid implementation-defined behavior.
+    int32_t context_index = raw_context < 0 ? -raw_context : raw_context;
+    int32_t width_index = raw_width < 0 ? -raw_width : raw_width;
+
+    icu::DateFormatSymbols::DtContextType context =
         static_cast<icu::DateFormatSymbols::DtContextType>(
-            context % icu::DateFormatSymbols::DtContextType::DT_CONTEXT_COUNT);
-;
-    std::memcpy(&width, fuzzData.data(), sizeof(width));
-    fuzzData.remove_prefix(sizeof(width));
-    icu::DateFormatSymbols::DtWidthType width_mod =
+            context_index % icu::DateFormatSymbols::DtContextType::DT_CONTEXT_COUNT);
+
+    icu::DateFormatSymbols::DtWidthType width =
         static_cast<icu::DateFormatSymbols::DtWidthType>(
-            width % icu::DateFormatSymbols::DtWidthType::DT_WIDTH_COUNT);
+            width_index % icu::DateFormatSymbols::DtWidthType::DT_WIDTH_COUNT);
 
     size_t len = fuzzData.size() / sizeof(char16_t);
     icu::UnicodeString text(false, reinterpret_cast<const char16_t*>(fuzzData.data()), len);
@@ -51,21 +57,17 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
     dfs->getMonths(count);
     dfs->getShortMonths(count);
     dfs->getMonths(count, context, width);
-    dfs->getMonths(count, context_mod, width_mod);
     dfs->getWeekdays(count);
     dfs->getShortWeekdays(count);
     dfs->getWeekdays(count, context, width);
-    dfs->getWeekdays(count, context_mod, width_mod);
     dfs->getShortWeekdays(count);
-    dfs->getQuarters(count, context_mod, width_mod);
+    dfs->getQuarters(count, context, width);
     dfs->getAmPmStrings(count);
 
     icu::UnicodeString output;
     dfs->getTimeSeparatorString(output);
     dfs->getYearNames(count, context, width);
-    dfs->getYearNames(count, context_mod, width_mod);
     dfs->getZodiacNames(count, context, width);
-    dfs->getZodiacNames(count, context_mod, width_mod);
     dfs->getLeapMonthPatterns(count);
     int32_t count2;
     dfs->getZoneStrings(count, count2);
