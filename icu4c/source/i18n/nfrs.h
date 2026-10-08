@@ -28,8 +28,6 @@
 
 #include "nfrlist.h"
 
-// Maximum depth of RBNF rule recursion, enforced in NFRuleSet::format/parse
-// and across explicit >>> rule delegations (see ICU-23144).
 #define RECURSION_LIMIT 64
 
 U_NAMESPACE_BEGIN
