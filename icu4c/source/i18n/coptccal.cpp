@@ -66,16 +66,8 @@ CopticCalendar::handleGetExtendedYear(UErrorCode& status)
     if (newerField(UCAL_EXTENDED_YEAR, UCAL_YEAR) == UCAL_EXTENDED_YEAR) {
         return internalGet(UCAL_EXTENDED_YEAR, 1); // Default to year 1
     }
-    // The year defaults to the epoch start, the era to CE
-    int32_t era = internalGet(UCAL_ERA, CE);
-    if (era == BCE) {
-        return 1 - internalGet(UCAL_YEAR, 1); // Convert to extended year
-    }
-    if (era == CE){
-        return internalGet(UCAL_YEAR, 1); // Default to year 1
-    }
-    status = U_ILLEGAL_ARGUMENT_ERROR;
-    return 0;
+    // Default to year 1
+    return internalGet(UCAL_YEAR, 1);
 }
 
 IMPL_SYSTEM_DEFAULT_CENTURY(CopticCalendar, "@calendar=coptic")
@@ -86,16 +78,21 @@ CopticCalendar::getJDEpochOffset() const
     return COPTIC_JD_EPOCH_OFFSET;
 }
 
-int32_t CopticCalendar::extendedYearToEra(int32_t extendedYear) const {
-    return extendedYear <= 0 ? BCE : CE;
+int32_t CopticCalendar::extendedYearToEra(int32_t /* extendedYear */) const {
+    return CE;
 }
 
 int32_t CopticCalendar::extendedYearToYear(int32_t extendedYear) const {
-    return extendedYear <= 0 ? 1 - extendedYear : extendedYear;
+    return extendedYear;
 }
 
-bool CopticCalendar::isEra0CountingBackward() const {
-    return true;
+int32_t
+CopticCalendar::handleGetLimit(UCalendarDateFields field, ELimitType limitType) const
+{
+    if (field == UCAL_ERA) {
+        return CE; // Only one era in this mode, era is always CE
+    }
+    return CECalendar::handleGetLimit(field, limitType);
 }
 
 int32_t
