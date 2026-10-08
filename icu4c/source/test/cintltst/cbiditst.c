@@ -92,6 +92,7 @@ static void doTailTest(void);
 
 static void testBracketOverflow(void);
 static void TestExplicitLevel0(void);
+static void testUnmatchedPDIOverride(void);
 static void testUBidiWriteReorderedBufferOverflow(void);
 static void testUBidiWriteReorderedUndefinedShift(void);
 static void testUBidiWriteReorderedReverseMirrorCombining(void);
@@ -147,6 +148,7 @@ addComplexTest(TestNode** root) {
     addTest(root, testContext, "complex/bidi/testContext");
     addTest(root, testBracketOverflow, "complex/bidi/TestBracketOverflow");
     addTest(root, TestExplicitLevel0, "complex/bidi/TestExplicitLevel0");
+    addTest(root, testUnmatchedPDIOverride, "complex/bidi/TestUnmatchedPDIOverride");
     addTest(root, testUBidiWriteReorderedBufferOverflow, "complex/bidi/writeReorderedBufferOverflow");
     addTest(root, testUBidiWriteReorderedUndefinedShift, "complex/bidi/writeReorderedUndefinedShift");
     addTest(root, testUBidiWriteReorderedReverseMirrorCombining, "complex/bidi/writeReorderedReverseMirrorCombining");
@@ -5119,6 +5121,32 @@ static void TestExplicitLevel0(void) {
         }
         if (embeddings[0] != 1 || embeddings[1] != 1) {
             log_err("modified embeddings[] levels != 1: { %d, %d }\n", embeddings[0], embeddings[1]);
+        }
+    }
+    ubidi_close(bidi);
+}
+
+static void
+testUnmatchedPDIOverride(void) {
+    /* ICU-23513 (J1): X6a applies the active RLO to an unmatched PDI. */
+    static const UChar text[] = { 0x202A, 0x0061, 0x202C, 0x202E, 0x2069, 0x202A, 0x0062 };
+    UErrorCode status = U_ZERO_ERROR;
+    UChar dest[3];
+    UBiDi *bidi = ubidi_openSized(UPRV_LENGTHOF(text), 0, &status);
+    if (!assertSuccess("ubidi_openSized", &status)) {
+        return;
+    }
+    ubidi_setPara(bidi, text, UPRV_LENGTHOF(text), UBIDI_LTR, NULL, &status);
+    if (assertSuccess("ubidi_setPara", &status)) {
+        /* Expected levels: x 2 x x 1 x 2; X9-removed controls are not checked. */
+        assertIntEquals("level of a", 2, ubidi_getLevelAt(bidi, 1));
+        assertIntEquals("level of PDI", 1, ubidi_getLevelAt(bidi, 4));
+        assertIntEquals("level of b", 2, ubidi_getLevelAt(bidi, 6));
+        int32_t length = ubidi_writeReordered(bidi, dest, UPRV_LENGTHOF(dest),
+                                            UBIDI_REMOVE_BIDI_CONTROLS, &status);
+        if (assertSuccess("ubidi_writeReordered", &status) &&
+                assertIntEquals("reordered length", 2, length)) {
+            assertUEquals("visual order", u"ba", dest);
         }
     }
     ubidi_close(bidi);
