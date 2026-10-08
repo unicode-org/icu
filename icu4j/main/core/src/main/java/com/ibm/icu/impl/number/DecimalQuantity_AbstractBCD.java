@@ -623,6 +623,14 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
     public long toFractionLong(boolean includeTrailingZeros) {
         long result = 0L;
         int magnitude = -1 - exponent;
+        // Only magnitudes in [scale, scale + precision - 1] map to stored digits;
+        // getDigitPos() returns 0 for everything above that range. Skip the leading
+        // zeros instead of iterating over them, so that a very negative scale
+        // (from a scale multiplier in a number skeleton) cannot make this loop run
+        // for hundreds of millions of iterations. See ICU-23530.
+        if ((long) magnitude - scale > (long) precision - 1) {
+            magnitude = scale + precision - 1;
+        }
         int lowerMagnitude = scale;
         if (includeTrailingZeros) {
             lowerMagnitude = Math.min(lowerMagnitude, rReqPos);
