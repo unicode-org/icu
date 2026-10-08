@@ -920,7 +920,7 @@ group: genderinfo
     uclean_i18n
 
 group: charset_detector
-    csdetect.o csmatch.o csr2022.o csrecog.o csrmbcs.o csrsbcs.o csrucode.o csrutf8.o inputext.o ucsdet.o
+    csdetect.o csmatch.o csr2022.o csrascii.o csrecog.o csrmbcs.o csrsbcs.o csrucode.o csrutf8.o inputext.o ucsdet.o
   deps
     conversion
     uclean_i18n

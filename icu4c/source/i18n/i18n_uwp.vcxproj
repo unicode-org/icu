@@ -555,6 +555,7 @@
     <ClCompile Include="csmatch.cpp" />
     <ClCompile Include="csr2022.cpp" />
     <ClCompile Include="csrecog.cpp" />
+    <ClCompile Include="csrascii.cpp" />
     <ClCompile Include="csrmbcs.cpp" />
     <ClCompile Include="csrsbcs.cpp" />
     <ClCompile Include="csrucode.cpp" />
@@ -694,6 +695,7 @@
     <ClInclude Include="csmatch.h" />
     <ClInclude Include="csr2022.h" />
     <ClInclude Include="csrecog.h" />
+    <ClInclude Include="csrascii.h" />
     <ClInclude Include="csrmbcs.h" />
     <ClInclude Include="csrsbcs.h" />
     <ClInclude Include="csrucode.h" />

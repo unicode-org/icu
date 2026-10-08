@@ -20,11 +20,13 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.TreeMap;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -234,8 +236,9 @@ public class TestCharsetDetector extends CoreTestFmwk {
         det.setText(bISO);
         m = det.detect();
 
-        if (!m.getName().equals("ISO-8859-1")) {
-            errln("Text without C1 bytes not correctly detected as ISO-8859-1.");
+        if (!m.getName().equals("ASCII")) {
+            // note, it could also be ISO-8859-1; if the text contains 7bit characters only
+            errln("Text without C1 bytes not correctly detected as ASCII.");
         }
     }
 
@@ -375,7 +378,7 @@ public class TestCharsetDetector extends CoreTestFmwk {
             "windows-1252",
             "windows-1252",
             "windows-1252",
-            "ISO-2022-JP",
+            "ASCII",
             null,
             null,
             "ISO-8859-1"
@@ -538,9 +541,9 @@ public class TestCharsetDetector extends CoreTestFmwk {
         }
 
         String charsetMatchLanguage = m.getLanguage();
-        if ((language != null && !charsetMatchLanguage.equals(language))
+        if ((language != null && charsetMatchLanguage == null)
                 || (language == null && charsetMatchLanguage != null)
-                || (language != null && charsetMatchLanguage == null)) {
+                || (language != null && !charsetMatchLanguage.equals(language))) {
             errln(
                     id
                             + ", "
@@ -894,6 +897,7 @@ public class TestCharsetDetector extends CoreTestFmwk {
     private CharsetMatch _testIBM424_he_rtl(String s) throws Exception {
         byte[] bytes = s.getBytes("IBM424");
         CharsetDetector det = new CharsetDetector();
+        det.setDetectableCharset("ASCII", false);
         det.setDetectableCharset("IBM424_rtl", true);
         det.setDetectableCharset("IBM424_ltr", true);
         det.setDetectableCharset("IBM420_rtl", true);
@@ -910,6 +914,7 @@ public class TestCharsetDetector extends CoreTestFmwk {
         byte[] bytes = ltrStrBuf.toString().getBytes("IBM424");
 
         CharsetDetector det = new CharsetDetector();
+        det.setDetectableCharset("ASCII", false);
         det.setDetectableCharset("IBM424_rtl", true);
         det.setDetectableCharset("IBM424_ltr", true);
         det.setDetectableCharset("IBM420_rtl", true);
@@ -1344,13 +1349,13 @@ public class TestCharsetDetector extends CoreTestFmwk {
         String name1 = match1.getName();
         assertEquals("Initial detection of charset", "windows-1252", name1);
 
-        // Next, using a completely separate detector, detect some 8859-1 text
+        // Next, using a completely separate detector, detect some ASCII text
 
         CharsetDetector csd2 = new CharsetDetector();
         csd2.setText(bISO);
         CharsetMatch match2 = csd2.detect();
         String name2 = match2.getName();
-        assertEquals("Initial use of second detector", "ISO-8859-1", name2);
+        assertEquals("Initial use of second detector", "ASCII", name2);
 
         // Recheck the 1252 results from the first detector, which should not have been
         //  altered by the use of a different detector.
@@ -1433,5 +1438,70 @@ public class TestCharsetDetector extends CoreTestFmwk {
                 return;
             }
         }
+    }
+
+    @Test
+    public void plainAsciiLeadsToAsciiBeingFirst() throws Exception {
+        // Non-English text because otherwise, it is detected as ISO-8859-1
+        byte[] input = "@{,xxx-yyy-!!!}".getBytes(StandardCharsets.US_ASCII);
+
+        CharsetDetector charsetDetector = new CharsetDetector();
+        charsetDetector.setText(input);
+        CharsetMatch[] matches = charsetDetector.detectAll();
+
+        // "just" check that ASCII is first
+        Assert.assertEquals("ASCII", matches[0].getName());
+        Assert.assertTrue(95 >= matches[0].getConfidence());
+    }
+
+    @Test
+    public void copyrightSignLeadsToAsciiNotBeingContained() throws Exception {
+        byte[] input = "<!-- Copyright © 1991-2005 Unicode, Inc. All rights reserved. -->".getBytes(StandardCharsets.UTF_8);
+
+        CharsetDetector charsetDetector = new CharsetDetector();
+        charsetDetector.setText(input);
+        CharsetMatch[] matches = charsetDetector.detectAll();
+
+        // check that ASCII is not contained
+        Assert.assertFalse(Arrays.asList(matches).contains("ASCII"));
+    }
+
+    @Test
+    public void utf8LeadsToAsciiNotBeingContained() throws Exception {
+        byte[] input = "🎉🍗".getBytes(StandardCharsets.UTF_8);
+
+        CharsetDetector charsetDetector = new CharsetDetector();
+        charsetDetector.setText(input);
+        CharsetMatch[] matches = charsetDetector.detectAll();
+
+        // check that ASCII is not contained
+        Assert.assertFalse(Arrays.asList(matches).contains("ASCII"));
+    }
+
+    @Test
+    public void utf8IsTheHighestAtUTf8String() throws Exception {
+        byte[] input = "🎉🍗".getBytes(StandardCharsets.UTF_8);
+
+        CharsetDetector charsetDetector = new CharsetDetector();
+        charsetDetector.setText(input);
+        CharsetMatch[] matches = charsetDetector.detectAll();
+
+        // check that UTF-8 is the highest
+        Assert.assertEquals("UTF-8", matches[0].getName());
+    }
+
+    @Test
+    public void utf16LeadsToAsciiNotBeingContained() throws Exception {
+        byte[] input = "This is a UTF-16 string! 🎉".getBytes(StandardCharsets.UTF_16BE);
+
+        CharsetDetector charsetDetector = new CharsetDetector();
+        charsetDetector.setText(input);
+        CharsetMatch[] matches = charsetDetector.detectAll();
+
+        // check that UTF-16BE is the highest
+        Assert.assertEquals("UTF-16BE", matches[0].getName());
+
+        // check that ASCII is not contained
+        Assert.assertFalse(Arrays.asList(matches).contains("ASCII"));
     }
 }
