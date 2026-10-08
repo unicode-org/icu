@@ -220,6 +220,15 @@ endif
 
 PKGDATA_LIST = $(TMP_DIR)/icudata.lst
 
+CURR_TREE=curr
+LANG_TREE=lang
+REGION_TREE=region
+ZONE_TREE=zone
+UNIT_TREE=unit
+BREAK_TREE=brkitr
+COLLATION_TREE=coll
+RBNF_TREE=rbnf
+TRANSLIT_TREE=translit
 
 #####################################################
 # General data build rules
