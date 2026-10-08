@@ -246,6 +246,7 @@ public:
     void TestICU23280IntOverFlow();
     void TestICU23467();
     void TestICU21992();
+    void TestICU21995();
 
 private:
     //------------------------------------------------------------------------
@@ -261,6 +262,11 @@ private:
     RuleBasedCollator *en_us;
 
     void caseFirstCompressionSub(Collator *col, UnicodeString opt);
+
+    void checkCompareAndCollationKeyCompare(Collator *coll,
+                                            const UnicodeString str1,
+                                            const UnicodeString str2,
+                                            UErrorCode &status);
 };
 
 #endif /* #if !UCONFIG_NO_COLLATION */
