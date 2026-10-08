@@ -16,6 +16,7 @@ import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.HebrewCalendar;
 import com.ibm.icu.util.IslamicCalendar;
+import com.ibm.icu.util.JapaneseCalendar;
 import com.ibm.icu.util.SimpleTimeZone;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
@@ -3340,6 +3341,673 @@ public class CalendarRegressionTest extends CoreTestFmwk {
         britishCal.set(1752, Calendar.SEPTEMBER, 14);
         assertEquals(
                 "1752-09-14 DAY_OF_YEAR, 1752 cutover", 247, britishCal.get(Calendar.DAY_OF_YEAR));
+    }
+
+    // WEEK_OF_MONTH in the cutover year is numbered from the hybrid month's
+    // own first day, which depends on the cutover date, the
+    // first-day-of-week, and the minimal-days-in-first-week setting. This
+    // covers non-1582 cutovers, both week settings, and cutovers whose gap
+    // falls in a different month or exactly on a month boundary;
+    // TestWeekOfMonthInCutoverYear23489 above covers the default 1582-10-15
+    // cutover with the month that actually loses days. Expected values follow
+    // directly from applying the definition of WEEK_OF_MONTH to the actual
+    // (possibly split, truncated, or year-shifted) hybrid month.
+    @Test
+    public void TestWeekOfMonthNon1582Cutover3350() {
+        class TestData {
+            Date cutover; // null means the default 1582-10-15 cutover
+            int year;
+            int month;
+            int firstDayOfWeek;
+            int minimalDaysInFirstWeek;
+            // Start (year, month, day) of WEEK_OF_MONTH 1..5.
+            int[][] weekStarts;
+
+            TestData(
+                    Date cutover,
+                    int year,
+                    int month,
+                    int firstDayOfWeek,
+                    int minimalDaysInFirstWeek,
+                    int[]... weekStarts) {
+                this.cutover = cutover;
+                this.year = year;
+                this.month = month;
+                this.firstDayOfWeek = firstDayOfWeek;
+                this.minimalDaysInFirstWeek = minimalDaysInFirstWeek;
+                this.weekStarts = weekStarts;
+            }
+        }
+
+        // The cutover point is the first Gregorian day, i.e. the date passed to
+        // setGregorianChange(), constructed with the default (1582) cutover
+        // since 1700/1752/1918 are all ordinary Gregorian dates under it.
+        GregorianCalendar cutoverBuilder = new GregorianCalendar(TimeZone.GMT_ZONE);
+        cutoverBuilder.clear();
+        cutoverBuilder.set(1700, Calendar.MARCH, 1);
+        Date denmark = cutoverBuilder.getTime();
+        cutoverBuilder.clear();
+        cutoverBuilder.set(1752, Calendar.SEPTEMBER, 14);
+        Date gb = cutoverBuilder.getTime();
+        cutoverBuilder.clear();
+        cutoverBuilder.set(1918, Calendar.FEBRUARY, 14);
+        Date russia = cutoverBuilder.getTime();
+        cutoverBuilder.clear();
+        cutoverBuilder.set(1753, Calendar.MARCH, 1);
+        Date sweden = cutoverBuilder.getTime();
+        cutoverBuilder.clear();
+        cutoverBuilder.set(1600, Calendar.JANUARY, 1);
+        Date yearBoundary1600 = cutoverBuilder.getTime();
+        cutoverBuilder.clear();
+        cutoverBuilder.set(1584, Calendar.JANUARY, 5);
+        Date yearBoundary1584 = cutoverBuilder.getTime();
+
+        TestData[] kData = {
+            // Default 1582-10-15 cutover: same instants as
+            // TestWeekOfMonthInCutoverYear23489, checked here with both week
+            // settings for cross-coverage with the general (non-1582) path.
+            new TestData(
+                    null,
+                    1582,
+                    Calendar.OCTOBER,
+                    Calendar.SUNDAY,
+                    1,
+                    new int[] {1582, Calendar.SEPTEMBER, 30},
+                    new int[] {1582, Calendar.OCTOBER, 17},
+                    new int[] {1582, Calendar.OCTOBER, 24},
+                    new int[] {1582, Calendar.OCTOBER, 31},
+                    new int[] {1582, Calendar.NOVEMBER, 7}),
+            new TestData(
+                    null,
+                    1582,
+                    Calendar.OCTOBER,
+                    Calendar.MONDAY,
+                    4,
+                    new int[] {1582, Calendar.OCTOBER, 1},
+                    new int[] {1582, Calendar.OCTOBER, 18},
+                    new int[] {1582, Calendar.OCTOBER, 25},
+                    new int[] {1582, Calendar.NOVEMBER, 1},
+                    new int[] {1582, Calendar.NOVEMBER, 8}),
+            // November 1582 is not affected by the cutover (control).
+            new TestData(
+                    null,
+                    1582,
+                    Calendar.NOVEMBER,
+                    Calendar.SUNDAY,
+                    1,
+                    new int[] {1582, Calendar.OCTOBER, 31},
+                    new int[] {1582, Calendar.NOVEMBER, 7},
+                    new int[] {1582, Calendar.NOVEMBER, 14},
+                    new int[] {1582, Calendar.NOVEMBER, 21},
+                    new int[] {1582, Calendar.NOVEMBER, 28}),
+            new TestData(
+                    null,
+                    1582,
+                    Calendar.NOVEMBER,
+                    Calendar.MONDAY,
+                    4,
+                    new int[] {1582, Calendar.NOVEMBER, 1},
+                    new int[] {1582, Calendar.NOVEMBER, 8},
+                    new int[] {1582, Calendar.NOVEMBER, 15},
+                    new int[] {1582, Calendar.NOVEMBER, 22},
+                    new int[] {1582, Calendar.NOVEMBER, 29}),
+
+            // March and September 1582: far enough from the cutover that every
+            // week's base day stays on the same side of it, so each resolves
+            // like an ordinary, single-calendar month (Julian throughout).
+            // Pins the shift at zero for months of the cutover year that
+            // merely share the year with the affected month.
+            new TestData(
+                    null,
+                    1582,
+                    Calendar.MARCH,
+                    Calendar.SUNDAY,
+                    1,
+                    new int[] {1582, Calendar.FEBRUARY, 25},
+                    new int[] {1582, Calendar.MARCH, 4},
+                    new int[] {1582, Calendar.MARCH, 11},
+                    new int[] {1582, Calendar.MARCH, 18},
+                    new int[] {1582, Calendar.MARCH, 25}),
+            new TestData(
+                    null,
+                    1582,
+                    Calendar.MARCH,
+                    Calendar.MONDAY,
+                    4,
+                    new int[] {1582, Calendar.FEBRUARY, 26},
+                    new int[] {1582, Calendar.MARCH, 5},
+                    new int[] {1582, Calendar.MARCH, 12},
+                    new int[] {1582, Calendar.MARCH, 19},
+                    new int[] {1582, Calendar.MARCH, 26}),
+            new TestData(
+                    null,
+                    1582,
+                    Calendar.SEPTEMBER,
+                    Calendar.SUNDAY,
+                    1,
+                    new int[] {1582, Calendar.AUGUST, 26},
+                    new int[] {1582, Calendar.SEPTEMBER, 2},
+                    new int[] {1582, Calendar.SEPTEMBER, 9},
+                    new int[] {1582, Calendar.SEPTEMBER, 16},
+                    new int[] {1582, Calendar.SEPTEMBER, 23}),
+            new TestData(
+                    null,
+                    1582,
+                    Calendar.SEPTEMBER,
+                    Calendar.MONDAY,
+                    4,
+                    new int[] {1582, Calendar.SEPTEMBER, 3},
+                    new int[] {1582, Calendar.SEPTEMBER, 10},
+                    new int[] {1582, Calendar.SEPTEMBER, 17},
+                    new int[] {1582, Calendar.SEPTEMBER, 24},
+                    new int[] {1582, Calendar.OCTOBER, 1}),
+
+            // Denmark: 1700-03-01. The whole gap falls inside February, so
+            // March 1700 is an intact, ordinary Gregorian month whose week 1
+            // nonetheless starts in February -- and none of its weeks take a
+            // shift, even though March is the month the cutover date itself
+            // falls in.
+            new TestData(
+                    denmark,
+                    1700,
+                    Calendar.FEBRUARY,
+                    Calendar.SUNDAY,
+                    1,
+                    new int[] {1700, Calendar.JANUARY, 28},
+                    new int[] {1700, Calendar.FEBRUARY, 4},
+                    new int[] {1700, Calendar.FEBRUARY, 11},
+                    new int[] {1700, Calendar.FEBRUARY, 18},
+                    new int[] {1700, Calendar.MARCH, 7}),
+            new TestData(
+                    denmark,
+                    1700,
+                    Calendar.FEBRUARY,
+                    Calendar.MONDAY,
+                    4,
+                    new int[] {1700, Calendar.JANUARY, 29},
+                    new int[] {1700, Calendar.FEBRUARY, 5},
+                    new int[] {1700, Calendar.FEBRUARY, 12},
+                    new int[] {1700, Calendar.MARCH, 1},
+                    new int[] {1700, Calendar.MARCH, 8}),
+            new TestData(
+                    denmark,
+                    1700,
+                    Calendar.MARCH,
+                    Calendar.SUNDAY,
+                    1,
+                    new int[] {1700, Calendar.FEBRUARY, 18},
+                    new int[] {1700, Calendar.MARCH, 7},
+                    new int[] {1700, Calendar.MARCH, 14},
+                    new int[] {1700, Calendar.MARCH, 21},
+                    new int[] {1700, Calendar.MARCH, 28}),
+            new TestData(
+                    denmark,
+                    1700,
+                    Calendar.MARCH,
+                    Calendar.MONDAY,
+                    4,
+                    new int[] {1700, Calendar.MARCH, 1},
+                    new int[] {1700, Calendar.MARCH, 8},
+                    new int[] {1700, Calendar.MARCH, 15},
+                    new int[] {1700, Calendar.MARCH, 22},
+                    new int[] {1700, Calendar.MARCH, 29}),
+
+            // Great Britain: 1752-09-14. September is split, with a gap in
+            // the middle relative to a plain single-calendar month (Sep 3-13
+            // do not exist): Julian Sep 1-2, then Gregorian Sep 14-30.
+            new TestData(
+                    gb,
+                    1752,
+                    Calendar.SEPTEMBER,
+                    Calendar.SUNDAY,
+                    1,
+                    new int[] {1752, Calendar.AUGUST, 30},
+                    new int[] {1752, Calendar.SEPTEMBER, 17},
+                    new int[] {1752, Calendar.SEPTEMBER, 24},
+                    new int[] {1752, Calendar.OCTOBER, 1},
+                    new int[] {1752, Calendar.OCTOBER, 8}),
+            new TestData(
+                    gb,
+                    1752,
+                    Calendar.SEPTEMBER,
+                    Calendar.MONDAY,
+                    4,
+                    new int[] {1752, Calendar.AUGUST, 31},
+                    new int[] {1752, Calendar.SEPTEMBER, 18},
+                    new int[] {1752, Calendar.SEPTEMBER, 25},
+                    new int[] {1752, Calendar.OCTOBER, 2},
+                    new int[] {1752, Calendar.OCTOBER, 9}),
+
+            // Russia: 1918-02-14. The gap falls exactly on the Julian/Gregorian
+            // month boundary, so January is unaffected, but February starts on
+            // the 14th instead of the 1st.
+            new TestData(
+                    russia,
+                    1918,
+                    Calendar.JANUARY,
+                    Calendar.SUNDAY,
+                    1,
+                    new int[] {1917, Calendar.DECEMBER, 31},
+                    new int[] {1918, Calendar.JANUARY, 7},
+                    new int[] {1918, Calendar.JANUARY, 14},
+                    new int[] {1918, Calendar.JANUARY, 21},
+                    new int[] {1918, Calendar.JANUARY, 28}),
+            new TestData(
+                    russia,
+                    1918,
+                    Calendar.JANUARY,
+                    Calendar.MONDAY,
+                    4,
+                    new int[] {1918, Calendar.JANUARY, 1},
+                    new int[] {1918, Calendar.JANUARY, 8},
+                    new int[] {1918, Calendar.JANUARY, 15},
+                    new int[] {1918, Calendar.JANUARY, 22},
+                    new int[] {1918, Calendar.JANUARY, 29}),
+            new TestData(
+                    russia,
+                    1918,
+                    Calendar.FEBRUARY,
+                    Calendar.SUNDAY,
+                    1,
+                    new int[] {1918, Calendar.JANUARY, 28},
+                    new int[] {1918, Calendar.FEBRUARY, 17},
+                    new int[] {1918, Calendar.FEBRUARY, 24},
+                    new int[] {1918, Calendar.MARCH, 3},
+                    new int[] {1918, Calendar.MARCH, 10}),
+            new TestData(
+                    russia,
+                    1918,
+                    Calendar.FEBRUARY,
+                    Calendar.MONDAY,
+                    4,
+                    new int[] {1918, Calendar.JANUARY, 29},
+                    new int[] {1918, Calendar.FEBRUARY, 18},
+                    new int[] {1918, Calendar.FEBRUARY, 25},
+                    new int[] {1918, Calendar.MARCH, 4},
+                    new int[] {1918, Calendar.MARCH, 11}),
+
+            // Sweden: 1753-03-01, structurally identical to Denmark above.
+            // February 1753 loses its last 11 days to the gap. March 1753 is
+            // intact but, like Denmark's March, has a week 1 that starts in
+            // February and must not take any shift.
+            new TestData(
+                    sweden,
+                    1753,
+                    Calendar.FEBRUARY,
+                    Calendar.SUNDAY,
+                    1,
+                    new int[] {1753, Calendar.JANUARY, 31},
+                    new int[] {1753, Calendar.FEBRUARY, 7},
+                    new int[] {1753, Calendar.FEBRUARY, 14},
+                    new int[] {1753, Calendar.MARCH, 4},
+                    new int[] {1753, Calendar.MARCH, 11}),
+            new TestData(
+                    sweden,
+                    1753,
+                    Calendar.FEBRUARY,
+                    Calendar.MONDAY,
+                    4,
+                    new int[] {1753, Calendar.FEBRUARY, 1},
+                    new int[] {1753, Calendar.FEBRUARY, 8},
+                    new int[] {1753, Calendar.FEBRUARY, 15},
+                    new int[] {1753, Calendar.MARCH, 5},
+                    new int[] {1753, Calendar.MARCH, 12}),
+            new TestData(
+                    sweden,
+                    1753,
+                    Calendar.MARCH,
+                    Calendar.SUNDAY,
+                    1,
+                    new int[] {1753, Calendar.FEBRUARY, 14},
+                    new int[] {1753, Calendar.MARCH, 4},
+                    new int[] {1753, Calendar.MARCH, 11},
+                    new int[] {1753, Calendar.MARCH, 18},
+                    new int[] {1753, Calendar.MARCH, 25}),
+            new TestData(
+                    sweden,
+                    1753,
+                    Calendar.MARCH,
+                    Calendar.MONDAY,
+                    4,
+                    new int[] {1753, Calendar.FEBRUARY, 15},
+                    new int[] {1753, Calendar.MARCH, 5},
+                    new int[] {1753, Calendar.MARCH, 12},
+                    new int[] {1753, Calendar.MARCH, 19},
+                    new int[] {1753, Calendar.MARCH, 26}),
+
+            // Cutover 1600-01-01: the month that loses days is DECEMBER OF THE
+            // PREVIOUS YEAR (1599), one extended year below gregorianCutoverYear
+            // (1600), not a month of gregorianCutoverYear itself. January 1600
+            // is an ordinary, unshifted month, included alongside it.
+            new TestData(
+                    yearBoundary1600,
+                    1599,
+                    Calendar.DECEMBER,
+                    Calendar.SUNDAY,
+                    1,
+                    new int[] {1599, Calendar.NOVEMBER, 25},
+                    new int[] {1599, Calendar.DECEMBER, 2},
+                    new int[] {1599, Calendar.DECEMBER, 9},
+                    new int[] {1599, Calendar.DECEMBER, 16},
+                    new int[] {1600, Calendar.JANUARY, 2}),
+            new TestData(
+                    yearBoundary1600,
+                    1599,
+                    Calendar.DECEMBER,
+                    Calendar.MONDAY,
+                    4,
+                    new int[] {1599, Calendar.DECEMBER, 3},
+                    new int[] {1599, Calendar.DECEMBER, 10},
+                    new int[] {1599, Calendar.DECEMBER, 17},
+                    new int[] {1600, Calendar.JANUARY, 3},
+                    new int[] {1600, Calendar.JANUARY, 10}),
+            new TestData(
+                    yearBoundary1600,
+                    1600,
+                    Calendar.JANUARY,
+                    Calendar.SUNDAY,
+                    1,
+                    new int[] {1599, Calendar.DECEMBER, 16},
+                    new int[] {1600, Calendar.JANUARY, 2},
+                    new int[] {1600, Calendar.JANUARY, 9},
+                    new int[] {1600, Calendar.JANUARY, 16},
+                    new int[] {1600, Calendar.JANUARY, 23}),
+            new TestData(
+                    yearBoundary1600,
+                    1600,
+                    Calendar.JANUARY,
+                    Calendar.MONDAY,
+                    4,
+                    new int[] {1600, Calendar.JANUARY, 3},
+                    new int[] {1600, Calendar.JANUARY, 10},
+                    new int[] {1600, Calendar.JANUARY, 17},
+                    new int[] {1600, Calendar.JANUARY, 24},
+                    new int[] {1600, Calendar.JANUARY, 31}),
+
+            // Cutover 1584-01-05 (Julian 1583-12-26): same year-boundary shape
+            // as 1600-01-01, with the cutover a few days into January instead
+            // of exactly on January 1. December 1583 is Julian Dec 1-25;
+            // January 1584 is Gregorian Jan 5-31.
+            new TestData(
+                    yearBoundary1584,
+                    1583,
+                    Calendar.DECEMBER,
+                    Calendar.SUNDAY,
+                    1,
+                    new int[] {1583, Calendar.DECEMBER, 1},
+                    new int[] {1583, Calendar.DECEMBER, 8},
+                    new int[] {1583, Calendar.DECEMBER, 15},
+                    new int[] {1583, Calendar.DECEMBER, 22},
+                    new int[] {1584, Calendar.JANUARY, 8}),
+            new TestData(
+                    yearBoundary1584,
+                    1583,
+                    Calendar.DECEMBER,
+                    Calendar.MONDAY,
+                    4,
+                    new int[] {1583, Calendar.DECEMBER, 2},
+                    new int[] {1583, Calendar.DECEMBER, 9},
+                    new int[] {1583, Calendar.DECEMBER, 16},
+                    new int[] {1583, Calendar.DECEMBER, 23},
+                    new int[] {1584, Calendar.JANUARY, 9}),
+            new TestData(
+                    yearBoundary1584,
+                    1584,
+                    Calendar.JANUARY,
+                    Calendar.SUNDAY,
+                    1,
+                    new int[] {1583, Calendar.DECEMBER, 22},
+                    new int[] {1584, Calendar.JANUARY, 8},
+                    new int[] {1584, Calendar.JANUARY, 15},
+                    new int[] {1584, Calendar.JANUARY, 22},
+                    new int[] {1584, Calendar.JANUARY, 29}),
+            new TestData(
+                    yearBoundary1584,
+                    1584,
+                    Calendar.JANUARY,
+                    Calendar.MONDAY,
+                    4,
+                    new int[] {1583, Calendar.DECEMBER, 23},
+                    new int[] {1584, Calendar.JANUARY, 9},
+                    new int[] {1584, Calendar.JANUARY, 16},
+                    new int[] {1584, Calendar.JANUARY, 23},
+                    new int[] {1584, Calendar.JANUARY, 30}),
+        };
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        sdf.setTimeZone(TimeZone.GMT_ZONE);
+
+        for (TestData data : kData) {
+            GregorianCalendar cal = new GregorianCalendar(TimeZone.GMT_ZONE);
+            if (data.cutover != null) {
+                cal.setGregorianChange(data.cutover);
+            }
+            cal.setFirstDayOfWeek(data.firstDayOfWeek);
+            cal.setMinimalDaysInFirstWeek(data.minimalDaysInFirstWeek);
+
+            // The expected instants are built from the same cutover, so that
+            // year/month/day are interpreted with the same hybrid labeling as
+            // the calendar under test.
+            GregorianCalendar expCal = new GregorianCalendar(TimeZone.GMT_ZONE);
+            if (data.cutover != null) {
+                expCal.setGregorianChange(data.cutover);
+            }
+
+            String rowLabel =
+                    "cutover="
+                            + (data.cutover == null ? "1582-10-15" : sdf.format(data.cutover))
+                            + ", year="
+                            + data.year
+                            + ", month="
+                            + (data.month + 1)
+                            + ", firstDayOfWeek="
+                            + data.firstDayOfWeek
+                            + ", minimalDaysInFirstWeek="
+                            + data.minimalDaysInFirstWeek;
+
+            for (int wom = 1; wom <= data.weekStarts.length; ++wom) {
+                cal.clear();
+                cal.set(Calendar.YEAR, data.year);
+                cal.set(Calendar.MONTH, data.month);
+                cal.set(Calendar.WEEK_OF_MONTH, wom);
+                cal.set(Calendar.DAY_OF_WEEK, data.firstDayOfWeek);
+                Date actual = cal.getTime();
+
+                int[] ymd = data.weekStarts[wom - 1];
+                expCal.clear();
+                expCal.set(ymd[0], ymd[1], ymd[2]);
+                Date expected = expCal.getTime();
+
+                assertEquals(
+                        rowLabel
+                                + ", WEEK_OF_MONTH="
+                                + wom
+                                + ": got "
+                                + sdf.format(actual)
+                                + ", expected "
+                                + sdf.format(expected),
+                        expected,
+                        actual);
+
+                // Also check a non-first day of week within the same week: the
+                // whole week must move together with its start.
+                int k = 2;
+                cal.clear();
+                cal.set(Calendar.YEAR, data.year);
+                cal.set(Calendar.MONTH, data.month);
+                cal.set(Calendar.WEEK_OF_MONTH, wom);
+                cal.set(Calendar.DAY_OF_WEEK, ((data.firstDayOfWeek - 1 + k) % 7) + 1);
+                Date kActual = cal.getTime();
+                Date kExpected = new Date(expected.getTime() + k * 24L * 60 * 60 * 1000);
+
+                assertEquals(
+                        rowLabel
+                                + ", WEEK_OF_MONTH="
+                                + wom
+                                + ", DAY_OF_WEEK=start+"
+                                + k
+                                + ": got "
+                                + sdf.format(kActual)
+                                + ", expected "
+                                + sdf.format(kExpected),
+                        kExpected,
+                        kActual);
+            }
+        }
+
+        // gregorianCutoverYear is derived from local time while the cutover
+        // Julian day is derived from UTC, so near a year boundary they can
+        // disagree; for the 1600-01-01T00:00Z cutover, gregorianCutoverYear
+        // is 1599 in America/New_York instead of 1600. WEEK_OF_MONTH must
+        // resolve to the same hybrid calendar day regardless: the result
+        // depends only on how close the normalized month is to
+        // gregorianCutoverYear, and 1600 is still within a year of 1599.
+        {
+            GregorianCalendar nyCal =
+                    new GregorianCalendar(TimeZone.getTimeZone("America/New_York"));
+            nyCal.setGregorianChange(yearBoundary1600);
+            nyCal.setFirstDayOfWeek(Calendar.SUNDAY);
+            nyCal.setMinimalDaysInFirstWeek(1);
+            nyCal.clear();
+            nyCal.set(Calendar.YEAR, 1600);
+            nyCal.set(Calendar.MONTH, Calendar.JANUARY);
+            nyCal.set(Calendar.WEEK_OF_MONTH, 1);
+            nyCal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+
+            String label =
+                    "America/New_York, cutover=1600-01-01, YEAR=1600, MONTH=JANUARY,"
+                            + " WEEK_OF_MONTH=1, SUNDAY: got "
+                            + nyCal.get(Calendar.YEAR)
+                            + "-"
+                            + (nyCal.get(Calendar.MONTH) + 1)
+                            + "-"
+                            + nyCal.get(Calendar.DAY_OF_MONTH)
+                            + ", expected 1599-12-16 (same hybrid day as the GMT answer)";
+            assertEquals(label, 1599, nyCal.get(Calendar.YEAR));
+            assertEquals(label, Calendar.DECEMBER, nyCal.get(Calendar.MONTH));
+            assertEquals(label, 16, nyCal.get(Calendar.DAY_OF_MONTH));
+        }
+
+        // An out-of-range month is normalized the way handleComputeMonthStart
+        // normalizes it: MONTH=-3 of YEAR=1583 is October 1582, and must
+        // resolve exactly like MONTH=OCTOBER of YEAR=1582 above (default
+        // cutover, first row).
+        {
+            GregorianCalendar overflowCal = new GregorianCalendar(TimeZone.GMT_ZONE);
+            overflowCal.setFirstDayOfWeek(Calendar.SUNDAY);
+            overflowCal.setMinimalDaysInFirstWeek(1);
+            overflowCal.clear();
+            overflowCal.set(Calendar.YEAR, 1583);
+            overflowCal.set(Calendar.MONTH, -3);
+            overflowCal.set(Calendar.WEEK_OF_MONTH, 1);
+            overflowCal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+            Date actual = overflowCal.getTime();
+
+            GregorianCalendar normalizedCal = new GregorianCalendar(TimeZone.GMT_ZONE);
+            normalizedCal.setFirstDayOfWeek(Calendar.SUNDAY);
+            normalizedCal.setMinimalDaysInFirstWeek(1);
+            normalizedCal.clear();
+            normalizedCal.set(Calendar.YEAR, 1582);
+            normalizedCal.set(Calendar.MONTH, Calendar.OCTOBER);
+            normalizedCal.set(Calendar.WEEK_OF_MONTH, 1);
+            normalizedCal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+            Date expected = normalizedCal.getTime();
+
+            assertEquals(
+                    "YEAR=1583, MONTH=-3, WEEK_OF_MONTH=1: got "
+                            + sdf.format(actual)
+                            + ", expected "
+                            + sdf.format(expected),
+                    expected,
+                    actual);
+        }
+    }
+
+    // A MONTH value outside 0..11 must normalize into the adjacent year
+    // exactly like the internal month-start computation does elsewhere:
+    // YEAR=1583, MONTH=-3 is October of the previous (cutover) year.
+    @Test
+    public void TestWeekOfMonthOutOfRangeMonth3350() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        sdf.setTimeZone(TimeZone.GMT_ZONE);
+
+        GregorianCalendar cal = new GregorianCalendar(TimeZone.GMT_ZONE);
+        cal.setFirstDayOfWeek(Calendar.SUNDAY);
+        cal.setMinimalDaysInFirstWeek(1);
+        cal.clear();
+        cal.set(Calendar.YEAR, 1583);
+        cal.set(Calendar.MONTH, -3);
+        cal.set(Calendar.WEEK_OF_MONTH, 1);
+        Date actual = cal.getTime();
+
+        GregorianCalendar expCal = new GregorianCalendar(TimeZone.GMT_ZONE);
+        expCal.setFirstDayOfWeek(Calendar.SUNDAY);
+        expCal.setMinimalDaysInFirstWeek(1);
+        expCal.clear();
+        expCal.set(Calendar.YEAR, 1582);
+        expCal.set(Calendar.MONTH, Calendar.OCTOBER);
+        expCal.set(Calendar.WEEK_OF_MONTH, 1);
+        Date expected = expCal.getTime();
+
+        assertEquals(
+                "YEAR=1583, MONTH=-3, WEEK_OF_MONTH=1: got "
+                        + sdf.format(actual)
+                        + ", expected "
+                        + sdf.format(expected),
+                expected,
+                actual);
+    }
+
+    // WEEK_OF_MONTH must resolve the month the same way the rest of
+    // handleComputeJulianDay does when MONTH/ORDINAL_MONTH is unset: via
+    // getDefaultMonthInYear(), which a subclass may override, not always
+    // January. JapaneseCalendar returns the era-start month, so setting only
+    // ERA, YEAR, WEEK_OF_MONTH, and DAY_OF_WEEK for the first year of an era
+    // must resolve within that month.
+    @Test
+    public void TestWeekOfMonthDefaultMonth3350() {
+        GregorianCalendar cutoverBuilder = new GregorianCalendar(TimeZone.GMT_ZONE);
+        cutoverBuilder.clear();
+        cutoverBuilder.set(1868, Calendar.MARCH, 1);
+        Date meijiCutover = cutoverBuilder.getTime();
+
+        JapaneseCalendar explicitCutover = new JapaneseCalendar(TimeZone.GMT_ZONE);
+        explicitCutover.setGregorianChange(meijiCutover);
+        explicitCutover.clear();
+        explicitCutover.set(Calendar.ERA, JapaneseCalendar.MEIJI);
+        explicitCutover.set(Calendar.YEAR, 1);
+        explicitCutover.set(Calendar.WEEK_OF_MONTH, 3);
+        explicitCutover.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
+
+        JapaneseCalendar defaultCutover = new JapaneseCalendar(TimeZone.GMT_ZONE);
+        defaultCutover.clear();
+        defaultCutover.set(Calendar.ERA, JapaneseCalendar.MEIJI);
+        defaultCutover.set(Calendar.YEAR, 1);
+        defaultCutover.set(Calendar.WEEK_OF_MONTH, 3);
+        defaultCutover.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
+
+        GregorianCalendar expCal = new GregorianCalendar(TimeZone.GMT_ZONE);
+        expCal.clear();
+        expCal.set(1868, Calendar.OCTOBER, 14);
+        Date expected = expCal.getTime();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        sdf.setTimeZone(TimeZone.GMT_ZONE);
+
+        assertEquals(
+                "MEIJI 1, WEEK_OF_MONTH=3, WEDNESDAY, explicit cutover 1868-03-01: got "
+                        + sdf.format(explicitCutover.getTime())
+                        + ", expected "
+                        + sdf.format(expected),
+                expected,
+                explicitCutover.getTime());
+        assertEquals(
+                "MEIJI 1, WEEK_OF_MONTH=3, WEDNESDAY, default cutover: got "
+                        + sdf.format(defaultCutover.getTime())
+                        + ", expected "
+                        + sdf.format(expected),
+                expected,
+                defaultCutover.getTime());
     }
 }
 // eof
