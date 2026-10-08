@@ -28,6 +28,8 @@
 
 #include "nfrlist.h"
 
+#define RECURSION_LIMIT 64
+
 U_NAMESPACE_BEGIN
 
 class NFRuleSet : public UMemory {

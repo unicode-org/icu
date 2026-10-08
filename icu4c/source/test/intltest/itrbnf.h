@@ -158,6 +158,7 @@ public:
     void TestRounding();
     void TestLargeNumbers();
     void TestCompactDecimalFormatStyle();
+    void TestICU23144Format();
     void TestParseFailure();
     void TestMinMaxIntegerDigitsIgnored();
     void TestNumberingSystem();

@@ -908,8 +908,13 @@ ModulusSubstitution::doSubstitution(int64_t number, UnicodeString& toInsertInto,
         // a >>> substitution goes straight to a particular rule to
         // format the substitution value
     } else {
+
+        if (recursionCount >= RECURSION_LIMIT) {
+            status = U_INVALID_STATE_ERROR;
+            return;
+        }
         int64_t numberToFormat = transformNumber(number);
-        ruleToUse->doFormat(numberToFormat, toInsertInto, _pos + getPos(), recursionCount, status);
+        ruleToUse->doFormat(numberToFormat, toInsertInto, _pos + getPos(), recursionCount + 1, status);
     }
 }
 
@@ -934,9 +939,14 @@ ModulusSubstitution::doSubstitution(double number, UnicodeString& toInsertInto, 
         // a >>> substitution goes straight to a particular rule to
         // format the substitution value
     } else {
+
+        if (recursionCount >= RECURSION_LIMIT) {
+            status = U_INVALID_STATE_ERROR;
+            return;
+        }
         double numberToFormat = transformNumber(number);
 
-        ruleToUse->doFormat(numberToFormat, toInsertInto, _pos + getPos(), recursionCount, status);
+        ruleToUse->doFormat(numberToFormat, toInsertInto, _pos + getPos(), recursionCount + 1, status);
     }
 }
 

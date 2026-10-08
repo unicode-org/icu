@@ -2202,6 +2202,29 @@ public class RbnfTest extends CoreTestFmwk {
         }
     }
 
+    @Test
+    public void TestICU23144Format() {
+        // Follow-up to ICU-23144: the parse-path fix propagated recursionCount across
+        // >>> (explicit rule) delegation in ModulusSubstitution.doParse, but the
+        // format path (ModulusSubstitution.doSubstitution -> ruleToUse.doFormat)
+        // had the identical flaw. A >>> delegation chain never re-enters
+        // NFRuleSet.format, the only place RECURSION_LIMIT is enforced, so a long
+        // chain used to exhaust the stack; it must now be bounded gracefully.
+        logln("TestICU23144Format: Verifying RECURSION_LIMIT is enforced across >>> rule delegations on the format path");
+
+        StringBuilder ruleDef = new StringBuilder("%format-recursion:\n");
+        ruleDef.append("0: ;\n");
+        for (int i = 1; i <= 75; ++i) {
+            ruleDef.append(i).append(": >>>;\n");
+        }
+
+        RuleBasedNumberFormat rbfmt = new RuleBasedNumberFormat(ruleDef.toString());
+        // Formatting the terminal index walks the full 75-depth >>> delegation chain.
+        // Must terminate (gracefully, via the recursion guard) rather than overflow.
+        String result = rbfmt.format(75);
+        logln("TestICU23144Format: survived 75-depth >>> format chain");
+    }
+
     /**
      * This test is a little contrived for English, but the grammar is relevant for several
      * languages, including: Latin, Germanic, Slavic and Indic. It's pretty common, especially for
