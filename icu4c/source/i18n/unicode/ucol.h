@@ -946,9 +946,8 @@ ucol_getFunctionalEquivalent(char* result, int32_t resultCapacity,
  * @return The collation tailoring rules.
  * @stable ICU 2.0
  */
-U_CAPI const UChar* U_EXPORT2 
-ucol_getRules(    const    UCollator    *coll, 
-        int32_t            *length);
+U_CAPI const UChar* U_EXPORT2
+ucol_getRules(const UCollator* coll U_LIFETIME_BOUND, int32_t* length);
 
 #ifndef U_HIDE_DEPRECATED_API
 /** Get the short definition string for a collator. This API harvests the collator's
@@ -1405,8 +1404,8 @@ ucol_getRulesEx(const UCollator *coll, UColRuleOption delta, UChar *buffer, int3
  *         NULL.
  * @deprecated ICU 2.8 Use ucol_getLocaleByType instead
  */
-U_DEPRECATED const char * U_EXPORT2
-ucol_getLocale(const UCollator *coll, ULocDataLocaleType type, UErrorCode *status);
+U_DEPRECATED const char* U_EXPORT2
+ucol_getLocale(const UCollator* coll U_LIFETIME_BOUND, ULocDataLocaleType type, UErrorCode* status);
 #endif  /* U_HIDE_DEPRECATED_API */
 
 /**
@@ -1423,8 +1422,10 @@ ucol_getLocale(const UCollator *coll, ULocDataLocaleType type, UErrorCode *statu
  *         NULL.
  * @stable ICU 2.8
  */
-U_CAPI const char * U_EXPORT2
-ucol_getLocaleByType(const UCollator *coll, ULocDataLocaleType type, UErrorCode *status);
+U_CAPI const char* U_EXPORT2
+ucol_getLocaleByType(const UCollator* coll U_LIFETIME_BOUND,
+                     ULocDataLocaleType type,
+                     UErrorCode* status);
 
 /**
  * Get a Unicode set that contains all the characters and sequences tailored in 
@@ -1517,9 +1518,10 @@ ucol_cloneBinary(const UCollator *coll,
  *  @stable ICU 3.2
  */
 U_CAPI UCollator* U_EXPORT2
-ucol_openBinary(const uint8_t *bin, int32_t length, 
-                const UCollator *base, 
-                UErrorCode *status);
+ucol_openBinary(const uint8_t* bin U_LIFETIME_BOUND,
+                int32_t length,
+                const UCollator* base U_LIFETIME_BOUND,
+                UErrorCode* status);
 
 #if U_SHOW_CPLUSPLUS_API || U_SHOW_CPLUSPLUS_HEADER_API
 
@@ -1544,7 +1546,7 @@ template <template <typename...> typename Compare, UCollationResult result>
 class Predicate {
   public:
     /** @internal */
-    explicit Predicate(const UCollator* ucol) : collator(ucol) {}
+    explicit Predicate(const UCollator* ucol U_LIFETIME_BOUND) : collator(ucol) {}
 
 #if U_SHOW_CPLUSPLUS_API
     /** @internal */

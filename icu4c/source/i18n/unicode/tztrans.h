@@ -77,7 +77,7 @@ public:
      * @param right The object to be copied.
      * @stable ICU 3.8
      */
-    TimeZoneTransition& operator=(const TimeZoneTransition& right);
+    TimeZoneTransition& operator=(const TimeZoneTransition& right) U_LIFETIME_BOUND;
 
     /**
      * Return true if the given TimeZoneTransition objects are semantically equal. Objects
@@ -116,7 +116,7 @@ public:
      * @return The time zone rule used after the transition.
      * @stable ICU 3.8
      */
-    const TimeZoneRule* getFrom() const;
+    const TimeZoneRule* getFrom() const U_LIFETIME_BOUND;
 
     /**
      * Sets the rule used before the transition.  The caller remains
@@ -155,7 +155,7 @@ public:
      * @return The time zone rule used after the transition.
      * @stable ICU 3.8
      */
-    const TimeZoneRule* getTo() const;
+    const TimeZoneRule* getTo() const U_LIFETIME_BOUND;
 
 private:
     UDate   fTime;

@@ -1353,8 +1353,10 @@ ucal_getLimit(const UCalendar*     cal,
  *  @return the locale name
  *  @stable ICU 2.8
  */
-U_CAPI const char * U_EXPORT2
-ucal_getLocaleByType(const UCalendar *cal, ULocDataLocaleType type, UErrorCode* status);
+U_CAPI const char* U_EXPORT2
+ucal_getLocaleByType(const UCalendar* cal U_LIFETIME_BOUND,
+                     ULocDataLocaleType type,
+                     UErrorCode* status);
 
 /**
  * Returns the timezone data version currently used by ICU.

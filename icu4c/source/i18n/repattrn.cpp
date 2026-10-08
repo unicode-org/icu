@@ -58,7 +58,7 @@ RegexPattern::RegexPattern(const RegexPattern &other) :  UObject(other) {
 //    Assignment Operator
 //
 //--------------------------------------------------------------------------
-RegexPattern &RegexPattern::operator = (const RegexPattern &other) {
+RegexPattern& RegexPattern::operator=(const RegexPattern& other) U_LIFETIME_BOUND {
     if (this == &other) {
         // Source and destination are the same.  Don't do anything.
         return *this;
@@ -474,8 +474,8 @@ uint32_t RegexPattern::flags() const {
 //   matcher(UnicodeString, err)
 //
 //---------------------------------------------------------------------
-RegexMatcher *RegexPattern::matcher(const UnicodeString &input,
-                                    UErrorCode          &status)  const {
+RegexMatcher* RegexPattern::matcher(const UnicodeString& input U_LIFETIME_BOUND,
+                                    UErrorCode& status) const U_LIFETIME_BOUND {
     RegexMatcher    *retMatcher = matcher(status);
     if (retMatcher != nullptr) {
         retMatcher->fDeferredStatus = status;
@@ -490,7 +490,7 @@ RegexMatcher *RegexPattern::matcher(const UnicodeString &input,
 //   matcher(status)
 //
 //---------------------------------------------------------------------
-RegexMatcher *RegexPattern::matcher(UErrorCode &status)  const {
+RegexMatcher* RegexPattern::matcher(UErrorCode& status) const U_LIFETIME_BOUND {
     RegexMatcher    *retMatcher = nullptr;
 
     if (U_FAILURE(status)) {
@@ -601,7 +601,7 @@ UnicodeString RegexPattern::pattern() const {
 //   patternText
 //
 //---------------------------------------------------------------------
-UText *RegexPattern::patternText(UErrorCode      &status) const {
+UText* RegexPattern::patternText(UErrorCode& status) const U_LIFETIME_BOUND {
     if (U_FAILURE(status)) {return nullptr;}
     status = U_ZERO_ERROR;
 

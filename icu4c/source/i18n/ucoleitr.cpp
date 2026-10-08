@@ -63,7 +63,7 @@ struct RCEBuffer
 
     UBool isEmpty() const;
     void  put(uint32_t ce, int32_t ixLow, int32_t ixHigh, UErrorCode &errorCode);
-    const RCEI *get();
+    const RCEI* get() U_LIFETIME_BOUND;
 };
 
 RCEBuffer::RCEBuffer()
@@ -114,7 +114,7 @@ void RCEBuffer::put(uint32_t ce, int32_t ixLow, int32_t ixHigh, UErrorCode &erro
     bufferIndex += 1;
 }
 
-const RCEI *RCEBuffer::get()
+const RCEI* RCEBuffer::get() U_LIFETIME_BOUND
 {
     if (bufferIndex > 0) {
      return &buffer[--bufferIndex];
@@ -176,7 +176,7 @@ void PCEBuffer::put(uint64_t ce, int32_t ixLow, int32_t ixHigh, UErrorCode &erro
     bufferIndex += 1;
 }
 
-const PCEI *PCEBuffer::get()
+const PCEI* PCEBuffer::get() U_LIFETIME_BOUND
 {
     if (bufferIndex > 0) {
      return &buffer[--bufferIndex];
@@ -271,10 +271,10 @@ U_NAMESPACE_END
 /* public methods ---------------------------------------------------- */
 
 U_CAPI UCollationElements* U_EXPORT2
-ucol_openElements(const UCollator  *coll,
-                  const char16_t   *text,
-                        int32_t    textLength,
-                        UErrorCode *status)
+ucol_openElements(const UCollator* coll U_LIFETIME_BOUND,
+                  const char16_t* text U_LIFETIME_BOUND,
+                  int32_t textLength,
+                  UErrorCode* status)
 {
     if (U_FAILURE(*status)) {
         return nullptr;

@@ -857,7 +857,7 @@ public:
      * @return   The time zone object associated with this calendar.
      * @stable ICU 2.0
      */
-    U_I18N_API const TimeZone& getTimeZone() const;
+    U_I18N_API const TimeZone& getTimeZone() const U_LIFETIME_BOUND;
 
     /**
      * Returns the time zone owned by this calendar. The caller owns the returned object
@@ -1443,7 +1443,7 @@ protected:
      * @param right    Calendar object to be copied
      * @stable ICU 2.0
      */
-    U_I18N_API Calendar& operator=(const Calendar& right);
+    U_I18N_API Calendar& operator=(const Calendar& right) U_LIFETIME_BOUND;
 
     /**
      * Constructs a Calendar with the given time zone and locale. Clients are no longer
@@ -2485,7 +2485,8 @@ private:
      *  @return the locale
      *  @internal
      */
-    U_I18N_API const char* getLocaleID(ULocDataLocaleType type, UErrorCode& status) const;
+    U_I18N_API const char* getLocaleID(ULocDataLocaleType type,
+                                       UErrorCode& status) const U_LIFETIME_BOUND;
 #endif  /* U_HIDE_INTERNAL_API */
 
 private:
@@ -2493,7 +2494,7 @@ private:
      * Cast TimeZone used by this object to BasicTimeZone, or nullptr if the TimeZone
      * is not an instance of BasicTimeZone.
      */
-    BasicTimeZone* getBasicTimeZone() const;
+    BasicTimeZone* getBasicTimeZone() const U_LIFETIME_BOUND;
 
     /**
      * Find the previous zone transition near the given time.
