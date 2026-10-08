@@ -605,8 +605,12 @@ static UResourceDataEntry *init_entry(const char *localeID, const char *path, UE
                     // No tracing: called during initial data loading
                     const char16_t *alias = res_getStringNoTrace(&(r->fData), aliasres, &aliasLen);
                     if(alias != nullptr && aliasLen > 0) { /* if there is actual alias - unload and load new data */
-                        u_UCharsToChars(alias, aliasName, aliasLen+1);
-                        r->fAlias = init_entry(aliasName, path, status);
+                        if (aliasLen >= static_cast<int32_t>(sizeof(aliasName))) {
+                            r->fBogus = *status = U_INVALID_FORMAT_ERROR;
+                        } else {
+                            u_UCharsToChars(alias, aliasName, aliasLen + 1);
+                            r->fAlias = init_entry(aliasName, path, status);
+                        }
                     }
                 }
             }
