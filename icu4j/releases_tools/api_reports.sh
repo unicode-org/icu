@@ -22,7 +22,8 @@ mvn clean -q --batch-mode
 # Build everything
 mvn install -q --batch-mode -DskipITs -DskipTests
 # Gather API info
-mvn site -q --batch-mode -DskipITs -DskipTests -P gatherapi > /dev/null
+mkdir target
+mvn site -q --batch-mode -DskipITs -DskipTests -P gatherapi > target/mvn_site.log
 
 checkFileCreated "${out_dir}/icu4j${api_report_version}.api3.gz"
 
