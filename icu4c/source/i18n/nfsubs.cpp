@@ -644,8 +644,8 @@ NFSubstitution::doSubstitution(double number, UnicodeString& toInsertInto, int32
 
     if (uprv_isInfinite(numberToFormat)) {
         // This is probably a minus rule. Combine it with an infinite rule.
-        const NFRule *infiniteRule = ruleSet->findDoubleRule(uprv_getInfinity());
-        infiniteRule->doFormat(numberToFormat, toInsertInto, _pos + this->pos, recursionCount, status);
+        // Route through NFRuleSet::format() to enforce RECURSION_LIMIT.
+        ruleSet->format(numberToFormat, toInsertInto, _pos + this->pos, recursionCount, status);
         return;
     }
 
