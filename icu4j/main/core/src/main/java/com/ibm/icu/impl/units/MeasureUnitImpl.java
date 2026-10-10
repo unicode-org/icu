@@ -306,13 +306,6 @@ public class MeasureUnitImpl {
                 firstTimeNegativeDimension = false;
             }
 
-            if (firstTimeNegativeDimension && this.constantDenominator > 0) {
-                result.append("-per-");
-                result.append(getConstantsString(this.constantDenominator));
-                firstTimeNegativeDimension = false;
-                isConstantDenominatorAdded = true;
-            }
-
             if (this.getComplexity() == MeasureUnit.Complexity.MIXED) {
                 if (result.length() != 0) {
                     result.append("-and-");
@@ -323,6 +316,12 @@ public class MeasureUnitImpl {
                         result.append("per-");
                     } else {
                         result.append("-per-");
+                    }
+
+                    if (this.constantDenominator > 0) {
+                        result.append(getConstantsString(this.constantDenominator));
+                        result.append("-");
+                        isConstantDenominatorAdded = true;
                     }
                 } else {
                     if (result.length() != 0) {
