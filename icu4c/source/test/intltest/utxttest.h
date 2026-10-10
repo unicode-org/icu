@@ -40,6 +40,7 @@ public:
     void Ticket12130();
     void Ticket13344();
     void Ticket23508();
+    void Ticket23556();
     void AccessChangesChunkSize();
 
 private:
