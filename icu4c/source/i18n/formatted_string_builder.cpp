@@ -151,7 +151,7 @@ FormattedStringBuilder::insertCodePoint(int32_t index, UChar32 codePoint, Field 
     int32_t count = U16_LENGTH(codePoint);
     int32_t position = prepareForInsert(index, count, status);
     if (U_FAILURE(status)) {
-        return count;
+        return 0;
     }
     auto* charPtr = getCharPtr();
     auto* fieldPtr = getFieldPtr();
@@ -185,7 +185,7 @@ FormattedStringBuilder::insert(int32_t index, const UnicodeString &unistr, int32
     int32_t count = end - start;
     int32_t position = prepareForInsert(index, count, status);
     if (U_FAILURE(status)) {
-        return count;
+        return 0;
     }
     for (int32_t i = 0; i < count; i++) {
         getCharPtr()[position + i] = unistr.charAt(start + i);
@@ -201,7 +201,7 @@ FormattedStringBuilder::splice(int32_t startThis, int32_t endThis,  const Unicod
     int32_t otherLength = endOther - startOther;
     int32_t count = otherLength - thisLength;
     if (U_FAILURE(status)) {
-        return count;
+        return 0;
     }
     int32_t position;
     if (count > 0) {
@@ -212,7 +212,7 @@ FormattedStringBuilder::splice(int32_t startThis, int32_t endThis,  const Unicod
         position = remove(startThis, -count);
     }
     if (U_FAILURE(status)) {
-        return count;
+        return 0;
     }
     for (int32_t i = 0; i < otherLength; i++) {
         getCharPtr()[position + i] = unistr.charAt(startOther + i);
@@ -241,7 +241,7 @@ FormattedStringBuilder::insert(int32_t index, const FormattedStringBuilder &othe
     }
     int32_t position = prepareForInsert(index, count, status);
     if (U_FAILURE(status)) {
-        return count;
+        return 0;
     }
     for (int32_t i = 0; i < count; i++) {
         getCharPtr()[position + i] = other.charAt(i);
@@ -261,15 +261,15 @@ void FormattedStringBuilder::writeTerminator(UErrorCode& status) {
 }
 
 int32_t FormattedStringBuilder::prepareForInsert(int32_t index, int32_t count, UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return -1;
+    }
     U_ASSERT(index >= 0);
     U_ASSERT(index <= fLength);
     U_ASSERT(count >= 0);
     U_ASSERT(fZero >= 0);
     U_ASSERT(fLength >= 0);
     U_ASSERT(getCapacity() - fZero >= fLength);
-    if (U_FAILURE(status)) {
-        return count;
-    }
     if (index == 0 && fZero - count >= 0) {
         // Append to start
         fZero -= count;

@@ -511,6 +511,7 @@ int32_t NumberFormatterImpl::writeAffixes(
         int32_t start,
         int32_t end,
         UErrorCode& status) {
+    if (U_FAILURE(status)) { return 0; }
     U_ASSERT(micros.modOuter != nullptr);
     // Always apply the inner modifier (which is "strong").
     int32_t length = micros.modInner->apply(string, start, end, status);

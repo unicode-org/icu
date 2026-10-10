@@ -144,6 +144,10 @@ void ModifiersTest::testCurrencySpacingEnabledModifier() {
     assertSuccess("Spot 12", status);
     assertModifierEquals(mod3, 3, true, u"USD|\u00A0XYZ", u"$$$nn$$$", status);
     assertSuccess("Spot 13", status);
+
+    UErrorCode failStatus = U_INPUT_TOO_LONG_ERROR;
+    assertEquals("apply with failed status and stale rightIndex",
+                 0, mod3.apply(sb, 0, 1000, failStatus));
 }
 
 void ModifiersTest::assertModifierEquals(const Modifier &mod, int32_t expectedPrefixLength,

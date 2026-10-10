@@ -258,7 +258,9 @@ void NumberRangeFormatterImpl::formatApproximately (UFormattedNumberRangeData& d
         // Re-format using the approximately formatter:
         MicroProps microsAppx;
         fApproximatelyFormatter.preProcess(quantity, microsAppx, status);
+        if (U_FAILURE(status)) { return; }
         int32_t length = NumberFormatterImpl::writeNumber(microsAppx.simple, quantity, data.getStringRef(), 0, status);
+        if (U_FAILURE(status)) { return; }
         length += microsAppx.modInner->apply(data.getStringRef(), 0, length, status);
         length += microsAppx.modMiddle->apply(data.getStringRef(), 0, length, status);
         microsAppx.modOuter->apply(data.getStringRef(), 0, length, status);
@@ -383,6 +385,7 @@ void NumberRangeFormatterImpl::formatRange(UFormattedNumberRangeData& data,
             if (!PatternProps::isWhiteSpace(string.charAt(UPRV_INDEX_2 - 1))) {
                 lengthInfix += string.insertCodePoint(UPRV_INDEX_2, u'\u0020', kUndefinedField, status);
             }
+            if (U_FAILURE(status)) { return; }
         }
     }
 
@@ -391,6 +394,7 @@ void NumberRangeFormatterImpl::formatRange(UFormattedNumberRangeData& data,
     FormattedStringBuilder tempString;
     NumberFormatterImpl::writeNumber(micros2.simple, data.quantity2, tempString, 0, status);
     length2 += string.insert(UPRV_INDEX_2, tempString, status);
+    if (U_FAILURE(status)) { return; }
 
     // TODO: Support padding?
 
@@ -403,6 +407,7 @@ void NumberRangeFormatterImpl::formatRange(UFormattedNumberRangeData& data,
         length1 += micros1.modInner->apply(string, UPRV_INDEX_0, UPRV_INDEX_1, status);
         length2 += micros2.modInner->apply(string, UPRV_INDEX_2, UPRV_INDEX_4, status);
     }
+    if (U_FAILURE(status)) { return; }
 
     if (collapseMiddle) {
         const Modifier& mod = resolveModifierPlurals(*micros1.modMiddle, *micros2.modMiddle);
@@ -413,6 +418,7 @@ void NumberRangeFormatterImpl::formatRange(UFormattedNumberRangeData& data,
         length1 += micros1.modMiddle->apply(string, UPRV_INDEX_0, UPRV_INDEX_1, status);
         length2 += micros2.modMiddle->apply(string, UPRV_INDEX_2, UPRV_INDEX_4, status);
     }
+    if (U_FAILURE(status)) { return; }
 
     if (collapseOuter) {
         const Modifier& mod = resolveModifierPlurals(*micros1.modOuter, *micros2.modOuter);
@@ -423,6 +429,7 @@ void NumberRangeFormatterImpl::formatRange(UFormattedNumberRangeData& data,
         length1 += micros1.modOuter->apply(string, UPRV_INDEX_0, UPRV_INDEX_1, status);
         length2 += micros2.modOuter->apply(string, UPRV_INDEX_2, UPRV_INDEX_4, status);
     }
+    if (U_FAILURE(status)) { return; }
 
     // Now that all pieces are added, save the span info.
     data.appendSpanInfo(UFIELD_CATEGORY_NUMBER_RANGE_SPAN, 0, UPRV_INDEX_0, length1, status);

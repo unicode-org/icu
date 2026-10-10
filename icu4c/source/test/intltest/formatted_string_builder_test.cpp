@@ -96,6 +96,30 @@ void FormattedStringBuilderTest::testInsertAppendUnicodeString() {
         assertSuccess("Appending again to sb5", status);
         assertEqualsImpl(sb4, sb5);
     }
+
+    {
+        FormattedStringBuilder sb;
+        sb.append(u"abc", kUndefinedField, status);
+        assertSuccess("Setup sb", status);
+        FormattedStringBuilder other;
+        other.append(u"xyz", kUndefinedField, status);
+        assertSuccess("Setup other", status);
+
+        UErrorCode failStatus = U_ILLEGAL_ARGUMENT_ERROR;
+        assertEquals("insertCodePoint on failure", 0,
+                     sb.insertCodePoint(0, u'X', kUndefinedField, failStatus));
+        assertEquals("insert(UnicodeString) on failure", 0,
+                     sb.insert(0, u"def", kUndefinedField, failStatus));
+        assertEquals("insert(UnicodeString, start, end) on failure", 0,
+                     sb.insert(0, u"def", 0, 3, kUndefinedField, failStatus));
+        assertEquals("splice on failure", 0,
+                     sb.splice(0, 1, u"def", 0, 3, kUndefinedField, failStatus));
+        assertEquals("insert(FormattedStringBuilder) on failure", 0,
+                     sb.insert(0, other, failStatus));
+        assertEquals("append(FormattedStringBuilder) on failure", 0,
+                     sb.append(other, failStatus));
+        assertEquals("sb length unchanged after failed operations", 3, sb.length());
+    }
 }
 
 void FormattedStringBuilderTest::testSplice() {
@@ -344,28 +368,31 @@ void FormattedStringBuilderTest::testInsertOverflow() {
     infoln("# log: setup 3 done, ustr len %d", ustr.length());
 
     // Test splice() of the second UnicodeString
-    sb.splice(0, 1, ustr, 1, ustr.length(),
-              kUndefinedField, status);
+    int32_t inserted = sb.splice(0, 1, ustr, 1, ustr.length(),
+                                 kUndefinedField, status);
     infoln("# log: sb.splice 1 done, sb len %d, status %s", sb.length(), u_errorName(status));
     assertEquals(
         "splice() long text should not crash but return U_INPUT_TOO_LONG_ERROR",
         U_INPUT_TOO_LONG_ERROR, status);
+    assertEquals("splice() should return 0 on failure", 0, inserted);
 
     // Test sb.insert() of the first FormattedStringBuilder with the second one.
     status = U_ZERO_ERROR;
-    sb.insert(0, sb2, status);
+    inserted = sb.insert(0, sb2, status);
     infoln("# log: sb.insert 1 done, sb len %d, status %s", sb.length(), u_errorName(status));
     assertEquals(
         "insert() long FormattedStringBuilder should not crash but return "
         "U_INPUT_TOO_LONG_ERROR", U_INPUT_TOO_LONG_ERROR, status);
+    assertEquals("insert(FormattedStringBuilder) should return 0 on failure", 0, inserted);
 
     // Test sb.insert() of the first FormattedStringBuilder with UnicodeString.
     status = U_ZERO_ERROR;
-    sb.insert(0, ustr, 0, ustr.length(), kUndefinedField, status);
+    inserted = sb.insert(0, ustr, 0, ustr.length(), kUndefinedField, status);
     infoln("# log: sb.insert 2 done, sb len %d, status %s", sb.length(), u_errorName(status));
     assertEquals(
         "insert() long UnicodeString should not crash but return "
         "U_INPUT_TOO_LONG_ERROR", U_INPUT_TOO_LONG_ERROR, status);
+    assertEquals("insert(UnicodeString) should return 0 on failure", 0, inserted);
 }
 
 void FormattedStringBuilderTest::assertEqualsImpl(const UnicodeString &a, const FormattedStringBuilder &b) {

@@ -246,23 +246,27 @@ bool SimpleModifier::strictEquals(const Modifier& other) const {
 int32_t
 SimpleModifier::formatAsPrefixSuffix(FormattedStringBuilder &result, int32_t startIndex, int32_t endIndex,
                                      UErrorCode &status) const {
+    if (U_FAILURE(status)) {
+        return 0;
+    }
     if (fSuffixOffset == -1 && fPrefixLength + fSuffixLength > 0) {
         // There is no argument for the inner number; overwrite the entire segment with our string.
         return result.splice(startIndex, endIndex, fCompiledPattern, 2, 2 + fPrefixLength, fField, status);
     } else {
+        int32_t length = 0;
         if (fPrefixLength > 0) {
-            result.insert(startIndex, fCompiledPattern, 2, 2 + fPrefixLength, fField, status);
+            length += result.insert(startIndex, fCompiledPattern, 2, 2 + fPrefixLength, fField, status);
         }
         if (fSuffixLength > 0) {
-            result.insert(
-                    endIndex + fPrefixLength,
+            length += result.insert(
+                    endIndex + length,
                     fCompiledPattern,
                     1 + fSuffixOffset,
                     1 + fSuffixOffset + fSuffixLength,
                     fField,
                     status);
         }
-        return fPrefixLength + fSuffixLength;
+        return length;
     }
 }
 
@@ -271,6 +275,9 @@ int32_t
 SimpleModifier::formatTwoArgPattern(const SimpleFormatter& compiled, FormattedStringBuilder& result,
                                     int32_t index, int32_t* outPrefixLength, int32_t* outSuffixLength,
                                     Field field, UErrorCode& status) {
+    if (U_FAILURE(status)) {
+        return 0;
+    }
     const UnicodeString& compiledPattern = compiled.compiledPattern;
     int32_t argLimit = SimpleFormatter::getArgumentLimit(
             compiledPattern.getBuffer(), compiledPattern.length());
@@ -316,6 +323,9 @@ SimpleModifier::formatTwoArgPattern(const SimpleFormatter& compiled, FormattedSt
         offset++;
         result.insert(index + length, compiledPattern, offset, offset + suffixLength, field, status);
         length += suffixLength;
+    }
+    if (U_FAILURE(status)) {
+        return 0;
     }
 
     *outPrefixLength = prefixLength;
@@ -414,6 +424,9 @@ CurrencySpacingEnabledModifier::CurrencySpacingEnabledModifier(const FormattedSt
 
 int32_t CurrencySpacingEnabledModifier::apply(FormattedStringBuilder &output, int leftIndex, int rightIndex,
                                               UErrorCode &status) const {
+    if (U_FAILURE(status)) {
+        return 0;
+    }
     // Currency spacing logic
     int length = 0;
     if (rightIndex - leftIndex > 0 && !fAfterPrefixUnicodeSet.isBogus() &&
@@ -426,7 +439,7 @@ int32_t CurrencySpacingEnabledModifier::apply(FormattedStringBuilder &output, in
             status);
     }
     if (rightIndex - leftIndex > 0 && !fBeforeSuffixUnicodeSet.isBogus() &&
-        fBeforeSuffixUnicodeSet.contains(output.codePointBefore(rightIndex))) {
+        fBeforeSuffixUnicodeSet.contains(output.codePointBefore(rightIndex + length))) {
         // TODO: Should we use the CURRENCY field here?
         length += output.insert(
             rightIndex + length,
@@ -446,6 +459,9 @@ CurrencySpacingEnabledModifier::applyCurrencySpacing(FormattedStringBuilder &out
                                                      int32_t suffixLen,
                                                      const DecimalFormatSymbols &symbols,
                                                      UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return 0;
+    }
     int length = 0;
     bool hasPrefix = (prefixLen > 0);
     bool hasSuffix = (suffixLen > 0);
