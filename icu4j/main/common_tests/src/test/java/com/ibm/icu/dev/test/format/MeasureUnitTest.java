@@ -1984,6 +1984,32 @@ public class MeasureUnitTest extends CoreTestFmwk {
         verifySingleUnit(kilometer2, MeasureUnit.MeasurePrefix.KILO, 1, "kilometer");
         assertTrue("kilometer equality", kilometer.equals(kilometer2));
 
+        MeasureUnit per100Kilometer = MeasureUnit.forIdentifier("per-100-kilometer");
+        MeasureUnit per100KilometerFromDimensionless = per100Kilometer.product(dimensionless);
+        String per100KilometerSub[] = {"per-kilometer"};
+        verifyCompoundUnit(
+                per100KilometerFromDimensionless,
+                "per-100-kilometer",
+                per100KilometerSub,
+                per100KilometerSub.length);
+        assertEquals(
+                "per-100-kilometer constant denominator",
+                100L,
+                per100KilometerFromDimensionless.getConstantDenominator());
+
+        MeasureUnit per100SquareKilometer =
+                MeasureUnit.forIdentifier("per-kilometer").product(per100Kilometer);
+        String per100SquareKilometerSub[] = {"per-square-kilometer"};
+        verifyCompoundUnit(
+                per100SquareKilometer,
+                "per-100-square-kilometer",
+                per100SquareKilometerSub,
+                per100SquareKilometerSub.length);
+        assertEquals(
+                "per-100-square-kilometer constant denominator",
+                100L,
+                per100SquareKilometer.getConstantDenominator());
+
         // Test out-of-range powers
         MeasureUnit power15 = MeasureUnit.forIdentifier("pow15-kilometer");
         verifySingleUnit(power15, MeasureUnit.MeasurePrefix.KILO, 15, "pow15-kilometer");
