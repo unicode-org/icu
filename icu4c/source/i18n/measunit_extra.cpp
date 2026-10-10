@@ -1249,10 +1249,10 @@ SingleUnitImpl SingleUnitImpl::forMeasureUnit(const MeasureUnit& measureUnit, UE
     if (U_FAILURE(status)) {
         return {};
     }
-    if (impl.singleUnits.length() == 0) {
+    if (impl.singleUnits.length() == 0 && impl.constantDenominator == 0) {
         return {};
     }
-    if (impl.singleUnits.length() == 1) {
+    if (impl.singleUnits.length() == 1 && impl.constantDenominator == 0) {
         return *impl.singleUnits[0];
     }
     status = U_ILLEGAL_ARGUMENT_ERROR;
