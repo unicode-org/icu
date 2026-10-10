@@ -87,26 +87,35 @@ public class MeasureUnitImpl {
      */
     public MeasureUnitImpl copyAndSimplify() {
         MeasureUnitImpl result = new MeasureUnitImpl();
-        for (SingleUnitImpl singleUnit : this.getSingleUnits()) {
+        for (int i = 0; i < this.getSingleUnits().size(); i++) {
+            SingleUnitImpl singleUnit = this.getSingleUnits().get(i);
             // This `for` loop will cause time complexity to be O(n^2).
             // However, n is very small (number of units, generally, at maximum equal to 10)
-            boolean unitExist = false;
-            for (SingleUnitImpl resultSingleUnit : result.getSingleUnits()) {
-                if (resultSingleUnit.getSimpleUnitID().compareTo(singleUnit.getSimpleUnitID()) == 0
-                        && resultSingleUnit
+            boolean alreadySimplified = false;
+            int dimensionality = singleUnit.getDimensionality();
+            for (int j = 0; j < this.getSingleUnits().size(); j++) {
+                if (i == j) {
+                    continue;
+                }
+                SingleUnitImpl otherSingleUnit = this.getSingleUnits().get(j);
+                if (otherSingleUnit.getSimpleUnitID().compareTo(singleUnit.getSimpleUnitID()) == 0
+                        && otherSingleUnit
                                         .getPrefix()
                                         .getIdentifier()
                                         .compareTo(singleUnit.getPrefix().getIdentifier())
                                 == 0) {
-                    unitExist = true;
-                    resultSingleUnit.setDimensionality(
-                            resultSingleUnit.getDimensionality() + singleUnit.getDimensionality());
-                    break;
+                    if (j < i) {
+                        alreadySimplified = true;
+                        break;
+                    }
+                    dimensionality += otherSingleUnit.getDimensionality();
                 }
             }
 
-            if (!unitExist) {
-                result.appendSingleUnit(singleUnit);
+            if (!alreadySimplified && dimensionality != 0) {
+                SingleUnitImpl simplifiedSingleUnit = singleUnit.copy();
+                simplifiedSingleUnit.setDimensionality(dimensionality);
+                result.appendSingleUnit(simplifiedSingleUnit);
             }
         }
 

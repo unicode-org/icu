@@ -1361,23 +1361,30 @@ MeasureUnitImpl MeasureUnitImpl::copyAndSimplify(UErrorCode &status) const {
     MeasureUnitImpl result;
     for (int32_t i = 0; i < singleUnits.length(); i++) {
         const SingleUnitImpl &singleUnit = *this->singleUnits[i];
-        
+
         // The following `for` loop will cause time complexity to be O(n^2).
         // However, n is very small (number of units, generally, at maximum equal to 10)
-        bool unitExist = false;
-        for (int32_t j = 0; j < result.singleUnits.length(); j++) {
-            if (uprv_strcmp(result.singleUnits[j]->getSimpleUnitID(), singleUnit.getSimpleUnitID()) ==
+        bool alreadySimplified = false;
+        int32_t dimensionality = singleUnit.dimensionality;
+        for (int32_t j = 0; j < singleUnits.length(); j++) {
+            if (i == j) {
+                continue;
+            }
+            if (uprv_strcmp(this->singleUnits[j]->getSimpleUnitID(), singleUnit.getSimpleUnitID()) ==
                     0 &&
-                result.singleUnits[j]->unitPrefix == singleUnit.unitPrefix) {
-                unitExist = true;
-                result.singleUnits[j]->dimensionality =
-                    result.singleUnits[j]->dimensionality + singleUnit.dimensionality;
-                break;
+                this->singleUnits[j]->unitPrefix == singleUnit.unitPrefix) {
+                if (j < i) {
+                    alreadySimplified = true;
+                    break;
+                }
+                dimensionality += this->singleUnits[j]->dimensionality;
             }
         }
 
-        if (!unitExist) {
-            result.appendSingleUnit(singleUnit, status);
+        if (!alreadySimplified && dimensionality != 0) {
+            SingleUnitImpl simplifiedSingleUnit = singleUnit;
+            simplifiedSingleUnit.dimensionality = dimensionality;
+            result.appendSingleUnit(simplifiedSingleUnit, status);
         }
     }
 
