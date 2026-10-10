@@ -878,12 +878,12 @@ public class MeasureUnitImpl {
             public static Token tokenWithConstant(String constantStr) {
                 BigDecimal unitConstantValue = new BigDecimal(constantStr);
                 if (unitConstantValue.scale() <= 0
-                        && unitConstantValue.compareTo(BigDecimal.ZERO) >= 0
+                        && unitConstantValue.compareTo(BigDecimal.ZERO) > 0
                         && unitConstantValue.compareTo(BigDecimal.valueOf(Long.MAX_VALUE)) <= 0) {
                     return new Token(unitConstantValue.longValueExact(), Type.TYPE_UNIT_CONSTANT);
                 } else {
                     throw new IllegalArgumentException(
-                            "The unit constant value is not a valid non-negative long integer.");
+                            "The unit constant value is not a valid positive long integer.");
                 }
             }
 
