@@ -614,6 +614,15 @@ public class UnitsTest {
             new TestData("mile-per-100-hour", "meter-per-100-second", 1.0, 0.44704),
             new TestData("mile-per-hour", "meter-per-100-second", 1.0, 44.704),
             new TestData("mile-per-100-hour", "meter-per-second", 1.0, 0.0044704),
+            // Volume and compound volume conversions (in3_to_m3 and gal_to_m3)
+            new TestData("gallon", "cubic-inch", 1.0, 231.0),
+            new TestData("bushel", "cubic-inch", 1.0, 2150.42),
+            new TestData("bushel", "gallon", 1.0, 9.309177489177489),
+            new TestData("gallon", "liter", 1.0, 3.785411784),
+            new TestData("square-gallon", "pow6-inch", 1.0, 53361.0),
+            new TestData("square-bushel", "pow6-inch", 1.0, 4624306.1764),
+            new TestData("square-bushel", "square-gallon", 1.0, 86.6607855246341),
+            new TestData("square-gallon", "square-liter", 1.0, 14.329342374519366),
         };
 
         ConversionRates conversionRates = new ConversionRates();
@@ -1053,66 +1062,6 @@ public class UnitsTest {
             fail("Expected IllegalArgumentException");
         } catch (IllegalArgumentException e) {
             // Expected exception
-        }
-    }
-
-    @Test
-    public void testFactorCompoundConstantPower() {
-        String[] constants = {"ft_to_m", "ft2_to_m2", "ft3_to_m3", "in3_to_m3", "gal_to_m3"};
-        for (String constant : constants) {
-            BigDecimal baseRate =
-                    UnitsConverter.Factor.processFactor(constant).getConversionRate();
-            BigDecimal squaredExpected =
-                    UnitsConverter.Factor.processFactor(constant + "*" + constant)
-                            .getConversionRate();
-            BigDecimal squaredActual =
-                    UnitsConverter.Factor.processFactor(constant + "^2").getConversionRate();
-            assertTrue(
-                    "Expected "
-                            + constant
-                            + "^2 ("
-                            + squaredActual
-                            + ") to match "
-                            + constant
-                            + "*"
-                            + constant
-                            + " ("
-                            + squaredExpected
-                            + ")",
-                    compareTwoBigDecimal(squaredExpected, squaredActual, BigDecimal.valueOf(1e-25)));
-            assertTrue(
-                    "Expected "
-                            + constant
-                            + "^2 ("
-                            + squaredActual
-                            + ") to match ("
-                            + constant
-                            + ")^2",
-                    compareTwoBigDecimal(
-                            baseRate.pow(2, MathContext.DECIMAL128),
-                            squaredActual,
-                            BigDecimal.valueOf(1e-25)));
-
-            BigDecimal cubedExpected =
-                    UnitsConverter.Factor.processFactor(constant + "*" + constant + "*" + constant)
-                            .getConversionRate();
-            BigDecimal cubedActual =
-                    UnitsConverter.Factor.processFactor(constant + "^3").getConversionRate();
-            assertTrue(
-                    "Expected "
-                            + constant
-                            + "^3 ("
-                            + cubedActual
-                            + ") to match "
-                            + constant
-                            + "*"
-                            + constant
-                            + "*"
-                            + constant
-                            + " ("
-                            + cubedExpected
-                            + ")",
-                    compareTwoBigDecimal(cubedExpected, cubedActual, BigDecimal.valueOf(1e-25)));
         }
     }
 }

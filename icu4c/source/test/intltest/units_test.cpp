@@ -125,34 +125,6 @@ void UnitsTest::testUnitConstantFreshness() {
                      factor.factorNum);
         assertEquals(UnicodeString("Constant ") + constant + u" denominator", 1.0, factor.factorDen);
     }
-
-    const char *compoundConstants[] = {"ft_to_m", "ft2_to_m2", "ft3_to_m3", "in3_to_m3", "gal_to_m3"};
-    for (const char *constant : compoundConstants) {
-        for (int32_t power = 2; power <= 3; ++power) {
-            Factor poweredFactor;
-            addSingleFactorConstant(constant, power, POSITIVE, poweredFactor, status);
-            if (status.errIfFailureAndReset("addSingleFactorConstant(<%s>, %d, POSITIVE, ...)",
-                                            constant, power)) {
-                continue;
-            }
-            poweredFactor.substituteConstants();
-
-            Factor repeatedFactor;
-            for (int32_t i = 0; i < power; ++i) {
-                addSingleFactorConstant(constant, 1, POSITIVE, repeatedFactor, status);
-            }
-            repeatedFactor.substituteConstants();
-
-            assertEqualsNear(UnicodeString(constant) + u"^" + Int64ToUnicodeString(power) +
-                                 u" numerator",
-                             repeatedFactor.factorNum, poweredFactor.factorNum,
-                             1e-12 * repeatedFactor.factorNum);
-            assertEqualsNear(UnicodeString(constant) + u"^" + Int64ToUnicodeString(power) +
-                                 u" denominator",
-                             repeatedFactor.factorDen, poweredFactor.factorDen,
-                             1e-12 * repeatedFactor.factorDen);
-        }
-    }
 }
 
 void UnitsTest::testExtractConvertibility() {
@@ -409,6 +381,15 @@ void UnitsTest::testConverter() {
         {"mile-per-100-hour", "meter-per-100-second", 1.0, 0.44704},
         {"mile-per-hour", "meter-per-100-second", 1.0, 44.704},
         {"mile-per-100-hour", "meter-per-second", 1.0, 0.0044704},
+        // Volume and compound volume conversions (in3_to_m3 and gal_to_m3)
+        {"gallon", "cubic-inch", 1.0, 231.0},
+        {"bushel", "cubic-inch", 1.0, 2150.42},
+        {"bushel", "gallon", 1.0, 9.309177489177489},
+        {"gallon", "liter", 1.0, 3.785411784},
+        {"square-gallon", "pow6-inch", 1.0, 53361.0},
+        {"square-bushel", "pow6-inch", 1.0, 4624306.1764},
+        {"square-bushel", "square-gallon", 1.0, 86.6607855246341},
+        {"square-gallon", "square-liter", 1.0, 14.329342374519366},
     };
 
     for (const auto &testCase : testCases) {

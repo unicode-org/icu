@@ -314,7 +314,7 @@ public class UnitsConverter {
     }
 
     /** Responsible for all the Factor operation NOTE: This class is immutable */
-    public static class Factor {
+    static class Factor {
         private BigDecimal factorNum;
         private BigDecimal factorDen;
 
