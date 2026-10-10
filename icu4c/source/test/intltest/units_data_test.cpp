@@ -57,6 +57,8 @@ void UnitsDataTest::testGetUnitCategory() {
         {"cubic-meter-per-meter", "consumption"},
         {"meter-per-cubic-meter", "consumption"},
         {"kilogram-meter-per-square-meter-square-second", "pressure"},
+        {"meter-second-per-meter", "duration"},
+        {"kilogram-meter-per-meter-cubic-meter", "mass-density"},
     };
 
     IcuTestErrorCode status(*this, "testGetUnitCategory");

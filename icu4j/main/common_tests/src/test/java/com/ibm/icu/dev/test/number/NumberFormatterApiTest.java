@@ -2198,6 +2198,17 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
                 1,
                 "0.019 psi");
 
+        assertFormatSingle(
+                "meter-second-per-meter simplifies when matching category",
+                "unit/meter-second-per-meter usage/default",
+                "unit/meter-second-per-meter usage/default",
+                NumberFormatter.with()
+                        .unit(MeasureUnit.forIdentifier("meter-second-per-meter"))
+                        .usage("default"),
+                new ULocale("en-US"),
+                1,
+                "1 sec");
+
         // ICU-22105
         assertFormatSingle(
                 "negative temperature conversion",
