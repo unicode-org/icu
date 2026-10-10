@@ -6868,14 +6868,20 @@ void MeasureFormatTest::TestCompoundUnitOperations() {
 
     // Don't allow get/set power or SI or binary prefix on compound units
     status.errIfFailureAndReset();
-    meterSecond.getDimensionality(status);
-    status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
-    meterSecond.withDimensionality(3, status);
-    status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
-    meterSecond.getPrefix(status);
-    status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
-    meterSecond.withPrefix(UMEASURE_PREFIX_CENTI, status);
-    status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
+    for (const MeasureUnit& compoundUnit : {
+            meterSecond,
+            MeasureUnit::forIdentifier("per-100-kilometer", status),
+            MeasureUnit::forIdentifier("meter-per-100", status)}) {
+        status.errIfFailureAndReset();
+        compoundUnit.getDimensionality(status);
+        status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
+        compoundUnit.withDimensionality(3, status);
+        status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
+        compoundUnit.getPrefix(status);
+        status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
+        compoundUnit.withPrefix(UMEASURE_PREFIX_CENTI, status);
+        status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
+    }
 
     // Test that StringPiece does not overflow
     MeasureUnit centimeter3 = MeasureUnit::forIdentifier({secondCentimeter.getIdentifier(), 10}, status);
