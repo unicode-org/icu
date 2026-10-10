@@ -47,9 +47,10 @@ jobs:
                 cache-dependency-path: |
                     tools/commit-checker/Pipfile
                     tools/commit-checker/Pipfile.lock
+            # https://stackoverflow.com/questions/53807511/pip-cannot-uninstall-package-it-is-a-distutils-installed-project
             - name: Install pipenv
               run: |
-                sudo pip3 install pipenv
+                sudo pip3 install --ignore-installed pipenv
             - name: Generate report
               env:
                 JIRA_USERNAME: ${{ secrets.COMMIT_CHECKER_JIRA_EMAIL }}
