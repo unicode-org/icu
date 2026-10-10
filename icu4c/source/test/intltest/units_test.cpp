@@ -125,6 +125,34 @@ void UnitsTest::testUnitConstantFreshness() {
                      factor.factorNum);
         assertEquals(UnicodeString("Constant ") + constant + u" denominator", 1.0, factor.factorDen);
     }
+
+    const char *compoundConstants[] = {"ft_to_m", "ft2_to_m2", "ft3_to_m3", "in3_to_m3", "gal_to_m3"};
+    for (const char *constant : compoundConstants) {
+        for (int32_t power = 2; power <= 3; ++power) {
+            Factor poweredFactor;
+            addSingleFactorConstant(constant, power, POSITIVE, poweredFactor, status);
+            if (status.errIfFailureAndReset("addSingleFactorConstant(<%s>, %d, POSITIVE, ...)",
+                                            constant, power)) {
+                continue;
+            }
+            poweredFactor.substituteConstants();
+
+            Factor repeatedFactor;
+            for (int32_t i = 0; i < power; ++i) {
+                addSingleFactorConstant(constant, 1, POSITIVE, repeatedFactor, status);
+            }
+            repeatedFactor.substituteConstants();
+
+            assertEqualsNear(UnicodeString(constant) + u"^" + Int64ToUnicodeString(power) +
+                                 u" numerator",
+                             repeatedFactor.factorNum, poweredFactor.factorNum,
+                             1e-12 * repeatedFactor.factorNum);
+            assertEqualsNear(UnicodeString(constant) + u"^" + Int64ToUnicodeString(power) +
+                                 u" denominator",
+                             repeatedFactor.factorDen, poweredFactor.factorDen,
+                             1e-12 * repeatedFactor.factorDen);
+        }
+    }
 }
 
 void UnitsTest::testExtractConvertibility() {

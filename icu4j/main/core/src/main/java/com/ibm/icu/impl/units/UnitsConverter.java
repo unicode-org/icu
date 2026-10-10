@@ -314,7 +314,7 @@ public class UnitsConverter {
     }
 
     /** Responsible for all the Factor operation NOTE: This class is immutable */
-    static class Factor {
+    public static class Factor {
         private BigDecimal factorNum;
         private BigDecimal factorDen;
 
@@ -612,11 +612,16 @@ public class UnitsConverter {
                 this.exponentFtToM += 3 * power;
             } else if ("in3_to_m3".equals(entity)) {
                 this.exponentFtToM += 3 * power;
-                this.factorDen = this.factorDen.multiply(BigDecimal.valueOf(Math.pow(12, 3)));
+                this.factorDen =
+                        this.factorDen.multiply(
+                                BigDecimal.valueOf(12 * 12 * 12).pow(power, DECIMAL128));
             } else if ("gal_to_m3".equals(entity)) {
-                this.factorNum = this.factorNum.multiply(BigDecimal.valueOf(231));
+                this.factorNum =
+                        this.factorNum.multiply(BigDecimal.valueOf(231).pow(power, DECIMAL128));
                 this.exponentFtToM += 3 * power;
-                this.factorDen = this.factorDen.multiply(BigDecimal.valueOf(12 * 12 * 12));
+                this.factorDen =
+                        this.factorDen.multiply(
+                                BigDecimal.valueOf(12 * 12 * 12).pow(power, DECIMAL128));
             } else if ("gal_imp_to_m3".equals(entity)) {
                 this.exponentGalImpToM3 += power;
             } else if ("G".equals(entity)) {
