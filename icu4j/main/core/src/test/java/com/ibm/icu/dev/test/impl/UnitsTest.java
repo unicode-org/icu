@@ -1113,6 +1113,30 @@ public class UnitsTest {
                             + cubedExpected
                             + ")",
                     compareTwoBigDecimal(cubedExpected, cubedActual, BigDecimal.valueOf(1e-25)));
+
+            for (int power = 1; power <= 3; power++) {
+                String expr = power == 1 ? "1/" + constant : "1/" + constant + "^" + power;
+                BigDecimal reciprocalExpected =
+                        BigDecimal.ONE.divide(
+                                baseRate.pow(power, MathContext.DECIMAL128),
+                                MathContext.DECIMAL128);
+                BigDecimal reciprocalActual =
+                        UnitsConverter.Factor.processFactor(expr).getConversionRate();
+                assertTrue(
+                        "Expected "
+                                + expr
+                                + " ("
+                                + reciprocalActual
+                                + ") to match 1/("
+                                + constant
+                                + ")^"
+                                + power
+                                + " ("
+                                + reciprocalExpected
+                                + ")",
+                        compareTwoBigDecimal(
+                                reciprocalExpected, reciprocalActual, BigDecimal.valueOf(1e-25)));
+            }
         }
     }
 }

@@ -128,7 +128,7 @@ void UnitsTest::testUnitConstantFreshness() {
 
     const char *compoundConstants[] = {"ft_to_m", "ft2_to_m2", "ft3_to_m3", "in3_to_m3", "gal_to_m3"};
     for (const char *constant : compoundConstants) {
-        for (int32_t power = 2; power <= 3; ++power) {
+        for (int32_t power = 1; power <= 3; ++power) {
             Factor poweredFactor;
             addSingleFactorConstant(constant, power, POSITIVE, poweredFactor, status);
             if (status.errIfFailureAndReset("addSingleFactorConstant(<%s>, %d, POSITIVE, ...)",
@@ -151,6 +151,23 @@ void UnitsTest::testUnitConstantFreshness() {
                                  u" denominator",
                              repeatedFactor.factorDen, poweredFactor.factorDen,
                              1e-12 * repeatedFactor.factorDen);
+
+            Factor negativeFactor;
+            addSingleFactorConstant(constant, power, NEGATIVE, negativeFactor, status);
+            if (status.errIfFailureAndReset("addSingleFactorConstant(<%s>, %d, NEGATIVE, ...)",
+                                            constant, power)) {
+                continue;
+            }
+            negativeFactor.substituteConstants();
+
+            assertEqualsNear(UnicodeString("1/") + constant + u"^" + Int64ToUnicodeString(power) +
+                                 u" numerator",
+                             poweredFactor.factorDen, negativeFactor.factorNum,
+                             1e-12 * poweredFactor.factorDen);
+            assertEqualsNear(UnicodeString("1/") + constant + u"^" + Int64ToUnicodeString(power) +
+                                 u" denominator",
+                             poweredFactor.factorNum, negativeFactor.factorDen,
+                             1e-12 * poweredFactor.factorNum);
         }
     }
 }
