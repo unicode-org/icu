@@ -221,10 +221,10 @@ public class MeasureUnitImpl {
      * @throws UnsupportedOperationException if the object could not be converted to SingleUnitImpl.
      */
     public SingleUnitImpl getSingleUnitImpl() {
-        if (this.singleUnits.size() == 0) {
+        if (this.singleUnits.size() == 0 && this.constantDenominator == 0) {
             return new SingleUnitImpl();
         }
-        if (this.singleUnits.size() == 1) {
+        if (this.singleUnits.size() == 1 && this.constantDenominator == 0) {
             return this.singleUnits.get(0).copy();
         }
 

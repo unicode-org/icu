@@ -1935,32 +1935,39 @@ public class MeasureUnitTest extends CoreTestFmwk {
                 "additional simple units inequality", !secondCubicMeter.equals(secondCentimeter));
 
         // Don't allow get/set power or SI or binary prefix on compound units
-        try {
-            meterSecond.getDimensionality();
-            fail("UnsupportedOperationException must be thrown");
-        } catch (UnsupportedOperationException e) {
-            // Expecting an exception to be thrown
-        }
+        for (MeasureUnit compoundUnit :
+                new MeasureUnit[] {
+                    meterSecond,
+                    MeasureUnit.forIdentifier("per-100-kilometer"),
+                    MeasureUnit.forIdentifier("meter-per-100")
+                }) {
+            try {
+                compoundUnit.getDimensionality();
+                fail("UnsupportedOperationException must be thrown");
+            } catch (UnsupportedOperationException e) {
+                // Expecting an exception to be thrown
+            }
 
-        try {
-            meterSecond.withDimensionality(3);
-            fail("UnsupportedOperationException must be thrown");
-        } catch (UnsupportedOperationException e) {
-            // Expecting an exception to be thrown
-        }
+            try {
+                compoundUnit.withDimensionality(3);
+                fail("UnsupportedOperationException must be thrown");
+            } catch (UnsupportedOperationException e) {
+                // Expecting an exception to be thrown
+            }
 
-        try {
-            meterSecond.getPrefix();
-            fail("UnsupportedOperationException must be thrown");
-        } catch (UnsupportedOperationException e) {
-            // Expecting an exception to be thrown
-        }
+            try {
+                compoundUnit.getPrefix();
+                fail("UnsupportedOperationException must be thrown");
+            } catch (UnsupportedOperationException e) {
+                // Expecting an exception to be thrown
+            }
 
-        try {
-            meterSecond.withPrefix(MeasureUnit.MeasurePrefix.CENTI);
-            fail("UnsupportedOperationException must be thrown");
-        } catch (UnsupportedOperationException e) {
-            // Expecting an exception to be thrown
+            try {
+                compoundUnit.withPrefix(MeasureUnit.MeasurePrefix.CENTI);
+                fail("UnsupportedOperationException must be thrown");
+            } catch (UnsupportedOperationException e) {
+                // Expecting an exception to be thrown
+            }
         }
 
         MeasureUnit footInch = MeasureUnit.forIdentifier("foot-and-inch");
