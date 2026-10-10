@@ -6590,6 +6590,9 @@ void MeasureFormatTest::TestInvalidIdentifiers() {
         "kilonewton-meter-and-newton-meter",
 
         // Invalid identifiers with constants.
+        "meter-per-0",
+        "meter-per-0-second",
+        "per-0-kilometer",
         "meter-per--20--second",
         "meter-per-1000-1e9-second",
         "meter-per-1e20-second",
