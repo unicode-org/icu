@@ -1320,15 +1320,23 @@ void DecimalQuantity::ensureCapacity(int32_t capacity) {
     if (capacity == 0) { return; }
     int32_t oldCapacity = usingBytes ? fBCD.bcdBytes.len : 0;
     if (!usingBytes) {
-        // TODO: There is nothing being done to check for memory allocation failures.
         // TODO: Consider indexing by nybbles instead of bytes in C++, so that we can
         // make these arrays half the size.
-        fBCD.bcdBytes.ptr = static_cast<int8_t*>(uprv_malloc(capacity * sizeof(int8_t)));
+        int8_t* newPtr = static_cast<int8_t*>(uprv_malloc(capacity * sizeof(int8_t)));
+        if (newPtr == nullptr) {
+            fBCD.bcdBytes.ptr = nullptr;
+            fBCD.bcdBytes.len = 0;
+            return;
+        }
+        fBCD.bcdBytes.ptr = newPtr;
         fBCD.bcdBytes.len = capacity;
         // Initialize the byte array to zeros (this is done automatically in Java)
         uprv_memset(fBCD.bcdBytes.ptr, 0, capacity * sizeof(int8_t));
     } else if (oldCapacity < capacity) {
-        auto* bcd1 = static_cast<int8_t*>(uprv_malloc(capacity * 2 * sizeof(int8_t)));
+        int8_t* bcd1 = static_cast<int8_t*>(uprv_malloc(capacity * 2 * sizeof(int8_t)));
+        if (bcd1 == nullptr) {
+            return;
+        }
         uprv_memcpy(bcd1, fBCD.bcdBytes.ptr, oldCapacity * sizeof(int8_t));
         // Initialize the rest of the byte array to zeros (this is done automatically in Java)
         uprv_memset(bcd1 + oldCapacity, 0, (capacity - oldCapacity) * sizeof(int8_t));
