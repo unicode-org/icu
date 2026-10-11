@@ -712,6 +712,10 @@ public class MeasureUnit implements Serializable {
         implCopy.setConstantDenominator(
                 Math.max(thisConstantDenominator, otherConstantDenominator));
 
+        if (implCopy.getSingleUnits().size() > 1 || implCopy.getConstantDenominator() > 0) {
+            implCopy.setComplexity(Complexity.COMPOUND);
+        }
+
         return implCopy.build();
     }
 
