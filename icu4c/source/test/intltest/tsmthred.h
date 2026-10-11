@@ -49,6 +49,7 @@ public:
     void TestBreakTranslit();
     void TestIncDec();
     void Test20104();
+    void TestTransliteratorAliasCompoundFilterRace();
 };
 
 #endif
