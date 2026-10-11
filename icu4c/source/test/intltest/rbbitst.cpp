@@ -1775,6 +1775,9 @@ class RegexRule : public SegmentationRule {
         beforeSearch->useAnchoringBounds(false);
         afterSearch->useAnchoringBounds(false);
         U_ASSERT(U_SUCCESS(status));
+        // Candidate positions advance monotonically. Keep the corresponding
+        // cursor in the original text instead of rescanning it from the start.
+        auto it = resolved.begin();
         if (beforeSearch->find() && afterSearch->find()) {
             for (;;) {
                 if (afterSearch->start(status) < beforeSearch->start(status)) {
@@ -1792,8 +1795,9 @@ class RegexRule : public SegmentationRule {
                         break;
                     }
                 } else {
-                    auto const it = std::find_if(resolved.begin(), resolved.end(), [&](auto r) {
-                        return r.indexInRemapped == afterSearch->start(status);
+                    const int32_t position = afterSearch->start(status);
+                    it = std::find_if(it, resolved.end(), [&](const auto &r) {
+                        return r.indexInRemapped == position;
                     });
                     if (it == resolved.end()) {
                         puts(("Rule " + name() +
