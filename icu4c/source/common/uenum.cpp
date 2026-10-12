@@ -36,11 +36,12 @@ static void* _getBuffer(UEnumeration* en U_LIFETIME_BOUND, int32_t capacity) {
     if (en->baseContext != nullptr) {
         if (static_cast<_UEnumBuffer*>(en->baseContext)->len < capacity) {
             capacity += PAD;
-            en->baseContext = uprv_realloc(en->baseContext,
-                                           sizeof(int32_t) + capacity);
-            if (en->baseContext == nullptr) {
+            void *newBaseContext = uprv_realloc(en->baseContext,
+                                               sizeof(int32_t) + capacity);
+            if (newBaseContext == nullptr) {
                 return nullptr;
             }
+            en->baseContext = newBaseContext;
             static_cast<_UEnumBuffer*>(en->baseContext)->len = capacity;
         }
     } else {
