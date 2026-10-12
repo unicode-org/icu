@@ -2769,7 +2769,8 @@ public class TimeZoneTest extends CoreTestFmwk {
             {"America/New_York", "Eastern Standard Time"},
             {"America/Montreal", "Eastern Standard Time"},
             {"America/Los_Angeles", "Pacific Standard Time"},
-            {"America/Vancouver", "Pacific Standard Time"},
+            // CLDR-19827: formerly Pacific Standard Time
+            {"America/Vancouver", "British Columbia Standard Time"},
             {"Asia/Shanghai", "China Standard Time"},
             {"Asia/Chongqing", "China Standard Time"},
             {"America/Indianapolis", "US Eastern Standard Time"}, // CLDR canonical name
