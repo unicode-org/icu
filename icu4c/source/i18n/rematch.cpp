@@ -4783,15 +4783,17 @@ void RegexMatcher::MatchChunkAt(int32_t startIdx, UBool toEnd, UErrorCode &statu
 
                 UChar32 c;
                 U16_NEXT(inputBuf, fp->fInputIdx, fActiveLimit, c);
-                if (c < 256) {
-                    Regex8BitSet &s8 = RegexStaticSets::gStaticSets->fPropSets8[opValue];
-                    if (s8.contains(c)) {
-                        success = !success;
-                    }
-                } else {
-                    const UnicodeSet &s = RegexStaticSets::gStaticSets->fPropSets[opValue];
-                    if (s.contains(c)) {
-                        success = !success;
+                if (c >= 0) {
+                    if (c < 256) {
+                        Regex8BitSet &s8 = RegexStaticSets::gStaticSets->fPropSets8[opValue];
+                        if (s8.contains(c)) {
+                            success = !success;
+                        }
+                    } else {
+                        const UnicodeSet &s = RegexStaticSets::gStaticSets->fPropSets[opValue];
+                        if (s.contains(c)) {
+                            success = !success;
+                        }
                     }
                 }
                 if (!success) {
@@ -4815,15 +4817,17 @@ void RegexMatcher::MatchChunkAt(int32_t startIdx, UBool toEnd, UErrorCode &statu
 
                 UChar32  c;
                 U16_NEXT(inputBuf, fp->fInputIdx, fActiveLimit, c);
-                if (c < 256) {
-                    Regex8BitSet &s8 = RegexStaticSets::gStaticSets->fPropSets8[opValue];
-                    if (s8.contains(c) == false) {
-                        break;
-                    }
-                } else {
-                    const UnicodeSet &s = RegexStaticSets::gStaticSets->fPropSets[opValue];
-                    if (s.contains(c) == false) {
-                        break;
+                if (c >= 0) {
+                    if (c < 256) {
+                        Regex8BitSet &s8 = RegexStaticSets::gStaticSets->fPropSets8[opValue];
+                        if (s8.contains(c) == false) {
+                            break;
+                        }
+                    } else {
+                        const UnicodeSet &s = RegexStaticSets::gStaticSets->fPropSets[opValue];
+                        if (s.contains(c) == false) {
+                            break;
+                        }
                     }
                 }
                 fp = reinterpret_cast<REStackFrame*>(fStack->popFrame(fFrameSize));
@@ -4844,20 +4848,21 @@ void RegexMatcher::MatchChunkAt(int32_t startIdx, UBool toEnd, UErrorCode &statu
                 // There is input left.  Pick up one char and test it for set membership.
                 UChar32  c;
                 U16_NEXT(inputBuf, fp->fInputIdx, fActiveLimit, c);
-                if (c<256) {
-                    Regex8BitSet *s8 = &fPattern->fSets8[opValue];
-                    if (s8->contains(c)) {
-                        // The character is in the set.  A Match.
-                        break;
-                    }
-                } else {
-                    UnicodeSet* s = static_cast<UnicodeSet*>(fSets->elementAt(opValue));
-                    if (s->contains(c)) {
-                        // The character is in the set.  A Match.
-                        break;
+                if (c >= 0) {
+                    if (c<256) {
+                        Regex8BitSet *s8 = &fPattern->fSets8[opValue];
+                        if (s8->contains(c)) {
+                            // The character is in the set.  A Match.
+                            break;
+                        }
+                    } else {
+                        UnicodeSet* s = static_cast<UnicodeSet*>(fSets->elementAt(opValue));
+                        if (s->contains(c)) {
+                            // The character is in the set.  A Match.
+                            break;
+                        }
                     }
                 }
-
                 // the character wasn't in the set.
                 fp = reinterpret_cast<REStackFrame*>(fStack->popFrame(fFrameSize));
             }
