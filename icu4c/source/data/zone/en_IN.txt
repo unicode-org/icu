@@ -3,12 +3,4 @@
 // Generated using tools/cldr/cldr-to-icu/
 en_IN{
     %%Parent{"en_001"}
-    zoneStrings{
-        "meta:Gulf"{
-            ss{"GST"}
-        }
-        "meta:India"{
-            ss{"IST"}
-        }
-    }
 }

@@ -7,10 +7,6 @@ de_CH{
             "BYN",
             "Weissrussischer Rubel",
         }
-        BYR{
-            "BYR",
-            "Weissrussischer Rubel (2000–2016)",
-        }
         EUR{
             "EUR",
             "Euro",
@@ -28,16 +24,11 @@ de_CH{
             one{"Weissrussischer Rubel"}
             other{"Weissrussische Rubel"}
         }
-        BYR{
-            one{"Weissrussischer Rubel (2000–2016)"}
-            other{"Weissrussische Rubel (2000–2016)"}
-        }
         STN{
             one{"São-toméischer Dobra (2018)"}
             other{"São-toméischer Dobra (2018)"}
         }
         XCG{
-            one{"Karibischer Gulden"}
             other{"Karibischer Gulden"}
         }
     }

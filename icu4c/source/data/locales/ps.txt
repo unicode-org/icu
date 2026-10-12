@@ -19,15 +19,6 @@ ps{
                 exponential{"^"}
             }
         }
-        arabext{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-            }
-            symbols{
-                timeSeparator{":"}
-            }
-        }
         default{"arabext"}
         latn{
             miscPatterns{
@@ -94,11 +85,9 @@ ps{
             patternsShort{
                 currencyFormat{
                     1000000000{
-                        one{"¤ 0B"}
                         other{"¤ 0B"}
                     }
                     10000000000{
-                        one{"¤ 00B"}
                         other{"¤ 00B"}
                     }
                     100000000000{
@@ -108,35 +97,27 @@ ps{
                 }
                 decimalFormat{
                     1000{
-                        one{"0 زره"}
                         other{"0 زره"}
                     }
                     10000{
-                        one{"00 زره"}
                         other{"00 زره"}
                     }
                     100000{
-                        one{"000 زره"}
                         other{"000 زره"}
                     }
                     1000000{
-                        one{"0 میلیونه"}
                         other{"0 میلیونه"}
                     }
                     10000000{
-                        one{"00 میلیونه"}
                         other{"00 میلیونه"}
                     }
                     100000000{
                         one{"000 میلیونه"}
-                        other{"000M"}
                     }
                     1000000000{
-                        one{"0B"}
                         other{"0B"}
                     }
                     10000000000{
-                        one{"00B"}
                         other{"00B"}
                     }
                     100000000000{
@@ -180,16 +161,6 @@ ps{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "Hmmsszzzz",
-                "Hmmssz",
-                "Hmmss",
-                "Hmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMMd",
-                "GGGGGyMd",
             }
             availableFormats{
                 GyM{"G y/MM"}
@@ -307,16 +278,6 @@ ps{
                 "{1} {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "Hmmsszzzz",
-                "Hmmssz",
-                "Hmmss",
-                "Hmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yMd",
-            }
             appendItems{
                 Time-Day-Of-Week{"{1}, {0}"}
             }
@@ -330,7 +291,6 @@ ps{
                 MMMEd{"E, MMM d"}
                 MMMMEd{"E, d MMMM"}
                 MMMMW{
-                    one{"اونۍ W د MMMM"}
                     other{"اونۍ W د MMMM"}
                 }
                 Md{"MM/dd"}
@@ -342,7 +302,6 @@ ps{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    one{"اونۍ w د Y"}
                     other{"اونۍ w د Y"}
                 }
             }
@@ -356,15 +315,6 @@ ps{
                         "پنج شنبه",
                         "جمعه",
                         "شنبه",
-                    }
-                    narrow{
-                        "ی",
-                        "د",
-                        "س",
-                        "چ",
-                        "پ",
-                        "ج",
-                        "ش",
                     }
                     short{
                         "ی",
@@ -386,25 +336,7 @@ ps{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        "یکشنبه",
-                        "دوشنبه",
-                        "سه شنبه",
-                        "چهارشنبه",
-                        "پنج شنبه",
-                        "جمعه",
-                        "شنبه",
-                    }
                     narrow{
-                        "ی",
-                        "د",
-                        "س",
-                        "چ",
-                        "پ",
-                        "ج",
-                        "ش",
-                    }
-                    short{
                         "ی",
                         "د",
                         "س",
@@ -576,31 +508,6 @@ ps{
                         "۲مه ربعه",
                         "۳مه ربعه",
                         "۴مه ربعه",
-                    }
-                }
-            }
-        }
-        indian{
-            eras{
-                abbreviated{
-                    0{"ساکا"}
-                }
-            }
-            monthNames{
-                format{
-                    wide{
-                        "چيترا",
-                        "ويساکا",
-                        "جياستا",
-                        "اسادها",
-                        "سراوانا",
-                        "بهادرا",
-                        "اسوينا",
-                        "کارتيکا",
-                        "اگراهايانا",
-                        "پاوسا",
-                        "مگها",
-                        "پهالگونا",
                     }
                 }
             }
@@ -822,18 +729,6 @@ ps{
                 }
             }
         }
-        fri-narrow{
-            relativeTime{
-                future{
-                    one{"په {0} جمعه کې"}
-                    other{"په {0} جمعو کې"}
-                }
-                past{
-                    one{"{0} جمعه مخکې"}
-                    other{"{0} جمعې مخکې"}
-                }
-            }
-        }
         hour{
             dn{"ساعت"}
             relative{
@@ -853,11 +748,9 @@ ps{
         hour-short{
             relativeTime{
                 future{
-                    one{"په {0} ساعت کې"}
                     other{"په {0} ساعت کې"}
                 }
                 past{
-                    one{"{0} ساعت مخکې"}
                     other{"{0} ساعت مخکې"}
                 }
             }
@@ -881,7 +774,6 @@ ps{
         minute-short{
             relativeTime{
                 past{
-                    one{"{0} دقيقه مخکې"}
                     other{"{0} دقيقه مخکې"}
                 }
             }
@@ -956,18 +848,6 @@ ps{
                 }
             }
         }
-        sat-narrow{
-            relativeTime{
-                future{
-                    one{"په {0} شنبه کې"}
-                    other{"په {0} شنبو کې"}
-                }
-                past{
-                    one{"{0} شنبه مخکې"}
-                    other{"{0} شنبې مخکې"}
-                }
-            }
-        }
         second{
             dn{"ثانيه"}
             relative{
@@ -1012,11 +892,9 @@ ps{
         sun-short{
             relativeTime{
                 future{
-                    one{"په {0} يکشنبه کې"}
                     other{"په {0} يکشنبه کې"}
                 }
                 past{
-                    one{"{0} يکشنبه مخکې"}
                     other{"{0} يکشنبه مخکې"}
                 }
             }
@@ -1027,18 +905,6 @@ ps{
                 "0"{"دا پنجشنبه"}
                 "1"{"راتلونکې پنجشنبه"}
             }
-            relativeTime{
-                future{
-                    one{"په {0} پنجشنبه کې"}
-                    other{"په {0} پنجشنبو کې"}
-                }
-                past{
-                    one{"{0} پنجشنبه مخکې"}
-                    other{"{0} پنجشنبې مخکې"}
-                }
-            }
-        }
-        thu-narrow{
             relativeTime{
                 future{
                     one{"په {0} پنجشنبه کې"}
@@ -1070,15 +936,11 @@ ps{
         tue-narrow{
             relative{
                 "-1"{"تيره سه شنبه"}
-                "0"{"دا سه شنبه"}
-                "1"{"راتلونکې سه شنبه"}
             }
         }
         tue-short{
             relative{
                 "-1"{"تېره سه شنبه"}
-                "0"{"دا سه شنبه"}
-                "1"{"راتلونکې سه شنبه"}
             }
         }
         wed{
@@ -1087,18 +949,6 @@ ps{
                 "0"{"دا چارشنبه"}
                 "1"{"راتلونکې چارشنبه"}
             }
-            relativeTime{
-                future{
-                    one{"په {0} چارشنبه کې"}
-                    other{"په {0} چارشنبو کې"}
-                }
-                past{
-                    one{"{0} چارشنبه مخکې"}
-                    other{"{0} چارشنبې مخکې"}
-                }
-            }
-        }
-        wed-narrow{
             relativeTime{
                 future{
                     one{"په {0} چارشنبه کې"}
@@ -1124,7 +974,6 @@ ps{
                     other{"په {0} اونيو کې"}
                 }
                 past{
-                    one{"{0} اونۍ مخکې"}
                     other{"{0} اونۍ مخکې"}
                 }
             }
@@ -1132,8 +981,6 @@ ps{
         week-short{
             relative{
                 "-1"{"تېره اونۍ"}
-                "0"{"دا اونۍ"}
-                "1"{"راتلونکې اونۍ"}
             }
         }
         weekOfMonth{
@@ -1166,7 +1013,6 @@ ps{
         year-narrow{
             relative{
                 "-1"{"تير کال"}
-                "0"{"سږ کال"}
                 "1"{"راتلونکی کال"}
             }
         }
@@ -1180,9 +1026,6 @@ ps{
         zone{
             dn{"وخت سيمه"}
         }
-    }
-    layout{
-        characters{"right-to-left"}
     }
     listPattern{
         or{

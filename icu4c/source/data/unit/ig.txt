@@ -200,7 +200,6 @@ ig{
                 other{"{0} calorie [IT]"}
             }
             electronvolt{
-                dnam{"electronvolt"}
                 other{"{0} electronvolt"}
             }
             foodcalorie{
@@ -282,16 +281,13 @@ ig{
                 other{"{0} decimita"}
             }
             earth-radius{
-                dnam{"okirikiri ụwa"}
                 other{"{0} okirikiri ụwa"}
             }
             foot{
-                dnam{"feet"}
                 other{"{0} feet"}
                 per{"{0} kwa foot"}
             }
             inch{
-                dnam{"inches"}
                 other{"{0} inches"}
                 per{"{0} kwa inch"}
             }
@@ -314,7 +310,6 @@ ig{
                 other{"{0} micromita"}
             }
             mile{
-                dnam{"mile"}
                 other{"{0} mile"}
             }
             mile-scandinavian{
@@ -334,7 +329,6 @@ ig{
                 other{"{0} nautical miles"}
             }
             parsec{
-                dnam{"parsecs"}
                 other{"{0} parsecs"}
             }
             picometer{
@@ -342,15 +336,12 @@ ig{
                 other{"{0} picomita"}
             }
             point{
-                dnam{"points"}
                 other{"{0} points"}
             }
             solar-radius{
-                dnam{"solar radii"}
                 other{"{0} solar radii"}
             }
             yard{
-                dnam{"yard"}
                 other{"{0} yard"}
             }
         }
@@ -366,15 +357,12 @@ ig{
         }
         mass{
             carat{
-                dnam{"carat"}
                 other{"{0} carat"}
             }
             dalton{
-                dnam{"dalton"}
                 other{"{0} dalton"}
             }
             earth-mass{
-                dnam{"Earth mass"}
                 other{"{0} Earth mass"}
             }
             gram{
@@ -404,16 +392,13 @@ ig{
                 other{"{0} troy ounce"}
             }
             pound{
-                dnam{"pound"}
                 other{"{0} pound"}
                 per{"{0} per pound"}
             }
             solar-mass{
-                dnam{"solar mass"}
                 other{"{0} solar mass"}
             }
             ton{
-                dnam{"ton"}
                 other{"{0} ton"}
             }
             tonne{
@@ -488,7 +473,6 @@ ig{
                 other{"{0} acre-feet"}
             }
             barrel{
-                dnam{"barel"}
                 other{"{0} barel"}
             }
             centiliter{
@@ -526,7 +510,6 @@ ig{
                 other{"{0} cubic yard"}
             }
             cup{
-                dnam{"iko"}
                 other{"{0} iko"}
             }
             cup-metric{
@@ -543,14 +526,6 @@ ig{
             dessert-spoon-imperial{
                 dnam{"Imp. ngaji megharịa ọnụ"}
                 other{"{0} Imp. ngaji mégharia onu"}
-            }
-            dram{
-                dnam{"dram"}
-                other{"{0} dram"}
-            }
-            drop{
-                dnam{"ntụsà"}
-                other{"{0} ntụsà"}
             }
             fluid-ounce{
                 dnam{"fluid ounce"}
@@ -591,7 +566,6 @@ ig{
                 other{"{0} milliliter"}
             }
             pint{
-                dnam{"pint"}
                 other{"{0} pint"}
             }
             pint-metric{
@@ -603,7 +577,6 @@ ig{
                 other{"{0} quart"}
             }
             quart-imperial{
-                dnam{"Imp. quarts"}
                 other{"{0} Imp. quarts"}
             }
             tablespoon{
@@ -625,21 +598,6 @@ ig{
                 other{"{0}m/s²"}
             }
         }
-        area{
-            square-foot{
-                dnam{"sq feet"}
-                other{"{0} sq ft"}
-            }
-            square-inch{
-                dnam{"inches²"}
-            }
-            square-meter{
-                dnam{"mita²"}
-            }
-            square-yard{
-                dnam{"yards²"}
-            }
-        }
         concentr{
             item{
                 other{"{0}ihe"}
@@ -652,9 +610,6 @@ ig{
             }
             part-per-1e6{
                 other{"{0}ppm"}
-            }
-            part-per-1e9{
-                dnam{"akụkụ/ijeri"}
             }
         }
         duration{
@@ -685,9 +640,6 @@ ig{
             ampere{
                 other{"{0}A"}
             }
-            milliampere{
-                dnam{"milliamp"}
-            }
             ohm{
                 other{"{0}Ω"}
             }
@@ -701,7 +653,6 @@ ig{
                 other{"{0}kal"}
             }
             electronvolt{
-                dnam{"electronvolt"}
                 other{"{0}eV"}
             }
             foodcalorie{
@@ -717,7 +668,6 @@ ig{
                 other{"{0}kJ"}
             }
             kilowatt-hour{
-                dnam{"kW-hour"}
                 other{"{0}kWh"}
             }
             therm-us{
@@ -751,21 +701,10 @@ ig{
         }
         length{
             foot{
-                dnam{"feet"}
                 other{"{0}′"}
             }
             inch{
-                dnam{"inches"}
                 other{"{0}″"}
-            }
-            meter{
-                dnam{"m"}
-            }
-            micrometer{
-                dnam{"μmita"}
-            }
-            mile{
-                dnam{"mile"}
             }
             parsec{
                 dnam{"parsec"}
@@ -773,21 +712,15 @@ ig{
             point{
                 dnam{"pts"}
             }
-            yard{
-                dnam{"yard"}
-            }
         }
         mass{
             carat{
-                dnam{"carat"}
                 other{"{0}CD"}
             }
             dalton{
-                dnam{"dalton"}
                 other{"{0}Da"}
             }
             earth-mass{
-                dnam{"Earth mass"}
                 other{"{0}M⊕"}
             }
             grain{
@@ -810,19 +743,15 @@ ig{
                 other{"{0}oz"}
             }
             ounce-troy{
-                dnam{"oz troy"}
                 other{"{0}oz t"}
             }
             pound{
-                dnam{"pound"}
                 other{"{0}#"}
             }
             solar-mass{
-                dnam{"solar mass"}
                 other{"{0}M☉"}
             }
             ton{
-                dnam{"ton"}
                 other{"{0}tn"}
             }
             tonne{
@@ -873,7 +802,6 @@ ig{
                 other{"{0}ìhè"}
             }
             meter-per-second{
-                dnam{"meters/sec"}
                 other{"{0}m/s"}
             }
             mile-per-hour{
@@ -886,17 +814,7 @@ ig{
                 dnam{"acre ft"}
             }
             barrel{
-                dnam{"barel"}
                 other{"{0}bbl"}
-            }
-            cubic-foot{
-                dnam{"feet³"}
-            }
-            cubic-yard{
-                dnam{"yards³"}
-            }
-            cup{
-                dnam{"iko"}
             }
             dessert-spoon{
                 dnam{"dsp"}
@@ -915,14 +833,12 @@ ig{
                 other{"{0}dr"}
             }
             fluid-ounce{
-                dnam{"fl oz"}
                 other{"{0}fl oz"}
             }
             fluid-ounce-imperial{
                 other{"{0}fl oz Im"}
             }
             gallon{
-                dnam{"gal"}
                 other{"{0}gal"}
                 per{"{0}/gal"}
             }
@@ -933,25 +849,17 @@ ig{
             jigger{
                 other{"{0}jigger"}
             }
-            liter{
-                other{"{0} L"}
-            }
             pinch{
                 dnam{"pn"}
                 other{"{0}pn"}
-            }
-            pint{
-                dnam{"pint"}
             }
             pint-metric{
                 dnam{"pt"}
             }
             quart{
-                dnam{"qts"}
                 other{"{0}qt"}
             }
             quart-imperial{
-                dnam{"Imp. quarts"}
                 other{"{0}qt-Imp."}
             }
             tablespoon{

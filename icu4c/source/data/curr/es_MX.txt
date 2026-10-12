@@ -8,10 +8,6 @@ es_MX{
             "BTN",
             "ngultrum butanés",
         }
-        MRO{
-            "MRU",
-            "uguiya (1973–2017)",
-        }
         MRU{
             "UM",
             "uguiya mauritano",
@@ -39,36 +35,27 @@ es_MX{
         RON{"lei"}
         SSP{"£"}
         SYP{"£"}
-        VEF{"Bs"}
     }
     CurrencyPlurals{
         BTN{
             one{"ngultrum butanés"}
             other{"ngultrums butaneses"}
         }
-        LVL{
-            one{"lats letón"}
-            other{"lats letones"}
-        }
         MVR{
             one{"rupia de Maldivas"}
             other{"rupias de Maldivas"}
         }
         RON{
-            one{"leu rumano"}
             other{"lei rumanos"}
         }
         THB{
             one{"baht tailandés"}
-            other{"bahts tailandeses"}
         }
         VES{
-            one{"bolívar venezolano"}
             other{"bolivares venezolanos"}
         }
         XXX{
             one{"(moneda desconocida)"}
-            other{"(moneda desconocida)"}
         }
         ZMW{
             one{"kwacha zambiano"}

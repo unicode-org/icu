@@ -2,9 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/
 bn_IN{
-    Languages{
-        ksh{"কোলোনিয়ান"}
-    }
     Types{
         calendar{
             gregorian{"গ্রেগোরিয়ান ক্যালেন্ডার"}

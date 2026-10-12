@@ -14,21 +14,6 @@ yi{
     }
     calendar{
         generic{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "G y MMMM d, EEEE",
-                "G y MMMM d",
-                "G y MMM d",
-                "G y-MM-dd",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
             intervalFormats{
                 fallback{"{0} – {1}"}
             }
@@ -52,16 +37,6 @@ yi{
                 "{1} {0}",
                 "{1}, {0}",
                 "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yyMMdd",
             }
             appendItems{
                 Timezone{"{1} {0}"}
@@ -207,48 +182,6 @@ yi{
                 "{1} {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                {
-                    "yMMMMEEEEd",
-                    "hebr",
-                }
-                {
-                    "yMMMMd",
-                    "hebr",
-                }
-                {
-                    "yMMMMd",
-                    "hebr",
-                }
-                {
-                    "yMMMMd",
-                    "hebr",
-                }
-            }
-            availableFormats{
-                GyMMM{"MMMM y G"}
-                GyMMMEd{"E, d MMMM y G"}
-                GyMMMd{"d MMMM y G"}
-                M{"MMMM"}
-                MEd{"E, d בMMMM"}
-                MMM{"MMMM"}
-                MMMEd{"E, d בMMMM"}
-                MMMMEd{"E, d בMMMM"}
-                MMMMd{"d בMMMM"}
-                MMMd{"d בMMMM"}
-                Md{"d בMMMM"}
-                yyyyM{"MMMM y"}
-                yyyyMEd{"E, d בMMMM y"}
-                yyyyMMM{"MMMM y"}
-                yyyyMMMEd{"E, d בMMMM y"}
-                yyyyMMMM{"MMMM y"}
-                yyyyMMMd{"d בMMMM y"}
-                yyyyMd{"d בMMMM y"}
-            }
             eras{
                 abbreviated{
                     0{"לבה״ע"}
@@ -289,22 +222,6 @@ yi{
                         "אב",
                         "אלול",
                         "אדר ב׳",
-                    }
-                    narrow{
-                        "תש",
-                        "חש",
-                        "כס",
-                        "טב",
-                        "שב",
-                        "אא",
-                        "אד",
-                        "ני",
-                        "אי",
-                        "סי",
-                        "תמ",
-                        "אב",
-                        "אל",
-                        "א2",
                     }
                     wide{
                         "תשרי",
@@ -378,8 +295,6 @@ yi{
         week{
             dn{"וואך"}
             relative{
-                "-1"{"last week"}
-                "0"{"this week"}
                 "1"{"איבער אַכט טאָג"}
             }
         }
@@ -395,11 +310,9 @@ yi{
             }
             relativeTime{
                 future{
-                    one{"איבער {0} יאָר"}
                     other{"איבער {0} יאָר"}
                 }
                 past{
-                    one{"פֿאַר {0} יאָר"}
                     other{"פֿאַר {0} יאָר"}
                 }
             }
@@ -408,7 +321,6 @@ yi{
             relativeTime{
                 future{
                     one{"איבער {0} יאָר"}
-                    other{"איבער {0} יאָר"}
                 }
             }
         }
@@ -416,16 +328,12 @@ yi{
             relativeTime{
                 future{
                     one{"איבער א יאָר"}
-                    other{"איבער {0} יאָר"}
                 }
             }
         }
         zone{
             dn{"צײַטזאנע"}
         }
-    }
-    layout{
-        characters{"right-to-left"}
     }
     listPattern{
         standard{

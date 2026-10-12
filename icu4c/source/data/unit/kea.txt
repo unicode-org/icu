@@ -283,10 +283,6 @@ kea{
             }
         }
         energy{
-            british-thermal-unit{
-                dnam{"unidadi térmiku britániku"}
-                other{"{0} unidadi térmiku britániku"}
-            }
             calorie{
                 dnam{"kaloria"}
                 other{"{0} kaloria"}

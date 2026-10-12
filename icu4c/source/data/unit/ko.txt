@@ -312,10 +312,6 @@ ko{
                 dnam{"베크렐"}
                 other{"{0}베크렐"}
             }
-            british-thermal-unit{
-                dnam{"영국 열량 단위"}
-                other{"{0}영국 열량 단위"}
-            }
             calorie{
                 dnam{"칼로리"}
                 other{"{0}칼로리"}
@@ -417,18 +413,10 @@ ko{
                 dnam{"지구 반경"}
                 other{"{0}지구 반경"}
             }
-            fathom{
-                dnam{"패덤"}
-                other{"{0}패덤"}
-            }
             foot{
                 dnam{"피트"}
                 other{"{0}피트"}
                 per{"피트당 {0}"}
-            }
-            furlong{
-                dnam{"펄롱"}
-                other{"{0}펄롱"}
             }
             inch{
                 dnam{"인치"}
@@ -574,10 +562,6 @@ ko{
                 dnam{"태양 질량"}
                 other{"{0}태양 질량"}
             }
-            stone{
-                dnam{"스톤"}
-                other{"{0}스톤"}
-            }
             ton{
                 dnam{"톤"}
                 other{"{0}톤"}
@@ -713,10 +697,6 @@ ko{
             barrel{
                 dnam{"배럴"}
                 other{"{0}배럴"}
-            }
-            bushel{
-                dnam{"부셸"}
-                other{"{0}부셸"}
             }
             centiliter{
                 dnam{"센티리터"}
@@ -1144,9 +1124,6 @@ ko{
             becquerel{
                 other{"{0}Bq"}
             }
-            british-thermal-unit{
-                other{"{0}Btu"}
-            }
             calorie{
                 other{"{0}cal"}
             }
@@ -1255,14 +1232,8 @@ ko{
             earth-radius{
                 other{"{0}R⊕"}
             }
-            fathom{
-                other{"{0}fth"}
-            }
             foot{
                 other{"{0}ft"}
-            }
-            furlong{
-                other{"{0}fur"}
             }
             inch{
                 other{"{0}in"}
@@ -1371,9 +1342,6 @@ ko{
             solar-mass{
                 other{"{0}M☉"}
             }
-            stone{
-                other{"{0}st"}
-            }
             ton{
                 other{"{0}tn"}
             }
@@ -1474,9 +1442,6 @@ ko{
             }
             barrel{
                 other{"{0}bbl"}
-            }
-            bushel{
-                other{"{0}bu"}
             }
             centiliter{
                 other{"{0}cL"}

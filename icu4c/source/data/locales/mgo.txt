@@ -23,16 +23,6 @@ mgo{
                 "{1} {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEdd",
-                "GyMMMMd",
-                "GyMMMd",
-                "GGGGGyMMdd",
-            }
         }
         gregorian{
             DateTimePatterns{
@@ -49,16 +39,6 @@ mgo{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "yMMMMEEEEdd",
-                "yMMMMd",
-                "yMMMd",
-                "yMMdd",
             }
             dayNames{
                 format{

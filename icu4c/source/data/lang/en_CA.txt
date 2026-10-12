@@ -10,9 +10,6 @@ en_CA{
     Languages{
         ar_001{"Arabic (Modern Standard)"}
         bn{"Bengali"}
-        mfe{"Mauritian Creole"}
-        nds_NL{"West Low German"}
-        ro_MD{"Moldovan"}
     }
     Languages%variant{
         my{"Myanmar language"}
@@ -37,10 +34,6 @@ en_CA{
             persian{"Persian calendar"}
             roc{"Minguo calendar"}
         }
-        colNormalization{
-            no{"Sort Without Normalisation"}
-            yes{"Sort Unicode Normalised"}
-        }
         d0{
             ascii{"to ASCII"}
             fwidth{"to full width"}
@@ -59,8 +52,6 @@ en_CA{
             wed{"First day of week is Wednesday"}
         }
         hc{
-            c12{"12-hour system"}
-            c24{"24-hour system"}
             h11{"12-hour system (0–11)"}
             h12{"12-hour system (1–12)"}
             h23{"24-hour system (0–23)"}

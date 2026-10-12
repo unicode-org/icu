@@ -7,11 +7,6 @@ en_001{
         colNormalization{"Normalised Sorting"}
         lw{"Line Breaks Within Words"}
     }
-    Languages{
-        bla{"Siksika"}
-        mus{"Creek"}
-        nds_NL{"West Low German"}
-    }
     Scripts{
         Hrkt{"Japanese Syllabaries"}
     }
@@ -19,17 +14,11 @@ en_001{
         calendar%core{
             islamic-rgsa{"Hijri, Saudi Arabia Sighting"}
         }
-        colNormalization{
-            no{"Sort Without Normalisation"}
-            yes{"Sort Unicode Normalised"}
-        }
         collation%core{
             eor{"European Rules"}
             searchjl{"Korean Initial Consonant"}
         }
         hc{
-            c12{"12-Hour System"}
-            c24{"24-Hour System"}
             h11{"12-Hour System (0–11)"}
             h12{"12-Hour System (1–12)"}
             h23{"24-Hour System (0–23)"}

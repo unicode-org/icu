@@ -70,101 +70,77 @@ pt{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"¤ 0 mil"}
                         other{"¤ 0 mil"}
                     }
                     10000{
-                        one{"¤ 00 mil"}
                         other{"¤ 00 mil"}
                     }
                     100000{
-                        one{"¤ 000 mil"}
                         other{"¤ 000 mil"}
                     }
                     1000000{
-                        one{"¤ 0 mi"}
                         other{"¤ 0 mi"}
                     }
                     10000000{
-                        one{"¤ 00 mi"}
                         other{"¤ 00 mi"}
                     }
                     100000000{
-                        one{"¤ 000 mi"}
                         other{"¤ 000 mi"}
                     }
                     1000000000{
-                        one{"¤ 0 bi"}
                         other{"¤ 0 bi"}
                     }
                     10000000000{
-                        one{"¤ 00 bi"}
                         other{"¤ 00 bi"}
                     }
                     100000000000{
-                        one{"¤ 000 bi"}
                         other{"¤ 000 bi"}
                     }
                     1000000000000{
-                        one{"¤ 0 tri"}
                         other{"¤ 0 tri"}
                     }
                     10000000000000{
-                        one{"¤ 00 tri"}
                         other{"¤ 00 tri"}
                     }
                     100000000000000{
-                        one{"¤ 000 tri"}
                         other{"¤ 000 tri"}
                     }
                 }
                 decimalFormat{
                     1000{
-                        one{"0 mil"}
                         other{"0 mil"}
                     }
                     10000{
-                        one{"00 mil"}
                         other{"00 mil"}
                     }
                     100000{
-                        one{"000 mil"}
                         other{"000 mil"}
                     }
                     1000000{
-                        one{"0 mi"}
                         other{"0 mi"}
                     }
                     10000000{
-                        one{"00 mi"}
                         other{"00 mi"}
                     }
                     100000000{
-                        one{"000 mi"}
                         other{"000 mi"}
                     }
                     1000000000{
-                        one{"0 bi"}
                         other{"0 bi"}
                     }
                     10000000000{
-                        one{"00 bi"}
                         other{"00 bi"}
                     }
                     100000000000{
-                        one{"000 bi"}
                         other{"000 bi"}
                     }
                     1000000000000{
-                        one{"0 tri"}
                         other{"0 tri"}
                     }
                     10000000000000{
-                        one{"00 tri"}
                         other{"00 tri"}
                     }
                     100000000000000{
-                        one{"000 tri"}
                         other{"000 tri"}
                     }
                 }
@@ -190,16 +166,6 @@ pt{
         }
     }
     calendar{
-        buddhist{
-            eras{
-                narrow{
-                    0{"EB"}
-                }
-                wide{
-                    0{"EB"}
-                }
-            }
-        }
         chinese{
             DateTimePatterns{
                 "HH:mm:ss zzzz",
@@ -215,48 +181,6 @@ pt{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "UMMMMEEEEd",
-                "UMMMMd",
-                "UMMdd",
-                "rMMdd",
-            }
-            availableFormats{
-                EHm{"E HH:mm"}
-                EHms{"E HH:mm:ss"}
-                Ed{"E, d"}
-                Ehm{"E h:mm a"}
-                Ehms{"E h:mm:ss a"}
-                Gy{"r(U)"}
-                GyMMM{"MMM 'de' U"}
-                GyMMMEd{"E, d 'de' MMM 'de' U"}
-                GyMMMd{"d 'de' MMM 'de' U"}
-                GyMd{"dd/MM/r"}
-                MEd{"E, dd/MM"}
-                MMMEd{"E, d 'de' MMM"}
-                MMMMEd{"E, d 'de' MMMM"}
-                MMMMd{"d 'de' MMMM"}
-                MMMd{"d 'de' MMM"}
-                Md{"d/M"}
-                h{"h a"}
-                hm{"h:mm a"}
-                hms{"h:mm:ss a"}
-                yyyyM{"MM/r"}
-                yyyyMEd{"E, dd/MM/r"}
-                yyyyMMM{"MMM 'de' U"}
-                yyyyMMMEd{"E, d 'de' MMM 'de' U"}
-                yyyyMMMM{"MMMM 'de' U"}
-                yyyyMMMMEd{"E, d 'de' MMMM 'de' U"}
-                yyyyMMMMd{"d 'de' MMMM 'de' U"}
-                yyyyMMMd{"d 'de' MMM 'de' U"}
-                yyyyMd{"dd/MM/r"}
-                yyyyQQQ{"U QQQ"}
-                yyyyQQQQ{"U QQQQ"}
             }
             monthNames{
                 format{
@@ -344,12 +268,6 @@ pt{
                 Bhm{
                     h{"h:mm – h:mm B"}
                 }
-                H{
-                    H{"HH'h' - HH'h'"}
-                }
-                Hv{
-                    H{"HH – HH v"}
-                }
                 M{
                     M{"M–M"}
                 }
@@ -375,24 +293,6 @@ pt{
                 Md{
                     M{"dd/MM – dd/MM"}
                     d{"dd/MM – dd/MM"}
-                }
-                h{
-                    a{"h'h' a – h'h' a"}
-                    h{"h'h' - h'h' a"}
-                }
-                hm{
-                    a{"h:mm a – h:mm a"}
-                    h{"h:mm–h:mm a"}
-                    m{"h:mm–h:mm a"}
-                }
-                hmv{
-                    a{"h:mm a – h:mm a v"}
-                    h{"h:mm–h:mm a v"}
-                    m{"h:mm–h:mm a v"}
-                }
-                hv{
-                    a{"h a – h a v"}
-                    h{"h – h a v"}
                 }
                 y{
                     y{"y – y G"}
@@ -487,7 +387,6 @@ pt{
                 MMMEd{"E, d 'de' MMM"}
                 MMMMEd{"E, d 'de' MMMM"}
                 MMMMW{
-                    one{"W'ª' 'semana' 'de' MMMM"}
                     other{"W'ª' 'semana' 'de' MMMM"}
                 }
                 MMMMd{"d 'de' MMMM"}
@@ -512,7 +411,6 @@ pt{
                 yQQQ{"QQQ 'de' y"}
                 yQQQQ{"QQQQ 'de' y"}
                 yw{
-                    one{"w'ª' 'semana' 'de' Y"}
                     other{"w'ª' 'semana' 'de' Y"}
                 }
             }
@@ -793,41 +691,6 @@ pt{
                 }
             }
         }
-        japanese{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE, d 'de' MMMM 'de' y G",
-                "d 'de' MMMM 'de' y G",
-                "dd/MM/y G",
-                "dd/MM/yy GGGGG",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMdd",
-                "GGGGGyyMMdd",
-            }
-        }
-        roc{
-            eras{
-                abbreviated{
-                    0{"Antes da R.C."}
-                    1{"Minguo"}
-                }
-            }
-        }
     }
     characterLabel{
         activities{"atividade"}
@@ -908,28 +771,6 @@ pt{
         weather{"clima"}
         western_asian_scripts{"escrita do oeste asiático"}
         whitespace{"espaço em branco"}
-    }
-    contextTransforms{
-        day-format-except-narrow:intvector{
-            1,
-            1,
-        }
-        day-standalone-except-narrow:intvector{
-            1,
-            1,
-        }
-        languages:intvector{
-            1,
-            1,
-        }
-        relative:intvector{
-            1,
-            1,
-        }
-        typographicNames:intvector{
-            1,
-            1,
-        }
     }
     fields{
         day{

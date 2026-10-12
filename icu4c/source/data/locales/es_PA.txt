@@ -20,16 +20,6 @@ es_PA{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMdd",
-                "GGGGGyyMMdd",
-            }
             availableFormats{
                 MEd{"E, MM/dd"}
                 Md{"MM/dd"}
@@ -89,16 +79,6 @@ es_PA{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMdd",
-                "yyMMdd",
-            }
             availableFormats{
                 MEd{"E, MM/dd"}
                 Md{"MM/dd"}
@@ -109,22 +89,10 @@ es_PA{
             dayPeriod{
                 format{
                     abbreviated{
-                        evening1{"de la tarde"}
-                        morning1{"de la madrugada"}
-                        morning2{"de la mañana"}
-                        night1{"de la noche"}
                         noon{"mediodía"}
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        am{"a. m."}
-                        pm{"p. m."}
-                    }
-                    narrow{
-                        am{"a. m."}
-                        pm{"p. m."}
-                    }
                     wide{
                         am{"a. m."}
                         pm{"p. m."}
@@ -158,14 +126,6 @@ es_PA{
             }
             quarters{
                 format{
-                    wide{
-                        "1er. trimestre",
-                        "2do. trimestre",
-                        "3er. trimestre",
-                        "4.º trimestre",
-                    }
-                }
-                stand-alone{
                     wide{
                         "1er. trimestre",
                         "2do. trimestre",

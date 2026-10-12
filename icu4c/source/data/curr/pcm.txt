@@ -673,7 +673,6 @@ pcm{
             other{"Azẹrbaiján mánats"}
         }
         BDT{
-            one{"Bangladẹ́sh táka"}
             other{"Bangladẹ́sh táka"}
         }
         BHD{

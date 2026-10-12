@@ -127,21 +127,6 @@ ja{
                     100000000000000{
                         other{"¤000兆"}
                     }
-                    1000000000000000{
-                        other{"¤0000兆"}
-                    }
-                    10000000000000000{
-                        other{"¤0京"}
-                    }
-                    100000000000000000{
-                        other{"¤00京"}
-                    }
-                    1000000000000000000{
-                        other{"¤000京"}
-                    }
-                    10000000000000000000{
-                        other{"¤0000京"}
-                    }
                 }
                 currencyFormat%alphaNextToNumber{
                     10000{
@@ -176,21 +161,6 @@ ja{
                     }
                     100000000000000{
                         other{"¤ 000兆"}
-                    }
-                    1000000000000000{
-                        other{"¤ 0000兆"}
-                    }
-                    10000000000000000{
-                        other{"¤ 0京"}
-                    }
-                    100000000000000000{
-                        other{"¤ 00京"}
-                    }
-                    1000000000000000000{
-                        other{"¤ 000京"}
-                    }
-                    10000000000000000000{
-                        other{"¤ 0000京"}
                     }
                 }
                 decimalFormat{
@@ -230,21 +200,6 @@ ja{
                     100000000000000{
                         other{"000兆"}
                     }
-                    1000000000000000{
-                        other{"0000兆"}
-                    }
-                    10000000000000000{
-                        other{"0京"}
-                    }
-                    100000000000000000{
-                        other{"00京"}
-                    }
-                    1000000000000000000{
-                        other{"000京"}
-                    }
-                    10000000000000000000{
-                        other{"0000京"}
-                    }
                 }
             }
             symbols{
@@ -262,105 +217,7 @@ ja{
         traditional{"jpan"}
     }
     calendar{
-        buddhist{
-            DateTimePatterns{
-                "H時mm分ss秒 zzzz",
-                "H:mm:ss z",
-                "H:mm:ss",
-                "H:mm",
-                "GGGGy年M月d日EEEE",
-                "GGGGy年M月d日",
-                "Gy/MM/dd",
-                "Gy/MM/dd",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "Hmmsszzzz",
-                "Hmmssz",
-                "Hmmss",
-                "Hmm",
-                "GGGGyMMMEEEEd",
-                "GGGGyMMMd",
-                "GyMMdd",
-                "GyMMdd",
-            }
-            availableFormats{
-                EEEEd{"d日EEEE"}
-                Gy{"GGGGy年"}
-                GyMMM{"GGGGy年M月"}
-                GyMMMEEEEd{"GGGGy年M月d日EEEE"}
-                GyMMMEd{"GGGGy年M月d日(E)"}
-                GyMMMd{"GGGGy年M月d日"}
-                GyMd{"GGGGy年M月d日"}
-                MEEEEd{"M/dEEEE"}
-                MMMEEEEd{"M月d日EEEE"}
-                y{"GGGGy年"}
-                yyyy{"GGGGy年"}
-                yyyyM{"GGGGy年M月"}
-                yyyyMEEEEd{"GGGGy年M/dEEEE"}
-                yyyyMEd{"GGGGy年M/d(E)"}
-                yyyyMM{"Gy/MM"}
-                yyyyMMM{"GGGGy年M月"}
-                yyyyMMMEEEEd{"GGGGy年M月d日EEEE"}
-                yyyyMMMEd{"GGGGy年M月d日(E)"}
-                yyyyMMMM{"GGGGy年M月"}
-                yyyyMMMd{"GGGGy年M月d日"}
-                yyyyMd{"Gy/M/d"}
-            }
-            eras{
-                wide{
-                    0{"仏暦"}
-                }
-            }
-        }
         chinese{
-            DateTimePatterns{
-                "H時mm分ss秒 zzzz",
-                "H:mm:ss z",
-                "H:mm:ss",
-                "H:mm",
-                {
-                    "U年MMMd日EEEE",
-                    "hanidec",
-                }
-                {
-                    "U年MMMd日",
-                    "hanidec",
-                }
-                {
-                    "U年MMMd日",
-                    "hanidec",
-                }
-                "U-M-d",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "Hmmsszzzz",
-                "Hmmssz",
-                "Hmmss",
-                "Hmm",
-                {
-                    "UMMMEEEEd",
-                    "hanidec",
-                }
-                {
-                    "UMMMd",
-                    "hanidec",
-                }
-                {
-                    "UMMMd",
-                    "hanidec",
-                }
-                "UMd",
-            }
             availableFormats{
                 Bh{"BK時"}
                 Bhm{"BK:mm"}
@@ -551,138 +408,6 @@ ja{
                     }
                 }
             }
-            intervalFormats{
-                H{
-                    H{"H時～H時"}
-                }
-                Hm{
-                    H{"H時mm分～H時mm分"}
-                    m{"H時mm分～H時mm分"}
-                }
-                Hmv{
-                    H{"H時mm分～H時mm分(v)"}
-                    m{"H時mm分～H時mm分(v)"}
-                }
-                Hv{
-                    H{"H時～H時(v)"}
-                }
-                M{
-                    M{"M月～M月"}
-                }
-                MEd{
-                    M{"MM/dd(E)～MM/dd(E)"}
-                    d{"MM/dd(E)～MM/dd(E)"}
-                }
-                MMM{
-                    M{"MMM～MMM"}
-                }
-                MMMEd{
-                    M{"MMMd日(E)～MMMd日(E)"}
-                    d{"MMMd日(E)～d日(E)"}
-                }
-                MMMM{
-                    M{"MMMM～MMMM"}
-                }
-                MMMd{
-                    M{"MMMd日～MMMd日"}
-                    d{"MMMd日～d日"}
-                }
-                Md{
-                    M{"MM/dd～MM/dd"}
-                    d{"MM/dd～MM/dd"}
-                }
-                d{
-                    d{"d日～d日"}
-                }
-                fallback{"{0}～{1}"}
-                h{
-                    a{"aK時～aK時"}
-                    h{"aK時～K時"}
-                }
-                hm{
-                    a{"aK時mm分～aK時mm分"}
-                    h{"aK時mm分～K時mm分"}
-                    m{"aK時mm分～K時mm分"}
-                }
-                hmv{
-                    a{"aK時mm分～aK時mm分(v)"}
-                    h{"aK時mm分～K時mm分(v)"}
-                    m{"aK時mm分～K時mm分(v)"}
-                }
-                hv{
-                    a{"aK時～aK時(v)"}
-                    h{"aK時～K時(v)"}
-                }
-                y{
-                    y{"U年～U年"}
-                }
-                yM{
-                    M{"U/MM～U/MM"}
-                    y{"U/MM～U/MM"}
-                }
-                yMEd{
-                    M{"U/MM/dd(E)～U/MM/dd(E)"}
-                    d{"U/MM/dd(E)～U/MM/dd(E)"}
-                    y{"U/MM/dd(E)～U/MM/dd(E)"}
-                }
-                yMMM{
-                    M{"U年MMM～MMM"}
-                    y{"U年MMM～U年MMM"}
-                }
-                yMMMEd{
-                    M{"U年MMMd日(E)～MMMd日(E)"}
-                    d{"U年MMMd日(E)～d日(E)"}
-                    y{"U年MMMd日(E)～U年MMMd日(E)"}
-                }
-                yMMMM{
-                    M{"U年MMM～MMM"}
-                    y{"U年MMM～U年MMM"}
-                }
-                yMMMd{
-                    M{"U年MMMd日～MMMd日"}
-                    d{"U年MMMd日～d日"}
-                    y{"U年MMMd日～U年MMMd日"}
-                }
-                yMd{
-                    M{"U/MM/dd～U/MM/dd"}
-                    d{"U/MM/dd～U/MM/dd"}
-                    y{"U/MM/dd～U/MM/dd"}
-                }
-            }
-            monthNames{
-                format{
-                    wide{
-                        "正月",
-                        "二月",
-                        "三月",
-                        "四月",
-                        "五月",
-                        "六月",
-                        "七月",
-                        "八月",
-                        "九月",
-                        "十月",
-                        "十一月",
-                        "十二月",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "正",
-                        "二",
-                        "三",
-                        "四",
-                        "五",
-                        "六",
-                        "七",
-                        "八",
-                        "九",
-                        "十",
-                        "十一",
-                        "十二",
-                    }
-                }
-            }
             monthPatterns{
                 format{
                     wide{
@@ -697,48 +422,6 @@ ja{
                 stand-alone{
                     narrow{
                         leap{"閏{0}"}
-                    }
-                }
-            }
-        }
-        coptic{
-            monthNames{
-                format{
-                    wide{
-                        "トウト",
-                        "ババ",
-                        "ハトール",
-                        "キアック",
-                        "トーバ",
-                        "アムシール",
-                        "バラムハート",
-                        "バラモウダ",
-                        "バシャンス",
-                        "パオーナ",
-                        "エペープ",
-                        "メスラ",
-                        "ナシエ",
-                    }
-                }
-            }
-        }
-        ethiopic{
-            monthNames{
-                format{
-                    wide{
-                        "メスケレム",
-                        "テケムト",
-                        "ヘダル",
-                        "ターサス",
-                        "テル",
-                        "イェカティト",
-                        "メガビト",
-                        "ミアジア",
-                        "ゲンボト",
-                        "セネ",
-                        "ハムレ",
-                        "ネハッセ",
-                        "パグメン",
                     }
                 }
             }
@@ -764,16 +447,6 @@ ja{
                 "{1}の {0}",
                 "{1} {0}",
                 "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "Hmmsszzzz",
-                "Hmmssz",
-                "Hmmss",
-                "Hmm",
-                "GyMMMEEEEd",
-                "GyMMMd",
-                "GGGGGyMMdd",
-                "GGGGGyMd",
             }
             availableFormats{
                 Bh{"BK時"}
@@ -894,20 +567,6 @@ ja{
                     d{"GGGGGy/MM/dd～y/MM/dd"}
                     y{"GGGGGy/MM/dd～y/MM/dd"}
                 }
-                H{
-                    H{"H時～H時"}
-                }
-                Hm{
-                    H{"H時mm分～H時mm分"}
-                    m{"H時mm分～H時mm分"}
-                }
-                Hmv{
-                    H{"H時mm分～H時mm分(v)"}
-                    m{"H時mm分～H時mm分(v)"}
-                }
-                Hv{
-                    H{"H時～H時(v)"}
-                }
                 M{
                     M{"M月～M月"}
                 }
@@ -941,24 +600,6 @@ ja{
                     d{"d日～d日"}
                 }
                 fallback{"{0}～{1}"}
-                h{
-                    a{"aK時～aK時"}
-                    h{"aK時～K時"}
-                }
-                hm{
-                    a{"aK時mm分～aK時mm分"}
-                    h{"aK時mm分～K時mm分"}
-                    m{"aK時mm分～K時mm分"}
-                }
-                hmv{
-                    a{"aK時mm分～aK時mm分(v)"}
-                    h{"aK時mm分～K時mm分(v)"}
-                    m{"aK時mm分～K時mm分(v)"}
-                }
-                hv{
-                    a{"aK時～aK時(v)"}
-                    h{"aK時～K時(v)"}
-                }
                 y{
                     y{"Gy年～y年"}
                 }
@@ -1021,16 +662,6 @@ ja{
                 "{1}の {0}",
                 "{1} {0}",
                 "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "Hmmsszzzz",
-                "Hmmssz",
-                "Hmmss",
-                "Hmm",
-                "yMMMEEEEd",
-                "yMMMd",
-                "yMMdd",
-                "yMMdd",
             }
             appendItems{
                 Day-Of-Week{"{0}({1})"}
@@ -1160,10 +791,6 @@ ja{
                 abbreviated%variant{
                     0{"西暦紀元前"}
                     1{"西暦紀元"}
-                }
-                narrow{
-                    0{"BC"}
-                    1{"AD"}
                 }
             }
             intervalFormats{
@@ -1350,137 +977,6 @@ ja{
                 }
             }
         }
-        hebrew{
-            DateTimePatterns{
-                "H時mm分ss秒 zzzz",
-                "H:mm:ss z",
-                "H:mm:ss",
-                "H:mm",
-                "Gy年M月d日EEEE",
-                "Gy年M月d日",
-                "Gy/MM/dd",
-                "Gy/MM/dd",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "Hmmsszzzz",
-                "Hmmssz",
-                "Hmmss",
-                "Hmm",
-                "GyMMMEEEEd",
-                "GyMMMd",
-                "GyMMdd",
-                "GyMMdd",
-            }
-            monthNames{
-                format{
-                    wide{
-                        "ティスレ",
-                        "へシボン",
-                        "キスレブ",
-                        "テベット",
-                        "シバット",
-                        "アダル I",
-                        "アダル",
-                        "ニサン",
-                        "イヤル",
-                        "シバン",
-                        "タムズ",
-                        "アヴ",
-                        "エルル",
-                        "アダル II",
-                    }
-                }
-            }
-        }
-        indian{
-            eras{
-                abbreviated{
-                    0{"サカ"}
-                }
-            }
-            monthNames{
-                format{
-                    wide{
-                        "カイトラ",
-                        "ヴァイサカ",
-                        "ジャイスタ",
-                        "アーサダ",
-                        "スラバナ",
-                        "バードラ",
-                        "アスビナ",
-                        "カルディカ",
-                        "アヴラハヤナ",
-                        "パウサ",
-                        "マーガ",
-                        "パルグナ",
-                    }
-                }
-            }
-        }
-        islamic{
-            DateTimePatterns{
-                "H時mm分ss秒 zzzz",
-                "H:mm:ss z",
-                "H:mm:ss",
-                "H:mm",
-                "Gy年M月d日EEEE",
-                "Gy年M月d日",
-                "Gy/MM/dd",
-                "Gy/MM/dd",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "Hmmsszzzz",
-                "Hmmssz",
-                "Hmmss",
-                "Hmm",
-                "GyMMMEEEEd",
-                "GyMMMd",
-                "GyMMdd",
-                "GyMMdd",
-            }
-            monthNames{
-                format{
-                    abbreviated{
-                        "ムハッラム",
-                        "サフアル",
-                        "ラビー・ウル・アウワル",
-                        "ラビー・ウッ・サーニー",
-                        "ジュマーダル・アウワル",
-                        "ジュマーダッサーニー",
-                        "ラジャブ",
-                        "シャアバーン",
-                        "ラマダーン",
-                        "シャウワール",
-                        "ズル・カイダ",
-                        "ズル・ヒッジャ",
-                    }
-                    wide{
-                        "ムハッラム",
-                        "サフアル",
-                        "ラビー・ウル・アウワル",
-                        "ラビー・ウッ・サーニー",
-                        "ジュマーダル・アウワル",
-                        "ジュマーダッサーニー",
-                        "ラジャブ",
-                        "シャアバーン",
-                        "ラマダーン",
-                        "シャウワール",
-                        "ズル・カイダ",
-                        "ズル・ヒッジャ",
-                    }
-                }
-            }
-        }
         japanese{
             DateTimePatterns{
                 "H時mm分ss秒 zzzz",
@@ -1491,10 +987,7 @@ ja{
                     "Gy年M月d日EEEE",
                     "y=jpanyear",
                 }
-                {
-                    "Gy年M月d日",
-                    "y=jpanyear",
-                }
+                "Gy年M月d日",
                 {
                     "Gy年M月d日",
                     "y=jpanyear",
@@ -1506,26 +999,12 @@ ja{
                 "{1} {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "Hmmsszzzz",
-                "Hmmssz",
-                "Hmmss",
-                "Hmm",
-                "GyMMMEEEEd",
-                "GyMMMd",
-                {
-                    "GyMMMd",
-                    "y=jpanyear",
-                }
-                "GGGGGyMd",
-            }
             availableFormats{
                 EEEEd{"d日EEEE"}
                 GyMMMEEEEd{"Gy年M月d日EEEE"}
                 MEEEEd{"M/dEEEE"}
                 MMMEEEEd{"M月d日EEEE"}
                 yyyyMEEEEd{"GGGGGy/M/dEEEE"}
-                yyyyMM{"GGGGGy/MM"}
                 yyyyMMMEEEEd{"Gy年M月d日EEEE"}
             }
             eras{
@@ -1535,59 +1014,6 @@ ja{
                     234{"昭和"}
                     235{"平成"}
                     236{"令和"}
-                }
-            }
-        }
-        persian{
-            monthNames{
-                format{
-                    wide{
-                        "ファルヴァルディーン",
-                        "オルディーベヘシュト",
-                        "ホルダード",
-                        "ティール",
-                        "モルダード",
-                        "シャハリーヴァル",
-                        "メフル",
-                        "アーバーン",
-                        "アーザル",
-                        "デイ",
-                        "バフマン",
-                        "エスファンド",
-                    }
-                }
-            }
-        }
-        roc{
-            DateTimePatterns{
-                "H時mm分ss秒 zzzz",
-                "H:mm:ss z",
-                "H:mm:ss",
-                "H:mm",
-                "Gy年M月d日EEEE",
-                "Gy年M月d日",
-                "Gy/MM/dd",
-                "Gy/MM/dd",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "Hmmsszzzz",
-                "Hmmssz",
-                "Hmmss",
-                "Hmm",
-                "GyMMMEEEEd",
-                "GyMMMd",
-                "GyMMdd",
-                "GyMMdd",
-            }
-            eras{
-                abbreviated{
-                    0{"民国前"}
-                    1{"民国"}
                 }
             }
         }

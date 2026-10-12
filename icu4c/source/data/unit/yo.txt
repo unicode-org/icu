@@ -203,14 +203,6 @@ yo{
                 dnam{"ìdinwọ̀n ayé"}
                 other{"{0} ìdinwọ̀n ayé"}
             }
-            fathom{
-                dnam{"fátọ́ọ̀mu"}
-                other{"{0} fátọ́ọ̀mù"}
-            }
-            furlong{
-                dnam{"àwọn fọ́lọ́ọ̀ngì"}
-                other{"{0} àwọn fọ́lọ́ọ̀ngì"}
-            }
         }
         light{
             candela{
@@ -234,9 +226,6 @@ yo{
             grain{
                 dnam{"giréènì"}
             }
-            stone{
-                other{"{0} àwon okùta"}
-            }
             tonne{
                 dnam{"mẹtiriki tọọnu"}
             }
@@ -257,10 +246,6 @@ yo{
             }
         }
         volume{
-            bushel{
-                dnam{"búsẹ́ẹ̀li"}
-                other{"{0} búsẹ́ẹ̀li"}
-            }
             cup{
                 dnam{"àwọn ife"}
             }
@@ -442,10 +427,6 @@ yo{
             }
         }
         energy{
-            british-thermal-unit{
-                dnam{"BTU"}
-                other{"{0}Btu"}
-            }
             calorie{
                 other{"{0}cal"}
             }
@@ -512,13 +493,6 @@ yo{
                 dnam{"R⊕"}
                 other{"{0}R⊕"}
             }
-            fathom{
-                dnam{"fatọ́"}
-                other{"{0}fth"}
-            }
-            furlong{
-                other{"{0}fur"}
-            }
         }
         light{
             candela{
@@ -564,10 +538,6 @@ yo{
             }
             solar-mass{
                 other{"{0}M☉"}
-            }
-            stone{
-                dnam{"okùta"}
-                other{"{0}st"}
             }
             ton{
                 other{"{0}tn"}
@@ -661,10 +631,6 @@ yo{
             }
             barrel{
                 other{"{0}bbl"}
-            }
-            bushel{
-                dnam{"búsẹ́li"}
-                other{"{0}búsẹ́ẹ̀li"}
             }
             centiliter{
                 other{"{0}cL"}
@@ -919,13 +885,6 @@ yo{
                 dnam{"àmì ìdínwọ̀n ayé"}
                 other{"{0} àmì ìdínwọ̀n ayé"}
             }
-            fathom{
-                dnam{"fátọ́mù"}
-            }
-            furlong{
-                dnam{"fọ́lọ́ọ̀ngì"}
-                other{"{0} fọ́"}
-            }
             meter{
                 dnam{"mita"}
             }
@@ -945,9 +904,6 @@ yo{
                 dnam{"gíréènì"}
                 other{"{0} gíréènì"}
             }
-            stone{
-                dnam{"àwon okùta"}
-            }
         }
         pressure{
             ofhg{
@@ -961,9 +917,6 @@ yo{
             }
         }
         volume{
-            bushel{
-                dnam{"Búsẹ́ẹ̀li"}
-            }
             cup{
                 dnam{"ife"}
             }

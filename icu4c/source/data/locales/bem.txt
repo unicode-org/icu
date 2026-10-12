@@ -68,16 +68,6 @@ bem{
                 "{1} {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "Hmmsszzzz",
-                "Hmmssz",
-                "Hmmss",
-                "Hmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yMMdd",
-            }
             availableFormats{
                 MEd{"E, M/d"}
                 MMMEd{"E, MMM d"}
@@ -171,9 +161,7 @@ bem{
         day{
             dn{"Ubushiku"}
             relative{
-                "-1"{"yesterday"}
                 "0"{"Lelo"}
-                "1"{"tomorrow"}
             }
         }
         dayperiod{

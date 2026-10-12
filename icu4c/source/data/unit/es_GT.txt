@@ -46,7 +46,6 @@ es_GT{
         power{
             horsepower{
                 one{"{0} caballos de fuerza"}
-                other{"{0} caballos de fuerza"}
             }
         }
         volume{

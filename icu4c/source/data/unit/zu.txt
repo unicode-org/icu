@@ -127,7 +127,6 @@ zu{
         }
         duration{
             decade{
-                one{"{0} dec"}
                 other{"{0} decades"}
             }
             hour{
@@ -140,12 +139,10 @@ zu{
                 other{"{0} microseconds"}
             }
             minute{
-                one{"{0} iminithi"}
                 other{"{0} amaminithi"}
             }
             month{
                 one{"{0} inyanga"}
-                other{"{0} izinyanga"}
                 per{"{0} ngenyanga"}
             }
             second{
@@ -155,7 +152,6 @@ zu{
             }
             week{
                 one{"{0} iviki"}
-                other{"{0} amaviki"}
             }
         }
         energy{
@@ -180,18 +176,15 @@ zu{
                 other{"{0} amachashazi nge-inch"}
             }
             megapixel{
-                one{"{0} MP"}
                 other{"{0} megapixels"}
             }
         }
         light{
             candela{
-                one{"{0} cd"}
                 other{"{0} candela"}
             }
             lumen{
                 one{"{0} i-lumen"}
-                other{"{0} lm"}
             }
             lux{
                 one{"{0} i-lux"}
@@ -213,7 +206,6 @@ zu{
         volume{
             quart-imperial{
                 one{"{0} Imp. quart"}
-                other{"{0} qt Imp."}
             }
         }
     }
@@ -269,7 +261,6 @@ zu{
                 other{"{0}km²"}
             }
             square-meter{
-                one{"{0} m²"}
                 other{"{0}m²"}
             }
             square-mile{
@@ -344,7 +335,6 @@ zu{
             }
             kilobyte{
                 one{"{0}Mb"}
-                other{"{0} kB"}
             }
             megabit{
                 one{"{0}Mb"}
@@ -373,15 +363,12 @@ zu{
                 other{"{0}c"}
             }
             day{
-                one{"{0} usuku"}
                 other{"{0} suku"}
             }
             decade{
                 one{"{0}dec"}
-                other{"{0} dec"}
             }
             hour{
-                one{"{0} hora"}
                 other{"{0} hora"}
             }
             minute{
@@ -421,10 +408,6 @@ zu{
             }
         }
         energy{
-            british-thermal-unit{
-                one{"{0}Btu"}
-                other{"{0}Btu"}
-            }
             calorie{
                 one{"{0}kcal"}
                 other{"{0}kcal"}
@@ -470,7 +453,6 @@ zu{
                 other{"{0}Hz"}
             }
             kilohertz{
-                one{"{0} kHz"}
                 other{"{0}kHz"}
             }
             megahertz{
@@ -489,7 +471,6 @@ zu{
                 other{"{0}dpcm"}
             }
             dot-per-inch{
-                one{"{0} dpi"}
                 other{"{0}dpi"}
             }
             em{
@@ -506,7 +487,6 @@ zu{
             }
             pixel-per-centimeter{
                 one{"{0}ppcm"}
-                other{"{0} ppcm"}
             }
             pixel-per-inch{
                 one{"{0}ppi"}
@@ -524,7 +504,6 @@ zu{
             }
             foot{
                 one{"{0}′"}
-                other{"{0} ft"}
             }
             micrometer{
                 one{"{0}μm"}
@@ -553,7 +532,6 @@ zu{
                 other{"{0}cd"}
             }
             lumen{
-                one{"{0} lm"}
                 other{"{0}lm"}
             }
         }
@@ -597,10 +575,6 @@ zu{
             solar-mass{
                 one{"{0}M☉"}
                 other{"{0}M☉"}
-            }
-            stone{
-                one{"{0} st"}
-                other{"{0}st"}
             }
             ton{
                 one{"{0}tn"}
@@ -675,14 +649,12 @@ zu{
                 other{"{0}Pa"}
             }
             pound-force-per-square-inch{
-                one{"{0} psi"}
                 other{"{0}psi"}
             }
         }
         speed{
             kilometer-per-hour{
                 one{"{0}kph"}
-                other{"{0} km/h"}
             }
             meter-per-second{
                 one{"{0}m/s"}
@@ -712,10 +684,6 @@ zu{
             barrel{
                 one{"{0}bbl"}
                 other{"{0}bbl"}
-            }
-            bushel{
-                one{"{0}bu"}
-                other{"{0}bu"}
             }
             centiliter{
                 one{"{0}cL"}
@@ -821,7 +789,6 @@ zu{
             }
             quart-imperial{
                 one{"{0} Imp. quart"}
-                other{"{0} qt Imp."}
             }
         }
     }
@@ -864,7 +831,6 @@ zu{
         consumption{
             mile-per-gallon{
                 dnam{"miles/gal"}
-                one{"{0} mpg"}
                 other{"{0} mpg"}
             }
         }
@@ -901,7 +867,6 @@ zu{
             }
             minute{
                 dnam{"amaminithi"}
-                one{"{0} iminithi"}
                 other{"{0} iminithi"}
             }
             month{
@@ -911,7 +876,6 @@ zu{
             }
             second{
                 dnam{"amasekhondi"}
-                one{"{0} sec"}
                 other{"{0} sec"}
             }
             week{
@@ -965,12 +929,10 @@ zu{
         volume{
             fluid-ounce{
                 dnam{"fl oz"}
-                one{"{0} fl oz"}
                 other{"{0} fl oz"}
             }
             gallon{
                 dnam{"gal"}
-                one{"{0} gal"}
                 other{"{0} gal"}
                 per{"{0}/gal"}
             }

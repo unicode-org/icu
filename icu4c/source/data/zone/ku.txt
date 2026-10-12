@@ -468,11 +468,6 @@ ku{
             lg{"Saeta Pasîfîkê ya Amerîkaya Bakur"}
             ls{"Saeta Standard a Pasîfîkê ya Amerîkaya Bakur"}
         }
-        "meta:Anadyr"{
-            ld{"Saeta Havînê ya Anadyrê"}
-            lg{"Saeta Anadyrê"}
-            ls{"Saeta Anadyrê ya Standard"}
-        }
         "meta:Apia"{
             ld{"Saeta Havînê ya Apiayê"}
             lg{"Saeta Apiayê"}
@@ -559,9 +554,6 @@ ku{
             ld{"Saeta Havînê ya Cape Verdeyê"}
             lg{"Saeta Cape Verdeyê"}
             ls{"Saeta Standard a Cape Verdeyê"}
-        }
-        "meta:Casey"{
-            ls{"Saeta Caseyê"}
         }
         "meta:Chamorro"{
             ls{"Saeta Chamorroyê ya Standard"}

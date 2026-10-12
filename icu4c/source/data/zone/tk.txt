@@ -980,11 +980,6 @@ tk{
             lg{"Demirgazyk Amerika Ýuwaş umman wagty"}
             ls{"Demirgazyk Amerika Ýuwaş umman standart wagty"}
         }
-        "meta:Anadyr"{
-            ld{"Anadyr tomusky wagty"}
-            lg{"Anadyr wagty"}
-            ls{"Anadyr standart wagty"}
-        }
         "meta:Apia"{
             ld{"Apia tomusky wagty"}
             lg{"Apia wagty"}

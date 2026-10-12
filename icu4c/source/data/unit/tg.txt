@@ -8,17 +8,12 @@ tg{
         }
         coordinate{
             dnam{"самти кардиналӣ"}
-            east{"{0} Шм"}
-            north{"{0} Шр"}
             south{"{0} ҷануб"}
             west{"{0} ғарб"}
         }
     }
     unitsNarrow{
         coordinate{
-            dnam{"самт"}
-            east{"{0} Шм"}
-            north{"{0} Шр"}
             south{"{0}Ҷ"}
             west{"{0}Ғ"}
         }

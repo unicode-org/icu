@@ -437,11 +437,6 @@ sl{
             lg{"Pacifiški čas"}
             ls{"Pacifiški standardni čas"}
         }
-        "meta:Anadyr"{
-            ld{"Anadirski poletni čas"}
-            lg{"Anadirski čas"}
-            ls{"Anadirski standardni čas"}
-        }
         "meta:Apia"{
             ld{"Zahodnosamojski poletni čas"}
             lg{"Zahodnosamojski čas"}

@@ -279,9 +279,6 @@ yrl{
         "America:Edmonton"{
             ec{"Edimũtũ"}
         }
-        "America:Eirunepe"{
-            ec{"Eirunepé"}
-        }
         "America:El_Salvador"{
             ec{"Eu Sawadu"}
         }
@@ -1017,9 +1014,6 @@ yrl{
         "Europe:Tallinn"{
             ec{"Tarĩ"}
         }
-        "Europe:Tirane"{
-            ec{"Tirana"}
-        }
         "Europe:Ulyanovsk"{
             ec{"Ulianuwiki"}
         }
@@ -1171,9 +1165,6 @@ yrl{
             ld{"Hurariyu Kurasí Ara Acre yara"}
             lg{"Hurariyu Acre yara"}
             ls{"Hurariyu Retewa Acre yara"}
-            sd{"ACST"}
-            sg{"ACT"}
-            ss{"ACT"}
         }
         "meta:Afghanistan"{
             ls{"Afegãniretãma Hurariyu"}
@@ -1199,9 +1190,6 @@ yrl{
             ld{"Amasuna Kurasí Ara Hurariyu"}
             lg{"Amasuna Hurariyu"}
             ls{"Amasuna Hurariyu Eté"}
-            sd{"AMST"}
-            sg{"AMT"}
-            ss{"AMT"}
         }
         "meta:America_Central"{
             ld{"Hurariyu Kurasí Ara Piterawara"}
@@ -1222,11 +1210,6 @@ yrl{
             ld{"Rỹ Kã Óra Pasifiku tá"}
             lg{"Óra Pasifiku tá"}
             ls{"Óra Pã Pasifiku tá"}
-        }
-        "meta:Anadyr"{
-            ld{"Anadí Kurasí Ara Hurariyu"}
-            lg{"Anadí Hurariyu"}
-            ls{"Anadí Hurariyu Retewa"}
         }
         "meta:Apia"{
             ld{"Apiya Kurasí Ara Hurariyu"}
@@ -1303,9 +1286,6 @@ yrl{
             ld{"Rỹ Kã Óra Brasília tá"}
             lg{"Óra Brasília tá"}
             ls{"Óra Pã Brasília tá"}
-            sd{"BRST"}
-            sg{"BRT"}
-            ss{"BRT"}
         }
         "meta:British"{
             ld{"Hurariyu Kurasí Ara Biritãniku"}

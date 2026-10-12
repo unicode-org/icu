@@ -149,15 +149,9 @@ nl{
                     _{
                         _{"vierkante {0}"}
                     }
-                    common{
-                        _{"vierkante {0}"}
-                    }
                 }
                 other{
                     _{
-                        _{"vierkante {0}"}
-                    }
-                    common{
                         _{"vierkante {0}"}
                     }
                 }
@@ -167,15 +161,9 @@ nl{
                     _{
                         _{"kubieke {0}"}
                     }
-                    common{
-                        _{"kubieke {0}"}
-                    }
                 }
                 other{
                     _{
-                        _{"kubieke {0}"}
-                    }
-                    common{
                         _{"kubieke {0}"}
                     }
                 }
@@ -480,11 +468,6 @@ nl{
                 one{"{0} becquerel"}
                 other{"{0} becquerels"}
             }
-            british-thermal-unit{
-                dnam{"British thermal unit"}
-                one{"{0} British thermal unit"}
-                other{"{0} British thermal unit"}
-            }
             calorie{
                 dnam{"calorie"}
                 gender{"common"}
@@ -609,7 +592,6 @@ nl{
             em{
                 dnam{"typografische em"}
                 gender{"common"}
-                one{"{0} em"}
                 other{"{0} ems"}
             }
             megapixel{
@@ -658,22 +640,12 @@ nl{
                 one{"{0} aardstraal"}
                 other{"{0} aardstralen"}
             }
-            fathom{
-                dnam{"vadem"}
-                one{"{0} vadem"}
-                other{"{0} vadems"}
-            }
             foot{
                 dnam{"voet"}
                 gender{"common"}
                 one{"{0} voet"}
                 other{"{0} voet"}
                 per{"{0} per voet"}
-            }
-            furlong{
-                dnam{"furlong"}
-                one{"{0} furlong"}
-                other{"{0} furlong"}
             }
             inch{
                 gender{"common"}
@@ -875,11 +847,6 @@ nl{
                 one{"{0} zonnemassa"}
                 other{"{0} zonnemassa"}
             }
-            stone{
-                dnam{"stone"}
-                one{"{0} stone"}
-                other{"{0} stone"}
-            }
             tonne{
                 dnam{"metrische ton"}
                 gender{"common"}
@@ -1059,11 +1026,6 @@ nl{
                 one{"{0} barrel"}
                 other{"{0} barrels"}
             }
-            bushel{
-                dnam{"bushel"}
-                one{"{0} bushel"}
-                other{"{0} bushels"}
-            }
             centiliter{
                 dnam{"centiliter"}
                 gender{"common"}
@@ -1185,7 +1147,6 @@ nl{
             }
             jigger{
                 gender{"common"}
-                one{"{0} jigger"}
                 other{"{0} jiggers"}
             }
             liter{
@@ -1209,7 +1170,6 @@ nl{
             }
             pinch{
                 gender{"neuter"}
-                one{"{0} snufje"}
                 other{"{0} snufjes"}
             }
             pint{
@@ -1343,7 +1303,6 @@ nl{
         graphics{
             dot{
                 dnam{"dot"}
-                one{"{0} dot"}
                 other{"{0} dot"}
             }
             megapixel{
@@ -1442,7 +1401,6 @@ nl{
             }
             revolution{
                 dnam{"tr"}
-                one{"{0} tr"}
                 other{"{0} tr"}
             }
         }
@@ -1473,22 +1431,18 @@ nl{
         concentr{
             item{
                 dnam{"onderdeel"}
-                one{"{0} ond."}
                 other{"{0} ond."}
             }
             karat{
                 dnam{"K"}
-                one{"{0} K"}
                 other{"{0} K"}
             }
             milligram-ofglucose-per-deciliter{
                 dnam{"mg/dl"}
-                one{"{0} mg/dl"}
                 other{"{0} mg/dl"}
             }
             millimole-per-liter{
                 dnam{"millimol/liter"}
-                one{"{0} mmol/l"}
                 other{"{0} mmol/l"}
             }
             ofglucose{
@@ -1515,22 +1469,18 @@ nl{
         consumption{
             liter-per-100-kilometer{
                 dnam{"l/100km"}
-                one{"{0} l/100km"}
                 other{"{0} l/100km"}
             }
             liter-per-kilometer{
                 dnam{"l/km"}
-                one{"{0} l/km"}
                 other{"{0} l/km"}
             }
             mile-per-gallon{
                 dnam{"mpg"}
-                one{"{0} mpg"}
                 other{"{0} mpg"}
             }
             mile-per-gallon-imperial{
                 dnam{"mijl/imp. gal"}
-                one{"{0} mpg imp."}
                 other{"{0} mpg imp."}
             }
         }
@@ -1561,18 +1511,15 @@ nl{
             }
             decade{
                 dnam{"dec."}
-                one{"{0} dec."}
                 other{"{0} dec."}
             }
             hour{
                 dnam{"uur"}
-                one{"{0} uur"}
                 other{"{0} uur"}
                 per{"{0}/uur"}
             }
             month{
                 dnam{"mnd"}
-                one{"{0} mnd"}
                 other{"{0} mnd"}
                 per{"{0}/mnd"}
             }
@@ -1584,12 +1531,10 @@ nl{
             }
             quarter{
                 dnam{"kwart."}
-                one{"{0} kwart."}
                 other{"{0} kwart."}
                 per{"{0}/kw."}
             }
             second{
-                one{"{0} sec"}
                 other{"{0} sec"}
                 per{"{0}/sec"}
             }
@@ -1600,7 +1545,6 @@ nl{
             }
             year{
                 dnam{"jr"}
-                one{"{0} jr"}
                 other{"{0} jr"}
                 per{"{0}/jr"}
             }
@@ -1654,7 +1598,6 @@ nl{
         length{
             astronomical-unit{
                 dnam{"AE"}
-                one{"{0} AE"}
                 other{"{0} AE"}
             }
             inch{
@@ -1662,7 +1605,6 @@ nl{
             }
             light-year{
                 dnam{"lj"}
-                one{"{0} lj"}
                 other{"{0} lj"}
             }
             meter{
@@ -1678,7 +1620,6 @@ nl{
         mass{
             grain{
                 dnam{"grein"}
-                one{"{0} grein"}
                 other{"{0} grein"}
             }
             gram{
@@ -1686,14 +1627,12 @@ nl{
             }
             ton{
                 dnam{"ton"}
-                one{"{0} ton"}
                 other{"{0} ton"}
             }
         }
         power{
             horsepower{
                 dnam{"pk"}
-                one{"{0} pk"}
                 other{"{0} pk"}
             }
             watt{
@@ -1703,36 +1642,30 @@ nl{
         pressure{
             millimeter-ofhg{
                 dnam{"mmHg"}
-                one{"{0} mmHg"}
                 other{"{0} mmHg"}
             }
         }
         speed{
             beaufort{
                 dnam{"windkracht"}
-                one{"{0}"}
                 other{"{0}"}
             }
             kilometer-per-hour{
                 dnam{"km/u"}
-                one{"{0} km/u"}
                 other{"{0} km/u"}
             }
             knot{
                 dnam{"kt"}
-                one{"{0} kt"}
                 other{"{0} kt"}
             }
             light-speed{
                 dnam{"licht"}
-                one{"{0} licht"}
                 other{"{0} licht"}
             }
         }
         torque{
             newton-meter{
                 dnam{"Nm"}
-                one{"{0} Nm"}
                 other{"{0} Nm"}
             }
         }
@@ -1742,11 +1675,9 @@ nl{
             }
             centiliter{
                 dnam{"cl"}
-                one{"{0} cl"}
                 other{"{0} cl"}
             }
             cup{
-                one{"{0} cup"}
                 other{"{0} cup"}
             }
             cup-metric{
@@ -1754,12 +1685,10 @@ nl{
             }
             deciliter{
                 dnam{"dl"}
-                one{"{0} dl"}
                 other{"{0} dl"}
             }
             dessert-spoon{
                 dnam{"des l"}
-                one{"{0} des l"}
                 other{"{0} des l"}
             }
             dessert-spoon-imperial{
@@ -1769,7 +1698,6 @@ nl{
             }
             dram{
                 dnam{"drachme"}
-                one{"{0} fl dr"}
                 other{"{0} fl dr"}
             }
             drop{
@@ -1779,24 +1707,20 @@ nl{
             }
             fluid-ounce{
                 dnam{"fl oz"}
-                one{"{0} fl oz"}
                 other{"{0} fl oz"}
             }
             gallon{
                 dnam{"gal"}
-                one{"{0} gal"}
                 other{"{0} gal"}
                 per{"{0}/gal"}
             }
             gallon-imperial{
                 dnam{"imp. gal"}
-                one{"{0} imp. gal"}
                 other{"{0} imp. gal"}
                 per{"{0}/imp. gal"}
             }
             hectoliter{
                 dnam{"hl"}
-                one{"{0} hl"}
                 other{"{0} hl"}
             }
             liter{
@@ -1804,27 +1728,22 @@ nl{
             }
             milliliter{
                 dnam{"ml"}
-                one{"{0} ml"}
                 other{"{0} ml"}
             }
             pinch{
                 dnam{"snufje"}
-                one{"{0} snufje"}
                 other{"{0} snufje"}
             }
             quart-imperial{
                 dnam{"imp. qt"}
-                one{"{0} imp. qt"}
                 other{"{0} imp. qt"}
             }
             tablespoon{
                 dnam{"el"}
-                one{"{0} el"}
                 other{"{0} el"}
             }
             teaspoon{
                 dnam{"tl"}
-                one{"{0} tl"}
                 other{"{0} tl"}
             }
         }

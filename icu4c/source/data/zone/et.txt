@@ -341,11 +341,6 @@ et{
             lg{"Vaikse ookeani aeg"}
             ls{"Vaikse ookeani standardaeg"}
         }
-        "meta:Anadyr"{
-            ld{"Anadõri suveaeg"}
-            lg{"Anadõri aeg"}
-            ls{"Anadõri standardaeg"}
-        }
         "meta:Apia"{
             ld{"Apia suveaeg"}
             lg{"Apia aeg"}
@@ -433,9 +428,6 @@ et{
             ld{"Roheneemesaarte suveaeg"}
             lg{"Roheneemesaarte aeg"}
             ls{"Roheneemesaarte standardaeg"}
-        }
-        "meta:Casey"{
-            ls{"Casey aeg"}
         }
         "meta:Chamorro"{
             ls{"Tšamorro standardaeg"}

@@ -29,16 +29,6 @@ en_MV{
                 "{1} {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMdd",
-                "yyMd",
-            }
         }
     }
 }

@@ -62,8 +62,4 @@ os{
             other{"нӕзонгӕ валютӕйы"}
         }
     }
-    CurrencyUnitPatterns{
-        one{"{0} {1}"}
-        other{"{0} {1}"}
-    }
 }

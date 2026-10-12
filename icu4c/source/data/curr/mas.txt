@@ -75,17 +75,9 @@ mas{
             "£",
             "Iropiyianí e Nkɨ́resa",
         }
-        GHC{
-            "GHC",
-            "Iropiyianí e Ghana",
-        }
         GMD{
             "GMD",
             "Iropiyianí e Gambia",
-        }
-        GNS{
-            "GNS",
-            "Iropiyianí e Gine",
         }
         INR{
             "₹",
@@ -123,10 +115,6 @@ mas{
             "MGA",
             "Iropiyianí e Bukini",
         }
-        MRO{
-            "MRO",
-            "Iropiyianí e Moritania (1973–2017)",
-        }
         MRU{
             "MRU",
             "Iropiyianí e Moritania",
@@ -138,10 +126,6 @@ mas{
         MWK{
             "MWK",
             "Iropiyianí e Malawi",
-        }
-        MZM{
-            "MZM",
-            "Iropiyianí e Msumbiji",
         }
         NAD{
             "NAD",
@@ -183,10 +167,6 @@ mas{
             "SOS",
             "Iropiyianí e Somalia",
         }
-        STD{
-            "STD",
-            "Iropiyianí e Saotome (1977–2017)",
-        }
         STN{
             "STN",
             "Iropiyianí e Saotome",
@@ -223,17 +203,9 @@ mas{
             "ZAR",
             "Iropiyianí e Afrika Kusini",
         }
-        ZMK{
-            "ZMK",
-            "Iropiyianí e Sambia (1968–2012)",
-        }
         ZMW{
             "ZMW",
             "Iropiyianí e Sambia",
-        }
-        ZWD{
-            "ZWD",
-            "Iropiyianí e Simbabwe",
         }
     }
 }

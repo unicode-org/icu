@@ -31,21 +31,13 @@ kok_Latn{
         cy{"Welx"}
         da{"Denmarkez"}
         de{"Jermon"}
-        de_AT{"Jermon (Austria)"}
-        de_CH{"Jermon (Switzerland)"}
         doi{"Dogri"}
         dsb{"Sokoilem Sorbian"}
         ee{"Ewe"}
         el{"Grik"}
         en{"Inglix"}
-        en_AU{"Inglix (Australia)"}
-        en_CA{"Inglix (Canada)"}
-        en_GB{"Inglix (Sõyukt Razvott)"}
-        en_US{"Inglix (Amerikechim Sõyukt Rajyam)"}
         eo{"Esperanto"}
         es{"Ispanhol"}
-        es_419{"Ispanhol (Latin Amerika)"}
-        es_MX{"Ispanhol (Meksiko)"}
         et{"Estonian"}
         eu{"Bask"}
         fa{"Farsi"}
@@ -54,8 +46,6 @@ kok_Latn{
         fil{"Filipino"}
         fo{"Faroez"}
         fr{"Fransez"}
-        fr_CA{"Fransez (Canada)"}
-        fr_CH{"Fransez (Switzerland)"}
         fy{"Ostonti Frisian"}
         ga{"Ayerlandez"}
         gaa{"Ga"}
@@ -91,7 +81,6 @@ kok_Latn{
         ku{"Kurdez"}
         kxv{"Kuvi"}
         ky{"Kyrgyz"}
-        la{"Latin"}
         lb{"Luxembourgez"}
         lij{"Ligurian"}
         lmo{"Lombard"}
@@ -112,7 +101,6 @@ kok_Latn{
         nds{"Sokoilem Jermon"}
         ne{"Nepali"}
         nl{"Hollandi"}
-        nl_BE{"Hollandi (Beljiom)"}
         nn{"Norwegian Nynorsk"}
         no{"Norwegian"}
         nqo{"N’Ko"}
@@ -126,8 +114,6 @@ kok_Latn{
         prg{"Prussian"}
         ps{"Pashto"}
         pt{"Portugez"}
-        pt_BR{"Portugez (Brazil)"}
-        pt_PT{"Portugez (Portugal)"}
         qu{"Kechua"}
         raj{"Rajasthani"}
         rm{"Romansh"}

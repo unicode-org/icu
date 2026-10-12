@@ -6,11 +6,7 @@ fa_AF{
     NumberElements{
         arabext{
             patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;‎(¤ #,##0.00)"}
-                accountingFormat%noCurrency{"#,##0.00;‎(#,##0.00)"}
                 currencyFormat{"¤ #,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-                currencyFormat%noCurrency{"#,##0.00"}
             }
         }
         latn{
@@ -52,27 +48,15 @@ fa_AF{
             dayPeriod{
                 format{
                     abbreviated{
-                        afternoon1{"ظهر"}
                         afternoon2{"بعدازچاشت"}
-                        morning1{"بامداد"}
-                        morning2{"صبح"}
-                        night1{"شب"}
-                        night2{"نیمه‌شب"}
                     }
                     wide{
                         afternoon1{"ظهر"}
-                        afternoon2{"بعدازچاشت"}
-                        morning1{"بامداد"}
-                        morning2{"صبح"}
-                        night1{"شب"}
-                        night2{"نیمه‌شب"}
                     }
                 }
                 stand-alone{
                     narrow{
                         afternoon1{"بعد از چاشت"}
-                        morning1{"بامداد"}
-                        night1{"شب"}
                     }
                 }
             }

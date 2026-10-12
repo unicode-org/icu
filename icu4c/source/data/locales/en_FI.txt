@@ -12,7 +12,6 @@ en_FI{
             symbols{
                 decimal{","}
                 group{" "}
-                timeSeparator{"."}
             }
         }
     }
@@ -25,12 +24,8 @@ en_FI{
                 Ehms{"E h.mm.ss a"}
                 Hm{"H.mm"}
                 Hms{"H.mm.ss"}
-                Hmsv{"H.mm.ss v"}
-                Hmv{"H.mm v"}
                 hm{"h.mm a"}
                 hms{"h.mm.ss a"}
-                hmsv{"h.mm.ss a v"}
-                hmv{"h.mm a v"}
                 ms{"mm.ss"}
             }
         }
@@ -49,16 +44,6 @@ en_FI{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
-            }
-            DateTimeSkeletons{
-                "Hmmsszzzz",
-                "Hmmssz",
-                "Hmmss",
-                "Hmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yMMdd",
             }
             availableFormats{
                 EHm{"E H.mm"}

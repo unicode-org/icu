@@ -45,9 +45,6 @@ sw_KE{
         "Asia:Macau"{
             ec{"Makao"}
         }
-        "Asia:Rangoon"{
-            ec{"Yangon"}
-        }
         "Asia:Saigon"{
             ec{"Jiji la Ho Chi Minh"}
         }
@@ -71,8 +68,6 @@ sw_KE{
         }
         "meta:Amazon"{
             ld{"Saa za Majira ya Joto za Amazon"}
-            lg{"Saa za Amazon"}
-            ls{"Saa za Wastani za Amazon"}
         }
         "meta:Argentina"{
             ld{"Saa za Majira Joto za Ajentina"}
@@ -86,8 +81,6 @@ sw_KE{
         }
         "meta:Armenia"{
             ld{"Saa za Majira ya Joto za Armenia"}
-            lg{"Saa za Armenia"}
-            ls{"Saa za Wastani za Armenia"}
         }
         "meta:Australia_CentralWestern"{
             ld{"Saa za Mchana za Magharibi mwa Australia ya Kati"}
@@ -101,8 +94,6 @@ sw_KE{
         }
         "meta:Azores"{
             ld{"Saa za Majira ya Joto za Azores"}
-            lg{"Saa za Azores"}
-            ls{"Saa za Wastani za Azores"}
         }
         "meta:Bangladesh"{
             ld{"Saa za Majira ya Joto za Bangladeshi"}
@@ -124,38 +115,24 @@ sw_KE{
         }
         "meta:Colombia"{
             ld{"Saa za Majira ya Joto za Kolombia"}
-            lg{"Saa za Kolombia"}
-            ls{"Saa za Wastani za Kolombia"}
         }
         "meta:Cook"{
             ld{"Saa za Majira Nusu ya Joto za Visiwa vya Cook"}
-            lg{"Saa za Visiwa vya Cook"}
-            ls{"Saa za Wastani za Visiwa vya Cook"}
         }
         "meta:Cuba"{
-            ld{"Saa za Mchana za Kuba"}
-            lg{"Saa za Kuba"}
             ls{"Saa za Wastani za Kuba"}
         }
         "meta:Easter"{
             ld{"Saa za Majira ya Joto za Kisiwa cha Easter"}
-            lg{"Saa za Kisiwa cha Easter"}
-            ls{"Saa za Wastani za Kisiwa cha Easter"}
         }
         "meta:Europe_Central"{
             ld{"Saa za Majira ya Joto za Ulaya ya Kati"}
-            lg{"Saa za Ulaya ya Kati"}
-            ls{"Saa za Wastani za Ulaya ya Kati"}
         }
         "meta:Europe_Eastern"{
             ld{"Saa za Majira ya Joto za Mashariki mwa Ulaya"}
-            lg{"Saa za Mashariki mwa Ulaya"}
-            ls{"Saa za Wastani za Mashariki mwa Ulaya"}
         }
         "meta:Europe_Western"{
             ld{"Saa za Majira ya Joto za Magharibi mwa Ulaya"}
-            lg{"Saa za Magharibi mwa Ulaya"}
-            ls{"Saa za Wastani za Magharibi mwa Ulaya"}
         }
         "meta:French_Guiana"{
             ls{"Saa za Guiana"}
@@ -167,31 +144,22 @@ sw_KE{
         }
         "meta:Greenland_Eastern"{
             ld{"Saa za Majira ya Joto za Greenland Mashariki"}
-            lg{"Saa za Greenland Mashariki"}
-            ls{"Saa za Wastani za Greenland Mashariki"}
         }
         "meta:Gulf"{
             ls{"Saa za Wastani za Ghuba"}
         }
         "meta:Hong_Kong"{
             ld{"Saa za Majira ya Joto za Hong Kong"}
-            lg{"Saa za Hong Kong"}
-            ls{"Saa za Wastani za Hong Kong"}
         }
         "meta:Hovd"{
             ld{"Saa za Majira ya Joto za Hovd"}
-            lg{"Saa za Hovd"}
-            ls{"Saa za Wastani za Hovd"}
         }
         "meta:Irkutsk"{
             ld{"Saa za Majira ya Joto za Irkutsk"}
-            lg{"Saa za Irkutsk"}
-            ls{"Saa za Wastani za Irkutsk"}
         }
         "meta:Japan"{
             ld{"Saa za Mchana za Japani"}
             lg{"Saa za Japani"}
-            ls{"Saa za Wastani za Japani"}
         }
         "meta:Kazakhstan_Eastern"{
             ls{"Saa za Kazakistani Mashariki"}
@@ -201,13 +169,9 @@ sw_KE{
         }
         "meta:Krasnoyarsk"{
             ld{"Saa za Majira ya Joto za Krasnoyarsk"}
-            lg{"Saa za Krasnoyarsk"}
-            ls{"Saa za Wastani za Krasnoyask"}
         }
         "meta:Magadan"{
             ld{"Saa za Majira ya Joto za Magadan"}
-            lg{"Saa za Magadan"}
-            ls{"Saa za Wastani za Magadan"}
         }
         "meta:Malaysia"{
             ls{"Saa za Malesia"}
@@ -217,8 +181,6 @@ sw_KE{
         }
         "meta:Mauritius"{
             ld{"Saa za Majira ya Joto za Morisi"}
-            lg{"Saa za Morisi"}
-            ls{"Saa za Wastani za Morisi"}
         }
         "meta:Mongolia"{
             ld{"Saa za Majira ya Joto za Ulaanbaatar"}
@@ -227,8 +189,6 @@ sw_KE{
         }
         "meta:Moscow"{
             ld{"Saa za Majira ya Joto za Moscow"}
-            lg{"Saa za Moscow"}
-            ls{"Saa za Wastani za Moscow"}
         }
         "meta:Myanmar"{
             ls{"Saa za Myanma"}
@@ -248,18 +208,12 @@ sw_KE{
         }
         "meta:Norfolk"{
             ld{"Saa za Majira ya Joto za Kisiwa cha Norfolk"}
-            lg{"Saa za Kisiwa cha Norfolk"}
-            ls{"Saa za Wastani za Kisiwa cha Norfolk"}
         }
         "meta:Novosibirsk"{
             ld{"Saa za Majira ya Joto za Novosibirsk"}
-            lg{"Saa za Novosibirsk"}
-            ls{"Saa za Wastani za Novosibirsk"}
         }
         "meta:Omsk"{
             ld{"Saa za Majira ya Joto za Omsk"}
-            lg{"Saa za Omsk"}
-            ls{"Saa za Wastani za Omsk"}
         }
         "meta:Pakistan"{
             ld{"Saa za Majira ya Joto za Pakistani"}
@@ -271,26 +225,18 @@ sw_KE{
         }
         "meta:Paraguay"{
             ld{"Saa za Majira ya Joto za Paragwai"}
-            lg{"Saa za Paragwai"}
-            ls{"Saa za Wastani za Paragwai"}
         }
         "meta:Peru"{
             ld{"Saa za Majira ya Joto za Peru"}
-            lg{"Saa za Peru"}
-            ls{"Saa za Wastani za Peru"}
         }
         "meta:Philippines"{
             ld{"Saa za Majira ya Joto za Ufilipino"}
-            lg{"Saa za Ufilipino"}
-            ls{"Saa za Wastani za Ufilipino"}
         }
         "meta:Phoenix_Islands"{
             ls{"Saa za Visiwa vya Finiksi"}
         }
         "meta:Sakhalin"{
             ld{"Saa za Majira ya Joto za Sakhalin"}
-            lg{"Saa za Sakhalin"}
-            ls{"Saa za Wastani za Sakhalin"}
         }
         "meta:Singapore"{
             ls{"Saa za Wastani za Singapoo"}
@@ -303,8 +249,6 @@ sw_KE{
         }
         "meta:Tonga"{
             ld{"Saa za Majira ya Joto za Tonga"}
-            lg{"Saa za Tonga"}
-            ls{"Saa za Wastani za Tonga"}
         }
         "meta:Turkmenistan"{
             ld{"Saa za Majira ya Joto za Turkmenistani"}
@@ -313,8 +257,6 @@ sw_KE{
         }
         "meta:Uruguay"{
             ld{"Saa za Majira ya Joto za Urugwai"}
-            lg{"Saa za Urugwai"}
-            ls{"Saa za Wastani za Urugwai"}
         }
         "meta:Uzbekistan"{
             ld{"Saa za Majira ya Joto za Uzbekistani"}
@@ -323,28 +265,18 @@ sw_KE{
         }
         "meta:Vanuatu"{
             ld{"Saa za Majira ya Joto za Vanuatu"}
-            lg{"Saa za Vanuatu"}
-            ls{"Saa za Wastani za Vanuatu"}
         }
         "meta:Vladivostok"{
             ld{"Saa za Majira ya Joto za Vladivostok"}
-            lg{"Saa za Vladivostok"}
-            ls{"Saa za Wastani za Vladivostok"}
         }
         "meta:Volgograd"{
             ld{"Saa za Majira ya Joto za Volgograd"}
-            lg{"Saa za Volgograd"}
-            ls{"Saa za Wastani za Volgograd"}
         }
         "meta:Yakutsk"{
             ld{"Saa za Majira ya Joto za Yakutsk"}
-            lg{"Saa za Yakutsk"}
-            ls{"Saa za Wastani za Yakutsk"}
         }
         "meta:Yekaterinburg"{
             ld{"Saa za Majira ya Joto za Yekaterinburg"}
-            lg{"Saa za Yekaterinburg"}
-            ls{"Saa za Wastani za Yekaterinburg"}
         }
     }
 }

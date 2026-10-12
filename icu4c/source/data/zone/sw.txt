@@ -89,11 +89,6 @@ sw{
             lg{"Saa za Pasifiki"}
             ls{"Saa za Wastani za Pasifiki"}
         }
-        "meta:Anadyr"{
-            ld{"Saa za Kiangazi za Anadyr"}
-            lg{"Saa za Anadyr"}
-            ls{"Saa za Wastani za Anadyr"}
-        }
         "meta:Apia"{
             ld{"Saa za Mchana za Apia"}
             lg{"Saa za Samoa Magharibi"}

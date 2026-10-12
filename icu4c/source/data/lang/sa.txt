@@ -3,9 +3,6 @@
 // Generated using tools/cldr/cldr-to-icu/
 sa{
     Languages{
-        ace{"अचिनीस्"}
-        ach{"अचोलि"}
-        anp{"अङ्गिक"}
         de{"जर्मनभाषा:"}
         de_AT{"ऑस्ट्रियाई जर्मनभाषा:"}
         de_CH{"स्विस उच्च जर्मनभाषा:"}

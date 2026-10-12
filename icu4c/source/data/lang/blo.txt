@@ -14,78 +14,36 @@ blo{
         timezone{"gakɔŋkɔŋɔ̀ kansaʊ"}
     }
     Languages{
-        aa{"Afaar kagɩja"}
-        ab{"Abkasii kagɩja"}
-        ady{"Aɖigee kagɩja"}
         af{"Afrikaansi kagɩja"}
-        agq{"Agem kagɩja"}
         ak{"Akan kagɩja"}
         am{"Amhariiki kagɩja"}
-        an{"Aragonɛɛsɩ kagɩja"}
-        ann{"Oboloo kagɩja"}
-        apc{"gajakalaŋ kagɩlaaribuja"}
-        apw{"Apashe gɩteŋshilelaŋ kagɩja"}
         ar{"gɩlaaribuja"}
         ar_001{"gɩlaaribuja ŋgɩɖee kǝ ba na fʊba na"}
-        arn{"Mapushi kagɩja"}
-        ary{"gɩlaaribuja Morooko kagɩja"}
         as{"Assam kagɩja"}
-        asa{"Asuu kagɩja"}
         ast{"Asɩtuuriya kagɩja"}
         az{"Asɛrbayijaŋ kagɩja"}
         ba{"Bashikiiri kagɩja"}
         bal{"Balushii kagɩja"}
-        bas{"Basaa kagɩja"}
         be{"Belaruus kagɩja"}
-        bem{"Bɛmba kagɩja"}
-        bew{"Betawii kagɩja"}
-        bez{"Bena kagɩja"}
         bg{"Bulgarii kagɩja"}
         bgc{"Haryaŋfii kagɩja"}
-        bgn{"Baluushi gɩteŋshilelaŋ kagɩja"}
         bho{"Bojɩpuuri kagɩja"}
         blo{"anii kagɩja"}
-        blt{"Taii Ɖam kagɩja"}
-        bm{"Bambaraa kagɩja"}
         bn{"Baŋgǝla kagɩja"}
-        bo{"Tibeeti kagɩja"}
-        bqi{"Bakitiyarii kagɩja"}
         br{"Bretɔn kagɩja"}
-        brh{"Brahui kagɩja"}
         brx{"Boɖo kagɩja"}
         bs{"Bɔsniya kagɩja"}
-        bss{"Akoose kagɩja"}
-        bua{"Buriyaat kagɩja"}
-        byn{"Biliin kagɩja"}
         ca{"Katalan kagɩja"}
-        cad{"Kaaɖo kagɩja"}
-        cch{"Atɩsaam kagɩja"}
-        ccp{"Shakamaa kagɩja"}
-        ce{"Sheshɛn kagɩja"}
         ceb{"Sebuwanoo kagɩja"}
-        cgg{"Shiga kagɩja"}
-        cho{"Shɔkɩtaʊ kagɩja"}
         chr{"Sherokee kagɩja"}
-        cic{"Shikasawʊ kagɩja"}
-        ckb{"Kurɖiishi gɩcɩɩca kagɩja"}
-        co{"Kɔrisiika kagɩja"}
-        cop{"Kɔptiiki kagɩja"}
         cs{"Cɛk kagɩja"}
         csw{"Sʊwampii Kree kagɩja"}
-        cu{"Slaafi cɔɔcɩ kagɩja"}
         cv{"Shufash kagɩja"}
         cy{"Wɛɛlishi kagɩja"}
         da{"Ɖanǝmark kagɩja"}
-        dav{"Tayɩta kagɩja"}
         de{"gɩjaamaja"}
-        dje{"gɩsarmaja"}
         doi{"Ɖogri kagɩja"}
         dsb{"Sɔrbii atǝntǝn kagɩja"}
-        dua{"Ɖuwala kagɩja"}
-        dv{"Ɖifehii kagɩja"}
-        dyo{"Jola-Fonyii kagɩja"}
-        dz{"Ɖɩsɔŋka kagɩja"}
-        ebu{"Ɛmbuu kagɩja"}
         ee{"gɩyigbeja"}
         el{"Grɛs kagɩja"}
         en{"gɛɛshɩ"}
@@ -94,38 +52,23 @@ blo{
         es_419{"gɩspaŋja (latɛŋ kaAmalɩkatǝna)"}
         et{"Ɛstoniya kagɩja"}
         eu{"Baske kagɩja"}
-        ewo{"Ɛwonɖoo kagɩja"}
         fa{"Pɛrs kagɩja"}
-        fa_AF{"Ɖaarii kagɩja"}
         ff{"gɩfǝlanɖɩja"}
         fi{"Fɛnlanɖ kagɩja"}
         fil{"Filipiin kagɩja"}
         fo{"Faroi kagɩja"}
         fr{"gɩfɔnɔ"}
-        frc{"Kajun kagɩfɔnɔ"}
-        frr{"Firiisi gʊnyɩpɛnɛlaŋ kagɩja"}
-        fur{"Friula kagɩja"}
         fy{"Frisiya gɩteŋshilelaŋ kagɩja"}
         ga{"Irlanɖ kagɩja"}
         gaa{"Gaa kagɩja"}
         gd{"Gɛɛliiki Ekɔɔsɩ kagɩja"}
-        gez{"Gɛɛsɩ kagɩja"}
         gl{"Galiisiya kagɩja"}
-        gn{"Guwaaranii kagɩja"}
-        gsw{"Suwis kagɩjaamakrǝ"}
         gu{"Gujaratii kagɩja"}
-        guz{"Gusii kagɩja"}
-        gv{"Mansɩ kagɩja"}
         ha{"gɩgambrɩja"}
-        haw{"Awayii kagɩja"}
         he{"Ibrii kagɩja"}
         hi{"Hinɖii kagɩja"}
-        hi_Latn{"Hinɖii kagɩja (latɛŋ kʊja)"}
-        hnj{"Hɩmoŋ Njʊwaa kagɩja"}
         hr{"Krowasii kagɩja"}
-        hrx{"Hunsriiki kagɩja"}
         hsb{"Sɔrbii alaŋ kagɩja"}
-        ht{"Kreyool Hayitii kagɩja"}
         hu{"Ɔŋgrii kagɩja"}
         hy{"Armenii kagɩja"}
         ia{"Ɛntɛrliŋguwaa kagɩja"}
@@ -133,235 +76,107 @@ blo{
         ie{"Ɛntɛrliŋgii kagɩja"}
         ig{"Igboo kagɩja"}
         ii{"Sishuaŋ Yii kagɩja"}
-        io{"Iɖoo kagɩja"}
         is{"Islanɖ kagɩja"}
-        isv{"Ɛntɔrsǝlafiiki kagɩja"}
         it{"gɩtaliija"}
-        iu{"Inuktituuti kagɩja"}
         ja{"gɩjapaŋja"}
-        jbo{"Lɔjɩbaŋ kagɩja"}
-        jgo{"Ŋgomba kagɩja"}
-        jmc{"Mashaam kagɩja"}
         jv{"Jafaa kagɩja"}
         ka{"Jɔrjiya kagɩja"}
-        kaa{"Karaa-Kalpaakɩ kagɩja"}
-        kab{"Kabilii kagɩja"}
-        kaj{"Juu kagɩja"}
-        kam{"Kambaa kagɩja"}
-        kbd{"Kabarɖii kagɩja"}
-        kcg{"Tɩyaapɩ kagɩja"}
-        kde{"Makɔnɖee kagɩja"}
         kea{"Kapfɛɛr kagɩja"}
-        kek{"Kekshii kagɩja"}
-        ken{"Kenyaŋ kagɩja"}
         kgp{"Kaɩŋgan kagɩja"}
-        khq{"Koyira-Shiinii kagɩja"}
-        ki{"Kikuyuu kagɩja"}
         kk{"Kasaakɩ kagɩja"}
-        kkj{"Kakoo kagɩja"}
-        kl{"Kalalisuuti kagɩja"}
-        kln{"Kalaŋjɩn kagɩja"}
         km{"Kǝmɛɛr kagɩja"}
         kn{"Kanaaɖa kagɩja"}
         ko{"Koree kagɩja"}
         kok{"Koŋkanii kagɩja"}
-        kpe{"Kɩpɛɛl kagɩja"}
         ks{"Kashimirii kagɩja"}
-        ksb{"Shambalaa kagɩja"}
-        ksf{"Bafiya kagɩja"}
-        ksh{"Kolɔnjǝ kagɩja"}
         ku{"Kurɖiishi kagɩja"}
-        kw{"Kɔrniishi kagɩja"}
         kxv{"Kʊfii kagɩja"}
         ky{"Kirgistan kagɩja"}
-        la{"latɛŋ kagɩja"}
-        lag{"Laŋgii kagɩja"}
         lb{"Lusɛmbuur kagɩja"}
-        lg{"Ganɖaa kagɩja"}
         lij{"Liguriaŋ kagɩja"}
-        lkt{"Lakotaa kagɩja"}
-        lld{"Laɖɛŋ kagɩja"}
         lmo{"Lɔmbaaɖɩ kagɩja"}
-        ln{"Liŋgalaa kagɩja"}
         lo{"Lawɔs kagɩja"}
-        lou{"Kreyool Luwisiyana kagɩja"}
-        lrc{"Lurii gʊnyɩpɛnɛlaŋ kagɩja"}
         lt{"Lituwaniya kagɩja"}
-        ltg{"Latɩgalɩyaŋ kagɩja"}
-        lu{"Luba-Kataŋgaa kagɩja"}
-        luo{"Luwo kagɩja"}
-        luy{"Luyaa kagɩja"}
         lv{"Lɛtfiya kagɩja"}
-        lzz{"Laas kagɩja"}
         mai{"Mayitilii kagɩja"}
-        mas{"Masaɩ kagɩja"}
-        mdf{"mɔkɩshaa kagɩja"}
-        mer{"Meruu kagɩja"}
-        mfe{"Kreyool Imoris kagɩja"}
-        mg{"Malagaasɩ kagɩja"}
-        mgh{"Makʊwa-Meeto kagɩja"}
-        mgo{"Metaa kagɩja"}
-        mhn{"Moshenoo kagɩja"}
         mi{"Maworii kagɩja"}
-        mic{"Mikimaawʊ kagɩja"}
-        mid{"Manɖayiiki kagɩja"}
         mk{"Maseɖoniya kagɩja"}
         ml{"Maalayalam kagɩja"}
         mn{"Mɔŋgolii kagɩja"}
         mni{"Manipurii kagɩja"}
-        moh{"mohawaaki kagɩja"}
         mr{"Maratii kagɩja"}
-        mrh{"Mara Shin kagɩja"}
         ms{"Malɛɛ kagɩja"}
         mt{"Malta kagɩja"}
-        mua{"Mʊnɖaŋgɩ kagɩja"}
         mul{"ɩkrǝ tuutuuma"}
-        mus{"Musikogee kagɩja"}
-        mww{"Hɩmɔŋ Ɖaʊ kagɩja"}
         my{"Burmaa kagɩja"}
-        myv{"Ɛrisiiya kagɩja"}
-        mzn{"Masanɖarii kɩja"}
-        nan{"caniisi Min Nan"}
-        naq{"Namaa kagɩja"}
-        nb{"Nɔrfɛɛsh bokimaalɩ kagɩja"}
-        nd{"Nɖebelee gʊnyɩpɛnɛlaŋ kagɩja"}
         nds{"atǝntǝn kagɩjaamakrǝ"}
-        nds_NL{"Saason atǝntǝn kagɩja (Holanɖ)"}
         ne{"Neepal kagɩja"}
         nl{"Holanɖ kagɩja"}
-        nmg{"Kʊwaasiyo kagɩja"}
         nn{"Nɔrfɛɛsh ninɔrisikɩ kagɩja"}
-        nnh{"Ŋgiyembuu kagɩja"}
-        nnp{"Wansho kagɩja"}
         no{"Nɔrfɛɛsh kagɩja"}
         nqo{"Ŋkoo kagɩja"}
-        nr{"Nɖebelee gʊnyɩsonolaŋ kagɩja"}
         nso{"Sotoo gʊnyɩpɛnɛlaŋ kagɩja"}
-        nus{"Nuyɛɛr kagɩja"}
-        nv{"Nafajo kagɩja"}
-        ny{"Nyanja kagɩja"}
-        nyn{"Nyaŋkolee kagɩja"}
         oc{"Ɔkitaŋ kagɩja"}
-        oka{"Okanagan kagɩja"}
         om{"Oromoo kagɩja"}
         or{"Oɖiya kagɩja"}
-        os{"Ɔsɛtiiki kagɩja"}
-        osa{"Osage kagɩja"}
         pa{"Pʊŋjabii kagɩja"}
-        pap{"Papiamentoo kagɩja"}
         pcm{"piɖijin Nanjiiriya kagɩja"}
-        pi{"Palii kagɩja"}
-        pis{"Pijiŋ kagɩja"}
         pl{"Polanɖ kagɩja"}
         pms{"Piyemɔŋtɛɛsɩ kagɩja"}
         prg{"Prʊsiya kagɩja"}
         ps{"Pashɩtoo kagɩja"}
         pt{"gɩpɔrtigalja"}
         qu{"Keshʊwaa kagɩja"}
-        quc{"Kishee kagɩja"}
         raj{"Rajastanii kagɩja"}
-        rej{"Rejaŋ kagɩja"}
-        rhg{"Rɔhiŋgiyaa kagɩja"}
-        rif{"Rifiyaŋ kagɩja"}
         rm{"Romaŋshɩ kagɩja"}
-        rn{"Rʊnɖii kagɩja"}
         ro{"Romanii kagɩja"}
-        ro_MD{"Mɔlɖafiya kagɩja"}
-        rof{"Rɔmboo kagɩja"}
         ru{"gɩrɔɔshɩyaja"}
         rw{"Kiŋyarwandaa kagɩja"}
-        rwk{"Rʊwaa kagɩja"}
         sa{"Saŋsikriitɩ kagɩja"}
         sah{"Yakuutu kagɩja"}
-        saq{"Samburuu kagɩja"}
         sat{"Santalii kagɩja"}
-        sbp{"Saŋguu kagɩja"}
         sc{"Sarɖiniaŋ kagɩja"}
         scn{"Sisilii kagɩja"}
         sd{"Sinɖii kagɩja"}
-        sdh{"Kurɖiishi gʊnyɩsonolaŋ kagɩja"}
-        se{"Samii gʊnyɩpɛnɛlaŋ kagɩja"}
-        seh{"Senaa kagɩja"}
-        ses{"Koyirabɔrɔ-Senii kagɩja"}
-        sg{"Saŋgoo kagɩja"}
-        sgs{"Samogiiti kagɩja"}
-        shi{"Tashelhiiti kagɩja"}
         shn{"Shaŋ kagɩja"}
         si{"Sinhalaa kagɩja"}
-        sid{"Siɖamoo kagɩja"}
-        sjd{"Kilɖin Sami kagɩja"}
-        sje{"Pite Sami kagɩja"}
-        sju{"Ume Sami kagɩja"}
         sk{"Slofakii kagɩja"}
-        skr{"Sarayiiki kagɩja"}
         sl{"Slofeniya kagɩja"}
-        sma{"Samii gʊnyɩsonolaŋ kagɩja"}
-        smj{"Lʊl Samii kagɩja"}
-        smn{"Inarii Samii kagɩja"}
-        sms{"Sǝkɔltɩ Samii kagɩja"}
-        sn{"Shonaa kagɩja"}
         so{"Somalii kagɩja"}
         sq{"Albanii kagɩja"}
         sr{"Sɛrbii kagɩja"}
-        ss{"Sʊwatii kagɩja"}
-        ssy{"Sahoo kagɩja"}
         st{"Sotoo gʊnyɩsonolaŋ kagɩja"}
         su{"Sunɖanɛɛsɩ kagɩja"}
-        sus{"Susu kagɩja"}
-        suz{"Sʊnwaar kagɩja"}
         sv{"Sʊwɛɖ kagɩja"}
         sw{"Sʊwahilii kagɩja"}
-        sw_CD{"Sʊwahili kagɩja (Koŋgoo)"}
         syr{"Siriyaakɩ kagɩja"}
         szl{"Silesiyaŋ kagɩja"}
         ta{"Tamil kagɩja"}
         te{"Telugu kagɩja"}
-        teo{"Teso kagɩja"}
         tg{"Tajikistan kagɩja"}
         th{"Taɩ kagɩja"}
         ti{"Tigrinyaa kagɩja"}
-        tig{"Tiigri kagɩja"}
         tk{"Tirkmɛn kagɩja"}
         tn{"Sʊwanaa kagɩja"}
         to{"Tɔŋga kagɩja"}
-        tok{"Toki Ponaa kagɩja"}
-        tpi{"Tɔk Pisin kagɩja"}
         tr{"gɩturkiija"}
-        trv{"Taroko kagɩja"}
-        trw{"Tɔɔrwalii kagɩja"}
-        ts{"Sɔŋgaa kagɩja"}
         tt{"Tatar kagɩja"}
-        twq{"Tasawaakɩ kagɩja"}
         tyv{"Tufiniyaŋ kagɩja"}
-        tzm{"Tamasiiti Atlaasɩ kagɩcɩɩca kagɩja"}
         ug{"Ʊyiguur kagɩja"}
         uk{"Ikrɛɛn kagɩja"}
         und{"gɩkrǝ ŋgɩɖee kʊyɔʊ ʊ mana ma"}
         ur{"Urɖuu kagɩja"}
         uz{"Usbeekistan kagɩja"}
-        vai{"Faɩ kagɩja"}
-        ve{"Fenɖa kagɩja"}
         vec{"Fenɛsiaŋ kagɩja"}
         vi{"Fɛtnam kagɩja"}
         vmw{"Makʊwa kagɩja"}
-        vo{"Folapuku kagɩja"}
-        vun{"Funjo kagɩja"}
-        wa{"Waloon kagɩja"}
-        wae{"Walsa kagɩja"}
-        wal{"Wolaɩta kagɩja"}
-        wbp{"Waripiri kagɩja"}
         wo{"Woloofi kagɩja"}
-        xdq{"Kaitaagɩ kagɩja"}
         xh{"Soosa kagɩja"}
         xnr{"Kaŋgrii kagɩja"}
-        xog{"Sogaa kagɩja"}
-        yav{"Yaŋgbɛn kagɩja"}
-        yi{"Yiɖiishi kagɩja"}
         yo{"gɩyorubaja"}
         yrl{"Ŋyeeŋgatuu kagɩja"}
         yue{"Kantonɛɛsɩ kagɩja"}
         za{"Sʊwaŋ kagɩja"}
-        zgh{"Tamashiiki kagɩja ŋgɩɖee kǝ ba na fʊba na (Morooko)"}
         zh{"gɩcaɩnaja manɖarɛŋ"}
         zh_Hans{"gɩcaɩnaja gɩburoka"}
         zh_Hant{"gɩcaɩnaja tututu"}
@@ -383,10 +198,8 @@ blo{
     }
     Languages%short{
         az{"Aserii kagɩja"}
-        en_US{"gɛɛshɩ (GKA)"}
     }
     Languages%variant{
-        ckb{"Kurɖiishi Sorani kagɩja"}
         hi_Latn{"Hiŋgliishɩ kagɩja"}
     }
     Scripts{
@@ -463,11 +276,8 @@ blo{
             ethiopic-amete-alem{"Etiyopii kɩshilé na kɩŋɔrɔ ɩtʊrka (Amete Alɛm)"}
             gregorian{"Gregɔɔ ‘ɩshilé n’‘ɩŋɔrɔ ɩtʊrka"}
             hebrew{"Yahuuɖi kǝbaja bɩshilé na bɩŋɔrɔ ɩtʊrka"}
-            indian{"Inɖiya kɩshilé na kɩŋɔrɔ ɩtʊrka"}
             islamic{"gɩnǝma kɩshilé na kɩŋɔrɔ ɩtʊrka"}
             islamic-civil{"gɩnǝma kɩshilé na kɩŋɔrɔ ɩtʊrka aɖʊ (gatǝna kʊsǝu katam)"}
-            islamic-rgsa{"gɩnǝma kɩshilé na kɩŋɔrɔ ɩtʊrka akʊn aŋɔrɔ (Sauɖiya)"}
-            islamic-tbla{"gɩnǝma kɩshilé na kɩŋɔrɔ ɩtʊrka aɖʊ (ɩŋɔripi ɩceuka katam)"}
             islamic-umalqura{"gɩnǝma kɩshilé na kɩŋɔrɔ ɩtʊrka (Um al-Kra)"}
             iso8601{"Gregɔɔ ‘ɩshilé n’‘ɩŋɔrɔ ɩtʊrka (asǝba na gaja)"}
             japanese{"Japaŋ kɩshilé na kɩŋɔrɔ ɩtʊrka"}

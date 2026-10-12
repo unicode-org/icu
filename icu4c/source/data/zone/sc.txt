@@ -324,11 +324,6 @@ sc{
             lg{"Ora de su Patzìficu USA"}
             ls{"Ora istandard de su Patzìficu USA"}
         }
-        "meta:Anadyr"{
-            ld{"Ora legale de Anadyr"}
-            lg{"Ora de Anadyr"}
-            ls{"Ora istandard de Anadyr"}
-        }
         "meta:Apia"{
             ld{"Ora legale de Apia"}
             lg{"Ora de Apia"}
@@ -416,9 +411,6 @@ sc{
             ld{"Ora legale de su Cabu Birde"}
             lg{"Ora de su Cabu Birde"}
             ls{"Ora istandard de su Cabu Birde"}
-        }
-        "meta:Casey"{
-            ls{"Ora de Casey"}
         }
         "meta:Chamorro"{
             ls{"Ora istandard de Chamorro"}
@@ -512,7 +504,6 @@ sc{
         }
         "meta:GMT"{
             ls{"Ora de su meridianu de Greenwich"}
-            ss{"OMG"}
         }
         "meta:Galapagos"{
             ls{"Ora de sas Galàpagos"}

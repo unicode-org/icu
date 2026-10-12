@@ -3,11 +3,4 @@
 // Generated using tools/cldr/cldr-to-icu/
 es_CO{
     %%Parent{"es_419"}
-    zoneStrings{
-        "meta:Colombia"{
-            sd{"COST"}
-            sg{"COT"}
-            ss{"COT"}
-        }
-    }
 }

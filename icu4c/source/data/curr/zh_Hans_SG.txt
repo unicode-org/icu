@@ -11,10 +11,6 @@ zh_Hans_SG{
             "$",
             "新加坡元",
         }
-        XAG{
-            "XAG",
-            "白银",
-        }
     }
     CurrencyPlurals{
         ANG{
@@ -22,9 +18,6 @@ zh_Hans_SG{
         }
         NIO{
             other{"尼加拉瓜科多巴"}
-        }
-        XAG{
-            other{"白银"}
         }
     }
     CurrencyUnitPatterns{

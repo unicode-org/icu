@@ -3,8 +3,6 @@
 // Generated using tools/cldr/cldr-to-icu/
 fr_BE{
     Languages{
-        frp{"franco-provençal"}
-        goh{"ancien haut-allemand"}
         gu{"gujarati"}
     }
 }

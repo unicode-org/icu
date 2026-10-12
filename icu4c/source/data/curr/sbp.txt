@@ -75,17 +75,9 @@ sbp{
             "£",
             "Ihela ya Uwingelesa",
         }
-        GHC{
-            "GHC",
-            "Ihela ya Ghana",
-        }
         GMD{
             "GMD",
             "Ihela ya Gambiya",
-        }
-        GNS{
-            "GNS",
-            "Ihela ya Gine",
         }
         INR{
             "₹",
@@ -123,10 +115,6 @@ sbp{
             "MGA",
             "Ihela ya Bukini",
         }
-        MRO{
-            "MRO",
-            "Ihela ya Molitaniya (1973–2017)",
-        }
         MRU{
             "MRU",
             "Ihela ya Molitaniya",
@@ -138,10 +126,6 @@ sbp{
         MWK{
             "MWK",
             "Ihela ya Malawi",
-        }
-        MZM{
-            "MZM",
-            "Ihela ya Musumbiji",
         }
         NAD{
             "NAD",
@@ -183,10 +167,6 @@ sbp{
             "SOS",
             "Ihela ya Somaliya",
         }
-        STD{
-            "STD",
-            "Ihela ya Sao Tome ni Pilinsipe (1977–2017)",
-        }
         STN{
             "STN",
             "Ihela ya Sao Tome ni Pilinsipe",
@@ -223,17 +203,9 @@ sbp{
             "ZAR",
             "Ihela ya Afilika Kusini",
         }
-        ZMK{
-            "ZMK",
-            "Ihela ya Sambiya (1968–2012)",
-        }
         ZMW{
             "ZMW",
             "Ihela ya Sambiya",
-        }
-        ZWD{
-            "ZWD",
-            "Ihela ya Simbabwe",
         }
     }
 }

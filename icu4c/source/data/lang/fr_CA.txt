@@ -14,70 +14,12 @@ fr_CA{
         t{"transformer"}
     }
     Languages{
-        ady{"adygué"}
-        ang{"vieil anglais"}
-        asa{"asou"}
         bbj{"ghomala"}
-        bik{"bicol"}
-        byn{"bilen"}
         byv{"medumba"}
-        chg{"tchagatay"}
-        chn{"chinook"}
-        ckb{"kurde central"}
-        cr{"cri"}
-        crg{"michif"}
-        crl{"cri du Nord-Est"}
-        crr{"algonquin de la Caroline"}
-        den{"slave"}
-        dgr{"tlicho"}
-        ebu{"embou"}
-        esu{"yupik central"}
         ewo{"ewondo"}
-        frc{"cajun"}
-        frp{"franco-provençal"}
-        goh{"vieux haut-allemand"}
         gu{"gujarati"}
         ii{"yi de Sichuan"}
-        ken{"kenyang"}
-        kl{"kalaallisut"}
         ks{"kashmiri"}
-        ksb{"chambala"}
-        liv{"live"}
-        lu{"luba-katanga"}
-        lzh{"chinois classique"}
-        mgh{"makhuwa-meetto"}
-        mgo{"meta’"}
-        mwr{"marwari"}
-        mwv{"mentawai"}
-        nds_NL{"bas saxon"}
-        njo{"ao naga"}
-        nmg{"kwasio"}
-        nwc{"newari classique"}
-        nyn{"nkole"}
-        oka{"okanagan"}
-        pau{"palauan"}
-        pdc{"allemand de Pennsylvanie"}
-        pdt{"bas allemand mennonite"}
-        peo{"vieux perse"}
-        pfl{"palatin"}
-        pis{"pidgin"}
-        pro{"ancien occitan"}
-        quc{"k’iche’"}
-        rar{"rarotonga"}
-        sbp{"sangu"}
-        sdh{"kurde méridional"}
-        sei{"seri"}
-        sga{"vieil irlandais"}
-        sly{"selayar"}
-        smn{"sami d’Inari"}
-        stq{"frison de Saterland"}
-        sus{"sosso"}
-        sw_CD{"swahili congolais"}
-        tru{"turoyo"}
-        tzm{"tamazight"}
-    }
-    Languages%core{
-        ku{"kurde"}
     }
     Languages%extension{
         ku{"kurmanji"}
@@ -87,7 +29,6 @@ fr_CA{
         zh_Hant{"chinois, mandarin traditionnel"}
     }
     Languages%menu{
-        ckb{"kurde central"}
         yue{"chinois, cantonais"}
         zh{"chinois, mandarin"}
     }
@@ -96,7 +37,6 @@ fr_CA{
         en_US{"anglais (É.-U.)"}
     }
     Languages%variant{
-        ckb{"sorani"}
         ug{"ouïghour"}
     }
     Scripts{
@@ -123,10 +63,8 @@ fr_CA{
         }
         collation{
             dictionary{"ordre de tri du dictionnaire"}
-            eor{"ordre multilingue européen"}
             phonebook{"ordre de tri de l’annuaire"}
             pinyin{"ordre de tri pinyin"}
-            searchjl{"Rechercher par consonne initiale en hangeul"}
             stroke{"ordre de tri des traits"}
             traditional{"ordre de tri traditionnel"}
             zhuyin{"ordre de tri zhuyin"}
@@ -158,7 +96,6 @@ fr_CA{
         }
         numbers{
             gujr{"chiffres gujaratis"}
-            mong{"Chiffres mongols"}
         }
         numbers%core{
             hanidays{

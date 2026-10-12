@@ -75,17 +75,9 @@ bm{
             "£",
             "angilɛ Livri",
         }
-        GHC{
-            "GHC",
-            "gana Sedi",
-        }
         GMD{
             "GMD",
             "gambi Dalasi",
-        }
-        GNS{
-            "GNS",
-            "gine Fraŋ",
         }
         INR{
             "₹",
@@ -123,10 +115,6 @@ bm{
             "MGA",
             "madagasikari Fraŋ",
         }
-        MRO{
-            "MRO",
-            "mɔritani Uguwiya (1973–2017)",
-        }
         MRU{
             "MRU",
             "mɔritani Uguwiya",
@@ -138,10 +126,6 @@ bm{
         MWK{
             "MWK",
             "malawi Kwaca",
-        }
-        MZM{
-            "MZM",
-            "mozanbiki Metikali",
         }
         NAD{
             "NAD",
@@ -167,10 +151,6 @@ bm{
             "SDG",
             "sudani Dinar",
         }
-        SDP{
-            "SDP",
-            "sudani Livri",
-        }
         SHP{
             "SHP",
             "Ɛlɛni-Senu Livri",
@@ -186,10 +166,6 @@ bm{
         SOS{
             "SOS",
             "somali Siling",
-        }
-        STD{
-            "STD",
-            "sawotome Dobra (1977–2017)",
         }
         STN{
             "STN",
@@ -227,17 +203,9 @@ bm{
             "ZAR",
             "sudafriki Randi",
         }
-        ZMK{
-            "ZMK",
-            "zambi Kwaca (1968–2012)",
-        }
         ZMW{
             "ZMW",
             "zambi Kwaca",
-        }
-        ZWD{
-            "ZWD",
-            "zimbabuwe Dolar",
         }
     }
 }

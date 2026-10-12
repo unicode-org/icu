@@ -362,11 +362,6 @@ hr{
             lg{"pacifičko vrijeme"}
             ls{"pacifičko standardno vrijeme"}
         }
-        "meta:Anadyr"{
-            ld{"anadirsko ljetno vrijeme"}
-            lg{"anadirsko vrijeme"}
-            ls{"anadirsko standardno vrijeme"}
-        }
         "meta:Apia"{
             ld{"ljetno vrijeme Apije"}
             lg{"vrijeme Apije"}
@@ -455,9 +450,6 @@ hr{
             lg{"vrijeme Zelenortskog otočja"}
             ls{"standardno vrijeme Zelenortskog otočja"}
         }
-        "meta:Casey"{
-            ls{"vrijeme Caseyja"}
-        }
         "meta:Chamorro"{
             ls{"standardno vrijeme Chamorra"}
         }
@@ -518,17 +510,11 @@ hr{
             ld{"srednjoeuropsko ljetno vrijeme"}
             lg{"srednjoeuropsko vrijeme"}
             ls{"srednjoeuropsko standardno vrijeme"}
-            sd{"CEST"}
-            sg{"CET"}
-            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"istočnoeuropsko ljetno vrijeme"}
             lg{"istočnoeuropsko vrijeme"}
             ls{"istočnoeuropsko standardno vrijeme"}
-            sd{"EEST"}
-            sg{"EET"}
-            ss{"EET"}
         }
         "meta:Europe_Further_Eastern"{
             ls{"dalekoistočno europsko vrijeme"}
@@ -537,9 +523,6 @@ hr{
             ld{"zapadnoeuropsko ljetno vrijeme"}
             lg{"zapadnoeuropsko vrijeme"}
             ls{"zapadnoeuropsko standardno vrijeme"}
-            sd{"WEST"}
-            sg{"WET"}
-            ss{"WET"}
         }
         "meta:Falkland"{
             ld{"falklandsko ljetno vrijeme"}
@@ -559,7 +542,6 @@ hr{
         }
         "meta:GMT"{
             ls{"univerzalno vrijeme"}
-            ss{"GMT"}
         }
         "meta:Galapagos"{
             ls{"vrijeme Galapagosa"}

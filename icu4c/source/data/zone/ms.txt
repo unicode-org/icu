@@ -107,11 +107,6 @@ ms{
             lg{"Waktu Pasifik"}
             ls{"Waktu Piawai Pasifik"}
         }
-        "meta:Anadyr"{
-            ld{"Waktu Musim Panas Anadyr"}
-            lg{"Waktu Anadyr"}
-            ls{"Waktu Piawai Anadyr"}
-        }
         "meta:Apia"{
             ld{"Waktu Siang Samoa"}
             lg{"Waktu Samoa"}
@@ -292,7 +287,6 @@ ms{
         }
         "meta:GMT"{
             ls{"Waktu Min Greenwich"}
-            ss{"GMT"}
         }
         "meta:Galapagos"{
             ls{"Waktu Galapagos"}
@@ -434,7 +428,6 @@ ms{
         }
         "meta:Malaysia"{
             ls{"Waktu Malaysia"}
-            ss{"MYT"}
         }
         "meta:Maldives"{
             ls{"Waktu Maldives"}
@@ -582,7 +575,6 @@ ms{
         }
         "meta:Singapore"{
             ls{"Waktu Piawai Singapura"}
-            ss{"SGT"}
         }
         "meta:Solomon"{
             ls{"Waktu Kepulauan Solomon"}

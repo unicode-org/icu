@@ -75,17 +75,9 @@ mua{
             "£",
             "solai Britaniya",
         }
-        GHC{
-            "GHC",
-            "solai Gana",
-        }
         GMD{
             "GMD",
             "solai Gambiya",
-        }
-        GNS{
-            "GNS",
-            "solai Guine",
         }
         INR{
             "₹",
@@ -123,10 +115,6 @@ mua{
             "MGA",
             "Solai Malagasya",
         }
-        MRO{
-            "MRO",
-            "Solai Mauritaniya (1973–2017)",
-        }
         MRU{
             "MRU",
             "Solai Mauritaniya",
@@ -138,10 +126,6 @@ mua{
         MWK{
             "MWK",
             "Solai Malawi",
-        }
-        MZM{
-            "MZM",
-            "Solai Mozambika",
         }
         NAD{
             "NAD",
@@ -167,10 +151,6 @@ mua{
             "SDG",
             "Solai Sudaŋ ma dii ne dinar",
         }
-        SDP{
-            "SDP",
-            "Solai Sudaŋ ma dii ne livre",
-        }
         SHP{
             "SHP",
             "Solai Helena",
@@ -186,10 +166,6 @@ mua{
         SOS{
             "SOS",
             "Solai Somaliya",
-        }
-        STD{
-            "STD",
-            "Solai Sao Tome (1977–2017)",
         }
         STN{
             "STN",
@@ -227,17 +203,9 @@ mua{
             "ZAR",
             "Solai Africa nekǝsǝŋ",
         }
-        ZMK{
-            "ZMK",
-            "Solai Zambiya (1968–2012)",
-        }
         ZMW{
             "ZMW",
             "Solai Zambiya",
-        }
-        ZWD{
-            "ZWD",
-            "Solai Zimbabwe",
         }
     }
 }

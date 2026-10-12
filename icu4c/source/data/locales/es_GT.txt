@@ -8,15 +8,12 @@ es_GT{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"¤0K"}
                         other{"¤0K"}
                     }
                     10000{
-                        one{"¤00K"}
                         other{"¤00K"}
                     }
                     100000{
-                        one{"¤000K"}
                         other{"¤000K"}
                     }
                     1000000{
@@ -102,16 +99,6 @@ es_GT{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMd",
-                "GGGGGyyMMd",
-            }
             intervalFormats{
                 MEd{
                     M{"E d/MM – E d/MM"}
@@ -183,26 +170,8 @@ es_GT{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMd",
-                "yyMMd",
-            }
             dayPeriod{
                 stand-alone{
-                    abbreviated{
-                        am{"a. m."}
-                        pm{"p. m."}
-                    }
-                    narrow{
-                        am{"a. m."}
-                        pm{"p. m."}
-                    }
                     wide{
                         am{"a. m."}
                         pm{"p. m."}

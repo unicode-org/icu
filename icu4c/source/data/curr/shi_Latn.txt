@@ -76,17 +76,9 @@ shi_Latn{
             "£",
             "ajnih astrlini n nngliz",
         }
-        GHC{
-            "GHC",
-            "sidi n ɣana",
-        }
         GMD{
             "GMD",
             "dalasi n gambya",
-        }
-        GNS{
-            "GNS",
-            "frank n ɣinya",
         }
         INR{
             "₹",
@@ -124,10 +116,6 @@ shi_Latn{
             "MGA",
             "frank n madaɣacqar",
         }
-        MRO{
-            "MRO",
-            "uqiyya n muṛiṭanya (1973–2017)",
-        }
         MRU{
             "MRU",
             "uqiyya n muṛiṭanya",
@@ -139,10 +127,6 @@ shi_Latn{
         MWK{
             "MWK",
             "kwaca n malawi",
-        }
-        MZM{
-            "MZM",
-            "amitikl n muznbiq",
         }
         NAD{
             "NAD",
@@ -168,10 +152,6 @@ shi_Latn{
             "SDG",
             "adinar n ssudan",
         }
-        SDP{
-            "SDP",
-            "ajnih n ssudan",
-        }
         SHP{
             "SHP",
             "ajnih n santilin",
@@ -187,10 +167,6 @@ shi_Latn{
         SOS{
             "SOS",
             "acilin n ṣṣumal",
-        }
-        STD{
-            "STD",
-            "adubra n sanṭumi (1977–2017)",
         }
         STN{
             "STN",
@@ -228,17 +204,9 @@ shi_Latn{
             "ZAR",
             "arand n afriqya n iffus",
         }
-        ZMK{
-            "ZMK",
-            "akwaca n zambya (1968–2012)",
-        }
         ZMW{
             "ZMW",
             "akwaca n zambya",
-        }
-        ZWD{
-            "ZWD",
-            "adular n zimbabwi",
         }
     }
 }

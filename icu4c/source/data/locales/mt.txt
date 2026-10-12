@@ -39,16 +39,6 @@ mt{
                 "{1} {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMMdd",
-                "GGGGGyMMdd",
-            }
             availableFormats{
                 MEd{"E, M/d"}
                 MMMEd{"E, d 'ta'’ MMM"}
@@ -141,16 +131,6 @@ mt{
                 "{1} {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMdd",
-                "yMMdd",
-            }
             availableFormats{
                 Ehm{"E h:mm a"}
                 Ehms{"E h:mm:ss a"}
@@ -162,12 +142,10 @@ mt{
                 MMMMW{
                     few{"W 'ġimgħat' 'ta''' MMMM"}
                     many{"W-'il' 'ġimgħa' 'ta''' MMMM"}
-                    one{"W 'ġimgħa' 'ta''' MMMM"}
                     other{"W 'ġimgħa' 'ta''' MMMM"}
                     two{"W 'ġimgħatejn' 'ta''' MMMM"}
                 }
                 MMMMd{"d 'ta'’ MMMM"}
-                h{"h a"}
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
                 hmsv{"h:mm:ss a v"}
@@ -183,7 +161,6 @@ mt{
                 yw{
                     few{"w 'ġimgħat' 'ta''' Y"}
                     many{"w-'il' 'ġimgħa' 'ta''' Y"}
-                    one{"w 'ġimgħa' 'ta''' Y"}
                     other{"w 'ġimgħa' 'ta''' Y"}
                     two{"w 'ġimgħatejn' 'ta''' Y"}
                 }
@@ -273,7 +250,6 @@ mt{
                     d{"dd/MM – dd/MM"}
                 }
                 h{
-                    a{"h a – h a"}
                     h{"h – h a"}
                 }
                 hm{
@@ -285,10 +261,6 @@ mt{
                     a{"h:mm a – h:mm a v"}
                     h{"h:mm–h:mm a v"}
                     m{"h:mm–h:mm a v"}
-                }
-                hv{
-                    a{"h a – h a v"}
-                    h{"h–h a v"}
                 }
                 y{
                     y{"y – y"}
@@ -316,7 +288,6 @@ mt{
                     y{"MMMM y – MMMM y"}
                 }
                 yMMMd{
-                    M{"y MMM d – MMM d"}
                     d{"d – d MMM y"}
                     y{"d MMM, y – d MMM, y"}
                 }
@@ -435,10 +406,6 @@ mt{
             relativeTime{
                 future{
                     few{"fi żmien {0} ġurnata oħra"}
-                    many{"fi żmien {0}-il ġurnata oħra"}
-                    one{"fi żmien ġurnata"}
-                    other{"fi żmien {0} ġurnata oħra"}
-                    two{"fi żmien jumejn oħra"}
                 }
             }
         }
@@ -499,11 +466,7 @@ mt{
             dn{"m"}
             relativeTime{
                 future{
-                    few{"sa {0} min. oħra"}
                     many{"sa {0}-il min"}
-                    one{"sa min. oħra"}
-                    other{"sa {0} min. oħra"}
-                    two{"sa {0} min. oħra"}
                 }
             }
         }
@@ -567,11 +530,7 @@ mt{
         month-narrow{
             relativeTime{
                 past{
-                    few{"{0} xhur ilu"}
-                    many{"{0}-il xahar ilu"}
                     one{"xahar ilu"}
-                    other{"{0} xahar ilu"}
-                    two{"xahrejn ilu"}
                 }
             }
         }
@@ -581,16 +540,11 @@ mt{
                 future{
                     few{"sa {0} xhur oħra"}
                     many{"sa {0}-il xahar oħra"}
-                    one{"sa xahar ieħor"}
                     other{"sa {0} xahar oħra"}
                     two{"sa xahrejn oħra"}
                 }
                 past{
-                    few{"{0} xhur ilu"}
-                    many{"{0}-il xahar ilu"}
                     one{"{0} xahar ilu"}
-                    other{"{0} xahar ilu"}
-                    two{"xahrejn ilu"}
                 }
             }
         }
@@ -604,7 +558,6 @@ mt{
                 future{
                     few{"f’{0} kwarti ta’ sena oħrajn"}
                     many{"f’{0}-il kwart ta’ sena oħrajn"}
-                    one{"f’{0} kwart ta’ sena oħrajn"}
                     other{"f’{0} kwart ta’ sena oħrajn"}
                     two{"f’{0} kwarti ta’ sena oħrajn"}
                 }
@@ -624,11 +577,7 @@ mt{
             }
             relativeTime{
                 future{
-                    few{"f’{0} kwarti ta’ sena oħrajn"}
-                    many{"f’{0}-il kwart ta’ sena oħrajn"}
                     one{"fi kwart ta’ sena ieħor"}
-                    other{"f’{0} kwart ta’ sena oħrajn"}
-                    two{"f’{0} kwarti ta’ sena oħrajn"}
                 }
             }
         }
@@ -636,11 +585,7 @@ mt{
             dn{"kwrt"}
             relativeTime{
                 future{
-                    few{"f’{0} kwarti ta’ sena oħrajn"}
-                    many{"f’{0}-il kwart ta’ sena oħrajn"}
                     one{"fil-kwart tas-sena li ġej"}
-                    other{"f’{0} kwart ta’ sena oħrajn"}
-                    two{"f’{0} kwarti ta’ sena oħrajn"}
                 }
                 past{
                     few{"{0} kwarti ta’ sena ilu"}
@@ -721,11 +666,7 @@ mt{
         sun-narrow{
             relativeTime{
                 past{
-                    few{"{0} Ħd. ilu"}
-                    many{"{0}-il Ħd. ilu"}
                     one{"{0} Ħd. ilu"}
-                    other{"{0} Ħd. ilu"}
-                    two{"{0} Ħd. ilu"}
                 }
             }
         }
@@ -827,11 +768,7 @@ mt{
             dn{"Sena"}
             relativeTime{
                 past{
-                    few{"{0} snin ilu"}
-                    many{"{0}-il sena ilu"}
                     one{"sena ilu"}
-                    other{"{0} sena ilu"}
-                    two{"sentejn ilu"}
                 }
             }
         }
@@ -839,11 +776,7 @@ mt{
             dn{"Sn"}
             relativeTime{
                 past{
-                    few{"{0} snin ilu"}
-                    many{"{0}-il sena ilu"}
                     one{"sa sena ilu"}
-                    other{"{0} sena ilu"}
-                    two{"sentejn ilu"}
                 }
             }
         }

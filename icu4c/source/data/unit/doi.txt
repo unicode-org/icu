@@ -4,40 +4,16 @@
 doi{
     units{
         acceleration{
-            g-force{
-                dnam{"ग्रै-फोर्स"}
-            }
             meter-per-square-second{
                 dnam{"मीटर फी सकिंट²"}
             }
         }
         angle{
-            arc-minute{
-                dnam{"आर्क मिंट"}
-            }
             arc-second{
                 dnam{"आर्क सकिंट"}
             }
-            degree{
-                dnam{"डिग्रियां"}
-            }
-            radian{
-                dnam{"रेडियन"}
-            }
-            revolution{
-                dnam{"घमघेरे"}
-            }
         }
         area{
-            acre{
-                dnam{"किल्ले"}
-            }
-            dunam{
-                dnam{"डोनम"}
-            }
-            hectare{
-                dnam{"हैक्टर"}
-            }
             square-centimeter{
                 dnam{"वर्ग सैंटीमीटर"}
             }
@@ -61,26 +37,14 @@ doi{
             }
         }
         concentr{
-            karat{
-                dnam{"कैरट"}
-            }
             milligram-ofglucose-per-deciliter{
                 dnam{"मिलिग्राम फी डैसीलीटर"}
             }
             millimole-per-liter{
                 dnam{"मिलीमोल फी लीटर"}
             }
-            mole{
-                dnam{"मोल"}
-            }
             part-per-1e6{
                 dnam{"हिस्से फी दस लक्ख"}
-            }
-            percent{
-                dnam{"प्रतिशत/फीसदी"}
-            }
-            permille{
-                dnam{"फी ज्हार"}
             }
             permyriad{
                 dnam{"फी दस ज्हार"}
@@ -104,12 +68,6 @@ doi{
             dnam{"प्रधान दिशा"}
         }
         digital{
-            bit{
-                dnam{"बिट"}
-            }
-            byte{
-                dnam{"बाइट"}
-            }
             gigabit{
                 dnam{"गीगाबिट"}
             }
@@ -142,14 +100,8 @@ doi{
             century{
                 dnam{"सदियां"}
             }
-            day{
-                dnam{"दिन"}
-            }
             decade{
                 dnam{"द्हाके"}
-            }
-            hour{
-                dnam{"घैंटे"}
             }
             microsecond{
                 dnam{"माइक्रोसकिंट"}
@@ -160,9 +112,6 @@ doi{
             minute{
                 dnam{"मिंट"}
             }
-            month{
-                dnam{"म्हीने"}
-            }
             nanosecond{
                 dnam{"नैनो सकिंट"}
             }
@@ -172,12 +121,6 @@ doi{
             second{
                 dnam{"सकिंट"}
             }
-            week{
-                dnam{"हफ्ते"}
-            }
-            year{
-                dnam{"ब’रे/साल"}
-            }
         }
         electric{
             ampere{
@@ -186,45 +129,21 @@ doi{
             milliampere{
                 dnam{"मिलीएंपीयर"}
             }
-            ohm{
-                dnam{"ओम"}
-            }
-            volt{
-                dnam{"वोल्ट"}
-            }
         }
         energy{
-            british-thermal-unit{
-                dnam{"ब्रिटिश थर्मल यूनटां"}
-            }
             calorie{
                 dnam{"कैलोरियां"}
-            }
-            electronvolt{
-                dnam{"इलैक्ट्रॉनवोल्ट"}
-            }
-            joule{
-                dnam{"जूल"}
             }
             kilocalorie{
                 dnam{"किलो कैलोरी"}
             }
-            kilojoule{
-                dnam{"किलो जूल"}
-            }
             kilowatt-hour{
                 dnam{"किलोवॉट-घैंटे"}
-            }
-            therm-us{
-                dnam{"यूऐस्स थर्म"}
             }
         }
         force{
             kilowatt-hour-per-100-kilometer{
                 dnam{"किलोवॉट-घैंटे फी 100किलोमीटर"}
-            }
-            newton{
-                dnam{"न्यूटन"}
             }
             pound-force{
                 dnam{"पौंड-बल"}
@@ -248,12 +167,6 @@ doi{
             em{
                 dnam{"टाइपोग्राफ़िक ऐम्म"}
             }
-            megapixel{
-                dnam{"मैगापिक्सल"}
-            }
-            pixel{
-                dnam{"पिक्सल"}
-            }
             pixel-per-centimeter{
                 dnam{"पिक्सल फी सैंटीमीटर"}
             }
@@ -274,32 +187,14 @@ doi{
             earth-radius{
                 dnam{"धरती दा घेरा"}
             }
-            fathom{
-                dnam{"मसातरां"}
-            }
-            foot{
-                dnam{"फुट"}
-            }
-            furlong{
-                dnam{"फरलांग"}
-            }
-            inch{
-                dnam{"इंच"}
-            }
             kilometer{
                 dnam{"किलोमीटर"}
-            }
-            light-year{
-                dnam{"रुशनाई ब’रे"}
             }
             meter{
                 dnam{"मीटर"}
             }
             micrometer{
                 dnam{"माइक्रोमीटर"}
-            }
-            mile{
-                dnam{"मील"}
             }
             mile-scandinavian{
                 dnam{"मील-स्कैण्डिनेवियन"}
@@ -313,17 +208,11 @@ doi{
             nautical-mile{
                 dnam{"नॉटिकल मील"}
             }
-            parsec{
-                dnam{"पारसेक"}
-            }
             picometer{
                 dnam{"पिकोमीटर"}
             }
             solar-radius{
                 dnam{"सौर अद्धाव्यास"}
-            }
-            yard{
-                dnam{"गज"}
             }
         }
         light{
@@ -333,28 +222,13 @@ doi{
             lumen{
                 dnam{"लुमेन"}
             }
-            lux{
-                dnam{"लक्स"}
-            }
             solar-luminosity{
                 dnam{"सौर चानन"}
             }
         }
         mass{
-            carat{
-                dnam{"कैरट"}
-            }
-            dalton{
-                dnam{"डाल्टन"}
-            }
             earth-mass{
                 dnam{"धरती पिंड"}
-            }
-            grain{
-                dnam{"डेढ रत्ती"}
-            }
-            gram{
-                dnam{"ग्राम"}
             }
             kilogram{
                 dnam{"किलोग्राम"}
@@ -371,14 +245,8 @@ doi{
             ounce-troy{
                 dnam{"ट्राय औंस"}
             }
-            pound{
-                dnam{"पौंड"}
-            }
             solar-mass{
                 dnam{"सौर पिंड"}
-            }
-            stone{
-                dnam{"स्टोन"}
             }
             tonne{
                 dnam{"मीट्रिक टन"}
@@ -397,16 +265,10 @@ doi{
             milliwatt{
                 dnam{"मिलीवॉट"}
             }
-            watt{
-                dnam{"वॉट"}
-            }
         }
         pressure{
             atmosphere{
                 dnam{"वायुमंडली दबाऽ"}
-            }
-            bar{
-                dnam{"बार"}
             }
             hectopascal{
                 dnam{"हैक्टोपास्कल"}
@@ -437,9 +299,6 @@ doi{
             kilometer-per-hour{
                 dnam{"किलोमीटर फी घैंटा"}
             }
-            knot{
-                dnam{"नॉट"}
-            }
             meter-per-second{
                 dnam{"मीटर प्रति सकिंट"}
             }
@@ -448,12 +307,6 @@ doi{
             }
         }
         temperature{
-            celsius{
-                dnam{"डिग्री सेल्सियस"}
-            }
-            fahrenheit{
-                dnam{"डिग्री फारेनहाइट"}
-            }
             kelvin{
                 dnam{"केल्विन"}
             }
@@ -469,12 +322,6 @@ doi{
         volume{
             acre-foot{
                 dnam{"किल्ला-फुट"}
-            }
-            barrel{
-                dnam{"बैरल"}
-            }
-            bushel{
-                dnam{"बुशल"}
             }
             centiliter{
                 dnam{"सैंटीलीटर"}
@@ -500,9 +347,6 @@ doi{
             cubic-yard{
                 dnam{"क्यूबिक गज"}
             }
-            cup{
-                dnam{"कप"}
-            }
             cup-metric{
                 dnam{"मीट्रिक कप"}
             }
@@ -514,12 +358,6 @@ doi{
             }
             dessert-spoon-imperial{
                 dnam{"इंपी. डेज़र्टस्पून"}
-            }
-            dram{
-                dnam{"ड्रैम फ्लूइड"}
-            }
-            drop{
-                dnam{"बूंद"}
             }
             fluid-ounce{
                 dnam{"फ्लूइड औंस"}
@@ -533,12 +371,6 @@ doi{
             hectoliter{
                 dnam{"हैक्टोलीटर"}
             }
-            jigger{
-                dnam{"जिगर"}
-            }
-            liter{
-                dnam{"लीटर"}
-            }
             megaliter{
                 dnam{"मैगालीटर"}
             }
@@ -548,14 +380,8 @@ doi{
             pinch{
                 dnam{"चूंडियां"}
             }
-            pint{
-                dnam{"पिंट"}
-            }
             pint-metric{
                 dnam{"मीट्रिक पिंट"}
-            }
-            quart{
-                dnam{"कुआर्ट"}
             }
             quart-imperial{
                 dnam{"इंपी. कुआर्ट"}
@@ -570,17 +396,11 @@ doi{
     }
     unitsNarrow{
         acceleration{
-            g-force{
-                dnam{"ग्रै-फोर्स"}
-            }
             meter-per-square-second{
                 dnam{"मीटर/स²"}
             }
         }
         angle{
-            arc-minute{
-                dnam{"आर्क मिंट"}
-            }
             arc-second{
                 dnam{"आर्कसकिं"}
             }
@@ -598,12 +418,6 @@ doi{
             acre{
                 dnam{"किल्ला"}
             }
-            dunam{
-                dnam{"डोनम"}
-            }
-            hectare{
-                dnam{"हैक्टर"}
-            }
             square-centimeter{
                 dnam{"व.सैंमी"}
             }
@@ -616,28 +430,16 @@ doi{
             square-kilometer{
                 dnam{"व. किमी"}
             }
-            square-meter{
-                dnam{"व. मीटर"}
-            }
-            square-mile{
-                dnam{"व.मील"}
-            }
             square-yard{
                 dnam{"वग"}
             }
         }
         concentr{
-            karat{
-                dnam{"कैरट"}
-            }
             milligram-ofglucose-per-deciliter{
                 dnam{"मि॰ग्रा॰/डैली"}
             }
             millimole-per-liter{
                 dnam{"मिलीमोल/ली"}
-            }
-            mole{
-                dnam{"मोल"}
             }
             part-per-1e6{
                 dnam{"हिफीदल"}
@@ -646,9 +448,6 @@ doi{
         consumption{
             liter-per-100-kilometer{
                 dnam{"ली/100 किमी"}
-            }
-            liter-per-kilometer{
-                dnam{"लीटर/किमी"}
             }
             mile-per-gallon{
                 dnam{"मील/गै"}
@@ -659,13 +458,7 @@ doi{
                 other{"{0}m/gUK"}
             }
         }
-        coordinate{
-            dnam{"दिशा"}
-        }
         digital{
-            bit{
-                dnam{"बिट"}
-            }
             byte{
                 dnam{"बा"}
             }
@@ -698,15 +491,6 @@ doi{
             }
         }
         duration{
-            century{
-                dnam{"स."}
-            }
-            day{
-                dnam{"दिन"}
-            }
-            decade{
-                dnam{"द्हा."}
-            }
             hour{
                 dnam{"घैंटा"}
             }
@@ -725,9 +509,6 @@ doi{
             nanosecond{
                 dnam{"नैसकिं"}
             }
-            quarter{
-                dnam{"त्रमा."}
-            }
             second{
                 dnam{"सकिं"}
             }
@@ -739,43 +520,16 @@ doi{
             }
         }
         electric{
-            ampere{
-                dnam{"एंपी"}
-            }
             milliampere{
                 dnam{"मिएं"}
             }
-            ohm{
-                dnam{"ओम"}
-            }
-            volt{
-                dnam{"वोल्ट"}
-            }
         }
         energy{
-            british-thermal-unit{
-                dnam{"ब्रिथयू"}
-            }
-            calorie{
-                dnam{"कैल"}
-            }
             electronvolt{
                 dnam{"इवो"}
             }
-            joule{
-                dnam{"जूल"}
-            }
-            kilocalorie{
-                dnam{"किकैल"}
-            }
             kilojoule{
                 dnam{"किजू"}
-            }
-            kilowatt-hour{
-                dnam{"किवॉघैं"}
-            }
-            therm-us{
-                dnam{"यूऐस्स थर्म"}
             }
         }
         force{
@@ -798,14 +552,8 @@ doi{
             decimeter{
                 dnam{"डैमी"}
             }
-            fathom{
-                dnam{"मसातर"}
-            }
             foot{
                 dnam{"फु."}
-            }
-            furlong{
-                dnam{"फरलांग"}
             }
             inch{
                 dnam{"इं."}
@@ -819,36 +567,19 @@ doi{
             meter{
                 dnam{"मी"}
             }
-            mile{
-                dnam{"मील"}
-            }
             millimeter{
                 dnam{"मिमी"}
-            }
-            parsec{
-                dnam{"पारसेक"}
             }
             yard{
                 dnam{"ग."}
             }
         }
-        light{
-            lux{
-                dnam{"लक्स"}
-            }
-        }
         mass{
-            carat{
-                dnam{"कैरट"}
-            }
             dalton{
                 dnam{"डा"}
             }
             grain{
                 dnam{"डे. रत्ती"}
-            }
-            gram{
-                dnam{"ग्राम"}
             }
             kilogram{
                 dnam{"किग्रा"}
@@ -865,37 +596,8 @@ doi{
             ounce-troy{
                 dnam{"औं.ट्रा"}
             }
-            pound{
-                dnam{"पौंड"}
-            }
-            stone{
-                dnam{"स्टोन"}
-            }
-            tonne{
-                dnam{"टन"}
-            }
-        }
-        power{
-            gigawatt{
-                dnam{"मैवॉ"}
-            }
-            horsepower{
-                dnam{"हापा"}
-            }
-            kilowatt{
-                dnam{"किवॉ"}
-            }
-            milliwatt{
-                dnam{"मिवॉ"}
-            }
-            watt{
-                dnam{"वॉट"}
-            }
         }
         pressure{
-            bar{
-                dnam{"बार"}
-            }
             kilopascal{
                 dnam{"किपा"}
             }
@@ -910,9 +612,6 @@ doi{
             kilometer-per-hour{
                 dnam{"किमी/घैं"}
             }
-            knot{
-                dnam{"नॉट"}
-            }
             meter-per-second{
                 dnam{"मीटर/स"}
             }
@@ -924,14 +623,6 @@ doi{
             celsius{
                 dnam{"°से॰"}
             }
-            fahrenheit{
-                dnam{"डिग्री फारेनहाइट"}
-            }
-        }
-        torque{
-            newton-meter{
-                dnam{"न्यू.मी."}
-            }
         }
         volume{
             acre-foot{
@@ -939,9 +630,6 @@ doi{
             }
             barrel{
                 dnam{"बैर."}
-            }
-            bushel{
-                dnam{"बुशल"}
             }
             centiliter{
                 dnam{"सैली"}
@@ -967,9 +655,6 @@ doi{
             cubic-yard{
                 dnam{"क्यूग"}
             }
-            cup{
-                dnam{"कप"}
-            }
             cup-metric{
                 dnam{"मीक"}
             }
@@ -982,9 +667,6 @@ doi{
             }
             dram{
                 dnam{"ड्रै.फ्लू."}
-            }
-            drop{
-                dnam{"बूंद"}
             }
             fluid-ounce-imperial{
                 one{"{0}fl oz Im"}
@@ -1001,12 +683,6 @@ doi{
             hectoliter{
                 dnam{"हैली"}
             }
-            jigger{
-                dnam{"जिगर"}
-            }
-            liter{
-                dnam{"लीटर"}
-            }
             megaliter{
                 dnam{"मैली"}
             }
@@ -1021,12 +697,6 @@ doi{
             }
             pint-metric{
                 dnam{"मीपिं"}
-            }
-            quart{
-                dnam{"कुआर्ट"}
-            }
-            quart-imperial{
-                dnam{"कु इंपी"}
             }
         }
     }
@@ -1216,9 +886,6 @@ doi{
             }
         }
         energy{
-            british-thermal-unit{
-                dnam{"ब्रिथयू"}
-            }
             calorie{
                 dnam{"कैल"}
             }
@@ -1264,14 +931,8 @@ doi{
             decimeter{
                 dnam{"डै.मी."}
             }
-            fathom{
-                dnam{"मसातरां"}
-            }
             foot{
                 dnam{"फुट"}
-            }
-            furlong{
-                dnam{"फरलांग"}
             }
             inch{
                 dnam{"इंच"}
@@ -1346,9 +1007,6 @@ doi{
             pound{
                 dnam{"पौंड"}
             }
-            stone{
-                dnam{"स्टोन"}
-            }
             tonne{
                 dnam{"टन"}
             }
@@ -1417,9 +1075,6 @@ doi{
             }
             barrel{
                 dnam{"बैरल"}
-            }
-            bushel{
-                dnam{"बुशल"}
             }
             centiliter{
                 dnam{"सैं.ली."}

@@ -20,16 +20,6 @@ en_SG{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMMd",
-                "GGGGGyyMd",
-            }
             availableFormats{
                 yyyyMEd{"E, d/M/y GGGGG"}
             }
@@ -72,16 +62,6 @@ en_SG{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
-            }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yyMd",
             }
             intervalFormats{
                 MEd{
@@ -128,18 +108,11 @@ en_SG{
             }
         }
         quarter-short{
-            relative{
-                "-1"{"last qtr"}
-                "0"{"this qtr"}
-                "1"{"next qtr"}
-            }
             relativeTime{
                 future{
-                    one{"in {0} qtr"}
                     other{"in {0} qtrs"}
                 }
                 past{
-                    one{"{0} qtr ago"}
                     other{"{0} qtrs ago"}
                 }
             }

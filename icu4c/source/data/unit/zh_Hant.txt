@@ -499,9 +499,6 @@ zh_Hant{
             }
         }
         energy{
-            british-thermal-unit{
-                other{"{0}英熱單位"}
-            }
             calorie{
                 other{"{0}卡"}
             }
@@ -590,12 +587,6 @@ zh_Hant{
             }
             earth-radius{
                 other{"{0}R⊕"}
-            }
-            fathom{
-                other{"{0}fth"}
-            }
-            furlong{
-                other{"{0}化朗"}
             }
             inch{
                 other{"{0}吋"}
@@ -694,9 +685,6 @@ zh_Hant{
             }
             solar-mass{
                 other{"{0}太陽質量"}
-            }
-            stone{
-                other{"{0}英石"}
             }
             ton{
                 dnam{"英噸"}
@@ -798,9 +786,6 @@ zh_Hant{
             }
             barrel{
                 other{"{0}桶"}
-            }
-            bushel{
-                other{"{0}蒲式耳"}
             }
             centiliter{
                 other{"{0}釐升"}
@@ -1175,10 +1160,6 @@ zh_Hant{
             }
         }
         energy{
-            british-thermal-unit{
-                dnam{"英熱單位"}
-                other{"{0} 英熱單位"}
-            }
             calorie{
                 dnam{"卡路里"}
                 other{"{0} 卡"}
@@ -1257,18 +1238,10 @@ zh_Hant{
                 dnam{"公寸"}
                 other{"{0} 公寸"}
             }
-            fathom{
-                dnam{"英尋"}
-                other{"{0} 英尋"}
-            }
             foot{
                 dnam{"英尺"}
                 other{"{0}英尺"}
                 per{"{0}/英尺"}
-            }
-            furlong{
-                dnam{"化朗"}
-                other{"{0} 化朗"}
             }
             inch{
                 dnam{"英寸"}
@@ -1395,10 +1368,6 @@ zh_Hant{
             solar-mass{
                 dnam{"太陽質量"}
                 other{"{0} 太陽質量"}
-            }
-            stone{
-                dnam{"英石"}
-                other{"{0} 英石"}
             }
             ton{
                 dnam{"美噸"}
@@ -1529,10 +1498,6 @@ zh_Hant{
             barrel{
                 dnam{"桶"}
                 other{"{0} 桶"}
-            }
-            bushel{
-                dnam{"蒲式耳"}
-                other{"{0} 蒲式耳"}
             }
             centiliter{
                 dnam{"釐升"}

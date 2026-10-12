@@ -50,9 +50,6 @@ ps_PK{
         "meta:French_Southern"{
             ls{"د فرانسے سویل او انټارټيک وخت"}
         }
-        "meta:Hawaii"{
-            ld{"هوایی الیوتین رڼا ورځے وخت"}
-        }
         "meta:Hawaii_Aleutian"{
             ld{"هوایی الیوتین رڼا ورځے وخت"}
         }

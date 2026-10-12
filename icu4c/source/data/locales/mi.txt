@@ -107,16 +107,6 @@ mi{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yMMdd",
-            }
             availableFormats{
                 Ed{"E, d"}
                 Ehm{"E h:mm a"}
@@ -246,20 +236,6 @@ mi{
                         "O",
                         "N",
                         "T",
-                    }
-                    wide{
-                        "Hānuere",
-                        "Pēpuere",
-                        "Māehe",
-                        "Āperira",
-                        "Mei",
-                        "Hune",
-                        "Hūrae",
-                        "Ākuhata",
-                        "Hepetema",
-                        "Oketopa",
-                        "Noema",
-                        "Tīhema",
                     }
                 }
             }
@@ -1005,11 +981,6 @@ mi{
         }
         year-narrow{
             dn{"t"}
-            relativeTime{
-                past{
-                    other{"i te {0} tau"}
-                }
-            }
         }
         year-short{
             dn{"t."}

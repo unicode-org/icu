@@ -176,7 +176,6 @@ bg{
             }
             mole{
                 dnam{"молове"}
-                one{"{0} mol"}
                 other{"{0} мола"}
             }
             ofglucose{
@@ -186,7 +185,6 @@ bg{
             }
             part{
                 dnam{"части"}
-                one{"{0} част"}
                 other{"{0} части"}
             }
             part-per-1e6{
@@ -414,11 +412,6 @@ bg{
                 one{"{0} бекерел"}
                 other{"{0} бекерела"}
             }
-            british-thermal-unit{
-                dnam{"британски термални единици"}
-                one{"{0} британска термална единица"}
-                other{"{0} британски термални единици"}
-            }
             calorie{
                 dnam{"калории"}
                 one{"{0} калория"}
@@ -576,21 +569,11 @@ bg{
                 one{"{0} земен радиус"}
                 other{"{0} земни радиуса"}
             }
-            fathom{
-                dnam{"фатоми"}
-                one{"{0} фатом"}
-                other{"{0} фатома"}
-            }
             foot{
                 dnam{"футове"}
                 one{"{0} фут"}
                 other{"{0} фута"}
                 per{"{0} на фут"}
-            }
-            furlong{
-                dnam{"фърлонги"}
-                one{"{0} фърлонг"}
-                other{"{0} фърлонга"}
             }
             inch{
                 dnam{"инчове"}
@@ -764,11 +747,6 @@ bg{
                 one{"{0} слънчева маса"}
                 other{"{0} слънчеви маси"}
             }
-            stone{
-                dnam{"стоунове"}
-                one{"{0} стоун"}
-                other{"{0} стоуна"}
-            }
             ton{
                 dnam{"къси тонове"}
                 one{"{0} къс тон"}
@@ -933,10 +911,6 @@ bg{
                 dnam{"барели"}
                 one{"{0} барел"}
                 other{"{0} барела"}
-            }
-            bushel{
-                one{"{0} бушел"}
-                other{"{0} бушела"}
             }
             centiliter{
                 dnam{"сентилитри"}
@@ -1223,7 +1197,6 @@ bg{
             }
             revolution{
                 dnam{"об."}
-                one{"{0} об."}
                 other{"{0} об."}
             }
         }
@@ -1245,15 +1218,12 @@ bg{
         concentr{
             item{
                 dnam{"единица"}
-                one{"{0} ед."}
                 other{"{0} ед."}
             }
             katal{
-                one{"{0} kat"}
                 other{"{0} kat"}
             }
             milligram-ofglucose-per-deciliter{
-                one{"{0} mg/dl"}
                 other{"{0} mg/dl"}
             }
             mole{
@@ -1261,12 +1231,10 @@ bg{
             }
             ofglucose{
                 dnam{"Glc"}
-                one{"{0} Glc"}
                 other{"{0} Glc"}
             }
             part{
                 dnam{"част"}
-                one{"{0} част"}
                 other{"{0} част"}
             }
             part-per-1e9{
@@ -1282,17 +1250,14 @@ bg{
         consumption{
             liter-per-100-kilometer{
                 dnam{"l/100 km"}
-                one{"{0} l/100 km"}
                 other{"{0} l/100 km"}
             }
             liter-per-kilometer{
                 dnam{"l/km"}
-                one{"{0} l/km"}
                 other{"{0} l/km"}
             }
             mile-per-gallon{
                 dnam{"mpg"}
-                one{"{0} mpg"}
                 other{"{0} mpg"}
             }
             mile-per-gallon-imperial{
@@ -1309,12 +1274,10 @@ bg{
         digital{
             bit{
                 dnam{"b"}
-                one{"{0} b"}
                 other{"{0} b"}
             }
             byte{
                 dnam{"B"}
-                one{"{0} B"}
                 other{"{0} B"}
             }
             petabyte{
@@ -1324,12 +1287,10 @@ bg{
         duration{
             century{
                 dnam{"в."}
-                one{"{0} в."}
                 other{"{0} в."}
             }
             day{
                 dnam{"дни"}
-                one{"{0} д"}
                 other{"{0} д"}
                 per{"{0}/д"}
             }
@@ -1340,24 +1301,20 @@ bg{
             }
             hour{
                 dnam{"часове"}
-                one{"{0} ч"}
                 other{"{0} ч"}
                 per{"{0}/ч"}
             }
             millisecond{
                 dnam{"милисекунди"}
-                one{"{0} мсек"}
                 other{"{0} мсек"}
             }
             minute{
                 dnam{"мин"}
-                one{"{0} мин"}
                 other{"{0} мин"}
                 per{"{0}/мин"}
             }
             month{
                 dnam{"месеци"}
-                one{"{0} мес."}
                 other{"{0} мес."}
                 per{"{0}/месец"}
             }
@@ -1369,25 +1326,21 @@ bg{
             }
             quarter{
                 dnam{"тримес."}
-                one{"{0} тримес."}
                 other{"{0} тримес."}
                 per{"{0}/тримес."}
             }
             second{
                 dnam{"секунди"}
-                one{"{0} сек"}
                 other{"{0} сек"}
                 per{"{0}/сек"}
             }
             week{
                 dnam{"седмици"}
-                one{"{0} седм."}
                 other{"{0} седм."}
                 per{"{0}/седмица"}
             }
             year{
                 dnam{"години"}
-                one{"{0} год."}
                 other{"{0} год."}
                 per{"{0}/год."}
             }
@@ -1405,17 +1358,10 @@ bg{
         }
         energy{
             becquerel{
-                one{"{0} Bq"}
                 other{"{0} Bq"}
-            }
-            british-thermal-unit{
-                dnam{"BTU"}
-                one{"{0} BTU"}
-                other{"{0} BTU"}
             }
             calorie-it{
                 dnam{"cal-IT"}
-                one{"{0} cal-IT"}
                 other{"{0} cal-IT"}
             }
             foodcalorie{
@@ -1424,30 +1370,25 @@ bg{
                 other{"{0} cal"}
             }
             gray{
-                one{"{0} Gy"}
                 other{"{0} Gy"}
             }
             joule{
                 dnam{"J"}
             }
             sievert{
-                one{"{0} Sv"}
                 other{"{0} Sv"}
             }
             therm-us{
                 dnam{"амер. термални ед."}
-                one{"{0} амер. терм. ед."}
                 other{"{0} амер. терм. ед."}
             }
         }
         force{
             kilogram-force{
-                one{"{0} kgf"}
                 other{"{0} kgf"}
             }
             kilowatt-hour-per-100-kilometer{
                 dnam{"kWh/100 km"}
-                one{"{0} kWh/100 km"}
                 other{"{0} kWh/100 km"}
             }
         }
@@ -1469,22 +1410,16 @@ bg{
             }
             em{
                 dnam{"ем"}
-                one{"{0} ем"}
                 other{"{0} ем"}
             }
         }
         length{
             astronomical-unit{
                 dnam{"AU"}
-                one{"{0} AU"}
                 other{"{0} AU"}
-            }
-            fathom{
-                dnam{"fth"}
             }
             light-year{
                 dnam{"св. г."}
-                one{"{0} св.г."}
                 other{"{0} св.г."}
             }
             meter{
@@ -1493,11 +1428,9 @@ bg{
         }
         magnetic{
             tesla{
-                one{"{0} T"}
                 other{"{0} T"}
             }
             weber{
-                one{"{0} Wb"}
                 other{"{0} Wb"}
             }
         }
@@ -1515,17 +1448,12 @@ bg{
             }
             ounce-troy{
                 dnam{"тр. унц."}
-                one{"{0} тр. унц."}
                 other{"{0} тр. унц."}
-            }
-            stone{
-                dnam{"стоун."}
             }
         }
         power{
             horsepower{
                 dnam{"к. с."}
-                one{"{0} к. с."}
                 other{"{0} к. с."}
             }
             watt{
@@ -1535,23 +1463,19 @@ bg{
         pressure{
             millimeter-ofhg{
                 dnam{"mmHg"}
-                one{"{0} mmHg"}
                 other{"{0} mmHg"}
             }
         }
         speed{
             beaufort{
-                one{"{0} по Bft"}
                 other{"{0} по Bft"}
             }
             light-speed{
                 dnam{"светлина"}
-                one{"{0} светлина"}
                 other{"{0} светлина"}
             }
             mile-per-hour{
                 dnam{"mph"}
-                one{"{0} mph"}
                 other{"{0} mph"}
             }
         }
@@ -1559,22 +1483,16 @@ bg{
             barrel{
                 dnam{"барел"}
             }
-            bushel{
-                dnam{"бушели"}
-            }
             centiliter{
                 dnam{"cl"}
-                one{"{0} cl"}
                 other{"{0} cl"}
             }
             cup{
                 dnam{"ч."}
-                one{"{0} ч."}
                 other{"{0} ч."}
             }
             deciliter{
                 dnam{"dl"}
-                one{"{0} dl"}
                 other{"{0} dl"}
             }
             dessert-spoon{
@@ -1605,7 +1523,6 @@ bg{
             }
             hectoliter{
                 dnam{"hl"}
-                one{"{0} hl"}
                 other{"{0} hl"}
             }
             jigger{
@@ -1618,12 +1535,10 @@ bg{
             }
             megaliter{
                 dnam{"Ml"}
-                one{"{0} Ml"}
                 other{"{0} Ml"}
             }
             milliliter{
                 dnam{"ml"}
-                one{"{0} ml"}
                 other{"{0} ml"}
             }
             pinch{
@@ -1638,12 +1553,10 @@ bg{
             }
             tablespoon{
                 dnam{"с. л."}
-                one{"{0} с. л."}
                 other{"{0} с. л."}
             }
             teaspoon{
                 dnam{"ч. л."}
-                one{"{0} ч. л."}
                 other{"{0} ч. л."}
             }
         }

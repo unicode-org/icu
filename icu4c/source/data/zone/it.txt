@@ -317,11 +317,6 @@ it{
             lg{"Ora del Pacifico USA"}
             ls{"Ora standard del Pacifico USA"}
         }
-        "meta:Anadyr"{
-            ld{"Ora legale di Anadyr"}
-            lg{"Ora di Anadyr"}
-            ls{"Ora standard di Anadyr"}
-        }
         "meta:Apia"{
             ld{"Ora legale delle Samoa occidentali"}
             lg{"Ora delle Samoa occidentali"}
@@ -470,17 +465,11 @@ it{
             ld{"Ora legale dell’Europa centrale"}
             lg{"Ora dell’Europa centrale"}
             ls{"Ora standard dell’Europa centrale"}
-            sd{"CEST"}
-            sg{"CET"}
-            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"Ora legale dell’Europa orientale"}
             lg{"Ora dell’Europa orientale"}
             ls{"Ora standard dell’Europa orientale"}
-            sd{"EEST"}
-            sg{"EET"}
-            ss{"EET"}
         }
         "meta:Europe_Further_Eastern"{
             ls{"Ora dell’Europa orientale (Kaliningrad)"}
@@ -489,9 +478,6 @@ it{
             ld{"Ora legale dell’Europa occidentale"}
             lg{"Ora dell’Europa occidentale"}
             ls{"Ora standard dell’Europa occidentale"}
-            sd{"WEST"}
-            sg{"WET"}
-            ss{"WET"}
         }
         "meta:Falkland"{
             ld{"Ora legale delle Isole Falkland"}

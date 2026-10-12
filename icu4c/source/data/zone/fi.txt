@@ -15,9 +15,6 @@ fi{
         "Africa:Khartoum"{
             ec{"Khartum"}
         }
-        "America:Godthab"{
-            ec%secondary{"Godthåb"}
-        }
         "America:Havana"{
             ec{"Havanna"}
         }
@@ -36,9 +33,6 @@ fi{
         "America:Santiago"{
             ec{"Santiago de Chile"}
         }
-        "America:Scoresbysund"{
-            ec%secondary{"Scoresbysund"}
-        }
         "America:St_Barthelemy"{
             ec{"Saint-Barthélemy"}
         }
@@ -53,9 +47,6 @@ fi{
         }
         "America:St_Vincent"{
             ec{"Saint Vincent"}
-        }
-        "America:Thule"{
-            ec%secondary{"Qaanaaq"}
         }
         "Antarctica:Macquarie"{
             ec{"Macquariensaari"}
@@ -221,7 +212,6 @@ fi{
         }
         "Europe:Mariehamn"{
             ec{"Maarianhamina"}
-            ec%secondary{"Mariehamn"}
         }
         "Europe:Moscow"{
             ec{"Moskova"}
@@ -351,11 +341,6 @@ fi{
             lg{"Yhdysvaltain Tyynenmeren aika"}
             ls{"Yhdysvaltain Tyynenmeren normaaliaika"}
         }
-        "meta:Anadyr"{
-            ld{"Anadyrin kesäaika"}
-            lg{"Anadyrin aika"}
-            ls{"Anadyrin normaaliaika"}
-        }
         "meta:Apia"{
             ld{"Apian kesäaika"}
             lg{"Apian aika"}
@@ -443,9 +428,6 @@ fi{
             ld{"Kap Verden kesäaika"}
             lg{"Kap Verden aika"}
             ls{"Kap Verden normaaliaika"}
-        }
-        "meta:Casey"{
-            ls{"Caseyn aika"}
         }
         "meta:Chamorro"{
             ls{"Tšamorron aika"}

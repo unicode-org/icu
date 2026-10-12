@@ -15,9 +15,6 @@ uz{
             }
         }
         arabext{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
-            }
             symbols{
                 minusSign{"-"}
                 nan{"son emas"}
@@ -87,101 +84,77 @@ uz{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"0 ming ¤"}
                         other{"0 ming ¤"}
                     }
                     10000{
-                        one{"00 ming ¤"}
                         other{"00 ming ¤"}
                     }
                     100000{
-                        one{"000 ming ¤"}
                         other{"000 ming ¤"}
                     }
                     1000000{
-                        one{"0 mln ¤"}
                         other{"0 mln ¤"}
                     }
                     10000000{
-                        one{"00 mln ¤"}
                         other{"00 mln ¤"}
                     }
                     100000000{
-                        one{"000 mln ¤"}
                         other{"000 mln ¤"}
                     }
                     1000000000{
-                        one{"0 mlrd ¤"}
                         other{"0 mlrd ¤"}
                     }
                     10000000000{
-                        one{"00 mlrd ¤"}
                         other{"00 mlrd ¤"}
                     }
                     100000000000{
-                        one{"000 mlrd ¤"}
                         other{"000 mlrd ¤"}
                     }
                     1000000000000{
-                        one{"0 trln ¤"}
                         other{"0 trln ¤"}
                     }
                     10000000000000{
-                        one{"00 trln ¤"}
                         other{"00 trln ¤"}
                     }
                     100000000000000{
-                        one{"000 trln ¤"}
                         other{"000 trln ¤"}
                     }
                 }
                 decimalFormat{
                     1000{
-                        one{"0 ming"}
                         other{"0 ming"}
                     }
                     10000{
-                        one{"00 ming"}
                         other{"00 ming"}
                     }
                     100000{
-                        one{"000 ming"}
                         other{"000 ming"}
                     }
                     1000000{
-                        one{"0 mln"}
                         other{"0 mln"}
                     }
                     10000000{
-                        one{"00 mln"}
                         other{"00 mln"}
                     }
                     100000000{
-                        one{"000 mln"}
                         other{"000 mln"}
                     }
                     1000000000{
-                        one{"0 mlrd"}
                         other{"0 mlrd"}
                     }
                     10000000000{
-                        one{"00 mlrd"}
                         other{"00 mlrd"}
                     }
                     100000000000{
-                        one{"000 mlrd"}
                         other{"000 mlrd"}
                     }
                     1000000000000{
-                        one{"0 trln"}
                         other{"0 trln"}
                     }
                     10000000000000{
-                        one{"00 trln"}
                         other{"00 trln"}
                     }
                     100000000000000{
-                        one{"000 trln"}
                         other{"000 trln"}
                     }
                 }
@@ -384,16 +357,6 @@ uz{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "Hmmsszzzz",
-                "Hmmssz",
-                "HHmmss",
-                "HHmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yyMMdd",
-            }
             appendItems{
                 Time-Day-Of-Week{"{1}, {0}"}
             }
@@ -425,7 +388,6 @@ uz{
                 MMMEd{"E, d-MMM"}
                 MMMMEd{"E, d-MMMM"}
                 MMMMW{
-                    one{"MMMM, W-'hafta'"}
                     other{"MMMM, W-'hafta'"}
                 }
                 MMMMd{"d-MMMM"}
@@ -447,7 +409,6 @@ uz{
                 yQQQ{"y, QQQ"}
                 yQQQQ{"y, QQQQ"}
                 yw{
-                    one{"Y, w-'hafta'"}
                     other{"Y, w-'hafta'"}
                 }
             }
@@ -740,8 +701,6 @@ uz{
         }
         islamic{
             availableFormats{
-                GyM{"MM-y (G)"}
-                GyMEd{"E, dd-MM-y (G)"}
                 yyyyMMM{"MMM, y (G)"}
                 yyyyMMMM{"MMMM, y G"}
                 yyyyMMMd{"d-MMM, y G"}
@@ -941,11 +900,9 @@ uz{
             }
             relativeTime{
                 future{
-                    one{"{0} kundan keyin"}
                     other{"{0} kundan keyin"}
                 }
                 past{
-                    one{"{0} kun oldin"}
                     other{"{0} kun oldin"}
                 }
             }
@@ -967,11 +924,9 @@ uz{
             }
             relativeTime{
                 future{
-                    one{"{0} ta jumadan keyin"}
                     other{"{0} ta jumadan keyin"}
                 }
                 past{
-                    one{"{0} ta juma oldin"}
                     other{"{0} ta juma oldin"}
                 }
             }
@@ -983,11 +938,9 @@ uz{
             }
             relativeTime{
                 future{
-                    one{"{0} soatdan keyin"}
                     other{"{0} soatdan keyin"}
                 }
                 past{
-                    one{"{0} soat oldin"}
                     other{"{0} soat oldin"}
                 }
             }
@@ -999,11 +952,9 @@ uz{
             }
             relativeTime{
                 future{
-                    one{"{0} daqiqadan keyin"}
                     other{"{0} daqiqadan keyin"}
                 }
                 past{
-                    one{"{0} daqiqa oldin"}
                     other{"{0} daqiqa oldin"}
                 }
             }
@@ -1019,11 +970,9 @@ uz{
             }
             relativeTime{
                 future{
-                    one{"{0} ta dushanbadan keyin"}
                     other{"{0} ta dushanbadan keyin"}
                 }
                 past{
-                    one{"{0} ta dushanba oldin"}
                     other{"{0} ta dushanba oldin"}
                 }
             }
@@ -1037,20 +986,16 @@ uz{
             }
             relativeTime{
                 future{
-                    one{"{0} oydan keyin"}
                     other{"{0} oydan keyin"}
                 }
                 past{
-                    one{"{0} oy oldin"}
                     other{"{0} oy oldin"}
                 }
             }
         }
         month-short{
             relative{
-                "-1"{"o‘tgan oy"}
                 "0"{"bu oy"}
-                "1"{"keyingi oy"}
             }
         }
         quarter{
@@ -1062,11 +1007,9 @@ uz{
             }
             relativeTime{
                 future{
-                    one{"{0} chorakdan keyin"}
                     other{"{0} chorakdan keyin"}
                 }
                 past{
-                    one{"{0} chorak oldin"}
                     other{"{0} chorak oldin"}
                 }
             }
@@ -1082,11 +1025,9 @@ uz{
             }
             relativeTime{
                 future{
-                    one{"{0} ta shanbadan keyin"}
                     other{"{0} ta shanbadan keyin"}
                 }
                 past{
-                    one{"{0} ta shanba oldin"}
                     other{"{0} ta shanba oldin"}
                 }
             }
@@ -1098,11 +1039,9 @@ uz{
             }
             relativeTime{
                 future{
-                    one{"{0} soniyadan keyin"}
                     other{"{0} soniyadan keyin"}
                 }
                 past{
-                    one{"{0} soniya oldin"}
                     other{"{0} soniya oldin"}
                 }
             }
@@ -1118,11 +1057,9 @@ uz{
             }
             relativeTime{
                 future{
-                    one{"{0} ta yakshanbadan keyin"}
                     other{"{0} ta yakshanbadan keyin"}
                 }
                 past{
-                    one{"{0} ta yakshanba oldin"}
                     other{"{0} ta yakshanba oldin"}
                 }
             }
@@ -1135,11 +1072,9 @@ uz{
             }
             relativeTime{
                 future{
-                    one{"{0} ta payshanbadan keyin"}
                     other{"{0} ta payshanbadan keyin"}
                 }
                 past{
-                    one{"{0} ta payshanba oldin"}
                     other{"{0} ta payshanba oldin"}
                 }
             }
@@ -1152,11 +1087,9 @@ uz{
             }
             relativeTime{
                 future{
-                    one{"{0} ta seshanbadan keyin"}
                     other{"{0} ta seshanbadan keyin"}
                 }
                 past{
-                    one{"{0} ta seshanba oldin"}
                     other{"{0} ta seshanba oldin"}
                 }
             }
@@ -1169,11 +1102,9 @@ uz{
             }
             relativeTime{
                 future{
-                    one{"{0} ta chorshanbadan keyin"}
                     other{"{0} ta chorshanbadan keyin"}
                 }
                 past{
-                    one{"{0} ta chorshanba oldin"}
                     other{"{0} ta chorshanba oldin"}
                 }
             }
@@ -1188,20 +1119,16 @@ uz{
             relativePeriod{"{0}-hafta"}
             relativeTime{
                 future{
-                    one{"{0} haftadan keyin"}
                     other{"{0} haftadan keyin"}
                 }
                 past{
-                    one{"{0} hafta oldin"}
                     other{"{0} hafta oldin"}
                 }
             }
         }
         week-short{
             relative{
-                "-1"{"o‘tgan hafta"}
                 "0"{"bu hafta"}
-                "1"{"keyingi hafta"}
             }
         }
         weekOfMonth{
@@ -1222,11 +1149,9 @@ uz{
             }
             relativeTime{
                 future{
-                    one{"{0} yildan keyin"}
                     other{"{0} yildan keyin"}
                 }
                 past{
-                    one{"{0} yil oldin"}
                     other{"{0} yil oldin"}
                 }
             }
@@ -1234,15 +1159,12 @@ uz{
         year-narrow{
             relative{
                 "-1"{"o‘tgan yil"}
-                "0"{"bu yil"}
-                "1"{"keyingi yil"}
             }
         }
         year-short{
             relative{
                 "-1"{"o‘ʻtgan yil"}
                 "0"{"bu yil"}
-                "1"{"keyingi yil"}
             }
         }
         zone{

@@ -303,10 +303,6 @@ ms{
                 dnam{"becquerel"}
                 other{"{0} becquerel"}
             }
-            british-thermal-unit{
-                dnam{"unit terma British"}
-                other{"{0} unit terma British"}
-            }
             calorie{
                 dnam{"kalori"}
                 other{"{0} kalori"}
@@ -430,15 +426,9 @@ ms{
                 dnam{"radius bumi"}
                 other{"{0} radius bumi"}
             }
-            fathom{
-                other{"{0} fathom"}
-            }
             foot{
                 other{"{0} kaki"}
                 per{"{0} sekaki"}
-            }
-            furlong{
-                other{"{0} furlong"}
             }
             inch{
                 other{"{0} inci"}
@@ -566,9 +556,6 @@ ms{
             solar-mass{
                 dnam{"jisim suria"}
                 other{"{0} jisim suria"}
-            }
-            stone{
-                other{"{0} stone"}
             }
             ton{
                 other{"{0} tan"}
@@ -699,10 +686,6 @@ ms{
             barrel{
                 dnam{"tong"}
                 other{"{0} tong"}
-            }
-            bushel{
-                dnam{"busyel"}
-                other{"{0} busyel"}
             }
             centiliter{
                 dnam{"sentiliter"}
@@ -928,9 +911,6 @@ ms{
             }
         }
         energy{
-            british-thermal-unit{
-                other{"{0}Btu"}
-            }
             calorie{
                 other{"{0}kal"}
             }
@@ -1297,10 +1277,6 @@ ms{
             }
         }
         energy{
-            british-thermal-unit{
-                dnam{"utB"}
-                other{"{0} utB"}
-            }
             calorie{
                 dnam{"kal"}
                 other{"{0} kal"}
@@ -1346,16 +1322,10 @@ ms{
             }
         }
         length{
-            fathom{
-                dnam{"fathom"}
-            }
             foot{
                 dnam{"kaki"}
                 other{"{0} ka"}
                 per{"{0}/ka"}
-            }
-            furlong{
-                dnam{"furlong"}
             }
             inch{
                 dnam{"inci"}
@@ -1407,9 +1377,6 @@ ms{
             }
             pound{
                 dnam{"paun"}
-            }
-            stone{
-                dnam{"stone"}
             }
             ton{
                 dnam{"tan"}

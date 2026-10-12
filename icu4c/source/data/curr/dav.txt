@@ -75,17 +75,9 @@ dav{
             "£",
             "Pauni ya Uingereza",
         }
-        GHC{
-            "GHC",
-            "Sedi ya Ghana",
-        }
         GMD{
             "GMD",
             "Dalasi ya Gambia",
-        }
-        GNS{
-            "GNS",
-            "Faranga ya Gine",
         }
         INR{
             "₹",
@@ -123,10 +115,6 @@ dav{
             "MGA",
             "Ariary ya Bukini",
         }
-        MRO{
-            "MRO",
-            "Ugwiya ya Moritania (1973–2017)",
-        }
         MRU{
             "MRU",
             "Ugwiya ya Moritania",
@@ -138,10 +126,6 @@ dav{
         MWK{
             "MWK",
             "Kwacha ya Malawi",
-        }
-        MZM{
-            "MZM",
-            "Metikali ya Msumbiji",
         }
         NAD{
             "NAD",
@@ -183,10 +167,6 @@ dav{
             "SOS",
             "Shilingi ya Somalia",
         }
-        STD{
-            "STD",
-            "Dobra ya Sao Tome na Principe (1977–2017)",
-        }
         STN{
             "STN",
             "Dobra ya Sao Tome na Principe",
@@ -223,17 +203,9 @@ dav{
             "ZAR",
             "Randi ya Afrika Kusini",
         }
-        ZMK{
-            "ZMK",
-            "Kwacha ya Zambia (1968–2012)",
-        }
         ZMW{
             "ZMW",
             "Kwacha ya Zambia",
-        }
-        ZWD{
-            "ZWD",
-            "Dola ya Zimbabwe",
         }
     }
 }

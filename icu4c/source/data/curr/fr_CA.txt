@@ -196,7 +196,6 @@ fr_CA{
     }
     CurrencyPlurals{
         AFN{
-            one{"afghani afghan"}
             other{"afghanis afghans"}
         }
         AZN{
@@ -261,7 +260,6 @@ fr_CA{
         }
     }
     CurrencyUnitPatterns{
-        one{"{0} {1}"}
         other{"{0} {1}"}
     }
 }

@@ -262,9 +262,6 @@ pt_PT{
             ld{"Hora de verão do Acre"}
             lg{"Hora do Acre"}
             ls{"Hora padrão do Acre"}
-            sd{"∅∅∅"}
-            sg{"∅∅∅"}
-            ss{"∅∅∅"}
         }
         "meta:Afghanistan"{
             ls{"Hora do Afeganistão"}
@@ -290,9 +287,6 @@ pt_PT{
             ld{"Hora de verão do Amazonas"}
             lg{"Hora do Amazonas"}
             ls{"Hora padrão do Amazonas"}
-            sd{"∅∅∅"}
-            sg{"∅∅∅"}
-            ss{"∅∅∅"}
         }
         "meta:America_Central"{
             ld{"Hora de verão central norte-americana"}
@@ -313,11 +307,6 @@ pt_PT{
             ld{"Hora de verão do Pacífico norte-americana"}
             lg{"Hora do Pacífico norte-americana"}
             ls{"Hora padrão do Pacífico norte-americana"}
-        }
-        "meta:Anadyr"{
-            ld{"Hora de verão de Anadyr"}
-            lg{"Hora de Anadyr"}
-            ls{"Hora padrão de Anadyr"}
         }
         "meta:Apia"{
             ld{"Hora de verão de Samoa"}
@@ -378,9 +367,6 @@ pt_PT{
             ld{"Hora de verão dos Açores"}
             lg{"Hora dos Açores"}
             ls{"Hora padrão dos Açores"}
-            sd{"AZOST"}
-            sg{"AZOT"}
-            ss{"AZOT"}
         }
         "meta:Bangladesh"{
             ld{"Hora de verão do Bangladeche"}
@@ -397,9 +383,6 @@ pt_PT{
             ld{"Hora de verão de Brasília"}
             lg{"Hora de Brasília"}
             ls{"Hora padrão de Brasília"}
-            sd{"∅∅∅"}
-            sg{"∅∅∅"}
-            ss{"∅∅∅"}
         }
         "meta:British"{
             ld{"Hora de verão britânica"}
@@ -473,17 +456,11 @@ pt_PT{
             ld{"Hora de verão da Europa Central"}
             lg{"Hora da Europa Central"}
             ls{"Hora padrão da Europa Central"}
-            sd{"CEST"}
-            sg{"CET"}
-            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"Hora de verão da Europa Oriental"}
             lg{"Hora da Europa Oriental"}
             ls{"Hora padrão da Europa Oriental"}
-            sd{"EEST"}
-            sg{"EET"}
-            ss{"EET"}
         }
         "meta:Europe_Further_Eastern"{
             ls{"Hora do Extremo Leste da Europa"}
@@ -492,9 +469,6 @@ pt_PT{
             ld{"Hora de verão da Europa Ocidental"}
             lg{"Hora da Europa Ocidental"}
             ls{"Hora padrão da Europa Ocidental"}
-            sd{"WEST"}
-            sg{"WET"}
-            ss{"WET"}
         }
         "meta:Falkland"{
             ld{"Hora de verão das Ilhas Falkland"}

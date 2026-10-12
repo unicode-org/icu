@@ -23,15 +23,6 @@ hi_Latn{
         }
     }
     calendar{
-        chinese{
-            availableFormats{
-                GyMMM{"MMM r(U)"}
-                GyMMMEd{"E, d MMM r(U)"}
-                yMd{"dd/MM/r"}
-                yyyyMMM{"MMM r(U)"}
-                yyyyMMMEd{"E, d MMM r(U)"}
-            }
-        }
         generic{
             DateTimePatterns{
                 "h:mm:ss a zzzz",
@@ -109,24 +100,14 @@ hi_Latn{
             DateTimePatterns%atTime{
                 "{1}, {0} 'par'",
                 "{1}, {0} 'par'",
-                "{1}, {0}",
-                "{1}, {0}",
+                "{1} {0}",
+                "{1} {0}",
             }
             DateTimePatterns%relative{
                 "{1}, {0} 'par'",
                 "{1}, {0} 'par'",
-                "{1}, {0}",
-                "{1}, {0}",
-            }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMdd",
-                "yMMdd",
+                "{1} {0}",
+                "{1} {0}",
             }
             availableFormats{
                 Eh{"E, h a"}
@@ -228,18 +209,14 @@ hi_Latn{
                     abbreviated{
                         afternoon1{"dopahar"}
                         evening1{"shaam"}
-                        midnight{"midnight"}
                         morning1{"subah"}
                         night1{"raat"}
-                        noon{"noon"}
                     }
                     narrow{
                         afternoon1{"dopahar"}
                         evening1{"shaam"}
-                        midnight{"mi"}
                         morning1{"subah"}
                         night1{"raat"}
-                        noon{"n"}
                     }
                     wide{
                         afternoon1{"dopahar"}
@@ -327,45 +304,6 @@ hi_Latn{
                 }
             }
         }
-        islamic{
-            eras{
-                abbreviated{
-                    0{"Hijri"}
-                }
-            }
-            monthNames{
-                format{
-                    abbreviated{
-                        "Muh",
-                        "Saf",
-                        "Rabi 1",
-                        "Rabi 2",
-                        "Jum 1",
-                        "Jum 2",
-                        "Rajab",
-                        "Shab",
-                        "Ram",
-                        "Shaw",
-                        "Zu Q",
-                        "Zu H",
-                    }
-                    wide{
-                        "Muharram",
-                        "Safar",
-                        "Rabi al-Awwal",
-                        "Rabi as-Saani",
-                        "Jumaada al-Awwal",
-                        "Jumaada as-Saani",
-                        "Rajab",
-                        "Shaabaan",
-                        "Ramzaan",
-                        "Shawwaal",
-                        "Zu’l-Qaada",
-                        "Zu’l-Hijja",
-                    }
-                }
-            }
-        }
     }
     characterLabel{
         animals_nature{"animal yaa nature"}
@@ -446,9 +384,7 @@ hi_Latn{
         }
         fri{
             relative{
-                "-1"{"last Friday"}
                 "0"{"Friday"}
-                "1"{"next Friday"}
             }
             relativeTime{
                 future{
@@ -463,9 +399,7 @@ hi_Latn{
         }
         fri-narrow{
             relative{
-                "-1"{"last F"}
                 "0"{"F"}
-                "1"{"next F"}
             }
             relativeTime{
                 future{
@@ -480,9 +414,7 @@ hi_Latn{
         }
         fri-short{
             relative{
-                "-1"{"last Fri"}
                 "0"{"Fri"}
-                "1"{"next Fri"}
             }
             relativeTime{
                 future{
@@ -576,9 +508,7 @@ hi_Latn{
         }
         mon{
             relative{
-                "-1"{"last Monday"}
                 "0"{"Monday"}
-                "1"{"next Monday"}
             }
             relativeTime{
                 future{
@@ -593,9 +523,7 @@ hi_Latn{
         }
         mon-narrow{
             relative{
-                "-1"{"last M"}
                 "0"{"M"}
-                "1"{"next M"}
             }
             relativeTime{
                 future{
@@ -610,9 +538,7 @@ hi_Latn{
         }
         mon-short{
             relative{
-                "-1"{"last Mon"}
                 "0"{"Mon"}
-                "1"{"next Mon"}
             }
             relativeTime{
                 future{
@@ -662,9 +588,7 @@ hi_Latn{
         }
         month-short{
             relative{
-                "-1"{"last mo"}
                 "0"{"is mo"}
-                "1"{"next mo"}
             }
             relativeTime{
                 future{
@@ -679,9 +603,7 @@ hi_Latn{
         }
         quarter{
             relative{
-                "-1"{"last quarter"}
                 "0"{"is quarter"}
-                "1"{"next quarter"}
             }
             relativeTime{
                 future{
@@ -720,9 +642,7 @@ hi_Latn{
         }
         sat{
             relative{
-                "-1"{"last Saturday"}
                 "0"{"is Saturday"}
-                "1"{"next Saturday"}
             }
             relativeTime{
                 future{
@@ -737,9 +657,7 @@ hi_Latn{
         }
         sat-narrow{
             relative{
-                "-1"{"last Sa"}
                 "0"{"is Sa"}
-                "1"{"next Sa"}
             }
             relativeTime{
                 future{
@@ -810,9 +728,7 @@ hi_Latn{
         }
         sun{
             relative{
-                "-1"{"last Sunday"}
                 "0"{"is Sunday"}
-                "1"{"next Sunday"}
             }
             relativeTime{
                 future{
@@ -827,9 +743,7 @@ hi_Latn{
         }
         sun-narrow{
             relative{
-                "-1"{"last Su"}
                 "0"{"is Su"}
-                "1"{"next Su"}
             }
             relativeTime{
                 future{
@@ -861,9 +775,7 @@ hi_Latn{
         }
         thu{
             relative{
-                "-1"{"last Thursday"}
                 "0"{"yah Thursday"}
-                "1"{"next Thursday"}
             }
             relativeTime{
                 future{
@@ -878,9 +790,7 @@ hi_Latn{
         }
         thu-narrow{
             relative{
-                "-1"{"last Th"}
                 "0"{"is Th"}
-                "1"{"next Th"}
             }
             relativeTime{
                 future{
@@ -912,9 +822,7 @@ hi_Latn{
         }
         tue{
             relative{
-                "-1"{"last Tuesday"}
                 "0"{"Tuesday"}
-                "1"{"next Tuesday"}
             }
             relativeTime{
                 future{
@@ -929,9 +837,7 @@ hi_Latn{
         }
         tue-narrow{
             relative{
-                "-1"{"last Tu"}
                 "0"{"is Tu"}
-                "1"{"next Tu"}
             }
             relativeTime{
                 future{
@@ -963,9 +869,7 @@ hi_Latn{
         }
         wed{
             relative{
-                "-1"{"last Wednesday"}
                 "0"{"is Wednesday"}
-                "1"{"next Wednesday"}
             }
             relativeTime{
                 future{
@@ -980,9 +884,7 @@ hi_Latn{
         }
         wed-narrow{
             relative{
-                "-1"{"last W"}
                 "0"{"is W"}
-                "1"{"next W"}
             }
             relativeTime{
                 future{
@@ -997,9 +899,7 @@ hi_Latn{
         }
         wed-short{
             relative{
-                "-1"{"last Wed"}
                 "0"{"is Wed"}
-                "1"{"next Wed"}
             }
             relativeTime{
                 future{
@@ -1033,9 +933,7 @@ hi_Latn{
         }
         week-narrow{
             relative{
-                "-1"{"last wk"}
                 "0"{"is wk"}
-                "1"{"next wk"}
             }
             relativePeriod{"{0} wala week"}
             relativeTime{

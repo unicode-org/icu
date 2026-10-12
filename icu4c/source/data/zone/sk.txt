@@ -452,11 +452,6 @@ sk{
             lg{"severoamerický tichomorský čas"}
             ls{"severoamerický tichomorský štandardný čas"}
         }
-        "meta:Anadyr"{
-            ld{"Anadyrský letný čas"}
-            lg{"Anadyrský čas"}
-            ls{"Anadyrský štandardný čas"}
-        }
         "meta:Apia"{
             ld{"apijský letný čas"}
             lg{"apijský čas"}
@@ -545,9 +540,6 @@ sk{
             lg{"kapverdský čas"}
             ls{"kapverdský štandardný čas"}
         }
-        "meta:Casey"{
-            ls{"čas Caseyho stanice"}
-        }
         "meta:Chamorro"{
             ls{"chamorrský čas"}
         }
@@ -608,9 +600,6 @@ sk{
             ld{"stredoeurópsky letný čas"}
             lg{"stredoeurópsky čas"}
             ls{"stredoeurópsky štandardný čas"}
-            sd{"SELČ"}
-            sg{"SEČ"}
-            ss{"SEČ"}
         }
         "meta:Europe_Eastern"{
             ld{"východoeurópsky letný čas"}

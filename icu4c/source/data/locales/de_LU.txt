@@ -2,11 +2,4 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/
 de_LU{
-    calendar{
-        gregorian{
-            availableFormats{
-                h{"h a"}
-            }
-        }
-    }
 }

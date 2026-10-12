@@ -407,11 +407,6 @@ tr{
             lg{"Kuzey Amerika Pasifik Saati"}
             ls{"Kuzey Amerika Pasifik Standart Saati"}
         }
-        "meta:Anadyr"{
-            ld{"Anadır Yaz Saati"}
-            lg{"Anadyr Saati"}
-            ls{"Anadır Standart Saati"}
-        }
         "meta:Apia"{
             ld{"Apia Yaz Saati"}
             lg{"Apia Saati"}
@@ -499,9 +494,6 @@ tr{
             ld{"Cape Verde Yaz Saati"}
             lg{"Cape Verde Saati"}
             ls{"Cape Verde Standart Saati"}
-        }
-        "meta:Casey"{
-            ls{"Casey Saati"}
         }
         "meta:Chamorro"{
             ls{"Chamorro Saati"}
@@ -922,9 +914,6 @@ tr{
             ld{"Türkiye Yaz Saati"}
             lg{"Türkiye Saati"}
             ls{"Türkiye Standart Saati"}
-            sd{"TSİ Yaz"}
-            sg{"TSİ"}
-            ss{"TSİ"}
         }
         "meta:Turkmenistan"{
             ld{"Türkmenistan Yaz Saati"}

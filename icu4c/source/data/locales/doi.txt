@@ -44,16 +44,6 @@ doi{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMMd",
-                "GGGGGyMd",
-            }
             intervalFormats{
                 fallback{"{0} – {1}"}
             }
@@ -88,16 +78,6 @@ doi{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yyMd",
-            }
             availableFormats{
                 Ed{"E d"}
                 GyMMMEd{"E, d, MMM G y"}
@@ -105,7 +85,6 @@ doi{
                 MEd{"E, d/M"}
                 MMMEd{"E, d MMM"}
                 MMMMW{
-                    one{"MMMM दा हफ्ता W"}
                     other{"MMMM दा हफ्ता W"}
                 }
                 MMMMd{"d MMMM"}
@@ -123,7 +102,6 @@ doi{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    one{"Y दा हफ्ता w"}
                     other{"Y दा हफ्ता w"}
                 }
             }
@@ -414,17 +392,8 @@ doi{
         dayOfYear{
             dn{"ब’रे दा दिन"}
         }
-        dayOfYear-narrow{
-            dn{"ब’रे दा दिन"}
-        }
-        dayOfYear-short{
-            dn{"ब’रे दा दिन"}
-        }
         dayperiod{
             dn{"सवेर/बा.दपै."}
-        }
-        dayperiod-narrow{
-            dn{"बडलै/स’ञां"}
         }
         dayperiod-short{
             dn{"बडलै/स’ञां"}
@@ -500,20 +469,8 @@ doi{
                 "1"{"अगला म्हीना/अगले म्हीनै"}
             }
         }
-        month-narrow{
-            relative{
-                "-1"{"पिछला म्हीना/पिछले म्हीनै"}
-                "0"{"एह् म्हीना/इस म्हीनै"}
-                "1"{"अगला म्हीना/अगले म्हीनै"}
-            }
-        }
         month-short{
             dn{"म्ही."}
-            relative{
-                "-1"{"पिछला म्हीना/पिछले म्हीनै"}
-                "0"{"एह् म्हीना/इस म्हीनै"}
-                "1"{"अगला म्हीना/अगले म्हीनै"}
-            }
         }
         quarter{
             dn{"त्रमाही"}
@@ -641,26 +598,11 @@ doi{
                 "1"{"अगला हफ्ता/अगले हफ्तै"}
             }
         }
-        week-narrow{
-            relative{
-                "-1"{"पिछला हफ्ता/पिछले हफ्तै"}
-                "0"{"एह् हफ्ता/इस हफ्तै"}
-                "1"{"अगला हफ्ता/अगले हफ्तै"}
-            }
-        }
         week-short{
             dn{"ह."}
-            relative{
-                "-1"{"पिछला हफ्ता/पिछले हफ्तै"}
-                "0"{"एह् हफ्ता/इस हफ्तै"}
-                "1"{"अगला हफ्ता/अगले हफ्तै"}
-            }
         }
         weekOfMonth{
             dn{"म्हीने दा हफ्ता"}
-        }
-        weekOfMonth-narrow{
-            dn{"म्ही.दा ह."}
         }
         weekOfMonth-short{
             dn{"म्ही.दा ह."}
@@ -668,19 +610,10 @@ doi{
         weekday{
             dn{"हफ्ते दा दिन"}
         }
-        weekday-narrow{
-            dn{"कम्म-दिन"}
-        }
         weekday-short{
             dn{"कम्म-दिन"}
         }
         weekdayOfMonth{
-            dn{"म्हीने दा कम्म-दिन"}
-        }
-        weekdayOfMonth-narrow{
-            dn{"म्हीने दा कम्म-दिन"}
-        }
-        weekdayOfMonth-short{
             dn{"म्हीने दा कम्म-दिन"}
         }
         year{
@@ -708,9 +641,6 @@ doi{
         }
         zone{
             dn{"समां खेत्तर"}
-        }
-        zone-narrow{
-            dn{"ज़ोन"}
         }
         zone-short{
             dn{"ज़ोन"}

@@ -75,17 +75,9 @@ bez{
             "£",
             "Lupila lwa Huuingereza",
         }
-        GHC{
-            "GHC",
-            "Lupila lwa Hughana",
-        }
         GMD{
             "GMD",
             "Lupila lwa Hugambia",
-        }
-        GNS{
-            "GNS",
-            "Lupila lwa Hujine",
         }
         INR{
             "₹",
@@ -123,10 +115,6 @@ bez{
             "MGA",
             "Lupila lwa Hubukini",
         }
-        MRO{
-            "MRO",
-            "Lupila lwa Humolitania (1973–2017)",
-        }
         MRU{
             "MRU",
             "Lupila lwa Humolitania",
@@ -138,10 +126,6 @@ bez{
         MWK{
             "MWK",
             "Lupila lwa Humalawi",
-        }
-        MZM{
-            "MZM",
-            "Lupila lwa Humsumbiji",
         }
         NAD{
             "NAD",
@@ -183,10 +167,6 @@ bez{
             "SOS",
             "Lupila lwa Husomalia",
         }
-        STD{
-            "STD",
-            "Lupila lwa Husaotome na Huprinisipe (1977–2017)",
-        }
         STN{
             "STN",
             "Lupila lwa Husaotome na Huprinisipe",
@@ -223,17 +203,9 @@ bez{
             "ZAR",
             "Lupila lwa Huafriaka ya Hukusini",
         }
-        ZMK{
-            "ZMK",
-            "Lupila lwa Huzambia (1968–2012)",
-        }
         ZMW{
             "ZMW",
             "Lupila lwa Huzambia",
-        }
-        ZWD{
-            "ZWD",
-            "Lupila lwa Huzimbabwe",
         }
     }
 }

@@ -414,11 +414,6 @@ fr{
             lg{"heure du Pacifique nord-américain"}
             ls{"heure normale du Pacifique nord-américain"}
         }
-        "meta:Anadyr"{
-            ld{"heure d’été d’Anadyr"}
-            lg{"heure d’Anadyr"}
-            ls{"heure normale d’Anadyr"}
-        }
         "meta:Apia"{
             ld{"heure d’été des Samoa occidentales"}
             lg{"heure des Samoa occidentales"}
@@ -599,7 +594,6 @@ fr{
         }
         "meta:GMT"{
             ls{"heure moyenne de Greenwich"}
-            ss{"GMT"}
         }
         "meta:Galapagos"{
             ls{"heure des îles Galápagos"}

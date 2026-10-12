@@ -235,18 +235,10 @@ qu{
                 dnam{"radio de la tierra"}
                 other{"{0} radio de la tierra"}
             }
-            fathom{
-                dnam{"fathoms"}
-                other{"{0} fathoms"}
-            }
             foot{
                 dnam{"pie"}
                 other{"{0} pie"}
                 per{"{0}/pie"}
-            }
-            furlong{
-                dnam{"furlongs"}
-                other{"{0} furlongs"}
             }
             inch{
                 dnam{"pulgada"}
@@ -354,10 +346,6 @@ qu{
             barrel{
                 dnam{"barril"}
                 other{"{0} barril"}
-            }
-            bushel{
-                dnam{"bushels"}
-                other{"{0} bushels"}
             }
             centiliter{
                 dnam{"centilitro"}
@@ -556,28 +544,13 @@ qu{
                 other{"{0} punto"}
             }
         }
-        length{
-            fathom{
-                dnam{"fathom"}
-            }
-            furlong{
-                dnam{"furlong"}
-            }
-        }
         mass{
             grain{
                 dnam{"grano"}
                 other{"{0} grano"}
             }
-            stone{
-                dnam{"catorce libras"}
-                other{"{0} catorce libras"}
-            }
         }
         volume{
-            bushel{
-                dnam{"bushel"}
-            }
             dessert-spoon{
                 dnam{"cucharilla"}
                 other{"{0} cucharilla"}

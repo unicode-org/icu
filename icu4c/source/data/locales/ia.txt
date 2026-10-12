@@ -71,101 +71,77 @@ ia{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"¤ 0 mil"}
                         other{"¤ 0 mil"}
                     }
                     10000{
-                        one{"¤ 00 mil"}
                         other{"¤ 00 mil"}
                     }
                     100000{
-                        one{"¤ 000 mil"}
                         other{"¤ 000 mil"}
                     }
                     1000000{
-                        one{"¤ 0 mln"}
                         other{"¤ 0 mln"}
                     }
                     10000000{
-                        one{"¤ 00 mln"}
                         other{"¤ 00 mln"}
                     }
                     100000000{
-                        one{"¤ 000 mln"}
                         other{"¤ 000 mln"}
                     }
                     1000000000{
-                        one{"¤ 0 mld"}
                         other{"¤ 0 mld"}
                     }
                     10000000000{
-                        one{"¤ 00 mld"}
                         other{"¤ 00 mld"}
                     }
                     100000000000{
-                        one{"¤ 000 mld"}
                         other{"¤ 000 mld"}
                     }
                     1000000000000{
-                        one{"¤ 0 bln"}
                         other{"¤ 0 bln"}
                     }
                     10000000000000{
-                        one{"¤ 00 bln"}
                         other{"¤ 00 bln"}
                     }
                     100000000000000{
-                        one{"¤ 000 bln"}
                         other{"¤ 000 bln"}
                     }
                 }
                 decimalFormat{
                     1000{
-                        one{"0 mil"}
                         other{"0 mil"}
                     }
                     10000{
-                        one{"00 mil"}
                         other{"00 mil"}
                     }
                     100000{
-                        one{"000 mil"}
                         other{"000 mil"}
                     }
                     1000000{
-                        one{"0 mln"}
                         other{"0 mln"}
                     }
                     10000000{
-                        one{"00 mln"}
                         other{"00 mln"}
                     }
                     100000000{
-                        one{"000 mln"}
                         other{"000 mln"}
                     }
                     1000000000{
-                        one{"0 mld"}
                         other{"0 mld"}
                     }
                     10000000000{
-                        one{"00 mld"}
                         other{"00 mld"}
                     }
                     100000000000{
-                        one{"000 mld"}
                         other{"000 mld"}
                     }
                     1000000000000{
-                        one{"0 bln"}
                         other{"0 bln"}
                     }
                     10000000000000{
-                        one{"00 bln"}
                         other{"00 bln"}
                     }
                     100000000000000{
-                        one{"000 bln"}
                         other{"000 bln"}
                     }
                 }
@@ -231,7 +207,6 @@ ia{
                 MMMMd{"d 'de' MMMM"}
                 MMMd{"d MMM"}
                 Md{"dd-MM"}
-                h{"h a"}
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
                 hv{"h v"}
@@ -390,13 +365,11 @@ ia{
                 MEd{"E dd-MM"}
                 MMMEd{"E d MMM"}
                 MMMMW{
-                    one{"'septimana' W 'de' MMMM"}
                     other{"'septimana' W 'de' MMMM"}
                 }
                 MMMMd{"d 'de' MMMM"}
                 MMMd{"d MMM"}
                 Md{"dd-MM"}
-                h{"h a"}
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
                 hmsv{"h:mm:ss a v"}
@@ -414,7 +387,6 @@ ia{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ 'de' y"}
                 yw{
-                    one{"'septimana' w 'de' Y"}
                     other{"'septimana' w 'de' Y"}
                 }
             }
@@ -549,15 +521,10 @@ ia{
                     M{"d MMM – d MMM"}
                     d{"d – d MMM"}
                 }
-                Md{
-                    M{"MM-dd – MM-dd"}
-                    d{"MM-dd – MM-dd"}
-                }
                 d{
                     d{"d – d"}
                 }
                 h{
-                    a{"h a – h a"}
                     h{"h – h a"}
                 }
                 hm{
@@ -571,7 +538,6 @@ ia{
                     m{"h:mm – h:mm a v"}
                 }
                 hv{
-                    a{"h a – h a v"}
                     h{"h – h a v"}
                 }
                 y{

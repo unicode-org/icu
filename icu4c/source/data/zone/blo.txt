@@ -1479,7 +1479,6 @@ blo{
         }
         "meta:GMT"{
             ls{"Griinwish kaakɔŋkɔŋɔ̀"}
-            ss{"Gk"}
         }
         "meta:Galapagos"{
             ls{"Galapagɔs kaakɔŋkɔŋɔ̀"}

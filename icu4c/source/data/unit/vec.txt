@@ -117,20 +117,9 @@ vec{
                 other{"{0} sègoli"}
             }
             day{
-                dnam{"dì"}
-                one{"{0} dì"}
-                other{"{0} dì"}
                 per{"{0} par dì"}
             }
-            decade{
-                dnam{"dezeni"}
-                one{"{0} dezenio"}
-                other{"{0} dezeni"}
-            }
             hour{
-                dnam{"ore"}
-                one{"{0} ora"}
-                other{"{0} ore"}
                 per{"{0} par ora"}
             }
             microsecond{
@@ -150,9 +139,6 @@ vec{
                 per{"{0} par menuto"}
             }
             month{
-                dnam{"mezi"}
-                one{"{0} meze"}
-                other{"{0} mezi"}
                 per{"{0} par meze"}
             }
             nanosecond{
@@ -161,9 +147,6 @@ vec{
                 other{"{0} nanosegondi"}
             }
             night{
-                dnam{"noti"}
-                one{"{0} note"}
-                other{"{0} noti"}
                 per{"{0} par note"}
             }
             quarter{
@@ -185,9 +168,6 @@ vec{
                 per{"{0} par setemana"}
             }
             year{
-                dnam{"ani"}
-                one{"{0} ano"}
-                other{"{0} ani"}
                 per{"{0} par ano"}
             }
         }
@@ -212,11 +192,6 @@ vec{
             }
         }
         energy{
-            british-thermal-unit{
-                dnam{"unidà tèrmeghe britàneghe"}
-                one{"{0} unidà tèrmega britànega"}
-                other{"{0} unidà tèrmeghe britàneghe"}
-            }
             calorie{
                 dnam{"calorìe"}
                 one{"{0} calorìa"}
@@ -323,21 +298,11 @@ vec{
                 one{"{0} rajo de la tera"}
                 other{"{0} raji de la tera"}
             }
-            fathom{
-                dnam{"brasi"}
-                one{"{0} braso"}
-                other{"{0} brasi"}
-            }
             foot{
                 dnam{"pie"}
                 one{"{0} pie"}
                 other{"{0} pie"}
                 per{"{0} par pie"}
-            }
-            furlong{
-                dnam{"furlong"}
-                one{"{0} furlong"}
-                other{"{0} furlong"}
             }
             inch{
                 dnam{"dedon"}
@@ -483,11 +448,6 @@ vec{
                 one{"{0} masa solar"}
                 other{"{0} mase solari"}
             }
-            stone{
-                dnam{"stone"}
-                one{"{0} stone"}
-                other{"{0} stone"}
-            }
             ton{
                 dnam{"tonelàe curte"}
                 one{"{0} tonelada curta"}
@@ -609,11 +569,6 @@ vec{
                 dnam{"barili"}
                 one{"{0} barile"}
                 other{"{0} barili"}
-            }
-            bushel{
-                dnam{"stari"}
-                one{"{0} staro"}
-                other{"{0} stari"}
             }
             centiliter{
                 dnam{"sentìlitri"}
@@ -780,7 +735,6 @@ vec{
     unitsNarrow{
         acceleration{
             g-force{
-                dnam{"fg"}
                 one{"{0}fg"}
                 other{"{0}fg"}
             }
@@ -791,7 +745,6 @@ vec{
         }
         area{
             acre{
-                dnam{"ac"}
                 one{"{0}ac"}
                 other{"{0}ac"}
             }
@@ -800,7 +753,6 @@ vec{
                 other{"{0}dunam"}
             }
             hectare{
-                dnam{"ha"}
                 one{"{0}ha"}
                 other{"{0}ha"}
             }
@@ -835,18 +787,14 @@ vec{
         }
         duration{
             century{
-                dnam{"sèg"}
                 one{"{0}sèg"}
                 other{"{0}sèg"}
             }
             day{
-                dnam{"dì"}
                 one{"{0}dì"}
                 other{"{0}dì"}
-                per{"{0}/dì"}
             }
             decade{
-                dnam{"dezeni"}
                 one{"{0}dezenio"}
                 other{"{0}dezeni"}
             }
@@ -871,26 +819,20 @@ vec{
                 per{"{0}/m"}
             }
             month{
-                dnam{"mezi"}
                 one{"{0}meze"}
                 other{"{0}mezi"}
-                per{"{0}/meze"}
             }
             nanosecond{
                 one{"{0}ns"}
                 other{"{0}ns"}
             }
             night{
-                dnam{"noti"}
                 one{"{0}note"}
                 other{"{0}noti"}
-                per{"{0}/note"}
             }
             quarter{
-                dnam{"trim"}
                 one{"{0}trim"}
                 other{"{0}trim"}
-                per{"{0}/trim"}
             }
             second{
                 dnam{"s"}
@@ -898,21 +840,16 @@ vec{
                 other{"{0}s"}
             }
             week{
-                dnam{"set"}
                 one{"{0}set"}
                 other{"{0}set"}
-                per{"{0}/set"}
             }
             year{
-                dnam{"ani"}
                 one{"{0}ano"}
                 other{"{0}ani"}
-                per{"{0}/ano"}
             }
         }
         electric{
             ampere{
-                dnam{"A"}
                 one{"{0}A"}
                 other{"{0}A"}
             }
@@ -921,22 +858,15 @@ vec{
                 other{"{0}mA"}
             }
             ohm{
-                dnam{"Ω"}
                 one{"{0}Ω"}
                 other{"{0}Ω"}
             }
             volt{
-                dnam{"V"}
                 one{"{0}V"}
                 other{"{0}V"}
             }
         }
         energy{
-            british-thermal-unit{
-                dnam{"BTU"}
-                one{"{0}BTU"}
-                other{"{0}BTU"}
-            }
             calorie{
                 one{"{0}cal"}
                 other{"{0}cal"}
@@ -946,7 +876,6 @@ vec{
                 other{"{0}eV"}
             }
             joule{
-                dnam{"J"}
                 one{"{0}J"}
                 other{"{0}J"}
             }
@@ -963,7 +892,6 @@ vec{
                 other{"{0}kWh"}
             }
             therm-us{
-                dnam{"thm"}
                 one{"{0}thm"}
                 other{"{0}thm"}
             }
@@ -1025,17 +953,9 @@ vec{
                 one{"{0}R⊕"}
                 other{"{0}R⊕"}
             }
-            fathom{
-                one{"{0}fth"}
-                other{"{0}fth"}
-            }
             foot{
                 one{"{0}ft"}
                 other{"{0}ft"}
-            }
-            furlong{
-                one{"{0}fur"}
-                other{"{0}fur"}
             }
             inch{
                 one{"{0}in"}
@@ -1050,7 +970,6 @@ vec{
                 other{"{0}ly"}
             }
             meter{
-                dnam{"m"}
                 one{"{0}m"}
                 other{"{0}m"}
             }
@@ -1101,7 +1020,6 @@ vec{
         }
         mass{
             carat{
-                dnam{"kt"}
                 one{"{0}kt"}
                 other{"{0}kt"}
             }
@@ -1114,12 +1032,10 @@ vec{
                 other{"{0}M⊕"}
             }
             grain{
-                dnam{"gr"}
                 one{"{0}gr"}
                 other{"{0}gr"}
             }
             gram{
-                dnam{"g"}
                 one{"{0}g"}
                 other{"{0}g"}
             }
@@ -1151,12 +1067,7 @@ vec{
                 one{"{0}M☉"}
                 other{"{0}M☉"}
             }
-            stone{
-                one{"{0}st"}
-                other{"{0}st"}
-            }
             ton{
-                dnam{"tc"}
                 one{"{0}tc"}
                 other{"{0}tc"}
             }
@@ -1187,7 +1098,6 @@ vec{
                 other{"{0}mW"}
             }
             watt{
-                dnam{"W"}
                 one{"{0}W"}
                 other{"{0}W"}
             }
@@ -1222,7 +1132,6 @@ vec{
                 other{"{0}mbar"}
             }
             millimeter-ofhg{
-                dnam{"mmHg"}
                 one{"{0}mmHg"}
                 other{"{0}mmHg"}
             }
@@ -1255,7 +1164,6 @@ vec{
         }
         volume{
             acre-foot{
-                dnam{"ac⋅ft"}
                 one{"{0}ac⋅ft"}
                 other{"{0}ac⋅ft"}
             }
@@ -1263,12 +1171,7 @@ vec{
                 one{"{0}bbl"}
                 other{"{0}bbl"}
             }
-            bushel{
-                one{"{0}bu"}
-                other{"{0}bu"}
-            }
             centiliter{
-                dnam{"cl"}
                 one{"{0}cl"}
                 other{"{0}cl"}
             }
@@ -1301,99 +1204,78 @@ vec{
                 other{"{0}yd³"}
             }
             cup{
-                dnam{"cìc"}
                 one{"{0}cìc"}
                 other{"{0}cìc"}
             }
             cup-metric{
-                dnam{"cìcm"}
                 one{"{0}cìcm"}
                 other{"{0}cìcm"}
             }
             deciliter{
-                dnam{"dl"}
                 one{"{0}dl"}
                 other{"{0}dl"}
             }
             dessert-spoon{
-                dnam{"dsp"}
                 one{"{0}dsp"}
                 other{"{0}dsp"}
             }
             dessert-spoon-imperial{
-                dnam{"dsp inp"}
                 one{"{0}dsp inp"}
                 other{"{0}dsp inp"}
             }
             dram{
-                dnam{"fl dr"}
                 one{"{0}fl dr"}
                 other{"{0}fl dr"}
             }
             drop{
-                dnam{"js"}
                 one{"{0}js"}
                 other{"{0}js"}
             }
             fluid-ounce{
-                dnam{"fl oz"}
                 one{"{0}fl oz"}
                 other{"{0}fl oz"}
             }
             fluid-ounce-imperial{
-                dnam{"fl oz inp"}
                 one{"{0}fl oz inp"}
                 other{"{0}fl oz inp"}
             }
             gallon{
-                dnam{"gal"}
                 one{"{0}gal"}
                 other{"{0}gal"}
-                per{"{0}/gal"}
             }
             gallon-imperial{
-                dnam{"gal inp"}
                 one{"{0}gal inp"}
                 other{"{0}gal inp"}
-                per{"{0}/gal inp"}
             }
             hectoliter{
-                dnam{"hl"}
                 one{"{0}hl"}
                 other{"{0}hl"}
             }
             jigger{
-                dnam{"mzr"}
                 one{"{0}mzr"}
                 other{"{0}mzr"}
             }
             liter{
-                dnam{"l"}
                 one{"{0}l"}
                 other{"{0}l"}
             }
             megaliter{
-                dnam{"Ml"}
                 one{"{0}Ml"}
                 other{"{0}Ml"}
             }
             milliliter{
-                dnam{"ml"}
                 one{"{0}ml"}
                 other{"{0}ml"}
             }
             pinch{
-                dnam{"sps"}
                 one{"{0}sps"}
                 other{"{0}sps"}
             }
             pint{
-                dnam{"pnt"}
                 one{"{0}pnt"}
                 other{"{0}pnt"}
             }
             pint-metric{
-                dnam{"ptm"}
                 one{"{0}ptm"}
                 other{"{0}ptm"}
             }
@@ -1402,7 +1284,6 @@ vec{
                 other{"{0}qt"}
             }
             quart-imperial{
-                dnam{"qt inp"}
                 one{"{0}qt inp"}
                 other{"{0}qt inp"}
             }
@@ -1420,7 +1301,6 @@ vec{
         acceleration{
             g-force{
                 dnam{"fg"}
-                one{"{0} fg"}
                 other{"{0} fg"}
             }
         }
@@ -1438,12 +1318,10 @@ vec{
         duration{
             century{
                 dnam{"sèg"}
-                one{"{0} sèg"}
                 other{"{0} sèg"}
             }
             day{
                 dnam{"dì"}
-                one{"{0} dì"}
                 other{"{0} dì"}
                 per{"{0}/dì"}
             }
@@ -1460,7 +1338,6 @@ vec{
             }
             minute{
                 dnam{"men"}
-                one{"{0} men"}
                 other{"{0} men"}
                 per{"{0}/men"}
             }
@@ -1478,19 +1355,16 @@ vec{
             }
             quarter{
                 dnam{"trim"}
-                one{"{0} trim"}
                 other{"{0} trim"}
                 per{"{0}/trim"}
             }
             second{
                 dnam{"seg"}
-                one{"{0} seg"}
                 other{"{0} seg"}
                 per{"{0}/seg"}
             }
             week{
                 dnam{"set"}
-                one{"{0} set"}
                 other{"{0} set"}
                 per{"{0}/set"}
             }
@@ -1513,17 +1387,11 @@ vec{
             }
         }
         energy{
-            british-thermal-unit{
-                dnam{"BTU"}
-                one{"{0} BTU"}
-                other{"{0} BTU"}
-            }
             joule{
                 dnam{"J"}
             }
             therm-us{
                 dnam{"thm"}
-                one{"{0} thm"}
                 other{"{0} thm"}
             }
         }
@@ -1535,12 +1403,10 @@ vec{
         mass{
             carat{
                 dnam{"kt"}
-                one{"{0} kt"}
                 other{"{0} kt"}
             }
             grain{
                 dnam{"gr"}
-                one{"{0} gr"}
                 other{"{0} gr"}
             }
             gram{
@@ -1548,7 +1414,6 @@ vec{
             }
             ton{
                 dnam{"tc"}
-                one{"{0} tc"}
                 other{"{0} tc"}
             }
         }
@@ -1560,86 +1425,70 @@ vec{
         pressure{
             millimeter-ofhg{
                 dnam{"mmHg"}
-                one{"{0} mmHg"}
                 other{"{0} mmHg"}
             }
         }
         volume{
             acre-foot{
                 dnam{"ac⋅ft"}
-                one{"{0} ac⋅ft"}
                 other{"{0} ac⋅ft"}
             }
             centiliter{
                 dnam{"cl"}
-                one{"{0} cl"}
                 other{"{0} cl"}
             }
             cup{
                 dnam{"cìc"}
-                one{"{0} cìc"}
                 other{"{0} cìc"}
             }
             cup-metric{
                 dnam{"cìcm"}
-                one{"{0} cìcm"}
                 other{"{0} cìcm"}
             }
             deciliter{
                 dnam{"dl"}
-                one{"{0} dl"}
                 other{"{0} dl"}
             }
             dessert-spoon{
                 dnam{"dsp"}
-                one{"{0} dsp"}
                 other{"{0} dsp"}
             }
             dessert-spoon-imperial{
                 dnam{"dsp inp"}
-                one{"{0} dsp inp"}
                 other{"{0} dsp inp"}
             }
             dram{
                 dnam{"fl dr"}
-                one{"{0} fl dr"}
                 other{"{0} fl dr"}
             }
             drop{
                 dnam{"js"}
-                one{"{0} js"}
                 other{"{0} js"}
             }
             fluid-ounce{
                 dnam{"fl oz"}
-                one{"{0} fl oz"}
                 other{"{0} fl oz"}
             }
             fluid-ounce-imperial{
                 dnam{"fl oz inp"}
-                one{"{0} fl oz inp"}
                 other{"{0} fl oz inp"}
             }
             gallon{
                 dnam{"gal"}
-                one{"{0} gal"}
                 other{"{0} gal"}
                 per{"{0}/gal"}
             }
             gallon-imperial{
                 dnam{"gal inp"}
-                one{"{0} gal inp"}
                 other{"{0} gal inp"}
                 per{"{0}/gal inp"}
             }
             hectoliter{
                 dnam{"hl"}
-                one{"{0} hl"}
                 other{"{0} hl"}
             }
             jigger{
                 dnam{"mzr"}
-                one{"{0} mzr"}
                 other{"{0} mzr"}
             }
             liter{
@@ -1647,32 +1496,26 @@ vec{
             }
             megaliter{
                 dnam{"Ml"}
-                one{"{0} Ml"}
                 other{"{0} Ml"}
             }
             milliliter{
                 dnam{"ml"}
-                one{"{0} ml"}
                 other{"{0} ml"}
             }
             pinch{
                 dnam{"sps"}
-                one{"{0} sps"}
                 other{"{0} sps"}
             }
             pint{
                 dnam{"pnt"}
-                one{"{0} pnt"}
                 other{"{0} pnt"}
             }
             pint-metric{
                 dnam{"ptm"}
-                one{"{0} ptm"}
                 other{"{0} ptm"}
             }
             quart-imperial{
                 dnam{"qt inp"}
-                one{"{0} qt inp"}
                 other{"{0} qt inp"}
             }
         }

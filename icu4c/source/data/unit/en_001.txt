@@ -165,7 +165,6 @@ en_001{
         mass{
             stone{
                 dnam{"stone"}
-                one{"{0} stone"}
                 other{"{0} stone"}
             }
             tonne{
@@ -199,7 +198,6 @@ en_001{
             }
             kelvin{
                 dnam{"kelvin"}
-                one{"{0} kelvin"}
                 other{"{0} kelvin"}
             }
         }
@@ -553,15 +551,12 @@ en_001{
         }
         duration{
             hour{
-                one{"{0} hr"}
                 other{"{0} hrs"}
             }
             minute{
-                one{"{0} min"}
                 other{"{0} mins"}
             }
             second{
-                one{"{0} sec"}
                 other{"{0} secs"}
             }
         }

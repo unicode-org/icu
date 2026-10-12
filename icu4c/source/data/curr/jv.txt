@@ -367,10 +367,6 @@ jv{
             "MOP",
             "Pataca Macau",
         }
-        MRO{
-            "MRO",
-            "Ouguiya Mauritania (1973 - 2017)",
-        }
         MRU{
             "MRU",
             "Ouguiya Mauritania",
@@ -591,10 +587,6 @@ jv{
             "UZS",
             "Som Usbekistan",
         }
-        VEF{
-            "VEF",
-            "Bolivar Venezuela (2008 - 2018)",
-        }
         VES{
             "VES",
             "Bolivar Venezuela",
@@ -656,8 +648,5 @@ jv{
         MAD{
             other{"Dirham Moroko"}
         }
-    }
-    CurrencyUnitPatterns{
-        other{"{0} {1}"}
     }
 }

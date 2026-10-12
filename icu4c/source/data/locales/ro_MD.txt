@@ -42,17 +42,11 @@ ro_MD{
                     narrow{
                         afternoon1{"după-amiază"}
                         evening1{"seară"}
-                        midnight{"miezul nopții"}
                         morning1{"dimineață"}
                         night1{"noapte"}
-                        noon{"amiază"}
                     }
                     wide{
-                        afternoon1{"după-amiaza"}
-                        evening1{"seara"}
                         midnight{"miezul nopții"}
-                        morning1{"dimineața"}
-                        night1{"noaptea"}
                         noon{"amiază"}
                     }
                 }

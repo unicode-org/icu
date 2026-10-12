@@ -100,16 +100,6 @@ ccp{
                 "{1} {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMMd",
-                "GGGGGyMd",
-            }
             availableFormats{
                 Ed{"d E"}
                 Gy{"y G"}
@@ -121,13 +111,11 @@ ccp{
                 MMMMEd{"E d MMMM"}
                 MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
-                MMdd{"dd-MM"}
                 Md{"d/M"}
                 y{"y G"}
                 yyyy{"y G"}
                 yyyyM{"M/y G"}
                 yyyyMEd{"E, d/M/y G"}
-                yyyyMM{"MM-y G"}
                 yyyyMMM{"MMM y G"}
                 yyyyMMMEd{"E, d MMM, y G"}
                 yyyyMMMM{"MMMM y G"}
@@ -212,16 +200,6 @@ ccp{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yyMd",
             }
             availableFormats{
                 Ed{"d E"}
@@ -663,7 +641,6 @@ ccp{
                 "-1"{"𑄉𑄬𑄣𑄴𑄣𑄳𑄠𑄇𑄬𑄣𑄴𑄣𑄳𑄠𑄬"}
                 "0"{"𑄃𑄬𑄌𑄴𑄥𑄳𑄠𑄬"}
                 "1"{"𑄃𑄬𑄎𑄬𑄖𑄴𑄖𑄳𑄠𑄇𑄬𑄣𑄴𑄣𑄳𑄠𑄬"}
-                "2"{"𑄃𑄬𑄎𑄬𑄖𑄴𑄖𑄳𑄠𑄇𑄬𑄣𑄴𑄣𑄳𑄠𑄬 𑄛𑄧𑄢𑄴𑄥𑄪"}
             }
         }
         dayperiod{
@@ -771,8 +748,6 @@ ccp{
         month-narrow{
             relative{
                 "-1"{"𑄉𑄬𑄣𑄧𑄘𑄬 𑄟𑄏𑄴"}
-                "0"{"𑄃𑄳𑄆𑄬 𑄟𑄏𑄴"}
-                "1"{"𑄛𑄧𑄢𑄬 𑄟𑄏𑄴"}
             }
             relativeTime{
                 past{
@@ -783,8 +758,6 @@ ccp{
         month-short{
             relative{
                 "-1"{"𑄉𑄬𑄣𑄧𑄉𑄬 𑄟𑄏𑄴"}
-                "0"{"𑄃𑄳𑄆𑄬 𑄟𑄏𑄴"}
-                "1"{"𑄛𑄧𑄢𑄬 𑄟𑄏𑄴"}
             }
             relativeTime{
                 past{
@@ -986,7 +959,6 @@ ccp{
         }
         year-short{
             relative{
-                "-1"{"𑄉𑄬𑄣𑄳𑄠𑄬 𑄝𑄧𑄏𑄧𑄢𑄴"}
                 "0"{"𑄃𑄳𑄆𑄬 𑄝𑄧𑄏𑄧𑄢𑄴"}
                 "1"{"𑄛𑄧𑄢𑄬 𑄝𑄧𑄏𑄧𑄢𑄴"}
             }

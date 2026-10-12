@@ -33,7 +33,6 @@ chr{
                 other{"{0} ᎠᏥ ᏗᏟᎶᏍᏙᏗ"}
             }
             revolution{
-                one{"{0} ᎠᏕᏲᎲ"}
                 other{"{0} ᏗᏕᏲᎯ"}
             }
             steradian{
@@ -48,7 +47,6 @@ chr{
                 other{"{0} ᎢᏧᏟᎶᏓ"}
             }
             dunam{
-                one{"{0} ᏚᎾᎹ"}
                 other{"{0} ᏚᎾᎹᏍ"}
             }
             hectare{
@@ -186,7 +184,6 @@ chr{
                 other{"{0} ᎾᎿ ᎦᎷᎪᏏ"}
             }
             part{
-                one{"{0} ᎢᎦᏛ"}
                 other{"{0} ᎢᎦᏛᎭ"}
             }
             part-per-1e6{
@@ -244,12 +241,10 @@ chr{
         digital{
             bit{
                 dnam{"ᎤᏍᎦᎵᏨ"}
-                one{"{0} ᎤᏍᎦᎳ"}
                 other{"{0} ᎤᏍᎦᎵᏨ"}
             }
             byte{
                 dnam{"ᏗᏓᏍᎦᎵᎩ"}
-                one{"{0} ᎠᏍᎦᎳ"}
                 other{"{0} ᏗᏓᏍᎦᎵᎩ"}
             }
             gigabit{
@@ -304,7 +299,6 @@ chr{
                 other{"{0} ᏍᎪᎯᏧᏈ ᏧᏕᏘᏴᏓ"}
             }
             day{
-                one{"{0} ᎢᎦ"}
                 other{"{0} ᎯᎸᏍᎩ ᏧᏒᎯᏓ"}
                 per{"{0} ᎢᎦ ᎢᏳᏓᎵ"}
             }
@@ -346,7 +340,6 @@ chr{
             }
             second{
                 dnam{"ᏗᏎᏢ"}
-                one{"{0} ᎠᏎᏢ"}
                 other{"{0} ᏗᏎᏢ"}
                 per{"{0} ᎠᏎᏢ ᎢᏳᏓᎵ"}
             }
@@ -406,11 +399,6 @@ chr{
                 dnam{"ᏘᎯ ᎠᎩᎪᏍᎦ"}
                 one{"{0} ᏘᎯ ᎠᎩᎪᏍᎦ"}
                 other{"{0} ᏘᎯ ᏗᎩᎪᏍᎦ"}
-            }
-            british-thermal-unit{
-                dnam{"ᏈᏗᏏ ᏗᎬᏍᎦᏢᏗ ᏂᎨᏒᎾ ᏓᎪᎵᏰᎥ ᏭᏍᏗᎬ ᎧᎵᎨᏒ"}
-                one{"{0} ᏈᏗᏏ ᏗᎬᏍᎦᏢᏗ ᏂᎨᏒᎾ ᏓᎪᎵᏰᎥ ᏭᏍᏗᎬ ᎧᎵᎨᏒ"}
-                other{"{0} ᏈᏗᏏ ᏗᎬᏍᎦᏢᏗ ᏂᎨᏒᎾ ᏓᎪᎵᏰᎥ ᏭᏍᏗᎬ ᎧᎵᎨᏒ"}
             }
             calorie{
                 dnam{"ᏗᏓᎵᏥᏍᏗᏍᎩ"}
@@ -523,7 +511,6 @@ chr{
             }
             em{
                 dnam{"ᎪᏪᎸ ems"}
-                one{"{0} em"}
                 other{"{0} ems"}
             }
             megapixel{
@@ -563,22 +550,13 @@ chr{
                 other{"{0} ᏌᏉ ᎢᏳᎾᏓᎢ ᏍᎪᎯ ᏗᏟᎶᏍᏗ"}
             }
             earth-radius{
-                dnam{"ᎡᎶᎯ ᏯᏗ"}
                 one{"{0} ᎡᎶᎯ ᏯᏗ"}
                 other{"{0} ᎡᎶᎯ ᏯᏗ"}
-            }
-            fathom{
-                one{"{0} ᏑᏓᎵ ᎢᏗᎳᏏᏗ ᎠᏯᏱ"}
-                other{"{0} ᏑᏓᎵ ᎢᏗᎳᏏᏗ ᎠᏯᏱ"}
             }
             foot{
                 one{"{0} ᎢᎳᏏᏗ"}
                 other{"{0} ᎢᏗᎳᏏᏗ"}
                 per{"{0} ᎢᎳᏏᏗ ᎢᏳᏓᎵ"}
-            }
-            furlong{
-                one{"{0} ᎠᏰᏟ ᎩᏄᏘᏗ ᏑᏟᎶᏓ"}
-                other{"{0} ᎠᏰᏟ ᎩᏄᏘᏗ ᎢᏳᏟᎶᏓ"}
             }
             inch{
                 one{"{0} ᎢᏏᏔᏗᏍᏗ"}
@@ -735,10 +713,6 @@ chr{
                 one{"{0} ᏅᏓ ᎹᏏ"}
                 other{"{0} ᏅᏓ ᎹᏏ"}
             }
-            stone{
-                one{"{0} ᏅᏯ"}
-                other{"{0} ᎠᏂᏅᏯ"}
-            }
             ton{
                 one{"{0} ᏈᏂ"}
                 other{"{0} ᏗᏈᏂ"}
@@ -788,7 +762,6 @@ chr{
             }
             bar{
                 dnam{"ᏕᎦᎾᎸᎢ"}
-                one{"{0} ᎦᎾᎸᎢ"}
                 other{"{0} ᏕᎦᎾᎸᎢ"}
             }
             hectopascal{
@@ -903,10 +876,6 @@ chr{
                 one{"{0} ᏒᏙᏂ"}
                 other{"{0} ᏧᏒᏙᏂ"}
             }
-            bushel{
-                one{"{0} ᎤᎧᏲᏗ ᏑᏟᎶᏓ"}
-                other{"{0} ᎤᎧᏲᏗ ᏑᏟᎶᏓ"}
-            }
             centiliter{
                 dnam{"ᏧᎤᏍᏗ ᏗᎵᏔᎢ"}
                 one{"{0} ᎤᏍᏗ ᎵᏔᎢ"}
@@ -964,18 +933,15 @@ chr{
                 other{"{0} ᏌᏉ ᎢᏳᎾᏓᎢ ᏍᎪᎯ ᎢᏧᏆᏗᏅᏛ"}
             }
             dessert-spoon{
-                dnam{"ᎤᎦᎾᏍᏓ ᎠᏗᏙᏗ"}
                 one{"{0} ᎤᎦᎾᏍᏓ ᎠᏗᏙᏗ"}
                 other{"{0} ᎤᎦᎾᏍᏓ ᎠᏗᏙᏗ"}
             }
             dessert-spoon-imperial{
-                dnam{"ᏂᎬᎾᏛᎢ ᎤᏓᏤᎵᎦᏯ ᎤᎦᎾᏍᏓ ᎠᏗᏙᏗ"}
                 one{"{0} ᏂᎬᎾᏛᎢ ᎤᏓᏤᎵᎦᏯ ᎤᎦᎾᏍᏓ ᎠᏗᏙᏗ"}
                 other{"{0} ᏂᎬᎾᏛᎢ ᎤᏓᏤᎵᎦᏯ ᎤᎦᎾᏍᏓ ᎠᏗᏙᏗ"}
             }
             dram{
                 dnam{"ᏜᎹ"}
-                one{"{0} ᏜᎹ"}
                 other{"{0} ᏜᎹ"}
             }
             fluid-ounce{
@@ -985,7 +951,6 @@ chr{
             }
             fluid-ounce-imperial{
                 dnam{"Imp. ᎤᏓᏁᎯ ᎢᏯᎣᏂᏏ"}
-                one{"{0} Imp. ᎤᏓᏁᎯ ᎣᏂᏏ"}
                 other{"{0} Imp. ᎤᏓᏁᎯ ᎢᏯᎣᏂᏏ"}
             }
             fluid-ounce-metric{
@@ -1001,7 +966,6 @@ chr{
             gallon-imperial{
                 dnam{"ᏂᎬᎾᏛᎢ ᎤᏓᏤᎵᎦᏯ ᎢᏧᎵᎶᏓ"}
                 one{"{0} ᏂᎬᎾᏛᎢ ᎤᏓᏤᎵᎦᏯ ᎢᏳᎵᎶᏓ"}
-                other{"{0} ᏂᎬᎾᏛᎢ ᎤᏓᏤᎵᎦᏯ ᎢᏧᎵᎶᏓ"}
                 per{"{0} ᏂᎬᎾᏛᎢ ᎤᏓᏤᎵᎦᏯ ᎢᏳᎵᎶᏓ ᎢᏳᏓᎵ"}
             }
             hectoliter{
@@ -1037,11 +1001,6 @@ chr{
                 dnam{"ᏅᎩ ᎢᏗᎧᎵᎢ"}
                 one{"{0} ᏅᎩ ᎢᏯᎧᎵᎢ"}
                 other{"{0} ᏅᎩ ᎢᏗᎧᎵᎢ"}
-            }
-            quart-imperial{
-                dnam{"ᏂᎬᎾᏛᎢ ᎤᏓᏤᎵᎦᏯ ᏅᎩ ᎢᏗᎧᎵᎢ"}
-                one{"{0} ᏂᎬᎾᏛᎢ ᎤᏓᏤᎵᎦᏯ ᏅᎩ ᎢᏗᎧᎵᎢ"}
-                other{"{0} ᏂᎬᎾᏛᎢ ᎤᏓᏤᎵᎦᏯ ᏅᎩ ᎢᏗᎧᎵᎢ"}
             }
             tablespoon{
                 dnam{"ᎤᏔᏂ ᏗᏗᏙᏗ"}
@@ -1354,10 +1313,6 @@ chr{
             }
         }
         energy{
-            british-thermal-unit{
-                one{"{0}Btu"}
-                other{"{0}Btu"}
-            }
             calorie{
                 one{"{0}cal"}
                 other{"{0}cal"}
@@ -1467,33 +1422,21 @@ chr{
                 other{"{0}au"}
             }
             centimeter{
-                dnam{"ᎢᏳ"}
                 one{"{0}ᎢᏳ"}
                 other{"{0}ᎢᏳ"}
-                per{"{0}/ᎢᏳ"}
             }
             decimeter{
                 one{"{0}ᏌᏟ"}
                 other{"{0}ᏌᏟ"}
             }
             earth-radius{
-                dnam{"ᎡᎶᎯ ᏯᏗ"}
                 one{"{0}R⊕"}
                 other{"{0}R⊕"}
-            }
-            fathom{
-                one{"{0}fth"}
-                other{"{0}fth"}
             }
             foot{
                 dnam{"ft"}
                 one{"{0}′"}
                 other{"{0}′"}
-            }
-            furlong{
-                dnam{"ᎠᏰᏟ ᎩᏄᏘᏗ ᏑᏟᎶᏓ"}
-                one{"{0}fur"}
-                other{"{0}fur"}
             }
             inch{
                 dnam{"in"}
@@ -1638,11 +1581,6 @@ chr{
                 one{"{0}M☉"}
                 other{"{0}M☉"}
             }
-            stone{
-                dnam{"ᏅᏯ"}
-                one{"{0}st"}
-                other{"{0}st"}
-            }
             ton{
                 one{"{0}tn"}
                 other{"{0}tn"}
@@ -1785,10 +1723,6 @@ chr{
                 one{"{0}bbl"}
                 other{"{0}bbl"}
             }
-            bushel{
-                one{"{0}bu"}
-                other{"{0}bu"}
-            }
             centiliter{
                 one{"{0}cL"}
                 other{"{0}cL"}
@@ -1866,7 +1800,6 @@ chr{
                 other{"{0}fl oz Im"}
             }
             gallon{
-                dnam{"ᎢᏧ"}
                 one{"{0}gal"}
                 other{"{0}gal"}
                 per{"{0}/gal"}
@@ -1889,7 +1822,6 @@ chr{
                 dnam{"ᎢᏳᏆᏗᏅᏛ"}
                 one{"{0}L"}
                 other{"{0}L"}
-                per{"{0}/L"}
             }
             megaliter{
                 one{"{0}ML"}
@@ -1919,7 +1851,6 @@ chr{
                 other{"{0}qt"}
             }
             quart-imperial{
-                dnam{"ᏂᎬᎾᏛᎢ ᎤᏓᏤᎵᎦᏯ ᏅᎩ ᎢᏗᎧᎵᎢ"}
                 one{"{0}ᏂᎬᎾᏛᎢ ᎤᏓᏤᎵᎦᏯ ᏅᎩ ᎢᏗᎧᎵᎢ"}
                 other{"{0}ᏂᎬᎾᏛᎢ ᎤᏓᏤᎵᎦᏯ ᏅᎩ ᎢᏗᎧᎵᎢ"}
             }
@@ -1955,7 +1886,6 @@ chr{
             }
             degree{
                 dnam{"ᎢᎦᎢ ᎢᏗᎦᏘ"}
-                one{"{0} deg"}
                 other{"{0} deg"}
             }
             radian{
@@ -1963,19 +1893,16 @@ chr{
             }
             revolution{
                 dnam{"ᎠᏕᏲᎲ"}
-                one{"{0} ᎠᏕᏲᎲ"}
                 other{"{0} ᎠᏕᏲᎲ"}
             }
         }
         area{
             acre{
                 dnam{"ᎢᏧᏟᎶᏓ"}
-                one{"{0} ᏑᏟᎶ"}
                 other{"{0} ᏑᏟᎶ"}
             }
             dunam{
                 dnam{"ᏚᎾᎹᏍ"}
-                one{"{0} ᏚᎾᎹ"}
                 other{"{0} ᏚᎾᎹ"}
             }
             hectare{
@@ -1983,7 +1910,6 @@ chr{
             }
             square-foot{
                 dnam{"ᏅᎩ ᏧᏅᏏᏱ ᎢᏗᎳᏏᏗ"}
-                one{"{0} sq ft"}
                 other{"{0} sq ft"}
             }
             square-inch{
@@ -1994,7 +1920,6 @@ chr{
             }
             square-mile{
                 dnam{"ᏅᎩ ᏧᏅᏏᏱ ᎢᏳᏟᎶᏓ"}
-                one{"{0} ᏅᏧᎢ"}
                 other{"{0} ᏅᏧᎢ"}
             }
             square-yard{
@@ -2011,7 +1936,6 @@ chr{
                 dnam{"ᏗᎧᏇᏓ"}
             }
             katal{
-                one{"{0} kat"}
                 other{"{0} kat"}
             }
             millimole-per-liter{
@@ -2022,7 +1946,6 @@ chr{
             }
             part{
                 dnam{"ᎢᎦᏛ"}
-                one{"{0} ᎢᎦᏛ"}
                 other{"{0} ᎢᎦᏛ"}
             }
             part-per-1e6{
@@ -2044,7 +1967,6 @@ chr{
         consumption{
             liter-per-100-kilometer{
                 dnam{"L/100 km"}
-                one{"{0} L/100 km"}
                 other{"{0} L/100 km"}
             }
             liter-per-kilometer{
@@ -2052,7 +1974,6 @@ chr{
             }
             mile-per-gallon{
                 dnam{"ᎢᏧᏟᎶᏓ/ᎢᏳᎵᎶᏓ"}
-                one{"{0} mpg"}
                 other{"{0} mpg"}
             }
             mile-per-gallon-imperial{
@@ -2069,12 +1990,10 @@ chr{
         digital{
             bit{
                 dnam{"ᎤᏍᎦᎳ"}
-                one{"{0} ᎤᏍᎦᎳ"}
                 other{"{0} ᎤᏍᎦᎳ"}
             }
             byte{
                 dnam{"ᎠᏍᎦᎳ"}
-                one{"{0} ᎠᏍᎦᎳ"}
                 other{"{0} ᎠᏍᎦᎳ"}
             }
             gigabit{
@@ -2108,7 +2027,6 @@ chr{
         duration{
             century{
                 dnam{"ᏍᏧ"}
-                one{"{0} ᏍᏧ"}
                 other{"{0} ᏍᏧ"}
             }
             day{
@@ -2119,28 +2037,23 @@ chr{
             }
             decade{
                 dnam{"ᏍᎪᎯ"}
-                one{"{0} ᏍᎪᎯ"}
                 other{"{0} ᏍᎪᎯ"}
             }
             hour{
                 dnam{"ᎢᏳᏟᎶᏓ"}
-                one{"{0} ᏑᏟ"}
                 other{"{0} ᏑᏟ"}
                 per{"{0}/Ꮡ"}
             }
             microsecond{
                 dnam{"μᏗᏎᏢ"}
-                one{"{0} μᏗ"}
                 other{"{0} μᏗ"}
             }
             millisecond{
                 dnam{"ᏌᏉ ᎢᏯᎦᎨᎵᏁᎢ ᏗᏎᏢ"}
-                one{"{0} ᏌᎠ"}
                 other{"{0} ᏌᎠ"}
             }
             minute{
                 dnam{"ᎢᏯᏔᏬᏍᏔᏅ"}
-                one{"{0} ᎢᏯᏔ"}
                 other{"{0} ᎢᏯᏔ"}
                 per{"{0}/ᎢᏯᏔ"}
             }
@@ -2152,7 +2065,6 @@ chr{
             }
             nanosecond{
                 dnam{"ᎾᏃᏗᏎᏢ"}
-                one{"{0} ᎾᏃ"}
                 other{"{0} ᎾᏃ"}
             }
             night{
@@ -2163,13 +2075,11 @@ chr{
             }
             quarter{
                 dnam{"ᎯᎸᏍᎩ"}
-                one{"{0} ᎯᎸᏍᎩ"}
                 other{"{0} ᎯᎸᏍᎩ"}
                 per{"{0}/Ꭿ"}
             }
             second{
                 dnam{"ᏓᏓᎾ"}
-                one{"{0} ᎠᏎᏢ"}
                 other{"{0} ᎠᏎᏢ"}
                 per{"{0}/ᎠᏎ"}
             }
@@ -2201,12 +2111,8 @@ chr{
             }
         }
         energy{
-            british-thermal-unit{
-                dnam{"BTU"}
-            }
             calorie-it{
                 dnam{"cal-IT"}
-                one{"{0} cal-IT"}
                 other{"{0} cal-IT"}
             }
             electronvolt{
@@ -2228,7 +2134,6 @@ chr{
             }
             therm-us{
                 dnam{"US ᎤᏗᏞᎬᎢ"}
-                one{"{0} US ᎤᏗᏞᎬ"}
                 other{"{0} US ᎤᏗᏞᎬ"}
             }
         }
@@ -2261,33 +2166,24 @@ chr{
         length{
             centimeter{
                 dnam{"ᎢᏳ"}
-                one{"{0} ᎢᏳ"}
                 other{"{0} ᎢᏳ"}
                 per{"{0}/ᎢᏳ"}
             }
             decimeter{
                 dnam{"ᏌᏟ"}
-                one{"{0} ᏌᏟ"}
                 other{"{0} ᏌᏟ"}
             }
             earth-radius{
                 dnam{"ᎡᎶᎯ ᏯᏗ"}
             }
-            fathom{
-                dnam{"ᏑᏓᎵ ᎢᏗᎳᏏᏗ ᎠᏯᏱ"}
-            }
             foot{
                 dnam{"ᎢᏗᎳᏏᏗ"}
-            }
-            furlong{
-                dnam{"ᎠᏰᏟ ᎩᏄᏘᏗ ᎢᏳᏟᎶᏓ"}
             }
             inch{
                 dnam{"ᎢᏗᏏᏔᏗᏍᏗ"}
             }
             kilometer{
                 dnam{"ᎠᏗ"}
-                one{"{0} ᎠᏗ"}
                 other{"{0} ᎠᏗ"}
                 per{"{0}/ᎠᏗ"}
             }
@@ -2296,7 +2192,6 @@ chr{
             }
             meter{
                 dnam{"ᎠᏟ"}
-                one{"{0} ᎠᏟ"}
                 other{"{0} ᎠᏟ"}
                 per{"{0}/ᎠᏟ"}
             }
@@ -2305,7 +2200,6 @@ chr{
             }
             millimeter{
                 dnam{"ᏌᎢᎠ"}
-                one{"{0} ᏌᎢᎠ"}
                 other{"{0} ᏌᎢᎠ"}
             }
             parsec{
@@ -2324,7 +2218,6 @@ chr{
         light{
             lux{
                 dnam{"ᎸᏏ"}
-                one{"{0} ᎸᏏ"}
                 other{"{0} ᎸᏏ"}
             }
             solar-luminosity{
@@ -2343,7 +2236,6 @@ chr{
             }
             grain{
                 dnam{"ᎤᏛᏒ ᎤᎦᏔ"}
-                one{"{0} ᎤᏛᏒ ᎤᎦᏔ"}
                 other{"{0} ᎤᏛᏒ ᎤᎦᏔ"}
             }
             gram{
@@ -2358,9 +2250,6 @@ chr{
             solar-mass{
                 dnam{"ᏅᏓ ᎹᏏ"}
             }
-            stone{
-                dnam{"ᎠᏂᏅᏯ"}
-            }
             ton{
                 dnam{"ᏗᏈᏂ"}
             }
@@ -2373,12 +2262,10 @@ chr{
         pressure{
             bar{
                 dnam{"ᎦᎾᎸᎢ"}
-                one{"{0} ᎦᎾᎸᎢ"}
                 other{"{0} ᎦᎾᎸᎢ"}
             }
             millimeter-ofhg{
                 dnam{"mmHg"}
-                one{"{0} mmHg"}
                 other{"{0} mmHg"}
             }
         }
@@ -2388,7 +2275,6 @@ chr{
             }
             light-speed{
                 dnam{"ᎠᏨᏍᏗ"}
-                one{"{0} ᎠᏨᏍᏗ"}
                 other{"{0} ᎠᏨᏍᏗ"}
             }
             meter-per-second{
@@ -2396,7 +2282,6 @@ chr{
             }
             mile-per-hour{
                 dnam{"ᎢᏧᏟᎶᏓ/ᏑᏟᎶᏛ"}
-                one{"{0} mph"}
                 other{"{0} mph"}
             }
         }
@@ -2415,9 +2300,6 @@ chr{
             barrel{
                 dnam{"ᏒᏙᏂ"}
             }
-            bushel{
-                dnam{"ᎤᎧᏲᏗ ᏑᏟᎶᏓ"}
-            }
             cubic-foot{
                 dnam{"ᎢᏗᎳᏏᏗ³"}
             }
@@ -2432,12 +2314,10 @@ chr{
             }
             dessert-spoon{
                 dnam{"ᎤᎦᎾᏍᏓ ᎠᏗᏙᏗ"}
-                one{"{0} dsp"}
                 other{"{0} dsp"}
             }
             dessert-spoon-imperial{
                 dnam{"ᏂᎬᎾᏛᎢ ᎤᏓᏤᎵᎦᏯ ᎤᎦᎾᏍᏓ ᎠᏗᏙᏗ"}
-                one{"{0} ᏂᎬᎾᏛᎢ ᎤᏓᏤᎵᎦᏯ ᎤᎦᎾᏍᏓ-ᎠᏗᏙᏗ"}
                 other{"{0} ᏂᎬᎾᏛᎢ ᎤᏓᏤᎵᎦᏯ ᎤᎦᎾᏍᏓ-ᎠᏗᏙᏗ"}
             }
             dram{
@@ -2447,44 +2327,36 @@ chr{
             }
             drop{
                 dnam{"ᎪᎭᏍᎬ"}
-                one{"{0} ᎪᎭᏍᎬ"}
                 other{"{0} ᎪᎭᏍᎬ"}
             }
             fluid-ounce{
                 dnam{"fl oz"}
-                one{"{0} fl oz"}
                 other{"{0} fl oz"}
             }
             fluid-ounce-imperial{
                 dnam{"Imp. ᎤᏓᏁᎯ ᎣᏂᏏ"}
-                one{"{0} Imp. ᎤᏓᏁᎯ ᎣᏂᏏ"}
                 other{"{0} Imp. ᎤᏓᏁᎯ ᎣᏂᏏ"}
             }
             gallon{
                 dnam{"ᎢᏧ"}
-                one{"{0} gal"}
                 other{"{0} gal"}
             }
             gallon-imperial{
                 dnam{"ᏂᎬᎾᏛᎢ ᎤᏓᏤᎵᎦᏯ ᎢᏳᎵᎶᏓ ᎢᏳᏓᎵ"}
-                one{"{0} ᏂᎬᎾᏛᎢ ᎤᏓᏤᎵᎦᏯ ᎢᏧᎵᎶᏓ"}
                 other{"{0} ᏂᎬᎾᏛᎢ ᎤᏓᏤᎵᎦᏯ ᎢᏧᎵᎶᏓ"}
                 per{"{0}/ᏂᎬᎾᏛᎢ ᎤᏓᏤᎵᎦᏯ ᎢᏳᎵᎶᏓ ᎢᏳᏓᎵ"}
             }
             jigger{
                 dnam{"ᏥᎩᎳ"}
-                one{"{0} ᏥᎩᎳ"}
                 other{"{0} ᏥᎩᎳ"}
             }
             liter{
                 dnam{"ᎢᏧᏆᏗᏅᏛ"}
-                one{"{0} L"}
                 other{"{0} L"}
                 per{"{0}/L"}
             }
             pinch{
                 dnam{"ᏗᏓᏇᏄᎩᏍᏗ"}
-                one{"{0} ᏗᏓᏇ"}
                 other{"{0} ᏗᏓᏇ"}
             }
             pint{
@@ -2495,7 +2367,6 @@ chr{
             }
             quart-imperial{
                 dnam{"ᏂᎬᎾᏛᎢ ᎤᏓᏤᎵᎦᏯ ᏅᎩ ᎢᏗᎧᎵᎢ"}
-                one{"{0} ᏂᎬᎾᏛᎢ ᎤᏓᏤᎵᎦᏯ ᏅᎩ ᎢᏗᎧᎵᎢ"}
                 other{"{0} ᏂᎬᎾᏛᎢ ᎤᏓᏤᎵᎦᏯ ᏅᎩ ᎢᏗᎧᎵᎢ"}
             }
         }

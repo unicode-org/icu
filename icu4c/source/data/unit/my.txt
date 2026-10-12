@@ -135,10 +135,6 @@ my{
             mole{
                 dnam{"မိုး"}
             }
-            part{
-                dnam{"ပိုင်း"}
-                other{"{0} ပိုင်း"}
-            }
             part-per-1e6{
                 other{"တစ်သန်းပုံ {0} ပုံ"}
             }
@@ -287,10 +283,6 @@ my{
             }
         }
         energy{
-            british-thermal-unit{
-                dnam{"ဗြိတိသျှ သာမယ်လ်ယူနစ်"}
-                other{"{0} ဗြိတိသျှ သာမယ်လ်ယူနစ်"}
-            }
             calorie{
                 other{"{0} ကယ်လိုရီ"}
             }
@@ -397,15 +389,9 @@ my{
             earth-radius{
                 dnam{"ကမ္ဘာ့ အချင်းဝက်"}
             }
-            fathom{
-                other{"{0} ဖန်တမ်"}
-            }
             foot{
                 other{"{0} ပေ"}
                 per{"တစ်ပေလျှင် {0}"}
-            }
-            furlong{
-                other{"{0} ဖာလုံ"}
             }
             inch{
                 per{"တစ်လက်မလျှင် {0}"}
@@ -723,10 +709,6 @@ my{
         concentr{
             ofglucose{
                 dnam{"Glc"}
-            }
-            part{
-                dnam{"ပိုင်း"}
-                other{"{0} ပိုင်း"}
             }
             part-per-1e9{
                 other{"{0}ppb"}
@@ -1091,9 +1073,6 @@ my{
             }
         }
         energy{
-            british-thermal-unit{
-                dnam{"BTU"}
-            }
             calorie{
                 dnam{"ကယ်လိုရီ"}
             }
@@ -1162,14 +1141,8 @@ my{
                 dnam{"ကမ္ဘာ့အချင်းဝက်"}
                 other{"{0} ကမ္ဘာ့အချင်းဝက်"}
             }
-            fathom{
-                dnam{"ဖန်တမ်"}
-            }
             foot{
                 dnam{"ပေ"}
-            }
-            furlong{
-                dnam{"ဖာလုံ"}
             }
             inch{
                 dnam{"လက်မ"}
@@ -1249,10 +1222,6 @@ my{
             solar-mass{
                 dnam{"နေရောင်ခြည် ဒြပ်ထု"}
             }
-            stone{
-                dnam{"စတုန်"}
-                other{"{0} စတုန်"}
-            }
             ton{
                 dnam{"တန်"}
             }
@@ -1320,10 +1289,6 @@ my{
             }
             barrel{
                 dnam{"ဘယ်ရလ်"}
-            }
-            bushel{
-                dnam{"၈ ဂါလံဝင်ပုံး"}
-                other{"၈ ဂါလံဝင်ပုံး {0} ပုံး"}
             }
             centiliter{
                 dnam{"စင်တီလီတာ"}

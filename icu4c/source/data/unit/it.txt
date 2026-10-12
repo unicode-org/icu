@@ -488,11 +488,6 @@ it{
                 one{"{0} becquerel"}
                 other{"{0} becquerel"}
             }
-            british-thermal-unit{
-                dnam{"unità termiche britanniche"}
-                one{"{0} unità termica britannica"}
-                other{"{0} unità termiche britanniche"}
-            }
             calorie{
                 dnam{"calorie"}
                 gender{"feminine"}
@@ -667,22 +662,12 @@ it{
                 one{"{0} raggio terrestre"}
                 other{"{0} raggi terrestri"}
             }
-            fathom{
-                dnam{"braccia"}
-                one{"{0} braccio"}
-                other{"{0} braccia"}
-            }
             foot{
                 dnam{"piedi"}
                 gender{"masculine"}
                 one{"{0} piede"}
                 other{"{0} piedi"}
                 per{"{0} per piede"}
-            }
-            furlong{
-                dnam{"furlong"}
-                one{"{0} furlong"}
-                other{"{0} furlong"}
             }
             inch{
                 dnam{"pollici"}
@@ -884,11 +869,6 @@ it{
                 one{"{0} massa solare"}
                 other{"{0} masse solari"}
             }
-            stone{
-                dnam{"stone"}
-                one{"{0} stone"}
-                other{"{0} stone"}
-            }
             ton{
                 dnam{"tonnellate"}
                 one{"{0} tonnellata"}
@@ -1084,10 +1064,6 @@ it{
                 gender{"masculine"}
                 one{"{0} barile"}
                 other{"{0} barili"}
-            }
-            bushel{
-                one{"{0} staio"}
-                other{"{0} staia"}
             }
             centiliter{
                 dnam{"centilitri"}
@@ -1563,10 +1539,6 @@ it{
                 one{"{0}Bq"}
                 other{"{0}Bq"}
             }
-            british-thermal-unit{
-                one{"{0}BTU"}
-                other{"{0}BTU"}
-            }
             calorie{
                 one{"{0}cal"}
                 other{"{0}cal"}
@@ -1700,17 +1672,9 @@ it{
                 one{"{0}R⊕"}
                 other{"{0}R⊕"}
             }
-            fathom{
-                one{"{0}fm"}
-                other{"{0}fm"}
-            }
             foot{
                 one{"{0}ft"}
                 other{"{0}ft"}
-            }
-            furlong{
-                one{"{0}fur"}
-                other{"{0}fur"}
             }
             inch{
                 one{"{0}″"}
@@ -1854,10 +1818,6 @@ it{
                 one{"{0}M☉"}
                 other{"{0}M☉"}
             }
-            stone{
-                one{"{0}st"}
-                other{"{0}st"}
-            }
             ton{
                 one{"{0}tn"}
                 other{"{0}tn"}
@@ -1994,11 +1954,6 @@ it{
                 dnam{"bbl"}
                 one{"{0}bbl"}
                 other{"{0}bbl"}
-            }
-            bushel{
-                dnam{"bu"}
-                one{"{0}bu"}
-                other{"{0}bu"}
             }
             centiliter{
                 one{"{0}cl"}
@@ -2155,11 +2110,9 @@ it{
             }
             revolution{
                 dnam{"riv"}
-                one{"{0} riv"}
                 other{"{0} riv"}
             }
             steradian{
-                one{"{0} sr"}
                 other{"{0} sr"}
             }
         }
@@ -2169,7 +2122,6 @@ it{
             }
             dunam{
                 dnam{"dunum"}
-                one{"{0} dunum"}
                 other{"{0} dunum"}
             }
             hectare{
@@ -2182,26 +2134,21 @@ it{
         concentr{
             item{
                 dnam{"elem."}
-                one{"{0} elem."}
                 other{"{0} elem."}
             }
             katal{
-                one{"{0} kat"}
                 other{"{0} kat"}
             }
             milligram-ofglucose-per-deciliter{
                 dnam{"mg/dl"}
-                one{"{0} mg/dl"}
                 other{"{0} mg/dl"}
             }
             millimole-per-liter{
                 dnam{"mmol/l"}
-                one{"{0} mmol/l"}
                 other{"{0} mmol/l"}
             }
             ofglucose{
                 dnam{"Glc"}
-                one{"{0} Glc"}
                 other{"{0} Glc"}
             }
             part{
@@ -2216,12 +2163,10 @@ it{
         consumption{
             mile-per-gallon{
                 dnam{"mpg"}
-                one{"{0} mpg"}
                 other{"{0} mpg"}
             }
             mile-per-gallon-imperial{
                 dnam{"miglia/gal imp."}
-                one{"{0} mpg imp."}
                 other{"{0} mpg imp."}
             }
         }
@@ -2272,7 +2217,6 @@ it{
             }
             decade{
                 dnam{"dec."}
-                one{"{0} dec."}
                 other{"{0} dec."}
             }
             hour{
@@ -2292,7 +2236,6 @@ it{
             }
             quarter{
                 dnam{"trim."}
-                one{"{0} trim."}
                 other{"{0} trim."}
                 per{"{0}/trimestre"}
             }
@@ -2301,7 +2244,6 @@ it{
             }
             week{
                 dnam{"settimane"}
-                one{"{0} sett."}
                 other{"{0} sett."}
                 per{"{0}/settimana"}
             }
@@ -2317,22 +2259,18 @@ it{
                 dnam{"A"}
             }
             coulomb{
-                one{"{0} C"}
                 other{"{0} C"}
             }
             farad{
-                one{"{0} F"}
                 other{"{0} F"}
             }
             henry{
-                one{"{0} H"}
                 other{"{0} H"}
             }
             ohm{
                 dnam{"Ω"}
             }
             siemens{
-                one{"{0} S"}
                 other{"{0} S"}
             }
             volt{
@@ -2341,17 +2279,10 @@ it{
         }
         energy{
             becquerel{
-                one{"{0} Bq"}
                 other{"{0} Bq"}
-            }
-            british-thermal-unit{
-                dnam{"BTU"}
-                one{"{0} BTU"}
-                other{"{0} BTU"}
             }
             calorie-it{
                 dnam{"cal-IT"}
-                one{"{0} cal-IT"}
                 other{"{0} cal-IT"}
             }
             foodcalorie{
@@ -2360,25 +2291,21 @@ it{
                 other{"{0} Cal"}
             }
             gray{
-                one{"{0} Gy"}
                 other{"{0} Gy"}
             }
             joule{
                 dnam{"J"}
             }
             sievert{
-                one{"{0} Sv"}
                 other{"{0} Sv"}
             }
             therm-us{
                 dnam{"therm US"}
-                one{"{0} therm US"}
                 other{"{0} therm US"}
             }
         }
         force{
             kilogram-force{
-                one{"{0} kgf"}
                 other{"{0} kgf"}
             }
         }
@@ -2400,13 +2327,8 @@ it{
             }
         }
         length{
-            fathom{
-                one{"{0} fm"}
-                other{"{0} fm"}
-            }
             light-year{
                 dnam{"al"}
-                one{"{0} al"}
                 other{"{0} al"}
             }
             meter{
@@ -2421,18 +2343,15 @@ it{
         }
         magnetic{
             tesla{
-                one{"{0} T"}
                 other{"{0} T"}
             }
             weber{
-                one{"{0} Wb"}
                 other{"{0} Wb"}
             }
         }
         mass{
             carat{
                 dnam{"carati"}
-                one{"{0} kt"}
                 other{"{0} kt"}
             }
             grain{
@@ -2445,7 +2364,6 @@ it{
             }
             ounce-troy{
                 dnam{"ozt"}
-                one{"{0} ozt"}
                 other{"{0} ozt"}
             }
         }
@@ -2457,40 +2375,33 @@ it{
         pressure{
             ofhg{
                 dnam{"di Hg"}
-                one{"{0} di Hg"}
                 other{"{0} di Hg"}
             }
         }
         speed{
             beaufort{
-                one{"Bft {0}"}
                 other{"Bft {0}"}
             }
             light-speed{
                 dnam{"luce"}
-                one{"{0} luce"}
                 other{"{0} luce"}
             }
         }
         temperature{
             celsius{
-                one{"{0} °C"}
                 other{"{0} °C"}
             }
             fahrenheit{
-                one{"{0} °F"}
                 other{"{0} °F"}
             }
         }
         torque{
             newton-meter{
                 dnam{"Nm"}
-                one{"{0} Nm"}
                 other{"{0} Nm"}
             }
             pound-force-foot{
                 dnam{"lb-ft"}
-                one{"{0} lb-ft"}
                 other{"{0} lb-ft"}
             }
         }
@@ -2498,12 +2409,8 @@ it{
             barrel{
                 dnam{"barile"}
             }
-            bushel{
-                dnam{"staia"}
-            }
             centiliter{
                 dnam{"cl"}
-                one{"{0} cl"}
                 other{"{0} cl"}
             }
             cup{
@@ -2511,17 +2418,14 @@ it{
             }
             deciliter{
                 dnam{"dl"}
-                one{"{0} dl"}
                 other{"{0} dl"}
             }
             dessert-spoon-imperial{
                 dnam{"cucchiaini dessert imp."}
-                one{"{0} cd imp."}
                 other{"{0} cd imp."}
             }
             dram{
                 dnam{"dramma liquida"}
-                one{"{0} dr liq"}
                 other{"{0} dr liq"}
             }
             drop{
@@ -2531,33 +2435,27 @@ it{
             }
             fluid-ounce{
                 dnam{"fl oz"}
-                one{"{0} fl oz"}
                 other{"{0} fl oz"}
             }
             fluid-ounce-imperial{
                 dnam{"fl oz imp."}
-                one{"{0} fl oz imp."}
                 other{"{0} fl oz imp."}
             }
             fluid-ounce-metric{
-                one{"{0} fl oz m."}
                 other{"{0} fl oz m."}
             }
             gallon{
                 dnam{"gal"}
-                one{"{0} gal"}
                 other{"{0} gal"}
                 per{"{0}/gal"}
             }
             gallon-imperial{
                 dnam{"gal imp."}
-                one{"{0} gal imp."}
                 other{"{0} gal imp."}
                 per{"{0}/gal imp."}
             }
             hectoliter{
                 dnam{"hl"}
-                one{"{0} hl"}
                 other{"{0} hl"}
             }
             liter{
@@ -2565,12 +2463,10 @@ it{
             }
             megaliter{
                 dnam{"Ml"}
-                one{"{0} Ml"}
                 other{"{0} Ml"}
             }
             milliliter{
                 dnam{"ml"}
-                one{"{0} ml"}
                 other{"{0} ml"}
             }
             pinch{
@@ -2580,7 +2476,6 @@ it{
             }
             quart-imperial{
                 dnam{"quarti imp."}
-                one{"{0} qt imp."}
                 other{"{0} qt imp."}
             }
         }

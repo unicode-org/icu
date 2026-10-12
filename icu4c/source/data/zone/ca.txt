@@ -377,11 +377,6 @@ ca{
             lg{"Hora del Pacífic d’Amèrica del Nord"}
             ls{"Hora estàndard del Pacífic d’Amèrica del Nord"}
         }
-        "meta:Anadyr"{
-            ld{"Horari d’estiu d’Anadyr"}
-            lg{"Hora d’Anàdir"}
-            ls{"Hora estàndard d’Anadyr"}
-        }
         "meta:Apia"{
             ld{"Hora d’estiu d’Apia"}
             lg{"Hora d’Apia"}
@@ -530,17 +525,11 @@ ca{
             ld{"Hora d’estiu d’Europa central"}
             lg{"Hora d’Europa central"}
             ls{"Hora estàndard d’Europa central"}
-            sd{"CEST"}
-            sg{"CET"}
-            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"Hora d’estiu d’Europa oriental"}
             lg{"Hora d’Europa oriental"}
             ls{"Hora estàndard d’Europa oriental"}
-            sd{"EEST"}
-            sg{"EET"}
-            ss{"EET"}
         }
         "meta:Europe_Further_Eastern"{
             ls{"Hora de l’extrem oriental d’Europa"}
@@ -549,9 +538,6 @@ ca{
             ld{"Hora d’estiu d’Europa occidental"}
             lg{"Hora d’Europa occidental"}
             ls{"Hora estàndard d’Europa occidental"}
-            sd{"WEST"}
-            sg{"WET"}
-            ss{"WET"}
         }
         "meta:Falkland"{
             ld{"Hora d’estiu de les illes Falkland"}
@@ -571,7 +557,6 @@ ca{
         }
         "meta:GMT"{
             ls{"Hora del meridià de Greenwich"}
-            ss{"GMT"}
         }
         "meta:Galapagos"{
             ls{"Hora de Galápagos"}

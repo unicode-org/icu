@@ -148,11 +148,9 @@ en_AU{
             other{"Bermuda dollars"}
         }
         ETB{
-            one{"Ethiopian birr"}
             other{"Ethiopian birrs"}
         }
         GEL{
-            one{"Georgian lari"}
             other{"Georgian lari"}
         }
         ILS{
@@ -160,31 +158,24 @@ en_AU{
             other{"Israeli sheckles"}
         }
         KZT{
-            one{"Kazakhstani tenge"}
             other{"Kazakhstani tenge"}
         }
         LAK{
-            one{"Laotian kip"}
             other{"Laotian kip"}
         }
         LSL{
-            one{"Lesotho loti"}
             other{"Lesotho lotis"}
         }
         MKD{
-            one{"Macedonian denar"}
             other{"Macedonian denar"}
         }
         MVR{
-            one{"Maldivian rufiyaa"}
             other{"Maldivian rufiyaas"}
         }
         PGK{
-            one{"Papua New Guinean kina"}
             other{"Papua New Guinean kinas"}
         }
         QAR{
-            one{"Qatari riyal"}
             other{"Quatari riyals"}
         }
         SRD{
@@ -192,23 +183,18 @@ en_AU{
             other{"Suriname dollars"}
         }
         TRY{
-            one{"Turkish lira"}
             other{"Turkish lire"}
         }
         UZS{
-            one{"Uzbekistani som"}
             other{"Uzbekistani soms"}
         }
         VND{
-            one{"Vietnamese dong"}
             other{"Vietnamese dongs"}
         }
         VUV{
-            one{"Vanuatu vatu"}
             other{"Vanuatu vatus"}
         }
         WST{
-            one{"Samoan tala"}
             other{"Samoan talas"}
         }
     }

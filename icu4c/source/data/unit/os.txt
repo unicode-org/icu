@@ -39,12 +39,10 @@ os{
             }
             hour{
                 dnam{"сахаты"}
-                one{"{0} с."}
                 other{"{0} с."}
             }
             minute{
                 dnam{"минуты"}
-                one{"{0} мин."}
                 other{"{0} мин."}
             }
             month{

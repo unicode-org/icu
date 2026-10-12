@@ -75,17 +75,9 @@ rof{
             "£",
             "heleri sa Uingereza",
         }
-        GHC{
-            "GHC",
-            "heleri sa Ghana",
-        }
         GMD{
             "GMD",
             "heleri sa Gambia",
-        }
-        GNS{
-            "GNS",
-            "heleri sa Gine",
         }
         INR{
             "₹",
@@ -123,10 +115,6 @@ rof{
             "MGA",
             "heleri sa Bukini",
         }
-        MRO{
-            "MRO",
-            "heleri sa Moritania (1973–2017)",
-        }
         MRU{
             "MRU",
             "heleri sa Moritania",
@@ -138,10 +126,6 @@ rof{
         MWK{
             "MWK",
             "heleri sa Malawi",
-        }
-        MZM{
-            "MZM",
-            "heleri sa Msumbiji",
         }
         NAD{
             "NAD",
@@ -183,10 +167,6 @@ rof{
             "SOS",
             "heleri sa Somalia",
         }
-        STD{
-            "STD",
-            "heleri sa Sao Tome na Principe (1977–2017)",
-        }
         STN{
             "STN",
             "heleri sa Sao Tome na Principe",
@@ -223,17 +203,9 @@ rof{
             "ZAR",
             "heleri sa Afrika Kusini",
         }
-        ZMK{
-            "ZMK",
-            "heleri sa Zambia (1968–2012)",
-        }
         ZMW{
             "ZMW",
             "heleri sa Zambia",
-        }
-        ZWD{
-            "ZWD",
-            "heleri sa Zimbabwe",
         }
     }
 }

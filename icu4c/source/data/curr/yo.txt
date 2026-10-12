@@ -199,10 +199,6 @@ yo{
             "GEL",
             "Lárì Jọ́jíà",
         }
-        GHC{
-            "GHC",
-            "ṣidi ti Orílẹ́ède Gana",
-        }
         GHS{
             "GHS",
             "sídì Gana",
@@ -218,10 +214,6 @@ yo{
         GNF{
             "GNF",
             "Fírànkì Gínì",
-        }
-        GNS{
-            "GNS",
-            "Faransi ti Orílẹ́ède Gini",
         }
         GTQ{
             "GTQ",
@@ -375,10 +367,6 @@ yo{
             "MOP",
             "Pàtákà Màkáò",
         }
-        MRO{
-            "MRO",
-            "Ouguiya ti Orílẹ́ède Maritania (1973–2017)",
-        }
         MRU{
             "MRU",
             "Ouguiya ti Orílẹ́ède Maritania",
@@ -402,10 +390,6 @@ yo{
         MYR{
             "MYR",
             "Ríngìtì Màléṣíà",
-        }
-        MZM{
-            "MZM",
-            "Metika ti Orílẹ́ède Mosamibiki",
         }
         MZN{
             "MZN",
@@ -503,10 +487,6 @@ yo{
             "SDG",
             "Pọ́n-ùn Sùdáànì",
         }
-        SDP{
-            "SDP",
-            "Pọọun ti Orílẹ́ède Sudani",
-        }
         SEK{
             "SEK",
             "Kòrónà Súwídìn",
@@ -538,10 +518,6 @@ yo{
         SSP{
             "SSP",
             "Pọ́n-un Gúúsù Sùdáànì",
-        }
-        STD{
-            "STD",
-            "Dobira ti Orílẹ́ède Sao tome Ati Pirisipe (1977–2017)",
         }
         STN{
             "STN",
@@ -659,17 +635,9 @@ yo{
             "ZAR",
             "Rándì Gúúsù Afíríkà",
         }
-        ZMK{
-            "ZMK",
-            "Kawaṣa ti Orílẹ́ède Saabia (1968–2012)",
-        }
         ZMW{
             "ZMW",
             "Kàwasà Sámbíà",
-        }
-        ZWD{
-            "ZWD",
-            "Dọla ti Orílẹ́ède Siibabuwe",
         }
         ZWG{
             "ZWG",

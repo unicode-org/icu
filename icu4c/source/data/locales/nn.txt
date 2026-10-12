@@ -10,7 +10,6 @@ nn{
             patternsLong{
                 decimalFormat{
                     1000000{
-                        one{"0 million"}
                         other{"0 millionar"}
                     }
                     10000000{
@@ -22,7 +21,6 @@ nn{
                         other{"000 millionar"}
                     }
                     1000000000{
-                        one{"0 milliard"}
                         other{"0 milliardar"}
                     }
                     10000000000{
@@ -34,7 +32,6 @@ nn{
                         other{"000 milliardar"}
                     }
                     1000000000000{
-                        one{"0 billion"}
                         other{"0 billionar"}
                     }
                     10000000000000{
@@ -96,11 +93,9 @@ nn{
                 EHm{"E HH:mm"}
                 EHms{"E HH:mm:ss"}
                 MMMMW{
-                    one{"'veke' W 'i' MMMM"}
                     other{"'veke' W 'i' MMMM"}
                 }
                 yw{
-                    one{"'veke' w 'i' Y"}
                     other{"'veke' w 'i' Y"}
                 }
             }
@@ -138,21 +133,13 @@ nn{
             dayPeriod{
                 format{
                     wide{
-                        afternoon1{"på ettermiddagen"}
-                        evening1{"på kvelden"}
-                        midnight{"midnatt"}
                         morning1{"på morgonen"}
-                        morning2{"på formiddagen"}
                         night1{"på natta"}
                     }
                 }
                 stand-alone{
                     wide{
-                        afternoon1{"ettermiddag"}
-                        evening1{"kveld"}
                         morning1{"morgon"}
-                        morning2{"formiddag"}
-                        night1{"natt"}
                     }
                 }
             }
@@ -237,15 +224,12 @@ nn{
     fields{
         day{
             relative{
-                "-1"{"i går"}
                 "-2"{"i førgår"}
-                "0"{"i dag"}
                 "1"{"i morgon"}
                 "2"{"i overmorgon"}
             }
             relativeTime{
                 past{
-                    one{"for {0} døgn sidan"}
                     other{"for {0} døgn sidan"}
                 }
             }
@@ -259,10 +243,6 @@ nn{
             }
         }
         day-short{
-            relative{
-                "-2"{"i forgårs"}
-                "2"{"i overmorgen"}
-            }
             relativeTime{
                 past{
                     one{"for {0} d. sidan"}
@@ -273,12 +253,9 @@ nn{
         fri{
             relative{
                 "-1"{"førre fredag"}
-                "0"{"fredag"}
-                "1"{"neste fredag"}
             }
             relativeTime{
                 future{
-                    one{"om {0} fredag"}
                     other{"om {0} fredagar"}
                 }
                 past{
@@ -291,7 +268,6 @@ nn{
             relative{
                 "-1"{"førre fr."}
                 "0"{"fr."}
-                "1"{"neste fr."}
             }
             relativeTime{
                 past{
@@ -304,7 +280,6 @@ nn{
             relative{
                 "-1"{"førre fre."}
                 "0"{"fre."}
-                "1"{"neste fre."}
             }
             relativeTime{
                 past{
@@ -316,7 +291,6 @@ nn{
         hour{
             relativeTime{
                 future{
-                    one{"om {0} time"}
                     other{"om {0} timar"}
                 }
                 past{
@@ -344,7 +318,6 @@ nn{
         minute{
             relativeTime{
                 future{
-                    one{"om {0} minutt"}
                     other{"om {0} minutt"}
                 }
                 past{
@@ -354,7 +327,6 @@ nn{
             }
         }
         minute-narrow{
-            dn{"min"}
             relativeTime{
                 past{
                     one{"–{0} min"}
@@ -450,8 +422,6 @@ nn{
         month-short{
             relative{
                 "-1"{"førre md."}
-                "0"{"denne md."}
-                "1"{"neste md."}
             }
             relativeTime{
                 past{
@@ -463,12 +433,9 @@ nn{
         quarter{
             relative{
                 "-1"{"førre kvartal"}
-                "0"{"dette kvartalet"}
-                "1"{"neste kvartal"}
             }
             relativeTime{
                 future{
-                    one{"om {0} kvartal"}
                     other{"om {0} kvartal"}
                 }
                 past{
@@ -550,7 +517,6 @@ nn{
             }
             relativeTime{
                 future{
-                    one{"om {0} sekund"}
                     other{"om {0} sekund"}
                 }
                 past{
@@ -633,12 +599,9 @@ nn{
         thu{
             relative{
                 "-1"{"førre torsdag"}
-                "0"{"torsdag"}
-                "1"{"neste torsdag"}
             }
             relativeTime{
                 future{
-                    one{"om {0} torsdag"}
                     other{"om {0} torsdagar"}
                 }
                 past{
@@ -651,7 +614,6 @@ nn{
             relative{
                 "-1"{"førre to."}
                 "0"{"to."}
-                "1"{"neste to."}
             }
             relativeTime{
                 past{
@@ -664,7 +626,6 @@ nn{
             relative{
                 "-1"{"førre tor."}
                 "0"{"tor."}
-                "1"{"neste tor."}
             }
             relativeTime{
                 past{
@@ -727,12 +688,9 @@ nn{
         wed{
             relative{
                 "-1"{"førre onsdag"}
-                "0"{"onsdag"}
-                "1"{"neste onsdag"}
             }
             relativeTime{
                 future{
-                    one{"om {0} onsdag"}
                     other{"om {0} onsdagar"}
                 }
                 past{
@@ -745,7 +703,6 @@ nn{
             relative{
                 "-1"{"førre on."}
                 "0"{"on."}
-                "1"{"neste on."}
             }
             relativeTime{
                 past{
@@ -758,7 +715,6 @@ nn{
             relative{
                 "-1"{"førre ons."}
                 "0"{"ons."}
-                "1"{"neste ons."}
             }
             relativeTime{
                 past{
@@ -829,7 +785,6 @@ nn{
         year{
             relativeTime{
                 past{
-                    one{"for {0} år sidan"}
                     other{"for {0} år sidan"}
                 }
             }

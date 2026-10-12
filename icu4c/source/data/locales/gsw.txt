@@ -8,7 +8,6 @@ gsw{
     NumberElements{
         latn{
             patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
                 currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
                 percentFormat{"#,##0 %"}
@@ -68,101 +67,77 @@ gsw{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"0 Tsg'.' ¤"}
                         other{"0 Tsg'.' ¤"}
                     }
                     10000{
-                        one{"00 Tsg'.' ¤"}
                         other{"00 Tsg'.' ¤"}
                     }
                     100000{
-                        one{"000 Tsg'.' ¤"}
                         other{"000 Tsg'.' ¤"}
                     }
                     1000000{
-                        one{"0 Mio'.' ¤"}
                         other{"0 Mio'.' ¤"}
                     }
                     10000000{
-                        one{"00 Mio'.' ¤"}
                         other{"00 Mio'.' ¤"}
                     }
                     100000000{
-                        one{"000 Mio'.' ¤"}
                         other{"000 Mio'.' ¤"}
                     }
                     1000000000{
-                        one{"0 Mrd'.' ¤"}
                         other{"0 Mrd'.' ¤"}
                     }
                     10000000000{
-                        one{"00 Mrd'.' ¤"}
                         other{"00 Mrd'.' ¤"}
                     }
                     100000000000{
-                        one{"000 Mrd'.' ¤"}
                         other{"000 Mrd'.' ¤"}
                     }
                     1000000000000{
-                        one{"0 Bio'.' ¤"}
                         other{"0 Bio'.' ¤"}
                     }
                     10000000000000{
-                        one{"00 Bio'.' ¤"}
                         other{"00 Bio'.' ¤"}
                     }
                     100000000000000{
-                        one{"000 Bio'.' ¤"}
                         other{"000 Bio'.' ¤"}
                     }
                 }
                 decimalFormat{
                     1000{
-                        one{"0 Tsg'.'"}
                         other{"0 Tsg'.'"}
                     }
                     10000{
-                        one{"00 Tsg'.'"}
                         other{"00 Tsg'.'"}
                     }
                     100000{
-                        one{"000 Tsg'.'"}
                         other{"000 Tsg'.'"}
                     }
                     1000000{
-                        one{"0 Mio'.'"}
                         other{"0 Mio'.'"}
                     }
                     10000000{
-                        one{"00 Mio'.'"}
                         other{"00 Mio'.'"}
                     }
                     100000000{
-                        one{"000 Mio'.'"}
                         other{"000 Mio'.'"}
                     }
                     1000000000{
-                        one{"0 Mrd'.'"}
                         other{"0 Mrd'.'"}
                     }
                     10000000000{
-                        one{"00 Mrd'.'"}
                         other{"00 Mrd'.'"}
                     }
                     100000000000{
-                        one{"000 Mrd'.'"}
                         other{"000 Mrd'.'"}
                     }
                     1000000000000{
-                        one{"0 Bio'.'"}
                         other{"0 Bio'.'"}
                     }
                     10000000000000{
-                        one{"00 Bio'.'"}
                         other{"00 Bio'.'"}
                     }
                     100000000000000{
-                        one{"000 Bio'.'"}
                         other{"000 Bio'.'"}
                     }
                 }
@@ -174,33 +149,6 @@ gsw{
         }
     }
     calendar{
-        buddhist{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE d. MMMM y G",
-                "d. MMMM y G",
-                "d. MMM y G",
-                "d.M.y",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMMd",
-                "yMd",
-            }
-        }
         generic{
             DateTimePatterns{
                 "HH:mm:ss zzzz",
@@ -217,16 +165,6 @@ gsw{
                 "{1} {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMdd",
-                "GGGGGyyMMdd",
-            }
             availableFormats{
                 Ed{"E d."}
                 H{"H"}
@@ -235,18 +173,13 @@ gsw{
                 MMMMEd{"E d. MMMM"}
                 MMMMd{"d. MMMM"}
                 MMMd{"d. MMM"}
-                MMd{"d.MM."}
-                MMdd{"dd.MM."}
                 Md{"d.M."}
-                mmss{"mm:ss"}
                 y{"y"}
                 yM{"y-M"}
                 yMEd{"E, y-M-d"}
-                yMM{"MM.y"}
                 yMMM{"MMM y"}
                 yMMMEd{"E, d. MMM y"}
                 yMMMM{"MMMM y"}
-                yMMdd{"dd.MM.y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
             }
@@ -278,24 +211,6 @@ gsw{
                 }
                 d{
                     d{"d.–d."}
-                }
-                h{
-                    a{"h a – h a"}
-                    h{"h–h a"}
-                }
-                hm{
-                    a{"h:mm a – h:mm a"}
-                    h{"h:mm–h:mm a"}
-                    m{"h:mm–h:mm a"}
-                }
-                hmv{
-                    a{"h:mm a – h:mm a v"}
-                    h{"h:mm–h:mm a v"}
-                    m{"h:mm–h:mm a v"}
-                }
-                hv{
-                    a{"h a – h a v"}
-                    h{"h–h a v"}
                 }
                 y{
                     y{"y–y"}
@@ -357,16 +272,6 @@ gsw{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMdd",
-                "yyMMdd",
             }
             availableFormats{
                 Ed{"E d."}
@@ -440,7 +345,6 @@ gsw{
                         afternoon2{"Namittag"}
                         am{"Vormittag"}
                         evening1{"Aabig"}
-                        midnight{"Mitternacht"}
                         morning1{"Morge"}
                         night1{"Nacht"}
                         pm{"Namittag"}
@@ -482,10 +386,6 @@ gsw{
                 d{
                     d{"d.–d."}
                 }
-                h{
-                    a{"h a – h a"}
-                    h{"h–h a"}
-                }
                 hm{
                     a{"h:mm a – h:mm a"}
                     h{"h:mm–h:mm a"}
@@ -495,10 +395,6 @@ gsw{
                     a{"h:mm a – h:mm a v"}
                     h{"h:mm–h:mm a v"}
                     m{"h:mm–h:mm a v"}
-                }
-                hv{
-                    a{"h a – h a v"}
-                    h{"h–h a v"}
                 }
                 yM{
                     M{"MM.y – MM.y"}

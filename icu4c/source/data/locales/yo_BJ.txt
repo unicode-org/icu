@@ -179,9 +179,7 @@ yo_BJ{
         day{
             dn{"Ɔjɔ́"}
             relative{
-                "-1"{"Àná"}
                 "-2"{"íjɛta"}
-                "0"{"Òní"}
                 "1"{"Ɔ̀la"}
             }
         }
@@ -223,15 +221,11 @@ yo_BJ{
         }
         mon-narrow{
             relative{
-                "-1"{"ɔjɔ́ Ajé tó kɔjá"}
-                "0"{"ɔjɔ́ Ajé yìí"}
                 "1"{"Ɔjɔ́ ajé tó ń bɔ̀"}
             }
         }
         mon-short{
             relative{
-                "-1"{"ɔjɔ́ Ajé tó kɔjá"}
-                "0"{"ɔjɔ́ Ajé yìí"}
                 "1"{"Ɔjɔ́ ajé tó ń bɔ̀"}
             }
         }
@@ -359,8 +353,6 @@ yo_BJ{
         }
         wed-short{
             relative{
-                "-1"{"Ojɔ́rú àná"}
-                "0"{"Ojɔ́rú yì"}
                 "1"{"Ojɔ́rú tóńbɔ̀"}
             }
             relativeTime{
@@ -421,7 +413,6 @@ yo_BJ{
         year-short{
             relative{
                 "-1"{"Ɔdún tó kɔjá"}
-                "0"{"Ɔdún yìí"}
                 "1"{"Ɔdún tó ńbɔ̀"}
             }
             relativeTime{

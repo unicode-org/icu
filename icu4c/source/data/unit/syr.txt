@@ -136,7 +136,6 @@ syr{
             item{
                 dnam{"ܡܠܘܐ̈ܐ"}
                 one{"ܚܕ ܡܠܘܐܐ"}
-                other{"{0} ܡܠܘܐ̈ܐ"}
             }
             karat{
                 dnam{"ܩܪ̈ܛܐ"}
@@ -272,26 +271,22 @@ syr{
             }
             microsecond{
                 dnam{"ܡܝܟܪܘܪ̈ܦܦܐ"}
-                one{"{0} ܡܝܟܪܘܪܦܦܐ"}
                 other{"{0} ܡܝܟܪܘܪ̈ܦܦܐ"}
             }
             minute{
                 one{"ܩܛܝܢܐ"}
-                other{"{0} ܩܛܝܢ̈ܐ"}
                 per{"{0} ܒܩܛܝܢܐ"}
             }
             month{
                 per{"{0} ܒܝܪܚܐ"}
             }
             nanosecond{
-                one{"{0} ܢܐܢܘܪܦܦܐ"}
                 other{"{0} ܢܐܢܘܪ̈ܦܦܐ"}
             }
             quarter{
                 dnam{"ܪ̈ܘܒܥܐ"}
             }
             second{
-                one{"{0} ܪܦܦܐ"}
                 other{"{0} ܪ̈ܦܦܐ"}
                 per{"{0} ܒܪܦܦܐ"}
             }
@@ -374,11 +369,6 @@ syr{
                 one{"{0} ܐܩܠܐ"}
                 other{"{0} ܐܩܠ̈ܐ"}
                 per{"{0} ܒܐܩܠܐ"}
-            }
-            furlong{
-                dnam{"ܦܘܪ̈ܠܢܓܐ"}
-                one{"{0} ܦܘܪܠܢܓ"}
-                other{"{0} ܦܘܪ̈ܠܢܓܐ"}
             }
             inch{
                 dnam{"ܐܢܟ̈ܐ"}
@@ -528,11 +518,6 @@ syr{
                 dnam{"ܥܘܫܢܐ ܫܡܫܝܐ"}
                 one{"{0} ܥܘܫܢܐ ܫܡܫܝܐ"}
                 other{"{0} ܥܘܫܢܐ ܫܡܫܝܐ"}
-            }
-            stone{
-                dnam{"ܣܛܘܢ"}
-                one{"{0} ܣܛܘܢ"}
-                other{"{0} ܣܛܘܢ"}
             }
             ton{
                 dnam{"ܬܘܢ̈ܐ"}
@@ -823,14 +808,12 @@ syr{
         duration{
             century{
                 one{"{0} ܕܪܐ"}
-                other{"{0} ܕܪ̈ܐ"}
             }
             day{
                 dnam{"ܝܘܡܐ"}
             }
             decade{
                 one{"{0} ܥܣܝܪܘܬܐ"}
-                other{"{0} ܥܣܝܪ̈ܘܬܐ"}
             }
             hour{
                 dnam{"ܫܥܬܐ"}
@@ -847,14 +830,12 @@ syr{
             month{
                 dnam{"ܝܪܚܐ"}
                 one{"{0} ܝܪܚܐ"}
-                other{"{0} ܝܪ̈ܚܐ"}
             }
             nanosecond{
                 dnam{"ܢܐܢܘܪܦܦܐ"}
             }
             quarter{
                 one{"{0} ܪܘܒܥܐ"}
-                other{"{0} ܪ̈ܘܒܥܐ"}
             }
             second{
                 dnam{"ܪܦܦܐ"}
@@ -866,7 +847,6 @@ syr{
             year{
                 dnam{"ܫܢܬܐ"}
                 one{"{0} ܫܢܬܐ"}
-                other{"{0} ܫ̈ܢܐ"}
             }
         }
         length{
@@ -1023,17 +1003,14 @@ syr{
                 dnam{"m"}
             }
             solar-radius{
-                one{"{0} ☉R"}
                 other{"{0} ☉R"}
             }
         }
         temperature{
             celsius{
-                one{"{0} °C"}
                 other{"{0} °C"}
             }
             fahrenheit{
-                one{"{0} °F"}
                 other{"{0} °F"}
             }
         }

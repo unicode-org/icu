@@ -132,7 +132,6 @@ id{
             symbols{
                 decimal{","}
                 group{"."}
-                timeSeparator{"."}
             }
         }
         minimalPairs{
@@ -145,217 +144,6 @@ id{
         }
     }
     calendar{
-        buddhist{
-            DateTimePatterns{
-                "HH.mm.ss zzzz",
-                "HH.mm.ss z",
-                "HH.mm.ss",
-                "HH.mm",
-                "EEEE, dd MMMM y G",
-                "d MMMM y G",
-                "d MMM y G",
-                "d/M/y GGGGG",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEdd",
-                "GyMMMMd",
-                "GyMMMd",
-                "GGGGGyMd",
-            }
-            eras{
-                abbreviated{
-                    0{"EB"}
-                }
-                wide{
-                    0{"Era Buddhis"}
-                }
-            }
-            intervalFormats{
-                Hm{
-                    H{"HH.mm – HH.mm"}
-                    m{"HH.mm – HH.mm"}
-                }
-                Hmv{
-                    H{"HH.mm – HH.mm v"}
-                    m{"HH.mm – HH.mm v"}
-                }
-                M{
-                    M{"M – M"}
-                }
-                MMM{
-                    M{"MMM – MMM"}
-                }
-                MMMd{
-                    d{"d – d MMM"}
-                }
-                d{
-                    d{"d – d"}
-                }
-                hm{
-                    h{"h.mm – h.mm a"}
-                    m{"h.mm – h.mm a"}
-                }
-                hmv{
-                    h{"h.mm – h.mm a v"}
-                    m{"h.mm – h.mm a v"}
-                }
-                y{
-                    y{"y – y G"}
-                }
-                yMMM{
-                    M{"MMM – MMM y G"}
-                }
-                yMMMd{
-                    d{"d – d MMM y G"}
-                }
-            }
-        }
-        chinese{
-            DateTimePatterns{
-                "HH.mm.ss zzzz",
-                "HH.mm.ss z",
-                "HH.mm.ss",
-                "HH.mm",
-                "EEEE, U MMMM dd",
-                "U MMMM d",
-                "U MMM d",
-                "y-M-d",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "UMMMMEEEEdd",
-                "UMMMMd",
-                "UMMMd",
-                "yMd",
-            }
-            cyclicNameSets{
-                solarTerms{
-                    format{
-                        abbreviated{
-                            "mulai musim semi",
-                            "air hujan",
-                            "serangga bangun",
-                            "ekuinoks musim semi",
-                            "bright and clear",
-                            "hujan butiran",
-                            "mulai musim panas",
-                            "grain full",
-                            "grain in ear",
-                            "summer solstice",
-                            "minor heat",
-                            "major heat",
-                            "mulai musim gugur",
-                            "akhir panas",
-                            "white dew",
-                            "ekuinoks musim gugur",
-                            "embun dingin",
-                            "embun beku turun",
-                            "mulai musim dingin",
-                            "mulai turun salju",
-                            "major snow",
-                            "winter solstice",
-                            "minor cold",
-                            "major cold",
-                        }
-                    }
-                }
-            }
-            monthNames{
-                format{
-                    wide{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                    }
-                }
-            }
-        }
-        dangi{
-            cyclicNameSets{
-                solarTerms{
-                    format{
-                        abbreviated{
-                            "mulai musim semi",
-                            "air hujan",
-                            "serangga bangun",
-                            "ekuinoks musim semi",
-                            "bright and clear",
-                            "hujan butiran",
-                            "mulai musim panas",
-                            "grain full",
-                            "grain in ear",
-                            "summer solstice",
-                            "minor heat",
-                            "major heat",
-                            "mulai musim gugur",
-                            "akhir panas",
-                            "embun putih",
-                            "ekuinoks musim gugur",
-                            "embun dingin",
-                            "embun beku turun",
-                            "mulai musim dingin",
-                            "mulai turun salju",
-                            "major snow",
-                            "winter solstice",
-                            "minor cold",
-                            "major cold",
-                        }
-                        wide{
-                            "mulai musim semi",
-                            "air hujan",
-                            "serangga bangun",
-                            "ekuinoks musim semi",
-                            "bright and clear",
-                            "hujan butiran",
-                            "mulai musim panas",
-                            "grain full",
-                            "grain in ear",
-                            "summer solstice",
-                            "minor heat",
-                            "major heat",
-                            "mulai musim gugur",
-                            "akhir panas",
-                            "embun putih",
-                            "ekuinoks musim gugur",
-                            "embun dingin",
-                            "embun beku turun",
-                            "mulai musim dingin",
-                            "mulai turun salju",
-                            "major snow",
-                            "winter solstice",
-                            "minor cold",
-                            "major cold",
-                        }
-                    }
-                }
-            }
-        }
         generic{
             DateTimePatterns{
                 "HH.mm.ss zzzz",
@@ -383,16 +171,6 @@ id{
                 "{1} 'pukul' {0}",
                 "{1}, {0}",
                 "{1}, {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEdd",
-                "GyMMMMd",
-                "GyMMMd",
-                "GGGGGyyMMdd",
             }
             availableFormats{
                 Bhm{"h.mm B"}
@@ -481,20 +259,6 @@ id{
                     d{"d/M/y–d/M/y G"}
                     y{"d/M/y–d/M/y G"}
                 }
-                H{
-                    H{"HH – HH"}
-                }
-                Hm{
-                    H{"HH.mm–HH.mm"}
-                    m{"HH.mm–HH.mm"}
-                }
-                Hmv{
-                    H{"HH.mm–HH.mm v"}
-                    m{"HH.mm–HH.mm v"}
-                }
-                Hv{
-                    H{"HH – HH v"}
-                }
                 M{
                     M{"M–M"}
                 }
@@ -522,22 +286,6 @@ id{
                     d{"d/M–d/M"}
                 }
                 fallback{"{0}–{1}"}
-                h{
-                    h{"h – h a"}
-                }
-                hm{
-                    a{"h.mm a – h.mm a"}
-                    h{"h.mm–h.mm a"}
-                    m{"h.mm–h.mm a"}
-                }
-                hmv{
-                    a{"h.mm a – h.mm a v"}
-                    h{"h.mm–h.mm a v"}
-                    m{"h.mm–h.mm a v"}
-                }
-                hv{
-                    h{"h – h a v"}
-                }
                 y{
                     y{"y–y G"}
                 }
@@ -602,16 +350,6 @@ id{
                 "{1} 'pukul' {0}",
                 "{1}, {0}",
                 "{1}, {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "yMMMMEEEEdd",
-                "yMMMMd",
-                "yMMMd",
-                "yyMMdd",
             }
             availableFormats{
                 Bhm{"h.mm B"}
@@ -925,13 +663,6 @@ id{
                 }
             }
         }
-        indian{
-            eras{
-                abbreviated{
-                    0{"SAKA"}
-                }
-            }
-        }
         islamic{
             DateTimePatterns{
                 "HH.mm.ss zzzz",
@@ -948,71 +679,9 @@ id{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEdd",
-                "GyMMMMd",
-                "GyMMMd",
-                "GGGGGyMd",
-            }
-            dayNames{
-                format{
-                    wide{
-                        "Ahad",
-                        "Senin",
-                        "Selasa",
-                        "Rabu",
-                        "Kamis",
-                        "Jumat",
-                        "Sabtu",
-                    }
-                }
-            }
             eras{
                 abbreviated{
                     0{"H"}
-                }
-            }
-            intervalFormats{
-                Hm{
-                    H{"HH.mm – HH.mm"}
-                    m{"HH.mm – HH.mm"}
-                }
-                Hmv{
-                    H{"HH.mm – HH.mm v"}
-                    m{"HH.mm – HH.mm v"}
-                }
-                M{
-                    M{"M – M"}
-                }
-                MMM{
-                    M{"MMM – MMM"}
-                }
-                MMMd{
-                    d{"d – d MMM"}
-                }
-                d{
-                    d{"d – d"}
-                }
-                hm{
-                    h{"h.mm – h.mm a"}
-                    m{"h.mm – h.mm a"}
-                }
-                hmv{
-                    h{"h.mm – h.mm a v"}
-                    m{"h.mm – h.mm a v"}
-                }
-                y{
-                    y{"y – y G"}
-                }
-                yMMM{
-                    M{"MMM – MMM y G"}
-                }
-                yMMMd{
-                    d{"d – d MMM y G"}
                 }
             }
             monthNames{
@@ -1045,65 +714,6 @@ id{
                         "Zulkaidah",
                         "Zulhijah",
                     }
-                }
-            }
-        }
-        japanese{
-            DateTimePatterns{
-                "HH.mm.ss zzzz",
-                "HH.mm.ss z",
-                "HH.mm.ss",
-                "HH.mm",
-                "EEEE, dd MMMM y G",
-                "d MMMM y G",
-                "d MMM y G",
-                "d/M/y GGGGG",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEdd",
-                "GyMMMMd",
-                "GyMMMd",
-                "GGGGGyMd",
-            }
-        }
-        roc{
-            DateTimePatterns{
-                "HH.mm.ss zzzz",
-                "HH.mm.ss z",
-                "HH.mm.ss",
-                "HH.mm",
-                "EEEE, dd MMMM y G",
-                "d MMMM y G",
-                "d MMM y G",
-                "d/M/y GGGGG",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEdd",
-                "GyMMMMd",
-                "GyMMMd",
-                "GGGGGyMd",
-            }
-            eras{
-                abbreviated{
-                    0{"Sebelum R.O.C."}
                 }
             }
         }
@@ -1188,16 +798,6 @@ id{
         western_asian_scripts{"skrip Asia Bagian Barat"}
         whitespace{"spasi kosong"}
     }
-    contextTransforms{
-        relative:intvector{
-            1,
-            1,
-        }
-        typographicNames:intvector{
-            1,
-            1,
-        }
-    }
     fields{
         day{
             dn{"hari"}
@@ -1222,9 +822,6 @@ id{
         }
         day-short{
             dn{"hr"}
-            relative{
-                "-2"{"selumbari"}
-            }
             relativeTime{
                 future{
                     other{"dalam {0} h"}
@@ -1327,9 +924,6 @@ id{
         }
         minute-short{
             dn{"mnt."}
-            relative{
-                "0"{"mnt ini"}
-            }
             relativeTime{
                 future{
                     other{"dlm {0} mnt"}
@@ -1419,11 +1013,6 @@ id{
         }
         quarter-short{
             dn{"krtl."}
-            relative{
-                "-1"{"krtl lalu"}
-                "0"{"krtl ini"}
-                "1"{"krtl berikutnya"}
-            }
             relativeTime{
                 future{
                     other{"dlm {0} krtl."}

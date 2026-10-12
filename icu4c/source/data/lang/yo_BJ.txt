@@ -32,17 +32,12 @@ yo_BJ{
         va{"Ɛ̀dà ìbílɛ̀"}
     }
     Languages{
-        agq{"Èdè Ágɛ̀ɛ̀mù"}
         bal{"Èdè Belúshì"}
-        bez{"Èdè Bɛ́nà"}
         chr{"Èdè Shɛ́rókiì"}
-        cu{"Èdè Síláfííkì Ilé Ìjɔ́sìn"}
         cv{"Èdè Shufasi"}
         de_AT{"Èdè Jámánì (Ɔ́síríà )"}
         de_CH{"Èdè Ilɛ̀ Jámánì (Orílɛ́ède swítsàlandì)"}
-        dje{"Shárúmà"}
         dsb{"Shóbíánù Apá Ìshàlɛ̀"}
-        ebu{"Èdè Ɛmbù"}
         en{"Èdè Gɛ̀ɛ́sì"}
         en_AU{"Èdè Gɛ̀ɛ́sì (órílɛ̀-èdè Ɔsirélíà)"}
         en_CA{"Èdè Gɛ̀ɛ́sì (Orílɛ̀-èdè Kánádà)"}
@@ -53,31 +48,20 @@ yo_BJ{
         es_MX{"Èdè Sípáníìshì (orílɛ̀-èdè Mɛ́síkò)"}
         fr_CA{"Èdè Faransé (orílɛ̀-èdè Kánádà)"}
         fr_CH{"Èdè Faranshé (Súwísàlaǹdì)"}
-        gez{"Ede Gɛ́sì"}
         id{"Èdè Indonéshíà"}
         ie{"Èdè àtɔwɔ́dá"}
         ii{"Shíkuán Yì"}
-        jmc{"Máshámè"}
-        khq{"Koira Shíínì"}
         kk{"Kashakì"}
-        kln{"Kálɛnjín"}
         ks{"Kashímirì"}
-        ksb{"Sháńbálà"}
         ku{"Kɔdishì"}
-        kw{"Èdè Kɔ́nììshì"}
         lb{"Lùshɛ́mbɔ́ɔ̀gì"}
         mul{"Ɔlɔ́pɔ̀ èdè"}
-        nb{"Nɔ́ɔ́wè Bokímàl"}
         nds{"Jámánì ìpìlɛ̀"}
         nl{"Èdè Dɔ́ɔ̀shì"}
         nl_BE{"Èdè Flemishi"}
-        nmg{"Kíwáshíò"}
         nn{"Nɔ́ɔ́wè Nínɔ̀sìkì"}
-        nus{"Núɛ̀"}
-        nyn{"Ńyákɔ́lè"}
         oc{"Èdè Ɔ̀kísítáànì"}
         om{"Òròmɔ́"}
-        os{"Ɔshɛ́tíìkì"}
         pms{"Èdè Pídímɔ̀ntísì"}
         prg{"Púrúshíànù"}
         pt{"Èdè Pɔtogí"}
@@ -86,22 +70,13 @@ yo_BJ{
         qu{"Kúɛ́ńjùà"}
         rm{"Rómáǹshì"}
         ru{"Èdè Rɔ́shíà"}
-        seh{"Shɛnà"}
-        shi{"Tashelíìtì"}
-        sn{"Shɔnà"}
         szl{"Silìshíànì"}
-        teo{"Tɛ́sò"}
         tr{"Èdè Tɔɔkisi"}
         ug{"Yúgɔ̀"}
         und{"Èdè àìmɔ̀"}
         vec{"Fènéshìànì"}
-        vo{"Fɔ́lápùùkù"}
-        wae{"Wɔsà"}
         wo{"Wɔ́lɔ́ɔ̀fù"}
-        xog{"Shógà"}
-        yav{"Yangbɛn"}
         za{"Shúwáànù"}
-        zgh{"Àfɛnùkò Támásáìtì ti Mòrókò"}
         zh{"Edè Sháínà"}
         zh_Hans{"Ɛdè Sháínà Onírɔ̀rùn"}
         zh_Hant{"Èdè Sháínà Ìbílɛ̀"}
@@ -109,9 +84,6 @@ yo_BJ{
     }
     Languages%core{
         ku{"Èdè Kɔ́dìshì"}
-    }
-    Languages%extension{
-        ku{"Èdè Kùmáǹjì"}
     }
     Languages%long{
         zh_Hans{"Èdè Mandárínì Sháínà Onírɔ̀rùn"}
@@ -137,7 +109,6 @@ yo_BJ{
         Hans{"tí wɔ́n mú rɔrùn."}
         Hrkt{"ìlànà àfɔwɔ́kɔ ará Jàpánù"}
         Khmr{"Kɛmɛ̀"}
-        Plrd{"Fonɛtiiki Polaadi"}
         Zmth{"Àmì Ìshèsìrò"}
         Zsym{"Àwɔn àmì"}
         Zxxx{"Aikɔsilɛ"}

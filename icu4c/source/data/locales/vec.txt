@@ -14,7 +14,6 @@ vec{
                 range{"{0}-{1}"}
             }
             patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
                 currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
                 currencyPatternAppendISO{"{0} ¤¤"}
@@ -78,47 +77,36 @@ vec{
                         other{"0 mila ¤"}
                     }
                     10000{
-                        one{"00 mila ¤"}
                         other{"00 mila ¤"}
                     }
                     100000{
-                        one{"000 mila ¤"}
                         other{"000 mila ¤"}
                     }
                     1000000{
-                        one{"0 mln ¤"}
                         other{"0 mln ¤"}
                     }
                     10000000{
-                        one{"00 mln ¤"}
                         other{"00 mln ¤"}
                     }
                     100000000{
-                        one{"000 mln ¤"}
                         other{"000 mln ¤"}
                     }
                     1000000000{
-                        one{"0 mld ¤"}
                         other{"0 mld ¤"}
                     }
                     10000000000{
-                        one{"00 mld ¤"}
                         other{"00 mld ¤"}
                     }
                     100000000000{
-                        one{"000 mld ¤"}
                         other{"000 mld ¤"}
                     }
                     1000000000000{
-                        one{"0 bln ¤"}
                         other{"0 bln ¤"}
                     }
                     10000000000000{
-                        one{"00 bln ¤"}
                         other{"00 bln ¤"}
                     }
                     100000000000000{
-                        one{"000 bln ¤"}
                         other{"000 bln ¤"}
                     }
                 }
@@ -128,47 +116,36 @@ vec{
                         other{"0 mila"}
                     }
                     10000{
-                        one{"00 mila"}
                         other{"00 mila"}
                     }
                     100000{
-                        one{"000 mila"}
                         other{"000 mila"}
                     }
                     1000000{
-                        one{"0 mln"}
                         other{"0 mln"}
                     }
                     10000000{
-                        one{"00 mln"}
                         other{"00 mln"}
                     }
                     100000000{
-                        one{"000 mln"}
                         other{"000 mln"}
                     }
                     1000000000{
-                        one{"0 mld"}
                         other{"0 mld"}
                     }
                     10000000000{
-                        one{"00 mld"}
                         other{"00 mld"}
                     }
                     100000000000{
-                        one{"000 mld"}
                         other{"000 mld"}
                     }
                     1000000000000{
-                        one{"0 bln"}
                         other{"0 bln"}
                     }
                     10000000000000{
-                        one{"00 bln"}
                         other{"00 bln"}
                     }
                     100000000000000{
-                        one{"000 bln"}
                         other{"000 bln"}
                     }
                 }
@@ -245,7 +222,6 @@ vec{
                     h{"h – h B"}
                 }
                 Bhm{
-                    B{"h:mm B – h:mm B"}
                     h{"h:mm – h:mm B"}
                     m{"h:mm – h:mm B"}
                 }
@@ -380,7 +356,6 @@ vec{
                 MEd{"E dd/MM"}
                 MMMEd{"E d MMM"}
                 MMMMW{
-                    one{"W'ª' 'setemana' 'de' MMMM"}
                     other{"W'ª' 'setemana' 'de' MMMM"}
                 }
                 MMMMd{"d MMMM"}
@@ -398,7 +373,6 @@ vec{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    one{"w'ª' 'setemana' 'de''l' Y"}
                     other{"w'ª' 'setemana' 'de''l' Y"}
                 }
             }
@@ -539,7 +513,6 @@ vec{
                     d{"d – d"}
                 }
                 h{
-                    a{"h a – h a"}
                     h{"h – h a"}
                 }
                 hm{
@@ -623,20 +596,6 @@ vec{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        "jen",
-                        "feb",
-                        "mar",
-                        "apr",
-                        "maj",
-                        "jug",
-                        "luj",
-                        "ago",
-                        "set",
-                        "oto",
-                        "nov",
-                        "dez",
-                    }
                     narrow{
                         "J",
                         "F",
@@ -650,20 +609,6 @@ vec{
                         "O",
                         "N",
                         "D",
-                    }
-                    wide{
-                        "jenaro",
-                        "febraro",
-                        "marso",
-                        "aprile",
-                        "majo",
-                        "jugno",
-                        "lujo",
-                        "agosto",
-                        "setenbre",
-                        "otobre",
-                        "novenbre",
-                        "dezenbre",
                     }
                 }
             }
@@ -695,7 +640,6 @@ vec{
             }
             relativeTime{
                 future{
-                    one{"tenpo {0} dì"}
                     other{"tenpo {0} dì"}
                 }
                 past{
@@ -706,34 +650,9 @@ vec{
         }
         day-narrow{
             dn{"d"}
-            relativeTime{
-                future{
-                    one{"tenpo {0} dì"}
-                    other{"tenpo {0} dì"}
-                }
-                past{
-                    one{"che’l ze {0} dì"}
-                    other{"che i ze {0} dì"}
-                }
-            }
-        }
-        day-short{
-            relativeTime{
-                future{
-                    one{"tenpo {0} dì"}
-                    other{"tenpo {0} dì"}
-                }
-                past{
-                    one{"che’l ze {0} dì"}
-                    other{"che i ze {0} dì"}
-                }
-            }
         }
         dayOfYear{
             dn{"dì de l’ano"}
-        }
-        dayOfYear-narrow{
-            dn{"dì/ano"}
         }
         dayOfYear-short{
             dn{"dì/ano"}
@@ -752,29 +671,11 @@ vec{
             }
             relativeTime{
                 future{
-                    one{"tenpo {0} vènare"}
                     other{"tenpo {0} vènare"}
                 }
                 past{
                     one{"che’l ze {0} vènare"}
                     other{"che i ze {0} vènare"}
-                }
-            }
-        }
-        fri-narrow{
-            relative{
-                "-1"{"vèn pasà"}
-                "0"{"‘sto vèn"}
-                "1"{"vèn che vien"}
-            }
-            relativeTime{
-                future{
-                    one{"tenpo {0} vèn"}
-                    other{"tenpo {0} vèn"}
-                }
-                past{
-                    one{"che’l ze {0} vèn"}
-                    other{"che i ze {0} vèn"}
                 }
             }
         }
@@ -813,9 +714,6 @@ vec{
         }
         hour-narrow{
             dn{"o"}
-            relative{
-                "0"{"‘sta o"}
-            }
             relativeTime{
                 future{
                     one{"tenpo {0} o"}
@@ -824,21 +722,6 @@ vec{
                 past{
                     one{"che la ze {0} o"}
                     other{"che le ze {0} o"}
-                }
-            }
-        }
-        hour-short{
-            relative{
-                "0"{"‘sta ora"}
-            }
-            relativeTime{
-                future{
-                    one{"tenpo {0} ora"}
-                    other{"tenpo {0} ore"}
-                }
-                past{
-                    one{"che la ze {0} ora"}
-                    other{"che le ze {0} ore"}
                 }
             }
         }
@@ -860,9 +743,6 @@ vec{
         }
         minute-narrow{
             dn{"m"}
-            relative{
-                "0"{"‘sto m"}
-            }
             relativeTime{
                 future{
                     one{"tenpo {0} m"}
@@ -876,9 +756,6 @@ vec{
         }
         minute-short{
             dn{"men"}
-            relative{
-                "0"{"‘sto men"}
-            }
             relativeTime{
                 future{
                     one{"tenpo {0} men"}
@@ -898,29 +775,11 @@ vec{
             }
             relativeTime{
                 future{
-                    one{"tenpo {0} luni"}
                     other{"tenpo {0} luni"}
                 }
                 past{
                     one{"che’l ze {0} luni"}
                     other{"che i ze {0} luni"}
-                }
-            }
-        }
-        mon-narrow{
-            relative{
-                "-1"{"lun pasà"}
-                "0"{"‘sto lun"}
-                "1"{"lun che vien"}
-            }
-            relativeTime{
-                future{
-                    one{"tenpo {0} lun"}
-                    other{"tenpo {0} lun"}
-                }
-                past{
-                    one{"che’l ze {0} lun"}
-                    other{"che i ze {0} lun"}
                 }
             }
         }
@@ -960,33 +819,9 @@ vec{
             }
         }
         month-narrow{
-            dn{"meze"}
             relative{
                 "-1"{"meze pasà"}
-                "0"{"‘sto meze"}
                 "1"{"meze che vien"}
-            }
-            relativeTime{
-                future{
-                    one{"tenpo {0} meze"}
-                    other{"tenpo {0} mezi"}
-                }
-                past{
-                    one{"che’l ze {0} meze"}
-                    other{"che i ze {0} mezi"}
-                }
-            }
-        }
-        month-short{
-            relativeTime{
-                future{
-                    one{"tenpo {0} meze"}
-                    other{"tenpo {0} mezi"}
-                }
-                past{
-                    one{"che’l ze {0} meze"}
-                    other{"che i ze {0} mezi"}
-                }
             }
         }
         quarter{
@@ -1007,30 +842,8 @@ vec{
                 }
             }
         }
-        quarter-narrow{
-            relative{
-                "-1"{"trim pasà"}
-                "0"{"‘sto trim"}
-                "1"{"trim che vien"}
-            }
-            relativeTime{
-                future{
-                    one{"tenpo {0} trim"}
-                    other{"tenpo {0} trim"}
-                }
-                past{
-                    one{"che’l ze {0} trim"}
-                    other{"che i ze {0} trim"}
-                }
-            }
-        }
         quarter-short{
             dn{"trim"}
-            relative{
-                "-1"{"el trim pasà"}
-                "0"{"‘sto trim"}
-                "1"{"el trim che vien"}
-            }
             relativeTime{
                 future{
                     one{"tenpo {0} trim"}
@@ -1056,23 +869,6 @@ vec{
                 past{
                     one{"che’l ze {0} sabo"}
                     other{"che i ze {0} sabi"}
-                }
-            }
-        }
-        sat-narrow{
-            relative{
-                "-1"{"sab pasà"}
-                "0"{"‘sto sab"}
-                "1"{"sab che vien"}
-            }
-            relativeTime{
-                future{
-                    one{"tenpo {0} sab"}
-                    other{"tenpo {0} sab"}
-                }
-                past{
-                    one{"che’l ze {0} sab"}
-                    other{"che i ze {0} sab"}
                 }
             }
         }
@@ -1111,9 +907,6 @@ vec{
         }
         second-narrow{
             dn{"s"}
-            relative{
-                "0"{"deso"}
-            }
             relativeTime{
                 future{
                     one{"tenpo {0} s"}
@@ -1127,9 +920,6 @@ vec{
         }
         second-short{
             dn{"seg"}
-            relative{
-                "0"{"deso"}
-            }
             relativeTime{
                 future{
                     one{"tenpo {0} seg"}
@@ -1158,23 +948,6 @@ vec{
                 }
             }
         }
-        sun-narrow{
-            relative{
-                "-1"{"dom pasada"}
-                "0"{"‘sta dom"}
-                "1"{"dom che vien"}
-            }
-            relativeTime{
-                future{
-                    one{"tenpo {0} dom"}
-                    other{"tenpo {0} dom"}
-                }
-                past{
-                    one{"che la ze {0} dom"}
-                    other{"che le ze {0} dom"}
-                }
-            }
-        }
         sun-short{
             relative{
                 "-1"{"dom pasada"}
@@ -1200,29 +973,11 @@ vec{
             }
             relativeTime{
                 future{
-                    one{"tenpo {0} zoba"}
                     other{"tenpo {0} zoba"}
                 }
                 past{
                     one{"che’l ze {0} zoba"}
                     other{"che i ze {0} zoba"}
-                }
-            }
-        }
-        thu-narrow{
-            relative{
-                "-1"{"zob pasà"}
-                "0"{"‘sto zob"}
-                "1"{"zob che vien"}
-            }
-            relativeTime{
-                future{
-                    one{"tenpo {0} zob"}
-                    other{"tenpo {0} zob"}
-                }
-                past{
-                    one{"che’l ze {0} zob"}
-                    other{"che i ze {0} zob"}
                 }
             }
         }
@@ -1251,29 +1006,11 @@ vec{
             }
             relativeTime{
                 future{
-                    one{"tenpo {0} marti"}
                     other{"tenpo {0} marti"}
                 }
                 past{
                     one{"che’l ze {0} marti"}
                     other{"che i ze {0} marti"}
-                }
-            }
-        }
-        tue-narrow{
-            relative{
-                "-1"{"mar pasà"}
-                "0"{"‘sto mar"}
-                "1"{"mar che vien"}
-            }
-            relativeTime{
-                future{
-                    one{"tenpo {0} mar"}
-                    other{"tenpo {0} mar"}
-                }
-                past{
-                    one{"che’l ze {0} mar"}
-                    other{"che i ze {0} mar"}
                 }
             }
         }
@@ -1302,29 +1039,11 @@ vec{
             }
             relativeTime{
                 future{
-                    one{"tenpo {0} mèrcore"}
                     other{"tenpo {0} mèrcore"}
                 }
                 past{
                     one{"che’l ze {0} mèrcore"}
                     other{"che i ze {0} mèrcore"}
-                }
-            }
-        }
-        wed-narrow{
-            relative{
-                "-1"{"mèr pasà"}
-                "0"{"‘sto mèr"}
-                "1"{"mèr che vien"}
-            }
-            relativeTime{
-                future{
-                    one{"tenpo {0} mèr"}
-                    other{"tenpo {0} mèr"}
-                }
-                past{
-                    one{"che’l ze {0} mèr"}
-                    other{"che i ze {0} mèr"}
                 }
             }
         }
@@ -1367,19 +1086,7 @@ vec{
         week-narrow{
             relative{
                 "-1"{"set pasada"}
-                "0"{"‘sta set"}
                 "1"{"set che vien"}
-            }
-            relativePeriod{"la set de’l {0}"}
-            relativeTime{
-                future{
-                    one{"tenpo {0} set"}
-                    other{"tenpo {0} set"}
-                }
-                past{
-                    one{"che la ze {0} set"}
-                    other{"che le ze {0} set"}
-                }
             }
         }
         week-short{
@@ -1404,26 +1111,17 @@ vec{
         weekOfMonth{
             dn{"setemana de’l meze"}
         }
-        weekOfMonth-narrow{
-            dn{"set/meze"}
-        }
         weekOfMonth-short{
             dn{"set/meze"}
         }
         weekday{
             dn{"dì de la setemana"}
         }
-        weekday-narrow{
-            dn{"dì/set"}
-        }
         weekday-short{
             dn{"dì/set"}
         }
         weekdayOfMonth{
             dn{"dì de’l meze"}
-        }
-        weekdayOfMonth-narrow{
-            dn{"dì/meze"}
         }
         weekdayOfMonth-short{
             dn{"dì/meze"}
@@ -1449,39 +1147,10 @@ vec{
         year-narrow{
             relative{
                 "-1"{"ano pasà"}
-                "0"{"‘st’ano"}
                 "1"{"ano che vien"}
-            }
-            relativeTime{
-                future{
-                    one{"tenpo {0} ano"}
-                    other{"tenpo {0} ani"}
-                }
-                past{
-                    one{"che’l ze {0} ano"}
-                    other{"che i ze {0} ani"}
-                }
-            }
-        }
-        year-short{
-            relativeTime{
-                future{
-                    one{"tenpo {0} ano"}
-                    other{"tenpo {0} ani"}
-                }
-                past{
-                    one{"che’l ze {0} ano"}
-                    other{"che i ze {0} ani"}
-                }
             }
         }
         zone{
-            dn{"fuzorario"}
-        }
-        zone-narrow{
-            dn{"fuzorario"}
-        }
-        zone-short{
             dn{"fuzorario"}
         }
     }
