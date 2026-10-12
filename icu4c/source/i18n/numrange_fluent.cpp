@@ -245,10 +245,10 @@ LocalizedNumberRangeFormatter::LocalizedNumberRangeFormatter(LocalizedNumberRang
         : LNF(static_cast<NFS<LNF>&&>(src)) {}
 
 LocalizedNumberRangeFormatter::LocalizedNumberRangeFormatter(NFS<LNF>&& src) noexcept
-        : NFS<LNF>(std::move(src)) {
+    : NFS<LNF>(std::move(src)) {
+    // Safely access the member from *this, which holds the moved-from state
     // Steal the compiled formatter
-    LNF&& _src = static_cast<LNF&&>(src);
-    auto* stolen = _src.fAtomicFormatter.exchange(nullptr);
+    auto* stolen = this->fAtomicFormatter.exchange(nullptr);
     delete fAtomicFormatter.exchange(stolen);
 }
 
