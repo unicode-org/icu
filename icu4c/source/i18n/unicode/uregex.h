@@ -270,10 +270,10 @@ uregex_clone(const URegularExpression *regexp, UErrorCode *status);
  *                   will remain valid until the regular expression is closed.
  * @stable ICU 3.0
  */
-U_CAPI const UChar * U_EXPORT2 
-uregex_pattern(const URegularExpression *regexp,
-                     int32_t            *patLength,
-                     UErrorCode         *status);
+U_CAPI const UChar* U_EXPORT2
+uregex_pattern(const URegularExpression* regexp U_LIFETIME_BOUND,
+               int32_t* patLength,
+               UErrorCode* status);
 
 /**
  *  Returns the source text of the pattern for this regular expression.
@@ -286,9 +286,9 @@ uregex_pattern(const URegularExpression *regexp,
  *
  * @stable ICU 4.6
  */
-U_CAPI UText * U_EXPORT2 
-uregex_patternUText(const URegularExpression *regexp,
-                          UErrorCode         *status);
+U_CAPI UText* U_EXPORT2
+uregex_patternUText(const URegularExpression* regexp U_LIFETIME_BOUND,
+                    UErrorCode* status);
 
 /**
   * Get the match mode flags that were specified when compiling this regular expression.
@@ -371,10 +371,10 @@ uregex_setUText(URegularExpression *regexp,
   *                    this regular expression.
   * @stable ICU 3.0
   */
-U_CAPI const UChar * U_EXPORT2 
-uregex_getText(URegularExpression *regexp,
-               int32_t            *textLength,
-               UErrorCode         *status);
+U_CAPI const UChar* U_EXPORT2
+uregex_getText(URegularExpression* regexp U_LIFETIME_BOUND,
+               int32_t* textLength,
+               UErrorCode* status);
 
 /**
   *  Get the subject text that is currently associated with this 
@@ -392,10 +392,10 @@ uregex_getText(URegularExpression *regexp,
   *
   * @stable ICU 4.6
   */
-U_CAPI UText * U_EXPORT2 
-uregex_getUText(URegularExpression *regexp,
-                UText              *dest,
-                UErrorCode         *status);
+U_CAPI UText* U_EXPORT2
+uregex_getUText(URegularExpression* regexp,
+                UText* dest U_LIFETIME_BOUND,
+                UErrorCode* status);
 
 /**
   *  Set the subject text string upon which the regular expression is looking for matches
@@ -703,12 +703,12 @@ uregex_group(URegularExpression *regexp,
   *
   *   @stable ICU 4.6
   */
-U_CAPI UText * U_EXPORT2 
-uregex_groupUText(URegularExpression *regexp,
-                  int32_t             groupNum,
-                  UText              *dest,
-                  int64_t            *groupLength,
-                  UErrorCode         *status);
+U_CAPI UText* U_EXPORT2
+uregex_groupUText(URegularExpression* regexp,
+                  int32_t groupNum,
+                  UText* dest U_LIFETIME_BOUND,
+                  int64_t* groupLength,
+                  UErrorCode* status);
 
 /**
   *   Returns the index in the input string of the start of the text matched by the
@@ -1111,11 +1111,11 @@ uregex_replaceAll(URegularExpression    *regexp,
   *
   *    @stable ICU 4.6
   */
-U_CAPI UText * U_EXPORT2 
-uregex_replaceAllUText(URegularExpression *regexp,
-                       UText              *replacement,
-                       UText              *dest,
-                       UErrorCode         *status);
+U_CAPI UText* U_EXPORT2
+uregex_replaceAllUText(URegularExpression* regexp,
+                       UText* replacement,
+                       UText* dest U_LIFETIME_BOUND,
+                       UErrorCode* status);
 
 /**
   *    Replaces the first substring of the input that matches the pattern
@@ -1170,11 +1170,11 @@ uregex_replaceFirst(URegularExpression  *regexp,
   *
   *    @stable ICU 4.6
   */
-U_CAPI UText * U_EXPORT2 
-uregex_replaceFirstUText(URegularExpression *regexp,
-                         UText              *replacement,
-                         UText              *dest,
-                         UErrorCode         *status);
+U_CAPI UText* U_EXPORT2
+uregex_replaceFirstUText(URegularExpression* regexp,
+                         UText* replacement,
+                         UText* dest U_LIFETIME_BOUND,
+                         UErrorCode* status);
 
 /**
   *   Implements a replace operation intended to be used as part of an
@@ -1306,10 +1306,10 @@ uregex_appendTail(URegularExpression    *regexp,
   *
   *   @stable ICU 4.6
   */
-U_CAPI UText * U_EXPORT2 
-uregex_appendTailUText(URegularExpression    *regexp,
-                       UText                 *dest,
-                       UErrorCode            *status);
+U_CAPI UText* U_EXPORT2
+uregex_appendTailUText(URegularExpression* regexp,
+                       UText* dest U_LIFETIME_BOUND,
+                       UErrorCode* status);
 
  /**
    * Split a string into fields.  Somewhat like split() from Perl.

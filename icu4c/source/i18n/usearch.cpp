@@ -429,7 +429,8 @@ inline void initialize(UStringSearch *strsrch, UErrorCode *status)
 #if !UCONFIG_NO_BREAK_ITERATION
 // If the caller provided a character breakiterator we'll return that,
 // otherwise we lazily create the internal break iterator. 
-static UBreakIterator* getBreakIterator(UStringSearch *strsrch, UErrorCode &status)
+static UBreakIterator* getBreakIterator(UStringSearch* strsrch U_LIFETIME_BOUND,
+                                        UErrorCode& status)
 {
     if (U_FAILURE(status)) {
         return nullptr;
@@ -520,13 +521,13 @@ inline UBool checkIdentical(const UStringSearch *strsrch, int32_t start, int32_t
 
 // constructors and destructor -------------------------------------------
 
-U_CAPI UStringSearch * U_EXPORT2 usearch_open(const char16_t *pattern,
-                                          int32_t         patternlength,
-                                    const char16_t       *text,
-                                          int32_t         textlength,
-                                    const char           *locale,
-                                          UBreakIterator *breakiter,
-                                          UErrorCode     *status)
+U_CAPI UStringSearch* U_EXPORT2 usearch_open(const char16_t* pattern U_LIFETIME_BOUND,
+                                             int32_t patternlength,
+                                             const char16_t* text U_LIFETIME_BOUND,
+                                             int32_t textlength,
+                                             const char* locale,
+                                             UBreakIterator* breakiter U_LIFETIME_BOUND,
+                                             UErrorCode* status)
 {
     if (U_FAILURE(*status)) {
         return nullptr;
@@ -560,14 +561,13 @@ U_CAPI UStringSearch * U_EXPORT2 usearch_open(const char16_t *pattern,
     return nullptr;
 }
 
-U_CAPI UStringSearch * U_EXPORT2 usearch_openFromCollator(
-                                  const char16_t       *pattern,
-                                        int32_t         patternlength,
-                                  const char16_t       *text,
-                                        int32_t         textlength,
-                                  const UCollator      *collator,
-                                        UBreakIterator *breakiter,
-                                        UErrorCode     *status)
+U_CAPI UStringSearch* U_EXPORT2 usearch_openFromCollator(const char16_t* pattern U_LIFETIME_BOUND,
+                                                         int32_t patternlength,
+                                                         const char16_t* text U_LIFETIME_BOUND,
+                                                         int32_t textlength,
+                                                         const UCollator* collator U_LIFETIME_BOUND,
+                                                         UBreakIterator* breakiter U_LIFETIME_BOUND,
+                                                         UErrorCode* status)
 {
     if (U_FAILURE(*status)) {
         return nullptr;
@@ -930,8 +930,8 @@ U_CAPI void U_EXPORT2 usearch_setText(      UStringSearch *strsrch,
     }
 }
 
-U_CAPI const char16_t * U_EXPORT2 usearch_getText(const UStringSearch *strsrch,
-                                                     int32_t       *length)
+U_CAPI const char16_t* U_EXPORT2 usearch_getText(const UStringSearch* strsrch U_LIFETIME_BOUND,
+                                                 int32_t* length)
 {
     if (strsrch) {
         *length = strsrch->search->textLength;
@@ -995,7 +995,7 @@ U_CAPI void U_EXPORT2 usearch_setCollator(      UStringSearch *strsrch,
     }
 }
 
-U_CAPI UCollator * U_EXPORT2 usearch_getCollator(const UStringSearch *strsrch)
+U_CAPI UCollator* U_EXPORT2 usearch_getCollator(const UStringSearch* strsrch U_LIFETIME_BOUND)
 {
     if (strsrch) {
         return (UCollator *)strsrch->collator;
@@ -1028,8 +1028,8 @@ U_CAPI void U_EXPORT2 usearch_setPattern(      UStringSearch *strsrch,
 }
 
 U_CAPI const char16_t* U_EXPORT2
-usearch_getPattern(const UStringSearch *strsrch,
-                   int32_t             *length)
+usearch_getPattern(const UStringSearch* strsrch U_LIFETIME_BOUND,
+                   int32_t* length)
 {
     if (strsrch) {
         *length = strsrch->pattern.textLength;
@@ -1383,8 +1383,8 @@ struct CEIBuffer {
 
                CEIBuffer(UStringSearch *ss, UErrorCode *status);
                ~CEIBuffer();
-   const CEI   *get(int32_t index);
-   const CEI   *getPrevious(int32_t index);
+   const CEI* get(int32_t index) U_LIFETIME_BOUND;
+   const CEI* getPrevious(int32_t index) U_LIFETIME_BOUND;
 };
 
 
@@ -1437,7 +1437,7 @@ CEIBuffer::~CEIBuffer() {
 //   where n is the largest index to have been fetched by some previous call to this function.
 //   The CE value will be UCOL__PROCESSED_NULLORDER at end of input.
 //
-const CEI *CEIBuffer::get(int32_t index) {
+const CEI* CEIBuffer::get(int32_t index) U_LIFETIME_BOUND {
     int i = index % bufSize;
 
     if (index>=firstIx && index<limitIx) {
@@ -1480,7 +1480,7 @@ const CEI *CEIBuffer::get(int32_t index) {
 //   where n is the largest index to have been fetched by some previous call to this function.
 //   The CE value will be UCOL__PROCESSED_NULLORDER at end of input.
 //
-const CEI *CEIBuffer::getPrevious(int32_t index) {
+const CEI* CEIBuffer::getPrevious(int32_t index) U_LIFETIME_BOUND {
     int i = index % bufSize;
 
     if (index>=firstIx && index<limitIx) {

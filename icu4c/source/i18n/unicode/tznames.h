@@ -210,7 +210,9 @@ public:
      * @return A reference to the result.
      * @stable ICU 50
      */
-    virtual UnicodeString& getMetaZoneID(const UnicodeString& tzID, UDate date, UnicodeString& mzID) const = 0;
+    virtual UnicodeString& getMetaZoneID(const UnicodeString& tzID,
+                                         UDate date,
+                                         UnicodeString& mzID U_LIFETIME_BOUND) const = 0;
 
     /**
      * Returns the reference zone ID for the given meta zone ID for the region.
@@ -228,7 +230,9 @@ public:
      * @return A reference to the result.
      * @stable ICU 50
      */
-    virtual UnicodeString& getReferenceZoneID(const UnicodeString& mzID, const char* region, UnicodeString& tzID) const = 0;
+    virtual UnicodeString& getReferenceZoneID(const UnicodeString& mzID,
+                                              const char* region,
+                                              UnicodeString& tzID U_LIFETIME_BOUND) const = 0;
 
     /**
      * Returns the display name of the meta zone.
@@ -240,7 +244,9 @@ public:
      * @return A reference to the result.
      * @stable ICU 50
      */
-    virtual UnicodeString& getMetaZoneDisplayName(const UnicodeString& mzID, UTimeZoneNameType type, UnicodeString& name) const = 0;
+    virtual UnicodeString& getMetaZoneDisplayName(const UnicodeString& mzID,
+                                                  UTimeZoneNameType type,
+                                                  UnicodeString& name U_LIFETIME_BOUND) const = 0;
 
     /**
      * Returns the display name of the time zone. Unlike {@link #getDisplayName},
@@ -252,7 +258,9 @@ public:
      * @return A reference to the result.
      * @stable ICU 50
      */
-    virtual UnicodeString& getTimeZoneDisplayName(const UnicodeString& tzID, UTimeZoneNameType type, UnicodeString& name) const = 0;
+    virtual UnicodeString& getTimeZoneDisplayName(const UnicodeString& tzID,
+                                                  UTimeZoneNameType type,
+                                                  UnicodeString& name U_LIFETIME_BOUND) const = 0;
 
     /**
      * Returns the exemplar location name for the given time zone. When this object does not have a localized location
@@ -273,7 +281,8 @@ public:
      * @return A reference to the result.
      * @stable ICU 50
      */
-    virtual UnicodeString& getExemplarLocationName(const UnicodeString& tzID, UnicodeString& name) const;
+    virtual UnicodeString& getExemplarLocationName(const UnicodeString& tzID,
+                                                   UnicodeString& name U_LIFETIME_BOUND) const;
 
     /**
      * Returns the display name of the time zone at the given date.
@@ -290,7 +299,10 @@ public:
      * @return A reference to the result.
      * @stable ICU 50
      */
-    virtual UnicodeString& getDisplayName(const UnicodeString& tzID, UTimeZoneNameType type, UDate date, UnicodeString& name) const;
+    virtual UnicodeString& getDisplayName(const UnicodeString& tzID,
+                                          UTimeZoneNameType type,
+                                          UDate date,
+                                          UnicodeString& name U_LIFETIME_BOUND) const;
 
     /**
      * @internal ICU internal only, for specific users only until proposed publicly.
@@ -391,7 +403,7 @@ public:
     private:
         UVector* fMatches;  // vector of MatchEntry
 
-        UVector* matches(UErrorCode& status);
+        UVector* matches(UErrorCode& status) U_LIFETIME_BOUND;
     };
 
     /**

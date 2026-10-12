@@ -792,8 +792,8 @@ Calendar::Calendar(const Calendar &source)
 
 // -------------------------------------
 
-Calendar &
-Calendar::operator=(const Calendar &right)
+Calendar&
+Calendar::operator=(const Calendar& right) U_LIFETIME_BOUND
 {
     if (this != &right) {
         uprv_arrayCopy(right.fFields, fFields, UCAL_FIELD_COUNT);
@@ -2445,7 +2445,7 @@ Calendar::setTimeZone(const TimeZone& zone)
 // -------------------------------------
 
 const TimeZone&
-Calendar::getTimeZone() const
+Calendar::getTimeZone() const U_LIFETIME_BOUND
 {
     U_ASSERT(fZone != nullptr);
     return *fZone;
@@ -4232,8 +4232,8 @@ Calendar::getLocale(ULocDataLocaleType type, UErrorCode& status) const {
     return LocaleBased::getLocale(validLocale, actualLocale, type, status);
 }
 
-const char *
-Calendar::getLocaleID(ULocDataLocaleType type, UErrorCode& status) const {
+const char*
+Calendar::getLocaleID(ULocDataLocaleType type, UErrorCode& status) const U_LIFETIME_BOUND {
     return LocaleBased::getLocaleID(validLocale, actualLocale, type, status);
 }
 
@@ -4292,7 +4292,7 @@ int32_t Calendar::internalGetMonth(int32_t defaultValue, UErrorCode& status) con
 }
 
 BasicTimeZone*
-Calendar::getBasicTimeZone() const {
+Calendar::getBasicTimeZone() const U_LIFETIME_BOUND {
     if (dynamic_cast<const OlsonTimeZone *>(fZone) != nullptr
         || dynamic_cast<const SimpleTimeZone *>(fZone) != nullptr
         || dynamic_cast<const RuleBasedTimeZone *>(fZone) != nullptr

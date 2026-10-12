@@ -167,7 +167,7 @@ Transliterator* Transliterator::clone() const {
 /**
  * Assignment operator.
  */
-Transliterator& Transliterator::operator=(const Transliterator& other) {
+Transliterator& Transliterator::operator=(const Transliterator& other) U_LIFETIME_BOUND {
     if (this == &other) { return *this; }  // self-assignment: no-op
     ID = other.ID;
     // NUL-terminate the ID string
@@ -698,7 +698,7 @@ void Transliterator::setMaximumContextLength(int32_t maxContextLength) {
  * @see #registerInstance
  * @see #getAvailableIDs
  */
-const UnicodeString& Transliterator::getID() const {
+const UnicodeString& Transliterator::getID() const U_LIFETIME_BOUND {
     return ID;
 }
 
@@ -708,7 +708,7 @@ const UnicodeString& Transliterator::getID() const {
  * #getDisplayName(Locale)} for details.
  */
 UnicodeString& U_EXPORT2 Transliterator::getDisplayName(const UnicodeString& ID,
-                                              UnicodeString& result) {
+                                                        UnicodeString& result U_LIFETIME_BOUND) {
     return getDisplayName(ID, Locale::getDefault(), result);
 }
 
@@ -731,8 +731,8 @@ UnicodeString& U_EXPORT2 Transliterator::getDisplayName(const UnicodeString& ID,
  * @see java.text.MessageFormat
  */
 UnicodeString& U_EXPORT2 Transliterator::getDisplayName(const UnicodeString& id,
-                                              const Locale& inLocale,
-                                              UnicodeString& result) {
+                                                        const Locale& inLocale,
+                                                        UnicodeString& result U_LIFETIME_BOUND) {
     UErrorCode status = U_ZERO_ERROR;
 
     ResourceBundle bundle(U_ICUDATA_TRANSLIT, inLocale, status);
@@ -832,7 +832,7 @@ UnicodeString& U_EXPORT2 Transliterator::getDisplayName(const UnicodeString& id,
  * if this transliterator uses no filter.  Caller musn't delete
  * the result!
  */
-const UnicodeFilter* Transliterator::getFilter() const {
+const UnicodeFilter* Transliterator::getFilter() const U_LIFETIME_BOUND {
     return filter;
 }
 
@@ -1155,7 +1155,7 @@ Transliterator::createFromRules(const UnicodeString& ID,
     return t;
 }
 
-UnicodeString& Transliterator::toRules(UnicodeString& rulesSource,
+UnicodeString& Transliterator::toRules(UnicodeString& rulesSource U_LIFETIME_BOUND,
                                        UBool escapeUnprintable) const {
     // The base class implementation of toRules munges the ID into
     // the correct format.  That is: foo => ::foo
@@ -1183,7 +1183,8 @@ int32_t Transliterator::countElements() const {
     return ct != nullptr ? ct->getCount() : 0;
 }
 
-const Transliterator& Transliterator::getElement(int32_t index, UErrorCode& ec) const {
+const Transliterator& Transliterator::getElement(int32_t index,
+                                                 UErrorCode& ec) const U_LIFETIME_BOUND {
     if (U_FAILURE(ec)) {
         return *this;
     }
@@ -1197,7 +1198,7 @@ const Transliterator& Transliterator::getElement(int32_t index, UErrorCode& ec) 
     }
 }
 
-UnicodeSet& Transliterator::getSourceSet(UnicodeSet& result) const {
+UnicodeSet& Transliterator::getSourceSet(UnicodeSet& result U_LIFETIME_BOUND) const {
     handleGetSourceSet(result);
     if (filter != nullptr) {
         UnicodeSet* filterSet = dynamic_cast<UnicodeSet*>(filter);
@@ -1225,7 +1226,7 @@ void Transliterator::handleGetSourceSet(UnicodeSet& result) const {
     result.clear();
 }
 
-UnicodeSet& Transliterator::getTargetSet(UnicodeSet& result) const {
+UnicodeSet& Transliterator::getTargetSet(UnicodeSet& result U_LIFETIME_BOUND) const {
     return result.clear();
 }
 
@@ -1369,8 +1370,8 @@ int32_t U_EXPORT2 Transliterator::countAvailableSources() {
     return HAVE_REGISTRY(ec) ? _countAvailableSources() : 0;
 }
 
-UnicodeString& U_EXPORT2 Transliterator::getAvailableSource(int32_t index,
-                                                  UnicodeString& result) {
+UnicodeString& U_EXPORT2
+Transliterator::getAvailableSource(int32_t index, UnicodeString& result U_LIFETIME_BOUND) {
     Mutex lock(&registryMutex);
     UErrorCode ec = U_ZERO_ERROR;
     if (HAVE_REGISTRY(ec)) {
@@ -1385,9 +1386,10 @@ int32_t U_EXPORT2 Transliterator::countAvailableTargets(const UnicodeString& sou
     return HAVE_REGISTRY(ec) ? _countAvailableTargets(source) : 0;
 }
 
-UnicodeString& U_EXPORT2 Transliterator::getAvailableTarget(int32_t index,
-                                                  const UnicodeString& source,
-                                                  UnicodeString& result) {
+UnicodeString& U_EXPORT2
+Transliterator::getAvailableTarget(int32_t index,
+                                   const UnicodeString& source,
+                                   UnicodeString& result U_LIFETIME_BOUND) {
     Mutex lock(&registryMutex);
     UErrorCode ec = U_ZERO_ERROR;
     if (HAVE_REGISTRY(ec)) {
@@ -1403,10 +1405,11 @@ int32_t U_EXPORT2 Transliterator::countAvailableVariants(const UnicodeString& so
     return HAVE_REGISTRY(ec) ? _countAvailableVariants(source, target) : 0;
 }
 
-UnicodeString& U_EXPORT2 Transliterator::getAvailableVariant(int32_t index,
-                                                   const UnicodeString& source,
-                                                   const UnicodeString& target,
-                                                   UnicodeString& result) {
+UnicodeString& U_EXPORT2
+Transliterator::getAvailableVariant(int32_t index,
+                                    const UnicodeString& source,
+                                    const UnicodeString& target,
+                                    UnicodeString& result U_LIFETIME_BOUND) {
     Mutex lock(&registryMutex);
     UErrorCode ec = U_ZERO_ERROR;
     if (HAVE_REGISTRY(ec)) {
@@ -1420,7 +1423,7 @@ int32_t Transliterator::_countAvailableSources() {
 }
 
 UnicodeString& Transliterator::_getAvailableSource(int32_t index,
-                                                  UnicodeString& result) {
+                                                   UnicodeString& result U_LIFETIME_BOUND) {
     return registry->getAvailableSource(index, result);
 }
 
@@ -1429,8 +1432,8 @@ int32_t Transliterator::_countAvailableTargets(const UnicodeString& source) {
 }
 
 UnicodeString& Transliterator::_getAvailableTarget(int32_t index,
-                                                  const UnicodeString& source,
-                                                  UnicodeString& result) {
+                                                   const UnicodeString& source,
+                                                   UnicodeString& result U_LIFETIME_BOUND) {
     return registry->getAvailableTarget(index, source, result);
 }
 
@@ -1440,9 +1443,9 @@ int32_t Transliterator::_countAvailableVariants(const UnicodeString& source,
 }
 
 UnicodeString& Transliterator::_getAvailableVariant(int32_t index,
-                                                   const UnicodeString& source,
-                                                   const UnicodeString& target,
-                                                   UnicodeString& result) {
+                                                    const UnicodeString& source,
+                                                    const UnicodeString& target,
+                                                    UnicodeString& result U_LIFETIME_BOUND) {
     return registry->getAvailableVariant(index, source, target, result);
 }
 

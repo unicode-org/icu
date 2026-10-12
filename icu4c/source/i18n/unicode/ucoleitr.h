@@ -113,11 +113,11 @@ typedef struct UCollationElements UCollationElements;
  * @return a struct containing collation element information
  * @stable ICU 2.0
  */
-U_CAPI UCollationElements* U_EXPORT2 
-ucol_openElements(const UCollator  *coll,
-                  const UChar      *text,
-                        int32_t    textLength,
-                        UErrorCode *status);
+U_CAPI UCollationElements* U_EXPORT2
+ucol_openElements(const UCollator* coll U_LIFETIME_BOUND,
+                  const UChar* text U_LIFETIME_BOUND,
+                  int32_t textLength,
+                  UErrorCode* status);
 
 /**
  * get a hash code for a key... Not very useful!

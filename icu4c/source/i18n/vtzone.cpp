@@ -997,7 +997,7 @@ VTimeZone::~VTimeZone() {
 }
 
 VTimeZone&
-VTimeZone::operator=(const VTimeZone& right) {
+VTimeZone::operator=(const VTimeZone& right) U_LIFETIME_BOUND {
     if (this == &right) {
         return *this;
     }
