@@ -214,6 +214,7 @@ void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
     TESTCASE_AUTO(Test22441Year88369);
     TESTCASE_AUTO(Test22730JapaneseOverflow);
     TESTCASE_AUTO(Test22730CopticOverflow);
+    TESTCASE_AUTO(TestBug23277);
     TESTCASE_AUTO(Test22962ComputeJulianDayOverflow);
 
     TESTCASE_AUTO(TestAddOverflow);
@@ -6154,6 +6155,29 @@ void CalendarTest::Test22730CopticOverflow() {
     calendar->set(UCAL_JULIAN_DAY, -2147456654);
     calendar->roll(UCAL_ORDINAL_MONTH, 6910543, status);
     assertEquals("status return without overflow", status, U_ILLEGAL_ARGUMENT_ERROR);
+}
+
+void CalendarTest::TestBug23277() {
+    IcuTestErrorCode status(*this, "TestBug23277");
+    LocalPointer<Calendar> cal(
+        Calendar::createInstance(Locale("en-u-ca-coptic"), status),
+        status);
+    if (failure(status, "Calendar::createInstance en-u-ca-coptic")) return;
+
+    cal->set(2000, 0, 1); // 2000 CE (around 1716 AM)
+    assertEquals("Era for positive extended year should be CE (1)",
+                 (int32_t)CopticCalendar::CE, cal->get(UCAL_ERA, status));
+    assertEquals("Minimum era should be CE (1)",
+                 (int32_t)CopticCalendar::CE, cal->getMinimum(UCAL_ERA));
+    assertEquals("Maximum era should be CE (1)",
+                 (int32_t)CopticCalendar::CE, cal->getMaximum(UCAL_ERA));
+
+    cal->clear();
+    cal->set(UCAL_EXTENDED_YEAR, -283); // Year -283 AM (Julian year 1 CE)
+    assertEquals("Era for negative extended year should be CE (1) in single-era model",
+                 (int32_t)CopticCalendar::CE, cal->get(UCAL_ERA, status));
+    assertEquals("Year for negative extended year should equal extended year in single-era model",
+                 -283, cal->get(UCAL_YEAR, status));
 }
 
 void CalendarTest::Test22962ComputeJulianDayOverflow() {
