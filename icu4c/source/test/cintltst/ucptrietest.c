@@ -1644,6 +1644,38 @@ static void ShortAllSameBlocksTest(void) {
     umutablecptrie_close(mutableTrie);
 }
 
+static void
+MalformedSerializedCPTrieTest(void) {
+    /* Crafted 24-byte serialized UCPTrie with index entries pointing outside
+       the data array. Before the fix, ucptrie_get() would read 2 bytes at
+       an attacker-controlled offset past the allocation. */
+    static const uint8_t data[] = {
+        0x33, 0x69, 0x72, 0x54, 0x00, 0x0f, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0xce, 0xce, 0xce,
+        0xce, 0xce, 0x00, 0x00, 0x0a, 0x00, 0x00, 0x28
+    };
+    UErrorCode status = U_ZERO_ERROR;
+    int32_t actualLength = 0;
+    UCPTrie *trie = ucptrie_openFromBinary(
+        UCPTRIE_TYPE_FAST, UCPTRIE_VALUE_BITS_16,
+        data, sizeof(data), &actualLength, &status);
+    if (U_SUCCESS(status)) {
+        log_err("ucptrie_openFromBinary(malformed) succeeded, expected U_INVALID_FORMAT_ERROR\n");
+        ucptrie_close(trie);
+    }
+
+    /* Truncated data: less than header size. */
+    static const uint8_t shortData[] = {0x33, 0x69, 0x72, 0x54, 0x00, 0x0f};
+    status = U_ZERO_ERROR;
+    trie = ucptrie_openFromBinary(
+        UCPTRIE_TYPE_FAST, UCPTRIE_VALUE_BITS_16,
+        shortData, sizeof(shortData), &actualLength, &status);
+    if (U_SUCCESS(status)) {
+        log_err("ucptrie_openFromBinary(truncated) succeeded, expected U_INVALID_FORMAT_ERROR\n");
+        ucptrie_close(trie);
+    }
+}
+
 void
 addUCPTrieTest(TestNode** root) {
     addTest(root, &TrieTestSet1, "tsutil/ucptrietest/TrieTestSet1");
@@ -1659,4 +1691,5 @@ addUCPTrieTest(TestNode** root) {
     addTest(root, &TrieTestGetRangesFixedSurr, "tsutil/ucptrietest/TrieTestGetRangesFixedSurr");
     addTest(root, &TestSmallNullBlockMatchesFast, "tsutil/ucptrietest/TestSmallNullBlockMatchesFast");
     addTest(root, &ShortAllSameBlocksTest, "tsutil/ucptrietest/ShortAllSameBlocksTest");
+    addTest(root, &MalformedSerializedCPTrieTest, "tsutil/ucptrietest/MalformedSerializedCPTrieTest");
 }

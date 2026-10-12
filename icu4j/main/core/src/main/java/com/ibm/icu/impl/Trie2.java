@@ -137,6 +137,22 @@ public abstract class Trie2 implements Iterable<Trie2.Range> {
             This.index2NullOffset = header.index2NullOffset;
             This.dataNullOffset = header.dataNullOffset;
             This.highStart = header.shiftedHighStart << UTRIE2_SHIFT_1;
+
+            // Validate lengths and offsets.
+            if (This.indexLength <= 0 || This.dataLength <= 0
+                    || This.dataLength <= UTRIE2_BAD_UTF8_DATA_OFFSET) {
+                throw new IOException("UTrie2 serialized format error: invalid lengths.");
+            }
+            if (width == ValueWidth.BITS_16) {
+                if (This.dataNullOffset >= This.indexLength + This.dataLength) {
+                    throw new IOException("UTrie2 serialized format error: dataNullOffset out of range.");
+                }
+            } else {
+                if (This.dataNullOffset >= This.dataLength) {
+                    throw new IOException("UTrie2 serialized format error: dataNullOffset out of range.");
+                }
+            }
+
             This.highValueIndex = This.dataLength - UTRIE2_DATA_GRANULARITY;
             if (width == ValueWidth.BITS_16) {
                 This.highValueIndex += This.indexLength;
