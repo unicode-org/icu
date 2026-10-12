@@ -644,12 +644,17 @@ BurmeseBreakEngine::BurmeseBreakEngine(DictionaryMatcher *adoptDictionary, UErro
     UTRACE_ENTRY(UTRACE_UBRK_CREATE_BREAK_ENGINE);
     UTRACE_DATA1(UTRACE_INFO, "dictbe=%s", "Mymr");
     fBeginWordSet.add(0x1000, 0x102A);      // basic consonants and independent vowels
-    fEndWordSet.applyPattern(UnicodeString(u"[[:Mymr:]&[:LineBreak=SA:]]"), status);
+    UnicodeSet burmeseWordSet(UnicodeString(u"[[:Mymr:]&[:LineBreak=SA:]]"), status);
     fMarkSet.applyPattern(UnicodeString(u"[[:Mymr:]&[:LineBreak=SA:]&[:M:]]"), status);
     fMarkSet.add(0x0020);
     if (U_SUCCESS(status)) {
-        setCharacters(fEndWordSet);
+        setCharacters(burmeseWordSet);
     }
+    fEndWordSet = burmeseWordSet;
+    // MYANMAR SIGN VIRAMA connects stacked consonants: the consonant
+    // following it belongs to the same syllable cluster, so the virama
+    // can never end a word (ICU-23329).
+    fEndWordSet.remove(0x1039);
 
     // Compact for caching.
     fMarkSet.compact();
