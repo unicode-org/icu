@@ -134,6 +134,7 @@ void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
     TESTCASE_AUTO(TestBasicConversionJapanese);
     TESTCASE_AUTO(TestBasicConversionBuddhist);
     TESTCASE_AUTO(TestBasicConversionTaiwan);
+    TESTCASE_AUTO(TestBasicConversionMyanmar);
     TESTCASE_AUTO(TestBasicConversionPersian);
     TESTCASE_AUTO(TestBasicConversionIslamic);
     TESTCASE_AUTO(TestBasicConversionIslamicTBLA);
@@ -2822,6 +2823,56 @@ void CalendarTest::TestBasicConversionTaiwan() {
         1, 111, 10, 45, 1, 1, 305, 3, 1, 0, 4, 4, 44, 51,
         323, 0, 0, 2022, 3, 2022, 2459885, 17091323, 0);
 
+}
+void CalendarTest::TestBasicConversionMyanmar() {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> myCal(icu::Calendar::createInstance(
+        *TimeZone::getGMT(), Locale("en@calendar=myanmar"), status));
+    if (U_FAILURE(status)) {
+        errln("Fail: Cannot get Myanmar calendar");
+        return;
+    }
+    assertEquals("getType", "myanmar", myCal->getType());
+
+    LocalPointer<Calendar> gCal(icu::Calendar::createInstance(
+        *TimeZone::getGMT(), Locale("en@calendar=gregorian"), status));
+    if (U_FAILURE(status)) {
+        errln("Fail: Cannot get Gregorian calendar");
+        return;
+    }
+
+    // 2024-06-12 Gregorian maps to Myanmar 1386-03-06 (month is 0-based in ICU APIs).
+    gCal->clear();
+    gCal->set(2024, UCAL_JUNE, 12);
+    UDate knownTime = gCal->getTime(status);
+    if (U_FAILURE(status)) {
+        errln("Fail: Cannot compute known Gregorian test date");
+        return;
+    }
+
+    myCal->clear();
+    myCal->setTime(knownTime, status);
+    if (U_FAILURE(status)) {
+        errln("Fail: Myanmar setTime failed");
+        return;
+    }
+
+    assertEquals("Myanmar year from known date", 1386, myCal->get(UCAL_YEAR, status));
+    assertEquals("Myanmar month from known date", 2, myCal->get(UCAL_MONTH, status));
+    assertEquals("Myanmar day from known date", 6, myCal->get(UCAL_DATE, status));
+    if (U_FAILURE(status)) {
+        errln("Fail: Myanmar get field(s) failed");
+        return;
+    }
+
+    myCal->clear();
+    myCal->set(1386, 2, 6);
+    UDate roundTrip = myCal->getTime(status);
+    if (U_FAILURE(status)) {
+        errln("Fail: Myanmar reverse conversion failed");
+        return;
+    }
+    assertEquals("Myanmar<->Gregorian roundtrip", knownTime, roundTrip);
 }
 void CalendarTest::TestBasicConversionPersian() {
     UErrorCode status = U_ZERO_ERROR;

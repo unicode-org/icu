@@ -265,6 +265,7 @@ public: // package
     void TestBasicConversionJapanese();
     void TestBasicConversionBuddhist();
     void TestBasicConversionTaiwan();
+    void TestBasicConversionMyanmar();
     void TestBasicConversionPersian();
     void TestBasicConversionIslamic();
     void TestBasicConversionIslamicTBLA();
