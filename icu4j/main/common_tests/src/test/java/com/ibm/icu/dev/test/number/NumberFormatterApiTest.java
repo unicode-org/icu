@@ -1827,7 +1827,7 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
                         + formattedNum.getOutputUnit().getIdentifier()
                         + "\"",
                 MeasureUnit.forIdentifier("stone-and-pound").equals(formattedNum.getOutputUnit()));
-        assertEquals(uTestCase, "12 st, 8.4 lb", formattedNum.toString());
+        assertEquals(uTestCase, "12 st, 8 lb", formattedNum.toString());
         {
             final Object[][] expectedFieldPositions = {
                 // // Desired output: TODO(icu-units#67)
@@ -1835,14 +1835,10 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
                 // {NumberFormat.Field.MEASURE_UNIT, 3, 5},
                 // {NumberFormat.ULISTFMT_LITERAL_FIELD, 5, 6},
                 // {NumberFormat.Field.INTEGER, 7, 8},
-                // {NumberFormat.DECIMAL_SEPARATOR_FIELD, 8, 9},
-                // {NumberFormat.FRACTION_FIELD, 9, 10},
-                // {NumberFormat.Field.MEASURE_UNIT, 11, 13}};
+                // {NumberFormat.Field.MEASURE_UNIT, 9, 11}};
 
                 // Current output: rather no fields than wrong fields
                 {NumberFormat.Field.INTEGER, 7, 8},
-                {NumberFormat.Field.DECIMAL_SEPARATOR, 8, 9},
-                {NumberFormat.Field.FRACTION, 9, 10},
             };
 
             assertNumberFieldPositions(
@@ -1854,14 +1850,14 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
                 "unit/kilogram usage/person",
                 unloc_formatter,
                 new ULocale("en-GB"),
-                "13,802 st, 7.2 lb",
-                "1,380 st, 3.5 lb",
-                "138 st, 0.35 lb",
+                "13,802 st, 7 lb",
+                "1,380 st, 4 lb",
+                "138 st, 0 lb",
                 "13 st, 11 lb",
-                "1 st, 5.3 lb",
+                "1 st, 5 lb",
                 "1 lb, 15 oz",
-                "0 lb, 3.1 oz",
-                "0 lb, 0.31 oz",
+                "0 lb, 3 oz",
+                "0 lb, 0 oz",
                 "0 lb, 0 oz");
 
         assertFormatDescending(
@@ -1870,14 +1866,14 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
                 "usage/person unit-width-narrow unit/kilogram",
                 unloc_formatter.unitWidth(UnitWidth.NARROW),
                 new ULocale("en-GB"),
-                "13,802st 7.2lb",
-                "1,380st 3.5lb",
-                "138st 0.35lb",
+                "13,802st 7lb",
+                "1,380st 4lb",
+                "138st 0lb",
                 "13st 11lb",
-                "1st 5.3lb",
+                "1st 5lb",
                 "1lb 15oz",
-                "0lb 3.1oz",
-                "0lb 0.31oz",
+                "0lb 3oz",
+                "0lb 0oz",
                 "0lb 0oz");
 
         assertFormatDescending(
@@ -1886,14 +1882,14 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
                 "usage/person unit-width-short unit/kilogram",
                 unloc_formatter.unitWidth(UnitWidth.SHORT),
                 new ULocale("en-GB"),
-                "13,802 st, 7.2 lb",
-                "1,380 st, 3.5 lb",
-                "138 st, 0.35 lb",
+                "13,802 st, 7 lb",
+                "1,380 st, 4 lb",
+                "138 st, 0 lb",
                 "13 st, 11 lb",
-                "1 st, 5.3 lb",
+                "1 st, 5 lb",
                 "1 lb, 15 oz",
-                "0 lb, 3.1 oz",
-                "0 lb, 0.31 oz",
+                "0 lb, 3 oz",
+                "0 lb, 0 oz",
                 "0 lb, 0 oz");
 
         assertFormatDescending(
@@ -1902,14 +1898,14 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
                 "usage/person unit-width-full-name unit/kilogram",
                 unloc_formatter.unitWidth(UnitWidth.FULL_NAME),
                 new ULocale("en-GB"),
-                "13,802 stone, 7.2 pounds",
-                "1,380 stone, 3.5 pounds",
-                "138 stone, 0.35 pounds",
+                "13,802 stone, 7 pounds",
+                "1,380 stone, 4 pounds",
+                "138 stone, 0 pounds",
                 "13 stone, 11 pounds",
-                "1 stone, 5.3 pounds",
+                "1 stone, 5 pounds",
                 "1 pound, 15 ounces",
-                "0 pounds, 3.1 ounces",
-                "0 pounds, 0.31 ounces",
+                "0 pounds, 3 ounces",
+                "0 pounds, 0 ounces",
                 "0 pounds, 0 ounces");
 
         assertFormatDescendingBig(
@@ -2210,6 +2206,113 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
                 new ULocale("en-US"),
                 -1,
                 "30°F");
+    }
+
+    @Test
+    public void unitUsageMixedUnits() {
+        // ICU-23558: When the unit preference has no skeleton, the lowest unit of a mixed
+        // unit is rounded to the nearest integer (UTS #35 Part 6, Mixed Units). Single units
+        // keep at least 2 significant digits.
+
+        assertFormatSingle(
+                "person-height foot-and-inch: round the inches",
+                "measure-unit/length-meter usage/person-height",
+                "unit/meter usage/person-height",
+                NumberFormatter.with().unit(MeasureUnit.METER).usage("person-height"),
+                new ULocale("en-US"),
+                1.7,
+                "5 ft, 7 in");
+
+        assertFormatSingle(
+                "person-height foot-and-inch: 0.047 inches round to 0",
+                "measure-unit/length-meter usage/person-height",
+                "unit/meter usage/person-height",
+                NumberFormatter.with().unit(MeasureUnit.METER).usage("person-height"),
+                new ULocale("en-US"),
+                1.83,
+                "6 ft, 0 in");
+
+        assertFormatSingle(
+                "person-height foot-and-inch: 11.89 inches carry into the feet",
+                "measure-unit/length-meter usage/person-height",
+                "unit/meter usage/person-height",
+                NumberFormatter.with().unit(MeasureUnit.METER).usage("person-height"),
+                new ULocale("en-US"),
+                1.826,
+                "6 ft, 0 in");
+
+        assertFormatSingle(
+                "person-height meter-and-centimeter: round the centimeters",
+                "measure-unit/length-meter usage/person-height",
+                "unit/meter usage/person-height",
+                NumberFormatter.with().unit(MeasureUnit.METER).usage("person-height"),
+                new ULocale("fr-FR"),
+                1.053,
+                "1 m et 5 cm");
+
+        assertFormatSingle(
+                "person pound-and-ounce: round the ounces",
+                "measure-unit/mass-kilogram usage/person",
+                "unit/kilogram usage/person",
+                NumberFormatter.with().unit(MeasureUnit.KILOGRAM).usage("person"),
+                new ULocale("en-HK"),
+                3.2,
+                "7 lb, 1 oz");
+
+        assertFormatSingle(
+                "media minute-and-second: round the seconds",
+                "measure-unit/duration-second usage/media",
+                "unit/second usage/media",
+                NumberFormatter.with().unit(MeasureUnit.SECOND).usage("media"),
+                new ULocale("en-US"),
+                185.5,
+                "3 min, 6 sec");
+
+        assertFormatSingle(
+                "vehicle foot-and-inch: round the inches",
+                "measure-unit/length-meter usage/vehicle",
+                "unit/meter usage/vehicle",
+                NumberFormatter.with().unit(MeasureUnit.METER).usage("vehicle"),
+                new ULocale("en-US"),
+                4.5,
+                "14 ft, 9 in");
+
+        assertFormatSingle(
+                "person-age year-person-and-month-person: round the months",
+                "measure-unit/duration-year usage/person-age",
+                "unit/year usage/person-age",
+                NumberFormatter.with().unit(MeasureUnit.YEAR).usage("person-age"),
+                new ULocale("en-US"),
+                2.04,
+                "2 yrs, 0 mths");
+
+        assertFormatSingle(
+                "person-height single unit: unchanged",
+                "measure-unit/length-meter usage/person-height",
+                "unit/meter usage/person-height",
+                NumberFormatter.with().unit(MeasureUnit.METER).usage("person-height"),
+                new ULocale("en-US"),
+                0.7,
+                "28 in");
+
+        assertFormatSingle(
+                "road single unit: keeps 2 significant digits",
+                "measure-unit/length-meter usage/road",
+                "unit/meter usage/road",
+                NumberFormatter.with().unit(MeasureUnit.METER).usage("road"),
+                new ULocale("en-US"),
+                900,
+                "0.56 mi");
+
+        assertFormatSingle(
+                "person-height foot-and-inch: an explicit precision overrides the default",
+                "measure-unit/length-meter usage/person-height .##",
+                "unit/meter usage/person-height .##",
+                NumberFormatter.with().unit(MeasureUnit.METER).usage("person-height")
+                        .precision(Precision.maxFraction(2)),
+                new ULocale("en-US"),
+                1.7,
+                "5 ft, 6.93 in");
     }
 
     @Test
