@@ -61,6 +61,7 @@ void NumberRangeFormatterTest::runIndexedTest(int32_t index, UBool exec, const c
         TESTCASE_AUTO(testCreateLNRFFromNumberingSystemInSkeleton);
         TESTCASE_AUTO(test22288_DifferentStartEndSettings);
         TESTCASE_AUTO(test23110_PercentApproximately);
+        TESTCASE_AUTO(test23539_LargeRangeError);
     TESTCASE_AUTO_END;
 }
 
@@ -1202,6 +1203,41 @@ void NumberRangeFormatterTest::test23110_PercentApproximately() {
         u"499,900% – 500,100%",
         u"~500,000%",
         u"500,000% – 500,000,000%");
+}
+
+void NumberRangeFormatterTest::test23539_LargeRangeError() {
+    IcuTestErrorCode status(*this, "test23539_LargeRangeError");
+    CurrencyUnit eur(u"EUR", status);
+    if (status.errIfFailureAndReset("CurrencyUnit EUR")) {
+        return;
+    }
+
+    LocalizedNumberRangeFormatter lnrf = NumberRangeFormatter::withLocale("bn-u-nu-mathsanb")
+        .numberFormatterBoth(
+            NumberFormatter::with()
+                .unit(eur)
+                .unitWidth(UNUM_UNIT_WIDTH_ISO_CODE)
+                .precision(Precision::integer()));
+
+    Formattable smallNeg(-1);
+    Formattable smallPos(1);
+    Formattable hugeNeg("-1e220000000", status);
+    Formattable hugePos("1e220000000", status);
+    if (status.errIfFailureAndReset("Formattable setup")) {
+        return;
+    }
+
+    lnrf.formatFormattableRange(smallNeg, hugePos, status);
+    status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
+
+    lnrf.formatFormattableRange(hugeNeg, smallPos, status);
+    status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
+
+    lnrf.formatFormattableRange(hugeNeg, hugePos, status);
+    status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
+
+    lnrf.formatFormattableRange(hugePos, hugePos, status);
+    status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
 }
 
 void  NumberRangeFormatterTest::assertFormatRange(
