@@ -2308,7 +2308,9 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
                 "person-height foot-and-inch: an explicit precision overrides the default",
                 "measure-unit/length-meter usage/person-height .##",
                 "unit/meter usage/person-height .##",
-                NumberFormatter.with().unit(MeasureUnit.METER).usage("person-height")
+                NumberFormatter.with()
+                        .unit(MeasureUnit.METER)
+                        .usage("person-height")
                         .precision(Precision.maxFraction(2)),
                 new ULocale("en-US"),
                 1.7,
