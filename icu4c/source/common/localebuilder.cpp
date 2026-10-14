@@ -462,6 +462,10 @@ Locale LocaleBuilder::build(UErrorCode& errorCode)
         return makeBogusLocale();
     }
     Locale product(locale_str.data());
+    if (product.isBogus()) {
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return makeBogusLocale();
+    }
     if (extensions_ != nullptr) {
         _copyExtensions(*extensions_, nullptr, product, true, errorCode);
     }
