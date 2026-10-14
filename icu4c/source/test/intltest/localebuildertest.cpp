@@ -51,6 +51,7 @@ void LocaleBuilderTest::runIndexedTest( int32_t index, UBool exec, const char* &
     TESTCASE_AUTO(TestSetUnicodeLocaleKeywordWellFormed);
     TESTCASE_AUTO(TestSetVariantIllFormed);
     TESTCASE_AUTO(TestSetVariantWellFormed);
+    TESTCASE_AUTO(TestChromiumBug557076207);
     TESTCASE_AUTO_END;
 }
 
@@ -1690,5 +1691,26 @@ void LocaleBuilderTest::TestPosixCases() {
     if (posix != l2) {
         errln("The result locale should be the set as %s but got %s\n",
               posix.getName(), l2.getName());
+    }
+}
+
+void LocaleBuilderTest::TestChromiumBug557076207() {
+    IcuTestErrorCode status(*this, "TestChromiumBug557076207");
+    constexpr char variants[] = "heploc-alalc97-baku1926-luna1918-colb1945-petr17-aaland-saaho-"
+                                "posix-oxendict-pinyin-fonipa-1990-1901-1606pcm-1959-1994-1996-"
+                                "16102-16103-aluku-ao1990-aragon-arkadj-asyrc-balanka-barla";
+    {
+        LocaleBuilder bld;
+        bld.setLanguage("en").setVariant(variants);
+        Locale l = bld.build(status);
+        assertTrue("l.isBogus()", l.isBogus());
+        assertEquals("status", U_ILLEGAL_ARGUMENT_ERROR, status.reset());
+    }
+    {
+        LocaleBuilder bld;
+        bld.setLanguageTag("en-u-ca-gregory").setVariant(variants);
+        Locale l = bld.build(status);
+        assertTrue("l.isBogus()", l.isBogus());
+        assertEquals("status", U_ILLEGAL_ARGUMENT_ERROR, status.reset());
     }
 }
