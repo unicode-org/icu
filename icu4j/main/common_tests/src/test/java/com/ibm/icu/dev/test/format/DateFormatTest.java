@@ -9384,6 +9384,15 @@ public class DateFormatTest extends CoreTestFmwk {
             // double-check that "dddd" and "ddddd" do the same thing as "ddd"
             {"en", "yMMMdddd", 2026, Calendar.JANUARY, 31, "Jan 31st, 2026"},
             {"en", "yMMMddddd", 2026, Calendar.JANUARY, 31, "Jan 31st, 2026"},
+            // test partial ordinal dates in French
+            // French ordinal "one" applies to day 1 only ("1er"); all others are plain numeric
+            {"fr", "yMMMddd", 2026, Calendar.APRIL, 1, "1er avr. 2026"},
+            {"fr", "yMMMddd", 2026, Calendar.APRIL, 2, "2 avr. 2026"},
+            {"fr", "yMMMddd", 2026, Calendar.APRIL, 3, "3 avr. 2026"},
+            {"fr", "yMMMddd", 2026, Calendar.APRIL, 5, "5 avr. 2026"},
+            {"fr", "yMMMddd", 2026, Calendar.APRIL, 10, "10 avr. 2026"},
+            {"fr", "yMMMddd", 2026, Calendar.APRIL, 11, "11 avr. 2026"},
+            {"fr", "yMMMddd", 2026, Calendar.APRIL, 21, "21 avr. 2026"},
         };
 
         for (Object[] tc : testCases) {
