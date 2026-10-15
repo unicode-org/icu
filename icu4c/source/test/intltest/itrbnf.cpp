@@ -73,6 +73,7 @@ void IntlTestRBNF::runIndexedTest(int32_t index, UBool exec, const char* &name, 
         TESTCASE(23, TestVariableDecimalPoint);
         TESTCASE(24, TestLargeNumbers);
         TESTCASE(25, TestCompactDecimalFormatStyle);
+        TESTCASE(42, TestICU23144Format);
         TESTCASE(26, TestParseFailure);
         TESTCASE(27, TestMinMaxIntegerDigitsIgnored);
         TESTCASE(28, TestNorwegianSpellout);
@@ -2443,6 +2444,37 @@ void IntlTestRBNF::TestCompactDecimalFormatStyle() {
             { nullptr, nullptr }
     };
     doTest(&rbnf, enTestFullData, false);
+}
+
+void IntlTestRBNF::TestICU23144Format() {
+    // Follow-up to ICU-23144: the parse-path fix propagated recursionCount across
+    // >>> (explicit rule) delegation in ModulusSubstitution::doParse, but the
+    // format path (ModulusSubstitution::doSubstitution -> ruleToUse->doFormat)
+    // had the identical flaw.  A >>> delegation chain never re-enters
+    // NFRuleSet::format, the only place RECURSION_LIMIT is enforced, so a long
+    // chain used to exhaust the stack; it must now be bounded gracefully.
+    logln("TestICU23144Format: Verifying RECURSION_LIMIT is enforced across >>> rule delegations on the format path");
+
+    icu::UnicodeString ruleDef = u"%format-recursion:\n";
+    ruleDef.append(u"0: ;\n");
+    for (int32_t i = 1; i <= 75; ++i) {
+        ruleDef.append(icu::UnicodeString::fromUTF8(std::to_string(i) + ": >>>;\n"));
+    }
+
+    UErrorCode status = U_ZERO_ERROR;
+    UParseError perror;
+    icu::RuleBasedNumberFormat rbfmt(ruleDef, Locale::getUS(), perror, status);
+    if (U_FAILURE(status)) {
+        logln("RBNF creation unexpectedly failed with %s", u_errorName(status));
+        return;
+    }
+
+    // Formatting the terminal index walks the full 75-depth >>> delegation chain.
+    // Must terminate (gracefully, via the recursion guard) rather than overflow.
+    icu::UnicodeString result;
+    status = U_ZERO_ERROR;
+    rbfmt.format((int64_t)75, result, status);
+    logln("TestICU23144Format: survived 75-depth >>> format chain, status=%s", u_errorName(status));
 }
 
 void IntlTestRBNF::TestParseFailure() {
