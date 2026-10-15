@@ -1367,8 +1367,9 @@ public final class ULocale implements Serializable, Comparable<ULocale>, Cloneab
         public String replace() {
             boolean changed = false;
             int count = 0;
+            final int maxCount = 4 + ((variants == null) ? 0 : variants.size());
             while (true) {
-                if (count++ > 10) {
+                if (count++ > maxCount) {
                     // Throw exception when we loop through too many time
                     // stop to avoid infinity loop cauesd by incorrect data
                     // in resource.
