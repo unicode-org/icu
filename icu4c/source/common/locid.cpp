@@ -1805,15 +1805,17 @@ AliasReplacer::replace(const Locale& locale, CharString& out, UErrorCode& status
     }, status);
 
     // A changed count to assert when loop too many times.
-    int changed = 0;
+    int32_t changed = 0;
+    const int32_t maxChanged = 4 + variants.size();
+    (void)maxChanged; // avoid unused-variable warning when U_ASSERT is a no-op
     // A UVector to to hold CharString allocated by the replace* method
     // and freed when out of scope from his function.
     UVector stringsToBeFreed([](void *obj) { delete static_cast<CharString*>(obj); },
                              nullptr, 10, status);
     while (U_SUCCESS(status)) {
-        // Something wrong with the data cause looping here more than 10 times
-        // already.
-        U_ASSERT(changed < 5);
+        // Something wrong with the data cause looping here more than maxChanged
+        // times already.
+        U_ASSERT(changed <= maxChanged);
         // From observation of key in data/misc/metadata.txt
         // we know currently we only need to search in the following combination
         // of fields for type in languageAlias:

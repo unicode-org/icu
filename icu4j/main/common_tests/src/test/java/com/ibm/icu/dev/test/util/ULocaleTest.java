@@ -4632,6 +4632,14 @@ public class ULocaleTest extends CoreTestFmwk {
         // alias of tvalue should be replaced
         Assert.assertEquals("en-t-m0-prprname", canonicalTag("en-t-m0-NaMeS"));
         Assert.assertEquals("en-t-d0-charname-s0-ascii", canonicalTag("en-t-s0-ascii-d0-nAmE"));
+
+        // ICU-23561
+        Assert.assertEquals(
+                "sr-Zinh-US-alalc97-polyton", canonicalTag("sh-Qaai-840-heploc-polytoni"));
+        Assert.assertEquals(
+                "sr-Zinh-US-alalc97-polyton",
+                canonicalTag(
+                        "sh-Qaai-840-aaland-arevela-arevmda-bokmal-hakka-lojban-nynorsk-saaho-xiang-heploc-polytoni"));
     }
 
     @Test
