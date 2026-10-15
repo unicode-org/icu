@@ -2202,6 +2202,15 @@ static void TestDayNames(void) {
         { "en", u"yMMMddd", 2026, UCAL_JANUARY,  23, u"Jan 23rd, 2026" },
         { "en", u"yMMMddd", 2026, UCAL_JANUARY,  30, u"Jan 30th, 2026" },
         { "en", u"yMMMddd", 2026, UCAL_JANUARY,  31, u"Jan 31st, 2026" },
+        // test partial ordinal dates in French
+        // French ordinal "one" applies to day 1 only ("1er"); all others are plain numeric
+        { "fr", u"yMMMddd", 2026, UCAL_APRIL,    1,  u"1er avr. 2026" },
+        { "fr", u"yMMMddd", 2026, UCAL_APRIL,    2,  u"2 avr. 2026"   },
+        { "fr", u"yMMMddd", 2026, UCAL_APRIL,    3,  u"3 avr. 2026"   },
+        { "fr", u"yMMMddd", 2026, UCAL_APRIL,    5,  u"5 avr. 2026"   },
+        { "fr", u"yMMMddd", 2026, UCAL_APRIL,    10, u"10 avr. 2026"  },
+        { "fr", u"yMMMddd", 2026, UCAL_APRIL,    11, u"11 avr. 2026"  },
+        { "fr", u"yMMMddd", 2026, UCAL_APRIL,    21, u"21 avr. 2026"  },
     };
 
     for (int32_t i = 0; i < UPRV_LENGTHOF(testCases); i++) {
