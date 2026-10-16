@@ -1578,8 +1578,16 @@ void NumberFormatterApiTest::unitUsage() {
         uTestCase + ", got outputUnit: \"" + formattedNum.getOutputUnit(status).getIdentifier() + "\"",
         MeasureUnit::forIdentifier("stone-and-pound", status) == formattedNum.getOutputUnit(status));
     status.errIfFailureAndReset("unitUsage() en-GB person - formattedNum.getOutputUnit(status)");
-    assertEquals(uTestCase, "12 st, 8.4 lb", formattedNum.toString(status));
+    assertEquals(uTestCase, "12 st, 8 lb", formattedNum.toString(status));
     status.errIfFailureAndReset("unitUsage() en-GB person, toString(...)");
+
+    // User can override the default integer precision on mixed units:
+    formattedNum = unloc_formatter.precision(Precision::maxFraction(1))
+                       .locale("en-GB")
+                       .formatDouble(80, status);
+    status.errIfFailureAndReset("unitUsage() en-GB person precision override, formatDouble(...)");
+    assertEquals(uTestCase + u" precision override", "12 st, 8.4 lb", formattedNum.toString(status));
+    status.errIfFailureAndReset("unitUsage() en-GB person precision override, toString(...)");
     {
         static const UFieldPosition expectedFieldPositions[] = {
                 // // Desired output: TODO(icu-units#67)
@@ -1608,14 +1616,14 @@ void NumberFormatterApiTest::unitUsage() {
             u"unit/kilogram usage/person",
             unloc_formatter,
             Locale("en-GB"),
-            u"13,802 st, 7.2 lb",
-            u"1,380 st, 3.5 lb",
-            u"138 st, 0.35 lb",
+            u"13,802 st, 7 lb",
+            u"1,380 st, 4 lb",
+            u"138 st, 0 lb",
             u"13 st, 11 lb",
-            u"1 st, 5.3 lb",
+            u"1 st, 5 lb",
             u"1 lb, 15 oz",
-            u"0 lb, 3.1 oz",
-            u"0 lb, 0.31 oz",
+            u"0 lb, 3 oz",
+            u"0 lb, 0 oz",
             u"0 lb, 0 oz");
 
    assertFormatDescending(
@@ -1624,14 +1632,14 @@ void NumberFormatterApiTest::unitUsage() {
             u"usage/person unit-width-narrow unit/kilogram",
             unloc_formatter.unitWidth(UNUM_UNIT_WIDTH_NARROW),
             Locale("en-GB"),
-            u"13,802st 7.2lb",
-            u"1,380st 3.5lb",
-            u"138st 0.35lb",
+            u"13,802st 7lb",
+            u"1,380st 4lb",
+            u"138st 0lb",
             u"13st 11lb",
-            u"1st 5.3lb",
+            u"1st 5lb",
             u"1lb 15oz",
-            u"0lb 3.1oz",
-            u"0lb 0.31oz",
+            u"0lb 3oz",
+            u"0lb 0oz",
             u"0lb 0oz");
 
    assertFormatDescending(
@@ -1640,14 +1648,14 @@ void NumberFormatterApiTest::unitUsage() {
             u"usage/person unit-width-short unit/kilogram",
             unloc_formatter.unitWidth(UNUM_UNIT_WIDTH_SHORT),
             Locale("en-GB"),
-            u"13,802 st, 7.2 lb",
-            u"1,380 st, 3.5 lb",
-            u"138 st, 0.35 lb",
+            u"13,802 st, 7 lb",
+            u"1,380 st, 4 lb",
+            u"138 st, 0 lb",
             u"13 st, 11 lb",
-            u"1 st, 5.3 lb",
+            u"1 st, 5 lb",
             u"1 lb, 15 oz",
-            u"0 lb, 3.1 oz",
-            u"0 lb, 0.31 oz",
+            u"0 lb, 3 oz",
+            u"0 lb, 0 oz",
             u"0 lb, 0 oz");
 
    assertFormatDescending(
@@ -1656,14 +1664,14 @@ void NumberFormatterApiTest::unitUsage() {
             u"usage/person unit-width-full-name unit/kilogram",
             unloc_formatter.unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
             Locale("en-GB"),
-            u"13,802 stone, 7.2 pounds",
-            u"1,380 stone, 3.5 pounds",
-            u"138 stone, 0.35 pounds",
+            u"13,802 stone, 7 pounds",
+            u"1,380 stone, 4 pounds",
+            u"138 stone, 0 pounds",
             u"13 stone, 11 pounds",
-            u"1 stone, 5.3 pounds",
+            u"1 stone, 5 pounds",
             u"1 pound, 15 ounces",
-            u"0 pounds, 3.1 ounces",
-            u"0 pounds, 0.31 ounces",
+            u"0 pounds, 3 ounces",
+            u"0 pounds, 0 ounces",
             u"0 pounds, 0 ounces");
 
     assertFormatDescendingBig(
@@ -1925,6 +1933,46 @@ void NumberFormatterApiTest::unitUsage() {
                        Locale("en-US"),                                                    //
                        -1,                                                                 //
                        u"30°F");
+
+    // ICU-23558: Mixed units round the lowest unit to the nearest integer by
+    // default, unless overridden by an explicit precision.
+    assertFormatSingle(u"person-height foot-and-inch: round the inches",
+                       u"measure-unit/length-meter usage/person-height",
+                       u"unit/meter usage/person-height",
+                       NumberFormatter::with().unit(METER).usage("person-height"),
+                       Locale("en-US"),
+                       1.7,
+                       u"5 ft, 7 in");
+
+    assertFormatSingle(u"person-height foot-and-inch: explicit precision overrides the default",
+                       u"measure-unit/length-meter usage/person-height .##",
+                       u"unit/meter usage/person-height .##",
+                       NumberFormatter::with()
+                           .unit(METER)
+                           .usage("person-height")
+                           .precision(Precision::maxFraction(2)),
+                       Locale("en-US"),
+                       1.7,
+                       u"5 ft, 6.93 in");
+
+    assertFormatSingle(u"person-height foot-and-inch: rounding inches carries into feet",
+                       u"measure-unit/length-meter usage/person-height",
+                       u"unit/meter usage/person-height",
+                       NumberFormatter::with().unit(METER).usage("person-height"),
+                       Locale("en-US"),
+                       1.52,
+                       u"5 ft, 0 in");
+
+    assertFormatSingle(u"person-height foot-and-inch: explicit precision before carry",
+                       u"measure-unit/length-meter usage/person-height .##",
+                       u"unit/meter usage/person-height .##",
+                       NumberFormatter::with()
+                           .unit(METER)
+                           .usage("person-height")
+                           .precision(Precision::maxFraction(2)),
+                       Locale("en-US"),
+                       1.52,
+                       u"4 ft, 11.84 in");
 }
 
 void NumberFormatterApiTest::unitUsageErrorCodes() {
