@@ -8,7 +8,6 @@
  */
 package com.ibm.icu.dev.test.translit;
 
-import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.Transliterator;
 import java.util.HashMap;
@@ -22,7 +21,7 @@ import org.junit.runners.JUnit4;
  * @summary Test the Latin-Jamo transliterator
  */
 @RunWith(JUnit4.class)
-public class JamoTest extends TestFmwk {
+public class JamoTest extends TransliteratorTestBase {
     @Test
     public void TestJamo() {
         Transliterator latinJamo = Transliterator.getInstance("Latin-Jamo");
@@ -141,11 +140,11 @@ public class JamoTest extends TestFmwk {
         for (int i = 0; i < CASE.length; i += 3) {
             String jamo = nameToJamo(CASE[i + 1]);
             if (CASE[i + 2] == null) {
-                TransliteratorTest.expect(latinJamo, CASE[i], jamo, jamoLatin);
+                expect(latinJamo, CASE[i], jamo, jamoLatin);
             } else {
                 // Handle case where round-trip is expected to fail
-                TransliteratorTest.expect(latinJamo, CASE[i], jamo);
-                TransliteratorTest.expect(jamoLatin, jamo, CASE[i + 2]);
+                expect(latinJamo, CASE[i], jamo);
+                expect(jamoLatin, jamo, CASE[i + 2]);
             }
         }
     }
@@ -197,31 +196,31 @@ public class JamoTest extends TestFmwk {
         Transliterator t = null;
 
         t = Transliterator.getInstance("NFD"); // was Hangul-Jamo
-        TransliteratorTest.expect(t, hangul, jamo);
+        expect(t, hangul, jamo);
 
         t = Transliterator.getInstance("NFC"); // was Jamo-Hangul
-        TransliteratorTest.expect(t, jamo, hangul);
+        expect(t, jamo, hangul);
 
         t = Transliterator.getInstance("Latin-Jamo");
-        TransliteratorTest.expect(t, latin, jamo);
+        expect(t, latin, jamo);
 
         t = Transliterator.getInstance("Jamo-Latin");
-        TransliteratorTest.expect(t, jamo, latin2);
+        expect(t, jamo, latin2);
 
         t = Transliterator.getInstance("Hangul-Latin");
-        TransliteratorTest.expect(t, hangul, latin2);
+        expect(t, hangul, latin2);
 
         t = Transliterator.getInstance("Latin-Hangul");
-        TransliteratorTest.expect(t, latin, hangul);
+        expect(t, latin, hangul);
 
         t = Transliterator.getInstance("Hangul-Latin; Latin-Jamo");
-        TransliteratorTest.expect(t, hangul, jamo);
+        expect(t, hangul, jamo);
 
         t = Transliterator.getInstance("Jamo-Latin; Latin-Hangul");
-        TransliteratorTest.expect(t, jamo, hangul);
+        expect(t, jamo, hangul);
 
         t = Transliterator.getInstance("Hangul-Latin; Latin-Hangul");
-        TransliteratorTest.expect(t, hangul, hangul);
+        expect(t, hangul, hangul);
     }
 
     @Test
@@ -447,8 +446,7 @@ public class JamoTest extends TestFmwk {
 
     // TransliteratorTest override
     boolean expectAux(String tag, String summary, boolean pass, String expectedResult) {
-        return TransliteratorTest.expectAux(
-                tag, jamoToName(summary), pass, jamoToName(expectedResult));
+        return expectAux(tag, jamoToName(summary), pass, jamoToName(expectedResult));
     }
 
     // UTILITIES

@@ -1309,7 +1309,7 @@ public class RoundTripTest extends TestFmwk {
         }
     }
 
-    static class TransliterationTest {
+    static class TransliterationTest extends TestFmwk {
 
         PrintWriter out;
 
@@ -1447,10 +1447,10 @@ public class RoundTripTest extends TestFmwk {
 
             log = logger;
 
-            TestFmwk.logln(Utility.escape("Source:  " + sourceRange));
-            TestFmwk.logln(Utility.escape("Target:  " + targetRange));
-            TestFmwk.logln(Utility.escape("Exclude: " + roundtripExclusions));
-            if (TestFmwk.isQuick()) TestFmwk.logln("Abbreviated Test");
+            logln(Utility.escape("Source:  " + sourceRange));
+            logln(Utility.escape("Target:  " + targetRange));
+            logln(Utility.escape("Exclude: " + roundtripExclusions));
+            if (TestFmwk.isQuick()) logln("Abbreviated Test");
 
             badCharacters = new UnicodeSet("[:other:]");
 
@@ -1498,11 +1498,11 @@ public class RoundTripTest extends TestFmwk {
                                     + transliteratorID.replace('/', '_')
                                     + ".html";
                     File lf = new File(logFileName);
-                    TestFmwk.logln("Creating log file " + lf.getAbsoluteFile());
+                    logln("Creating log file " + lf.getAbsoluteFile());
                     FileOutputStream fos = new FileOutputStream(lf);
                     fos.write(bast.toByteArray());
                     fos.close();
-                    TestFmwk.errln(
+                    errln(
                             transliteratorID
                                     + " errors: "
                                     + errorCount
@@ -1510,7 +1510,7 @@ public class RoundTripTest extends TestFmwk {
                                     + ", see "
                                     + lf.getAbsoluteFile());
                 } catch (SecurityException e) {
-                    TestFmwk.errln(
+                    errln(
                             transliteratorID
                                     + " errors: "
                                     + errorCount
@@ -1518,7 +1518,7 @@ public class RoundTripTest extends TestFmwk {
                                     + ", no log provided due to protected test domain");
                 }
             } else {
-                TestFmwk.logln(transliteratorID + " ok");
+                logln(transliteratorID + " ok");
                 //                  new File(logFileName).delete();
             }
         }
@@ -1546,7 +1546,7 @@ public class RoundTripTest extends TestFmwk {
             sourceToTarget = Transliterator.getInstance(transliteratorID);
             targetToSource = sourceToTarget.getInverse();
 
-            TestFmwk.logln("Checking that at least one irrevant characters is not NFC'ed");
+            logln("Checking that at least one irrevant characters is not NFC'ed");
             out.println("<h3>Checking that at least one irrevant characters is not NFC'ed</h3>");
 
             String irrelevants =
@@ -1560,7 +1560,7 @@ public class RoundTripTest extends TestFmwk {
             }
 
             if (EXTRA_TESTS) {
-                TestFmwk.logln("Checking that toRules works");
+                logln("Checking that toRules works");
                 String rules = "";
                 Transliterator sourceToTarget2;
                 Transliterator targetToSource2;
@@ -1614,7 +1614,7 @@ public class RoundTripTest extends TestFmwk {
         }
 
         private void checkSourceTargetSource(Transliterator sourceToTarget2) {
-            TestFmwk.logln("Checking that source -> target -> source");
+            logln("Checking that source -> target -> source");
             out.println("<h3>Checking that source -> target -> source</h3>");
 
             usi.reset(sourceRange);
@@ -1632,7 +1632,7 @@ public class RoundTripTest extends TestFmwk {
         }
 
         private void checkTargetSourceTarget(Transliterator targetToSource2) {
-            TestFmwk.logln("Checking that target -> source -> target");
+            logln("Checking that target -> source -> target");
             out.println("<h3>Checking that target -> source -> target</h3>");
             usi.reset(targetRange);
             while (usi.next()) {
@@ -1649,7 +1649,7 @@ public class RoundTripTest extends TestFmwk {
         }
 
         private void checkSourceTargetSingles(UnicodeSet failSourceTarg) {
-            TestFmwk.logln("Checking that source characters convert to target - Singles");
+            logln("Checking that source characters convert to target - Singles");
             out.println("<h3>Checking that source characters convert to target - Singles</h3>");
 
             /*
@@ -1686,7 +1686,7 @@ public class RoundTripTest extends TestFmwk {
         }
 
         private boolean checkSourceTargetDoubles(UnicodeSet failSourceTarg) {
-            TestFmwk.logln("Checking that source characters convert to target - Doubles");
+            logln("Checking that source characters convert to target - Doubles");
             out.println("<h3>Checking that source characters convert to target - Doubles</h3>");
             long count = 0;
 
@@ -1714,8 +1714,7 @@ public class RoundTripTest extends TestFmwk {
                         !sourceRange.contains(d)) continue;
                     if (failSourceTarg.get(d)) continue;
                  */
-                TestFmwk.logln(
-                        count + "/" + pairLimit + " Checking starting with " + UTF16.valueOf(c));
+                logln(count + "/" + pairLimit + " Checking starting with " + UTF16.valueOf(c));
                 usi2.reset(abbreviateSet(sourceRangeMinusFailures, quickRt, density));
 
                 while (usi2.next()) {
@@ -1748,7 +1747,7 @@ public class RoundTripTest extends TestFmwk {
         }
 
         void checkTargetSourceSingles(UnicodeSet failTargSource, UnicodeSet failRound) {
-            TestFmwk.logln("Checking that target characters convert to source and back - Singles");
+            logln("Checking that target characters convert to source and back - Singles");
             out.println(
                     "<h3>Checking that target characters convert to source and back - Singles</h3>");
 
@@ -1809,7 +1808,7 @@ public class RoundTripTest extends TestFmwk {
 
         private void checkTargetSourceDoubles(
                 boolean quickRt, UnicodeSet failTargSource, UnicodeSet failRound) {
-            TestFmwk.logln("Checking that target characters convert to source and back - Doubles");
+            logln("Checking that target characters convert to source and back - Doubles");
             out.println(
                     "<h3>Checking that target characters convert to source and back - Doubles</h3>");
             long count = 0;
@@ -1837,8 +1836,7 @@ public class RoundTripTest extends TestFmwk {
                     if (TestUtility.isUnassigned(d) ||
                         !targetRange.contains(d)) continue;
                  */
-                TestFmwk.logln(
-                        count + "/" + pairLimit + " Checking starting with " + UTF16.valueOf(c));
+                logln(count + "/" + pairLimit + " Checking starting with " + UTF16.valueOf(c));
                 usi2.reset(abbreviateSet(targetRangeMinusFailures, quickRt, density));
 
                 while (usi2.next()) {
@@ -1890,7 +1888,7 @@ public class RoundTripTest extends TestFmwk {
                     }
                 }
             }
-            TestFmwk.logln("");
+            logln("");
         }
 
         /**

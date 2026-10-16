@@ -386,7 +386,7 @@ public class UnicodeMapTest extends TestFmwk {
         Set<String> values1 = map1.getAvailableValues(new TreeSet<String>());
         Set<String> values2 = new TreeSet<String>(map2.values());
         if (!TestBoilerplate.verifySetsIdentical(this, values1, values2)) {
-            throw new IllegalArgumentException("Halting");
+            fail("Two string sets are not identical");
         }
         logln("Comparing Sets");
         for (Iterator<String> it = values1.iterator(); it.hasNext(); ) {
@@ -395,7 +395,7 @@ public class UnicodeMapTest extends TestFmwk {
             UnicodeSet set1 = map1.keySet(value);
             UnicodeSet set2 = TestBoilerplate.getSet(map2, value);
             if (!TestBoilerplate.verifySetsIdentical(this, set1, set2)) {
-                throw new IllegalArgumentException("Halting");
+                fail("Two UnicodeSets are not identical");
             }
         }
     }
@@ -462,17 +462,21 @@ public class UnicodeMapTest extends TestFmwk {
             String value1 = map1.getValue(i);
             String value2 = map2.get(i);
             if (!UnicodeMap.areEqual(value1, value2)) {
-                errln(
-                        counter
-                                + " Difference at "
-                                + Utility.hex(i)
-                                + "\t UnicodeMap: "
-                                + value1
-                                + "\t HashMap: "
-                                + value2);
-                errln("UnicodeMap: " + map1);
-                errln("Log: " + TestBoilerplate.show(log));
-                errln("HashMap: " + TestBoilerplate.show(map2));
+                StringBuilder msg = new StringBuilder();
+                msg.append(counter)
+                        .append(" Difference at ")
+                        .append(Utility.hex(i))
+                        .append("\t UnicodeMap: ")
+                        .append(value1)
+                        .append("\t HashMap: ")
+                        .append(value2)
+                        .append('\n');
+
+                msg.append("UnicodeMap: ").append(map1).append('\n');
+                msg.append("Log: ").append(TestBoilerplate.show(log)).append('\n');
+                msg.append("HashMap: ").append(TestBoilerplate.show(map2)).append('\n');
+
+                errln(msg.toString());
             }
         }
     }

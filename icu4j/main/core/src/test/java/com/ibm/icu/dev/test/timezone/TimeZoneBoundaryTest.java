@@ -930,7 +930,7 @@ public class TimeZoneBoundaryTest extends CoreTestFmwk {
         findBoundariesStepwise(1997, ONE_DAY, safeGetTimeZone(AUSTRALIA), 2);
     }
 
-    private static TimeZone safeGetTimeZone(String id) {
+    private TimeZone safeGetTimeZone(String id) {
         TimeZone tz = TimeZone.getTimeZone(id);
         if (tz == null) {
             // should never happen

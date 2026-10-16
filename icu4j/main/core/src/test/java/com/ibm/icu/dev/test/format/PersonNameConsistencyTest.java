@@ -48,7 +48,7 @@ public class PersonNameConsistencyTest extends CoreTestFmwk {
                 "shn.txt", "ICU-23187");
     }
 
-    static List<String> readTestCases() throws Exception {
+    List<String> readTestCases() throws Exception {
         List<String> tests = new ArrayList<>();
         try (InputStream catalogFileStream =
                         TestUtil.class.getResourceAsStream(DATA_PATH + "catalog.txt");
@@ -119,7 +119,7 @@ public class PersonNameConsistencyTest extends CoreTestFmwk {
         }
     }
 
-    private static class PersonNameTester {
+    private class PersonNameTester {
         SimplePersonName name = null;
         SimplePersonName.Builder nameBuilder = null;
         String expectedResult = null;

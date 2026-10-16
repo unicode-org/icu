@@ -9,7 +9,6 @@
 package com.ibm.icu.dev.test.timezone;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
-import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.TimeZoneAdapter;
 import com.ibm.icu.text.SimpleDateFormat;
@@ -2714,7 +2713,7 @@ public class TimeZoneTest extends CoreTestFmwk {
     @Test
     public void Test11619_UnrecognizedTimeZoneID() {
         VTimeZone vzone = VTimeZone.create("ABadTimeZoneId");
-        TestFmwk.assertNull("", vzone);
+        assertNull("", vzone);
     }
 
     private static boolean isDaylightTimeAvailable(TimeZone tz, long start) {

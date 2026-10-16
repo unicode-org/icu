@@ -3,7 +3,6 @@
 
 package com.ibm.icu.dev.test.translit;
 
-import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.CanonicalIterator;
 import com.ibm.icu.text.Normalizer2;
 import com.ibm.icu.text.Transliterator;
@@ -16,13 +15,18 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @test
  * @summary Disordered marks test of Transliterator
  */
 @RunWith(JUnitParamsRunner.class)
-public class TransliteratorDisorderedMarksTest extends TestFmwk {
+public class TransliteratorDisorderedMarksTest extends TransliteratorTestBase {
+    private static Logger staticLogger =
+            LoggerFactory.getLogger(TransliteratorDisorderedMarksTest.class);
+
     private static UnicodeSet disorderedMarks;
 
     @AfterClass
@@ -117,7 +121,7 @@ public class TransliteratorDisorderedMarksTest extends TestFmwk {
             disorderedMarks.add(s + "\u0323");
             String xx = nfc.normalize("\u01EC" + s);
             if (!xx.startsWith("\u01EC")) {
-                logln("??");
+                staticLogger.info("??");
             }
         }
 
@@ -150,9 +154,9 @@ public class TransliteratorDisorderedMarksTest extends TestFmwk {
         //                }
         //            }
         //        }
-        logln("Test cases: " + disorderedMarks.size());
+        staticLogger.info("Test cases: " + disorderedMarks.size());
         disorderedMarks.addAll(0, 0x10FFFF).freeze();
-        logln("isInert \u0104 " + nfc.isInert('\u0104'));
+        staticLogger.info("isInert \u0104 " + nfc.isInert('\u0104'));
     }
 
     @Test
@@ -223,12 +227,12 @@ public class TransliteratorDisorderedMarksTest extends TestFmwk {
             // See the comment in TestCasing() about the iota subscript.
             empiricalSource.remove(0x345);
         }
-        TransliteratorTest.assertEquals(
+        assertEquals(
                 "getSource(" + ruleDisplay + ")",
                 empiricalSource,
                 actualSource,
                 TransliteratorTest.SetAssert.MISSING_OK);
-        TransliteratorTest.assertEquals(
+        assertEquals(
                 "getTarget(" + ruleDisplay + ")",
                 empiricalTarget,
                 actualTarget,

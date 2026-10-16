@@ -599,7 +599,7 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
     }
 
     @SuppressWarnings("ReferenceEquality")
-    private static void generateCXXConstants() throws IOException {
+    private void generateCXXConstants() throws IOException {
         String fullOutputPath = "${icuroot}/icu4c/source/i18n/measunit.cpp";
         try (PrintStream out = createAndStartOutputFile(fullOutputPath)) {
             out.println("// Start generated code for measunit.cpp");

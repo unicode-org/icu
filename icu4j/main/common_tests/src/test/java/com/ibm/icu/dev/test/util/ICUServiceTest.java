@@ -44,23 +44,38 @@ public class ICUServiceTest extends CoreTestFmwk {
     }
 
     public void confirmBoolean(String message, boolean val) {
-        msg(message, val ? LOG : ERR, !val, true);
+        if (val) {
+            logln(message);
+        } else {
+            errln(message);
+        }
     }
 
     public void confirmEqual(String message, Object lhs, Object rhs) {
-        msg(
-                lrmsg(message, lhs, rhs),
-                (lhs == null ? rhs == null : lhs.equals(rhs)) ? LOG : ERR,
-                true,
-                true);
+        String lrmsg = lrmsg(message, lhs, rhs);
+        if (lhs == null ? rhs == null : lhs.equals(rhs)) {
+            logln(lrmsg);
+        } else {
+            errln(lrmsg);
+        }
     }
 
     public void confirmIdentical(String message, Object lhs, Object rhs) {
-        msg(lrmsg(message, lhs, rhs), lhs == rhs ? LOG : ERR, true, true);
+        String lrmsg = lrmsg(message, lhs, rhs);
+        if (lhs == rhs) {
+            logln(lrmsg);
+        } else {
+            errln(lrmsg);
+        }
     }
 
     public void confirmIdentical(String message, int lhs, int rhs) {
-        msg(message + " lhs: " + lhs + " rhs: " + rhs, lhs == rhs ? LOG : ERR, true, true);
+        String msg = message + " lhs: " + lhs + " rhs: " + rhs;
+        if (lhs == rhs) {
+            logln(msg);
+        } else {
+            errln(msg);
+        }
     }
 
     /**
