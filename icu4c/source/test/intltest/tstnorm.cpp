@@ -63,6 +63,7 @@ void BasicNormalizerTest::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO(TestComposeJamoTBase);
     TESTCASE_AUTO(TestComposeBoundaryAfter);
     TESTCASE_AUTO(TestNFKC_SCF);
+    TESTCASE_AUTO(TestReorderingBufferOverflow);
     TESTCASE_AUTO_END;
 }
 
@@ -1890,6 +1891,57 @@ BasicNormalizerTest::TestNFKC_SCF() {
     UnicodeString result = nfkc_scf->normalize(s, errorCode);
     assertSuccess("nfkc_scf", errorCode.get());
     assertEquals("nfkc_scf", expected, result);
+}
+
+void
+BasicNormalizerTest::TestReorderingBufferOverflow() {
+    IcuTestErrorCode errorCode(*this, "TestReorderingBufferOverflow");
+    const Normalizer2Impl *nfcImpl = Normalizer2Factory::getNFCImpl(errorCode);
+    if (errorCode.errDataIfFailureAndReset("Normalizer2Factory::getNFCImpl() call failed")) {
+        return;
+    }
+    {
+        UnicodeString dest(u"abcdefghij");
+        ReorderingBuffer buffer(*nfcImpl, dest);
+        assertTrue("buffer.init", buffer.init(16, errorCode));
+        char16_t ch = u'a';
+        // length (10) + appendLength (INT32_MAX - 5) overflows int32_t in ReorderingBuffer::resize().
+        assertFalse("append overflow",
+                    buffer.append(&ch, INT32_MAX - 5, true, 0, 0, errorCode));
+        assertEquals("append overflow errorCode",
+                     U_MEMORY_ALLOCATION_ERROR, errorCode.reset());
+        assertTrue("dest isBogus", dest.isBogus());
+    }
+    const Normalizer2 *nfd = Normalizer2::getNFDInstance(errorCode);
+    if (errorCode.errDataIfFailureAndReset("Normalizer2::getNFDInstance() call failed")) {
+        return;
+    }
+    {
+        UnicodeString first(u"abcdefghij");
+        UnicodeString second(false, first.getBuffer(), INT32_MAX - 5);
+        nfd->normalizeSecondAndAppend(first, second, errorCode);
+        assertEquals("normalizeSecondAndAppend overflow errorCode",
+                     U_MEMORY_ALLOCATION_ERROR, errorCode.reset());
+        assertTrue("first isBogus", first.isBogus());
+    }
+    {
+        char16_t firstBuf[16] = u"abcdefghij";
+        const char16_t *secondBuf = firstBuf + 10;
+        unorm2_normalizeSecondAndAppend(
+            reinterpret_cast<const UNormalizer2 *>(nfd),
+            firstBuf, 10, 16,
+            secondBuf, INT32_MAX - 5,
+            errorCode);
+        assertEquals("unorm2_normalizeSecondAndAppend overflow errorCode",
+                     U_MEMORY_ALLOCATION_ERROR, errorCode.reset());
+        unorm2_normalizeSecondAndAppend(
+            reinterpret_cast<const UNormalizer2 *>(nfd),
+            firstBuf, 10, INT32_MAX,
+            secondBuf, INT32_MAX - 5,
+            errorCode);
+        assertEquals("unorm2_normalizeSecondAndAppend max firstCapacity overflow errorCode",
+                     U_MEMORY_ALLOCATION_ERROR, errorCode.reset());
+    }
 }
 
 #endif /* #if !UCONFIG_NO_NORMALIZATION */
