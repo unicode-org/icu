@@ -95,7 +95,7 @@ public interface TestLog {
     void log(String message);
 
     /**
-     * Emits a warn text. This is equivalent to (@link #warnln(String)).
+     * Emits a warn text. This is equivalent to {@link #warnln(String)}.
      *
      * @param message a warn text
      * @deprecated Use {@link #errln(String)} instead.
