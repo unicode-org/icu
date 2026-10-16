@@ -251,6 +251,7 @@ void TestMessageFormat2::testCustomFunctions() {
   testMessageRefFormatter(errorCode);
   testComplexOptions(errorCode);
   testSingleEvaluation(errorCode);
+  testSelectorResultChecked(errorCode);
 }
 
 
@@ -1076,6 +1077,117 @@ UnicodeString CounterFunctionValue::formatToString(UErrorCode& status) const {
 
 CounterFunction::~CounterFunction() {}
 CounterFunctionValue::~CounterFunctionValue() {}
+
+void TestMessageFormat2::testSelectorResultChecked(IcuTestErrorCode& errorCode) {
+    CHECK_ERROR(errorCode);
+
+    MFFunctionRegistry customRegistry(MFFunctionRegistry::Builder(errorCode)
+                                      .adoptFunction(FunctionName("badselect"),
+                                                     new BadSelectorFunction(),
+                                                     errorCode)
+                                      .build());
+    TestCase::Builder testBuilder;
+    testBuilder.setName("testSelectorResultChecked");
+    testBuilder.setLocale(Locale("en"));
+    testBuilder.setFunctionRegistry(&customRegistry);
+    testBuilder.setBidiIsolationStrategy(U_MF_BIDI_OFF);
+
+    // A selector result that is not a list of distinct indices into the keys,
+    // or that comes with an error, is a selector error, and only `*` matches
+    const char16_t* modes[] = { u"index", u"negative", u"length", u"negativeLength",
+                                 u"duplicate", u"error" };
+    for (const char16_t* mode : modes) {
+        UnicodeString pattern(u".local $x = {1 :badselect mode=");
+        pattern += mode;
+        pattern += u"}\n.match $x\na {{a}}\nb {{b}}\n* {{other}}";
+        TestCase test = testBuilder.setPattern(pattern)
+            .setExpected("other")
+            .setExpectedError(U_MF_SELECTOR_ERROR)
+            .build();
+        TestUtils::runTestCase(*this, test, errorCode);
+    }
+
+    // A valid result selects the key it names
+    TestCase test = testBuilder.setPattern(".local $x = {1 :badselect mode=valid}\n\
+                                            .match $x\na {{a}}\nb {{b}}\n* {{other}}")
+        .setExpected("b")
+        .setExpectSuccess()
+        .build();
+    TestUtils::runTestCase(*this, test, errorCode);
+}
+
+LocalPointer<FunctionValue>
+BadSelectorFunction::call(const FunctionContext&,
+                          const FunctionValue& arg,
+                          const FunctionOptions& opts,
+                          UErrorCode& errorCode) const {
+    if (U_FAILURE(errorCode)) {
+        return LocalPointer<FunctionValue>();
+    }
+
+    LocalPointer<FunctionValue> v(new BadSelectorValue(arg, std::move(opts), errorCode));
+    if (!v.isValid()) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return v;
+}
+
+BadSelectorValue::BadSelectorValue(const FunctionValue& arg,
+                                   const FunctionOptions& options,
+                                   UErrorCode& errorCode) {
+    if (U_FAILURE(errorCode)) {
+        return;
+    }
+    innerValue = arg.unwrap();
+    opts = options;
+    mode = getStringOption(opts.getOptions(), "mode");
+}
+
+UnicodeString BadSelectorValue::formatToString(UErrorCode&) const {
+    return mode;
+}
+
+void BadSelectorValue::selectKeys(const UnicodeString* keys,
+                                  int32_t keysLen,
+                                  int32_t* prefs,
+                                  int32_t& prefsLen,
+                                  UErrorCode& status) const {
+    if (U_FAILURE(status)) {
+        return;
+    }
+    prefsLen = 0;
+    if (mode == u"valid") {
+        for (int32_t i = 0; i < keysLen; i++) {
+            if (keys[i] == u"b") {
+                prefs[prefsLen++] = i;
+            }
+        }
+    } else if (mode == u"index") {
+        prefs[0] = keysLen;
+        prefsLen = 1;
+    } else if (mode == u"negative") {
+        prefs[0] = -1;
+        prefsLen = 1;
+    } else if (mode == u"length") {
+        for (int32_t i = 0; i < keysLen; i++) {
+            prefs[i] = i;
+        }
+        prefsLen = keysLen + 1;
+    } else if (mode == u"negativeLength") {
+        prefsLen = -1;
+    } else if (mode == u"duplicate") {
+        prefs[0] = 0;
+        prefs[1] = 0;
+        prefsLen = 2;
+    } else if (mode == u"error") {
+        prefs[0] = 0;
+        prefsLen = 1;
+        status = U_MF_SELECTOR_ERROR;
+    }
+}
+
+BadSelectorFunction::~BadSelectorFunction() {}
+BadSelectorValue::~BadSelectorValue() {}
 
 #endif /* #if !UCONFIG_NO_MF2 */
 
