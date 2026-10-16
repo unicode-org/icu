@@ -55,6 +55,7 @@ public:
     void TestComposeJamoTBase();
     void TestComposeBoundaryAfter();
     void TestNFKC_SCF();
+    void TestReorderingBufferOverflow();
 
 private:
     UnicodeString canonTests[24][3];
