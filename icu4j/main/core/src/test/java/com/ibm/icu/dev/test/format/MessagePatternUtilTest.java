@@ -123,7 +123,7 @@ public final class MessagePatternUtilTest extends CoreTestFmwk {
      * Base class for message contents nodes. Used directly for REPLACE_NUMBER nodes, subclassed for
      * others.
      */
-    private static class ExpectMessageContentsNode {
+    private class ExpectMessageContentsNode {
         protected boolean matches(MessageContentsNode c) {
             return assertEquals(
                     "not a REPLACE_NUMBER node",
@@ -132,7 +132,7 @@ public final class MessagePatternUtilTest extends CoreTestFmwk {
         }
     }
 
-    private static class ExpectTextNode extends ExpectMessageContentsNode {
+    private class ExpectTextNode extends ExpectMessageContentsNode {
         private ExpectTextNode(String subString) {
             this.subString = subString;
         }
@@ -148,7 +148,7 @@ public final class MessagePatternUtilTest extends CoreTestFmwk {
         private String subString;
     }
 
-    private static class ExpectArgNode extends ExpectMessageContentsNode {
+    private class ExpectArgNode extends ExpectMessageContentsNode {
         private ExpectArgNode(Object name) {
             this(name, null, null);
         }

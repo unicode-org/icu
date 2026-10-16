@@ -10,7 +10,6 @@
 package com.ibm.icu.dev.test.format;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
-import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.DecimalFormatSymbols;
@@ -67,7 +66,7 @@ public class PluralFormatUnitTest extends CoreTestFmwk {
         for (int n = 1; n < 13; n++) {
             String result = numberFmt.format(n);
             for (int k = 0; k < plFmts.length; ++k) {
-                TestFmwk.assertEquals(
+                assertEquals(
                         "PluralFormat's output is not as expected", result, plFmts[k].format(n));
             }
         }
@@ -80,7 +79,7 @@ public class PluralFormatUnitTest extends CoreTestFmwk {
             for (int k = 0; k < plFmts.length; ++k) {
                 sb.delete(0, sb.length());
                 String pfResult = plFmts[k].format((long) (n * n), sb, ignore).toString();
-                TestFmwk.assertEquals("PluralFormat's output is not as expected", result, pfResult);
+                assertEquals("PluralFormat's output is not as expected", result, pfResult);
             }
         }
     }

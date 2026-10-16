@@ -31,12 +31,8 @@ public class DataDrivenUScriptTest extends CoreTestFmwk {
         return sb.toString();
     }
 
-    private static void assertEqualScripts(String msg, int[] expectedScripts, int[] actualScripts) {
-        assertEquals(msg, scriptsToString(expectedScripts), scriptsToString(actualScripts));
-    }
-
     @RunWith(Parameterized.class)
-    public static class LocaleGetCodeTest {
+    public static class LocaleGetCodeTest extends CoreTestFmwk {
         private ULocale testLocaleName;
         private int expected;
 
@@ -135,6 +131,10 @@ public class DataDrivenUScriptTest extends CoreTestFmwk {
                     UScript.getCode("ro-RO")); // String
             // not
             // ULocale
+        }
+
+        private void assertEqualScripts(String msg, int[] expectedScripts, int[] actualScripts) {
+            assertEquals(msg, scriptsToString(expectedScripts), scriptsToString(actualScripts));
         }
     }
 
@@ -309,7 +309,7 @@ public class DataDrivenUScriptTest extends CoreTestFmwk {
     }
 
     @RunWith(Parameterized.class)
-    public static class GetNameTest {
+    public static class GetNameTest extends CoreTestFmwk {
         private int testCode;
         private String expected;
 
@@ -347,7 +347,7 @@ public class DataDrivenUScriptTest extends CoreTestFmwk {
     }
 
     @RunWith(Parameterized.class)
-    public static class GetShortNameTest {
+    public static class GetShortNameTest extends CoreTestFmwk {
         private int testCode;
         private String expected;
 
@@ -388,7 +388,7 @@ public class DataDrivenUScriptTest extends CoreTestFmwk {
     }
 
     @RunWith(Parameterized.class)
-    public static class GetScriptTest {
+    public static class GetScriptTest extends CoreTestFmwk {
         private int codepoint;
         private int expected;
 

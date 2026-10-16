@@ -13,7 +13,6 @@
  */
 package com.ibm.icu.dev.test.collator;
 
-import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.text.CollationElementIterator;
 import com.ibm.icu.text.CollationKey;
@@ -29,7 +28,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
-public class CollationThaiTest extends TestFmwk {
+public class CollationThaiTest extends CollationTestBase {
 
     final int MAX_FAILURES_TO_SHOW = -1;
 
@@ -103,7 +102,7 @@ public class CollationThaiTest extends TestFmwk {
             }
             String s1 = tests[i];
             String s2 = tests[i + 2];
-            CollationTest.doTest(this, c, s1, s2, expect);
+            doTest(this, c, s1, s2, expect);
         }
     }
 
@@ -241,7 +240,7 @@ public class CollationThaiTest extends TestFmwk {
                 }
             }
             CollationElementIterator iterator = collator.getCollationElementIterator(tests[i]);
-            CollationTest.backAndForth(this, iterator);
+            backAndForth(this, iterator);
         }
     }
 

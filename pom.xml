@@ -68,6 +68,7 @@
     <jmh.version>1.37</jmh.version>
     <junit.version>4.13.2</junit.version>
     <junitparams.version>1.1.1</junitparams.version>
+    <slf4j.version>2.0.20</slf4j.version>
     <spotbugs-annotations.version>4.9.8</spotbugs-annotations.version>
     <truth.version>1.4.5</truth.version>
     <xalan.version>2.7.2</xalan.version>
@@ -296,6 +297,18 @@
         <version>${junitparams.version}</version>
         <scope>test</scope>
       </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>${slf4j.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-simple</artifactId>
+        <version>${slf4j.version}</version>
+        <scope>test</scope>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
@@ -335,6 +348,10 @@
               -->
               <include>**/*.java</include>
             </includes>
+            <systemPropertyVariables>
+              <org.slf4j.simpleLogger.logFile>${project.build.directory}/test.log</org.slf4j.simpleLogger.logFile>
+              <org.slf4j.simpleLogger.defaultLogLevel>info</org.slf4j.simpleLogger.defaultLogLevel>
+            </systemPropertyVariables>
           </configuration>
         </plugin>
         <plugin>

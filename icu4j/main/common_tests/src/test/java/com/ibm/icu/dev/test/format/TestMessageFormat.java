@@ -2210,7 +2210,7 @@ public class TestMessageFormat extends CoreTestFmwk {
         }
     }
 
-    private static void doTheRealDateTimeSkeletonTesting(
+    private void doTheRealDateTimeSkeletonTesting(
             Date date, String messagePattern, ULocale locale, String expected) {
 
         MessageFormat msgf = new MessageFormat(messagePattern, locale);

@@ -9,7 +9,6 @@
 package com.ibm.icu.dev.test.util;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
-import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.ICULocaleService;
 import com.ibm.icu.impl.ICUService;
 import com.ibm.icu.impl.ICUService.SimpleFactory;
@@ -185,7 +184,7 @@ public class ICUServiceThreadTest extends CoreTestFmwk {
         */
     }
 
-    static class RegisterFactoryThread extends TestThread {
+    class RegisterFactoryThread extends TestThread {
         RegisterFactoryThread(String name, ICUService service, long delay) {
             super("REG " + name, service, delay);
         }
@@ -194,11 +193,11 @@ public class ICUServiceThreadTest extends CoreTestFmwk {
         protected void iterate() {
             ICUService.Factory f = new TestFactory(getCLV());
             service.registerFactory(f);
-            TestFmwk.logln(f.toString());
+            logln(f.toString());
         }
     }
 
-    static class UnregisterFactoryThread extends TestThread {
+    class UnregisterFactoryThread extends TestThread {
         private Random r;
         List<ICUService.Factory> factories;
 
@@ -218,12 +217,12 @@ public class ICUServiceThreadTest extends CoreTestFmwk {
                 int n = r.nextInt(s);
                 ICUService.Factory f = (ICUService.Factory) factories.remove(n);
                 boolean success = service.unregisterFactory(f);
-                TestFmwk.logln("factory: " + f + (success ? " succeeded." : " *** failed."));
+                logln("factory: " + f + (success ? " succeeded." : " *** failed."));
             }
         }
     }
 
-    static class UnregisterFactoryListThread extends TestThread {
+    class UnregisterFactoryListThread extends TestThread {
         ICUService.Factory[] factories;
         int n;
 
@@ -239,12 +238,12 @@ public class ICUServiceThreadTest extends CoreTestFmwk {
             if (n < factories.length) {
                 ICUService.Factory f = factories[n++];
                 boolean success = service.unregisterFactory(f);
-                TestFmwk.logln("factory: " + f + (success ? " succeeded." : " *** failed."));
+                logln("factory: " + f + (success ? " succeeded." : " *** failed."));
             }
         }
     }
 
-    static class GetVisibleThread extends TestThread {
+    class GetVisibleThread extends TestThread {
         GetVisibleThread(String name, ICUService service, long delay) {
             super("VIS " + name, service, delay);
         }
@@ -257,12 +256,12 @@ public class ICUServiceThreadTest extends CoreTestFmwk {
             while (--n >= 0 && iter.hasNext()) {
                 String id = iter.next();
                 Object result = service.get(id);
-                TestFmwk.logln("iter: " + n + " id: " + id + " result: " + result);
+                logln("iter: " + n + " id: " + id + " result: " + result);
             }
         }
     }
 
-    static class GetDisplayThread extends TestThread {
+    class GetDisplayThread extends TestThread {
         ULocale locale;
 
         GetDisplayThread(String name, ICUService service, long delay, ULocale locale) {
@@ -287,13 +286,12 @@ public class ICUServiceThreadTest extends CoreTestFmwk {
                 // int to String out of this statement resolves the issue.
 
                 String num = Integer.toString(n);
-                TestFmwk.logln(
-                        " iter: " + num + " dname: " + dname + " id: " + id + " result: " + result);
+                logln(" iter: " + num + " dname: " + dname + " id: " + id + " result: " + result);
             }
         }
     }
 
-    static class GetThread extends TestThread {
+    class GetThread extends TestThread {
         private String[] actualID;
 
         GetThread(String name, ICUService service, long delay) {
@@ -307,12 +305,12 @@ public class ICUServiceThreadTest extends CoreTestFmwk {
             String id = getCLV();
             Object o = service.get(id, actualID);
             if (o != null) {
-                TestFmwk.logln(" id: " + id + " actual: " + actualID[0] + " result: " + o);
+                logln(" id: " + id + " actual: " + actualID[0] + " result: " + o);
             }
         }
     }
 
-    static class GetListThread extends TestThread {
+    class GetListThread extends TestThread {
         private final String[] list;
         private int n;
 
@@ -329,7 +327,7 @@ public class ICUServiceThreadTest extends CoreTestFmwk {
             }
             String id = list[n];
             Object o = service.get(id);
-            TestFmwk.logln(" id: " + id + " result: " + o);
+            logln(" id: " + id + " result: " + o);
         }
     }
 

@@ -808,8 +808,12 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
     // class RBBIMonkeyImpl     holds (some indirectly) everything associated with running a monkey
     //                          test for one set of break rules.
     //
+    enum CheckDirection {
+        FORWARD,
+        REVERSE
+    };
 
-    static class RBBIMonkeyImpl extends Thread {
+    class RBBIMonkeyImpl extends Thread {
 
         void setup(String ruleFile) {
             fRuleFileName = ruleFile;
@@ -860,7 +864,7 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
             fRuleCharBuffer = testFileBuf.toString(); /* the file as a String */
         }
 
-        static class MonkeyException extends RuntimeException {
+        class MonkeyException extends RuntimeException {
             private static final long serialVersionUID = 1L;
             public int fPosition; // Position of the failure in the test data.
 
@@ -908,11 +912,6 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
                 }
             }
         }
-
-        enum CheckDirection {
-            FORWARD,
-            REVERSE
-        };
 
         void testForwards() {
             fTestData.clearActualBreaks();

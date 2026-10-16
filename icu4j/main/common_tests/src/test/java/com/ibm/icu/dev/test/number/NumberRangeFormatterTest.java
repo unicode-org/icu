@@ -901,7 +901,7 @@ public class NumberRangeFormatterTest extends CoreTestFmwk {
 
     static final String[] allNSNames = NumberingSystem.getAvailableNames();
 
-    private static class RangePatternSink extends UResource.Sink {
+    private class RangePatternSink extends UResource.Sink {
         Map<String, String> rangePatterns = new HashMap<>();
         Map<String, String> approxPatterns = new HashMap<>();
 
@@ -1143,7 +1143,7 @@ public class NumberRangeFormatterTest extends CoreTestFmwk {
                 "500,000% – 500,000,000%");
     }
 
-    static void assertFormatRange(
+    void assertFormatRange(
             String message,
             UnlocalizedNumberRangeFormatter f,
             ULocale locale,
@@ -1170,7 +1170,7 @@ public class NumberRangeFormatterTest extends CoreTestFmwk {
         assertFormattedRangeEquals(message, l, 5e3, 5e6, expected_50K_50M);
     }
 
-    private static FormattedNumberRange assertFormattedRangeEquals(
+    private FormattedNumberRange assertFormattedRangeEquals(
             String message,
             LocalizedNumberRangeFormatter l,
             Number first,
