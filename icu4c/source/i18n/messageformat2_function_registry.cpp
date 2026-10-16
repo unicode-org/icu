@@ -2303,7 +2303,7 @@ void StandardFunctions::TestFunctionValue::selectKeys(const UnicodeString* keys,
         // 1.0 must come first, so search the keys for 1.0 and then 1
         for (int32_t i = 0; i < keysLen; i++) {
             if (keys[i] == u"1.0") {
-                prefs[0] = i;
+                prefs[prefsLen] = i;
                 prefsLen++;
             }
         }
