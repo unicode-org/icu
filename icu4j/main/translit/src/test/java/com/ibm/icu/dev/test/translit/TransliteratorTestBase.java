@@ -1,3 +1,5 @@
+// © 2026 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.dev.test.translit;
 
 import com.ibm.icu.dev.test.TestFmwk;
