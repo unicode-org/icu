@@ -5,7 +5,6 @@ package com.ibm.icu.dev.test.number;
 import com.ibm.icu.dev.impl.number.DecimalQuantity_64BitBCD;
 import com.ibm.icu.dev.impl.number.DecimalQuantity_ByteArrayBCD;
 import com.ibm.icu.dev.impl.number.DecimalQuantity_SimpleStorage;
-import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.FormattedStringBuilder;
 import com.ibm.icu.impl.number.DecimalFormatProperties;
 import com.ibm.icu.impl.number.DecimalQuantity;
@@ -34,7 +33,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
-public class DecimalQuantityTest extends CoreTestFmwk {
+public class DecimalQuantityTest extends NumberTestBase {
 
     @Ignore
     @Test
@@ -129,8 +128,7 @@ public class DecimalQuantityTest extends CoreTestFmwk {
         }
     }
 
-    static void testDecimalQuantity(
-            int t, String str, List<LocalizedNumberFormatter> formats, int mode) {
+    void testDecimalQuantity(int t, String str, List<LocalizedNumberFormatter> formats, int mode) {
         if (mode == 2) {
             assertEquals("Double is not valid", Double.toString(Double.parseDouble(str)), str);
         }
@@ -175,7 +173,7 @@ public class DecimalQuantityTest extends CoreTestFmwk {
         }
     }
 
-    private static void testDecimalQuantityExpectedOutput(DecimalQuantity rq, String expected) {
+    private void testDecimalQuantityExpectedOutput(DecimalQuantity rq, String expected) {
         DecimalQuantity q0 = rq.createCopy();
         // Force an accurate double
         q0.roundToInfinity();
@@ -197,7 +195,7 @@ public class DecimalQuantityTest extends CoreTestFmwk {
     private static final MathContext MATH_CONTEXT_PRECISION =
             new MathContext(3, RoundingMode.HALF_UP);
 
-    private static void testDecimalQuantityRounding(DecimalQuantity rq0, DecimalQuantity rq1) {
+    private void testDecimalQuantityRounding(DecimalQuantity rq0, DecimalQuantity rq1) {
         DecimalQuantity q0 = rq0.createCopy();
         DecimalQuantity q1 = rq1.createCopy();
         q0.roundToMagnitude(-1, MATH_CONTEXT_HALF_EVEN);
@@ -217,8 +215,7 @@ public class DecimalQuantityTest extends CoreTestFmwk {
         testDecimalQuantityBehavior(q0, q1);
     }
 
-    private static void testDecimalQuantityRoundingInterval(
-            DecimalQuantity rq0, DecimalQuantity rq1) {
+    private void testDecimalQuantityRoundingInterval(DecimalQuantity rq0, DecimalQuantity rq1) {
         DecimalQuantity q0 = rq0.createCopy();
         DecimalQuantity q1 = rq1.createCopy();
         q0.roundToIncrement(new BigDecimal("0.05"), MATH_CONTEXT_HALF_EVEN);
@@ -232,7 +229,7 @@ public class DecimalQuantityTest extends CoreTestFmwk {
         testDecimalQuantityBehavior(q0, q1);
     }
 
-    private static void testDecimalQuantityMath(DecimalQuantity rq0, DecimalQuantity rq1) {
+    private void testDecimalQuantityMath(DecimalQuantity rq0, DecimalQuantity rq1) {
         DecimalQuantity q0 = rq0.createCopy();
         DecimalQuantity q1 = rq1.createCopy();
         q0.adjustMagnitude(-3);
@@ -246,7 +243,7 @@ public class DecimalQuantityTest extends CoreTestFmwk {
         testDecimalQuantityBehavior(q0, q1);
     }
 
-    private static void testDecimalQuantityWithFormats(
+    private void testDecimalQuantityWithFormats(
             DecimalQuantity rq0, DecimalQuantity rq1, List<LocalizedNumberFormatter> formats) {
         for (LocalizedNumberFormatter format : formats) {
             DecimalQuantity q0 = rq0.createCopy();
@@ -261,7 +258,7 @@ public class DecimalQuantityTest extends CoreTestFmwk {
         }
     }
 
-    private static void testDecimalQuantityBehavior(DecimalQuantity rq0, DecimalQuantity rq1) {
+    private void testDecimalQuantityBehavior(DecimalQuantity rq0, DecimalQuantity rq1) {
         DecimalQuantity q0 = rq0.createCopy();
         DecimalQuantity q1 = rq1.createCopy();
 
@@ -1070,30 +1067,5 @@ public class DecimalQuantityTest extends CoreTestFmwk {
                 "Zero ignored for visible exponent",
                 "1.0",
                 DecimalQuantity_DualStorageBCD.fromExponentString("1.0c0").toExponentString());
-    }
-
-    static boolean doubleEquals(double d1, double d2) {
-        return (Math.abs(d1 - d2) < 1e-6) || (Math.abs((d1 - d2) / d1) < 1e-6);
-    }
-
-    static void assertDoubleEquals(String message, double d1, double d2) {
-        boolean equal = doubleEquals(d1, d2);
-        handleAssert(equal, message, d1, d2, null, false);
-    }
-
-    static void assertBigDecimalEquals(String message, String d1, BigDecimal d2) {
-        assertBigDecimalEquals(message, new BigDecimal(d1), d2);
-    }
-
-    static void assertBigDecimalEquals(String message, BigDecimal d1, BigDecimal d2) {
-        boolean equal = d1.compareTo(d2) == 0;
-        handleAssert(equal, message, d1, d2, null, false);
-    }
-
-    static void assertToStringAndHealth(DecimalQuantity_DualStorageBCD fq, String expected) {
-        String actual = fq.toString();
-        assertEquals("DecimalQuantity toString", expected, actual);
-        String health = fq.checkHealth();
-        assertNull("DecimalQuantity health", health);
     }
 }

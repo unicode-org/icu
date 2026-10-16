@@ -2627,7 +2627,7 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
                 "-RON 123.12");
     }
 
-    public static class UnitInflectionTestCase {
+    public class UnitInflectionTestCase {
         public final String unitIdentifier;
         public final String locale;
         public final String unitDisplayCase;
@@ -6785,7 +6785,7 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
                 "Testing default -u-mu- for fr-FR", MeasureUnit.CELSIUS.getIdentifier(), result);
     }
 
-    static void assertFormatDescending(
+    void assertFormatDescending(
             String message,
             String skeleton,
             String conciseSkeleton,
@@ -6797,7 +6797,7 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
         assertFormatDescending(message, skeleton, conciseSkeleton, f, locale, inputs, expected);
     }
 
-    static void assertFormatDescendingBig(
+    void assertFormatDescendingBig(
             String message,
             String skeleton,
             String conciseSkeleton,
@@ -6809,7 +6809,7 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
         assertFormatDescending(message, skeleton, conciseSkeleton, f, locale, inputs, expected);
     }
 
-    static void assertFormatDescending(
+    void assertFormatDescending(
             String message,
             String skeleton,
             String conciseSkeleton,
@@ -6865,7 +6865,7 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
         }
     }
 
-    static FormattedNumber assertFormatSingle(
+    FormattedNumber assertFormatSingle(
             String message,
             String skeleton,
             String conciseSkeleton,
@@ -6912,7 +6912,7 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
         return result1;
     }
 
-    static void assertFormatSingleMeasure(
+    void assertFormatSingleMeasure(
             String message,
             String skeleton,
             String conciseSkeleton,
@@ -6958,7 +6958,7 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
         }
     }
 
-    static void assertUndefinedSkeleton(UnlocalizedNumberFormatter f) {
+    void assertUndefinedSkeleton(UnlocalizedNumberFormatter f) {
         try {
             String skeleton = f.toSkeleton();
             fail("Expected toSkeleton to fail, but it passed, producing: " + skeleton);
