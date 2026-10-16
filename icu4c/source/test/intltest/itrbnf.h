@@ -154,6 +154,7 @@ public:
     void TestPluralRules();
 
     void TestInfinityNaN();
+    void TestInfinityRuleRecursionLimit();
     void TestVariableDecimalPoint();
     void TestRounding();
     void TestLargeNumbers();

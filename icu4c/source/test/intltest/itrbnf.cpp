@@ -89,6 +89,7 @@ void IntlTestRBNF::runIndexedTest(int32_t index, UBool exec, const char* &name, 
         TESTCASE(39, TestDividedByZero);
         TESTCASE(40, TestTurkishSpellout);
         TESTCASE(41, TestNumeratorSubstitutionOverflow);
+        TESTCASE(42, TestInfinityRuleRecursionLimit);
 #else
         TESTCASE(0, TestRBNFDisabled);
 #endif
@@ -2336,6 +2337,56 @@ void IntlTestRBNF::TestInfinityNaN() {
     };
 
     doTest(&enFormatter2, enDefaultTestData, true);
+}
+
+void IntlTestRBNF::TestInfinityRuleRecursionLimit() {
+    // The infinity rule is not always a hard-coded end state: with
+    // caller-supplied rules it can contain a substitution that formats
+    // infinity again. Here the Inf rule uses << (a MultiplierSubstitution;
+    // special rules have divisor 1), so formatting +Inf re-enters the
+    // infinity branch of NFSubstitution::doSubstitution() on every hop.
+    // Before the fix, that branch called the infinity rule's doFormat()
+    // directly, bypassing NFRuleSet::format() — the only place that
+    // enforces RECURSION_LIMIT (64) — and formatting +Inf recursed
+    // without bound until the stack overflowed.
+    // With the fix, the branch routes through NFRuleSet::format(), so
+    // formatting stops after exactly RECURSION_LIMIT (64) hops.
+    UErrorCode status = U_ZERO_ERROR;
+    UParseError parseError;
+    UnicodeString rules("%default:"
+            "-x: minus >>;"
+            "Inf: infinite <<;"
+            "NaN: not a number;"
+            "0: =#,##0=;");
+    RuleBasedNumberFormat formatter(rules, Locale::getEnglish(), parseError, status);
+    if (U_FAILURE(status)) {
+        errln("Unable to create RuleBasedNumberFormat - " + UnicodeString(u_errorName(status)));
+        return;
+    }
+
+    // Finite values are unaffected.
+    UnicodeString finiteResult;
+    formatter.format(1.0, finiteResult, status);
+    assertEquals("finite formatting", UnicodeString("1"), finiteResult);
+
+    // +Inf: one "infinite " per hop, stopping at RECURSION_LIMIT (64) hops.
+    UnicodeString expectedInf;
+    for (int32_t i = 0; i < 64; ++i) {
+        expectedInf.append("infinite ");
+    }
+    UnicodeString infResult;
+    formatter.format(uprv_getInfinity(), infResult, status);
+    assertEquals("infinity-rule recursion is bounded", expectedInf, infResult);
+
+    // -Inf: the minus rule consumes the first hop, leaving 63 hops
+    // for the infinity rule.
+    UnicodeString expectedNegInf("minus ");
+    for (int32_t i = 0; i < 63; ++i) {
+        expectedNegInf.append("infinite ");
+    }
+    UnicodeString negInfResult;
+    formatter.format(-uprv_getInfinity(), negInfResult, status);
+    assertEquals("negative-infinity recursion is bounded", expectedNegInf, negInfResult);
 }
 
 void IntlTestRBNF::TestVariableDecimalPoint() {
