@@ -92,6 +92,7 @@ private:
     void TestCoverage();
     void TestDiacriticMatch();
     void TestBug22775();
+    void TestCEIndexOverflow();
 #endif
 };
 
