@@ -441,7 +441,7 @@ public class PersonNameFormatterImpl {
         // if we got the "unknown" script code, don't do anything with it-- just return the original
         // locale
         if (scriptCode.equals("Zzzz")) {
-            return oldLocale;
+            return (oldLocale != null) ? oldLocale : Locale.ROOT;
         }
 
         Locale.Builder builder = new Locale.Builder();
