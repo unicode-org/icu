@@ -29,6 +29,7 @@
 #include "mutex.h"
 #include "norm2allmodes.h"
 #include "normalizer2impl.h"
+#include "putilimp.h"
 #include "uassert.h"
 #include "ucln_cmn.h"
 
@@ -386,8 +387,13 @@ normalizeSecondAndAppend(const UNormalizer2 *norm2,
             // Avoid duplicate argument checking and support NUL-terminated src.
             UnicodeString safeMiddle;
             {
+                int32_t destCapacity;
                 ReorderingBuffer buffer(n2wi->impl, firstString);
-                if(buffer.init(firstLength+secondLength+1, *pErrorCode)) {  // destCapacity>=-1
+                if(uprv_add32_overflow(firstLength, secondLength, &destCapacity) ||
+                        uprv_add32_overflow(destCapacity, 1, &destCapacity)) {
+                    firstString.setToBogus();
+                    *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
+                } else if(buffer.init(destCapacity, *pErrorCode)) {  // destCapacity>=-1
                     n2wi->normalizeAndAppend(second, secondLength>=0 ? second+secondLength : nullptr,
                                              doNormalize, safeMiddle, buffer, *pErrorCode);
                 }
