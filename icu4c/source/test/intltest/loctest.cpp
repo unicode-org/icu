@@ -6317,6 +6317,28 @@ void LocaleTest::TestToLanguageTag() {
         icu::CheckedArrayByteSink sink(buf, sizeof(buf));
         locale.toLanguageTag(sink, status);
     }
+
+    // StringByteSink with a 16-bit StringClass must convert each byte to
+    // one Unit, not reinterpret the byte buffer as Units. Before the fix,
+    // toLanguageTag<UnicodeString>() returned garbage (pairs of ASCII bytes
+    // fused into single UChars) and read past the end of the byte buffer.
+    {
+        IcuTestErrorCode status2(*this, "TestToLanguageTag() 16-bit StringClass");
+        UnicodeString tag16 = loc_en.toLanguageTag<UnicodeString>(status2);
+        status2.errIfFailureAndReset("toLanguageTag<UnicodeString>");
+        assertEquals("toLanguageTag<UnicodeString>", "en-US", tag16);
+        std::u16string tag16std = loc_en.toLanguageTag<std::u16string>(status2);
+        status2.errIfFailureAndReset("toLanguageTag<std::u16string>");
+        assertEquals("toLanguageTag<std::u16string>", u"en-US", tag16std);
+
+        Locale loc_kw("en_US@calendar=buddhist");
+        UnicodeString kw = loc_kw.getKeywordValue<UnicodeString>("calendar", status2);
+        status2.errIfFailureAndReset("getKeywordValue<UnicodeString>");
+        assertEquals("getKeywordValue<UnicodeString>", "buddhist", kw);
+        UnicodeString ukw = loc_kw.getUnicodeKeywordValue<UnicodeString>("ca", status2);
+        status2.errIfFailureAndReset("getUnicodeKeywordValue<UnicodeString>");
+        assertEquals("getUnicodeKeywordValue<UnicodeString>", "buddhist", ukw);
+    }
 }
 
 /* ICU-20310 */
