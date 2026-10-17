@@ -321,8 +321,8 @@ abstract class NFSubstitution {
 
         if (Double.isInfinite(numberToFormat)) {
             // This is probably a minus rule. Combine it with an infinite rule.
-            NFRule infiniteRule = ruleSet.findRule(Double.POSITIVE_INFINITY);
-            infiniteRule.doFormat(numberToFormat, toInsertInto, position + pos, recursionCount);
+            // Route through NFRuleSet.format() to enforce RECURSION_LIMIT.
+            ruleSet.format(numberToFormat, toInsertInto, position + pos, recursionCount);
             return;
         }
 
