@@ -463,8 +463,7 @@ parseTransliterator(ParseState* state, char *tag, uint32_t startline, const stru
     struct SResource *result = nullptr;
     struct UString   *tokenValue;
     FileStream       *file          = nullptr;
-    char              filename[256] = { '\0' };
-    char              cs[128]       = { '\0' };
+    CharString       filename;
     uint32_t          line;
     UCHARBUF *ucbuf=nullptr;
     const char* cp  = nullptr;
@@ -485,15 +484,15 @@ parseTransliterator(ParseState* state, char *tag, uint32_t startline, const stru
     /* make the filename including the directory */
     if (state->inputdir != nullptr)
     {
-        uprv_strcat(filename, state->inputdir);
+        filename.append(state->inputdir, -1, *status);
 
         if (state->inputdir[state->inputdirLength - 1] != U_FILE_SEP_CHAR)
         {
-            uprv_strcat(filename, U_FILE_SEP_STRING);
+            filename.append(U_FILE_SEP_CHAR, *status);
         }
     }
 
-    u_UCharsToChars(tokenValue->fChars, cs, tokenValue->fLength);
+    filename.appendInvariantChars(tokenValue->fChars, tokenValue->fLength, *status);
 
     expect(state, TOK_CLOSE_BRACE, nullptr, nullptr, nullptr, status);
 
@@ -501,13 +500,12 @@ parseTransliterator(ParseState* state, char *tag, uint32_t startline, const stru
     {
         return nullptr;
     }
-    uprv_strcat(filename, cs);
 
 
-    ucbuf = ucbuf_open(filename, &cp, getShowWarning(),false, status);
+    ucbuf = ucbuf_open(filename.data(), &cp, getShowWarning(),false, status);
 
     if (U_FAILURE(*status)) {
-        error(line, "An error occurred while opening the input file %s\n", filename);
+        error(line, "An error occurred while opening the input file %s\n", filename.data());
         return nullptr;
     }
 
@@ -542,8 +540,7 @@ parseDependency(ParseState* state, char *tag, uint32_t startline, const struct U
     struct SResource *elem = nullptr;
     struct UString   *tokenValue;
     uint32_t          line;
-    char              filename[256] = { '\0' };
-    char              cs[128]       = { '\0' };
+    CharString       filename;
 
     expect(state, TOK_STRING, &tokenValue, nullptr, &line, status);
 
@@ -558,26 +555,25 @@ parseDependency(ParseState* state, char *tag, uint32_t startline, const struct U
     /* make the filename including the directory */
     if (state->outputdir != nullptr)
     {
-        uprv_strcat(filename, state->outputdir);
+        filename.append(state->outputdir, -1, *status);
 
         if (state->outputdir[state->outputdirLength - 1] != U_FILE_SEP_CHAR)
         {
-            uprv_strcat(filename, U_FILE_SEP_STRING);
+            filename.append(U_FILE_SEP_CHAR, *status);
         }
     }
 
-    u_UCharsToChars(tokenValue->fChars, cs, tokenValue->fLength);
+    filename.appendInvariantChars(tokenValue->fChars, tokenValue->fLength, *status);
 
     if (U_FAILURE(*status))
     {
         return nullptr;
     }
-    uprv_strcat(filename, cs);
-    if(!T_FileStream_file_exists(filename)){
+    if(!T_FileStream_file_exists(filename.data())){
         if(isStrict()){
-            error(line, "The dependency file %s does not exist. Please make sure it exists.\n",filename);
+            error(line, "The dependency file %s does not exist. Please make sure it exists.\n", filename.data());
         }else{
-            warning(line, "The dependency file %s does not exist. Please make sure it exists.\n",filename);
+            warning(line, "The dependency file %s does not exist. Please make sure it exists.\n", filename.data());
         }
     }
     if(dependencyArray==nullptr){
