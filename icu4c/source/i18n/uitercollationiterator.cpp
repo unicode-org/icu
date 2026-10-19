@@ -213,13 +213,9 @@ FCDUIterCollationIterator::previousCodePoint(UErrorCode &errorCode) {
                 return U_SENTINEL;
             }
             if(CollationFCD::hasLccc(c)) {
-                UChar32 prev = U_SENTINEL;
                 if(CollationFCD::maybeTibetanCompositeVowel(c) ||
-                        CollationFCD::hasTccc(prev = iter.previous(&iter))) {
+                        CollationFCD::hasTcccBefore(iter)) {
                     iter.next(&iter);
-                    if(prev >= 0) {
-                        iter.next(&iter);
-                    }
                     if(!previousSegment(errorCode)) {
                         return U_SENTINEL;
                     }
@@ -227,15 +223,12 @@ FCDUIterCollationIterator::previousCodePoint(UErrorCode &errorCode) {
                 }
                 // hasLccc(trail)=true for all trail surrogates
                 if(U16_IS_TRAIL(c)) {
-                    if(prev < 0) {
-                        prev = iter.previous(&iter);
+                    UChar32 lead = iter.previous(&iter);
+                    if(U16_IS_LEAD(lead)) {
+                        return U16_GET_SUPPLEMENTARY(lead, c);
+                    } else if(lead >= 0) {
+                        iter.next(&iter);
                     }
-                    if(U16_IS_LEAD(prev)) {
-                        return U16_GET_SUPPLEMENTARY(prev, c);
-                    }
-                }
-                if(prev >= 0) {
-                    iter.next(&iter);
                 }
             }
             return c;
