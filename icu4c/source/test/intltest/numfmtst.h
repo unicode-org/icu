@@ -314,6 +314,7 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void Test21556_CurrencyAsDecimal();
     void Test22088_Ethiopic();
     void Test22983_LongFraction();
+    void TestParseCurrencyLongLocale();
 
  private:
     UBool testFormattableAsUFormattable(const char *file, int line, Formattable &f);
