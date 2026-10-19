@@ -1434,6 +1434,12 @@ getCacheEntry(const char* locale, UErrorCode& ec) {
     CurrencyNameStruct* currencySymbols = nullptr;
     CurrencyNameCacheEntry* cacheEntry = nullptr;
 
+    // The cache key is stored in a fixed-size buffer.
+    if (uprv_strlen(locale) >= ULOC_FULLNAME_CAPACITY) {
+        ec = U_ILLEGAL_ARGUMENT_ERROR;
+        return nullptr;
+    }
+
     umtx_lock(&gCurrencyCacheMutex);
     // in order to handle racing correctly,
     // not putting 'search' in a separate function.
