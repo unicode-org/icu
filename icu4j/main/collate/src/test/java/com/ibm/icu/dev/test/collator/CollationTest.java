@@ -1993,6 +1993,24 @@ public class CollationTest extends TestFmwk {
                 String[] testCase = testCases[i];
                 int cmp = coll.compare(testCase[0], testCase[1]);
                 assertEquals("Locale " + loc.toString() + " case:" + i, 0, cmp);
+                if (coll instanceof RuleBasedCollator) {
+                    RuleBasedCollator rbc = (RuleBasedCollator) coll;
+                    CollationElementIterator iter0 =
+                            rbc.getCollationElementIterator(
+                                    UCharacterIterator.getInstance(testCase[0]));
+                    CollationElementIterator iter1 =
+                            rbc.getCollationElementIterator(
+                                    UCharacterIterator.getInstance(testCase[1]));
+                    int ce0;
+                    do {
+                        ce0 = iter0.next();
+                        int ce1 = iter1.next();
+                        assertEquals(
+                                "Locale " + loc.toString() + " UCharacterIterator case:" + i,
+                                ce0,
+                                ce1);
+                    } while (ce0 != CollationElementIterator.NULLORDER);
+                }
             }
         }
     }

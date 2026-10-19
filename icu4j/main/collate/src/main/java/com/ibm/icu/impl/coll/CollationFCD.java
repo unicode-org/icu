@@ -13,6 +13,7 @@
 
 package com.ibm.icu.impl.coll;
 
+import com.ibm.icu.text.UCharacterIterator;
 import com.ibm.icu.text.UTF16;
 
 /**
@@ -73,6 +74,29 @@ public final class CollationFCD {
                     return Character.isHighSurrogate(prev2) && hasTccc(prev2);
                 }
             } else {
+                return hasTccc(prev);
+            }
+        }
+        return false;
+    }
+
+    static boolean hasTcccBefore(UCharacterIterator iter) {
+        int prev = iter.previous();
+        if (prev >= 0) {
+            if (Character.isLowSurrogate((char) prev)) {
+                // hasTccc(<low-surrogate>) always returns false.
+                // To test possible trailing ccc, we need to check the high surrogate
+                // (or previous character for unpaired surrogate).
+                int prev2 = iter.previous();
+                if (prev2 >= 0) {
+                    iter.next();
+                    iter.next();
+                    return Character.isHighSurrogate((char) prev2) && hasTccc(prev2);
+                }
+                iter.next();
+                return false;
+            } else {
+                iter.next();
                 return hasTccc(prev);
             }
         }
