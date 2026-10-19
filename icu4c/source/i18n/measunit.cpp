@@ -2644,6 +2644,8 @@ MeasureUnit::MeasureUnit(MeasureUnit &&other) noexcept
         fSubTypeId(other.fSubTypeId),
         fTypeId(other.fTypeId) {
     other.fImpl = nullptr;
+    other.fTypeId = kBaseTypeIdx;
+    other.fSubTypeId = kBaseSubTypeIdx;
 }
 
 MeasureUnit::MeasureUnit(MeasureUnitImpl&& impl)
@@ -2686,6 +2688,8 @@ MeasureUnit &MeasureUnit::operator=(MeasureUnit &&other) noexcept {
     other.fImpl = nullptr;
     fTypeId = other.fTypeId;
     fSubTypeId = other.fSubTypeId;
+    other.fTypeId = kBaseTypeIdx;
+    other.fSubTypeId = kBaseSubTypeIdx;
     return *this;
 }
 
@@ -2717,7 +2721,11 @@ const char *MeasureUnit::getSubtype() const {
 }
 
 const char *MeasureUnit::getIdentifier() const {
-    return fImpl ? fImpl->identifier.data() : gSubTypes[getOffset()];
+    if (fImpl) {
+        return fImpl->identifier.data();
+    }
+    int32_t offset = getOffset();
+    return offset >= 0 ? gSubTypes[offset] : "";
 }
 
 bool MeasureUnit::operator==(const UObject& other) const {
