@@ -62,8 +62,8 @@ ucsdet_setText(UCharsetDetector *ucsd, const char *textIn, int32_t len, UErrorCo
     ((CharsetDetector *) ucsd)->setText(textIn, len);
 }
 
-U_CAPI const char * U_EXPORT2
-ucsdet_getName(const UCharsetMatch *ucsm, UErrorCode *status)
+U_CAPI const char* U_EXPORT2
+ucsdet_getName(const UCharsetMatch* ucsm U_LIFETIME_BOUND, UErrorCode* status)
 {
     if(U_FAILURE(*status)) {
         return nullptr;
@@ -82,8 +82,8 @@ ucsdet_getConfidence(const UCharsetMatch *ucsm, UErrorCode *status)
     return ((CharsetMatch *) ucsm)->getConfidence();
 }
 
-U_CAPI const char * U_EXPORT2
-ucsdet_getLanguage(const UCharsetMatch *ucsm, UErrorCode *status)
+U_CAPI const char* U_EXPORT2
+ucsdet_getLanguage(const UCharsetMatch* ucsm U_LIFETIME_BOUND, UErrorCode* status)
 {
     if(U_FAILURE(*status)) {
         return nullptr;
@@ -92,8 +92,8 @@ ucsdet_getLanguage(const UCharsetMatch *ucsm, UErrorCode *status)
     return ((CharsetMatch *) ucsm)->getLanguage();
 }
 
-U_CAPI const UCharsetMatch * U_EXPORT2
-ucsdet_detect(UCharsetDetector *ucsd, UErrorCode *status)
+U_CAPI const UCharsetMatch* U_EXPORT2
+ucsdet_detect(UCharsetDetector* ucsd U_LIFETIME_BOUND, UErrorCode* status)
 {
     if(U_FAILURE(*status)) {
         return nullptr;
@@ -113,8 +113,9 @@ ucsdet_setDeclaredEncoding(UCharsetDetector *ucsd, const char *encoding, int32_t
 }
 
 U_CAPI const UCharsetMatch**
-ucsdet_detectAll(UCharsetDetector *ucsd,
-                 int32_t *maxMatchesFound, UErrorCode *status)
+ucsdet_detectAll(UCharsetDetector* ucsd U_LIFETIME_BOUND,
+                 int32_t* maxMatchesFound,
+                 UErrorCode* status)
 {
     if(U_FAILURE(*status)) {
         return nullptr;
@@ -193,8 +194,8 @@ ucsdet_getAllDetectableCharsets(const UCharsetDetector * /*ucsd*/, UErrorCode *s
     return CharsetDetector::getAllDetectableCharsets(*status);
 }
 
-U_CAPI UEnumeration * U_EXPORT2
-ucsdet_getDetectableCharsets(const UCharsetDetector *ucsd,  UErrorCode *status)
+U_CAPI UEnumeration* U_EXPORT2
+ucsdet_getDetectableCharsets(const UCharsetDetector* ucsd U_LIFETIME_BOUND, UErrorCode* status)
 {
     return ((CharsetDetector *)ucsd)->getDetectableCharsets(*status);
 }

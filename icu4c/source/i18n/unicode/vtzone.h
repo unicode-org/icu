@@ -62,7 +62,7 @@ public:
      * @param right The object to be copied.
      * @stable ICU 3.8
      */
-    VTimeZone& operator=(const VTimeZone& right);
+    VTimeZone& operator=(const VTimeZone& right) U_LIFETIME_BOUND;
 
     /**
      * Return true if the given <code>TimeZone</code> objects are

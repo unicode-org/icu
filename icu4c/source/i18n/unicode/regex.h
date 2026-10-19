@@ -136,7 +136,7 @@ public:
      *     to the source object.
      * @stable ICU 2.4
      */
-    RegexPattern  &operator =(const RegexPattern &source);
+    RegexPattern& operator=(const RegexPattern& source) U_LIFETIME_BOUND;
 
     /**
      * Create an exact copy of this RegexPattern object.  Since RegexPattern is not
@@ -344,9 +344,9 @@ public:
     *
     * @stable ICU 2.4
     */
-    RegexMatcher *matcher(const UnicodeString &input,
-        UErrorCode          &status) const;
-        
+    RegexMatcher* matcher(const UnicodeString& input U_LIFETIME_BOUND,
+                          UErrorCode& status) const U_LIFETIME_BOUND;
+
 private:
     /**
      * Cause a compilation error if an application accidentally attempts to
@@ -376,7 +376,7 @@ public:
     *
     * @stable ICU 2.6
     */
-    RegexMatcher *matcher(UErrorCode  &status) const;
+    RegexMatcher* matcher(UErrorCode & status) const U_LIFETIME_BOUND;
 
 
    /**
@@ -438,7 +438,7 @@ public:
     *
     * @stable ICU 4.6
     */
-    UText *patternText(UErrorCode      &status) const;
+    UText* patternText(UErrorCode& status) const U_LIFETIME_BOUND;
 
 
     /**
@@ -911,7 +911,7 @@ public:
     *
     *   @stable ICU 4.6
     */
-    UText *group(UText *dest, int64_t &group_len, UErrorCode &status) const; 
+    UText* group(UText* dest U_LIFETIME_BOUND, int64_t& group_len, UErrorCode& status) const;
 
    /**
     *   Returns a shallow clone of the entire live input string with the UText current native index
@@ -933,7 +933,10 @@ public:
     *
     *   @stable ICU 4.6
     */
-    UText *group(int32_t groupNum, UText *dest, int64_t &group_len, UErrorCode &status) const;
+    UText* group(int32_t groupNum,
+                 UText* dest U_LIFETIME_BOUND,
+                 int64_t& group_len,
+                 UErrorCode& status) const;
 
    /**
     *   Returns the index in the input string of the start of the text matched
@@ -1061,7 +1064,7 @@ public:
     *   @return this RegexMatcher.
     *   @stable ICU 2.4
     */
-    RegexMatcher &reset();
+    RegexMatcher& reset() U_LIFETIME_BOUND;
 
 
    /**
@@ -1079,7 +1082,7 @@ public:
     *   @return this RegexMatcher.
     *   @stable ICU 2.8
     */
-    RegexMatcher &reset(int64_t index, UErrorCode &status);
+    RegexMatcher& reset(int64_t index, UErrorCode& status) U_LIFETIME_BOUND;
 
 
    /**
@@ -1099,7 +1102,7 @@ public:
     *   @return this RegexMatcher.
     *   @stable ICU 2.4
     */
-    RegexMatcher &reset(const UnicodeString &input);
+    RegexMatcher& reset(const UnicodeString& input) U_LIFETIME_BOUND;
 
 
    /**
@@ -1115,7 +1118,7 @@ public:
     *
     *   @stable ICU 4.6
     */
-    RegexMatcher &reset(UText *input);
+    RegexMatcher& reset(UText* input) U_LIFETIME_BOUND;
 
 
   /**
@@ -1142,7 +1145,7 @@ public:
     *
     * @stable ICU 4.8 
     */
-    RegexMatcher &refreshInputText(UText *input, UErrorCode &status);
+    RegexMatcher& refreshInputText(UText* input, UErrorCode& status) U_LIFETIME_BOUND;
 
 private:
     /**
@@ -1167,7 +1170,7 @@ public:
     *   @return the input string
     *   @stable ICU 2.4
     */
-    const UnicodeString &input() const;
+    const UnicodeString& input() const U_LIFETIME_BOUND;
     
    /**
     *   Returns the input string being matched.  This is the live input text; it should not be
@@ -1177,8 +1180,8 @@ public:
     *
     *   @stable ICU 4.6
     */
-    UText *inputText() const;
-    
+    UText* inputText() const U_LIFETIME_BOUND;
+
    /**
     *   Returns the input string being matched, either by copying it into the provided
     *   UText parameter or by returning a shallow clone of the live input. Note that copying
@@ -1189,8 +1192,8 @@ public:
     *
     *   @stable ICU 4.6
     */
-    UText *getInput(UText *dest, UErrorCode &status) const;
-    
+    UText* getInput(UText* dest U_LIFETIME_BOUND, UErrorCode& status) const;
+
 
    /** Sets the limits of this matcher's region.
      * The region is the part of the input string that will be searched to find a match.
@@ -1210,7 +1213,7 @@ public:
      * @param status A reference to a UErrorCode to receive any errors.
      * @stable ICU 4.0
      */
-     RegexMatcher &region(int64_t start, int64_t limit, UErrorCode &status);
+    RegexMatcher& region(int64_t start, int64_t limit, UErrorCode& status) U_LIFETIME_BOUND;
 
    /** 
      * Identical to region(start, limit, status) but also allows a start position without
@@ -1223,7 +1226,10 @@ public:
      *                U_INDEX_OUTOFBOUNDS_ERROR is returned.
      * @stable ICU 4.6
      */
-     RegexMatcher &region(int64_t regionStart, int64_t regionLimit, int64_t startIndex, UErrorCode &status);
+    RegexMatcher& region(int64_t regionStart,
+                         int64_t regionLimit,
+                         int64_t startIndex,
+                         UErrorCode& status) U_LIFETIME_BOUND;
 
    /**
      * Reports the start index of this matcher's region. The searches this matcher
@@ -1294,7 +1300,7 @@ public:
       * @return  This Matcher;
       * @stable ICU 4.0
       **/
-      RegexMatcher &useTransparentBounds(UBool b);
+      RegexMatcher& useTransparentBounds(UBool b) U_LIFETIME_BOUND;
 
      
     /**
@@ -1319,7 +1325,7 @@ public:
       * @return  This Matcher
       * @stable ICU 4.0
       */
-      RegexMatcher &useAnchoringBounds(UBool b);
+      RegexMatcher& useAnchoringBounds(UBool b) U_LIFETIME_BOUND;
 
 
     /**
@@ -1353,7 +1359,7 @@ public:
     *    @return  the RegexPattern for this RegexMatcher
     *    @stable ICU 2.4
     */
-    const RegexPattern &pattern() const;
+    const RegexPattern& pattern() const U_LIFETIME_BOUND;
 
 
    /**
@@ -1395,8 +1401,8 @@ public:
     *
     *    @stable ICU 4.6
     */
-    UText *replaceAll(UText *replacement, UText *dest, UErrorCode &status);
-    
+    UText* replaceAll(UText* replacement, UText* dest U_LIFETIME_BOUND, UErrorCode& status);
+
 
    /**
     * Replaces the first substring of the input that matches
@@ -1445,9 +1451,9 @@ public:
     *
     *    @stable ICU 4.6
     */
-    UText *replaceFirst(UText *replacement, UText *dest, UErrorCode &status);
-    
-    
+    UText* replaceFirst(UText* replacement, UText* dest U_LIFETIME_BOUND, UErrorCode& status);
+
+
    /**
     *   Implements a replace operation intended to be used as part of an
     *   incremental find-and-replace.
@@ -1475,10 +1481,11 @@ public:
     *   @stable ICU 2.4
     *
     */
-    RegexMatcher &appendReplacement(UnicodeString &dest,
-        const UnicodeString &replacement, UErrorCode &status);
-    
-    
+    RegexMatcher& appendReplacement(UnicodeString& dest,
+                                    const UnicodeString& replacement,
+                                    UErrorCode& status) U_LIFETIME_BOUND;
+
+
    /**
     *   Implements a replace operation intended to be used as part of an
     *   incremental find-and-replace.
@@ -1506,9 +1513,9 @@ public:
     *
     *   @stable ICU 4.6
     */
-    RegexMatcher &appendReplacement(UText *dest,
-        UText *replacement, UErrorCode &status);
-
+    RegexMatcher& appendReplacement(UText* dest,
+                                    UText* replacement,
+                                    UErrorCode& status) U_LIFETIME_BOUND;
 
    /**
     * As the final step in a find-and-replace operation, append the remainder
@@ -1520,7 +1527,7 @@ public:
     *  @return  the destination string.
     *  @stable ICU 2.4
     */
-    UnicodeString &appendTail(UnicodeString &dest);
+    UnicodeString& appendTail(UnicodeString& dest U_LIFETIME_BOUND);
 
 
    /**
@@ -1536,7 +1543,7 @@ public:
     *
     *  @stable ICU 4.6
     */
-    UText *appendTail(UText *dest, UErrorCode &status);
+    UText* appendTail(UText* dest U_LIFETIME_BOUND, UErrorCode& status);
 
 
     /**
@@ -1777,8 +1784,10 @@ private:
     UBool                isUWordBoundary(int64_t pos, UErrorCode &status);   // perform RBBI based \b test
     // Find a grapheme cluster boundary using a break iterator. For handling \X in regexes.
     int64_t              followingGCBoundary(int64_t pos, UErrorCode &status);
-    REStackFrame        *resetStack();
-    inline REStackFrame *StateSave(REStackFrame *fp, int64_t savePatIdx, UErrorCode &status);
+    REStackFrame* resetStack() U_LIFETIME_BOUND;
+    inline REStackFrame* StateSave(REStackFrame* fp,
+                                   int64_t savePatIdx,
+                                   UErrorCode& status) U_LIFETIME_BOUND;
     void                 IncrementTime(UErrorCode &status);
 
     // Call user find callback function, if set. Return true if operation should be interrupted.

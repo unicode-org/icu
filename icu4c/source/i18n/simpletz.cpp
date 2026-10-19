@@ -202,8 +202,8 @@ SimpleTimeZone::SimpleTimeZone(const SimpleTimeZone &source)
 // -------------------------------------
 
 // Called by TimeZone::createDefault(), then clone() inside a Mutex - be careful.
-SimpleTimeZone &
-SimpleTimeZone::operator=(const SimpleTimeZone &right)
+SimpleTimeZone&
+SimpleTimeZone::operator=(const SimpleTimeZone& right) U_LIFETIME_BOUND
 {
     if (this != &right)
     {

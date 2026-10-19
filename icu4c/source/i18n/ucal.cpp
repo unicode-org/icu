@@ -579,8 +579,10 @@ ucal_getLimit(    const    UCalendar*              cal,
     return -1;
 }
 
-U_CAPI const char * U_EXPORT2
-ucal_getLocaleByType(const UCalendar *cal, ULocDataLocaleType type, UErrorCode* status) 
+U_CAPI const char* U_EXPORT2
+ucal_getLocaleByType(const UCalendar* cal U_LIFETIME_BOUND,
+                     ULocDataLocaleType type,
+                     UErrorCode* status)
 {
     if (cal == nullptr) {
         if (U_SUCCESS(*status)) {

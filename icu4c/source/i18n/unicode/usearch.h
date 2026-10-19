@@ -306,13 +306,13 @@ typedef enum {
 * @return search iterator data structure, or NULL if there is an error.
 * @stable ICU 2.4
 */
-U_CAPI UStringSearch * U_EXPORT2 usearch_open(const UChar    *pattern,
-                                              int32_t         patternlength,
-                                        const UChar          *text,
-                                              int32_t         textlength,
-                                        const char           *locale,
-                                              UBreakIterator *breakiter,
-                                              UErrorCode     *status);
+U_CAPI UStringSearch* U_EXPORT2 usearch_open(const UChar* pattern U_LIFETIME_BOUND,
+                                             int32_t patternlength,
+                                             const UChar* text U_LIFETIME_BOUND,
+                                             int32_t textlength,
+                                             const char* locale,
+                                             UBreakIterator* breakiter U_LIFETIME_BOUND,
+                                             UErrorCode* status);
 
 /**
 * Creates a String Search iterator data struct using the argument collator language
@@ -343,14 +343,13 @@ U_CAPI UStringSearch * U_EXPORT2 usearch_open(const UChar    *pattern,
 * @return search iterator data structure, or NULL if there is an error.
 * @stable ICU 2.4
 */
-U_CAPI UStringSearch * U_EXPORT2 usearch_openFromCollator(
-                                         const UChar          *pattern,
-                                               int32_t         patternlength,
-                                         const UChar          *text,
-                                               int32_t         textlength,
-                                         const UCollator      *collator,
-                                               UBreakIterator *breakiter,
-                                               UErrorCode     *status);
+U_CAPI UStringSearch* U_EXPORT2 usearch_openFromCollator(const UChar* pattern U_LIFETIME_BOUND,
+                                                         int32_t patternlength,
+                                                         const UChar* text U_LIFETIME_BOUND,
+                                                         int32_t textlength,
+                                                         const UCollator* collator U_LIFETIME_BOUND,
+                                                         UBreakIterator* breakiter U_LIFETIME_BOUND,
+                                                         UErrorCode* status);
 
 /**
  * Destroys and cleans up the String Search iterator data struct.
@@ -577,8 +576,8 @@ U_CAPI void U_EXPORT2 usearch_setText(      UStringSearch *strsrch,
 * @see #usearch_setText
 * @stable ICU 2.4
 */
-U_CAPI const UChar * U_EXPORT2 usearch_getText(const UStringSearch *strsrch, 
-                                               int32_t       *length);
+U_CAPI const UChar* U_EXPORT2 usearch_getText(const UStringSearch* strsrch U_LIFETIME_BOUND,
+                                              int32_t* length);
 
 /**
 * Gets the collator used for the language rules. 
@@ -590,8 +589,7 @@ U_CAPI const UChar * U_EXPORT2 usearch_getText(const UStringSearch *strsrch,
 * @return collator
 * @stable ICU 2.4
 */
-U_CAPI UCollator * U_EXPORT2 usearch_getCollator(
-                                               const UStringSearch *strsrch);
+U_CAPI UCollator* U_EXPORT2 usearch_getCollator(const UStringSearch* strsrch U_LIFETIME_BOUND);
 
 /**
 * Sets the collator used for the language rules. User retains the ownership 
@@ -636,9 +634,8 @@ U_CAPI void U_EXPORT2 usearch_setPattern(      UStringSearch *strsrch,
 * @return pattern string
 * @stable ICU 2.4
 */
-U_CAPI const UChar * U_EXPORT2 usearch_getPattern(
-                                               const UStringSearch *strsrch, 
-                                                     int32_t       *length);
+U_CAPI const UChar* U_EXPORT2 usearch_getPattern(const UStringSearch* strsrch U_LIFETIME_BOUND,
+                                                 int32_t* length);
 
 /* methods ------------------------------------------------------------- */
 

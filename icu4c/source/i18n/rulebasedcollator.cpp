@@ -151,8 +151,10 @@ RuleBasedCollator::RuleBasedCollator(const RuleBasedCollator &other)
     cacheEntry->addRef();
 }
 
-RuleBasedCollator::RuleBasedCollator(const uint8_t *bin, int32_t length,
-                                     const RuleBasedCollator *base, UErrorCode &errorCode)
+RuleBasedCollator::RuleBasedCollator(const uint8_t* bin U_LIFETIME_BOUND,
+                                     int32_t length,
+                                     const RuleBasedCollator* base U_LIFETIME_BOUND,
+                                     UErrorCode& errorCode)
         : data(nullptr),
           settings(nullptr),
           tailoring(nullptr),
@@ -226,7 +228,7 @@ RuleBasedCollator::clone() const {
     return new RuleBasedCollator(*this);
 }
 
-RuleBasedCollator &RuleBasedCollator::operator=(const RuleBasedCollator &other) {
+RuleBasedCollator& RuleBasedCollator::operator=(const RuleBasedCollator& other) U_LIFETIME_BOUND {
     if(this == &other) { return *this; }
     SharedObject::copyPtr(other.settings, settings);
     tailoring = other.tailoring;
@@ -319,8 +321,9 @@ RuleBasedCollator::getLocale(ULocDataLocaleType type, UErrorCode& errorCode) con
     }
 }
 
-const char *
-RuleBasedCollator::internalGetLocaleID(ULocDataLocaleType type, UErrorCode &errorCode) const {
+const char*
+RuleBasedCollator::internalGetLocaleID(ULocDataLocaleType type,
+                                       UErrorCode& errorCode) const U_LIFETIME_BOUND {
     if(U_FAILURE(errorCode)) {
         return nullptr;
     }
@@ -343,7 +346,7 @@ RuleBasedCollator::internalGetLocaleID(ULocDataLocaleType type, UErrorCode &erro
 }
 
 const UnicodeString&
-RuleBasedCollator::getRules() const {
+RuleBasedCollator::getRules() const U_LIFETIME_BOUND {
     return tailoring->rules;
 }
 
@@ -403,8 +406,8 @@ RuleBasedCollator::internalAddContractions(UChar32 c, UnicodeSet &set, UErrorCod
     ContractionsAndExpansions(&set, nullptr, nullptr, false).forCodePoint(data, c, errorCode);
 }
 
-const CollationSettings &
-RuleBasedCollator::getDefaultSettings() const {
+const CollationSettings&
+RuleBasedCollator::getDefaultSettings() const U_LIFETIME_BOUND {
     return *tailoring->settings;
 }
 
@@ -507,8 +510,8 @@ RuleBasedCollator::setAttribute(UColAttribute attr, UColAttributeValue value,
     }
 }
 
-Collator &
-RuleBasedCollator::setMaxVariable(UColReorderCode group, UErrorCode &errorCode) {
+Collator&
+RuleBasedCollator::setMaxVariable(UColReorderCode group, UErrorCode& errorCode) U_LIFETIME_BOUND {
     if(U_FAILURE(errorCode)) { return *this; }
     // Convert the reorder code into a MaxVariable number, or UCOL_DEFAULT=-1.
     int32_t value;
@@ -1278,15 +1281,18 @@ RuleBasedCollator::compare(UCharIterator &left, UCharIterator &right,
     }
 }
 
-CollationKey &
-RuleBasedCollator::getCollationKey(const UnicodeString &s, CollationKey &key,
-                                   UErrorCode &errorCode) const {
+CollationKey&
+RuleBasedCollator::getCollationKey(const UnicodeString& s,
+                                   CollationKey& key U_LIFETIME_BOUND,
+                                   UErrorCode& errorCode) const {
     return getCollationKey(s.getBuffer(), s.length(), key, errorCode);
 }
 
-CollationKey &
-RuleBasedCollator::getCollationKey(const char16_t *s, int32_t length, CollationKey& key,
-                                   UErrorCode &errorCode) const {
+CollationKey&
+RuleBasedCollator::getCollationKey(const char16_t* s,
+                                   int32_t length,
+                                   CollationKey& key U_LIFETIME_BOUND,
+                                   UErrorCode& errorCode) const {
     if(U_FAILURE(errorCode)) {
         return key.setToBogus();
     }
@@ -1622,8 +1628,9 @@ RuleBasedCollator::initMaxExpansions(UErrorCode &errorCode) const {
     return U_SUCCESS(errorCode);
 }
 
-CollationElementIterator *
-RuleBasedCollator::createCollationElementIterator(const UnicodeString& source) const {
+CollationElementIterator*
+RuleBasedCollator::createCollationElementIterator(
+        const UnicodeString& source) const U_LIFETIME_BOUND {
     UErrorCode errorCode = U_ZERO_ERROR;
     if(!initMaxExpansions(errorCode)) { return nullptr; }
     CollationElementIterator *cei = new CollationElementIterator(source, this, errorCode);
@@ -1634,8 +1641,9 @@ RuleBasedCollator::createCollationElementIterator(const UnicodeString& source) c
     return cei;
 }
 
-CollationElementIterator *
-RuleBasedCollator::createCollationElementIterator(const CharacterIterator& source) const {
+CollationElementIterator*
+RuleBasedCollator::createCollationElementIterator(
+        const CharacterIterator& source) const U_LIFETIME_BOUND {
     UErrorCode errorCode = U_ZERO_ERROR;
     if(!initMaxExpansions(errorCode)) { return nullptr; }
     CollationElementIterator *cei = new CollationElementIterator(source, this, errorCode);

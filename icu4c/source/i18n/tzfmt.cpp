@@ -193,7 +193,7 @@ public:
 
     FieldType getType() const;
     uint8_t getWidth() const;
-    const char16_t* getPatternText() const;
+    const char16_t* getPatternText() const U_LIFETIME_BOUND;
 
 private:
     char16_t* fText;
@@ -293,7 +293,7 @@ GMTOffsetField::getWidth() const {
 }
  
 inline const char16_t*
-GMTOffsetField::getPatternText() const {
+GMTOffsetField::getPatternText() const U_LIFETIME_BOUND {
     return fText;
 }
 
@@ -437,7 +437,7 @@ TimeZoneFormat::~TimeZoneFormat() {
 }
 
 TimeZoneFormat&
-TimeZoneFormat::operator=(const TimeZoneFormat& other) {
+TimeZoneFormat::operator=(const TimeZoneFormat& other) U_LIFETIME_BOUND {
     if (this == &other) {
         return *this;
     }
@@ -522,7 +522,7 @@ TimeZoneFormat::createInstance(const Locale& locale, UErrorCode& status) {
 // Setter and Getter
 
 const TimeZoneNames*
-TimeZoneFormat::getTimeZoneNames() const {
+TimeZoneFormat::getTimeZoneNames() const U_LIFETIME_BOUND {
     return (const TimeZoneNames*)fTimeZoneNames;
 }
 
@@ -554,7 +554,7 @@ TimeZoneFormat::getDefaultParseOptions() const {
 
 
 UnicodeString& 
-TimeZoneFormat::getGMTPattern(UnicodeString& pattern) const {
+TimeZoneFormat::getGMTPattern(UnicodeString& pattern U_LIFETIME_BOUND) const {
     return pattern.setTo(fGMTPattern);
 }
 
@@ -564,7 +564,8 @@ TimeZoneFormat::setGMTPattern(const UnicodeString& pattern, UErrorCode& status) 
 }
 
 UnicodeString&
-TimeZoneFormat::getGMTOffsetPattern(UTimeZoneFormatGMTOffsetPatternType type, UnicodeString& pattern) const {
+TimeZoneFormat::getGMTOffsetPattern(UTimeZoneFormatGMTOffsetPatternType type,
+                                    UnicodeString& pattern U_LIFETIME_BOUND) const {
     return pattern.setTo(fGMTOffsetPatterns[type]);
 }
 
@@ -608,7 +609,7 @@ TimeZoneFormat::setGMTOffsetPattern(UTimeZoneFormatGMTOffsetPatternType type, co
 }
 
 UnicodeString&
-TimeZoneFormat::getGMTOffsetDigits(UnicodeString& digits) const {
+TimeZoneFormat::getGMTOffsetDigits(UnicodeString& digits U_LIFETIME_BOUND) const {
     digits.remove();
     for (int32_t i = 0; i < 10; i++) {
         digits.append(fGMTOffsetDigits[i]);
@@ -630,7 +631,7 @@ TimeZoneFormat::setGMTOffsetDigits(const UnicodeString& digits, UErrorCode& stat
 }
 
 UnicodeString&
-TimeZoneFormat::getGMTZeroFormat(UnicodeString& gmtZeroFormat) const {
+TimeZoneFormat::getGMTZeroFormat(UnicodeString& gmtZeroFormat U_LIFETIME_BOUND) const {
     return gmtZeroFormat.setTo(fGMTZeroFormat);
 }
 
@@ -650,7 +651,7 @@ TimeZoneFormat::setGMTZeroFormat(const UnicodeString& gmtZeroFormat, UErrorCode&
 
 UnicodeString&
 TimeZoneFormat::format(UTimeZoneFormatStyle style, const TimeZone& tz, UDate date,
-        UnicodeString& name, UTimeZoneFormatTimeType* timeType /* = nullptr */) const {
+        UnicodeString& name U_LIFETIME_BOUND, UTimeZoneFormatTimeType* timeType /* = nullptr */) const {
     if (timeType) {
         *timeType = UTZFMT_TIME_TYPE_UNKNOWN;
     }
@@ -774,7 +775,7 @@ TimeZoneFormat::format(UTimeZoneFormatStyle style, const TimeZone& tz, UDate dat
 }
 
 UnicodeString&
-TimeZoneFormat::format(const Formattable& obj, UnicodeString& appendTo,
+TimeZoneFormat::format(const Formattable& obj, UnicodeString& appendTo U_LIFETIME_BOUND,
         FieldPosition& pos, UErrorCode& status) const {
     if (U_FAILURE(status)) {
         return appendTo;
@@ -1332,7 +1333,10 @@ TimeZoneFormat::parseObject(const UnicodeString& source, Formattable& result,
 // Private zone name format/parse implementation
 
 UnicodeString&
-TimeZoneFormat::formatGeneric(const TimeZone& tz, int32_t genType, UDate date, UnicodeString& name) const {
+TimeZoneFormat::formatGeneric(const TimeZone& tz,
+                              int32_t genType,
+                              UDate date,
+                              UnicodeString& name U_LIFETIME_BOUND) const {
     UErrorCode status = U_ZERO_ERROR;
     const TimeZoneGenericNames* gnames = getTimeZoneGenericNames(status);
     if (U_FAILURE(status)) {
@@ -1352,8 +1356,12 @@ TimeZoneFormat::formatGeneric(const TimeZone& tz, int32_t genType, UDate date, U
 }
 
 UnicodeString&
-TimeZoneFormat::formatSpecific(const TimeZone& tz, UTimeZoneNameType stdType, UTimeZoneNameType dstType,
-        UDate date, UnicodeString& name, UTimeZoneFormatTimeType *timeType) const {
+TimeZoneFormat::formatSpecific(const TimeZone& tz,
+                               UTimeZoneNameType stdType,
+                               UTimeZoneNameType dstType,
+                               UDate date,
+                               UnicodeString& name U_LIFETIME_BOUND,
+                               UTimeZoneFormatTimeType* timeType) const {
     if (fTimeZoneNames == nullptr) {
         name.setToBogus();
         return name;
@@ -1381,7 +1389,7 @@ TimeZoneFormat::formatSpecific(const TimeZone& tz, UTimeZoneNameType stdType, UT
 }
 
 const TimeZoneGenericNames*
-TimeZoneFormat::getTimeZoneGenericNames(UErrorCode& status) const {
+TimeZoneFormat::getTimeZoneGenericNames(UErrorCode& status) const U_LIFETIME_BOUND {
     if (U_FAILURE(status)) {
         return nullptr;
     }
@@ -1397,7 +1405,7 @@ TimeZoneFormat::getTimeZoneGenericNames(UErrorCode& status) const {
 }
 
 const TZDBTimeZoneNames*
-TimeZoneFormat::getTZDBTimeZoneNames(UErrorCode& status) const {
+TimeZoneFormat::getTZDBTimeZoneNames(UErrorCode& status) const U_LIFETIME_BOUND {
     if (U_FAILURE(status)) {
         return nullptr;
     }
@@ -1418,7 +1426,8 @@ TimeZoneFormat::getTZDBTimeZoneNames(UErrorCode& status) const {
 }
 
 UnicodeString&
-TimeZoneFormat::formatExemplarLocation(const TimeZone& tz, UnicodeString& name) const {
+TimeZoneFormat::formatExemplarLocation(const TimeZone& tz,
+                                       UnicodeString& name U_LIFETIME_BOUND) const {
     char16_t locationBuf[ZONE_NAME_U16_MAX];
     UnicodeString location(locationBuf, 0, UPRV_LENGTHOF(locationBuf));
     const char16_t* canonicalID = ZoneMeta::getCanonicalCLDRID(tz);
@@ -1446,24 +1455,36 @@ TimeZoneFormat::formatExemplarLocation(const TimeZone& tz, UnicodeString& name) 
 // Zone offset format and parse
 
 UnicodeString&
-TimeZoneFormat::formatOffsetISO8601Basic(int32_t offset, UBool useUtcIndicator, UBool isShort, UBool ignoreSeconds,
-        UnicodeString& result, UErrorCode& status) const {
+TimeZoneFormat::formatOffsetISO8601Basic(int32_t offset,
+                                         UBool useUtcIndicator,
+                                         UBool isShort,
+                                         UBool ignoreSeconds,
+                                         UnicodeString& result U_LIFETIME_BOUND,
+                                         UErrorCode& status) const {
     return formatOffsetISO8601(offset, true, useUtcIndicator, isShort, ignoreSeconds, result, status);
 }
 
 UnicodeString&
-TimeZoneFormat::formatOffsetISO8601Extended(int32_t offset, UBool useUtcIndicator, UBool isShort, UBool ignoreSeconds,
-        UnicodeString& result, UErrorCode& status) const {
+TimeZoneFormat::formatOffsetISO8601Extended(int32_t offset,
+                                            UBool useUtcIndicator,
+                                            UBool isShort,
+                                            UBool ignoreSeconds,
+                                            UnicodeString& result U_LIFETIME_BOUND,
+                                            UErrorCode& status) const {
     return formatOffsetISO8601(offset, false, useUtcIndicator, isShort, ignoreSeconds, result, status);
 }
 
 UnicodeString&
-TimeZoneFormat::formatOffsetLocalizedGMT(int32_t offset, UnicodeString& result, UErrorCode& status) const {
+TimeZoneFormat::formatOffsetLocalizedGMT(int32_t offset,
+                                         UnicodeString& result U_LIFETIME_BOUND,
+                                         UErrorCode& status) const {
     return formatOffsetLocalizedGMT(offset, false, result, status);
 }
 
 UnicodeString&
-TimeZoneFormat::formatOffsetShortLocalizedGMT(int32_t offset, UnicodeString& result, UErrorCode& status) const {
+TimeZoneFormat::formatOffsetShortLocalizedGMT(int32_t offset,
+                                              UnicodeString& result U_LIFETIME_BOUND,
+                                              UErrorCode& status) const {
     return formatOffsetLocalizedGMT(offset, true, result, status);
 }
 
@@ -1486,8 +1507,13 @@ TimeZoneFormat::parseOffsetShortLocalizedGMT(const UnicodeString& text, ParsePos
 // Private zone offset format/parse implementation
 
 UnicodeString&
-TimeZoneFormat::formatOffsetISO8601(int32_t offset, UBool isBasic, UBool useUtcIndicator,
-        UBool isShort, UBool ignoreSeconds, UnicodeString& result, UErrorCode& status) const {
+TimeZoneFormat::formatOffsetISO8601(int32_t offset,
+                                    UBool isBasic,
+                                    UBool useUtcIndicator,
+                                    UBool isShort,
+                                    UBool ignoreSeconds,
+                                    UnicodeString& result U_LIFETIME_BOUND,
+                                    UErrorCode& status) const {
     if (U_FAILURE(status)) {
         result.setToBogus();
         return result;
@@ -1554,7 +1580,10 @@ TimeZoneFormat::formatOffsetISO8601(int32_t offset, UBool isBasic, UBool useUtcI
 }
 
 UnicodeString&
-TimeZoneFormat::formatOffsetLocalizedGMT(int32_t offset, UBool isShort, UnicodeString& result, UErrorCode& status) const {
+TimeZoneFormat::formatOffsetLocalizedGMT(int32_t offset,
+                                         UBool isShort,
+                                         UnicodeString& result U_LIFETIME_BOUND,
+                                         UErrorCode& status) const {
     if (U_FAILURE(status)) {
         result.setToBogus();
         return result;
@@ -2158,7 +2187,11 @@ TimeZoneFormat::parseSingleLocalizedDigit(const UnicodeString& text, int32_t sta
 }
 
 UnicodeString&
-TimeZoneFormat::formatOffsetWithAsciiDigits(int32_t offset, char16_t sep, OffsetFields minFields, OffsetFields maxFields, UnicodeString& result) {
+TimeZoneFormat::formatOffsetWithAsciiDigits(int32_t offset,
+                                            char16_t sep,
+                                            OffsetFields minFields,
+                                            OffsetFields maxFields,
+                                            UnicodeString& result U_LIFETIME_BOUND) {
     U_ASSERT(maxFields >= minFields);
     U_ASSERT(offset > -MAX_OFFSET && offset < MAX_OFFSET);
 
@@ -2396,7 +2429,7 @@ TimeZoneFormat::initGMTPattern(const UnicodeString& gmtPattern, UErrorCode& stat
 }
 
 UnicodeString&
-TimeZoneFormat::unquote(const UnicodeString& pattern, UnicodeString& result) {
+TimeZoneFormat::unquote(const UnicodeString& pattern, UnicodeString& result U_LIFETIME_BOUND) {
     if (pattern.indexOf(SINGLEQUOTE) < 0) {
         result.setTo(pattern);
         return result;
@@ -2563,7 +2596,9 @@ TimeZoneFormat::parseOffsetPattern(const UnicodeString& pattern, OffsetFields re
 }
 
 UnicodeString&
-TimeZoneFormat::expandOffsetPattern(const UnicodeString& offsetHM, UnicodeString& result, UErrorCode& status) {
+TimeZoneFormat::expandOffsetPattern(const UnicodeString& offsetHM,
+                                    UnicodeString& result U_LIFETIME_BOUND,
+                                    UErrorCode& status) {
     result.setToBogus();
     if (U_FAILURE(status)) {
         return result;
@@ -2590,7 +2625,9 @@ TimeZoneFormat::expandOffsetPattern(const UnicodeString& offsetHM, UnicodeString
 }
 
 UnicodeString&
-TimeZoneFormat::truncateOffsetPattern(const UnicodeString& offsetHM, UnicodeString& result, UErrorCode& status) {
+TimeZoneFormat::truncateOffsetPattern(const UnicodeString& offsetHM,
+                                      UnicodeString& result U_LIFETIME_BOUND,
+                                      UErrorCode& status) {
     result.setToBogus();
     if (U_FAILURE(status)) {
         return result;
@@ -2708,7 +2745,9 @@ TimeZoneFormat::getTimeType(UTimeZoneNameType nameType) {
 }
 
 UnicodeString&
-TimeZoneFormat::getTimeZoneID(const TimeZoneNames::MatchInfoCollection* matches, int32_t idx, UnicodeString& tzID) const {
+TimeZoneFormat::getTimeZoneID(const TimeZoneNames::MatchInfoCollection* matches,
+                              int32_t idx,
+                              UnicodeString& tzID U_LIFETIME_BOUND) const {
     if (!matches->getTimeZoneIDAt(idx, tzID)) {
         char16_t mzIDBuf[32];
         UnicodeString mzID(mzIDBuf, 0, UPRV_LENGTHOF(mzIDBuf));
@@ -2791,7 +2830,9 @@ static void U_CALLCONV initZoneIdTrie(UErrorCode &status) {
 
 
 UnicodeString&
-TimeZoneFormat::parseZoneID(const UnicodeString& text, ParsePosition& pos, UnicodeString& tzID) const {
+TimeZoneFormat::parseZoneID(const UnicodeString& text,
+                            ParsePosition& pos,
+                            UnicodeString& tzID U_LIFETIME_BOUND) const {
     UErrorCode status = U_ZERO_ERROR;
     umtx_initOnce(gZoneIdTrieInitOnce, &initZoneIdTrie, status);
 
@@ -2841,7 +2882,9 @@ static void U_CALLCONV initShortZoneIdTrie(UErrorCode &status) {
 
 
 UnicodeString&
-TimeZoneFormat::parseShortZoneID(const UnicodeString& text, ParsePosition& pos, UnicodeString& tzID) const {
+TimeZoneFormat::parseShortZoneID(const UnicodeString& text,
+                                 ParsePosition& pos,
+                                 UnicodeString& tzID U_LIFETIME_BOUND) const {
     UErrorCode status = U_ZERO_ERROR;
     umtx_initOnce(gShortZoneIdTrieInitOnce, &initShortZoneIdTrie, status);
 
@@ -2869,7 +2912,9 @@ TimeZoneFormat::parseShortZoneID(const UnicodeString& text, ParsePosition& pos, 
 
 
 UnicodeString&
-TimeZoneFormat::parseExemplarLocation(const UnicodeString& text, ParsePosition& pos, UnicodeString& tzID) const {
+TimeZoneFormat::parseExemplarLocation(const UnicodeString& text,
+                                      ParsePosition& pos,
+                                      UnicodeString& tzID U_LIFETIME_BOUND) const {
     int32_t startIdx = pos.getIndex();
     int32_t parsedPos = -1;
     tzID.setToBogus();

@@ -94,7 +94,7 @@ StringReplacer* StringReplacer::clone() const {
 /**
  * Implement UnicodeFunctor
  */
-UnicodeReplacer* StringReplacer::toReplacer() const {
+UnicodeReplacer* StringReplacer::toReplacer() const U_LIFETIME_BOUND {
   return const_cast<StringReplacer *>(this);
 }
 
@@ -239,7 +239,7 @@ int32_t StringReplacer::replace(Replaceable& text,
 /**
  * UnicodeReplacer API
  */
-UnicodeString& StringReplacer::toReplacerPattern(UnicodeString& rule,
+UnicodeString& StringReplacer::toReplacerPattern(UnicodeString& rule U_LIFETIME_BOUND,
                                                  UBool escapeUnprintable) const {
     rule.truncate(0);
     UnicodeString quoteBuf;

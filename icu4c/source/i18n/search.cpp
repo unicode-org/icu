@@ -169,8 +169,8 @@ void SearchIterator::setText(CharacterIterator &text, UErrorCode &status)
         setText(m_text_, status);
     }
 }
-    
-const UnicodeString & SearchIterator::getText() const
+
+const UnicodeString& SearchIterator::getText() const U_LIFETIME_BOUND
 {
     return m_text_;
 }
@@ -358,8 +358,8 @@ SearchIterator::SearchIterator()
     m_breakiterator_              = nullptr;
 }
 
-SearchIterator::SearchIterator(const UnicodeString &text, 
-                                     BreakIterator *breakiter) :
+SearchIterator::SearchIterator(const UnicodeString& text,
+                               BreakIterator* breakiter U_LIFETIME_BOUND) :
                                      m_breakiterator_(breakiter),
                                      m_text_(text)
 {
@@ -376,8 +376,8 @@ SearchIterator::SearchIterator(const UnicodeString &text,
     m_search_->textLength         = text.length();
 }
 
-SearchIterator::SearchIterator(CharacterIterator &text, 
-                               BreakIterator     *breakiter) :
+SearchIterator::SearchIterator(CharacterIterator& text,
+                               BreakIterator* breakiter U_LIFETIME_BOUND) :
                                m_breakiterator_(breakiter)
 {
     m_search_ = static_cast<USearch*>(uprv_malloc(sizeof(USearch)));
@@ -397,7 +397,7 @@ SearchIterator::SearchIterator(CharacterIterator &text,
 
 // protected methods ------------------------------------------------------
 
-SearchIterator & SearchIterator::operator=(const SearchIterator &that)
+SearchIterator& SearchIterator::operator=(const SearchIterator& that) U_LIFETIME_BOUND
 {
     if (this != &that) {
         m_breakiterator_            = that.m_breakiterator_;

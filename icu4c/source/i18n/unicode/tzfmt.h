@@ -289,7 +289,7 @@ public:
      * Assignment operator.
      * @stable ICU 50
      */
-    U_I18N_API TimeZoneFormat& operator=(const TimeZoneFormat& other);
+    U_I18N_API TimeZoneFormat& operator=(const TimeZoneFormat& other) U_LIFETIME_BOUND;
 
     /**
      * Return true if the given Format objects are semantically equal.
@@ -324,7 +324,7 @@ public:
      * @return The time zone display name data.
      * @stable ICU 50
      */
-    U_I18N_API const TimeZoneNames* getTimeZoneNames() const;
+    U_I18N_API const TimeZoneNames* getTimeZoneNames() const U_LIFETIME_BOUND;
 
     /**
      * Sets the time zone display name data to this format instance.
@@ -349,7 +349,7 @@ public:
      * @see #setGMTPattern
      * @stable ICU 50
      */
-    U_I18N_API UnicodeString& getGMTPattern(UnicodeString& pattern) const;
+    U_I18N_API UnicodeString& getGMTPattern(UnicodeString& pattern U_LIFETIME_BOUND) const;
 
     /**
      * Sets the localized GMT format pattern. The pattern must contain
@@ -370,7 +370,7 @@ public:
      * @stable ICU 50
      */
     U_I18N_API UnicodeString& getGMTOffsetPattern(UTimeZoneFormatGMTOffsetPatternType type,
-                                                  UnicodeString& pattern) const;
+                                                  UnicodeString& pattern U_LIFETIME_BOUND) const;
 
     /**
      * Sets the offset pattern for the given offset type.
@@ -392,7 +392,7 @@ public:
      * @see #setGMTOffsetDigits
      * @stable ICU 50
      */
-    U_I18N_API UnicodeString& getGMTOffsetDigits(UnicodeString& digits) const;
+    U_I18N_API UnicodeString& getGMTOffsetDigits(UnicodeString& digits U_LIFETIME_BOUND) const;
 
     /**
      * Sets the decimal digit characters used for localized GMT format.
@@ -415,7 +415,7 @@ public:
      * @see #setGMTZeroFormat
      * @stable ICU 50
      */
-    U_I18N_API UnicodeString& getGMTZeroFormat(UnicodeString& gmtZeroFormat) const;
+    U_I18N_API UnicodeString& getGMTZeroFormat(UnicodeString& gmtZeroFormat U_LIFETIME_BOUND) const;
 
     /**
      * Sets the localized GMT format string for GMT(UTC) itself (GMT offset is 0).
@@ -464,7 +464,7 @@ public:
                                                        UBool useUtcIndicator,
                                                        UBool isShort,
                                                        UBool ignoreSeconds,
-                                                       UnicodeString& result,
+                                                       UnicodeString& result U_LIFETIME_BOUND,
                                                        UErrorCode& status) const;
 
     /**
@@ -486,7 +486,7 @@ public:
                                                           UBool useUtcIndicator,
                                                           UBool isShort,
                                                           UBool ignoreSeconds,
-                                                          UnicodeString& result,
+                                                          UnicodeString& result U_LIFETIME_BOUND,
                                                           UErrorCode& status) const;
 
     /**
@@ -509,7 +509,7 @@ public:
      * @stable ICU 50
      */
     U_I18N_API UnicodeString& formatOffsetLocalizedGMT(int32_t offset,
-                                                       UnicodeString& result,
+                                                       UnicodeString& result U_LIFETIME_BOUND,
                                                        UErrorCode& status) const;
 
     /**
@@ -532,7 +532,7 @@ public:
      * @stable ICU 51
      */
     U_I18N_API UnicodeString& formatOffsetShortLocalizedGMT(int32_t offset,
-                                                            UnicodeString& result,
+                                                            UnicodeString& result U_LIFETIME_BOUND,
                                                             UErrorCode& status) const;
 
     using Format::format;
@@ -553,7 +553,7 @@ public:
     U_I18N_API virtual UnicodeString& format(UTimeZoneFormatStyle style,
                                              const TimeZone& tz,
                                              UDate date,
-                                             UnicodeString& name,
+                                             UnicodeString& name U_LIFETIME_BOUND,
                                              UTimeZoneFormatTimeType* timeType = nullptr) const;
 
     /**
@@ -658,7 +658,7 @@ public:
      * @stable ICU 50
      */
     U_I18N_API virtual UnicodeString& format(const Formattable& obj,
-                                             UnicodeString& appendTo,
+                                             UnicodeString& appendTo U_LIFETIME_BOUND,
                                              FieldPosition& pos,
                                              UErrorCode& status) const override;
 
@@ -747,8 +747,12 @@ private:
      * @param timeType when null, actual time type is set
      * @return a reference to name.
      */
-    UnicodeString& formatSpecific(const TimeZone& tz, UTimeZoneNameType stdType, UTimeZoneNameType dstType,
-        UDate date, UnicodeString& name, UTimeZoneFormatTimeType *timeType) const;
+    UnicodeString& formatSpecific(const TimeZone& tz,
+                                  UTimeZoneNameType stdType,
+                                  UTimeZoneNameType dstType,
+                                  UDate date,
+                                  UnicodeString& name U_LIFETIME_BOUND,
+                                  UTimeZoneFormatTimeType* timeType) const;
 
     /**
      * Returns the time zone's generic format string.
@@ -758,21 +762,24 @@ private:
      * @param name receives the time zone's generic format name string
      * @return a reference to name.
      */
-    UnicodeString& formatGeneric(const TimeZone& tz, int32_t genType, UDate date, UnicodeString& name) const;
+    UnicodeString& formatGeneric(const TimeZone& tz,
+                                 int32_t genType,
+                                 UDate date,
+                                 UnicodeString& name U_LIFETIME_BOUND) const;
 
     /**
      * Lazily create a TimeZoneGenericNames instance
      * @param status receives the status
      * @return the cached TimeZoneGenericNames.
      */
-    const TimeZoneGenericNames* getTimeZoneGenericNames(UErrorCode& status) const;
+    const TimeZoneGenericNames* getTimeZoneGenericNames(UErrorCode& status) const U_LIFETIME_BOUND;
 
     /**
      * Lazily create a TZDBTimeZoneNames instance
      * @param status receives the status
      * @return the cached TZDBTimeZoneNames.
      */
-    const TZDBTimeZoneNames* getTZDBTimeZoneNames(UErrorCode& status) const;
+    const TZDBTimeZoneNames* getTZDBTimeZoneNames(UErrorCode& status) const U_LIFETIME_BOUND;
 
     /**
      * Private method returning the time zone's exemplar location string.
@@ -781,7 +788,8 @@ private:
      * @param name receives the time zone's exemplar location name
      * @return a reference to name.
      */
-    UnicodeString& formatExemplarLocation(const TimeZone& tz, UnicodeString& name) const;
+    UnicodeString& formatExemplarLocation(const TimeZone& tz,
+                                          UnicodeString& name U_LIFETIME_BOUND) const;
 
     /**
      * Private enum specifying a combination of offset fields
@@ -819,7 +827,9 @@ private:
      * @param status receives the status
      * @return a reference to result
      */
-    static UnicodeString& expandOffsetPattern(const UnicodeString& offsetHM, UnicodeString& result, UErrorCode& status);
+    static UnicodeString& expandOffsetPattern(const UnicodeString& offsetHM,
+                                              UnicodeString& result U_LIFETIME_BOUND,
+                                              UErrorCode& status);
 
     /**
      * Truncates minutes field to the offset pattern with hour/minute
@@ -829,7 +839,9 @@ private:
      * @param status receives the status
      * @return a reference to result
      */
-    static UnicodeString& truncateOffsetPattern(const UnicodeString& offsetHM, UnicodeString& result, UErrorCode& status);
+    static UnicodeString& truncateOffsetPattern(const UnicodeString& offsetHM,
+                                                UnicodeString& result U_LIFETIME_BOUND,
+                                                UErrorCode& status);
 
     /**
      * Break input string into UChar32[]. Each array element represents
@@ -853,8 +865,13 @@ private:
      * @param status Receives the status
      * @return the ISO 8601 basic format.
      */
-    UnicodeString& formatOffsetISO8601(int32_t offset, UBool isBasic, UBool useUtcIndicator,
-        UBool isShort, UBool ignoreSeconds, UnicodeString& result, UErrorCode& status) const;
+    UnicodeString& formatOffsetISO8601(int32_t offset,
+                                       UBool isBasic,
+                                       UBool useUtcIndicator,
+                                       UBool isShort,
+                                       UBool ignoreSeconds,
+                                       UnicodeString& result U_LIFETIME_BOUND,
+                                       UErrorCode& status) const;
 
     /**
      * Private method used for localized GMT formatting.
@@ -863,7 +880,10 @@ private:
      * @param result receives the localized GMT format string
      * @param status receives the status
      */
-    UnicodeString& formatOffsetLocalizedGMT(int32_t offset, UBool isShort, UnicodeString& result, UErrorCode& status) const;
+    UnicodeString& formatOffsetLocalizedGMT(int32_t offset,
+                                            UBool isShort,
+                                            UnicodeString& result U_LIFETIME_BOUND,
+                                            UErrorCode& status) const;
 
     /**
      * Returns offset from GMT(UTC) in milliseconds for the given ISO 8601 style
@@ -1008,8 +1028,11 @@ private:
      * @param maxFields The maximum fields
      * @return The offset string
      */
-    static UnicodeString& formatOffsetWithAsciiDigits(int32_t offset, char16_t sep,
-        OffsetFields minFields, OffsetFields maxFields, UnicodeString& result);
+    static UnicodeString& formatOffsetWithAsciiDigits(int32_t offset,
+                                                      char16_t sep,
+                                                      OffsetFields minFields,
+                                                      OffsetFields maxFields,
+                                                      UnicodeString& result U_LIFETIME_BOUND);
 
     /**
      * Parses offset represented by contiguous ASCII digits.
@@ -1047,7 +1070,8 @@ private:
      * @param result receive the unquoted pattern.
      * @return A reference to result.
      */
-    static UnicodeString& unquote(const UnicodeString& pattern, UnicodeString& result);
+    static UnicodeString& unquote(const UnicodeString& pattern,
+                                  UnicodeString& result U_LIFETIME_BOUND);
 
     /**
      * Initialize localized GMT format offset hour/min/sec patterns.
@@ -1086,8 +1110,9 @@ private:
      * @param tzID receives the resolved time zone ID
      * @return a reference to tzID.
      */
-    UnicodeString& getTimeZoneID(const TimeZoneNames::MatchInfoCollection* matches, int32_t idx, UnicodeString& tzID) const;
-
+    UnicodeString& getTimeZoneID(const TimeZoneNames::MatchInfoCollection* matches,
+                                 int32_t idx,
+                                 UnicodeString& tzID U_LIFETIME_BOUND) const;
 
     /**
      * Parse a zone ID.
@@ -1096,7 +1121,9 @@ private:
      * @param tzID receives the zone ID
      * @return a reference to tzID
      */
-    UnicodeString& parseZoneID(const UnicodeString& text, ParsePosition& pos, UnicodeString& tzID) const;
+    UnicodeString& parseZoneID(const UnicodeString& text,
+                               ParsePosition& pos,
+                               UnicodeString& tzID U_LIFETIME_BOUND) const;
 
     /**
      * Parse a short zone ID.
@@ -1105,7 +1132,9 @@ private:
      * @param tzID receives the short zone ID
      * @return a reference to tzID
      */
-    UnicodeString& parseShortZoneID(const UnicodeString& text, ParsePosition& pos, UnicodeString& tzID) const;
+    UnicodeString& parseShortZoneID(const UnicodeString& text,
+                                    ParsePosition& pos,
+                                    UnicodeString& tzID U_LIFETIME_BOUND) const;
 
     /**
      * Parse an exemplar location string.
@@ -1114,7 +1143,9 @@ private:
      * @param tzID receives the time zone ID
      * @return a reference to tzID
      */
-    UnicodeString& parseExemplarLocation(const UnicodeString& text, ParsePosition& pos, UnicodeString& tzID) const;
+    UnicodeString& parseExemplarLocation(const UnicodeString& text,
+                                         ParsePosition& pos,
+                                         UnicodeString& tzID U_LIFETIME_BOUND) const;
 };
 
 U_NAMESPACE_END

@@ -193,8 +193,8 @@ AlphabeticIndex::ImmutableIndex::getBucketIndex(
     return buckets_->getBucketIndex(name, *collatorPrimaryOnly_, errorCode);
 }
 
-const AlphabeticIndex::Bucket *
-AlphabeticIndex::ImmutableIndex::getBucket(int32_t index) const {
+const AlphabeticIndex::Bucket*
+AlphabeticIndex::ImmutableIndex::getBucket(int32_t index) const U_LIFETIME_BOUND {
     if (0 <= index && index < buckets_->getBucketCount()) {
         return icu::getBucket(*buckets_->immutableVisibleList_, index);
     } else {
@@ -234,8 +234,8 @@ AlphabeticIndex::~AlphabeticIndex() {
     delete initialLabels_;
 }
 
-
-AlphabeticIndex &AlphabeticIndex::addLabels(const UnicodeSet &additions, UErrorCode &status) {
+AlphabeticIndex&
+AlphabeticIndex::addLabels(const UnicodeSet& additions, UErrorCode& status) U_LIFETIME_BOUND {
     if (U_FAILURE(status)) {
         return *this;
     }
@@ -244,8 +244,8 @@ AlphabeticIndex &AlphabeticIndex::addLabels(const UnicodeSet &additions, UErrorC
     return *this;
 }
 
-
-AlphabeticIndex &AlphabeticIndex::addLabels(const Locale &locale, UErrorCode &status) {
+AlphabeticIndex&
+AlphabeticIndex::addLabels(const Locale& locale, UErrorCode& status) U_LIFETIME_BOUND {
     addIndexExemplars(locale, status);
     clearBuckets();
     return *this;
@@ -805,40 +805,41 @@ bool AlphabeticIndex::operator!=(const AlphabeticIndex& /* other */) const {
 }
 
 
-const RuleBasedCollator &AlphabeticIndex::getCollator() const {
+const RuleBasedCollator& AlphabeticIndex::getCollator() const U_LIFETIME_BOUND {
     return *collator_;
 }
 
 
-const UnicodeString &AlphabeticIndex::getInflowLabel() const {
+const UnicodeString& AlphabeticIndex::getInflowLabel() const U_LIFETIME_BOUND {
     return inflowLabel_;
 }
 
-const UnicodeString &AlphabeticIndex::getOverflowLabel() const {
+const UnicodeString& AlphabeticIndex::getOverflowLabel() const U_LIFETIME_BOUND {
     return overflowLabel_;
 }
 
 
-const UnicodeString &AlphabeticIndex::getUnderflowLabel() const {
+const UnicodeString& AlphabeticIndex::getUnderflowLabel() const U_LIFETIME_BOUND {
     return underflowLabel_;
 }
 
 
-AlphabeticIndex &AlphabeticIndex::setInflowLabel(const UnicodeString &label, UErrorCode &/*status*/) {
+AlphabeticIndex& AlphabeticIndex::setInflowLabel(const UnicodeString& label,
+                                                 UErrorCode& /*status*/) U_LIFETIME_BOUND {
     inflowLabel_ = label;
     clearBuckets();
     return *this;
 }
 
-
-AlphabeticIndex &AlphabeticIndex::setOverflowLabel(const UnicodeString &label, UErrorCode &/*status*/) {
+AlphabeticIndex& AlphabeticIndex::setOverflowLabel(const UnicodeString& label,
+                                                   UErrorCode& /*status*/) U_LIFETIME_BOUND {
     overflowLabel_ = label;
     clearBuckets();
     return *this;
 }
 
-
-AlphabeticIndex &AlphabeticIndex::setUnderflowLabel(const UnicodeString &label, UErrorCode &/*status*/) {
+AlphabeticIndex& AlphabeticIndex::setUnderflowLabel(const UnicodeString& label,
+                                                    UErrorCode& /*status*/) U_LIFETIME_BOUND {
     underflowLabel_ = label;
     clearBuckets();
     return *this;
@@ -849,8 +850,8 @@ int32_t AlphabeticIndex::getMaxLabelCount() const {
     return maxLabelCount_;
 }
 
-
-AlphabeticIndex &AlphabeticIndex::setMaxLabelCount(int32_t maxLabelCount, UErrorCode &status) {
+AlphabeticIndex& AlphabeticIndex::setMaxLabelCount(int32_t maxLabelCount,
+                                                   UErrorCode& status) U_LIFETIME_BOUND {
     if (U_FAILURE(status)) {
         return *this;
     }
@@ -1055,8 +1056,9 @@ AlphabeticIndex::Record::Record(const UnicodeString &name, const void *data)
 AlphabeticIndex::Record::~Record() {
 }
 
-
-AlphabeticIndex & AlphabeticIndex::addRecord(const UnicodeString &name, const void *data, UErrorCode &status) {
+AlphabeticIndex& AlphabeticIndex::addRecord(const UnicodeString& name,
+                                            const void* data,
+                                            UErrorCode& status) U_LIFETIME_BOUND {
     if (U_FAILURE(status)) {
         return *this;
     }
@@ -1082,7 +1084,7 @@ AlphabeticIndex & AlphabeticIndex::addRecord(const UnicodeString &name, const vo
 }
 
 
-AlphabeticIndex &AlphabeticIndex::clearRecords(UErrorCode &status) {
+AlphabeticIndex& AlphabeticIndex::clearRecords(UErrorCode& status) U_LIFETIME_BOUND {
     if (U_SUCCESS(status) && inputList_ != nullptr && !inputList_->isEmpty()) {
         inputList_->removeAllElements();
         clearBuckets();
@@ -1126,7 +1128,7 @@ UBool AlphabeticIndex::nextBucket(UErrorCode &status) {
     return true;
 }
 
-const UnicodeString &AlphabeticIndex::getBucketLabel() const {
+const UnicodeString& AlphabeticIndex::getBucketLabel() const U_LIFETIME_BOUND {
     if (currentBucket_ != nullptr) {
         return currentBucket_->label_;
     } else {
@@ -1153,7 +1155,7 @@ int32_t AlphabeticIndex::getBucketRecordCount() const {
 }
 
 
-AlphabeticIndex &AlphabeticIndex::resetBucketIterator(UErrorCode &status) {
+AlphabeticIndex& AlphabeticIndex::resetBucketIterator(UErrorCode& status) U_LIFETIME_BOUND {
     if (U_FAILURE(status)) {
         return *this;
     }
@@ -1188,7 +1190,7 @@ UBool AlphabeticIndex::nextRecord(UErrorCode &status) {
 }
 
 
-const UnicodeString &AlphabeticIndex::getRecordName() const {
+const UnicodeString& AlphabeticIndex::getRecordName() const U_LIFETIME_BOUND {
     const UnicodeString *retStr = &emptyString_;
     if (currentBucket_ != nullptr && currentBucket_->records_ != nullptr &&
         itemsIterIndex_ >= 0 &&
@@ -1211,7 +1213,7 @@ const void *AlphabeticIndex::getRecordData() const {
 }
 
 
-AlphabeticIndex & AlphabeticIndex::resetRecordIterator() {
+AlphabeticIndex& AlphabeticIndex::resetRecordIterator() U_LIFETIME_BOUND {
     itemsIterIndex_ = -1;
     return *this;
 }
