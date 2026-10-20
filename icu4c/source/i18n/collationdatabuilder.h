@@ -160,7 +160,7 @@ public:
      * Does not write completely ignorable CEs.
      * Does not write beyond Collation::MAX_EXPANSION_LENGTH.
      *
-     * @return incremented cesLength
+     * @return incremented cesLength, or MAX_EXPANSION_LENGTH + 1 if the limit is exceeded
      */
     int32_t getCEs(const UnicodeString &s, int64_t ces[], int32_t cesLength);
     int32_t getCEs(const UnicodeString &prefix, const UnicodeString &s,
