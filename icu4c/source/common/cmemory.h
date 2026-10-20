@@ -352,7 +352,7 @@ public:
      * Intended for use when an approximate capacity is known at compile time but the true
      * capacity is not known until runtime.
      */
-    MaybeStackArray(int32_t newCapacity, UErrorCode status) : MaybeStackArray() {
+    MaybeStackArray(int32_t newCapacity, UErrorCode &status) : MaybeStackArray() {
         if (U_FAILURE(status)) {
             return;
         }
