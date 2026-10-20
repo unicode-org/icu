@@ -209,10 +209,12 @@ DataBuilderCollationIterator::fetchCEs(const UnicodeString &str, int32_t start,
         for(int32_t i = 0; i < getCEsLength(); ++i) {
             int64_t ce = getCE(i);
             if(ce != 0) {
-                if(cesLength < Collation::MAX_EXPANSION_LENGTH) {
-                    ces[cesLength] = ce;
+                if(cesLength >= Collation::MAX_EXPANSION_LENGTH) {
+                    // Callers only need to know that the limit was exceeded.
+                    // Stop counting here to avoid overflowing cesLength.
+                    return Collation::MAX_EXPANSION_LENGTH + 1;
                 }
-                ++cesLength;
+                ces[cesLength++] = ce;
             }
         }
     }
