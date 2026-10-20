@@ -604,6 +604,9 @@ OlsonTimeZone::getDSTSavings() const{
 UBool OlsonTimeZone::inDaylightTime(UDate date, UErrorCode& ec) const {
     int32_t raw, dst;
     getOffset(date, false, raw, dst, ec);
+    if (U_FAILURE(ec)) {
+        return false;
+    }
     return dst != 0;
 }
 

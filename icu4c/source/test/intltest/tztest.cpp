@@ -81,10 +81,37 @@ void TimeZoneTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
     TESTCASE_AUTO(TestRawOffsetAndOffsetConsistency22041);
     TESTCASE_AUTO(TestGetIanaID);
     TESTCASE_AUTO(TestGMTMinus24ICU22526);
+    TESTCASE_AUTO(TestInDaylightTimeErrorStatus);
     TESTCASE_AUTO_END;
 }
 
 const int32_t TimeZoneTest::millisPerHour = 3600000;
+
+// ---------------------------------------------------------------------------------
+
+void TimeZoneTest::TestInDaylightTimeErrorStatus()
+{
+    // Exercise OlsonTimeZone through the public TimeZone API. With an existing
+    // error, getOffset() leaves its output parameters untouched.
+    std::unique_ptr<TimeZone> zone(TimeZone::createTimeZone("America/Los_Angeles"));
+    UnicodeString id;
+    if (zone == nullptr || zone->getID(id) != "America/Los_Angeles") {
+        dataerrln("Failed to load America/Los_Angeles time zone");
+        return;
+    }
+
+    // July 4, 2024 at 00:00 UTC is in daylight saving time in Los Angeles.
+    constexpr UDate summer = 1720051200000.0;
+    UErrorCode status = U_ZERO_ERROR;
+    assertTrue("Los Angeles should observe DST in July", zone->inDaylightTime(summer, status));
+    assertSuccess("Los Angeles daylight saving time lookup", status);
+
+    status = U_ILLEGAL_ARGUMENT_ERROR;
+    assertFalse("inDaylightTime should return false when status already indicates an error",
+                zone->inDaylightTime(summer, status));
+    assertEquals("inDaylightTime should preserve the existing error",
+                 U_ILLEGAL_ARGUMENT_ERROR, status);
+}
 
 // ---------------------------------------------------------------------------------
 
