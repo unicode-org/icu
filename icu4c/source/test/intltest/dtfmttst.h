@@ -277,6 +277,7 @@ public:
     void TestDayPeriodFallback();
     void TestInvalidStyles();
     void TestDayNames();
+    void TestLongNumberingSystemOverride();
 
 private:
     UBool showParse(DateFormat &format, const UnicodeString &formattedString);
