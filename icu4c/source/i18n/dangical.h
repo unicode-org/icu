@@ -99,11 +99,29 @@ class DangiCalendar : public ChineseCalendar {
    * @internal
    */
   const char * getType() const override;
+  virtual int32_t getActualMaximum(UCalendarDateFields field, UErrorCode& status) const override;
+  virtual bool inTemporalLeapYear(UErrorCode& status) const override;
+  virtual void add(UCalendarDateFields field, int32_t amount, UErrorCode& status) override;
+  virtual void add(EDateFields field, int32_t amount, UErrorCode& status) override;
+  virtual void roll(UCalendarDateFields field, int32_t amount, UErrorCode& status) override;
+  virtual void roll(EDateFields field, int32_t amount, UErrorCode& status) override;
 
- protected:
+protected:
   virtual Setting getSetting(UErrorCode& status) const override;
+  virtual int32_t handleGetExtendedYear(UErrorCode& status) override;
+  virtual void handleComputeFields(int32_t julianDay, UErrorCode &status) override;
+  virtual int32_t handleComputeJulianDay(UCalendarDateFields bestField, UErrorCode& status) override;
+  virtual int64_t handleComputeMonthStart(int32_t eyear, int32_t month, UBool useMonth, UErrorCode& status) const override;
+  virtual int32_t handleGetMonthLength(int32_t extendedYear, int32_t month, UErrorCode& status) const override;
+  virtual int32_t handleGetYearLength(int32_t eyear, UErrorCode& status) const override;
+  virtual int32_t handleGetLimit(UCalendarDateFields field, ELimitType limitType) const override;
+  virtual int32_t getDefaultDayInMonth(int32_t eyear, int32_t month, UErrorCode& status) override;
+  virtual int32_t getRelatedYearDifference() const override;
 
  private:
+  UBool useGregorianSolarFields(UCalendarDateFields bestField, UErrorCode& status);
+  int32_t lunarToGregorianYear(int32_t dangiYear, UErrorCode& status) const;
+  mutable UBool fUseGregorianSolar = false;
  
   DangiCalendar(); // default constructor not implemented
 };
@@ -112,6 +130,3 @@ U_NAMESPACE_END
 
 #endif
 #endif
-
-
-
