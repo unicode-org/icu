@@ -1312,25 +1312,36 @@ void CollationRegressionTest::TestICU21992() {
     coll->setStrength(Collator::TERTIARY);
     coll->setAttribute(UCOL_ALTERNATE_HANDLING, UCOL_SHIFTED, errorCode);
     coll->setMaxVariable(UCOL_REORDER_CODE_SPACE, errorCode);
-
     UnicodeString str1 = u"\u0002\u2000湢";
     UnicodeString str2 = u"ô\u0B00\u0B03";
+    checkCompareAndCollationKeyCompare(coll.getAlias(), str1, str2, errorCode);
+}
 
-    // Compare the two strings by ucol_strcoll
-    UCollationResult res1 = coll->compare(str1, str2, errorCode);
+void CollationRegressionTest::TestICU21995() {
+    IcuTestErrorCode errorCode(*this, "TestICU21995");
+    LocalPointer<Collator> coll(Collator::createInstance(Locale("zh-u-co-stroke"), errorCode));
+    coll->setAttribute(UCOL_NUMERIC_COLLATION, UCOL_ON, errorCode);
+    UnicodeString str1 = u"᠘᠘楴";
+    UnicodeString str2 = u"᠘\uFFFF";
+    checkCompareAndCollationKeyCompare(coll.getAlias(), str1, str2, errorCode);
+}
 
-    // Get the collation keys for both strings
+void CollationRegressionTest::checkCompareAndCollationKeyCompare(Collator* coll,
+                                                                 const UnicodeString str1,
+                                                                 const UnicodeString str2,
+                                                                 UErrorCode& status) {
+    UCollationResult res1 = coll->compare(str1, str2, status);
+
     CollationKey key1, key2;
-    coll->getCollationKey(str1, key1, errorCode);
-    coll->getCollationKey(str2, key2, errorCode);
-    UCollationResult res2 = key1.compareTo(key2, errorCode);
+    coll->getCollationKey(str1, key1, status);
+    coll->getCollationKey(str2, key2, status);
+    UCollationResult res2 = key1.compareTo(key2, status);
 
     if (res1 != res2) {
         errln("compare() and collation key comparison result must be equivalent: "
               "res1=%d, res2=%d", res1, res2);
     }
 }
-
 
 void CollationRegressionTest::compareArray(Collator &c,
                                            const char16_t tests[][CollationRegressionTest::MAX_TOKEN_LEN],
@@ -1476,6 +1487,7 @@ void CollationRegressionTest::runIndexedTest(int32_t index, UBool exec, const ch
     TESTCASE_AUTO(TestICU23280IntOverFlow);
     TESTCASE_AUTO(TestICU23467);
     TESTCASE_AUTO(TestICU21992);
+    TESTCASE_AUTO(TestICU21995);
     TESTCASE_AUTO_END;
 }
 
