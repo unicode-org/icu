@@ -467,19 +467,28 @@ NFRule::extractSubstitutions(const NFRuleSet* owner,
         return;
     }
     ruleText = sourceRuleText;
-    sub1 = extractSubstitution(owner, predecessor, status);
-    if (sub1 == nullptr) {
-        // Small optimization. There is no need to create a redundant NullSubstitution.
+    if (getType() == kInfinityRule || getType() == kNaNRule) {
+        // The Inf and NaN rules are end states: their text is literal
+        // and never contains substitutions. Treat tokens such as "<<"
+        // as plain text, so the rule can never recurse back into
+        // formatting infinity or NaN.
+        sub1 = nullptr;
         sub2 = nullptr;
-    }
-    else {
-        sub2 = extractSubstitution(owner, predecessor, status);
-    }
+    } else {
+        sub1 = extractSubstitution(owner, predecessor, status);
+        if (sub1 == nullptr) {
+            // Small optimization. There is no need to create a redundant NullSubstitution.
+            sub2 = nullptr;
+        }
+        else {
+            sub2 = extractSubstitution(owner, predecessor, status);
+        }
 
-    if (sub1 != nullptr && sub2 != nullptr && sub1->getDynamicClassID() == sub2->getDynamicClassID()) {
-        // Something like << << or >> >> or == == was encountered.
-        status = U_STATE_OLD_WARNING;
-        owner->owner->unparseable = true;
+        if (sub1 != nullptr && sub2 != nullptr && sub1->getDynamicClassID() == sub2->getDynamicClassID()) {
+            // Something like << << or >> >> or == == was encountered.
+            status = U_STATE_OLD_WARNING;
+            owner->owner->unparseable = true;
+        }
     }
 
     int32_t pluralRuleStart = ruleText.indexOf(gDollarOpenParenthesis, -1, 0);
