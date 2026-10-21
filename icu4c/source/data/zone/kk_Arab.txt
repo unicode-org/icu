@@ -1595,15 +1595,12 @@ kk_Arab{
         }
         "meta:Kazakhstan"{
             ls{"قازاق ەلى ۋاقىتى"}
-            ss{"قازاق ەلى"}
         }
         "meta:Kazakhstan_Eastern"{
             ls{"شىعىس قازاق ەلى ۋاقىتى"}
-            ss{"شىعىش قازاق ەلى"}
         }
         "meta:Kazakhstan_Western"{
             ls{"باتىس قازاق ەلى ۋاقىتى"}
-            ss{"باتىس قازاق ەلى"}
         }
         "meta:Korea"{
             ld{"كورەيا جازعى ۋاقىتى"}
@@ -1620,7 +1617,6 @@ kk_Arab{
         }
         "meta:Kyrgystan"{
             ls{"قىرعىزستان ۋاقىتى"}
-            ss{"قىرعىزستان"}
         }
         "meta:Line_Islands"{
             ls{"لاين ارالدارى ۋاقىتى"}

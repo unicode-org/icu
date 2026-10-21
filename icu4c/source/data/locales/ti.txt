@@ -85,51 +85,39 @@ ti{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"¤0 ሽ"}
                         other{"¤0 ሽ"}
                     }
                     10000{
-                        one{"¤00 ሽ"}
                         other{"¤00 ሽ"}
                     }
                     100000{
-                        one{"¤000 ሽ"}
                         other{"¤000 ሽ"}
                     }
                     1000000{
-                        one{"¤0 ሚ"}
                         other{"¤0 ሚ"}
                     }
                     10000000{
-                        one{"¤00 ሚ"}
                         other{"¤00 ሚ"}
                     }
                     100000000{
-                        one{"¤000 ሚ"}
                         other{"¤000 ሚ"}
                     }
                     1000000000{
-                        one{"¤0 ቢ"}
                         other{"¤0 ቢ"}
                     }
                     10000000000{
-                        one{"¤00 ቢ"}
                         other{"¤00 ቢ"}
                     }
                     100000000000{
-                        one{"¤000 ቢ"}
                         other{"¤000 ቢ"}
                     }
                     1000000000000{
-                        one{"¤0 ት"}
                         other{"¤0 ት"}
                     }
                     10000000000000{
-                        one{"¤00 ት"}
                         other{"¤00 ት"}
                     }
                     100000000000000{
-                        one{"¤000 ት"}
                         other{"¤000 ት"}
                     }
                 }
@@ -185,51 +173,39 @@ ti{
                 }
                 decimalFormat{
                     1000{
-                        one{"0 ሽ"}
                         other{"0 ሽ"}
                     }
                     10000{
-                        one{"00 ሽ"}
                         other{"00 ሽ"}
                     }
                     100000{
-                        one{"000 ሽ"}
                         other{"000 ሽ"}
                     }
                     1000000{
-                        one{"0 ሚ"}
                         other{"0 ሚ"}
                     }
                     10000000{
-                        one{"00 ሚ"}
                         other{"00 ሚ"}
                     }
                     100000000{
-                        one{"000 ሚ"}
                         other{"000 ሚ"}
                     }
                     1000000000{
-                        one{"0 ቢ"}
                         other{"0 ቢ"}
                     }
                     10000000000{
-                        one{"00 ቢ"}
                         other{"00 ቢ"}
                     }
                     100000000000{
-                        one{"000 ቢ"}
                         other{"000 ቢ"}
                     }
                     1000000000000{
-                        one{"0 ት"}
                         other{"0 ት"}
                     }
                     10000000000000{
-                        one{"00 ት"}
                         other{"00 ት"}
                     }
                     100000000000000{
-                        one{"000 ት"}
                         other{"000 ት"}
                     }
                 }
@@ -296,16 +272,6 @@ ti{
                 "{1}፣ {0}",
                 "{1}፣ {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "GyMMMMEEEEd",
-                "GyMMMMdd",
-                "GyMMMdd",
-                "GGGGGyyMMdd",
-            }
             availableFormats{
                 Ed{"d E"}
                 Gy{"y G"}
@@ -314,16 +280,13 @@ ti{
                 GyMMMEd{"E፣ d MMM y G"}
                 GyMMMd{"MMM d, y G"}
                 GyMd{"M/d/y GGGGG"}
-                Hv{"HH v"}
                 MEd{"E፣ d/M"}
                 MMMEd{"E, MMM d"}
                 MMMMd{"d MMMM"}
                 MMMMdd{"dd MMMM"}
                 MMMd{"d MMM"}
-                MMdd{"dd/MM"}
                 Md{"M/d"}
                 y{"y G"}
-                yMM{"MM/y"}
                 yMMMM{"MMMM y"}
                 yQQQ{"QQQ y"}
                 yyyy{"y G"}
@@ -395,9 +358,6 @@ ti{
                     d{"M/d – M/d"}
                 }
                 fallback{"{0} – {1}"}
-                hm{
-                    h{"h:mm – h:mm a"}
-                }
                 y{
                     y{"y – y G"}
                 }
@@ -467,16 +427,6 @@ ti{
                 "{1}፣ {0}",
                 "{1}፣ {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "GyMMMMEEEEdd",
-                "yMMMMdd",
-                "yMMMdd",
-                "yyMMdd",
-            }
             availableFormats{
                 EHm{"E፣ HH:mm"}
                 EHms{"E፣ HH:mm:ss"}
@@ -492,7 +442,6 @@ ti{
                 MEd{"E፣ d/M"}
                 MMMEd{"E፣ d MMM"}
                 MMMMW{
-                    one{"ሰሙን W ናይ MMMM"}
                     other{"ሰሙን W ናይ MMMM"}
                 }
                 MMMMd{"d MMMM"}
@@ -513,7 +462,6 @@ ti{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    one{"ሰሙን w ናይ Y"}
                     other{"ሰሙን w ናይ Y"}
                 }
             }
@@ -839,7 +787,6 @@ ti{
             }
             relativeTime{
                 future{
-                    one{"ኣብ {0} መዓልቲ"}
                     other{"ኣብ {0} መዓልቲ"}
                 }
                 past{
@@ -851,7 +798,6 @@ ti{
         day-short{
             relativeTime{
                 past{
-                    one{"ቅድሚ {0} መዓልቲ"}
                     other{"ቅድሚ {0} መዓልቲ"}
                 }
             }
@@ -876,11 +822,9 @@ ti{
             }
             relativeTime{
                 future{
-                    one{"ኣብ {0} ዓርቢ"}
                     other{"ኣብ {0} ዓርቢ"}
                 }
                 past{
-                    one{"ቅድሚ {0} ዓርቢ"}
                     other{"ቅድሚ {0} ዓርቢ"}
                 }
             }
@@ -892,11 +836,9 @@ ti{
             }
             relativeTime{
                 future{
-                    one{"ኣብ {0} ሰዓት"}
                     other{"ኣብ {0} ሰዓት"}
                 }
                 past{
-                    one{"ቅድሚ {0} ሰዓት"}
                     other{"ቅድሚ {0} ሰዓት"}
                 }
             }
@@ -908,11 +850,9 @@ ti{
             }
             relativeTime{
                 future{
-                    one{"ኣብ {0} ደቒቕ"}
                     other{"ኣብ {0} ደቒቕ"}
                 }
                 past{
-                    one{"ቅድሚ {0} ደቒቕ"}
                     other{"ቅድሚ {0} ደቒቕ"}
                 }
             }
@@ -928,11 +868,9 @@ ti{
             }
             relativeTime{
                 future{
-                    one{"ኣብ {0} ሰኑይ"}
                     other{"ኣብ {0} ሰኑይ"}
                 }
                 past{
-                    one{"ቅድሚ {0} ሰኑይ"}
                     other{"ቅድሚ {0} ሰኑይ"}
                 }
             }
@@ -946,11 +884,9 @@ ti{
             }
             relativeTime{
                 future{
-                    one{"ኣብ {0} ወርሒ"}
                     other{"ኣብ {0} ወርሒ"}
                 }
                 past{
-                    one{"ቅድሚ {0} ወርሒ"}
                     other{"ቅድሚ {0} ወርሒ"}
                 }
             }
@@ -964,11 +900,9 @@ ti{
             }
             relativeTime{
                 future{
-                    one{"ኣብ {0} ርብዒ"}
                     other{"ኣብ {0} ርብዒ"}
                 }
                 past{
-                    one{"ቅድሚ {0} ርብዒ"}
                     other{"ቅድሚ {0} ርብዒ"}
                 }
             }
@@ -981,11 +915,9 @@ ti{
             }
             relativeTime{
                 future{
-                    one{"ኣብ {0} ቀዳም"}
                     other{"ኣብ {0} ቀዳም"}
                 }
                 past{
-                    one{"ቅድሚ {0} ቀዳም"}
                     other{"ቅድሚ {0} ቀዳም"}
                 }
             }
@@ -997,11 +929,9 @@ ti{
             }
             relativeTime{
                 future{
-                    one{"ኣብ {0} ካልኢት"}
                     other{"ኣብ {0} ካልኢት"}
                 }
                 past{
-                    one{"ቅድሚ {0} ካልኢት"}
                     other{"ቅድሚ {0} ካልኢት"}
                 }
             }
@@ -1014,11 +944,9 @@ ti{
             }
             relativeTime{
                 future{
-                    one{"ኣብ {0} ሰንበት"}
                     other{"ኣብ {0} ሰንበት"}
                 }
                 past{
-                    one{"ቅድሚ {0} ሰንበት"}
                     other{"ቅድሚ {0} ሰንበት"}
                 }
             }
@@ -1031,11 +959,9 @@ ti{
             }
             relativeTime{
                 future{
-                    one{"ኣብ {0} ሓሙስ"}
                     other{"ኣብ {0} ሓሙስ"}
                 }
                 past{
-                    one{"ቅድሚ {0} ሓሙስ"}
                     other{"ቅድሚ {0} ሓሙስ"}
                 }
             }
@@ -1048,11 +974,9 @@ ti{
             }
             relativeTime{
                 future{
-                    one{"ኣብ {0} ሰሉስ"}
                     other{"ኣብ {0} ሰሉስ"}
                 }
                 past{
-                    one{"ቅድሚ {0} ሰሉስ"}
                     other{"ቅድሚ {0} ሰሉስ"}
                 }
             }
@@ -1065,11 +989,9 @@ ti{
             }
             relativeTime{
                 future{
-                    one{"ኣብ {0} ረቡዕ"}
                     other{"ኣብ {0} ረቡዕ"}
                 }
                 past{
-                    one{"ቅድሚ {0} ረቡዕ"}
                     other{"ቅድሚ {0} ረቡዕ"}
                 }
             }
@@ -1084,11 +1006,9 @@ ti{
             relativePeriod{"ሰሙን ናይ {0}"}
             relativeTime{
                 future{
-                    one{"ኣብ {0} ሰሙን"}
                     other{"ኣብ {0} ሰሙን"}
                 }
                 past{
-                    one{"ቅድሚ {0} ሰሙን"}
                     other{"ቅድሚ {0} ሰሙን"}
                 }
             }
@@ -1120,11 +1040,9 @@ ti{
             }
             relativeTime{
                 future{
-                    one{"ኣብ {0} ዓ"}
                     other{"ኣብ {0} ዓ"}
                 }
                 past{
-                    one{"ቅድሚ {0} ዓ"}
                     other{"ቅድሚ {0} ዓ"}
                 }
             }
@@ -1133,7 +1051,6 @@ ti{
             relativeTime{
                 past{
                     one{"ቅድሚ {0} ዓ"}
-                    other{"ቅድሚ {0} ዓ"}
                 }
             }
         }
@@ -1141,7 +1058,6 @@ ti{
             relativeTime{
                 past{
                     one{"ቅድሚ -{0} ዓ"}
-                    other{"ቅድሚ {0} ዓ"}
                 }
             }
         }

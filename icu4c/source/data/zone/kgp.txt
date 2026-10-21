@@ -1225,9 +1225,6 @@ kgp{
             ld{"Rỹ Kã óra Akre tá"}
             lg{"Akre tá óra"}
             ls{"Óra Pã Akre tá"}
-            sd{"ACST"}
-            sg{"ACT"}
-            ss{"ACT"}
         }
         "meta:Afghanistan"{
             ls{"Afeganĩtã tá óra"}
@@ -1253,9 +1250,6 @@ kgp{
             ld{"Rỹ Kã óra Amỹjonỹ tá"}
             lg{"Amỹjonỹ tá óra"}
             ls{"Óra Pã Amỹjonỹ tá"}
-            sd{"AMST"}
-            sg{"AMT"}
-            ss{"AMT"}
         }
         "meta:America_Central"{
             ld{"Rỹ Kã óra Kuju tá"}
@@ -1276,11 +1270,6 @@ kgp{
             ld{"Rỹ Kã óra Rãpur tá"}
             lg{"Óra Rãpur tá"}
             ls{"Óra Pã Rãpur tá"}
-        }
-        "meta:Anadyr"{
-            ld{"Rỹ Kã óra Anỹnhyr tá"}
-            lg{"Óra Anỹnnyr tá"}
-            ls{"Óra Pã Anỹnhyr tá"}
         }
         "meta:Apia"{
             ld{"Rỹ Kã óra Apija tá"}
@@ -1357,9 +1346,6 @@ kgp{
             ld{"Rỹ Kã óra Mrasirja tá"}
             lg{"Óra Mrasirja tá"}
             ls{"Óra Pã Mrasirja tá"}
-            sd{"BRST"}
-            sg{"BRT"}
-            ss{"BRT"}
         }
         "meta:British"{
             ld{"Óra Mritỹnĩku Rỹ Kã"}

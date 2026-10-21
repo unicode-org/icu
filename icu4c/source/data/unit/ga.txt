@@ -275,26 +275,16 @@ ga{
                 two{"{0} chuid sa mhilliún"}
             }
             percent{
-                few{"{0}%"}
-                many{"{0}%"}
                 one{"{0} faoin gcéad"}
                 other{"{0} faoin gcéad"}
-                two{"{0}%"}
             }
             permille{
-                few{"{0}‰"}
-                many{"{0}‰"}
                 one{"{0} faoin míle"}
                 other{"{0} faoin míle"}
-                two{"{0}‰"}
             }
             permyriad{
                 dnam{"faoin deich míle"}
-                few{"{0}‱"}
-                many{"{0}‱"}
                 one{"{0} faoin deich míle"}
-                other{"{0}‱"}
-                two{"{0}‱"}
             }
         }
         consumption{
@@ -392,11 +382,8 @@ ga{
             }
             petabyte{
                 dnam{"peitibhearta"}
-                few{"{0} PB"}
-                many{"{0} PB"}
                 one{"{0} peitibheart"}
                 other{"{0} petabytes"}
-                two{"{0} PB"}
             }
             terabit{
                 dnam{"teirighiotáin"}
@@ -429,18 +416,14 @@ ga{
             }
             decade{
                 dnam{"deicheanna blianta"}
-                few{"{0} dec"}
-                many{"{0} dec"}
                 one{"{0} deich mbliana"}
                 other{"{0} deich mbliana"}
-                two{"{0} dec"}
             }
             millisecond{
                 dnam{"msoic"}
             }
             month{
                 few{"{0} mhí"}
-                many{"{0} mí"}
                 one{"{0} mhí"}
                 other{"{0} mí"}
                 two{"{0} mhí"}
@@ -454,33 +437,21 @@ ga{
                 two{"{0} nanashoicind"}
             }
             night{
-                few{"{0} oíche"}
-                many{"{0} n-oíche"}
                 one{"{0} oíche amháin"}
-                other{"{0} oíche"}
                 per{"{0} san oíche"}
-                two{"{0} oíche"}
             }
             quarter{
                 dnam{"ceathrúna"}
-                few{"{0} cna"}
-                many{"{0} cna"}
                 one{"{0} ceathrú"}
                 other{"{0} ceathrúna"}
-                two{"{0} cna"}
             }
             second{
                 few{"{0} shoic"}
-                many{"{0} soic"}
-                one{"{0} soic"}
-                other{"{0} soic"}
                 two{"{0} shoic"}
             }
             year{
-                few{"{0} bl"}
                 many{"{0} mbl"}
                 one{"{0} bhliain"}
-                other{"{0} bl"}
                 per{"{0} sa bhliain"}
                 two{"{0} bhl"}
             }
@@ -557,14 +528,6 @@ ga{
                 other{"{0} beicireil"}
                 two{"{0} bheicireil"}
             }
-            british-thermal-unit{
-                dnam{"teas-aonaid Bhriotanacha"}
-                few{"{0} Btu"}
-                many{"{0} Btu"}
-                one{"{0} theas-aonad Briotanach"}
-                other{"{0} aonad teirmeach Briotanach"}
-                two{"{0} Btu"}
-            }
             calorie{
                 dnam{"calraí"}
                 few{"{0} chalra"}
@@ -583,11 +546,8 @@ ga{
             }
             electronvolt{
                 dnam{"leictreonvoltanna"}
-                few{"{0} eV"}
-                many{"{0} eV"}
                 one{"{0} leictreavolta"}
                 other{"{0} leictreonvolta"}
-                two{"{0} eV"}
             }
             foodcalorie{
                 dnam{"Calraí"}
@@ -656,8 +616,6 @@ ga{
             }
             kilowatt-hour-per-100-kilometer{
                 dnam{"cileavatuair in aghaidh 100 ciliméadar"}
-                few{"{0} kWh/100km"}
-                many{"{0} kWh/100km"}
                 one{"cileavatuair in aghaidh 100 ciliméadar"}
                 other{"{0} cileavatuair in aghaidh 100 ciliméadar"}
                 two{"{0} cileavatuair in aghaidh 100 cilliméadar"}
@@ -672,11 +630,7 @@ ga{
             }
             pound-force{
                 dnam{"puint fórsa"}
-                few{"{0} lbf"}
-                many{"{0} lbf"}
                 one{"{0} punt fórsa"}
-                other{"{0} lbf"}
-                two{"{0} lbf"}
             }
         }
         frequency{
@@ -715,18 +669,12 @@ ga{
         }
         graphics{
             em{
-                few{"{0} eim"}
                 many{"{0} n-eim"}
-                one{"{0} eim"}
                 other{"{0} eim"}
-                two{"{0} eim"}
             }
             megapixel{
-                few{"{0} MP"}
-                many{"{0} MP"}
                 one{"{0} mheigiphicteilín"}
                 other{"{0} meigiphicteilín"}
-                two{"{0} MP"}
             }
             pixel-per-inch{
                 dnam{"picteilíní san orlach"}
@@ -735,10 +683,7 @@ ga{
         length{
             astronomical-unit{
                 dnam{"aonaid réalteolaíocha"}
-                few{"{0} AR"}
-                many{"{0} AR"}
                 one{"{0} aonad réalteolaíoch"}
-                other{"{0} AR"}
                 two{"{0} aonad réalteolaíoch"}
             }
             centimeter{
@@ -770,13 +715,11 @@ ga{
                 few{"{0} thr."}
                 many{"{0} dtr."}
                 one{"{0} troigh"}
-                other{"{0} tr."}
                 per{"{0} sa troigh"}
                 two{"{0} thr."}
             }
             inch{
                 few{"{0} orlach"}
-                many{"{0} or."}
                 one{"{0} orlach"}
                 other{"{0} orlach"}
                 two{"{0} orlach"}
@@ -791,11 +734,7 @@ ga{
                 two{"{0} chiliméadar"}
             }
             light-year{
-                few{"{0} sbh"}
-                many{"{0} sbh"}
                 one{"{0} solasbhliain"}
-                other{"{0} sbh"}
-                two{"{0} sbh"}
             }
             meter{
                 few{"{0} mhéadar"}
@@ -814,11 +753,7 @@ ga{
                 two{"{0} mhicriméadar"}
             }
             mile{
-                few{"{0} mhíle"}
-                many{"{0} míle"}
-                one{"{0} mhíle"}
                 other{"{0} míle"}
-                two{"{0} mhíle"}
             }
             mile-scandinavian{
                 dnam{"mílte Lochlannacha"}
@@ -845,11 +780,7 @@ ga{
                 two{"{0} nanaiméadar"}
             }
             nautical-mile{
-                few{"{0} muirmh."}
-                many{"{0} muirmh."}
                 one{"{0} mhuirmhíle"}
-                other{"{0} muirmh."}
-                two{"{0} muirmh."}
             }
             parsec{
                 dnam{"parsoiceanna"}
@@ -869,10 +800,8 @@ ga{
             }
             solar-radius{
                 few{"{0} ghriangha"}
-                many{"{0} R☉"}
                 one{"{0} ghriangha"}
                 other{"{0} griangha"}
-                two{"{0} R☉"}
             }
             yard{
                 few{"{0} shlat"}
@@ -907,8 +836,6 @@ ga{
             }
             solar-luminosity{
                 dnam{"grianlonrachas"}
-                few{"{0} L☉"}
-                many{"{0} L☉"}
                 one{"{0} ghrianlonrachas"}
                 other{"{0} grianlonrachas"}
                 two{"{0} ghrianlonrachas"}
@@ -958,7 +885,6 @@ ga{
                 few{"{0} ghráinne"}
                 many{"{0} ngráinne"}
                 one{"{0} ghráinne"}
-                other{"{0} gráinne"}
                 two{"{0} ghráinne"}
             }
             gram{
@@ -1015,13 +941,6 @@ ga{
                 one{"{0} mhais ghréine"}
                 other{"{0} mais ghréine"}
                 two{"{0} mhais ghréine"}
-            }
-            stone{
-                few{"{0} chloch"}
-                many{"{0} gcloch"}
-                one{"{0} chloch"}
-                other{"{0} cloch"}
-                two{"{0} chloch"}
             }
             ton{
                 few{"{0} thonna ghearra"}
@@ -1119,19 +1038,12 @@ ga{
             }
             kilopascal{
                 dnam{"cileapascail"}
-                few{"{0} kPa"}
-                many{"{0} kPa"}
                 one{"{0} chileapascal"}
-                other{"{0} kPa"}
-                two{"{0} kPa"}
             }
             megapascal{
                 dnam{"meigeapascail"}
-                few{"{0} MPa"}
-                many{"{0} MPa"}
                 one{"{0} mheigeapascal"}
                 other{"{0} meigeapascal"}
-                two{"{0} MPa"}
             }
             millibar{
                 dnam{"milleabair"}
@@ -1176,10 +1088,7 @@ ga{
         }
         speed{
             knot{
-                few{"{0} mrml/u"}
-                many{"{0} mrml/u"}
                 one{"{0} mhuirmh/u"}
-                other{"{0} mrml/u"}
                 two{"{0} muirmh/u"}
             }
         }
@@ -1238,18 +1147,7 @@ ga{
             }
             barrel{
                 dnam{"bairillí"}
-                few{"{0} bbl"}
-                many{"{0} bbl"}
                 one{"{0} bairille"}
-                other{"{0} bbl"}
-                two{"{0} bbl"}
-            }
-            bushel{
-                few{"{0} bhuiséal"}
-                many{"{0} mbuiséal"}
-                one{"{0} bhuiséal"}
-                other{"{0} buiséal"}
-                two{"{0} bhuiséal"}
             }
             centiliter{
                 dnam{"ceintilítir"}
@@ -1318,11 +1216,8 @@ ga{
                 two{"{0} shlat chiúbacha"}
             }
             cup{
-                few{"{0} c"}
-                many{"{0} c"}
                 one{"{0} chupán"}
                 other{"{0} cupán"}
-                two{"{0} c"}
             }
             cup-metric{
                 dnam{"cupáin mhéadracha"}
@@ -1374,10 +1269,7 @@ ga{
             }
             fluid-ounce-imperial{
                 dnam{"Unsaí leachtacha impiriúla"}
-                few{"{0} fl oz Imp."}
-                many{"{0} fl oz Imp."}
                 one{"{0} unsa leachtach impiriúil"}
-                other{"{0} fl oz Imp."}
                 two{"{0} unsa leachtacha impiriúla"}
             }
             fluid-ounce-metric{
@@ -1433,11 +1325,8 @@ ga{
                 two{"{0} mhillilítear"}
             }
             pint{
-                few{"{0} pt"}
-                many{"{0} pt"}
                 one{"{0} phionta"}
                 other{"{0} pionta"}
-                two{"{0} pt"}
             }
             pint-metric{
                 dnam{"piontaí méadracha"}
@@ -1640,17 +1529,12 @@ ga{
                 two{"{0}μs"}
             }
             minute{
-                few{"{0} nóim"}
                 many{"{0}n"}
-                one{"{0} nóim"}
-                other{"{0} nóim"}
-                two{"{0} nóim"}
             }
             month{
                 few{"{0}m"}
                 many{"{0}m"}
                 one{"{0}m"}
-                other{"{0} m"}
                 two{"{0}m"}
             }
             nanosecond{
@@ -1669,11 +1553,7 @@ ga{
                 two{"{0}oí"}
             }
             quarter{
-                few{"{0} cna"}
-                many{"{0} cna"}
-                one{"{0} ctú"}
                 other{"{0} ctú"}
-                two{"{0} cna"}
             }
         }
         electric{
@@ -1796,11 +1676,8 @@ ga{
         }
         graphics{
             em{
-                few{"{0} eim"}
                 many{"{0} n-eim"}
-                one{"{0} eim"}
                 other{"{0} eim"}
-                two{"{0} eim"}
             }
         }
         length{
@@ -1822,11 +1699,7 @@ ga{
                 dnam{"tr"}
             }
             inch{
-                few{"{0} or."}
                 many{"{0} n-or."}
-                one{"{0} or."}
-                other{"{0} or."}
-                two{"{0} or."}
             }
             kilometer{
                 few{"{0}km"}
@@ -1836,11 +1709,7 @@ ga{
                 two{"{0}km"}
             }
             light-year{
-                few{"{0} sbh"}
-                many{"{0} sbh"}
                 one{"{0}sbh"}
-                other{"{0} sbh"}
-                two{"{0} sbh"}
             }
             meter{
                 dnam{"méadar"}
@@ -1859,11 +1728,7 @@ ga{
                 two{"{0}μm"}
             }
             mile{
-                few{"{0} mhíle"}
-                many{"{0} míle"}
-                one{"{0} mhíle"}
                 other{"{0} míle"}
-                two{"{0} mhíle"}
             }
             mile-scandinavian{
                 few{"{0}mhíle Lochl."}
@@ -1888,9 +1753,7 @@ ga{
             }
             nautical-mile{
                 few{"{0} mhuirmh."}
-                many{"{0} muirmh."}
                 one{"{0} mhuirmh."}
-                other{"{0} muirmh."}
                 two{"{0} mhuirmh."}
             }
             picometer{
@@ -1945,7 +1808,6 @@ ga{
                 few{"{0} ghráinne"}
                 many{"{0} ngráinne"}
                 one{"{0} ghráinne"}
-                other{"{0} gráinne"}
                 two{"{0} ghráinne"}
             }
             gram{
@@ -1978,14 +1840,7 @@ ga{
                 two{"{0}mg"}
             }
             ounce-troy{
-                few{"{0} unsa t"}
                 many{"{0} unsa t"}
-                one{"{0} unsa t"}
-                other{"{0} unsa t"}
-                two{"{0} unsa t"}
-            }
-            stone{
-                dnam{"cloch"}
             }
             tonne{
                 few{"{0}t"}
@@ -2190,11 +2045,7 @@ ga{
                 two{"{0}dr l."}
             }
             fluid-ounce{
-                few{"{0} unsa l."}
                 many{"{0} unsa l."}
-                one{"{0} unsa l."}
-                other{"{0} unsa l."}
-                two{"{0} unsa l."}
             }
             gallon-imperial{
                 few{"{0}ghal. Im"}
@@ -2221,17 +2072,11 @@ ga{
         angle{
             arc-minute{
                 dnam{"nóim. stua"}
-                few{"{0} nóim. stua"}
-                many{"{0} nóim. stua"}
-                one{"{0} nóim. stua"}
                 other{"{0} nóim. stua"}
-                two{"{0} nóim. stua"}
             }
             arc-second{
                 dnam{"soic. stua"}
                 few{"{0} shoic. stua"}
-                many{"{0} soic. stua"}
-                one{"{0} soic. stua"}
                 other{"{0} soic. stua"}
                 two{"{0} shoic. stua"}
             }
@@ -2245,26 +2090,14 @@ ga{
             }
             radian{
                 dnam{"raidiain"}
-                few{"{0} raid"}
-                many{"{0} raid"}
-                one{"{0} raid"}
                 other{"{0} raid"}
-                two{"{0} raid"}
             }
             revolution{
                 dnam{"imr"}
-                few{"{0} imr"}
-                many{"{0} imr"}
-                one{"{0} imr"}
                 other{"{0} imr"}
-                two{"{0} imr"}
             }
             steradian{
-                few{"{0} sr"}
-                many{"{0} sr"}
-                one{"{0} sr"}
                 other{"{0} sr"}
-                two{"{0} sr"}
             }
         }
         area{
@@ -2275,8 +2108,6 @@ ga{
                 dnam{"dunaim"}
                 few{"{0} dhunam"}
                 many{"{0} ndunam"}
-                one{"{0} dunam"}
-                other{"{0} dunam"}
                 two{"{0} dhunam"}
             }
             hectare{
@@ -2284,61 +2115,39 @@ ga{
             }
             square-foot{
                 dnam{"tr²"}
-                few{"{0} tr²"}
-                many{"{0} tr²"}
-                one{"{0} tr²"}
                 other{"{0} tr²"}
-                two{"{0} tr²"}
             }
             square-inch{
                 dnam{"or²"}
-                few{"{0} or²"}
-                many{"{0} or²"}
-                one{"{0} or²"}
                 other{"{0} or²"}
                 per{"{0}/or²"}
-                two{"{0} or²"}
             }
             square-mile{
                 dnam{"mílte²"}
                 few{"{0} mhíle²"}
-                many{"{0} míle²"}
                 one{"{0} mhíle²"}
                 other{"{0} míle²"}
                 two{"{0} mhíle²"}
             }
             square-yard{
                 dnam{"slata²"}
-                few{"{0} sl²"}
-                many{"{0} sl²"}
-                one{"{0} sl²"}
                 other{"{0} sl²"}
-                two{"{0} sl²"}
             }
         }
         concentr{
             item{
                 dnam{"mír."}
                 few{"{0} mhír"}
-                many{"{0} mír"}
                 one{"{0} mhír"}
                 other{"{0} mír"}
                 two{"{0} mhír"}
             }
             karat{
                 dnam{"carait"}
-                few{"{0} ct"}
-                many{"{0} ct"}
-                one{"{0} ct"}
                 other{"{0} ct"}
-                two{"{0} ct"}
             }
             katal{
-                few{"{0} kat"}
-                many{"{0} kat"}
-                one{"{0} kat"}
                 other{"{0} kat"}
-                two{"{0} kat"}
             }
             millimole-per-liter{
                 dnam{"milleamól/lítear"}
@@ -2346,18 +2155,13 @@ ga{
             mole{
                 dnam{"mól"}
                 few{"{0} mhól"}
-                many{"{0} mól"}
                 one{"{0} mhól"}
                 other{"{0} mól"}
                 two{"{0} mhól"}
             }
             ofglucose{
                 dnam{"Glc"}
-                few{"{0} Glc"}
-                many{"{0} Glc"}
-                one{"{0} Glc"}
                 other{"{0} Glc"}
-                two{"{0} Glc"}
             }
             part{
                 dnam{"cod."}
@@ -2369,11 +2173,7 @@ ga{
             }
             part-per-1e6{
                 dnam{"codanna/milliún"}
-                few{"{0}/milliún"}
-                many{"{0}/milliún"}
-                one{"{0}/milliún"}
                 other{"{0}/milliún"}
-                two{"{0}/milliún"}
             }
             percent{
                 dnam{"faoin gcéad"}
@@ -2388,35 +2188,22 @@ ga{
         consumption{
             liter-per-100-kilometer{
                 dnam{"l/100km"}
-                few{"{0} l/100km"}
-                many{"{0} l/100km"}
-                one{"{0} l/100km"}
                 other{"{0} l/100km"}
-                two{"{0} l/100km"}
             }
             liter-per-kilometer{
                 dnam{"lítir/km"}
-                few{"{0} l/km"}
-                many{"{0} l/km"}
-                one{"{0} l/km"}
                 other{"{0} l/km"}
-                two{"{0} l/km"}
             }
             mile-per-gallon{
                 dnam{"mílte/gal"}
                 few{"{0} mhíle/gal"}
-                many{"{0} míle/gal"}
                 one{"{0} mhíle/gal"}
                 other{"{0} míle/gal"}
                 two{"{0} mhíle/gal"}
             }
             mile-per-gallon-imperial{
                 dnam{"mílte/gal. imp."}
-                few{"{0} msg imp"}
-                many{"{0} msg imp"}
-                one{"{0} msg imp"}
                 other{"{0} msg imp"}
-                two{"{0} msg imp"}
             }
         }
         coordinate{
@@ -2453,83 +2240,52 @@ ga{
             }
             day{
                 dnam{"lá"}
-                few{"{0} lá"}
-                many{"{0} lá"}
-                one{"{0} lá"}
                 other{"{0} lá"}
                 per{"{0}/lá"}
-                two{"{0} lá"}
             }
             hour{
                 dnam{"uair"}
-                few{"{0} u"}
-                many{"{0} u"}
-                one{"{0} u"}
                 other{"{0} u"}
                 per{"{0}/u"}
-                two{"{0} u"}
             }
             minute{
                 dnam{"nóim"}
-                few{"{0} nóim"}
-                many{"{0} nóim"}
-                one{"{0} nóim"}
                 other{"{0} nóim"}
                 per{"{0}/nóim"}
-                two{"{0} nóim"}
             }
             month{
                 dnam{"míonna"}
                 few{"{0} mí"}
                 many{"{0} mí"}
                 one{"{0} mí"}
-                other{"{0} m"}
                 per{"{0}/mí"}
                 two{"{0} mí"}
             }
             night{
                 dnam{"oícheanta"}
-                few{"{0} oíche"}
                 many{"{0} n-oíche"}
-                one{"{0} oíche"}
                 other{"{0} oíche"}
                 per{"{0}/oíche"}
-                two{"{0} oíche"}
             }
             quarter{
                 dnam{"ctú"}
-                few{"{0} cna"}
-                many{"{0} cna"}
                 one{"{0} ctú"}
                 other{"{0} cna"}
                 per{"{0}/c"}
-                two{"{0} cna"}
             }
             second{
                 dnam{"soic"}
-                few{"{0} soic"}
-                many{"{0} soic"}
-                one{"{0} soic"}
                 other{"{0} soic"}
-                two{"{0} soic"}
             }
             week{
                 dnam{"scht"}
-                few{"{0} scht"}
-                many{"{0} scht"}
-                one{"{0} scht"}
                 other{"{0} scht"}
                 per{"{0}/scht"}
-                two{"{0} scht"}
             }
             year{
                 dnam{"blianta"}
-                few{"{0} bl"}
-                many{"{0} bl"}
-                one{"{0} bl"}
                 other{"{0} bl"}
                 per{"{0}/bl"}
-                two{"{0} bl"}
             }
         }
         electric{
@@ -2551,19 +2307,11 @@ ga{
                 few{"{0} Bq"}
                 many{"{0} Bq"}
                 one{"{0} Bq"}
-                other{"{0} Bq"}
                 two{"{0} Bq"}
-            }
-            british-thermal-unit{
-                dnam{"BTU"}
             }
             calorie-it{
                 dnam{"cal-IT"}
-                few{"{0} cal-IT"}
-                many{"{0} cal-IT"}
-                one{"{0} cal-IT"}
                 other{"{0} cal-IT"}
-                two{"{0} cal-IT"}
             }
             electronvolt{
                 dnam{"leictravolta"}
@@ -2577,11 +2325,7 @@ ga{
                 two{"{0} Cal"}
             }
             gray{
-                few{"{0} Gy"}
-                many{"{0} Gy"}
-                one{"{0} Gy"}
                 other{"{0} Gy"}
-                two{"{0} Gy"}
             }
             joule{
                 dnam{"giúil"}
@@ -2596,18 +2340,13 @@ ga{
                 dnam{"teirmeacha SAM"}
                 few{"{0} theirm SAM"}
                 many{"{0} dteirm SAM"}
-                one{"{0} teirm SAM"}
                 other{"{0} teirm SAM"}
                 two{"{0} theirm SAM"}
             }
         }
         force{
             kilogram-force{
-                few{"{0} kgf"}
-                many{"{0} kgf"}
-                one{"{0} kgf"}
                 other{"{0} kgf"}
-                two{"{0} kgf"}
             }
             newton{
                 dnam{"niútan"}
@@ -2630,7 +2369,6 @@ ga{
                 few{"{0} eim"}
                 many{"{0} eim"}
                 one{"{0} eim"}
-                other{"{0} em"}
                 two{"{0} eim"}
             }
             megapixel{
@@ -2643,48 +2381,21 @@ ga{
         length{
             astronomical-unit{
                 dnam{"AR"}
-                few{"{0} AR"}
-                many{"{0} AR"}
-                one{"{0} AR"}
                 other{"{0} AR"}
-                two{"{0} AR"}
-            }
-            fathom{
-                dnam{"feánna"}
             }
             foot{
                 dnam{"troithe"}
-                few{"{0} tr."}
-                many{"{0} tr."}
-                one{"{0} tr."}
                 other{"{0} tr."}
                 per{"{0}/tr."}
-                two{"{0} tr."}
-            }
-            furlong{
-                dnam{"staideanna"}
-                few{"{0} st"}
-                many{"{0} st"}
-                one{"{0} st"}
-                other{"{0} st"}
-                two{"{0} st"}
             }
             inch{
                 dnam{"orlaí"}
-                few{"{0} or."}
-                many{"{0} or."}
-                one{"{0} or."}
                 other{"{0} or."}
                 per{"{0}/or."}
-                two{"{0} or."}
             }
             light-year{
                 dnam{"solasbhl."}
-                few{"{0} sbh"}
-                many{"{0} sbh"}
-                one{"{0} sbh"}
                 other{"{0} sbh"}
-                two{"{0} sbh"}
             }
             meter{
                 dnam{"méadair"}
@@ -2697,24 +2408,18 @@ ga{
                 few{"{0} mhíle"}
                 many{"{0} míle"}
                 one{"{0} mhíle"}
-                other{"{0} mi"}
                 two{"{0} mhíle"}
             }
             mile-scandinavian{
                 dnam{"míle Lochl."}
                 few{"{0} mhíle Lochl."}
-                many{"{0} míle Lochl."}
                 one{"{0} mhíle Lochl."}
                 other{"{0} míle Lochl."}
                 two{"{0} mhíle Lochl."}
             }
             nautical-mile{
                 dnam{"muirmh."}
-                few{"{0} muirmh."}
-                many{"{0} muirmh."}
-                one{"{0} muirmh."}
                 other{"{0} muirmh."}
-                two{"{0} muirmh."}
             }
             point{
                 dnam{"pointí"}
@@ -2725,8 +2430,6 @@ ga{
             yard{
                 dnam{"slata"}
                 few{"{0} shl."}
-                many{"{0} sl."}
-                one{"{0} sl."}
                 other{"{0} sl."}
                 two{"{0} shl."}
             }
@@ -2747,18 +2450,10 @@ ga{
         }
         magnetic{
             tesla{
-                few{"{0} T"}
-                many{"{0} T"}
-                one{"{0} T"}
                 other{"{0} T"}
-                two{"{0} T"}
             }
             weber{
-                few{"{0} Wb"}
-                many{"{0} Wb"}
-                one{"{0} Wb"}
                 other{"{0} Wb"}
-                two{"{0} Wb"}
             }
         }
         mass{
@@ -2773,31 +2468,21 @@ ga{
             }
             grain{
                 dnam{"gráinne"}
-                few{"{0} gráinne"}
-                many{"{0} gráinne"}
-                one{"{0} gráinne"}
                 other{"{0} gráinne"}
-                two{"{0} gráinne"}
             }
             gram{
                 dnam{"graim"}
             }
             ounce{
                 dnam{"unsa"}
-                few{"{0} unsa"}
                 many{"{0} n-unsa"}
-                one{"{0} unsa"}
                 other{"{0} unsa"}
                 per{"{0}/unsa"}
-                two{"{0} unsa"}
             }
             ounce-troy{
                 dnam{"unsa t"}
-                few{"{0} unsa t"}
                 many{"{0} n-unsa t"}
-                one{"{0} unsa t"}
                 other{"{0} unsa t"}
-                two{"{0} unsa t"}
             }
             pound{
                 dnam{"puint"}
@@ -2811,31 +2496,15 @@ ga{
             solar-mass{
                 dnam{"maiseanna gréine"}
             }
-            stone{
-                dnam{"clocha"}
-                few{"{0} chl."}
-                many{"{0} gcl."}
-                one{"{0} chl."}
-                other{"{0} cl."}
-                two{"{0} chl."}
-            }
             ton{
                 dnam{"tonnaí gearra"}
-                few{"{0} t.g."}
-                many{"{0} t.g."}
-                one{"{0} t.g."}
                 other{"{0} t.g."}
-                two{"{0} t.g."}
             }
         }
         power{
             horsepower{
                 dnam{"ec"}
-                few{"{0} ec"}
-                many{"{0} ec"}
-                one{"{0} ec"}
                 other{"{0} ec"}
-                two{"{0} ec"}
             }
             watt{
                 dnam{"vataí"}
@@ -2852,101 +2521,60 @@ ga{
             }
             inch-ofhg{
                 dnam{"orlaí Hg"}
-                few{"{0} or. Hg"}
                 many{"{0} n-or. Hg"}
-                one{"{0} or. Hg"}
                 other{"{0} or. Hg"}
-                two{"{0} or. Hg"}
             }
             pound-force-per-square-inch{
                 dnam{"psoc"}
-                few{"{0} psoc"}
-                many{"{0} psoc"}
-                one{"{0} psoc"}
                 other{"{0} psoc"}
-                two{"{0} psoc"}
             }
         }
         speed{
             kilometer-per-hour{
                 dnam{"km/uair"}
-                few{"{0} km/u"}
-                many{"{0} km/u"}
-                one{"{0} km/u"}
                 other{"{0} km/u"}
-                two{"{0} km/u"}
             }
             knot{
                 dnam{"mrml/u"}
-                few{"{0} mrml/u"}
-                many{"{0} mrml/u"}
-                one{"{0} mrml/u"}
                 other{"{0} mrml/u"}
-                two{"{0} mrml/u"}
             }
             light-speed{
                 dnam{"solas"}
                 few{"{0} sholas"}
-                many{"{0} solas"}
-                one{"{0} solas"}
                 other{"{0} solas"}
                 two{"{0} sholas"}
             }
             mile-per-hour{
                 dnam{"mílte/uair"}
-                few{"{0} msu"}
-                many{"{0} msu"}
-                one{"{0} msu"}
                 other{"{0} msu"}
-                two{"{0} msu"}
             }
         }
         volume{
             acre-foot{
                 dnam{"acra-tr"}
-                few{"{0} ac tr"}
-                many{"{0} ac tr"}
-                one{"{0} ac tr"}
                 other{"{0} ac tr"}
-                two{"{0} ac tr"}
             }
             barrel{
                 dnam{"bairille"}
             }
-            bushel{
-                dnam{"buiséil"}
-            }
             cubic-foot{
                 dnam{"tr³"}
-                few{"{0} tr³"}
-                many{"{0} tr³"}
-                one{"{0} tr³"}
                 other{"{0} tr³"}
-                two{"{0} tr³"}
             }
             cubic-inch{
                 dnam{"orlach³"}
-                few{"{0} or³"}
-                many{"{0} or³"}
-                one{"{0} or³"}
                 other{"{0} or³"}
-                two{"{0} or³"}
             }
             cubic-mile{
                 dnam{"míle³"}
                 few{"{0} mhíle³"}
-                many{"{0} míle³"}
                 one{"{0} mhíle³"}
                 other{"{0} míle³"}
                 two{"{0} mhíle³"}
             }
             cubic-yard{
                 dnam{"slata³"}
-                few{"{0} sl³"}
-                many{"{0} sl³"}
-                one{"{0} sl³"}
                 other{"{0} sl³"}
-                two{"{0} sl³"}
             }
             cup{
                 dnam{"cupáin"}
@@ -2956,35 +2584,19 @@ ga{
             }
             deciliter{
                 dnam{"dl"}
-                few{"{0} dl"}
-                many{"{0} dl"}
-                one{"{0} dl"}
                 other{"{0} dl"}
-                two{"{0} dl"}
             }
             dessert-spoon{
                 dnam{"spmhil"}
-                few{"{0} spmhil"}
-                many{"{0} spmhil"}
-                one{"{0} spmhil"}
                 other{"{0} spmhil"}
-                two{"{0} spmhil"}
             }
             dessert-spoon-imperial{
                 dnam{"spmhil imp"}
-                few{"{0} spmhil imp"}
-                many{"{0} spmhil imp"}
-                one{"{0} spmhil imp"}
                 other{"{0} spmhil imp"}
-                two{"{0} spmhil imp"}
             }
             dram{
                 dnam{"dr l."}
-                few{"{0} dr l."}
-                many{"{0} dr l."}
-                one{"{0} dr l."}
                 other{"{0} dr l."}
-                two{"{0} dr l."}
             }
             drop{
                 dnam{"braon"}
@@ -2996,11 +2608,8 @@ ga{
             }
             fluid-ounce{
                 dnam{"unsaí leacht."}
-                few{"{0} unsa l."}
                 many{"{0} n-unsa l."}
-                one{"{0} unsa l."}
                 other{"{0} unsa l."}
-                two{"{0} unsa l."}
             }
             fluid-ounce-imperial{
                 dnam{"Unsa leachtach impiriúil"}
@@ -3025,16 +2634,11 @@ ga{
             }
             hectoliter{
                 dnam{"hl"}
-                few{"{0} hl"}
-                many{"{0} hl"}
-                one{"{0} hl"}
                 other{"{0} hl"}
-                two{"{0} hl"}
             }
             jigger{
                 dnam{"miosúr"}
                 few{"{0} mhiosúr"}
-                many{"{0} miosúr"}
                 one{"{0} mhiosúr"}
                 other{"{0} miosúr"}
                 two{"{0} mhiosúr"}
@@ -3044,19 +2648,11 @@ ga{
             }
             megaliter{
                 dnam{"Ml"}
-                few{"{0} Ml"}
-                many{"{0} Ml"}
-                one{"{0} Ml"}
                 other{"{0} Ml"}
-                two{"{0} Ml"}
             }
             milliliter{
                 dnam{"ml"}
-                few{"{0} ml"}
-                many{"{0} ml"}
-                one{"{0} ml"}
                 other{"{0} ml"}
-                two{"{0} ml"}
             }
             pinch{
                 dnam{"pinse"}
@@ -3087,11 +2683,8 @@ ga{
             }
             tablespoon{
                 dnam{"spbh"}
-                few{"{0} spbh"}
-                many{"{0} spbh"}
                 one{"{0} Spbh"}
                 other{"{0} spbh"}
-                two{"{0} spbh"}
             }
         }
     }

@@ -385,9 +385,6 @@ pt{
             ld{"Horário de Verão do Acre"}
             lg{"Horário do Acre"}
             ls{"Horário Padrão do Acre"}
-            sd{"ACST"}
-            sg{"ACT"}
-            ss{"ACT"}
         }
         "meta:Afghanistan"{
             ls{"Horário do Afeganistão"}
@@ -413,9 +410,6 @@ pt{
             ld{"Horário de Verão do Amazonas"}
             lg{"Horário do Amazonas"}
             ls{"Horário Padrão do Amazonas"}
-            sd{"AMST"}
-            sg{"AMT"}
-            ss{"AMT"}
         }
         "meta:America_Central"{
             ld{"Horário de Verão Central"}
@@ -436,11 +430,6 @@ pt{
             ld{"Horário de Verão do Pacífico"}
             lg{"Horário do Pacífico"}
             ls{"Horário Padrão do Pacífico"}
-        }
-        "meta:Anadyr"{
-            ld{"Horário de Verão do Anadyr"}
-            lg{"Horário de Anadyr"}
-            ls{"Horário Padrão do Anadyr"}
         }
         "meta:Apia"{
             ld{"Horário de Verão de Apia"}
@@ -517,9 +506,6 @@ pt{
             ld{"Horário de Verão de Brasília"}
             lg{"Horário de Brasília"}
             ls{"Horário Padrão de Brasília"}
-            sd{"BRST"}
-            sg{"BRT"}
-            ss{"BRT"}
         }
         "meta:British"{
             ld{"Horário de Verão Britânico"}

@@ -21,9 +21,6 @@ gsw{
         "Africa:Djibouti"{
             ec{"Dschibuti"}
         }
-        "Africa:El_Aaiun"{
-            ec{"El Aaiún"}
-        }
         "Africa:Khartoum"{
             ec{"Khartum"}
         }
@@ -33,17 +30,8 @@ gsw{
         "Africa:Ouagadougou"{
             ec{"Wagadugu"}
         }
-        "Africa:Sao_Tome"{
-            ec{"São Tomé"}
-        }
-        "America:Asuncion"{
-            ec{"Asunción"}
-        }
         "America:Cayman"{
             ec{"Kaimaninsle"}
-        }
-        "America:Curacao"{
-            ec{"Curaçao"}
         }
         "America:El_Salvador"{
             ec{"Salvador"}
@@ -198,9 +186,6 @@ gsw{
         "Europe:Rome"{
             ec{"Rom"}
         }
-        "Europe:Tirane"{
-            ec{"Tirana"}
-        }
         "Europe:Vienna"{
             ec{"Wien"}
         }
@@ -221,9 +206,6 @@ gsw{
         }
         "Indian:Maldives"{
             ec{"Maledive"}
-        }
-        "Indian:Reunion"{
-            ec{"Réunion"}
         }
         "Pacific:Easter"{
             ec{"Oschterinsle"}
@@ -270,25 +252,16 @@ gsw{
             ld{"Mitteleuropäischi Summerziit"}
             lg{"Mitteleuropäischi Ziit"}
             ls{"Mitteleuropäischi Schtandardziit"}
-            sd{"MESZ"}
-            sg{"MEZ"}
-            ss{"MEZ"}
         }
         "meta:Europe_Eastern"{
             ld{"Oschteuropäischi Summerziit"}
             lg{"Oschteuropäischi Ziit"}
             ls{"Oschteuropäischi Schtandardziit"}
-            sd{"OESZ"}
-            sg{"OEZ"}
-            ss{"OEZ"}
         }
         "meta:Europe_Western"{
             ld{"Weschteuropäischi Summerziit"}
             lg{"Weschteuropäischi Ziit"}
             ls{"Weschteuropäischi Schtandardziit"}
-            sd{"WESZ"}
-            sg{"WEZ"}
-            ss{"WEZ"}
         }
         "meta:Moscow"{
             ld{"Moskauer Summerziit"}

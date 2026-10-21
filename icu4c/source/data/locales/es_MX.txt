@@ -9,7 +9,6 @@ es_MX{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"¤0 k"}
                         other{"¤0 k"}
                     }
                 }
@@ -21,16 +20,7 @@ es_MX{
                 }
                 decimalFormat{
                     1000{
-                        one{"0 k"}
                         other{"0 k"}
-                    }
-                    10000{
-                        one{"00 k"}
-                        other{"00 k"}
-                    }
-                    100000{
-                        one{"000 k"}
-                        other{"000 k"}
                     }
                 }
             }
@@ -76,16 +66,6 @@ es_MX{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
-            }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yyMMdd",
             }
             availableFormats{
                 EHm{"E HH:mm"}
@@ -216,8 +196,6 @@ es_MX{
         }
         fri{
             relative{
-                "-1"{"el viernes pasado"}
-                "0"{"este viernes"}
                 "1"{"el viernes próximo"}
             }
         }
@@ -238,15 +216,11 @@ es_MX{
         }
         mon{
             relative{
-                "-1"{"el lunes pasado"}
-                "0"{"este lunes"}
                 "1"{"el lunes próximo"}
             }
         }
         month{
             relative{
-                "-1"{"el mes pasado"}
-                "0"{"este mes"}
                 "1"{"el mes próximo"}
             }
             relativeTime{
@@ -275,7 +249,6 @@ es_MX{
         quarter-narrow{
             relativeTime{
                 future{
-                    one{"en {0} trim."}
                     other{"en {0} trim."}
                 }
             }
@@ -290,8 +263,6 @@ es_MX{
         }
         sat{
             relative{
-                "-1"{"el sábado pasado"}
-                "0"{"este sábado"}
                 "1"{"el sábado próximo"}
             }
         }
@@ -305,29 +276,21 @@ es_MX{
         }
         sun{
             relative{
-                "-1"{"el domingo pasado"}
-                "0"{"este domingo"}
                 "1"{"el domingo próximo"}
             }
         }
         thu{
             relative{
-                "-1"{"el jueves pasado"}
-                "0"{"este jueves"}
                 "1"{"el jueves próximo"}
             }
         }
         tue{
             relative{
-                "-1"{"el martes pasado"}
-                "0"{"este martes"}
                 "1"{"el martes próximo"}
             }
         }
         wed{
             relative{
-                "-1"{"el miércoles pasado"}
-                "0"{"este miércoles"}
                 "1"{"el miércoles próximo"}
             }
         }
@@ -340,8 +303,6 @@ es_MX{
         }
         week{
             relative{
-                "-1"{"la semana pasada"}
-                "0"{"esta semana"}
                 "1"{"la semana próxima"}
             }
         }
@@ -358,8 +319,6 @@ es_MX{
         }
         year{
             relative{
-                "-1"{"el año pasado"}
-                "0"{"este año"}
                 "1"{"el año próximo"}
             }
         }

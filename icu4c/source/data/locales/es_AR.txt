@@ -19,31 +19,6 @@ es_AR{
     }
     calendar{
         generic{
-            DateTimePatterns{
-                "H:mm:ss zzzz",
-                "H:mm:ss z",
-                "H:mm:ss",
-                "H:mm",
-                "EEEE, d 'de' MMMM 'de' y G",
-                "d 'de' MMMM 'de' y G",
-                "d 'de' MMM 'de' y G",
-                "d/M/y GGGGG",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-            }
-            DateTimeSkeletons{
-                "Hmmsszzzz",
-                "Hmmssz",
-                "Hmmss",
-                "Hmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMMd",
-                "GGGGGyyMMdd",
-            }
             availableFormats{
                 MEd{"E d-M"}
                 yyyyM{"M-y G"}
@@ -73,16 +48,6 @@ es_AR{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yyMd",
-            }
             availableFormats{
                 GyMMMEd{"E, d 'de' MMM 'de' y G"}
                 GyMMMd{"d MMM y G"}
@@ -104,14 +69,8 @@ es_AR{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        am{"a. m."}
-                        pm{"p. m."}
-                    }
                     narrow{
-                        am{"a. m."}
                         noon{"m."}
-                        pm{"p. m."}
                     }
                     wide{
                         am{"a. m."}
@@ -151,9 +110,6 @@ es_AR{
                     d{"dd/MM – dd/MM"}
                 }
                 fallback{"{0} a el {1}"}
-                h{
-                    a{"h a – h a"}
-                }
                 hm{
                     h{"h:mm–h:mm a"}
                     m{"h:mm–h:mm a"}
@@ -201,39 +157,17 @@ es_AR{
                         "4.º trimestre",
                     }
                 }
-                stand-alone{
-                    wide{
-                        "1.er trimestre",
-                        "2.º trimestre",
-                        "3.er trimestre",
-                        "4.º trimestre",
-                    }
-                }
             }
         }
     }
     fields{
-        day-narrow{
-            relativeTime{
-                future{
-                    one{"dentro de {0} días"}
-                    other{"dentro de {0} días"}
-                }
-                past{
-                    one{"hace {0} días"}
-                    other{"hace {0} días"}
-                }
-            }
-        }
         day-short{
             relativeTime{
                 future{
                     one{"dentro de {0} días"}
-                    other{"dentro de {0} días"}
                 }
                 past{
                     one{"hace {0} días"}
-                    other{"hace {0} días"}
                 }
             }
         }

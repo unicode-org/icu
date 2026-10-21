@@ -67,17 +67,9 @@ yav{
             "£",
             "lífilɛ sitelelíiŋ",
         }
-        GHC{
-            "GHC",
-            "setí",
-        }
         GMD{
             "GMD",
             "talasí u kaambí",
-        }
-        GNS{
-            "GNS",
-            "silí u kiiné",
         }
         INR{
             "₹",

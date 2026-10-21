@@ -322,10 +322,6 @@ id{
                 dnam{"becquerel"}
                 other{"{0} becquerel"}
             }
-            british-thermal-unit{
-                dnam{"satuan panas Britania"}
-                other{"{0} satuan panas Britania"}
-            }
             calorie{
                 dnam{"kalori"}
                 other{"{0} kalori"}
@@ -443,16 +439,9 @@ id{
                 dnam{"jari-jari Bumi"}
                 other{"{0} jari-jari Bumi"}
             }
-            fathom{
-                dnam{"depa"}
-                other{"{0} depa"}
-            }
             foot{
                 other{"{0} kaki"}
                 per{"{0} per kaki"}
-            }
-            furlong{
-                other{"{0} furlong"}
             }
             inch{
                 other{"{0} inci"}
@@ -579,9 +568,6 @@ id{
             }
             solar-mass{
                 other{"{0} massa Matahari"}
-            }
-            stone{
-                other{"{0} stone"}
             }
             ton{
                 dnam{"ton Amerika Serikat"}
@@ -712,9 +698,6 @@ id{
             }
             barrel{
                 other{"{0} barrel"}
-            }
-            bushel{
-                other{"{0} gantang"}
             }
             centiliter{
                 dnam{"sentiliter"}
@@ -1015,9 +998,6 @@ id{
             }
         }
         length{
-            fathom{
-                dnam{"depa"}
-            }
             foot{
                 dnam{"ft"}
                 other{"{0}′"}
@@ -1364,9 +1344,6 @@ id{
             }
         }
         energy{
-            british-thermal-unit{
-                dnam{"BTU"}
-            }
             calorie{
                 dnam{"kal"}
                 other{"{0} kal"}
@@ -1433,15 +1410,8 @@ id{
                 dnam{"sa"}
                 other{"{0} sa"}
             }
-            fathom{
-                dnam{"dp"}
-                other{"{0} dp"}
-            }
             foot{
                 dnam{"kaki"}
-            }
-            furlong{
-                dnam{"furlong"}
             }
             inch{
                 dnam{"inci"}
@@ -1505,9 +1475,6 @@ id{
             solar-mass{
                 dnam{"massa Matahari"}
             }
-            stone{
-                dnam{"stone"}
-            }
             ton{
                 dnam{"ton AS"}
                 other{"{0} tn AS"}
@@ -1545,9 +1512,6 @@ id{
         volume{
             barrel{
                 dnam{"barrel"}
-            }
-            bushel{
-                dnam{"gantang"}
             }
             cubic-inch{
                 dnam{"inci³"}

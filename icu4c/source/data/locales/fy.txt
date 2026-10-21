@@ -74,39 +74,30 @@ fy{
             patternsShort{
                 decimalFormat{
                     1000000{
-                        one{"0 mln'.'"}
                         other{"0 mln'.'"}
                     }
                     10000000{
-                        one{"00 mln'.'"}
                         other{"00 mln'.'"}
                     }
                     100000000{
-                        one{"000 mln'.'"}
                         other{"000 mln'.'"}
                     }
                     1000000000{
-                        one{"0 mld'.'"}
                         other{"0 mld'.'"}
                     }
                     10000000000{
-                        one{"00 mld'.'"}
                         other{"00 mld'.'"}
                     }
                     100000000000{
-                        one{"000 mld'.'"}
                         other{"000 mld'.'"}
                     }
                     1000000000000{
-                        one{"0 bln'.'"}
                         other{"0 bln'.'"}
                     }
                     10000000000000{
-                        one{"00 bln'.'"}
                         other{"00 bln'.'"}
                     }
                     100000000000000{
-                        one{"000 bln'.'"}
                         other{"000 bln'.'"}
                     }
                 }
@@ -118,121 +109,6 @@ fy{
         }
     }
     calendar{
-        chinese{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE d MMMM U",
-                "d MMMM U",
-                "d MMM U",
-                "dd-MM-yy",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "UMMMMEEEEd",
-                "UMMMMd",
-                "UMMMd",
-                "yyMMdd",
-            }
-            availableFormats{
-                Ed{"E d"}
-                Gy{"U"}
-                GyMMM{"MMM U"}
-                GyMMMEd{"E d MMM U"}
-                GyMMMd{"d MMM U"}
-                MEd{"E d-M"}
-                MMMEd{"E d MMM"}
-                MMMMd{"d MMMM"}
-                MMMd{"d MMM"}
-                Md{"d-M"}
-                h{"h a"}
-                hm{"h:mm a"}
-                hms{"h:mm:ss a"}
-                y{"U"}
-                yyyy{"U"}
-                yyyyM{"M-y"}
-                yyyyMEd{"E d-M-y"}
-                yyyyMMM{"MMM U"}
-                yyyyMMMEd{"E d MMM U"}
-                yyyyMMMM{"MMMM U"}
-                yyyyMMMd{"d MMM U"}
-                yyyyMd{"d-M-y"}
-                yyyyQQQ{"QQQ U"}
-                yyyyQQQQ{"QQQQ U"}
-            }
-            cyclicNameSets{
-                zodiacs{
-                    format{
-                        abbreviated{
-                            "Rôt",
-                            "Okse",
-                            "Tiger",
-                            "Knyn",
-                            "Draak",
-                            "Slang",
-                            "Hynder",
-                            "Geit",
-                            "Aap",
-                            "Hoanne",
-                            "Hûn",
-                            "Baarch",
-                        }
-                    }
-                }
-            }
-        }
-        coptic{
-            monthNames{
-                format{
-                    wide{
-                        "Tut",
-                        "Babah",
-                        "Hatur",
-                        "Kiyahk",
-                        "Tubah",
-                        "Amshir",
-                        "Baramhat",
-                        "Baramundah",
-                        "Bashans",
-                        "Ba’unah",
-                        "Abib",
-                        "Misra",
-                        "Nasi",
-                    }
-                }
-            }
-        }
-        ethiopic{
-            monthNames{
-                format{
-                    wide{
-                        "Mäskäräm",
-                        "Teqemt",
-                        "Hedar",
-                        "Tahsas",
-                        "T’er",
-                        "Yäkatit",
-                        "Mägabit",
-                        "Miyazya",
-                        "Genbot",
-                        "Säne",
-                        "Hamle",
-                        "Nähase",
-                        "Pagumän",
-                    }
-                }
-            }
-        }
         generic{
             DateTimePatterns{
                 "HH:mm:ss zzzz",
@@ -249,16 +125,6 @@ fy{
                 "{1} {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMMd",
-                "GGGGGyyMMdd",
-            }
             availableFormats{
                 Ed{"E d"}
                 Gy{"y G"}
@@ -270,7 +136,6 @@ fy{
                 MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
                 Md{"d-M"}
-                h{"h a"}
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
                 y{"y G"}
@@ -310,24 +175,6 @@ fy{
                 Md{
                     M{"dd-MM – dd-MM"}
                     d{"dd-MM – dd-MM"}
-                }
-                h{
-                    a{"h a – h a"}
-                    h{"h–h a"}
-                }
-                hm{
-                    a{"h:mm a – h:mm a"}
-                    h{"h:mm–h:mm a"}
-                    m{"h:mm–h:mm a"}
-                }
-                hmv{
-                    a{"h:mm a – h:mm a v"}
-                    h{"h:mm–h:mm a v"}
-                    m{"h:mm–h:mm a v"}
-                }
-                hv{
-                    a{"h a – h a v"}
-                    h{"h–h a v"}
                 }
                 y{
                     y{"y–y G"}
@@ -388,16 +235,6 @@ fy{
                 "{1} {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yyMMdd",
-            }
             availableFormats{
                 Ehm{"E h:mm a"}
                 Ehms{"E h:mm:ss a"}
@@ -407,13 +244,11 @@ fy{
                 MEd{"E d-M"}
                 MMMEd{"E d MMM"}
                 MMMMW{
-                    one{"'wike' W 'fan' MMMM"}
                     other{"'wike' W 'fan' MMMM"}
                 }
                 MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
                 Md{"d-M"}
-                h{"h a"}
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
                 hmsv{"h:mm:ss a v"}
@@ -430,7 +265,6 @@ fy{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    one{"'wike' w 'fan' Y"}
                     other{"'wike' w 'fan' Y"}
                 }
             }
@@ -464,14 +298,6 @@ fy{
                 abbreviated%variant{
                     0{"f.g.j."}
                     1{"g.j."}
-                }
-                narrow{
-                    0{"f.K."}
-                    1{"n.K."}
-                }
-                narrow%variant{
-                    0{"fgj"}
-                    1{"gj"}
                 }
                 wide{
                     0{"Foar Kristus"}
@@ -508,10 +334,6 @@ fy{
                     M{"dd-MM – dd-MM"}
                     d{"dd-MM – dd-MM"}
                 }
-                h{
-                    a{"h a – h a"}
-                    h{"h–h a"}
-                }
                 hm{
                     a{"h:mm a – h:mm a"}
                     h{"h:mm–h:mm a"}
@@ -521,10 +343,6 @@ fy{
                     a{"h:mm a – h:mm a v"}
                     h{"h:mm–h:mm a v"}
                     m{"h:mm–h:mm a v"}
-                }
-                hv{
-                    a{"h a – h a v"}
-                    h{"h–h a v"}
                 }
                 yM{
                     M{"MM-y – MM-y"}
@@ -624,121 +442,6 @@ fy{
                 }
             }
         }
-        hebrew{
-            monthNames{
-                format{
-                    wide{
-                        "Tisjrie",
-                        "Chesjwan",
-                        "Kislev",
-                        "Tevet",
-                        "Sjevat",
-                        "Adar A",
-                        "Adar",
-                        "Nisan",
-                        "Ijar",
-                        "Sivan",
-                        "Tammoez",
-                        "Av",
-                        "Elloel",
-                        "Adar B",
-                    }
-                }
-            }
-        }
-        indian{
-            eras{
-                abbreviated{
-                    0{"SAKA"}
-                }
-            }
-            monthNames{
-                format{
-                    wide{
-                        "Chaitra",
-                        "Vaishakha",
-                        "Jyeshtha",
-                        "Aashaadha",
-                        "Shraavana",
-                        "Bhaadrapada",
-                        "Ashvina",
-                        "Kaartika",
-                        "Agrahayana",
-                        "Pausha",
-                        "Maagha",
-                        "Phaalguna",
-                    }
-                }
-            }
-        }
-        islamic{
-            eras{
-                abbreviated{
-                    0{"Saʻna Hizjria"}
-                }
-            }
-            monthNames{
-                format{
-                    abbreviated{
-                        "Moeh.",
-                        "Saf.",
-                        "Rab. I",
-                        "Rab. II",
-                        "Joem. I",
-                        "Joem. II",
-                        "Raj.",
-                        "Sja.",
-                        "Ram.",
-                        "Sjaw.",
-                        "Doe al k.",
-                        "Doe al h.",
-                    }
-                    wide{
-                        "Moeharram",
-                        "Safar",
-                        "Rabiʻa al awal",
-                        "Rabiʻa al thani",
-                        "Joemadʻal awal",
-                        "Joemadʻal thani",
-                        "Rajab",
-                        "Sjaʻaban",
-                        "Ramadan",
-                        "Sjawal",
-                        "Doe al kaʻaba",
-                        "Doe al hizja",
-                    }
-                }
-            }
-        }
-        roc{
-            eras{
-                abbreviated{
-                    1{"Minguo"}
-                }
-            }
-        }
-    }
-    contextTransforms{
-        day-format-except-narrow:intvector{
-            1,
-            1,
-        }
-        day-standalone-except-narrow:intvector{
-            1,
-            1,
-        }
-        month-format-except-narrow:intvector{
-            1,
-            1,
-        }
-        month-standalone-except-narrow:intvector{
-            1,
-            1,
-        }
-        relative:intvector{
-            1,
-            1,
-        }
     }
     fields{
         day{
@@ -778,11 +481,9 @@ fy{
             dn{"oere"}
             relativeTime{
                 future{
-                    one{"Oer {0} oere"}
                     other{"Oer {0} oere"}
                 }
                 past{
-                    one{"{0} oere lyn"}
                     other{"{0} oere lyn"}
                 }
             }
@@ -906,11 +607,9 @@ fy{
             }
             relativeTime{
                 future{
-                    one{"Oer {0} jier"}
                     other{"Oer {0} jier"}
                 }
                 past{
-                    one{"{0} jier lyn"}
                     other{"{0} jier lyn"}
                 }
             }

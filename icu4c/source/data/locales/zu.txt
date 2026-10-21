@@ -76,51 +76,39 @@ zu{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"¤0K"}
                         other{"¤0K"}
                     }
                     10000{
-                        one{"¤00K"}
                         other{"¤00K"}
                     }
                     100000{
-                        one{"¤000K"}
                         other{"¤000K"}
                     }
                     1000000{
-                        one{"¤0M"}
                         other{"¤0M"}
                     }
                     10000000{
-                        one{"¤00M"}
                         other{"¤00M"}
                     }
                     100000000{
-                        one{"¤000M"}
                         other{"¤000M"}
                     }
                     1000000000{
-                        one{"¤0B"}
                         other{"¤0B"}
                     }
                     10000000000{
-                        one{"¤00B"}
                         other{"¤00B"}
                     }
                     100000000000{
-                        one{"¤000B"}
                         other{"¤000B"}
                     }
                     1000000000000{
-                        one{"¤0T"}
                         other{"¤0T"}
                     }
                     10000000000000{
-                        one{"¤00T"}
                         other{"¤00T"}
                     }
                     100000000000000{
-                        one{"¤000T"}
                         other{"¤000T"}
                     }
                 }
@@ -176,15 +164,12 @@ zu{
                 }
                 decimalFormat{
                     1000000000{
-                        one{"0B"}
                         other{"0B"}
                     }
                     10000000000{
-                        one{"00B"}
                         other{"00B"}
                     }
                     100000000000{
-                        one{"000B"}
                         other{"000B"}
                     }
                 }
@@ -201,51 +186,6 @@ zu{
         }
     }
     calendar{
-        buddhist{
-            intervalFormats{
-                Bh{
-                    B{"h B – h B"}
-                }
-                Bhm{
-                    B{"h:mm B – h:mm B"}
-                }
-                Gy{
-                    G{"G y – G y"}
-                }
-                GyM{
-                    G{"GGGGG y-MM – GGGGG y-MM"}
-                    M{"GGGGG y-MM – y-MM"}
-                    y{"GGGGG y-MM – y-MM"}
-                }
-                GyMEd{
-                    G{"GGGGG y-MM-dd, E – GGGGG y-MM-dd, E"}
-                    M{"GGGGG y-MM-dd, E – y-MM-dd, E"}
-                    d{"GGGGG y-MM-dd, E – y-MM-dd, E"}
-                    y{"GGGGG y-MM-dd, E – y-MM-dd, E"}
-                }
-                GyMMM{
-                    G{"G y MMM – G y MMM"}
-                    y{"G y MMM – y MMM"}
-                }
-                GyMMMEd{
-                    G{"G y MMM d, E – G y MMM d, E"}
-                    M{"G y MMM d, E – MMM d, E"}
-                    d{"G y MMM d, E – MMM d, E"}
-                    y{"G y MMM d, E – y MMM d, E"}
-                }
-                GyMMMd{
-                    G{"G y MMM d – G y MMM d"}
-                    M{"G y MMM d – MMM d"}
-                    y{"G y MMM d – y MMM d"}
-                }
-                GyMd{
-                    G{"GGGGG y-MM-dd – GGGGG y-MM-dd"}
-                    M{"GGGGG y-MM-dd – y-MM-dd"}
-                    d{"GGGGG y-MM-dd – y-MM-dd"}
-                    y{"GGGGG y-MM-dd – y-MM-dd"}
-                }
-            }
-        }
         generic{
             DateTimePatterns{
                 "HH:mm:ss zzzz",
@@ -261,16 +201,6 @@ zu{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEdd",
-                "GyMMMMd",
-                "GyMMMd",
-                "GGGGGyMMdd",
             }
             availableFormats{
                 Ed{"d E"}
@@ -307,24 +237,6 @@ zu{
                 }
                 Md{
                     M{"M/d – M/d"}
-                }
-                h{
-                    a{"h a – h a"}
-                    h{"h–h a"}
-                }
-                hm{
-                    a{"h:mm a – h:mm a"}
-                    h{"h:mm–h:mm a"}
-                    m{"h:mm–h:mm a"}
-                }
-                hmv{
-                    a{"h:mm a – h:mm a v"}
-                    h{"h:mm–h:mm a v"}
-                    m{"h:mm–h:mm a v"}
-                }
-                hv{
-                    a{"h a – h a v"}
-                    h{"h–h a v"}
                 }
                 yMEd{
                     y{"E, M/d/y – E, M/d/y"}
@@ -365,16 +277,6 @@ zu{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yyMd",
             }
             availableFormats{
                 Ed{"d E"}
@@ -667,24 +569,10 @@ zu{
             }
             relativeTime{
                 future{
-                    one{"ezinsukwini ezingu-{0} ezizayo"}
                     other{"ezinsukwini ezingu-{0} ezizayo"}
                 }
                 past{
-                    one{"ezinsukwini ezingu-{0} ezedlule."}
                     other{"ezinsukwini ezingu-{0} ezedlule."}
-                }
-            }
-        }
-        day-narrow{
-            relativeTime{
-                future{
-                    one{"ezinsukwini ezingu-{0} ezizayo"}
-                    other{"ezinsukwini ezingu-{0} ezizayo"}
-                }
-                past{
-                    one{"{0} izinsuku ezedlule"}
-                    other{"{0} izinsuku ezedlule"}
                 }
             }
         }
@@ -695,9 +583,6 @@ zu{
                     other{"{0} izinsuku ezedlule"}
                 }
             }
-        }
-        dayOfYear-narrow{
-            dn{"Day Of Year"}
         }
         dayperiod{
             dn{"AM/PM"}
@@ -726,11 +611,9 @@ zu{
             relativeTime{
                 future{
                     one{"ngo {0} Lwezihlanu"}
-                    other{"ngo {0} Lwezihlanu"}
                 }
                 past{
                     one{"{0} Lwezihlanu oludlule"}
-                    other{"{0} Lwezihlanu oludlule"}
                 }
             }
         }
@@ -741,32 +624,18 @@ zu{
             }
             relativeTime{
                 future{
-                    one{"emahoreni angu-{0} ezayo"}
                     other{"emahoreni angu-{0} ezayo"}
                 }
                 past{
-                    one{"emahoreni angu-{0} edlule"}
                     other{"emahoreni angu-{0} edlule"}
                 }
             }
         }
         hour-narrow{
             relativeTime{
-                future{
-                    one{"emahoreni angu-{0} ezayo"}
-                    other{"emahoreni angu-{0} ezayo"}
-                }
                 past{
                     one{"{0} amphora edlule"}
                     other{"{0} amahora edlule"}
-                }
-            }
-        }
-        hour-short{
-            relativeTime{
-                future{
-                    one{"emahoreni angu-{0} ezayo"}
-                    other{"emahoreni angu-{0} ezayo"}
                 }
             }
         }
@@ -777,11 +646,9 @@ zu{
             }
             relativeTime{
                 future{
-                    one{"kumaminithi angu-{0} ezayo"}
                     other{"kumaminithi angu-{0} ezayo"}
                 }
                 past{
-                    one{"{0} amaminithi edlule"}
                     other{"{0} amaminithi edlule"}
                 }
             }
@@ -791,18 +658,6 @@ zu{
                 future{
                     one{"kumaminithi angu-{0}"}
                     other{"kumaminithi angu-{0}"}
-                }
-                past{
-                    one{"{0} amaminithi edlule"}
-                    other{"{0} amaminithi edlule"}
-                }
-            }
-        }
-        minute-short{
-            relativeTime{
-                future{
-                    one{"kumaminithi angu-{0} ezayo"}
-                    other{"kumaminithi angu-{0} ezayo"}
                 }
             }
         }
@@ -814,23 +669,9 @@ zu{
             }
             relativeTime{
                 future{
-                    one{"ngeMisombuluko e-{0}"}
                     other{"ngeMisombuluko e-{0}"}
                 }
                 past{
-                    one{"ngeMsombuluko e-{0} edlule"}
-                    other{"ngeMsombuluko e-{0} edlule"}
-                }
-            }
-        }
-        mon-short{
-            relativeTime{
-                future{
-                    one{"ngeMisombuluko e-{0}"}
-                    other{"ngeMisombuluko e-{0}"}
-                }
-                past{
-                    one{"ngeMsombuluko e-{0} edlule"}
                     other{"ngeMsombuluko e-{0} edlule"}
                 }
             }
@@ -844,7 +685,6 @@ zu{
             }
             relativeTime{
                 future{
-                    one{"ezinyangeni ezingu-{0} ezizayo"}
                     other{"ezinyangeni ezingu-{0} ezizayo"}
                 }
                 past{
@@ -863,13 +703,8 @@ zu{
         }
         month-short{
             relativeTime{
-                future{
-                    one{"ezinyangeni ezingu-{0} ezizayo"}
-                    other{"ezinyangeni ezingu-{0} ezizayo"}
-                }
                 past{
                     one{"{0} izinyanga ezedlule"}
-                    other{"{0} izinyanga ezedlule"}
                 }
             }
         }
@@ -882,11 +717,9 @@ zu{
             }
             relativeTime{
                 future{
-                    one{"kumakota angu-{0} ezayo"}
                     other{"kumakota angu-{0} ezayo"}
                 }
                 past{
-                    one{"{0} amakota adlule"}
                     other{"{0} amakota adlule"}
                 }
             }
@@ -901,12 +734,7 @@ zu{
         }
         quarter-short{
             relativeTime{
-                future{
-                    one{"kumakota angu-{0} ezayo"}
-                    other{"kumakota angu-{0} ezayo"}
-                }
                 past{
-                    one{"{0} amakota adlule"}
                     other{"{0} amakota edlule"}
                 }
             }
@@ -919,23 +747,9 @@ zu{
             }
             relativeTime{
                 future{
-                    one{"ngeMgqibelo engu-{0}"}
                     other{"ngeMgqibelo engu-{0}"}
                 }
                 past{
-                    one{"ngeMgqibelo engu-{0} edlule"}
-                    other{"ngeMgqibelo engu-{0} edlule"}
-                }
-            }
-        }
-        sat-short{
-            relativeTime{
-                future{
-                    one{"ngeMgqibelo engu-{0}"}
-                    other{"ngeMgqibelo engu-{0}"}
-                }
-                past{
-                    one{"ngeMgqibelo engu-{0} edlule"}
                     other{"ngeMgqibelo engu-{0} edlule"}
                 }
             }
@@ -947,35 +761,9 @@ zu{
             }
             relativeTime{
                 future{
-                    one{"kumasekhondi angu-{0} ezayo"}
                     other{"kumasekhondi angu-{0} ezayo"}
                 }
                 past{
-                    one{"{0} amasekhondi edlule"}
-                    other{"{0} amasekhondi edlule"}
-                }
-            }
-        }
-        second-narrow{
-            relativeTime{
-                future{
-                    one{"kumasekhondi angu-{0} ezayo"}
-                    other{"kumasekhondi angu-{0} ezayo"}
-                }
-                past{
-                    one{"{0} amasekhondi edlule"}
-                    other{"{0} amasekhondi edlule"}
-                }
-            }
-        }
-        second-short{
-            relativeTime{
-                future{
-                    one{"kumasekhondi angu-{0} ezayo"}
-                    other{"kumasekhondi angu-{0} ezayo"}
-                }
-                past{
-                    one{"{0} amasekhondi edlule"}
                     other{"{0} amasekhondi edlule"}
                 }
             }
@@ -988,23 +776,9 @@ zu{
             }
             relativeTime{
                 future{
-                    one{"kumaSonto angu-{0}"}
                     other{"kumaSonto angu-{0}"}
                 }
                 past{
-                    one{"{0} amaSonto edlule"}
-                    other{"{0} amaSonto edlule"}
-                }
-            }
-        }
-        sun-short{
-            relativeTime{
-                future{
-                    one{"kumaSonto angu-{0}"}
-                    other{"kumaSonto angu-{0}"}
-                }
-                past{
-                    one{"{0} amaSonto edlule"}
                     other{"{0} amaSonto edlule"}
                 }
             }
@@ -1017,11 +791,9 @@ zu{
             }
             relativeTime{
                 future{
-                    one{"ngoLwezine abangu-{0}"}
                     other{"ngoLwezine abangu-{0}"}
                 }
                 past{
-                    one{"ngoLwezine abangu-{0} abedlule"}
                     other{"ngoLwezine abangu-{0} abedlule"}
                 }
             }
@@ -1029,18 +801,6 @@ zu{
         thu-short{
             relative{
                 "-1"{"uLwesine olwedlule"}
-                "0"{"kulo Lwesine"}
-                "1"{"uLwesine oluzayo"}
-            }
-            relativeTime{
-                future{
-                    one{"ngoLwezine abangu-{0}"}
-                    other{"ngoLwezine abangu-{0}"}
-                }
-                past{
-                    one{"ngoLwezine abangu-{0} abedlule"}
-                    other{"ngoLwezine abangu-{0} abedlule"}
-                }
             }
         }
         tue{
@@ -1051,11 +811,9 @@ zu{
             }
             relativeTime{
                 future{
-                    one{"ngoLwezibili abangu-{0}"}
                     other{"ngoLwezibili abangu-{0}"}
                 }
                 past{
-                    one{"ngoLwezibili abangu-{0} abedlule"}
                     other{"ngoLwezibili abangu-{0} abedlule"}
                 }
             }
@@ -1080,23 +838,9 @@ zu{
             }
             relativeTime{
                 future{
-                    one{"ngoLwezithathu abangu-{0}"}
                     other{"ngoLwezithathu abangu-{0}"}
                 }
                 past{
-                    one{"ngoLwezithathu abangu-{0} abedlule"}
-                    other{"ngoLwezithathu abangu-{0} abedlule"}
-                }
-            }
-        }
-        wed-short{
-            relativeTime{
-                future{
-                    one{"ngoLwezithathu abangu-{0}"}
-                    other{"ngoLwezithathu abangu-{0}"}
-                }
-                past{
-                    one{"ngoLwezithathu abangu-{0} abedlule"}
                     other{"ngoLwezithathu abangu-{0} abedlule"}
                 }
             }
@@ -1111,20 +855,10 @@ zu{
             relativePeriod{"evikini le-{0}"}
             relativeTime{
                 future{
-                    one{"emavikini angu-{0}"}
                     other{"emavikini angu-{0}"}
                 }
                 past{
-                    one{"amaviki angu-{0} edlule"}
                     other{"amaviki angu-{0} edlule"}
-                }
-            }
-        }
-        week-narrow{
-            relativeTime{
-                future{
-                    one{"emavikini angu-{0} ezayo"}
-                    other{"emavikini angu-{0} ezayo"}
                 }
             }
         }
@@ -1134,10 +868,6 @@ zu{
                     one{"emavikini angu-{0} ezayo"}
                     other{"emavikini angu-{0} ezayo"}
                 }
-                past{
-                    one{"amaviki angu-{0} edlule"}
-                    other{"amaviki angu-{0} edlule"}
-                }
             }
         }
         weekOfMonth{
@@ -1145,9 +875,6 @@ zu{
         }
         weekday{
             dn{"Usuku evikini"}
-        }
-        weekdayOfMonth-short{
-            dn{"Weekday Of Month"}
         }
         year{
             dn{"Unyaka"}
@@ -1158,31 +885,16 @@ zu{
             }
             relativeTime{
                 future{
-                    one{"eminyakeni engu-{0} ezayo"}
                     other{"eminyakeni engu-{0} ezayo"}
                 }
                 past{
-                    one{"{0} iminyaka edlule"}
                     other{"{0} iminyaka edlule"}
-                }
-            }
-        }
-        year-narrow{
-            relativeTime{
-                future{
-                    one{"eminyakeni engu-{0} ezayo"}
-                    other{"eminyakeni engu-{0} ezayo"}
                 }
             }
         }
         year-short{
             relativeTime{
-                future{
-                    one{"eminyakeni engu-{0} ezayo"}
-                    other{"eminyakeni engu-{0} ezayo"}
-                }
                 past{
-                    one{"{0} iminyaka edlule"}
                     other{"{0} unyaka odlule"}
                 }
             }

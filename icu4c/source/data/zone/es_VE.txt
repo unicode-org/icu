@@ -3,9 +3,4 @@
 // Generated using tools/cldr/cldr-to-icu/
 es_VE{
     %%Parent{"es_419"}
-    zoneStrings{
-        "meta:Venezuela"{
-            ss{"VET"}
-        }
-    }
 }

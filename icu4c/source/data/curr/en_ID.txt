@@ -9,7 +9,4 @@ en_ID{
             "Indonesian Rupiah",
         }
     }
-    Currencies%narrow{
-        IDR{"Rp"}
-    }
 }

@@ -227,16 +227,6 @@ km{
                 "{1} {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMMd",
-                "GGGGGyMd",
-            }
             availableFormats{
                 Ed{"E d"}
                 Gy{"y G"}
@@ -245,7 +235,6 @@ km{
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E d MMM y G"}
                 GyMMMd{"d MMM y G"}
-                Hv{"HH v"}
                 MEd{"E d/M"}
                 MMMEd{"E d MMM"}
                 MMMMd{"d MMMM"}
@@ -308,20 +297,6 @@ km{
                     M{"d/M/y – d/M/y GGGGG"}
                     d{"d/M/y – d/M/y GGGGG"}
                     y{"d/M/y – d/M/y GGGGG"}
-                }
-                H{
-                    H{"H–H"}
-                }
-                Hm{
-                    H{"H:mm–H:mm"}
-                    m{"H:mm–H:mm"}
-                }
-                Hmv{
-                    H{"H:mm–H:mm v"}
-                    m{"H:mm–H:mm v"}
-                }
-                Hv{
-                    H{"H–H v"}
                 }
                 M{
                     M{"M – M"}
@@ -421,16 +396,6 @@ km{
                 "{1} នៅម៉ោង {0}",
                 "{1} នៅម៉ោង {0}",
                 "{1} នៅម៉ោង {0}",
-            }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yyMd",
             }
             availableFormats{
                 Ed{"d E"}
@@ -849,8 +814,6 @@ km{
         }
         day-short{
             relative{
-                "-1"{"ម្សិលមិញ"}
-                "0"{"ថ្ងៃ​នេះ"}
                 "1"{"ថ្ងៃស្អែក"}
             }
             relativeTime{

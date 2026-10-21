@@ -10,20 +10,11 @@ xnr{
     ExemplarCharactersNumbers{"[\\- ‑ , . % ‰ + 0० 1१ 2२ 3३ 4४ 5५ 6६ 7७ 8८ 9९]"}
     ExemplarCharactersPunctuation{"[\\- ‑ , ; \\: ! ? . '‘’ \u0022“” ( ) \\[ \\] \\{ \\} ॰]"}
     NumberElements{
-        deva{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##,##0.00"}
-                currencyFormat%noCurrency{"#,##,##0.00"}
-            }
-        }
         latn{
             miscPatterns{
                 atLeast{"{0}+"}
             }
             patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##,##0.00"}
-                accountingFormat%noCurrency{"#,##,##0.00"}
                 currencyFormat{"¤#,##,##0.00"}
                 currencyFormat%alphaNextToNumber{"¤ #,##,##0.00"}
                 currencyFormat%noCurrency{"#,##,##0.00"}
@@ -668,9 +659,6 @@ xnr{
         dayOfYear{
             dn{"साल्ले दा ध्याड़ा"}
         }
-        dayOfYear-short{
-            dn{"साल्ले दा ध्याड़ा"}
-        }
         dayperiod{
             dn{"भ्यागा/संजा"}
         }
@@ -1017,24 +1005,7 @@ xnr{
                 }
             }
         }
-        week-narrow{
-            relative{
-                "-1"{"पिछले हफ्ते"}
-                "0"{"एह हफ्ता"}
-                "1"{"अगले हफ्ते"}
-            }
-        }
-        week-short{
-            relative{
-                "-1"{"पिछले हफ्ते"}
-                "0"{"एह हफ्ता"}
-                "1"{"अगले हफ्ते"}
-            }
-        }
         weekOfMonth{
-            dn{"मीन्ने दा हफ्ता"}
-        }
-        weekOfMonth-short{
             dn{"मीन्ने दा हफ्ता"}
         }
         weekday{

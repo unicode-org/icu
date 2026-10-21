@@ -21,7 +21,6 @@ ka{
                 range{"{0}-{1}"}
             }
             patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
                 currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
             }
@@ -80,101 +79,77 @@ ka{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"0 ათ'.' ¤"}
                         other{"0 ათ'.' ¤"}
                     }
                     10000{
-                        one{"00 ათ'.' ¤"}
                         other{"00 ათ'.' ¤"}
                     }
                     100000{
-                        one{"000 ათ'.' ¤"}
                         other{"000 ათ'.' ¤"}
                     }
                     1000000{
-                        one{"0 მლნ'.' ¤"}
                         other{"0 მლნ'.' ¤"}
                     }
                     10000000{
-                        one{"00 მლნ'.' ¤"}
                         other{"00 მლნ'.' ¤"}
                     }
                     100000000{
-                        one{"000 მლნ'.' ¤"}
                         other{"000 მლნ'.' ¤"}
                     }
                     1000000000{
-                        one{"0 მლრდ'.' ¤"}
                         other{"0 მლრდ'.' ¤"}
                     }
                     10000000000{
-                        one{"00 მლრდ'.' ¤"}
                         other{"00 მლრდ'.' ¤"}
                     }
                     100000000000{
-                        one{"000 მლრ'.' ¤"}
                         other{"000 მლრ'.' ¤"}
                     }
                     1000000000000{
-                        one{"0 ტრლ'.' ¤"}
                         other{"0 ტრლ'.' ¤"}
                     }
                     10000000000000{
-                        one{"00 ტრლ'.' ¤"}
                         other{"00 ტრლ'.' ¤"}
                     }
                     100000000000000{
-                        one{"000 ტრლ'.' ¤"}
                         other{"000 ტრლ'.' ¤"}
                     }
                 }
                 decimalFormat{
                     1000{
-                        one{"0 ათ'.'"}
                         other{"0 ათ'.'"}
                     }
                     10000{
-                        one{"00 ათ'.'"}
                         other{"00 ათ'.'"}
                     }
                     100000{
-                        one{"000 ათ'.'"}
                         other{"000 ათ'.'"}
                     }
                     1000000{
-                        one{"0 მლნ'.'"}
                         other{"0 მლნ'.'"}
                     }
                     10000000{
-                        one{"00 მლნ'.'"}
                         other{"00 მლნ'.'"}
                     }
                     100000000{
-                        one{"000 მლნ'.'"}
                         other{"000 მლნ'.'"}
                     }
                     1000000000{
-                        one{"0 მლრდ'.'"}
                         other{"0 მლრდ'.'"}
                     }
                     10000000000{
-                        one{"00 მლრდ'.'"}
                         other{"00 მლრდ'.'"}
                     }
                     100000000000{
-                        one{"000 მლრ'.'"}
                         other{"000 მლრ'.'"}
                     }
                     1000000000000{
-                        one{"0 ტრლ'.'"}
                         other{"0 ტრლ'.'"}
                     }
                     10000000000000{
-                        one{"00 ტრლ'.'"}
                         other{"00 ტრლ'.'"}
                     }
                     100000000000000{
-                        one{"000 ტრლ'.'"}
                         other{"000 ტრლ'.'"}
                     }
                 }
@@ -217,16 +192,6 @@ ka{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEdd",
-                "GyMMMMd",
-                "GyMMMd",
-                "GGGGGyMMdd",
-            }
             availableFormats{
                 Ed{"d E"}
                 GyMMM{"MMM, y G"}
@@ -254,15 +219,6 @@ ka{
                 yyyyMd{"G d.M.y"}
                 yyyyQQQ{"QQQ, y G"}
                 yyyyQQQQ{"QQQQ, y G"}
-            }
-            dayOfMonthNames{
-                format{
-                    abbreviated{
-                        many{"{0}"}
-                        one{"{0}-ლი"}
-                        other{"{0}"}
-                    }
-                }
             }
             intervalFormats{
                 Bh{
@@ -355,16 +311,6 @@ ka{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "yMMMMEEEEdd",
-                "yMMMMd",
-                "yMMMd",
-                "yyMMdd",
-            }
             appendItems{
                 Time-Day-Of-Week{"{1}, {0}"}
             }
@@ -392,7 +338,6 @@ ka{
                 MMMMEd{"E, d MMMM"}
                 MMMMEddd{"E, ddd MMMM"}
                 MMMMW{
-                    one{"MMMMს კვირა W"}
                     other{"MMMMს კვირა W"}
                 }
                 MMMMd{"d MMMM"}
@@ -416,7 +361,6 @@ ka{
                 yQQQ{"QQQ, y"}
                 yQQQQ{"QQQQ, y"}
                 yw{
-                    one{"კვირა w, Y"}
                     other{"კვირა w, Y"}
                 }
             }
@@ -484,7 +428,6 @@ ka{
                     wide{
                         afternoon1{"ნაშუადღევს"}
                         evening1{"საღამოს"}
-                        midnight{"შუაღამეს"}
                         morning1{"დილით"}
                         night1{"ღამით"}
                         noon{"შუადღეს"}
@@ -755,11 +698,9 @@ ka{
             }
             relativeTime{
                 future{
-                    one{"{0} დღეში"}
                     other{"{0} დღეში"}
                 }
                 past{
-                    one{"{0} დღის წინ"}
                     other{"{0} დღის წინ"}
                 }
             }
@@ -787,11 +728,9 @@ ka{
             }
             relativeTime{
                 future{
-                    one{"{0} პარასკევში"}
                     other{"{0} პარასკევში"}
                 }
                 past{
-                    one{"{0} პარასკევის წინ"}
                     other{"{0} პარასკევის წინ"}
                 }
             }
@@ -817,11 +756,9 @@ ka{
             }
             relativeTime{
                 future{
-                    one{"{0} საათში"}
                     other{"{0} საათში"}
                 }
                 past{
-                    one{"{0} საათის წინ"}
                     other{"{0} საათის წინ"}
                 }
             }
@@ -842,11 +779,9 @@ ka{
             }
             relativeTime{
                 future{
-                    one{"{0} წუთში"}
                     other{"{0} წუთში"}
                 }
                 past{
-                    one{"{0} წუთის წინ"}
                     other{"{0} წუთის წინ"}
                 }
             }
@@ -868,11 +803,9 @@ ka{
             }
             relativeTime{
                 future{
-                    one{"{0} ორშაბათში"}
                     other{"{0} ორშაბათში"}
                 }
                 past{
-                    one{"{0} ორშაბათის წინ"}
                     other{"{0} ორშაბათის წინ"}
                 }
             }
@@ -900,11 +833,9 @@ ka{
             }
             relativeTime{
                 future{
-                    one{"{0} თვეში"}
                     other{"{0} თვეში"}
                 }
                 past{
-                    one{"{0} თვის წინ"}
                     other{"{0} თვის წინ"}
                 }
             }
@@ -918,11 +849,9 @@ ka{
             }
             relativeTime{
                 future{
-                    one{"{0} კვარტალში"}
                     other{"{0} კვარტალში"}
                 }
                 past{
-                    one{"{0} კვარტალის წინ"}
                     other{"{0} კვარტალის წინ"}
                 }
             }
@@ -944,11 +873,9 @@ ka{
             }
             relativeTime{
                 future{
-                    one{"{0} შაბათში"}
                     other{"{0} შაბათში"}
                 }
                 past{
-                    one{"{0} შაბათის წინ"}
                     other{"{0} შაბათის წინ"}
                 }
             }
@@ -974,11 +901,9 @@ ka{
             }
             relativeTime{
                 future{
-                    one{"{0} წამში"}
                     other{"{0} წამში"}
                 }
                 past{
-                    one{"{0} წამის წინ"}
                     other{"{0} წამის წინ"}
                 }
             }
@@ -1000,7 +925,6 @@ ka{
             }
             relativeTime{
                 future{
-                    one{"{0} კვირაში"}
                     other{"{0} კვირაში"}
                 }
                 past{
@@ -1012,7 +936,6 @@ ka{
         sun-narrow{
             relativeTime{
                 past{
-                    one{"{0} კვირის წინ"}
                     other{"{0} კვირი წინ"}
                 }
             }
@@ -1020,7 +943,6 @@ ka{
         sun-short{
             relativeTime{
                 past{
-                    one{"{0} კვირის წინ"}
                     other{"{0} კვირის წინ"}
                 }
             }
@@ -1033,11 +955,9 @@ ka{
             }
             relativeTime{
                 future{
-                    one{"{0} ხუთშაბათში"}
                     other{"{0} ხუთშაბათში"}
                 }
                 past{
-                    one{"{0} ხუთშაბათის წინ"}
                     other{"{0} ხუთშაბათის წინ"}
                 }
             }
@@ -1064,11 +984,9 @@ ka{
             }
             relativeTime{
                 future{
-                    one{"{0} სამშაბათში"}
                     other{"{0} სამშაბათში"}
                 }
                 past{
-                    one{"{0} სამშაბათის წინ"}
                     other{"{0} სამშაბათის წინ"}
                 }
             }
@@ -1095,11 +1013,9 @@ ka{
             }
             relativeTime{
                 future{
-                    one{"{0} ოთხშაბათში"}
                     other{"{0} ოთხშაბათში"}
                 }
                 past{
-                    one{"{0} ოთხშაბათის წინ"}
                     other{"{0} ოთხშაბათის წინ"}
                 }
             }
@@ -1128,11 +1044,9 @@ ka{
             relativePeriod{"{0}-ის კვირაში"}
             relativeTime{
                 future{
-                    one{"{0} კვირაში"}
                     other{"{0} კვირაში"}
                 }
                 past{
-                    one{"{0} კვირის წინ"}
                     other{"{0} კვირის წინ"}
                 }
             }
@@ -1181,11 +1095,9 @@ ka{
             }
             relativeTime{
                 future{
-                    one{"{0} წელიწადში"}
                     other{"{0} წელიწადში"}
                 }
                 past{
-                    one{"{0} წლის წინ"}
                     other{"{0} წლის წინ"}
                 }
             }

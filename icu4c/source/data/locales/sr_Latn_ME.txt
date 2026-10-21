@@ -22,13 +22,9 @@ sr_Latn_ME{
             }
             availableFormats{
                 MMMMW{
-                    few{"W. 'sjedmica' 'u' MMMM"}
-                    one{"W. 'sjedmica' 'u' MMMM"}
                     other{"W. 'sjedmica' 'u' MMMM"}
                 }
                 yw{
-                    few{"w. 'sjedmica' 'u' Y."}
-                    one{"w. 'sjedmica' 'u' Y."}
                     other{"w. 'sjedmica' 'u' Y."}
                 }
             }
@@ -50,18 +46,10 @@ sr_Latn_ME{
                     abbreviated{
                         afternoon1{"po pod."}
                         evening1{"veče"}
-                        midnight{"ponoć"}
                         morning1{"jutro"}
-                        night1{"noću"}
-                        noon{"podne"}
                     }
                     narrow{
-                        afternoon1{"po pod."}
-                        evening1{"veče"}
-                        midnight{"ponoć"}
-                        morning1{"jutro"}
                         night1{"noć"}
-                        noon{"podne"}
                     }
                 }
                 stand-alone{

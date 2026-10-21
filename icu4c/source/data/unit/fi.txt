@@ -25,7 +25,6 @@ fi{
                     }
                     partitive{
                         one{"{0} G-voimaa"}
-                        other{"{0} G-voimaa"}
                     }
                 }
                 dnam{"G-voimat"}
@@ -48,7 +47,6 @@ fi{
                     }
                     partitive{
                         one{"{0} metriä per sekunti toiseen"}
-                        other{"{0} metriä per sekunti toiseen"}
                     }
                 }
                 dnam{"metrit per sekunti toiseen"}
@@ -73,7 +71,6 @@ fi{
                     }
                     partitive{
                         one{"{0} kulmaminuuttia"}
-                        other{"{0} kulmaminuuttia"}
                     }
                 }
                 dnam{"kulmaminuutit"}
@@ -96,7 +93,6 @@ fi{
                     }
                     partitive{
                         one{"{0} kulmasekuntia"}
-                        other{"{0} kulmasekuntia"}
                     }
                 }
                 dnam{"kulmasekunnit"}
@@ -119,7 +115,6 @@ fi{
                     }
                     partitive{
                         one{"{0} astetta"}
-                        other{"{0} astetta"}
                     }
                 }
                 dnam{"asteet"}
@@ -142,7 +137,6 @@ fi{
                     }
                     partitive{
                         one{"{0} radiaania"}
-                        other{"{0} radiaania"}
                     }
                 }
                 dnam{"radiaanit"}
@@ -165,7 +159,6 @@ fi{
                     }
                     partitive{
                         one{"{0} kierrosta"}
-                        other{"{0} kierrosta"}
                     }
                 }
                 dnam{"kierros"}
@@ -200,7 +193,6 @@ fi{
                     }
                     partitive{
                         one{"{0} hehtaaria"}
-                        other{"{0} hehtaaria"}
                     }
                 }
                 dnam{"hehtaarit"}
@@ -223,7 +215,6 @@ fi{
                     }
                     partitive{
                         one{"{0} neliösenttimetriä"}
-                        other{"{0} neliösenttimetriä"}
                     }
                 }
                 dnam{"neliösenttimetrit"}
@@ -258,7 +249,6 @@ fi{
                     }
                     partitive{
                         one{"{0} neliökilometriä"}
-                        other{"{0} neliökilometriä"}
                     }
                 }
                 dnam{"neliökilometrit"}
@@ -282,7 +272,6 @@ fi{
                     }
                     partitive{
                         one{"{0} neliömetriä"}
-                        other{"{0} neliömetriä"}
                     }
                 }
                 dnam{"neliömetrit"}
@@ -377,11 +366,9 @@ fi{
                     }
                     partitive{
                         one{"{0} kohdetta"}
-                        other{"{0} kohdetta"}
                     }
                 }
                 dnam{"kohteet"}
-                one{"{0} kohde"}
                 other{"{0} kohdetta"}
             }
             karat{
@@ -400,7 +387,6 @@ fi{
                     }
                     partitive{
                         one{"{0} karaattia"}
-                        other{"{0} karaattia"}
                     }
                 }
                 dnam{"karaatit"}
@@ -428,7 +414,6 @@ fi{
                     }
                     partitive{
                         one{"{0} milligrammaa desilitrassa"}
-                        other{"{0} milligrammaa desilitrassa"}
                     }
                 }
                 dnam{"milligrammat desilitrassa"}
@@ -451,7 +436,6 @@ fi{
                     }
                     partitive{
                         one{"{0} millimoolia litrassa"}
-                        other{"{0} millimoolia litrassa"}
                     }
                 }
                 dnam{"millimoolit litrassa"}
@@ -474,7 +458,6 @@ fi{
                     }
                     partitive{
                         one{"{0} moolia"}
-                        other{"{0} moolia"}
                     }
                 }
                 dnam{"moolit"}
@@ -488,7 +471,6 @@ fi{
             }
             part{
                 dnam{"osat"}
-                one{"{0} osa"}
                 other{"{0} osaa"}
             }
             part-per-1e6{
@@ -507,7 +489,6 @@ fi{
                     }
                     partitive{
                         one{"{0} miljoonasosaa"}
-                        other{"{0} miljoonasosaa"}
                     }
                 }
                 dnam{"miljoonasosat"}
@@ -530,7 +511,6 @@ fi{
                     }
                     partitive{
                         one{"{0} miljardisosaa"}
-                        other{"{0} miljardisosaa"}
                     }
                 }
                 dnam{"miljardisosat"}
@@ -553,7 +533,6 @@ fi{
                     }
                     partitive{
                         one{"{0} prosenttia"}
-                        other{"{0} prosenttia"}
                     }
                 }
                 dnam{"prosentit"}
@@ -576,7 +555,6 @@ fi{
                     }
                     partitive{
                         one{"{0} promillea"}
-                        other{"{0} promillea"}
                     }
                 }
                 dnam{"promillet"}
@@ -599,7 +577,6 @@ fi{
                     }
                     partitive{
                         one{"{0} peruspistettä"}
-                        other{"{0} peruspistettä"}
                     }
                 }
                 one{"{0} peruspiste"}
@@ -623,7 +600,6 @@ fi{
                     }
                     partitive{
                         one{"{0} litraa / 100 km"}
-                        other{"{0} litraa / 100 km"}
                     }
                 }
                 dnam{"litrat / 100 kilometriä"}
@@ -646,7 +622,6 @@ fi{
                     }
                     partitive{
                         one{"{0} litraa / kilometri"}
-                        other{"{0} litraa / kilometri"}
                     }
                 }
                 dnam{"litrat / kilometri"}
@@ -684,7 +659,6 @@ fi{
                     }
                     partitive{
                         one{"{0} bittiä"}
-                        other{"{0} bittiä"}
                     }
                 }
                 dnam{"bitit"}
@@ -707,7 +681,6 @@ fi{
                     }
                     partitive{
                         one{"{0} tavua"}
-                        other{"{0} tavua"}
                     }
                 }
                 dnam{"tavut"}
@@ -730,7 +703,6 @@ fi{
                     }
                     partitive{
                         one{"{0} gigabittiä"}
-                        other{"{0} gigabittiä"}
                     }
                 }
                 dnam{"gigabitit"}
@@ -753,7 +725,6 @@ fi{
                     }
                     partitive{
                         one{"{0} gigatavua"}
-                        other{"{0} gigatavua"}
                     }
                 }
                 dnam{"gigatavut"}
@@ -776,7 +747,6 @@ fi{
                     }
                     partitive{
                         one{"{0} kilobittiä"}
-                        other{"{0} kilobittiä"}
                     }
                 }
                 dnam{"kilobitit"}
@@ -799,7 +769,6 @@ fi{
                     }
                     partitive{
                         one{"{0} kilotavua"}
-                        other{"{0} kilotavua"}
                     }
                 }
                 dnam{"kilotavut"}
@@ -822,7 +791,6 @@ fi{
                     }
                     partitive{
                         one{"{0} megabittiä"}
-                        other{"{0} megabittiä"}
                     }
                 }
                 dnam{"megabitit"}
@@ -845,7 +813,6 @@ fi{
                     }
                     partitive{
                         one{"{0} megatavua"}
-                        other{"{0} megatavua"}
                     }
                 }
                 dnam{"megatavut"}
@@ -868,7 +835,6 @@ fi{
                     }
                     partitive{
                         one{"{0} petatavua"}
-                        other{"{0} petatavua"}
                     }
                 }
                 dnam{"petatavut"}
@@ -891,7 +857,6 @@ fi{
                     }
                     partitive{
                         one{"{0} terabittiä"}
-                        other{"{0} terabittiä"}
                     }
                 }
                 dnam{"terabitit"}
@@ -914,7 +879,6 @@ fi{
                     }
                     partitive{
                         one{"{0} teratavua"}
-                        other{"{0} teratavua"}
                     }
                 }
                 dnam{"teratavut"}
@@ -939,7 +903,6 @@ fi{
                     }
                     partitive{
                         one{"{0} vuosisataa"}
-                        other{"{0} vuosisataa"}
                     }
                 }
                 dnam{"vuosisadat"}
@@ -962,7 +925,6 @@ fi{
                     }
                     partitive{
                         one{"{0} päivää"}
-                        other{"{0} päivää"}
                     }
                 }
                 dnam{"päivät"}
@@ -986,7 +948,6 @@ fi{
                     }
                     partitive{
                         one{"{0} vuosikymmentä"}
-                        other{"{0} vuosikymmentä"}
                     }
                 }
                 dnam{"vuosikymmenet"}
@@ -1009,7 +970,6 @@ fi{
                     }
                     partitive{
                         one{"{0} tuntia"}
-                        other{"{0} tuntia"}
                     }
                 }
                 dnam{"tunnit"}
@@ -1033,7 +993,6 @@ fi{
                     }
                     partitive{
                         one{"{0} mikrosekuntia"}
-                        other{"{0} mikrosekuntia"}
                     }
                 }
                 dnam{"mikrosekunnit"}
@@ -1056,7 +1015,6 @@ fi{
                     }
                     partitive{
                         one{"{0} millisekuntia"}
-                        other{"{0} millisekuntia"}
                     }
                 }
                 dnam{"millisekunnit"}
@@ -1079,7 +1037,6 @@ fi{
                     }
                     partitive{
                         one{"{0} minuuttia"}
-                        other{"{0} minuuttia"}
                     }
                 }
                 dnam{"minuutit"}
@@ -1103,7 +1060,6 @@ fi{
                     }
                     partitive{
                         one{"{0} kuukautta"}
-                        other{"{0} kuukautta"}
                     }
                 }
                 dnam{"kuukaudet"}
@@ -1127,7 +1083,6 @@ fi{
                     }
                     partitive{
                         one{"{0} nanosekuntia"}
-                        other{"{0} nanosekuntia"}
                     }
                 }
                 dnam{"nanosekunnit"}
@@ -1150,10 +1105,8 @@ fi{
                     }
                     partitive{
                         one{"{0} yötä"}
-                        other{"{0} yötä"}
                     }
                 }
-                one{"{0} yö"}
                 other{"{0} yötä"}
                 per{"{0} / yö"}
             }
@@ -1173,7 +1126,6 @@ fi{
                     }
                     partitive{
                         one{"{0} neljännestä"}
-                        other{"{0} neljännestä"}
                     }
                 }
                 dnam{"neljännekset"}
@@ -1197,7 +1149,6 @@ fi{
                     }
                     partitive{
                         one{"{0} sekuntia"}
-                        other{"{0} sekuntia"}
                     }
                 }
                 dnam{"sekunnit"}
@@ -1221,7 +1172,6 @@ fi{
                     }
                     partitive{
                         one{"{0} viikkoa"}
-                        other{"{0} viikkoa"}
                     }
                 }
                 dnam{"viikot"}
@@ -1271,7 +1221,6 @@ fi{
                     }
                     partitive{
                         one{"{0} ampeeria"}
-                        other{"{0} ampeeria"}
                     }
                 }
                 dnam{"ampeerit"}
@@ -1309,7 +1258,6 @@ fi{
                     }
                     partitive{
                         one{"{0} milliampeeria"}
-                        other{"{0} milliampeeria"}
                     }
                 }
                 dnam{"milliampeerit"}
@@ -1332,7 +1280,6 @@ fi{
                     }
                     partitive{
                         one{"{0} ohmia"}
-                        other{"{0} ohmia"}
                     }
                 }
                 dnam{"ohmit"}
@@ -1360,7 +1307,6 @@ fi{
                     }
                     partitive{
                         one{"{0} volttia"}
-                        other{"{0} volttia"}
                     }
                 }
                 dnam{"voltit"}
@@ -1373,11 +1319,6 @@ fi{
                 dnam{"becquerelit"}
                 one{"{0} becquerel"}
                 other{"{0} becquereliä"}
-            }
-            british-thermal-unit{
-                dnam{"brittiläiset termiset yksiköt"}
-                one{"{0} brittiläinen terminen yksikkö"}
-                other{"{0} brittiläistä termistä yksikköä"}
             }
             calorie{
                 case{
@@ -1395,7 +1336,6 @@ fi{
                     }
                     partitive{
                         one{"{0} kaloria"}
-                        other{"{0} kaloria"}
                     }
                 }
                 dnam{"kalorit"}
@@ -1438,7 +1378,6 @@ fi{
                     }
                     partitive{
                         one{"{0} joulea"}
-                        other{"{0} joulea"}
                     }
                 }
                 dnam{"joulet"}
@@ -1461,7 +1400,6 @@ fi{
                     }
                     partitive{
                         one{"{0} kilokaloria"}
-                        other{"{0} kilokaloria"}
                     }
                 }
                 dnam{"kilokalorit"}
@@ -1484,7 +1422,6 @@ fi{
                     }
                     partitive{
                         one{"{0} kilojoulea"}
-                        other{"{0} kilojoulea"}
                     }
                 }
                 dnam{"kilojoulet"}
@@ -1507,7 +1444,6 @@ fi{
                     }
                     partitive{
                         one{"{0} kilowattituntia"}
-                        other{"{0} kilowattituntia"}
                     }
                 }
                 dnam{"kilowattitunnit"}
@@ -1565,7 +1501,6 @@ fi{
                     }
                     partitive{
                         one{"{0} newtonia"}
-                        other{"{0} newtonia"}
                     }
                 }
                 dnam{"newtonit"}
@@ -1595,7 +1530,6 @@ fi{
                     }
                     partitive{
                         one{"{0} gigahertsiä"}
-                        other{"{0} gigahertsiä"}
                     }
                 }
                 dnam{"gigahertsit"}
@@ -1618,7 +1552,6 @@ fi{
                     }
                     partitive{
                         one{"{0} hertsiä"}
-                        other{"{0} hertsiä"}
                     }
                 }
                 dnam{"hertsit"}
@@ -1641,7 +1574,6 @@ fi{
                     }
                     partitive{
                         one{"{0} kilohertsiä"}
-                        other{"{0} kilohertsiä"}
                     }
                 }
                 dnam{"kilohertsit"}
@@ -1664,7 +1596,6 @@ fi{
                     }
                     partitive{
                         one{"{0} megahertsiä"}
-                        other{"{0} megahertsiä"}
                     }
                 }
                 dnam{"megahertsit"}
@@ -1699,7 +1630,6 @@ fi{
                     }
                     partitive{
                         one{"{0} em-väliä"}
-                        other{"{0} em-väliä"}
                     }
                 }
                 dnam{"em-väli"}
@@ -1719,10 +1649,6 @@ fi{
                     illative{
                         one{"{0} megapikseliin"}
                         other{"{0} megapikseliin"}
-                    }
-                    partitive{
-                        one{"{0} megapikseliä"}
-                        other{"{0} megapikseliä"}
                     }
                 }
                 dnam{"megapikselit"}
@@ -1745,7 +1671,6 @@ fi{
                     }
                     partitive{
                         one{"{0} pikseliä"}
-                        other{"{0} pikseliä"}
                     }
                 }
                 dnam{"pikselit"}
@@ -1768,7 +1693,6 @@ fi{
                     }
                     partitive{
                         one{"{0} pikseliä / senttimetri"}
-                        other{"{0} pikseliä / senttimetri"}
                     }
                 }
                 dnam{"pikselit/senttimetri"}
@@ -1803,7 +1727,6 @@ fi{
                     }
                     partitive{
                         one{"{0} senttimetriä"}
-                        other{"{0} senttimetriä"}
                     }
                 }
                 dnam{"senttimetrit"}
@@ -1827,7 +1750,6 @@ fi{
                     }
                     partitive{
                         one{"{0} desimetriä"}
-                        other{"{0} desimetriä"}
                     }
                 }
                 dnam{"desimetrit"}
@@ -1839,21 +1761,11 @@ fi{
                 one{"{0} Maan säde"}
                 other{"{0} Maan sädettä"}
             }
-            fathom{
-                dnam{"sylet"}
-                one{"{0} syli"}
-                other{"{0} syltä"}
-            }
             foot{
                 dnam{"jalat"}
                 one{"{0} jalka"}
                 other{"{0} jalkaa"}
                 per{"{0} / jalka"}
-            }
-            furlong{
-                dnam{"furlongit"}
-                one{"{0} furlong"}
-                other{"{0} furlongia"}
             }
             inch{
                 dnam{"tuumat"}
@@ -1877,7 +1789,6 @@ fi{
                     }
                     partitive{
                         one{"{0} kilometriä"}
-                        other{"{0} kilometriä"}
                     }
                 }
                 dnam{"kilometrit"}
@@ -1906,7 +1817,6 @@ fi{
                     }
                     partitive{
                         one{"{0} metriä"}
-                        other{"{0} metriä"}
                     }
                 }
                 dnam{"metrit"}
@@ -1930,7 +1840,6 @@ fi{
                     }
                     partitive{
                         one{"{0} mikrometriä"}
-                        other{"{0} mikrometriä"}
                     }
                 }
                 dnam{"mikrometrit"}
@@ -1958,7 +1867,6 @@ fi{
                     }
                     partitive{
                         one{"{0} peninkulmaa"}
-                        other{"{0} peninkulmaa"}
                     }
                 }
                 dnam{"peninkulmat"}
@@ -1981,7 +1889,6 @@ fi{
                     }
                     partitive{
                         one{"{0} millimetrin"}
-                        other{"{0} millimetriä"}
                     }
                 }
                 dnam{"millimetrit"}
@@ -2004,7 +1911,6 @@ fi{
                     }
                     partitive{
                         one{"{0} nanometriä"}
-                        other{"{0} nanometriä"}
                     }
                 }
                 dnam{"nanometrit"}
@@ -2037,7 +1943,6 @@ fi{
                     }
                     partitive{
                         one{"{0} pikometriä"}
-                        other{"{0} pikometriä"}
                     }
                 }
                 dnam{"pikometrit"}
@@ -2071,7 +1976,6 @@ fi{
                     }
                     partitive{
                         one{"{0} kandelaa"}
-                        other{"{0} kandelaa"}
                     }
                 }
                 dnam{"kandelat"}
@@ -2094,7 +1998,6 @@ fi{
                     }
                     partitive{
                         one{"{0} luumenia"}
-                        other{"{0} luumenia"}
                     }
                 }
                 dnam{"luumenit"}
@@ -2117,7 +2020,6 @@ fi{
                     }
                     partitive{
                         one{"{0} luksia"}
-                        other{"{0} luksia"}
                     }
                 }
                 dnam{"luksit"}
@@ -2158,7 +2060,6 @@ fi{
                     }
                     partitive{
                         one{"{0} karaattia"}
-                        other{"{0} karaattia"}
                     }
                 }
                 dnam{"karaatit"}
@@ -2189,7 +2090,6 @@ fi{
                     }
                     partitive{
                         one{"{0} grammaa"}
-                        other{"{0} grammaa"}
                     }
                 }
                 dnam{"grammat"}
@@ -2213,7 +2113,6 @@ fi{
                     }
                     partitive{
                         one{"{0} kilogrammaa"}
-                        other{"{0} kilogrammaa"}
                     }
                 }
                 dnam{"kilogrammat"}
@@ -2237,7 +2136,6 @@ fi{
                     }
                     partitive{
                         one{"{0} mikrogrammaa"}
-                        other{"{0} mikrogrammaa"}
                     }
                 }
                 dnam{"mikrogrammat"}
@@ -2260,7 +2158,6 @@ fi{
                     }
                     partitive{
                         one{"{0} milligrammaa"}
-                        other{"{0} milligrammaa"}
                     }
                 }
                 dnam{"milligrammat"}
@@ -2288,11 +2185,6 @@ fi{
                 one{"{0} auringon massa"}
                 other{"{0} auringon massaa"}
             }
-            stone{
-                dnam{"stonet"}
-                one{"{0} stone"}
-                other{"{0} stonea"}
-            }
             ton{
                 dnam{"am. tonnit"}
                 one{"{0} am. tonni"}
@@ -2314,7 +2206,6 @@ fi{
                     }
                     partitive{
                         one{"{0} tonnia"}
-                        other{"{0} tonnia"}
                     }
                 }
                 dnam{"tonnit"}
@@ -2339,7 +2230,6 @@ fi{
                     }
                     partitive{
                         one{"{0} gigawattia"}
-                        other{"{0} gigawattia"}
                     }
                 }
                 dnam{"gigawatit"}
@@ -2367,7 +2257,6 @@ fi{
                     }
                     partitive{
                         one{"{0} kilowattia"}
-                        other{"{0} kilowattia"}
                     }
                 }
                 dnam{"kilowatit"}
@@ -2390,7 +2279,6 @@ fi{
                     }
                     partitive{
                         one{"{0} megawattia"}
-                        other{"{0} megawattia"}
                     }
                 }
                 dnam{"megawatit"}
@@ -2413,7 +2301,6 @@ fi{
                     }
                     partitive{
                         one{"{0} milliwattia"}
-                        other{"{0} milliwattia"}
                     }
                 }
                 dnam{"milliwatit"}
@@ -2436,7 +2323,6 @@ fi{
                     }
                     partitive{
                         one{"{0} wattia"}
-                        other{"{0} wattia"}
                     }
                 }
                 dnam{"watit"}
@@ -2461,7 +2347,6 @@ fi{
                     }
                     partitive{
                         one{"{0} normaali-ilmakehää"}
-                        other{"{0} normaali-ilmakehää"}
                     }
                 }
                 dnam{"normaali-ilmakehät"}
@@ -2484,7 +2369,6 @@ fi{
                     }
                     partitive{
                         one{"{0} baaria"}
-                        other{"{0} baaria"}
                     }
                 }
                 dnam{"baarit"}
@@ -2507,7 +2391,6 @@ fi{
                     }
                     partitive{
                         one{"{0} hehtopascalia"}
-                        other{"{0} hehtopascalia"}
                     }
                 }
                 dnam{"hehtopascalit"}
@@ -2535,7 +2418,6 @@ fi{
                     }
                     partitive{
                         one{"{0} kilopascalia"}
-                        other{"{0} kilopascalia"}
                     }
                 }
                 dnam{"kilopascalit"}
@@ -2558,7 +2440,6 @@ fi{
                     }
                     partitive{
                         one{"{0} megapascalia"}
-                        other{"{0} megapascalia"}
                     }
                 }
                 dnam{"megapascalit"}
@@ -2581,7 +2462,6 @@ fi{
                     }
                     partitive{
                         one{"{0} millibaaria"}
-                        other{"{0} millibaaria"}
                     }
                 }
                 dnam{"millibaarit"}
@@ -2604,7 +2484,6 @@ fi{
                     }
                     partitive{
                         one{"{0} elohopeamillimetriä"}
-                        other{"{0} elohopeamillimetriä"}
                     }
                 }
                 dnam{"elohopeamillimetrit"}
@@ -2632,7 +2511,6 @@ fi{
                     }
                     partitive{
                         one{"{0} pascalia"}
-                        other{"{0} pascalia"}
                     }
                 }
                 dnam{"pascalit"}
@@ -2667,7 +2545,6 @@ fi{
                     }
                     partitive{
                         one{"{0} kilometriä tunnissa"}
-                        other{"{0} kilometriä tunnissa"}
                     }
                 }
                 dnam{"kilometrit tunnissa"}
@@ -2695,7 +2572,6 @@ fi{
                     }
                     partitive{
                         one{"{0} metriä sekunnissa"}
-                        other{"{0} metriä sekunnissa"}
                     }
                 }
                 dnam{"metrit sekunnissa"}
@@ -2725,7 +2601,6 @@ fi{
                     }
                     partitive{
                         one{"{0} celsiusastetta"}
-                        other{"{0} celsiusastetta"}
                     }
                 }
                 dnam{"celsiusasteet"}
@@ -2753,7 +2628,6 @@ fi{
                     }
                     partitive{
                         one{"{0} astetta"}
-                        other{"{0} astetta"}
                     }
                 }
                 dnam{"asteet"}
@@ -2776,7 +2650,6 @@ fi{
                     }
                     partitive{
                         one{"{0} kelviniä"}
-                        other{"{0} kelviniä"}
                     }
                 }
                 dnam{"kelvinit"}
@@ -2801,7 +2674,6 @@ fi{
                     }
                     partitive{
                         one{"{0} newtonmetriä"}
-                        other{"{0} newtonmetriä"}
                     }
                 }
                 dnam{"newtonmetrit"}
@@ -2824,11 +2696,6 @@ fi{
                 one{"{0} barreli"}
                 other{"{0} barrelia"}
             }
-            bushel{
-                dnam{"bushelit"}
-                one{"{0} busheli"}
-                other{"{0} bushelia"}
-            }
             centiliter{
                 case{
                     elative{
@@ -2845,7 +2712,6 @@ fi{
                     }
                     partitive{
                         one{"{0} senttilitraa"}
-                        other{"{0} senttilitraa"}
                     }
                 }
                 dnam{"senttilitrat"}
@@ -2868,7 +2734,6 @@ fi{
                     }
                     partitive{
                         one{"{0} kuutiosenttimetriä"}
-                        other{"{0} kuutiosenttimetriä"}
                     }
                 }
                 dnam{"kuutiosenttimetrit"}
@@ -2902,7 +2767,6 @@ fi{
                     }
                     partitive{
                         one{"{0} kuutiokilometriä"}
-                        other{"{0} kuutiokilometriä"}
                     }
                 }
                 dnam{"kuutiokilometrit"}
@@ -2925,7 +2789,6 @@ fi{
                     }
                     partitive{
                         one{"{0} kuutiometriä"}
-                        other{"{0} kuutiometriä"}
                     }
                 }
                 dnam{"kuutiometrit"}
@@ -2962,7 +2825,6 @@ fi{
                     }
                     partitive{
                         one{"{0} teekuppia"}
-                        other{"{0} teekuppia"}
                     }
                 }
                 dnam{"teekupit"}
@@ -2985,7 +2847,6 @@ fi{
                     }
                     partitive{
                         one{"{0} desilitraa"}
-                        other{"{0} desilitraa"}
                     }
                 }
                 dnam{"desilitrat"}
@@ -3045,7 +2906,6 @@ fi{
                     }
                     partitive{
                         one{"{0} hehtolitraa"}
-                        other{"{0} hehtolitraa"}
                     }
                 }
                 dnam{"hehtolitrat"}
@@ -3068,7 +2928,6 @@ fi{
                     }
                     partitive{
                         one{"{0} litraa"}
-                        other{"{0} litraa"}
                     }
                 }
                 dnam{"litrat"}
@@ -3092,7 +2951,6 @@ fi{
                     }
                     partitive{
                         one{"{0} megalitraa"}
-                        other{"{0} megalitraa"}
                     }
                 }
                 dnam{"megalitrat"}
@@ -3115,7 +2973,6 @@ fi{
                     }
                     partitive{
                         one{"{0} millilitraa"}
-                        other{"{0} millilitraa"}
                     }
                 }
                 dnam{"millilitrat"}
@@ -3143,7 +3000,6 @@ fi{
                     }
                     partitive{
                         one{"{0} tuoppia"}
-                        other{"{0} tuoppia"}
                     }
                 }
                 dnam{"tuopit"}
@@ -3241,7 +3097,6 @@ fi{
         }
         concentr{
             item{
-                one{"{0} kohde"}
                 other{"{0} kohdetta"}
             }
             karat{
@@ -3441,10 +3296,6 @@ fi{
                 one{"{0} Bq"}
                 other{"{0} Bq"}
             }
-            british-thermal-unit{
-                one{"{0}Btu"}
-                other{"{0}Btu"}
-            }
             calorie{
                 one{"{0}cal"}
                 other{"{0}cal"}
@@ -3581,18 +3432,10 @@ fi{
                 one{"{0}R⊕"}
                 other{"{0}R⊕"}
             }
-            fathom{
-                one{"{0}fth"}
-                other{"{0}fth"}
-            }
             foot{
                 one{"{0}′"}
                 other{"{0}′"}
                 per{"{0}/′"}
-            }
-            furlong{
-                one{"{0}fur"}
-                other{"{0}fur"}
             }
             inch{
                 one{"{0}″"}
@@ -3738,10 +3581,6 @@ fi{
                 one{"{0}M☉"}
                 other{"{0}M☉"}
             }
-            stone{
-                one{"{0}st"}
-                other{"{0}st"}
-            }
             ton{
                 dnam{"am.tn"}
                 one{"{0}am.tn"}
@@ -3879,10 +3718,6 @@ fi{
                 dnam{"bbl"}
                 one{"{0}bbl"}
                 other{"{0}bbl"}
-            }
-            bushel{
-                one{"{0}bu"}
-                other{"{0}bu"}
             }
             centiliter{
                 one{"{0}cl"}
@@ -4028,7 +3863,6 @@ fi{
                 dnam{"°"}
             }
             steradian{
-                one{"{0} sr"}
                 other{"{0} sr"}
             }
         }
@@ -4048,26 +3882,21 @@ fi{
         concentr{
             item{
                 dnam{"kohde"}
-                one{"{0} kohde"}
                 other{"{0} kohde"}
             }
             karat{
                 dnam{"ka"}
-                one{"{0} ka"}
                 other{"{0} ka"}
             }
             katal{
-                one{"{0} kat"}
                 other{"{0} kat"}
             }
             milligram-ofglucose-per-deciliter{
                 dnam{"mg/dl"}
-                one{"{0} mg/dl"}
                 other{"{0} mg/dl"}
             }
             millimole-per-liter{
                 dnam{"mmol/l"}
-                one{"{0} mmol/l"}
                 other{"{0} mmol/l"}
             }
             mole{
@@ -4075,47 +3904,38 @@ fi{
             }
             ofglucose{
                 dnam{"gluk"}
-                one{"{0} gluk"}
                 other{"{0} gluk"}
             }
             part{
                 dnam{"osa"}
-                one{"{0} osa"}
                 other{"{0} osa"}
             }
             percent{
-                one{"{0} %"}
                 other{"{0} %"}
             }
             permille{
-                one{"{0} ‰"}
                 other{"{0} ‰"}
             }
             permyriad{
                 dnam{"peruspiste"}
-                one{"{0} ‱"}
                 other{"{0} ‱"}
             }
         }
         consumption{
             liter-per-100-kilometer{
                 dnam{"l/100 km"}
-                one{"{0} l/100 km"}
                 other{"{0} l/100 km"}
             }
             liter-per-kilometer{
                 dnam{"l/km"}
-                one{"{0} l/km"}
                 other{"{0} l/km"}
             }
             mile-per-gallon{
                 dnam{"mpg-am"}
-                one{"{0} mpg-am"}
                 other{"{0} mpg-am"}
             }
             mile-per-gallon-imperial{
                 dnam{"mpg-br"}
-                one{"{0} mpg-br"}
                 other{"{0} mpg-br"}
             }
         }
@@ -4129,67 +3949,55 @@ fi{
         digital{
             bit{
                 dnam{"b"}
-                one{"{0} b"}
                 other{"{0} b"}
             }
             byte{
                 dnam{"t"}
-                one{"{0} t"}
                 other{"{0} t"}
             }
             gigabyte{
                 dnam{"Gt"}
-                one{"{0} Gt"}
                 other{"{0} Gt"}
             }
             kilobyte{
                 dnam{"kt"}
-                one{"{0} kt"}
                 other{"{0} kt"}
             }
             megabyte{
                 dnam{"Mt"}
-                one{"{0} Mt"}
                 other{"{0} Mt"}
             }
             petabyte{
                 dnam{"Pt"}
-                one{"{0} Pt"}
                 other{"{0} Pt"}
             }
             terabyte{
                 dnam{"Tt"}
-                one{"{0} Tt"}
                 other{"{0} Tt"}
             }
         }
         duration{
             century{
                 dnam{"vs"}
-                one{"{0} vs"}
                 other{"{0} vs"}
             }
             day{
                 dnam{"pv"}
-                one{"{0} pv"}
                 other{"{0} pv"}
                 per{"{0}/pv"}
             }
             hour{
                 dnam{"t"}
-                one{"{0} t"}
                 other{"{0} t"}
                 per{"{0}/t"}
             }
             month{
                 dnam{"kk"}
-                one{"{0} kk"}
                 other{"{0} kk"}
                 per{"{0}/kk"}
             }
             night{
                 dnam{"yöt"}
-                one{"{0} yö"}
                 other{"{0} yö"}
                 per{"{0}/yö"}
             }
@@ -4201,13 +4009,11 @@ fi{
             }
             week{
                 dnam{"vk"}
-                one{"{0} vk"}
                 other{"{0} vk"}
                 per{"{0}/vk"}
             }
             year{
                 dnam{"v"}
-                one{"{0} v"}
                 other{"{0} v"}
                 per{"{0}/v"}
             }
@@ -4217,22 +4023,18 @@ fi{
                 dnam{"A"}
             }
             coulomb{
-                one{"{0} C"}
                 other{"{0} C"}
             }
             farad{
-                one{"{0} F"}
                 other{"{0} F"}
             }
             henry{
-                one{"{0} H"}
                 other{"{0} H"}
             }
             ohm{
                 dnam{"Ω"}
             }
             siemens{
-                one{"{0} S"}
                 other{"{0} S"}
             }
             volt{
@@ -4241,41 +4043,32 @@ fi{
         }
         energy{
             becquerel{
-                one{"{0} Bq"}
                 other{"{0} Bq"}
-            }
-            british-thermal-unit{
-                dnam{"BTU"}
             }
             calorie-it{
                 dnam{"cal-IT"}
-                one{"{0} cal-IT"}
                 other{"{0} cal-IT"}
             }
             electronvolt{
                 dnam{"elektronivoltti"}
             }
             gray{
-                one{"{0} Gy"}
                 other{"{0} Gy"}
             }
             joule{
                 dnam{"J"}
             }
             sievert{
-                one{"{0} Sv"}
                 other{"{0} Sv"}
             }
         }
         force{
             kilogram-force{
                 dnam{"kp"}
-                one{"{0} kp"}
                 other{"{0} kp"}
             }
             kilowatt-hour-per-100-kilometer{
                 dnam{"kWh/100 km"}
-                one{"{0} kWh/100 km"}
                 other{"{0} kWh/100 km"}
             }
             newton{
@@ -4298,13 +4091,8 @@ fi{
             }
         }
         length{
-            fathom{
-                one{"{0} fm"}
-                other{"{0} fth"}
-            }
             light-year{
                 dnam{"vv"}
-                one{"{0} vv"}
                 other{"{0} vv"}
             }
             meter{
@@ -4312,12 +4100,10 @@ fi{
             }
             mile-scandinavian{
                 dnam{"pnk"}
-                one{"{0} pnk"}
                 other{"{0} pnk"}
             }
             nautical-mile{
                 dnam{"mpk"}
-                one{"{0} mpk"}
                 other{"{0} mpk"}
             }
             solar-radius{
@@ -4331,18 +4117,15 @@ fi{
         }
         magnetic{
             tesla{
-                one{"{0} T"}
                 other{"{0} T"}
             }
             weber{
-                one{"{0} Wb"}
                 other{"{0} Wb"}
             }
         }
         mass{
             carat{
                 dnam{"ka"}
-                one{"{0} ka"}
                 other{"{0} ka"}
             }
             dalton{
@@ -4364,14 +4147,12 @@ fi{
             }
             ton{
                 dnam{"am. tn"}
-                one{"{0} am. tn"}
                 other{"{0} am. tn"}
             }
         }
         power{
             horsepower{
                 dnam{"hv"}
-                one{"{0} hv"}
                 other{"{0} hv"}
             }
             watt{
@@ -4381,35 +4162,29 @@ fi{
         pressure{
             millimeter-ofhg{
                 dnam{"mmHg"}
-                one{"{0} mmHg"}
                 other{"{0} mmHg"}
             }
             ofhg{
-                one{"{0} Hg"}
                 other{"{0} Hg"}
             }
         }
         speed{
             light-speed{
                 dnam{"valon nopeus"}
-                one{"{0} valon nopeus"}
                 other{"{0} valon nopeus"}
             }
         }
         temperature{
             celsius{
-                one{"{0} °C"}
                 other{"{0} °C"}
             }
             fahrenheit{
-                one{"{0} °F"}
                 other{"{0} °F"}
             }
         }
         torque{
             newton-meter{
                 dnam{"Nm"}
-                one{"{0} Nm"}
                 other{"{0} Nm"}
             }
         }
@@ -4419,7 +4194,6 @@ fi{
             }
             centiliter{
                 dnam{"cl"}
-                one{"{0} cl"}
                 other{"{0} cl"}
             }
             cup{
@@ -4429,22 +4203,18 @@ fi{
             }
             cup-metric{
                 dnam{"tkp"}
-                one{"{0} tkp"}
                 other{"{0} tkp"}
             }
             deciliter{
                 dnam{"dl"}
-                one{"{0} dl"}
                 other{"{0} dl"}
             }
             dessert-spoon{
                 dnam{"jrkl"}
-                one{"{0} jrkl"}
                 other{"{0} jrkl"}
             }
             dessert-spoon-imperial{
                 dnam{"br. jrkl"}
-                one{"{0} br. jrkl"}
                 other{"{0} br. jrkl"}
             }
             dram{
@@ -4459,33 +4229,27 @@ fi{
             }
             fluid-ounce{
                 dnam{"fl oz"}
-                one{"{0} fl oz"}
                 other{"{0} fl oz"}
             }
             fluid-ounce-imperial{
                 dnam{"br. nesteunssi"}
-                one{"{0} fl oz br."}
                 other{"{0} fl oz br."}
             }
             fluid-ounce-metric{
-                one{"{0} fl oz m."}
                 other{"{0} fl oz m."}
             }
             gallon{
                 dnam{"am. gal"}
-                one{"{0} am. gal"}
                 other{"{0} am. gal"}
                 per{"{0}/am. gal"}
             }
             gallon-imperial{
                 dnam{"br. gal"}
-                one{"{0} br. gal"}
                 other{"{0} br. gal"}
                 per{"{0}/br. gal"}
             }
             hectoliter{
                 dnam{"hl"}
-                one{"{0} hl"}
                 other{"{0} hl"}
             }
             jigger{
@@ -4498,12 +4262,10 @@ fi{
             }
             megaliter{
                 dnam{"Ml"}
-                one{"{0} Ml"}
                 other{"{0} Ml"}
             }
             milliliter{
                 dnam{"ml"}
-                one{"{0} ml"}
                 other{"{0} ml"}
             }
             pinch{
@@ -4513,22 +4275,18 @@ fi{
             }
             pint-metric{
                 dnam{"tp"}
-                one{"{0} tp"}
                 other{"{0} tp"}
             }
             quart-imperial{
                 dnam{"qt br"}
-                one{"{0} qt br."}
                 other{"{0} qt br."}
             }
             tablespoon{
                 dnam{"rkl"}
-                one{"{0} rkl"}
                 other{"{0} rkl"}
             }
             teaspoon{
                 dnam{"tl"}
-                one{"{0} tl"}
                 other{"{0} tl"}
             }
         }

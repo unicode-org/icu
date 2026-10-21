@@ -7,12 +7,6 @@ to{
     ExemplarCharactersIndex{"[A E F H I K L M N {NG} O P S T U V ʻ]"}
     ExemplarCharactersPunctuation{"[\\- ‐‑ – — , ; \\: ! ? . … '‘’ \u0022“” ( ) \\[ \\] § @ * / \\& # † ‡ ′ ″]"}
     NumberElements{
-        arab{
-            symbols{
-                minusSign{"‏-"}
-                plusSign{"‏+"}
-            }
-        }
         latn{
             miscPatterns{
                 atLeast{"{0}+"}
@@ -131,16 +125,6 @@ to{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMMd",
-                "GGGGGyyMd",
-            }
             availableFormats{
                 Ed{"E d"}
                 Ehm{"E h:mm a"}
@@ -163,7 +147,6 @@ to{
                 y{"y G"}
                 yM{"M/y"}
                 yMEd{"E d/M/y"}
-                yMM{"MM-y"}
                 yMMM{"MMM y"}
                 yMMMEd{"E d MMM y"}
                 yMMMM{"MMMM y"}
@@ -246,16 +229,6 @@ to{
                 d{
                     d{"d – d"}
                 }
-                hm{
-                    a{"h:mm a – h:mm a"}
-                    h{"h:mm–h:mm a"}
-                    m{"h:mm–h:mm a"}
-                }
-                hmv{
-                    a{"h:mm a – h:mm a v"}
-                    h{"h:mm–h:mm a v"}
-                    m{"h:mm–h:mm a v"}
-                }
                 y{
                     y{"y – y G"}
                 }
@@ -316,16 +289,6 @@ to{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yyMd",
             }
             availableFormats{
                 Ed{"E d"}
@@ -724,7 +687,6 @@ to{
             dn{"ʻa."}
             relative{
                 "-1"{"ʻane"}
-                "-2"{"ʻahn"}
                 "0"{"ʻa.ni"}
                 "1"{"ʻapo"}
             }
@@ -1227,19 +1189,6 @@ to{
             lenient{
                 "[\\- ‑ . /]",
                 "[\\: ∶]",
-            }
-        }
-        general{
-            lenient{
-                "[.．․﹒ 。｡︒]",
-                "['＇’ ՚ ᾽᾿ ʼ]",
-                "[%％﹪ ٪]",
-                "[‰ ؉]",
-                "[\$＄﹩]",
-                "[£￡ ₤]",
-                "[¥￥]",
-                "[₩￦]",
-                "[₹ {Rp} {Rs}₨]",
             }
         }
         number{

@@ -104,11 +104,6 @@ fil{
             lg{"Oras sa Pasipiko sa HIlagang Amerika"}
             ls{"Standard na Oras sa Pasipiko sa Hilagang Amerika"}
         }
-        "meta:Anadyr"{
-            ld{"Summer Time sa Anadyr"}
-            lg{"Oras sa Anadyr"}
-            ls{"Standard Time sa Anadyr"}
-        }
         "meta:Apia"{
             ld{"Daylight Time sa Apia"}
             lg{"Oras sa Apia"}

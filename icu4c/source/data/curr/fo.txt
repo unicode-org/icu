@@ -99,10 +99,6 @@ fo{
             "BYN",
             "Hvítarussiskur ruble",
         }
-        BYR{
-            "BYR",
-            "Hvítarussland ruble (2000–2016)",
-        }
         BZD{
             "BZD",
             "Belis dollari",
@@ -371,10 +367,6 @@ fo{
             "MOP",
             "Makao pataca",
         }
-        MRO{
-            "MRO",
-            "Móritania ouguiya (1973–2017)",
-        }
         MRU{
             "MRU",
             "Móritania ouguiya",
@@ -527,10 +519,6 @@ fo{
             "SSP",
             "Suðursudan pund",
         }
-        STD{
-            "STD",
-            "Sao Tome & Prinsipi dobra (1977–2017)",
-        }
         STN{
             "STN",
             "Sao Tome & Prinsipi dobra",
@@ -599,10 +587,6 @@ fo{
             "UZS",
             "Usbekistan som",
         }
-        VEF{
-            "VEF",
-            "Venesuela bolívar (2008–2018)",
-        }
         VES{
             "VES",
             "Venesuela bolívar",
@@ -623,14 +607,6 @@ fo{
             "FCFA",
             "Miðafrika CFA frankur",
         }
-        XAG{
-            "XAG",
-            "unse sølv",
-        }
-        XAU{
-            "XAU",
-            "unse guld",
-        }
         XCD{
             "EC$",
             "Eystur Karibia dollari",
@@ -643,17 +619,9 @@ fo{
             "F CFA",
             "Vesturafrika CFA frankur",
         }
-        XPD{
-            "XPD",
-            "unse palladium",
-        }
         XPF{
             "CFPF",
             "CFP frankur",
-        }
-        XPT{
-            "XPT",
-            "unse platin",
         }
         XXX{
             "¤",
@@ -786,11 +754,9 @@ fo{
         }
         INR{
             one{"indiskur rupi"}
-            other{"indiskir rupis"}
         }
         IRR{
             one{"iranskur rial"}
-            other{"iranskir rials"}
         }
         ISK{
             one{"íslendsk króna"}
@@ -924,10 +890,6 @@ fo{
             one{"Eystur Karibia dollari"}
             other{"Eystur Karibia dollarar"}
         }
-        XCG{
-            one{"Karibia gyllin"}
-            other{"Karibia gyllin"}
-        }
         XOF{
             one{"Vesturafrika CFA frankur"}
             other{"Vesturafrika CFA frankar"}
@@ -937,7 +899,6 @@ fo{
             other{"CFP frankar"}
         }
         XXX{
-            one{"(ókent gjaldoyra)"}
             other{"(ókent gjaldoyra)"}
         }
     }

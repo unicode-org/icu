@@ -18,7 +18,6 @@ ki{
         fr{"Kĩbaranja"}
         ha{"Kihausa"}
         hi{"Kĩhĩndĩ"}
-        hi_Latn{"Kĩhĩndĩ (Kĩratini)"}
         hu{"Kihungari"}
         id{"Kiindonesia"}
         ig{"Kiigbo"}

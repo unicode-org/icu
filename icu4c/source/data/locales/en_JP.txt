@@ -57,20 +57,6 @@ en_JP{
                     d{"GGGGG y/MM/dd – y/MM/dd"}
                     y{"GGGGG y/MM/dd – y/MM/dd"}
                 }
-                H{
-                    H{"H – H"}
-                }
-                Hm{
-                    H{"H:mm – H:mm"}
-                    m{"H:mm – H:mm"}
-                }
-                Hmv{
-                    H{"H:mm – H:mm v"}
-                    m{"H:mm – H:mm v"}
-                }
-                Hv{
-                    H{"H – H v"}
-                }
                 MEd{
                     M{"E, MM/dd – E, MM/dd"}
                     d{"E, MM/dd – E, MM/dd"}
@@ -110,16 +96,6 @@ en_JP{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
-            }
-            DateTimeSkeletons{
-                "Hmmsszzzz",
-                "Hmmssz",
-                "Hmmss",
-                "Hmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yMd",
             }
             availableFormats{
                 GyMd{"y/MM/dd G"}
@@ -191,7 +167,6 @@ en_JP{
                 yyyyM{"GGGGG y/MM"}
                 yyyyMEEEEd{"GGGGG y MMMM d, EEEE"}
                 yyyyMEd{"GGGGG y/MM/dd EEEE"}
-                yyyyMM{"GGGGG y MM"}
                 yyyyMMM{"G y MMM"}
                 yyyyMMMEd{"G y MMM d, E"}
                 yyyyMMMM{"G y MMMM"}
@@ -199,148 +174,6 @@ en_JP{
                 yyyyMd{"GGGGG y/MM/dd"}
                 yyyyQQQ{"G y QQQ"}
                 yyyyQQQQ{"G y QQQQ"}
-            }
-            intervalFormats{
-                Bh{
-                    B{"h B – h B"}
-                    h{"h – h B"}
-                }
-                Bhm{
-                    B{"h:mm B – h:mm B"}
-                    h{"h:mm – h:mm B"}
-                    m{"h:mm – h:mm B"}
-                }
-                Gy{
-                    G{"G y – G y"}
-                    y{"G y – y"}
-                }
-                GyM{
-                    G{"G y/MM – G y/MM"}
-                    M{"G y/MM – y/MM"}
-                    y{"G y/MM – y/MM"}
-                }
-                GyMEd{
-                    G{"G y/MM/dd – G y/MM/dd, E"}
-                    M{"G y/MM/dd, E – y/MM/dd, E"}
-                    d{"G y/MM/dd – y/MM/dd, E"}
-                    y{"G y/MM/dd, E – y/MM/dd, E"}
-                }
-                GyMMM{
-                    G{"G y MMM – G y MMM"}
-                    M{"G y MMM – MMM"}
-                    y{"G y MMM – y MMM"}
-                }
-                GyMMMEd{
-                    G{"G y MMM d, E – G y MMM d, E"}
-                    M{"G y MMM d, E – MMM d, E"}
-                    d{"G y MMM d, E – MMM d, E"}
-                    y{"G y MMM d, E – y MMM d, E"}
-                }
-                GyMMMd{
-                    G{"G y MMM d – G y MMM d"}
-                    M{"G y MMM d – MMM d"}
-                    d{"G y MMM d – d"}
-                    y{"G y MMM d – y MMM"}
-                }
-                GyMd{
-                    G{"G y/MM/dd – G y/MM/dd"}
-                    M{"G y/MM/dd – y/MM/dd"}
-                    d{"G y/MM/dd – y/MM/dd"}
-                    y{"G y/MM/dd – y/MM/dd"}
-                }
-                H{
-                    H{"HH – HH"}
-                }
-                Hm{
-                    H{"H:mm – H:mm"}
-                    m{"H:mm – H:mm"}
-                }
-                Hmv{
-                    H{"H:mm – H:mm v"}
-                    m{"H:mm – H:mm v"}
-                }
-                Hv{
-                    H{"H – H v"}
-                }
-                M{
-                    M{"M – M"}
-                }
-                MEd{
-                    M{"M/dd, E – MM/dd, E"}
-                    d{"MM/dd, E – MM/dd, E"}
-                }
-                MMM{
-                    M{"MMM – MMM"}
-                }
-                MMMEd{
-                    M{"E, MMM d – E, MMM d"}
-                    d{"E, MMM d – E, MMM d"}
-                }
-                MMMd{
-                    M{"MMM d – MMM d"}
-                    d{"MMM d – d"}
-                }
-                Md{
-                    M{"M/d – M/d"}
-                    d{"M/d – M/d"}
-                }
-                d{
-                    d{"d – d"}
-                }
-                fallback{"{0} – {1}"}
-                h{
-                    a{"h a – h a"}
-                    h{"h – h a"}
-                }
-                hm{
-                    a{"h:mm a – h:mm a"}
-                    h{"h:mm – h:mm a"}
-                    m{"h:mm – h:mm a"}
-                }
-                hmv{
-                    a{"h:mm a – h:mm a v"}
-                    h{"h:mm – h:mm a v"}
-                    m{"h:mm – h:mm a v"}
-                }
-                hv{
-                    a{"h a – h a v"}
-                    h{"h – h a v"}
-                }
-                y{
-                    y{"y – y"}
-                }
-                yM{
-                    M{"y/MM – y/MM"}
-                    y{"y/MM – y/MM"}
-                }
-                yMEd{
-                    M{"y/MM/dd, E – y/MM/dd, E"}
-                    d{"y/MM/dd, E – y/MM/dd, E"}
-                    y{"y/MM/dd, E – y/MM/dd, E"}
-                }
-                yMMM{
-                    M{"y MMM – MMM"}
-                    y{"y MMM – y MMM"}
-                }
-                yMMMEd{
-                    M{"y MMM d, E – MMM d, E"}
-                    d{"y MMM d, E – E, MMM d, E"}
-                    y{"y MMM d, E – y MMM d, E"}
-                }
-                yMMMM{
-                    M{"y MMMM – MMMM"}
-                    y{"y MMMM – y MMMM"}
-                }
-                yMMMd{
-                    M{"y MMM d – MMM d"}
-                    d{"y MMM d – d"}
-                    y{"y MMM d – y MMM d"}
-                }
-                yMd{
-                    M{"y/MM/dd – y/MM/dd"}
-                    d{"y/MM/dd – y/MM/dd"}
-                    y{"y/MM/dd – y/MM/dd"}
-                }
             }
         }
     }

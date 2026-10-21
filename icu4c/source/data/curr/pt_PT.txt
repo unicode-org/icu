@@ -7,10 +7,6 @@ pt_PT{
             "AED",
             "dirham dos Emirados Árabes Unidos",
         }
-        AFA{
-            "AFA",
-            "Afeghani (1927–2002)",
-        }
         AFN{
             "AFN",
             "afegâni afegão",
@@ -47,10 +43,6 @@ pt_PT{
             "AZN",
             "manat azeri",
         }
-        BAD{
-            "BAD",
-            "Dinar da Bósnia-Herzegóvina",
-        }
         BAM{
             "BAM",
             "marco bósnio-herzegóvino conversível",
@@ -62,10 +54,6 @@ pt_PT{
         BDT{
             "BDT",
             "taka bengali",
-        }
-        BEC{
-            "BEC",
-            "Franco belga (convertível)",
         }
         BGN{
             "BGN",
@@ -106,10 +94,6 @@ pt_PT{
         BWP{
             "BWP",
             "pula de Botswana",
-        }
-        BYB{
-            "BYB",
-            "Rublo novo bielorusso (1994–1999)",
         }
         BYN{
             "BYN",
@@ -163,10 +147,6 @@ pt_PT{
             "CVE",
             "escudo cabo-verdiano",
         }
-        CYP{
-            "CYP",
-            "Libra de Chipre",
-        }
         CZK{
             "CZK",
             "coroa checa",
@@ -186,10 +166,6 @@ pt_PT{
         DZD{
             "DZD",
             "dinar argelino",
-        }
-        ECV{
-            "ECV",
-            "Unidad de Valor Constante (UVC) do Equador",
         }
         EGP{
             "EGP",
@@ -359,14 +335,6 @@ pt_PT{
             "LSL",
             "loti lesotiano",
         }
-        LTL{
-            "LTL",
-            "Litas da Lituânia",
-        }
-        LVL{
-            "LVL",
-            "Lats da Letónia",
-        }
         LYD{
             "LYD",
             "dinar líbio",
@@ -399,10 +367,6 @@ pt_PT{
             "MOP",
             "pataca macaense",
         }
-        MRO{
-            "MRO",
-            "ouguiya mauritana (1973–2017)",
-        }
         MRU{
             "MRU",
             "ouguiya mauritana",
@@ -423,14 +387,6 @@ pt_PT{
             "MX$",
             "peso mexicano",
         }
-        MXP{
-            "MXP",
-            "Peso Plata mexicano (1861–1992)",
-        }
-        MXV{
-            "MXV",
-            "Unidad de Inversion (UDI) mexicana",
-        }
         MYR{
             "MYR",
             "ringgit malaio",
@@ -446,10 +402,6 @@ pt_PT{
         NGN{
             "NGN",
             "naira nigeriana",
-        }
-        NIC{
-            "NIC",
-            "Córdoba nicaraguano (1988–1991)",
         }
         NIO{
             "NIO",
@@ -494,15 +446,6 @@ pt_PT{
         PLN{
             "PLN",
             "zloti polaco",
-        }
-        PTE{
-            "​",
-            "escudo português",
-            {
-                "#,##0.00 ¤",
-                "$",
-                ",",
-            }
         }
         PYG{
             "PYG",
@@ -644,10 +587,6 @@ pt_PT{
             "UZS",
             "som uzbeque",
         }
-        VEF{
-            "VEF",
-            "bolívar (2008–2018)",
-        }
         VES{
             "VES",
             "bolívar",
@@ -695,10 +634,6 @@ pt_PT{
         ZAR{
             "ZAR",
             "rand sul-africano",
-        }
-        ZMK{
-            "ZMK",
-            "Kwacha zambiano (1968–2012)",
         }
         ZMW{
             "ZMW",
@@ -1045,14 +980,6 @@ pt_PT{
             one{"loti lesotiano"}
             other{"lotis lesotianos"}
         }
-        LTL{
-            one{"Litas da Lituânia"}
-            other{"Litas da Lituânia"}
-        }
-        LVL{
-            one{"Lats da Letónia"}
-            other{"Lats da Letónia"}
-        }
         LYD{
             one{"dinar líbio"}
             other{"dinares líbios"}
@@ -1084,10 +1011,6 @@ pt_PT{
         MOP{
             one{"pataca macaense"}
             other{"patacas macaenses"}
-        }
-        MRO{
-            one{"ouguiya mauritana (1973–2017)"}
-            other{"ouguiyas mauritanas (1973–2017)"}
         }
         MRU{
             one{"ouguiya mauritana"}
@@ -1125,10 +1048,6 @@ pt_PT{
             one{"naira nigeriana"}
             other{"nairas nigerianas"}
         }
-        NIC{
-            one{"Córdoba nicaraguano (1988–1991)"}
-            other{"Córdobas nicaraguano (1988–1991)"}
-        }
         NIO{
             one{"córdoba nicaraguano"}
             other{"córdobas nicaraguanos"}
@@ -1157,10 +1076,6 @@ pt_PT{
             one{"sol peruano"}
             other{"sóis peruanos"}
         }
-        PES{
-            one{"Sol peruano (1863–1965)"}
-            other{"Soles peruanos (1863–1965)"}
-        }
         PGK{
             one{"kina papuásia"}
             other{"kinas papuásias"}
@@ -1176,10 +1091,6 @@ pt_PT{
         PLN{
             one{"zloti polaco"}
             other{"zlotis polacos"}
-        }
-        PTE{
-            one{"escudo português"}
-            other{"escudos portugueses"}
         }
         PYG{
             one{"guarani paraguaio"}
@@ -1321,10 +1232,6 @@ pt_PT{
             one{"som uzbeque"}
             other{"somes uzbeques"}
         }
-        VEF{
-            one{"bolívar (2008–2018)"}
-            other{"bolívares (2008–2018)"}
-        }
         VES{
             one{"bolívar"}
             other{"bolívares"}
@@ -1363,7 +1270,6 @@ pt_PT{
         }
         XXX{
             one{"(moeda desconhecida)"}
-            other{"(moedas desconhecidas)"}
         }
         YER{
             one{"rial iemenita"}
@@ -1372,10 +1278,6 @@ pt_PT{
         ZAR{
             one{"rand sul-africano"}
             other{"rands sul-africanos"}
-        }
-        ZMK{
-            one{"Kwacha zambiano (1968–2012)"}
-            other{"Kwachas zambianos (1968–2012)"}
         }
         ZMW{
             one{"kwacha zambiano"}

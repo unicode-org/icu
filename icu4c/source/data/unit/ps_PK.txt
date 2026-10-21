@@ -12,7 +12,6 @@ ps_PK{
         angle{
             arc-second{
                 dnam{"آرک ثانيے"}
-                one{"{0} آرک ثانيه"}
                 other{"{0} آرک ثانيے"}
             }
             degree{
@@ -22,7 +21,6 @@ ps_PK{
         }
         area{
             hectare{
-                one{"{0} هيکتر"}
                 other{"{0} هيکترے"}
             }
         }
@@ -31,7 +29,6 @@ ps_PK{
                 per{"{0} په هره ورځ کے"}
             }
             month{
-                one{"{0} مياشت"}
                 other{"{0} مياشتے"}
             }
             week{
@@ -41,11 +38,9 @@ ps_PK{
         length{
             astronomical-unit{
                 dnam{"فلکي احدے"}
-                one{"{0} فلکي احد"}
                 other{"{0} فلکي احدے"}
             }
             inch{
-                one{"{0} انچ"}
                 other{"{0} انچے"}
             }
         }
@@ -75,20 +70,11 @@ ps_PK{
         }
         volume{
             cup{
-                one{"{0} پياله"}
                 other{"{0} پيالے"}
             }
             teaspoon{
                 dnam{"د ميز کاچوغے"}
-                one{"{0} د ميز کاچوغه"}
                 other{"{0} د ميز کاچوغے"}
-            }
-        }
-    }
-    unitsNarrow{
-        angle{
-            degree{
-                dnam{"درجے"}
             }
         }
     }
@@ -111,7 +97,6 @@ ps_PK{
         duration{
             day{
                 dnam{"ورځے"}
-                one{"{0} ورځ"}
                 other{"{0} ورځے"}
             }
             month{

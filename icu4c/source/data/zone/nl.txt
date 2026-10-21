@@ -302,11 +302,6 @@ nl{
             lg{"Pacific-tijd"}
             ls{"Pacific-standaardtijd"}
         }
-        "meta:Anadyr"{
-            ld{"Anadyr-zomertijd"}
-            lg{"Anadyr-tijd"}
-            ls{"Anadyr-standaardtijd"}
-        }
         "meta:Apia"{
             ld{"Apia-zomertijd"}
             lg{"Apia-tijd"}
@@ -395,9 +390,6 @@ nl{
             lg{"Kaapverdische tijd"}
             ls{"Kaapverdische standaardtijd"}
         }
-        "meta:Casey"{
-            ls{"Casey tijd"}
-        }
         "meta:Chamorro"{
             ls{"Chamorro-tijd"}
         }
@@ -458,17 +450,11 @@ nl{
             ld{"Midden-Europese zomertijd"}
             lg{"Midden-Europese tijd"}
             ls{"Midden-Europese standaardtijd"}
-            sd{"CEST"}
-            sg{"CET"}
-            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"Oost-Europese zomertijd"}
             lg{"Oost-Europese tijd"}
             ls{"Oost-Europese standaardtijd"}
-            sd{"EEST"}
-            sg{"EET"}
-            ss{"EET"}
         }
         "meta:Europe_Further_Eastern"{
             ls{"Verder-oostelijk-Europese tijd"}
@@ -477,9 +463,6 @@ nl{
             ld{"West-Europese zomertijd"}
             lg{"West-Europese tijd"}
             ls{"West-Europese standaardtijd"}
-            sd{"WEST"}
-            sg{"WET"}
-            ss{"WET"}
         }
         "meta:Falkland"{
             ld{"Falklandeilandse zomertijd"}
@@ -499,7 +482,6 @@ nl{
         }
         "meta:GMT"{
             ls{"Greenwich Mean Time"}
-            ss{"GMT"}
         }
         "meta:Galapagos"{
             ls{"Galapagoseilandse tijd"}

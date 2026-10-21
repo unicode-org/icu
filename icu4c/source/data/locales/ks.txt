@@ -10,11 +10,6 @@ ks{
     ExemplarCharactersNumbers{"[\u200E \\- ‑ , ٫ ٬ . % ‰ + 0۰ 1۱ 2۲ 3۳ 4۴ 5۵ 6۶ 7۷ 8۸ 9۹]"}
     ExemplarCharactersPunctuation{"[\\- ‐‑ – — , ; \\: ! ? . … '‘’ \u0022“” ( ) \\[ \\] § @ * / \\& # † ‡ ′ ″]"}
     NumberElements{
-        arabext{
-            symbols{
-                timeSeparator{":"}
-            }
-        }
         default{"arabext"}
         latn{
             patterns{
@@ -57,16 +52,6 @@ ks{
                 "{0} پٮ۪ٹھؠ {1}",
                 "{1}, {0}",
                 "{1}, {0}",
-            }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMMd",
-                "GyMd",
             }
             availableFormats{
                 Gy{"Gy"}
@@ -144,7 +129,6 @@ ks{
                     d{"E, MMM d – E, MMM d"}
                 }
                 MMMd{
-                    M{"MMM d – MMM d"}
                     d{"MMM d – d"}
                 }
                 Md{
@@ -218,16 +202,6 @@ ks{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yyMd",
-            }
             availableFormats{
                 Ed{"d E"}
                 Gy{"y G"}
@@ -239,7 +213,6 @@ ks{
                 MMMEd{"E, MMM d"}
                 MMMMEd{"E, MMMM d"}
                 MMMMW{
-                    one{"ہفتہ W از MMMM"}
                     other{"ہفتہ W از MMMM"}
                 }
                 Md{"M/d"}
@@ -253,7 +226,6 @@ ks{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    one{"ہفتہ w از Y"}
                     other{"ہفتہ w از Y"}
                 }
             }
@@ -358,7 +330,6 @@ ks{
                     d{"E, MMM d – E, MMM d"}
                 }
                 MMMd{
-                    M{"MMM d – MMM d"}
                     d{"MMM d – d"}
                 }
                 Md{
@@ -366,7 +337,6 @@ ks{
                     d{"M/d – M/d"}
                 }
                 h{
-                    a{"h a – h a"}
                     h{"h – h a"}
                 }
                 y{
@@ -407,20 +377,6 @@ ks{
             }
             monthNames{
                 format{
-                    abbreviated{
-                        "جنوری",
-                        "فروری",
-                        "مارچ",
-                        "اپریل",
-                        "مئی",
-                        "جوٗن",
-                        "جُلایی",
-                        "اگست",
-                        "ستمبر",
-                        "اکتوٗبر",
-                        "نومبر",
-                        "دسمبر",
-                    }
                     wide{
                         "جنوری",
                         "فروری",
@@ -582,9 +538,6 @@ ks{
         zone{
             dn{"وَکھ زون"}
         }
-    }
-    layout{
-        characters{"right-to-left"}
     }
     listPattern{
         standard{

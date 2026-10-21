@@ -4,17 +4,10 @@
 es_VE{
     %%Parent{"es_419"}
     Currencies{
-        VEF{
-            "Bs.",
-            "bolívar venezolano (2008–2018)",
-        }
         VES{
             "Bs.S",
             "bolívar soberano",
         }
-    }
-    Currencies%narrow{
-        VEF{"Bs."}
     }
     CurrencyPlurals{
         VES{

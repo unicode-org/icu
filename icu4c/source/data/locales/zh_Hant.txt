@@ -95,18 +95,6 @@ zh_Hant{
     }
     MoreInformation{"？"}
     NumberElements{
-        arab{
-            symbols{
-                minusSign{"-"}
-                nan{"非數值"}
-            }
-        }
-        arabext{
-            symbols{
-                nan{"非數值"}
-                plusSign{"+‎"}
-            }
-        }
         finance{"hantfin"}
         latn{
             miscPatterns{
@@ -248,48 +236,6 @@ zh_Hant{
         traditional{"hant"}
     }
     calendar{
-        buddhist{
-            DateTimePatterns{
-                "Bh:mm:ss [zzzz]",
-                "Bh:mm:ss [z]",
-                "Bh:mm:ss",
-                "Bh:mm",
-                "Gy年M月d日EEEE",
-                "Gy年M月d日",
-                "Gy年M月d日",
-                "Gy/M/d",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            availableFormats{
-                Ed{"d日（E）"}
-                Gy{"Gy年"}
-                GyMMM{"Gy年M月"}
-                GyMMMEd{"Gy年M月d日E"}
-                GyMMMd{"Gy年M月d日"}
-                GyMd{"Gy/M/d"}
-                MMMEd{"M月d日E"}
-                y{"Gy年"}
-                yyyy{"Gy年"}
-                yyyyM{"Gy/M"}
-                yyyyMEd{"Gy/M/d（E）"}
-                yyyyMMM{"Gy年M月"}
-                yyyyMMMEd{"Gy年M月d日E"}
-                yyyyMMMM{"Gy年M月"}
-                yyyyMMMd{"Gy年M月d日"}
-                yyyyMd{"Gy/M/d"}
-                yyyyQQQ{"Gy年QQQ"}
-                yyyyQQQQ{"Gy年QQQQ"}
-            }
-            eras{
-                abbreviated{
-                    0{"佛曆"}
-                }
-            }
-        }
         chinese{
             DateTimePatterns{
                 "Bh:mm:ss [zzzz]",
@@ -314,22 +260,6 @@ zh_Hant{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "Bhmmsszzzz",
-                "Bhmmssz",
-                "Bhmmss",
-                "Bhmm",
-                {
-                    "rMMMEEEEd",
-                    "d=hanidays",
-                }
-                {
-                    "rMMMd",
-                    "d=hanidays",
-                }
-                "rMMMd",
-                "rMd",
             }
             availableFormats{
                 Bh{"Bh時"}
@@ -512,104 +442,6 @@ zh_Hant{
                     }
                 }
             }
-            intervalFormats{
-                H{
-                    H{"HH至HH"}
-                }
-                Hm{
-                    H{"HH:mm至HH:mm"}
-                    m{"HH:mm至HH:mm"}
-                }
-                Hmv{
-                    H{"HH:mm–HH:mm [v]"}
-                    m{"HH:mm–HH:mm [v]"}
-                }
-                Hv{
-                    H{"HH–HH [v]"}
-                }
-                M{
-                    M{"MMM至MMM"}
-                }
-                MEd{
-                    M{"M/dE至M/dE"}
-                    d{"M/dE至M/dE"}
-                }
-                MMM{
-                    M{"LLL至LLL"}
-                }
-                MMMEd{
-                    M{"MMMd日E至MMMd日E"}
-                    d{"MMMd日E至d日E"}
-                }
-                MMMM{
-                    M{"LLLL至LLLL"}
-                }
-                MMMd{
-                    M{"MMMd日至MMMd日"}
-                    d{"MMMd日至d日"}
-                }
-                Md{
-                    M{"M/d至M/d"}
-                    d{"M/d至M/d"}
-                }
-                d{
-                    d{"d日至d日"}
-                }
-                fallback{"{0}至{1}"}
-                h{
-                    B{"Bh時至Bh時"}
-                    h{"Bh時至h時"}
-                }
-                hm{
-                    B{"Bh:mm至Bh:mm"}
-                    h{"Bh:mm至h:mm"}
-                    m{"Bh:mm至h:mm"}
-                }
-                hmv{
-                    B{"Bh:mm至Bh:mm [v]"}
-                    h{"Bh:mm至h:mm [v]"}
-                    m{"Bh:mm至h:mm [v]"}
-                }
-                hv{
-                    B{"Bh時至Bh時 [v]"}
-                    h{"Bh時至h時 [v]"}
-                }
-                y{
-                    y{"rU至rU"}
-                }
-                yM{
-                    M{"r/M至r/M"}
-                    y{"r/M至r/M"}
-                }
-                yMEd{
-                    M{"r/M/dE至r/M/dE"}
-                    d{"r/M/dE至r/M/dE"}
-                    y{"r/M/dE至r/M/dE"}
-                }
-                yMMM{
-                    M{"rU年MMM至MMM"}
-                    y{"rU年MMM至rU年MMM"}
-                }
-                yMMMEd{
-                    M{"rU年MMMdE至MMMdE"}
-                    d{"rU年MMMdE至dE"}
-                    y{"rU年MMMdE至rU年MMMdE"}
-                }
-                yMMMM{
-                    M{"rU年MMMM至MMMM"}
-                    y{"rU年MMMM至rU年MMMM"}
-                }
-                yMMMd{
-                    M{"r年MMMd至MMMd"}
-                    d{"r年MMMd至d"}
-                    y{"r年MMMd至r年MMMd"}
-                }
-                yMd{
-                    M{"r/M/d至r/M/d"}
-                    d{"r/M/d至r/M/d"}
-                    y{"r/M/d至r/M/d"}
-                }
-            }
             monthNames{
                 format{
                     wide{
@@ -662,168 +494,6 @@ zh_Hant{
                 }
             }
         }
-        coptic{
-            monthNames{
-                format{
-                    wide{
-                        "1月",
-                        "2月",
-                        "3月",
-                        "4月",
-                        "5月",
-                        "6月",
-                        "7月",
-                        "8月",
-                        "9月",
-                        "10月",
-                        "11月",
-                        "12月",
-                        "13月",
-                    }
-                }
-            }
-        }
-        dangi{
-            DateTimePatterns{
-                "Bh:mm:ss [zzzz]",
-                "Bh:mm:ss [z]",
-                "Bh:mm:ss",
-                "Bh:mm",
-                "U年MMMd日EEEE",
-                "U年MMMd日",
-                "U年MMMd日",
-                "U/M/d",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "Bhmmsszzzz",
-                "Bhmmssz",
-                "Bhmmss",
-                "Bhmm",
-                "UMMMEEEEd",
-                "UMMMd",
-                "UMMMd",
-                "UMd",
-            }
-            availableFormats{
-                Ed{"d日E"}
-            }
-            monthNames{
-                format{
-                    abbreviated{
-                        "正月",
-                        "二月",
-                        "三月",
-                        "四月",
-                        "五月",
-                        "六月",
-                        "七月",
-                        "八月",
-                        "九月",
-                        "十月",
-                        "十一月",
-                        "十二月",
-                    }
-                    narrow{
-                        "正",
-                        "二",
-                        "三",
-                        "四",
-                        "五",
-                        "六",
-                        "七",
-                        "八",
-                        "九",
-                        "十",
-                        "十一",
-                        "十二",
-                    }
-                    wide{
-                        "正月",
-                        "二月",
-                        "三月",
-                        "四月",
-                        "五月",
-                        "六月",
-                        "七月",
-                        "八月",
-                        "九月",
-                        "十月",
-                        "十一月",
-                        "十二月",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "正月",
-                        "二月",
-                        "三月",
-                        "四月",
-                        "五月",
-                        "六月",
-                        "七月",
-                        "八月",
-                        "九月",
-                        "十月",
-                        "十一月",
-                        "十二月",
-                    }
-                    narrow{
-                        "正",
-                        "二",
-                        "三",
-                        "四",
-                        "五",
-                        "六",
-                        "七",
-                        "八",
-                        "九",
-                        "十",
-                        "十一",
-                        "十二",
-                    }
-                    wide{
-                        "正月",
-                        "二月",
-                        "三月",
-                        "四月",
-                        "五月",
-                        "六月",
-                        "七月",
-                        "八月",
-                        "九月",
-                        "十月",
-                        "十一月",
-                        "十二月",
-                    }
-                }
-            }
-        }
-        ethiopic{
-            monthNames{
-                format{
-                    wide{
-                        "1月",
-                        "2月",
-                        "3月",
-                        "4月",
-                        "5月",
-                        "6月",
-                        "7月",
-                        "8月",
-                        "9月",
-                        "10月",
-                        "11月",
-                        "12月",
-                        "13月",
-                    }
-                }
-            }
-        }
         generic{
             DateTimePatterns{
                 "Bh:mm:ss [zzzz]",
@@ -845,16 +515,6 @@ zh_Hant{
                 "{1}{0}",
                 "{1}{0}",
                 "{1}{0}",
-            }
-            DateTimeSkeletons{
-                "Bhmmsszzzz",
-                "Bhmmssz",
-                "Bhmmss",
-                "Bhmm",
-                "GyMMMEEEEd",
-                "GyMMMd",
-                "GyMMMd",
-                "GyMd",
             }
             availableFormats{
                 Bh{"Bh時"}
@@ -901,13 +561,6 @@ zh_Hant{
                 yyyyQQQQ{"G y年QQQQ"}
             }
             intervalFormats{
-                Hmv{
-                    H{"HH:mm–HH:mm [v]"}
-                    m{"HH:mm–HH:mm [v]"}
-                }
-                Hv{
-                    H{"HH–HH [v]"}
-                }
                 M{
                     M{"M月至M月"}
                 }
@@ -939,24 +592,6 @@ zh_Hant{
                 }
                 d{
                     d{"d日至d日"}
-                }
-                h{
-                    B{"Bh時至Bh時"}
-                    h{"Bh時至h時"}
-                }
-                hm{
-                    B{"Bh:mm至Bh:mm"}
-                    h{"Bh:mm至h:mm"}
-                    m{"Bh:mm至h:mm"}
-                }
-                hmv{
-                    B{"Bh:mm至Bh:mm [v]"}
-                    h{"Bh:mm至h:mm [v]"}
-                    m{"Bh:mm至h:mm [v]"}
-                }
-                hv{
-                    B{"Bh時至Bh時 [v]"}
-                    h{"Bh時至h時 [v]"}
                 }
                 y{
                     y{"G y至y"}
@@ -1020,16 +655,6 @@ zh_Hant{
                 "{1}{0}",
                 "{1}{0}",
                 "{1}{0}",
-            }
-            DateTimeSkeletons{
-                "Bhmmsszzzz",
-                "Bhmmssz",
-                "Bhmmss",
-                "Bhmm",
-                "yMMMEEEEd",
-                "yMMMd",
-                "yMMMd",
-                "yMd",
             }
             appendItems{
                 Date-Timezone{"{1} {0}"}
@@ -1344,73 +969,6 @@ zh_Hant{
                 }
             }
         }
-        hebrew{
-            DateTimePatterns{
-                "Bh:mm:ss [zzzz]",
-                "Bh:mm:ss [z]",
-                "Bh:mm:ss",
-                "Bh:mm",
-                "Gy年M月d日EEEE",
-                "Gy年M月d日",
-                "Gy年M月d日",
-                "Gy/M/d",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            eras{
-                abbreviated{
-                    0{"創世紀元"}
-                }
-            }
-            monthNames{
-                format{
-                    wide{
-                        "提斯利月",
-                        "瑪西班月",
-                        "基斯流月",
-                        "提別月",
-                        "細罷特月",
-                        "亞達月 I",
-                        "亞達月",
-                        "尼散月",
-                        "以珥月",
-                        "西彎月",
-                        "搭模斯月",
-                        "埃波月",
-                        "以祿月",
-                        "亞達月 II",
-                    }
-                }
-            }
-        }
-        indian{
-            eras{
-                abbreviated{
-                    0{"印度曆"}
-                }
-            }
-            monthNames{
-                format{
-                    wide{
-                        "制檀邏月",
-                        "吠舍佉月",
-                        "逝瑟吒月",
-                        "頞沙荼月",
-                        "室羅伐拏月",
-                        "婆羅鉢陀月",
-                        "頞涇縛庚闍月",
-                        "迦剌底迦月",
-                        "末伽始羅月",
-                        "報沙月",
-                        "磨祛月",
-                        "頗勒窶拏月",
-                    }
-                }
-            }
-        }
         islamic{
             DateTimePatterns{
                 "Bh:mm:ss [zzzz]",
@@ -1483,85 +1041,6 @@ zh_Hant{
                         "閃瓦魯月",
                         "都爾喀爾德月",
                         "都爾黑哲月",
-                    }
-                }
-            }
-        }
-        japanese{
-            DateTimePatterns{
-                "Bh:mm:ss [zzzz]",
-                "Bh:mm:ss [z]",
-                "Bh:mm:ss",
-                "Bh:mm",
-                "Gy年M月d日EEEE",
-                "Gy年M月d日",
-                "Gy年M月d日",
-                "Gy/M/d",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            availableFormats{
-                Ed{"d日（E）"}
-                Gy{"Gy年"}
-                GyMMM{"Gy年M月"}
-                GyMMMEd{"Gy年M月d日E"}
-                GyMMMd{"Gy年M月d日"}
-                Hm{"HH:mm"}
-                Hms{"HH:mm:ss"}
-                MMMEd{"M月d日E"}
-                y{"Gy年"}
-                yyyy{"Gy年"}
-                yyyyM{"Gy/M"}
-                yyyyMEd{"Gy/M/d（E）"}
-                yyyyMMM{"Gy年M月"}
-                yyyyMMMEd{"Gy年M月d日E"}
-                yyyyMMMM{"Gy年M月"}
-                yyyyMMMd{"Gy年M月d日"}
-                yyyyMd{"Gy/M/d"}
-                yyyyQQQ{"Gy年QQQ"}
-                yyyyQQQQ{"Gy年QQQQ"}
-            }
-            eras{
-                abbreviated{
-                    232{"明治"}
-                    233{"大正"}
-                    234{"昭和"}
-                    235{"平成"}
-                    236{"令和"}
-                }
-                narrow{
-                    232{"明治"}
-                    233{"大正"}
-                    234{"昭和"}
-                    235{"平成"}
-                    236{"令和"}
-                }
-            }
-        }
-        persian{
-            eras{
-                abbreviated{
-                    0{"波斯曆"}
-                }
-            }
-            monthNames{
-                format{
-                    wide{
-                        "1月",
-                        "2月",
-                        "3月",
-                        "4月",
-                        "5月",
-                        "6月",
-                        "7月",
-                        "8月",
-                        "9月",
-                        "10月",
-                        "11月",
-                        "12月",
                     }
                 }
             }

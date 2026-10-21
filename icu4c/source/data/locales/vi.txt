@@ -154,82 +154,7 @@ vi{
         }
     }
     calendar{
-        buddhist{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE, 'ngày' dd MMMM 'năm' y G",
-                "'ngày' d 'tháng' M 'năm' y G",
-                "d MMM, y G",
-                "d/M/y GGGGG",
-                "{0} {1}",
-                "{0} {1}",
-                "{0} {1}",
-                "{0} {1}",
-                "{0} {1}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEdd",
-                "GyMdd",
-                "GyMMdd",
-                "GGGGGyMMdd",
-            }
-            availableFormats{
-                M{"'tháng' L"}
-                MEd{"E, dd-M"}
-                d{"'Ngày' dd"}
-            }
-            intervalFormats{
-                Bh{
-                    B{"h B – h B"}
-                    h{"h – h B"}
-                }
-                GyMEd{
-                    G{"E, dd-MM-y GGGGG – E, dd-MM-y GGGGG"}
-                    M{"E, dd-MM-y – E, dd-MM-y GGGGG"}
-                    d{"E, dd-MM-y – E, dd-MM-y GGGGG"}
-                    y{"E, dd-MM-y – E, dd-MM-y GGGGG"}
-                }
-                GyMd{
-                    G{"dd-MM-y GGGGG – dd-MM-y GGGGG"}
-                    M{"dd-MM-y – dd-MM-y GGGGG"}
-                    d{"dd-MM-y – dd-MM-y GGGGG"}
-                    y{"dd-MM-y – dd-MM-y GGGGG"}
-                }
-            }
-        }
         chinese{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE, 'ngày' dd MMMM 'năm' U",
-                "'Ngày' dd 'tháng' M 'năm' U",
-                "dd-MM U",
-                "dd/MM/y",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "UMMMMEEEEdd",
-                "UMdd",
-                "UMMdd",
-                "yMMdd",
-            }
             availableFormats{
                 Bh{"h 'giờ' B"}
                 EBh{"h 'giờ' B E"}
@@ -388,67 +313,6 @@ vi{
                     }
                 }
             }
-            intervalFormats{
-                Bhm{
-                    h{"h:mm – h:mm B"}
-                    m{"h:mm – h:mm B"}
-                }
-                H{
-                    H{"HH – HH"}
-                }
-                Hm{
-                    H{"HH:mm – HH:mm"}
-                    m{"HH:mm – HH:mm"}
-                }
-                Hmv{
-                    H{"HH:mm – HH:mm v"}
-                    m{"HH:mm – HH:mm v"}
-                }
-                Hv{
-                    H{"HH – HH v"}
-                }
-                M{
-                    M{"M – M"}
-                }
-                MMM{
-                    M{"MMM – MMM"}
-                }
-                d{
-                    d{"d – d"}
-                }
-                h{
-                    h{"h – h a"}
-                }
-                hm{
-                    h{"h:mm – h:mm a"}
-                    m{"h:mm – h:mm a"}
-                }
-                hmv{
-                    h{"h:mm – h:mm a v"}
-                    m{"h:mm – h:mm a v"}
-                }
-                y{
-                    y{"U – U"}
-                }
-            }
-            monthNames{
-                format{
-                    wide{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                    }
-                }
-            }
             monthPatterns{
                 format{
                     wide{
@@ -464,59 +328,6 @@ vi{
                     narrow{
                         leap{"{0} Nhuận"}
                     }
-                }
-            }
-        }
-        coptic{
-            intervalFormats{
-                Bh{
-                    B{"h B – h B"}
-                    h{"h – h B"}
-                }
-                GyMEd{
-                    G{"E, dd-MM-y GGGGG – E, dd-MM-y GGGGG"}
-                    M{"E, dd-MM-y – E, dd-MM-y GGGGG"}
-                    d{"E, dd-MM-y – E, dd-MM-y GGGGG"}
-                    y{"E, dd-MM-y – E, dd-MM-y GGGGG"}
-                }
-                GyMd{
-                    G{"dd-MM-y GGGGG – dd-MM-y GGGGG"}
-                    M{"dd-MM-y – dd-MM-y GGGGG"}
-                    d{"dd-MM-y – dd-MM-y GGGGG"}
-                    y{"dd-MM-y – dd-MM-y GGGGG"}
-                }
-            }
-        }
-        dangi{
-            intervalFormats{
-                Bh{
-                    h{"h – h B"}
-                }
-                hm{
-                    a{"h:mm a – h:mm a"}
-                }
-                hmv{
-                    a{"h:mm a – h:mm a v"}
-                }
-            }
-        }
-        ethiopic{
-            intervalFormats{
-                Bh{
-                    B{"h B – h B"}
-                    h{"h – h B"}
-                }
-                GyMEd{
-                    G{"E, dd-MM-y GGGGG – E, dd-MM-y GGGGG"}
-                    M{"E, dd-MM-y – E, dd-MM-y GGGGG"}
-                    d{"E, dd-MM-y – E, dd-MM-y GGGGG"}
-                    y{"E, dd-MM-y – E, dd-MM-y GGGGG"}
-                }
-                GyMd{
-                    G{"dd-MM-y GGGGG – dd-MM-y GGGGG"}
-                    M{"dd-MM-y – dd-MM-y GGGGG"}
-                    d{"dd-MM-y – dd-MM-y GGGGG"}
-                    y{"dd-MM-y – dd-MM-y GGGGG"}
                 }
             }
         }
@@ -548,16 +359,6 @@ vi{
                 "{0} {1}",
                 "{0} {1}",
             }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMEEEEdd",
-                "GyMdd",
-                "GyMMdd",
-                "GGGGGyMMdd",
-            }
             availableFormats{
                 Bh{"h 'giờ' B"}
                 EBh{"h 'giờ' B E"}
@@ -583,7 +384,6 @@ vi{
                 MMMMEd{"E, dd MMMM"}
                 MMMMd{"dd MMMM"}
                 MMMd{"d MMM"}
-                MMdd{"dd-MM"}
                 Md{"d/M"}
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
@@ -592,7 +392,6 @@ vi{
                 yyyy{"y G"}
                 yyyyM{"M/y GGGGG"}
                 yyyyMEd{"E, d/M/y GGGGG"}
-                yyyyMM{"MM-y G"}
                 yyyyMMM{"MMM y G"}
                 yyyyMMMEd{"E, d MMM, y G"}
                 yyyyMMMM{"MMMM y G"}
@@ -648,12 +447,6 @@ vi{
                     d{"d/M/y – d/M/y GGGGG"}
                     y{"d/M/y – d/M/y GGGGG"}
                 }
-                H{
-                    H{"HH'h' - HH'h'"}
-                }
-                Hv{
-                    H{"HH'h'-HH'h' v"}
-                }
                 M{
                     M{"M – M"}
                 }
@@ -679,24 +472,6 @@ vi{
                 Md{
                     M{"d/M – d/M"}
                     d{"d/M – d/M"}
-                }
-                h{
-                    a{"h'h' a – h'h' a"}
-                    h{"h'h' - h'h' a"}
-                }
-                hm{
-                    a{"h:mm a – h:mm a"}
-                    h{"h:mm–h:mm a"}
-                    m{"h:mm–h:mm a"}
-                }
-                hmv{
-                    a{"h:mm a – h:mm a v"}
-                    h{"h:mm–h:mm a v"}
-                    m{"h:mm–h:mm a v"}
-                }
-                hv{
-                    a{"h'h' a – h'h' a v"}
-                    h{"h'h'-h'h' a v"}
                 }
                 y{
                     y{"y–y G"}
@@ -881,19 +656,9 @@ vi{
                         noon{"TR"}
                     }
                     narrow{
-                        afternoon1{"chiều"}
-                        evening1{"tối"}
-                        midnight{"nửa đêm"}
-                        morning1{"sáng"}
-                        night1{"đêm"}
                         noon{"tr"}
                     }
                     wide{
-                        afternoon1{"chiều"}
-                        evening1{"tối"}
-                        midnight{"nửa đêm"}
-                        morning1{"sáng"}
-                        night1{"đêm"}
                         noon{"trưa"}
                     }
                 }
@@ -910,9 +675,6 @@ vi{
                 abbreviated{
                     0{"TCN"}
                     1{"SCN"}
-                }
-                narrow{
-                    1{"CN"}
                 }
                 wide{
                     0{"Trước Chúa Giáng Sinh"}
@@ -1129,187 +891,6 @@ vi{
                 }
             }
         }
-        hebrew{
-            intervalFormats{
-                Bh{
-                    B{"h B – h B"}
-                    h{"h – h B"}
-                }
-                GyMEd{
-                    G{"E, dd-MM-y GGGGG – E, dd-MM-y GGGGG"}
-                    M{"E, dd-MM-y – E, dd-MM-y GGGGG"}
-                    d{"E, dd-MM-y – E, dd-MM-y GGGGG"}
-                    y{"E, dd-MM-y – E, dd-MM-y GGGGG"}
-                }
-                GyMd{
-                    G{"dd-MM-y GGGGG – dd-MM-y GGGGG"}
-                    M{"dd-MM-y – dd-MM-y GGGGG"}
-                    d{"dd-MM-y – dd-MM-y GGGGG"}
-                    y{"dd-MM-y – dd-MM-y GGGGG"}
-                }
-            }
-        }
-        indian{
-            intervalFormats{
-                Bh{
-                    B{"h B – h B"}
-                    h{"h – h B"}
-                }
-                GyMEd{
-                    G{"E, dd-MM-y GGGGG – E, dd-MM-y GGGGG"}
-                    M{"E, dd-MM-y – E, dd-MM-y GGGGG"}
-                    d{"E, dd-MM-y – E, dd-MM-y GGGGG"}
-                    y{"E, dd-MM-y – E, dd-MM-y GGGGG"}
-                }
-                GyMd{
-                    G{"dd-MM-y GGGGG – dd-MM-y GGGGG"}
-                    M{"dd-MM-y – dd-MM-y GGGGG"}
-                    d{"dd-MM-y – dd-MM-y GGGGG"}
-                    y{"dd-MM-y – dd-MM-y GGGGG"}
-                }
-            }
-        }
-        islamic{
-            intervalFormats{
-                Bh{
-                    B{"h B – h B"}
-                    h{"h – h B"}
-                }
-                GyMEd{
-                    G{"E, dd-MM-y GGGGG – E, dd-MM-y GGGGG"}
-                    M{"E, dd-MM-y – E, dd-MM-y GGGGG"}
-                    d{"E, dd-MM-y – E, dd-MM-y GGGGG"}
-                    y{"E, dd-MM-y – E, dd-MM-y GGGGG"}
-                }
-                GyMd{
-                    G{"dd-MM-y GGGGG – dd-MM-y GGGGG"}
-                    M{"dd-MM-y – dd-MM-y GGGGG"}
-                    d{"dd-MM-y – dd-MM-y GGGGG"}
-                    y{"dd-MM-y – dd-MM-y GGGGG"}
-                }
-            }
-        }
-        japanese{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE, 'ngày' dd MMMM 'năm' y G",
-                "'Ngày' dd 'tháng' M 'năm' y G",
-                "dd-MM-y G",
-                "dd/MM/y G",
-                "{0} {1}",
-                "{0} {1}",
-                "{0} {1}",
-                "{0} {1}",
-                "{0} {1}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEdd",
-                "GyMdd",
-                "GyMMdd",
-                "GyMMdd",
-            }
-            intervalFormats{
-                Bh{
-                    B{"h B – h B"}
-                    h{"h – h B"}
-                }
-                GyMEd{
-                    G{"E, dd-MM-y GGGGG – E, dd-MM-y GGGGG"}
-                    M{"E, dd-MM-y – E, dd-MM-y GGGGG"}
-                    d{"E, dd-MM-y – E, dd-MM-y GGGGG"}
-                    y{"E, dd-MM-y – E, dd-MM-y GGGGG"}
-                }
-                GyMd{
-                    G{"dd-MM-y GGGGG – dd-MM-y GGGGG"}
-                    M{"dd-MM-y – dd-MM-y GGGGG"}
-                    d{"dd-MM-y – dd-MM-y GGGGG"}
-                    y{"dd-MM-y – dd-MM-y GGGGG"}
-                }
-            }
-        }
-        persian{
-            intervalFormats{
-                Bh{
-                    B{"h B – h B"}
-                    h{"h – h B"}
-                }
-                GyMEd{
-                    G{"E, dd-MM-y GGGGG – E, dd-MM-y GGGGG"}
-                    M{"E, dd-MM-y – E, dd-MM-y GGGGG"}
-                    d{"E, dd-MM-y – E, dd-MM-y GGGGG"}
-                    y{"E, dd-MM-y – E, dd-MM-y GGGGG"}
-                }
-                GyMd{
-                    G{"dd-MM-y GGGGG – dd-MM-y GGGGG"}
-                    M{"dd-MM-y – dd-MM-y GGGGG"}
-                    d{"dd-MM-y – dd-MM-y GGGGG"}
-                    y{"dd-MM-y – dd-MM-y GGGGG"}
-                }
-            }
-        }
-        roc{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE, 'ngày' dd MMMM 'năm' y G",
-                "'ngày' d 'tháng' M 'năm' y G",
-                "d MMM, y G",
-                "d/M/y GGGGG",
-                "{0} {1}",
-                "{0} {1}",
-                "{0} {1}",
-                "{0} {1}",
-                "{0} {1}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEdd",
-                "GyMdd",
-                "GyMMdd",
-                "GGGGGyMMdd",
-            }
-            availableFormats{
-                M{"'tháng' L"}
-                MEd{"E, dd-M"}
-                Md{"dd-M"}
-                d{"'Ngày' dd"}
-            }
-            eras{
-                abbreviated{
-                    0{"Trước R.O.C"}
-                }
-            }
-            intervalFormats{
-                Bh{
-                    B{"h B – h B"}
-                    h{"h – h B"}
-                }
-                GyMEd{
-                    G{"E, dd-MM-y GGGGG – E, dd-MM-y GGGGG"}
-                    M{"E, dd-MM-y – E, dd-MM-y GGGGG"}
-                    d{"E, dd-MM-y – E, dd-MM-y GGGGG"}
-                    y{"E, dd-MM-y – E, dd-MM-y GGGGG"}
-                }
-                GyMd{
-                    G{"dd-MM-y GGGGG – dd-MM-y GGGGG"}
-                    M{"dd-MM-y – dd-MM-y GGGGG"}
-                    d{"dd-MM-y – dd-MM-y GGGGG"}
-                    y{"dd-MM-y – dd-MM-y GGGGG"}
-                }
-            }
-        }
     }
     characterLabel{
         activities{"hoạt động"}
@@ -1395,12 +976,6 @@ vi{
         western_asian_scripts{"chữ viết Tây Á"}
         whitespace{"dấu cách"}
     }
-    contextTransforms{
-        typographicNames:intvector{
-            1,
-            1,
-        }
-    }
     fields{
         day{
             dn{"Ngày"}
@@ -1418,13 +993,6 @@ vi{
                 past{
                     other{"{0} ngày trước"}
                 }
-            }
-        }
-        day-short{
-            relative{
-                "-1"{"hôm qua"}
-                "0"{"hôm nay"}
-                "1"{"ngày mai"}
             }
         }
         dayOfYear{

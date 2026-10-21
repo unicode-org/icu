@@ -777,7 +777,6 @@ eo{
         }
         CNY{
             one{"ĉina juano"}
-            other{"ĉinaj juanoj"}
         }
         COP{
             one{"kolombia peso"}
@@ -1276,7 +1275,6 @@ eo{
             other{"pacifikaj frankoj"}
         }
         XXX{
-            one{"(nekonata valuto)"}
             other{"(nekonata valuto)"}
         }
         YER{

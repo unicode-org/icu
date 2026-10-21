@@ -3,12 +3,6 @@
 // Generated using tools/cldr/cldr-to-icu/
 se{
     zoneStrings{
-        "America:Curacao"{
-            ec{"Curaçao"}
-        }
-        "America:Sao_Paulo"{
-            ec{"São Paulo"}
-        }
         "America:St_Barthelemy"{
             ec{"Saint Barthélemy"}
         }
@@ -19,29 +13,19 @@ se{
             ld{"gaska-Eurohpá geassiáigi"}
             lg{"gaska-Eurohpá áigi"}
             ls{"gaska-Eurohpá dábálašáigi"}
-            sd{"CEST"}
-            sg{"CET"}
-            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"nuorti-Eurohpá geassiáigi"}
             lg{"nuorti-Eurohpá áigi"}
             ls{"nuorti-Eurohpá dábálašáigi"}
-            sd{"EEST"}
-            sg{"EET"}
-            ss{"EET"}
         }
         "meta:Europe_Western"{
             ld{"oarje-Eurohpá geassiáigi"}
             lg{"oarje-Eurohpá áigi"}
             ls{"oarje-Eurohpá dábálašáigi"}
-            sd{"WEST"}
-            sg{"WET"}
-            ss{"WET"}
         }
         "meta:GMT"{
             ls{"Greenwich gaskka áigi"}
-            ss{"GMT"}
         }
         "meta:Moscow"{
             ld{"Moskva-geassiáigi"}

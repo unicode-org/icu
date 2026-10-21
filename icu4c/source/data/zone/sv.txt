@@ -284,11 +284,6 @@ sv{
             lg{"västnordamerikansk tid"}
             ls{"västnordamerikansk normaltid"}
         }
-        "meta:Anadyr"{
-            ld{"Anadyrsommartid"}
-            lg{"Anadyrtid"}
-            ls{"Anadyrnormaltid"}
-        }
         "meta:Apia"{
             ld{"Apia, sommartid"}
             lg{"Apiatid"}
@@ -377,9 +372,6 @@ sv{
             lg{"Kap Verdetid"}
             ls{"Kap Verde, normaltid"}
         }
-        "meta:Casey"{
-            ls{"Caseytid"}
-        }
         "meta:Chamorro"{
             ls{"Chamorrotid"}
         }
@@ -440,17 +432,11 @@ sv{
             ld{"centraleuropeisk sommartid"}
             lg{"centraleuropeisk tid"}
             ls{"centraleuropeisk normaltid"}
-            sd{"CEST"}
-            sg{"CET"}
-            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"östeuropeisk sommartid"}
             lg{"östeuropeisk tid"}
             ls{"östeuropeisk normaltid"}
-            sd{"EEST"}
-            sg{"EET"}
-            ss{"EET"}
         }
         "meta:Europe_Further_Eastern"{
             ls{"Kaliningradtid"}
@@ -459,9 +445,6 @@ sv{
             ld{"västeuropeisk sommartid"}
             lg{"västeuropeisk tid"}
             ls{"västeuropeisk normaltid"}
-            sd{"WEST"}
-            sg{"WET"}
-            ss{"WET"}
         }
         "meta:Falkland"{
             ld{"Falklandsöarna, sommartid"}
@@ -481,7 +464,6 @@ sv{
         }
         "meta:GMT"{
             ls{"Greenwichtid"}
-            ss{"GMT"}
         }
         "meta:Galapagos"{
             ls{"Galápagostid"}

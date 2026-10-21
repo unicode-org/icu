@@ -411,11 +411,6 @@ mk{
                 one{"{0} бекерел"}
                 other{"{0} бекерели"}
             }
-            british-thermal-unit{
-                dnam{"британски термални единици"}
-                one{"{0} британска термална единица"}
-                other{"{0} британски термални единици"}
-            }
             calorie{
                 dnam{"калории"}
                 one{"{0} калорија"}
@@ -578,18 +573,10 @@ mk{
                 one{"{0} земјен радиус"}
                 other{"{0} земјени радиуси"}
             }
-            fathom{
-                one{"{0} фатом"}
-                other{"{0} фатоми"}
-            }
             foot{
                 one{"{0} стапка"}
                 other{"{0} стапки"}
                 per{"{0} на стапка"}
-            }
-            furlong{
-                one{"{0} фурлонг"}
-                other{"{0} фурлонзи"}
             }
             inch{
                 one{"{0} инч"}
@@ -757,10 +744,6 @@ mk{
                 one{"{0} сончева маса"}
                 other{"{0} сончеви маси"}
             }
-            stone{
-                one{"{0} стоун"}
-                other{"{0} стоуни"}
-            }
             ton{
                 one{"{0} американски тон"}
                 other{"{0} американски тони"}
@@ -925,10 +908,6 @@ mk{
                 dnam{"барели"}
                 one{"{0} барел"}
                 other{"{0} барели"}
-            }
-            bushel{
-                one{"{0} бушел"}
-                other{"{0} бушели"}
             }
             centiliter{
                 dnam{"центилитри"}
@@ -1245,19 +1224,12 @@ mk{
         graphics{
             dot{
                 dnam{"dot"}
-                one{"{0} dot"}
                 other{"{0} dot"}
             }
         }
         length{
-            fathom{
-                dnam{"fathom"}
-            }
             foot{
                 dnam{"ft"}
-            }
-            furlong{
-                dnam{"furlong"}
             }
             inch{
                 dnam{"in"}
@@ -1290,9 +1262,6 @@ mk{
             pound{
                 dnam{"lb"}
             }
-            stone{
-                dnam{"стоун"}
-            }
             ton{
                 dnam{"американски тон"}
             }
@@ -1314,9 +1283,6 @@ mk{
             }
         }
         volume{
-            bushel{
-                dnam{"бушел"}
-            }
             cubic-foot{
                 dnam{"ft³"}
             }
@@ -1405,7 +1371,6 @@ mk{
             }
             degree{
                 dnam{"степени"}
-                one{"{0} deg"}
                 other{"{0} deg"}
             }
         }
@@ -1421,7 +1386,6 @@ mk{
             }
             square-foot{
                 dnam{"квадратни стапки"}
-                one{"{0} sq ft"}
                 other{"{0} sq ft"}
             }
             square-meter{
@@ -1429,7 +1393,6 @@ mk{
             }
             square-mile{
                 dnam{"кв. милји"}
-                one{"{0} sq mi"}
                 other{"{0} sq mi"}
             }
             square-yard{
@@ -1451,18 +1414,15 @@ mk{
                 other{"{0} делови"}
             }
             percent{
-                one{"{0} %"}
                 other{"{0} %"}
             }
             permille{
-                one{"{0} ‰"}
                 other{"{0} ‰"}
             }
         }
         consumption{
             mile-per-gallon{
                 dnam{"mpg"}
-                one{"{0} mpg"}
                 other{"{0} mpg"}
             }
         }
@@ -1498,7 +1458,6 @@ mk{
         duration{
             century{
                 dnam{"в."}
-                one{"{0} в."}
                 other{"{0} в."}
             }
             day{
@@ -1509,35 +1468,29 @@ mk{
             }
             decade{
                 dnam{"дец."}
-                one{"{0} дец."}
                 other{"{0} дец."}
             }
             hour{
                 dnam{"часа"}
-                one{"{0} ч."}
                 other{"{0} ч."}
                 per{"{0}/ч."}
             }
             millisecond{
                 dnam{"мс"}
-                one{"{0} мс"}
                 other{"{0} мс"}
             }
             minute{
                 dnam{"мин."}
-                one{"{0} мин."}
                 other{"{0} мин."}
                 per{"{0}/мин."}
             }
             month{
                 dnam{"месеци"}
-                one{"{0} мес."}
                 other{"{0} мес."}
                 per{"{0}/мес."}
             }
             nanosecond{
                 dnam{"наносек"}
-                one{"{0} нс"}
                 other{"{0} нс"}
             }
             night{
@@ -1548,25 +1501,21 @@ mk{
             }
             quarter{
                 dnam{"тримесечја"}
-                one{"{0} тримес."}
                 other{"{0} тримес."}
                 per{"{0}/тримес."}
             }
             second{
                 dnam{"сек."}
-                one{"{0} сек."}
                 other{"{0} сек."}
                 per{"{0}/с"}
             }
             week{
                 dnam{"седмици"}
-                one{"{0} сед."}
                 other{"{0} сед."}
                 per{"{0}/сед."}
             }
             year{
                 dnam{"години"}
-                one{"{0} год."}
                 other{"{0} год."}
                 per{"{0}/год."}
             }
@@ -1580,12 +1529,8 @@ mk{
             }
         }
         energy{
-            british-thermal-unit{
-                dnam{"BTU"}
-            }
             calorie-it{
                 dnam{"cal [IT]"}
-                one{"{0} cal [IT]"}
                 other{"{0} cal [IT]"}
             }
             foodcalorie{
@@ -1620,14 +1565,8 @@ mk{
             }
         }
         length{
-            fathom{
-                dnam{"фатоми"}
-            }
             foot{
                 dnam{"стапки"}
-            }
-            furlong{
-                dnam{"фурлонзи"}
             }
             inch{
                 dnam{"инчи"}
@@ -1664,9 +1603,6 @@ mk{
             pound{
                 dnam{"фунти"}
             }
-            stone{
-                dnam{"стоуни"}
-            }
             ton{
                 dnam{"американски тони"}
             }
@@ -1679,13 +1615,11 @@ mk{
         pressure{
             millimeter-ofhg{
                 dnam{"mmHg"}
-                one{"{0} mmHg"}
                 other{"{0} mmHg"}
             }
         }
         speed{
             beaufort{
-                one{"{0} B"}
                 other{"{0} B"}
             }
             kilometer-per-hour{
@@ -1701,27 +1635,21 @@ mk{
             }
             mile-per-hour{
                 dnam{"милји/час"}
-                one{"{0} mph"}
                 other{"{0} mph"}
             }
         }
         temperature{
             celsius{
                 dnam{"целзиусови степени"}
-                one{"{0} °C"}
                 other{"{0} °C"}
             }
             fahrenheit{
-                one{"{0} °F"}
                 other{"{0} °F"}
             }
         }
         volume{
             acre-foot{
                 dnam{"acre ft"}
-            }
-            bushel{
-                dnam{"бушели"}
             }
             cubic-foot{
                 dnam{"стапки³"}
@@ -1743,12 +1671,10 @@ mk{
             }
             fluid-ounce{
                 dnam{"fl oz"}
-                one{"{0} fl oz"}
                 other{"{0} fl oz"}
             }
             gallon{
                 dnam{"gal"}
-                one{"{0} gal"}
                 other{"{0} gal"}
             }
             jigger{
@@ -1758,7 +1684,6 @@ mk{
             }
             liter{
                 dnam{"литри"}
-                one{"{0} L"}
                 other{"{0} L"}
                 per{"{0}/L"}
             }

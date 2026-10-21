@@ -50,7 +50,6 @@ ps{
                 other{"{0} ايکړز"}
             }
             dunam{
-                one{"{0} دونم"}
                 other{"{0} دونمز"}
             }
             hectare{
@@ -176,7 +175,6 @@ ps{
             }
             mole{
                 dnam{"مولز"}
-                one{"{0} مول"}
                 other{"{0} مولز"}
             }
             ofglucose{
@@ -186,7 +184,6 @@ ps{
             }
             part{
                 dnam{"برخې"}
-                one{"{0} برخه"}
                 other{"{0} برخې"}
             }
             part-per-1e6{
@@ -298,12 +295,10 @@ ps{
             }
             decade{
                 dnam{"لسيزې"}
-                one{"{0} لسيزه"}
                 other{"{0} لسيزې"}
             }
             hour{
                 one{"{0} ساعت"}
-                other{"{0} h"}
                 per{"{0} په ساعت"}
             }
             microsecond{
@@ -315,7 +310,6 @@ ps{
                 other{"{0} ملی ثانیې"}
             }
             minute{
-                one{"{0} دقیقه"}
                 other{"{0} دقیقې"}
                 per{"{0} په دقیقه کې"}
             }
@@ -343,7 +337,6 @@ ps{
             }
             year{
                 one{"{0} کال"}
-                other{"{0} کالونه"}
                 per{"{0} په هر کال کې"}
             }
         }
@@ -391,11 +384,6 @@ ps{
                 one{"{0} بیکریل"}
                 other{"{0} بیکریلونه"}
             }
-            british-thermal-unit{
-                dnam{"بريتانوي ترمل يونټس"}
-                one{"برتانوي ترمل یونټ"}
-                other{"{0} برتانوي ترمل يونټس"}
-            }
             calorie{
                 dnam{"کيلريز"}
                 one{"{0} کيلري"}
@@ -413,7 +401,6 @@ ps{
             }
             foodcalorie{
                 dnam{"کيلريز"}
-                one{"{0} kcal"}
                 other{"{0} کيلريز"}
             }
             gray{
@@ -446,7 +433,6 @@ ps{
             }
             therm-us{
                 dnam{"متحده ایالاتو ترمامونه"}
-                one{"{0} د متحده ایالاتو تهرم"}
                 other{"{0} US تهرم"}
             }
         }
@@ -454,7 +440,6 @@ ps{
             kilogram-force{
                 dnam{"کیلوګرامه ځواک"}
                 one{"{0} کیلوګرامه ځواک"}
-                other{"{0} kgf"}
             }
             newton{
                 dnam{"نيوټنز"}
@@ -533,18 +518,10 @@ ps{
                 one{"{0} د ځمکې وړانګې"}
                 other{"{0} د ځمکې وړانګې"}
             }
-            fathom{
-                one{"{0} fathom"}
-                other{"{0} فتومونه"}
-            }
             foot{
                 one{"{0} فټ"}
                 other{"{0} فټه"}
                 per{"{0}هر فټ"}
-            }
-            furlong{
-                one{"{0} fur"}
-                other{"{0} فرلانګونه"}
             }
             inch{
                 one{"{0} انچ"}
@@ -758,7 +735,6 @@ ps{
             }
             bar{
                 dnam{"بارونه"}
-                one{"{0} بار"}
                 other{"{0} بارونه"}
             }
             hectopascal{
@@ -863,10 +839,6 @@ ps{
                 one{"{0} بېرل"}
                 other{"{0} بېرلز"}
             }
-            bushel{
-                one{"{0} بوشیل"}
-                other{"{0} بوشیل"}
-            }
             centiliter{
                 dnam{"سنټي ليټرز"}
                 one{"{0} سنټي ليټر"}
@@ -924,7 +896,6 @@ ps{
                 other{"{0} ډيسي ليټرز"}
             }
             dessert-spoon{
-                dnam{"د ډیزرټ کاچوغي"}
                 one{"{0} د ډیزرټ کاچوغي"}
                 other{"{0} د ډیزرټ کاچوغي"}
             }
@@ -933,15 +904,8 @@ ps{
                 one{"{0} Imp. dessert spoon"}
                 other{"{0} Imp. dessert spoons"}
             }
-            dram{
-                dnam{"ډرامونه"}
-                one{"{0} ډرامونه"}
-                other{"{0} ډرامونه"}
-            }
             drop{
                 dnam{"څاڅکی"}
-                one{"{0} څاڅکی"}
-                other{"{0} څاڅکي"}
             }
             fluid-ounce{
                 dnam{"مایع اونس"}
@@ -959,7 +923,6 @@ ps{
             }
             gallon{
                 dnam{"ګيلنز"}
-                one{"{0} ګيلن"}
                 other{"{0} ګيلنز"}
                 per{"{0} في ګيلن"}
             }
@@ -967,10 +930,6 @@ ps{
                 dnam{"هيکټو ليټرز"}
                 one{"{0} هيکټو ليټر"}
                 other{"{0} هيکټو ليټرز"}
-            }
-            jigger{
-                one{"{0} جګرونه"}
-                other{"{0} جګرونه"}
             }
             liter{
                 one{"{0} ليټر"}
@@ -1013,19 +972,11 @@ ps{
         }
     }
     unitsNarrow{
-        angle{
-            arc-second{
-                dnam{"arcsec"}
-            }
-        }
         area{
             square-foot{
                 dnam{"ft²"}
                 one{"{0}ft²"}
                 other{"{0}ft²"}
-            }
-            square-mile{
-                dnam{"مربع ميل"}
             }
         }
         concentr{
@@ -1083,7 +1034,6 @@ ps{
         duration{
             day{
                 dnam{"ورځ"}
-                one{"{0} ورځ"}
                 other{"{0}d"}
             }
             hour{
@@ -1099,7 +1049,6 @@ ps{
             }
             month{
                 dnam{"مياشت"}
-                one{"{0} m"}
                 other{"{0} m"}
             }
             second{
@@ -1107,7 +1056,6 @@ ps{
                 other{"{0} s"}
             }
             week{
-                one{"{0} w"}
                 other{"{0} w"}
             }
             year{
@@ -1116,27 +1064,13 @@ ps{
                 other{"{0} y"}
             }
         }
-        energy{
-            kilocalorie{
-                dnam{"کیلو کالوري"}
-            }
-            kilowatt-hour{
-                dnam{"kWh"}
-            }
-            therm-us{
-                one{"{0} د متحده ایالاتو تهرم"}
-                other{"{0} د متحده ایالاتو تهرم"}
-            }
-        }
         force{
             kilowatt-hour-per-100-kilometer{
-                one{"{0} kWh/100km"}
                 other{"{0}kWh/100km"}
             }
             pound-force{
                 dnam{"lbf"}
                 one{"{0}lbf"}
-                other{"{0} lbf"}
             }
         }
         graphics{
@@ -1168,7 +1102,6 @@ ps{
         light{
             solar-luminosity{
                 dnam{"L☉"}
-                one{"{0} L☉"}
                 other{"{0}L☉"}
             }
         }
@@ -1190,7 +1123,6 @@ ps{
         pressure{
             bar{
                 one{"{0}بار"}
-                other{"{0} بار"}
             }
         }
         speed{
@@ -1204,11 +1136,6 @@ ps{
                 other{"{0}رڼا"}
             }
         }
-        temperature{
-            celsius{
-                dnam{"°C"}
-            }
-        }
         volume{
             cubic-foot{
                 dnam{"ft³"}
@@ -1217,7 +1144,6 @@ ps{
                 dnam{"in³"}
             }
             dessert-spoon{
-                dnam{"د ډیزرټ کاچوغي"}
                 one{"{0}ډيزرټ کاچوغي"}
                 other{"{0}ډيزرټ کاچوغي"}
             }
@@ -1233,7 +1159,6 @@ ps{
             }
             drop{
                 dnam{"څاڅکی"}
-                one{"{0} څاڅکی"}
                 other{"{0} څاڅکی"}
             }
             fluid-ounce-imperial{
@@ -1248,11 +1173,6 @@ ps{
             gallon-imperial{
                 one{"{0}galIm"}
                 other{"{0}galIm"}
-            }
-            jigger{
-                dnam{"جیګرونه"}
-                one{"{0} جګرونه"}
-                other{"{0} جګرونه"}
             }
             liter{
                 dnam{"لیټر"}
@@ -1289,7 +1209,6 @@ ps{
             }
             dunam{
                 dnam{"دونمز"}
-                one{"{0} دونم"}
                 other{"{0} دونم"}
             }
             hectare{
@@ -1297,7 +1216,6 @@ ps{
             }
             square-foot{
                 dnam{"مربع فټ"}
-                one{"{0} مربع فټ"}
                 other{"{0} مربع فټ"}
             }
             square-inch{
@@ -1308,7 +1226,6 @@ ps{
             }
             square-mile{
                 dnam{"مربع ميل"}
-                one{"{0} sq mi"}
                 other{"{0} sq mi"}
             }
             square-yard{
@@ -1322,17 +1239,11 @@ ps{
                         _{"مربع {0}"}
                     }
                 }
-                other{
-                    _{
-                        _{"{0}²"}
-                    }
-                }
             }
         }
         concentr{
             item{
                 dnam{"توکی"}
-                one{"{0} توکی"}
                 other{"{0} توکی"}
             }
             karat{
@@ -1340,7 +1251,6 @@ ps{
             }
             katal{
                 dnam{"کات"}
-                one{"{0} کات"}
                 other{"{0} کات"}
             }
             millimole-per-liter{
@@ -1348,7 +1258,6 @@ ps{
             }
             mole{
                 dnam{"مول"}
-                one{"{0} مول"}
                 other{"{0} مول"}
             }
             ofglucose{
@@ -1356,7 +1265,6 @@ ps{
             }
             part{
                 dnam{"برخه"}
-                one{"{0} برخه"}
                 other{"{0} برخه"}
             }
             part-per-1e6{
@@ -1427,7 +1335,6 @@ ps{
             }
             decade{
                 dnam{"لسيزه"}
-                one{"{0} لسيزه"}
                 other{"{0} لسيزه"}
             }
             hour{
@@ -1438,7 +1345,6 @@ ps{
             }
             minute{
                 dnam{"دقيقې"}
-                one{"{0} دقیقه"}
                 other{"{0} دقیقه"}
                 per{"{0}/دقیقه"}
             }
@@ -1452,13 +1358,11 @@ ps{
             }
             night{
                 dnam{"شپي"}
-                one{"{0}/شپه"}
                 other{"{0}/شپه"}
                 per{"{0}/شپه"}
             }
             second{
                 dnam{"ثانيې"}
-                one{"{0} sec"}
                 other{"{0} sec"}
             }
             week{
@@ -1488,9 +1392,6 @@ ps{
             }
         }
         energy{
-            british-thermal-unit{
-                dnam{"BTU"}
-            }
             calorie-it{
                 dnam{"cal-IT"}
             }
@@ -1508,7 +1409,6 @@ ps{
             }
             therm-us{
                 dnam{"US تهرم"}
-                one{"{0} د متحده ایالاتو تهرم"}
                 other{"{0} د متحده ایالاتو تهرم"}
             }
         }
@@ -1528,19 +1428,12 @@ ps{
                 dnam{"dpcm"}
             }
             dot-per-inch{
-                one{"{0} ppi"}
                 other{"{0} dpi"}
             }
         }
         length{
-            fathom{
-                dnam{"فتومونه"}
-            }
             foot{
                 dnam{"فټه"}
-            }
-            furlong{
-                dnam{"فرلانګونه"}
             }
             inch{
                 dnam{"انچې"}
@@ -1590,7 +1483,6 @@ ps{
             }
             grain{
                 dnam{"دانې"}
-                one{"{0} gr"}
                 other{"{0} gr"}
             }
             gram{
@@ -1617,29 +1509,24 @@ ps{
         pressure{
             bar{
                 dnam{"بار"}
-                one{"{0} بار"}
                 other{"{0} بار"}
             }
             millimeter-ofhg{
                 dnam{"mmHg"}
-                one{"{0} mmHg"}
                 other{"{0} mmHg"}
             }
             ofhg{
                 dnam{"د Hg"}
-                one{"{0} د Hg"}
                 other{"{0} د Hg"}
             }
         }
         speed{
             kilometer-per-hour{
                 dnam{"km/hour"}
-                one{"{0} kph"}
                 other{"{0} kph"}
             }
             light-speed{
                 dnam{"رڼا"}
-                one{"{0} رڼا"}
                 other{"{0} رڼا"}
             }
             meter-per-second{
@@ -1647,7 +1534,6 @@ ps{
             }
             mile-per-hour{
                 dnam{"میل/ساعت"}
-                one{"{0} mph"}
                 other{"{0} mph"}
             }
         }
@@ -1657,9 +1543,6 @@ ps{
             }
             barrel{
                 dnam{"بېرل"}
-            }
-            bushel{
-                dnam{"بوشیل"}
             }
             cubic-foot{
                 dnam{"فټ³"}
@@ -1675,12 +1558,10 @@ ps{
             }
             dessert-spoon{
                 dnam{"د ډیزرټ کاچوغي"}
-                one{"{0} ډيزرټ کاچوغي"}
                 other{"{0} ډيزرټ کاچوغي"}
             }
             dram{
                 dnam{"ډرامونه"}
-                one{"{0} ډرامونه"}
                 other{"{0} ډرامونه"}
             }
             drop{
@@ -1690,7 +1571,6 @@ ps{
             }
             fluid-ounce{
                 dnam{"fl oz"}
-                one{"{0} fl oz"}
                 other{"{0} fl oz"}
             }
             fluid-ounce-imperial{
@@ -1698,24 +1578,20 @@ ps{
             }
             gallon{
                 dnam{"ګيلن"}
-                one{"{0} ګيلن"}
                 other{"{0} ګيلن"}
                 per{"{0}/ګيلن US"}
             }
             jigger{
                 dnam{"جیګرونه"}
-                one{"{0} جګرونه"}
                 other{"{0} جګرونه"}
             }
             liter{
                 dnam{"ليټرز"}
-                one{"{0} L"}
                 other{"{0} L"}
                 per{"{0}/L"}
             }
             pinch{
                 dnam{"چنه"}
-                one{"{0} چنه"}
                 other{"{0} چنه"}
             }
             pint{

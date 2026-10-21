@@ -28,24 +28,11 @@ en_CH{
                 "d MMMM r(U)",
                 "d MMM r",
                 "dd.MM.r",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-            }
-            availableFormats{
-                MEd{"E, dd.MM"}
-                UM{"M.U"}
-                UMd{"dd.MM.U"}
-                yyyyM{"MM.r"}
-                yyyyMEd{"E, dd.MM.r"}
-                yyyyMd{"dd.MM.r"}
-            }
-        }
-        dangi{
-            availableFormats{
-                Md{"dd.MM"}
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
             }
         }
         generic{

@@ -459,24 +459,18 @@ se{
             }
             month{
                 dnam{"mánotbadji"}
-                one{"{0} mán"}
                 other{"{0} mán"}
-                two{"{0} mán"}
             }
             second{
                 dnam{"sekundda"}
             }
             week{
                 dnam{"váhkku"}
-                one{"{0} v"}
                 other{"{0} v"}
-                two{"{0} v"}
             }
             year{
                 dnam{"jahkki"}
-                one{"{0} jah"}
                 other{"{0} jah"}
-                two{"{0} jah"}
             }
         }
         length{
@@ -485,15 +479,11 @@ se{
             }
             foot{
                 dnam{"juolgi"}
-                one{"{0} juolgi"}
                 other{"{0} juolgi"}
-                two{"{0} juolgi"}
             }
             inch{
                 dnam{"bealgi"}
-                one{"{0} bealgi"}
                 other{"{0} bealgi"}
-                two{"{0} bealgi"}
             }
             kilometer{
                 dnam{"kilomehtera"}
@@ -523,23 +513,17 @@ se{
             }
             ounce{
                 dnam{"unssi"}
-                one{"{0} unssi"}
                 other{"{0} unssi"}
-                two{"{0} unssi"}
             }
             pound{
                 dnam{"pauna"}
-                one{"{0} pauna"}
                 other{"{0} pauna"}
-                two{"{0} pauna"}
             }
         }
         power{
             horsepower{
                 dnam{"hevosvoima"}
-                one{"{0} hv"}
                 other{"{0} hv"}
-                two{"{0} hv"}
             }
             kilowatt{
                 dnam{"kilowatt"}
@@ -551,9 +535,7 @@ se{
             }
             inch-ofhg{
                 dnam{"bealgi kvikksølv"}
-                one{"{0} bealgi Hg"}
                 other{"{0} bealgi Hg"}
-                two{"{0} bealgi Hg"}
             }
             millibar{
                 dnam{"millibar"}

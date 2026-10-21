@@ -8,17 +8,11 @@ bs_Cyrl{
     NumberElements{
         latn{
             patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
                 currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
             }
             patternsLong{
                 decimalFormat{
-                    1000{
-                        few{"0"}
-                        one{"0"}
-                        other{"0"}
-                    }
                     10000{
                         few{"00 хиљ"}
                         one{"00 хиљ"}
@@ -79,113 +73,77 @@ bs_Cyrl{
             patternsShort{
                 currencyFormat{
                     1000{
-                        few{"0"}
-                        one{"0"}
                         other{"0"}
                     }
                     10000{
-                        few{"00 хиљ ¤"}
-                        one{"00 хиљ ¤"}
                         other{"00 хиљ ¤"}
                     }
                     100000{
-                        few{"000 хиљ ¤"}
-                        one{"000 хиљ ¤"}
                         other{"000 хиљ ¤"}
                     }
                     1000000{
-                        few{"0 мил ¤"}
-                        one{"0 мил ¤"}
                         other{"0 мил ¤"}
                     }
                     10000000{
-                        few{"00 мил ¤"}
-                        one{"00 мил ¤"}
                         other{"00 мил ¤"}
                     }
                     100000000{
-                        few{"000 мил ¤"}
-                        one{"000 мил ¤"}
                         other{"000 мил ¤"}
                     }
                     1000000000{
-                        few{"0 млрд ¤"}
-                        one{"0 млрд ¤"}
                         other{"0 млрд ¤"}
                     }
                     10000000000{
-                        few{"00 млрд ¤"}
-                        one{"00 млрд ¤"}
                         other{"00 млрд ¤"}
                     }
                     100000000000{
-                        few{"000 млрд ¤"}
-                        one{"000 млрд ¤"}
                         other{"000 млрд ¤"}
                     }
                     1000000000000{
-                        few{"0 бил ¤"}
-                        one{"0 бил ¤"}
                         other{"0 бил ¤"}
                     }
                     10000000000000{
-                        few{"00 бил ¤"}
-                        one{"00 бил ¤"}
                         other{"00 бил ¤"}
                     }
                     100000000000000{
-                        few{"000 бил ¤"}
-                        one{"000 бил ¤"}
                         other{"000 бил ¤"}
                     }
                 }
                 decimalFormat{
                     1000{
-                        one{"0"}
                         other{"0"}
                     }
                     10000{
-                        one{"00 хиљ"}
                         other{"00 хиљ"}
                     }
                     100000{
-                        one{"000 хиљ"}
                         other{"000 хиљ"}
                     }
                     1000000{
-                        one{"0 мил"}
                         other{"0 мил"}
                     }
                     10000000{
-                        one{"00 мил"}
                         other{"00 мил"}
                     }
                     100000000{
-                        one{"000 мил"}
                         other{"000 мил"}
                     }
                     1000000000{
-                        one{"0 млрд"}
                         other{"0 млрд"}
                     }
                     10000000000{
-                        one{"00 млрд"}
                         other{"00 млрд"}
                     }
                     100000000000{
-                        one{"000 млрд"}
                         other{"000 млрд"}
                     }
                     1000000000000{
-                        one{"0 бил"}
                         other{"0 бил"}
                     }
                     10000000000000{
-                        one{"00 бил"}
                         other{"00 бил"}
                     }
                     100000000000000{
-                        one{"000 бил"}
                         other{"000 бил"}
                     }
                 }
@@ -207,55 +165,6 @@ bs_Cyrl{
         }
     }
     calendar{
-        buddhist{
-            eras{
-                abbreviated{
-                    0{"БЕ"}
-                }
-            }
-        }
-        coptic{
-            monthNames{
-                format{
-                    wide{
-                        "Таут",
-                        "Баба",
-                        "Хатор",
-                        "Киахк",
-                        "Тоба",
-                        "Амшир",
-                        "Барамхат",
-                        "Барамуда",
-                        "Башанс",
-                        "Паона",
-                        "Епеп",
-                        "Месра",
-                        "Наси",
-                    }
-                }
-            }
-        }
-        ethiopic{
-            monthNames{
-                format{
-                    wide{
-                        "Мескерем",
-                        "Текемт",
-                        "Хедар",
-                        "Тахсас",
-                        "Тер",
-                        "Јекатит",
-                        "Мегабит",
-                        "Миазиа",
-                        "Генбот",
-                        "Сене",
-                        "Хамле",
-                        "Нехасе",
-                        "Пагумен",
-                    }
-                }
-            }
-        }
         generic{
             DateTimePatterns{
                 "HH:mm:ss zzzz",
@@ -271,16 +180,6 @@ bs_Cyrl{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEdd",
-                "GyMMMMdd",
-                "GyMMdd",
-                "GGGGGyMd",
             }
             availableFormats{
                 Ed{"E, d."}
@@ -326,24 +225,6 @@ bs_Cyrl{
                 Md{
                     M{"d.M – d.M"}
                     d{"d.M – d.M"}
-                }
-                h{
-                    a{"hh a – hh a"}
-                    h{"hh–hh a"}
-                }
-                hm{
-                    a{"hh:mm a – hh:mm a"}
-                    h{"hh:mm–hh:mm a"}
-                    m{"hh:mm–hh:mm a"}
-                }
-                hmv{
-                    a{"hh:mm a – hh:mm a v"}
-                    h{"hh:mm–hh:mm a v"}
-                    m{"hh:mm–hh:mm a v"}
-                }
-                hv{
-                    a{"hh a – hh a v"}
-                    h{"hh–hh a v"}
                 }
                 y{
                     y{"y–y G"}
@@ -406,16 +287,6 @@ bs_Cyrl{
                 "{1} {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "yMMMMEEEEdd",
-                "yMMMMdd",
-                "yMMdd",
-                "yyMd",
-            }
             availableFormats{
                 Ed{"E, d."}
                 Gy{"y. G"}
@@ -425,8 +296,6 @@ bs_Cyrl{
                 MEd{"E, dd.MM."}
                 MMMEd{"E, dd. MMM"}
                 MMMMW{
-                    few{"'седмица' W 'мјесец' MMMM"}
-                    one{"'седмица' W 'мјесец' MMMM"}
                     other{"'седмица' W 'мјесец' MMMM"}
                 }
                 MMMMd{"d. MMMM"}
@@ -441,8 +310,6 @@ bs_Cyrl{
                 yMMMd{"dd. MMM y."}
                 yMd{"dd.MM.y."}
                 yw{
-                    few{"'седмица' w 'година' Y"}
-                    one{"'седмица' w 'година' Y"}
                     other{"'седмица' w 'година' Y"}
                 }
             }
@@ -507,10 +374,6 @@ bs_Cyrl{
                 abbreviated{
                     0{"п. н. е."}
                     1{"н. е."}
-                }
-                narrow{
-                    0{"п.н.е."}
-                    1{"н.е."}
                 }
                 wide{
                     0{"прије нове ере"}
@@ -664,178 +527,6 @@ bs_Cyrl{
                 }
             }
         }
-        hebrew{
-            monthNames{
-                format{
-                    wide{
-                        "Тишри",
-                        "Хешван",
-                        "Кислев",
-                        "Тевет",
-                        "Шеват",
-                        "Адар I",
-                        "Адар",
-                        "Нисан",
-                        "Ијар",
-                        "Сиван",
-                        "Тамуз",
-                        "Ав",
-                        "Елул",
-                        "Адар II",
-                    }
-                }
-            }
-        }
-        indian{
-            eras{
-                abbreviated{
-                    0{"САКА"}
-                }
-            }
-            monthNames{
-                format{
-                    wide{
-                        "Чаитра",
-                        "Ваисака",
-                        "Јиаиста",
-                        "Асада",
-                        "Сравана",
-                        "Бадра",
-                        "Асвина",
-                        "Картика",
-                        "Аргајана",
-                        "Пауза",
-                        "Мага",
-                        "Фалгуна",
-                    }
-                }
-            }
-        }
-        islamic{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE, dd. MMMM y. G",
-                "dd. MMMM y. G",
-                "dd.MM.y. G",
-                "dd.MM.y. G",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEdd",
-                "GyMMMMdd",
-                "GyMMdd",
-                "GyMMdd",
-            }
-            availableFormats{
-                Ed{"E, dd."}
-                yM{"MM.y. G"}
-                yMEd{"E, dd.MM.y. G"}
-                yMMM{"MMM y. G"}
-                yMMMEd{"E, dd. MMM y. G"}
-                yMMMd{"dd. MMM y. G"}
-                yMd{"dd.MM.y. G"}
-                yQQQ{"y G QQQ"}
-                yQQQQ{"y G QQQQ"}
-            }
-            eras{
-                abbreviated{
-                    0{"АХ"}
-                }
-            }
-            monthNames{
-                format{
-                    wide{
-                        "Мурахам",
-                        "Сафар",
-                        "Рабиʻ I",
-                        "Рабиʻ II",
-                        "Јумада I",
-                        "Јумада II",
-                        "Рађаб",
-                        "Шаʻбан",
-                        "Рамадан",
-                        "Шавал",
-                        "Дуʻл-Киʻда",
-                        "Дуʻл-хиђа",
-                    }
-                }
-            }
-        }
-        japanese{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE, MMMM d, y G",
-                "MMMM d, y G",
-                "MMM d, y G",
-                "M/d/yy G",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMMd",
-                "GyyMd",
-            }
-            eras{
-                abbreviated{
-                    232{"Меиђи"}
-                    233{"Таишо"}
-                    234{"Шова"}
-                    235{"Хаисеи"}
-                    236{"Реива"}
-                }
-            }
-        }
-        persian{
-            monthNames{
-                format{
-                    wide{
-                        "Фаравадин",
-                        "Ордибехешт",
-                        "Кордад",
-                        "Тир",
-                        "Мордад",
-                        "Шахривар",
-                        "Мехр",
-                        "Абан",
-                        "Азар",
-                        "Деј",
-                        "Бахман",
-                        "Есфанд",
-                    }
-                }
-            }
-        }
-        roc{
-            eras{
-                abbreviated{
-                    0{"Пре РК"}
-                    1{"РК"}
-                }
-            }
-        }
     }
     delimiters{
         alternateQuotationEnd{"‘"}
@@ -855,12 +546,10 @@ bs_Cyrl{
             }
             relativeTime{
                 future{
-                    few{"за {0} дана"}
                     one{"за {0} дан"}
                     other{"за {0} дана"}
                 }
                 past{
-                    few{"прије {0} дана"}
                     one{"прије {0} дан"}
                     other{"прије {0} дана"}
                 }
@@ -888,7 +577,6 @@ bs_Cyrl{
         fri-narrow{
             relative{
                 "-1"{"пр. петка"}
-                "0"{"овог пет."}
                 "1"{"сљ. петка"}
             }
         }
@@ -924,12 +612,10 @@ bs_Cyrl{
             }
             relativeTime{
                 future{
-                    few{"за {0} минута"}
                     one{"за {0} минут"}
                     other{"за {0} минута"}
                 }
                 past{
-                    few{"прије {0} минута"}
                     one{"прије {0} минут"}
                     other{"прије {0} минута"}
                 }
@@ -958,7 +644,6 @@ bs_Cyrl{
         mon-narrow{
             relative{
                 "-1"{"пр. понедј."}
-                "0"{"овог понедј."}
                 "1"{"сљ. понедј."}
             }
         }
@@ -1040,7 +725,6 @@ bs_Cyrl{
         sat-narrow{
             relative{
                 "-1"{"пр. суботе"}
-                "0"{"ове суб."}
                 "1"{"сљ. суботе"}
             }
         }
@@ -1076,9 +760,7 @@ bs_Cyrl{
             dn{"сек."}
             relativeTime{
                 future{
-                    few{"за {0} секунде"}
                     one{"за {0} сек."}
-                    other{"за {0} секунди"}
                 }
                 past{
                     few{"прије {0} сек."}
@@ -1098,13 +780,11 @@ bs_Cyrl{
             relative{
                 "-1"{"пр. недјеље"}
                 "0"{"ове недј."}
-                "1"{"сљ. недјеље"}
             }
         }
         sun-short{
             relative{
                 "-1"{"прошл. недјеље"}
-                "0"{"ове недјеље"}
                 "1"{"сљ. недјеље"}
             }
         }
@@ -1118,7 +798,6 @@ bs_Cyrl{
         thu-narrow{
             relative{
                 "-1"{"пр. чет."}
-                "0"{"овог чет."}
                 "1"{"сљ. чет."}
             }
         }
@@ -1139,7 +818,6 @@ bs_Cyrl{
         tue-narrow{
             relative{
                 "-1"{"пр. уторка"}
-                "0"{"овог утор."}
                 "1"{"сљ. уторка"}
             }
         }
@@ -1167,7 +845,6 @@ bs_Cyrl{
         wed-short{
             relative{
                 "-1"{"прошл. сриједе"}
-                "0"{"ове сриједе"}
                 "1"{"сљед. сриједе"}
             }
         }

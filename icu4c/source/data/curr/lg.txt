@@ -75,17 +75,9 @@ lg{
             "£",
             "Pawundi ey’eBungereza",
         }
-        GHC{
-            "GHC",
-            "Sedi ey’eGana",
-        }
         GMD{
             "GMD",
             "Dalasi ey’eGambya",
-        }
-        GNS{
-            "GNS",
-            "Faranga ey’eGini",
         }
         INR{
             "₹",
@@ -123,10 +115,6 @@ lg{
             "MGA",
             "Faranga ey’eMalagase",
         }
-        MRO{
-            "MRO",
-            "Wugwiya ey’eMawritenya (1973–2017)",
-        }
         MRU{
             "MRU",
             "Wugwiya ey’eMawritenya",
@@ -138,10 +126,6 @@ lg{
         MWK{
             "MWK",
             "Kwaca ey’eMalawi",
-        }
-        MZM{
-            "MZM",
-            "Metikaali ey’eMozambiiki",
         }
         NAD{
             "NAD",
@@ -167,10 +151,6 @@ lg{
             "SDG",
             "Dinaali ey’eSudaani",
         }
-        SDP{
-            "SDP",
-            "Pawundi ey’eSudaani",
-        }
         SHP{
             "SHP",
             "Pawundi ey’eSenti Herena",
@@ -186,10 +166,6 @@ lg{
         SOS{
             "SOS",
             "Silingi ey’eSomaliya",
-        }
-        STD{
-            "STD",
-            "Dobura ey’eSantome ne Purincipe (1977–2017)",
         }
         STN{
             "STN",
@@ -227,17 +203,9 @@ lg{
             "ZAR",
             "Randi ey’eSawusafirika",
         }
-        ZMK{
-            "ZMK",
-            "Kwaca ey’eZambya (1968–2012)",
-        }
         ZMW{
             "ZMW",
             "Kwaca ey’eZambya",
-        }
-        ZWD{
-            "ZWD",
-            "Doola ey’eZimbabwe",
         }
     }
 }

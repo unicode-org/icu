@@ -12,7 +12,6 @@ se{
     NumberElements{
         latn{
             patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
                 currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
                 percentFormat{"#,##0 %"}
@@ -84,51 +83,39 @@ se{
             patternsShort{
                 decimalFormat{
                     1000{
-                        one{"0 dt"}
                         other{"0 dt"}
                     }
                     10000{
-                        one{"00 dt"}
                         other{"00 dt"}
                     }
                     100000{
-                        one{"000 dt"}
                         other{"000 dt"}
                     }
                     1000000{
-                        one{"0 mn"}
                         other{"0 mn"}
                     }
                     10000000{
-                        one{"00 mn"}
                         other{"00 mn"}
                     }
                     100000000{
-                        one{"000 mn"}
                         other{"000 mn"}
                     }
                     1000000000{
-                        one{"0 md"}
                         other{"0 md"}
                     }
                     10000000000{
-                        one{"00 md"}
                         other{"00 md"}
                     }
                     100000000000{
-                        one{"000 md"}
                         other{"000 md"}
                     }
                     1000000000000{
-                        one{"0 bn"}
                         other{"0 bn"}
                     }
                     10000000000000{
-                        one{"00 bn"}
                         other{"00 bn"}
                     }
                     100000000000000{
-                        one{"000 bn"}
                         other{"000 bn"}
                     }
                 }
@@ -155,7 +142,6 @@ se{
             availableFormats{
                 Ehm{"E h:mm a"}
                 Ehms{"E h:mm:ss a"}
-                h{"h a"}
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
                 hmsv{"h:mm:ss a v"}
@@ -217,25 +203,6 @@ se{
                 }
             }
             intervalFormats{
-                MEd{
-                    M{"MM-dd, E – MM-dd, E"}
-                    d{"MM-dd, E – MM-dd, E"}
-                }
-                MMMEd{
-                    M{"MMM d, E – MMM d, E"}
-                    d{"MMM d, E – MMM d, E"}
-                }
-                MMMd{
-                    M{"MMM d – MMM d"}
-                }
-                Md{
-                    M{"MM-dd – MM-dd"}
-                    d{"MM-dd – MM-dd"}
-                }
-                h{
-                    a{"h a – h a"}
-                    h{"h–h a"}
-                }
                 hm{
                     a{"h:mm a – h:mm a"}
                     h{"h:mm–h:mm a"}
@@ -245,39 +212,6 @@ se{
                     a{"h:mm a – h:mm a v"}
                     h{"h:mm–h:mm a v"}
                     m{"h:mm–h:mm a v"}
-                }
-                hv{
-                    a{"h a – h a v"}
-                    h{"h–h a v"}
-                }
-                yM{
-                    M{"y-MM – y-MM"}
-                    y{"y-MM – y-MM"}
-                }
-                yMEd{
-                    M{"y-MM-dd, E – y-MM-dd, E"}
-                    d{"y-MM-dd, E – y-MM-dd, E"}
-                    y{"y-MM-dd, E – y-MM-dd, E"}
-                }
-                yMMM{
-                    y{"y MMM – y MMM"}
-                }
-                yMMMEd{
-                    M{"y MMM d, E – MMM d, E"}
-                    d{"y MMM d, E – MMM d, E"}
-                    y{"y MMM d, E – y MMM d, E"}
-                }
-                yMMMM{
-                    y{"y MMMM – y MMMM"}
-                }
-                yMMMd{
-                    M{"y MMM d – MMM d"}
-                    y{"y MMM d – y MMM d"}
-                }
-                yMd{
-                    M{"y-MM-dd – y-MM-dd"}
-                    d{"y-MM-dd – y-MM-dd"}
-                    y{"y-MM-dd – y-MM-dd"}
                 }
             }
             monthNames{
@@ -353,7 +287,6 @@ se{
                 past{
                     one{"{0} jándor árat"}
                     other{"{0} jándora árat"}
-                    two{"{0} jándora árat"}
                 }
             }
         }
@@ -369,12 +302,10 @@ se{
                 future{
                     one{"{0} diibmu maŋŋilit"}
                     other{"{0} diibmur maŋŋilit"}
-                    two{"{0} diibmur maŋŋilit"}
                 }
                 past{
                     one{"{0} diibmu árat"}
                     other{"{0} diibmur árat"}
-                    two{"{0} diibmur árat"}
                 }
             }
         }
@@ -384,12 +315,10 @@ se{
                 future{
                     one{"{0} minuhta maŋŋilit"}
                     other{"{0} minuhtta maŋŋilit"}
-                    two{"{0} minuhtta maŋŋilit"}
                 }
                 past{
                     one{"{0} minuhta árat"}
                     other{"{0} minuhtta árat"}
-                    two{"{0} minuhtta árat"}
                 }
             }
         }
@@ -397,14 +326,10 @@ se{
             dn{"mánnu"}
             relativeTime{
                 future{
-                    one{"{0} mánotbadji maŋŋilit"}
                     other{"{0} mánotbadji maŋŋilit"}
-                    two{"{0} mánotbadji maŋŋilit"}
                 }
                 past{
-                    one{"{0} mánotbadji árat"}
                     other{"{0} mánotbadji árat"}
-                    two{"{0} mánotbadji árat"}
                 }
             }
         }
@@ -414,12 +339,10 @@ se{
                 future{
                     one{"{0} sekunda maŋŋilit"}
                     other{"{0} sekundda maŋŋilit"}
-                    two{"{0} sekundda maŋŋilit"}
                 }
                 past{
                     one{"{0} sekunda árat"}
                     other{"{0} sekundda árat"}
-                    two{"{0} sekundda árat"}
                 }
             }
         }
@@ -429,12 +352,10 @@ se{
                 future{
                     one{"{0} vahku maŋŋilit"}
                     other{"{0} vahkku maŋŋilit"}
-                    two{"{0} vahkku maŋŋilit"}
                 }
                 past{
                     one{"{0} vahku árat"}
                     other{"{0} vahkku árat"}
-                    two{"{0} vahkku árat"}
                 }
             }
         }
@@ -447,12 +368,10 @@ se{
                 future{
                     one{"{0} jahki maŋŋilit"}
                     other{"{0} jahkki maŋŋilit"}
-                    two{"{0} jahkki maŋŋilit"}
                 }
                 past{
                     one{"{0} jahki árat"}
                     other{"{0} jahkki árat"}
-                    two{"{0} jahkki árat"}
                 }
             }
         }

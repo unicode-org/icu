@@ -42,23 +42,8 @@ kxv_Orya{
         }
     }
     CurrencyPlurals{
-        BRL{
-            other{"ବ୍ରାଜିଲ୍ ତି ରିଏଲ୍"}
-        }
-        CNY{
-            other{"ଚିନି ତି ୟୁଆନ"}
-        }
         EUR{
             other{"ୟୁରସ୍"}
-        }
-        GBP{
-            other{"ବ୍ରିଟିସ୍ ପାଉଣ୍ଡ୍"}
-        }
-        INR{
-            other{"ବାରତ ତି ଟାକାଁ"}
-        }
-        JPY{
-            other{"ଜାପାନ ତି ୟେନ"}
         }
         RUB{
             other{"ରୁସିଆ ତି ରୁବଲ୍ସ"}

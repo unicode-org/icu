@@ -14,27 +14,21 @@ kab{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"0G¤"}
                         other{"0G¤"}
                     }
                     10000{
-                        one{"00G¤"}
                         other{"00G¤"}
                     }
                     100000{
-                        one{"000G¤"}
                         other{"000G¤"}
                     }
                     1000000000{
-                        one{"0L¤"}
                         other{"0L¤"}
                     }
                     10000000000{
-                        one{"00L¤"}
                         other{"00L¤"}
                     }
                     100000000000{
-                        one{"000L¤"}
                         other{"000L¤"}
                     }
                 }
@@ -112,16 +106,6 @@ kab{
                 "{1} {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMMd",
-                "GGGGGyMd",
-            }
             availableFormats{
                 M{"M"}
                 MMM{"MMM"}
@@ -129,14 +113,11 @@ kab{
                 MMMMEd{"E d MMMM"}
                 MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
-                MMd{"d/MM"}
-                MMdd{"dd/MM"}
                 Md{"d/M"}
                 ms{"m:ss"}
                 y{"y"}
                 yM{"M/y"}
                 yMEd{"E d/M/y"}
-                yMM{"MM/y"}
                 yMMM{"MMM y"}
                 yMMMEd{"E d MMM y"}
                 yMMMM{"MMMM y"}
@@ -168,16 +149,6 @@ kab{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yMd",
             }
             availableFormats{
                 M{"M"}
@@ -221,15 +192,6 @@ kab{
                         "M",
                         "S",
                         "S",
-                    }
-                    wide{
-                        "Acer",
-                        "Arim",
-                        "Aram",
-                        "Ahad",
-                        "Amhad",
-                        "Sem",
-                        "Sed",
                     }
                 }
             }

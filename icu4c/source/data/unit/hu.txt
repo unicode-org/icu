@@ -114,8 +114,6 @@ hu{
                         other{"{0} fokká"}
                     }
                 }
-                one{"{0} fok"}
-                other{"{0} fok"}
             }
             radian{
                 case{
@@ -371,8 +369,6 @@ hu{
                         other{"{0} itemmé"}
                     }
                 }
-                one{"{0} item"}
-                other{"{0} item"}
             }
             karat{
                 case{
@@ -476,7 +472,6 @@ hu{
             }
             part{
                 one{"{0} rész"}
-                other{"{0} rész"}
             }
             part-per-1e6{
                 case{
@@ -649,8 +644,6 @@ hu{
                         other{"{0} bitté"}
                     }
                 }
-                one{"{0} bit"}
-                other{"{0} bit"}
             }
             byte{
                 case{
@@ -671,8 +664,6 @@ hu{
                         other{"{0} bájttá"}
                     }
                 }
-                one{"{0} bájt"}
-                other{"{0} bájt"}
             }
             gigabit{
                 case{
@@ -925,8 +916,6 @@ hu{
                         other{"{0} nappá"}
                     }
                 }
-                one{"{0} nap"}
-                other{"{0} nap"}
             }
             day-person{
                 case{
@@ -947,8 +936,6 @@ hu{
                         other{"{0} nappá"}
                     }
                 }
-                one{"{0} nap"}
-                other{"{0} nap"}
             }
             decade{
                 case{
@@ -1086,8 +1073,6 @@ hu{
                         other{"{0} hónappá"}
                     }
                 }
-                one{"{0} hónap"}
-                other{"{0} hónap"}
                 per{"{0}/hónap"}
             }
             nanosecond{
@@ -1132,8 +1117,6 @@ hu{
                         other{"{0} éjszakává"}
                     }
                 }
-                one{"{0} éjszaka"}
-                other{"{0} éjszaka"}
             }
             quarter{
                 case{
@@ -1201,8 +1184,6 @@ hu{
                         other{"{0} hétté"}
                     }
                 }
-                one{"{0} hét"}
-                other{"{0} hét"}
             }
             year{
                 case{
@@ -1223,8 +1204,6 @@ hu{
                         other{"{0} évvé"}
                     }
                 }
-                one{"{0} év"}
-                other{"{0} év"}
             }
         }
         electric{
@@ -1346,11 +1325,6 @@ hu{
                 dnam{"becquerel"}
                 one{"{0} becquerel"}
                 other{"{0} becquerel"}
-            }
-            british-thermal-unit{
-                dnam{"brit hőegység"}
-                one{"{0} brit hőegység"}
-                other{"{0} brit hőegység"}
             }
             calorie{
                 case{
@@ -1523,8 +1497,6 @@ hu{
                         other{"{0} kWh/100 km-ré"}
                     }
                 }
-                one{"{0} kWh/100 km"}
-                other{"{0} kWh/100 km"}
             }
             newton{
                 case{
@@ -1814,10 +1786,6 @@ hu{
                 dnam{"földsugár"}
                 one{"{0} földsugár"}
                 other{"{0} földsugár"}
-            }
-            furlong{
-                one{"{0} furlong"}
-                other{"{0} furlong"}
             }
             inch{
                 per{"{0}/hüvelyk"}
@@ -2269,11 +2237,6 @@ hu{
                 one{"{0} Nap-tömeg"}
                 other{"{0} Nap-tömeg"}
             }
-            stone{
-                dnam{"stone"}
-                one{"{0} stone"}
-                other{"{0} stone"}
-            }
             ton{
                 dnam{"amerikai tonna"}
                 one{"{0} amerikai tonna"}
@@ -2468,8 +2431,6 @@ hu{
                         other{"{0} barrá"}
                     }
                 }
-                one{"{0} bar"}
-                other{"{0} bar"}
             }
             hectopascal{
                 case{
@@ -2660,27 +2621,7 @@ hu{
                 other{"{0} csomó"}
             }
             light-speed{
-                case{
-                    accusative{
-                        one{"{0} fény"}
-                        other{"{0} light"}
-                    }
-                    instrumental{
-                        one{"{0} fény"}
-                        other{"{0} light"}
-                    }
-                    terminative{
-                        one{"{0} fény"}
-                        other{"{0} light"}
-                    }
-                    translative{
-                        one{"{0} fény"}
-                        other{"{0} light"}
-                    }
-                }
-                dnam{"fény"}
                 one{"{0} fény"}
-                other{"{0} light"}
             }
             meter-per-second{
                 case{
@@ -3195,7 +3136,6 @@ hu{
         }
         consumption{
             liter-per-100-kilometer{
-                one{"{0} l/100 km"}
                 other{"{0} l/100 km"}
             }
         }
@@ -3233,11 +3173,9 @@ hu{
                 dnam{"g"}
             }
             ounce{
-                one{"{0} oz"}
                 other{"{0} uncia"}
             }
             pound{
-                one{"{0} lb"}
                 other{"{0} font"}
             }
         }
@@ -3250,9 +3188,6 @@ hu{
             beaufort{
                 one{"B{0}"}
                 other{"B{0}"}
-            }
-            light-speed{
-                dnam{"fény"}
             }
         }
         volume{
@@ -3283,19 +3218,16 @@ hu{
             }
             degree{
                 dnam{"fok"}
-                one{"{0} fok"}
                 other{"{0} fok"}
             }
             revolution{
                 dnam{"ford."}
-                one{"{0} ford."}
                 other{"{0} ford."}
             }
         }
         area{
             acre{
                 dnam{"kh"}
-                one{"{0} kh"}
                 other{"{0} kh"}
             }
             hectare{
@@ -3305,12 +3237,10 @@ hu{
         concentr{
             milligram-ofglucose-per-deciliter{
                 dnam{"mg/dl"}
-                one{"{0} mg/dl"}
                 other{"{0} mg/dl"}
             }
             millimole-per-liter{
                 dnam{"millimól/liter"}
-                one{"{0} mmol/l"}
                 other{"{0} mmol/l"}
             }
             mole{
@@ -3321,7 +3251,6 @@ hu{
             }
             part{
                 dnam{"rész"}
-                one{"{0} rész"}
                 other{"{0} rész"}
             }
             part-per-1e6{
@@ -3342,17 +3271,14 @@ hu{
             }
             liter-per-kilometer{
                 dnam{"l/km"}
-                one{"{0} l/km"}
                 other{"{0} l/km"}
             }
             mile-per-gallon{
                 dnam{"mpg"}
-                one{"{0} mpg"}
                 other{"{0} mpg"}
             }
             mile-per-gallon-imperial{
                 dnam{"mérföld/bir. gallon"}
-                one{"{0} mpg bir."}
                 other{"{0} mpg bir."}
             }
         }
@@ -3366,72 +3292,60 @@ hu{
         digital{
             byte{
                 dnam{"bájt"}
-                one{"{0} bájt"}
                 other{"{0} bájt"}
             }
         }
         duration{
             century{
                 dnam{"sz."}
-                one{"{0} sz."}
                 other{"{0} sz."}
             }
             day{
                 dnam{"nap"}
-                one{"{0} nap"}
                 other{"{0} nap"}
                 per{"{0}/nap"}
             }
             decade{
                 dnam{"dek"}
-                one{"{0} dek"}
                 other{"{0} dek"}
             }
             hour{
                 dnam{"ó"}
-                one{"{0} ó"}
                 other{"{0} ó"}
                 per{"{0}/ó"}
             }
             minute{
                 dnam{"p"}
-                one{"{0} p"}
                 other{"{0} p"}
                 per{"{0}/p"}
             }
             month{
                 dnam{"hónap"}
-                one{"{0} hónap"}
                 other{"{0} hónap"}
                 per{"{0}/hó"}
             }
             night{
                 dnam{"éjszakák"}
-                one{"{0} éjszaka"}
                 other{"{0} éjszaka"}
                 per{"{0}/éjszaka"}
             }
             quarter{
                 dnam{"n.év"}
-                one{"{0} n.év"}
                 other{"{0} n.év"}
                 per{"{0}/n.év"}
             }
             second{
                 dnam{"mp"}
-                one{"{0} mp"}
                 other{"{0} mp"}
                 per{"{0}/mp"}
             }
             week{
                 dnam{"hét"}
-                one{"{0} hét"}
                 other{"{0} hét"}
                 per{"{0}/hét"}
             }
             year{
                 dnam{"év"}
-                one{"{0} év"}
                 other{"{0} év"}
                 per{"{0}/év"}
             }
@@ -3461,14 +3375,12 @@ hu{
             }
             therm-us{
                 dnam{"USA therm"}
-                one{"{0} USA therm"}
                 other{"{0} USA therm"}
             }
         }
         force{
             kilowatt-hour-per-100-kilometer{
                 dnam{"kWh/100 km"}
-                one{"{0} kWh/100 km"}
                 other{"{0} kWh/100 km"}
             }
         }
@@ -3497,31 +3409,19 @@ hu{
         length{
             astronomical-unit{
                 dnam{"CsE"}
-                one{"{0} CsE"}
                 other{"{0} CsE"}
-            }
-            fathom{
-                dnam{"öl"}
-                one{"{0} öl"}
-                other{"{0} öl"}
             }
             foot{
                 dnam{"láb"}
-                one{"{0} láb"}
                 other{"{0} láb"}
                 per{"{0}/láb"}
             }
-            furlong{
-                dnam{"furlong"}
-            }
             inch{
                 dnam{"hüvelyk"}
-                one{"{0} hüvelyk"}
                 other{"{0} hüvelyk"}
             }
             light-year{
                 dnam{"fényév"}
-                one{"{0} fényév"}
                 other{"{0} fényév"}
             }
             meter{
@@ -3529,12 +3429,10 @@ hu{
             }
             mile{
                 dnam{"mf"}
-                one{"{0} mf"}
                 other{"{0} mf"}
             }
             mile-scandinavian{
                 dnam{"mil"}
-                one{"{0} mil"}
                 other{"{0} mil"}
             }
             point{
@@ -3552,14 +3450,12 @@ hu{
         mass{
             carat{
                 dnam{"Kt"}
-                one{"{0} Kt"}
                 other{"{0} Kt"}
             }
         }
         power{
             horsepower{
                 dnam{"LE"}
-                one{"{0} LE"}
                 other{"{0} LE"}
             }
             watt{
@@ -3568,12 +3464,10 @@ hu{
         }
         pressure{
             millibar{
-                one{"{0} mb"}
                 other{"{0} mb"}
             }
             millimeter-ofhg{
                 dnam{"Hgmm"}
-                one{"{0} Hgmm"}
                 other{"{0} Hgmm"}
             }
         }
@@ -3583,108 +3477,84 @@ hu{
             }
             mile-per-hour{
                 dnam{"mph"}
-                one{"{0} mph"}
                 other{"{0} mph"}
             }
         }
         temperature{
             celsius{
-                one{"{0} °C"}
                 other{"{0} °C"}
             }
             fahrenheit{
-                one{"{0} °F"}
                 other{"{0} °F"}
             }
         }
         torque{
             newton-meter{
                 dnam{"Nm"}
-                one{"{0} Nm"}
                 other{"{0} Nm"}
             }
         }
         volume{
             barrel{
                 dnam{"hordó"}
-                one{"{0} hordó"}
                 other{"{0} hordó"}
-            }
-            bushel{
-                dnam{"véka"}
-                one{"{0} véka"}
-                other{"{0} véka"}
             }
             centiliter{
                 dnam{"cl"}
-                one{"{0} cl"}
                 other{"{0} cl"}
             }
             cup{
                 dnam{"cs."}
-                one{"{0} cs."}
                 other{"{0} cs."}
             }
             cup-metric{
                 dnam{"bg"}
-                one{"{0} bg"}
                 other{"{0} bg"}
             }
             deciliter{
                 dnam{"dl"}
-                one{"{0} dl"}
                 other{"{0} dl"}
             }
             dessert-spoon{
                 dnam{"desszertkanál"}
-                one{"{0} desszertkanál"}
                 other{"{0} desszertkanál"}
             }
             dessert-spoon-imperial{
                 dnam{"bir. desszertkanál"}
-                one{"{0} bir. desszertkanál"}
                 other{"{0} bir. desszertkanál"}
             }
             dram{
                 dnam{"fluid dram"}
-                one{"{0} fl dram"}
                 other{"{0} fl dram"}
             }
             drop{
                 dnam{"csepp"}
-                one{"{0} csepp"}
                 other{"{0} csepp"}
             }
             fluid-ounce{
                 dnam{"fl oz"}
-                one{"{0} fl oz"}
                 other{"{0} fl oz"}
             }
             fluid-ounce-imperial{
                 dnam{"bir. f. uncia"}
-                one{"{0} bir. f. uncia"}
                 other{"{0} bir. f. uncia"}
             }
             gallon{
                 dnam{"gal"}
-                one{"{0} gal"}
                 other{"{0} gal"}
                 per{"{0}/gal"}
             }
             gallon-imperial{
                 dnam{"bir. gal"}
-                one{"{0} bir. gal"}
                 other{"{0} bir. gal"}
                 per{"{0}/bir. gal"}
             }
             hectoliter{
                 dnam{"hl"}
-                one{"{0} hl"}
                 other{"{0} hl"}
             }
             jigger{
                 dnam{"adagolópohár"}
-                one{"{0} adagolópohár"}
                 other{"{0} adagolópohár"}
             }
             liter{
@@ -3692,32 +3562,26 @@ hu{
             }
             megaliter{
                 dnam{"Ml"}
-                one{"{0} Ml"}
                 other{"{0} Ml"}
             }
             milliliter{
                 dnam{"ml"}
-                one{"{0} ml"}
                 other{"{0} ml"}
             }
             pinch{
                 dnam{"csipet"}
-                one{"{0} csipet"}
                 other{"{0} csipet"}
             }
             quart-imperial{
                 dnam{"bir. qt"}
-                one{"{0} bir. qt"}
                 other{"{0} bir. qt"}
             }
             tablespoon{
                 dnam{"ek."}
-                one{"{0} ek."}
                 other{"{0} ek."}
             }
             teaspoon{
                 dnam{"kk."}
-                one{"{0} kk."}
                 other{"{0} kk."}
             }
         }

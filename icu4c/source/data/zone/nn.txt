@@ -45,21 +45,15 @@ nn{
         }
         "meta:Acre"{
             ld{"sommartid for Acre"}
-            lg{"tidssone for Acre"}
-            ls{"normaltid for Acre"}
         }
         "meta:Africa_Eastern"{
             ls{"austafrikansk tid"}
         }
         "meta:Alaska"{
             ld{"alaskisk sommartid"}
-            lg{"tidssone for Alaska"}
-            ls{"normaltid for Alaska"}
         }
         "meta:Amazon"{
             ld{"sommartid for Amazonas"}
-            lg{"tidssone for Amazonas"}
-            ls{"normaltid for Amazonas"}
         }
         "meta:America_Central"{
             ld{"sommartid for sentrale Nord-Amerika"}
@@ -73,8 +67,6 @@ nn{
         }
         "meta:America_Mountain"{
             ld{"sommartid for Rocky Mountains (USA)"}
-            lg{"tidssone for Rocky Mountains (USA)"}
-            ls{"normaltid for Rocky Mountains (USA)"}
         }
         "meta:America_Pacific"{
             ld{"sommartid for den nordamerikanske stillehavskysten"}
@@ -83,42 +75,29 @@ nn{
         }
         "meta:Apia"{
             ld{"sommartid for Apia"}
-            lg{"tidssone for Samoa"}
-            ls{"normaltid for Samoa"}
         }
         "meta:Arabian"{
             ld{"arabisk sommartid"}
-            lg{"tidssone for Saudi-Arabia"}
             ls{"arabisk normaltid"}
         }
         "meta:Argentina"{
             ld{"argentinsk sommartid"}
-            lg{"argentinsk tid"}
-            ls{"argentinsk normaltid"}
         }
         "meta:Argentina_Western"{
             ld{"vestargentinsk sommartid"}
-            lg{"vestargentinsk tid"}
-            ls{"vestargentinsk normaltid"}
         }
         "meta:Armenia"{
             ld{"armensk sommartid"}
-            lg{"tidssone for Armenia"}
-            ls{"normaltid for Armenia"}
         }
         "meta:Atlantic"{
             ld{"sommartid for den nordamerikanske atlanterhavskysten"}
-            lg{"tidssone for den nordamerikanske atlanterhavskysten"}
-            ls{"normaltid for den nordamerikanske atlanterhavskysten"}
         }
         "meta:Australia_Central"{
             ld{"sentralaustralsk sommartid"}
-            lg{"tidssone for Sentral-Australia"}
             ls{"sentralaustralsk standardtid"}
         }
         "meta:Australia_CentralWestern"{
             ld{"vest-sentralaustralsk sommartid"}
-            lg{"tidssone for Sentralvest-Australia"}
             ls{"vest-sentralaustralsk standardtid"}
         }
         "meta:Australia_Eastern"{
@@ -128,52 +107,34 @@ nn{
         }
         "meta:Australia_Western"{
             ld{"vestaustralsk sommartid"}
-            lg{"tidssone for Vest-Australia"}
             ls{"vestaustralsk standardtid"}
         }
         "meta:Azerbaijan"{
             ld{"aserbajdsjansk sommartid"}
-            lg{"tidssone for Aserbajdsjan"}
-            ls{"normaltid for Aserbajdsjan"}
         }
         "meta:Azores"{
             ld{"asorisk sommartid"}
-            lg{"tidssone for Asorene"}
-            ls{"normaltid for Asorene"}
         }
         "meta:Bangladesh"{
             ld{"bangladeshisk sommartid"}
-            lg{"tidssone for Bangladesh"}
-            ls{"normaltid for Bangladesh"}
         }
         "meta:Brasilia"{
             ld{"sommartid for Brasilia"}
-            lg{"tidssone for Brasilia"}
-            ls{"normaltid for Brasilia"}
         }
         "meta:British"{
             ld{"britisk sommartid"}
-            lg{"tidssone for Storbritannia"}
         }
         "meta:Cape_Verde"{
             ld{"kappverdisk sommartid"}
-            lg{"tidssone for Kapp Verde"}
-            ls{"normaltid for Kapp Verde"}
         }
         "meta:Chatham"{
             ld{"sommartid for Chatham"}
-            lg{"tidssone for Chatham"}
-            ls{"normaltid for Chatham"}
         }
         "meta:Chile"{
             ld{"chilensk sommartid"}
-            lg{"chilensk tid"}
-            ls{"chilensk normaltid"}
         }
         "meta:China"{
             ld{"kinesisk sommartid"}
-            lg{"tidssone for Kina"}
-            ls{"normaltid for Kina"}
         }
         "meta:Cocos"{
             ls{"tidssone for Kokosøyane"}
@@ -190,8 +151,6 @@ nn{
         }
         "meta:Cuba"{
             ld{"sommartid for Cuba"}
-            lg{"tidssone for Cuba"}
-            ls{"normaltid for Cuba"}
         }
         "meta:DumontDUrville"{
             ls{"tidssone for Dumont-d’Urville"}
@@ -201,12 +160,9 @@ nn{
         }
         "meta:Easter"{
             ld{"sommartid for Påskeøya"}
-            lg{"tidssone for Påskeøya"}
-            ls{"normaltid for Påskeøya"}
         }
         "meta:Europe_Central"{
             ld{"sentraleuropeisk sommartid"}
-            lg{"tidssone for Sentral-Europa"}
             ls{"sentraleuropeisk standardtid"}
         }
         "meta:Europe_Eastern"{
@@ -219,7 +175,6 @@ nn{
         }
         "meta:Europe_Western"{
             ld{"vesteuropeisk sommartid"}
-            lg{"tidssone for Vest-Europa"}
             ls{"vesteuropeisk standardtid"}
         }
         "meta:Falkland"{
@@ -229,8 +184,6 @@ nn{
         }
         "meta:Fiji"{
             ld{"sommartid for Fiji"}
-            lg{"tidssone for Fiji"}
-            ls{"normaltid for Fiji"}
         }
         "meta:French_Southern"{
             ls{"tidssone for Dei franske sørterritoria"}
@@ -240,16 +193,12 @@ nn{
         }
         "meta:Georgia"{
             ld{"georgisk sommartid"}
-            lg{"tidssone for Georgia"}
-            ls{"normaltid for Georgia"}
         }
         "meta:Gilbert_Islands"{
             ls{"tidssone for Gilbertøyane"}
         }
         "meta:Greenland"{
             ld{"sommartid for Grønland"}
-            lg{"tidssone for Grønland"}
-            ls{"normaltid for Grønland"}
         }
         "meta:Greenland_Eastern"{
             ld{"sommartid for Austgrønland"}
@@ -258,8 +207,6 @@ nn{
         }
         "meta:Greenland_Western"{
             ld{"sommartid for Vestgrønland"}
-            lg{"tidssone for Vestgrønland"}
-            ls{"normaltid for Vestgrønland"}
         }
         "meta:Hawaii"{
             ls{"normaltid for Hawaii/Aleutane"}
@@ -276,70 +223,48 @@ nn{
         }
         "meta:Hovd"{
             ld{"sommartid for Khovd"}
-            lg{"tidssone for Khovd"}
-            ls{"normaltid for Khovd"}
         }
         "meta:Indonesia_Eastern"{
             ls{"austindonesisk tid"}
         }
         "meta:Iran"{
             ld{"iransk sommartid"}
-            lg{"tidssone for Iran"}
-            ls{"normaltid for Iran"}
         }
         "meta:Irkutsk"{
             ld{"sommartid for Irkutsk"}
-            lg{"tidssone for Irkutsk"}
-            ls{"normaltid for Irkutsk"}
         }
         "meta:Israel"{
             ld{"israelsk sommartid"}
-            lg{"tidssone for Israel"}
-            ls{"normaltid for Israel"}
         }
         "meta:Japan"{
             ld{"japansk sommartid"}
-            lg{"tidssone for Japan"}
-            ls{"normaltid for Japan"}
         }
         "meta:Kamchatka"{
             ld{"sommartid for Kamsjatka"}
-            lg{"tidssone for Kamsjatka"}
-            ls{"normaltid for Kamsjatka"}
         }
         "meta:Kazakhstan_Eastern"{
             ls{"austkasakhstansk tid"}
         }
         "meta:Korea"{
             ld{"koreansk sommartid"}
-            lg{"tidssone for Korea"}
-            ls{"normaltid for Korea"}
         }
         "meta:Krasnoyarsk"{
             ld{"sommartid for Krasnojarsk"}
-            lg{"tidssone for Krasnojarsk"}
-            ls{"normaltid for Krasnojarsk"}
         }
         "meta:Line_Islands"{
             ls{"tidssone for Lineøyane"}
         }
         "meta:Lord_Howe"{
             ld{"sommartid for Lord Howe-øya"}
-            lg{"tidssone for Lord Howe-øya"}
-            ls{"normaltid for Lord Howe-øya"}
         }
         "meta:Magadan"{
             ld{"sommartid for Magadan"}
-            lg{"tidssone for Magadan"}
-            ls{"normaltid for Magadan"}
         }
         "meta:Marquesas"{
             ls{"tidssone for Marquesasøyane"}
         }
         "meta:Mauritius"{
             ld{"mauritisk sommartid"}
-            lg{"tidssone for Mauritius"}
-            ls{"normaltid for Mauritius"}
         }
         "meta:Mexico_Pacific"{
             ld{"sommartid for den meksikanske stillehavskysten"}
@@ -348,18 +273,12 @@ nn{
         }
         "meta:Mongolia"{
             ld{"sommartid for Ulan Bator"}
-            lg{"tidssone for Ulan Bator"}
-            ls{"normaltid for Ulan Bator"}
         }
         "meta:Moscow"{
             ld{"sommartid for Moskva"}
-            lg{"tidssone for Moskva"}
-            ls{"normaltid for Moskva"}
         }
         "meta:New_Caledonia"{
             ld{"kaledonsk sommartid"}
-            lg{"tidssone for Ny-Caledonia"}
-            ls{"normaltid for Ny-Caledonia"}
         }
         "meta:New_Zealand"{
             ld{"nyzealandsk sommartid"}
@@ -368,127 +287,81 @@ nn{
         }
         "meta:Newfoundland"{
             ld{"sommartid for Newfoundland"}
-            lg{"tidssone for Newfoundland"}
-            ls{"normaltid for Newfoundland"}
         }
         "meta:Norfolk"{
             ld{"sommartid for Norfolkøya"}
-            lg{"tidssone for Norfolkøya"}
-            ls{"normaltid for Norfolkøya"}
         }
         "meta:Noronha"{
             ld{"sommartid for Fernando de Noronha"}
-            lg{"tidssone for Fernando de Noronha"}
-            ls{"normaltid for Fernando de Noronha"}
         }
         "meta:Novosibirsk"{
             ld{"sommartid for Novosibirsk"}
-            lg{"tidssone for Novosibirsk"}
-            ls{"normaltid for Novosibirsk"}
         }
         "meta:Omsk"{
             ld{"sommartid for Omsk"}
-            lg{"tidssone for Omsk"}
-            ls{"normaltid for Omsk"}
         }
         "meta:Pakistan"{
             ld{"pakistansk sommartid"}
-            lg{"tidssone for Pakistan"}
-            ls{"normaltid for Pakistan"}
         }
         "meta:Paraguay"{
             ld{"paraguayansk sommartid"}
-            lg{"paraguayansk tid"}
-            ls{"paraguayansk normaltid"}
         }
         "meta:Peru"{
             ld{"peruansk sommartid"}
-            lg{"peruansk tid"}
-            ls{"peruansk normaltid"}
         }
         "meta:Philippines"{
             ld{"filippinsk sommartid"}
-            lg{"tidssone for Filippinene"}
-            ls{"normaltid for Filippinene"}
         }
         "meta:Phoenix_Islands"{
             ls{"tidssone for Phoenixøyane"}
         }
         "meta:Pierre_Miquelon"{
             ld{"sommartid for Saint-Pierre-et-Miquelon"}
-            lg{"tidssone for Saint-Pierre-et-Miquelon"}
-            ls{"normaltid for Saint-Pierre-et-Miquelon"}
         }
         "meta:Sakhalin"{
             ld{"sommartid for Sakhalin"}
-            lg{"tidssone for Sakhalin"}
-            ls{"normaltid for Sakhalin"}
         }
         "meta:Samara"{
             ld{"sommartid for Samara"}
-            lg{"tidssone for Samara"}
-            ls{"normaltid for Samara"}
         }
         "meta:Taipei"{
             ld{"sommartid for Taipei"}
-            lg{"tidssone for Taipei"}
-            ls{"normaltid for Taipei"}
         }
         "meta:Tonga"{
             ld{"tongansk sommartid"}
-            lg{"tidssone for Tonga"}
-            ls{"normaltid for Tonga"}
         }
         "meta:Truk"{
             ls{"tidssone for Chuukøyane"}
         }
         "meta:Turkey"{
             ld{"tyrkisk sommartid"}
-            lg{"tidssone for Tyrkia"}
-            ls{"normaltid for Tyrkia"}
         }
         "meta:Turkmenistan"{
             ld{"turkmensk sommartid"}
-            lg{"tidssone for Turkmenistan"}
-            ls{"normaltid for Turkmenistan"}
         }
         "meta:Uruguay"{
             ld{"uruguayansk sommartid"}
-            lg{"uruguayansk tid"}
-            ls{"uruguayansk normaltid"}
         }
         "meta:Uzbekistan"{
             ld{"usbekisk sommartid"}
-            lg{"tidssone for Usbekistan"}
-            ls{"normaltid for Usbekistan"}
         }
         "meta:Vanuatu"{
             ld{"vanuatisk sommartid"}
-            lg{"tidssone for Vanuatu"}
-            ls{"normaltid for Vanuatu"}
         }
         "meta:Vladivostok"{
             ld{"sommartid for Vladivostok"}
-            lg{"tidssone for Vladivostok"}
-            ls{"normaltid for Vladivostok"}
         }
         "meta:Volgograd"{
             ld{"sommartid for Volgograd"}
-            lg{"tidssone for Volgograd"}
-            ls{"normaltid for Volgograd"}
         }
         "meta:Wallis"{
             ls{"tidssone for Wallis- og Futunaøyane"}
         }
         "meta:Yakutsk"{
             ld{"sommartid for Jakutsk"}
-            lg{"tidssone for Jakutsk"}
-            ls{"normaltid for Jakutsk"}
         }
         "meta:Yekaterinburg"{
             ld{"sommartid for Jekaterinburg"}
-            lg{"tidssone for Jekaterinburg"}
-            ls{"normaltid for Jekaterinburg"}
         }
         regionFormatDaylight{"sommartid – {0}"}
     }

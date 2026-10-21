@@ -75,17 +75,9 @@ mg{
             "£",
             "livre sterling",
         }
-        GHC{
-            "GHC",
-            "cédi",
-        }
         GMD{
             "GMD",
             "Dalasi gambianina",
-        }
-        GNS{
-            "GNS",
-            "Farantsa Gineanina",
         }
         INR{
             "₹",
@@ -123,10 +115,6 @@ mg{
             "Ar",
             "Ariary",
         }
-        MRO{
-            "MRO",
-            "Ouguiya moritanianina (1973–2017)",
-        }
         MRU{
             "MRU",
             "Ouguiya moritanianina",
@@ -138,10 +126,6 @@ mg{
         MWK{
             "MWK",
             "kwacha malawite",
-        }
-        MZM{
-            "MZM",
-            "Metikaly",
         }
         NAD{
             "NAD",
@@ -167,10 +151,6 @@ mg{
             "SDG",
             "Dinara Sodaney",
         }
-        SDP{
-            "SDP",
-            "livre soudanaise (1956–2007)",
-        }
         SHP{
             "SHP",
             "livre de Sainte-Hélène",
@@ -186,10 +166,6 @@ mg{
         SOS{
             "SOS",
             "Shilling somalianina",
-        }
-        STD{
-            "STD",
-            "Dobra (1977–2017)",
         }
         STN{
             "STN",
@@ -227,21 +203,9 @@ mg{
             "ZAR",
             "Rand afrikanina tatsimo",
         }
-        ZMK{
-            "ZMK",
-            "Kwacha zambianina (1968–2012)",
-        }
         ZMW{
             "ZMW",
             "Kwacha zambianina",
         }
-        ZWD{
-            "ZWD",
-            "Dôlara Zimbaboeanina",
-        }
-    }
-    CurrencyUnitPatterns{
-        one{"{0} {1}"}
-        other{"{0} {1}"}
     }
 }

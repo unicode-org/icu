@@ -114,22 +114,11 @@ ckb{
                 "{1} {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yMMdd",
-            }
             availableFormats{
                 Ed{"E dھەم"}
                 MEd{"E، M/d"}
                 MMMEd{"E، dی MMM"}
                 MMMMW{
-                    one{"هەفتەی W ی MMMM"}
                     other{"هەفتەی W ی MMMM"}
                 }
                 MMMd{"dی MMM"}
@@ -141,7 +130,6 @@ ckb{
                 yMMMd{"dی MMMی y"}
                 yMd{"d/M/y"}
                 yw{
-                    one{"هەفتەی w ی Y"}
                     other{"هەفتەی w ی Y"}
                 }
             }
@@ -278,13 +266,8 @@ ckb{
         year-short{
             relative{
                 "-1"{"ساڵی پێشوو"}
-                "0"{"ئەم ساڵ"}
-                "1"{"ساڵی داهاتوو"}
             }
         }
-    }
-    layout{
-        characters{"right-to-left"}
     }
     measurementSystemNames{
         UK{"بەڕیتانی"}

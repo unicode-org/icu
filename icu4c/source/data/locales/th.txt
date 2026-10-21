@@ -182,16 +182,6 @@ th{
                 "{1} {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "Hmmsszzzz",
-                "Hmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yyMd",
-            }
             availableFormats{
                 GyM{"M/G y"}
                 GyMEd{"E d/M/G y"}
@@ -213,356 +203,9 @@ th{
                 abbreviated{
                     0{"พ.ศ."}
                 }
-                wide{
-                    0{"พุทธศักราช"}
-                }
-            }
-            intervalFormats{
-                Hm{
-                    H{"H:mm–H:mm"}
-                    m{"H:mm–H:mm"}
-                }
-                MEd{
-                    M{"E d – E d/M"}
-                    d{"E d – E d/M"}
-                }
-                MMMEd{
-                    d{"E d – E d MMM"}
-                }
-                y{
-                    y{"y–y"}
-                }
-                yM{
-                    M{"M/y – M/y"}
-                    y{"M/y – M/y"}
-                }
-                yMEd{
-                    M{"E d/M/y – E d/M/y"}
-                    d{"E d – E d/M/y"}
-                    y{"E d/M/y – E d/M/y"}
-                }
-                yMMM{
-                    M{"MMM–MMM y"}
-                    y{"MMM y – MMM y"}
-                }
-                yMMMEEEEd{
-                    M{"EEEEที่ d MMM – EEEEที่ d MMM y"}
-                    d{"EEEEที่ d – EEEEที่ d MMM y"}
-                    y{"EEEEที่ d MMM y – EEEEที่ d MMM y"}
-                }
-                yMMMEd{
-                    M{"E d MMM – E d MMM y"}
-                    d{"E d – E d MMM y"}
-                    y{"E d MMM y – E d MMM y"}
-                }
-                yMMMM{
-                    M{"MMMM–MMMM y"}
-                    y{"MMMM y – MMMM y"}
-                }
-                yMMMd{
-                    M{"d MMM – d MMM y"}
-                    d{"d–d MMM y"}
-                    y{"d MMM y – d MMM y"}
-                }
-                yMd{
-                    M{"d/M/y – d/M/y"}
-                    d{"d–d/M/y"}
-                    y{"d/M/y – d/M/y"}
-                }
-            }
-        }
-        chinese{
-            DateTimePatterns{
-                "H นาฬิกา mm นาที ss วินาที zzzz",
-                "H นาฬิกา mm นาที ss วินาที z",
-                "HH:mm:ss",
-                "HH:mm น.",
-                "EEEE, U MMMM d",
-                "U MMMM d",
-                "U MMM d",
-                "y-M-d",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "Hmmsszzzz",
-                "Hmmssz",
-                "HHmmss",
-                "HHmm",
-                "UMMMMEEEEd",
-                "UMMMMd",
-                "UMMMd",
-                "yMd",
-            }
-            cyclicNameSets{
-                dayParts{
-                    format{
-                        abbreviated{
-                            "จื่อ",
-                            "โฉ่ว",
-                            "อิ๋น",
-                            "เหม่า",
-                            "เฉิน",
-                            "ซื่อ",
-                            "อู้",
-                            "เว่ย",
-                            "เซิน",
-                            "โหย่ว",
-                            "ซู",
-                            "ฮ่าย",
-                        }
-                    }
-                }
-                solarTerms{
-                    format{
-                        abbreviated{
-                            "ลี่ชุน",
-                            "rain water",
-                            "insects awaken",
-                            "spring equinox",
-                            "bright and clear",
-                            "grain rain",
-                            "summer begins",
-                            "grain full",
-                            "grain in ear",
-                            "summer solstice",
-                            "minor heat",
-                            "major heat",
-                            "autumn begins",
-                            "end of heat",
-                            "white dew",
-                            "autumn equinox",
-                            "cold dew",
-                            "frost descends",
-                            "winter begins",
-                            "minor snow",
-                            "major snow",
-                            "winter solstice",
-                            "minor cold",
-                            "major cold",
-                        }
-                    }
-                }
-                years{
-                    format{
-                        abbreviated{
-                            "เจี่ยจื่อ",
-                            "อี๋โฉ่ว",
-                            "ปิ่งอิ๋น",
-                            "ติงเหม่า",
-                            "อู้เฉิน",
-                            "จี่ซื่อ",
-                            "เกิงอู้",
-                            "ซินเว่ย",
-                            "เหรินเซิน",
-                            "กุ๋ยโหย่ว",
-                            "เจ่ียซู",
-                            "อี๋ฮ่าย",
-                            "ปิ๋ิ่งจื่อ",
-                            "ติงโฉ่ว",
-                            "อู้อิ๋น",
-                            "จี๋เหม่า",
-                            "เกิงเฉิน",
-                            "ซินซื่อ",
-                            "เหรินอู้",
-                            "กุ่ยเว่ย",
-                            "เจี่ยเซิน",
-                            "อี๋โหย่ว",
-                            "ปิ่งซู",
-                            "ติงฮ่าย",
-                            "อู้จื่อ",
-                            "จี๋โฉ่ว",
-                            "เกิงอิ๋น",
-                            "ซินเหม่า",
-                            "เหรินเฉิน",
-                            "กุ่ยซ่อ",
-                            "เจ่ียอู้",
-                            "อี่เว่ย",
-                            "ป่ิงเซิน",
-                            "ติงโหย่ว",
-                            "อู้ซู",
-                            "จี่ฮ่าย",
-                            "เกิงจื่อ",
-                            "ซินโฉ่ว",
-                            "เหรินอิ๋น",
-                            "กุ๋ยเหม่า",
-                            "เจี่ยเฉิน",
-                            "อี่ซ่ือ",
-                            "ป่ิงอู้",
-                            "ติงเว่ย",
-                            "อู้เซิน",
-                            "จี๋โหย่ว",
-                            "เกิงซู",
-                            "ซินฮ่าย",
-                            "เหรินจ่ือ",
-                            "กุ๋่ยโฉ่ว",
-                            "เจี่ยอิ๋น",
-                            "อ๋ีเหม่า",
-                            "ปิ่งเฉิน",
-                            "ติงซื่อ",
-                            "อู้อู้",
-                            "จ่ีเว่ย",
-                            "เกิงเซิน",
-                            "ซินโหย่ว",
-                            "เหรินซู",
-                            "กุ่ยฮ่าย",
-                        }
-                    }
-                }
-                zodiacs{
-                    format{
-                        abbreviated{
-                            "หนู",
-                            "วัว",
-                            "เสือ",
-                            "กระต่าย",
-                            "มังกร",
-                            "งู",
-                            "ม้า",
-                            "แพะ",
-                            "ลิง",
-                            "ไก่ตัวผู้",
-                            "สุนัข",
-                            "หมู",
-                        }
-                    }
-                }
-            }
-            monthNames{
-                format{
-                    wide{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                    }
-                }
-            }
-        }
-        coptic{
-            monthNames{
-                format{
-                    wide{
-                        "เทาท์",
-                        "บาบา",
-                        "ฮาเทอร์",
-                        "เคียฟ",
-                        "โทบา",
-                        "อัมเชอร์",
-                        "บารัมฮัท",
-                        "บาราเมาดา",
-                        "บาชันส์",
-                        "พาโอนา",
-                        "อีเปป",
-                        "เมสรา",
-                        "นาซี",
-                    }
-                }
-            }
-        }
-        dangi{
-            cyclicNameSets{
-                years{
-                    format{
-                        abbreviated{
-                            "เจี่ยจื่อ",
-                            "อี๋โฉ่ว",
-                            "ปิ่งอิ๋น",
-                            "ติงเหม่า",
-                            "อู้เฉิน",
-                            "จี่ซื่อ",
-                            "เกิงอู้",
-                            "ซินเว่ย",
-                            "เหรินเซิน",
-                            "กุ๋่ยโหย่ว",
-                            "เจ่ียซู",
-                            "อี๋ฮ่าย",
-                            "ปิ๋ิ่งจื่อ",
-                            "ติงโฉ่ว",
-                            "อู้อิ๋น",
-                            "จี๋เหม่า",
-                            "เกิงเฉิน",
-                            "ซินซื่อ",
-                            "เหรินอู้",
-                            "กุ่ยเว่ย",
-                            "เจี่ยเซิน",
-                            "อี๋โหย่ว",
-                            "ปิ่งซู",
-                            "ติงฮ่าย",
-                            "อู้จื่อ",
-                            "จี๋โฉ่ว",
-                            "เกิงอิ๋น",
-                            "ซินเหม่า",
-                            "เหรินเฉิน",
-                            "กุ่ยซ่อ",
-                            "เจ่ียอู้",
-                            "อี่เว่ย",
-                            "ป่ิงเซิน",
-                            "ติงโหย่ว",
-                            "อู้ซู",
-                            "จี่ฮ่าย",
-                            "เกิงจื่อ",
-                            "ซินโฉ่ว",
-                            "เหรินอิ๋น",
-                            "กุ๋ยเหม่า",
-                            "เจี่ยเฉิน",
-                            "อี่ซ่ือ",
-                            "ป่ิงอู้",
-                            "ติงเว่ย",
-                            "อู้เซิน",
-                            "จี๋โหย่ว",
-                            "เกิงซู",
-                            "ซินฮ่าย",
-                            "เหรินจ่ือ",
-                            "กุ๋่ยโฉ่ว",
-                            "เจี่ยอิ๋น",
-                            "อ๋ีเหม่า",
-                            "ปิ่งเฉิน",
-                            "ติงซื่อ",
-                            "อู้อู้",
-                            "จ่ีเว่ย",
-                            "เกิงเซิน",
-                            "ซินโหย่ว",
-                            "เหรินซู",
-                            "กุ่ยฮ่าย",
-                        }
-                    }
-                }
             }
         }
         default{"buddhist"}
-        ethiopic{
-            monthNames{
-                format{
-                    wide{
-                        "เมสเคอเรม",
-                        "เตเกมท",
-                        "เฮดาร์",
-                        "ทาฮ์ซัส",
-                        "เทอร์",
-                        "เยคาทิท",
-                        "เมกาบิต",
-                        "เมียเซีย",
-                        "เจนบอต",
-                        "เซเน",
-                        "ฮัมเล",
-                        "เนแฮซ",
-                        "พากูเมน",
-                    }
-                }
-            }
-        }
         generic{
             DateTimePatterns{
                 "H นาฬิกา mm นาที ss วินาที zzzz",
@@ -590,16 +233,6 @@ th{
                 "{1} เวลา {0}",
                 "{1} {0}",
                 "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "Hmmsszzzz",
-                "Hmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMMd",
-                "GyMd",
             }
             availableFormats{
                 Ed{"E d"}
@@ -669,26 +302,12 @@ th{
                     d{"d/M/y – d/M/y G"}
                     y{"d/M/y – d/M/y G"}
                 }
-                H{
-                    H{"H–H"}
-                }
-                Hmv{
-                    H{"H:mm–H:mm v"}
-                    m{"H:mm–H:mm v"}
-                }
-                Hv{
-                    H{"H–H v"}
-                }
                 M{
                     M{"M–M"}
                 }
                 MEd{
                     M{"E d/M – E d/M"}
                     d{"E d/M – E d/M"}
-                }
-                MMMEEEEd{
-                    M{"EEEEที่ d MMM – EEEEที่ d MMM"}
-                    d{"EEEEที่ d – EEEEที่ d MMM"}
                 }
                 MMMEd{
                     M{"E d MMM – E d MMM"}
@@ -719,11 +338,6 @@ th{
                 yMMM{
                     M{"MMM–MMM G y"}
                     y{"MMM G y – MMM y"}
-                }
-                yMMMEEEEd{
-                    M{"EEEEที่ d MMM – EEEEที่ d MMM G y"}
-                    d{"EEEEที่ d – EEEEที่ d MMM G y"}
-                    y{"EEEEที่ d MMM G y – EEEEที่ d MMM y"}
                 }
                 yMMMEd{
                     M{"E d MMM – E d MMM G y"}
@@ -781,16 +395,6 @@ th{
                 "{1} เวลา {0}",
                 "{1} {0}",
                 "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "Hmmsszzzz",
-                "Hmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "yMMMd",
-                "yyMd",
             }
             appendItems{
                 Day-Of-Week{"{1}ที่ {0}"}
@@ -894,41 +498,27 @@ th{
                     }
                     narrow{
                         afternoon1{"เที่ยง"}
-                        afternoon2{"บ่าย"}
                         evening1{"เย็น"}
-                        evening2{"ค่ำ"}
-                        midnight{"เที่ยงคืน"}
                         morning1{"เช้า"}
-                        night1{"กลางคืน"}
-                        noon{"เที่ยง"}
                     }
                 }
                 stand-alone{
                     abbreviated{
                         afternoon1{"ตอนบ่าย"}
-                        afternoon2{"บ่าย"}
                         am{"ก่อนเที่ยง"}
                         evening1{"ตอนเย็น"}
-                        evening2{"ค่ำ"}
                         morning1{"ตอนเช้า"}
-                        night1{"กลางคืน"}
                         pm{"หลังเที่ยง"}
                     }
                     narrow{
                         afternoon1{"ช่วงเที่ยง"}
-                        afternoon2{"บ่าย"}
                         evening1{"เย็น"}
-                        evening2{"ค่ำ"}
                         morning1{"เช้า"}
-                        night1{"กลางคืน"}
                     }
                     wide{
                         afternoon1{"ในตอนบ่าย"}
-                        afternoon2{"บ่าย"}
                         evening1{"ในตอนเย็น"}
-                        evening2{"ค่ำ"}
                         morning1{"ในตอนเช้า"}
-                        night1{"กลางคืน"}
                     }
                 }
             }
@@ -940,9 +530,6 @@ th{
                 abbreviated%variant{
                     0{"ก่อน ส.ศ."}
                     1{"ส.ศ."}
-                }
-                narrow%variant{
-                    0{"ก.ส.ศ."}
                 }
                 wide{
                     0{"ปีก่อนคริสตกาล"}
@@ -1013,10 +600,6 @@ th{
                 MMM{
                     M{"MMM – MMM"}
                 }
-                MMMEEEEd{
-                    M{"EEEEที่ d MMM – EEEEที่ d MMM"}
-                    d{"EEEEที่ d – EEEEที่ d MMM"}
-                }
                 MMMEd{
                     M{"E d MMM – E d MMM"}
                     d{"E d – E d MMM"}
@@ -1047,11 +630,6 @@ th{
                     M{"MMM–MMM y"}
                     y{"MMM y – MMM y"}
                 }
-                yMMMEEEEd{
-                    M{"EEEEที่ d MMM – EEEEที่ d MMM y"}
-                    d{"EEEEที่ d – EEEEที่ d MMM y"}
-                    y{"EEEEที่ d MMM y – EEEEที่ d MMM y"}
-                }
                 yMMMEd{
                     M{"E d MMM – E d MMM y"}
                     d{"E d MMM – E d MMM y"}
@@ -1060,11 +638,6 @@ th{
                 yMMMM{
                     M{"MMMM – MMMM y"}
                     y{"MMMM y – MMMM y"}
-                }
-                yMMMMEEEEd{
-                    M{"EEEEที่ d MMMM – EEEEที่ d MMMM G y"}
-                    d{"EEEEที่ d – EEEEที่ d MMMM G y"}
-                    y{"EEEEที่ d MMMM G y – EEEEที่ d MMMM y"}
                 }
                 yMMMMEd{
                     M{"E d MMMM – E d MMMM y"}
@@ -1143,202 +716,6 @@ th{
                         "ไตรมาส 3",
                         "ไตรมาส 4",
                     }
-                }
-            }
-        }
-        hebrew{
-            eras{
-                abbreviated{
-                    0{"ย.ศ."}
-                }
-            }
-            monthNames{
-                format{
-                    wide{
-                        "ทิชรี",
-                        "เฮวาน",
-                        "กีสเลฟ",
-                        "เตเวต",
-                        "เชวัต",
-                        "อาดาร์ I",
-                        "อาดาร์",
-                        "นิสซาน",
-                        "อิยาร์",
-                        "สีวัน",
-                        "ตามูซ",
-                        "อัฟ",
-                        "เอลอุล",
-                        "อาดาร์ II",
-                    }
-                }
-            }
-        }
-        indian{
-            eras{
-                abbreviated{
-                    0{"ม.ศ."}
-                }
-            }
-            monthNames{
-                format{
-                    wide{
-                        "จิตรา",
-                        "วิสาขา",
-                        "เชษฐา",
-                        "อัษฎา",
-                        "ศรวณา",
-                        "พัตรา",
-                        "อัศวิชา",
-                        "การติกา",
-                        "มฤคศิรา",
-                        "ปุษยา",
-                        "มาฆะ",
-                        "ผลคุณี",
-                    }
-                }
-            }
-        }
-        islamic{
-            availableFormats{
-                MEd{"E, d/M"}
-            }
-            eras{
-                abbreviated{
-                    0{"ฮ.ศ."}
-                }
-                wide{
-                    0{"ฮิจเราะห์ศักราช"}
-                }
-            }
-            monthNames{
-                format{
-                    abbreviated{
-                        "มุฮัร.",
-                        "เศาะ.",
-                        "รอบี I",
-                        "รอบี II",
-                        "จุมาดา I",
-                        "จุมาดา II",
-                        "เราะ.",
-                        "ชะอ์.",
-                        "เราะมะ.",
-                        "เชาว.",
-                        "ซุลกิอฺ.",
-                        "ซุลหิจ.",
-                    }
-                    wide{
-                        "มุฮะร์รอม",
-                        "ซอฟาร์",
-                        "รอบี I",
-                        "รอบี II",
-                        "จุมาดา I",
-                        "จุมาดา II",
-                        "รอจับ",
-                        "ชะอะบาน",
-                        "รอมะดอน",
-                        "เชาวัล",
-                        "ซุลกิอฺดะฮฺ",
-                        "ซุลหิจญะฮฺ",
-                    }
-                }
-            }
-        }
-        japanese{
-            DateTimePatterns{
-                "H นาฬิกา mm นาที ss วินาที zzzz",
-                "H นาฬิกา mm นาที ss วินาที z",
-                "HH:mm:ss",
-                "HH:mm น.",
-                "EEEEที่ d MMMM ปีGที่ y",
-                "d MMMM ปีG y",
-                "d MMM G y",
-                "d/M/yy G",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "Hmmsszzzz",
-                "Hmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMMd",
-                "GyyMd",
-            }
-            availableFormats{
-                MEd{"E, d/M"}
-                yyyyM{"M/GGGGG y"}
-                yyyyMEd{"E d/M/GGGGG y"}
-                yyyyMd{"d/M/GGGGG y"}
-            }
-            eras{
-                abbreviated{
-                    232{"เมจิ"}
-                    233{"ทะอิโช"}
-                    234{"โชวะ"}
-                    235{"เฮเซ"}
-                    236{"เรวะ"}
-                }
-            }
-        }
-        persian{
-            eras{
-                abbreviated{
-                    0{"ปีเปอร์เซีย"}
-                }
-            }
-            monthNames{
-                format{
-                    wide{
-                        "ฟาร์วาร์ดิน",
-                        "ออร์ดิเบเฮชต์",
-                        "คอร์แดด",
-                        "เตอร์",
-                        "มอร์แดด",
-                        "ชาหริวาร์",
-                        "เมฮร์",
-                        "อะบาน",
-                        "อะซาร์",
-                        "เดย์",
-                        "บาฮ์มาน",
-                        "เอสฟานด์",
-                    }
-                }
-            }
-        }
-        roc{
-            DateTimePatterns{
-                "H นาฬิกา mm นาที ss วินาที zzzz",
-                "H นาฬิกา mm นาที ss วินาที z",
-                "HH:mm:ss",
-                "HH:mm น.",
-                "EEEEที่ d MMMM ปีGที่ y",
-                "d MMMM ปีG y",
-                "d MMM G y",
-                "d/M/y G",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            availableFormats{
-                Gy{"ปีGที่ y"}
-                MEd{"E, d/M"}
-                y{"ปีGที่ y"}
-                yyyy{"ปีGที่ y"}
-                yyyyM{"M/GGGGG y"}
-                yyyyMEd{"E d/M/GGGGG y"}
-                yyyyMd{"d/M/GGGGG y"}
-            }
-            eras{
-                abbreviated{
-                    0{"ปีก่อนไต้หวัน"}
-                    1{"ไต้หวัน"}
                 }
             }
         }

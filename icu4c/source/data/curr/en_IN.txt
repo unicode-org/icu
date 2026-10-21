@@ -50,10 +50,6 @@ en_IN{
             one{"Uzbekistani Som"}
             other{"Uzbekistani Som"}
         }
-        VEF{
-            one{"Venezuelan bolívar"}
-            other{"Venezuelan bolívars"}
-        }
         VES{
             one{"Venezuelan bolivar"}
             other{"Venezuelan bolivars"}

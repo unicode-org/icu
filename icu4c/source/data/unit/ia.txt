@@ -52,11 +52,6 @@ ia{
                 one{"{0} acre"}
                 other{"{0} acres"}
             }
-            dunam{
-                dnam{"dunames"}
-                one{"{0} dunams"}
-                other{"{0} dunams"}
-            }
             hectare{
                 dnam{"hectares"}
                 one{"{0} hectare"}
@@ -211,7 +206,6 @@ ia{
             }
             byte{
                 dnam{"bytes"}
-                one{"{0} byte"}
                 other{"{0} bytes"}
             }
             gigabit{
@@ -670,10 +664,6 @@ ia{
                 one{"{0} barriles"}
                 other{"{0} barriles"}
             }
-            bushel{
-                one{"{0} bushel"}
-                other{"{0} bushels"}
-            }
             centiliter{
                 dnam{"centilitros"}
                 one{"{0} centilitro"}
@@ -844,7 +834,6 @@ ia{
                 other{"{0}h"}
             }
             microsecond{
-                one{"{0} μs"}
                 other{"{0}μs"}
             }
             millisecond{
@@ -903,11 +892,6 @@ ia{
                 dnam{"bbl"}
                 one{"{0}bbl"}
                 other{"{0}bbl"}
-            }
-            bushel{
-                dnam{"bushel"}
-                one{"{0}bu"}
-                other{"{0}bu"}
             }
             centiliter{
                 one{"{0}cl"}
@@ -1065,7 +1049,6 @@ ia{
             }
             dunam{
                 dnam{"dunames"}
-                one{"{0} dunams"}
                 other{"{0} dunams"}
             }
             hectare{
@@ -1075,12 +1058,10 @@ ia{
         consumption{
             mile-per-gallon{
                 dnam{"mi/gal"}
-                one{"{0} mi/gal"}
                 other{"{0} mi/gal"}
             }
             mile-per-gallon-imperial{
                 dnam{"mi/gal imp."}
-                one{"{0} mi/gal imp."}
                 other{"{0} mi/gal imp."}
             }
         }
@@ -1093,7 +1074,6 @@ ia{
         digital{
             bit{
                 dnam{"b"}
-                one{"{0} b"}
                 other{"{0} b"}
             }
             byte{
@@ -1103,7 +1083,6 @@ ia{
         duration{
             century{
                 dnam{"scl"}
-                one{"{0} scl"}
                 other{"{0} scl"}
             }
             day{
@@ -1113,7 +1092,6 @@ ia{
             }
             hour{
                 dnam{"horas"}
-                one{"{0} hr"}
                 other{"{0} hr"}
             }
             millisecond{
@@ -1125,18 +1103,15 @@ ia{
                 other{"{0} menses"}
             }
             second{
-                one{"{0} sec"}
                 other{"{0} sec"}
             }
             week{
                 dnam{"septimanas"}
-                one{"{0} sept"}
                 other{"{0} sept"}
                 per{"{0}/sept"}
             }
             year{
                 dnam{"annos"}
-                one{"{0} an"}
                 other{"{0} an"}
                 per{"{0}/an"}
             }
@@ -1160,12 +1135,10 @@ ia{
         length{
             astronomical-unit{
                 dnam{"ua"}
-                one{"{0} ua"}
                 other{"{0} ua"}
             }
             light-year{
                 dnam{"al"}
-                one{"{0} al"}
                 other{"{0} al"}
             }
             meter{
@@ -1175,7 +1148,6 @@ ia{
         mass{
             carat{
                 dnam{"ct"}
-                one{"{0} ct"}
                 other{"{0} ct"}
             }
             gram{
@@ -1185,7 +1157,6 @@ ia{
         power{
             horsepower{
                 dnam{"cv"}
-                one{"{0} cv"}
                 other{"{0} cv"}
             }
             watt{
@@ -1195,53 +1166,41 @@ ia{
         volume{
             acre-foot{
                 dnam{"acre pd"}
-                one{"{0} ac pd"}
                 other{"{0} ac pd"}
             }
             barrel{
                 dnam{"barril"}
             }
-            bushel{
-                dnam{"bushels"}
-            }
             centiliter{
                 dnam{"cl"}
-                one{"{0} cl"}
                 other{"{0} cl"}
             }
             cubic-foot{
                 dnam{"pd³"}
-                one{"{0} pd³"}
                 other{"{0} pd³"}
             }
             cup{
                 dnam{"tas"}
-                one{"{0} tas"}
                 other{"{0} tas"}
             }
             cup-metric{
                 dnam{"tasm"}
-                one{"{0} tasm"}
                 other{"{0} tasm"}
             }
             deciliter{
                 dnam{"dl"}
-                one{"{0} dl"}
                 other{"{0} dl"}
             }
             dessert-spoon{
                 dnam{"cocl. a dessert"}
-                one{"{0} cocl. a dessert"}
                 other{"{0} cocl. a dessert"}
             }
             dessert-spoon-imperial{
                 dnam{"cocl. a dessert imp."}
-                one{"{0} cocl. a dessert imp."}
                 other{"{0} cocl. a dessert imp."}
             }
             dram{
                 dnam{"drachma liq."}
-                one{"{0} dr liq"}
                 other{"{0} dr liq"}
             }
             drop{
@@ -1251,29 +1210,24 @@ ia{
             }
             fluid-ounce{
                 dnam{"oz liq"}
-                one{"{0} oz liq"}
                 other{"{0} oz liq"}
             }
             fluid-ounce-imperial{
                 dnam{"oz liq imp."}
-                one{"{0} oz liq imp."}
                 other{"{0} oz liq imp."}
             }
             gallon{
                 dnam{"gal"}
-                one{"{0} gal"}
                 other{"{0} gal"}
                 per{"{0}/gal"}
             }
             gallon-imperial{
                 dnam{"gal imp"}
-                one{"{0} gal imp"}
                 other{"{0} gal imp"}
                 per{"{0}/gal imp"}
             }
             hectoliter{
                 dnam{"hl"}
-                one{"{0} hl"}
                 other{"{0} hl"}
             }
             liter{
@@ -1281,17 +1235,14 @@ ia{
             }
             megaliter{
                 dnam{"Ml"}
-                one{"{0} Ml"}
                 other{"{0} Ml"}
             }
             milliliter{
                 dnam{"ml"}
-                one{"{0} ml"}
                 other{"{0} ml"}
             }
             pinch{
                 dnam{"pinciata"}
-                one{"{0} pn"}
                 other{"{0} pn"}
             }
             pint{
@@ -1299,7 +1250,6 @@ ia{
             }
             pint-metric{
                 dnam{"ptm"}
-                one{"{0} ptm"}
                 other{"{0} ptm"}
             }
             quart-imperial{
@@ -1309,12 +1259,10 @@ ia{
             }
             tablespoon{
                 dnam{"cocl. a suppa"}
-                one{"{0} c. a suppa"}
                 other{"{0} c. a suppa"}
             }
             teaspoon{
                 dnam{"cocl. a the"}
-                one{"{0} cocl. a the"}
                 other{"{0} cocl. a the"}
             }
         }

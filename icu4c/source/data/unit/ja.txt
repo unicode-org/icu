@@ -239,9 +239,6 @@ ja{
                 dnam{"ベクレル"}
                 other{"{0} ベクレル"}
             }
-            british-thermal-unit{
-                other{"{0} 英熱量"}
-            }
             calorie{
                 dnam{"カロリー"}
                 other{"{0} カロリー"}
@@ -355,15 +352,9 @@ ja{
                 dnam{"地球半径"}
                 other{"{0} 地球半径"}
             }
-            fathom{
-                other{"{0} ファゾム"}
-            }
             foot{
                 other{"{0} フィート"}
                 per{"{0}/フィート"}
-            }
-            furlong{
-                other{"{0} ハロン"}
             }
             inch{
                 other{"{0} インチ"}
@@ -474,9 +465,6 @@ ja{
             }
             solar-mass{
                 other{"{0} 太陽質量"}
-            }
-            stone{
-                other{"{0} ストーン"}
             }
             ton{
                 other{"{0} 米トン"}
@@ -590,9 +578,6 @@ ja{
             }
             barrel{
                 other{"{0} バレル"}
-            }
-            bushel{
-                other{"{0} ブッシェル"}
             }
             centiliter{
                 other{"{0} センチリットル"}
@@ -942,9 +927,6 @@ ja{
             becquerel{
                 other{"{0} Bq"}
             }
-            british-thermal-unit{
-                other{"{0}BTU"}
-            }
             calorie{
                 other{"{0}calth"}
             }
@@ -1051,14 +1033,8 @@ ja{
             earth-radius{
                 other{"{0}R⊕"}
             }
-            fathom{
-                other{"{0}fth"}
-            }
             foot{
                 other{"{0}′"}
-            }
-            furlong{
-                other{"{0}fur"}
             }
             inch{
                 other{"{0}″"}
@@ -1199,9 +1175,6 @@ ja{
                 dnam{"M☉"}
                 other{"{0}M☉"}
             }
-            stone{
-                other{"{0}st"}
-            }
             ton{
                 other{"{0}s/t"}
             }
@@ -1307,9 +1280,6 @@ ja{
             barrel{
                 dnam{"bbl"}
                 other{"{0}bbl"}
-            }
-            bushel{
-                other{"{0}bu"}
             }
             centiliter{
                 dnam{"cL"}
@@ -1693,10 +1663,6 @@ ja{
             becquerel{
                 other{"{0} Bq"}
             }
-            british-thermal-unit{
-                dnam{"英熱量"}
-                other{"{0} BTU"}
-            }
             calorie-it{
                 dnam{"cal-IT"}
                 other{"{0} cal-IT"}
@@ -1767,14 +1733,8 @@ ja{
             decimeter{
                 dnam{"デシメートル"}
             }
-            fathom{
-                dnam{"ファゾム"}
-            }
             foot{
                 dnam{"フィート"}
-            }
-            furlong{
-                dnam{"ハロン"}
             }
             inch{
                 dnam{"インチ"}
@@ -1901,9 +1861,6 @@ ja{
             solar-mass{
                 dnam{"太陽質量"}
             }
-            stone{
-                dnam{"ストーン"}
-            }
             ton{
                 dnam{"米トン"}
                 other{"{0} s/t"}
@@ -1988,9 +1945,6 @@ ja{
             }
             barrel{
                 dnam{"バレル"}
-            }
-            bushel{
-                dnam{"ブッシェル"}
             }
             centiliter{
                 dnam{"センチリットル"}

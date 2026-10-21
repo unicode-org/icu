@@ -11,18 +11,11 @@ ky{
         " #]"
     }
     NumberElements{
-        arabext{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-        }
         latn{
             miscPatterns{
                 atLeast{"{0}+"}
             }
             patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
                 currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
             }
@@ -81,101 +74,77 @@ ky{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"0 миң ¤"}
                         other{"0 миң ¤"}
                     }
                     10000{
-                        one{"00 миң ¤"}
                         other{"00 миң ¤"}
                     }
                     100000{
-                        one{"000 миң ¤"}
                         other{"000 миң ¤"}
                     }
                     1000000{
-                        one{"0 млн ¤"}
                         other{"0 млн ¤"}
                     }
                     10000000{
-                        one{"00 млн ¤"}
                         other{"00 млн ¤"}
                     }
                     100000000{
-                        one{"000 млн ¤"}
                         other{"000 млн ¤"}
                     }
                     1000000000{
-                        one{"0 млд ¤"}
                         other{"0 млд ¤"}
                     }
                     10000000000{
-                        one{"00 млд ¤"}
                         other{"00 млд ¤"}
                     }
                     100000000000{
-                        one{"000 млд ¤"}
                         other{"000 млд ¤"}
                     }
                     1000000000000{
-                        one{"0 трлн ¤"}
                         other{"0 трлн ¤"}
                     }
                     10000000000000{
-                        one{"00 трлн ¤"}
                         other{"00 трлн ¤"}
                     }
                     100000000000000{
-                        one{"000 трлн ¤"}
                         other{"000 трлн ¤"}
                     }
                 }
                 decimalFormat{
                     1000{
-                        one{"0 миң"}
                         other{"0 миң"}
                     }
                     10000{
-                        one{"00 миң"}
                         other{"00 миң"}
                     }
                     100000{
-                        one{"000 миң"}
                         other{"000 миң"}
                     }
                     1000000{
-                        one{"0 млн"}
                         other{"0 млн"}
                     }
                     10000000{
-                        one{"00 млн"}
                         other{"00 млн"}
                     }
                     100000000{
-                        one{"000 млн"}
                         other{"000 млн"}
                     }
                     1000000000{
-                        one{"0 млд"}
                         other{"0 млд"}
                     }
                     10000000000{
-                        one{"00 млд"}
                         other{"00 млд"}
                     }
                     100000000000{
-                        one{"000 млд"}
                         other{"000 млд"}
                     }
                     1000000000000{
-                        one{"0 трлн"}
                         other{"0 трлн"}
                     }
                     10000000000000{
-                        one{"00 трлн"}
                         other{"00 трлн"}
                     }
                     100000000000000{
-                        one{"000 трлн"}
                         other{"000 трлн"}
                     }
                 }
@@ -212,16 +181,6 @@ ky{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMdd",
-                "GGGGGyMMdd",
             }
             availableFormats{
                 Ehm{"E h:mm a"}
@@ -275,9 +234,6 @@ ky{
                     d{"dd.MM – dd.MM"}
                 }
                 fallback{"{0} - {1}"}
-                hmv{
-                    m{"h:mm–h:mm a v"}
-                }
                 y{
                     y{"y-'ж'.–y-'ж'. G"}
                 }
@@ -339,16 +295,6 @@ ky{
                 "{1} {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yyMd",
-            }
             availableFormats{
                 Ehm{"E h:mm a"}
                 Ehms{"E h:mm:ss a"}
@@ -360,7 +306,6 @@ ky{
                 MEd{"dd-MM, E"}
                 MMMEd{"d-MMM, E"}
                 MMMMW{
-                    one{"MMMM 'айынын' W-'аптасы'"}
                     other{"MMMM 'айынын' W-'аптасы'"}
                 }
                 MMMMd{"d-MMMM"}
@@ -381,7 +326,6 @@ ky{
                 yQQQ{"y-'ж'., QQQ"}
                 yQQQQ{"y-'ж'., QQQQ"}
                 yw{
-                    one{"Y-'жылдын' w-'аптасы'"}
                     other{"Y-'жылдын' w-'аптасы'"}
                 }
             }
@@ -448,9 +392,7 @@ ky{
                 }
                 stand-alone{
                     abbreviated{
-                        afternoon1{"түштөн кийин"}
                         evening1{"кечкурун"}
-                        morning1{"эртең менен"}
                         night1{"түн"}
                     }
                     wide{
@@ -748,11 +690,9 @@ ky{
             }
             relativeTime{
                 future{
-                    one{"{0} күндөн кийин"}
                     other{"{0} күндөн кийин"}
                 }
                 past{
-                    one{"{0} күн мурун"}
                     other{"{0} күн мурун"}
                 }
             }
@@ -785,11 +725,9 @@ ky{
             }
             relativeTime{
                 future{
-                    one{"{0} жумадан кийин"}
                     other{"{0} жумадан кийин"}
                 }
                 past{
-                    one{"{0} жума мурун"}
                     other{"{0} жума мурун"}
                 }
             }
@@ -831,11 +769,9 @@ ky{
             }
             relativeTime{
                 future{
-                    one{"{0} сааттан кийин"}
                     other{"{0} сааттан кийин"}
                 }
                 past{
-                    one{"{0} саат мурун"}
                     other{"{0} саат мурун"}
                 }
             }
@@ -872,11 +808,9 @@ ky{
             }
             relativeTime{
                 future{
-                    one{"{0} мүнөттөн кийин"}
                     other{"{0} мүнөттөн кийин"}
                 }
                 past{
-                    one{"{0} мүнөт мурун"}
                     other{"{0} мүнөт мурун"}
                 }
             }
@@ -915,11 +849,9 @@ ky{
             }
             relativeTime{
                 future{
-                    one{"{0} дүйшөмбүдөн кийин"}
                     other{"{0} дүйшөмбүдөн кийин"}
                 }
                 past{
-                    one{"{0} дүйшөмбү мурун"}
                     other{"{0} дүйшөмбү мурун"}
                 }
             }
@@ -967,11 +899,9 @@ ky{
             }
             relativeTime{
                 future{
-                    one{"{0} айдан кийин"}
                     other{"{0} айдан кийин"}
                 }
                 past{
-                    one{"{0} ай мурун"}
                     other{"{0} ай мурун"}
                 }
             }
@@ -1005,11 +935,9 @@ ky{
             }
             relativeTime{
                 future{
-                    one{"{0} чейректен кийин"}
                     other{"{0} чейректен кийин"}
                 }
                 past{
-                    one{"{0} чейрек мурун"}
                     other{"{0} чейрек мурун"}
                 }
             }
@@ -1024,11 +952,6 @@ ky{
         }
         quarter-short{
             dn{"чейр."}
-            relative{
-                "-1"{"акыркы чейр."}
-                "0"{"бул чейр."}
-                "1"{"кийинки чейр."}
-            }
             relativeTime{
                 past{
                     one{"{0} чейр. мурун"}
@@ -1044,11 +967,9 @@ ky{
             }
             relativeTime{
                 future{
-                    one{"{0} ишембиден кийин"}
                     other{"{0} ишембиден кийин"}
                 }
                 past{
-                    one{"{0} ишемби мурун"}
                     other{"{0} ишемби мурун"}
                 }
             }
@@ -1077,11 +998,9 @@ ky{
             }
             relativeTime{
                 future{
-                    one{"{0} секунддан кийин"}
                     other{"{0} секунддан кийин"}
                 }
                 past{
-                    one{"{0} секунд мурун"}
                     other{"{0} секунд мурун"}
                 }
             }
@@ -1119,11 +1038,9 @@ ky{
             }
             relativeTime{
                 future{
-                    one{"{0} жекшембиден кийин"}
                     other{"{0} жекшембиден кийин"}
                 }
                 past{
-                    one{"{0} жекшемби мурун"}
                     other{"{0} жекшемби мурун"}
                 }
             }
@@ -1153,11 +1070,9 @@ ky{
             }
             relativeTime{
                 future{
-                    one{"{0} бейшембиден кийин"}
                     other{"{0} бейшембиден кийин"}
                 }
                 past{
-                    one{"{0} бейшемби мурун"}
                     other{"{0} бейшемби мурун"}
                 }
             }
@@ -1204,11 +1119,9 @@ ky{
             }
             relativeTime{
                 future{
-                    one{"{0} шейшембиден кийин"}
                     other{"{0} шейшембиден кийин"}
                 }
                 past{
-                    one{"{0} шейшемби мурун"}
                     other{"{0} шейшемби мурун"}
                 }
             }
@@ -1238,11 +1151,9 @@ ky{
             }
             relativeTime{
                 future{
-                    one{"{0} шаршембиден кийин"}
                     other{"{0} шаршембиден кийин"}
                 }
                 past{
-                    one{"{0} шаршемби мурун"}
                     other{"{0} шаршемби мурун"}
                 }
             }
@@ -1291,11 +1202,9 @@ ky{
             relativePeriod{"{0} апта ичинде"}
             relativeTime{
                 future{
-                    one{"{0} аптадан кийин"}
                     other{"{0} аптадан кийин"}
                 }
                 past{
-                    one{"{0} апта мурун"}
                     other{"{0} апта мурун"}
                 }
             }
@@ -1336,11 +1245,9 @@ ky{
             }
             relativeTime{
                 future{
-                    one{"{0} жылдан кийин"}
                     other{"{0} жылдан кийин"}
                 }
                 past{
-                    one{"{0} жыл мурун"}
                     other{"{0} жыл мурун"}
                 }
             }
@@ -1388,19 +1295,6 @@ ky{
             lenient{
                 "[\\- ‑ . /]",
                 "[\\: ∶]",
-            }
-        }
-        general{
-            lenient{
-                "[.．․﹒ 。｡︒]",
-                "['＇’ ՚ ᾽᾿ ʼ]",
-                "[%％﹪ ٪]",
-                "[‰ ؉]",
-                "[\$＄﹩]",
-                "[£￡ ₤]",
-                "[¥￥]",
-                "[₩￦]",
-                "[₹ {Rp} {Rs}₨]",
             }
         }
         number{

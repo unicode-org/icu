@@ -101,125 +101,77 @@ sl{
             patternsShort{
                 currencyFormat{
                     1000{
-                        few{"0 tis'.' ¤"}
-                        one{"0 tis'.' ¤"}
                         other{"0 tis'.' ¤"}
-                        two{"0 tis'.' ¤"}
                     }
                     10000{
-                        few{"00 tis'.' ¤"}
-                        one{"00 tis'.' ¤"}
                         other{"00 tis'.' ¤"}
-                        two{"00 tis'.' ¤"}
                     }
                     100000{
-                        few{"000 tis'.' ¤"}
-                        one{"000 tis'.' ¤"}
                         other{"000 tis'.' ¤"}
-                        two{"000 tis'.' ¤"}
                     }
                     1000000{
-                        few{"0 mio'.' ¤"}
-                        one{"0 mio'.' ¤"}
                         other{"0 mio'.' ¤"}
-                        two{"0 mio'.' ¤"}
                     }
                     10000000{
-                        few{"00 mio'.' ¤"}
-                        one{"00 mio'.' ¤"}
                         other{"00 mio'.' ¤"}
-                        two{"00 mio'.' ¤"}
                     }
                     100000000{
-                        few{"000 mio'.' ¤"}
-                        one{"000 mio'.' ¤"}
                         other{"000 mio'.' ¤"}
-                        two{"000 mio'.' ¤"}
                     }
                     1000000000{
-                        few{"0 mrd'.' ¤"}
-                        one{"0 mrd'.' ¤"}
                         other{"0 mrd'.' ¤"}
-                        two{"0 mrd'.' ¤"}
                     }
                     10000000000{
-                        few{"00 mrd'.' ¤"}
-                        one{"00 mrd'.' ¤"}
                         other{"00 mrd'.' ¤"}
-                        two{"00 mrd'.' ¤"}
                     }
                     100000000000{
-                        few{"000 mrd'.' ¤"}
-                        one{"000 mrd'.' ¤"}
                         other{"000 mrd'.' ¤"}
-                        two{"000 mrd'.' ¤"}
                     }
                     1000000000000{
-                        few{"0 bil'.' ¤"}
-                        one{"0 bil'.' ¤"}
                         other{"0 bil'.' ¤"}
-                        two{"0 bil'.' ¤"}
                     }
                     10000000000000{
-                        few{"00 bil'.' ¤"}
-                        one{"00 bil'.' ¤"}
                         other{"00 bil'.' ¤"}
-                        two{"00 bil'.' ¤"}
                     }
                     100000000000000{
-                        few{"000 bil'.' ¤"}
-                        one{"000 bil'.' ¤"}
                         other{"000 bil'.' ¤"}
-                        two{"000 bil'.' ¤"}
                     }
                 }
                 decimalFormat{
                     1000{
-                        one{"0 tis'.'"}
                         other{"0 tis'.'"}
                     }
                     10000{
-                        one{"00 tis'.'"}
                         other{"00 tis'.'"}
                     }
                     100000{
-                        one{"000 tis'.'"}
                         other{"000 tis'.'"}
                     }
                     1000000{
-                        one{"0 mio'.'"}
                         other{"0 mio'.'"}
                     }
                     10000000{
-                        one{"00 mio'.'"}
                         other{"00 mio'.'"}
                     }
                     100000000{
-                        one{"000 mio'.'"}
                         other{"000 mio'.'"}
                     }
                     1000000000{
-                        one{"0 mrd'.'"}
                         other{"0 mrd'.'"}
                     }
                     10000000000{
-                        one{"00 mrd'.'"}
                         other{"00 mrd'.'"}
                     }
                     100000000000{
-                        one{"000 mrd'.'"}
                         other{"000 mrd'.'"}
                     }
                     1000000000000{
-                        one{"0 bil'.'"}
                         other{"0 bil'.'"}
                     }
                     10000000000000{
-                        one{"00 bil'.'"}
                         other{"00 bil'.'"}
                     }
                     100000000000000{
-                        one{"000 bil'.'"}
                         other{"000 bil'.'"}
                     }
                 }
@@ -258,19 +210,6 @@ sl{
         minimumGroupingDigits{"2"}
     }
     calendar{
-        buddhist{
-            eras{
-                abbreviated{
-                    0{"bud. kol."}
-                }
-                narrow{
-                    0{"BK"}
-                }
-                wide{
-                    0{"budistični koledar"}
-                }
-            }
-        }
         generic{
             DateTimePatterns{
                 "HH:mm:ss zzzz",
@@ -298,16 +237,6 @@ sl{
                 "{1} 'ob' {0}",
                 "{1}, {0}",
                 "{1}, {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEdd",
-                "GyMMMMdd",
-                "GyMMMd",
-                "GGGGGyyMMd",
             }
             availableFormats{
                 EBh{"E, h B"}
@@ -420,24 +349,6 @@ sl{
                     d{"d.–d."}
                 }
                 fallback{"{0}–{1}"}
-                h{
-                    a{"h a – h a"}
-                    h{"h–h a"}
-                }
-                hm{
-                    a{"h:mm a – h:mm a"}
-                    h{"h:mm–h:mm a"}
-                    m{"h:mm–h:mm a"}
-                }
-                hmv{
-                    a{"h:mm a – h:mm a v"}
-                    h{"h:mm–h:mm a v"}
-                    m{"h:mm–h:mm a v"}
-                }
-                hv{
-                    a{"h a – h a v"}
-                    h{"h–h a v"}
-                }
                 y{
                     y{"y–y"}
                 }
@@ -511,16 +422,6 @@ sl{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "yMMMMEEEEdd",
-                "yMMMMdd",
-                "yMMMd",
-                "yyMMd",
-            }
             appendItems{
                 Date-Timezone{"{0} ({1})"}
                 Day-Of-Week{"{1}, {0}"}
@@ -550,10 +451,7 @@ sl{
                 MMMEd{"E, d. MMM"}
                 MMMMEd{"E, d. MMMM"}
                 MMMMW{
-                    few{"MMMM: W. 'teden'"}
-                    one{"MMMM: W. 'teden'"}
                     other{"MMMM: W. 'teden'"}
-                    two{"MMMM: W. 'teden'"}
                 }
                 MMMMd{"d. MMMM"}
                 MMMd{"d. MMM"}
@@ -575,10 +473,7 @@ sl{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    few{"w. 'teden' 'leta' Y"}
-                    one{"w. 'teden' 'leta' Y"}
                     other{"w. 'teden' 'leta' Y"}
-                    two{"w. 'teden' 'leta' Y"}
                 }
             }
             dayNames{
@@ -640,17 +535,14 @@ sl{
                         midnight{"opolnoči"}
                         morning1{"zjutraj"}
                         morning2{"dopoldan"}
-                        night1{"ponoči"}
                         noon{"opoldne"}
                     }
                 }
                 stand-alone{
                     abbreviated{
-                        afternoon1{"pop."}
                         evening1{"več."}
                         midnight{"poln."}
                         morning1{"jut."}
-                        morning2{"dop."}
                         night1{"noč"}
                         noon{"pold."}
                     }
@@ -672,7 +564,6 @@ sl{
                         midnight{"polnoč"}
                         morning1{"jutro"}
                         morning2{"dopoldne"}
-                        night1{"noč"}
                         noon{"poldne"}
                         pm{"popoldne"}
                     }
@@ -904,14 +795,6 @@ sl{
                 }
             }
         }
-        roc{
-            eras{
-                abbreviated{
-                    0{"pred RK"}
-                    1{"Minguo koledar"}
-                }
-            }
-        }
     }
     characterLabel{
         activities{"dejavnosti"}
@@ -1016,13 +899,11 @@ sl{
             }
             relativeTime{
                 future{
-                    few{"čez {0} dni"}
                     one{"čez {0} dan"}
                     other{"čez {0} dni"}
                     two{"čez {0} dneva"}
                 }
                 past{
-                    few{"pred {0} dnevi"}
                     one{"pred {0} dnevom"}
                     other{"pred {0} dnevi"}
                     two{"pred {0} dnevoma"}
@@ -1052,7 +933,6 @@ sl{
                     two{"čez {0} petka"}
                 }
                 past{
-                    few{"pred {0} petki"}
                     one{"pred {0} petkom"}
                     other{"pred {0} petki"}
                     two{"pred {0} petkoma"}
@@ -1062,7 +942,6 @@ sl{
         fri-narrow{
             relative{
                 "-1"{"prejš. pet."}
-                "0"{"ta pet."}
                 "1"{"nasl. pet."}
             }
         }
@@ -1100,7 +979,6 @@ sl{
                     two{"čez {0} uri"}
                 }
                 past{
-                    few{"pred {0} urami"}
                     one{"pred {0} uro"}
                     other{"pred {0} urami"}
                     two{"pred {0} urama"}
@@ -1137,7 +1015,6 @@ sl{
                     two{"čez {0} minuti"}
                 }
                 past{
-                    few{"pred {0} minutami"}
                     one{"pred {0} minuto"}
                     other{"pred {0} minutami"}
                     two{"pred {0} minutama"}
@@ -1192,7 +1069,6 @@ sl{
                     two{"čez {0} ponedeljka"}
                 }
                 past{
-                    few{"pred {0} ponedeljki"}
                     one{"pred {0} ponedeljkom"}
                     other{"pred {0} ponedeljki"}
                     two{"pred {0} ponedeljkoma"}
@@ -1202,7 +1078,6 @@ sl{
         mon-narrow{
             relative{
                 "-1"{"prejš. pon."}
-                "0"{"ta pon."}
                 "1"{"nasl. pon."}
             }
         }
@@ -1242,7 +1117,6 @@ sl{
                     two{"čez {0} meseca"}
                 }
                 past{
-                    few{"pred {0} meseci"}
                     one{"pred {0} mesecem"}
                     other{"pred {0} meseci"}
                     two{"pred {0} mesecema"}
@@ -1252,7 +1126,6 @@ sl{
         month-narrow{
             relative{
                 "-1"{"prej. mes."}
-                "0"{"ta mes."}
                 "1"{"nasl. mes."}
             }
         }
@@ -1293,7 +1166,6 @@ sl{
                     two{"čez {0} četrtletji"}
                 }
                 past{
-                    few{"pred {0} četrtletji"}
                     one{"pred {0} četrtletjem"}
                     other{"pred {0} četrtletji"}
                     two{"pred {0} četrtletjema"}
@@ -1348,7 +1220,6 @@ sl{
                     two{"čez {0} soboti"}
                 }
                 past{
-                    few{"pred {0} sobotami"}
                     one{"pred {0} soboto"}
                     other{"pred {0} sobotami"}
                     two{"pred {0} sobotama"}
@@ -1358,7 +1229,6 @@ sl{
         sat-narrow{
             relative{
                 "-1"{"prejš. sob."}
-                "0"{"to sob."}
                 "1"{"nasl. sob."}
             }
         }
@@ -1396,7 +1266,6 @@ sl{
                     two{"čez {0} sekundi"}
                 }
                 past{
-                    few{"pred {0} sekundami"}
                     one{"pred {0} sekundo"}
                     other{"pred {0} sekundami"}
                     two{"pred {0} sekundama"}
@@ -1437,7 +1306,6 @@ sl{
                     two{"čez {0} nedelji"}
                 }
                 past{
-                    few{"pred {0} nedeljami"}
                     one{"pred {0} nedeljo"}
                     other{"pred {0} nedeljami"}
                     two{"pred {0} nedeljama"}
@@ -1447,7 +1315,6 @@ sl{
         sun-narrow{
             relative{
                 "-1"{"prejš. ned."}
-                "0"{"to ned."}
                 "1"{"nasl. ned."}
             }
         }
@@ -1486,7 +1353,6 @@ sl{
                     two{"čez {0} četrtka"}
                 }
                 past{
-                    few{"pred {0} četrtki"}
                     one{"pred {0} četrtkom"}
                     other{"pred {0} četrtki"}
                     two{"pred {0} četrtkoma"}
@@ -1496,7 +1362,6 @@ sl{
         thu-narrow{
             relative{
                 "-1"{"prejš. čet."}
-                "0"{"ta čet."}
                 "1"{"nasl. čet."}
             }
         }
@@ -1535,7 +1400,6 @@ sl{
                     two{"čez {0} torka"}
                 }
                 past{
-                    few{"pred {0} torki"}
                     one{"pred {0} torkom"}
                     other{"pred {0} torki"}
                     two{"pred {0} torkoma"}
@@ -1545,7 +1409,6 @@ sl{
         tue-narrow{
             relative{
                 "-1"{"prejš. tor."}
-                "0"{"ta tor."}
                 "1"{"nasl. tor."}
             }
         }
@@ -1584,7 +1447,6 @@ sl{
                     two{"čez {0} sredi"}
                 }
                 past{
-                    few{"pred {0} sredami"}
                     one{"pred {0} sredo"}
                     other{"pred {0} sredami"}
                     two{"pred {0} sredama"}
@@ -1594,7 +1456,6 @@ sl{
         wed-narrow{
             relative{
                 "-1"{"prejš. sre."}
-                "0"{"to sre."}
                 "1"{"nasl. sre."}
             }
         }
@@ -1635,7 +1496,6 @@ sl{
                     two{"čez {0} tedna"}
                 }
                 past{
-                    few{"pred {0} tedni"}
                     one{"pred {0} tednom"}
                     other{"pred {0} tedni"}
                     two{"pred {0} tednoma"}
@@ -1645,7 +1505,6 @@ sl{
         week-narrow{
             relative{
                 "-1"{"prej. ted."}
-                "0"{"ta ted."}
                 "1"{"nasl. ted."}
             }
         }
@@ -1704,7 +1563,6 @@ sl{
                     two{"čez {0} leti"}
                 }
                 past{
-                    few{"pred {0} leti"}
                     one{"pred {0} letom"}
                     other{"pred {0} leti"}
                     two{"pred {0} letoma"}
@@ -1713,8 +1571,6 @@ sl{
         }
         year-narrow{
             relative{
-                "-1"{"lani"}
-                "0"{"letos"}
                 "1"{"nasl. l."}
             }
             relativeTime{
@@ -1726,23 +1582,17 @@ sl{
                 }
                 past{
                     few{"pred {0} l."}
-                    one{"pred {0} l."}
                     other{"pred {0} l."}
-                    two{"pred {0} l."}
                 }
             }
         }
         year-short{
             relative{
-                "-1"{"lani"}
-                "0"{"letos"}
                 "1"{"nasl. leto"}
             }
             relativeTime{
                 past{
-                    few{"pred {0} leti"}
                     one{"pred {0} l."}
-                    other{"pred {0} leti"}
                     two{"pred {0} l."}
                 }
             }

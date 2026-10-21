@@ -23,10 +23,6 @@ sw_CD{
             "MGA",
             "Ariary ya Bukini",
         }
-        MRO{
-            "MRO",
-            "Ugwiya ya Moritania (1973–2017)",
-        }
         MRU{
             "MRU",
             "Ugwiya ya Moritania",

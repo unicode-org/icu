@@ -307,19 +307,15 @@ af{
         }
         "meta:Africa_Central"{
             ls{"Sentraal-Afrika-tyd"}
-            ss{"CAT"}
         }
         "meta:Africa_Eastern"{
             ls{"Oos-Afrika-tyd"}
-            ss{"EAT"}
         }
         "meta:Africa_Southern"{
             ls{"Suid-Afrika-standaardtyd"}
-            ss{"SAST"}
         }
         "meta:Africa_Western"{
             ls{"Wes-Afrika-tyd"}
-            ss{"WAT"}
         }
         "meta:Alaska"{
             ld{"Alaska-dagligtyd"}
@@ -350,11 +346,6 @@ af{
             ld{"Pasifiese dagligtyd"}
             lg{"Pasifiese tyd"}
             ls{"Pasifiese standaardtyd"}
-        }
-        "meta:Anadyr"{
-            ld{"Anadyr-somertyd"}
-            lg{"Anadyr-tyd"}
-            ls{"Anadyr-standaardtyd"}
         }
         "meta:Apia"{
             ld{"Apia-somertyd"}

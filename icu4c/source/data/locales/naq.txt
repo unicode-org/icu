@@ -65,16 +65,6 @@ naq{
                 "{1} {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yMMdd",
-            }
             availableFormats{
                 MEd{"E, M/d"}
                 MMMEd{"E, MMM d"}
@@ -202,9 +192,7 @@ naq{
         day{
             dn{"Tsees"}
             relative{
-                "-1"{"yesterday"}
                 "0"{"Neetsee"}
-                "1"{"tomorrow"}
             }
         }
         dayperiod{

@@ -13,82 +13,11 @@ en_AE{
                 "d MMMM r(U)",
                 "d MMM r",
                 "dd/MM/r",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-            }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "rMMMMEEEEd",
-                "rMMMMd",
-                "rMMMd",
-                "rMMdd",
-            }
-            availableFormats{
-                Ed{"E d"}
-                GyMMMEd{"E, d MMM r(U)"}
-                GyMMMd{"d MMM r"}
-                M{"LL"}
-                MEd{"E, dd/MM"}
-                MMMEd{"E, d MMM"}
-                MMMMd{"d MMMM"}
-                MMMd{"d MMM"}
-                Md{"dd/MM"}
-                UMMMd{"d MMM U"}
-                UMd{"dd/MM/U"}
-                yMd{"dd/MM/r"}
-                yyyyM{"MM/r"}
-                yyyyMEd{"E, dd/MM/r"}
-                yyyyMMMEd{"E, d MMM r(U)"}
-                yyyyMMMd{"d MMM r"}
-                yyyyMd{"dd/MM/r"}
-            }
-            intervalFormats{
-                MEd{
-                    M{"E dd/MM – E dd/MM"}
-                    d{"E dd/MM – E dd/MM"}
-                }
-                MMMEd{
-                    M{"E d MMM – E d MMM"}
-                    d{"E d – E d MMM"}
-                }
-                MMMd{
-                    M{"d MMM – d MMM"}
-                    d{"d – d MMM"}
-                }
-                Md{
-                    M{"dd/MM – dd/MM"}
-                    d{"dd/MM – dd/MM"}
-                }
-                yM{
-                    M{"MM/y – MM/y"}
-                    y{"MM/y – MM/y"}
-                }
-                yMEd{
-                    M{"E, dd/MM/y – E, dd/MM/y"}
-                    d{"E, dd/MM/y – E, dd/MM/y"}
-                    y{"E, dd/MM/y – E, dd/MM/y"}
-                }
-                yMMMEd{
-                    M{"E, d MMM – E, d MMM U"}
-                    d{"E, d – E, d MMM U"}
-                    y{"E, d MMM U – E, d MMM U"}
-                }
-                yMMMd{
-                    M{"d MMM – d MMM U"}
-                    d{"d – d MMM U"}
-                    y{"d MMM U – d MMM U"}
-                }
-                yMd{
-                    M{"dd/MM/y – dd/MM/y"}
-                    d{"dd/MM/y – dd/MM/y"}
-                    y{"dd/MM/y – dd/MM/y"}
-                }
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
             }
         }
         generic{
@@ -106,16 +35,6 @@ en_AE{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
-            }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMMd",
-                "GGGGGyMMdd",
             }
             availableFormats{
                 EBhm{"E, h:mm B"}
@@ -197,16 +116,6 @@ en_AE{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
-            }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yMMdd",
             }
             availableFormats{
                 EBhm{"E, h:mm B"}

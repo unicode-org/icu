@@ -14,7 +14,6 @@ su{
             symbols{
                 decimal{","}
                 group{"."}
-                timeSeparator{"."}
             }
         }
     }
@@ -41,16 +40,6 @@ su{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "Hmmsszzzz",
-                "Hmmssz",
-                "Hmmss",
-                "Hmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMMd",
-                "GGGGGyMd",
-            }
         }
         gregorian{
             DateTimePatterns{
@@ -73,16 +62,6 @@ su{
                 "{1} 'jam' {0}",
                 "{1}, {0}",
                 "{1}, {0}",
-            }
-            DateTimeSkeletons{
-                "Hmmsszzzz",
-                "Hmmssz",
-                "Hmmss",
-                "Hmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yyMd",
             }
             availableFormats{
                 Bhm{"h.mm B"}

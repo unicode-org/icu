@@ -214,10 +214,6 @@ th{
             becquerel{
                 other{"{0} เบ็กเคอเรล"}
             }
-            british-thermal-unit{
-                dnam{"หน่วยความร้อนอังกฤษ"}
-                other{"{0} หน่วยความร้อนอังกฤษ"}
-            }
             calorie-it{
                 dnam{"แคลอรี [IT]"}
                 other{"{0} แคลอรี [IT]"}
@@ -304,14 +300,8 @@ th{
                 dnam{"รัศมีของโลก"}
                 other{"{0} รัศมีของโลก"}
             }
-            fathom{
-                other{"{0} ฟาทอม"}
-            }
             foot{
                 per{"{0} ต่อฟุต"}
-            }
-            furlong{
-                other{"{0} เฟอร์ลอง"}
             }
             inch{
                 per{"{0} ต่อนิ้ว"}
@@ -394,9 +384,6 @@ th{
             solar-mass{
                 other{"{0} มวลดวงอาทิตย์"}
             }
-            stone{
-                other{"{0} สโตน"}
-            }
             tonne{
                 dnam{"เมตริกตัน"}
                 other{"{0} เมตริกตัน"}
@@ -466,9 +453,6 @@ th{
         volume{
             barrel{
                 other{"{0} บาร์เรล"}
-            }
-            bushel{
-                other{"{0} บุชเชล"}
             }
             centiliter{
                 dnam{"เซนติลิตร"}
@@ -787,9 +771,6 @@ th{
             }
         }
         energy{
-            british-thermal-unit{
-                other{"{0}BTU"}
-            }
             calorie{
                 other{"{0}แคลอรี"}
             }
@@ -891,14 +872,8 @@ th{
             earth-radius{
                 other{"{0}R⊕"}
             }
-            fathom{
-                other{"{0}fth"}
-            }
             foot{
                 other{"{0}′"}
-            }
-            furlong{
-                other{"{0}fur"}
             }
             inch{
                 other{"{0}″"}
@@ -1009,9 +984,6 @@ th{
             solar-mass{
                 dnam{"M☉"}
                 other{"{0}M☉"}
-            }
-            stone{
-                other{"{0}st"}
             }
             ton{
                 other{"{0}ตัน"}
@@ -1124,9 +1096,6 @@ th{
             barrel{
                 dnam{"bbl"}
                 other{"{0}bbl"}
-            }
-            bushel{
-                other{"{0}bu"}
             }
             centiliter{
                 other{"{0}ซล."}
@@ -1533,10 +1502,6 @@ th{
                 dnam{"เบ็กเคอเรล"}
                 other{"{0} Bq"}
             }
-            british-thermal-unit{
-                dnam{"บีทียู"}
-                other{"{0} BTU"}
-            }
             calorie{
                 dnam{"แคลอรี"}
                 other{"{0} แคลอรี"}
@@ -1625,16 +1590,10 @@ th{
                 dnam{"ดม."}
                 other{"{0} ดม."}
             }
-            fathom{
-                dnam{"ฟาทอม"}
-            }
             foot{
                 dnam{"ฟุต"}
                 other{"{0} ฟุต"}
                 per{"{0}/ฟุต"}
-            }
-            furlong{
-                dnam{"เฟอร์ลอง"}
             }
             inch{
                 dnam{"นิ้ว"}
@@ -1766,9 +1725,6 @@ th{
             solar-mass{
                 dnam{"มวลดวงอาทิตย์"}
             }
-            stone{
-                dnam{"สโตน"}
-            }
             ton{
                 dnam{"ตัน"}
                 other{"{0} ตัน"}
@@ -1874,9 +1830,6 @@ th{
             }
             barrel{
                 dnam{"บาร์เรล"}
-            }
-            bushel{
-                dnam{"บุชเชล"}
             }
             centiliter{
                 dnam{"ซล."}

@@ -17,11 +17,6 @@ nqo{
             }
         }
         native{"nkoo"}
-        nkoo{
-            symbols{
-                group{"،"}
-            }
-        }
     }
     calendar{
         gregorian{
@@ -97,10 +92,6 @@ nqo{
                 abbreviated{
                     0{"ߌߛ. ߡ. ߢߍ߫"}
                     1{"ߌߛ. ߡ. ߞߐ߫"}
-                }
-                narrow{
-                    0{"ߌߛ. ߢߍ߫"}
-                    1{"ߌߛ. ߞߐ߫"}
                 }
                 wide{
                     0{"ߌߛߊ߫ ߡߏߦߌ ߢߍ߫"}
@@ -195,58 +186,26 @@ nqo{
             }
         }
         day-narrow{
-            dn{"ߟߏ߲"}
-            relative{
-                "-1"{"ߞߎߣߎ߲߬"}
-                "0"{"ߓߌ߬"}
-                "1"{"ߛߌߣߌ߲߫"}
-            }
             relativeTime{
                 past{
                     other{"ߊ߬ ߟߐ߯ߕߍ߫ {0} ߟߋ߫ ߣߌ߲߬"}
                 }
             }
         }
-        day-short{
-            dn{"ߟߏ߲"}
-            relative{
-                "-1"{"ߞߎߣߎ߲߬"}
-                "0"{"ߓߌ߬"}
-                "1"{"ߛߌߣߌ߲߫"}
-            }
-        }
         dayperiod{
-            dn{"ߛ/ߥ"}
-        }
-        dayperiod-narrow{
-            dn{"ߛ/ߥ"}
-        }
-        dayperiod-short{
             dn{"ߛ/ߥ"}
         }
         era{
             dn{"ߕߎ߬ߡߊ"}
         }
-        era-narrow{
-            dn{"ߕߎ߬ߡߊ"}
-        }
-        era-short{
-            dn{"ߕߎ߬ߡߊ"}
-        }
         hour{
             dn{"ߕߎ߬ߡߊ߬ߙߋ߲"}
-        }
-        hour-narrow{
-            dn{"ߕ."}
         }
         hour-short{
             dn{"ߕ."}
         }
         minute{
             dn{"ߡߌ߬ߛߍ߲"}
-        }
-        minute-narrow{
-            dn{"ߡ."}
         }
         minute-short{
             dn{"ߡ."}
@@ -260,19 +219,13 @@ nqo{
             }
         }
         month-narrow{
-            dn{"ߞߊߙߏ"}
             relative{
                 "-1"{"ߞߊߙߏ߫ ߕߊ߬ߡߌ߲߬ߣߍ߲"}
-                "0"{"ߞߊߙߏ ߣߌ߲߬"}
-                "1"{"ߞߊߙߏ߫ ߣߊ߬ߕߐ"}
             }
         }
         month-short{
-            dn{"ߞߊߙߏ"}
             relative{
                 "-1"{"ߞߊߙߏ߫ ߕߊߡߌ߲߬ߣߍ߲"}
-                "0"{"ߞߊߙߏ ߣߌ߲߬"}
-                "1"{"ߞߊߙߏ߫ ߣߊ߬ߕߐ"}
             }
         }
         quarter{
@@ -280,9 +233,6 @@ nqo{
         }
         second{
             dn{"ߝߌ߬ߟߊ߲"}
-        }
-        second-narrow{
-            dn{"ߝ."}
         }
         second-short{
             dn{"ߝ."}
@@ -296,19 +246,9 @@ nqo{
             }
         }
         week-narrow{
-            relative{
-                "-1"{"ߟߐ߯ߕߍ߫ ߕߊ߬ߡߌ߲߬ߣߍ߲"}
-                "0"{"ߟߐ߯ߕߍ ߣߌ߲߬"}
-                "1"{"ߟߐ߯ߕߍ߫ ߣߊ߬ߕߐ"}
-            }
             relativePeriod{"ߞߊ߬ߓߐ߫ ߟߐ߯ߕߍ {0}"}
         }
         week-short{
-            relative{
-                "-1"{"ߟߐ߯ߕߍ߫ ߕߊ߬ߡߌ߲߬ߣߍ߲"}
-                "0"{"ߟߐ߯ߕߍ ߣߌ߲߬"}
-                "1"{"ߟߐ߯ߕߍ߫ ߣߊ߬ߕߐ"}
-            }
             relativePeriod{"ߞߊ߬ ߓߐ߫ ߟߐ߯ߕߍ߫ {0}"}
         }
         weekday{
@@ -323,27 +263,20 @@ nqo{
             }
         }
         year-narrow{
-            dn{"ߛߊ߲߭"}
             relative{
                 "-1"{"ߛߊ߲߬ߘߐ߫"}
-                "0"{"ߢߌ߬ߣߊ߲߬"}
                 "1"{"ߛߊ߲߬ߘߐ߫"}
             }
         }
         year-short{
-            dn{"ߛߊ߲߭"}
             relative{
                 "-1"{"ߛߊ߲߬ ߕߊ߬ߡߌ߲߬ߣߍ߲"}
-                "0"{"ߢߌ߬ߣߊ߲߬"}
                 "1"{"ߛߊ߲߬ߘߐ"}
             }
         }
         zone{
             dn{"ߝߊ߲߬ߕߙߊ߬ ߕߎߡߊ"}
         }
-    }
-    layout{
-        characters{"right-to-left"}
     }
     measurementSystemNames{
         UK{"ߓߙߌߕߊ߲ߓߊ߫ ߡߊ߲߬ߛߊ߬ߟߊ (ߓ.ߡ.)"}

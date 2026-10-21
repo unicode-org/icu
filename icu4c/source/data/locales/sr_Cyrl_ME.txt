@@ -22,13 +22,9 @@ sr_Cyrl_ME{
             }
             availableFormats{
                 MMMMW{
-                    few{"W. 'сједмица' 'у' MMMM"}
-                    one{"W. 'сједмица' 'у' MMMM"}
                     other{"W. 'сједмица' 'у' MMMM"}
                 }
                 yw{
-                    few{"w. 'сједмица' 'у' Y."}
-                    one{"w. 'сједмица' 'у' Y."}
                     other{"w. 'сједмица' 'у' Y."}
                 }
             }
@@ -50,18 +46,10 @@ sr_Cyrl_ME{
                     abbreviated{
                         afternoon1{"по под."}
                         evening1{"вече"}
-                        midnight{"поноћ"}
                         morning1{"јутро"}
-                        night1{"ноћу"}
-                        noon{"подне"}
                     }
                     narrow{
-                        afternoon1{"по под."}
-                        evening1{"вече"}
-                        midnight{"поноћ"}
-                        morning1{"јутро"}
                         night1{"ноћ"}
-                        noon{"подне"}
                     }
                 }
                 stand-alone{

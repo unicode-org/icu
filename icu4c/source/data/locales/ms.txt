@@ -187,16 +187,6 @@ ms{
                 "{1} {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "rMMMMEEEEd",
-                "rMMMMd",
-                "rMMMd",
-                "rMd",
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -287,16 +277,6 @@ ms{
                 "{1} 'pada' {0}",
                 "{1} {0}",
                 "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMdd",
-                "GGGGGyMMd",
             }
             availableFormats{
                 Ed{"E, d"}
@@ -393,16 +373,6 @@ ms{
                     M{"d/M – d/M"}
                     d{"d/M – d/M"}
                 }
-                hm{
-                    a{"h:mm a – h:mm a"}
-                    h{"h:mm–h:mm a"}
-                    m{"h:mm–h:mm a"}
-                }
-                hmv{
-                    a{"h:mm a – h:mm a v"}
-                    h{"h:mm–h:mm a v"}
-                    m{"h:mm–h:mm a v"}
-                }
                 y{
                     y{"y–y G"}
                 }
@@ -471,16 +441,6 @@ ms{
                 "{1} 'pada' {0}",
                 "{1}, {0}",
                 "{1}, {0}",
-            }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yyMMd",
             }
             availableFormats{
                 Ed{"d E"}
@@ -576,27 +536,15 @@ ms{
                         night1{"malam"}
                     }
                     wide{
-                        afternoon1{"tengah hari"}
-                        evening1{"petang"}
                         morning1{"tengah malam"}
-                        morning2{"pagi"}
-                        night1{"malam"}
                     }
                 }
                 stand-alone{
                     abbreviated{
-                        afternoon1{"tengah hari"}
-                        evening1{"petang"}
                         morning1{"tengah malam"}
-                        morning2{"pagi"}
-                        night1{"malam"}
                     }
                     narrow{
-                        afternoon1{"tengah hari"}
-                        evening1{"petang"}
                         morning1{"pagi"}
-                        morning2{"pagi"}
-                        night1{"malam"}
                     }
                 }
             }
@@ -775,26 +723,6 @@ ms{
                 }
             }
         }
-        hebrew{
-            DateTimePatterns{
-                "h:mm:ss a zzzz",
-                "h:mm:ss a z",
-                "h:mm:ss a",
-                "h:mm a",
-                "EEEE, d MMMM y G",
-                "d MMMM y G",
-                "dd/MM/y G",
-                "d/MM/y GGGGG",
-                "{1}, {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-            }
-            availableFormats{
-                y{"y"}
-            }
-        }
         islamic{
             availableFormats{
                 yyyyM{"M/y GGGGG"}
@@ -804,9 +732,6 @@ ms{
             eras{
                 abbreviated{
                     0{"H"}
-                }
-                wide{
-                    0{"AH"}
                 }
             }
             monthNames{
@@ -839,13 +764,6 @@ ms{
                         "Zulkaedah",
                         "Zulhijah",
                     }
-                }
-            }
-        }
-        roc{
-            eras{
-                wide{
-                    0{"Sebelum R.O.C"}
                 }
             }
         }
@@ -958,8 +876,6 @@ ms{
         day-narrow{
             relative{
                 "-1"{"semlm"}
-                "0"{"hari ini"}
-                "1"{"esok"}
             }
         }
         day-short{
@@ -1158,11 +1074,6 @@ ms{
         }
         quarter-short{
             dn{"suku"}
-            relative{
-                "-1"{"suku lepas"}
-                "0"{"suku ini"}
-                "1"{"suku seterusnya"}
-            }
             relativeTime{
                 future{
                     other{"dlm {0} suku thn"}

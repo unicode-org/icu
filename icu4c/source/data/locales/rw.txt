@@ -47,7 +47,6 @@ rw{
                 MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
                 Md{"dd/MM"}
-                h{"h a"}
                 hmv{"h:mm a v"}
                 yM{"MM/y"}
                 yMEd{"E, dd/MM/y"}
@@ -154,7 +153,6 @@ rw{
                     d{"dd/MM – dd/MM"}
                 }
                 h{
-                    a{"h a – h a"}
                     h{"h – h a"}
                 }
                 hm{

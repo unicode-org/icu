@@ -42,7 +42,6 @@ doi{
     }
     CurrencyPlurals{
         XXX{
-            one{"(अनजांती करंसी)"}
             other{"(अनजांती करंसी)"}
         }
     }

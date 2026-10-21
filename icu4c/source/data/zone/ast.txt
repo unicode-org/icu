@@ -21,9 +21,6 @@ ast{
         "Africa:Khartoum"{
             ec{"Ḥartum"}
         }
-        "Africa:Lome"{
-            ec{"Lomé"}
-        }
         "Africa:Mogadishu"{
             ec{"Mogadixu"}
         }
@@ -51,29 +48,14 @@ ast{
         "America:Anguilla"{
             ec{"Anguila"}
         }
-        "America:Argentina:Tucuman"{
-            ec{"Tucumán"}
-        }
-        "America:Asuncion"{
-            ec{"Asunción"}
-        }
         "America:Bahia"{
             ec{"Bahía"}
         }
         "America:Bahia_Banderas"{
             ec{"Bahía Banderas"}
         }
-        "America:Bogota"{
-            ec{"Bogotá"}
-        }
         "America:Cayman"{
             ec{"Caimán"}
-        }
-        "America:Cordoba"{
-            ec{"Córdoba"}
-        }
-        "America:Curacao"{
-            ec{"Curaçao"}
         }
         "America:Grenada"{
             ec{"Granada"}
@@ -318,9 +300,6 @@ ast{
         "Europe:Stockholm"{
             ec{"Estocolmu"}
         }
-        "Europe:Tirane"{
-            ec{"Tirana"}
-        }
         "Europe:Vatican"{
             ec{"El Vaticanu"}
         }
@@ -344,9 +323,6 @@ ast{
         }
         "Pacific:Fiji"{
             ec{"Fixi"}
-        }
-        "Pacific:Galapagos"{
-            ec{"Galápagos"}
         }
         "Pacific:Honolulu"{
             ec{"Honolulu"}
@@ -400,11 +376,6 @@ ast{
             ld{"Hora braniega del Pacíficu norteamericanu"}
             lg{"Hora del Pacíficu norteamericanu"}
             ls{"Hora estándar del Pacíficu norteamericanu"}
-        }
-        "meta:Anadyr"{
-            ld{"hora braniega d’Anadyr"}
-            lg{"hora d’Anadyr"}
-            ls{"hora estándar d’Anadyr"}
         }
         "meta:Apia"{
             ld{"Hora braniega d’Apia"}
@@ -492,9 +463,6 @@ ast{
             ld{"Hora braniega de Cabu Verde"}
             lg{"Hora de Cabu Verde"}
             ls{"Hora estándar de Cabu Verde"}
-        }
-        "meta:Casey"{
-            ls{"Hora de Casey"}
         }
         "meta:Chamorro"{
             ls{"Hora estándar de Chamorro"}
@@ -588,7 +556,6 @@ ast{
         }
         "meta:GMT"{
             ls{"Hora media de Greenwich"}
-            ss{"GMT"}
         }
         "meta:Galapagos"{
             ls{"Hora de Galápagos"}

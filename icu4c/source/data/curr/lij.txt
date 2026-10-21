@@ -78,7 +78,6 @@ lij{
     }
     CurrencyPlurals{
         AED{
-            one{"dirham di EAU"}
             other{"dirham di EAU"}
         }
         AMD{
@@ -116,10 +115,6 @@ lij{
         TRY{
             one{"lia turca"}
             other{"lie turche"}
-        }
-        XCG{
-            one{"fiorin di Caraibi"}
-            other{"fiorin di Caraibi"}
         }
         ZWG{
             one{"öo do Zimbabwe"}

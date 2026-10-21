@@ -15,9 +15,6 @@ lb{
         "Africa:Djibouti"{
             ec{"Dschibuti"}
         }
-        "Africa:El_Aaiun"{
-            ec{"El Aaiún"}
-        }
         "Africa:Khartoum"{
             ec{"Khartum"}
         }
@@ -27,17 +24,8 @@ lb{
         "Africa:Ouagadougou"{
             ec{"Wagadugu"}
         }
-        "Africa:Sao_Tome"{
-            ec{"São Tomé"}
-        }
-        "America:Asuncion"{
-            ec{"Asunción"}
-        }
         "America:Cayman"{
             ec{"Kaimaninselen"}
-        }
-        "America:Curacao"{
-            ec{"Curaçao"}
         }
         "America:El_Salvador"{
             ec{"Salvador"}
@@ -201,9 +189,6 @@ lb{
         "Europe:Rome"{
             ec{"Roum"}
         }
-        "Europe:Tirane"{
-            ec{"Tirana"}
-        }
         "Europe:Vatican"{
             ec{"Vatikan"}
         }
@@ -230,9 +215,6 @@ lb{
         }
         "Indian:Maldives"{
             ec{"Maldiven"}
-        }
-        "Indian:Reunion"{
-            ec{"Réunion"}
         }
         "Pacific:Easter"{
             ec{"Ouschterinsel"}
@@ -289,11 +271,6 @@ lb{
             ld{"Nordamerikanesch Westküsten-Summerzäit"}
             lg{"Nordamerikanesch Westküstenzäit"}
             ls{"Nordamerikanesch Westküsten-Normalzäit"}
-        }
-        "meta:Anadyr"{
-            ld{"Anadyr-Summerzäit"}
-            lg{"Anadyr-Zäit"}
-            ls{"Anadyr-Normalzäit"}
         }
         "meta:Arabian"{
             ld{"Arabesch Summerzäit"}

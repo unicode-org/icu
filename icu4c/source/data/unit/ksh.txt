@@ -451,15 +451,11 @@ ksh{
             }
             foot{
                 dnam{"Voss"}
-                one{"{0} Voss"}
                 other{"{0} Voss"}
-                zero{"{0} Voss"}
             }
             inch{
                 dnam{"Dumm"}
-                one{"{0} Dumm"}
                 other{"{0} Dumm"}
-                zero{"{0} Dumm"}
             }
             kilometer{
                 dnam{"Kilometer"}
@@ -488,21 +484,16 @@ ksh{
                 dnam{"Unzen"}
                 one{"{0} Unze"}
                 other{"{0} Unzen"}
-                zero{"{0} Unzen"}
             }
             pound{
                 dnam{"Pfund"}
-                one{"{0} Pfund"}
                 other{"{0} Pfund"}
-                zero{"{0} Pfund"}
             }
         }
         power{
             horsepower{
                 dnam{"Pferdestärken"}
-                one{"{0} PS"}
                 other{"{0} PS"}
-                zero{"{0} PS"}
             }
             kilowatt{
                 dnam{"Kilowatt"}

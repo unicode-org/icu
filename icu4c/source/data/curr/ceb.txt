@@ -678,7 +678,6 @@ ceb{
             other{"Australian dollars"}
         }
         AWG{
-            one{"Aruban florin"}
             other{"Aruban florin"}
         }
         AZN{
@@ -762,11 +761,9 @@ ceb{
             other{"Chilean pesos"}
         }
         CNH{
-            one{"Chinese yuan (offshore)"}
             other{"Chinese yuan (offshore)"}
         }
         CNY{
-            one{"Chinese yuan"}
             other{"Chinese yuan"}
         }
         COP{
@@ -918,7 +915,6 @@ ceb{
             other{"Jordanian dinars"}
         }
         JPY{
-            one{"Japanese yen"}
             other{"Japanese yen"}
         }
         KES{
@@ -938,11 +934,9 @@ ceb{
             other{"Comorian francs"}
         }
         KPW{
-            one{"North Korean won"}
             other{"North Korean won"}
         }
         KRW{
-            one{"South Korean won"}
             other{"South Korean won"}
         }
         KWD{
@@ -1074,7 +1068,6 @@ ceb{
             other{"Peruvian soles"}
         }
         PGK{
-            one{"Papua New Guinean kina"}
             other{"Papua New Guinean kina"}
         }
         PHP{
@@ -1174,7 +1167,6 @@ ceb{
             other{"Swazi emalangeni"}
         }
         THB{
-            one{"Thai baht"}
             other{"Thai baht"}
         }
         TJS{
@@ -1182,7 +1174,6 @@ ceb{
             other{"Tajikistani somonis"}
         }
         TMT{
-            one{"Turkmenistani manat"}
             other{"Turkmenistani manat"}
         }
         TND{
@@ -1190,12 +1181,10 @@ ceb{
             other{"Tunisian dinars"}
         }
         TOP{
-            one{"Tongan paʻanga"}
             other{"Tongan paʻanga"}
         }
         TRY{
             one{"Turkish lira"}
-            other{"Turkish Lira"}
         }
         TTD{
             one{"Trinidad & Tobago dollar"}
@@ -1226,7 +1215,6 @@ ceb{
             other{"Uruguayan pesos"}
         }
         UZS{
-            one{"Uzbekistani som"}
             other{"Uzbekistani som"}
         }
         VES{
@@ -1234,7 +1222,6 @@ ceb{
             other{"Venezuelan bolivars"}
         }
         VND{
-            one{"Vietnamese dong"}
             other{"Vietnamese dong"}
         }
         VUV{
@@ -1242,7 +1229,6 @@ ceb{
             other{"Vanuatu vatus"}
         }
         WST{
-            one{"Samoan tala"}
             other{"Samoan tala"}
         }
         XAF{
@@ -1270,16 +1256,11 @@ ceb{
             other{"Yemeni rials"}
         }
         ZAR{
-            one{"South African rand"}
             other{"South African rand"}
         }
         ZMW{
             one{"Zambian kwacha"}
             other{"Zambian kwachas"}
         }
-    }
-    CurrencyUnitPatterns{
-        one{"{0} {1}"}
-        other{"{0} {1}"}
     }
 }

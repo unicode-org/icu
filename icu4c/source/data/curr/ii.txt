@@ -12,7 +12,4 @@ ii{
             "ꅉꀋꐚꌠꌋꆀꎆꃀꀋꈁꀐꌠ",
         }
     }
-    CurrencyUnitPatterns{
-        other{"{0} {1}"}
-    }
 }

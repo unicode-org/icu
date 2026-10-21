@@ -45,7 +45,6 @@ ceb{
                 other{"{0} ka mga acre"}
             }
             dunam{
-                one{"{0} ka dunam"}
                 other{"{0} ka mga dunam"}
             }
             hectare{
@@ -217,12 +216,10 @@ ceb{
         digital{
             bit{
                 dnam{"mga bit"}
-                one{"{0} ka bit"}
                 other{"{0} ka mga bit"}
             }
             byte{
                 dnam{"mga byte"}
-                one{"{0} ka byte"}
                 other{"{0} ka mga byte"}
             }
             gigabit{
@@ -278,7 +275,6 @@ ceb{
                 other{"{0} ka mga siglo"}
             }
             day{
-                one{"{0} ka adlaw"}
                 other{"{0} ka mga adlaw"}
                 per{"{0} kada adlaw"}
             }
@@ -288,7 +284,6 @@ ceb{
                 other{"{0} ka mga dekada"}
             }
             hour{
-                one{"{0} ka oras"}
                 other{"{0} ka mga oras"}
                 per{"{0} kada oras"}
             }
@@ -303,12 +298,10 @@ ceb{
                 other{"{0} ka mga millisecond"}
             }
             minute{
-                one{"{0} ka minuto"}
                 other{"{0} ka mga minuto"}
                 per{"{0} kada minuto"}
             }
             month{
-                one{"{0} ka buwan"}
                 other{"{0} ka mga buwan"}
                 per{"{0} kada buwan"}
             }
@@ -323,12 +316,10 @@ ceb{
                 per{"{0} kada segundo"}
             }
             week{
-                one{"{0} ka semana"}
                 other{"{0} ka mga semana"}
                 per{"{0} kada semana"}
             }
             year{
-                one{"{0} ka tuig"}
                 other{"{0} ka mga tuig"}
                 per{"{0} kada tuig"}
             }
@@ -354,11 +345,6 @@ ceb{
             }
         }
         energy{
-            british-thermal-unit{
-                dnam{"Mga British thermal unit"}
-                one{"{0} ka British thermal unit"}
-                other{"{0} ka mga British thermal unit"}
-            }
             calorie{
                 dnam{"mga calorie"}
                 one{"{0} ka calorie"}
@@ -429,7 +415,6 @@ ceb{
         graphics{
             em{
                 dnam{"typographic em"}
-                one{"{0} ka em"}
                 other{"{0} ka mga em"}
             }
             megapixel{
@@ -678,7 +663,6 @@ ceb{
             }
             bar{
                 dnam{"mga bar"}
-                one{"{0} ka bar"}
                 other{"{0} ka mga bar"}
             }
             hectopascal{
@@ -764,7 +748,6 @@ ceb{
         torque{
             newton-meter{
                 dnam{"mga newton-meter"}
-                one{"{0} N⋅m"}
                 other{"{0} ka mga newton-meter"}
             }
             pound-force-foot{
@@ -923,7 +906,6 @@ ceb{
             }
             teaspoon{
                 dnam{"mga kutsarita"}
-                one{"{0} ka kutsarita"}
                 other{"{0} ka mga kutsarita"}
             }
         }
@@ -1049,7 +1031,6 @@ ceb{
             }
             degree{
                 dnam{"mga degree"}
-                one{"{0} deg"}
                 other{"{0} deg"}
             }
             radian{
@@ -1062,7 +1043,6 @@ ceb{
             }
             dunam{
                 dnam{"mga dunam"}
-                one{"{0} ka dunam"}
                 other{"{0} ka dunam"}
             }
             hectare{
@@ -1070,7 +1050,6 @@ ceb{
             }
             square-foot{
                 dnam{"mga sq foot"}
-                one{"{0} sq ft"}
                 other{"{0} sq ft"}
             }
             square-inch{
@@ -1081,7 +1060,6 @@ ceb{
             }
             square-mile{
                 dnam{"mga milya kwadrado"}
-                one{"{0} sq mi"}
                 other{"{0} sq mi"}
             }
             square-yard{
@@ -1114,7 +1092,6 @@ ceb{
         consumption{
             liter-per-100-kilometer{
                 dnam{"L/100 km"}
-                one{"{0} L/100 km"}
                 other{"{0} L/100 km"}
             }
             liter-per-kilometer{
@@ -1122,7 +1099,6 @@ ceb{
             }
             mile-per-gallon{
                 dnam{"mga milya/gal"}
-                one{"{0} mpg"}
                 other{"{0} mpg"}
             }
             mile-per-gallon-imperial{
@@ -1138,11 +1114,9 @@ ceb{
         }
         digital{
             bit{
-                one{"{0} ka bit"}
                 other{"{0} ka bit"}
             }
             byte{
-                one{"{0} ka byte"}
                 other{"{0} ka byte"}
             }
             gigabit{
@@ -1176,13 +1150,11 @@ ceb{
         duration{
             day{
                 dnam{"mga adlaw"}
-                one{"{0} ka adlaw"}
                 other{"{0} ka adlaw"}
                 per{"{0}/adlaw"}
             }
             hour{
                 dnam{"mga oras"}
-                one{"{0} ka oras"}
                 other{"{0} ka oras"}
                 per{"{0}/oras"}
             }
@@ -1194,13 +1166,11 @@ ceb{
             }
             minute{
                 dnam{"mga minuto"}
-                one{"{0} ka minuto"}
                 other{"{0} ka minuto"}
                 per{"{0}/minuto"}
             }
             month{
                 dnam{"mga buwan"}
-                one{"{0} ka buwan"}
                 other{"{0} ka buwan"}
                 per{"{0}/buwan"}
             }
@@ -1209,19 +1179,16 @@ ceb{
             }
             second{
                 dnam{"mga segundo"}
-                one{"{0}segundo"}
                 other{"{0}segundo"}
                 per{"{0}/segundo"}
             }
             week{
                 dnam{"mga semana"}
-                one{"{0} ka semana"}
                 other{"{0} ka semana"}
                 per{"{0}/semana"}
             }
             year{
                 dnam{"mga tuig"}
-                one{"{0} ka tuig"}
                 other{"{0} ka tuig"}
                 per{"{0}/tuig"}
             }
@@ -1241,9 +1208,6 @@ ceb{
             }
         }
         energy{
-            british-thermal-unit{
-                dnam{"BTU"}
-            }
             electronvolt{
                 dnam{"electronvolt"}
             }
@@ -1271,7 +1235,6 @@ ceb{
         }
         graphics{
             em{
-                one{"{0} ka em"}
                 other{"{0} ka em"}
             }
             megapixel{
@@ -1354,16 +1317,13 @@ ceb{
         }
         pressure{
             bar{
-                one{"{0} ka bar"}
                 other{"{0} ka bar"}
             }
             millibar{
-                one{"{0} ka mbar"}
                 other{"{0} ka mbar"}
             }
             millimeter-ofhg{
                 dnam{"mmHg"}
-                one{"{0} mmHg"}
                 other{"{0} mmHg"}
             }
         }
@@ -1376,7 +1336,6 @@ ceb{
             }
             mile-per-hour{
                 dnam{"mga milya/oras"}
-                one{"{0} mph"}
                 other{"{0} mph"}
             }
         }
@@ -1408,35 +1367,28 @@ ceb{
                 dnam{"mga tasa"}
             }
             dram{
-                one{"{0} ka dram fl"}
                 other{"{0} ka dram fl"}
             }
             drop{
-                one{"{0} ka drop"}
                 other{"{0} ka drop"}
             }
             fluid-ounce{
                 dnam{"fl oz"}
-                one{"{0} fl oz"}
                 other{"{0} fl oz"}
             }
             gallon{
                 dnam{"gal"}
-                one{"{0} gal"}
                 other{"{0} gal"}
             }
             jigger{
-                one{"{0} ka jigger"}
                 other{"{0} ka jigger"}
             }
             liter{
                 dnam{"mga litro"}
-                one{"{0} L"}
                 other{"{0} L"}
                 per{"{0}/L"}
             }
             pinch{
-                one{"{0} ka pinch"}
                 other{"{0} ka pinch"}
             }
             pint{
@@ -1447,7 +1399,6 @@ ceb{
             }
             teaspoon{
                 dnam{"kutsarita"}
-                one{"{0} ka kutsarita"}
                 other{"{0} ka kutsarita"}
             }
         }

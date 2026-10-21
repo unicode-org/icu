@@ -19,16 +19,6 @@ ee_TG{
                 "{0} {1}",
                 "{0} {1}",
             }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yyMd",
-            }
         }
     }
 }

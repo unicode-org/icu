@@ -30,16 +30,6 @@ fur{
                 "{1} {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMdd",
-                "GGGGGyyMMdd",
-            }
             availableFormats{
                 Ed{"d E"}
                 Hm{"H:mm"}
@@ -48,7 +38,6 @@ fur{
                 MMMMEd{"E d MMMM"}
                 MMMMd{"d 'di' MMMM"}
                 MMMd{"d MMM"}
-                MMd{"d/MM"}
                 Md{"d/M"}
                 y{"y"}
                 yM{"M/y"}
@@ -78,24 +67,6 @@ fur{
                 Md{
                     M{"dd/MM – dd/MM"}
                     d{"dd/MM – dd/MM"}
-                }
-                h{
-                    a{"h a – h a"}
-                    h{"h–h a"}
-                }
-                hm{
-                    a{"h:mm a – h:mm a"}
-                    h{"h:mm–h:mm a"}
-                    m{"h:mm–h:mm a"}
-                }
-                hmv{
-                    a{"h:mm a – h:mm a v"}
-                    h{"h:mm–h:mm a v"}
-                    m{"h:mm–h:mm a v"}
-                }
-                hv{
-                    a{"h a – h a v"}
-                    h{"h–h a v"}
                 }
                 y{
                     y{"y–y"}
@@ -153,16 +124,6 @@ fur{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMdd",
-                "yyMMdd",
             }
             availableFormats{
                 Ed{"d E"}
@@ -241,10 +202,6 @@ fur{
                     M{"dd/MM – dd/MM"}
                     d{"dd/MM – dd/MM"}
                 }
-                h{
-                    a{"h a – h a"}
-                    h{"h–h a"}
-                }
                 hm{
                     a{"h:mm a – h:mm a"}
                     h{"h:mm–h:mm a"}
@@ -254,10 +211,6 @@ fur{
                     a{"h:mm a – h:mm a v"}
                     h{"h:mm–h:mm a v"}
                     m{"h:mm–h:mm a v"}
-                }
-                hv{
-                    a{"h a – h a v"}
-                    h{"h–h a v"}
                 }
                 yM{
                     M{"MM/y – MM/y"}
@@ -421,11 +374,9 @@ fur{
             dn{"mês"}
             relativeTime{
                 future{
-                    one{"ca di {0} mês"}
                     other{"ca di {0} mês"}
                 }
                 past{
-                    one{"{0} mês indaûr"}
                     other{"{0} mês indaûr"}
                 }
             }

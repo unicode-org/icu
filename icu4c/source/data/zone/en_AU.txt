@@ -7,58 +7,20 @@ en_AU{
         "Pacific:Wallis"{
             ec{"Wallis and Futuna"}
         }
-        "meta:Australia_Central"{
-            sd{"ACDT"}
-            sg{"ACT"}
-            ss{"ACST"}
-        }
-        "meta:Australia_CentralWestern"{
-            sd{"ACWDT"}
-            sg{"ACWT"}
-            ss{"ACWST"}
-        }
-        "meta:Australia_Eastern"{
-            sd{"AEDT"}
-            sg{"AET"}
-            ss{"AEST"}
-        }
-        "meta:Australia_Western"{
-            sd{"AWDT"}
-            sg{"AWT"}
-            ss{"AWST"}
-        }
         "meta:China"{
             ld{"China Summer Time"}
-            lg{"China Time"}
-            ls{"China Standard Time"}
         }
         "meta:French_Southern"{
             ls{"French Southern and Antarctic Time"}
         }
         "meta:Japan"{
             ld{"Japan Summer Time"}
-            lg{"Japan Time"}
-            ls{"Japan Standard Time"}
         }
         "meta:Korea"{
             ld{"Korean Summer Time"}
-            lg{"Korean Time"}
-            ls{"Korean Standard Time"}
-        }
-        "meta:Lord_Howe"{
-            sd{"LHDT"}
-            sg{"LHT"}
-            ss{"LHST"}
-        }
-        "meta:New_Zealand"{
-            sd{"NZDT"}
-            sg{"NZT"}
-            ss{"NZST"}
         }
         "meta:Taipei"{
             ld{"Taipei Summer Time"}
-            lg{"Taiwan Time"}
-            ls{"Taiwan Standard Time"}
         }
     }
 }

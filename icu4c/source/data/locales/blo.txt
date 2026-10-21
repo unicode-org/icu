@@ -426,9 +426,7 @@ blo{
                 MMMEd{"E, MMM d"}
                 MMMMEd{"E, MMMM d"}
                 MMMMW{
-                    one{"MMMM 'abɔkɔɩ' W'ja'"}
                     other{"MMMM 'abɔkɔɩ' W'ja'"}
-                    zero{"MMMM 'abɔkɔɩ' W'ja'"}
                 }
                 Md{"M/d"}
                 hm{"h:mm a"}
@@ -447,9 +445,7 @@ blo{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    one{"Y 'kabɔkɔɩ' w'ja'"}
                     other{"Y 'kabɔkɔɩ' w'ja'"}
-                    zero{"Y 'kabɔkɔɩ' w'ja'"}
                 }
             }
             dayNames{
@@ -832,14 +828,10 @@ blo{
             }
             relativeTime{
                 future{
-                    one{"na ce arɩsǝma {0} nɩ"}
                     other{"na ce arɩsǝma {0} nɩ"}
-                    zero{"na ce arɩsǝma {0} nɩ"}
                 }
                 past{
-                    one{"ɩ ɖoo arɩsǝma {0}"}
                     other{"ɩ ɖoo arɩsǝma {0}"}
-                    zero{"ɩ ɖoo arɩsǝma {0}"}
                 }
             }
         }
@@ -901,33 +893,9 @@ blo{
         }
         hour-narrow{
             dn{"gk"}
-            relativeTime{
-                future{
-                    one{"na ce gakɔŋɔkɔŋɔ̀ {0} nɩ"}
-                    other{"na ce bʊkɔŋɔkɔŋɔ̀ {0} nɩ"}
-                    zero{"na ce gakɔŋɔkɔŋɔ̀ {0} nɩ"}
-                }
-                past{
-                    one{"ɩ ɖoo gakɔŋkɔŋɔ̀ {0}"}
-                    other{"ɩ ɖoo bʊkɔŋkɔŋɔ̀ {0}"}
-                    zero{"ɩ ɖoo gkk. {0}"}
-                }
-            }
         }
         hour-short{
             dn{"gk."}
-            relativeTime{
-                future{
-                    one{"na ce gakɔŋɔkɔŋɔ̀ {0} nɩ"}
-                    other{"na ce bʊkɔŋɔkɔŋɔ̀ {0} nɩ"}
-                    zero{"na ce gakɔŋɔkɔŋɔ̀ {0} nɩ"}
-                }
-                past{
-                    one{"ɩ ɖoo gakɔŋkɔŋɔ̀ {0}"}
-                    other{"ɩ ɖoo bʊkɔŋkɔŋɔ̀ {0}"}
-                    zero{"ɩ ɖoo gkk. {0}"}
-                }
-            }
         }
         minute{
             dn{"gʊnaŋa"}
@@ -938,44 +906,18 @@ blo{
                 future{
                     one{"na ce gʊnaŋa {0} nɩ"}
                     other{"na ce anaŋa {0} nɩ"}
-                    zero{"na ce anaŋa {0} nɩ"}
                 }
                 past{
                     one{"ɩ ɖoo gʊnaŋa {0}"}
                     other{"ɩ ɖoo anaŋa {0}"}
-                    zero{"ɩ ɖoo anaŋa {0}"}
                 }
             }
         }
         minute-narrow{
             dn{"gn"}
-            relativeTime{
-                future{
-                    one{"na ce gʊnaŋa {0} nɩ"}
-                    other{"na ce anaŋa {0} nɩ"}
-                    zero{"na ce anaŋa {0} nɩ"}
-                }
-                past{
-                    one{"ɩ ɖoo gʊnaŋa {0}"}
-                    other{"ɩ ɖoo anaŋa {0}"}
-                    zero{"ɩ ɖoo anaŋa {0}"}
-                }
-            }
         }
         minute-short{
             dn{"gn."}
-            relativeTime{
-                future{
-                    one{"na ce gʊnaŋa {0} nɩ"}
-                    other{"na ce anaŋa {0} nɩ"}
-                    zero{"na ce anaŋa {0} nɩ"}
-                }
-                past{
-                    one{"ɩ ɖoo gʊnaŋa {0}"}
-                    other{"ɩ ɖoo anaŋa {0}"}
-                    zero{"ɩ ɖoo anaŋa {0}"}
-                }
-            }
         }
         mon{
             relative{
@@ -985,14 +927,10 @@ blo{
             }
             relativeTime{
                 future{
-                    one{"na ce aɖɩtɛnɛɛ {0} nɩ"}
                     other{"na ce aɖɩtɛnɛɛ {0} nɩ"}
-                    zero{"na ce aɖɩtɛnɛɛ {0} nɩ"}
                 }
                 past{
-                    one{"ɩ ɖoo aɖɩtɛnɛɛ {0}"}
                     other{"ɩ ɖoo aɖɩtɛnɛɛ {0}"}
-                    zero{"ɩ ɖoo aɖɩtɛnɛɛ {0}"}
                 }
             }
         }
@@ -1045,12 +983,10 @@ blo{
                 future{
                     one{"na ce aŋɔrɔ {0} nɩ"}
                     other{"na ce ɩŋɔrɔ {0} nɩ"}
-                    zero{"na ce ɩŋɔrɔ {0} nɩ"}
                 }
                 past{
                     one{"ɩ ɖoo aŋɔrɔ {0}"}
                     other{"ɩ ɖoo ɩŋɔrɔ {0}"}
-                    zero{"ɩ ɖoo ɩŋɔrɔ {0}"}
                 }
             }
         }
@@ -1103,31 +1039,15 @@ blo{
             }
             relativeTime{
                 future{
-                    one{"na ce ɩŋɔrɩriu {0} nɩ"}
                     other{"na ce ɩŋɔrɩriu {0} nɩ"}
-                    zero{"na ce ɩŋɔrɩriu {0} nɩ"}
                 }
                 past{
-                    one{"ɩ ɖoo ɩŋɔrɩriu {0}"}
                     other{"ɩ ɖoo ɩŋɔrɩriu {0}"}
-                    zero{"ɩ ɖoo ɩŋɔrɩriu {0}"}
                 }
             }
         }
         quarter-narrow{
             dn{"ɩŋɔ"}
-            relativeTime{
-                future{
-                    one{"na ce ɩŋɩ {0} nɩ"}
-                    other{"na ce ɩŋɩ {0} nɩ"}
-                    zero{"na ce ɩŋɩ {0} nɩ"}
-                }
-                past{
-                    one{"ɩ ɖoo ɩŋɩ {0}"}
-                    other{"ɩ ɖoo ɩŋɩ {0}"}
-                    zero{"ɩ ɖoo ɩŋɩ {0}"}
-                }
-            }
         }
         quarter-short{
             dn{"ɩŋɔ."}
@@ -1152,14 +1072,10 @@ blo{
             }
             relativeTime{
                 future{
-                    one{"na ce asiibi {0} nɩ"}
                     other{"na ce asiibi {0} nɩ"}
-                    zero{"na ce asiibi {0} nɩ"}
                 }
                 past{
-                    one{"ɩ ɖoo asiibi {0}"}
                     other{"ɩ ɖoo asiibi {0}"}
-                    zero{"ɩ ɖoo asiibi {0}"}
                 }
             }
         }
@@ -1210,44 +1126,18 @@ blo{
                 future{
                     one{"na ce gɩpi {0} nɩ"}
                     other{"na ce ɩpi {0} nɩ"}
-                    zero{"na ce ɩpi {0} nɩ"}
                 }
                 past{
                     one{"ɩ ɖoo gɩpi {0}"}
                     other{"ɩ ɖoo ɩpi {0}"}
-                    zero{"ɩ ɖoo ɩpi {0}"}
                 }
             }
         }
         second-narrow{
             dn{"gp"}
-            relativeTime{
-                future{
-                    one{"na ce gɩpi {0} nɩ"}
-                    other{"na ce ɩpi {0} nɩ"}
-                    zero{"na ce ɩpi {0} nɩ"}
-                }
-                past{
-                    one{"ɩ ɖoo gɩpi {0}"}
-                    other{"ɩ ɖoo ɩpi {0}"}
-                    zero{"ɩ ɖoo ɩpi {0}"}
-                }
-            }
         }
         second-short{
             dn{"gp."}
-            relativeTime{
-                future{
-                    one{"na ce gɩpi {0} nɩ"}
-                    other{"na ce ɩpi {0} nɩ"}
-                    zero{"na ce ɩpi {0} nɩ"}
-                }
-                past{
-                    one{"ɩ ɖoo gɩpi {0}"}
-                    other{"ɩ ɖoo ɩpi {0}"}
-                    zero{"ɩ ɖoo ɩpi {0}"}
-                }
-            }
         }
         sun{
             relative{
@@ -1257,14 +1147,10 @@ blo{
             }
             relativeTime{
                 future{
-                    one{"na ce alahaɖɩ {0} nɩ"}
                     other{"na ce alahaɖɩ {0} nɩ"}
-                    zero{"na ce alahaɖɩ {0} nɩ"}
                 }
                 past{
-                    one{"ɩ ɖoo alahaɖɩ {0}"}
                     other{"ɩ ɖoo alahaɖɩ {0}"}
-                    zero{"ɩ ɖoo alahaɖɩ {0}"}
                 }
             }
         }
@@ -1314,14 +1200,10 @@ blo{
             }
             relativeTime{
                 future{
-                    one{"na ce alaamɩshɩ {0} nɩ"}
                     other{"na ce alaamɩshɩ {0} nɩ"}
-                    zero{"na ce alaamɩshɩ {0} nɩ"}
                 }
                 past{
-                    one{"ɩ ɖoo alaamɩshɩ {0}"}
                     other{"ɩ ɖoo alaamɩshɩ {0}"}
-                    zero{"ɩ ɖoo alaamɩshɩ {0}"}
                 }
             }
         }
@@ -1371,14 +1253,10 @@ blo{
             }
             relativeTime{
                 future{
-                    one{"na ce atalaata {0} nɩ"}
                     other{"na ce atalaata {0} nɩ"}
-                    zero{"na ce atalaata {0} nɩ"}
                 }
                 past{
-                    one{"ɩ ɖoo atalaata {0}"}
                     other{"ɩ ɖoo atalaata {0}"}
-                    zero{"ɩ ɖoo atalaata {0}"}
                 }
             }
         }
@@ -1428,14 +1306,10 @@ blo{
             }
             relativeTime{
                 future{
-                    one{"na ce alaarba {0} nɩ"}
                     other{"na ce alaarba {0} nɩ"}
-                    zero{"na ce alaarba {0} nɩ"}
                 }
                 past{
-                    one{"ɩ ɖoo alaarba {0}"}
                     other{"ɩ ɖoo alaarba {0}"}
-                    zero{"ɩ ɖoo alaarba {0}"}
                 }
             }
         }
@@ -1508,9 +1382,7 @@ blo{
             relativePeriod{"{0} kabk"}
             relativeTime{
                 future{
-                    one{"na ce bk. {0} nɩ"}
                     other{"na ce ɩbk {0} nɩ"}
-                    zero{"na ce bk. {0} nɩ"}
                 }
                 past{
                     one{"ɩ ɖoo bk {0}"}
@@ -1578,12 +1450,10 @@ blo{
                 future{
                     one{"na ce gaja {0} nɩ"}
                     other{"na ce bʊja {0} nɩ"}
-                    zero{"na ce bʊja {0} nɩ"}
                 }
                 past{
                     one{"ɩ ɖoo gaja {0}"}
                     other{"ɩ ɖoo bʊja {0}"}
-                    zero{"ɩ ɖoo bʊja {0}"}
                 }
             }
         }
@@ -1598,12 +1468,10 @@ blo{
                 future{
                     one{"na ce gj {0} nɩ"}
                     other{"na ce bj {0} nɩ"}
-                    zero{"na ce bʊja {0} nɩ"}
                 }
                 past{
                     one{"ɩ ɖoo gj {0}"}
                     other{"ɩ ɖoo bj {0}"}
-                    zero{"ɩ ɖoo bʊja {0}"}
                 }
             }
         }
@@ -1618,12 +1486,10 @@ blo{
                 future{
                     one{"na ce gj. {0} nɩ"}
                     other{"na ce bj. {0} nɩ"}
-                    zero{"na ce bʊja {0} nɩ"}
                 }
                 past{
                     one{"ɩ ɖoo gj. {0}"}
                     other{"ɩ ɖoo bj. {0}"}
-                    zero{"ɩ ɖoo bʊja {0}"}
                 }
             }
         }

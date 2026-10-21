@@ -678,7 +678,6 @@ xh{
             other{"Iidola zase-Australia"}
         }
         AWG{
-            one{"Aruban florin"}
             other{"Aruban florin"}
         }
         AZN{
@@ -735,7 +734,6 @@ xh{
         }
         BWP{
             one{"I-pula yaseBotswana"}
-            other{"I-Pula yaseBotswana"}
         }
         BYN{
             one{"I-ruble yaseBelarus"}
@@ -762,11 +760,9 @@ xh{
             other{"Ii-pesos zaseChile"}
         }
         CNH{
-            one{"I-Chinese yuan (offshore)"}
             other{"I-Chinese yuan (offshore)"}
         }
         CNY{
-            one{"I-yuan yaseTshayina"}
             other{"I-yuan yaseTshayina"}
         }
         COP{
@@ -918,7 +914,6 @@ xh{
             other{"Ii-dinar zaseJordan"}
         }
         JPY{
-            one{"I-yen yaseJapan"}
             other{"I-yen yaseJapan"}
         }
         KES{
@@ -938,7 +933,6 @@ xh{
             other{"Ii-franc zaseComoros"}
         }
         KPW{
-            one{"I-won yaseNorth Korea"}
             other{"I-won yaseNorth Korea"}
         }
         KRW{
@@ -1074,7 +1068,6 @@ xh{
             other{"Ii-sol zasePeruvia"}
         }
         PGK{
-            one{"I-kina yasePapua New Guinea"}
             other{"I-kina yasePapua New Guinea"}
         }
         PHP{
@@ -1174,7 +1167,6 @@ xh{
             other{"I-emalangeni yase-Eswatini"}
         }
         THB{
-            one{"I-baht yaseThailand"}
             other{"I-baht yaseThailand"}
         }
         TJS{
@@ -1182,7 +1174,6 @@ xh{
             other{"Ii-somonis zaseTajikistan"}
         }
         TMT{
-            one{"I-manat yaseTurkmenistan"}
             other{"I-manat yaseTurkmenistan"}
         }
         TND{
@@ -1190,12 +1181,10 @@ xh{
             other{"Ii-dinar zaseTunisia"}
         }
         TOP{
-            one{"I-paʻanga yaseTonga"}
             other{"I-paʻanga yaseTonga"}
         }
         TRY{
             one{"I-lira yaseTurkey"}
-            other{"I-Lira yaseTurkey"}
         }
         TTD{
             one{"Trinidad & Tobago dollar"}
@@ -1226,7 +1215,6 @@ xh{
             other{"Ii-peso zase-Uruguay"}
         }
         UZS{
-            one{"I-som yase-Uzbekistan"}
             other{"I-som yase-Uzbekistan"}
         }
         VES{
@@ -1234,7 +1222,6 @@ xh{
             other{"Ii-bolivar zaseVenezuela"}
         }
         VND{
-            one{"I-dong yaseVietnam"}
             other{"I-dong yaseVietnam"}
         }
         VUV{
@@ -1242,7 +1229,6 @@ xh{
             other{"Ii-vatu zaseVanuatu"}
         }
         WST{
-            one{"I-tala yaseSamoa"}
             other{"I-tala yaseSamoa"}
         }
         XAF{
@@ -1270,15 +1256,12 @@ xh{
             other{"Ii-rial zaseYemen"}
         }
         ZAR{
-            one{"Irandi yaseMzantsi Afrika"}
             other{"Irandi yaseMzantsi Afrika"}
         }
         ZMW{
-            one{"I-kwacha yaseZambia"}
             other{"I-kwacha yaseZambia"}
         }
         ZWG{
-            one{"IZimbabwean gold"}
             other{"IZimbabwean gold"}
         }
     }

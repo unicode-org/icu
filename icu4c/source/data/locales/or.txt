@@ -83,51 +83,39 @@ or{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"¤0ହ"}
                         other{"¤0ହ"}
                     }
                     10000{
-                        one{"¤00ହ"}
                         other{"¤00ହ"}
                     }
                     100000{
-                        one{"¤000ହ"}
                         other{"¤000ହ"}
                     }
                     1000000{
-                        one{"¤0ନି"}
                         other{"¤0ନି"}
                     }
                     10000000{
-                        one{"¤00ନି"}
                         other{"¤00ନି"}
                     }
                     100000000{
-                        one{"¤000ନି"}
                         other{"¤000ନି"}
                     }
                     1000000000{
-                        one{"¤0ବି"}
                         other{"¤0ବି"}
                     }
                     10000000000{
-                        one{"¤00ବି"}
                         other{"¤00ବି"}
                     }
                     100000000000{
-                        one{"¤000ବି"}
                         other{"¤000ବି"}
                     }
                     1000000000000{
-                        one{"¤0ଟ୍ରି"}
                         other{"¤0ଟ୍ରି"}
                     }
                     10000000000000{
-                        one{"¤00ଟ୍ରି"}
                         other{"¤00ଟ୍ରି"}
                     }
                     100000000000000{
-                        one{"¤000ଟ୍ରି"}
                         other{"¤000ଟ୍ରି"}
                     }
                 }
@@ -183,51 +171,39 @@ or{
                 }
                 decimalFormat{
                     1000{
-                        one{"0ହ"}
                         other{"0ହ"}
                     }
                     10000{
-                        one{"00ହ"}
                         other{"00ହ"}
                     }
                     100000{
-                        one{"000ହ"}
                         other{"000ହ"}
                     }
                     1000000{
-                        one{"0ନି"}
                         other{"0ନି"}
                     }
                     10000000{
-                        one{"00ନି"}
                         other{"00ନି"}
                     }
                     100000000{
-                        one{"000ନି"}
                         other{"000ନି"}
                     }
                     1000000000{
-                        one{"0ବି"}
                         other{"0ବି"}
                     }
                     10000000000{
-                        one{"00ବି"}
                         other{"00ବି"}
                     }
                     100000000000{
-                        one{"000ବି"}
                         other{"000ବି"}
                     }
                     1000000000000{
-                        one{"0ଟ୍ରି"}
                         other{"0ଟ୍ରି"}
                     }
                     10000000000000{
-                        one{"00ଟ୍ରି"}
                         other{"00ଟ୍ରି"}
                     }
                     100000000000000{
-                        one{"000ଟ୍ରି"}
                         other{"000ଟ୍ରି"}
                     }
                 }
@@ -271,16 +247,6 @@ or{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMMd",
-                "GGGGGyMd",
-            }
             availableFormats{
                 Ed{"d E"}
                 Gy{"y G"}
@@ -290,10 +256,8 @@ or{
                 GyMMMd{"MMM d, y G"}
                 MEd{"E, M/d"}
                 MMMEd{"E, MMM d"}
-                MMdd{"dd-MM"}
                 Md{"M/d"}
                 y{"y G"}
-                yMM{"MM-y G"}
                 yMMMM{"MMMM y G"}
                 yQQQ{"QQQ y G"}
                 yyyy{"y G"}
@@ -422,16 +386,6 @@ or{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "ahmmsszzzz",
-                "ahmmssz",
-                "ahmmss",
-                "ahmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yyMd",
-            }
             appendItems{
                 Day-Of-Week{"{0} {1}"}
                 Era{"{0} {1}"}
@@ -447,7 +401,6 @@ or{
                 MEd{"E, M/d"}
                 MMMEd{"E, MMM d"}
                 MMMMW{
-                    one{"MMMM ର ସପ୍ତାହ W"}
                     other{"MMMM ର ସପ୍ତାହ W"}
                 }
                 MMdd{"dd-MM"}
@@ -465,7 +418,6 @@ or{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    one{"Y ର ସପ୍ତାହ w"}
                     other{"Y ର ସପ୍ତାହ w"}
                 }
             }
@@ -783,11 +735,9 @@ or{
             }
             relativeTime{
                 future{
-                    one{"{0} ଦିନରେ"}
                     other{"{0} ଦିନରେ"}
                 }
                 past{
-                    one{"{0} ଦିନ ପୂର୍ବେ"}
                     other{"{0} ଦିନ ପୂର୍ବେ"}
                 }
             }
@@ -812,11 +762,9 @@ or{
             }
             relativeTime{
                 future{
-                    one{"{0} ଶୁକ୍ରବାରରେ"}
                     other{"{0} ଶୁକ୍ରବାରରେ"}
                 }
                 past{
-                    one{"{0} ଶୁକ୍ରବାର ପୂର୍ବେ"}
                     other{"{0} ଶୁକ୍ରବାର ପୂର୍ବେ"}
                 }
             }
@@ -853,11 +801,9 @@ or{
             }
             relativeTime{
                 future{
-                    one{"{0} ଘଣ୍ଟାରେ"}
                     other{"{0} ଘଣ୍ଟାରେ"}
                 }
                 past{
-                    one{"{0} ଘଣ୍ଟା ପୂର୍ବେ"}
                     other{"{0} ଘଣ୍ଟା ପୂର୍ବେ"}
                 }
             }
@@ -882,11 +828,9 @@ or{
             }
             relativeTime{
                 future{
-                    one{"{0} ମିନିଟ୍‌‌ରେ"}
                     other{"{0} ମିନିଟ୍‌‌ରେ"}
                 }
                 past{
-                    one{"{0} ମିନିଟ୍ ପୂର୍ବେ"}
                     other{"{0} ମିନିଟ୍ ପୂର୍ବେ"}
                 }
             }
@@ -912,11 +856,9 @@ or{
             }
             relativeTime{
                 future{
-                    one{"{0} ସୋମବାରରେ"}
                     other{"{0} ସୋମବାରରେ"}
                 }
                 past{
-                    one{"{0} ସୋମବାର ପୂର୍ବେ"}
                     other{"{0} ସୋମବାର ପୂର୍ବେ"}
                 }
             }
@@ -964,11 +906,9 @@ or{
             }
             relativeTime{
                 future{
-                    one{"{0} ମାସରେ"}
                     other{"{0} ମାସରେ"}
                 }
                 past{
-                    one{"{0} ମାସ ପୂର୍ବେ"}
                     other{"{0} ମାସ ପୂର୍ବେ"}
                 }
             }
@@ -995,29 +935,15 @@ or{
             }
             relativeTime{
                 future{
-                    one{"{0} ତ୍ରୟମାସରେ"}
                     other{"{0} ତ୍ରୟମାସରେ"}
                 }
                 past{
-                    one{"{0} ତ୍ରୟମାସ ପୂର୍ବେ"}
                     other{"{0} ତ୍ରୟମାସ ପୂର୍ବେ"}
                 }
             }
         }
-        quarter-narrow{
-            relative{
-                "-1"{"ଗତ ତିନିମାସ"}
-                "0"{"ଏହି ତିନିମାସ"}
-                "1"{"ଆଗାମୀ ତିନିମାସ"}
-            }
-        }
         quarter-short{
             dn{"ତ୍ରୟ."}
-            relative{
-                "-1"{"ଗତ ତିନିମାସ"}
-                "0"{"ଏହି ତ୍ରୟମାସ"}
-                "1"{"ଆଗାମୀ ତ୍ରୟମାସ"}
-            }
             relativeTime{
                 future{
                     one{"{0} ତ୍ରୟ. ରେ"}
@@ -1037,11 +963,9 @@ or{
             }
             relativeTime{
                 future{
-                    one{"{0} ଶନିବାରରେ"}
                     other{"{0} ଶନିବାରରେ"}
                 }
                 past{
-                    one{"{0} ଶନିବାର ପୂର୍ବେ"}
                     other{"{0} ଶନିବାର ପୂର୍ବେ"}
                 }
             }
@@ -1070,11 +994,9 @@ or{
             }
             relativeTime{
                 future{
-                    one{"{0} ସେକେଣ୍ଡରେ"}
                     other{"{0} ସେକେଣ୍ଡରେ"}
                 }
                 past{
-                    one{"{0} ସେକେଣ୍ଡ ପୂର୍ବେ"}
                     other{"{0} ସେକେଣ୍ଡ ପୂର୍ବେ"}
                 }
             }
@@ -1102,11 +1024,9 @@ or{
             }
             relativeTime{
                 future{
-                    one{"{0} ରବିବାରରେ"}
                     other{"{0} ରବିବାରରେ"}
                 }
                 past{
-                    one{"{0} ରବିବାର ପୂର୍ବେ"}
                     other{"{0} ରବିବାର ପୂର୍ବେ"}
                 }
             }
@@ -1136,11 +1056,9 @@ or{
             }
             relativeTime{
                 future{
-                    one{"{0} ଗୁରୁବାରରେ"}
                     other{"{0} ଗୁରୁବାରରେ"}
                 }
                 past{
-                    one{"{0} ଗୁରୁବାର ପୂର୍ବେ"}
                     other{"{0} ଗୁରୁବାର ପୂର୍ବେ"}
                 }
             }
@@ -1170,11 +1088,9 @@ or{
             }
             relativeTime{
                 future{
-                    one{"{0} ମଙ୍ଗଳବାରରେ"}
                     other{"{0} ମଙ୍ଗଳବାରରେ"}
                 }
                 past{
-                    one{"{0} ମଙ୍ଗଳବାର ପୂର୍ବେ"}
                     other{"{0} ମଙ୍ଗଳବାର ପୂର୍ବେ"}
                 }
             }
@@ -1204,11 +1120,9 @@ or{
             }
             relativeTime{
                 future{
-                    one{"{0} ବୁଧବାରରେ"}
                     other{"{0} ବୁଧବାରରେ"}
                 }
                 past{
-                    one{"{0} ବୁଧବାର ପୂର୍ବେ"}
                     other{"{0} ବୁଧବାର ପୂର୍ବେ"}
                 }
             }
@@ -1247,11 +1161,9 @@ or{
             relativePeriod{"{0} ର ସପ୍ତାହ"}
             relativeTime{
                 future{
-                    one{"{0} ସପ୍ତାହରେ"}
                     other{"{0} ସପ୍ତାହରେ"}
                 }
                 past{
-                    one{"{0} ସପ୍ତାହ ପୂର୍ବେ"}
                     other{"{0} ସପ୍ତାହ ପୂର୍ବେ"}
                 }
             }
@@ -1293,11 +1205,9 @@ or{
             }
             relativeTime{
                 future{
-                    one{"{0} ବର୍ଷରେ"}
                     other{"{0} ବର୍ଷରେ"}
                 }
                 past{
-                    one{"{0} ବର୍ଷ ପୂର୍ବେ"}
                     other{"{0} ବର୍ଷ ପୂର୍ବେ"}
                 }
             }

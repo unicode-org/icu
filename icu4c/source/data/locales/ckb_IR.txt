@@ -20,57 +20,22 @@ ckb_IR{
                 "{1} {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yMMdd",
-            }
         }
         persian{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "G y MMMM d, EEEE",
-                "dی MMMMی y G",
-                "G y MMM d",
-                "G y-MM-dd",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEd",
-                "GyMMMMd",
-                "GyMMMd",
-                "GGGGGyMMdd",
-            }
             monthNames{
                 format{
                     wide{
-                        "خاکەلێوە",
+                        "Farvardin",
                         "گوڵان",
-                        "جۆزەردان",
-                        "پووشپەڕ",
-                        "گەلاوێژ",
-                        "خەرمانان",
-                        "ڕەزبەر",
+                        "Khordad",
+                        "Tir",
+                        "Mordad",
+                        "Shahrivar",
+                        "Mehr",
                         "گەڵاڕێزان",
-                        "سەرماوەز",
-                        "بەفرانبار",
-                        "ڕێبەندان",
+                        "Azar",
+                        "Dey",
+                        "Bahman",
                         "ڕەشەمە",
                     }
                 }

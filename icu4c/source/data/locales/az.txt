@@ -16,11 +16,6 @@ az{
             }
         }
         arabext{
-            patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
             symbols{
                 decimal{","}
                 minusSign{"-"}
@@ -91,89 +86,68 @@ az{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"0K ¤"}
                         other{"0K ¤"}
                     }
                     10000{
-                        one{"00K ¤"}
                         other{"00K ¤"}
                     }
                     100000{
-                        one{"000K ¤"}
                         other{"000K ¤"}
                     }
                     1000000{
-                        one{"0 mln ¤"}
                         other{"0 mln ¤"}
                     }
                     10000000{
-                        one{"00 mln ¤"}
                         other{"00 mln ¤"}
                     }
                     100000000{
-                        one{"000 mln ¤"}
                         other{"000 mln ¤"}
                     }
                     1000000000{
-                        one{"0 mlrd ¤"}
                         other{"0 mlrd ¤"}
                     }
                     10000000000{
-                        one{"00 mlrd ¤"}
                         other{"00 mlrd ¤"}
                     }
                     100000000000{
-                        one{"000 mlrd ¤"}
                         other{"000 mlrd ¤"}
                     }
                     1000000000000{
-                        one{"0 trln ¤"}
                         other{"0 trln ¤"}
                     }
                     10000000000000{
-                        one{"00 trln ¤"}
                         other{"00 trln ¤"}
                     }
                     100000000000000{
-                        one{"000 trln ¤"}
                         other{"000 trln ¤"}
                     }
                 }
                 decimalFormat{
                     1000000{
-                        one{"0 mln"}
                         other{"0 mln"}
                     }
                     10000000{
-                        one{"00 mln"}
                         other{"00 mln"}
                     }
                     100000000{
-                        one{"000 mln"}
                         other{"000 mln"}
                     }
                     1000000000{
-                        one{"0 mlrd"}
                         other{"0 mlrd"}
                     }
                     10000000000{
-                        one{"00 mlrd"}
                         other{"00 mlrd"}
                     }
                     100000000000{
-                        one{"000 mlrd"}
                         other{"000 mlrd"}
                     }
                     1000000000000{
-                        one{"0 trln"}
                         other{"0 trln"}
                     }
                     10000000000000{
-                        one{"00 trln"}
                         other{"00 trln"}
                     }
                     100000000000000{
-                        one{"000 trln"}
                         other{"000 trln"}
                     }
                 }
@@ -320,16 +294,6 @@ az{
                     M{"d/M – d/M"}
                     d{"dd.MM – dd.MM"}
                 }
-                hm{
-                    a{"h:mm a – h:mm a"}
-                    h{"h:mm–h:mm a"}
-                    m{"h:mm–h:mm a"}
-                }
-                hmv{
-                    a{"h:mm a – h:mm a v"}
-                    h{"h:mm–h:mm a v"}
-                    m{"h:mm–h:mm a v"}
-                }
                 yM{
                     M{"G M/y – M/y"}
                     y{"G M/y – M/y"}
@@ -396,16 +360,6 @@ az{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yyMMdd",
-            }
             availableFormats{
                 Bh{"B h"}
                 Bhm{"B h:mm"}
@@ -429,7 +383,6 @@ az{
                 MMMEd{"E, d MMM"}
                 MMMMEd{"E, d MMMM"}
                 MMMMW{
-                    one{"MMMM, 'həftə' W"}
                     other{"MMMM, 'həftə' W"}
                 }
                 MMMMd{"d MMMM"}
@@ -449,7 +402,6 @@ az{
                 yMMMd{"d MMM y"}
                 yMd{"dd.MM.y"}
                 yw{
-                    one{"Y, 'həftə' w"}
                     other{"Y, 'həftə' w"}
                 }
             }
@@ -517,13 +469,6 @@ az{
                         noon{"günorta"}
                     }
                     narrow{
-                        afternoon1{"gündüz"}
-                        evening1{"axşamüstü"}
-                        midnight{"gecəyarı"}
-                        morning1{"sübh"}
-                        morning2{"səhər"}
-                        night1{"axşam"}
-                        night2{"gecə"}
                         noon{"g"}
                     }
                 }
@@ -742,12 +687,6 @@ az{
                         "3-cü kv.",
                         "4-cü kv.",
                     }
-                    wide{
-                        "1-ci rüb",
-                        "2-ci rüb",
-                        "3-cü rüb",
-                        "4-cü rüb",
-                    }
                 }
             }
         }
@@ -768,14 +707,10 @@ az{
                 "{1} {0}",
             }
             availableFormats{
-                Ed{"E, d"}
                 GyM{"G M/y"}
                 GyMEd{"G E, d/M/y"}
-                GyMMMEd{"G E, d MMM y"}
                 GyMd{"G d/M/y"}
                 MEd{"E, d/M"}
-                MMMEd{"E, d MMM"}
-                MMMMd{"d MMMM"}
                 Md{"d/M"}
                 yyyyM{"G y/M"}
                 yyyyMEd{"G E, d/M/y"}
@@ -934,17 +869,14 @@ az{
             }
             relativeTime{
                 future{
-                    one{"{0} gün sonra"}
                     other{"{0} gün sonra"}
                 }
                 past{
-                    one{"{0} gün əvvəl"}
                     other{"{0} gün əvvəl"}
                 }
             }
         }
         day-narrow{
-            dn{"gün"}
             relativeTime{
                 future{
                     one{"{0} g sonra"}
@@ -953,19 +885,6 @@ az{
                 past{
                     one{"{0} g əvvəl"}
                     other{"{0} g əvvəl"}
-                }
-            }
-        }
-        day-short{
-            dn{"gün"}
-            relativeTime{
-                future{
-                    one{"{0} gün sonra"}
-                    other{"{0} gün sonra"}
-                }
-                past{
-                    one{"{0} gün əvvəl"}
-                    other{"{0} gün əvvəl"}
                 }
             }
         }
@@ -978,12 +897,6 @@ az{
         era{
             dn{"era"}
         }
-        era-narrow{
-            dn{"era"}
-        }
-        era-short{
-            dn{"era"}
-        }
         fri{
             relative{
                 "-1"{"keçən cümə"}
@@ -992,11 +905,9 @@ az{
             }
             relativeTime{
                 future{
-                    one{"{0} cümə sonra"}
                     other{"{0} cümə sonra"}
                 }
                 past{
-                    one{"{0} cümə əvvəl"}
                     other{"{0} cümə əvvəl"}
                 }
             }
@@ -1042,27 +953,15 @@ az{
             }
             relativeTime{
                 future{
-                    one{"{0} saat sonra"}
                     other{"{0} saat sonra"}
                 }
                 past{
-                    one{"{0} saat əvvəl"}
                     other{"{0} saat əvvəl"}
                 }
             }
         }
         hour-narrow{
             dn{"st"}
-            relativeTime{
-                future{
-                    one{"{0} st sonra"}
-                    other{"{0} st sonra"}
-                }
-                past{
-                    one{"{0} st əvvəl"}
-                    other{"{0} st əvvəl"}
-                }
-            }
         }
         hour-short{
             dn{"st."}
@@ -1084,11 +983,9 @@ az{
             }
             relativeTime{
                 future{
-                    one{"{0} dəqiqə sonra"}
                     other{"{0} dəqiqə sonra"}
                 }
                 past{
-                    one{"{0} dəqiqə əvvəl"}
                     other{"{0} dəqiqə əvvəl"}
                 }
             }
@@ -1127,11 +1024,9 @@ az{
             }
             relativeTime{
                 future{
-                    one{"{0} bazar ertəsi sonra"}
                     other{"{0} bazar ertəsi sonra"}
                 }
                 past{
-                    one{"{0} bazar ertəsi əvvəl"}
                     other{"{0} bazar ertəsi əvvəl"}
                 }
             }
@@ -1179,36 +1074,9 @@ az{
             }
             relativeTime{
                 future{
-                    one{"{0} ay sonra"}
                     other{"{0} ay sonra"}
                 }
                 past{
-                    one{"{0} ay əvvəl"}
-                    other{"{0} ay əvvəl"}
-                }
-            }
-        }
-        month-narrow{
-            relativeTime{
-                future{
-                    one{"{0} ay sonra"}
-                    other{"{0} ay sonra"}
-                }
-                past{
-                    one{"{0} ay əvvəl"}
-                    other{"{0} ay əvvəl"}
-                }
-            }
-        }
-        month-short{
-            dn{"ay"}
-            relativeTime{
-                future{
-                    one{"{0} ay sonra"}
-                    other{"{0} ay sonra"}
-                }
-                past{
-                    one{"{0} ay əvvəl"}
                     other{"{0} ay əvvəl"}
                 }
             }
@@ -1222,11 +1090,9 @@ az{
             }
             relativeTime{
                 future{
-                    one{"{0} rüb sonra"}
                     other{"{0} rüb sonra"}
                 }
                 past{
-                    one{"{0} rüb əvvəl"}
                     other{"{0} rüb əvvəl"}
                 }
             }
@@ -1244,7 +1110,6 @@ az{
             }
         }
         quarter-short{
-            dn{"rüb"}
             relativeTime{
                 future{
                     one{"{0} rb sonra"}
@@ -1264,11 +1129,9 @@ az{
             }
             relativeTime{
                 future{
-                    one{"{0} şənbə sonra"}
                     other{"{0} şənbə sonra"}
                 }
                 past{
-                    one{"{0} şənbə əvvəl"}
                     other{"{0} şənbə əvvəl"}
                 }
             }
@@ -1314,11 +1177,9 @@ az{
             }
             relativeTime{
                 future{
-                    one{"{0} saniyə sonra"}
                     other{"{0} saniyə sonra"}
                 }
                 past{
-                    one{"{0} saniyə əvvəl"}
                     other{"{0} saniyə əvvəl"}
                 }
             }
@@ -1357,11 +1218,9 @@ az{
             }
             relativeTime{
                 future{
-                    one{"{0} bazar sonra"}
                     other{"{0} bazar sonra"}
                 }
                 past{
-                    one{"{0} bazar əvvəl"}
                     other{"{0} bazar əvvəl"}
                 }
             }
@@ -1408,11 +1267,9 @@ az{
             }
             relativeTime{
                 future{
-                    one{"{0} cümə axşamı sonra"}
                     other{"{0} cümə axşamı sonra"}
                 }
                 past{
-                    one{"{0} cümə axşamı əvvəl"}
                     other{"{0} cümə axşamı əvvəl"}
                 }
             }
@@ -1459,11 +1316,9 @@ az{
             }
             relativeTime{
                 future{
-                    one{"{0} çərşənbə axşamı sonra"}
                     other{"{0} çərşənbə axşamı sonra"}
                 }
                 past{
-                    one{"{0} çərşənbə axşamı əvvəl"}
                     other{"{0} çərşənbə axşamı əvvəl"}
                 }
             }
@@ -1510,11 +1365,9 @@ az{
             }
             relativeTime{
                 future{
-                    one{"{0} çərşənbə sonra"}
                     other{"{0} çərşənbə sonra"}
                 }
                 past{
-                    one{"{0} çərşənbə əvvəl"}
                     other{"{0} çərşənbə əvvəl"}
                 }
             }
@@ -1563,11 +1416,9 @@ az{
             relativePeriod{"həftə {0}"}
             relativeTime{
                 future{
-                    one{"{0} həftə sonra"}
                     other{"{0} həftə sonra"}
                 }
                 past{
-                    one{"{0} həftə əvvəl"}
                     other{"{0} həftə əvvəl"}
                 }
             }
@@ -1637,36 +1488,9 @@ az{
             }
             relativeTime{
                 future{
-                    one{"{0} il sonra"}
                     other{"{0} il sonra"}
                 }
                 past{
-                    one{"{0} il əvvəl"}
-                    other{"{0} il əvvəl"}
-                }
-            }
-        }
-        year-narrow{
-            relativeTime{
-                future{
-                    one{"{0} il sonra"}
-                    other{"{0} il sonra"}
-                }
-                past{
-                    one{"{0} il əvvəl"}
-                    other{"{0} il əvvəl"}
-                }
-            }
-        }
-        year-short{
-            dn{"il"}
-            relativeTime{
-                future{
-                    one{"{0} il sonra"}
-                    other{"{0} il sonra"}
-                }
-                past{
-                    one{"{0} il əvvəl"}
                     other{"{0} il əvvəl"}
                 }
             }

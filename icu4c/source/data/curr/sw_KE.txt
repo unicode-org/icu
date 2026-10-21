@@ -286,7 +286,6 @@ sw_KE{
             other{"gilda za Antili ya Uholanzi"}
         }
         AWG{
-            one{"florin ya Aruba"}
             other{"florin ya Aruba"}
         }
         AZN{
@@ -422,7 +421,6 @@ sw_KE{
             other{"diramu za Moroko"}
         }
         MGA{
-            one{"ariari ya Madagaska"}
             other{"Ariari za Madagaska"}
         }
         MKD{
@@ -462,7 +460,6 @@ sw_KE{
             other{"riali za Omani"}
         }
         PAB{
-            one{"balboa za Panama"}
             other{"balboa za Panama"}
         }
         PKR{
@@ -510,7 +507,6 @@ sw_KE{
             other{"pauni za Sudani Kusini"}
         }
         SZL{
-            one{"lilangeni ya Uswazi"}
             other{"lilangeni za Uswazi"}
         }
         THB{

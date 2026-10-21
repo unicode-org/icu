@@ -8,7 +8,6 @@ fr_CH{
                 percentFormat{"#,##0%"}
             }
             symbols{
-                currencyDecimal{"."}
                 group{"'"}
             }
         }
@@ -32,7 +31,6 @@ fr_CH{
             }
             availableFormats{
                 MEd{"E, dd.MM."}
-                MMdd{"dd.MM"}
                 Md{"dd.MM."}
                 yM{"MM.y GGGGG"}
                 yMEd{"E, dd.MM.y GGGGG"}
@@ -102,16 +100,6 @@ fr_CH{
                 "{1}, {0}",
                 "{1} {0}",
             }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "yMMMMEEEEd",
-                "yMMMMd",
-                "yMMMd",
-                "yyMMdd",
-            }
             availableFormats{
                 MEd{"E, dd.MM."}
                 MMdd{"dd.MM"}
@@ -128,15 +116,10 @@ fr_CH{
                         midnight{"min."}
                         morning1{"du mat."}
                         night1{"du mat."}
-                        noon{"midi"}
                     }
                     narrow{
                         afternoon1{"de l’ap.m."}
-                        evening1{"du soir"}
-                        midnight{"min."}
                         morning1{"du mat."}
-                        night1{"du mat."}
-                        noon{"midi"}
                     }
                 }
             }

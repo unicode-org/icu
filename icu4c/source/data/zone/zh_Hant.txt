@@ -1314,11 +1314,6 @@ zh_Hant{
             lg{"太平洋時間"}
             ls{"太平洋標準時間"}
         }
-        "meta:Anadyr"{
-            ld{"阿那底河夏令時間"}
-            lg{"阿納德爾時間"}
-            ls{"阿那底河標準時間"}
-        }
         "meta:Apia"{
             ld{"阿皮亞夏令時間"}
             lg{"阿皮亞時間"}
@@ -1406,9 +1401,6 @@ zh_Hant{
             ld{"維德角夏令時間"}
             lg{"維德角時間"}
             ls{"維德角標準時間"}
-        }
-        "meta:Casey"{
-            ls{"凱西站時間"}
         }
         "meta:Chamorro"{
             ls{"查莫洛時間"}
@@ -1502,7 +1494,6 @@ zh_Hant{
         }
         "meta:GMT"{
             ls{"格林威治標準時間"}
-            ss{"GMT"}
         }
         "meta:Galapagos"{
             ls{"加拉巴哥群島時間"}

@@ -9,20 +9,14 @@ wo{
         as{"Asame"}
         az{"Aserbayjane"}
         ba{"Baskir"}
-        ban{"Bali"}
         be{"Belaris"}
-        bem{"Bemba"}
         bg{"Bilgaar"}
         bn{"Baŋla"}
-        bo{"Tibetan"}
         br{"Breton"}
         bs{"Bosñak"}
         ca{"Katalan"}
         ceb{"Sibiyanoo"}
-        chm{"Mari"}
         chr{"Ceroki"}
-        ckb{"Kurdi gu Diggu"}
-        co{"Kors"}
         cs{"Cek"}
         cy{"Wels"}
         da{"Danuwa"}
@@ -30,8 +24,6 @@ wo{
         de_AT{"Almaa bu Ótiriis"}
         de_CH{"Almaa bu Kawe bu Swis"}
         dsb{"Sorab-Suuf"}
-        dv{"Diweyi"}
-        dz{"Dsongkaa"}
         el{"Gereg"}
         en{"Àngale"}
         en_AU{"Àngale bu Óstraali"}
@@ -56,26 +48,19 @@ wo{
         ga{"Irlànde"}
         gd{"Galuwaa bu Ekos"}
         gl{"Galisiye"}
-        gn{"Garani"}
         gu{"Gujarati"}
         ha{"Hawsa"}
-        haw{"Hawaye"}
         he{"Ebrë"}
         hi{"Endo"}
         hi_Latn{"Hindī"}
-        hil{"Hiligaynon"}
         hr{"Krowat"}
         hsb{"Sorab-Kaw"}
-        ht{"Kereyolu Ayti"}
         hu{"Ongruwaa"}
         hy{"Armaniye"}
-        hz{"Herero"}
-        ibb{"Ibibiyo"}
         id{"Endonesiye"}
         ig{"Igbo"}
         is{"Islànde"}
         it{"Italiye"}
-        iu{"Inuktitit"}
         ja{"Sapone"}
         ka{"Sorsiye"}
         kk{"Kasax"}
@@ -83,46 +68,36 @@ wo{
         kn{"Kannadaa"}
         ko{"Koreye"}
         kok{"Konkani"}
-        kr{"Kanuri"}
-        kru{"Kuruks"}
         ks{"Kashmiri"}
         ku{"Kurdi"}
         ky{"Kirgiis"}
-        la{"Latin"}
         lb{"Liksàmbursuwaa"}
         lo{"Laaw"}
         lt{"Lituyaniye"}
         lv{"Letoniye"}
-        men{"Mende"}
-        mg{"Malagasi"}
         mi{"Mawri"}
         mk{"Maseduwaane"}
         ml{"Malayalam"}
         mn{"Mongoliye"}
         mni{"Manipuri"}
-        moh{"Mowak"}
         mr{"Marati"}
         ms{"Malay"}
         mt{"Malt"}
         my{"Birmes"}
         ne{"Nepale"}
-        niu{"Niweyan"}
         nl{"Neyerlànde"}
         nl_BE{"Belsig"}
         no{"Nerwesiye"}
-        ny{"Sewa"}
         oc{"Ositan"}
         om{"Oromo"}
         or{"Oja"}
         pa{"Punjabi"}
-        pap{"Papiyamento"}
         pl{"Polone"}
         ps{"Pasto"}
         pt{"Purtugees"}
         pt_BR{"Purtugees bu Bresil"}
         pt_PT{"Portugees bu Tugël"}
         qu{"Kesuwa"}
-        quc{"Kishe"}
         rm{"Romaas"}
         ro{"Rumaniyee"}
         ru{"Rus"}
@@ -131,14 +106,9 @@ wo{
         sah{"Saxa"}
         sat{"Santali"}
         sd{"Sindi"}
-        se{"Penku Sami"}
         si{"Sinala"}
         sk{"Eslowaki (Eslowak)"}
         sl{"Esloweniye"}
-        sma{"Sami gu Saalum"}
-        smj{"Lule Sami"}
-        smn{"Inari Sami"}
-        sms{"Eskolt Sami"}
         so{"Somali (làkk)"}
         sq{"Albane"}
         sr{"Serb"}
@@ -153,16 +123,13 @@ wo{
         to{"Tongan"}
         tr{"Tirk"}
         tt{"Tatar"}
-        tzm{"Tamasis gu Digg Atlaas"}
         ug{"Uygur"}
         uk{"Ikreniye"}
         und{"Làkk wuñ xamul"}
         ur{"Urdu"}
         uz{"Usbek"}
-        ve{"Wenda"}
         vi{"Wiyetnaamiye"}
         wo{"Wolof"}
-        yi{"Yidis"}
         yo{"Yoruba"}
         zh{"Sinuwaa"}
         zh_Hans{"Sinuwaa buñ woyofal"}

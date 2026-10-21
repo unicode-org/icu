@@ -7,24 +7,9 @@ sv_FI{
         word-initial{"…{0}"}
         word-medial{"{0}…{1}"}
     }
-    NumberElements{
-        latn{
-            symbols{
-                timeSeparator{"."}
-            }
-        }
-    }
     calendar{
         gregorian{
-            AmPmMarkers{
-                "fm.",
-                "em.",
-            }
             AmPmMarkersAbbr{
-                "fm.",
-                "em.",
-            }
-            AmPmMarkersNarrow{
                 "fm.",
                 "em.",
             }
@@ -73,22 +58,6 @@ sv_FI{
                 yMEd{"E d.M.y"}
                 yMM{"M.y"}
                 yMd{"d.M.y"}
-            }
-            dayPeriod{
-                stand-alone{
-                    abbreviated{
-                        am{"fm."}
-                        pm{"em."}
-                    }
-                    narrow{
-                        am{"fm."}
-                        pm{"em."}
-                    }
-                    wide{
-                        am{"fm."}
-                        pm{"em."}
-                    }
-                }
             }
             intervalFormats{
                 Bhm{

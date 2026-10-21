@@ -67,7 +67,6 @@ es_CO{
             }
             year{
                 dnam{"a."}
-                one{"{0} a."}
                 other{"{0} a."}
                 per{"{0}/año"}
             }

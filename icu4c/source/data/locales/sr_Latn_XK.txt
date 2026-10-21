@@ -16,19 +16,11 @@ sr_Latn_XK{
                 format{
                     abbreviated{
                         afternoon1{"po pod."}
-                        evening1{"uveče"}
-                        midnight{"ponoć"}
                         morning1{"jutro"}
-                        night1{"noću"}
-                        noon{"podne"}
                     }
                     narrow{
-                        afternoon1{"po pod."}
                         evening1{"veče"}
-                        midnight{"ponoć"}
-                        morning1{"jutro"}
                         night1{"noć"}
-                        noon{"podne"}
                     }
                 }
                 stand-alone{

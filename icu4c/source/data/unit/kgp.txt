@@ -298,11 +298,6 @@ kgp{
             }
         }
         energy{
-            british-thermal-unit{
-                dnam{"ũnĩnane térmĩka mritỹnĩka"}
-                one{"{0} ũnĩnane térmĩka mritỹnĩka"}
-                other{"{0} ũnĩnane térmĩka mritỹnĩka ag"}
-            }
             calorie{
                 dnam{"karorija ag"}
                 one{"{0} karorija"}
@@ -413,16 +408,8 @@ kgp{
                 one{"{0} nesimẽturo"}
                 other{"{0} nesimẽturo ag"}
             }
-            fathom{
-                one{"{0} mrasa"}
-                other{"{0} mrasa ag"}
-            }
             foot{
                 per{"{0} tipẽn ki"}
-            }
-            furlong{
-                one{"{0} furlong"}
-                other{"{0} furlong ag"}
             }
             inch{
                 dnam{"poregana ag"}
@@ -559,10 +546,6 @@ kgp{
             solar-mass{
                 one{"{0} rã-pãgoj"}
                 other{"{0} rã-pãgoj"}
-            }
-            stone{
-                one{"{0} pó"}
-                other{"{0} pó ag"}
             }
             ton{
                 dnam{"tãnẽrada ag"}
@@ -930,14 +913,8 @@ kgp{
             }
         }
         length{
-            fathom{
-                dnam{"mrasa"}
-            }
             foot{
                 per{"{0}/tipẽn"}
-            }
-            furlong{
-                dnam{"furlong"}
             }
             inch{
                 dnam{"por."}
@@ -972,9 +949,6 @@ kgp{
             kilogram{
                 one{"{0}kg"}
                 other{"{0}kg"}
-            }
-            stone{
-                dnam{"pó"}
             }
             ton{
                 dnam{"ton"}
@@ -1215,10 +1189,6 @@ kgp{
             }
         }
         energy{
-            british-thermal-unit{
-                dnam{"BTU"}
-                other{"{0} BTU"}
-            }
             electronvolt{
                 dnam{"elétron-volt"}
             }
@@ -1257,18 +1227,11 @@ kgp{
                 dnam{"ua k.v."}
                 other{"{0} ua"}
             }
-            fathom{
-                dnam{"mrasa ag"}
-                other{"{0} bça. mrs"}
-            }
             foot{
                 dnam{"tipẽn ag"}
                 one{"{0} tipẽn"}
                 other{"{0} tipẽn ag"}
                 per{"{0}/tipẽn ki"}
-            }
-            furlong{
-                dnam{"furlong ag"}
             }
             inch{
                 dnam{"pol."}
@@ -1332,9 +1295,6 @@ kgp{
             }
             solar-mass{
                 dnam{"rã-pãgoj ag"}
-            }
-            stone{
-                dnam{"pó ag"}
             }
             ton{
                 dnam{"tãnẽrana"}

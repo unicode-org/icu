@@ -203,11 +203,6 @@ id{
             lg{"Waktu Pasifik"}
             ls{"Waktu Standar Pasifik"}
         }
-        "meta:Anadyr"{
-            ld{"Waktu Musim Panas Anadyr"}
-            lg{"Waktu Anadyr"}
-            ls{"Waktu Standar Anadyr"}
-        }
         "meta:Apia"{
             ld{"Waktu Musim Panas Apia"}
             lg{"Waktu Apia"}
@@ -295,9 +290,6 @@ id{
             ld{"Waktu Musim Panas Tanjung Verde"}
             lg{"Waktu Tanjung Verde"}
             ls{"Waktu Standar Tanjung Verde"}
-        }
-        "meta:Casey"{
-            ls{"Waktu Casey"}
         }
         "meta:Chamorro"{
             ls{"Waktu Standar Chamorro"}
@@ -456,15 +448,12 @@ id{
         }
         "meta:Indonesia_Central"{
             ls{"Waktu Indonesia Tengah"}
-            ss{"WITA"}
         }
         "meta:Indonesia_Eastern"{
             ls{"Waktu Indonesia Timur"}
-            ss{"WIT"}
         }
         "meta:Indonesia_Western"{
             ls{"Waktu Indonesia Barat"}
-            ss{"WIB"}
         }
         "meta:Iran"{
             ld{"Waktu Musim Panas Iran"}

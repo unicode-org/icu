@@ -7,159 +7,7 @@ mn{
     ExemplarCharactersIndex{"[А Б В Г Д Е Ж З И Й К Л М Н О Ө П Р С Т У Ү Ф Х Ц Ч Ш Щ Ъ Ы Ь Э Ю Я]"}
     ExemplarCharactersPunctuation{"[\\- ‐‑ – — , ; \\: ! ? . … '‘’ \u0022“” ( ) \\[ \\] § @ * / \\& # † ‡ ′ ″]"}
     NumberElements{
-        adlm{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
-        }
-        arabext{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
-        }
-        bali{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
-        }
-        beng{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
-        }
-        brah{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
-        }
-        cakm{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
-        }
-        cham{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
-        }
-        deva{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
-        }
-        fullwide{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
-        }
-        gong{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
-        }
-        gonm{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
-        }
-        gujr{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
-        }
-        guru{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
-        }
-        hanidec{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
-        }
-        java{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
-        }
-        kali{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
-        }
-        khmr{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
-        }
-        knda{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
-        }
-        lana{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
-        }
-        lanatham{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
-        }
-        laoo{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
-        }
         latn{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
             patternsLong{
                 decimalFormat{
                     1000{
@@ -215,47 +63,36 @@ mn{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"0 мян ¤"}
                         other{"0 мян ¤"}
                     }
                     10000{
-                        one{"00 мян ¤"}
                         other{"00 мян ¤"}
                     }
                     100000{
-                        one{"000 мян ¤"}
                         other{"000 мян ¤"}
                     }
                     1000000{
-                        one{"0 сая ¤"}
                         other{"0 сая ¤"}
                     }
                     10000000{
-                        one{"00 сая ¤"}
                         other{"00 сая ¤"}
                     }
                     100000000{
-                        one{"000 сая ¤"}
                         other{"000 сая ¤"}
                     }
                     1000000000{
-                        one{"0 тэрбум ¤"}
                         other{"0 тэрбум ¤"}
                     }
                     10000000000{
-                        one{"00 тэрбум ¤"}
                         other{"00 тэрбум ¤"}
                     }
                     100000000000{
-                        one{"000 тэрбум ¤"}
                         other{"000 тэрбум ¤"}
                     }
                     1000000000000{
-                        one{"0 их наяд ¤"}
                         other{"0 их наяд ¤"}
                     }
                     10000000000000{
-                        one{"00 их наяд ¤"}
                         other{"00 их наяд ¤"}
                     }
                     100000000000000{
@@ -265,74 +102,47 @@ mn{
                 }
                 currencyFormat%alphaNextToNumber{
                     100000000000000{
-                        one{"000 их наяд ¤"}
                         other{"000 их наяд ¤"}
                     }
                 }
                 decimalFormat{
                     1000{
-                        one{"0 мян"}
                         other{"0 мян"}
                     }
                     10000{
-                        one{"00 мян"}
                         other{"00 мян"}
                     }
                     100000{
-                        one{"000 мян"}
                         other{"000 мян"}
                     }
                     1000000{
-                        one{"0 сая"}
                         other{"0 сая"}
                     }
                     10000000{
-                        one{"00 сая"}
                         other{"00 сая"}
                     }
                     100000000{
-                        one{"000 сая"}
                         other{"000 сая"}
                     }
                     1000000000{
-                        one{"0 тэрбум"}
                         other{"0 тэрбум"}
                     }
                     10000000000{
-                        one{"00 тэрбум"}
                         other{"00 тэрбум"}
                     }
                     100000000000{
-                        one{"000 т'.'бум"}
                         other{"000 т'.'бум"}
                     }
                     1000000000000{
-                        one{"0 их наяд"}
                         other{"0 их наяд"}
                     }
                     10000000000000{
-                        one{"00 и'.'наяд"}
                         other{"00 и'.'наяд"}
                     }
                     100000000000000{
-                        one{"000 их наяд"}
                         other{"000 их наяд"}
                     }
                 }
-            }
-        }
-        lepc{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
-        }
-        limb{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
             }
         }
         minimalPairs{
@@ -344,154 +154,10 @@ mn{
                 other{"Картанд {0} Х байна. Тэднийг авах уу?"}
             }
         }
-        mlym{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
-        }
         mong{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-            }
             symbols{
                 decimal{","}
                 group{" "}
-            }
-        }
-        mtei{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
-        }
-        mymr{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
-        }
-        mymrshan{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
-        }
-        nkoo{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
-        }
-        olck{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
-        }
-        orya{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
-        }
-        osma{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
-        }
-        rohg{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
-        }
-        saur{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
-        }
-        shrd{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
-        }
-        sora{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
-        }
-        sund{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
-        }
-        takr{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
-        }
-        talu{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
-        }
-        tamldec{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
-        }
-        telu{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
-        }
-        thai{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
-        }
-        tibt{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
-            }
-        }
-        vaii{
-            patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
             }
         }
     }
@@ -546,16 +212,6 @@ mn{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEd",
-                "GyMMdd",
-                "GyMMMd",
-                "GGGGGyMMdd",
             }
             availableFormats{
                 Bh{"B h 'ц'"}
@@ -627,24 +283,6 @@ mn{
                     d{"d – d"}
                 }
                 fallback{"{0} – {1}"}
-                h{
-                    a{"h a – h a"}
-                    h{"h–h a"}
-                }
-                hm{
-                    a{"h:mm a – h:mm a"}
-                    h{"h:mm–h:mm a"}
-                    m{"h:mm–h:mm a"}
-                }
-                hmv{
-                    a{"h:mm a – h:mm a v"}
-                    h{"h:mm–h:mm a v"}
-                    m{"h:mm–h:mm a v"}
-                }
-                hv{
-                    a{"h a – h a v"}
-                    h{"h–h a v"}
-                }
                 yM{
                     M{"GGGGG y 'оны' MMMMM–MMMMM 'сар'"}
                     y{"GGGGG y 'оны' MMMMM 'сар' – y 'оны' MMMMM 'сар'"}
@@ -730,7 +368,6 @@ mn{
                 MMMEd{"MMM'ын' d. E"}
                 MMMMEd{"MMMM'ын' d, E"}
                 MMMMW{
-                    one{"MMMM'ын' W-'р' 'долоо' 'хоног'"}
                     other{"MMMM'ын' W-'р' 'долоо' 'хоног'"}
                 }
                 MMMMd{"MMMM'ын' d"}
@@ -753,7 +390,6 @@ mn{
                 yQQQ{"y 'оны' QQQ"}
                 yQQQQ{"y 'оны' QQQQ"}
                 yw{
-                    one{"Y 'оны' w-'р' 'долоо' 'хоног'"}
                     other{"Y 'оны' w-'р' 'долоо' 'хоног'"}
                 }
             }
@@ -1115,11 +751,9 @@ mn{
             }
             relativeTime{
                 future{
-                    one{"{0} өдрийн дараа"}
                     other{"{0} өдрийн дараа"}
                 }
                 past{
-                    one{"{0} өдрийн өмнө"}
                     other{"{0} өдрийн өмнө"}
                 }
             }
@@ -1141,11 +775,9 @@ mn{
             }
             relativeTime{
                 future{
-                    one{"{0} баасан гарагийн дараа"}
                     other{"{0} баасан гарагийн дараа"}
                 }
                 past{
-                    one{"{0} баасан гарагийн өмнө"}
                     other{"{0} баасан гарагийн өмнө"}
                 }
             }
@@ -1174,11 +806,9 @@ mn{
             }
             relativeTime{
                 future{
-                    one{"{0} цагийн дараа"}
                     other{"{0} цагийн дараа"}
                 }
                 past{
-                    one{"{0} цагийн өмнө"}
                     other{"{0} цагийн өмнө"}
                 }
             }
@@ -1203,11 +833,9 @@ mn{
             }
             relativeTime{
                 future{
-                    one{"{0} минутын дараа"}
                     other{"{0} минутын дараа"}
                 }
                 past{
-                    one{"{0} минутын өмнө"}
                     other{"{0} минутын өмнө"}
                 }
             }
@@ -1233,11 +861,9 @@ mn{
             }
             relativeTime{
                 future{
-                    one{"{0} даваа гарагийн дараа"}
                     other{"{0} даваа гарагийн дараа"}
                 }
                 past{
-                    one{"{0} даваа гарагийн өмнө"}
                     other{"{0} даваа гарагийн өмнө"}
                 }
             }
@@ -1268,11 +894,9 @@ mn{
             }
             relativeTime{
                 future{
-                    one{"{0} сарын дараа"}
                     other{"{0} сарын дараа"}
                 }
                 past{
-                    one{"{0} сарын өмнө"}
                     other{"{0} сарын өмнө"}
                 }
             }
@@ -1286,11 +910,9 @@ mn{
             }
             relativeTime{
                 future{
-                    one{"{0} улирлын дараа"}
                     other{"{0} улирлын дараа"}
                 }
                 past{
-                    one{"{0} улирлын өмнө"}
                     other{"{0} улирлын өмнө"}
                 }
             }
@@ -1303,11 +925,9 @@ mn{
             }
             relativeTime{
                 future{
-                    one{"{0} бямба гарагийн дараа"}
                     other{"{0} бямба гарагийн дараа"}
                 }
                 past{
-                    one{"{0} бямба гарагийн өмнө"}
                     other{"{0} бямба гарагийн өмнө"}
                 }
             }
@@ -1336,11 +956,9 @@ mn{
             }
             relativeTime{
                 future{
-                    one{"{0} секундын дараа"}
                     other{"{0} секундын дараа"}
                 }
                 past{
-                    one{"{0} секундын өмнө"}
                     other{"{0} секундын өмнө"}
                 }
             }
@@ -1366,11 +984,9 @@ mn{
             }
             relativeTime{
                 future{
-                    one{"{0} ням гарагийн дараа"}
                     other{"{0} ням гарагийн дараа"}
                 }
                 past{
-                    one{"{0} ням гарагийн өмнө"}
                     other{"{0} ням гарагийн өмнө"}
                 }
             }
@@ -1400,11 +1016,9 @@ mn{
             }
             relativeTime{
                 future{
-                    one{"{0} пүрэв гарагийн дараа"}
                     other{"{0} пүрэв гарагийн дараа"}
                 }
                 past{
-                    one{"{0} пүрэв гарагийн өмнө"}
                     other{"{0} пүрэв гарагийн өмнө"}
                 }
             }
@@ -1434,11 +1048,9 @@ mn{
             }
             relativeTime{
                 future{
-                    one{"{0} мягмар гарагийн дараа"}
                     other{"{0} мягмар гарагийн дараа"}
                 }
                 past{
-                    one{"{0} мягмар гарагийн өмнө"}
                     other{"{0} мягмар гарагийн өмнө"}
                 }
             }
@@ -1468,11 +1080,9 @@ mn{
             }
             relativeTime{
                 future{
-                    one{"{0} лхагва гарагийн дараа"}
                     other{"{0} лхагва гарагийн дараа"}
                 }
                 past{
-                    one{"{0} лхагва гарагийн өмнө"}
                     other{"{0} лхагва гарагийн өмнө"}
                 }
             }
@@ -1504,11 +1114,9 @@ mn{
             relativePeriod{"{0}-н долоо хоног"}
             relativeTime{
                 future{
-                    one{"{0} долоо хоногийн дараа"}
                     other{"{0} долоо хоногийн дараа"}
                 }
                 past{
-                    one{"{0} долоо хоногийн өмнө"}
                     other{"{0} долоо хоногийн өмнө"}
                 }
             }
@@ -1553,11 +1161,9 @@ mn{
             }
             relativeTime{
                 future{
-                    one{"{0} жилийн дараа"}
                     other{"{0} жилийн дараа"}
                 }
                 past{
-                    one{"{0} жилийн өмнө"}
                     other{"{0} жилийн өмнө"}
                 }
             }

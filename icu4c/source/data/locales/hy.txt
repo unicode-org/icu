@@ -78,101 +78,77 @@ hy{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"0 հզր ¤"}
                         other{"0 հզր ¤"}
                     }
                     10000{
-                        one{"00 հզր ¤"}
                         other{"00 հզր ¤"}
                     }
                     100000{
-                        one{"000 հզր ¤"}
                         other{"000 հզր ¤"}
                     }
                     1000000{
-                        one{"0 մլն ¤"}
                         other{"0 մլն ¤"}
                     }
                     10000000{
-                        one{"00 մլն ¤"}
                         other{"00 մլն ¤"}
                     }
                     100000000{
-                        one{"000 մլն ¤"}
                         other{"000 մլն ¤"}
                     }
                     1000000000{
-                        one{"0 մլրդ ¤"}
                         other{"0 մլրդ ¤"}
                     }
                     10000000000{
-                        one{"00 մլրդ ¤"}
                         other{"00 մլրդ ¤"}
                     }
                     100000000000{
-                        one{"000 մլրդ ¤"}
                         other{"000 մլրդ ¤"}
                     }
                     1000000000000{
-                        one{"0 տրլն ¤"}
                         other{"0 տրլն ¤"}
                     }
                     10000000000000{
-                        one{"00 տրլն ¤"}
                         other{"00 տրլն ¤"}
                     }
                     100000000000000{
-                        one{"000 տրլն ¤"}
                         other{"000 տրլն ¤"}
                     }
                 }
                 decimalFormat{
                     1000{
-                        one{"0 հզր"}
                         other{"0 հզր"}
                     }
                     10000{
-                        one{"00 հզր"}
                         other{"00 հզր"}
                     }
                     100000{
-                        one{"000 հզր"}
                         other{"000 հզր"}
                     }
                     1000000{
-                        one{"0 մլն"}
                         other{"0 մլն"}
                     }
                     10000000{
-                        one{"00 մլն"}
                         other{"00 մլն"}
                     }
                     100000000{
-                        one{"000 մլն"}
                         other{"000 մլն"}
                     }
                     1000000000{
-                        one{"0 մլրդ"}
                         other{"0 մլրդ"}
                     }
                     10000000000{
-                        one{"00 մլրդ"}
                         other{"00 մլրդ"}
                     }
                     100000000000{
-                        one{"000 մլրդ"}
                         other{"000 մլրդ"}
                     }
                     1000000000000{
-                        one{"0 տրլն"}
                         other{"0 տրլն"}
                     }
                     10000000000000{
-                        one{"00 տրլն"}
                         other{"00 տրլն"}
                     }
                     100000000000000{
-                        one{"000 տրլն"}
                         other{"000 տրլն"}
                     }
                 }
@@ -220,16 +196,6 @@ hy{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "GyMMMMEEEEd",
-                "GyMMMMdd",
-                "GyMMMdd",
-                "GGGGGyMMdd",
-            }
             availableFormats{
                 Bh{"B h-ին"}
                 Bhm{"B h:mm-ին"}
@@ -272,20 +238,6 @@ hy{
                     B{"B h:mm – B h:mm"}
                     h{"B h:mm – h:mm"}
                     m{"B h:mm – h:mm"}
-                }
-                H{
-                    H{"H–H"}
-                }
-                Hm{
-                    H{"H:mm–H:mm"}
-                    m{"H:mm–H:mm"}
-                }
-                Hmv{
-                    H{"H:mm–H:mm v"}
-                    m{"H:mm–H:mm v"}
-                }
-                Hv{
-                    H{"H–H v"}
                 }
                 M{
                     M{"M–M"}
@@ -362,16 +314,6 @@ hy{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
-            }
-            DateTimeSkeletons{
-                "HHmmsszzzz",
-                "HHmmssz",
-                "HHmmss",
-                "HHmm",
-                "yMMMMEEEEd",
-                "yMMMMdd",
-                "yMMMdd",
-                "yyMMdd",
             }
             appendItems{
                 Day-Of-Week{"{1}, {0}"}
@@ -488,9 +430,7 @@ hy{
                     }
                     wide{
                         afternoon1{"ցերեկվա"}
-                        evening1{"երեկոյան"}
                         midnight{"կեսգիշերին"}
-                        morning1{"առավոտյան"}
                         night1{"գիշերվա"}
                         noon{"կեսօրին"}
                     }
@@ -820,18 +760,11 @@ hy{
             }
             relativeTime{
                 future{
-                    one{"{0} օրից"}
                     other{"{0} օրից"}
                 }
                 past{
-                    one{"{0} օր առաջ"}
                     other{"{0} օր առաջ"}
                 }
-            }
-        }
-        day-short{
-            relative{
-                "-2"{"երեկ չէ առաջի օրը"}
             }
         }
         dayOfYear{
@@ -854,11 +787,9 @@ hy{
             }
             relativeTime{
                 future{
-                    one{"{0} ուրբաթ հետո"}
                     other{"{0} ուրբաթ հետո"}
                 }
                 past{
-                    one{"{0} ուրբաթ առաջ"}
                     other{"{0} ուրբաթ առաջ"}
                 }
             }
@@ -887,11 +818,9 @@ hy{
             }
             relativeTime{
                 future{
-                    one{"{0} ժամից"}
                     other{"{0} ժամից"}
                 }
                 past{
-                    one{"{0} ժամ առաջ"}
                     other{"{0} ժամ առաջ"}
                 }
             }
@@ -916,11 +845,9 @@ hy{
             }
             relativeTime{
                 future{
-                    one{"{0} րոպեից"}
                     other{"{0} րոպեից"}
                 }
                 past{
-                    one{"{0} րոպե առաջ"}
                     other{"{0} րոպե առաջ"}
                 }
             }
@@ -946,11 +873,9 @@ hy{
             }
             relativeTime{
                 future{
-                    one{"{0} երկուշաբթի հետո"}
                     other{"{0} երկուշաբթի հետո"}
                 }
                 past{
-                    one{"{0} երկուշաբթի առաջ"}
                     other{"{0} երկուշաբթի առաջ"}
                 }
             }
@@ -981,11 +906,9 @@ hy{
             }
             relativeTime{
                 future{
-                    one{"{0} ամսից"}
                     other{"{0} ամսից"}
                 }
                 past{
-                    one{"{0} ամիս առաջ"}
                     other{"{0} ամիս առաջ"}
                 }
             }
@@ -1002,11 +925,9 @@ hy{
             }
             relativeTime{
                 future{
-                    one{"{0} եռամսյակից"}
                     other{"{0} եռամսյակից"}
                 }
                 past{
-                    one{"{0} եռամսյակ առաջ"}
                     other{"{0} եռամսյակ առաջ"}
                 }
             }
@@ -1032,11 +953,9 @@ hy{
             }
             relativeTime{
                 future{
-                    one{"{0} շաբաթ օր հետո"}
                     other{"{0} շաբաթ օր հետո"}
                 }
                 past{
-                    one{"{0} շաբաթ օր առաջ"}
                     other{"{0} շաբաթ օր առաջ"}
                 }
             }
@@ -1065,11 +984,9 @@ hy{
             }
             relativeTime{
                 future{
-                    one{"{0} վայրկյանից"}
                     other{"{0} վայրկյանից"}
                 }
                 past{
-                    one{"{0} վայրկյան առաջ"}
                     other{"{0} վայրկյան առաջ"}
                 }
             }
@@ -1107,11 +1024,9 @@ hy{
             }
             relativeTime{
                 future{
-                    one{"{0} կիրակի հետո"}
                     other{"{0} կիրակի հետո"}
                 }
                 past{
-                    one{"{0} կիրակի առաջ"}
                     other{"{0} կիրակի առաջ"}
                 }
             }
@@ -1141,11 +1056,9 @@ hy{
             }
             relativeTime{
                 future{
-                    one{"{0} հինգշաբթի հետո"}
                     other{"{0} հինգշաբթի հետո"}
                 }
                 past{
-                    one{"{0} հինգշաբթի առաջ"}
                     other{"{0} հինգշաբթի առաջ"}
                 }
             }
@@ -1175,11 +1088,9 @@ hy{
             }
             relativeTime{
                 future{
-                    one{"{0} երեքշաբթի հետո"}
                     other{"{0} երեքշաբթի հետո"}
                 }
                 past{
-                    one{"{0} երեքշաբթի առաջ"}
                     other{"{0} երեքշաբթի առաջ"}
                 }
             }
@@ -1209,11 +1120,9 @@ hy{
             }
             relativeTime{
                 future{
-                    one{"{0} չորեքշաբթի հետո"}
                     other{"{0} չորեքշաբթի հետո"}
                 }
                 past{
-                    one{"{0} չորեքշաբթի առաջ"}
                     other{"{0} չորեքշաբթի առաջ"}
                 }
             }
@@ -1245,11 +1154,9 @@ hy{
             relativePeriod{"{0} շաբաթում"}
             relativeTime{
                 future{
-                    one{"{0} շաբաթից"}
                     other{"{0} շաբաթից"}
                 }
                 past{
-                    one{"{0} շաբաթ առաջ"}
                     other{"{0} շաբաթ առաջ"}
                 }
             }
@@ -1303,11 +1210,9 @@ hy{
             }
             relativeTime{
                 future{
-                    one{"{0} տարուց"}
                     other{"{0} տարուց"}
                 }
                 past{
-                    one{"{0} տարի առաջ"}
                     other{"{0} տարի առաջ"}
                 }
             }

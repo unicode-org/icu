@@ -687,11 +687,6 @@ so{
             lg{"Waqtiga Basifika ee Waqooyiga Ameerika"}
             ls{"Waqtiga Caadiga ah ee Basifika Waqooyiga Ameerika"}
         }
-        "meta:Anadyr"{
-            ld{"Wakhtiga Kulka ee Anadyr"}
-            lg{"Wakhtiga Anadyr"}
-            ls{"Wakhtiga Caadiga ah ee Anadyr"}
-        }
         "meta:Apia"{
             ld{"Waqtiga Dharaarta ee Samoa"}
             lg{"Waqtiga Galbeedka Samoa"}
