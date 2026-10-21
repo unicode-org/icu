@@ -50,6 +50,7 @@
 #include "coptccal.h"
 #include "dangical.h"
 #include "ethpccal.h"
+#include "myancal.h"
 #include "unicode/calendar.h"
 #include "cpputils.h"
 #include "servloc.h"
@@ -162,6 +163,7 @@ static const char * const gCalTypes[] = {
     "gregorian",
     "japanese",
     "buddhist",
+    "myanmar",
     "roc",
     "persian",
     "islamic-civil",
@@ -186,6 +188,7 @@ typedef enum ECalType {
     CALTYPE_GREGORIAN = 0,
     CALTYPE_JAPANESE,
     CALTYPE_BUDDHIST,
+    CALTYPE_MYANMAR,
     CALTYPE_ROC,
     CALTYPE_PERSIAN,
     CALTYPE_ISLAMIC_CIVIL,
@@ -322,6 +325,9 @@ static Calendar *createStandardCalendar(ECalType calType, const Locale &loc, UEr
             break;
         case CALTYPE_BUDDHIST:
             cal.adoptInsteadAndCheckErrorCode(new BuddhistCalendar(loc, status), status);
+            break;
+        case CALTYPE_MYANMAR:
+            cal.adoptInsteadAndCheckErrorCode(new MyanmarCalendar(loc, status), status);
             break;
         case CALTYPE_ROC:
             cal.adoptInsteadAndCheckErrorCode(new TaiwanCalendar(loc, status), status);
