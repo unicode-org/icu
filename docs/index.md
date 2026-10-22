@@ -55,7 +55,7 @@ including new characters and scripts, emoji, collation & IDNA changes, and corre
 
 It also updates to
 [CLDR 49](https://cldr.unicode.org/downloads/cldr-49)
-([blog](https://blog.unicode.org/2026/09/unicode-cldr-49-beta-available-for.html))
+([blog](https://blog.unicode.org/2026/10/unicode-cldr-49-released.html))
 locale data with many additions and corrections.
 
 Line break backwards-iteration performance has been significantly improved,
