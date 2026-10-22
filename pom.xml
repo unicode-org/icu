@@ -77,7 +77,7 @@
 
     <!-- Plugin versions -->
     <build-helper-maven-plugin.version>3.6.1</build-helper-maven-plugin.version>
-    <central-publishing-maven-plugin.version>0.10.0</central-publishing-maven-plugin.version>
+    <central-publishing-maven-plugin.version>0.12.0</central-publishing-maven-plugin.version>
     <exec-maven-plugin.version>3.6.3</exec-maven-plugin.version>
     <flatten-maven-plugin.version>1.7.3</flatten-maven-plugin.version>
     <google-java-style.version>1.32.0</google-java-style.version>
