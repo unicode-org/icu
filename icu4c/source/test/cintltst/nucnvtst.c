@@ -103,6 +103,7 @@ static void TestJitterbug2411(void);
 static void TestJB5275(void);
 static void TestJB5275_1(void);
 static void TestJitterbug6175(void);
+static void TestCompoundTextReset(void);
 
 static void TestIsFixedWidth(void);
 #endif
@@ -331,6 +332,7 @@ void addTestNewConvert(TestNode** root)
    addTest(root, &TestJitterbug2346, "tsconv/nucnvtst/TestJitterbug2346");
    addTest(root, &TestJitterbug2411, "tsconv/nucnvtst/TestJitterbug2411");
    addTest(root, &TestJitterbug6175, "tsconv/nucnvtst/TestJitterbug6175");
+   addTest(root, &TestCompoundTextReset, "tsconv/nucnvtst/TestCompoundTextReset");
 
    addTest(root, &TestIsFixedWidth, "tsconv/nucnvtst/TestIsFixedWidth");
 #endif
@@ -5635,4 +5637,37 @@ TestIsFixedWidth(void) {
         }
         ucnv_close(cnv);
     }
+}
+
+/* A reset must return x11-compound-text to its initial charset (ISO 8859-1). */
+static void TestCompoundTextReset(void) {
+    static const UChar greek[] = { 0x03b1, 0x03b2, 0x03b3 };
+    static const char greekBytes[] = "\x1b\x2d\x46\xe1\xe2\xe3";  /* ESC - F designates ISO 8859-7 */
+    static const char latin1Bytes[] = "\xe1\xe2\xe3";
+    static const UChar latin1[] = { 0x00e1, 0x00e2, 0x00e3 };
+    char bytes[32];
+    UChar uchars[32];
+    int32_t i, length;
+    UErrorCode errorCode = U_ZERO_ERROR;
+    UConverter *cnv = ucnv_open("x11-compound-text", &errorCode);
+    if (U_FAILURE(errorCode)) {
+        log_data_err("ucnv_open(x11-compound-text) failed - %s\n", u_errorName(errorCode));
+        return;
+    }
+
+    /* ucnv_fromUChars() resets the converter, so each call must emit the designation again. */
+    for (i = 0; i < 2; ++i) {
+        length = ucnv_fromUChars(cnv, bytes, (int32_t)sizeof(bytes), greek, UPRV_LENGTHOF(greek), &errorCode);
+        if (U_FAILURE(errorCode) || length != 6 || 0 != memcmp(bytes, greekBytes, 6)) {
+            log_err("x11-compound-text fromUChars call %d: wrong output - %s\n", (int)i, u_errorName(errorCode));
+        }
+    }
+
+    /* After a reset, bytes without a designation are in the default charset again. */
+    ucnv_toUChars(cnv, uchars, UPRV_LENGTHOF(uchars), greekBytes, 6, &errorCode);
+    length = ucnv_toUChars(cnv, uchars, UPRV_LENGTHOF(uchars), latin1Bytes, 3, &errorCode);
+    if (U_FAILURE(errorCode) || length != 3 || 0 != memcmp(uchars, latin1, 3 * U_SIZEOF_UCHAR)) {
+        log_err("x11-compound-text toUChars: wrong output after reset - %s\n", u_errorName(errorCode));
+    }
+    ucnv_close(cnv);
 }
