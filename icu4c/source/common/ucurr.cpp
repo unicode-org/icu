@@ -521,7 +521,7 @@ ucurr_forLocale(const char* locale,
         return u_terminateUChars(buff, buffCapacity, resLen, ec);
     }
 
-    // get country or country_variant in `id'
+    // get country or country_variant in `id`
     CharString id = idForLocale(locale, ec);
     if (U_FAILURE(*ec)) {
         return 0;
@@ -1434,6 +1434,12 @@ getCacheEntry(const char* locale, UErrorCode& ec) {
     CurrencyNameStruct* currencySymbols = nullptr;
     CurrencyNameCacheEntry* cacheEntry = nullptr;
 
+    // The cache key is stored in a fixed-size buffer.
+    if (uprv_strlen(locale) >= ULOC_FULLNAME_CAPACITY) {
+        ec = U_ILLEGAL_ARGUMENT_ERROR;
+        return nullptr;
+    }
+
     umtx_lock(&gCurrencyCacheMutex);
     // in order to handle racing correctly,
     // not putting 'search' in a separate function.
@@ -2291,7 +2297,7 @@ ucurr_countCurrencies(const char* locale,
         // local variables
         UErrorCode localStatus = U_ZERO_ERROR;
 
-        // get country or country_variant in `id'
+        // get country or country_variant in `id`
         CharString id = idForLocale(locale, ec);
 
         if (U_FAILURE(*ec))
@@ -2395,7 +2401,7 @@ ucurr_forLocaleAndDate(const char* locale,
             // local variables
             UErrorCode localStatus = U_ZERO_ERROR;
 
-            // get country or country_variant in `id'
+            // get country or country_variant in `id`
             CharString id = idForLocale(locale, ec);
             if (U_FAILURE(*ec))
             {

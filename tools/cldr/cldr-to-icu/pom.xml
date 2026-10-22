@@ -10,7 +10,7 @@
     <parent>
       <groupId>com.ibm.icu</groupId>
       <artifactId>icu-root</artifactId>
-      <version>79.1-SNAPSHOT</version>
+      <version>79.1</version>
       <relativePath>../../../pom.xml</relativePath>
     </parent>
 
@@ -27,7 +27,7 @@
         <!-- By default we use the current ICU4J, built locally.
              One can override it, for example -Dicu4j.version=78.1 -->
         <icu4j.version>${project.parent.version}</icu4j.version>
-        <cldr-code.version>49.0-SNAPSHOT</cldr-code.version>
+        <cldr-code.version>49.0</cldr-code.version>
 
         <mf.Automatic-Module-Name>org.unicode.icu.cldr_to_icu</mf.Automatic-Module-Name>
     </properties>

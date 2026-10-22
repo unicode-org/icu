@@ -2141,6 +2141,10 @@ void CollationTest::TestColItrInfiniteLoop22511() {
             u"\u0100\u032a\u01e0\xd804\u031c",      // Low surrogate 0xdd00 is dropped
             u"A\u0304\u032a\u01e0\xd804\u031c"      // Equivalent to above, but U+0100 is decomposed
         },
+        {
+            u"\U000105D2\u0F82\U0001D16D\u0344",
+            u"\U000105D2\u0F82\U0001D16D\u0308\u0301"
+        },
         {nullptr, nullptr}
     };
 
@@ -2159,6 +2163,13 @@ void CollationTest::TestColItrInfiniteLoop22511() {
             UCollationResult result = coll->compare(testCases[j][0], -1, testCases[j][1], -1, errorCode);
             errorCode.assertSuccess();
             assertEquals(UnicodeString("Locale ") + l.getName() + "UTF16 case:" + j, UCOL_EQUAL, result);
+
+            UCharIterator iter1, iter2;
+            uiter_setString(&iter1, testCases[j][0], -1);
+            uiter_setString(&iter2, testCases[j][1], -1);
+            result = coll->compare(iter1, iter2, errorCode);
+            errorCode.assertSuccess();
+            assertEquals(UnicodeString("Locale ") + l.getName() + "UCharIterator case:" + j, UCOL_EQUAL, result);
         }
 
         // Also test the UTF-8 versions

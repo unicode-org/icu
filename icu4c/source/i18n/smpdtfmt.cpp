@@ -3889,11 +3889,15 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, ch
                     UnicodeString prefix(ordNames[i], 0, placeholderPos);
                     UnicodeString suffix(ordNames[i], placeholderPos + 3);
                     // Match prefix
-                    if (prefix.length() > 0 && matchStringWithOptionalDot(text, start, prefix) == start + prefix.length()) {
-                        continue;
+                    int32_t numStart = start;
+                    if (prefix.length() > 0) {
+                        int32_t prefixLen = matchStringWithOptionalDot(text, start, prefix);
+                        if (prefixLen == 0) {
+                            continue;
+                        }
+                        numStart = start + prefixLen;
                     }
                     // Parse number after prefix
-                    int32_t numStart = start + prefix.length();
                     ParsePosition numPos(numStart);
                     parseInt(text, number, numPos, allowNegative, currentNumberFormat);
                     if (numPos.getIndex() <= numStart) {
@@ -3901,11 +3905,15 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, ch
                     }
                     // Match suffix
                     int32_t numEnd = numPos.getIndex();
-                    if (suffix.length() > 0 && matchStringWithOptionalDot(text, numEnd, suffix) == numEnd + suffix.length()) {
-                        continue;
+                    int32_t suffixLen = 0;
+                    if (suffix.length() > 0) {
+                        suffixLen = matchStringWithOptionalDot(text, numEnd, suffix);
+                        if (suffixLen == 0) {
+                            continue;
+                        }
                     }
                     cal.set(UCAL_DATE, number.getLong());
-                    return numEnd + suffix.length();
+                    return numEnd + suffixLen;
                 }
             }
         }

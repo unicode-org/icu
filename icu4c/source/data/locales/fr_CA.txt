@@ -341,6 +341,7 @@ fr_CA{
                 Hms{"HH 'h' mm 'min' ss 's'"}
                 Hmsv{"HH 'h' mm 'min' ss 's' v"}
                 Hmv{"HH 'h' mm v"}
+                Hv{"HH 'h' v"}
                 MEd{"E MM-dd"}
                 MMd{"MM-dd"}
                 MMdd{"MM-dd"}

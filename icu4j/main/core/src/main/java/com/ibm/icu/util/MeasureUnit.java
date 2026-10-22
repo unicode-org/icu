@@ -877,8 +877,8 @@ public class MeasureUnit implements Serializable {
      * Returns the MeasureUnit instance if the given type and subtype combination is valid, or null
      * otherwise.
      *
-     * <p>Example: "length", "meter" -> METER "length", "kilometer" -> KILOMETER "length",
-     * "kilometer-per-hour" -> null --> not valid
+     * <p>Example: "length", "meter" -&gt; METER "length", "kilometer" -&gt; KILOMETER "length",
+     * "kilometer-per-hour" -&gt; null --&gt; not valid
      *
      * @param type the unit type (e.g., "length", "mass", "volume")
      * @param subtype the unit subtype (e.g., "meter", "kilogram", "liter")

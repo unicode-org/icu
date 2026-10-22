@@ -153,50 +153,62 @@ ro{
                 }
                 decimalFormat{
                     1000{
+                        few{"0 K"}
                         one{"0 K"}
                         other{"0 K"}
                     }
                     10000{
+                        few{"00 K"}
                         one{"00 K"}
                         other{"00 K"}
                     }
                     100000{
+                        few{"000 K"}
                         one{"000 K"}
                         other{"000 K"}
                     }
                     1000000{
+                        few{"0 mil'.'"}
                         one{"0 mil'.'"}
                         other{"0 mil'.'"}
                     }
                     10000000{
+                        few{"00 mil'.'"}
                         one{"00 mil'.'"}
                         other{"00 mil'.'"}
                     }
                     100000000{
+                        few{"000 mil'.'"}
                         one{"000 mil'.'"}
                         other{"000 mil'.'"}
                     }
                     1000000000{
+                        few{"0 mld'.'"}
                         one{"0 mld'.'"}
                         other{"0 mld'.'"}
                     }
                     10000000000{
+                        few{"00 mld'.'"}
                         one{"00 mld'.'"}
                         other{"00 mld'.'"}
                     }
                     100000000000{
+                        few{"000 mld'.'"}
                         one{"000 mld'.'"}
                         other{"000 mld'.'"}
                     }
                     1000000000000{
+                        few{"0 tril'.'"}
                         one{"0 tril'.'"}
                         other{"0 tril'.'"}
                     }
                     10000000000000{
+                        few{"00 tril'.'"}
                         one{"00 tril'.'"}
                         other{"00 tril'.'"}
                     }
                     100000000000000{
+                        few{"000 tril'.'"}
                         one{"000 tril'.'"}
                         other{"000 tril'.'"}
                     }

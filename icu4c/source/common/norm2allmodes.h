@@ -24,6 +24,7 @@
 #include "unicode/unistr.h"
 #include "cpputils.h"
 #include "normalizer2impl.h"
+#include "putilimp.h"
 
 U_NAMESPACE_BEGIN
 
@@ -90,8 +91,14 @@ public:
         int32_t firstLength=first.length();
         UnicodeString safeMiddle;
         {
+            int32_t destCapacity;
+            if(uprv_add32_overflow(firstLength, second.length(), &destCapacity)) {
+                first.setToBogus();
+                errorCode=U_MEMORY_ALLOCATION_ERROR;
+                return first;
+            }
             ReorderingBuffer buffer(impl, first);
-            if(buffer.init(firstLength+second.length(), errorCode)) {
+            if(buffer.init(destCapacity, errorCode)) {
                 normalizeAndAppend(secondArray, secondArray+second.length(), doNormalize,
                                    safeMiddle, buffer, errorCode);
             }
