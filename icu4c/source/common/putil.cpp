@@ -935,6 +935,10 @@ static UBool compareBinaryFiles(const char* TZFileName, DefaultTZInfo* tzInfo) {
                     return false;
                 }
                 tzInfo->defaultTZBuffer = static_cast<char*>(uprv_malloc(sizeof(char) * tzInfo->defaultTZFileSize));
+                if (tzInfo->defaultTZBuffer == nullptr) {
+                    fclose(file);
+                    return false;
+                }
                 sizeFileRead = fread(tzInfo->defaultTZBuffer, 1, tzInfo->defaultTZFileSize, tzInfo->defaultTZFilePtr);
             }
             if (fseek(file, 0, SEEK_SET) != 0) {
