@@ -30,9 +30,12 @@ static const char SEPARATOR = '%';
 static char*
 _catkey(char* buffer U_LIFETIME_BOUND, int32_t set_num, int32_t msg_num) {
     int32_t i = 0;
-    i = T_CString_integerToString(buffer, set_num, 10);
+    i = T_CString_integerToString(buffer, MAX_KEY_LEN, set_num, 10);
+    // MAX_KEY_LEN fits any two int32_t values, so the first number always fits
+    // with room for the separator and the second number.
+    U_ASSERT(i < MAX_KEY_LEN - 1);
     buffer[i++] = SEPARATOR;
-    T_CString_integerToString(buffer+i, msg_num, 10);
+    T_CString_integerToString(buffer+i, MAX_KEY_LEN-i, msg_num, 10);
     return buffer;
 }
 

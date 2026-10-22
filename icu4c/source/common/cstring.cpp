@@ -147,81 +147,87 @@ T_CString_toUpperCase(char* str)
     return origPtr;
 }
 
+namespace {
+
 /*
- * Takes a int32_t and fills in  a char* string with that number "radix"-based.
- * Does not handle negative values (makes an empty string for them).
- * Writes at most 12 chars ("-2147483647" plus NUL).
+ * Formats the magnitude uval in the given radix, preceded by a '-' if negative is true,
+ * into buffer[0..capacity[.
+ * Returns the length of the number string, not including the terminating NUL.
+ * If that length is >=capacity, then nothing is written except an empty string
+ * (if capacity>0), so that a too-small buffer is never overrun.
+ */
+int32_t
+uint64ToString(char *buffer, int32_t capacity, uint64_t uval, bool negative, uint32_t radix) {
+    /* Enough for 64 binary digits. */
+    char      tbuf[64];
+    int32_t   tbx    = UPRV_LENGTHOF(tbuf);
+
+    U_ASSERT(radix>=2 && radix<=16);
+    do {
+        uint8_t digit = static_cast<uint8_t>(uval % radix);
+        tbuf[--tbx] = static_cast<char>(T_CString_itosOffset(digit));
+        uval  = uval / radix;
+    } while (uval != 0);
+
+    int32_t digitsLength = UPRV_LENGTHOF(tbuf) - tbx;
+    int32_t length = digitsLength + (negative ? 1 : 0);
+    if (length >= capacity) {
+        if (buffer != nullptr && capacity > 0) {
+            buffer[0] = 0;
+        }
+        return length;
+    }
+    if (negative) {
+        *buffer++ = '-';
+    }
+    uprv_memcpy(buffer, tbuf + tbx, static_cast<size_t>(digitsLength));
+    buffer[digitsLength] = 0;
+    return length;
+}
+
+}  // namespace
+
+/*
+ * Takes a int32_t and fills in a char* string with that number "radix"-based.
+ * Only in base 10 are numbers considered signed; in other bases the
+ * two's complement bit pattern is formatted.
+ * Writes at most 33 chars (32 binary digits plus NUL); in base 10 at most 12
+ * ("-2147483648" plus NUL).
  * Returns the length of the string (not including the NUL).
+ * If the length is >=capacity, then only an empty string is written (if capacity>0).
  */
 U_CAPI int32_t U_EXPORT2
-T_CString_integerToString(char* buffer, int32_t v, int32_t radix)
+T_CString_integerToString(char* buffer, int32_t capacity, int32_t v, int32_t radix)
 {
-    char      tbuf[30];
-    int32_t   tbx    = sizeof(tbuf);
-    uint8_t   digit;
-    int32_t   length = 0;
-    uint32_t  uval;
-    
-    U_ASSERT(radix>=2 && radix<=16);
-    uval = (uint32_t) v;
-    if(v<0 && radix == 10) {
-        /* Only in base 10 do we conside numbers to be signed. */
-        uval = (uint32_t)(-v); 
-        buffer[length++] = '-';
+    uint32_t uval = static_cast<uint32_t>(v);
+    bool negative = v < 0 && radix == 10;
+    if (negative) {
+        /* Unsigned negation is well-defined even for INT32_MIN. */
+        uval = 0u - uval;
     }
-    
-    tbx = sizeof(tbuf)-1;
-    tbuf[tbx] = 0;   /* We are generating the digits backwards.  Null term the end. */
-    do {
-        digit = (uint8_t)(uval % radix);
-        tbuf[--tbx] = (char)(T_CString_itosOffset(digit));
-        uval  = uval / radix;
-    } while (uval != 0);
-    
-    /* copy converted number into user buffer  */
-    uprv_strcpy(buffer+length, tbuf+tbx);
-    length += sizeof(tbuf) - tbx -1;
-    return length;
+    return uint64ToString(buffer, capacity, uval, negative, static_cast<uint32_t>(radix));
 }
-
-
 
 /*
- * Takes a int64_t and fills in  a char* string with that number "radix"-based.
- * Writes at most 21: chars ("-9223372036854775807" plus NUL).
+ * Takes a int64_t and fills in a char* string with that number "radix"-based.
+ * Only in base 10 are numbers considered signed; in other bases the
+ * two's complement bit pattern is formatted.
+ * Writes at most 65 chars (64 binary digits plus NUL); in base 10 at most 21
+ * ("-9223372036854775808" plus NUL).
  * Returns the length of the string, not including the terminating NUL.
+ * If the length is >=capacity, then only an empty string is written (if capacity>0).
  */
 U_CAPI int32_t U_EXPORT2
-T_CString_int64ToString(char* buffer, int64_t v, uint32_t radix)
+T_CString_int64ToString(char* buffer, int32_t capacity, int64_t v, uint32_t radix)
 {
-    char      tbuf[30];
-    int32_t   tbx    = sizeof(tbuf);
-    uint8_t   digit;
-    int32_t   length = 0;
-    uint64_t  uval;
-    
-    U_ASSERT(radix>=2 && radix<=16);
-    uval = (uint64_t) v;
-    if(v<0 && radix == 10) {
-        /* Only in base 10 do we conside numbers to be signed. */
-        uval = (uint64_t)(-v); 
-        buffer[length++] = '-';
+    uint64_t uval = static_cast<uint64_t>(v);
+    bool negative = v < 0 && radix == 10;
+    if (negative) {
+        /* Unsigned negation is well-defined even for INT64_MIN. */
+        uval = 0u - uval;
     }
-    
-    tbx = sizeof(tbuf)-1;
-    tbuf[tbx] = 0;   /* We are generating the digits backwards.  Null term the end. */
-    do {
-        digit = (uint8_t)(uval % radix);
-        tbuf[--tbx] = (char)(T_CString_itosOffset(digit));
-        uval  = uval / radix;
-    } while (uval != 0);
-    
-    /* copy converted number into user buffer  */
-    uprv_strcpy(buffer+length, tbuf+tbx);
-    length += sizeof(tbuf) - tbx -1;
-    return length;
+    return uint64ToString(buffer, capacity, uval, negative, radix);
 }
-
 
 U_CAPI int32_t U_EXPORT2
 T_CString_stringToInteger(const char *integerString, int32_t radix)

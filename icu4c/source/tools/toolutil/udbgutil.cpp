@@ -432,8 +432,8 @@ static int32_t stringToStringBuffer(char *target, int32_t targetCapacity, const 
 
 static int32_t integerToStringBuffer(char *target, int32_t targetCapacity, int32_t n, int32_t radix, UErrorCode *status) {
   if(U_FAILURE(*status)) return 0;
-  char str[300];
-  T_CString_integerToString(str,n,radix);
+  char str[33]; // 32 binary digits plus NUL
+  T_CString_integerToString(str,UPRV_LENGTHOF(str),n,radix);
   return stringToStringBuffer(target,targetCapacity,str,status);
 }
 

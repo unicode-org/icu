@@ -2032,8 +2032,8 @@ loadEraNames(UnicodeString *eras, int32_t length, Hashtable *eraNamesTable, URes
     const UResourceBundle *ctewbPtr = (U_SUCCESS(resStatus))? ctewb.getAlias() : nullptr;
 
     for (int32_t eraCode = 0; eraCode <= maxEra; eraCode++) {
-        char eraCodeStr[12]; // T_CString_integerToString is documented to generate at most 12 bytes including nul terminator
-        int32_t eraCodeStrLen = T_CString_integerToString(eraCodeStr, eraCode, 10);
+        char eraCodeStr[12]; // enough for any base-10 int32_t including NUL terminator
+        int32_t eraCodeStrLen = T_CString_integerToString(eraCodeStr, UPRV_LENGTHOF(eraCodeStr), eraCode, 10);
         UnicodeString eraCodeKey = UnicodeString(eraCodeStr, eraCodeStrLen, US_INV);
         UnicodeString *eraName = static_cast<UnicodeString*>(eraNamesTable->get(eraCodeKey));
         eras[eraCode].remove();
