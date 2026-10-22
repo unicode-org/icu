@@ -7570,6 +7570,7 @@ public class DiagBigDecimalTest extends CoreTestFmwk {
 
     /** Test the {@link com.ibm.icu.math.BigDecimal#equals} method. */
     @Test
+    @SuppressWarnings("SelfEquals")
     public void diagequals() {
         com.ibm.icu.math.BigDecimal d;
         d = new com.ibm.icu.math.BigDecimal(17);
