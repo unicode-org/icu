@@ -84,6 +84,7 @@ void addCollAPITest(TestNode** root)
     addTest(root, &TestGetTailoredSet, "tscoll/capitst/TestGetTailoredSet");
     addTest(root, &TestMergeSortKeys, "tscoll/capitst/TestMergeSortKeys");
     addTest(root, &TestShortString, "tscoll/capitst/TestShortString");
+    addTest(root, &TestNormalizeShortDefinitionStringBufferOverrun, "tscoll/capitst/TestNormalizeShortDefinitionStringBufferOverrun");
     addTest(root, &TestGetContractionsAndUnsafes, "tscoll/capitst/TestGetContractionsAndUnsafes");
     addTest(root, &TestOpenBinary, "tscoll/capitst/TestOpenBinary");
     addTest(root, &TestDefault, "tscoll/capitst/TestDefault");
@@ -2238,6 +2239,39 @@ static void TestShortString(void)
         }
     }
 
+}
+
+/*
+ * ucol_normalizeShortDefinitionString() must never write past the caller's
+ * buffer. The "_" separator between two options was emitted with uprv_strcat
+ * guarded only by (len < capacity), which let the trailing NUL land at
+ * destination[capacity] when len == capacity-1. Run it at every capacity from
+ * 0 up to past the required length; under ASan a too-tight buffer (e.g.
+ * capacity 3 for "S3_FO") is a heap-buffer-overflow write without the fix.
+ */
+static void TestNormalizeShortDefinitionStringBufferOverrun(void)
+{
+    const char *input = "S3_FO";
+    char full[64];
+    int32_t fullLen, cap;
+    UParseError parseError;
+    UErrorCode status = U_ZERO_ERROR;
+
+    fullLen = ucol_normalizeShortDefinitionString(input, full, (int32_t)sizeof(full),
+                                                  &parseError, &status);
+    if(U_FAILURE(status)) {
+        log_err_status(status, "normalize of '%s' into a large buffer failed: %s\n",
+            input, u_errorName(status));
+        return;
+    }
+
+    for(cap = 0; cap <= fullLen + 1; cap++) {
+        /* Size the buffer exactly so ASan brackets any out-of-bounds write. */
+        char *buffer = cap > 0 ? (char *)malloc((size_t)cap) : NULL;
+        status = U_ZERO_ERROR;
+        ucol_normalizeShortDefinitionString(input, buffer, cap, &parseError, &status);
+        free(buffer);
+    }
 }
 
 static void
