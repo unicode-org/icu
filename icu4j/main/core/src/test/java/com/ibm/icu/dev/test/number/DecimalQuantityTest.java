@@ -20,6 +20,7 @@ import com.ibm.icu.number.Scale;
 import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.PluralRules.Operand;
+import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.ULocale;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -960,6 +961,37 @@ public class DecimalQuantityTest extends CoreTestFmwk {
                 String.format("compact decimal fraction toString: %f", inputVal),
                 expectedString,
                 actualString);
+    }
+
+    @Test
+    public void testToFractionLongWithExtremeScale() {
+        // ICU-23530: with a very negative scale, toFractionLong() used to iterate over
+        // hundreds of millions of magnitudes that are all zero because they lie above
+        // the stored digits, making plural-operand computation take several seconds per
+        // format call.
+        DecimalQuantity_DualStorageBCD fq = new DecimalQuantity_DualStorageBCD();
+        fq.setToLong(5);
+        fq.roundToInfinity();
+        fq.adjustMagnitude(-993030305); // scale is now -993030305
+        assertEquals("toFractionLong(true) with extreme scale", 5L, fq.toFractionLong(true));
+        assertEquals("toFractionLong(false) with extreme scale", 5L, fq.toFractionLong(false));
+
+        DecimalQuantity_DualStorageBCD fq2 = new DecimalQuantity_DualStorageBCD();
+        fq2.setToLong(1234);
+        fq2.roundToInfinity();
+        fq2.adjustMagnitude(-2); // scale is now -2, the value is 12.34
+        assertEquals("toFractionLong(true) for 12.34", 34L, fq2.toFractionLong(true));
+        assertEquals("toFractionLong(false) for 12.34", 34L, fq2.toFractionLong(false));
+
+        // End to end: compact notation with a unit formats through the plural rules
+        // path that computes the f and t operands. Before the fix, each of these format
+        // calls ran the unbounded loop and took several seconds.
+        LocalizedNumberFormatter nf = NumberFormatter.withLocale(new ULocale("dsb"))
+                .notation(Notation.compactLong())
+                .unit(MeasureUnit.PERCENT)
+                .scale(Scale.powerOfTen(-993030305));
+        nf.formatInt(5);
+        nf.formatDouble(5);
     }
 
     @Test
