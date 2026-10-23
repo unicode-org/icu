@@ -258,6 +258,9 @@
     <ClCompile Include="hpmufn.c">
       <Filter>misc</Filter>
     </ClCompile>
+    <ClCompile Include="regexoomtest.cpp">
+      <Filter>regex</Filter>
+    </ClCompile>
     <ClCompile Include="putiltst.c">
       <Filter>misc</Filter>
     </ClCompile>

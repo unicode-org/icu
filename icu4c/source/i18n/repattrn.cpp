@@ -609,6 +609,9 @@ UText *RegexPattern::patternText(UErrorCode      &status) const {
         return fPattern;
     } else {
         RegexStaticSets::initGlobals(&status);
+        if (U_FAILURE(status)) {
+            return nullptr;
+        }
         return RegexStaticSets::gStaticSets->fEmptyText;
     }
 }

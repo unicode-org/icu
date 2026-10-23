@@ -56,7 +56,7 @@ ncnvfbts.o ncnvtst.o putiltst.o cstrtest.o udatpg_test.o utf8tst.o \
 stdnmtst.o usrchtst.o custrtrn.o sorttest.o trietest.o trie2test.o ucptrietest.o usettest.o \
 uenumtst.o utmstest.o currtest.o \
 idnatest.o nfsprep.o spreptst.o sprpdata.o \
-hpmufn.o tracetst.o reapits.o uregiontest.o ulistfmttest.o\
+hpmufn.o tracetst.o reapits.o regexoomtest.o uregiontest.o ulistfmttest.o\
 utexttst.o ucsdetst.o spooftest.o \
 cbiditransformtst.o \
 cgendtst.o \
