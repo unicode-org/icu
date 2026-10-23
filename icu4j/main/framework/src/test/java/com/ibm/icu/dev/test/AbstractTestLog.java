@@ -12,62 +12,93 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import org.junit.Assert;
+import org.junit.AssumptionViolatedException;
+import org.junit.Rule;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class AbstractTestLog implements TestLog {
-    /** Add a message. */
-    public static final void log(String message) {
-        // TODO(stuartg): turned off - causing OOM running under ant
-        // Probably temporary - must decide what to do with these
-        // System.out.print(message);
-        // msg(message, LOG, true, false);
+    protected Logger logger;
+
+    @Rule public LoggingTestWatcher watcher;
+
+    protected AbstractTestLog() {
+        this.logger = LoggerFactory.getLogger(getClass());
+        this.watcher = new LoggingTestWatcher(logger);
     }
 
-    /** Add a message and newline. */
-    public static final void logln(String message) {
-        // TODO(stuartg): turned off - causing OOM running under ant
-        // Probably temporary - must decide what to do with these
-        // System.out.println(message);
-        // msg(message, LOG, true, true);
+    // --------------------------------------------------
+    // Simple logging methods
+    // --------------------------------------------------
+
+    @Override
+    public void logTrace(String message) {
+        logger.trace(message);
     }
 
-    /** Report an error. */
-    public static final void err(String message) {
+    @Override
+    public void logDebug(String message) {
+        logger.debug(message);
+    }
+
+    @Override
+    public void logInfo(String message) {
+        logger.info(message);
+    }
+
+    @Override
+    public void logWarn(String message) {
+        logger.warn(message);
+    }
+
+    @Override
+    public void logError(String message) {
+        logger.error(message);
+    }
+
+    // --------------------------------------------------
+    // Backward compatible logging methods
+    // --------------------------------------------------
+
+    @Override
+    public void logln(String message) {
+        logger.debug(message);
+    }
+
+    @Override
+    public void warnln(String message) {
+        logger.warn(message);
         Assert.fail(message);
-        // msg(message, ERR, true, false);
     }
 
-    /** Report an error and newline. */
-    public static final void errln(String message) {
+    @Override
+    public void errln(String message) {
+        logger.error(message);
         Assert.fail(message);
-        // msg(message, ERR, true, true);
     }
 
-    /** Report a warning (generally missing tests or data). */
-    public static final void warn(String message) {
+    // --------------------------------------------------
+    // Obsolete logging methods
+    // --------------------------------------------------
+
+    @Override
+    public void log(String message) {
+        logger.debug(message);
+    }
+
+    @Override
+    public void warn(String message) {
+        logger.warn(message);
         Assert.fail(message);
-        // TODO(stuartg): turned off - causing OOM running under ant
-        // System.out.print(message);
-        // msg(message, WARN, true, false);
     }
 
-    /** Report a warning (generally missing tests or data) and newline. */
-    public static final void warnln(String message) {
+    @Override
+    public void err(String message) {
+        logger.error(message);
         Assert.fail(message);
-        // TODO(stuartg): turned off - causing OOM running under ant
-        // System.out.println(message);
-        // msg(message, WARN, true, true);
     }
-
-    /**
-     * Vector for logging. Callers can force the logging system to not increment the error or
-     * warning level by passing false for incCount.
-     *
-     * @param message the message to output.
-     * @param level the message level, either LOG, WARN, or ERR.
-     * @param incCount if true, increments the warning or error count
-     * @param newln if true, forces a newline after the message
-     */
-    // public abstract void msg(String message, int level, boolean incCount, boolean newln);
 
     public boolean isDateAtLeast(int year, int month, int day) {
         Date now = new Date();
@@ -77,5 +108,33 @@ public abstract class AbstractTestLog implements TestLog {
             return true;
         }
         return false;
+    }
+
+    static class LoggingTestWatcher extends TestWatcher {
+        Logger logger;
+
+        LoggingTestWatcher(Logger logger) {
+            this.logger = logger;
+        }
+
+        @Override
+        protected void starting(Description description) {
+            logger.info("Starting: " + description.getDisplayName());
+        }
+
+        @Override
+        protected void succeeded(Description description) {
+            logger.info("Succeeded: " + description.getDisplayName());
+        }
+
+        @Override
+        protected void failed(Throwable e, Description description) {
+            logger.error("Failed: " + description.getDisplayName());
+        }
+
+        @Override
+        protected void skipped(AssumptionViolatedException e, Description description) {
+            logger.info("Skipped: " + description.getDisplayName());
+        }
     }
 }

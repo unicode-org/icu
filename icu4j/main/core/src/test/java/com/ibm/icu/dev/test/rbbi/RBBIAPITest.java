@@ -517,11 +517,10 @@ public class RBBIAPITest extends CoreTestFmwk {
     @Test
     public void testGetTitleInstance() {
         BreakIterator bi = BreakIterator.getTitleInstance(new Locale("en", "CA"));
-        TestFmwk.assertNotEquals(
+        assertNotEquals(
                 "Title instance break iterator not correctly instantiated", bi.first(), null);
         bi.setText("Here is some Text");
-        TestFmwk.assertEquals(
-                "Title instance break iterator not correctly instantiated", bi.first(), 0);
+        assertEquals("Title instance break iterator not correctly instantiated", bi.first(), 0);
     }
 
     @Test

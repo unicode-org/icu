@@ -68,6 +68,7 @@
     <jmh.version>1.37</jmh.version>
     <junit.version>4.13.2</junit.version>
     <junitparams.version>1.1.1</junitparams.version>
+    <slf4j.version>2.0.20</slf4j.version>
     <spotbugs-annotations.version>4.9.8</spotbugs-annotations.version>
     <truth.version>1.4.5</truth.version>
     <xalan.version>2.7.2</xalan.version>
@@ -153,6 +154,12 @@
     <mf.Manifest-Version>1.0</mf.Manifest-Version>
     <mf.Bundle-ManifestVersion>2</mf.Bundle-ManifestVersion>
     <mf.Bundle-Copyright>© 2016 and later: Unicode, Inc. and others. License &amp; terms of use: http://www.unicode.org/copyright.html</mf.Bundle-Copyright>
+
+    <!--
+      Test log level. The default is "info".
+      You can change the logging level to debug by "mvn package -DtestLogLevel=debug"
+    -->
+    <testLogLevel>info</testLogLevel>
   </properties>
 
   <licenses>
@@ -296,6 +303,18 @@
         <version>${junitparams.version}</version>
         <scope>test</scope>
       </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>${slf4j.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-simple</artifactId>
+        <version>${slf4j.version}</version>
+        <scope>test</scope>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
@@ -335,6 +354,15 @@
               -->
               <include>**/*.java</include>
             </includes>
+            <systemPropertyVariables>
+              <org.slf4j.simpleLogger.logFile>${project.build.directory}/test.log</org.slf4j.simpleLogger.logFile>
+              <!--
+                To enable logging for certain classes you can do this (replace with your class):
+                <org.slf4j.simpleLogger.log.com.ibm.icu.foo.BarTest>debug</org.slf4j.simpleLogger.log.com.ibm.icu.foo.BarTest>
+                To enable logging for all test classes change the `defaultLogLevel` above to `debug` or `trace`.
+              -->
+              <org.slf4j.simpleLogger.defaultLogLevel>${testLogLevel}</org.slf4j.simpleLogger.defaultLogLevel>
+            </systemPropertyVariables>
           </configuration>
         </plugin>
         <plugin>

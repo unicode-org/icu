@@ -439,7 +439,7 @@ public class MeasureUnitTest extends CoreTestFmwk {
         assertUnique(MeasureUnit.getAvailable());
     }
 
-    static void assertUnique(Collection<?> coll) {
+    void assertUnique(Collection<?> coll) {
         int expectedSize = new HashSet<>(coll).size();
         int actualSize = coll.size();
         assertEquals("Collection should contain only unique elements", expectedSize, actualSize);

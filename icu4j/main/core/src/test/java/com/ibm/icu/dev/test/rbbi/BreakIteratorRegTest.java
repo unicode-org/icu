@@ -36,7 +36,7 @@ public class BreakIteratorRegTest extends CoreTestFmwk {
         // do they?  This here test ain't worth $2.50.  Nope.";
         // sbi.setText(text);
 
-        assertTrue(!BreakIterator.unregister(""), "unregister before register"); // coverage
+        assertTrue("unregister before register", !BreakIterator.unregister("")); // coverage
 
         Object key0 =
                 BreakIterator.registerInstance(twbi.clone(), foo_locale, BreakIterator.KIND_WORD);
@@ -51,17 +51,17 @@ public class BreakIteratorRegTest extends CoreTestFmwk {
             BreakIterator test3 = BreakIterator.getWordInstance(thailand_locale);
             BreakIterator test4 = BreakIterator.getWordInstance(foo_locale);
 
-            assertEqual(test0, jwbi, "japan word == japan word");
-            assertEqual(test1, twbi, "us word == thai word");
-            assertEqual(test2, usbi, "us sentence == us sentence");
-            assertEqual(test3, twbi, "thai word == thai word");
-            assertEqual(test4, twbi, "foo word == thai word");
+            assertEquals("japan word == japan word", test0, jwbi);
+            assertEquals("us word == thai word", test1, twbi);
+            assertEquals("us sentence == us sentence", test2, usbi);
+            assertEquals("thai word == thai word", test3, twbi);
+            assertEquals("foo word == thai word", test4, twbi);
         }
 
         // Locale[] locales = BreakIterator.getAvailableLocales();
 
-        assertTrue(BreakIterator.unregister(key2), "unregister us word (thai word)");
-        assertTrue(!BreakIterator.unregister(key2), "unregister second time");
+        assertTrue("unregister us word (thai word)", BreakIterator.unregister(key2));
+        assertTrue("unregister second time", !BreakIterator.unregister(key2));
         boolean error = false;
         try {
             BreakIterator.unregister(null);
@@ -69,24 +69,24 @@ public class BreakIteratorRegTest extends CoreTestFmwk {
             error = true;
         }
 
-        assertTrue(error, "unregister null");
+        assertTrue("unregister null", error);
 
         {
             CharacterIterator sci = BreakIterator.getWordInstance(Locale.US).getText();
             int len = sci.getEndIndex() - sci.getBeginIndex();
-            assertEqual(len, 0, "us word text: " + getString(sci));
+            assertEquals("us word text: " + getString(sci), len, 0);
         }
 
         assertTrue(
-                Arrays.asList(BreakIterator.getAvailableLocales()).contains(foo_locale),
-                "foo_locale");
-        assertTrue(BreakIterator.unregister(key0), "unregister foo word (thai word)");
+                "foo_locale",
+                Arrays.asList(BreakIterator.getAvailableLocales()).contains(foo_locale));
+        assertTrue("unregister foo word (thai word)", BreakIterator.unregister(key0));
         assertTrue(
-                !Arrays.asList(BreakIterator.getAvailableLocales()).contains(foo_locale),
-                "no foo_locale");
-        assertEqual(BreakIterator.getWordInstance(Locale.US), usbi, "us word == us sentence");
+                "no foo_locale",
+                !Arrays.asList(BreakIterator.getAvailableLocales()).contains(foo_locale));
+        assertEquals("us word == us sentence", BreakIterator.getWordInstance(Locale.US), usbi);
 
-        assertTrue(BreakIterator.unregister(key1), "unregister us word (us sentence)");
+        assertTrue("unregister us word (us sentence)", BreakIterator.unregister(key1));
         {
             BreakIterator test0 = BreakIterator.getWordInstance(Locale.JAPAN);
             BreakIterator test1 = BreakIterator.getWordInstance(Locale.US);
@@ -94,28 +94,16 @@ public class BreakIteratorRegTest extends CoreTestFmwk {
             BreakIterator test3 = BreakIterator.getWordInstance(thailand_locale);
             BreakIterator test4 = BreakIterator.getWordInstance(foo_locale);
 
-            assertEqual(test0, jwbi, "japanese word break");
-            assertEqual(test1, uwbi, "us sentence-word break");
-            assertEqual(test2, usbi, "us sentence break");
-            assertEqual(test3, twbi, "thai word break");
-            assertEqual(test4, rwbi, "root word break");
+            assertEquals("japanese word break", test0, jwbi);
+            assertEquals("us sentence-word break", test1, uwbi);
+            assertEquals("us sentence break", test2, usbi);
+            assertEquals("thai word break", test3, twbi);
+            assertEquals("root word break", test4, rwbi);
 
             CharacterIterator sci = test1.getText();
             int len = sci.getEndIndex() - sci.getBeginIndex();
-            assertEqual(len, 0, "us sentence-word break text: " + getString(sci));
+            assertEquals("us sentence-word break text: " + getString(sci), len, 0);
         }
-    }
-
-    private void assertEqual(Object lhs, Object rhs, String msg) {
-        msg(msg, lhs.equals(rhs) ? LOG : ERR, true, true);
-    }
-
-    private void assertEqual(int lhs, int rhs, String msg) {
-        msg(msg, lhs == rhs ? LOG : ERR, true, true);
-    }
-
-    private void assertTrue(boolean arg, String msg) {
-        msg(msg, arg ? LOG : ERR, true, true);
     }
 
     private static String getString(CharacterIterator ci) {

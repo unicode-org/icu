@@ -20,7 +20,6 @@ import java.util.StringJoiner;
 import java.util.TimeZone;
 import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.Before;
 
 /**
@@ -408,7 +407,7 @@ public abstract class TestFmwk extends AbstractTestLog {
      * @param expected array of strings we expect to see, or null
      * @return the length of 'array', or -1 on error
      */
-    protected static int checkArray(String msg, String array[], String expected[]) {
+    protected int checkArray(String msg, String array[], String expected[]) {
         int explen = (expected != null) ? expected.length : 0;
         if (!(explen >= 0 && explen < 31)) { // [sic] 31 not 32
             errln("Internal error");
@@ -452,7 +451,7 @@ public abstract class TestFmwk extends AbstractTestLog {
      * @param expected array of locales names we expect to see, or null
      * @return the length of 'array'
      */
-    protected static <T> int checkArray(String msg, T array[], String expected[]) {
+    protected <T> int checkArray(String msg, T array[], String expected[]) {
         String strs[] = new String[array.length];
         for (int i = 0; i < array.length; ++i) {
             strs[i] = array[i].toString();
@@ -462,28 +461,27 @@ public abstract class TestFmwk extends AbstractTestLog {
 
     // JUnit-like assertions.
 
-    protected static boolean assertTrue(String message, boolean condition) {
+    protected boolean assertTrue(String message, boolean condition) {
         return handleAssert(condition, message, "true", null);
     }
 
-    protected static boolean assertFalse(String message, boolean condition) {
+    protected boolean assertFalse(String message, boolean condition) {
         return handleAssert(!condition, message, "false", null);
     }
 
-    protected static boolean assertEquals(String message, boolean expected, boolean actual) {
+    protected boolean assertEquals(String message, boolean expected, boolean actual) {
         return handleAssert(
                 expected == actual, message, String.valueOf(expected), String.valueOf(actual));
     }
 
-    protected static boolean assertEquals(String message, long expected, long actual) {
+    protected boolean assertEquals(String message, long expected, long actual) {
         return handleAssert(
                 expected == actual, message, String.valueOf(expected), String.valueOf(actual));
     }
 
     // do NaN and range calculations to precision of float, don't rely on
     // promotion to double
-    protected static boolean assertEquals(
-            String message, float expected, float actual, double error) {
+    protected boolean assertEquals(String message, float expected, float actual, double error) {
         boolean result =
                 Float.isInfinite(expected)
                         ? expected == actual
@@ -495,8 +493,7 @@ public abstract class TestFmwk extends AbstractTestLog {
                 String.valueOf(actual));
     }
 
-    protected static boolean assertEquals(
-            String message, double expected, double actual, double error) {
+    protected boolean assertEquals(String message, double expected, double actual, double error) {
         boolean result =
                 Double.isInfinite(expected)
                         ? expected == actual
@@ -508,19 +505,19 @@ public abstract class TestFmwk extends AbstractTestLog {
                 String.valueOf(actual));
     }
 
-    protected static <T> boolean assertEquals(String message, T[] expected, T[] actual) {
+    protected <T> boolean assertEquals(String message, T[] expected, T[] actual) {
         // Use toString on a List to get useful, readable messages
         String expectedString = expected == null ? "null" : Arrays.asList(expected).toString();
         String actualString = actual == null ? "null" : Arrays.asList(actual).toString();
         return assertEquals(message, expectedString, actualString);
     }
 
-    protected static boolean assertEquals(String message, Object expected, Object actual) {
+    protected boolean assertEquals(String message, Object expected, Object actual) {
         boolean result = expected == null ? actual == null : expected.equals(actual);
         return handleAssert(result, message, stringFor(expected), stringFor(actual));
     }
 
-    protected static boolean assertNotEquals(String message, Object expected, Object actual) {
+    protected boolean assertNotEquals(String message, Object expected, Object actual) {
         boolean result = !(expected == null ? actual == null : expected.equals(actual));
         return handleAssert(
                 result, message, stringFor(expected), stringFor(actual), "not equal to", true);
@@ -531,24 +528,24 @@ public abstract class TestFmwk extends AbstractTestLog {
                 expected == actual, message, stringFor(expected), stringFor(actual), "==", false);
     }
 
-    protected static boolean assertNotSame(String message, Object expected, Object actual) {
+    protected boolean assertNotSame(String message, Object expected, Object actual) {
         return handleAssert(
                 expected != actual, message, stringFor(expected), stringFor(actual), "!=", true);
     }
 
-    protected static boolean assertNull(String message, Object actual) {
+    protected boolean assertNull(String message, Object actual) {
         return handleAssert(actual == null, message, null, stringFor(actual));
     }
 
-    protected static boolean assertNotNull(String message, Object actual) {
+    protected boolean assertNotNull(String message, Object actual) {
         return handleAssert(actual != null, message, null, stringFor(actual), "!=", true);
     }
 
-    protected static void fail() {
+    protected void fail() {
         fail("");
     }
 
-    protected static void fail(String message) {
+    protected void fail(String message) {
         if (message == null) {
             message = "";
         }
@@ -558,12 +555,11 @@ public abstract class TestFmwk extends AbstractTestLog {
         errln(sourceLocation() + message);
     }
 
-    private static boolean handleAssert(
-            boolean result, String message, String expected, String actual) {
+    private boolean handleAssert(boolean result, String message, String expected, String actual) {
         return handleAssert(result, message, expected, actual, null, false);
     }
 
-    public static boolean handleAssert(
+    public boolean handleAssert(
             boolean result,
             String message,
             Object expected,
@@ -626,13 +622,12 @@ public abstract class TestFmwk extends AbstractTestLog {
         throw new InternalError();
     }
 
-    protected static boolean checkDefaultPrivateConstructor(String fullyQualifiedClassName)
+    protected boolean checkDefaultPrivateConstructor(String fullyQualifiedClassName)
             throws Exception {
         return checkDefaultPrivateConstructor(Class.forName(fullyQualifiedClassName));
     }
 
-    protected static boolean checkDefaultPrivateConstructor(Class<?> classToBeTested)
-            throws Exception {
+    protected boolean checkDefaultPrivateConstructor(Class<?> classToBeTested) throws Exception {
         Constructor<?> constructor = classToBeTested.getDeclaredConstructor();
 
         // Check that the constructor is private.
@@ -709,27 +704,5 @@ public abstract class TestFmwk extends AbstractTestLog {
         Method toStringMethod = classToBeTested.getDeclaredMethod("toString");
         toStringMethod.setAccessible(true);
         return (String) toStringMethod.invoke(obj);
-    }
-
-    // End JUnit-like assertions
-
-    // TODO (sgill): added to keep errors away
-    /* (non-Javadoc)
-     * @see com.ibm.icu.dev.test.TestLog#msg(java.lang.String, int, boolean, boolean)
-     */
-    // @Override
-    protected static void msg(String message, int level, boolean incCount, boolean newln) {
-        if (level == TestLog.WARN || level == TestLog.ERR) {
-            Assert.fail(message);
-        }
-        // TODO(stuartg): turned off - causing OOM running under ant
-        //        while (level > 0) {
-        //            System.out.print(" ");
-        //            level--;
-        //        }
-        //        System.out.print(message);
-        //        if (newln) {
-        //            System.out.println();
-        //        }
     }
 }

@@ -1110,7 +1110,7 @@ public final class UCharacterCaseTest extends CoreTestFmwk {
         }
     }
 
-    private static void checkEditsIter(
+    private void checkEditsIter(
             String name,
             Edits.Iterator ei1,
             Edits.Iterator ei2, // two equal iterators

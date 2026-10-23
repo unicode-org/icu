@@ -73,7 +73,7 @@ public class TestMultipleParagraphs extends BidiFmwk {
     @Test
     public void testMultipleParagraphs() {
         byte gotLevel;
-        byte[] gotLevels;
+        byte[] gotLevels = null;
         boolean orderParagraphsLTR;
         String src;
         Bidi bidi = new Bidi();
@@ -237,8 +237,6 @@ public class TestMultipleParagraphs extends BidiFmwk {
             gotLevels = bidi.getLevels();
         } catch (Exception e) {
             errln("Error on Bidi.getLevels");
-            gotLevels = new byte[bidi.getLength()];
-            Arrays.fill(gotLevels, (byte) -1);
         }
         for (i = 26; i < 32; i++) {
             if (gotLevels[i] != Bidi.RTL) {
@@ -260,7 +258,6 @@ public class TestMultipleParagraphs extends BidiFmwk {
             bidiLine = bidi.setLine(i, k);
         } catch (Exception e) {
             errln("For line limits " + i + "-" + k + " got failure");
-            return;
         }
         paraIndex = bidiLine.getParagraphIndex(i);
         run = bidiLine.getParagraph(i);
@@ -268,8 +265,6 @@ public class TestMultipleParagraphs extends BidiFmwk {
             gotLevels = bidiLine.getLevels();
         } catch (Exception e) {
             errln("Error on bidiLine.getLevels");
-            gotLevels = new byte[bidiLine.getLength()];
-            Arrays.fill(gotLevels, (byte) -1);
         }
         length = bidiLine.getLength();
         gotLevel = run.getEmbeddingLevel();
@@ -338,30 +333,28 @@ public class TestMultipleParagraphs extends BidiFmwk {
             gotLevels = bidiLine.getLevels();
         } catch (Exception e) {
             errln("Error on bidiLine.getLevels");
-            gotLevels = new byte[bidiLine.getLength()];
-            Arrays.fill(gotLevels, (byte) -1);
         }
         length = bidiLine.getLength();
         gotLevel = run.getEmbeddingLevel();
         if ((gotLevel != Bidi.RTL) || (gotLevels[length - 1] != 0)) {
-            err(
-                    "\nFor paragraph "
-                            + paraIndex
-                            + " with limits "
-                            + run.getStart()
-                            + "-"
-                            + run.getLimit()
-                            + ", paraLevel = "
-                            + gotLevel
-                            + "expected = "
-                            + Bidi.RTL
-                            + ", level of separator = "
-                            + gotLevels[length - 1]
-                            + " expected = 0\nlevels = ");
+            StringBuilder msg = new StringBuilder();
+            msg.append("For paragraph ")
+                    .append(paraIndex)
+                    .append(" with limits ")
+                    .append(run.getStart())
+                    .append('-')
+                    .append(run.getLimit())
+                    .append(", paraLevel = ")
+                    .append(gotLevel)
+                    .append(", expected = ")
+                    .append(Bidi.RTL)
+                    .append(", level of separator = ")
+                    .append(gotLevels[length - 1])
+                    .append(", expected = 0\nlevels = ");
             for (count = 0; count < length; count++) {
-                errcont(gotLevels[count] + "  ");
+                msg.append(gotLevels[count]).append("  ");
             }
-            errcont("\n");
+            errln(msg.toString());
         }
 
         /* test that the concatenation of separate invocations of the bidi code

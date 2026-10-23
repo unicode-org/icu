@@ -9300,7 +9300,7 @@ public class DateFormatTest extends CoreTestFmwk {
         }
     }
 
-    private static void oneCalendarTest(Locale locale, String expect1, String expect2) {
+    private void oneCalendarTest(Locale locale, String expect1, String expect2) {
         String skeleton = "EyMMMMdjmz";
         long millis = 1758854856581L; // 2025/09/25 19:47:36
 
