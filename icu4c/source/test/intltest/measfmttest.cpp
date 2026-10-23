@@ -21,6 +21,7 @@
 #include "cstr.h"
 #include "cstring.h"
 #include "measunit_impl.h"
+#include "unicode/currunit.h"
 #include "unicode/decimfmt.h"
 #include "unicode/measfmt.h"
 #include "unicode/measure.h"
@@ -108,6 +109,7 @@ private:
     void Test21223_FrenchDuration();
     void TestInternalMeasureUnitImpl();
     void TestMeasureEquality();
+    void TestCurrencyUnitMove();
 
     void verifyFormat(
         const char *description,
@@ -249,6 +251,7 @@ void MeasureFormatTest::runIndexedTest(
     TESTCASE_AUTO(Test21223_FrenchDuration);
     TESTCASE_AUTO(TestInternalMeasureUnitImpl);
     TESTCASE_AUTO(TestMeasureEquality);
+    TESTCASE_AUTO(TestCurrencyUnitMove);
     TESTCASE_AUTO_END;
 }
 
@@ -7165,6 +7168,36 @@ void MeasureFormatTest::TestMeasureEquality() {
         assertEquals(eq.c_str(), false, a == s);
         assertEquals(ne.c_str(), true, a != s);
     }
+}
+
+void MeasureFormatTest::TestCurrencyUnitMove() {
+    UErrorCode status = U_ZERO_ERROR;
+    // QZZ is not in the built-in currency table, so its identifier uses fImpl.
+    CurrencyUnit currency("QZZ", status);
+    if (!assertSuccess("Create currency unit", status)) {
+        return;
+    }
+    MeasureUnit source(currency);
+    assertEquals("Currency identifier before move", "QZZ", source.getIdentifier());
+
+    MeasureUnit moved(std::move(source));
+    assertEquals("Currency identifier after move construction", "QZZ", moved.getIdentifier());
+    UErrorCode movedSourceStatus = U_ZERO_ERROR;
+    CurrencyUnit fromMovedSource(source, movedSourceStatus);
+    assertEquals("Moved-from unit is not a currency", U_ILLEGAL_ARGUMENT_ERROR, movedSourceStatus);
+    assertEquals("Moved-from currency identifier", "", fromMovedSource.getIdentifier());
+    assertEquals("Moved-from identifier after construction", "", source.getIdentifier());
+    assertEquals("Moved-from type after construction", "none", source.getType());
+
+    MeasureUnit target;
+    target = std::move(moved);
+    assertEquals("Currency identifier after move assignment", "QZZ", target.getIdentifier());
+    assertEquals("Moved-from identifier after assignment", "", moved.getIdentifier());
+    assertEquals("Moved-from type after assignment", "none", moved.getType());
+
+    CurrencyUnit restored(target, status);
+    assertSuccess("Restore currency after move", status);
+    assertEquals("Restored currency identifier", "QZZ", restored.getIdentifier());
 }
 
 
