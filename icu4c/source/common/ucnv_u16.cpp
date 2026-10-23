@@ -301,7 +301,7 @@ _UTF16BEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     }
     if((count=cnv->toULength)!=0) {
         uint8_t *p=cnv->toUBytes;
-        do {
+        while(length>0) {
             p[count++]=*source++;
             ++sourceIndex;
             --length;
@@ -371,7 +371,7 @@ _UTF16BEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                     return;
                 }
             }
-        } while(length>0);
+        }
         cnv->toULength=(int8_t)count;
     }
 
@@ -902,7 +902,7 @@ _UTF16LEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     }
     if((count=cnv->toULength)!=0) {
         uint8_t *p=cnv->toUBytes;
-        do {
+        while(length>0) {
             p[count++]=*source++;
             ++sourceIndex;
             --length;
@@ -972,7 +972,7 @@ _UTF16LEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                     return;
                 }
             }
-        } while(length>0);
+        }
         cnv->toULength=(int8_t)count;
     }
 
