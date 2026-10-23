@@ -927,10 +927,14 @@ class ModulusSubstitution extends NFSubstitution {
         if (ruleToUse == null) {
             super.doSubstitution(number, toInsertInto, position, recursionCount);
         } else {
+
+            if (recursionCount >= NFRuleSet.RECURSION_LIMIT) {
+                throw new IllegalStateException("Recursion limit exceeded in RBNF formatting");
+            }
             // a >>> substitution goes straight to a particular rule to
             // format the substitution value
             long numberToFormat = transformNumber(number);
-            ruleToUse.doFormat(numberToFormat, toInsertInto, position + pos, recursionCount);
+            ruleToUse.doFormat(numberToFormat, toInsertInto, position + pos, recursionCount + 1);
         }
     }
 
@@ -952,11 +956,15 @@ class ModulusSubstitution extends NFSubstitution {
             super.doSubstitution(number, toInsertInto, position, recursionCount);
 
         } else {
+
+            if (recursionCount >= NFRuleSet.RECURSION_LIMIT) {
+                throw new IllegalStateException("Recursion limit exceeded in RBNF formatting");
+            }
             // a >>> substitution goes straight to a particular rule to
             // format the substitution value
             double numberToFormat = transformNumber(number);
 
-            ruleToUse.doFormat(numberToFormat, toInsertInto, position + pos, recursionCount);
+            ruleToUse.doFormat(numberToFormat, toInsertInto, position + pos, recursionCount + 1);
         }
     }
 
