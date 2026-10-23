@@ -574,6 +574,12 @@ public:
 
 private:
     /**
+     * Default constructor. Allocates the core helper objects; sets
+     * internalErrorCode to U_MEMORY_ALLOCATION_ERROR on failure.
+     */
+    DateTimePatternGenerator();
+
+    /**
      * Constructor.
      */
     DateTimePatternGenerator(UErrorCode & status);
