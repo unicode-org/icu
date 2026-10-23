@@ -752,6 +752,18 @@ public class TestBidi extends BidiFmwk {
     }
 
     @Test
+    public void testUnmatchedPDIOverride() {
+        // ICU-23513 (J1): X6a applies the active RLO to an unmatched PDI.
+        Bidi bidi = new Bidi();
+        bidi.setPara("\u202Aa\u202C\u202E\u2069\u202Ab", Bidi.LTR, null);
+        // Expected levels: x 2 x x 1 x 2; X9-removed controls are not checked.
+        assertEquals("level of a", 2, bidi.getLevelAt(1));
+        assertEquals("level of PDI", 1, bidi.getLevelAt(4));
+        assertEquals("level of b", 2, bidi.getLevelAt(6));
+        assertEquals("visual order", "ba", bidi.writeReordered(Bidi.REMOVE_BIDI_CONTROLS));
+    }
+
+    @Test
     public void testWriteReorderedUndefinedShift() {
         Bidi bidi = new Bidi();
         bidi.setReorderingMode(Bidi.REORDER_INVERSE_LIKE_DIRECT);
