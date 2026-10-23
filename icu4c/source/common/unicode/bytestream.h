@@ -284,9 +284,10 @@ using value_type_or_char_t = typename value_type_or_char<StringClass>::type;
  * Implementation of ByteSink that writes to a "string".
  * The StringClass is usually instantiated with a std::string or a std::u8string.
  * StringClass must have public member functions reserve(integer type), capacity(), length(), and
- * append(value type, integer type) with the same semantics as those of std::basic_string, and must
- * have an 8-bit value type.  If the value type is not char, it must be a public member type
- * StringClass::value_type.
+ * append(value type, integer type) with the same semantics as those of std::basic_string.
+ * If the value type is not char, it must be a public member type
+ * StringClass::value_type.  Append() converts each byte to one Unit, so StringClass types with
+ * a wider value type (e.g. UnicodeString) also work correctly.
  * @stable ICU 4.2
  */
 template<typename StringClass>
@@ -322,7 +323,15 @@ class StringByteSink : public ByteSink {
     if constexpr (std::is_same_v<Unit, char>) {
       dest_->append(data, n);
     } else {
-      dest_->append(reinterpret_cast<const Unit*>(data), n);
+      // ByteSink::Append delivers n bytes, but dest_->append(const Unit*, n)
+      // would interpret n as a count of Units, reading 2n/4n bytes and
+      // merging byte pairs for 16/32-bit Units. Convert byte by byte:
+      // callers write ASCII (language tags, keywords), so each byte maps
+      // to one Unit with the same value.
+      for (int32_t i = 0; i < n; ++i) {
+        Unit unit = static_cast<Unit>(static_cast<unsigned char>(data[i]));
+        dest_->append(&unit, 1);
+      }
     }
   }
  private:
