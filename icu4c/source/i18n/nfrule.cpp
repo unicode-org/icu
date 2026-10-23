@@ -383,11 +383,15 @@ NFRule::parseRuleDescriptor(UnicodeString& description, UErrorCode& status)
 
                 // val now contains the rule's radix.  Set it
                 // accordingly, and recalculate the rule's exponent
-                radix = static_cast<int32_t>(val);
-                if (radix == 0) {
-                    // throw new IllegalArgumentException("Rule can't have radix of 0");
+                if (val < 1 || val > INT32_MAX) {
+                    // The radix must be a positive value that fits in an int32_t.
+                    // A larger value would wrap to a negative radix below, and
+                    // expectedExponent() would then take uprv_log() of a negative
+                    // number (NaN) and cast the NaN to int16_t.
                     status = U_PARSE_ERROR;
+                    return;
                 }
+                radix = static_cast<int32_t>(val);
 
                 exponent = expectedExponent();
             }

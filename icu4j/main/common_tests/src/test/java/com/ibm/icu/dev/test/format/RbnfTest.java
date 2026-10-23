@@ -2377,4 +2377,19 @@ public class RbnfTest extends CoreTestFmwk {
             // Expected exception or parse failure is fine, but not others like NPE.
         }
     }
+
+    @Test
+    public void TestParseRuleDescriptorRadixOverflow() {
+        // A radix descriptor that fits in a long but not an int (2^31) used to be
+        // narrowed to a negative radix, so expectedExponent() took Math.log() of a
+        // negative number and cast the resulting NaN to short. Reject it instead.
+        try {
+            new RuleBasedNumberFormat("1000000000/2147483648: x>>;", Locale.ENGLISH);
+            errln("radix 2147483648 should be rejected");
+        } catch (IllegalArgumentException e) {
+            // expected
+        }
+        // A radix at the int maximum is still accepted.
+        new RuleBasedNumberFormat("1000000000/2147483647: x>>;", Locale.ENGLISH);
+    }
 }
