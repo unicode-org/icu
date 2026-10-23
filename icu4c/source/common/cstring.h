@@ -100,11 +100,25 @@ T_CString_toLowerCase(char* str);
 U_CAPI char* U_EXPORT2
 T_CString_toUpperCase(char* str);
 
+/**
+ * Formats n in the given radix (2..16) into buffer.
+ * Returns the length of the number string, not including the terminating NUL.
+ * If that length is >=capacity, then nothing but an empty string is written
+ * (if capacity>0), so the buffer is never overrun.
+ * A capacity of 12 is sufficient for base 10, 33 for any radix.
+ */
 U_CAPI int32_t U_EXPORT2
-T_CString_integerToString(char *buffer, int32_t n, int32_t radix);
+T_CString_integerToString(char *buffer, int32_t capacity, int32_t n, int32_t radix);
 
+/**
+ * Formats n in the given radix (2..16) into buffer.
+ * Returns the length of the number string, not including the terminating NUL.
+ * If that length is >=capacity, then nothing but an empty string is written
+ * (if capacity>0), so the buffer is never overrun.
+ * A capacity of 21 is sufficient for base 10, 65 for any radix.
+ */
 U_CAPI int32_t U_EXPORT2
-T_CString_int64ToString(char *buffer, int64_t n, uint32_t radix);
+T_CString_int64ToString(char *buffer, int32_t capacity, int64_t n, uint32_t radix);
 
 U_CAPI int32_t U_EXPORT2
 T_CString_stringToInteger(const char *integerString, int32_t radix);

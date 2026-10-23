@@ -32,6 +32,7 @@ static void TestCompareInvEbcdicAsAscii(void);
 static void TestLocaleAtSign(void);
 static void TestNoInvariantAtSign(void);
 static void TestInvCharToAscii(void);
+static void TestIntegerToStringBounds(void);
 
 void addCStringTest(TestNode** root) {
     addTest(root, &TestAPI, "tsutil/cstrtest/TestAPI");
@@ -40,6 +41,7 @@ void addCStringTest(TestNode** root) {
     addTest(root, &TestLocaleAtSign, "tsutil/cstrtest/TestLocaleAtSign");
     addTest(root, &TestNoInvariantAtSign, "tsutil/cstrtest/TestNoInvariantAtSign");
     addTest(root, &TestInvCharToAscii, "tsutil/cstrtest/TestInvCharToAscii");
+    addTest(root, &TestIntegerToStringBounds, "tsutil/cstrtest/TestIntegerToStringBounds");
 }
 
 static void TestAPI(void)
@@ -97,19 +99,19 @@ static void TestAPI(void)
     if(intValue != 256){
         log_err("FAIL: ****T_CString_stringToInteger(\"100\", 16) failed. Expected: 256, Got: %d\n", intValue);
     }
-    i = T_CString_integerToString(src, 34556, 10);
+    i = T_CString_integerToString(src, UPRV_LENGTHOF(src), 34556, 10);
     if(uprv_strcmp(src, "34556") != 0 || i != 5){
         log_err("FAIL: ****integerToString(src, 34566, 10); failed. Expected: \"34556\", Got: %s\n", src);
     }
-    i = T_CString_integerToString(src, 431, 16);
+    i = T_CString_integerToString(src, UPRV_LENGTHOF(src), 431, 16);
     if(uprv_stricmp(src, "1AF") != 0 || i != 3){
         log_err("FAIL: ****integerToString(src, 431, 16); failed. Expected: \"1AF\", Got: %s\n", src);
     }
-    i = T_CString_int64ToString(src, U_INT64_MAX, 10);
+    i = T_CString_int64ToString(src, UPRV_LENGTHOF(src), U_INT64_MAX, 10);
     if(uprv_strcmp(src,  "9223372036854775807") != 0 || i != 19){
         log_err("FAIL: ****integerToString(src, 9223372036854775807, 10); failed. Got: %s\n", src);
     }
-    i = T_CString_int64ToString(src, U_INT64_MAX, 16);
+    i = T_CString_int64ToString(src, UPRV_LENGTHOF(src), U_INT64_MAX, 16);
     if(uprv_stricmp(src, "7FFFFFFFFFFFFFFF") != 0 || i != 16){
         log_err("FAIL: ****integerToString(src, 7FFFFFFFFFFFFFFF, 16); failed. Got: %s\n", src);
     }
@@ -395,5 +397,77 @@ TestInvCharToAscii(void) {
             log_err("uprv_invCharToAscii('%c') did not convert to ASCII 0x%02x\n", ic, (int)ac);
         }
         if (ic == 0) { break; }
+    }
+}
+
+/* Checks that no more than capacity bytes are written, and that the guard byte after them is intact. */
+static void checkIntToString(const char *name, int32_t length, const char *buffer, int32_t capacity,
+                             const char *expected) {
+    int32_t expectedLength = (int32_t)uprv_strlen(expected);
+    if (length != expectedLength) {
+        log_err("FAIL: %s capacity %d returned length %d, expected %d\n",
+                name, (int)capacity, (int)length, (int)expectedLength);
+    }
+    if (buffer[capacity] != 'x') {
+        log_err("FAIL: %s capacity %d wrote past the end of the buffer\n", name, (int)capacity);
+    } else if (expectedLength < capacity) {
+        if (uprv_stricmp(buffer, expected) != 0) {
+            log_err("FAIL: %s capacity %d wrote \"%s\", expected \"%s\"\n",
+                    name, (int)capacity, buffer, expected);
+        }
+    } else if (capacity > 0 && buffer[0] != 0) {
+        log_err("FAIL: %s capacity %d did not write an empty string on overflow\n", name, (int)capacity);
+    }
+}
+
+static void TestIntegerToStringBounds(void) {
+    /* Values whose formatted lengths are the maximum for their radix. */
+    static const struct {
+        int32_t value;
+        int32_t radix;
+        const char *expected;
+    } int32Cases[] = {
+        { 0, 10, "0" },
+        { INT32_MIN, 10, "-2147483648" },
+        { INT32_MAX, 10, "2147483647" },
+        { -1, 16, "FFFFFFFF" },
+        { INT32_MIN, 8, "20000000000" },
+        { -1, 2, "11111111111111111111111111111111" },
+        { INT32_MIN, 2, "10000000000000000000000000000000" }
+    };
+    static const struct {
+        int64_t value;
+        uint32_t radix;
+        const char *expected;
+    } int64Cases[] = {
+        { INT64_MIN, 10, "-9223372036854775808" },
+        { -1, 16, "FFFFFFFFFFFFFFFF" },
+        { -1, 2, "1111111111111111111111111111111111111111111111111111111111111111" }
+    };
+    char buffer[80];
+    int32_t i, capacity, length;
+
+    for (i = 0; i < UPRV_LENGTHOF(int32Cases); ++i) {
+        int32_t expectedLength = (int32_t)uprv_strlen(int32Cases[i].expected);
+        /* Exact fit, one byte too small (no room for NUL), much too small, and zero capacity. */
+        int32_t capacities[] = { expectedLength + 1, expectedLength, 1, 0 };
+        int32_t j;
+        for (j = 0; j < UPRV_LENGTHOF(capacities); ++j) {
+            capacity = capacities[j];
+            uprv_memset(buffer, 'x', sizeof(buffer));
+            length = T_CString_integerToString(buffer, capacity, int32Cases[i].value, int32Cases[i].radix);
+            checkIntToString("T_CString_integerToString", length, buffer, capacity, int32Cases[i].expected);
+        }
+    }
+    for (i = 0; i < UPRV_LENGTHOF(int64Cases); ++i) {
+        int32_t expectedLength = (int32_t)uprv_strlen(int64Cases[i].expected);
+        int32_t capacities[] = { expectedLength + 1, expectedLength, 1, 0 };
+        int32_t j;
+        for (j = 0; j < UPRV_LENGTHOF(capacities); ++j) {
+            capacity = capacities[j];
+            uprv_memset(buffer, 'x', sizeof(buffer));
+            length = T_CString_int64ToString(buffer, capacity, int64Cases[i].value, int64Cases[i].radix);
+            checkIntToString("T_CString_int64ToString", length, buffer, capacity, int64Cases[i].expected);
+        }
     }
 }

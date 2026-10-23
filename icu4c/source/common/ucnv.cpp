@@ -145,7 +145,7 @@ ucnv_openCCSID (int32_t codepage,
 
     /* ucnv_copyPlatformString could return "ibm-" or "cp" */
     myNameLen = ucnv_copyPlatformString(myName, platform);
-    T_CString_integerToString(myName + myNameLen, codepage, 10);
+    T_CString_integerToString(myName + myNameLen, UPRV_LENGTHOF(myName) - myNameLen, codepage, 10);
 
     return ucnv_createConverter(nullptr, myName, err);
 }

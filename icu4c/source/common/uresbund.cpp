@@ -1466,8 +1466,8 @@ UResourceBundle* init_resb_result(UResourceDataEntry* dataEntry,
             ures_appendResPath(resB, RES_PATH_SEPARATOR_S, 1, status);
         }
     } else if(idx >= 0) {
-        char buf[256];
-        int32_t len = T_CString_integerToString(buf, idx, 10);
+        char buf[16];
+        int32_t len = T_CString_integerToString(buf, UPRV_LENGTHOF(buf), idx, 10);
         ures_appendResPath(resB, buf, len, status);
         if(resB->fResPathLen > 0 && resB->fResPath[resB->fResPathLen-1] != RES_PATH_SEPARATOR) {
             ures_appendResPath(resB, RES_PATH_SEPARATOR_S, 1, status);
