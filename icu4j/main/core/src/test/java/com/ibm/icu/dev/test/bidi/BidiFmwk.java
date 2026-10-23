@@ -376,14 +376,6 @@ public class BidiFmwk extends CoreTestFmwk {
         return new String(output);
     }
 
-    //    void errcont(String message) {
-    //        msg(message, ERR, false, false);
-    //    }
-    //
-    //    void errcontln(String message) {
-    //        msg(message, ERR, false, true);
-    //    }
-
     void printCaseInfo(Bidi bidi, String src, String dst) {
         int length = bidi.getProcessedLength();
         byte[] levels = bidi.getLevels();
