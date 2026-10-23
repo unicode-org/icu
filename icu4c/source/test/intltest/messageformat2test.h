@@ -71,6 +71,7 @@ private:
     void testMessageRefFormatter(IcuTestErrorCode&);
     void testComplexOptions(IcuTestErrorCode&);
     void testSingleEvaluation(IcuTestErrorCode&);
+    void testSelectorResultChecked(IcuTestErrorCode&);
 
     // Feature tests
     void testEmptyMessage(message2::TestCase::Builder&, IcuTestErrorCode&);
@@ -296,6 +297,29 @@ class CounterFunctionValue : public FunctionValue {
                          const FunctionOptions&,
                          UErrorCode&);
 }; // class ResourceManagerValue
+
+// Selector that returns an invalid result from selectKeys()
+class BadSelectorFunction : public Function {
+    public:
+    LocalPointer<FunctionValue> call(const FunctionContext&, const FunctionValue&, const FunctionOptions&, UErrorCode&) const override;
+    BadSelectorFunction() {}
+    virtual ~BadSelectorFunction();
+};
+
+class BadSelectorValue : public FunctionValue {
+    public:
+    UnicodeString formatToString(UErrorCode&) const override;
+    UBool isSelectable() const override { return true; }
+    void selectKeys(const UnicodeString*, int32_t, int32_t*, int32_t&, UErrorCode&) const override;
+    virtual ~BadSelectorValue();
+    private:
+    friend class BadSelectorFunction;
+    UnicodeString mode;
+
+    BadSelectorValue(const FunctionValue&,
+                     const FunctionOptions&,
+                     UErrorCode&);
+}; // class BadSelectorValue
 
 } // namespace message2
 U_NAMESPACE_END

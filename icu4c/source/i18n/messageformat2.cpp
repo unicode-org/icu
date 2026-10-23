@@ -16,6 +16,7 @@
 #include "unicode/normalizer2.h"
 #include "unicode/ubidi.h"
 #include "unicode/unistr.h"
+#include "cmemory.h"
 #include "messageformat2_allocation.h"
 #include "messageformat2_checker.h"
 #include "messageformat2_evaluation.h"
@@ -563,11 +564,9 @@ void MessageFormatter::matchSelectorKeys(const UVector& keys,
     LocalArray<UnicodeString> adoptedKeys(keysArr);
 
     // Create an array to hold the output
-    int32_t* prefsArr = static_cast<int32_t*>(uprv_malloc(keysLen * sizeof(int32_t)));
-    if (prefsArr == nullptr) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return;
-    }
+    const auto prefsArr = prv::make_unique<int32_t[]>(keysLen, status);
+    const auto prefsSeen = prv::make_unique<bool[]>(keysLen, status);
+    CHECK_ERROR(status);
 
     int32_t prefsLen = 0;
 
@@ -579,8 +578,25 @@ void MessageFormatter::matchSelectorKeys(const UVector& keys,
     // This condition can't be checked in the selector.
     bool badSelectOption = !checkSelectOption(*rvVal);
 
-    rvVal->selectKeys(adoptedKeys.getAlias(), keysLen, prefsArr, prefsLen,
+    rvVal->selectKeys(adoptedKeys.getAlias(), keysLen, prefsArr.get(), prefsLen,
                       status);
+
+    // The selector must return distinct indices into `keys`;
+    // treat any other result as a selector error
+    if (U_SUCCESS(status)) {
+        if (prefsLen < 0 || prefsLen > keysLen) {
+            status = U_MF_SELECTOR_ERROR;
+        } else {
+            for (int32_t i = 0; i < prefsLen; i++) {
+                int32_t pref = prefsArr[i];
+                if (pref < 0 || pref >= keysLen || prefsSeen[pref]) {
+                    status = U_MF_SELECTOR_ERROR;
+                    break;
+                }
+                prefsSeen[pref] = true;
+            }
+        }
+    }
 
     if (badSelectOption) {
         context.getErrors().setBadOption(rvVal->getFunctionName(), status);
@@ -594,6 +610,8 @@ void MessageFormatter::matchSelectorKeys(const UVector& keys,
         if (U_FAILURE(status)) {
             status = U_ZERO_ERROR;
             context.getErrors().setSelectorError({}, status);
+            // After a selector error, no keys match
+            prefsLen = 0;
         } else {
             // Ignore warnings
             status = savedStatus;
@@ -614,8 +632,6 @@ void MessageFormatter::matchSelectorKeys(const UVector& keys,
         keysOut.adoptElement(k, status);
         CHECK_ERROR(status);
     }
-
-    uprv_free(prefsArr);
 }
 
 // See https://github.com/unicode-org/message-format-wg/blob/main/spec/formatting.md#resolve-preferences
