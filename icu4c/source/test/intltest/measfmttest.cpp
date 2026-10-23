@@ -6906,6 +6906,24 @@ void MeasureFormatTest::TestCompoundUnitOperations() {
     verifySingleUnit(kilometer2, UMEASURE_PREFIX_KILO, 1, "kilometer");
     assertTrue("kilometer equality", kilometer == kilometer2);
 
+    MeasureUnit per100Kilometer = MeasureUnit::forIdentifier("per-100-kilometer", status);
+    MeasureUnit per100KilometerFromDimensionless = dimensionless.product(per100Kilometer, status);
+    status.errIfFailureAndReset("dimensionless.product(per100Kilometer, status)");
+    const char* per100KilometerSub[] = {"per-kilometer"};
+    verifyCompoundUnit(per100KilometerFromDimensionless, "per-100-kilometer",
+        per100KilometerSub, UPRV_LENGTHOF(per100KilometerSub));
+    assertEquals("per-100-kilometer constant denominator", 100,
+        static_cast<int32_t>(per100KilometerFromDimensionless.getConstantDenominator(status)));
+
+    MeasureUnit per100SquareKilometer = MeasureUnit::forIdentifier("per-kilometer", status)
+        .product(per100Kilometer, status);
+    status.errIfFailureAndReset("perKilometer.product(per100Kilometer, status)");
+    const char* per100SquareKilometerSub[] = {"per-square-kilometer"};
+    verifyCompoundUnit(per100SquareKilometer, "per-100-square-kilometer",
+        per100SquareKilometerSub, UPRV_LENGTHOF(per100SquareKilometerSub));
+    assertEquals("per-100-square-kilometer constant denominator", 100,
+        static_cast<int32_t>(per100SquareKilometer.getConstantDenominator(status)));
+
     // Test out-of-range powers
     MeasureUnit power15 = MeasureUnit::forIdentifier("pow15-kilometer", status);
     verifySingleUnit(power15, UMEASURE_PREFIX_KILO, 15, "pow15-kilometer");
