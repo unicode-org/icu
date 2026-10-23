@@ -314,7 +314,9 @@ _CompoundTextClose(UConverter *converter) {
             }
         }
 
-        uprv_free(converter->extraInfo);
+        if (!converter->isExtraLocal) {
+            uprv_free(converter->extraInfo);
+        }
         converter->extraInfo = nullptr;
     }
 }
@@ -596,6 +598,46 @@ _CompoundText_GetUnicodeSet(const UConverter *cnv,
     sa->addRange(sa->set, 0x0020, 0x007F);
     sa->addRange(sa->set, 0x00A0, 0x00FF);
 }
+
+/* structure for SafeClone calculations */
+struct cloneCompoundTextStruct
+{
+    UConverter cnv;
+    UConverterDataCompoundText mydata;
+};
+
+static UConverter * U_CALLCONV
+_CompoundTextSafeClone(const UConverter *cnv,
+                       void *stackBuffer,
+                       int32_t *pBufferSize,
+                       UErrorCode *status)
+{
+    (void)status;
+    struct cloneCompoundTextStruct *localClone;
+    const UConverterDataCompoundText *myConverterData = (const UConverterDataCompoundText *)cnv->extraInfo;
+    int32_t i;
+
+    if (*pBufferSize <= 0) {
+        *pBufferSize = (int32_t)sizeof(struct cloneCompoundTextStruct);
+        return nullptr;
+    }
+
+    localClone = (struct cloneCompoundTextStruct *)stackBuffer;
+    /* ucnv.c/ucnv_safeClone() copied the main UConverter already */
+
+    uprv_memcpy(&localClone->mydata, myConverterData, sizeof(UConverterDataCompoundText));
+
+    /* share the subconverters */
+    for (i = 0; i < NUM_OF_CONVERTERS; i++) {
+        if (myConverterData->myConverterArray[i] != nullptr) {
+            ucnv_incrementRefCount(myConverterData->myConverterArray[i]);
+        }
+    }
+
+    localClone->cnv.extraInfo = &localClone->mydata;
+    localClone->cnv.isExtraLocal = true;
+    return &localClone->cnv;
+}
 U_CDECL_END
 
 static const UConverterImpl _CompoundTextImpl = {
@@ -618,7 +660,7 @@ static const UConverterImpl _CompoundTextImpl = {
     nullptr,
     _CompoundTextgetName,
     nullptr,
-    nullptr,
+    _CompoundTextSafeClone,
     _CompoundText_GetUnicodeSet,
     nullptr,
     nullptr
