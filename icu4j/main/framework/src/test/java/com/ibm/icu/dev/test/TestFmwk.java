@@ -705,26 +705,4 @@ public abstract class TestFmwk extends AbstractTestLog {
         toStringMethod.setAccessible(true);
         return (String) toStringMethod.invoke(obj);
     }
-
-    // End JUnit-like assertions
-
-    // TODO (sgill): added to keep errors away
-    /* (non-Javadoc)
-     * @see com.ibm.icu.dev.test.TestLog#msg(java.lang.String, int, boolean, boolean)
-     */
-    // @Override
-    //    protected static void msg(String message, int level, boolean incCount, boolean newln) {
-    //        if (level == TestLog.WARN || level == TestLog.ERR) {
-    //            Assert.fail(message);
-    //        }
-    //        // TODO(stuartg): turned off - causing OOM running under ant
-    //        //        while (level > 0) {
-    //        //            System.out.print(" ");
-    //        //            level--;
-    //        //        }
-    //        //        System.out.print(message);
-    //        //        if (newln) {
-    //        //            System.out.println();
-    //        //        }
-    //    }
 }
