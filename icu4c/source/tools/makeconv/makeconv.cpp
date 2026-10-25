@@ -726,23 +726,30 @@ createConverter(ConvData *data, const char *converterName, UErrorCode *pErrorCod
         }
     } else {
         /* Build an extension-only .cnv file. */
-        char baseFilename[500];
-        char *basename;
+        icu::CharString baseFilename;
 
         initConvData(&baseData);
 
         /* assemble a path/filename for data->ucm->baseName */
-        uprv_strcpy(baseFilename, converterName);
-        basename = const_cast<char*>(findBasename(baseFilename));
-        uprv_strcpy(basename, data->ucm->baseName);
-        uprv_strcat(basename, ".ucm");
+        baseFilename.append(converterName, *pErrorCode);
+        if(U_FAILURE(*pErrorCode)) {
+            return;
+        }
+        int32_t basenameIndex =
+            static_cast<int32_t>(findBasename(baseFilename.data()) - baseFilename.data());
+        baseFilename.truncate(basenameIndex)
+            .append(data->ucm->baseName, *pErrorCode)
+            .append(".ucm", *pErrorCode);
+        if(U_FAILURE(*pErrorCode)) {
+            return;
+        }
 
         /* read the base table */
-        dataIsBase=readFile(&baseData, baseFilename, pErrorCode);
+        dataIsBase=readFile(&baseData, baseFilename.data(), pErrorCode);
         if(U_FAILURE(*pErrorCode)) {
             return;
         } else if(!dataIsBase) {
-            fprintf(stderr, "error: the <icu:base> file \"%s\" is not a base table file\n", baseFilename);
+            fprintf(stderr, "error: the <icu:base> file \"%s\" is not a base table file\n", baseFilename.data());
             *pErrorCode=U_INVALID_TABLE_FORMAT;
         } else {
             /* prepare the extension table */
