@@ -166,6 +166,7 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
     TESTCASE_AUTO(TestUnpairedSurrogate);
     TESTCASE_AUTO(TestLSTMThai);
     TESTCASE_AUTO(TestLSTMBurmese);
+    TESTCASE_AUTO(TestBurmeseVirama);
     TESTCASE_AUTO(TestRandomAccess);
     TESTCASE_AUTO(TestExternalBreakEngineWithFakeTaiLe);
     TESTCASE_AUTO(TestExternalBreakEngineWithFakeYue);
@@ -3476,6 +3477,40 @@ void RBBITest::TestBug7547() {
     }
 }
 
+
+
+void RBBITest::TestBurmeseVirama() {
+    // ICU-23329: U+1039 MYANMAR SIGN VIRAMA connects stacked consonants.
+    // A boundary must not be produced at a position where the preceding
+    // character is the virama, even when a dictionary word follows.
+    //
+    // 0x1001 is a consonant that does not begin a dictionary word here,
+    // followed by a virama and the dictionary word 0x1000 0x102C.
+    const char16_t text[] = {
+        0x1001,             // GBA NGA, not a word start in the dictionary
+        0x1039,             // MYANMAR SIGN VIRAMA
+        0x1000, 0x102C      // KA + AA, a dictionary word
+    };
+    UErrorCode status = U_ZERO_ERROR;
+    LocalUBreakIteratorPointer iter(
+        ubrk_open(UBRK_WORD, "my", text, UPRV_LENGTHOF(text), &status));
+    if (U_FAILURE(status)) {
+        dataerrln("%s:%d status = %s", __FILE__, __LINE__, u_errorName(status));
+        return;
+    }
+    ubrk_first(iter.getAlias());
+    for (;;) {
+        int32_t pos = ubrk_next(iter.getAlias());
+        if (pos == UBRK_DONE) {
+            break;
+        }
+        // A boundary directly after the virama would split the stacked
+        // consonant cluster.
+        if (pos == 2) {
+            errln("%s:%d boundary at %d splits a stacked consonant cluster", __FILE__, __LINE__, pos);
+        }
+    }
+}
 
 void RBBITest::TestBug12797() {
     UnicodeString rules = "!!chain; !!forward; $v=b c; a b; $v; !!reverse; .*;";
