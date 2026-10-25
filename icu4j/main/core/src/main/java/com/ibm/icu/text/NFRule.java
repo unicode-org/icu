@@ -312,10 +312,14 @@ final class NFRule {
 
                     // val now contains the rule's radix.  Set it
                     // accordingly, and recalculate the rule's exponent
-                    radix = (int) val;
-                    if (radix == 0) {
-                        throw new IllegalArgumentException("Rule can't have radix of 0");
+                    if (val < 1 || val > Integer.MAX_VALUE) {
+                        // The radix must be a positive value that fits in an int.
+                        // A larger value would wrap to a negative radix below, and
+                        // expectedExponent() would then take Math.log() of a negative
+                        // number (NaN) and cast the NaN to short.
+                        throw new IllegalArgumentException("Rule radix out of range: " + val);
                     }
+                    radix = (int) val;
                     exponent = expectedExponent();
                 }
 
