@@ -2,7 +2,7 @@ name: Release - ICU4C artifacts on Ubuntu
 
 on:
   workflow_dispatch:
-    inputs:
+    inputs: &all_inputs
       runTests:
         description: 'Run the tests.'
         type: boolean
@@ -10,6 +10,8 @@ on:
       gitReleaseTag:
         description: 'Release tag to upload to. Must start with "release-"'
         type: string
+  workflow_call:
+    inputs: *all_inputs
 
 env:
   RELEASE_FOLDER: '${{ github.workspace }}/releaseDist'
@@ -19,11 +21,13 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     environment: release-env
 
     permissions:
       contents: write # So that we can upload to release
+      id-token: write # For artifact attestation
+      attestations: write # For artifact attestation
 
     steps:
 
@@ -32,7 +36,9 @@ jobs:
         sudo apt-get -y install doxygen
 
     - name: Checkout and setup
-      uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        persist-credentials: false
 
     - name: Config and build ICU4C proper
       run: |
@@ -65,12 +71,19 @@ jobs:
         tar -czf icu4c-${github_rel_version}-Ubuntu${VERSION_ID}-x64.tgz icu
         rm -fr icu
         popd
-        mv icu4c/source/dist/icu4c-${github_rel_version}-data*     ${RELEASE_FOLDER}
-        mv icu4c/source/dist/icu4c-${github_rel_version}-docs*     ${RELEASE_FOLDER}
-        mv icu4c/source/dist/icu4c-${github_rel_version}-sources.* ${RELEASE_FOLDER}
+        pushd icu4c/source/dist
+        # Remove symlinks
+        find . -type l -delete
+        cp icu4c-*-data-bin-b.zip ${RELEASE_FOLDER}/icu4c-${github_rel_version}-data-bin-b.zip
+        cp icu4c-*-data-bin-l.zip ${RELEASE_FOLDER}/icu4c-${github_rel_version}-data-bin-l.zip
+        cp icu4c-*-data.zip       ${RELEASE_FOLDER}/icu4c-${github_rel_version}-data.zip
+        cp icu4c-*-docs.zip       ${RELEASE_FOLDER}/icu4c-${github_rel_version}-docs.zip
+        cp icu4c-*-sources.tgz    ${RELEASE_FOLDER}/icu4c-${github_rel_version}-sources.tgz
+        cp icu4c-*-sources.zip    ${RELEASE_FOLDER}/icu4c-${github_rel_version}-sources.zip
+        popd
 
     - name: Upload build results
-      uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
       with:
         name: icu4c-ubuntu-binaries
         path: ${{ env.RELEASE_FOLDER }}
@@ -80,6 +93,13 @@ jobs:
     - name: Upload to release
       if: ${{ inputs.gitReleaseTag && startsWith(inputs.gitReleaseTag, 'release-') }}
       run: |
-        gh release upload ${{ inputs.gitReleaseTag }} ${RELEASE_FOLDER}/* --clobber --repo=${{ github.repository }}
+        gh release upload ${INPUTS_GITRELEASETAG} ${RELEASE_FOLDER}/* --clobber --repo=${{ github.repository }}
       env:
         GH_TOKEN: ${{ github.token }}
+        INPUTS_GITRELEASETAG: ${{ inputs.gitReleaseTag }}
+
+    - name: Generate artifact attestation
+      if: github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call'
+      uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
+      with:
+        subject-path: ${{ env.RELEASE_FOLDER }}

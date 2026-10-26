@@ -3,6 +3,9 @@
 // Generated using tools/cldr/cldr-to-icu/
 raj{
     zoneStrings{
+        "Etc:UTC"{
+            ls{"Coordinated Universal Time"}
+        }
         "meta:GMT"{
             ls{"ग्रीन विच मीन टाइम"}
         }

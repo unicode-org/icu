@@ -16,11 +16,14 @@ package com.ibm.icu.dev.tool.layout;
 import com.ibm.icu.text.MessageFormat;
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class ModuleWriter {
     private static final String BUILDER_FILE_PATH = "src/com/ibm/icu/dev/tool/layout/";
@@ -97,12 +100,11 @@ public class ModuleWriter {
 
     protected PrintStream output;
 
-    protected BufferedReader reader;
     protected PrintStream updateFile;
     protected int previousTotalScripts;
     protected int previousTotalLanguages;
-    protected ArrayList scriptVersionNumber = new ArrayList();
-    protected ArrayList languageVersionNumber = new ArrayList();
+    protected List<String> scriptVersionNumber = new ArrayList<>();
+    protected List<String> languageVersionNumber = new ArrayList<>();
 
     public void openScriptAndLanguages(String name) {
         try {
@@ -114,8 +116,9 @@ public class ModuleWriter {
     }
 
     public void readFile(String file, String what) {
-        try {
-            reader = new BufferedReader(new FileReader(BUILDER_FILE_PATH + file));
+        try (BufferedReader reader =
+                Files.newBufferedReader(
+                        Path.of(BUILDER_FILE_PATH + file), StandardCharsets.UTF_8)) {
             String inputText = "";
             String versionToAdd = "";
             while ((inputText = reader.readLine()) != null) {
@@ -135,8 +138,6 @@ public class ModuleWriter {
                     }
                 }
             }
-            reader.close();
-
         } catch (IOException e) {
             System.out.println("? Could not open " + file + " for reading.");
             return;

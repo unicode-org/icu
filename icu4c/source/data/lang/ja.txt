@@ -11,19 +11,35 @@ ja{
         colCaseLevel{"大文字小文字を区別した並べ替え"}
         colNormalization{"正規化による並べ替え"}
         colNumeric{"数値による並べ替え"}
+        colReorder{"スクリプト/ブロックの順序変更"}
         colStrength{"照合強度"}
         collation{"並べ替え順序"}
         currency{"通貨"}
+        d0{"変換方向"}
+        dx{"辞書ベースの改行の除外"}
         em{"絵文字表示方法"}
+        fw{"週の開始曜日"}
+        h0{"混合"}
         hc{"時間制(12 / 24)"}
+        i0{"入力方法"}
+        k0{"キーボード"}
+        kv{"最高位の無視対象"}
         lb{"禁則処理"}
         lw{"単語途中の改行"}
+        m0{"変換ルール"}
         ms{"単位系"}
+        mu{"測定単位"}
         numbers{"数値書式"}
+        rg{"補足データ用地域"}
+        s0{"変換元"}
+        sd{"地域区画"}
         ss{"略語の後の文分割"}
+        t{"変換"}
+        t0{"機械翻訳"}
         timezone{"タイムゾーン"}
         va{"ロケールのバリアント"}
         x{"私用"}
+        x0{"私用変換"}
     }
     Languages{
         aa{"アファル語"}
@@ -433,7 +449,7 @@ ja{
         nl{"オランダ語"}
         nl_BE{"フラマン語"}
         nmg{"クワシオ語"}
-        nn{"ノルウェー語(ニーノシュク)"}
+        nn{"ノルウェー語 (ニーノシュク)"}
         nnh{"ンジエムブーン語"}
         no{"ノルウェー語"}
         nog{"ノガイ語"}
@@ -907,9 +923,13 @@ ja{
             ethiopic-amete-alem{"エチオピア創世紀元暦"}
             gregorian{"西暦(グレゴリオ暦)"}
             hebrew{"ユダヤ暦"}
+            indian{"インド国定暦"}
             islamic{"イスラム暦"}
             islamic-civil{"イスラム暦(定周期、公民紀元)"}
+            islamic-rgsa{"イスラム歴(サウジアラビア観測)"}
+            islamic-tbla{"イスラム暦(定周期、天文学紀元)"}
             islamic-umalqura{"イスラム暦(ウンム・アルクラー)"}
+            iso8601{"グレゴリオ暦"}
             japanese{"和暦"}
             persian{"ペルシア暦"}
             roc{"中華民国暦"}
@@ -935,6 +955,11 @@ ja{
             no{"大文字小文字を通常の順序で並べ替え"}
             upper{"大文字優先で並べ替え"}
         }
+        colCaseFirst%core{
+            lower{"小文字"}
+            no{"小文字"}
+            upper{"大文字"}
+        }
         colCaseLevel{
             no{"大文字小文字を区別しないで並べ替え"}
             yes{"大文字小文字を区別して並べ替え"}
@@ -947,12 +972,26 @@ ja{
             no{"数値を独立して並べ替え"}
             yes{"数値を数値として並べ替え"}
         }
+        colReorder%core{
+            currency{"通貨"}
+            digit{"数字"}
+            punct{"約物"}
+            space{"空白文字"}
+            symbol{"記号"}
+        }
         colStrength{
             identical{"すべてを区別して並べ替え"}
             primary{"基本文字のみで並べ替え"}
             quaternary{"アクセント/大文字小文字/全角半角/仮名で並べ替え"}
             secondary{"アクセントで並べ替え"}
             tertiary{"アクセント/大文字小文字/全角半角で並べ替え"}
+        }
+        colStrength%core{
+            identical{"すべて"}
+            primary{"基底文字のみ"}
+            quaternary{"基底、アクセント、大文字/小文字、異体字、カナ"}
+            secondary{"基底、アクセント"}
+            tertiary{"基底、アクセント、大文字/小文字、異体字"}
         }
         collation{
             compat{"以前の順序（互換性）"}
@@ -974,10 +1013,13 @@ ja{
             compat{"互換性"}
             dictionary{"辞書"}
             ducet{"デフォルトUnicode"}
+            emoji{"絵文字"}
+            eor{"欧州並べ替え規則"}
             phonebook{"電話帳"}
             phonetic{"読み"}
             pinyin{"ピンイン"}
             search{"検索"}
+            searchjl{"ハングル初声"}
             standard{"標準"}
             stroke{"画数"}
             traditional{"伝統的"}
@@ -995,16 +1037,26 @@ ja{
             text{"テキスト"}
         }
         hc{
+            c12{"12時間制"}
+            c24{"24時間制"}
             h11{"12時間制(0〜11)"}
             h12{"12時間制(1〜12)"}
             h23{"24時間制(0〜23)"}
             h24{"24時間制(1〜24)"}
         }
         hc%core{
+            c12{"12時間制"}
+            c24{"24時間制"}
             h11{"12時間制(0〜11)"}
             h12{"12時間制(1〜12)"}
             h23{"24時間制(0〜23)"}
             h24{"24時間制(1〜24)"}
+        }
+        kv%core{
+            currency{"スペース、約物、全記号をシフト"}
+            punct{"スペース、約物をシフト"}
+            space{"スペース、約物をシフト"}
+            symbol{"スペース、約物、非通貨記号をシフト"}
         }
         lb{
             loose{"禁則処理(弱)"}
@@ -1063,7 +1115,7 @@ ja{
             hebr{"ヘブライ数字"}
             java{"ジャワ数字"}
             jpan{"漢数字"}
-            jpanfin{"大字"}
+            jpanfin{"日本式大字"}
             kali{"カヤー数字"}
             khmr{"クメール数字"}
             knda{"カンナダ数字"}
@@ -1099,9 +1151,45 @@ ja{
             traditional{"従来の記数法"}
             vaii{"ヴァイ文字の記数法"}
         }
+        numbers%core{
+            arabext{"ペルシア"}
+            armnlow{"アルメニア(小文字)"}
+            finance{"大字"}
+            fullwide{"全角"}
+            greklow{"ギリシャ(小文字)"}
+            hanidays{"伝統的な暦で日付に使用される漢字"}
+            hanidec{"漢数字を数字として扱う位取り記数法"}
+            hansfin{"簡体大字"}
+            hantfin{"繁体大字"}
+            jpanfin{"日本式大字"}
+            jpanyear{"初年を元年とする日本式"}
+            lanatham{"タイ・タム文字タム数字(宗教儀式用)"}
+            mathbold{"数学用太字"}
+            mathdbl{"数学用重ね打ち体"}
+            mathmono{"数学用等幅"}
+            mathsanb{"数学用サンセリフ太字"}
+            mathsans{"数学用サンセリフ"}
+            mymrepka{"ミャンマー数字東部ポー・カレン語"}
+            mymrpao{"ミャンマー数字パオ語"}
+            mymrshan{"ミャンマー数字シャン語"}
+            mymrtlng{"ミャンマー数字タイ・ライン語"}
+            native{"ネイティブ数字"}
+            outlined{"アウトライン数字"}
+            roman{"ローマ数字(大文字)"}
+            romanlow{"ローマ数字(小文字)"}
+            segment{"セグメント数字"}
+            tamldec{"現代タミル"}
+            traditional{"伝統的数字"}
+        }
         ss%core{
             none{"オフ"}
             standard{"オン"}
+        }
+        t0{
+            und{"未指定の機械翻訳"}
+        }
+        va%core{
+            posix{"POSIXのバリアント"}
         }
     }
     Variants{

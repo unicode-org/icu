@@ -296,7 +296,6 @@ gl{
         }
         "Europe:Dublin"{
             ec{"Dublín"}
-            ld{"hora estándar irlandesa"}
         }
         "Europe:Gibraltar"{
             ec{"Xibraltar"}
@@ -321,7 +320,6 @@ gl{
         }
         "Europe:London"{
             ec{"Londres"}
-            ld{"hora de verán británica"}
         }
         "Europe:Luxembourg"{
             ec{"Luxemburgo"}
@@ -532,6 +530,10 @@ gl{
             lg{"hora de Brasilia"}
             ls{"hora estándar de Brasilia"}
         }
+        "meta:British"{
+            ld{"hora de verán británica"}
+            lg{"hora británica"}
+        }
         "meta:Brunei"{
             ls{"hora de Brunei Darussalam"}
         }
@@ -657,6 +659,11 @@ gl{
         "meta:Gilbert_Islands"{
             ls{"hora das Illas Gilbert"}
         }
+        "meta:Greenland"{
+            ld{"hora de verán de Groenlandia"}
+            lg{"hora de Groenlandia"}
+            ls{"hora estándar de Groenlandia"}
+        }
         "meta:Greenland_Eastern"{
             ld{"hora de verán de Groenlandia Oriental"}
             lg{"hora de Groenlandia Oriental"}
@@ -674,7 +681,7 @@ gl{
             ls{"hora da Güiana"}
         }
         "meta:Hawaii"{
-            ls{"hora estándar de Hawai-illas Aleutianas"}
+            ls{"hora de Hawai"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"hora de verán de Hawai-illas Aleutianas"}
@@ -714,6 +721,10 @@ gl{
             lg{"hora de Irán"}
             ls{"hora estándar de Irán"}
         }
+        "meta:Irish"{
+            ld{"hora estándar irlandesa"}
+            lg{"hora irlandesa"}
+        }
         "meta:Irkutsk"{
             ld{"hora de verán de Irkutsk"}
             lg{"hora de Irkutsk"}
@@ -730,9 +741,9 @@ gl{
             ls{"hora estándar do Xapón"}
         }
         "meta:Kamchatka"{
-            ld{"Horario de verán de Petropávlovsk-Kamchatski"}
-            lg{"hora estándar de Petropavlovsk-Kamchatski"}
-            ls{"Horario estándar de Petropávlovsk-Kamchatski"}
+            ld{"hora de verán de Kamchatka"}
+            lg{"hora de Kamchatka"}
+            ls{"hora estándar de Kamchatka"}
         }
         "meta:Kazakhstan"{
             ls{"hora de Kazakistán"}
@@ -909,13 +920,11 @@ gl{
             ls{"hora estándar de Sakhalín"}
         }
         "meta:Samara"{
-            ld{"Horario de verán de Samara"}
+            ld{"hora de verán de Samara"}
             lg{"hora de Samara"}
-            ls{"Horario estándar de Samara"}
+            ls{"hora estándar de Samara"}
         }
         "meta:Samoa"{
-            ld{"hora de verán de Samoa"}
-            lg{"hora de Samoa"}
             ls{"hora estándar de Samoa"}
         }
         "meta:Seychelles"{
@@ -958,6 +967,11 @@ gl{
         "meta:Truk"{
             ls{"hora de Chuuk"}
         }
+        "meta:Turkey"{
+            ld{"hora de verán de Turquía"}
+            lg{"hora de Turquía"}
+            ls{"hora estándar de Turquía"}
+        }
         "meta:Turkmenistan"{
             ld{"hora de verán de Turkmenistán"}
             lg{"hora de Turkmenistán"}
@@ -970,6 +984,9 @@ gl{
             ld{"hora de verán do Uruguai"}
             lg{"hora do Uruguai"}
             ls{"hora estándar do Uruguai"}
+        }
+        "meta:Urumqi"{
+            ls{"hora de Ürümqi"}
         }
         "meta:Uzbekistan"{
             ld{"hora de verán de Uzbekistán"}

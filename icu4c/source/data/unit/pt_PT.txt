@@ -316,10 +316,6 @@ pt_PT{
             meter{
                 dnam{"metro"}
             }
-            mile{
-                one{"{0} mi"}
-                other{"{0} mi"}
-            }
             parsec{
                 dnam{"pc"}
             }
@@ -520,10 +516,6 @@ pt_PT{
             }
             meter{
                 dnam{"metros"}
-            }
-            mile{
-                one{"{0} mi"}
-                other{"{0} mi"}
             }
             nautical-mile{
                 dnam{"nmi"}

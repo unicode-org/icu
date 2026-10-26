@@ -230,7 +230,6 @@ gd{
         }
         "Europe:Dublin"{
             ec{"Baile Àtha Cliath"}
-            ld{"Bun-àm na h-Èireann"}
             sd{"TSÈ (Èirinn)"}
         }
         "Europe:Gibraltar"{
@@ -250,7 +249,6 @@ gd{
         }
         "Europe:London"{
             ec{"Dùn Èideann/Lunnainn"}
-            ld{"Tìde samhraidh Bhreatainn"}
             sd{"TSB"}
         }
         "Europe:Luxembourg"{
@@ -349,14 +347,6 @@ gd{
             ld{"Tìde samhraidh Alaska"}
             lg{"Àm Alaska"}
             ls{"Bun-àm Alaska"}
-            sd{"AKDT"}
-            sg{"AKT"}
-            ss{"AKST"}
-        }
-        "meta:Almaty"{
-            ld{"Tìde samhraidh Almaty"}
-            lg{"Àm Almaty"}
-            ls{"Bun-àm Almaty"}
         }
         "meta:Amazon"{
             ld{"Tìde samhraidh Amasoin"}
@@ -367,33 +357,21 @@ gd{
             ld{"Tìde samhraidh Meadhan Aimeireaga"}
             lg{"Àm Meadhan Aimeireaga"}
             ls{"Bun-àm Meadhan Aimeireaga"}
-            sd{"CDT"}
-            sg{"CT"}
-            ss{"CST"}
         }
         "meta:America_Eastern"{
             ld{"Tìde samhraidh Aimeireaga an Ear"}
             lg{"Àm Aimeireaga an Ear"}
             ls{"Bun-àm Aimeireaga an Ear"}
-            sd{"EDT"}
-            sg{"ET"}
-            ss{"EST"}
         }
         "meta:America_Mountain"{
             ld{"Tìde samhraidh Monadh Aimeireaga"}
             lg{"Àm Monadh Aimeireaga"}
             ls{"Bun-àm Monadh Aimeireaga"}
-            sd{"MDT"}
-            sg{"MT"}
-            ss{"MST"}
         }
         "meta:America_Pacific"{
             ld{"Tìde samhraidh a’ Chuain Shèimh"}
             lg{"Àm a’ Chuain Shèimh"}
             ls{"Bun-àm a’ Chuain Shèimh"}
-            sd{"PDT"}
-            sg{"PT"}
-            ss{"PST"}
         }
         "meta:Anadyr"{
             ld{"Tìde samhraidh Anadyr"}
@@ -404,16 +382,6 @@ gd{
             ld{"Tìde samhraidh Apia"}
             lg{"Àm Apia"}
             ls{"Bun-àm Apia"}
-        }
-        "meta:Aqtau"{
-            ld{"Tìde samhraidh Aqtau"}
-            lg{"Àm Aqtau"}
-            ls{"Bun-àm Aqtau"}
-        }
-        "meta:Aqtobe"{
-            ld{"Tìde samhraidh Aqtobe"}
-            lg{"Àm Aqtobe"}
-            ls{"Bun-àm Aqtobe"}
         }
         "meta:Arabian"{
             ld{"Tìde samhraidh Arabach"}
@@ -439,9 +407,6 @@ gd{
             ld{"Tìde samhraidh a’ Chuain Shiar"}
             lg{"Àm a’ Chuain Shiar"}
             ls{"Bun-àm a’ Chuain Shiar"}
-            sd{"ADT"}
-            sg{"AT"}
-            ss{"AST"}
         }
         "meta:Australia_Central"{
             ld{"Tìde samhraidh Meadhan Astràilia"}
@@ -488,6 +453,10 @@ gd{
             ld{"Tìde samhraidh Bhrasília"}
             lg{"Àm Bhrasília"}
             ls{"Bun-àm Bhrasília"}
+        }
+        "meta:British"{
+            ld{"Tìde samhraidh Bhreatainn"}
+            lg{"Ùine Bhreatainn"}
         }
         "meta:Brunei"{
             ls{"Àm Bhrùnaigh Dàr as-Salàm"}
@@ -632,9 +601,6 @@ gd{
             lg{"Àm na Graonlainn an Iar"}
             ls{"Bun-àm na Graonlainn an Iar"}
         }
-        "meta:Guam"{
-            ls{"Àm Guam"}
-        }
         "meta:Gulf"{
             ls{"Àm a’ Chamais"}
         }
@@ -642,16 +608,12 @@ gd{
             ls{"Àm Guidheàna"}
         }
         "meta:Hawaii"{
-            ls{"Bun-àm nan Eileanan Hawai’i ’s Aleutach"}
-            ss{"HAST"}
+            ls{"Àm nan Eileanan Hawai’i"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"Tìde Samhraidh nan Eileanan Hawai’i ’s Aleutach"}
             lg{"Àm nan Eileanan Hawai’i ’s Aleutach"}
             ls{"Bun-àm nan Eileanan Hawai’i ’s Aleutach"}
-            sd{"HADT"}
-            sg{"HAT"}
-            ss{"HAST"}
         }
         "meta:Hong_Kong"{
             ld{"Tìde samhraidh Hong Kong"}
@@ -685,6 +647,10 @@ gd{
             ld{"Tìde samhraidh Ioràin"}
             lg{"Àm Ioràin"}
             ls{"Bun-àm Ioràin"}
+        }
+        "meta:Irish"{
+            ld{"Bun-àm na h-Èireann"}
+            lg{"Àm na h-Èireann"}
         }
         "meta:Irkutsk"{
             ld{"Tìde Samhraidh Irkutsk"}
@@ -731,9 +697,6 @@ gd{
         "meta:Kyrgystan"{
             ls{"Àm Cìorgastain"}
         }
-        "meta:Lanka"{
-            ls{"Àm Lanca"}
-        }
         "meta:Line_Islands"{
             ls{"Àm Eileanan Teraina"}
         }
@@ -741,11 +704,6 @@ gd{
             ld{"Tìde samhraidh Lord Howe"}
             lg{"Àm Lord Howe"}
             ls{"Bun-àm Lord Howe"}
-        }
-        "meta:Macau"{
-            ld{"Tìde samhraidh Macàthu"}
-            lg{"Àm Macàthu"}
-            ls{"Bun-àm Macàthu"}
         }
         "meta:Magadan"{
             ld{"Tìde Samhraidh Magadan"}
@@ -824,9 +782,6 @@ gd{
             lg{"Àm Fernando de Noronha"}
             ls{"Bun-àm Fernando de Noronha"}
         }
-        "meta:North_Mariana"{
-            ls{"Àm nan Eileanan Mairianach a Tuath"}
-        }
         "meta:Novosibirsk"{
             ld{"Tìde samhraidh Novosibirsk"}
             lg{"Àm Novosibirsk"}
@@ -880,11 +835,6 @@ gd{
         "meta:Pyongyang"{
             ls{"Àm Pyeongyang"}
         }
-        "meta:Qyzylorda"{
-            ld{"Tìde samhraidh Qızılorda"}
-            lg{"Àm Qızılorda"}
-            ls{"Bun-àm Qızılorda"}
-        }
         "meta:Reunion"{
             ls{"Àm Reunion"}
         }
@@ -902,8 +852,6 @@ gd{
             ls{"Bun-àm Samara"}
         }
         "meta:Samoa"{
-            ld{"Tìde samhraidh Samotha"}
-            lg{"Àm Samotha"}
             ls{"Bun-àm Samotha"}
         }
         "meta:Seychelles"{
@@ -946,6 +894,11 @@ gd{
         "meta:Truk"{
             ls{"Àm Chuuk"}
         }
+        "meta:Turkey"{
+            ld{"Àm Samhraidh na Tuirc"}
+            lg{"Ùine na Tuirc"}
+            ls{"Àm Coitcheann na Tuirc"}
+        }
         "meta:Turkmenistan"{
             ld{"Tìde samhraidh Turcmanastàin"}
             lg{"Àm Turcmanastàin"}
@@ -958,6 +911,9 @@ gd{
             ld{"Tìde samhraidh Uruguaidh"}
             lg{"Àm Uruguaidh"}
             ls{"Bun-àm Uruguaidh"}
+        }
+        "meta:Urumqi"{
+            ls{"Ùine Urumqi"}
         }
         "meta:Uzbekistan"{
             ld{"Tìde samhraidh Usbagastàn"}

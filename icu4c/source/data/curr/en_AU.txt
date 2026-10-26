@@ -80,10 +80,6 @@ en_AU{
             "Rs",
             "Seychellois Rupee",
         }
-        SLL{
-            "SLL",
-            "Sierra Leonean Leone (1964–2022)",
-        }
         SRD{
             "SRD",
             "Suriname Dollar",
@@ -190,10 +186,6 @@ en_AU{
         QAR{
             one{"Qatari riyal"}
             other{"Quatari riyals"}
-        }
-        SLL{
-            one{"Sierra Leonean leone (1964–2022)"}
-            other{"Sierra Leonean leones (1964–2022)"}
         }
         SRD{
             one{"Suriname dollar"}

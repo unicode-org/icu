@@ -87,9 +87,6 @@ se_FI{
         "Europe:Copenhagen"{
             ec{"København"}
         }
-        "Europe:Dublin"{
-            ld{"Irlánddalaš dálveáigi"}
-        }
         "Europe:Helsinki"{
             ec{"Helsset"}
         }
@@ -98,9 +95,6 @@ se_FI{
         }
         "Europe:Lisbon"{
             ec{"Lisboa"}
-        }
-        "Europe:London"{
-            ld{"Brihtalaš geasseáigi"}
         }
         "Europe:Luxembourg"{
             ec{"Luxenburg"}
@@ -261,6 +255,9 @@ se_FI{
             ld{"Brasilia geasseáigi"}
             lg{"Brasilia áigi"}
             ls{"Brasilia dálveáigi"}
+        }
+        "meta:British"{
+            ld{"Brihtalaš geasseáigi"}
         }
         "meta:Brunei"{
             ls{"Brunei Darussalama áigi"}
@@ -433,6 +430,9 @@ se_FI{
             ld{"Irana geasseáigi"}
             lg{"Irana áigi"}
             ls{"Irana dálveáigi"}
+        }
+        "meta:Irish"{
+            ld{"Irlánddalaš dálveáigi"}
         }
         "meta:Irkutsk"{
             ld{"Irkucka geasseáigi"}
@@ -619,8 +619,6 @@ se_FI{
             ls{"Sahalina dálveáigi"}
         }
         "meta:Samoa"{
-            ld{"Samoa geasseáigi"}
-            lg{"Samoa áigi"}
             ls{"Samoa dálveáigi"}
         }
         "meta:Seychelles"{
@@ -719,7 +717,6 @@ se_FI{
             ls{"Jekaterinburga dálveáigi"}
         }
         gmtFormat{"{0} GMT"}
-        gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormatDaylight{"{0} geasseáigi"}
         regionFormatStandard{"{0} dálveáigi"}

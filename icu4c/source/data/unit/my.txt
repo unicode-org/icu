@@ -135,13 +135,9 @@ my{
             mole{
                 dnam{"မိုး"}
             }
-            ofglucose{
-                dnam{"ဂလူးကို့စ်"}
-                other{"{0} ဂလူးကို့စ်"}
-            }
             part{
-                dnam{"ပတ်"}
-                other{"{0} ပတ်"}
+                dnam{"ပိုင်း"}
+                other{"{0} ပိုင်း"}
             }
             part-per-1e6{
                 other{"တစ်သန်းပုံ {0} ပုံ"}
@@ -729,8 +725,8 @@ my{
                 dnam{"Glc"}
             }
             part{
-                dnam{"ပတ်"}
-                other{"{0} ပတ်"}
+                dnam{"ပိုင်း"}
+                other{"{0} ပိုင်း"}
             }
             part-per-1e9{
                 other{"{0}ppb"}
@@ -777,10 +773,6 @@ my{
             }
         }
         energy{
-            calorie-it{
-                dnam{"ကယ်လိုရီ-IT"}
-                other{"{0} ကယ်လိုရီ-IT"}
-            }
             therm-us{
                 other{"{0}US therms"}
             }
@@ -960,8 +952,8 @@ my{
                 other{"{0} ဂလူးကို့စ်"}
             }
             part{
-                dnam{"ပတ်"}
-                other{"{0} ပတ်"}
+                dnam{"ပိုင်း"}
+                other{"{0} ပိုင်း"}
             }
             part-per-1e6{
                 dnam{"တစ်သန်းပုံ တစ်ပုံ"}

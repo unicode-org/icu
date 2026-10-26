@@ -5,12 +5,6 @@ hi_Latn{
     %%Parent{"en_IN"}
     AuxExemplarCharacters{"[ā ḍ ĕē ḥ ī ḷ{l̥} ṁ{m̐} ñṅṇ ŏō ṛ{r̥}{r̥̄} śṣ ṭ ū]"}
     NumberElements{
-        deva{
-            patterns{
-                currencyFormat%alphaNextToNumber{"¤ #,##,##0.00"}
-                currencyFormat%noCurrency{"#,##,##0.00"}
-            }
-        }
         latn{
             patterns{
                 accountingFormat{"¤#,##,##0.00"}
@@ -67,7 +61,6 @@ hi_Latn{
                 "{1}, {0}",
             }
             availableFormats{
-                Bhms{"h:mm.ss B"}
                 EBh{"E, B h"}
                 Eh{"E, h a"}
                 Hv{"HH'h', v"}
@@ -75,10 +68,6 @@ hi_Latn{
                 yyyyMd{"d/M/y GGGGG"}
             }
             intervalFormats{
-                MEd{
-                    M{"E, d/M – E, d/M"}
-                    d{"E, d/M – E, d/M"}
-                }
                 yM{
                     M{"M/y – M/y GGGGG"}
                     y{"M/y – M/y GGGGG"}
@@ -89,9 +78,7 @@ hi_Latn{
                     y{"E, d/M/y – E, d/M/y GGGGG"}
                 }
                 yMMMEd{
-                    M{"E, d MMM – E, d MMM y G"}
                     d{"E, d – E, d MMM y G"}
-                    y{"E, d MMM y – E, d MMM y G"}
                 }
                 yMMMd{
                     d{"d–d MMM, y G"}
@@ -104,14 +91,6 @@ hi_Latn{
             }
         }
         gregorian{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
-            AmPmMarkersAbbr{
-                "AM",
-                "PM",
-            }
             DateTimePatterns{
                 "h:mm:ss a zzzz",
                 "h:mm:ss a z",
@@ -150,14 +129,16 @@ hi_Latn{
                 "yMMdd",
             }
             availableFormats{
-                EBh{"E, B h"}
                 Eh{"E, h a"}
                 GyMMMEEEEd{"EEEE, d MMM, y G"}
+                GyMMMMEd{"E, d MMMM, y G"}
+                GyMMMMd{"d MMMM, y G"}
                 MMMMW{
                     one{"MMMM 'kaa' 'week' W"}
                     other{"MMMM 'kaa' 'week' W"}
                 }
                 hv{"h a, v"}
+                yMMMMd{"d MMMM, y"}
                 yMMMd{"d MMM, y"}
                 yw{
                     one{"Y 'kaa' 'week' w"}
@@ -270,19 +251,13 @@ hi_Latn{
                     }
                 }
                 stand-alone{
-                    narrow{
-                        am{"AM"}
-                        pm{"PM"}
-                    }
                     wide{
                         afternoon1{"dopahar"}
-                        am{"AM"}
                         evening1{"shaam"}
                         midnight{"aadhi raat"}
                         morning1{"subah"}
                         night1{"raat"}
                         noon{"Madhyanh"}
-                        pm{"PM"}
                     }
                 }
             }
@@ -1191,7 +1166,6 @@ hi_Latn{
         }
         standard-narrow{
             2{"{0} aur {1}"}
-            end{"{0}, {1}"}
         }
         standard-short{
             2{"{0} aur {1}"}

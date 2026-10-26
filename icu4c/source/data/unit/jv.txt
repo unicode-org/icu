@@ -692,9 +692,6 @@ jv{
             }
         }
         concentr{
-            ofglucose{
-                dnam{"Glc"}
-            }
             percent{
                 dnam{"%"}
             }
@@ -720,9 +717,6 @@ jv{
             }
         }
         energy{
-            calorie-it{
-                dnam{"cal-IT"}
-            }
             foodcalorie{
                 other{"{0}Kal"}
             }

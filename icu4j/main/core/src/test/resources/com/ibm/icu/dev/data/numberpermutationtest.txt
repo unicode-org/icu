@@ -171,9 +171,9 @@ scientific/+ee/sign-always measure-unit/length-furlong unit-width-full-name
 
 compact-short percent precision-integer
   es-MX
-    0 %
-    92 k %
-    -0 %
+    0%
+    92 k%
+    -0%
   zh-TW
     0%
     9萬%
@@ -185,9 +185,9 @@ compact-short percent precision-integer
 
 compact-short percent .000
   es-MX
-    0.000 %
-    91.827 k %
-    -0.222 %
+    0.000%
+    91.827 k%
+    -0.222%
   zh-TW
     0.000%
     9.183萬%
@@ -199,9 +199,9 @@ compact-short percent .000
 
 compact-short percent .##/@@@+
   es-MX
-    0 %
-    91.83 k %
-    -0.222 %
+    0%
+    91.83 k%
+    -0.222%
   zh-TW
     0%
     9.18萬%
@@ -213,9 +213,9 @@ compact-short percent .##/@@@+
 
 compact-short percent @@
   es-MX
-    0.0 %
-    92 k %
-    -0.22 %
+    0.0%
+    92 k%
+    -0.22%
   zh-TW
     0.0%
     9.2萬%
@@ -507,9 +507,9 @@ scientific/+ee/sign-always measure-unit/length-furlong @@
 
 compact-short percent rounding-mode-floor
   es-MX
-    0 %
-    91 k %
-    -0.23 %
+    0%
+    91 k%
+    -0.23%
   zh-TW
     0%
     9.1萬%
@@ -591,9 +591,9 @@ scientific/+ee/sign-always measure-unit/length-furlong rounding-mode-floor
 
 compact-short percent integer-width/##00
   es-MX
-    00 %
-    92 k %
-    -00.22 %
+    00%
+    92 k%
+    -00.22%
   zh-TW
     00%
     09.2萬%
@@ -675,9 +675,9 @@ scientific/+ee/sign-always measure-unit/length-furlong integer-width/##00
 
 compact-short percent scale/0.5
   es-MX
-    0 %
-    46 k %
-    -0.11 %
+    0%
+    46 k%
+    -0.11%
   zh-TW
     0%
     4.6萬%
@@ -759,9 +759,9 @@ scientific/+ee/sign-always measure-unit/length-furlong scale/0.5
 
 compact-short percent group-on-aligned
   es-MX
-    0 %
-    92 k %
-    -0.22 %
+    0%
+    92 k%
+    -0.22%
   zh-TW
     0%
     9.2萬%
@@ -843,9 +843,9 @@ scientific/+ee/sign-always measure-unit/length-furlong group-on-aligned
 
 compact-short percent latin
   es-MX
-    0 %
-    92 k %
-    -0.22 %
+    0%
+    92 k%
+    -0.22%
   zh-TW
     0%
     9.2萬%
@@ -927,9 +927,9 @@ scientific/+ee/sign-always measure-unit/length-furlong latin
 
 compact-short percent sign-accounting-except-zero
   es-MX
-    0 %
-    +92 k %
-    -0.22 %
+    0%
+    +92 k%
+    -0.22%
   zh-TW
     0%
     +9.2萬%
@@ -1011,9 +1011,9 @@ scientific/+ee/sign-always measure-unit/length-furlong sign-accounting-except-ze
 
 compact-short percent decimal-always
   es-MX
-    0. %
-    92. k %
-    -0.22 %
+    0.%
+    92. k%
+    -0.22%
   zh-TW
     0.%
     9.2萬%

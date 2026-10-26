@@ -261,7 +261,7 @@ hu{
         }
         CRC{
             "CRC",
-            "Costa Rica-i colon",
+            "Costa Rica-i colón",
         }
         CSD{
             "CSD",
@@ -1185,9 +1185,9 @@ hu{
             one{"fehérorosz új rubel (1994–1999)"}
             other{"fehérorosz új rubel (1994–1999)"}
         }
-        CSD{
-            one{"szerb dinár (2002–2006)"}
-            other{"szerb dinár (2002–2006)"}
+        CRC{
+            one{"Costa Rica-i colón"}
+            other{"Costa Rica-i colón"}
         }
         CSK{
             one{"csehszlovák kemény korona"}
@@ -1285,10 +1285,6 @@ hu{
             one{"Uruguayi peso (1975–1993)"}
             other{"Uruguayi peso (1975–1993)"}
         }
-        XCG{
-            one{"karibi forint"}
-            other{"karibi forint"}
-        }
         XEU{
             one{"Európai pénznemegység"}
             other{"Európai pénznemegység"}
@@ -1316,10 +1312,6 @@ hu{
         YUN{
             one{"jugoszláv konvertibilis dinár (1990–1992)"}
             other{"jugoszláv konvertibilis dinár (1990–1992)"}
-        }
-        ZWG{
-            one{"zimbabwei arany"}
-            other{"zimbabwei arany"}
         }
     }
 }

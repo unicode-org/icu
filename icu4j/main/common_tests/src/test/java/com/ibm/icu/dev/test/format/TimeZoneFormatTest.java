@@ -22,7 +22,6 @@ import com.ibm.icu.text.TimeZoneFormat.ParseOption;
 import com.ibm.icu.text.TimeZoneFormat.Style;
 import com.ibm.icu.text.TimeZoneFormat.TimeType;
 import com.ibm.icu.text.TimeZoneNames;
-import com.ibm.icu.text.TimeZoneNames.Factory;
 import com.ibm.icu.text.TimeZoneNames.NameType;
 import com.ibm.icu.util.BasicTimeZone;
 import com.ibm.icu.util.Calendar;
@@ -55,7 +54,6 @@ import org.junit.runners.JUnit4;
 public class TimeZoneFormatTest extends CoreTestFmwk {
 
     private static boolean JDKTZ = (TimeZone.getDefaultTimeZoneType() == TimeZone.TIMEZONE_JDK);
-    private static final Pattern EXCL_TZ_PATTERN = Pattern.compile(".*/Riyadh8[7-9]");
 
     private static final String[] PATTERNS = {
         "z", "zzzz", "Z", // equivalent to "xxxx"
@@ -138,9 +136,6 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
                 SimpleDateFormat sdf = new SimpleDateFormat(PATTERNS[patidx], LOCALES[locidx]);
 
                 for (int tzidx = 0; tzidx < tzids.length; tzidx++) {
-                    if (EXCL_TZ_PATTERN.matcher(tzids[tzidx]).matches()) {
-                        continue;
-                    }
                     TimeZone tz = TimeZone.getTimeZone(tzids[tzidx]);
 
                     for (int datidx = 0; datidx < DATES.length; datidx++) {
@@ -172,7 +167,7 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
                             String canonicalID = TimeZone.getCanonicalID(tzids[tzidx]);
                             if (!outtz.getID().equals(canonicalID)) {
                                 if (outtz.getID().equals("Etc/Unknown")) {
-                                    // Note that some zones like Asia/Riyadh87 does not have
+                                    // Note that some zones do not have
                                     // short zone ID and "unk" is used as the fallback
                                     if (REALLY_VERBOSE_LOG) {
                                         logln(
@@ -410,7 +405,7 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
         List<String> MINUTES_OFFSET = Arrays.asList("X", "XX", "XXX", "x", "xx", "xxx");
 
         // Regex pattern used for filtering zone IDs without exemplar location
-        final Pattern LOC_EXCLUSION_PATTERN = Pattern.compile("Etc/.*|SystemV/.*|.*/Riyadh8[7-9]");
+        final Pattern LOC_EXCLUSION_PATTERN = Pattern.compile("Etc/.*|SystemV/.*");
 
         final String BASEPATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS";
 
@@ -472,9 +467,6 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
                     ids = new TreeSet<>();
                     String[] jdkIDs = java.util.TimeZone.getAvailableIDs();
                     for (String jdkID : jdkIDs) {
-                        if (EXCL_TZ_PATTERN.matcher(jdkID).matches()) {
-                            continue;
-                        }
                         String tmpID = TimeZone.getCanonicalID(jdkID);
                         if (tmpID != null) {
                             ids.add(tmpID);
@@ -485,18 +477,8 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
                 }
 
                 for (String id : ids) {
-                    // NOTE: This test only fails in the exhaustive tests.  If you take out this
-                    // check,
-                    // make sure you run the exhaustive tests!
-                    if (logKnownIssue(
-                                    "CLDR-18924",
-                                    "Time round trip issues for Pacific/Apia in various locales")
-                            && id.equals("Pacific/Apia")) {
-                        continue;
-                    }
-
                     if (PATTERNS[patidx].equals("V")) {
-                        // Some zones do not have short ID assigned, such as Asia/Riyadh87.
+                        // Some zones do not have short ID assigned.
                         // The time roundtrip will fail for such zones with pattern "V" (short zone
                         // ID).
                         // This is expected behavior.
@@ -679,6 +661,7 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void TestParse() {
         final Object[][] DATA = {
             //   text                   inpos       locale      style
@@ -1230,6 +1213,14 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
                 TimeType.UNKNOWN
             },
             {
+                "en",
+                "PST8PDT",
+                dateJan,
+                Style.EXEMPLAR_LOCATION,
+                "Unknown Location",
+                TimeType.UNKNOWN
+            },
+            {
                 "ja",
                 "Asia/Tokyo",
                 dateJan,
@@ -1238,14 +1229,7 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
                 TimeType.UNKNOWN
             },
             // Regression test for ICU-23278
-            {
-                "en",
-                "Europe/Dublin",
-                dateJan,
-                Style.SPECIFIC_LONG,
-                "Greenwich Mean Time",
-                TimeType.STANDARD
-            }
+            {"en", "Europe/Dublin", dateJan, Style.SPECIFIC_LONG, "GMT+00:00", TimeType.STANDARD}
         };
 
         for (Object[] testCase : TESTDATA) {
@@ -1518,7 +1502,7 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
         assertTrue("No cases were tested", casesTested > 0);
     }
 
-    class TimeZoneNamesInheriter extends TimeZoneNames {
+    static class TimeZoneNamesInheriter extends TimeZoneNames {
         private static final long serialVersionUID = 1L;
 
         @Override
@@ -1561,7 +1545,7 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
             Class<?> cls =
                     Class.forName(
                             "com.ibm.icu.text.TimeZoneNames$DefaultTimeZoneNames$FactoryImpl");
-            factory = (Factory) cls.newInstance();
+            factory = (TimeZoneNames.Factory) cls.newInstance();
         } catch (Exception e) {
             errln(
                     "Could not create class DefaultTimeZoneNames.FactoryImpl: "

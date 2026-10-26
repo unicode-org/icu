@@ -949,6 +949,10 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
             setMonetaryDecimalSeparatorString(formatInfo.monetaryDecimalSeparator);
             setMonetaryGroupingSeparatorString(formatInfo.monetaryGroupingSeparator);
             currencyPattern = formatInfo.currencyPattern;
+        } else {
+            // TODO: At this point we should reset the pattern and the separators to the
+            // locale default, in case the previous currency overrode them. This requires
+            // either reopening the resource bundle or caching the symbols.
         }
     }
 
@@ -1072,6 +1076,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * Internal API for NumberFormat
      *
      * @return String currency pattern string
+     * @internal
      * @deprecated This API is for ICU internal use only
      */
     @Deprecated
@@ -1567,7 +1572,6 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
         // to handle the actual/valid ulocale fields.
 
         stream.defaultReadObject();
-        /// CLOVER:OFF
         // we don't have data for these old serialized forms any more
         if (serialVersionOnStream < 1) {
             // Didn't have monetarySeparator or exponential field;
@@ -1584,7 +1588,6 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
             // notation isn't supported by the old classes, even though the
             // symbol is there.
         }
-        /// CLOVER:ON
         if (serialVersionOnStream < 3) {
             // Resurrected objects from old streams will have no
             // locale.  There is no 100% fix for this.  A
@@ -2051,9 +2054,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     final void setLocale(ULocale valid, ULocale actual) {
         // Change the following to an assertion later
         if ((valid == null) != (actual == null)) {
-            /// CLOVER:OFF
             throw new IllegalArgumentException();
-            /// CLOVER:ON
         }
         // Another check we could do is that the actual locale is at
         // the same level or less specific than the valid locale.

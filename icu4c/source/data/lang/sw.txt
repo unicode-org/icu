@@ -11,19 +11,35 @@ sw{
         colCaseLevel{"Upangaji Kulingana na Ukubwa wa Herufi"}
         colNormalization{"Upangaji wa Kawaida"}
         colNumeric{"Upangaji kwa Nambari"}
+        colReorder{"Hati/Upangaji Upya wa Fungu"}
         colStrength{"Nguvu ya Upangaji"}
         collation{"Mpangilio"}
         currency{"Sarafu"}
+        d0{"Hatima ya Kigeuzi"}
+        dx{"Upuuzaji wa Migawanyo ya Kikamusi"}
         em{"Uwasilishaji wa Emoji"}
+        fw{"Siku ya kwanza ya wiki"}
+        h0{"Mseto"}
         hc{"Kipindi cha saa (12 au 24)"}
+        i0{"Mbinu ya Ingizo"}
+        k0{"Kibodi"}
+        kv{"Kilichopuuzwa Zaidi"}
         lb{"Mtindo wa Kukata Mstari"}
         lw{"Nafasi kati ya mistari kwa maneno"}
+        m0{"Kanuni za Ugeuzaji"}
         ms{"Mfumo wa Vipimo"}
+        mu{"Kizio cha Kipimo"}
         numbers{"Nambari"}
+        rg{"Eneo kwa ajili ya Data ya Nyongeza"}
+        s0{"Badili Umbo Chanzo"}
+        sd{"Ugawanyaji mdogo wa eneo"}
         ss{"Nafasi ya Sentensi Baada ya Ufupisho"}
+        t{"Badili Umbo"}
+        t0{"Imetafsiriwa na Mashine"}
         timezone{"Saa za Eneo"}
         va{"Lahaja za Lugha"}
         x{"Matumizi ya Kibinafsi"}
+        x0{"Kubadili Umbo kwa Matumizi Binafsi"}
     }
     Languages{
         aa{"Kiafar"}
@@ -44,14 +60,14 @@ sw{
         ann{"Kiobolo"}
         anp{"Kiangika"}
         ar{"Kiarabu"}
-        ar_001{"Kiarabu sanifu"}
+        ar_001{"Kiarabu Sanifu cha Kisasa"}
         arc{"Kiaramu"}
         arn{"Kimapuche"}
         arp{"Kiarapaho"}
         arq{"Kiarabu cha Algeria"}
         ars{"Kiarabu cha Najdi"}
         arz{"Kiarabu cha Misri"}
-        as{"Kiassam"}
+        as{"Kiasami"}
         asa{"Kiasu"}
         ast{"Kiasturia"}
         atj{"Kiatikamekw"}
@@ -143,8 +159,9 @@ sw{
         en_GB{"Kiingereza (Uingereza)"}
         eo{"Kiesperanto"}
         es{"Kihispania"}
-        es_419{"Kihispania (Amerika ya Latini)"}
-        es_ES{"Kihispania (Ulaya)"}
+        es_419{"Kihispania cha Amerika ya Latini"}
+        es_ES{"Kihispania cha Ulaya"}
+        es_MX{"Kihispania cha Meksiko"}
         et{"Kiestonia"}
         eu{"Kibaski"}
         ewo{"Kiewondo"}
@@ -211,7 +228,7 @@ sw{
         it{"Kiitaliano"}
         iu{"Kiinuktituti"}
         ja{"Kijapani"}
-        jbo{"Lojban"}
+        jbo{"Kilojbani"}
         jgo{"Kingomba"}
         jmc{"Kimachame"}
         jv{"Kijava"}
@@ -367,12 +384,13 @@ sw{
         peo{"Kiajemi cha Kale"}
         pis{"Kipijini"}
         pl{"Kipolandi"}
+        pms{"Kipiedmonti"}
         pqm{"Kimaliseet-Passamaquoddy"}
         prg{"Kiprussia"}
         ps{"Kipashto"}
         pt{"Kireno"}
-        pt_BR{"Kireno (Brazili)"}
-        pt_PT{"Kireno (Ulaya)"}
+        pt_BR{"Kireno cha Brazili"}
+        pt_PT{"Kireno cha Ulaya"}
         qu{"Kikechua"}
         quc{"Kʼicheʼ"}
         raj{"Kirajasthani"}
@@ -407,7 +425,7 @@ sw{
         sg{"Kisango"}
         sh{"Kiserbia-kroeshia"}
         shi{"Kitachelhit"}
-        shn{"Kishan"}
+        shn{"Kishani"}
         shu{"Kiarabu cha Chad"}
         si{"Kisinhala"}
         sk{"Kislovakia"}
@@ -434,7 +452,7 @@ sw{
         sv{"Kiswidi"}
         sw{"Kiswahili"}
         swb{"Shikomor"}
-        syr{"Lugha ya Syriac"}
+        syr{"Kisiria"}
         szl{"Kisilesia"}
         ta{"Kitamili"}
         tce{"Kitutchone cha Kusini"}
@@ -462,7 +480,7 @@ sw{
         ttm{"Kitutchone cha Kaskazini"}
         tum{"Kitumbuka"}
         tvl{"Kituvalu"}
-        tw{"Twi"}
+        tw{"Kitwi"}
         twq{"Kitasawak"}
         ty{"Kitahiti"}
         tyv{"Kituva"}
@@ -516,6 +534,7 @@ sw{
         ku{"Kikurmanji"}
     }
     Languages%long{
+        zh_Hans{"Kichina cha Mandarin Kilichorahisishwa"}
         zh_Hant{"Kichina (cha jadi)"}
     }
     Languages%menu{
@@ -527,7 +546,6 @@ sw{
     }
     Languages%variant{
         hi_Latn{"Kihindi chenye Kiingereza"}
-        ps{"Kipushto"}
     }
     Scripts{
         Adlm{"Kiadlamu"}
@@ -553,7 +571,7 @@ sw{
         Hans{"Rahisi"}
         Hant{"Cha jadi"}
         Hebr{"Kiebrania"}
-        Hira{"Hiragana"}
+        Hira{"Kihiragana"}
         Hrkt{"Hati za Kijapani"}
         Jpan{"Kijapani"}
         Kana{"Kikatakana"}
@@ -623,9 +641,13 @@ sw{
             ethiopic-amete-alem{"Amete Alem ya Ethiopia"}
             gregorian{"Kigregori"}
             hebrew{"Kiebrania"}
+            indian{"Kitaifa India"}
             islamic{"Hijra"}
             islamic-civil{"Hijra (inayotegemea hesabu)"}
+            islamic-rgsa{"Hijra, mwezi kuonekana Saudia"}
+            islamic-tbla{"Hijra (inayotegemea falaki)"}
             islamic-umalqura{"Hijra (Umm al-Qura)"}
+            iso8601{"Kigregori"}
             japanese{"Kijapani"}
             persian{"Kiajemi"}
             roc{"Kiminguo"}
@@ -651,6 +673,11 @@ sw{
             no{"Panga Utaratibu wa Herufi ya Kawaida"}
             upper{"Panga Herufi kubwa Kwanza"}
         }
+        colCaseFirst%core{
+            lower{"Herufi ndogo"}
+            no{"Herufi ndogo"}
+            upper{"Herufi kubwa"}
+        }
         colCaseLevel{
             no{"Panga Isiyoathiriwa na Herufi"}
             yes{"Panga kwa Inayoathiriwa na Herufi"}
@@ -663,12 +690,26 @@ sw{
             no{"Panga Tarakimu Kivyake"}
             yes{"Panga Dijiti kwa Namba"}
         }
+        colReorder%core{
+            currency{"Sarafu"}
+            digit{"Tarakimu"}
+            punct{"Uakifishaji"}
+            space{"Nafasi wazi"}
+            symbol{"Alama"}
+        }
         colStrength{
             identical{"Panga Zote"}
             primary{"Panga Herufi Msingi Tu"}
             quaternary{"Panga Viinitoni/Herufi/Upana/Kana"}
             secondary{"Panga Viinitoni"}
             tertiary{"Panga Viinitoni/Herufi/Upana"}
+        }
+        colStrength%core{
+            identical{"Vyote"}
+            primary{"Herufi za Msingi Pekee"}
+            quaternary{"Msingi, Shadda, Herufi Kubwa au Ndogo, Vibadala, Kana"}
+            secondary{"Msingi, Shadda"}
+            tertiary{"Msingi, Shadda, Herufi Kubwa au Ndogo, Vibadala"}
         }
         collation{
             dictionary{"Mpangilio wa Kamusi"}
@@ -684,9 +725,21 @@ sw{
             unihan{"Mpangilio wa Mikwaju ya Shina"}
         }
         collation%core{
+            compat{"Upatanifu"}
+            dictionary{"Kamusi"}
             ducet{"Chaguomsingi ya Unicode"}
+            emoji{"Emoji"}
+            eor{"Kanuni za Ulaya"}
+            phonebook{"Orodha ya anwani"}
+            phonetic{"Fonetiki"}
+            pinyin{"Pinyin"}
             search{"Utafutaji"}
+            searchjl{"Konsonanti ya awali ya Kikorea"}
             standard{"Kawaida"}
+            stroke{"Chapa"}
+            traditional{"Kijadi"}
+            unihan{"Chapa ya Kimapokeo"}
+            zhuyin{"Zhuyin"}
         }
         d0{
             fwidth{"Upana kamili"}
@@ -699,16 +752,26 @@ sw{
             text{"Maandiko"}
         }
         hc{
+            c12{"Kipindi cha saa 12"}
+            c24{"Kipindi cha saa 24"}
             h11{"Kipindi cha saa 12 (0–11)"}
             h12{"Kipindi cha saa 12 (1–12)"}
             h23{"Kipindi cha saa 24 (0–23)"}
             h24{"Kipindi cha saa 24 (1–24)"}
         }
         hc%core{
+            c12{"12"}
+            c24{"24"}
             h11{"12 (0–11)"}
             h12{"12 (1–12)"}
             h23{"24 (0–23)"}
             h24{"24 (1–24)"}
+        }
+        kv%core{
+            currency{"Kitufe cha Kubadilisha Nafasi, uakifishaji, alama zote"}
+            punct{"Kitufe cha Kubadilisha Nafasi, uakifishaji"}
+            space{"Kitufe cha Kubadilisha Nafasi, uakifishaji"}
+            symbol{"Kitufe cha Kubadilisha Nafasi, uakifishaji, alama zisizo za kifedha"}
         }
         lb{
             loose{"Mtindo Pana wa Kukata Mstari"}
@@ -747,6 +810,7 @@ sw{
             armnlow{"Nambari Ndogo za Kiarmenia"}
             beng{"Nambari za Kibengali"}
             cakm{"Nambari za Kichakma"}
+            cham{"Nambari za Kichami"}
             deva{"Nambari za Kidevanagari"}
             ethi{"Nambari za Kiethiopia"}
             finance{"Tarakimu za Kifedha"}
@@ -786,9 +850,48 @@ sw{
             traditional{"Tarakimu za Jadi"}
             vaii{"Nambari za Kivai"}
         }
+        numbers%core{
+            arabext{"Tarakimu za Kiarabu"}
+            armnlow{"Herufi ndogo za Kiarmenia"}
+            finance{"Kifedha"}
+            fullwide{"Upana kamili"}
+            greklow{"Herufi ndogo ya Kigiriki"}
+            hanidays{"Kalenda za jadi zenye tarakimu za Han kwa idadi ya siku za mwezi"}
+            hanidec{
+                "Mfumo wa nafasi za desimali kwa kutumia ishara za nambari za Kichina"
+                " kama tarakimu"
+            }
+            hansfin{"Kichina Rahisi cha Kifedha"}
+            hantfin{"Kijapani Rahisi cha Kifedha"}
+            jpanfin{"Tarakimu za Kijapani za kifedha"}
+            jpanyear{"Tarakimu za Kijapani za Gannen ya mwaka wa kwanza"}
+            lanatham{"Hati ya Tai Tham (kidini)"}
+            mathbold{"Chapa nene ya kihesabu"}
+            mathdbl{"Chapa ya kihesabu ya mstari pacha"}
+            mathmono{"Chapa ya kihesabu ya upana sawa"}
+            mathsanb{"Chapa ya kihesabu ya sans-serif iliyokolezwa"}
+            mathsans{"Chapa ya kihesabu ya sans-serif"}
+            mymrepka{"Hati ya Pwo Karen ya Myanmar Mashariki"}
+            mymrpao{"Tarakimu za Pao za Myanmar"}
+            mymrshan{"Tarakimu za Shan za Myanmar"}
+            mymrtlng{"Tarakimu za Tai Laing za Myanmar"}
+            native{"Tarakimu asilia"}
+            outlined{"Chapa yenye mistari ya nje"}
+            roman{"Herufi kubwa za Kirumi"}
+            romanlow{"Herufi ndogo za Kirumi"}
+            segment{"Tarakimu za vipande"}
+            tamldec{"Tarakimu za Kitamil za Kisasa"}
+            traditional{"Tarakimu za jadi"}
+        }
         ss%core{
             none{"Imezimwa"}
             standard{"Imewashwa"}
+        }
+        t0{
+            und{"Tafsiri ya Mashine Isiyo Bayana"}
+        }
+        va%core{
+            posix{"Kibadala cha POSIX"}
         }
     }
     characterLabelPattern{

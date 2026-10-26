@@ -5,15 +5,41 @@ ga{
     Keys{
         calendar{"Féilire"}
         cf{"Formáid Airgeadra"}
+        colAlternate{"Sórtáil Siombailí \u0022Tabhair Neamhaird ar\u0022"}
+        colBackwards{"Sórtáil de réir Fada Tiontaithe Thart"}
+        colCaseFirst{"Cuir in Ord de réir Cás Uachtair/Cás Íochtair"}
+        colCaseLevel{"Sórtáil chásíogair"}
+        colNormalization{"Sórtáil Normalaithe"}
+        colNumeric{"Sórtáil Uimhriúil"}
+        colReorder{"Athord a chur ar Chlónna/ar Bhloclitreacha"}
+        colStrength{"Neart Sórtála"}
         collation{"Ord Sórtála"}
         currency{"Airgeadra"}
+        d0{"Ceann Scríbe Claochlaithe"}
+        dx{"Eisiamh Briste Foclóra"}
         em{"Léiriú mar Emoji"}
+        fw{"An chéad lá den tseachtain"}
+        h0{"Measctha"}
         hc{"Timthriall Uaire (12 vs 24)"}
+        i0{"Modh Ionchuir"}
+        k0{"Méarchlár"}
+        kv{"An líon ar a dtugtar neamhaird is mó"}
         lb{"Déine Briste Líne"}
         lw{"Bristeacha Líne laistigh d’Fhocail"}
+        m0{"Rialacha Claochlaithe"}
         ms{"Córas Tomhais"}
+        mu{"Aonad Tomhais"}
         numbers{"Uimhreacha"}
+        rg{"Réigiún le haghaidh Sonraí Forlíontacha"}
+        s0{"Foinse Claochlaithe"}
+        sd{"Foroinn Réigiúin"}
         ss{"Briseadh Frása tar éis Giorrúcháin"}
+        t{"Claochlaigh"}
+        t0{"Aistrithe ag Meaisín"}
+        timezone{"Crios Ama"}
+        va{"Leagan Logchaighdeáin"}
+        x{"Úsáid Phríobháideach"}
+        x0{"Claochlú Úsáide Príobháidí"}
     }
     Languages{
         aa{"Afáiris"}
@@ -370,6 +396,7 @@ ga{
         pi{"Páilis"}
         pis{"Pijin"}
         pl{"Polainnis"}
+        pms{"de chuid Phíodmant"}
         pqm{"Maliseet-Passamaquoddy"}
         prg{"Prúisis"}
         ps{"Paistis"}
@@ -725,9 +752,13 @@ ga{
             ethiopic-amete-alem{"Aetóipice Amete Alem"}
             gregorian{"Gréagóra"}
             hebrew{"Eabhrach"}
+            indian{"Náisiúnach de chuid na hIndia"}
             islamic{"Moslamach"}
             islamic-civil{"Moslamach (táblach, seanré shibhialta)"}
+            islamic-rgsa{"Hijri, Saudi Arabia, radharc gealaí"}
+            islamic-tbla{"Hijri (i bhfoirm tábla, aga réalteolaíoch)"}
             islamic-umalqura{"Moslamach (Umm al-Qura)"}
+            iso8601{"Greagórach"}
             japanese{"Seapánach"}
             persian{"Peirseach"}
             roc{"Téavánach"}
@@ -739,6 +770,25 @@ ga{
         cf%core{
             account{"Cuntasaíocht"}
             standard{"Caighdeánach"}
+        }
+        colCaseFirst%core{
+            lower{"Cás íochtair"}
+            no{"Cás íochtair"}
+            upper{"Cás uachtair"}
+        }
+        colReorder%core{
+            currency{"Airgeadra"}
+            digit{"Digití"}
+            punct{"Poncaíocht"}
+            space{"Spás bán"}
+            symbol{"Siombail"}
+        }
+        colStrength%core{
+            identical{"Gach"}
+            primary{"Bonnlitreacha Amháin"}
+            quaternary{"Bonnlitir, Fada, Cás, Leaganacha, Kana"}
+            secondary{"Bonnlitir, Fada"}
+            tertiary{"Bonnlitir, Fada, Cás, Leaganacha"}
         }
         collation{
             compat{"Ord Sórtála Roimhe Seo, ar son na comhoiriúnachta"}
@@ -757,9 +807,25 @@ ga{
             zhuyin{"Ord Sórtála Zhuyin"}
         }
         collation%core{
+            compat{"Comhoiriúnacht"}
+            dictionary{"Foclóir"}
             ducet{"Réamhshocraithe Unicode"}
+            emoji{"Emoji"}
+            eor{"Rialacha Eorpacha"}
+            phonebook{"Eolaí teileafóin"}
+            phonetic{"Foghraíochta"}
+            pinyin{"Pinyin"}
             search{"Cuardach"}
+            searchjl{"Consan tosaigh Cóiréise"}
             standard{"Caighdeánach"}
+            stroke{"Stríoc"}
+            traditional{"Traidisiúnta"}
+            unihan{"Fréamh-Stríoc"}
+            zhuyin{"Zhuyin"}
+        }
+        d0{
+            fwidth{"Go Lánleithid"}
+            hwidth{"Go Leathleithid"}
         }
         em%core{
             default{"Réamhshocraithe"}
@@ -767,16 +833,26 @@ ga{
             text{"Téacs"}
         }
         hc{
+            c12{"Córas 12 Uair"}
+            c24{"Córas 24 Uair"}
             h11{"Córas 12 Uair (0–11)"}
             h12{"Córas 12 Uair (1–12)"}
             h23{"Córas 24 Uair (0–23)"}
             h24{"Córas 24 Uair (1–24)"}
         }
         hc%core{
+            c12{"12"}
+            c24{"24"}
             h11{"12 (0–11)"}
             h12{"12 (1–12)"}
             h23{"24 (0–23)"}
             h24{"24 (1–24)"}
+        }
+        kv%core{
+            currency{"Spásanna Iomlaoide, poncaíocht, gach siombail"}
+            punct{"Spásanna iomlaoide, poncaíocht"}
+            space{"Spásanna iomlaoide, poncaíocht"}
+            symbol{"Spásanna Iomlaoide, poncaíocht, siombailí neamhairgeadra"}
         }
         lb{
             loose{"Stíl Scaoilte Briste Líne"}
@@ -793,6 +869,10 @@ ga{
             keepall{"Coinnigh gach rud"}
             normal{"Gnách"}
             phrase{"Coinnigh i bhfrásaí"}
+        }
+        m0{
+            bgn{"Traslitriú BGN SAM"}
+            ungegn{"Traslitriú GEGN NA"}
         }
         ms{
             metric{"Córas Méadrach"}
@@ -857,6 +937,7 @@ ga{
             mymr{"Digití Maenmaracha"}
             mymrshan{"Digití Myanmar Shan"}
             mymrtlng{"Digití Myanmar Tai Laing"}
+            native{"Digití Dúchasacha"}
             nkoo{"Digití N’ko"}
             olck{"Digití Ol Chiki"}
             orya{"Digití Oiríseacha"}
@@ -880,9 +961,51 @@ ga{
             vaii{"Digití Vadhacha"}
             wara{"Digití Warang Citi"}
         }
+        numbers%core{
+            arabext{"Indic-Araibis Sínte"}
+            armnlow{"Cás Íochtair Airméinise"}
+            finance{"Airgeadais"}
+            fullwide{"Lánleithid"}
+            greklow{"Cás Íochtair Gréagach"}
+            hanidays{
+                "Uimhriú lá na míosa le carachtar Han le haghaidh féilirí traidisiúnt"
+                "a"
+            }
+            hanidec{
+                "Córas deachúil suímh ina n-úsáidtear ideagraif uimhreacha Síneacha m"
+                "ar dhigití"
+            }
+            hansfin{"Airgeadais na Sínise Simplithe"}
+            hantfin{"Airgeadais na Sínise Traidisiúnta"}
+            jpanfin{"Airgeadais Seapánach"}
+            jpanyear{"Uimhriú Seapánach Gannen (An bhliain bunúis)"}
+            lanatham{"Tai Tham Tham (eaglasta)"}
+            mathbold{"Cló trom matamaiticiúil"}
+            mathdbl{"Double-struck matamaiticiúil"}
+            mathmono{"Monaspás matamaiticiúil"}
+            mathsanb{"Sans-serif matamaiticiúil i gcló trom"}
+            mathsans{"Sans-serif matamaiticiúil"}
+            mymrepka{"Cairéinis Pao Oirthearach Mhaenmar"}
+            mymrpao{"Pao Maenmar"}
+            mymrshan{"Shan Maenmar"}
+            mymrtlng{"Tai Laing Maenmar"}
+            native{"Digití dúchasacha"}
+            outlined{"Imlínithe"}
+            roman{"Cás uachtair Romhánach"}
+            romanlow{"Cás íochtair Romhánach"}
+            segment{"Deighilte"}
+            tamldec{"Tamailis Nua"}
+            traditional{"Uimhreacha traidisiúnta"}
+        }
         ss%core{
             none{"Múchta"}
             standard{"Ar siúl"}
+        }
+        t0{
+            und{"Meaisínaistriúchán Neamhshonraithe"}
+        }
+        va%core{
+            posix{"Leagan POSIX"}
         }
     }
     Variants{

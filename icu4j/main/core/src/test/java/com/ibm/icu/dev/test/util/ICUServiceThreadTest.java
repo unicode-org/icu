@@ -12,7 +12,6 @@ import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.ICULocaleService;
 import com.ibm.icu.impl.ICUService;
-import com.ibm.icu.impl.ICUService.Factory;
 import com.ibm.icu.impl.ICUService.SimpleFactory;
 import com.ibm.icu.util.ULocale;
 import java.text.Collator;
@@ -193,7 +192,7 @@ public class ICUServiceThreadTest extends CoreTestFmwk {
 
         @Override
         protected void iterate() {
-            Factory f = new TestFactory(getCLV());
+            ICUService.Factory f = new TestFactory(getCLV());
             service.registerFactory(f);
             TestFmwk.logln(f.toString());
         }
@@ -201,7 +200,7 @@ public class ICUServiceThreadTest extends CoreTestFmwk {
 
     static class UnregisterFactoryThread extends TestThread {
         private Random r;
-        List<Factory> factories;
+        List<ICUService.Factory> factories;
 
         UnregisterFactoryThread(String name, ICUService service, long delay) {
             super("UNREG " + name, service, delay);
@@ -217,7 +216,7 @@ public class ICUServiceThreadTest extends CoreTestFmwk {
                 factories = service.factories();
             } else {
                 int n = r.nextInt(s);
-                Factory f = (Factory) factories.remove(n);
+                ICUService.Factory f = (ICUService.Factory) factories.remove(n);
                 boolean success = service.unregisterFactory(f);
                 TestFmwk.logln("factory: " + f + (success ? " succeeded." : " *** failed."));
             }
@@ -225,11 +224,11 @@ public class ICUServiceThreadTest extends CoreTestFmwk {
     }
 
     static class UnregisterFactoryListThread extends TestThread {
-        Factory[] factories;
+        ICUService.Factory[] factories;
         int n;
 
         UnregisterFactoryListThread(
-                String name, ICUService service, long delay, Factory[] factories) {
+                String name, ICUService service, long delay, ICUService.Factory[] factories) {
             super("UNREG " + name, service, delay);
 
             this.factories = factories;
@@ -238,7 +237,7 @@ public class ICUServiceThreadTest extends CoreTestFmwk {
         @Override
         public void iterate() {
             if (n < factories.length) {
-                Factory f = factories[n++];
+                ICUService.Factory f = factories[n++];
                 boolean success = service.unregisterFactory(f);
                 TestFmwk.logln("factory: " + f + (success ? " succeeded." : " *** failed."));
             }
@@ -335,12 +334,12 @@ public class ICUServiceThreadTest extends CoreTestFmwk {
     }
 
     // return a collection of unique factories, might be fewer than requested
-    Collection<Factory> getFactoryCollection(int requested) {
+    Collection<ICUService.Factory> getFactoryCollection(int requested) {
         Set<String> locales = new HashSet<>();
         for (int i = 0; i < requested; ++i) {
             locales.add(getCLV());
         }
-        List<Factory> factories = new ArrayList<>(locales.size());
+        List<ICUService.Factory> factories = new ArrayList<>(locales.size());
         Iterator<String> iter = locales.iterator();
         for (String locale : locales) {
             factories.add(new TestFactory(locale));
@@ -348,8 +347,8 @@ public class ICUServiceThreadTest extends CoreTestFmwk {
         return factories;
     }
 
-    void registerFactories(ICUService service, Collection<Factory> c) {
-        for (Factory factory : c) {
+    void registerFactories(ICUService service, Collection<ICUService.Factory> c) {
+        for (ICUService.Factory factory : c) {
             service.registerFactory(factory);
         }
     }
@@ -418,14 +417,14 @@ public class ICUServiceThreadTest extends CoreTestFmwk {
         ICUService service = new ICULocaleService();
         if (PRINTSTATS) service.stats(); // Enable the stats collection
 
-        Collection<Factory> fc = getFactoryCollection(50);
+        Collection<ICUService.Factory> fc = getFactoryCollection(50);
         registerFactories(service, fc);
 
-        Factory[] factories = fc.toArray(new Factory[fc.size()]);
-        Comparator<Factory> comp =
-                new Comparator<Factory>() {
+        ICUService.Factory[] factories = fc.toArray(new ICUService.Factory[fc.size()]);
+        Comparator<ICUService.Factory> comp =
+                new Comparator<ICUService.Factory>() {
                     @Override
-                    public int compare(Factory lhs, Factory rhs) {
+                    public int compare(ICUService.Factory lhs, ICUService.Factory rhs) {
                         return lhs.toString().compareTo(rhs.toString());
                     }
                 };

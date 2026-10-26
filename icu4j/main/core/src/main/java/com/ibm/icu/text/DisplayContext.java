@@ -14,7 +14,7 @@ package com.ibm.icu.text;
  * @stable ICU 51
  */
 public enum DisplayContext {
-    /** ================================ Settings for DIALECT_HANDLING (use one) */
+    /* ================================ Settings for DIALECT_HANDLING (use one) */
     /**
      * A possible setting for DIALECT_HANDLING: use standard names when generating a locale name,
      * e.g. en_GB displays as 'English (United Kingdom)'.
@@ -29,7 +29,7 @@ public enum DisplayContext {
      * @stable ICU 51
      */
     DIALECT_NAMES(Type.DIALECT_HANDLING, 1),
-    /** ================================ Settings for CAPITALIZATION (use one) */
+    /* ================================ Settings for CAPITALIZATION (use one) */
     /**
      * A possible setting for CAPITALIZATION: The capitalization context to be used is unknown (this
      * is the default value).
@@ -68,7 +68,7 @@ public enum DisplayContext {
      * @stable ICU 51
      */
     CAPITALIZATION_FOR_STANDALONE(Type.CAPITALIZATION, 4),
-    /** ================================ Settings for DISPLAY_LENGTH (use one) */
+    /* ================================ Settings for DISPLAY_LENGTH (use one) */
     /**
      * A possible setting for DISPLAY_LENGTH: use full names when generating a locale name, e.g.
      * "United States" for US.
@@ -83,7 +83,7 @@ public enum DisplayContext {
      * @stable ICU 54
      */
     LENGTH_SHORT(Type.DISPLAY_LENGTH, 1),
-    /** ================================ Settings for SUBSTITUTE_HANDLING (choose one) */
+    /* ================================ Settings for SUBSTITUTE_HANDLING (choose one) */
     /**
      * A possible setting for SUBSTITUTE_HANDLING: Returns a fallback value (e.g., the input code)
      * when no data is available. This is the default behavior.

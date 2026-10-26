@@ -198,9 +198,6 @@ bs{
             }
             part{
                 dnam{"dijelovi"}
-                few{"{0} dijela"}
-                one{"{0} dio"}
-                other{"{0} dijelova"}
             }
             part-per-1e6{
                 dnam{"dijelovi na milion"}
@@ -983,12 +980,6 @@ bs{
                 one{"{0} čvor"}
                 other{"{0} čvorova"}
             }
-            light-speed{
-                dnam{"svjetlo"}
-                few{"{0} svjetla"}
-                one{"{0} svjetlo"}
-                other{"{0} svjetala"}
-            }
             meter-per-second{
                 dnam{"metri u sekundi"}
                 few{"{0} metra u sekundi"}
@@ -1233,32 +1224,13 @@ bs{
         }
     }
     unitsNarrow{
-        angle{
-            steradian{
-                few{"{0} sr"}
-                one{"{0} sr"}
-                other{"{0} sr"}
-            }
-        }
         area{
             acre{
                 dnam{"aker"}
             }
         }
         concentr{
-            katal{
-                few{"{0} kat"}
-                one{"{0} kat"}
-                other{"{0} kat"}
-            }
-            ofglucose{
-                dnam{"Glc"}
-                few{"{0} Glc"}
-                one{"{0} Glc"}
-                other{"{0} Glc"}
-            }
             part{
-                dnam{"dio"}
                 few{"{0} dijela"}
                 one{"{0} dio"}
                 other{"{0} dijelova"}
@@ -1327,46 +1299,18 @@ bs{
                 dnam{"god."}
             }
         }
-        electric{
-            farad{
-                few{"{0} F"}
-                one{"{0} F"}
-                other{"{0} F"}
-            }
-            siemens{
-                few{"{0} S"}
-                one{"{0} S"}
-                other{"{0} S"}
-            }
-        }
         energy{
-            becquerel{
-                few{"{0} Bq"}
-                one{"{0} Bq"}
-                other{"{0} Bq"}
-            }
             calorie{
                 dnam{"cal"}
                 few{"{0} kal."}
                 one{"{0} kal."}
                 other{"{0} cal"}
             }
-            calorie-it{
-                dnam{"cal [IT]"}
-                few{"{0} cal IT"}
-                one{"{0} cal IT"}
-                other{"{0} cal IT"}
-            }
             kilojoule{
                 dnam{"kJ"}
             }
         }
         force{
-            kilogram-force{
-                few{"{0} kgf"}
-                one{"{0} kgf"}
-                other{"{0} kgf"}
-            }
             kilowatt-hour-per-100-kilometer{
                 few{"{0} kWh/100 km"}
                 one{"{0}kWh/100 km"}
@@ -1410,18 +1354,6 @@ bs{
                 dnam{"yd"}
             }
         }
-        magnetic{
-            tesla{
-                few{"{0} T"}
-                one{"{0} T"}
-                other{"{0} T"}
-            }
-            weber{
-                few{"{0} Wb"}
-                one{"{0} Wb"}
-                other{"{0} Wb"}
-            }
-        }
         mass{
             carat{
                 dnam{"karat"}
@@ -1449,19 +1381,6 @@ bs{
                 few{"{0} mbar"}
                 one{"{0} mb"}
                 other{"{0} mb"}
-            }
-            ofhg{
-                few{"{0} Hg"}
-                one{"{0} Hg"}
-                other{"{0} Hg"}
-            }
-        }
-        speed{
-            light-speed{
-                dnam{"svjetlo"}
-                few{"{0} svjetla"}
-                one{"{0} svjetlo"}
-                other{"{0} svjetala"}
             }
         }
         temperature{

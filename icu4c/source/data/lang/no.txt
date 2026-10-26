@@ -5,25 +5,41 @@ no{
     Keys{
         calendar{"kalender"}
         cf{"valutaformat"}
-        colAlternate{"Ignorer sortering etter symboler"}
-        colBackwards{"Omvendt sortering etter aksent"}
-        colCaseFirst{"Organisering av store og små bokstaver"}
-        colCaseLevel{"Sortering av store og små bokstaver"}
-        colNormalization{"Normalisert sortering"}
-        colNumeric{"Numerisk sortering"}
-        colStrength{"Sorteringsstyrke"}
+        colAlternate{"ignorer sortering etter symboler"}
+        colBackwards{"omvendt sortering etter aksent"}
+        colCaseFirst{"organisering av store og små bokstaver"}
+        colCaseLevel{"sortering av store og små bokstaver"}
+        colNormalization{"normalisert sortering"}
+        colNumeric{"numerisk sortering"}
+        colReorder{"omorganisering etter skriftsystem/blokk"}
+        colStrength{"sorteringsstyrke"}
         collation{"sorteringsrekkefølge"}
         currency{"valuta"}
+        d0{"transformeringsmål"}
+        dx{"unntak for ordbokbasert tekstbryting"}
         em{"emojivisning"}
+        fw{"første dag i uken"}
+        h0{"blandet inn"}
         hc{"timesyklus (12 eller 24)"}
+        i0{"inndatametode"}
+        k0{"tastatur"}
+        kv{"høyeste ignorerte"}
         lb{"linjeskiftstil"}
         lw{"linjeskift innenfor ord"}
+        m0{"transformasjonsregler"}
         ms{"målesystem"}
+        mu{"måleenhet"}
         numbers{"tall"}
-        ss{"Ny setning etter fork."}
+        rg{"region for tilleggsdata"}
+        s0{"transformasjonskilde"}
+        sd{"underregion"}
+        ss{"ny setning etter fork."}
+        t{"transformer"}
+        t0{"maskinoversatt"}
         timezone{"tidssone"}
         va{"språkvariant"}
         x{"privat bruk"}
+        x0{"privat transformasjon"}
     }
     Languages{
         aa{"afar"}
@@ -903,9 +919,13 @@ no{
             ethiopic-amete-alem{"etiopisk amete-alem"}
             gregorian{"gregoriansk"}
             hebrew{"hebraisk"}
+            indian{"indisk nasjonalkalender"}
             islamic{"hijri"}
             islamic-civil{"hijri (tabell, sivil)"}
+            islamic-rgsa{"hijri, saudiarabisk observasjon"}
+            islamic-tbla{"hijri (tabulær, astronomisk epoke)"}
             islamic-umalqura{"hijri (Umm al-Qura)"}
+            iso8601{"gregoriansk"}
             japanese{"japansk"}
             persian{"persisk"}
             roc{"minguo"}
@@ -931,6 +951,11 @@ no{
             no{"Sortér store og små bokstaver i vanlig rekkefølge"}
             upper{"Sortér store bokstaver først"}
         }
+        colCaseFirst%core{
+            lower{"små bokstaver"}
+            no{"små bokstaver"}
+            upper{"store bokstaver"}
+        }
         colCaseLevel{
             no{"Sortér uavhengig av store og små bokstaver."}
             yes{"Sortér med skille mellom små og store bokstaver"}
@@ -943,12 +968,26 @@ no{
             no{"Sortér sifre individuelt"}
             yes{"Sortér sifre numerisk"}
         }
+        colReorder%core{
+            currency{"valuta"}
+            digit{"sifre"}
+            punct{"tegnsetting"}
+            space{"mellomrom"}
+            symbol{"symbol"}
+        }
         colStrength{
             identical{"Sortér alle"}
             primary{"Sortér bare basisbokstaver"}
             quaternary{"Sortér aksenttegn / små og store bokstaver / bredde / kana"}
             secondary{"Sortér aksenttegn"}
             tertiary{"Sortér aksenttegn / små og store bokstaver / bredde"}
+        }
+        colStrength%core{
+            identical{"alle"}
+            primary{"kun grunnbokstaver"}
+            quaternary{"grunnbokstaver, aksenter, kasus, varianter, kana"}
+            secondary{"grunnbokstaver, aksenter"}
+            tertiary{"grunnbokstaver, aksenter, kasus, varianter"}
         }
         collation{
             compat{"forrige sorteringsrekkefølge (for kompatibilitet)"}
@@ -971,10 +1010,13 @@ no{
             compat{"kompatibilitet"}
             dictionary{"ordliste"}
             ducet{"standard Unicode"}
+            emoji{"emoji"}
+            eor{"europeiske regler"}
             phonebook{"telefonkatalog"}
             phonetic{"fonetisk"}
             pinyin{"pinyin"}
             search{"søk"}
+            searchjl{"koreansk første konsonant"}
             standard{"standard"}
             stroke{"strek"}
             traditional{"tradisjonell"}
@@ -992,16 +1034,26 @@ no{
             text{"tekst"}
         }
         hc{
+            c12{"12-timers system"}
+            c24{"24-timers system"}
             h11{"12-timers system (0–11)"}
             h12{"12-timers system (1–12)"}
             h23{"24-timers system (0–23)"}
             h24{"24-timers system (1–24)"}
         }
         hc%core{
+            c12{"12"}
+            c24{"24"}
             h11{"12 (0–11)"}
             h12{"12 (1–12)"}
             h23{"24 (0–23)"}
             h24{"24 (1–24)"}
+        }
+        kv%core{
+            currency{"forskyv mellomrom, tegnsetting, alle symboler"}
+            punct{"forskyv mellomrom, tegnsetting"}
+            space{"forskyv mellomrom, tegnsetting"}
+            symbol{"forskyv mellomrom, tegnsetting, ikke-valutasymboler"}
         }
         lb{
             loose{"løs linjeskiftstil"}
@@ -1075,7 +1127,7 @@ no{
             mlym{"malayalam-sifre"}
             mong{"mongolske tall"}
             mtei{"meetei mayek-sifre"}
-            mymr{"burmesiske sifre"}
+            mymr{"myanmarske sifre"}
             mymrshan{"myanmar shan-tall"}
             native{"språkspesifikke sifre"}
             nkoo{"n’ko-tall"}
@@ -1100,9 +1152,51 @@ no{
             traditional{"Tradisjonelle tall"}
             vaii{"vai-sifre"}
         }
+        numbers%core{
+            arabext{"utvidet arabisk-indisk"}
+            armnlow{"små armenske"}
+            finance{"finansielle"}
+            fullwide{"full bredde"}
+            greklow{"små greske"}
+            hanidays{
+                "han-tegn for nummerering av dager i måneden i tradisjonelle kalender"
+                "e"
+            }
+            hanidec{
+                "posisjonsbasert desimalsystem som bruker kinesiske tallideogrammer s"
+                "om siffer"
+            }
+            hansfin{"forenklet kinesisk finansielle"}
+            hantfin{"tradisjonell kinesisk finansielle"}
+            jpanfin{"japanske finansielle"}
+            jpanyear{"japansk gannen-nummerering for det første året"}
+            lanatham{"tai tham (kirkelig)"}
+            mathbold{"matematisk halvfet"}
+            mathdbl{"matematisk dobbeltstreket"}
+            mathmono{"matematisk fastbreddeskrift"}
+            mathsanb{"matematisk sans-serif halvfet"}
+            mathsans{"matematisk sans-serif"}
+            mymrepka{"myanmarsk østlig pwo-karen"}
+            mymrpao{"myanmarsk pao"}
+            mymrshan{"myanmarsk shan"}
+            mymrtlng{"myanmarsk tai-laing"}
+            native{"språkspesifikke sifre"}
+            outlined{"omriss"}
+            roman{"romertall"}
+            romanlow{"små romertall"}
+            segment{"segmentert"}
+            tamldec{"moderne tamil"}
+            traditional{"tradisjonelle tall"}
+        }
         ss%core{
             none{"av"}
             standard{"på"}
+        }
+        t0{
+            und{"uspesifisert maskinoversettelse"}
+        }
+        va%core{
+            posix{"POSIX-variant"}
         }
     }
     Variants{

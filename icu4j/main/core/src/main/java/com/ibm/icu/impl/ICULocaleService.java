@@ -389,7 +389,6 @@ public class ICULocaleService extends ICUService {
             //          return null;
         }
 
-        /// CLOVER:OFF
         /**
          * Utility method used by create(Key, ICUService). Subclasses can implement this instead of
          * create.
@@ -397,8 +396,6 @@ public class ICULocaleService extends ICUService {
         protected Object handleCreate(ULocale loc, int kind, ICUService service) {
             return null;
         }
-
-        /// CLOVER:ON
 
         /** Return true if this id is one the factory supports (visible or otherwise). */
         protected boolean isSupportedID(String id) {
@@ -551,6 +548,7 @@ public class ICULocaleService extends ICUService {
      * Return the name of the current fallback locale. If it has changed since this was last
      * accessed, the service cache is cleared.
      */
+    @SuppressWarnings("ReferenceEquality")
     public String validateFallbackLocale() {
         ULocale loc = ULocale.getDefault();
         if (loc != fallbackLocale) {

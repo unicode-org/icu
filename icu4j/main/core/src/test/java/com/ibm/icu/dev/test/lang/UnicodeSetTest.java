@@ -8,8 +8,13 @@
  */
 package com.ibm.icu.dev.test.lang;
 
+import static com.ibm.icu.dev.test.lang.UnicodeSetTest.LookupSymbolTableTestCase.*;
+import static com.ibm.icu.dev.test.lang.UnicodeSetTest.SymbolTableTestCase.*;
+
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.lang.UnicodeSetTest.LookupSymbolTableTestCase.SetValuedVariable;
+import com.ibm.icu.dev.test.lang.UnicodeSetTest.LookupSymbolTableTestCase.StringValuedVariable;
 import com.ibm.icu.impl.SortedSetRelation;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.CharacterProperties;
@@ -24,6 +29,7 @@ import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSet.ComparisonStyle;
 import com.ibm.icu.text.UnicodeSet.EntryRange;
 import com.ibm.icu.text.UnicodeSet.SpanCondition;
+import com.ibm.icu.text.UnicodeSet.XSymbolTable;
 import com.ibm.icu.text.UnicodeSetIterator;
 import com.ibm.icu.text.UnicodeSetSpanner;
 import com.ibm.icu.text.UnicodeSetSpanner.CountMethod;
@@ -41,12 +47,16 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.StringJoiner;
+import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -1257,7 +1267,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
             "abcd\u0300\u0301\u00c0\u00c5",
             "[:Assigned:]",
             "A\\uE000\\uF8FF\\uFDC7\\U00010000\\U0010FFFD",
-            "\\u0558\\uFDD3\\uFFFE\\U00050005",
+            "\\u0557\\uFDD3\\uFFFE\\U00050005",
 
             // Script_Extensions, new in Unicode 6.0
             "[:scx=Arab:]",
@@ -1400,11 +1410,12 @@ public class UnicodeSetTest extends CoreTestFmwk {
             // selector, input, output
             CASE,
             "[aq\u00DF{Bc}{bC}{Fi}]",
-            "[aAqQ\u00DF\u1E9E\uFB01{ss}{bc}{fi}]", // U+1E9E LATIN CAPITAL LETTER SHARP S is new in
-            // Unicode 5.1
+            // U+1E9E LATIN CAPITAL LETTER SHARP S is new in Unicode 5.1.
+            // U+1DF95 LATIN SMALL LIGATURE LONG S WITH DESCENDER S is new in Unicode 18.
+            "[aAqQ\u00DF\u1E9E\uD837\uDF95\uFB01{ss}{bc}{fi}]",
             SIMPLE_CASE_INSENSITIVE,
             "[aq\u00DF{Bc}{bC}{Fi}]",
-            "[aAqQ\u00DF\u1E9E{bc}{fi}]",
+            "[aAqQ\u00DF\u1E9E\uD837\uDF95{bc}{fi}]",
             CASE,
             "[\u01F1]", // 'DZ'
             "[\u01F1\u01F2\u01F3]",
@@ -1530,6 +1541,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
         values.add(t);
     }
 
+    @SuppressWarnings("ReferenceEquality")
     private void addIfAbsent(
             Map<Integer, Collection<Integer>> closure,
             Integer c,
@@ -1731,16 +1743,66 @@ public class UnicodeSetTest extends CoreTestFmwk {
         }
     }
 
+    static class SymbolTableTestCase {
+        static class Variable {
+            public Variable(String name, String value) {
+                this.name = name;
+                this.value = value;
+            }
+
+            public String name;
+            public String value;
+        }
+
+        public static Variable variable(String name, String value) {
+            return new Variable(name, value);
+        }
+
+        public static SymbolTableTestCase error(
+                List<Variable> variables, String expression, String expectedErrorMessage) {
+            final var result = new SymbolTableTestCase();
+            result.variables = variables;
+            result.expression = expression;
+            result.expectedErrorMessage = expectedErrorMessage;
+            return result;
+        }
+
+        public static SymbolTableTestCase success(
+                List<Variable> variables, String expression, String expectedPattern) {
+            final var result = new SymbolTableTestCase();
+            result.variables = variables;
+            result.expression = expression;
+            result.expectedPattern = expectedPattern;
+            return result;
+        }
+
+        public List<Variable> variables;
+        public String expression;
+        public String expectedErrorMessage;
+        public String expectedPattern;
+    }
+
     @Test
     public void TestSymbolTable() {
         // Multiple test cases can be set up here.  Each test case
         // is terminated by null:
         // var, value, var, value,..., input pat., exp. output pat., null
+        // spotless:off
         String DATA[] = {
-            "us", "a-z", "[0-1$us]", "[0-1a-z]", null,
             "us", "[a-z]", "[0-1$us]", "[0-1[a-z]]", null,
-            "us", "\\[a\\-z\\]", "[0-1$us]", "[-01\\[\\]az]", null
+            // Variables do not expand inside string literals.
+            "us", "[a-z]", "[$us{$us}]", "[a-z{\\$us}]", null,
+            // Variables are their own lexical elements added to the syntax; their values are not
+            // subject to the lexical separation constraints (this is not macro replacement
+            // anymore).
+            "colon", ":", "[$colon]", "[\\:]", null,
+            "dbff", "\uDBFF", "dfff", "\uDFFF", "[$dbff$dfff]", "[\\uDFFF\\uDBFF]", null,
+            "DBFF", "\\uDBFF", "DFFF", "\\uDFFF", "[$DBFF$DFFF]", "[\\uDFFF\\uDBFF]", null,
+            "nul", "\\00", "seven", "7", "[$nul$seven]", "[\\u00007]", null,
+            "cr", "\\xD", "F", "F", "[$cr$F]", "[\\u000DF]", null,
+            "privateUse", "[[:Co:]]", "$privateUse", "[[:Co:]]", null,
         };
+        // spotless:on
 
         for (int i = 0; i < DATA.length; ++i) {
             TokenSymbolTable sym = new TokenSymbolTable();
@@ -1784,6 +1846,168 @@ public class UnicodeSetTest extends CoreTestFmwk {
                 errln("FAIL: Failed, got " + inSet + ", expected " + expSet);
             } else {
                 logln("OK: got " + inSet);
+            }
+        }
+        final String open = "[a";
+        final String close = "]";
+        String deep = "[a]";
+        String deepReference = "$deep";
+        for (int i = 0; i < 100; ++i) {
+            deep = open + deep + close;
+            deepReference = open + deepReference + close;
+        }
+        final String deeper = open + deep + close;
+        final String deeperReference = open + deepReference + close;
+        final String unfathomableDepths =
+                deepReference.substring(0, 200) + deep + deepReference.substring(205);
+        for (final var testCase :
+                new SymbolTableTestCase[] {
+                    // a-z is neither a single element nor a set (that would be [a-z]).
+                    error(
+                            List.of(variable("us", "a-z")),
+                            "[0-1$us]",
+                            "Variable $us expands to 'a-z' which consists of several lexical"
+                                    + " elements that do not form a UnicodeSet expression"
+                                    + " [0-1$us☜]"),
+                    // Same with \[a\-z\].
+                    error(
+                            List.of(variable("us", "(\\[a\\-z\\])")),
+                            "[0-1$us]",
+                            "Variable $us expands to '(\\[a\\-z\\])' which consists of several"
+                                    + " lexical elements that do not form a UnicodeSet expression"
+                                    + " [0-1$us☜]"),
+                    // Same with :-D.
+                    error(
+                            List.of(variable("smiling", ":-]"), variable("laughing", ":-D")),
+                            "[ {$smiling} $laughing $smiling",
+                            "Variable $laughing expands to ':-D' which consists of several lexical"
+                                    + " elements that do not form a UnicodeSet expression"
+                                    + " [ {$smiling} $laughing☜ $smiling"),
+                    // Variables cannot be partial UnicodeSet expressions.
+                    error(
+                            List.of(
+                                    variable("privateUseOrUnassigned", "[[:Co:][:Cn:]"),
+                                    variable("close", "]")),
+                            "$privateUseOrUnassigned$close",
+                            "The value of variable $privateUseOrUnassigned failed to parse as a"
+                                    + " UnicodeSet (Expected ], got (end of text) ''"
+                                    + " [[:Co:][:Cn:]☞). See usage of $privateUseOrUnassigned:"
+                                    + " $privateUseOrUnassigned☜$close"),
+                    // Variables cannot be set-operators.
+                    error(
+                            List.of(variable("open", "[")),
+                            "$open a-z]",
+                            "The value of variable $open failed to parse as a UnicodeSet"
+                                    + " (Expected ], got (end of text) '' [☞). See usage of $open:"
+                                    + " $open☜ a-z]"),
+                    error(
+                            List.of(
+                                    variable("open", "["),
+                                    variable("close", "]"),
+                                    variable("hyphenMinus", "-")),
+                            "[ $open a $hyphenMinus z] $hyphenMinus [ c-z $close $hyphenMinus ]",
+                            "The value of variable $open failed to parse as a UnicodeSet"
+                                    + " (Expected ], got (end of text) '' [☞). See usage of $open:"
+                                    + " [ $open☜ a $hyphenMinus z] $hyphenMinus [ c-z $close $hyphenMinus ]"),
+                    // Variables cannot be unpaired string delimiters.
+                    error(
+                            List.of(variable("string", "{"), variable("end", "}")),
+                            "[$string Zeichenkette $end]",
+                            "String literal was not terminated: { {☜"),
+                    // This works and it is fine.
+                    success(List.of(variable("privateUse", "[[:Co:]]")), "$privateUse", "[[:Co:]]"),
+                    // This also works now.
+                    success(List.of(variable("privateUse", "[:Co:]")), "[$privateUse]", "[[:Co:]]"),
+                    // Variables cannot piece together a property-query.
+                    error(
+                            List.of(variable("sad", ":C"), variable("surprised", "o:")),
+                            "[$sad$surprised]",
+                            "Variable $sad expands to ':C' which consists of several lexical"
+                                    + " elements that do not form a UnicodeSet expression"
+                                    + " [$sad☜$surprised]"),
+                    // The empty string is neither a set nor an element.
+                    error(
+                            List.of(variable("leer", "")),
+                            "[$leer]",
+                            "Value of variable $leer expands to invalid lexical element of"
+                                    + " type (end of text) : [$leer☜]"),
+                    // The empty string literal is an element.
+                    success(List.of(variable("leer", "{}")), "[$leer]", "[{}]"),
+                    // Check that we don’t recursively expand variables.
+                    // In ICU 78 and earlier, this would have been U_ZERO_ERROR with [[\$y][\$x]];
+                    // but \$y
+                    // is a sequence of elements, so it is not a valid variable value.
+                    error(
+                            List.of(variable("x", "$y"), variable("y", "$x")),
+                            "[[$x][$y]]",
+                            "Variable $x expands to '$y' which consists of several lexical"
+                                    + " elements that do not form a UnicodeSet expression"
+                                    + " [[$x☜][$y]]"),
+                    // Since variable expansion spawns a new parser in the lexer, which is by design
+                    // unaware of the outer parser, a variable can be used to double the maximum
+                    // depth of a UnicodeSet.  Check that this doesn’t explode the stack, and check
+                    // that both the variable and the outer expression can produce an error if they
+                    // are too deep.
+                    success(List.of(variable("deep", deep)), deepReference, unfathomableDepths),
+                    error(
+                            List.of(variable("deep", deeper)),
+                            deepReference,
+                            "The value of variable $deep failed to parse as a UnicodeSet"
+                                    + " (Expected depth <= 100, got depth = 101 [a⋯[a☞[a]]⋯])."
+                                    + " See usage of $deep: [a⋯[a$deep☜]⋯]"),
+                    error(
+                            List.of(variable("deep", deep)),
+                            deeperReference,
+                            "Expected depth <= 100, got depth = 101 [a[a⋯[a☞$deep]⋯]]"),
+                    error(
+                            List.of(variable("deep", deeper)),
+                            deeperReference,
+                            "The value of variable $deep failed to parse as a UnicodeSet"
+                                    + " (Expected depth <= 100, got depth = 101 [a⋯[a☞[a]]⋯])."
+                                    + " See usage of $deep: [a⋯[a$deep☜]⋯]"),
+                }) {
+            final var symbols = new TokenSymbolTable();
+            for (var variable : testCase.variables) {
+                symbols.add(variable.name, variable.value);
+            }
+            try {
+                final var set = new UnicodeSet(testCase.expression, new ParsePosition(0), symbols);
+                final String actual = set.toPattern(true);
+                if (testCase.expectedErrorMessage != null) {
+                    errln(
+                            "Parsing "
+                                    + testCase.expression
+                                    + ": Expected IllegalArgumentException, got no exception,"
+                                    + " resulting UnicodeSet is "
+                                    + actual);
+                    continue;
+                }
+                if (!actual.equals(testCase.expectedPattern)) {
+                    errln(
+                            "UnicodeSet(R\"("
+                                    + testCase.expression
+                                    + ")\").toPattern() expected "
+                                    + testCase.expectedPattern
+                                    + ", got "
+                                    + actual);
+                }
+            } catch (IllegalArgumentException e) {
+                final var matcher =
+                        Pattern.compile(
+                                        Arrays.stream(testCase.expectedErrorMessage.split("⋯"))
+                                                .map(Pattern::quote)
+                                                .collect(Collectors.joining(".*")))
+                                .matcher(e.getMessage());
+                if (!matcher.matches()) {
+                    errln(
+                            "Error while parsing "
+                                    + testCase.expression
+                                    + ": expected \""
+                                    + testCase.expectedErrorMessage
+                                    + "\", got \""
+                                    + e.getMessage()
+                                    + "\"");
+                }
             }
         }
     }
@@ -2322,7 +2546,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
     //        return string.substring(0,97) + "...";
     //    }
 
-    public class TokenSymbolTable implements SymbolTable {
+    public static class TokenSymbolTable implements SymbolTable {
         HashMap<String, char[]> contents = new HashMap<>();
 
         /**
@@ -2396,6 +2620,228 @@ public class UnicodeSetTest extends CoreTestFmwk {
         }
     }
 
+    static class LookupSymbolTableTestCase {
+        abstract static class Variable {
+            public String name;
+        }
+
+        static class SetValuedVariable extends Variable {
+            public UnicodeSet value;
+        }
+
+        static class StringValuedVariable extends Variable {
+            public String value;
+        }
+
+        public static SetValuedVariable newVariable(String name, UnicodeSet value) {
+            var result = new SetValuedVariable();
+            result.name = name;
+            result.value = value;
+            return result;
+        }
+
+        public static StringValuedVariable newVariable(String name, String value) {
+            var result = new StringValuedVariable();
+            result.name = name;
+            result.value = value;
+            return result;
+        }
+
+        public LookupSymbolTableTestCase(
+                String expression,
+                String expectedErrorMessage,
+                String expectedPattern,
+                String expectedRegeneratedPattern,
+                List<String> expectedLookups,
+                List<Variable> variables) {
+            this.expression = expression;
+            this.expectedErrorMessage = expectedErrorMessage;
+            this.expectedPattern = expectedPattern;
+            this.expectedRegeneratedPattern = expectedRegeneratedPattern;
+            this.expectedLookups = expectedLookups;
+            this.variables = variables;
+        }
+
+        String expression;
+        String expectedErrorMessage;
+        String expectedPattern;
+        String expectedRegeneratedPattern;
+        List<String> expectedLookups;
+        // Variables for `lookup` and `lookupSet`.
+        List<Variable> variables;
+    }
+
+    @Test
+    public void TestLookupSymbolTable() {
+        class TestSymbolTable implements SymbolTable {
+            @Override
+            public char[] lookup(String name) {
+                lookupTrace_.add("lookup(" + name + ")");
+                return variables_.stream()
+                        .filter(v -> v.name.equals(name) && v instanceof StringValuedVariable)
+                        .findFirst()
+                        .map(v -> ((StringValuedVariable) v).value.toCharArray())
+                        .orElse(null);
+            }
+
+            @Override
+            public UnicodeSet lookupSet(String name) {
+                lookupTrace_.add("lookupSet(" + name + ")");
+                return variables_.stream()
+                        .filter(v -> v.name.equals(name) && v instanceof SetValuedVariable)
+                        .findFirst()
+                        .map(v -> ((SetValuedVariable) v).value)
+                        .orElse(null);
+            }
+
+            @Override
+            public UnicodeMatcher lookupMatcher(int c) {
+                errln("Unexpected call to lookupMatcher() while parsing UnicodeSet");
+                return null;
+            }
+
+            @Override
+            public String parseReference(String text, ParsePosition pos, int limit) {
+                final CharSequence limitedText = text.subSequence(pos.getIndex(), limit);
+                int codePointPos = pos.getIndex();
+                for (int codePoint : (Iterable<Integer>) limitedText.codePoints()::iterator) {
+                    if (!Character.isUnicodeIdentifierPart(codePoint)) {
+                        final var result =
+                                (String) limitedText.subSequence(0, codePointPos - pos.getIndex());
+                        pos.setIndex(codePointPos);
+                        return result;
+                    }
+                    if (codePoint > 0xFFFF) {
+                        codePointPos += 2;
+                    } else {
+                        ++codePointPos;
+                    }
+                }
+                pos.setIndex(limit);
+                return (String) limitedText;
+            }
+
+            void setVariables(List<LookupSymbolTableTestCase.Variable> variables) {
+                variables_ = variables;
+            }
+
+            List<String> getLookupTrace() {
+                return lookupTrace_;
+            }
+
+            void clearLookupTrace() {
+                lookupTrace_.clear();
+            }
+
+            List<LookupSymbolTableTestCase.Variable> variables_;
+            List<String> lookupTrace_ = new ArrayList<>();
+        }
+        final var symbols = new TestSymbolTable();
+        for (final var testCase :
+                new LookupSymbolTableTestCase[] {
+                    // Variables that are found by lookupSet are not looked up with the old lookup.
+                    new LookupSymbolTableTestCase(
+                            "[0-$one]",
+                            "Expected RangeElement, got variable '$one' [0-☞$one]",
+                            "[]",
+                            "[]",
+                            List.of("lookupSet(one)"),
+                            List.of(newVariable("one", new UnicodeSet("[ b-c ]")))),
+                    new LookupSymbolTableTestCase(
+                            "[$zero-$one]",
+                            null,
+                            "[[a-z]-[bc]]",
+                            "[ad-z]",
+                            List.of("lookupSet(zero)", "lookupSet(one)"),
+                            List.of(
+                                    newVariable("zero", new UnicodeSet("[ a-z ]")),
+                                    newVariable("one", new UnicodeSet("[ b-c ]")))),
+                    new LookupSymbolTableTestCase(
+                            "[ $two & $one ]",
+                            null,
+                            "[[: Co :]&[bc]]",
+                            "[]",
+                            List.of("lookupSet(two)", "lookupSet(one)"),
+                            List.of(
+                                    newVariable("two", new UnicodeSet("[: Co :]")),
+                                    newVariable("one", new UnicodeSet("[ b-c ]")))),
+                    // A variable that is not found by lookupSet is then looked up with the old
+                    // lookup.
+                    new LookupSymbolTableTestCase(
+                            "[ $two$one ]",
+                            null,
+                            "[[: Co :][bc]]",
+                            "[bc\\uE000-\\uF8FF\\U000F0000-\\U000FFFFD\\U00100000-\\U0010FFFD]",
+                            List.of("lookupSet(two)", "lookup(two)", "lookupSet(one)"),
+                            List.of(
+                                    newVariable("two", "[: Co :]"),
+                                    newVariable("one", new UnicodeSet("[ b-c ]")))),
+                    // If neither lookupSet nor lookup return something, we get an error.
+                    new LookupSymbolTableTestCase(
+                            "[ $two$one ]",
+                            "Undefined variable two [ $two☜$one ]",
+                            "[]",
+                            "[]",
+                            List.of("lookupSet(two)", "lookup(two)"),
+                            List.of(newVariable("one", new UnicodeSet("[ b-c ]")))),
+                }) {
+            symbols.setVariables(testCase.variables);
+            symbols.clearLookupTrace();
+            try {
+                final var set = new UnicodeSet(testCase.expression, new ParsePosition(0), symbols);
+                final String actualToPattern = set.toPattern(true);
+                if (testCase.expectedErrorMessage != null) {
+                    errln(
+                            "Parsing "
+                                    + testCase.expression
+                                    + ": Expected IllegalArgumentException, got no exception, resulting UnicodeSet is "
+                                    + actualToPattern);
+                    continue;
+                }
+                if (!actualToPattern.equals(testCase.expectedPattern)) {
+                    errln(
+                            "UnicodeSet(R\"("
+                                    + testCase.expression
+                                    + ")\").toPattern() expected "
+                                    + testCase.expectedPattern
+                                    + ", got "
+                                    + actualToPattern);
+                }
+                final String regeneratedPattern =
+                        new UnicodeSet(set).complement().complement().toPattern(true);
+                if (!regeneratedPattern.equals(testCase.expectedRegeneratedPattern)) {
+                    errln(
+                            "UnicodeSet(R\"("
+                                    + testCase.expression
+                                    + ")\").complement().complement().toPattern() expected "
+                                    + testCase.expectedRegeneratedPattern
+                                    + ", got "
+                                    + regeneratedPattern);
+                }
+            } catch (IllegalArgumentException e) {
+                assertEquals(
+                        "Error while parsing " + testCase.expression,
+                        testCase.expectedErrorMessage,
+                        e.getMessage());
+            }
+            if (!symbols.getLookupTrace().equals(testCase.expectedLookups)) {
+                final var expected = new StringBuilder();
+                final var actual = new StringBuilder();
+                for (final var l : testCase.expectedLookups) {
+                    expected.append("u\"" + l + "\", ");
+                }
+                for (final var l : symbols.getLookupTrace()) {
+                    actual.append("u\"" + l + "\", ");
+                }
+                errln(
+                        "Unexpected sequence of lookups:\nExpected : "
+                                + expected
+                                + "\nActual   : "
+                                + actual);
+            }
+        }
+    }
+
     @Test
     public void TestSurrogate() {
         String DATA[] = {
@@ -2429,15 +2875,12 @@ public class UnicodeSetTest extends CoreTestFmwk {
                 boolean containsAll = (i & j) == j;
                 boolean equals = i == j;
                 if (containsNone != x.containsNone(y)) {
-                    x.containsNone(y); // repeat for debugging
                     errln("FAILED: " + x + " containsSome " + y);
                 }
                 if (containsAll != x.containsAll(y)) {
-                    x.containsAll(y); // repeat for debugging
                     errln("FAILED: " + x + " containsAll " + y);
                 }
                 if (equals != x.equals(y)) {
-                    x.equals(y); // repeat for debugging
                     errln("FAILED: " + x + " equals " + y);
                 }
             }
@@ -2833,6 +3276,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
         }
     }
 
+    @SuppressWarnings("ReferenceEquality")
     void expectToPattern(UnicodeSet set, String expPat, String[] expStrings) {
         String pat = set.toPattern(true);
         if (pat.equals(expPat)) {
@@ -3278,19 +3722,21 @@ public class UnicodeSetTest extends CoreTestFmwk {
     @Test
     public void TestAStringRange() {
         String[][] tests = {
-            {"[{ax}-{bz}]", "[{ax}{ay}{az}{bx}{by}{bz}]"},
+            // Support for this (meaning [{ax}{ay}{az}{bx}{by}{bz}] was added by ICU-11738 (ICU 56,
+            // but only ever implemented in Java), and removed by ICU-23312 (ICU 79).
+            {"[{ax}-{bz}]", "Expected ], got string-literal '{bz}' [{ax}-☞{bz}]"},
+            // Retained by ICU-23312.
             {"[{a}-{c}]", "[a-c]"},
-            // {"[a-{c}]", "[a-c]"}, // don't handle these yet: enable once we do
-            // {"[{a}-c]", "[a-c]"}, // don't handle these yet: enable once we do
-            {
-                "[{ax}-{by}-{cz}]",
-                "Error: '-' not after char, string, or set at \"[{ax}-{by}-{|cz}]\""
-            },
-            {"[{a}-{bz}]", "Error: Range must have equal-length strings at \"[{a}-{bz}|]\""},
-            {"[{ax}-{b}]", "Error: Range must have equal-length strings at \"[{ax}-{b}|]\""},
-            {"[{ax}-bz]", "Error: Invalid range at \"[{ax}-b|z]\""},
-            {"[ax-{bz}]", "Error: Range must have 2 valid strings at \"[ax-{bz}|]\""},
-            {"[{bx}-{az}]", "Error: Range must have xᵢ ≤ yᵢ for each index i at \"[{bx}-{az}|]\""},
+            // Support for these two was added by ICU-23312.
+            {"[a-{c}]", "[a-c]"},
+            {"[{a}-c]", "[a-c]"},
+            // These were never allowed.
+            {"[{ax}-{by}-{cz}]", "Expected ], got string-literal '{by}' [{ax}-☞{by}-{cz}]"},
+            {"[{a}-{bz}]", "Expected RangeElement, got string-literal '{bz}' [{a}-☞{bz}]"},
+            {"[{ax}-{b}]", "Expected ], got bracketed-element '{b}' [{ax}-☞{b}]"},
+            {"[{ax}-bz]", "Expected ], got literal-element 'b' [{ax}-☞bz]"},
+            {"[ax-{bz}]", "Expected RangeElement, got string-literal '{bz}' [ax-☞{bz}]"},
+            {"[{bx}-{az}]", "Expected ], got string-literal '{az}' [{bx}-☞{az}]"},
         };
         int i = 0;
         for (String[] test : tests) {
@@ -3755,5 +4201,677 @@ public class UnicodeSetTest extends CoreTestFmwk {
         System.out.println("Speed (normal/parallel)  : " + (double) timeNormal / timeParallel);
 
         assertEquals("normal and parallel give different sum", sumNormal, sumParallel);
+    }
+
+    @Test
+    public void testToPatternOutput() {
+        class TestCase {
+            public TestCase(String expression, String expected) {
+                this.expression = expression;
+                this.expected = expected;
+            }
+
+            public String expression;
+            public String expected;
+        }
+        for (final var testCase :
+                new TestCase[] {
+                    // For a UnicodeSet which is not a property-query nor a named-element and
+                    // without any
+                    // Restriction among its Terms (that is, whose Union consists solely a sequence
+                    // of Elements
+                    // UnescapedHyphenMinus), toPattern merges and sorts ranges, and introduces a
+                    // complement to
+                    // minimize the result.
+                    new TestCase("[c-za-b]", "[a-z]"),
+                    new TestCase("[  c - z  a - b  ]", "[a-z]"),
+                    new TestCase("[ ^ \\u0000-b d-\\U0010FFFF ]", "[c]"),
+                    new TestCase("[ \\u0000-b d-\\U0010FFFF ]", "[^c]"),
+                    new TestCase("[{Baden-Württemberg}]", "[{Baden\\-Württemberg}]"),
+                    new TestCase("[{\\Ba\\den\\-\\W\\ürtte\\mber\\g}]", "[{Baden\\-Württemberg}]"),
+                    new TestCase("[{N\\or\\man\\d\\ie}]", "[{Normandie}]"),
+                    new TestCase("[{P\\icar\\d\\ie}]", "[{Picardie}]"),
+                    new TestCase(
+                            "[{Pr\\ovence\\-\\A\\lpe\\s\\-\\C\\ôte\\ \\d\\'\\A\\zur}]",
+                            "[{Provence\\-Alpes\\-Côte\\ d'Azur}]"),
+                    new TestCase("[ - - ]", "[\\-]"),
+                    new TestCase("[ - _ - ]", "[\\-_]"),
+                    new TestCase("[ - + - ]", "[+\\-]"),
+                    new TestCase("[$d-za-c]", "[\\$a-z]"),
+                    new TestCase("[a-c$d-z]", "[\\$a-z]"),
+                    new TestCase("[\\uFFFFa-z]", "[a-z\\uFFFF]"),
+                    new TestCase("[!-$z]", "[!-\\$z]"),
+                    new TestCase("[-a-cd-z$-]", "[\\$\\-a-z]"),
+                    new TestCase("[-$-]", "[\\$\\-]"),
+                    // A property-query or named-element is kept as-is:
+                    new TestCase(
+                            "\\p{ General_Category = Punctuation }",
+                            "\\p{ General_Category = Punctuation }"),
+                    new TestCase("\\p{P}", "\\p{P}"),
+                    new TestCase("\\p{gc=P}", "\\p{gc=P}"),
+                    new TestCase(
+                            "[: general category = punctuation :]",
+                            "[: general category = punctuation :]"),
+                    new TestCase("\\P{ gc = punctuation }", "\\P{ gc = punctuation }"),
+                    new TestCase("[\\N{ latin small letter a }]", "[a]"),
+                    // If there is any Restriction among the terms, its syntax is mostly as-is
+                    // (spaces are
+                    // still eliminated), with the exception that an initial UnescapedHyphenMinus
+                    // gets escaped.
+                    // This is applied recursively, so innermost ranges-only UnicodeSets get
+                    // normalized.
+                    new TestCase("[ c-z a-b [c-f g-z] ]", "[c-za-b[c-z]]"),
+                    new TestCase("[- + c-z a-b [c-f g-z] -]", "[\\-+c-za-b[c-z]-]"),
+                    new TestCase(
+                            "[ c-z a-b \\p{ General_Category = Punctuation } ]",
+                            "[c-za-b\\p{ General_Category = Punctuation }]"),
+                    new TestCase("[^[c]]", "[^[c]]"),
+                    new TestCase("[ ^ [ \\u0000-b d-\\U0010FFFF ] ]", "[^[^c]]"),
+                    new TestCase("[$[]]", "[\\$[]]"),
+                    // In ICU 78 and earlier, a named-element was a nested set, so it was preserved
+                    // and
+                    // caused the syntax to be preserved.  Now it is treated like an escape.
+                    new TestCase("[ \\N{LATIN CAPITAL LETTER Z}eichenmenge ]", "[Zceg-imn]"),
+                    // This was ill-formed in ICU 78 and earlier (in a convoluted way:
+                    // {\\N{LATIN CAPITAL LETTER Z} was a well-formed string literal, but then the
+                    // second }
+                    // was unpaired).
+                    new TestCase(
+                            "[ {\\N{LATIN CAPITAL LETTER Z}eichenkette} ]", "[{Zeichenkette}]"),
+                    // This used to be equal to [A] in ICU 78 and earlier.
+                    new TestCase(
+                            "[ \\N{LATIN CAPITAL LETTER A} - \\N{LATIN CAPITAL LETTER Z} ]",
+                            "[A-Z]"),
+                    // Escapes added by ICU-23314.
+                    new TestCase(
+                            "[ \\N{41:A:LATIN CAPITAL LETTER A} - \\N{005A:LATIN CAPITAL LETTER Z} ]",
+                            "[A-Z]"),
+                    new TestCase("[ \\N{0001226D:𒉭:CUNEIFORM SIGN NUNUZ} ]", "[𒉭]"),
+                    new TestCase(
+                            "[ {\\N{1202D:CUNEIFORM SIGN AN}\\N{12240:𒉀:CUNEIFORM SIGN NAGA}} ]",
+                            "[{𒀭𒉀}]"),
+                    new TestCase("[ \\N{20: :SPACE} ]", "[\\ ]"),
+                    new TestCase("[ \\N{BED:TAMIL DIGIT SEVEN} ]", "[௭]"),
+                    // Some character names happen to be sequences of hexadecimal digits.
+                    new TestCase("[ \\N{BED} ]", "[🛏]"),
+                    // An anchor also causes the syntax to be preserved.
+                    new TestCase("[ d-z a-c $ ]", "[d-za-c$]"),
+                    new TestCase("[ - a-c d-z $ ]", "[\\-a-cd-z$]"),
+                    new TestCase("[$$$]", "[\\$\\$$]"),
+                    // Ill-formed in ICU4C 78 and earlier, made well-formed by ICU-23312.
+                    new TestCase("[a-{z}]", "[a-z]"),
+                    new TestCase("[{a}-z]", "[a-z]"),
+                    new TestCase(
+                            "[\\N{PRESENTATION FORM FOR VERTICAL RIGHT WHITE LENTICULAR BRAKCET}]",
+                            "[︘]"),
+                    new TestCase("[\\N{bell}]", "[🔔]"),
+                    // Ill-formed in ICU 78 and earlier, made well-formed by ICU-23350:
+                    new TestCase(
+                            "[\\N{PRESENTATION FORM FOR VERTICAL RIGHT WHITE LENTICULAR BRACKET}]",
+                            "[︘]"),
+                    // Loose matching: These were ill-formed in ICU 78 and earlier, and were
+                    // made well-formed by ICU-3736.
+                    new TestCase("[\\N{Latin small ligature o-e}]", "[œ]"),
+                    new TestCase("[\\N{Hangul jungseong O-E}]", "[ᆀ]"),
+                    new TestCase("[\\N{Hangul jungseong O -E}]", "[ᆀ]"),
+                    new TestCase("[\\N{Hangul jungseong OE}]", "[ᅬ]"),
+                    new TestCase("[\\N{Tibetan letter -a}]", "[འ]"),
+                    new TestCase("[\\N{Tibetan letter - a}]", "[འ]"),
+                    new TestCase("[\\N{TIBETAN_LETTER_-A}]", "[འ]"),
+                    new TestCase("[\\N{TIBETAN LETTER-A}]", "[ཨ]"),
+                    new TestCase("[\\N{Tibetan mark BKA- SHOG YIG MGO}]", "[༊]"),
+                    new TestCase("[\\N{Tibetan mark BKA -SHOG-YIG-MGO}]", "[༊]"),
+                    new TestCase("[\\N{CJK UNIFIED IDEOGRAPH-55B5}]", "[喵]"),
+                    new TestCase("[\\N{CJK unified ideograph 5-5-b-5}]", "[喵]"),
+                    new TestCase("[{\\N{Hangul syllable YA}\\N{Hangul syllable ONG}}]", "[{야옹}]"),
+                    new TestCase("[{\\N{Hangul-syllable-y-a}\\N{Hangul-syllable-o-ng}}]", "[{야옹}]"),
+                    new TestCase("[\\xDF]", "[ß]"),
+                    new TestCase("[\\xDFF]", "[Fß]"),
+                    new TestCase("[\\xD F]", "[\\u000DF]"),
+                    new TestCase("[\\0007]", "[\\u00007]"),
+                    new TestCase("[\\007]", "[\\u0007]"),
+                    new TestCase("[\\00 7]", "[\\u00007]"),
+                    new TestCase("[\\0 07]", "[\\u000007]"),
+                    new TestCase("[\\ 007]", "[\\ 07]"),
+                    new TestCase("[\\800]", "[08]"),
+                    new TestCase("[\\0008]", "[\\u00008]"),
+                    new TestCase("[\\008]", "[\\u00008]"),
+                    new TestCase("[\\08]", "[\\u00008]"),
+                    new TestCase("[\\8]", "[8]"),
+                    new TestCase("[\\007F]", "[\\u0007F]"),
+                    new TestCase("[\\07F]", "[\\u0007F]"),
+                    new TestCase("[\\7F]", "[\\u0007F]"),
+                    new TestCase("[\\u200E007]", "[07\\\u200E]"),
+                    new TestCase("[\\\u200E007]", "[07\\\u200E]"),
+                    new TestCase("[{\\\u200E}]", "[\\\u200E]"),
+                    new TestCase("[ :Greek:]", "[\\:Gekr]"),
+                    new TestCase("[\\uDBFF \\uDFFF]", "[\\uDFFF\\uDBFF]"),
+                    // ICU-2906, ICU extension to UnicodeSet.
+                    new TestCase("[\\uDBFF\\uDFFF]", "[\\U0010FFFF]"),
+                    // Nonportable ICU4J-only extension.
+                    // ICU4J interprets those like [\uDBFF\uDFFF], as [\U0010FFFF].  ICU4C < 79
+                    // interpreted them as [\uDBFF \uDFFF], because the sequence of two escapes is
+                    // longer than MAX_U_NOTATION_LEN defined in ruleiter.cpp.  They became
+                    // ill-formed in ICU4C 79 because of the requirement to separate
+                    // escaped-elements for lead and trail surrogates.
+                    // TODO(egg): Propose making them ill-formed in ICU4J too.
+                    new TestCase("[\\x{DBFF}\\x{DFFF}]", "[\\U0010FFFF]"),
+                    new TestCase("[\\U0000DBFF\\U0000DFFF]", "[\\U0010FFFF]"),
+                }) {
+            final var set = new UnicodeSet(testCase.expression);
+            final String actual = set.toPattern(false);
+            if (!actual.equals(testCase.expected)) {
+                errln(
+                        "UnicodeSet(R\"("
+                                + testCase.expression
+                                + ")\").toPattern() expected "
+                                + testCase.expected
+                                + ", got "
+                                + actual);
+            }
+        }
+    }
+
+    @Test
+    public void testParseErrors() {
+        for (final var expression : new String[] {"[\\u]", "[\\x{}]"}) {
+            try {
+                final var set = new UnicodeSet(expression);
+                errln(
+                        expression
+                                + ": Expected IllegalArgumentException, set is "
+                                + set.complement().complement().toPattern(true));
+            } catch (IllegalArgumentException e) {
+            }
+        }
+        for (final var testCase :
+                new String[][] {
+                    {"[a-[b]]", "Expected RangeElement, got set-operator '[' [a-☞[b]]"},
+                    {"a-z", "Expected property-query | [, got literal-element 'a' ☞a-z"},
+                    {"[[a]&]", "Expected property-query | [, got set-operator ']' [[a]&☞]"},
+                    {"[[a]&-[z]]", "Expected property-query | [, got set-operator '-' [[a]&☞-[z]]"},
+                    {"[[a]--[z]]", "Expected property-query | [, got set-operator '-' [[a]-☞-[z]]"},
+                    {"[{aa}-{zz}]", "Expected ], got string-literal '{zz}' [{aa}-☞{zz}]"},
+                    {
+                        "[a&z]",
+                        "Expected RangeElement | string-literal, got set-operator '&' [a☞&z]"
+                    },
+                    {
+                        "[{aa}&{zz}]",
+                        "Expected RangeElement | string-literal, got set-operator '&' [{aa}☞&{zz}]"
+                    },
+                    {
+                        "[a^z]",
+                        "Expected RangeElement | string-literal, got set-operator '^' [a☞^z]"
+                    },
+                    {"[a-{zz}]", "Expected RangeElement, got string-literal '{zz}' [a-☞{zz}]"},
+                    {
+                        "[[a]-{zz}]",
+                        "Expected property-query | [, got string-literal '{zz}' [[a]-☞{zz}]"
+                    },
+                    {
+                        "[[a]&{zz}]",
+                        "Expected property-query | [, got string-literal '{zz}' [[a]&☞{zz}]"
+                    },
+                    {"[{aa]", "String literal was not terminated: {aa] [{aa]☜"},
+                    {
+                        "[a-$]",
+                        "Expected Elements or UnicodeSet after Range ending in unescaped $, got set-operator '$' followed by set-operator ']' [a-☞$]"
+                    },
+                    {
+                        "[!-$]",
+                        "Expected Elements or UnicodeSet after Range ending in unescaped $, got set-operator '$' followed by set-operator ']' [!-☞$]"
+                    },
+                    {"[a-a]", "Expected first < last in Range, got a-a [a-☞a]"},
+                    {"[z-a]", "Expected first < last in Range, got a-z [z-☞a]"},
+                    {"[[a]-z]", "Expected property-query | [, got literal-element 'z' [[a]-☞z]"},
+                    {"[[a]&z]", "Expected property-query | [, got literal-element 'z' [[a]&☞z]"},
+                    {"[a-z", "Expected ], got (end of text) '' [a-z☞"},
+                    // This was a well-formed string in ICU 78 and earlier, with the value
+                    // "N{LATINCAPITALLETTERZ".
+                    {
+                        "[{\\N{LATIN CAPITAL LETTER Z}]",
+                        "String literal was not terminated: {\\N{LATIN CAPITAL LETTER Z}] [{\\N{LATIN CAPITAL LETTER Z}]☜"
+                    },
+                    // These four were well-formed in ICU 78 and earlier.
+                    {"[{\\Normandie}]", "Ill-formed named-element [{\\No☜rmandie}]"},
+                    {
+                        "[{\\Picardie}]",
+                        "Invalid escape sequence \\P in UnicodeSet string [{\\P☜icardie}]"
+                    },
+                    {
+                        "[{Provence-Al\\pes-Côte d'Azur}]",
+                        "Invalid escape sequence \\p in UnicodeSet string [{Provence-Al\\p☜es-Côte d'Azur}]"
+                    },
+                    // This was a well-formed set in ICU 78 and earlier; now it must be enclosed in
+                    // square
+                    // brackets.
+                    {
+                        "\\N{ latin small letter a }",
+                        "Expected property-query | [, got named-element '\\N{ latin small letter a }' ☞\\N{ latin small letter a }"
+                    },
+                    // Well-formed in ICU 78 and earlier (spaces ignored).
+                    // In ICU 81 and later, the spaces will mean spaces.
+                    // Ill-formed in ICU 79 and 80.
+                    {
+                        "[ { Z e i c h e n k e t t e } Zeichenmenge ]",
+                        "Unescaped Pattern_White_Space in UnicodeSet string literals is prohibited until ICU 81.  Escape U+0020. [ { ☜Z e i c h e n k e t t e } Zeichenmenge ]"
+                    },
+                    {
+                        "[ { \\x5A e i c h e n k e t t e } \\x5Aeichenmenge ]",
+                        "Unescaped Pattern_White_Space in UnicodeSet string literals is prohibited until ICU 81.  Escape U+0020. [ { ☜\\x5A e i c h e n k e t t e } \\x5Aeichenmenge ]"
+                    },
+                    {
+                        "[ { Z e i c h e n k e t t e } [] Zeichenmenge ]",
+                        "Unescaped Pattern_White_Space in UnicodeSet string literals is prohibited until ICU 81.  Escape U+0020. [ { ☜Z e i c h e n k e t t e } [] Zeichenmenge ]"
+                    },
+                    {
+                        "[ { \\x5A e i c h e n k e t t e } [] \\x5Aeichenmenge ]",
+                        "Unescaped Pattern_White_Space in UnicodeSet string literals is prohibited until ICU 81.  Escape U+0020. [ { ☜\\x5A e i c h e n k e t t e } [] \\x5Aeichenmenge ]"
+                    },
+                    // ICU-23497 Implicit Directional Marks should not separate UnicodeSet lexical
+                    // elements.
+                    {
+                        "[\\xD\u200EF]",
+                        "white-space other than ignorable-format-control is required between escaped-element \\xD and literal-element F [\\xD☜‎F]"
+                    },
+                    {
+                        "[\\00\u200E7]",
+                        "white-space other than ignorable-format-control is required between escaped-element \\00 and literal-element 7 [\\00☜‎7]"
+                    },
+                    {
+                        "[\\0\u200E07]",
+                        "white-space other than ignorable-format-control is required between escaped-element \\0 and literal-element 0 [\\0☜‎07]"
+                    },
+                    {
+                        "[\\uDBFF\u200E\\uDFFF]",
+                        "white-space other than ignorable-format-control is required between escaped-elements representing high and low surrogates [\\uDBFF☜‎\\uDFFF]"
+                    },
+                    {
+                        "[\\x{DBFF}\u200E\\U0000DFFF]",
+                        "white-space other than ignorable-format-control is required between escaped-elements representing high and low surrogates [\\x{DBFF}☜‎\\U0000DFFF]"
+                    },
+                    {
+                        "[\u200E:Greek:]",
+                        "white-space other than ignorable-format-control is required between set-operator [ and literal-element : [☜‎:Greek:]"
+                    },
+                }) {
+            final String expression = testCase[0];
+            final String errorMessage = testCase[1];
+            try {
+                final var set = new UnicodeSet(expression);
+                errln(
+                        expression
+                                + ": Expected IllegalArgumentException, set is "
+                                + set.complement().complement().toPattern(true));
+            } catch (IllegalArgumentException e) {
+                assertEquals("Error while parsing " + expression, errorMessage, e.getMessage());
+            }
+        }
+        for (final var testCase :
+                new String[][] {
+                    {"[:]", "property-query was not terminated [:]☜"},
+                    {"\\p", "Missing { in property-query \\p☜"},
+                    {"[:^]", "property-query was not terminated [:^]☜"},
+                    {"\\P", "Missing { in property-query \\P☜"},
+                    {"\\N", "Ill-formed named-element \\N☜"},
+                    {"[\\p{Some_Property=\\u}]", "Invalid escape"},
+                    {"[:Some_Property=\\u:]", "Invalid escape"},
+                    {
+                        "\\p{Some_Property=\\N{SOME CHARACTER}}",
+                        "Ill-formed named-element: SOME CHARACTER not found \\p{Some_Property=\\N{SOME CHARACTER}☜}"
+                    },
+                    {"[\\N{}]", "Ill-formed named-element:  not found [\\N{}☜]"},
+                    {
+                        "[ \\N{FFFFFFFF:NOT A CODE POINT} ]",
+                        "hexadecimal-digits out of range: FFFFFFFF [ \\N{FFFFFFFF:☜NOT A CODE POINT} ]"
+                    },
+                    {
+                        "[ \\N{0A:LATIN CAPITAL LETTER A} ]",
+                        "Ill-formed named-element: inconsistent with 000A: [ \\N{0A:LATIN CAPITAL LETTER A}☜ ]"
+                    },
+                    {
+                        "[ \\N{41:a:LATIN CAPITAL LETTER A} ]",
+                        "Ill-formed named-element: inconsistent with 0041:a: [ \\N{41:a:LATIN CAPITAL LETTER A}☜ ]"
+                    },
+                    {
+                        "[ \\N{12240:𒊺𒉀:CUNEIFORM SIGN NAGA} ]",
+                        "Ill-formed named-literal-element '𒊺𒉀' (2 code points) [ \\N{12240:𒊺𒉀:☜CUNEIFORM SIGN NAGA} ]"
+                    },
+                    {
+                        "[ \\N{12240::CUNEIFORM SIGN NAGA} ]",
+                        "Ill-formed named-literal-element '' (0 code points) [ \\N{12240::☜CUNEIFORM SIGN NAGA} ]"
+                    },
+                    {
+                        "[ \\N{:CUNEIFORM SIGN NAGA} ]",
+                        "Empty hexadecimal-digits in named-element [ \\N{:☜CUNEIFORM SIGN NAGA} ]"
+                    },
+                    {
+                        "[ \\N{::CUNEIFORM SIGN NAGA} ]",
+                        "Empty hexadecimal-digits in named-element [ \\N{:☜:CUNEIFORM SIGN NAGA} ]"
+                    },
+                    {
+                        "[ \\N{12240:𒉀::CUNEIFORM SIGN NAGA} ]",
+                        "Too many colons in named-element [ \\N{12240:𒉀::☜CUNEIFORM SIGN NAGA} ]"
+                    },
+                    {
+                        "[ \\N{12240:𒉀:CUNEIFORM SIGN NAGA:} ]",
+                        "Too many colons in named-element [ \\N{12240:𒉀:CUNEIFORM SIGN NAGA:☜} ]"
+                    },
+                    {
+                        "[ \\N{12240:CUNEIFORM SIGN NAGA:𒉀} ]",
+                        "Ill-formed named-literal-element 'CUNEIFORM SIGN NAGA' (19 code points) [ \\N{12240:CUNEIFORM SIGN NAGA:☜𒉀} ]"
+                    },
+                    {
+                        "[ \\N{𒉀:12240:CUNEIFORM SIGN NAGA} ]",
+                        "Ill-formed hexadecimal-digits: 𒉀 [ \\N{𒉀:☜12240:CUNEIFORM SIGN NAGA} ]"
+                    },
+                    {"[ \\N{12240} ]", "Ill-formed named-element: 12240 not found [ \\N{12240}☜ ]"},
+                    {
+                        "[ \\N{12240:𒉀} ]",
+                        "Ill-formed named-element: 𒉀 not found [ \\N{12240:𒉀}☜ ]"
+                    },
+                    {
+                        "[ \\N{𒉀:CUNEIFORM SIGN NAGA} ]",
+                        "Ill-formed hexadecimal-digits: 𒉀 [ \\N{𒉀:☜CUNEIFORM SIGN NAGA} ]"
+                    },
+                    {
+                        "[ \\N{BED:BED} ]",
+                        "Ill-formed named-element: inconsistent with 0BED: [ \\N{BED:BED}☜ ]"
+                    },
+                    // Well-formed in ICU 78 and earlier, disallowed by ICU-23308.
+                    {"\\p{XID_Continue=}", "Invalid name: "},
+                    {"\\p{Uppercase_Letter=}", "Invalid name: Uppercase_Letter"},
+                    // Well-formed in ICU 78 and earlier, disallowed by ICU-23306.
+                    {"[: ^general category = punctuation :]", "Invalid name:  ^general category "},
+                    // Doubly negated property queries.
+                    {
+                        "\\P{Decomposition_Type≠compat}",
+                        "Found doubly negated property-query \\P{Decomposition_Type≠☜compat}"
+                    },
+                    {
+                        "[:^Noncharacter_Code_Point≠No:]",
+                        "Found doubly negated property-query [:^Noncharacter_Code_Point≠☜No:]"
+                    },
+                    // This should be [\a]; tracked by ICU-8963.
+                    {"[\\N{BEL}]", "Ill-formed named-element: BEL not found [\\N{BEL}☜]"},
+                    // The leading hyphen does not match the medial hyphen in the real character
+                    // name.
+                    {
+                        "[\\N{CJK UNIFIED IDEOGRAPH -55B5}]",
+                        "Ill-formed named-element: CJK UNIFIED IDEOGRAPH -55B5 not found [\\N{CJK UNIFIED IDEOGRAPH -55B5}☜]"
+                    },
+                    // A medial hyphen does not match the trailing hyphen in BKA-.
+                    {
+                        "[\\N{Tibetan mark BKA-SHOG-YIG-MGO}]",
+                        "Ill-formed named-element: Tibetan mark BKA-SHOG-YIG-MGO not found [\\N{Tibetan mark BKA-SHOG-YIG-MGO}☜]"
+                    },
+                    // With -- in the query, neither hyphen is medial, and two hyphens do not match
+                    // one.
+                    {
+                        "[\\N{Tibetan mark BKA--SHOG-YIG-MGO}]",
+                        "Ill-formed named-element: Tibetan mark BKA--SHOG-YIG-MGO not found [\\N{Tibetan mark BKA--SHOG-YIG-MGO}☜]"
+                    },
+                    // A final hyphen is trailing, so non-ignorable, and by rule R3 it would never
+                    // match a character name:
+                    // https://unicode.org/versions/Unicode17.0.0/core-spec/chapter-4/#G135174.
+                    // But an early version of the character name matcher would read out of the
+                    // bounds of the query in that case, so test it.
+                    {
+                        "[\\N{CJK UNIFIED IDEOGRAPH 55B5-}]",
+                        "Ill-formed named-element: CJK UNIFIED IDEOGRAPH 55B5- not found [\\N{CJK UNIFIED IDEOGRAPH 55B5-}☜]"
+                    },
+                }) {
+            final String expression = testCase[0];
+            final String errorMessage = testCase[1];
+            try {
+                final var set = new UnicodeSet(expression);
+                errln(
+                        expression
+                                + ": Expected IllegalArgumentException, set is "
+                                + set.complement().complement().toPattern(true));
+            } catch (IllegalArgumentException e) {
+                assertEquals("Error while parsing " + expression, errorMessage, e.getMessage());
+            }
+        }
+    }
+
+    // A whimsical symbol table that gives some code points the names of characters from
+    // Shakespeare’s plays.
+    // The symbol table requires exact matches for the property value (and thus checks that the
+    // UnicodeSet implementation does not apply loose matching too early).
+    // Variables are prefixed by a dollar, and consist of XID_Continue characters.
+    // The names of plays (case- and punctuation-insensitive) are recognized as variables for the
+    // sets of their characters.
+    public static class ShakespeareanSymbolTable extends XSymbolTable {
+        static final Map<String, List<String>> DRAMATIS_PERSONAE;
+
+        static final List<String> ALL_CHARACTERS;
+
+        static {
+            DRAMATIS_PERSONAE = new TreeMap<>();
+            // Spellings from
+            // https://internetshakespeare.uvic.ca/Library/facsimile/book/BPL_Rowe1/462/index.html%3Fzoom=450.html.
+            DRAMATIS_PERSONAE.put(
+                    "Love’s Labour’s loſt",
+                    List.of(
+                            "Ferdinand",
+                            "Biron",
+                            "Longaville",
+                            "Dumain",
+                            "Boyet",
+                            "Macard",
+                            "Don Adriana de Armado",
+                            "Nathaniel",
+                            "Dull",
+                            "Holofernes",
+                            "Coſtard",
+                            "Moth",
+                            "Roſaline",
+                            "Maria",
+                            "Catherine",
+                            "Jaquenetta"));
+            DRAMATIS_PERSONAE.put(
+                    // Spellings from
+                    // https://internetshakespeare.uvic.ca/Library/facsimile/book/BPL_Rowe1/62/index.html%3Fzoom=450.html.
+                    "A Midſummer-Night’s Dream",
+                    List.of(
+                            "Theſeus",
+                            "Egeus",
+                            "Lyſander",
+                            "Demetrius",
+                            "Quince",
+                            "Snug",
+                            "Bottom",
+                            "Flute",
+                            "Snowt",
+                            "Starveling",
+                            "Hippolita",
+                            "Hermia",
+                            "Helena",
+                            "Oberon",
+                            "Titania",
+                            "Puck",
+                            "peaſebloſſom",
+                            "Cobweb",
+                            "Moth",
+                            "Muſtardſeed"));
+            ALL_CHARACTERS =
+                    DRAMATIS_PERSONAE.values().stream()
+                            .flatMap(characters -> characters.stream())
+                            .distinct()
+                            .collect(Collectors.toList());
+        }
+
+        @Override
+        public boolean applyPropertyAlias(
+                String propertyName, String propertyValue, UnicodeSet result) {
+            final String nameSkeleton =
+                    propertyName.replaceAll("[_ -]", "").toLowerCase(Locale.ROOT);
+            if (nameSkeleton.equals("name") || nameSkeleton.equals("na")) {
+                final int character = ALL_CHARACTERS.indexOf(propertyValue);
+                if (character < 0) {
+                    throw new IllegalArgumentException("Unknown character " + propertyValue);
+                }
+                result.add(character);
+                return true;
+            }
+            // We do not touch the other properties.
+            return false;
+        }
+
+        @Override
+        public UnicodeSet lookupSet(String name) {
+
+            final String foldedName =
+                    UCharacter.foldCase(name, /* defaultmapping= */ true)
+                            .codePoints()
+                            .filter(cp -> UCharacter.isLetter(cp))
+                            .mapToObj(Character::toString)
+                            .collect(Collectors.joining());
+            for (final var play : DRAMATIS_PERSONAE.entrySet()) {
+                final String foldedPlayName =
+                        UCharacter.foldCase(play.getKey(), /* defaultmapping= */ true)
+                                .codePoints()
+                                .filter(cp -> UCharacter.isLetter(cp))
+                                .mapToObj(Character::toString)
+                                .collect(Collectors.joining());
+                if (foldedPlayName.equals(foldedName)) {
+                    final var result = new UnicodeSet();
+                    for (final String character : play.getValue()) {
+                        applyPropertyAlias("Name", character, result);
+                    }
+                    return result;
+                }
+            }
+            return null;
+        }
+
+        @Override
+        public String parseReference(String text, ParsePosition pos, int limit) {
+            if (limit <= pos.getIndex()) {
+                // A $ at the end of text is not a variable.
+                return null;
+            }
+            for (int i = pos.getIndex(); i < limit; i = text.offsetByCodePoints(i, 1)) {
+                if (!UCharacter.hasBinaryProperty(text.codePointAt(i), UProperty.XID_CONTINUE)) {
+                    if (i == pos.getIndex()) {
+                        // A lone $ is not a variable.
+                        return null;
+                    }
+                    final String result = text.substring(pos.getIndex(), i);
+                    pos.setIndex(i);
+                    return result;
+                }
+            }
+            final String result = text.substring(pos.getIndex(), limit);
+            pos.setIndex(limit);
+            return result;
+        }
+    }
+
+    // Same as above, but the variables have no sigil, and allow for RIGHT SINGLE QUOTATION MARK,
+    // spaces, and medial hyphens, demonstrating that XSymbolTable allows for extensions that
+    // require complex lexing.
+    static class ShakespeareanSymbolTableWithCustomVariables extends ShakespeareanSymbolTable {
+        @Override
+        public String scanVariable(String text, ParsePosition pos, int limit) {
+            if (pos.getIndex() >= limit
+                    || !UCharacter.hasBinaryProperty(
+                            text.codePointAt(pos.getIndex()), UProperty.XID_START)) {
+                return null;
+            }
+            int previous = text.codePointAt(pos.getIndex());
+            for (int i = pos.getIndex() + 1; i < limit; i = text.offsetByCodePoints(i, 1)) {
+                int cp = text.codePointAt(i);
+                if ((cp == '-'
+                                && (!UCharacter.isLetter(previous)
+                                        || i + 1 == limit
+                                        || !UCharacter.isLetter(text.codePointAt(i + 1))))
+                        || (cp != '-'
+                                && cp != ' '
+                                && cp != '’'
+                                && !UCharacter.hasBinaryProperty(cp, UProperty.XID_CONTINUE))) {
+                    final String result = text.substring(pos.getIndex(), i);
+                    pos.setIndex(i);
+                    return result;
+                }
+                previous = cp;
+            }
+            final String result = text.substring(pos.getIndex(), limit);
+            pos.setIndex(limit);
+            return result;
+        }
+    }
+
+    @Test
+    public void TestXSymbolTable() {
+        ShakespeareanSymbolTable sstable = new ShakespeareanSymbolTable();
+        for (String[] test :
+                new String[][] {
+                    {"[\\p{Name=Biron}]", "[\\u0015]"},
+                    {"[\\N{Moth}]", "[\\u0012]"},
+                    {"[\\p{Name=LATIN SMALL LETTER A}]", "Unknown character LATIN SMALL LETTER A"},
+                    {"[\\N{LATIN SMALL LETTER A}]", "Unknown character LATIN SMALL LETTER A"},
+                    {"[\\p{Name=biron}]", "Unknown character biron"},
+                    {"[$AMidsummerNightsDream&$LovesLaboursLost]", "[\\N{Moth}]"},
+                    {
+                        "[$AMidsummerNightsDream-$LovesLaboursLost]",
+                        "[\\N{Theſeus}-\\N{Cobweb}\\N{Muſtardſeed}]"
+                    },
+                }) {
+            String expected = test[1];
+            if (test[1].startsWith("[")) {
+                expected = new UnicodeSet(expected, new ParsePosition(0), sstable).toPattern(false);
+            }
+            String actual;
+            try {
+                actual =
+                        new UnicodeSet(test[0], new ParsePosition(0), sstable)
+                                .complement()
+                                .complement()
+                                .toPattern(false);
+            } catch (Exception e) {
+                actual = e.getMessage();
+            }
+            assertEquals(test[0] + " with " + sstable.getClass(), expected, actual);
+        }
+        sstable = new ShakespeareanSymbolTableWithCustomVariables();
+        for (String[] test :
+                new String[][] {
+                    // With this lexing of variables, the dollar is not part of the variable.
+                    {"[$AMidsummerNightsDream]", "[\\N{Theſeus}-\\N{Muſtardſeed} \\$]"},
+                    {
+                        "[$AMidsummerNightsDream&$LovesLaboursLost]",
+                        "Expected property-query | [, got set-operator '$' [$AMidsummerNightsDream&☞$LovesLaboursLost]"
+                    },
+                    // Medial hyphens do not terminate variable names (and so do not act as
+                    // operators):
+                    {
+                        "[AMidsummerNightsDream-LovesLaboursLost]",
+                        "Undefined variable AMidsummerNightsDream-LovesLaboursLost [AMidsummerNightsDream-LovesLaboursLost☜]"
+                    },
+                    // Neither do spaces; but non-medial hyphens do terminate variable names.
+                    {
+                        "[A Midſummer-Night’s Dream - Love’s Labour’s loſt]",
+                        "[\\N{Theſeus}-\\N{Cobweb}\\N{Muſtardſeed}]"
+                    },
+                }) {
+            String expected = test[1];
+            if (test[1].startsWith("[")) {
+                expected = new UnicodeSet(expected, new ParsePosition(0), sstable).toPattern(false);
+            }
+            String actual;
+            try {
+                actual =
+                        new UnicodeSet(test[0], new ParsePosition(0), sstable)
+                                .complement()
+                                .complement()
+                                .toPattern(false);
+            } catch (Exception e) {
+                actual = e.getMessage();
+            }
+            assertEquals(test[0] + " with " + sstable.getClass(), expected, actual);
+        }
     }
 }

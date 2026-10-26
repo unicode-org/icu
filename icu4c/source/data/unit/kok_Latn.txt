@@ -4,13 +4,6 @@
 kok_Latn{
     %%Parent{"root"}
     units{
-        angle{
-            degree{
-                dnam{"onx"}
-                one{"{0} onx"}
-                other{"{0} onx"}
-            }
-        }
         area{
             square-centimeter{
                 dnam{"choukon centimiter"}
@@ -90,11 +83,6 @@ kok_Latn{
             west{"{0} Ostont"}
         }
         digital{
-            byte{
-                dnam{"bayt"}
-                one{"{0} bayt"}
-                other{"{0} bayt"}
-            }
             gigabit{
                 one{"{0} gigabit"}
             }
@@ -185,8 +173,6 @@ kok_Latn{
                 other{"{0} nanosekond"}
             }
             night{
-                one{"{0} rat"}
-                other{"{0} rati"}
                 per{"dor rat {0}"}
             }
             quarter{
@@ -205,19 +191,15 @@ kok_Latn{
                 per{"dor sumanak {0}"}
             }
             year{
-                one{"{0} voros"}
-                other{"{0} vorsam"}
                 per{"dor voros {0}"}
             }
         }
         graphics{
             megapixel{
-                dnam{"mega-chitr-totvam"}
                 one{"{0} mega-chitr-totv"}
                 other{"{0} mega-chitr-totvam"}
             }
             pixel{
-                dnam{"chitr-totvam"}
                 one{"{0} chitr-totv"}
                 other{"{0} chitr-totvam"}
             }
@@ -262,7 +244,6 @@ kok_Latn{
                 other{"{0} maikromiter"}
             }
             mile{
-                dnam{"mil"}
                 one{"{0} mil"}
                 other{"{0} mil"}
             }
@@ -301,7 +282,6 @@ kok_Latn{
                 other{"{0} onx Fahrenheit"}
             }
             generic{
-                dnam{"onx tapman"}
                 one{"{0} onx tapman"}
                 other{"{0} onx tapman"}
             }
@@ -349,11 +329,11 @@ kok_Latn{
     unitsNarrow{
         angle{
             degree{
-                dnam{"onx"}
+                one{"{0}°"}
+                other{"{0}°"}
             }
         }
         coordinate{
-            dnam{"dixa"}
             east{"{0}UD"}
             north{"{0}UT"}
             south{"{0}DO"}
@@ -369,20 +349,17 @@ kok_Latn{
                 one{"{0}B"}
                 other{"{0}B"}
             }
-            gigabyte{
-                dnam{"GBayt"}
+            gigabit{
+                dnam{"Gb"}
             }
-            kilobyte{
-                dnam{"kBayt"}
+            kilobit{
+                dnam{"kb"}
             }
-            megabyte{
-                dnam{"MBayt"}
+            megabit{
+                dnam{"Mb"}
             }
-            petabyte{
-                dnam{"PBayt"}
-            }
-            terabyte{
-                dnam{"TBayt"}
+            terabit{
+                dnam{"Tb"}
             }
         }
         duration{
@@ -401,7 +378,6 @@ kok_Latn{
                 other{"{0}dos"}
             }
             fortnight{
-                dnam{"pondr"}
                 one{"{0} pondr"}
                 other{"{0} pondr"}
             }

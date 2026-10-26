@@ -232,7 +232,7 @@ fr{
             }
             part{
                 dnam{"parts"}
-                one{"{0} parts"}
+                one{"{0} part"}
                 other{"{0} parts"}
             }
             part-per-1e6{
@@ -1395,11 +1395,8 @@ fr{
                 one{"{0}mol"}
                 other{"{0}mol"}
             }
-            ofglucose{
-                dnam{"Glc"}
-            }
             part{
-                one{"{0} parts"}
+                one{"{0} part"}
                 other{"{0} parts"}
             }
             part-per-1e6{
@@ -1582,7 +1579,8 @@ fr{
                 other{"{0}cal"}
             }
             calorie-it{
-                dnam{"cal-IT"}
+                one{"{0} cal-IT"}
+                other{"{0} cal-IT"}
             }
             electronvolt{
                 one{"{0}eV"}
@@ -1591,6 +1589,10 @@ fr{
             foodcalorie{
                 one{"{0}kcal"}
                 other{"{0}kcal"}
+            }
+            gray{
+                one{"{0} Gy"}
+                other{"{0} Gy"}
             }
             joule{
                 one{"{0}J"}
@@ -1607,6 +1609,10 @@ fr{
             kilowatt-hour{
                 one{"{0}kWh"}
                 other{"{0}kWh"}
+            }
+            sievert{
+                one{"{0} Sv"}
+                other{"{0} Sv"}
             }
             therm-us{
                 dnam{"thm US"}
@@ -1857,11 +1863,6 @@ fr{
             millimeter-ofhg{
                 one{"{0} mmHg"}
                 other{"{0} mmHg"}
-            }
-            ofhg{
-                dnam{"de Hg"}
-                one{"{0} de Hg"}
-                other{"{0} de Hg"}
             }
             pascal{
                 one{"{0}Pa"}
@@ -2164,7 +2165,7 @@ fr{
                 dnam{"Glc"}
             }
             part{
-                one{"{0} parts"}
+                one{"{0} part"}
                 other{"{0} parts"}
             }
             part-per-1e6{

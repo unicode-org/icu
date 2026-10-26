@@ -113,6 +113,7 @@ class NumberFormatterApiTest : public IntlTestWithFieldPosition {
     CurrencyUnit USD;
     CurrencyUnit GBP;
     CurrencyUnit CZK;
+    CurrencyUnit CHF;
     CurrencyUnit CAD;
     CurrencyUnit ESP;
     CurrencyUnit PTE;
@@ -306,6 +307,8 @@ class NumberSkeletonTest : public IntlTest {
     void perUnitToSkeleton();
     void measurementSystemOverride();
     void longSkeletonCrash();
+    void unitAliases();
+    void testIssue23144();
 
     void runIndexedTest(int32_t index, UBool exec, const char*& name, char* par = nullptr) override;
 
@@ -336,6 +339,7 @@ class NumberRangeFormatterTest : public IntlTestWithFieldPosition {
     void testCreateLNRFFromNumberingSystemInSkeleton();
     void test22288_DifferentStartEndSettings();
     void test23110_PercentApproximately();
+    void test23539_LargeRangeError();
 
     void runIndexedTest(int32_t index, UBool exec, const char*& name, char* par = nullptr) override;
 

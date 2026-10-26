@@ -8,7 +8,7 @@
 
   <groupId>com.ibm.icu</groupId>
   <artifactId>icu-root</artifactId>
-  <version>79.0.1-SNAPSHOT</version>
+  <version>80.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>${proj-title} (${project.artifactId})</name>
@@ -39,57 +39,75 @@
     <!-- This is the folder where we gather the files to be posted in the Github Release-->
     <release.directory>${project.build.directory}/release_directory</release.directory>
 
-    <!-- 
+    <!--
       Report dependencies and plugins that have updates:
-        mvn versions:display-property-updates -Dmaven.version.ignore=".*alpha.*,.*beta.*" | grep " -> " | sort -u
-      Please update the maven.version.ignore if some other non-release versions show up.
+        mvn versions:display-property-updates | grep " -> " | sort -u
+
+      If you are happy with the updates you can apply them all in one command:
+        mvn versions:update-properties -DgenerateBackupPoms=false
+
+      You can also update one single property (in this example exec-maven-plugin.version):
+        mvn versions:update-property -Dproperty=exec-maven-plugin.version
+      Or set one single property to any value you want:
+        mvn versions:set-property -Dproperty=exec-maven-plugin.version -DnewVersion=1.2.3
     -->
 
+    <!-- From the Maven web site, Dec. 2025 (https://maven.apache.org/docs/history.html)
+      "Maven 3.8.9 and before has now reached its end of life and is no longer supported in any way.
+      New plugin releases will require Maven 3.9.0 or later."
+    -->
+    <enforcer.requireMavenVersion>3.9.0</enforcer.requireMavenVersion>
+    <enforcer.requireJavaVersion>[11,)</enforcer.requireJavaVersion>
+    <enforcer.requireJavaToolsVersion>[21,)</enforcer.requireJavaToolsVersion>
+
     <!-- Dependencies versions -->
-    <commons-cli.version>1.9.0</commons-cli.version>
-    <error_prone.version>2.25.0</error_prone.version>
-    <gson.version>2.11.0</gson.version>
-    <guava.version>32.1.1-jre</guava.version>
+    <commons-cli.version>1.11.0</commons-cli.version>
+    <error_prone.version>2.49.0</error_prone.version>
+    <gson.version>2.13.2</gson.version>
+    <guava.version>33.5.0-jre</guava.version>
     <jmh.version>1.37</jmh.version>
     <junit.version>4.13.2</junit.version>
     <junitparams.version>1.1.1</junitparams.version>
-    <truth.version>1.4.4</truth.version>
+    <spotbugs-annotations.version>4.9.8</spotbugs-annotations.version>
+    <truth.version>1.4.5</truth.version>
     <xalan.version>2.7.2</xalan.version>
     <xerces.version>2.12.2</xerces.version>
     <xml-apis.version>1.4.01</xml-apis.version>
     <!-- Dependencies versions - END -->
 
     <!-- Plugin versions -->
-    <build-helper-maven-plugin.version>3.6.0</build-helper-maven-plugin.version>
-    <central-publishing-maven-plugin.version>0.8.0</central-publishing-maven-plugin.version>
-    <exec-maven-plugin.version>3.4.1</exec-maven-plugin.version>
-    <flatten-maven-plugin.version>1.6.0</flatten-maven-plugin.version>
+    <build-helper-maven-plugin.version>3.6.1</build-helper-maven-plugin.version>
+    <central-publishing-maven-plugin.version>0.12.0</central-publishing-maven-plugin.version>
+    <exec-maven-plugin.version>3.6.3</exec-maven-plugin.version>
+    <flatten-maven-plugin.version>1.7.3</flatten-maven-plugin.version>
     <google-java-style.version>1.32.0</google-java-style.version>
-    <maven-assembly-plugin.version>3.7.1</maven-assembly-plugin.version>
-    <maven-clean-plugin.version>3.4.0</maven-clean-plugin.version>
-    <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
-    <maven-dependency-plugin.version>3.8.0</maven-dependency-plugin.version>
-    <maven-deploy-plugin.version>3.1.3</maven-deploy-plugin.version>
-    <maven-enforcer-plugin.version>3.5.0</maven-enforcer-plugin.version>
-    <maven-failsafe-plugin.version>3.4.0</maven-failsafe-plugin.version>
-    <maven-gpg-plugin.version>3.2.5</maven-gpg-plugin.version>
-    <maven-install-plugin.version>3.1.3</maven-install-plugin.version>
-    <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
-    <maven-javadoc-plugin.version>3.11.2</maven-javadoc-plugin.version>
-    <maven-pmd-plugin.version>3.27.0</maven-pmd-plugin.version>
-    <maven-project-info-reports-plugin.version>3.7.0</maven-project-info-reports-plugin.version>
-    <maven-release-plugin.version>3.1.1</maven-release-plugin.version>
-    <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
-    <maven-shade-plugin.version>3.6.0</maven-shade-plugin.version>
+    <jacoco-maven-plugin.version>0.8.14</jacoco-maven-plugin.version>
+    <maven-assembly-plugin.version>3.8.0</maven-assembly-plugin.version>
+    <maven-clean-plugin.version>3.5.0</maven-clean-plugin.version>
+    <maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
+    <maven-dependency-plugin.version>3.9.0</maven-dependency-plugin.version>
+    <maven-deploy-plugin.version>3.1.4</maven-deploy-plugin.version>
+    <maven-enforcer-plugin.version>3.6.2</maven-enforcer-plugin.version>
+    <maven-failsafe-plugin.version>3.5.4</maven-failsafe-plugin.version>
+    <maven-gpg-plugin.version>3.2.8</maven-gpg-plugin.version>
+    <maven-install-plugin.version>3.1.4</maven-install-plugin.version>
+    <maven-jar-plugin.version>3.5.0</maven-jar-plugin.version>
+    <maven-javadoc-plugin.version>3.12.0</maven-javadoc-plugin.version>
+    <maven-pmd-plugin.version>3.28.0</maven-pmd-plugin.version>
+    <maven-project-info-reports-plugin.version>3.9.0</maven-project-info-reports-plugin.version>
+    <maven-release-plugin.version>3.3.1</maven-release-plugin.version>
+    <maven-resources-plugin.version>3.4.0</maven-resources-plugin.version>
+    <maven-shade-plugin.version>3.6.1</maven-shade-plugin.version>
     <maven-site-plugin.version>4.0.0-M16</maven-site-plugin.version>
-    <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
-    <maven-surefire-plugin.version>3.4.0</maven-surefire-plugin.version>
+    <maven-source-plugin.version>3.4.0</maven-source-plugin.version>
+    <maven-surefire-plugin.version>3.5.4</maven-surefire-plugin.version>
     <!-- We need at least 3.5.1 to avoid https://github.com/codehaus-plexus/plexus-io/issues/109.
         Once we upgrade maven-source-plugin and maven-jar-plugin to versions new enough to depend
         on 3.5.1 or higher, we can remove this override.
     -->
-    <plexus-io.version>3.5.1</plexus-io.version>
-    <spotless-maven-plugin.version>3.0.0</spotless-maven-plugin.version>
+    <plexus-io.version>3.6.0</plexus-io.version>
+    <spotless-maven-plugin.version>3.1.0</spotless-maven-plugin.version>
+    <versions-maven-plugin.version>2.21.0</versions-maven-plugin.version>
     <!-- Plugin versions - END -->
 
     <proj-title>International Components for Unicode for Java</proj-title>
@@ -100,7 +118,7 @@
     <proj.scm.url>https://github.com/unicode-org/icu</proj.scm.url>
 
     <!-- Version update! -->
-    <icu.major.version>79</icu.major.version>
+    <icu.major.version>80</icu.major.version>
 
     <!-- Variables used to generate the javadoc -->
     <api.doc.version>${icu.major.version}</api.doc.version>
@@ -115,7 +133,7 @@
     <mf.Specification-Version>${icu.major.version}</mf.Specification-Version>
     <mf.Implementation-Version>${project.version}</mf.Implementation-Version>
     <mf.Bundle-Version>${project.version}</mf.Bundle-Version>
-    <mf.Bundle-RequiredExecutionEnvironment>JavaSE-1.8</mf.Bundle-RequiredExecutionEnvironment>
+    <mf.Bundle-RequiredExecutionEnvironment>JavaSE-${maven.compiler.release}</mf.Bundle-RequiredExecutionEnvironment>
 
     <!-- For most modules artifactId does not have an "icu4j" prefix, so this is a good default -->
     <module-name>${project.artifactId}</module-name>
@@ -205,7 +223,7 @@
         but `site:stage` works.
       -->
       <id>unicode-org.github.io</id>
-      <url>scp://https://unicode-org.github.io/</url>
+      <url>https://unicode-org.github.io/</url>
     </site>
     <repository>
       <id>central</id>
@@ -241,6 +259,11 @@
         <groupId>org.openjdk.jmh</groupId>
         <artifactId>jmh-generator-annprocess</artifactId>
         <version>${jmh.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-annotations</artifactId>
+        <version>${spotbugs-annotations.version}</version>
       </dependency>
 
       <!-- Test only -->
@@ -290,6 +313,12 @@
         <plugin>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>${maven-compiler-plugin.version}</version>
+          <configuration>
+            <compilerArgs>
+              <arg>-Xlint:unchecked</arg>
+              <arg>${xlint.dangling-doc-comments}</arg>
+            </compilerArgs>
+          </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
@@ -423,14 +452,10 @@
               <configuration>
                 <rules>
                   <requireMavenVersion>
-                    <!-- From the Maven web site, Dec. 2025 (https://maven.apache.org/docs/history.html)
-                      "Maven 3.8.9 and before has now reached its end of life and is no longer supported in any way.
-                       New plugin releases will require Maven 3.9.0 or later."
-                    -->
-                    <version>3.9.0</version>
+                    <version>${enforcer.requireMavenVersion}</version>
                   </requireMavenVersion>
                   <requireJavaVersion>
-                    <version>[11,)</version>
+                    <version>${enforcer.requireJavaVersion}</version>
                   </requireJavaVersion>
                 </rules>
               </configuration>
@@ -450,7 +475,7 @@
                 [ERROR] com\ibm\icu\util\ULocale.java:100: error: reference not found
                 [ERROR]  * {@link com.ibm.icu.text.Collator}
             -->
-            <doclint>html</doclint>
+            <doclint>html,syntax</doclint>
             <notimestamp>true</notimestamp>
             <nodeprecatedlist>true</nodeprecatedlist>
             <quiet>true</quiet>
@@ -571,7 +596,7 @@
           <configuration>
             <rulesets>
               <!-- Hand-picked rules -->
-              <ruleset>tools/pmd/src/main/resources/icu4j/pmd-ruleset.xml</ruleset>
+              <ruleset>icu4j/tools/pmd/src/main/resources/icu4j/pmd-ruleset.xml</ruleset>
               <!-- Uncomment the block below to enable all known checks.
                 All of these rulesets can be specified in pmd-ruleset.xml instead.
               -->
@@ -613,6 +638,27 @@
             </java>
           </configuration>
         </plugin>
+        <plugin>
+          <groupId>org.jacoco</groupId>
+          <artifactId>jacoco-maven-plugin</artifactId>
+          <version>${jacoco-maven-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>versions-maven-plugin</artifactId>
+          <version>${versions-maven-plugin.version}</version>
+          <configuration>
+            <!-- https://www.mojohaus.org/versions/versions-maven-plugin/version-rules.html#Using_the_ruleSet_element_in_the_POM -->
+            <ruleSet>
+              <ignoreVersions>
+                <ignoreVersion>
+                  <type>regex</type>
+                  <version>.+-(alpha|beta|rc|RC|M\d).*</version>
+                </ignoreVersion>
+              </ignoreVersions>
+            </ruleSet>
+          </configuration>
+        </plugin>
       </plugins>
     </pluginManagement>
 
@@ -636,6 +682,9 @@
            mvn clean test -DskipTests -DskipITs -P errorprone
       -->
       <id>errorprone</id>
+      <properties>
+        <enforcer.requireJavaVersion>${enforcer.requireJavaToolsVersion}</enforcer.requireJavaVersion>
+      </properties>
       <build>
         <plugins>
           <plugin>
@@ -648,11 +697,9 @@
               <!-- Use <compilerArg> to pass flags to errorprone. See https://errorprone.info/docs/flags -->
               <compilerArgs>
                 <arg>-XDcompilePolicy=simple</arg>
-                <!--
-                  WARNING: Do not wrap the line below, it will fail on Windows.
-                  See https://github.com/google/error-prone/issues/4256
-                -->
-                <arg>-Xplugin:ErrorProne -Xep:UnicodeEscape:OFF -Xep:InvalidBlockTag:OFF -Xep:ComparableType:WARN -Xep:EqualsHashCode:WARN -Xep:SelfEquals:WARN -Xep:ReturnValueIgnored:WARN -Xep:ArrayToString:WARN -Xep:MisusedDayOfYear:WARN -Xep:SelfComparison:WARN -Xep:MisusedWeekYear:WARN -Xep:IdentityBinaryExpression:WARN</arg>
+                <arg>-XDaddTypeAnnotationsToSymbol=true</arg>
+                <arg>--should-stop=ifError=FLOW</arg>
+                <arg>-Xplugin:ErrorProne @${maven.multiModuleProjectDirectory}/errorprone.cfg</arg>
                 <arg>-Xmaxerrs</arg>
                 <arg>10000</arg>
                 <arg>-Xmaxwarns</arg>
@@ -685,11 +732,14 @@
     <profile>
       <!-- Run this in the root of the ICU project:
            mvn clean test -DskipTests -DskipITs -l /tmp/errorprone_all.log -P errorprone-all
-           mvn exec:java -f icu4j/tools/build/ -P errorprone_report -DlogFile=/tmp/errorprone_all.log
+           mvn exec:java -f icu4j/tools/errorprone_report/ -P errorprone_report -DlogFile=/tmp/errorprone_all.log
         On Windows you can use %TEMP%\errorprone_all.log for the temporary folder.
         You can then inspect the content of the errorprone.log file, or the reports in
         the target folder (errorprone*.html, errorprone.md, errorprone.tsv) -->
       <id>errorprone-all</id>
+      <properties>
+        <enforcer.requireJavaVersion>${enforcer.requireJavaToolsVersion}</enforcer.requireJavaVersion>
+      </properties>
       <build>
         <plugins>
           <plugin>
@@ -703,6 +753,8 @@
               <!-- Use <compilerArg> to pass flags to errorprone. See https://errorprone.info/docs/flags -->
               <compilerArgs>
                 <arg>-XDcompilePolicy=simple</arg>
+                <arg>-XDaddTypeAnnotationsToSymbol=true</arg>
+                <arg>--should-stop=ifError=FLOW</arg>
                 <!--
                   -XepAllErrorsAsWarnings:
                     If we let errors be errors they fail and stop the build, so we don't get a full report.
@@ -710,7 +762,7 @@
                     The drawback is that there are not errors now, they get mixed with the real warnings.
                     The proper severity level is then restored by the tool generating the reports.
                 -->
-                <arg>-Xplugin:ErrorProne -XepAllErrorsAsWarnings -Xep:UnicodeEscape:OFF</arg>
+                <arg>-Xplugin:ErrorProne -XepAllErrorsAsWarnings @${maven.multiModuleProjectDirectory}/errorprone.cfg</arg>
                 <arg>-Xmaxerrs</arg>
                 <arg>10000</arg>
                 <arg>-Xmaxwarns</arg>
@@ -795,6 +847,100 @@
           </plugin>
         </plugins>
       </reporting>
+    </profile>
+
+    <profile>
+      <!--
+        Generating a merged report, see https://www.eclemma.org/jacoco/trunk/doc/cli.html
+        The result can be inspected starting from target/jacocoreport/html/index.html
+        Execute these commands in cli, in the root of the ICU repo:
+
+        mvn clean install site site:stage -P coverage
+
+        rm -fr target/jacoco
+
+        # If somehow the latest version of jacoco becomes incompatible,
+        # use the value of the `jacoco-maven-plugin.version` property.
+        # And consider updating to the latest version.
+        mvn dependency:copy \
+            -Dartifact=org.jacoco:jacoco:LATEST:zip \
+            -DoutputDirectory=target/jacoco \
+            -Dmdep.stripVersion=true \
+            -q -ntp
+
+        unzip -q target/jacoco/jacoco.zip -d target/jacoco
+
+        rm -fr target/jacocoreport
+        mkdir -p target/jacocoreport
+
+        artifact_version="`mvn help:evaluate -Dexpression=project.version -q -DforceStdout`"
+
+        # Sorry, it's hard to copy paste from here, but xml does not allow double-minus in comments
+        java -jar target/jacoco/lib/jacococli.jar report \
+            icu4j/main/core/target/jacoco.exec \
+            icu4j/main/collate/target/jacoco.exec \
+            icu4j/main/common_tests/target/jacoco.exec \
+            icu4j/main/framework/target/jacoco.exec \
+            icu4j/main/translit/target/jacoco.exec \
+            icu4j/main/charset/target/jacoco.exec \
+            \-\-classfiles icu4j/main/core/target/core-${artifact_version}.jar \
+            \-\-classfiles icu4j/main/collate/target/collate-${artifact_version}.jar \
+            \-\-classfiles icu4j/main/currdata/target/currdata-${artifact_version}.jar \
+            \-\-classfiles icu4j/main/langdata/target/langdata-${artifact_version}.jar \
+            \-\-classfiles icu4j/main/regiondata/target/regiondata-${artifact_version}.jar \
+            \-\-classfiles icu4j/main/translit/target/translit-${artifact_version}.jar \
+            \-\-classfiles icu4j/main/charset/target/icu4j-charset-${artifact_version}.jar \
+            \-\-sourcefiles icu4j/main/core/src/main/java \
+            \-\-sourcefiles icu4j/main/collate/src/main/java \
+            \-\-sourcefiles icu4j/main/currdata/src/main/java \
+            \-\-sourcefiles icu4j/main/langdata/src/main/java \
+            \-\-sourcefiles icu4j/main/regiondata/src/main/java \
+            \-\-sourcefiles icu4j/main/translit/src/main/java \
+            \-\-sourcefiles icu4j/main/charset/src/main/java \
+            \-\-encoding utf-8 \
+            \-\-csv target/jacocoreport/jacoco.csv \
+            \-\-xml target/jacocoreport/jacoco.xml \
+            \-\-html target/jacocoreport/html
+       -->
+      <id>coverage</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>prepare-agent</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>report</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>report-aggregate</goal>
+                </goals>
+                <configuration>
+                  <dataFileIncludes>
+                    <dataFileInclude>**/jacoco.exec</dataFileInclude>
+                  </dataFileIncludes>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
+      <id>if_jdk23</id>
+      <activation>
+        <jdk>[23,)</jdk>
+      </activation>
+      <properties>
+        <!-- This compiler lint flag is defined starting with JDK 23, and fails if used below that -->
+        <xlint.xlint.dangling-doc-comments>-Xlint:dangling-doc-comments</xlint.xlint.dangling-doc-comments>
+      </properties>
     </profile>
 
   </profiles>

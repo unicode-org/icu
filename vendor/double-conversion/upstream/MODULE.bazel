@@ -1,7 +1,7 @@
+"""This project (double-conversion) provides binary-decimal and decimal-binary routines for IEEE doubles."""
+
 module(
     name = "double-conversion",
-    compatibility_level = 1,
-    version = "0.0.0",
+    version = "3.3.0",
+    compatibility_level = 3,
 )
-
-bazel_dep(name = "rules_cc", version = "0.0.6")

@@ -210,9 +210,6 @@ de{
         "Europe:Copenhagen"{
             ec{"Kopenhagen"}
         }
-        "Europe:Dublin"{
-            ld{"Irische Sommerzeit"}
-        }
         "Europe:Kiev"{
             ec{"Kiew"}
         }
@@ -221,9 +218,6 @@ de{
         }
         "Europe:Lisbon"{
             ec{"Lissabon"}
-        }
-        "Europe:London"{
-            ld{"Britische Sommerzeit"}
         }
         "Europe:Luxembourg"{
             ec{"Luxemburg"}
@@ -301,11 +295,6 @@ de{
             lg{"Alaska-Zeit"}
             ls{"Alaska-Normalzeit"}
         }
-        "meta:Almaty"{
-            ld{"Almaty-Sommerzeit"}
-            lg{"Almaty-Zeit"}
-            ls{"Almaty-Normalzeit"}
-        }
         "meta:Amazon"{
             ld{"Amazonas-Sommerzeit"}
             lg{"Amazonas-Zeit"}
@@ -340,16 +329,6 @@ de{
             ld{"Apia-Sommerzeit"}
             lg{"Apia-Zeit"}
             ls{"Apia-Normalzeit"}
-        }
-        "meta:Aqtau"{
-            ld{"Aqtau-Sommerzeit"}
-            lg{"Aqtau-Zeit"}
-            ls{"Aqtau-Normalzeit"}
-        }
-        "meta:Aqtobe"{
-            ld{"Aqtöbe-Sommerzeit"}
-            lg{"Aqtöbe-Zeit"}
-            ls{"Aqtöbe-Normalzeit"}
         }
         "meta:Arabian"{
             ld{"Arabische Sommerzeit"}
@@ -421,6 +400,10 @@ de{
             ld{"Brasília-Sommerzeit"}
             lg{"Brasília-Zeit"}
             ls{"Brasília-Normalzeit"}
+        }
+        "meta:British"{
+            ld{"Britische Sommerzeit"}
+            lg{"Britische Zeit"}
         }
         "meta:Brunei"{
             ls{"Brunei-Darussalam-Zeit"}
@@ -549,18 +532,20 @@ de{
         "meta:Gilbert_Islands"{
             ls{"Gilbert-Inseln-Zeit"}
         }
+        "meta:Greenland"{
+            ld{"Grönländische Sommerzeit"}
+            lg{"Grönländische Zeit"}
+            ls{"Grönländische Normalzeit"}
+        }
         "meta:Greenland_Eastern"{
-            ld{"Ostgrönland-Sommerzeit"}
-            lg{"Ostgrönland-Zeit"}
-            ls{"Ostgrönland-Normalzeit"}
+            ld{"Ostgrönländische Sommerzeit"}
+            lg{"Ostgrönländische Zeit"}
+            ls{"Ostgrönländische Normalzeit"}
         }
         "meta:Greenland_Western"{
-            ld{"Westgrönland-Sommerzeit"}
-            lg{"Westgrönland-Zeit"}
-            ls{"Westgrönland-Normalzeit"}
-        }
-        "meta:Guam"{
-            ls{"Guam-Zeit"}
+            ld{"Westgrönländische Sommerzeit"}
+            lg{"Westgrönländische Zeit"}
+            ls{"Westgrönländische Normalzeit"}
         }
         "meta:Gulf"{
             ls{"Golf-Zeit"}
@@ -569,7 +554,7 @@ de{
             ls{"Guyana-Zeit"}
         }
         "meta:Hawaii"{
-            ls{"Hawaii-Aleuten-Normalzeit"}
+            ls{"Hawaii-Normalzeit"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"Hawaii-Aleuten-Sommerzeit"}
@@ -608,6 +593,10 @@ de{
             ld{"Iranische Sommerzeit"}
             lg{"Iranische Zeit"}
             ls{"Iranische Normalzeit"}
+        }
+        "meta:Irish"{
+            ld{"Irische Sommerzeit"}
+            lg{"Irische Zeit"}
         }
         "meta:Irkutsk"{
             ld{"Irkutsker Sommerzeit"}
@@ -654,9 +643,6 @@ de{
         "meta:Kyrgystan"{
             ls{"Kirgisische Zeit"}
         }
-        "meta:Lanka"{
-            ls{"Sri-Lanka-Zeit"}
-        }
         "meta:Line_Islands"{
             ls{"Linieninseln-Zeit"}
         }
@@ -664,11 +650,6 @@ de{
             ld{"Lord-Howe-Sommerzeit"}
             lg{"Lord-Howe-Zeit"}
             ls{"Lord-Howe-Normalzeit"}
-        }
-        "meta:Macau"{
-            ld{"Macau-Sommerzeit"}
-            lg{"Macau-Zeit"}
-            ls{"Macau-Normalzeit"}
         }
         "meta:Magadan"{
             ld{"Magadan-Sommerzeit"}
@@ -747,9 +728,6 @@ de{
             lg{"Fernando-de-Noronha-Zeit"}
             ls{"Fernando-de-Noronha-Normalzeit"}
         }
-        "meta:North_Mariana"{
-            ls{"Nördliche-Marianen-Zeit"}
-        }
         "meta:Novosibirsk"{
             ld{"Nowosibirsker Sommerzeit"}
             lg{"Nowosibirsker Zeit"}
@@ -803,11 +781,6 @@ de{
         "meta:Pyongyang"{
             ls{"Pjöngjang-Zeit"}
         }
-        "meta:Qyzylorda"{
-            ld{"Qysylorda-Sommerzeit"}
-            lg{"Quysylorda-Zeit"}
-            ls{"Quysylorda-Normalzeit"}
-        }
         "meta:Reunion"{
             ls{"Réunion-Zeit"}
         }
@@ -825,8 +798,6 @@ de{
             ls{"Samara-Normalzeit"}
         }
         "meta:Samoa"{
-            ld{"Samoa-Sommerzeit"}
-            lg{"Samoa-Zeit"}
             ls{"Samoa-Normalzeit"}
         }
         "meta:Seychelles"{
@@ -886,6 +857,9 @@ de{
             ld{"Uruguayische Sommerzeit"}
             lg{"Uruguayische Zeit"}
             ls{"Uruguayische Normalzeit"}
+        }
+        "meta:Urumqi"{
+            ls{"Ürümqi-Zeit"}
         }
         "meta:Uzbekistan"{
             ld{"Usbekische Sommerzeit"}

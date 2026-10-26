@@ -3,12 +3,6 @@
 // Generated using tools/cldr/cldr-to-icu/
 yue{
     units{
-        angle{
-            steradian{
-                dnam{"球面度"}
-                other{"{0} 球面度"}
-            }
-        }
         area{
             square-centimeter{
                 per{"每平方厘米 {0}"}
@@ -30,18 +24,6 @@ yue{
             per{"每 {1} {0}"}
         }
         concentr{
-            katal{
-                dnam{"開特"}
-                other{"{0} 開特"}
-            }
-            ofglucose{
-                dnam{"葡萄糖"}
-                other{"{0} 葡萄糖"}
-            }
-            part{
-                dnam{"等份"}
-                other{"{0} 等份"}
-            }
             part-per-1e9{
                 dnam{"十億分點濃度"}
                 other{"{0} 十億分點濃度"}
@@ -116,12 +98,6 @@ yue{
             sievert{
                 dnam{"希沃特"}
                 other{"{0} 希沃特"}
-            }
-        }
-        force{
-            kilogram-force{
-                dnam{"公斤力"}
-                other{"{0} 公斤力"}
             }
         }
         graphics{
@@ -223,10 +199,6 @@ yue{
             dessert-spoon-imperial{
                 other{"英制甜品匙{0}匙"}
             }
-            fluid-ounce-metric{
-                dnam{"公制液量安士"}
-                other{"{0} 公制液量安士"}
-            }
             gallon{
                 per{"每加侖 {0}"}
             }
@@ -241,21 +213,17 @@ yue{
     unitsNarrow{
         angle{
             steradian{
-                dnam{"球面度"}
                 other{"{0} 球面度"}
             }
         }
         concentr{
             katal{
-                dnam{"開特"}
                 other{"{0} 開特"}
             }
             ofglucose{
-                dnam{"葡萄糖"}
                 other{"{0} 葡萄糖"}
             }
             part{
-                dnam{"等份"}
                 other{"{0} 等份"}
             }
             part-per-1e9{
@@ -275,25 +243,20 @@ yue{
         }
         electric{
             coulomb{
-                dnam{"庫"}
                 other{"{0} 庫"}
             }
             farad{
-                dnam{"法"}
                 other{"{0} 法"}
             }
             henry{
-                dnam{"亨"}
                 other{"{0} 亨"}
             }
             siemens{
-                dnam{"西"}
                 other{"{0} 西"}
             }
         }
         energy{
             becquerel{
-                dnam{"貝克"}
                 other{"{0} 貝克"}
             }
             calorie-it{
@@ -301,17 +264,14 @@ yue{
                 other{"{0} 卡路里-IT"}
             }
             gray{
-                dnam{"戈"}
                 other{"{0} 戈"}
             }
             sievert{
-                dnam{"希"}
                 other{"{0} 希"}
             }
         }
         force{
             kilogram-force{
-                dnam{"公斤力"}
                 other{"{0} 公斤力"}
             }
         }
@@ -341,11 +301,9 @@ yue{
         }
         magnetic{
             tesla{
-                dnam{"特"}
                 other{"{0} 特"}
             }
             weber{
-                dnam{"韋"}
                 other{"{0} 韋"}
             }
         }
@@ -364,9 +322,6 @@ yue{
             }
         }
         pressure{
-            ofhg{
-                other{"{0} Hg"}
-            }
             pound-force-per-square-inch{
                 other{"每平方吋 {0} 磅"}
             }
@@ -392,7 +347,6 @@ yue{
         }
         volume{
             fluid-ounce-metric{
-                dnam{"公制液量安士"}
                 other{"{0} 公制液量安士"}
             }
         }

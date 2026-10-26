@@ -34,7 +34,7 @@ License & terms of use: http://www.unicode.org/copyright.html
 
     Or, to install manually
     1.  To update Doxygen, first [download binary or source release
-        here](http://doxygen.org/download.html#latestsrc)
+        here](https://www.doxygen.nl/download.html)
     2.  Unpack the release, and run something like<br>
         "`configure --prefix /usr/local`" (to install into /usr/local/bin etc)<br>
         (Note for the binary release, 'configure' just builds an installer.)
@@ -70,7 +70,7 @@ See the [User Guide, ICU Architectural Design, ICU API
 compatibility](https://unicode-org.github.io/icu/userguide/icu/design#icu-api-compatibility).
 
 On ICU4J, run
-[com.ibm.icu.dev.tool.docs.CheckTags](https://github.com/unicode-org/icu/blob/main/icu4j/tools/build/src/com/ibm/icu/dev/tool/docs/CheckTags.java)
+[com.ibm.icu.dev.tool.docs.CheckTags](https://github.com/unicode-org/icu/blob/main/icu4j/tools/build/src/main/java/com/ibm/icu/dev/tool/docs/CheckTags.java)
 (see file for instructions). This requires a JDK with javadoc available, i.e, JDK11. The
 tool will need to change to reflect the release number to search for.
 
@@ -118,9 +118,8 @@ Andy's method (from email 2019-sep-05):
 1.  Create a new GitHub branch.
 2.  In directory icu/icu4j, run this script: `releases_tools/api_reports.sh`
 3.  This script generates a tab-separated values file at target/draftAPIs.tsv.
-4.  Import the TSV file to Google spread sheet - for example, [ICU4J 74 Draft
-    API
-    Promotion](https://docs.google.com/spreadsheets/d/135RDyY6cWKBBvNuVE9ne8HfsItZu_CvLh47hKjr3UqM/edit#gid=1384666589).
+4.  Import the TSV file to a Google spreadsheet - for example, "ICU4J 74 Draft API
+    Promotion."
     *   Create the spreadsheet in the shared ***ICU Projects*** folder.
 5.  Review all APIs introduced in 2 releases ago or older. For example, 72 or
     older for ICU 74 release.
@@ -303,7 +302,7 @@ Instructions ***for ICU4C 4.8.x and earlier***:
 
 Run the ICU4J versus JDK API comparison tool against the target JDK (anything
 that will come out before our next release, basically) with the tool
-[com.ibm.icu.dev.tool.docs.ICUJDKCompare](https://github.com/unicode-org/icu/blob/main/icu4j/tools/build/src/com/ibm/icu/dev/tool/docs/ICUJDKCompare.java)
+[com.ibm.icu.dev.tool.docs.ICUJDKCompare](https://github.com/unicode-org/icu/blob/main/icu4j/tools/build/src/main/java/com/ibm/icu/dev/tool/docs/ICUJDKCompare.java)
 and make sure ICU4J adequately covers the JDK API for the classes we replicate.
 
 ---
@@ -312,13 +311,17 @@ and make sure ICU4J adequately covers the JDK API for the classes we replicate.
 
 ### **ICU4C**
 
+#### Create the ICU4C docs zip file - Post 71.1
+
+Download the `icu4c-{icuver}-docs.zip` asset from the GitHub release.
+
+#### Create the ICU4C docs zip file - Pre 71.1
+
 Build the API documentation pages for the new release. Run Doxygen to create the
 javadoc files. Create icu4c-X_X_X-docs.zip
 
 **Note: for ICU4C 49m2 or later, requires Doxygen 1.7.5.1 or later ( see
 [ICU-8862](https://unicode-org.atlassian.net/browse/ICU-8862) )**
-
-#### Create the ICU4C docs zip file:
 
 1.  Go to .../icu4c/source
 2.  Generate the API document pages:<br>
@@ -368,7 +371,11 @@ Note: This is also referenced below [Upload API documentations](docs.md#upload-a
 
 ### ICU4J
 
-Build the API documentation pages for the new release:
+#### Build the API documentation pages for the new release - Post 71.1
+
+Download the `icu4j-{icuver}-fulljavadoc.jar` asset from the GitHub release.
+
+#### Build the API documentation pages for the new release - Pre 71.1
 
 ```
 cd icu4j
@@ -397,6 +404,7 @@ See <https://unicode-org.github.io/icu-docs/HOWTO-Update.html> for instructions
 to upload to <https://unicode-org.github.io/icu-docs/>
 
 #### Update table of API docs:
+
 1. Edit [README.md in icu-docs](https://github.com/unicode-org/icu-docs/blob/main/README.md).
 2. Update the table under "API docs" at the top of README.md with the new version in column "J" in row "Dev" for the release candidate or "Released" for the final release.
 3. Add the updated README.md to the pull request with the new API documentation.

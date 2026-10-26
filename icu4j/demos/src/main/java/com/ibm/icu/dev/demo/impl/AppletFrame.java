@@ -117,7 +117,7 @@ public class AppletFrame extends Frame implements AppletStub, AppletContext {
         return applet;
     }
 
-    public Enumeration getApplets() {
+    public Enumeration<Applet> getApplets() {
         return null;
     }
 
@@ -143,7 +143,7 @@ public class AppletFrame extends Frame implements AppletStub, AppletContext {
         return null;
     }
 
-    public Iterator getStreamKeys() {
+    public Iterator<String> getStreamKeys() {
         return null;
     }
 }

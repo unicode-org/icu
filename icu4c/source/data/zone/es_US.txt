@@ -75,9 +75,6 @@ es_US{
         "meta:Chamorro"{
             ls{"hora de Chamorro"}
         }
-        "meta:Cocos"{
-            ls{"hora de las Islas Cocos"}
-        }
         "meta:Cook"{
             ld{"hora de verano media de las Islas Cook"}
             lg{"hora de las Islas Cook"}
@@ -123,9 +120,6 @@ es_US{
         "meta:Marquesas"{
             ls{"hora de las islas Marquesas"}
         }
-        "meta:Marshall_Islands"{
-            ls{"hora de las Islas Marshall"}
-        }
         "meta:Norfolk"{
             ld{"hora de verano de la isla Norfolk"}
             lg{"hora de la isla Norfolk"}
@@ -136,9 +130,6 @@ es_US{
         }
         "meta:Pyongyang"{
             ls{"hora de Pyongyang"}
-        }
-        "meta:Solomon"{
-            ls{"hora de las Islas Salomón"}
         }
         "meta:Wake"{
             ls{"hora de la isla Wake"}

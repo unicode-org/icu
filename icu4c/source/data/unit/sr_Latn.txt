@@ -452,9 +452,6 @@ sr_Latn{
             }
             part{
                 dnam{"delovi"}
-                few{"{0} dela"}
-                one{"{0} deo"}
-                other{"{0} delova"}
             }
             part-per-1e6{
                 case{
@@ -2869,15 +2866,6 @@ sr_Latn{
     }
     unitsNarrow{
         concentr{
-            ofglucose{
-                dnam{"Glc"}
-            }
-            part{
-                dnam{"deo"}
-                few{"{0} dela"}
-                one{"{0} deo"}
-                other{"{0} delova"}
-            }
             percent{
                 dnam{"%"}
             }
@@ -2951,9 +2939,6 @@ sr_Latn{
             }
         }
         energy{
-            calorie-it{
-                dnam{"cal [IT]"}
-            }
             electronvolt{
                 dnam{"eV"}
             }
@@ -3000,13 +2985,6 @@ sr_Latn{
                 few{"{0} ks"}
                 one{"{0} ks"}
                 other{"{0} ks"}
-            }
-        }
-        speed{
-            beaufort{
-                few{"B {0}"}
-                one{"B {0}"}
-                other{"B {0}"}
             }
         }
         volume{
@@ -3345,9 +3323,6 @@ sr_Latn{
         speed{
             beaufort{
                 dnam{"Bf"}
-                few{"B {0}"}
-                one{"B {0}"}
-                other{"B {0}"}
             }
             light-speed{
                 dnam{"svetlo"}

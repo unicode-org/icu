@@ -980,7 +980,6 @@ tt{
         }
         "Europe:Dublin"{
             ec{"Дублин"}
-            ld{"Ирландия стандарт вакыты"}
         }
         "Europe:Gibraltar"{
             ec{"Гибралтар"}
@@ -1017,7 +1016,6 @@ tt{
         }
         "Europe:London"{
             ec{"Лондон"}
-            ld{"Британия җәйге вакыты"}
         }
         "Europe:Luxembourg"{
             ec{"Люксембург"}
@@ -1390,6 +1388,10 @@ tt{
             lg{"Бразилиа вакыты"}
             ls{"Бразилиа стандарт вакыты"}
         }
+        "meta:British"{
+            ld{"Британия җәйге вакыты"}
+            lg{"British Tiempo"}
+        }
         "meta:Brunei"{
             ls{"Бруней-Даруссалам вакыты"}
         }
@@ -1505,6 +1507,11 @@ tt{
         "meta:Gilbert_Islands"{
             ls{"Гилберт утраулары вакыты"}
         }
+        "meta:Greenland"{
+            ld{"Groenlandia Inti raymi pacha"}
+            lg{"Groenlandia pacha"}
+            ls{"Groenlandia Tiempo Estándar"}
+        }
         "meta:Greenland_Eastern"{
             ld{"Көнчыгыш Гренландия җәйге вакыты"}
             lg{"Көнчыгыш Гренландия вакыты"}
@@ -1522,7 +1529,7 @@ tt{
             ls{"Гайана вакыты"}
         }
         "meta:Hawaii"{
-            ls{"Гавай-Алеут стандарт вакыты"}
+            ls{"Гавай вакыты"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"Гавай-Алеут җәйге вакыты"}
@@ -1561,6 +1568,10 @@ tt{
             ld{"Иран җәйге вакыты"}
             lg{"Иран вакыты"}
             ls{"Иран стандарт вакыты"}
+        }
+        "meta:Irish"{
+            ld{"Ирландия стандарт вакыты"}
+            lg{"Irlanda pacha"}
         }
         "meta:Irkutsk"{
             ld{"Иркутск җәйге вакыты"}
@@ -1762,8 +1773,6 @@ tt{
             ls{"Самара стандарт вакыты"}
         }
         "meta:Samoa"{
-            ld{"Самоа җәйге вакыты"}
-            lg{"Самоа вакыты"}
             ls{"Самоа стандарт вакыты"}
         }
         "meta:Seychelles"{
@@ -1806,6 +1815,11 @@ tt{
         "meta:Truk"{
             ls{"Чуук вакыты"}
         }
+        "meta:Turkey"{
+            ld{"Türkiye Inti raymi pacha"}
+            lg{"Türkiye Tiempo"}
+            ls{"Türkiye Standard Time"}
+        }
         "meta:Turkmenistan"{
             ld{"Төркмәнстан җәйге вакыты"}
             lg{"Төркмәнстан вакыты"}
@@ -1818,6 +1832,9 @@ tt{
             ld{"Уругвай җәйге вакыты"}
             lg{"Уругвай вакыты"}
             ls{"Уругвай стандарт вакыты"}
+        }
+        "meta:Urumqi"{
+            ls{"Urumqi Tiempo"}
         }
         "meta:Uzbekistan"{
             ld{"Үзбәкстан җәйге вакыты"}

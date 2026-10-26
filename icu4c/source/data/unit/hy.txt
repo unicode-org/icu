@@ -466,16 +466,6 @@ hy{
                 one{"{0} մոլ"}
                 other{"{0} մոլ"}
             }
-            ofglucose{
-                dnam{"գլյուկոզ"}
-                one{"{0} գլյուկոզ"}
-                other{"{0} գլյուկոզ"}
-            }
-            part{
-                dnam{"մաս"}
-                one{"{0} մաս"}
-                other{"{0} մաս"}
-            }
             part-per-1e6{
                 case{
                     ablative{
@@ -1266,7 +1256,6 @@ hy{
                 other{"{0} կուլոն"}
             }
             farad{
-                dnam{"ֆարադ"}
                 one{"{0} ֆարադ"}
                 other{"{0} ֆարադ"}
             }
@@ -1382,11 +1371,6 @@ hy{
                 dnam{"կալորիա"}
                 one{"{0} կալորիա"}
                 other{"{0} կալորիա"}
-            }
-            calorie-it{
-                dnam{"միջազգային կալորիա"}
-                one{"{0} միջազգային կալորիա"}
-                other{"{0} միջազգային կալորիա"}
             }
             electronvolt{
                 dnam{"էլեկտրոն-վոլտ"}
@@ -1654,6 +1638,11 @@ hy{
             }
         }
         graphics{
+            dot{
+                dnam{"կետիկ"}
+                one{"{0} կետիկ"}
+                other{"{0} կետիկ"}
+            }
             dot-per-centimeter{
                 dnam{"կետ սանտիմետրի վրա"}
                 one{"{0} կետ սանտիմետրի վրա"}
@@ -2025,24 +2014,25 @@ hy{
             point{
                 case{
                     ablative{
-                        one{"{0} կտ"}
-                        other{"{0} կտ"}
+                        one{"{0} կետից"}
+                        other{"{0} կետից"}
                     }
                     dative{
-                        one{"{0} կտ"}
-                        other{"{0} կտ"}
+                        one{"{0} կետին"}
+                        other{"{0} կետին"}
                     }
                     instrumental{
-                        one{"{0} կտ"}
-                        other{"{0} կտ"}
+                        one{"{0} կետով"}
+                        other{"{0} կետով"}
                     }
                     locative{
-                        one{"{0} կտ"}
-                        other{"{0} կտ"}
+                        one{"{0} կետում"}
+                        other{"{0} կետում"}
                     }
                 }
-                one{"{0} կտ"}
-                other{"{0} կտ"}
+                dnam{"կետ"}
+                one{"{0} կետ"}
+                other{"{0} կետ"}
             }
             solar-radius{
                 dnam{"արեգակնային շառավիղ"}
@@ -3233,7 +3223,6 @@ hy{
                 other{"{0}կար"}
             }
             katal{
-                dnam{"կատ"}
                 one{"{0}կատ"}
                 other{"{0}կատ"}
             }
@@ -3244,11 +3233,6 @@ hy{
             mole{
                 one{"{0}մոլ"}
                 other{"{0}մոլ"}
-            }
-            ofglucose{
-                dnam{"գլյուկոզ"}
-                one{"{0} գլյուկոզ"}
-                other{"{0} գլյուկոզ"}
             }
             part{
                 dnam{"մ․"}
@@ -3379,8 +3363,6 @@ hy{
             }
             farad{
                 dnam{"Ֆ"}
-                one{"{0} Ֆ"}
-                other{"{0} Ֆ"}
             }
             milliampere{
                 one{"{0}մԱ"}
@@ -3401,18 +3383,12 @@ hy{
         }
         energy{
             becquerel{
-                dnam{"Բք"}
                 one{"{0}Բք"}
                 other{"{0}Բք"}
             }
             british-thermal-unit{
                 one{"{0}Բջմ"}
                 other{"{0}Բջմ"}
-            }
-            calorie-it{
-                dnam{"միջազգային կալորիա"}
-                one{"{0} միջազգային կալորիա"}
-                other{"{0} միջազգային կալորիա"}
             }
             electronvolt{
                 one{"{0}էՎ"}
@@ -3423,7 +3399,6 @@ hy{
                 other{"{0}կալ"}
             }
             gray{
-                dnam{"Գր"}
                 one{"{0}Գր"}
                 other{"{0}Գր"}
             }
@@ -3436,14 +3411,12 @@ hy{
                 other{"{0}կՋ"}
             }
             sievert{
-                dnam{"Զվ"}
                 one{"{0}Զվ"}
                 other{"{0}Զվ"}
             }
         }
         force{
             kilogram-force{
-                dnam{"կգ-ուժ"}
                 one{"{0}կգ-ուժ"}
                 other{"{0}կգ-ուժ"}
             }
@@ -3471,6 +3444,11 @@ hy{
             }
         }
         graphics{
+            dot{
+                dnam{"կտկ"}
+                one{"{0} կտկ"}
+                other{"{0} կտկ"}
+            }
             em{
                 one{"{0}em"}
                 other{"{0}em"}
@@ -3498,6 +3476,10 @@ hy{
                 one{"{0} լ. տ."}
                 other{"{0} լ. տ."}
             }
+            point{
+                one{"{0} կտ"}
+                other{"{0} կտ"}
+            }
             yard{
                 dnam{"յդ"}
                 one{"{0}յդ"}
@@ -3512,12 +3494,10 @@ hy{
         }
         magnetic{
             tesla{
-                dnam{"Տլ"}
                 one{"{0}Տլ"}
                 other{"{0}Տլ"}
             }
             weber{
-                dnam{"Վբ"}
                 one{"{0}Վբ"}
                 other{"{0}Վբ"}
             }
@@ -3618,7 +3598,6 @@ hy{
                 other{"{0} մմսս"}
             }
             ofhg{
-                dnam{"ս․ս․"}
                 one{"{0}սս"}
                 other{"{0}սս"}
             }
@@ -4260,9 +4239,9 @@ hy{
         }
         graphics{
             dot{
-                dnam{"կետ"}
-                one{"{0} կետ"}
-                other{"{0} կետ"}
+                dnam{"կտկ"}
+                one{"{0} կտկ"}
+                other{"{0} կտկ"}
             }
             dot-per-centimeter{
                 dnam{"կսմ"}
@@ -4393,6 +4372,8 @@ hy{
             }
             point{
                 dnam{"կտ"}
+                one{"{0} կտ"}
+                other{"{0} կտ"}
             }
             yard{
                 dnam{"յարդ"}

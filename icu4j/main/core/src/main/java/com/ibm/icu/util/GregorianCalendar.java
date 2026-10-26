@@ -7,6 +7,7 @@
 
 package com.ibm.icu.util;
 
+import com.ibm.icu.impl.Grego;
 import com.ibm.icu.util.ULocale.Category;
 import java.util.Date;
 import java.util.Locale;
@@ -319,8 +320,11 @@ public class GregorianCalendar extends Calendar implements Cloneable {
      */
     private long gregorianCutover = -12219292800000L;
 
+    private static final int kEpochStartAsJulianDay = 2440588; // January 1, 1970 (Gregorian)
+    private static final int kCutoverJulianDay = 2299161;
+
     /** Julian day number of the Gregorian cutover. */
-    private transient int cutoverJulianDay = 2299161;
+    private transient int cutoverJulianDay = kCutoverJulianDay;
 
     /** The year of the gregorianCutover, with 0 representing 1 BC, -1 representing 2 BC, etc. */
     private transient int gregorianCutoverYear = 1582;
@@ -508,15 +512,20 @@ public class GregorianCalendar extends Calendar implements Cloneable {
         } else if (gregorianCutover >= MAX_MILLIS) {
             gregorianCutoverYear = cutoverJulianDay = Integer.MAX_VALUE;
         } else {
-            // Precompute two internal variables which we use to do the actual
-            // cutover computations.  These are the Julian day of the cutover
-            // and the cutover year.
-            cutoverJulianDay = (int) floorDivide(gregorianCutover, ONE_DAY);
-
             // Convert cutover millis to extended year
             GregorianCalendar cal = new GregorianCalendar(getTimeZone());
             cal.setTime(date);
             gregorianCutoverYear = cal.get(EXTENDED_YEAR);
+
+            long tmpCutoverJulianDay =
+                    floorDivide(gregorianCutover, ONE_DAY) + kEpochStartAsJulianDay;
+            if (tmpCutoverJulianDay <= Integer.MIN_VALUE) {
+                cutoverJulianDay = Integer.MIN_VALUE;
+            } else if (tmpCutoverJulianDay >= Integer.MAX_VALUE) {
+                cutoverJulianDay = Integer.MAX_VALUE;
+            } else {
+                cutoverJulianDay = (int) tmpCutoverJulianDay;
+            }
         }
     }
 
@@ -816,6 +825,14 @@ public class GregorianCalendar extends Calendar implements Cloneable {
             dayOfMonth = dayOfYear - MONTH_COUNT[month][isLeap ? 3 : 2] + 1; // one-based DOM
             ++dayOfYear;
         }
+
+        // [j81] if we are after the cutover in its year, shift the day of the year
+        if ((eyear == gregorianCutoverYear) && (julianDay >= cutoverJulianDay)) {
+            // from handleComputeMonthStart
+            int gregShift = Grego.gregorianShift(eyear);
+            dayOfYear += gregShift;
+        }
+
         internalSet(MONTH, month);
         internalSet(ORDINAL_MONTH, month);
         internalSet(DAY_OF_MONTH, dayOfMonth);
@@ -864,14 +881,118 @@ public class GregorianCalendar extends Calendar implements Cloneable {
 
         int jd = super.handleComputeJulianDay(bestField);
 
+        if (bestField == WEEK_OF_MONTH) {
+            // WEEK_OF_MONTH counts from the hybrid month's own first day. The
+            // isGregorian/invertGregorian inversion below picks one calendar
+            // for the whole month from a single day, which only goes wrong
+            // when a week spills across the cutover, so it is bypassed here:
+            // shift jd (already computed with isGregorian's calendar for (y,
+            // m)) to the hybrid first day; zero unless (y, m) is within a
+            // year of gregorianCutoverYear.
+            int y = internalGet(EXTENDED_YEAR);
+            int m = internalGetMonth(getDefaultMonthInYear(y));
+            if (m < 0 || m > 11) {
+                int[] rem = new int[1];
+                y += floorDivide(m, 12, rem);
+                m = rem[0];
+            }
+            // The +/-1 year window assumes the Julian and Gregorian calendars
+            // never drift a full year apart, true for |year| under roughly
+            // 48000.
+            if (cutoverJulianDay != Integer.MIN_VALUE
+                    && cutoverJulianDay != Integer.MAX_VALUE
+                    && Math.abs((long) y - gregorianCutoverYear) <= 1) {
+                int baseStart = isGregorian ? gregorianMonthStart(y, m) : julianMonthStart(y, m);
+                int hybridStart = cutoverMonthStart(cutoverJulianDay, y, m);
+                return jd + firstWeekStart(hybridStart) - firstWeekStart(baseStart);
+            }
+            return jd;
+        }
+
+        if ((bestField == WEEK_OF_YEAR)
+                && // if we are doing WOY calculations, we are counting relative to Jan 1 *julian*
+                (internalGet(EXTENDED_YEAR) == gregorianCutoverYear)
+                && jd >= cutoverJulianDay) {
+            invertGregorian =
+                    true; // So that the Julian Jan 1 will be used in handleComputeMonthStart
+            return super.handleComputeJulianDay(bestField);
+        }
+
         // The following check handles portions of the cutover year BEFORE the
         // cutover itself happens.
-        if (isGregorian != (jd >= cutoverJulianDay)) {
+        if ((isGregorian) != (jd >= cutoverJulianDay)) {
             invertGregorian = true;
             jd = super.handleComputeJulianDay(bestField);
         }
 
+        if (isGregorian && (internalGet(EXTENDED_YEAR) == gregorianCutoverYear)) {
+            int gregShift = Grego.gregorianShift(internalGet(EXTENDED_YEAR));
+            if (bestField == DAY_OF_YEAR) {
+                jd -= gregShift;
+            }
+        }
         return jd;
+    }
+
+    /**
+     * Julian day of the first day of the hybrid month (year, month): J1(year, month) if that Julian
+     * first day precedes the cutover, else the later of G1(year, month) and the cutover itself.
+     * Computed directly, independent of the hybrid calendar's own month lengths. Requires 0 <=
+     * month <= 11. The sentinel branches below are defensive: the only caller,
+     * handleComputeJulianDay(), already excludes them, so they are unreachable today.
+     */
+    private static int cutoverMonthStart(int cutoverJulianDay, int year, int month) {
+        if (cutoverJulianDay == Integer.MAX_VALUE) {
+            return julianMonthStart(year, month); // pure Julian calendar
+        }
+        if (cutoverJulianDay == Integer.MIN_VALUE) {
+            return gregorianMonthStart(year, month); // pure Gregorian calendar
+        }
+        int julianStart = julianMonthStart(year, month);
+        if (julianStart < cutoverJulianDay) {
+            return julianStart;
+        }
+        return Math.max(gregorianMonthStart(year, month), cutoverJulianDay);
+    }
+
+    /**
+     * Julian day of the first day of the given month (0-based) of the given extended year, in the
+     * pure proleptic Julian calendar, independent of any cutover. Requires 0 <= month <= 11.
+     */
+    private static int julianMonthStart(int year, int month) {
+        boolean isLeap = year % 4 == 0;
+        int y = year - 1;
+        int dayBeforeJan1 = 365 * y + floorDivide(y, 4) + (JAN_1_1_JULIAN_DAY - 3);
+        if (month != 0) {
+            dayBeforeJan1 += MONTH_COUNT[month][isLeap ? 3 : 2];
+        }
+        return dayBeforeJan1 + 1;
+    }
+
+    /**
+     * Julian day of the first day of the given month (0-based) of the given extended year, in the
+     * pure proleptic Gregorian calendar, independent of any cutover. Requires 0 <= month <= 11.
+     */
+    private static int gregorianMonthStart(int year, int month) {
+        return (int) (Grego.fieldsToDay(year, month, 1) + kEpochStartAsJulianDay);
+    }
+
+    /**
+     * Julian day of the first day of week 1 of a month that starts on Julian day {@code
+     * monthStart}, using {@link #getFirstDayOfWeek()} and {@link #getMinimalDaysInFirstWeek()}
+     * exactly as Calendar does for an ordinary month.
+     */
+    private int firstWeekStart(int monthStart) {
+        int firstDOW = getFirstDayOfWeek();
+        int first = julianDayToDayOfWeek(monthStart) - firstDOW;
+        if (first < 0) {
+            first += 7;
+        }
+        int weekStart = monthStart - first;
+        if ((7 - first) < getMinimalDaysInFirstWeek()) {
+            weekStart += 7;
+        }
+        return weekStart;
     }
 
     /**

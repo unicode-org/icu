@@ -221,7 +221,7 @@ it{
         }
         CNH{
             "CNH",
-            "renmimbi cinese offshore",
+            "yuan cinese offshore",
         }
         CNY{
             "CN¥",
@@ -1241,8 +1241,8 @@ it{
             other{"pesos cileni"}
         }
         CNH{
-            one{"renmimbi cinese offshore"}
-            other{"renmimbi cinesi offshore"}
+            one{"yuan cinese offshore"}
+            other{"yuan cinesi offshore"}
         }
         CNY{
             one{"yuan cinese"}
@@ -1771,10 +1771,6 @@ it{
         ZMW{
             one{"kwacha zambiano"}
             other{"kwacha zambiani"}
-        }
-        ZWG{
-            one{"Zimbabwe Gold"}
-            other{"Zimbabwe Gold"}
         }
     }
 }

@@ -218,6 +218,8 @@ public final class CollationFastLatin /* all static */ {
                 return -1; // variableTop >= digits, should not occur
             }
             miniVarTop = header[i];
+            // Turn the max long-primary for the group into a max CE.
+            miniVarTop |= TERTIARY_MASK;
         }
 
         boolean digitsAreReordered = false;
@@ -263,15 +265,15 @@ public final class CollationFastLatin /* all static */ {
 
         char[] table = data.fastLatinTable; // skip the header
         for (int c = 0; c < LATIN_LIMIT; ++c) {
-            int p = table[c];
-            if (p >= MIN_SHORT) {
-                p &= SHORT_PRIMARY_MASK;
-            } else if (p > miniVarTop) {
-                p &= LONG_PRIMARY_MASK;
+            int ce = table[c];
+            if (ce >= MIN_SHORT) {
+                ce &= SHORT_PRIMARY_MASK;
+            } else if (ce > miniVarTop) {
+                ce &= LONG_PRIMARY_MASK;
             } else {
-                p = 0;
+                ce = 0;
             }
-            primaries[c] = (char) p;
+            primaries[c] = (char) ce;
         }
         if (digitsAreReordered || (settings.options & CollationSettings.NUMERIC) != 0) {
             // Bail out for digits.
@@ -280,8 +282,15 @@ public final class CollationFastLatin /* all static */ {
             }
         }
 
+        // NUMERIC flag is also used for indicating digits are reordered
+        // in fast-Latin options.
+        int options =
+                digitsAreReordered
+                        ? CollationSettings.NUMERIC | settings.options
+                        : settings.options;
+
         // Shift the miniVarTop above other options.
-        return (miniVarTop << 16) | settings.options;
+        return (miniVarTop << 16) | options;
     }
 
     public static int compareUTF16(
@@ -300,7 +309,7 @@ public final class CollationFastLatin /* all static */ {
 
         // Check for supported characters, fetch mini CEs, and compare primaries.
         int leftIndex = startIndex, rightIndex = startIndex;
-        /**
+        /*
          * Single mini CE or a pair. The current mini CE is in the lower 16 bits, the next one is in
          * the upper 16 bits. If there is only one, then it is in the lower bits, and the upper bits
          * are 0.

@@ -1,5 +1,5 @@
 # Test data for unit conversions
-#  Copyright © 1991-2025 Unicode, Inc.
+#  Copyright © 1991-2026 Unicode, Inc.
 #  For terms of use, see http://www.unicode.org/copyright.html
 #  SPDX-License-Identifier: Unicode-3.0
 #  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
@@ -84,6 +84,8 @@ energy	;	foodcalorie	;	kilogram-square-meter-per-square-second	;	4,184 * x	;	418
 energy	;	kilocalorie	;	kilogram-square-meter-per-square-second	;	4,184 * x	;	4184000.0
 energy	;	kilowatt-hour	;	kilogram-square-meter-second-per-cubic-second	;	3,600,000 * x	;	3.6E9
 energy	;	therm-us	;	kilogram-square-meter-per-square-second	;	105,480,400 * x	;	1.054804E11
+force	;	dyne	;	kilogram-meter-per-square-second	;	0.00001 * x	;	0.01
+force	;	poundal	;	kilogram-meter-per-square-second	;	0.138254954376 * x	;	138.255
 force	;	newton	;	kilogram-meter-per-square-second	;	1 * x	;	1000.0
 force	;	pound-force	;	kilogram-meter-per-square-second	;	4.4482216152605 * x	;	4448.222
 force	;	kilogram-force	;	kilogram-meter-per-square-second	;	9.80665 * x	;	9806.65
@@ -101,6 +103,7 @@ ionizing-radiation	;	sievert	;	square-meter-per-square-second	;	1 * x	;	1000.0
 length	;	picometer	;	meter	;	0.000000000001 * x	;	1.0E-9
 length	;	nanometer	;	meter	;	0.000000001 * x	;	1.0E-6
 length	;	micrometer	;	meter	;	0.000001 * x	;	0.001
+length	;	milliinch	;	meter	;	0.0000254 * x	;	0.0254
 length	;	rin	;	meter	;	0.004/121 * x	;	0.03305785
 length	;	point	;	meter	;	0.003175/9 * x	;	0.3527778
 length	;	millimeter	;	meter	;	0.001 * x	;	1.0

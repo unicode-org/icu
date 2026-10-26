@@ -7,7 +7,7 @@
  *******************************************************************************
  */
 
-/**
+/*
  * Port From: ICU4C v1.8.1 : format : DateFormatTest Source File:
  * $ICU4CRoot/source/test/intltest/dtfmttst.cpp
  */
@@ -531,7 +531,7 @@ public class DateFormatTest extends CoreTestFmwk {
             "Anno Domini",
             "1997",
             "August",
-            "0013",
+            "13th",
             "0014",
             "0014",
             "0034",
@@ -621,7 +621,7 @@ public class DateFormatTest extends CoreTestFmwk {
                 "3", "33", "1997", "1997"
             },
             {
-                "PM", "0013", "Wednesday", "0002", "0225",
+                "PM", "13th", "Wednesday", "0002", "0225",
                 "Wednesday", "Anno Domini", "1997", "0014", "0014",
                 "0002", "0002", "2450674", "5130", "52452513",
                 "0034", "August", "3rd quarter", "0012", "Pacific Daylight Time",
@@ -1546,8 +1546,8 @@ public class DateFormatTest extends CoreTestFmwk {
         },
         {"en", "Europe/London", "2004-01-15T00:00:00Z", "Z", "+0000", "+0:00"},
         {"en", "Europe/London", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+00:00", "+0:00"},
-        {"en", "Europe/London", "2004-01-15T00:00:00Z", "z", "GMT", "+0:00"},
-        {"en", "Europe/London", "2004-01-15T00:00:00Z", "zzzz", "Greenwich Mean Time", "+0:00"},
+        {"en", "Europe/London", "2004-01-15T00:00:00Z", "z", "GMT+0", "+0:00"},
+        {"en", "Europe/London", "2004-01-15T00:00:00Z", "zzzz", "GMT+00:00", "+0:00"},
         {"en", "Europe/London", "2004-07-15T00:00:00Z", "Z", "+0100", "+1:00"},
         {"en", "Europe/London", "2004-07-15T00:00:00Z", "ZZZZ", "GMT+01:00", "+1:00"},
         {"en", "Europe/London", "2004-07-15T00:00:00Z", "z", "GMT+1", "Europe/London"},
@@ -1568,14 +1568,7 @@ public class DateFormatTest extends CoreTestFmwk {
             "United Kingdom Time",
             "Europe/London"
         },
-        {
-            "en",
-            "Europe/London",
-            "2004-07-15T00:00:00Z",
-            "vvvv",
-            "United Kingdom Time",
-            "Europe/London"
-        },
+        {"en", "Europe/London", "2004-07-15T00:00:00Z", "vvvv", "British Time", "Europe/London"},
         {
             "en",
             "Europe/London",
@@ -1875,7 +1868,7 @@ public class DateFormatTest extends CoreTestFmwk {
         {"de", "Europe/London", "2004-01-15T00:00:00Z", "Z", "+0000", "+0:00"},
         {"de", "Europe/London", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+00:00", "+0:00"},
         {"de", "Europe/London", "2004-01-15T00:00:00Z", "z", "GMT+0", "+0:00"},
-        {"de", "Europe/London", "2004-01-15T00:00:00Z", "zzzz", "Mittlere Greenwich-Zeit", "+0:00"},
+        {"de", "Europe/London", "2004-01-15T00:00:00Z", "zzzz", "GMT+00:00", "+0:00"},
         {"de", "Europe/London", "2004-07-15T00:00:00Z", "Z", "+0100", "+1:00"},
         {"de", "Europe/London", "2004-07-15T00:00:00Z", "ZZZZ", "GMT+01:00", "+1:00"},
         {"de", "Europe/London", "2004-07-15T00:00:00Z", "z", "GMT+1", "+1:00"},
@@ -1888,14 +1881,7 @@ public class DateFormatTest extends CoreTestFmwk {
             "Vereinigtes K\u00f6nigreich (Ortszeit)",
             "Europe/London"
         },
-        {
-            "de",
-            "Europe/London",
-            "2004-07-15T00:00:00Z",
-            "vvvv",
-            "Vereinigtes K\u00f6nigreich (Ortszeit)",
-            "Europe/London"
-        },
+        {"de", "Europe/London", "2004-07-15T00:00:00Z", "vvvv", "Britische Zeit", "Europe/London"},
         {"de", "Etc/GMT+3", "2004-01-15T00:00:00Z", "Z", "-0300", "-3:00"},
         {"de", "Etc/GMT+3", "2004-01-15T00:00:00Z", "ZZZZ", "GMT-03:00", "-3:00"},
         {"de", "Etc/GMT+3", "2004-01-15T00:00:00Z", "z", "GMT-3", "-3:00"},
@@ -2203,14 +2189,7 @@ public class DateFormatTest extends CoreTestFmwk {
         {"zh", "Europe/London", "2004-01-15T00:00:00Z", "Z", "+0000", "+0:00"},
         {"zh", "Europe/London", "2004-01-15T00:00:00Z", "ZZZZ", GMT_ZH + "+00:00", "+0:00"},
         {"zh", "Europe/London", "2004-01-15T00:00:00Z", "z", GMT_ZH + "+0", "+0:00"},
-        {
-            "zh",
-            "Europe/London",
-            "2004-01-15T00:00:00Z",
-            "zzzz",
-            "\u683C\u6797\u5C3C\u6CBB\u6807\u51C6\u65F6\u95F4",
-            "+0:00"
-        },
+        {"zh", "Europe/London", "2004-01-15T00:00:00Z", "zzzz", "GMT+00:00", "+0:00"},
         {"zh", "Europe/London", "2004-07-15T00:00:00Z", "Z", "+0100", "+1:00"},
         {"zh", "Europe/London", "2004-07-15T00:00:00Z", "ZZZZ", GMT_ZH + "+01:00", "+1:00"},
         {"zh", "Europe/London", "2004-07-15T00:00:00Z", "z", GMT_ZH + "+1", "+1:00"},
@@ -2544,14 +2523,7 @@ public class DateFormatTest extends CoreTestFmwk {
         {"hi", "Europe/London", "2004-01-15T00:00:00Z", "Z", "+0000", "+0:00"},
         {"hi", "Europe/London", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+00:00", "+0:00"},
         {"hi", "Europe/London", "2004-01-15T00:00:00Z", "z", "GMT+0", "+0:00"},
-        {
-            "hi",
-            "Europe/London",
-            "2004-01-15T00:00:00Z",
-            "zzzz",
-            "\u0917\u094d\u0930\u0940\u0928\u0935\u093f\u091a \u092e\u0940\u0928 \u091f\u093e\u0907\u092e",
-            "+0:00"
-        },
+        {"hi", "Europe/London", "2004-01-15T00:00:00Z", "zzzz", "GMT+00:00", "+0:00"},
         {"hi", "Europe/London", "2004-07-15T00:00:00Z", "Z", "+0100", "+1:00"},
         {"hi", "Europe/London", "2004-07-15T00:00:00Z", "ZZZZ", "GMT+01:00", "+1:00"},
         {"hi", "Europe/London", "2004-07-15T00:00:00Z", "z", "GMT+1", "+1:00"},
@@ -2576,7 +2548,7 @@ public class DateFormatTest extends CoreTestFmwk {
             "Europe/London",
             "2004-07-15T00:00:00Z",
             "vvvv",
-            "\u092f\u0942\u0928\u093e\u0907\u091f\u0947\u0921 \u0915\u093f\u0902\u0917\u0921\u092e \u0938\u092e\u092f",
+            "\u092c\u094d\u0930\u093f\u091f\u093f\u0936 \u0938\u092e\u092f",
             "Europe/London"
         },
         {"hi", "Etc/GMT+3", "2004-01-15T00:00:00Z", "Z", "-0300", "-3:00"},
@@ -2906,14 +2878,7 @@ public class DateFormatTest extends CoreTestFmwk {
         {"bg", "Europe/London", "2004-01-15T00:00:00Z", "Z", "+0000", "+0:00"},
         {"bg", "Europe/London", "2004-01-15T00:00:00Z", "ZZZZ", GMT_BG + "+00:00", "+0:00"},
         {"bg", "Europe/London", "2004-01-15T00:00:00Z", "z", GMT_BG + "+0", "+0:00"},
-        {
-            "bg",
-            "Europe/London",
-            "2004-01-15T00:00:00Z",
-            "zzzz",
-            "\u0421\u0440\u0435\u0434\u043d\u043e \u0433\u0440\u0438\u043d\u0443\u0438\u0447\u043a\u043e \u0432\u0440\u0435\u043c\u0435",
-            "+0:00"
-        },
+        {"bg", "Europe/London", "2004-01-15T00:00:00Z", "zzzz", "Гринуич+00:00", "+0:00"},
         {"bg", "Europe/London", "2004-07-15T00:00:00Z", "Z", "+0100", "+1:00"},
         {"bg", "Europe/London", "2004-07-15T00:00:00Z", "ZZZZ", GMT_BG + "+01:00", "+1:00"},
         {"bg", "Europe/London", "2004-07-15T00:00:00Z", "z", GMT_BG + "+1", "+1:00"},
@@ -2938,7 +2903,7 @@ public class DateFormatTest extends CoreTestFmwk {
             "Europe/London",
             "2004-07-15T00:00:00Z",
             "vvvv",
-            "\u041e\u0431\u0435\u0434\u0438\u043d\u0435\u043d\u043e\u0442\u043e \u043a\u0440\u0430\u043b\u0441\u0442\u0432\u043e",
+            "\u0411\u0440\u0438\u0442\u0430\u043d\u0441\u043a\u043e \u0432\u0440\u0435\u043c\u0435",
             "Europe/London"
         },
         {"bg", "Etc/GMT+3", "2004-01-15T00:00:00Z", "Z", "-0300", "-3:00"},
@@ -3251,14 +3216,7 @@ public class DateFormatTest extends CoreTestFmwk {
         {"ja", "Europe/London", "2004-01-15T00:00:00Z", "Z", "+0000", "+0:00"},
         {"ja", "Europe/London", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+00:00", "+0:00"},
         {"ja", "Europe/London", "2004-01-15T00:00:00Z", "z", "GMT+0", "+0:00"},
-        {
-            "ja",
-            "Europe/London",
-            "2004-01-15T00:00:00Z",
-            "zzzz",
-            "\u30B0\u30EA\u30CB\u30C3\u30B8\u6A19\u6E96\u6642",
-            "+0:00"
-        },
+        {"ja", "Europe/London", "2004-01-15T00:00:00Z", "zzzz", "GMT+00:00", "+0:00"},
         {"ja", "Europe/London", "2004-07-15T00:00:00Z", "Z", "+0100", "+1:00"},
         {"ja", "Europe/London", "2004-07-15T00:00:00Z", "ZZZZ", "GMT+01:00", "+1:00"},
         {"ja", "Europe/London", "2004-07-15T00:00:00Z", "z", "GMT+1", "+1:00"},
@@ -3283,7 +3241,7 @@ public class DateFormatTest extends CoreTestFmwk {
             "Europe/London",
             "2004-07-15T00:00:00Z",
             "vvvv",
-            "\u30a4\u30ae\u30ea\u30b9\u6642\u9593",
+            "\u82f1\u56fd\u6642\u9593",
             "Europe/London"
         },
         {
@@ -3595,7 +3553,7 @@ public class DateFormatTest extends CoreTestFmwk {
         {"ti", "Europe/London", "2004-01-15T00:00:00Z", "Z", "+0000", "+0:00"},
         {"ti", "Europe/London", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+00:00", "+0:00"},
         {"ti", "Europe/London", "2004-01-15T00:00:00Z", "z", "GMT+0", "+0:00"},
-        {"ti", "Europe/London", "2004-01-15T00:00:00Z", "zzzz", "GMT", "+0:00"},
+        {"ti", "Europe/London", "2004-01-15T00:00:00Z", "zzzz", "GMT+00:00", "+0:00"},
         {"ti", "Europe/London", "2004-07-15T00:00:00Z", "Z", "+0100", "+1:00"},
         {"ti", "Europe/London", "2004-07-15T00:00:00Z", "ZZZZ", "GMT+01:00", "+1:00"},
         {"ti", "Europe/London", "2004-07-15T00:00:00Z", "z", "GMT+1", "+1:00"},
@@ -3620,7 +3578,7 @@ public class DateFormatTest extends CoreTestFmwk {
             "Europe/London",
             "2004-07-15T00:00:00Z",
             "vvvv",
-            "\u130d\u12d8 \u1265\u122a\u1323\u1295\u12eb",
+            "\u1265\u130d\u12dc \u12a5\u1295\u130d\u120a\u12dd",
             "Europe/London"
         },
         {"ti", "Etc/GMT+3", "2004-01-15T00:00:00Z", "Z", "-0300", "-3:00"},
@@ -3749,7 +3707,6 @@ public class DateFormatTest extends CoreTestFmwk {
 
     // internal test subroutine, used by TestPartialParse994
     public void tryPat994(SimpleDateFormat format, String pat, String str, Date expected) {
-        Date Null = null;
         logln("Pattern \"" + pat + "\"   String \"" + str + "\"");
         try {
             format.applyPattern(pat);
@@ -3757,12 +3714,12 @@ public class DateFormatTest extends CoreTestFmwk {
             String f = ((DateFormat) format).format(date);
             logln(" parse(" + str + ") -> " + date);
             logln(" format -> " + f);
-            if (expected.equals(Null) || !date.equals(expected))
+            if (expected.equals(null) || !date.equals(expected))
                 errln("FAIL: Expected null"); // " + expected);
             if (!f.equals(str)) errln("FAIL: Expected " + str);
         } catch (ParseException e) {
             logln("ParseException: " + e.getMessage());
-            if (!(expected == Null)) errln("FAIL: Expected " + expected);
+            if (!(expected == null)) errln("FAIL: Expected " + expected);
         } catch (Exception e) {
             errln("*** Exception:");
             e.printStackTrace();
@@ -4535,22 +4492,10 @@ public class DateFormatTest extends CoreTestFmwk {
         expectParse(DATA, new Locale("en", "", ""));
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
+    @SuppressWarnings("MisusedWeekYear")
     public void TestInvalidPattern() {
-        Exception e = null;
-        SimpleDateFormat f = null;
-        String out = null;
-        try {
-            f = new SimpleDateFormat("Yesterday");
-            out = f.format(new Date(0));
-        } catch (IllegalArgumentException e1) {
-            e = e1;
-        }
-        if (e != null) {
-            logln("Ok: Received " + e.getMessage());
-        } else {
-            errln("FAIL: Expected exception, got " + f.toPattern() + "; " + out);
-        }
+        new SimpleDateFormat("Yesterday").format(new Date(0));
     }
 
     @Test
@@ -4625,6 +4570,7 @@ public class DateFormatTest extends CoreTestFmwk {
     }
 
     @Test
+    @SuppressWarnings({"IdentityBinaryExpression", "SelfEquals"})
     public void TestCoverage() {
         Date now = new Date();
         Calendar cal = new GregorianCalendar();
@@ -4660,7 +4606,6 @@ public class DateFormatTest extends CoreTestFmwk {
         Locale foo = new Locale("fu", "FU", "BAR");
         rb = null;
         sym = new DateFormatSymbols(GregorianCalendar.class, foo);
-        sym.equals(null);
 
         sym = new ChineseDateFormatSymbols();
         sym = new ChineseDateFormatSymbols(new Locale("en", "US"));
@@ -6110,19 +6055,7 @@ public class DateFormatTest extends CoreTestFmwk {
                 }
             }
 
-            if (got == exp || (got != null && got.equals(exp))) {
-                logln("Ok: " + input + " x " + currentPat + " => " + gotstr);
-            } else {
-                errln(
-                        "FAIL: "
-                                + input
-                                + " x "
-                                + currentPat
-                                + " => "
-                                + gotstr
-                                + ", expected "
-                                + expstr);
-            }
+            assertEquals("", got, exp);
         }
     }
 
@@ -6494,15 +6427,7 @@ public class DateFormatTest extends CoreTestFmwk {
             int calField = DATEFORMAT_FIELDS[i].getCalendarField();
             if (calField != -1) {
                 DateFormat.Field field = DateFormat.Field.ofCalendarField(calField);
-                if (field != DATEFORMAT_FIELDS[i]) {
-                    errln(
-                            "FAIL: "
-                                    + field
-                                    + " is returned for a Calendar field "
-                                    + calField
-                                    + " - Expected: "
-                                    + DATEFORMAT_FIELDS[i]);
-                }
+                assertSame("Calendar field", field, DATEFORMAT_FIELDS[i]);
             }
         }
 
@@ -6521,23 +6446,22 @@ public class DateFormatTest extends CoreTestFmwk {
 
         // ChineseDateFormat.Field#ofCalendarField and getCalendarField
         int ccalField = ChineseDateFormat.Field.IS_LEAP_MONTH.getCalendarField();
-        if (ccalField != Calendar.IS_LEAP_MONTH) {
-            errln(
-                    "FAIL: ChineseCalendar field "
-                            + ccalField
-                            + " is returned for ChineseDateFormat.Field.IS_LEAP_MONTH.getCalendarField()");
-        } else {
-            DateFormat.Field cfield = ChineseDateFormat.Field.ofCalendarField(ccalField);
-            if (cfield != ChineseDateFormat.Field.IS_LEAP_MONTH) {
-                errln(
-                        "FAIL: "
-                                + cfield
-                                + " is returned for a ChineseCalendar field "
-                                + ccalField
-                                + " - Expected: "
-                                + ChineseDateFormat.Field.IS_LEAP_MONTH);
-            }
-        }
+        assertSame(
+                "FAIL: ChineseCalendar field "
+                        + ccalField
+                        + " is returned for ChineseDateFormat.Field.IS_LEAP_MONTH.getCalendarField()",
+                ccalField,
+                Calendar.IS_LEAP_MONTH);
+        DateFormat.Field cfield = ChineseDateFormat.Field.ofCalendarField(ccalField);
+        assertSame(
+                "FAIL: "
+                        + cfield
+                        + " is returned for a ChineseCalendar field "
+                        + ccalField
+                        + " - Expected: "
+                        + ChineseDateFormat.Field.IS_LEAP_MONTH,
+                cfield,
+                ChineseDateFormat.Field.IS_LEAP_MONTH);
     }
 
     /*
@@ -6960,12 +6884,12 @@ public class DateFormatTest extends CoreTestFmwk {
             "yyyyyyyyyyy.M.dddddddddd",
             "fp",
             "2010 04 01",
-            "00000002010.4.0000000001",
+            "00000002010.4.1st",
             "2010 04 01",
             "y.M.ddddddddddd",
             "fp",
             "2010 10 11",
-            "2010.10.00000000011",
+            "2010.10.11th",
             "2010 10 11",
         };
         expect(DATA, new Locale("en", "", ""));
@@ -7100,24 +7024,27 @@ public class DateFormatTest extends CoreTestFmwk {
             fmt = new SimpleDateFormat("MM d", new ULocale("en_US"));
             String field = DATA[i][0];
 
-            if (field == "") { // use the one w/o field
-                fmt.setNumberFormat(override);
-            } else if (field
-                    == "mixed") { // set 1 field at first but then full override, both(M & d) should
-                // be override
-                NumberFormat single_override =
-                        NumberFormat.getInstance(new ULocale("en@numbers=hebr"));
-                fmt.setNumberFormat("M", single_override);
-                fmt.setNumberFormat(override);
-            } else if (field == "Mo") { // o is invalid field
-                try {
+            switch (field) {
+                case "": // use the one w/o field
+                    fmt.setNumberFormat(override);
+                    break;
+                case "mixed": // set 1 field at first but then full override, both(M & d) should
+                    // be override
+                    NumberFormat single_override =
+                            NumberFormat.getInstance(new ULocale("en@numbers=hebr"));
+                    fmt.setNumberFormat("M", single_override);
+                    fmt.setNumberFormat(override);
+                    break;
+                case "Mo": // o is invalid field
+                    try {
+                        fmt.setNumberFormat(field, override);
+                    } catch (IllegalArgumentException e) {
+                        logln("IllegalArgumentException is thrown for invalid fields");
+                        continue;
+                    }
+                    break;
+                default:
                     fmt.setNumberFormat(field, override);
-                } catch (IllegalArgumentException e) {
-                    logln("IllegalArgumentException is thrown for invalid fields");
-                    continue;
-                }
-            } else {
-                fmt.setNumberFormat(field, override);
             }
             String result = fmt.format(test_date);
             String expected = DATA[i][1];
@@ -7732,6 +7659,7 @@ public class DateFormatTest extends CoreTestFmwk {
     }
 
     @Test
+    @SuppressWarnings("MisusedWeekYear")
     public void TestTwoDigitWOY() { // See ICU Ticket #8514
         String dateText = new String("98MON01");
 
@@ -9412,11 +9340,147 @@ public class DateFormatTest extends CoreTestFmwk {
         // Buddhist calendar
         oneCalendarTest(
                 new Locale("th", "TH", "TH"),
-                "๒๕ กันยายน ๒๕๖๘ เวลา ๑๙:๔๗",
+                "๒๕ กันยายน ๒๕๖๘ เวลา ๑๙:๔๗ น.",
                 "พฤหัส ๒๕ กันยายน ๒๕๖๘ เวลา ๑๙:๔๗ GMT-๗");
         oneCalendarTest(
                 Locale.forLanguageTag("en-US-u-ca-buddhist"),
                 "September 25, 2568 BE at 7:47\u202FPM",
                 "Thu, September 25, 2568 BE at 7:47\u202FPM PDT");
+    }
+
+    @Test
+    public void TestDayPeriodFallback() {
+        Locale testLocale = new Locale("nv");
+        DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance(testLocale);
+        SimpleDateFormat sdf = new SimpleDateFormat(dtpg.getBestPattern("Bhm"), testLocale);
+        Date testDate = new Date(99, 9, 13, 23, 58, 59);
+        String formattedDate = sdf.format(testDate);
+
+        if (!formattedDate.equals("11:58 PM")) {
+            errln("FAIL: Wrong formatting result, expected 11:58 PM, got " + formattedDate);
+        }
+    }
+
+    @Test
+    public void TestDayNames() {
+        // English ordinal rules: one (1,21,31) -> "{0}st", two (2,22) -> "{0}nd",
+        // few (3,23) -> "{0}rd", other -> "{0}th".
+        Object[][] testCases = {
+            {"en", "yMMMddd", 2026, Calendar.JANUARY, 1, "Jan 1st, 2026"},
+            {"en", "yMMMddd", 2026, Calendar.JANUARY, 2, "Jan 2nd, 2026"},
+            {"en", "yMMMddd", 2026, Calendar.JANUARY, 3, "Jan 3rd, 2026"},
+            {"en", "yMMMddd", 2026, Calendar.JANUARY, 4, "Jan 4th, 2026"},
+            {"en", "yMMMddd", 2026, Calendar.JANUARY, 5, "Jan 5th, 2026"},
+            {"en", "yMMMddd", 2026, Calendar.JANUARY, 7, "Jan 7th, 2026"},
+            {"en", "yMMMddd", 2026, Calendar.JANUARY, 9, "Jan 9th, 2026"},
+            {"en", "yMMMddd", 2026, Calendar.JANUARY, 11, "Jan 11th, 2026"},
+            {"en", "yMMMddd", 2026, Calendar.JANUARY, 12, "Jan 12th, 2026"},
+            {"en", "yMMMddd", 2026, Calendar.JANUARY, 13, "Jan 13th, 2026"},
+            {"en", "yMMMddd", 2026, Calendar.JANUARY, 21, "Jan 21st, 2026"},
+            {"en", "yMMMddd", 2026, Calendar.JANUARY, 22, "Jan 22nd, 2026"},
+            {"en", "yMMMddd", 2026, Calendar.JANUARY, 23, "Jan 23rd, 2026"},
+            {"en", "yMMMddd", 2026, Calendar.JANUARY, 30, "Jan 30th, 2026"},
+            {"en", "yMMMddd", 2026, Calendar.JANUARY, 31, "Jan 31st, 2026"},
+            // double-check that "dddd" and "ddddd" do the same thing as "ddd"
+            {"en", "yMMMdddd", 2026, Calendar.JANUARY, 31, "Jan 31st, 2026"},
+            {"en", "yMMMddddd", 2026, Calendar.JANUARY, 31, "Jan 31st, 2026"},
+            // test partial ordinal dates in French
+            // French ordinal "one" applies to day 1 only ("1er"); all others are plain numeric
+            {"fr", "yMMMddd", 2026, Calendar.APRIL, 1, "1er avr. 2026"},
+            {"fr", "yMMMddd", 2026, Calendar.APRIL, 2, "2 avr. 2026"},
+            {"fr", "yMMMddd", 2026, Calendar.APRIL, 3, "3 avr. 2026"},
+            {"fr", "yMMMddd", 2026, Calendar.APRIL, 5, "5 avr. 2026"},
+            {"fr", "yMMMddd", 2026, Calendar.APRIL, 10, "10 avr. 2026"},
+            {"fr", "yMMMddd", 2026, Calendar.APRIL, 11, "11 avr. 2026"},
+            {"fr", "yMMMddd", 2026, Calendar.APRIL, 21, "21 avr. 2026"},
+        };
+
+        for (Object[] tc : testCases) {
+            String localeID = (String) tc[0];
+            String skeleton = (String) tc[1];
+            int year = (Integer) tc[2];
+            int month = (Integer) tc[3];
+            int day = (Integer) tc[4];
+            String expected = (String) tc[5];
+
+            ULocale locale = new ULocale(localeID);
+            DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance(locale);
+            String pattern = dtpg.getBestPattern(skeleton);
+            SimpleDateFormat sdf = new SimpleDateFormat(pattern, locale);
+            sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+
+            Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"), locale);
+            cal.clear();
+            cal.set(Calendar.EXTENDED_YEAR, year);
+            cal.set(Calendar.MONTH, month);
+            cal.set(Calendar.DAY_OF_MONTH, day);
+            Date date = cal.getTime();
+
+            String result = sdf.format(date);
+            String label =
+                    "Wrong formatting result for "
+                            + localeID
+                            + " "
+                            + year
+                            + "/"
+                            + (month + 1)
+                            + "/"
+                            + day;
+            assertEquals(label, expected, result);
+
+            // uppercase the formatting result to make sure parsing is case-insensitive
+            result = result.toUpperCase();
+
+            // Round-trip parse.
+            ParsePosition parsePos = new ParsePosition(0);
+            Date parsedDate = sdf.parse(result, parsePos);
+            assertNotNull(
+                    "Round-trip parse returned null for "
+                            + localeID
+                            + " "
+                            + year
+                            + "/"
+                            + (month + 1)
+                            + "/"
+                            + day,
+                    parsedDate);
+            if (parsedDate != null) {
+                assertEquals(
+                        "Round-trip parse mismatch for "
+                                + localeID
+                                + " "
+                                + year
+                                + "/"
+                                + (month + 1)
+                                + "/"
+                                + day,
+                        date,
+                        parsedDate);
+            }
+        }
+    }
+
+    @Test
+    public void TestBadErasMakesBadMonthNamesBug() {
+        // Regression test for ICU-23262
+        final String[][] testCases = {
+            {"EEEE MMMM d, y G 'at' h:mm:ss a z", "Monday June 10, 1996 AD at 4:05:00 PM GMT"},
+            {
+                "EEEE MMMM d, y GGGG 'at' h:mm:ss a z",
+                "Monday June 10, 1996 Anno Domini at 4:05:00 PM GMT"
+            },
+            {"EEEE MMMM d, y GGGGG 'at' h:mm:ss a z", "Monday June 10, 1996 A at 4:05:00 PM GMT"},
+            {"EEEE MMMM d, y 'at' h:mm:ss a z", "Monday June 10, 1996 at 4:05:00 PM GMT"},
+        };
+
+        Date dateToFormat = new Date(834422700000L); // July 10, 1996 4:05 PM GMT
+        Locale locale = Locale.forLanguageTag("en-US-u-ca-iso8601");
+        for (String[] testCase : testCases) {
+            DateFormat df = new SimpleDateFormat(testCase[0], locale);
+            DateFormatSymbols dfs;
+            df.setTimeZone(TimeZone.GMT_ZONE);
+            String result = df.format(dateToFormat);
+            assertEquals("Wrong formatting result for " + testCase[0], testCase[1], result);
+        }
     }
 }

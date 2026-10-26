@@ -267,10 +267,6 @@ fi{
             "CNH",
             "Kiinan juan (offshore)",
         }
-        CNX{
-            "CNX",
-            "Kiinan kansanpankin dollari",
-        }
         CNY{
             "CNY",
             "Kiinan juan",
@@ -1585,10 +1581,6 @@ fi{
         CNH{
             one{"Kiinan juan (offshore)"}
             other{"Kiinan juania (offshore)"}
-        }
-        CNX{
-            one{"Kiinan kansanpankin dollari"}
-            other{"Kiinan kansanpankin dollaria"}
         }
         CNY{
             one{"Kiinan juan"}

@@ -65,6 +65,7 @@ public class RbnfTest extends CoreTestFmwk {
                     + "   10: <0</10;\n";
 
     @Test
+    @SuppressWarnings("SelfEquals")
     public void TestCoverage() {
         String durationInSecondsRules =
                 // main rule set for formatting with words
@@ -441,6 +442,21 @@ public class RbnfTest extends CoreTestFmwk {
         };
 
         doTest(formatter, testData, true);
+
+        String[][] lpTestData = {
+            // NFD form of "dieciséis": s + e + combining acute + i + s
+            {"diecise\u0301is", "16"},
+            // Accent missing.
+            {"dieciseis", "16"},
+            // Mixed case with NFD accent
+            {"DIECISE\u0301IS", "16"},
+            // NFD form of "veintiséis"
+            {"veintise\u0301is", "26"},
+            // Standard NFC form should still work
+            {"diecis\u00e9is", "16"},
+        };
+
+        doParsingTest(formatter, lpTestData, true);
     }
 
     /** Perform a simple spot check on the French spellout rules */
@@ -484,6 +500,8 @@ public class RbnfTest extends CoreTestFmwk {
 
         String[][] testDataLenient = {
             {"trente-et-un", "31"},
+            {"trente  et  un", "31"},
+            {"TRENTE ET UN", "31"},
             {"un cent quatre vingt dix huit", "198"},
         };
 
@@ -1469,6 +1487,7 @@ public class RbnfTest extends CoreTestFmwk {
      *      public boolean equals(Object that)
      */
     @Test
+    @SuppressWarnings("SelfEquals")
     public void TestEquals() {
         // Tests when "if (!(that instanceof RuleBasedNumberFormat))" is true
         RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat("dummy");
@@ -2300,6 +2319,62 @@ public class RbnfTest extends CoreTestFmwk {
         if (result.longValue() != 10000000) {
             // It better not be 10!
             errln("parse got " + result.longValue() + " instead of 10000000");
+        }
+    }
+
+    @Test
+    public void TestTurkishSpellout() {
+        Locale locale = new Locale("tr");
+        RuleBasedNumberFormat formatter =
+                new RuleBasedNumberFormat(locale, RuleBasedNumberFormat.SPELLOUT);
+
+        String[][] testData = {
+            {"2", "iki"},
+            {"6", "alt\u0131"},
+        };
+
+        doTest(formatter, testData, true);
+
+        String[][] lpTestData = {
+            {"iki", "2"},
+            {"iK\u0130", "2"},
+            {"\u0130ki", "2"},
+            {"\u0130K\u0130", "2"},
+            {"alt\u0131", "6"},
+            {"ALTI", "6"},
+        };
+
+        doParsingTest(formatter, lpTestData, true);
+    }
+
+    @Test
+    public void Test23407NullDereferenceREAD() {
+        // This is "garbage" from a fuzzer run. We test that the code does not crash.
+        String fuzzstr = "x0x:>%䀾>Ā;%䀾:>;>;;<0<<>";
+        try {
+            RuleBasedNumberFormat rbfmt = new RuleBasedNumberFormat(fuzzstr, Locale.US);
+            rbfmt.parse(fuzzstr);
+        } catch (IllegalArgumentException | ParseException e) {
+            // Expected exception or parse failure is fine, but not others like NPE.
+        }
+    }
+
+    @Test
+    public void TestNumeratorSubstitutionOverflow() {
+        // This test case comes from a fuzzer (Bug 471607891).
+        // The goal is to make sure that the code does not loop infinitely or throw unexpected
+        // exceptions (like NullPointerException) with invalid/extreme inputs,
+        // rather than looking for a particular result value.
+        String rulesStr =
+                "> \u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+                        + "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+                        + "\u0001a;x0x:>%a>a;%a:a;>;\u00024<;<<<a\u0089;"
+                        + "\u0010a\u0000\u0300<<<\u0003>;\u0000;\u001faz>;a;>;\u00024<;<<<Ya";
+        try {
+            RuleBasedNumberFormat rbfmt = new RuleBasedNumberFormat(rulesStr, Locale.US);
+            rbfmt.parse(rulesStr);
+        } catch (IllegalArgumentException | ParseException e) {
+            // Expected exception or parse failure is fine, but not others like NPE.
         }
     }
 }

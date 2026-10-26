@@ -200,7 +200,7 @@ da{
             "belizisk dollar",
         }
         CAD{
-            "CA$",
+            "CAD",
             "canadisk dollar",
         }
         CDF{
@@ -924,7 +924,7 @@ da{
             "ugandisk shilling",
         }
         USD{
-            "US$",
+            "USD",
             "amerikansk dollar",
         }
         USN{
@@ -2038,10 +2038,6 @@ da{
             one{"østkaribisk dollar"}
             other{"østkaribiske dollar"}
         }
-        XCG{
-            one{"caribiske gylden"}
-            other{"caribiske gylden"}
-        }
         XFO{
             one{"Fransk guldfranc"}
             other{"Franske guldfranc"}
@@ -2105,10 +2101,6 @@ da{
         ZWD{
             one{"Zimbabwisk dollar (1980–2008)"}
             other{"Zimbabwiske dollar (1980–2008)"}
-        }
-        ZWG{
-            one{"Zimbabwe Gold"}
-            other{"Zimbabwe Gold"}
         }
         ZWL{
             one{"Zimbabwisk dollar (2009)"}

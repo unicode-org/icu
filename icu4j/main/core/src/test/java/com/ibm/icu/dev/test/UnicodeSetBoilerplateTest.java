@@ -11,11 +11,12 @@ package com.ibm.icu.dev.test;
 import com.ibm.icu.text.UnicodeSet;
 import java.util.List;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 /** Moved from UnicodeMapTest */
+@RunWith(JUnit4.class)
 public class UnicodeSetBoilerplateTest extends TestBoilerplate<UnicodeSet> {
-
-    public void TestUnicodeSetBoilerplate() throws Exception {}
 
     @Test
     public void test() throws Exception {

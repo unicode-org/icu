@@ -75,15 +75,6 @@ tok{
             }
             dayNames{
                 format{
-                    narrow{
-                        "7",
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                    }
                     wide{
                         "suno esun #7",
                         "suno esun #1",
@@ -151,9 +142,6 @@ tok{
                 }
             }
         }
-        day-narrow{
-            dn{"suno"}
-        }
         day-short{
             dn{"suno"}
         }
@@ -203,9 +191,6 @@ tok{
                     other{"tenpo mun pini {0}"}
                 }
             }
-        }
-        month-narrow{
-            dn{"mun"}
         }
         month-short{
             dn{"mun"}
@@ -261,9 +246,6 @@ tok{
                 }
             }
         }
-        week-narrow{
-            dn{"esun"}
-        }
         week-short{
             dn{"esun"}
         }
@@ -282,9 +264,6 @@ tok{
                     other{"tenpo sike pini {0}"}
                 }
             }
-        }
-        year-narrow{
-            dn{"sike"}
         }
         year-short{
             dn{"sike"}

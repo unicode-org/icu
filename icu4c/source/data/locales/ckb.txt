@@ -17,6 +17,12 @@ ckb{
                 plusSign{"‏+"}
             }
         }
+        arabext{
+            patterns{
+                currencyFormat{"#,##0.00 ¤"}
+                percentFormat{"#,##0 %"}
+            }
+        }
         default{"arab"}
         latn{
             symbols{
@@ -244,8 +250,45 @@ ckb{
                 }
             }
         }
+        islamic{
+            monthNames{
+                format{
+                    wide{
+                        "موحەرەم",
+                        "سەفەر",
+                        "رەبیعی یەکەم",
+                        "ڕەبیعی دووەم",
+                        "جەمادی یەکەم",
+                        "جەمادی دووەم",
+                        "ڕەجەب",
+                        "شەعبان",
+                        "ڕەمەزان",
+                        "شەوال",
+                        "زولقەعدە",
+                        "زولحجە",
+                    }
+                }
+            }
+        }
+    }
+    fields{
+        era{
+            dn{"سەردەم"}
+        }
+        year-short{
+            relative{
+                "-1"{"ساڵی پێشوو"}
+                "0"{"ئەم ساڵ"}
+                "1"{"ساڵی داهاتوو"}
+            }
+        }
     }
     layout{
         characters{"right-to-left"}
+    }
+    measurementSystemNames{
+        UK{"بەڕیتانی"}
+        US{"ئەمەریکی"}
+        metric{"مەتریک"}
     }
 }

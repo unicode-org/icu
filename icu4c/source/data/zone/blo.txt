@@ -61,7 +61,7 @@ blo{
             ec{"Jibutii"}
         }
         "Africa:Douala"{
-            ec{"Ɖuwalaa"}
+            ec{"Ɖuwala"}
         }
         "Africa:El_Aaiun"{
             ec{"Ɛl Ayun"}
@@ -111,9 +111,6 @@ blo{
         "Africa:Lusaka"{
             ec{"Lusakaa"}
         }
-        "Africa:Malabo"{
-            ec{"Malaboo"}
-        }
         "Africa:Maputo"{
             ec{"Maputoo"}
         }
@@ -148,7 +145,7 @@ blo{
             ec{"Pɔrto Nofoo"}
         }
         "Africa:Sao_Tome"{
-            ec{"Saotome kampá"}
+            ec{"Saotomee kampá"}
         }
         "Africa:Tripoli"{
             ec{"Tripolii"}
@@ -202,7 +199,7 @@ blo{
             ec{"Asunsiyɔn"}
         }
         "America:Bahia"{
-            ec{"Bahiyaa"}
+            ec{"Bahiiya"}
         }
         "America:Bahia_Banderas"{
             ec{"Bahiiya ɖe Banɖeraasɩ"}
@@ -280,7 +277,7 @@ blo{
             ec{"Kuyabaa"}
         }
         "America:Curacao"{
-            ec{"Kurasaawu"}
+            ec{"Kurasawuu"}
         }
         "America:Danmarkshavn"{
             ec{"Ɖanǝmarkɩhaʊn"}
@@ -478,7 +475,7 @@ blo{
             ec{"Sɛnta, Nɔɔr Ɖakoota"}
         }
         "America:North_Dakota:New_Salem"{
-            ec{"Niu Salɛm, Nɔɔr Ɖakota"}
+            ec{"Niu Salɛm, Nɔɔr Ɖakoota"}
         }
         "America:Ojinaga"{
             ec{"Ojinaaga"}
@@ -598,7 +595,7 @@ blo{
             ec{"Ɖimɔn Ɖirfil"}
         }
         "Antarctica:Macquarie"{
-            ec{"Makarii"}
+            ec{"Makarii kaAtukǝltǝna"}
         }
         "Antarctica:Mawson"{
             ec{"Mɔsɔn"}
@@ -922,7 +919,7 @@ blo{
             ec{"Linɖeman"}
         }
         "Australia:Lord_Howe"{
-            ec{"Lɔrɖ Hoo"}
+            ec{"Lɔrɖ Hoo kaAtukǝltǝna"}
         }
         "Australia:Melbourne"{
             ec{"Mɛlbɔrn"}
@@ -981,7 +978,6 @@ blo{
         }
         "Europe:Dublin"{
             ec{"Ɖɔblɛŋ"}
-            ld{"Irlanɖ kaakɔŋkɔŋɔ̀"}
         }
         "Europe:Gibraltar"{
             ec{"Gibraltaa"}
@@ -1018,7 +1014,6 @@ blo{
         }
         "Europe:London"{
             ec{"Lɔnɖɔn"}
-            ld{"Gagɛɛshɩtǝna kaakɔŋkɔŋɔ̀ gafʊbaka"}
         }
         "Europe:Luxembourg"{
             ec{"Lusɛmbuur"}
@@ -1120,10 +1115,10 @@ blo{
             ec{"Shagɔs"}
         }
         "Indian:Christmas"{
-            ec{"Nowɛl"}
+            ec{"Nowɛl kaAtukǝltǝna"}
         }
         "Indian:Cocos"{
-            ec{"Kokoos"}
+            ec{"Kokoos kaBʊtukǝltǝna"}
         }
         "Indian:Comoro"{
             ec{"Komoroo"}
@@ -1156,7 +1151,7 @@ blo{
             ec{"Bugɛɛŋfil"}
         }
         "Pacific:Chatham"{
-            ec{"Shatam"}
+            ec{"Shatam kaBʊtukǝltǝna"}
         }
         "Pacific:Easter"{
             ec{"Ista"}
@@ -1165,7 +1160,7 @@ blo{
             ec{"Efatee"}
         }
         "Pacific:Enderbury"{
-            ec{"Kantɔn"}
+            ec{"Kantɔn kaAtukǝltǝna"}
         }
         "Pacific:Fakaofo"{
             ec{"Fakawofoo"}
@@ -1198,7 +1193,7 @@ blo{
             ec{"Majuroo"}
         }
         "Pacific:Marquesas"{
-            ec{"Markesas"}
+            ec{"Markesas kaBʊtukǝltǝna"}
         }
         "Pacific:Midway"{
             ec{"Miɖwee"}
@@ -1210,7 +1205,7 @@ blo{
             ec{"Niwuye"}
         }
         "Pacific:Norfolk"{
-            ec{"Nɔrfook"}
+            ec{"Nɔrfook kaAtukǝltǝna"}
         }
         "Pacific:Noumea"{
             ec{"Numeya"}
@@ -1222,10 +1217,10 @@ blo{
             ec{"Palawoo"}
         }
         "Pacific:Pitcairn"{
-            ec{"Pɩtkɛɛn"}
+            ec{"Pɩtkɛɛn kaBʊtukǝltǝna"}
         }
         "Pacific:Ponape"{
-            ec{"Poonpee"}
+            ec{"Poonpei"}
         }
         "Pacific:Port_Moresby"{
             ec{"Pɔɔr Mɔrɛsbii"}
@@ -1249,10 +1244,15 @@ blo{
             ec{"Cuuk"}
         }
         "Pacific:Wake"{
-            ec{"Week"}
+            ec{"Week kaAtukǝltǝna"}
         }
         "Pacific:Wallis"{
-            ec{"Walis"}
+            ec{"Walis na Futuna"}
+        }
+        "meta:Acre"{
+            ld{"Akrǝ kaakɔŋkɔŋɔ̀ gafʊbaka"}
+            lg{"Akrǝ kaakɔŋkɔŋɔ̀"}
+            ls{"Akrǝ kaakɔŋkɔŋɔ̀ ɖeiɖei"}
         }
         "meta:Afghanistan"{
             ls{"Afganistan kaakɔŋkɔŋɔ̀"}
@@ -1375,6 +1375,10 @@ blo{
             lg{"Brasiliya kaakɔŋkɔŋɔ̀"}
             ls{"Brasiliya kaakɔŋkɔŋɔ̀ ɖeiɖei"}
         }
+        "meta:British"{
+            ld{"Gagɛɛshɩtǝna kaakɔŋkɔŋɔ̀ gafʊbaka"}
+            lg{"Gagɛɛshɩtǝna kaakɔŋkɔŋɔ̀"}
+        }
         "meta:Brunei"{
             ls{"Brunɛɩ kaakɔŋkɔŋɔ̀"}
         }
@@ -1491,6 +1495,11 @@ blo{
         "meta:Gilbert_Islands"{
             ls{"Jilbɛɛr kaBʊtukǝltǝna kaakɔŋkɔŋɔ̀"}
         }
+        "meta:Greenland"{
+            ld{"Grinlanɖ kaakɔŋkɔŋɔ̀ gafʊbaka"}
+            lg{"Grinlanɖ kaakɔŋkɔŋɔ̀"}
+            ls{"Grinlanɖ kaakɔŋkɔŋɔ̀ ɖeiɖei"}
+        }
         "meta:Greenland_Eastern"{
             ld{"Grinlanɖ gajakalaŋ kaakɔŋkɔŋɔ̀ gafʊbaka"}
             lg{"Grinlanɖ gajakalaŋ kaakɔŋkɔŋɔ̀"}
@@ -1501,9 +1510,6 @@ blo{
             lg{"Grinlanɖ gɩteŋshilelaŋ kaakɔŋkɔŋɔ̀"}
             ls{"Grinlanɖ gɩteŋshilelaŋ kaakɔŋkɔŋɔ̀ ɖeiɖei"}
         }
-        "meta:Guam"{
-            ls{"Guwam kaakɔŋkɔŋɔ̀"}
-        }
         "meta:Gulf"{
             ls{"Gɔlf kaakɔŋkɔŋɔ̀"}
         }
@@ -1511,7 +1517,7 @@ blo{
             ls{"Guyanaa kaakɔŋkɔŋɔ̀"}
         }
         "meta:Hawaii"{
-            ls{"Awayɩɩ n’Alewutii kaakɔŋkɔŋɔ̀ ɖeiɖei"}
+            ls{"Awayɩɩ kaakɔŋkɔŋɔ̀ ɖeiɖei"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"Awayɩɩ n’Alewutii kaakɔŋkɔŋɔ̀ gafʊbaka"}
@@ -1551,6 +1557,10 @@ blo{
             lg{"Iraŋ kaakɔŋkɔŋɔ̀"}
             ls{"Iraŋ kaakɔŋkɔŋɔ̀ ɖeiɖei"}
         }
+        "meta:Irish"{
+            ld{"Irlanɖ kaakɔŋkɔŋɔ̀ deidei"}
+            lg{"Irlanɖ kaakɔŋkɔŋɔ̀"}
+        }
         "meta:Irkutsk"{
             ld{"Irkut kaakɔŋkɔŋɔ̀ gafʊbaka"}
             lg{"Irkut kaakɔŋkɔŋɔ̀"}
@@ -1565,6 +1575,11 @@ blo{
             ld{"Japaŋ kaakɔŋkɔŋɔ̀ gafʊbaka"}
             lg{"Japaŋ kaakɔŋkɔŋɔ̀"}
             ls{"Japaŋ kaakɔŋkɔŋɔ̀ ɖeiɖei"}
+        }
+        "meta:Kamchatka"{
+            ld{"Kamshatɩka kaakɔŋkɔŋɔ̀ gafʊbaka"}
+            lg{"Kamshatɩka kaakɔŋkɔŋɔ̀"}
+            ls{"Kamshatɩka kaakɔŋkɔŋɔ̀ ɖeiɖei"}
         }
         "meta:Kazakhstan"{
             ls{"Kasastan kaakɔŋkɔŋɔ̀"}
@@ -1591,9 +1606,6 @@ blo{
         "meta:Kyrgystan"{
             ls{"Kirgistan kaakɔŋkɔŋɔ̀"}
         }
-        "meta:Lanka"{
-            ls{"Siri Laŋkaa kaakɔŋkɔŋɔ̀"}
-        }
         "meta:Line_Islands"{
             ls{"Laɩn kaBʊtukǝltǝna kaakɔŋkɔŋɔ̀"}
         }
@@ -1601,11 +1613,6 @@ blo{
             ld{"Lɔrɖ Hoo kaakɔŋkɔŋɔ̀ gafʊbaka"}
             lg{"Lɔrɖ Hoo kaakɔŋkɔŋɔ̀"}
             ls{"Lɔrɖ Hoo kaakɔŋkɔŋɔ̀ ɖeiɖei"}
-        }
-        "meta:Macau"{
-            ld{"akawoo kaakɔŋkɔŋɔ̀ gafʊbaka"}
-            lg{"Makawoo kaakɔŋkɔŋɔ̀"}
-            ls{"Makawoo kaakɔŋkɔŋɔ̀ ɖeiɖei"}
         }
         "meta:Magadan"{
             ld{"Magaɖan kaakɔŋkɔŋɔ̀ gafʊbaka"}
@@ -1684,9 +1691,6 @@ blo{
             lg{"Fɛrnanɖo ɖe Norɔnya kaakɔŋkɔŋɔ̀"}
             ls{"Fɛrnanɖo ɖe Norɔnya kaakɔŋkɔŋɔ̀ ɖeiɖei"}
         }
-        "meta:North_Mariana"{
-            ls{"Mariyan kǝbʊtukǝltǝna gʊnyɩpɛnɛlaŋ kaakɔŋkɔŋɔ̀"}
-        }
         "meta:Novosibirsk"{
             ld{"Nofosibirk kaakɔŋkɔŋɔ̀ gafʊbaka"}
             lg{"Nofosibirk kaakɔŋkɔŋɔ̀"}
@@ -1751,9 +1755,12 @@ blo{
             lg{"Sakalin kaakɔŋkɔŋɔ̀"}
             ls{"Sakalin kaakɔŋkɔŋɔ̀ ɖeiɖei"}
         }
+        "meta:Samara"{
+            ld{"Samara kaakɔŋkɔŋɔ̀ gafʊbaka"}
+            lg{"Samara kaakɔŋkɔŋɔ̀"}
+            ls{"Samara kaakɔŋkɔŋɔ̀ ɖeiɖei"}
+        }
         "meta:Samoa"{
-            ld{"Samowa Amalɩka kaja kaakɔŋkɔŋɔ̀ gafʊbaka"}
-            lg{"Samowa Amalɩka kaja kaakɔŋkɔŋɔ̀"}
             ls{"Samowa Amalɩka kaja kaakɔŋkɔŋɔ̀ ɖeiɖei"}
         }
         "meta:Seychelles"{
@@ -1796,6 +1803,11 @@ blo{
         "meta:Truk"{
             ls{"Cuuk kaakɔŋkɔŋɔ̀"}
         }
+        "meta:Turkey"{
+            ld{"Turkii kaakɔŋkɔŋɔ gafʊbaka"}
+            lg{"Turkii kaakɔŋkɔŋɔ̀"}
+            ls{"Turkii kaakɔŋkɔŋɔ̀ ɖeiɖei"}
+        }
         "meta:Turkmenistan"{
             ld{"Turkmenistan kaakɔŋkɔŋɔ̀ gafʊbaka"}
             lg{"Turkmenistan kaakɔŋkɔŋɔ̀"}
@@ -1808,6 +1820,9 @@ blo{
             ld{"Uruguwee kaakɔŋkɔŋɔ̀ gafʊbaka"}
             lg{"Uruguwee kaakɔŋkɔŋɔ̀"}
             ls{"Uruguwee kaakɔŋkɔŋɔ̀ ɖeiɖei"}
+        }
+        "meta:Urumqi"{
+            ls{"Urumkii kaakɔŋkɔŋɔ̀"}
         }
         "meta:Uzbekistan"{
             ld{"Usbeekistan kaakɔŋkɔŋɔ̀ gafʊbaka"}
@@ -1855,7 +1870,6 @@ blo{
             ls{"Yukɔn kaakɔŋkɔŋɔ̀"}
         }
         gmtFormat{"{0} Gk"}
-        gmtZeroFormat{"Gk"}
         regionFormat{"{0} kaakɔŋkɔŋɔ̀"}
         regionFormatDaylight{"{0} kaakɔŋkɔŋɔ̀ gafʊbaka"}
         regionFormatStandard{"{0} kaakɔŋkɔŋɔ̀ ɖeiɖei"}

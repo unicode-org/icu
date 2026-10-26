@@ -164,13 +164,14 @@ class TransliteratorParser {
     private static final char ALT_FUNCTION = '\u2206'; // Increment (~Greek Capital Delta)
 
     // Special characters disallowed at the top level
-    private static UnicodeSet ILLEGAL_TOP = new UnicodeSet("[\\)]");
+    private static final UnicodeSet ILLEGAL_TOP = new UnicodeSet("[\\)]").freeze();
 
     // Special characters disallowed within a segment
-    private static UnicodeSet ILLEGAL_SEG = new UnicodeSet("[\\{\\}\\|\\@]");
+    private static final UnicodeSet ILLEGAL_SEG = new UnicodeSet("[\\{\\}\\|\\@]").freeze();
 
     // Special characters disallowed within a function argument
-    private static UnicodeSet ILLEGAL_FUNC = new UnicodeSet("[\\^\\(\\.\\*\\+\\?\\{\\}\\|\\@]");
+    private static final UnicodeSet ILLEGAL_FUNC =
+            new UnicodeSet("[\\^\\(\\.\\*\\+\\?\\{\\}\\|\\@]").freeze();
 
     // ----------------------------------------------------------------------
     // class ParseData
@@ -187,6 +188,22 @@ class TransliteratorParser {
         @Override
         public char[] lookup(String name) {
             return variableNames.get(name);
+        }
+
+        @Override
+        public UnicodeSet lookupSet(String name) {
+            final char[] value = variableNames.get(name);
+            if (value == null || value.length != 1) {
+                return null;
+            }
+            final int i = value[0] - curData.variablesBase;
+            if (0 <= i && i < variablesVector.size()) {
+                final var result = variablesVector.get(i);
+                if (result instanceof UnicodeSet) {
+                    return (UnicodeSet) result;
+                }
+            }
+            return null;
         }
 
         /** Implement SymbolTable API. */
@@ -427,12 +444,10 @@ class TransliteratorParser {
                 }
                 // HALF_ENDERS is all chars that end a rule half: "<>=;"
                 if (HALF_ENDERS.indexOf(c) >= 0) {
-                    /// CLOVER:OFF
                     // isSegment is always false
                     if (isSegment) {
                         syntaxError("Unclosed segment", rule, start);
                     }
-                    /// CLOVER:ON
                     break main;
                 }
                 if (anchorEnd) {
@@ -649,14 +664,12 @@ class TransliteratorParser {
                         //  $v+     matches  xyxyxy if $v == xy
                         //  (seg)+  matches  segsegseg
                         {
-                            /// CLOVER:OFF
                             // isSegment is always false
                             if (isSegment && buf.length() == bufStart) {
                                 // The */+ immediately follows '('
                                 syntaxError("Misplaced quantifier", rule, start);
                                 break;
                             }
-                            /// CLOVER:ON
 
                             int qstart, qlimit;
                             // The */+ follows an isolated character or quote
@@ -1297,28 +1310,20 @@ class TransliteratorParser {
     }
 
     // (The following method is part of an unimplemented feature.
-    // Remove this clover pragma after the feature is implemented.
     // 2003-06-11 ICU 2.6 Alan)
-    /// CLOVER:OFF
     /** Set the maximum backup to 'backup', in response to a pragma statement. */
     private void pragmaMaximumBackup(int backup) {
         // TODO Finish
         throw new IllegalIcuArgumentException("use maximum backup pragma not implemented yet");
     }
 
-    /// CLOVER:ON
-
     // (The following method is part of an unimplemented feature.
-    // Remove this clover pragma after the feature is implemented.
     // 2003-06-11 ICU 2.6 Alan)
-    /// CLOVER:OFF
     /** Begin normalizing all rules using the given mode, in response to a pragma statement. */
     private void pragmaNormalizeRules(Normalizer.Mode mode) {
         // TODO Finish
         throw new IllegalIcuArgumentException("use normalize rules pragma not implemented yet");
     }
-
-    /// CLOVER:ON
 
     /**
      * Return true if the given rule looks like a pragma.

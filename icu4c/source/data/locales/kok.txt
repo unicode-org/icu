@@ -4,9 +4,9 @@
 kok{
     AuxExemplarCharacters{"[\u200C\u200D ॄ]"}
     ExemplarCharacters{
-        "[़ ० १ २ ३ ४ ५ ६ ७ ८ ९ ॐ ं ँ ः अ आ इ ई उ ऊ ऋ ऌ ऍ ए ऐ ऑ ओ औ क{क़} ख{ख़} ग{ग़}"
-        " घ ङ च छ ज{ज़} झ ञ ट ठ ड{ड़} ढ{ढ़} ण त थ द ध न प फ{फ़} ब भ म य{य़} र ल व श ष"
-        " स ह ळ ऽ ा ि ी ु ू ृ ॅ े ै ॉ ो ौ ्]"
+        "[़ ॐ ं ँ ः अ आ इ ई उ ऊ ऋ ऌ ऍ ए ऐ ऑ ओ औ क{क़} ख{ख़} ग{ग़} घ ङ च छ ज{ज़} झ ञ ट"
+        " ठ ड{ड़} ढ{ढ़} ण त थ द ध न प फ{फ़} ब भ म य{य़} र ल व श ष स ह ळ ऽ ा ि ी ु ू ृ"
+        " ॅ े ै ॉ ो ौ ्]"
     }
     ExemplarCharactersIndex{
         "[अ आ इ ई उ ऊ ऋ ऌ ऍ ए ऐ ऑ ओ औ क ख ग घ ङ च छ ज झ ञ ट ठ ड ढ ण त थ द ध न प फ ब भ"
@@ -109,7 +109,6 @@ kok{
             patterns{
                 accountingFormat%alphaNextToNumber{"¤ #,##,##0.00"}
                 accountingFormat%noCurrency{"#,##,##0.00"}
-                currencyFormat{"¤#,##,##0.00"}
                 currencyFormat%alphaNextToNumber{"¤ #,##,##0.00"}
                 currencyFormat%noCurrency{"#,##,##0.00"}
             }
@@ -615,7 +614,10 @@ kok{
         }
         minimalPairs{
             ordinal{
+                few{"{0} व्या उजव्यान घेवचें."}
+                one{"{0} वी उजवे वटेन घेयात."}
                 other{"{0}व्या उजव्या वाटेन वच."}
+                two{"{0} आनी उजवे वटेन घेयात."}
             }
             plural{
                 one{"{0} वांटो"}
@@ -1276,6 +1278,8 @@ kok{
                 yMEd{"d-M-y, E"}
                 yMMM{"MMM y"}
                 yMMMM{"MMMM, y"}
+                yMMMMEd{"y MMMM d, EEE"}
+                yMMMMd{"d MMMM, y"}
                 yMMMd{"d MMM, y"}
                 yMd{"d-M-y"}
                 yw{
@@ -1343,13 +1347,6 @@ kok{
                         morning1{"सकाळ"}
                         night1{"रात"}
                     }
-                    narrow{
-                        afternoon1{"दनपार"}
-                        evening1{"सांज"}
-                        midnight{"मध्यान"}
-                        morning1{"सकाळ"}
-                        night1{"रात"}
-                    }
                     wide{
                         afternoon1{"दनपारां"}
                         evening1{"सांजे"}
@@ -1359,20 +1356,6 @@ kok{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        afternoon1{"दनपार"}
-                        evening1{"सांज"}
-                        midnight{"मध्यान"}
-                        morning1{"सकाळ"}
-                        night1{"रात"}
-                    }
-                    narrow{
-                        afternoon1{"दनपार"}
-                        evening1{"सांज"}
-                        midnight{"मध्यान"}
-                        morning1{"सकाळ"}
-                        night1{"रात"}
-                    }
                     wide{
                         afternoon1{"दनपारां"}
                         am{"सकाळीं"}
@@ -1541,20 +1524,6 @@ kok{
                         "नोव्हें",
                         "डिसें",
                     }
-                    narrow{
-                        "जा",
-                        "फे",
-                        "मा",
-                        "ए",
-                        "मे",
-                        "जू",
-                        "जु",
-                        "ऑ",
-                        "स",
-                        "ऑ",
-                        "नो",
-                        "डि",
-                    }
                     wide{
                         "जानेवारी",
                         "फेब्रुवारी",
@@ -1663,6 +1632,11 @@ kok{
                         "फाल्गुन",
                     }
                 }
+            }
+        }
+        iso8601{
+            availableFormats{
+                Bh{"h वाजतां B"}
             }
         }
     }
@@ -1785,14 +1759,6 @@ kok{
                 }
             }
         }
-        day-short{
-            relativeTime{
-                future{
-                    one{"{0} दिसान"}
-                    other{"{0} दिसानीं"}
-                }
-            }
-        }
         dayOfYear{
             dn{"वर्साचो दीस"}
         }
@@ -1826,10 +1792,6 @@ kok{
                 "1"{"फुडलो सुक्र"}
             }
             relativeTime{
-                future{
-                    one{"{0} सुक्रारान"}
-                    other{"{0} सुक्रारानीं"}
-                }
                 past{
                     one{"{0} सुक्र आदीं"}
                     other{"{0} सुक्र आदीं"}
@@ -1843,10 +1805,6 @@ kok{
                 "1"{"फुडलो सुक्र."}
             }
             relativeTime{
-                future{
-                    one{"{0} सुक्रारान"}
-                    other{"{0} सुक्रारानीं"}
-                }
                 past{
                     one{"{0} सुक्र. आदीं"}
                     other{"{0} सुक्र. आदीं"}
@@ -1878,18 +1836,6 @@ kok{
                 past{
                     one{"{0}वर आदीं"}
                     other{"{0}वरां आदीं"}
-                }
-            }
-        }
-        hour-short{
-            relativeTime{
-                future{
-                    one{"{0} वरान"}
-                    other{"{0} वरांनीं"}
-                }
-                past{
-                    one{"{0} वर आदीं"}
-                    other{"{0} वरां आदीं"}
                 }
             }
         }
@@ -1963,10 +1909,6 @@ kok{
                 "1"{"फुडलो सो"}
             }
             relativeTime{
-                future{
-                    one{"{0} सोमारान"}
-                    other{"{0} सोमारानीं"}
-                }
                 past{
                     one{"{0} सो आदीं"}
                     other{"{0} सो आदीं"}
@@ -1980,10 +1922,6 @@ kok{
                 "1"{"फुडलो सोम."}
             }
             relativeTime{
-                future{
-                    one{"{0} सोमारान"}
-                    other{"{0} सोमारानीं"}
-                }
                 past{
                     one{"{0} सोम. आदीं"}
                     other{"{0} सोम. आदीं"}
@@ -2032,10 +1970,6 @@ kok{
                 "1"{"फुडलो म्ह."}
             }
             relativeTime{
-                future{
-                    one{"{0} म्हयन्यान"}
-                    other{"{0} म्हयन्यानीं"}
-                }
                 past{
                     one{"{0} म्ह. आदीं"}
                     other{"{0} म्ह. आदीं"}
@@ -2084,10 +2018,6 @@ kok{
                 "1"{"फुडलें तिम्ह."}
             }
             relativeTime{
-                future{
-                    one{"{0} तिम्हयनाळ्यान"}
-                    other{"{0} तिम्हयनाळ्यांनीं"}
-                }
                 past{
                     one{"{0} तिम्ह. आदीं"}
                     other{"{0} तिम्ह. आदीं"}
@@ -2118,10 +2048,6 @@ kok{
                 "1"{"फुडलो शे"}
             }
             relativeTime{
-                future{
-                    one{"{0} शेनवारान"}
-                    other{"{0} शेनवारानीं"}
-                }
                 past{
                     one{"{0} शे आदीं"}
                     other{"{0} शे आदीं"}
@@ -2135,10 +2061,6 @@ kok{
                 "1"{"फुडलो शेन."}
             }
             relativeTime{
-                future{
-                    one{"{0} शेनवारान"}
-                    other{"{0} शेनवारानीं"}
-                }
                 past{
                     one{"{0} शेन. आदीं"}
                     other{"{0} शेन. आदीं"}
@@ -2175,10 +2097,6 @@ kok{
         }
         second-short{
             relativeTime{
-                future{
-                    one{"{0} सॅकंडान"}
-                    other{"{0} सॅकंडानीं"}
-                }
                 past{
                     one{"{0} सॅक. आदीं"}
                     other{"{0} सॅक. आदीं"}
@@ -2209,10 +2127,6 @@ kok{
                 "1"{"फुडलो आ"}
             }
             relativeTime{
-                future{
-                    one{"{0} आयतारान"}
-                    other{"{0} आयतारानीं"}
-                }
                 past{
                     one{"{0} आ आदीं"}
                     other{"{0} आ आदीं"}
@@ -2226,10 +2140,6 @@ kok{
                 "1"{"फुडलो आयत"}
             }
             relativeTime{
-                future{
-                    one{"{0} आयतारान"}
-                    other{"{0} आयतारानीं"}
-                }
                 past{
                     one{"{0} आयत. आदीं"}
                     other{"{0} आयत आदीं"}
@@ -2260,10 +2170,6 @@ kok{
                 "1"{"फुडलो ब्रे"}
             }
             relativeTime{
-                future{
-                    one{"{0} बिरेस्तारान"}
-                    other{"{0} बिरेस्तारानीं"}
-                }
                 past{
                     one{"{0} ब्रे आदीं"}
                     other{"{0} ब्रे आदीं"}
@@ -2277,10 +2183,6 @@ kok{
                 "1"{"फुडलो ब्रेस्त."}
             }
             relativeTime{
-                future{
-                    one{"{0} बिरेस्तारान"}
-                    other{"{0} बिरेस्तारानीं"}
-                }
                 past{
                     one{"{0} ब्रेस्त. आदीं"}
                     other{"{0} ब्रेस्त. आदीं"}
@@ -2311,10 +2213,6 @@ kok{
                 "1"{"फुडलो मं"}
             }
             relativeTime{
-                future{
-                    one{"{0} मंगळारान"}
-                    other{"{0} मंगळारानीं"}
-                }
                 past{
                     one{"{0} मं आदीं"}
                     other{"{0} मं आदीं"}
@@ -2328,10 +2226,6 @@ kok{
                 "1"{"फुडलो मंग."}
             }
             relativeTime{
-                future{
-                    one{"{0} मंगळारान"}
-                    other{"{0} मंगळारानीं"}
-                }
                 past{
                     one{"{0} मंग. आदीं"}
                     other{"{0} मंग. आदीं"}
@@ -2362,10 +2256,6 @@ kok{
                 "1"{"फुडलो बु"}
             }
             relativeTime{
-                future{
-                    one{"{0} बुधवारान"}
-                    other{"{0} बुधवारानीं"}
-                }
                 past{
                     one{"{0} बु आदीं"}
                     other{"{0} बु आदीं"}
@@ -2379,10 +2269,6 @@ kok{
                 "1"{"फुडलो बुध."}
             }
             relativeTime{
-                future{
-                    one{"{0} बुधवारान"}
-                    other{"{0} बुधवारानीं"}
-                }
                 past{
                     one{"{0} बुध. आदीं"}
                     other{"{0} बुध. आदीं"}
@@ -2426,23 +2312,6 @@ kok{
                 }
             }
         }
-        week-short{
-            relative{
-                "-1"{"फाटलो सप्तक"}
-                "0"{"हो सप्तक"}
-                "1"{"फुडलो सप्तक"}
-            }
-            relativeTime{
-                future{
-                    one{"{0} सप्तकान"}
-                    other{"{0} सप्तकांनीं"}
-                }
-                past{
-                    one{"{0} सप्तक आदीं"}
-                    other{"{0} सप्तकां आदीं"}
-                }
-            }
-        }
         weekOfMonth{
             dn{"म्हयन्यातलो सप्तक"}
         }
@@ -2452,17 +2321,11 @@ kok{
         weekdayOfMonth{
             dn{"म्हयन्यांत दीसाचो प्रसंग"}
         }
-        weekdayOfMonth-narrow{
-            dn{"म्हयन्यांत दीसाचो प्रसंग"}
-        }
-        weekdayOfMonth-short{
-            dn{"म्हयन्यांत दीसाचो प्रसंग"}
-        }
         year{
             dn{"वर्स"}
             relative{
                 "-1"{"पोरूं"}
-                "0"{"हें वर्स"}
+                "0"{"औंदू"}
                 "1"{"फुडलें वर्स"}
             }
             relativeTime{
@@ -2479,7 +2342,7 @@ kok{
         year-narrow{
             relative{
                 "-1"{"पोरूं"}
-                "0"{"हें वर्स"}
+                "0"{"औंदू"}
                 "1"{"फुडलें वर्स"}
             }
             relativeTime{
@@ -2496,25 +2359,12 @@ kok{
         year-short{
             relative{
                 "-1"{"पोरूं"}
-                "0"{"हें वर्स"}
+                "0"{"औंदू"}
                 "1"{"फुडलें वर्स"}
-            }
-            relativeTime{
-                future{
-                    one{"{0} वर्सान"}
-                    other{"{0} वर्सांनीं"}
-                }
-                past{
-                    one{"{0} वर्स आदीं"}
-                    other{"{0} वर्सां आदीं"}
-                }
             }
         }
         zone{
             dn{"वेळ झोन"}
-        }
-        zone-narrow{
-            dn{"क्षेत्र"}
         }
         zone-short{
             dn{"क्षेत्र"}
@@ -2525,9 +2375,8 @@ kok{
             2{"{0} वा {1}"}
             end{"{0}, वा {1}"}
         }
-        or-short{
-            2{"{0} or {1}"}
-            end{"{0}, or {1}"}
+        or-narrow{
+            2{"{0} वा {1}"}
         }
         standard-narrow{
             2{"{0}, {1}"}

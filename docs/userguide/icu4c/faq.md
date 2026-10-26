@@ -69,8 +69,8 @@ MSVC compiler. See the [Building ICU4C](./build) page.
 
 #### Can you help me build ICU4C for ...
 
-We can try ... make sure you read the [Building ICU4C](./build) section and also the [ICU
-Data](../icudata.md) section. You might also [searching the icu-support
+We can try ... make sure you read the [Building ICU4C](./build) section and also the
+[ICU Data](../icu_data/index.md) section. You might also [searching the icu-support
 archives](https://icu.unicode.org/contacts), and then posting a question
 there. Additionally, sites such as
 [StackOverflow](http://stackoverflow.com/search?q=icu) may have helpful tips for
@@ -88,8 +88,8 @@ your topic.
 #### What is the ICU binary compatibility policy?
 
 Please see the section on
-[binary compatibility](../design#icu-binary-compatibility)
-in the [design chapter](../design.md).
+[binary compatibility](../icu/design#icu-binary-compatibility)
+in the [design chapter](../icu/design.md).
 
 #### How is ICU licensed?
 
@@ -104,7 +104,7 @@ ICU 1.8.1–ICU 57 and ICU4J 1.3.1–ICU4J 57 are covered by the [ICU
 license](https://github.com/unicode-org/icu/blob/release-57-1/icu4c/LICENSE),
 a simple, permissive non-copyleft free software license, compatible with the GNU
 GPL. The ICU license is identical to the version of the X license that was
-formerly available at <http://www.x.org/Downloads_terms.html> . (This site no
+formerly available at `http://www.x.org/Downloads_terms.html`. (This site no
 longer exists, but can still be retrieved through internet archive services.)
 
 #### Can I use ICU from other languages besides C/C++ and Java?
@@ -120,8 +120,8 @@ upgrade-friendly.
 
 *   **API:** ensure that you are not using draft APIs which may have changed in
     a future release. See the section on
-    [API compatibility](../design#icu-api-compatibility) in the
-    [design chapter](../design.md).
+    [API compatibility](../icu/design#icu-api-compatibility) in the
+    [design chapter](../icu/design.md).
 *   **Unicode:** See the release notes for particular versions of Unicode to
     ensure that your code is not affected by property changes or other
     specification changes.
@@ -133,8 +133,8 @@ upgrade-friendly.
     currencies, types of calendars
 *   **Building/Deploying your Application (ICU4C):** ICU4C usually builds with
     symbol renaming (See:
-    [binary compatibility](../design#icu-binary-compatibility)
-    in the [design chapter](../design.md)). Be sure that you build your
+    [binary compatibility](../icu/design#icu-binary-compatibility)
+    in the [design chapter](../icu/design.md)). Be sure that you build your
     application with the updated ICU header files, so that it will link against
     the current ICU. Also, don't hard-code the names of ICU libraries in your
     build scripts and projects. Where possible, link against just the
@@ -185,8 +185,8 @@ Support List](https://icu.unicode.org/contacts) .
 
 Use the [Data Customizer](https://unicode-org.atlassian.net/browse/ICU-12835)
 or see
-[Customizing ICU's Data Library](../icudata#customizing-icus-data-library)
-in the [ICU Data Management](../icudata.md) chapter of this User's Guide.
+[Customizing ICU's Data Library](../icu_data/index.md#customizing-icus-data-library)
+in the [ICU Data Management](../icu_data/index.md) chapter of this User's Guide.
 
 #### Why am I seeing a small ( only a few K ) instead of a large ( several megabytes ) data shared library (icudt)?
 #### Opening ICU services fails with U_MISSING_RESOURCE_ERROR and u_init() returns failure.
@@ -203,8 +203,8 @@ Studio.
 
 #### Can I add or remove a converter from ICU?
 
-Yes. Please see [Customizing ICU's Data Library](../icudata#customizing-icus-data-library)
-in the [ICU Data Management](../icudata.md) of this User's Guide. You can also
+Yes. Please see [Customizing ICU's Data Library](../icu_data/index.md#customizing-icus-data-library)
+in the [ICU Data Management](../icu_data/index.md) of this User's Guide. You can also
 get extra converters from <https://icu.unicode.org/charts/charset> or use
 the [ICU Data Customizer](https://unicode-org.atlassian.net/browse/ICU-12835)
 tool.
@@ -217,17 +217,7 @@ be using a platform that ICU does not support. If the first two answers do not
 apply to you, then you should send an e-mail to the
 [ICU4C Support List](https://icu.unicode.org/contacts).
 
-Here are some places you can find gmake:
-
-1.  GNU: <http://www.gnu.org/software/make/>
-
-2.  Sun® Source/Binaries: <http://www.sunfreeware.com>
-
-3.  z/OS (OS/390) Source/Binaries:
-    <http://www.ibm.com/servers/eserver/zseries/zos/unix/bpxa1ty1.html#opensrc>
-
-4.  IBM i (OS/400) Source/Binaries:
-    <http://www.ibm.com/servers/enable/site/porting/iseries/overview/gnu_utilities.html>
+Here is one of the places where you can find gmake: <http://www.gnu.org/software/make/>
 
 Due to differences in every platform's make program, we will not support other
 versions of our make files.
@@ -268,8 +258,8 @@ ICU4C (ICU) is written in C and C++, and ICU4J is written in Java™.
 
 #### How are the APIs documented for deprecation?
 
-Please read the [ICU API compatibility](../design#icu-api-compatibility)
-section in the [ICU Design](../design.md) chapter.
+Please read the [ICU API compatibility](../icu/design#icu-api-compatibility)
+section in the [ICU Design](../icu/design.md) chapter.
 
 #### What version of Unicode standard does ICU support?
 
@@ -404,12 +394,12 @@ uses 3 characters to represent that part of the locale. All three parts are
 separated by an underscore "_". For example, US English is "en_US", and German
 in Germany with the Euro symbol is represented as "de_DE_EURO". Traditionally
 the language part of the locale is lowercase, the country is uppercase and the
-variant is uppercase. More details are available from the [Locale
-Chapter](../locale/index.md) of this User's Guide.
+variant is uppercase. More details are available from the
+[Locale Chapter](../locale/index.md) of this User's Guide.
 
 #### How is ICU versioned?
 
-Please read the [ICU Design](../design.md) chapter of the User's Guide.
+Please read the [ICU Design](../icu/design.md) chapter of the User's Guide.
 
 #### What is the relationship between ICU locale data and system locale data?
 
@@ -445,7 +435,7 @@ puts("callMyFunction() Failed!");
 }
 ```
 
-Please see the [ICU Design](../design.md) chapter for details.
+Please see the [ICU Design](../icu/design.md) chapter for details.
 
 #### With calendar classes, why are months 0-based?
 

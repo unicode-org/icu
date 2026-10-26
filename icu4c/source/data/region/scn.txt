@@ -13,7 +13,6 @@ scn{
         014{"Àfrica livantina"}
         015{"Àfrica di tramuntana"}
         017{"Àfrica di menzu"}
-        018{"Àfrica di sciroccu"}
         019{"Mèrichi"}
         021{"Mèrica di tramuntana"}
         029{"Caràibbi"}

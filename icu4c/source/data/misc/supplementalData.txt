@@ -220,1049 +220,6 @@ supplementalData:table(nofallback){
         }
         japanese{
             eras{
-                0{
-                    start:intvector{
-                        645,
-                        6,
-                        19,
-                    }
-                }
-                1{
-                    start:intvector{
-                        650,
-                        2,
-                        15,
-                    }
-                }
-                10{
-                    start:intvector{
-                        729,
-                        8,
-                        5,
-                    }
-                }
-                100{
-                    start:intvector{
-                        1169,
-                        4,
-                        8,
-                    }
-                }
-                101{
-                    start:intvector{
-                        1171,
-                        4,
-                        21,
-                    }
-                }
-                102{
-                    start:intvector{
-                        1175,
-                        7,
-                        28,
-                    }
-                }
-                103{
-                    start:intvector{
-                        1177,
-                        8,
-                        4,
-                    }
-                }
-                104{
-                    start:intvector{
-                        1181,
-                        7,
-                        14,
-                    }
-                }
-                105{
-                    start:intvector{
-                        1182,
-                        5,
-                        27,
-                    }
-                }
-                106{
-                    start:intvector{
-                        1184,
-                        4,
-                        16,
-                    }
-                }
-                107{
-                    start:intvector{
-                        1185,
-                        8,
-                        14,
-                    }
-                }
-                108{
-                    start:intvector{
-                        1190,
-                        4,
-                        11,
-                    }
-                }
-                109{
-                    start:intvector{
-                        1199,
-                        4,
-                        27,
-                    }
-                }
-                11{
-                    start:intvector{
-                        749,
-                        4,
-                        14,
-                    }
-                }
-                110{
-                    start:intvector{
-                        1201,
-                        2,
-                        13,
-                    }
-                }
-                111{
-                    start:intvector{
-                        1204,
-                        2,
-                        20,
-                    }
-                }
-                112{
-                    start:intvector{
-                        1206,
-                        4,
-                        27,
-                    }
-                }
-                113{
-                    start:intvector{
-                        1207,
-                        10,
-                        25,
-                    }
-                }
-                114{
-                    start:intvector{
-                        1211,
-                        3,
-                        9,
-                    }
-                }
-                115{
-                    start:intvector{
-                        1213,
-                        12,
-                        6,
-                    }
-                }
-                116{
-                    start:intvector{
-                        1219,
-                        4,
-                        12,
-                    }
-                }
-                117{
-                    start:intvector{
-                        1222,
-                        4,
-                        13,
-                    }
-                }
-                118{
-                    start:intvector{
-                        1224,
-                        11,
-                        20,
-                    }
-                }
-                119{
-                    start:intvector{
-                        1225,
-                        4,
-                        20,
-                    }
-                }
-                12{
-                    start:intvector{
-                        749,
-                        7,
-                        2,
-                    }
-                }
-                120{
-                    start:intvector{
-                        1227,
-                        12,
-                        10,
-                    }
-                }
-                121{
-                    start:intvector{
-                        1229,
-                        3,
-                        5,
-                    }
-                }
-                122{
-                    start:intvector{
-                        1232,
-                        4,
-                        2,
-                    }
-                }
-                123{
-                    start:intvector{
-                        1233,
-                        4,
-                        15,
-                    }
-                }
-                124{
-                    start:intvector{
-                        1234,
-                        11,
-                        5,
-                    }
-                }
-                125{
-                    start:intvector{
-                        1235,
-                        9,
-                        19,
-                    }
-                }
-                126{
-                    start:intvector{
-                        1238,
-                        11,
-                        23,
-                    }
-                }
-                127{
-                    start:intvector{
-                        1239,
-                        2,
-                        7,
-                    }
-                }
-                128{
-                    start:intvector{
-                        1240,
-                        7,
-                        16,
-                    }
-                }
-                129{
-                    start:intvector{
-                        1243,
-                        2,
-                        26,
-                    }
-                }
-                13{
-                    start:intvector{
-                        757,
-                        8,
-                        18,
-                    }
-                }
-                130{
-                    start:intvector{
-                        1247,
-                        2,
-                        28,
-                    }
-                }
-                131{
-                    start:intvector{
-                        1249,
-                        3,
-                        18,
-                    }
-                }
-                132{
-                    start:intvector{
-                        1256,
-                        10,
-                        5,
-                    }
-                }
-                133{
-                    start:intvector{
-                        1257,
-                        3,
-                        14,
-                    }
-                }
-                134{
-                    start:intvector{
-                        1259,
-                        3,
-                        26,
-                    }
-                }
-                135{
-                    start:intvector{
-                        1260,
-                        4,
-                        13,
-                    }
-                }
-                136{
-                    start:intvector{
-                        1261,
-                        2,
-                        20,
-                    }
-                }
-                137{
-                    start:intvector{
-                        1264,
-                        2,
-                        28,
-                    }
-                }
-                138{
-                    start:intvector{
-                        1275,
-                        4,
-                        25,
-                    }
-                }
-                139{
-                    start:intvector{
-                        1278,
-                        2,
-                        29,
-                    }
-                }
-                14{
-                    start:intvector{
-                        765,
-                        1,
-                        7,
-                    }
-                }
-                140{
-                    start:intvector{
-                        1288,
-                        4,
-                        28,
-                    }
-                }
-                141{
-                    start:intvector{
-                        1293,
-                        8,
-                        5,
-                    }
-                }
-                142{
-                    start:intvector{
-                        1299,
-                        4,
-                        25,
-                    }
-                }
-                143{
-                    start:intvector{
-                        1302,
-                        11,
-                        21,
-                    }
-                }
-                144{
-                    start:intvector{
-                        1303,
-                        8,
-                        5,
-                    }
-                }
-                145{
-                    start:intvector{
-                        1306,
-                        12,
-                        14,
-                    }
-                }
-                146{
-                    start:intvector{
-                        1308,
-                        10,
-                        9,
-                    }
-                }
-                147{
-                    start:intvector{
-                        1311,
-                        4,
-                        28,
-                    }
-                }
-                148{
-                    start:intvector{
-                        1312,
-                        3,
-                        20,
-                    }
-                }
-                149{
-                    start:intvector{
-                        1317,
-                        2,
-                        3,
-                    }
-                }
-                15{
-                    start:intvector{
-                        767,
-                        8,
-                        16,
-                    }
-                }
-                150{
-                    start:intvector{
-                        1319,
-                        4,
-                        28,
-                    }
-                }
-                151{
-                    start:intvector{
-                        1321,
-                        2,
-                        23,
-                    }
-                }
-                152{
-                    start:intvector{
-                        1324,
-                        12,
-                        9,
-                    }
-                }
-                153{
-                    start:intvector{
-                        1326,
-                        4,
-                        26,
-                    }
-                }
-                154{
-                    start:intvector{
-                        1329,
-                        8,
-                        29,
-                    }
-                }
-                155{
-                    start:intvector{
-                        1331,
-                        8,
-                        9,
-                    }
-                }
-                156{
-                    start:intvector{
-                        1334,
-                        1,
-                        29,
-                    }
-                }
-                157{
-                    start:intvector{
-                        1336,
-                        2,
-                        29,
-                    }
-                }
-                158{
-                    start:intvector{
-                        1340,
-                        4,
-                        28,
-                    }
-                }
-                159{
-                    start:intvector{
-                        1346,
-                        12,
-                        8,
-                    }
-                }
-                16{
-                    start:intvector{
-                        770,
-                        10,
-                        1,
-                    }
-                }
-                160{
-                    start:intvector{
-                        1370,
-                        7,
-                        24,
-                    }
-                }
-                161{
-                    start:intvector{
-                        1372,
-                        4,
-                        1,
-                    }
-                }
-                162{
-                    start:intvector{
-                        1375,
-                        5,
-                        27,
-                    }
-                }
-                163{
-                    start:intvector{
-                        1379,
-                        3,
-                        22,
-                    }
-                }
-                164{
-                    start:intvector{
-                        1381,
-                        2,
-                        10,
-                    }
-                }
-                165{
-                    start:intvector{
-                        1384,
-                        4,
-                        28,
-                    }
-                }
-                166{
-                    start:intvector{
-                        1387,
-                        8,
-                        22,
-                    }
-                }
-                167{
-                    start:intvector{
-                        1387,
-                        8,
-                        23,
-                    }
-                }
-                168{
-                    start:intvector{
-                        1389,
-                        2,
-                        9,
-                    }
-                }
-                169{
-                    start:intvector{
-                        1390,
-                        3,
-                        26,
-                    }
-                }
-                17{
-                    start:intvector{
-                        781,
-                        1,
-                        1,
-                    }
-                }
-                170{
-                    start:intvector{
-                        1394,
-                        7,
-                        5,
-                    }
-                }
-                171{
-                    start:intvector{
-                        1428,
-                        4,
-                        27,
-                    }
-                }
-                172{
-                    start:intvector{
-                        1429,
-                        9,
-                        5,
-                    }
-                }
-                173{
-                    start:intvector{
-                        1441,
-                        2,
-                        17,
-                    }
-                }
-                174{
-                    start:intvector{
-                        1444,
-                        2,
-                        5,
-                    }
-                }
-                175{
-                    start:intvector{
-                        1449,
-                        7,
-                        28,
-                    }
-                }
-                176{
-                    start:intvector{
-                        1452,
-                        7,
-                        25,
-                    }
-                }
-                177{
-                    start:intvector{
-                        1455,
-                        7,
-                        25,
-                    }
-                }
-                178{
-                    start:intvector{
-                        1457,
-                        9,
-                        28,
-                    }
-                }
-                179{
-                    start:intvector{
-                        1460,
-                        12,
-                        21,
-                    }
-                }
-                18{
-                    start:intvector{
-                        782,
-                        8,
-                        19,
-                    }
-                }
-                180{
-                    start:intvector{
-                        1466,
-                        2,
-                        28,
-                    }
-                }
-                181{
-                    start:intvector{
-                        1467,
-                        3,
-                        3,
-                    }
-                }
-                182{
-                    start:intvector{
-                        1469,
-                        4,
-                        28,
-                    }
-                }
-                183{
-                    start:intvector{
-                        1487,
-                        7,
-                        29,
-                    }
-                }
-                184{
-                    start:intvector{
-                        1489,
-                        8,
-                        21,
-                    }
-                }
-                185{
-                    start:intvector{
-                        1492,
-                        7,
-                        19,
-                    }
-                }
-                186{
-                    start:intvector{
-                        1501,
-                        2,
-                        29,
-                    }
-                }
-                187{
-                    start:intvector{
-                        1504,
-                        2,
-                        30,
-                    }
-                }
-                188{
-                    start:intvector{
-                        1521,
-                        8,
-                        23,
-                    }
-                }
-                189{
-                    start:intvector{
-                        1528,
-                        8,
-                        20,
-                    }
-                }
-                19{
-                    start:intvector{
-                        806,
-                        5,
-                        18,
-                    }
-                }
-                190{
-                    start:intvector{
-                        1532,
-                        7,
-                        29,
-                    }
-                }
-                191{
-                    start:intvector{
-                        1555,
-                        10,
-                        23,
-                    }
-                }
-                192{
-                    start:intvector{
-                        1558,
-                        2,
-                        28,
-                    }
-                }
-                193{
-                    start:intvector{
-                        1570,
-                        4,
-                        23,
-                    }
-                }
-                194{
-                    start:intvector{
-                        1573,
-                        7,
-                        28,
-                    }
-                }
-                195{
-                    start:intvector{
-                        1592,
-                        12,
-                        8,
-                    }
-                }
-                196{
-                    start:intvector{
-                        1596,
-                        10,
-                        27,
-                    }
-                }
-                197{
-                    start:intvector{
-                        1615,
-                        7,
-                        13,
-                    }
-                }
-                198{
-                    start:intvector{
-                        1624,
-                        2,
-                        30,
-                    }
-                }
-                199{
-                    start:intvector{
-                        1644,
-                        12,
-                        16,
-                    }
-                }
-                2{
-                    start:intvector{
-                        672,
-                        1,
-                        1,
-                    }
-                }
-                20{
-                    start:intvector{
-                        810,
-                        9,
-                        19,
-                    }
-                }
-                200{
-                    start:intvector{
-                        1648,
-                        2,
-                        15,
-                    }
-                }
-                201{
-                    start:intvector{
-                        1652,
-                        9,
-                        18,
-                    }
-                }
-                202{
-                    start:intvector{
-                        1655,
-                        4,
-                        13,
-                    }
-                }
-                203{
-                    start:intvector{
-                        1658,
-                        7,
-                        23,
-                    }
-                }
-                204{
-                    start:intvector{
-                        1661,
-                        4,
-                        25,
-                    }
-                }
-                205{
-                    start:intvector{
-                        1673,
-                        9,
-                        21,
-                    }
-                }
-                206{
-                    start:intvector{
-                        1681,
-                        9,
-                        29,
-                    }
-                }
-                207{
-                    start:intvector{
-                        1684,
-                        2,
-                        21,
-                    }
-                }
-                208{
-                    start:intvector{
-                        1688,
-                        9,
-                        30,
-                    }
-                }
-                209{
-                    start:intvector{
-                        1704,
-                        3,
-                        13,
-                    }
-                }
-                21{
-                    start:intvector{
-                        824,
-                        1,
-                        5,
-                    }
-                }
-                210{
-                    start:intvector{
-                        1711,
-                        4,
-                        25,
-                    }
-                }
-                211{
-                    start:intvector{
-                        1716,
-                        6,
-                        22,
-                    }
-                }
-                212{
-                    start:intvector{
-                        1736,
-                        4,
-                        28,
-                    }
-                }
-                213{
-                    start:intvector{
-                        1741,
-                        2,
-                        27,
-                    }
-                }
-                214{
-                    start:intvector{
-                        1744,
-                        2,
-                        21,
-                    }
-                }
-                215{
-                    start:intvector{
-                        1748,
-                        7,
-                        12,
-                    }
-                }
-                216{
-                    start:intvector{
-                        1751,
-                        10,
-                        27,
-                    }
-                }
-                217{
-                    start:intvector{
-                        1764,
-                        6,
-                        2,
-                    }
-                }
-                218{
-                    start:intvector{
-                        1772,
-                        11,
-                        16,
-                    }
-                }
-                219{
-                    start:intvector{
-                        1781,
-                        4,
-                        2,
-                    }
-                }
-                22{
-                    start:intvector{
-                        834,
-                        1,
-                        3,
-                    }
-                }
-                220{
-                    start:intvector{
-                        1789,
-                        1,
-                        25,
-                    }
-                }
-                221{
-                    start:intvector{
-                        1801,
-                        2,
-                        5,
-                    }
-                }
-                222{
-                    start:intvector{
-                        1804,
-                        2,
-                        11,
-                    }
-                }
-                223{
-                    start:intvector{
-                        1818,
-                        4,
-                        22,
-                    }
-                }
-                224{
-                    start:intvector{
-                        1830,
-                        12,
-                        10,
-                    }
-                }
-                225{
-                    start:intvector{
-                        1844,
-                        12,
-                        2,
-                    }
-                }
-                226{
-                    start:intvector{
-                        1848,
-                        2,
-                        28,
-                    }
-                }
-                227{
-                    start:intvector{
-                        1854,
-                        11,
-                        27,
-                    }
-                }
-                228{
-                    start:intvector{
-                        1860,
-                        3,
-                        18,
-                    }
-                }
-                229{
-                    start:intvector{
-                        1861,
-                        2,
-                        19,
-                    }
-                }
-                23{
-                    start:intvector{
-                        848,
-                        6,
-                        13,
-                    }
-                }
-                230{
-                    start:intvector{
-                        1864,
-                        2,
-                        20,
-                    }
-                }
-                231{
-                    start:intvector{
-                        1865,
-                        4,
-                        7,
-                    }
-                }
                 232{
                     start:intvector{
                         1868,
@@ -1296,587 +253,6 @@ supplementalData:table(nofallback){
                         2019,
                         5,
                         1,
-                    }
-                }
-                24{
-                    start:intvector{
-                        851,
-                        4,
-                        28,
-                    }
-                }
-                25{
-                    start:intvector{
-                        854,
-                        11,
-                        30,
-                    }
-                }
-                26{
-                    start:intvector{
-                        857,
-                        2,
-                        21,
-                    }
-                }
-                27{
-                    start:intvector{
-                        859,
-                        4,
-                        15,
-                    }
-                }
-                28{
-                    start:intvector{
-                        877,
-                        4,
-                        16,
-                    }
-                }
-                29{
-                    start:intvector{
-                        885,
-                        2,
-                        21,
-                    }
-                }
-                3{
-                    start:intvector{
-                        686,
-                        7,
-                        20,
-                    }
-                }
-                30{
-                    start:intvector{
-                        889,
-                        4,
-                        27,
-                    }
-                }
-                31{
-                    start:intvector{
-                        898,
-                        4,
-                        26,
-                    }
-                }
-                32{
-                    start:intvector{
-                        901,
-                        7,
-                        15,
-                    }
-                }
-                33{
-                    start:intvector{
-                        923,
-                        4,
-                        11,
-                    }
-                }
-                34{
-                    start:intvector{
-                        931,
-                        4,
-                        26,
-                    }
-                }
-                35{
-                    start:intvector{
-                        938,
-                        5,
-                        22,
-                    }
-                }
-                36{
-                    start:intvector{
-                        947,
-                        4,
-                        22,
-                    }
-                }
-                37{
-                    start:intvector{
-                        957,
-                        10,
-                        27,
-                    }
-                }
-                38{
-                    start:intvector{
-                        961,
-                        2,
-                        16,
-                    }
-                }
-                39{
-                    start:intvector{
-                        964,
-                        7,
-                        10,
-                    }
-                }
-                4{
-                    start:intvector{
-                        701,
-                        3,
-                        21,
-                    }
-                }
-                40{
-                    start:intvector{
-                        968,
-                        8,
-                        13,
-                    }
-                }
-                41{
-                    start:intvector{
-                        970,
-                        3,
-                        25,
-                    }
-                }
-                42{
-                    start:intvector{
-                        973,
-                        12,
-                        20,
-                    }
-                }
-                43{
-                    start:intvector{
-                        976,
-                        7,
-                        13,
-                    }
-                }
-                44{
-                    start:intvector{
-                        978,
-                        11,
-                        29,
-                    }
-                }
-                45{
-                    start:intvector{
-                        983,
-                        4,
-                        15,
-                    }
-                }
-                46{
-                    start:intvector{
-                        985,
-                        4,
-                        27,
-                    }
-                }
-                47{
-                    start:intvector{
-                        987,
-                        4,
-                        5,
-                    }
-                }
-                48{
-                    start:intvector{
-                        989,
-                        8,
-                        8,
-                    }
-                }
-                49{
-                    start:intvector{
-                        990,
-                        11,
-                        7,
-                    }
-                }
-                5{
-                    start:intvector{
-                        704,
-                        5,
-                        10,
-                    }
-                }
-                50{
-                    start:intvector{
-                        995,
-                        2,
-                        22,
-                    }
-                }
-                51{
-                    start:intvector{
-                        999,
-                        1,
-                        13,
-                    }
-                }
-                52{
-                    start:intvector{
-                        1004,
-                        7,
-                        20,
-                    }
-                }
-                53{
-                    start:intvector{
-                        1012,
-                        12,
-                        25,
-                    }
-                }
-                54{
-                    start:intvector{
-                        1017,
-                        4,
-                        23,
-                    }
-                }
-                55{
-                    start:intvector{
-                        1021,
-                        2,
-                        2,
-                    }
-                }
-                56{
-                    start:intvector{
-                        1024,
-                        7,
-                        13,
-                    }
-                }
-                57{
-                    start:intvector{
-                        1028,
-                        7,
-                        25,
-                    }
-                }
-                58{
-                    start:intvector{
-                        1037,
-                        4,
-                        21,
-                    }
-                }
-                59{
-                    start:intvector{
-                        1040,
-                        11,
-                        10,
-                    }
-                }
-                6{
-                    start:intvector{
-                        708,
-                        1,
-                        11,
-                    }
-                }
-                60{
-                    start:intvector{
-                        1044,
-                        11,
-                        24,
-                    }
-                }
-                61{
-                    start:intvector{
-                        1046,
-                        4,
-                        14,
-                    }
-                }
-                62{
-                    start:intvector{
-                        1053,
-                        1,
-                        11,
-                    }
-                }
-                63{
-                    start:intvector{
-                        1058,
-                        8,
-                        29,
-                    }
-                }
-                64{
-                    start:intvector{
-                        1065,
-                        8,
-                        2,
-                    }
-                }
-                65{
-                    start:intvector{
-                        1069,
-                        4,
-                        13,
-                    }
-                }
-                66{
-                    start:intvector{
-                        1074,
-                        8,
-                        23,
-                    }
-                }
-                67{
-                    start:intvector{
-                        1077,
-                        11,
-                        17,
-                    }
-                }
-                68{
-                    start:intvector{
-                        1081,
-                        2,
-                        10,
-                    }
-                }
-                69{
-                    start:intvector{
-                        1084,
-                        2,
-                        7,
-                    }
-                }
-                7{
-                    start:intvector{
-                        715,
-                        9,
-                        2,
-                    }
-                }
-                70{
-                    start:intvector{
-                        1087,
-                        4,
-                        7,
-                    }
-                }
-                71{
-                    start:intvector{
-                        1094,
-                        12,
-                        15,
-                    }
-                }
-                72{
-                    start:intvector{
-                        1096,
-                        12,
-                        17,
-                    }
-                }
-                73{
-                    start:intvector{
-                        1097,
-                        11,
-                        21,
-                    }
-                }
-                74{
-                    start:intvector{
-                        1099,
-                        8,
-                        28,
-                    }
-                }
-                75{
-                    start:intvector{
-                        1104,
-                        2,
-                        10,
-                    }
-                }
-                76{
-                    start:intvector{
-                        1106,
-                        4,
-                        9,
-                    }
-                }
-                77{
-                    start:intvector{
-                        1108,
-                        8,
-                        3,
-                    }
-                }
-                78{
-                    start:intvector{
-                        1110,
-                        7,
-                        13,
-                    }
-                }
-                79{
-                    start:intvector{
-                        1113,
-                        7,
-                        13,
-                    }
-                }
-                8{
-                    start:intvector{
-                        717,
-                        11,
-                        17,
-                    }
-                }
-                80{
-                    start:intvector{
-                        1118,
-                        4,
-                        3,
-                    }
-                }
-                81{
-                    start:intvector{
-                        1120,
-                        4,
-                        10,
-                    }
-                }
-                82{
-                    start:intvector{
-                        1124,
-                        4,
-                        3,
-                    }
-                }
-                83{
-                    start:intvector{
-                        1126,
-                        1,
-                        22,
-                    }
-                }
-                84{
-                    start:intvector{
-                        1131,
-                        1,
-                        29,
-                    }
-                }
-                85{
-                    start:intvector{
-                        1132,
-                        8,
-                        11,
-                    }
-                }
-                86{
-                    start:intvector{
-                        1135,
-                        4,
-                        27,
-                    }
-                }
-                87{
-                    start:intvector{
-                        1141,
-                        7,
-                        10,
-                    }
-                }
-                88{
-                    start:intvector{
-                        1142,
-                        4,
-                        28,
-                    }
-                }
-                89{
-                    start:intvector{
-                        1144,
-                        2,
-                        23,
-                    }
-                }
-                9{
-                    start:intvector{
-                        724,
-                        2,
-                        4,
-                    }
-                }
-                90{
-                    start:intvector{
-                        1145,
-                        7,
-                        22,
-                    }
-                }
-                91{
-                    start:intvector{
-                        1151,
-                        1,
-                        26,
-                    }
-                }
-                92{
-                    start:intvector{
-                        1154,
-                        10,
-                        28,
-                    }
-                }
-                93{
-                    start:intvector{
-                        1156,
-                        4,
-                        27,
-                    }
-                }
-                94{
-                    start:intvector{
-                        1159,
-                        4,
-                        20,
-                    }
-                }
-                95{
-                    start:intvector{
-                        1160,
-                        1,
-                        10,
-                    }
-                }
-                96{
-                    start:intvector{
-                        1161,
-                        9,
-                        4,
-                    }
-                }
-                97{
-                    start:intvector{
-                        1163,
-                        3,
-                        29,
-                    }
-                }
-                98{
-                    start:intvector{
-                        1165,
-                        6,
-                        5,
-                    }
-                }
-                99{
-                    start:intvector{
-                        1166,
-                        8,
-                        27,
                     }
                 }
             }
@@ -2204,7 +580,7 @@ supplementalData:table(nofallback){
             "islamic-tbla",
         }
     }
-    cldrVersion{"48"}
+    cldrVersion{"49"}
     codeMappings{
         {
             "AA",
@@ -4476,8 +2852,7 @@ supplementalData:table(nofallback){
                 "BEC",
                 "BEF",
                 "BEL",
-                "BGL~M",
-                "BGO",
+                "BGL~O",
                 "BOL",
                 "BOP",
                 "BOV",
@@ -4493,7 +2868,6 @@ supplementalData:table(nofallback){
                 "CHW",
                 "CLE~F",
                 "CNH",
-                "CNX",
                 "COU",
                 "CSD",
                 "CSK",
@@ -4617,7 +2991,6 @@ supplementalData:table(nofallback){
                 "BAM",
                 "BBD",
                 "BDT",
-                "BGN",
                 "BHD",
                 "BIF",
                 "BMD",
@@ -4786,6 +3159,7 @@ supplementalData:table(nofallback){
                 "bh",
                 "bhk",
                 "bic",
+                "bih",
                 "bij",
                 "bjd",
                 "bjq",
@@ -4840,7 +3214,6 @@ supplementalData:table(nofallback){
                 "emk",
                 "emo",
                 "esk",
-                "fat",
                 "fuc",
                 "gav",
                 "gaz",
@@ -4920,6 +3293,7 @@ supplementalData:table(nofallback){
                 "mnt",
                 "mo",
                 "mof",
+                "mrd",
                 "mst",
                 "mup",
                 "mvm",
@@ -4984,6 +3358,7 @@ supplementalData:table(nofallback){
                 "sgl",
                 "sgo",
                 "sh",
+                "shl",
                 "skk",
                 "slq",
                 "smd",
@@ -5044,6 +3419,7 @@ supplementalData:table(nofallback){
                 "yma",
                 "ymt",
                 "ynh",
+                "yol",
                 "yos",
                 "yri",
                 "yuu",
@@ -5513,7 +3889,7 @@ supplementalData:table(nofallback){
                 "dyd",
                 "dyg",
                 "dyi",
-                "dym~o",
+                "dyl~o",
                 "dyr",
                 "dyu",
                 "dyy",
@@ -5621,7 +3997,7 @@ supplementalData:table(nofallback){
                 "faf~n",
                 "fap",
                 "far",
-                "fau",
+                "fat~u",
                 "fax~z",
                 "fbl",
                 "fcs",
@@ -6201,7 +4577,7 @@ supplementalData:table(nofallback){
                 "ldg~q",
                 "lea~f",
                 "leh~z",
-                "lfa",
+                "lfa~b",
                 "lfn",
                 "lg",
                 "lga~b",
@@ -6356,7 +4732,8 @@ supplementalData:table(nofallback){
                 "mqa~c",
                 "mqe~z",
                 "mr",
-                "mra~h",
+                "mra~c",
+                "mre~h",
                 "mrj~z",
                 "ms",
                 "msb~s",
@@ -6555,7 +4932,7 @@ supplementalData:table(nofallback){
                 "oku~v",
                 "okx",
                 "okz",
-                "ola",
+                "ola~b",
                 "old~e",
                 "olk",
                 "olm",
@@ -6596,7 +4973,7 @@ supplementalData:table(nofallback){
                 "orz",
                 "os",
                 "osa",
-                "osc",
+                "osc~d",
                 "osi",
                 "osn~p",
                 "ost~u",
@@ -6869,6 +5246,7 @@ supplementalData:table(nofallback){
                 "sck~l",
                 "scn~q",
                 "scs~x",
+                "scz",
                 "sd",
                 "sda~c",
                 "sde~h",
@@ -6892,7 +5270,8 @@ supplementalData:table(nofallback){
                 "sgr~u",
                 "sgw~z",
                 "sha~e",
-                "shg~z",
+                "shg~k",
+                "shm~z",
                 "si",
                 "sia~b",
                 "sid~m",
@@ -7082,6 +5461,7 @@ supplementalData:table(nofallback){
                 "tus~z",
                 "tva",
                 "tvd~e",
+                "tvg",
                 "tvi",
                 "tvk~o",
                 "tvs~u",
@@ -7557,7 +5937,8 @@ supplementalData:table(nofallback){
                 "yob",
                 "yog",
                 "yoi",
-                "yok~n",
+                "yok",
+                "yom~n",
                 "yot",
                 "yox~y",
                 "ypa~b",
@@ -7630,6 +6011,7 @@ supplementalData:table(nofallback){
                 "zhb",
                 "zhd",
                 "zhi",
+                "zhk",
                 "zhn",
                 "zhw~x",
                 "zia~b",
@@ -7956,6 +6338,7 @@ supplementalData:table(nofallback){
                 "Jamo",
                 "Java",
                 "Jpan",
+                "Jurc",
                 "Kali",
                 "Kana",
                 "Kawi",
@@ -8010,6 +6393,7 @@ supplementalData:table(nofallback){
                 "Ougr",
                 "Palm",
                 "Pauc",
+                "Pcun",
                 "Perm",
                 "Phag",
                 "Phli",
@@ -8023,6 +6407,7 @@ supplementalData:table(nofallback){
                 "Samr",
                 "Sarb",
                 "Saur",
+                "Seal",
                 "Sgnw",
                 "Shaw",
                 "Shrd",
@@ -11841,6 +10226,7 @@ supplementalData:table(nofallback){
                 "length-meter",
                 "length-decimeter",
                 "length-centimeter",
+                "length-milliinch",
                 "length-millimeter",
                 "length-micrometer",
                 "length-nanometer",
@@ -11985,6 +10371,8 @@ supplementalData:table(nofallback){
                 "speed-light-speed",
                 "volume-fluid-ounce-metric",
                 "volume-cup-imperial",
+                "force-poundal",
+                "force-dyne",
             }
         }
         variant{
@@ -12074,6 +10462,7 @@ supplementalData:table(nofallback){
                 "mdctrans",
                 "mesokem",
                 "metelko",
+                "moderat",
                 "monoton",
                 "ndyuka",
                 "nedis",
@@ -12092,6 +10481,7 @@ supplementalData:table(nofallback){
                 "polyton",
                 "provenc",
                 "puter",
+                "radikalt",
                 "rigik",
                 "rozaj",
                 "rumgr",
@@ -12100,13 +10490,16 @@ supplementalData:table(nofallback){
                 "scotland",
                 "scouse",
                 "simple",
+                "slepe",
                 "solba",
                 "sotav",
                 "spanglis",
+                "stadi",
                 "surmiran",
                 "sursilv",
                 "sutsilv",
                 "synnejyl",
+                "taglish",
                 "tailo",
                 "tarask",
                 "tongyong",
@@ -12772,6 +11165,14 @@ supplementalData:table(nofallback){
                 scripts{"Latn"}
             }
         }
+        cdo{
+            primary{
+                scripts{"Hans"}
+            }
+            secondary{
+                scripts{"Hant"}
+            }
+        }
         ce{
             primary{
                 scripts{"Cyrl"}
@@ -12888,6 +11289,14 @@ supplementalData:table(nofallback){
         cps{
             primary{
                 scripts{"Latn"}
+            }
+        }
+        cpx{
+            primary{
+                scripts{"Hans"}
+            }
+            secondary{
+                scripts{"Hant"}
             }
         }
         cr{
@@ -13180,6 +11589,17 @@ supplementalData:table(nofallback){
                 scripts{"Latn"}
             }
         }
+        esg{
+            primary{
+                scripts{"Gonm"}
+            }
+            secondary{
+                scripts{
+                    "Deva",
+                    "Telu",
+                }
+            }
+        }
         esu{
             primary{
                 scripts{"Latn"}
@@ -13457,8 +11877,13 @@ supplementalData:table(nofallback){
         }
         gon{
             primary{
+                scripts{"Deva"}
+            }
+            secondary{
                 scripts{
-                    "Deva",
+                    "Gong",
+                    "Gonm",
+                    "Orya",
                     "Telu",
                 }
             }
@@ -13680,6 +12105,11 @@ supplementalData:table(nofallback){
                 scripts{"Latn"}
             }
         }
+        hrx{
+            primary{
+                scripts{"Latn"}
+            }
+        }
         hsb{
             primary{
                 scripts{"Latn"}
@@ -13800,6 +12230,14 @@ supplementalData:table(nofallback){
         is{
             primary{
                 scripts{"Latn"}
+            }
+        }
+        isv{
+            primary{
+                scripts{"Latn"}
+            }
+            secondary{
+                scripts{"Cyrl"}
             }
         }
         it{
@@ -13953,6 +12391,11 @@ supplementalData:table(nofallback){
             }
         }
         kea{
+            primary{
+                scripts{"Latn"}
+            }
+        }
+        kek{
             primary{
                 scripts{"Latn"}
             }
@@ -14726,6 +13169,14 @@ supplementalData:table(nofallback){
                 scripts{"Mtei"}
             }
         }
+        mnp{
+            primary{
+                scripts{"Hans"}
+            }
+            secondary{
+                scripts{"Hant"}
+            }
+        }
         mns{
             primary{
                 scripts{"Cyrl"}
@@ -14759,9 +13210,9 @@ supplementalData:table(nofallback){
                 scripts{"Modi"}
             }
         }
-        mrd{
+        mrh{
             primary{
-                scripts{"Deva"}
+                scripts{"Latn"}
             }
         }
         mrj{
@@ -16440,6 +14891,18 @@ supplementalData:table(nofallback){
                 scripts{"Arab"}
             }
         }
+        wsg{
+            primary{
+                scripts{"Telu"}
+            }
+            secondary{
+                scripts{
+                    "Deva",
+                    "Gong",
+                    "Gonm",
+                }
+            }
+        }
         wtm{
             primary{
                 scripts{"Deva"}
@@ -16463,6 +14926,11 @@ supplementalData:table(nofallback){
         xcr{
             primary{
                 scripts{"Cari"}
+            }
+        }
+        xdq{
+            primary{
+                scripts{"Cyrl"}
             }
         }
         xh{
@@ -17214,6 +15682,24 @@ supplementalData:table(nofallback){
             }
             {
                 "rn",
+                "rw",
+                "10",
+                "0",
+            }
+            {
+                "rn",
+                "fr",
+                "30",
+                "1",
+            }
+            {
+                "rn",
+                "en",
+                "35",
+                "1",
+            }
+            {
+                "rw",
                 "en",
                 "30",
                 "1",
@@ -17221,7 +15707,7 @@ supplementalData:table(nofallback){
             {
                 "rw",
                 "fr",
-                "30",
+                "35",
                 "1",
             }
             {
@@ -19219,7 +17705,6 @@ supplementalData:table(nofallback){
             "es_UY",
             "es_VE",
         }
-        fr_HT{"ht"}
         no{
             "nb",
             "nn",
@@ -25541,6 +24026,7 @@ supplementalData:table(nofallback){
             EZ{
                 "AT",
                 "BE",
+                "BG",
                 "CY",
                 "DE",
                 "EE",
@@ -25548,6 +24034,7 @@ supplementalData:table(nofallback){
                 "FI",
                 "FR",
                 "GR",
+                "HR",
                 "IE",
                 "IT",
                 "LT",
@@ -26411,6 +24898,9 @@ supplementalData:table(nofallback){
             gub{
                 populationShareF:int{45840000}
             }
+            hrx{
+                populationShareF:int{47590000}
+            }
             it{
                 populationShareF:int{47280000}
             }
@@ -26874,10 +25364,6 @@ supplementalData:table(nofallback){
             bci{
                 literacyShareF:int{49100000}
                 populationShareF:int{49110000}
-            }
-            bqv{
-                literacyShareF:int{49100000}
-                populationShareF:int{47170000}
             }
             dnj{
                 literacyShareF:int{48100000}
@@ -28187,7 +26673,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{48500000}
             }
             sus{
-                populationShareF:int{49110000}
+                populationShareF:int{49240000}
             }
             territoryF:intvector{
                 60566600,
@@ -28920,6 +27406,9 @@ supplementalData:table(nofallback){
                 officialStatus{"official_regional"}
                 populationShareF:int{48700000}
             }
+            mrh{
+                populationShareF:int{45340000}
+            }
             mtr{
                 populationShareF:int{46970000}
             }
@@ -29016,6 +27505,9 @@ supplementalData:table(nofallback){
             }
             wbr{
                 populationShareF:int{47150000}
+            }
+            wsg{
+                populationShareF:int{46210000}
             }
             wtm{
                 literacyShareF:int{49250000}
@@ -29267,6 +27759,9 @@ supplementalData:table(nofallback){
             }
         }
         JO{
+            ady{
+                populationShareF:int{48100000}
+            }
             apc{
                 populationShareF:int{49660000}
             }
@@ -30015,6 +28510,9 @@ supplementalData:table(nofallback){
             mnw{
                 populationShareF:int{48150000}
             }
+            mrh{
+                populationShareF:int{46360000}
+            }
             my{
                 officialStatus{"official"}
                 populationShareF:int{49640000}
@@ -30645,9 +29143,6 @@ supplementalData:table(nofallback){
             mgp{
                 populationShareF:int{48110000}
             }
-            mrd{
-                populationShareF:int{47830000}
-            }
             ne{
                 officialStatus{"official"}
                 populationShareF:int{49440000}
@@ -30923,7 +29418,7 @@ supplementalData:table(nofallback){
                 writingShareF:int{48500000}
             }
             brh{
-                populationShareF:int{48130000}
+                populationShareF:int{48120000}
             }
             btv{
                 populationShareF:int{46190000}
@@ -31131,21 +29626,63 @@ supplementalData:table(nofallback){
             }
         }
         PY{
+            aqt{
+                populationShareF:int{46170000}
+            }
+            ayo{
+                populationShareF:int{46360000}
+            }
+            cag{
+                populationShareF:int{47230000}
+            }
+            ceg{
+                populationShareF:int{46300000}
+            }
             de{
                 populationShareF:int{48290000}
             }
+            enl{
+                populationShareF:int{47130000}
+            }
+            enx{
+                populationShareF:int{46750000}
+            }
             es{
                 officialStatus{"official"}
-                populationShareF:int{48320000}
+                populationShareF:int{49670000}
             }
             gn{
                 officialStatus{"official"}
-                populationShareF:int{49800000}
+                populationShareF:int{49690000}
+            }
+            gun{
+                populationShareF:int{47160000}
+            }
+            guq{
+                populationShareF:int{46240000}
+            }
+            gva{
+                populationShareF:int{44300000}
+            }
+            mca{
+                populationShareF:int{46270000}
+            }
+            nhd{
+                populationShareF:int{46160000}
+            }
+            pta{
+                populationShareF:int{47130000}
+            }
+            spn{
+                populationShareF:int{46250000}
             }
             territoryF:intvector{
                 61108000,
                 49939000,
                 56752255,
+            }
+            tmf{
+                populationShareF:int{46270000}
             }
         }
         QA{
@@ -31268,45 +29805,54 @@ supplementalData:table(nofallback){
             }
             ady{
                 officialStatus{"official_regional"}
-                populationShareF:int{46880000}
+                populationShareF:int{46810000}
             }
             alt{
-                populationShareF:int{46140000}
+                populationShareF:int{46470000}
             }
             av{
                 officialStatus{"official_regional"}
-                populationShareF:int{47390000}
+                populationShareF:int{47480000}
             }
             az_Cyrl{
                 officialStatus{"official_regional"}
-                populationShareF:int{46930000}
+                populationShareF:int{47220000}
             }
             ba{
                 officialStatus{"official_regional"}
-                populationShareF:int{48130000}
+                populationShareF:int{47800000}
+            }
+            be{
+                populationShareF:int{46450000}
             }
             bua{
                 officialStatus{"official_regional"}
-                populationShareF:int{47220000}
+                populationShareF:int{47230000}
             }
             ce{
                 officialStatus{"official_regional"}
-                populationShareF:int{47660000}
+                populationShareF:int{48110000}
             }
             chm{
-                populationShareF:int{47370000}
+                populationShareF:int{47190000}
             }
             cu{
-                populationShareF:int{0}
+                populationShareF:int{45100000}
             }
             cv{
                 populationShareF:int{48130000}
             }
             dar{
-                populationShareF:int{47260000}
+                populationShareF:int{47270000}
+            }
+            de{
+                populationShareF:int{47790000}
+            }
+            en{
+                populationShareF:int{48380000}
             }
             fi{
-                populationShareF:int{46120000}
+                populationShareF:int{46100000}
             }
             hy{
                 literacyShareF:int{49500000}
@@ -31314,98 +29860,119 @@ supplementalData:table(nofallback){
             }
             inh{
                 officialStatus{"official_regional"}
-                populationShareF:int{47160000}
+                populationShareF:int{47250000}
             }
             izh{
-                populationShareF:int{44100000}
+                populationShareF:int{0}
+            }
+            ka{
+                populationShareF:int{46600000}
             }
             kaa{
-                populationShareF:int{44600000}
+                populationShareF:int{44300000}
             }
             kbd{
                 officialStatus{"official_regional"}
-                populationShareF:int{47310000}
+                populationShareF:int{47340000}
+            }
+            kk{
+                populationShareF:int{47200000}
             }
             koi{
                 officialStatus{"official_regional"}
-                populationShareF:int{46450000}
+                populationShareF:int{46310000}
             }
             krc{
                 officialStatus{"official_regional"}
-                populationShareF:int{47170000}
+                populationShareF:int{47200000}
             }
             krl{
-                populationShareF:int{46820000}
+                populationShareF:int{46100000}
             }
             kum{
                 officialStatus{"official_regional"}
-                populationShareF:int{47200000}
+                populationShareF:int{47300000}
             }
             kv{
                 officialStatus{"official_regional"}
-                populationShareF:int{47180000}
+                populationShareF:int{46810000}
             }
             lbe{
                 officialStatus{"official_regional"}
-                populationShareF:int{46780000}
+                populationShareF:int{46650000}
             }
             lez{
                 officialStatus{"official_regional"}
-                populationShareF:int{47180000}
+                populationShareF:int{47210000}
             }
             mdf{
                 officialStatus{"official_regional"}
                 populationShareF:int{47210000}
             }
             mn{
-                populationShareF:int{45150000}
+                populationShareF:int{45330000}
             }
             mrj{
-                populationShareF:int{46210000}
+                populationShareF:int{46110000}
             }
             myv{
                 officialStatus{"official_regional"}
                 populationShareF:int{47310000}
             }
             os{
-                populationShareF:int{47320000}
+                populationShareF:int{47260000}
             }
             pnt_Cyrl{
                 populationShareF:int{46400000}
             }
             ru{
                 officialStatus{"official"}
-                populationShareF:int{49940000}
+                populationShareF:int{49990000}
             }
             sah{
                 officialStatus{"official_regional"}
-                populationShareF:int{47320000}
+                populationShareF:int{47280000}
             }
             sr{
-                populationShareF:int{45410000}
+                populationShareF:int{45420000}
             }
             territoryF:intvector{
                 62581600,
                 49997000,
                 58140821,
             }
+            tg{
+                populationShareF:int{47160000}
+            }
             tt{
                 officialStatus{"official_regional"}
-                populationShareF:int{48140000}
+                populationShareF:int{48240000}
             }
             tyv{
                 officialStatus{"official_regional"}
-                populationShareF:int{47130000}
+                populationShareF:int{47190000}
             }
             udm{
                 officialStatus{"official_regional"}
-                populationShareF:int{47380000}
+                populationShareF:int{47190000}
+            }
+            uk{
+                populationShareF:int{47460000}
+            }
+            uz{
+                populationShareF:int{47170000}
             }
             vep{
-                populationShareF:int{45260000}
+                populationShareF:int{45160000}
             }
             vot{
                 populationShareF:int{0}
+            }
+            xal{
+                populationShareF:int{46800000}
+            }
+            xdq{
+                populationShareF:int{46150000}
             }
         }
         RW{
@@ -31554,32 +30121,75 @@ supplementalData:table(nofallback){
             }
         }
         SG{
+            bn{
+                populationShareF:int{48130000}
+            }
+            cdo{
+                populationShareF:int{47900000}
+            }
+            cpx{
+                populationShareF:int{47400000}
+            }
             en{
+                literacyShareF:int{50100000}
                 officialStatus{"official"}
-                populationShareF:int{49930000}
+                populationShareF:int{49800000}
+            }
+            fil{
+                populationShareF:int{48260000}
+            }
+            hak{
+                populationShareF:int{48430000}
+            }
+            id{
+                populationShareF:int{48200000}
+            }
+            ja{
+                populationShareF:int{47600000}
+            }
+            jv{
+                populationShareF:int{48150000}
+            }
+            mad{
+                populationShareF:int{47400000}
             }
             ml{
-                populationShareF:int{47170000}
+                populationShareF:int{47400000}
+            }
+            mnp{
+                populationShareF:int{47300000}
             }
             ms{
+                literacyShareF:int{50100000}
                 officialStatus{"official"}
-                populationShareF:int{49140000}
+                populationShareF:int{49190000}
+            }
+            nan{
+                populationShareF:int{48580000}
             }
             pa{
-                populationShareF:int{47160000}
+                populationShareF:int{47400000}
             }
             ta{
+                literacyShareF:int{49880000}
                 officialStatus{"official"}
-                populationShareF:int{48210000}
+                populationShareF:int{48490000}
             }
             territoryF:intvector{
                 61754800,
                 49959000,
                 56602846,
             }
+            th{
+                populationShareF:int{47700000}
+            }
+            yue{
+                populationShareF:int{48210000}
+            }
             zh{
+                literacyShareF:int{50100000}
                 officialStatus{"official"}
-                populationShareF:int{49770000}
+                populationShareF:int{49620000}
             }
         }
         SH{
@@ -31682,6 +30292,9 @@ supplementalData:table(nofallback){
             }
             men{
                 populationShareF:int{49270000}
+            }
+            sus{
+                populationShareF:int{48300000}
             }
             tem{
                 literacyShareF:int{48600000}
@@ -33069,12 +31682,12 @@ supplementalData:table(nofallback){
         }
         AR{
             allowed{
-                "h",
                 "H",
+                "h",
                 "hB",
                 "hb",
             }
-            preferred{"h"}
+            preferred{"H"}
         }
         AS{
             allowed{
@@ -33340,12 +31953,12 @@ supplementalData:table(nofallback){
         }
         CL{
             allowed{
-                "h",
                 "H",
+                "h",
                 "hB",
                 "hb",
             }
-            preferred{"h"}
+            preferred{"H"}
         }
         CM{
             allowed{
@@ -33773,6 +32386,13 @@ supplementalData:table(nofallback){
             preferred{"h"}
         }
         HR{
+            allowed{
+                "H",
+                "hB",
+            }
+            preferred{"H"}
+        }
+        HT{
             allowed{
                 "H",
                 "hB",
@@ -34489,12 +33109,12 @@ supplementalData:table(nofallback){
         }
         PY{
             allowed{
-                "h",
                 "H",
+                "h",
                 "hB",
                 "hb",
             }
-            preferred{"h"}
+            preferred{"H"}
         }
         QA{
             allowed{
@@ -34533,6 +33153,8 @@ supplementalData:table(nofallback){
         }
         RW{
             allowed{
+                "hB",
+                "hb",
                 "H",
                 "h",
             }
@@ -34859,12 +33481,12 @@ supplementalData:table(nofallback){
         }
         UY{
             allowed{
-                "h",
                 "H",
+                "h",
                 "hB",
                 "hb",
             }
-            preferred{"h"}
+            preferred{"H"}
         }
         UZ{
             allowed{
@@ -34981,12 +33603,10 @@ supplementalData:table(nofallback){
         }
         ZM{
             allowed{
-                "h",
-                "hb",
                 "H",
                 "hB",
             }
-            preferred{"h"}
+            preferred{"H"}
         }
         ZW{
             allowed{

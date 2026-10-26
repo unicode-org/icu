@@ -9,6 +9,7 @@
 package com.ibm.icu.text;
 
 import com.ibm.icu.impl.PatternProps;
+import com.ibm.icu.lang.UCharacter;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
 import java.util.List;
@@ -1248,6 +1249,20 @@ final class NFRule {
     }
 
     /**
+     * Characters that lenient parsing treats as ignorable separators in prefixLength. Zs = space
+     * separators, Pd = dash punctuation, Cf = format characters (soft hyphen, ZWNJ, etc.) Plus
+     * comma and period which lenient-parse rules historically treated as equivalent.
+     */
+    private static boolean isLenientSeparator(char c) {
+        int type = UCharacter.getType(c);
+        return type == UCharacter.SPACE_SEPARATOR
+                || type == UCharacter.DASH_PUNCTUATION
+                || type == UCharacter.FORMAT
+                || c == ','
+                || c == '.';
+    }
+
+    /**
      * Used by stripPrefix() to match characters. If lenient parse mode is off, this just calls
      * startsWith(). If lenient parse mode is on, this function uses CollationElementIterators to
      * match characters in the strings (only primary-order differences are significant in
@@ -1266,20 +1281,107 @@ final class NFRule {
             return 0;
         }
 
-        RbnfLenientScanner scanner = formatter.getLenientScanner();
-        if (scanner != null) {
-            // Check if non-lenient rule finds the text before call lenient parsing
-            if (str.startsWith(prefix)) {
-                return prefix.length();
-            }
-            return scanner.prefixLength(str, prefix);
-        }
-
-        // If lenient parsing is turned off, forget all that crap above.
-        // Just use String.startsWith() and be done with it.
+        // Check if non-lenient rule finds the text before call lenient parsing
         if (str.startsWith(prefix)) {
             return prefix.length();
         }
+
+        if (formatter.lenientParseEnabled()) {
+            // In lenient-parse mode, walk both strings simultaneously:
+            // skip separator characters in both, and compare the rest case-insensitively.
+            // NFC normalization is applied incrementally to handle NFC/NFD differences
+            // (e.g., U+00E9 vs U+0065 U+0301). NFC is used instead of NFD to
+            // avoid decomposing Hangul syllables into Jamo (which would create false
+            // prefix matches) and to preserve correct Turkish dotted uppercase i case folding
+            // behavior.
+            Normalizer2 nfc = Normalizer2.getNFCInstance();
+            // NFC-normalize the prefix up front (it's short rule text).
+            String nfcPrefix = nfc.normalize(prefix);
+            int strLen = str.length();
+            int nfcPrefixLen = nfcPrefix.length();
+            int strIdx = 0;
+            int prefixIdx = 0;
+            boolean matched = true;
+
+            // Buffer for the NFC of the current normalization segment from str.
+            // We normalize str segments on the fly to avoid normalizing the entire string.
+            StringBuilder strSeg = new StringBuilder();
+            String strNfc = "";
+            int strNfcIdx = 0;
+            int strNfcLen = 0;
+
+            // Check if the prefix consists entirely of separator characters.
+            // If so, require that the str also has at least one separator.
+            boolean prefixIsAllSeparators = true;
+            for (int i = 0; i < nfcPrefixLen; ++i) {
+                if (!isLenientSeparator(nfcPrefix.charAt(i))) {
+                    prefixIsAllSeparators = false;
+                    break;
+                }
+            }
+            while (prefixIdx < nfcPrefixLen) {
+                // Skip separators in str only when the NFC buffer is exhausted.
+                // Separators are NFC-inert and always appear at segment boundaries.
+                int strSepCount = 0;
+                while (strNfcIdx >= strNfcLen
+                        && strIdx < strLen
+                        && isLenientSeparator(str.charAt(strIdx))) {
+                    ++strIdx;
+                    ++strSepCount;
+                }
+                while (prefixIdx < nfcPrefixLen
+                        && isLenientSeparator(nfcPrefix.charAt(prefixIdx))) {
+                    ++prefixIdx;
+                }
+                // If the prefix is entirely separators (e.g., " "), require
+                // at least one separator in str to match against.
+                if (prefixIsAllSeparators && prefixIdx >= nfcPrefixLen && strSepCount == 0) {
+                    matched = false;
+                    break;
+                }
+                if (prefixIdx >= nfcPrefixLen) {
+                    break;
+                }
+
+                // Get the next NFC code unit from str.
+                if (strNfcIdx >= strNfcLen) {
+                    if (strIdx >= strLen) {
+                        matched = false;
+                        break;
+                    }
+                    // Read the next normalization segment from str up to the next NFC boundary.
+                    strSeg.setLength(0);
+                    do {
+                        int cp = Character.codePointAt(str, strIdx);
+                        strSeg.appendCodePoint(cp);
+                        strIdx += Character.charCount(cp);
+                    } while (strIdx < strLen
+                            && !nfc.hasBoundaryBefore(Character.codePointAt(str, strIdx)));
+
+                    strNfc = nfc.normalize(strSeg);
+                    strNfcIdx = 0;
+                    strNfcLen = strNfc.length();
+                }
+
+                if (UCharacter.foldCase(strNfc.charAt(strNfcIdx++), formatter.caseFoldOption)
+                        != UCharacter.foldCase(
+                                nfcPrefix.charAt(prefixIdx), formatter.caseFoldOption)) {
+                    matched = false;
+                    break;
+                }
+                ++prefixIdx;
+            }
+            if (matched) {
+                return strIdx;
+            }
+
+            // Fall back to the collator-based scanner for locale-specific equivalences
+            RbnfLenientScanner scanner = formatter.getLenientScanner();
+            if (scanner != null) {
+                return scanner.prefixLength(str, prefix);
+            }
+        }
+
         return 0;
     }
 
@@ -1296,11 +1398,10 @@ final class NFRule {
      *     necessarily the same as the length of "key")
      */
     private int[] findText(String str, String key, PluralFormat pluralFormatKey, int startingAt) {
-        RbnfLenientScanner scanner = formatter.getLenientScanner();
         if (pluralFormatKey != null) {
             FieldPosition position = new FieldPosition(NumberFormat.INTEGER_FIELD);
             position.setBeginIndex(startingAt);
-            pluralFormatKey.parseType(str, scanner, position);
+            pluralFormatKey.parseType(str, position);
             int start = position.getBeginIndex();
             if (start >= 0) {
                 int pluralRuleStart = ruleText.indexOf("$(");
@@ -1318,15 +1419,22 @@ final class NFRule {
             return new int[] {-1, 0};
         }
 
-        if (scanner != null) {
+        if (formatter.lenientParseEnabled()) {
             // Check if non-lenient rule finds the text before call lenient parsing
-            int[] pos = new int[] {str.indexOf(key, startingAt), key.length()};
-            if (pos[0] >= 0) {
-                return pos;
-            } else {
-                // if lenient parsing is turned ON, we've got some work ahead of us
-                return scanner.findText(str, key, startingAt);
+            int pos = str.indexOf(key, startingAt);
+            if (pos >= 0) {
+                return new int[] {pos, key.length()};
             }
+
+            // Search by trying prefixLength at each position.
+            for (int p = startingAt; p < str.length(); ++p) {
+                int keyLen = prefixLength(str.substring(p), key);
+                if (keyLen != 0) {
+                    return new int[] {p, keyLen};
+                }
+            }
+
+            return new int[] {-1, 0};
         }
         // if lenient parsing is turned off, this is easy. Just call
         // String.indexOf() and we're done
@@ -1341,12 +1449,7 @@ final class NFRule {
      *     formatter's collator says are ignorable at the primary-order level. false otherwise.
      */
     private boolean allIgnorable(String str) {
-        // if the string is empty, we can just return true
-        if (str == null || str.isEmpty()) {
-            return true;
-        }
-        RbnfLenientScanner scanner = formatter.getLenientScanner();
-        return scanner != null && scanner.allIgnorable(str);
+        return str == null || str.isEmpty();
     }
 
     public void setDecimalFormatSymbols(DecimalFormatSymbols newSymbols) {

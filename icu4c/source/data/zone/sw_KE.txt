@@ -183,11 +183,6 @@ sw_KE{
             lg{"Saa za Hovd"}
             ls{"Saa za Wastani za Hovd"}
         }
-        "meta:Iran"{
-            ld{"Saa za Mchana za Irani"}
-            lg{"Saa za Irani"}
-            ls{"Saa za Wastani za Irani"}
-        }
         "meta:Irkutsk"{
             ld{"Saa za Majira ya Joto za Irkutsk"}
             lg{"Saa za Irkutsk"}
@@ -296,11 +291,6 @@ sw_KE{
             ld{"Saa za Majira ya Joto za Sakhalin"}
             lg{"Saa za Sakhalin"}
             ls{"Saa za Wastani za Sakhalin"}
-        }
-        "meta:Samoa"{
-            ld{"Saa za Mchana za Samoa"}
-            lg{"Saa za Samoa"}
-            ls{"Saa za Wastani za Samoa"}
         }
         "meta:Singapore"{
             ls{"Saa za Wastani za Singapoo"}

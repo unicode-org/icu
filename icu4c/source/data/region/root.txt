@@ -2,5 +2,5 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/
 root{
-    Version{"48"}
+    Version{"49"}
 }

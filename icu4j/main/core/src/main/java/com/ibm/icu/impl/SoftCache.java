@@ -32,6 +32,13 @@ import java.util.concurrent.ConcurrentHashMap;
 public abstract class SoftCache<K, V, D> extends CacheBase<K, V, D> {
     private ConcurrentHashMap<K, Object> map = new ConcurrentHashMap<K, Object>();
 
+    /**
+     * @return the cache contents.
+     */
+    protected ConcurrentHashMap<K, Object> getMap() {
+        return map;
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public final V getInstance(K key, D data) {

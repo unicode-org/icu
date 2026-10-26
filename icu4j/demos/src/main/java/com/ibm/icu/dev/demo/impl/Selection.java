@@ -9,6 +9,7 @@
 package com.ibm.icu.dev.demo.impl;
 
 import java.text.BreakIterator;
+import java.util.Objects;
 
 public final class Selection {
 
@@ -42,9 +43,21 @@ public final class Selection {
         return this;
     }
 
+    @Override
     public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+        if (!(other instanceof Selection)) {
+            return false;
+        }
         Selection other2 = (Selection) other;
         return anchor == other2.anchor && caret == other2.caret && clickAfter == other2.clickAfter;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(anchor, caret, clickAfter);
     }
 
     public boolean isLessThan(Selection other) {

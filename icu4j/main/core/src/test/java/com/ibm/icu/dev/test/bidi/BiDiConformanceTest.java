@@ -364,7 +364,7 @@ public class BiDiConformanceTest extends CoreTestFmwk {
         0x2e // '.' for PDI
     };
 
-    private class ConfTestBidiClassifier extends BidiClassifier {
+    private static class ConfTestBidiClassifier extends BidiClassifier {
         public ConfTestBidiClassifier() {
             super(null);
         }

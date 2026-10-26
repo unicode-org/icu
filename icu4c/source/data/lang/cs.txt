@@ -11,19 +11,35 @@ cs{
         colCaseLevel{"Rozlišování velkých a malých písmen při řazení"}
         colNormalization{"Normalizované řazení"}
         colNumeric{"Číselné řazení"}
+        colReorder{"Přeuspořádání skriptů/bloků"}
         colStrength{"Míra řazení"}
         collation{"Řazení"}
         currency{"Měna"}
+        d0{"Cílový formát"}
+        dx{"Výjimky slovníkového dělení"}
         em{"Zobrazení emodži"}
+        fw{"První den týdne"}
+        h0{"Smíšené"}
         hc{"Hodinový cyklus (12 vs. 24)"}
+        i0{"Vstupní metoda"}
+        k0{"Klávesnice"}
+        kv{"Ignorování nejvyššího"}
         lb{"Styl zalamování řádků"}
         lw{"Zalamování řádků uprostřed slova"}
+        m0{"Transformační pravidla"}
         ms{"Měrná soustava"}
+        mu{"Měrná jednotka"}
         numbers{"Čísla"}
+        rg{"Oblast pro doplňující data"}
+        s0{"Transformační zdroj"}
+        sd{"Rozdělení oblastí"}
         ss{"Zlom věty za zkratkou"}
+        t{"Transformace"}
+        t0{"Strojový překlad"}
         timezone{"Časové pásmo"}
         va{"Varianta národního prostředí"}
         x{"Soukromé použití"}
+        x0{"Soukromá transformace"}
     }
     Languages{
         aa{"afarština"}
@@ -340,7 +356,7 @@ cs{
         kxv{"kúvi"}
         ky{"kyrgyzština"}
         la{"latina"}
-        lad{"ladinština"}
+        lad{"ladino"}
         lag{"langi"}
         lah{"lahndština"}
         lam{"lambština"}
@@ -904,9 +920,13 @@ cs{
             ethiopic-amete-alem{"Etiopský (amete alem)"}
             gregorian{"Gregoriánský"}
             hebrew{"Hebrejský"}
+            indian{"Indický národní"}
             islamic{"Podle hidžry"}
             islamic-civil{"Podle hidždy (občanský)"}
+            islamic-rgsa{"Kalendář podle hidžry (pozorování Měsíce v Saúdské Arábii)"}
+            islamic-tbla{"Kalendář podle hidžry (tabulkový, astronomická epocha)"}
             islamic-umalqura{"Podle hidžry (Umm al-Qura)"}
+            iso8601{"Gregoriánský"}
             japanese{"Japonský"}
             persian{"Perský"}
             roc{"Čínské republiky"}
@@ -932,6 +952,11 @@ cs{
             no{"Běžné řazení velkých a malých písmen"}
             upper{"Nejdříve řadit velká písmena"}
         }
+        colCaseFirst%core{
+            lower{"Malá písmena"}
+            no{"Malá písmena"}
+            upper{"Velká písmena"}
+        }
         colCaseLevel{
             no{"Nerozlišovat při řazení velká a malá písmena"}
             yes{"Rozlišovat při řazení velká a malá písmena"}
@@ -944,12 +969,26 @@ cs{
             no{"Řadit číslice jednotlivě"}
             yes{"Řadit číslice numericky"}
         }
+        colReorder%core{
+            currency{"Měna"}
+            digit{"Číslice"}
+            punct{"Interpunkce"}
+            space{"Prázdné znaky"}
+            symbol{"Symbol"}
+        }
         colStrength{
             identical{"Řadit vše"}
             primary{"Řadit pouze základní písmena"}
             quaternary{"Řadit akcenty/velká a malá písmena/šířku/kana"}
             secondary{"Řadit akcenty"}
             tertiary{"Řadit akcenty/velká a malá písmena/šířku"}
+        }
+        colStrength%core{
+            identical{"Vše"}
+            primary{"Pouze základní písmena"}
+            quaternary{"Základní písmena, diakritika, velikost písmen, varianty znaků, kana"}
+            secondary{"Základní písmena, diakritika"}
+            tertiary{"Základní písmena, diakritika, velikost písmen, varianty znaků"}
         }
         collation{
             compat{"Předchozí řazení, kompatibilita"}
@@ -971,10 +1010,13 @@ cs{
             compat{"Kompatibilita"}
             dictionary{"Slovník"}
             ducet{"Výchozí Unicode"}
+            emoji{"Emoji"}
+            eor{"Evropská pravidla"}
             phonebook{"Telefonní seznam"}
             phonetic{"Fonetické"}
             pinyin{"Podle pchin-jinu"}
             search{"Hledání"}
+            searchjl{"Počáteční souhláska v korejštině"}
             standard{"Standardní"}
             stroke{"Podle tahů"}
             traditional{"Tradiční"}
@@ -988,20 +1030,30 @@ cs{
         }
         em%core{
             default{"Výchozí"}
-            emoji{"Emodži"}
+            emoji{"Emoji"}
             text{"Text"}
         }
         hc{
+            c12{"12hodinový systém"}
+            c24{"24hodinový systém"}
             h11{"12hodinový systém (0–11)"}
             h12{"12hodinový systém (1–12)"}
             h23{"24hodinový systém (0–23)"}
             h24{"24hodinový systém (1–24)"}
         }
         hc%core{
+            c12{"12"}
+            c24{"24"}
             h11{"12 (0–11)"}
             h12{"12 (1–12)"}
             h23{"24 (0–23)"}
             h24{"24 (1–24)"}
+        }
+        kv%core{
+            currency{"posunutí mezer, interpunkce, všech symbolů"}
+            punct{"posunutí mezer, interpunkce"}
+            space{"posunutí mezer, interpunkce"}
+            symbol{"posunutí mezer, interpunkce, jiných než měnových symbolů"}
         }
         lb{
             loose{"Volný styl zalamování řádků"}
@@ -1037,17 +1089,19 @@ cs{
             arab{"Arabsko-indické číslice"}
             arabext{"Rozšířené arabsko-indické číslice"}
             armn{"Arménské číslice"}
-            armnlow{"Malé arménské číslice"}
+            armnlow{"Arménské malé číslice"}
             bali{"Balijské číslice"}
             beng{"Bengálské číslice"}
+            brah{"Bráhmí číslice"}
             cakm{"Čakmské číslice"}
-            deva{"Číslice písma dévanágarí"}
+            cham{"Čamské číslice"}
+            deva{"Dévanágaríjské číslice"}
             ethi{"Etiopské číslice"}
             finance{"Finanční zápis čísel"}
             fullwide{"Číslice – plná šířka"}
             geor{"Gruzínské číslice"}
             grek{"Řecké číslice"}
-            greklow{"Malé řecké číslice"}
+            greklow{"Řecké malé číslice"}
             gujr{"Gudžarátské číslice"}
             guru{"Číslice gurmukhí"}
             hanidec{"Čínské desítkové číslice"}
@@ -1063,6 +1117,7 @@ cs{
             knda{"Kannadské číslice"}
             laoo{"Laoské číslice"}
             latn{"Západní číslice"}
+            mathmono{"Matematické znaky s pevnou šířkou"}
             mlym{"Malajálamské číslice"}
             mong{"Mongolské číslice"}
             mtei{"Manipurské číslice"}
@@ -1072,7 +1127,7 @@ cs{
             orya{"Urijské číslice"}
             osma{"Somálské číslice"}
             roman{"Římské číslice"}
-            romanlow{"Malé římské číslice"}
+            romanlow{"Římské malé číslice"}
             saur{"Saurášterské číslice"}
             sund{"Sundské číslice"}
             taml{"Tamilské tradiční číslice"}
@@ -1083,9 +1138,48 @@ cs{
             traditional{"Tradiční číslovky"}
             vaii{"Vaiské číslice"}
         }
+        numbers%core{
+            arabext{"Rozšířené arabsko-indické"}
+            armnlow{"Arménské malé"}
+            finance{"Finanční"}
+            fullwide{"Plná šířka"}
+            greklow{"Řecké malé"}
+            hanidays{"Číslování dne v měsíci znakem han v tradičním kalendáři"}
+            hanidec{
+                "Poziční desítkový systém používající čínské číselné ideogramy jako č"
+                "íslice"
+            }
+            hansfin{"Finanční znaky zjednodušené čínštiny"}
+            hantfin{"Finanční znaky tradiční čínštiny"}
+            jpanfin{"Japonské finanční"}
+            jpanyear{"Japonské číslování prvního roku éry (Gannen)"}
+            lanatham{"Sada čísel Tai Tham (církevní)"}
+            mathbold{"Matematické znaky tučné"}
+            mathdbl{"Matematické znaky dvojité"}
+            mathmono{"Matematické znaky s pevnou šířkou"}
+            mathsanb{"Matematické znaky bezpatkové tučné"}
+            mathsans{"Matematické znaky bezpatkové"}
+            mymrepka{"Myanmarské východní číslice pwo karen"}
+            mymrpao{"Myanmarské číslice pao"}
+            mymrshan{"Myanmarské číslice shan"}
+            mymrtlng{"Myanmarské číslice tai laing"}
+            native{"Nativní číslice"}
+            outlined{"Konturové"}
+            roman{"Římské velké číslice"}
+            romanlow{"Římské malé"}
+            segment{"Segmentované"}
+            tamldec{"Tamilské moderní"}
+            traditional{"Tradiční číslice"}
+        }
         ss%core{
             none{"Ne"}
             standard{"Ano"}
+        }
+        t0{
+            und{"Nespecifikovaný strojový překlad"}
+        }
+        va%core{
+            posix{"POSIX varianta"}
         }
     }
     Variants{

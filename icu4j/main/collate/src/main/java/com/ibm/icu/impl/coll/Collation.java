@@ -132,7 +132,7 @@ public final class Collation {
     static final int NO_CE_WEIGHT16 = 0x0100; // weight of LEVEL_SEPARATOR_BYTE
     public static final long NO_CE = 0x101000100L; // NO_CE_PRIMARY, NO_CE_WEIGHT16, NO_CE_WEIGHT16
 
-    /** Sort key levels. */
+    /* === Sort key levels. === */
 
     /** Unspecified level. */
     public static final int NO_LEVEL = 0;
@@ -161,7 +161,7 @@ public final class Collation {
     static final int IDENTICAL_LEVEL_FLAG = 0x40;
     static final int ZERO_LEVEL_FLAG = 0x80;
 
-    /**
+    /*
      * Special-CE32 tags, from bits 3..0 of a special 32-bit CE. Bits 31..8 are available for
      * tag-specific data. Bits 5..4: Reserved. May be used in the future to indicate lccc!=0 and
      * tccc!=0.

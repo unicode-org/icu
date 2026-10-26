@@ -24,6 +24,11 @@ es_US{
                 one{"{0} parte por millón"}
                 other{"{0} partes por millón"}
             }
+            part-per-1e6{
+                dnam{"partes p/millón"}
+                one{"{0} parte p/millón"}
+                other{"{0} partes p/millón"}
+            }
             percent{
                 dnam{"por ciento"}
             }
@@ -58,6 +63,7 @@ es_US{
             }
             siemens{
                 dnam{"simens"}
+                one{"{0} siemens"}
                 other{"{0} siemens"}
             }
         }
@@ -249,7 +255,6 @@ es_US{
         }
         force{
             kilogram-force{
-                dnam{"kp"}
                 one{"{0} kp"}
                 other{"{0} kp"}
             }
@@ -313,10 +318,6 @@ es_US{
     }
     unitsShort{
         concentr{
-            ofglucose{
-                one{"{0} Glc"}
-                other{"{0} Glc"}
-            }
             part{
                 dnam{"parte por millón"}
                 one{"{0} ppm"}

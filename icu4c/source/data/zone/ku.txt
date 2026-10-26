@@ -312,7 +312,6 @@ ku{
         }
         "Europe:Dublin"{
             ec{"Dûblîn"}
-            ld{"Saeta Îrlandayê ya Standard"}
         }
         "Europe:Gibraltar"{
             ec{"Cebelîtariq"}
@@ -340,7 +339,6 @@ ku{
         }
         "Europe:London"{
             ec{"Londra"}
-            ld{"Saeta Havînê ya Brîtanyayê"}
         }
         "Europe:Luxembourg"{
             ec{"Luksembûrg"}
@@ -445,11 +443,6 @@ ku{
             lg{"Saeta Alaskayê"}
             ls{"Saeta Standard a Alaskayê"}
         }
-        "meta:Almaty"{
-            ld{"Saeta Havînê ya Almatîyê"}
-            lg{"Saeta Almatîyê"}
-            ls{"Saeta Almatîyê ya Standard"}
-        }
         "meta:Amazon"{
             ld{"Saeta Havînê ya Amazonê"}
             lg{"Saeta Amazonê"}
@@ -484,16 +477,6 @@ ku{
             ld{"Saeta Havînê ya Apiayê"}
             lg{"Saeta Apiayê"}
             ls{"Saeta Apiayê ya Standard"}
-        }
-        "meta:Aqtau"{
-            ld{"Saeta Havînê ya Aqtauyê"}
-            lg{"Saeta Aqtauyê"}
-            ls{"Saeta Aqtauyê ya Standard"}
-        }
-        "meta:Aqtobe"{
-            ld{"Saeta Havînê ya Aqtobeyê"}
-            lg{"Saeta Aqtobeyê"}
-            ls{"Saeta Aqtobeyê ya Standard"}
         }
         "meta:Arabian"{
             ld{"Saeta Havînê ya Erebistanê"}
@@ -565,6 +548,9 @@ ku{
             ld{"Saeta Havînê ya Brasîlyayê"}
             lg{"Saeta Brasîlyayê"}
             ls{"Saeta Brasîlyayê ya Standard"}
+        }
+        "meta:British"{
+            ld{"Saeta Havînê ya Brîtanyayê"}
         }
         "meta:Brunei"{
             ls{"Saeta Brûneyê"}
@@ -699,9 +685,6 @@ ku{
             lg{"Saeta Grînlanda Rojava"}
             ls{"Saeta Standard a Grînlanda Rojava"}
         }
-        "meta:Guam"{
-            ls{"Saeta Guamê ya Standard"}
-        }
         "meta:Gulf"{
             ls{"Saeta Kendavê ya Standard"}
         }
@@ -749,6 +732,9 @@ ku{
             lg{"Saeta Îranê"}
             ls{"Saeta Îranê ya Standard"}
         }
+        "meta:Irish"{
+            ld{"Saeta Îrlandayê ya Standard"}
+        }
         "meta:Irkutsk"{
             ld{"Saeta Havînê ya Irkutskê"}
             lg{"Saeta Irkutskê"}
@@ -794,9 +780,6 @@ ku{
         "meta:Kyrgystan"{
             ls{"Saeta Qirxizistanê"}
         }
-        "meta:Lanka"{
-            ls{"Saeta Lankayê"}
-        }
         "meta:Line_Islands"{
             ls{"Saeta Giravên Lîneyê"}
         }
@@ -804,11 +787,6 @@ ku{
             ld{"Saeta Havînê ya Lord Howeyê"}
             lg{"Saeta Lord Howeyê"}
             ls{"Saeta Standard a Lord Howeyê"}
-        }
-        "meta:Macau"{
-            ld{"Saeta Havînê ya Macaoyê"}
-            lg{"Saeta Macaoyê"}
-            ls{"Saeta Macaoyê ya Standard"}
         }
         "meta:Magadan"{
             ld{"Saeta Havînê ya Magadanê"}
@@ -887,9 +865,6 @@ ku{
             lg{"Saeta Fernando de Noronhayê"}
             ls{"Saeta Fernando de Noronhayê ya Standard"}
         }
-        "meta:North_Mariana"{
-            ls{"Saeta Giravên Marianaya Bakur"}
-        }
         "meta:Novosibirsk"{
             ld{"Saeta Havînê ya Novosibirskê"}
             lg{"Saeta Novosibirskê"}
@@ -943,11 +918,6 @@ ku{
         "meta:Pyongyang"{
             ls{"Saeta Pyongyangê"}
         }
-        "meta:Qyzylorda"{
-            ld{"Saeta Havînê ya Qizilordayê"}
-            lg{"Saeta Qizilordayê"}
-            ls{"Saeta Qizilordayê ya Standard"}
-        }
         "meta:Reunion"{
             ls{"Saeta Réunionê"}
         }
@@ -965,8 +935,6 @@ ku{
             ls{"Saeta Samarayê ya Standard"}
         }
         "meta:Samoa"{
-            ld{"Saeta Havînê ya Samoayê"}
-            lg{"Saeta Samoayê"}
             ls{"Saeta Samoayê ya Standard"}
         }
         "meta:Seychelles"{

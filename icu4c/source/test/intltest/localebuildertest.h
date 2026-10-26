@@ -46,6 +46,7 @@ class LocaleBuilderTest: public IntlTest {
     void TestSetUnicodeLocaleKeywordWellFormed();
     void TestSetVariantIllFormed();
     void TestSetVariantWellFormed();
+    void TestChromiumBug557076207();
 
  private:
     void Verify(LocaleBuilder& bld, const char* expected, const char* msg);

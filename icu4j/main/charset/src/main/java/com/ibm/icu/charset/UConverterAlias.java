@@ -100,7 +100,7 @@ final class UConverterAlias {
                                                                  * offsets[]
                                                                  */
 
-    static ByteBuffer gAliasData = null;
+    static volatile ByteBuffer gAliasData = null;
 
     private static final boolean isAlias(String alias) {
         if (alias == null) {
@@ -111,14 +111,16 @@ final class UConverterAlias {
 
     private static final String CNVALIAS_DATA_FILE_NAME = "cnvalias.icu";
 
-    private static final synchronized boolean haveAliasData() throws IOException {
-        boolean needInit;
+    private static boolean haveAliasData() throws IOException {
+        if (gAliasData != null) {
+            return true;
+        }
+        synchronized (UConverterAlias.class) {
+            if (gAliasData != null) {
+                return true;
+            }
 
-        needInit = gAliasData == null;
-
-        /* load converter alias data from file if necessary */
-        if (needInit) {
-            ByteBuffer data = null;
+            /* load converter alias data from file if necessary */
             int[] tableArray = null;
             int tableStart;
 
@@ -142,17 +144,12 @@ final class UConverterAlias {
             gNormalizedStringTable = new byte[tableArray[normalizedStringTableIndex] * 2];
             b.get(gNormalizedStringTable);
 
-            data = ByteBuffer.allocate(0); // dummy UDataMemory object in absence
-            // of memory mapping
-
             if (gOptionTable[0] != STD_NORMALIZED) {
                 throw new IOException("Unsupported alias normalization");
             }
 
-            if (gAliasData == null) {
-                gAliasData = data;
-                data = null;
-            }
+            // Write gAliasData last: it's the volatile flag read by the fast path
+            gAliasData = ByteBuffer.allocate(0);
         }
 
         return true;

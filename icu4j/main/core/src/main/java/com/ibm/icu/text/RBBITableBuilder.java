@@ -16,10 +16,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.Stack;
 import java.util.TreeSet;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * This class is part of the RBBI rule compiler. It builds the state transition table used by the
@@ -118,22 +124,6 @@ class RBBITableBuilder {
         }
 
         //
-        // If the rules contained any references to {bof}
-        //   add a {bof} <cat> <former root of tree> to the
-        //   tree.  Means that all matches must start out with the
-        //   {bof} fake character.
-        //
-        if (fRB.fSetBuilder.sawBOF()) {
-            RBBINode bofTop = new RBBINode(RBBINode.opCat);
-            RBBINode bofLeaf = new RBBINode(RBBINode.leafChar);
-            bofTop.fLeftChild = bofLeaf;
-            bofTop.fRightChild = fRB.fTreeRoots[fRootIx];
-            bofLeaf.fParent = bofTop;
-            bofLeaf.fVal = 2; // Reserved value for {bof}.
-            fRB.fTreeRoots[fRootIx] = bofTop;
-        }
-
-        //
         // Add a unique right-end marker to the expression.
         //   Appears as a cat-node, left child being the original tree,
         //   right child being the end marker.
@@ -176,13 +166,6 @@ class RBBITableBuilder {
         //
         if (fRB.fChainRules) {
             calcChainedFollowPos(fRB.fTreeRoots[fRootIx], endMarkerNode);
-        }
-
-        //
-        //  BOF (start of input) test fixup.
-        //
-        if (fRB.fSetBuilder.sawBOF()) {
-            bofFixup();
         }
 
         //
@@ -436,59 +419,11 @@ class RBBITableBuilder {
 
     // -----------------------------------------------------------------------------
     //
-    //   bofFixup.    Fixup for state tables that include {bof} beginning of input testing.
-    //                Do an swizzle similar to chaining, modifying the followPos set of
-    //                the bofNode to include the followPos nodes from other {bot} nodes
-    //                scattered through the tree.
-    //
-    //                This function has much in common with calcChainedFollowPos().
-    //
-    // -----------------------------------------------------------------------------
-    void bofFixup() {
-        //
-        //   The parse tree looks like this ...
-        //         fTree root  --.       <cat>
-        //                               /     \
-        //                            <cat>   <#end node>
-        //                           /     \
-        //                     <bofNode>   rest
-        //                               of tree
-        //
-        //    We will be adding things to the followPos set of the <bofNode>
-        //
-        RBBINode bofNode = fRB.fTreeRoots[fRootIx].fLeftChild.fLeftChild;
-        Assert.assrt(bofNode.fType == RBBINode.leafChar);
-        Assert.assrt(bofNode.fVal == 2);
-
-        // Get all nodes that can be the start a match of the user-written rules
-        //  (excluding the fake bofNode)
-        //  We want the nodes that can start a match in the
-        //     part labeled "rest of tree"
-        //
-        Set<RBBINode> matchStartNodes = fRB.fTreeRoots[fRootIx].fLeftChild.fRightChild.fFirstPosSet;
-        for (RBBINode startNode : matchStartNodes) {
-            if (startNode.fType != RBBINode.leafChar) {
-                continue;
-            }
-
-            if (startNode.fVal == bofNode.fVal) {
-                //  We found a leaf node corresponding to a {bof} that was
-                //    explicitly written into a rule.
-                //  Add everything from the followPos set of this node to the
-                //    followPos set of the fake bofNode at the start of the tree.
-                //
-                bofNode.fFollowPos.addAll(startNode.fFollowPos);
-            }
-        }
-    }
-
-    // -----------------------------------------------------------------------------
-    //
     //   buildStateTable()    Determine the set of runtime DFA states and the
     //                        transition tables for these states, by the algorithm
     //                        of fig. 3.44 in Aho.
     //
-    //                        Most of the comments are quotes of Aho's psuedo-code.
+    //                        Most of the comments are quotes of Aho's pseudo-code.
     //
     // -----------------------------------------------------------------------------
     void buildStateTable() {
@@ -802,6 +737,144 @@ class RBBITableBuilder {
 
     // -----------------------------------------------------------------------------
     //
+    //    minimizeStates    Minimize the number of states of the DFA, by Algorithm
+    //                      3.6 in Aho.  The one twist is that instead of starting
+    //                      from a partition in two groups (accepting and non-
+    //                      accepting states), we partition according to all
+    //                      relevant properties of the states, namely the values of:
+    //                      - fAccepting—which may be non-accepting,
+    //                        unconditionally accepting, or the index of a
+    //                        lookahead—;
+    //                      - fLookAhead;
+    //                      - fTagsIdx.
+    //
+    // -----------------------------------------------------------------------------
+
+    void minimizeStates() {
+        class StateType {
+            int fAccepting;
+            int fLookAhead;
+            int fTagsIdx;
+
+            public StateType(int fAccepting, int fLookAhead, int fTagsIdx) {
+                this.fAccepting = fAccepting;
+                this.fLookAhead = fLookAhead;
+                this.fTagsIdx = fTagsIdx;
+            }
+
+            @Override
+            public boolean equals(Object other) {
+                if (!(other instanceof StateType)) {
+                    return false;
+                }
+                final var otherType = (StateType) other;
+                return fAccepting == otherType.fAccepting
+                        && fLookAhead == otherType.fLookAhead
+                        && fTagsIdx == otherType.fTagsIdx;
+            }
+
+            @Override
+            public int hashCode() {
+                return Objects.hash(fAccepting, fLookAhead, fTagsIdx);
+            }
+        }
+        Map<StateType, List<Integer>> initialPartition = new LinkedHashMap<>();
+        for (int i = 0; i < fDStates.size(); ++i) {
+            final RBBIStateDescriptor state = fDStates.get(i);
+            var type = new StateType(state.fAccepting, state.fLookAhead, state.fTagsIdx);
+            initialPartition.computeIfAbsent(type, k -> new ArrayList<>()).add(i);
+        }
+        // The partition Π from Algorithm 3.6.
+        // (We could call it Π, but some member companies that integrate the ICU
+        // code base prohibit non-ASCII identifiers…).
+        List<List<Integer>> partition = new ArrayList<>();
+        for (final var part : initialPartition.values()) {
+            partition.add(part);
+        }
+        // Given the index of a state 𝑠 in `fDStates`, returns a List of integers
+        // σ(𝑠) such that 𝑠.fDtran[i] (the index of the state reached by the
+        // transition from 𝑠 on the character class with index i) is in Π[σ(𝑠)[i]].
+        // We then have σ(𝑠) == σ(𝑡) if and only if “for all input symbols 𝑎, states
+        // 𝑠 and 𝑡 have transitions on 𝑎 to states in the same group of Π” (which is
+        // what defines the refinement of 𝐺 in Fig. 3.45).
+        Function<Integer, List<Integer>> partitionSignature =
+                (Integer stateIndex) -> {
+                    RBBIStateDescriptor state = fDStates.get(stateIndex);
+                    ArrayList<Integer> result = new ArrayList<>();
+                    for (int i = 0; i < state.fDtran.length; ++i) {
+                        int toState = state.fDtran[i];
+                        for (int partIndex = 0; partIndex < partition.size(); ++partIndex) {
+                            final List<Integer> part = partition.get(partIndex);
+                            if (part.contains(toState)) {
+                                result.add(partIndex);
+                                break;
+                            }
+                        }
+                    }
+                    return result;
+                };
+        // The loop between steps 2. and 3. of Algorithm 3.6.
+        for (; ; ) {
+            // Π_new.
+            List<List<Integer>> partitionNew = new ArrayList<>();
+            // The procedure from Figure 3.45, Construction of Π_new.
+            boolean refined = false;
+            // Group 𝐺 in Π (=`partition`).
+            for (List<Integer> group : partition) {
+                // Partition 𝐺 based on the signature, see above.
+                Map<List<Integer>, List<Integer>> groupRefinement = new LinkedHashMap<>();
+                // Index of a state in the group.
+                for (final int s : group) {
+                    final var signature = partitionSignature.apply(s);
+                    groupRefinement.computeIfAbsent(signature, k -> new ArrayList<>()).add(s);
+                }
+                refined |= groupRefinement.size() > 1;
+                for (final var subgroup : groupRefinement.values()) {
+                    partitionNew.add(subgroup);
+                }
+            }
+            if (refined) {
+                // This cannot be `partition = partitionNew` because `partition` is captured in
+                // `partitionSignature`.
+                partition.clear();
+                partition.addAll(partitionNew);
+            } else {
+                break;
+            }
+        }
+        // We will use the indices in `partition` as the new state indices.  Make
+        // sure that the start (1) and stop (0) states remain in their correct
+        // places; everything else can merrily be scrambled.
+        for (int i = 0; i < partition.size(); ++i) {
+            List<Integer> part_i = partition.get(i);
+            if (part_i.contains(0)) {
+                partition.set(i, partition.get(0));
+                partition.set(0, part_i);
+            } else if (part_i.contains(1)) {
+                partition.set(i, partition.get(1));
+                partition.set(1, part_i);
+            }
+        }
+        final var oldStateToPart = new int[fDStates.size()];
+        for (int i = 0; i < partition.size(); ++i) {
+            final var part = partition.get(i);
+            for (final var state : part) {
+                oldStateToPart[state] = i;
+            }
+        }
+        List<RBBIStateDescriptor> oldStates = fDStates;
+        fDStates = new ArrayList<>();
+        for (final var part : partition) {
+            RBBIStateDescriptor state = oldStates.get(part.get(0));
+            fDStates.add(state);
+            for (int j = 0; j < state.fDtran.length; ++j) {
+                state.fDtran[j] = oldStateToPart[state.fDtran[j]];
+            }
+        }
+    }
+
+    // -----------------------------------------------------------------------------
+    //
     //  printPosSets   Debug function.  Dump Nullable, firstpos, lastpos and followpos
     //                 for each node in the tree.
     //
@@ -887,48 +960,6 @@ class RBBITableBuilder {
     }
 
     /**
-     * Find duplicate (redundant) states, beginning at the specified pair, within this state table.
-     * This is an iterator-like function, used to identify states (state table rows) that can be
-     * eliminated.
-     *
-     * @param states in/out parameter, specifies where to start looking for duplicates, and returns
-     *     the first pair of duplicates found, if any.
-     * @return true if duplicate states were found, false otherwise.
-     * @internal
-     */
-    boolean findDuplicateState(RBBIRuleBuilder.IntPair states) {
-        int numStates = fDStates.size();
-        int numCols = fRB.fSetBuilder.getNumCharCategories();
-
-        for (; states.first < numStates - 1; ++states.first) {
-            RBBIStateDescriptor firstSD = fDStates.get(states.first);
-            for (states.second = states.first + 1; states.second < numStates; ++states.second) {
-                RBBIStateDescriptor duplSD = fDStates.get(states.second);
-                if (firstSD.fAccepting != duplSD.fAccepting
-                        || firstSD.fLookAhead != duplSD.fLookAhead
-                        || firstSD.fTagsIdx != duplSD.fTagsIdx) {
-                    continue;
-                }
-                boolean rowsMatch = true;
-                for (int col = 0; col < numCols; ++col) {
-                    int firstVal = firstSD.fDtran[col];
-                    int duplVal = duplSD.fDtran[col];
-                    if (!((firstVal == duplVal)
-                            || ((firstVal == states.first || firstVal == states.second)
-                                    && (duplVal == states.first || duplVal == states.second)))) {
-                        rowsMatch = false;
-                        break;
-                    }
-                }
-                if (rowsMatch) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    /**
      * Find the next duplicate state in the safe reverse table. An iterator function.
      *
      * @param states in/out parameter, specifies where to start looking for duplicates, and returns
@@ -961,38 +992,6 @@ class RBBITableBuilder {
             }
         }
         return false;
-    }
-
-    /**
-     * Remove a duplicate state (row) from the state table. All references to the deleted (second)
-     * state are redirected to first state.
-     *
-     * @param duplStates The duplicate pair of states.
-     * @internal
-     */
-    void removeState(IntPair duplStates) {
-        final int keepState = duplStates.first;
-        final int duplState = duplStates.second;
-        assert (keepState < duplState);
-        assert (duplState < fDStates.size());
-
-        fDStates.remove(duplState);
-
-        int numStates = fDStates.size();
-        int numCols = fRB.fSetBuilder.getNumCharCategories();
-        for (int state = 0; state < numStates; ++state) {
-            RBBIStateDescriptor sd = fDStates.get(state);
-            for (int col = 0; col < numCols; col++) {
-                int existingVal = sd.fDtran[col];
-                int newVal = existingVal;
-                if (existingVal == duplState) {
-                    newVal = keepState;
-                } else if (existingVal > duplState) {
-                    newVal = existingVal - 1;
-                }
-                sd.fDtran[col] = newVal;
-            }
-        }
     }
 
     /**
@@ -1032,15 +1031,164 @@ class RBBITableBuilder {
      * @internal
      */
     int removeDuplicateStates() {
-        IntPair dupls = new IntPair(3, 0);
-        int numStatesRemoved = 0;
+        int oldStateCount = fDStates.size();
+        minimizeStates();
+        return fDStates.size() - oldStateCount;
+    }
 
-        while (findDuplicateState(dupls)) {
-            // System.out.printf("Removing duplicate states (%d, %d)\n", dupls.first, dupls.second);
-            removeState(dupls);
-            ++numStatesRemoved;
+    /**
+     * Minimizes the number of slots used by the lookaheads.
+     *
+     * <p>When the state machine is first generated, every lookahead rule occupies a different slot,
+     * for instance, given
+     *
+     * <pre>
+     *   x / z;  # Lookahead 1 below.
+     *   y / z;  # Lookahead 2 below.
+     *   [xyz]*;
+     * </pre>
+     *
+     * the following state machine is produced,
+     *
+     * <pre>
+     *           x
+     *         x ⮏  z
+     *         → 𝑠₁ → 𝑎₁
+     *   START  x⇅y
+     *     ↻z  → 𝑠₂ → 𝑎₂
+     *         y ↻  z
+     *           y
+     * </pre>
+     *
+     * where 𝑠ᵢ sets the current position for lookahead i (assigning pᵢ=p_current), and 𝑎ᵢ accepts
+     * lookahead i if set, i.e., on state 𝑎ᵢ,the break iterator returns pᵢ if set. Because they
+     * accept different lookaheads, states 𝑎₁ and 𝑎₂ are distinct in the initial partition
+     * constructed by {@link #minimizeStates}, and cannot be merged, and the state machine cannot be
+     * simplified.
+     *
+     * <p>However, there is no need for lookaheads 1 and 2 to occupy different slots, i.e., there is
+     * no need for the state machine to separately store the positions set by 𝑠₁ and 𝑠₂ (for p₁
+     * and p₂ to be distinct variables). Indeed, if state 𝑠₁ is encountered, state 𝑎₂ cannot be
+     * reached without going through state 𝑠₂, and vice versa, so if p₁ and p₂ are backed by the
+     * same variable p, the value set by p=p₁=p_current on 𝑠₁ will have been overriden by
+     * p=p₂=p_current on 𝑠₂, so that the p₁-p₂ merger has no effect.
+     *
+     * <p>If the lookaheads are merged, states 𝑎₁ and 𝑎₂ are no longer initially distinct in
+     * {@link #minimizeStates} (they both accept the only lookahead), and indeed the whole state
+     * machine simplifies to
+     *
+     * <pre>
+     *         [xy]     z
+     *   START   →  𝑠  →  𝑎
+     *     ↻z       ↻
+     *             [xy]
+     * </pre>
+     *
+     * Lookaheads i and j can be merged if:
+     *
+     * <ol>
+     *   <li>From any state that sets lookahead i, no state that accepts lookahead j can be reached
+     *       without going through a state that sets lookahead j; and
+     *   <li>From any state that sets lookahead j, no state that accepts lookahead i can be reached
+     *       without going through a state that sets lookahead i.
+     * </ol>
+     *
+     * This reachability relation defines a directed graph of lookaheads, and an optimal merging of
+     * lookaheads is then a colouring of that graph. (In the example above, the graph of lookaheads
+     * has no edges, and is thus 1-colourable; more interesting examples can be found in the test
+     * {@link com.ibm.icu.dev.test.rbbi.RBBITest#TestLookaheadPolychromy}.)
+     *
+     * <p>This function first computes the adjacency matrix of lookahead reachability, and then
+     * colours the graph of lookaheads and reassigns lookahead slots accordingly.
+     *
+     * @internal
+     */
+    void minimizeLookaheads() {
+        if (fLASlotsInUse == RBBIDataWrapper.ACCEPTING_UNCONDITIONAL) {
+            return;
         }
-        return numStatesRemoved;
+        final int lookaheadCount = fLASlotsInUse - RBBIDataWrapper.ACCEPTING_UNCONDITIONAL;
+        // The last lookahead is fLASlotsInUse.
+        final int firstLookahead = RBBIDataWrapper.ACCEPTING_UNCONDITIONAL + 1;
+        final var lookaheadReachability = new boolean[lookaheadCount][lookaheadCount];
+        for (int l = firstLookahead; l <= fLASlotsInUse; ++l) {
+            for (int k = firstLookahead; k <= fLASlotsInUse; ++k) {
+                if (k != l) {
+                    for (int source = 1; source < fDStates.size(); ++source) {
+                        if (fDStates.get(source).fLookAhead != l) {
+                            continue;
+                        }
+                        // We need a final copy of k to capture it in the λs below.
+                        final int targetLookahead = k;
+                        if (reachableByTransitions(
+                                source,
+                                /* isSink= */ state ->
+                                        fDStates.get(state).fAccepting == targetLookahead,
+                                /* excludedState= */ state ->
+                                        fDStates.get(state).fLookAhead == targetLookahead)) {
+                            lookaheadReachability[l - firstLookahead][k - firstLookahead] = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        final var colours = new int[lookaheadCount];
+        // Brute-force colouring: the number of lookaheads is in practice small, and the chromatic
+        // number is in practice 1, so this usually terminates in one iteration of the first two
+        // loops.
+        // Of course the worst case is exponential, but exponentials are everywhere in regular
+        // expressions anyway.
+        // The outer loop terminates after at most `lookaheadCount` iterations
+        // (when the chromatic number equals the number of lookaheads being coloured).
+        for (int chromaticNumber = 1; ; ++chromaticNumber) {
+            Arrays.setAll(colours, i -> 0);
+            // This loop terminates after at most chromaticNumber ** lookaheadCount iterations.
+            for (; ; ) {
+                boolean validColouring = true;
+                // Here `source` and `sink` correspond to lookaheads, not states.
+                validateColouring:
+                for (int source = 0; source < lookaheadCount; ++source) {
+                    for (int sink = 0; sink < lookaheadCount; ++sink) {
+                        if (lookaheadReachability[source][sink]
+                                && colours[source] == colours[sink]) {
+                            validColouring = false;
+                            break validateColouring;
+                        }
+                    }
+                }
+
+                if (validColouring) {
+                    // We have found a valid colouring of the graph of lookaheads.  Assign lookahead
+                    // slots accordingly.
+                    for (final var state : fDStates) {
+                        if (state.fAccepting > RBBIDataWrapper.ACCEPTING_UNCONDITIONAL) {
+                            state.fAccepting =
+                                    firstLookahead + colours[state.fAccepting - firstLookahead];
+                        }
+                        if (state.fLookAhead != 0) {
+                            state.fLookAhead =
+                                    firstLookahead + colours[state.fLookAhead - firstLookahead];
+                        }
+                    }
+                    fLASlotsInUse = RBBIDataWrapper.ACCEPTING_UNCONDITIONAL + chromaticNumber;
+                    return;
+                } else {
+                    // Increment the colour of the first lookahead, and then carry if we reach
+                    // `chromaticNumber` (which is one more than the greatest colour).
+                    ++colours[0];
+                    for (int i = 0; i < colours.length - 1 && colours[i] == chromaticNumber; ++i) {
+                        colours[i] = 0;
+                        ++colours[i + 1];
+                    }
+                    if (colours[colours.length - 1] == chromaticNumber) {
+                        // We tried all assignments of colours in {0, …, chromaticNumber - 1},
+                        // we need more colours.
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -1108,9 +1256,6 @@ class RBBITableBuilder {
         if (fRB.fLookAheadHardBreak) {
             table.fFlags |= RBBIDataWrapper.RBBI_LOOKAHEAD_HARD_BREAK;
         }
-        if (fRB.fSetBuilder.sawBOF()) {
-            table.fFlags |= RBBIDataWrapper.RBBI_BOF_REQUIRED;
-        }
         if (use8Bits) {
             table.fFlags |= RBBIDataWrapper.RBBI_8BITS_ROWS;
         }
@@ -1152,30 +1297,214 @@ class RBBITableBuilder {
         int numCharClasses = fRB.fSetBuilder.getNumCharCategories();
         int numStates = fDStates.size();
 
-        for (int c1 = 0; c1 < numCharClasses; ++c1) {
-            for (int c2 = 0; c2 < numCharClasses; ++c2) {
+        // The elements at indices 0 and ACCEPTING_UNCONDITIONAL (1) are never used.
+        final var lookaheadPositions = new int[fLASlotsInUse + 1];
+        final var wantedLookaheadsInPair = new int[fLASlotsInUse + 1];
+        // Same as in RuleBasedBreakIterator.
+        // TODO(egg): Maybe this should move to RBBIDataWrapper like ACCEPTING_UNCONDITIONAL?
+        final int START_STATE = 1;
+        // Index -2 is used to signify a text position before the pair (c1, c2).
+        final int BEFORE_PAIR = -2;
+        // In lookaheadPositions, index -1 is used to signify that the lookahead has not been set.
+        final int LOOKAHEAD_NOT_SET = -1;
+        for (int c1 = 1; c1 < numCharClasses; ++c1) {
+            if (fRB.fSetBuilder.getFirstChar(c1) < 0) {
+                continue;
+            }
+            trySymbolPairs:
+            for (int c2 = 1; c2 < numCharClasses; ++c2) {
+                if (fRB.fSetBuilder.getFirstChar(c2) < 0) {
+                    continue;
+                }
                 int wantedEndState = -1;
-                int endState = 0;
-                for (int startState = 1; startState < numStates; ++startState) {
-                    RBBIStateDescriptor startStateD = fDStates.get(startState);
-                    int s2 = startStateD.fDtran[c1];
-                    RBBIStateDescriptor s2StateD = fDStates.get(s2);
-                    endState = s2StateD.fDtran[c2];
-                    if (wantedEndState < 0) {
-                        wantedEndState = endState;
-                    } else {
-                        if (wantedEndState != endState) {
-                            break;
+                int wantedLastAcceptingPosition = -1;
+                boolean mustCheckConsistentWithStartC2 = false;
+                final int[] text = {c1, c2};
+                for (int injectedState = START_STATE; injectedState < numStates; ++injectedState) {
+                    for (int injectedLookahead = RBBIDataWrapper.ACCEPTING_UNCONDITIONAL;
+                            injectedLookahead <= fLASlotsInUse;
+                            ++injectedLookahead) {
+                        // We never use this initial value of lastBreak, but the Java compiler does
+                        // not realize that.
+                        int lastBreak = BEFORE_PAIR;
+                        int lastAcceptingPosition = BEFORE_PAIR;
+                        Arrays.setAll(lookaheadPositions, l -> LOOKAHEAD_NOT_SET);
+                        if (injectedLookahead != RBBIDataWrapper.ACCEPTING_UNCONDITIONAL) {
+                            lookaheadPositions[injectedLookahead] = BEFORE_PAIR;
+                        }
+                        {
+                            final RBBIStateDescriptor injectedStateDescriptor =
+                                    fDStates.get(injectedState);
+                            if (injectedStateDescriptor.fAccepting
+                                    == RBBIDataWrapper.ACCEPTING_UNCONDITIONAL) {
+                                lastAcceptingPosition = 0;
+                            } else if (injectedStateDescriptor.fAccepting == injectedLookahead) {
+                                continue;
+                            }
+                            if (injectedStateDescriptor.fLookAhead != 0) {
+                                lookaheadPositions[injectedStateDescriptor.fLookAhead] = 0;
+                            }
+                        }
+                        int s = injectedState;
+                        int i = 0;
+                        // We are simulating starting from some injected initial state into an inner
+                        // loop, and we have no goto in Java, so this flag the part of the inner
+                        // loop that we want to jump over.
+                        boolean injecting = true;
+                        // Loop Run_DFA in L2/26-135, without the termination condition (we do not
+                        // need to simulate the end of text).
+                        runDFA:
+                        for (; ; ) {
+                            if (!injecting) {
+                                s = START_STATE;
+
+                                Arrays.setAll(lookaheadPositions, l -> LOOKAHEAD_NOT_SET);
+                                i = lastBreak;
+                            }
+                            // Loop Find_Next_Break in L2/26-135.
+                            findNextBreak:
+                            for (; ; ) {
+                                if (injecting) {
+                                    injecting = false;
+                                }
+                                if (i == BEFORE_PAIR || i == 2) {
+                                    break runDFA;
+                                }
+                                final int symbolAhead = text[i];
+                                ++i;
+                                RBBIStateDescriptor sDescriptor = fDStates.get(s);
+                                if (sDescriptor.fDtran[symbolAhead] != 0) {
+                                    s = sDescriptor.fDtran[symbolAhead];
+                                    sDescriptor = fDStates.get(s);
+                                } else {
+                                    if (lastBreak != BEFORE_PAIR
+                                            && lastAcceptingPosition == lastBreak) {
+                                        // The pair (c1, c2) puts us in an infinite loop from the
+                                        // current configuration, presumably because some one-
+                                        // character strings are not in the language recognized by
+                                        // the rules).
+                                        // This should never happen for a segmentation algorithm.
+                                        // The RBBI implementation forcefully advances the iterator
+                                        // in that case; let’s just say the pair is unsafe and move
+                                        // on.
+                                        continue trySymbolPairs;
+                                    }
+                                    lastBreak = lastAcceptingPosition;
+                                    break findNextBreak;
+                                }
+
+                                if (sDescriptor.fAccepting
+                                        == RBBIDataWrapper.ACCEPTING_UNCONDITIONAL) {
+                                    lastAcceptingPosition = i;
+                                } else if (sDescriptor.fAccepting
+                                                > RBBIDataWrapper.ACCEPTING_UNCONDITIONAL
+                                        && lookaheadPositions[sDescriptor.fAccepting]
+                                                != LOOKAHEAD_NOT_SET) {
+                                    lastBreak = lookaheadPositions[sDescriptor.fAccepting];
+                                    break findNextBreak;
+                                }
+                                if (sDescriptor.fLookAhead != 0) {
+                                    lookaheadPositions[sDescriptor.fLookAhead] = i;
+                                }
+                            }
+                        }
+                        if (i == BEFORE_PAIR) {
+                            // Starting on `injectedState` with `injectedLookahead` set, with the
+                            // pair (c1, c2) ahead, the state machine finds a break before the pair;
+                            // it will thus come back to the pair in a different configuration,
+                            // which is covered by some other iteration of the loop over
+                            // `injectedState` and `injectedLookahead`.
+                            continue;
+                        }
+                        if (wantedEndState < 0) {
+                            wantedEndState = s;
+                            wantedLastAcceptingPosition = lastAcceptingPosition;
+                            for (int l = RBBIDataWrapper.ACCEPTING_UNCONDITIONAL + 1;
+                                    l <= fLASlotsInUse;
+                                    ++l) {
+                                if (lookaheadPositions[l] != LOOKAHEAD_NOT_SET
+                                        && lookaheadPositions[l] != BEFORE_PAIR
+                                        && lookaheadPositions[l] != 0) {
+                                    wantedLookaheadsInPair[l] = lookaheadPositions[i];
+                                } else {
+                                    wantedLookaheadsInPair[l] = LOOKAHEAD_NOT_SET;
+                                }
+                            }
+                        } else {
+                            if (wantedEndState != s) {
+                                // We can get out of the pair on different states depending on the
+                                // initial configuration.
+                                continue trySymbolPairs;
+                            }
+                            if (wantedLastAcceptingPosition != lastAcceptingPosition) {
+                                continue trySymbolPairs;
+                            }
+                        }
+                        // A lookahead some distance before the pair (set to BEFORE_PAIR) means we
+                        // will come back to the pair in a different configuration if it matches, a
+                        // lookahead at position 0 means we get back to the pair on the start state
+                        // if it matches; either way, this is covered by other iterations of the
+                        // loop over injected states and lookaheads.
+                        // For lookaheads at position 1 (in the middle of the pair) and 2 (after the
+                        // pair), these have two ways of being safe: either they are always set, or
+                        // it does not matter if they are set, because if they match we come back
+                        // with the same state.
+                        for (int l = RBBIDataWrapper.ACCEPTING_UNCONDITIONAL + 1;
+                                l <= fLASlotsInUse;
+                                ++l) {
+                            if (lookaheadPositions[l] == BEFORE_PAIR
+                                    || lookaheadPositions[l] == 0
+                                    || lookaheadPositions[l] == wantedLookaheadsInPair[l]) {
+                                continue;
+                            }
+                            if (lookaheadPositions[l] == 2 || wantedLookaheadsInPair[l] == 2) {
+                                // A lookahead after the pair means we will come back to the end of
+                                // the pair on the start state if it matches, so in order for the
+                                // pair to be  safe if that lookahead is not consistently set, we
+                                // must have left it on the start state.
+                                if (wantedEndState != START_STATE) {
+                                    continue trySymbolPairs;
+                                }
+                            }
+                            if (lookaheadPositions[l] == 1 || wantedLookaheadsInPair[l] == 1) {
+                                // If a lookahead in the middle of the pair matches, we will come
+                                // back to c2 on the start state.
+                                mustCheckConsistentWithStartC2 = true;
+                            }
                         }
                     }
                 }
-                if (wantedEndState == endState) {
-                    safePairs.append((char) c1);
-                    safePairs.append((char) c2);
-                    // System.out.printf("(%d, %d) ", c1, c2);
+                if (mustCheckConsistentWithStartC2) {
+                    final RBBIStateDescriptor startDescriptor = fDStates.get(START_STATE);
+                    final var c2State = startDescriptor.fDtran[c2];
+                    if (c2State != wantedEndState) {
+                        continue trySymbolPairs;
+                    }
+                    final RBBIStateDescriptor c2StateDescriptor = fDStates.get(c2State);
+                    // In a segmentation algorithm, any single symbol transitions to an
+                    // accepting state from the start state (a single character is a
+                    // possible segment), so we know c2State is accepting.
+                    assert (c2StateDescriptor.fAccepting
+                            == RBBIDataWrapper.ACCEPTING_UNCONDITIONAL);
+                    if (wantedLastAcceptingPosition != 2) {
+                        continue trySymbolPairs;
+                    }
+                    // If that in turn sets a lookahead, we have a lookahead after the
+                    // pair.  If we consistently have that the pair is safe.  Otherwise, if we match
+                    // that lookahead, we end up on the start state.
+                    for (int l = RBBIDataWrapper.ACCEPTING_UNCONDITIONAL + 1;
+                            l <= fLASlotsInUse;
+                            ++l) {
+                        if (((wantedLookaheadsInPair[l] == 2)
+                                        != (c2StateDescriptor.fLookAhead == l))
+                                && wantedEndState != START_STATE) {
+                            continue trySymbolPairs;
+                        }
+                    }
                 }
+                safePairs.append((char) c1);
+                safePairs.append((char) c2);
             }
-            // System.out.printf("\n");
         }
 
         // Populate the initial safe table.
@@ -1399,5 +1728,38 @@ class RBBITableBuilder {
             System.out.print("\n");
         }
         System.out.print("\n\n");
+    }
+
+    /**
+     * Returns true if a state for which `isSink` returns true is reachable from state `source` by
+     * following transitions without going through any state for which `excludedState` returns true.
+     * Note that “going through” is distinct from “reaching”, and means entering and then leaving: A
+     * state can be both a sink and excluded, and can still be reachable.
+     */
+    private boolean reachableByTransitions(
+            int source, Predicate<Integer> isSink, Predicate<Integer> excludedState) {
+        Stack<Integer> boundary = new Stack<>();
+        for (final int state : fDStates.get(source).fDtran) {
+            if (state != 0) {
+                boundary.push(state);
+            }
+        }
+        final var visited = new boolean[fDStates.size()];
+        while (!boundary.empty()) {
+            final int s = boundary.pop();
+            if (isSink.test(s)) {
+                return true;
+            }
+            if (visited[s] || excludedState.test(s)) {
+                continue;
+            }
+            visited[s] = true;
+            for (final int t : fDStates.get(s).fDtran) {
+                if (t != 0 && !visited[t]) {
+                    boundary.push(t);
+                }
+            }
+        }
+        return false;
     }
 }

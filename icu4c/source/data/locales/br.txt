@@ -204,16 +204,25 @@ br{
                 }
                 decimalFormat{
                     1000{
+                        few{"0k"}
+                        many{"0k"}
                         one{"0k"}
                         other{"0k"}
+                        two{"0k"}
                     }
                     10000{
+                        few{"00k"}
+                        many{"00k"}
                         one{"00k"}
                         other{"00k"}
+                        two{"00k"}
                     }
                     100000{
+                        few{"000k"}
+                        many{"000k"}
                         one{"000k"}
                         other{"000k"}
+                        two{"000k"}
                     }
                 }
             }
@@ -556,15 +565,15 @@ br{
                     y{"y – y G"}
                 }
                 GyM{
-                    G{"MM/y GGGGG – MM/y GGGGG"}
-                    M{"MM/y – MM/y GGGGG"}
-                    y{"MM/y – MM/y GGGGG"}
+                    G{"MM/y G – MM/y G"}
+                    M{"MM/y – MM/y G"}
+                    y{"MM/y – MM/y G"}
                 }
                 GyMEd{
-                    G{"E dd/MM/y GGGGG – E dd/MM/y GGGGG"}
-                    M{"E dd/MM/y – E dd/MM/y GGGGG"}
-                    d{"E dd/MM/y – E dd/MM/y GGGGG"}
-                    y{"E dd/MM/y – E dd/MM/y GGGGG"}
+                    G{"E dd/MM/y G – E dd/MM/y G"}
+                    M{"E dd/MM/y – E dd/MM/y G"}
+                    d{"E dd/MM/y – E dd/MM/y G"}
+                    y{"E dd/MM/y – E dd/MM/y G"}
                 }
                 GyMMM{
                     G{"MMM y G – MMM y G"}
@@ -584,10 +593,10 @@ br{
                     y{"d MMM y – d MMM y G"}
                 }
                 GyMd{
-                    G{"dd/MM/y GGGGG – dd/MM/y GGGGG"}
-                    M{"dd/MM/y – dd/MM/y GGGGG"}
-                    d{"dd/MM/y – dd/MM/y GGGGG"}
-                    y{"dd/MM/y – dd/MM/y GGGGG"}
+                    G{"dd/MM/y G – dd/MM/y G"}
+                    M{"dd/MM/y – dd/MM/y G"}
+                    d{"dd/MM/y – dd/MM/y G"}
+                    y{"dd/MM/y – dd/MM/y G"}
                 }
                 MEd{
                     M{"E dd/MM – E dd/MM"}
@@ -596,6 +605,10 @@ br{
                 MMMEd{
                     M{"E d MMM – E d MMM"}
                     d{"E d MMM – E d MMM"}
+                }
+                MMMMd{
+                    M{"d MMMM – d MMMM"}
+                    d{"d–d MMMM"}
                 }
                 MMMd{
                     M{"d MMM – d MMM"}
@@ -627,13 +640,13 @@ br{
                     y{"y–y G"}
                 }
                 yM{
-                    M{"MM/y–MM/y GGGGG"}
-                    y{"MM/y–MM/y GGGGG"}
+                    M{"MM/y–MM/y G"}
+                    y{"MM/y–MM/y G"}
                 }
                 yMEd{
-                    M{"E dd/MM/y – E dd/MM/y GGGGG"}
-                    d{"E dd/MM/y – E dd/MM/y GGGGG"}
-                    y{"E dd/MM/y – E dd/MM/y GGGGG"}
+                    M{"E dd/MM/y – E dd/MM/y G"}
+                    d{"E dd/MM/y – E dd/MM/y G"}
+                    y{"E dd/MM/y – E dd/MM/y G"}
                 }
                 yMMM{
                     M{"MMM – MMM y G"}
@@ -654,9 +667,9 @@ br{
                     y{"d MMM y – d MMM y G"}
                 }
                 yMd{
-                    M{"dd/MM/y–dd/MM/y GGGGG"}
-                    d{"dd/MM/y–dd/MM/y GGGGG"}
-                    y{"dd/MM/y–dd/MM/y GGGGG"}
+                    M{"dd/MM/y–dd/MM/y G"}
+                    d{"dd/MM/y–dd/MM/y G"}
+                    y{"dd/MM/y–dd/MM/y G"}
                 }
             }
         }
@@ -696,6 +709,9 @@ br{
                 "{1}, {0}",
                 "{1}, {0}",
             }
+            appendItems{
+                Era{"{0} {1}"}
+            }
             availableFormats{
                 Ed{"E d"}
                 Ehm{"E h:mm a"}
@@ -705,12 +721,16 @@ br{
                 GyMEd{"E, dd/MM/y G"}
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E d MMM y G"}
+                GyMMMM{"MMMM y G"}
+                GyMMMMEd{"E d MMMM y G"}
+                GyMMMMd{"d MMMM y G"}
                 GyMMMd{"d MMM y G"}
                 GyMd{"dd/MM/y G"}
                 Hv{"HH'e' v"}
                 M{"MM"}
                 MEd{"E dd/MM"}
                 MMMEd{"E d MMM"}
+                MMMMEd{"E d MMMM"}
                 MMMMW{
                     few{"'sizhun' W 'miz' MMMM"}
                     many{"'sizhun' W 'miz' MMMM"}
@@ -731,6 +751,8 @@ br{
                 yMMM{"MMM y"}
                 yMMMEd{"E d MMM y"}
                 yMMMM{"MMMM y"}
+                yMMMMEd{"E d MMMM y"}
+                yMMMMd{"d MMMM y"}
                 yMMMd{"d MMM y"}
                 yMd{"dd/MM/y"}
                 yQQQ{"QQQ y"}
@@ -840,6 +862,10 @@ br{
                 MMMEd{
                     M{"E d MMM – E d MMM"}
                     d{"E d MMM – E d MMM"}
+                }
+                MMMMd{
+                    M{"d MMMM – d MMMM"}
+                    d{"d–d MMMM"}
                 }
                 MMMd{
                     M{"d MMM – d MMM"}
@@ -1029,6 +1055,8 @@ br{
         digits{"sifr"}
         dingbats{"arouez Dingbat"}
         divination_symbols{"arouez divinouriezh"}
+        downwards_arrows{"bir dʼan traoñ"}
+        downwards_upwards_arrows{"bir dʼan traoñ ha dʼal laez"}
         east_asian_scripts{"skriturioù Azia ar Reter"}
         european_scripts{"skritur europat"}
         female{"benel"}
@@ -1037,6 +1065,7 @@ br{
         food_drink{"boued hag evaj"}
         format{"furmad"}
         format_whitespace{"furmad hag esaouennoù"}
+        geometric_shapes{"stumm geometrek"}
         han_characters{"arouezennoù han"}
         han_radicals{"gwrizienn han"}
         hanja{"arouezenn hanja"}
@@ -1045,12 +1074,17 @@ br{
         heart{"kalon"}
         historic_scripts{"skritur istorel"}
         japanese_kana{"kana japanek"}
+        keycap{"stokell"}
+        leftwards_arrows{"bir tu kleiz"}
+        leftwards_rightwards_arrows{"bir tu kleiz ha dehoù"}
+        limited_use{"implij bevennet"}
         male{"gourel"}
         math_symbols{"arouez matematikel"}
         middle_eastern_scripts{"skriturioù Reter-Kreiz"}
         miscellaneous{"liesseurt"}
         modern_scripts{"skritur modern"}
         modifier{"kemmañ"}
+        musical_symbols{"arouez sonerezh"}
         nature{"natur"}
         numbers{"niveroù"}
         objects{"tra"}
@@ -1060,6 +1094,7 @@ br{
         pictographs{"piktogramm"}
         place{"lecʼh"}
         punctuation{"poentadur"}
+        rightwards_arrows{"bir tu dehoù"}
         sign_standard_symbols{"sin pe arouez"}
         small_form_variant{"adstummoù bihan"}
         smiley{"fromlun"}
@@ -1068,8 +1103,10 @@ br{
         southeast_asian_scripts{"skriturioù Azia ar Gevred"}
         symbols{"arouez"}
         technical_symbols{"arouez teknikel"}
+        tone_marks{"arouez ton"}
         travel{"beaj"}
         travel_places{"beaj pe lecʼh"}
+        upwards_arrows{"bir dʼal laez"}
         variant_forms{"adstumm"}
         vocalic_jamo{"bogalennoù jamo"}
         weather{"amzer"}
@@ -1192,12 +1229,44 @@ br{
                 "0"{"G-mañ"}
                 "1"{"G a zeu"}
             }
+            relativeTime{
+                future{
+                    few{"a-benn {0} G"}
+                    many{"a-benn {0} G"}
+                    one{"a-benn {0} G"}
+                    other{"a-benn {0} G"}
+                    two{"a-benn {0} G"}
+                }
+                past{
+                    few{"{0} G zo"}
+                    many{"{0} G zo"}
+                    one{"{0} G zo"}
+                    other{"{0} G zo"}
+                    two{"{0} G zo"}
+                }
+            }
         }
         fri-short{
             relative{
                 "-1"{"Gwe. diwezhañ"}
                 "0"{"Gwe.-mañ"}
                 "1"{"Gwe. a zeu"}
+            }
+            relativeTime{
+                future{
+                    few{"a-benn {0} Gwe."}
+                    many{"a-benn {0} Gwe."}
+                    one{"a-benn {0} Gwe."}
+                    other{"a-benn {0} Gwe."}
+                    two{"a-benn {0} Gwe."}
+                }
+                past{
+                    few{"{0} Gwe. zo"}
+                    many{"{0} Gwe. zo"}
+                    one{"{0} Gwe. zo"}
+                    other{"{0} Gwe. zo"}
+                    two{"{0} Gwe. zo"}
+                }
             }
         }
         hour{
@@ -1424,14 +1493,14 @@ br{
                     many{"+{0} miz"}
                     one{"+{0} miz"}
                     other{"+{0} miz"}
-                    two{"+{0} miz"}
+                    two{"+{0} viz"}
                 }
                 past{
                     few{"-{0} miz"}
                     many{"-{0} miz"}
                     one{"-{0} miz"}
                     other{"-{0} miz"}
-                    two{"-{0} miz"}
+                    two{"-{0} viz"}
                 }
             }
         }
@@ -1734,14 +1803,14 @@ br{
             relativeTime{
                 future{
                     few{"a-benn {0} Y"}
-                    many{"a-benn {0} a Yaou."}
+                    many{"a-benn {0} Y"}
                     one{"a-benn {0} Y"}
                     other{"a-benn {0} Y"}
                     two{"a-benn {0} Y"}
                 }
                 past{
                     few{"{0} Y zo"}
-                    many{"{0} a Y zo"}
+                    many{"{0} Y zo"}
                     one{"{0} Y zo"}
                     other{"{0} Y zo"}
                     two{"{0} Y zo"}
@@ -1757,14 +1826,14 @@ br{
             relativeTime{
                 future{
                     few{"a-benn {0} Yaou"}
-                    many{"a-benn {0} a Yaou."}
+                    many{"a-benn {0} Yaou"}
                     one{"a-benn {0} Yaou"}
                     other{"a-benn {0} Yaou"}
                     two{"a-benn {0} Yaou"}
                 }
                 past{
                     few{"{0} Yaou zo"}
-                    many{"{0} a Yaou. zo"}
+                    many{"{0} Yaou zo"}
                     one{"{0} Yaou zo"}
                     other{"{0} Yaou zo"}
                     two{"{0} Yaou zo"}
@@ -1800,12 +1869,44 @@ br{
                 "0"{"Mz-mañ"}
                 "1"{"Mz a zeu"}
             }
+            relativeTime{
+                future{
+                    few{"a-benn {0} Mz"}
+                    many{"a-benn {0} Mz"}
+                    one{"a-benn {0} Mz"}
+                    other{"a-benn {0} Mz"}
+                    two{"a-benn {0} Mz"}
+                }
+                past{
+                    few{"{0} Mz zo"}
+                    many{"{0} Mz zo"}
+                    one{"{0} Mz zo"}
+                    other{"{0} Mz zo"}
+                    two{"{0} Mz zo"}
+                }
+            }
         }
         tue-short{
             relative{
                 "-1"{"Meu. diwezhañ"}
                 "0"{"Meu.-mañ"}
                 "1"{"Meu. a zeu"}
+            }
+            relativeTime{
+                future{
+                    few{"a-benn {0} Meu."}
+                    many{"a-benn {0} Meu."}
+                    one{"a-benn {0} Meu."}
+                    other{"a-benn {0} Meu."}
+                    two{"a-benn {0} Meu."}
+                }
+                past{
+                    few{"{0} Meu. zo"}
+                    many{"{0} Meu. zo"}
+                    one{"{0} Meu. zo"}
+                    other{"{0} Meu. zo"}
+                    two{"{0} Meu. zo"}
+                }
             }
         }
         wed{
@@ -1837,12 +1938,44 @@ br{
                 "0"{"Mc-mañ"}
                 "1"{"Mc a zeu"}
             }
+            relativeTime{
+                future{
+                    few{"a-benn {0} Mc"}
+                    many{"a-benn {0} Mc"}
+                    one{"a-benn {0} Mc"}
+                    other{"a-benn {0} Mc"}
+                    two{"a-benn {0} Mc"}
+                }
+                past{
+                    few{"{0} Mc zo"}
+                    many{"{0} Mc zo"}
+                    one{"{0} Mc zo"}
+                    other{"{0} Mc zo"}
+                    two{"{0} Mc zo"}
+                }
+            }
         }
         wed-short{
             relative{
                 "-1"{"Mer. diwezhañ"}
                 "0"{"Mer.-mañ"}
                 "1"{"Mer. a zeu"}
+            }
+            relativeTime{
+                future{
+                    few{"a-benn {0} Mer."}
+                    many{"a-benn {0} Mer."}
+                    one{"a-benn {0} Mer."}
+                    other{"a-benn {0} Mer."}
+                    two{"a-benn {0} Mer."}
+                }
+                past{
+                    few{"{0} Mer. zo"}
+                    many{"{0} Mer. zo"}
+                    one{"{0} Mer. zo"}
+                    other{"{0} Mer. zo"}
+                    two{"{0} Mer. zo"}
+                }
             }
         }
         week{
@@ -2060,6 +2193,23 @@ br{
                 "yue",
                 "zh",
             }
+        }
+        namePattern{
+            givenFirst-long-addressing-formal{"{title} {surname-prefix} {surname-core}"}
+            givenFirst-long-addressing-informal{"{given-informal}"}
+            givenFirst-long-referring-formal{
+                "{title} {given} {given2} {surname-prefix} {surname-core} {surname2} "
+                "{credentials}"
+            }
+            givenFirst-long-referring-informal{"{given-informal} {surname-prefix} {surname-core}"}
+            givenFirst-medium-addressing-formal{"{title} {surname-prefix} {surname-core}"}
+            givenFirst-medium-addressing-informal{"{given-informal}"}
+            givenFirst-medium-referring-formal{"{title} {given} {surname-prefix} {surname-core} {credentials}"}
+            givenFirst-medium-referring-informal{"{given-informal} {surname-prefix} {surname-core}"}
+            givenFirst-short-addressing-formal{"{title} {surname-prefix} {surname-core}"}
+            givenFirst-short-addressing-informal{"{given-informal}"}
+            givenFirst-short-referring-formal{"{given} {surname-prefix} {surname-core}"}
+            givenFirst-short-referring-informal{"{given-informal} {surname-initial}"}
         }
     }
 }

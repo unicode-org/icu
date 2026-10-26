@@ -14,6 +14,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.util.Date;
 import javax.xml.XMLConstants;
@@ -159,7 +161,7 @@ public final class XLIFF2ICUConverter {
     private static final String ALIAS = "alias";
     private static final String LINESEP = System.getProperty("line.separator");
     private static final String BOM = "\uFEFF";
-    private static final String CHARSET = "UTF-8";
+    private static final Charset CHARSET = StandardCharsets.UTF_8;
     private static final String OPENBRACE = "{";
     private static final String CLOSEBRACE = "}";
     private static final String COLON = ":";
@@ -690,7 +692,7 @@ public final class XLIFF2ICUConverter {
         return oldLangName;
     }
 
-    private class Resource {
+    private static class Resource {
         String[] note = new String[20];
         int noteLen = 0;
         String translate;
@@ -776,7 +778,7 @@ public final class XLIFF2ICUConverter {
         }
     }
 
-    private class ResourceString extends Resource {
+    private static class ResourceString extends Resource {
         String val;
 
         @Override
@@ -806,7 +808,7 @@ public final class XLIFF2ICUConverter {
         }
     }
 
-    private class ResourceAlias extends Resource {
+    private static class ResourceAlias extends Resource {
         String val;
 
         @Override
@@ -834,7 +836,7 @@ public final class XLIFF2ICUConverter {
         }
     }
 
-    private class ResourceInt extends Resource {
+    private static class ResourceInt extends Resource {
         String val;
 
         @Override
@@ -855,7 +857,7 @@ public final class XLIFF2ICUConverter {
         }
     }
 
-    private class ResourceBinary extends Resource {
+    private static class ResourceBinary extends Resource {
         String internal;
         String external;
 
@@ -889,7 +891,7 @@ public final class XLIFF2ICUConverter {
         }
     }
 
-    private class ResourceIntVector extends Resource {
+    private static class ResourceIntVector extends Resource {
         ResourceInt first;
 
         @Override
@@ -912,7 +914,7 @@ public final class XLIFF2ICUConverter {
         }
     }
 
-    private class ResourceTable extends Resource {
+    private static class ResourceTable extends Resource {
         Resource first;
 
         @Override
@@ -932,7 +934,7 @@ public final class XLIFF2ICUConverter {
         }
     }
 
-    private class ResourceArray extends Resource {
+    private static class ResourceArray extends Resource {
         Resource first;
 
         @Override

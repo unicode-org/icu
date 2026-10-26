@@ -139,16 +139,6 @@ gu{
             mole{
                 gender{"masculine"}
             }
-            ofglucose{
-                dnam{"ગ્લૂકોઝ"}
-                one{"{0} ગ્લૂકોઝ"}
-                other{"{0} ગ્લૂકોઝ"}
-            }
-            part{
-                dnam{"ભાગ"}
-                one{"{0} ભાગ"}
-                other{"{0} ભાગ"}
-            }
             part-per-1e6{
                 dnam{"કણ પ્રતિ મિલિયન"}
                 gender{"masculine"}
@@ -880,16 +870,6 @@ gu{
         concentr{
             millimole-per-liter{
                 dnam{"mmol/L"}
-            }
-            ofglucose{
-                dnam{"ગ્લૂકોઝ"}
-                one{"{0} ગ્લૂકોઝ"}
-                other{"{0} ગ્લૂકોઝ"}
-            }
-            part{
-                dnam{"ભાગ"}
-                one{"{0} ભાગ"}
-                other{"{0} ભાગ"}
             }
             part-per-1e6{
                 dnam{"ppm"}

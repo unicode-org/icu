@@ -13,7 +13,6 @@ el{
                 atLeast{"{0}+"}
             }
             patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
                 currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
             }
@@ -233,7 +232,7 @@ el{
                 "h:mm:ss a z",
                 "h:mm:ss a",
                 "h:mm a",
-                "EEEE, d MMMM y G",
+                "EEEE d MMMM y G",
                 "d MMMM y G",
                 "d MMM y G",
                 "d/M/y GGGGG",
@@ -265,15 +264,15 @@ el{
                 Ehms{"E h:mm:ss a"}
                 Gy{"y G"}
                 GyM{"MM-y G"}
-                GyMEd{"E, dd-MM-y G"}
+                GyMEd{"E dd/MM/y G"}
                 GyMMM{"MMM y G"}
-                GyMMMEd{"E, d MMM y G"}
+                GyMMMEd{"E d MMM y G"}
                 GyMMMd{"d MMM y G"}
                 GyMd{"d/M/y GGGGG"}
-                Hv{"HH'h' (vvvv)"}
-                MEd{"E, d/M"}
-                MMMEd{"E, d MMM"}
-                MMMMEd{"E, d MMMM"}
+                Hv{"HH (vvvv)"}
+                MEd{"E d/M"}
+                MMMEd{"E d MMM"}
+                MMMMEd{"E d MMMM"}
                 MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
                 Md{"d/M"}
@@ -285,10 +284,11 @@ el{
                 yyyyM{"M/y GGGGG"}
                 yyyyMEd{"E, d/M/y GGGGG"}
                 yyyyMMM{"MMM y G"}
-                yyyyMMMEd{"E, d MMM y G"}
+                yyyyMMMEd{"E d MMM y G"}
                 yyyyMMMM{"MMMM y G"}
                 yyyyMMMd{"d MMM y G"}
                 yyyyMd{"d/M/y GGGGG"}
+                yyyyQQQ{"QQQ y G"}
             }
             intervalFormats{
                 Bh{
@@ -349,6 +349,10 @@ el{
                 MMMEd{
                     M{"E, dd MMM – E, dd MMM"}
                     d{"E, dd – E, dd MMM"}
+                }
+                MMMMd{
+                    M{"d MMMM – d MMMM"}
+                    d{"d – d MMMM"}
                 }
                 MMMd{
                     M{"dd MMM – dd MMM"}
@@ -452,19 +456,27 @@ el{
                 "yMMMd",
                 "yyMd",
             }
+            appendItems{
+                Day-Of-Week{"{1}, {0}"}
+                Era{"{0} {1}"}
+            }
             availableFormats{
                 Ed{"E d"}
                 Ehm{"E h:mm a"}
                 Ehms{"E h:mm:ss a"}
                 Gy{"y G"}
-                GyMEd{"E, dd-MM-y G"}
+                GyM{"M/y G"}
+                GyMEd{"E dd/MM/y G"}
                 GyMMM{"LLL y G"}
                 GyMMMEd{"E d MMM y G"}
+                GyMMMM{"MMMM y G"}
+                GyMMMMEd{"E d MMMM y G"}
+                GyMMMMd{"d MMMM y G"}
                 GyMMMd{"d MMM y G"}
                 GyMd{"d/M/y GGGGG"}
                 Hmsv{"HH:mm:ss (vvvv)"}
                 Hmv{"HH:mm (vvvv)"}
-                Hv{"HH'h' (vvvv)"}
+                Hv{"HH (vvvv)"}
                 MEd{"E d/M"}
                 MMM{"MMM"}
                 MMMEd{"E d MMM"}
@@ -485,6 +497,8 @@ el{
                 yMMM{"MMM y"}
                 yMMMEd{"E d MMM y"}
                 yMMMM{"LLLL y"}
+                yMMMMEd{"E d MMMM y"}
+                yMMMMd{"d MMMM y"}
                 yMMMd{"d MMM y"}
                 yMd{"d/M/y"}
                 yQQQ{"QQQ y"}
@@ -641,6 +655,10 @@ el{
                 MMMEd{
                     M{"E d MMM – E d MMM"}
                     d{"E d MMM – E d MMM"}
+                }
+                MMMMd{
+                    M{"d MMMM – d MMMM"}
+                    d{"d–d MMMM"}
                 }
                 MMMd{
                     M{"d MMM – d MMM"}

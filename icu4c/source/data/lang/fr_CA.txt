@@ -3,7 +3,15 @@
 // Generated using tools/cldr/cldr-to-icu/
 fr_CA{
     Keys{
+        colReorder{"réorganisation des écritures et des blocs"}
+        d0{"transformer la destination"}
         em{"Présentation des émojis"}
+        h0{"mixte"}
+        kv{"plus élevé ignoré"}
+        rg{"région de données supplémentaires"}
+        s0{"transformer la source"}
+        sd{"subdivision par région"}
+        t{"transformer"}
     }
     Languages{
         ady{"adygué"}
@@ -68,6 +76,9 @@ fr_CA{
         tru{"turoyo"}
         tzm{"tamazight"}
     }
+    Languages%core{
+        ku{"kurde"}
+    }
     Languages%extension{
         ku{"kurmanji"}
     }
@@ -103,6 +114,13 @@ fr_CA{
         Hant{"caractères chinois traditionnels"}
     }
     Types{
+        calendar%core{
+            islamic-rgsa{"hégirien, observation en Arabie saoudite"}
+        }
+        colStrength%core{
+            primary{"lettres de base seulement"}
+            quaternary{"base, accents, casse, variantes, kana"}
+        }
         collation{
             dictionary{"ordre de tri du dictionnaire"}
             eor{"ordre multilingue européen"}
@@ -116,7 +134,9 @@ fr_CA{
         collation%core{
             compat{"par compatibilité"}
             dictionary{"du dictionnaire"}
+            emoji{"émoji"}
             phonebook{"de l’annuaire"}
+            searchjl{"consonne initiale coréenne"}
             stroke{"des traits"}
         }
         d0{
@@ -126,6 +146,12 @@ fr_CA{
         em%core{
             emoji{"émoji"}
         }
+        kv%core{
+            currency{"espaces, ponctuation, tous les symboles"}
+            punct{"espaces, ponctuation"}
+            space{"espaces, ponctuation"}
+            symbol{"espaces, ponctuation, symboles autres que les devises"}
+        }
         m0{
             bgn{"BGN (commission de toponymie des États-Unis)"}
             ungegn{"GENUNG"}
@@ -133,6 +159,30 @@ fr_CA{
         numbers{
             gujr{"chiffres gujaratis"}
             mong{"Chiffres mongols"}
+        }
+        numbers%core{
+            hanidays{
+                "numérotation selon le jour du mois en caractères Han pour les calend"
+                "riers traditionnels"
+            }
+            hanidec{
+                "système décimal positionnel avec idéogrammes de nombres chinois comm"
+                "e chiffres"
+            }
+            jpanyear{"numérotation japonaise selon la première année d’une ère"}
+            lanatham{"chiffres taï tham (ecclésiastiques)"}
+            mathdbl{"mathématiques en gras de tableau noir"}
+            mathmono{"mathématiques à espacement constant"}
+            mathsanb{"mathématiques sans empattements gras"}
+            mathsans{"mathématiques sans empattements"}
+            mymrepka{"chiffres birmans karène pwo oriental"}
+            mymrpao{"chiffres birmans pa-o"}
+            mymrshan{"chiffres birmans shan"}
+            mymrtlng{"chiffre birmans tai laing"}
+            outlined{"chiffres creux"}
+        }
+        t0{
+            und{"traduction automatique non précisée"}
         }
     }
     characterLabelPattern{

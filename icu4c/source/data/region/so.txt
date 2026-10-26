@@ -68,7 +68,7 @@ so{
         BR{"Baraasiil"}
         BS{"Bahaamas"}
         BT{"Buutan"}
-        BV{"Buufet Island"}
+        BV{"Jasiiradda Bouvet"}
         BW{"Botuswaana"}
         BY{"Belarus"}
         BZ{"Beliis"}
@@ -310,7 +310,7 @@ so{
         CD{"Jamhuuriyadda Dimuqaadiga Kongo"}
         CG{"Jamhuuriyadda Kongo"}
         CZ{"Jamhuuriyadda Jek"}
-        FK{"Jasiiradaha Fookland"}
+        FK{"Jasiiradaha Fookland (Islas Malvinas)"}
         NZ{"Aotearoa New Zealand"}
         SZ{"Iswaasilaan"}
         TL{"Bariga Timor"}

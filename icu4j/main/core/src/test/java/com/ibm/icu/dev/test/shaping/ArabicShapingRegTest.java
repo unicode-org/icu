@@ -46,6 +46,7 @@ public class ArabicShapingRegTest extends CoreTestFmwk {
     public static final int DIGIT_TYPE_AN_EXTENDED = 0x100;
 
     @Test
+    @SuppressWarnings("SelfEquals")
     public void TestEquals() {
         ArabicShaping as1 =
                 new ArabicShaping(

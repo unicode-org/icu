@@ -4,203 +4,433 @@
 hr{
     RBNFRules{
         SpelloutRules{
-            "%spellout-numbering-year:",
-            "x.x: =0.0=;",
-            "0: =%spellout-numbering=;",
-            "%spellout-numbering:",
-            "0: =%spellout-cardinal-masculine=;",
-            "%spellout-cardinal-masculine:",
-            "-x: minus >>;",
-            "x.x: << zarez >>;",
-            "0: nula;",
-            "1: jedan;",
-            "2: dva;",
-            "3: tri;",
-            "4: \u010Detiri;",
-            "5: pet;",
-            "6: \u0161est;",
-            "7: sedam;",
-            "8: osam;",
-            "9: devet;",
-            "10: deset;",
-            "11: jedanaest;",
-            "12: dvanaest;",
-            "13: trinaest;",
-            "14: \u010Detrnaest;",
-            "15: petnaest;",
-            "16: \u0161esnaest;",
-            "17: sedamnaest;",
-            "18: osamnaest;",
-            "19: devetnaest;",
-            "20: dvadeset[ i >>];",
-            "30: trideset[ i >>];",
-            "40: \u010Detrdeset[ i >>];",
-            "50: pedeset[ i >>];",
-            "60: \u0161ezdeset[ i >>];",
-            "70: sedamdeset[ i >>];",
-            "80: osamdeset[ i >>];",
-            "90: devedeset[ i >>];",
-            "100: sto[ >>];",
-            "200: dvjesto[ >>];",
-            "300: tristo[ >>];",
-            "400: \u010Detiristo[ >>];",
-            "500: petsto[ >>];",
-            "600: \u0161eststo[ >>];",
-            "700: sedamsto[ >>];",
-            "800: osamsto[ >>];",
-            "900: devetsto[ >>];",
-            "1000: tisu\u0107u[ >>];",
-            "2000: <%spellout-cardinal-feminine< tisu\u0107e[ >>];",
-            "5000: <%spellout-cardinal-feminine< tisu\u0107a[ >>];",
-            "1000000: <%spellout-cardinal-masculine< milijun[ >>];",
-            "2000000: <%spellout-cardinal-masculine< milijuna[ >>];",
-            "5000000: <%spellout-cardinal-masculine< milijuna[ >>];",
-            "1000000000: <%spellout-cardinal-feminine< milijarda[ >>];",
-            "2000000000: <%spellout-cardinal-feminine< milijarde[ >>];",
-            "5000000000: <%spellout-cardinal-feminine< milijardi[ >>];",
-            "1000000000000: <%spellout-cardinal-masculine< bilijun[ >>];",
-            "2000000000000: <%spellout-cardinal-masculine< bilijuna[ >>];",
-            "5000000000000: <%spellout-cardinal-masculine< bilijuna[ >>];",
-            "1000000000000000: <%spellout-cardinal-feminine< bilijarda[ >>];",
-            "2000000000000000: <%spellout-cardinal-feminine< bilijarde[ >>];",
-            "5000000000000000: <%spellout-cardinal-feminine< bilijardi[ >>];",
-            "1000000000000000000: =#,##0=;",
-            "%spellout-cardinal-neuter:",
-            "-x: minus >>;",
-            "x.x: << zarez >>;",
-            "0: nula;",
-            "1: jedno;",
-            "2: dva;",
-            "3: =%spellout-cardinal-masculine=;",
-            "20: dvadeset[ i >>];",
-            "30: trideset[ i >>];",
-            "40: \u010Detrdeset[ i >>];",
-            "50: pedeset[ i >>];",
-            "60: \u0161ezdeset[ i >>];",
-            "70: sedamdeset[ i >>];",
-            "80: osamdeset[ i >>];",
-            "90: devedeset[ i >>];",
-            "100: sto[ >>];",
-            "200: dvjesto[ >>];",
-            "300: tristo[ >>];",
-            "400: \u010Detiristo[ >>];",
-            "500: petsto[ >>];",
-            "600: \u0161eststo[ >>];",
-            "700: sedamsto[ >>];",
-            "800: osamsto[ >>];",
-            "900: devetsto[ >>];",
-            "1000: tisu\u0107u[ >>];",
-            "2000: <%spellout-cardinal-feminine< tisu\u0107e[ >>];",
-            "5000: <%spellout-cardinal-feminine< tisu\u0107a[ >>];",
-            "1000000: <%spellout-cardinal-masculine< milijun[ >>];",
-            "2000000: <%spellout-cardinal-masculine< milijuna[ >>];",
-            "5000000: <%spellout-cardinal-masculine< milijuna[ >>];",
-            "1000000000: <%spellout-cardinal-feminine< milijarda[ >>];",
-            "2000000000: <%spellout-cardinal-feminine< milijarde[ >>];",
-            "5000000000: <%spellout-cardinal-feminine< milijardi[ >>];",
-            "1000000000000: <%spellout-cardinal-masculine< bilijun[ >>];",
-            "2000000000000: <%spellout-cardinal-masculine< bilijuna[ >>];",
-            "5000000000000: <%spellout-cardinal-masculine< bilijuna[ >>];",
-            "1000000000000000: <%spellout-cardinal-feminine< bilijarda[ >>];",
-            "2000000000000000: <%spellout-cardinal-feminine< bilijarde[ >>];",
-            "5000000000000000: <%spellout-cardinal-feminine< bilijardi[ >>];",
-            "1000000000000000000: =#,##0=;",
-            "%spellout-cardinal-feminine:",
-            "-x: minus >>;",
-            "x.x: << zarez >>;",
-            "0: nula;",
-            "1: jedna;",
-            "2: dvije;",
-            "3: =%spellout-cardinal-masculine=;",
-            "20: dvadeset[ i >>];",
-            "30: trideset[ i >>];",
-            "40: \u010Detrdeset[ i >>];",
-            "50: pedeset[ i >>];",
-            "60: \u0161ezdeset[ i >>];",
-            "70: sedamdeset[ i >>];",
-            "80: osamdeset[ i >>];",
-            "90: devedeset[ i >>];",
-            "100: sto[ >>];",
-            "200: dvjesto[ >>];",
-            "300: tristo[ >>];",
-            "400: \u010Detiristo[ >>];",
-            "500: petsto[ >>];",
-            "600: \u0161eststo[ >>];",
-            "700: sedamsto[ >>];",
-            "800: osamsto[ >>];",
-            "900: devetsto[ >>];",
-            "1000: tisu\u0107u[ >>];",
-            "2000: <%spellout-cardinal-feminine< tisu\u0107e[ >>];",
-            "5000: <%spellout-cardinal-feminine< tisu\u0107a[ >>];",
-            "1000000: <%spellout-cardinal-masculine< milijun[ >>];",
-            "2000000: <%spellout-cardinal-masculine< milijuna[ >>];",
-            "5000000: <%spellout-cardinal-masculine< milijuna[ >>];",
-            "1000000000: <%spellout-cardinal-feminine< milijarda[ >>];",
-            "2000000000: <%spellout-cardinal-feminine< milijarde[ >>];",
-            "5000000000: <%spellout-cardinal-feminine< milijardi[ >>];",
-            "1000000000000: <%spellout-cardinal-masculine< bilijun[ >>];",
-            "2000000000000: <%spellout-cardinal-masculine< bilijuna[ >>];",
-            "5000000000000: <%spellout-cardinal-masculine< bilijuna[ >>];",
-            "1000000000000000: <%spellout-cardinal-feminine< bilijarda[ >>];",
-            "2000000000000000: <%spellout-cardinal-feminine< bilijarde[ >>];",
-            "5000000000000000: <%spellout-cardinal-feminine< bilijardi[ >>];",
-            "1000000000000000000: =#,##0=;",
-            "%%spellout-ordinal-base:",
-            "-x: minus >>;",
-            "x.x: =#,##0.#=;",
-            "0: nula;",
-            "1: prv;",
-            "2: drug;",
-            "3: tre\u0107;",
-            "4: \u010Detvrt;",
-            "5: pet;",
-            "6: \u0161est;",
-            "7: sedm;",
-            "8: osm;",
-            "9: devet;",
-            "10: deset;",
-            "11: =%spellout-numbering=;",
-            "20: dvadeset[ >>];",
-            "30: trideset[ >>];",
-            "40: \u010Detrdeset[ >>];",
-            "50: pedeset[ >>];",
-            "60: \u0161ezdeset[ >>];",
-            "70: sedamdeset[ >>];",
-            "80: osamdeset[ >>];",
-            "90: devedeset[ >>];",
-            "100: st[ >>];",
-            "200: dvest[ >>];",
-            "300: trist[ >>];",
-            "400: \u010Detrist[ >>];",
-            "500: petst[ >>];",
-            "600: \u0161est[ >>];",
-            "700: sedamst[ >>];",
-            "800: osamst[ >>];",
-            "900: devetst[ >>];",
-            "1000: tisu\u0107u[ >>];",
-            "2000: <%spellout-cardinal-feminine< tisu\u0107e[ >>];",
-            "5000: <%spellout-cardinal-feminine< tisu\u0107u[ >>];",
-            "1000000: <%spellout-cardinal-masculine< milijun[ >>];",
-            "2000000: <%spellout-cardinal-masculine< milijuny[ >>];",
-            "5000000: <%spellout-cardinal-masculine< milijun[ >>];",
-            "1000000000: <%spellout-cardinal-masculine< miliarda[ >>];",
-            "2000000000: <%spellout-cardinal-masculine< miliardy[ >>];",
-            "5000000000: <%spellout-cardinal-masculine< miliarda[ >>];",
-            "1000000000000: <%spellout-cardinal-masculine< bilijun[ >>];",
-            "2000000000000: <%spellout-cardinal-masculine< bilijuny[ >>];",
-            "5000000000000: <%spellout-cardinal-masculine< bilijun[ >>];",
-            "1000000000000000: <%spellout-cardinal-masculine< biliarda[ >>];",
-            "2000000000000000: <%spellout-cardinal-masculine< biliardy[ >>];",
-            "5000000000000000: <%spellout-cardinal-masculine< biliarda[ >>];",
-            "1000000000000000000: =#,##0=;",
-            "%spellout-ordinal-masculine:",
-            "0: =%%spellout-ordinal-base=i;",
-            "%spellout-ordinal-neuter:",
-            "0: =%%spellout-ordinal-base=o;",
-            "3: =%%spellout-ordinal-base=e;",
-            "4: =%%spellout-ordinal-base=o;",
-            "%spellout-ordinal-feminine:",
-            "0: =%%spellout-ordinal-base=a;",
+            "%spellout-numbering-year:"
+            "x.x: =0.0=;"
+            "0: =%spellout-ordinal-feminine=;"
+            "%spellout-numbering:"
+            "-x: minus >>;"
+            "x.x: << zarez >>;"
+            "Inf: beskona\u010Dnost;"
+            "0: =%spellout-cardinal-masculine=;"
+            "1000: [tisu\u0107u >>|tisu\u0107a];"
+            "2000: <%spellout-cardinal-feminine< $(cardinal,one{tisu\u0107a}few{tisu\u0107e}other{tisu\u0107a})$[ >>];"
+            "1000000: milijun[ >>];"
+            "2000000: <%spellout-cardinal-masculine< $(cardinal,one{milijun}few{milijuna}other{milijuna})$[ >>];"
+            "1000000000: milijarda[ >>];"
+            "2000000000: <%spellout-cardinal-feminine< $(cardinal,one{milijarda}few{milijarde}other{milijardi})$[ >>];"
+            "1000000000000: bilijun[ >>];"
+            "2000000000000: <%spellout-cardinal-masculine< $(cardinal,one{bilijun}few{bilijuna}other{bilijuna})$[ >>];"
+            "1000000000000000: bilijarda[ >>];"
+            "2000000000000000: <%spellout-cardinal-feminine< $(cardinal,one{bilijarda}few{bilijarde}other{bilijardi})$[ >>];"
+            "1000000000000000000: =#,##0=;"
+            "%%cardinal-prefix-tens:"
+            "1: jedan;"
+            "2: dva;"
+            "3: tri;"
+            "4: \u010Detr;"
+            "5: pe;"
+            "6: \u0161ez;"
+            "7: sedam;"
+            "8: osam;"
+            "9: deve;"
+            "10: =%spellout-cardinal-masculine=;"
+            "%%cardinal-prefix-hundreds:"
+            "0: =%spellout-cardinal-masculine=;"
+            "2: dvje;"
+            "3: =%spellout-cardinal-masculine=;"
+            "%spellout-cardinal-masculine:"
+            "-x: minus >>;"
+            "x.x: << zarez >>;"
+            "Inf: beskona\u010Dan;"
+            "0: nula;"
+            "1: jedan;"
+            "2: dva;"
+            "3: tri;"
+            "4: \u010Detiri;"
+            "5: pet;"
+            "6: \u0161est;"
+            "7: sedam;"
+            "8: osam;"
+            "9: devet;"
+            "10: deset;"
+            "11: jedanaest;"
+            "12: dvanaest;"
+            "13: trinaest;"
+            "14: \u010Detrnaest;"
+            "15: petnaest;"
+            "16: \u0161esnaest;"
+            "17: sedamnaest;"
+            "18: osamnaest;"
+            "19: devetnaest;"
+            "20: <%%cardinal-prefix-tens<deset[ i >>];"
+            "100: sto[ >>];"
+            "200: <%%cardinal-prefix-hundreds<sto[ >>];"
+            "1000: tisu\u0107u[ >>];"
+            "2000: <%spellout-cardinal-feminine< $(cardinal,one{tisu\u0107u}few{tisu\u0107e}other{tisu\u0107a})$[ >>];"
+            "1000000: <%spellout-cardinal-masculine< $(cardinal,one{milijun}few{milijuna}other{milijuna})$[ >>];"
+            "1000000000: <%spellout-cardinal-feminine< $(cardinal,one{milijarda}few{milijarde}other{milijardi})$[ >>];"
+            "1000000000000: <%spellout-cardinal-masculine< $(cardinal,one{bilijun}few{bilijuna}other{bilijuna})$[ >>];"
+            "1000000000000000: <%spellout-cardinal-feminine< $(cardinal,one{bilijarda}few{bilijarde}other{bilijardi})$[ >>];"
+            "1000000000000000000: =#,##0=;"
+            "%spellout-cardinal-neuter:"
+            "-x: minus >>;"
+            "x.x: << zarez >>;"
+            "Inf: beskona\u010Dno;"
+            "0: nula;"
+            "1: jedno;"
+            "2: dva;"
+            "3: =%spellout-cardinal-masculine=;"
+            "20: <%%cardinal-prefix-tens<deset[ i >>];"
+            "100: sto[ >>];"
+            "200: <%%cardinal-prefix-hundreds<sto[ >>];"
+            "1000: tisu\u0107u[ >>];"
+            "2000: <%spellout-cardinal-feminine< $(cardinal,one{tisu\u0107u}few{tisu\u0107e}other{tisu\u0107a})$[ >>];"
+            "1000000: <%spellout-cardinal-masculine< $(cardinal,one{milijun}few{milijuna}other{milijuna})$[ >>];"
+            "1000000000: <%spellout-cardinal-feminine< $(cardinal,one{milijarda}few{milijarde}other{milijardi})$[ >>];"
+            "1000000000000: <%spellout-cardinal-masculine< $(cardinal,one{bilijun}few{bilijuna}other{bilijuna})$[ >>];"
+            "1000000000000000: <%spellout-cardinal-feminine< $(cardinal,one{bilijarda}few{bilijarde}other{bilijardi})$[ >>];"
+            "1000000000000000000: =#,##0=;"
+            "%spellout-cardinal-feminine:"
+            "-x: minus >>;"
+            "x.x: << zarez >>;"
+            "Inf: beskona\u010Dna;"
+            "0: nula;"
+            "1: jedna;"
+            "2: dvije;"
+            "3: =%spellout-cardinal-masculine=;"
+            "20: <%%cardinal-prefix-tens<deset[ i >>];"
+            "100: sto[ >>];"
+            "200: <%%cardinal-prefix-hundreds<sto[ >>];"
+            "1000: tisu\u0107u[ >>];"
+            "2000: <%spellout-cardinal-feminine< $(cardinal,one{tisu\u0107u}few{tisu\u0107e}other{tisu\u0107a})$[ >>];"
+            "1000000: <%spellout-cardinal-masculine< $(cardinal,one{milijun}few{milijuna}other{milijuna})$[ >>];"
+            "1000000000: <%spellout-cardinal-feminine< $(cardinal,one{milijarda}few{milijarde}other{milijardi})$[ >>];"
+            "1000000000000: <%spellout-cardinal-masculine< $(cardinal,one{bilijun}few{bilijuna}other{bilijuna})$[ >>];"
+            "1000000000000000: <%spellout-cardinal-feminine< $(cardinal,one{bilijarda}few{bilijarde}other{bilijardi})$[ >>];"
+            "1000000000000000000: =#,##0=;"
+            "%spellout-cardinal-masculine-genitive:"
+            "-x: minus >>;"
+            "x.x: << zarez >>;"
+            "Inf: beskona\u010Dnog;"
+            "0: nule;"
+            "1: jednog;"
+            "2: dvaju;"
+            "3: triju;"
+            "4: \u010Detiriju;"
+            "5: =%spellout-cardinal-masculine=;"
+            "20: <%%cardinal-prefix-tens<deset[ i >>];"
+            "100: sto[ >>];"
+            "200: <%%cardinal-prefix-hundreds<sto[ >>];"
+            "1000: tisu\u0107e[ >>];"
+            "2000: <%spellout-cardinal-feminine-genitive< $(cardinal,one{tisu\u0107e}few{tisu\u0107e}other{tisu\u0107a})$[ >>];"
+            "1000000: milijuna[ >>];"
+            "2000000: <%spellout-cardinal-masculine-genitive< $(cardinal,one{milijuna}few{milijuna}other{milijuna})$[ >>];"
+            "1000000000: milijarde[ >>];"
+            "2000000000: <%spellout-cardinal-feminine-genitive< $(cardinal,one{milijarde}few{milijarde}other{milijardi})$[ >>];"
+            "1000000000000: bilijuna[ >>];"
+            "2000000000000: <%spellout-cardinal-masculine-genitive< $(cardinal,one{bilijuna}few{bilijuna}other{bilijuna})$[ >>];"
+            "1000000000000000: bilijarde[ >>];"
+            "2000000000000000: <%spellout-cardinal-feminine-genitive< $(cardinal,one{bilijarde}few{bilijarde}other{bilijardi})$[ >>];"
+            "1000000000000000000: =#,##0=;"
+            "%spellout-cardinal-neuter-genitive:"
+            "0: =%spellout-cardinal-masculine-genitive=;"
+            "%spellout-cardinal-feminine-genitive:"
+            "-x: minus >>;"
+            "x.x: << zarez >>;"
+            "Inf: beskona\u010Dne;"
+            "0: nule;"
+            "1: jedne;"
+            "2: dviju;"
+            "3: triju;"
+            "4: \u010Detiriju;"
+            "5: =%spellout-cardinal-masculine=;"
+            "20: <%%cardinal-prefix-tens<deset[ i >>];"
+            "100: sto[ >>];"
+            "200: <%%cardinal-prefix-hundreds<sto[ >>];"
+            "1000: tisu\u0107e[ >>];"
+            "2000: <%spellout-cardinal-feminine-genitive< $(cardinal,one{tisu\u0107e}few{tisu\u0107e}other{tisu\u0107a})$[ >>];"
+            "1000000: milijuna[ >>];"
+            "2000000: <%spellout-cardinal-masculine-genitive< $(cardinal,one{milijuna}few{milijuna}other{milijuna})$[ >>];"
+            "1000000000: milijarde[ >>];"
+            "2000000000: <%spellout-cardinal-feminine-genitive< $(cardinal,one{milijarde}few{milijarde}other{milijardi})$[ >>];"
+            "1000000000000: bilijuna[ >>];"
+            "2000000000000: <%spellout-cardinal-masculine-genitive< $(cardinal,one{bilijuna}few{bilijuna}other{bilijuna})$[ >>];"
+            "1000000000000000: bilijarde[ >>];"
+            "2000000000000000: <%spellout-cardinal-feminine-genitive< $(cardinal,one{bilijarde}few{bilijarde}other{bilijardi})$[ >>];"
+            "1000000000000000000: =#,##0=;"
+            "%spellout-cardinal-masculine-dative:"
+            "-x: minus >>;"
+            "x.x: << zarez >>;"
+            "Inf: beskona\u010Dnom;"
+            "0: nuli;"
+            "1: jednom;"
+            "2: dvama;"
+            "3: trima;"
+            "4: \u010Detirima;"
+            "5: =%spellout-cardinal-masculine=;"
+            "20: <%%cardinal-prefix-tens<deset[ i >>];"
+            "100: sto[ >>];"
+            "200: <%%cardinal-prefix-hundreds<sto[ >>];"
+            "1000: tisu\u0107i[ >>];"
+            "2000: <%spellout-cardinal-feminine-dative< $(cardinal,one{tisu\u0107i}few{tisu\u0107i}other{tisu\u0107ama})$[ >>];"
+            "1000000: milijunu[ >>];"
+            "2000000: <%spellout-cardinal-masculine-dative< $(cardinal,one{milijunu}few{milijunu}other{milijunima})$[ >>];"
+            "1000000000: milijardi[ >>];"
+            "2000000000: <%spellout-cardinal-feminine-dative< $(cardinal,one{milijardi}few{milijardi}other{milijardama})$[ >>];"
+            "1000000000000: bilijunu[ >>];"
+            "2000000000000: <%spellout-cardinal-masculine-dative< $(cardinal,one{bilijunu}few{bilijunu}other{bilijunima})$[ >>];"
+            "1000000000000000: bilijardi[ >>];"
+            "2000000000000000: <%spellout-cardinal-feminine-dative< $(cardinal,one{bilijardi}few{bilijardi}other{bilijardama})$[ >>];"
+            "1000000000000000000: =#,##0=;"
+            "%spellout-cardinal-neuter-dative:"
+            "0: =%spellout-cardinal-masculine-dative=;"
+            "%spellout-cardinal-feminine-dative:"
+            "-x: minus >>;"
+            "x.x: << zarez >>;"
+            "Inf: beskona\u010Dnoj;"
+            "0: nuli;"
+            "1: jednoj;"
+            "2: dvjema;"
+            "3: trima;"
+            "4: \u010Detirima;"
+            "5: =%spellout-cardinal-masculine=;"
+            "20: <%%cardinal-prefix-tens<deset[ i >>];"
+            "100: sto[ >>];"
+            "200: <%%cardinal-prefix-hundreds<sto[ >>];"
+            "1000: tisu\u0107i[ >>];"
+            "2000: <%spellout-cardinal-feminine-dative< $(cardinal,one{tisu\u0107i}few{tisu\u0107i}other{tisu\u0107ama})$[ >>];"
+            "1000000: milijunu[ >>];"
+            "2000000: <%spellout-cardinal-masculine-dative< $(cardinal,one{milijunu}few{milijunu}other{milijunima})$[ >>];"
+            "1000000000: milijardi[ >>];"
+            "2000000000: <%spellout-cardinal-feminine-dative< $(cardinal,one{milijardi}few{milijardi}other{milijardama})$[ >>];"
+            "1000000000000: bilijunu[ >>];"
+            "2000000000000: <%spellout-cardinal-masculine-dative< $(cardinal,one{bilijunu}few{bilijunu}other{bilijunima})$[ >>];"
+            "1000000000000000: bilijardi[ >>];"
+            "2000000000000000: <%spellout-cardinal-feminine-dative< $(cardinal,one{bilijardi}few{bilijardi}other{bilijardama})$[ >>];"
+            "1000000000000000000: =#,##0=;"
+            "%spellout-cardinal-masculine-accusative:"
+            "0: =%spellout-cardinal-masculine=;"
+            "%spellout-cardinal-masculine-animate-accusative:"
+            "0: =%spellout-cardinal-masculine-genitive=;"
+            "%spellout-cardinal-neuter-accusative:"
+            "0: =%spellout-cardinal-neuter=;"
+            "%spellout-cardinal-feminine-accusative:"
+            "-x: minus >>;"
+            "x.x: << zarez >>;"
+            "Inf: beskona\u010Dnu;"
+            "0: nulu;"
+            "1: jednu;"
+            "2: =%spellout-cardinal-feminine=;"
+            "%spellout-cardinal-masculine-locative:"
+            "0: =%spellout-cardinal-masculine-dative=;"
+            "%spellout-cardinal-neuter-locative:"
+            "0: =%spellout-cardinal-neuter-dative=;"
+            "%spellout-cardinal-feminine-locative:"
+            "0: =%spellout-cardinal-feminine-dative=;"
+            "%spellout-cardinal-masculine-instrumental:"
+            "-x: minus >>;"
+            "x.x: << zarez >>;"
+            "Inf: beskona\u010Dnim;"
+            "0: nulom;"
+            "1: jednim;"
+            "2: dvama;"
+            "3: trima;"
+            "4: \u010Detirima;"
+            "5: =%spellout-cardinal-masculine=;"
+            "20: <%%cardinal-prefix-tens<deset[ i >>];"
+            "100: sto[ >>];"
+            "200: <%%cardinal-prefix-hundreds<sto[ >>];"
+            "1000: tisu\u0107om[ >>];"
+            "2000: <%spellout-cardinal-feminine-instrumental< $(cardinal,one{tisu\u0107om}few{tisu\u0107om}other{tisu\u0107ama})$[ >>];"
+            "1000000: milijunom[ >>];"
+            "2000000: <%spellout-cardinal-masculine-instrumental< $(cardinal,one{milijunom}few{milijunom}other{milijunima})$[ >>];"
+            "1000000000: milijardom[ >>];"
+            "2000000000: <%spellout-cardinal-feminine-instrumental< $(cardinal,one{milijardom}few{milijardom}other{milijardama})$[ >>];"
+            "1000000000000: bilijunom[ >>];"
+            "2000000000000: <%spellout-cardinal-masculine-instrumental< $(cardinal,one{bilijunom}few{bilijunom}other{bilijunima})$[ >>];"
+            "1000000000000000: bilijardom[ >>];"
+            "2000000000000000: <%spellout-cardinal-feminine-instrumental< $(cardinal,one{bilijardom}few{bilijardom}other{bilijardama})$[ >>];"
+            "1000000000000000000: =#,##0=;"
+            "%spellout-cardinal-neuter-instrumental:"
+            "0: =%spellout-cardinal-masculine-instrumental=;"
+            "%spellout-cardinal-feminine-instrumental:"
+            "-x: minus >>;"
+            "x.x: << zarez >>;"
+            "Inf: beskona\u010Dnom;"
+            "0: nulom;"
+            "1: jednom;"
+            "2: dvjema;"
+            "3: trima;"
+            "4: \u010Detirima;"
+            "5: =%spellout-cardinal-masculine=;"
+            "20: <%%cardinal-prefix-tens<deset[ i >>];"
+            "100: sto[ >>];"
+            "200: <%%cardinal-prefix-hundreds<sto[ >>];"
+            "1000: tisu\u0107om[ >>];"
+            "2000: <%spellout-cardinal-feminine-instrumental< $(cardinal,one{tisu\u0107om}few{tisu\u0107om}other{tisu\u0107ama})$[ >>];"
+            "1000000: milijunom[ >>];"
+            "2000000: <%spellout-cardinal-masculine-instrumental< $(cardinal,one{milijunom}few{milijunom}other{milijunima})$[ >>];"
+            "1000000000: milijardom[ >>];"
+            "2000000000: <%spellout-cardinal-feminine-instrumental< $(cardinal,one{milijardom}few{milijardom}other{milijardama})$[ >>];"
+            "1000000000000: bilijunom[ >>];"
+            "2000000000000: <%spellout-cardinal-masculine-instrumental< $(cardinal,one{bilijunom}few{bilijunom}other{bilijunima})$[ >>];"
+            "1000000000000000: bilijardom[ >>];"
+            "2000000000000000: <%spellout-cardinal-feminine-instrumental< $(cardinal,one{bilijardom}few{bilijardom}other{bilijardama})$[ >>];"
+            "1000000000000000000: =#,##0=;"
+            "%%prefixconjoined:"
+            "0: =%spellout-cardinal-masculine=;"
+            "1: jedno;"
+            "2: dvo;"
+            "3: tro;"
+            "4: \u010Detvero;"
+            "5: peto;"
+            "6: \u0161esto;"
+            "7: sedmo;"
+            "8: osmo;"
+            "9: =%spellout-cardinal-masculine=o;"
+            "20: <%%cardinal-prefix-tens<deset[>>];"
+            "100: sto[>>];"
+            "200: <%%cardinal-prefix-hundreds<sto[>>];"
+            "%%spellout-ordinal-base:"
+            "-x: minus >>;"
+            "x.x: =#,##0.#=;"
+            "Inf: beskona\u010Dn;"
+            "0: nult;"
+            "1: prv;"
+            "2: drug;"
+            "3: tre\u0107;"
+            "4: \u010Detvrt;"
+            "5: pet;"
+            "6: \u0161est;"
+            "7: sedm;"
+            "8: osm;"
+            "9: devet;"
+            "10: deset;"
+            "11: =%spellout-cardinal-masculine=;"
+            "20: <%%cardinal-prefix-tens<deset[ >>];"
+            "100: [sto >>|stot];"
+            "200: [<%%cardinal-prefix-hundreds<sto >>|<%%cardinal-prefix-hundreds<stot];"
+            "1000: [tisu\u0107u >>|tisu\u0107it];"
+            "2000: [<%spellout-cardinal-feminine< $(cardinal,one{tisu\u0107a}few{tisu\u0107e}other{tisu\u0107a})$ >>|<%%prefixconjoined<tisu\u0107it];"
+            "1000000: [<%spellout-cardinal-masculine< $(cardinal,one{milijun}few{milijuna}other{milijuna})$ >>|milijunt];"
+            "2000000: [<%spellout-cardinal-masculine< $(cardinal,one{milijun}few{milijuna}other{milijuna})$ >>|<%%prefixconjoined<milijunt];"
+            "1000000000: [<%spellout-cardinal-feminine< $(cardinal,one{milijarda}few{milijarde}other{milijardi})$ >>|milijardit];"
+            "2000000000: [<%spellout-cardinal-feminine< $(cardinal,one{milijarda}few{milijarde}other{milijardi})$ >>|<%%prefixconjoined<milijardit];"
+            "1000000000000: [<%spellout-cardinal-masculine< $(cardinal,one{bilijun}few{bilijuna}other{bilijuna})$ >>|bilijunt];"
+            "2000000000000: [<%spellout-cardinal-masculine< $(cardinal,one{bilijun}few{bilijuna}other{bilijuna})$ >>|<%%prefixconjoined<bilijunt];"
+            "1000000000000000: [<%spellout-cardinal-feminine< $(cardinal,one{bilijarda}few{bilijarde}other{bilijardi})$ >>|bilijardit];"
+            "2000000000000000: [<%spellout-cardinal-feminine< $(cardinal,one{bilijarda}few{bilijarde}other{bilijardi})$ >>|<%%prefixconjoined<bilijardit];"
+            "1000000000000000000: =#,##0=;"
+            "%spellout-ordinal-masculine:"
+            "-x: minus >>;"
+            "x.x: =#,##0.#=;"
+            "Inf: beskona\u010Dni;"
+            "0: nulti;"
+            "1: prvi;"
+            "2: drugi;"
+            "3: tre\u0107i;"
+            "4: \u010Detvrti;"
+            "5: peti;"
+            "6: \u0161esti;"
+            "7: sedmi;"
+            "8: osmi;"
+            "9: deveti;"
+            "10: deseti;"
+            "11: =%spellout-cardinal-masculine=i;"
+            "20: <%%cardinal-prefix-tens<deset[ >>|i];"
+            "100: [sto >>|stoti];"
+            "200: [<%%cardinal-prefix-hundreds<sto >>|<%%cardinal-prefix-hundreds<stoti];"
+            "1000: [tisu\u0107u >>|tisu\u0107iti];"
+            "2000: [<%spellout-cardinal-feminine< $(cardinal,one{tisu\u0107a}few{tisu\u0107e}other{tisu\u0107a})$ >>|<%%prefixconjoined<tisu\u0107iti];"
+            "1000000: [<%spellout-cardinal-masculine< $(cardinal,one{milijun}few{milijuna}other{milijuna})$ >>|milijunti];"
+            "2000000: [<%spellout-cardinal-masculine< $(cardinal,one{milijun}few{milijuna}other{milijuna})$ >>|<%%prefixconjoined<milijunti];"
+            "1000000000: [<%spellout-cardinal-feminine< $(cardinal,one{milijarda}few{milijarde}other{milijardi})$ >>|milijarditi];"
+            "2000000000: [<%spellout-cardinal-feminine< $(cardinal,one{milijarda}few{milijarde}other{milijardi})$ >>|<%%prefixconjoined<milijarditi];"
+            "1000000000000: [<%spellout-cardinal-masculine< $(cardinal,one{bilijun}few{bilijuna}other{bilijuna})$ >>|bilijunti];"
+            "2000000000000: [<%spellout-cardinal-masculine< $(cardinal,one{bilijun}few{bilijuna}other{bilijuna})$ >>|<%%prefixconjoined<bilijunti];"
+            "1000000000000000: [<%spellout-cardinal-feminine< $(cardinal,one{bilijarda}few{bilijarde}other{bilijardi})$ >>|bilijarditi];"
+            "2000000000000000: [<%spellout-cardinal-feminine< $(cardinal,one{bilijarda}few{bilijarde}other{bilijardi})$ >>|<%%prefixconjoined<bilijarditi];"
+            "1000000000000000000: =#,##0=;"
+            "%spellout-ordinal-neuter:"
+            "-x: minus >>;"
+            "x.x: =#,##0.#=;"
+            "Inf: beskona\u010Dno;"
+            "0: nulto;"
+            "1: prvo;"
+            "2: drugo;"
+            "3: tre\u0107e;"
+            "4: =%%spellout-ordinal-base=o;"
+            "20: <%%cardinal-prefix-tens<deset[ >>|o];"
+            "100: [sto >>|stoto];"
+            "200: [<%%cardinal-prefix-hundreds<sto >>|<%%cardinal-prefix-hundreds<stoto];"
+            "1000: [tisu\u0107u >>|tisu\u0107ito];"
+            "2000: [<%spellout-cardinal-feminine< $(cardinal,one{tisu\u0107a}few{tisu\u0107e}other{tisu\u0107a})$ >>|<%%prefixconjoined<tisu\u0107ito];"
+            "1000000: [<%spellout-cardinal-masculine< $(cardinal,one{milijun}few{milijuna}other{milijuna})$ >>|milijunto];"
+            "2000000: [<%spellout-cardinal-masculine< $(cardinal,one{milijun}few{milijuna}other{milijuna})$ >>|<%%prefixconjoined<milijunto];"
+            "1000000000: [<%spellout-cardinal-feminine< $(cardinal,one{milijarda}few{milijarde}other{milijardi})$ >>|milijardito];"
+            "2000000000: [<%spellout-cardinal-feminine< $(cardinal,one{milijarda}few{milijarde}other{milijardi})$ >>|<%%prefixconjoined<milijardito];"
+            "1000000000000: [<%spellout-cardinal-masculine< $(cardinal,one{bilijun}few{bilijuna}other{bilijuna})$ >>|bilijunto];"
+            "2000000000000: [<%spellout-cardinal-masculine< $(cardinal,one{bilijun}few{bilijuna}other{bilijuna})$ >>|<%%prefixconjoined<bilijunto];"
+            "1000000000000000: [<%spellout-cardinal-feminine< $(cardinal,one{bilijarda}few{bilijarde}other{bilijardi})$ >>|bilijardito];"
+            "2000000000000000: [<%spellout-cardinal-feminine< $(cardinal,one{bilijarda}few{bilijarde}other{bilijardi})$ >>|<%%prefixconjoined<bilijardito];"
+            "1000000000000000000: =#,##0=;"
+            "%spellout-ordinal-feminine:"
+            "0: =%%spellout-ordinal-base=a;"
+            "%spellout-ordinal-masculine-genitive:"
+            "-x: minus >>;"
+            "x.x: =#,##0.#=;"
+            "Inf: beskona\u010Dnog;"
+            "0: nultog;"
+            "1: prvog;"
+            "2: drugog;"
+            "3: tre\u0107eg;"
+            "4: =%%spellout-ordinal-base=og;"
+            "%spellout-ordinal-neuter-genitive:"
+            "0: =%spellout-ordinal-masculine-genitive=;"
+            "%spellout-ordinal-feminine-genitive:"
+            "-x: minus >>;"
+            "x.x: =#,##0.#=;"
+            "Inf: beskona\u010Dne;"
+            "0: =%%spellout-ordinal-base=e;"
+            "%spellout-ordinal-masculine-dative:"
+            "-x: minus >>;"
+            "x.x: =#,##0.#=;"
+            "Inf: beskona\u010Dnom;"
+            "0: nultom;"
+            "1: prvom;"
+            "2: drugom;"
+            "3: tre\u0107em;"
+            "4: =%%spellout-ordinal-base=om;"
+            "%spellout-ordinal-neuter-dative:"
+            "0: =%spellout-ordinal-masculine-dative=;"
+            "%spellout-ordinal-feminine-dative:"
+            "-x: minus >>;"
+            "x.x: =#,##0.#=;"
+            "Inf: beskona\u010Dnoj;"
+            "0: =%%spellout-ordinal-base=oj;"
+            "%spellout-ordinal-masculine-accusative:"
+            "0: =%spellout-ordinal-masculine=;"
+            "%spellout-ordinal-masculine-animate-accusative:"
+            "0: =%spellout-ordinal-masculine-genitive=;"
+            "%spellout-ordinal-neuter-accusative:"
+            "0: =%spellout-ordinal-neuter=;"
+            "%spellout-ordinal-feminine-accusative:"
+            "-x: minus >>;"
+            "x.x: =#,##0.#=;"
+            "Inf: beskona\u010Dnu;"
+            "0: =%%spellout-ordinal-base=u;"
+            "%spellout-ordinal-masculine-locative:"
+            "0: =%spellout-ordinal-masculine-dative=;"
+            "%spellout-ordinal-neuter-locative:"
+            "0: =%spellout-ordinal-neuter-dative=;"
+            "%spellout-ordinal-feminine-locative:"
+            "0: =%spellout-ordinal-feminine-dative=;"
+            "%spellout-ordinal-masculine-instrumental:"
+            "0: =%%spellout-ordinal-base=im;"
+            "%spellout-ordinal-neuter-instrumental:"
+            "0: =%spellout-ordinal-masculine-instrumental=;"
+            "%spellout-ordinal-feminine-instrumental:"
+            "0: =%%spellout-ordinal-base=om;"
         }
     }
 }

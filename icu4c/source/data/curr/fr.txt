@@ -1142,6 +1142,7 @@ fr{
     }
     Currencies%narrow{
         BYN{"р."}
+        CHF{"fr."}
         EGP{"£E"}
         KMF{"FC"}
         LBP{"£L"}
@@ -2271,10 +2272,6 @@ fr{
         ZWD{
             one{"dollar zimbabwéen"}
             other{"dollars zimbabwéens"}
-        }
-        ZWG{
-            one{"or du Zimbabwe"}
-            other{"or du Zimbabwe"}
         }
         ZWL{
             one{"dollar zimbabwéen (2009)"}

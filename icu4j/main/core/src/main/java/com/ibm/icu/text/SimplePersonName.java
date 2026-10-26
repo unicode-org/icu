@@ -229,10 +229,10 @@ public class SimplePersonName implements PersonName {
     }
 
     /**
-     * @internal Debugging only!
-     * @deprecated This API is ICU internal only.
+     * {@inheritDoc}
+     *
+     * @stable ICU 73
      */
-    @Deprecated
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

@@ -16,6 +16,7 @@ es_419{
         eu{"vasco"}
         goh{"alemán de la alta edad antigua"}
         grc{"griego clásico"}
+        hi_Latn{"hindi (latino)"}
         ht{"haitiano"}
         kbd{"cabardiano"}
         krc{"karachái-bálkaro"}
@@ -24,9 +25,7 @@ es_419{
         mni{"manipuri"}
         nr{"ndebele del sur"}
         nso{"sesotho del norte"}
-        prg{"prusiano antiguo"}
-        rm{"retorrománico"}
-        sd{"sindhi"}
+        raj{"rayastani"}
         shu{"árabe (Chad)"}
         sma{"sami del sur"}
         st{"sesotho del sur"}
@@ -40,17 +39,18 @@ es_419{
         xal{"calmuco"}
         zun{"zuni"}
     }
+    Languages%core{
+        ku{"kurdo"}
+    }
     Languages%extension{
         ku{"kurmanyi"}
     }
     Languages%variant{
-        ps{"pashtún"}
+        ps{"pasto"}
         ug{"uighur"}
     }
     Scripts{
-        Gujr{"gujarati"}
         Hrkt{"katakana o hiragana"}
-        Laoo{"lao"}
         Latn{"latín"}
         Mlym{"malabar"}
         Mtei{"manipuri"}
@@ -62,6 +62,7 @@ es_419{
             islamic-tbla{"calendario islámico tabular"}
         }
         calendar%core{
+            islamic-rgsa{"hijri (avistamiento en Arabia Saudita)"}
             roc{"calendario chino"}
         }
         colAlternate{
@@ -84,11 +85,10 @@ es_419{
         collation{
             eor{"reglas de orden europeas"}
             phonebook{"orden de agenda telefónica"}
+            stroke{"orden de trazos"}
         }
         collation%core{
-            ducet{"unicode predeterminado"}
             phonebook{"agenda telefónica"}
-            phonetic{"fonética"}
             stroke{"trazo"}
             unihan{"trazo radical"}
         }
@@ -98,6 +98,7 @@ es_419{
             phrase{"conservar en frases"}
         }
         numbers{
+            mlym{"dígitos en malabar"}
             tirh{"dígitos en tirh"}
             traditional{"números traducionales"}
             wara{"dígitos en Warang Citi"}

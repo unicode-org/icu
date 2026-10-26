@@ -40,6 +40,7 @@ public:
     void TestT6669();
     void TestVTimeZoneWrapper();
     void TestT8943();
+    void TestVTimeZoneRruleUntil();
 
 private:
     void verifyTransitions(BasicTimeZone& icutz, UDate start, UDate end);

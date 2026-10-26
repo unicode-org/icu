@@ -303,7 +303,8 @@ public abstract class TimeZoneNames implements Serializable {
      *
      * <ol>
      *   <li>Check if the ID contains "/". If not, return null.
-     *   <li>Check if the ID does not start with "Etc/" or "SystemV/". If it does, return null.
+     *   <li>Check if the ID is associated with a region other than "001" (World) — i.e., not "Etc/"
+     *       or "SystemV/". If not, return null.
      *   <li>Extract a substring after the last occurrence of "/".
      *   <li>Replace "_" with " ".
      * </ol>
@@ -510,7 +511,6 @@ public abstract class TimeZoneNames implements Serializable {
         }
     }
 
-    /// CLOVER:OFF
     /**
      * The default implementation of <code>TimeZoneNames</code> used by {@link
      * TimeZoneNames#getInstance(ULocale)} when the ICU4J tznamedata component is not available.
@@ -601,5 +601,4 @@ public abstract class TimeZoneNames implements Serializable {
             }
         }
     }
-    /// CLOVER:ON
 }

@@ -281,6 +281,13 @@ public final class VersionInfo implements Comparable<VersionInfo> {
     public static final VersionInfo UNICODE_17_0;
 
     /**
+     * Unicode 18.0 version
+     *
+     * @stable ICU 79
+     */
+    public static final VersionInfo UNICODE_18_0;
+
+    /**
      * ICU4J current release version
      *
      * @stable ICU 2.8
@@ -294,7 +301,7 @@ public final class VersionInfo implements Comparable<VersionInfo> {
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    @Deprecated public static final String ICU_DATA_VERSION_PATH = "79b";
+    @Deprecated public static final String ICU_DATA_VERSION_PATH = "80b";
 
     /**
      * Data version in ICU4J.
@@ -588,7 +595,7 @@ public final class VersionInfo implements Comparable<VersionInfo> {
 
     // static declaration ------------------------------------------------
 
-    /** Initialize versions only after MAP_ has been created */
+    /* Initialize versions only after MAP_ has been created */
     static {
         UNICODE_1_0 = getInstance(1, 0, 0, 0);
         UNICODE_1_0_1 = getInstance(1, 0, 1, 0);
@@ -627,10 +634,11 @@ public final class VersionInfo implements Comparable<VersionInfo> {
         UNICODE_15_1 = getInstance(15, 1, 0, 0);
         UNICODE_16_0 = getInstance(16, 0, 0, 0);
         UNICODE_17_0 = getInstance(17, 0, 0, 0);
+        UNICODE_18_0 = getInstance(18, 0, 0, 0);
 
-        ICU_VERSION = getInstance(79, 0, 1, 0);
+        ICU_VERSION = getInstance(80, 0, 1, 0);
         ICU_DATA_VERSION = ICU_VERSION;
-        UNICODE_VERSION = UNICODE_17_0;
+        UNICODE_VERSION = UNICODE_18_0;
 
         UCOL_RUNTIME_VERSION = getInstance(9);
         UCOL_BUILDER_VERSION = getInstance(9);
@@ -660,7 +668,6 @@ public final class VersionInfo implements Comparable<VersionInfo> {
         return (major << 24) | (minor << 16) | (milli << 8) | micro;
     }
 
-    /// CLOVER:OFF
     /**
      * Main method prints out ICU version information
      *
@@ -745,8 +752,6 @@ public final class VersionInfo implements Comparable<VersionInfo> {
 
         return verStr.toString();
     }
-
-    /// CLOVER:ON
 
     // Moved from TimeZone class
     private static volatile String TZDATA_VERSION = null;

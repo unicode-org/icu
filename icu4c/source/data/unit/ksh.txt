@@ -363,6 +363,7 @@ ksh{
         }
         temperature{
             celsius{
+                dnam{"°C"}
                 one{"{0}°"}
                 other{"{0}°"}
                 zero{"{0}°"}

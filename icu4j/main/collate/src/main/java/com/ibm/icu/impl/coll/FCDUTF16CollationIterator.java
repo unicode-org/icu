@@ -32,11 +32,12 @@ public final class FCDUTF16CollationIterator extends UTF16CollationIterator {
         checkDir = 1;
     }
 
+    @SuppressWarnings("EqualsReference")
     @Override
     public boolean equals(Object other) {
         // Skip the UTF16CollationIterator and call its parent.
         if (!(other instanceof CollationIterator)
-                || !((CollationIterator) this).equals(other)
+                || !this.equals(other)
                 || !(other instanceof FCDUTF16CollationIterator)) {
             return false;
         }
@@ -136,13 +137,12 @@ public final class FCDUTF16CollationIterator extends UTF16CollationIterator {
                     return Collation.SENTINEL_CP;
                 }
                 c = seq.charAt(--pos);
-                if (CollationFCD.hasLccc(c)) {
-                    if (CollationFCD.maybeTibetanCompositeVowel(c)
-                            || (pos != start && CollationFCD.hasTccc(seq.charAt(pos - 1)))) {
-                        ++pos;
-                        previousSegment();
-                        c = seq.charAt(--pos);
-                    }
+                if (CollationFCD.hasLccc(c)
+                        && (CollationFCD.maybeTibetanCompositeVowel(c)
+                                || CollationFCD.hasTcccBefore(seq, start, pos))) {
+                    ++pos;
+                    previousSegment();
+                    c = seq.charAt(--pos);
                 }
                 break;
             } else if (checkDir == 0 && pos != start) {

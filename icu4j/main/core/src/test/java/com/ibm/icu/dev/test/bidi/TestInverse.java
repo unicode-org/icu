@@ -271,4 +271,21 @@ public class TestInverse extends BidiFmwk {
         String out = bidi.writeReordered(Bidi.OUTPUT_REVERSE | Bidi.INSERT_LRM_FOR_NUMERIC);
         assertEquals("\nInvalid output with RLM at both sides", "\u200f   \u200f", out);
     }
+
+    @Test
+    public void testWriteReverseMirroring() {
+        String src = "\u05D0\u221D\u0300\u05D1";
+        Bidi bidi = new Bidi(src, Bidi.DIRECTION_RIGHT_TO_LEFT);
+        String out =
+                bidi.writeReordered(
+                        Bidi.OUTPUT_REVERSE | Bidi.DO_MIRRORING | Bidi.KEEP_BASE_COMBINING);
+        assertEquals("testWriteReverseMirroring output", "\u05D0\uD836\uDF10\u0300\u05D1", out);
+
+        String src2 = "\u05D0\uD836\uDF10\u0300\u05D1";
+        Bidi bidi2 = new Bidi(src2, Bidi.DIRECTION_RIGHT_TO_LEFT);
+        String out2 =
+                bidi2.writeReordered(
+                        Bidi.OUTPUT_REVERSE | Bidi.DO_MIRRORING | Bidi.KEEP_BASE_COMBINING);
+        assertEquals("testWriteReverseMirroring reverse output", "\u05D0\u221D\u0300\u05D1", out2);
+    }
 }

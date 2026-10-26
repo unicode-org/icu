@@ -233,6 +233,9 @@ sr_Cyrl_BA{
         speed{
             beaufort{
                 dnam{"Bft"}
+                few{"B {0}"}
+                one{"B {0}"}
+                other{"B {0}"}
             }
             light-speed{
                 dnam{"свјетло"}
@@ -294,6 +297,11 @@ sr_Cyrl_BA{
             }
         }
         speed{
+            beaufort{
+                few{"B {0}"}
+                one{"B {0}"}
+                other{"B {0}"}
+            }
             light-speed{
                 dnam{"свјетло"}
                 few{"{0} свјетла"}

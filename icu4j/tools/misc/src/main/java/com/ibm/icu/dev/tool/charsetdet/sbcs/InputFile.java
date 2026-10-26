@@ -1,11 +1,10 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /*
- ***********************************************************************
- * Copyright (C) 2005-2007, International Business Machines Corporation and *
- * others. All Rights Reserved.                                        *
- ***********************************************************************
- *
+ ************************************************************************
+ * Copyright (C) 2005-2007, International Business Machines Corporation *
+ * and others. All Rights Reserved.                                     *
+ ************************************************************************
  */
 
 package com.ibm.icu.dev.tool.charsetdet.sbcs;
@@ -26,7 +25,7 @@ import java.nio.charset.CodingErrorAction;
  *     <p>TODO To change the template for this generated type comment go to Window - Preferences -
  *     Java - Code Style - Code Templates
  */
-public class InputFile implements NGramList.NGramKeyMapper {
+public class InputFile implements NGramList.NGramKeyMapper<Integer> {
 
     private File file;
     private FileInputStream fileStream;
@@ -114,7 +113,8 @@ public class InputFile implements NGramList.NGramKeyMapper {
         return visualOrder;
     }
 
-    public Object mapKey(String key) {
+    @Override
+    public Integer mapKey(String key) {
         byte[] bytes = encode(key.toCharArray());
         int length = key.length();
         int value = 0;

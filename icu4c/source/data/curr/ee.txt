@@ -263,10 +263,6 @@ ee{
             "CLP",
             "chilega peso",
         }
-        CNX{
-            "CNX",
-            "tsainatɔwo ƒe gadzraɖoƒe dollar",
-        }
         CNY{
             "CN¥",
             "Chinesega yuan",
@@ -1196,10 +1192,6 @@ ee{
             one{"WIR euro CHW"}
             other{"WIR eurowo CHW"}
         }
-        CNX{
-            one{"tsainatɔwo ƒe gadzraɖoƒe dollar"}
-            other{"tsainatɔwo ƒe gadzraɖoƒe dollarwo"}
-        }
         DEM{
             one{"germaniaga mark"}
             other{"germaniaga markwo"}
@@ -1299,6 +1291,6 @@ ee{
     }
     CurrencyUnitPatterns{
         one{"{0} {1}"}
-        other{"{1} {0}"}
+        other{"{0} {1}"}
     }
 }

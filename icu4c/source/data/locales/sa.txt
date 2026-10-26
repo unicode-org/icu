@@ -134,6 +134,8 @@ sa{
                 yMMM{"MMM y"}
                 yMMMEd{"E, d MMM y"}
                 yMMMM{"MMMM y"}
+                yMMMMEd{"d MMMM y E"}
+                yMMMMd{"d MMMM y"}
                 yMMMd{"d MMM y"}
                 yMd{"d/M/y"}
                 yQQQ{"QQQ y"}
@@ -177,9 +179,6 @@ sa{
                     0{"इ.स.पू."}
                     1{"संवत्"}
                 }
-            }
-            intervalFormats{
-                fallback{"{0} – {1}"}
             }
             monthNames{
                 format{

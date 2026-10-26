@@ -21,6 +21,7 @@ import org.junit.runners.JUnit4;
 public class RuleBasedSegmenterTest extends CoreTestFmwk {
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testRules() {
         Object[][] casesData = {
             {

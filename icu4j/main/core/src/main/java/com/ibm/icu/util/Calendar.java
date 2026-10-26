@@ -1592,12 +1592,10 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         // Allocate fields through the framework method.  Subclasses
         // may override this to define additional fields.
         fields = handleCreateFields();
-        /// CLOVER:OFF
         // todo: fix, difficult to test without subclassing
         if (fields == null || fields.length < BASE_FIELD_COUNT || fields.length > MAX_FIELD_COUNT) {
             throw new IllegalStateException("Invalid fields[]");
         }
-        /// CLOVER:ON
         stamp = new byte[fields.length];
         int mask =
                 (1 << ERA)
@@ -2449,8 +2447,6 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * <em>not</em> four days in that week, so it is week number 0, and <code>
      * getActualMinimum(WEEK_OF_MONTH)</code> will return 0.
      *
-     * <p>
-     *
      * @param field the field whose actual minimum value is desired.
      * @return the minimum of the given field for the current date of this calendar
      * @see #getMinimum
@@ -2635,8 +2631,6 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * methods will take this into account, while simple arithmetic manipulations may give invalid
      * results.
      *
-     * <p>
-     *
      * @param field the calendar field to roll.
      * @param up indicates if the value of the specified time field is to be rolled up or rolled
      *     down. Use <code>true</code> if rolling up, <code>false</code> otherwise.
@@ -2700,8 +2694,6 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * Shevat (month #4) to Adar (month #6). The {@link HebrewCalendar#roll HebrewCalendar.roll}
      * method takes this into account, so that rolling the month of Shevat by one gives the proper
      * result (Adar) in a non-leap year.
-     *
-     * <p>
      *
      * @param field the calendar field to roll.
      * @param amount the amount by which the field should be rolled.
@@ -3066,8 +3058,6 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * Shevat (month #4) to Adar (month #6). The {@link HebrewCalendar#add HebrewCalendar.add}
      * method takes this into account, so that adding one month to a date in Shevat gives the proper
      * result (Adar) in a non-leap year.
-     *
-     * <p>
      *
      * @param field the time field.
      * @param amount the amount to add to the field.
@@ -3530,6 +3520,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @param calType Calendar type to retrieve. If not found will fallback to gregorian.
      * @return PatternData object for this locale and calendarType.
      */
+    @SuppressWarnings("ReferenceEquality")
     private static PatternData getPatternData(ULocale locale, String calType) {
         ICUResourceBundle rb =
                 (ICUResourceBundle)
@@ -3790,8 +3781,6 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * call <code>pinField</code> for that field. If you really do need to do so, you should
      * override this method to do something more efficient for that field.
      *
-     * <p>
-     *
      * @param field The calendar field whose value should be pinned.
      * @see #getActualMinimum
      * @see #getActualMaximum
@@ -3838,8 +3827,6 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * the first or last day of the period) when its day of the week is not known but the day number
      * and day of week for some other day in the period (e.g. the current date) <em>is</em> known.
      *
-     * <p>
-     *
      * @param desiredDay The {@link #DAY_OF_YEAR DAY_OF_YEAR} or {@link #DAY_OF_MONTH DAY_OF_MONTH}
      *     whose week number is desired. Should be 1 for the first day of the period.
      * @param dayOfPeriod The {@link #DAY_OF_YEAR DAY_OF_YEAR} or {@link #DAY_OF_MONTH DAY_OF_MONTH}
@@ -3884,8 +3871,6 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * computeTime} and/or {@link #computeFields computeFields} methods. It is often useful in
      * {@link #getActualMinimum getActualMinimum} and {@link #getActualMaximum getActualMaximum} as
      * well.
-     *
-     * <p>
      *
      * @param dayOfPeriod The {@link #DAY_OF_YEAR DAY_OF_YEAR} or {@link #DAY_OF_MONTH DAY_OF_MONTH}
      *     whose week number is desired. Should be 1 for the first day of the period.
@@ -5862,7 +5847,6 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
 
     // (The following method is not called because all existing subclasses
     // override it.  2003-06-11 ICU 2.6 Alan)
-    /// CLOVER:OFF
     /**
      * Returns the number of days in the given month of the given extended year of this calendar
      * system. Subclasses should override this method if they can provide a more correct or more
@@ -5875,8 +5859,6 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         return handleComputeMonthStart(extendedYear, month + 1, true)
                 - handleComputeMonthStart(extendedYear, month, true);
     }
-
-    /// CLOVER:ON
 
     /**
      * Returns the number of days in the given extended year of this calendar system. Subclasses
@@ -6106,7 +6088,6 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
 
     // (The following method is not called because all existing subclasses
     // override it.  2003-06-11 ICU 2.6 Alan)
-    /// CLOVER:OFF
     /**
      * Subclasses may override this method to compute several fields specific to each calendar
      * system. These are:
@@ -6148,8 +6129,6 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         internalSet(ERA, era);
         internalSet(YEAR, eyear);
     }
-
-    /// CLOVER:ON
 
     // ----------------------------------------------------------------------
     // Subclass API
@@ -6523,9 +6502,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     final void setLocale(ULocale valid, ULocale actual) {
         // Change the following to an assertion later
         if ((valid == null) != (actual == null)) {
-            /// CLOVER:OFF
             throw new IllegalArgumentException();
-            /// CLOVER:ON
         }
         // Another check we could do is that the actual locale is at
         // the same level or less specific than the valid locale.

@@ -13,7 +13,6 @@ da{
                 range{"{0}-{1}"}
             }
             patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
                 currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
                 percentFormat{"#,##0 %"}
@@ -289,7 +288,7 @@ da{
                 Ehms{"E h.mm.ss a"}
                 Gy{"y G"}
                 GyM{"M/y G"}
-                GyMEd{"E, d/M/y G"}
+                GyMEd{"E d/M/y G"}
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E d. MMM y G"}
                 GyMMMd{"d. MMM y G"}
@@ -388,6 +387,10 @@ da{
                 MMMEd{
                     M{"E 'den' d. MMM–E 'den' d. MMM"}
                     d{"E 'den' d.–E 'den' d. MMM"}
+                }
+                MMMMd{
+                    M{"d. MMMM – d. MMMM"}
+                    d{"d .–d. MMMM"}
                 }
                 MMMd{
                     M{"d. MMM–d. MMM"}
@@ -488,6 +491,9 @@ da{
                 "{1} 'kl'. {0}",
                 "{1} 'kl'. {0}",
             }
+            appendItems{
+                Era{"{0} {1}"}
+            }
             availableFormats{
                 Bhm{"h.mm B"}
                 Bhms{"h.mm.ss B"}
@@ -503,6 +509,9 @@ da{
                 GyMEd{"E d/M/y G"}
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E d. MMM y G"}
+                GyMMMM{"MMMM y G"}
+                GyMMMMEd{"E d. MMMM y G"}
+                GyMMMMd{"d. MMMM y G"}
                 GyMMMd{"d. MMM y G"}
                 GyMd{"d.M.y GGGGG"}
                 Hm{"HH.mm"}
@@ -534,6 +543,8 @@ da{
                 yMMM{"MMM y"}
                 yMMMEd{"E d. MMM y"}
                 yMMMM{"MMMM y"}
+                yMMMMEd{"E d. MMMM y"}
+                yMMMMd{"d. MMMM y"}
                 yMMMd{"d. MMM y"}
                 yMd{"d.M.y"}
                 yQQQ{"QQQ y"}
@@ -700,6 +711,10 @@ da{
                 MMMEd{
                     M{"E d. MMM–E d. MMM"}
                     d{"E d.–E d. MMM"}
+                }
+                MMMMd{
+                    M{"d. MMMM – d. MMMM"}
+                    d{"d.–d. MMMM"}
                 }
                 MMMd{
                     M{"d. MMM–d. MMM"}

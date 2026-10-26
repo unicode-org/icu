@@ -41,6 +41,7 @@ class SegmentsImpl implements Segments {
         BreakIterator breakIter = breakIterPrototype.clone();
         int start;
         int limit;
+        int ruleStatus;
 
         if (i < 0 || i >= source.length()) {
             throw new IndexOutOfBoundsException(i);
@@ -51,17 +52,19 @@ class SegmentsImpl implements Segments {
         if (isBoundary) {
             start = i;
             limit = breakIter.next();
+            ruleStatus = breakIter.getRuleStatus();
         } else {
             // BreakIterator.isBoundary(i) will advance forwards to the next boundary if the
             // argument
             // is not a boundary.
             limit = breakIter.current();
+            ruleStatus = breakIter.getRuleStatus();
             start = breakIter.previous();
         }
 
         assert start != BreakIterator.DONE && limit != BreakIterator.DONE;
 
-        return new Segment(start, limit, source);
+        return new Segment(start, limit, ruleStatus, source);
     }
 
     @Override

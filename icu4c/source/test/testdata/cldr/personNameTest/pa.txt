@@ -1,5 +1,5 @@
 # Test data for Person Name Data
-#  Copyright © 1991-2025 Unicode, Inc.
+#  Copyright © 1991-2026 Unicode, Inc.
 #  For terms of use, see http://www.unicode.org/copyright.html
 #  SPDX-License-Identifier: Unicode-3.0
 #  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
@@ -59,10 +59,10 @@ enum ; usage ; referring, addressing, monogram
 enum ; formality ; formal, informal
 
 # nativeG
-name ; given; ਜ਼ੈਨਡਿਆ
+name ; given; ਅਮਨਦੀਪ
 name ; locale; pa_AQ
 
-expectedResult; ਜ਼ੈਨਡਿਆ
+expectedResult; ਅਮਨਦੀਪ
 
 parameters; givenFirst; long; referring; formal
 parameters; givenFirst; long; referring; informal
@@ -95,7 +95,7 @@ parameters; sorting; medium; referring; informal
 parameters; sorting; short; referring; formal
 parameters; sorting; short; referring; informal
 
-expectedResult; ਜ਼ੈ
+expectedResult; ਅ
 
 parameters; givenFirst; long; monogram; formal
 parameters; givenFirst; long; monogram; informal
@@ -113,11 +113,11 @@ parameters; surnameFirst; short; monogram; informal
 endName
 
 # nativeGS
-name ; given; ਆਰੀਨ
-name ; surname; ਐਡਲਰ
+name ; given; ਰਣਜੀਤ
+name ; surname; ਗਿੱਲ
 name ; locale; pa_AQ
 
-expectedResult; ਐਡਲਰ, ਆਰੀਨ
+expectedResult; ਗਿੱਲ, ਰਣਜੀਤ
 
 parameters; sorting; long; referring; formal
 parameters; sorting; long; referring; informal
@@ -125,38 +125,47 @@ parameters; sorting; medium; referring; formal
 parameters; sorting; medium; referring; informal
 parameters; sorting; short; referring; informal
 
-expectedResult; ਆਰੀਨ ਐਡਲਰ
-
-parameters; givenFirst; long; referring; formal
-parameters; givenFirst; long; referring; informal
-parameters; givenFirst; medium; referring; formal
-parameters; givenFirst; medium; referring; informal
-
-expectedResult; ਐਡਲਰ ਆਰੀਨ
+expectedResult; ਗਿੱਲ ਰਣਜੀਤ
 
 parameters; surnameFirst; long; referring; formal
 parameters; surnameFirst; long; referring; informal
 parameters; surnameFirst; medium; referring; formal
 parameters; surnameFirst; medium; referring; informal
 
-expectedResult; ਐਡਲਰ, ਆ.
-
-parameters; sorting; short; referring; formal
-
-expectedResult; ਆ. ਐਡਲਰ
-
-parameters; givenFirst; short; referring; formal
-
-expectedResult; ਆਰੀਨ ਐ.
+expectedResult; ਰਣਜੀਤ ਗਿੱ.
 
 parameters; givenFirst; short; referring; informal
 
-expectedResult; ਐਡਲਰ ਆ.
+expectedResult; ਰਣਜੀਤ ਗਿੱਲ
+
+parameters; givenFirst; long; referring; formal
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; medium; referring; formal
+parameters; givenFirst; medium; referring; informal
+
+expectedResult; ਗਿੱਲ, ਰ.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; ਗਿੱਲ ਰ.
 
 parameters; surnameFirst; short; referring; formal
 parameters; surnameFirst; short; referring; informal
 
-expectedResult; ਆਰੀਨ
+expectedResult; ਰ. ਗਿੱਲ
+
+parameters; givenFirst; short; referring; formal
+
+expectedResult; ਗਿੱ.ਰ
+
+parameters; surnameFirst; long; monogram; informal
+
+expectedResult; ਰ.ਗਿੱ
+
+parameters; givenFirst; long; monogram; formal
+parameters; givenFirst; long; monogram; informal
+
+expectedResult; ਰਣਜੀਤ
 
 parameters; givenFirst; long; addressing; informal
 parameters; givenFirst; medium; addressing; informal
@@ -165,7 +174,11 @@ parameters; surnameFirst; long; addressing; informal
 parameters; surnameFirst; medium; addressing; informal
 parameters; surnameFirst; short; addressing; informal
 
-expectedResult; ਐਡਲਰ
+expectedResult; ਗਿੱਰ
+
+parameters; surnameFirst; long; monogram; formal
+
+expectedResult; ਗਿੱਲ
 
 parameters; givenFirst; long; addressing; formal
 parameters; givenFirst; medium; addressing; formal
@@ -174,134 +187,92 @@ parameters; surnameFirst; long; addressing; formal
 parameters; surnameFirst; medium; addressing; formal
 parameters; surnameFirst; short; addressing; formal
 
-expectedResult; ਆ.ਐ
-
-parameters; givenFirst; long; monogram; formal
-parameters; givenFirst; long; monogram; informal
-
-expectedResult; ਐ.ਆ
-
-parameters; surnameFirst; long; monogram; informal
-
-expectedResult; ਆਐ
+expectedResult; ਰਗਿੱ
 
 parameters; givenFirst; medium; monogram; formal
 parameters; givenFirst; medium; monogram; informal
 parameters; givenFirst; short; monogram; formal
 parameters; givenFirst; short; monogram; informal
 
-expectedResult; ਐਆ
-
-parameters; surnameFirst; long; monogram; formal
-
-expectedResult; ਆ
-
-parameters; surnameFirst; medium; monogram; informal
-parameters; surnameFirst; short; monogram; informal
-
-expectedResult; ਐ
+expectedResult; ਗਿੱ
 
 parameters; surnameFirst; medium; monogram; formal
 parameters; surnameFirst; short; monogram; formal
+
+expectedResult; ਰ
+
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; informal
 
 endName
 
 # nativeGGS
-name ; given; ਜੌਨ
-name ; given2; ਹਾਮਿਸ਼
-name ; surname; ਵਾਟਸਨ
+name ; given; ਨਿਮਰਤ ਕੌਰ
+name ; given2; ਸੰਦੀਪ
+name ; surname; ਸ਼ਰਮਾ
 name ; locale; pa_AQ
 
-expectedResult; ਵਾਟਸਨ, ਜੌਨ ਹਾਮਿਸ਼
+expectedResult; ਸ਼ਰਮਾ, ਨਿਮਰਤ ਕੌਰ ਸੰਦੀਪ
 
 parameters; sorting; long; referring; formal
 
-expectedResult; ਜੌਨ ਹਾਮਿਸ਼ ਵਾਟਸਨ
-
-parameters; givenFirst; long; referring; formal
-
-expectedResult; ਵਾਟਸਨ ਜੌਨ ਹਾਮਿਸ਼
+expectedResult; ਸ਼ਰਮਾ ਨਿਮਰਤ ਕੌਰ ਸੰਦੀਪ
 
 parameters; surnameFirst; long; referring; formal
 
-expectedResult; ਵਾਟਸਨ, ਜੌ. ਹਾ.
+expectedResult; ਨਿਮਰਤ ਕੌਰ ਸੰਦੀਪ ਸ਼ਰਮਾ
 
-parameters; sorting; short; referring; formal
+parameters; givenFirst; long; referring; formal
 
-expectedResult; ਵਾਟਸਨ, ਜੌਨ ਹਾ.
+expectedResult; ਸ਼ਰਮਾ, ਨਿਮਰਤ ਕੌਰ ਸੰ.
 
 parameters; sorting; medium; referring; formal
 
-expectedResult; ਜੌ. ਹਾ. ਵਾਟਸਨ
-
-parameters; givenFirst; short; referring; formal
-
-expectedResult; ਜੌਨ ਹਾ. ਵਾਟਸਨ
-
-parameters; givenFirst; medium; referring; formal
-
-expectedResult; ਵਾਟਸਨ ਜੌ. ਹਾ.
-
-parameters; surnameFirst; short; referring; formal
-
-expectedResult; ਵਾਟਸਨ ਜੌਨ ਹਾ.
+expectedResult; ਸ਼ਰਮਾ ਨਿਮਰਤ ਕੌਰ ਸੰ.
 
 parameters; surnameFirst; medium; referring; formal
 
-expectedResult; ਵਾਟਸਨ, ਜੌਨ
+expectedResult; ਨਿਮਰਤ ਕੌਰ ਸੰ. ਸ਼ਰਮਾ
+
+parameters; givenFirst; medium; referring; formal
+
+expectedResult; ਸ਼ਰਮਾ, ਨਿ. ਕੌ. ਸੰ.
+
+parameters; sorting; short; referring; formal
+
+expectedResult; ਸ਼ਰਮਾ ਨਿ. ਕੌ. ਸੰ.
+
+parameters; surnameFirst; short; referring; formal
+
+expectedResult; ਨਿ. ਕੌ. ਸੰ. ਸ਼ਰਮਾ
+
+parameters; givenFirst; short; referring; formal
+
+expectedResult; ਸ਼ਰਮਾ, ਨਿਮਰਤ ਕੌਰ
 
 parameters; sorting; long; referring; informal
 parameters; sorting; medium; referring; informal
 parameters; sorting; short; referring; informal
 
-expectedResult; ਜੌਨ ਵਾਟਸਨ
-
-parameters; givenFirst; long; referring; informal
-parameters; givenFirst; medium; referring; informal
-
-expectedResult; ਵਾਟਸਨ ਜੌ.
-
-parameters; surnameFirst; short; referring; informal
-
-expectedResult; ਵਾਟਸਨ ਜੌਨ
+expectedResult; ਸ਼ਰਮਾ ਨਿਮਰਤ ਕੌਰ
 
 parameters; surnameFirst; long; referring; informal
 parameters; surnameFirst; medium; referring; informal
 
-expectedResult; ਜੌ.ਹਾ.ਵਾ
+expectedResult; ਨਿਮਰਤ ਕੌਰ ਸ਼ਰਮਾ
 
-parameters; givenFirst; long; monogram; formal
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; medium; referring; informal
 
-expectedResult; ਜੌਨ ਵਾ.
+expectedResult; ਸ਼ਰਮਾ ਨਿ. ਕੌ.
+
+parameters; surnameFirst; short; referring; informal
+
+expectedResult; ਨਿਮਰਤ ਕੌਰ ਸ਼.
 
 parameters; givenFirst; short; referring; informal
 
-expectedResult; ਜੌਹਾਵਾ
-
-parameters; givenFirst; long; monogram; informal
-parameters; givenFirst; medium; monogram; formal
-parameters; givenFirst; medium; monogram; informal
-parameters; givenFirst; short; monogram; formal
-parameters; givenFirst; short; monogram; informal
-
-expectedResult; ਵਾਜੌਹਾ
-
-parameters; surnameFirst; long; monogram; formal
-
-expectedResult; ਵਾ.ਜੌ
-
-parameters; surnameFirst; long; monogram; informal
-
-expectedResult; ਵਾਟਸਨ
-
-parameters; givenFirst; long; addressing; formal
-parameters; givenFirst; medium; addressing; formal
-parameters; givenFirst; short; addressing; formal
-parameters; surnameFirst; long; addressing; formal
-parameters; surnameFirst; medium; addressing; formal
-parameters; surnameFirst; short; addressing; formal
-
-expectedResult; ਜੌਨ
+expectedResult; ਨਿਮਰਤ ਕੌਰ
 
 parameters; givenFirst; long; addressing; informal
 parameters; givenFirst; medium; addressing; informal
@@ -310,69 +281,98 @@ parameters; surnameFirst; long; addressing; informal
 parameters; surnameFirst; medium; addressing; informal
 parameters; surnameFirst; short; addressing; informal
 
-expectedResult; ਜੌ
+expectedResult; ਨਿ.ਸੰ.ਸ਼
 
-parameters; surnameFirst; medium; monogram; informal
-parameters; surnameFirst; short; monogram; informal
+parameters; givenFirst; long; monogram; formal
 
-expectedResult; ਵਾ
+expectedResult; ਸ਼ਨਿਸੰ
+
+parameters; surnameFirst; long; monogram; formal
+
+expectedResult; ਨਿਸੰਸ਼
+
+parameters; givenFirst; long; monogram; informal
+parameters; givenFirst; medium; monogram; formal
+parameters; givenFirst; medium; monogram; informal
+parameters; givenFirst; short; monogram; formal
+parameters; givenFirst; short; monogram; informal
+
+expectedResult; ਸ਼.ਨਿ
+
+parameters; surnameFirst; long; monogram; informal
+
+expectedResult; ਸ਼ਰਮਾ
+
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; short; addressing; formal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; short; addressing; formal
+
+expectedResult; ਸ਼
 
 parameters; surnameFirst; medium; monogram; formal
 parameters; surnameFirst; short; monogram; formal
+
+expectedResult; ਨਿ
+
+parameters; surnameFirst; medium; monogram; informal
+parameters; surnameFirst; short; monogram; informal
 
 endName
 
 # nativeFull
 name ; title; ਸ਼੍ਰੀ
-name ; given; ਬਰਟਰਮ ਵਿਲਬਰਫ਼ੋਰਸ
-name ; given-informal; ਬਰਟੀ
-name ; given2; ਹੈਨਰੀ ਰਾਬਰਟ
-name ; surname-core; ਵੂਸਟਰ
+name ; given; ਗਗਨਦੀਪ ਸਿੰਘ
+name ; given-informal; ਗਗਨ
+name ; given2; ਜੀਵਨਜੋਤ ਸਿੰਘ
+name ; surname-core; ਸੰਧੂ
 name ; generation; ਜੂ.
 name ; credentials; ਐਮ.ਪੀ.
 name ; locale; pa_AQ
 
-expectedResult; ਸ਼੍ਰੀ ਬਰਟਰਮ ਵਿਲਬਰਫ਼ੋਰਸ ਹੈਨਰੀ ਰਾਬਰਟ ਵੂਸਟਰ ਐਮ.ਪੀ.
+expectedResult; ਸ਼੍ਰੀ ਗਗਨਦੀਪ ਸਿੰਘ ਜੀਵਨਜੋਤ ਸਿੰਘ ਸੰਧੂ ਐਮ.ਪੀ.
 
 parameters; givenFirst; long; referring; formal
 
-expectedResult; ਵੂਸਟਰ ਬਰਟਰਮ ਵਿਲਬਰਫ਼ੋਰਸ ਹੈਨਰੀ ਰਾਬਰਟ ਐਮ.ਪੀ.
+expectedResult; ਸੰਧੂ ਗਗਨਦੀਪ ਸਿੰਘ ਜੀਵਨਜੋਤ ਸਿੰਘ ਐਮ.ਪੀ.
 
 parameters; surnameFirst; long; referring; formal
 
-expectedResult; ਬਰਟਰਮ ਵਿਲਬਰਫ਼ੋਰਸ ਹੈ. ਰਾ. ਵੂਸਟਰ ਐਮ.ਪੀ.
-
-parameters; givenFirst; medium; referring; formal
-
-expectedResult; ਵੂਸਟਰ ਬਰਟਰਮ ਵਿਲਬਰਫ਼ੋਰਸ ਹੈ. ਰਾ. ਐਮ.ਪੀ.
+expectedResult; ਸੰਧੂ ਗਗਨਦੀਪ ਸਿੰਘ ਜੀ. ਸਿੰ. ਐਮ.ਪੀ.
 
 parameters; surnameFirst; medium; referring; formal
 
-expectedResult; ਵੂਸਟਰ, ਬਰਟਰਮ ਵਿਲਬਰਫ਼ੋਰਸ ਹੈਨਰੀ ਰਾਬਰਟ
+expectedResult; ਗਗਨਦੀਪ ਸਿੰਘ ਜੀ. ਸਿੰ. ਸੰਧੂ ਐਮ.ਪੀ.
+
+parameters; givenFirst; medium; referring; formal
+
+expectedResult; ਸੰਧੂ, ਗਗਨਦੀਪ ਸਿੰਘ ਜੀਵਨਜੋਤ ਸਿੰਘ
 
 parameters; sorting; long; referring; formal
 
-expectedResult; ਵੂਸਟਰ, ਬਰਟਰਮ ਵਿਲਬਰਫ਼ੋਰਸ ਹੈ. ਰਾ.
+expectedResult; ਸੰਧੂ, ਗਗਨਦੀਪ ਸਿੰਘ ਜੀ. ਸਿੰ.
 
 parameters; sorting; medium; referring; formal
 
-expectedResult; ਵੂਸਟਰ, ਬ. ਵਿ. ਹੈ. ਰਾ.
+expectedResult; ਸੰਧੂ, ਗ. ਸਿੰ. ਜੀ. ਸਿੰ.
 
 parameters; sorting; short; referring; formal
 
-expectedResult; ਬ. ਵਿ. ਹੈ. ਰਾ. ਵੂਸਟਰ
-
-parameters; givenFirst; short; referring; formal
-
-expectedResult; ਵੂਸਟਰ ਬ. ਵਿ. ਹੈ. ਰਾ.
+expectedResult; ਸੰਧੂ ਗ. ਸਿੰ. ਜੀ. ਸਿੰ.
 
 parameters; surnameFirst; short; referring; formal
 
-expectedResult; ਵੂਸਟਰ ਬ. ਵਿ.
+expectedResult; ਗ. ਸਿੰ. ਜੀ. ਸਿੰ. ਸੰਧੂ
+
+parameters; givenFirst; short; referring; formal
+
+expectedResult; ਸੰਧੂ ਗ. ਸਿੰ.
 
 parameters; surnameFirst; short; referring; informal
 
-expectedResult; ਸ਼੍ਰੀ ਵੂਸਟਰ
+expectedResult; ਸ਼੍ਰੀ ਸੰਧੂ
 
 parameters; givenFirst; long; addressing; formal
 parameters; givenFirst; medium; addressing; formal
@@ -381,31 +381,35 @@ parameters; surnameFirst; long; addressing; formal
 parameters; surnameFirst; medium; addressing; formal
 parameters; surnameFirst; short; addressing; formal
 
-expectedResult; ਵੂਸਟਰ, ਬਰਟੀ
+expectedResult; ਸੰਧੂ, ਗਗਨ
 
 parameters; sorting; long; referring; informal
 parameters; sorting; medium; referring; informal
 parameters; sorting; short; referring; informal
 
-expectedResult; ਬਰਟੀ ਵੂਸਟਰ
-
-parameters; givenFirst; long; referring; informal
-parameters; givenFirst; medium; referring; informal
-
-expectedResult; ਵੂਸਟਰ ਬਰਟੀ
+expectedResult; ਸੰਧੂ ਗਗਨ
 
 parameters; surnameFirst; long; referring; informal
 parameters; surnameFirst; medium; referring; informal
 
-expectedResult; ਬਰਟੀ ਵੂ.
+expectedResult; ਗਗਨ ਸੰਧੂ
 
-parameters; givenFirst; short; referring; informal
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; medium; referring; informal
 
-expectedResult; ਬ.ਹੈ.ਵੂ
+expectedResult; ਗ.ਜੀ.ਸੰ
 
 parameters; givenFirst; long; monogram; formal
 
-expectedResult; ਬਹੈਵੂ
+expectedResult; ਗਗਨ ਸੰ.
+
+parameters; givenFirst; short; referring; informal
+
+expectedResult; ਸੰਗਜੀ
+
+parameters; surnameFirst; long; monogram; formal
+
+expectedResult; ਗਜੀਸੰ
 
 parameters; givenFirst; long; monogram; informal
 parameters; givenFirst; medium; monogram; formal
@@ -413,11 +417,11 @@ parameters; givenFirst; medium; monogram; informal
 parameters; givenFirst; short; monogram; formal
 parameters; givenFirst; short; monogram; informal
 
-expectedResult; ਵੂਬਹੈ
+expectedResult; ਸੰ.ਗ
 
-parameters; surnameFirst; long; monogram; formal
+parameters; surnameFirst; long; monogram; informal
 
-expectedResult; ਬਰਟੀ
+expectedResult; ਗਗਨ
 
 parameters; givenFirst; long; addressing; informal
 parameters; givenFirst; medium; addressing; informal
@@ -426,16 +430,12 @@ parameters; surnameFirst; long; addressing; informal
 parameters; surnameFirst; medium; addressing; informal
 parameters; surnameFirst; short; addressing; informal
 
-expectedResult; ਵੂ.ਬ
-
-parameters; surnameFirst; long; monogram; informal
-
-expectedResult; ਵੂ
+expectedResult; ਸੰ
 
 parameters; surnameFirst; medium; monogram; formal
 parameters; surnameFirst; short; monogram; formal
 
-expectedResult; ਬ
+expectedResult; ਗ
 
 parameters; surnameFirst; medium; monogram; informal
 parameters; surnameFirst; short; monogram; informal

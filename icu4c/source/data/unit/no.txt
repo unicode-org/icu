@@ -1913,8 +1913,6 @@ no{
             }
             pinch{
                 gender{"masculine"}
-                one{"{0} klype"}
-                other{"{0} klyper"}
             }
             pint{
                 gender{"masculine"}
@@ -2036,22 +2034,11 @@ no{
                 one{"{0}mol"}
                 other{"{0}mol"}
             }
-            ofglucose{
-                dnam{"Glk"}
-                one{"{0} Glk"}
-                other{"{0} Glk"}
-            }
-            part{
-                dnam{"del"}
-                one{"{0} del"}
-                other{"{0} del"}
-            }
             part-per-1e6{
                 one{"{0}ppm"}
                 other{"{0}ppm"}
             }
             part-per-1e9{
-                dnam{"ppb"}
                 one{"{0}ppb"}
                 other{"{0}ppb"}
             }
@@ -2209,9 +2196,6 @@ no{
             }
         }
         energy{
-            calorie-it{
-                dnam{"cal-IT"}
-            }
             electronvolt{
                 dnam{"eV"}
             }
@@ -2220,11 +2204,6 @@ no{
             }
         }
         force{
-            kilogram-force{
-                dnam{"kp"}
-                one{"{0} kp"}
-                other{"{0} kp"}
-            }
             kilowatt-hour-per-100-kilometer{
                 one{"{0}kWh/100km"}
                 other{"{0}kWh/100km"}
@@ -2272,10 +2251,10 @@ no{
                 per{"{0}/ft"}
             }
             inch{
-                dnam{"in"}
+                dnam{"″"}
                 one{"{0}″"}
                 other{"{0}″"}
-                per{"{0}/in"}
+                per{"{0}/″"}
             }
             kilometer{
                 one{"{0}km"}
@@ -2625,6 +2604,9 @@ no{
                 dnam{"del"}
                 one{"{0} del"}
                 other{"{0} del"}
+            }
+            part-per-1e9{
+                dnam{"deler/mrd."}
             }
             percent{
                 dnam{"prosent"}

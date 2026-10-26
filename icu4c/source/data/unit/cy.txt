@@ -282,7 +282,6 @@ cy{
                 zero{"{0} Glc"}
             }
             part{
-                dnam{"rhan"}
                 few{"{0} rhan"}
                 many{"{0} rhan"}
                 one{"{0} rhan"}
@@ -1775,14 +1774,6 @@ cy{
                 two{"{0} rev"}
                 zero{"{0} rev"}
             }
-            steradian{
-                few{"{0} sr"}
-                many{"{0} sr"}
-                one{"{0} sr"}
-                other{"{0} sr"}
-                two{"{0} sr"}
-                zero{"{0} sr"}
-            }
         }
         area{
             acre{
@@ -1858,18 +1849,6 @@ cy{
                 other{"{0}kt"}
                 two{"{0} kt"}
                 zero{"{0} kt"}
-            }
-            ofglucose{
-                dnam{"Glc"}
-            }
-            part{
-                dnam{"rhan"}
-                few{"{0} rhan"}
-                many{"{0} rhan"}
-                one{"{0} rhan"}
-                other{"{0} rhan"}
-                two{"{0} rhan"}
-                zero{"{0} rhan"}
             }
             part-per-1e9{
                 few{"{0} ppb"}
@@ -2084,30 +2063,6 @@ cy{
                 two{"{0}A"}
                 zero{"{0}A"}
             }
-            coulomb{
-                few{"{0} C"}
-                many{"{0} C"}
-                one{"{0} C"}
-                other{"{0} C"}
-                two{"{0} C"}
-                zero{"{0} C"}
-            }
-            farad{
-                few{"{0} F"}
-                many{"{0} F"}
-                one{"{0} F"}
-                other{"{0} F"}
-                two{"{0} F"}
-                zero{"{0} F"}
-            }
-            henry{
-                few{"{0} H"}
-                many{"{0} H"}
-                one{"{0} H"}
-                other{"{0} H"}
-                two{"{0} H"}
-                zero{"{0} H"}
-            }
             milliampere{
                 dnam{"mA"}
                 few{"{0}mA"}
@@ -2126,14 +2081,6 @@ cy{
                 two{"{0}Ω"}
                 zero{"{0}Ω"}
             }
-            siemens{
-                few{"{0} S"}
-                many{"{0} S"}
-                one{"{0} S"}
-                other{"{0} S"}
-                two{"{0} S"}
-                zero{"{0} S"}
-            }
             volt{
                 dnam{"folt"}
                 few{"{0}V"}
@@ -2145,14 +2092,6 @@ cy{
             }
         }
         energy{
-            becquerel{
-                few{"{0} Bq"}
-                many{"{0} Bq"}
-                one{"{0} Bq"}
-                other{"{0} Bq"}
-                two{"{0} Bq"}
-                zero{"{0} Bq"}
-            }
             calorie{
                 few{"{0}cal"}
                 many{"{0}cal"}
@@ -2161,9 +2100,6 @@ cy{
                 two{"{0}cal"}
                 zero{"{0}cal"}
             }
-            calorie-it{
-                dnam{"cal-IT"}
-            }
             foodcalorie{
                 few{"{0} kcal"}
                 many{"{0} kcal"}
@@ -2171,14 +2107,6 @@ cy{
                 other{"{0}Cal"}
                 two{"{0} kcal"}
                 zero{"{0} kcal"}
-            }
-            gray{
-                few{"{0} Gy"}
-                many{"{0} Gy"}
-                one{"{0} Gy"}
-                other{"{0} Gy"}
-                two{"{0} Gy"}
-                zero{"{0} Gy"}
             }
             joule{
                 dnam{"joule"}
@@ -2205,14 +2133,6 @@ cy{
                 other{"{0}kj"}
                 two{"{0}kj"}
                 zero{"{0}kj"}
-            }
-            sievert{
-                few{"{0} Sv"}
-                many{"{0} Sv"}
-                one{"{0} Sv"}
-                other{"{0} Sv"}
-                two{"{0} Sv"}
-                zero{"{0} Sv"}
             }
         }
         force{
@@ -2480,24 +2400,6 @@ cy{
                 zero{"{0} L☉"}
             }
         }
-        magnetic{
-            tesla{
-                few{"{0} T"}
-                many{"{0} T"}
-                one{"{0} T"}
-                other{"{0} T"}
-                two{"{0} T"}
-                zero{"{0} T"}
-            }
-            weber{
-                few{"{0} Wb"}
-                many{"{0} Wb"}
-                one{"{0} Wb"}
-                other{"{0} Wb"}
-                two{"{0} Wb"}
-                zero{"{0} Wb"}
-            }
-        }
         mass{
             carat{
                 dnam{"carat"}
@@ -2668,9 +2570,6 @@ cy{
                 other{"{0}mmHg"}
                 two{"{0}mmHg"}
                 zero{"{0}mmHg"}
-            }
-            ofhg{
-                dnam{"o Hg"}
             }
             pascal{
                 few{"{0} Pa"}
@@ -2896,8 +2795,8 @@ cy{
                 dnam{"Imp gal"}
                 few{"{0} gal Imp."}
                 many{"{0} gal Imp."}
-                one{"{0}galIm"}
-                other{"{0}galIm"}
+                one{"{0}gal-Im"}
+                other{"{0}gal-Im"}
                 per{"{0}/galIm"}
                 two{"{0} gal Imp."}
                 zero{"{0} gal Imp."}
@@ -2974,8 +2873,8 @@ cy{
             tablespoon{
                 few{"{0} tbsp"}
                 many{"{0} tbsp"}
-                one{"{0}tbsp"}
-                other{"{0}tbsp"}
+                one{"{0} Llond llwy fwrdd"}
+                other{"{0} Llond llwy fwrdd"}
                 two{"{0} tbsp"}
                 zero{"{0} tbsp"}
             }

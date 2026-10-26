@@ -18,9 +18,6 @@ et{
         "Africa:Mogadishu"{
             ec{"Muqdisho"}
         }
-        "America:Bahia_Banderas"{
-            ec{"Bahia Banderas"}
-        }
         "America:Havana"{
             ec{"Havanna"}
         }
@@ -96,6 +93,9 @@ et{
         "Asia:Hong_Kong"{
             ec{"Hongkong"}
         }
+        "Asia:Hovd"{
+            ec{"Hovd"}
+        }
         "Asia:Jerusalem"{
             ec{"Jeruusalemm"}
         }
@@ -159,9 +159,6 @@ et{
         "Asia:Tehran"{
             ec{"Teheran"}
         }
-        "Asia:Tokyo"{
-            ec{"Tōkyō"}
-        }
         "Asia:Yakutsk"{
             ec{"Jakutsk"}
         }
@@ -219,9 +216,6 @@ et{
         "Europe:Copenhagen"{
             ec{"Kopenhaagen"}
         }
-        "Europe:Dublin"{
-            ld{"Iiri suveaeg"}
-        }
         "Europe:Helsinki"{
             ec{"Helsingi"}
         }
@@ -236,9 +230,6 @@ et{
         }
         "Europe:Lisbon"{
             ec{"Lissabon"}
-        }
-        "Europe:London"{
-            ld{"Briti suveaeg"}
         }
         "Europe:Mariehamn"{
             ec{"Maarianhamina"}
@@ -325,11 +316,6 @@ et{
             lg{"Alaska aeg"}
             ls{"Alaska standardaeg"}
         }
-        "meta:Almaty"{
-            ld{"Almatõ suveaeg"}
-            lg{"Almatõ aeg"}
-            ls{"Almatõ standardaeg"}
-        }
         "meta:Amazon"{
             ld{"Amazonase suveaeg"}
             lg{"Amazonase aeg"}
@@ -364,16 +350,6 @@ et{
             ld{"Apia suveaeg"}
             lg{"Apia aeg"}
             ls{"Apia standardaeg"}
-        }
-        "meta:Aqtau"{
-            ld{"Aktau suveaeg"}
-            lg{"Aktau aeg"}
-            ls{"Aktau standardaeg"}
-        }
-        "meta:Aqtobe"{
-            ld{"Aktöbe suveaeg"}
-            lg{"Aktöbe aeg"}
-            ls{"Aktöbe standardaeg"}
         }
         "meta:Arabian"{
             ld{"Araabia suveaeg"}
@@ -445,6 +421,10 @@ et{
             ld{"Brasiilia suveaeg"}
             lg{"Brasiilia aeg"}
             ls{"Brasiilia standardaeg"}
+        }
+        "meta:British"{
+            ld{"Briti suveaeg"}
+            lg{"Briti aeg"}
         }
         "meta:Brunei"{
             ls{"Brunei aeg"}
@@ -579,9 +559,6 @@ et{
             lg{"Lääne-Gröönimaa aeg"}
             ls{"Lääne-Gröönimaa standardaeg"}
         }
-        "meta:Guam"{
-            ls{"Guami standardaeg"}
-        }
         "meta:Gulf"{
             ls{"Pärsia lahe standardaeg"}
         }
@@ -589,7 +566,7 @@ et{
             ls{"Guyana aeg"}
         }
         "meta:Hawaii"{
-            ls{"Hawaii-Aleuudi standardaeg"}
+            ls{"Hawaii aeg"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"Hawaii-Aleuudi suveaeg"}
@@ -628,6 +605,10 @@ et{
             ld{"Iraani suveaeg"}
             lg{"Iraani aeg"}
             ls{"Iraani standardaeg"}
+        }
+        "meta:Irish"{
+            ld{"Iiri suveaeg"}
+            lg{"Iiri aeg"}
         }
         "meta:Irkutsk"{
             ld{"Irkutski suveaeg"}
@@ -674,9 +655,6 @@ et{
         "meta:Kyrgystan"{
             ls{"Kõrgõzstani aeg"}
         }
-        "meta:Lanka"{
-            ls{"Sri Lanka aeg"}
-        }
         "meta:Line_Islands"{
             ls{"Line’i saarte aeg"}
         }
@@ -684,11 +662,6 @@ et{
             ld{"Lord Howe’i suveaeg"}
             lg{"Lord Howe’i aeg"}
             ls{"Lord Howe’i standardaeg"}
-        }
-        "meta:Macau"{
-            ld{"Macau suveaeg"}
-            lg{"Macau aeg"}
-            ls{"Macau standardaeg"}
         }
         "meta:Magadan"{
             ld{"Magadani suveaeg"}
@@ -767,9 +740,6 @@ et{
             lg{"Fernando de Noronha aeg"}
             ls{"Fernando de Noronha standardaeg"}
         }
-        "meta:North_Mariana"{
-            ls{"Põhja-Mariaani aeg"}
-        }
         "meta:Novosibirsk"{
             ld{"Novosibirski suveaeg"}
             lg{"Novosibirski aeg"}
@@ -823,11 +793,6 @@ et{
         "meta:Pyongyang"{
             ls{"Pyongyangi aeg"}
         }
-        "meta:Qyzylorda"{
-            ld{"Kõzõlorda suveaeg"}
-            lg{"Kõzõlorda aeg"}
-            ls{"Kõzõlorda standardaeg"}
-        }
         "meta:Reunion"{
             ls{"Réunioni aeg"}
         }
@@ -845,8 +810,6 @@ et{
             ls{"Samara standardaeg"}
         }
         "meta:Samoa"{
-            ld{"Samoa suveaeg"}
-            lg{"Samoa aeg"}
             ls{"Samoa standardaeg"}
         }
         "meta:Seychelles"{
@@ -906,6 +869,9 @@ et{
             ld{"Uruguay suveaeg"}
             lg{"Uruguay aeg"}
             ls{"Uruguay standardaeg"}
+        }
+        "meta:Urumqi"{
+            ls{"Ürümqi aeg"}
         }
         "meta:Uzbekistan"{
             ld{"Usbekistani suveaeg"}

@@ -180,7 +180,6 @@ sc{
         }
         "Europe:Dublin"{
             ec{"Dublinu"}
-            ld{"Ora istandard irlandesa"}
         }
         "Europe:Gibraltar"{
             ec{"Gibilterra"}
@@ -202,7 +201,6 @@ sc{
         }
         "Europe:London"{
             ec{"Londra"}
-            ld{"Ora istiale britànnica"}
         }
         "Europe:Luxembourg"{
             ec{"Lussemburgu"}
@@ -300,14 +298,6 @@ sc{
             ld{"Ora legale de s’Alaska"}
             lg{"Ora de s’Alaska"}
             ls{"Ora istandard de s’Alaska"}
-            sd{"OLAK"}
-            sg{"OAK"}
-            ss{"OIAK"}
-        }
-        "meta:Almaty"{
-            ld{"Ora legale de Almaty"}
-            lg{"Ora de Almaty"}
-            ls{"Ora istandard de Almaty"}
         }
         "meta:Amazon"{
             ld{"Ora legale de s’Amatzònia"}
@@ -318,33 +308,21 @@ sc{
             ld{"Ora legale tzentrale USA"}
             lg{"Ora tzentrale USA"}
             ls{"Ora istandard tzentrale USA"}
-            sd{"OLT"}
-            sg{"OT"}
-            ss{"OIT"}
         }
         "meta:America_Eastern"{
             ld{"Ora legale orientale USA"}
             lg{"Ora orientale USA"}
             ls{"Ora istandard orientale USA"}
-            sd{"OLO"}
-            sg{"OO"}
-            ss{"OIO"}
         }
         "meta:America_Mountain"{
             ld{"Ora legale Montes Pedrosos USA"}
             lg{"Ora Montes Pedrosos USA"}
             ls{"Ora istandard Montes Pedrosos USA"}
-            sd{"OLMP"}
-            sg{"OMP"}
-            ss{"OIMP"}
         }
         "meta:America_Pacific"{
             ld{"Ora legale de su Patzìficu USA"}
             lg{"Ora de su Patzìficu USA"}
             ls{"Ora istandard de su Patzìficu USA"}
-            sd{"OLP"}
-            sg{"OP"}
-            ss{"OIP"}
         }
         "meta:Anadyr"{
             ld{"Ora legale de Anadyr"}
@@ -355,16 +333,6 @@ sc{
             ld{"Ora legale de Apia"}
             lg{"Ora de Apia"}
             ls{"Ora istandard de Apia"}
-        }
-        "meta:Aqtau"{
-            ld{"Ora legale de Aktau"}
-            lg{"Ora de Aktau"}
-            ls{"Ora istandard de Aktau"}
-        }
-        "meta:Aqtobe"{
-            ld{"Ora legale de Aktobe"}
-            lg{"Ora de Aktobe"}
-            ls{"Ora istandard de Aktobe"}
         }
         "meta:Arabian"{
             ld{"Ora legale àraba"}
@@ -390,9 +358,6 @@ sc{
             ld{"Ora legale de s’Atlànticu"}
             lg{"Ora de s’Atlànticu"}
             ls{"Ora istandard de s’Atlànticu"}
-            sd{"OLA"}
-            sg{"OA"}
-            ss{"OIA"}
         }
         "meta:Australia_Central"{
             ld{"Ora legale de s’Austràlia tzentrale"}
@@ -439,6 +404,10 @@ sc{
             ld{"Ora legale de Brasìlia"}
             lg{"Ora de Brasìlia"}
             ls{"Ora istandard de Brasìlia"}
+        }
+        "meta:British"{
+            ld{"Ora istiale britànnica"}
+            lg{"Ora britànnica"}
         }
         "meta:Brunei"{
             ls{"Ora de su Brunei"}
@@ -489,9 +458,6 @@ sc{
             ld{"Ora legale de Cuba"}
             lg{"Ora de Cuba"}
             ls{"Ora istandard de Cuba"}
-            sd{"OLC"}
-            sg{"OC"}
-            ss{"OIC"}
         }
         "meta:Davis"{
             ls{"Ora de Davis"}
@@ -577,9 +543,6 @@ sc{
             lg{"Ora de sa Groenlàndia otzidentale"}
             ls{"Ora istandard de sa Groenlàndia otzidentale"}
         }
-        "meta:Guam"{
-            ls{"Ora istandard de Guàm"}
-        }
         "meta:Gulf"{
             ls{"Ora istandard de su Gulfu"}
         }
@@ -587,7 +550,7 @@ sc{
             ls{"Ora de sa Guyana"}
         }
         "meta:Hawaii"{
-            ls{"Ora istandard de sas ìsulas Hawaii-Aleutinas"}
+            ls{"Ora istandard de sas ìsulas Hawaii"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"Ora legale de sas ìsulas Hawaii-Aleutinas"}
@@ -626,6 +589,10 @@ sc{
             ld{"Ora legale de s’Iràn"}
             lg{"Ora de s’Iràn"}
             ls{"Ora istandard de s’Iràn"}
+        }
+        "meta:Irish"{
+            ld{"Ora istandard irlandesa"}
+            lg{"Ora irlandesa"}
         }
         "meta:Irkutsk"{
             ld{"Ora legale de Irkutsk"}
@@ -672,9 +639,6 @@ sc{
         "meta:Kyrgystan"{
             ls{"Ora de su Kirghìzistan"}
         }
-        "meta:Lanka"{
-            ls{"Ora de Lanka"}
-        }
         "meta:Line_Islands"{
             ls{"Ora de sas Ìsulas de sa Lìnia"}
         }
@@ -682,11 +646,6 @@ sc{
             ld{"Ora legale de Lord Howe"}
             lg{"Ora de Lord Howe"}
             ls{"Ora istandard de Lord Howe"}
-        }
-        "meta:Macau"{
-            ld{"Ora legale de Macao"}
-            lg{"Ora de Macao"}
-            ls{"Ora istandard de Macao"}
         }
         "meta:Magadan"{
             ld{"Ora legale de Magadan"}
@@ -765,9 +724,6 @@ sc{
             lg{"Ora de su Fernando de Noronha"}
             ls{"Ora istandard de su Fernando de Noronha"}
         }
-        "meta:North_Mariana"{
-            ls{"Ora de sas Ìsulas Mariannas Setentrionales"}
-        }
         "meta:Novosibirsk"{
             ld{"Ora legale de Novosibirsk"}
             lg{"Ora de Novosibirsk"}
@@ -821,11 +777,6 @@ sc{
         "meta:Pyongyang"{
             ls{"Ora de Pyongyang"}
         }
-        "meta:Qyzylorda"{
-            ld{"Ora legale de Qyzylorda"}
-            lg{"Ora de Qyzylorda"}
-            ls{"Ora istandard de Qyzylorda"}
-        }
         "meta:Reunion"{
             ls{"Ora de sa Reunione"}
         }
@@ -843,8 +794,6 @@ sc{
             ls{"Ora istandard de Samara"}
         }
         "meta:Samoa"{
-            ld{"Ora legale de sas Samoa"}
-            lg{"Ora de sas Samoa"}
             ls{"Ora istandard de sas Samoa"}
         }
         "meta:Seychelles"{

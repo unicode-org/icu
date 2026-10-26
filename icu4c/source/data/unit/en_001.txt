@@ -233,6 +233,11 @@ en_001{
                 other{"{0} cubic metres"}
                 per{"{0} per cubic metre"}
             }
+            cup{
+                dnam{"US cups"}
+                one{"{0} US cup"}
+                other{"{0} US cups"}
+            }
             deciliter{
                 dnam{"decilitres"}
                 one{"{0} decilitre"}
@@ -290,6 +295,11 @@ en_001{
                 dnam{"millilitres"}
                 one{"{0} millilitre"}
                 other{"{0} millilitres"}
+            }
+            pint{
+                dnam{"US pints"}
+                one{"{0} US pint"}
+                other{"{0} US pints"}
             }
             quart{
                 dnam{"US quarts"}
@@ -353,6 +363,11 @@ en_001{
                 other{"{0}mpg"}
             }
         }
+        energy{
+            british-thermal-unit-it{
+                other{"{0} BTU-IT"}
+            }
+        }
         mass{
             carat{
                 one{"{0}ct"}
@@ -376,12 +391,21 @@ en_001{
                 one{"{0}°F"}
                 other{"{0}°F"}
             }
+            rankine{
+                one{"{0}°R"}
+                other{"{0}°R"}
+            }
         }
         volume{
             centiliter{
                 dnam{"cl"}
                 one{"{0}cl"}
                 other{"{0}cl"}
+            }
+            cup{
+                dnam{"US cup"}
+                one{"{0}USc"}
+                other{"{0}USc"}
             }
             deciliter{
                 dnam{"dl"}
@@ -444,6 +468,11 @@ en_001{
                 one{"{0}ml"}
                 other{"{0}ml"}
             }
+            pint{
+                dnam{"US pt"}
+                one{"{0}USpt"}
+                other{"{0}USpt"}
+            }
             quart{
                 dnam{"USqt"}
                 one{"{0}USqt"}
@@ -453,6 +482,11 @@ en_001{
                 dnam{"qt"}
                 one{"{0}qt"}
                 other{"{0}qt"}
+            }
+            tablespoon{
+                dnam{"tbsp"}
+                one{"{0}tbsp"}
+                other{"{0}tbsp"}
             }
         }
     }
@@ -531,6 +565,11 @@ en_001{
                 other{"{0} secs"}
             }
         }
+        energy{
+            british-thermal-unit-it{
+                other{"{0} BTU-IT"}
+            }
+        }
         length{
             micrometer{
                 dnam{"μmetres"}
@@ -550,11 +589,22 @@ en_001{
                 dnam{"metres/sec"}
             }
         }
+        temperature{
+            rankine{
+                one{"{0}°R"}
+                other{"{0}°R"}
+            }
+        }
         volume{
             centiliter{
                 dnam{"cl"}
                 one{"{0} cl"}
                 other{"{0} cl"}
+            }
+            cup{
+                dnam{"US cups"}
+                one{"{0} US c"}
+                other{"{0} US c"}
             }
             deciliter{
                 dnam{"dl"}
@@ -625,6 +675,11 @@ en_001{
                 one{"{0} pinch"}
                 other{"{0} pinches"}
             }
+            pint{
+                dnam{"US pints"}
+                one{"{0} US pt"}
+                other{"{0} US pt"}
+            }
             quart{
                 dnam{"US qts"}
                 one{"{0} US qt"}
@@ -634,6 +689,11 @@ en_001{
                 dnam{"qt"}
                 one{"{0} qt"}
                 other{"{0} qt"}
+            }
+            tablespoon{
+                dnam{"tbsp"}
+                one{"{0} tbsp"}
+                other{"{0} tbsp"}
             }
         }
     }

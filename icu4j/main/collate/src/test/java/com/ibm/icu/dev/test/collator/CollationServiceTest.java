@@ -34,8 +34,11 @@ public class CollationServiceTest extends TestFmwk {
         Collator frcol = Collator.getInstance(ULocale.FRANCE);
         Collator uscol = Collator.getInstance(ULocale.US);
 
-        { // try override en_US collator
-            Object key = Collator.registerInstance(frcol, ULocale.US);
+        Object key = null;
+
+        try {
+            // try override en_US collator
+            key = Collator.registerInstance(frcol, ULocale.US);
             Collator ncol = Collator.getInstance(ULocale.US);
             if (!frcol.equals(ncol)) {
                 errln("register of french collator for en_US failed");
@@ -50,17 +53,22 @@ public class CollationServiceTest extends TestFmwk {
             if (!Collator.unregister(key)) {
                 errln("failed to unregister french collator");
             }
+            key = null;
+
             ncol = Collator.getInstance(ULocale.US);
             if (!uscol.equals(ncol)) {
                 errln("collator after unregister does not match original");
             }
+        } finally {
+            if (key != null) Collator.unregister(key);
         }
 
         ULocale fu_FU = new ULocale("fu_FU_FOO");
 
-        { // try create collator for new locale
+        try {
+            // try create collator for new locale
             Collator fucol = Collator.getInstance(fu_FU);
-            Object key = Collator.registerInstance(frcol, fu_FU);
+            key = Collator.registerInstance(frcol, fu_FU);
             Collator ncol = Collator.getInstance(fu_FU);
             if (!frcol.equals(ncol)) {
                 errln("register of fr collator for fu_FU failed");
@@ -99,10 +107,14 @@ public class CollationServiceTest extends TestFmwk {
             if (!Collator.unregister(key)) {
                 errln("failed to unregister french collator");
             }
+            key = null;
+
             ncol = Collator.getInstance(fu_FU);
             if (!fucol.equals(ncol)) {
                 errln("collator after unregister does not match original fu_FU");
             }
+        } finally {
+            if (key != null) Collator.unregister(key);
         }
 
         {
@@ -248,12 +260,17 @@ public class CollationServiceTest extends TestFmwk {
             Object key = Collator.registerFactory(wrapper);
             String name = null;
             try {
-                name = Collator.getDisplayName(fu_FU, fu_FU_FOO);
-            } catch (MissingResourceException ex) {
-                warnln("Could not load locale data.");
+                try {
+                    name = Collator.getDisplayName(fu_FU, fu_FU_FOO);
+                } catch (MissingResourceException ex) {
+                    warnln("Could not load locale data.");
+                }
+                logln("*** default name: " + name);
+                Collator.unregister(key);
+                key = null;
+            } finally {
+                if (key != null) Collator.unregister(key);
             }
-            logln("*** default name: " + name);
-            Collator.unregister(key);
 
             ULocale bar_BAR = new ULocale("bar_BAR");
             Collator col = Collator.getInstance(bar_BAR);
@@ -266,8 +283,9 @@ public class CollationServiceTest extends TestFmwk {
 
         int n1 = checkAvailable("before registerFactory");
 
-        {
-            Object key = Collator.registerFactory(factory);
+        Object key = null;
+        try {
+            key = Collator.registerFactory(factory);
 
             int n2 = checkAvailable("after registerFactory");
 
@@ -306,6 +324,7 @@ public class CollationServiceTest extends TestFmwk {
             if (!Collator.unregister(key)) {
                 errln("failed to unregister factory");
             }
+            key = null;
 
             int n3 = checkAvailable("after unregister");
             assertTrue("register increases count", n2 > n1);
@@ -315,6 +334,8 @@ public class CollationServiceTest extends TestFmwk {
             if (!fucol.equals(ncol)) {
                 errln("collator after unregister does not match original fu_FU");
             }
+        } finally {
+            if (key != null) Collator.unregister(key);
         }
     }
 

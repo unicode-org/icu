@@ -212,7 +212,7 @@ public final class LSR {
             String lang = langsCache.computeIfAbsent(encodedLang, CachedDecoder::toLanguage);
 
             int encodedScript = (encoded >> 24) & 0x000000ff;
-            String script = scriptsCache.computeIfAbsent(encodedScript, UScript::getShortName);
+            String script = scriptsCache.computeIfAbsent(encodedScript, CachedDecoder::toScript);
 
             int encodedRegion = encoded & 0x00ffffff;
             encodedRegion /= 27 * 27 * 27;
@@ -226,6 +226,16 @@ public final class LSR {
             }
 
             return new String[] {lang, script, region};
+        }
+
+        private static String toScript(int encoded) {
+            try {
+                return UScript.getShortName(encoded);
+            } catch (IllegalArgumentException e) {
+                // The data contains an unknown script code. Return an empty string,
+                // which is what the ICU4C decoder does.
+                return "";
+            }
         }
 
         private static String toLanguage(int encoded) {

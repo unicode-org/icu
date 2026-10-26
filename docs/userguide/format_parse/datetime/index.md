@@ -234,14 +234,14 @@ Note that the examples may not reflect current CLDR data.
 | `S` | fractional second - truncates (like other time fields)<br/>to the count of letters when formatting. Appends<br/>zeros if more than 3 letters specified. Truncates at<br/>three significant digits when parsing. | `S`<br/>`SS`<br/>`SSS`<br/>`SSSS` | 2<br/>23<br/>235<br/>2350 |
 | `A` | milliseconds in day | `A` | 61201235 |
 | `z` | Time Zone: specific non-location | `z`, `zz`, or `zzz`<br/>`zzzz` | PDT<br/>Pacific Daylight Time |
-| `Z` | Time Zone: ISO8601 basic hms? / RFC 822<br/>Time Zone: long localized GMT (=OOOO)<br/>TIme Zone: ISO8601 extended hms? (=XXXXX) | `Z`, `ZZ`, or `ZZZ`<br/>`ZZZZ`<br/>`ZZZZZ` | -0800<br/>GMT-08:00<br/>-08:00, -07:52:58, Z |
+| `Z` | Time Zone: ISO8601 basic hms? / RFC 822<br/>Time Zone: long localized GMT (=OOOO)<br/>Time Zone: ISO8601 extended hms? (=XXXXX) | `Z`, `ZZ`, or `ZZZ`<br/>`ZZZZ`<br/>`ZZZZZ` | -0800<br/>GMT-08:00<br/>-08:00, -07:52:58, Z |
 | `O` | Time Zone: short localized GMT<br/>Time Zone: long localized GMT (=ZZZZ) | `O`<br/>`OOOO` | GMT-8<br/>GMT-08:00 |
 | `v` | Time Zone: generic non-location<br/>(falls back first to VVVV) | `v`<br/>`vvvv` | PT<br/>Pacific Time or Los Angeles Time |
 | `V` | Time Zone: short time zone ID<br/>Time Zone: long time zone ID<br/>Time Zone: time zone exemplar city<br/>Time Zone: generic location (falls back to OOOO) | `V`<br/>`VV`<br/>`VVV`<br/>`VVVV` | uslax<br/>America/Los_Angeles<br/>Los Angeles<br/>Los Angeles Time |
 | `X` | Time Zone: ISO8601 basic hm?, with Z for 0<br/>Time Zone: ISO8601 basic hm, with Z<br/>Time Zone: ISO8601 extended hm, with Z<br/>Time Zone: ISO8601 basic hms?, with Z<br/>Time Zone: ISO8601 extended hms?, with Z | `X`<br/>`XX`<br/>`XXX`<br/>`XXXX`<br/>`XXXXX` | -08, +0530, Z<br/>-0800, Z<br/>-08:00, Z<br/>-0800, -075258, Z<br/>-08:00, -07:52:58, Z |
 | `x` | Time Zone: ISO8601 basic hm?, without Z for 0<br/>Time Zone: ISO8601 basic hm, without Z<br/>Time Zone: ISO8601 extended hm, without Z<br/>Time Zone: ISO8601 basic hms?, without Z<br/>Time Zone: ISO8601 extended hms?, without Z | `x`<br/>`xx`<br/>`xxx`<br/>`xxxx`<br/>`xxxxx` | -08, +0530<br/>-0800<br/>-08:00<br/>-0800, -075258<br/>-08:00, -07:52:58 |
 | `'` | escape for text | `'` | (nothing) |
-| `' '` | two single quotes produce one | `' '` | ' |
+| `''` | two single quotes produce one | `''` | ' |
 
 > :point_right: **Note**: *Any characters in the pattern that are not in the ranges of
 ['a'..'z'] and ['A'..'Z'] will be treated as quoted text. For instance,

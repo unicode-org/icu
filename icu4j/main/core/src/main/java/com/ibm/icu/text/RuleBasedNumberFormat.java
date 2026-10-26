@@ -18,7 +18,6 @@ import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
 import com.ibm.icu.util.UResourceBundle;
-import com.ibm.icu.util.UResourceBundleIterator;
 import java.math.BigInteger;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
@@ -639,6 +638,12 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
     private boolean lenientParse = false;
 
     /**
+     * Case folding option for lenient parsing. Uses Turkic case folding for Turkish and Azerbaijani
+     * locales.
+     */
+    transient byte caseFoldOption = (byte) UCharacter.FOLD_CASE_DEFAULT;
+
+    /**
      * Specifies if one of the rules is unparseable. For example, there may be substitutions of the
      * same type in a rule.
      */
@@ -822,16 +827,13 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
         ULocale uloc = bundle.getULocale();
         setLocale(uloc, uloc);
 
-        StringBuilder description = new StringBuilder();
+        String description;
         String[][] localizations = null;
 
         try {
-            ICUResourceBundle rules = bundle.getWithFallback("RBNFRules/" + rulenames[format - 1]);
-            UResourceBundleIterator it = rules.getIterator();
-            while (it.hasNext()) {
-                description.append(it.nextString());
-            }
+            description = bundle.getStringWithFallback("RBNFRules/" + rulenames[format - 1]);
         } catch (MissingResourceException e1) {
+            description = "";
         }
 
         // We use findTopLevel() instead of get() because
@@ -845,7 +847,7 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
         }
         // else there are no localized names. It's not that important.
 
-        init(description.toString(), localizations);
+        init(description, localizations);
     }
 
     private static final String[] rulenames = {
@@ -1222,8 +1224,7 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
     }
 
     /**
-     * <strong style="font-family: helvetica; color: red;">NEW</strong> Implement
-     * com.ibm.icu.text.NumberFormat: Format a BigInteger.
+     * Implement {@link com.ibm.icu.text.NumberFormat}: format a {@link BigDecimal}.
      *
      * @stable ICU 2.0
      */
@@ -1233,8 +1234,7 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
     }
 
     /**
-     * <strong style="font-family: helvetica; color: red;">NEW</strong> Implement
-     * com.ibm.icu.text.NumberFormat: Format a BigDecimal.
+     * Implement {@link com.ibm.icu.text.NumberFormat}: format a {@link BigDecimal}.
      *
      * @stable ICU 2.0
      */
@@ -1250,8 +1250,7 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
             com.ibm.icu.math.BigDecimal.valueOf(Long.MIN_VALUE);
 
     /**
-     * <strong style="font-family: helvetica; color: red;">NEW</strong> Implement
-     * com.ibm.icu.text.NumberFormat: Format a BigDecimal.
+     * Implement {@link com.ibm.icu.text.NumberFormat}: format a {@link BigDecimal}.
      *
      * @stable ICU 2.0
      */
@@ -1360,6 +1359,11 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
      */
     public void setLenientParseMode(boolean enabled) {
         lenientParse = enabled;
+        if (enabled) {
+            // Eagerly initialize the scanner provider so that getLenientScannerProvider()
+            // is thread-safe when called from parse().
+            initializeLenientScannerProvider();
+        }
     }
 
     /**
@@ -1396,10 +1400,20 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
      * @stable ICU 4.4
      */
     public RbnfLenientScannerProvider getLenientScannerProvider() {
-        // there's a potential race condition if two threads try to set/get the scanner at
-        // the same time, but you get what you get, and you shouldn't be using this from
-        // multiple threads anyway.
         if (scannerProvider == null && lenientParse && !lookedForScanner) {
+            initializeLenientScannerProvider();
+        }
+
+        return scannerProvider;
+    }
+
+    /**
+     * Attempts to instantiate the default lenient scanner provider. Called eagerly from
+     * setLenientParseMode() so that getLenientScannerProvider() does not need to perform lazy
+     * initialization from parse() (thread safety).
+     */
+    private void initializeLenientScannerProvider() {
+        if (scannerProvider == null && !lookedForScanner) {
             try {
                 lookedForScanner = true;
                 Class<?> cls = Class.forName("com.ibm.icu.impl.text.RbnfScannerProviderImpl");
@@ -1410,8 +1424,6 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
                 // any failure, we just ignore and return null
             }
         }
-
-        return scannerProvider;
     }
 
     /**
@@ -1580,7 +1592,7 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
      * @return The collator to use for lenient parsing, or null if lenient parsing is turned off.
      */
     RbnfLenientScanner getLenientScanner() {
-        if (lenientParse) {
+        if (lenientParse && lenientParseRules != null && !lenientParseRules.isEmpty()) {
             RbnfLenientScannerProvider provider = getLenientScannerProvider();
             if (provider != null) {
                 return provider.get(locale, lenientParseRules);
@@ -1699,6 +1711,14 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
      */
     private void init(String description, String[][] localizations) {
         initLocalizations(localizations);
+
+        // Use Turkic case folding for Turkish and Azerbaijani locales.
+        String lang = locale.getLanguage();
+        caseFoldOption =
+                (byte)
+                        (("tr".equals(lang) || "az".equals(lang))
+                                ? UCharacter.FOLD_CASE_EXCLUDE_SPECIAL_I
+                                : UCharacter.FOLD_CASE_DEFAULT);
 
         // start by stripping the trailing whitespace from all the rules
         // (this is all the whitespace following each semicolon in the
@@ -1887,13 +1907,33 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
      * @return The description with all the whitespace that follows semicolons taken out.
      */
     private StringBuilder stripWhitespace(String description) {
-        // since we don't have a method that deletes characters (why?!!)
-        // create a new StringBuffer to copy the text into
-        StringBuilder result = new StringBuilder();
         int descriptionLength = description.length();
 
-        // iterate through the characters...
+        // Find the first semicolon followed by whitespace or another semicolon,
+        // or leading whitespace/semicolons. Everything before that point is already clean.
         int start = 0;
+        if (descriptionLength > 0) {
+            char first = description.charAt(0);
+            if (!PatternProps.isWhiteSpace(first) && first != ';') {
+                for (int i = 0; i < descriptionLength - 1; ++i) {
+                    if (description.charAt(i) == ';') {
+                        char next = description.charAt(i + 1);
+                        if (PatternProps.isWhiteSpace(next) || next == ';') {
+                            start = i + 1;
+                            break;
+                        }
+                    }
+                }
+                if (start == 0) {
+                    // No whitespace to strip anywhere.
+                    return new StringBuilder(description);
+                }
+            }
+        }
+
+        // Copy the clean prefix, then strip whitespace from the rest.
+        StringBuilder result = new StringBuilder(description.substring(0, start));
+
         char ch;
         while (start < descriptionLength) {
             // Seek to the first non-whitespace character...
@@ -2036,10 +2076,12 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
                     // should only happen when deserializing, etc.
                     capitalizationBrkIter = BreakIterator.getSentenceInstance(locale);
                 }
+                // Clone the break iterator to avoid mutating it (thread safety).
+                BreakIterator iter = (BreakIterator) capitalizationBrkIter.clone();
                 return UCharacter.toTitleCase(
                         locale,
                         result,
-                        capitalizationBrkIter,
+                        iter,
                         UCharacter.TITLECASE_NO_LOWERCASE
                                 | UCharacter.TITLECASE_NO_BREAK_ADJUSTMENT);
             }

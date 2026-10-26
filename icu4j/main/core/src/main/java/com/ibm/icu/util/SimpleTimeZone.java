@@ -1295,6 +1295,7 @@ public class SimpleTimeZone extends BasicTimeZone implements Cloneable {
      * @stable ICU 2.0
      */
     @Override
+    @SuppressWarnings("ReferenceEquality")
     public boolean hasSameRules(TimeZone othr) {
         if (this == othr) {
             return true;

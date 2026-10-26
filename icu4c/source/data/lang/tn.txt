@@ -3,10 +3,10 @@
 // Generated using tools/cldr/cldr-to-icu/
 tn{
     Languages{
-        en{"Sekgoa"}
+        en{"English"}
         tn{"Setswana"}
     }
     Scripts{
-        Latn{"Selatine"}
+        Latn{"Latin"}
     }
 }

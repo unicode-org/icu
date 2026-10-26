@@ -1041,9 +1041,6 @@ qu{
         XCD{
             other{"Dólar del caribe oriental"}
         }
-        XCG{
-            other{"Caribe guilderkuna"}
-        }
         XOF{
             other{"Franco CFA de áfrica occidental"}
         }
@@ -1058,9 +1055,6 @@ qu{
         }
         ZMW{
             other{"Kwacha zambiano"}
-        }
-        ZWG{
-            other{"Zimbabuemanta quri"}
         }
     }
 }

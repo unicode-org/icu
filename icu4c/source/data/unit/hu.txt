@@ -466,7 +466,6 @@ hu{
                         other{"{0} móllá"}
                     }
                 }
-                dnam{"mól"}
                 one{"{0} mól"}
                 other{"{0} mól"}
             }
@@ -476,7 +475,6 @@ hu{
                 other{"{0} glükóz"}
             }
             part{
-                dnam{"rész"}
                 one{"{0} rész"}
                 other{"{0} rész"}
             }
@@ -2054,7 +2052,6 @@ hu{
                         other{"{0} kandelává"}
                     }
                 }
-                dnam{"kandela"}
                 one{"{0} kandela"}
                 other{"{0} kandela"}
             }
@@ -2662,6 +2659,29 @@ hu{
                 one{"{0} csomó"}
                 other{"{0} csomó"}
             }
+            light-speed{
+                case{
+                    accusative{
+                        one{"{0} fény"}
+                        other{"{0} light"}
+                    }
+                    instrumental{
+                        one{"{0} fény"}
+                        other{"{0} light"}
+                    }
+                    terminative{
+                        one{"{0} fény"}
+                        other{"{0} light"}
+                    }
+                    translative{
+                        one{"{0} fény"}
+                        other{"{0} light"}
+                    }
+                }
+                dnam{"fény"}
+                one{"{0} fény"}
+                other{"{0} light"}
+            }
             meter-per-second{
                 case{
                     accusative{
@@ -3159,11 +3179,7 @@ hu{
             millimole-per-liter{
                 dnam{"mmol/l"}
             }
-            ofglucose{
-                dnam{"Glc"}
-            }
             part{
-                dnam{"rész"}
                 one{"{0} rész"}
                 other{"{0} rész"}
             }
@@ -3194,11 +3210,6 @@ hu{
             month{
                 one{"{0} h."}
                 other{"{0} h."}
-            }
-        }
-        energy{
-            calorie-it{
-                dnam{"cal-IT"}
             }
         }
         graphics{
@@ -3239,6 +3250,9 @@ hu{
             beaufort{
                 one{"B{0}"}
                 other{"B{0}"}
+            }
+            light-speed{
+                dnam{"fény"}
             }
         }
         volume{
@@ -3564,6 +3578,9 @@ hu{
             }
         }
         speed{
+            light-speed{
+                dnam{"fény"}
+            }
             mile-per-hour{
                 dnam{"mph"}
                 one{"{0} mph"}

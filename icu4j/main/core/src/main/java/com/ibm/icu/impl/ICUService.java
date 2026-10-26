@@ -693,6 +693,7 @@ public class ICUService extends ICUNotifier {
             this.dnCache = dnCache;
         }
 
+        @SuppressWarnings("ReferenceEquality")
         SortedMap<String, String> get(ULocale loc, Comparator<Object> comp) {
             SortedMap<String, String> m = dnCache;
             if (m != null

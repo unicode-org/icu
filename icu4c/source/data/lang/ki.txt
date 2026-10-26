@@ -12,19 +12,20 @@ ki{
         cs{"Kichecki"}
         de{"Kĩnjeremani"}
         el{"Kigiriki"}
-        en{"Gĩthungũ"}
+        en{"Gĩthũngũ"}
         es{"Kihispania"}
         fa{"Kiajemi"}
         fr{"Kĩbaranja"}
         ha{"Kihausa"}
         hi{"Kĩhĩndĩ"}
+        hi_Latn{"Kĩhĩndĩ (Kĩratini)"}
         hu{"Kihungari"}
         id{"Kiindonesia"}
         ig{"Kiigbo"}
         it{"Kĩtaliano"}
         ja{"Kĩnjabani"}
         jv{"Kijava"}
-        ki{"Gikuyu"}
+        ki{"Gĩgĩkũyũ"}
         km{"Kikambodia"}
         ko{"Kikorea"}
         ms{"Kimalesia"}
@@ -48,5 +49,12 @@ ki{
         yo{"Kiyoruba"}
         zh{"Kĩcaina"}
         zu{"Kizulu"}
+    }
+    Languages%variant{
+        hi_Latn{"Kĩhĩndĩ (Gĩthũngũ)"}
+    }
+    Scripts{
+        Arab{"Kĩarabu"}
+        Latn{"Kĩratini"}
     }
 }

@@ -20,18 +20,9 @@ using namespace icu::message2;
 */
 
 /*
-  TODO: Tests need to be unified in a single format that
-  both ICU4C and ICU4J can use, rather than being embedded in code.
-*/
-
-/*
 Tests reflect the syntax specified in
 
   https://github.com/unicode-org/message-format-wg/commits/main/spec/message.abnf
-
-as of the following commit from 2023-05-09:
-  https://github.com/unicode-org/message-format-wg/commit/194f6efcec5bf396df36a19bd6fa78d1fa2e0867
-
 */
 
 void TestMessageFormat2::testSample(TestCase::Builder& testBuilder, IcuTestErrorCode& errorCode) {

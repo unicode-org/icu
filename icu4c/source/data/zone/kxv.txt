@@ -977,7 +977,6 @@ kxv{
         }
         "Europe:Dublin"{
             ec{"ḍblin"}
-            ld{"aairis manaka belā"}
         }
         "Europe:Gibraltar"{
             ec{"jibralṭar"}
@@ -1014,7 +1013,6 @@ kxv{
         }
         "Europe:London"{
             ec{"lnḍn"}
-            ld{"briṭis karã masa belā"}
         }
         "Europe:Luxembourg"{
             ec{"lksembrg"}
@@ -1377,6 +1375,9 @@ kxv{
             lg{"brājiliā belā"}
             ls{"brājiliā mānānka belā"}
         }
+        "meta:British"{
+            ld{"briṭis karã masa belā"}
+        }
         "meta:Brunei"{
             ls{"bruneti dārusālām belā"}
         }
@@ -1548,6 +1549,9 @@ kxv{
             ld{"irān ḍelāiṭ belā"}
             lg{"irān belā"}
             ls{"irān mānānka belā"}
+        }
+        "meta:Irish"{
+            ld{"aairis manaka belā"}
         }
         "meta:Irkutsk"{
             ld{"īrkustak kār~ā belā"}
@@ -1739,8 +1743,6 @@ kxv{
             ls{"sakālin mānānka belā"}
         }
         "meta:Samoa"{
-            ld{"saāmoa ḍelāiṭ"}
-            lg{"saāmoa belā"}
             ls{"saāmoa mānānka belā"}
         }
         "meta:Seychelles"{

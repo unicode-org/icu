@@ -12,9 +12,9 @@ en_IN{
             "$",
             "US Dollar",
         }
-        VEF{
-            "VEF",
-            "Venezuelan Bolívar",
+        VES{
+            "VES",
+            "Venezuelan Bolivar",
         }
         XCG{
             "Cg.",
@@ -55,8 +55,8 @@ en_IN{
             other{"Venezuelan bolívars"}
         }
         VES{
-            one{"Venezuelan Bolívar"}
-            other{"Venezuelan Bolívars"}
+            one{"Venezuelan bolivar"}
+            other{"Venezuelan bolivars"}
         }
         XCG{
             one{"Caribbean Guilder"}

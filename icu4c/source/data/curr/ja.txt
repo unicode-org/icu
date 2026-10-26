@@ -267,10 +267,6 @@ ja{
             "CNH",
             "中国人民元(オフショア)",
         }
-        CNX{
-            "CNX",
-            "中国人民銀行ドル",
-        }
         CNY{
             "元",
             "中国人民元",
@@ -1230,18 +1226,15 @@ ja{
         JPY{"￥"}
         RON{"レイ"}
     }
+    Currencies%variant{
+        SAR{"SR"}
+    }
     CurrencyPlurals{
         AED{
             other{"UAE ディルハム"}
         }
         JPY{
             other{"円"}
-        }
-        XCG{
-            other{"カリブ ギルダー"}
-        }
-        ZWG{
-            other{"ジンバブエ ゴールド"}
         }
     }
     CurrencyUnitPatterns{

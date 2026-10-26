@@ -230,15 +230,7 @@ ne{
                 "{1},{0}",
                 "{1},{0}",
             }
-            availableFormats{
-                GyMd{"M/d/y GGGGG"}
-                MEd{"MM/dd, E"}
-            }
             intervalFormats{
-                MEd{
-                    M{"MM/dd, E – MM/dd, E"}
-                    d{"MM/dd, E – MM/dd, E"}
-                }
                 fallback{"{0} – {1}"}
             }
         }
@@ -286,13 +278,12 @@ ne{
             }
             availableFormats{
                 Ed{"d E"}
-                GyM{"M/y G"}
-                GyMEd{"E, M/d/y G"}
-                GyMd{"M/d/y G"}
                 MMMMW{
                     one{"MMMM को W हप्ता"}
                     other{"MMMM को W हप्ता"}
                 }
+                yMMMMEd{"y MMMM d, EEE"}
+                yMMMMd{"y MMMM d"}
                 yw{
                     one{"Y को w हप्ता"}
                     other{"Y को w हप्ता"}
@@ -357,9 +348,6 @@ ne{
                 Gy{
                     G{"y G – y G"}
                     y{"y – y G"}
-                }
-                GyM{
-                    G{"M/y G – M/y G"}
                 }
                 fallback{"{0} – {1}"}
             }

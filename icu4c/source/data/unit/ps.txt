@@ -63,13 +63,7 @@ ps{
                 other{"{0} مربع سنتي متر"}
                 per{"{0} في مربع سنتي متر"}
             }
-            square-foot{
-                dnam{"مربع فټ"}
-                one{"{0} مربع فټ"}
-                other{"{0} مربع فټ"}
-            }
             square-inch{
-                dnam{"مربع انچ"}
                 one{"{0} مربع انچ"}
                 other{"{0} مربع انچ"}
                 per{"{0} في مربع انچ"}
@@ -87,7 +81,6 @@ ps{
                 per{"{0} في مربع متر"}
             }
             square-mile{
-                dnam{"مربع ميل"}
                 one{"{0} مربع ميل"}
                 other{"{0} مربع ميل"}
                 per{"{0} في مربع ميل"}
@@ -99,15 +92,15 @@ ps{
             }
         }
         compound{
-            1024p1{"kibi{0}"}
-            1024p2{"mebi{0}"}
-            1024p3{"gibi{0}"}
-            1024p4{"tebi{0}"}
-            1024p5{"pebi{0}"}
-            1024p6{"exbi{0}"}
-            1024p7{"zebi{0}"}
-            1024p8{"yobi{0}"}
-            10p-1{"پرېکړه{0}"}
+            1024p1{"کیبي{0}"}
+            1024p2{"میبي{0}"}
+            1024p3{"ګیبي{0}"}
+            1024p4{"ټیبي{0}"}
+            1024p5{"پیبي{0}"}
+            1024p6{"ایګزبی{0}"}
+            1024p7{"زیبی{0}"}
+            1024p8{"یوبي{0}"}
+            10p-1{"ډیسی میتره{0}"}
             10p-12{"پیکو {0}"}
             10p-15{"فيمتو {0}"}
             10p-18{"أتو{0}"}
@@ -116,7 +109,7 @@ ps{
             10p-24{"یکوټو {0}"}
             10p-27{"رونټو{0}"}
             10p-3{"ملی {0}"}
-            10p-30{"کویټو{0}"}
+            10p-30{"کویکټو{0}"}
             10p-6{"مایکرو {0}"}
             10p-9{"نانو {0}"}
             10p1{"ډیکا {0}"}
@@ -231,7 +224,6 @@ ps{
                 other{"{0} ليټرز في کيلو متر"}
             }
             mile-per-gallon{
-                dnam{"ميلز في ګيلن"}
                 one{"{0} ميل في ګيلن"}
                 other{"{0} ميلز في ګيلن"}
             }
@@ -249,16 +241,6 @@ ps{
             west{"{0} لوېديځ"}
         }
         digital{
-            bit{
-                dnam{"بټس"}
-                one{"{0} بټ"}
-                other{"{0} بټس"}
-            }
-            byte{
-                dnam{"بايټس"}
-                one{"{0} بايټ"}
-                other{"{0} بايټس"}
-            }
             gigabit{
                 dnam{"ګيګا بټس"}
                 one{"{0} ګيګا بټ"}
@@ -343,6 +325,8 @@ ps{
             }
             nanosecond{
                 dnam{"نينو ثانيې"}
+                one{"{0} نینو ثانیه"}
+                other{"{0} نینو ثانیې"}
             }
             quarter{
                 dnam{"ربعه"}
@@ -383,7 +367,6 @@ ps{
                 other{"{0} هینري"}
             }
             milliampere{
-                dnam{"ملي ايمپيرز"}
                 one{"{0} ملي ايمپير"}
                 other{"{0} ملي ايمپيرز"}
             }
@@ -421,7 +404,7 @@ ps{
             calorie-it{
                 dnam{"کالوري [IT]"}
                 one{"{0} کالوري [IT]"}
-                other{"{0} cal-IT"}
+                other{"{0} کالوري-IT"}
             }
             electronvolt{
                 dnam{"اليکټران وولټس"}
@@ -430,7 +413,7 @@ ps{
             }
             foodcalorie{
                 dnam{"کيلريز"}
-                one{"{0} کيلري"}
+                one{"{0} kcal"}
                 other{"{0} کيلريز"}
             }
             gray{
@@ -443,9 +426,9 @@ ps{
                 other{"{0} جولز"}
             }
             kilocalorie{
-                dnam{"کيلو کيلريز"}
-                one{"{0} کيلو کيلري"}
-                other{"{0} کيلو کيلريز"}
+                dnam{"کيلو کالوري"}
+                one{"{0} کيلو کالوري"}
+                other{"{0} کيلو کالوري"}
             }
             kilojoule{
                 dnam{"کيلو جولز"}
@@ -463,7 +446,7 @@ ps{
             }
             therm-us{
                 dnam{"متحده ایالاتو ترمامونه"}
-                one{"{0} US تهرم"}
+                one{"{0} د متحده ایالاتو تهرم"}
                 other{"{0} US تهرم"}
             }
         }
@@ -595,7 +578,7 @@ ps{
                 other{"{0} ميلونه"}
             }
             mile-scandinavian{
-                dnam{"سکېنډنيوين ميل"}
+                dnam{"سکینډینویايي مایلز"}
                 one{"{0} سکېنډنيوين ميل"}
                 other{"{0} سکېنډنيوين ميلونه"}
             }
@@ -640,12 +623,10 @@ ps{
         }
         light{
             candela{
-                dnam{"کینډیلا"}
                 one{"{0} کینډیلا"}
                 other{"{0} کینډیلا"}
             }
             lumen{
-                dnam{"لومن"}
                 one{"{0} لومن"}
                 other{"{0} لومن"}
             }
@@ -684,7 +665,6 @@ ps{
                 other{"{0} د زمکې حجمونه"}
             }
             grain{
-                dnam{"دانې"}
                 one{"{0} دانې"}
                 other{"{0} دانې"}
             }
@@ -840,11 +820,6 @@ ps{
                 one{"{0} ناټ"}
                 other{"{0} ناټس"}
             }
-            light-speed{
-                dnam{"رڼا"}
-                one{"{0} رڼا"}
-                other{"{0} رڼا"}
-            }
             meter-per-second{
                 dnam{"متر في ثانيه"}
                 one{"{0} متر في ثانيه"}
@@ -857,15 +832,8 @@ ps{
             }
         }
         temperature{
-            celsius{
-                dnam{"درجې سيلسيس"}
-                one{"{0} درجې سيلسيس"}
-                other{"{0} درجې سيلسيس"}
-            }
             fahrenheit{
                 dnam{"درجې فارنهايټ"}
-                one{"{0} درجې فارنهايټ"}
-                other{"{0} درجې فارنهايټ"}
             }
             kelvin{
                 dnam{"کيلونز"}
@@ -956,9 +924,9 @@ ps{
                 other{"{0} ډيسي ليټرز"}
             }
             dessert-spoon{
-                dnam{"مچ چمچ"}
-                one{"{0} مچ چمچ"}
-                other{"{0} مچ چمچ"}
+                dnam{"د ډیزرټ کاچوغي"}
+                one{"{0} د ډیزرټ کاچوغي"}
+                other{"{0} د ډیزرټ کاچوغي"}
             }
             dessert-spoon-imperial{
                 dnam{"Imp. dessert spoons"}
@@ -966,9 +934,14 @@ ps{
                 other{"{0} Imp. dessert spoons"}
             }
             dram{
-                dnam{"ډرام"}
-                one{"{0} ډرام"}
-                other{"{0} ډرام"}
+                dnam{"ډرامونه"}
+                one{"{0} ډرامونه"}
+                other{"{0} ډرامونه"}
+            }
+            drop{
+                dnam{"څاڅکی"}
+                one{"{0} څاڅکی"}
+                other{"{0} څاڅکي"}
             }
             fluid-ounce{
                 dnam{"مایع اونس"}
@@ -990,13 +963,14 @@ ps{
                 other{"{0} ګيلنز"}
                 per{"{0} في ګيلن"}
             }
-            gallon-imperial{
-                dnam{"امپراطوري ګیلن"}
-            }
             hectoliter{
                 dnam{"هيکټو ليټرز"}
                 one{"{0} هيکټو ليټر"}
                 other{"{0} هيکټو ليټرز"}
+            }
+            jigger{
+                one{"{0} جګرونه"}
+                other{"{0} جګرونه"}
             }
             liter{
                 one{"{0} ليټر"}
@@ -1039,33 +1013,22 @@ ps{
         }
     }
     unitsNarrow{
+        angle{
+            arc-second{
+                dnam{"arcsec"}
+            }
+        }
         area{
             square-foot{
                 dnam{"ft²"}
                 one{"{0}ft²"}
                 other{"{0}ft²"}
             }
-            square-inch{
-                dnam{"مربع انچ"}
-            }
             square-mile{
                 dnam{"مربع ميل"}
             }
         }
         concentr{
-            katal{
-                dnam{"کات"}
-                one{"{0} کات"}
-                other{"{0} کات"}
-            }
-            ofglucose{
-                dnam{"Glc"}
-            }
-            part{
-                dnam{"برخه"}
-                one{"{0} برخه"}
-                other{"{0} برخه"}
-            }
             part-per-1e9{
                 dnam{"ppb"}
             }
@@ -1153,18 +1116,16 @@ ps{
                 other{"{0} y"}
             }
         }
-        electric{
-            milliampere{
-                dnam{"ملي ايمپيرز"}
-            }
-        }
         energy{
-            calorie-it{
-                dnam{"cal-IT"}
+            kilocalorie{
+                dnam{"کیلو کالوري"}
+            }
+            kilowatt-hour{
+                dnam{"kWh"}
             }
             therm-us{
-                one{"{0}US تهرم"}
-                other{"{0}US تهرم"}
+                one{"{0} د متحده ایالاتو تهرم"}
+                other{"{0} د متحده ایالاتو تهرم"}
             }
         }
         force{
@@ -1196,9 +1157,6 @@ ps{
                 one{"{0}″"}
                 other{"{0}″"}
             }
-            light-year{
-                dnam{"نوري کاله"}
-            }
             micrometer{
                 dnam{"μm"}
             }
@@ -1208,9 +1166,6 @@ ps{
             }
         }
         light{
-            lumen{
-                dnam{"لومن"}
-            }
             solar-luminosity{
                 dnam{"L☉"}
                 one{"{0} L☉"}
@@ -1219,7 +1174,6 @@ ps{
         }
         mass{
             grain{
-                dnam{"دانې"}
                 one{"{0}gr"}
                 other{"{0}gr"}
             }
@@ -1235,14 +1189,8 @@ ps{
         }
         pressure{
             bar{
-                dnam{"بار"}
                 one{"{0}بار"}
                 other{"{0} بار"}
-            }
-            ofhg{
-                dnam{"د Hg"}
-                one{"{0} د Hg"}
-                other{"{0} د Hg"}
             }
         }
         speed{
@@ -1252,7 +1200,6 @@ ps{
                 other{"{0}kph"}
             }
             light-speed{
-                dnam{"رڼا"}
                 one{"{0}رڼا"}
                 other{"{0}رڼا"}
             }
@@ -1270,8 +1217,9 @@ ps{
                 dnam{"in³"}
             }
             dessert-spoon{
-                one{"{0}dsp"}
-                other{"{0}dsp"}
+                dnam{"د ډیزرټ کاچوغي"}
+                one{"{0}ډيزرټ کاچوغي"}
+                other{"{0}ډيزرټ کاچوغي"}
             }
             dessert-spoon-imperial{
                 dnam{"dsp Imp"}
@@ -1279,8 +1227,14 @@ ps{
                 other{"{0}dsp-Imp"}
             }
             dram{
-                one{"{0}fl.dr."}
-                other{"{0}fl.dr."}
+                dnam{"مایع ډرام"}
+                one{"{0}مایع ډرام"}
+                other{"{0}مایع ډرام"}
+            }
+            drop{
+                dnam{"څاڅکی"}
+                one{"{0} څاڅکی"}
+                other{"{0} څاڅکی"}
             }
             fluid-ounce-imperial{
                 one{"{0}fl oz Im"}
@@ -1294,6 +1248,11 @@ ps{
             gallon-imperial{
                 one{"{0}galIm"}
                 other{"{0}galIm"}
+            }
+            jigger{
+                dnam{"جیګرونه"}
+                one{"{0} جګرونه"}
+                other{"{0} جګرونه"}
             }
             liter{
                 dnam{"لیټر"}
@@ -1316,9 +1275,6 @@ ps{
         angle{
             arc-minute{
                 dnam{"arcmins"}
-            }
-            arc-second{
-                dnam{"آرکسیکس"}
             }
             degree{
                 dnam{"درجې"}
@@ -1491,6 +1447,9 @@ ps{
                 one{"{0} m"}
                 other{"{0} mths"}
             }
+            nanosecond{
+                dnam{"نینو ثانیې"}
+            }
             night{
                 dnam{"شپي"}
                 one{"{0}/شپه"}
@@ -1541,16 +1500,16 @@ ps{
             joule{
                 dnam{"جولز"}
             }
+            kilocalorie{
+                dnam{"کیلو کالوري"}
+            }
             kilojoule{
                 dnam{"کيلو جول"}
             }
-            kilowatt-hour{
-                dnam{"kW-hour"}
-            }
             therm-us{
                 dnam{"US تهرم"}
-                one{"{0} US تهرم"}
-                other{"{0} US therm"}
+                one{"{0} د متحده ایالاتو تهرم"}
+                other{"{0} د متحده ایالاتو تهرم"}
             }
         }
         force{
@@ -1692,14 +1651,6 @@ ps{
                 other{"{0} mph"}
             }
         }
-        temperature{
-            celsius{
-                dnam{"deg. C"}
-            }
-            fahrenheit{
-                dnam{"deg. F"}
-            }
-        }
         volume{
             acre-foot{
                 dnam{"اکړ فټ"}
@@ -1722,15 +1673,20 @@ ps{
             cup{
                 dnam{"پيالې"}
             }
+            dessert-spoon{
+                dnam{"د ډیزرټ کاچوغي"}
+                one{"{0} ډيزرټ کاچوغي"}
+                other{"{0} ډيزرټ کاچوغي"}
+            }
             dram{
-                dnam{"ډرام مایع"}
-                one{"{0} ډرام"}
-                other{"{0} ډرام"}
+                dnam{"ډرامونه"}
+                one{"{0} ډرامونه"}
+                other{"{0} ډرامونه"}
             }
             drop{
-                dnam{"څاڅک"}
-                one{"{0} څاڅک"}
-                other{"{0} څاڅک"}
+                dnam{"څاڅکي"}
+                one{"{0} څاڅکی"}
+                other{"{0} څاڅکي"}
             }
             fluid-ounce{
                 dnam{"fl oz"}
@@ -1747,9 +1703,9 @@ ps{
                 per{"{0}/ګيلن US"}
             }
             jigger{
-                dnam{"جګر"}
-                one{"{0} جګر"}
-                other{"{0} جګر"}
+                dnam{"جیګرونه"}
+                one{"{0} جګرونه"}
+                other{"{0} جګرونه"}
             }
             liter{
                 dnam{"ليټرز"}

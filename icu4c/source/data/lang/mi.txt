@@ -114,7 +114,7 @@ mi{
         en_US{"Ingarihi Amerikana"}
         eo{"Eheperāto"}
         es{"Pāniora"}
-        es_419{"Pāniora o Amerika Rātini"}
+        es_419{"Pāniora Amerika Rātini"}
         es_ES{"Pāniora Ūropi"}
         es_MX{"Pāniora Mehikana"}
         et{"Etōniana"}
@@ -322,8 +322,8 @@ mi{
         pqm{"Marahiti-Pehamakoare"}
         ps{"Pāhitō"}
         pt{"Pōtukīhi"}
-        pt_BR{"Pōtukīhi Parahi"}
-        pt_PT{"Pōtukīhi Uropi"}
+        pt_BR{"Pōtukīhi Parīhi"}
+        pt_PT{"Pōtukīhi Potukara"}
         qu{"Kētua"}
         raj{"Ratiahitani"}
         rap{"Rapanui"}
@@ -539,6 +539,7 @@ mi{
         }
         calendar%core{
             gregorian{"Pākehā"}
+            iso8601{"Pākehā"}
         }
         cf{
             account{"Hōputu Moni Mahi Kaute"}
@@ -553,6 +554,8 @@ mi{
             standard{"Arowhānui"}
         }
         hc{
+            c12{"Pūnaha Haora 12"}
+            c24{"Pūnaha Haora 24"}
             h11{"Pūnaha Haora 12 (0–11)"}
             h12{"Pūnaha Haora 12 (1–12)"}
             h23{"Pūnaha Haora 24 (0–23)"}

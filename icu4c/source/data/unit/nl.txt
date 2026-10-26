@@ -215,13 +215,9 @@ nl{
                 gender{"common"}
             }
             ofglucose{
+                dnam{"glucose"}
                 one{"{0} glucose"}
                 other{"{0} glucose"}
-            }
-            part{
-                dnam{"deel"}
-                one{"{0} deel"}
-                other{"{0} delen"}
             }
             part-per-1e6{
                 dnam{"parts per million"}
@@ -759,8 +755,8 @@ nl{
             solar-radius{
                 dnam{"zonneradius"}
                 gender{"common"}
-                one{"{0} solar radius"}
-                other{"{0} solar radii"}
+                one{"{0} zonneradius"}
+                other{"{0} zonneradii"}
             }
             yard{
                 gender{"common"}
@@ -1279,13 +1275,11 @@ nl{
             }
         }
         concentr{
-            ofglucose{
-                dnam{"Glc"}
+            part-per-1e6{
+                dnam{"ppm"}
             }
-            part{
-                dnam{"deel"}
-                one{"{0} deel"}
-                other{"{0} delen"}
+            part-per-1e9{
+                dnam{"ppb"}
             }
             percent{
                 dnam{"%"}
@@ -1338,11 +1332,6 @@ nl{
                 one{"{0} w"}
                 other{"{0} w"}
                 per{"{0}/w"}
-            }
-        }
-        energy{
-            calorie-it{
-                dnam{"cal-IT"}
             }
         }
         force{

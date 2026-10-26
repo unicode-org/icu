@@ -204,10 +204,10 @@ ur{
                 other{"{0} پارٹس"}
             }
             part-per-1e6{
-                dnam{"فی ملین حصے"}
+                dnam{"فی ملین اجزا"}
                 gender{"masculine"}
-                one{"{0} فی ملین حصے"}
-                other{"{0} فی ملین حصے"}
+                one{"{0} جزو فی ملین"}
+                other{"{0} اجزا فی ملین"}
             }
             part-per-1e9{
                 dnam{"اجزا فی بلین"}
@@ -396,9 +396,9 @@ ur{
                 other{"{0} ایمپیئر"}
             }
             coulomb{
-                dnam{"کولمبز"}
+                dnam{"کولمب"}
                 one{"{0} کولمب"}
-                other{"{0} کولمبز"}
+                other{"{0} کولمب"}
             }
             farad{
                 dnam{"فیراڈ"}
@@ -406,9 +406,9 @@ ur{
                 other{"{0} فیراڈ"}
             }
             henry{
-                dnam{"ہینریز"}
-                one{"{0} ہینری"}
-                other{"{0} ہینریز"}
+                dnam{"ہنری"}
+                one{"{0} ہنری"}
+                other{"{0} ہنری"}
             }
             milliampere{
                 dnam{"ملی ایمپیئر"}
@@ -654,6 +654,8 @@ ur{
             }
             millimeter{
                 gender{"masculine"}
+                one{"{0} ملی میٹر"}
+                other{"{0} ملی میٹر"}
             }
             nanometer{
                 dnam{"نینو میٹر"}
@@ -872,9 +874,9 @@ ur{
                 other{"{0} ملی میٹر مرکری"}
             }
             ofhg{
-                dnam{"مرکری کے"}
-                one{"{0} مرکری کے"}
-                other{"{0} مرکری کے"}
+                dnam{"مرکری"}
+                one{"{0} مرکری"}
+                other{"{0} مرکری"}
             }
             pascal{
                 dnam{"پاسکل"}
@@ -928,7 +930,10 @@ ur{
                 other{"{0} ڈگری فارن ہائیٹ"}
             }
             generic{
+                dnam{"ڈگری درجۂ حرارت"}
                 gender{"masculine"}
+                one{"{0} ڈگری درجۂ حرارت"}
+                other{"{0} ڈگری درجۂ حرارت"}
             }
             kelvin{
                 dnam{"کیلون"}
@@ -1127,12 +1132,12 @@ ur{
                 one{"{0}″"}
                 other{"{0}″"}
             }
+            degree{
+                one{"{0}°"}
+                other{"{0}°"}
+            }
             radian{
                 dnam{"ریڈین"}
-            }
-            steradian{
-                one{"{0} sr"}
-                other{"{0} sr"}
             }
         }
         area{
@@ -1166,17 +1171,7 @@ ur{
             10p24{"یوٹا{0}"}
         }
         concentr{
-            katal{
-                one{"{0} kat"}
-                other{"{0} kat"}
-            }
-            ofglucose{
-                dnam{"Glc"}
-                one{"{0} Glc"}
-                other{"{0} Glc"}
-            }
             part{
-                dnam{"پارٹ"}
                 one{"{0} پارٹ"}
                 other{"{0} پارٹ"}
             }
@@ -1184,6 +1179,7 @@ ur{
                 dnam{"ppm"}
             }
             part-per-1e9{
+                dnam{"ppb"}
                 one{"{0}ppb"}
                 other{"{0}ppb"}
             }
@@ -1251,16 +1247,27 @@ ur{
             ampere{
                 dnam{"amp"}
             }
+            coulomb{
+                one{"{0} C"}
+                other{"{0} C"}
+            }
+            farad{
+                one{"{0} F"}
+                other{"{0} F"}
+            }
+            henry{
+                one{"{0} H"}
+                other{"{0} H"}
+            }
+            siemens{
+                one{"{0} S"}
+                other{"{0} S"}
+            }
         }
         energy{
-            calorie-it{
-                dnam{"cal-IT"}
-                one{"{0} cal-IT"}
-                other{"{0} cal-IT"}
-            }
-            gray{
-                one{"{0} Gy"}
-                other{"{0} Gy"}
+            becquerel{
+                one{"{0} Bq"}
+                other{"{0} Bq"}
             }
             joule{
                 dnam{"جول"}
@@ -1268,16 +1275,8 @@ ur{
             kilowatt-hour{
                 dnam{"kWh"}
             }
-            sievert{
-                one{"{0} Sv"}
-                other{"{0} Sv"}
-            }
         }
         force{
-            kilogram-force{
-                one{"{0} kgf"}
-                other{"{0} kgf"}
-            }
             pound-force{
                 dnam{"lbf"}
             }
@@ -1324,8 +1323,8 @@ ur{
                 per{"{0} فی میٹر"}
             }
             millimeter{
-                one{"{0} ملی میٹر"}
-                other{"{0}ملی میٹر"}
+                one{"{0} mm"}
+                other{"{0} mm"}
             }
             picometer{
                 dnam{"pm"}
@@ -1334,16 +1333,6 @@ ur{
             }
             solar-radius{
                 dnam{"R☉"}
-            }
-        }
-        magnetic{
-            tesla{
-                one{"{0} T"}
-                other{"{0} T"}
-            }
-            weber{
-                one{"{0} Wb"}
-                other{"{0} Wb"}
             }
         }
         mass{
@@ -1405,9 +1394,9 @@ ur{
                 other{"{0}mb"}
             }
             ofhg{
-                dnam{"of Hg"}
-                one{"{0} of Hg"}
-                other{"{0} of Hg"}
+                dnam{"Hg"}
+                one{"{0} Hg"}
+                other{"{0} Hg"}
             }
         }
         speed{
@@ -1484,6 +1473,10 @@ ur{
             fluid-ounce-imperial{
                 one{"{0}fl oz Im"}
                 other{"{0}fl oz Im"}
+            }
+            fluid-ounce-metric{
+                one{"{0} fl oz m."}
+                other{"{0} fl oz m."}
             }
             gallon-imperial{
                 one{"{0}galIm"}
@@ -1606,7 +1599,7 @@ ur{
                 other{"{0} پارٹ"}
             }
             part-per-1e6{
-                dnam{"حصے/ملین"}
+                dnam{"اجزا/ملین"}
             }
             part-per-1e9{
                 dnam{"اجزا/بلین"}
@@ -1892,7 +1885,7 @@ ur{
             millimeter{
                 dnam{"ملی میٹر"}
                 one{"{0} ملی میٹر"}
-                other{"{0} ملیمیٹر"}
+                other{"{0} ملی میٹر"}
             }
             parsec{
                 dnam{"پارسیک"}
@@ -1978,9 +1971,8 @@ ur{
                 other{"{0} بارز"}
             }
             ofhg{
-                dnam{"of Hg"}
-                one{"{0} of Hg"}
-                other{"{0} of Hg"}
+                one{"{0} Hg"}
+                other{"{0} Hg"}
             }
         }
         speed{
@@ -2016,6 +2008,9 @@ ur{
                 dnam{"ڈگری فارن ہائیٹ"}
                 one{"{0}‎°F"}
                 other{"{0}‎°F"}
+            }
+            generic{
+                dnam{"ڈگری درجۂ حرارت"}
             }
         }
         volume{

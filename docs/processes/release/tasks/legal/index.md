@@ -20,12 +20,12 @@ proper copyright notice is in place. For example,
 
 ```
 © 2016 and later: Unicode, Inc. and others.
-License & terms of use: http://www.unicode.org/copyright.html#License
+License & terms of use: https://www.unicode.org/copyright.html
 ```
 
 Scan the source code to make sure that every file that was touched recently has
 the current year in the copyright statement. See the [ICU Copyright
-Scanner](../../../copyright-scan.md) page and follow the link to the scripts and
+Scanner](https://icu.unicode.org/processes/copyright-scan) page and follow the link to the scripts and
 the readme.
 
 Scan the source code to include third-party company names in copyright notices

@@ -9,10 +9,5 @@ en_MO{
             sg{"HKT"}
             ss{"HKT"}
         }
-        "meta:Macau"{
-            sd{"MDT"}
-            sg{"MST"}
-            ss{"MST"}
-        }
     }
 }

@@ -876,18 +876,10 @@ lt{
                 other{"{0} molių"}
             }
             ofglucose{
-                dnam{"gliukozė"}
                 few{"gliukozės kiekis – {0}"}
                 many{"gliukozės kiekis – {0}"}
                 one{"gliukozės kiekis – {0}"}
                 other{"gliukozės kiekis – {0}"}
-            }
-            part{
-                dnam{"dalelė"}
-                few{"{0} dalelės"}
-                many{"{0} dalelės"}
-                one{"{0} dalelė"}
-                other{"{0} dalelių"}
             }
             part-per-1e6{
                 case{
@@ -1960,7 +1952,7 @@ lt{
                     accusative{
                         few{"{0} naktis"}
                         many{"{0} nakties"}
-                        one{"{0} naktis"}
+                        one{"{0} naktį"}
                         other{"{0} naktų"}
                     }
                     dative{
@@ -4546,10 +4538,6 @@ lt{
             }
             light-speed{
                 dnam{"šviesos greitis"}
-                few{"{0} šm"}
-                many{"{0} šm"}
-                one{"{0} šm"}
-                other{"{0} šm"}
             }
             meter-per-second{
                 case{
@@ -5363,22 +5351,11 @@ lt{
             }
         }
         concentr{
-            ofglucose{
-                dnam{"gliukozė"}
-            }
             part{
-                dnam{"dalelė"}
                 few{"{0} dal."}
                 many{"{0} dal."}
                 one{"{0} dal."}
                 other{"{0} dal."}
-            }
-            part-per-1e9{
-                dnam{"dalis/mlrd."}
-                few{"{0} dal./mlrd."}
-                many{"{0} dal./mlrd."}
-                one{"{0} dal./mlrd."}
-                other{"{0} dal./mlrd."}
             }
             percent{
                 dnam{"%"}
@@ -5417,12 +5394,8 @@ lt{
             }
         }
         energy{
-            calorie-it{
+            calorie{
                 dnam{"cal"}
-                few{"{0} cal"}
-                many{"{0} cal"}
-                one{"{0} cal"}
-                other{"{0} cal"}
             }
         }
         speed{
@@ -5432,13 +5405,6 @@ lt{
                 many{"{0} km/h"}
                 one{"{0} km/h"}
                 other{"{0} km/h"}
-            }
-            light-speed{
-                dnam{"šm"}
-                few{"{0} šm"}
-                many{"{0} šm"}
-                one{"{0} šm"}
-                other{"{0} šm"}
             }
             meter-per-second{
                 dnam{"m/s"}
@@ -5754,15 +5720,8 @@ lt{
             }
         }
         energy{
-            calorie{
-                dnam{"kal."}
-            }
             calorie-it{
-                dnam{"cal"}
-                few{"{0} cal"}
-                many{"{0} cal"}
-                one{"{0} cal"}
-                other{"{0} cal"}
+                dnam{"cal-IT"}
             }
             foodcalorie{
                 dnam{"cal"}

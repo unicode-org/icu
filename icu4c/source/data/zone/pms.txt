@@ -3,6 +3,9 @@
 // Generated using tools/cldr/cldr-to-icu/
 pms{
     zoneStrings{
+        "Etc:UTC"{
+            ls{"Temp Universal Coordinà"}
+        }
         "meta:GMT"{
             ls{"Ora dë Greenwich"}
         }

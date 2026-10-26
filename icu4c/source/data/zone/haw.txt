@@ -9,9 +9,7 @@ haw{
             ss{"AKST"}
         }
         "meta:Hawaii"{
-            sd{"HADT"}
-            sg{"HAT"}
-            ss{"HAST"}
+            ss{"HST"}
         }
         "meta:Hawaii_Aleutian"{
             sd{"HADT"}

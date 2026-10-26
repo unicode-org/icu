@@ -5,15 +5,40 @@ eo{
     Keys{
         calendar{"kalendaro"}
         cf{"formo de valuto"}
+        colAlternate{"ordigo ignoranta simbolojn"}
+        colBackwards{"inversa ordigo kun kromsignoj"}
+        colCaseFirst{"ordigo majuskloj/minuskloj"}
+        colCaseLevel{"ordigo distinganta litergrandon"}
+        colNormalization{"normigita ordigo"}
+        colNumeric{"ordigi kiel numeroj"}
+        colReorder{"ordigo de grupoj/skribsistemoj"}
+        colStrength{"forto de ordigo"}
         collation{"ordigo"}
         currency{"valuto"}
+        d0{"celo de transformo"}
+        dx{"eksigi de vortar-bazita linisalto"}
         em{"vidigo de miensimboloj"}
+        fw{"unua tago de semajno"}
+        h0{"miksitaj"}
         hc{"horloĝa sistemo (12- aŭ 24-hora)"}
+        i0{"metodo de enigo"}
+        k0{"klavaro"}
         lb{"stilo de linisalto"}
         lw{"linisalto ene vortoj"}
+        m0{"reguloj de transformo"}
         ms{"mezur-sistemo"}
+        mu{"mezur-unuo"}
         numbers{"ciferoj"}
+        rg{"regiono por suplementaj datumoj"}
+        s0{"fonto de transformo"}
+        sd{"subregiono"}
         ss{"frazfino post mallongigo"}
+        t{"transformo"}
+        t0{"maŝine tradukita"}
+        timezone{"horzono"}
+        va{"variaĵo de lokaĵaro"}
+        x{"por privata uzo"}
+        x0{"private uzata transformo"}
     }
     Languages{
         aa{"afara"}
@@ -161,7 +186,6 @@ eo{
         hax{"sud-haida"}
         he{"hebrea"}
         hi{"hindia"}
-        hi_Latn{"hindia (latina)"}
         hil{"hiligajnona"}
         hmn{"hmonga"}
         hnj{"verd-hmonga"}
@@ -186,6 +210,7 @@ eo{
         inh{"inguŝa"}
         io{"Ido"}
         is{"islanda"}
+        isv{"interslava"}
         it{"itala"}
         iu{"inuktituta"}
         ja{"japana"}
@@ -203,6 +228,7 @@ eo{
         kek{"kekĉia"}
         kfo{"malinka (Koro)"}
         kgp{"kainganga"}
+        kha{"kasia"}
         ki{"kikuja"}
         kj{"kuanjama"}
         kk{"kazaĥa"}
@@ -326,6 +352,7 @@ eo{
         pis{"Piĵino"}
         pl{"pola"}
         pms{"piemonta"}
+        pqm{"malesita-pasamakvodja"}
         prg{"prusa"}
         ps{"paŝtua"}
         pt{"portugala"}
@@ -447,6 +474,7 @@ eo{
         xal{"kalmuka"}
         xh{"ksosa"}
         xnr{"kangra"}
+        xog{"soga"}
         yi{"judgermana"}
         yo{"joruba"}
         yrl{"nengatua"}
@@ -481,7 +509,6 @@ eo{
     }
     Languages%variant{
         ckb{"kurda, sorana"}
-        hi_Latn{"hinglish"}
     }
     Scripts{
         Adlm{"adlam"}
@@ -530,6 +557,7 @@ eo{
         Syrc{"siria"}
         Taml{"tamila"}
         Telu{"telugua"}
+        Tfng{"tifinaĥa"}
         Thaa{"maldiva"}
         Thai{"taja"}
         Tibt{"tibeta"}
@@ -557,9 +585,9 @@ eo{
             gregorian{"gregoria kalendaro"}
             hebrew{"juda kalendaro"}
             islamic{"islama kalendaro"}
-            islamic-civil{"tabela islama kalendaro"}
+            islamic-civil{"islama kalendaro (tabela, civila epoko)"}
             islamic-umalqura{"islama kalendaro (Umm al-Qura)"}
-            iso8601{"gregoria kalendaro (jaro unue)"}
+            iso8601{"gregoria kalendaro ISO 8601"}
             japanese{"japana kalendaro"}
             persian{"persa kalendaro"}
             roc{"kalendaro de Respubliko Ĉinujo"}
@@ -573,9 +601,13 @@ eo{
             ethiopic-amete-alem{"etiopa Amete Alem"}
             gregorian{"gregoria"}
             hebrew{"juda"}
+            indian{"hinda nacia"}
             islamic{"islama"}
-            islamic-civil{"tabela islama"}
-            islamic-umalqura{"islama Umm al-Qura"}
+            islamic-civil{"islama (tabela, civila epoko)"}
+            islamic-rgsa{"islama (observ-bazita, Sauda Arabujo)"}
+            islamic-tbla{"islama (tabela, astronomia epoko)"}
+            islamic-umalqura{"islama (Umm al-Qura)"}
+            iso8601{"gregoria"}
             japanese{"japana"}
             persian{"persa"}
             roc{"respublik-ĉina"}
@@ -588,15 +620,50 @@ eo{
             account{"kontista"}
             standard{"norma"}
         }
+        colCaseFirst%core{
+            lower{"minuskloj unue"}
+            no{"minuskloj unue"}
+            upper{"majuskloj unue"}
+        }
+        colReorder%core{
+            currency{"valutoj"}
+            digit{"ciferoj"}
+            punct{"helpsignoj"}
+            space{"blankspacoj"}
+            symbol{"aliaj simboloj"}
+        }
+        colStrength%core{
+            identical{"ĉio"}
+            primary{"nur literoj ignorante kromsignojn"}
+            quaternary{"literoj kun kromsignoj, litergrando, variaĵo, kanaoj"}
+            secondary{"literoj kun kromsignoj"}
+            tertiary{"literoj kun kromsignoj, litergrando, variaĵo"}
+        }
         collation{
             ducet{"norma ordigo laŭ Unikodo"}
             search{"ĝeneral-uza serĉo"}
             standard{"norma ordigo"}
         }
         collation%core{
+            compat{"malnova maniero"}
+            dictionary{"vortara"}
             ducet{"norma laŭ Unikodo"}
+            emoji{"por miensimboloj"}
+            eor{"eŭropaj reguloj (EOR)"}
+            phonebook{"adresara"}
+            phonetic{"fonetika"}
+            pinyin{"pinjina"}
             search{"serĉa"}
+            searchjl{"koreaj unuaj konsonantoj"}
             standard{"norma"}
+            stroke{"laŭ strek-nombro"}
+            traditional{"tradicia"}
+            unihan{"laŭ radikaloj kaj strek-nombro"}
+            zhuyin{"bopomofo"}
+        }
+        d0{
+            fwidth{"al plenlarĝa"}
+            hwidth{"al duonlarĝa"}
         }
         em%core{
             default{"norma"}
@@ -604,12 +671,16 @@ eo{
             text{"teksto"}
         }
         hc{
+            c12{"12-hora sistemo"}
+            c24{"24-hora sistemo"}
             h11{"12-hora sistemo (0–11)"}
             h12{"12-hora sistemo (1–12)"}
             h23{"24-hora sistemo (0–23)"}
             h24{"24-hora sistemo (1–24)"}
         }
         hc%core{
+            c12{"12"}
+            c24{"24"}
             h11{"12 (0–11)"}
             h12{"12 (1–12)"}
             h23{"24 (0–23)"}
@@ -630,6 +701,10 @@ eo{
             keepall{"konservi ĉiujn"}
             normal{"norma"}
             phrase{"konservi en frazoj"}
+        }
+        m0{
+            bgn{"transliterumo laŭ BGN"}
+            ungegn{"transliterumo laŭ UNGEGN"}
         }
         ms{
             metric{"metra sistemo"}
@@ -660,7 +735,7 @@ eo{
             hans{"simpligit-ĉinaj ciferoj"}
             hansfin{"simpligit-ĉinaj financaj ciferoj"}
             hant{"tradici-ĉinaj ciferoj"}
-            hantfin{"tradic-ĉinaj financaj ciferoj"}
+            hantfin{"tradici-ĉinaj financaj ciferoj"}
             hebr{"hebreaj ciferoj"}
             java{"javaj ciferoj"}
             jpan{"japanaj ciferoj"}
@@ -672,6 +747,7 @@ eo{
             mlym{"malajalamaj ciferoj"}
             mtei{"manipuraj ciferoj"}
             mymr{"birmaj ciferoj"}
+            native{"indiĝenaj ciferoj"}
             orya{"orijaj ciferoj"}
             roman{"romaj ciferoj"}
             romanlow{"romaj ciferoj minusklaj"}
@@ -682,15 +758,63 @@ eo{
             tibt{"tibetaj ciferoj"}
             vaii{"vajaj ciferoj"}
         }
+        numbers%core{
+            arabext{"hind-arabaj etenditaj"}
+            armnlow{"armenaj minusklaj"}
+            finance{"financaj"}
+            fullwide{"plenlarĝaj"}
+            greklow{"grekaj minusklaj"}
+            hanidays{"numeri monattagojn per ĉinaj signoj por tradiciaj kalendaroj"}
+            hanidec{"pozicia dekuma sistemo uzanta ĉinajn ideografiaĵojn kiel ciferojn"}
+            hansfin{"simpligit-ĉinaj financaj"}
+            hantfin{"tradici-ĉinaj financaj"}
+            jpanfin{"japanaj financaj"}
+            mathbold{"matematikaj grasaj"}
+            mathdbl{"matematikaj kretograsaj"}
+            mathmono{"matematikaj egallarĝaj"}
+            mathsanb{"matematikaj senserifaj grasaj"}
+            mathsans{"matematikaj senserifaj"}
+            native{"indiĝenaj ciferoj"}
+            outlined{"konturaj ciferoj"}
+            roman{"romaj majusklaj"}
+            romanlow{"romaj minusklaj"}
+            segment{"segmentaj"}
+            tamldec{"tamilaj modernaj"}
+            traditional{"tradiciaj ciferoj"}
+        }
         ss%core{
             none{"ne"}
             standard{"jes"}
+        }
+        t0{
+            und{"nedifinita maŝina traduko"}
+        }
+        va%core{
+            posix{"variaĵo POSIX"}
         }
     }
     Variants{
         ARKAIKA{"Arkaika"}
         HSISTEMO{"h-sistemo"}
         XSISTEMO{"x-sistemo"}
+    }
+    characterLabelPattern{
+        all{"{0} — ĉio"}
+        compatibility{"{0} — kongrueco"}
+        enclosed{"{0} — enfermitaj"}
+        extended{"{0} — etenditaj"}
+        facing-left{"{0} direktita maldekstren"}
+        facing-right{"{0} direktita dekstren"}
+        historic{"{0} — historiaj"}
+        miscellaneous{"{0} — diversaj"}
+        other{"{0} — aliaj"}
+        scripts{"skribsistemoj — {0}"}
+        strokes{
+            one{"{0} streko"}
+            other{"{0} strekoj"}
+        }
+        subscript{"subindico {0}"}
+        superscript{"superindico {0}"}
     }
     codePatterns{
         language{"Lingvo: {0}"}

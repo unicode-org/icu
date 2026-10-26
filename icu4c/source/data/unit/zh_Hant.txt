@@ -61,7 +61,6 @@ zh_Hant{
         }
         concentr{
             katal{
-                dnam{"開特"}
                 other{"{0} 開特"}
             }
             milligram-ofglucose-per-deciliter{
@@ -73,11 +72,9 @@ zh_Hant{
                 other{"每公升 {0} 毫莫耳"}
             }
             ofglucose{
-                dnam{"葡萄糖"}
                 other{"{0} 葡萄糖"}
             }
             part{
-                dnam{"比例"}
                 other{"{0} 比例"}
             }
             part-per-1e9{
@@ -134,19 +131,15 @@ zh_Hant{
         }
         electric{
             coulomb{
-                dnam{"庫侖"}
                 other{"{0} 庫侖"}
             }
             farad{
-                dnam{"法拉"}
                 other{"{0} 法拉"}
             }
             henry{
-                dnam{"亨利"}
                 other{"{0} 亨利"}
             }
             siemens{
-                dnam{"西門子"}
                 other{"{0} 西門子"}
             }
         }
@@ -157,9 +150,6 @@ zh_Hant{
             }
             calorie{
                 other{"{0} 卡路里"}
-            }
-            calorie-it{
-                dnam{"卡路里-IT"}
             }
             foodcalorie{
                 dnam{"卡路里"}
@@ -311,10 +301,6 @@ zh_Hant{
                 dnam{"每小時公里"}
                 other{"每小時 {0} 公里"}
             }
-            light-speed{
-                dnam{"光速"}
-                other{"{0} 倍光速"}
-            }
             meter-per-second{
                 dnam{"每秒公尺"}
                 other{"每秒 {0} 公尺"}
@@ -340,10 +326,6 @@ zh_Hant{
             }
             cubic-meter{
                 per{"每立方公尺 {0}"}
-            }
-            fluid-ounce-metric{
-                dnam{"公制液盎司"}
-                other{"{0}公制液盎司"}
             }
             gallon{
                 per{"每加侖 {0}"}
@@ -422,9 +404,6 @@ zh_Hant{
             karat{
                 other{"{0}克拉"}
             }
-            katal{
-                dnam{"開特"}
-            }
             milligram-ofglucose-per-deciliter{
                 other{"{0}毫克/分升"}
             }
@@ -434,11 +413,7 @@ zh_Hant{
             mole{
                 other{"{0}莫耳"}
             }
-            ofglucose{
-                dnam{"葡萄糖"}
-            }
             part{
-                dnam{"比例"}
                 other{"{0} 比例"}
             }
             part-per-1e6{
@@ -513,24 +488,11 @@ zh_Hant{
             ampere{
                 other{"{0}安培"}
             }
-            coulomb{
-                dnam{"庫侖"}
-            }
-            farad{
-                dnam{"法拉"}
-            }
-            henry{
-                dnam{"亨利"}
-                other{"{0} 亨利"}
-            }
             milliampere{
                 other{"{0}毫安培"}
             }
             ohm{
                 other{"{0}歐姆"}
-            }
-            siemens{
-                dnam{"西門子"}
             }
             volt{
                 other{"{0}伏特"}
@@ -542,9 +504,6 @@ zh_Hant{
             }
             calorie{
                 other{"{0}卡"}
-            }
-            calorie-it{
-                dnam{"卡路里-IT"}
             }
             electronvolt{
                 other{"{0}電子伏特"}
@@ -634,10 +593,6 @@ zh_Hant{
             }
             fathom{
                 other{"{0}fth"}
-            }
-            foot{
-                other{"{0}英尺"}
-                per{"{0}/英尺"}
             }
             furlong{
                 other{"{0}化朗"}
@@ -811,7 +766,6 @@ zh_Hant{
                 other{"{0}公里/小時"}
             }
             light-speed{
-                dnam{"光速"}
                 other{"{0}倍光速"}
             }
             meter-per-second{
@@ -898,10 +852,6 @@ zh_Hant{
             }
             fluid-ounce-imperial{
                 other{"{0}英液盎司"}
-            }
-            fluid-ounce-metric{
-                dnam{"公制液盎司"}
-                other{"{0}公制液盎司"}
             }
             gallon{
                 other{"{0}加侖"}

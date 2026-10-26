@@ -2167,6 +2167,10 @@ static const UChar zoneGMT[] = { 0x47,0x4D,0x54,0 };
 void TestAddRollEra0AndEraBounds(void) {
     const EraTestItem * eraTestItemPtr;
     for (eraTestItemPtr = eraTestItems; eraTestItemPtr->locale != NULL; eraTestItemPtr++) {
+        if (uprv_strstr(eraTestItemPtr->locale, "calendar=japanese") != NULL &&
+                log_knownIssue("ICU-23108", "ICU needs to implement era inheritance")) {
+            continue;
+        }
         UErrorCode status = U_ZERO_ERROR;
         UCalendar *ucalTest = ucal_open(zoneGMT, -1, eraTestItemPtr->locale, UCAL_DEFAULT, &status);
         if ( U_SUCCESS(status) ) {
@@ -2922,7 +2926,7 @@ TestGetIanaTimeZoneID(void) {
         {u"Europe/Zaporozhye",  u"Europe/Kyiv"},
         {u"Etc/GMT-1",          u"Etc/GMT-1"},
         {u"Etc/GMT+20",         UNKNOWN},
-        {u"PST8PDT",            u"America/Los_Angeles"},
+        {u"PST8PDT",            u"PST8PDT"},
         {u"GMT-08:00",          UNKNOWN},
         {0,                     0}
     };

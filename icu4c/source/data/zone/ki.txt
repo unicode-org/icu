@@ -2,4 +2,25 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/
 ki{
+    zoneStrings{
+        "Etc:UTC"{
+            ls{"Mũbango wa Ithaa rĩa Thĩ"}
+            ss{"MIT"}
+        }
+        "meta:Africa_Central"{
+            ls{"Mathaa ma Abirika ya Gatagatĩ"}
+        }
+        "meta:Africa_Eastern"{
+            ls{"Mathaa ma Abirika ya Irathĩro"}
+        }
+        "meta:Africa_Southern"{
+            ls{"Mathaa ma Abirika ya Mũhuro"}
+        }
+        "meta:Africa_Western"{
+            ls{"Mathaa ma Abirika ya Ithũĩro"}
+        }
+        "meta:GMT"{
+            ls{"GMT"}
+        }
+    }
 }

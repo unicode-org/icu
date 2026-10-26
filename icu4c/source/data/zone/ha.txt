@@ -18,14 +18,13 @@ ha{
         "Etc:Unknown"{
             ec{"Birni da ba a sani ba"}
         }
-        "Europe:Dublin"{
-            ld{"Tsayayyen Lokacin Irish"}
-        }
-        "Europe:London"{
-            ld{"Lokacin Bazara na Birtaniya"}
-        }
         "Pacific:Enderbury"{
             ec{"Tsibirin Canton"}
+        }
+        "meta:Acre"{
+            ld{"Lokacin Bazara na Acre"}
+            lg{"Lokacin Acre"}
+            ls{"Tsayayyen Lokacin Acre"}
         }
         "meta:Afghanistan"{
             ls{"Lokacin Afghanistan"}
@@ -73,8 +72,8 @@ ha{
             ls{"Lokaci Tsayayye na Arewacin Amurika"}
         }
         "meta:Apia"{
-            ld{"Lokacin Rana na Apia"}
-            lg{"Lokacin Apia"}
+            ld{"Lokacin Rana na Yammacin Samoa"}
+            lg{"Lokacin Yammacin Samoa"}
             ls{"Tsayayyen Lokacin Apia"}
         }
         "meta:Arabian"{
@@ -147,6 +146,10 @@ ha{
             ld{"Lokacin Bazara na Brasillia"}
             lg{"Lokacin Brasillia"}
             ls{"Tsayayyen Lokacin Brasillia"}
+        }
+        "meta:British"{
+            ld{"Lokacin Bazara na Birtaniya"}
+            lg{"Lokacin Birtaniya"}
         }
         "meta:Brunei"{
             ls{"Lokacin Brunei Darussalam"}
@@ -263,6 +266,11 @@ ha{
         "meta:Gilbert_Islands"{
             ls{"Lokacin Gilbert Islands"}
         }
+        "meta:Greenland"{
+            ld{"Lokacin Bazara na Greenland"}
+            lg{"Lokacin Greenland"}
+            ls{"Tsayayyen Lokacin Greenland"}
+        }
         "meta:Greenland_Eastern"{
             ld{"Lokacin Rana na Gabashin Greenland"}
             lg{"Lokacin Gabas na Greenland"}
@@ -280,7 +288,7 @@ ha{
             ls{"Lokacin Guyana"}
         }
         "meta:Hawaii"{
-            ls{"Tsayayyen Lokacin Hawaii-Aleutian"}
+            ls{"Lokacin Hawaii"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"Lokacin Rana na Hawaii-Aleutian"}
@@ -320,6 +328,10 @@ ha{
             lg{"Lokacin Iran"}
             ls{"Tsayayyen Lokacin Iran"}
         }
+        "meta:Irish"{
+            ld{"Tsayayyen Lokacin Ireland"}
+            lg{"Lokacin Ireland"}
+        }
         "meta:Irkutsk"{
             ld{"Lokacin Bazara na Irkutsk"}
             lg{"Lokacin Irkutsk"}
@@ -334,6 +346,11 @@ ha{
             ld{"Lokacin Hasken Rana na Japan"}
             lg{"Lokacin Japan"}
             ls{"Tsayayyen lokacin Japan"}
+        }
+        "meta:Kamchatka"{
+            ld{"Lokacin Bazara na Kamchatka"}
+            lg{"Lokacin Kamchatka"}
+            ls{"Tsayayyen Lokacin Kamchatka"}
         }
         "meta:Kazakhstan"{
             ls{"Lokacin Kazakhstan"}
@@ -509,9 +526,12 @@ ha{
             lg{"Lokacin Sakhalin"}
             ls{"Tsayayyen Lokacin Sakhalin"}
         }
+        "meta:Samara"{
+            ld{"Lokacin Bazara na Samara"}
+            lg{"Lokacin Samara"}
+            ls{"Tsayayyen Lokacin Samara"}
+        }
         "meta:Samoa"{
-            ld{"Lokacin Rana na Vote Samoa"}
-            lg{"Lokacin Samoa"}
             ls{"Tsayayyen Lokacin Samoa"}
         }
         "meta:Seychelles"{
@@ -554,6 +574,11 @@ ha{
         "meta:Truk"{
             ls{"Lokacin Chuuk"}
         }
+        "meta:Turkey"{
+            ld{"Lokacin Bazara na Türkiye"}
+            lg{"Lokacin Türkiye"}
+            ls{"Tsayayyen Lokacin Türkiye"}
+        }
         "meta:Turkmenistan"{
             ld{"Lokacin Bazara na Turkmenistan"}
             lg{"Lokacin Turkmenistan"}
@@ -566,6 +591,9 @@ ha{
             ld{"Lokacin Bazara na Uruguay"}
             lg{"Lokacin Uruguay"}
             ls{"Tsayayyen Lokacin Uruguay"}
+        }
+        "meta:Urumqi"{
+            ls{"Lokacin Ürümqi"}
         }
         "meta:Uzbekistan"{
             ld{"Lokacin Bazara na Uzbekistan"}

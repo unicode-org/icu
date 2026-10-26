@@ -598,10 +598,6 @@ sw{
                 one{"{0}°"}
                 other{"{0}°"}
             }
-            steradian{
-                one{"sr {0}"}
-                other{"sr {0}"}
-            }
         }
         area{
             acre{
@@ -621,24 +617,10 @@ sw{
             10p1{"deka{0}"}
         }
         concentr{
-            katal{
-                one{"kat {0}"}
-                other{"kat {0}"}
-            }
             millimole-per-liter{
                 dnam{"mmol/L"}
                 one{"mmol {0}/L"}
                 other{"mmol {0}/L"}
-            }
-            ofglucose{
-                dnam{"Glc"}
-                one{"Glc {0}"}
-                other{"Glc {0}"}
-            }
-            part{
-                dnam{"kipande"}
-                one{"kipande {0}"}
-                other{"kipande {0}"}
             }
             part-per-1e6{
                 dnam{"ppm"}
@@ -673,48 +655,7 @@ sw{
                 dnam{"mwaka"}
             }
         }
-        electric{
-            coulomb{
-                one{"C {0}"}
-                other{"C {0}"}
-            }
-            farad{
-                one{"F {0}"}
-                other{"F {0}"}
-            }
-            henry{
-                one{"H {0}"}
-                other{"H {0}"}
-            }
-            siemens{
-                one{"S {0}"}
-                other{"S {0}"}
-            }
-        }
-        energy{
-            becquerel{
-                one{"Bq {0}"}
-                other{"Bq {0}"}
-            }
-            calorie-it{
-                dnam{"cal-IT"}
-                one{"cal-IT {0}"}
-                other{"cal-IT {0}"}
-            }
-            gray{
-                one{"Gy {0}"}
-                other{"Gy {0}"}
-            }
-            sievert{
-                one{"Sv {0}"}
-                other{"Sv {0}"}
-            }
-        }
         force{
-            kilogram-force{
-                one{"kgf {0}"}
-                other{"kgf {0}"}
-            }
             kilowatt-hour-per-100-kilometer{
                 one{"kWh {0} kwa km 100"}
                 other{"kWh {0} kwa km 100"}
@@ -809,6 +750,11 @@ sw{
         temperature{
             celsius{
                 dnam{"°C"}
+            }
+        }
+        volume{
+            gallon-imperial{
+                per{"{0}/galIm"}
             }
         }
     }
@@ -1758,6 +1704,7 @@ sw{
                 other{"desilita {0}"}
             }
             dessert-spoon{
+                dnam{"vijiko vya kitindamlo"}
                 one{"dstspn {0}"}
                 other{"dstspn {0}"}
             }
@@ -1793,6 +1740,7 @@ sw{
             gallon-imperial{
                 one{"gal Imp. {0}"}
                 other{"gal Imp. {0}"}
+                per{"{0}/galImp"}
             }
             hectoliter{
                 dnam{"hektolita"}

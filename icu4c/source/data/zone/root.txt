@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/
 root{
-    Version{"48"}
+    Version{"49"}
     zoneStrings{
         "Africa:Asmera"{
             ec{"Asmara"}
@@ -223,10 +223,10 @@ root{
         "Pacific:Wallis"{
             ec{"Wallis & Futuna"}
         }
+        dualOffsetFormat{"{0}/{1}"}
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}
         gmtUnknownFormat{"GMT+?"}
-        gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0}"}
         regionFormatDaylight{"{0} (+1)"}

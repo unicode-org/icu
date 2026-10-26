@@ -17,7 +17,6 @@ th{
                 other{"{0} องศา"}
             }
             steradian{
-                dnam{"สเตอเรเดียน"}
                 other{"{0} สเตอเรเดียน"}
             }
         }
@@ -73,10 +72,6 @@ th{
             }
         }
         concentr{
-            katal{
-                dnam{"คาทัล"}
-                other{"{0} คาทัล"}
-            }
             milligram-ofglucose-per-deciliter{
                 dnam{"มิลลิกรัมต่อเดซิลิตร"}
                 other{"{0} มิลลิกรัมต่อเดซิลิตร"}
@@ -84,14 +79,6 @@ th{
             millimole-per-liter{
                 dnam{"มิลลิโมลต่อลิตร"}
                 other{"{0} มิลลิโมลต่อลิตร"}
-            }
-            ofglucose{
-                dnam{"กลูโคส"}
-                other{"{0} กลูโคส"}
-            }
-            part{
-                dnam{"ส่วน"}
-                other{"{0} ส่วน"}
             }
             part-per-1e6{
                 dnam{"ส่วนต่อล้าน"}
@@ -210,16 +197,7 @@ th{
                 other{"{0} แอมแปร์"}
             }
             coulomb{
-                dnam{"คูลอมบ์"}
                 other{"{0} คูลอมบ์"}
-            }
-            farad{
-                dnam{"ฟารัด"}
-                other{"{0} ฟารัด"}
-            }
-            henry{
-                dnam{"เฮนรี"}
-                other{"{0} เฮนรี"}
             }
             milliampere{
                 dnam{"มิลลิแอมแปร์"}
@@ -228,17 +206,12 @@ th{
             ohm{
                 other{"{0} โอห์ม"}
             }
-            siemens{
-                dnam{"ซีเมนส์"}
-                other{"{0} ซีเมนส์"}
-            }
             volt{
                 other{"{0} โวลต์"}
             }
         }
         energy{
             becquerel{
-                dnam{"เบ็กเคอเรล"}
                 other{"{0} เบ็กเคอเรล"}
             }
             british-thermal-unit{
@@ -252,17 +225,9 @@ th{
             electronvolt{
                 other{"{0} อิเล็กตรอนโวลต์"}
             }
-            gray{
-                dnam{"เกรย์"}
-                other{"{0} เกรย์"}
-            }
             kilowatt-hour{
                 dnam{"กิโลวัตต์-ชั่วโมง"}
                 other{"{0} กิโลวัตต์-ชั่วโมง"}
-            }
-            sievert{
-                dnam{"ซีเวิร์ต"}
-                other{"{0} ซีเวิร์ต"}
             }
             therm-us{
                 dnam{"เธิร์มสหรัฐฯ"}
@@ -270,10 +235,6 @@ th{
             }
         }
         force{
-            kilogram-force{
-                dnam{"กิโลกรัมแรง"}
-                other{"{0} กิโลกรัมแรง"}
-            }
             kilowatt-hour-per-100-kilometer{
                 dnam{"กิโลวัตต์-ชั่วโมงต่อ 100 กิโลเมตร"}
                 other{"{0} กิโลวัตต์-ชั่วโมงต่อ 100 กิโลเมตร"}
@@ -396,12 +357,7 @@ th{
             }
         }
         magnetic{
-            tesla{
-                dnam{"เทสลา"}
-                other{"{0} เทสลา"}
-            }
             weber{
-                dnam{"เวเบอร์"}
                 other{"{0} เวเบอร์"}
             }
         }
@@ -458,10 +414,6 @@ th{
             millimeter-ofhg{
                 dnam{"มิลลิเมตรปรอท"}
                 other{"{0} มิลลิเมตรปรอท"}
-            }
-            ofhg{
-                dnam{"ปรอท"}
-                other{"{0} ปรอท"}
             }
             pascal{
                 dnam{"ปาสกาล"}
@@ -634,9 +586,6 @@ th{
             revolution{
                 other{"{0}รอบ"}
             }
-            steradian{
-                dnam{"สเตอเรเดียน"}
-            }
         }
         area{
             acre{
@@ -678,7 +627,6 @@ th{
                 other{"{0}กะรัต"}
             }
             katal{
-                dnam{"คาทัล"}
                 other{"{0} คาทัล"}
             }
             milligram-ofglucose-per-deciliter{
@@ -692,11 +640,9 @@ th{
                 other{"{0}โมล"}
             }
             ofglucose{
-                dnam{"กลูโคส"}
                 other{"{0} กลูโคส"}
             }
             part{
-                dnam{"ส่วน"}
                 other{"{0} ส่วน"}
             }
             part-per-1e6{
@@ -821,15 +767,10 @@ th{
             ampere{
                 other{"{0}แอมป์"}
             }
-            coulomb{
-                dnam{"คูลอมบ์"}
-            }
             farad{
-                dnam{"ฟารัด"}
                 other{"{0} ฟารัด"}
             }
             henry{
-                dnam{"เฮนรี"}
                 other{"{0} เฮนรี"}
             }
             milliampere{
@@ -839,7 +780,6 @@ th{
                 other{"{0}Ω"}
             }
             siemens{
-                dnam{"ซีเมนส์"}
                 other{"{0} ซีเมนส์"}
             }
             volt{
@@ -847,9 +787,6 @@ th{
             }
         }
         energy{
-            becquerel{
-                dnam{"เบ็กเคอเรล"}
-            }
             british-thermal-unit{
                 other{"{0}BTU"}
             }
@@ -857,7 +794,6 @@ th{
                 other{"{0}แคลอรี"}
             }
             calorie-it{
-                dnam{"แคลอรี-IT"}
                 other{"{0} แคลอรี-IT"}
             }
             electronvolt{
@@ -868,7 +804,6 @@ th{
                 other{"{0}แคลอรี"}
             }
             gray{
-                dnam{"เกรย์"}
                 other{"{0} เกรย์"}
             }
             joule{
@@ -884,7 +819,6 @@ th{
                 other{"{0}kWh"}
             }
             sievert{
-                dnam{"ซีเวิร์ต"}
                 other{"{0} ซีเวิร์ต"}
             }
             therm-us{
@@ -892,10 +826,6 @@ th{
             }
         }
         force{
-            kilogram-force{
-                dnam{"กิโลกรัมแรง"}
-                other{"{0} กิโลกรัมแรง"}
-            }
             kilowatt-hour-per-100-kilometer{
                 other{"{0}กิโลวัตต์-ชม./100กม."}
             }
@@ -1036,11 +966,7 @@ th{
         }
         magnetic{
             tesla{
-                dnam{"เทสลา"}
                 other{"{0} เทสลา"}
-            }
-            weber{
-                dnam{"เวเบอร์"}
             }
         }
         mass{
@@ -1140,7 +1066,6 @@ th{
                 other{"{0}มม. ปรอท"}
             }
             ofhg{
-                dnam{"ปรอท"}
                 other{"{0} ปรอท"}
             }
             pascal{
@@ -1872,7 +1797,6 @@ th{
             }
             milliwatt{
                 dnam{"มิลลิวัตต์"}
-                other{"{0} มิลลิวัตต์"}
             }
             watt{
                 dnam{"วัตต์"}

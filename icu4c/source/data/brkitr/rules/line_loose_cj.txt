@@ -17,7 +17,8 @@
 #         line-break=loose (BCP47 -u-lb-loose) as defined for Chinese & Japanese.
 #         It sets characters of class CJ to behave like ID.
 #         In addition, it allows breaks:
-#         * between ID and hyphens 2010 & 2013 (as well as the rest of the HH class)
+#         * between ID and HYPHEN 2010 (as well as the rest of the HH class),
+#           and between ID and 2013 EN DASH;
 #         * before 301C, 30A0 (both NS)
 #         * before iteration marks 3005, 303B, 309D, 309E, 30FD, 30FE (all NS)
 #         * between characters of LineBreak class IN such as 2026
@@ -137,6 +138,17 @@ $CANT_CM = [ $SP $BK $CR $LF $NL $ZW $CM];       # Bases that can't take CMs
 #
 $AL_FOLLOW      = [$BK $CR $LF $NL $ZW $SP $CL $CP $EX $HL $IS $SY $WJ $GL [$OP - $EastAsian] $QU $BA $HH $HY $NS $IN $NU $PR $PO $POX $ALPlus];
 
+# LB 3.
+# A rule
+#  . [{eof}] {100};
+# would result in the correct behaviour (chaining on anything at the end of
+# text), but would create unnecessary states: in LF eot, after LF, we would need
+# a transition on eot, and since we do not have a transition on eot at eot, the
+# states after LF and after eot would have to be distinct.  Excluding the hard
+# breaks which already set status 100 in LB 4 and 5 below means that a single
+# state can handle hard line breaks and eot.
+[^$BK $CR $LF $NL] [{eof}] {100};
+[{eof}] {100};
 
 #
 #  Rule LB 4, 5    Mandatory (Hard) breaks.
@@ -168,7 +180,12 @@ $ZW $SP* / [^$SP $ZW $LB4Breaks];
 
 # LB 8a        ZWJ x            Do not break Emoji ZWJ sequences.
 #
-$ZWJ [^$CM];
+# We do not let the rules for LB8a and LB9 join an RI to an RI, as chaining on
+# that would flip the parity of RI sequences.  RI ZWJ RI is handled below as
+# part of the RI-specific rules, with more context.
+$ZWJ [^$CM $RI];
+[$CAN_CM - $RI] $CM* $ZWJ $RI;
+^ $CM* $ZWJ $RI;
 
 # LB 9     Combining marks.      X   $CM needs to behave like X, where X is not $SP, $BK $CR $LF $NL
 #                                $CM not covered by the above needs to behave like $AL
@@ -194,9 +211,9 @@ $GL $CM* .;
 
 #
 # LB 12a  Do not break before NBSP and related characters ...
-#            [^SP BA HY HH] x GL
+#            [^SP HY HH] x GL
 #
-[[$LB8NonBreaks] - [$SP $BA $HY $HH]] $CM* $GL;
+[[$LB8NonBreaks] - [$SP $HY $HH]] $CM* $GL;
 ^$CM+ $GL;
 
 
@@ -229,15 +246,15 @@ $CAN_CM $CM*  $SY;
 #
 $OP $CM* $SP* .;
 
-$OP $CM* $SP+ $CM+ $AL_FOLLOW?;    # by rule 10, stand-alone CM behaves as AL
-                                   # by rule 8, CM following a SP is stand-alone.
+$OP $CM* $SP+ ($CM+ $AL_FOLLOW? | $CM* $ZWJ $RI?);  # by rule 10, stand-alone CM behaves as AL
+                                                    # by rule 8, CM following a SP is stand-alone.
 
 
 # LB 15a
 ($OP $CM* $SP+ | [$OP $QU $GL] $CM*) ([\p{Pi} & $QU] $CM* $SP*)+ .;
-($OP $CM* $SP+ | [$OP $QU $GL] $CM*) ([\p{Pi} & $QU] $CM* $SP*)+ $SP $CM+ $AL_FOLLOW?;
+($OP $CM* $SP+ | [$OP $QU $GL] $CM*) ([\p{Pi} & $QU] $CM* $SP*)+ $SP ($CM+ $AL_FOLLOW? | $CM* $ZWJ $RI?);
 ^([\p{Pi} & $QU] $CM* $SP*)+ .;
-^([\p{Pi} & $QU] $CM* $SP*)+ $SP $CM+ $AL_FOLLOW?;
+^([\p{Pi} & $QU] $CM* $SP*)+ $SP ($CM+ $AL_FOLLOW? | $CM* $ZWJ $RI?);
 
 # LB 15b
 $LB8NonBreaks [\p{Pf} & $QU] $CM* [$SP $GL $WJ $CL $QU $CP $EX $IS $SY $BK $CR $LF $NL $ZW {eof}];
@@ -246,11 +263,11 @@ $CAN_CM $CM*  [\p{Pf} & $QU] $CM* [$SP $GL $WJ $CL $QU $CP $EX $IS $SY $BK $CR $
 
 # Messy interaction: manually chain between LB 15b and LB 15a on Pf Pi.
 $LB8NonBreaks [\p{Pf} & $QU] $CM* ([\p{Pi} & $QU] $CM* $SP*)+ .;
-$LB8NonBreaks [\p{Pf} & $QU] $CM* ([\p{Pi} & $QU] $CM* $SP*)+ $SP $CM+ $AL_FOLLOW?;
+$LB8NonBreaks [\p{Pf} & $QU] $CM* ([\p{Pi} & $QU] $CM* $SP*)+ $SP ($CM+ $AL_FOLLOW? | $CM* $ZWJ $RI?);
 $CAN_CM $CM*  [\p{Pf} & $QU] $CM* ([\p{Pi} & $QU] $CM* $SP*)+ .;
-$CAN_CM $CM*  [\p{Pf} & $QU] $CM* ([\p{Pi} & $QU] $CM* $SP*)+ $SP $CM+ $AL_FOLLOW?;
+$CAN_CM $CM*  [\p{Pf} & $QU] $CM* ([\p{Pi} & $QU] $CM* $SP*)+ $SP ($CM+ $AL_FOLLOW? | $CM* $ZWJ $RI?);
 ^$CM+  [\p{Pf} & $QU] $CM* ([\p{Pi} & $QU] $CM* $SP*)+ .;
-^$CM+  [\p{Pf} & $QU] $CM* ([\p{Pi} & $QU] $CM* $SP*)+ $SP $CM+ $AL_FOLLOW?;
+^$CM+  [\p{Pf} & $QU] $CM* ([\p{Pi} & $QU] $CM* $SP*)+ $SP ($CM+ $AL_FOLLOW? | $CM* $ZWJ $RI?);
 
 
 # LB 15c Force a break before start of a number with a leading decimal pt, e.g. " .23"
@@ -335,8 +352,9 @@ $CAN_CM $CM*  [\p{Pf} & $QU] $CM* ([\p{Pi} & $QU] $CM* $SP*)+ $SP ($HY | $HH) $C
 #
 # DO allow breaks here before $NSX, so don't include it.
 # And DO allow breaks between ID and $HH, so split out the handling of ID and do not include $HH for them.
+# U+2013 is BA but should be treated like HH in this rule (the CSS specification calls it a hyphen).
 [$LB20NonBreaks - $ID] $CM* ($BA | $HH | $HY | $NS);
-$ID $CM* ($BA | $HY | $NS);
+$ID $CM* ([$BA-[\u2013]] | $HY | $NS);
 
 
 ^$CM+ ($BA | $HH | $HY | $NS);
@@ -421,6 +439,7 @@ $IS $CM* ($ALPlus | $HL);
 $RI $CM* $RI                 / [[^$BK $CR $LF $NL $SP $ZW $WJ $CL $CP $EX $IS $SY $GL $QU $BA $HH $HY $NS $IN $CM]];
 $RI $CM* $RI $CM* [$CM-$ZWJ] / [[^$BK $CR $LF $NL $SP $ZW $WJ $CL $CP $EX $IS $SY $GL $QU $BA $HH $HY $NS $IN $CM]];
 $RI $CM* $RI $CM* [$BK $CR $LF $NL $SP $ZW $WJ $CL $CP $EX $IS $SY $GL $QU $BA $HH $HY $NS $IN $ZWJ {eof}];
+$RI $CM* $RI $CM* $ZWJ $RI;
 # note: the preceding rule includes {eof} rather than having the last [set] term qualified with '?'
 #       because of the chain-out behavior difference. The rule must chain out only from the [set characters],
 #       not from the preceding $RI or $CM, which it would be able to do if the set were optional.

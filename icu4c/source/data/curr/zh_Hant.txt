@@ -750,7 +750,7 @@ zh_Hant{
         }
         NIC{
             "NIC",
-            "尼加拉瓜科多巴",
+            "尼加拉瓜科多巴（1988–1991）",
         }
         NIO{
             "NIO",
@@ -1230,32 +1230,11 @@ zh_Hant{
         RUR{"р."}
     }
     CurrencyPlurals{
-        ERN{
-            other{"厄利垂亞納可法"}
-        }
-        MDL{
-            other{"摩爾多瓦列伊"}
-        }
-        NIO{
-            other{"尼加拉瓜科多巴"}
-        }
-        XAF{
-            other{"中非法郎"}
-        }
-        XCG{
-            other{"加勒比盾"}
-        }
-        XOF{
-            other{"西非法郎"}
-        }
-        XPF{
-            other{"太平洋法郎"}
+        NIC{
+            other{"尼加拉瓜科多巴（1988–1991）"}
         }
         XXX{
             other{"（未知貨幣）"}
-        }
-        ZWG{
-            other{"辛巴威金"}
         }
     }
 }

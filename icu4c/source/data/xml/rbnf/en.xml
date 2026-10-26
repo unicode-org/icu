@@ -34,14 +34,6 @@
 3600/60: <#,##0<:>>>;
 %duration:
 0: =%in-numerals=;
-%%lenient-parse:
-& ':' = '.' = ' ' = '-';
-]]></rbnfRules>
-        </rulesetGrouping>
-        <rulesetGrouping type="SpelloutRules">
-            <rbnfRules><![CDATA[
-%%lenient-parse:
-&[last primary ignorable ] << ' ' << ',' << '-' << '­';
 ]]></rbnfRules>
         </rulesetGrouping>
    </rbnf>

@@ -19,9 +19,6 @@ lmo{
                 "del matin",
                 "de sira",
             }
-            availableFormats{
-                yMMMd{"d MMM y"}
-            }
             dayNames{
                 format{
                     wide{

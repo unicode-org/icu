@@ -227,7 +227,6 @@ mi{
         }
         "Europe:Dublin"{
             ec{"Tapurini"}
-            ld{"Wā Airihi Arowhānui"}
         }
         "Europe:Helsinki"{
             ec{"Hēriki"}
@@ -243,7 +242,6 @@ mi{
         }
         "Europe:London"{
             ec{"Rānana"}
-            ld{"Wā Piritana Raumati"}
         }
         "Europe:Luxembourg"{
             ec{"Rakapuō"}
@@ -335,6 +333,11 @@ mi{
         "Pacific:Wallis"{
             ec{"Wārihi"}
         }
+        "meta:Acre"{
+            ld{"Wā Raumati Acre"}
+            lg{"Wā Acre"}
+            ls{"Wā Arowhānui Acre"}
+        }
         "meta:Afghanistan"{
             ls{"Wā Awhekenetāna"}
         }
@@ -348,7 +351,7 @@ mi{
             ls{"Wā Arowhānui o Āwherika ki te tonga"}
         }
         "meta:Africa_Western"{
-            ls{"Wā o Āwherika ki te uru"}
+            ls{"Wā Āwherika ki te Uru"}
         }
         "meta:Alaska"{
             ld{"Wā Awatea Alaska"}
@@ -456,6 +459,10 @@ mi{
             lg{"Wā Parīhia"}
             ls{"Wā Parīhia Arowhānui"}
         }
+        "meta:British"{
+            ld{"Wā Raumati Piritana"}
+            lg{"Wā Piritana"}
+        }
         "meta:Brunei"{
             ls{"Wā Poronai Darussalam"}
         }
@@ -521,22 +528,22 @@ mi{
             ls{"Wā Ekuatoa"}
         }
         "meta:Europe_Central"{
-            ld{"Wā Raumati Uropi Waenga"}
-            lg{"Wā Uropi Waenga"}
-            ls{"Wā Arowhānui Uropi Waenga"}
+            ld{"Wā Raumati Ūropi Waenga"}
+            lg{"Wā Ūropi Waenga"}
+            ls{"Wā Arowhānui Ūropi Waenga"}
         }
         "meta:Europe_Eastern"{
-            ld{"Wā Raumati Uropi Rāwhiti"}
-            lg{"Wā Uropi Rāwhiti"}
-            ls{"Wā Arowhānui Uropi Rāwhiti"}
+            ld{"Wā Raumati Ūropi ki te Rāwhiti"}
+            lg{"Wā Ūropi ki te Rāwhiti"}
+            ls{"Wā Arowhānui Ūropi ki te Rāwhiti"}
         }
         "meta:Europe_Further_Eastern"{
-            ls{"Wā Ūropi ki te rāwhiti rawa"}
+            ls{"Wā Ūropi ki te Rāwhiti-atu"}
         }
         "meta:Europe_Western"{
-            ld{"Wā Raumati Uropi Uru"}
-            lg{"Wā Uropi Uru"}
-            ls{"Wā Arowhānui Uropi Uru"}
+            ld{"Wā Raumati Ūropi ki te Uru"}
+            lg{"Wā Ūropi ki te Uru"}
+            ls{"Wā Arowhānui Ūropi ki te Uru"}
         }
         "meta:Falkland"{
             ld{"Wā ki Ngā Motu Whākana Raumati"}
@@ -571,6 +578,11 @@ mi{
         "meta:Gilbert_Islands"{
             ls{"Wā Kiripati"}
         }
+        "meta:Greenland"{
+            ld{"Wā Rāumati Kārikirana"}
+            lg{"Wā Kārikirana"}
+            ls{"Wā Arowhānui Kārikirana"}
+        }
         "meta:Greenland_Eastern"{
             ld{"Wā Raumati o Whenuakāriki ki te rāwhiti"}
             lg{"Wā Whenuakāriki ki te rāwhiti"}
@@ -588,7 +600,7 @@ mi{
             ls{"Wā Kaiana"}
         }
         "meta:Hawaii"{
-            ls{"Wā Arowhānui Hawaii-Aleutian"}
+            ls{"Wā Hawaii"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"Wā Awatea Hawaii-Aleutian"}
@@ -628,6 +640,10 @@ mi{
             lg{"Wā Irāna"}
             ls{"Wā Irāna Arowhānui"}
         }
+        "meta:Irish"{
+            ld{"Wā Arowhānui Airana"}
+            lg{"Wā Airana"}
+        }
         "meta:Irkutsk"{
             ld{"Wā Irkutsk Raumati"}
             lg{"Wā Irkutsk"}
@@ -642,6 +658,11 @@ mi{
             ld{"Wā Hapani Awatea"}
             lg{"Wā Hapani"}
             ls{"Wā Hapani Arowhānui"}
+        }
+        "meta:Kamchatka"{
+            ld{"Wā Kamchatka Raumati"}
+            lg{"Wā Kamchatka"}
+            ls{"Wā Kamchatka Arowhānui"}
         }
         "meta:Kazakhstan"{
             ls{"Wā Katatānga"}
@@ -817,9 +838,12 @@ mi{
             lg{"Wā Sakhalin"}
             ls{"Wā Sakhalin Arowhānui"}
         }
+        "meta:Samara"{
+            ld{"Wā Samara Raumati"}
+            lg{"Wā Samara"}
+            ls{"Wā Samara Arowhānui"}
+        }
         "meta:Samoa"{
-            ld{"Wā Hāmoa Awatea"}
-            lg{"Wā Hāmoa"}
             ls{"Wā Hāmoa Arowhānui"}
         }
         "meta:Seychelles"{
@@ -862,6 +886,11 @@ mi{
         "meta:Truk"{
             ls{"Wā Chuuk"}
         }
+        "meta:Turkey"{
+            ld{"Wā Raumati Tākei"}
+            lg{"Wā Tākei"}
+            ls{"Wā Arowhānui Tākei"}
+        }
         "meta:Turkmenistan"{
             ld{"Wā Tukumanatānga Raumati"}
             lg{"Wā Tukumanatānga"}
@@ -874,6 +903,9 @@ mi{
             ld{"Wā Urukoi Raumati"}
             lg{"Wā Urukoi"}
             ls{"Wā Urukoi Arowhānui"}
+        }
+        "meta:Urumqi"{
+            ls{"Wā Ürümqi"}
         }
         "meta:Uzbekistan"{
             ld{"Wā Uhipeketāne Raumati"}

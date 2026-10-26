@@ -14,6 +14,7 @@ import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.SimpleTimeZone;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * A pseudo <code>Calendar</code> that is useful for testing new calendars. A <code>TestCase</code>
@@ -247,7 +248,18 @@ public class TestCase {
      */
     @Override
     public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof Calendar)) {
+            return false;
+        }
         return time == ((Calendar) obj).getTime().getTime();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(time);
     }
 
     protected static final int ONE_SECOND = 1000;

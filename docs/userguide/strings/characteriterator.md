@@ -1,7 +1,7 @@
 ---
 layout: default
 title: CharacterIterator
-nav_order: 3
+nav_order: 30
 parent: Chars and Strings
 ---
 <!--
@@ -10,6 +10,17 @@ License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # CharacterIterator Class
+
+## Modern APIs
+
+### Modern C++
+Starting with ICU 78, ICU4C has [C++ header-only APIs](../icu4c/header-only.md)
+for conveniently iterating over the code points of a Unicode string in any standard encoding form (UTF-8/16/32).
+See [C++ Code Point Iterators](cpp-code-point-iterator.md).
+
+### Modern Java
+Starting with Java 8, interface `CharSequence` (and thus `String` and `StringBuilder`)
+has a `codePoints()` method which returns an `IntStream` of Unicode code points.
 
 ## Overview
 
@@ -103,7 +114,7 @@ behind the character it read and returns the character read. ICU can use
 nextPostInc() or next32PostInc() calls with hasNext() to perform Forward
 Iteration. These calls are the only character access methods provided by the
 ForwardCharacterIterator. An iteration loop can be started with the
-setToStart(), firstPostInc() or first32PostInc()calls . (The setToStart() call
+setToStart(), firstPostInc() or first32PostInc() calls. (The setToStart() call
 is implied after instantiating the iterator or setting the text.)
 
 The less efficient forward iteration mechanism that is available for
@@ -121,7 +132,7 @@ Backward Iteration has pre-decrement semantics, which are the exact opposite of
 the post-increment Forward Iteration. The current index reads the character that
 precedes the index, the character is returned, and the index is left at the
 beginning of this character. The methods used for Backward Iteration are the
-previous() or previous32() calls with the hasPrevious() call . An iteration loop
+previous() or previous32() calls with the hasPrevious() call. An iteration loop
 can be started with setToEnd(), last(), or last32() calls.
 
 ### Direct index manipulation
@@ -167,9 +178,3 @@ text under iteration:
 This text (and the length) may include more than the actual iteration area
 because the start and end indexes may not be the start and end of the entire
 text. The text and the iteration range are set in the implementing subclasses.
-
-## Additional Sample Code
-
-C/C++: See
-[icu4c/source/samples/citer/](https://github.com/unicode-org/icu/blob/main/icu4c/source/samples/citer/)
-in the ICU source distribution for code samples.

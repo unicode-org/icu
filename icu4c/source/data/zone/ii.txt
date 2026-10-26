@@ -11,7 +11,6 @@ ii{
         }
         fallbackFormat{"{1}（{0}）"}
         gmtFormat{"ꋧꃅꎕꏦꄮꈉ{0}"}
-        gmtZeroFormat{"ꋧꃅꎕꏦꄮꈉ"}
         regionFormat{"{0}ꄮꈉ"}
         regionFormatDaylight{"{0}ꃅꎸꄮꈉ"}
         regionFormatStandard{"{0}ꎕꏦꄮꈉ"}

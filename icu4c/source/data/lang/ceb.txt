@@ -17,8 +17,6 @@ ceb{
         es_ES{"Spanish (Europe)"}
         es_MX{"Spanish (Mexico)"}
         fr{"French"}
-        fr_CA{"French (Canada)"}
-        fr_CH{"French (Switzerland)"}
         hi{"Hindi"}
         id{"Indonesian"}
         it{"Italian"}
@@ -28,6 +26,7 @@ ceb{
         nl_BE{"Flemish"}
         pl{"Polish"}
         pt{"Portuguese"}
+        pt_PT{"Portuguese (Europe)"}
         ru{"Russian"}
         th{"Thai"}
         tr{"Turkish"}
@@ -68,10 +67,11 @@ ceb{
     Types{
         calendar{
             gregorian{"Gregorian nga Kalendaryo"}
-            iso8601{"Gregorian nga Kalendaryo (Tuig Una)"}
+            iso8601{"Gregorian nga Kalendaryo (pag-ihap sa mga semana sumala sa ISO 8601)"}
         }
         calendar%core{
             gregorian{"Gregorian"}
+            iso8601{"Gregorian"}
         }
         collation{
             standard{"Standard nga Paagi sa Paghan-ay"}

@@ -42,7 +42,7 @@ public class TestConversion extends TestFmwk {
      * This maps to the C struct of conversion case in convtest.h that stores the data for a
      * conversion test
      */
-    private class ConversionCase {
+    private static class ConversionCase {
         int caseNr; // testcase index
         String option = null; // callback options
         CodingErrorAction cbErrorAction = null; // callback action type
@@ -703,8 +703,6 @@ public class TestConversion extends TestFmwk {
             }
             break;
         }
-
-        return;
     }
 
     private int stepToUnicode(ConversionCase cc, CharsetDecoder decoder, int step) {

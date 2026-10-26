@@ -1,6 +1,7 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
-/*****************************************************************************************
+/*
+ **************************************************************************
  * (C) Copyright Taligent, Inc. 1996, 1997 - All Rights Reserved
  * (C) Copyright IBM Corp. 1996-2012 - All Rights Reserved
  *
@@ -10,9 +11,10 @@
  * technology is protected by multiple US and International patents. This notice and
  * attribution to Taligent may not be removed.
  *   Taligent is a registered trademark of Taligent, Inc.
- **/
+ **************************************************************************
+ */
 
-/**
+/*
  * Port From: JDK 1.4b1 : java.text.Format.IntlTestSimpleDateFormatAPI Source File:
  * java/text/format/IntlTestSimpleDateFormatAPI.java
  */

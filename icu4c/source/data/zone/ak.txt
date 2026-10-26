@@ -506,7 +506,6 @@ ak{
         }
         "Europe:Dublin"{
             ec{"Dɔblin"}
-            ld{"Irelandfoɔ Susudua Berɛ"}
         }
         "Europe:Gibraltar"{
             ec{"Gyebrota"}
@@ -528,7 +527,6 @@ ak{
         }
         "Europe:London"{
             ec{"Lɔndɔn"}
-            ld{"Engresi Awia Berɛ"}
         }
         "Europe:Luxembourg"{
             ec{"Lɛsembɛg"}
@@ -629,6 +627,11 @@ ak{
         "Pacific:Wake"{
             ec{"Wake Supᴐ"}
         }
+        "meta:Acre"{
+            ld{"Acre Ahuhuro Berε"}
+            lg{"Acre Berε"}
+            ls{"Acre Susudua Berε"}
+        }
         "meta:Afghanistan"{
             ls{"Afganistan Berɛ"}
         }
@@ -675,9 +678,9 @@ ak{
             ls{"Pasifik Susudua Berɛ"}
         }
         "meta:Apia"{
-            ld{"Apia Awia Berɛ"}
-            lg{"Apia Berɛ"}
-            ls{"Apia Susudua Berɛ"}
+            ld{"Samoa Atᴐeε Awiaberε"}
+            lg{"Samoa Atᴐeε Berε"}
+            ls{"Samoa Atᴐeε Susudua Berε"}
         }
         "meta:Arabian"{
             ld{"Arabia Awia Berɛ"}
@@ -749,6 +752,10 @@ ak{
             ld{"Brasilia Awia Berɛ"}
             lg{"Brasilia Berɛ"}
             ls{"Brasilia Susudua Berɛ"}
+        }
+        "meta:British"{
+            ld{"Engresi Awia Berɛ"}
+            lg{"Engresi Berɛ"}
         }
         "meta:Brunei"{
             ls{"Brunei Berɛ"}
@@ -865,6 +872,11 @@ ak{
         "meta:Gilbert_Islands"{
             ls{"Geebɛt Aeland Berɛ"}
         }
+        "meta:Greenland"{
+            ld{"Greenland Ahuhoro Berε"}
+            lg{"Greenland Berε"}
+            ls{"Greenland Susudua Berε"}
+        }
         "meta:Greenland_Eastern"{
             ld{"Greenland Apueeɛ Awia Berɛ"}
             lg{"Greenland Apueeɛ Berɛ"}
@@ -882,7 +894,7 @@ ak{
             ls{"Gayana Berɛ"}
         }
         "meta:Hawaii"{
-            ls{"Hawaii-Aleutian Susudua Berɛ"}
+            ls{"Hawaii Susudua Berɛ"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"Hawaii-Aleutian Awia Berɛ"}
@@ -922,6 +934,10 @@ ak{
             lg{"Iran Berɛ"}
             ls{"Iran Susudua Berɛ"}
         }
+        "meta:Irish"{
+            ld{"Irelandfoɔ Susudua Berɛ"}
+            lg{"Irelandfoɔ Berɛ"}
+        }
         "meta:Irkutsk"{
             ld{"Yiikusk Awia Berɛ"}
             lg{"Yiikusk Berɛ"}
@@ -936,6 +952,11 @@ ak{
             ld{"Gyapan Awia Berɛ"}
             lg{"Gyapan Berɛ"}
             ls{"Gyapan Susudua Berɛ"}
+        }
+        "meta:Kamchatka"{
+            ld{"Kamchatka Ahuhuro Berε"}
+            lg{"Kamchaka Berε"}
+            ls{"Kamchatka Susudua Berε"}
         }
         "meta:Kazakhstan"{
             ls{"Kazakstan Berɛ"}
@@ -1111,9 +1132,12 @@ ak{
             lg{"Sakhalin Berɛ"}
             ls{"Sakhalin Susudua Berɛ"}
         }
+        "meta:Samara"{
+            ld{"Samara Ahuhuro Berε"}
+            lg{"Samara Berε"}
+            ls{"Samara Susudua Berε"}
+        }
         "meta:Samoa"{
-            ld{"Samoa Awia Berɛ"}
-            lg{"Samoa Berɛ"}
             ls{"Samoa Susudua Berɛ"}
         }
         "meta:Seychelles"{
@@ -1156,6 +1180,11 @@ ak{
         "meta:Truk"{
             ls{"Kyuuk Berɛ"}
         }
+        "meta:Turkey"{
+            ld{"Turkiye Ahuhuro Berε"}
+            lg{"Turkiye Berε"}
+            ls{"Turkiye Susudua Berε"}
+        }
         "meta:Turkmenistan"{
             ld{"Tɛkmɛnistan Awia Berɛ"}
             lg{"Tɛkmɛnistan Berɛ"}
@@ -1168,6 +1197,9 @@ ak{
             ld{"Yurugwae Awia Berɛ"}
             lg{"Yurugwae Berɛ"}
             ls{"Yurugwae Susudua Berɛ"}
+        }
+        "meta:Urumqi"{
+            ls{"Ürümqi Bere"}
         }
         "meta:Uzbekistan"{
             ld{"Usbɛkistan Awia Berɛ"}

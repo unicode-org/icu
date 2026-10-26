@@ -32,7 +32,7 @@ public class UCharacterCategoryTest extends CoreTestFmwk {
     /**
      * Gets the name of the argument category
      *
-     * @returns category name
+     * @return category name
      */
     @Test
     public void TestToString() {

@@ -12,7 +12,7 @@ kok_Latn{
         011{"Ostonti Afrika"}
         013{"Modlo America"}
         014{"Udenti Afrika"}
-        015{"Ut’tori Amerika"}
+        015{"Ut’tori Afrika"}
         017{"Modlo Afrika"}
         018{"Dokxinni Afrika"}
         019{"Purai Amerika"}

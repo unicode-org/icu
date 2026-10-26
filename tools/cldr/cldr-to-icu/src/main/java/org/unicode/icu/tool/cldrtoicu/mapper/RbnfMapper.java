@@ -7,6 +7,10 @@ import static org.unicode.cldr.api.AttributeKey.keyOf;
 import static org.unicode.cldr.api.CldrData.PathOrder.DTD;
 
 import com.google.common.escape.UnicodeEscaper;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.unicode.cldr.api.AttributeKey;
 import org.unicode.cldr.api.CldrData;
@@ -16,6 +20,7 @@ import org.unicode.cldr.api.CldrValue;
 import org.unicode.icu.tool.cldrtoicu.CldrDataProcessor;
 import org.unicode.icu.tool.cldrtoicu.IcuData;
 import org.unicode.icu.tool.cldrtoicu.RbPath;
+import org.unicode.icu.tool.cldrtoicu.RbValue;
 
 /**
  * A mapper to collect plural data from {@link CldrDataType#LDML LDML} data via the paths:
@@ -57,13 +62,19 @@ public final class RbnfMapper {
         RbnfMapper mapper = new RbnfMapper(icuData);
         icuSpecialData.ifPresent(s -> RBNF_PROCESSOR.process(s, mapper, DTD));
         RBNF_PROCESSOR.process(cldrData, mapper, DTD);
+        mapper.flush();
         return mapper.icuData;
     }
 
     private final IcuData icuData;
+    private final Map<RbPath, List<String>> rulesByPath = new LinkedHashMap<>();
 
     private RbnfMapper(IcuData icuData) {
         this.icuData = checkNotNull(icuData);
+    }
+
+    private void flush() {
+        rulesByPath.forEach((path, lines) -> icuData.add(path, RbValue.of(lines)));
     }
 
     private class RbnfRules {
@@ -74,8 +85,9 @@ public final class RbnfMapper {
         }
 
         void addRules(CldrValue value) {
+            List<String> lines = rulesByPath.computeIfAbsent(rbPath, k -> new ArrayList<>());
             for (String line : value.getValue().strip().split("\n")) {
-                icuData.add(rbPath, ESCAPE_RBNF_DATA.escape(line));
+                lines.add(ESCAPE_RBNF_DATA.escape(line));
             }
         }
     }

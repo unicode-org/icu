@@ -1,5 +1,5 @@
 # Test data for Person Name Data
-#  Copyright © 1991-2025 Unicode, Inc.
+#  Copyright © 1991-2026 Unicode, Inc.
 #  For terms of use, see http://www.unicode.org/copyright.html
 #  SPDX-License-Identifier: Unicode-3.0
 #  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
@@ -136,7 +136,9 @@ parameters; surnameFirst; medium; referring; informal
 expectedResult; مۇرات كارىباي
 
 parameters; givenFirst; long; referring; formal
+parameters; givenFirst; long; referring; informal
 parameters; givenFirst; medium; referring; formal
+parameters; givenFirst; medium; referring; informal
 
 expectedResult; كارىباي م.
 
@@ -146,6 +148,10 @@ parameters; surnameFirst; short; referring; informal
 expectedResult; م. كارىباي
 
 parameters; givenFirst; short; referring; formal
+
+expectedResult; مۇرات ك.
+
+parameters; givenFirst; short; referring; informal
 
 expectedResult; كارىباي
 
@@ -158,11 +164,8 @@ parameters; surnameFirst; short; addressing; formal
 
 expectedResult; مۇرات
 
-parameters; givenFirst; long; referring; informal
 parameters; givenFirst; long; addressing; informal
-parameters; givenFirst; medium; referring; informal
 parameters; givenFirst; medium; addressing; informal
-parameters; givenFirst; short; referring; informal
 parameters; givenFirst; short; addressing; informal
 parameters; surnameFirst; long; addressing; informal
 parameters; surnameFirst; medium; addressing; informal
@@ -211,7 +214,9 @@ parameters; sorting; short; referring; informal
 expectedResult; قالاجان قايرات
 
 parameters; givenFirst; long; referring; formal
+parameters; givenFirst; long; referring; informal
 parameters; givenFirst; medium; referring; formal
+parameters; givenFirst; medium; referring; informal
 
 expectedResult; قايرات قالاجان
 
@@ -219,6 +224,10 @@ parameters; surnameFirst; long; referring; formal
 parameters; surnameFirst; long; referring; informal
 parameters; surnameFirst; medium; referring; formal
 parameters; surnameFirst; medium; referring; informal
+
+expectedResult; قالاجان ق.
+
+parameters; givenFirst; short; referring; informal
 
 expectedResult; ق. قايرات
 
@@ -231,11 +240,8 @@ parameters; surnameFirst; short; referring; informal
 
 expectedResult; قالاجان
 
-parameters; givenFirst; long; referring; informal
 parameters; givenFirst; long; addressing; informal
-parameters; givenFirst; medium; referring; informal
 parameters; givenFirst; medium; addressing; informal
-parameters; givenFirst; short; referring; informal
 parameters; givenFirst; short; addressing; informal
 parameters; surnameFirst; long; addressing; informal
 parameters; surnameFirst; medium; addressing; informal
@@ -278,24 +284,30 @@ name ; given2; توقماحامبەتۇلى
 name ; surname-core; بالقىباي
 name ; locale; kk_Arab_AQ
 
+expectedResult; بالقىباي مىرزا ماقسات توقماحامبەتۇلى
+
+parameters; surnameFirst; long; referring; formal
+
+expectedResult; مىرزا ماقسات توقماحامبەتۇلى بالقىباي
+
+parameters; givenFirst; long; referring; formal
+
 expectedResult; بالقىباي، ماقسات توقماحامبەتۇلى
 
 parameters; sorting; long; referring; formal
+
+expectedResult; بالقىباي ماقسات ت.
+
+parameters; surnameFirst; medium; referring; formal
+
+expectedResult; ماقسات ت. بالقىباي
+
+parameters; givenFirst; medium; referring; formal
 
 expectedResult; بالقىباي، ماقسات
 
 parameters; sorting; medium; referring; formal
 parameters; sorting; short; referring; formal
-
-expectedResult; بالقىباي ماقسات
-
-parameters; surnameFirst; long; referring; formal
-parameters; surnameFirst; medium; referring; formal
-
-expectedResult; ماقسات بالقىباي
-
-parameters; givenFirst; long; referring; formal
-parameters; givenFirst; medium; referring; formal
 
 expectedResult; بالقىباي، ماكە
 
@@ -303,21 +315,11 @@ parameters; sorting; long; referring; informal
 parameters; sorting; medium; referring; informal
 parameters; sorting; short; referring; informal
 
-expectedResult; بالقىباي ماكە
-
-parameters; surnameFirst; long; referring; informal
-parameters; surnameFirst; medium; referring; informal
-
-expectedResult; بالقىباي م.
-
-parameters; surnameFirst; short; referring; formal
-parameters; surnameFirst; short; referring; informal
-
-expectedResult; م. بالقىباي
+expectedResult; م. ت. بالقىباي
 
 parameters; givenFirst; short; referring; formal
 
-expectedResult; بالقىباي
+expectedResult; مىرزا بالقىباي
 
 parameters; givenFirst; long; addressing; formal
 parameters; givenFirst; medium; addressing; formal
@@ -326,13 +328,29 @@ parameters; surnameFirst; long; addressing; formal
 parameters; surnameFirst; medium; addressing; formal
 parameters; surnameFirst; short; addressing; formal
 
-expectedResult; ماكە
+expectedResult; بالقىباي ماكە
+
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; medium; referring; informal
+
+expectedResult; ماكە بالقىباي
 
 parameters; givenFirst; long; referring; informal
-parameters; givenFirst; long; addressing; informal
 parameters; givenFirst; medium; referring; informal
-parameters; givenFirst; medium; addressing; informal
+
+expectedResult; بالقىباي م.
+
+parameters; surnameFirst; short; referring; formal
+parameters; surnameFirst; short; referring; informal
+
+expectedResult; ماكە ب.
+
 parameters; givenFirst; short; referring; informal
+
+expectedResult; ماكە
+
+parameters; givenFirst; long; addressing; informal
+parameters; givenFirst; medium; addressing; informal
 parameters; givenFirst; short; addressing; informal
 parameters; surnameFirst; long; addressing; informal
 parameters; surnameFirst; medium; addressing; informal
@@ -435,7 +453,9 @@ parameters; sorting; short; referring; informal
 expectedResult; كەيت مۇللەر
 
 parameters; givenFirst; long; referring; formal
+parameters; givenFirst; long; referring; informal
 parameters; givenFirst; medium; referring; formal
+parameters; givenFirst; medium; referring; informal
 
 expectedResult; مۇللەر كەيت
 
@@ -453,6 +473,10 @@ expectedResult; مۇللەر ك.
 parameters; surnameFirst; short; referring; formal
 parameters; surnameFirst; short; referring; informal
 
+expectedResult; كەيت م.
+
+parameters; givenFirst; short; referring; informal
+
 expectedResult; مۇللەر
 
 parameters; givenFirst; long; addressing; formal
@@ -464,11 +488,8 @@ parameters; surnameFirst; short; addressing; formal
 
 expectedResult; كەيت
 
-parameters; givenFirst; long; referring; informal
 parameters; givenFirst; long; addressing; informal
-parameters; givenFirst; medium; referring; informal
 parameters; givenFirst; medium; addressing; informal
-parameters; givenFirst; short; referring; informal
 parameters; givenFirst; short; addressing; informal
 parameters; surnameFirst; long; addressing; informal
 parameters; surnameFirst; medium; addressing; informal
@@ -510,6 +531,22 @@ expectedResult; شتوبەر، سەسيليا حەمىش
 
 parameters; sorting; long; referring; formal
 
+expectedResult; سەسيليا حەمىش شتوبەر
+
+parameters; givenFirst; long; referring; formal
+
+expectedResult; شتوبەر سەسيليا حەمىش
+
+parameters; surnameFirst; long; referring; formal
+
+expectedResult; سەسيليا ح. شتوبەر
+
+parameters; givenFirst; medium; referring; formal
+
+expectedResult; شتوبەر سەسيليا ح.
+
+parameters; surnameFirst; medium; referring; formal
+
 expectedResult; شتوبەر، سەسيليا
 
 parameters; sorting; long; referring; informal
@@ -520,19 +557,21 @@ parameters; sorting; short; referring; informal
 
 expectedResult; سەسيليا شتوبەر
 
-parameters; givenFirst; long; referring; formal
-parameters; givenFirst; medium; referring; formal
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; medium; referring; informal
 
 expectedResult; شتوبەر سەسيليا
 
-parameters; surnameFirst; long; referring; formal
 parameters; surnameFirst; long; referring; informal
-parameters; surnameFirst; medium; referring; formal
 parameters; surnameFirst; medium; referring; informal
 
-expectedResult; س. شتوبەر
+expectedResult; س. ح. شتوبەر
 
 parameters; givenFirst; short; referring; formal
+
+expectedResult; سەسيليا ش.
+
+parameters; givenFirst; short; referring; informal
 
 expectedResult; شتوبەر س.
 
@@ -541,11 +580,8 @@ parameters; surnameFirst; short; referring; informal
 
 expectedResult; سەسيليا
 
-parameters; givenFirst; long; referring; informal
 parameters; givenFirst; long; addressing; informal
-parameters; givenFirst; medium; referring; informal
 parameters; givenFirst; medium; addressing; informal
-parameters; givenFirst; short; referring; informal
 parameters; givenFirst; short; addressing; informal
 parameters; surnameFirst; long; addressing; informal
 parameters; surnameFirst; medium; addressing; informal
@@ -598,10 +634,21 @@ name ; generation; جۋنيور
 name ; credentials; ءتىس دارىگەرى
 name ; locale; ja_AQ
 
-expectedResult; ادا كورنەليا فون بريۋل جۋنيور، ءتىس دارىگەرى
+expectedResult; پروءەسسوت ادا كورنەليا سەزار مارتين فون بريۋل جۋنيور, ءتىس دارىگەرى
 
 parameters; givenFirst; long; referring; formal
+
+expectedResult; فون بريۋل پروءەسسوت ادا كورنەليا سەزار مارتين جۋنيور, ءتىس دارىگەرى
+
+parameters; surnameFirst; long; referring; formal
+
+expectedResult; ادا كورنەليا س. م. فون بريۋل جۋنيور, ءتىس دارىگەرى
+
 parameters; givenFirst; medium; referring; formal
+
+expectedResult; فون بريۋل ادا كورنەليا س. م. جۋنيور, ءتىس دارىگەرى
+
+parameters; surnameFirst; medium; referring; formal
 
 expectedResult; بريۋل، ادا كورنەليا سەزار مارتين فون
 
@@ -615,14 +662,18 @@ expectedResult; فون بريۋل، ادا كورنەليا
 
 parameters; sorting; short; referring; formal
 
-expectedResult; فون بريۋل ادا كورنەليا
-
-parameters; surnameFirst; long; referring; formal
-parameters; surnameFirst; medium; referring; formal
-
-expectedResult; ا. ك. فون بريۋل
+expectedResult; ا. ك. س. م. فون بريۋل
 
 parameters; givenFirst; short; referring; formal
+
+expectedResult; پروءەسسوت فون بريۋل
+
+parameters; givenFirst; long; addressing; formal
+parameters; givenFirst; medium; addressing; formal
+parameters; givenFirst; short; addressing; formal
+parameters; surnameFirst; long; addressing; formal
+parameters; surnameFirst; medium; addressing; formal
+parameters; surnameFirst; short; addressing; formal
 
 expectedResult; فون بريۋل ا. ك.
 
@@ -640,22 +691,19 @@ expectedResult; فون بريۋل نەلي
 parameters; surnameFirst; long; referring; informal
 parameters; surnameFirst; medium; referring; informal
 
-expectedResult; فون بريۋل
+expectedResult; نەلي فون بريۋل
 
-parameters; givenFirst; long; addressing; formal
-parameters; givenFirst; medium; addressing; formal
-parameters; givenFirst; short; addressing; formal
-parameters; surnameFirst; long; addressing; formal
-parameters; surnameFirst; medium; addressing; formal
-parameters; surnameFirst; short; addressing; formal
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; medium; referring; informal
+
+expectedResult; نەلي ف. ب.
+
+parameters; givenFirst; short; referring; informal
 
 expectedResult; نەلي
 
-parameters; givenFirst; long; referring; informal
 parameters; givenFirst; long; addressing; informal
-parameters; givenFirst; medium; referring; informal
 parameters; givenFirst; medium; addressing; informal
-parameters; givenFirst; short; referring; informal
 parameters; givenFirst; short; addressing; informal
 parameters; surnameFirst; long; addressing; informal
 parameters; surnameFirst; medium; addressing; informal

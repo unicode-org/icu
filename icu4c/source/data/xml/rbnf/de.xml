@@ -14,7 +14,7 @@
         <rulesetGrouping type="SpelloutRules">
             <rbnfRules><![CDATA[
 %%lenient-parse:
-&ue=ü&ae=ä&oe=ö&[last primary ignorable ] << ' ' << ',' << '-' << '­';
+&ue=ü&ae=ä&oe=ö;
 ]]></rbnfRules>
         </rulesetGrouping>
    </rbnf>

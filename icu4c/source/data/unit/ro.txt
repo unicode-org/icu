@@ -414,9 +414,6 @@ ro{
             }
             part{
                 dnam{"părți"}
-                few{"{0} părți"}
-                one{"{0} parte"}
-                other{"{0} de părți"}
             }
             part-per-1e6{
                 case{
@@ -1107,7 +1104,7 @@ ro{
                     genitive{
                         few{"{0} kilowați-oră per 100 kilometri"}
                         one{"unui kilowatt-oră per 100 de kilometri"}
-                        other{"{0} kilowați-oră per 100 kilometri"}
+                        other{"{0} de kilowați-oră per 100 kilometri"}
                     }
                 }
                 dnam{"kilowatt-oră per 100 kilometri"}
@@ -2363,11 +2360,7 @@ ro{
             karat{
                 dnam{"carat"}
             }
-            ofglucose{
-                dnam{"Glc"}
-            }
             part{
-                dnam{"parte"}
                 few{"{0} părți"}
                 one{"{0} parte"}
                 other{"{0} părți"}
@@ -2426,11 +2419,6 @@ ro{
                 other{"{0} a"}
             }
         }
-        energy{
-            calorie-it{
-                dnam{"cal-IT"}
-            }
-        }
         force{
             kilowatt-hour-per-100-kilometer{
                 few{"{0} kWh/100 km"}
@@ -2475,12 +2463,6 @@ ro{
                 few{"{0} mb"}
                 one{"{0} mb"}
                 other{"{0} mb"}
-            }
-            ofhg{
-                dnam{"de Hg"}
-                few{"{0} de Hg"}
-                one{"{0} de Hg"}
-                other{"{0} de Hg"}
             }
         }
         torque{

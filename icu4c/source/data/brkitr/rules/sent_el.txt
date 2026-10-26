@@ -76,8 +76,15 @@ $ATermEx $CloseEx* $SpEx* $NotLettersEx* $Lower;
 ($STermEx | $ATermEx) $CloseEx* $SpEx* ($SContinueEx | $STermEx | $ATermEx);
 
 #Rule 9, 10, 11
-($STermEx | $ATermEx) $CloseEx* $SpEx* ($Sep | $CR | $LF)?;
+# Including {eof} here does not change the observable behaviour (if {eof} were not here, on STerm at
+# the end of text, we would reach an accepting state which would have no transition on the {eof}
+# symbol, and break at the end of text with status 0), but it allows us to merge the {eof} and Sep
+# symbols; on STerm at the end of text or before Sep, we transition on {eof} or Sep to the same
+# state and accept that one.
+($STermEx | $ATermEx) $CloseEx* $SpEx* [$Sep $LF $CR {eof}]?;
 
 #Rule 998
-[[^$STerm $ATerm $Close $Sp $Sep $LF $CR $Format $Extend]{bof}] ($Extend | $Format | $Close | $Sp)* .;
-[[^$STerm $ATerm $Close $Sp $Sep $LF $CR $Format $Extend]{bof}] ($Extend | $Format | $Close | $Sp)* ([$Sep $LF $CR {eof}] | $CR $LF){100};
+[^$STerm $ATerm $Close $Sp $Sep $LF $CR $Format $Extend] ($Extend | $Format | $Close | $Sp)* .;
+[^$STerm $ATerm $Close $Sp $Sep $LF $CR $Format $Extend] ($Extend | $Format | $Close | $Sp)* ([$Sep $LF $CR {eof}] | $CR $LF){100};
+^ ($Extend | $Format | $Close | $Sp)* .;
+^ ($Extend | $Format | $Close | $Sp)* ([$Sep $LF $CR {eof}] | $CR $LF){100};

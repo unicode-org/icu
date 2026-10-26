@@ -5,6 +5,8 @@ ki{
     AuxExemplarCharacters{"[f l p q s v x z]"}
     ExemplarCharacters{"[a b c d e g h iĩ j k m n o r t uũ w y]"}
     ExemplarCharactersIndex{"[A B C D E G H I J K M N O R T U W Y]"}
+    ExemplarCharactersNumbers{"[{ NBHY } \\- ‑ , . % ‰ + − 0 1 2 3 4 5 6 7 8 9]"}
+    ExemplarCharactersPunctuation{"[\\- ‐‑ – — , ; \\: ! ? . … '‘’ \u0022“” ( ) \\[ \\] @ * / \\& # † ‡ ′ ″]"}
     NumberElements{
         latn{
             patterns{
@@ -47,8 +49,16 @@ ki{
             }
         }
         gregorian{
+            AmPmMarkers{
+                "Kĩroko",
+                "Hwaĩ-inĩ",
+            }
             AmPmMarkersAbbr{
                 "Kiroko",
+                "Hwaĩ-inĩ",
+            }
+            AmPmMarkersNarrow{
+                "Kĩroko",
                 "Hwaĩ-inĩ",
             }
             DateTimePatterns{
@@ -67,16 +77,23 @@ ki{
                 "{1} {0}",
             }
             availableFormats{
+                Hmsv{"HH:mm:ss v"}
                 MEd{"E, M/d"}
                 MMMEd{"E, MMM d"}
                 MMMMEd{"E, MMMM d"}
                 Md{"M/d"}
                 hm{"h:mm a"}
+                hms{"h:mm:ss a"}
+                hmsv{"h:mm:ss a v"}
                 yM{"M/y"}
                 yMEd{"E, M/d/y"}
                 yMMM{"MMM y"}
                 yMMMEd{"E, MMM d, y"}
                 yMMMM{"MMMM y"}
+                yMMMMEd{"dd-MM-YYYY E"}
+                yMMMMd{"dd-MM-YYYY"}
+                yMMMd{"dd-MM-YYYY"}
+                yMd{"dd-MM-y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
             }
@@ -84,24 +101,51 @@ ki{
                 format{
                     abbreviated{
                         "KMA",
-                        "NTT",
-                        "NMN",
-                        "NMT",
-                        "ART",
-                        "NMA",
-                        "NMM",
+                        "MWA",
+                        "WAĨ",
+                        "WETŨ",
+                        "WEN",
+                        "WETO",
+                        "NJU",
+                    }
+                    narrow{
+                        "K",
+                        "MW",
+                        "WA",
+                        "WTŨ",
+                        "WN",
+                        "WTO",
+                        "MŨT",
+                    }
+                    short{
+                        "KMA",
+                        "MWA",
+                        "WAĨ",
+                        "WETŨ",
+                        "WEN",
+                        "WETO",
+                        "NJU",
                     }
                     wide{
                         "Kiumia",
-                        "Njumatatũ",
-                        "Njumaine",
-                        "Njumatana",
-                        "Aramithi",
-                        "Njumaa",
-                        "Njumamothi",
+                        "Mwambĩrĩrio",
+                        "Waĩrĩ",
+                        "Wetatũ",
+                        "Wena",
+                        "Wetano",
+                        "Njuuma",
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "KMA",
+                        "MWA",
+                        "WAĨ",
+                        "WETŨ",
+                        "WEN",
+                        "WETO",
+                        "MŨT",
+                    }
                     narrow{
                         "K",
                         "N",
@@ -111,6 +155,40 @@ ki{
                         "N",
                         "N",
                     }
+                    short{
+                        "KMA",
+                        "MWA",
+                        "WAĨ",
+                        "WETŨ",
+                        "WEN",
+                        "WETO",
+                        "MŨT",
+                    }
+                    wide{
+                        "Kiumia",
+                        "Mwambĩrĩrio",
+                        "Waĩrĩ",
+                        "Wetatũ",
+                        "Wena",
+                        "Wetano",
+                        "Njuuma",
+                    }
+                }
+            }
+            dayPeriod{
+                stand-alone{
+                    abbreviated{
+                        am{"Kĩroko"}
+                        pm{"Hwaĩ-inĩ"}
+                    }
+                    narrow{
+                        am{"Kĩroko"}
+                        pm{"Hwaĩ-inĩ"}
+                    }
+                    wide{
+                        am{"Kĩroko"}
+                        pm{"Hwaĩ-inĩ"}
+                    }
                 }
             }
             eras{
@@ -119,42 +197,61 @@ ki{
                     1{"TK"}
                 }
                 wide{
-                    0{"Mbere ya Kristo"}
-                    1{"Thutha wa Kristo"}
+                    0{"Mbere ya Kristũ"}
+                    1{"Thutha wa Kristũ"}
+                }
+            }
+            intervalFormats{
+                yMMMM{
+                    M{"MMMM ‑ MMMM y"}
                 }
             }
             monthNames{
                 format{
                     abbreviated{
-                        "JEN",
-                        "WKR",
-                        "WGT",
-                        "WKN",
-                        "WTN",
-                        "WTD",
-                        "WMJ",
-                        "WNN",
-                        "WKD",
-                        "WIK",
-                        "WMW",
-                        "DIT",
+                        "MGA",
+                        "MGE",
+                        "KH",
+                        "MŨTH",
+                        "MGNJ",
+                        "GATH",
+                        "GATHN",
+                        "MWNY",
+                        "MŨGK",
+                        "MWTH",
+                        "KNY",
+                        "GAT",
                     }
                     wide{
-                        "Njenuarĩ",
-                        "Mwere wa kerĩ",
-                        "Mwere wa gatatũ",
-                        "Mwere wa kana",
-                        "Mwere wa gatano",
-                        "Mwere wa gatandatũ",
-                        "Mwere wa mũgwanja",
-                        "Mwere wa kanana",
-                        "Mwere wa kenda",
-                        "Mwere wa ikũmi",
-                        "Mwere wa ikũmi na ũmwe",
-                        "Ndithemba",
+                        "Mũgaa",
+                        "Mũgetho",
+                        "Kĩhu",
+                        "Mũthatũ",
+                        "Mũgiranjara",
+                        "Gathathanwa",
+                        "Gathano",
+                        "Mworia Nyoni",
+                        "Mũgaa wa Kerĩ",
+                        "Mwania Thenge",
+                        "Kanyua Hũngũ",
+                        "Gatumu",
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "MGA",
+                        "MGE",
+                        "KH",
+                        "MŨTH",
+                        "MGNJ",
+                        "GATH",
+                        "GATHN",
+                        "MWNY",
+                        "MŨGK",
+                        "MWTH",
+                        "KNY",
+                        "GAT",
+                    }
                     narrow{
                         "J",
                         "K",
@@ -168,6 +265,20 @@ ki{
                         "I",
                         "I",
                         "D",
+                    }
+                    wide{
+                        "Mũgaa",
+                        "Mũgetho",
+                        "Kĩhu",
+                        "Mũthatũ",
+                        "Mũgĩranjara",
+                        "Gathathanwa",
+                        "Gathano",
+                        "Mworia Nyoni",
+                        "Mũgaa wa Kerĩ",
+                        "Mwania Thenge",
+                        "Kanyua Hũngũ",
+                        "Gatumu",
                     }
                 }
             }
@@ -209,18 +320,99 @@ ki{
         }
         month{
             dn{"Mweri"}
+            relative{
+                "-1"{"mweri mũhĩtũku"}
+                "0"{"mweri ũyũ"}
+                "1"{"mweri mũku"}
+            }
+        }
+        month-narrow{
+            relative{
+                "-1"{"mweri mũhĩtũku"}
+                "0"{"mweri ũyũ"}
+                "1"{"mweri mũku"}
+            }
+        }
+        month-short{
+            relative{
+                "-1"{"mweri mũhĩtũku"}
+                "0"{"mweri ũyũ"}
+                "1"{"mweri mũku"}
+            }
         }
         second{
-            dn{"Sekunde"}
+            dn{"ica"}
+        }
+        sun{
+            relative{
+                "-1"{"Kiumia gĩthiru"}
+                "0"{"Kiumia gĩkĩ"}
+                "1"{"Kiumia gĩũku"}
+            }
+        }
+        sun-narrow{
+            relative{
+                "-1"{"Kiumia gĩthiru"}
+                "0"{"Kiumia gĩkĩ"}
+                "1"{"Kiumia gĩũku"}
+            }
+        }
+        sun-short{
+            relative{
+                "-1"{"Kiumia gĩthiru"}
+                "0"{"Kiumia gĩkĩ"}
+                "1"{"Kiumia gĩũku"}
+            }
         }
         week{
-            dn{"Kiumia"}
+            dn{"kiumia"}
+            relative{
+                "-1"{"kiumia kĩhĩtũku"}
+                "0"{"kiumia tũrĩ"}
+                "1"{"kiumia kĩroka"}
+            }
+            relativePeriod{"kiumia kĩa {0}"}
+        }
+        week-narrow{
+            relative{
+                "-1"{"kiumia hĩtũku"}
+                "0"{"kiumia ĩno"}
+                "1"{"kiumia njũku"}
+            }
+            relativePeriod{"kiumia kĩa {0}"}
+        }
+        week-short{
+            relative{
+                "-1"{"kiumia kĩhĩtũku"}
+                "0"{"kiumia tũrĩ"}
+                "1"{"kiumia kĩroka"}
+            }
+            relativePeriod{"kiumia kĩa {0}"}
         }
         weekday{
             dn{"Mũthenya kiumia-inĩ"}
         }
         year{
             dn{"Mwaka"}
+            relative{
+                "-1"{"mwaka mũhĩtũku"}
+                "0"{"mwaka ũyũ"}
+                "1"{"mwaka ũroka"}
+            }
+        }
+        year-narrow{
+            relative{
+                "-1"{"mwaka mũhĩtũku"}
+                "0"{"mwaka ũyũ"}
+                "1"{"mwaka ũroka"}
+            }
+        }
+        year-short{
+            relative{
+                "-1"{"mwaka mũhĩtũku"}
+                "0"{"mwaka ũyũ"}
+                "1"{"mwaka ũroka"}
+            }
         }
         zone{
             dn{"Mũcooro wa mathaa"}

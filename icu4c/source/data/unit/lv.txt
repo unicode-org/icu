@@ -3284,12 +3284,6 @@ lv{
                 other{"{0} dzīvsudraba stabiņa milimetri"}
                 zero{"{0} dzīvsudraba stabiņa milimetru"}
             }
-            ofhg{
-                dnam{"pēc dzīvsudraba staba"}
-                one{"{0} pēc dzīvsudraba staba"}
-                other{"{0} pēc dzīvsudraba staba"}
-                zero{"{0} pēc dzīvsudraba staba"}
-            }
             pascal{
                 case{
                     accusative{
@@ -4070,14 +4064,7 @@ lv{
             }
         }
         concentr{
-            ofglucose{
-                dnam{"Glc"}
-                one{"{0} Glc"}
-                other{"{0} Glc"}
-                zero{"{0} Glc"}
-            }
             part{
-                dnam{"daļa"}
                 one{"{0} daļa"}
                 other{"{0} daļa"}
                 zero{"{0} daļu"}
@@ -4115,48 +4102,6 @@ lv{
                 other{"{0} n."}
                 per{"{0}/n."}
                 zero{"{0} n."}
-            }
-        }
-        electric{
-            coulomb{
-                one{"{0} C"}
-                other{"{0} C"}
-                zero{"{0} C"}
-            }
-            farad{
-                one{"{0} F"}
-                other{"{0} F"}
-                zero{"{0} F"}
-            }
-            henry{
-                one{"{0} H"}
-                other{"{0} H"}
-                zero{"{0} H"}
-            }
-            siemens{
-                one{"{0} S"}
-                other{"{0} S"}
-                zero{"{0} S"}
-            }
-        }
-        energy{
-            becquerel{
-                one{"{0} Bq"}
-                other{"{0} Bq"}
-                zero{"{0} Bq"}
-            }
-            calorie-it{
-                dnam{"cal-IT"}
-            }
-            gray{
-                one{"{0} Gy"}
-                other{"{0} Gy"}
-                zero{"{0} Gy"}
-            }
-            sievert{
-                one{"{0} Sv"}
-                other{"{0} Sv"}
-                zero{"{0} Sv"}
             }
         }
         graphics{
@@ -4238,13 +4183,6 @@ lv{
                 dnam{"L☉"}
             }
         }
-        magnetic{
-            weber{
-                one{"{0} Wb"}
-                other{"{0} Wb"}
-                zero{"{0} Wb"}
-            }
-        }
         mass{
             carat{
                 one{"{0} ct"}
@@ -4302,7 +4240,6 @@ lv{
                 zero{"{0}mbar"}
             }
             ofhg{
-                dnam{"pēc dzīvsudraba staba"}
                 one{"{0} pēc dzīvsudraba staba"}
                 other{"{0} pēc dzīvsudraba staba"}
                 zero{"{0} pēc dzīvsudraba staba"}

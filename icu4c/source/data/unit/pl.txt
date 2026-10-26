@@ -5364,18 +5364,6 @@ pl{
                 other{"{0} yd²"}
             }
         }
-        concentr{
-            ofglucose{
-                dnam{"Glc"}
-            }
-            part{
-                dnam{"część"}
-                few{"{0} cz."}
-                many{"{0} cz."}
-                one{"{0} cz."}
-                other{"{0} cz."}
-            }
-        }
         duration{
             day{
                 few{"{0} d."}
@@ -5424,13 +5412,6 @@ pl{
             }
         }
         energy{
-            calorie-it{
-                dnam{"cal [IT]"}
-                few{"{0} cal [IT]"}
-                many{"{0} cal [IT]"}
-                one{"{0} cal [IT]"}
-                other{"{0} cal [IT]"}
-            }
             electronvolt{
                 dnam{"eV"}
             }
@@ -5465,6 +5446,11 @@ pl{
                 dnam{"lb"}
             }
         }
+        power{
+            watt{
+                dnam{"W"}
+            }
+        }
         speed{
             kilometer-per-hour{
                 dnam{"km/h"}
@@ -5483,7 +5469,6 @@ pl{
         }
         temperature{
             celsius{
-                dnam{"°C"}
                 few{"{0}°C"}
                 many{"{0}°C"}
                 one{"{0}°C"}
@@ -5917,7 +5902,7 @@ pl{
                 other{"{0} KM"}
             }
             watt{
-                dnam{"waty"}
+                dnam{"W"}
             }
         }
         pressure{

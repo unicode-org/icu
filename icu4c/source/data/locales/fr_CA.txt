@@ -24,30 +24,6 @@ fr_CA{
             }
             patternsShort{
                 currencyFormat{
-                    1000{
-                        one{"0 k ¤"}
-                        other{"0 k ¤"}
-                    }
-                    10000{
-                        one{"00 k ¤"}
-                        other{"00 k ¤"}
-                    }
-                    100000{
-                        one{"000 k ¤"}
-                        other{"000 k ¤"}
-                    }
-                    1000000{
-                        one{"0 M ¤"}
-                        other{"0 M ¤"}
-                    }
-                    10000000{
-                        one{"00 M ¤"}
-                        other{"00 M ¤"}
-                    }
-                    100000000{
-                        one{"000 M ¤"}
-                        other{"000 M ¤"}
-                    }
                     1000000000{
                         one{"0 G ¤"}
                         other{"0 G ¤"}
@@ -298,6 +274,10 @@ fr_CA{
                 MMMEd{
                     d{"E d – E d MMM"}
                 }
+                MMMMd{
+                    M{"d MMMM–d MMMM"}
+                    d{"d–d MMMM"}
+                }
                 Md{
                     M{"MM-dd – MM-dd"}
                     d{"MM-dd – MM-dd"}
@@ -361,7 +341,7 @@ fr_CA{
                 Hms{"HH 'h' mm 'min' ss 's'"}
                 Hmsv{"HH 'h' mm 'min' ss 's' v"}
                 Hmv{"HH 'h' mm v"}
-                Hv{"H 'h' v"}
+                Hv{"HH 'h' v"}
                 MEd{"E MM-dd"}
                 MMd{"MM-dd"}
                 MMdd{"MM-dd"}
@@ -474,6 +454,9 @@ fr_CA{
                 }
                 MMMEd{
                     d{"E d MMM – E d MMM"}
+                }
+                MMMMd{
+                    d{"d–d MMMM"}
                 }
                 MMMd{
                     d{"d – d MMM"}

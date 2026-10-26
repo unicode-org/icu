@@ -33,9 +33,6 @@ cy{
         "America:North_Dakota:New_Salem"{
             ec{"New Salem, Gogledd Dakota"}
         }
-        "Asia:Gaza"{
-            ec{"Gasa"}
-        }
         "Asia:Jerusalem"{
             ec{"Jerwsalem"}
         }
@@ -72,6 +69,9 @@ cy{
         "Etc:Unknown"{
             ec{"Dinas Anhysbys"}
         }
+        "Europe:Athens"{
+            ec{"Athen"}
+        }
         "Europe:Brussels"{
             ec{"Brwsel"}
         }
@@ -80,23 +80,18 @@ cy{
         }
         "Europe:Dublin"{
             ec{"Dulyn"}
-            ld{"Amser Safonol Iwerddon"}
-        }
-        "Europe:Guernsey"{
-            ec{"Ynys y Garn"}
         }
         "Europe:Isle_of_Man"{
             ec{"Ynys Manaw"}
         }
         "Europe:Istanbul"{
-            ec{"Caergystennin"}
+            ec{"Istanbwl"}
         }
         "Europe:Kiev"{
             ec{"Kiev"}
         }
         "Europe:London"{
             ec{"Llundain"}
-            ld{"Amser Haf Prydain"}
         }
         "Europe:Luxembourg"{
             ec{"Lwcsembwrg"}
@@ -121,6 +116,11 @@ cy{
         }
         "Pacific:Honolulu"{
             ec{"Honolulu"}
+        }
+        "meta:Acre"{
+            ld{"Amser Haf Acrys"}
+            lg{"Amser Acrys"}
+            ls{"Amser Safonol Acrys"}
         }
         "meta:Afghanistan"{
             ls{"Amser Afghanistan"}
@@ -242,6 +242,10 @@ cy{
             ld{"Amser Haf Brasília"}
             lg{"Amser Brasília"}
             ls{"Amser Safonol Brasília"}
+        }
+        "meta:British"{
+            ld{"Amser Haf Prydain"}
+            lg{"Amser Prydain"}
         }
         "meta:Brunei"{
             ls{"Amser Brunei Darussalam"}
@@ -368,6 +372,11 @@ cy{
         "meta:Gilbert_Islands"{
             ls{"Amser Ynysoedd Gilbert"}
         }
+        "meta:Greenland"{
+            ld{"Amser Haf yr Ynys Las"}
+            lg{"Amser yr Ynys Las"}
+            ls{"Amser Safonol yr Ynys Las"}
+        }
         "meta:Greenland_Eastern"{
             ld{"Amser Haf Dwyrain yr Ynys Las"}
             lg{"Amser Dwyrain yr Ynys Las"}
@@ -385,7 +394,7 @@ cy{
             ls{"Amser Guyana"}
         }
         "meta:Hawaii"{
-            ls{"Amser Safonol Hawaii-Aleutian"}
+            ls{"Amser Hawaii"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"Amser Haf Hawaii-Aleutian"}
@@ -425,6 +434,10 @@ cy{
             lg{"Amser Iran"}
             ls{"Amser Safonol Iran"}
         }
+        "meta:Irish"{
+            ld{"Amser Safonol Iwerddon"}
+            lg{"Amser Iwerddon"}
+        }
         "meta:Irkutsk"{
             ld{"Amser Haf Irkutsk"}
             lg{"Amser Irkutsk"}
@@ -439,6 +452,11 @@ cy{
             ld{"Amser Haf Japan"}
             lg{"Amser Japan"}
             ls{"Amser Safonol Japan"}
+        }
+        "meta:Kamchatka"{
+            ld{"Amser Haf Kamchatka"}
+            lg{"Amser Kamchatka"}
+            ls{"Amser Safonol Kamchatka"}
         }
         "meta:Kazakhstan"{
             ls{"Amser Kazakhstan"}
@@ -601,7 +619,7 @@ cy{
             ls{"Amser Pohnpei"}
         }
         "meta:Pyongyang"{
-            ls{"Amser Pyongyang"}
+            ls{"Amser Gogledd Korea"}
         }
         "meta:Reunion"{
             ls{"Amser Réunion"}
@@ -620,8 +638,6 @@ cy{
             ls{"Amser Safonol Samara"}
         }
         "meta:Samoa"{
-            ld{"Amser Haf Samoa"}
-            lg{"Amser Samoa"}
             ls{"Amser Safonol Samoa"}
         }
         "meta:Seychelles"{
@@ -646,9 +662,9 @@ cy{
             ls{"Amser Tahiti"}
         }
         "meta:Taipei"{
-            ld{"Amser Haf Taipei"}
-            lg{"Amser Taipei"}
-            ls{"Amser Safonol Taipei"}
+            ld{"Amser Haf Taiwan"}
+            lg{"Amser Taiwan"}
+            ls{"Amser Safonol Taiwan"}
         }
         "meta:Tajikistan"{
             ls{"Amser Tajicistan"}
@@ -664,6 +680,11 @@ cy{
         "meta:Truk"{
             ls{"Amser Chuuk"}
         }
+        "meta:Turkey"{
+            ld{"Amser Haf Türkiye"}
+            lg{"Amser Türkiye"}
+            ls{"Amser Safonol Türkiye"}
+        }
         "meta:Turkmenistan"{
             ld{"Amser Haf Tyrcmenistan"}
             lg{"Amser Tyrcmenistan"}
@@ -676,6 +697,9 @@ cy{
             ld{"Amser Haf Uruguay"}
             lg{"Amser Uruguay"}
             ls{"Amser Safonol Uruguay"}
+        }
+        "meta:Urumqi"{
+            ls{"Amser Ürümqi"}
         }
         "meta:Uzbekistan"{
             ld{"Amser Haf Uzbekistan"}

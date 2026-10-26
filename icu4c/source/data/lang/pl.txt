@@ -11,19 +11,35 @@ pl{
         colCaseLevel{"Sortowanie uwzględniające wielkość liter"}
         colNormalization{"sortowanie znormalizowane"}
         colNumeric{"sortowanie numeryczne"}
+        colReorder{"zmiana kolejności skryptów/bloków"}
         colStrength{"siła sortowania"}
         collation{"kolejność sortowania"}
         currency{"waluta"}
+        d0{"cel transformacji"}
+        dx{"wyłączenia podziału słownikowego"}
         em{"prezentacja emoji"}
+        fw{"pierwszy dzień tygodnia"}
+        h0{"zmieszane"}
         hc{"cykl (12- lub 24-godzinny)"}
+        i0{"metoda wprowadzania"}
+        k0{"klawiatura"}
+        kv{"najwyższy ignorowany"}
         lb{"styl podziału wiersza"}
         lw{"podział wierszy wewnątrz wyrazów"}
+        m0{"reguły transformacji"}
         ms{"system miar"}
+        mu{"jednostka miary"}
         numbers{"cyfry"}
+        rg{"region dla danych uzupełniających"}
+        s0{"źródło transformacji"}
+        sd{"podział regionalny"}
         ss{"koniec zdania po skrócie"}
+        t{"transformacja"}
+        t0{"tłumaczenie maszynowe"}
         timezone{"strefa czasowa"}
         va{"wariant regionalny"}
         x{"do użytku prywatnego"}
+        x0{"transformacja niestandardowa"}
     }
     Languages{
         aa{"afar"}
@@ -881,9 +897,13 @@ pl{
             ethiopic-amete-alem{"etiopski Amete Alem"}
             gregorian{"gregoriański"}
             hebrew{"hebrajski"}
+            indian{"indyjski narodowy"}
             islamic{"muzułmański"}
             islamic-civil{"muzułmański (metoda obliczeniowa)"}
+            islamic-rgsa{"muzułmański (oparty na lokalnej obserwacji)"}
+            islamic-tbla{"muzułmański (tabelaryczny, epoka astronomiczna)"}
             islamic-umalqura{"muzułmański (Umm al-Kura)"}
+            iso8601{"gregoriański"}
             japanese{"japoński"}
             persian{"perski"}
             roc{"Republiki Chińskiej"}
@@ -909,6 +929,11 @@ pl{
             no{"Sortowanie z zachowaniem zwykłej kolejności wielkości liter"}
             upper{"Sortowanie od wielkich liter"}
         }
+        colCaseFirst%core{
+            lower{"małe litery"}
+            no{"małe litery"}
+            upper{"wielkie litery"}
+        }
         colCaseLevel{
             no{"Sortowanie bez rozróżniania wielkości liter"}
             yes{"Sortowanie z rozróżnianiem wielkości liter"}
@@ -921,12 +946,26 @@ pl{
             no{"Oddzielne sortowanie cyfr"}
             yes{"Numeryczne sortowanie cyfr"}
         }
+        colReorder%core{
+            currency{"waluta"}
+            digit{"cyfry"}
+            punct{"interpunkcja"}
+            space{"biały znak"}
+            symbol{"symbol"}
+        }
         colStrength{
             identical{"Sortuj wszystko"}
             primary{"Sortowanie tylko liter podstawowych"}
             quaternary{"Sortowanie znaków akcentowanych/wielkości liter/szerokości/kana"}
             secondary{"Sortowanie znaków akcentowanych"}
             tertiary{"Sortowanie znaków akcentowanych/wielkości liter/szerokości"}
+        }
+        colStrength%core{
+            identical{"wszystko"}
+            primary{"sortowanie tylko liter podstawowych"}
+            quaternary{"podstawa, akcenty, wielkość liter, warianty, kana"}
+            secondary{"podstawa, akcenty"}
+            tertiary{"podstawa, akcenty, wielkość liter, warianty"}
         }
         collation{
             compat{"poprzedni porządek sortowania, dla zgodności"}
@@ -948,10 +987,13 @@ pl{
             compat{"zgodność"}
             dictionary{"słownikowe"}
             ducet{"domyślne Unicode"}
+            emoji{"emotikon"}
+            eor{"reguły europejskie"}
             phonebook{"książka telefoniczna"}
             phonetic{"fonetyczne"}
             pinyin{"pinyin"}
             search{"wyszukiwanie"}
+            searchjl{"koreańskie spółgłoski początkowe"}
             standard{"standardowe"}
             stroke{"liczba kresek"}
             traditional{"tradycyjne"}
@@ -969,16 +1011,26 @@ pl{
             text{"tekst"}
         }
         hc{
+            c12{"system 12-godzinny"}
+            c24{"system 24-godzinny"}
             h11{"system 12-godzinny (0–11)"}
             h12{"system 12-godzinny (1–12)"}
             h23{"system 24-godzinny (0–23)"}
             h24{"system 24-godzinny (1–24)"}
         }
         hc%core{
+            c12{"12"}
+            c24{"24"}
             h11{"12 (0–11)"}
             h12{"12 (1–12)"}
             h23{"24 (0–23)"}
             h24{"24 (1–24)"}
+        }
+        kv%core{
+            currency{"przesunięcie: spacje, interpunkcja, wszystkie symbole"}
+            punct{"przesunięcie: spacje, interpunkcja"}
+            space{"przesunięcie: spacje, interpunkcja"}
+            symbol{"przesunięcie: spacje, interpunkcja, symbole inne niż waluty"}
         }
         lb{
             loose{"luźny styl podziału wiersza"}
@@ -1056,9 +1108,48 @@ pl{
             traditional{"Liczebniki tradycyjne"}
             vaii{"cyfry vai"}
         }
+        numbers%core{
+            arabext{"rozszerzone arabsko-indyjskie"}
+            armnlow{"ormiańskie (małe litery)"}
+            finance{"księgowy"}
+            fullwide{"pełna szerokość"}
+            greklow{"greckie (małe litery)"}
+            hanidays{"numeracja dni miesiąca znakami Han do kalendarzy tradycyjnych"}
+            hanidec{
+                "pozycyjny system dziesiętny wykorzystujący ideogramy chińskie jako c"
+                "yfry"
+            }
+            hansfin{"uproszczone chińskie księgowe"}
+            hantfin{"tradycyjne chińskie księgowe"}
+            jpanfin{"japońskie księgowe"}
+            jpanyear{"numeracja pierwszego roku ery jako Gannen"}
+            lanatham{"system liczbowy Tai Tham Tham (religijny)"}
+            mathbold{"matematyczne pogrubione"}
+            mathdbl{"matematyczne z podwójną kreską"}
+            mathmono{"matematyczne o stałej szerokości"}
+            mathsanb{"matematyczne bezszeryfowe pogrubione"}
+            mathsans{"matematyczne bezszeryfowe"}
+            mymrepka{"cyfry pwo wschodnie (Mjanma)"}
+            mymrpao{"cyfry pao (Mjanma)"}
+            mymrshan{"cyfry szan (Mjanma)"}
+            mymrtlng{"cyfry tai laing (Mjanma)"}
+            native{"cyfry macierzyste"}
+            outlined{"konturowe"}
+            roman{"rzymskie (wielkie litery)"}
+            romanlow{"rzymskie (małe litery)"}
+            segment{"segmentowe"}
+            tamldec{"współczesne tamilskie"}
+            traditional{"cyfry tradycyjne"}
+        }
         ss%core{
             none{"wył."}
             standard{"wł."}
+        }
+        t0{
+            und{"nieokreślone tłumaczenie maszynowe"}
+        }
+        va%core{
+            posix{"wariant POSIX"}
         }
     }
     Variants{

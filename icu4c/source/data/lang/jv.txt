@@ -5,15 +5,41 @@ jv{
     Keys{
         calendar{"Tanggalan"}
         cf{"Format Mata Uang"}
+        colAlternate{"Lirwakake Pangurutan Simbol"}
+        colBackwards{"Pangurutan Aksen Walikan"}
+        colCaseFirst{"Urutan Aksara Gedhe/Cilik"}
+        colCaseLevel{"Pangurutan Sensitif Aksara Gedhe/Cilik"}
+        colNormalization{"Pangurutan sing Dinormalisasi"}
+        colNumeric{"Pangurutan Numerik"}
+        colReorder{"Ngurutake Maneh Skrip/Blok"}
+        colStrength{"Kekuwatan Sortiran"}
         collation{"Urutan Pamilahan"}
         currency{"Mata Uang"}
+        d0{"Transformasi Tujuan"}
+        dx{"Pamisahan Jeda Bausastra"}
         em{"Presentasi Emoji"}
+        fw{"Dina pisanan ing minggu"}
+        h0{"Dicampur"}
         hc{"Siklus Jam (12 vs 24)"}
+        i0{"Metode Input"}
+        k0{"Papan Ketik"}
+        kv{"Paling Dhuwur sing Dilirwakake"}
         lb{"Gaya Ganti Baris"}
         lw{"Ganti baris sajrone Tembung"}
+        m0{"Aturan Transformasi"}
         ms{"Sistem Pangukuran"}
+        mu{"Unit Pangukuran"}
         numbers{"Angka"}
+        rg{"Wilayah kanggo Data Tambahan"}
+        s0{"Transformasi Sumber"}
+        sd{"Subdivisi Wilayah"}
         ss{"Pedhotan ukara sawise singkatan"}
+        t{"Transformasi"}
+        t0{"Dijarwakake Mesin"}
+        timezone{"Zona Wektu"}
+        va{"Varian Lokal"}
+        x{"Panggunaan Pribadi"}
+        x0{"Transformasi Panggunaan Pribadi"}
     }
     Languages{
         ab{"Abkhazian"}
@@ -31,7 +57,7 @@ jv{
         ann{"Obolo"}
         anp{"Angika"}
         ar{"Arab"}
-        ar_001{"Arab Standar Anyar"}
+        ar_001{"Arab Standar Modern"}
         arn{"Mapushe"}
         arp{"Arapaho"}
         ars{"Arab Najdi"}
@@ -62,10 +88,10 @@ jv{
         bo{"Tibet"}
         br{"Breton"}
         brx{"Bodo"}
-        bs{"Bosnia lan Hercegovina"}
+        bs{"Bosnia"}
         bug{"Bugis"}
         byn{"Blin"}
-        ca{"Katala"}
+        ca{"Katalan"}
         cay{"Kayuga"}
         ccp{"Chakma"}
         ce{"Chechen"}
@@ -87,22 +113,22 @@ jv{
         crl{"Kree Lor Segara"}
         crm{"Moose Cree"}
         crr{"Karolina Algonquian"}
-        cs{"Ceska"}
+        cs{"Ceko"}
         csw{"Kree Rawa"}
         cu{"Slavia Gerejani"}
-        cv{"Khuvash"}
+        cv{"Chuvash"}
         cy{"Welsh"}
-        da{"Dansk"}
+        da{"Denmark"}
         dak{"Dakota"}
         dar{"Dargwa"}
         dav{"Taita"}
-        de{"Jérman"}
-        de_AT{"Jérman Ostenrik"}
-        de_CH{"Jérman Switserlan"}
+        de{"Jerman"}
+        de_AT{"Jerman Austria"}
+        de_CH{"Swiss Standar Jerman"}
         dgr{"Dogrib"}
         dje{"Zarma"}
         doi{"Dogri"}
-        dsb{"Sorbia Non Standar"}
+        dsb{"Sorbia Hilir"}
         dua{"Duala"}
         dv{"Divehi"}
         dyo{"Jola-Fonyi"}
@@ -114,35 +140,35 @@ jv{
         eka{"Ekajuk"}
         el{"Yunani"}
         en{"Inggris"}
-        en_AU{"Inggris Ostrali"}
+        en_AU{"Inggris Australia"}
         en_CA{"Inggris Kanada"}
-        en_GB{"Inggris Karajan Manunggal"}
-        en_US{"Inggris Amérika Sarékat"}
+        en_GB{"Inggris Britania Raya"}
+        en_US{"Inggris Amerika Serikat"}
         eo{"Esperanto"}
         es{"Spanyol"}
-        es_419{"Spanyol (Amerika Latin)"}
-        es_ES{"Spanyol (Eropah)"}
-        es_MX{"Spanyol (Meksiko)"}
+        es_419{"Spanyol Amerika Latin"}
+        es_ES{"Spanyol Eropa"}
+        es_MX{"Spanyol Meksiko"}
         et{"Estonia"}
         eu{"Basque"}
         ewo{"Ewondo"}
         fa{"Persia"}
         ff{"Fula"}
         fi{"Suomi"}
-        fil{"Tagalog"}
+        fil{"Filipino"}
         fj{"Fijian"}
         fo{"Faroe"}
         fon{"Fon"}
         fr{"Prancis"}
         fr_CA{"Prancis Kanada"}
-        fr_CH{"Prancis Switserlan"}
+        fr_CH{"Prancis Swiss"}
         frc{"Prancis Cajun"}
         frr{"Frisian Lor Segara"}
         fur{"Friulian"}
-        fy{"Frisia Sisih Kulon"}
+        fy{"Frisia Kulon"}
         ga{"Irlandia"}
         gaa{"Ga"}
-        gd{"Gaulia"}
+        gd{"Gaelik Skotlandia"}
         gez{"Gees"}
         gil{"Gilbertese"}
         gl{"Galisia"}
@@ -162,7 +188,7 @@ jv{
         hil{"Hiligainon"}
         hmn{"Hmong"}
         hr{"Kroasia"}
-        hsb{"Sorbia Standar"}
+        hsb{"Sorbia Hulu"}
         ht{"Kreol Haiti"}
         hu{"Hungaria"}
         hup{"Hupa"}
@@ -280,7 +306,7 @@ jv{
         ms{"Melayu"}
         mt{"Malta"}
         mua{"Mundang"}
-        mul{"Basa Multilingua"}
+        mul{"Multibasa"}
         mus{"Muskogee"}
         mwl{"Mirandese"}
         my{"Myanmar"}
@@ -291,14 +317,14 @@ jv{
         naq{"Nama"}
         nb{"Bokmål Norwegia"}
         nd{"Ndebele Lor"}
-        nds{"Jerman Non Standar"}
+        nds{"Jerman Dataran Cendhek"}
         ne{"Nepal"}
         new{"Newari"}
         ng{"Ndonga"}
         nia{"Nias"}
         niu{"Niuean"}
         nl{"Walanda"}
-        nl_BE{"Flemis"}
+        nl_BE{"Flemish"}
         nmg{"Kwasio"}
         nn{"Nynorsk Norwegia"}
         nnh{"Ngiemboon"}
@@ -311,7 +337,7 @@ jv{
         nv{"Navajo"}
         ny{"Nyanja"}
         nyn{"Nyankole"}
-        oc{"Ossitan"}
+        oc{"Oksitan"}
         ojb{"Ojibwa Kulon Segara"}
         ojc{"Ojibwa Tengah"}
         ojs{"Oji-Kree"}
@@ -328,12 +354,13 @@ jv{
         pcm{"Nigeria Pidgin"}
         pis{"Pijin"}
         pl{"Polandia"}
+        pms{"Piemonte"}
         pqm{"Maliseet-Passamakuoddi"}
         prg{"Prusia"}
         ps{"Pashto"}
         pt{"Portugis"}
         pt_BR{"Portugis Brasil"}
-        pt_PT{"Portugis Portugal"}
+        pt_PT{"Portugis Eropa"}
         qu{"Quechua"}
         raj{"Rajasthani"}
         rap{"Rapanui"}
@@ -385,7 +412,7 @@ jv{
         sv{"Swedia"}
         sw{"Swahili"}
         swb{"Komorian"}
-        syr{"Siriak"}
+        syr{"Suryani"}
         szl{"Silesia"}
         ta{"Tamil"}
         tce{"Tutkhone Sisih Kidul"}
@@ -415,7 +442,7 @@ jv{
         tvl{"Tupalu"}
         twq{"Tasawaq"}
         ty{"Tahiti"}
-        tyv{"Tupinian"}
+        tyv{"Tuva"}
         tzm{"Tamazight Atlas Tengah"}
         udm{"Udmurt"}
         ug{"Uighur"}
@@ -451,7 +478,6 @@ jv{
         zgh{"Tamazight Moroko Standar"}
         zh{"Tyonghwa"}
         zh_Hans{"Tyonghwa (Ringkes)"}
-        zh_Hant{"Tyonghwa (Tradisional)"}
         zu{"Zulu"}
         zun{"Zuni"}
         zxx{"Konten tanpa linguistik"}
@@ -465,7 +491,7 @@ jv{
     }
     Languages%long{
         zh_Hans{"Tyonghwa Mandarin (Ringkes)"}
-        zh_Hant{"Tyonghwa Mandarin (Tradisional)"}
+        zh_Hant{"Tyonghwa Mandarin Tradhisional"}
     }
     Languages%menu{
         yue{"Tyonghwa, Kanton"}
@@ -475,20 +501,23 @@ jv{
         en_GB{"Inggris (Britania)"}
         en_US{"Inggris (AS)"}
     }
+    Languages%variant{
+        hi_Latn{"Inggris India"}
+    }
     Scripts{
         Adlm{"Adlam"}
-        Arab{"hija’iyah"}
-        Aran{"Nastalik"}
+        Arab{"Hijaiyah"}
+        Aran{"Nastaliq"}
         Armn{"Armenia"}
         Beng{"Bangla"}
         Bopo{"Bopomofo"}
         Brai{"Braille"}
         Cakm{"Chakma"}
-        Cans{"Wanda Manunggal Aborigin Kanada"}
-        Cher{"Sherokee"}
-        Cyrl{"Sirilik"}
+        Cans{"Aksara Suku Aborigin Kanada Terpadu"}
+        Cher{"Cherokee"}
+        Cyrl{"Kiril"}
         Deva{"Devanagari"}
-        Ethi{"Ethiopik"}
+        Ethi{"Ge’ez"}
         Geor{"Georgia"}
         Grek{"Yunani"}
         Gujr{"Gujarati"}
@@ -500,7 +529,7 @@ jv{
         Hant{"Tradhisional"}
         Hebr{"Ibrani"}
         Hira{"Hiragana"}
-        Hrkt{"Silabaris Jepang"}
+        Hrkt{"Aksara Silabis Jepang"}
         Jpan{"Jepang"}
         Kana{"Katakana"}
         Khmr{"Khmer"}
@@ -518,10 +547,10 @@ jv{
         Rohg{"Hanifi"}
         Sinh{"Sinhala"}
         Sund{"Sunda"}
-        Syrc{"Siriak"}
+        Syrc{"Suryani"}
         Taml{"Tamil"}
         Telu{"Telugu"}
-        Tfng{"Tifinak"}
+        Tfng{"Tifinagh"}
         Thaa{"Thaana"}
         Thai{"Thailand"}
         Tibt{"Tibet"}
@@ -566,10 +595,13 @@ jv{
             ethiopic-amete-alem{"Etiopia Amete Alem"}
             gregorian{"Gregorian"}
             hebrew{"Ibrani"}
+            indian{"Nasional India"}
             islamic{"Hijriah"}
             islamic-civil{"Hijriah (tabel, jaman sipil)"}
+            islamic-rgsa{"Hijriah, rukyat Arab Saudi"}
             islamic-tbla{"Hijriah (tabel, jaman astronomis)"}
             islamic-umalqura{"Hijriah (Ummul Qura)"}
+            iso8601{"Masehi"}
             japanese{"Jepang"}
             persian{"Persia"}
             roc{"Minguo"}
@@ -582,15 +614,50 @@ jv{
             account{"Akuntansi"}
             standard{"Standar"}
         }
+        colCaseFirst%core{
+            lower{"Aksara Cilik"}
+            no{"Aksara Cilik"}
+            upper{"Aksara Gedhe"}
+        }
+        colReorder%core{
+            currency{"Mata Uang"}
+            digit{"Digit"}
+            punct{"Tandha Wacan"}
+            space{"Spasi Kosong"}
+            symbol{"Simbol"}
+        }
+        colStrength%core{
+            identical{"Kabeh"}
+            primary{"Mung Aksara Dhasar"}
+            quaternary{"Dhasar, Aksen, Aksara Kapital, Varian, Kana"}
+            secondary{"Dhasar, Aksen"}
+            tertiary{"Dhasar, Aksen, Aksara Kapital, Varian"}
+        }
         collation{
             ducet{"Urutan Pamilahan Unicode Default"}
             search{"Panlusuran Tujuan Umum"}
-            standard{"Standar Ngurutke Urutan"}
+            standard{"Urutan Ngurutake Standar"}
         }
         collation%core{
+            compat{"Kompatibilitas"}
+            dictionary{"Bausastra"}
             ducet{"Unicode Default"}
+            emoji{"Emoji"}
+            eor{"Aturan Eropa"}
+            phonebook{"Buku tilpun"}
+            phonetic{"Fonetik"}
+            pinyin{"Pinyin"}
             search{"Panlusuran"}
+            searchjl{"Konsonan wiwitan Korea"}
             standard{"Standar"}
+            stroke{"Corekan"}
+            traditional{"Tradisional"}
+            unihan{"Corekan-Radikal"}
+            zhuyin{"Zhuyin"}
+        }
+        d0{
+            fwidth{"Dadi Jembar Kebak"}
+            hwidth{"Dadi Jembar Separo"}
         }
         em%core{
             default{"Gawan"}
@@ -598,21 +665,31 @@ jv{
             text{"Teks"}
         }
         hc{
+            c12{"Sistem 12 Jam"}
+            c24{"Sistem 24 Jam"}
             h11{"Sistem 12 Jam (0–11)"}
             h12{"Sistem 12 Jam (1–12)"}
             h23{"Sistem 24 Jam (0–23)"}
             h24{"Sistem 24 Jam (1–24)"}
         }
         hc%core{
+            c12{"12"}
+            c24{"24"}
             h11{"12 (0–11)"}
             h12{"12 (1–12)"}
             h23{"24 (0–23)"}
             h24{"24 (1–24)"}
         }
+        kv%core{
+            currency{"Geseran spasi, tandha waca, kabeh simbol"}
+            punct{"Geseran spasi, tandha waca"}
+            space{"Geseran spasi, tandha waca"}
+            symbol{"Geseran spasi, tandha waca, simbol non-mata uang"}
+        }
         lb{
             loose{"Gaya Ganti Baris Longgar"}
             normal{"Gaya Ganti Baris Normal"}
-            strict{"Gaya Ganti Baris Strik"}
+            strict{"Gaya Ganti Baris Ketat"}
         }
         lb%core{
             loose{"Longgar"}
@@ -625,6 +702,10 @@ jv{
             normal{"Normal"}
             phrase{"Pertahanake frasa"}
         }
+        m0{
+            bgn{"Transliterasi BGN AS"}
+            ungegn{"Transliterasi GEGN AS"}
+        }
         ms{
             metric{"Sistem Metrik"}
             uksystem{"Sistem Pangukuran Imperial"}
@@ -636,36 +717,37 @@ jv{
             ussystem{"AS"}
         }
         numbers{
-            arab{"Digit Hindu-Arab"}
-            arabext{"Digit Hindu-Arab Diambakake"}
+            arab{"Angka Arab-India"}
+            arabext{"Angka Arab-India sing Luwih Dawa"}
             armn{"Angka Armenia"}
             armnlow{"Angka Huruf Cilik Armenia"}
-            beng{"Digit Bengali"}
-            cakm{"Digit Chakma"}
-            deva{"Digit Devanagari"}
+            beng{"Angka Bengali"}
+            cakm{"Angka Chakma"}
+            deva{"Angka Devanagari"}
             ethi{"Angka Etiopia"}
-            fullwide{"Digit Amba Kebak"}
+            fullwide{"Angka Amba Kebak"}
             geor{"Angka Georgian"}
             grek{"Angka Yunani"}
             greklow{"Angka Huruf Cilik Yunani"}
-            gujr{"Digit Gujarat"}
-            guru{"Digit Gurmukhi"}
-            hanidec{"Angka Desimal Mandarin"}
-            hans{"Angka Mandarin Ringkes"}
-            hansfin{"Angka Finansial Mandarin Ringkes"}
-            hant{"Angka Mandarin Tradisional"}
-            hantfin{"Angka Finansial Mandarin Tradisional"}
+            gujr{"Angka Gujarat"}
+            guru{"Angka Gurmukhi"}
+            hanidec{"Angka Desimal Tyonghwa"}
+            hans{"Angka Tyonghwa Prasaja"}
+            hansfin{"Angka Finansial Tyonghwa Prasaja"}
+            hant{"Angka Tyonghwa Tradhisional"}
+            hantfin{"Angka Finansial Tyonghwa Tradhisional"}
             hebr{"Angka Ibrani"}
-            java{"Digit Jawa"}
+            java{"Angka Jawa"}
             jpan{"Angka Jepang"}
             jpanfin{"Angka Finansial Jepang"}
-            khmr{"Digit Khmer"}
-            knda{"Digit Kannada"}
-            laoo{"Digit Lao"}
-            latn{"Digit Latin"}
+            khmr{"Angka Khmer"}
+            knda{"Angka Kannada"}
+            laoo{"Angka Lao"}
+            latn{"Angka Arab Kulon"}
             mlym{"Digit Malayalam"}
             mtei{"Digit Meetei Mayek"}
             mymr{"Digit Myanmar"}
+            native{"Digit Asli"}
             olck{"Digit Ol Chiki"}
             orya{"Digit Odia"}
             roman{"Angka Romawi"}
@@ -677,9 +759,48 @@ jv{
             tibt{"Digit Tibet"}
             vaii{"Digit Vai"}
         }
+        numbers%core{
+            arabext{"Basa Arab-India sing Dijembarake"}
+            armnlow{"Aksara cilik Armenia"}
+            finance{"Finansial"}
+            fullwide{"Amba kebak"}
+            greklow{"Aksara cilik Yunani"}
+            hanidays{"Penomeran dina-ing-sasi karakter Han kanggo tanggalan tradisional"}
+            hanidec{
+                "Sistem desimal posisional sing nggunakake ideograf angka Tyonghwa mi"
+                "nangka digit"
+            }
+            hansfin{"Finansial Tyonghwa Prasaja"}
+            hantfin{"Finansial Tyonghwa Prasaja"}
+            jpanfin{"Finansial Jepang"}
+            jpanyear{"Penomeran Gannen taun pisanan Jepang"}
+            lanatham{"Tai Tham Tham (gerejawi)"}
+            mathbold{"Kandel matematika"}
+            mathdbl{"Matematika papan tulis kandel"}
+            mathmono{"Matematika monospace"}
+            mathsanb{"Matematika sans-serif kandel"}
+            mathsans{"Matematika sans-serif"}
+            mymrepka{"Pwo Karen Timur Myanmar"}
+            mymrpao{"Pao Myanmar"}
+            mymrshan{"Shan Myanmar"}
+            mymrtlng{"Tai Laing Myanmar"}
+            native{"Digit asli"}
+            outlined{"Digaris pinggir"}
+            roman{"Romawi huruf gedhe"}
+            romanlow{"Romawi huruf cilik"}
+            segment{"Disegmentasi"}
+            tamldec{"Tamil Modern"}
+            traditional{"Angka Tradisional"}
+        }
         ss%core{
             none{"Mati"}
             standard{"Urip"}
+        }
+        t0{
+            und{"Jarwan Mesin sing Ora Spesifik"}
+        }
+        va%core{
+            posix{"Varian POSIX"}
         }
     }
     characterLabelPattern{

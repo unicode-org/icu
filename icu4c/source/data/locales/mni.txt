@@ -98,6 +98,8 @@ mni{
                 yMMM{"MMM y"}
                 yMMMEd{"MMM d, y, E"}
                 yMMMM{"MMMM y"}
+                yMMMMEd{"MMMM d, y, EEE"}
+                yMMMMd{"MMMM d, y"}
                 yMMMd{"MMM d, y"}
                 yMd{"d/M/y"}
             }

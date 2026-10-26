@@ -637,7 +637,7 @@ zu{
         }
         XCG{
             "Cg.",
-            "Caribbean guilder",
+            "i-Caribbean guilder",
         }
         XOF{
             "F CFA",
@@ -669,7 +669,7 @@ zu{
         }
         ZWG{
             "ZWG",
-            "Zimbabwean Gold",
+            "igolide laseZimbabwe",
         }
     }
     Currencies%narrow{
@@ -683,10 +683,6 @@ zu{
         TWD{"NT$"}
     }
     CurrencyPlurals{
-        CNH{
-            one{"i-Chinese yuan (offshore)"}
-            other{"i-CNH"}
-        }
         CUP{
             one{"i-Cuban pesos"}
             other{"i-Cuban pesos"}
@@ -716,7 +712,7 @@ zu{
             other{"i-Romanian lei"}
         }
         TTD{
-            one{"i-Trinidad and Tobago dollar"}
+            one{"i-Trinidad & Tobago dollar"}
             other{"i-Trinidad & Tobago dollars"}
         }
         XAF{
@@ -724,16 +720,16 @@ zu{
             other{"i-CFA Franc BCEA"}
         }
         XCG{
-            one{"Caribbean guilder"}
-            other{"Caribbean guilders"}
+            one{"I-Caribbean guilder"}
+            other{"ama-Caribbean guilders"}
         }
         XOF{
             one{"i-West African CFA Franc"}
             other{"i-West African CFA francs"}
         }
         ZWG{
-            one{"Zimbabwean gold"}
-            other{"Zimbabwean gold"}
+            one{"igolide laseZimbabwe"}
+            other{"igolide laseZimbabwe"}
         }
     }
 }

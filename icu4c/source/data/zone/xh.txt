@@ -24,14 +24,13 @@ xh{
         "Etc:Unknown"{
             ec{"Indawo Engaziwayo"}
         }
-        "Europe:Dublin"{
-            ld{"Irish Standard Time"}
-        }
-        "Europe:London"{
-            ld{"British Summer Time"}
-        }
         "Pacific:Enderbury"{
             ec{"ICanton Island"}
+        }
+        "meta:Acre"{
+            ld{"Acre Summer Time"}
+            lg{"Acre Time"}
+            ls{"Acre Standard Time"}
         }
         "meta:Afghanistan"{
             ls{"Afghanistan Time"}
@@ -154,6 +153,10 @@ xh{
             lg{"Brasilia Time"}
             ls{"Brasilia Standard Time"}
         }
+        "meta:British"{
+            ld{"British Summer Time"}
+            lg{"Ixesha laseBritane"}
+        }
         "meta:Brunei"{
             ls{"Brunei Darussalam Time"}
         }
@@ -269,6 +272,11 @@ xh{
         "meta:Gilbert_Islands"{
             ls{"Gilbert Islands Time"}
         }
+        "meta:Greenland"{
+            ld{"Greenland Summer Time"}
+            lg{"Greenland Time"}
+            ls{"Greenland Standard Time"}
+        }
         "meta:Greenland_Eastern"{
             ld{"East Greenland Summer Time"}
             lg{"East Greenland Time"}
@@ -291,7 +299,7 @@ xh{
         "meta:Hawaii_Aleutian"{
             ld{"Hawaii-Aleutian Daylight Time"}
             lg{"Hawaii-Aleutian Time"}
-            ls{"Hawaii-Aleutian Standard Time"}
+            ls{"I-Hawaii-Aleutian Standard Time"}
         }
         "meta:Hong_Kong"{
             ld{"Hong Kong Summer Time"}
@@ -326,6 +334,10 @@ xh{
             lg{"Iran Time"}
             ls{"Iran Standard Time"}
         }
+        "meta:Irish"{
+            ld{"Irish Standard Time"}
+            lg{"Ixesha lase-Ireland"}
+        }
         "meta:Irkutsk"{
             ld{"Irkutsk Summer Time"}
             lg{"Irkutsk Time"}
@@ -340,6 +352,11 @@ xh{
             ld{"Japan Daylight Time"}
             lg{"Japan Time"}
             ls{"Japan Standard Time"}
+        }
+        "meta:Kamchatka"{
+            ld{"Kamchatka Summer Time"}
+            lg{"Kamchatka Time"}
+            ls{"Kamchatka Standard Time"}
         }
         "meta:Kazakhstan"{
             ls{"Kazakhstan Time"}
@@ -515,9 +532,12 @@ xh{
             lg{"Sakhalin Time"}
             ls{"Sakhalin Standard Time"}
         }
+        "meta:Samara"{
+            ld{"Samara Summer Time"}
+            lg{"Samara Time"}
+            ls{"Samara Standard Time"}
+        }
         "meta:Samoa"{
-            ld{"Samoa Daylight Time"}
-            lg{"Samoa Time"}
             ls{"Samoa Standard Time"}
         }
         "meta:Seychelles"{
@@ -560,6 +580,11 @@ xh{
         "meta:Truk"{
             ls{"Chuuk Time"}
         }
+        "meta:Turkey"{
+            ld{"Türkiye Summer Time"}
+            lg{"Türkiye Time"}
+            ls{"Türkiye Standard Time"}
+        }
         "meta:Turkmenistan"{
             ld{"Turkmenistan Summer Time"}
             lg{"Turkmenistan Time"}
@@ -572,6 +597,9 @@ xh{
             ld{"Uruguay Summer Time"}
             lg{"Uruguay Time"}
             ls{"Uruguay Standard Time"}
+        }
+        "meta:Urumqi"{
+            ls{"Ürümqi Time"}
         }
         "meta:Uzbekistan"{
             ld{"Uzbekistan Summer Time"}

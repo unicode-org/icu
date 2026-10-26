@@ -1253,10 +1253,6 @@ ceb{
             one{"East Caribbean dollar"}
             other{"East Caribbean dollars"}
         }
-        XCG{
-            one{"Carribean guilder"}
-            other{"Carribean guilder"}
-        }
         XOF{
             one{"West African CFA franc"}
             other{"West African CFA francs"}
@@ -1281,13 +1277,9 @@ ceb{
             one{"Zambian kwacha"}
             other{"Zambian kwachas"}
         }
-        ZWG{
-            one{"Zimbabwean Gold"}
-            other{"Zimbabwean Gold"}
-        }
     }
     CurrencyUnitPatterns{
         one{"{0} {1}"}
-        other{"{1} {0}"}
+        other{"{0} {1}"}
     }
 }

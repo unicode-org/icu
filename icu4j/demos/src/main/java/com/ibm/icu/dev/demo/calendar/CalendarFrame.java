@@ -339,10 +339,6 @@ class CalendarFrame extends Frame {
         /** For serialization */
         private static final long serialVersionUID = 5004484960341875722L;
 
-        public ColoredLabel(String label) {
-            text = label;
-        }
-
         public ColoredLabel(String label, Color c) {
             text = label;
             color = c;
@@ -395,7 +391,7 @@ class CalendarFrame extends Frame {
         }
     }
 
-    class CalendarRec {
+    static class CalendarRec {
         public CalendarRec(String nameStr, Calendar cal) {
             name = nameStr;
             calendar = cal;

@@ -470,7 +470,8 @@ void UObjectTest::testIDs()
     TESTCLASSID_CTOR(UnicodeSet, (0, 1));
     TESTCLASSID_ABSTRACT(UnicodeFilter);
     TESTCLASSID_ABSTRACT(UnicodeFunctor);
-    TESTCLASSID_CTOR(UnicodeSetIterator,(UnicodeSet(0,1)));
+    UnicodeSet dummy(0, 1);
+    TESTCLASSID_CTOR(UnicodeSetIterator, (dummy));
     TESTCLASSID_CTOR(UStack, (status));
     TESTCLASSID_CTOR(UVector, (status));
     TESTCLASSID_CTOR(UVector32, (status));

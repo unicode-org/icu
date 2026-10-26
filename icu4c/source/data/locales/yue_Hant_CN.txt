@@ -4,6 +4,18 @@
 yue_Hant_CN{
     calendar{
         gregorian{
+            AmPmMarkers{
+                "上午",
+                "下午",
+            }
+            AmPmMarkersAbbr{
+                "上午",
+                "下午",
+            }
+            AmPmMarkersNarrow{
+                "上午",
+                "下午",
+            }
             DateTimePatterns{
                 "HH:mm:ss [zzzz]",
                 "HH:mm:ss [z]",
@@ -17,7 +29,7 @@ yue_Hant_CN{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
-                "{1} {0}",
+                "{1} {0}",
             }
             DateTimeSkeletons{
                 "HHmmsszzzz",
@@ -28,6 +40,18 @@ yue_Hant_CN{
                 "yMMMd",
                 "yMMMd",
                 "yMd",
+            }
+            dayPeriod{
+                stand-alone{
+                    abbreviated{
+                        am{"上午"}
+                        pm{"下午"}
+                    }
+                    narrow{
+                        am{"上午"}
+                        pm{"下午"}
+                    }
+                }
             }
         }
     }

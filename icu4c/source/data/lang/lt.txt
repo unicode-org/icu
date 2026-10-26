@@ -11,19 +11,35 @@ lt{
         colCaseLevel{"Rikiavimas skiriant didžiąsias ir mažąsias raides"}
         colNormalization{"Normalizuotas rikiavimas"}
         colNumeric{"Skaitinis rikiavimas"}
+        colReorder{"Scenarijaus / bloko pertvarkymas"}
         colStrength{"Rikiavimo intensyvumas"}
         collation{"rikiavimas"}
         currency{"valiuta"}
+        d0{"keisti paskirties vietą"}
+        dx{"žodyno skilimo išimtys"}
         em{"Jaustukų pateiktis"}
+        fw{"Pirma savaitės diena"}
+        h0{"sumaišytas"}
         hc{"valandų ciklas (12 ir 24)"}
+        i0{"įvesties metodas"}
+        k0{"klaviatūra"}
+        kv{"labiausiai ignoruojami"}
         lb{"teksto laužymo stilius"}
         lw{"Eilučių laužymas"}
+        m0{"Transformacijos taisyklės"}
         ms{"matų sistema"}
+        mu{"Matavimo vienetas"}
         numbers{"skaičiai"}
+        rg{"papildomų duomenų regionas"}
+        s0{"transformacijos šaltinis"}
+        sd{"regiono padalinys"}
         ss{"tarpas po trumpinio"}
+        t{"transformuoti"}
+        t0{"mašininio vertimo"}
         timezone{"Laiko juosta"}
         va{"Lokalės variantas"}
         x{"Naudoti privačiai"}
+        x0{"Privataus naudojimo transformacija"}
     }
     Languages{
         aa{"afarų"}
@@ -690,6 +706,9 @@ lt{
         en_GB{"anglų (JK)"}
         en_US{"anglų (JAV)"}
     }
+    Languages%variant{
+        hi_Latn{"hindi anglų"}
+    }
     Scripts{
         Adlm{"ADLAM"}
         Afak{"Afaka"}
@@ -898,9 +917,13 @@ lt{
             ethiopic-amete-alem{"Etiopijos „Amete Alem“"}
             gregorian{"Grigaliaus"}
             hebrew{"hebrajų"}
+            indian{"indų (nacionalinis)"}
             islamic{"Islamo"}
             islamic-civil{"musulmonų (lentelinis, pilietinė era)"}
+            islamic-rgsa{"musulmonų (Saudo Arabijos)"}
+            islamic-tbla{"musulmonų (lentelinis, astronominė era)"}
             islamic-umalqura{"musulmonų (Umm al-Qura)"}
+            iso8601{"Grigaliaus"}
             japanese{"japonų"}
             persian{"persų"}
             roc{"Kinijos Respublikos"}
@@ -926,6 +949,11 @@ lt{
             no{"Rikiuoti įprasta didžiųjų ir mažųjų raidžių tvarka"}
             upper{"Rikiuoti suteikiant pirmumą didžiosioms raidėms"}
         }
+        colCaseFirst%core{
+            lower{"Mažosios raidės"}
+            no{"Mažosios raidės"}
+            upper{"Didžiosios raidės"}
+        }
         colCaseLevel{
             no{"Rikiuoti neskiriant didžiųjų ir mažųjų raidžių"}
             yes{"Rikiuoti skiriant didžiąsias ir mažąsias raides"}
@@ -937,6 +965,13 @@ lt{
         colNumeric{
             no{"Rikiuoti skaitmenis atskirai"}
             yes{"Rikiuoti skaitmenis pagal skaičius"}
+        }
+        colReorder%core{
+            currency{"Valiuta"}
+            digit{"Skaitmenys"}
+            punct{"Skyryba"}
+            space{"Tarpai"}
+            symbol{"Simboliai"}
         }
         colStrength{
             identical{"Rikiuoti viską"}
@@ -950,6 +985,13 @@ lt{
                 "Rikiuoti pagal diakritinius ženklus / didžiąsias ir mažąsias raides "
                 "/ plotį"
             }
+        }
+        colStrength%core{
+            identical{"Viskas"}
+            primary{"Tik pagrindinės raidės"}
+            quaternary{"Bazė, akcentai, atvejis, variantai, Kana"}
+            secondary{"Bazė, akcentai"}
+            tertiary{"Bazė, akcentai, atvejis, variantai"}
         }
         collation{
             compat{"ankstesnė rūšiavimo tvarka, skirta suderinamumui"}
@@ -967,9 +1009,21 @@ lt{
             zhuyin{"Zhuyin rikiavimo tvarka"}
         }
         collation%core{
+            compat{"suderinamumas"}
+            dictionary{"žodynas"}
             ducet{"numatytasis unikodo"}
+            emoji{"jausmaženklis"}
+            eor{"europietiškos taisyklės"}
+            phonebook{"telefono knyga"}
+            phonetic{"fonetinis"}
+            pinyin{"pinjinas"}
             search{"paieška"}
+            searchjl{"korėjiečių pradinis priebalsis"}
             standard{"standartinis"}
+            stroke{"rikiavimas pagal brūkšnius"}
+            traditional{"tradicinis"}
+            unihan{"raktai ir brūkšniai"}
+            zhuyin{"džujinas"}
         }
         d0{
             fwidth{"viso pločio"}
@@ -982,16 +1036,26 @@ lt{
             text{"tekstas"}
         }
         hc{
+            c12{"12 valandų sistema"}
+            c24{"24 valandų sistema"}
             h11{"12 valandų sistema (0–11)"}
             h12{"12 valandų sistema (1–12)"}
             h23{"24 valandų sistema (0–23)"}
             h24{"24 valandų sistema (1–24)"}
         }
         hc%core{
+            c12{"12"}
+            c24{"24"}
             h11{"12 (0–11)"}
             h12{"12 (1–12)"}
             h23{"24 (0–23)"}
             h24{"24 (1–24)"}
+        }
+        kv%core{
+            currency{"SHIFT tarpai, skyryba, visi simboliai"}
+            punct{"SHIFT tarpai, skyryba"}
+            space{"SHIFT tarpai, skyryba"}
+            symbol{"SHIFT tarpai, skyryba, ne valiutos simboliai"}
         }
         lb{
             loose{"laisvas teksto laužymo stilius"}
@@ -1086,9 +1150,48 @@ lt{
             traditional{"Tradiciniai skaičiai"}
             vaii{"vai skaitmenys"}
         }
+        numbers%core{
+            arabext{"išplėstiniai arabų-indų"}
+            armnlow{"armėnų mažosiomis raidėmis"}
+            finance{"finansiniai"}
+            fullwide{"viso pločio"}
+            greklow{"graikų mažosiomis raidėmis"}
+            hanidays{"Han simbolių mėnesio dienų numeracija tradiciniuose kalendoriuose"}
+            hanidec{
+                "Pozicinė dešimtainė sistema, naudojanti kinų skaičių ideografus kaip"
+                " skaitmenis"
+            }
+            hansfin{"supaprastintos kinų k. finansiniai"}
+            hantfin{"tradicinės kinų k. finansiniai"}
+            jpanfin{"japonų finansiniai"}
+            jpanyear{"japonų pirmųjų eros metų numeracija"}
+            lanatham{"Tai Tham Tham (bažnytinis)"}
+            mathbold{"matematiniai pajuodinti"}
+            mathdbl{"matematiniai su dvigubu brūkšniu"}
+            mathmono{"matematiniai vienodo pločio"}
+            mathsanb{"matematiniai pajuodinti be užraitų"}
+            mathsans{"matematiniai be užraitų"}
+            mymrepka{"mianmariečių rytų Pwo Karen"}
+            mymrpao{"mianmariečių Pao"}
+            mymrshan{"mianmariečių Shan"}
+            mymrtlng{"mianmariečių Tai Laing"}
+            native{"vietiniai skaitmenys"}
+            outlined{"už kontūro"}
+            roman{"romėniški didžiosiomis raidėmis"}
+            romanlow{"romėniški mažosiomis raidėmis"}
+            segment{"segmentuoti"}
+            tamldec{"šiuolaikinės tamilų"}
+            traditional{"tradiciniai skaitmenys"}
+        }
         ss%core{
             none{"išjungta"}
             standard{"įjungta"}
+        }
+        t0{
+            und{"nenurodytas mašininis vertimas"}
+        }
+        va%core{
+            posix{"POSIX variantas"}
         }
     }
     Variants{

@@ -27,7 +27,6 @@ hu{
                 atLeast{"{0}+"}
             }
             patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
                 currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
             }
@@ -357,7 +356,7 @@ hu{
                 Ehms{"E h:mm:ss"}
                 Gy{"G y."}
                 GyM{"G y. M."}
-                GyMEd{"E, M/d/y G"}
+                GyMEd{"G y. M. d., E"}
                 GyMMM{"G y. MMM"}
                 GyMMMEd{"G y. MMM d., E"}
                 GyMMMd{"G y. MMM d."}
@@ -365,6 +364,7 @@ hu{
                 H{"H"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
+                Hv{"H v"}
                 MEd{"M. d., E"}
                 MMMEd{"MMM d., E"}
                 MMMMd{"MMMM d."}
@@ -417,6 +417,10 @@ hu{
                 MMMEd{
                     M{"MMM d., E – MMM d., E"}
                     d{"MMM d., E – d., E"}
+                }
+                MMMMd{
+                    M{"MMMM d. – MMMM d."}
+                    d{"MMMM d–d."}
                 }
                 MMMd{
                     M{"MMM d. – MMM d."}
@@ -514,6 +518,10 @@ hu{
                 "yMMMd",
                 "yMMdd",
             }
+            appendItems{
+                Day-Of-Week{"{0}, {1}"}
+                Time-Day-Of-Week{"{1}, {0}"}
+            }
             availableFormats{
                 Bh{"B h"}
                 Bhm{"B h:mm"}
@@ -530,13 +538,18 @@ hu{
                 GyMEd{"G y. MM. dd., E"}
                 GyMMM{"G y. MMM"}
                 GyMMMEd{"G y. MMM d., E"}
+                GyMMMM{"G y. MMMM"}
+                GyMMMMEd{"G y. MMMM d., E"}
+                GyMMMMd{"G y. MMMM d."}
                 GyMMMd{"G y. MMM d."}
                 GyMd{"GGGGG y. MM. dd."}
                 H{"H"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
+                Hv{"H v"}
                 MEd{"M. d., E"}
                 MMMEd{"MMM d., E"}
+                MMMMEd{"MMMM d., E"}
                 MMMMW{
                     one{"MMMM W. 'hete'"}
                     other{"MMMM W. 'hete'"}
@@ -557,6 +570,8 @@ hu{
                 yMMM{"y. MMM"}
                 yMMMEd{"y. MMM d., E"}
                 yMMMM{"y. MMMM"}
+                yMMMMEd{"y. MMMM d., E"}
+                yMMMMd{"y. MMMM d."}
                 yMMMd{"y. MMM d."}
                 yMd{"y. MM. dd."}
                 yQQQ{"y. QQQ"}
@@ -701,6 +716,10 @@ hu{
                 MMMEd{
                     M{"MMM d., E – MMM d., E"}
                     d{"MMM d., E – d., E"}
+                }
+                MMMMd{
+                    M{"MMMM d. – MMMM d."}
+                    d{"MMMM d–d."}
                 }
                 MMMd{
                     M{"MMM d. – MMM d."}

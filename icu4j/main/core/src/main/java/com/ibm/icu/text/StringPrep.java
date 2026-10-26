@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.nio.ByteBuffer;
+import java.util.concurrent.atomic.AtomicReferenceArray;
 
 /**
  * StringPrep API implements the StingPrep framework as described by <a
@@ -203,9 +204,8 @@ public final class StringPrep {
         "rfc4518ci", /* RFC4518_LDAP_CI */
     };
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    private static final WeakReference<StringPrep>[] CACHE =
-            (WeakReference<StringPrep>[]) new WeakReference[MAX_PROFILE + 1];
+    private static final AtomicReferenceArray<WeakReference<StringPrep>> CACHE =
+            new AtomicReferenceArray<>(MAX_PROFILE + 1);
 
     private static final int UNASSIGNED = 0x0000;
     private static final int MAP = 0x0001;
@@ -333,27 +333,26 @@ public final class StringPrep {
             throw new IllegalArgumentException("Bad profile type");
         }
 
-        StringPrep instance = null;
-
         // A StringPrep instance is immutable.  We use a single instance
         // per type and store it in the internal cache.
-        synchronized (CACHE) {
-            WeakReference<StringPrep> ref = CACHE[profile];
-            if (ref != null) {
-                instance = ref.get();
-            }
-
-            if (instance == null) {
-                ByteBuffer bytes = ICUBinary.getRequiredData(PROFILE_NAMES[profile] + ".spp");
-                if (bytes != null) {
-                    try {
-                        instance = new StringPrep(bytes);
-                    } catch (IOException e) {
-                        throw new ICUUncheckedIOException(e);
+        WeakReference<StringPrep> ref = CACHE.get(profile);
+        StringPrep instance = (ref != null) ? ref.get() : null;
+        if (instance == null) {
+            synchronized (CACHE) {
+                ref = CACHE.get(profile);
+                instance = (ref != null) ? ref.get() : null;
+                if (instance == null) {
+                    ByteBuffer bytes = ICUBinary.getRequiredData(PROFILE_NAMES[profile] + ".spp");
+                    if (bytes != null) {
+                        try {
+                            instance = new StringPrep(bytes);
+                        } catch (IOException e) {
+                            throw new ICUUncheckedIOException(e);
+                        }
                     }
-                }
-                if (instance != null) {
-                    CACHE[profile] = new WeakReference<StringPrep>(instance);
+                    if (instance != null) {
+                        CACHE.set(profile, new WeakReference<>(instance));
+                    }
                 }
             }
         }

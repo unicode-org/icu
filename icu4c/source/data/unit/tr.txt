@@ -173,7 +173,6 @@ tr{
                 other{"{0} glikoz"}
             }
             part-per-1e6{
-                dnam{"parça/milyon"}
                 one{"{0} parça/milyon"}
                 other{"{0} parça/milyon"}
             }
@@ -971,9 +970,6 @@ tr{
                 one{"{0} mmol/L"}
                 other{"{0} mmol/L"}
             }
-            ofglucose{
-                dnam{"Glc"}
-            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1029,9 +1025,6 @@ tr{
             }
         }
         energy{
-            calorie-it{
-                dnam{"cal-IT"}
-            }
             electronvolt{
                 dnam{"eV"}
             }

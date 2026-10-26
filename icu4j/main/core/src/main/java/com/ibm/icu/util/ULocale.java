@@ -40,7 +40,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -114,7 +113,7 @@ public final class ULocale implements Serializable, Comparable<ULocale>, Cloneab
     // using serialver from jdk1.4.2_05
     private static final long serialVersionUID = 3715177670352309217L;
 
-    private static CacheBase<String, String, Void> nameCache =
+    private static final CacheBase<String, String, Void> nameCache =
             new SoftCache<String, String, Void>() {
                 @Override
                 protected String createInstance(String tmpLocaleID, Void unused) {
@@ -399,7 +398,7 @@ public final class ULocale implements Serializable, Comparable<ULocale>, Cloneab
      * This table lists pairs of locale ids for canonicalization. The 1st item is the normalized id.
      * The 2nd item is the canonicalized id.
      */
-    private static String[][] CANONICALIZE_MAP = {
+    private static final String[][] CANONICALIZE_MAP = {
         {"art__LOJBAN", "jbo"}, /* registered name */
         {"cel__GAULISH", "cel__GAULISH"}, /* registered name */
         {"de__1901", "de__1901"}, /* registered name */
@@ -558,28 +557,46 @@ public final class ULocale implements Serializable, Comparable<ULocale>, Cloneab
     /** Keep our own default ULocale. */
     private static volatile ULocale defaultULocale;
 
-    private static Locale[] defaultCategoryLocales = new Locale[Category.values().length];
-    private static ULocale[] defaultCategoryULocales = new ULocale[Category.values().length];
+    /**
+     * Holds the per-category default Locale and ULocale arrays as a single volatile snapshot. This
+     * avoids the TOCTOU race of reading two separate volatile arrays (one could be swapped between
+     * reads). All writes do copy-on-write: clone arrays, modify, publish new snapshot via volatile
+     * write.
+     */
+    private static final class DefaultCategoryState {
+        final Locale[] locales;
+        final ULocale[] ulocales;
+
+        DefaultCategoryState(Locale[] locales, ULocale[] ulocales) {
+            this.locales = locales;
+            this.ulocales = ulocales;
+        }
+    }
+
+    private static volatile DefaultCategoryState defaultCategoryState;
 
     static {
         Locale defaultLocale = Locale.getDefault();
         defaultULocale = forLocale(defaultLocale);
 
+        Locale[] catLocales = new Locale[Category.values().length];
+        ULocale[] catULocales = new ULocale[Category.values().length];
         if (JDKLocaleHelper.hasLocaleCategories()) {
             for (Category cat : Category.values()) {
                 int idx = cat.ordinal();
-                defaultCategoryLocales[idx] = JDKLocaleHelper.getDefault(cat);
-                defaultCategoryULocales[idx] = forLocale(defaultCategoryLocales[idx]);
+                catLocales[idx] = JDKLocaleHelper.getDefault(cat);
+                catULocales[idx] = forLocale(catLocales[idx]);
             }
         } else {
             // Android API level 21..23 does not have separate category locales,
             // use the non-category default for all.
             for (Category cat : Category.values()) {
                 int idx = cat.ordinal();
-                defaultCategoryLocales[idx] = defaultLocale;
-                defaultCategoryULocales[idx] = defaultULocale;
+                catLocales[idx] = defaultLocale;
+                catULocales[idx] = defaultULocale;
             }
         }
+        defaultCategoryState = new DefaultCategoryState(catLocales, catULocales);
     }
 
     /**
@@ -625,11 +642,14 @@ public final class ULocale implements Serializable, Comparable<ULocale>, Cloneab
                 // Detected Java default Locale change.
                 // We need to update category defaults to match
                 // Java 7's behavior on Android API level 21..23.
+                Locale[] newLocales = new Locale[Category.values().length];
+                ULocale[] newULocales = new ULocale[Category.values().length];
                 for (Category cat : Category.values()) {
                     int idx = cat.ordinal();
-                    defaultCategoryLocales[idx] = currentDefault;
-                    defaultCategoryULocales[idx] = nextULocale;
+                    newLocales[idx] = currentDefault;
+                    newULocales[idx] = nextULocale;
                 }
+                defaultCategoryState = new DefaultCategoryState(newLocales, newULocales);
             }
 
             return defaultULocale = nextULocale;
@@ -670,49 +690,69 @@ public final class ULocale implements Serializable, Comparable<ULocale>, Cloneab
      * @stable ICU 49
      */
     public static ULocale getDefault(Category category) {
-        synchronized (ULocale.class) {
-            int idx = category.ordinal();
-            if (defaultCategoryULocales[idx] == null) {
-                // Just in case this method is called during ULocale class
-                // initialization. Unlike getDefault(), we do not have
-                // cyclic dependency for category default.
-                return ULocale.ROOT;
-            }
-            if (JDKLocaleHelper.hasLocaleCategories()) {
-                Locale currentCategoryDefault = JDKLocaleHelper.getDefault(category);
-                if (!defaultCategoryLocales[idx].equals(currentCategoryDefault)) {
-                    defaultCategoryLocales[idx] = currentCategoryDefault;
-                    defaultCategoryULocales[idx] = forLocale(currentCategoryDefault);
-                }
-            } else {
-                // java.util.Locale.setDefault(Locale) in Java 7 updates
-                // category locale defaults. On Android API level 21..23
-                // ICU4J checks if the default locale has changed and update
-                // category ULocales here if necessary.
-
-                // Note: When java.util.Locale.setDefault(Locale) is called
-                // with a Locale same with the previous one, Java 7 still
-                // updates category locale defaults. On Android API level 21..23
-                // there is no good way to detect the event, ICU4J simply
-                // checks if the default Java Locale has changed since last
-                // time.
-
-                Locale currentDefault = Locale.getDefault();
-                if (!defaultULocale.locale.equals(currentDefault)) {
-                    defaultULocale = forLocale(currentDefault);
-
-                    for (Category cat : Category.values()) {
-                        int tmpIdx = cat.ordinal();
-                        defaultCategoryLocales[tmpIdx] = currentDefault;
-                        defaultCategoryULocales[tmpIdx] = forLocale(currentDefault);
+        int idx = category.ordinal();
+        // Single volatile read: atomic snapshot of both arrays
+        DefaultCategoryState state = defaultCategoryState;
+        if (state == null || state.ulocales[idx] == null) {
+            // Just in case this method is called during ULocale class
+            // initialization. Unlike getDefault(), we do not have
+            // cyclic dependency for category default.
+            return ULocale.ROOT;
+        }
+        if (JDKLocaleHelper.hasLocaleCategories()) {
+            Locale currentCategoryDefault = JDKLocaleHelper.getDefault(category);
+            if (!state.locales[idx].equals(currentCategoryDefault)) {
+                // Rare path: JDK default changed. Take the lock to update.
+                synchronized (ULocale.class) {
+                    state = defaultCategoryState;
+                    if (!state.locales[idx].equals(currentCategoryDefault)) {
+                        Locale[] newLocales = state.locales.clone();
+                        ULocale[] newULocales = state.ulocales.clone();
+                        newLocales[idx] = currentCategoryDefault;
+                        newULocales[idx] = forLocale(currentCategoryDefault);
+                        state = new DefaultCategoryState(newLocales, newULocales);
+                        defaultCategoryState = state;
                     }
                 }
-
-                // No synchronization with JDK Locale, because category default
-                // is not supported in Android API level 21..23.
+                return state.ulocales[idx];
             }
-            return defaultCategoryULocales[idx];
+        } else {
+            // java.util.Locale.setDefault(Locale) in Java 7 updates
+            // category locale defaults. On Android API level 21..23
+            // ICU4J checks if the default locale has changed and update
+            // category ULocales here if necessary.
+
+            // Note: When java.util.Locale.setDefault(Locale) is called
+            // with a Locale same with the previous one, Java 7 still
+            // updates category locale defaults. On Android API level 21..23
+            // there is no good way to detect the event, ICU4J simply
+            // checks if the default Java Locale has changed since last
+            // time.
+
+            Locale currentDefault = Locale.getDefault();
+            if (!defaultULocale.locale.equals(currentDefault)) {
+                synchronized (ULocale.class) {
+                    state = defaultCategoryState;
+                    if (!defaultULocale.locale.equals(currentDefault)) {
+                        defaultULocale = forLocale(currentDefault);
+                        Locale[] newLocales = new Locale[Category.values().length];
+                        ULocale[] newULocales = new ULocale[Category.values().length];
+                        for (Category cat : Category.values()) {
+                            int tmpIdx = cat.ordinal();
+                            newLocales[tmpIdx] = currentDefault;
+                            newULocales[tmpIdx] = forLocale(currentDefault);
+                        }
+                        state = new DefaultCategoryState(newLocales, newULocales);
+                        defaultCategoryState = state;
+                    }
+                }
+                return state.ulocales[idx];
+            }
+
+            // No synchronization with JDK Locale, because category default
+            // is not supported in Android API level 21..23.
         }
+        return state.ulocales[idx];
     }
 
     /**
@@ -730,8 +770,12 @@ public final class ULocale implements Serializable, Comparable<ULocale>, Cloneab
     public static synchronized void setDefault(Category category, ULocale newLocale) {
         Locale newJavaDefault = newLocale.toLocale();
         int idx = category.ordinal();
-        defaultCategoryULocales[idx] = newLocale;
-        defaultCategoryLocales[idx] = newJavaDefault;
+        DefaultCategoryState state = defaultCategoryState;
+        ULocale[] newULocales = state.ulocales.clone();
+        Locale[] newLocales = state.locales.clone();
+        newULocales[idx] = newLocale;
+        newLocales[idx] = newJavaDefault;
+        defaultCategoryState = new DefaultCategoryState(newLocales, newULocales);
         JDKLocaleHelper.setDefault(category, newJavaDefault);
     }
 
@@ -1322,10 +1366,10 @@ public final class ULocale implements Serializable, Comparable<ULocale>, Cloneab
 
         public String replace() {
             boolean changed = false;
-            loadAliasData();
             int count = 0;
+            final int maxCount = 4 + ((variants == null) ? 0 : variants.size());
             while (true) {
-                if (count++ > 10) {
+                if (count++ > maxCount) {
                     // Throw exception when we loop through too many time
                     // stop to avoid infinity loop cauesd by incorrect data
                     // in resource.
@@ -1399,123 +1443,145 @@ public final class ULocale implements Serializable, Comparable<ULocale>, Cloneab
         }
         ;
 
-        private static boolean aliasDataIsLoaded = false;
-        private static Map<String, String> languageAliasMap = null;
-        private static Map<String, String> scriptAliasMap = null;
-        private static Map<String, List<String>> territoryAliasMap = null;
-        private static Map<String, String> variantAliasMap = null;
-        private static Map<String, String> subdivisionAliasMap = null;
-
-        /*
-         * Initializes the alias data from the ICU resource bundles. The alias
-         * data contains alias of language, country, script and variants.
+        /**
+         * Holds all alias replacement maps, loaded once from ICU resource bundles. Uses the Holder
+         * class idiom (JLS 12.4.2) for thread-safe lazy initialization without synchronization on
+         * the read path.
          *
-         * If the alias data has already loaded, then this method simply
-         * returns without doing anything meaningful.
-         *
+         * <p>Note: If the ICU "metadata" resource bundle is missing or corrupt, class
+         * initialization fails permanently (ExceptionInInitializerError).
          */
-        private static synchronized void loadAliasData() {
-            if (aliasDataIsLoaded) {
-                return;
-            }
-            languageAliasMap = new HashMap<>();
-            scriptAliasMap = new HashMap<>();
-            territoryAliasMap = new HashMap<>();
-            variantAliasMap = new HashMap<>();
-            subdivisionAliasMap = new HashMap<>();
+        private static final class AliasDataHolder {
+            static final Map<String, String> languageAliasMap;
+            static final Map<String, String> scriptAliasMap;
+            static final Map<String, List<String>> territoryAliasMap;
+            static final Map<String, String> variantAliasMap;
+            static final Map<String, String> subdivisionAliasMap;
 
-            UResourceBundle metadata =
-                    UResourceBundle.getBundleInstance(
-                            ICUData.ICU_BASE_NAME,
-                            "metadata",
-                            ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-            UResourceBundle metadataAlias = metadata.get("alias");
-            UResourceBundle languageAlias = metadataAlias.get("language");
-            UResourceBundle scriptAlias = metadataAlias.get("script");
-            UResourceBundle territoryAlias = metadataAlias.get("territory");
-            UResourceBundle variantAlias = metadataAlias.get("variant");
-            UResourceBundle subdivisionAlias = metadataAlias.get("subdivision");
+            static {
+                Map<String, String> languageMap = new HashMap<>();
+                Map<String, String> scriptMap = new HashMap<>();
+                Map<String, List<String>> territoryMap = new HashMap<>();
+                Map<String, String> variantMap = new HashMap<>();
+                Map<String, String> subdivisionMap = new HashMap<>();
 
-            for (int i = 0; i < languageAlias.getSize(); i++) {
-                UResourceBundle res = languageAlias.get(i);
-                String aliasFrom = res.getKey();
-                String aliasTo = res.get("replacement").getString();
-                Locale testLocale = new Locale(aliasFrom);
-                // if there are script in the aliasFrom
-                // or we have both a und as language and a region code.
-                if (!testLocale.getScript().isEmpty()
-                        || (aliasFrom.startsWith("und") && !testLocale.getCountry().isEmpty())) {
-                    throw new IllegalArgumentException(
-                            "key ["
-                                    + aliasFrom
-                                    + "] in alias:language contains unsupported fields combination.");
-                }
-                languageAliasMap.put(aliasFrom, aliasTo);
-            }
-            for (int i = 0; i < scriptAlias.getSize(); i++) {
-                UResourceBundle res = scriptAlias.get(i);
-                String aliasFrom = res.getKey();
-                String aliasTo = res.get("replacement").getString();
-                if (aliasFrom.length() != 4) {
-                    throw new IllegalArgumentException(
-                            "Incorrect key [" + aliasFrom + "] in alias:script.");
-                }
-                scriptAliasMap.put(aliasFrom, aliasTo);
-            }
-            for (int i = 0; i < territoryAlias.getSize(); i++) {
-                UResourceBundle res = territoryAlias.get(i);
-                String aliasFrom = res.getKey();
-                String aliasTo = res.get("replacement").getString();
-                if (aliasFrom.length() < 2 || aliasFrom.length() > 3) {
-                    throw new IllegalArgumentException(
-                            "Incorrect key [" + aliasFrom + "] in alias:territory.");
-                }
-                territoryAliasMap.put(
-                        aliasFrom, new ArrayList<>(Arrays.asList(aliasTo.split(" "))));
-            }
-            for (int i = 0; i < variantAlias.getSize(); i++) {
-                UResourceBundle res = variantAlias.get(i);
-                String aliasFrom = res.getKey();
-                String aliasTo = res.get("replacement").getString();
-                if (aliasFrom.length() < 4
-                        || aliasFrom.length() > 8
-                        || (aliasFrom.length() == 4
-                                && (aliasFrom.charAt(0) < '0' || aliasFrom.charAt(0) > '9'))) {
-                    throw new IllegalArgumentException(
-                            "Incorrect key [" + aliasFrom + "] in alias:variant.");
-                }
-                if (aliasTo.length() < 4
-                        || aliasTo.length() > 8
-                        || (aliasTo.length() == 4
-                                && (aliasTo.charAt(0) < '0' || aliasTo.charAt(0) > '9'))) {
-                    throw new IllegalArgumentException(
-                            "Incorrect variant ["
-                                    + aliasTo
-                                    + "] for the key ["
-                                    + aliasFrom
-                                    + "] in alias:variant.");
-                }
-                variantAliasMap.put(aliasFrom, aliasTo);
-            }
-            for (int i = 0; i < subdivisionAlias.getSize(); i++) {
-                UResourceBundle res = subdivisionAlias.get(i);
-                String aliasFrom = res.getKey();
-                String aliasTo = res.get("replacement").getString().split(" ")[0];
-                if (aliasFrom.length() < 3 || aliasFrom.length() > 8) {
-                    throw new IllegalArgumentException(
-                            "Incorrect key [" + aliasFrom + "] in alias:territory.");
-                }
-                if (aliasTo.length() == 2) {
-                    // Add 'zzzz' based on changes to UTS #35 for CLDR-14312.
-                    aliasTo += "zzzz";
-                } else if (aliasTo.length() < 2 || aliasTo.length() > 8) {
-                    throw new IllegalArgumentException(
-                            "Incorrect value [" + aliasTo + "] in alias:territory.");
-                }
-                subdivisionAliasMap.put(aliasFrom, aliasTo);
-            }
+                UResourceBundle metadata =
+                        UResourceBundle.getBundleInstance(
+                                ICUData.ICU_BASE_NAME,
+                                "metadata",
+                                ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+                UResourceBundle metadataAlias = metadata.get("alias");
+                UResourceBundle languageAlias = metadataAlias.get("language");
+                UResourceBundle scriptAlias = metadataAlias.get("script");
+                UResourceBundle territoryAlias = metadataAlias.get("territory");
+                UResourceBundle variantAlias = metadataAlias.get("variant");
+                UResourceBundle subdivisionAlias = metadataAlias.get("subdivision");
 
-            aliasDataIsLoaded = true;
+                for (int i = 0; i < languageAlias.getSize(); i++) {
+                    UResourceBundle res = languageAlias.get(i);
+                    String aliasFrom = res.getKey();
+                    String aliasTo = res.get("replacement").getString();
+                    Locale testLocale = new Locale(aliasFrom);
+                    // if there are script in the aliasFrom
+                    // or we have both a und as language and a region code.
+                    if (!testLocale.getScript().isEmpty()
+                            || (aliasFrom.startsWith("und")
+                                    && !testLocale.getCountry().isEmpty())) {
+                        throw new IllegalArgumentException(
+                                "key ["
+                                        + aliasFrom
+                                        + "] in alias:language contains unsupported fields combination.");
+                    }
+                    languageMap.put(aliasFrom, aliasTo);
+                }
+                for (int i = 0; i < scriptAlias.getSize(); i++) {
+                    UResourceBundle res = scriptAlias.get(i);
+                    String aliasFrom = res.getKey();
+                    String aliasTo = res.get("replacement").getString();
+                    if (aliasFrom.length() != 4) {
+                        throw new IllegalArgumentException(
+                                "Incorrect key [" + aliasFrom + "] in alias:script.");
+                    }
+                    scriptMap.put(aliasFrom, aliasTo);
+                }
+                for (int i = 0; i < territoryAlias.getSize(); i++) {
+                    UResourceBundle res = territoryAlias.get(i);
+                    String aliasFrom = res.getKey();
+                    String aliasTo = res.get("replacement").getString();
+                    if (aliasFrom.length() < 2 || aliasFrom.length() > 3) {
+                        throw new IllegalArgumentException(
+                                "Incorrect key [" + aliasFrom + "] in alias:territory.");
+                    }
+                    territoryMap.put(aliasFrom, new ArrayList<>(Arrays.asList(aliasTo.split(" "))));
+                }
+                for (int i = 0; i < variantAlias.getSize(); i++) {
+                    UResourceBundle res = variantAlias.get(i);
+                    String aliasFrom = res.getKey();
+                    String aliasTo = res.get("replacement").getString();
+                    if (aliasFrom.length() < 4
+                            || aliasFrom.length() > 8
+                            || (aliasFrom.length() == 4
+                                    && (aliasFrom.charAt(0) < '0' || aliasFrom.charAt(0) > '9'))) {
+                        throw new IllegalArgumentException(
+                                "Incorrect key [" + aliasFrom + "] in alias:variant.");
+                    }
+                    if (aliasTo.length() < 4
+                            || aliasTo.length() > 8
+                            || (aliasTo.length() == 4
+                                    && (aliasTo.charAt(0) < '0' || aliasTo.charAt(0) > '9'))) {
+                        throw new IllegalArgumentException(
+                                "Incorrect variant ["
+                                        + aliasTo
+                                        + "] for the key ["
+                                        + aliasFrom
+                                        + "] in alias:variant.");
+                    }
+                    variantMap.put(aliasFrom, aliasTo);
+                }
+                for (int i = 0; i < subdivisionAlias.getSize(); i++) {
+                    UResourceBundle res = subdivisionAlias.get(i);
+                    String aliasFrom = res.getKey();
+                    String aliasTo = res.get("replacement").getString().split(" ")[0];
+                    if (aliasFrom.length() < 3 || aliasFrom.length() > 8) {
+                        throw new IllegalArgumentException(
+                                "Incorrect key [" + aliasFrom + "] in alias:territory.");
+                    }
+                    if (aliasTo.length() == 2) {
+                        // Add 'zzzz' based on changes to UTS #35 for CLDR-14312.
+                        aliasTo += "zzzz";
+                    } else if (aliasTo.length() < 2 || aliasTo.length() > 8) {
+                        throw new IllegalArgumentException(
+                                "Incorrect value [" + aliasTo + "] in alias:territory.");
+                    }
+                    subdivisionMap.put(aliasFrom, aliasTo);
+                }
+
+                languageAliasMap = Map.copyOf(languageMap);
+                scriptAliasMap = Map.copyOf(scriptMap);
+                territoryAliasMap = Map.copyOf(territoryMap);
+                variantAliasMap = Map.copyOf(variantMap);
+                subdivisionAliasMap = Map.copyOf(subdivisionMap);
+            }
+        }
+
+        private static Map<String, String> languageAliasMap() {
+            return AliasDataHolder.languageAliasMap;
+        }
+
+        private static Map<String, String> scriptAliasMap() {
+            return AliasDataHolder.scriptAliasMap;
+        }
+
+        private static Map<String, List<String>> territoryAliasMap() {
+            return AliasDataHolder.territoryAliasMap;
+        }
+
+        private static Map<String, String> variantAliasMap() {
+            return AliasDataHolder.variantAliasMap;
+        }
+
+        private static Map<String, String> subdivisionAliasMap() {
+            return AliasDataHolder.subdivisionAliasMap;
         }
 
         private static String generateKey(String language, String region, String variant) {
@@ -1568,7 +1634,7 @@ public final class ULocale implements Serializable, Comparable<ULocale>, Cloneab
                     searchVariant = null;
                 }
                 String typeKey = generateKey(searchLanguage, searchRegion, searchVariant);
-                String replacement = languageAliasMap.get(typeKey);
+                String replacement = languageAliasMap().get(typeKey);
                 if (replacement == null) {
                     // Found no replacement data.
                     continue;
@@ -1664,7 +1730,7 @@ public final class ULocale implements Serializable, Comparable<ULocale>, Cloneab
 
         private boolean replaceRegion() {
             if (region == null || region.isEmpty()) return false;
-            List<String> replacement = territoryAliasMap.get(region);
+            List<String> replacement = territoryAliasMap().get(region);
             if (replacement == null) {
                 // Found no replacement data for this region.
                 return false;
@@ -1689,7 +1755,7 @@ public final class ULocale implements Serializable, Comparable<ULocale>, Cloneab
 
         private boolean replaceScript() {
             if (script == null || script.isEmpty()) return false;
-            String replacement = scriptAliasMap.get(script);
+            String replacement = scriptAliasMap().get(script);
             if (replacement == null) {
                 // Found no replacement data for this script.
                 return false;
@@ -1704,7 +1770,7 @@ public final class ULocale implements Serializable, Comparable<ULocale>, Cloneab
             if (variants == null) return false;
             for (int i = 0; i < variants.size(); i++) {
                 String variant = variants.get(i);
-                String replacement = variantAliasMap.get(variant);
+                String replacement = variantAliasMap().get(variant);
                 if (replacement == null) {
                     // Found no replacement data for this variant.
                     continue;
@@ -1729,7 +1795,7 @@ public final class ULocale implements Serializable, Comparable<ULocale>, Cloneab
         }
 
         private String replaceSubdivision(String subdivision) {
-            return subdivisionAliasMap.get(subdivision);
+            return subdivisionAliasMap().get(subdivision);
         }
 
         private String replaceTransformedExtensions(String extensions) {
@@ -1845,196 +1911,192 @@ public final class ULocale implements Serializable, Comparable<ULocale>, Cloneab
         return parser.getName();
     }
 
-    private static synchronized boolean isKnownCanonicalizedLocale(String name) {
-        if (name.equals("c") || name.equals("en") || name.equals("en_US")) {
-            return true;
-        }
-        if (gKnownCanonicalizedCases == null) {
-            List<String> items =
-                    Arrays.asList(
-                            "af",
-                            "af_ZA",
-                            "am",
-                            "am_ET",
-                            "ar",
-                            "ar_001",
-                            "as",
-                            "as_IN",
-                            "az",
-                            "az_AZ",
-                            "be",
-                            "be_BY",
-                            "bg",
-                            "bg_BG",
-                            "bn",
-                            "bn_IN",
-                            "bs",
-                            "bs_BA",
-                            "ca",
-                            "ca_ES",
-                            "cs",
-                            "cs_CZ",
-                            "cy",
-                            "cy_GB",
-                            "da",
-                            "da_DK",
-                            "de",
-                            "de_DE",
-                            "el",
-                            "el_GR",
-                            "en",
-                            "en_GB",
-                            "en_US",
-                            "es",
-                            "es_419",
-                            "es_ES",
-                            "et",
-                            "et_EE",
-                            "eu",
-                            "eu_ES",
-                            "fa",
-                            "fa_IR",
-                            "fi",
-                            "fi_FI",
-                            "fil",
-                            "fil_PH",
-                            "fr",
-                            "fr_FR",
-                            "ga",
-                            "ga_IE",
-                            "gl",
-                            "gl_ES",
-                            "gu",
-                            "gu_IN",
-                            "he",
-                            "he_IL",
-                            "hi",
-                            "hi_IN",
-                            "hr",
-                            "hr_HR",
-                            "hu",
-                            "hu_HU",
-                            "hy",
-                            "hy_AM",
-                            "id",
-                            "id_ID",
-                            "is",
-                            "is_IS",
-                            "it",
-                            "it_IT",
-                            "ja",
-                            "ja_JP",
-                            "jv",
-                            "jv_ID",
-                            "ka",
-                            "ka_GE",
-                            "kk",
-                            "kk_KZ",
-                            "km",
-                            "km_KH",
-                            "kn",
-                            "kn_IN",
-                            "ko",
-                            "ko_KR",
-                            "ky",
-                            "ky_KG",
-                            "lo",
-                            "lo_LA",
-                            "lt",
-                            "lt_LT",
-                            "lv",
-                            "lv_LV",
-                            "mk",
-                            "mk_MK",
-                            "ml",
-                            "ml_IN",
-                            "mn",
-                            "mn_MN",
-                            "mr",
-                            "mr_IN",
-                            "ms",
-                            "ms_MY",
-                            "my",
-                            "my_MM",
-                            "nb",
-                            "nb_NO",
-                            "ne",
-                            "ne_NP",
-                            "nl",
-                            "nl_NL",
-                            "no",
-                            "or",
-                            "or_IN",
-                            "pa",
-                            "pa_IN",
-                            "pl",
-                            "pl_PL",
-                            "ps",
-                            "ps_AF",
-                            "pt",
-                            "pt_BR",
-                            "pt_PT",
-                            "ro",
-                            "ro_RO",
-                            "ru",
-                            "ru_RU",
-                            "sd",
-                            "sd_IN",
-                            "si",
-                            "si_LK",
-                            "sk",
-                            "sk_SK",
-                            "sl",
-                            "sl_SI",
-                            "so",
-                            "so_SO",
-                            "sq",
-                            "sq_AL",
-                            "sr",
-                            "sr_Cyrl_RS",
-                            "sr_Latn",
-                            "sr_RS",
-                            "sv",
-                            "sv_SE",
-                            "sw",
-                            "sw_TZ",
-                            "ta",
-                            "ta_IN",
-                            "te",
-                            "te_IN",
-                            "th",
-                            "th_TH",
-                            "tk",
-                            "tk_TM",
-                            "tr",
-                            "tr_TR",
-                            "uk",
-                            "uk_UA",
-                            "ur",
-                            "ur_PK",
-                            "uz",
-                            "uz_UZ",
-                            "vi",
-                            "vi_VN",
-                            "yue",
-                            "yue_Hant",
-                            "yue_Hant_HK",
-                            "yue_HK",
-                            "zh",
-                            "zh_CN",
-                            "zh_Hans",
-                            "zh_Hans_CN",
-                            "zh_Hant",
-                            "zh_Hant_TW",
-                            "zh_TW",
-                            "zu",
-                            "zu_ZA");
-            gKnownCanonicalizedCases = new HashSet<>(items);
-        }
-        return gKnownCanonicalizedCases.contains(name);
+    private static final class KnownLocalesHolder {
+        static final Set<String> KNOWN_LOCALES =
+                Set.of(
+                        "c",
+                        "en",
+                        "en_US",
+                        "af",
+                        "af_ZA",
+                        "am",
+                        "am_ET",
+                        "ar",
+                        "ar_001",
+                        "as",
+                        "as_IN",
+                        "az",
+                        "az_AZ",
+                        "be",
+                        "be_BY",
+                        "bg",
+                        "bg_BG",
+                        "bn",
+                        "bn_IN",
+                        "bs",
+                        "bs_BA",
+                        "ca",
+                        "ca_ES",
+                        "cs",
+                        "cs_CZ",
+                        "cy",
+                        "cy_GB",
+                        "da",
+                        "da_DK",
+                        "de",
+                        "de_DE",
+                        "el",
+                        "el_GR",
+                        "en_GB",
+                        "es",
+                        "es_419",
+                        "es_ES",
+                        "et",
+                        "et_EE",
+                        "eu",
+                        "eu_ES",
+                        "fa",
+                        "fa_IR",
+                        "fi",
+                        "fi_FI",
+                        "fil",
+                        "fil_PH",
+                        "fr",
+                        "fr_FR",
+                        "ga",
+                        "ga_IE",
+                        "gl",
+                        "gl_ES",
+                        "gu",
+                        "gu_IN",
+                        "he",
+                        "he_IL",
+                        "hi",
+                        "hi_IN",
+                        "hr",
+                        "hr_HR",
+                        "hu",
+                        "hu_HU",
+                        "hy",
+                        "hy_AM",
+                        "id",
+                        "id_ID",
+                        "is",
+                        "is_IS",
+                        "it",
+                        "it_IT",
+                        "ja",
+                        "ja_JP",
+                        "jv",
+                        "jv_ID",
+                        "ka",
+                        "ka_GE",
+                        "kk",
+                        "kk_KZ",
+                        "km",
+                        "km_KH",
+                        "kn",
+                        "kn_IN",
+                        "ko",
+                        "ko_KR",
+                        "ky",
+                        "ky_KG",
+                        "lo",
+                        "lo_LA",
+                        "lt",
+                        "lt_LT",
+                        "lv",
+                        "lv_LV",
+                        "mk",
+                        "mk_MK",
+                        "ml",
+                        "ml_IN",
+                        "mn",
+                        "mn_MN",
+                        "mr",
+                        "mr_IN",
+                        "ms",
+                        "ms_MY",
+                        "my",
+                        "my_MM",
+                        "nb",
+                        "nb_NO",
+                        "ne",
+                        "ne_NP",
+                        "nl",
+                        "nl_NL",
+                        "no",
+                        "or",
+                        "or_IN",
+                        "pa",
+                        "pa_IN",
+                        "pl",
+                        "pl_PL",
+                        "ps",
+                        "ps_AF",
+                        "pt",
+                        "pt_BR",
+                        "pt_PT",
+                        "ro",
+                        "ro_RO",
+                        "ru",
+                        "ru_RU",
+                        "sd",
+                        "sd_IN",
+                        "si",
+                        "si_LK",
+                        "sk",
+                        "sk_SK",
+                        "sl",
+                        "sl_SI",
+                        "so",
+                        "so_SO",
+                        "sq",
+                        "sq_AL",
+                        "sr",
+                        "sr_Cyrl_RS",
+                        "sr_Latn",
+                        "sr_RS",
+                        "sv",
+                        "sv_SE",
+                        "sw",
+                        "sw_TZ",
+                        "ta",
+                        "ta_IN",
+                        "te",
+                        "te_IN",
+                        "th",
+                        "th_TH",
+                        "tk",
+                        "tk_TM",
+                        "tr",
+                        "tr_TR",
+                        "uk",
+                        "uk_UA",
+                        "ur",
+                        "ur_PK",
+                        "uz",
+                        "uz_UZ",
+                        "vi",
+                        "vi_VN",
+                        "yue",
+                        "yue_Hant",
+                        "yue_Hant_HK",
+                        "yue_HK",
+                        "zh",
+                        "zh_CN",
+                        "zh_Hans",
+                        "zh_Hans_CN",
+                        "zh_Hant",
+                        "zh_Hant_TW",
+                        "zh_TW",
+                        "zu",
+                        "zu_ZA");
     }
 
-    private static Set<String> gKnownCanonicalizedCases = null;
+    private static boolean isKnownCanonicalizedLocale(String name) {
+        return KnownLocalesHolder.KNOWN_LOCALES.contains(name);
+    }
 
     /**
      * {@icu} Given a keyword and a value, return a new locale with an updated keyword and value. If
@@ -2809,6 +2871,18 @@ public final class ULocale implements Serializable, Comparable<ULocale>, Cloneab
      */
     public static final class Type {
         private Type() {}
+
+        /**
+         * {@inheritDoc}
+         *
+         * @draft ICU 2.8
+         */
+        @Override
+        public String toString() {
+            if (this == ULocale.ACTUAL_LOCALE) return "ACTUAL_LOCALE";
+            if (this == ULocale.VALID_LOCALE) return "VALID_LOCALE";
+            return ("Unknown Type: " + Objects.toString(this));
+        }
     }
 
     /**

@@ -58,44 +58,42 @@ in ICU resource bundle source format - currencyNumericCodes.txt.
 
 For each ICU release, we should check if the mapping data is up to date.
 
-Prerequisites: Java 6+, ant
+Prerequisites: Java 11+, Ant (TO REMOVE), Python
 
-First, run the ant target "check". This ant target download XML files from
+First, run the "check" target. This target will download XML files from
 the SIX Interbank Clearing site and invoke the tool command "check".
+
+```sh
+./build.py --check
+```
 
 When the target successfully finished, you should see the log like below:
 ----------------------------------------------------------------------------
-C:\devtools\trunk\currency>ant
-Buildfile: C:\devtools\trunk\currency\build.xml
 
-classes:
+```
+[INFO] ──────────────────────────────[ check() ]───────────────────────────────
+[INFO] ─────────────────────────────[ classes() ]──────────────────────────────
+[INFO] [rmdir] ./out/bin
+[INFO] [mkdir] ./out/bin
+[INFO] [execute] javac -d ./out/bin --release 11 -encoding UTF-8 ./src/com/ibm/icu/dev/tool/currency/*.java
+        logfile: -
+[INFO] [mkdir] ./target/pylogs
+[INFO] [rmfile] ./target/pylogs/-
+[INFO] ─────────────────────────────[ xml_data() ]─────────────────────────────
+[INFO] _local_xml()
+[INFO] _check_local_xml()
+[INFO] _download_xml()
+[INFO] _check_local_xml()
+[INFO] Downloading ISO 4217 XML data files
+[INFO] [mkdir] ./out/xml
+[INFO] urllib.request.urlretrieve( "https://www.six-group.com/dam/download/financial-information/data-center/iso-currrency/lists/list-one.xml", "./out/xml/list-one.xml")
+[INFO] [execute] java -cp ./out/bin com.ibm.icu.dev.tool.currency.Main check ./out/xml/list-one.xml ./out/xml/list-three.xml
+        logfile: -
+[OK] ICU data is synchronized with the reference data
+[INFO] [mkdir] ./target/pylogs
+[INFO] [rmfile] ./target/pylogs/-
+```
 
-_checkLocalXml:
-
-_localXml:
-
-_downloadXml:
-     [echo] Downloading ISO 4217 XML data files
-      [get] Getting: http://www.currency-iso.org/dam/downloads/lists/list_one.xm
-l
-      [get] To: C:\devtools\trunk\currency\out\xml\list_one.xml
-      [get] Getting: http://www.currency-iso.org/dam/downloads/lists/list_three.
-xml
-      [get] To: C:\devtools\trunk\currency\out\xml\list_three.xml
-
-xmlData:
-
-check:
-     [java] [OK] ICU data is synchronized with the reference data
-
-resource:
-     [echo] ISO 4217 numeric code mapping data was successfully created in C:\de
-vtools\trunk\currency/out/res
-
-build:
-
-BUILD SUCCESSFUL
-Total time: 1 second
 ----------------------------------------------------------------------------
 In this case, our data is synchronized with the latest XML data and you're done.
 
@@ -103,8 +101,8 @@ In this case, our data is synchronized with the latest XML data and you're done.
 If the data is out of sync, you should see message like below:
 ----------------------------------------------------------------------------
 check:
-     [java] Missing alpha code in ICU map [ZWR]
-     [java] Codes not found in the reference data: ZZZ
+     Missing alpha code in ICU map [ZWR]
+     Codes not found in the reference data: ZZZ
 
 BUILD FAILED
 C:\devtools\trunk\currency\build.xml:54: Java returned: 1
@@ -113,11 +111,18 @@ In this case, you have to update the hardcoded data in NumericCodeData.
 You can either edit the table in NumericCodeData manually, or run the tool
 command "print" and copy the output and paste it to the table.
 
-Once you make sure "ant check" returns no errors, run "ant resource". This
+Once you make sure "check" returns no errors, run "resource" task. This
 target generate out/res/currencyNumericCodes.txt. The file should go to
 <icu4c>/source/data/misc directory.
 
-Note: The default ant target does both operation. Although it creates the
+```sh
+./build.py --resource
+```
+
+Note: The default "build" target does both operation. Although it creates the
 ICU resource file, you do not need to replace the one in ICU4C package with
 the newly generated one if "check" successfully finished.
 
+```sh
+./build.py --build
+```

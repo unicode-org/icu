@@ -35,6 +35,46 @@ ig{
                 currencyFormat{"¤#,##0.00"}
                 currencyPatternAppendISO{"{0} ¤¤"}
             }
+            patternsLong{
+                decimalFormat{
+                    1000{
+                        other{"0 puku"}
+                    }
+                    10000{
+                        other{"00 puku"}
+                    }
+                    100000{
+                        other{"000 puku"}
+                    }
+                    1000000{
+                        other{"0 nde"}
+                    }
+                    10000000{
+                        other{"00 nde"}
+                    }
+                    100000000{
+                        other{"000 nde"}
+                    }
+                    1000000000{
+                        other{"0 ijeri"}
+                    }
+                    10000000000{
+                        other{"00 ijeri"}
+                    }
+                    100000000000{
+                        other{"000 ijeri"}
+                    }
+                    1000000000000{
+                        other{"0 puku ijeri"}
+                    }
+                    10000000000000{
+                        other{"00 puku ijeri"}
+                    }
+                    100000000000000{
+                        other{"000 puku ijeri"}
+                    }
+                }
+            }
             patternsShort{
                 currencyFormat{
                     1000{
@@ -166,6 +206,11 @@ ig{
                 yMMMM{"MMMM y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
+                yyyy{"y G"}
+                yyyyM{"M/y G"}
+                yyyyMEd{"E, M/d/y G"}
+                yyyyMMM{"MMM y G"}
+                yyyyMd{"M/d/y G"}
             }
             intervalFormats{
                 MMM{
@@ -237,6 +282,8 @@ ig{
                 yMMM{"MMM y"}
                 yMMMEd{"E, d MMM y"}
                 yMMMM{"MMMM y"}
+                yMMMMEd{"EEE, d MMMM y"}
+                yMMMMd{"d MMMM y"}
                 yMMMd{"d MMM y"}
                 yMd{"d/M/y"}
                 yQQQ{"QQQ y"}
@@ -427,16 +474,31 @@ ig{
         day{
             dn{"Ụbọchị"}
             relative{
-                "-1"{"Ụnyaahụ"}
-                "0"{"Taa"}
-                "1"{"Echi"}
+                "-1"{"ụnyaahụ"}
+                "0"{"taa"}
+                "1"{"echi"}
+            }
+            relativeTime{
+                future{
+                    other{"n’ụbọchị {0}"}
+                }
+                past{
+                    other{"ụbọchị {0} gara aga"}
+                }
+            }
+        }
+        day-narrow{
+            relative{
+                "-1"{"ụnyaahụ"}
+                "0"{"taa"}
+                "1"{"echi"}
             }
         }
         day-short{
             relative{
-                "-1"{"Ụnyaahụ"}
-                "0"{"Taata"}
-                "1"{"Echi"}
+                "-1"{"ụnyaahụ"}
+                "0"{"taa"}
+                "1"{"echi"}
             }
             relativeTime{
                 future{
@@ -465,6 +527,14 @@ ig{
                 "0"{"ụbọchị Faraịde a"}
                 "1"{"ụbọchị Faraịde na abịa"}
             }
+            relativeTime{
+                future{
+                    other{"n’ime Friday {0}"}
+                }
+                past{
+                    other{"n’ime Friday {0} gara aga"}
+                }
+            }
         }
         fri-narrow{
             relative{
@@ -489,15 +559,71 @@ ig{
             }
         }
         hour{
-            dn{"Elekere"}
+            dn{"elekere"}
             relative{
                 "0"{"elekere a"}
+            }
+            relativeTime{
+                future{
+                    other{"n’ime awa {0}"}
+                }
+                past{
+                    other{"n’ime awa {0} gara aga"}
+                }
+            }
+        }
+        hour-narrow{
+            relativeTime{
+                future{
+                    other{"n’ime awa {0}"}
+                }
+                past{
+                    other{"awa {0} gara aga"}
+                }
+            }
+        }
+        hour-short{
+            relativeTime{
+                future{
+                    other{"n’ime awa {0}."}
+                }
+                past{
+                    other{"awa {0} gara aga"}
+                }
             }
         }
         minute{
             dn{"Nkeji"}
             relative{
                 "0"{"nkejị a"}
+            }
+            relativeTime{
+                future{
+                    other{"n’ime nkeji {0}"}
+                }
+                past{
+                    other{"nkeji {0} gara aga"}
+                }
+            }
+        }
+        minute-narrow{
+            relativeTime{
+                future{
+                    other{"n’ime nkeji {0}"}
+                }
+                past{
+                    other{"nkeji {0} gara aga"}
+                }
+            }
+        }
+        minute-short{
+            relativeTime{
+                future{
+                    other{"n’ime nkeji {0}."}
+                }
+                past{
+                    other{"nkeji {0} gara aga"}
+                }
             }
         }
         mon{
@@ -506,6 +632,14 @@ ig{
                 "0"{"ụbọchị Mọnde a"}
                 "1"{"ụbọchị Monde a"}
             }
+            relativeTime{
+                future{
+                    other{"n’ime Mọnde {0}"}
+                }
+                past{
+                    other{"Mọnde {0} gara aga"}
+                }
+            }
         }
         mon-narrow{
             relative{
@@ -513,12 +647,28 @@ ig{
                 "0"{"ụbọchị Monde a"}
                 "1"{"ụbọchị Monde na abịa"}
             }
+            relativeTime{
+                future{
+                    other{"n’ime Mọnde {0}"}
+                }
+                past{
+                    other{"Mọnde {0} gara aga"}
+                }
+            }
         }
         mon-short{
             relative{
-                "-1"{"Mon gara aga"}
+                "-1"{"ụbọchị Mọnde gara aga"}
                 "0"{"ụbọchị Mọnde a"}
                 "1"{"ụbọchị Mọnde na abịa"}
+            }
+            relativeTime{
+                future{
+                    other{"n’ime Mọnde {0}"}
+                }
+                past{
+                    other{"Mọnde {0} gara aga"}
+                }
             }
         }
         month{
@@ -527,6 +677,34 @@ ig{
                 "-1"{"Ọnwa gara aga"}
                 "0"{"Ọnwa a"}
                 "1"{"Ọnwa na-abịa"}
+            }
+            relativeTime{
+                future{
+                    other{"n’ime ọnwa {0}"}
+                }
+                past{
+                    other{"ọnwa {0} gara aga"}
+                }
+            }
+        }
+        month-narrow{
+            relativeTime{
+                future{
+                    other{"n’ime ọnwa {0}"}
+                }
+                past{
+                    other{"ọnwa {0} gara aga"}
+                }
+            }
+        }
+        month-short{
+            relativeTime{
+                future{
+                    other{"n’ime ọnwa {0}"}
+                }
+                past{
+                    other{"ọnwa {0} gara aga"}
+                }
             }
         }
         quarter{
@@ -552,6 +730,9 @@ ig{
                 "1"{"ụbọchị Satụde na abịa"}
             }
             relativeTime{
+                future{
+                    other{"n’ime Satọde {0}"}
+                }
                 past{
                     other{"Ụbọchị Satụde {0} gara aga"}
                 }
@@ -563,27 +744,70 @@ ig{
                 "0"{"ụbọchị Satụde a"}
                 "1"{"ụbọchị Satụde na abịa"}
             }
+            relativeTime{
+                future{
+                    other{"n’ime Satọde {0}"}
+                }
+            }
         }
         sat-short{
-            relative{
-                "-1"{"Ụbọchị Satụde gara aga"}
-                "0"{"ụbọchị Satụde a"}
-                "1"{"ụbọchị Satụde na abịa"}
+            relativeTime{
+                future{
+                    other{"n’ime Satọde {0}"}
+                }
+                past{
+                    other{"Satọde {0} gara aga"}
+                }
             }
         }
         second{
+            dn{"sekọnd"}
             relative{
                 "0"{"ụgbụa"}
+            }
+            relativeTime{
+                future{
+                    other{"n’ime sekọnd {0}"}
+                }
+                past{
+                    other{"sekọnd {0} gara aga"}
+                }
+            }
+        }
+        second-narrow{
+            relativeTime{
+                future{
+                    other{"n’ime sekọnd {0}"}
+                }
+                past{
+                    other{"sekọnd {0} gara aga"}
+                }
             }
         }
         second-short{
             dn{"sekọnd"}
+            relativeTime{
+                future{
+                    other{"n’ime sekọnd {0}"}
+                }
+                past{
+                    other{"sekọnd {0} gara aga"}
+                }
+            }
         }
         sun{
             relative{
-                "-1"{"Ụbọchị ụka gara aga"}
-                "0"{"ụbọchị ụka a"}
-                "1"{"ụbọchị ụka na abịa"}
+                "-1"{"Sọnde gara aga"}
+                "0"{"ụbọchị Sọnde a"}
+                "1"{"ụbọchị Sọnde na abịa"}
+            }
+            relativeTime{
+                future{
+                    other{"n’ime Sọnde {0}"}
+                }
+                past{
+                    other{"Sọnde {0} gara aga"}
+                }
             }
         }
         sun-narrow{
@@ -592,12 +816,28 @@ ig{
                 "0"{"ụbọchị Sọnde a"}
                 "1"{"ụbọchị Sọnde na abịa"}
             }
+            relativeTime{
+                future{
+                    other{"n’ime sekọnd {0}"}
+                }
+                past{
+                    other{"Sọnde {0} gara aga"}
+                }
+            }
         }
         sun-short{
             relative{
-                "-1"{"ụbọchị ụka gara aga"}
-                "0"{"ubochị ụka a"}
-                "1"{"ụbọchị ụka na abịa"}
+                "-1"{"ụbọchị Sọnde gara aga"}
+                "0"{"ụbọchị Sọnde a"}
+                "1"{"ụbọchị Sọnde na abịa"}
+            }
+            relativeTime{
+                future{
+                    other{"n’ime sekọnd {0}"}
+                }
+                past{
+                    other{"Sọnde {0} gara aga"}
+                }
             }
         }
         thu{
@@ -606,19 +846,43 @@ ig{
                 "0"{"ụbọchị Tọsdee a"}
                 "1"{"ụbọchị Tọsdee na abịa"}
             }
+            relativeTime{
+                future{
+                    other{"n’ime Tọzdee {0}"}
+                }
+                past{
+                    other{"Tọzdee {0} gara aga"}
+                }
+            }
         }
         thu-narrow{
             relative{
                 "-1"{"ụbọchị Tọsdee gara aga"}
-                "0"{"ụbọchị Tọsdee a"}
-                "1"{"ụbọchị Tọsdee na abịa"}
+                "0"{"ụbọchị Tọzdee a"}
+                "1"{"ụbọchị Tọzdee na abịa"}
+            }
+            relativeTime{
+                future{
+                    other{"n’ime Tọzdee {0}"}
+                }
+                past{
+                    other{"Tọzdee {0} gara aga"}
+                }
             }
         }
         thu-short{
             relative{
-                "-1"{"Ụbọchị Tọsdee gara aga"}
-                "0"{"ụbọchị Tọsdee a"}
-                "1"{"ụbọchị Tọsdee na abịa"}
+                "-1"{"Ụbọchị Tọzdee gara aga"}
+                "0"{"ụbọchị Tọzdee a"}
+                "1"{"ụbọchị Tọzdee na abịa"}
+            }
+            relativeTime{
+                future{
+                    other{"n’ime Tọzdee {0}"}
+                }
+                past{
+                    other{"Tọzdee {0} gara aga"}
+                }
             }
         }
         tue{
@@ -627,6 +891,14 @@ ig{
                 "0"{"ụbọchị Tuzde a"}
                 "1"{"ụbọchị Tuzde na abịa"}
             }
+            relativeTime{
+                future{
+                    other{"n’ime Tuzdee {0}"}
+                }
+                past{
+                    other{"Tuzdee {0} gara aga"}
+                }
+            }
         }
         tue-narrow{
             relative{
@@ -634,33 +906,68 @@ ig{
                 "0"{"ụbọchị Tuzde a"}
                 "1"{"ụbọchị Tuzde na abịa"}
             }
+            relativeTime{
+                future{
+                    other{"n’ime Tuzdee {0}"}
+                }
+                past{
+                    other{"Tuzdee {0} gara aga"}
+                }
+            }
         }
         tue-short{
-            relative{
-                "-1"{"ụbọchị Tụesde gara aga"}
-                "0"{"ụbọchị Tuzde a"}
-                "1"{"ụbọchị Tuzde na abịa"}
+            relativeTime{
+                future{
+                    other{"n’ime Tuzdee {0}"}
+                }
+                past{
+                    other{"Tuzdee {0} gara aga"}
+                }
             }
         }
         wed{
             relative{
-                "-1"{"ụbọchị wednesde gara aga"}
-                "0"{"ụbọchị Wednesde a"}
-                "1"{"ụbọchị Wednesde na abịa"}
+                "-1"{"ụbọchị Wenezde gara aga"}
+                "0"{"ụbọchị Wenezde a"}
+                "1"{"ụbọchị Wenezde na abịa"}
+            }
+            relativeTime{
+                future{
+                    other{"n’ime Wenezdee {0}"}
+                }
+                past{
+                    other{"Wenezde {0} gara aga"}
+                }
             }
         }
         wed-narrow{
             relative{
-                "-1"{"ụbọchị Wednesde gara ag"}
-                "0"{"ụbọchị Wednesde a"}
-                "1"{"ụbọchị Wednesde a"}
+                "-1"{"ụbọchị Wenezde gara aga"}
+                "0"{"ụbọchị Wenezde a"}
+                "1"{"ụbọchị Wenezde na abịa"}
+            }
+            relativeTime{
+                future{
+                    other{"n’ime Wenezdee {0}"}
+                }
+                past{
+                    other{"Wenezde {0} gara aga"}
+                }
             }
         }
         wed-short{
             relative{
-                "-1"{"ụbọchị Wednesde gara ag"}
-                "0"{"ụbọchị Wednesde a"}
-                "1"{"ụbọchị Wednesde na abịa"}
+                "-1"{"ụbọchị Wenezde gara aga"}
+                "0"{"ụbọchị Wenezde a"}
+                "1"{"ụbọchị Wenezde na abịa"}
+            }
+            relativeTime{
+                future{
+                    other{"n’ime Wenezdee {0}"}
+                }
+                past{
+                    other{"Wenezde {0} gara aga"}
+                }
             }
         }
         week{
@@ -671,9 +978,43 @@ ig{
                 "1"{"Izu na-esote"}
             }
             relativePeriod{"Izu nke{0}"}
+            relativeTime{
+                future{
+                    other{"n’ime izu {0}"}
+                }
+                past{
+                    other{"izu {0} gara aga"}
+                }
+            }
+        }
+        week-narrow{
+            relativeTime{
+                future{
+                    other{"n’ime izu {0}"}
+                }
+                past{
+                    other{"izu {0} gara aga"}
+                }
+            }
+        }
+        week-short{
+            relativeTime{
+                future{
+                    other{"n’ime izu {0}"}
+                }
+                past{
+                    other{"izu {0} gara aga"}
+                }
+            }
         }
         weekOfMonth{
-            dn{"ịzụ ọnwa"}
+            dn{"ịzụ nke ọnwa"}
+        }
+        weekOfMonth-narrow{
+            dn{"ịzụ nke ọnwa"}
+        }
+        weekOfMonth-short{
+            dn{"ịzụ nke ọnwa"}
         }
         weekday{
             dn{"Ụbọchị izu"}
@@ -691,9 +1032,20 @@ ig{
                 "0"{"Afọ a"}
                 "1"{"Afọ na-abịa"}
             }
+            relativeTime{
+                future{
+                    other{"n’ime afọ {0}"}
+                }
+                past{
+                    other{"afọ {0} gara aga"}
+                }
+            }
         }
         year-narrow{
             relativeTime{
+                future{
+                    other{"n’ime afọ {0}"}
+                }
                 past{
                     other{"Afọ {0} gara aga"}
                 }
@@ -705,9 +1057,23 @@ ig{
                 "0"{"Afọ a"}
                 "1"{"afọ na-abịa"}
             }
+            relativeTime{
+                future{
+                    other{"n’ime afọ {0}"}
+                }
+                past{
+                    other{"afọ {0} gara aga"}
+                }
+            }
         }
         zone{
-            dn{"Mpaghara oge"}
+            dn{"oge mpaghara"}
+        }
+        zone-narrow{
+            dn{"oge mpaghara"}
+        }
+        zone-short{
+            dn{"oge mpaghara"}
         }
     }
     listPattern{

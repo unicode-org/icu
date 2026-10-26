@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 import java.util.StringTokenizer;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -1959,5 +1960,25 @@ public class PersonNameFormatterTest extends CoreTestFmwk {
 
             assertEquals("Wrong result", expectedResult, actualResult);
         }
+    }
+
+    @Test
+    public void TestICU23565() {
+        PersonName name =
+                SimplePersonName.builder()
+                        .addField(PersonName.NameField.GIVEN, Set.of(), "8")
+                        .addField(PersonName.NameField.SURNAME, Set.of(), "8")
+                        .build(); // nameLocale is null (unknown)
+        Assert.assertNull(name.getNameLocale());
+
+        // Case 1: NPE in PersonNameFormatterImpl.nameIsGnFirst
+        PersonNameFormatter.builder().setLocale(Locale.US).build().formatToString(name);
+
+        // Case 2: NPE in PersonNameFormatterImpl.localesMatch, even when nameIsGnFirst is bypassed
+        PersonNameFormatter.builder()
+                .setLocale(Locale.JAPANESE)
+                .setDisplayOrder(PersonNameFormatter.DisplayOrder.FORCE_GIVEN_FIRST)
+                .build()
+                .formatToString(name);
     }
 }

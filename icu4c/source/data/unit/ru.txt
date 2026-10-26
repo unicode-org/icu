@@ -1063,13 +1063,6 @@ ru{
                 one{"{0} моль"}
                 other{"{0} моля"}
             }
-            ofglucose{
-                dnam{"глюкозы"}
-                few{"{0} глюкозы"}
-                many{"{0} глюкозы"}
-                one{"{0} глюкозы"}
-                other{"{0} глюкозы"}
-            }
             part{
                 dnam{"части"}
                 few{"{0} части"}
@@ -7159,37 +7152,7 @@ ru{
         }
     }
     unitsNarrow{
-        angle{
-            steradian{
-                dnam{"ср"}
-                few{"{0} ср"}
-                many{"{0} ср"}
-                one{"{0} ср"}
-                other{"{0} ср"}
-            }
-        }
         concentr{
-            katal{
-                dnam{"кат"}
-                few{"{0} кат"}
-                many{"{0} кат"}
-                one{"{0} кат"}
-                other{"{0} кат"}
-            }
-            ofglucose{
-                dnam{"глюкозы"}
-                few{"{0} глюкозы"}
-                many{"{0} глюкозы"}
-                one{"{0} глюкозы"}
-                other{"{0} глюкозы"}
-            }
-            part{
-                dnam{"ч."}
-                few{"{0} ч."}
-                many{"{0} ч."}
-                one{"{0} ч."}
-                other{"{0} ч."}
-            }
             percent{
                 few{"{0}%"}
                 many{"{0}%"}
@@ -7241,75 +7204,6 @@ ru{
                 per{"{0}/г."}
             }
         }
-        electric{
-            coulomb{
-                dnam{"Кл"}
-                few{"{0} Кл"}
-                many{"{0} Кл"}
-                one{"{0} Кл"}
-                other{"{0} Кл"}
-            }
-            farad{
-                dnam{"Ф"}
-                few{"{0} Ф"}
-                many{"{0} Ф"}
-                one{"{0} Ф"}
-                other{"{0} Ф"}
-            }
-            henry{
-                dnam{"Гн"}
-                few{"{0} Гн"}
-                many{"{0} Гн"}
-                one{"{0} Гн"}
-                other{"{0} Гн"}
-            }
-            siemens{
-                dnam{"См"}
-                few{"{0} См"}
-                many{"{0} См"}
-                one{"{0} См"}
-                other{"{0} См"}
-            }
-        }
-        energy{
-            becquerel{
-                dnam{"Бк"}
-                few{"{0} Бк"}
-                many{"{0} Бк"}
-                one{"{0} Бк"}
-                other{"{0} Бк"}
-            }
-            calorie-it{
-                dnam{"калм"}
-                few{"{0} калм"}
-                many{"{0} калм"}
-                one{"{0} калм"}
-                other{"{0} калм"}
-            }
-            gray{
-                dnam{"Гр"}
-                few{"{0} Гр"}
-                many{"{0} Гр"}
-                one{"{0} Гр"}
-                other{"{0} Гр"}
-            }
-            sievert{
-                dnam{"Зв"}
-                few{"{0} Зв"}
-                many{"{0} Зв"}
-                one{"{0} Зв"}
-                other{"{0} Зв"}
-            }
-        }
-        force{
-            kilogram-force{
-                dnam{"кгс"}
-                few{"{0} кгс"}
-                many{"{0} кгс"}
-                one{"{0} кгс"}
-                other{"{0} кгс"}
-            }
-        }
         length{
             fathom{
                 dnam{"м. саж."}
@@ -7339,22 +7233,6 @@ ru{
                 other{"{0} м. ми"}
             }
         }
-        magnetic{
-            tesla{
-                dnam{"Тл"}
-                few{"{0} Тл"}
-                many{"{0} Тл"}
-                one{"{0} Тл"}
-                other{"{0} Тл"}
-            }
-            weber{
-                dnam{"Вб"}
-                few{"{0} Вб"}
-                many{"{0} Вб"}
-                one{"{0} Вб"}
-                other{"{0} Вб"}
-            }
-        }
         mass{
             stone{
                 dnam{"стн"}
@@ -7369,15 +7247,6 @@ ru{
                 many{"{0} ам. т"}
                 one{"{0} ам. т"}
                 other{"{0} ам. т"}
-            }
-        }
-        pressure{
-            ofhg{
-                dnam{"рт. ст."}
-                few{"{0} рт. ст."}
-                many{"{0} рт. ст."}
-                one{"{0} рт. ст."}
-                other{"{0} рт. ст."}
             }
         }
         speed{
@@ -7395,15 +7264,6 @@ ru{
                 many{"{0}°F"}
                 one{"{0}°F"}
                 other{"{0}°F"}
-            }
-        }
-        volume{
-            fluid-ounce-metric{
-                dnam{"м. жидк. унц."}
-                few{"{0} м. жидк. унц."}
-                many{"{0} м. жидк. унц."}
-                one{"{0} м. жидк. унц."}
-                other{"{0} м. жидк. унц."}
             }
         }
     }

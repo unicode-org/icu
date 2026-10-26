@@ -26,6 +26,7 @@
 #include "unicode/upluralrules.h"
 #include "unicode/coleitr.h"
 #include "unicode/uchar.h"
+#include "unicode/normalizer2.h"
 #include "nfrs.h"
 #include "nfrlist.h"
 #include "nfsubs.h"
@@ -33,6 +34,13 @@
 #include "putilimp.h"
 
 U_NAMESPACE_BEGIN
+
+// Characters that lenient parsing treats as ignorable separators in prefixLength.
+// Zs = space separators, Pd = dash punctuation, Cf = format characters (soft hyphen, ZWNJ, etc.)
+// Plus comma, and period which %%lenient-parse rules historically treated as equivalent.
+static inline UBool isLenientSeparator(char16_t c) {
+    return (U_GET_GC_MASK(c) & (U_GC_ZS_MASK | U_GC_PD_MASK | U_GC_CF_MASK)) || c == u',' || c == u'.';
+}
 
 NFRule::NFRule(const RuleBasedNumberFormat* _rbnf, const UnicodeString &_ruleText, UErrorCode &status)
   : ruleText(_ruleText)
@@ -1255,11 +1263,7 @@ NFRule::matchToDelimiter(const UnicodeString& text,
             subText.setTo(text, 0, dPos);
             if (!subText.isEmpty()) {
                 UBool success = sub->doParse(subText, tempPP, _baseValue, upperBound,
-#if UCONFIG_NO_COLLATION
-                    false,
-#else
                     formatter->isLenient(),
-#endif
                     nonNumericalExecutedRuleMask,
                     recursionCount,
                     result);
@@ -1317,11 +1321,7 @@ NFRule::matchToDelimiter(const UnicodeString& text,
 
         // try to match the whole string against the substitution
         UBool success = sub->doParse(text, tempPP, _baseValue, upperBound,
-#if UCONFIG_NO_COLLATION
-            false,
-#else
             formatter->isLenient(),
-#endif
             nonNumericalExecutedRuleMask,
             recursionCount,
             result);
@@ -1368,12 +1368,104 @@ NFRule::prefixLength(const UnicodeString& str, const UnicodeString& prefix, UErr
         return 0;
     }
 
-#if !UCONFIG_NO_COLLATION
-    // go through all this grief if we're in lenient-parse mode
+    // Check if non-lenient rule finds the text before call lenient parsing
+    if (str.startsWith(prefix)) {
+        return prefix.length();
+    }
+
     if (formatter->isLenient()) {
-        // Check if non-lenient rule finds the text before call lenient parsing
-        if (str.startsWith(prefix)) {
-            return prefix.length();
+        // In lenient-parse mode, walk both strings simultaneously:
+        // skip separator characters in both, and compare the rest case-insensitively.
+        // NFC normalization is applied incrementally to handle NFC/NFD differences
+        // (e.g., U+00E9 vs U+0065 U+0301). NFC is used instead of NFD to
+        // avoid decomposing Hangul syllables into Jamo (which would create false
+        // prefix matches) and to preserve correct Turkish dotted uppercase i case folding behavior.
+        UErrorCode err = U_ZERO_ERROR;
+#if !UCONFIG_NO_NORMALIZATION
+        const Normalizer2 *nfc = Normalizer2::getNFCInstance(err);
+        if (U_SUCCESS(err)) {
+            // NFC-normalize the prefix up front (it's short rule text).
+            UnicodeString nfcPrefix;
+            nfc->normalize(prefix, nfcPrefix, err);
+            if (U_SUCCESS(err)) {
+                int32_t strIdx = 0;        // position in original str
+                int32_t prefixIdx = 0;
+                int32_t strLen = str.length();
+                int32_t nfcPrefixLen = nfcPrefix.length();
+                UBool matched = true;
+
+                // Buffer for the NFC of the current normalization segment from str.
+                // We normalize str segments on the fly to avoid normalizing the entire string.
+                UnicodeString strSeg, strNfc;
+                int32_t strNfcIdx = 0;
+                int32_t strNfcLen = 0;
+
+                UBool prefixIsAllSeparators = true;
+                for (int32_t i = 0; i < nfcPrefixLen; ++i) {
+                    if (!isLenientSeparator(nfcPrefix.charAt(i))) {
+                        prefixIsAllSeparators = false;
+                        break;
+                    }
+                }
+                while (prefixIdx < nfcPrefixLen) {
+                    // Skip separators in str only when the NFC buffer is exhausted.
+                    // Separators are NFC-inert and always appear at segment boundaries.
+                    int32_t strSepCount = 0;
+                    while (strNfcIdx >= strNfcLen && strIdx < strLen && isLenientSeparator(str.charAt(strIdx))) {
+                        ++strIdx;
+                        ++strSepCount;
+                    }
+                    while (prefixIdx < nfcPrefixLen && isLenientSeparator(nfcPrefix.charAt(prefixIdx))) {
+                        ++prefixIdx;
+                    }
+                    if (prefixIsAllSeparators && prefixIdx >= nfcPrefixLen && strSepCount == 0) {
+                        matched = false;
+                        break;
+                    }
+                    if (prefixIdx >= nfcPrefixLen) {
+                        break;
+                    }
+
+                    // Get the next NFC code unit from str.
+                    if (strNfcIdx >= strNfcLen) {
+                        if (strIdx >= strLen) {
+                            matched = false;
+                            break;
+                        }
+                        // Read the next normalization segment from str up to the next NFC boundary.
+                        strSeg.remove();
+                        do {
+                            UChar32 cp = str.char32At(strIdx);
+                            strSeg.append(cp);
+                            strIdx += U16_LENGTH(cp);
+                        } while (strIdx < strLen && !nfc->hasBoundaryBefore(str.char32At(strIdx)));
+
+                        nfc->normalize(strSeg, strNfc, err);
+                        if (U_FAILURE(err)) {
+                            break;
+                        }
+                        strNfcIdx = 0;
+                        strNfcLen = strNfc.length();
+                    }
+
+                    if (u_foldCase(strNfc.charAt(strNfcIdx++), formatter->caseFoldOption) != u_foldCase(nfcPrefix.charAt(prefixIdx), formatter->caseFoldOption)) {
+                        matched = false;
+                        break;
+                    }
+                    ++prefixIdx;
+                }
+                if (matched) {
+                    return strIdx;
+                }
+            }
+        }
+#endif
+
+        // go through all this grief if we're in lenient-parse mode
+#if !UCONFIG_NO_COLLATION
+        if (formatter->lenientParseRules == nullptr) {
+            // Nothing customized. Don't go further.
+            return 0;
         }
         // get the formatter's collator and use it to create two
         // collation element iterators, one over the target string
@@ -1395,7 +1487,7 @@ NFRule::prefixLength(const UnicodeString& str, const UnicodeString& prefix, UErr
             return 0;
         }
 
-        UErrorCode err = U_ZERO_ERROR;
+        err = U_ZERO_ERROR;
 
         // The original code was problematic.  Consider this match:
         // prefix = "fifty-"
@@ -1472,65 +1564,9 @@ NFRule::prefixLength(const UnicodeString& str, const UnicodeString& prefix, UErr
         fprintf(stderr, "prefix length: %d\n", result);
 #endif
         return result;
-#if 0
-        //----------------------------------------------------------------
-        // JDK 1.2-specific API call
-        // return strIter.getOffset();
-        //----------------------------------------------------------------
-        // JDK 1.1 HACK (take out for 1.2-specific code)
-
-        // if we make it to here, we have a successful match.  Now we
-        // have to find out HOW MANY characters from the target string
-        // matched the prefix (there isn't necessarily a one-to-one
-        // mapping between collation elements and characters).
-        // In JDK 1.2, there's a simple getOffset() call we can use.
-        // In JDK 1.1, on the other hand, we have to go through some
-        // ugly contortions.  First, use the collator to compare the
-        // same number of characters from the prefix and target string.
-        // If they're equal, we're done.
-        collator->setStrength(Collator::PRIMARY);
-        if (str.length() >= prefix.length()) {
-            UnicodeString temp;
-            temp.setTo(str, 0, prefix.length());
-            if (collator->equals(temp, prefix)) {
-#ifdef RBNF_DEBUG
-                fprintf(stderr, "returning: %d\n", prefix.length());
 #endif
-                return prefix.length();
-            }
-        }
-
-        // if they're not equal, then we have to compare successively
-        // larger and larger substrings of the target string until we
-        // get to one that matches the prefix.  At that point, we know
-        // how many characters matched the prefix, and we can return.
-        int32_t p = 1;
-        while (p <= str.length()) {
-            UnicodeString temp;
-            temp.setTo(str, 0, p);
-            if (collator->equals(temp, prefix)) {
-                return p;
-            } else {
-                ++p;
-            }
-        }
-
-        // SHOULD NEVER GET HERE!!!
-        return 0;
-        //----------------------------------------------------------------
-#endif
-
-        // If lenient parsing is turned off, forget all that crap above.
-        // Just use String.startsWith() and be done with it.
-  } else
-#endif
-  {
-      if (str.startsWith(prefix)) {
-          return prefix.length();
-      } else {
-          return 0;
-      }
-  }
+    }
+    return 0;
 }
 
 /**
@@ -1649,45 +1685,10 @@ NFRule::findTextLenient(const UnicodeString& str,
 * ignorable at the primary-order level.  false otherwise.
 */
 UBool
-NFRule::allIgnorable(const UnicodeString& str, UErrorCode& status) const
+NFRule::allIgnorable(const UnicodeString& str, UErrorCode& /*status*/) const
 {
     // if the string is empty, we can just return true
-    if (str.length() == 0) {
-        return true;
-    }
-
-#if !UCONFIG_NO_COLLATION
-    // if lenient parsing is turned on, walk through the string with
-    // a collation element iterator and make sure each collation
-    // element is 0 (ignorable) at the primary level
-    if (formatter->isLenient()) {
-        const RuleBasedCollator* collator = formatter->getCollator();
-        if (collator == nullptr) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return false;
-        }
-        LocalPointer<CollationElementIterator> iter(collator->createCollationElementIterator(str));
-
-        // Memory allocation error check.
-        if (iter.isNull()) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return false;
-        }
-
-        UErrorCode err = U_ZERO_ERROR;
-        int32_t o = iter->next(err);
-        while (o != CollationElementIterator::NULLORDER
-            && CollationElementIterator::primaryOrder(o) == 0) {
-            o = iter->next(err);
-        }
-
-        return o == CollationElementIterator::NULLORDER;
-    }
-#endif
-
-    // if lenient parsing is turned off, there is no such thing as
-    // an ignorable character: return true only if the string is empty
-    return false;
+    return str.length() == 0;
 }
 
 void

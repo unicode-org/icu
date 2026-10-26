@@ -177,50 +177,74 @@ sk{
                 }
                 decimalFormat{
                     1000{
+                        few{"0 tis'.'"}
+                        many{"0 tis'.'"}
                         one{"0 tis'.'"}
                         other{"0 tis'.'"}
                     }
                     10000{
+                        few{"00 tis'.'"}
+                        many{"00 tis'.'"}
                         one{"00 tis'.'"}
                         other{"00 tis'.'"}
                     }
                     100000{
+                        few{"000 tis'.'"}
+                        many{"000 tis'.'"}
                         one{"000 tis'.'"}
                         other{"000 tis'.'"}
                     }
                     1000000{
+                        few{"0 mil'.'"}
+                        many{"0 mil'.'"}
                         one{"0 mil'.'"}
                         other{"0 mil'.'"}
                     }
                     10000000{
+                        few{"00 mil'.'"}
+                        many{"00 mil'.'"}
                         one{"00 mil'.'"}
                         other{"00 mil'.'"}
                     }
                     100000000{
+                        few{"000 mil'.'"}
+                        many{"000 mil'.'"}
                         one{"000 mil'.'"}
                         other{"000 mil'.'"}
                     }
                     1000000000{
+                        few{"0 mld'.'"}
+                        many{"0 mld'.'"}
                         one{"0 mld'.'"}
                         other{"0 mld'.'"}
                     }
                     10000000000{
+                        few{"00 mld'.'"}
+                        many{"00 mld'.'"}
                         one{"00 mld'.'"}
                         other{"00 mld'.'"}
                     }
                     100000000000{
+                        few{"000 mld'.'"}
+                        many{"000 mld'.'"}
                         one{"000 mld'.'"}
                         other{"000 mld'.'"}
                     }
                     1000000000000{
+                        few{"0 bil'.'"}
+                        many{"0 bil'.'"}
                         one{"0 bil'.'"}
                         other{"0 bil'.'"}
                     }
                     10000000000000{
+                        few{"00 bil'.'"}
+                        many{"00 bil'.'"}
                         one{"00 bil'.'"}
                         other{"00 bil'.'"}
                     }
                     100000000000000{
+                        few{"000 bil'.'"}
+                        many{"000 bil'.'"}
                         one{"000 bil'.'"}
                         other{"000 bil'.'"}
                     }
@@ -346,7 +370,7 @@ sk{
                 H{"H"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
-                Hv{"HH 'h', v"}
+                Hv{"H v"}
                 M{"M."}
                 MEd{"E d. M."}
                 MMMEd{"E d. M."}
@@ -449,6 +473,10 @@ sk{
                 MMMM{
                     M{"LLLL – LLLL"}
                 }
+                MMMMd{
+                    M{"d. MM. – d. MM."}
+                    d{"d. – d. MM."}
+                }
                 MMMd{
                     M{"d. M. – d. M."}
                     d{"d. – d. M."}
@@ -547,6 +575,11 @@ sk{
                 "yMd",
                 "yMd",
             }
+            appendItems{
+                Day-Of-Week{"{1}, {0}"}
+                Era{"{0} {1}"}
+                Time-Day-Of-Week{"{1}, {0}"}
+            }
             availableFormats{
                 Ed{"E d."}
                 Ehm{"E h:mm a"}
@@ -554,6 +587,8 @@ sk{
                 Gy{"y G"}
                 GyMMM{"LLLL y G"}
                 GyMMMEd{"E d. M. y G"}
+                GyMMMM{"MMM y G"}
+                GyMMMMEd{"E, d. MMMM y G"}
                 GyMMMMd{"d. M. y G"}
                 GyMMMd{"d. M. y G"}
                 GyMd{"d. M. y GGGGG"}
@@ -562,6 +597,7 @@ sk{
                 Hms{"H:mm:ss"}
                 Hmsv{"H:mm:ss v"}
                 Hmv{"H:mm v"}
+                Hv{"H v"}
                 M{"L."}
                 MEd{"E d. M."}
                 MMMEd{"E d. M."}
@@ -586,6 +622,7 @@ sk{
                 yMMM{"M/y"}
                 yMMMEd{"E d. M. y"}
                 yMMMM{"LLLL y"}
+                yMMMMEd{"E, d. MMMM y"}
                 yMMMMd{"d. MMMM y"}
                 yMMMd{"d. M. y"}
                 yMd{"d. M. y"}
@@ -783,6 +820,10 @@ sk{
                 }
                 MMMM{
                     M{"LLLL – LLLL"}
+                }
+                MMMMd{
+                    M{"d. MMMM – d. MMMM"}
+                    d{"d. – d. MMMM"}
                 }
                 MMMd{
                     M{"d. M. – d. M."}
@@ -1031,7 +1072,6 @@ sk{
             eras{
                 abbreviated{
                     0{"pred ROC"}
-                    1{"ROC"}
                 }
             }
         }

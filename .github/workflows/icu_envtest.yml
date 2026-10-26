@@ -25,7 +25,7 @@ jobs:
   #=================================================================
   # locale env tests.
   env-test-locale:
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     strategy:
       # "fail-fast: false" let other jobs keep running even if the test break in some locales.
       fail-fast: false
@@ -46,7 +46,9 @@ jobs:
         run: |
           locale -a;
       - name: Checkout and setup
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Build
         run: |
           cd icu4c/source/;
@@ -82,7 +84,7 @@ jobs:
   #=================================================================
   # tz env tests.
   env-test-tz:
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     strategy:
       # "fail-fast: false" let other jobs keep running even if the test break in some timezones.
       fail-fast: false
@@ -105,7 +107,9 @@ jobs:
           find /usr/share/zoneinfo/ -type f,l|egrep -v "/(right|posix)/"|egrep -v "\.tab"|wc -l;
           find /usr/share/zoneinfo/ -type f,l|egrep -v "/(right|posix)/"|egrep -v "\.tab"|cut -d '/' -f5-50;
       - name: Checkout and setup
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Build
         run: |
           cd icu4c/source/;

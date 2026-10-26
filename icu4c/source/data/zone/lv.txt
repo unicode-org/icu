@@ -872,7 +872,6 @@ lv{
         }
         "Europe:Dublin"{
             ec{"Dublina"}
-            ld{"Īrijas ziemas laiks"}
         }
         "Europe:Gibraltar"{
             ec{"Gibraltārs"}
@@ -906,7 +905,6 @@ lv{
         }
         "Europe:London"{
             ec{"Londona"}
-            ld{"Lielbritānijas vasaras laiks"}
         }
         "Europe:Luxembourg"{
             ec{"Luksemburga"}
@@ -1112,6 +1110,11 @@ lv{
         "Pacific:Wallis"{
             ec{"Volisa"}
         }
+        "meta:Acre"{
+            ld{"Akres vasaras laiks"}
+            lg{"Akres laiks"}
+            ls{"Akres ziemas laiks"}
+        }
         "meta:Afghanistan"{
             ls{"Afganistānas laiks"}
         }
@@ -1238,6 +1241,10 @@ lv{
             lg{"Brazīlijas laiks"}
             ls{"Brazīlijas ziemas laiks"}
         }
+        "meta:British"{
+            ld{"Lielbritānijas vasaras laiks"}
+            lg{"Lielbritānijas laiks"}
+        }
         "meta:Brunei"{
             ls{"Brunejas Darusalamas laiks"}
         }
@@ -1362,6 +1369,11 @@ lv{
         "meta:Gilbert_Islands"{
             ls{"Gilberta salu laiks"}
         }
+        "meta:Greenland"{
+            ld{"Grenlandes vasaras laiks"}
+            lg{"Grenlandes laiks"}
+            ls{"Grenlandes ziemas laiks"}
+        }
         "meta:Greenland_Eastern"{
             ld{"Austrumgrenlandes vasaras laiks"}
             lg{"Austrumgrenlandes laiks"}
@@ -1379,7 +1391,7 @@ lv{
             ls{"Gajānas laiks"}
         }
         "meta:Hawaii"{
-            ls{"Havaju–Aleutu ziemas laiks"}
+            ls{"Havaju laiks"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"Havaju–Aleutu vasaras laiks"}
@@ -1419,6 +1431,10 @@ lv{
             lg{"Irānas laiks"}
             ls{"Irānas ziemas laiks"}
         }
+        "meta:Irish"{
+            ld{"Īrijas ziemas laiks"}
+            lg{"Īrijas laiks"}
+        }
         "meta:Irkutsk"{
             ld{"Irkutskas vasaras laiks"}
             lg{"Irkutskas laiks"}
@@ -1435,9 +1451,9 @@ lv{
             ls{"Japānas ziemas laiks"}
         }
         "meta:Kamchatka"{
-            ld{"Petropavlovskas-Kamčatskas vasaras laiks"}
-            lg{"Petropavlovskas-Kamčatskas laiks"}
-            ls{"Petropavlovskas-Kamčatskas ziemas laiks"}
+            ld{"Kamčatkas vasaras laiks"}
+            lg{"Kamčatkas laiks"}
+            ls{"Kamčatkas ziemas laiks"}
         }
         "meta:Kazakhstan"{
             ls{"Kazahstānas laiks"}
@@ -1619,8 +1635,6 @@ lv{
             ls{"Samaras ziemas laiks"}
         }
         "meta:Samoa"{
-            ld{"Samoa vasaras laiks"}
-            lg{"Samoa laiks"}
             ls{"Samoa ziemas laiks"}
         }
         "meta:Seychelles"{
@@ -1680,6 +1694,9 @@ lv{
             ld{"Urugvajas vasaras laiks"}
             lg{"Urugvajas laiks"}
             ls{"Urugvajas ziemas laiks"}
+        }
+        "meta:Urumqi"{
+            ls{"Urumči laiks"}
         }
         "meta:Uzbekistan"{
             ld{"Uzbekistānas vasaras laiks"}

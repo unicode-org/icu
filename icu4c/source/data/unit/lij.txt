@@ -2,4 +2,228 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/
 lij{
+    units{
+        angle{
+            steradian{
+                dnam{"steradianti"}
+                one{"{0} steradiante"}
+                other{"{0} steradianti"}
+            }
+        }
+        compound{
+            10p-27{"ronto{0}"}
+            10p-30{"quecto{0}"}
+            10p27{"ronna{0}"}
+            10p30{"quetta{0}"}
+        }
+        concentr{
+            katal{
+                dnam{"katal"}
+                one{"{0} katal"}
+                other{"{0} katal"}
+            }
+            ofglucose{
+                dnam{"de glucòsio"}
+                one{"{0} de glucòsio"}
+                other{"{0} de glucòsio"}
+            }
+            part{
+                dnam{"parte"}
+                one{"{0} parte"}
+                other{"{0} parte"}
+            }
+            part-per-1e9{
+                dnam{"parte pe miliardo"}
+                one{"{0} parte pe miliardo"}
+                other{"{0} parte pe miliardo"}
+            }
+        }
+        duration{
+            night{
+                dnam{"neutte"}
+                one{"{0} neutte"}
+                other{"{0} neutte"}
+                per{"{0} pe neutte"}
+            }
+        }
+        electric{
+            coulomb{
+                dnam{"coulomb"}
+                one{"{0} coulomb"}
+                other{"{0} coulomb"}
+            }
+            farad{
+                dnam{"farad"}
+                one{"{0} farad"}
+                other{"{0} farad"}
+            }
+            henry{
+                dnam{"henry"}
+                one{"{0} henry"}
+                other{"{0} henry"}
+            }
+            siemens{
+                dnam{"siemens"}
+                one{"{0} siemens"}
+                other{"{0} siemens"}
+            }
+        }
+        energy{
+            becquerel{
+                dnam{"becquerel"}
+                one{"{0} becquerel"}
+                other{"{0} becquerel"}
+            }
+            calorie-it{
+                dnam{"calorie [IT]"}
+                one{"{0} calorie [IT]"}
+                other{"{0} calorie [IT]"}
+            }
+            gray{
+                dnam{"gray"}
+                one{"{0} gray"}
+                other{"{0} gray"}
+            }
+            sievert{
+                dnam{"sievert"}
+                one{"{0} sievert"}
+                other{"{0} sievert"}
+            }
+        }
+        force{
+            kilogram-force{
+                dnam{"chillogrammi-fòrsa"}
+                one{"{0} chillogrammo-fòrsa"}
+                other{"{0} chillogrammi-fòrsa"}
+            }
+        }
+        magnetic{
+            tesla{
+                dnam{"tesla"}
+                one{"{0} tesla"}
+                other{"{0} tesla"}
+            }
+            weber{
+                dnam{"weber"}
+                one{"{0} weber"}
+                other{"{0} weber"}
+            }
+        }
+        pressure{
+            ofhg{
+                dnam{"de mercuio"}
+                one{"{0} de mercuio"}
+                other{"{0} de mercuio"}
+            }
+        }
+        speed{
+            beaufort{
+                dnam{"Beaufort"}
+            }
+            light-speed{
+                dnam{"luxe"}
+                one{"{0} luxe"}
+                other{"{0} luxe"}
+            }
+        }
+        volume{
+            fluid-ounce-metric{
+                dnam{"onse fluide metriche"}
+                one{"{0} onsa fluida metrica"}
+                other{"{0} onse fluide metriche"}
+            }
+        }
+    }
+    unitsNarrow{
+        concentr{
+            ofglucose{
+                dnam{"Glc"}
+            }
+            part{
+                dnam{"parte"}
+                one{"{0} parte"}
+                other{"{0} parte"}
+            }
+            part-per-1e9{
+                dnam{"ppmd"}
+                one{"{0} ppmd"}
+                other{"{0} ppmd"}
+            }
+        }
+        duration{
+            night{
+                dnam{"neutte"}
+                one{"{0}neutte"}
+                other{"{0}neutte"}
+                per{"{0}/neutte"}
+            }
+        }
+        energy{
+            calorie-it{
+                dnam{"cal-IT"}
+            }
+        }
+        pressure{
+            ofhg{
+                dnam{"de Hg"}
+                one{"{0} de Hg"}
+                other{"{0} de Hg"}
+            }
+        }
+        speed{
+            light-speed{
+                dnam{"luxe"}
+                one{"{0}luxe"}
+                other{"{0}luxe"}
+            }
+        }
+    }
+    unitsShort{
+        concentr{
+            ofglucose{
+                dnam{"Glc"}
+            }
+            part{
+                dnam{"parte"}
+                one{"{0} parte"}
+                other{"{0} parte"}
+            }
+            part-per-1e9{
+                dnam{"parte/miliardo"}
+                one{"{0} ppmd"}
+                other{"{0} ppmd"}
+            }
+        }
+        duration{
+            century{
+                one{"{0} sec."}
+                other{"{0} sec."}
+            }
+            night{
+                dnam{"neutte"}
+                one{"{0} neutte"}
+                other{"{0} neutte"}
+                per{"{0}/neutte"}
+            }
+        }
+        energy{
+            calorie-it{
+                dnam{"cal-IT"}
+            }
+        }
+        pressure{
+            ofhg{
+                dnam{"de Hg"}
+                one{"{0} de Hg"}
+                other{"{0} de Hg"}
+            }
+        }
+        speed{
+            light-speed{
+                dnam{"luxe"}
+                one{"{0} luxe"}
+                other{"{0} luxe"}
+            }
+        }
+    }
 }

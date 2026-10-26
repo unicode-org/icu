@@ -48,11 +48,12 @@ test-*.xml
 .idea/
 .vs/
 .vscode/
+.settings/
 ARM/
 ARM64/
 Debug/
 Generated[!!-~]Files/
-Release/
+Release/**
 __pycache__/
 _site/
 arm/
@@ -63,7 +64,7 @@ doc/
 lib/
 !tools/cldr/lib
 out/
-release/
+release/**
 target/
 !docs/processes/release/
 tmp/
@@ -81,7 +82,8 @@ pkgdataMakefile
 rules.mk
 .DS_Store
 .flattened-pom.xml
-
+dependency-reduced-pom.xml
+.project
 !icu4c/source/samples/csdet/Makefile
 
 # Directory specific wildcards
@@ -267,7 +269,6 @@ icu4c/source/tools/makeconv/makeconv.[0-9]
 icu4c/source/tools/pkgdata/pkgdata
 icu4c/source/tools/pkgdata/pkgdata.[0-9]
 icu4c/source/uconfig.h.prepend
-icu4j/.project
 icu4j/eclipse
 tools/multi/proj/icu4cscan/cooked
 tools/multi/proj/icu4cscan/dtdcache

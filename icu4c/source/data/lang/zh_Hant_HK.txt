@@ -3,8 +3,12 @@
 // Generated using tools/cldr/cldr-to-icu/
 zh_Hant_HK{
     Keys{
+        d0{"轉換目的地"}
+        fw{"一星期的第一日"}
         ms{"度量衡系統"}
+        mu{"測量單位"}
         x{"專用區"}
+        x0{"專用區轉換"}
     }
     Languages{
         aa{"阿法爾文"}
@@ -106,14 +110,25 @@ zh_Hant_HK{
         calendar%core{
             ethiopic{"埃塞俄比亞曆"}
             ethiopic-amete-alem{"埃塞俄比亞阿美德阿萊姆曆"}
+            indian{"印度曆"}
             islamic-civil{"伊斯蘭曆（表格曆，民用紀元）"}
+            islamic-rgsa{"伊斯蘭曆，沙特觀月"}
             islamic-tbla{"伊斯蘭曆（表格式，天文紀元）"}
+        }
+        colStrength%core{
+            primary{"只限基礎字母"}
         }
         collation{
             dictionary{"詞典排序"}
         }
         collation%core{
             dictionary{"詞典"}
+        }
+        kv%core{
+            currency{"Shift 鍵、空格、標點符號、所有符號"}
+            punct{"Shift 鍵、空格、標點符號"}
+            space{"Shift 鍵、空格、標點符號"}
+            symbol{"Shift 鍵、空格、標點符號、非貨幣符號。"}
         }
         ms{
             uksystem{"英制"}
@@ -129,6 +144,18 @@ zh_Hant_HK{
             orya{"奧里亞數字"}
             taml{"泰米爾數字"}
             tamldec{"泰米爾數字"}
+        }
+        numbers%core{
+            greklow{"小寫希臘文"}
+            hanidays{"傳統曆法漢字月日寫法"}
+            hanidec{"使用漢字數字計數的位置十進制"}
+            jpanyear{"日本元年紀年法"}
+            lanatham{"泰譚譚（教會用語）"}
+            mathmono{"數學等寬字體"}
+            mathsans{"數學無襯線字體"}
+            roman{"大寫羅馬數字"}
+            romanlow{"小寫羅馬字"}
+            tamldec{"現代泰米爾"}
         }
     }
     Variants{

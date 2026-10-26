@@ -263,10 +263,6 @@ hr{
             "CNH",
             "kineski juan (offshore)",
         }
-        CNX{
-            "CNX",
-            "kineski narodni dolar",
-        }
         CNY{
             "CNY",
             "kineski yuan",
@@ -1546,11 +1542,6 @@ hr{
             few{"kineska juana (offshore)"}
             one{"kineski juan (offshore)"}
             other{"kineskih juana (offshore)"}
-        }
-        CNX{
-            few{"kineska narodna dolara"}
-            one{"kineski narodni dolar"}
-            other{"kineskih narodnih dolara"}
         }
         CNY{
             few{"kineska yuana"}

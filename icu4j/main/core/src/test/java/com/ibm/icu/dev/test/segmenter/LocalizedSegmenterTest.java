@@ -25,6 +25,7 @@ import org.junit.runners.JUnit4;
 public class LocalizedSegmenterTest extends CoreTestFmwk {
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testLocaleInLocalizedSegmenter() {
 
         Object[][] casesData = {

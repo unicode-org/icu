@@ -158,11 +158,6 @@ az{
                 one{"{0} qlükoza"}
                 other{"{0} qlükoza"}
             }
-            part{
-                dnam{"hissə"}
-                one{"{0} hissə"}
-                other{"{0} hissə"}
-            }
             part-per-1e6{
                 dnam{"milyonda hissəcik"}
                 one{"{0} milyonda hissəcik"}
@@ -300,11 +295,6 @@ az{
                 one{"{0} amper"}
                 other{"{0} amper"}
             }
-            coulomb{
-                dnam{"kulomb"}
-                one{"{0} kulomb"}
-                other{"{0} kulomb"}
-            }
             farad{
                 dnam{"farad"}
             }
@@ -360,8 +350,6 @@ az{
             }
             gray{
                 dnam{"qrey"}
-                one{"{0} Qy"}
-                other{"{0} Qy"}
             }
             joule{
                 one{"{0} coul"}
@@ -396,8 +384,6 @@ az{
         force{
             kilogram-force{
                 dnam{"kiloqram qüvvə"}
-                one{"{0} kqq"}
-                other{"{0} kqq"}
             }
             kilowatt-hour-per-100-kilometer{
                 one{"{0} kVtst/100km"}
@@ -903,20 +889,6 @@ az{
             10p3{"k{0}"}
         }
         concentr{
-            ofglucose{
-                dnam{"Qlk"}
-                one{"{0} Qlk"}
-                other{"{0} Qlk"}
-            }
-            part{
-                dnam{"hissə"}
-                one{"{0} hissə"}
-                other{"{0} hissə"}
-            }
-            part-per-1e9{
-                one{"{0} hissə/milyard"}
-                other{"{0} hissə/milyard"}
-            }
             percent{
                 dnam{"%"}
             }
@@ -959,41 +931,16 @@ az{
             }
         }
         energy{
-            becquerel{
-                dnam{"Bk"}
-                one{"{0} Bk"}
-                other{"{0} Bk"}
-            }
-            calorie-it{
-                dnam{"kal-IT"}
-                one{"{0} kal-IT"}
-                other{"{0} kal-IT"}
-            }
             electronvolt{
                 dnam{"eV"}
-            }
-            gray{
-                dnam{"Qy"}
-                one{"{0} Qy"}
-                other{"{0} Qy"}
             }
             kilowatt-hour{
                 dnam{"kVt/saat"}
                 one{"{0} kVt/saat"}
                 other{"{0} kVt/saat"}
             }
-            sievert{
-                dnam{"Zv"}
-                one{"{0} Zv"}
-                other{"{0} Zv"}
-            }
         }
         force{
-            kilogram-force{
-                dnam{"kqq"}
-                one{"{0} kqq"}
-                other{"{0} kqq"}
-            }
             kilowatt-hour-per-100-kilometer{
                 one{"{0} kVts/100km"}
                 other{"{0} kVts/100km"}
@@ -1167,11 +1114,6 @@ az{
             fluid-ounce-imperial{
                 one{"{0}fl oz Im"}
                 other{"{0}fl oz Im"}
-            }
-            fluid-ounce-metric{
-                dnam{"mmu"}
-                one{"{0} mmu"}
-                other{"{0} mmu"}
             }
             gallon-imperial{
                 one{"{0} imp.qal"}

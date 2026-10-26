@@ -30,6 +30,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Multimaps;
 import com.google.common.collect.SetMultimap;
 import com.google.common.collect.Sets;
 import com.google.common.io.CharStreams;
@@ -57,6 +58,7 @@ import org.unicode.icu.tool.cldrtoicu.mapper.BreakIteratorMapper;
 import org.unicode.icu.tool.cldrtoicu.mapper.CollationMapper;
 import org.unicode.icu.tool.cldrtoicu.mapper.DayPeriodsMapper;
 import org.unicode.icu.tool.cldrtoicu.mapper.LocaleMapper;
+import org.unicode.icu.tool.cldrtoicu.mapper.MetazoneOffsetsMapper;
 import org.unicode.icu.tool.cldrtoicu.mapper.PluralRangesMapper;
 import org.unicode.icu.tool.cldrtoicu.mapper.PluralsMapper;
 import org.unicode.icu.tool.cldrtoicu.mapper.RbnfMapper;
@@ -227,6 +229,7 @@ public final class LdmlConverter {
                         readLinesFromResource("/ldml2icu_supplemental.txt"),
                         IcuFunctions.ALGORITHM_FN,
                         IcuFunctions.DATE_FN,
+                        IcuFunctions.DATE_ROUND_SEC_FN,
                         IcuFunctions.DAY_NUMBER_FN,
                         IcuFunctions.EXP_FN,
                         IcuFunctions.YMD_FN);
@@ -287,7 +290,8 @@ public final class LdmlConverter {
         Map<IcuLocaleDir, DependencyGraph> graphMetadata = new HashMap<>();
         splitDirs.forEach(d -> graphMetadata.put(d, new DependencyGraph(cldrVersion)));
 
-        SetMultimap<IcuLocaleDir, String> writtenLocaleIds = HashMultimap.create();
+        SetMultimap<IcuLocaleDir, String> writtenLocaleIds =
+                Multimaps.synchronizedSetMultimap(HashMultimap.create());
         Path baseDir = config.getOutputDir();
 
         System.out.println("processing standard ldml files");
@@ -533,6 +537,7 @@ public final class LdmlConverter {
 
                 case META_ZONES:
                     processSupplemental("metaZones", METAZONE_PATHS, "misc", false);
+                    writeMetazoneOffsets();
                     break;
 
                 case NUMBERING_SYSTEMS:
@@ -636,6 +641,38 @@ public final class LdmlConverter {
         IcuTextWriter.writeToFile(versionData, miscDir, versionHeader, false);
     }
 
+    // Directory for data which lives in the ICU source tree but is not packaged into ICU's
+    // runtime data (nothing under here is read by the ICU data build).
+    private static final String TZDATA_DIR = "tzdata";
+    private static final String METAZONE_OFFSETS_FILE = "metazoneOffsets.txt";
+    private static final ImmutableList<String> METAZONE_OFFSETS_COMMENT =
+            ImmutableList.of(
+                    "",
+                    "Standard and daylight-savings offsets from CLDR's metaZones.xml.",
+                    "",
+                    "This file is NOT packaged into ICU's data; it is only read offline by the",
+                    "\"tz2icu\" tool (icu4c/source/tools/tzcode/) when generating zoneinfo64.txt.",
+                    "",
+                    "Fields (tab separated):",
+                    "  <zone ID> <from> <to> <stdOffset> <dstOffset>",
+                    "where <from> (inclusive) and <to> (exclusive) are UTC date-times formatted",
+                    "as \"yyyy-MM-dd HH:mm\", and the offsets are in CLDR's \"[+-]HH[:mm]\" format.");
+
+    private void writeMetazoneOffsets() {
+        ImmutableList<String> rows = MetazoneOffsetsMapper.process(src);
+        Path dir = createDirectory(config.getOutputDir().resolve(TZDATA_DIR));
+        Path file = dir.resolve(METAZONE_OFFSETS_FILE);
+        try (BufferedWriter w = Files.newBufferedWriter(file, UTF_8);
+                PrintWriter out = new PrintWriter(w)) {
+            Stream.concat(fileHeader.stream(), METAZONE_OFFSETS_COMMENT.stream())
+                    .forEach(line -> out.println(line.isEmpty() ? "#" : "# " + line));
+            rows.forEach(out::println);
+            out.flush();
+        } catch (IOException e) {
+            throw new RuntimeException("cannot write metazone offsets file: " + file, e);
+        }
+    }
+
     // Commonest case for writing data files in "normal" directories.
     private void write(IcuData icuData, String dir) {
         write(icuData, config.getOutputDir().resolve(dir), false);
@@ -650,7 +687,12 @@ public final class LdmlConverter {
         try {
             Files.createDirectories(dir);
         } catch (IOException e) {
-            throw new RuntimeException("cannot create directory: " + dir, e);
+            // On Windows, concurrent directory creation by parallel threads can transiently
+            // produce AccessDeniedException even when the directory already exists. If the
+            // directory is now present (created by another thread), treat it as success.
+            if (!Files.isDirectory(dir)) {
+                throw new RuntimeException("cannot create directory: " + dir, e);
+            }
         }
         return dir;
     }

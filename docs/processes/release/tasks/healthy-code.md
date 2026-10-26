@@ -43,12 +43,12 @@ look for "UClassID" or similar.
 *   Latest trunk report:
     [icu/icu4c/APIChangeReport.html](https://github.com/unicode-org/icu/blob/main/icu4c/APIChangeReport.html)
 *   ~~The automated build system creates a new report:
-    <https://cldr-build.unicode.org/jenkins/job/icu/job/icu-apidocs/>~~
+    `https://cldr-build.unicode.org/jenkins/job/icu/job/icu-apidocs/`~~
     *   Click "ICU4C API Change Report vs Latest"
-*   Old: was http://bugs.icu-project.org/trac/build/icu4cdocs
+*   Old: was <http://bugs.icu-project.org/trac/build/icu4cdocs>
     *   Go into the latest successful build, the report is an attachment there.
     *   Download the style sheet next to it:
-        https://github.com/unicode-org/icu/blob/main/icu4c/icu4c.css
+        <https://github.com/unicode-org/icu/blob/main/icu4c/icu4c.css>
 
 ---
 
@@ -124,9 +124,27 @@ the UTF-8 signature byte sequence ("BOM").~~
 
 ---
 
-## Clean up import statements
+## ~~Clean up import statements \[obsolete\]~~
 
-### From command line
+Since ICU 79, Java source code formatting check is done by
+[spotless](https://github.com/diffplug/spotless). The tool is integrated as
+a part of Git commit check. The formatter supports import statement checking and
+formatting, so **we no longer need a separate task for each ICU release**.
+
+The spotless check and fixup can be invoked by Maven as below. This should be
+done by each ICU developer before creating a new pull request.
+
+```sh
+cd icu
+mvn spotless:apply
+```
+
+
+### ~~From command line \[obsolete\]~~
+
+<span style="color:red">**Note: As of ICU 79, import statements are also handled
+by Maven spotless plugin. The spotless plugin is integrated with Git commit checker.
+Therefore, we no longer need to run the tool below manually.**</span>
 
 This can be done from command line using the
 [Google Java Format](https://github.com/google/google-java-format) tool.
@@ -155,7 +173,11 @@ You can (of course) download it from
 [GitHub Releases](https://github.com/google/google-java-format/releases). \
 Or save it in a personal tools folder and keep it around.
 
-### From Eclipse
+### ~~From Eclipse \[obsolete\]~~
+
+<span style="color:red">**Note: As of ICU 79, import statements are also handled
+by Maven spotless plugin. The spotless plugin is integrated with Git commit checker.
+Therefore, we no longer need to run the Eclipse tool below manually.**</span>
 
 The Eclipse IDE provides a feature which allow you to organize import statements
 for multiple files. Right click on projects/source folders/files, you can select
@@ -365,7 +387,7 @@ The command line is simply
 ~/git.icu/icu4c/source$ test/hdrtst/testinternalheaders.sh
 ```
 
-See https://unicode-org.atlassian.net/browse/ICU-12141 "every header file should
+See <https://unicode-org.atlassian.net/browse/ICU-12141> "every header file should
 include all other headers if it depends on definitions from them"
 
 <span style="color:red">**As of ICU 68, the internal header test is now

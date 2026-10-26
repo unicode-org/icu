@@ -14,43 +14,65 @@ License & terms of use: http://www.unicode.org/copyright.html
 
 If you want to use ICU (as opposed to developing it), it is recommended that you download an official packaged version of the ICU source code. These versions are tested more thoroughly than day-to-day development builds of the system, and they are packaged in zip and tar files for convenient download. Here are several recent releases of ICU that are available:
 
+<!--
+## Release Candidate
+
+***2026-09-25: [ICU 79 release candidate](79.md) is now available*** —
+[releases/tag/release-79.1rc](https://github.com/unicode-org/icu/releases/tag/release-79.1rc)
+- Unicode 18, CLDR 49, performance improvements, etc.
+- Please use it for testing but not in production.
+-->
+
 ## Latest Release
 
-***2025-10-30: [ICU 78](78.md) is now available*** —
-[releases/tag/release-78.1](https://github.com/unicode-org/icu/releases/tag/release-78.1) —
-Maven: [com.ibm.icu / icu4j / version 78.1](https://mvnrepository.com/artifact/com.ibm.icu/icu4j/78.1)
+<!-- TODO: Consider less duplication; maybe shorten the blurb here like for 78, with the longer blurb on docs/index(?) and full details on 79.md -->
 
-ICU 78 updates to
+***2026-10-22: [ICU 79](79.md) is now available*** —
+[releases/tag/release-79.1](https://github.com/unicode-org/icu/releases/tag/release-79.1) —
+Maven: [com.ibm.icu / icu4j / version 79.1](https://mvnrepository.com/artifact/com.ibm.icu/icu4j/79.1)
+
+ICU 79 updates to
+[Unicode 18](https://www.unicode.org/versions/Unicode18.0.0/)
+([blog](https://blog.unicode.org/2026/09/announcing-unicode-standard-version-180.html)),
+including new characters and scripts, emoji, collation & IDNA changes, and corresponding APIs and implementations.
+
+It also updates to
+[CLDR 49](https://cldr.unicode.org/downloads/cldr-49)
+([blog](https://blog.unicode.org/2026/10/unicode-cldr-49-released.html))
+locale data with many additions and corrections.
+
+Line break backwards-iteration performance has been significantly improved,
+fixing a long-standing regression.
+
+C++ and Java implementations of the 
+[CLDR MessageFormat 2.0 specification](https://www.unicode.org/reports/tr35/tr35-messageFormat.html)
+have been updated to CLDR 49.
+Some of the API remains in technology preview.
+
+ICU 79 and CLDR 49 are major releases, including a new version of Unicode and major locale data improvements.
+
+## Previous Releases
+
+- 2026-03-17: [ICU 78.3](78.md) maintenance release of ICU 78 which updates to
 [Unicode 17](https://www.unicode.org/versions/Unicode17.0.0/)
 ([blog](https://blog.unicode.org/2025/09/unicode-170-release-announcement.html)),
 including new characters and scripts, emoji, collation & IDNA changes, and corresponding APIs and implementations.
-
 It also updates to
 [CLDR 48](https://cldr.unicode.org/downloads/cldr-48)
 ([blog](https://blog.unicode.org/2025/10/unicode-cldr-48-available.html))
 locale data with new locales, and various additions and corrections.
-
-In Java, there is a new Segmenter API which is easier and safer to use than BreakIterator.\
-In C++, there is a new set of APIs for Unicode string (UTF-8/16/32) code point iteration
-that works seamlessly with modern C++ iterators and ranges.
-
-The Java implementation of the
-[CLDR MessageFormat 2.0 specification](https://www.unicode.org/reports/tr35/tr35-messageFormat.html)
-has been updated to CLDR 48.
-The core API has been upgraded to “draft”, while the Data Model API remains in technology preview.
-
-The C++ implementation of MessageFormat 2.0 is at CLDR 47 level and remains in technology preview.
-
-ICU 78 and CLDR 48 are major releases, including a new version of Unicode and major locale data improvements.
-
-## Previous Releases
+  - Java: New Segmenter API improves on BreakIterator
+  - C++: New colloquial APIs for Unicode string (UTF-8/16/32) code point iteration
+  - Java implementation of MessageFormat 2 upgraded to “draft”
 
 - 2025-03-13: [**ICU 77**](77.md) updates to [CLDR 47](https://cldr.unicode.org/downloads/cldr-47) locale data with new locales, and various additions and corrections. The technology preview implementations of the CLDR MessageFormat 2.0 specification have been updated to incorporate some, but not yet all, of the CLDR 47 changes. (Java more than C++)
 
 - 2024-10-24: **ICU 76** updates to [Unicode 16](https://www.unicode.org/versions/Unicode16.0.0/) ([blog](https://blog.unicode.org/2024/09/announcing-unicode-standard-version-160.html)), including new characters and scripts, emoji, collation & IDNA changes, and corresponding APIs and implementations. It also updates to [CLDR 46](https://cldr.unicode.org/downloads/cldr-46) ([beta blog](https://blog.unicode.org/2024/09/unicode-cldr-46-beta-available-for.html)) locale data with new locales, significant updates to existing locales, and various additions and corrections. For example, the CLDR and Unicode default sort orders are now very nearly the same.
   - Most of the java.time (Temporal) types can now be formatted directly. There are some new APIs to make ICU easier to use with modern C++ and Java patterns. The Java and C++ technology preview implementations of the CLDR MessageFormat 2.0 specification have been updated to match recent changes. See [ICU 76](76.md).
 
-- 2024-04-17: **ICU 75** updates to [CLDR 45](https://cldr.unicode.org/index/downloads/cldr-45) ([beta blog](https://blog.unicode.org/2024/04/unicode-cldr-v45-beta-available-for.html)) locale data with new locales and various additions and corrections. C++ code now requires C++17 and is being made more robust. The CLDR MessageFormat 2.0 specification is now in [technology preview](https://github.com/unicode-org/message-format-wg?tab=readme-ov-file#messageformat-2-technical-preview), together with a corresponding update of the ICU4J (Java) tech preview and a new ICU4C (C++) tech preview. See [Downloading ICU &gt; ICU 75](https://icu.unicode.org/download/75).
+<!-- TODO: move to an Old Releases page -->
+
+- 2024-04-17: **ICU 75** updates to [CLDR 45](https://cldr.unicode.org/index/downloads/cldr-45) ([beta blog](https://blog.unicode.org/2024/04/unicode-cldr-v45-beta-available-for.html)) locale data with new locales and various additions and corrections. C++ code now requires C++17 and is being made more robust. The CLDR MessageFormat 2.0 specification is now in [technology preview](https://github.com/unicode-org/message-format-wg?tab=readme-ov-file), together with a corresponding update of the ICU4J (Java) tech preview and a new ICU4C (C++) tech preview. See [Downloading ICU &gt; ICU 75](https://icu.unicode.org/download/75).
 
 - 2023-12-13: **ICU 74.2** released with date/time formatting bug fixes. See [Downloading ICU &gt; ICU 74](https://icu.unicode.org/download/74).
 
@@ -88,7 +110,7 @@ ICU 78 and CLDR 48 are major releases, including a new version of Unicode and ma
 | [**ICU 51**](https://icu.unicode.org/download/51) | [**51.3**](https://icu.unicode.org/download/51#h.ae67vrvucf1k) | [**51.3**](https://icu.unicode.org/download/51#h.p2kuuvx5ko5z) | CLDR 23, short weekday names, new time zone format patterns, display context for date format and locale display names |
 | [ICU 50](https://icu.unicode.org/download/50) | [50.2](https://icu.unicode.org/download/50#h.au7pfptnrbk0) | [50.2](https://icu.unicode.org/download/50#h.h2lsiy5b0om3) | CLDR 22.1, Unicode 6.2, ordinal number support, dictionary-based break iterators for Chinese & Japanese… |
 | [ICU 49](https://icu.unicode.org/download/49) | [49.1.2](https://icu.unicode.org/download/49#h.8kgchrymg08d) | [49.1](https://icu.unicode.org/download/49#h.plyzynidar2c) | CLDR 21.0.1, Unicode 6.1, simpler ICU4C build without generated platform.h, many small API additions |
-|  |   |   | Note: We have changed the [ICU release version numbering](https://unicode-org.github.io/icu/userguide/icu/design.html#version-numbers-in-icu) , combining the former first two fields into one, thus the major release sequence is ICU 4.8, ICU 49, ICU 50, … |
+|  |   |   | Note: We have changed the [ICU release version numbering](https://unicode-org.github.io/icu/userguide/icu/design.html#version-numbers-in-icu), combining the former first two fields into one, thus the major release sequence is ICU 4.8, ICU 49, ICU 50, … |
 
 For more details on building ICU once you've checked out the code, please see the ICU4C or ICU4J readme (linked from the nav bar).
 

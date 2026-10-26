@@ -2,12 +2,263 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/
 lij{
+    Keys{
+        calendar{"lunäio"}
+        cf{"formato de monæa"}
+        colAlternate{"ordinamento sensa scimboli"}
+        colBackwards{"ordinamento di açenti con inverscion"}
+        colCaseFirst{"ordinamento maiuscole/minuscole"}
+        colCaseLevel{"ordinamento maiuscole/minuscole"}
+        colNormalization{"ordinamento normalizzou"}
+        colNumeric{"ordinamento numerico"}
+        colReorder{"reordinamento scrittue/blòcchi"}
+        colStrength{"prioritæ de l’ordinamento"}
+        collation{"ordinamento"}
+        currency{"monæa"}
+        d0{"trasforma destinaçion"}
+        dx{"escluxoin de separaçion pe diçionäio"}
+        em{"Presentaçion emoji"}
+        fw{"Primmo giorno da settemaña"}
+        h0{"Mescciou"}
+        hc{"scistema oräio (12 ò 24 oe)"}
+        i0{"metodo d’inserçion"}
+        k0{"tastea"}
+        kv{"livello mascimo ignorou"}
+        lb{"stilo de interruçion de linia"}
+        lw{"Interruçioin de linia drento de poule"}
+        m0{"regole de trasformaçion"}
+        ms{"scistema de mesuaçion"}
+        mu{"unitæ de mesua"}
+        numbers{"numeri"}
+        ss{"Interruçion de frase dòppo abbr."}
+    }
     Languages{
+        ar{"arabo"}
+        ar_001{"arabo moderno standard"}
+        bal{"baloci"}
+        bgc{"haryanvi"}
+        blo{"anii"}
         en{"ingleise"}
+        es{"spagnòllo"}
+        es_419{"spagnòllo d’America"}
+        es_ES{"spagnòllo da Spagna"}
+        es_MX{"spagnòllo do Mescico"}
+        fa{"perscian"}
+        gd{"gaelico scoçeise"}
+        ie{"interlingue"}
+        ja{"giaponeise"}
+        kxv{"kuvi"}
         lij{"ligure"}
+        lmo{"lombardo"}
+        pa{"punjabi"}
+        pms{"piemonteise"}
+        prg{"pruscio"}
+        ps{"pashto"}
+        pt{"portogheise"}
+        pt_BR{"portogheise do Braxî"}
+        pt_PT{"portogheise d’Euröpa"}
+        qu{"quechua"}
+        raj{"rajasthani"}
+        ru{"ruscio"}
+        sc{"sardo"}
+        scn{"siçilian"}
+        sl{"sloven"}
+        sr{"serbo"}
+        sv{"svedeise"}
+        sw{"swahili"}
+        syr{"sciriaco"}
+        szl{"silesian"}
+        vec{"veneto"}
+        vmw{"makhuwa"}
+        xnr{"kangri"}
+        za{"zhuang"}
+    }
+    Languages%core{
+        ku{"curdo"}
+    }
+    Languages%extension{
+        ku{"kurmangi"}
+    }
+    Languages%variant{
+        hi_Latn{"hinglish"}
     }
     Scripts{
         Latn{"latin"}
+    }
+    Types{
+        calendar{
+            buddhist{"lunäio buddista"}
+            chinese{"lunäio cineise"}
+            coptic{"lunäio còpto"}
+            dangi{"lunäio dangi"}
+            ethiopic{"lunäio etiope"}
+            ethiopic-amete-alem{"lunäio etiope Amete Alem"}
+            gregorian{"lunäio gregorian"}
+            hebrew{"lunäio ebraico"}
+            islamic{"lunäio egirian"}
+            islamic-civil{"lunäio çivile egirian"}
+            islamic-umalqura{"lunäio egirian (Umm al-Qura)"}
+            iso8601{"lunäio ISO-8601"}
+            japanese{"lunäio giaponeise"}
+            persian{"lunäio perscian"}
+            roc{"lunäio repubrican cineise"}
+        }
+        calendar%core{
+            buddhist{"buddista"}
+            chinese{"cineise"}
+            coptic{"còpto"}
+            dangi{"dangi"}
+            ethiopic{"etiope"}
+            ethiopic-amete-alem{"etiope Amete Alem"}
+            gregorian{"gregorian"}
+            hebrew{"ebraico"}
+            indian{"naçionale indian"}
+            islamic{"egirian"}
+            islamic-civil{"egirian (çivile)"}
+            islamic-rgsa{"egirian, osservaçion saudita"}
+            islamic-tbla{"egirian (tabulare, epoca astronòmica)"}
+            islamic-umalqura{"egirian (Umm al-Qura)"}
+            iso8601{"gregorian"}
+            japanese{"giaponeise"}
+            persian{"perscian"}
+            roc{"cineise"}
+        }
+        cf{
+            account{"formato de monæa contabile"}
+            standard{"formato de monæa standard"}
+        }
+        cf%core{
+            account{"contabile"}
+            standard{"standard"}
+        }
+        colCaseFirst%core{
+            lower{"minuscole"}
+            no{"minuscole"}
+            upper{"maiuscole"}
+        }
+        colReorder%core{
+            currency{"monæa"}
+            digit{"giffre"}
+            punct{"pontezzatua"}
+            space{"spaçi"}
+            symbol{"scimboli"}
+        }
+        colStrength%core{
+            identical{"tutti"}
+            primary{"solo lettie base"}
+            quaternary{"base, açenti, maiuscole/minuscole, variante, kana"}
+            secondary{"base, açenti"}
+            tertiary{"base, açenti, maiuscole/minuscole, variante"}
+        }
+        collation{
+            ducet{"ordinamento predefinio de Unicode"}
+            search{"reçerca generica"}
+            standard{"ordinamento standard"}
+        }
+        collation%core{
+            compat{"compatibilitæ"}
+            dictionary{"diçionäio"}
+            ducet{"Unicode predefinio"}
+            emoji{"emoji"}
+            eor{"regole europee"}
+            phonebook{"elenco telefònico"}
+            phonetic{"fonetico"}
+            pinyin{"pinyin"}
+            search{"reçerca"}
+            searchjl{"consonante iniçiale coreaña"}
+            standard{"standard"}
+            stroke{"træti"}
+            traditional{"tradiçionale"}
+            unihan{"træti radicali"}
+            zhuyin{"zhuyin"}
+        }
+        d0{
+            fwidth{"à larghixe intrega"}
+            hwidth{"à meza larghixe"}
+        }
+        em%core{
+            default{"Default"}
+            emoji{"Emoji"}
+            text{"Testo"}
+        }
+        hc{
+            h11{"scistema oräio à 12 oe (0–11)"}
+            h12{"scistema oräio à 12 oe (1–12)"}
+            h23{"scistema oräio à 24 oe (0–23)"}
+            h24{"scistema oräio à 24 oe (1–24)"}
+        }
+        hc%core{
+            c12{"12"}
+            c24{"24"}
+            h11{"12 oe (0–11)"}
+            h12{"12 oe (1–12)"}
+            h23{"24 oe (0–23)"}
+            h24{"24 oe (1–24)"}
+        }
+        kv%core{
+            currency{"spaçi, pontezzatua, tutti i scimboli"}
+            punct{"spaçi, pontezzatua"}
+            space{"spaçi, pontezzatua"}
+            symbol{"spaçi, pontezzatua, scimboli che no en de monæe"}
+        }
+        lb{
+            loose{"stilo de interruçion de linia flescibile"}
+            normal{"stilo de interruçion de linia standard"}
+            strict{"stilo de interruçion de linia sforsou"}
+        }
+        lb%core{
+            loose{"flescibile"}
+            normal{"standard"}
+            strict{"sforsou"}
+        }
+        lw%core{
+            breakall{"Dividdi tutte"}
+            keepall{"Conserva tutte"}
+            normal{"Normale"}
+            phrase{"Conserva inti sintagmi"}
+        }
+        m0{
+            bgn{"trasliteraçion US BGN"}
+            ungegn{"trasliteraçion US GEGN"}
+        }
+        ms{
+            metric{"scistema metrico"}
+            uksystem{"scistema de mesuaçion imperiale"}
+            ussystem{"scistema de mesuaçion american"}
+        }
+        ms%core{
+            metric{"metrico"}
+            uksystem{"imperiale britannico"}
+            ussystem{"imperiale american"}
+        }
+        numbers{
+            arab{"giffre indo-arabe"}
+            arabext{"giffre indo-arabe esteise"}
+            armn{"numeri ermeni"}
+            armnlow{"numeri ermeni piccin"}
+            beng{"giffre bengaleixi"}
+            cakm{"giffre chakma"}
+            deva{"giffre devanagari"}
+            ethi{"numeri etiopi"}
+            fullwide{"giffre à larghixe intrega"}
+            geor{"numeri georgien"}
+            grek{"numeri greghi"}
+            greklow{"numeri greghi piccin"}
+            gujr{"giffre gujarati"}
+            guru{"giffre gurmuki"}
+            latn{"giffre occidentale"}
+        }
+        numbers%core{
+            arabext{"indo-arabe esteise"}
+            armnlow{"ermeni piccin"}
+            finance{"finançiäi"}
+            fullwide{"larghixe intrega"}
+            greklow{"greghi piccin"}
+        }
+    }
+    characterLabelPattern{
+        facing-left{"{0} in sciâ manciña"}
+        facing-right{"{0} in sciâ drita"}
     }
     codePatterns{
         language{"Lengua: {0}"}

@@ -2,12 +2,12 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/
 pt{
-    AuxExemplarCharacters{"[ªăåäā æ èĕëē ìĭîïī ñ ºŏöøō œ ùŭûüū ÿ]"}
+    AuxExemplarCharacters{"[ªăåäā æ èĕëē ìĭîïī ñ ºòŏöøō œ ùŭûüū ÿ]"}
     Ellipsis{
         medial{"{0}… {1}"}
         word-final{"{0}…"}
     }
-    ExemplarCharacters{"[aáàâã b cç d eéê f g h ií j k l m n oóòôõ p q r s t uú v w x y z]"}
+    ExemplarCharacters{"[aáàâã b cç d eéê f g h ií j k l m n oóôõ p q r s t uú v w x y z]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]"}
     ExemplarCharactersPunctuation{"[\\- ‐‑ – — , ; \\: ! ? . … '‘’ \u0022“” ( ) \\[ \\] § @ * / \\& # † ‡ ′ ″]"}
     NumberElements{
@@ -364,6 +364,10 @@ pt{
                     M{"E, d 'de' MMM – E, d 'de' MMM"}
                     d{"E, d 'de' MMM – E, d 'de' MMM"}
                 }
+                MMMMd{
+                    M{"d 'de' MMMM – d 'de' MMMM"}
+                    d{"d–d 'de' MMMM"}
+                }
                 MMMd{
                     M{"d 'de' MMM – d 'de' MMM"}
                     d{"d–d 'de' MMM"}
@@ -455,6 +459,11 @@ pt{
                 "{1}, {0}",
                 "{1}, {0}",
             }
+            appendItems{
+                Day-Of-Week{"{1}, {0}"}
+                Era{"{0} {1}"}
+                Time-Day-Of-Week{"{1}, {0}"}
+            }
             availableFormats{
                 EBh{"E, h B"}
                 EHm{"E, HH:mm"}
@@ -468,6 +477,9 @@ pt{
                 GyMEd{"E, MM/dd/y G"}
                 GyMMM{"MMM 'de' y G"}
                 GyMMMEd{"E, d 'de' MMM 'de' y G"}
+                GyMMMM{"MMMM 'de' Y G"}
+                GyMMMMEd{"E, d 'de' MMMM 'de' y G"}
+                GyMMMMd{"d 'de' MMMM 'de' y G"}
                 GyMMMd{"d 'de' MMM 'de' y G"}
                 GyMd{"dd/MM/y GGGGG"}
                 Hv{"HH'h', v"}
@@ -648,6 +660,10 @@ pt{
                 MMMEd{
                     M{"E, d 'de' MMM – E, d 'de' MMM"}
                     d{"E, d 'de' MMM – E, d 'de' MMM"}
+                }
+                MMMMd{
+                    M{"d 'de' MMMM – d 'de' MMMM"}
+                    d{"d–d 'de' MMMM"}
                 }
                 MMMd{
                     M{"d 'de' MMM – d 'de' MMM"}

@@ -72,11 +72,10 @@ yo_BJ{
         "Etc:Unknown"{
             ec{"Ìlú Àìmɔ̀"}
         }
-        "Europe:Dublin"{
-            ld{"Àkókò Àfɛnukò Airiisi"}
-        }
-        "Europe:London"{
-            ld{"Àkókò Sɔmà Gɛɛsi"}
+        "meta:Acre"{
+            ld{"Àkókò Ékà Ìgbà ɛ̀rùn"}
+            lg{"Àkókò Ékà"}
+            ls{"Àkókò Ékà Àfɛnukò"}
         }
         "meta:Africa_Western"{
             ls{"Àkókò Ìwɔ̀-Oòrùn Afírikà"}
@@ -176,6 +175,10 @@ yo_BJ{
             lg{"Àkókò Bangladesh"}
             ls{"Àkókò Àfɛnukò Bangladesh"}
         }
+        "meta:British"{
+            ld{"Àkókò Ɛ̀rùn ilɛ̀ Gɛɛsi"}
+            lg{"Àkɔ́kɔ̀ ilɛ̀ Gɛ̀ɛ́sì"}
+        }
         "meta:Cape_Verde"{
             ld{"Àkókò Ɛ̀rún Képú Fáàdì"}
             lg{"Àkókò Képú Fáàdì"}
@@ -245,6 +248,11 @@ yo_BJ{
         "meta:Gilbert_Islands"{
             ls{"Àkókò Àwɔn Erekusu Gilibati"}
         }
+        "meta:Greenland"{
+            ld{"Ìgbà Ɛ̀rùn Greenland"}
+            lg{"Àkókò Greenland"}
+            ls{"Àkókò Àfenukò Greenland"}
+        }
         "meta:Greenland_Eastern"{
             ld{"Àkókò ìgbà Ooru Greenland"}
             lg{"Àkókò Ìlà oorùn Greenland"}
@@ -264,7 +272,7 @@ yo_BJ{
         "meta:Hawaii_Aleutian"{
             ld{"Àkókò Ojúmɔmɔ Hawaii-Aleutian"}
             lg{"Àkókò Hawaii-Aleutian"}
-            ls{"Àkókò Àfɛnukò Hawaii-Aleutian"}
+            ls{"Àkókò Àfɛnukò ti Hawaii-Aleutian"}
         }
         "meta:Hong_Kong"{
             ld{"Àkókò Sɔmà Hong Kong"}
@@ -272,9 +280,9 @@ yo_BJ{
             ls{"Àkókò Ìfɛnukòsí Hong Kong"}
         }
         "meta:Hovd"{
-            ld{"Àkókò Sɔmà Hofidi"}
+            ld{"Àkókò Ìgbà Ɛ̀rùn Hofidi"}
             lg{"Àkókò Hofidi"}
-            ls{"Àkókò Ìfɛnukòsí Hofidi"}
+            ls{"Àkókò Ìfɛnukò Hofidi"}
         }
         "meta:India"{
             ls{"Àkókò Àfɛnukò India"}
@@ -286,6 +294,10 @@ yo_BJ{
             ld{"Àkókò Ojúmɔmɔ Irani"}
             lg{"Àkókò Irani"}
             ls{"Àkókò Àfɛnukò Irani"}
+        }
+        "meta:Irish"{
+            ld{"Àkókò Àfɛnukò orílɛ́-èdè Ireland"}
+            lg{"Àkókò orílɛ́-èdè Ireland"}
         }
         "meta:Irkutsk"{
             ld{"Àkókò Sɔmà Íkúsíkì"}
@@ -301,6 +313,11 @@ yo_BJ{
             ld{"Àkókò Sɔmà Japan"}
             lg{"Àkókò Japan"}
             ls{"Àkókò Ìfɛnukòsí Japan"}
+        }
+        "meta:Kamchatka"{
+            ld{"Àkókò Kamchatka Ìgbà Ɛrùn"}
+            lg{"Àkókò Kamchatka"}
+            ls{"Àkókò Kamchatka Àfɛnukò"}
         }
         "meta:Kazakhstan_Western"{
             ls{"Àkókò Ìwɔ̀-Oòrùn Kasasitáànì"}
@@ -417,9 +434,12 @@ yo_BJ{
             lg{"Àkókò Sakhalin"}
             ls{"Àkókò Àfɛnukò Sakhalin"}
         }
+        "meta:Samara"{
+            ld{"Àkókò Ìgbà ɛ̀rùn Sàmárà"}
+            lg{"Àkókò Sàmárà"}
+            ls{"Àkókò Sàmárà Àfɛnukò"}
+        }
         "meta:Samoa"{
-            ld{"Àkókò Ojúmɔmɔ Samoa"}
-            lg{"Àkókò Samoa"}
             ls{"Àkókò Àfɛnukò Samoa"}
         }
         "meta:Seychelles"{
@@ -443,6 +463,11 @@ yo_BJ{
             ld{"Àkókò Sɔmà Tonga"}
             lg{"Àkókò Tonga"}
             ls{"Àkókò Àfɛnukò Tonga"}
+        }
+        "meta:Turkey"{
+            ld{"Àkókò Ìgbàɛ̀rùn Tɔ́kì"}
+            lg{"Àkókò Tɔ́kì"}
+            ls{"Àkókò Tɔ́kì Àfɛnukò"}
         }
         "meta:Turkmenistan"{
             ld{"Àkókò Sɔmà Turkmenistani"}

@@ -11,19 +11,35 @@ eu{
         colCaseLevel{"Maiuskulak eta minuskulak bereizten dituen ordena"}
         colNormalization{"Araututako ordena"}
         colNumeric{"Zenbakizko ordena"}
+        colReorder{"Idazketen/Blokeen ordena aldatzea"}
         colStrength{"Ordenaren sendotasuna"}
         collation{"Ordenatzeko irizpidea"}
         currency{"Moneta"}
+        d0{"Eraldaketaren helburua"}
+        dx{"Lerro-jauzien salbuespenak"}
         em{"Emojien aurkezpena"}
+        fw{"Asteko lehen eguna"}
+        h0{"Nahasia"}
         hc{"Ordu-zikloa (12 vs 24)"}
+        i0{"Idazketa-metodoa"}
+        k0{"Teklatua"}
+        kv{"Ez ikusi gehien egin zaiona"}
         lb{"Lerro-jauziaren estiloa"}
         lw{"Hitz barruko lerro-jauziak"}
+        m0{"Eraldaketa-arauak"}
         ms{"Neurketa-sistema"}
+        mu{"Neurketa-unitatea"}
         numbers{"Zenbakiak"}
+        rg{"Datu gehigarrietarako eremua"}
+        s0{"Eraldaketaren iturburua"}
+        sd{"Eremuaren subdibisioa"}
         ss{"Laburtzapenen ondorengo lerro-jauzia"}
+        t{"Eraldaketa"}
+        t0{"Automatikoki itzulia"}
         timezone{"Ordu-zona"}
         va{"Eskualdeko ezarpenen aldaera"}
         x{"Erabilera pribatua"}
+        x0{"Erabilera pribaturako eraldaketa"}
     }
     Languages{
         aa{"afarera"}
@@ -347,6 +363,7 @@ eu{
         pcm{"Nigeriako pidgina"}
         pis{"pijina"}
         pl{"poloniera"}
+        pms{"piemontera"}
         pqm{"maliseet-passamaquoddyera"}
         prg{"prusiera"}
         ps{"paxtunera"}
@@ -722,9 +739,13 @@ eu{
             ethiopic-amete-alem{"Amete Alem etiopiarra"}
             gregorian{"Gregoriarra"}
             hebrew{"Hebrearra"}
+            indian{"Indiako egutegi nazionala"}
             islamic{"Islamiarra"}
             islamic-civil{"Islamiarra (taula-formakoa, garai zibilekoa)"}
+            islamic-rgsa{"Islamiarra, Saudi Arabiako behaketa"}
+            islamic-tbla{"Islamiarra (taula-formakoa, garai astronomikokoa)"}
             islamic-umalqura{"Islamiarra (Umm al-Qura)"}
+            iso8601{"Gregoriarra"}
             japanese{"Japoniarra"}
             persian{"Persiarra"}
             roc{"Minguoa"}
@@ -750,6 +771,11 @@ eu{
             no{"Ordenatu maiuskulak modu normalean"}
             upper{"Ordenatu maiuskulak lehenik"}
         }
+        colCaseFirst%core{
+            lower{"Minuskula"}
+            no{"Minuskula"}
+            upper{"Maiuskula"}
+        }
         colCaseLevel{
             no{"Ordenatu maiuskulak eta minuskulak bereizi gabe"}
             yes{"Ordenatu maiuskulak eta minuskulak bereizita"}
@@ -762,12 +788,26 @@ eu{
             no{"Ordenatu digituak banaka"}
             yes{"Ordenatu digituak zenbakien arabera"}
         }
+        colReorder%core{
+            currency{"Dibisa"}
+            digit{"Digituak"}
+            punct{"Puntuazioa"}
+            space{"Zuriunea"}
+            symbol{"Sinboloa"}
+        }
         colStrength{
             identical{"Ordenatu guztiak"}
             primary{"Ordenatu oinarrizko hizkiak soilik"}
             quaternary{"Ordenatu azentuak / maiuskula eta minuskulak / zabalera / kanak"}
             secondary{"Ordenatu azentuak"}
             tertiary{"Ordenatu azentuak / maiuskula eta minuskulak / zabalera"}
+        }
+        colStrength%core{
+            identical{"Dena"}
+            primary{"Oinarrizko hizkiak bakarrik"}
+            quaternary{"Oinarrizkoak, azentuak, maiuskulak/minuskulak, aldaerak, kana"}
+            secondary{"Oinarrizkoak, azentuak"}
+            tertiary{"Oinarrizkoak, azentuak, maiuskulak/minuskulak, aldaerak"}
         }
         collation{
             compat{"Aurreko hurrenkera, bateragarria izateko"}
@@ -787,9 +827,21 @@ eu{
             zhuyin{"Zhuyin hurrenkera"}
         }
         collation%core{
+            compat{"Bateragarritasuna"}
+            dictionary{"Hiztegia"}
             ducet{"Unicode lehenetsia"}
+            emoji{"Emojiak"}
+            eor{"Europako arauak"}
+            phonebook{"Telefono-zerrenda"}
+            phonetic{"Fonetikoa"}
+            pinyin{"Pinyin-a"}
             search{"Bilaketa"}
+            searchjl{"Koreerazko hasierako kontsonantea"}
             standard{"Estandarra"}
+            stroke{"Trazua"}
+            traditional{"Tradizionala"}
+            unihan{"Erroaren trazua"}
+            zhuyin{"Zhuyin-a"}
         }
         d0{
             fwidth{"Zabalera osoko karaktere-bihurketa"}
@@ -802,16 +854,26 @@ eu{
             text{"Testua"}
         }
         hc{
+            c12{"12 orduko sistema"}
+            c24{"24 orduko sistema"}
             h11{"12 orduko sistema (0–11)"}
             h12{"12 orduko sistema (1–12)"}
             h23{"24 orduko sistema (0–23)"}
             h24{"24 orduko sistema (1–24)"}
         }
         hc%core{
+            c12{"12"}
+            c24{"24"}
             h11{"12 (0–11)"}
             h12{"12 (1–12)"}
             h23{"24 (0–23)"}
             h24{"24 (1–24)"}
+        }
+        kv%core{
+            currency{"Kontuan izan espazioak, puntuazioa, sinbolo guztiak"}
+            punct{"Kontuan izan espazioak, puntuazioa"}
+            space{"Kontuan izan espazioak, puntuazioa"}
+            symbol{"Kontuan izan espazioak, puntuazioa, dibisak ez diren sinboloak"}
         }
         lb{
             loose{"Lerro-jauziaren estilo malgua"}
@@ -930,9 +992,51 @@ eu{
             wara{"Warang Citi digituak"}
             wcho{"Wancho digituak"}
         }
+        numbers%core{
+            arabext{"Arabiar-indiar hedatuak"}
+            armnlow{"Armeniarrak minuskulaz"}
+            finance{"Finantzetakoak"}
+            fullwide{"Zabalera osokoak"}
+            greklow{"Grekoak minuskulaz"}
+            hanidays{
+                "Egutegi tradizionaletan hileko egunen zenbakiak adierazteko han kara"
+                "kterea"
+            }
+            hanidec{
+                "Digitu gisa zenbaki-ideograma txinatarrak darabiltzan kokapen-dezima"
+                "len sistema"
+            }
+            hansfin{"Finantzetarako txinatar sinplifikatuak"}
+            hantfin{"Finantzetarako txinatar tradizionalak"}
+            jpanfin{"Finantzetarako japoniarrak"}
+            jpanyear{"Garaiko lehen urterako gannen zenbaki japoniarrak"}
+            lanatham{"Tai Tham Tham (eklesiastikoa)"}
+            mathbold{"Matematikarako letra lodia"}
+            mathdbl{"Arbeleko letra lodia"}
+            mathmono{"Matematikarako espazio bakarreko letra"}
+            mathsanb{"Matematikarako sans-serif letra lodia"}
+            mathsans{"Matematikarako sans-serif letra"}
+            mymrepka{"Myanmarko ekialdeko pwo karendarrak"}
+            mymrpao{"Myanmarko paoarrak"}
+            mymrshan{"Myanmarko shandarrak"}
+            mymrtlng{"Myanmarko tai laingtarrak"}
+            native{"Digitu natiboak"}
+            outlined{"Profilatuak"}
+            roman{"Erromatarrak maiuskulaz"}
+            romanlow{"Erromatarrak minuskulaz"}
+            segment{"Segmentatuak"}
+            tamldec{"Tamildar modernoak"}
+            traditional{"Zenbaki tradizionalak"}
+        }
         ss%core{
             none{"Aktibatuta"}
             standard{"Desaktibatuta"}
+        }
+        t0{
+            und{"Zehaztu gabeko itzulpen automatikoa"}
+        }
+        va%core{
+            posix{"POSIX aldaera"}
         }
     }
     Variants{

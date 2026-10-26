@@ -72,6 +72,10 @@ hi_Latn{
             secondary{"Accents ko sort karein"}
             tertiary{"Accents/Case/Width ko sort karein"}
         }
+        colStrength%core{
+            identical{"Sabhi"}
+            primary{"Sirf base letters"}
+        }
         collation{
             compat{"Compatibility ke liye, picchla sort order"}
             dictionary{"Dictionary kaa sort order"}
@@ -89,22 +93,27 @@ hi_Latn{
         em{
             default{"Emoji Characters ke liye Default Presentation use karein"}
             emoji{"Emoji Characters ke liye Emoji Presentation prefer karein"}
-            text{"Emoji Characters ke liye Text Presentation prefer karein"}
+            text{"Emoji ke liye Text Presentation"}
         }
         fw{
-            fri{"Week kaa pahla din Friday"}
-            mon{"Week kaa pahla din Monday"}
-            sat{"Week kaa pahla din Saturday"}
-            sun{"Week kaa pahla din Sunday"}
-            thu{"Week kaa pahla din Thursday"}
-            tue{"Week kaa pahla din Tuesday"}
-            wed{"Week kaa pahla din Wednesday"}
+            fri{"Week kaa pahla din: Friday"}
+            mon{"Week kaa pahla din: Monday"}
+            sat{"Week kaa pahla din: Saturday"}
+            sun{"Week kaa pahla din: Sunday"}
+            thu{"Week kaa pahla din: Thursday"}
+            tue{"Week kaa pahla din: Tuesday"}
+            wed{"Week kaa pahla din: Wednesday"}
         }
         hc{
+            c12{"12 Hour System"}
+            c24{"24 Hour System"}
             h11{"12 Hour System (0–11)"}
             h12{"12 Hour System (1–12)"}
             h23{"24 Hour System (0–23)"}
             h24{"24 Hour System (1–24)"}
+        }
+        kv%core{
+            currency{"Shift Spaces, punctuation, sabhi symbols"}
         }
         lw{
             breakall{"Sabhi Words mein Line Breaks allow karein"}
@@ -132,10 +141,13 @@ hi_Latn{
             taml{"Traditional Tamil Numbers"}
         }
         numbers%core{
+            hanidays{"Traditional calendars ke liye Han-character day-of-month numbering"}
             hanidec{
                 "Positional decimal system ke liye digits ke taur par Chinese number "
                 "ideographs kaa use"
             }
+            segment{"Segment mein divided"}
+            traditional{"Traditional numbers"}
         }
     }
     codePatterns{

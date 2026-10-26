@@ -4,88 +4,190 @@
 ro{
     RBNFRules{
         OrdinalRules{
-            "%digits-ordinal:",
-            "-x: \u2212>>;",
-            "0: =#,##0=a;",
+            "%digits-ordinal:"
+            "-x: \u2212>>;"
+            "0: =#,##0=a;"
         }
         SpelloutRules{
-            "%spellout-numbering-year:",
-            "x.x: =0.0=;",
-            "0: =%spellout-numbering=;",
-            "%spellout-numbering:",
-            "0: =%spellout-cardinal-masculine=;",
-            "%spellout-cardinal-masculine:",
-            "-x: minus >>;",
-            "x.x: << virgul\u0103 >>;",
-            "0: zero;",
-            "1: unu;",
-            "2: doi;",
-            "3: trei;",
-            "4: patru;",
-            "5: cinci;",
-            "6: \u0219ase;",
-            "7: \u0219apte;",
-            "8: opt;",
-            "9: nou\u0103;",
-            "10: zece;",
-            "11: unsprezece;",
-            "12: >>sprezece;",
-            "20: <%spellout-cardinal-feminine<zeci[ \u0219i >>];",
-            "100: una sut\u0103[ >>];",
-            "200: <%spellout-cardinal-feminine< sute[ >>];",
-            "1000: una mie[ >>];",
-            "2000: <%spellout-cardinal-feminine< mii[ >>];",
-            "1000000: <%spellout-cardinal-neuter< milion[ >>];",
-            "2000000: <%spellout-cardinal-neuter< milioane[ >>];",
-            "1000000000: <%spellout-cardinal-neuter< miliard[ >>];",
-            "2000000000: <%spellout-cardinal-neuter< miliarde[ >>];",
-            "1000000000000: <%spellout-cardinal-neuter< bilion[ >>];",
-            "2000000000000: <%spellout-cardinal-neuter< bilioane[ >>];",
-            "1000000000000000: <%spellout-cardinal-neuter< biliard[ >>];",
-            "2000000000000000: <%spellout-cardinal-neuter< biliarde[ >>];",
-            "1000000000000000000: =#,##0=;",
-            "%spellout-cardinal-feminine:",
-            "-x: minus >>;",
-            "x.x: << virgul\u0103 >>;",
-            "0: zero;",
-            "1: una;",
-            "2: dou\u0103;",
-            "3: =%spellout-cardinal-masculine=;",
-            "12: >>sprezece;",
-            "20: <%spellout-cardinal-feminine<zeci[ \u0219i >>];",
-            "100: una sut\u0103[ >>];",
-            "200: <%spellout-cardinal-feminine< sute[ >>];",
-            "1000: una mie[ >>];",
-            "2000: <%spellout-cardinal-feminine< mii[ >>];",
-            "1000000: <%spellout-cardinal-neuter< milion[ >>];",
-            "2000000: <%spellout-cardinal-neuter< milioane[ >>];",
-            "1000000000: <%spellout-cardinal-neuter< miliard[ >>];",
-            "2000000000: <%spellout-cardinal-neuter< miliarde[ >>];",
-            "1000000000000: <%spellout-cardinal-neuter< bilion[ >>];",
-            "2000000000000: <%spellout-cardinal-neuter< bilioane[ >>];",
-            "1000000000000000: <%spellout-cardinal-neuter< biliard[ >>];",
-            "2000000000000000: <%spellout-cardinal-neuter< biliarde[ >>];",
-            "1000000000000000000: =#,##0=;",
-            "%spellout-cardinal-neuter:",
-            "-x: minus >>;",
-            "x.x: << virgul\u0103 >>;",
-            "0: zero;",
-            "1: unu;",
-            "2: =%spellout-cardinal-feminine=;",
-            "20: <%spellout-cardinal-feminine<zeci[ \u0219i >>];",
-            "100: una sut\u0103[ >>];",
-            "200: <%spellout-cardinal-feminine< sute[ >>];",
-            "1000: una mie[ >>];",
-            "2000: <%spellout-cardinal-feminine< mii[ >>];",
-            "1000000: <%spellout-cardinal-neuter< milion[ >>];",
-            "2000000: <%spellout-cardinal-neuter< milioane[ >>];",
-            "1000000000: <%spellout-cardinal-neuter< miliard[ >>];",
-            "2000000000: <%spellout-cardinal-neuter< miliarde[ >>];",
-            "1000000000000: <%spellout-cardinal-neuter< bilion[ >>];",
-            "2000000000000: <%spellout-cardinal-neuter< bilioane[ >>];",
-            "1000000000000000: <%spellout-cardinal-neuter< biliard[ >>];",
-            "2000000000000000: <%spellout-cardinal-neuter< biliarde[ >>];",
-            "1000000000000000000: =#,##0=;",
+            "%spellout-numbering-year:"
+            "x.x: =0.0=;"
+            "0: =%spellout-numbering=;"
+            "%spellout-numbering:"
+            "0: =%spellout-cardinal-masculine=;"
+            "%spellout-cardinal-masculine:"
+            "-x: minus >>;"
+            "x.x: << virgul\u0103 >>;"
+            "Inf: infinit;"
+            "0: zero;"
+            "1: unu;"
+            "2: doi;"
+            "3: trei;"
+            "4: patru;"
+            "5: cinci;"
+            "6: \u0219ase;"
+            "7: \u0219apte;"
+            "8: opt;"
+            "9: nou\u0103;"
+            "10: zece;"
+            "11: unsprezece;"
+            "12: >>sprezece;"
+            "14: paisprezece;"
+            "15: >>sprezece;"
+            "16: \u0219aisprezece;"
+            "17: >>sprezece;"
+            "20: <%spellout-cardinal-feminine<zeci[ \u0219i >>];"
+            "100: o sut\u0103[ >>];"
+            "200: <%spellout-cardinal-feminine< sute[ >>];"
+            "1000: o mie[ >>];"
+            "2000: <%spellout-cardinal-feminine< mii[ >>];"
+            "20000/1000: <%spellout-cardinal-feminine< de mii[ >>];"
+            "1000000: un milion[ >>];"
+            "2000000: <%spellout-cardinal-neuter< milioane[ >>];"
+            "20000000/1000: <%spellout-cardinal-neuter< de milioane[ >>];"
+            "1000000000: un miliard[ >>];"
+            "2000000000: <%spellout-cardinal-neuter< miliarde[ >>];"
+            "20000000000/1000: <%spellout-cardinal-neuter< de miliarde[ >>];"
+            "1000000000000: un bilion[ >>];"
+            "2000000000000: <%spellout-cardinal-neuter< bilioane[ >>];"
+            "20000000000000/1000: <%spellout-cardinal-neuter< de bilioane[ >>];"
+            "1000000000000000: un biliard[ >>];"
+            "2000000000000000: <%spellout-cardinal-neuter< biliarde[ >>];"
+            "20000000000000000/1000: <%spellout-cardinal-neuter< de biliarde[ >>];"
+            "1000000000000000000: =#,##0=;"
+            "%spellout-cardinal-feminine:"
+            "-x: minus >>;"
+            "x.x: << virgul\u0103 >>;"
+            "Inf: infinit\u0103;"
+            "0: zero;"
+            "1: una;"
+            "2: dou\u0103;"
+            "3: =%spellout-cardinal-masculine=;"
+            "12: >>sprezece;"
+            "14: paisprezece;"
+            "15: >>sprezece;"
+            "16: \u0219aisprezece;"
+            "17: >>sprezece;"
+            "20: <<zeci[ \u0219i >>];"
+            "100: o sut\u0103[ >>];"
+            "200: << sute[ >>];"
+            "1000: o mie[ >>];"
+            "2000: << mii[ >>];"
+            "20000/1000: << de mii[ >>];"
+            "1000000: un milion[ >>];"
+            "2000000: <%spellout-cardinal-neuter< milioane[ >>];"
+            "20000000/1000: <%spellout-cardinal-neuter< de milioane[ >>];"
+            "1000000000: un miliard[ >>];"
+            "2000000000: <%spellout-cardinal-neuter< miliarde[ >>];"
+            "20000000000/1000: <%spellout-cardinal-neuter< de miliarde[ >>];"
+            "1000000000000: un bilion[ >>];"
+            "2000000000000: <%spellout-cardinal-neuter< bilioane[ >>];"
+            "20000000000000/1000: <%spellout-cardinal-neuter< de bilioane[ >>];"
+            "1000000000000000: un biliard[ >>];"
+            "2000000000000000: <%spellout-cardinal-neuter< biliarde[ >>];"
+            "20000000000000000/1000: <%spellout-cardinal-neuter< de biliarde[ >>];"
+            "1000000000000000000: =#,##0=;"
+            "%spellout-cardinal-neuter:"
+            "-x: minus >>;"
+            "x.x: << virgul\u0103 >>;"
+            "Inf: infinit;"
+            "0: zero;"
+            "1: un;"
+            "2: =%spellout-cardinal-feminine=;"
+            "20: <%spellout-cardinal-feminine<zeci[ \u0219i >>];"
+            "100: una sut\u0103[ >>];"
+            "200: <%spellout-cardinal-feminine< sute[ >>];"
+            "1000: una mie[ >>];"
+            "2000: <%spellout-cardinal-feminine< mii[ >>];"
+            "20000/1000: <%spellout-cardinal-feminine< de mii[ >>];"
+            "1000000: un milion[ >>];"
+            "2000000: <%spellout-cardinal-neuter< milioane[ >>];"
+            "20000000/1000: <%spellout-cardinal-neuter< de milioane[ >>];"
+            "1000000000: un miliard[ >>];"
+            "2000000000: <%spellout-cardinal-neuter< miliarde[ >>];"
+            "20000000000/1000: <%spellout-cardinal-neuter< de miliarde[ >>];"
+            "1000000000000: un bilion[ >>];"
+            "2000000000000: <%spellout-cardinal-neuter< bilioane[ >>];"
+            "20000000000000/1000: <%spellout-cardinal-neuter< de bilioane[ >>];"
+            "1000000000000000: un biliard[ >>];"
+            "2000000000000000: <%spellout-cardinal-neuter< biliarde[ >>];"
+            "20000000000000000/1000: <%spellout-cardinal-neuter< de biliarde[ >>];"
+            "1000000000000000000: =#,##0=;"
+            "%%ordinal-masculine-body:"
+            "0: zerolea;"
+            "1: unulea;"
+            "2: doilea;"
+            "3: treilea;"
+            "4: patrulea;"
+            "5: cincilea;"
+            "6: \u0219aselea;"
+            "7: \u0219aptelea;"
+            "8: optulea;"
+            "9: nou\u0103lea;"
+            "10: zecelea;"
+            "11: unsprezecelea;"
+            "12: >%spellout-cardinal-masculine>sprezecelea;"
+            "14: paisprezecelea;"
+            "15: >%spellout-cardinal-masculine>sprezecelea;"
+            "16: \u0219aisprezecelea;"
+            "17: >%spellout-cardinal-masculine>sprezecelea;"
+            "20: <%spellout-cardinal-feminine<[zeci \u0219i >>|zecilea];"
+            "100: [o sut\u0103 >>|o sut\u0103lea];"
+            "200: <%spellout-cardinal-feminine< [sute >>|sutilea];"
+            "1000: [o mie >>|o mielea];"
+            "2000: <%spellout-cardinal-feminine< [$(cardinal,one{mie}other{de mii}few{mii})$ >>|miilea];"
+            "1000000: [un milion >>|milionulea];"
+            "2000000: <%spellout-cardinal-neuter< [$(cardinal,one{milion}other{de milioane}few{milioane})$ >>|milionulea];"
+            "1000000000: [un miliard >>|miliardulea];"
+            "2000000000: <%spellout-cardinal-neuter< [$(cardinal,one{miliard}other{de miliarde}few{miliarde})$ >>|miliardulea];"
+            "1000000000000: [un bilion >>|bilionulea];"
+            "2000000000000: <%spellout-cardinal-neuter< [$(cardinal,one{bilion}other{de bilioane}few{bilioane})$ >>|bilionulea];"
+            "1000000000000000: [un biliard >>|biliardulea];"
+            "2000000000000000: <%spellout-cardinal-neuter< [$(cardinal,one{biliard}other{de biliarde}few{biliarde})$ >>|biliardulea];"
+            "1000000000000000000: =#,##0=lea;"
+            "%%ordinal-feminine-body:"
+            "0: zeroa;"
+            "1: una;"
+            "2: doua;"
+            "3: treia;"
+            "4: patra;"
+            "5: cincea;"
+            "6: \u0219asea;"
+            "7: \u0219aptea;"
+            "8: opta;"
+            "9: noua;"
+            "10: zecea;"
+            "11: unsprezecea;"
+            "12: >%spellout-cardinal-feminine>sprezecea;"
+            "14: paisprezecea;"
+            "15: >%spellout-cardinal-feminine>sprezecea;"
+            "16: \u0219aisprezecea;"
+            "17: >%spellout-cardinal-feminine>sprezecea;"
+            "20: <%spellout-cardinal-feminine<[zeci \u0219i >>|zecea];"
+            "100: [o sut\u0103 >>|o suta];"
+            "200: <%spellout-cardinal-feminine< [sute >>|suta];"
+            "1000: [o mie >>|o mia];"
+            "2000: <%spellout-cardinal-feminine< [$(cardinal,one{mie}other{de mii}few{mii})$ >>|mia];"
+            "1000000: [un milion >>|milioana];"
+            "2000000: <%spellout-cardinal-neuter< [$(cardinal,one{milion}other{de milioane}few{milioane})$ >>|milioana];"
+            "1000000000: [un miliard >>|miliarda];"
+            "2000000000: <%spellout-cardinal-neuter< [$(cardinal,one{miliard}other{de miliarde}few{miliarde})$ >>|miliarda];"
+            "1000000000000: [un bilion >>|bilioana];"
+            "2000000000000: <%spellout-cardinal-neuter< [$(cardinal,one{bilion}other{de bilioane}few{bilioane})$ >>|bilioana];"
+            "1000000000000000: [un biliard >>|biliarda];"
+            "2000000000000000: <%spellout-cardinal-neuter< [$(cardinal,one{biliard}other{de biliarde}few{biliarde})$ >>|biliarda];"
+            "1000000000000000000: =#,##0=a;"
+            "%spellout-ordinal-masculine:"
+            "-x: minus >>;"
+            "x.x: =#,##0.#=;"
+            "0: al =%%ordinal-masculine-body=;"
+            "1: primul;"
+            "2: al =%%ordinal-masculine-body=;"
+            "%spellout-ordinal-feminine:"
+            "-x: minus >>;"
+            "x.x: =#,##0.#=;"
+            "0: a =%%ordinal-feminine-body=;"
+            "1: prima;"
+            "2: a =%%ordinal-feminine-body=;"
         }
     }
 }

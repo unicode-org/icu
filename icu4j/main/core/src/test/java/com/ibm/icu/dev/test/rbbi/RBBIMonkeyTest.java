@@ -860,7 +860,7 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
             fRuleCharBuffer = testFileBuf.toString(); /* the file as a String */
         }
 
-        class MonkeyException extends RuntimeException {
+        static class MonkeyException extends RuntimeException {
             private static final long serialVersionUID = 1L;
             public int fPosition; // Position of the failure in the test data.
 

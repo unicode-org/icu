@@ -37,6 +37,7 @@ NumberFormatterApiTest::NumberFormatterApiTest(UErrorCode& status)
         : USD(u"USD", status),
           GBP(u"GBP", status),
           CZK(u"CZK", status),
+          CHF(u"CHF", status),
           CAD(u"CAD", status),
           ESP(u"ESP", status),
           PTE(u"PTE", status),
@@ -888,6 +889,17 @@ void NumberFormatterApiTest::unitMeasure() {
             Locale("en"),
             100,
             u"100");
+    
+      // This test checks the behavior of using a fixed-size length for the units array with a fixed number of units.
+      // The array size is fixed, and we are now using a binary search approach.
+      assertFormatSingle(
+              u"One of the latest unit, volume-teaspoon",
+                    u"measure-unit/volume-teaspoon",
+                    u"unit/teaspoon",
+                    NumberFormatter::with().unit(MeasureUnit::forIdentifier("teaspoon", status)),
+                    Locale("en-US"),
+                    100,
+                    u"100 tsp");
 
     // TODO: desired behaviour for this "pathological" case?
     // Since this is pointless, we don't test that its behaviour doesn't change.
@@ -2268,6 +2280,15 @@ void NumberFormatterApiTest::unitCurrency() {
             Locale("ro-RO"),
             24,
             u"24,00 lei românești");
+
+    assertFormatSingle(
+            u"Swiss long currency (ICU-23503)",
+            u"currency/CHF unit-width-full-name",
+            u"currency/CHF unit-width-full-name",
+            NumberFormatter::with().unit(CHF).unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
+            Locale("en-DE"),
+            5.43,
+            u"5,43 Swiss francs");
 
     assertFormatSingle(
             u"Currency spacing in suffix (ICU-20954)",

@@ -50,6 +50,7 @@ void IntlTestDateTimePatternGeneratorAPI::runIndexedTest( int32_t index, UBool e
         TESTCASE(14, testISO8601);
         TESTCASE(15, testRegionOverride);
         TESTCASE(16, testAlphabeticSubstitution23114);
+        TESTCASE(17, testTwoDigitYear);
         default: name = ""; break;
     }
 }
@@ -1594,6 +1595,28 @@ void IntlTestDateTimePatternGeneratorAPI::testBestPattern() {
         // ICU-20992: Bad patterns for missing fields
         { "ckb_IR",     "mmSSS",       u"mm:ss\u066bSSS"     },
         { "ckb_IR",     "BSSS",        u"SSS \u251c'Dayperiod': B\u2524" },
+        // ddd (ordinal day-of-month) vs d (numeric) produce different patterns
+        { "en",         "yMMMd",       u"MMM d, y"        },
+        { "en",         "yMMMddd",     u"MMM ddd, y"      },
+        { "en",         "yMMMEd",      u"EEE, MMM d, y"   },
+        { "en",         "yMMMEddd",    u"EEE, MMM ddd, y" },
+        { "en",         "MMMd",        u"MMM d"           },
+        { "en",         "MMMddd",      u"MMM ddd"         },
+        { "en",         "MMMMddd",     u"MMMM ddd"        },
+        { "en",         "MMMMEddd",    u"EEE, MMMM ddd"   },
+        // French now has its own ddd availableFormats (CLDR-19616), which use
+        // the French day-before-month order rather than root's MMM-before-day.
+        { "fr",         "yMMMd",       u"d MMM y"         },
+        { "fr",         "yMMMddd",     u"ddd MMM y"       },
+        { "fr",         "MMMd",        u"d MMM"           },
+        { "fr",         "MMMddd",      u"ddd MMM"         },
+		// We also have to make sure that the presence of new "ddd" patterns didn't
+		// mess up the handling of skeletons that contain "dd"-- if we don't treat
+		// "ddd" correctly, "dd" in the skeleton will match a "ddd" skeleton in
+		// the parent locale instead of a "d" skeleton in the requested locale,
+		// potentially messing up the field order.
+		{ "de",         "MMMd",        u"d. MMM"          },
+		{ "de",         "MMMdd",       u"dd. MMM"         },
     };
     
     for (int32_t i = 0; i < UPRV_LENGTHOF(testCases); i++) {
@@ -1644,7 +1667,7 @@ void IntlTestDateTimePatternGeneratorAPI::testDateTimePatterns() {
                   UnicodeString(u"d MMM y, HH:mm"),
                   UnicodeString(u"dd/MM/y HH:mm") } },
         { "ha", { UnicodeString(u"EEEE d MMMM, y 'da' HH:mm"),
-                  UnicodeString(u"d MMMM, y 'da' HH:mm"),
+                  UnicodeString(u"y, MMMM d 'da' HH:mm"),
                   UnicodeString(u"d MMM, y, HH:mm"),
                   UnicodeString(u"y-MM-dd, HH:mm") } },
         { nullptr, { UnicodeString(""), UnicodeString(""), // terminator
@@ -1846,6 +1869,59 @@ void IntlTestDateTimePatternGeneratorAPI::testAlphabeticSubstitution23114() {
     UnicodeString bestPattern = dtpg->getBestPattern(u"GyMEd", status);
     status.assertSuccess();
     assertEquals("Should not substitute numeric for alpha", u"EEE, MMM d, y G", bestPattern);
+}
+
+/**
+ * Test that a two-digit year in the requested skeleton produces a two-digit year in
+ * the resulting pattern (and that other year field lengths are preserved as well).
+ */
+typedef struct DTPtnGenTwoDigitYearData {
+    const char *locale;
+    const char *skel;
+    const char16_t *expectedPattern;
+} DTPtnGenTwoDigitYearData;
+void IntlTestDateTimePatternGeneratorAPI::testTwoDigitYear()
+{
+    DTPtnGenTwoDigitYearData testData[] = {
+        //   locale  skel   expectedPattern
+        { "en", "yMMMd",    u"MMM d, y"    },
+        { "en", "yyMMMd",   u"MMM d, ’yy"  },
+        { "en", "yyyyMMMd", u"MMM d, yyyy" }, // NOT "MMM d,’yyyy"
+        { "de", "yMMMd",    u"d. MMM y"    },
+        { "de", "yyMMMd",   u"d. MMM yy"   },
+        { "de", "yyyyMMMd", u"d. MMM yyyy" },
+    };
+
+    int count = UPRV_LENGTHOF(testData);
+    const DTPtnGenTwoDigitYearData * testDataPtr = testData;
+
+    for (; count-- > 0; ++testDataPtr) {
+        UErrorCode status = U_ZERO_ERROR;
+
+        Locale locale(testDataPtr->locale);
+        UnicodeString skel(testDataPtr->skel);
+        UnicodeString expectedPattern(testDataPtr->expectedPattern, -1);
+
+        LocalPointer<DateTimePatternGenerator> dtpgen(
+            DateTimePatternGenerator::createInstance(locale, status));
+        if (U_FAILURE(status)) {
+            dataerrln("Unable to create DateTimePatternGenerator instance for locale(%s): %s",
+                      locale.getName(), u_errorName(status));
+            continue;
+        }
+        UnicodeString pattern = dtpgen->getBestPattern(skel, UDATPG_MATCH_NO_OPTIONS, status);
+        if (U_FAILURE(status)) {
+            errln("ERROR in getBestPattern, locale %s, skeleton %s: %s",
+                  testDataPtr->locale, testDataPtr->skel, u_errorName(status));
+            continue;
+        }
+        if (pattern.compare(expectedPattern) != 0) {
+            errln( UnicodeString("ERROR in getBestPattern, locale ") + UnicodeString(testDataPtr->locale) +
+                   UnicodeString(", skeleton ") + skel +
+                   UnicodeString(", expected pattern ") + expectedPattern +
+                   UnicodeString(", got ") + pattern );
+        }
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

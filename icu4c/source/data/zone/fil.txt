@@ -39,14 +39,14 @@ fil{
         "Etc:Unknown"{
             ec{"Di-kilalang Lungsod"}
         }
-        "Europe:Dublin"{
-            ld{"Standard na Oras sa Ireland"}
-        }
         "Europe:Kiev"{
             ec{"Kiev"}
         }
-        "Europe:London"{
-            ld{"Oras sa Tag-init ng Britain"}
+        "Indian:Chagos"{
+            ec{"Chagos Archipelago"}
+        }
+        "Indian:Kerguelen"{
+            ec{"Kerguelen Islands"}
         }
         "Pacific:Enderbury"{
             ec{"Canton Island"}
@@ -54,11 +54,16 @@ fil{
         "Pacific:Honolulu"{
             ec{"Honolulu"}
         }
+        "meta:Acre"{
+            ld{"Acre Summer Time"}
+            lg{"Acre Time"}
+            ls{"Acre Standard Time"}
+        }
         "meta:Afghanistan"{
             ls{"Oras sa Afghanistan"}
         }
         "meta:Africa_Central"{
-            ls{"Oras sa Gitnang Africa"}
+            ls{"Central Africa Time"}
         }
         "meta:Africa_Eastern"{
             ls{"Oras sa Silangang Africa"}
@@ -67,7 +72,7 @@ fil{
             ls{"Oras sa Timog Africa"}
         }
         "meta:Africa_Western"{
-            ls{"Oras sa Kanlurang Africa"}
+            ls{"West Africa Time"}
         }
         "meta:Alaska"{
             ld{"Daylight Time sa Alaska"}
@@ -180,12 +185,16 @@ fil{
             lg{"Oras sa Brasilia"}
             ls{"Standard na Oras sa Brasilia"}
         }
+        "meta:British"{
+            ld{"British Summer Time"}
+            lg{"British Time"}
+        }
         "meta:Brunei"{
             ls{"Oras sa Brunei Darussalam"}
         }
         "meta:Cape_Verde"{
-            ld{"Oras sa Tag-init ng Cape Verde"}
-            lg{"Oras sa Cape Verde"}
+            ld{"Cape Verde Summer Time"}
+            lg{"Cape Verde Time"}
             ls{"Standard na Oras sa Cape Verde"}
         }
         "meta:Chamorro"{
@@ -276,7 +285,7 @@ fil{
             ls{"Oras sa French Guiana"}
         }
         "meta:French_Southern"{
-            ls{"Oras sa Katimugang France at Antartiko"}
+            ls{"French Southern Territories Time"}
         }
         "meta:GMT"{
             ls{"Greenwich Mean Time"}
@@ -295,6 +304,11 @@ fil{
         "meta:Gilbert_Islands"{
             ls{"Oras sa Gilbert Islands"}
         }
+        "meta:Greenland"{
+            ld{"Greenland Summer Time"}
+            lg{"Greenland Time"}
+            ls{"Greenland Standard Time"}
+        }
         "meta:Greenland_Eastern"{
             ld{"Oras sa Tag-init ng Silangang Greenland"}
             lg{"Oras sa Silangang Greenland"}
@@ -312,7 +326,7 @@ fil{
             ls{"Oras sa Guyana"}
         }
         "meta:Hawaii"{
-            ls{"Standard na Oras sa Hawaii-Aleutian"}
+            ls{"Hawaii Time"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"Oras sa Tag-init ng Hawaii-Aleutian"}
@@ -333,7 +347,7 @@ fil{
             ls{"Standard na Oras sa India"}
         }
         "meta:Indian_Ocean"{
-            ls{"Oras sa Indian Ocean"}
+            ls{"Indian Ocean Time"}
         }
         "meta:Indochina"{
             ls{"Oras sa Indochina"}
@@ -352,6 +366,10 @@ fil{
             lg{"Oras sa Iran"}
             ls{"Standard na Oras sa Iran"}
         }
+        "meta:Irish"{
+            ld{"Irish Standard Time"}
+            lg{"Irish Time"}
+        }
         "meta:Irkutsk"{
             ld{"Oras sa Tag-init ng Irkutsk"}
             lg{"Oras sa Irkutsk"}
@@ -368,12 +386,12 @@ fil{
             ls{"Standard na Oras sa Japan"}
         }
         "meta:Kamchatka"{
-            ld{"Summer Time sa Petropavlovsk-Kamchatski"}
-            lg{"Oras sa Petropavlovsk-Kamchatski"}
-            ls{"Standard Time sa Petropavlovsk-Kamchatski"}
+            ld{"Kamchatka Summer Time"}
+            lg{"Kamchatka Time"}
+            ls{"Kamchatka Standard Time"}
         }
         "meta:Kazakhstan"{
-            ls{"Oras ng Kazakhstan"}
+            ls{"Kazakhstan Time"}
         }
         "meta:Kazakhstan_Eastern"{
             ls{"Oras sa Silangang Kazakhstan"}
@@ -423,9 +441,9 @@ fil{
             ls{"Oras sa Marshall Islands"}
         }
         "meta:Mauritius"{
-            ld{"Oras sa Tag-init ng Mauritius"}
-            lg{"Oras sa Mauritius"}
-            ls{"Standard na Oras sa Mauritius"}
+            ld{"Mauritius Summer Time"}
+            lg{"Mauritius Time"}
+            ls{"Mauritius Standard Time"}
         }
         "meta:Mawson"{
             ls{"Oras sa Mawson"}
@@ -536,7 +554,7 @@ fil{
             ls{"Oras sa Pyongyang"}
         }
         "meta:Reunion"{
-            ls{"Oras sa Reunion"}
+            ls{"Réunion Time"}
         }
         "meta:Rothera"{
             ls{"Oras sa Rothera"}
@@ -547,17 +565,15 @@ fil{
             ls{"Standard na Oras sa Sakhalin"}
         }
         "meta:Samara"{
-            ld{"Samara Daylight"}
-            lg{"Oras sa Samara"}
-            ls{"Standard Time sa Samara"}
+            ld{"Samara Summer Time"}
+            lg{"Samara Time"}
+            ls{"Samara Standard Time"}
         }
         "meta:Samoa"{
-            ld{"Daylight Time sa Samoa"}
-            lg{"Oras sa Samoa"}
             ls{"Standard na Oras sa Samoa"}
         }
         "meta:Seychelles"{
-            ls{"Oras sa Seychelles"}
+            ls{"Seychelles Time"}
         }
         "meta:Singapore"{
             ls{"Standard na Oras sa Singapore"}
@@ -596,6 +612,11 @@ fil{
         "meta:Truk"{
             ls{"Oras sa Chuuk"}
         }
+        "meta:Turkey"{
+            ld{"Türkiye Summer Time"}
+            lg{"Türkiye Time"}
+            ls{"Türkiye Standard Time"}
+        }
         "meta:Turkmenistan"{
             ld{"Oras sa Tag-init ng Turkmenistan"}
             lg{"Oras sa Turkmenistan"}
@@ -608,6 +629,9 @@ fil{
             ld{"Oras sa Tag-init ng Uruguay"}
             lg{"Oras sa Uruguay"}
             ls{"Standard na Oras sa Uruguay"}
+        }
+        "meta:Urumqi"{
+            ls{"Ürümqi Time"}
         }
         "meta:Uzbekistan"{
             ld{"Oras sa Tag-init ng Uzbekistan"}

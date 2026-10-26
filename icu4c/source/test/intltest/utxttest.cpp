@@ -65,6 +65,7 @@ UTextTest::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO(Ticket10983);
     TESTCASE_AUTO(Ticket12130);
     TESTCASE_AUTO(Ticket13344);
+    TESTCASE_AUTO(Ticket23508);
     TESTCASE_AUTO(AccessChangesChunkSize);
     TESTCASE_AUTO_END;
 }
@@ -1606,6 +1607,45 @@ void UTextTest::Ticket13344() {
     assertEquals("UTextTest::Ticket13344-trail-2", 3, utext_getNativeIndex(ut.getAlias()));
     utext_setNativeIndex(ut.getAlias(), 5);
     assertEquals("UTextTest::Ticket13344-bmp-2", 5, utext_getNativeIndex(ut.getAlias()));
+}
+
+// ICU-23508 Deep UText clones must not retain chunk contents from source storage.
+void UTextTest::Ticket23508() {
+    UErrorCode status = U_ZERO_ERROR;
+
+    // UChar* provider.
+    char16_t chars[] = u"ABC";
+    LocalUTextPointer charsText(
+            utext_openUChars(nullptr, chars, -1, &status));
+    assertSuccess("UTextTest::Ticket23508-UChars-open", status);
+
+    LocalUTextPointer charsClone(
+            utext_clone(nullptr, charsText.getAlias(), true, false, &status));
+    assertSuccess("UTextTest::Ticket23508-UChars-clone", status);
+
+    chars[0] = u'Z';
+    assertEquals(
+            "UTextTest::Ticket23508-UChars-independent",
+            0x41,
+            utext_char32At(charsClone.getAlias(), 0));
+
+    // UnicodeString provider.
+    status = U_ZERO_ERROR;
+    UnicodeString str(u"ABC");
+
+    LocalUTextPointer stringText(
+            utext_openUnicodeString(nullptr, &str, &status));
+    assertSuccess("UTextTest::Ticket23508-UnicodeString-open", status);
+
+    LocalUTextPointer stringClone(
+            utext_clone(nullptr, stringText.getAlias(), true, false, &status));
+    assertSuccess("UTextTest::Ticket23508-UnicodeString-clone", status);
+
+    str.setCharAt(0, u'Z');
+    assertEquals(
+            "UTextTest::Ticket23508-UnicodeString-independent",
+            0x41,
+            utext_char32At(stringClone.getAlias(), 0));
 }
 
 // ICU-21653 UText does not handle access callback that changes chunk size

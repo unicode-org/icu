@@ -76,12 +76,10 @@ abstract class NFSubstitution {
             case '<':
                 if (rule.getBaseValue() == NFRule.NEGATIVE_NUMBER_RULE) {
                     // throw an exception if the rule is a negative number rule
-                    /// CLOVER:OFF
                     // If you look at the call hierarchy of this method, the rule would
                     // never be directly modified by the user and therefore makes the
                     // following pointless unless the user changes the ruleset.
                     throw new IllegalArgumentException("<< not allowed in negative-number rule");
-                    /// CLOVER:ON
                 } else if (rule.getBaseValue() == NFRule.IMPROPER_FRACTION_RULE
                         || rule.getBaseValue() == NFRule.PROPER_FRACTION_RULE
                         || rule.getBaseValue() == NFRule.DEFAULT_RULE) {
@@ -111,12 +109,10 @@ abstract class NFSubstitution {
                 } else if (ruleSet.isFractionSet()) {
                     // if the rule set owning the rule is a fraction rule set,
                     // throw an exception
-                    /// CLOVER:OFF
                     // If you look at the call hierarchy of this method, the rule would
                     // never be directly modified by the user and therefore makes the
                     // following pointless unless the user changes the ruleset.
                     throw new IllegalArgumentException(">> not allowed in fraction rule set");
-                    /// CLOVER:ON
                 } else {
                     // otherwise, return a ModulusSubstitution
                     return new ModulusSubstitution(
@@ -126,12 +122,10 @@ abstract class NFSubstitution {
                 return new SameValueSubstitution(pos, ruleSet, description);
             default:
                 // and if it's anything else, throw an exception
-                /// CLOVER:OFF
                 // If you look at the call hierarchy of this method, the rule would
                 // never be directly modified by the user and therefore makes the
                 // following pointless unless the user changes the ruleset.
                 throw new IllegalArgumentException("Illegal substitution character");
-                /// CLOVER:ON
         }
     }
 
@@ -1033,7 +1027,7 @@ class ModulusSubstitution extends NFSubstitution {
                             false,
                             upperBound,
                             nonNumericalExecutedRuleMask,
-                            recursionCount);
+                            recursionCount + 1);
 
             if (parsePosition.getIndex() != 0) {
                 double result = tempResult.doubleValue();
@@ -1221,6 +1215,7 @@ class FractionalPartSubstitution extends NFSubstitution {
      * format by digits or not. In addition, it marks the rule set it calls (if any) as a fraction
      * rule set.
      */
+    @SuppressWarnings("ReferenceEquality")
     FractionalPartSubstitution(int pos, NFRuleSet ruleSet, String description) {
         super(pos, ruleSet, description);
         if (description.equals(">>") || description.equals(">>>") || ruleSet == this.ruleSet) {
@@ -1675,7 +1670,7 @@ class NumeratorSubstitution extends NFSubstitution {
         // if withZeros is true, we need to count the zeros
         // and use that to adjust the parse result
         int zeroCount = 0;
-        if (withZeros) {
+        if (withZeros && ruleSet != null) {
             String workText = text;
             ParsePosition workPos = new ParsePosition(1);
 
@@ -1720,7 +1715,7 @@ class NumeratorSubstitution extends NFSubstitution {
                         nonNumericalExecutedRuleMask,
                         recursionCount);
 
-        if (withZeros) {
+        if (withZeros && result != null) {
             // any base value will do in this case.  is there a way to
             // force this to not bother trying all the base values?
 
@@ -1728,10 +1723,18 @@ class NumeratorSubstitution extends NFSubstitution {
             long n = result.longValue();
             long d = 1;
             while (d <= n) {
+                if (d > Long.MAX_VALUE / 10) {
+                    parsePosition.setIndex(0);
+                    return 0;
+                }
                 d *= 10;
             }
             // now add the zeros
             while (zeroCount > 0) {
+                if (d > Long.MAX_VALUE / 10) {
+                    parsePosition.setIndex(0);
+                    return 0;
+                }
                 d *= 10;
                 --zeroCount;
             }

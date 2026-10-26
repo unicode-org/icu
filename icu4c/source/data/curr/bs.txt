@@ -259,10 +259,6 @@ bs{
             "CNH",
             "Kineski juan (izvanteritorijalni)",
         }
-        CNX{
-            "CNX",
-            "Dolar kineske narodne banke",
-        }
         CNY{
             "CNY",
             "Kineski juan",
@@ -1538,11 +1534,6 @@ bs{
             few{"kineska juana (izvanteritorijalni)"}
             one{"kineski juan (izvanteritorijalni)"}
             other{"kineskih juana (izvanteritorijalni)"}
-        }
-        CNX{
-            few{"dolara kineske narodne banke"}
-            one{"dolar kineske narodne banke"}
-            other{"dolara kineske narodne banke"}
         }
         CNY{
             few{"kineska juana"}

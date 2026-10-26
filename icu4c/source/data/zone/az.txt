@@ -78,6 +78,9 @@ az{
         "Africa:Libreville"{
             ec{"Librevil"}
         }
+        "Africa:Lome"{
+            ec{"Lome"}
+        }
         "Africa:Lubumbashi"{
             ec{"Lubumbaşi"}
         }
@@ -135,6 +138,9 @@ az{
         "America:Bahia_Banderas"{
             ec{"Bahia Banderas"}
         }
+        "America:Belem"{
+            ec{"Belem"}
+        }
         "America:Belize"{
             ec{"Beliz"}
         }
@@ -176,6 +182,9 @@ az{
         }
         "America:Chihuahua"{
             ec{"Çihuahua"}
+        }
+        "America:Ciudad_Juarez"{
+            ec{"Siudad Xuares"}
         }
         "America:Cordoba"{
             ec{"Kordoba"}
@@ -318,6 +327,9 @@ az{
         "America:Mazatlan"{
             ec{"Mazaltan"}
         }
+        "America:Mendoza"{
+            ec{"Mendosa"}
+        }
         "America:Menominee"{
             ec{"Menomini"}
         }
@@ -390,6 +402,9 @@ az{
         "America:Rio_Branco"{
             ec{"Rio Branko"}
         }
+        "America:Santarem"{
+            ec{"Santarem"}
+        }
         "America:Santiago"{
             ec{"Santyaqo"}
         }
@@ -459,8 +474,20 @@ az{
         "Antarctica:McMurdo"{
             ec{"Mak Murdo"}
         }
+        "Antarctica:Palmer"{
+            ec{"Palmer torpağı"}
+        }
+        "Antarctica:Rothera"{
+            ec{"Rotera stansiyası"}
+        }
         "Antarctica:Syowa"{
-            ec{"Syova"}
+            ec{"Syova stansiyası"}
+        }
+        "Antarctica:Troll"{
+            ec{"Troll stansiyası"}
+        }
+        "Antarctica:Vostok"{
+            ec{"Vostok stansiyası"}
         }
         "Arctic:Longyearbyen"{
             ec{"Lonqyir"}
@@ -717,9 +744,6 @@ az{
         "Europe:Copenhagen"{
             ec{"Kopenhagen"}
         }
-        "Europe:Dublin"{
-            ld{"İrlandiya Yay Vaxtı"}
-        }
         "Europe:Gibraltar"{
             ec{"Cəbəli-Tariq"}
         }
@@ -746,9 +770,6 @@ az{
         }
         "Europe:Ljubljana"{
             ec{"Lyublyana"}
-        }
-        "Europe:London"{
-            ld{"Britaniya Yay Vaxtı"}
         }
         "Europe:Luxembourg"{
             ec{"Lüksemburq"}
@@ -828,6 +849,9 @@ az{
         "Indian:Kerguelen"{
             ec{"Kergelen"}
         }
+        "Indian:Mahe"{
+            ec{"Mahe"}
+        }
         "Indian:Maldives"{
             ec{"Maldiv"}
         }
@@ -836,6 +860,9 @@ az{
         }
         "Indian:Mayotte"{
             ec{"Mayot"}
+        }
+        "Indian:Reunion"{
+            ec{"Reunion"}
         }
         "Pacific:Auckland"{
             ec{"Oklənd"}
@@ -917,6 +944,11 @@ az{
         }
         "Pacific:Wallis"{
             ec{"Uollis"}
+        }
+        "meta:Acre"{
+            ld{"Əkka yay vaxtı"}
+            lg{"Əkka"}
+            ls{"Əkka standart vaxtı"}
         }
         "meta:Afghanistan"{
             ls{"Əfqanıstan Vaxtı"}
@@ -1039,6 +1071,10 @@ az{
             lg{"Braziliya Vaxtı"}
             ls{"Braziliya Standart Vaxtı"}
         }
+        "meta:British"{
+            ld{"Britaniya Yay Vaxtı"}
+            lg{"Britaniya vaxtı"}
+        }
         "meta:Brunei"{
             ls{"Brunei Darussalam vaxtı"}
         }
@@ -1090,7 +1126,7 @@ az{
             ls{"Devis Vaxtı"}
         }
         "meta:DumontDUrville"{
-            ls{"Dümon-d’Ürvil Vaxtı"}
+            ls{"Dümon-d’Urvil Vaxtı"}
         }
         "meta:East_Timor"{
             ls{"Şərqi Timor Vaxtı"}
@@ -1154,6 +1190,11 @@ az{
         "meta:Gilbert_Islands"{
             ls{"Gilbert Adaları Vaxtı"}
         }
+        "meta:Greenland"{
+            ld{"Qrenlandiya yay vaxtı"}
+            lg{"Qrenlandiya vaxtı"}
+            ls{"Qrenlandiya standart vaxtı"}
+        }
         "meta:Greenland_Eastern"{
             ld{"Şərqi Qrenlandiya Yay Vaxtı"}
             lg{"Şərqi Qrenlandiya Vaxtı"}
@@ -1171,7 +1212,7 @@ az{
             ls{"Qayana Vaxtı"}
         }
         "meta:Hawaii"{
-            ls{"Havay-Aleut Standart Vaxtı"}
+            ls{"Havay vaxtı"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"Havay-Aleut Yay Vaxtı"}
@@ -1211,6 +1252,10 @@ az{
             lg{"İran Vaxtı"}
             ls{"İran Standart Vaxtı"}
         }
+        "meta:Irish"{
+            ld{"İrlandiya Yay Vaxtı"}
+            lg{"İrlandiya vaxtı"}
+        }
         "meta:Irkutsk"{
             ld{"İrkutsk Yay Vaxtı"}
             lg{"İrkutsk Vaxtı"}
@@ -1225,6 +1270,11 @@ az{
             ld{"Yaponiya Yay Vaxtı"}
             lg{"Yaponiya Vaxtı"}
             ls{"Yaponiya Standart Vaxtı"}
+        }
+        "meta:Kamchatka"{
+            ld{"Kamçatka yay vaxtı"}
+            lg{"Kamçatka vaxtı"}
+            ls{"Kamçatka standart vaxtı"}
         }
         "meta:Kazakhstan"{
             ls{"Qazaxıstan vaxtı"}
@@ -1406,8 +1456,6 @@ az{
             ls{"Samara standart vaxtı"}
         }
         "meta:Samoa"{
-            ld{"Samoa Yay Vaxtı"}
-            lg{"Samoa Vaxtı"}
             ls{"Samoa Standart Vaxtı"}
         }
         "meta:Seychelles"{
@@ -1467,6 +1515,9 @@ az{
             ld{"Uruqvay Yay Vaxtı"}
             lg{"Uruqvay Vaxtı"}
             ls{"Uruqvay Standart Vaxtı"}
+        }
+        "meta:Urumqi"{
+            ls{"Urumçi vaxtı"}
         }
         "meta:Uzbekistan"{
             ld{"Özbəkistan Yay Vaxtı"}

@@ -51,7 +51,7 @@ GB7:     (LV | V) (V | T);
 GB8:     (LVT | T) T;
 
 GB11:    Extended_Pict Extend_* ZWJ Extended_Pict;
-GB9c:    InCBConsonant ( InCBExtend | InCBLinker )* InCBLinker ( InCBExtend | InCBLinker )* InCBConsonant;
+GB9c:    InCBLinker InCBExtend* InCBConsonant;
 GB9:     . (Extend_ | ZWJ);
 
 GB9a:    . SpacingMark;

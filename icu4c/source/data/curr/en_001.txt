@@ -39,6 +39,10 @@ en_001{
             "SHP",
             "St Helena Pound",
         }
+        SLL{
+            "SLL",
+            "Sierra Leonean Leone (1964–2022)",
+        }
         TJR{
             "TJR",
             "Tajikistani Rouble",
@@ -52,6 +56,9 @@ en_001{
         AFN{
             one{"Afghan afghani"}
             other{"Afghan afghanis"}
+        }
+        BDT{
+            other{"Bangladeshi taka"}
         }
         BMD{
             one{"Bermudian dollar"}
@@ -97,9 +104,16 @@ en_001{
             one{"St Helena pound"}
             other{"St Helena pounds"}
         }
+        SLL{
+            one{"Sierra Leonean leone (1964–2022)"}
+            other{"Sierra Leonean leones (1964–2022)"}
+        }
         TJR{
             one{"Tajikistani rouble"}
             other{"Tajikistani roubles"}
+        }
+        TRY{
+            other{"Turkish lira"}
         }
         VUV{
             other{"Vanuatu vatu"}

@@ -15,7 +15,6 @@ import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICULocaleService;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.ICUService;
-import com.ibm.icu.impl.ICUService.Factory;
 import com.ibm.icu.util.ULocale;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -41,7 +40,7 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
         if (service.isDefault()) {
             return false;
         }
-        return service.unregisterFactory((Factory) key);
+        return service.unregisterFactory((ICUService.Factory) key);
     }
 
     @Override

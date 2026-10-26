@@ -70,10 +70,6 @@ yo{
                 dnam{"nínú èròjà gúlúkóòsì"}
                 other{"{0} nínú èròjà gúlúkóósì"}
             }
-            part{
-                dnam{"ìpín"}
-                other{"ìpín {0}"}
-            }
             part-per-1e9{
                 dnam{"ẹ̀yà nínú ìdá blíọ̀nù"}
             }
@@ -348,13 +344,6 @@ yo{
             mole{
                 other{"{0}mol"}
             }
-            ofglucose{
-                dnam{"Glc"}
-            }
-            part{
-                dnam{"ìpín"}
-                other{"ìpín {0}"}
-            }
             part-per-1e6{
                 other{"{0}ppm"}
             }
@@ -459,9 +448,6 @@ yo{
             }
             calorie{
                 other{"{0}cal"}
-            }
-            calorie-it{
-                dnam{"cal-IT"}
             }
             electronvolt{
                 other{"{0}eV"}

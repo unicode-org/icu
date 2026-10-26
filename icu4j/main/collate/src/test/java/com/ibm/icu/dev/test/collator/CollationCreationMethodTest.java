@@ -13,6 +13,7 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.CollationKey;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.RuleBasedCollator;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.Random;
 import org.junit.Test;
@@ -92,7 +93,7 @@ public class CollationCreationMethodTest extends TestFmwk {
             c[x] = (byte) (z >>> 4);
         }
         try {
-            s = new String(c, "UTF-16BE");
+            s = new String(c, StandardCharsets.UTF_16BE);
         } catch (Exception e) {
             warnln("Error creating random strings");
         }

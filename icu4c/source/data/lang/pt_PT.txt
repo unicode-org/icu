@@ -11,8 +11,14 @@ pt_PT{
         colNormalization{"Ordenação normalizada"}
         colNumeric{"Ordenação numérica"}
         colStrength{"Força da ordenação"}
+        dx{"Exclusões de separação de palavras do dicionário"}
         hc{"Ciclo horário (12 vs. 24)"}
         ms{"Sistema de medida"}
+        rg{"Região para dados suplementares"}
+        s0{"Fonte da transformação"}
+        sd{"Subdivisão de região"}
+        t{"Regra de transformação"}
+        t0{"Traduzido automaticamente"}
         va{"Variante de região"}
     }
     Languages{
@@ -175,7 +181,9 @@ pt_PT{
         }
         calendar%core{
             ethiopic-amete-alem{"Etíope Amete Alem"}
+            indian{"Nacional indiano"}
             islamic-civil{"Hegírico (civil)"}
+            islamic-tbla{"Hegírico (astronómico)"}
             roc{"República da China"}
         }
         cf{
@@ -207,12 +215,19 @@ pt_PT{
             no{"Ordenar dígitos individualmente"}
             yes{"Ordenar dígitos numericamente"}
         }
+        colReorder%core{
+            digit{"Algarismos"}
+        }
         colStrength{
             identical{"Ordenar tudo"}
             primary{"Ordenar apenas letras básicas"}
             quaternary{"Ordenar acentos/tipo de letra/largura/kana"}
             secondary{"Ordenar acentos"}
             tertiary{"Ordenar acentos/tipo de letra/largura"}
+        }
+        colStrength%core{
+            quaternary{"Alfabeto básico, acentos, maiúsculas e minúsculas, variantes, kana"}
+            tertiary{"Alfabeto básico, acentos, maiúsculas e minúsculas, variantes"}
         }
         collation{
             eor{"Regras de ordenação europeias"}
@@ -226,10 +241,17 @@ pt_PT{
         collation%core{
             ducet{"Unicode padrão"}
             phonebook{"Lista telefónica"}
+            searchjl{"Consoante inicial do coreano"}
             unihan{"Radical e traços"}
         }
         d0{
             fwidth{"Largura completa"}
+        }
+        kv%core{
+            currency{"Espaços shift, pontuação, todos os símbolos"}
+            punct{"Espaços shift, pontuação"}
+            space{"Espaços shift, pontuação"}
+            symbol{"Espaços shift, pontuação, símbolos não relacionados com moedas"}
         }
         lb{
             loose{"Estilo flexível de quebra de linha"}
@@ -291,6 +313,40 @@ pt_PT{
             tamldec{"Algarismos de tâmil"}
             telu{"Algarismos de telugu"}
             traditional{"Algarismos tradicionais"}
+        }
+        numbers%core{
+            arabext{"Indo-arábicos expandidos"}
+            armnlow{"Arménia minúscula"}
+            finance{"Numeração financeira"}
+            fullwide{"Largura completa"}
+            greklow{"Grega minúscula"}
+            hanidays{
+                "Numeração dos dias do mês em caracteres Han para calendários tradici"
+                "onais"
+            }
+            hanidec{
+                "Sistema decimal posicional com ideogramas numéricos chineses como dí"
+                "gitos"
+            }
+            hansfin{"Financeira em chinês simplificado"}
+            hantfin{"Financeira em chinês tradicional"}
+            jpanfin{"Financeira japonesa"}
+            jpanyear{"Numeração Gannen para o primeiro ano do calendário japonês"}
+            lanatham{"Numeração Tai Tham Tham (eclesiástica)"}
+            mathbold{"Algarismos matemáticos a negrito"}
+            mathdbl{"Algarismos matemáticos de traço duplo"}
+            mathmono{"Algarismos matemáticos monoespaçados"}
+            mathsanb{"Algarismos matemáticos sem serifa a negrito"}
+            mathsans{"Algarismos matemáticos sem serifa"}
+            mymrepka{"Algarismos pwo karen orientais de Myanmar"}
+            mymrpao{"Algarismos pa’o de Myanmar"}
+            mymrshan{"Algarismos shan de Myanmar"}
+            mymrtlng{"Algarismos tai laing de Myanmar"}
+            outlined{"Algarismos contornados"}
+            roman{"Algarismos romanos maiúsculos"}
+            romanlow{"Algarismos romanos minúsculos"}
+            segment{"Algarismos segmentados"}
+            tamldec{"Algarismos de tâmil modernos"}
         }
     }
     Variants{

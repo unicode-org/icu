@@ -615,7 +615,7 @@ You can optionally configure ICU4J date and time service classes to use underlyi
 
 ## Where to Find More Information
 
-[https://icu.unicode.org/](https://icu.unicode.org/) is the home page of International Components for Unicode development project
+<https://icu.unicode.org/> is the home page of International Components for Unicode development project
 
 ## Submitting Comments, Requesting Features and Reporting Bugs
 
@@ -626,4 +626,4 @@ To submit comments, request features and report bugs, please see [ICU bug databa
 * * *
 
 © 2016 and later: Unicode, Inc. and others.
-License & terms of use: [http://www.unicode.org/copyright.html](http://www.unicode.org/copyright.html)
+License & terms of use: <http://www.unicode.org/copyright.html>

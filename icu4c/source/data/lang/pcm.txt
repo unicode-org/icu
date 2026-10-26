@@ -5,15 +5,41 @@ pcm{
     Keys{
         calendar{"Kalẹ́nda"}
         cf{"Haú To Arénj Mọní"}
+        colAlternate{"Ignọ Simbọls Arénjin"}
+        colBackwards{"Rivás Áksẹnt Arénjin"}
+        colCaseFirst{"Bíg Lẹ́ta-dẹm/Smọ́l Lẹ́ta-dẹm Arénjin"}
+        colCaseLevel{"Kés Sénsitív Arénjín"}
+        colNormalization{"Nọ́mál Wè To Arénj Tins"}
+        colNumeric{"Nọ́mba-dém Wè To Arénj Tins"}
+        colReorder{"Skrípt/Blọk Rearénj"}
+        colStrength{"Arénj Páwá"}
         collation{"Arénj Tins Wẹl"}
         currency{"Mọní"}
+        d0{"Tránsfọ́m destinéshọ́n"}
+        dx{"Díkshọ́narí Brẹk Ẹsklúshọ́n"}
         em{"Imọ́ji presentáshọn"}
+        fw{"Fès dè of wík"}
+        h0{"Míksd-ín"}
         hc{"Awá Saíkul (12 vs 24)"}
-        lb{"Laín Brẹk Staíl"}
+        i0{"Inpút mẹthọ́d"}
+        k0{"Kíbọd"}
+        kv{"Háyest Ignọd"}
+        lb{"CJK Laín Brẹk"}
         lw{"Laín Brẹks wídin wọds"}
+        m0{"Tránsfọ́m rúl dém"}
         ms{"Sístẹm fọ Mẹ́zhọ́mẹnt"}
+        mu{"Mẹ́zhọ́mẹnt Unít"}
         numbers{"Nọ́mba-dẹm"}
+        rg{"Éria fọ́ Sọ́plimentál Dátá"}
+        s0{"Tránsfóm Sós"}
+        sd{"Éria Subdivishọ́n"}
         ss{"Sẹntẹns Brẹk Aftá Abbr"}
+        t{"Tránsfóm"}
+        t0{"Máshín Tránslétéd"}
+        timezone{"Táím zọn"}
+        va{"Lọkál Variánt"}
+        x{"Praívét-yúz"}
+        x0{"Praívét-yúz Tránsfóm"}
     }
     Languages{
         ab{"Abkházian"}
@@ -329,6 +355,7 @@ pcm{
         pcm{"Naijíriá Píjin"}
         pis{"Píjín Lángwej"}
         pl{"Pólánd Lángwej"}
+        pms{"Píedmọ́ntís Lángwej"}
         pqm{"Malisiít Pasamákódí Lángwej"}
         prg{"Prúshia"}
         ps{"Páshto"}
@@ -556,7 +583,7 @@ pcm{
             islamic{"Íslám Kalẹ́nda"}
             islamic-civil{"Íslám Kalẹ́nda (Tébúlá Taip an Sívúl Taip)"}
             islamic-umalqura{"Íslám Kalẹ́nda (Úmm al-Kúrá)"}
-            iso8601{"ISO-8601 Kalẹ́nda"}
+            iso8601{"Grẹ́górían Kalẹ́nda (ISO 8601 Wík dẹ́m)"}
             japanese{"Japán Kalẹ́nda"}
             persian{"Pẹ́shia Kalẹ́nda"}
             roc{"Ripọ́blík ọf Chaíná Kalẹ́nda"}
@@ -570,9 +597,13 @@ pcm{
             ethiopic-amete-alem{"Ẹtiópiá Amẹtẹ́ Álẹ́m"}
             gregorian{"Grẹ́górían"}
             hebrew{"Híbrú"}
+            indian{"Índián Náshọ́nál"}
             islamic{"Íslám"}
             islamic-civil{"Íslám (Tébúlá Taip an Sívúl Taip)"}
+            islamic-rgsa{"Íslám Kalẹ́nda, Saúdí Arébiá sáitin"}
+            islamic-tbla{"Íslám Kalẹ́nda (tábulá, ástrọnọmikál ípọk)"}
             islamic-umalqura{"Íslám (Úmm al-Kúrá)"}
+            iso8601{"Grẹ́górían"}
             japanese{"Japánis"}
             persian{"Pẹ́shia"}
             roc{"Ripọ́blík ọf Chaíná"}
@@ -585,15 +616,50 @@ pcm{
             account{"Akáunting"}
             standard{"Nọ́mál"}
         }
+        colCaseFirst%core{
+            lower{"Smọ́l Lẹ́ta-dẹm"}
+            no{"Smọ́l Lẹ́ta-dẹm"}
+            upper{"Bíg Lẹ́ta-dẹm"}
+        }
+        colReorder%core{
+            currency{"Mọní"}
+            digit{"Nọ́mba-dẹm"}
+            punct{"Pọnkchuéshọn"}
+            space{"Waítspes"}
+            symbol{"Símbọ́l"}
+        }
+        colStrength%core{
+            identical{"All"}
+            primary{"Bẹs lẹtás onlí"}
+            quaternary{"Bẹs, Aksẹnt dẹm, Kẹs, Váriánt dem, Káná"}
+            secondary{"Bẹs, Aksẹnt dẹm"}
+            tertiary{"Bẹs, Aksẹnt dẹm, Kẹs, Váriánt dẹm"}
+        }
         collation{
             ducet{"Yúníkód Mén Wè To Arénj Tins Wẹl"}
             search{"Jẹ́nárál Sachin"}
             standard{"Nọ́mál Wè To Arénj Tins Wẹl"}
         }
         collation%core{
+            compat{"Kọmpátibílití"}
+            dictionary{"Díkshonárí"}
             ducet{"Yúníkód Mén"}
+            emoji{"Imọ́ji"}
+            eor{"Yurópián rúl dém"}
+            phonebook{"Fọnbúk"}
+            phonetic{"Fọnétik"}
+            pinyin{"Pínyín"}
             search{"Sach"}
+            searchjl{"Koriá Iníshál Kọ́nsónant"}
             standard{"Nọ́mál Wè"}
+            stroke{"Strọk"}
+            traditional{"Trádishọ́nál"}
+            unihan{"Rádikál-Strọk"}
+            zhuyin{"Zúyín"}
+        }
+        d0{
+            fwidth{"To Fúl-Waid"}
+            hwidth{"To Háf-Waid"}
         }
         em%core{
             default{"Mén"}
@@ -601,16 +667,26 @@ pcm{
             text{"Tẹxt"}
         }
         hc{
+            c12{"12 Áwa Sístẹm"}
+            c24{"24 Áwa Sístẹm"}
             h11{"12 Áwa Sístẹm (0–11)"}
             h12{"12 Áwa Sístẹm (1–12)"}
             h23{"24 Áwa Sístẹm (0–23)"}
             h24{"24 Áwa Sístẹm (1–24)"}
         }
         hc%core{
+            c12{"12"}
+            c24{"24"}
             h11{"12 (0–11)"}
             h12{"12 (1–12)"}
             h23{"24 (0–23)"}
             h24{"24 (1–24)"}
+        }
+        kv%core{
+            currency{"Shíft spésís, pọnkchuéshọn, ọl símbọls"}
+            punct{"Shíft spésís, pọnkchuéshọn"}
+            space{"Shíft spésís, pọnkchuéshọn"}
+            symbol{"Shíft spésís, pọnkchuéshọn, nọ-mọní símbọl dém"}
         }
         lb{
             loose{"Lúz Laín Brẹk Staíl"}
@@ -627,6 +703,10 @@ pcm{
             keepall{"Kíp all"}
             normal{"Nọ́mál"}
             phrase{"Kíp in frẹzis"}
+        }
+        m0{
+            bgn{"US BGN Translítráshọ́n"}
+            ungegn{"US GEGN Translítráshọ́n"}
         }
         ms{
             metric{"Mẹ́trík Sístẹm"}
@@ -669,6 +749,7 @@ pcm{
             mlym{"Maléyálam Nọ́mba-dẹm"}
             mtei{"Miitẹí Mayẹ́k Nọ́mba-dẹm"}
             mymr{"Miánma Nọ́mba-dẹm"}
+            native{"Nẹtiv Nọ́mba-dẹm"}
             olck{"Ol Chiki Nọ́mba-dẹm"}
             orya{"Ódia Nọ́mba-dẹm"}
             roman{"Rómán Nọ́mba-dẹm"}
@@ -680,9 +761,48 @@ pcm{
             tibt{"Tíbẹt Nọ́mba-dẹm"}
             vaii{"Vaí Nọ́mba-dẹm"}
         }
+        numbers%core{
+            arabext{"Ẹstrá Arábík-Índík"}
+            armnlow{"Smọ́l taíp Armẹ́nián lẹ́ta-dẹm"}
+            finance{"Mọní"}
+            fullwide{"Fúl-Waid"}
+            greklow{"Smọ́l taíp Grík lẹ́ta-dẹm"}
+            hanidays{"Hán-charácter dáy-of-mọ́nt nọ́mba fọ́ trádishọ́nál káléndá dém"}
+            hanidec{
+                "Pọ́zishọ́nál décimál systém yúzin Chainiz nọ́mbá áidiyográfs as nọ́m"
+                "bá dém"
+            }
+            hansfin{"Ízí Chainíz Mọní"}
+            hantfin{"Nọ́mál Chainíz Mọní"}
+            jpanfin{"Japán Mọní"}
+            jpanyear{"Japán fẹs yiẹ Gánnẹn nọ́mba-dẹm"}
+            lanatham{"Táí Thám Thám (éklésíástíkál)"}
+            mathbold{"Matimátikal bọ́ld"}
+            mathdbl{"Matimátikal dọ́bul-strọ́k"}
+            mathmono{"Matimátikal mọ́nọ́spés"}
+            mathsanb{"Matimátikal sáns-seríf bọ́ld"}
+            mathsans{"Matimátikal sáns-seríf"}
+            mymrepka{"Miánma Ístán Pwo Káren"}
+            mymrpao{"Miánma Páo"}
+            mymrshan{"Miánma Shán"}
+            mymrtlng{"Miánma Tái Láing"}
+            native{"Nẹtiv Nọ́mba-dẹm"}
+            outlined{"Aúsaíd Mak"}
+            roman{"Rómán bíg lẹtá-dẹm"}
+            romanlow{"Rómán smól lẹtá-dẹm"}
+            segment{"Ségméntéd"}
+            tamldec{"Mọ́dán Támíl"}
+            traditional{"Trádishọ́nál nọ́mba dém"}
+        }
         ss%core{
             none{"Off"}
             standard{"On"}
+        }
+        t0{
+            und{"Unspécifáid Máshín Tránsléshọ́n"}
+        }
+        va%core{
+            posix{"POSIX Variánt"}
         }
     }
     characterLabelPattern{

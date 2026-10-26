@@ -120,7 +120,7 @@ public class Region implements Comparable<Region> {
     private Set<Region> containedRegions = new TreeSet<Region>();
     private List<Region> preferredValues = null;
 
-    private static boolean regionDataIsLoaded = false;
+    private static volatile boolean regionDataIsLoaded = false;
 
     private static Map<String, Region> regionIDMap = null; // Map from ID the regions
     private static Map<Integer, Region> numericCodeMap =
@@ -149,255 +149,261 @@ public class Region implements Comparable<Region> {
      * anything meaningful.
      *
      */
-    private static synchronized void loadRegionData() {
-
+    private static void loadRegionData() {
         if (regionDataIsLoaded) {
             return;
         }
-
-        regionAliases = new HashMap<String, Region>();
-        regionIDMap = new HashMap<String, Region>();
-        numericCodeMap = new HashMap<Integer, Region>();
-
-        availableRegions = new ArrayList<Set<Region>>(RegionType.values().length);
-
-        UResourceBundle metadataAlias = null;
-        UResourceBundle territoryAlias = null;
-        UResourceBundle codeMappings = null;
-        UResourceBundle idValidity = null;
-        UResourceBundle regionList = null;
-        UResourceBundle regionRegular = null;
-        UResourceBundle regionMacro = null;
-        UResourceBundle regionUnknown = null;
-        UResourceBundle worldContainment = null;
-        UResourceBundle territoryContainment = null;
-        UResourceBundle groupingContainment = null;
-
-        UResourceBundle metadata =
-                UResourceBundle.getBundleInstance(
-                        ICUData.ICU_BASE_NAME, "metadata", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-        metadataAlias = metadata.get("alias");
-        territoryAlias = metadataAlias.get("territory");
-
-        UResourceBundle supplementalData =
-                UResourceBundle.getBundleInstance(
-                        ICUData.ICU_BASE_NAME,
-                        "supplementalData",
-                        ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-        codeMappings = supplementalData.get("codeMappings");
-        idValidity = supplementalData.get("idValidity");
-        regionList = idValidity.get("region");
-        regionRegular = regionList.get("regular");
-        regionMacro = regionList.get("macroregion");
-        regionUnknown = regionList.get("unknown");
-
-        territoryContainment = supplementalData.get("territoryContainment");
-        worldContainment = territoryContainment.get("001");
-        groupingContainment = territoryContainment.get("grouping");
-
-        String[] continentsArr = worldContainment.getStringArray();
-        List<String> continents = Arrays.asList(continentsArr);
-        Enumeration<String> groupings = groupingContainment.getKeys();
-        List<String> regionCodes = new ArrayList<String>();
-
-        List<String> allRegions = new ArrayList<String>();
-        allRegions.addAll(Arrays.asList(regionRegular.getStringArray()));
-        allRegions.addAll(Arrays.asList(regionMacro.getStringArray()));
-        allRegions.add(regionUnknown.getString());
-
-        for (String r : allRegions) {
-            int rangeMarkerLocation = r.indexOf("~");
-            if (rangeMarkerLocation > 0) {
-                StringBuilder regionName = new StringBuilder(r);
-                char endRange = regionName.charAt(rangeMarkerLocation + 1);
-                regionName.setLength(rangeMarkerLocation);
-                char lastChar = regionName.charAt(rangeMarkerLocation - 1);
-                while (lastChar <= endRange) {
-                    String newRegion = regionName.toString();
-                    regionCodes.add(newRegion);
-                    lastChar++;
-                    regionName.setCharAt(rangeMarkerLocation - 1, lastChar);
-                }
-            } else {
-                regionCodes.add(r);
+        synchronized (Region.class) {
+            if (regionDataIsLoaded) {
+                return;
             }
-        }
 
-        regions = new ArrayList<Region>(regionCodes.size());
+            regionAliases = new HashMap<String, Region>();
+            regionIDMap = new HashMap<String, Region>();
+            numericCodeMap = new HashMap<Integer, Region>();
 
-        // First process the region codes and create the primary array of regions.
-        for (String id : regionCodes) {
-            Region r = new Region();
-            r.id = id;
-            r.type =
-                    RegionType
-                            .TERRITORY; // Only temporary - figure out the real type later once the
-            // aliases are known.
-            regionIDMap.put(id, r);
-            if (id.matches("[0-9]{3}")) {
-                r.code = Integer.valueOf(id).intValue();
-                numericCodeMap.put(r.code, r);
-                r.type = RegionType.SUBCONTINENT;
-            } else {
-                r.code = -1;
-            }
-            regions.add(r);
-        }
+            availableRegions = new ArrayList<Set<Region>>(RegionType.values().length);
 
-        // Process the territory aliases
-        for (int i = 0; i < territoryAlias.getSize(); i++) {
-            UResourceBundle res = territoryAlias.get(i);
-            String aliasFrom = res.getKey();
-            String aliasTo = res.get("replacement").getString();
+            UResourceBundle metadataAlias = null;
+            UResourceBundle territoryAlias = null;
+            UResourceBundle codeMappings = null;
+            UResourceBundle idValidity = null;
+            UResourceBundle regionList = null;
+            UResourceBundle regionRegular = null;
+            UResourceBundle regionMacro = null;
+            UResourceBundle regionUnknown = null;
+            UResourceBundle worldContainment = null;
+            UResourceBundle territoryContainment = null;
+            UResourceBundle groupingContainment = null;
 
-            if (regionIDMap.containsKey(aliasTo)
-                    && !regionIDMap.containsKey(
-                            aliasFrom)) { // This is just an alias from some string to a region
-                regionAliases.put(aliasFrom, regionIDMap.get(aliasTo));
-            } else {
-                Region r;
-                if (regionIDMap.containsKey(aliasFrom)) { // This is a deprecated region
-                    r = regionIDMap.get(aliasFrom);
-                } else { // Deprecated region code not in the primary codes list - so need to create
-                    // a deprecated region for it.
-                    r = new Region();
-                    r.id = aliasFrom;
-                    regionIDMap.put(aliasFrom, r);
-                    if (aliasFrom.matches("[0-9]{3}")) {
-                        r.code = Integer.valueOf(aliasFrom).intValue();
-                        numericCodeMap.put(r.code, r);
-                    } else {
-                        r.code = -1;
+            UResourceBundle metadata =
+                    UResourceBundle.getBundleInstance(
+                            ICUData.ICU_BASE_NAME,
+                            "metadata",
+                            ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+            metadataAlias = metadata.get("alias");
+            territoryAlias = metadataAlias.get("territory");
+
+            UResourceBundle supplementalData =
+                    UResourceBundle.getBundleInstance(
+                            ICUData.ICU_BASE_NAME,
+                            "supplementalData",
+                            ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+            codeMappings = supplementalData.get("codeMappings");
+            idValidity = supplementalData.get("idValidity");
+            regionList = idValidity.get("region");
+            regionRegular = regionList.get("regular");
+            regionMacro = regionList.get("macroregion");
+            regionUnknown = regionList.get("unknown");
+
+            territoryContainment = supplementalData.get("territoryContainment");
+            worldContainment = territoryContainment.get("001");
+            groupingContainment = territoryContainment.get("grouping");
+
+            String[] continentsArr = worldContainment.getStringArray();
+            List<String> continents = Arrays.asList(continentsArr);
+            Enumeration<String> groupings = groupingContainment.getKeys();
+            List<String> regionCodes = new ArrayList<String>();
+
+            List<String> allRegions = new ArrayList<String>();
+            allRegions.addAll(Arrays.asList(regionRegular.getStringArray()));
+            allRegions.addAll(Arrays.asList(regionMacro.getStringArray()));
+            allRegions.add(regionUnknown.getString());
+
+            for (String r : allRegions) {
+                int rangeMarkerLocation = r.indexOf("~");
+                if (rangeMarkerLocation > 0) {
+                    StringBuilder regionName = new StringBuilder(r);
+                    char endRange = regionName.charAt(rangeMarkerLocation + 1);
+                    regionName.setLength(rangeMarkerLocation);
+                    char lastChar = regionName.charAt(rangeMarkerLocation - 1);
+                    while (lastChar <= endRange) {
+                        String newRegion = regionName.toString();
+                        regionCodes.add(newRegion);
+                        lastChar++;
+                        regionName.setCharAt(rangeMarkerLocation - 1, lastChar);
                     }
-                    regions.add(r);
-                }
-                r.type = RegionType.DEPRECATED;
-                List<String> aliasToRegionStrings = Arrays.asList(aliasTo.split(" "));
-                r.preferredValues = new ArrayList<Region>();
-                for (String s : aliasToRegionStrings) {
-                    if (regionIDMap.containsKey(s)) {
-                        r.preferredValues.add(regionIDMap.get(s));
-                    }
+                } else {
+                    regionCodes.add(r);
                 }
             }
-        }
 
-        // Process the code mappings - This will allow us to assign numeric codes to most of the
-        // territories.
-        for (int i = 0; i < codeMappings.getSize(); i++) {
-            UResourceBundle mapping = codeMappings.get(i);
-            if (mapping.getType() == UResourceBundle.ARRAY) {
-                String[] codeMappingStrings = mapping.getStringArray();
-                String codeMappingID = codeMappingStrings[0];
-                Integer codeMappingNumber = Integer.valueOf(codeMappingStrings[1]);
-                String codeMapping3Letter = codeMappingStrings[2];
+            regions = new ArrayList<Region>(regionCodes.size());
 
-                if (regionIDMap.containsKey(codeMappingID)) {
-                    Region r = regionIDMap.get(codeMappingID);
-                    r.code = codeMappingNumber.intValue();
+            // First process the region codes and create the primary array of regions.
+            for (String id : regionCodes) {
+                Region r = new Region();
+                r.id = id;
+                // Only temporary - figure out the real type later once the aliases are known.
+                r.type = RegionType.TERRITORY;
+                regionIDMap.put(id, r);
+                if (id.matches("[0-9]{3}")) {
+                    r.code = Integer.valueOf(id).intValue();
                     numericCodeMap.put(r.code, r);
-                    regionAliases.put(codeMapping3Letter, r);
+                    r.type = RegionType.SUBCONTINENT;
+                } else {
+                    r.code = -1;
                 }
+                regions.add(r);
             }
-        }
 
-        // Now fill in the special cases for WORLD, UNKNOWN, CONTINENTS, and GROUPINGS
-        Region r;
-        if (regionIDMap.containsKey(WORLD_ID)) {
-            r = regionIDMap.get(WORLD_ID);
-            r.type = RegionType.WORLD;
-        }
+            // Process the territory aliases
+            for (int i = 0; i < territoryAlias.getSize(); i++) {
+                UResourceBundle res = territoryAlias.get(i);
+                String aliasFrom = res.getKey();
+                String aliasTo = res.get("replacement").getString();
 
-        if (regionIDMap.containsKey(UNKNOWN_REGION_ID)) {
-            r = regionIDMap.get(UNKNOWN_REGION_ID);
-            r.type = RegionType.UNKNOWN;
-        }
-
-        for (String continent : continents) {
-            if (regionIDMap.containsKey(continent)) {
-                r = regionIDMap.get(continent);
-                r.type = RegionType.CONTINENT;
-            }
-        }
-
-        while (groupings.hasMoreElements()) {
-            String grouping = groupings.nextElement();
-            if (regionIDMap.containsKey(grouping)) {
-                r = regionIDMap.get(grouping);
-                r.type = RegionType.GROUPING;
-            }
-        }
-
-        // Special case: The region code "QO" (Outlying Oceania) is a subcontinent code added by
-        // CLDR
-        // even though it looks like a territory code.  Need to handle it here.
-
-        if (regionIDMap.containsKey(OUTLYING_OCEANIA_REGION_ID)) {
-            r = regionIDMap.get(OUTLYING_OCEANIA_REGION_ID);
-            r.type = RegionType.SUBCONTINENT;
-        }
-
-        // Load territory containment info from the supplemental data.
-        for (int i = 0; i < territoryContainment.getSize(); i++) {
-            UResourceBundle mapping = territoryContainment.get(i);
-            String parent = mapping.getKey();
-            if (parent.equals("containedGroupings")
-                    || parent.equals("deprecated")
-                    || parent.equals("grouping")) {
-                continue; // handle new pseudo-parent types added in ICU data per cldrbug 7808; for
-                // now just skip.
-                // #11232 is to do something useful with these.
-                // Also skip "grouping" which has multi-level structure below from CLDR 34.
-            }
-            Region parentRegion = regionIDMap.get(parent);
-            for (int j = 0; j < mapping.getSize(); j++) {
-                String child = mapping.getString(j);
-                Region childRegion = regionIDMap.get(child);
-                if (parentRegion != null && childRegion != null) {
-
-                    // Add the child region to the set of regions contained by the parent
-                    parentRegion.containedRegions.add(childRegion);
-
-                    // Set the parent region to be the containing region of the child.
-                    // Regions of type GROUPING can't be set as the parent, since another region
-                    // such as a SUBCONTINENT, CONTINENT, or WORLD must always be the parent.
-                    if (parentRegion.getType() != RegionType.GROUPING) {
-                        childRegion.containingRegion = parentRegion;
+                if (regionIDMap.containsKey(aliasTo)
+                        && !regionIDMap.containsKey(
+                                aliasFrom)) { // This is just an alias from some string to a region
+                    regionAliases.put(aliasFrom, regionIDMap.get(aliasTo));
+                } else {
+                    Region r;
+                    if (regionIDMap.containsKey(aliasFrom)) { // This is a deprecated region
+                        r = regionIDMap.get(aliasFrom);
+                    } else {
+                        // Deprecated region code not in the primary codes list -
+                        // so need to create a deprecated region for it.
+                        r = new Region();
+                        r.id = aliasFrom;
+                        regionIDMap.put(aliasFrom, r);
+                        if (aliasFrom.matches("[0-9]{3}")) {
+                            r.code = Integer.valueOf(aliasFrom).intValue();
+                            numericCodeMap.put(r.code, r);
+                        } else {
+                            r.code = -1;
+                        }
+                        regions.add(r);
+                    }
+                    r.type = RegionType.DEPRECATED;
+                    List<String> aliasToRegionStrings = Arrays.asList(aliasTo.split(" "));
+                    r.preferredValues = new ArrayList<Region>();
+                    for (String s : aliasToRegionStrings) {
+                        if (regionIDMap.containsKey(s)) {
+                            r.preferredValues.add(regionIDMap.get(s));
+                        }
                     }
                 }
             }
-        }
 
-        // Fill in the grouping containment resource as well
-        for (int i = 0; i < groupingContainment.getSize(); i++) {
-            UResourceBundle mapping = groupingContainment.get(i);
-            String parent = mapping.getKey();
-            Region parentRegion = regionIDMap.get(parent);
-            for (int j = 0; j < mapping.getSize(); j++) {
-                String child = mapping.getString(j);
-                Region childRegion = regionIDMap.get(child);
-                if (parentRegion != null && childRegion != null) {
-                    // Add the child region to the set of regions contained by the parent
-                    parentRegion.containedRegions.add(childRegion);
-                    // Do NOT change the parent of the child region, since groupings are
-                    // never the primary parent of a region.
+            // Process the code mappings - This will allow us to assign numeric codes to most of the
+            // territories.
+            for (int i = 0; i < codeMappings.getSize(); i++) {
+                UResourceBundle mapping = codeMappings.get(i);
+                if (mapping.getType() == UResourceBundle.ARRAY) {
+                    String[] codeMappingStrings = mapping.getStringArray();
+                    String codeMappingID = codeMappingStrings[0];
+                    Integer codeMappingNumber = Integer.valueOf(codeMappingStrings[1]);
+                    String codeMapping3Letter = codeMappingStrings[2];
+
+                    if (regionIDMap.containsKey(codeMappingID)) {
+                        Region r = regionIDMap.get(codeMappingID);
+                        r.code = codeMappingNumber.intValue();
+                        numericCodeMap.put(r.code, r);
+                        regionAliases.put(codeMapping3Letter, r);
+                    }
                 }
             }
+
+            // Now fill in the special cases for WORLD, UNKNOWN, CONTINENTS, and GROUPINGS
+            Region r;
+            if (regionIDMap.containsKey(WORLD_ID)) {
+                r = regionIDMap.get(WORLD_ID);
+                r.type = RegionType.WORLD;
+            }
+
+            if (regionIDMap.containsKey(UNKNOWN_REGION_ID)) {
+                r = regionIDMap.get(UNKNOWN_REGION_ID);
+                r.type = RegionType.UNKNOWN;
+            }
+
+            for (String continent : continents) {
+                if (regionIDMap.containsKey(continent)) {
+                    r = regionIDMap.get(continent);
+                    r.type = RegionType.CONTINENT;
+                }
+            }
+
+            while (groupings.hasMoreElements()) {
+                String grouping = groupings.nextElement();
+                if (regionIDMap.containsKey(grouping)) {
+                    r = regionIDMap.get(grouping);
+                    r.type = RegionType.GROUPING;
+                }
+            }
+
+            // Special case: The region code "QO" (Outlying Oceania) is a subcontinent code added by
+            // CLDR
+            // even though it looks like a territory code.  Need to handle it here.
+
+            if (regionIDMap.containsKey(OUTLYING_OCEANIA_REGION_ID)) {
+                r = regionIDMap.get(OUTLYING_OCEANIA_REGION_ID);
+                r.type = RegionType.SUBCONTINENT;
+            }
+
+            // Load territory containment info from the supplemental data.
+            for (int i = 0; i < territoryContainment.getSize(); i++) {
+                UResourceBundle mapping = territoryContainment.get(i);
+                String parent = mapping.getKey();
+                if (parent.equals("containedGroupings")
+                        || parent.equals("deprecated")
+                        || parent.equals("grouping")) {
+                    // Handle new pseudo-parent types added in ICU data per cldrbug 7808;
+                    // for now just skip.
+                    // #11232 is to do something useful with these.
+                    // Also skip "grouping" which has multi-level structure below from CLDR 34.
+                    continue;
+                }
+                Region parentRegion = regionIDMap.get(parent);
+                for (int j = 0; j < mapping.getSize(); j++) {
+                    String child = mapping.getString(j);
+                    Region childRegion = regionIDMap.get(child);
+                    if (parentRegion != null && childRegion != null) {
+
+                        // Add the child region to the set of regions contained by the parent
+                        parentRegion.containedRegions.add(childRegion);
+
+                        // Set the parent region to be the containing region of the child.
+                        // Regions of type GROUPING can't be set as the parent, since another region
+                        // such as a SUBCONTINENT, CONTINENT, or WORLD must always be the parent.
+                        if (parentRegion.getType() != RegionType.GROUPING) {
+                            childRegion.containingRegion = parentRegion;
+                        }
+                    }
+                }
+            }
+
+            // Fill in the grouping containment resource as well
+            for (int i = 0; i < groupingContainment.getSize(); i++) {
+                UResourceBundle mapping = groupingContainment.get(i);
+                String parent = mapping.getKey();
+                Region parentRegion = regionIDMap.get(parent);
+                for (int j = 0; j < mapping.getSize(); j++) {
+                    String child = mapping.getString(j);
+                    Region childRegion = regionIDMap.get(child);
+                    if (parentRegion != null && childRegion != null) {
+                        // Add the child region to the set of regions contained by the parent
+                        parentRegion.containedRegions.add(childRegion);
+                        // Do NOT change the parent of the child region, since groupings are
+                        // never the primary parent of a region.
+                    }
+                }
+            }
+
+            // Create the availableRegions lists
+
+            for (int i = 0; i < RegionType.values().length; i++) {
+                availableRegions.add(new TreeSet<Region>());
+            }
+
+            for (Region ar : regions) {
+                Set<Region> currentSet = availableRegions.get(ar.type.ordinal());
+                currentSet.add(ar);
+                availableRegions.set(ar.type.ordinal(), currentSet);
+            }
+
+            regionDataIsLoaded = true;
         }
-
-        // Create the availableRegions lists
-
-        for (int i = 0; i < RegionType.values().length; i++) {
-            availableRegions.add(new TreeSet<Region>());
-        }
-
-        for (Region ar : regions) {
-            Set<Region> currentSet = availableRegions.get(ar.type.ordinal());
-            currentSet.add(ar);
-            availableRegions.set(ar.type.ordinal(), currentSet);
-        }
-
-        regionDataIsLoaded = true;
     }
 
     /**

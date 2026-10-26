@@ -3,6 +3,10 @@
 // Generated using tools/cldr/cldr-to-icu/
 bho{
     zoneStrings{
+        "Etc:UTC"{
+            ls{"समन्वित वैश्विक समय"}
+            ss{"यूटीसी"}
+        }
         "meta:GMT"{
             ls{"ग्रीनविच मीन टाइम"}
         }

@@ -102,14 +102,11 @@ final class UCharacterNameReader implements ICUBinary.Authenticate {
      * @param dataformatversion
      * @return true if the file format version is correct
      */
-    /// CLOVER:OFF
     protected boolean authenticate(byte dataformatid[], byte dataformatversion[]) {
         return Arrays.equals(
                         ICUBinary.getVersionByteArrayFromCompactInt(DATA_FORMAT_ID_), dataformatid)
                 && isDataVersionAcceptable(dataformatversion);
     }
-
-    /// CLOVER:ON
 
     // private variables -------------------------------------------------
 

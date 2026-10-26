@@ -9,7 +9,13 @@ import static org.unicode.icu.tool.cldrtoicu.testing.IcuDataSubjectFactory.asser
 
 import com.google.common.base.CaseFormat;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
+import com.ibm.icu.text.NumberFormat;
+import com.ibm.icu.text.RuleBasedNumberFormat;
+import com.ibm.icu.util.ULocale;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -56,11 +62,11 @@ public class RbnfMapperTest {
         assertThat(icuData)
                 .hasValuesFor(
                         "/RBNFRules/SpelloutRules",
-                        // Double-% prefix for "private" access.
-                        RbValue.of("%%2d-year:"),
-                        RbValue.of("0: hundred;"),
-                        RbValue.of("1: oh-=%first-set=;"),
-                        RbValue.of("10: =%first-set=;"));
+                        RbValue.of(
+                                "%%2d-year:",
+                                "0: hundred;",
+                                "1: oh-=%first-set=;",
+                                "10: =%first-set=;"));
     }
 
     @Test
@@ -89,18 +95,17 @@ public class RbnfMapperTest {
         assertThat(icuData)
                 .hasValuesFor(
                         "/RBNFRules/SpelloutRules",
-                        // Single-% prefix for "public" access.
-                        RbValue.of("%first-set:"),
-                        RbValue.of("-x: one;"),
-                        RbValue.of("Inf: two;"),
-                        RbValue.of("NaN: three;"),
-                        RbValue.of("0: four;"),
-                        // Each "heading" appears once at the start of the section.
-                        RbValue.of("%second-set:"),
-                        RbValue.of("-x: five;"),
-                        RbValue.of("Inf: six;"),
-                        RbValue.of("NaN: seven;"),
-                        RbValue.of("0: eight;"));
+                        RbValue.of(
+                                "%first-set:",
+                                "-x: one;",
+                                "Inf: two;",
+                                "NaN: three;",
+                                "0: four;",
+                                "%second-set:",
+                                "-x: five;",
+                                "Inf: six;",
+                                "NaN: seven;",
+                                "0: eight;"));
     }
 
     @Test
@@ -134,22 +139,24 @@ public class RbnfMapperTest {
         assertThat(icuData)
                 .hasValuesFor(
                         "/RBNFRules/OrdinalRules",
-                        RbValue.of("%digits-ordinal:"),
-                        RbValue.of("-x: \\u2212>>;"),
-                        RbValue.of("0: =#,##0=$(ordinal,one{st}two{nd}few{rd}other{th})$;"));
+                        RbValue.of(
+                                "%digits-ordinal:",
+                                "-x: \\u2212>>;",
+                                "0: =#,##0=$(ordinal,one{st}two{nd}few{rd}other{th})$;"));
 
         // The headings are sorted in the output ("hr" < "in-numerals" < min").
         assertThat(icuData)
                 .hasValuesFor(
                         "/RBNFRules/DurationRules",
-                        RbValue.of("%%hr:"),
-                        RbValue.of("0: 0 hours; 1 hour; =0= hours;"),
-                        RbValue.of("%in-numerals:"),
-                        RbValue.of("0: =0= sec.;"),
-                        RbValue.of("60: =%%min-sec=;"),
-                        RbValue.of("3600: =%%hr-min-sec=;"),
-                        RbValue.of("%%min:"),
-                        RbValue.of("0: 0 minutes; 1 minute; =0= minutes;"));
+                        RbValue.of(
+                                "%%hr:",
+                                "0: 0 hours; 1 hour; =0= hours;",
+                                "%in-numerals:",
+                                "0: =0= sec.;",
+                                "60: =%%min-sec=;",
+                                "3600: =%%hr-min-sec=;",
+                                "%%min:",
+                                "0: 0 minutes; 1 minute; =0= minutes;"));
     }
 
     // Note that while this is testing the escaping behaviour, the implementation was largely
@@ -174,11 +181,12 @@ public class RbnfMapperTest {
         assertThat(icuData)
                 .hasValuesFor(
                         "/RBNFRules/SpelloutRules",
-                        RbValue.of("%escaping:"),
-                        RbValue.of("k1: \\\\ Backslash"),
-                        RbValue.of("k2: << Arrows >>"),
-                        RbValue.of("k3: \\u00DC Umlaut"),
-                        RbValue.of("k4: \\U0001F603 Smiley"));
+                        RbValue.of(
+                                "%escaping:",
+                                "k1: \\\\ Backslash",
+                                "k2: << Arrows >>",
+                                "k3: \\u00DC Umlaut",
+                                "k4: \\U0001F603 Smiley"));
     }
 
     private static CldrData cldrData(CldrValue... values) {
@@ -199,5 +207,41 @@ public class RbnfMapperTest {
 
     private static void appendAttribute(StringBuilder out, String k, Object v) {
         out.append(String.format("[@%s=\"%s\"]", k, v));
+    }
+
+    @SuppressWarnings("unused")
+    @Ignore("Disabled. It should be run manually.")
+    @Test
+    public void testCoverage() {
+        var ruleMatchingPatterns = List.of(
+                Pattern.compile("^%spellout-numbering$"),
+                Pattern.compile("^%spellout-numbering-year$"),
+                Pattern.compile("^%spellout-cardinal.*"),
+                Pattern.compile("^%spellout-ordinal.*"));
+        System.out.println("| Locale | Numbering | Year | Cardinal | Ordinal |");
+        System.out.println("| ------ | --------- | ---- | -------- | ------- |");
+        for (ULocale loc : NumberFormat.getAvailableULocales()) {
+            RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat(loc, RuleBasedNumberFormat.SPELLOUT);
+            if (!rbnf.getLocale(ULocale.ACTUAL_LOCALE).equals(loc)) {
+                // Uninteresting duplicate data. Show only the minimal set of information.
+                continue;
+            }
+            System.out.print("| [" + loc + "](https://st.unicode.org/cldr-apps/numbers.jsp?locale="+loc+")");
+            for (var desiredRule : ruleMatchingPatterns) {
+                int count = 0;
+                for (String name : rbnf.getRuleSetNames()) {
+                    if (desiredRule.matcher(name).find()) {
+                        count++;
+                    }
+                }
+                if (count > 0) {
+                    System.out.print(" | " + count + "✅");
+                }
+                else {
+                    System.out.print(" | ❌");
+                }
+            }
+            System.out.println(" |");
+        }
     }
 }

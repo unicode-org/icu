@@ -51,8 +51,8 @@ variable-element placeholders (called "arguments" in the API docs) enclosed in
 default format is used. For details about the pattern syntax and the formatting
 behavior see the `MessageFormat` API docs
 ([Java](https://unicode-org.github.io/icu-docs/apidoc/released/icu4j/com/ibm/icu/text/MessageFormat.html),
-[C++](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classMessageFormat.html#_details),
-[C](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/umsg_8h.html#_details)).
+[C++](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classMessageFormat.html),
+[C](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/umsg_8h.html)).
 
 ### Complex Argument Types
 
@@ -243,4 +243,4 @@ was a disturbance in the Force on planet 7."
 ```
 
 There are several more usage examples for the `MessageFormat` and `ChoiceFormat`
-classes in [C , C++ and Java](examples.md).
+classes in [C, C++ and Java](examples.md).

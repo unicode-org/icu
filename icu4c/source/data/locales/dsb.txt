@@ -180,52 +180,76 @@ dsb{
                 }
                 decimalFormat{
                     1000{
+                        few{"0 tys'.'"}
                         one{"0 tys'.'"}
                         other{"0 tys'.'"}
+                        two{"0 tys'.'"}
                     }
                     10000{
+                        few{"00 tys'.'"}
                         one{"00 tys'.'"}
                         other{"00 tys'.'"}
+                        two{"00 tys'.'"}
                     }
                     100000{
+                        few{"000 tys'.'"}
                         one{"000 tys'.'"}
                         other{"000 tys'.'"}
+                        two{"000 tys'.'"}
                     }
                     1000000{
+                        few{"0 mio'.'"}
                         one{"0 mio'.'"}
                         other{"0 mio'.'"}
+                        two{"0 mio'.'"}
                     }
                     10000000{
+                        few{"00 mio'.'"}
                         one{"00 mio'.'"}
                         other{"00 mio'.'"}
+                        two{"00 mio'.'"}
                     }
                     100000000{
+                        few{"000 mio'.'"}
                         one{"000 mio'.'"}
                         other{"000 mio'.'"}
+                        two{"000 mio'.'"}
                     }
                     1000000000{
+                        few{"0 mrd'.'"}
                         one{"0 mrd'.'"}
                         other{"0 mrd'.'"}
+                        two{"0 mrd'.'"}
                     }
                     10000000000{
+                        few{"00 mrd'.'"}
                         one{"00 mrd'.'"}
                         other{"00 mrd'.'"}
+                        two{"00 mrd'.'"}
                     }
                     100000000000{
+                        few{"000 mrd'.'"}
                         one{"000 mrd'.'"}
                         other{"000 mrd'.'"}
+                        two{"000 mrd'.'"}
                     }
                     1000000000000{
+                        few{"0 bil'.'"}
                         one{"0 bil'.'"}
                         other{"0 bil'.'"}
+                        two{"0 bil'.'"}
                     }
                     10000000000000{
+                        few{"00 bil'.'"}
                         one{"00 bil'.'"}
                         other{"00 bil'.'"}
+                        two{"00 bil'.'"}
                     }
                     100000000000000{
+                        few{"000 bil'.'"}
                         one{"000 bil'.'"}
                         other{"000 bil'.'"}
+                        two{"000 bil'.'"}
                     }
                 }
             }
@@ -330,9 +354,6 @@ dsb{
                 Bhm{
                     B{"h:mm 'hodź'. B – h:mm 'hodź'. B"}
                 }
-                Gy{
-                    G{"G y – G y"}
-                }
                 GyM{
                     G{"GGGGG y-MM – GGGGG y-MM"}
                     M{"GGGGG y-MM – y-MM"}
@@ -343,21 +364,6 @@ dsb{
                     M{"GGGGG y-MM-dd, E – y-MM-dd, E"}
                     d{"GGGGG y-MM-dd, E – y-MM-dd, E"}
                     y{"GGGGG y-MM-dd, E – y-MM-dd, E"}
-                }
-                GyMMM{
-                    G{"G y MMM – G y MMM"}
-                    y{"G y MMM – y MMM"}
-                }
-                GyMMMEd{
-                    G{"G y MMM d, E – G y MMM d, E"}
-                    M{"G y MMM d, E – MMM d, E"}
-                    d{"G y MMM d, E – MMM d, E"}
-                    y{"G y MMM d, E – y MMM d, E"}
-                }
-                GyMMMd{
-                    G{"G y MMM d – G y MMM d"}
-                    M{"G y MMM d – MMM d"}
-                    y{"G y MMM d – y MMM d"}
                 }
                 GyMd{
                     G{"GGGGG y-MM-dd – GGGGG y-MM-dd"}
@@ -378,6 +384,10 @@ dsb{
                 MMMEd{
                     M{"E, d. MMM – E, d. MMM"}
                     d{"E, d. – E, d. MMM"}
+                }
+                MMMMd{
+                    M{"d. MMMM – d. MMMM"}
+                    d{"d. – d. MMMM"}
                 }
                 MMMd{
                     M{"d. MMM – d. MMM"}
@@ -486,6 +496,9 @@ dsb{
                 GyMEd{"E, d.M.y G"}
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, d. MMM y G"}
+                GyMMMM{"LLLL y G"}
+                GyMMMMEd{"E, d. MMMM y G"}
+                GyMMMMd{"d. MMMM y G"}
                 GyMMMd{"d. MMM y G"}
                 GyMd{"d.M.y GGGGG"}
                 H{"'zeg'. H"}
@@ -496,6 +509,7 @@ dsb{
                 Hv{"'zeg'. H v"}
                 MEd{"E, d.M."}
                 MMMEd{"E, d. MMM"}
+                MMMMEd{"E, d. MMMM"}
                 MMMMW{
                     few{"W. 'tyźeń' MMMM"}
                     one{"W. 'tyźeń' MMMM"}
@@ -506,7 +520,6 @@ dsb{
                 MMMd{"d. MMM"}
                 Md{"d.M."}
                 d{"d."}
-                h{"h a"}
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
                 hv{"'zeg'. h a v"}
@@ -515,6 +528,8 @@ dsb{
                 yMMM{"MMM y"}
                 yMMMEd{"E, d. MMM y"}
                 yMMMM{"LLLL y"}
+                yMMMMEd{"E, d. MMMM y"}
+                yMMMMd{"d. MMMM y"}
                 yMMMd{"d. MMM y"}
                 yMd{"d.M.y"}
                 yQQQ{"QQQ y"}
@@ -603,6 +618,7 @@ dsb{
                 }
                 Gy{
                     G{"G y – G y"}
+                    y{"y–y G"}
                 }
                 GyM{
                     G{"MM/y G – MM/y G"}
@@ -666,6 +682,10 @@ dsb{
                     M{"E, d. MMM – E, d. MMM"}
                     d{"E, d. – E, d. MMM"}
                 }
+                MMMMd{
+                    M{"d. MMMM – d. MMMM"}
+                    d{"d. – d. MMMM"}
+                }
                 MMMd{
                     M{"d. MMM – d. MMM"}
                     d{"d. – d. MMM"}
@@ -677,10 +697,6 @@ dsb{
                 d{
                     d{"d. – d."}
                 }
-                h{
-                    a{"h a – h a"}
-                    h{"h–h a"}
-                }
                 hm{
                     a{"h:mm a – h:mm a"}
                     h{"h:mm – h:mm a"}
@@ -690,10 +706,6 @@ dsb{
                     a{"h:mm a – h:mm a v"}
                     h{"h:mm – h:mm a v"}
                     m{"h:mm – h:mm a v"}
-                }
-                hv{
-                    a{"h a – h a v"}
-                    h{"h–h a v"}
                 }
                 yM{
                     M{"M.y – M.y"}

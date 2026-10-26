@@ -3,6 +3,21 @@
 // Generated using tools/cldr/cldr-to-icu/
 nl_SR{
     zoneStrings{
+        "meta:Europe_Central"{
+            sd{"∅∅∅"}
+            sg{"∅∅∅"}
+            ss{"∅∅∅"}
+        }
+        "meta:Europe_Eastern"{
+            sd{"∅∅∅"}
+            sg{"∅∅∅"}
+            ss{"∅∅∅"}
+        }
+        "meta:Europe_Western"{
+            sd{"∅∅∅"}
+            sg{"∅∅∅"}
+            ss{"∅∅∅"}
+        }
         "meta:Suriname"{
             ss{"SRT"}
         }

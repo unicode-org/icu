@@ -480,8 +480,6 @@ is{
             }
             part{
                 dnam{"hlutar"}
-                one{"{0} hluti"}
-                other{"{0} hlutar"}
             }
             part-per-1e6{
                 case{
@@ -2416,11 +2414,6 @@ is{
                 one{"{0} hnútur"}
                 other{"{0} hnútar"}
             }
-            light-speed{
-                dnam{"ljóshraði"}
-                one{"{0} ljóshraði"}
-                other{"{0} ljóshraðar"}
-            }
             meter-per-second{
                 case{
                     accusative{
@@ -2723,7 +2716,7 @@ is{
                 per{"{0} á gallon"}
             }
             gallon-imperial{
-                dnam{"Breskt gallon"}
+                dnam{"breskt gallon"}
                 one{"{0} breskt gallon"}
                 other{"{0} breskt gallon"}
                 per{"{0}/ á breskt gallon"}
@@ -2820,7 +2813,24 @@ is{
                 other{"{0} hálfpottar"}
             }
             pint-metric{
+                case{
+                    accusative{
+                        one{"{0} hálflítra"}
+                        other{"{0} hálflítra"}
+                    }
+                    dative{
+                        one{"{0} hálflítra"}
+                        other{"{0} hálflítrum"}
+                    }
+                    genitive{
+                        one{"{0} hálflítra"}
+                        other{"{0} hálflítra"}
+                    }
+                }
+                dnam{"hálflítrar"}
                 gender{"feminine"}
+                one{"{0} hálflítri"}
+                other{"{0} hálflítrar"}
             }
             quart{
                 dnam{"kvartar"}
@@ -2900,14 +2910,6 @@ is{
                 one{"{0}mmól/l"}
                 other{"{0}mmól/l"}
             }
-            ofglucose{
-                dnam{"Glc"}
-            }
-            part{
-                dnam{"hluti"}
-                one{"{0} hluti"}
-                other{"{0} hlutar"}
-            }
             part-per-1e6{
                 dnam{"ppm"}
                 one{"{0}ppm"}
@@ -2980,11 +2982,6 @@ is{
             }
         }
         energy{
-            calorie-it{
-                dnam{"kal-IT"}
-                one{"{0} kal-IT"}
-                other{"{0} kal-IT"}
-            }
             electronvolt{
                 dnam{"eV"}
             }
@@ -3081,11 +3078,6 @@ is{
                 one{"{0}\u0022 Hg"}
                 other{"{0}\u0022 Hg"}
             }
-            ofhg{
-                dnam{"af Hg"}
-                one{"{0} af Hg"}
-                other{"{0} af Hg"}
-            }
         }
         speed{
             beaufort{
@@ -3094,11 +3086,6 @@ is{
             }
             kilometer-per-hour{
                 dnam{"km/klst."}
-            }
-            light-speed{
-                dnam{"ljóshraði"}
-                one{"{0} ljóshraði"}
-                other{"{0} ljóshraðar"}
             }
             meter-per-second{
                 dnam{"m/sek."}

@@ -1,5 +1,5 @@
 # Test data for Person Name Data
-#  Copyright © 1991-2025 Unicode, Inc.
+#  Copyright © 1991-2026 Unicode, Inc.
 #  For terms of use, see http://www.unicode.org/copyright.html
 #  SPDX-License-Identifier: Unicode-3.0
 #  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
@@ -438,7 +438,7 @@ endName
 
 # foreignG
 name ; given; Sinbad
-name ; locale; ko_AQ
+name ; locale; ja_AQ
 
 expectedResult; Sinbad
 
@@ -493,7 +493,7 @@ endName
 # foreignGS
 name ; given; Kathi
 name ; surname; Muller
-name ; locale; ko_AQ
+name ; locale; ja_AQ
 
 expectedResult; Muller, Kathi
 
@@ -582,7 +582,7 @@ endName
 name ; given; Sasilia
 name ; given2; Hamis
 name ; surname; Stober
-name ; locale; ko_AQ
+name ; locale; ja_AQ
 
 expectedResult; Stober, Sasilia Hamis
 
@@ -698,7 +698,7 @@ name ; surname-core; Wolf
 name ; surname2; Becker Schmidt
 name ; generation; Jr
 name ; credentials; M.D. Ph.D.
-name ; locale; ko_AQ
+name ; locale; ja_AQ
 
 expectedResult; van. den. Wolf, Ada Cornelia Eva Sophia M.D. Ph.D.
 

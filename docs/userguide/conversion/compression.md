@@ -75,8 +75,8 @@ registered names.
 
 The compression service in ICU is a part of Conversion framework, and follows
 the semantics of converters. For more information on how to use ICU's conversion
-service, please refer to the Usage Model section in the [Using
-Converters](converters.md) chapter.
+service, please refer to the Usage Model section in the
+[Using Converters](converters.md) chapter.
 
 ```c++
 uint16_t germanUTF16[]={

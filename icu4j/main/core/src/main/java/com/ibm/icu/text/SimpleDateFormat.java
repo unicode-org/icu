@@ -18,6 +18,7 @@ import com.ibm.icu.impl.JavaTimeConverters;
 import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.impl.SimpleFormatterImpl;
+import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.TimeZoneFormat.Style;
 import com.ibm.icu.text.TimeZoneFormat.TimeType;
@@ -722,6 +723,12 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
      */
     private transient boolean hasHanYearChar;
 
+    /**
+     * Cached ordinal-form PluralRules for the formatter's locale, used by the "ddd" pattern.
+     * Created lazily by {@link #parsePattern()} when the pattern contains 3+ consecutive 'd' chars.
+     */
+    private transient PluralRules ordinalPluralRules;
+
     /*
      *  Capitalization setting, introduced in ICU 50
      *  Special serialization, see writeObject & readObject below
@@ -1000,26 +1007,48 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
     }
 
     // privates for the default pattern
-    private static ULocale cachedDefaultLocale = null;
-    private static String cachedDefaultPattern = null;
+
+    /**
+     * Immutable snapshot of (locale, pattern) for the default pattern cache. Published via a single
+     * volatile write so readers always see a consistent pair.
+     */
+    private static final class DefaultPatternEntry {
+        final ULocale locale;
+        final String pattern;
+
+        DefaultPatternEntry(ULocale locale, String pattern) {
+            this.locale = locale;
+            this.pattern = pattern;
+        }
+    }
+
+    private static volatile DefaultPatternEntry cachedDefault = null;
     private static final String FALLBACKPATTERN = "yy/MM/dd HH:mm";
 
     /*
      * Returns the default date and time pattern (SHORT) for the default locale.
      * This method is only used by the default SimpleDateFormat constructor.
      */
-    private static synchronized String getDefaultPattern() {
+    private static String getDefaultPattern() {
         ULocale defaultLocale = ULocale.getDefault(Category.FORMAT);
-        if (!defaultLocale.equals(cachedDefaultLocale)) {
-            cachedDefaultLocale = defaultLocale;
-            Calendar cal = Calendar.getInstance(cachedDefaultLocale);
+        DefaultPatternEntry entry = cachedDefault; // single volatile read
+        if (entry != null && defaultLocale.equals(entry.locale)) {
+            return entry.pattern;
+        }
+        synchronized (SimpleDateFormat.class) {
+            entry = cachedDefault;
+            if (entry != null && defaultLocale.equals(entry.locale)) {
+                return entry.pattern;
+            }
+            Calendar cal = Calendar.getInstance(defaultLocale);
+            String pattern;
 
             try {
                 // Load the calendar data directly.
                 ICUResourceBundle rb =
                         (ICUResourceBundle)
                                 UResourceBundle.getBundleInstance(
-                                        ICUData.ICU_BASE_NAME, cachedDefaultLocale);
+                                        ICUData.ICU_BASE_NAME, defaultLocale);
                 String resourcePath = "calendar/" + cal.getType() + "/DateTimePatterns";
                 ICUResourceBundle patternsRb = rb.findWithFallback(resourcePath);
 
@@ -1027,12 +1056,11 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
                     patternsRb = rb.findWithFallback("calendar/gregorian/DateTimePatterns");
                 }
                 if (patternsRb == null || patternsRb.getSize() < 9) {
-                    cachedDefaultPattern = FALLBACKPATTERN;
+                    pattern = FALLBACKPATTERN;
                 } else {
-                    String basePattern =
-                            Calendar.getDateAtTimePattern(cal, cachedDefaultLocale, SHORT);
+                    String basePattern = Calendar.getDateAtTimePattern(cal, defaultLocale, SHORT);
 
-                    cachedDefaultPattern =
+                    pattern =
                             SimpleFormatterImpl.formatRawPattern(
                                     basePattern,
                                     2,
@@ -1041,10 +1069,11 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
                                     patternsRb.getString(SHORT + 4));
                 }
             } catch (MissingResourceException e) {
-                cachedDefaultPattern = FALLBACKPATTERN;
+                pattern = FALLBACKPATTERN;
             }
+            cachedDefault = new DefaultPatternEntry(defaultLocale, pattern);
+            return pattern;
         }
-        return cachedDefaultPattern;
     }
 
     /* Define one-century window into which to disambiguate dates using
@@ -1150,6 +1179,7 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
     }
 
     /** Internal formatting method that accepts an attributes list. */
+    @SuppressWarnings("ReferenceEquality")
     StringBuffer format(
             Calendar cal,
             StringBuffer toAppendTo,
@@ -1477,7 +1507,7 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
-    @SuppressWarnings("fallthrough")
+    @SuppressWarnings({"fallthrough", "ReferenceEquality"})
     protected void subFormat(
             StringBuffer buf,
             char ch,
@@ -1977,24 +2007,6 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
                     // first
                     // loading of an instance) if a relevant pattern character (b or B) is used.
                     DayPeriodRules ruleSet = DayPeriodRules.getInstance(getLocale());
-                    if (ruleSet == null) {
-                        // Data doesn't exist for the locale we're looking for.
-                        // Fall back to am/pm.
-                        // We are passing a different patternCharToOutput because we want to add
-                        // 'B' to field position. This makes this fallback stable when
-                        // there is a data change on locales.
-                        subFormat(
-                                buf,
-                                'a',
-                                count,
-                                beginOffset,
-                                fieldNum,
-                                capitalizationContext,
-                                pos,
-                                'B',
-                                cal);
-                        return;
-                    }
 
                     // Get current display time.
                     int hour = cal.get(Calendar.HOUR_OF_DAY);
@@ -2086,6 +2098,17 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
             case 37: // TIME SEPARATOR (no pattern character currently defined, we should
                 // not get here but leave support in for future definition.
                 buf.append(formatData.getTimeSeparatorString());
+                break;
+            case 3: // 'd' - DATE
+                if (count >= 3 && value >= 1) {
+                    String dayStr =
+                            formatDayOfMonthName(value, currentNumberFormat, count, maxIntCount);
+                    if (dayStr != null) {
+                        buf.append(dayStr);
+                        break;
+                    }
+                }
+                zeroPaddingNumber(currentNumberFormat, buf, value, count, maxIntCount);
                 break;
             default:
                 // case 3: // 'd' - DATE
@@ -2439,6 +2462,7 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
      * @stable ICU 2.0
      */
     @Override
+    @SuppressWarnings("ReferenceEquality")
     public void parse(String text, Calendar cal, ParsePosition parsePos) {
         TimeZone backupTZ = null;
         Calendar resultCal = null;
@@ -4270,6 +4294,15 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
                     return newStart;
                 }
 
+            case 3: // 'd' - DATE
+                if (count >= 3) {
+                    int newStart = parseDayOfMonthName(text, start, cal);
+                    if (newStart > 0) {
+                        return newStart;
+                    }
+                }
+            // fall through to numeric parsing in default
+
             default:
                 // case 3: // 'd' - DATE
                 // case 5: // 'H' - HOUR_OF_DAY (0..23)
@@ -4625,14 +4658,11 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
     private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
         stream.defaultReadObject();
         int capitalizationSettingValue = (serialVersionOnStream > 1) ? stream.readInt() : -1;
-        /// CLOVER:OFF
         // don't have old serial data to test with
         if (serialVersionOnStream < 1) {
             // didn't have defaultCenturyStart field
             defaultCenturyBase = System.currentTimeMillis();
-        }
-        /// CLOVER:ON
-        else {
+        } else {
             // fill in dependent transient field
             parseAmbiguousDatesAsAfter(defaultCenturyStart);
         }
@@ -5154,8 +5184,10 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
         hasMinute = false;
         hasSecond = false;
         hasHanYearChar = false;
+        ordinalPluralRules = null;
 
         boolean inQuote = false;
+        int dCount = 0;
         for (int i = 0; i < pattern.length(); ++i) {
             char ch = pattern.charAt(i);
             if (ch == '\'') {
@@ -5171,7 +5203,124 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
                 if (ch == 's') {
                     hasSecond = true;
                 }
+                if (ch == 'd') {
+                    dCount++;
+                    if (dCount >= 3 && ordinalPluralRules == null) {
+                        ordinalPluralRules =
+                                PluralRules.forLocale(locale, PluralRules.PluralType.ORDINAL);
+                    }
+                } else {
+                    dCount = 0;
+                }
             }
         }
+    }
+
+    /**
+     * Formats the day-of-month {@code value} using the locale's ordinal-form day-of-month names
+     * (the pattern contains "ddd" or longer). Returns null if no relevant data is available \u2014
+     * the caller should fall back to numeric formatting.
+     */
+    private String formatDayOfMonthName(
+            int value, NumberFormat currentNumberFormat, int count, int maxIntCount) {
+        // First check for a cardinal element (e.g., Chinese hanidays "\u521D\u4E00",
+        // "\u5341\u4E94").
+        String[] cardinalNames =
+                formatData.getDayOfMonthCardinalNames(
+                        DateFormatSymbols.FORMAT, DateFormatSymbols.ABBREVIATED);
+        if (cardinalNames != null
+                && value >= 1
+                && value < cardinalNames.length
+                && cardinalNames[value] != null
+                && !cardinalNames[value].isEmpty()) {
+            return cardinalNames[value];
+        }
+
+        // Fall back to ordinal patterns selected by plural form (e.g., English "{0}st", "{0}nd").
+        String[] ordNames =
+                formatData.getDayOfMonthOrdinalNames(
+                        DateFormatSymbols.FORMAT, DateFormatSymbols.ABBREVIATED);
+        if (ordNames == null || ordinalPluralRules == null) {
+            return null;
+        }
+        String keyword = ordinalPluralRules.select(value);
+        StandardPlural form = StandardPlural.orOtherFromString(keyword);
+        String pat = ordNames[form.ordinal()];
+        if (pat == null || pat.isEmpty()) {
+            pat = ordNames[StandardPlural.OTHER.ordinal()];
+        }
+        if (pat == null || pat.isEmpty()) {
+            return null;
+        }
+        StringBuffer dayNum = new StringBuffer();
+        zeroPaddingNumber(currentNumberFormat, dayNum, value, 1, maxIntCount);
+        return SimpleFormatter.compile(pat).format(dayNum.toString());
+    }
+
+    /**
+     * Tries to parse {@code text} starting at {@code start} as an ordinal day-of-month name (the
+     * pattern contains "ddd" or longer). Sets {@link Calendar#DATE} on {@code cal} and returns the
+     * new position on success; returns -1 otherwise (so the caller can fall through to numeric
+     * parsing).
+     */
+    private int parseDayOfMonthName(String text, int start, Calendar cal) {
+        // Try cardinal names first (e.g., Chinese hanidays).
+        String[] cardinalNames =
+                formatData.getDayOfMonthCardinalNames(
+                        DateFormatSymbols.FORMAT, DateFormatSymbols.ABBREVIATED);
+        if (cardinalNames != null) {
+            int bestLen = 0;
+            int bestDay = -1;
+            for (int day = 1; day < cardinalNames.length; day++) {
+                String name = cardinalNames[day];
+                if (name == null || name.isEmpty()) {
+                    continue;
+                }
+                if (name.length() > bestLen
+                        && regionMatchesWithOptionalDot(text, 0, name, name.length()) >= 0) {
+                    bestLen = name.length();
+                    bestDay = day;
+                }
+            }
+            if (bestDay > 0) {
+                cal.set(Calendar.DATE, bestDay);
+                return start + bestLen;
+            }
+        }
+
+        // Try ordinal patterns: match prefix, parse number, match suffix.
+        String[] ordNames =
+                formatData.getDayOfMonthOrdinalNames(
+                        DateFormatSymbols.FORMAT, DateFormatSymbols.ABBREVIATED);
+        if (ordNames == null) {
+            return -1;
+        }
+        for (String pat : ordNames) {
+            if (pat == null || pat.isEmpty()) {
+                continue;
+            }
+            int placeholderPos = pat.indexOf("{0}");
+            if (placeholderPos < 0) {
+                continue;
+            }
+            String prefix = pat.substring(0, placeholderPos);
+            String suffix = pat.substring(placeholderPos + 3);
+            if (regionMatchesWithOptionalDot(text, start, prefix, prefix.length()) < 0) {
+                continue;
+            }
+            int numStart = start + prefix.length();
+            ParsePosition numPos = new ParsePosition(numStart);
+            Number n = parseInt(text, numPos, false, getNumberFormat('d'));
+            if (n == null || numPos.getIndex() <= numStart) {
+                continue;
+            }
+            int numEnd = numPos.getIndex();
+            if (regionMatchesWithOptionalDot(text, numEnd, suffix, suffix.length()) < 0) {
+                continue;
+            }
+            cal.set(Calendar.DATE, n.intValue());
+            return numEnd + suffix.length();
+        }
+        return -1;
     }
 }

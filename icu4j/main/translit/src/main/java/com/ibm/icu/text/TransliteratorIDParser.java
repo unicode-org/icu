@@ -17,10 +17,9 @@ import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.CaseInsensitiveString;
 import java.text.ParsePosition;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Parsing component for transliterator IDs. This class contains only static members; it cannot be
@@ -58,7 +57,7 @@ class TransliteratorIDParser {
     private static final int REVERSE = Transliterator.REVERSE;
 
     private static final Map<CaseInsensitiveString, String> SPECIAL_INVERSES =
-            Collections.synchronizedMap(new HashMap<CaseInsensitiveString, String>());
+            new ConcurrentHashMap<>();
 
     /**
      * A structure containing the parsed data of a filtered ID, that is, a basic ID optionally with

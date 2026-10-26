@@ -44,8 +44,8 @@ fa{
                 atLeast{"‎{0}+‎"}
             }
             patterns{
-                accountingFormat{"‎¤ #,##0.00;‎(¤ #,##0.00)"}
-                accountingFormat%alphaNextToNumber{"‎¤ #,##0.00;‎(¤ #,##0.00)"}
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"‎#,##0.00;‎(#,##0.00)"}
                 currencyFormat{"‎¤ #,##0.00"}
                 currencyFormat%alphaNextToNumber{"‎¤ #,##0.00"}
@@ -106,7 +106,7 @@ fa{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"‎¤ 0 هزار"}
+                        one{"0K¤"}
                         other{"‎¤ 0 هزار"}
                     }
                     10000{
@@ -337,10 +337,10 @@ fa{
                 GyMMMd{"d MMM y G"}
                 GyMd{"M/d/y GGGGG"}
                 H{"H"}
-                HHmmZ{"HH:mm (Z)"}
+                HHmmv{"HH:mm (Z)"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
-                Hv{"سHH v"}
+                Hv{"H (v)"}
                 MEd{"E M/d"}
                 MMMEd{"E d LLL"}
                 MMMMEd{"E d LLLL"}
@@ -435,6 +435,10 @@ fa{
                 MMMEd{
                     M{"E d LLL تا E d LLL"}
                     d{"E d LLL تا E d LLL"}
+                }
+                MMMMd{
+                    M{"d MMMM تا d MMMM"}
+                    d{"d تا d MMMM"}
                 }
                 MMMd{
                     M{"d LLL تا d LLL"}
@@ -548,7 +552,7 @@ fa{
                 "yMd",
             }
             appendItems{
-                Day-Of-Week{"{1} {0}"}
+                Era{"{0} {1}"}
                 Timezone{"{0} ({1})"}
             }
             availableFormats{
@@ -560,15 +564,18 @@ fa{
                 GyMEd{"E، y/M/d G"}
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E d MMM y G"}
+                GyMMMM{"MMMM y G"}
+                GyMMMMEd{"E، d MMMM، y G"}
+                GyMMMMd{"d MMMM، y G"}
                 GyMMMd{"d MMM y G"}
                 GyMd{"y/M/d GGGGG"}
                 H{"H"}
-                HHmmZ{"HH:mm (Z)"}
+                HHmmv{"HH:mm (v)"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
                 Hmsv{"H:mm:ss v"}
                 Hmv{"H:mm v"}
-                Hv{"سHH v"}
+                Hv{"H (v)"}
                 MEd{"E M/d"}
                 MMMEd{"E d LLL"}
                 MMMMEd{"E d LLLL"}
@@ -587,6 +594,8 @@ fa{
                 yMMMEd{"E d MMM y"}
                 yMMMM{"MMMM y"}
                 yMMMMEEEEd{"EEEE d MMMM y"}
+                yMMMMEd{"E، d MMMM y"}
+                yMMMMd{"d MMMM y"}
                 yMMMd{"d MMM y"}
                 yMd{"y/M/d"}
                 yQQQ{"QQQQ y"}
@@ -757,6 +766,10 @@ fa{
                     M{"E d LLL تا E d LLL"}
                     d{"E d LLL تا E d LLL"}
                 }
+                MMMMd{
+                    M{"d MMMM تا d MMMM"}
+                    d{"d تا d MMMM"}
+                }
                 MMMd{
                     M{"d LLL تا d LLL"}
                     d{"d تا d LLL"}
@@ -840,13 +853,13 @@ fa{
                         "دسامبر",
                     }
                     wide{
-                        "ژانویهٔ",
-                        "فوریهٔ",
+                        "ژانویه",
+                        "فوریه",
                         "مارس",
                         "آوریل",
-                        "مهٔ",
+                        "مه",
                         "ژوئن",
-                        "ژوئیهٔ",
+                        "ژوئیه",
                         "اوت",
                         "سپتامبر",
                         "اکتبر",
@@ -1007,9 +1020,8 @@ fa{
                 "GyMd",
             }
             availableFormats{
-                GyM{"y/M G"}
-                GyMEd{"E، y/M/d G"}
-                HmZ{"HH:mm (Z)"}
+                Hmv{"HH:mm (v)"}
+                MMMMd{"d MMMM"}
                 ms{"mm:ss"}
                 yM{"y/M G"}
                 yMEd{"E y/M/d G"}

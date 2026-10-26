@@ -10,8 +10,11 @@ package com.ibm.icu.dev.test.lang;
 
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterCategory;
-import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,11 +35,9 @@ public final class UCharacterCompare {
     /** Main testing method */
     public static void main(String arg[]) {
         System.out.println("Starting character compare");
-        try {
-            FileWriter f;
-            if (arg.length == 0) f = new FileWriter("compare.txt");
-            else f = new FileWriter(arg[0]);
-            PrintWriter p = new PrintWriter(f);
+        String filename = arg.length == 0 ? "compare.txt" : arg[0];
+        try (Writer writer = Files.newBufferedWriter(Path.of(filename), StandardCharsets.UTF_8);
+                PrintWriter p = new PrintWriter(writer)) {
             p.print(
                     "char  character name                                                           ");
             p.println("method name               ucharacter character");
@@ -188,7 +189,6 @@ public final class UCharacterCompare {
                 }
             }
             summary(p);
-            p.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

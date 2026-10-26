@@ -1,5 +1,5 @@
 # Test data for Person Name Data
-#  Copyright © 1991-2025 Unicode, Inc.
+#  Copyright © 1991-2026 Unicode, Inc.
 #  For terms of use, see http://www.unicode.org/copyright.html
 #  SPDX-License-Identifier: Unicode-3.0
 #  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
@@ -114,10 +114,10 @@ endName
 
 # nativeGS
 name ; given; ललित
-name ; surname; शर्मा
+name ; surname; कुमार
 name ; locale; hi_AQ
 
-expectedResult; शर्मा, ललित
+expectedResult; कुमार, ललित
 
 parameters; sorting; long; referring; formal
 parameters; sorting; long; referring; informal
@@ -125,35 +125,35 @@ parameters; sorting; medium; referring; formal
 parameters; sorting; medium; referring; informal
 parameters; sorting; short; referring; informal
 
-expectedResult; ललित शर्मा
+expectedResult; कुमार ललित
+
+parameters; surnameFirst; long; referring; formal
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; medium; referring; informal
+
+expectedResult; ललित कुमार
 
 parameters; givenFirst; long; referring; formal
 parameters; givenFirst; long; referring; informal
 parameters; givenFirst; medium; referring; informal
 parameters; givenFirst; short; referring; informal
 
-expectedResult; शर्मा ललित
-
-parameters; surnameFirst; long; referring; formal
-parameters; surnameFirst; long; referring; informal
-parameters; surnameFirst; medium; referring; informal
-
-expectedResult; शर्मा, ल॰
+expectedResult; कुमार, ल॰
 
 parameters; sorting; short; referring; formal
 
-expectedResult; ल॰ शर्मा
-
-parameters; givenFirst; medium; referring; formal
-parameters; givenFirst; short; referring; formal
-
-expectedResult; शर्मा ल॰
+expectedResult; कुमार ल॰
 
 parameters; surnameFirst; medium; referring; formal
 parameters; surnameFirst; short; referring; formal
 parameters; surnameFirst; short; referring; informal
 
-expectedResult; शर्मा
+expectedResult; ल॰ कुमार
+
+parameters; givenFirst; medium; referring; formal
+parameters; givenFirst; short; referring; formal
+
+expectedResult; कुमार
 
 parameters; givenFirst; long; addressing; formal
 parameters; givenFirst; medium; addressing; formal
@@ -171,15 +171,20 @@ parameters; surnameFirst; long; addressing; informal
 parameters; surnameFirst; medium; addressing; informal
 parameters; surnameFirst; short; addressing; informal
 
-expectedResult; लश
+expectedResult; कुल
+
+parameters; surnameFirst; long; monogram; formal
+parameters; surnameFirst; long; monogram; informal
+
+expectedResult; लकु
 
 parameters; givenFirst; long; monogram; formal
 parameters; givenFirst; long; monogram; informal
 
-expectedResult; शल
+expectedResult; कु
 
-parameters; surnameFirst; long; monogram; formal
-parameters; surnameFirst; long; monogram; informal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; short; monogram; formal
 
 expectedResult; ल
 
@@ -189,72 +194,67 @@ parameters; givenFirst; short; monogram; formal
 parameters; givenFirst; short; monogram; informal
 parameters; surnameFirst; medium; monogram; informal
 parameters; surnameFirst; short; monogram; informal
-
-expectedResult; श
-
-parameters; surnameFirst; medium; monogram; formal
-parameters; surnameFirst; short; monogram; formal
 
 endName
 
 # nativeGGS
 name ; given; ललित
 name ; given2; मोहन
-name ; surname; शर्मा
+name ; surname; कुमार
 name ; locale; hi_AQ
 
-expectedResult; शर्मा, ललित मोहन
+expectedResult; कुमार, ललित मोहन
 
 parameters; sorting; long; referring; formal
 
-expectedResult; ललित मोहन शर्मा
-
-parameters; givenFirst; long; referring; formal
-
-expectedResult; शर्मा ललित मोहन
+expectedResult; कुमार ललित मोहन
 
 parameters; surnameFirst; long; referring; formal
 
-expectedResult; शर्मा, ललित मो॰
+expectedResult; कुमार, ललित मो॰
 
 parameters; sorting; medium; referring; formal
 
-expectedResult; शर्मा, ल॰ मो॰
+expectedResult; ललित मोहन कुमार
+
+parameters; givenFirst; long; referring; formal
+
+expectedResult; कुमार, ल॰ मो॰
 
 parameters; sorting; short; referring; formal
 
-expectedResult; ल॰ मो॰ शर्मा
-
-parameters; givenFirst; medium; referring; formal
-parameters; givenFirst; short; referring; formal
-
-expectedResult; शर्मा ल॰ मो॰
+expectedResult; कुमार ल॰ मो॰
 
 parameters; surnameFirst; medium; referring; formal
 parameters; surnameFirst; short; referring; formal
 
-expectedResult; शर्मा, ललित
+expectedResult; ल॰ मो॰ कुमार
+
+parameters; givenFirst; medium; referring; formal
+parameters; givenFirst; short; referring; formal
+
+expectedResult; कुमार, ललित
 
 parameters; sorting; long; referring; informal
 parameters; sorting; medium; referring; informal
 parameters; sorting; short; referring; informal
 
-expectedResult; ललित शर्मा
+expectedResult; कुमार ललित
+
+parameters; surnameFirst; long; referring; informal
+parameters; surnameFirst; medium; referring; informal
+
+expectedResult; ललित कुमार
 
 parameters; givenFirst; long; referring; informal
 parameters; givenFirst; medium; referring; informal
 parameters; givenFirst; short; referring; informal
 
-expectedResult; शर्मा ललित
-
-parameters; surnameFirst; long; referring; informal
-parameters; surnameFirst; medium; referring; informal
-
-expectedResult; शर्मा ल॰
+expectedResult; कुमार ल॰
 
 parameters; surnameFirst; short; referring; informal
 
-expectedResult; शर्मा
+expectedResult; कुमार
 
 parameters; givenFirst; long; addressing; formal
 parameters; givenFirst; medium; addressing; formal
@@ -263,7 +263,11 @@ parameters; surnameFirst; long; addressing; formal
 parameters; surnameFirst; medium; addressing; formal
 parameters; surnameFirst; short; addressing; formal
 
-expectedResult; लमोश
+expectedResult; कुलमो
+
+parameters; surnameFirst; long; monogram; formal
+
+expectedResult; लमोकु
 
 parameters; givenFirst; long; monogram; formal
 
@@ -276,17 +280,18 @@ parameters; surnameFirst; long; addressing; informal
 parameters; surnameFirst; medium; addressing; informal
 parameters; surnameFirst; short; addressing; informal
 
-expectedResult; शलमो
+expectedResult; कुल
 
-parameters; surnameFirst; long; monogram; formal
+parameters; surnameFirst; long; monogram; informal
 
-expectedResult; लश
+expectedResult; लकु
 
 parameters; givenFirst; long; monogram; informal
 
-expectedResult; शल
+expectedResult; कु
 
-parameters; surnameFirst; long; monogram; informal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; short; monogram; formal
 
 expectedResult; ल
 
@@ -296,11 +301,6 @@ parameters; givenFirst; short; monogram; formal
 parameters; givenFirst; short; monogram; informal
 parameters; surnameFirst; medium; monogram; informal
 parameters; surnameFirst; short; monogram; informal
-
-expectedResult; श
-
-parameters; surnameFirst; medium; monogram; formal
-parameters; surnameFirst; short; monogram; formal
 
 endName
 

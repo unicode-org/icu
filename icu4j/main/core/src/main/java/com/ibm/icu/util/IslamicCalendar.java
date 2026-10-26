@@ -1270,14 +1270,6 @@ public class IslamicCalendar extends Calendar {
     }
 
     /**
-     * Return the day # on which the given year starts. Days are counted from the Hijri epoch,
-     * origin 0.
-     */
-    private long yearStart(int year) {
-        return algorithm.yearStart(year);
-    }
-
-    /**
      * Find the day number on which a particular month of the true/lunar Islamic calendar starts.
      *
      * @param month The month in question, origin 0 from the Hijri epoch

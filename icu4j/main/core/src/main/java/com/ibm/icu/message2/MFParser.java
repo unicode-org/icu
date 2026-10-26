@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * This class parses a {@code MessageFormat 2} syntax into a data model {@link MFDataModel.Message}.
@@ -833,15 +831,5 @@ public class MFParser {
             }
         }
         throw new MFParseException(finalMsg.toString(), input.getPosition());
-    }
-
-    private String peekWithRegExp(Pattern pattern) {
-        StringView sv = new StringView(input.buffer, input.getPosition());
-        Matcher m = pattern.matcher(sv);
-        if (m.find()) {
-            input.skip(m.group().length());
-            return m.group();
-        }
-        return null;
     }
 }

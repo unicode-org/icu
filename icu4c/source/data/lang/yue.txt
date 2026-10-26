@@ -7,23 +7,39 @@ yue{
         cf{"貨幣格式"}
         colAlternate{"略過符號排序"}
         colBackwards{"反向重音排序"}
-        colCaseFirst{"大寫/小寫排列"}
-        colCaseLevel{"區分大小寫排序"}
+        colCaseFirst{"大細楷排序"}
+        colCaseLevel{"分大細楷排序"}
         colNormalization{"正規化排序"}
         colNumeric{"數字排序"}
+        colReorder{"語系文字/區塊重新排序"}
         colStrength{"排序強度"}
         collation{"排序"}
         currency{"貨幣"}
+        d0{"轉換目的地"}
+        dx{"字典斷詞排除項目"}
         em{"Emoji 顯示方式"}
+        fw{"一星期嘅第一日"}
+        h0{"混合"}
         hc{"時間週期（12 小時制與 24 小時制）"}
+        i0{"輸入法"}
+        k0{"鍵盤"}
+        kv{"略過嘅最高級別項目"}
         lb{"換行樣式"}
         lw{"單字強制換行"}
+        m0{"轉換規則"}
         ms{"度量單位系統"}
+        mu{"度量單位"}
         numbers{"數字"}
+        rg{"補充資料專用區域"}
+        s0{"轉換來源"}
+        sd{"區域次分區"}
         ss{"縮寫後斷句"}
+        t{"轉換"}
+        t0{"機器翻譯"}
         timezone{"時區"}
         va{"區域變異"}
         x{"專用區"}
+        x0{"專用區轉換"}
     }
     Languages{
         aa{"阿法文"}
@@ -886,9 +902,13 @@ yue{
             ethiopic-amete-alem{"埃塞俄比亞阿美德阿萊姆"}
             gregorian{"公曆"}
             hebrew{"希伯來曆"}
+            indian{"印度國定曆"}
             islamic{"伊斯蘭曆"}
             islamic-civil{"伊斯蘭民用曆 (表格式)"}
+            islamic-rgsa{"伊斯蘭新月曆"}
+            islamic-tbla{"伊斯蘭天文曆"}
             islamic-umalqura{"伊斯蘭曆 (烏姆庫拉)"}
+            iso8601{"公曆"}
             japanese{"日本曆"}
             persian{"波斯曆"}
             roc{"民國曆"}
@@ -914,6 +934,11 @@ yue{
             no{"正常大小寫順序排序"}
             upper{"優先排序大寫"}
         }
+        colCaseFirst%core{
+            lower{"細楷"}
+            no{"細楷"}
+            upper{"大楷"}
+        }
         colCaseLevel{
             no{"不分大小寫排序"}
             yes{"依大小寫排序"}
@@ -926,12 +951,26 @@ yue{
             no{"個別排序數字"}
             yes{"依數字順序排序數字"}
         }
+        colReorder%core{
+            currency{"貨幣"}
+            digit{"數字"}
+            punct{"標點符號"}
+            space{"空白字元"}
+            symbol{"符號"}
+        }
         colStrength{
             identical{"全部排序"}
             primary{"僅排序基礎字母"}
             quaternary{"排序重音/大小寫/全半形/假名"}
             secondary{"排序重音"}
             tertiary{"排序重音/大小寫/全半形"}
+        }
+        colStrength%core{
+            identical{"全部"}
+            primary{"只限基礎字母"}
+            quaternary{"基礎、重音、大細楷、變體、假名"}
+            secondary{"基礎、重音"}
+            tertiary{"基礎、重音、大細寫、變體"}
         }
         collation{
             dictionary{"字典排序"}
@@ -949,9 +988,21 @@ yue{
             zhuyin{"注音排序"}
         }
         collation%core{
+            compat{"相容性"}
+            dictionary{"字典"}
             ducet{"預設 Unicode"}
+            emoji{"Emoji"}
+            eor{"歐洲規則"}
+            phonebook{"電話簿"}
+            phonetic{"發音"}
+            pinyin{"拼音"}
             search{"搜尋"}
+            searchjl{"韓文初聲子音"}
             standard{"標準"}
+            stroke{"筆畫"}
+            traditional{"傳統"}
+            unihan{"部首筆畫"}
+            zhuyin{"注音"}
         }
         d0{
             fwidth{"全形"}
@@ -964,16 +1015,26 @@ yue{
             text{"文字"}
         }
         hc{
+            c12{"12 小時制"}
+            c24{"24 小時制"}
             h11{"12 小時制 (0–11)"}
             h12{"12 小時制 (1–12)"}
             h23{"24 小時制 (0–23)"}
             h24{"24 小時制 (1–24)"}
         }
         hc%core{
+            c12{"12"}
+            c24{"24"}
             h11{"12 (0–11)"}
             h12{"12 (1–12)"}
             h23{"24 (0–23)"}
             h24{"24 (1–24)"}
+        }
+        kv%core{
+            currency{"Shift、空格、標點符號、所有符號"}
+            punct{"Shift、空格、標點符號"}
+            space{"Shift、空格、標點符號"}
+            symbol{"Shift、空格、標點符號、非貨幣符號"}
         }
         lb{
             loose{"寬鬆換行樣式"}
@@ -1068,9 +1129,45 @@ yue{
             traditional{"傳統數字"}
             vaii{"瓦伊文數字"}
         }
+        numbers%core{
+            arabext{"阿拉伯-印度擴充"}
+            armnlow{"小寫亞美尼亞"}
+            finance{"財務"}
+            fullwide{"全形"}
+            greklow{"小寫希臘"}
+            hanidays{"傳統曆法漢字月日寫法"}
+            hanidec{"使用漢字數字計數的位置十進制"}
+            hansfin{"大寫簡體中文"}
+            hantfin{"大寫繁體中文"}
+            jpanfin{"大寫日文"}
+            jpanyear{"日本元年紀年法"}
+            lanatham{"蘭納文 (教會用語)"}
+            mathbold{"數學粗體"}
+            mathdbl{"數學雙線體"}
+            mathmono{"數學等寬字體"}
+            mathsanb{"數學無襯線粗體"}
+            mathsans{"數學無襯線字體"}
+            mymrepka{"緬甸東部波克倫族"}
+            mymrpao{"緬甸巴歐族"}
+            mymrshan{"緬甸撣族"}
+            mymrtlng{"緬甸紅傣族"}
+            native{"原始數字"}
+            outlined{"大綱"}
+            roman{"大寫羅馬數字"}
+            romanlow{"小寫羅馬數字"}
+            segment{"分段"}
+            tamldec{"現代泰米爾"}
+            traditional{"傳統數字"}
+        }
         ss%core{
             none{"閂"}
             standard{"開"}
+        }
+        t0{
+            und{"未指定嘅機器翻譯"}
+        }
+        va%core{
+            posix{"POSIX 變體"}
         }
     }
     Variants{

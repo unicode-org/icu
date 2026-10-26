@@ -10,6 +10,7 @@ package com.ibm.icu.dev.test.perf;
 
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 public class BreakIteratorPerformanceTest extends PerfTest {
 
@@ -98,14 +99,14 @@ public class BreakIteratorPerformanceTest extends PerfTest {
         iter.setText(fileContents);
 
         // produce a token list
-        ArrayList tokenList = new ArrayList();
+        List<String> tokenList = new ArrayList<>();
         int start = iter.first();
         for (int end = iter.next();
                 end != com.ibm.icu.text.BreakIterator.DONE;
                 start = end, end = iter.next()) tokenList.add(fileContents.substring(start, end));
 
         // return the token list as a string array
-        return (String[]) tokenList.toArray(new String[0]);
+        return tokenList.toArray(new String[0]);
     }
 
     private String[] init(java.text.BreakIterator iter) {
@@ -113,14 +114,14 @@ public class BreakIteratorPerformanceTest extends PerfTest {
         iter.setText(fileContents);
 
         // produce a token list
-        ArrayList tokenList = new ArrayList();
+        List<String> tokenList = new ArrayList<>();
         int start = iter.first();
         for (int end = iter.next();
                 end != com.ibm.icu.text.BreakIterator.DONE;
                 start = end, end = iter.next()) tokenList.add(fileContents.substring(start, end));
 
         // return the token list as a string array
-        return (String[]) tokenList.toArray(new String[0]);
+        return tokenList.toArray(new String[0]);
     }
 
     PerfTest.Function createTestICU(

@@ -325,7 +325,7 @@ gu{
                 "EEEE, d MMMM, G y",
                 "d MMMM, G y",
                 "d MMM, G y",
-                "d-MM- GGGGG y",
+                "d-MM GGGGG y",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -355,14 +355,14 @@ gu{
                 Md{"d/M"}
                 hm{"hh:mm a"}
                 hms{"hh:mm:ss a"}
-                yyyyM{"M/G y"}
-                yyyyMEd{"E, d/M/G y"}
+                yyyyM{"M G y"}
+                yyyyMEd{"E, d-MM G y"}
                 yyyyMM{"MM-y G"}
                 yyyyMMM{"MMM G y"}
                 yyyyMMMEd{"E, d MMM, G y"}
                 yyyyMMMM{"MMMM G y"}
                 yyyyMMMd{"d MMM, G y"}
-                yyyyMd{"d/M/G y"}
+                yyyyMd{"d-MM G y"}
                 yyyyQQQ{"QQQ G y"}
                 yyyyQQQQ{"QQQQ G y"}
             }
@@ -407,6 +407,10 @@ gu{
                 MMMEd{
                     M{"E, d MMM – E, d MMM"}
                     d{"E, d MMM – E, d MMM"}
+                }
+                MMMMd{
+                    M{"d MMMM – d MMMM"}
+                    d{"d – d MMMM"}
                 }
                 MMMd{
                     M{"d MMM – d MMM"}
@@ -481,9 +485,13 @@ gu{
                 GyM{"M/y G"}
                 GyMMM{"MMM, G y"}
                 GyMMMEd{"E, d MMM, G y"}
+                GyMMMM{"MMMM, G y"}
+                GyMMMMEd{"E, d MMMM, G y"}
+                GyMMMMd{"d MMMM, G y"}
                 GyMMMd{"d MMM, G y"}
                 MEd{"E, d/M"}
                 MMMEd{"E, d MMM"}
+                MMMMEd{"E, d MMMM"}
                 MMMMW{
                     one{"MMMMના W અઠવાડિયા"}
                     other{"MMMMના W અઠવાડિયા"}
@@ -498,6 +506,8 @@ gu{
                 yMMM{"MMM y"}
                 yMMMEd{"E, d MMM, y"}
                 yMMMM{"MMMM y"}
+                yMMMMEd{"E, d MMMM, y"}
+                yMMMMd{"d MMMM, y"}
                 yMMMd{"d MMM, y"}
                 yMd{"d/M/y"}
                 yw{
@@ -644,6 +654,10 @@ gu{
                 MMMEd{
                     M{"E, d MMM – E, d MMM"}
                     d{"E, d MMM – E, d MMM"}
+                }
+                MMMMd{
+                    M{"d MMMM – d MMMM"}
+                    d{"d – d MMMM"}
                 }
                 MMMd{
                     M{"d MMM – d MMM"}
@@ -794,19 +808,63 @@ gu{
             }
             monthNames{
                 format{
+                    abbreviated{
+                        "ચૈત્ર",
+                        "વૈશાખ",
+                        "જેઠ",
+                        "અષાઢ",
+                        "શ્રાવણ",
+                        "ભાદરવો",
+                        "આસો",
+                        "કારતક",
+                        "માગશર",
+                        "પોષ",
+                        "મહા",
+                        "ફાગણ",
+                    }
                     wide{
                         "ચૈત્ર",
                         "વૈશાખ",
-                        "જ્યેષ્ઠ",
+                        "જેઠ",
                         "અષાઢ",
                         "શ્રાવણ",
-                        "ભાદો",
-                        "અશ્વિન",
-                        "કાર્તિક",
-                        "અગ્રહાયણ",
+                        "ભાદરવો",
+                        "આસો",
+                        "કારતક",
+                        "માગશર",
                         "પોષ",
                         "મહા",
-                        "ફાલ્ગુન",
+                        "ફાગણ",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "ચૈત્ર",
+                        "વૈશાખ",
+                        "જેઠ",
+                        "અષાઢ",
+                        "શ્રાવણ",
+                        "ભાદરવો",
+                        "આસો",
+                        "કારતક",
+                        "માગશર",
+                        "પોષ",
+                        "મહા",
+                        "ફાગણ",
+                    }
+                    wide{
+                        "ચૈત્ર",
+                        "વૈશાખ",
+                        "જેઠ",
+                        "અષાઢ",
+                        "શ્રાવણ",
+                        "ભાદરવો",
+                        "આસો",
+                        "કારતક",
+                        "માગશર",
+                        "પોષ",
+                        "મહા",
+                        "ફાગણ",
                     }
                 }
             }
@@ -1033,9 +1091,6 @@ gu{
                 }
             }
         }
-        hour-narrow{
-            dn{"ક૰"}
-        }
         hour-short{
             dn{"ક૰"}
         }
@@ -1054,9 +1109,6 @@ gu{
                     other{"{0} મિનિટ પહેલાં"}
                 }
             }
-        }
-        minute-narrow{
-            dn{"મિ૰"}
         }
         minute-short{
             dn{"મિ૰"}

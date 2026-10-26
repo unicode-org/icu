@@ -1542,7 +1542,6 @@ de{
                         other{"{0} Newton"}
                     }
                 }
-                dnam{"Newton"}
                 gender{"neuter"}
                 one{"{0} Newton"}
                 other{"{0} Newton"}
@@ -3582,12 +3581,10 @@ de{
                 other{"{0}mol"}
             }
             ofglucose{
-                dnam{"Glc"}
                 one{"{0}Glc"}
                 other{"{0}Glc"}
             }
             part{
-                dnam{"Teil"}
                 one{"{0} Teil"}
                 other{"{0} Teil"}
             }
@@ -3695,18 +3692,6 @@ de{
                 one{"{0}A"}
                 other{"{0}A"}
             }
-            coulomb{
-                one{"{0} C"}
-                other{"{0} C"}
-            }
-            farad{
-                one{"{0} F"}
-                other{"{0} F"}
-            }
-            henry{
-                one{"{0} H"}
-                other{"{0} H"}
-            }
             milliampere{
                 one{"{0}mA"}
                 other{"{0}mA"}
@@ -3716,10 +3701,6 @@ de{
                 one{"{0}Ω"}
                 other{"{0}Ω"}
             }
-            siemens{
-                one{"{0} S"}
-                other{"{0} S"}
-            }
             volt{
                 dnam{"V"}
                 one{"{0}V"}
@@ -3728,13 +3709,8 @@ de{
         }
         energy{
             calorie-it{
-                dnam{"calIT"}
                 one{"{0}calIT"}
                 other{"{0}calIT"}
-            }
-            gray{
-                one{"{0} Gy"}
-                other{"{0} Gy"}
             }
             joule{
                 dnam{"J"}
@@ -3743,10 +3719,6 @@ de{
             }
             kilojoule{
                 dnam{"kJ"}
-            }
-            sievert{
-                one{"{0} Sv"}
-                other{"{0} Sv"}
             }
         }
         force{
@@ -3952,9 +3924,6 @@ de{
                 dnam{"Im.fl.oz"}
                 one{"{0} Im.fl.oz"}
                 other{"{0} Im.fl.oz"}
-            }
-            fluid-ounce-metric{
-                dnam{"fl.oz. m."}
             }
             gallon-imperial{
                 dnam{"Imp.gal"}

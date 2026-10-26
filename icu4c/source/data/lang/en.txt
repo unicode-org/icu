@@ -65,6 +65,7 @@ en{
         ang{"Old English"}
         ann{"Obolo"}
         anp{"Angika"}
+        apw{"Western Apache"}
         ar{"Arabic"}
         ar_001{"Modern Standard Arabic"}
         arc{"Aramaic"}
@@ -380,6 +381,7 @@ en{
         lil{"Lillooet"}
         liv{"Livonian"}
         lkt{"Lakota"}
+        lld{"Ladin"}
         lmo{"Lombard"}
         ln{"Lingala"}
         lo{"Lao"}
@@ -420,6 +422,7 @@ en{
         mh{"Marshallese"}
         mi{"Māori"}
         mic{"Mi'kmaw"}
+        mid{"Mandaic"}
         min{"Minangkabau"}
         mk{"Macedonian"}
         ml{"Malayalam"}
@@ -462,6 +465,7 @@ en{
         nmg{"Kwasio"}
         nn{"Norwegian Nynorsk"}
         nnh{"Ngiemboon"}
+        nnp{"Wancho"}
         no{"Norwegian"}
         nog{"Nogai"}
         non{"Old Norse"}
@@ -521,6 +525,7 @@ en{
         raj{"Rajasthani"}
         rap{"Rapanui"}
         rar{"Rarotongan"}
+        rej{"Rejang"}
         rgn{"Romagnol"}
         rhg{"Rohingya"}
         rif{"Riffian"}
@@ -544,7 +549,7 @@ en{
         saq{"Samburu"}
         sas{"Sasak"}
         sat{"Santali"}
-        saz{"Saurashtra"}
+        saz{"Sourashtra"}
         sba{"Ngambay"}
         sbp{"Sangu"}
         sc{"Sardinian"}
@@ -568,6 +573,9 @@ en{
         shu{"Chadian Arabic"}
         si{"Sinhala"}
         sid{"Sidamo"}
+        sjd{"Kildin Sami"}
+        sje{"Pite Sami"}
+        sju{"Ume Sami"}
         sk{"Slovak"}
         sl{"Slovenian"}
         slh{"Southern Lushootseed"}
@@ -747,6 +755,7 @@ en{
         oka{"Colville Salish"}
         pi{"Pāli"}
         ps{"Pushto"}
+        saz{"Saurashtra"}
         ug{"Uighur"}
     }
     Scripts{
@@ -888,6 +897,7 @@ en{
         Ougr{"Old Uyghur"}
         Palm{"Palmyrene"}
         Pauc{"Pau Cin Hau"}
+        Pcun{"Proto-Cuneiform"}
         Perm{"Old Permic"}
         Phag{"Phags-pa"}
         Phli{"Inscriptional Pahlavi"}
@@ -904,7 +914,8 @@ en{
         Samr{"Samaritan"}
         Sara{"Sarati"}
         Sarb{"Old South Arabian"}
-        Saur{"Saurashtra"}
+        Saur{"Sourashtra"}
+        Seal{"Seal"}
         Sgnw{"SignWriting"}
         Shaw{"Shavian"}
         Shrd{"Sharada"}
@@ -975,6 +986,7 @@ en{
     }
     Scripts%variant{
         Arab{"Perso-Arabic"}
+        Saur{"Saurashtra"}
     }
     Types{
         calendar{
@@ -1038,6 +1050,11 @@ en{
             no{"Sort Normal Case Order"}
             upper{"Sort Uppercase First"}
         }
+        colCaseFirst%core{
+            lower{"Lowercase"}
+            no{"Lowercase"}
+            upper{"Uppercase"}
+        }
         colCaseLevel{
             no{"Sort Case Insensitive"}
             yes{"Sort Case Sensitive"}
@@ -1057,12 +1074,26 @@ en{
             space{"Whitespace"}
             symbol{"Symbol"}
         }
+        colReorder%core{
+            currency{"Currency"}
+            digit{"Digits"}
+            punct{"Punctuation"}
+            space{"Whitespace"}
+            symbol{"Symbol"}
+        }
         colStrength{
             identical{"Sort All"}
             primary{"Sort Base Letters Only"}
             quaternary{"Sort Accents/Case/Width/Kana"}
             secondary{"Sort Accents"}
             tertiary{"Sort Accents/Case/Width"}
+        }
+        colStrength%core{
+            identical{"All"}
+            primary{"Base Letters Only"}
+            quaternary{"Base, Accents, Case, Variants, Kana"}
+            secondary{"Base, Accents"}
+            tertiary{"Base, Accents, Case, Variants"}
         }
         collation{
             compat{"Previous Sort Order, for compatibility"}
@@ -1146,12 +1177,16 @@ en{
             hybrid{"Hybrid"}
         }
         hc{
+            c12{"12 Hour System"}
+            c24{"24 Hour System"}
             h11{"12 Hour System (0–11)"}
             h12{"12 Hour System (1–12)"}
             h23{"24 Hour System (0–23)"}
             h24{"24 Hour System (1–24)"}
         }
         hc%core{
+            c12{"12"}
+            c24{"24"}
             h11{"12 (0–11)"}
             h12{"12 (1–12)"}
             h23{"24 (0–23)"}
@@ -1359,7 +1394,7 @@ en{
             rohg{"Hanifi Rohingya digits"}
             roman{"Roman Numerals"}
             romanlow{"Roman Lowercase Numerals"}
-            saur{"Saurashtra Digits"}
+            saur{"Sourashtra Digits"}
             segment{"Segmented Digits"}
             shrd{"Sharada Digits"}
             sind{"Khudawadi Digits"}
@@ -1447,6 +1482,9 @@ en{
     Types%variant{
         calendar{
             iso8601{"ISO 8601 Weeks"}
+        }
+        numbers{
+            saur{"Saurashtra Digits"}
         }
     }
     Variants{

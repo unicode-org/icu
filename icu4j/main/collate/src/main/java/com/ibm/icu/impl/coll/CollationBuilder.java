@@ -913,7 +913,7 @@ public final class CollationBuilder extends CollationRuleParser.Sink {
     // This value is needed for compiling a rule with eight Hangul syllables such as
     // "&a=b쫊쫊쫊쫊쫊쫊쫊쫊" without error, which should be more than realistic
     // usage.
-    private static int kClosureLoopLimit = 6560;
+    private static int kClosureLoopLimit = 2400;
 
     private int addOnlyClosure(
             CharSequence nfdPrefix,
@@ -1588,7 +1588,7 @@ public final class CollationBuilder extends CollationRuleParser.Sink {
     }
 
     private static long nodeFromNextIndex(int next) {
-        return next << 8;
+        return (long) next << 8;
     }
 
     private static long nodeFromStrength(int strength) {

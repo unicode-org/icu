@@ -22,7 +22,6 @@ es{
                 range{"{0}-{1}"}
             }
             patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
                 currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
                 percentFormat{"#,##0 %"}
@@ -192,7 +191,8 @@ es{
                 masculine{"El {0} es…"}
             }
             ordinal{
-                other{"Toma la {0}.ª a la derecha."}
+                one{"El {0}.ᵉʳ equipo clasificado ganó."}
+                other{"El {0}.º equipo clasificado ganó."}
             }
             plural{
                 many{"{0} de días"}
@@ -344,7 +344,7 @@ es{
                 GyMMMMd{"d 'de' MMMM 'de' y G"}
                 GyMMMd{"d MMM y G"}
                 GyMd{"d/M/y GGGGG"}
-                Hv{"H 'h' v"}
+                Hv{"H v"}
                 MEd{"E, d/M"}
                 MMMEd{"E, d MMM"}
                 MMMMEd{"E, d 'de' MMMM"}
@@ -427,6 +427,10 @@ es{
                 MMMEd{
                     M{"E, d 'de' MMM – E, d 'de' MMM"}
                     d{"E, d 'de' MMM – E, d 'de' MMM"}
+                }
+                MMMMd{
+                    M{"d 'de' MMMM – d 'de' MMMM"}
+                    d{"d–d 'de' MMMM"}
                 }
                 MMMd{
                     M{"d 'de' MMM – d 'de' MMM"}
@@ -529,6 +533,11 @@ es{
                 "yMMMd",
                 "yyMd",
             }
+            appendItems{
+                Day-Of-Week{"{1}, {0}"}
+                Era{"{0} {1}"}
+                Time-Day-Of-Week{"{1}, {0}"}
+            }
             availableFormats{
                 EHm{"E, H:mm"}
                 EHms{"E, H:mm:ss"}
@@ -551,7 +560,7 @@ es{
                 Hmsv{"H:mm:ss v"}
                 Hmsvvvv{"H:mm:ss (vvvv)"}
                 Hmv{"H:mm v"}
-                Hv{"H 'h' v"}
+                Hv{"H v"}
                 MEd{"E, d/M"}
                 MMMEd{"E, d MMM"}
                 MMMMEd{"E, d 'de' MMMM"}
@@ -570,12 +579,12 @@ es{
                 hmsvvvv{"h:mm:ss a (vvvv)"}
                 hmv{"h:mm a v"}
                 yM{"M/y"}
-                yMEd{"EEE, d/M/y"}
+                yMEd{"E, d/M/y"}
                 yMM{"M/y"}
                 yMMM{"MMM y"}
-                yMMMEd{"EEE, d MMM y"}
+                yMMMEd{"E, d MMM y"}
                 yMMMM{"MMMM 'de' y"}
-                yMMMMEd{"EEE, d 'de' MMMM 'de' y"}
+                yMMMMEd{"E, d 'de' MMMM 'de' y"}
                 yMMMMd{"d 'de' MMMM 'de' y"}
                 yMMMd{"d MMM y"}
                 yMd{"d/M/y"}

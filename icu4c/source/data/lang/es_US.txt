@@ -3,6 +3,11 @@
 // Generated using tools/cldr/cldr-to-icu/
 es_US{
     %%Parent{"es_419"}
+    Keys{
+        colReorder{"reordenamiento de secuencia comandos/bloques"}
+        dx{"exclusiones del diccionario"}
+        t0{"traducción automática"}
+    }
     Languages{
         ace{"acehnés"}
         alt{"altái meridional"}
@@ -45,7 +50,6 @@ es_US{
         ojb{"ojibwa del noroeste"}
         ojw{"ojibwa del oeste"}
         pis{"pijín"}
-        rm{"romanche"}
         se{"sami del norte"}
         shu{"árabe chadiano"}
         slh{"lushootseed del sur"}
@@ -61,6 +65,9 @@ es_US{
         tyv{"tuviniano"}
         wal{"wolayta"}
         xnr{"dogrí"}
+    }
+    Languages%core{
+        ku{"kurdo"}
     }
     Languages%extension{
         ku{"kurdo kurmanyi"}
@@ -80,11 +87,19 @@ es_US{
         }
         calendar%core{
             dangi{"coreano"}
+            indian{"calendario nacional de la India"}
+            islamic-rgsa{"hijri, avistamiento en Arabia Saudita"}
             roc{"chino"}
+        }
+        colStrength%core{
+            identical{"todos"}
+            primary{"orden solo por raíz alfabética"}
+            quaternary{"raíz, acentos, formato, variantes, Kana"}
+            secondary{"raíz, acentos"}
+            tertiary{"raíz, acentos, formato, variantes"}
         }
         collation%core{
             ducet{"predeterminado Unicode"}
-            phonetic{"fonético"}
             pinyin{"sistema piyin"}
             stroke{"trazos"}
             unihan{"trazos radicales"}
@@ -92,6 +107,12 @@ es_US{
         }
         em%core{
             emoji{"emoticón"}
+        }
+        kv%core{
+            currency{"espacios, signos de puntuación y todos los símbolos"}
+            punct{"espacios y signos de puntuación"}
+            space{"espacios y signos de puntuación"}
+            symbol{"espacios, signos de puntuación y símbolos no monetarios"}
         }
         lw%core{
             breakall{"dividir todo"}
@@ -106,9 +127,18 @@ es_US{
             mtei{"dígitos meetei mayek"}
             olck{"dígitos ol chiki"}
         }
+        numbers%core{
+            arabext{"dígitos indoarábigos extendidos"}
+            armnlow{"minúscula armenia"}
+            greklow{"minúscula griega"}
+            jpanyear{"numeración japonesa Gannen del primer año"}
+        }
         ss%core{
             none{"desactivado"}
             standard{"activado"}
+        }
+        t0{
+            und{"traducción automática sin especificar"}
         }
     }
     characterLabelPattern{

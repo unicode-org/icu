@@ -10,6 +10,7 @@
 package com.ibm.icu.dev.tool.localeconverter;
 
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 
 /* ICU is not endian portable, because ICU data generated on big endian machines can be
  * ported to big endian machines but not to little endian machines and vice versa. The
@@ -59,7 +60,7 @@ public class CalculateCRC32 {
     }
 
     public static int computeCRC32(String buffer, int crc) {
-        return computeCRC32(buffer.getBytes(), crc);
+        return computeCRC32(buffer.getBytes(StandardCharsets.UTF_8), crc);
     }
 
     public static int computeCRC32(byte buffer[], int crc) {

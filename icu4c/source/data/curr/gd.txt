@@ -267,10 +267,6 @@ gd{
             "CNH",
             "Yuan Sìneach (far-thìreach)",
         }
-        CNX{
-            "CNX",
-            "Dolar an t-sluagh-bhanca Shìnich",
-        }
         CNY{
             "CN¥",
             "Yuan Sìneach",
@@ -1634,12 +1630,6 @@ gd{
             one{"yuan Sìneach (far-thìreach)"}
             other{"yuan Sìneach (far-thìreach)"}
             two{"yuan Sìneach (far-thìreach)"}
-        }
-        CNX{
-            few{"dolaran an t-sluagh-bhanca Shìnich"}
-            one{"dolar an t-sluagh-bhanca Shìnich"}
-            other{"dolar an t-sluagh-bhanca Shìnich"}
-            two{"dholar an t-sluagh-bhanca Shìnich"}
         }
         CNY{
             few{"yuan Sìneach"}
@@ -3062,12 +3052,6 @@ gd{
             one{"dolar Sìombabuthach (1980–2008)"}
             other{"dolar Sìombabuthach (1980–2008)"}
             two{"dholar Sìombabuthach (1980–2008)"}
-        }
-        ZWG{
-            few{"Òr Sìombabuthach"}
-            one{"Òr Sìombabuthach"}
-            other{"Òr Sìombabuthach"}
-            two{"Òr Sìombabuthach"}
         }
         ZWL{
             few{"dolaran Sìombabuthach (2009)"}

@@ -40,7 +40,7 @@ public class MessageFormat2Test extends CoreTestFmwk {
     @Test
     public void test() {
         MessageFormatter mf2 = MessageFormatter.builder().setPattern("Hello World!").build();
-        assertEquals("simple message", "Hello World!", mf2.formatToString(Args.NONE));
+        assertEquals("simple message", "Hello World!", mf2.formatToString(Map.of()));
     }
 
     @Test
@@ -53,7 +53,7 @@ public class MessageFormat2Test extends CoreTestFmwk {
         assertEquals(
                 "date format",
                 "Your card expires on Thu, Oct 27, 2022!",
-                mf2.formatToString(Args.of("exp", expiration)));
+                mf2.formatToString(Map.of("exp", expiration)));
 
         mf2 =
                 MessageFormatter.builder()
@@ -63,7 +63,7 @@ public class MessageFormat2Test extends CoreTestFmwk {
         assertEquals(
                 "date format",
                 "Your card expires on Thu, Oct 27, 2022!",
-                mf2.formatToString(Args.of("exp", expiration)));
+                mf2.formatToString(Map.of("exp", expiration)));
 
         Calendar cal = new GregorianCalendar(2022, Calendar.OCTOBER, 27);
         mf2 =
@@ -73,18 +73,18 @@ public class MessageFormat2Test extends CoreTestFmwk {
         assertEquals(
                 "date format",
                 "Your card expires on Thu, Oct 27, 2022!",
-                mf2.formatToString(Args.of("exp", cal)));
+                mf2.formatToString(Map.of("exp", cal)));
 
         // Implied function based on type of the object to format
         mf2 = MessageFormatter.builder().setPattern("Your card expires on {$exp}!").build();
         assertEquals(
                 "date format",
                 "Your card expires on Thu, Oct 27, 2022, 12:00\u202FAM!",
-                mf2.formatToString(Args.of("exp", expiration)));
+                mf2.formatToString(Map.of("exp", expiration)));
         assertEquals(
                 "date format",
                 "Your card expires on Thu, Oct 27, 2022, 12:00\u202FAM!",
-                mf2.formatToString(Args.of("exp", cal)));
+                mf2.formatToString(Map.of("exp", cal)));
 
         // Implied function based on type of the object to format
         // This is a calendar that is not explicitly added to the registry.
@@ -97,7 +97,7 @@ public class MessageFormat2Test extends CoreTestFmwk {
         assertEquals(
                 "date format",
                 "Your card expires on Wed, Oct 27, 1479!",
-                mf2.formatToString(Args.of("exp", calNotRegistered)));
+                mf2.formatToString(Map.of("exp", calNotRegistered)));
 
         mf2 =
                 MessageFormatter.builder()
@@ -106,7 +106,7 @@ public class MessageFormat2Test extends CoreTestFmwk {
         assertEquals(
                 "date format",
                 "Your card expires on Wed, Oct 27, 1479!",
-                mf2.formatToString(Args.of("exp", calNotRegistered)));
+                mf2.formatToString(Map.of("exp", calNotRegistered)));
 
         // Test the overrides
         cal = new GregorianCalendar(2025, Calendar.SEPTEMBER, 23, 19, 42, 51);
@@ -122,7 +122,7 @@ public class MessageFormat2Test extends CoreTestFmwk {
         assertEquals(
                 "date format",
                 "Date time: Tue, Sep 23, 2025, 7:42\u202FPM",
-                mf2.formatToString(Args.of("exp", cal)));
+                mf2.formatToString(Map.of("exp", cal)));
         // Force 24h clock
         mf2 =
                 MessageFormatter.builder()
@@ -135,7 +135,7 @@ public class MessageFormat2Test extends CoreTestFmwk {
         assertEquals(
                 "date format",
                 "Date time: Tue, Sep 23, 2025, 19:42",
-                mf2.formatToString(Args.of("exp", cal)));
+                mf2.formatToString(Map.of("exp", cal)));
         // Force 12h clock
         mf2 =
                 MessageFormatter.builder()
@@ -148,7 +148,7 @@ public class MessageFormat2Test extends CoreTestFmwk {
         assertEquals(
                 "date format",
                 "Date time: mar. 23 sept. 2025, 7:42\u202FPM",
-                mf2.formatToString(Args.of("exp", cal)));
+                mf2.formatToString(Map.of("exp", cal)));
         // Force timezone
         mf2 =
                 MessageFormatter.builder()
@@ -161,7 +161,7 @@ public class MessageFormat2Test extends CoreTestFmwk {
         assertEquals(
                 "date format",
                 "Date time: Tue, Sep 23, 2025, 10:42\u202fPM Eastern Daylight Time",
-                mf2.formatToString(Args.of("exp", cal.getTime())));
+                mf2.formatToString(Map.of("exp", cal.getTime())));
         mf2 =
                 MessageFormatter.builder()
                         .setPattern(
@@ -173,7 +173,7 @@ public class MessageFormat2Test extends CoreTestFmwk {
         assertEquals(
                 "date format",
                 "Date time: Tue, Sep 23, 2025, 4:42\u202fPM HST",
-                mf2.formatToString(Args.of("exp", cal.getTime())));
+                mf2.formatToString(Map.of("exp", cal.getTime())));
         // Force calendar
         mf2 =
                 MessageFormatter.builder()
@@ -186,7 +186,7 @@ public class MessageFormat2Test extends CoreTestFmwk {
         assertEquals(
                 "date format",
                 "Date time: Rab. II 2, 1447 AH, 7:42\u202FPM",
-                mf2.formatToString(Args.of("exp", cal)));
+                mf2.formatToString(Map.of("exp", cal)));
     }
 
     @Test
@@ -200,9 +200,9 @@ public class MessageFormat2Test extends CoreTestFmwk {
 
         MessageFormatter mf2 = MessageFormatter.builder().setPattern(message).build();
         assertEquals(
-                "plural", "You have one notification.", mf2.formatToString(Args.of("count", 1)));
+                "plural", "You have one notification.", mf2.formatToString(Map.of("count", 1)));
         assertEquals(
-                "plural", "You have 42 notifications.", mf2.formatToString(Args.of("count", 42)));
+                "plural", "You have 42 notifications.", mf2.formatToString(Map.of("count", 42)));
     }
 
     @Test
@@ -221,31 +221,31 @@ public class MessageFormat2Test extends CoreTestFmwk {
 
         MessageFormatter mf2 = MessageFormatter.builder().setPattern(message).build();
         assertEquals(
-                "selectordinal", "You got the gold medal", mf2.formatToString(Args.of("place", 1)));
+                "selectordinal", "You got the gold medal", mf2.formatToString(Map.of("place", 1)));
         assertEquals(
                 "selectordinal",
                 "You got the silver medal",
-                mf2.formatToString(Args.of("place", 2)));
+                mf2.formatToString(Map.of("place", 2)));
         assertEquals(
                 "selectordinal",
                 "You got the bronze medal",
-                mf2.formatToString(Args.of("place", 3)));
+                mf2.formatToString(Map.of("place", 3)));
         assertEquals(
                 "selectordinal",
                 "You got in the 21st place",
-                mf2.formatToString(Args.of("place", 21)));
+                mf2.formatToString(Map.of("place", 21)));
         assertEquals(
                 "selectordinal",
                 "You got in the 32nd place",
-                mf2.formatToString(Args.of("place", 32)));
+                mf2.formatToString(Map.of("place", 32)));
         assertEquals(
                 "selectordinal",
                 "You got in the 23rd place",
-                mf2.formatToString(Args.of("place", 23)));
+                mf2.formatToString(Map.of("place", 23)));
         assertEquals(
                 "selectordinal",
                 "You got in the 15th place",
-                mf2.formatToString(Args.of("place", 15)));
+                mf2.formatToString(Map.of("place", 15)));
     }
 
     static class TemperatureFunctionFactory implements FunctionFactory {
@@ -255,7 +255,7 @@ public class MessageFormat2Test extends CoreTestFmwk {
         int cFormatterCount = 0;
 
         @Override
-        public Function create(Locale locale, Map<String, Object> fixedOptions) {
+        public Function create(Locale locale, Map<String, ?> fixedOptions) {
             // Check that the formatter can only see the fixed options
             Assert.assertTrue(fixedOptions.containsKey("icu:skeleton"));
             Assert.assertFalse(fixedOptions.containsKey("icu:unit"));
@@ -282,13 +282,12 @@ public class MessageFormat2Test extends CoreTestFmwk {
             }
 
             @Override
-            public String formatToString(Object toFormat, Map<String, Object> variableOptions) {
+            public String formatToString(Object toFormat, Map<String, ?> variableOptions) {
                 return this.format(toFormat, variableOptions).toString();
             }
 
             @Override
-            public FormattedPlaceholder format(
-                    Object toFormat, Map<String, Object> variableOptions) {
+            public FormattedPlaceholder format(Object toFormat, Map<String, ?> variableOptions) {
                 // Check that the formatter can only see the variable options
                 Assert.assertFalse(variableOptions.containsKey("skeleton"));
                 Assert.assertTrue(variableOptions.containsKey("unit"));
@@ -350,11 +349,11 @@ public class MessageFormat2Test extends CoreTestFmwk {
             assertEquals(
                     "cached formatter",
                     "Testing " + count + "°C.",
-                    mf2.formatToString(Args.of("count", count, "unit", "C")));
+                    mf2.formatToString(Map.of("count", count, "unit", "C")));
             assertEquals(
                     "cached formatter",
                     "Testing " + count + "°F.",
-                    mf2.formatToString(Args.of("count", count, "unit", "F")));
+                    mf2.formatToString(Map.of("count", count, "unit", "F")));
         }
 
         // Check that the constructor was only called once,
@@ -368,19 +367,19 @@ public class MessageFormat2Test extends CoreTestFmwk {
         assertEquals(
                 "cached formatter",
                 "Testing 12°C.",
-                mf2.formatToString(Args.of("count", 12, "unit", "C")));
+                mf2.formatToString(Map.of("count", 12, "unit", "C")));
         assertEquals(
                 "cached formatter",
                 "Testing 12.50°F.",
-                mf2.formatToString(Args.of("count", 12.5, "unit", "F")));
+                mf2.formatToString(Map.of("count", 12.5, "unit", "F")));
         assertEquals(
                 "cached formatter",
                 "Testing 12.54°C.",
-                mf2.formatToString(Args.of("count", 12.54, "unit", "C")));
+                mf2.formatToString(Map.of("count", 12.54, "unit", "C")));
         assertEquals(
                 "cached formatter",
                 "Testing 12.54°F.",
-                mf2.formatToString(Args.of("count", 12.54321, "unit", "F")));
+                mf2.formatToString(Map.of("count", 12.54321, "unit", "F")));
 
         message = "Testing {$count :temp unit=$unit icu:skeleton=|.0/w|}.";
         mf2 = MessageFormatter.builder().setFunctionRegistry(registry).setPattern(message).build();
@@ -388,19 +387,19 @@ public class MessageFormat2Test extends CoreTestFmwk {
         assertEquals(
                 "cached formatter",
                 "Testing 12°C.",
-                mf2.formatToString(Args.of("count", 12, "unit", "C")));
+                mf2.formatToString(Map.of("count", 12, "unit", "C")));
         assertEquals(
                 "cached formatter",
                 "Testing 12.5°F.",
-                mf2.formatToString(Args.of("count", 12.5, "unit", "F")));
+                mf2.formatToString(Map.of("count", 12.5, "unit", "F")));
         assertEquals(
                 "cached formatter",
                 "Testing 12.5°C.",
-                mf2.formatToString(Args.of("count", 12.54, "unit", "C")));
+                mf2.formatToString(Map.of("count", 12.54, "unit", "C")));
         assertEquals(
                 "cached formatter",
                 "Testing 12.5°F.",
-                mf2.formatToString(Args.of("count", 12.54321, "unit", "F")));
+                mf2.formatToString(Map.of("count", 12.54321, "unit", "F")));
     }
 
     @Test
@@ -415,20 +414,20 @@ public class MessageFormat2Test extends CoreTestFmwk {
                         + " * one {{Anna, Bob, and {$offsetCount} other guest}}\n"
                         + " * *   {{Anna, Bob, and {$offsetCount} other guests}}";
         MessageFormatter mf2 = MessageFormatter.builder().setPattern(message).build();
-        assertEquals("plural with offset", "Anna", mf2.formatToString(Args.of("count", 1)));
-        assertEquals("plural with offset", "Anna and Bob", mf2.formatToString(Args.of("count", 2)));
+        assertEquals("plural with offset", "Anna", mf2.formatToString(Map.of("count", 1)));
+        assertEquals("plural with offset", "Anna and Bob", mf2.formatToString(Map.of("count", 2)));
         assertEquals(
                 "plural with offset",
                 "Anna, Bob, and 1 other guest",
-                mf2.formatToString(Args.of("count", 3)));
+                mf2.formatToString(Map.of("count", 3)));
         assertEquals(
                 "plural with offset",
                 "Anna, Bob, and 2 other guests",
-                mf2.formatToString(Args.of("count", 4)));
+                mf2.formatToString(Map.of("count", 4)));
         assertEquals(
                 "plural with offset",
                 "Anna, Bob, and 10 other guests",
-                mf2.formatToString(Args.of("count", 12)));
+                mf2.formatToString(Map.of("count", 12)));
     }
 
     @Test
@@ -441,9 +440,9 @@ public class MessageFormat2Test extends CoreTestFmwk {
                         + " one {{{$foo} dollar}}\n"
                         + " *   {{{$foo} dollars}}";
         MessageFormatter mf2 = MessageFormatter.builder().setPattern(message).build();
-        assertEquals("plural with offset", "Last dollar", mf2.formatToString(Args.of("amount", 1)));
-        assertEquals("plural with offset", "2 dollars", mf2.formatToString(Args.of("amount", 2)));
-        assertEquals("plural with offset", "3 dollars", mf2.formatToString(Args.of("amount", 3)));
+        assertEquals("plural with offset", "Last dollar", mf2.formatToString(Map.of("amount", 1)));
+        assertEquals("plural with offset", "2 dollars", mf2.formatToString(Map.of("amount", 2)));
+        assertEquals("plural with offset", "3 dollars", mf2.formatToString(Map.of("amount", 3)));
     }
 
     @Test
@@ -456,9 +455,9 @@ public class MessageFormat2Test extends CoreTestFmwk {
                         + " one {{{$foo} dollar}}\n"
                         + " *   {{{$foo} dollars}}";
         MessageFormatter mf2 = MessageFormatter.builder().setPattern(message).build();
-        assertEquals("plural with offset", "Last dollar", mf2.formatToString(Args.of("amount", 1)));
-        assertEquals("plural with offset", "2 dollars", mf2.formatToString(Args.of("amount", 2)));
-        assertEquals("plural with offset", "3 dollars", mf2.formatToString(Args.of("amount", 3)));
+        assertEquals("plural with offset", "Last dollar", mf2.formatToString(Map.of("amount", 1)));
+        assertEquals("plural with offset", "2 dollars", mf2.formatToString(Map.of("amount", 2)));
+        assertEquals("plural with offset", "3 dollars", mf2.formatToString(Map.of("amount", 3)));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -487,19 +486,19 @@ public class MessageFormat2Test extends CoreTestFmwk {
                         + " * *   {{A, B, and {$offsetCount} more characters}}";
         MessageFormatter mfVar = MessageFormatter.builder().setPattern(messageVar).build();
         assertEquals(
-                "test local vars loop", "A", mfVar.formatToString(Args.of("count", 1, "delta", 2)));
+                "test local vars loop", "A", mfVar.formatToString(Map.of("count", 1, "delta", 2)));
         assertEquals(
                 "test local vars loop",
                 "A and B",
-                mfVar.formatToString(Args.of("count", 2, "delta", 2)));
+                mfVar.formatToString(Map.of("count", 2, "delta", 2)));
         assertEquals(
                 "test local vars loop",
                 "A, B, and 1 more character",
-                mfVar.formatToString(Args.of("count", 3, "delta", 2)));
+                mfVar.formatToString(Map.of("count", 3, "delta", 2)));
         assertEquals(
                 "test local vars loop",
                 "A, B, and 5 more characters",
-                mfVar.formatToString(Args.of("count", 7, "delta", 2)));
+                mfVar.formatToString(Map.of("count", 7, "delta", 2)));
 
         String messageVar2 =
                 ""
@@ -513,54 +512,54 @@ public class MessageFormat2Test extends CoreTestFmwk {
         assertEquals(
                 "test local vars loop",
                 "Exactly 1",
-                mfVar2.formatToString(Args.of("count", 1, "delta", 0)));
+                mfVar2.formatToString(Map.of("count", 1, "delta", 0)));
         assertEquals(
                 "test local vars loop",
                 "Exactly 1",
-                mfVar2.formatToString(Args.of("count", 1, "delta", 1)));
+                mfVar2.formatToString(Map.of("count", 1, "delta", 1)));
         assertEquals(
                 "test local vars loop",
                 "Exactly 1",
-                mfVar2.formatToString(Args.of("count", 1, "delta", 2)));
+                mfVar2.formatToString(Map.of("count", 1, "delta", 2)));
 
         assertEquals(
                 "test local vars loop",
                 "Exactly 2",
-                mfVar2.formatToString(Args.of("count", 2, "delta", 0)));
+                mfVar2.formatToString(Map.of("count", 2, "delta", 0)));
         assertEquals(
                 "test local vars loop",
                 "Exactly 2",
-                mfVar2.formatToString(Args.of("count", 2, "delta", 1)));
+                mfVar2.formatToString(Map.of("count", 2, "delta", 1)));
         assertEquals(
                 "test local vars loop",
                 "Exactly 2",
-                mfVar2.formatToString(Args.of("count", 2, "delta", 2)));
+                mfVar2.formatToString(Map.of("count", 2, "delta", 2)));
 
         assertEquals(
                 "test local vars loop",
                 "Count = 3 and delta=0.",
-                mfVar2.formatToString(Args.of("count", 3, "delta", 0)));
+                mfVar2.formatToString(Map.of("count", 3, "delta", 0)));
         assertEquals(
                 "test local vars loop",
                 "Count = 2 and delta=1.",
-                mfVar2.formatToString(Args.of("count", 3, "delta", 1)));
+                mfVar2.formatToString(Map.of("count", 3, "delta", 1)));
         assertEquals(
                 "test local vars loop",
                 "Count = 1 and delta=2.",
-                mfVar2.formatToString(Args.of("count", 3, "delta", 2)));
+                mfVar2.formatToString(Map.of("count", 3, "delta", 2)));
 
         assertEquals(
                 "test local vars loop",
                 "Count = 23 and delta=0.",
-                mfVar2.formatToString(Args.of("count", 23, "delta", 0)));
+                mfVar2.formatToString(Map.of("count", 23, "delta", 0)));
         assertEquals(
                 "test local vars loop",
                 "Count = 22 and delta=1.",
-                mfVar2.formatToString(Args.of("count", 23, "delta", 1)));
+                mfVar2.formatToString(Map.of("count", 23, "delta", 1)));
         assertEquals(
                 "test local vars loop",
                 "Count = 21 and delta=2.",
-                mfVar2.formatToString(Args.of("count", 23, "delta", 2)));
+                mfVar2.formatToString(Map.of("count", 23, "delta", 2)));
     }
 
     @Test
@@ -575,16 +574,16 @@ public class MessageFormat2Test extends CoreTestFmwk {
                         + " * one {{A, B, and {$offCount} more character}}\n"
                         + " * *   {{A, B, and {$offCount} more characters}}";
         MessageFormatter mfFix = MessageFormatter.builder().setPattern(messageFix).build();
-        assertEquals("test local vars loop", "A", mfFix.formatToString(Args.of("count", 1)));
-        assertEquals("test local vars loop", "A and B", mfFix.formatToString(Args.of("count", 2)));
+        assertEquals("test local vars loop", "A", mfFix.formatToString(Map.of("count", 1)));
+        assertEquals("test local vars loop", "A and B", mfFix.formatToString(Map.of("count", 2)));
         assertEquals(
                 "test local vars loop",
                 "A, B, and 1 more character",
-                mfFix.formatToString(Args.of("count", 3)));
+                mfFix.formatToString(Map.of("count", 3)));
         assertEquals(
                 "test local vars loop",
                 "A, B, and 5 more characters",
-                mfFix.formatToString(Args.of("count", 7)));
+                mfFix.formatToString(Map.of("count", 7)));
 
         String messageVar =
                 ""
@@ -597,19 +596,19 @@ public class MessageFormat2Test extends CoreTestFmwk {
                         + " * *   {{A, B, and {$offCount} more characters}}";
         MessageFormatter mfVar = MessageFormatter.builder().setPattern(messageVar).build();
         assertEquals(
-                "test local vars loop", "A", mfVar.formatToString(Args.of("count", 1, "delta", 2)));
+                "test local vars loop", "A", mfVar.formatToString(Map.of("count", 1, "delta", 2)));
         assertEquals(
                 "test local vars loop",
                 "A and B",
-                mfVar.formatToString(Args.of("count", 2, "delta", 2)));
+                mfVar.formatToString(Map.of("count", 2, "delta", 2)));
         assertEquals(
                 "test local vars loop",
                 "A, B, and 1 more character",
-                mfVar.formatToString(Args.of("count", 3, "delta", 2)));
+                mfVar.formatToString(Map.of("count", 3, "delta", 2)));
         assertEquals(
                 "test local vars loop",
                 "A, B, and 5 more characters",
-                mfVar.formatToString(Args.of("count", 7, "delta", 2)));
+                mfVar.formatToString(Map.of("count", 7, "delta", 2)));
 
         String messageVar2 =
                 ""
@@ -623,61 +622,61 @@ public class MessageFormat2Test extends CoreTestFmwk {
         assertEquals(
                 "test local vars loop",
                 "Exactly 1",
-                mfVar2.formatToString(Args.of("count", 1, "delta", 0)));
+                mfVar2.formatToString(Map.of("count", 1, "delta", 0)));
         assertEquals(
                 "test local vars loop",
                 "Exactly 1",
-                mfVar2.formatToString(Args.of("count", 1, "delta", 1)));
+                mfVar2.formatToString(Map.of("count", 1, "delta", 1)));
         assertEquals(
                 "test local vars loop",
                 "Exactly 1",
-                mfVar2.formatToString(Args.of("count", 1, "delta", 2)));
+                mfVar2.formatToString(Map.of("count", 1, "delta", 2)));
 
         assertEquals(
                 "test local vars loop",
                 "Exactly 2",
-                mfVar2.formatToString(Args.of("count", 2, "delta", 0)));
+                mfVar2.formatToString(Map.of("count", 2, "delta", 0)));
         assertEquals(
                 "test local vars loop",
                 "Exactly 2",
-                mfVar2.formatToString(Args.of("count", 2, "delta", 1)));
+                mfVar2.formatToString(Map.of("count", 2, "delta", 1)));
         assertEquals(
                 "test local vars loop",
                 "Exactly 2",
-                mfVar2.formatToString(Args.of("count", 2, "delta", 2)));
+                mfVar2.formatToString(Map.of("count", 2, "delta", 2)));
 
         assertEquals(
                 "test local vars loop",
                 "Count = 3, OffCount = 3, and delta=0.",
-                mfVar2.formatToString(Args.of("count", 3, "delta", 0)));
+                mfVar2.formatToString(Map.of("count", 3, "delta", 0)));
         assertEquals(
                 "test local vars loop",
                 "Count = 3, OffCount = 2, and delta=1.",
-                mfVar2.formatToString(Args.of("count", 3, "delta", 1)));
+                mfVar2.formatToString(Map.of("count", 3, "delta", 1)));
         assertEquals(
                 "test local vars loop",
                 "Count = 3, OffCount = 1, and delta=2.",
-                mfVar2.formatToString(Args.of("count", 3, "delta", 2)));
+                mfVar2.formatToString(Map.of("count", 3, "delta", 2)));
 
         assertEquals(
                 "test local vars loop",
                 "Count = 23, OffCount = 23, and delta=0.",
-                mfVar2.formatToString(Args.of("count", 23, "delta", 0)));
+                mfVar2.formatToString(Map.of("count", 23, "delta", 0)));
         assertEquals(
                 "test local vars loop",
                 "Count = 23, OffCount = 22, and delta=1.",
-                mfVar2.formatToString(Args.of("count", 23, "delta", 1)));
+                mfVar2.formatToString(Map.of("count", 23, "delta", 1)));
         assertEquals(
                 "test local vars loop",
                 "Count = 23, OffCount = 21, and delta=2.",
-                mfVar2.formatToString(Args.of("count", 23, "delta", 2)));
+                mfVar2.formatToString(Map.of("count", 23, "delta", 2)));
     }
 
     // Needs more tests. Ported from the equivalent test in ICU4C
     @Test
     public void testFormatterAPI() {
         String result;
-        Map<String, Object> messageArguments = new HashMap<>();
+        Map<String, ?> messageArguments = new HashMap<>();
 
         // Check that constructing the function fails
         // if there's a syntax error

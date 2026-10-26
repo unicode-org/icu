@@ -228,11 +228,6 @@ ka{
                 one{"{0} გიგაბიტი"}
                 other{"{0} გიგაბიტი"}
             }
-            gigabyte{
-                dnam{"გიგაბაიტი"}
-                one{"{0} გიგაბაიტი"}
-                other{"{0} გიგაბაიტი"}
-            }
             kilobit{
                 dnam{"კილობიტი"}
                 one{"{0} კილობიტი"}
@@ -246,11 +241,6 @@ ka{
                 dnam{"მეგაბიტი"}
                 one{"{0} მეგაბიტი"}
                 other{"{0} მეგაბიტი"}
-            }
-            megabyte{
-                dnam{"მეგაბაიტი"}
-                one{"{0} მეგაბაიტი"}
-                other{"{0} მეგაბაიტი"}
             }
             petabyte{
                 one{"{0} პბაიტი"}
@@ -979,33 +969,8 @@ ka{
                 one{"{0} წმ"}
                 other{"{0} წმ"}
             }
-            steradian{
-                dnam{"სრ"}
-                one{"{0} სრ"}
-                other{"{0} სრ"}
-            }
         }
         concentr{
-            katal{
-                dnam{"კატ"}
-                one{"{0} კატ"}
-                other{"{0} კატ"}
-            }
-            mole{
-                dnam{"მოლ"}
-                one{"{0} მოლ"}
-                other{"{0} მოლ"}
-            }
-            ofglucose{
-                dnam{"Glc"}
-                one{"{0} Glc"}
-                other{"{0} Glc"}
-            }
-            part{
-                dnam{"წ."}
-                one{"{0} წ."}
-                other{"{0} წ."}
-            }
             part-per-1e9{
                 dnam{"ნ/მ"}
             }
@@ -1047,21 +1012,6 @@ ka{
             }
         }
         electric{
-            coulomb{
-                dnam{"კულ"}
-                one{"{0} კულ"}
-                other{"{0} კულ"}
-            }
-            farad{
-                dnam{"ფ"}
-                one{"{0} ფ"}
-                other{"{0} ფ"}
-            }
-            henry{
-                dnam{"ჰ"}
-                one{"{0} ჰ"}
-                other{"{0} ჰ"}
-            }
             milliampere{
                 dnam{"მილიამპერი"}
                 one{"{0} მილიამპერი"}
@@ -1071,49 +1021,12 @@ ka{
                 one{"{0} ომი"}
                 other{"{0} ომი"}
             }
-            siemens{
-                dnam{"სიმ"}
-                one{"{0} სიმ"}
-                other{"{0} სიმ"}
-            }
         }
         energy{
-            becquerel{
-                dnam{"ბკ"}
-                one{"{0} ბკ"}
-                other{"{0} ბკ"}
-            }
-            calorie-it{
-                dnam{"კალ-IT"}
-                one{"{0} კალ-IT"}
-                other{"{0} კალ-IT"}
-            }
-            gray{
-                dnam{"გრ"}
-                one{"{0} გრ"}
-                other{"{0} გრ"}
-            }
             kilowatt-hour{
                 dnam{"კვტ.სთ"}
                 one{"{0} კვტ.სთ"}
                 other{"{0} კვტ.სთ"}
-            }
-            sievert{
-                dnam{"ზვ"}
-                one{"{0} ზვ"}
-                other{"{0} ზვ"}
-            }
-        }
-        force{
-            kilogram-force{
-                dnam{"კგძ"}
-                one{"{0} კგძ"}
-                other{"{0} კგძ"}
-            }
-            newton{
-                dnam{"ნ"}
-                one{"{0} ნ"}
-                other{"{0} ნ"}
             }
         }
         graphics{
@@ -1130,18 +1043,6 @@ ka{
             meter{
                 one{"{0}მ"}
                 other{"{0}მ"}
-            }
-        }
-        magnetic{
-            tesla{
-                dnam{"ტლ"}
-                one{"{0} ტლ"}
-                other{"{0} ტლ"}
-            }
-            weber{
-                dnam{"ვბ"}
-                one{"{0} ვბ"}
-                other{"{0} ვბ"}
             }
         }
         mass{
@@ -1212,8 +1113,6 @@ ka{
             }
             light-speed{
                 dnam{"c"}
-                one{"{0} სინათლის სიჩქ."}
-                other{"{0}-მაგი სინათლის სიჩქ."}
             }
         }
         volume{

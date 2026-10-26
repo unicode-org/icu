@@ -4,9 +4,8 @@
 en_AU{
     %%Parent{"en_001"}
     Keys{
-        colCaseFirst{"Upper case / Lower case Ordering"}
+        colCaseFirst{"Upper-case/Lower-case ordering"}
         x{"Private Use"}
-        x0{"Private Use Transform"}
     }
     Languages{
         bn{"Bengali"}

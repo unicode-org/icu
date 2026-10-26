@@ -82,7 +82,7 @@ public class SerializableTestUtility {
     }
 
     public static Handler getHandler(String className) {
-        return (Handler) map.get(className);
+        return map.get(className);
     }
 
     private static class TimeZoneHandler implements Handler {
@@ -774,7 +774,28 @@ public class SerializableTestUtility {
     private abstract static class ExceptionHandlerBase implements Handler {
         @Override
         public boolean hasSameBehavior(Object a, Object b) {
-            return sameThrowable((Exception) a, (Exception) b);
+            boolean same = sameThrowable((Exception) a, (Exception) b);
+            // TODO: Delete the following code when we no longer test with pre-ICU 79 data.
+            if (!same && a instanceof ICUUncheckedIOException) {
+                // ICU 79 changed the base class, see ICU-22148.
+                // Deserialization works as well as possible,
+                // but the objects are not quite the same.
+                // The new API contract guarantees that getCause() returns an IOException.
+                // The causes should also never be null here,
+                // but getCause() appears to not enforce that from deserialization.
+                // Compare message strings when they are explicit, not computed.
+                // When an exception has a null message and a non-null cause,
+                // then getMessage() computes a message string.
+                var a2 = (ICUUncheckedIOException) a;
+                var b2 = (ICUUncheckedIOException) b;
+                String oldMsg = a2.getMessage(); // null if neither message nor cause
+                String newMsg = b2.getMessage(); // never null because there is a cause
+                same =
+                        (newMsg.startsWith("java.") || newMsg.equals(a2.getMessage()))
+                                && a2.getCause() != null
+                                && b2.getCause() != null;
+            }
+            return same;
         }
 
         // Exception.equals() does not seem to work.

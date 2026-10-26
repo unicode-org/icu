@@ -11,6 +11,9 @@ es_419{
             }
         }
         concentr{
+            item{
+                dnam{"ítems"}
+            }
             part{
                 one{"{0} parte"}
                 other{"{0} partes"}
@@ -55,8 +58,8 @@ es_419{
             }
             kilojoule{
                 dnam{"kilojoules"}
-                one{"{0} kilojule"}
-                other{"{0} kilojules"}
+                one{"{0} kilojoule"}
+                other{"{0} kilojoules"}
             }
             sievert{
                 dnam{"sieverts"}
@@ -303,7 +306,6 @@ es_419{
                 other{"{0}bbl"}
             }
             fluid-ounce-metric{
-                dnam{"fl oz m"}
                 one{"{0}fl oz m"}
                 other{"{0}fl oz m"}
             }
@@ -340,6 +342,10 @@ es_419{
                 dnam{"partes/mil millones"}
                 one{"{0} ppmm"}
                 other{"{0} ppmm"}
+            }
+            percent{
+                one{"{0}%"}
+                other{"{0}%"}
             }
         }
         consumption{

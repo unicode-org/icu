@@ -1225,14 +1225,8 @@ yue{
         RUR{"р."}
     }
     CurrencyPlurals{
-        XCG{
-            other{"加勒比盾"}
-        }
         XXX{
             other{"(未知貨幣)"}
-        }
-        ZWG{
-            other{"辛巴威金"}
         }
     }
     CurrencyUnitPatterns{

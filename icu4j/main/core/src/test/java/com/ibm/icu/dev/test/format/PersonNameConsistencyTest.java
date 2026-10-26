@@ -50,20 +50,24 @@ public class PersonNameConsistencyTest extends CoreTestFmwk {
 
     static List<String> readTestCases() throws Exception {
         List<String> tests = new ArrayList<>();
-        InputStream catalogFileStream =
-                TestUtil.class.getResourceAsStream(DATA_PATH + "catalog.txt");
-        LineNumberReader catalogFile =
-                new LineNumberReader(new InputStreamReader(catalogFileStream));
-        String filename = null;
-        while ((filename = catalogFile.readLine()) != null) {
-            if (filename.startsWith("#")) { // comment line, skip without logging
-                continue;
-            }
-            if (!filename.endsWith(".txt")) {
-                logln("Skipping " + filename + "...");
-                continue;
-            }
-            tests.add(filename);
+        try (InputStream catalogFileStream =
+                        TestUtil.class.getResourceAsStream(DATA_PATH + "catalog.txt");
+                LineNumberReader catalogFile =
+                        new LineNumberReader(
+                                new InputStreamReader(catalogFileStream, StandardCharsets.UTF_8))) {
+            catalogFile
+                    .lines()
+                    .filter(
+                            filename ->
+                                    !filename.startsWith("#")) // comment line, skip without logging
+                    .forEach(
+                            filename -> {
+                                if (!filename.endsWith(".txt")) {
+                                    logln("Skipping " + filename + "...");
+                                    return;
+                                }
+                                tests.add(filename);
+                            });
         }
         return tests;
     }
@@ -72,41 +76,45 @@ public class PersonNameConsistencyTest extends CoreTestFmwk {
     @Parameters(method = "readTestCases")
     public void TestPersonNames(String filename) throws IOException {
         String knownIssue = KNOWN_ISSUES.get(filename);
-        LineNumberReader in =
+        try (LineNumberReader in =
                 new LineNumberReader(
                         new InputStreamReader(
                                 TestUtil.class.getResourceAsStream(DATA_PATH + filename),
-                                StandardCharsets.UTF_8));
-        String line = null;
-        PersonNameTester tester = new PersonNameTester(filename);
+                                StandardCharsets.UTF_8))) {
+            String line = null;
+            PersonNameTester tester = new PersonNameTester(filename);
 
-        int errors = 0;
-        try {
-            while ((line = in.readLine()) != null) {
-                tester.processLine(line, filename, in.getLineNumber());
+            int errors = 0;
+            try {
+                while ((line = in.readLine()) != null) {
+                    tester.processLine(line, filename, in.getLineNumber());
+                }
+                errors = tester.getErrorCount();
+            } catch (Exception e) {
+                if (knownIssue != null) {
+                    logKnownIssue(
+                            knownIssue, "Exception thrown on " + filename + ": " + e.toString());
+                } else if (RUN_ALL_TESTS) {
+                    logln("Exception thrown on " + filename + ": " + e.toString());
+                } else {
+                    throw e;
+                }
             }
-            errors = tester.getErrorCount();
-        } catch (Exception e) {
-            if (knownIssue != null) {
-                logKnownIssue(knownIssue, "Exception thrown on " + filename + ": " + e.toString());
-            } else if (RUN_ALL_TESTS) {
-                logln("Exception thrown on " + filename + ": " + e.toString());
-            } else {
-                throw e;
-            }
-        }
 
-        if (errors != 0) {
-            if (knownIssue != null) {
-                logKnownIssue(
-                        knownIssue, "Failure in " + filename + ": Found " + errors + " errors.");
-            } else if (RUN_ALL_TESTS) {
-                logln("Failure in " + filename + ": Found " + errors + " errors.");
-            } else {
-                errln("Failure in " + filename + ": Found " + errors + " errors.");
-            }
-            if (!isVerbose()) {
-                System.out.println("Note: Use verbose ( -DICU.logging=3 ) to get verbose output");
+            if (errors != 0) {
+                if (knownIssue != null) {
+                    logKnownIssue(
+                            knownIssue,
+                            "Failure in " + filename + ": Found " + errors + " errors.");
+                } else if (RUN_ALL_TESTS) {
+                    logln("Failure in " + filename + ": Found " + errors + " errors.");
+                } else {
+                    errln("Failure in " + filename + ": Found " + errors + " errors.");
+                }
+                if (!isVerbose()) {
+                    System.out.println(
+                            "Note: Use verbose ( -DICU.logging=3 ) to get verbose output");
+                }
             }
         }
     }

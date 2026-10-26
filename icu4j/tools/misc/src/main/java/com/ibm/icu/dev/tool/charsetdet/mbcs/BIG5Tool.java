@@ -100,7 +100,7 @@ public class BIG5Tool {
     //
     void processDir(File dir) {
         int totalMbcsChars = 0;
-        HashMap m = new HashMap(10000);
+        HashMap<ChEl, ChEl> m = new HashMap<>(10000);
         int i;
 
         System.out.println(dir.getName());
@@ -139,7 +139,7 @@ public class BIG5Tool {
                         //  Frequency of occurrence statistics are accumulated in a map.
                         //
                         ChEl keyEl = new ChEl(ichar.charValue, 0);
-                        ChEl valEl = (ChEl) m.get(keyEl);
+                        ChEl valEl = m.get(keyEl);
                         if (valEl == null) {
                             m.put(keyEl, keyEl);
                             valEl = keyEl;
@@ -171,14 +171,14 @@ public class BIG5Tool {
         //  We've processed through all of the files.
         //     sort and dump out the frequency statistics.
         //
-        Object[] encounteredChars = m.values().toArray();
+        ChEl[] encounteredChars = m.values().toArray(new ChEl[0]);
         Arrays.sort(encounteredChars);
         int cumulativeChars = 0;
         int cumulativePercent = 0;
         if (option_v) {
             System.out.println("# <char code> <occurences>  <Cumulative %>");
             for (i = 0; i < encounteredChars.length; i++) {
-                ChEl c = (ChEl) encounteredChars[i];
+                ChEl c = encounteredChars[i];
                 cumulativeChars += c.occurences;
                 cumulativePercent = cumulativeChars * 100 / totalMbcsChars;
                 System.out.println(
@@ -198,10 +198,10 @@ public class BIG5Tool {
             //     Resort into order based on the character code value, not
             //      on frequency of occurrence.
             //
-            List charList = new ArrayList();
+            List<Integer> charList = new ArrayList<>();
 
             for (i = 0; i < 100 && cumulativePercent < 50; i++) {
-                ChEl c = (ChEl) encounteredChars[i];
+                ChEl c = encounteredChars[i];
                 cumulativeChars += c.occurences;
                 cumulativePercent = cumulativeChars * 100 / totalMbcsChars;
                 charList.add(c.charCode);
@@ -243,19 +243,22 @@ public class BIG5Tool {
 
         // Equals needs to work with a map, with the charCode as the key.
         //   For insertion/lookup, we care about the char code only, not the occurrence count.
+        @Override
         public boolean equals(Object other) {
             ChEl o = (ChEl) other;
             return o.charCode == this.charCode;
         }
 
-        // Hashcode needs to be compatible with equals
+        // hashCode needs to be compatible with equals
         //   We're using this in a hashMap!
+        @Override
         public int hashCode() {
             return charCode;
         }
 
         // We want to be able to sort the results by frequency of occurrence
         //   Compare backwards.  We want most frequent chars first.
+        @Override
         public int compareTo(ChEl other) {
             return (this.occurences > other.occurences
                     ? -1

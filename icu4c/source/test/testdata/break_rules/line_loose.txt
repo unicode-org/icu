@@ -184,7 +184,7 @@ LB11.3:      WJ CM* [^CM];
 LB20a.2:   GL CM* (HY | HH) CM* (AL | HL);
 LB12:      GL CM* [^CM];
 
-LB12a:       [^SP BA HY HH] CM* GL;
+LB12a:       [^SP HY HH] CM* GL;
 
 # LB 13 Do not break before ‘]’ or ‘!’ or ‘/’, even after spaces.
 LB13.1: [^SP] CM* [CL CP EX SY];

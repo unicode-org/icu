@@ -14,8 +14,6 @@ import com.ibm.icu.impl.ICULocaleService.LocaleKey;
 import com.ibm.icu.impl.ICULocaleService.LocaleKeyFactory;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.ICUService;
-import com.ibm.icu.impl.ICUService.Factory;
-import com.ibm.icu.impl.ICUService.Key;
 import com.ibm.icu.text.NumberFormat.NumberFormatFactory;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.ULocale;
@@ -51,7 +49,7 @@ class NumberFormatServiceShim extends NumberFormat.NumberFormatShim {
         }
 
         @Override
-        public Object create(Key key, ICUService srvc) {
+        public Object create(ICUService.Key key, ICUService srvc) {
             if (!handlesKey(key) || !(key instanceof LocaleKey)) {
                 return null;
             }
@@ -77,7 +75,7 @@ class NumberFormatServiceShim extends NumberFormat.NumberFormatShim {
 
     @Override
     boolean unregister(Object registryKey) {
-        return service.unregisterFactory((Factory) registryKey);
+        return service.unregisterFactory((ICUService.Factory) registryKey);
     }
 
     @Override

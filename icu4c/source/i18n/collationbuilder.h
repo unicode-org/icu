@@ -252,7 +252,7 @@ private:
         return static_cast<int64_t>(previous) << 28;
     }
     static inline int64_t nodeFromNextIndex(int32_t next) {
-        return next << 8;
+        return static_cast<int64_t>(next) << 8;
     }
     static inline int64_t nodeFromStrength(int32_t strength) {
         return strength;

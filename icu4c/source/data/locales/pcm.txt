@@ -192,7 +192,7 @@ pcm{
             }
             plural{
                 one{"{0} dè"}
-                other{"{0}?"}
+                other{"{0} days"}
             }
         }
     }
@@ -229,6 +229,7 @@ pcm{
                 hms{"h:mm:ss a"}
                 y{"y G"}
                 yyyy{"y G"}
+                yyyyMd{"G y/MM/dd"}
             }
         }
         gregorian{
@@ -281,7 +282,7 @@ pcm{
                 Ed{"d E"}
                 Ehm{"E h:mm a"}
                 Ehms{"E h:mm:ss a"}
-                MEd{"E, d/M"}
+                MEd{"E, M/d"}
                 MMMEd{"E, d MMM"}
                 MMMMW{
                     one{"'Wik' W 'fọ' MMMM"}
@@ -299,6 +300,8 @@ pcm{
                 yMMM{"MMM y"}
                 yMMMEd{"E, d MMM y"}
                 yMMMM{"MMMM y"}
+                yMMMMEd{"EEE, d MMMM y"}
+                yMMMMd{"d MMMM y"}
                 yMMMd{"d MMM y"}
                 yMd{"d/M/y"}
                 yQQQ{"QQQ y"}

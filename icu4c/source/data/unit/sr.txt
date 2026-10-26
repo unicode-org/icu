@@ -600,9 +600,6 @@ sr{
             }
             part{
                 dnam{"делови"}
-                few{"{0} дела"}
-                one{"{0} део"}
-                other{"{0} делова"}
             }
             part-per-1e6{
                 case{
@@ -3424,15 +3421,6 @@ sr{
     }
     unitsNarrow{
         concentr{
-            ofglucose{
-                dnam{"Glc"}
-            }
-            part{
-                dnam{"део"}
-                few{"{0} дела"}
-                one{"{0} део"}
-                other{"{0} делова"}
-            }
             percent{
                 dnam{"%"}
             }
@@ -3506,9 +3494,6 @@ sr{
             }
         }
         energy{
-            calorie-it{
-                dnam{"cal [IT]"}
-            }
             electronvolt{
                 dnam{"eV"}
             }
@@ -3555,13 +3540,6 @@ sr{
                 few{"{0} кс"}
                 one{"{0} кс"}
                 other{"{0} кс"}
-            }
-        }
-        speed{
-            beaufort{
-                few{"B {0}"}
-                one{"B {0}"}
-                other{"B {0}"}
             }
         }
         volume{
@@ -3900,9 +3878,6 @@ sr{
         speed{
             beaufort{
                 dnam{"Bf"}
-                few{"B {0}"}
-                one{"B {0}"}
-                other{"B {0}"}
             }
             light-speed{
                 dnam{"светло"}

@@ -267,10 +267,6 @@ yrl{
             "CNH",
             "Yuwã Xinawara (offshore)",
         }
-        CNX{
-            "CNX",
-            "Dóra Bãku Pupulari Xinawara suí",
-        }
         CNY{
             "CN¥",
             "Yuwã Xinawara",
@@ -1476,10 +1472,6 @@ yrl{
         CNH{
             one{"Yuwã Xinawara (offshore)"}
             other{"Yuwã-ita Xinawara (offshore)"}
-        }
-        CNX{
-            one{"Dóra Bãku Pupulari Xinawara suí"}
-            other{"Dóra-ita Bãku Pupulari Xinawara suí"}
         }
         CNY{
             one{"Yuwã Xinawara"}

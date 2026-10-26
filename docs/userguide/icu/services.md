@@ -165,17 +165,22 @@ See [Formatting and Parsing Classes](../format_parse/index.md#formatting-and-par
 
 #### Formatting Numbers
 
-*   [`NumberFormat`](../format_parse/numbers/index.md#formatting-numbers)
+*   [`NumberFormatter`](../format_parse/numbers/) Since ICU 60, the recommended
+    mechanism for formatting numbers is `NumberFormatter` (Java).
+    NumberFormatter supports the formatting of decimal values, currencies,
+    measurement units, percentages, scientific notation, compact notatioan.
+
+*   [`NumberFormat`](../format_parse/numbers/legacy-numberformat.html#numberformat)
     NumberFormat provides the basic fields and methods to format number objects
     and number primitives into localized strings and parse localized strings to
     number objects.
 
-*   [`DecimalFormat`](../format_parse/numbers/index.md#decimalformat)
+*   [`DecimalFormat`](../format_parse/numbers/legacy-numberformat.html#decimalformat)
     DecimalFormat provides the methods used to format number objects and number
     primitives into localized strings and parse localized strings into number
     objects in base 10.
 
-*   [`DecimalFormatSymbols`](../format_parse/numbers/index.md#decimalformatsymbols)
+*   [`DecimalFormatSymbols`](../format_parse/numbers/legacy-numberformat.html#decimalformatsymbols)
     DecimalFormatSymbols is a concrete class used by DecimalFormat to access
     localized number strings such as the grouping separators, the decimal
     separator, and the percent sign.
@@ -183,12 +188,12 @@ See [Formatting and Parsing Classes](../format_parse/index.md#formatting-and-par
 #### Formatting Dates and Times
 
 *   [`DateFormat`](../format_parse/datetime/index.md#dateformat)
-    
+
     `DateFormat` provides the basic fields and methods for formatting date objects
     to localized strings and parsing date and time strings to date objects.
 
 *   [`SimpleDateFormat`](../format_parse/datetime/index.md#simpledateformat)
-    
+
     `SimpleDateFormat` is a concrete class used to format date objects to
     localized strings and to parse date and time strings to date objects using a
     `GregorianCalendar`.

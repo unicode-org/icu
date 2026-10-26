@@ -185,10 +185,7 @@ public class BOCSU {
     // private constructor ---------------------------------------------------
 
     /** Constructor private to prevent initialization */
-    /// CLOVER:OFF
     private BOCSU() {}
-
-    /// CLOVER:ON
 
     // private methods -------------------------------------------------------
 

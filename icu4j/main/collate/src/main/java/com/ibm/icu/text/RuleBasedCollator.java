@@ -264,6 +264,9 @@ public final class RuleBasedCollator extends Collator implements Cloneable {
     }
 
     private final void initMaxExpansions() {
+        if (tailoring.maxExpansions != null) {
+            return;
+        }
         synchronized (tailoring) {
             if (tailoring.maxExpansions == null) {
                 tailoring.maxExpansions =
@@ -352,7 +355,7 @@ public final class RuleBasedCollator extends Collator implements Cloneable {
             // since all collation data in the RuleBasedCollator do not change
             // we can safely assign the result.fields to this collator
             // except in cases where we can't
-            result.settings = settings.clone();
+            result.settings = new SharedObject.Reference<>(settings);
             result.collationBuffer = null;
             result.frozenLock = null;
             return result;
@@ -1821,7 +1824,7 @@ public final class RuleBasedCollator extends Collator implements Cloneable {
 
     RuleBasedCollator(CollationTailoring t, ULocale vl) {
         data = t.data;
-        settings = t.settings.clone();
+        settings = new SharedObject.Reference<>(t.settings);
         tailoring = t;
         validLocale = vl;
         actualLocaleIsSameAsValid = false;
@@ -1830,7 +1833,7 @@ public final class RuleBasedCollator extends Collator implements Cloneable {
     private void adoptTailoring(CollationTailoring t) {
         assert (settings == null && data == null && tailoring == null);
         data = t.data;
-        settings = t.settings.clone();
+        settings = new SharedObject.Reference<>(t.settings);
         tailoring = t;
         validLocale = t.actualLocale;
         actualLocaleIsSameAsValid = false;

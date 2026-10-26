@@ -23,11 +23,6 @@ fa{
                 one{"{0} ثانیهٔ قوسی"}
                 other{"{0} ثانیهٔ قوسی"}
             }
-            steradian{
-                dnam{"استرادیان"}
-                one{"{0} استرادیان"}
-                other{"{0} استرادیان"}
-            }
         }
         area{
             square-centimeter{
@@ -84,11 +79,6 @@ fa{
             times{"{0}‌{1}"}
         }
         concentr{
-            katal{
-                dnam{"کاتال"}
-                one{"{0} کاتال"}
-                other{"{0} کاتال"}
-            }
             milligram-ofglucose-per-deciliter{
                 one{"{0} میلی‌گرم در دسی‌لیتر"}
                 other{"{0} میلی‌گرم در دسی‌لیتر"}
@@ -97,16 +87,6 @@ fa{
                 dnam{"میلی‌مول در لیتر"}
                 one{"{0} میلی‌مول در لیتر"}
                 other{"{0} میلی‌مول در لیتر"}
-            }
-            ofglucose{
-                dnam{"گلوکز"}
-                one{"{0} گلوکز"}
-                other{"{0} گلوکز"}
-            }
-            part{
-                dnam{"پارت"}
-                one{"{0} پارت"}
-                other{"{0} پارت"}
             }
             part-per-1e6{
                 dnam{"بخش در میلیون"}
@@ -219,34 +199,7 @@ fa{
                 per{"{0} در سال"}
             }
         }
-        electric{
-            coulomb{
-                dnam{"کولن"}
-                one{"{0} کولن"}
-                other{"{0} کولن"}
-            }
-            farad{
-                dnam{"فاراد"}
-                one{"{0} فاراد"}
-                other{"{0} فاراد"}
-            }
-            henry{
-                dnam{"هنری"}
-                one{"{0} هنری"}
-                other{"{0} هنری"}
-            }
-            siemens{
-                dnam{"زیمنس"}
-                one{"{0} زیمنس"}
-                other{"{0} زیمنس"}
-            }
-        }
         energy{
-            becquerel{
-                dnam{"بکرل"}
-                one{"{0} بکرل"}
-                other{"{0} بکرل"}
-            }
             calorie-it{
                 dnam{"کالری [IT]"}
                 one{"{0} کالری [IT]"}
@@ -256,11 +209,6 @@ fa{
                 dnam{"الکترون ولت"}
                 one{"{0} الکترون‌ولت"}
                 other{"{0} الکترون‌ولت"}
-            }
-            gray{
-                dnam{"گری"}
-                one{"{0} گری"}
-                other{"{0} گری"}
             }
             kilocalorie{
                 dnam{"کیلوکالری"}
@@ -277,18 +225,8 @@ fa{
                 one{"{0} کیلووات‌ساعت"}
                 other{"{0} کیلووات‌ساعت"}
             }
-            sievert{
-                dnam{"سیورت"}
-                one{"{0} سیورت"}
-                other{"{0} سیورت"}
-            }
         }
         force{
-            kilogram-force{
-                dnam{"کیلوگرم-نیرو"}
-                one{"{0} کیلوگرم-نیرو"}
-                other{"{0} کیلوگرم-نیرو"}
-            }
             kilowatt-hour-per-100-kilometer{
                 dnam{"کیلووات-ساعت در ۱۰۰ کیلومتر"}
                 one{"{0} کیلووات-ساعت در ۱۰۰ کیلومتر"}
@@ -371,31 +309,9 @@ fa{
             }
         }
         light{
-            candela{
-                dnam{"شمع"}
-                one{"{0} شمع"}
-                other{"{0} شمع"}
-            }
-            lumen{
-                dnam{"لومن"}
-                one{"{0} لومن"}
-                other{"{0} لومن"}
-            }
             solar-luminosity{
                 one{"{0} تابندگی خورشید"}
                 other{"{0} تابندگی خورشید"}
-            }
-        }
-        magnetic{
-            tesla{
-                dnam{"تسلا"}
-                one{"{0} تسلا"}
-                other{"{0} تسلا"}
-            }
-            weber{
-                dnam{"وبر"}
-                one{"{0} وبر"}
-                other{"{0} وبر"}
             }
         }
         mass{
@@ -436,11 +352,6 @@ fa{
                 one{"{0} میلی‌متر جیوه"}
                 other{"{0} میلی‌متر جیوه"}
             }
-            ofhg{
-                dnam{"جیوه"}
-                one{"{0} جیوه"}
-                other{"{0} جیوه"}
-            }
             pound-force-per-square-inch{
                 one{"{0} پوند در اینچ مربع"}
                 other{"{0} پوند در اینچ مربع"}
@@ -450,11 +361,6 @@ fa{
             kilometer-per-hour{
                 one{"{0} کیلومتر در ساعت"}
                 other{"{0} کیلومتر در ساعت"}
-            }
-            light-speed{
-                dnam{"نور"}
-                one{"{0} نوری"}
-                other{"{0} نوری"}
             }
             meter-per-second{
                 one{"{0} متر در ثانیه"}
@@ -473,6 +379,10 @@ fa{
             fahrenheit{
                 one{"{0} درجهٔ فارنهایت"}
                 other{"{0} درجهٔ فارنهایت"}
+            }
+            generic{
+                one{"{0} درجه"}
+                other{"{0} درجه"}
             }
             kelvin{
                 one{"{0} درجهٔ کلوین"}
@@ -604,6 +514,10 @@ fa{
                 one{"{0}rad"}
                 other{"{0}rad"}
             }
+            steradian{
+                one{"{0} sr"}
+                other{"{0} sr"}
+            }
         }
         area{
             acre{
@@ -716,22 +630,16 @@ fa{
                 one{"{0}kt"}
                 other{"{0}kt"}
             }
-            katal{
-                dnam{"کاتال"}
-            }
             millimole-per-liter{
                 one{"{0}mmol/L"}
                 other{"{0}mmol/L"}
             }
-            ofglucose{
-                dnam{"گلوکز"}
-            }
             part{
-                dnam{"پارت"}
                 one{"{0} پارت"}
                 other{"{0}پارت"}
             }
             part-per-1e6{
+                dnam{"ppm"}
                 one{"{0}ppm"}
                 other{"{0}ppm"}
             }
@@ -829,12 +737,6 @@ fa{
                 one{"{0}A"}
                 other{"{0}A"}
             }
-            coulomb{
-                dnam{"کولن"}
-            }
-            henry{
-                dnam{"هنری"}
-            }
             milliampere{
                 dnam{"mA"}
                 one{"{0}mA"}
@@ -850,6 +752,11 @@ fa{
             }
         }
         energy{
+            becquerel{
+                dnam{"Bq"}
+                one{"{0} Bq"}
+                other{"{0} Bq"}
+            }
             british-thermal-unit{
                 dnam{"BTU"}
                 one{"{0}Btu"}
@@ -859,9 +766,6 @@ fa{
                 dnam{"cal"}
                 one{"{0}cal"}
                 other{"{0}cal"}
-            }
-            calorie-it{
-                dnam{"کالری-IT"}
             }
             electronvolt{
                 dnam{"eV"}
@@ -874,7 +778,8 @@ fa{
                 other{"{0}Cal"}
             }
             gray{
-                dnam{"گری"}
+                one{"{0} Gy"}
+                other{"{0} Gy"}
             }
             joule{
                 one{"{0}J"}
@@ -889,6 +794,11 @@ fa{
                 dnam{"kWh"}
                 one{"{0}kWh"}
                 other{"{0}kWh"}
+            }
+            sievert{
+                dnam{"Sv"}
+                one{"{0} Sv"}
+                other{"{0} Sv"}
             }
         }
         force{
@@ -1052,26 +962,16 @@ fa{
         }
         light{
             candela{
-                dnam{"شمع"}
                 one{"{0}cd"}
                 other{"{0}cd"}
             }
             lumen{
-                dnam{"لومن"}
                 one{"{0}lm"}
                 other{"{0}lm"}
             }
             lux{
                 one{"{0}lx"}
                 other{"{0}lx"}
-            }
-        }
-        magnetic{
-            tesla{
-                dnam{"تسلا"}
-            }
-            weber{
-                dnam{"وبر"}
             }
         }
         mass{
@@ -1179,6 +1079,7 @@ fa{
                 other{"{0}hPa"}
             }
             inch-ofhg{
+                dnam{"inHg"}
                 one{"{0}inHg"}
                 other{"{0}inHg"}
             }
@@ -1190,18 +1091,23 @@ fa{
                 one{"{0}mbar"}
                 other{"{0}mbar"}
             }
-            ofhg{
-                dnam{"جیوه"}
+            millimeter-ofhg{
+                dnam{"mmHg"}
+                one{"{0}mmHg"}
+                other{"{0}mmHg"}
             }
             pascal{
                 one{"{0}Pa"}
                 other{"{0}Pa"}
             }
+            pound-force-per-square-inch{
+                dnam{"psi"}
+            }
         }
         speed{
             beaufort{
                 one{"B{0}"}
-                other{"{0}بوفورت"}
+                other{"B{0}"}
             }
             kilometer-per-hour{
                 dnam{"km/hr"}
@@ -1212,7 +1118,6 @@ fa{
                 other{"{0}kn"}
             }
             light-speed{
-                dnam{"نور"}
                 one{"{0}نوری"}
                 other{"{0}نوری"}
             }
@@ -1235,6 +1140,7 @@ fa{
                 dnam{"‎°F"}
             }
             kelvin{
+                dnam{"K"}
                 one{"{0}K"}
                 other{"{0}K"}
             }
@@ -1304,6 +1210,10 @@ fa{
                 dnam{"Imp fl oz"}
                 one{"{0}fl oz Im"}
                 other{"{0}fl oz Im"}
+            }
+            fluid-ounce-metric{
+                one{"‎{0} fl oz m.‎"}
+                other{"‎{0} fl oz m.‎"}
             }
             gallon-imperial{
                 one{"{0}galIm"}
@@ -1383,8 +1293,8 @@ fa{
             }
             steradian{
                 dnam{"استرادیان"}
-                one{"{0} استرادیان"}
-                other{"{0} استرادیان"}
+                one{"{0} sr"}
+                other{"{0} sr"}
             }
         }
         area{
@@ -2176,8 +2086,6 @@ fa{
             }
             pound-force-per-square-inch{
                 dnam{"پوند در اینچ مربع"}
-                one{"{0}‎ psi"}
-                other{"{0}‎ psi"}
             }
         }
         speed{

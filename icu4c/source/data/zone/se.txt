@@ -50,7 +50,6 @@ se{
         }
         fallbackFormat{"{0} ({1})"}
         gmtFormat{"UTC{0}"}
-        gmtZeroFormat{"UTC"}
         hourFormat{"+HH:mm;−HH:mm"}
         regionFormat{"{0} áigi"}
     }

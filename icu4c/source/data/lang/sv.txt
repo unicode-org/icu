@@ -11,19 +11,35 @@ sv{
         colCaseLevel{"Skiftlägeskänslig sortering"}
         colNormalization{"Normaliserad sortering"}
         colNumeric{"Numerisk sortering"}
+        colReorder{"ändrad ordning för skript/block"}
         colStrength{"Sorteringsstyrka"}
         collation{"sorteringsordning"}
         currency{"valuta"}
+        d0{"omvandla mål"}
+        dx{"undantag för brytning enligt ordlista"}
         em{"emojipresentation"}
+        fw{"första veckodag"}
+        h0{"inblandat"}
         hc{"12- eller 24-timmarsklocka"}
+        i0{"inmatningsmetod"}
+        k0{"tangentbord"}
+        kv{"högsta ignorerade"}
         lb{"radbrytningstyp"}
         lw{"radbrytningar inom ord"}
+        m0{"omvandlingsregler"}
         ms{"enhetssystem"}
+        mu{"måttenhet"}
         numbers{"siffror"}
+        rg{"region för tilläggsdata"}
+        s0{"omvandla källan"}
+        sd{"region och underdivision"}
         ss{"meningsgräns efter förkortn."}
+        t{"omvandla"}
+        t0{"maskinöversatt"}
         timezone{"Tidszon"}
         va{"Språkvariant"}
         x{"privat"}
+        x0{"privat omvandla"}
     }
     Languages{
         aa{"afar"}
@@ -932,9 +948,13 @@ sv{
             ethiopic-amete-alem{"etiopisk amete-alem"}
             gregorian{"gregoriansk"}
             hebrew{"hebreisk"}
+            indian{"indisk nationell"}
             islamic{"islamisk"}
             islamic-civil{"islamisk civil"}
+            islamic-rgsa{"islamisk, månobservation i Saudiarabien"}
+            islamic-tbla{"islamisk (beräknad, astronomisk epok)"}
             islamic-umalqura{"islamisk, Umm al-Qura"}
+            iso8601{"gregoriansk"}
             japanese{"japansk"}
             persian{"persisk"}
             roc{"kinesiska republikens"}
@@ -960,6 +980,11 @@ sv{
             no{"Ordna normalt efter skiftläge"}
             upper{"Sortera versaler först"}
         }
+        colCaseFirst%core{
+            lower{"gemener"}
+            no{"gemener"}
+            upper{"versaler"}
+        }
         colCaseLevel{
             no{"Sortera oavsett skiftläge"}
             yes{"Sortera efter skiftläge"}
@@ -972,12 +997,26 @@ sv{
             no{"Sortera siffror för sig"}
             yes{"Sortera siffror numeriskt"}
         }
+        colReorder%core{
+            currency{"valuta"}
+            digit{"siffror"}
+            punct{"skiljetecken"}
+            space{"blanksteg"}
+            symbol{"symbol"}
+        }
         colStrength{
             identical{"Sortera alla"}
             primary{"Sortera endast efter grundbokstäver"}
             quaternary{"Sortera efter accent/skiftläge/bredd/kana"}
             secondary{"Sortera accenter"}
             tertiary{"Sortera accenter/skiftläge/bredd"}
+        }
+        colStrength%core{
+            identical{"alla"}
+            primary{"endast grundbokstäver"}
+            quaternary{"grundbokstäver, accenter, skiftläge, varianter, kana"}
+            secondary{"grundbokstäver, accenter"}
+            tertiary{"grundbokstäver, accenter, skiftläge, varianter"}
         }
         collation{
             compat{"bakåtkompatibel sorteringsordning"}
@@ -1000,10 +1039,13 @@ sv{
             compat{"bakåtkompatibel"}
             dictionary{"ordbok"}
             ducet{"grundläggande Unicode"}
+            emoji{"emoji"}
+            eor{"europeiska regler"}
             phonebook{"telefonkatalog"}
             phonetic{"fonetisk"}
             pinyin{"pinyin"}
             search{"sökning"}
+            searchjl{"initial konsonant i koreanska"}
             standard{"normal"}
             stroke{"streck"}
             traditional{"traditionell"}
@@ -1021,16 +1063,26 @@ sv{
             text{"text"}
         }
         hc{
+            c12{"12-timmarsklocka"}
+            c24{"24-timmarsklocka"}
             h11{"12-timmarsklocka (0–11)"}
             h12{"12-timmarsklocka (1–12)"}
             h23{"24-timmarsklocka (0–23)"}
             h24{"24-timmarsklocka (1–24)"}
         }
         hc%core{
+            c12{"12"}
+            c24{"24"}
             h11{"12 (0–11)"}
             h12{"12 (1–12)"}
             h23{"24 (0–23)"}
             h24{"24 (1–24)"}
+        }
+        kv%core{
+            currency{"flytta blanksteg, skiljetecken, alla symboler"}
+            punct{"flytta blanksteg, skiljetecken"}
+            space{"flytta blanksteg, skiljetecken"}
+            symbol{"flytta blanksteg, skiljetecken, symboler utom valutatecken"}
         }
         lb{
             loose{"fri radbrytning"}
@@ -1083,7 +1135,7 @@ sv{
             gong{"gunjalagondiska siffror"}
             gonm{"masaramgondiska siffror"}
             grek{"grekiska taltecken"}
-            greklow{"små grekiska taltecken"}
+            greklow{"grekiska gemena taltecken"}
             gujr{"gujaratiska siffror"}
             guru{"gurmukhiska siffror"}
             hanidec{"kinesiska decimaltal"}
@@ -1116,7 +1168,7 @@ sv{
             mong{"mongoliska siffror"}
             mroo{"mro-siffror"}
             mtei{"meetei mayek-siffror"}
-            mymr{"burmesiska siffror"}
+            mymr{"myanmariska siffror"}
             mymrshan{"burmesiska shan-siffror"}
             mymrtlng{"burmesiska tai laing-siffror"}
             native{"språkspecifika siffror"}
@@ -1126,7 +1178,7 @@ sv{
             osma{"osmanya-siffror"}
             rohg{"hanifisiffror"}
             roman{"romerska taltecken"}
-            romanlow{"små romerska taltecken"}
+            romanlow{"romerska gemena taltecken"}
             saur{"saurashtra-siffror"}
             shrd{"sharada-siffror"}
             sind{"khudawidiska siffror"}
@@ -1146,9 +1198,45 @@ sv{
             wara{"varang kshiti-siffror"}
             wcho{"wanchosiffror"}
         }
+        numbers%core{
+            arabext{"utökade indo-arabiska"}
+            armnlow{"gemena armeniska"}
+            finance{"finansiella"}
+            fullwide{"fullbredd"}
+            greklow{"grekiska gemena"}
+            hanidays{"hantecken för numrering av dag i månad för traditionella kalendrar"}
+            hanidec{"positionellt decimalsystem med kinesiska nummerideogram som siffror"}
+            hansfin{"förenklat kinesiskt finansiellt"}
+            hantfin{"traditionellt kinesiskt finansiellt"}
+            jpanfin{"japanskt finansiellt"}
+            jpanyear{"japansk gannen-numrering av första året"}
+            lanatham{"tai tham tham (ecklesiastiska)"}
+            mathbold{"matematiskt fetstil"}
+            mathdbl{"matematiskt double-struck"}
+            mathmono{"matematiskt fastbredd"}
+            mathsanb{"matematiskt sans-serif fetstil"}
+            mathsans{"matematiskt sans-serif"}
+            mymrepka{"myanmarisk eastern pwo karen"}
+            mymrpao{"myanmarisk pao"}
+            mymrshan{"myanmarisk shan"}
+            mymrtlng{"myanmarisk tai laing"}
+            native{"språkspecifika siffror"}
+            outlined{"konturer"}
+            roman{"romerska versala"}
+            romanlow{"romerska gemena"}
+            segment{"segmenterade"}
+            tamldec{"moderna tamilska"}
+            traditional{"traditionella taltecken"}
+        }
         ss%core{
             none{"av"}
             standard{"på"}
+        }
+        t0{
+            und{"ospecificerad maskinöversättning"}
+        }
+        va%core{
+            posix{"POSIX-variant"}
         }
     }
     Variants{

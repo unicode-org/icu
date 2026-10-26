@@ -16,18 +16,6 @@ rm{
             }
             patternsLong{
                 decimalFormat{
-                    1000{
-                        one{"0"}
-                        other{"0"}
-                    }
-                    10000{
-                        one{"0"}
-                        other{"0"}
-                    }
-                    100000{
-                        one{"0"}
-                        other{"0"}
-                    }
                     1000000{
                         one{"0 milliun"}
                         other{"0 milliuns"}
@@ -488,6 +476,11 @@ rm{
                 "yMMdd",
                 "yyMMdd",
             }
+            appendItems{
+                Day-Of-Week{"{1}, {0}"}
+                Era{"{0} {1}"}
+                Time-Day-Of-Week{"{1}, {0}"}
+            }
             availableFormats{
                 Ed{"E d"}
                 Ehm{"E h:mm a"}
@@ -497,6 +490,7 @@ rm{
                 GyMEd{"E, dd-MM-y G"}
                 GyMMM{"LLL y G"}
                 GyMMMEd{"E, d MMM y G"}
+                GyMMMM{"MMM y G"}
                 GyMMMMEd{"E, d MMMM y G"}
                 GyMMMMd{"d MMMM y G"}
                 GyMMMd{"dd-MM-y G"}
@@ -900,43 +894,13 @@ rm{
                 }
             }
         }
-        day-short{
-            relativeTime{
-                future{
-                    one{"en {0} di"}
-                    other{"en {0} dis"}
-                }
-                past{
-                    one{"avant {0} di"}
-                    other{"avant {0} dis"}
-                }
-            }
-        }
         dayOfYear{
-            dn{"di da l’onn"}
-        }
-        dayOfYear-narrow{
-            dn{"di da l’onn"}
-        }
-        dayOfYear-short{
             dn{"di da l’onn"}
         }
         dayperiod{
             dn{"AM/PM"}
         }
-        dayperiod-narrow{
-            dn{"AM/PM"}
-        }
-        dayperiod-short{
-            dn{"AM/PM"}
-        }
         era{
-            dn{"èra"}
-        }
-        era-narrow{
-            dn{"èra"}
-        }
-        era-short{
             dn{"èra"}
         }
         fri{
@@ -1007,7 +971,6 @@ rm{
             }
         }
         hour-narrow{
-            dn{"h"}
             relativeTime{
                 future{
                     one{"en {0}h"}
@@ -1045,18 +1008,6 @@ rm{
                 past{
                     one{"avant {0} minuta"}
                     other{"avant {0} minutas"}
-                }
-            }
-        }
-        minute-narrow{
-            relativeTime{
-                future{
-                    one{"en {0} min"}
-                    other{"en {0} min"}
-                }
-                past{
-                    one{"avant {0} min"}
-                    other{"avant {0} min"}
                 }
             }
         }
@@ -1144,11 +1095,6 @@ rm{
         }
         month-narrow{
             dn{"m."}
-            relative{
-                "-1"{"ultim mais"}
-                "0"{"quest mais"}
-                "1"{"proxim mais"}
-            }
             relativeTime{
                 future{
                     one{"en {0}mais"}
@@ -1165,16 +1111,6 @@ rm{
                 "-1"{"ultim mais"}
                 "0"{"quest mais"}
                 "1"{"proxim mais"}
-            }
-            relativeTime{
-                future{
-                    one{"en {0} mais"}
-                    other{"en {0} mais"}
-                }
-                past{
-                    one{"avant {0} mais"}
-                    other{"avant {0} mais"}
-                }
             }
         }
         quarter{
@@ -1196,7 +1132,7 @@ rm{
             }
         }
         quarter-narrow{
-            dn{"Q"}
+            dn{"q"}
             relativeTime{
                 future{
                     one{"en {0}q"}
@@ -1261,16 +1197,6 @@ rm{
                 "0"{"questa sonda"}
                 "1"{"proxima sonda"}
             }
-            relativeTime{
-                future{
-                    one{"en {0} sonda"}
-                    other{"en {0} sondas"}
-                }
-                past{
-                    one{"avant {0} sonda"}
-                    other{"avant {0} sondas"}
-                }
-            }
         }
         second{
             dn{"secunda"}
@@ -1285,18 +1211,6 @@ rm{
                 past{
                     one{"avant {0} secunda"}
                     other{"avant {0} secundas"}
-                }
-            }
-        }
-        second-narrow{
-            relativeTime{
-                future{
-                    one{"en {0} s"}
-                    other{"en {0} s"}
-                }
-                past{
-                    one{"avant {0} s"}
-                    other{"avant {0} s"}
                 }
             }
         }
@@ -1339,7 +1253,7 @@ rm{
             relativeTime{
                 future{
                     one{"en {0} du"}
-                    other{"en {0} dum."}
+                    other{"en {0} du"}
                 }
                 past{
                     one{"avant {0} du"}
@@ -1455,16 +1369,6 @@ rm{
                 "0"{"quest mardi"}
                 "1"{"proxim mar"}
             }
-            relativeTime{
-                future{
-                    one{"en {0} mardi"}
-                    other{"en {0} mardis"}
-                }
-                past{
-                    one{"avant {0} mardi"}
-                    other{"avant {0} mardis"}
-                }
-            }
         }
         wed{
             relative{
@@ -1538,12 +1442,6 @@ rm{
         }
         week-narrow{
             dn{"e."}
-            relative{
-                "-1"{"ultim’emna"}
-                "0"{"quest’emna"}
-                "1"{"proxim’emna"}
-            }
-            relativePeriod{"l’emna dals {0}"}
             relativeTime{
                 future{
                     one{"en {0}e"}
@@ -1561,17 +1459,6 @@ rm{
                 "0"{"quest’emna"}
                 "1"{"proxim’emna"}
             }
-            relativePeriod{"l’emna dals {0}"}
-            relativeTime{
-                future{
-                    one{"en {0} emna"}
-                    other{"en {0} emnas"}
-                }
-                past{
-                    one{"avant {0} emna"}
-                    other{"avant {0} emnas"}
-                }
-            }
         }
         weekOfMonth{
             dn{"emna dal mais"}
@@ -1579,19 +1466,10 @@ rm{
         weekOfMonth-narrow{
             dn{"emna mais"}
         }
-        weekOfMonth-short{
-            dn{"emna dal mais"}
-        }
         weekday{
             dn{"di da l’emna"}
         }
         weekdayOfMonth{
-            dn{"di dal mais"}
-        }
-        weekdayOfMonth-narrow{
-            dn{"di dal mais"}
-        }
-        weekdayOfMonth-short{
             dn{"di dal mais"}
         }
         year{
@@ -1627,18 +1505,6 @@ rm{
                 past{
                     one{"avant {0}o"}
                     other{"avant {0}o"}
-                }
-            }
-        }
-        year-short{
-            relativeTime{
-                future{
-                    one{"en {0} onn"}
-                    other{"en {0} onns"}
-                }
-                past{
-                    one{"avant {0} onn"}
-                    other{"avant {0} onns"}
                 }
             }
         }

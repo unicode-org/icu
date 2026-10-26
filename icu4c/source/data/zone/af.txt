@@ -222,9 +222,6 @@ af{
         "Europe:Copenhagen"{
             ec{"Kopenhagen"}
         }
-        "Europe:Dublin"{
-            ld{"Ierse standaardtyd"}
-        }
         "Europe:Isle_of_Man"{
             ec{"Eiland Man"}
         }
@@ -236,7 +233,6 @@ af{
         }
         "Europe:London"{
             ec{"Londen"}
-            ld{"Britse somertyd"}
         }
         "Europe:Luxembourg"{
             ec{"Luxemburg"}
@@ -301,6 +297,11 @@ af{
         "Pacific:Wake"{
             ec{"Wake-eiland"}
         }
+        "meta:Acre"{
+            ld{"Acre-somertyd"}
+            lg{"Acre-tyd"}
+            ls{"Acre-standaardtyd"}
+        }
         "meta:Afghanistan"{
             ls{"Afganistan-tyd"}
         }
@@ -356,7 +357,7 @@ af{
             ls{"Anadyr-standaardtyd"}
         }
         "meta:Apia"{
-            ld{"Apia-dagligtyd"}
+            ld{"Apia-somertyd"}
             lg{"Apia-tyd"}
             ls{"Apia-standaardtyd"}
         }
@@ -430,6 +431,10 @@ af{
             ld{"Brasilia-somertyd"}
             lg{"Brasilia-tyd"}
             ls{"Brasilia-standaardtyd"}
+        }
+        "meta:British"{
+            ld{"Britse somertyd"}
+            lg{"Britse tyd"}
         }
         "meta:Brunei"{
             ls{"Broenei Darussalam-tyd"}
@@ -546,6 +551,11 @@ af{
         "meta:Gilbert_Islands"{
             ls{"Gilberteilande-tyd"}
         }
+        "meta:Greenland"{
+            ld{"Groenland-somertyd"}
+            lg{"Groenland-tyd"}
+            ls{"Groenland-standaardtyd"}
+        }
         "meta:Greenland_Eastern"{
             ld{"Oos-Groenland-somertyd"}
             lg{"Oos-Groenland-tyd"}
@@ -563,7 +573,7 @@ af{
             ls{"Guiana-tyd"}
         }
         "meta:Hawaii"{
-            ls{"Hawaii-Aleoete-standaardtyd"}
+            ls{"Hawaii-standaardtyd"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"Hawaii-Aleoete-dagligtyd"}
@@ -603,6 +613,10 @@ af{
             lg{"Iran-tyd"}
             ls{"Iran-standaardtyd"}
         }
+        "meta:Irish"{
+            ld{"Ierse standaardtyd"}
+            lg{"Ierse tyd"}
+        }
         "meta:Irkutsk"{
             ld{"Irkoetsk-somertyd"}
             lg{"Irkoetsk-tyd"}
@@ -619,9 +633,9 @@ af{
             ls{"Japan-standaardtyd"}
         }
         "meta:Kamchatka"{
-            ld{"Petropavlovsk-Kamchatski-somertyd"}
-            lg{"Petropavlovsk-Kamchatski-tyd"}
-            ls{"Petropavlovsk-Kamchatski-standaardtyd"}
+            ld{"Kamchatski-somertyd"}
+            lg{"Kamchatski-tyd"}
+            ls{"Kamchatski-standaardtyd"}
         }
         "meta:Kazakhstan"{
             ls{"Kazakstan-tyd"}
@@ -798,13 +812,11 @@ af{
             ls{"Sakhalin-standaardtyd"}
         }
         "meta:Samara"{
-            ld{"Samara-dagligtyd"}
+            ld{"Samara-somertyd"}
             lg{"Samara-tyd"}
             ls{"Samara-standaardtyd"}
         }
         "meta:Samoa"{
-            ld{"Samoa-dagligtyd"}
-            lg{"Samoa-tyd"}
             ls{"Samoa-standaardtyd"}
         }
         "meta:Seychelles"{
@@ -847,6 +859,11 @@ af{
         "meta:Truk"{
             ls{"Chuuk-tyd"}
         }
+        "meta:Turkey"{
+            ld{"Türkiye-somertyd"}
+            lg{"Türkiye-tyd"}
+            ls{"Türkiye-standaardtyd"}
+        }
         "meta:Turkmenistan"{
             ld{"Turkmenistan-somertyd"}
             lg{"Turkmenistan-tyd"}
@@ -859,6 +876,9 @@ af{
             ld{"Uruguay-somertyd"}
             lg{"Uruguay-tyd"}
             ls{"Uruguay-standaardtyd"}
+        }
+        "meta:Urumqi"{
+            ls{"Ürümqi-tyd"}
         }
         "meta:Uzbekistan"{
             ld{"Oesbekistan-somertyd"}

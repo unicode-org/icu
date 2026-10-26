@@ -263,10 +263,6 @@ ast{
             "CLP",
             "pesu chilenu",
         }
-        CNX{
-            "CNX",
-            "Dólar del Bancu Popular Chinu",
-        }
         CNY{
             "CN¥",
             "Yuan chinu",
@@ -1480,10 +1476,6 @@ ast{
         CLP{
             one{"pesu chilenu"}
             other{"pesos chilenos"}
-        }
-        CNX{
-            one{"dólar del Bancu Popular Chinu"}
-            other{"dólares del Bancu Popular Chinu"}
         }
         CNY{
             one{"yuan chinu"}

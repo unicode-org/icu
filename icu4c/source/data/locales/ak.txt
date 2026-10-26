@@ -96,8 +96,8 @@ ak{
                         other{"¤0G"}
                     }
                     10000000000{
-                        one{"¤00G"}
-                        other{"¤00G"}
+                        one{"¤ 00B"}
+                        other{"¤00B"}
                     }
                     100000000000{
                         one{"¤000G"}
@@ -143,10 +143,10 @@ ak{
                     }
                     1000000000{
                         one{"¤ 0G"}
-                        other{"¤ 0G"}
+                        other{"¤ 0B"}
                     }
                     10000000000{
-                        one{"¤ 00G"}
+                        one{"¤ 00B"}
                         other{"¤ 00G"}
                     }
                     100000000000{
@@ -232,10 +232,6 @@ ak{
             }
         }
         gregorian{
-            AmPmMarkers{
-                "AN",
-                "ANW",
-            }
             AmPmMarkersAbbr{
                 "AN",
                 "ANW",
@@ -286,6 +282,8 @@ ak{
                 yMMM{"MMM y"}
                 yMMMEd{"E, MMM d, y"}
                 yMMMM{"MMMM y"}
+                yMMMMEd{"EEE, MMMM d, y"}
+                yMMMMd{"MMMM d, y"}
                 yMMMd{"MMM d, y"}
                 yMd{"y/M/d"}
                 yQQQ{"QQQ y"}
@@ -302,15 +300,6 @@ ak{
                         "Fia",
                         "Mem",
                     }
-                    short{
-                        "Kwa",
-                        "Dwo",
-                        "Ben",
-                        "Wuk",
-                        "Yaw",
-                        "Fia",
-                        "Mem",
-                    }
                     wide{
                         "Sun",
                         "Dwoada",
@@ -322,15 +311,6 @@ ak{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        "Kwa",
-                        "Dwo",
-                        "Ben",
-                        "Wuk",
-                        "Yaw",
-                        "Fia",
-                        "Mem",
-                    }
                     narrow{
                         "K",
                         "D",
@@ -339,40 +319,6 @@ ak{
                         "Y",
                         "F",
                         "M",
-                    }
-                    short{
-                        "Kwa",
-                        "Dwo",
-                        "Ben",
-                        "Wuk",
-                        "Yaw",
-                        "Fia",
-                        "Mem",
-                    }
-                    wide{
-                        "Sun",
-                        "Dwoada",
-                        "Benada",
-                        "Wukuada",
-                        "Yawoada",
-                        "Fiada",
-                        "Memeneda",
-                    }
-                }
-            }
-            dayPeriod{
-                stand-alone{
-                    abbreviated{
-                        am{"AN"}
-                        pm{"ANW"}
-                    }
-                    narrow{
-                        am{"AN"}
-                        pm{"ANW"}
-                    }
-                    wide{
-                        am{"AN"}
-                        pm{"ANW"}
                     }
                 }
             }
@@ -801,7 +747,14 @@ ak{
             relative{
                 "-1"{"Memeneda a atwam"}
                 "0"{"Memeneda yi"}
-                "1"{"next Saturday"}
+                "1"{"Memeneda a εreba"}
+            }
+        }
+        sat-short{
+            relative{
+                "-1"{"Memeneda a atwam"}
+                "0"{"Memeneda yi"}
+                "1"{"Memeneda a εreba"}
             }
         }
         second{
@@ -809,30 +762,6 @@ ak{
             relative{
                 "0"{"seesei"}
             }
-            relativeTime{
-                future{
-                    one{"simasin {0} mu"}
-                    other{"simasin {0} mu"}
-                }
-                past{
-                    one{"simasin {0} a atwam"}
-                    other{"simasin {0} a atwam"}
-                }
-            }
-        }
-        second-narrow{
-            relativeTime{
-                future{
-                    one{"simasin {0} mu"}
-                    other{"simasin {0} mu"}
-                }
-                past{
-                    one{"simasin {0} a atwam"}
-                    other{"simasin {0} a atwam"}
-                }
-            }
-        }
-        second-short{
             relativeTime{
                 future{
                     one{"simasin {0} mu"}

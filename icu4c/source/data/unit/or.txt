@@ -175,11 +175,6 @@ or{
                 one{"{0} ଗ୍ଲୁକୋଜ୍‌"}
                 other{"{0} ଗ୍ଲୁକୋଜ୍‌"}
             }
-            part{
-                dnam{"ଅଂଶ"}
-                one{"{0} ଅଂଶ"}
-                other{"{0} ଅଂଶ"}
-            }
             part-per-1e6{
                 dnam{"ଅଂଶ ପ୍ରତି ନିୟୁତ"}
                 one{"{0} ଅଂଶ ପ୍ରତି ନିୟୁତ"}
@@ -972,10 +967,6 @@ or{
                 one{"{0} ଘୂର୍ଣନ"}
                 other{"{0} ଘୂର୍ଣନ"}
             }
-            steradian{
-                one{"{0} sr"}
-                other{"{0} sr"}
-            }
         }
         area{
             dunam{
@@ -1045,10 +1036,6 @@ or{
                 one{"{0}kt"}
                 other{"{0}kt"}
             }
-            katal{
-                one{"{0} kat"}
-                other{"{0} kat"}
-            }
             milligram-ofglucose-per-deciliter{
                 dnam{"ମି.ଗ୍ରା./ଡେ.ଲି."}
                 one{"{0} ମି.ଗ୍ରା./ଡେ.ଲି."}
@@ -1063,11 +1050,7 @@ or{
                 one{"{0}ମୋଲ"}
                 other{"{0}ମୋଲ"}
             }
-            ofglucose{
-                dnam{"Glc"}
-            }
             part{
-                dnam{"ଅଂଶ"}
                 one{"{0} ଅଂଶ"}
                 other{"{0} ଅଂଶ"}
             }
@@ -1164,9 +1147,6 @@ or{
         energy{
             british-thermal-unit{
                 dnam{"BTU"}
-            }
-            calorie-it{
-                dnam{"cal-IT"}
             }
             kilowatt-hour{
                 one{"{0}kWh"}

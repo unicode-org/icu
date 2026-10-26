@@ -3,8 +3,14 @@
 // Generated using tools/cldr/cldr-to-icu/
 nso{
     zoneStrings{
+        "Etc:UTC"{
+            ls{"Nako ya Legohle yeo e Rulagantšwego"}
+        }
         "meta:GMT"{
             ls{"Nako Palogare ya Greenwich"}
         }
+        regionFormat{"Nako ya {0}"}
+        regionFormatDaylight{"Nako le Hlabile {0}"}
+        regionFormatStandard{"Nako ya Tlwaelo ya {0}"}
     }
 }

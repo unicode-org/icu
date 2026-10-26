@@ -4,8 +4,9 @@
 en_GB{
     %%Parent{"en_001"}
     zoneStrings{
-        "Europe:London"{
+        "meta:British"{
             sd{"BST"}
+            ss{"GMT"}
         }
         "meta:Europe_Central"{
             sd{"CEST"}

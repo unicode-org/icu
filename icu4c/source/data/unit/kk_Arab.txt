@@ -6,7 +6,6 @@ kk_Arab{
     units{
         angle{
             steradian{
-                dnam{"ستەراديان"}
                 one{"{0} ستەراديان"}
                 other{"{0} ستەراديان"}
             }
@@ -70,11 +69,6 @@ kk_Arab{
             }
         }
         concentr{
-            katal{
-                dnam{"كاتال"}
-                one{"{0} كاتال"}
-                other{"{0} كاتال"}
-            }
             milligram-ofglucose-per-deciliter{
                 one{"{0} ميليگرام/دەسيمەتىر"}
                 other{"{0} ميليگرام/دەسيمەتىر"}
@@ -82,24 +76,6 @@ kk_Arab{
             millimole-per-liter{
                 one{"{0} ميليمول/ليتىر"}
                 other{"{0} ميليمول/ليتىر"}
-            }
-            ofglucose{
-                dnam{"گليۋكوزا"}
-                one{"{0} گليۋكوزا"}
-                other{"{0} گليۋكوزا"}
-            }
-            part{
-                dnam{"بولىك"}
-                one{"{0} بولىك"}
-                other{"{0} بولىك"}
-            }
-            part-per-1e6{
-                one{"{0} ميلليوندىق ۇلەس"}
-                other{"{0} ميلليوندىق ۇلەس"}
-            }
-            part-per-1e9{
-                one{"{0} ميللياردتىق ۇلەس"}
-                other{"{0} ميللياردتىق ۇلەس"}
             }
             percent{
                 one{"{0} پايىز"}
@@ -198,55 +174,18 @@ kk_Arab{
             }
         }
         electric{
-            coulomb{
-                dnam{"كۋلون"}
-                one{"{0} كۋلون"}
-                other{"{0} كۋلون"}
-            }
-            farad{
-                dnam{"فاراد"}
-                one{"{0} فاراد"}
-                other{"{0} فاراد"}
-            }
-            henry{
-                dnam{"حەنري"}
-                one{"{0} حەنري"}
-                other{"{0} حەنري"}
-            }
             siemens{
-                dnam{"سيمەنس"}
                 one{"{0} سيمەنس"}
                 other{"{0} سيمەنس"}
             }
         }
         energy{
             becquerel{
-                dnam{"بەككەرەل"}
                 one{"{0} بەككەرەل"}
                 other{"{0} بەككەرەل"}
             }
-            calorie-it{
-                dnam{"كالو."}
-                one{"{0} كالو."}
-                other{"{0} كالو."}
-            }
-            gray{
-                dnam{"گىرەي"}
-                one{"{0} گىرەي"}
-                other{"{0} گىرەي"}
-            }
-            sievert{
-                dnam{"زيۆەرت"}
-                one{"{0} زيۆەرت"}
-                other{"{0} زيۆەرت"}
-            }
         }
         force{
-            kilogram-force{
-                dnam{"كيلوگرام-كۇش"}
-                one{"{0} كيلوگرام-كۇش"}
-                other{"{0} كيلوگرام-كۇش"}
-            }
             kilowatt-hour-per-100-kilometer{
                 one{"{0} كيلوۆات-ساعات/100 كيلومەتىر"}
                 other{"{0} كيلوۆات-ساعات/100 كيلومەتىر"}
@@ -287,35 +226,10 @@ kk_Arab{
                 other{"{0} ليۋكس"}
             }
         }
-        magnetic{
-            tesla{
-                dnam{"ت"}
-                one{"{0} تەسلا"}
-                other{"{0} تەسلا"}
-            }
-            weber{
-                dnam{"ۋەبەر"}
-                one{"{0} ۋەبەر"}
-                other{"{0} ۋەبەر"}
-            }
-        }
         mass{
-            gram{
-                per{"{0}/g"}
-            }
-            pound{
-                dnam{"lb"}
-            }
             tonne{
                 one{"{0} مەتىرلىك توننا"}
                 other{"{0} مەتىرلىك توننا"}
-            }
-        }
-        pressure{
-            ofhg{
-                dnam{"مەركۋري ءديۋيمى"}
-                one{"{0} مەركۋري ءديۋيمى"}
-                other{"{0} مەركۋري ءديۋيمى"}
             }
         }
         temperature{
@@ -348,100 +262,142 @@ kk_Arab{
                 one{"يمپ سۇيىق ۋنسيا"}
                 other{"{0} يمپ سۇيىق ۋنسيا"}
             }
-            fluid-ounce-metric{
-                dnam{"سۇ. ۋن."}
-                one{"{0} سۇ. ۋن."}
-                other{"{0} سۇ. ۋن."}
-            }
         }
     }
     unitsNarrow{
+        angle{
+            arc-minute{
+                one{"{0}′"}
+                other{"{0}′"}
+            }
+            arc-second{
+                one{"{0}″"}
+                other{"{0}″"}
+            }
+            degree{
+                one{"{0}°"}
+                other{"{0}°"}
+            }
+            radian{
+                one{"{0}rad"}
+                other{"{0}rad"}
+            }
+            steradian{
+                one{"{0} sr"}
+                other{"{0} sr"}
+            }
+        }
+        compound{
+            1024p1{"Ki{0}"}
+            1024p2{"Mi{0}"}
+            1024p3{"Gi{0}"}
+            1024p4{"Ti{0}"}
+            1024p5{"Pi{0}"}
+            1024p6{"Ei{0}"}
+            1024p7{"Zi{0}"}
+            1024p8{"Yi{0}"}
+            10p-1{"d{0}"}
+            10p-12{"p{0}"}
+            10p-15{"f{0}"}
+            10p-18{"a{0}"}
+            10p-2{"c{0}"}
+            10p-21{"z{0}"}
+            10p-24{"y{0}"}
+            10p-27{"r{0}"}
+            10p-3{"m{0}"}
+            10p-30{"q{0}"}
+            10p-6{"μ{0}"}
+            10p-9{"n{0}"}
+            10p1{"da{0}"}
+            10p12{"T{0}"}
+            10p15{"P{0}"}
+            10p18{"E{0}"}
+            10p2{"h{0}"}
+            10p21{"Z{0}"}
+            10p24{"Y{0}"}
+            10p27{"R{0}"}
+            10p3{"k{0}"}
+            10p30{"Q{0}"}
+            10p6{"M{0}"}
+            10p9{"G{0}"}
+        }
         concentr{
+            item{
+                one{"{0}ەلەمەنت"}
+                other{"{0}ەلەمەنت"}
+            }
+            karat{
+                one{"{0}kt"}
+                other{"{0}kt"}
+            }
             katal{
-                dnam{"كاتال"}
-                one{"{0} كاتال"}
-                other{"{0} كاتال"}
+                one{"{0} kat"}
+                other{"{0} kat"}
             }
             ofglucose{
-                dnam{"گليۋكوزا"}
-                one{"{0} گليۋكوزا"}
-                other{"{0} گليۋكوزا"}
+                one{"{0} گليۋكوزا"}
+                other{"{0} گليۋكوزا"}
             }
             part{
-                dnam{"بولىك"}
-                one{"{0} بولىك"}
-                other{"{0} بولىك"}
-            }
-            part-per-1e6{
-                one{"{0} ميلليوندىق ۇلەس"}
-                other{"{0} ميلليوندىق ۇلەس"}
+                one{"{0} بولىك"}
+                other{"{0} بولىك"}
             }
             part-per-1e9{
-                one{"{0} ميللياردتىق ۇلەس"}
-                other{"{0} ميللياردتىق ۇلەس"}
+                one{"{0}ppb"}
+                other{"{0}ppb"}
             }
+        }
+        consumption{
+            mile-per-gallon{
+                one{"{0}mpg"}
+                other{"{0}mpg"}
+            }
+            mile-per-gallon-imperial{
+                one{"{0}m/gUK"}
+                other{"{0}m/gUK"}
+            }
+        }
+        coordinate{
+            east{"{0} شىعىس"}
+            north{"{0} سولتۇستىك"}
+            south{"{0} وڭتۇستىك"}
+            west{"{0} باتىس"}
         }
         digital{
             byte{
                 dnam{"B"}
             }
         }
-        electric{
-            coulomb{
-                dnam{"كۋلون"}
-                one{"{0} كۋلون"}
-                other{"{0} كۋلون"}
-            }
-            farad{
-                dnam{"فاراد"}
-                one{"{0} فاراد"}
-                other{"{0} فاراد"}
-            }
-            henry{
-                dnam{"حەنري"}
-                one{"{0} حەنري"}
-                other{"{0} حەنري"}
-            }
-        }
         energy{
             becquerel{
-                dnam{"بەككەرەل"}
                 one{"{0} بك"}
                 other{"{0} بك"}
-            }
-            calorie-it{
-                dnam{"كالو."}
-                one{"{0} كالو."}
-                other{"{0} كالو."}
-            }
-            gray{
-                dnam{"گىرەي"}
-                one{"{0} گىرەي"}
-                other{"{0} گىرەي"}
-            }
-            sievert{
-                dnam{"زيۆەرت"}
-                one{"{0} زيۆەرت"}
-                other{"{0} زيۆەرت"}
             }
         }
         force{
             kilogram-force{
-                dnam{"كيلوگرام-كۇش"}
-                one{"{0} كيلوگرام-كۇش"}
-                other{"{0} كيلوگرام-كۇش"}
+                one{"{0} kgf"}
+                other{"{0} kgf"}
+            }
+            pound-force{
+                one{"{0}lbf"}
+                other{"{0}lbf"}
+            }
+        }
+        light{
+            solar-luminosity{
+                one{"{0}L☉"}
+                other{"{0}L☉"}
             }
         }
         magnetic{
             tesla{
-                dnam{"ت"}
-                one{"{0} ت"}
-                other{"{0} ت"}
+                one{"{0} T"}
+                other{"{0} T"}
             }
             weber{
-                dnam{"ۋەبەر"}
-                one{"{0} ۋەبەر"}
-                other{"{0} ۋەبەر"}
+                one{"{0} Wb"}
+                other{"{0} Wb"}
             }
         }
         mass{
@@ -467,20 +423,17 @@ kk_Arab{
             gram{
                 one{"{0}g"}
                 other{"{0}g"}
-                per{"{0}/g"}
             }
             kilogram{
                 dnam{"kg"}
                 one{"{0}kg"}
                 other{"{0}kg"}
-                per{"{0}‎/kg"}
             }
             microgram{
                 one{"{0}μg"}
                 other{"{0}μg"}
             }
             milligram{
-                dnam{"mg"}
                 one{"{0}mg"}
                 other{"{0}mg"}
             }
@@ -496,7 +449,6 @@ kk_Arab{
                 other{"{0}oz t"}
             }
             pound{
-                dnam{"lb"}
                 one{"{0}lb"}
                 other{"{0}lb"}
             }
@@ -510,18 +462,10 @@ kk_Arab{
                 other{"{0}tn"}
             }
         }
-        pressure{
-            ofhg{
-                dnam{"مەركۋري ءديۋيمى"}
-                one{"{0} مەركۋري ءديۋيمى"}
-                other{"{0} مەركۋري ءديۋيمى"}
-            }
-        }
-        volume{
-            fluid-ounce-metric{
-                dnam{"سۇ. ۋن."}
-                one{"{0} سۇ. ۋن."}
-                other{"{0} سۇ. ۋن."}
+        torque{
+            pound-force-foot{
+                one{"{0}lbf⋅ft"}
+                other{"{0}lbf⋅ft"}
             }
         }
     }
@@ -705,8 +649,8 @@ kk_Arab{
             }
             part-per-1e9{
                 dnam{"ميللياردتىق ۇلەس"}
-                one{"{0} ميللياردتىق ۇلەس"}
-                other{"{0} ميللياردتىق ۇلەس"}
+                one{"{0} ppb"}
+                other{"{0} ppb"}
             }
             percent{
                 dnam{"پايىز"}
@@ -732,16 +676,16 @@ kk_Arab{
             }
             mile-per-gallon-imperial{
                 dnam{"ميل/يمپ گاللون"}
-                one{"{0} ميل/يمپ گاللون"}
-                other{"{0} ميل/يمپ گاللون"}
+                one{"{0} mpg Imp."}
+                other{"{0} mpg Imp."}
             }
         }
         coordinate{
             dnam{"باعىت"}
-            east{"{0} ش"}
-            north{"{0} س"}
-            south{"{0} و"}
-            west{"{0} ب"}
+            east{"{0} شىعىس"}
+            north{"{0} سولتۇستىك"}
+            south{"{0} وڭتۇستىك"}
+            west{"{0} باتىس"}
         }
         digital{
             bit{
@@ -1132,8 +1076,8 @@ kk_Arab{
             }
             solar-luminosity{
                 dnam{"كۇن جارىقتىعى"}
-                one{"{0} كۇن جارىقتىعى"}
-                other{"{0} كۇن جارىقتىعى"}
+                one{"{0} L☉"}
+                other{"{0} L☉"}
             }
         }
         magnetic{
@@ -1161,8 +1105,6 @@ kk_Arab{
             }
             earth-mass{
                 dnam{"جەر ماسساسى"}
-                one{"{0} M⊕"}
-                other{"{0} M⊕"}
             }
             grain{
                 dnam{"گران"}
@@ -1207,8 +1149,6 @@ kk_Arab{
             }
             solar-mass{
                 dnam{"كۇن ماسساسى"}
-                one{"{0} M☉"}
-                other{"{0} M☉"}
             }
             stone{
                 dnam{"ستوۋن"}

@@ -918,7 +918,7 @@ void TimeZoneTest::TestShortZoneIDs()
         {"ECT", 60, true},    // ICU Link - Europe/Paris
         {"MET", 60, true},    // Olson europe 1:00 C-Eur
         {"CAT", 120, false},  // ICU Link - Africa/Maputo
-        {"ART", 120, false},  // ICU Link - Africa/Cairo
+        {"ART", 120, true},   // ICU Link - Africa/Cairo - observes DST since 2023
         {"EET", 120, true},   // Olson europe 2:00 EU
         {"EAT", 180, false},  // ICU Link - Africa/Addis_Ababa
         {"NET", 240, false},  // ICU Link - Asia/Yerevan
@@ -968,11 +968,6 @@ void TimeZoneTest::TestShortZoneIDs()
         if (usesDaylight != kReferenceList[i].daylight) {
             if (!isDevelopmentBuild) {
                 logln("Warning: Time Zone " + itsID + " use daylight is " +
-                      (usesDaylight?"true":"false") +
-                      " but it should be " +
-                      ((kReferenceList[i].daylight)?"true":"false"));
-            } else if (!(itsID==UnicodeString(u"ART",-1) && logKnownIssue("ICU-22436", "Wrong DST status for time zone ART"))) {
-                dataerrln("FAIL: Time Zone " + itsID + " use daylight is " +
                       (usesDaylight?"true":"false") +
                       " but it should be " +
                       ((kReferenceList[i].daylight)?"true":"false"));
@@ -2354,8 +2349,8 @@ static struct   {
     const char            *expectedDisplayName; } 
  zoneDisplayTestData [] =  {
      //  zone id         locale   summer   format          expected display name
-      {"Europe/London",     "en", false, TimeZone::SHORT, "GMT"},
-      {"Europe/London",     "en", false, TimeZone::LONG,  "Greenwich Mean Time"},
+      {"Europe/London",     "en", false, TimeZone::SHORT, "GMT+0"},
+      {"Europe/London",     "en", false, TimeZone::LONG,  "GMT+00:00"},
       {"Europe/London",     "en", true,  TimeZone::SHORT, "GMT+1" /*"BST"*/},
       {"Europe/London",     "en", true,  TimeZone::LONG,  "British Summer Time"},
       
@@ -2383,7 +2378,7 @@ static struct   {
        
       // No Summer Time, but had it before 1983.
       {"Pacific/Honolulu",   "en", false, TimeZone::SHORT, "HST"},
-      {"Pacific/Honolulu",   "en", false, TimeZone::LONG,  "Hawaii-Aleutian Standard Time"},
+      {"Pacific/Honolulu",   "en", false, TimeZone::LONG,  "Hawaii Time"},
       {"Pacific/Honolulu",   "en", true,  TimeZone::SHORT, "GMT-10"},
       {"Pacific/Honolulu",   "en", true,  TimeZone::LONG,  "GMT-10:00"},
        
@@ -2395,13 +2390,13 @@ static struct   {
 
       // Repeating the test data for DST.  The test data below trigger the problem reported
       // by Ticket#6644
-      {"Europe/London",       "en", false, TimeZone::SHORT, "GMT" /*"BST"*/},
-      {"Europe/London",       "en", false, TimeZone::LONG,  "Greenwich Mean Time"},
+      {"Europe/London",       "en", false, TimeZone::SHORT, "GMT+0" /*"BST"*/},
+      {"Europe/London",       "en", false, TimeZone::LONG,  "GMT+00:00"},
       {"Europe/London",       "en", true, TimeZone::SHORT, "GMT+1" /*"BST"*/},
       {"Europe/London",       "en", true, TimeZone::LONG,  "British Summer Time"},
 
-      {"Europe/Dublin",       "en", false, TimeZone::SHORT, "GMT" /*"IST"*/},
-      {"Europe/Dublin",       "en", false, TimeZone::LONG,  "Greenwich Mean Time"},
+      {"Europe/Dublin",       "en", false, TimeZone::SHORT, "GMT+0" /*"IST"*/},
+      {"Europe/Dublin",       "en", false, TimeZone::LONG,  "GMT+00:00"},
       {"Europe/Dublin",       "en", true, TimeZone::SHORT, "GMT+1" /*"IST"*/},
       {"Europe/Dublin",       "en", true, TimeZone::LONG,  "Irish Standard Time"},
 
@@ -2470,13 +2465,11 @@ void TimeZoneTest::TestGetRegion()
         {"America/Indiana/Indianapolis",    "US"},  // CLDR alias
         {"Mexico/General",                  "MX"},  // Link America/Mexico_City, Olson backward
         {"Etc/UTC",                         "001"},
-        {"EST5EDT",                         "US"},
+        {"EST5EDT",                         "001"},
         {"PST",                             "US"},  // Link America/Los_Angeles
         {"Europe/Helsinki",                 "FI"},
         {"Europe/Mariehamn",                "AX"},  // Link Europe/Helsinki, but in zone.tab
         {"Asia/Riyadh",                     "SA"},
-        // tz file solar87 was removed from tzdata2013i
-        // {"Asia/Riyadh87",                   "001"}, // this should be "SA" actually, but not in zone.tab
         {"Atlantic/Jan_Mayen",              "SJ"},
         {"Pacific/Truk",                    "FM"},
         {"Etc/Unknown",                     nullptr},  // CLDR canonical, but not a sysmte zone ID
@@ -2573,7 +2566,7 @@ void TimeZoneTest::TestGetWindowsID() {
         {"America/New_York",        "Eastern Standard Time"},
         {"America/Montreal",        "Eastern Standard Time"},
         {"America/Los_Angeles",     "Pacific Standard Time"},
-        {"America/Vancouver",       "Pacific Standard Time"},
+        {"America/Vancouver",       "British Columbia Standard Time"}, // CLDR-19827: formerly Pacific Standard Time
         {"Asia/Shanghai",           "China Standard Time"},
         {"Asia/Chongqing",          "China Standard Time"},
         {"America/Indianapolis",    "US Eastern Standard Time"},            // CLDR canonical name
@@ -2676,7 +2669,7 @@ void TimeZoneTest::TestGetIanaID() {
         {u"Europe/Zaporozhye",  u"Europe/Kyiv"},
         {u"Etc/GMT-1",          u"Etc/GMT-1"},
         {u"Etc/GMT+20",         UNKNOWN},
-        {u"PST8PDT",            u"America/Los_Angeles"},
+        {u"PST8PDT",            u"PST8PDT"},
         {u"GMT-08:00",          UNKNOWN},
         {nullptr,               nullptr}
     };

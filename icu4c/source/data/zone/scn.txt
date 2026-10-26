@@ -224,7 +224,6 @@ scn{
         }
         "Europe:Dublin"{
             ec{"Dubblinu"}
-            ld{"Ura sulari Irlannisi"}
         }
         "Europe:Gibraltar"{
             ec{"Gibbirterra"}
@@ -246,7 +245,6 @@ scn{
         }
         "Europe:London"{
             ec{"Lònnira"}
-            ld{"Ura ligali Britànnica"}
         }
         "Europe:Luxembourg"{
             ec{"Lussimmurgu"}
@@ -342,9 +340,6 @@ scn{
             ld{"Ura ligali di l’Alaska"}
             lg{"Ura di l’Alaska"}
             ls{"Ura sulari di l’Alaska"}
-            sd{"AKDT"}
-            sg{"AKT"}
-            ss{"AKST"}
         }
         "meta:Amazon"{
             ld{"Ura ligali di l’Amazzonia"}
@@ -355,33 +350,21 @@ scn{
             ld{"Ura ligali cintrali"}
             lg{"Ura cintrali"}
             ls{"Ura sulari cintrali"}
-            sd{"CDT"}
-            sg{"CT"}
-            ss{"CST"}
         }
         "meta:America_Eastern"{
             ld{"Ura ligali livantina"}
             lg{"Ura livantina"}
             ls{"Ura sulari livantina"}
-            sd{"EDT"}
-            sg{"ET"}
-            ss{"EST"}
         }
         "meta:America_Mountain"{
             ld{"Ura ligali dî muntagni"}
             lg{"Ura dî muntagni"}
             ls{"Ura sulari dî muntagni"}
-            sd{"MDT"}
-            sg{"MT"}
-            ss{"MST"}
         }
         "meta:America_Pacific"{
             ld{"Ura ligali dû Pacìficu"}
             lg{"Ura dû Pacìficu"}
             ls{"Ura sulari dû Pacìficu"}
-            sd{"PDT"}
-            sg{"PT"}
-            ss{"PST"}
         }
         "meta:Apia"{
             ld{"Ura ligali di Samoa"}
@@ -412,9 +395,6 @@ scn{
             ld{"Ura ligali di l’Atlànticu"}
             lg{"Ura di l’Atlànticu"}
             ls{"Ura sulari di l’Atlànticu"}
-            sd{"ADT"}
-            sg{"AT"}
-            ss{"AST"}
         }
         "meta:Australia_Central"{
             ld{"Ura ligali di l’Australia cintrali"}
@@ -462,6 +442,9 @@ scn{
             lg{"Ura di Brasilia"}
             ls{"Ura sulari di Brasilia"}
         }
+        "meta:British"{
+            ld{"Ura ligali Britànnica"}
+        }
         "meta:Brunei"{
             ls{"Ura dû Brunei"}
         }
@@ -508,9 +491,6 @@ scn{
             ld{"Ura ligali di Cubba"}
             lg{"Ura di Cubba"}
             ls{"Ura sulari di Cubba"}
-            sd{"CuDT"}
-            sg{"CuT"}
-            ss{"CuST"}
         }
         "meta:Davis"{
             ls{"Ura di Davis"}
@@ -603,15 +583,11 @@ scn{
         }
         "meta:Hawaii"{
             ls{"Ura sulari di l’Hawaai"}
-            ss{"HAST"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"Ura ligali di l’Hawaai"}
             lg{"Ura di l’Hawaai"}
             ls{"Ura sulari di l’Hawaai"}
-            sd{"HADT"}
-            sg{"HAT"}
-            ss{"HAST"}
         }
         "meta:Hong_Kong"{
             ld{"Ura ligali di Hong Kong"}
@@ -645,6 +621,9 @@ scn{
             ld{"Ura ligali di l’Iran"}
             lg{"Ura di l’Iran"}
             ls{"Ura sulari di l’Iran"}
+        }
+        "meta:Irish"{
+            ld{"Ura sulari Irlannisi"}
         }
         "meta:Irkutsk"{
             ld{"Ura ligali di Irtkutsk"}
@@ -836,8 +815,6 @@ scn{
             ls{"Ura sulari di Sakhalin"}
         }
         "meta:Samoa"{
-            ld{"Ura ligali dî Samoa miricani"}
-            lg{"Ura dî Samoa miricani"}
             ls{"Ura sulari dî Samoa miricani"}
         }
         "meta:Seychelles"{

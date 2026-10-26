@@ -471,9 +471,6 @@ vec{
         "Europe:Copenhagen"{
             ec{"Copenaghen"}
         }
-        "Europe:Dublin"{
-            ld{"Ora d’istà irlandeze"}
-        }
         "Europe:Gibraltar"{
             ec{"Jibiltera"}
         }
@@ -497,7 +494,6 @@ vec{
         }
         "Europe:London"{
             ec{"Londra"}
-            ld{"Ora d’istà britànega"}
         }
         "Europe:Luxembourg"{
             ec{"Lusenburgo"}
@@ -800,6 +796,9 @@ vec{
             lg{"Ora de Brazilia"}
             ls{"Ora normale de Brazilia"}
         }
+        "meta:British"{
+            ld{"Ora d’istà britànega"}
+        }
         "meta:Brunei"{
             ls{"Ora de’l Brunéi"}
         }
@@ -971,6 +970,9 @@ vec{
             ld{"Ora d’istà de l’Iran"}
             lg{"Ora de l’Iran"}
             ls{"Ora normale de l’Iran"}
+        }
+        "meta:Irish"{
+            ld{"Ora d’istà irlandeze"}
         }
         "meta:Irkutsk"{
             ld{"Ora d’istà de Irkutsk"}
@@ -1162,8 +1164,6 @@ vec{
             ls{"Ora normale de Sakalin"}
         }
         "meta:Samoa"{
-            ld{"Ora d’istà de le Ìzole Samòa"}
-            lg{"Ora de le Ìzole Samòa"}
             ls{"Ora normale de le Ìzole Samòa"}
         }
         "meta:Seychelles"{
@@ -1266,7 +1266,6 @@ vec{
         }
         gmtFormat{"UTC{0}"}
         gmtUnknownFormat{"UTC+?"}
-        gmtZeroFormat{"UTC"}
         regionFormat{"Ora {0}"}
         regionFormatDaylight{"Ora d’istà {0}"}
         regionFormatStandard{"Ora normale {0}"}

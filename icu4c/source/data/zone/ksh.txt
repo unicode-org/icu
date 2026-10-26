@@ -195,9 +195,6 @@ ksh{
         "Europe:Copenhagen"{
             ec{"Kopenharen"}
         }
-        "Europe:Dublin"{
-            ld{"Irland sing Summerzick"}
-        }
         "Europe:Gibraltar"{
             ec{"Jibraltaa"}
         }
@@ -218,9 +215,6 @@ ksh{
         }
         "Europe:Lisbon"{
             ec{"Lissabon"}
-        }
-        "Europe:London"{
-            ld{"Jrußbretannije sing Summerzick"}
         }
         "Europe:Luxembourg"{
             ec{"Luxembursch"}
@@ -290,6 +284,10 @@ ksh{
             lg{"de Azore ier Zick"}
             ls{"de Azore ier jewöhnlijje Zick"}
         }
+        "meta:British"{
+            ld{"Jrußbretannije sing Summerzick"}
+            lg{"Jrußbretannije sing Zick"}
+        }
         "meta:Cape_Verde"{
             ld{"Kapvärdejaansche Sommerzigg"}
             lg{"Kapvärdejaansche Zigg"}
@@ -324,6 +322,10 @@ ksh{
         }
         "meta:Indian_Ocean"{
             ls{"dem Indische Ozejan sing Zick"}
+        }
+        "meta:Irish"{
+            ld{"Irland sing Summerzick"}
+            lg{"Irland sing Zick"}
         }
         "meta:Mauritius"{
             ld{"Summerzigg vun Mauritius"}

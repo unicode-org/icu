@@ -89,7 +89,7 @@ yo{
         CR{"Kuusita Ríkà"}
         CU{"Kúbà"}
         CV{"Etíokun Kápé féndè"}
-        CW{"Curaçao"}
+        CW{"Kírósáwù"}
         CX{"Erékùsù Christmas"}
         CY{"Kúrúsì"}
         CZ{"Ṣẹ́ẹ́kì"}
@@ -289,7 +289,7 @@ yo{
         VU{"Faniatu"}
         WF{"Wali ati futuna"}
         WS{"Samọ"}
-        XA{"ìsọ̀rọ̀sí irọ́"}
+        XA{"Ìsọ̀rọ̀sí irọ́"}
         XB{"Agbègbè irọ́"}
         XK{"Kòsófò"}
         YE{"Yemeni"}

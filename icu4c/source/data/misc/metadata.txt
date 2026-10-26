@@ -460,10 +460,6 @@ metadata:table(nofallback){
                 reason{"overlong"}
                 replacement{"fa"}
             }
-            fat{
-                reason{"macrolanguage"}
-                replacement{"ak"}
-            }
             fij{
                 reason{"overlong"}
                 replacement{"fj"}
@@ -1076,6 +1072,10 @@ metadata:table(nofallback){
                 reason{"overlong"}
                 replacement{"mn"}
             }
+            mrd{
+                reason{"deprecated"}
+                replacement{"mgp"}
+            }
             mri{
                 reason{"overlong"}
                 replacement{"mi"}
@@ -1500,6 +1500,10 @@ metadata:table(nofallback){
                 reason{"legacy"}
                 replacement{"sr_Latn"}
             }
+            shl{
+                reason{"deprecated"}
+                replacement{"mrh"}
+            }
             sin{
                 reason{"overlong"}
                 replacement{"si"}
@@ -1915,6 +1919,10 @@ metadata:table(nofallback){
             ymt{
                 reason{"deprecated"}
                 replacement{"mtm"}
+            }
+            yol{
+                reason{"deprecated"}
+                replacement{"enm"}
             }
             yor{
                 reason{"overlong"}
@@ -5241,6 +5249,7 @@ metadata:table(nofallback){
     defaultContent{
         "aa_ET",
         "ab_GE",
+        "ady_RU",
         "af_ZA",
         "agq_CM",
         "ak_GH",
@@ -5250,6 +5259,7 @@ metadata:table(nofallback){
         "apc_SY",
         "ar_001",
         "arn_CL",
+        "ary_MA",
         "as_IN",
         "asa_TZ",
         "ast_ES",
@@ -5278,6 +5288,7 @@ metadata:table(nofallback){
         "bo_CN",
         "bqi_IR",
         "br_FR",
+        "brh_PK",
         "brx_IN",
         "bs_Cyrl_BA",
         "bs_Latn",
@@ -5354,6 +5365,7 @@ metadata:table(nofallback){
         "hnj_Hmnp",
         "hnj_Hmnp_US",
         "hr_HR",
+        "hrx_BR",
         "hsb_DE",
         "ht_HT",
         "hu_HU",
@@ -5366,6 +5378,9 @@ metadata:table(nofallback){
         "ii_CN",
         "io_001",
         "is_IS",
+        "isv_Latn",
+        "isv_Latn_001",
+        "isv_Cyrl_001",
         "it_IT",
         "iu_CA",
         "iu_Latn_CA",
@@ -5381,6 +5396,7 @@ metadata:table(nofallback){
         "kab_DZ",
         "kaj_NG",
         "kam_KE",
+        "kbd_RU",
         "kcg_NG",
         "kde_TZ",
         "kea_CV",
@@ -5456,6 +5472,7 @@ metadata:table(nofallback){
         "mni_Mtei_IN",
         "moh_CA",
         "mr_IN",
+        "mrh_IN",
         "ms_Arab_MY",
         "ms_MY",
         "mt_MT",
@@ -5554,6 +5571,7 @@ metadata:table(nofallback){
         "sr_Latn_RS",
         "ss_ZA",
         "ssy_ER",
+        "sus_GN",
         "suz_Deva",
         "suz_Sunu_NP",
         "suz_Deva_NP",
@@ -5605,6 +5623,7 @@ metadata:table(nofallback){
         "wal_ET",
         "wbp_AU",
         "wo_SN",
+        "xdq_RU",
         "xh_ZA",
         "xnr_IN",
         "xog_UG",

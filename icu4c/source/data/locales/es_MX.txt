@@ -156,9 +156,6 @@ es_MX{
                     M{"d/M – d/M"}
                     d{"d/M – d/M"}
                 }
-                h{
-                    a{"h a – h a"}
-                }
                 hm{
                     h{"h:mm–h:mm a"}
                     m{"h:mm–h:mm a"}
@@ -194,24 +191,6 @@ es_MX{
                     M{"d/M/y – d/M/y"}
                     d{"d/M/y – d/M/y"}
                     y{"d/M/y – d/M/y"}
-                }
-            }
-            monthNames{
-                format{
-                    abbreviated{
-                        "ene",
-                        "feb",
-                        "mar",
-                        "abr",
-                        "may",
-                        "jun",
-                        "jul",
-                        "ago",
-                        "sep",
-                        "oct",
-                        "nov",
-                        "dic",
-                    }
                 }
             }
         }

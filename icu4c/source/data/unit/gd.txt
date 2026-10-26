@@ -247,7 +247,6 @@ gd{
                 two{"{0} de ghlùcos"}
             }
             part{
-                dnam{"pàirt"}
                 few{"{0} pàirtean"}
                 one{"{0} phàirt"}
                 other{"{0} pàirt"}
@@ -1693,14 +1692,12 @@ gd{
                 two{"{0}mòl"}
             }
             ofglucose{
-                dnam{"Glc"}
                 few{"{0}Glc"}
                 one{"{0}Glc"}
                 other{"{0}Glc"}
                 two{"{0}Glc"}
             }
             part{
-                dnam{"pàirt"}
                 few{"{0}pàirt."}
                 one{"{0}phàirt"}
                 other{"{0}pàirt"}
@@ -1847,7 +1844,6 @@ gd{
                 two{"{0}dheich"}
             }
             fortnight{
-                dnam{"cld"}
                 few{"{0}cld"}
                 one{"{0}cld"}
                 other{"{0}cld"}
@@ -2007,7 +2003,6 @@ gd{
                 two{"{0}cal"}
             }
             calorie-it{
-                dnam{"cal-IT"}
                 few{"{0}cal-IT"}
                 one{"{0}cal-IT"}
                 other{"{0}cal-IT"}
@@ -2193,7 +2188,6 @@ gd{
                 two{"{0}cm"}
             }
             chain{
-                dnam{"ch"}
                 few{"{0}ch"}
                 one{"{0}ch"}
                 other{"{0}ch"}
@@ -2312,7 +2306,6 @@ gd{
                 two{"{0}pt"}
             }
             rod{
-                dnam{"rd"}
                 few{"{0}rd"}
                 one{"{0}rd"}
                 other{"{0}rd"}
@@ -2533,7 +2526,6 @@ gd{
                 two{"{0}bhàr"}
             }
             gasoline-energy-density{
-                dnam{"peatr-ionn"}
                 few{"{0}peatr-ionn"}
                 one{"{0}pheatr-ionn"}
                 other{"{0}peatr-ionn"}
@@ -2577,7 +2569,6 @@ gd{
                 two{"{0}mm Hg"}
             }
             ofhg{
-                dnam{"de Hg"}
                 few{"{0} de Hg"}
                 one{"{0} de Hg"}
                 other{"{0} de Hg"}
@@ -2750,13 +2741,6 @@ gd{
                 other{"{0}c"}
                 two{"{0}c"}
             }
-            cup-imperial{
-                dnam{"cupa ìmp."}
-                few{"{0} c ìmp."}
-                one{"{0} c ìmp."}
-                other{"{0} c ìmp."}
-                two{"{0} c ìmp."}
-            }
             cup-metric{
                 few{"{0}mc"}
                 one{"{0}mc"}
@@ -2806,12 +2790,6 @@ gd{
                 one{"{0}fl oz ì."}
                 other{"{0}fl oz ì."}
                 two{"{0}fl oz ì."}
-            }
-            fluid-ounce-metric{
-                few{"{0} fl oz m."}
-                one{"{0} fl oz m."}
-                other{"{0} fl oz m."}
-                two{"{0} fl oz m."}
             }
             gallon{
                 few{"{0}gal"}
@@ -2869,13 +2847,6 @@ gd{
                 one{"{0}pt"}
                 other{"{0}pt"}
                 two{"{0}pt"}
-            }
-            pint-imperial{
-                dnam{"pt ìmp."}
-                few{"{0} pt ìmp."}
-                one{"{0} pt ìmp."}
-                other{"{0} pt ìmp."}
-                two{"{0} pt ìmp."}
             }
             pint-metric{
                 dnam{"pt"}

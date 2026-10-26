@@ -153,50 +153,62 @@ ro{
                 }
                 decimalFormat{
                     1000{
+                        few{"0 K"}
                         one{"0 K"}
                         other{"0 K"}
                     }
                     10000{
+                        few{"00 K"}
                         one{"00 K"}
                         other{"00 K"}
                     }
                     100000{
+                        few{"000 K"}
                         one{"000 K"}
                         other{"000 K"}
                     }
                     1000000{
+                        few{"0 mil'.'"}
                         one{"0 mil'.'"}
                         other{"0 mil'.'"}
                     }
                     10000000{
+                        few{"00 mil'.'"}
                         one{"00 mil'.'"}
                         other{"00 mil'.'"}
                     }
                     100000000{
+                        few{"000 mil'.'"}
                         one{"000 mil'.'"}
                         other{"000 mil'.'"}
                     }
                     1000000000{
+                        few{"0 mld'.'"}
                         one{"0 mld'.'"}
                         other{"0 mld'.'"}
                     }
                     10000000000{
+                        few{"00 mld'.'"}
                         one{"00 mld'.'"}
                         other{"00 mld'.'"}
                     }
                     100000000000{
+                        few{"000 mld'.'"}
                         one{"000 mld'.'"}
                         other{"000 mld'.'"}
                     }
                     1000000000000{
+                        few{"0 tril'.'"}
                         one{"0 tril'.'"}
                         other{"0 tril'.'"}
                     }
                     10000000000000{
+                        few{"00 tril'.'"}
                         one{"00 tril'.'"}
                         other{"00 tril'.'"}
                     }
                     100000000000000{
+                        few{"000 tril'.'"}
                         one{"000 tril'.'"}
                         other{"000 tril'.'"}
                     }
@@ -455,6 +467,10 @@ ro{
                     M{"E, d MMM – E, d MMM"}
                     d{"E, d MMM – E, d MMM"}
                 }
+                MMMMd{
+                    M{"d MMMM – d MMMM"}
+                    d{"d – d MMMM"}
+                }
                 MMMd{
                     M{"d MMM – d MMM"}
                     d{"d–d MMM"}
@@ -550,6 +566,11 @@ ro{
                 "{1} 'la' {0}",
                 "{1}, {0}",
             }
+            appendItems{
+                Day-Of-Week{"{1}, {0}"}
+                Era{"{0} {1}"}
+                Time-Day-Of-Week{"{1}, {0}"}
+            }
             availableFormats{
                 Ed{"E d"}
                 Ehm{"E h:mm a"}
@@ -559,9 +580,11 @@ ro{
                 GyMEd{"E, dd.MM.y G"}
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, d MMM y G"}
+                GyMMMM{"MMMM y G"}
+                GyMMMMEd{"E, d MMMM y G"}
+                GyMMMMd{"d MMMM y G"}
                 GyMMMd{"d MMM y G"}
                 GyMd{"dd.MM.y G"}
-                Hv{"'h' HH v"}
                 MEd{"E, dd.MM"}
                 MMMEd{"E, d MMM"}
                 MMMMEd{"E, d MMMM"}
@@ -584,6 +607,8 @@ ro{
                 yMMM{"MMM y"}
                 yMMMEd{"E, d MMM y"}
                 yMMMM{"MMMM y"}
+                yMMMMEd{"E, d MMMM y"}
+                yMMMMd{"d MMMM y"}
                 yMMMd{"d MMM y"}
                 yMd{"dd.MM.y"}
                 yQQQ{"QQQ y"}
@@ -732,6 +757,10 @@ ro{
                 MMMEd{
                     M{"E, d MMM – E, d MMM"}
                     d{"E, d MMM – E, d MMM"}
+                }
+                MMMMd{
+                    M{"d MMMM – d MMMM"}
+                    d{"d – d MMMM"}
                 }
                 MMMd{
                     M{"d MMM – d MMM"}
@@ -1086,12 +1115,6 @@ ro{
             dn{"ziua din an"}
         }
         dayperiod{
-            dn{"a.m./p.m."}
-        }
-        dayperiod-narrow{
-            dn{"a.m./p.m."}
-        }
-        dayperiod-short{
             dn{"a.m./p.m."}
         }
         era{

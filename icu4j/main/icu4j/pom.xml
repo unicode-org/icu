@@ -9,7 +9,7 @@
   <parent>
     <groupId>com.ibm.icu</groupId>
     <artifactId>icu4j-main</artifactId>
-    <version>79.0.1-SNAPSHOT</version>
+    <version>80.0.1-SNAPSHOT</version>
   </parent>
 
   <artifactId>icu4j</artifactId>
@@ -73,20 +73,12 @@
         <artifactId>maven-shade-plugin</artifactId>
         <executions>
           <execution>
-            <id>source-jar</id>
-            <goals>
-              <goal>shade</goal>
-            </goals>
-            <configuration>
-              <createSourcesJar>true</createSourcesJar>
-            </configuration>
-          </execution>
-          <execution>
             <goals>
               <goal>shade</goal>
             </goals>
             <phase>package</phase>
             <configuration>
+              <createSourcesJar>true</createSourcesJar>
               <createDependencyReducedPom>true</createDependencyReducedPom>
               <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml</dependencyReducedPomLocation>
               <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
@@ -97,9 +89,17 @@
                   <excludes>
                     <!-- Exclude taglets code -->
                     <exclude>com/ibm/icu/dev/tool/docs/**</exclude>
+                    <!-- We exclude the manifests in dependencies -->
+                    <exclude>META-INF/MANIFEST.MF</exclude>
+                    <!-- Exclude maven info for unpublished artifacts -->
+                    <exclude>META-INF/maven/com.ibm.icu/core/**</exclude>
+                    <exclude>META-INF/maven/com.ibm.icu/tools_taglets/**</exclude>
+                    <exclude>META-INF/maven/com.ibm.icu/collate/**</exclude>
+                    <exclude>META-INF/maven/com.ibm.icu/currdata/**</exclude>
+                    <exclude>META-INF/maven/com.ibm.icu/langdata/**</exclude>
+                    <exclude>META-INF/maven/com.ibm.icu/regiondata/**</exclude>
+                    <exclude>META-INF/maven/com.ibm.icu/translit/**</exclude>
                   </excludes>
-                  <includes>
-                  </includes>
                 </filter>
               </filters>
               <transformers>

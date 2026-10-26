@@ -288,4 +288,3 @@ class RBBIRuleParseTable {
         new RBBIRuleTableElement(doExit, 255, 103, 0, true, "errorDeath") //  103
     };
 }
-;

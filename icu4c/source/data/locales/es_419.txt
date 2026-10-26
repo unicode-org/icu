@@ -131,6 +131,11 @@ es_419{
                 group{","}
             }
         }
+        minimalPairs{
+            ordinal{
+                one{"El {0}ᵉʳ. equipo clasificado ganó."}
+            }
+        }
         minimumGroupingDigits{"1"}
     }
     calendar{
@@ -185,6 +190,7 @@ es_419{
                 GyMMM{"MMM 'de' y G"}
                 GyMMMEd{"E, d 'de' MMM 'de' y G"}
                 GyMMMd{"d 'de' MMM 'de' y G"}
+                Hv{"HH v"}
                 MMMEd{"E, d 'de' MMM"}
                 MMMd{"d 'de' MMM"}
                 yMEd{"E d/M/y G"}
@@ -267,9 +273,9 @@ es_419{
                 Hmsv{"HH:mm:ss v"}
                 Hmsvvvv{"HH:mm:ss vvvv"}
                 Hmv{"HH:mm v"}
+                Hv{"HH v"}
                 MMMdd{"dd-MMM"}
                 yMEd{"E d/M/y"}
-                yMMMEd{"E, d MMM y"}
                 yQQQ{"QQQ 'de' y"}
             }
             dayNames{
@@ -381,6 +387,40 @@ es_419{
                     M{"d/M/y–d/M/y"}
                     d{"d/M/y–d/M/y"}
                     y{"d/M/y–d/M/y"}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "ene",
+                        "feb",
+                        "mar",
+                        "abr",
+                        "may",
+                        "jun",
+                        "jul",
+                        "ago",
+                        "sep",
+                        "oct",
+                        "nov",
+                        "dic",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "ene",
+                        "feb",
+                        "mar",
+                        "abr",
+                        "may",
+                        "jun",
+                        "jul",
+                        "ago",
+                        "sep",
+                        "oct",
+                        "nov",
+                        "dic",
+                    }
                 }
             }
             quarters{

@@ -885,7 +885,6 @@ typedef struct DefaultTZInfo {
     char* defaultTZBuffer;
     int64_t defaultTZFileSize;
     FILE* defaultTZFilePtr;
-    UBool defaultTZstatus;
     int32_t defaultTZPosition;
 } DefaultTZInfo;
 
@@ -893,7 +892,7 @@ typedef struct DefaultTZInfo {
  * This method compares the two files given to see if they are a match.
  * It is currently use to compare two TZ files.
  */
-static UBool compareBinaryFiles(const char* defaultTZFileName, const char* TZFileName, DefaultTZInfo* tzInfo) {
+static UBool compareBinaryFiles(const char* TZFileName, DefaultTZInfo* tzInfo) {
     FILE* file;
     int64_t sizeFile;
     int64_t sizeFileLeft;
@@ -902,14 +901,12 @@ static UBool compareBinaryFiles(const char* defaultTZFileName, const char* TZFil
     char bufferFile[MAX_READ_SIZE];
     UBool result = true;
 
-    if (tzInfo->defaultTZFilePtr == nullptr) {
-        tzInfo->defaultTZFilePtr = fopen(defaultTZFileName, "r");
-    }
+    U_ASSERT(tzInfo->defaultTZFilePtr != nullptr);
     file = fopen(TZFileName, "r");
 
     tzInfo->defaultTZPosition = 0; /* reset position to begin search */
 
-    if (file != nullptr && tzInfo->defaultTZFilePtr != nullptr) {
+    if (file != nullptr) {
         /* First check that the file size are equal. */
         if (tzInfo->defaultTZFileSize == 0) {
             fseek(tzInfo->defaultTZFilePtr, 0, SEEK_END);
@@ -989,6 +986,11 @@ static char* searchForTZFile(const char* path, DefaultTZInfo* tzInfo) {
     char* result = nullptr;
     UErrorCode status = U_ZERO_ERROR;
 
+    /* There is no reference file to compare against, so do not traverse the zoneinfo tree. */
+    if (tzInfo->defaultTZFilePtr == nullptr) {
+        return nullptr;
+    }
+
     /* Save the current path */
     CharString curpath(path, -1, status);
     if (U_FAILURE(status)) {
@@ -1040,7 +1042,7 @@ static char* searchForTZFile(const char* path, DefaultTZInfo* tzInfo) {
                 if (result != nullptr)
                     break;
             } else {
-                if(compareBinaryFiles(TZDEFAULT, newpath.data(), tzInfo)) {
+                if(compareBinaryFiles(newpath.data(), tzInfo)) {
                     int32_t amountToSkip = sizeof(TZZONEINFO) - 1;
                     if (amountToSkip > newpath.length()) {
                         amountToSkip = newpath.length();
@@ -1082,6 +1084,32 @@ static char gAndroidTimeZone[PROP_VALUE_MAX] = { '\0' };
 static void u_property_read(void* cookie, const char* name, const char* value,
                             uint32_t serial) {
     uprv_strcpy((char* )cookie, value);
+}
+#endif
+
+#if defined(CHECK_LOCALTIME_LINK) && !defined(DEBUG_SKIP_LOCALTIME_LINK)
+/* Attempt to extract a valid Olson ID from the path of a zoneinfo file, i.e.
+ * the part following TZZONEINFOTAIL ("/zoneinfo/"). The path is first copied
+ * into gTimeZoneBuffer so that the ID pointed to by gTimeZoneBufferPtr stays
+ * valid after the caller's string is gone. Caller must handle threading
+ * issues. */
+static bool extractOlsonIdFromPath(const char* path) {
+    U_ASSERT(gTimeZoneBufferPtr == nullptr);
+    if (uprv_strlen(path) >= sizeof(gTimeZoneBuffer)) {
+        return false;
+    }
+    uprv_strcpy(gTimeZoneBuffer, path);
+    const char* tzZoneInfoTailPtr = uprv_strstr(gTimeZoneBuffer, TZZONEINFOTAIL);
+    if (tzZoneInfoTailPtr == nullptr) {
+        return false;
+    }
+    tzZoneInfoTailPtr += uprv_strlen(TZZONEINFOTAIL);
+    skipZoneIDPrefix(&tzZoneInfoTailPtr);
+    if (!isValidOlsonID(tzZoneInfoTailPtr)) {
+        return false;
+    }
+    gTimeZoneBufferPtr = tzZoneInfoTailPtr;
+    return true;
 }
 #endif
 
@@ -1158,19 +1186,46 @@ uprv_tzname(int n)
 #else
     tzid = getenv("TZ");
 #endif
-    if (tzid != nullptr && isValidOlsonID(tzid)
+    if (tzid != nullptr && (isValidOlsonID(tzid)
+#if defined(CHECK_LOCALTIME_LINK) && !defined(DEBUG_SKIP_LOCALTIME_LINK)
+        /* TZ can also hold the full path of a zoneinfo file, with or without
+           a leading colon, in which case it need not look like an Olson ID
+           (e.g. the zoneinfo directory itself may contain digits). */
+        || tzid[0] == '/' || (tzid[0] == ':' && tzid[1] == '/')
+#endif
+        )
 #if U_PLATFORM == U_PF_SOLARIS
     /* Don't misinterpret TZ "localtime" on Solaris as a time zone name. */
         && uprv_strcmp(tzid, TZ_ENV_CHECK) != 0
 #endif
     ) {
-        /* The colon forces tzset() to treat the remainder as zoneinfo path */
+        /* The colon forces tzset() to treat the remainder as a zoneinfo path.
+           At least glibc also accepts an absolute path without the leading
+           colon. */
         if (tzid[0] == ':') {
             tzid++;
         }
         /* This might be a good Olson ID. */
         skipZoneIDPrefix(&tzid);
+#if defined(CHECK_LOCALTIME_LINK) && !defined(DEBUG_SKIP_LOCALTIME_LINK)
+        if (tzid[0] != '/') {
+            return tzid;
+        }
+        /* TZ can also hold the full path of a zoneinfo file, e.g.
+           TZ=:/usr/share/zoneinfo/America/New_York. Try to extract the Olson
+           ID following TZZONEINFOTAIL in the path. If the path does not
+           contain TZZONEINFOTAIL (e.g. TZ=:/etc/localtime, possibly a symlink
+           to a zoneinfo file), fall through to the TZDEFAULT handling below.
+           Caller must handle threading issues. */
+        if (gTimeZoneBufferPtr != nullptr) {
+            return gTimeZoneBufferPtr;
+        }
+        if (extractOlsonIdFromPath(tzid)) {
+            return gTimeZoneBufferPtr;
+        }
+#else
         return tzid;
+#endif
     }
     /* else U_TZNAME will give a better result. */
 #endif
@@ -1215,8 +1270,7 @@ uprv_tzname(int n)
             if (tzInfo != nullptr) {
                 tzInfo->defaultTZBuffer = nullptr;
                 tzInfo->defaultTZFileSize = 0;
-                tzInfo->defaultTZFilePtr = nullptr;
-                tzInfo->defaultTZstatus = false;
+                tzInfo->defaultTZFilePtr = fopen(TZDEFAULT, "r");
                 tzInfo->defaultTZPosition = 0;
 
                 gTimeZoneBufferPtr = searchForTZFile(TZZONEINFO, tzInfo);

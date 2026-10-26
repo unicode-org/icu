@@ -48,14 +48,15 @@ public class LongNameHandler
     // Returns the array index that corresponds to the given pluralKeyword.
     private static int getIndex(String pluralKeyword) {
         // pluralKeyword can also be "dnam", "per" or "gender"
-        if (pluralKeyword.equals("dnam")) {
-            return DNAM_INDEX;
-        } else if (pluralKeyword.equals("per")) {
-            return PER_INDEX;
-        } else if (pluralKeyword.equals("gender")) {
-            return GENDER_INDEX;
-        } else {
-            return StandardPlural.fromString(pluralKeyword).ordinal();
+        switch (pluralKeyword) {
+            case "dnam":
+                return DNAM_INDEX;
+            case "per":
+                return PER_INDEX;
+            case "gender":
+                return GENDER_INDEX;
+            default:
+                return StandardPlural.fromString(pluralKeyword).ordinal();
         }
     }
 
@@ -124,9 +125,9 @@ public class LongNameHandler
         return result;
     }
 
-    //////////////////////////
-    /// BEGIN DATA LOADING ///
-    //////////////////////////
+    // //////////////////
+    // BEGIN DATA LOADING
+    // //////////////////
 
     // Gets the gender of a built-in unit: unit must be a built-in. Returns an empty
     // string both in case of unknown gender and in case of unknown unit.
@@ -218,7 +219,7 @@ public class LongNameHandler
                 if (loadForGender(genderTable, gender, value)) {
                     return true;
                 }
-                if (gender != "neuter") {
+                if (!gender.equals("neuter")) {
                     if (loadForGender(genderTable, "neuter", value)) {
                         return true;
                     }
@@ -244,7 +245,7 @@ public class LongNameHandler
                 if (loadForCase(caseTable, caseVariant, value)) {
                     return true;
                 }
-                if (caseVariant != "nominative") {
+                if (!caseVariant.equals("nominative")) {
                     if (loadForCase(caseTable, "nominative", value)) {
                         return true;
                     }
@@ -661,9 +662,9 @@ public class LongNameHandler
         return val;
     }
 
-    ////////////////////////
-    /// END DATA LOADING ///
-    ////////////////////////
+    // ////////////////
+    // END DATA LOADING
+    // ////////////////
 
     /**
      * Calculates the gender of an arbitrary unit: this is the *second* implementation of an

@@ -72,6 +72,7 @@ public class SimpleModifier implements Modifier {
     }
 
     @Override
+    @SuppressWarnings("ReferenceEquality")
     public boolean strictEquals(Modifier other) {
         if (!(other instanceof SimpleModifier)) {
             return false;

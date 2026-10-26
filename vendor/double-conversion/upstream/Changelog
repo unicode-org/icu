@@ -1,3 +1,12 @@
+2025-12-08:
+  Add pkg-config.
+  Add alias double-conversion::double-conversion.
+  Documentation improvements.
+  Minor code cleanups, avoiding spurious warnings.
+  Increase CMake minimum required version to 3.29.
+  Makefile improvements.
+  Bazel build improvements.
+
 2023-05-18:
   Add flags to control trailing decimal and zero in exponent
   form when input has one significant digit.

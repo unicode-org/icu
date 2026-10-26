@@ -12,6 +12,7 @@ package com.ibm.icu.dev.test.format;
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.PatternTokenizer;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.impl.locale.XCldrStub;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DateTimePatternGenerator;
 import com.ibm.icu.text.DateTimePatternGenerator.FormatParser;
@@ -25,6 +26,7 @@ import com.ibm.icu.util.SimpleTimeZone;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 import java.text.ParsePosition;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -33,6 +35,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 import org.junit.Test;
@@ -853,11 +856,26 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
 
         @Override
         public boolean equals(Object that) {
+            if (this == that) {
+                return true;
+            }
+            if (!(that instanceof DateOrder)) {
+                return false;
+            }
             DateOrder other = (DateOrder) that;
             return monthLength == other.monthLength
                     && fields[0] == other.fields[0]
                     && fields[1] == other.fields[1]
                     && fields[2] == other.fields[2];
+        }
+
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + Arrays.hashCode(fields);
+            result = prime * result + Objects.hash(monthLength);
+            return result;
         }
     }
 
@@ -1197,7 +1215,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
         }
     }
 
-    private final class AppendItemName {
+    private static final class AppendItemName {
         public int field;
         public String name;
 
@@ -1294,11 +1312,11 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
         }
 
         DateTimePatternGenerator dtpg2 = dtpg.cloneAsThawed();
-        if (dtpg.isFrozen() != false) {
+        if (dtpg.isFrozen() != true) {
             errln(
-                    "DateTimePatternGenerator.isFrozen() is suppose to return false "
-                            + "for a DateTimePatternGenerator object that was just "
-                            + "clone as thawed.");
+                    "DateTimePatternGenerator.isFrozen() is suppose to return true "
+                            + "for the original DateTimePatternGenerator after "
+                            + "cloneAsThawed (the original should remain frozen).");
         }
         if (dtpg2.isFrozen() != false) {
             errln(
@@ -1481,6 +1499,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
      * Test case for DateFormatPatternGenerator threading problem #7169
      */
     @Test
+    @SuppressWarnings("ThreadJoinLoop")
     public void TestT7169() {
         Thread[] workers = new Thread[10];
         for (int i = 0; i < workers.length; i++) {
@@ -1516,11 +1535,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
             wk.start();
         }
         for (Thread wk : workers) {
-            try {
-                wk.join();
-            } catch (InterruptedException ie) {
-
-            }
+            XCldrStub.joinUninterruptibly(wk);
         }
     }
 
@@ -1531,7 +1546,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
      * hms{"h:mm:ss a"} en/gregorian has Hm{"H:mm"} Hms{"H:mm:ss"} hm{"h:mm a"} be/gregorian has
      * HHmmss{"HH.mm.ss"} Hm{"HH.mm"} hm{"h.mm a"} hms{"h.mm.ss a"}
      */
-    private final class TestOptionsItem {
+    private static final class TestOptionsItem {
         public String locale;
         public String skeleton;
         public String expectedPattern;
@@ -1708,8 +1723,34 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
         }
     }
 
+    /**
+     * Test that a two-digit year in the requested skeleton produces a two-digit year in the
+     * resulting pattern (and that other year field lengths are preserved as well).
+     */
+    @Test
+    public void TestTwoDigitYear() {
+        String[][] testData = {
+            //  locale, skeleton, expected pattern
+            {"en", "yMMMd", "MMM d, y"},
+            {"en", "yyMMMd", "MMM d, ’yy"},
+            {"en", "yyyyMMMd", "MMM d, yyyy"},
+            {"de", "yMMMd", "d. MMM y"},
+            {"de", "yyMMMd", "d. MMM yy"},
+            {"de", "yyyyMMMd", "d. MMM yyyy"},
+        };
+
+        for (String[] testCase : testData) {
+            DateTimePatternGenerator dtpgen =
+                    DateTimePatternGenerator.getInstance(new ULocale(testCase[0]));
+            String pattern =
+                    dtpgen.getBestPattern(testCase[1], DateTimePatternGenerator.MATCH_NO_OPTIONS);
+            assertEquals(
+                    "Locale " + testCase[0] + ", skeleton " + testCase[1], testCase[2], pattern);
+        }
+    }
+
     /** Test that DTPG can handle all valid pattern character / length combinations */
-    private final class AllFieldsTestItem {
+    private static final class AllFieldsTestItem {
         public char patternChar;
         public int[] fieldLengths;
         public String mustIncludeOneOf;
@@ -1956,7 +1997,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
         assertEquals(message, "d-MM-y, G", dtpg.getBestPattern(skeleton));
     }
 
-    private final class FieldDisplayNameData {
+    private static final class FieldDisplayNameData {
         public String locale;
         public int field;
         public DateTimePatternGenerator.DisplayWidth width;
@@ -2297,7 +2338,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
 
     private static final int NUM_DATE_TIME_PATTERNS = 4;
 
-    private final class DTPLocaleAndResults {
+    private static final class DTPLocaleAndResults {
         public String localeID;
         public String[] expectPat;
 
@@ -2339,7 +2380,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
                     "ha",
                     new String[] {
                         "EEEE d MMMM, y 'da' HH:mm",
-                        "d MMMM, y 'da' HH:mm",
+                        "y, MMMM d 'da' HH:mm",
                         "d MMM, y, HH:mm",
                         "y-MM-dd, HH:mm"
                     }),
@@ -2569,5 +2610,38 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
         // we still select GyMMMEd, but we don't change it to a numeric month.
         String bestPattern = dtpg.getBestPattern("GyMEd");
         assertEquals("Should not substitute numeric for alpha", "EEE, MMM d, y G", bestPattern);
+    }
+
+    @Test
+    public void TestDayOfMonthSkeleton() {
+        // ddd (ordinal day-of-month) vs d (numeric) produce different patterns.
+        String[][] testCases = {
+            {"en", "yMMMd", "MMM d, y"},
+            {"en", "yMMMddd", "MMM ddd, y"},
+            {"en", "yMMMEd", "EEE, MMM d, y"},
+            {"en", "yMMMEddd", "EEE, MMM ddd, y"},
+            {"en", "MMMd", "MMM d"},
+            {"en", "MMMddd", "MMM ddd"},
+            {"en", "MMMMddd", "MMMM ddd"},
+            {"en", "MMMMEddd", "EEE, MMMM ddd"},
+            // French has no ddd availableFormats of its own, so it inherits root's
+            // patterns (which use English-style MMM-before-day order).
+            {"fr", "yMMMd", "d MMM y"},
+            {"fr", "yMMMddd", "ddd MMM y"},
+            {"fr", "MMMd", "d MMM"},
+            {"fr", "MMMddd", "ddd MMM"},
+            // We also have to make sure that the presence of new "ddd" patterns didn't
+            // mess up the handling of skeletons that contain "dd"-- if we don't treat
+            // "ddd" correctly, "dd" in the skeleton will match a "ddd" skeleton in
+            // the parent locale instead of a "d" skeleton in the requested locale,
+            // potentially messing up the field order.
+            {"de", "MMMd", "d. MMM"},
+            {"de", "MMMdd", "dd. MMM"},
+        };
+        for (String[] tc : testCases) {
+            DateTimePatternGenerator gen = DateTimePatternGenerator.getInstance(new ULocale(tc[0]));
+            String got = gen.getBestPattern(tc[1]);
+            assertEquals(tc[0] + " " + tc[1], tc[2], got);
+        }
     }
 }

@@ -718,17 +718,8 @@ ms{
         ILS{
             other{"Syekel baharu Israel"}
         }
-        MMK{
-            other{"Kyat Myanmar"}
-        }
-        XCG{
-            other{"Guilder Caribbean"}
-        }
         XXX{
             other{"(mata wang tidak diketahui)"}
-        }
-        ZWG{
-            other{"Emas Zimbabwe"}
         }
     }
 }

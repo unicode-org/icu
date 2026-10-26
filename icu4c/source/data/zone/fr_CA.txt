@@ -48,14 +48,11 @@ fr_CA{
         "Atlantic:Faeroe"{
             ec{"îles Féroé"}
         }
-        "Europe:Dublin"{
-            ld{"heure avancée irlandaise"}
+        "Etc:UTC"{
+            ss{"UTC"}
         }
         "Europe:Isle_of_Man"{
             ec{"île de Man"}
-        }
-        "Europe:London"{
-            ld{"heure avancée britannique"}
         }
         "Europe:Vatican"{
             ec{"Vatican"}
@@ -84,11 +81,6 @@ fr_CA{
             ld{"heure avancée de l’Alaska"}
             lg{"heure de l’Alaska"}
             ls{"heure normale de l’Alaska"}
-        }
-        "meta:Almaty"{
-            ld{"heure avancée d’Alma Ata"}
-            lg{"heure d’Alma Ata"}
-            ls{"heure normale d’Alma Ata"}
         }
         "meta:Amazon"{
             ld{"heure avancée de l’Amazonie"}
@@ -134,18 +126,8 @@ fr_CA{
         }
         "meta:Apia"{
             ld{"heure avancée d’Apia"}
-            lg{"heure d’Apia"}
-            ls{"heure normale d’Apia"}
-        }
-        "meta:Aqtau"{
-            ld{"heure avancée d’Aktaou"}
-            lg{"heure d’Aktaou"}
-            ls{"heure normale d’Aktaou"}
-        }
-        "meta:Aqtobe"{
-            ld{"heure avancée d’Aqtöbe"}
-            lg{"heure d’Aqtöbe"}
-            ls{"heure normale d’Aqtöbe"}
+            lg{"heure des Samoa occidentales"}
+            ls{"heure normale des Samoa occidentales"}
         }
         "meta:Arabian"{
             ld{"heure avancée de l’Arabie"}
@@ -214,6 +196,10 @@ fr_CA{
             ld{"heure avancée de Brasilia"}
             lg{"heure de Brasilia"}
             ls{"heure normale de Brasilia"}
+        }
+        "meta:British"{
+            ld{"heure avancée britannique"}
+            lg{"heure britannique"}
         }
         "meta:Brunei"{
             ls{"heure du Brunéi"}
@@ -286,6 +272,9 @@ fr_CA{
             lg{"heure de la Géorgie"}
             ls{"heure normale de la Géorgie"}
         }
+        "meta:Greenland"{
+            ld{"heure avancée du Groenland"}
+        }
         "meta:Greenland_Eastern"{
             ld{"heure avancée de l’Est du Groenland"}
             lg{"heure de l’Est du Groenland"}
@@ -295,9 +284,6 @@ fr_CA{
             ld{"heure avancée de l’Ouest du Groenland"}
             lg{"heure de l’Ouest du Groenland"}
             ls{"heure normale de l’Ouest du Groenland"}
-        }
-        "meta:Hawaii"{
-            ls{"heure normale d’Hawaï-Aléoutiennes"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"heure avancée d’Hawaï-Aléoutiennes"}
@@ -322,6 +308,10 @@ fr_CA{
             lg{"heure de l’Iran"}
             ls{"heure normale d’Iran"}
         }
+        "meta:Irish"{
+            ld{"heure avancée irlandaise"}
+            lg{"heure irlandaise"}
+        }
         "meta:Irkutsk"{
             ld{"heure avancée d’Irkoutsk"}
             lg{"heure d’Irkoutsk"}
@@ -339,8 +329,8 @@ fr_CA{
         }
         "meta:Kamchatka"{
             ld{"heure avancée de Petropavlovsk-Kamchatski"}
-            lg{"heure de Petropavlovsk-Kamchatski"}
-            ls{"heure normale de Petropavlovsk-Kamchatski"}
+            lg{"heure du Kamtchatka"}
+            ls{"heure normale du Kamtchatka"}
         }
         "meta:Korea"{
             ld{"heure avancée de Corée"}
@@ -458,11 +448,6 @@ fr_CA{
             ld{"heure avancée de Sakhaline"}
             lg{"heure de Sakhaline"}
             ls{"heure normale de Sakhaline"}
-        }
-        "meta:Samoa"{
-            ld{"heure avancée des Samoa"}
-            lg{"heure des Samoa"}
-            ls{"heure normale des Samoa"}
         }
         "meta:Taipei"{
             ld{"heure avancée de Taipei"}

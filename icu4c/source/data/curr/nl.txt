@@ -267,10 +267,6 @@ nl{
             "CNH",
             "Chinese yuan (offshore)",
         }
-        CNX{
-            "CNX",
-            "dollar van de Chinese Volksbank",
-        }
         CNY{
             "CN¥",
             "Chinese yuan",
@@ -1233,7 +1229,7 @@ nl{
         }
     }
     Currencies%narrow{
-        BYN{"р."}
+        BYN{"Br"}
         RUR{"р."}
         TWD{"NT$"}
         XCG{"Cg"}
@@ -1313,10 +1309,6 @@ nl{
         XPT{
             one{"Troy ounce platina"}
             other{"Troy ounces platina"}
-        }
-        ZWG{
-            one{"Zimbabwe Gold"}
-            other{"Zimbabwe Gold"}
         }
     }
 }

@@ -387,8 +387,6 @@ public class SpoofCheckerTest extends CoreTestFmwk {
         assertEquals("", lll_Skel, dest);
     }
 
-    /** IntlTestSpoof is the top level test class for the Unicode Spoof detection tests */
-
     // Test the USpoofDetector API functions that require C++
     // The pure C part of the API, which is most of it, is tested in cintltst
     /** IntlTestSpoof tests for USpoofDetector */

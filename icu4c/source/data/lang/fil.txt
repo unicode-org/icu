@@ -6,24 +6,40 @@ fil{
         calendar{"Kalendaryo"}
         cf{"Format ng Pera"}
         colAlternate{"Pag-uuri-uri ng Mga Ignore Symbol"}
-        colBackwards{"Pag-uuri-uri ng Baliktad na Accent"}
-        colCaseFirst{"Uppercase/Lowercase na Pagsusunud-sunod"}
+        colBackwards{"Reversed Accent na Pag-uuri"}
+        colCaseFirst{"Uppercase/Lowercase na Pagsusunod-sunod"}
         colCaseLevel{"Case Sensitive na Pag-uuri-uri"}
         colNormalization{"Normalized na Pag-uuri-uri"}
         colNumeric{"Numeric na Pag-uuri-uri"}
+        colReorder{"Script/Block na Pag-reorder"}
         colStrength{"Lakas ng Pag-uuri-uri"}
         collation{"Pagkakasunud-sunod ng Ayos"}
         currency{"Pera"}
+        d0{"Transform Destination"}
+        dx{"Mga Dictionary Break Exclusion"}
         em{"Presentation ng Emoji"}
+        fw{"Unang araw ng linggo"}
+        h0{"Mixed-in"}
         hc{"Siklo ng Oras (12 laban sa 24)"}
+        i0{"Paraan ng Pag-input"}
+        k0{"Keyboard"}
+        kv{"Balewalain ang Pinakamataas"}
         lb{"CJK na Line Break"}
         lw{"Mga Line Break sa Mga Salita"}
+        m0{"Mga Transform Rule"}
         ms{"Sistema ng Pagsukat"}
+        mu{"Unit ng Pagsukat"}
         numbers{"Mga Numero"}
+        rg{"Rehiyon para sa Karagdagang Data"}
+        s0{"Transform Source"}
+        sd{"Subdivision ng Rehiyon"}
         ss{"Sentence Break Pagkatapos ng Abbr."}
+        t{"Transform"}
+        t0{"Machine Translated"}
         timezone{"Time Zone"}
         va{"Lokal na Variant"}
         x{"Pribadong Paggamit"}
+        x0{"Private-Use Transform"}
     }
     Languages{
         aa{"Afar"}
@@ -111,6 +127,8 @@ fil{
         dar{"Dargwa"}
         dav{"Taita"}
         de{"German"}
+        de_AT{"Austrian German"}
+        de_CH{"Swiss High German"}
         dgr{"Dogrib"}
         dje{"Zarma"}
         doi{"Dogri"}
@@ -125,8 +143,11 @@ fil{
         efi{"Efik"}
         eka{"Ekajuk"}
         el{"Greek"}
-        en{"Ingles"}
-        en_US{"Ingles (American)"}
+        en{"English"}
+        en_AU{"Australian English"}
+        en_CA{"Canadian English"}
+        en_GB{"British English"}
+        en_US{"American English"}
         eo{"Esperanto"}
         es{"Spanish"}
         es_419{"Latin American na Espanyol"}
@@ -137,13 +158,15 @@ fil{
         ewo{"Ewondo"}
         fa{"Persian"}
         fa_AF{"Dari"}
-        ff{"Fulah"}
+        ff{"Fula"}
         fi{"Finnish"}
         fil{"Filipino"}
         fj{"Fijian"}
         fo{"Faroese"}
         fon{"Fon"}
         fr{"French"}
+        fr_CA{"Canadian French"}
+        fr_CH{"Swiss French"}
         frc{"Cajun French"}
         frr{"Hilagang Frisian"}
         fur{"Friulian"}
@@ -340,6 +363,7 @@ fil{
         pcm{"Nigerian Pidgin"}
         pis{"Pijin"}
         pl{"Polish"}
+        pms{"Piedmontese"}
         pqm{"Maliseet-Passamaquoddy"}
         prg{"Prussian"}
         ps{"Pashto"}
@@ -472,8 +496,8 @@ fil{
         za{"Zhuang"}
         zgh{"Standard Moroccan Tamazight"}
         zh{"Chinese"}
-        zh_Hans{"Pinasimpleng Chinese"}
-        zh_Hant{"Tradisyonal na Chinese"}
+        zh_Hans{"Simplified Chinese"}
+        zh_Hant{"Traditional Chinese"}
         zu{"Zulu"}
         zun{"Zuni"}
         zxx{"Walang nilalaman na ukol sa wika"}
@@ -486,7 +510,7 @@ fil{
         ku{"Kurmanji"}
     }
     Languages%long{
-        zh_Hans{"Pinasimpleng Mandarin Chinese"}
+        zh_Hans{"Simplified Mandarin Chinese"}
         zh_Hant{"Tradisyonal na Mandarin Chinese"}
     }
     Languages%menu{
@@ -497,7 +521,7 @@ fil{
     Languages%short{
         az{"Azeri"}
         en_GB{"Ingles sa UK"}
-        en_US{"Ingles sa US"}
+        en_US{"US English"}
     }
     Languages%variant{
         ckb{"Kurdish, Sorani"}
@@ -577,19 +601,19 @@ fil{
             coptic{"Kalendaryong Coptic"}
             dangi{"Dangi na Kalendaryo"}
             ethiopic{"Kalendaryo ng Ethiopia"}
-            ethiopic-amete-alem{"Kalendaryong Ethiopic Amete Alem"}
-            gregorian{"Gregorian na Kalendaryo"}
-            hebrew{"Hebrew na Kalendaryo"}
+            ethiopic-amete-alem{"Ethiopic Amete Alem Calendar"}
+            gregorian{"Gregorian Calendar"}
+            hebrew{"Hebrew Calendar"}
             indian{"Pambansang Kalendaryong Indian"}
-            islamic{"Kalendaryong Hijiri"}
-            islamic-civil{"Kalendaryong Hijri (tabular, Civil epoch)"}
+            islamic{"Hijri Calendar"}
+            islamic-civil{"Hijri Calendar (tabular, civil epoch)"}
             islamic-rgsa{"Kalendaryong Islamiko (Saudi Arabia, sighting)"}
             islamic-tbla{"Kalendaryong Islamiko (tabular, astronomikal na epoch)"}
-            islamic-umalqura{"Kalendaryong Hijri (Umm al-Qura)"}
-            iso8601{"Kalendaryong Gregorian (Unang Taon)"}
-            japanese{"Kalendaryong Japanese"}
-            persian{"Kalendaryong Persian"}
-            roc{"Kalendaryong Minguo"}
+            islamic-umalqura{"Hijri Calendar (Umm al-Qura)"}
+            iso8601{"Gregorian Calendar (ISO 8601 Weeks)"}
+            japanese{"Japanese Calendar"}
+            persian{"Persian Calendar"}
+            roc{"Minguo Calendar"}
         }
         calendar%core{
             buddhist{"Buddhist"}
@@ -600,9 +624,13 @@ fil{
             ethiopic-amete-alem{"Ethiopic Amete Alem"}
             gregorian{"Gregorian"}
             hebrew{"Hebrew"}
+            indian{"Indian National"}
             islamic{"Hijri"}
             islamic-civil{"Hijri (tabular, civil epoch)"}
+            islamic-rgsa{"Hijri, Saudi Arabia sighting"}
+            islamic-tbla{"Hijri (tabular, astronomical epoch)"}
             islamic-umalqura{"Hijri (Umm al-Qura)"}
+            iso8601{"Gregorian"}
             japanese{"Japanese"}
             persian{"Persian"}
             roc{"Minguo"}
@@ -628,6 +656,11 @@ fil{
             no{"Pag-uri-uriin ang Ayos ng Normal na Case"}
             upper{"Uppercase Muna ang Pag-uri-uriin"}
         }
+        colCaseFirst%core{
+            lower{"Lowercase"}
+            no{"Lowercase"}
+            upper{"Uppercase"}
+        }
         colCaseLevel{
             no{"Pag-uri-uriin ang Hindi Case Sensitive"}
             yes{"Pag-uri-uriin ang Case Sensitive"}
@@ -640,12 +673,26 @@ fil{
             no{"Pag-uri-uriin ang Mga Digit nang Indibidwal"}
             yes{"Pag-uri-uriin ang Mga Digit nang Numerical"}
         }
+        colReorder%core{
+            currency{"Currency"}
+            digit{"Mga Digit"}
+            punct{"Bantas"}
+            space{"Whitespace"}
+            symbol{"Simbolo"}
+        }
         colStrength{
             identical{"Pag-uri-uriin Lahat"}
             primary{"Mga Base na Titik Lang ang Pag-uri-uriin"}
             quaternary{"Pag-uri-uriin ang Mga Accent/Case/Lapad/Kana"}
             secondary{"Pag-uri-uriin ang Mga Accent"}
             tertiary{"Pag-uri-uriin ang Mga Accent/Case/Lapad"}
+        }
+        colStrength%core{
+            identical{"Lahat"}
+            primary{"Mga Base na Titik Lang"}
+            quaternary{"Base, Mga Accent, Case, Mga Variant, Kana"}
+            secondary{"Base, Mga Accent"}
+            tertiary{"Base, Mga Accent, Case, Mga Variant"}
         }
         collation{
             compat{"Nakaraang Pagkakasunud-sunod ng Pag-uuri, para sa compatibility"}
@@ -665,9 +712,21 @@ fil{
             zhuyin{"Zhuyin na Pagkakasunud-sunod ng Pag-uuri"}
         }
         collation%core{
+            compat{"Compatibility"}
+            dictionary{"Dictionary"}
             ducet{"Default na Unicode"}
+            emoji{"Emoji"}
+            eor{"Mga panuntunan sa Europe"}
+            phonebook{"Phonebook"}
+            phonetic{"Phonetic"}
+            pinyin{"Pinyin"}
             search{"Maghanap"}
+            searchjl{"Korean initial consonant"}
             standard{"Karaniwan"}
+            stroke{"Stroke"}
+            traditional{"Traditional"}
+            unihan{"Radical-Stroke"}
+            zhuyin{"Zhuyin"}
         }
         d0{
             fwidth{"Hanggang sa Fullwidth"}
@@ -680,16 +739,26 @@ fil{
             text{"Text"}
         }
         hc{
+            c12{"12 Oras na Sistema"}
+            c24{"24 na Oras na Sistema"}
             h11{"12 Oras na Sistema (0–11)"}
             h12{"12 Oras na Sistema (1–12)"}
             h23{"24 na Oras na Sistema (0–23)"}
             h24{"24 na Oras na Sistema (1–24)"}
         }
         hc%core{
+            c12{"12"}
+            c24{"24"}
             h11{"12 (0–11)"}
             h12{"12 (1–12)"}
             h23{"24 (0–23)"}
             h24{"24 (1–24)"}
+        }
+        kv%core{
+            currency{"I-shift ang mga Space, bantas, lahat ng simbolo"}
+            punct{"I-shift ang mga space, bantas"}
+            space{"I-shift ang mga Space, bantas"}
+            symbol{"I-shift ang mga Space, bantas, hindi currency na simbolo"}
         }
         lb{
             loose{"Loose na Istilo ng Line Break"}
@@ -789,9 +858,51 @@ fil{
             traditional{"Mga Tradisyunal na Numeral"}
             vaii{"Mga Vai na Digit"}
         }
+        numbers%core{
+            arabext{"Extended Arabic-Indic"}
+            armnlow{"Armenian lowercase"}
+            finance{"Financial"}
+            fullwide{"Full-width"}
+            greklow{"Greek lowercase"}
+            hanidays{
+                "Han-character na pagnunumero sa araw ng buwan para sa mga tradisyona"
+                "l na kalendaryo"
+            }
+            hanidec{
+                "Positional decimal system gamit ang mga Chinese number ideograph bil"
+                "ang mga digit"
+            }
+            hansfin{"Simplified Chinese financial"}
+            hantfin{"Traditional Chinese financial"}
+            jpanfin{"Japanese financial"}
+            jpanyear{"Japanese first-year Gannen na pagnunumero"}
+            lanatham{"Tai Tham Tham (ecclesiastical)"}
+            mathbold{"Mathematical bold"}
+            mathdbl{"Mathematical double-struck"}
+            mathmono{"Mathematical monospace"}
+            mathsanb{"Mathematical sans-serif bold"}
+            mathsans{"Mathematical sans-serif"}
+            mymrepka{"Myanmar Eastern Pwo Karen"}
+            mymrpao{"Myanmar Pao"}
+            mymrshan{"Myanmar Shan"}
+            mymrtlng{"Myanmar Tai Laing"}
+            native{"Mga native digit"}
+            outlined{"Naka-outline"}
+            roman{"Roman uppercase"}
+            romanlow{"Roman lowercase"}
+            segment{"Segmented"}
+            tamldec{"Modern Tamil"}
+            traditional{"Mga tradisyonal na numeral"}
+        }
         ss%core{
             none{"Naka-off"}
             standard{"Naka-on"}
+        }
+        t0{
+            und{"Hindi Natukoy na Machine Translation"}
+        }
+        va%core{
+            posix{"Variant ng POSIX"}
         }
     }
     Variants{

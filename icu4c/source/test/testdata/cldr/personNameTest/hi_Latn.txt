@@ -1,5 +1,5 @@
 # Test data for Person Name Data
-#  Copyright © 1991-2025 Unicode, Inc.
+#  Copyright © 1991-2026 Unicode, Inc.
 #  For terms of use, see http://www.unicode.org/copyright.html
 #  SPDX-License-Identifier: Unicode-3.0
 #  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
@@ -320,57 +320,57 @@ endName
 name ; title; Shree
 name ; given; Lalit
 name ; given-informal; Lakhan
-name ; given2; Kumaar
-name ; surname-core; Bharati
+name ; given2; Kumar
+name ; surname-core; Bharti
 name ; generation; Jr
 name ; credentials; MP
 name ; locale; hi_Latn_AQ
 
-expectedResult; Bharati Shree Lalit Kumaar Jr, MP
+expectedResult; Bharti Shree Lalit Kumar Jr, MP
 
 parameters; surnameFirst; long; referring; formal
 
-expectedResult; Shree Lalit Kumaar Bharati Jr, MP
+expectedResult; Shree Lalit Kumar Bharti Jr, MP
 
 parameters; givenFirst; long; referring; formal
 
-expectedResult; Bharati Lalit K. Jr, MP
+expectedResult; Bharti Lalit K. Jr, MP
 
 parameters; surnameFirst; medium; referring; formal
 
-expectedResult; Lalit K. Bharati Jr, MP
+expectedResult; Lalit K. Bharti Jr, MP
 
 parameters; givenFirst; medium; referring; formal
 
-expectedResult; Bharati, Lalit Kumaar
+expectedResult; Bharti, Lalit Kumar
 
 parameters; sorting; long; referring; formal
 
-expectedResult; Bharati, Lalit K.
+expectedResult; Bharti, Lalit K.
 
 parameters; sorting; medium; referring; formal
 
-expectedResult; Bharati, Lakhan
+expectedResult; Bharti, Lakhan
 
 parameters; sorting; long; referring; informal
 parameters; sorting; medium; referring; informal
 parameters; sorting; short; referring; informal
 
-expectedResult; Bharati Lakhan
+expectedResult; Bharti Lakhan
 
 parameters; surnameFirst; long; referring; informal
 parameters; surnameFirst; medium; referring; informal
 
-expectedResult; Lakhan Bharati
+expectedResult; Lakhan Bharti
 
 parameters; givenFirst; long; referring; informal
 parameters; givenFirst; medium; referring; informal
 
-expectedResult; Bharati, L.K.
+expectedResult; Bharti, L.K.
 
 parameters; sorting; short; referring; formal
 
-expectedResult; Shree Bharati
+expectedResult; Shree Bharti
 
 parameters; givenFirst; long; addressing; formal
 parameters; givenFirst; medium; addressing; formal
@@ -379,15 +379,15 @@ parameters; surnameFirst; long; addressing; formal
 parameters; surnameFirst; medium; addressing; formal
 parameters; surnameFirst; short; addressing; formal
 
-expectedResult; Bharati L.K.
+expectedResult; Bharti L.K.
 
 parameters; surnameFirst; short; referring; formal
 
-expectedResult; L.K. Bharati
+expectedResult; L.K. Bharti
 
 parameters; givenFirst; short; referring; formal
 
-expectedResult; Bharati L.
+expectedResult; Bharti L.
 
 parameters; surnameFirst; short; referring; informal
 

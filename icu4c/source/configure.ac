@@ -306,7 +306,7 @@ if test "$ENABLE_STATIC" = "YES"; then
             OLD_LDFLAGS="${LDFLAGS}"
 
             case "${host}" in
-            *-linux*|i*86-*-*bsd*|i*86-pc-gnu|*-haiku*)
+            *-linux*|i*86-*-*bsd*|*-pc-gnu|*-haiku*)
                 if test "$GCC" = yes; then
                     CPPFLAGS="${CPPFLAGS} -ffunction-sections -fdata-sections"
                     LDFLAGS="${LDFLAGS} -Wl,--gc-sections"
@@ -613,7 +613,7 @@ AC_MSG_CHECKING([for genccode assembly])
 # Check to see if genccode can generate simple assembly.
 GENCCODE_ASSEMBLY=
 case "${host}" in
-*-linux*|*-kfreebsd*-gnu*|i*86-*-*bsd*|i*86-pc-gnu)
+*-linux*|*-kfreebsd*-gnu*|i*86-*-*bsd*|*-pc-gnu)
     if test "$GCC" = yes; then
         # We're using gcc, and the simple -a gcc command line works for genccode
         GENCCODE_ASSEMBLY="-a gcc"

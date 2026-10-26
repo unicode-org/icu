@@ -63,6 +63,7 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
 
     private static final Currency USD = Currency.getInstance("USD");
     private static final Currency GBP = Currency.getInstance("GBP");
+    private static final Currency CHF = Currency.getInstance("CHF");
     private static final Currency CZK = Currency.getInstance("CZK");
     private static final Currency CAD = Currency.getInstance("CAD");
     private static final Currency ESP = Currency.getInstance("ESP");
@@ -1783,12 +1784,13 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
         uTestCase = "unitUsage() en-US road";
         formatter = unloc_formatter.locale(new ULocale("en-US"));
         formattedNum = formatter.format(321d);
-        assertTrue(
+        assertSame(
                 uTestCase
                         + ", got outputUnit: \""
                         + formattedNum.getOutputUnit().getIdentifier()
                         + "\"",
-                MeasureUnit.FOOT == formattedNum.getOutputUnit());
+                MeasureUnit.FOOT,
+                formattedNum.getOutputUnit());
         assertEquals(uTestCase, "1,050 ft", formattedNum.toString());
         {
             final Object[][] expectedFieldPositions = {
@@ -2585,6 +2587,15 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
                 ULocale.forLanguageTag("ro-RO"),
                 24,
                 "24,00 lei românești");
+
+        assertFormatSingle(
+                "Swiss long currency (ICU-23503)",
+                "currency/CHF unit-width-full-name",
+                "currency/CHF unit-width-full-name",
+                NumberFormatter.with().unit(CHF).unitWidth(UnitWidth.FULL_NAME),
+                ULocale.forLanguageTag("en-DE"),
+                5.43,
+                "5,43 Swiss francs");
 
         assertFormatSingle(
                 "Currency spacing in suffix (ICU-20954)",
@@ -6959,5 +6970,44 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
             String message, FormattedNumber result, Object[][] expectedFieldPositions) {
         FormattedValueTest.checkFormattedValue(
                 message, result, result.toString(), expectedFieldPositions);
+    }
+
+    @Test
+    public void testCurrencyPrecisionCacheMutation() {
+        Currency usd = Currency.getInstance("USD");
+
+        // Precision gets cached, we want to make sure the cache isn't overwritten.
+
+        // 1. Format using the cached Precision as is
+        String actual1 =
+                NumberFormatter.with()
+                        .precision(Precision.currency(CurrencyUsage.STANDARD))
+                        .locale(Locale.US)
+                        .unit(usd)
+                        .format(123.0)
+                        .toString();
+        assertEquals("Initial formatting with cached Precision", "$123.00", actual1);
+
+        // 2. Format modifying the Precision's trailingZeroDisplay
+        String actual2 =
+                NumberFormatter.with()
+                        .precision(
+                                Precision.currency(CurrencyUsage.STANDARD)
+                                        .trailingZeroDisplay(TrailingZeroDisplay.HIDE_IF_WHOLE))
+                        .locale(Locale.US)
+                        .unit(usd)
+                        .format(123.0)
+                        .toString();
+        assertEquals("Formatting with modified trailingZeroDisplay", "$123", actual2);
+
+        // 3. Format like the first time again, expect the same result
+        String actual3 =
+                NumberFormatter.with()
+                        .precision(Precision.currency(CurrencyUsage.STANDARD))
+                        .locale(Locale.US)
+                        .unit(usd)
+                        .format(123.0)
+                        .toString();
+        assertEquals("Subsequent formatting with cached Precision", "$123.00", actual3);
     }
 }

@@ -546,9 +546,6 @@ zu{
         "America:St_Kitts"{
             ec{"i-St. Kitts"}
         }
-        "America:St_Lucia"{
-            ec{"I-St. Lucia"}
-        }
         "America:St_Thomas"{
             ec{"i-St. Thomas"}
         }
@@ -971,7 +968,6 @@ zu{
         }
         "Europe:Dublin"{
             ec{"i-Dublin"}
-            ld{"isikhathi sase-Irish esivamile"}
         }
         "Europe:Gibraltar"{
             ec{"i-Gibraltar"}
@@ -1008,7 +1004,6 @@ zu{
         }
         "Europe:London"{
             ec{"i-London"}
-            ld{"isikhathi sase-British sasehlobo"}
         }
         "Europe:Luxembourg"{
             ec{"i-Luxembourg"}
@@ -1250,6 +1245,11 @@ zu{
         "Pacific:Wallis"{
             ec{"i-Wallis"}
         }
+        "meta:Acre"{
+            ld{"Acre Summer Time"}
+            lg{"Acre Time"}
+            ls{"Acre Standard Time"}
+        }
         "meta:Afghanistan"{
             ls{"Isikhathi sase-Afghanistan"}
         }
@@ -1376,6 +1376,10 @@ zu{
             lg{"Isikhathi sase-Brasilia"}
             ls{"Isikhathi sase-Brasilia esijwayelekile"}
         }
+        "meta:British"{
+            ld{"Isikhathi sase-British sasehlobo"}
+            lg{"Isikhathi sase-British"}
+        }
         "meta:Brunei"{
             ls{"Isikhathi sase-Brunei Darussalam"}
         }
@@ -1491,6 +1495,11 @@ zu{
         "meta:Gilbert_Islands"{
             ls{"Isikhathi sase-Gilbert Islands"}
         }
+        "meta:Greenland"{
+            ld{"Greenland Summer Time"}
+            lg{"Isikhathi saseGreenland"}
+            ls{"Greenland Standard Time"}
+        }
         "meta:Greenland_Eastern"{
             ld{"Isikhathi sase-East Greenland sasemini"}
             lg{"Isikhathi sase-East Greenland"}
@@ -1508,12 +1517,12 @@ zu{
             ls{"Isikhathi sase-Guyana"}
         }
         "meta:Hawaii"{
-            ls{"Isikhathi sase-Hawaii-Aleutia esijwayelekile"}
+            ls{"Isikhathi saseHawaii"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"Isikhathi sase-Hawaii-Aleutia sasemini"}
             lg{"Isikhathi sase-Hawaii-Aleutia"}
-            ls{"Isikhathi sase-Hawaii-Aleutia esijwayelekile"}
+            ls{"Isikhathi saseHawaii-Aleutia Esijwayelekile"}
         }
         "meta:Hong_Kong"{
             ld{"Isikhathi sehlobo sase-Hong Kong"}
@@ -1548,6 +1557,10 @@ zu{
             lg{"Isikhathi sase-Iran"}
             ls{"Isikhathi sase-Iran esivamile"}
         }
+        "meta:Irish"{
+            ld{"Isikhathi sase-Irish esivamile"}
+            lg{"Isikhathi sase-Irish"}
+        }
         "meta:Irkutsk"{
             ld{"Isikhathi sasehlobo e-Irkutsk"}
             lg{"Isikhathi sase-Irkutsk"}
@@ -1564,9 +1577,9 @@ zu{
             ls{"Isikhathi esivamile sase-Japan"}
         }
         "meta:Kamchatka"{
-            ld{"esase-Petropavlovsk-Kamchatski Summer Time"}
-            lg{"esase-Petropavlovsk-Kamchatski Time"}
-            ls{"esase-Petropavlovsk-Kamchatski Standard Time"}
+            ld{"Esase-Petropavlovsk-Kamchatski Summer Time"}
+            lg{"Esase-Petropavlovsk-Kamchatski Time"}
+            ls{"Esase-Petropavlovsk-Kamchatski Standard Time"}
         }
         "meta:Kazakhstan"{
             ls{"Isikhathi saseKazakhstan"}
@@ -1743,13 +1756,11 @@ zu{
             ls{"Isikhathi Esivamile sase-Sakhalin"}
         }
         "meta:Samara"{
-            ld{"esase-Samara Summer Time"}
+            ld{"Isikhathi Sasehlobo eSamara"}
             lg{"esase-Samara Time"}
             ls{"esase-Samara Standard Time"}
         }
         "meta:Samoa"{
-            ld{"Isikhathi sase-Samoa sasemini"}
-            lg{"Isikhathi sase-Samoa"}
             ls{"Isikhathi sase-Samoa esivamile"}
         }
         "meta:Seychelles"{
@@ -1792,6 +1803,11 @@ zu{
         "meta:Truk"{
             ls{"Isikhathi sase-Chuuk"}
         }
+        "meta:Turkey"{
+            ld{"Türkiye Summer Time"}
+            lg{"Türkiye Time"}
+            ls{"Türkiye Standard Time"}
+        }
         "meta:Turkmenistan"{
             ld{"Isikhathi sehlobo sase-Turkmenistan"}
             lg{"Isikhathi sase-Turkmenistan"}
@@ -1804,6 +1820,9 @@ zu{
             ld{"Isikhathi sase-Uruguay sasehlobo"}
             lg{"Isikhathi sase-Uruguay"}
             ls{"Isikhathi sase-Uruguay esijwayelekile"}
+        }
+        "meta:Urumqi"{
+            ls{"Ürümqi Time"}
         }
         "meta:Uzbekistan"{
             ld{"Isikhathi sehlobo sase-Uzbekistan"}

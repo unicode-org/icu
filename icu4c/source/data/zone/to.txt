@@ -4,31 +4,130 @@
 to{
     zoneStrings{
         "Africa:Sao_Tome"{
-            ec{"Sao Tomé"}
+            ec{"Sā Tomē"}
+        }
+        "America:Anguilla"{
+            ec{"Anikuila"}
+        }
+        "America:Antigua"{
+            ec{"Anitikua"}
+        }
+        "America:Aruba"{
+            ec{"ʻAlupa"}
         }
         "America:Bahia_Banderas"{
             ec{"Bahia Banderas"}
         }
+        "America:Barbados"{
+            ec{"Pāpeitosi"}
+        }
+        "America:Belize"{
+            ec{"Pelise"}
+        }
         "America:Cancun"{
             ec{"Cancun"}
+        }
+        "America:Guyana"{
+            ec{"Kuiana"}
+        }
+        "America:Jamaica"{
+            ec{"Samaika"}
+        }
+        "America:Martinique"{
+            ec{"Mātiniki"}
         }
         "America:Merida"{
             ec{"Merida"}
         }
+        "America:Miquelon"{
+            ec{"Sā-piea"}
+        }
+        "America:Montserrat"{
+            ec{"Moʻungaselati"}
+        }
         "America:New_York"{
             ec{"Niu ʻIoke"}
+        }
+        "America:Puerto_Rico"{
+            ec{"Puēto Liko"}
+        }
+        "America:St_Vincent"{
+            ec{"Sā Viniseni"}
+        }
+        "Asia:Anadyr"{
+            ec{"ʻAnatili"}
+        }
+        "Asia:Barnaul"{
+            ec{"Palanauli"}
+        }
+        "Asia:Chita"{
+            ec{"Tisita"}
         }
         "Asia:Hebron"{
             ec{"Hepeloni"}
         }
+        "Asia:Hong_Kong"{
+            ec{"Hongi-kongi"}
+        }
+        "Asia:Irkutsk"{
+            ec{"ʻĪkutisiki"}
+        }
         "Asia:Jerusalem"{
             ec{"Selūsalema"}
+        }
+        "Asia:Kamchatka"{
+            ec{"Kamisātika"}
+        }
+        "Asia:Khandyga"{
+            ec{"Kanitika"}
+        }
+        "Asia:Krasnoyarsk"{
+            ec{"Kalasinoiāsiki"}
         }
         "Asia:Macau"{
             ec{"Macau"}
         }
+        "Asia:Magadan"{
+            ec{"Makatani"}
+        }
+        "Asia:Novokuznetsk"{
+            ec{"Novokusinetisiki"}
+        }
+        "Asia:Novosibirsk"{
+            ec{"Novosipīsiki"}
+        }
+        "Asia:Omsk"{
+            ec{"ʻOmisiki"}
+        }
         "Asia:Rangoon"{
             ec{"Rangoon"}
+        }
+        "Asia:Sakhalin"{
+            ec{"Sakāline"}
+        }
+        "Asia:Singapore"{
+            ec{"Singapula"}
+        }
+        "Asia:Srednekolymsk"{
+            ec{"Siletinekolimisiki"}
+        }
+        "Asia:Tokyo"{
+            ec{"Tokiō"}
+        }
+        "Asia:Tomsk"{
+            ec{"Tomisiki"}
+        }
+        "Asia:Ust-Nera"{
+            ec{"ʻUsiti-nela"}
+        }
+        "Asia:Vladivostok"{
+            ec{"Valativositoki"}
+        }
+        "Asia:Yakutsk"{
+            ec{"ʻIākutisiki"}
+        }
+        "Asia:Yekaterinburg"{
+            ec{"ʻIekatelinepūki"}
         }
         "Australia:Adelaide"{
             ec{"Atelaite"}
@@ -39,27 +138,36 @@ to{
         "Australia:Melbourne"{
             ec{"Melipoane"}
         }
+        "Australia:Perth"{
+            ec{"Peefi"}
+        }
         "Australia:Sydney"{
             ec{"Senē"}
         }
         "Etc:UTC"{
             ls{"taimi fakaemāmani"}
+            ss{"TFM"}
         }
         "Etc:Unknown"{
             ec{"Feituʻu taʻeʻiloa"}
         }
+        "Europe:Astrakhan"{
+            ec{"ʻAsitalakani"}
+        }
         "Europe:Athens"{
             ec{"ʻAtenisi"}
         }
-        "Europe:Dublin"{
-            ld{"houa fakaʻaealani taimi totonu"}
+        "Europe:Kaliningrad"{
+            ec{"Kalininikalati"}
         }
         "Europe:Kiev"{
             ec{"Kiev"}
         }
+        "Europe:Kirov"{
+            ec{"Kilovi"}
+        }
         "Europe:London"{
             ec{"Lonitoni"}
-            ld{"houa fakapilitānia taimi liliu"}
         }
         "Europe:Moscow"{
             ec{"Mosikou"}
@@ -70,8 +178,35 @@ to{
         "Europe:Rome"{
             ec{"Loma"}
         }
+        "Europe:Samara"{
+            ec{"Samala"}
+        }
+        "Europe:Saratov"{
+            ec{"Salatovi"}
+        }
+        "Europe:Ulyanovsk"{
+            ec{"ʻUlaianovisiki"}
+        }
         "Europe:Vatican"{
             ec{"Vatikani"}
+        }
+        "Europe:Volgograd"{
+            ec{"Volikokalati"}
+        }
+        "Indian:Chagos"{
+            ec{"ʻOtu motu Sakōsi"}
+        }
+        "Indian:Comoro"{
+            ec{"Komolosi"}
+        }
+        "Indian:Kerguelen"{
+            ec{"ʻOtu motu Kelikueleni"}
+        }
+        "Indian:Mauritius"{
+            ec{"Maulitiusi"}
+        }
+        "Indian:Reunion"{
+            ec{"Lēunioni"}
         }
         "Pacific:Auckland"{
             ec{"ʻAokalani"}
@@ -188,11 +323,6 @@ to{
             lg{"houa fakaʻalasika"}
             ls{"houa fakaʻalasika taimi totonu"}
         }
-        "meta:Almaty"{
-            ld{"houa fakaʻalamati taimi liliu"}
-            lg{"houa fakaʻalamati"}
-            ls{"houa fakaʻalamati taimi totonu"}
-        }
         "meta:Amazon"{
             ld{"houa fakaʻamasōne taimi liliu"}
             lg{"houa fakaʻamasōne"}
@@ -227,16 +357,6 @@ to{
             ld{"houa fakaapia taimi liliu"}
             lg{"houa fakaapia"}
             ls{"houa fakaapia taimi totonu"}
-        }
-        "meta:Aqtau"{
-            ld{"houa fakaʻakitau taimi liliu"}
-            lg{"houa fakaʻakitau"}
-            ls{"houa fakaʻakitau taimi totonu"}
-        }
-        "meta:Aqtobe"{
-            ld{"houa fakaʻakitōpe taimi liliu"}
-            lg{"houa fakaʻakitōpe"}
-            ls{"houa fakaʻakitōpe taimi totonu"}
         }
         "meta:Arabian"{
             ld{"houa fakaʻalepea taimi liliu"}
@@ -308,6 +428,10 @@ to{
             ld{"houa fakapalāsila taimi liliu"}
             lg{"houa fakapalāsila"}
             ls{"houa fakapalāsila taimi totonu"}
+        }
+        "meta:British"{
+            ld{"houa fakapilitānia taimi liliu"}
+            lg{"houa fakapilitānia"}
         }
         "meta:Brunei"{
             ls{"houa fakapulunei"}
@@ -427,6 +551,11 @@ to{
         "meta:Gilbert_Islands"{
             ls{"houa fakakilipasi"}
         }
+        "meta:Greenland"{
+            ld{"houa fakafonuamata taimi liliu"}
+            lg{"houa fakafonuamata"}
+            ls{"houa fakafonuamata taimi totonu"}
+        }
         "meta:Greenland_Eastern"{
             ld{"houa fakafonuamata-hahake taimi liliu"}
             lg{"houa fakafonuamata-hahake"}
@@ -437,9 +566,6 @@ to{
             lg{"houa fakafonuamata-hihifo"}
             ls{"houa fakafonuamata-hihifo taimi totonu"}
         }
-        "meta:Guam"{
-            ls{"houa fakakuami"}
-        }
         "meta:Gulf"{
             ls{"houa fakakūlifi"}
         }
@@ -447,7 +573,7 @@ to{
             ls{"houa fakakuiana"}
         }
         "meta:Hawaii"{
-            ls{"houa fakahauaiʻi-aleuti taimi totonu"}
+            ls{"houa fakahauaiʻi taimi totonu"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"houa fakahauaiʻi-aleuti taimi liliu"}
@@ -487,6 +613,10 @@ to{
             lg{"houa fakaʻilaani"}
             ls{"houa fakaʻilaani taimi totonu"}
         }
+        "meta:Irish"{
+            ld{"houa fakaʻaealani taimi totonu"}
+            lg{"houa fakaʻaealani"}
+        }
         "meta:Irkutsk"{
             ld{"houa fakalūsia-ʻīkutisiki taimi liliu"}
             lg{"houa fakalūsia-ʻīkutisiki"}
@@ -503,9 +633,9 @@ to{
             ls{"houa fakasiapani taimi totonu"}
         }
         "meta:Kamchatka"{
-            ld{"houa fakalūsia-petelopavilovisiki taimi liliu"}
-            lg{"houa fakalūsia-petelopavilovisiki"}
-            ls{"houa fakalūsia-petelopavilovisiki taimi totonu"}
+            ld{"houa fakalūsia-kamisātika taimi liliu"}
+            lg{"houa fakalūsia-kamisātika"}
+            ls{"houa fakalūsia-kamisātika taimi totonu"}
         }
         "meta:Kazakhstan"{
             ls{"houa fakakasakitani"}
@@ -532,9 +662,6 @@ to{
         "meta:Kyrgystan"{
             ls{"houa fakakīkisitani"}
         }
-        "meta:Lanka"{
-            ls{"houa fakalangikā"}
-        }
         "meta:Line_Islands"{
             ls{"houa fakaʻotumotulaine"}
         }
@@ -542,11 +669,6 @@ to{
             ld{"houa fakamotuʻeikihoue taimi liliu"}
             lg{"houa fakamotuʻeikihoue"}
             ls{"houa fakamotuʻeikihoue taimi totonu"}
-        }
-        "meta:Macau"{
-            ld{"houa fakamakau taimi liliu"}
-            lg{"houa fakamakau"}
-            ls{"houa fakamakau taimi totonu"}
         }
         "meta:Magadan"{
             ld{"houa fakalūsia-makatani taimi liliu"}
@@ -625,9 +747,6 @@ to{
             lg{"houa fakafēnanito-te-nolōnia"}
             ls{"houa fakafēnanito-te-nolōnia taimi totonu"}
         }
-        "meta:North_Mariana"{
-            ls{"houa fakamalianatokelau"}
-        }
         "meta:Novosibirsk"{
             ld{"houa fakalūsia-novosipīsiki taimi liliu"}
             lg{"houa fakalūsia-novosipīsiki"}
@@ -681,11 +800,6 @@ to{
         "meta:Pyongyang"{
             ls{"houa fakapiongiangi"}
         }
-        "meta:Qyzylorda"{
-            ld{"houa fakakisilōta taimi liliu"}
-            lg{"houa fakakisilōta"}
-            ls{"houa fakakisilōta taimi totonu"}
-        }
         "meta:Reunion"{
             ls{"houa fakalēunioni"}
         }
@@ -703,8 +817,6 @@ to{
             ls{"houa fakalūsia-samala taimi totonu"}
         }
         "meta:Samoa"{
-            ld{"houa fakahaʻamoa taimi liliu"}
-            lg{"houa fakahaʻamoa"}
             ls{"houa fakahaʻamoa taimi totonu"}
         }
         "meta:Seychelles"{

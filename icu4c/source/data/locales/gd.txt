@@ -260,16 +260,22 @@ gd{
                 }
                 decimalFormat{
                     1000000000{
+                        few{"0B"}
                         one{"0B"}
                         other{"0B"}
+                        two{"0B"}
                     }
                     10000000000{
+                        few{"00B"}
                         one{"00B"}
                         other{"00B"}
+                        two{"00B"}
                     }
                     100000000000{
+                        few{"000B"}
                         one{"000B"}
                         other{"000B"}
+                        two{"000B"}
                     }
                 }
             }
@@ -657,7 +663,7 @@ gd{
                 GyMMMEd{"E, d'mh' MMM y G"}
                 GyMMMd{"d'mh' MMM y G"}
                 GyMd{"d/M/y GGGGG"}
-                Hv{"HH'u' v"}
+                Hv{"HH v"}
                 MEd{"E, d/M"}
                 MMMEd{"E, d MMM"}
                 MMMMd{"d'mh' MMMM"}
@@ -876,7 +882,7 @@ gd{
                 GyMMMEd{"E, d MMM y G"}
                 GyMMMd{"d MMM y G"}
                 GyMd{"d/M/y G"}
-                Hv{"HH'u' v"}
+                Hv{"HH v"}
                 MEd{"E, d/M"}
                 MMMEd{"E, d MMM"}
                 MMMMW{
@@ -901,6 +907,8 @@ gd{
                 yMMM{"LLL Y"}
                 yMMMEd{"E, d MMM y"}
                 yMMMM{"LLLL y"}
+                yMMMMEd{"EEE, d MMMM y"}
+                yMMMMd{"d MMMM y"}
                 yMMMd{"d MMM y"}
                 yMd{"d/M/y"}
                 yQQQ{"QQQ y"}

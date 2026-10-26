@@ -625,7 +625,7 @@ eo{
         }
         XXX{
             "¤",
-            "nekonata monunuo",
+            "nekonata valuto",
         }
         YER{
             "YER",
@@ -1276,8 +1276,8 @@ eo{
             other{"pacifikaj frankoj"}
         }
         XXX{
-            one{"(nekunata monunuo)"}
-            other{"(nekonata monunuo)"}
+            one{"(nekonata valuto)"}
+            other{"(nekonata valuto)"}
         }
         YER{
             one{"jemena rialo"}

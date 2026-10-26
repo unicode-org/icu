@@ -407,8 +407,8 @@ static const uint8_t ebcdicTypes[128] = {
 
 
 /* @see ucnv_compareNames */
-U_CAPI char * U_CALLCONV
-ucnv_io_stripASCIIForCompare(char *dst, const char *name) {
+U_CAPI char* U_CALLCONV
+ucnv_io_stripASCIIForCompare(char* dst U_LIFETIME_BOUND, const char* name) {
     char *dstItr = dst;
     uint8_t type, nextType;
     char c1;
@@ -442,8 +442,8 @@ ucnv_io_stripASCIIForCompare(char *dst, const char *name) {
     return dst;
 }
 
-U_CAPI char * U_CALLCONV
-ucnv_io_stripEBCDICForCompare(char *dst, const char *name) {
+U_CAPI char* U_CALLCONV
+ucnv_io_stripEBCDICForCompare(char* dst U_LIFETIME_BOUND, const char* name) {
     char *dstItr = dst;
     uint8_t type, nextType;
     char c1;

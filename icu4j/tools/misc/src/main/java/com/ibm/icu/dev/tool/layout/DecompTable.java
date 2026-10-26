@@ -9,7 +9,7 @@
 package com.ibm.icu.dev.tool.layout;
 
 import com.ibm.icu.text.UTF16;
-import java.util.Vector;
+import java.util.ArrayList;
 
 /**
  * @author Owner
@@ -62,10 +62,10 @@ public class DecompTable implements LookupSubtable {
         //
         // Straight insertion sort from Knuth vol. III, pg. 81
         //
-        public static void sort(DecompEntry[] table, Vector decompVector) {
+        public static void sort(DecompEntry[] table, ArrayList<DecompEntry> decompList) {
             for (int j = 0; j < table.length; j += 1) {
                 int i;
-                DecompEntry v = (DecompEntry) decompVector.elementAt(j);
+                DecompEntry v = decompList.get(j);
 
                 for (i = j - 1; i >= 0; i -= 1) {
                     if (v.compareTo(table[i]) >= 0) {
@@ -80,12 +80,12 @@ public class DecompTable implements LookupSubtable {
         }
     }
 
-    private Vector decompVector;
+    private ArrayList<DecompEntry> decompList;
     private DecompEntry[] decompEntries;
     private int snapshotSize;
 
     public DecompTable() {
-        decompVector = new Vector();
+        decompList = new ArrayList<>();
         decompEntries = null;
         snapshotSize = -1;
     }
@@ -93,7 +93,7 @@ public class DecompTable implements LookupSubtable {
     public void add(int composed, String decomposition) {
         DecompEntry entry = new DecompEntry(composed, decomposition);
 
-        decompVector.addElement(entry);
+        decompList.add(entry);
     }
 
     public int getComposedCharacter(int i) {
@@ -113,14 +113,14 @@ public class DecompTable implements LookupSubtable {
     }
 
     public boolean hasEntries() {
-        return decompVector.size() > 0;
+        return decompList.size() > 0;
     }
 
     private void snapshot() {
-        if (snapshotSize != decompVector.size()) {
-            snapshotSize = decompVector.size();
+        if (snapshotSize != decompList.size()) {
+            snapshotSize = decompList.size();
             decompEntries = new DecompEntry[snapshotSize];
-            DecompEntry.sort(decompEntries, decompVector);
+            DecompEntry.sort(decompEntries, decompList);
         }
     }
 

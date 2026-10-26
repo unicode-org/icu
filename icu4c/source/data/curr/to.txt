@@ -54,11 +54,6 @@ to{
         NZD{"NZ$"}
         SBD{"S$"}
     }
-    CurrencyPlurals{
-        EUR{
-            other{"ʻeulo"}
-        }
-    }
     CurrencyUnitPatterns{
         other{"{1} {0}"}
     }

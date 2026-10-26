@@ -11,19 +11,35 @@ lv{
         colCaseLevel{"reģistrjutīga kārtošana"}
         colNormalization{"normalizēta kārtošana"}
         colNumeric{"kārtošana skaitliskā secībā"}
+        colReorder{"rakstību/bloku pārkārtošana"}
         colStrength{"kārtošanas pakāpe"}
         collation{"kārtošanas secība"}
         currency{"valūta"}
+        d0{"Pārveidošanas mērķis"}
+        dx{"Izņēmumi vārdnīcas segmentēšanai"}
         em{"Emocijzīmes attēlojums"}
+        fw{"Pirmā nedēļas diena"}
+        h0{"Jaukti"}
         hc{"Stundu formāts (12 vai 24)"}
+        i0{"Ievades metode"}
+        k0{"Tastatūra"}
+        kv{"Visvairāk ignorētās rakstzīmes"}
         lb{"Rindiņas pārtraukuma stils"}
         lw{"Rindiņu pārtraukumi vārdos"}
+        m0{"Pārveidošanas noteikumi"}
         ms{"mērvienību sistēma"}
+        mu{"Mērvienība"}
         numbers{"Cipari"}
+        rg{"Reģions papildu datiem"}
+        s0{"Transformācijas avots"}
+        sd{"Reģiona apakšiedalījums"}
         ss{"Teikuma beigas pēc abr."}
+        t{"Transformācija"}
+        t0{"Mašīntulkots"}
         timezone{"laika josla"}
         va{"lokalizācijas variants"}
         x{"personīgai lietošanai"}
+        x0{"Personīgai lietošanai paredzēta transformācija"}
     }
     Languages{
         aa{"afāru"}
@@ -421,6 +437,7 @@ lv{
         pi{"pāli"}
         pis{"pidžinvaloda"}
         pl{"poļu"}
+        pms{"pjemontiešu"}
         pon{"ponapiešu"}
         pqm{"malisetu-pasamakvodi"}
         prg{"prūšu"}
@@ -716,7 +733,7 @@ lv{
             islamic{"Hidžrī kalendārs"}
             islamic-civil{"Hidžrī kalendārs (pilsoņu)"}
             islamic-umalqura{"Hidžrī kalendārs (Umm al-kura)"}
-            iso8601{"ISO 8601 kalendārs"}
+            iso8601{"Gregora kalendārs (nedēļu numerācija pēc ISO 8601)"}
             japanese{"japāņu kalendārs"}
             persian{"persiešu kalendārs"}
             roc{"Ķīnas Republikas kalendārs"}
@@ -730,9 +747,13 @@ lv{
             ethiopic-amete-alem{"etiopiešu Amete Alem"}
             gregorian{"Gregora"}
             hebrew{"ebreju"}
+            indian{"Indijas nacionālais"}
             islamic{"Hidžrī"}
             islamic-civil{"Hidžrī (pilsoņu)"}
+            islamic-rgsa{"Hidžrī kalendārs (Saūda Arābijas mēness novērojums)"}
+            islamic-tbla{"Hidžrī (tabulārais, astronomiskās ēras)"}
             islamic-umalqura{"Hidžrī (Umm al-kura)"}
+            iso8601{"Gregora"}
             japanese{"japāņu"}
             persian{"persiešu"}
             roc{"Ķīnas Republikas"}
@@ -758,6 +779,11 @@ lv{
             no{"Kārtot burtu reģistra parastā secībā"}
             upper{"Kārtot pēc pirmā lielā burta"}
         }
+        colCaseFirst%core{
+            lower{"mazie burti"}
+            no{"mazie burti"}
+            upper{"lielie burti"}
+        }
         colCaseLevel{
             no{"Kārtot reģistrnejutīgas rakstzīmes"}
             yes{"Kārtot reģistrjutīgās rakstzīmes"}
@@ -769,6 +795,13 @@ lv{
         colNumeric{
             no{"Kārtot ciparus atsevišķi"}
             yes{"Kārtot ciparus skaitliskā secībā"}
+        }
+        colReorder%core{
+            currency{"valūta"}
+            digit{"cipari"}
+            punct{"interpunkcija"}
+            space{"tukšzīme"}
+            symbol{"simbols"}
         }
         colStrength{
             identical{"Kārtot visus"}
@@ -782,6 +815,13 @@ lv{
                 "Kārtot diakritiskās zīmes/reģistrjutīgās rakstzīmes/rakstzīmes pēc p"
                 "latuma"
             }
+        }
+        colStrength%core{
+            identical{"visi"}
+            primary{"tikai pamatburti"}
+            quaternary{"pamatburti, diakritiskās zīmes, lielie/mazie burti, varianti, Kana"}
+            secondary{"pamatburti, diakritiskās zīmes"}
+            tertiary{"pamatburti, diakritiskās zīmes, lielie/mazie burti, varianti"}
         }
         collation{
             compat{"saderīgā kārtošanas secība"}
@@ -799,9 +839,21 @@ lv{
             unihan{"Radikālā kārtošanas secība pēc vilkumu skaita"}
         }
         collation%core{
+            compat{"saderība"}
+            dictionary{"vārdnīca"}
             ducet{"noklusējuma unikods"}
+            emoji{"emocijzīme"}
+            eor{"Eiropas noteikumi"}
+            phonebook{"telefongrāmata"}
+            phonetic{"fonētisks"}
+            pinyin{"piņjiņs"}
             search{"meklēšana"}
+            searchjl{"korejiešu sākuma līdzskanis"}
             standard{"standarta"}
+            stroke{"vilcienu skaits"}
+            traditional{"tradicionālā secība"}
+            unihan{"radikāļu un vilcienu skaita secība"}
+            zhuyin{"Džujins"}
         }
         d0{
             fwidth{"Pilna platuma"}
@@ -814,16 +866,26 @@ lv{
             text{"Teksts"}
         }
         hc{
+            c12{"12 stundu sistēma"}
+            c24{"24 stundu sistēma"}
             h11{"12 stundu sistēma (0–11)"}
             h12{"12 stundu sistēma (1–12)"}
             h23{"24 stundu sistēma (0–23)"}
             h24{"24 stundu sistēma (1–24)"}
         }
         hc%core{
+            c12{"12"}
+            c24{"24"}
             h11{"12 (0–11)"}
             h12{"12 (1–12)"}
             h23{"24 (0–23)"}
             h24{"24 (1–24)"}
+        }
+        kv%core{
+            currency{"ignorēt atstarpes, pieturzīmes un visus simbolus"}
+            punct{"ignorēt atstarpes un pieturzīmes"}
+            space{"ignorēt atstarpes un pieturzīmes"}
+            symbol{"ignorēt atstarpes, pieturzīmes un simbolus, kas nav valūtas simboli"}
         }
         lb{
             loose{"Brīvais rindiņas pārtraukuma stils"}
@@ -901,9 +963,48 @@ lv{
             traditional{"Tradicionālā ciparu sistēma"}
             vaii{"VAI cipari"}
         }
+        numbers%core{
+            arabext{"Izvērstie arābu-indiešu"}
+            armnlow{"Mazie armēņu"}
+            finance{"finanšu"}
+            fullwide{"pilna platuma"}
+            greklow{"mazie grieķu"}
+            hanidays{
+                "Mēneša dienu numerācija ar haņu rakstzīmēm tradicionālajos kalendāro"
+                "s"
+            }
+            hanidec{"pozicionālā decimālsistēma ar ķīniešu ciparu rakstzīmēm"}
+            hansfin{"Vienkāršotās ķīniešu finanšu ciparzīmes"}
+            hantfin{"Tradicionālās ķīniešu finanšu ciparzīmes"}
+            jpanfin{"Japāņu finanšu ciparzīmes"}
+            jpanyear{"Japāņu pirmā gada numerācija"}
+            lanatham{"Tai Tham Tham (reliģiskais lietojums)"}
+            mathbold{"Matemātiskais treknraksts"}
+            mathdbl{"Matemātiskais dubultsvītrojums"}
+            mathmono{"Matemātiskais vienplatuma raksts"}
+            mathsanb{"Matemātiskais bezserifa treknraksts"}
+            mathsans{"Matemātiskais bezserifa raksts"}
+            mymrepka{"Mjanmas austrumu pvo karenu"}
+            mymrpao{"Mjanmas pao"}
+            mymrshan{"Mjanmas šaņu"}
+            mymrtlng{"Mjanmas tai laingu"}
+            native{"Vietējie cipari"}
+            outlined{"Kontūrveida"}
+            roman{"Romiešu lielie cipari"}
+            romanlow{"Romiešu mazie cipari"}
+            segment{"Segmentēti"}
+            tamldec{"Mūsdienu tamilu"}
+            traditional{"Tradicionālie cipari"}
+        }
         ss%core{
             none{"Izsl."}
             standard{"Iesl."}
+        }
+        t0{
+            und{"Nenorādīta mašīntulkošana"}
+        }
+        va%core{
+            posix{"POSIX variants"}
         }
     }
     Variants{

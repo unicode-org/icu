@@ -37,19 +37,21 @@ jobs:
   # Keep in sync with deploy workflow in `jekyll-gh-pages.yml`
   test-docs-build:
     name: Test build of User Guide docs
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     steps:
       - name: Checkout
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@ac793fdd38cc468a4dd57246fa9d0e868aba9085 # v1.270.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ruby-version: '2.7.4' # Not needed with a .ruby-version file
+          persist-credentials: false
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@14594264cd68ce8a2345dd349bc3d138a4ef85c8 # v1.327.0
+        with:
+          ruby-version: '3.2.1' # Not needed with a .ruby-version file
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
           cache-version: 0 # Increment this number if you need to re-download cached gems
       - name: Setup Pages
         id: pages
-        uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5.0.0
+        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
         with:
           generator_config_file: docs/_config.yml
       - name: Build with Jekyll
@@ -58,6 +60,7 @@ jobs:
           cd docs  # root directory of markdown, also contains Jekyll configs, etc.
           bundle install
           # The baseurl arg is parsed from the `baseurl` field of _config.yml.
-          bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
+          bundle exec jekyll build --baseurl "${STEPS_PAGES_OUTPUTS_BASE_PATH}"
         env:
           JEKYLL_ENV: production
+          STEPS_PAGES_OUTPUTS_BASE_PATH: ${{ steps.pages.outputs.base_path }}

@@ -1,7 +1,5 @@
 # Bazel(http://bazel.io) BUILD file
 
-load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
-
 licenses(["notice"])
 
 exports_files(["LICENSE"])

@@ -259,6 +259,26 @@ te{
         }
     }
     calendar{
+        chinese{
+            DateTimePatterns{
+                "h:mm:ss a zzzz",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
+                "r(U) MMMM d, EEEE",
+                "r(U) MMMM d",
+                "r MMM d",
+                "dd/MM/r",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                yyyyMd{"dd/MM/r"}
+            }
+        }
         coptic{
             monthNames{
                 format{
@@ -278,6 +298,26 @@ te{
                         "నైసే",
                     }
                 }
+            }
+        }
+        dangi{
+            DateTimePatterns{
+                "h:mm:ss a zzzz",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
+                "r(U) MMMM d, EEEE",
+                "r(U) MMMM d",
+                "r MMM d",
+                "dd/MM/r",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                yyyyMd{"dd/MM/r"}
             }
         }
         ethiopic{
@@ -310,7 +350,7 @@ te{
                 "EEEE d MMMM y G",
                 "d MMMM y G",
                 "d MMM y G",
-                "dd-MM-y GGGGG",
+                "G y/M/d",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -437,7 +477,7 @@ te{
                 "d, MMMM y, EEEE",
                 "d MMMM, y",
                 "d MMM, y",
-                "dd-MM-yy",
+                "d/M/yy",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -489,6 +529,8 @@ te{
                 yMMM{"MMM y"}
                 yMMMEd{"d MMM, y, E"}
                 yMMMM{"MMMM y"}
+                yMMMMEd{"d MMMM, y, EEE"}
+                yMMMMd{"d, MMMM y"}
                 yMMMd{"d, MMM y"}
                 yMd{"d/M/y"}
                 yQQQ{"QQQ y"}
@@ -817,6 +859,26 @@ te{
                 }
             }
         }
+        iso8601{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "y MMMM d, EEEE",
+                "y MMMM d",
+                "y MMM d",
+                "y/MM/dd",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                yMd{"y/MM/dd"}
+            }
+        }
         persian{
             monthNames{
                 format{
@@ -954,19 +1016,7 @@ te{
                 }
             }
         }
-        day-narrow{
-            dn{"రోజు"}
-        }
-        day-short{
-            dn{"రోజు"}
-        }
         dayOfYear{
-            dn{"సంవత్సరంలో రోజు"}
-        }
-        dayOfYear-narrow{
-            dn{"సంవత్సరంలో రోజు"}
-        }
-        dayOfYear-short{
             dn{"సంవత్సరంలో రోజు"}
         }
         dayperiod{

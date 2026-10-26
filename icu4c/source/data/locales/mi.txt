@@ -10,6 +10,19 @@ mi{
             miscPatterns{
                 atLeast{"⩾{0}"}
             }
+            patternsShort{
+                currencyFormat{
+                    1000000000{
+                        other{"¤ 0B"}
+                    }
+                    10000000000{
+                        other{"¤ 00B"}
+                    }
+                    100000000000{
+                        other{"¤ 000B"}
+                    }
+                }
+            }
         }
         minimalPairs{
             ordinal{
@@ -44,6 +57,12 @@ mi{
                 "{1}, {0}",
             }
             intervalFormats{
+                MMM{
+                    M{"MMM – MMM"}
+                }
+                MMMd{
+                    d{"MMM d – d"}
+                }
                 fallback{"{0} ki te {1}"}
                 yM{
                     M{"GGGGG y-MM – y-MM"}
@@ -123,6 +142,8 @@ mi{
                 yMMM{"MMM y"}
                 yMMMEd{"E, d MMM y"}
                 yMMMM{"MMMM y"}
+                yMMMMEd{"EEE, d MMMM y"}
+                yMMMMd{"d MMMM y"}
                 yMMMd{"d MMM y"}
                 yMd{"dd-MM-y"}
                 yQQQ{"QQQ y"}
@@ -200,7 +221,7 @@ mi{
                         "Hānuere",
                         "Pēpuere",
                         "Māehe",
-                        "Āpereira",
+                        "Āperira",
                         "Mei",
                         "Hune",
                         "Hūrae",

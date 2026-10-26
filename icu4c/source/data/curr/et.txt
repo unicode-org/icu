@@ -1130,6 +1130,7 @@ et{
         }
     }
     Currencies%narrow{
+        CHF{"Fr"}
         TWD{"NT$"}
     }
     CurrencyPlurals{
@@ -1675,7 +1676,7 @@ et{
         }
         MGF{
             one{"Madagaskari frank"}
-            other{"Madagaskar franki"}
+            other{"Madagaskari frank"}
         }
         MKD{
             one{"Makedoonia dinaar"}

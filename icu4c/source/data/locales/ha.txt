@@ -89,40 +89,52 @@ ha{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"¤ 0K"}
-                        other{"¤ 0K"}
+                        one{"¤0K"}
+                        other{"¤0K"}
                     }
                     10000{
-                        one{"¤ 00D"}
-                        other{"¤ 00D"}
+                        one{"¤00D"}
+                        other{"¤00D"}
                     }
                     100000{
-                        one{"¤ 000D"}
-                        other{"¤ 000D"}
+                        one{"¤000D"}
+                        other{"¤000D"}
+                    }
+                    1000000{
+                        one{"¤0M"}
+                        other{"¤0M"}
+                    }
+                    10000000{
+                        one{"¤00M"}
+                        other{"¤00M"}
+                    }
+                    100000000{
+                        one{"¤000M"}
+                        other{"¤000M"}
                     }
                     1000000000{
-                        one{"¤ 0B"}
-                        other{"¤ 0B"}
+                        one{"¤0B"}
+                        other{"¤0B"}
                     }
                     10000000000{
-                        one{"¤ 00B"}
-                        other{"¤ 00B"}
+                        one{"¤00B"}
+                        other{"¤00B"}
                     }
                     100000000000{
-                        one{"¤ 000B"}
-                        other{"¤ 000B"}
+                        one{"¤000B"}
+                        other{"¤000B"}
                     }
                     1000000000000{
-                        one{"¤ 0T"}
-                        other{"¤ 0T"}
+                        one{"¤0T"}
+                        other{"¤0T"}
                     }
                     10000000000000{
-                        one{"¤ 00T"}
-                        other{"¤ 00T"}
+                        one{"¤00T"}
+                        other{"¤00T"}
                     }
                     100000000000000{
-                        one{"¤ 000T"}
-                        other{"¤ 000T"}
+                        one{"¤000T"}
+                        other{"¤000T"}
                     }
                 }
                 decimalFormat{
@@ -154,6 +166,9 @@ ha{
             }
         }
         minimalPairs{
+            ordinal{
+                other{"Ɗauki na {0}th daga dama."}
+            }
             plural{
                 one{"rana {0}"}
                 other{"kwanaki {0}"}
@@ -260,10 +275,18 @@ ha{
                 "yMMMd",
                 "yyMd",
             }
+            appendItems{
+                Day-Of-Week{"{1}, {0}"}
+                Era{"{0} {1}"}
+                Time-Day-Of-Week{"{1}, {0}"}
+            }
             availableFormats{
                 Ed{"E, d"}
                 GyM{"M/y G"}
                 GyMEd{"E, M/d/y G"}
+                GyMMMMEd{"G y, MMMM d, E"}
+                GyMMMMd{"G y, MMMM d"}
+                GyMd{"d/M/y G"}
                 MEd{"E, M/d"}
                 MMMEd{"E, MMM d"}
                 MMMMEd{"E, MMMM d"}
@@ -278,6 +301,8 @@ ha{
                 yMEd{"E, M/d/y"}
                 yMMM{"MMM y"}
                 yMMMM{"MMMM y"}
+                yMMMMEd{"y, MMMM d, E"}
+                yMMMMd{"y, MMMM d"}
                 yMMMd{"d MMM, y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
@@ -947,6 +972,9 @@ ha{
             surnameFirst-short-monogram-informal{"{given-informal-monogram-allCaps}"}
             surnameFirst-short-referring-formal{"{surname} {given-initial} {given2-initial}"}
             surnameFirst-short-referring-informal{"{surname} {given-initial}"}
+        }
+        parameterDefault{
+            formality{"informal"}
         }
     }
 }

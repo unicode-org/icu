@@ -183,7 +183,6 @@ public class LocaleDistanceTest extends CoreTestFmwk {
             } else {
                 super.handleParams(comment, arguments);
             }
-            return;
         }
     }
 }

@@ -11,19 +11,35 @@ ro{
         colCaseLevel{"sortare care ține seama de majuscule/minuscule"}
         colNormalization{"sortare normalizată"}
         colNumeric{"sortare numerică"}
+        colReorder{"reordonare scriere/blocuri"}
         colStrength{"puterea sortării"}
         collation{"ordine de sortare"}
         currency{"monedă"}
+        d0{"destinație transformare"}
+        dx{"excluderi întreruperi dicționar"}
         em{"Prezentare emojiuri"}
+        fw{"prima zi a săptămânii"}
+        h0{"amestecate"}
         hc{"ciclu orar (12 sau 24)"}
+        i0{"metodă de introducere"}
+        k0{"tastatură"}
+        kv{"cel mai înalt nivel ignorat"}
         lb{"stil de întrerupere a rândului (chineză, japoneză, coreeană)"}
         lw{"întrerupere a rândului în interiorul cuvântului"}
+        m0{"reguli de transformare"}
         ms{"sistem de unități de măsură"}
+        mu{"unitate de măsură"}
         numbers{"numere"}
+        rg{"regiune pentru date suplimentare"}
+        s0{"sursă transformare"}
+        sd{"subdiviziune regiune"}
         ss{"întrerupere propoziție după abr."}
+        t{"Transformare"}
+        t0{"traducere automată"}
         timezone{"fus orar"}
         va{"variantă locală"}
         x{"utilizare privată"}
+        x0{"transformare de uz privat"}
     }
     Languages{
         aa{"afar"}
@@ -424,6 +440,7 @@ ro{
         pi{"pali"}
         pis{"pijin"}
         pl{"poloneză"}
+        pms{"piemonteză"}
         pon{"pohnpeiană"}
         pqm{"maliseet-passamaquoddy"}
         prg{"prusacă"}
@@ -837,9 +854,13 @@ ro{
             ethiopic-amete-alem{"etiopian amete alem"}
             gregorian{"gregorian"}
             hebrew{"ebraic"}
+            indian{"național indian"}
             islamic{"al hegirei"}
             islamic-civil{"al hegirei (tabular, civil)"}
+            islamic-rgsa{"al hegirei, observare Arabia Saudită"}
+            islamic-tbla{"al hegirei (tabular, astronomic)"}
             islamic-umalqura{"al hegirei (Umm al-Qura)"}
+            iso8601{"gregorian"}
             japanese{"japonez"}
             persian{"persan"}
             roc{"al Republicii Chineze"}
@@ -865,6 +886,11 @@ ro{
             no{"Ordonați după dimensiunea normală a literei"}
             upper{"Ordonați mai întâi majusculele"}
         }
+        colCaseFirst%core{
+            lower{"minuscule"}
+            no{"minuscule"}
+            upper{"majuscule"}
+        }
         colCaseLevel{
             no{"Ordonați neținând seama de diferența dintre majuscule/minuscule"}
             yes{"Ordonați ținând seama de diferența dintre majuscule/minuscule"}
@@ -877,12 +903,26 @@ ro{
             no{"Ordonați cifrele individual"}
             yes{"Ordonați cifrele în ordine numerică"}
         }
+        colReorder%core{
+            currency{"monedă"}
+            digit{"cifre"}
+            punct{"punctuație"}
+            space{"spațiu"}
+            symbol{"simbol"}
+        }
         colStrength{
             identical{"Ordonați-le pe toate"}
             primary{"Ordonați numai literele de bază"}
             quaternary{"Ordonați după accente/dimensiunea literei/lățime/kana"}
             secondary{"Ordonați după accent"}
             tertiary{"Ordonați după accente/dimensiunea literei/lățime"}
+        }
+        colStrength%core{
+            identical{"toate"}
+            primary{"doar literele de bază"}
+            quaternary{"bază, accente, majuscule/minuscule, variante, kana"}
+            secondary{"bază, accente"}
+            tertiary{"bază, accente, majuscule/minuscule, variante"}
         }
         collation{
             compat{"ordine de sortare anterioară, pentru compatibilitate"}
@@ -905,10 +945,13 @@ ro{
             compat{"compatibilitate"}
             dictionary{"dicționar"}
             ducet{"Unicode implicită"}
+            emoji{"emoji"}
+            eor{"reguli europene"}
             phonebook{"carte de telefon"}
             phonetic{"fonetică"}
             pinyin{"pinyin"}
             search{"căutare"}
+            searchjl{"consoană inițială coreeană"}
             standard{"standard"}
             stroke{"trasare"}
             traditional{"tradițională"}
@@ -926,16 +969,26 @@ ro{
             text{"text"}
         }
         hc{
+            c12{"sistem cu 12 ore"}
+            c24{"sistem cu 24 de ore"}
             h11{"sistem cu 12 ore (0–11)"}
             h12{"sistem cu 12 ore (1–12)"}
             h23{"sistem cu 24 de ore (0–23)"}
             h24{"sistem cu 24 de ore (1–24)"}
         }
         hc%core{
+            c12{"12"}
+            c24{"24"}
             h11{"12 (0–11)"}
             h12{"12 (1–12)"}
             h23{"24 (0–23)"}
             h24{"24 (1–24)"}
+        }
+        kv%core{
+            currency{"omite spații, punctuație, toate simbolurile"}
+            punct{"omite spații, punctuație"}
+            space{"omite spații, punctuație"}
+            symbol{"omite spații, punctuație, simboluri nemonetare"}
         }
         lb{
             loose{"stil liber de întrerupere a liniei"}
@@ -1054,9 +1107,51 @@ ro{
             wara{"cifre warang citi"}
             wcho{"cifre wancho"}
         }
+        numbers%core{
+            arabext{"indo-arabe extinse"}
+            armnlow{"armenești cu minuscule"}
+            finance{"financiare"}
+            fullwide{"lățime întreagă"}
+            greklow{"grecești cu minuscule"}
+            hanidays{
+                "numerotare a zilelor lunii cu caractere han pentru calendarele tradi"
+                "ționale"
+            }
+            hanidec{
+                "sistem zecimal pozițional utilizând ideograme numerice chinezești dr"
+                "ept cifre"
+            }
+            hansfin{"financiare chinezești simplificate"}
+            hantfin{"financiare chinezești tradiționale"}
+            jpanfin{"financiare japoneze"}
+            jpanyear{"numerotare japoneză gannen după primul an"}
+            lanatham{"tai tham tham (ecleziastică)"}
+            mathbold{"matematice aldine"}
+            mathdbl{"matematice cu linii duble"}
+            mathmono{"matematice monospațiate"}
+            mathsanb{"matematice fără serife aldine"}
+            mathsans{"matematice fără serife"}
+            mymrepka{"karen pwo de Est birmaneze"}
+            mymrpao{"pao birmaneze"}
+            mymrshan{"shan birmaneze"}
+            mymrtlng{"tai laing birmaneze"}
+            native{"cifre native"}
+            outlined{"conturate"}
+            roman{"romane cu majuscule"}
+            romanlow{"romane cu minuscule"}
+            segment{"segmentate"}
+            tamldec{"tamile moderne"}
+            traditional{"numerale tradiționale"}
+        }
         ss%core{
             none{"dezactivată"}
             standard{"activată"}
+        }
+        t0{
+            und{"traducere automată nespecificată"}
+        }
+        va%core{
+            posix{"variantă POSIX"}
         }
     }
     Variants{

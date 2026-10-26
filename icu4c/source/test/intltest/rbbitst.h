@@ -83,6 +83,7 @@ public:
     void TestTableRedundancies();
     void TestBug13447();
     void TestReverse();
+    void TestSafePairDensity();
     void TestReverse(std::unique_ptr<RuleBasedBreakIterator>bi);
     void TestBug13692();
     void TestDebugRules();
@@ -107,6 +108,8 @@ public:
     void TestBug22585();
     void TestBug22602();
     void TestBug22636();
+    void TestLookaheadPolychromy();
+    void TestBug23449();
 
 #if U_ENABLE_TRACING
     void TestTraceCreateCharacter();

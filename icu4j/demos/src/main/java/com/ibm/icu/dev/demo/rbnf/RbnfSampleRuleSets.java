@@ -22,7 +22,7 @@ import java.util.Locale;
  * @author Richard Gillam
  */
 public class RbnfSampleRuleSets {
-    /** Puts a copyright in the .class file */
+    /* Puts a copyright in the .class file */
     //    private static final String copyrightNotice
     //        = "Copyright \u00a91997-1998 IBM Corp.  All rights reserved.";
 

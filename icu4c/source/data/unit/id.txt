@@ -149,10 +149,6 @@ id{
                 dnam{"glukosa"}
                 other{"{0} glukosa"}
             }
-            part{
-                dnam{"bagian"}
-                other{"{0} bagian"}
-            }
             part-per-1e6{
                 dnam{"bagian per juta"}
                 other{"{0} bagian per juta"}
@@ -860,9 +856,6 @@ id{
             radian{
                 dnam{"rad"}
             }
-            steradian{
-                other{"{0} sr"}
-            }
         }
         area{
             square-foot{
@@ -879,14 +872,16 @@ id{
             }
         }
         concentr{
+            katal{
+                other{"{0} kat"}
+            }
             millimole-per-liter{
                 dnam{"mmol/L"}
             }
             ofglucose{
-                dnam{"Glc"}
+                other{"{0} Glc"}
             }
             part{
-                dnam{"bagian"}
                 other{"{0} bagian"}
             }
             part-per-1e6{
@@ -970,13 +965,24 @@ id{
             }
         }
         electric{
+            coulomb{
+                other{"{0} C"}
+            }
+            farad{
+                other{"{0} F"}
+            }
+            henry{
+                other{"{0} H"}
+            }
             milliampere{
                 dnam{"mA"}
+            }
+            siemens{
+                other{"{0} S"}
             }
         }
         energy{
             calorie-it{
-                dnam{"kal-IT"}
                 other{"{0} kal-IT"}
             }
             electronvolt{
@@ -990,6 +996,9 @@ id{
             }
         }
         force{
+            kilogram-force{
+                other{"{0} kgf"}
+            }
             newton{
                 dnam{"N"}
             }
@@ -1038,6 +1047,14 @@ id{
                 dnam{"L☉"}
             }
         }
+        magnetic{
+            tesla{
+                other{"{0} T"}
+            }
+            weber{
+                other{"{0} Wb"}
+            }
+        }
         mass{
             dalton{
                 dnam{"Da"}
@@ -1070,9 +1087,6 @@ id{
             }
             millibar{
                 other{"{0} mb"}
-            }
-            ofhg{
-                other{"{0} Hg"}
             }
         }
         speed{

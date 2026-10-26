@@ -48,7 +48,7 @@ _scripts_only_in_iso15924 = (
     "Afak", "Aran", "Blis", "Cirt", "Cyrs",
     "Egyd", "Egyh", "Geok",
     "Hanb", "Hans", "Hant", "Hntl",
-    "Inds", "Jamo", "Jpan", "Jurc", "Kore", "Kpel", "Latf", "Latg", "Loma",
+    "Inds", "Jamo", "Jpan", "Kore", "Kpel", "Latf", "Latg", "Loma",
     "Maya", "Moon", "Nkgb", "Phlv", "Roro",
     "Sara", "Syre", "Syrj", "Syrn",
     "Teng", "Visp", "Wole", "Zmth", "Zsye", "Zsym", "Zxxx"
@@ -1154,11 +1154,15 @@ def CompactBlock(b, i):
           # b_props only has non-default values.
           # Set the default value if it used to be inherited.
           props[pname] = _null_or_defaults[pname]
-      # If there is only one assigned range, then move all of its properties
-      # to the block.
+      # If there is only one assigned range, then
+      # move all of its compressible properties to the block.
       if num_ranges == 1:
-        b_props.update(props)
-        props.clear()
+        # We cannot iterate directly over props and delete items from it.
+        # Copy the props keys, keep only compressible properties.
+        pnames = set(props) - _uncompressible_props
+        for pname in pnames:
+          b_props[pname] = props[pname]
+          del props[pname]
     i += 1
   # Return the _starts index of the first range after this block.
   return i
@@ -2266,8 +2270,8 @@ def WritePNamesDataHeader(out_path):
     # Write an array of "binprop" Value object initializers
     # with the value aliases shared among all binary properties.
     out_file.write("static const Value VALUES_binprop[2] = {\n")
-    out_file.write('    Value(0, "%s"),\n' % " ".join(_binary_values["N"]))
-    out_file.write('    Value(1, "%s"),\n' % " ".join(_binary_values["Y"]))
+    out_file.write('    Value(0, "", "%s"),\n' % " ".join(_binary_values["N"]))
+    out_file.write('    Value(1, "", "%s"),\n' % " ".join(_binary_values["Y"]))
     out_file.write("};\n\n")
 
     # For each property with named values, write an array of
@@ -2283,11 +2287,14 @@ def WritePNamesDataHeader(out_path):
         aliases = _properties[pname][3][vname]
         # ccc, lccc, tccc: Omit the numeric strings from the aliases.
         # (See the comment about ccc in the PropertyValueAliases.txt header.)
-        if pname.endswith("ccc"): aliases = aliases[1:]
+        api_name = v_enum
+        if pname.endswith("ccc"):
+          api_name = ""
+          aliases = aliases[1:]
         if len(aliases) > max_aliases: max_aliases = len(aliases)
         cast = "(int32_t)" if pname == "gcm" else ""
-        out_file.write('    Value(%s%s, "%s"),\n' %
-                       (cast, v_enum, " ".join(aliases)))
+        out_file.write('    Value(%s%s, "%s", "%s"),\n' %
+                       (cast, v_enum, api_name, " ".join(aliases)))
       out_file.write("};\n\n")
 
     # For each property, write a Property object initializer
@@ -2298,12 +2305,12 @@ def WritePNamesDataHeader(out_path):
       prop = _properties[pname]
       aliases = " ".join(prop[1])
       if prop[0] == "Binary":
-        out_file.write('    Property(%s, "%s"),\n' % (enum, aliases))
+        out_file.write('    Property(%s, "%s", "%s"),\n' % (enum, enum, aliases))
       elif values:  # Property with named values.
-        out_file.write('    Property(%s, "%s", VALUES_%s, %d),\n' %
-                       (enum, aliases, pname, len(values)))
+        out_file.write('    Property(%s, "%s", "%s", VALUES_%s, %d),\n' %
+                       (enum, enum, aliases, pname, len(values)))
       else:
-        out_file.write('    Property(%s, "%s"),\n' % (enum, aliases))
+        out_file.write('    Property(%s, "%s", "%s"),\n' % (enum, enum, aliases))
     out_file.write("};\n\n")
 
     out_file.write("const int32_t MAX_ALIASES = %d;\n" % max_aliases)

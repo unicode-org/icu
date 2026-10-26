@@ -9,6 +9,7 @@
 
 #include "unicode/datefmt.h"
 #include "unicode/locid.h"
+#include "unicode/udat.h"
 
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
     uint16_t rnd;
@@ -30,11 +31,10 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
         icu::DateFormat::EStyle::kShortRelative,
     };
     int32_t numStyles = sizeof(styles) / sizeof(icu::DateFormat::EStyle);
+    int32_t rawDateStyle;
+    int32_t rawTimeStyle;
 
-    icu::DateFormat::EStyle dateStyle;
-    icu::DateFormat::EStyle timeStyle;
-    if (size < sizeof(rnd) + sizeof(date) + 2*sizeof(rnd2) +
-        sizeof(dateStyle) + sizeof(timeStyle) ) {
+    if (size < sizeof(rnd) + sizeof(date) + 4*sizeof(rnd2) + sizeof(rawDateStyle) + sizeof(rawTimeStyle) ) {
         return 0;
     }
     icu::StringPiece fuzzData(reinterpret_cast<const char *>(data), size);
@@ -43,10 +43,13 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
     fuzzData.remove_prefix(sizeof(rnd));
     icu::Locale locale = GetRandomLocale(rnd);
 
-    std::memcpy(&dateStyle, fuzzData.data(), sizeof(dateStyle));
-    fuzzData.remove_prefix(sizeof(dateStyle));
-    std::memcpy(&timeStyle, fuzzData.data(), sizeof(timeStyle));
-    fuzzData.remove_prefix(sizeof(timeStyle));
+    std::memcpy(&rnd2, fuzzData.data(), sizeof(rnd2));
+    icu::DateFormat::EStyle dateStyle = styles[rnd2 % numStyles];
+    fuzzData.remove_prefix(sizeof(rnd2));
+
+    std::memcpy(&rnd2, fuzzData.data(), sizeof(rnd2));
+    icu::DateFormat::EStyle timeStyle = styles[rnd2 % numStyles];
+    fuzzData.remove_prefix(sizeof(rnd2));
 
     std::memcpy(&rnd2, fuzzData.data(), sizeof(rnd2));
     icu::DateFormat::EStyle dateStyle2 = styles[rnd2 % numStyles];
@@ -59,15 +62,24 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
     std::memcpy(&date, fuzzData.data(), sizeof(date));
     fuzzData.remove_prefix(sizeof(date));
 
+    std::memcpy(&rawDateStyle, fuzzData.data(), sizeof(rawDateStyle));
+    fuzzData.remove_prefix(sizeof(rawDateStyle));
+    std::memcpy(&rawTimeStyle, fuzzData.data(), sizeof(rawTimeStyle));
+    fuzzData.remove_prefix(sizeof(rawTimeStyle));
+
     std::unique_ptr<icu::DateFormat> df(
         icu::DateFormat::createDateTimeInstance(dateStyle, timeStyle, locale));
     icu::UnicodeString appendTo;
-    df->format(date, appendTo);
+    if (df) {
+        df->format(date, appendTo);
+    }
 
     df.reset(
         icu::DateFormat::createDateTimeInstance(dateStyle2, timeStyle2, locale));
     appendTo.remove();
-    df->format(date, appendTo);
+    if (df) {
+        df->format(date, appendTo);
+    }
     icu::UnicodeString skeleton = icu::UnicodeString::fromUTF8(fuzzData);
 
     UErrorCode status = U_ZERO_ERROR;
@@ -95,6 +107,17 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
                                  skeleton.getBuffer(), skeleton.length(), &status);
     if (udf && U_SUCCESS(status)) {
         udat_close(udf);
+    }
+
+    // Test udat_open validation
+    UErrorCode localStatus = U_ZERO_ERROR;
+    UDateFormat* udfInvalid = udat_open(
+        static_cast<UDateFormatStyle>(rawTimeStyle),
+        static_cast<UDateFormatStyle>(rawDateStyle),
+        locale.getName(), nullptr, 0,
+        nullptr, 0, &localStatus);
+    if (udfInvalid != nullptr) {
+        udat_close(udfInvalid);
     }
     return EXIT_SUCCESS;
 }

@@ -5,15 +5,10 @@ doi{
     zoneStrings{
         "Etc:UTC"{
             ls{"तालमेली आलमी समां"}
+            ss{"-"}
         }
         "Etc:Unknown"{
             ec{"अनजांता शैह्‌र"}
-        }
-        "Europe:Dublin"{
-            ld{"आयरिश मानक समां"}
-        }
-        "Europe:London"{
-            ld{"ब्रिटिश गर्मियें दा समां"}
         }
         "meta:America_Central"{
             ld{"उत्तरी अमरीकी डेलाइट केंदरी समां"}
@@ -40,6 +35,10 @@ doi{
             lg{"अटलांटिक समां"}
             ls{"अटलांटिक मानक समां"}
         }
+        "meta:British"{
+            ld{"ब्रिटिश गर्मियें दा समां"}
+            lg{"ब्रिटिश समां"}
+        }
         "meta:Europe_Central"{
             ld{"केंदरी यूरोपी गर्मियें दा समां"}
             lg{"केंदरी यूरोपी समां"}
@@ -57,6 +56,10 @@ doi{
         }
         "meta:GMT"{
             ls{"ग्रीनविच मीन टाइम"}
+        }
+        "meta:Irish"{
+            ld{"आयरिश मानक समां"}
+            lg{"आयरिश समां"}
         }
         regionFormat{"{0} समां"}
         regionFormatDaylight{"{0} डेलाइट समां"}

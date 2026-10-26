@@ -24,7 +24,7 @@ final class DependencyGraph {
         this.cldrVersion = checkNotNull(cldrVersion);
     }
 
-    void addParent(String localeId, String parentId) {
+    synchronized void addParent(String localeId, String parentId) {
         // Aliases take priority (since they can be forced and will replace empty files). Note
         // however that this only happens in a tiny number of places due to the somewhat "hacky"
         // forced aliases, and in future it's perfectly possibly that there would never be an

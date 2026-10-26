@@ -267,10 +267,6 @@ en{
             "CNH",
             "Chinese Yuan (offshore)",
         }
-        CNX{
-            "CNX",
-            "Chinese People’s Bank Dollar",
-        }
         CNY{
             "CN¥",
             "Chinese Yuan",
@@ -1496,10 +1492,6 @@ en{
         CNH{
             one{"Chinese yuan (offshore)"}
             other{"Chinese yuan (offshore)"}
-        }
-        CNX{
-            one{"Chinese People’s Bank dollar"}
-            other{"Chinese People’s Bank dollars"}
         }
         CNY{
             one{"Chinese yuan"}

@@ -215,65 +215,71 @@ mn{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"¤ 0 мян'.'"}
-                        other{"¤ 0 мян"}
+                        one{"0 мян ¤"}
+                        other{"0 мян ¤"}
                     }
                     10000{
-                        one{"¤ 00 мян'.'"}
-                        other{"¤ 00 мян"}
+                        one{"00 мян ¤"}
+                        other{"00 мян ¤"}
                     }
                     100000{
-                        one{"¤ 000 мян'.'"}
-                        other{"¤ 000 мян"}
+                        one{"000 мян ¤"}
+                        other{"000 мян ¤"}
                     }
                     1000000{
-                        one{"¤ 0 сая"}
-                        other{"¤ 0 сая"}
+                        one{"0 сая ¤"}
+                        other{"0 сая ¤"}
                     }
                     10000000{
-                        one{"¤ 00 сая"}
-                        other{"¤ 00 сая"}
+                        one{"00 сая ¤"}
+                        other{"00 сая ¤"}
                     }
                     100000000{
-                        one{"¤ 000 сая"}
-                        other{"¤ 000 сая"}
+                        one{"000 сая ¤"}
+                        other{"000 сая ¤"}
                     }
                     1000000000{
-                        one{"¤ 0 тэрбум"}
-                        other{"¤ 0 тэрбум"}
+                        one{"0 тэрбум ¤"}
+                        other{"0 тэрбум ¤"}
                     }
                     10000000000{
-                        one{"¤ 00 тэрбум"}
-                        other{"¤ 00 тэрбум"}
+                        one{"00 тэрбум ¤"}
+                        other{"00 тэрбум ¤"}
                     }
                     100000000000{
-                        one{"¤ 000Т"}
-                        other{"¤ 000Т"}
+                        one{"000 тэрбум ¤"}
+                        other{"000 тэрбум ¤"}
                     }
                     1000000000000{
-                        one{"¤ 0ИН"}
-                        other{"¤ 0ИН"}
+                        one{"0 их наяд ¤"}
+                        other{"0 их наяд ¤"}
                     }
                     10000000000000{
-                        one{"¤ 00ИН"}
-                        other{"¤ 00ИН"}
+                        one{"00 их наяд ¤"}
+                        other{"00 их наяд ¤"}
                     }
                     100000000000000{
-                        one{"¤ 000ИН"}
+                        one{"000 их наяд ¤"}
                         other{"¤ 000ИН"}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
+                    100000000000000{
+                        one{"000 их наяд ¤"}
+                        other{"000 их наяд ¤"}
                     }
                 }
                 decimalFormat{
                     1000{
-                        one{"0 мян'.'"}
+                        one{"0 мян"}
                         other{"0 мян"}
                     }
                     10000{
-                        one{"00 мян'.'"}
+                        one{"00 мян"}
                         other{"00 мян"}
                     }
                     100000{
-                        one{"000 мян'.'"}
+                        one{"000 мян"}
                         other{"000 мян"}
                     }
                     1000000{
@@ -297,20 +303,20 @@ mn{
                         other{"00 тэрбум"}
                     }
                     100000000000{
-                        one{"000Т"}
-                        other{"000Т"}
+                        one{"000 т'.'бум"}
+                        other{"000 т'.'бум"}
                     }
                     1000000000000{
-                        one{"0ИН"}
-                        other{"0ИН"}
+                        one{"0 их наяд"}
+                        other{"0 их наяд"}
                     }
                     10000000000000{
-                        one{"00ИН"}
-                        other{"00ИН"}
+                        one{"00 и'.'наяд"}
+                        other{"00 и'.'наяд"}
                     }
                     100000000000000{
-                        one{"000ИН"}
-                        other{"000ИН"}
+                        one{"000 их наяд"}
+                        other{"000 их наяд"}
                     }
                 }
             }
@@ -349,7 +355,6 @@ mn{
             patterns{
                 accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
                 accountingFormat%noCurrency{"#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
             }
             symbols{
                 decimal{","}
@@ -547,7 +552,7 @@ mn{
                 "HHmmssz",
                 "HHmmss",
                 "HHmm",
-                "GyMMMMccccd",
+                "GyMMMMEEEEd",
                 "GyMMdd",
                 "GyMMMd",
                 "GGGGGyMMdd",
@@ -605,6 +610,10 @@ mn{
                 MMMEd{
                     M{"MMMMM/d E – MMMMM/d E"}
                     d{"MMMMM/d E – MMMMM/d E"}
+                }
+                MMMMd{
+                    M{"MM-'р' 'сарын' d – MM-'р' 'сарын' d"}
+                    d{"MM-'р' 'сарын' d–d"}
                 }
                 MMMd{
                     M{"MMMMM/d – MMMMM/d"}
@@ -691,6 +700,8 @@ mn{
                 "{1} {0}",
             }
             appendItems{
+                Day-Of-Week{"{0}, {1}"}
+                Time-Day-Of-Week{"{0}, {1}"}
                 Timezone{"{0} ({1})"}
             }
             availableFormats{
@@ -706,6 +717,9 @@ mn{
                 Ehms{"E. h:mm:ss a"}
                 GyMMM{"G y 'оны' MMM"}
                 GyMMMEd{"G y 'оны' MMM'ын' d. E"}
+                GyMMMM{"G y 'оны' MMMM"}
+                GyMMMMEd{"G y 'оны' MMMM'ын' d, E"}
+                GyMMMMd{"G y 'оны' MMMM'ын' d"}
                 GyMMMd{"G y 'оны' MMM'ын' d"}
                 H{"HH 'ц'"}
                 Hmsv{"HH:mm:ss (v)"}
@@ -714,6 +728,7 @@ mn{
                 M{"LLLLL"}
                 MEd{"MMMMM/dd. E"}
                 MMMEd{"MMM'ын' d. E"}
+                MMMMEd{"MMMM'ын' d, E"}
                 MMMMW{
                     one{"MMMM'ын' W-'р' 'долоо' 'хоног'"}
                     other{"MMMM'ын' W-'р' 'долоо' 'хоног'"}
@@ -731,6 +746,8 @@ mn{
                 yMMM{"y 'оны' MMM"}
                 yMMMEd{"y 'оны' MMM'ын' d. E"}
                 yMMMM{"y 'оны' MMMM"}
+                yMMMMEd{"y 'оны' MMMM'ын' d, E"}
+                yMMMMd{"y 'оны' MMMM'ын' d"}
                 yMMMd{"y 'оны' MMM'ын' d"}
                 yMd{"y.MM.dd"}
                 yQQQ{"y 'оны' QQQ"}
@@ -839,6 +856,10 @@ mn{
                 MMMEd{
                     M{"MMMMM/d E – MMMMM/d E"}
                     d{"MMMMM/d E – MMMMM/d E"}
+                }
+                MMMMd{
+                    M{"MMMM'ын' d – MMMM'ын' d"}
+                    d{"MMMM'ын' d–d"}
                 }
                 MMMd{
                     M{"MMMMM/d – MMMMM/d"}

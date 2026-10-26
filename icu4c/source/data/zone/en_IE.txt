@@ -4,8 +4,9 @@
 en_IE{
     %%Parent{"en_001"}
     zoneStrings{
-        "Europe:Dublin"{
+        "meta:Irish"{
             sd{"IST"}
+            ss{"GMT"}
         }
     }
 }

@@ -309,6 +309,7 @@ public class ConstrainedFieldPosition {
      * @return Whether the field should be included given the constraints.
      * @stable ICU 64
      */
+    @SuppressWarnings("ReferenceEquality")
     public boolean matchesField(Field field, Object fieldValue) {
         if (field == null) {
             throw new IllegalArgumentException("field must not be null");
@@ -321,7 +322,6 @@ public class ConstrainedFieldPosition {
             case FIELD:
                 return fField == field;
             case VALUE:
-                // Note: Objects.equals is Android API level 19 and Java 1.7
                 return fField == field && Objects.equals(fValue, fieldValue);
             default:
                 throw new AssertionError();

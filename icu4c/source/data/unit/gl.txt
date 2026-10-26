@@ -186,8 +186,6 @@ gl{
             }
             part{
                 dnam{"partes"}
-                one{"{0} parte"}
-                other{"{0} partes"}
             }
             part-per-1e6{
                 dnam{"partes por millón"}
@@ -1104,10 +1102,6 @@ gl{
             radian{
                 dnam{"rad"}
             }
-            steradian{
-                one{"{0} sr"}
-                other{"{0} sr"}
-            }
         }
         area{
             acre{
@@ -1124,19 +1118,8 @@ gl{
             karat{
                 dnam{"kt"}
             }
-            katal{
-                one{"{0} kat"}
-                other{"{0} kat"}
-            }
-            ofglucose{
-                dnam{"Glc"}
-                one{"{0} Glc"}
-                other{"{0} Glc"}
-            }
-            part{
-                dnam{"parte"}
-                one{"{0} parte"}
-                other{"{0} partes"}
+            part-per-1e6{
+                dnam{"ppm"}
             }
             part-per-1e9{
                 dnam{"ppmm"}
@@ -1182,59 +1165,22 @@ gl{
             }
         }
         electric{
-            coulomb{
-                one{"{0} C"}
-                other{"{0} C"}
-            }
-            farad{
-                one{"{0} F"}
-                other{"{0} F"}
-            }
-            henry{
-                one{"{0} H"}
-                other{"{0} H"}
-            }
             ohm{
                 dnam{"Ω"}
-            }
-            siemens{
-                one{"{0} S"}
-                other{"{0} S"}
             }
             volt{
                 dnam{"V"}
             }
         }
         energy{
-            becquerel{
-                one{"{0} Bq"}
-                other{"{0} Bq"}
-            }
-            calorie-it{
-                dnam{"cal IT"}
-                one{"{0} cal IT"}
-                other{"{0} cal IT"}
-            }
-            gray{
-                one{"{0} Gy"}
-                other{"{0} Gy"}
-            }
             joule{
                 dnam{"J"}
             }
             kilojoule{
                 dnam{"kJ"}
             }
-            sievert{
-                one{"{0} Sv"}
-                other{"{0} Sv"}
-            }
         }
         force{
-            kilogram-force{
-                one{"{0} kgf"}
-                other{"{0} kgf"}
-            }
             newton{
                 dnam{"N"}
             }
@@ -1281,16 +1227,6 @@ gl{
                 dnam{"L☉"}
             }
         }
-        magnetic{
-            tesla{
-                one{"{0} T"}
-                other{"{0} T"}
-            }
-            weber{
-                one{"{0} Wb"}
-                other{"{0} Wb"}
-            }
-        }
         mass{
             carat{
                 dnam{"ct"}
@@ -1314,12 +1250,6 @@ gl{
         power{
             watt{
                 dnam{"W"}
-            }
-        }
-        pressure{
-            ofhg{
-                one{"{0} Hg"}
-                other{"{0} Hg"}
             }
         }
         speed{
@@ -1354,10 +1284,6 @@ gl{
             }
             cup{
                 dnam{"c"}
-            }
-            fluid-ounce-metric{
-                one{"{0} fl oz m."}
-                other{"{0} fl oz m."}
             }
             liter{
                 dnam{"l"}

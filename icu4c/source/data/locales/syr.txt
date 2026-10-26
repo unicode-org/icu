@@ -394,20 +394,6 @@ syr{
                         "ܬܫܪܝܢ ܒ",
                         "ܟܢܘܢ ܐ",
                     }
-                    narrow{
-                        "ܟ",
-                        "ܫ",
-                        "ܐ",
-                        "ܢ",
-                        "ܐ",
-                        "ܚ",
-                        "ܬ",
-                        "ܐ",
-                        "ܐ",
-                        "ܬ",
-                        "ܬ",
-                        "ܟ",
-                    }
                     wide{
                         "ܟܢܘܢ ܐܚܪܝܐ",
                         "ܫܒܛ",
@@ -455,35 +441,11 @@ syr{
                         "ܪܘܒܥܐ ܪܒܝܥܝܐ",
                     }
                 }
-                stand-alone{
-                    abbreviated{
-                        "܏ܪ ܐ",
-                        "܏ܪ ܒ",
-                        "܏ܪ ܓ",
-                        "܏ܪ ܕ",
-                    }
-                }
             }
         }
         islamic{
             monthNames{
                 format{
-                    wide{
-                        "ܡܘܚܪܡ",
-                        "ܨܦܪ",
-                        "ܪܒܝܥ ܩܕܡܝܐ",
-                        "ܪܒܝܥ ܬܪܝܢܐ",
-                        "ܓܘܡܕܐ ܩܕܡܝܐ",
-                        "ܓܘܡܕܐ ܬܪܝܢܐ",
-                        "ܪܓܒ",
-                        "ܫܥܒܐܢ",
-                        "ܪܡܨܐܢ",
-                        "ܫܘܐܠ",
-                        "ܕܘܠܩܥܕܗ",
-                        "ܕܘܠܚܓܗ",
-                    }
-                }
-                stand-alone{
                     wide{
                         "ܡܘܚܪܡ",
                         "ܨܦܪ",
@@ -525,14 +487,6 @@ syr{
                     one{"ܡ̣ܢ ܩܕܡ ܚܕ ܝܘܡܐ"}
                     other{"ܡ̣ܢ ܩܕܡ {0} ܝܘܡܢ̈ܐ"}
                 }
-            }
-        }
-        day-narrow{
-            dn{"܏ܝܘܡ"}
-            relative{
-                "-1"{"܏ܬܡܠ"}
-                "0"{"ܐܕܝܘܡ"}
-                "1"{"܏ܩܘܕܡ"}
             }
         }
         day-short{
@@ -591,9 +545,6 @@ syr{
                 }
             }
         }
-        hour-narrow{
-            dn{"܏ܫܥ"}
-        }
         hour-short{
             dn{"܏ܫܥ"}
         }
@@ -612,9 +563,6 @@ syr{
                     other{"ܡ̣ܢ ܩܕܡ {0} ܩܛܝ̈ܢܐ"}
                 }
             }
-        }
-        minute-narrow{
-            dn{"܏ܩܛܝܢ"}
         }
         minute-short{
             dn{"܏ܩܛܝܢ"}
@@ -654,14 +602,6 @@ syr{
                 }
             }
         }
-        month-narrow{
-            dn{"܏ܝܪܚ"}
-            relative{
-                "-1"{"܏ܝܪܚ ܏ܐܚܪ"}
-                "0"{"ܗܢ ܏ܝܪܚ"}
-                "1"{"܏ܝܪܚ ܕܐܬܐ"}
-            }
-        }
         month-short{
             dn{"܏ܝܪܚ"}
             relative{
@@ -693,9 +633,6 @@ syr{
                     other{"ܡ̣ܢ ܩܕܡ {0} ܪ̈ܘܒܥܐ"}
                 }
             }
-        }
-        quarter-narrow{
-            dn{"ܪܒܘܥ ܏ܫܢ"}
         }
         quarter-short{
             dn{"ܪܒܘܥ ܏ܫܢ"}
@@ -732,9 +669,6 @@ syr{
                     other{"ܡ̣ܢ ܩܕܡ {0} ܖ̈ܦܦܐ"}
                 }
             }
-        }
-        second-narrow{
-            dn{"܏ܪܦ"}
         }
         second-short{
             dn{"܏ܪܦ"}
@@ -827,12 +761,6 @@ syr{
             }
         }
         week-narrow{
-            dn{"܏ܫܒܘ"}
-            relative{
-                "-1"{"܏ܫܒܘ ܏ܐܚܪ"}
-                "0"{"ܗܢ ܏ܫܒܘ"}
-                "1"{"܏ܫܒܘ ܕܐܬܐ"}
-            }
             relativePeriod{"܏ܫܒܘ {0}"}
         }
         week-short{
@@ -846,9 +774,6 @@ syr{
         }
         weekOfMonth{
             dn{"ܫܒܘܥܐ ܕܝܪܚܐ"}
-        }
-        weekOfMonth-narrow{
-            dn{"ܫܒܘܥ ܝܪܚܐ"}
         }
         weekOfMonth-short{
             dn{"ܫܒܘܥ ܝܪܚܐ"}
@@ -881,14 +806,6 @@ syr{
                     one{"ܡ̣ܢ ܩܕܡ ܚܕܐ ܫܢܬܐ"}
                     other{"ܡ̣ܢ ܩܕܡ {0} ܫܢܝ̈ܐ"}
                 }
-            }
-        }
-        year-narrow{
-            dn{"܏ܫܢ"}
-            relative{
-                "-1"{"܏ܫܬܩܕ"}
-                "0"{"ܗܕ ܏ܫܢ"}
-                "1"{"܏ܫܢ ܕܐܬܝܐ"}
             }
         }
         year-short{
@@ -973,10 +890,6 @@ syr{
             givenFirst-medium-addressing-formal{"{title} {surname}"}
             givenFirst-medium-addressing-informal{"{given-informal}"}
             givenFirst-medium-monogram-formal{"{surname-monogram-allCaps}"}
-            givenFirst-medium-monogram-informal{
-                "{given-monogram-allCaps}.{given2-monogram-allCaps}.{surname-monogram"
-                "-allCaps}."
-            }
             givenFirst-medium-referring-formal{"{title} {given} {given2-initial} {surname}"}
             givenFirst-medium-referring-informal{"{given-informal} {surname}"}
             givenFirst-short-addressing-formal{"{title} {surname}"}

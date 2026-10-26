@@ -665,7 +665,7 @@ static void TestDateTimePatterns(void) {
                   u"d MMM y, HH:mm",
                   u"dd/MM/y HH:mm" } },
         { "ha", { u"EEEE d MMMM, y 'da' HH:mm",
-                  u"d MMMM, y 'da' HH:mm",
+                  u"y, MMMM d 'da' HH:mm",
                   u"d MMM, y, HH:mm",
                   u"y-MM-dd, HH:mm" } },
         { NULL, { NULL, NULL, NULL, NULL } } // terminator

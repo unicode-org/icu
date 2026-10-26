@@ -163,19 +163,15 @@ kk{
                 other{"{0} миллимоль/литр"}
             }
             ofglucose{
-                dnam{"глюкоза"}
                 one{"{0} глюкоза"}
                 other{"{0} глюкоза"}
             }
             part{
-                dnam{"бөлік"}
                 one{"{0} бөлік"}
                 other{"{0} бөлік"}
             }
             part-per-1e6{
                 dnam{"миллиондағы бөлік"}
-                one{"{0} б/млн"}
-                other{"{0} б/млн"}
             }
             part-per-1e9{
                 dnam{"миллиардтағы бөлік"}
@@ -390,7 +386,6 @@ kk{
                 other{"{0} калория"}
             }
             gray{
-                dnam{"Гр"}
                 one{"{0} Гр"}
                 other{"{0} Гр"}
             }
@@ -414,15 +409,11 @@ kk{
             }
             sievert{
                 dnam{"зиверт"}
-                one{"{0} Зв"}
-                other{"{0} Зв"}
             }
         }
         force{
             kilogram-force{
                 dnam{"килограмм-күш"}
-                one{"{0} кг-күш"}
-                other{"{0} кг-күш"}
             }
             kilowatt-hour-per-100-kilometer{
                 dnam{"киловатт-сағат/100 километр"}
@@ -870,11 +861,6 @@ kk{
                 one{"{0} имп. сұйық унция"}
                 other{"{0} имп. сұйық унция"}
             }
-            fluid-ounce-metric{
-                dnam{"метрлік сұйық унция"}
-                one{"{0} метрлік сұйық унция"}
-                other{"{0} метрлік сұйық унция"}
-            }
             gallon{
                 dnam{"галлон"}
                 one{"{0} галлон"}
@@ -956,11 +942,6 @@ kk{
             radian{
                 dnam{"рад"}
             }
-            steradian{
-                dnam{"ср"}
-                one{"{0} ср"}
-                other{"{0} ср"}
-            }
         }
         area{
             square-foot{
@@ -971,25 +952,8 @@ kk{
             }
         }
         concentr{
-            katal{
-                dnam{"кат"}
-                one{"{0} кат"}
-                other{"{0} кат"}
-            }
-            ofglucose{
-                dnam{"глюкоза"}
-                one{"{0} Глк"}
-                other{"{0} Глк"}
-            }
-            part{
-                dnam{"бөлік"}
-                one{"{0} бөлік"}
-                other{"{0} бөлік"}
-            }
             part-per-1e6{
                 dnam{"б/млн"}
-                one{"{0} б/млн"}
-                other{"{0} б/млн"}
             }
             part-per-1e9{
                 dnam{"б/млрд"}
@@ -1056,60 +1020,13 @@ kk{
             }
         }
         electric{
-            coulomb{
-                dnam{"Кл"}
-                one{"{0} Кл"}
-                other{"{0} Кл"}
-            }
-            farad{
-                dnam{"Ф"}
-                one{"{0} Ф"}
-                other{"{0} Ф"}
-            }
-            henry{
-                dnam{"Г"}
-                one{"{0} Г"}
-                other{"{0} Г"}
-            }
             milliampere{
                 dnam{"мА"}
             }
-            siemens{
-                dnam{"Си"}
-                one{"{0} Си"}
-                other{"{0} Си"}
-            }
         }
         energy{
-            becquerel{
-                dnam{"Бк"}
-                one{"{0} Бк"}
-                other{"{0} Бк"}
-            }
-            calorie-it{
-                dnam{"халықаралық калория"}
-                one{"{0} халықаралық калория"}
-                other{"{0} халықаралық калория"}
-            }
-            gray{
-                dnam{"Гр"}
-                one{"{0} Гр"}
-                other{"{0} Гр"}
-            }
             kilojoule{
                 dnam{"кДж"}
-            }
-            sievert{
-                dnam{"Зв"}
-                one{"{0} Зв"}
-                other{"{0} Зв"}
-            }
-        }
-        force{
-            kilogram-force{
-                dnam{"кг-күш"}
-                one{"{0} кг-күш"}
-                other{"{0} кг-күш"}
             }
         }
         length{
@@ -1131,18 +1048,6 @@ kk{
                 other{"{0} теңіз милі"}
             }
         }
-        magnetic{
-            tesla{
-                dnam{"Тл"}
-                one{"{0} Т"}
-                other{"{0} Т"}
-            }
-            weber{
-                dnam{"Вб"}
-                one{"{0} Вб"}
-                other{"{0} Вб"}
-            }
-        }
         mass{
             ounce{
                 one{"{0} унция"}
@@ -1156,11 +1061,6 @@ kk{
             millibar{
                 one{"{0} мб"}
                 other{"{0} мб"}
-            }
-            ofhg{
-                dnam{"с. б."}
-                one{"{0} с. б."}
-                other{"{0} с. б."}
             }
         }
         speed{
@@ -1189,11 +1089,6 @@ kk{
                 dnam{"имп. сұй. унц."}
                 one{"{0} имп. сұй. унц."}
                 other{"{0} имп. сұй. унц."}
-            }
-            fluid-ounce-metric{
-                dnam{"метрлік сұйық унция"}
-                one{"{0} метрлік сұйық унция"}
-                other{"{0} метрлік сұйық унция"}
             }
         }
     }

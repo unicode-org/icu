@@ -288,8 +288,8 @@ to{
         VU{"Vanuatu"}
         WF{"ʻUvea mo Futuna"}
         WS{"Haʻamoa"}
-        XA{"fasiʻalea loi"}
-        XB{"fua-ua loi"}
+        XA{"Fasiʻalea loi"}
+        XB{"Fua-ua loi"}
         XK{"Kōsovo"}
         YE{"Iemeni"}
         YT{"Maiote"}

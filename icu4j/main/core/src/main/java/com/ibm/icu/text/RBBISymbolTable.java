@@ -17,12 +17,6 @@ class RBBISymbolTable implements SymbolTable {
     HashMap<String, RBBISymbolTableEntry> fHashTable;
     RBBIRuleScanner fRuleScanner;
 
-    // These next two fields are part of the mechanism for passing references to
-    //   already-constructed UnicodeSets back to the UnicodeSet constructor
-    //   when the pattern includes $variable references.
-    String ffffString;
-    UnicodeSet fCachedSetLookup;
-
     static class RBBISymbolTableEntry {
         String key;
         RBBINode val;
@@ -31,7 +25,6 @@ class RBBISymbolTable implements SymbolTable {
     RBBISymbolTable(RBBIRuleScanner rs) {
         fRuleScanner = rs;
         fHashTable = new HashMap<String, RBBISymbolTableEntry>();
-        ffffString = "\uffff";
     }
 
     //
@@ -43,63 +36,48 @@ class RBBISymbolTable implements SymbolTable {
     //
     @Override
     public char[] lookup(String s) {
-        RBBISymbolTableEntry el;
-        RBBINode varRefNode;
-        RBBINode exprNode;
-
-        RBBINode usetNode;
-        String retString;
-
-        el = fHashTable.get(s);
+        final RBBISymbolTableEntry el = fHashTable.get(s);
         if (el == null) {
             return null;
         }
 
-        // Walk through any chain of variable assignments that ultimately resolve to a Set Ref.
-        varRefNode = el.val;
-        while (varRefNode.fLeftChild.fType == RBBINode.varRef) {
-            varRefNode = varRefNode.fLeftChild;
-        }
-
-        exprNode = varRefNode.fLeftChild; // Root node of expression for variable
-        if (exprNode.fType == RBBINode.setRef) {
-            // The $variable refers to a single UnicodeSet
-            //   return the ffffString, which will subsequently be interpreted as a
-            //   stand-in character for the set by RBBISymbolTable::lookupMatcher()
-            usetNode = exprNode.fLeftChild;
-            fCachedSetLookup = usetNode.fInputSet;
-            retString = ffffString;
-        } else {
-            // The variable refers to something other than just a set.
-            // This is an error in the rules being compiled.  $Variables inside of UnicodeSets
-            //   must refer only to another set, not to some random non-set expression.
-            //   Note:  single characters are represented as sets, so they are ok.
-            fRuleScanner.error(RBBIRuleBuilder.U_BRK_MALFORMED_SET);
-            retString = exprNode.fText;
-            fCachedSetLookup = null;
-        }
-        return retString.toCharArray();
+        final RBBINode exprNode = el.val.fLeftChild; // Root node of expression for variable
+        // Return the original source string for the expression.
+        // Note that for set-valued variables used in UnicodeSet expressions, this would be rejected
+        // by the UnicodeSet parser if the source itself contains variable references.  For
+        // instance, with
+        //     $CaseIgnorable   = [[:Mn:][:Me:][:Cf:][:Lm:][:Sk:] \u0027 \u00AD \u2019];
+        //     $Cased = [[:Upper_Case:][:Lower_Case:][:Lt:] - $CaseIgnorable];
+        // If lookupSet were not overridden, when parsing the right-hand side of
+        //     $NotCased        = [[^ $Cased] - $CaseIgnorable];
+        // there would be a call to lookup("Cased") which would return
+        //     "[[:Upper_Case:][:Lower_Case:][:Lt:]-$CaseIgnorable]". This contains a variable,
+        // which is  disallowed by the UnicodeSet parser inside a variable expansion.
+        // However, set-valued variables are pre-parsed, and returned by lookupSet instead, so this
+        // call to lookup() never happens; instead, lookupSet("CaseIgnorable") is called when
+        // computing $Cased and returns the non-null value of $CaseIgnorable, and then when
+        // computing $NotCased, lookupSet("Cased") returns the value computed for $Cased.
+        return exprNode.fText.toCharArray();
     }
 
-    //
-    //  RBBISymbolTable::lookupMatcher   This function from the abstract symbol table
-    //                                   interface maps a single stand-in character to a
-    //                                   pointer to a Unicode Set.   The Unicode Set code uses this
-    //                                   mechanism to get all references to the same $variable
-    //                                   name to refer to a single common Unicode Set instance.
-    //
-    //    This implementation cheats a little, and does not maintain a map of stand-in chars
-    //    to sets.  Instead, it takes advantage of the fact that  the UnicodeSet
-    //    constructor will always call this function right after calling lookup(),
-    //    and we just need to remember what set to return between these two calls.
+    @Override
+    public UnicodeSet lookupSet(String s) {
+        final RBBISymbolTableEntry el = fHashTable.get(s);
+        if (el == null) {
+            return null;
+        }
+        final RBBINode exprNode = el.val.fLeftChild;
+        if (exprNode.fType == RBBINode.setRef) {
+            return exprNode.fLeftChild.fInputSet;
+        } else {
+            return null;
+        }
+    }
+
+    // No longer used, see ICU-23297.
     @Override
     public UnicodeMatcher lookupMatcher(int ch) {
-        UnicodeSet retVal = null;
-        if (ch == 0xffff) {
-            retVal = fCachedSetLookup;
-            fCachedSetLookup = null;
-        }
-        return retVal;
+        return null;
     }
 
     //
@@ -169,7 +147,6 @@ class RBBISymbolTable implements SymbolTable {
     //
     //  RBBISymbolTable::print    Debugging function, dump out the symbol table contents.
     //
-    /// CLOVER:OFF
     void rbbiSymtablePrint() {
         System.out.print(
                 "Variable Definitions\n"
@@ -195,6 +172,4 @@ class RBBISymbolTable implements SymbolTable {
             System.out.print("\n");
         }
     }
-    /// CLOVER:ON
-
 }

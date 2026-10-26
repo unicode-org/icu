@@ -11,19 +11,35 @@ sk{
         colCaseLevel{"rozlišovanie veľkých a malých písmen pri radení"}
         colNormalization{"normálne radenie"}
         colNumeric{"číselné radenie"}
+        colReorder{"skriptová/bloková zmena poradia"}
         colStrength{"sila radenia"}
         collation{"zoradenie"}
         currency{"mena"}
+        d0{"transformačný cieľ"}
+        dx{"slovník výnimiek pri delení slov"}
         em{"prezentácia emodži"}
+        fw{"prvý deň v týždni"}
+        h0{"zmiešané"}
         hc{"hodinový cyklus (12 vs 24)"}
+        i0{"metóda vstupu"}
+        k0{"klávesnica"}
+        kv{"ignorovanie najvyššieho"}
         lb{"štýl koncov riadka"}
         lw{"zlom riadka v slovách"}
+        m0{"transformačné pravidlá"}
         ms{"merná sústava"}
+        mu{"merná jednotka"}
         numbers{"čísla"}
+        rg{"pole na doplňujúce údaje"}
+        s0{"transformačný zdroj"}
+        sd{"rozdelenie oblasti"}
         ss{"veta po skrat."}
+        t{"transformácia"}
+        t0{"strojovo preložené"}
         timezone{"časové pásmo"}
         va{"variant miestneho nastavenia"}
         x{"súkromné použitie"}
+        x0{"súkromná transformácia"}
     }
     Languages{
         aa{"afarčina"}
@@ -429,6 +445,7 @@ sk{
         pi{"pálí"}
         pis{"pidžin"}
         pl{"poľština"}
+        pms{"piedmončina"}
         pon{"pohnpeiština"}
         pqm{"maliseet-passamaquoddy"}
         prg{"pruština"}
@@ -720,9 +737,13 @@ sk{
             ethiopic-amete-alem{"etiópsky Amete Alem"}
             gregorian{"gregoriánsky"}
             hebrew{"židovský"}
+            indian{"indický národný"}
             islamic{"podľa hidžry"}
             islamic-civil{"podľa hidžry (občiansky)"}
+            islamic-rgsa{"podľa hidžry, Saudská Arábia"}
+            islamic-tbla{"podľa hidžry (tabuľkový, astronomická epocha)"}
             islamic-umalqura{"podľa hidžry (Umm al-Qura)"}
+            iso8601{"gregoriánsky"}
             japanese{"japonský"}
             persian{"perzský"}
             roc{"čínsky republikánsky"}
@@ -748,6 +769,11 @@ sk{
             no{"Normálne radenie veľkých a malých písmen"}
             upper{"Najprv radiť veľké písmená"}
         }
+        colCaseFirst%core{
+            lower{"malé písmená"}
+            no{"malé písmená"}
+            upper{"veľké písmená"}
+        }
         colCaseLevel{
             no{"Pri radení nerozlišovať veľké a malé písmená"}
             yes{"Pri radení rozlišovať veľké a malé písmená"}
@@ -760,12 +786,26 @@ sk{
             no{"Radiť číslice jednotlivo"}
             yes{"Numerické radenie číslic"}
         }
+        colReorder%core{
+            currency{"mena"}
+            digit{"čísla"}
+            punct{"interpunkcia"}
+            space{"medzera"}
+            symbol{"symbol"}
+        }
         colStrength{
             identical{"Radiť všetko"}
             primary{"Radiť iba základné písmená"}
             quaternary{"Radiť akcenty/veľké a malé písmená/šírku/kana"}
             secondary{"Radiť akcenty"}
             tertiary{"Radiť akcenty/veľké a malé písmená/šírku"}
+        }
+        colStrength%core{
+            identical{"všetky"}
+            primary{"iba základné písmená"}
+            quaternary{"základné, s prízvukmi, veľkosti, varianty, kana"}
+            secondary{"základné, s prízvukmi"}
+            tertiary{"základné, s prízvukmi, veľkosti, varianty"}
         }
         collation{
             compat{"predchádzajúce zoradenie, kompatibilita"}
@@ -787,10 +827,13 @@ sk{
             compat{"kompatibilita"}
             dictionary{"slovníkové"}
             ducet{"predvolené, unicode"}
+            emoji{"emodži"}
+            eor{"európske pravidlá"}
             phonebook{"lexikografické"}
             phonetic{"fonetické"}
             pinyin{"pchin-jin"}
             search{"vyhľadávanie"}
+            searchjl{"kórejská úvodná spoluhláska"}
             standard{"štandardné"}
             stroke{"podľa ťahov"}
             traditional{"tradičné"}
@@ -808,16 +851,26 @@ sk{
             text{"text"}
         }
         hc{
+            c12{"12-hodinový cyklus"}
+            c24{"24-hodinový cyklus"}
             h11{"12-hodinový cyklus (0 – 11)"}
             h12{"12-hodinový cyklus (1 – 12)"}
             h23{"24-hodinový cyklus (0 – 23)"}
             h24{"24-hodinový cyklus (1 – 24)"}
         }
         hc%core{
+            c12{"12"}
+            c24{"24"}
             h11{"12 (0 – 11)"}
             h12{"12 (1 – 12)"}
             h23{"24 (0 – 23)"}
             h24{"24 (1 – 24)"}
+        }
+        kv%core{
+            currency{"posuny, interpunkcia, všetky symboly"}
+            punct{"posuny, interpunkcia"}
+            space{"posuny, interpunkcia"}
+            symbol{"posuny, interpunkcia, iné symboly než meny"}
         }
         lb{
             loose{"voľný štýl koncov riadka"}
@@ -895,9 +948,48 @@ sk{
             traditional{"Tradičné číslovky"}
             vaii{"vaiské číslice"}
         }
+        numbers%core{
+            arabext{"rozšírené arabsko-indické"}
+            armnlow{"malé arménske"}
+            finance{"finančné znaky"}
+            fullwide{"celá šírka"}
+            greklow{"malé grécke"}
+            hanidays{"číslovanie dňa v mesiaci znakom han v tradičnom kalendári"}
+            hanidec{
+                "pozičný desiatkový systém používajúci čínske číselné ideogramy ako č"
+                "íslice"
+            }
+            hansfin{"finančné znaky zjednodušenej čínštiny"}
+            hantfin{"finančné znaky tradičnej čínštiny"}
+            jpanfin{"japonské finančné znaky"}
+            jpanyear{"japonské číslovanie Gannen (najprv rok)"}
+            lanatham{"cirkevné tai tham tham"}
+            mathbold{"matematické znaky tučné"}
+            mathdbl{"matematické znaky dvojité"}
+            mathmono{"matematické znaky jednomiestne"}
+            mathsanb{"matematické znaky bezpätkové, tučné"}
+            mathsans{"matematické znaky bezpätkové"}
+            mymrepka{"mjanmarské východné pwo karen"}
+            mymrpao{"mjanmarské pao"}
+            mymrshan{"mjanmarské shan"}
+            mymrtlng{"mjanmarské tai laing"}
+            native{"natívne číslice"}
+            outlined{"obrysové"}
+            roman{"rímske veľké"}
+            romanlow{"rímske malé"}
+            segment{"segmentované"}
+            tamldec{"moderné tamilské"}
+            traditional{"tradičné číslice"}
+        }
         ss%core{
             none{"vypnuté"}
             standard{"zapnuté"}
+        }
+        t0{
+            und{"nešpecifikovaný strojový preklad"}
+        }
+        va%core{
+            posix{"variant POSIX"}
         }
     }
     Variants{

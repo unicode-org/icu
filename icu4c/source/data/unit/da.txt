@@ -821,8 +821,6 @@ da{
             }
             calorie-it{
                 dnam{"international tabelkalorie"}
-                one{"{0} calIT"}
-                other{"{0} calIT"}
             }
             electronvolt{
                 one{"{0} elektronvolt"}
@@ -1381,7 +1379,7 @@ da{
                 case{
                     genitive{
                         one{"{0} tons"}
-                        other{"{0} tons'"}
+                        other{"{0} tons’"}
                     }
                 }
                 dnam{"tons"}
@@ -1586,11 +1584,6 @@ da{
                 gender{"common"}
                 one{"{0} kilometer i timen"}
                 other{"{0} kilometer i timen"}
-            }
-            light-speed{
-                dnam{"lys"}
-                one{"{0} lys"}
-                other{"{0} lys"}
             }
             meter-per-second{
                 case{
@@ -1976,7 +1969,6 @@ da{
                 dnam{"mmol/L"}
             }
             ofglucose{
-                dnam{"Glk"}
                 one{"{0} Glk"}
                 other{"{0} Glk"}
             }
@@ -2074,20 +2066,13 @@ da{
         energy{
             calorie-it{
                 dnam{"calIT"}
-                one{"{0} calIT"}
-                other{"{0} calIT"}
             }
             electronvolt{
                 dnam{"eV"}
             }
-            gray{
-                one{"{0} Gy"}
-                other{"{0} Gy"}
-            }
         }
         force{
             kilogram-force{
-                dnam{"kp"}
                 one{"{0} kp"}
                 other{"{0} kp"}
             }
@@ -2114,8 +2099,8 @@ da{
                 dnam{"favn"}
             }
             inch{
-                one{"{0}\u0022"}
-                other{"{0}\u0022"}
+                one{"{0}″"}
+                other{"{0}″"}
             }
             light-year{
                 dnam{"ly"}
@@ -2181,6 +2166,7 @@ da{
                 other{"{0}hPa"}
             }
             inch-ofhg{
+                dnam{"″ Hg"}
                 one{"{0}″ Hg"}
                 other{"{0}″ Hg"}
             }
@@ -2193,11 +2179,6 @@ da{
             kilometer-per-hour{
                 one{"{0} km/t"}
                 other{"{0} km/t"}
-            }
-            light-speed{
-                dnam{"lys"}
-                one{"{0} lys"}
-                other{"{0} lys"}
             }
             meter-per-second{
                 one{"{0}m/s"}

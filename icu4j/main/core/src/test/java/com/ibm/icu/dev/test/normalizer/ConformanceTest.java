@@ -18,6 +18,7 @@ import com.ibm.icu.text.UnicodeSet;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.text.StringCharacterIterator;
+import java.util.Objects;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -278,7 +279,7 @@ public class ConformanceTest extends CoreTestFmwk {
         if (!pass) {
             errln("FAIL: " + line);
         }
-        if (field[0] != field[2]) {
+        if (!Objects.equals(field[0], field[2])) {
             // two strings that are canonically equivalent must test
             // equal under a canonical caseless match
             // see UAX #21 Case Mappings and Jitterbug 2021 and
@@ -477,7 +478,7 @@ public class ConformanceTest extends CoreTestFmwk {
      * @param got value received
      * @param exp expected value
      * @param msg description of this test
-     * @returns true if got == exp
+     * @return true if got == exp
      */
     private boolean assertEqual(
             String op, String op2, String s, String got, String exp, String msg) {

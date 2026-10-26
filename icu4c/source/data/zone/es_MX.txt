@@ -7,9 +7,6 @@ es_MX{
         "Africa:Bujumbura"{
             ec{"Buyumbura"}
         }
-        "Africa:Conakry"{
-            ec{"Conakri"}
-        }
         "Africa:Dar_es_Salaam"{
             ec{"Dar es-Salaam"}
         }
@@ -45,9 +42,6 @@ es_MX{
         "meta:Christmas"{
             ls{"hora de la isla de Navidad"}
         }
-        "meta:Cocos"{
-            ls{"hora de las Islas Cocos"}
-        }
         "meta:Cook"{
             ld{"hora de verano media de las Islas Cook"}
             lg{"hora de las Islas Cook"}
@@ -79,14 +73,8 @@ es_MX{
         "meta:Gilbert_Islands"{
             ls{"hora de las Islas Gilbert"}
         }
-        "meta:Marshall_Islands"{
-            ls{"hora de las Islas Marshall"}
-        }
         "meta:Pyongyang"{
             ls{"hora de Pyongyang"}
-        }
-        "meta:Solomon"{
-            ls{"hora de las Islas Salomón"}
         }
         "meta:Wake"{
             ls{"hora de la Isla Wake"}

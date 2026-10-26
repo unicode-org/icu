@@ -10,8 +10,6 @@ he{
     NumberElements{
         latn{
             patterns{
-                accountingFormat%alphaNextToNumber{"‏#,##0.00 ‏¤;‏-#,##0.00 ‏¤"}
-                accountingFormat%noCurrency{"‏#,##0.00 ‏;‏-#,##0.00 ‏"}
                 currencyFormat{"‏#,##0.00 ‏¤;‏-#,##0.00 ‏¤"}
                 currencyFormat%alphaNextToNumber{"‏#,##0.00 ‏¤;‏-#,##0.00 ‏¤"}
                 currencyFormat%noCurrency{"‏#,##0.00 ‏;‏-#,##0.00 ‏"}
@@ -95,73 +93,61 @@ he{
             patternsShort{
                 currencyFormat{
                     1000{
-                        many{"‏0K‏ ‏¤"}
-                        one{"‏0K‏ ‏¤"}
+                        one{"‏0 א׳‏ ‏¤"}
                         other{"‏0K‏ ‏¤"}
                         two{"‏0K‏ ‏¤"}
                     }
                     10000{
-                        many{"‏00K‏ ‏¤"}
                         one{"‏00K‏ ‏¤"}
                         other{"‏00K‏ ‏¤"}
                         two{"‏00K‏ ‏¤"}
                     }
                     100000{
-                        many{"‏000K‏ ‏¤"}
                         one{"‏000K‏ ‏¤"}
                         other{"‏000K‏ ‏¤"}
                         two{"‏000K‏ ‏¤"}
                     }
                     1000000{
-                        many{"‏0M‏ ‏¤"}
                         one{"‏0M‏ ‏¤"}
                         other{"‏0M‏ ‏¤"}
                         two{"‏0M‏ ‏¤"}
                     }
                     10000000{
-                        many{"‏00M‏ ‏¤"}
                         one{"‏00M‏ ‏¤"}
                         other{"‏00M‏ ‏¤"}
                         two{"‏00M‏ ‏¤"}
                     }
                     100000000{
-                        many{"‏000M‏ ‏¤"}
                         one{"‏000M‏ ‏¤"}
                         other{"‏000M‏ ‏¤"}
                         two{"‏000M‏ ‏¤"}
                     }
                     1000000000{
-                        many{"‏0B‏ ‏¤"}
                         one{"‏0B‏ ‏¤"}
                         other{"‏0B‏ ‏¤"}
                         two{"‏0B‏ ‏¤"}
                     }
                     10000000000{
-                        many{"‏00B‏ ‏¤"}
                         one{"‏00B‏ ‏¤"}
                         other{"‏00B‏ ‏¤"}
                         two{"‏00B‏ ‏¤"}
                     }
                     100000000000{
-                        many{"‏000B‏ ‏¤"}
                         one{"‏000B‏ ‏¤"}
                         other{"‏000B‏ ‏¤"}
                         two{"‏000B‏ ‏¤"}
                     }
                     1000000000000{
-                        many{"‏0T‏ ‏¤"}
                         one{"‏0T‏ ‏¤"}
                         other{"‏0T‏ ‏¤"}
                         two{"‏0T‏ ‏¤"}
                     }
                     10000000000000{
-                        many{"‏00T‏ ‏¤"}
                         one{"‏00T‏ ‏¤"}
                         other{"‏00T‏ ‏¤"}
                         two{"‏00T‏ ‏¤"}
                     }
                     100000000000000{
-                        many{"‏000T‏ ‏¤"}
                         one{"‏000T‏ ‏¤"}
                         other{"‏000T‏ ‏¤"}
                         two{"‏000T‏ ‏¤"}
@@ -171,50 +157,62 @@ he{
                     1000{
                         one{"0K‏"}
                         other{"0K‏"}
+                        two{"0K‏"}
                     }
                     10000{
                         one{"00K‏"}
                         other{"00K‏"}
+                        two{"00K‏"}
                     }
                     100000{
                         one{"000K‏"}
                         other{"000K‏"}
+                        two{"000K‏"}
                     }
                     1000000{
                         one{"0M‏"}
                         other{"0M‏"}
+                        two{"0M‏"}
                     }
                     10000000{
                         one{"00M‏"}
                         other{"00M‏"}
+                        two{"00M‏"}
                     }
                     100000000{
                         one{"000M‏"}
                         other{"000M‏"}
+                        two{"000M‏"}
                     }
                     1000000000{
                         one{"0B‏"}
                         other{"0B‏"}
+                        two{"0B‏"}
                     }
                     10000000000{
                         one{"00B‏"}
                         other{"00B‏"}
+                        two{"00B‏"}
                     }
                     100000000000{
                         one{"000B‏"}
                         other{"000B‏"}
+                        two{"000B‏"}
                     }
                     1000000000000{
                         one{"0T‏"}
                         other{"0T‏"}
+                        two{"0T‏"}
                     }
                     10000000000000{
                         one{"00T‏"}
                         other{"00T‏"}
+                        two{"00T‏"}
                     }
                     100000000000000{
                         one{"000T‏"}
                         other{"000T‏"}
+                        two{"000T‏"}
                     }
                 }
             }
@@ -346,6 +344,7 @@ he{
                 Hms{"H:mm:ss"}
                 MEd{"E, d/M"}
                 MMMEd{"E, d בMMM"}
+                MMMMd{"d‎ בMMMM"}
                 MMMd{"d בMMM"}
                 Md{"d.M"}
                 h{"‏h a"}
@@ -355,8 +354,8 @@ he{
                 yyyyMEd{"E, d/M/y G"}
                 yyyyMM{"MM/y G"}
                 yyyyMMM{"MMM y G"}
-                yyyyMMMEd{"E, d בMMM y G"}
-                yyyyMMMd{"d בMMM y G"}
+                yyyyMMMEd{"E,‏ ‏d בMMMM‏, y‏ G"}
+                yyyyMMMd{"d‏ בMMMM‏, y‏ G"}
                 yyyyMd{"d.M.y G"}
             }
             intervalFormats{
@@ -420,6 +419,10 @@ he{
                 }
                 MMMM{
                     M{"LLLL–LLLL"}
+                }
+                MMMMd{
+                    M{"d בMMMM – ‏d בMMMM"}
+                    d{"d–d בMMMM"}
                 }
                 MMMd{
                     M{"d MMM – d MMM"}
@@ -506,13 +509,18 @@ he{
                 Gy{"y G"}
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, d בMMM y G"}
+                GyMMMM{"MMMM y G"}
+                GyMMMMEd{"E, d בMMMM y G"}
+                GyMMMMd{"d בMMMM y G"}
                 GyMMMd{"d בMMM y G"}
                 GyMd{"d/M/y G"}
                 H{"H"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
+                Hv{"H v"}
                 MEd{"E, d.M"}
                 MMMEd{"E, d בMMM"}
+                MMMMEd{"E, d בMMMM"}
                 MMMMW{
                     one{"שבוע W בMMMM"}
                     other{"שבוע W בMMMM"}
@@ -528,6 +536,8 @@ he{
                 yMMM{"MMM y"}
                 yMMMEd{"E, d בMMM y"}
                 yMMMM{"MMMM y"}
+                yMMMMEd{"E, d בMMMM y"}
+                yMMMMd{"d בMMMM y"}
                 yMMMd{"d בMMM y"}
                 yMd{"d.M.y"}
                 yQQQ{"QQQ y"}
@@ -618,10 +628,6 @@ he{
                         morning1{"בוקר"}
                         night1{"לילה"}
                         night2{"לפנות בוקר"}
-                    }
-                    narrow{
-                        am{"לפנה״צ"}
-                        pm{"אחה״צ"}
                     }
                     wide{
                         afternoon1{"צהריים"}
@@ -723,6 +729,10 @@ he{
                 MMMM{
                     M{"LLLL–LLLL"}
                 }
+                MMMMd{
+                    M{"d בMMMM – d בMMMM"}
+                    d{"d–d בMMMM"}
+                }
                 MMMd{
                     M{"d בMMM–d בMMM"}
                     d{"d–d בMMM"}
@@ -746,18 +756,18 @@ he{
                     y{"MMM y – MMM y"}
                 }
                 yMMMEd{
-                    M{"EEEE d MMM – EEEE d MMM y"}
-                    d{"EEEE d MMM – EEEE d MMM y"}
-                    y{"EEEE d MMM y – EEEE d MMM y"}
+                    M{"EEEE d בMMM – EEEE d בMMM y"}
+                    d{"EEEE d בMMM – EEEE d בMMM y"}
+                    y{"EEEE d בMMM y – EEEE d בMMM y"}
                 }
                 yMMMM{
                     M{"MMMM–MMMM y"}
                     y{"MMMM y–MMMM y"}
                 }
                 yMMMd{
-                    M{"d MMM – d MMM y"}
+                    M{"d בMMM – d בMMM y"}
                     d{"d–d בMMM y"}
-                    y{"d MMM y – d MMM y"}
+                    y{"d בMMM y – d בMMM y"}
                 }
                 yMd{
                     M{"d.M.y – d.M.y"}
@@ -968,22 +978,6 @@ he{
             }
             monthNames{
                 format{
-                    abbreviated{
-                        "תשרי",
-                        "חשון",
-                        "כסלו",
-                        "טבת",
-                        "שבט",
-                        "אדר א׳",
-                        "אדר",
-                        "ניסן",
-                        "אייר",
-                        "סיון",
-                        "תמוז",
-                        "אב",
-                        "אלול",
-                        "אדר ב׳",
-                    }
                     wide{
                         "תשרי",
                         "חשוון",
@@ -1087,7 +1081,6 @@ he{
                 "GGGGGyyMMdd",
             }
             availableFormats{
-                GyM{"MM-y G"}
                 MMMMd{"d בMMMM"}
                 Md{"d/M"}
                 h{"h a"}
@@ -1120,8 +1113,8 @@ he{
                         "שעבאן",
                         "רמדאן",
                         "שוואל",
-                        "ד׳ו אל־קעדה",
-                        "ד׳ו אל־חיג׳ה",
+                        "ד׳ו אל-קעדה",
+                        "ד׳ו אל-חיג׳ה",
                     }
                     wide{
                         "מוחרם",
@@ -1139,29 +1132,43 @@ he{
                     }
                 }
                 stand-alone{
-                    wide{
+                    abbreviated{
                         "מוחרם",
                         "צפר",
-                        "רביע אל־אוול",
-                        "רביע א־ת׳אני",
-                        "ג׳ומאדא אל־אולא",
-                        "ג׳ומאדא א־ת׳אניה",
+                        "רביע א׳",
+                        "רביע ב׳",
+                        "ג׳ומאדא א׳",
+                        "ג׳ומאדא ב׳",
                         "רג׳ב",
                         "שעבאן",
                         "רמדאן",
                         "שוואל",
-                        "ד׳ו אל־קעדה",
-                        "ד׳ו אל־חיג׳ה",
+                        "ד׳ו אל-קעדה",
+                        "ד׳ו אל-חיג׳ה",
+                    }
+                    wide{
+                        "מוחרם",
+                        "צפר",
+                        "רביע אל-אוול",
+                        "רביע א-ת׳אני",
+                        "ג׳ומאדא אל-אולא",
+                        "ג׳ומאדא א-ת׳אניה",
+                        "רג׳ב",
+                        "שעבאן",
+                        "רמדאן",
+                        "שוואל",
+                        "ד׳ו אל-קעדה",
+                        "ד׳ו אל-חיג׳ה",
                     }
                 }
             }
         }
-        japanese{
-            eras{
-                abbreviated{
-                    0{"טאיקה"}
-                    24{"נינג׳ו"}
-                    73{"שוטוקו"}
+        iso8601{
+            availableFormats{
+                yw{
+                    one{"Y שבוע w"}
+                    other{"Y 'week' w"}
+                    two{"Y 'week' w"}
                 }
             }
         }
@@ -1317,31 +1324,12 @@ he{
                 }
             }
         }
-        day-narrow{
-            relativeTime{
-                future{
-                    one{"בעוד יום אחד ({0})"}
-                    other{"בעוד {0} ימים"}
-                    two{"בעוד יומיים ({0})"}
-                }
-                past{
-                    one{"לפני יום אחד ({0})"}
-                    other{"לפני {0} ימים"}
-                    two{"לפני יומיים ({0})"}
-                }
-            }
-        }
         day-short{
             relativeTime{
                 future{
                     one{"בעוד יום אחד ({0})"}
                     other{"בעוד {0} ימים"}
                     two{"בעוד יומיים ({0})"}
-                }
-                past{
-                    one{"לפני יום אחד ({0})"}
-                    other{"לפני {0} ימים"}
-                    two{"לפני יומיים ({0})"}
                 }
             }
         }
@@ -1373,22 +1361,6 @@ he{
                     one{"לפני יום שישי אחד ({0})"}
                     other{"לפני {0} ימי שישי"}
                     two{"לפני {0} ימי שישי"}
-                }
-            }
-        }
-        fri-narrow{
-            relativeTime{
-                future{
-                    many{"בעוד {0} ימי ו׳"}
-                    one{"בעוד יום ו׳ אחד ({0})"}
-                    other{"בעוד {0} ימי ו׳"}
-                    two{"בעוד {0} ימי ו׳"}
-                }
-                past{
-                    many{"לפני {0} ימי ו׳"}
-                    one{"לפני יום ו׳ אחד ({0})"}
-                    other{"לפני {0} ימי ו׳"}
-                    two{"לפני {0} ימי ו׳"}
                 }
             }
         }
@@ -1433,18 +1405,6 @@ he{
         }
         hour-narrow{
             dn{"שע׳"}
-            relativeTime{
-                future{
-                    one{"בעוד שעה ({0})"}
-                    other{"בעוד {0} שע׳"}
-                    two{"בעוד שעתיים ({0})"}
-                }
-                past{
-                    one{"לפני שע׳ ({0})"}
-                    other{"לפני {0} שע׳"}
-                    two{"לפני שעתיים ({0})"}
-                }
-            }
         }
         hour-short{
             relativeTime{
@@ -1519,22 +1479,6 @@ he{
                 }
             }
         }
-        mon-narrow{
-            relativeTime{
-                future{
-                    many{"בעוד {0} ימי ב׳"}
-                    one{"בעוד יום ב׳ אחד ({0})"}
-                    other{"בעוד {0} ימי ב׳"}
-                    two{"בעוד {0} ימי ב׳"}
-                }
-                past{
-                    many{"לפני {0} ימי ב׳"}
-                    one{"לפני יום ב׳ אחד ({0})"}
-                    other{"לפני {0} ימי ב׳"}
-                    two{"לפני {0} ימי ב׳"}
-                }
-            }
-        }
         mon-short{
             relative{
                 "-1"{"יום ב׳ שעבר"}
@@ -1559,9 +1503,9 @@ he{
         month{
             dn{"חודש"}
             relative{
-                "-1"{"החודש שעבר"}
+                "-1"{"בחודש שעבר"}
                 "0"{"החודש"}
-                "1"{"החודש הבא"}
+                "1"{"בחודש הבא"}
             }
             relativeTime{
                 future{
@@ -1577,6 +1521,11 @@ he{
             }
         }
         month-narrow{
+            relative{
+                "-1"{"בחודש שעבר"}
+                "0"{"החודש"}
+                "1"{"בחודש הבא"}
+            }
             relativeTime{
                 future{
                     many{"בעוד {0} חו׳"}
@@ -1594,6 +1543,11 @@ he{
         }
         month-short{
             dn{"חו׳"}
+            relative{
+                "-1"{"בחודש שעבר"}
+                "0"{"החודש"}
+                "1"{"בחודש הבא"}
+            }
         }
         quarter{
             dn{"רבעון"}
@@ -1612,20 +1566,6 @@ he{
                     one{"לפני רבעון אחד ({0})"}
                     other{"לפני {0} רבעונים"}
                     two{"לפני {0} רבעונים"}
-                }
-            }
-        }
-        quarter-narrow{
-            relativeTime{
-                future{
-                    one{"בעוד רבע׳ אחד ({0})"}
-                    other{"בעוד {0} רבע׳"}
-                    two{"בעוד {0} רבע׳"}
-                }
-                past{
-                    one{"לפני רבע׳ אחד ({0})"}
-                    other{"לפני {0} רבע׳"}
-                    two{"לפני {0} רבע׳"}
                 }
             }
         }
@@ -1665,37 +1605,11 @@ he{
                 }
             }
         }
-        sat-narrow{
-            relativeTime{
-                future{
-                    one{"בעוד שבת אחת ({0})"}
-                    other{"בעוד {0} שבתות"}
-                    two{"בעוד {0} שבתות"}
-                }
-                past{
-                    one{"לפני שבת אחת ({0})"}
-                    other{"לפני {0} שבתות"}
-                    two{"לפני {0} שבתות"}
-                }
-            }
-        }
         sat-short{
             relative{
                 "-1"{"שבת שעברה"}
                 "0"{"שבת"}
                 "1"{"שבת הבאה"}
-            }
-            relativeTime{
-                future{
-                    one{"בעוד שבת אחת ({0})"}
-                    other{"בעוד {0} שבתות"}
-                    two{"בעוד {0} שבתות"}
-                }
-                past{
-                    one{"לפני שבת אחת ({0})"}
-                    other{"לפני {0} שבתות"}
-                    two{"לפני {0} שבתות"}
-                }
             }
         }
         second{
@@ -1717,33 +1631,36 @@ he{
             }
         }
         second-narrow{
+            dn{"שני׳"}
             relativeTime{
                 future{
-                    one{"בעוד שנ׳ ({0})"}
-                    other{"בעוד {0} שנ׳"}
-                    two{"בעוד {0} שנ׳"}
+                    many{"בעוד {0} שני׳"}
+                    one{"בעוד שני׳ ({0})"}
+                    other{"בעוד {0} שני׳"}
+                    two{"בעוד {0} שני׳"}
                 }
                 past{
-                    one{"לפני שנ׳ ({0})"}
-                    other{"לפני {0} שנ׳"}
-                    two{"לפני שתי שנ׳"}
+                    many{"לפני {0} שני׳"}
+                    one{"לפני שני׳ ({0})"}
+                    other{"לפני {0} שני׳"}
+                    two{"לפני שתי שני׳"}
                 }
             }
         }
         second-short{
-            dn{"שנ׳"}
+            dn{"שני׳"}
             relativeTime{
                 future{
-                    many{"בעוד {0} שנ׳"}
-                    one{"בעוד שנ׳ ({0})"}
-                    other{"בעוד {0} שנ׳"}
-                    two{"בעוד {0} שנ׳"}
+                    many{"בעוד {0} שני׳"}
+                    one{"בעוד שני׳ ({0})"}
+                    other{"בעוד {0} שני׳"}
+                    two{"בעוד {0} שני׳"}
                 }
                 past{
-                    many{"לפני {0} שנ׳"}
-                    one{"לפני שנ׳ ({0})"}
-                    other{"לפני {0} שנ׳"}
-                    two{"לפני שתי שנ׳"}
+                    many{"לפני {0} שני׳"}
+                    one{"לפני שני׳ ({0})"}
+                    other{"לפני {0} שני׳"}
+                    two{"לפני שתי שני׳"}
                 }
             }
         }
@@ -1755,30 +1672,14 @@ he{
             }
             relativeTime{
                 future{
-                    one{"בעוד יום ראשון {0}"}
+                    one{"בעוד יום ראשון אחד ({0})"}
                     other{"בעוד {0} ימי ראשון"}
                     two{"בעוד {0} ימי ראשון"}
                 }
                 past{
-                    one{"לפני יום ראשון {0}"}
+                    one{"לפני יום ראשון אחד ({0})"}
                     other{"לפני {0} ימי ראשון"}
                     two{"לפני {0} ימי ראשון"}
-                }
-            }
-        }
-        sun-narrow{
-            relativeTime{
-                future{
-                    many{"בעוד {0} ימי א׳"}
-                    one{"בעוד יום א׳ אחד ({0})"}
-                    other{"בעוד {0} ימי א׳"}
-                    two{"בעוד {0} ימי א׳"}
-                }
-                past{
-                    many{"לפני {0} ימי א׳"}
-                    one{"לפני יום א׳ אחד ({0})"}
-                    other{"לפני {0} ימי א׳"}
-                    two{"לפני {0} ימי א׳"}
                 }
             }
         }
@@ -1822,22 +1723,6 @@ he{
                 }
             }
         }
-        thu-narrow{
-            relativeTime{
-                future{
-                    many{"בעוד {0} ימי ה׳"}
-                    one{"בעוד יום ה׳ אחד ({0})"}
-                    other{"בעוד {0} ימי ה׳"}
-                    two{"בעוד {0} ימי ה׳"}
-                }
-                past{
-                    many{"לפני {0} ימי ה׳"}
-                    one{"לפני יום ה׳ אחד ({0})"}
-                    other{"לפני {0} ימי ה׳"}
-                    two{"לפני {0} ימי ה׳"}
-                }
-            }
-        }
         thu-short{
             relative{
                 "-1"{"יום ה׳ שעבר"}
@@ -1875,22 +1760,6 @@ he{
                     one{"לפני יום שלישי אחד ({0})"}
                     other{"לפני {0} ימי שלישי"}
                     two{"לפני {0} ימי שלישי"}
-                }
-            }
-        }
-        tue-narrow{
-            relativeTime{
-                future{
-                    many{"בעוד {0} ימי ג׳"}
-                    one{"בעוד יום ג׳ אחד ({0})"}
-                    other{"בעוד {0} ימי ג׳"}
-                    two{"בעוד {0} ימי ג׳"}
-                }
-                past{
-                    many{"לפני {0} ימי ג׳"}
-                    one{"לפני יום ג׳ אחד ({0})"}
-                    other{"לפני {0} ימי ג׳"}
-                    two{"לפני {0} ימי ג׳"}
                 }
             }
         }
@@ -1934,22 +1803,6 @@ he{
                 }
             }
         }
-        wed-narrow{
-            relativeTime{
-                future{
-                    many{"בעוד {0} ימי ד׳"}
-                    one{"בעוד יום ד׳ אחד ({0})"}
-                    other{"בעוד {0} ימי ד׳"}
-                    two{"בעוד {0} ימי ד׳"}
-                }
-                past{
-                    many{"לפני {0} ימי ד׳"}
-                    one{"לפני יום ד׳ אחד ({0})"}
-                    other{"לפני {0} ימי ד׳"}
-                    two{"לפני {0} ימי ד׳"}
-                }
-            }
-        }
         wed-short{
             relative{
                 "-1"{"יום ד׳ שעבר"}
@@ -1974,9 +1827,9 @@ he{
         week{
             dn{"שבוע"}
             relative{
-                "-1"{"השבוע שעבר"}
+                "-1"{"בשבוע שעבר"}
                 "0"{"השבוע"}
-                "1"{"השבוע הבא"}
+                "1"{"בשבוע הבא"}
             }
             relativePeriod{"השבוע של {0}"}
             relativeTime{
@@ -1993,16 +1846,19 @@ he{
             }
         }
         week-narrow{
-            relativeTime{
-                past{
-                    one{"לפני שב׳ ({0})"}
-                    other{"לפני {0} שב׳"}
-                    two{"לפני שבועיים ({0})"}
-                }
+            relative{
+                "-1"{"בשבוע שעבר"}
+                "0"{"השבוע"}
+                "1"{"בשבוע הבא"}
             }
         }
         week-short{
             dn{"שב׳"}
+            relative{
+                "-1"{"בשבוע שעבר"}
+                "0"{"השבוע"}
+                "1"{"בשבוע הבא"}
+            }
             relativeTime{
                 future{
                     many{"בעוד {0} שב׳"}
@@ -2033,9 +1889,9 @@ he{
         year{
             dn{"שנה"}
             relative{
-                "-1"{"השנה שעברה"}
+                "-1"{"בשנה שעברה"}
                 "0"{"השנה"}
-                "1"{"השנה הבאה"}
+                "1"{"בשנה הבאה"}
             }
             relativeTime{
                 future{
@@ -2051,21 +1907,26 @@ he{
             }
         }
         year-narrow{
+            relative{
+                "-1"{"בשנה שעברה"}
+                "0"{"השנה"}
+                "1"{"בשנה הבאה"}
+            }
             relativeTime{
                 future{
                     one{"בעוד שנה ({0})"}
                     other{"בעוד {0} שנים"}
                     two{"בעוד שנתיים ({0})"}
                 }
-                past{
-                    one{"לפני שנה ({0})"}
-                    other{"לפני {0} שנים"}
-                    two{"לפני שנתיים ({0})"}
-                }
             }
         }
         year-short{
             dn{"שנ׳"}
+            relative{
+                "-1"{"בשנה שעברה"}
+                "0"{"השנה"}
+                "1"{"בשנה הבאה"}
+            }
             relativeTime{
                 future{
                     one{"בעוד שנה"}
@@ -2097,9 +1958,6 @@ he{
         standard{
             2{"{0} ו{1}"}
             end{"{0} ו{1}"}
-        }
-        unit{
-            end{"{0} ו-{1}"}
         }
         unit-narrow{
             2{"{0} {1}"}

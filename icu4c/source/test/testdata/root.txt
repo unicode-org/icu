@@ -12,9 +12,9 @@
 
 root
 {
-    Version { 48.0 }
-    ExpectCLDRVersionAtLeast { 48.0 } // 'base' cldr version. Allow up to version =.=.* of this
-    CurrentCLDRVersion { 48.0 } // Current CLDR version as of the test update. Warn if not an exact match.
+    Version { 49.0 }
+    ExpectCLDRVersionAtLeast { 49.0 } // 'base' cldr version. Allow up to version =.=.* of this
+    CurrentCLDRVersion { 49.0 } // Current CLDR version as of the test update. Warn if not an exact match.
 
     ShortLanguage { xxx }
 

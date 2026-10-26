@@ -2157,10 +2157,6 @@ rm{
             one{"dollar dal Simbabwe (1980–2008)"}
             other{"dollars dal Simbabwe (1980–2008)"}
         }
-        ZWG{
-            one{"aur dal Simbabwe"}
-            other{"aur dal Simbabwe"}
-        }
         ZWL{
             one{"dollar dal Simbabwe (2009)"}
             other{"dollars dal Simbabwe (2009)"}

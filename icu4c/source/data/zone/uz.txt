@@ -171,6 +171,9 @@ uz{
         "America:Costa_Rica"{
             ec{"Kosta-Rika"}
         }
+        "America:Coyhaique"{
+            ec{"Koyayke"}
+        }
         "America:Creston"{
             ec{"Kreston"}
         }
@@ -690,9 +693,6 @@ uz{
         "Europe:Copenhagen"{
             ec{"Kopengagen"}
         }
-        "Europe:Dublin"{
-            ld{"Irlandiya yozgi vaqti"}
-        }
         "Europe:Guernsey"{
             ec{"Gernsi"}
         }
@@ -713,9 +713,6 @@ uz{
         }
         "Europe:Ljubljana"{
             ec{"Lyublyana"}
-        }
-        "Europe:London"{
-            ld{"Britaniya yozgi vaqti"}
         }
         "Europe:Luxembourg"{
             ec{"Lyuksemburg"}
@@ -819,6 +816,9 @@ uz{
         "Pacific:Easter"{
             ec{"Pasxa oroli"}
         }
+        "Pacific:Enderbury"{
+            ec{"Kanton oroli"}
+        }
         "Pacific:Gambier"{
             ec{"Gambye oroli"}
         }
@@ -869,6 +869,11 @@ uz{
         }
         "Pacific:Wallis"{
             ec{"Uollis"}
+        }
+        "meta:Acre"{
+            ld{"Akri yozgi vaqti"}
+            lg{"Akri vaqti"}
+            ls{"Akri standart vaqti"}
         }
         "meta:Afghanistan"{
             ls{"Afgʻoniston vaqti"}
@@ -991,6 +996,10 @@ uz{
             lg{"Braziliya vaqti"}
             ls{"Braziliya standart vaqti"}
         }
+        "meta:British"{
+            ld{"Britaniya yozgi vaqti"}
+            lg{"Britaniya vaqti"}
+        }
         "meta:Brunei"{
             ls{"Bruney-Dorussalom vaqti"}
         }
@@ -1106,6 +1115,11 @@ uz{
         "meta:Gilbert_Islands"{
             ls{"Gilbert orollari vaqti"}
         }
+        "meta:Greenland"{
+            ld{"Grenlandiya yozgi vaqti"}
+            lg{"Grenlandiya vaqti"}
+            ls{"Grenlandiya standart vaqti"}
+        }
         "meta:Greenland_Eastern"{
             ld{"Sharqiy Grenlandiya yozgi vaqti"}
             lg{"Sharqiy Grenlandiya vaqti"}
@@ -1123,7 +1137,7 @@ uz{
             ls{"Gayana vaqti"}
         }
         "meta:Hawaii"{
-            ls{"Gavayi-aleut standart vaqti"}
+            ls{"Gavayi vaqti"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"Gavayi-aleut yozgi vaqti"}
@@ -1163,6 +1177,10 @@ uz{
             lg{"Eron vaqti"}
             ls{"Eron standart vaqti"}
         }
+        "meta:Irish"{
+            ld{"Irlandiya standart vaqti"}
+            lg{"Irlandiya vaqti"}
+        }
         "meta:Irkutsk"{
             ld{"Irkutsk yozgi vaqti"}
             lg{"Irkutsk vaqti"}
@@ -1177,6 +1195,11 @@ uz{
             ld{"Yaponiya yozgi vaqti"}
             lg{"Yaponiya vaqti"}
             ls{"Yaponiya standart vaqti"}
+        }
+        "meta:Kamchatka"{
+            ld{"Kamchatka yozgi vaqti"}
+            lg{"Kamchatka vaqti"}
+            ls{"Kamchatka standart vaqti"}
         }
         "meta:Kazakhstan"{
             ls{"Qozogʻiston vaqti"}
@@ -1352,9 +1375,12 @@ uz{
             lg{"Saxalin vaqti"}
             ls{"Saxalin standart vaqti"}
         }
+        "meta:Samara"{
+            ld{"Samara yozgi vaqti"}
+            lg{"Samara vaqti"}
+            ls{"Samara standart vaqti"}
+        }
         "meta:Samoa"{
-            ld{"Samoa yozgi vaqti"}
-            lg{"Samoa vaqti"}
             ls{"Samoa standart vaqti"}
         }
         "meta:Seychelles"{
@@ -1397,6 +1423,11 @@ uz{
         "meta:Truk"{
             ls{"Chuuk vaqti"}
         }
+        "meta:Turkey"{
+            ld{"Turkiya yozgi vaqti"}
+            lg{"Turkiya vaqti"}
+            ls{"Turkiya standart vaqti"}
+        }
         "meta:Turkmenistan"{
             ld{"Turkmaniston yozgi vaqti"}
             lg{"Turkmaniston vaqti"}
@@ -1409,6 +1440,9 @@ uz{
             ld{"Urugvay yozgi vaqti"}
             lg{"Urugvay vaqti"}
             ls{"Urugvay standart vaqti"}
+        }
+        "meta:Urumqi"{
+            ls{"Urumchi vaqti"}
         }
         "meta:Uzbekistan"{
             ld{"O‘zbekiston yozgi vaqti"}

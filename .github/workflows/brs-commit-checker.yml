@@ -24,10 +24,11 @@ jobs:
     commit-report:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
               with:
                 fetch-tags: true
                 fetch-depth: 0
+                persist-credentials: false
             # workaround for bug in checkout action. this step should be redundant.
             # https://github.com/actions/checkout/issues/1471
             # https://github.com/actions/checkout/issues/1781
@@ -39,26 +40,30 @@ jobs:
               run: |
                 git fetch origin
             - name: Setup Python
-              uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
+              uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
               with:
                 python-version: '3.12.8'
                 cache: 'pipenv'
                 cache-dependency-path: |
                     tools/commit-checker/Pipfile
                     tools/commit-checker/Pipfile.lock
+            # https://stackoverflow.com/questions/53807511/pip-cannot-uninstall-package-it-is-a-distutils-installed-project
             - name: Install pipenv
               run: |
-                sudo pip3 install pipenv
+                sudo pip3 install --ignore-installed pipenv
             - name: Generate report
               env:
                 JIRA_USERNAME: ${{ secrets.COMMIT_CHECKER_JIRA_EMAIL }}
                 JIRA_PASSWORD: ${{ secrets.COMMIT_CHECKER_JIRA_TOKEN }}
+                INPUTS_FIX_VERSION: ${{ inputs.fix_version }}
+                INPUTS_FROM_GIT_REF: ${{ inputs.from_git_ref }}
+                INPUTS_END_GIT_REF: ${{ inputs.end_git_ref }}
               run: |
                 pushd ./tools/commit-checker
                 pipenv install
                 pipenv run python3 check.py \
-                    --jira-query "project=ICU AND fixVersion=${{ inputs.fix_version }}" \
-                    --rev-range "${{ inputs.from_git_ref }}..${{ inputs.end_git_ref }}" > REPORT.md
+                    --jira-query "project=ICU AND fixVersion=${INPUTS_FIX_VERSION}" \
+                    --rev-range "${INPUTS_FROM_GIT_REF}..${INPUTS_END_GIT_REF}" > REPORT.md
                 popd
             # https://github.blog/news-insights/product-news/supercharging-github-actions-with-job-summaries/
             - name: Reproduce report as workflow job summary

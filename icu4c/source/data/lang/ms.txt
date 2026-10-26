@@ -11,19 +11,35 @@ ms{
         colCaseLevel{"Pengisihan Sensitif Atur"}
         colNormalization{"Pengisihan Ternormal"}
         colNumeric{"Pengisihan Berangka"}
+        colReorder{"Atur Skrip/Blok Semula"}
         colStrength{"Kekuatan Pengisihan"}
         collation{"Tertib Isihan"}
         currency{"Mata wang"}
+        d0{"Sasaran Transformasi"}
+        dx{"Pengecualian Pemisahan Kamus"}
         em{"Paparan Emoji"}
+        fw{"Hari pertama dalam minggu"}
+        h0{"Campuran"}
         hc{"Kitaran Jam (12 berbanding 24)"}
+        i0{"Kaedah Input"}
+        k0{"Papan Kekunci"}
+        kv{"Tahap Abaian Tertinggi"}
         lb{"Gaya Pemisah Baris"}
         lw{"Penggalan Baris dalam Perkataan"}
+        m0{"Peraturan Transformasi"}
         ms{"Sistem Ukuran"}
+        mu{"Unit Ukuran"}
         numbers{"Nombor"}
+        rg{"Rantau Untuk Data Tambahan"}
+        s0{"Sumber Transformasi"}
+        sd{"Subbahagian Rantau"}
         ss{"Penggalan Ayat Selepas Singkatan"}
+        t{"Transformasi"}
+        t0{"Terjemahan Mesin"}
         timezone{"Zon Waktu"}
         va{"Varian Tempat"}
         x{"Penggunaan Peribadi"}
+        x0{"Transformasi Penggunaan Peribadi"}
     }
     Languages{
         aa{"Afar"}
@@ -380,6 +396,7 @@ ms{
         pcm{"Nigerian Pidgin"}
         pis{"Pijin"}
         pl{"Poland"}
+        pms{"Piedmont"}
         pqm{"Maliseet-Passamaquoddy"}
         prg{"Prusia"}
         ps{"Pashto"}
@@ -733,7 +750,7 @@ ms{
             islamic-rgsa{"Kalendar Islam (Arab Saudi, cerapan)"}
             islamic-tbla{"Kalendar Hijrah (jadual, zaman astronomi)"}
             islamic-umalqura{"Kalendar Islam (Umm Al-Quran)"}
-            iso8601{"Kalendar Gregorian (Tahun Pertama)"}
+            iso8601{"Kalendar Gregorian (Minggu ISO 8601)"}
             japanese{"Kalendar Jepun"}
             persian{"Kalendar Parsi"}
             roc{"Kalendar Minguo"}
@@ -747,10 +764,13 @@ ms{
             ethiopic-amete-alem{"Ethiopia Amete Alem"}
             gregorian{"Gregory"}
             hebrew{"Ibrani"}
+            indian{"India Nasional"}
             islamic{"Hijrah"}
             islamic-civil{"Hijrah (jadual, zaman sivil)"}
+            islamic-rgsa{"Hijrah, Cerapan Arab Saudi"}
             islamic-tbla{"Hijrah (jadual, zaman astronomi)"}
             islamic-umalqura{"Hijrah (Umm al-Quran)"}
+            iso8601{"Gregorian"}
             japanese{"Jepun"}
             persian{"Parsi"}
             roc{"Minguo"}
@@ -776,6 +796,11 @@ ms{
             no{"Isih Urutan Atur Biasa"}
             upper{"Isih Huruf Besar Dahulu"}
         }
+        colCaseFirst%core{
+            lower{"Huruf Kecil"}
+            no{"Huruf kecil"}
+            upper{"Huruf besar"}
+        }
         colCaseLevel{
             no{"Isih Tidak Sensitif Atur"}
             yes{"Isih Sensitif Atur"}
@@ -788,12 +813,26 @@ ms{
             no{"Isih Digit Secara Berasingan"}
             yes{"Isih Digit Mengikut Nombor"}
         }
+        colReorder%core{
+            currency{"Mata wang"}
+            digit{"Digit"}
+            punct{"Tanda baca"}
+            space{"Ruang kosong"}
+            symbol{"Simbol"}
+        }
         colStrength{
             identical{"Isih Semua"}
             primary{"Isih Huruf Asas Sahaja"}
             quaternary{"Isih Aksen/Atur/Lebar/Kana"}
             secondary{"Isih Aksen"}
             tertiary{"Isih Aksen/Atur/Lebar"}
+        }
+        colStrength%core{
+            identical{"Semua"}
+            primary{"Huruf Asas Sahaja"}
+            quaternary{"Huruf Asas, Aksen, Huruf Besar/Kecil, Varian, Kana"}
+            secondary{"Huruf Asas, Aksen"}
+            tertiary{"Huruf Asas, Aksen, Huruf Besar/Kecil, Varian"}
         }
         collation{
             compat{"Tertib Isihan Sebelumnya"}
@@ -816,10 +855,13 @@ ms{
             compat{"Keserasian"}
             dictionary{"Kamus"}
             ducet{"Unikod Lalai"}
+            emoji{"Emoji"}
+            eor{"Peraturan Eropah"}
             phonebook{"Buku Telefon"}
             phonetic{"Fonetik"}
             pinyin{"Pinyin"}
             search{"Carian"}
+            searchjl{"Konsonan awal Korea"}
             standard{"Standard"}
             stroke{"Coretan"}
             traditional{"Tradisional"}
@@ -837,16 +879,26 @@ ms{
             text{"Teks"}
         }
         hc{
+            c12{"Sistem 12 Jam"}
+            c24{"Sistem 24 Jam"}
             h11{"Sistem 12 Jam (0–11)"}
             h12{"Sistem 12 Jam (1–12)"}
             h23{"Sistem 24 Jam (0–23)"}
             h24{"Sistem 24 Jam (1–24)"}
         }
         hc%core{
+            c12{"12"}
+            c24{"24"}
             h11{"12 (0–11)"}
             h12{"12 (1–12)"}
             h23{"24 (0–23)"}
             h24{"24 (1–24)"}
+        }
+        kv%core{
+            currency{"Ruang Anjak, tanda baca, semua simbol"}
+            punct{"Ruang anjak, tanda baca"}
+            space{"Ruang anjak, tanda baca"}
+            symbol{"Ruang anjak, tanda baca, simbol bukan mata wang"}
         }
         lb{
             loose{"Gaya Pemisah Baris Bebas"}
@@ -880,8 +932,8 @@ ms{
         }
         numbers{
             ahom{"Digit Ahom"}
-            arab{"Digit Indi-Arab"}
-            arabext{"Digit Indi Arab Lanjutan"}
+            arab{"Digit Arab-India"}
+            arabext{"Digit Arab-India Lanjutan"}
             armn{"Angka Armenia"}
             armnlow{"Angka Kecil Armenia"}
             bali{"Digit Bali"}
@@ -939,6 +991,7 @@ ms{
             olck{"Digit Ol Chiki"}
             orya{"Digit Oriya"}
             osma{"Digit Osmanya"}
+            outlined{"Digit Rongga"}
             rohg{"Digit Hanifi Rohingya"}
             roman{"Angka Roman"}
             romanlow{"Angka Huruf Kecil Roman"}
@@ -961,9 +1014,48 @@ ms{
             wara{"Digit Warang Citi"}
             wcho{"Digit Wancho"}
         }
+        numbers%core{
+            arabext{"Arab-India Lanjutan"}
+            armnlow{"Angka kecil Armenia"}
+            finance{"Kewangan"}
+            fullwide{"Lebar penuh"}
+            greklow{"Angka kecil Greek"}
+            hanidays{"Penomboran hari bulan aksara Han untuk kalendar tradisional"}
+            hanidec{
+                "Sistem perpuluhan kedudukan menggunakan ideograf nombor Cina sebagai"
+                " digit"
+            }
+            hansfin{"Kewangan Cina Ringkas"}
+            hantfin{"Kewangan Cina Tradisional"}
+            jpanfin{"Kewangan Jepun"}
+            jpanyear{"Angka gannen bagi tahun pertama Jepun"}
+            lanatham{"Tai Tham Tham (eklesiastikal)"}
+            mathbold{"Matematik tebal"}
+            mathdbl{"Matematik dwigarisan"}
+            mathmono{"Matematik monospace"}
+            mathsanb{"Matematik sans-serif tebal"}
+            mathsans{"Matematik sans-serif"}
+            mymrepka{"Pwo Karen Timur Myanmar"}
+            mymrpao{"Pao Myanmar"}
+            mymrshan{"Shan Myanmar"}
+            mymrtlng{"Tai Laing Myanmar"}
+            native{"Digit asal"}
+            outlined{"Digit Rongga"}
+            roman{"Huruf besar Roman"}
+            romanlow{"Huruf kecil Roman"}
+            segment{"Bersegmen"}
+            tamldec{"Tamil Moden"}
+            traditional{"Angka tradisional"}
+        }
         ss%core{
             none{"Matikan"}
             standard{"Hidupkan"}
+        }
+        t0{
+            und{"Terjemahan Mesin Tidak Tentu"}
+        }
+        va%core{
+            posix{"Varian POSIX"}
         }
     }
     Variants{

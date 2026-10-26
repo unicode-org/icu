@@ -9,10 +9,10 @@ export MAVEN_ARGS='--no-transfer-progress'
 # files, including the `-SNAPSHOT` if it is there.
 # Should match what this command shows:
 #   mvn help:evaluate -Dexpression=project.version -q -DforceStdout
-export artifact_version='79.0.1-SNAPSHOT'
-export github_rel_version='79.0.1'
-export api_report_version='79'
-export api_report_prev_version='78'
+export artifact_version='80.0.1-SNAPSHOT'
+export github_rel_version='80.0.1'
+export api_report_version='80'
+export api_report_prev_version='79'
 export out_dir=target
 
 function checkThatJdk8IsNotDefault() {

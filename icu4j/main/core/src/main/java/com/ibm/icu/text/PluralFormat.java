@@ -448,8 +448,19 @@ public class PluralFormat extends UFormat {
         ulocale = locale;
         pluralRules = (rules == null) ? PluralRules.forLocale(ulocale, type) : rules;
         resetPattern();
-        this.numberFormat =
-                (numberFormat == null) ? NumberFormat.getInstance(ulocale) : numberFormat;
+        this.numberFormat = numberFormat;
+        initializeNumberFormat();
+    }
+
+    private void initializeNumberFormat() {
+        if (numberFormat == null
+                && ((msgPattern == null || msgPattern.countParts() == 0)
+                        || (pattern != null && pattern.indexOf('#') >= 0))) {
+            // The pattern may need to format a number later.
+            // Let's cache this expensive to use number format.
+            this.numberFormat = NumberFormat.getInstance(ulocale);
+        }
+        // either we use the existing one, or the pattern doesn't format a number.
     }
 
     private void resetPattern() {
@@ -481,6 +492,7 @@ public class PluralFormat extends UFormat {
             resetPattern();
             throw e;
         }
+        initializeNumberFormat();
     }
 
     /**
@@ -672,24 +684,29 @@ public class PluralFormat extends UFormat {
         double numberMinusOffset = number - offset;
         String numberString;
         IFixedDecimal dec;
-        if (numberFormat instanceof DecimalFormat) {
-            // Call NumberFormatter to get both the DecimalQuantity and the string.
-            LocalizedNumberFormatter f = ((DecimalFormat) numberFormat).toNumberFormatter();
-            FormattedNumber result;
-            if (offset == 0) {
-                // could be BigDecimal etc.
-                result = f.format(numberObject);
+        if (numberFormat != null) {
+            if (numberFormat instanceof DecimalFormat) {
+                // Call NumberFormatter to get both the DecimalQuantity and the string.
+                LocalizedNumberFormatter f = ((DecimalFormat) numberFormat).toNumberFormatter();
+                FormattedNumber result;
+                if (offset == 0) {
+                    // could be BigDecimal etc.
+                    result = f.format(numberObject);
+                } else {
+                    result = f.format(numberMinusOffset);
+                }
+                numberString = result.toString();
+                dec = result.getFixedDecimal();
             } else {
-                result = f.format(numberMinusOffset);
+                if (offset == 0) {
+                    numberString = numberFormat.format(numberObject);
+                } else {
+                    numberString = numberFormat.format(numberMinusOffset);
+                }
+                dec = new FixedDecimal(numberMinusOffset);
             }
-            numberString = result.toString();
-            dec = result.getFixedDecimal();
         } else {
-            if (offset == 0) {
-                numberString = numberFormat.format(numberObject);
-            } else {
-                numberString = numberFormat.format(numberMinusOffset);
-            }
+            numberString = "";
             dec = new FixedDecimal(numberMinusOffset);
         }
 
@@ -774,7 +791,7 @@ public class PluralFormat extends UFormat {
      * @return Returns the PluralRules type. For example, it could be "zero", "one", "two", "few",
      *     "many" or "other")
      */
-    /*package*/ String parseType(String source, RbnfLenientScanner scanner, FieldPosition pos) {
+    /*package*/ String parseType(String source, FieldPosition pos) {
         // If no pattern was applied, return null.
         if (msgPattern == null || msgPattern.countParts() == 0) {
             pos.setBeginIndex(-1);
@@ -818,20 +835,7 @@ public class PluralFormat extends UFormat {
             }
 
             String currArg = pattern.substring(partStart.getLimit(), partLimit.getIndex());
-            if (scanner != null) {
-                // Check if non-lenient rule finds the text before call lenient parsing
-                int tempPos = source.indexOf(currArg, startingAt);
-                if (tempPos >= 0) {
-                    currMatchIndex = tempPos;
-                } else {
-                    // If lenient parsing is turned ON, we've got some time consuming parsing ahead
-                    // of us.
-                    int[] scannerMatchResult = scanner.findText(source, currArg, startingAt);
-                    currMatchIndex = scannerMatchResult[0];
-                }
-            } else {
-                currMatchIndex = source.indexOf(currArg, startingAt);
-            }
+            currMatchIndex = source.indexOf(currArg, startingAt);
             if (currMatchIndex >= 0
                     && currMatchIndex >= matchedIndex
                     && (matchedWord == null || currArg.length() > matchedWord.length())) {

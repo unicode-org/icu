@@ -237,12 +237,13 @@ ky{
                 hms{"h:mm:ss a"}
                 y{"y-G"}
                 yyyy{"y-G"}
-                yyyyMEd{"GGGGG y-dd-MM, E"}
+                yyyyM{"MM.y, G"}
+                yyyyMEd{"EEE, dd.MM.y, G"}
                 yyyyMMM{"G y-'ж'. MMM"}
                 yyyyMMMEd{"G y-'ж'. d-MMM, E"}
                 yyyyMMMM{"G y-'ж'., MMMM"}
                 yyyyMMMd{"G y-'ж'. d-MMM"}
-                yyyyMd{"GGGGG y-dd-MM"}
+                yyyyMd{"dd.MM.y, G"}
                 yyyyQQQ{"G y-'ж'. QQQ"}
                 yyyyQQQQ{"G y-'ж'. QQQQ"}
             }
@@ -260,6 +261,10 @@ ky{
                 MMMEd{
                     M{"E, d MMM – E, d MMM"}
                     d{"E, d – E, d MMM"}
+                }
+                MMMMd{
+                    M{"d-MMMM – d-MMMM"}
+                    d{"d–d-MMMM"}
                 }
                 MMMd{
                     M{"d MMM – d MMM"}
@@ -327,7 +332,7 @@ ky{
                 "y-'ж'., d-MMMM, EEEE",
                 "y-'ж'., d-MMMM",
                 "y-'ж'., d-MMM",
-                "d/M/yy",
+                "dd.MM.yy",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -350,6 +355,7 @@ ky{
                 Gy{"G y-'ж'."}
                 GyMMM{"G y-'ж'. MMM"}
                 GyMMMEd{"G y-'ж'. d-MMM, E"}
+                GyMMMM{"G y-'жылдын' MMMM"}
                 GyMMMd{"G y-'ж'. d-MMM"}
                 MEd{"dd-MM, E"}
                 MMMEd{"d-MMM, E"}
@@ -364,12 +370,14 @@ ky{
                 hms{"h:mm:ss a"}
                 hmsv{"h:mm:ss a v"}
                 hmv{"h:mm a v"}
-                yMEd{"y-dd-MM, E"}
+                yMEd{"E, dd.MM.y"}
                 yMMM{"y-'ж'. MMM"}
                 yMMMEd{"y-'ж'. d-MMM, E"}
                 yMMMM{"y-'ж'., MMMM"}
+                yMMMMEd{"E, d-MMM, y"}
+                yMMMMd{"y-'ж'. d-MMMM"}
                 yMMMd{"y-'ж'. d-MMM"}
-                yMd{"y-dd-MM"}
+                yMd{"dd.MM.y"}
                 yQQQ{"y-'ж'., QQQ"}
                 yQQQQ{"y-'ж'., QQQQ"}
                 yw{

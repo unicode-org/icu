@@ -144,7 +144,7 @@ update strategies are possible, depending on the ICU version and configuration.
   * Data is loaded from individual files: drop in the updated binary .res
     files.
 
-The [ICU Data](../../icudata.md) section of this user guide gives more
+The [ICU Data](../../icu_data/index.md) section of this user guide gives more
 information on how ICU loads resources.
 
 The ICU resource files required for time zone data updates are posted at
@@ -220,7 +220,7 @@ file directory.
 If the ICU-using application sets an ICU data path (or can be changed to set
 one), then the time zone .res file can be placed there. Download the files as
 described above and copy them to the specified directory. See the
-[ICU Data](../../icudata.md) page of the user guide for more information about
+[ICU Data](../../icu_data/index.md) page of the user guide for more information about
 the ICU data path.
 
 ### ICU4C TZ update when ICU data is built into a shared library

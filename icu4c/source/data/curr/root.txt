@@ -15,6 +15,10 @@ root{
             "CA$",
             "CAD",
         }
+        CHF{
+            "CHF",
+            "CHF",
+        }
         CNY{
             "CN¥",
             "CNY",
@@ -114,6 +118,7 @@ root{
         BWP{"P"}
         BZD{"$"}
         CAD{"$"}
+        CHF{"Fr."}
         CLP{"$"}
         CNY{"¥"}
         COP{"$"}
@@ -200,13 +205,16 @@ root{
         ZMW{"ZK"}
     }
     Currencies%variant{
+        AED{"⃃"}
+        MVR{"⃂"}
+        OMR{"⃄"}
         SAR{"⃁"}
         TRY{"TL"}
     }
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"48"}
+    Version{"49"}
     currencySpacing{
         afterCurrency{
             currencyMatch{"[[:^S:]&[:^Z:]]"}

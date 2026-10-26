@@ -6,7 +6,7 @@ su{
         de{"Jérman"}
         de_AT{"Jérman Austria"}
         de_CH{"Jérman Swiss Luhur"}
-        en{"Inggris"}
+        en{"Basa Inggris"}
         en_AU{"Inggris Australia"}
         en_CA{"Inggris Kanada"}
         en_US{"Inggris Amerika"}
@@ -44,7 +44,7 @@ su{
         Cyrl{"Sirilik"}
         Hans{"Sederhana"}
         Hant{"Tradisional"}
-        Latn{"Latin"}
+        Latn{"Basa Latin"}
         Zxxx{"Non-tulisan"}
         Zzzz{"Tulisan Teu Dikenal"}
     }

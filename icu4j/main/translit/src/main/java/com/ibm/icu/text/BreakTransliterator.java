@@ -33,21 +33,13 @@ final class BreakTransliterator extends Transliterator implements Cloneable {
         this(ID, filter, null, " ");
     }
 
-    /// CLOVER:OFF
-    // The following method is not called by anything and can't be reached
     public String getInsertion() {
         return insertion;
     }
 
-    /// CLOVER:ON
-
-    /// CLOVER:OFF
-    // The following method is not called by anything and can't be reached
     public void setInsertion(String insertion) {
         this.insertion = insertion;
     }
-
-    /// CLOVER:ON
 
     public BreakIterator getBreakIterator() {
         // Defer initialization of BreakIterator because it is slow,
@@ -57,13 +49,9 @@ final class BreakTransliterator extends Transliterator implements Cloneable {
         return bi.clone();
     }
 
-    /// CLOVER:OFF
-    // The following method is not called by anything and can't be reached
     public void setBreakIterator(BreakIterator bi) {
         this.bi = bi;
     }
-
-    /// CLOVER:ON
 
     static final int LETTER_OR_MARK_MASK =
             (1 << Character.UPPERCASE_LETTER)
@@ -163,23 +151,6 @@ final class BreakTransliterator extends Transliterator implements Cloneable {
         private int end;
         // invariant: begin <= pos <= end
         private int pos;
-
-        /** Constructs an iterator with an initial index of 0. */
-        /*public ReplaceableCharacterIterator(Replaceable text)
-        {
-            this(text, 0);
-        }*/
-
-        /**
-         * Constructs an iterator with the specified initial index.
-         *
-         * @param text The String to be iterated over
-         * @param pos Initial iterator position
-         */
-        /*public ReplaceableCharacterIterator(Replaceable text, int pos)
-        {
-            this(text, 0, text.length(), pos);
-        }*/
 
         /**
          * Constructs an iterator over the given range of the given string, with the index set at

@@ -577,9 +577,9 @@ System.out.println("Using locale " + result);
 > considerations and recommendations when using this header in a web application.
 
 > *For further information about the Accept-Language HTTP header:* <br>
-> https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.4 <br>
+> <https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.4> <br>
 > *Notes and cautions about the use of this header:* <br>
-> https://www.w3.org/International/questions/qa-accept-lang-locales
+> <https://www.w3.org/International/questions/qa-accept-lang-locales>
 
 ## Programming in C vs. C++ vs. Java
 

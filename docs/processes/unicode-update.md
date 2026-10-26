@@ -53,11 +53,11 @@ to reduce their size.
 
 Some of the data files are not part of the Unicode release but are output from
 various Unicode Tools, as noted in the change log.
-(See also https://github.com/unicode-org/unicodetools)
+(See also <https://github.com/unicode-org/unicodetools>)
 
 Note: We have looked at using the [UCD XML](https://www.unicode.org/ucd/#UCDinXML) files,
 but decided against it and instead developed a simpler format for a combined Unicode data file.
-See https://icu.unicode.org/design/props/ppucd#TOC-Why-not-UCD-XML-files-
+See <https://icu.unicode.org/design/props/ppucd#TOC-Why-not-UCD-XML-files->
 (There was an outdated, experimental, partial UCD XML parser here:
 <https://github.com/unicode-org/icu-docs/tree/main/design/properties/genudata>)
 
@@ -109,10 +109,10 @@ Finally, it should make it easier to modify the binary data file format for a pr
 because we build the library code that depends on the data only after generating that data.
 
 For the initial setup of this Bazel build system for ICU see
-https://unicode-org.atlassian.net/browse/ICU-21117 “sane build system for Unicode data”
+<https://unicode-org.atlassian.net/browse/ICU-21117> “sane build system for Unicode data”
 
 This was completed while working on
-https://unicode-org.atlassian.net/browse/ICU-21635 “Unicode 14”
+<https://unicode-org.atlassian.net/browse/ICU-21635> “Unicode 14”
 
 #### Bazel setup
 

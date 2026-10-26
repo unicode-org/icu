@@ -19,9 +19,6 @@ ta{
                 accountingFormat{"¤#,##0.00;(¤#,##0.00)"}
                 accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"¤#,##,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##,##0.00"}
-                currencyFormat%noCurrency{"#,##,##0.00"}
                 decimalFormat{"#,##,##0.###"}
                 percentFormat{"#,##,##0%"}
             }
@@ -80,152 +77,152 @@ ta{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"¤0ஆ"}
-                        other{"¤0ஆ"}
+                        one{"¤0K"}
+                        other{"¤0K"}
                     }
                     10000{
-                        one{"¤00ஆ"}
-                        other{"¤00ஆ"}
+                        one{"¤00K"}
+                        other{"¤00K"}
                     }
                     100000{
-                        one{"¤000ஆ"}
-                        other{"¤000ஆ"}
+                        one{"¤000K"}
+                        other{"¤000K"}
                     }
                     1000000{
-                        one{"¤0மி"}
-                        other{"¤0மி"}
+                        one{"¤0M"}
+                        other{"¤0M"}
                     }
                     10000000{
-                        one{"¤00மி"}
-                        other{"¤00மி"}
+                        one{"¤00M"}
+                        other{"¤00M"}
                     }
                     100000000{
-                        one{"¤000மி"}
-                        other{"¤000மி"}
+                        one{"¤000M"}
+                        other{"¤000M"}
                     }
                     1000000000{
-                        one{"¤0பி"}
-                        other{"¤0பி"}
+                        one{"¤0B"}
+                        other{"¤0B"}
                     }
                     10000000000{
-                        one{"¤00பி"}
-                        other{"¤00பி"}
+                        one{"¤00B"}
+                        other{"¤00B"}
                     }
                     100000000000{
-                        one{"¤000பி"}
-                        other{"¤000பி"}
+                        one{"¤000B"}
+                        other{"¤000B"}
                     }
                     1000000000000{
-                        one{"¤0டி"}
-                        other{"¤0டி"}
+                        one{"¤0T"}
+                        other{"¤0T"}
                     }
                     10000000000000{
-                        one{"¤00டி"}
-                        other{"¤00டி"}
+                        one{"¤00T"}
+                        other{"¤00T"}
                     }
                     100000000000000{
-                        one{"¤000டி"}
-                        other{"¤000டி"}
+                        one{"¤000T"}
+                        other{"¤000T"}
                     }
                 }
                 currencyFormat%alphaNextToNumber{
                     1000{
-                        one{"¤ 0ஆ"}
-                        other{"¤ 0ஆ"}
+                        one{"¤ 0K"}
+                        other{"¤ 0K"}
                     }
                     10000{
-                        one{"¤ 00ஆ"}
-                        other{"¤ 00ஆ"}
+                        one{"¤ 00K"}
+                        other{"¤ 00K"}
                     }
                     100000{
-                        one{"¤ 000ஆ"}
-                        other{"¤ 000ஆ"}
+                        one{"¤ 000K"}
+                        other{"¤ 000K"}
                     }
                     1000000{
-                        one{"¤ 0மி"}
-                        other{"¤ 0மி"}
+                        one{"¤ 0M"}
+                        other{"¤ 0M"}
                     }
                     10000000{
-                        one{"¤ 00மி"}
-                        other{"¤ 00மி"}
+                        one{"¤ 00M"}
+                        other{"¤ 00M"}
                     }
                     100000000{
-                        one{"¤ 000மி"}
-                        other{"¤ 000மி"}
+                        one{"¤ 000M"}
+                        other{"¤ 000M"}
                     }
                     1000000000{
-                        one{"¤ 0பி"}
-                        other{"¤ 0பி"}
+                        one{"¤ 0B"}
+                        other{"¤ 0B"}
                     }
                     10000000000{
-                        one{"¤ 00பி"}
-                        other{"¤ 00பி"}
+                        one{"¤ 00B"}
+                        other{"¤ 00B"}
                     }
                     100000000000{
-                        one{"¤ 000பி"}
-                        other{"¤ 000பி"}
+                        one{"¤ 000B"}
+                        other{"¤ 000B"}
                     }
                     1000000000000{
-                        one{"¤ 0டி"}
-                        other{"¤ 0டி"}
+                        one{"¤ 0T"}
+                        other{"¤ 0T"}
                     }
                     10000000000000{
-                        one{"¤ 00டி"}
-                        other{"¤ 00டி"}
+                        one{"¤ 00T"}
+                        other{"¤ 00T"}
                     }
                     100000000000000{
-                        one{"¤ 000டி"}
-                        other{"¤ 000டி"}
+                        one{"¤ 000T"}
+                        other{"¤ 000T"}
                     }
                 }
                 decimalFormat{
                     1000{
-                        one{"0ஆ"}
-                        other{"0ஆ"}
+                        one{"0K"}
+                        other{"0K"}
                     }
                     10000{
-                        one{"00ஆ"}
-                        other{"00ஆ"}
+                        one{"00K"}
+                        other{"00K"}
                     }
                     100000{
-                        one{"000ஆ"}
-                        other{"000ஆ"}
+                        one{"000K"}
+                        other{"000K"}
                     }
                     1000000{
-                        one{"0மி"}
-                        other{"0மி"}
+                        one{"0M"}
+                        other{"0M"}
                     }
                     10000000{
-                        one{"00மி"}
-                        other{"00மி"}
+                        one{"00M"}
+                        other{"00M"}
                     }
                     100000000{
-                        one{"000மி"}
-                        other{"000மி"}
+                        one{"000M"}
+                        other{"000M"}
                     }
                     1000000000{
-                        one{"0பி"}
-                        other{"0பி"}
+                        one{"0B"}
+                        other{"0B"}
                     }
                     10000000000{
-                        one{"00பி"}
-                        other{"00பி"}
+                        one{"00B"}
+                        other{"00B"}
                     }
                     100000000000{
-                        one{"000பி"}
-                        other{"000பி"}
+                        one{"000B"}
+                        other{"000B"}
                     }
                     1000000000000{
-                        one{"0டி"}
-                        other{"0டி"}
+                        one{"0T"}
+                        other{"0T"}
                     }
                     10000000000000{
-                        one{"00டி"}
-                        other{"00டி"}
+                        one{"00T"}
+                        other{"00T"}
                     }
                     100000000000000{
-                        one{"000டி"}
-                        other{"000டி"}
+                        one{"000T"}
+                        other{"000T"}
                     }
                 }
             }
@@ -424,7 +421,7 @@ ta{
                 "{1}, {0}",
             }
             DateTimePatterns%atTime{
-                "{1} அன்று {0}",
+                "{1} {0}",
                 "{1} அன்று {0}",
                 "{1}, {0}",
                 "{1}, {0}",
@@ -448,7 +445,6 @@ ta{
                 Ed{"d E"}
                 Gy{"y G"}
                 GyMMM{"MMM y G"}
-                GyMMMEd{"E, d MMM, y G"}
                 GyMMMd{"d MMM, y G"}
                 GyMd{"d/M/y GGGGG"}
                 MEd{"E, d/M"}
@@ -484,6 +480,9 @@ ta{
                 MMMEd{
                     M{"E, d MMM – E, d MMM"}
                     d{"E, d MMM – E, d MMM"}
+                }
+                MMMMd{
+                    d{"MMMM d – d"}
                 }
                 MMMd{
                     M{"d MMM – d MMM"}
@@ -584,6 +583,11 @@ ta{
                 "yMMMd",
                 "yyMd",
             }
+            appendItems{
+                Day-Of-Week{"{1}, {0}"}
+                Era{"{0} {1}"}
+                Time-Day-Of-Week{"{1}, {0}"}
+            }
             availableFormats{
                 Bh{"B h"}
                 Bhm{"B h:mm"}
@@ -606,6 +610,8 @@ ta{
                 yMMM{"MMM y"}
                 yMMMEd{"E, d MMM, y"}
                 yMMMM{"MMMM y"}
+                yMMMMEd{"E, d MMMM y"}
+                yMMMMd{"d MMMM y"}
                 yMMMd{"d MMM, y"}
                 yMd{"d/M/y"}
                 yQQQ{"QQQ y"}
@@ -702,12 +708,16 @@ ta{
                     1{"கி.பி."}
                 }
                 abbreviated%variant{
-                    0{"பொ.ச.மு"}
-                    1{"பொ.ச"}
+                    0{"பொ.யு.மு"}
+                    1{"பொ.யு"}
                 }
                 wide{
                     0{"கிறிஸ்துவுக்கு முன்"}
                     1{"அன்னோ டோமினி"}
+                }
+                wide%variant{
+                    0{"பொது யுகத்திற்கு முன்"}
+                    1{"பொது யுகம்"}
                 }
             }
             intervalFormats{
@@ -739,6 +749,9 @@ ta{
                     M{"E, d MMM – E, d MMM"}
                     d{"E, d MMM – E, d MMM"}
                 }
+                MMMMd{
+                    d{"MMMM d – d"}
+                }
                 MMMd{
                     M{"d MMM – d MMM"}
                     d{"d – d MMM"}
@@ -747,7 +760,6 @@ ta{
                     M{"d/M – d/M"}
                     d{"d/M – d/M"}
                 }
-                fallback{"{0} – {1}"}
                 hmv{
                     h{"h:mm – h:mm a v"}
                     m{"h:mm – h:mm a v"}
@@ -756,10 +768,10 @@ ta{
                     h{"h – h a v"}
                 }
                 y{
-                    y{"y – y"}
+                    y{"y – y"}
                 }
                 yM{
-                    M{"M/y – M/y"}
+                    M{"M/y – M/y"}
                     y{"M/y – M/y"}
                 }
                 yMEd{
@@ -1143,12 +1155,6 @@ ta{
         dayperiod{
             dn{"AM/PM"}
         }
-        dayperiod-narrow{
-            dn{"AM/PM"}
-        }
-        dayperiod-short{
-            dn{"AM/PM"}
-        }
         era{
             dn{"காலம்"}
         }
@@ -1203,15 +1209,10 @@ ta{
             }
         }
         hour-narrow{
-            dn{"ம."}
             relativeTime{
                 future{
                     one{"{0} ம."}
                     other{"{0} ம."}
-                }
-                past{
-                    one{"{0} ம. முன்"}
-                    other{"{0} ம. முன்"}
                 }
             }
         }
@@ -1362,15 +1363,10 @@ ta{
             }
         }
         quarter-narrow{
-            dn{"கா."}
             relativeTime{
                 future{
                     one{"{0} கா."}
                     other{"{0} கா."}
-                }
-                past{
-                    one{"{0} கா. முன்"}
-                    other{"{0} கா. முன்"}
                 }
             }
         }
@@ -1434,15 +1430,10 @@ ta{
             }
         }
         second-narrow{
-            dn{"வி."}
             relativeTime{
                 future{
                     one{"{0} வி."}
                     other{"{0} வி."}
-                }
-                past{
-                    one{"{0} வி. முன்"}
-                    other{"{0} வி. முன்"}
                 }
             }
         }

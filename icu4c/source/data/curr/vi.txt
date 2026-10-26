@@ -1189,7 +1189,7 @@ vi{
         }
         ZWG{
             "ZWG",
-            "Zimbabwean Gold",
+            "Zimbabwe Gold",
         }
         ZWL{
             "ZWL",
@@ -1223,6 +1223,12 @@ vi{
         ARS{
             other{"peso Argentina"}
         }
+        AUD{
+            other{"đô la Australia"}
+        }
+        AWG{
+            other{"florin Aruba"}
+        }
         AZN{
             other{"manat Azerbaijan"}
         }
@@ -1231,6 +1237,9 @@ vi{
         }
         BBD{
             other{"đô la Barbados"}
+        }
+        BDT{
+            other{"taka Bangladesh"}
         }
         BGN{
             other{"lev Bulgaria"}
@@ -1255,6 +1264,9 @@ vi{
         }
         BSD{
             other{"đô la Bahamas"}
+        }
+        BTN{
+            other{"ngultrum Bhutan"}
         }
         BWP{
             other{"pula Botswana"}
@@ -1376,8 +1388,14 @@ vi{
         ILS{
             other{"sheqel Israel mới"}
         }
+        INR{
+            other{"rupee Ấn Độ"}
+        }
         IQD{
             other{"dinar Iraq"}
+        }
+        IRR{
+            other{"rial Iran"}
         }
         ISK{
             other{"króna Iceland"}
@@ -1424,14 +1442,20 @@ vi{
         LBP{
             other{"bảng Li-băng"}
         }
+        LKR{
+            other{"rupee Sri Lanka"}
+        }
         LRD{
             other{"đô la Liberia"}
+        }
+        LSL{
+            other{"loti Lesotho"}
         }
         LTL{
             other{"litas Lít-va"}
         }
         LVL{
-            other{"lats Lativia"}
+            other{"lats Latvia"}
         }
         LYD{
             other{"dinar Libi"}
@@ -1463,6 +1487,9 @@ vi{
         MUR{
             other{"rupee Mauritius"}
         }
+        MVR{
+            other{"rufiyaa Maldives"}
+        }
         MWK{
             other{"kwacha Malawi"}
         }
@@ -1487,6 +1514,9 @@ vi{
         NOK{
             other{"krone Na Uy"}
         }
+        NPR{
+            other{"rupee Nepal"}
+        }
         NZD{
             other{"đô la New Zealand"}
         }
@@ -1504,6 +1534,9 @@ vi{
         }
         PHP{
             other{"peso Philipin"}
+        }
+        PKR{
+            other{"rupee Pakistan"}
         }
         PLN{
             other{"zloty Ba Lan"}
@@ -1546,6 +1579,12 @@ vi{
         }
         SHP{
             other{"bảng St. Helena"}
+        }
+        SLE{
+            other{"leone Sierra Leone"}
+        }
+        SLL{
+            other{"leone Sierra Leone (1964—2022)"}
         }
         SOS{
             other{"shilling Somali"}
@@ -1626,7 +1665,7 @@ vi{
             other{"đô la Đông Caribê"}
         }
         XCG{
-            other{"Guilder Caribe"}
+            other{"guilder Caribe"}
         }
         XOF{
             other{"franc CFA Tây Phi"}
@@ -1647,7 +1686,7 @@ vi{
             other{"kwacha Zambia"}
         }
         ZWG{
-            other{"Zimbabwean Gold"}
+            other{"Zimbabwe gold"}
         }
     }
 }

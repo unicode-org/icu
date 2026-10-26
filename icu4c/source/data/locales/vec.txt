@@ -182,10 +182,6 @@ vec{
             ordinal{
                 other{"Ciapa la {0}ª a dreta"}
             }
-            plural{
-                one{"{0} pomo"}
-                other{"{0} pomi"}
-            }
         }
     }
     calendar{

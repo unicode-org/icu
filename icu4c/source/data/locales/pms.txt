@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/
 pms{
-    AuxExemplarCharacters{"[h]"}
+    AuxExemplarCharacters{"[h w]"}
     ExemplarCharacters{
         "[aà b c {cc} {ch} d eéèë {eu} f g {gg} {gh} iì j l m n {n\\-} oò p q r s {s"
         "\\-c} {ss} t uù v z]"
@@ -27,6 +27,8 @@ pms{
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
                 hmsv{"h:mm:ss a v"}
+                yMMMMEd{"d MMMM y, E"}
+                yMMMMd{"d MMMM y"}
                 yMMMd{"d MMM y"}
                 yMd{"dd/MM/y"}
             }
@@ -45,6 +47,20 @@ pms{
             }
             monthNames{
                 format{
+                    narrow{
+                        "g",
+                        "f",
+                        "m",
+                        "a",
+                        "m",
+                        "g",
+                        "l",
+                        "a",
+                        "s",
+                        "u",
+                        "n",
+                        "d",
+                    }
                     wide{
                         "gené",
                         "fërvé",
@@ -68,6 +84,23 @@ pms{
         alternateQuotationStart{"“"}
         quotationEnd{"»"}
         quotationStart{"«"}
+    }
+    fields{
+        day{
+            dn{"Di"}
+        }
+        hour{
+            dn{"Ora"}
+        }
+        minute{
+            dn{"Minuta"}
+        }
+        month{
+            dn{"Mèis"}
+        }
+        year{
+            dn{"Ann"}
+        }
     }
     measurementSystemNames{
         UK{"britànico"}

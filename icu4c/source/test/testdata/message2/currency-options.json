@@ -1,0 +1,314 @@
+{
+  "$schema": "../../schemas/v0/tests.schema.json",
+  "scenario": "Currency function",
+  "description": "The built-in formatter for currencies.",
+  "defaultTestProperties": {
+    "tags": [":currency"],
+    "bidiIsolation": "none",
+    "locale": "en-US",
+    "expErrors": []
+  },
+  "tests": [
+    {
+      "src": "{42 :currency currency=EUR}",
+      "exp": "€42.00"
+
+    },
+    {
+      "src": ".local $n = {42 :number} {{{$n :currency currency=EUR}}}",
+      "exp": "€42.00"
+    },
+    {
+      "src": ".local $n = {42 :integer} {{{$n :currency currency=EUR}}}",
+      "exp": "€42.00"
+    },
+    {
+      "src": ".local $n = {42 :currency currency=EUR} {{{$n :currency}}}",
+      "exp": "€42.00"
+    },
+    {
+      "src": "{42 :currency currency=EUR fractionDigits=0}",
+      "exp": "€42"
+    },
+    {
+      "src": "{42 :currency currency=EUR fractionDigits=auto}",
+      "exp": "€42.00"
+    },
+    {
+      "src": "{42 :currency currency=EUR fractionDigits=2}",
+      "exp": "€42.00"
+    },
+    {
+      "src": "{42.17 :currency currency=EUR fractionDigits=2 roundingIncrement=5}",
+      "exp": "€42.15"
+    },
+    {
+      "src": "{42 :currency currency=EUR currencyDisplay=narrowSymbol}",
+      "exp": "€42.00"
+    },
+    {
+      "src": "{42 :currency currency=EUR currencyDisplay=symbol}",
+      "exp": "€42.00"
+    },
+    {
+      "src": "{42 :currency currency=EUR currencyDisplay=name}",
+      "exp": "42.00 euros"
+    },
+    {
+      "src": "{42 :currency currency=EUR currencyDisplay=code}",
+      "exp": "EUR 42.00"
+    },
+    {
+      "src": "{42 :currency currency=EUR currencyDisplay=never}",
+      "exp": "42.00"
+    },
+
+    {
+      "src": "{$x :currency currency=EUR}",
+      "params": [{ "name": "x", "value": 41 }],
+      "exp": "€41.00"
+    },
+    {
+      "src": ".local $n = {-42 :currency currency=USD trailingZeroDisplay=stripIfInteger} {{{$n :currency currencySign=accounting}}}",
+      "exp": "($42)"
+    },
+    {
+      "src": "{420000 :currency currency=EUR useGrouping=auto}",
+      "exp": "€420,000.00"
+    },
+    {
+      "locale": "es",
+      "src": "{4201 :currency currency=EUR useGrouping=always}",
+      "exp": "4.201,00 €"
+    },
+    {
+      "src": "{4201 :currency currency=EUR useGrouping=never}",
+      "exp": "€4201.00"
+    },
+    {
+      "locale": "es",
+      "src": "{4201 :currency currency=EUR useGrouping=min2}",
+      "exp": "4201,00 €"
+    },
+    {
+      "locale": "es",
+      "src": "{420100 :currency currency=EUR useGrouping=min2}",
+      "exp": "420.100,00 €"
+    },
+    {
+      "src": "{42 :currency currency=EUR minimumIntegerDigits=3}",
+      "exp": "€042.00"
+    },
+    {
+      "src": "{42.75 :currency currency=EUR minimumSignificantDigits=5}",
+      "exp": "€42.750"
+    },
+    {
+      "src": "{42.75 :currency currency=EUR maximumSignificantDigits=3}",
+      "exp": "€42.8"
+    },
+    {
+      "src": "{42.75 :currency currency=EUR fractionDigits=5 minimumSignificantDigits=2 roundingPriority=auto}",
+      "exp": "€42.75"
+    },
+    {
+      "src": "{42.75 :currency currency=EUR fractionDigits=5 maximumSignificantDigits=2 roundingPriority=auto}",
+      "exp": "€43"
+    },
+    {
+      "src": "{42.75 :currency currency=EUR fractionDigits=5 minimumSignificantDigits=2 roundingPriority=morePrecision}",
+      "exp": "€42.75"
+    },
+    {
+      "src": "{42.75 :currency currency=EUR fractionDigits=5 maximumSignificantDigits=2 roundingPriority=morePrecision}",
+      "exp": "€42.75000"
+    },
+    {
+      "src": "{42.75 :currency currency=EUR fractionDigits=5 minimumSignificantDigits=2 roundingPriority=lessPrecision}",
+      "exp": "€42.75"
+    },
+    {
+      "src": "{42.75 :currency currency=EUR fractionDigits=5 maximumSignificantDigits=2 roundingPriority=lessPrecision}",
+      "exp": "€43"
+    },
+    {
+      "src": "{42.75 :currency currency=EUR roundingPriority=morePrecision}",
+      "exp": "€42.75"
+    },
+    {
+      "src": "{42.75 :currency currency=EUR roundingPriority=lessPrecision}",
+      "exp": "€42.75"
+    },
+    {
+      "src": "{42.75 :currency currency=EUR roundingIncrement=2}",
+      "exp": "€42.76"
+    },
+    {
+      "src": "{42.75 :currency currency=EUR roundingIncrement=5}",
+      "exp": "€42.75"
+    },
+    {
+      "src": "{42.75 :currency currency=EUR roundingIncrement=250}",
+      "exp": "€42.50"
+    },
+    {
+      "src": "{42.75 :currency currency=EUR roundingIncrement=1000}",
+      "exp": "€40.00"
+    },
+    {
+      "src": "{42.75 :currency currency=EUR roundingIncrement=10 roundingMode=ceil}",
+      "exp": "€42.80"
+    },
+    {
+      "src": "{42.75 :currency currency=EUR roundingIncrement=10 roundingMode=floor}",
+      "exp": "€42.70"
+    },
+    {
+      "src": "{42.75 :currency currency=EUR roundingIncrement=10 roundingMode=expand}",
+      "exp": "€42.80"
+    },
+    {
+      "src": "{-42.75 :currency currency=EUR roundingIncrement=10 roundingMode=expand}",
+      "exp": "-€42.80"
+    },
+    {
+      "src": "{-42.75 :currency currency=EUR roundingIncrement=10 roundingMode=ceil}",
+      "exp": "-€42.70"
+    },
+    {
+      "src": "{-42.75 :currency currency=EUR roundingIncrement=10 roundingMode=floor}",
+      "exp": "-€42.80"
+    },
+    {
+      "src": "{42.75 :currency currency=EUR roundingIncrement=10 roundingMode=halfCeil}",
+      "exp": "€42.80"
+    },
+    {
+      "src": "{42.74 :currency currency=EUR roundingIncrement=10 roundingMode=halfCeil}",
+      "exp": "€42.70"
+    },
+    {
+      "src": "{42.74 :currency currency=EUR roundingIncrement=10 roundingMode=ceil}",
+      "exp": "€42.80"
+    },
+    {
+      "src": "{42.75 :currency currency=EUR roundingIncrement=10 roundingMode=trunc}",
+      "exp": "€42.70"
+    },
+    {
+      "src": "{-42.75 :currency currency=EUR roundingIncrement=10 roundingMode=trunc}",
+      "exp": "-€42.70"
+    },
+    {
+      "src": "{42.75 :currency currency=EUR roundingIncrement=10 roundingMode=halfFloor}",
+      "exp": "€42.70"
+    },
+    {
+      "src": "{42.74 :currency currency=EUR roundingIncrement=10 roundingMode=halfFloor}",
+      "exp": "€42.70"
+    },
+    {
+      "src": "{42.77 :currency currency=EUR roundingIncrement=10 roundingMode=halfFloor}",
+      "exp": "€42.80"
+    },
+    {
+      "src": "{42.75 :currency currency=EUR roundingIncrement=10 roundingMode=halfExpand}",
+      "exp": "€42.80"
+    },
+    {
+      "src": "{42.77 :currency currency=EUR roundingIncrement=10 roundingMode=halfExpand}",
+      "exp": "€42.80"
+    },
+    {
+      "src": "{-42.74 :currency currency=EUR roundingIncrement=10 roundingMode=halfExpand}",
+      "exp": "-€42.70"
+    },
+    {
+      "src": "{-42.75 :currency currency=EUR roundingIncrement=10 roundingMode=halfExpand}",
+      "exp": "-€42.80"
+    },
+    {
+      "src": "{-42.77 :currency currency=EUR roundingIncrement=10 roundingMode=halfExpand}",
+      "exp": "-€42.80"
+    },
+    {
+      "src": "{42.74 :currency currency=EUR roundingIncrement=10 roundingMode=halfTrunc}",
+      "exp": "€42.70"
+    },
+    {
+      "src": "{42.75 :currency currency=EUR roundingIncrement=10 roundingMode=halfTrunc}",
+      "exp": "€42.70"
+    },
+    {
+      "src": "{42.77 :currency currency=EUR roundingIncrement=10 roundingMode=halfTrunc}",
+      "exp": "€42.80"
+    },
+    {
+      "src": "{-42.74 :currency currency=EUR roundingIncrement=10 roundingMode=halfTrunc}",
+      "exp": "-€42.70"
+    },
+    {
+      "src": "{-42.75 :currency currency=EUR roundingIncrement=10 roundingMode=halfTrunc}",
+      "exp": "-€42.70"
+    },
+    {
+      "src": "{-42.77 :currency currency=EUR roundingIncrement=10 roundingMode=halfTrunc}",
+      "exp": "-€42.80"
+    },
+    {
+      "src": "{42.74 :currency currency=EUR roundingIncrement=10 roundingMode=halfTrunc}",
+      "exp": "€42.70"
+    },
+    {
+      "src": "{42.74 :currency currency=EUR roundingIncrement=5 roundingMode=halfEven}",
+      "exp": "€42.75"
+    },
+    {
+      "src": "{42.725 :currency currency=EUR roundingIncrement=5 roundingMode=halfEven}",
+      "exp": "€42.70"
+    },
+    {
+      "src": "{42.77 :currency currency=EUR roundingIncrement=5 roundingMode=halfEven}",
+      "exp": "€42.75"
+    },
+    {
+      "src": "{-42.74 :currency currency=EUR roundingIncrement=5 roundingMode=halfEven}",
+      "exp": "-€42.75"
+    },
+    {
+      "src": "{-42.725 :currency currency=EUR roundingIncrement=5 roundingMode=halfEven}",
+      "exp": "-€42.70"
+    },
+    {
+      "src": "{-42.77 :currency currency=EUR roundingIncrement=5 roundingMode=halfEven}",
+      "exp": "-€42.75"
+    },
+    {
+      "src": "{42.74 :currency currency=EUR roundingIncrement=5 roundingMode=halfEven}",
+      "exp": "€42.75"
+    },
+    {
+      "src": "{42.75 :currency currency=EUR roundingIncrement=2 minSignificantDigits=3 maxSignificantDigits=7}",
+      "exp": "€42.76"
+    },
+    {
+      "src": "{42.75 :currency currency=EUR roundingIncrement=2 fractionDigits=6}",
+      "exp": "€42.760000"
+    },
+    {
+      "src": "{42.75 :currency currency=XOF roundingIncrement=2 fractionDigits=auto}",
+      "exp": "F CFA 42.76",
+      "comment": "Result should be F CFA 42 -- see ICU-23433"
+    },
+    {
+      "src": "{42.75 :currency currency=EUR roundingIncrement=2 fractionDigits=1}",
+      "exp": "€42.76",
+      "comment": "Result should be €42.8 -- see ICU-23433"
+    },
+    {
+      "src": "{42.75 :currency currency=XOF roundingIncrement=2 fractionDigits=1}",
+      "exp": "F CFA 42.76",
+      "comment": "Result should be F CFA 42.8 -- see ICU-23433"
+    }
+  ]
+}

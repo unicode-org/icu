@@ -719,7 +719,7 @@ nn{
                 dnam{"mmol/l"}
             }
             part-per-1e9{
-                dnam{"delar/milliard"}
+                dnam{"delar/mrd."}
             }
         }
         consumption{

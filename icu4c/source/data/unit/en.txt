@@ -533,6 +533,11 @@ en{
             }
         }
         force{
+            dyne{
+                dnam{"dynes"}
+                one{"{0} dyne"}
+                other{"{0} dynes"}
+            }
             kilogram-force{
                 dnam{"kilograms-force"}
                 one{"{0} kilogram-force"}
@@ -552,6 +557,11 @@ en{
                 dnam{"pounds of force"}
                 one{"{0} pound of force"}
                 other{"{0} pounds of force"}
+            }
+            poundal{
+                dnam{"poundal"}
+                one{"{0} poundal"}
+                other{"{0} poundal"}
             }
         }
         frequency{
@@ -708,6 +718,11 @@ en{
                 dnam{"miles-scandinavian"}
                 one{"{0} mile-scandinavian"}
                 other{"{0} miles-scandinavian"}
+            }
+            milliinch{
+                dnam{"mils"}
+                one{"{0} mil"}
+                other{"{0} mils"}
             }
             millimeter{
                 dnam{"millimeters"}
@@ -1829,6 +1844,11 @@ en{
             }
         }
         force{
+            dyne{
+                dnam{"dyn"}
+                one{"{0}dyn"}
+                other{"{0}dyn"}
+            }
             kilogram-force{
                 dnam{"kgf"}
                 one{"{0} kgf"}
@@ -1848,6 +1868,11 @@ en{
                 dnam{"lbf"}
                 one{"{0}lbf"}
                 other{"{0}lbf"}
+            }
+            poundal{
+                dnam{"pdl"}
+                one{"{0}pdl"}
+                other{"{0}pdls"}
             }
         }
         frequency{
@@ -2004,6 +2029,11 @@ en{
                 dnam{"smi"}
                 one{"{0}smi"}
                 other{"{0}smi"}
+            }
+            milliinch{
+                dnam{"mil"}
+                one{"{0}mil"}
+                other{"{0}mil"}
             }
             millimeter{
                 dnam{"mm"}
@@ -2578,9 +2608,9 @@ en{
                 other{"{0} shaku [vol, JP]"}
             }
             tablespoon{
-                dnam{"tbsp"}
-                one{"{0}tbsp"}
-                other{"{0}tbsp"}
+                dnam{"Tbsp"}
+                one{"{0}Tbsp"}
+                other{"{0}Tbsp"}
             }
             teaspoon{
                 dnam{"tsp"}
@@ -3125,6 +3155,11 @@ en{
             }
         }
         force{
+            dyne{
+                dnam{"dyne"}
+                one{"{0} dyne"}
+                other{"{0} dynes"}
+            }
             kilogram-force{
                 dnam{"kgf"}
                 one{"{0} kgf"}
@@ -3144,6 +3179,11 @@ en{
                 dnam{"pound-force"}
                 one{"{0} lbf"}
                 other{"{0} lbf"}
+            }
+            poundal{
+                dnam{"pdl"}
+                one{"{0} pdl"}
+                other{"{0} pdls"}
             }
         }
         frequency{
@@ -3300,6 +3340,11 @@ en{
                 dnam{"smi"}
                 one{"{0} smi"}
                 other{"{0} smi"}
+            }
+            milliinch{
+                dnam{"mil"}
+                one{"{0} mil"}
+                other{"{0} mil"}
             }
             millimeter{
                 dnam{"mm"}
@@ -3873,9 +3918,9 @@ en{
                 other{"{0} shaku [vol, JP]"}
             }
             tablespoon{
-                dnam{"tbsp"}
-                one{"{0} tbsp"}
-                other{"{0} tbsp"}
+                dnam{"Tbsp"}
+                one{"{0} Tbsp"}
+                other{"{0} Tbsp"}
             }
             teaspoon{
                 dnam{"tsp"}

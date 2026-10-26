@@ -1306,6 +1306,32 @@ void CollationRegressionTest::TestICU22277() {
     }
 }
 
+void CollationRegressionTest::TestICU21992() {
+    IcuTestErrorCode errorCode(*this, "TestICU21992");
+    LocalPointer<Collator> coll(Collator::createInstance(Locale("bn"), errorCode));
+    coll->setStrength(Collator::TERTIARY);
+    coll->setAttribute(UCOL_ALTERNATE_HANDLING, UCOL_SHIFTED, errorCode);
+    coll->setMaxVariable(UCOL_REORDER_CODE_SPACE, errorCode);
+
+    UnicodeString str1 = u"\u0002\u2000湢";
+    UnicodeString str2 = u"ô\u0B00\u0B03";
+
+    // Compare the two strings by ucol_strcoll
+    UCollationResult res1 = coll->compare(str1, str2, errorCode);
+
+    // Get the collation keys for both strings
+    CollationKey key1, key2;
+    coll->getCollationKey(str1, key1, errorCode);
+    coll->getCollationKey(str2, key2, errorCode);
+    UCollationResult res2 = key1.compareTo(key2, errorCode);
+
+    if (res1 != res2) {
+        errln("compare() and collation key comparison result must be equivalent: "
+              "res1=%d, res2=%d", res1, res2);
+    }
+}
+
+
 void CollationRegressionTest::compareArray(Collator &c,
                                            const char16_t tests[][CollationRegressionTest::MAX_TOKEN_LEN],
                                            int32_t testCount)
@@ -1448,7 +1474,21 @@ void CollationRegressionTest::runIndexedTest(int32_t index, UBool exec, const ch
     TESTCASE_AUTO(TestICU22517);
     TESTCASE_AUTO(TestICU22555InfinityLoop);
     TESTCASE_AUTO(TestICU23280IntOverFlow);
+    TESTCASE_AUTO(TestICU23467);
+    TESTCASE_AUTO(TestICU21992);
     TESTCASE_AUTO_END;
+}
+
+void CollationRegressionTest::TestICU23467() {
+    IcuTestErrorCode errorCode(*this, "TestICU23467");
+    // ICU-23467: RuleBasedCollator constructor timeout/overflow on long closure rules
+    char16_t data[] = u"&㜀=̫&웴=産싂싂싂Į혏훖훖걁";
+    icu::UnicodeString rule(true, data, -1);
+    UErrorCode status = U_ZERO_ERROR;
+    icu::LocalPointer<icu::RuleBasedCollator> col(new icu::RuleBasedCollator(rule, status));
+    if (status != U_INPUT_TOO_LONG_ERROR && status != U_BUFFER_OVERFLOW_ERROR && U_SUCCESS(status)) {
+        // Either error or fast completion is acceptable without hanging
+    }
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */

@@ -3,6 +3,10 @@
 // Generated using tools/cldr/cldr-to-icu/
 bgc{
     zoneStrings{
+        "Etc:UTC"{
+            ls{"कॉर्डिनेटेड यूनिवर्सल टाइम"}
+            ss{"यूटीसी"}
+        }
         "meta:GMT"{
             ls{"ग्रीनविच मीन टाइम"}
         }

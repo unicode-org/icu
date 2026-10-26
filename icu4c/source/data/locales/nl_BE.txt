@@ -2,6 +2,13 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/
 nl_BE{
+    NumberElements{
+        latn{
+            patterns{
+                currencyFormat%noCurrency{"#,##0.00"}
+            }
+        }
+    }
     calendar{
         generic{
             DateTimePatterns{

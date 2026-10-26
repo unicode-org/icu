@@ -1986,7 +1986,7 @@ pl{
         SLL{
             few{"leone sierraleońskie (1964–2022)"}
             many{"leone sierraleońskich (1964–2022)"}
-            one{"leone sierraleoński (1964—2022)"}
+            one{"leone sierraleoński (1964–2022)"}
             other{"leone sierraleońskiego (1964–2022)"}
         }
         SOS{

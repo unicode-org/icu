@@ -959,7 +959,6 @@ kgp{
         }
         "Europe:Dublin"{
             ec{"Numrin"}
-            ld{"Óra Pã Irỹna"}
         }
         "Europe:Gibraltar"{
             ec{"Jimratar"}
@@ -996,7 +995,6 @@ kgp{
         }
         "Europe:London"{
             ec{"Rãnere"}
-            ld{"Óra Mritỹnĩku Rỹ Kã"}
         }
         "Europe:Luxembourg"{
             ec{"Rusẽgmurgo"}
@@ -1251,11 +1249,6 @@ kgp{
             lg{"Aranhka tá óra"}
             ls{"Óra Pã Aranhka tá"}
         }
-        "meta:Almaty"{
-            ld{"Rỹ Kã óra Armaty tá"}
-            lg{"Armaty tá óra"}
-            ls{"Óra Pã Armaty tá"}
-        }
         "meta:Amazon"{
             ld{"Rỹ Kã óra Amỹjonỹ tá"}
             lg{"Amỹjonỹ tá óra"}
@@ -1293,16 +1286,6 @@ kgp{
             ld{"Rỹ Kã óra Apija tá"}
             lg{"Óra Apija tá"}
             ls{"Óra Pã Apija tá"}
-        }
-        "meta:Aqtau"{
-            ld{"Rỹ Kã óra Agtav tá"}
-            lg{"Óra Agtav tá"}
-            ls{"Óra Pã Agtav tá"}
-        }
-        "meta:Aqtobe"{
-            ld{"Rỹ Kã óra Agtóme tá"}
-            lg{"Óra Agtóme tá"}
-            ls{"Óra Pã Agtóme tá"}
         }
         "meta:Arabian"{
             ld{"Rỹ Kã óra Aramija tá"}
@@ -1377,6 +1360,9 @@ kgp{
             sd{"BRST"}
             sg{"BRT"}
             ss{"BRT"}
+        }
+        "meta:British"{
+            ld{"Óra Mritỹnĩku Rỹ Kã"}
         }
         "meta:Brunei"{
             ls{"Óra Mrunẽj Narusarỹ tá"}
@@ -1503,9 +1489,6 @@ kgp{
             lg{"Óra Groẽrỹnija Rãpur tá"}
             ls{"Óra Pã Groẽrỹnija Rãpur tá"}
         }
-        "meta:Guam"{
-            ls{"Óra Pã Guvỹm tá"}
-        }
         "meta:Gulf"{
             ls{"Óra Gorfu tá"}
         }
@@ -1553,6 +1536,9 @@ kgp{
             lg{"Óra Irỹ tá"}
             ls{"Óra Pã Irỹ tá"}
         }
+        "meta:Irish"{
+            ld{"Óra Pã Irỹna"}
+        }
         "meta:Irkutsk"{
             ld{"Rỹ Kã óra Irkutinhki tá"}
             lg{"Óra Irkutinhki tá"}
@@ -1595,9 +1581,6 @@ kgp{
         "meta:Kyrgystan"{
             ls{"Óra Kirginhtỹv tá"}
         }
-        "meta:Lanka"{
-            ls{"Óra Rỹnka tá"}
-        }
         "meta:Line_Islands"{
             ls{"Óra Vãfe Goj-vẽso tỹ tá"}
         }
@@ -1605,11 +1588,6 @@ kgp{
             ld{"Rỹ Kã óra Rórni Hove tá"}
             lg{"Óra Rórni Hove tá"}
             ls{"Óra Pã Rórni Hove tá"}
-        }
-        "meta:Macau"{
-            ld{"Rỹ kã óra Mỹkav tá"}
-            lg{"Óra Mỹkav tá"}
-            ls{"Óra Pã Mỹkav tá"}
         }
         "meta:Magadan"{
             ld{"Rỹ Kã óra Mỹganan tá"}
@@ -1688,9 +1666,6 @@ kgp{
             lg{"Óra Fernỹnu Nãrãja-tá tá"}
             ls{"Óra Pã Fernỹnu Nãrãja-tá tá"}
         }
-        "meta:North_Mariana"{
-            ls{"Óra Nãrti-Mỹrijỹnỹ Goj-vẽso tá"}
-        }
         "meta:Novosibirsk"{
             ld{"Rỹ Kã óra Pã Simirsiki Tãg tá"}
             lg{"Óra Simirsiki Tãg tá"}
@@ -1744,11 +1719,6 @@ kgp{
         "meta:Pyongyang"{
             ls{"Óra Piãgiỹng tá"}
         }
-        "meta:Qyzylorda"{
-            ld{"Rỹ Kã óra Kysyrorna tá"}
-            lg{"Óra Kysyrorna tá"}
-            ls{"Óra Pã Kysyrorna tá"}
-        }
         "meta:Reunion"{
             ls{"Óra Hujáv tá"}
         }
@@ -1766,8 +1736,6 @@ kgp{
             ls{"Óra Pã Samỹra tá"}
         }
         "meta:Samoa"{
-            ld{"Rỹ Kã óra Samãva tá"}
-            lg{"Óra Samãva tá"}
             ls{"Óra Pã Samãva tá"}
         }
         "meta:Seychelles"{

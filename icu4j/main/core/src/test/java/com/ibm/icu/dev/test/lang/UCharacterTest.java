@@ -54,7 +54,7 @@ public final class UCharacterTest extends CoreTestFmwk {
     // private variables =============================================
 
     /** Expected Unicode version. */
-    private final VersionInfo VERSION_ = VersionInfo.getInstance(17, 0);
+    private final VersionInfo VERSION_ = VersionInfo.getInstance(18, 0);
 
     // constructor ===================================================
 
@@ -925,16 +925,14 @@ public final class UCharacterTest extends CoreTestFmwk {
             }
         }
 
-        if (UCharacter.UnicodeBlock.of(0x0041) != UCharacter.UnicodeBlock.BASIC_LATIN
-                || UCharacter.getIntPropertyValue(0x41, UProperty.BLOCK)
-                        != UCharacter.UnicodeBlock.BASIC_LATIN.getID()) {
-            errln(
-                    "UCharacter.UnicodeBlock.of(\\u0041) property failed! "
-                            + "Expected : "
-                            + UCharacter.UnicodeBlock.BASIC_LATIN.getID()
-                            + " got "
-                            + UCharacter.UnicodeBlock.of(0x0041));
-        }
+        assertSame(
+                "UCharacter.UnicodeBlock.of(\\u0041) property failed!",
+                UCharacter.UnicodeBlock.of(0x0041),
+                UCharacter.UnicodeBlock.BASIC_LATIN);
+        assertSame(
+                "UCharacter.UnicodeBlock.of(\\u0041) property failed!",
+                UCharacter.getIntPropertyValue(0x41, UProperty.BLOCK),
+                UCharacter.UnicodeBlock.BASIC_LATIN.getID());
 
         // sanity check on repeated properties
         for (int ch = 0xfffe; ch <= 0x10ffff; ) {
@@ -1790,23 +1788,21 @@ public final class UCharacterTest extends CoreTestFmwk {
         };
         for (int i = 0; i < ages.length; i += 5) {
             VersionInfo age = UCharacter.getAge(ages[i]);
-            if (age
-                    != VersionInfo.getInstance(
-                            ages[i + 1], ages[i + 2], ages[i + 3], ages[i + 4])) {
-                errln(
-                        "error: getAge(\\u"
-                                + Integer.toHexString(ages[i])
-                                + ") == "
-                                + age.toString()
-                                + " instead of "
-                                + ages[i + 1]
-                                + "."
-                                + ages[i + 2]
-                                + "."
-                                + ages[i + 3]
-                                + "."
-                                + ages[i + 4]);
-            }
+            assertSame(
+                    "error: getAge(\\u"
+                            + Integer.toHexString(ages[i])
+                            + ") == "
+                            + age.toString()
+                            + " instead of "
+                            + ages[i + 1]
+                            + "."
+                            + ages[i + 2]
+                            + "."
+                            + ages[i + 3]
+                            + "."
+                            + ages[i + 4],
+                    age,
+                    VersionInfo.getInstance(ages[i + 1], ages[i + 2], ages[i + 3], ages[i + 4]));
         }
 
         int[] valid_tests = {
@@ -2362,6 +2358,11 @@ public final class UCharacterTest extends CoreTestFmwk {
         if (UCharacter.getIntPropertyMaxValue(UProperty.EAST_ASIAN_WIDTH)
                 != (UCharacter.EastAsianWidth.COUNT - 1)) {
             errln("error: UCharacter.getIntPropertyMaxValue(UProperty.EAST_ASIAN_WIDTH) wrong\n");
+        }
+        if (UCharacter.getIntPropertyMaxValue(UProperty.INDIC_CONJUNCT_BREAK)
+                != (UCharacter.IndicConjunctBreak.values().length - 1)) {
+            errln(
+                    "error: UCharacter.getIntPropertyMaxValue(UProperty.INDIC_CONJUNCT_BREAK) wrong\n");
         }
 
         VersionInfo version = UCharacter.getUnicodeVersion();
@@ -3198,15 +3199,10 @@ public final class UCharacterTest extends CoreTestFmwk {
         // Testing values for invalid and valid ID
         int[] invalid_test = {-1, -10, -100};
         for (int i = 0; i < invalid_test.length; i++) {
-            if (UCharacter.UnicodeBlock.INVALID_CODE
-                    != UCharacter.UnicodeBlock.getInstance(invalid_test[i])) {
-                errln(
-                        "UCharacter.UnicodeBlock.getInstance(invalid_test[i]) was "
-                                + "suppose to return UCharacter.UnicodeBlock.INVALID_CODE. Got "
-                                + UCharacter.UnicodeBlock.getInstance(invalid_test[i])
-                                + ". Expected "
-                                + UCharacter.UnicodeBlock.INVALID_CODE);
-            }
+            assertSame(
+                    "UCharacter.UnicodeBlock.getInstance(invalid_test[i]) was supposed to return UCharacter.UnicodeBlock.INVALID_CODE.",
+                    UCharacter.UnicodeBlock.INVALID_CODE,
+                    UCharacter.UnicodeBlock.getInstance(invalid_test[i]));
         }
     }
 
@@ -3215,16 +3211,16 @@ public final class UCharacterTest extends CoreTestFmwk {
      *      public static UnicodeBlock of(int ch)
      */
     @Test
+    @SuppressWarnings("ReferenceEquality")
     public void TestOf() {
-        if (UCharacter.UnicodeBlock.INVALID_CODE
-                != UCharacter.UnicodeBlock.of(UTF16.CODEPOINT_MAX_VALUE + 1)) {
-            errln(
-                    "UCharacter.UnicodeBlock.of(UTF16.CODEPOINT_MAX_VALUE+1) was "
-                            + "suppose to return UCharacter.UnicodeBlock.INVALID_CODE. Got "
-                            + UCharacter.UnicodeBlock.of(UTF16.CODEPOINT_MAX_VALUE + 1)
-                            + ". Expected "
-                            + UCharacter.UnicodeBlock.INVALID_CODE);
-        }
+        assertSame(
+                "UCharacter.UnicodeBlock.of(UTF16.CODEPOINT_MAX_VALUE+1) was "
+                        + "suppose to return UCharacter.UnicodeBlock.INVALID_CODE. Got "
+                        + UCharacter.UnicodeBlock.of(UTF16.CODEPOINT_MAX_VALUE + 1)
+                        + ". Expected "
+                        + UCharacter.UnicodeBlock.INVALID_CODE,
+                UCharacter.UnicodeBlock.INVALID_CODE,
+                UCharacter.UnicodeBlock.of(UTF16.CODEPOINT_MAX_VALUE + 1));
     }
 
     /*
@@ -4299,6 +4295,29 @@ public final class UCharacterTest extends CoreTestFmwk {
                 }
             }
         }
+
+        // Binary properties all have an integer max value of 1 = TRUE.
+        for (int prop = 0; prop < UProperty.BINARY_LIMIT; ++prop) {
+            assertEquals(
+                    "getIntPropertyMaxValue(" + prop + ')',
+                    1,
+                    UCharacter.getIntPropertyMaxValue(prop));
+        }
+    }
+
+    private static int expectedIntPropertyLeastMaxValue(int prop) {
+        switch (prop) {
+            case UProperty.NFD_QUICK_CHECK:
+            case UProperty.NFKD_QUICK_CHECK:
+                // no & yes
+                return 1;
+            case UProperty.IDENTIFIER_STATUS:
+                // restricted & allowed
+                return 1;
+            default:
+                // otherwise 3 or more values
+                return 2;
+        }
     }
 
     @Test
@@ -4326,6 +4345,15 @@ public final class UCharacterTest extends CoreTestFmwk {
                     "int property later range value at " + Utility.hex(end),
                     UCharacter.getIntPropertyValue(end, prop),
                     range.getValue());
+        }
+
+        // Almost all enumerated properties have at least three enumerated values.
+        for (int prop = UProperty.INT_START; prop < UProperty.INT_LIMIT; ++prop) {
+            int max = UCharacter.getIntPropertyMaxValue(prop);
+            int least = expectedIntPropertyLeastMaxValue(prop);
+            if (max < least) {
+                errln("u_getIntPropertyMaxValue(" + Utility.hex(prop) + ") too small: " + max);
+            }
         }
     }
 

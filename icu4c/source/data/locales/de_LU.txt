@@ -4,9 +4,8 @@
 de_LU{
     calendar{
         gregorian{
-            AmPmMarkersNarrow{
-                "vorm.",
-                "nachm.",
+            availableFormats{
+                h{"h a"}
             }
         }
     }

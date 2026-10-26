@@ -173,8 +173,10 @@ kxv{
             standard{"mānānka baga lẽ"}
         }
         hc{
+            c12{"12 gṇṭati pddti"}
+            c24{"24 gṇṭati pddti"}
             h11{"12 gṇṭati pddti (0 - 11)"}
-            h12{"12 gṇṭati pddti (1–12)"}
+            h12{"12 gṇṭati pddti (1 - 12)"}
             h23{"24 gṇṭati pddti (0 - 23)"}
             h24{"24 gṇṭati pddti (1 - 24)"}
         }

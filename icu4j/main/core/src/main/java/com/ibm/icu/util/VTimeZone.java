@@ -167,6 +167,7 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
      * @stable ICU 3.8
      */
     @Override
+    @SuppressWarnings("ReferenceEquality")
     public boolean hasSameRules(TimeZone other) {
         if (this == other) {
             return true;
@@ -370,6 +371,7 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
      * @stable ICU 3.8
      */
     @Override
+    @SuppressWarnings("ReferenceEquality")
     public boolean hasEquivalentTransitions(TimeZone other, long start, long end) {
         if (this == other) {
             return true;
@@ -473,9 +475,7 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
         try {
             ICU_TZVERSION = TimeZone.getTZDataVersion();
         } catch (MissingResourceException e) {
-            /// CLOVER:OFF
             ICU_TZVERSION = null;
-            /// CLOVER:ON
         }
     }
 
@@ -560,9 +560,7 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
                 return false;
             }
         } catch (IOException ioe) {
-            /// CLOVER:OFF
             return false;
-            /// CLOVER:ON
         }
         return parse();
     }
@@ -577,11 +575,9 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
      * Parse VTIMEZONE data and create a RuleBasedTimeZone
      */
     private boolean parse() {
-        /// CLOVER:OFF
         if (vtzlines == null || vtzlines.size() == 0) {
             return false;
         }
-        /// CLOVER:ON
 
         // timezone ID
         String tzid = null;
@@ -848,7 +844,7 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
                     }
                 }
                 TimeZoneRule newRule;
-                if (start == finalStart) {
+                if (start.equals(finalStart)) {
                     // Transform this into a single transition
                     newRule =
                             new TimeArrayTimeZoneRule(
@@ -1743,7 +1739,7 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
         writer.write(Integer.toString(dayOfMonth));
 
         if (untilTime != MAX_TIME) {
-            appendUNTIL(writer, getDateTimeString(untilTime + fromOffset));
+            appendUNTIL(writer, getUTCDateTimeString(untilTime));
         }
         writer.write(NEWLINE);
 
@@ -1774,7 +1770,7 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
         writer.write(ICAL_DOW_NAMES[dayOfWeek - 1]); // SU, MO, TU...
 
         if (untilTime != MAX_TIME) {
-            appendUNTIL(writer, getDateTimeString(untilTime + fromOffset));
+            appendUNTIL(writer, getUTCDateTimeString(untilTime));
         }
         writer.write(NEWLINE);
 

@@ -724,6 +724,8 @@ vec{
             standard{"standard"}
         }
         hc{
+            c12{"sistema a 12 ore"}
+            c24{"sistema a 24 ore"}
             h11{"sistema a 12 ore (0–11)"}
             h12{"sistema a 12 ore (1–12)"}
             h23{"sistema a 24 ore (0–23)"}

@@ -815,7 +815,6 @@ syr{
             }
         }
         coordinate{
-            dnam{"ܦܢܝܬܐ"}
             east{"{0} ܏ܡܕܢܚ"}
             north{"{0} ܏ܓܪܒܝ"}
             south{"{0} ܏ܬܝܡܢ"}

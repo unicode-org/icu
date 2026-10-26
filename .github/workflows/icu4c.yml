@@ -23,13 +23,6 @@ on:
   workflow_dispatch:
     # To trigger the Env Test workflow manually, follow the instructions in
     # https://docs.github.com/en/actions/managing-workflow-runs/manually-running-a-workflow
-    inputs:
-      gitReleaseTag:
-        description: 'Release tag to upload to. Must start with "release-" or "icu4x/"'
-        type: string
-      gitReleaseFilename:
-        description: 'Release tag with no slashes, to be used in file names'
-        type: string
 
 # For non-release branches (namely: PRs), only run CI on the most recent commit. Cancel
 # runs on previous commits mid-flight when new commits are pushed.
@@ -45,9 +38,11 @@ jobs:
 
   # ICU4C docs build using doxygen..
   icu4c-docs-build:
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: ICU4C doc
         run: |
@@ -68,9 +63,11 @@ jobs:
   #
   # Invokes test/hdrtst to check public headers compliance.
   gcc-debug-build-and-test:
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: ICU4C with gcc
         env:
@@ -97,7 +94,9 @@ jobs:
           - '-std=c++20'
           - '-std=c++23'
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Install GCC-14
         run: |
           sudo add-apt-repository ppa:ubuntu-toolchain-r/test
@@ -120,9 +119,11 @@ jobs:
   # (FORCE guards make this tool pass but won't compile to working code.
   # See the testtagsguards.sh script for details.)
   clang-release-build-and-test:
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Install doxygen
         run: |
@@ -138,6 +139,7 @@ jobs:
           make -j -l4.5 check;
       - name: Test Dependency
         run: |
+          sudo update-alternatives --install /usr/bin/nm nm /usr/bin/llvm-nm-18 0
           cd icu4c/source/test/depstest;
           python3 depstest.py ../../../source/;
       - name: Test Tags Guards
@@ -168,13 +170,17 @@ jobs:
         build_option:
          [ --enable-static, --enable-static --disable-shared ]
          # --disable-shared has a build problem.
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Build ICU4C with clang
         run: |
           cd icu4c/source;
+          export AR='/usr/bin/llvm-ar-18';
+          export RANLIB='/usr/bin/llvm-ranlib-18';
           ./runConfigureICU Linux/clang ${{ matrix.build_option }};
           make -j -l4.5 tests;
       - name: Test
@@ -184,9 +190,11 @@ jobs:
 
   # Out of source build with gcc 10, c++14, and extra warnings; executes icuinfo.
   gcc-10-stdlib17:
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: ICU4C with gcc 10 and c++17 and extra warnings.
         env:
@@ -195,6 +203,7 @@ jobs:
           CXX: g++-10
           CXXFLAGS: -std=c++17 -Wextra
         run: |
+          sudo apt-get install g++-10;
           mkdir build;
           cd build;
           ../icu4c/source/runConfigureICU Linux --disable-layout --disable-layoutex --prefix=$PREFIX;
@@ -205,9 +214,11 @@ jobs:
 
   # Clang Linux with address sanitizer.
   clang-asan:
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: ICU4C with clang and asan
         run: |
@@ -219,9 +230,11 @@ jobs:
           LDFLAGS: -fsanitize=address
   # Clang Linux with leak sanitizer.
   clang-lsan:
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: ICU4C with clang and lsan
         run: |
@@ -234,9 +247,11 @@ jobs:
           ASAN_OPTIONS: detect_leaks=1
   # Clang Linux with undefined-behavior sanitizer.
   clang-ubsan:
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: ICU4C with clang and ubsan +alignment
         run: |
@@ -249,9 +264,11 @@ jobs:
           LDFLAGS: -fsanitize=undefined -fsanitize=alignment -fno-sanitize-recover=undefined,alignment
   # Control Flow Integrity.
   clang-cfi:
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: ICU4C with clang using CFI
         run: |
@@ -268,9 +285,11 @@ jobs:
 
   # Clang Linux with thread sanitizer.
   clang-tsan:
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: ICU4C with clang and tsan
         run: |
@@ -290,9 +309,11 @@ jobs:
   # this check became flaky. The build apparently was not done copying one or another .ucm file before
   # calling makeconv for it, although the Makefile has appropriate dependencies.
   clang-datafilter:
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Extract ICU version
         run: |
           # Extract ICU version from icuver.txt
@@ -312,9 +333,11 @@ jobs:
 
   # Clang Linux with CPP 17
   clang-cpp17:
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Build ICU4C with CPP 17
         env:
           CXXFLAGS: -std=c++17 -Winvalid-constexpr
@@ -323,9 +346,11 @@ jobs:
 
   # Clang Linux with LANG: en_US@calendar=gregorian;hours=h12
   clang-lang-with-extn-tags:
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Linux Clang - LANG has extension tags
         env:
           LANG: "en_US@calendar=gregorian;hours=h12"
@@ -334,7 +359,7 @@ jobs:
 
   # Modern Clang (18 and later) with C++20 and 23 and treat warnings as errors
   clang-18-21-cpp-20-23-warning-as-errors:
-      runs-on: ubuntu-22.04  # Updated in BRS
+      runs-on: ubuntu-24.04  # Updated in BRS
       strategy:
         fail-fast: false
         matrix:
@@ -354,7 +379,9 @@ jobs:
             - clang-version: '18'
               flags: '-std=c++20 -stdlib=libc++'
       steps:
-        - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+          with:
+            persist-credentials: false
         - name: Install Modern Clang
           env:
             CLANG_VERSION: ${{ matrix.clang-version }}
@@ -375,7 +402,9 @@ jobs:
   macos-clang:
     runs-on: macos-15  # Updated in BRS
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: ICU4C with clang on MacOS
         env:
           CPPFLAGS: '-Wall -Wextra -Wextra-semi -Wundef -Wnon-virtual-dtor -Wctad-maybe-unsupported -Wglobal-constructors -Wexit-time-destructors -Werror'
@@ -386,7 +415,7 @@ jobs:
 
   # Windows MSVC builds
   windows-msvc:
-    runs-on: windows-2022  # Updated in BRS
+    runs-on: windows-2025  # Updated in BRS
     strategy:
       fail-fast: false
       matrix:
@@ -396,15 +425,27 @@ jobs:
           - test_flags: 'x86 Debug'
             build_flags: '/p:Configuration=Debug /p:Platform=Win32'
           - test_flags: 'arm Release'
-            build_flags: '/p:Configuration=Release /p:Platform=ARM'
+            build_flags: '/p:Configuration=Release /p:Platform=ARM64'
           - test_flags: 'x64 Release cpplatest'
             build_flags: '/p:OverrideLanguageStandard=stdcpplatest /p:Configuration=Release /p:Platform=x64'
           - test_flags: 'x64 Release'
             build_flags: '/p:Configuration=Release /p:Platform=x64'
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Set up MSBuild
-        uses: microsoft/setup-msbuild@6fb02220983dee41ce7ae257b6f4d8f9bf5ed4ce # v2
+        uses: microsoft/setup-msbuild@30375c66a4eea26614e0d39710365f22f8b0af57 # v3.0.0
+      - name: Install Windows SDK 10.0.22621.0
+        # See https://github.com/actions/runner-images/issues/13339.
+        if: contains(matrix.test_flags, 'arm Release')
+        run: |
+          $installPath = &"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -products * -latest -property installationPath
+          Write-Host $installPath
+          &"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vs_installer.exe" modify `
+            --installPath "$installPath" `
+            --add Microsoft.VisualStudio.Component.Windows11SDK.22621 `
+            --norestart --quiet --force | Out-Host
       - name: Build Solution x64
         if: contains(matrix.test_flags, 'arm Release')
         run: msbuild icu4c/source/allinone/allinone.sln /p:Configuration=Release /p:Platform=x64
@@ -418,94 +459,35 @@ jobs:
 
   # Windows data filter build
   windows-msvc-datafilter:
-    runs-on: windows-2022  # Updated in BRS
+    runs-on: windows-2025  # Updated in BRS
     timeout-minutes: 30
     steps:
-    - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        persist-credentials: false
     - name: Set ICU_DATA_FILTER_FILE variable
       run: |
         $filterPath = "${{ github.workspace }}\.github\data-filter.json"
         echo "ICU_DATA_FILTER_FILE=$filterPath" >> $GITHUB_ENV
       shell: pwsh
     - name: Set up MSBuild
-      uses: microsoft/setup-msbuild@6fb02220983dee41ce7ae257b6f4d8f9bf5ed4ce # v2
+      uses: microsoft/setup-msbuild@30375c66a4eea26614e0d39710365f22f8b0af57 # v3.0.0
     - name: Build Solution with Data Filter
       run: msbuild icu4c/source/allinone/allinone.sln /p:Configuration=Release /p:Platform=x64
 
-  # Windows MSVC distribution release
-  windows-msvc-dist-release:
-    runs-on: windows-2022  # Updated in BRS
-    permissions:
-      contents: write # So that we can upload to release
-    timeout-minutes: 30
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - arch: 'x64'
-            plat: 'x64'
-            win_ver: 'Win64'
-          - arch: 'x86'
-            plat: 'Win32'
-            win_ver: 'Win32'
-          - arch: 'arm64'
-            plat: 'ARM64'
-            win_ver: 'WinARM64'
-    steps:
-    - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
-    - name: Set up MSBuild
-      uses: microsoft/setup-msbuild@6fb02220983dee41ce7ae257b6f4d8f9bf5ed4ce # v2
-    - name: Build Solution x64
-      if: contains(matrix.win_ver, 'ARM64')
-      run: msbuild icu4c/source/allinone/allinone.sln /p:Configuration=Release /p:Platform=x64
-    - name: Build Solution
-      run: msbuild icu4c/source/allinone/allinone.sln /p:Configuration=Release /p:Platform=${{ matrix.plat }}
-    - name: Run Tests (icucheck.bat)
-      if: contains(matrix.win_ver, 'ARM64') == false
-      run: icu4c/source/allinone/icucheck.bat ${{ matrix.arch }} Release
-    - name: "Run PowerShell: Distrelease script (${{ matrix.arch }})"
-      run: |
-        cd ./icu4c/
-        ./packaging/distrelease.ps1 -arch ${{ matrix.arch }}
-      shell: pwsh
-    - name: Extract ICU version and rename zip file
-      id: set-zip-name
-      run: |
-        # Extract ICU version from the release tag
-        $releaseTag = '${{ inputs.gitReleaseTag }}'.replace('release-','')
-        # Determine the new file name based on the version
-        $newZipName = "icu4c-${releaseTag}-${{ matrix.win_ver }}-MSVC2022"
-        # Debugging: Print the new zip name
-        Write-Host "New Zip Name: $newZipName"
-        # Rename the existing zip file
-        cd icu4c\source\dist\ && ls -l .
-        Rename-Item -Path icu-windows.zip -NewName "${newZipName}.zip"
-        echo $newZipName
-        ls -l .
-        echo "newZipName=$newZipName" | Out-File -FilePath $env:GITHUB_ENV -Append
-    - name: Upload artifact
-      uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
-      with:
-        name: icu4c.${{ matrix.win_ver }}.run_#${{ github.run_number }}
-        path: icu4c/source/dist/${{ env.newZipName }}.zip
-    - name: Upload to release
-      if: ${{ inputs.gitReleaseTag && startsWith(inputs.gitReleaseTag, 'release-') }}
-      run: |
-        gh release upload ${{ inputs.gitReleaseTag }} icu4c/source/dist/${{ env.newZipName }}.zip --clobber
-      env:
-        GH_TOKEN: ${{ github.token }}
-
   # Window MSYS2 tests
   windows-msys2-gcc-x86_64:
-    runs-on: windows-2022  # Updated in BRS
+    runs-on: windows-2025  # Updated in BRS
     timeout-minutes: 45
     defaults:
       run:
         shell: msys2 {0}
     steps:
-    - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        persist-credentials: false
     - name: Set up MSYS2
-      uses: msys2/setup-msys2@4f806de0a5a7294ffabaff804b38a9b435a73bda # v2.30.0
+      uses: msys2/setup-msys2@ec48f7c5447b3140e2b088413ae3a55687bccb6e # v2.33.0
       id: msys2
       with:
         update: true
@@ -526,6 +508,7 @@ jobs:
       run: |
         echo 'Run icuinfo from MSYS shell' && cd /tmp/build-icu/bin && ./icuinfo.exe
     - name: Run icuinfo from CMD
+      if: false  # Temporary disable because it fails, related to some vs2026 migration (tbd)
       shell: cmd
       run: |
         cd /d ${{ steps.msys2.outputs.msys2-location }}\tmp\build-icu\bin
@@ -534,9 +517,11 @@ jobs:
 
   # WebAssembly build using the WASI SDK.
   wasm-wasi-sdk:
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Install WASI SDK
         env:
@@ -578,9 +563,11 @@ jobs:
 
   # Run ICU4C tests with stubdata.
   run-with-stubdata:
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: ICU4C tests with stubdata
         run: |
@@ -621,9 +608,11 @@ jobs:
 
   # Test U_CHARSET_IS_UTF8
   u-charset-is-utf8-test:
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - run: |
           cd icu4c/source;
           ./runConfigureICU Linux CPPFLAGS="-DU_CHARSET_IS_UTF8=1";
@@ -631,9 +620,11 @@ jobs:
 
   # Test U_OVERRIDE_CXX_ALLOCATION-is-0-test
   u-override-cxx-allocation-is-0-test:
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - run: |
           cd icu4c/source;
           ./runConfigureICU Linux CPPFLAGS="-DU_OVERRIDE_CXX_ALLOCATION=0";
@@ -642,9 +633,11 @@ jobs:
 
   # Test LSTM
   lstm-test:
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - run: |
           cd icu4c/source;
           ICU_DATA_FILTER_FILE=../../.github/lstm_for_th_my.json ./runConfigureICU --enable-debug --disable-release Linux -disable-layoutex;
@@ -653,9 +646,11 @@ jobs:
 
   # Test adaboost
   adaboost-test:
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - run: |
           cd icu4c/source;
           ICU_DATA_FILTER_FILE=../../.github/adaboost.json CPPFLAGS=-DUCONFIG_USE_ML_PHRASE_BREAKING=1 ./runConfigureICU --enable-debug --disable-release Linux -disable-layoutex;
@@ -664,9 +659,11 @@ jobs:
 
   # Build and run testmap
   testmap:
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - run: |
           cd icu4c/source;
           ./runConfigureICU Linux;
@@ -677,28 +674,34 @@ jobs:
 
   # Copyright scan
   copyright-scan:
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - run: perl tools/scripts/cpysearch/cpyscan.pl
 
   # Check compilation of internal headers.
   internal-header-compilation:
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - run: cd icu4c/source; test/hdrtst/testinternalheaders.sh
 
   # Check source files for valid UTF-8 and for absence of BOM.
   valid-UTF-8-and-no-BOM-check:
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - run: tools/scripts/icu-file-utf8-check.py
 
   # Run unit tests with UCONFIG_NO_XXX variations.
   uconfig-unit-tests:
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     strategy:
       # "fail-fast: false" lets other jobs keep running even if the test breaks in some other uconfig.
       fail-fast: false
@@ -722,7 +725,9 @@ jobs:
          - "-DUCONFIG_NO_LEGACY_CONVERSION=1 -DUCONFIG_NO_NORMALIZATION=1 -DUCONFIG_NO_BREAK_ITERATION=1 -DUCONFIG_NO_IDNA=1 -DUCONFIG_NO_COLLATION=1 -DUCONFIG_NO_FORMATTING=1 -DUCONFIG_NO_MF2=1 -DUCONFIG_NO_TRANSLITERATION=1 -DUCONFIG_NO_REGULAR_EXPRESSIONS=1 -DUCONFIG_NO_SERVICE=1 -DUCONFIG_NO_FILTERED_BREAK_ITERATION=1"
     steps:
       - name: Checkout
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Verify no additional new UCONFIG_NO_xxx added
         run: |
           # Test that we have exactly 13 "#ifndef UCONFIG_NO_" in uconfig.h. If the number changes, we need to also
@@ -745,7 +750,7 @@ jobs:
 
   # Run header tests with UCONFIG_NO_XXX variations.
   uconfig-header-tests:
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     strategy:
       # "fail-fast: false" lets other jobs keep running even if the test breaks in some other uconfig.
       fail-fast: false
@@ -769,7 +774,9 @@ jobs:
          - "-DUCONFIG_NO_LEGACY_CONVERSION=1 -DUCONFIG_NO_NORMALIZATION=1 -DUCONFIG_NO_BREAK_ITERATION=1 -DUCONFIG_NO_IDNA=1 -DUCONFIG_NO_COLLATION=1 -DUCONFIG_NO_FORMATTING=1 -DUCONFIG_NO_MF2=1 -DUCONFIG_NO_TRANSLITERATION=1 -DUCONFIG_NO_REGULAR_EXPRESSIONS=1 -DUCONFIG_NO_SERVICE=1 -DUCONFIG_NO_FILTERED_BREAK_ITERATION=1"
     steps:
       - name: Checkout
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Verify no additional new UCONFIG_NO_xxx added
         run: |
           # Test that we have exactly 13 "#ifndef UCONFIG_NO_" in uconfig.h. If the number changes, we need to also
@@ -796,16 +803,18 @@ jobs:
 
   # Build Unicode update tools
   unicode-update-tools:
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-    - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
-    - uses: bazel-contrib/setup-bazel@43d7d5ceab59a307da44fc7585faa2a2fff4f88d # 0.16.0
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        persist-credentials: false
+    - uses: bazel-contrib/setup-bazel@c5acdfb288317d0b5c0bbd7a396a3dc868bb0f86 # 0.19.0
     - name: Get CI Linux runner VM version
       id: linux-version
       run: |
         echo "LINUX_VERSION=$(grep -F VERSION_ID /etc/os-release | cut -d'"' -f2)" >> $GITHUB_OUTPUT
     - name: Mount bazel cache
-      uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
         path: "~/.cache/bazel"
         key: bazel-${{ runner.os }}-${{ steps.linux-version.outputs.LINUX_VERSION }}
@@ -835,9 +844,11 @@ jobs:
 
 # Build and run ICU4C samples
   icu4c-test-samples:
-      runs-on: ubuntu-22.04  # Updated in BRS
+      runs-on: ubuntu-24.04  # Updated in BRS
       steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: ICU4C configure and build
         run: |
@@ -860,9 +871,11 @@ jobs:
 
   # https://unicode-org.github.io/icu/processes/release/tasks/integration.html#verify-that-icu4c-tests-pass-without-collation-rule-strings
   icu4c-without-collation-rule-strings:
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Install hjson dependency
         run: |
           sudo apt-get install python3-pip
@@ -900,9 +913,11 @@ jobs:
 
   # https://unicode-org.github.io/icu/processes/release/tasks/healthy-code.html#test-uconfig_no_conversion
   icu4c-uconfig-no-conversion:
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Set UCONFIG_NO_CONVERSION and configure ICU4C
         env:
           UCONFIG_NO_CONVERSION: 1
@@ -917,91 +932,3 @@ jobs:
           mkdir -p lib
           pushd common && make -j -l4.5 && popd
           pushd i18n && make -j -l4.5 && popd
-
-  # Workflow for ICU Export Data for ICU4X
-  icu4c-icuexportdata:
-    runs-on: ubuntu-22.04  # Updated in BRS
-    permissions:
-      contents: write # So that we can upload to release
-    timeout-minutes: 30
-    steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
-      - name: Build
-        run: |
-          cd icu4c/source && ./runConfigureICU Linux && make -j -l4.5
-        env:
-          CC: clang
-          CXX: clang++
-      - name: Build property data files
-        run: |
-          cd icu4c/source
-          mkdir -p icuexportdata/uprops/fast
-          ./bin/icuexportdata --mode uprops --index --copyright --verbose --destdir icuexportdata/uprops/fast --trie-type fast --all
-          mkdir -p icuexportdata/uprops/small
-          ./bin/icuexportdata --mode uprops --index --copyright --verbose --destdir icuexportdata/uprops/small --trie-type small --all
-        env:
-          LD_LIBRARY_PATH: lib
-      - name: Build normalization data files
-        run: |
-          cd icu4c/source
-          mkdir -p icuexportdata/norm/fast
-          ./bin/icuexportdata --mode norm --index --copyright --verbose --destdir icuexportdata/norm/fast --trie-type fast --all
-          mkdir -p icuexportdata/norm/small
-          ./bin/icuexportdata --mode norm --index --copyright --verbose --destdir icuexportdata/norm/small --trie-type small --all
-        env:
-          LD_LIBRARY_PATH: lib
-      - name: Build case data files
-        run: |
-          cd icu4c/source
-          mkdir -p icuexportdata/ucase/fast
-          ./bin/icuexportdata --mode ucase --index --copyright --verbose --destdir icuexportdata/ucase/fast --trie-type fast --all
-          mkdir -p icuexportdata/ucase/small
-          ./bin/icuexportdata --mode ucase --index --copyright --verbose --destdir icuexportdata/ucase/small --trie-type small --all
-        env:
-          LD_LIBRARY_PATH: lib
-      - name: Build collation data files
-        run: |
-          cd icu4c/source
-          cd data/coll
-          FILES=$(ls *.txt)
-          cd ../../
-          mkdir -p icuexportdata/collation/unihan
-          ./bin/genrb -X -s data/coll --ucadata data/in/coll/ucadata-unihan-icu4x.icu -d icuexportdata/collation/unihan $FILES
-          rm icuexportdata/collation/unihan/*.res
-          mkdir -p icuexportdata/collation/implicithan
-          ./bin/genrb -X -s data/coll --ucadata data/in/coll/ucadata-implicithan-icu4x.icu -d icuexportdata/collation/implicithan $FILES
-          rm icuexportdata/collation/implicithan/*.res
-        env:
-          LD_LIBRARY_PATH: lib
-      - name: Build segmenter dictionary files
-        run: |
-          cd icu4c/source
-          mkdir -p icuexportdata/segmenter/dictionary
-          for FILE in $(ls data/brkitr/dictionaries | xargs -n 1 basename); do
-            ./bin/gendict --uchars --toml data/brkitr/dictionaries/$FILE icuexportdata/segmenter/dictionary/$(basename $FILE .txt).toml
-          done
-        env:
-          LD_LIBRARY_PATH: lib
-      - name: Zip
-        run: |
-          cd icu4c/source/icuexportdata
-          zip -r ../../../icu4x-icuexportdata_${{ inputs.gitReleaseFilename }}.zip .
-      - name: Publish Artifact
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
-        with:
-          name: icuexportdata_output
-          path: icu4x-icuexportdata_*.zip
-      - name: Upload to release tag
-        if: ${{ inputs.gitReleaseTag && startsWith(inputs.gitReleaseTag, 'release-') }}
-        run: |
-          zipVer=$(echo ${{ inputs.gitReleaseTag }} | sed 's/^release-//')
-          mv icu4x-icuexportdata_*.zip icu4x-icuexportdata-${zipVer}.zip
-          gh release upload ${{ inputs.gitReleaseTag }} icu4x-icuexportdata-*.zip --clobber
-        env:
-          GH_TOKEN: ${{ github.token }}
-      - name: Upload to icu4x tag
-        if: ${{ inputs.gitReleaseTag && startsWith(inputs.gitReleaseTag, 'icu4x/') }}
-        run: |
-          gh release upload ${{ inputs.gitReleaseTag }} icu4x-icuexportdata_*.zip --clobber
-        env:
-          GH_TOKEN: ${{ github.token }}

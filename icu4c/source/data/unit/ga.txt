@@ -31,13 +31,6 @@ ga{
                 other{"{0} soicind stua"}
                 two{"{0} shoicind stua"}
             }
-            degree{
-                few{"{0} chéim"}
-                many{"{0} gcéim"}
-                one{"{0} chéim"}
-                other{"{0} céim"}
-                two{"{0} chéim"}
-            }
             radian{
                 few{"{0} raidian"}
                 many{"{0} raidian"}
@@ -227,14 +220,8 @@ ga{
         concentr{
             item{
                 dnam{"míreanna"}
-                few{"{0} mhír"}
-                many{"{0} mír"}
-                one{"{0} mhír"}
-                other{"{0} mír"}
-                two{"{0} mhír"}
             }
             karat{
-                dnam{"carait"}
                 few{"{0} charat"}
                 many{"{0} gcarat"}
                 one{"{0} charat"}
@@ -278,11 +265,6 @@ ga{
             }
             part{
                 dnam{"codanna"}
-                few{"{0} chuid"}
-                many{"{0} gcuid"}
-                one{"{0} chuid"}
-                other{"{0} cuid"}
-                two{"{0} chuid"}
             }
             part-per-1e6{
                 dnam{"codanna sa mhilliún"}
@@ -902,7 +884,6 @@ ga{
         }
         light{
             candela{
-                dnam{"caindéilí"}
                 few{"{0} chaindéile"}
                 many{"{0} gcaindéile"}
                 one{"{0} chaindéile"}
@@ -910,7 +891,6 @@ ga{
                 two{"{0} chaindéile"}
             }
             lumen{
-                dnam{"lúmain"}
                 few{"{0} lúman"}
                 many{"{0} lúman"}
                 one{"{0} lúman"}
@@ -1202,14 +1182,6 @@ ga{
                 other{"{0} mrml/u"}
                 two{"{0} muirmh/u"}
             }
-            light-speed{
-                dnam{"solas"}
-                few{"{0} sholas"}
-                many{"{0} solas"}
-                one{"{0} solas"}
-                other{"{0} solas"}
-                two{"{0} sholas"}
-            }
         }
         temperature{
             celsius{
@@ -1499,9 +1471,6 @@ ga{
             }
         }
         angle{
-            arc-minute{
-                dnam{"nóim. stua"}
-            }
             degree{
                 dnam{"céim"}
             }
@@ -1545,11 +1514,7 @@ ga{
                 other{"{0}mól"}
                 two{"{0}mhól"}
             }
-            ofglucose{
-                dnam{"Glc"}
-            }
             part{
-                dnam{"cod."}
                 few{"{0} chuid"}
                 many{"{0} gcuid"}
                 one{"{0} chuid"}
@@ -1710,9 +1675,6 @@ ga{
                 other{"{0} ctú"}
                 two{"{0} cna"}
             }
-            year{
-                per{"{0}/bl"}
-            }
         }
         electric{
             ampere{
@@ -1754,14 +1716,6 @@ ga{
                 one{"{0}cal"}
                 other{"{0}cal"}
                 two{"{0}cal"}
-            }
-            calorie-it{
-                dnam{"cal-IT"}
-                few{"{0} cal-IT"}
-                many{"{0} cal-IT"}
-                one{"{0} cal-IT"}
-                other{"{0} cal-IT"}
-                two{"{0} cal-IT"}
             }
             foodcalorie{
                 few{"{0}Cal"}
@@ -1964,7 +1918,6 @@ ga{
                 two{"{0}cd"}
             }
             lumen{
-                dnam{"lúmain"}
                 few{"{0}lm"}
                 many{"{0}lm"}
                 one{"{0}lm"}
@@ -1972,21 +1925,11 @@ ga{
                 two{"{0}lm"}
             }
             lux{
-                dnam{"lucs."}
                 few{"{0}lx"}
                 many{"{0}lx"}
                 one{"{0}lx"}
                 other{"{0}lx"}
                 two{"{0}lx"}
-            }
-        }
-        magnetic{
-            weber{
-                few{"{0} Wb"}
-                many{"{0} Wb"}
-                one{"{0} Wb"}
-                other{"{0} Wb"}
-                two{"{0} Wb"}
             }
         }
         mass{
@@ -2135,7 +2078,6 @@ ga{
         }
         speed{
             light-speed{
-                dnam{"solas"}
                 few{"{0}sholas"}
                 many{"{0}solas"}
                 one{"{0}solas"}
@@ -3147,7 +3089,7 @@ ga{
                 dnam{"spbh"}
                 few{"{0} spbh"}
                 many{"{0} spbh"}
-                one{"{0} spbh"}
+                one{"{0} Spbh"}
                 other{"{0} spbh"}
                 two{"{0} spbh"}
             }

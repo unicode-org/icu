@@ -688,7 +688,8 @@ public class StableAPI {
                 "virtual",
                 "U_EXPORT2",
                 "U_I18N_API",
-                "U_COMMON_API"
+                "U_COMMON_API",
+                "U_LIFETIME_BOUND"
             };
             for (int i = 0; i < statusList.length; i++) {
                 String s = statusList[i];

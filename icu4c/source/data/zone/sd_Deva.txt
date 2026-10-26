@@ -59,7 +59,6 @@ sd_Deva{
             ls{"ग्रीनविच मीन वक़्तु"}
         }
         gmtFormat{"जीएमटी{0}"}
-        gmtZeroFormat{"जीएमटी"}
         regionFormat{"{0} वक़्तु"}
         regionFormatDaylight{"{0} दीं॒ह जो वक्त"}
         regionFormatStandard{"{0} मइयारी वक़्तु"}

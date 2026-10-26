@@ -23,7 +23,6 @@ et{
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
                 currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%noCurrency{"#,##0.00"}
             }
             patternsLong{
                 decimalFormat{
@@ -207,6 +206,24 @@ et{
             }
         }
         chinese{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "r(U) MMMM d, EEEE",
+                "r(U) MMMM d",
+                "r MMM d",
+                "dd.MM.r",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                yyyyMd{"dd.MM.r"}
+            }
             cyclicNameSets{
                 zodiacs{
                     format{
@@ -366,6 +383,10 @@ et{
                     M{"E, d. MMM – E, d. MMM"}
                     d{"E, d. MMM – E, d. MMM"}
                 }
+                MMMMd{
+                    M{"d. MMMM – d. MMMM"}
+                    d{"d–d. MMMM"}
+                }
                 MMMd{
                     M{"d. MMM – d. MMM"}
                     d{"d.–d. MMM"}
@@ -453,6 +474,11 @@ et{
                 "yMMMd",
                 "yyMMdd",
             }
+            appendItems{
+                Day-Of-Week{"{1}, {0}"}
+                Era{"{0} {1}"}
+                Time-Day-Of-Week{"{1}, {0}"}
+            }
             availableFormats{
                 Ed{"E, d"}
                 Ehm{"E h:mm a"}
@@ -462,6 +488,9 @@ et{
                 GyMEd{"E, dd.MM.y G"}
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, d. MMMM y G"}
+                GyMMMM{"MMMM y G"}
+                GyMMMMEd{"E, d. MMMM y G"}
+                GyMMMMd{"d. MMMM y G"}
                 GyMMMd{"d. MMM y G"}
                 GyMd{"d.MM.y GGGGG"}
                 M{"M"}
@@ -486,6 +515,8 @@ et{
                 yMMM{"MMM y"}
                 yMMMEd{"E, d. MMMM y"}
                 yMMMM{"MMMM y"}
+                yMMMMEd{"E, d. MMMM y"}
+                yMMMMd{"d MMMM y"}
                 yMMMd{"d. MMM y"}
                 yMd{"d.M.y"}
                 yQQQ{"QQQ y"}
@@ -617,6 +648,10 @@ et{
                 MMMEd{
                     M{"E, d. MMM – E, d. MMM"}
                     d{"E, d. MMM – E, d. MMM"}
+                }
+                MMMMd{
+                    M{"d. MMMM – d. MMMM"}
+                    d{"d–d. MMMM"}
                 }
                 MMMd{
                     M{"d. MMM – d. MMM"}

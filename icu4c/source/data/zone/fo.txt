@@ -70,7 +70,7 @@ fo{
             ls{"Samskipað heimstíð"}
         }
         "Etc:Unknown"{
-            ec{"Ókendur býur"}
+            ec{"Ókent stað"}
         }
         "Europe:Athens"{
             ec{"Aten"}
@@ -87,17 +87,11 @@ fo{
         "Europe:Copenhagen"{
             ec{"Keypmannahavn"}
         }
-        "Europe:Dublin"{
-            ld{"Írsk vanlig tíð"}
-        }
         "Europe:Kiev"{
             ec{"Kiev"}
         }
         "Europe:Lisbon"{
             ec{"Lissabon"}
-        }
-        "Europe:London"{
-            ld{"Bretsk summartíð"}
         }
         "Europe:Luxembourg"{
             ec{"Luksemborg"}
@@ -184,9 +178,9 @@ fo{
             ls{"Pacific vanlig tíð"}
         }
         "meta:Apia"{
-            ld{"Apia summartíð"}
-            lg{"Apia tíð"}
-            ls{"Apia vanlig tíð"}
+            ld{"Sámoa summartíð"}
+            lg{"Sámoa tíð"}
+            ls{"Sámoa vanlig tíð"}
         }
         "meta:Arabian"{
             ld{"Arabisk summartíð"}
@@ -259,8 +253,12 @@ fo{
             lg{"Brasilia tíð"}
             ls{"Brasilia vanlig tíð"}
         }
+        "meta:British"{
+            ld{"Bretsk summartíð"}
+            lg{"Bretsk tíð"}
+        }
         "meta:Brunei"{
-            ls{"Brunei Darussalam tíð"}
+            ls{"Brunei tíð"}
         }
         "meta:Cape_Verde"{
             ld{"Grønhøvdaoyggjar summartíð"}
@@ -310,7 +308,7 @@ fo{
             ls{"Davis tíð"}
         }
         "meta:DumontDUrville"{
-            ls{"Dumont-d’Urville tíð"}
+            ls{"Dumont d’Urville tíð"}
         }
         "meta:East_Timor"{
             ls{"Eysturtimor tíð"}
@@ -391,7 +389,7 @@ fo{
             ls{"Gujana tíð"}
         }
         "meta:Hawaii"{
-            ls{"Hawaii-Aleutian vanlig tíð"}
+            ls{"Hawaii tíð"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"Hawaii-Aleutian summartíð"}
@@ -404,9 +402,9 @@ fo{
             ls{"Hong Kong vanlig tíð"}
         }
         "meta:Hovd"{
-            ld{"Hovd summartíð"}
-            lg{"Hovd tíð"}
-            ls{"Hovd vanlig tíð"}
+            ld{"Khovd summartíð"}
+            lg{"Khovd tíð"}
+            ls{"Khovd vanlig tíð"}
         }
         "meta:India"{
             ls{"India tíð"}
@@ -430,6 +428,10 @@ fo{
             ld{"Iran summartíð"}
             lg{"Iran tíð"}
             ls{"Iran vanlig tíð"}
+        }
+        "meta:Irish"{
+            ld{"Írsk vanlig tíð"}
+            lg{"Írsk tíð"}
         }
         "meta:Irkutsk"{
             ld{"Irkutsk summartíð"}
@@ -604,10 +606,10 @@ fo{
             ls{"Pitcairnoyggjar tíð"}
         }
         "meta:Ponape"{
-            ls{"Ponape tíð"}
+            ls{"Pohnpei tíð"}
         }
         "meta:Pyongyang"{
-            ls{"Pyongyang tíð"}
+            ls{"Norðurkorea tíð"}
         }
         "meta:Reunion"{
             ls{"Réunion tíð"}
@@ -621,9 +623,7 @@ fo{
             ls{"Sakhalin vanlig tíð"}
         }
         "meta:Samoa"{
-            ld{"Samoa summartíð"}
-            lg{"Samoa tíð"}
-            ls{"Samoa vanlig tíð"}
+            ls{"Amerikonsk Sámoa vanlig tíð"}
         }
         "meta:Seychelles"{
             ls{"Seyskelloyggjar tíð"}
@@ -647,9 +647,9 @@ fo{
             ls{"Tahiti tíð"}
         }
         "meta:Taipei"{
-            ld{"Taipei summartíð"}
-            lg{"Taipei tíð"}
-            ls{"Taipei vanlig tíð"}
+            ld{"Taivan summartíð"}
+            lg{"Taivan tíð"}
+            ls{"Taivan vanlig tíð"}
         }
         "meta:Tajikistan"{
             ls{"Tadsjikistan tíð"}

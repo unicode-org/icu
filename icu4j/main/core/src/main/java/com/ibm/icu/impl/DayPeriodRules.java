@@ -12,6 +12,7 @@ import com.ibm.icu.util.ICUException;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public final class DayPeriodRules {
@@ -290,10 +291,13 @@ public final class DayPeriodRules {
         while (ruleSetNum == null) {
             ruleSetNum = DATA.localesToRuleSetNumMap.get(localeCode);
             if (ruleSetNum == null) {
-                localeCode = ULocale.getFallback(localeCode);
-                if (localeCode.isEmpty()) {
-                    // Saves a lookup in the map.
+                if (localeCode.equals("root")) {
                     break;
+                } else {
+                    localeCode = ULocale.getFallback(localeCode);
+                    if (localeCode.isEmpty()) {
+                        localeCode = "root";
+                    }
                 }
             } else {
                 break;
@@ -341,6 +345,8 @@ public final class DayPeriodRules {
         data.rules = new DayPeriodRules[data.maxRuleSetNum + 1];
         DayPeriodRulesDataSink sink = new DayPeriodRulesDataSink(data);
         rb.getAllItemsWithFallback("", sink);
+
+        deduplicateDayPeriodRulesData(data);
 
         return data;
     }
@@ -431,5 +437,18 @@ public final class DayPeriodRules {
         String numStr = setNumStr.substring(3); // e.g. "set17" -> "17"
         return Integer.parseInt(
                 numStr); // This throws NumberFormatException if numStr isn't a proper number.
+    }
+
+    private static void deduplicateDayPeriodRulesData(DayPeriodRulesData data) {
+        Map<List<DayPeriod>, DayPeriod[]> internedDayPeriods = new HashMap<>();
+        for (DayPeriodRules rule : data.rules) {
+            if (rule != null && rule.dayPeriodForHour != null) {
+                DayPeriod[] dayPeriods = rule.dayPeriodForHour;
+                // Use List.of(dayPeriods) as a key to identify the deduplicated DayPeriod[]
+                // objects.
+                rule.dayPeriodForHour =
+                        internedDayPeriods.computeIfAbsent(List.of(dayPeriods), (l) -> dayPeriods);
+            }
+        }
     }
 }

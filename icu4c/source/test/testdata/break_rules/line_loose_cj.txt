@@ -103,6 +103,7 @@ eaFWHminusCMOPGL   = [ eaFWH - [CMS OP GL] ];
 eaFWHminusCM     = [ eaFWH - CMS ];
 eaFWHBreakableAtLB19 = [ eaFWH - [NS BA EX CL IN IS GL CMS] ];
 BAminuseaFWH = [BA - eaFWH ];
+BAminusEnDash = [BA - [\u2013]];
 
 PiQU = [\p{Pi}&QU];
 PfQU = [\p{Pf}&QU];
@@ -202,7 +203,7 @@ LB11.3:      WJ CM* [^CM];
 LB20a.2:   GL CM* (HY | HH) CM* (AL | HL);
 LB12:      GL CM* [^CM];
 
-LB12a:       [^SP BA HY HH] CM* GL;
+LB12a:       [^SP HY HH] CM* GL;
 
 # LB 13 Do not break before ‘]’ or ‘!’ or ‘/’, even after spaces.
 LB13.1: [^SP] CM* [CL CP EX SY];
@@ -238,7 +239,7 @@ LB20a.1:     ^(HY | HH) CM* (AL | HL);
 LB21a:       HL CM* (HY | HH) CM* [^CM CB HL];
 
 LB21.1:      [^ID] CM* [BA HY HH NS];
-LB21.2:      ID CM* [BA HY NS];
+LB21.2:      ID CM* [BAminusEnDash HY NS];
 LB21.3:      BB CM* [^CM CB];
 
 LB21b:       SY CM* HL;

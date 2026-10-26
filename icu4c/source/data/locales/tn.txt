@@ -3,15 +3,12 @@
 // Generated using tools/cldr/cldr-to-icu/
 tn{
     AuxExemplarCharacters{"[c q v x z]"}
-    ExemplarCharacters{"[a b d e ê f g h i j k l m n o ô p r s t u w y]"}
+    ExemplarCharacters{"[a b d e ê f g h i j k l m n o ô p r s š t u w y]"}
     ExemplarCharactersPunctuation{"[\\- ‐‑ – — , ; \\: ! ? . … '‘’ \u0022“” ( ) \\[ \\] § @ * / \\& # † ‡ ′ ″]"}
     NumberElements{
         latn{
             patterns{
                 currencyFormat{"¤#,##0.00"}
-            }
-            symbols{
-                group{"'"}
             }
         }
     }
@@ -48,6 +45,8 @@ tn{
                 hms{"h:mm:ss a"}
                 hmsv{"h:mm:ss a v"}
                 hmv{"h:mm a v"}
+                yMMMMEd{"y MMMM d, EEE"}
+                yMMMMd{"y MMMM d"}
                 yw{
                     one{"'beke' w 'ya' Y"}
                     other{"'beke' w 'ya' Y"}
@@ -178,7 +177,7 @@ tn{
                         "Tlhakole",
                         "Mopitlo",
                         "Moranang",
-                        "Motsheganang",
+                        "Motsheganong",
                         "Seetebosigo",
                         "Phukwi",
                         "Phatwe",
@@ -210,8 +209,6 @@ tn{
     delimiters{
         alternateQuotationEnd{"”"}
         alternateQuotationStart{"“"}
-        quotationEnd{"’"}
-        quotationStart{"‘"}
     }
     fields{
         day{

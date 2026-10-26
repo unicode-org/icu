@@ -384,9 +384,6 @@ pl{
         "Europe:Copenhagen"{
             ec{"Kopenhaga"}
         }
-        "Europe:Dublin"{
-            ld{"Irlandia (czas letni)"}
-        }
         "Europe:Isle_of_Man"{
             ec{"Wyspa Man"}
         }
@@ -407,7 +404,6 @@ pl{
         }
         "Europe:London"{
             ec{"Londyn"}
-            ld{"Brytyjski czas letni"}
         }
         "Europe:Luxembourg"{
             ec{"Luksemburg"}
@@ -525,6 +521,11 @@ pl{
         }
         "Pacific:Noumea"{
             ec{"Numea"}
+        }
+        "meta:Acre"{
+            ld{"Acre (czas letni)"}
+            lg{"czas Acre"}
+            ls{"Acre (czas standardowy)"}
         }
         "meta:Afghanistan"{
             ls{"czas Afganistan"}
@@ -652,6 +653,10 @@ pl{
             lg{"czas Brasília"}
             ls{"Brasília (czas standardowy)"}
         }
+        "meta:British"{
+            ld{"brytyjski czas letni"}
+            lg{"czas Wielka Brytania"}
+        }
         "meta:Brunei"{
             ls{"czas Brunei"}
         }
@@ -776,6 +781,11 @@ pl{
         "meta:Gilbert_Islands"{
             ls{"czas Wyspy Gilberta"}
         }
+        "meta:Greenland"{
+            ld{"Grenlandia (czas letni)"}
+            lg{"czas Grenlandia"}
+            ls{"Grenlandia (czas standardowy)"}
+        }
         "meta:Greenland_Eastern"{
             ld{"Grenlandia Wschodnia (czas letni)"}
             lg{"czas Grenlandia Wschodnia"}
@@ -793,7 +803,7 @@ pl{
             ls{"czas Gujana"}
         }
         "meta:Hawaii"{
-            ls{"Hawaje-Aleuty (czas standardowy)"}
+            ls{"Hawaje (czas standardowy)"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"Hawaje-Aleuty (czas letni)"}
@@ -833,6 +843,10 @@ pl{
             lg{"czas Iran"}
             ls{"Iran (czas standardowy)"}
         }
+        "meta:Irish"{
+            ld{"Irlandia (czas letni)"}
+            lg{"czas irlandzki"}
+        }
         "meta:Irkutsk"{
             ld{"Irkuck (czas letni)"}
             lg{"czas Irkuck"}
@@ -849,9 +863,9 @@ pl{
             ls{"Japonia (czas standardowy)"}
         }
         "meta:Kamchatka"{
-            ld{"czas Pietropawłowsk Kamczacki letni"}
-            lg{"czas Pietropawłowsk Kamczacki"}
-            ls{"czas standardowy Pietropawłowsk Kamczacki"}
+            ld{"Kamczatka (czas letni)"}
+            lg{"czas Kamczatka"}
+            ls{"Kamczatka (czas standardowy)"}
         }
         "meta:Kazakhstan"{
             ls{"czas Kazachstan"}
@@ -1028,13 +1042,11 @@ pl{
             ls{"Sachalin (czas standardowy)"}
         }
         "meta:Samara"{
-            ld{"czas Samara letni"}
+            ld{"Samara (czas letni)"}
             lg{"czas Samara"}
-            ls{"czas standardowy Samara"}
+            ls{"Samara (czas standardowy)"}
         }
         "meta:Samoa"{
-            ld{"Samoa (czas letni)"}
-            lg{"czas Samoa"}
             ls{"Samoa (czas standardowy)"}
         }
         "meta:Seychelles"{
@@ -1077,6 +1089,11 @@ pl{
         "meta:Truk"{
             ls{"czas Chuuk"}
         }
+        "meta:Turkey"{
+            ld{"Turcja (czas letni)"}
+            lg{"czas Turcja"}
+            ls{"Turcja (czas standardowy)"}
+        }
         "meta:Turkmenistan"{
             ld{"Turkmenistan (czas letni)"}
             lg{"czas Turkmenistan"}
@@ -1089,6 +1106,9 @@ pl{
             ld{"Urugwaj (czas letni)"}
             lg{"czas Urugwaj"}
             ls{"Urugwaj (czas standardowy)"}
+        }
+        "meta:Urumqi"{
+            ls{"czas Urumczi"}
         }
         "meta:Uzbekistan"{
             ld{"Uzbekistan (czas letni)"}

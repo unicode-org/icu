@@ -3,6 +3,9 @@
 // Generated using tools/cldr/cldr-to-icu/
 tn{
     zoneStrings{
+        "Etc:UTC"{
+            ls{"Selekanyetsa Nakotsatsi sa Lefatshe Lotlhe"}
+        }
         "meta:GMT"{
             ls{"Palogare ya nako ya ngwaga le ngwaga ya Greenwich"}
         }

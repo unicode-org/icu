@@ -42,9 +42,11 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public final class CleanOutputDirectoryTask extends Task {
+    // Locale directories, plus the directories written to by the supplemental mappers ("tzdata"
+    // holds data which is not packaged into ICU's runtime data; see LdmlConverter).
     private static final ImmutableSet<String> ALLOWED_DIRECTORIES =
             Stream.concat(
-                            Stream.of("misc", "translit"),
+                            Stream.of("misc", "translit", "tzdata"),
                             Arrays.stream(IcuLocaleDir.values()).map(IcuLocaleDir::getOutputDir))
                     .sorted()
                     .collect(toImmutableSet());

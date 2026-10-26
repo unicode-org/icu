@@ -5,6 +5,7 @@ sa{
     zoneStrings{
         "Etc:UTC"{
             ls{"समन्वितः वैश्विक समय:"}
+            ss{"यूटीसी"}
         }
         "Etc:Unknown"{
             ec{"अज्ञात नगरी"}
@@ -53,7 +54,6 @@ sa{
             ls{"ग्रीनविच मीन समयः"}
         }
         gmtFormat{"जी.एम.टी. {0}"}
-        gmtZeroFormat{"जी.एम.टी."}
         regionFormat{"{0} समय:"}
         regionFormatDaylight{"{0} अयामसमयः"}
         regionFormatStandard{"{0} प्रमाणसमयः"}

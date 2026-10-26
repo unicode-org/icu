@@ -240,9 +240,6 @@ is{
         "Europe:Copenhagen"{
             ec{"Kaupmannahöfn"}
         }
-        "Europe:Dublin"{
-            ld{"Sumartími á Írlandi"}
-        }
         "Europe:Gibraltar"{
             ec{"Gíbraltar"}
         }
@@ -260,7 +257,6 @@ is{
         }
         "Europe:London"{
             ec{"Lundúnir"}
-            ld{"Sumartími í Bretlandi"}
         }
         "Europe:Luxembourg"{
             ec{"Lúxemborg"}
@@ -355,6 +351,11 @@ is{
         "Pacific:Tahiti"{
             ec{"Tahítí"}
         }
+        "meta:Acre"{
+            ld{"Sumartími í Acre"}
+            lg{"Tími í Acre"}
+            ls{"Staðaltími í Acre"}
+        }
         "meta:Afghanistan"{
             ls{"Afganistantími"}
         }
@@ -406,9 +407,9 @@ is{
             ls{"Staðaltími í Anadyr"}
         }
         "meta:Apia"{
-            ld{"Sumartími í Apía"}
-            lg{"Tími í Apía"}
-            ls{"Staðaltími í Apía"}
+            ld{"Sumartími á Vestur-Samóa"}
+            lg{"Vestur-Samóatími"}
+            ls{"Staðaltími á Vestur-Samóa"}
         }
         "meta:Arabian"{
             ld{"Sumartími í Arabíu"}
@@ -480,6 +481,10 @@ is{
             ld{"Sumartími í Brasilíu"}
             lg{"Brasilíutími"}
             ls{"Staðaltími í Brasilíu"}
+        }
+        "meta:British"{
+            ld{"Sumartími í Bretlandi"}
+            lg{"Tími í Bretlandi"}
         }
         "meta:Brunei"{
             ls{"Brúneitími"}
@@ -596,6 +601,11 @@ is{
         "meta:Gilbert_Islands"{
             ls{"Tími á Gilbert-eyjum"}
         }
+        "meta:Greenland"{
+            ld{"Sumartími á Grænlandi"}
+            lg{"Grænlandstími"}
+            ls{"Staðaltími á Grænlandi"}
+        }
         "meta:Greenland_Eastern"{
             ld{"Sumartími á Austur-Grænlandi"}
             lg{"Austur-Grænlandstími"}
@@ -613,12 +623,12 @@ is{
             ls{"Gvæjanatími"}
         }
         "meta:Hawaii"{
-            ls{"Staðaltími á Havaí og Aleúta"}
+            ls{"Havaítími"}
         }
         "meta:Hawaii_Aleutian"{
-            ld{"Sumartími á Havaí og Aleúta"}
-            lg{"Tími á Havaí og Aleúta"}
-            ls{"Staðaltími á Havaí og Aleúta"}
+            ld{"Sumartími á Havaí og Aleúteyjum"}
+            lg{"Tími á Havaí og Aleúteyjum"}
+            ls{"Staðaltími á Havaí og Aleúteyjum"}
         }
         "meta:Hong_Kong"{
             ld{"Sumartími í Hong Kong"}
@@ -653,6 +663,10 @@ is{
             lg{"Íranstími"}
             ls{"Staðaltími í Íran"}
         }
+        "meta:Irish"{
+            ld{"Sumartími á Írlandi"}
+            lg{"Tími á Írlandi"}
+        }
         "meta:Irkutsk"{
             ld{"Sumartími í Irkutsk"}
             lg{"Tími í Irkutsk"}
@@ -669,9 +683,9 @@ is{
             ls{"Staðaltími í Japan"}
         }
         "meta:Kamchatka"{
-            ld{"Sumartími í Petropavlovsk-Kamchatski"}
-            lg{"Tími í Petropavlovsk-Kamchatski"}
-            ls{"Staðaltími í Petropavlovsk-Kamchatski"}
+            ld{"Sumartími á Kamtsjatka"}
+            lg{"Kamtsjatkatími"}
+            ls{"Staðaltími á Kamtsjatka"}
         }
         "meta:Kazakhstan"{
             ls{"Tími í Kasakstan"}
@@ -853,8 +867,6 @@ is{
             ls{"Staðaltími í Samara"}
         }
         "meta:Samoa"{
-            ld{"Sumartími á Samóa"}
-            lg{"Samóa-tími"}
             ls{"Staðaltími á Samóa"}
         }
         "meta:Seychelles"{
@@ -897,6 +909,11 @@ is{
         "meta:Truk"{
             ls{"Chuuk-tími"}
         }
+        "meta:Turkey"{
+            ld{"Sumartími í Tyrklandi"}
+            lg{"Tyrklandstími"}
+            ls{"Staðaltími í Tyrklandi"}
+        }
         "meta:Turkmenistan"{
             ld{"Sumartími í Túrkmenistan"}
             lg{"Túrkmenistan-tími"}
@@ -909,6 +926,9 @@ is{
             ld{"Sumartími í Úrúgvæ"}
             lg{"Úrúgvætími"}
             ls{"Staðaltími í Úrúgvæ"}
+        }
+        "meta:Urumqi"{
+            ls{"Tími í Ürümqi"}
         }
         "meta:Uzbekistan"{
             ld{"Sumartími í Úsbekistan"}

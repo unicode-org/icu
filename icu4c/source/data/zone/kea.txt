@@ -132,12 +132,6 @@ kea{
         "Etc:Unknown"{
             ec{"Sidadi diskonxedu"}
         }
-        "Europe:Dublin"{
-            ld{"Ora Padron di Irlanda"}
-        }
-        "Europe:London"{
-            ld{"Ora di Veron Britániku"}
-        }
         "meta:Africa_Central"{
             ls{"Ora di Áfrika Sentral"}
         }
@@ -200,6 +194,9 @@ kea{
             lg{"Ora di Austrália Osidental"}
             ls{"Ora Padron di Austrália Osidental"}
         }
+        "meta:British"{
+            ld{"Ora di Veron Britániku"}
+        }
         "meta:Cape_Verde"{
             ld{"Ora di Veron de Kabu Verdi"}
             lg{"Ora di Kabu Verdi"}
@@ -245,6 +242,9 @@ kea{
             ld{"Ora di Veron di Avaí i Aleutas"}
             lg{"Ora di Avaí i Aleutas"}
             ls{"Ora Padron di Avaí i Aleutas"}
+        }
+        "meta:Irish"{
+            ld{"Ora Padron di Irlanda"}
         }
         "meta:Mexico_Pacific"{
             ld{"Ora di Veron di Pasífiku Mexikanu"}

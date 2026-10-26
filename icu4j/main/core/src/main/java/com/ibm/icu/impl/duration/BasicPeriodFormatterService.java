@@ -15,7 +15,12 @@ import java.util.Collection;
 
 /** An implementation of PeriodFormatterService that constructs a BasicPeriodFormatterFactory. */
 public class BasicPeriodFormatterService implements PeriodFormatterService {
-    private static BasicPeriodFormatterService instance;
+    private static final class DefaultHolder {
+        static final BasicPeriodFormatterService SERVICE =
+                new BasicPeriodFormatterService(
+                        ResourceBasedPeriodFormatterDataService.getInstance());
+    }
+
     private PeriodFormatterDataService ds;
 
     /**
@@ -24,11 +29,7 @@ public class BasicPeriodFormatterService implements PeriodFormatterService {
      * @return an BasicPeriodFormatterService
      */
     public static BasicPeriodFormatterService getInstance() {
-        if (instance == null) {
-            PeriodFormatterDataService ds = ResourceBasedPeriodFormatterDataService.getInstance();
-            instance = new BasicPeriodFormatterService(ds);
-        }
-        return instance;
+        return DefaultHolder.SERVICE;
     }
 
     /**

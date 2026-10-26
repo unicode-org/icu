@@ -54,8 +54,6 @@ import java.util.TreeMap;
  *   }
  * </pre>
  *
- * <p>
- *
  * @see TimeUnitAmount
  * @see MeasureFormat
  * @author markdavis
@@ -208,6 +206,7 @@ public class TimeUnitFormat extends MeasureFormat implements Cloneable {
      * @deprecated ICU 53 see {@link MeasureFormat}.
      */
     @Deprecated
+    @SuppressWarnings("ReferenceEquality")
     public TimeUnitFormat setNumberFormat(NumberFormat format) {
         if (format == this.format) {
             return this;
@@ -515,6 +514,7 @@ public class TimeUnitFormat extends MeasureFormat implements Cloneable {
     // if the pattern is not found even in root, fallback to
     // using patterns of plural count "other",
     // then, "other" is the searchPluralCount.
+    @SuppressWarnings("ReferenceEquality")
     private void searchInTree(
             String resourceKey,
             int styl,

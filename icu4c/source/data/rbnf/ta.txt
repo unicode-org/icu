@@ -4,85 +4,211 @@
 ta{
     RBNFRules{
         OrdinalRules{
-            "%digits-ordinal:",
-            "-x: \u2212>>;",
-            "0: =#,##,##0=.;",
+            "%digits-ordinal:"
+            "-x: \u2212>>;"
+            "x.x: =#,##,##0.###=\u0B86\u0BB5\u0BA4\u0BC1;"
+            "0: =#,##,##0=\u0B86\u0BB5\u0BA4\u0BC1;"
         }
         SpelloutRules{
-            "%spellout-numbering-year:",
-            "x.x: =0.0=;",
-            "0: =%spellout-numbering=;",
-            "%spellout-numbering:",
-            "0: =%spellout-cardinal=;",
-            "%spellout-cardinal:",
-            "-x: \u0B8E\u0BA4\u0BBF\u0BB0\u0BCD\u0BAE >>;",
-            "x.x: << \u0BAA\u0BC1\u0BB3\u0BCD\u0BB3\u0BBF >>;",
-            "0: \u0BAA\u0BC2\u0B9C\u0BCD\u0BAF\u0BAE\u0BCD;",
-            "1: \u0B92\u0BA9\u0BCD\u0BB1\u0BC1;",
-            "2: \u0B87\u0BB0\u0BA3\u0BCD\u0B9F\u0BC1;",
-            "3: \u0BAE\u0BC2\u0BA9\u0BCD\u0BB1\u0BC1;",
-            "4: \u0BA8\u0BBE\u0BA9\u0BCD\u0B95\u0BC1;",
-            "5: \u0B90\u0BA8\u0BCD\u0BA4\u0BC1;",
-            "6: \u0B86\u0BB1\u0BC1;",
-            "7: \u0B8F\u0BB4\u0BC1;",
-            "8: \u0B8E\u0B9F\u0BCD\u0B9F\u0BC1;",
-            "9: \u0B92\u0BA9\u0BCD\u0BAA\u0BA4\u0BC1;",
-            "10: \u0BAA\u0BA4\u0BCD\u0BA4\u0BC1;",
-            "11: \u0BAA\u0BA4\u0BBF\u0BA9\u0BCA\u0BA9\u0BCD\u0BB1\u0BC1;",
-            "12: \u0BAA\u0BA9\u0BCD\u0BA9\u0BBF\u0BB0\u0BA3\u0BCD\u0B9F\u0BC1;",
-            "13: \u0BAA\u0BA4\u0BBF\u0BA9\u0BCD\u0BAE\u0BC2\u0BA9\u0BCD\u0BB1\u0BC1;",
-            "14: \u0BAA\u0BA4\u0BBF\u0BA9\u0BBE\u0BA9\u0BCD\u0B95\u0BC1;",
-            "15: \u0BAA\u0BA4\u0BBF\u0BA9\u0BC8\u0BA8\u0BCD\u0BA4\u0BC1;",
-            "16: \u0BAA\u0BA4\u0BBF\u0BA9\u0BBE\u0BB1\u0BC1;",
-            "17: \u0BAA\u0BA4\u0BBF\u0BA9\u0BC7\u0BB4\u0BC1;",
-            "18: \u0BAA\u0BA4\u0BBF\u0BA9\u0BC6\u0B9F\u0BCD\u0B9F\u0BC1;",
-            "19: \u0BAA\u0BA4\u0BCD\u0BA4\u0BCA\u0BA9\u0BCD\u0BAA\u0BA4\u0BC1;",
-            "20: \u0B87\u0BB0\u0BC1\u0BAA\u0BA4\u0BC1[ >>];",
-            "30: \u0BAE\u0BC1\u0BAA\u0BCD\u0BAA\u0BA4\u0BC1[ >>];",
-            "40: \u0BA8\u0BBE\u0BB1\u0BCD\u0BAA\u0BA4\u0BC1[ >>];",
-            "50: \u0B90\u0BAE\u0BCD\u0BAA\u0BA4\u0BC1[ >>];",
-            "60: \u0B85\u0BB1\u0BC1\u0BAA\u0BA4\u0BC1[ >>];",
-            "70: \u0B8E\u0BB4\u0BC1\u0BAA\u0BA4\u0BC1[ >>];",
-            "80: \u0B8E\u0BA3\u0BCD\u0BAA\u0BA4\u0BC1[ >>];",
-            "90: \u0BA4\u0BCA\u0BA3\u0BCD\u0BA3\u0BC2\u0BB1\u0BC1[ >>];",
-            "100: \u0BA8\u0BC2\u0BB1\u0BC1[ >>];",
-            "200: \u0B87\u0BB0\u0BC1\u0BA8\u0BC2\u0BB1\u0BC1[ >>];",
-            "300: \u0BAE\u0BC1\u0BA8\u0BCD\u0BA8\u0BC2\u0BB1\u0BC1[ >>];",
-            "400: \u0BA8\u0BBE\u0BA8\u0BC2\u0BB1\u0BC2[ >>];",
-            "500: \u0B90\u0BA8\u0BC2\u0BB1\u0BC1[ >>];",
-            "600: \u0B85\u0BB1\u0BC1\u0BA8\u0BC2\u0BB1\u0BC1[ >>];",
-            "700: \u0B8E\u0BB4\u0BC1\u0BA8\u0BC2\u0BB1\u0BC1[ >>];",
-            "800: \u0B8E\u0BA3\u0BCD\u0BA8\u0BC2\u0BB1\u0BC1[ >>];",
-            "900: \u0BA4\u0BCA\u0BB3\u0BCD\u0BB3\u0BBE\u0BAF\u0BBF\u0BB0\u0BAE\u0BCD[ >>];",
-            "1000: << \u0B86\u0BAF\u0BBF\u0BB0\u0BAE\u0BCD[ >>];",
-            "100000: << \u0BB2\u0B9F\u0BCD\u0B9A\u0BAE\u0BCD[ >>];",
-            "10000000: << \u0B95\u0BCB\u0B9F\u0BBF[ >>];",
-            "1000000000000000000: =#,##,##0=;",
-            "%spellout-ordinal:",
-            "-x: \u0B8E\u0BA4\u0BBF\u0BB0\u0BCD\u0BAE >>;",
-            "x.x: =#,##,##0.#=;",
-            "0: \u0BAA\u0BC2\u0B9C\u0BCD\u0BAF\u0BAE\u0BCD;",
-            "1: \u0BAE\u0BC1\u0BA4\u0BB2\u0BBE\u0BB5\u0BA4\u0BC1;",
-            "2: \u0B87\u0BB0\u0BA3\u0BCD\u0B9F\u0BBE\u0BB5\u0BA4\u0BC1;",
-            "3: \u0BAE\u0BC2\u0BA9\u0BCD\u0BB1\u0BBE\u0BB5\u0BA4\u0BC1;",
-            "4: \u0BA8\u0BBE\u0BA9\u0BCD\u0B95\u0BBE\u0BB5\u0BA4\u0BC1;",
-            "5: \u0B90\u0BA8\u0BCD\u0BA4\u0BBE\u0BB5\u0BA4\u0BC1;",
-            "6: \u0B86\u0BB1\u0BBE\u0BB5\u0BA4\u0BC1;",
-            "7: \u0B8F\u0BB4\u0BBE\u0BB5\u0BA4\u0BC1;",
-            "8: \u0B8E\u0B9F\u0BCD\u0B9F\u0BBE\u0BB5\u0BA4\u0BC1;",
-            "9: \u0B92\u0BA9\u0BCD\u0BAA\u0BA4\u0BBE\u0BB5\u0BA4\u0BC1;",
-            "10: \u0BAA\u0BA4\u0BCD\u0BA4\u0BBE\u0BB5\u0BA4\u0BC1;",
-            "11: \u0BAA\u0BA4\u0BBF\u0BA9\u0BCA\u0BA9\u0BCD\u0BB1\u0BBE\u0BB5\u0BA4\u0BC1;",
-            "12: \u0BAA\u0BA9\u0BCD\u0BA9\u0BBF\u0BB0\u0BA3\u0BCD\u0B9F\u0BBE\u0BB5\u0BA4\u0BC1;",
-            "13: \u0BAA\u0BA4\u0BBF\u0BAE\u0BC2\u0BA9\u0BCD\u0BB1\u0BBE\u0BB5\u0BA4\u0BC1;",
-            "14: \u0BAA\u0BA4\u0BBF\u0BA8\u0BBE\u0BA9\u0BCD\u0B95\u0BBE\u0BB5\u0BA4\u0BC1;",
-            "15: \u0BAA\u0BA4\u0BBF\u0BA9\u0BC8\u0BA8\u0BCD\u0BA4\u0BBE\u0BB5\u0BA4\u0BC1;",
-            "16: \u0BAA\u0BA4\u0BBF\u0BA9\u0BBE\u0BB1\u0BBE\u0BB5\u0BA4\u0BC1;",
-            "17: \u0BAA\u0BA4\u0BBF\u0BA9\u0BC7\u0BB4\u0BBE\u0BB5\u0BA4\u0BC1;",
-            "18: \u0BAA\u0BA4\u0BBF\u0BA9\u0BC6\u0B9F\u0BCD\u0B9F\u0BBE\u0BB5\u0BA4\u0BC1;",
-            "19: \u0BAA\u0BA4\u0BCD\u0BA4\u0BCA\u0BA9\u0BCD\u0BAA\u0BA4\u0BBE\u0BB5\u0BA4\u0BC1;",
-            "20: \u0B87\u0BB0\u0BC1\u0BAA\u0BA4\u0BBE\u0BB5\u0BA4\u0BC1;",
-            "21: =#,##,##0=\u0BBE\u0BB5\u0BA4\u0BC1;",
+            "%spellout-numbering-year:"
+            "x.x: =0.0=;"
+            "0: =%spellout-numbering=;"
+            "%%spellout-prefix:"
+            "1: \u0B92\u0BA9\u0BCD\u0BB1;"
+            "2: \u0B87\u0BB0\u0BA3\u0BCD\u0B9F;"
+            "3: \u0BAE\u0BC2\u0BA9\u0BCD\u0BB1;"
+            "4: \u0BA8\u0BBE\u0BA9\u0BCD\u0B95;"
+            "5: \u0B90\u0BA8\u0BCD\u0BA4;"
+            "6: \u0B86\u0BB1;"
+            "7: \u0B8F\u0BB4;"
+            "8: \u0B8E\u0B9F\u0BCD\u0B9F;"
+            "9: \u0B92\u0BA9\u0BCD\u0BAA\u0BA4;"
+            "10: \u0BAA\u0BA4\u0BCD\u0BA4;"
+            "11: \u0BAA\u0BA4\u0BBF\u0BA9\u0BCA\u0BA9\u0BCD\u0BB1;"
+            "12: \u0BAA\u0BA9\u0BCD\u0BA9\u0BBF\u0BB0\u0BA3\u0BCD\u0B9F;"
+            "13: \u0BAA\u0BA4\u0BBF\u0BA9\u0BCD\u0BAE\u0BC2\u0BA9\u0BCD\u0BB1;"
+            "14: \u0BAA\u0BA4\u0BBF\u0BA9\u0BBE\u0BA9\u0BCD\u0B95;"
+            "15: \u0BAA\u0BA4\u0BBF\u0BA9\u0BC8\u0BA8\u0BCD\u0BA4;"
+            "16: \u0BAA\u0BA4\u0BBF\u0BA9\u0BBE\u0BB1;"
+            "17: \u0BAA\u0BA4\u0BBF\u0BA9\u0BC7\u0BB4;"
+            "18: \u0BAA\u0BA4\u0BBF\u0BA9\u0BC6\u0B9F\u0BCD\u0B9F;"
+            "19: \u0BAA\u0BA4\u0BCD\u0BA4\u0BCA\u0BA9\u0BCD\u0BAA\u0BA4;"
+            "20: \u0B87\u0BB0\u0BC1\u0BAA[\u0BA4\u0BCD\u0BA4\u0BC1 >%%spellout-prefix>|\u0BA4];"
+            "30: \u0BAE\u0BC1\u0BAA\u0BCD\u0BAA[\u0BA4\u0BCD\u0BA4\u0BC1 >%%spellout-prefix>|\u0BA4];"
+            "40: \u0BA8\u0BBE\u0BB1\u0BCD\u0BAA[\u0BA4\u0BCD\u0BA4\u0BC1 >%%spellout-prefix>|\u0BA4];"
+            "50: \u0B90\u0BAE\u0BCD\u0BAA[\u0BA4\u0BCD\u0BA4\u0BC1 >%%spellout-prefix>|\u0BA4];"
+            "60: \u0B85\u0BB1\u0BC1\u0BAA[\u0BA4\u0BCD\u0BA4\u0BC1 >%%spellout-prefix>|\u0BA4];"
+            "70: \u0B8E\u0BB4\u0BC1\u0BAA[\u0BA4\u0BCD\u0BA4\u0BC1 >%%spellout-prefix>|\u0BA4];"
+            "80: \u0B8E\u0BA3\u0BCD\u0BAA[\u0BA4\u0BCD\u0BA4\u0BC1 >%%spellout-prefix>|\u0BA4];"
+            "90: \u0BA4\u0BCA\u0BA3\u0BCD\u0BA3\u0BC2[\u0BB1\u0BCD\u0BB1\u0BC1 >%%spellout-prefix>|\u0BB1];"
+            "%spellout-numbering:"
+            "-x: \u0B8E\u0BA4\u0BBF\u0BB0\u0BCD\u0BAE >>;"
+            "x.x: << \u0BAA\u0BC1\u0BB3\u0BCD\u0BB3\u0BBF >>;"
+            "Inf: \u0BAE\u0BC1\u0B9F\u0BBF\u0BB5\u0BBF\u0BB2\u0BBF;"
+            "0: \u0BAA\u0BC2\u0B9C\u0BCD\u0BAF\u0BAE\u0BCD;"
+            "1: \u0B92\u0BA9\u0BCD\u0BB1\u0BC1;"
+            "2: \u0B87\u0BB0\u0BA3\u0BCD\u0B9F\u0BC1;"
+            "3: \u0BAE\u0BC2\u0BA9\u0BCD\u0BB1\u0BC1;"
+            "4: \u0BA8\u0BBE\u0BA9\u0BCD\u0B95\u0BC1;"
+            "5: \u0B90\u0BA8\u0BCD\u0BA4\u0BC1;"
+            "6: \u0B86\u0BB1\u0BC1;"
+            "7: \u0B8F\u0BB4\u0BC1;"
+            "8: \u0B8E\u0B9F\u0BCD\u0B9F\u0BC1;"
+            "9: \u0B92\u0BA9\u0BCD\u0BAA\u0BA4\u0BC1;"
+            "10: \u0BAA\u0BA4\u0BCD\u0BA4\u0BC1;"
+            "11: \u0BAA\u0BA4\u0BBF\u0BA9\u0BCA\u0BA9\u0BCD\u0BB1\u0BC1;"
+            "12: \u0BAA\u0BA9\u0BCD\u0BA9\u0BBF\u0BB0\u0BA3\u0BCD\u0B9F\u0BC1;"
+            "13: \u0BAA\u0BA4\u0BBF\u0BA9\u0BCD\u0BAE\u0BC2\u0BA9\u0BCD\u0BB1\u0BC1;"
+            "14: \u0BAA\u0BA4\u0BBF\u0BA9\u0BBE\u0BA9\u0BCD\u0B95\u0BC1;"
+            "15: \u0BAA\u0BA4\u0BBF\u0BA9\u0BC8\u0BA8\u0BCD\u0BA4\u0BC1;"
+            "16: \u0BAA\u0BA4\u0BBF\u0BA9\u0BBE\u0BB1\u0BC1;"
+            "17: \u0BAA\u0BA4\u0BBF\u0BA9\u0BC7\u0BB4\u0BC1;"
+            "18: \u0BAA\u0BA4\u0BBF\u0BA9\u0BC6\u0B9F\u0BCD\u0B9F\u0BC1;"
+            "19: \u0BAA\u0BA4\u0BCD\u0BA4\u0BCA\u0BA9\u0BCD\u0BAA\u0BA4\u0BC1;"
+            "20: \u0B87\u0BB0\u0BC1\u0BAA\u0BA4[\u0BCD\u0BA4\u0BC1 >>|\u0BC1];"
+            "30: \u0BAE\u0BC1\u0BAA\u0BCD\u0BAA\u0BA4[\u0BCD\u0BA4\u0BC1 >>|\u0BC1];"
+            "40: \u0BA8\u0BBE\u0BB1\u0BCD\u0BAA\u0BA4[\u0BCD\u0BA4\u0BC1 >>|\u0BC1];"
+            "50: \u0B90\u0BAE\u0BCD\u0BAA\u0BA4[\u0BCD\u0BA4\u0BC1 >>|\u0BC1];"
+            "60: \u0B85\u0BB1\u0BC1\u0BAA\u0BA4[\u0BCD\u0BA4\u0BC1 >>|\u0BC1];"
+            "70: \u0B8E\u0BB4\u0BC1\u0BAA\u0BA4[\u0BCD\u0BA4\u0BC1 >>|\u0BC1];"
+            "80: \u0B8E\u0BA3\u0BCD\u0BAA\u0BA4[\u0BCD\u0BA4\u0BC1 >>|\u0BC1];"
+            "90: \u0BA4\u0BCA\u0BA3\u0BCD\u0BA3\u0BC2\u0BB1[\u0BCD\u0BB1\u0BC1 >>|\u0BC1];"
+            "100: \u0BA8\u0BC2\u0BB1[\u0BCD\u0BB1\u0BC1 >>|\u0BC1];"
+            "200: \u0B87\u0BB0\u0BC1\u0BA8\u0BC2\u0BB1[\u0BCD\u0BB1\u0BC1 >>|\u0BC1];"
+            "300: \u0BAE\u0BC1\u0BA8\u0BCD\u0BA8\u0BC2\u0BB1[\u0BCD\u0BB1\u0BC1 >>|\u0BC1];"
+            "400: \u0BA8\u0BBE\u0BA9\u0BC2\u0BB1[\u0BCD\u0BB1\u0BC1 >>|\u0BC1];"
+            "500: \u0B90\u0BA8\u0BC2\u0BB1[\u0BCD\u0BB1\u0BC1 >>|\u0BC1];"
+            "600: \u0B85\u0BB1\u0BC1\u0BA8\u0BC2\u0BB1[\u0BCD\u0BB1\u0BC1 >>|\u0BC1];"
+            "700: \u0B8E\u0BB4\u0BC1\u0BA8\u0BC2\u0BB1[\u0BCD\u0BB1\u0BC1 >>|\u0BC1];"
+            "800: \u0B8E\u0BA3\u0BCD\u0BA8\u0BC2\u0BB1[\u0BCD\u0BB1\u0BC1 >>|\u0BC1];"
+            "900: \u0BA4\u0BCA\u0BB3\u0BCD\u0BB3\u0BBE\u0BAF\u0BBF\u0BB0[\u0BA4\u0BCD\u0BA4\u0BC1 >>|\u0BAE\u0BCD];"
+            "1000: \u0B86\u0BAF\u0BBF\u0BB0[\u0BA4\u0BCD\u0BA4\u0BC1 >>|\u0BAE\u0BCD];"
+            "2000: <%%spellout-prefix<\u0BBE\u0BAF\u0BBF\u0BB0[\u0BA4\u0BCD\u0BA4\u0BC1 >>|\u0BAE\u0BCD];"
+            "100000: \u0B92\u0BB0\u0BC1 \u0BB2\u0B9F\u0BCD\u0B9A[\u0BA4\u0BCD\u0BA4\u0BC1 >>|\u0BAE\u0BCD];"
+            "200000: << \u0BB2\u0B9F\u0BCD\u0B9A[\u0BA4\u0BCD\u0BA4\u0BC1 >>|\u0BAE\u0BCD];"
+            "10000000: \u0B92\u0BB0\u0BC1 \u0B95\u0BCB\u0B9F\u0BBF[\u0BAF\u0BC7 >>];"
+            "20000000: << \u0B95\u0BCB\u0B9F\u0BBF[\u0BAF\u0BC7 >>];"
+            "1000000000: \u0B92\u0BB0\u0BC1 \u0B85\u0BB0\u0BAA\u0BAE\u0BCD[ >>];"
+            "2000000000: << \u0B85\u0BB0\u0BAA\u0BAE\u0BCD[ >>];"
+            "100000000000: \u0B92\u0BB0\u0BC1 \u0B95\u0BB0\u0BAA\u0BAE\u0BCD[ >>];"
+            "200000000000: << \u0B95\u0BB0\u0BAA\u0BAE\u0BCD[ >>];"
+            "1000000000000000000: =#,##,##0=;"
+            "%%spellout-cardinal-tens-compound:"
+            "1: \u0BCA\u0BB0\u0BC1;"
+            "2: \u0BC1 =%spellout-cardinal=;"
+            "%%spellout-cardinal-hundreds-compound:"
+            "1: \u0BBF\u0BAF\u0BCA\u0BB0\u0BC1;"
+            "2: \u0BC1 =%spellout-cardinal=;"
+            "%%spellout-cardinal-crore-compound:"
+            "1: \u0B92\u0BB0\u0BC1;"
+            "2: =%spellout-cardinal=;"
+            "%spellout-cardinal:"
+            "-x: \u0B8E\u0BA4\u0BBF\u0BB0\u0BCD\u0BAE >>;"
+            "x.x: << \u0BAA\u0BC1\u0BB3\u0BCD\u0BB3\u0BBF >>;"
+            "Inf: \u0BAE\u0BC1\u0B9F\u0BBF\u0BB5\u0BBF\u0BB2\u0BBF;"
+            "0: \u0BAA\u0BC2\u0B9C\u0BCD\u0BAF\u0BAE\u0BCD;"
+            "1: \u0B92\u0BB0\u0BC1;"
+            "2: \u0B87\u0BB0\u0BA3\u0BCD\u0B9F\u0BC1;"
+            "3: \u0BAE\u0BC2\u0BA9\u0BCD\u0BB1\u0BC1;"
+            "4: \u0BA8\u0BBE\u0BA9\u0BCD\u0B95\u0BC1;"
+            "5: \u0B90\u0BA8\u0BCD\u0BA4\u0BC1;"
+            "6: \u0B86\u0BB1\u0BC1;"
+            "7: \u0B8F\u0BB4\u0BC1;"
+            "8: \u0B8E\u0B9F\u0BCD\u0B9F\u0BC1;"
+            "9: \u0B92\u0BA9\u0BCD\u0BAA\u0BA4\u0BC1;"
+            "10: \u0BAA\u0BA4\u0BCD\u0BA4\u0BC1;"
+            "11: \u0BAA\u0BA4\u0BBF\u0BA9\u0BCA\u0BB0\u0BC1;"
+            "12: \u0BAA\u0BA9\u0BCD\u0BA9\u0BBF\u0BB0\u0BA3\u0BCD\u0B9F\u0BC1;"
+            "13: \u0BAA\u0BA4\u0BBF\u0BA9\u0BCD\u0BAE\u0BC2\u0BA9\u0BCD\u0BB1\u0BC1;"
+            "14: \u0BAA\u0BA4\u0BBF\u0BA9\u0BBE\u0BA9\u0BCD\u0B95\u0BC1;"
+            "15: \u0BAA\u0BA4\u0BBF\u0BA9\u0BC8\u0BA8\u0BCD\u0BA4\u0BC1;"
+            "16: \u0BAA\u0BA4\u0BBF\u0BA9\u0BBE\u0BB1\u0BC1;"
+            "17: \u0BAA\u0BA4\u0BBF\u0BA9\u0BC7\u0BB4\u0BC1;"
+            "18: \u0BAA\u0BA4\u0BBF\u0BA9\u0BC6\u0B9F\u0BCD\u0B9F\u0BC1;"
+            "19: \u0BAA\u0BA4\u0BCD\u0BA4\u0BCA\u0BA9\u0BCD\u0BAA\u0BA4\u0BC1;"
+            "20: \u0B87\u0BB0\u0BC1\u0BAA\u0BA4[\u0BCD\u0BA4>%%spellout-cardinal-tens-compound>|\u0BC1];"
+            "30: \u0BAE\u0BC1\u0BAA\u0BCD\u0BAA\u0BA4[\u0BCD\u0BA4>%%spellout-cardinal-tens-compound>|\u0BC1];"
+            "40: \u0BA8\u0BBE\u0BB1\u0BCD\u0BAA\u0BA4[\u0BCD\u0BA4>%%spellout-cardinal-tens-compound>|\u0BC1];"
+            "50: \u0B90\u0BAE\u0BCD\u0BAA\u0BA4[\u0BCD\u0BA4>%%spellout-cardinal-tens-compound>|\u0BC1];"
+            "60: \u0B85\u0BB1\u0BC1\u0BAA\u0BA4[\u0BCD\u0BA4>%%spellout-cardinal-tens-compound>|\u0BC1];"
+            "70: \u0B8E\u0BB4\u0BC1\u0BAA\u0BA4[\u0BCD\u0BA4>%%spellout-cardinal-tens-compound>|\u0BC1];"
+            "80: \u0B8E\u0BA3\u0BCD\u0BAA\u0BA4[\u0BCD\u0BA4>%%spellout-cardinal-tens-compound>|\u0BC1];"
+            "90: \u0BA4\u0BCA\u0BA3\u0BCD\u0BA3\u0BC2\u0BB1[\u0BCD\u0BB1>%%spellout-cardinal-tens-compound>|\u0BC1];"
+            "100: \u0BA8\u0BC2\u0BB1[\u0BCD\u0BB1>%%spellout-cardinal-hundreds-compound>|\u0BC1];"
+            "200: \u0B87\u0BB0\u0BC1\u0BA8\u0BC2\u0BB1[\u0BCD\u0BB1>%%spellout-cardinal-hundreds-compound>|\u0BC1];"
+            "300: \u0BAE\u0BC1\u0BA8\u0BCD\u0BA8\u0BC2\u0BB1[\u0BCD\u0BB1>%%spellout-cardinal-hundreds-compound>|\u0BC1];"
+            "400: \u0BA8\u0BBE\u0BA9\u0BC2\u0BB1[\u0BCD\u0BB1>%%spellout-cardinal-hundreds-compound>|\u0BC1];"
+            "500: \u0B90\u0BA8\u0BC2\u0BB1[\u0BCD\u0BB1>%%spellout-cardinal-hundreds-compound>|\u0BC1];"
+            "600: \u0B85\u0BB1\u0BC1\u0BA8\u0BC2\u0BB1[\u0BCD\u0BB1>%%spellout-cardinal-hundreds-compound>|\u0BC1];"
+            "700: \u0B8E\u0BB4\u0BC1\u0BA8\u0BC2\u0BB1[\u0BCD\u0BB1>%%spellout-cardinal-hundreds-compound>|\u0BC1];"
+            "800: \u0B8E\u0BA3\u0BCD\u0BA8\u0BC2\u0BB1[\u0BCD\u0BB1>%%spellout-cardinal-hundreds-compound>|\u0BC1];"
+            "900: \u0BA4\u0BCA\u0BB3\u0BCD\u0BB3\u0BBE\u0BAF\u0BBF\u0BB0[\u0BA4\u0BCD\u0BA4>%%spellout-cardinal-tens-compound>|\u0BAE\u0BCD];"
+            "1000: \u0B86\u0BAF\u0BBF\u0BB0[\u0BA4\u0BCD\u0BA4>%%spellout-cardinal-tens-compound>|\u0BAE\u0BCD];"
+            "2000: <%%spellout-prefix<\u0BBE\u0BAF\u0BBF\u0BB0[\u0BA4\u0BCD\u0BA4>%%spellout-cardinal-tens-compound>|\u0BAE\u0BCD];"
+            "100000: \u0B92\u0BB0\u0BC1 \u0BB2\u0B9F\u0BCD\u0B9A[\u0BA4\u0BCD\u0BA4>%%spellout-cardinal-tens-compound>|\u0BAE\u0BCD];"
+            "200000: << \u0BB2\u0B9F\u0BCD\u0B9A[\u0BA4\u0BCD\u0BA4>%%spellout-cardinal-tens-compound>|\u0BAE\u0BCD];"
+            "10000000: \u0B92\u0BB0\u0BC1 \u0B95\u0BCB\u0B9F\u0BBF[\u0BAF\u0BC7 >%%spellout-cardinal-crore-compound>];"
+            "20000000: << \u0B95\u0BCB\u0B9F\u0BBF[\u0BAF\u0BC7 >%%spellout-cardinal-crore-compound>];"
+            "1000000000: \u0B92\u0BB0\u0BC1 \u0B85\u0BB0\u0BAA\u0BAE\u0BCD[ >%%spellout-cardinal-crore-compound>];"
+            "2000000000: << \u0B85\u0BB0\u0BAA\u0BAE\u0BCD[ >%%spellout-cardinal-crore-compound>];"
+            "100000000000: \u0B92\u0BB0\u0BC1 \u0B95\u0BB0\u0BAA\u0BAE\u0BCD[ >%%spellout-cardinal-crore-compound>];"
+            "200000000000: << \u0B95\u0BB0\u0BAA\u0BAE\u0BCD[ >%%spellout-cardinal-crore-compound>];"
+            "1000000000000000000: =#,##,##0=;"
+            "%%spellout-ordinal-compound:"
+            "1: \u0B92\u0BA9\u0BCD\u0BB1\u0BBE\u0BB5\u0BA4\u0BC1;"
+            "2: =%spellout-ordinal=;"
+            "%spellout-ordinal:"
+            "-x: \u0B8E\u0BA4\u0BBF\u0BB0\u0BCD\u0BAE >>;"
+            "x.x: =#,##,##0.#=;"
+            "Inf: \u0BAE\u0BC1\u0B9F\u0BBF\u0BB5\u0BBF\u0BB2\u0BBF\u0BAF\u0BBE\u0BB5\u0BA4\u0BC1;"
+            "0: \u0BAA\u0BC2\u0B9C\u0BCD\u0BAF\u0BAE\u0BCD;"
+            "1: \u0BAE\u0BC1\u0BA4\u0BB2\u0BBE\u0BB5\u0BA4\u0BC1;"
+            "2: \u0B87\u0BB0\u0BA3\u0BCD\u0B9F\u0BBE\u0BB5\u0BA4\u0BC1;"
+            "3: \u0BAE\u0BC2\u0BA9\u0BCD\u0BB1\u0BBE\u0BB5\u0BA4\u0BC1;"
+            "4: \u0BA8\u0BBE\u0BA9\u0BCD\u0B95\u0BBE\u0BB5\u0BA4\u0BC1;"
+            "5: \u0B90\u0BA8\u0BCD\u0BA4\u0BBE\u0BB5\u0BA4\u0BC1;"
+            "6: \u0B86\u0BB1\u0BBE\u0BB5\u0BA4\u0BC1;"
+            "7: \u0B8F\u0BB4\u0BBE\u0BB5\u0BA4\u0BC1;"
+            "8: \u0B8E\u0B9F\u0BCD\u0B9F\u0BBE\u0BB5\u0BA4\u0BC1;"
+            "9: \u0B92\u0BA9\u0BCD\u0BAA\u0BA4\u0BBE\u0BB5\u0BA4\u0BC1;"
+            "10: \u0BAA\u0BA4\u0BCD\u0BA4\u0BBE\u0BB5\u0BA4\u0BC1;"
+            "11: \u0BAA\u0BA4\u0BBF\u0BA9\u0BCA\u0BA9\u0BCD\u0BB1\u0BBE\u0BB5\u0BA4\u0BC1;"
+            "12: \u0BAA\u0BA9\u0BCD\u0BA9\u0BBF\u0BB0\u0BA3\u0BCD\u0B9F\u0BBE\u0BB5\u0BA4\u0BC1;"
+            "13: \u0BAA\u0BA4\u0BBF\u0BA9\u0BCD\u0BAE\u0BC2\u0BA9\u0BCD\u0BB1\u0BBE\u0BB5\u0BA4\u0BC1;"
+            "14: \u0BAA\u0BA4\u0BBF\u0BA9\u0BBE\u0BA9\u0BCD\u0B95\u0BBE\u0BB5\u0BA4\u0BC1;"
+            "15: \u0BAA\u0BA4\u0BBF\u0BA9\u0BC8\u0BA8\u0BCD\u0BA4\u0BBE\u0BB5\u0BA4\u0BC1;"
+            "16: \u0BAA\u0BA4\u0BBF\u0BA9\u0BBE\u0BB1\u0BBE\u0BB5\u0BA4\u0BC1;"
+            "17: \u0BAA\u0BA4\u0BBF\u0BA9\u0BC7\u0BB4\u0BBE\u0BB5\u0BA4\u0BC1;"
+            "18: \u0BAA\u0BA4\u0BBF\u0BA9\u0BC6\u0B9F\u0BCD\u0B9F\u0BBE\u0BB5\u0BA4\u0BC1;"
+            "19: \u0BAA\u0BA4\u0BCD\u0BA4\u0BCA\u0BA9\u0BCD\u0BAA\u0BA4\u0BBE\u0BB5\u0BA4\u0BC1;"
+            "20: \u0B87\u0BB0\u0BC1\u0BAA\u0BA4[\u0BCD\u0BA4\u0BC1 >%%spellout-ordinal-compound>|\u0BBE\u0BB5\u0BA4\u0BC1];"
+            "30: \u0BAE\u0BC1\u0BAA\u0BCD\u0BAA\u0BA4[\u0BCD\u0BA4\u0BC1 >%%spellout-ordinal-compound>|\u0BBE\u0BB5\u0BA4\u0BC1];"
+            "40: \u0BA8\u0BBE\u0BB1\u0BCD\u0BAA\u0BA4[\u0BCD\u0BA4\u0BC1 >%%spellout-ordinal-compound>|\u0BBE\u0BB5\u0BA4\u0BC1];"
+            "50: \u0B90\u0BAE\u0BCD\u0BAA\u0BA4[\u0BCD\u0BA4\u0BC1 >%%spellout-ordinal-compound>|\u0BBE\u0BB5\u0BA4\u0BC1];"
+            "60: \u0B85\u0BB1\u0BC1\u0BAA\u0BA4[\u0BCD\u0BA4\u0BC1 >%%spellout-ordinal-compound>|\u0BBE\u0BB5\u0BA4\u0BC1];"
+            "70: \u0B8E\u0BB4\u0BC1\u0BAA\u0BA4[\u0BCD\u0BA4\u0BC1 >%%spellout-ordinal-compound>|\u0BBE\u0BB5\u0BA4\u0BC1];"
+            "80: \u0B8E\u0BA3\u0BCD\u0BAA\u0BA4[\u0BCD\u0BA4\u0BC1 >%%spellout-ordinal-compound>|\u0BBE\u0BB5\u0BA4\u0BC1];"
+            "90: \u0BA4\u0BCA\u0BA3\u0BCD\u0BA3\u0BC2\u0BB1[\u0BCD\u0BB1\u0BC1 >%%spellout-ordinal-compound>|\u0BBE\u0BB5\u0BA4\u0BC1];"
+            "100: \u0BA8\u0BC2\u0BB1[\u0BCD\u0BB1\u0BC1 >%%spellout-ordinal-compound>|\u0BBE\u0BB5\u0BA4\u0BC1];"
+            "200: \u0B87\u0BB0\u0BC1\u0BA8\u0BC2\u0BB1[\u0BCD\u0BB1\u0BC1 >%%spellout-ordinal-compound>|\u0BBE\u0BB5\u0BA4\u0BC1];"
+            "300: \u0BAE\u0BC1\u0BA8\u0BCD\u0BA8\u0BC2\u0BB1[\u0BCD\u0BB1\u0BC1 >%%spellout-ordinal-compound>|\u0BBE\u0BB5\u0BA4\u0BC1];"
+            "400: \u0BA8\u0BBE\u0BA9\u0BC2\u0BB1[\u0BCD\u0BB1\u0BC1 >%%spellout-ordinal-compound>|\u0BBE\u0BB5\u0BA4\u0BC1];"
+            "500: \u0B90\u0BA8\u0BC2\u0BB1[\u0BCD\u0BB1\u0BC1 >%%spellout-ordinal-compound>|\u0BBE\u0BB5\u0BA4\u0BC1];"
+            "600: \u0B85\u0BB1\u0BC1\u0BA8\u0BC2\u0BB1[\u0BCD\u0BB1\u0BC1 >%%spellout-ordinal-compound>|\u0BBE\u0BB5\u0BA4\u0BC1];"
+            "700: \u0B8E\u0BB4\u0BC1\u0BA8\u0BC2\u0BB1[\u0BCD\u0BB1\u0BC1 >%%spellout-ordinal-compound>|\u0BBE\u0BB5\u0BA4\u0BC1];"
+            "800: \u0B8E\u0BA3\u0BCD\u0BA8\u0BC2\u0BB1[\u0BCD\u0BB1\u0BC1 >%%spellout-ordinal-compound>|\u0BBE\u0BB5\u0BA4\u0BC1];"
+            "900: \u0BA4\u0BCA\u0BB3\u0BCD\u0BB3\u0BBE\u0BAF\u0BBF\u0BB0\u0BA4\u0BCD\u0BA4[\u0BC1 >%%spellout-ordinal-compound>|\u0BBE\u0BB5\u0BA4\u0BC1];"
+            "1000: \u0B86\u0BAF\u0BBF\u0BB0\u0BA4\u0BCD\u0BA4[\u0BC1 >%%spellout-ordinal-compound>|\u0BBE\u0BB5\u0BA4\u0BC1];"
+            "2000: <%%spellout-prefix<\u0BBE\u0BAF\u0BBF\u0BB0\u0BA4\u0BCD\u0BA4[\u0BC1 >%%spellout-ordinal-compound>|\u0BBE\u0BB5\u0BA4\u0BC1];"
+            "100000: \u0B92\u0BB0\u0BC1 \u0BB2\u0B9F\u0BCD\u0B9A\u0BA4\u0BCD\u0BA4[\u0BC1 >%%spellout-ordinal-compound>|\u0BBE\u0BB5\u0BA4\u0BC1];"
+            "200000: <%spellout-cardinal< \u0BB2\u0B9F\u0BCD\u0B9A\u0BA4\u0BCD\u0BA4[\u0BC1 >%%spellout-ordinal-compound>|\u0BBE\u0BB5\u0BA4\u0BC1];"
+            "10000000: \u0B92\u0BB0\u0BC1 \u0B95\u0BCB\u0B9F\u0BBF[\u0BAF\u0BC7 >%%spellout-ordinal-compound>|\u0BAF\u0BBE\u0BB5\u0BA4\u0BC1];"
+            "20000000: <%spellout-cardinal< \u0B95\u0BCB\u0B9F\u0BBF[\u0BAF\u0BC7 >%%spellout-ordinal-compound>|\u0BAF\u0BBE\u0BB5\u0BA4\u0BC1];"
+            "1000000000: \u0B92\u0BB0\u0BC1 \u0B85\u0BB0\u0BAA\u0BA4\u0BCD\u0BA4[\u0BC1 >>|\u0BBE\u0BB5\u0BA4\u0BC1];"
+            "2000000000: <%spellout-cardinal< \u0B85\u0BB0\u0BAA\u0BA4\u0BCD\u0BA4[\u0BC1 >>|\u0BBE\u0BB5\u0BA4\u0BC1];"
+            "100000000000: \u0B92\u0BB0\u0BC1 \u0B95\u0BB0\u0BAA\u0BA4\u0BCD\u0BA4[\u0BC1 >>|\u0BBE\u0BB5\u0BA4\u0BC1];"
+            "200000000000: <%spellout-cardinal< \u0B95\u0BB0\u0BAA\u0BA4\u0BCD\u0BA4[\u0BC1 >>|\u0BBE\u0BB5\u0BA4\u0BC1];"
+            "1000000000000000000: =#,##,##0=\u0BBE\u0BB5\u0BA4\u0BC1;"
         }
     }
 }

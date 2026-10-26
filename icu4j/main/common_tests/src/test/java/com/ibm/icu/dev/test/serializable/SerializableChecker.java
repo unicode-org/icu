@@ -94,7 +94,7 @@ public class SerializableChecker implements URLHandler.URLVisitor {
 
                     if (!Modifier.isInterface(m)) {
                         try {
-                            /* uid= */ c.getDeclaredField("serialVersionUID");
+                            var unused = c.getDeclaredField("serialVersionUID");
                         } catch (Exception e) {
                             System.out.print("no serialVersionUID - ");
                         }

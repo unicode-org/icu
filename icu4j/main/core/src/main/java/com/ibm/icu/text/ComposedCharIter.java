@@ -54,7 +54,6 @@ import com.ibm.icu.impl.Normalizer2Impl;
  * @deprecated ICU 2.2
  */
 @Deprecated
-/// CLOVER:OFF
 public final class ComposedCharIter {
     /**
      * Constant that indicates the iteration has completed. {@link #next} returns this value when
@@ -77,8 +76,6 @@ public final class ComposedCharIter {
 
     /**
      * Constructs a non-default {@code ComposedCharIter} with optional behavior.
-     *
-     * <p>
      *
      * @param compat {@code false} for canonical decompositions only; {@code true} for both
      *     canonical and compatibility decompositions.

@@ -53,7 +53,6 @@ mni{
             ls{"গ্রিনৱিচ মিন টাইম"}
         }
         gmtFormat{"জি এম টি {0}"}
-        gmtZeroFormat{"জি এম টি"}
         regionFormat{"{0} টাইম"}
         regionFormatDaylight{"{0} (+1) দেলাইট টাইম"}
         regionFormatStandard{"{0} (+0) ষ্টেন্দর্দ টাইম"}

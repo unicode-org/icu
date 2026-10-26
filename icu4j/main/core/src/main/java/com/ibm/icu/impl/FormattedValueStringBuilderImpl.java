@@ -83,6 +83,7 @@ public class FormattedValueStringBuilderImpl {
         }
     }
 
+    @SuppressWarnings("ReferenceEquality")
     public static boolean nextFieldPosition(FormattedStringBuilder self, FieldPosition fp) {
         java.text.Format.Field rawField = fp.getFieldAttribute();
 
@@ -164,6 +165,7 @@ public class FormattedValueStringBuilderImpl {
      *     the string.
      * @return See FormattedValue#nextPosition.
      */
+    @SuppressWarnings("ReferenceEquality")
     public static boolean nextPosition(
             FormattedStringBuilder self, ConstrainedFieldPosition cfpos, Field numericField) {
         int fieldStart = -1;

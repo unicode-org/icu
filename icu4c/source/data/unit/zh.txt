@@ -88,15 +88,11 @@ zh{
                 dnam{"葡萄糖"}
                 other{"{0}葡萄糖"}
             }
-            part{
-                dnam{"份"}
-                other{"{0}份"}
-            }
             part-per-1e6{
                 other{"百万分之{0}"}
             }
             part-per-1e9{
-                dnam{"十亿分比"}
+                dnam{"十亿分率"}
                 other{"十亿分之{0}"}
             }
         }
@@ -229,14 +225,6 @@ zh{
             }
             foodcalorie{
                 other{"{0}大卡"}
-            }
-            gray{
-                dnam{"戈瑞"}
-                other{"{0}戈瑞"}
-            }
-            sievert{
-                dnam{"西弗"}
-                other{"{0} 西弗"}
             }
         }
         force{
@@ -505,10 +493,6 @@ zh{
                 dnam{"打兰"}
                 other{"{0}打兰"}
             }
-            fluid-ounce-metric{
-                dnam{"公制液量盎司"}
-                other{"{0}公制液量盎司"}
-            }
             quart-imperial{
                 dnam{"英制夸脱"}
                 other{"{0}英制夸脱"}
@@ -528,9 +512,6 @@ zh{
             }
             arc-second{
                 other{"{0}″"}
-            }
-            steradian{
-                other{"{0}sr"}
             }
         }
         area{
@@ -581,9 +562,6 @@ zh{
             karat{
                 other{"{0}kt"}
             }
-            katal{
-                other{"{0}kat"}
-            }
             milligram-ofglucose-per-deciliter{
                 other{"{0}mg/dL"}
             }
@@ -592,17 +570,6 @@ zh{
             }
             mole{
                 other{"{0}mol"}
-            }
-            ofglucose{
-                dnam{"Glc"}
-                other{"{0}Glc"}
-            }
-            part{
-                dnam{"份"}
-                other{"{0}份"}
-            }
-            part-per-1e9{
-                other{"{0}ppb"}
             }
         }
         consumption{
@@ -676,6 +643,7 @@ zh{
                 other{"{0}Cal"}
             }
             gray{
+                dnam{"Gy"}
                 other{"{0}Gy"}
             }
             joule{
@@ -694,13 +662,11 @@ zh{
                 other{"{0}kWh"}
             }
             sievert{
+                dnam{"Sv"}
                 other{"{0}Sv"}
             }
         }
         force{
-            kilogram-force{
-                other{"{0}kgf"}
-            }
             kilowatt-hour-per-100-kilometer{
                 other{"{0}kWh/100km"}
             }
@@ -842,14 +808,6 @@ zh{
                 other{"{0}L☉"}
             }
         }
-        magnetic{
-            tesla{
-                other{"{0}T"}
-            }
-            weber{
-                other{"{0}Wb"}
-            }
-        }
         mass{
             carat{
                 other{"{0}CD"}
@@ -948,9 +906,6 @@ zh{
             }
             millimeter-ofhg{
                 other{"{0}mmHg"}
-            }
-            ofhg{
-                other{"{0}Hg"}
             }
             pascal{
                 other{"{0}Pa"}
@@ -1330,7 +1285,6 @@ zh{
             }
             gray{
                 dnam{"戈瑞"}
-                other{"{0}戈瑞"}
             }
             joule{
                 dnam{"焦耳"}
@@ -1350,7 +1304,6 @@ zh{
             }
             sievert{
                 dnam{"西弗"}
-                other{"{0}西弗"}
             }
             therm-us{
                 dnam{"美制克卡"}

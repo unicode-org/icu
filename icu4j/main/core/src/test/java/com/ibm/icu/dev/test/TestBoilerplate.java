@@ -39,7 +39,7 @@ public abstract class TestBoilerplate<T> extends TestFmwk {
 
     protected static Random random = new Random(12345);
 
-    @SuppressWarnings({"SelfEquals", "EqualsNull"})
+    @SuppressWarnings({"SelfEquals", "EqualsNull", "unchecked"})
     protected final void _test() throws Exception {
         List<T> list = new ArrayList<T>();
         while (_addTestObject(list)) {}
@@ -122,6 +122,7 @@ public abstract class TestBoilerplate<T> extends TestFmwk {
      * @param a
      * @return clone
      */
+    @SuppressWarnings("unchecked")
     protected T _clone(T a) throws Exception {
         Class<?> aClass = a.getClass();
         try {

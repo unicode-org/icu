@@ -267,10 +267,6 @@ zh{
             "CNH",
             "人民币（离岸）",
         }
-        CNX{
-            "CNX",
-            "中国人民银行元",
-        }
         CNY{
             "¥",
             "人民币",
@@ -1244,14 +1240,8 @@ zh{
         NIO{
             other{"尼加拉瓜金科多巴"}
         }
-        XCG{
-            other{"加勒比盾"}
-        }
         XXX{
             other{"（未知货币）"}
-        }
-        ZWG{
-            other{"津巴布韦金元"}
         }
     }
     CurrencyUnitPatterns{

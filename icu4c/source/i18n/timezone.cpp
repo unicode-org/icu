@@ -961,7 +961,7 @@ public:
         return U_FAILURE(status) ? 0 : len;
     }
 
-    virtual const UnicodeString* snext(UErrorCode& status) override {
+    virtual const UnicodeString* snext(UErrorCode& status) U_LIFETIME_BOUND override {
         if (U_SUCCESS(status) && map != nullptr && pos < len) {
             getID(map[pos], status);
             ++pos;
@@ -1566,7 +1566,9 @@ TimeZone::getCanonicalID(const UnicodeString& id, UnicodeString& canonicalID, UB
 }
 
 UnicodeString&
-TimeZone::getIanaID(const UnicodeString& id, UnicodeString& ianaID, UErrorCode& status)
+TimeZone::getIanaID(const UnicodeString& id,
+                    UnicodeString& ianaID U_LIFETIME_BOUND,
+                    UErrorCode& status)
 {
     ianaID.remove();
     if (U_FAILURE(status)) {

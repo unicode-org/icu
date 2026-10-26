@@ -19,7 +19,7 @@
 
 /*
 ** Defaults for preprocessor symbols.
-** You can override these in your C compiler options, e.g. `-DHAVE_ADJTIME=0'.
+** You can override these in your C compiler options, e.g. `-DHAVE_ADJTIME=0`.
 */
 
 #ifndef HAVE_ADJTIME
@@ -365,7 +365,7 @@ static time_t const time_t_max =
 
 /*
 ** For the benefit of GNU folk...
-** `_(MSGID)' uses the current locale's message library string for MSGID.
+** `_(MSGID)` uses the current locale's message library string for MSGID.
 ** The default is to use gettext if available, and use MSGID otherwise.
 */
 

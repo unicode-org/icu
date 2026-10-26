@@ -5,15 +5,41 @@ gd{
     Keys{
         calendar{"Mìosachan"}
         cf{"Fòrmat an airgeadra"}
+        colAlternate{"Leig seachad seòrsachadh samhlaidhean"}
+        colBackwards{"Seòrsachadh Aicinn Air Aiseag"}
+        colCaseFirst{"Òrdachadh Litrichean Mòra/Litrean Ìosal"}
+        colCaseLevel{"Seòrsachadh Mothachail air Cùis-chùis"}
+        colNormalization{"Seòrsachadh àbhaisteach"}
+        colNumeric{"Seòrsachadh Àireamhach"}
+        colReorder{"Ath-òrdachadh Sgriobt/Bloc"}
+        colStrength{"Neart Seòrsachaidh"}
         collation{"Òrdugh an t-seòrsachaidh"}
         currency{"Airgeadra"}
+        d0{"Transform Destination"}
+        dx{"Eisgeachdan Briseadh Faclair"}
         em{"Riochdachadh nan Emoji"}
+        fw{"A’ chiad latha den t-seachdain"}
+        h0{"Measgaichte a-steach"}
         hc{"Cearcall an ama (12 no 24 uair)"}
+        i0{"Modh Cuir a-steach"}
+        k0{"Meur-chlàr"}
+        kv{"Air a leigeil seachad as àirde"}
         lb{"Stoidhle nam brisidhean-loidhe"}
         lw{"Brisidhean loidhne am broinn fhaclan"}
+        m0{"Riaghailtean Atharrachaidh"}
         ms{"Siostam tomhais"}
+        mu{"Aonad Tomhais"}
         numbers{"Àireamhan"}
+        rg{"Roinn airson Dàta a bharrachd"}
+        s0{"Cruth-atharrachadh Stòr"}
+        sd{"Fo-roinn Roinneil"}
         ss{"Briseadh rosgrainn às dèidh giorr."}
+        t{"Cruth-atharrachadh"}
+        t0{"Eadar-theangaichte le inneal"}
+        timezone{"Crios-Ùine"}
+        va{"Caochladh Àite"}
+        x{"Cleachdadh Prìobhaideach"}
+        x0{"Cruth-atharrachadh Cleachdadh Prìobhaideach"}
     }
     Languages{
         aa{"Afar"}
@@ -924,8 +950,10 @@ gd{
             indian{"Nàiseanta nan Innseachan"}
             islamic{"Hijri"}
             islamic-civil{"Hijri (clàrach, linn sìobhalta)"}
+            islamic-rgsa{"Hijri, sealladh air Saudi Arabia"}
             islamic-tbla{"Hijri (clàrach, linn reul-eòlach)"}
             islamic-umalqura{"Hijri (Umm al-Qura)"}
+            iso8601{"Griogairianach"}
             japanese{"Seapanach"}
             persian{"Pearsach"}
             roc{"Poblachd na Sìne"}
@@ -937,6 +965,25 @@ gd{
         cf%core{
             account{"Cunntasachd"}
             standard{"Stannardach"}
+        }
+        colCaseFirst%core{
+            lower{"Litir bheag"}
+            no{"Litir bheag"}
+            upper{"Litir-mhòr"}
+        }
+        colReorder%core{
+            currency{"Airgead"}
+            digit{"Figearan"}
+            punct{"Punndadh"}
+            space{"Àite geal"}
+            symbol{"Samhla"}
+        }
+        colStrength%core{
+            identical{"Uile"}
+            primary{"Litrichean Bunasach a-mhàin"}
+            quaternary{"Bun, Structan, Cùis, Caochlaidhean, Kana"}
+            secondary{"Bunait, Aiseagan"}
+            tertiary{"Bonn, Structan, Cùis, Caochlaidhean"}
         }
         collation{
             compat{"Òrdugh seòrsachaidh roimhe a chum co-chòrdalachd"}
@@ -958,10 +1005,13 @@ gd{
             compat{"Co-chòrdalachd"}
             dictionary{"Faclair"}
             ducet{"Unicode bunaiteach"}
+            emoji{"Emoji"}
+            eor{"Riaghailtean Eòrpach"}
             phonebook{"Leabhar-fòn"}
             phonetic{"Tar-litreachadh"}
             pinyin{"Pinyin"}
             search{"Coitcheann"}
+            searchjl{"Connrag tùsail Coirèanais"}
             standard{"Stannardach"}
             stroke{"Stràcan"}
             traditional{"Tradaiseanta"}
@@ -979,16 +1029,26 @@ gd{
             text{"Teacsa"}
         }
         hc{
+            c12{"Cleoc 12 uair a thìde"}
+            c24{"Cleoc 24 uair a thìde"}
             h11{"Cleoc 12 uair a thìde (0–11)"}
             h12{"Cleoc 12 uair a thìde (1–12)"}
             h23{"Cleoc 24 uair a thìde (0–23)"}
             h24{"Cleoc 24 uair a thìde (1–24)"}
         }
         hc%core{
+            c12{"12"}
+            c24{"24"}
             h11{"12 (0–11)"}
             h12{"12 (1–12)"}
             h23{"24 (0–23)"}
             h24{"24 (1–24)"}
+        }
+        kv%core{
+            currency{"Àiteachan Shift, puingeachadh, a h-uile samhla"}
+            punct{"Gluasad beàrnan, puingeachadh"}
+            space{"Gluasad beàrnan, puingeachadh"}
+            symbol{"Àiteachan Shift, puingeachadh, samhlaidhean neo-airgead"}
         }
         lb{
             loose{"Brisidhean-loidhe fuasgailte"}
@@ -1083,6 +1143,7 @@ gd{
             mymrshan{"Àireamhan Shan Miànmar"}
             mymrtlng{"Àireamhan Tai Laing Miànmar"}
             nagm{"Àireamhan Nag Mundari"}
+            native{"Figearan Dùthchasach"}
             nkoo{"Àireamhan N’Ko"}
             olck{"Àireamhan Ol Chiki"}
             onao{"Àireamhan Ol Onal"}
@@ -1113,9 +1174,51 @@ gd{
             wara{"Àireamhan Warang Citi"}
             wcho{"Àireamhan Wancho"}
         }
+        numbers%core{
+            arabext{"Extended Arabic-Indic"}
+            armnlow{"Litir bheag Airmeinis"}
+            finance{"Ionmhasail"}
+            fullwide{"Leud slàn"}
+            greklow{"Litir bheag Grèigeach"}
+            hanidays{
+                "Àireamhachadh latha na mìosa le caractar Han airson mìosachain traid"
+                "iseanta"
+            }
+            hanidec{
+                "Siostam deicheach suidheachaidh a’ cleachdadh ideagrafaichean àiream"
+                "han Sìneach mar fhigearan"
+            }
+            hansfin{"Ionmhas Sìneach Shìmplidh"}
+            hantfin{"Ionmhas traidiseanta Sìneach"}
+            jpanfin{"Ionmhas Iapanach"}
+            jpanyear{"Àireamhachadh Gannen sa chiad bhliadhna ann an Iapan"}
+            lanatham{"Tai Tham Tham (eaglaiseil)"}
+            mathbold{"Matamataigeach trom"}
+            mathdbl{"Buille dùbailte matamataigeach"}
+            mathmono{"Aon-àite matamataigeach"}
+            mathsanb{"Matamataigeach gun serif trom"}
+            mathsans{"Matamataigeach gun serif trom"}
+            mymrepka{"Pwo Karen an Ear Mhianmar"}
+            mymrpao{"Pao Mhianmar"}
+            mymrshan{"Shan Mhianmar"}
+            mymrtlng{"Tai Laing ann am Mianmar"}
+            native{"àireamhan dùthchasach"}
+            outlined{"Air a mhìneachadh"}
+            roman{"Litir mhòr Ròmanach"}
+            romanlow{"Litir bheag Ròmanach"}
+            segment{"Air a roinneadh"}
+            tamldec{"Tamil Nuadh-aimsireil"}
+            traditional{"Àireamhan traidiseanta"}
+        }
         ss%core{
             none{"Dheth"}
             standard{"Air"}
+        }
+        t0{
+            und{"Eadar-theangachadh Inneal Neo-shònraichte"}
+        }
+        va%core{
+            posix{"Caochladh POSIX"}
         }
     }
     Variants{

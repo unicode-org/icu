@@ -17,7 +17,6 @@ ja{
                 other{"{0} 回転"}
             }
             steradian{
-                dnam{"ステラジアン"}
                 other{"{0} ステラジアン"}
             }
         }
@@ -112,7 +111,6 @@ ja{
         }
         concentr{
             katal{
-                dnam{"カタール"}
                 other{"{0} カタール"}
             }
             milligram-ofglucose-per-deciliter{
@@ -125,12 +123,7 @@ ja{
                 other{"{0} モル"}
             }
             ofglucose{
-                dnam{"グルコース"}
                 other{"{0} グルコース"}
-            }
-            part{
-                dnam{"パーツ"}
-                other{"{0} パーツ"}
             }
             percent{
                 other{"{0} パーセント"}
@@ -288,7 +281,6 @@ ja{
         }
         force{
             kilogram-force{
-                dnam{"重量キログラム"}
                 other{"{0} 重量キログラム"}
             }
             kilowatt-hour-per-100-kilometer{
@@ -437,11 +429,9 @@ ja{
         }
         magnetic{
             tesla{
-                dnam{"テスラ"}
                 other{"{0} テスラ"}
             }
             weber{
-                dnam{"ウェーバ"}
                 other{"{0} ウェーバ"}
             }
         }
@@ -540,10 +530,6 @@ ja{
             }
             millimeter-ofhg{
                 other{"{0} 水銀柱ミリメートル"}
-            }
-            ofhg{
-                dnam{"水銀柱"}
-                other{"{0}Hg"}
             }
             pascal{
                 other{"{0} パスカル"}
@@ -654,7 +640,6 @@ ja{
                 other{"{0} 英液量オンス"}
             }
             fluid-ounce-metric{
-                dnam{"メトリック液量オンス"}
                 other{"{0} メトリック液量オンス"}
             }
             gallon{
@@ -779,7 +764,6 @@ ja{
                 other{"{0}K"}
             }
             katal{
-                dnam{"カタール"}
                 other{"{0}kat"}
             }
             milligram-ofglucose-per-deciliter{
@@ -795,11 +779,9 @@ ja{
                 other{"{0}mol"}
             }
             ofglucose{
-                dnam{"グルコース"}
                 other{"{0}Glc"}
             }
             part{
-                dnam{"パーツ"}
                 other{"{0}パーツ"}
             }
             part-per-1e6{
@@ -934,17 +916,32 @@ ja{
             ampere{
                 other{"{0}A"}
             }
+            coulomb{
+                other{"{0} C"}
+            }
+            farad{
+                other{"{0} F"}
+            }
+            henry{
+                other{"{0} H"}
+            }
             milliampere{
                 other{"{0}mA"}
             }
             ohm{
                 other{"{0}Ω"}
             }
+            siemens{
+                other{"{0} S"}
+            }
             volt{
                 other{"{0}V"}
             }
         }
         energy{
+            becquerel{
+                other{"{0} Bq"}
+            }
             british-thermal-unit{
                 other{"{0}BTU"}
             }
@@ -952,13 +949,16 @@ ja{
                 other{"{0}calth"}
             }
             calorie-it{
-                dnam{"cal-IT"}
+                other{"{0} cal-IT"}
             }
             electronvolt{
                 dnam{"eV"}
             }
             foodcalorie{
                 other{"{0}cal"}
+            }
+            gray{
+                other{"{0} Gy"}
             }
             joule{
                 other{"{0}J"}
@@ -973,13 +973,15 @@ ja{
                 dnam{"kWh"}
                 other{"{0}kWh"}
             }
+            sievert{
+                other{"{0} Sv"}
+            }
             therm-us{
                 other{"{0}米サーム"}
             }
         }
         force{
             kilogram-force{
-                dnam{"重量キログラム"}
                 other{"{0}kgf"}
             }
             kilowatt-hour-per-100-kilometer{
@@ -1144,11 +1146,9 @@ ja{
         }
         magnetic{
             tesla{
-                dnam{"テスラ"}
                 other{"{0}T"}
             }
             weber{
-                dnam{"ウェーバ"}
                 other{"{0}Wb"}
             }
         }
@@ -1255,10 +1255,6 @@ ja{
             }
             millimeter-ofhg{
                 other{"{0}mmHg"}
-            }
-            ofhg{
-                dnam{"水銀柱"}
-                other{"{0}Hg"}
             }
             pascal{
                 dnam{"Pa"}
@@ -1377,10 +1373,6 @@ ja{
             fluid-ounce-imperial{
                 dnam{"Imp fl oz"}
                 other{"{0}Imp fl oz"}
-            }
-            fluid-ounce-metric{
-                dnam{"メトリック液量オンス"}
-                other{"{0} fl oz m."}
             }
             gallon{
                 dnam{"gal"}

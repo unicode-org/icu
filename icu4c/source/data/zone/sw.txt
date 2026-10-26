@@ -24,9 +24,6 @@ sw{
         "Asia:Qostanay"{
             ec{"Kostanay"}
         }
-        "Asia:Rangoon"{
-            ec{"Rangoon"}
-        }
         "Atlantic:South_Georgia"{
             ec{"Georgia Kusini"}
         }
@@ -36,17 +33,16 @@ sw{
         "Etc:Unknown"{
             ec{"Jiji Lisilojulikana"}
         }
-        "Europe:Dublin"{
-            ld{"Saa za Majira ya Joto za Ayalandi"}
-        }
         "Europe:Kiev"{
             ec{"Kiev"}
         }
-        "Europe:London"{
-            ld{"Saa za Majira ya Joto za Uingereza"}
-        }
         "Pacific:Honolulu"{
             ec{"Honolulu"}
+        }
+        "meta:Acre"{
+            ld{"Saa za Acre Majira ya Joto"}
+            lg{"Saa za Acre"}
+            ls{"Saa Wastani za Acre"}
         }
         "meta:Afghanistan"{
             ls{"Saa za Afghanistan"}
@@ -100,7 +96,7 @@ sw{
         }
         "meta:Apia"{
             ld{"Saa za Mchana za Apia"}
-            lg{"Saa za Apia"}
+            lg{"Saa za Samoa Magharibi"}
             ls{"Saa za Wastani za Apia"}
         }
         "meta:Arabian"{
@@ -173,6 +169,10 @@ sw{
             ld{"Saa za Majira ya joto za Brasilia"}
             lg{"Saa za Brasilia"}
             ls{"Saa za Wastani za Brasilia"}
+        }
+        "meta:British"{
+            ld{"Saa za Majira ya Joto za Uingereza"}
+            lg{"Saa za Uingereza"}
         }
         "meta:Brunei"{
             ls{"Saa za Brunei Darussalam"}
@@ -289,6 +289,11 @@ sw{
         "meta:Gilbert_Islands"{
             ls{"Saa za Visiwa vya Gilbert"}
         }
+        "meta:Greenland"{
+            ld{"Saa Wastani za Greenland Majira ya Joto"}
+            lg{"Saa za Greenland"}
+            ls{"Saa Wastani za Greenland"}
+        }
         "meta:Greenland_Eastern"{
             ld{"Saa za Majira ya joto za Greenland Mashariki"}
             lg{"Saa za Greenland Mashariki"}
@@ -306,12 +311,12 @@ sw{
             ls{"Saa za Guyana"}
         }
         "meta:Hawaii"{
-            ls{"Saa za Wastani za Hawaii-Aleutian"}
+            ls{"Saa za Hawaii"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"Saa za Mchana za Hawaii-Aleutian"}
             lg{"Saa za Hawaii-Aleutian"}
-            ls{"Saa za Wastani za Hawaii-Aleutian"}
+            ls{"Saa Wastani za Hawaii-Aleutian"}
         }
         "meta:Hong_Kong"{
             ld{"Saa za Majira ya joto za Hong Kong"}
@@ -342,9 +347,13 @@ sw{
             ls{"Saa za Magharibi mwa Indonesia"}
         }
         "meta:Iran"{
-            ld{"Saa za Mchana za Iran"}
-            lg{"Saa za Iran"}
-            ls{"Saa za Wastani za Iran"}
+            ld{"Saa za Mchana za Irani"}
+            lg{"Saa za Irani"}
+            ls{"Saa za Wastani za Irani"}
+        }
+        "meta:Irish"{
+            ld{"Saa za Majira ya Joto za Ayalandi"}
+            lg{"Saa za Ayalandi"}
         }
         "meta:Irkutsk"{
             ld{"Saa za Majira ya joto za Irkutsk"}
@@ -546,8 +555,6 @@ sw{
             ls{"Saa za Wastani za Samara"}
         }
         "meta:Samoa"{
-            ld{"Saa za Majira ya joto za Samoa"}
-            lg{"Saa za Samoa"}
             ls{"Saa za Wastani za Samoa"}
         }
         "meta:Seychelles"{
@@ -590,6 +597,11 @@ sw{
         "meta:Truk"{
             ls{"Saa za Chuuk"}
         }
+        "meta:Turkey"{
+            ld{"Saa za Uturuki Majira ya Joto"}
+            lg{"Saa za Uturuki"}
+            ls{"Saa Wastani za Uturuki"}
+        }
         "meta:Turkmenistan"{
             ld{"Saa za Majira ya joto za Turkmenistan"}
             lg{"Saa za Turkmenistan"}
@@ -602,6 +614,9 @@ sw{
             ld{"Saa za Majira ya joto za Urugwai"}
             lg{"Saa za Urugwai"}
             ls{"Saa za Wastani za Urugwai"}
+        }
+        "meta:Urumqi"{
+            ls{"Saa za Urumqi"}
         }
         "meta:Uzbekistan"{
             ld{"Saa za Majira ya joto za Uzbekistan"}

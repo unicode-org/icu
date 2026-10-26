@@ -149,8 +149,6 @@ import java.util.Map;
  * be found at <a target="github"
  * href="https://github.com/unicode-org/message-format-wg/blob/main/spec/registry.md">here</a>.
  *
- * <p>
- *
  * @draft ICU 78
  */
 public class MessageFormatter {
@@ -283,7 +281,7 @@ public class MessageFormatter {
      *     or null arguments, etc.)
      * @draft ICU 78
      */
-    public String formatToString(Map<String, Object> arguments) {
+    public String formatToString(Map<String, ?> arguments) {
         return modelFormatter.format(arguments);
     }
 
@@ -298,7 +296,7 @@ public class MessageFormatter {
      */
     @Deprecated
     @SuppressWarnings("static-method")
-    public FormattedMessage format(Map<String, Object> arguments) {
+    public FormattedMessage format(Map<String, ?> arguments) {
         throw new RuntimeException("Not yet implemented.");
     }
 

@@ -22,7 +22,7 @@ License & terms of use: http://www.unicode.org/copyright.html
 ## Overview
 
 ICU is designed for use in multi-threaded environments. Guidelines for
-developers using ICU are in the [ICU Design](../../design.md) section of the
+developers using ICU are in the [ICU Design](../../icu/design.md) section of the
 user guide.
 
 Within the ICU implementation, access to shared or global data sometimes must be
@@ -41,8 +41,8 @@ The ICU4C synchronization primitives are for internal use only; they are not
 exported as API to normal users of ICU.
 
 ICU provides implementations of its synchronization functions for Windows, POSIX
-and C++11 platforms, and provides a build-time interface to allow [custom
-implementations](custom.md) for other platforms.
+and C++11 platforms, and provides a build-time interface to allow
+[custom implementations](custom.md) for other platforms.
 
 ## ICU4C Synchronization Primitives
 

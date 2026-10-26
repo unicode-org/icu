@@ -44,6 +44,7 @@ private:
     void testISO8601();
     void testRegionOverride();
     void testAlphabeticSubstitution23114();
+    void testTwoDigitYear();
 
     enum { kNumDateTimePatterns = 4 };
     typedef struct {

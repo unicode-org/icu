@@ -1,10 +1,11 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
-/********************************************************************
- * COPYRIGHT:
- * Copyright (c) 2001-2016, International Business Machines Corporation and
- * others. All Rights Reserved.
- ********************************************************************/
+/*
+ **************************************************************************
+ * Copyright (c) 2001-2016, International Business Machines Corporation   *
+ * and others. All Rights Reserved.                                       *
+ **************************************************************************
+ */
 
 package com.ibm.icu.text;
 
@@ -148,22 +149,29 @@ class RBBINode {
     //
     // -------------------------------------------------------------------------
     RBBINode cloneTree() {
+        return cloneTree(0);
+    }
+
+    RBBINode cloneTree(int depth) {
+        if (depth > kRecursiveDepthLimit) {
+            throw new IllegalArgumentException("The input is too long");
+        }
         RBBINode n;
 
         if (fType == RBBINode.varRef) {
             // If the current node is a variable reference, skip over it
             //   and clone the definition of the variable instead.
-            n = fLeftChild.cloneTree();
+            n = fLeftChild.cloneTree(depth + 1);
         } else if (fType == RBBINode.uset) {
             n = this;
         } else {
             n = new RBBINode(this);
             if (fLeftChild != null) {
-                n.fLeftChild = fLeftChild.cloneTree();
+                n.fLeftChild = fLeftChild.cloneTree(depth + 1);
                 n.fLeftChild.fParent = n;
             }
             if (fRightChild != null) {
-                n.fRightChild = fRightChild.cloneTree();
+                n.fRightChild = fRightChild.cloneTree(depth + 1);
                 n.fRightChild.fParent = n;
             }
         }
@@ -195,7 +203,7 @@ class RBBINode {
             throw new IllegalArgumentException("The input is too long");
         }
         if (fType == varRef) {
-            RBBINode retNode = fLeftChild.cloneTree();
+            RBBINode retNode = fLeftChild.cloneTree(depth + 1);
             retNode.fRuleRoot = this.fRuleRoot;
             retNode.fChainIn = this.fChainIn;
             return retNode;
@@ -221,6 +229,13 @@ class RBBINode {
     //
     // -------------------------------------------------------------------------
     void flattenSets() {
+        flattenSets(0);
+    }
+
+    void flattenSets(int depth) {
+        if (depth > kRecursiveDepthLimit) {
+            throw new IllegalArgumentException("The input is too long");
+        }
         Assert.assrt(fType != setRef);
 
         if (fLeftChild != null) {
@@ -228,10 +243,10 @@ class RBBINode {
                 RBBINode setRefNode = fLeftChild;
                 RBBINode usetNode = setRefNode.fLeftChild;
                 RBBINode replTree = usetNode.fLeftChild;
-                fLeftChild = replTree.cloneTree();
+                fLeftChild = replTree.cloneTree(depth + 1);
                 fLeftChild.fParent = this;
             } else {
-                fLeftChild.flattenSets();
+                fLeftChild.flattenSets(depth + 1);
             }
         }
 
@@ -240,11 +255,11 @@ class RBBINode {
                 RBBINode setRefNode = fRightChild;
                 RBBINode usetNode = setRefNode.fLeftChild;
                 RBBINode replTree = usetNode.fLeftChild;
-                fRightChild = replTree.cloneTree();
+                fRightChild = replTree.cloneTree(depth + 1);
                 fRightChild.fParent = this;
                 // delete setRefNode;
             } else {
-                fRightChild.flattenSets();
+                fRightChild.flattenSets(depth + 1);
             }
         }
     }
@@ -272,7 +287,6 @@ class RBBINode {
     //        print. Print out a single node, for debugging.
     //
     // -------------------------------------------------------------------------
-    /// CLOVER:OFF
     static void printNode(RBBINode n) {
 
         if (n == null) {
@@ -293,11 +307,8 @@ class RBBINode {
         System.out.println("");
     }
 
-    /// CLOVER:ON
-
     // Print a String in a fixed field size.
     // Debugging function.
-    /// CLOVER:OFF
     static void printString(String s, int minWidth) {
         for (int i = minWidth; i < 0; i++) {
             // negative width means pad leading spaces, not fixed width.
@@ -309,21 +320,13 @@ class RBBINode {
         System.out.print(s);
     }
 
-    /// CLOVER:ON
-
-    //
     //  Print an int in a fixed size field.
     //  Debugging function.
-    //
-    /// CLOVER:OFF
     static void printInt(int i, int minWidth) {
         String s = Integer.toString(i);
         printString(s, Math.max(minWidth, s.length() + 1));
     }
 
-    /// CLOVER:ON
-
-    /// CLOVER:OFF
     static void printHex(int i, int minWidth) {
         String s = Integer.toString(i, 16);
         String leadingZeroes = "00000".substring(0, Math.max(0, 5 - s.length()));
@@ -331,14 +334,11 @@ class RBBINode {
         printString(s, minWidth);
     }
 
-    /// CLOVER:ON
-
     // -------------------------------------------------------------------------
     //
     //        print. Print out the tree of nodes rooted at "this"
     //
     // -------------------------------------------------------------------------
-    /// CLOVER:OFF
     void printTree(boolean printHeading) {
         if (printHeading) {
             System.out.println(
@@ -359,6 +359,4 @@ class RBBINode {
             }
         }
     }
-    /// CLOVER:ON
-
 }

@@ -15,6 +15,15 @@ de_CH{
         "meta:Brunei"{
             ls{"Brunei-Zeit"}
         }
+        "meta:Greenland"{
+            ld{"Grönland-Sommerzeit"}
+            lg{"Grönlandzeit"}
+            ls{"Grönland-Normalzeit"}
+        }
+        "meta:Irish"{
+            ld{"Irische Normalzeit"}
+            lg{"Irische Zeit"}
+        }
         "meta:Solomon"{
             ls{"Salomoninseln-Zeit"}
         }

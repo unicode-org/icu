@@ -7,6 +7,7 @@ prg{
         prg{"prūsiskan"}
     }
     Scripts{
+        Latn{"lātiniskan"}
         Zzzz{"niwaīstan skriptan"}
     }
     codePatterns{

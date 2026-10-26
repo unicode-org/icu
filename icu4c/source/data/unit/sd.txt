@@ -680,11 +680,6 @@ sd{
                 other{"{0}س"}
             }
         }
-        energy{
-            calorie-it{
-                dnam{"cal-IT"}
-            }
-        }
         force{
             kilowatt-hour-per-100-kilometer{
                 one{"{0}ڪ و آ/100 ڪ م"}

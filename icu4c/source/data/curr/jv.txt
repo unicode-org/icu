@@ -656,12 +656,6 @@ jv{
         MAD{
             other{"Dirham Moroko"}
         }
-        XCG{
-            other{"Guilder Karibia"}
-        }
-        ZWG{
-            other{"Emas Zimbabwe"}
-        }
     }
     CurrencyUnitPatterns{
         other{"{0} {1}"}

@@ -263,6 +263,7 @@ ga{
         }
         "Etc:UTC"{
             ls{"Am Uilíoch Lárnach"}
+            ss{"AUL"}
         }
         "Etc:Unknown"{
             ec{"Láthair Anaithnid"}
@@ -305,7 +306,6 @@ ga{
         }
         "Europe:Dublin"{
             ec{"Baile Átha Cliath"}
-            ld{"Am Caighdéanach na hÉireann"}
             sd{"ACÉ"}
         }
         "Europe:Gibraltar"{
@@ -337,7 +337,6 @@ ga{
         }
         "Europe:London"{
             ec{"Londain"}
-            ld{"Am Samhraidh na Breataine"}
             sd{"ASB"}
         }
         "Europe:Luxembourg"{
@@ -503,11 +502,6 @@ ga{
             lg{"Am Alasca"}
             ls{"Am Caighdeánach Alasca"}
         }
-        "meta:Almaty"{
-            ld{"Am Samhraidh Almaty"}
-            lg{"Am Almaty"}
-            ls{"Am Caighdeánach Almaty"}
-        }
         "meta:Amazon"{
             ld{"Am Samhraidh na hAmasóine"}
             lg{"Am na hAmasóine"}
@@ -532,9 +526,6 @@ ga{
             ld{"Am Samhraidh an Aigéin Chiúin"}
             lg{"Am an Aigéin Chiúin"}
             ls{"Am Caighdeánach an Aigéin Chiúin"}
-            sd{"ASAC"}
-            sg{"AAC"}
-            ss{"ACAC"}
         }
         "meta:Anadyr"{
             ld{"Am Samhraidh Anadyr"}
@@ -545,16 +536,6 @@ ga{
             ld{"Am Samhraidh Shamó"}
             lg{"Am Shamó"}
             ls{"Am Caighdeánach Shamó"}
-        }
-        "meta:Aqtau"{
-            ld{"Am Samhraidh Aqtau"}
-            lg{"Am Aqtau"}
-            ls{"Am Caighdeánach Aqtau"}
-        }
-        "meta:Aqtobe"{
-            ld{"Am Samhraidh Aqtobe"}
-            lg{"Am Aqtobe"}
-            ls{"Am Caighdeánach Aqtobe"}
         }
         "meta:Arabian"{
             ld{"Am Samhraidh na hAraibe"}
@@ -626,6 +607,10 @@ ga{
             ld{"Am Samhraidh Bhrasília"}
             lg{"Am Bhrasília"}
             ls{"Am Caighdeánach Bhrasília"}
+        }
+        "meta:British"{
+            ld{"Am Samhraidh na Breataine"}
+            lg{"Am na Breataine"}
         }
         "meta:Brunei"{
             ls{"Am Bhrúiné Darasalám"}
@@ -755,6 +740,11 @@ ga{
         "meta:Gilbert_Islands"{
             ls{"Am Chiribeas"}
         }
+        "meta:Greenland"{
+            ld{"Am Samhraidh na Graonlainne"}
+            lg{"Am na Graonlainne"}
+            ls{"Am Caighdeánach na Graonlainne"}
+        }
         "meta:Greenland_Eastern"{
             ld{"Am Samhraidh Oirthear na Graonlainne"}
             lg{"Am Oirthear na Graonlainne"}
@@ -765,9 +755,6 @@ ga{
             lg{"Am Iarthar na Graonlainne"}
             ls{"Am Caighdeánach Iarthar na Graonlainne"}
         }
-        "meta:Guam"{
-            ls{"Am Caighdeánach Ghuam"}
-        }
         "meta:Gulf"{
             ls{"Am Caighdeánach na Murascaille"}
         }
@@ -775,7 +762,7 @@ ga{
             ls{"Am na Guáine"}
         }
         "meta:Hawaii"{
-            ls{"Am Caighdeánach Haváí-Ailiúit"}
+            ls{"Am Caighdeánach Haváí"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"Am Samhraidh Haváí-Ailiúit"}
@@ -815,6 +802,10 @@ ga{
             lg{"Am na hIaráine"}
             ls{"Am Caighdeánach na hIaráine"}
         }
+        "meta:Irish"{
+            ld{"Am Caighdéanach na hÉireann"}
+            lg{"Am na hÉireann"}
+        }
         "meta:Irkutsk"{
             ld{"Am Samhraidh Irkutsk"}
             lg{"Am Irkutsk"}
@@ -831,9 +822,9 @@ ga{
             ls{"Am Caighdeánach na Seapáine"}
         }
         "meta:Kamchatka"{
-            ld{"Am Samhraidh Phetropavlovsk-Kamchatski"}
+            ld{"Am Samhraidh Kamchatka"}
             lg{"Am Phetropavlovsk-Kamchatski"}
-            ls{"Am Caighdeánach Phetropavlovsk-Kamchatski"}
+            ls{"Am Caighdeánach Kamchatka"}
         }
         "meta:Kazakhstan"{
             ls{"Am na Casacstáine"}
@@ -860,9 +851,6 @@ ga{
         "meta:Kyrgystan"{
             ls{"Am na Cirgeastáine"}
         }
-        "meta:Lanka"{
-            ls{"Am Shrí Lanca"}
-        }
         "meta:Line_Islands"{
             ls{"Am Oileáin na Líne"}
         }
@@ -870,11 +858,6 @@ ga{
             ld{"Am Samhraidh Lord Howe"}
             lg{"Am Lord Howe"}
             ls{"Am Caighdeánach Lord Howe"}
-        }
-        "meta:Macau"{
-            ld{"Am Samhraidh Mhacao"}
-            lg{"Am Mhacao"}
-            ls{"Am Caighdeánach Mhacao"}
         }
         "meta:Magadan"{
             ld{"Am Samhraidh Mhagadan"}
@@ -953,9 +936,6 @@ ga{
             lg{"Am Fernando de Noronha"}
             ls{"Am Caighdeánach Fernando de Noronha"}
         }
-        "meta:North_Mariana"{
-            ls{"Am na nOileán Máirianach Thuaidh"}
-        }
         "meta:Novosibirsk"{
             ld{"Am Samhraidh Novosibirsk"}
             lg{"Am Novosibirsk"}
@@ -1009,11 +989,6 @@ ga{
         "meta:Pyongyang"{
             ls{"Am Pyongyang"}
         }
-        "meta:Qyzylorda"{
-            ld{"Am Samhraidh Qyzylorda"}
-            lg{"Am Qyzylorda"}
-            ls{"Am Caighdeánach Qyzylorda"}
-        }
         "meta:Reunion"{
             ls{"Am Réunion"}
         }
@@ -1031,8 +1006,6 @@ ga{
             ls{"Am Caighdeánach Shamara"}
         }
         "meta:Samoa"{
-            ld{"Am Samhraidh Shamó Mheiriceá"}
-            lg{"Am Shamó Mheiriceá"}
             ls{"Am Caighdeánach Shamó Mheiriceá"}
         }
         "meta:Seychelles"{
@@ -1075,6 +1048,11 @@ ga{
         "meta:Truk"{
             ls{"Am Chuuk"}
         }
+        "meta:Turkey"{
+            ld{"Am Samhraidh na Tuirce"}
+            lg{"Am na Tuirce"}
+            ls{"Am Caighdeánach na Tuirce"}
+        }
         "meta:Turkmenistan"{
             ld{"Am Samhraidh na Tuircméanastáine"}
             lg{"Am na Tuircméanastáine"}
@@ -1087,6 +1065,9 @@ ga{
             ld{"Am Samhraidh Uragua"}
             lg{"Am Uragua"}
             ls{"Am Caighdeánach Uragua"}
+        }
+        "meta:Urumqi"{
+            ls{"Am Ürümqi"}
         }
         "meta:Uzbekistan"{
             ld{"Am Samhraidh na hÚisbéiceastáine"}
@@ -1134,6 +1115,5 @@ ga{
             ls{"Am Yukon"}
         }
         gmtFormat{"MAG{0}"}
-        gmtZeroFormat{"MAG"}
     }
 }

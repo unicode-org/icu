@@ -3,6 +3,7 @@
 // Generated using tools/cldr/cldr-to-icu/
 en_AU{
     %%Parent{"en_001"}
+    AuxExemplarCharacters{"[áàăâåäãā æ ç éèĕêëē íìĭîïī ḻ ñṉ ŋ óòŏôöøō œ ṯ úùŭûüū ÿ]"}
     NumberElements{
         latn{
             symbols{
@@ -14,9 +15,6 @@ en_AU{
         generic{
             availableFormats{
                 GyMEd{"E, d/M/y G"}
-                GyMMMEEEEd{"EEEE d MMM y G"}
-                MMMEEEEd{"EEEE d MMM"}
-                MMMMEEEEd{"EEEE d MMMM"}
                 yMEd{"E, dd/MM/y"}
                 yMd{"dd/MM/y"}
                 yyyyMMMEEEEd{"EEEE d MMM y G"}
@@ -47,18 +45,11 @@ en_AU{
                     M{"E, d MMM – E, d MMM"}
                     d{"E, d MMM – E, d MMM"}
                 }
-                yMMMEEEEd{
-                    M{"EEEE d MMM – EEEE d MMM y G"}
-                    d{"EEEE d MMM – EEEE d MMM y G"}
-                    y{"EEEE d MMM y – EEEE d MMM y G"}
+                MMMMd{
+                    d{"d – d MMMM"}
                 }
                 yMMMEd{
                     d{"E, d MMM – E, d MMM y G"}
-                }
-                yMMMMEEEEd{
-                    M{"EEEE d MMMM – EEEE d MMMM y G"}
-                    d{"EEEE d MMMM – EEEE d MMMM y G"}
-                    y{"EEEE d MMMM y – EEEE d MMMM y G"}
                 }
             }
         }
@@ -94,25 +85,19 @@ en_AU{
             }
             availableFormats{
                 GyMMMEEEEd{"EEEE d MMM y G"}
-                MEd{"E, d/M"}
-                MMMEEEEd{"EEEE d MMM"}
-                MMMMEEEEd{"EEEE d MMMM"}
+                GyMMMEddd{"E ddd MMM y G"}
+                GyMMMMEd{"E d MMMM y G"}
+                GyMMMMEddd{"E ddd MMMM y G"}
+                GyMMMddd{"ddd MMM y G"}
+                MEd{"E dd/MM"}
+                MMMEd{"E d MMM"}
                 Md{"d/M"}
+                yMEd{"E dd/MM/y"}
                 yMMMEEEEd{"EEEE d MMM y"}
+                yMMMEd{"E d MMM y"}
+                yMMMEddd{"E ddd MMM y"}
                 yMMMMEEEEd{"EEEE d MMMM y"}
-            }
-            dayNames{
-                format{
-                    narrow{
-                        "Su.",
-                        "M.",
-                        "Tu.",
-                        "W.",
-                        "Th.",
-                        "F.",
-                        "Sa.",
-                    }
-                }
+                yMMMMEd{"E d MMMM y"}
             }
             dayPeriod{
                 format{
@@ -155,16 +140,19 @@ en_AU{
             }
             intervalFormats{
                 GyMEd{
-                    G{"E, d/M/y G – E, d/M/y G"}
-                    M{"E, d/M/y – E, d/M/y G"}
-                    d{"E, d/M/y – E, d/M/y G"}
-                    y{"E, d/M/y – E, d/M/y G"}
+                    G{"E dd/MM/y G – E dd/MM/y G"}
+                    M{"E dd/MM/y – E dd/MM/y G"}
+                    d{"E dd/MM/y – E dd/MM/y G"}
+                    y{"E dd/MM/y – E dd/MM/y G"}
                 }
-                GyMMMEEEEd{
-                    G{"EEEE d MMM y G – EEEE d MMM y G"}
-                    M{"EEEE d MMM – EEEE d MMM y G"}
-                    d{"EEEE d MMM – EEEE d MMM y G"}
-                    y{"EEEE d MMM y – EEEE d MMM y G"}
+                GyMMMEd{
+                    G{"E d MMM y G – E d MMM y G"}
+                    M{"E d MMM – E d MMM y G"}
+                    d{"E d MMM – E d MMM y G"}
+                    y{"E d MMM y – E d MMM y G"}
+                }
+                GyMMMd{
+                    d{"d–d MMM y G"}
                 }
                 GyMd{
                     G{"d/M/y G – d/M/y G"}
@@ -172,39 +160,48 @@ en_AU{
                     d{"d/M/y – d/M/y G"}
                     y{"d/M/y – d/M/y G"}
                 }
+                MMMEd{
+                    d{"E d MMM – E d MMM"}
+                }
+                MMMMd{
+                    d{"d–d MMMM"}
+                }
+                yMEd{
+                    M{"E dd/MM/y – E dd/MM/y"}
+                    d{"E dd/MM/y – E dd/MM/y"}
+                    y{"E dd/MM/y – E dd/MM/y"}
+                }
                 yMMMEEEEd{
-                    M{"EEEE d MMM – EEEE d MMM y"}
                     d{"EEEE d – EEEE d MMM y"}
-                    y{"EEEE d MMM y – EEEE d MMM y"}
+                }
+                yMMMEd{
+                    M{"E d MMM – E d MMM y"}
+                    d{"E d MMM – E d MMM y"}
+                    y{"E d MMM y – E d MMM y"}
                 }
                 yMMMMEEEEd{
-                    M{"EEEE d MMMM – EEEE d MMMM y"}
                     d{"EEEE d – EEEE d MMMM y"}
-                    y{"EEEE d MMMM y – EEEE d MMMM y"}
-                }
-            }
-            monthNames{
-                format{
-                    abbreviated{
-                        "Jan",
-                        "Feb",
-                        "Mar",
-                        "Apr",
-                        "May",
-                        "June",
-                        "July",
-                        "Aug",
-                        "Sept",
-                        "Oct",
-                        "Nov",
-                        "Dec",
-                    }
                 }
             }
         }
         islamic{
             availableFormats{
+                GyMMMEEEEd{"EEEE, d MMM y G"}
                 MMMEd{"E, d MMM"}
+                MMMEddd{"ddd MMM, E"}
+                yyyyMMMEddd{"G y ddd MMM, E"}
+                yyyyMMMddd{"ddd MMM, y G"}
+            }
+        }
+        japanese{
+            availableFormats{
+                GyMEd{"E, d/M/y GGGGG"}
+                GyMMMEddd{"G y, E ddd MMM"}
+                GyMMMddd{"G y ddd MMM"}
+                yyyyMEEEEd{"EEEE, d MMMM, y G"}
+                yyyyMMMEEEEd{"EEEE, d MMMM, y G"}
+                yyyyMMMEddd{"G y ddd MMM, E"}
+                yyyyMMMddd{"ddd MMM, y G"}
             }
         }
     }

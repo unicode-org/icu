@@ -196,7 +196,6 @@ conflicts in your history. Plenty of examples:
 
 *   <https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History#_squashing>
 *   <https://github.com/todotxt/todo.txt-android/wiki/Squash-All-Commits-Related-to-a-Single-Issue-into-a-Single-Commit>
-*   <https://blog.carbonfive.com/2017/08/28/always-squash-and-rebase-your-git-commits/>
 *   <http://gitready.com/advanced/2009/02/10/squashing-commits-with-rebase.html>
 *   <https://medium.com/@slamflipstrom/a-beginners-guide-to-squashing-commits-with-git-rebase-8185cf6e62ec>
 *   Several other options:

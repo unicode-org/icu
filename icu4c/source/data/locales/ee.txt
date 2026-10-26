@@ -353,6 +353,8 @@ ee{
                 yMMM{"MMM y"}
                 yMMMEd{"E, MMM d, y"}
                 yMMMM{"MMMM y"}
+                yMMMMEd{"E, MMMM d, y"}
+                yMMMMd{"MMMM d, y"}
                 yMMMd{"MMM d 'lia', y"}
                 yMd{"M/d/y"}
                 yQQQ{"QQQ y"}

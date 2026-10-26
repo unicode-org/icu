@@ -172,17 +172,11 @@ uz{
                 one{"{0} glyukoza"}
                 other{"{0} glyukoza"}
             }
-            part{
-                dnam{"qism"}
-                one{"{0} qismi"}
-                other{"{0} qismi"}
-            }
             part-per-1e6{
                 one{"{0} milliondan ulush"}
                 other{"{0} milliondan ulush"}
             }
             part-per-1e9{
-                dnam{"milliarddan ulush"}
                 one{"{0} milliarddan ulush"}
                 other{"{0} milliarddan ulush"}
             }
@@ -370,7 +364,7 @@ uz{
                 other{"{0} kaloriya"}
             }
             gray{
-                dnam{"Grey"}
+                dnam{"grey"}
                 one{"{0} grey"}
                 other{"{0} grey"}
             }
@@ -702,7 +696,6 @@ uz{
                 other{"Bofort {0}"}
             }
             light-speed{
-                dnam{"yorug‘lik"}
                 one{"{0} yorug‘lik tezligi"}
                 other{"{0} yorug‘lik tezligi"}
             }
@@ -857,14 +850,8 @@ uz{
         }
         concentr{
             ofglucose{
-                dnam{"Glk"}
                 one{"{0} Glk"}
                 other{"{0} Glk"}
-            }
-            part{
-                dnam{"qism"}
-                one{"{0} qismi"}
-                other{"{0} qismi"}
             }
             part-per-1e6{
                 dnam{"ppm"}
@@ -903,12 +890,10 @@ uz{
         }
         energy{
             calorie-it{
-                dnam{"kal-IT"}
                 one{"{0} kal-IT"}
                 other{"{0} kal-IT"}
             }
             gray{
-                dnam{"Gr"}
                 one{"{0} Gr"}
                 other{"{0} Gr"}
             }
@@ -956,18 +941,7 @@ uz{
                 other{"{0} hp"}
             }
         }
-        pressure{
-            ofhg{
-                one{"{0} Hg"}
-                other{"{0} Hg"}
-            }
-        }
         speed{
-            light-speed{
-                dnam{"yorug‘lik"}
-                one{"{0} yorug‘lik"}
-                other{"{0} yorug‘lik"}
-            }
             mile-per-hour{
                 one{"{0} mi/h"}
                 other{"{0} mi/h"}
@@ -1102,8 +1076,6 @@ uz{
             }
             part-per-1e9{
                 dnam{"milliarddan ulush"}
-                one{"{0} ppb"}
-                other{"{0} ppb"}
             }
             percent{
                 dnam{"foiz"}

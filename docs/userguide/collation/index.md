@@ -115,8 +115,7 @@ For example, here are some of the ways languages vary in ordering strings:
 
 To accommodate the many languages and differing requirements, ICU collation
 supports customizing sort orderings - also known as **tailoring**. More details
-regarding tailoring are discussed in the [Customization
-chapter.](customization/index.md)
+regarding tailoring are discussed in the [Customization chapter](customization/index.md).
 
 The basic ICU Collation Service is provided by two main categories of APIs:
 

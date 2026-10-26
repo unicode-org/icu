@@ -98,5 +98,10 @@ hi_Latn{
         "meta:Reunion"{
             ls{"Reunion Time"}
         }
+        "meta:Turkey"{
+            ld{"Turkiye Summer Time"}
+            lg{"Turkiye Time"}
+            ls{"Turkiye Standard Time"}
+        }
     }
 }

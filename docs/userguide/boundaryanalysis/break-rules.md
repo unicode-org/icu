@@ -270,6 +270,39 @@ See, for example, this snippet from the [line break rules](https://github.com/un
     $dictionary = [$SA];
 ```
 
+The status value of dictionary breaks is determined as follows:
+* the status value of the final break of the rule-based segment refined by the
+  dictionary breaks, if the largest status value defined in the rules is greater
+  than 100 (in that case, the rules are called *word-like*).
+* 0 otherwise.
+
+> **Note:** In practice, only word segmentation is word-like.
+> The need for a distinct behaviour was realized long after status values were
+> introduced: prior to ICU 79, all rules were considered word-like.  Using the
+> largest status value as a heuristic allows rules that are customized versions
+> of the word breaking rules to behave like word segmentation should, without
+> needing to introduce a new syntax to select the status of dictionary breaks.
+
+> **Example:**
+> With the rules
+> ```
+> $dictionary = [A-Z];
+> $ {100};
+> [A-Z] [A-Z];
+> ```
+> The string `ARMAVIRUMQUECANO` has a final break with status 100.
+> These rules are not word-like, so if dictionary breaking finds breaks between
+> `ARMA`, `VIRUMQUE`, and `CANO`,
+> These will have a status value of 0.
+> If however the following rule is added,
+> ```
+> . [?] {200};
+> ```
+> the rules become word-like, and breaks within `ARMAVIRUMQUECANO` all get a
+> status value of 100. Any dictionary breaks within
+> `QUOUSQUETANDEMABUTERECATILINAPATIENTIANOSTRA?` would get a status value of
+> 200.
+
 ## Rule Options
 
 | Option          | Description |
@@ -382,12 +415,6 @@ Here is the syntax for the boundary rules. (The EBNF Syntax is given below.)
    that will probably be removed in a future version of ICU. They are currently
    used by the standard rules for word, line and sentence breaking. An
    alternative is probably needed. The existing implementation is incomplete.
-
-## Additional Sample Code
-
-**C/C++**
-See [icu/source/samples/break/](https://github.com/unicode-org/icu/tree/main/icu4c/source/samples/break/)
-in the ICU source distribution for code samples showing the use of ICU boundary analysis.
 
 ## Details about Dictionary-Based Break Iteration
 

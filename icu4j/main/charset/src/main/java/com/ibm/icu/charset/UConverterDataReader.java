@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.IntBuffer;
+import java.nio.charset.StandardCharsets;
 
 /**
  * ucnvmbcs.h
@@ -408,7 +409,7 @@ final class UConverterDataReader {
         sd.structSize = byteBuffer.getInt();
         byte[] name = new byte[UConverterConstants.MAX_CONVERTER_NAME_LENGTH];
         byteBuffer.get(name);
-        sd.name = new String(name, "US-ASCII");
+        sd.name = new String(name, StandardCharsets.US_ASCII);
         sd.codepage = byteBuffer.getInt();
         sd.platform = byteBuffer.get();
         sd.conversionType = byteBuffer.get();

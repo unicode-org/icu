@@ -67,11 +67,11 @@ are applicable to text searching:
 
 The ICU string search service provides similar APIs to the other text iterating
 services. Allowing users to specify the starting position and direction within
-the text string to be searched. For more information, please see the [Boundary
-Analysis](../boundaryanalysis/index.md) chapter. The user can locate one or all
-occurrences of a pattern in a string. For a given collator, a pattern match is
-located at the offsets <start, end> in a string if the collator finds that the
-sub-string between the start and end is equal.
+the text string to be searched. For more information, please see the
+[Boundary Analysis](../boundaryanalysis/index.md) chapter. The user can locate
+one or all occurrences of a pattern in a string. For a given collator, a pattern
+match is located at the offsets <start, end> in a string if the collator finds
+that the sub-string between the start and end is equal.
 
 The string search service supports two different types of canonical match
 behavior.

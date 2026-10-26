@@ -333,7 +333,6 @@ public final class MathContext implements java.io.Serializable {
      */
     public MathContext(int setdigits) {
         this(setdigits, DEFAULT_FORM, DEFAULT_LOSTDIGITS, DEFAULT_ROUNDINGMODE);
-        return;
     }
 
     /**
@@ -351,7 +350,6 @@ public final class MathContext implements java.io.Serializable {
      */
     public MathContext(int setdigits, int setform) {
         this(setdigits, setform, DEFAULT_LOSTDIGITS, DEFAULT_ROUNDINGMODE);
-        return;
     }
 
     /**
@@ -371,7 +369,6 @@ public final class MathContext implements java.io.Serializable {
      */
     public MathContext(int setdigits, int setform, boolean setlostdigits) {
         this(setdigits, setform, setlostdigits, DEFAULT_ROUNDINGMODE);
-        return;
     }
 
     /**
@@ -418,7 +415,6 @@ public final class MathContext implements java.io.Serializable {
         form = setform;
         lostDigits = setlostdigits; // [no bad value possible]
         roundingMode = setroundingmode;
-        return;
     }
 
     /**

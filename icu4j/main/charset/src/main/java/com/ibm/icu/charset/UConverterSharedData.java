@@ -20,7 +20,7 @@ final class UConverterSharedData {
 
     // const UConverterImpl *impl; /* vtable-style struct of mostly function pointers */
     // UConverterImpl impl; /* vtable-style struct of mostly function pointers */
-    /** initial values of some members of the mutable part of object */
+    /* initial values of some members of the mutable part of object */
 
     /**
      * Shared data structures currently come in two flavors: - readonly for built-in algorithmic

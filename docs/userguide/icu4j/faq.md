@@ -62,7 +62,7 @@ Time Zone Data Version: 2011g
 #### I'm using ICU4J X, but planning to upgrade ICU4J version to X+1 soon. What should I do for the migration?
 
 See the user guide section
-[Version Numbers in ICU](../design#version-numbers-in-icu)
+[Version Numbers in ICU](../icu/design#version-numbers-in-icu)
 for the details about the meaning of the version number parts and how the ICU
 version number changes.
 
@@ -70,7 +70,7 @@ In general, two different reference releases are not binary compatible (i.e.
 drop-in jar file replacement would not work). To use a new reference version of
 ICU4J, you should rebuild your application with the new ICU4J library. ICU
 project has the
-[API compatibility policy](../design#icu-api-compatibility)
+[API compatibility policy](../icu/design#icu-api-compatibility)
 long as you're using ICU APIs marked as @stable in the API reference
 documentation, your application should successfully compile with the new
 reference version of ICU4J library without any source code modifications. (Note:
@@ -86,22 +86,6 @@ with the pattern in a new version.
 For every ICU4J release, we publish
 [APIChangeReport.html](https://htmlpreview.github.io/?https://github.com/unicode-org/icu/blob/main/icu4j/APIChangeReport.html)
 which captures all API changes since previous reference release.
-However, someone may want to see the changes between the
-current release and much older ICU4J version. For example, you're currently
-using ICU4J 60 and considering to upgrade to ICU4J 64. In this case, you can
-generate a change report page by following steps.
-
-1.  Download [ICU4J 64 source package
-    archive](https://icu.unicode.org/download/64#TOC-ICU4J-Download)
-    from the ICU 64 download page and extract files to your local system.
-2.  Set up ICU4J build environment as explained in the
-    [ICU4C Readme](./index).
-3.  Edit
-    [build.properties](https://github.com/unicode-org/icu/blob/main/icu4j/build.properties)
-    in the root directory and change the property value api.report.prev.version
-    from 63 to 60.
-4.  Invoke ant target "apireport".
-5.  The output is generated at out/icu4j_compare_60_64.html.
 
 ### International Calendars
 

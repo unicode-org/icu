@@ -22,7 +22,7 @@
 $tone = [\u0304\u0301\u030C\u0300\u0306] ;
 # Move the tone to the end of a syllable, and convert to number
 e {($tone) r} → r &Pinyin-NumericPinyin($1);
-($tone) ( [i o n u {o n} {n g}]) → $2 &Pinyin-NumericPinyin($1);
+($tone) ( [i o n u {on} {ng}]) → $2 &Pinyin-NumericPinyin($1);
 ($tone) → &Pinyin-NumericPinyin($1);
 # The following backs up until it finds the right vowel, then deposits the tone
 $vowel = [aAeEiIoOuU {u\u0308} {U\u0308} vV];

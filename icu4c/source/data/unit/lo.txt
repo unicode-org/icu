@@ -278,7 +278,6 @@ lo{
                 other{"{0} ແຄລໍລີ່"}
             }
             joule{
-                dnam{"ຈູນ"}
                 other{"{0} ຈູນ"}
             }
             kilojoule{
@@ -459,8 +458,8 @@ lo{
                 other{"{0} ໂຕນ"}
             }
             tonne{
-                dnam{"ໂຕນ"}
-                other{"{0} ໂຕນ"}
+                dnam{"ເມທຣິກໂຕນ"}
+                other{"{0} ເມທຣິກໂຕນ"}
             }
         }
         power{
@@ -704,9 +703,6 @@ lo{
             }
         }
         concentr{
-            ofglucose{
-                dnam{"Glc"}
-            }
             part-per-1e6{
                 dnam{"ppm"}
             }
@@ -750,9 +746,6 @@ lo{
             }
             foodcalorie{
                 other{"{0}ຄລ"}
-            }
-            joule{
-                dnam{"ຈູນ"}
             }
         }
         force{

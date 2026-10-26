@@ -93,6 +93,11 @@ static void doTailTest(void);
 static void testBracketOverflow(void);
 static void TestExplicitLevel0(void);
 static void testUBidiWriteReorderedBufferOverflow(void);
+static void testUBidiWriteReorderedUndefinedShift(void);
+static void testUBidiWriteReorderedReverseMirrorCombining(void);
+static void testUBidiGetRunsBufferOverflow(void);
+static void testUBidiWriteReverseOverflow(void);
+static void testUBidiWriteReverseInternalRunsOnlyOverflow(void);
 
 /* new BIDI API */
 static void testReorderingMode(void);
@@ -143,6 +148,11 @@ addComplexTest(TestNode** root) {
     addTest(root, testBracketOverflow, "complex/bidi/TestBracketOverflow");
     addTest(root, TestExplicitLevel0, "complex/bidi/TestExplicitLevel0");
     addTest(root, testUBidiWriteReorderedBufferOverflow, "complex/bidi/writeReorderedBufferOverflow");
+    addTest(root, testUBidiWriteReorderedUndefinedShift, "complex/bidi/writeReorderedUndefinedShift");
+    addTest(root, testUBidiWriteReorderedReverseMirrorCombining, "complex/bidi/writeReorderedReverseMirrorCombining");
+    addTest(root, testUBidiGetRunsBufferOverflow, "complex/bidi/getRunsBufferOverflow");
+    addTest(root, testUBidiWriteReverseOverflow, "complex/bidi/writeReverseOverflow");
+    addTest(root, testUBidiWriteReverseInternalRunsOnlyOverflow, "complex/bidi/writeReverseInternalRunsOnlyOverflow");
 
     addTest(root, doArabicShapingTest, "complex/arabic-shaping/ArabicShapingTest");
     addTest(root, doLamAlefSpecialVLTRArabicShapingTest, "complex/arabic-shaping/lamalef");
@@ -4959,6 +4969,139 @@ testUBidiWriteReorderedBufferOverflow (void) {
     ubidi_close(bidi);
 }
 
+static void
+testUBidiWriteReorderedUndefinedShift (void) {
+    UErrorCode status = U_ZERO_ERROR;
+    UBiDi* bidi;
+    bidi = ubidi_open();
+    ubidi_setReorderingMode(bidi, UBIDI_REORDER_INVERSE_LIKE_DIRECT);
+    static const UChar text[] = { 0x05D0, 0x221D }; // Alef (RTL), Proportional To (ON)
+    ubidi_setPara(bidi, text, 2, UBIDI_DEFAULT_RTL, NULL, &status);
+    if (U_FAILURE(status)) {
+        log_err("ubidi_setPara failed: %s\n", u_errorName(status));
+        ubidi_close(bidi);
+        return;
+    }
+    UChar dest[MAXLEN];
+    uint16_t opt = UBIDI_INSERT_LRM_FOR_NUMERIC |
+        UBIDI_OUTPUT_REVERSE |
+        UBIDI_DO_MIRRORING;
+    int32_t len = ubidi_writeReordered(bidi, dest, MAXLEN, opt, &status);
+    if (U_FAILURE(status)) {
+        log_err("ubidi_writeReordered failed: %s\n", u_errorName(status));
+    }
+    
+    if (len != 4) {
+        log_err("Expected len 4, got %d\n", (int)len);
+    }
+    /*
+     * Justification for expected:
+     * The input is { 0x05D0, 0x221D } (Alef, Proportional To) in REORDER_INVERSE_LIKE_DIRECT mode with UBIDI_DEFAULT_RTL.
+     * Options set: UBIDI_INSERT_LRM_FOR_NUMERIC | UBIDI_OUTPUT_REVERSE | UBIDI_DO_MIRRORING.
+     * 1. Mirroring: U+221D (Proportional To) mirrors to U+1DB10 (surrogate pair 0xD836, 0xDF10).
+     * 2. Reordering & Visual order: In RTL paragraph, Alef (R) and U+1DB10 (ON) form an RTL run from right to left.
+     *    UBIDI_OUTPUT_REVERSE reverses the visual output buffer so that characters are written out in reverse order.
+     * 3. Mark insertion: With REORDER_INVERSE_LIKE_DIRECT and UBIDI_INSERT_LRM_FOR_NUMERIC, because the run is RTL,
+     *    a Right-to-Left Mark (RLM, U+200F) is appended at the run boundary according to Bidi mark insertion rules.
+     * Thus the resulting output array is: Alef (0x05D0), high/low surrogate of U+1DB10 (0xD836, 0xDF10), and RLM (0x200F).
+     */
+    static const UChar expected[] = { 0x05D0, 0xD836, 0xDF10, 0x200F };
+    if (len == 4) {
+        /* Loop over the output buffer to verify that each code unit exactly matches the expected character sequence. */
+        for (int32_t i = 0; i < len; ++i) {
+            if (dest[i] != expected[i]) {
+                log_err("Mismatch at index %d: expected U+%04X, got U+%04X\n", (int)i, (int)expected[i], (int)dest[i]);
+            }
+        }
+    }
+    ubidi_close(bidi);
+}
+
+static void
+testUBidiWriteReorderedReverseMirrorCombining (void) {
+    UErrorCode status = U_ZERO_ERROR;
+    UBiDi* bidi;
+    bidi = ubidi_open();
+    static const UChar text[] = { u'A', 0x05D0, 0x221D, 0x0300, 0x05D1, u'B' };
+    ubidi_setPara(bidi, text, 6, UBIDI_DEFAULT_LTR, NULL, &status);
+    if (U_FAILURE(status)) {
+        log_err("ubidi_setPara failed: %s\n", u_errorName(status));
+        ubidi_close(bidi);
+        return;
+    }
+    UChar dest[MAXLEN];
+    uint16_t opt = UBIDI_KEEP_BASE_COMBINING | UBIDI_DO_MIRRORING;
+    int32_t len = ubidi_writeReordered(bidi, dest, MAXLEN, opt, &status);
+    if (U_FAILURE(status)) {
+        log_err("ubidi_writeReordered failed: %s\n", u_errorName(status));
+    }
+    
+    if (len != 7) {
+        log_err("Expected len 7, got %d\n", (int)len);
+    }
+    /*
+     * Justification for expected:
+     * Input text: { 'A', 0x05D0 (Alef), 0x221D (Proportional To), 0x0300 (Combining Grave), 0x05D1 (Bet), 'B' }.
+     * Paragraph direction is LTR (UBIDI_DEFAULT_LTR). Options: UBIDI_KEEP_BASE_COMBINING | UBIDI_DO_MIRRORING.
+     * 1. Run breakdown:
+     *    - LTR run 0: 'A'
+     *    - RTL run 1: Alef (0x05D0), Proportional To (0x221D) + Combining Grave (0x0300), Bet (0x05D1).
+     *    - LTR run 2: 'B'
+     * 2. Mirroring & Combining preservation inside RTL run:
+     *    - When reversing the RTL run to visual order (doWriteReverse), Bet (0x05D1) comes first.
+     *    - Next is the base character U+221D with its combining grave (0x0300). Because UBIDI_KEEP_BASE_COMBINING is set,
+     *      the combining grave must stay immediately after its base character in the output.
+     *    - U+221D mirrors to U+1DB10 (surrogate pair 0xD836, 0xDF10), expanding from 1 to 2 code units.
+     *    - Thus the base+combining sequence written in visual order is: 0xD836, 0xDF10, 0x0300.
+     *    - Finally, Alef (0x05D0) is written at the end of the RTL run.
+     * Resulting output: 'A', Bet (0x05D1), U+1DB10 (0xD836, 0xDF10), Combining Grave (0x0300), Alef (0x05D0), 'B'.
+     */
+    static const UChar expected[] = { u'A', 0x05D1, 0xD836, 0xDF10, 0x0300, 0x05D0, u'B' };
+    if (len == 7) {
+        /* Loop over the output buffer to verify that each code unit exactly matches the expected character sequence. */
+        for (int32_t i = 0; i < len; ++i) {
+            if (dest[i] != expected[i]) {
+                log_err("Mismatch at index %d: expected U+%04X, got U+%04X\n", (int)i, (int)expected[i], (int)dest[i]);
+            }
+        }
+    }
+
+    status = U_ZERO_ERROR;
+    len = ubidi_writeReordered(bidi, dest, 6, opt, &status);
+    if (status != U_BUFFER_OVERFLOW_ERROR) {
+        log_err("Expected U_BUFFER_OVERFLOW_ERROR, got %s (len=%d)\n", u_errorName(status), (int)len);
+    }
+    if (len != 7) {
+        log_err("Expected preflight len 7, got %d\n", (int)len);
+    }
+
+    ubidi_close(bidi);
+}
+
+/* ICU-23397 */
+static void
+testUBidiGetRunsBufferOverflow (void) {
+    UErrorCode status = U_ZERO_ERROR;
+    UBiDi* bidi;
+    static const int32_t length = 400000000;
+    UChar* text = uprv_malloc(length * sizeof(UChar));
+    for (int32_t i = 0; i < length; ++i) {
+        text[i] = i % 2 == 0 ? u'A' : u'א';
+    }
+    bidi = ubidi_open();
+    ubidi_setPara(bidi, text, length, UBIDI_DEFAULT_RTL, NULL, &status);
+    int32_t logicalLimit = 0xBADBEEF;
+    UBiDiLevel level = 0xDB;
+    ubidi_getLogicalRun(bidi, length / 2, &logicalLimit, &level);
+    if (logicalLimit != 0xBADBEEF || level != 0xDB) {
+        log_err("ubidi_getLogicalRuns should have failed and left its output parameters untouched "
+                "but it returned with logicalLimit=%d, level=%d",
+                logicalLimit, level);
+    }
+    ubidi_close(bidi);
+    uprv_free(text);
+}
+
 static void TestExplicitLevel0(void) {
     // The following used to fail with an error, see ICU ticket #12922.
     static const UChar text[2] = { 0x202d, 0x05d0 };
@@ -4980,3 +5123,82 @@ static void TestExplicitLevel0(void) {
     }
     ubidi_close(bidi);
 }
+
+static void
+testUBidiWriteReverseOverflow(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    static const UChar src[] = { 0x05D0, 0x221D, 0x05D1 };
+    int32_t srcLen = 3;
+    UChar dest[10];
+    int32_t outLen = ubidi_writeReverse(src, srcLen, dest, 3, 
+                                        UBIDI_DO_MIRRORING | UBIDI_KEEP_BASE_COMBINING, 
+                                        &status);
+    if (status != U_BUFFER_OVERFLOW_ERROR || outLen != 4) {
+        log_err("testUBidiWriteReverseOverflow failed: expected U_BUFFER_OVERFLOW_ERROR and outLen=4, got %s and outLen=%d\n",
+                u_errorName(status), outLen);
+    }
+
+    status = U_ZERO_ERROR;
+    u_memset(dest, 0, 10);
+    outLen = ubidi_writeReverse(src, srcLen, dest, 10,
+                                UBIDI_DO_MIRRORING | UBIDI_KEEP_BASE_COMBINING,
+                                &status);
+    static const UChar expectedDest[] = { 0x05D1, 0xD836, 0xDF10, 0x05D0 };
+    if (U_FAILURE(status) || outLen != 4 || u_strncmp(dest, expectedDest, 4) != 0) {
+        log_err("testUBidiWriteReverseOverflow actual chars (221D->1DB10) failed: status=%s, outLen=%d\n",
+                u_errorName(status), outLen);
+    }
+
+    status = U_ZERO_ERROR;
+    static const UChar src2[] = { 0x05D0, 0xD836, 0xDF10, 0x05D1 };
+    int32_t src2Len = 4;
+    outLen = ubidi_writeReverse(src2, src2Len, dest, 2,
+                                UBIDI_DO_MIRRORING | UBIDI_KEEP_BASE_COMBINING,
+                                &status);
+    if (status != U_BUFFER_OVERFLOW_ERROR || outLen != 3) {
+        log_err("testUBidiWriteReverseOverflow (1DB10->221D overflow) failed: expected U_BUFFER_OVERFLOW_ERROR and outLen=3, got %s and outLen=%d\n",
+                u_errorName(status), outLen);
+    }
+
+    status = U_ZERO_ERROR;
+    u_memset(dest, 0, 10);
+    outLen = ubidi_writeReverse(src2, src2Len, dest, 10,
+                                UBIDI_DO_MIRRORING | UBIDI_KEEP_BASE_COMBINING,
+                                &status);
+    static const UChar expectedDest2[] = { 0x05D1, 0x221D, 0x05D0 };
+    if (U_FAILURE(status) || outLen != 3 || u_strncmp(dest, expectedDest2, 3) != 0) {
+        log_err("testUBidiWriteReverseOverflow actual chars (1DB10->221D) failed: status=%s, outLen=%d\n",
+                u_errorName(status), outLen);
+    }
+}
+
+static void
+testUBidiWriteReverseInternalRunsOnlyOverflow(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    static const UChar src[] = { 0x05D0, 0x221D, 0x05D1 };
+    int32_t srcLen = 3;
+    UChar dest[10];
+    /* 64 is UBIDI_INTERNAL_RUNS_ONLY from ubidiimp.h. When UBIDI_DO_MIRRORING causes expansion
+     * (U+221D expanding to U+1DB10, 2 code units), case UBIDI_INTERNAL_RUNS_ONLY must check destination
+     * capacity to avoid out-of-bounds writes into dest when destSize <= srcLen.
+     */
+    int32_t outLen = ubidi_writeReverse(src, srcLen, dest, 3,
+                                        UBIDI_DO_MIRRORING | 64 /* UBIDI_INTERNAL_RUNS_ONLY */,
+                                        &status);
+    if (status != U_BUFFER_OVERFLOW_ERROR || outLen != 4) {
+        log_err("testUBidiWriteReverseInternalRunsOnlyOverflow failed: expected U_BUFFER_OVERFLOW_ERROR and outLen=4, got %s and outLen=%d\n",
+                u_errorName(status), outLen);
+    }
+
+    status = U_ZERO_ERROR;
+    u_memset(dest, 0, 10);
+    outLen = ubidi_writeReverse(src, srcLen, dest, 10,
+                                UBIDI_DO_MIRRORING | 64 /* UBIDI_INTERNAL_RUNS_ONLY */,
+                                &status);
+    static const UChar expectedDest[] = { 0x05D1, 0xD836, 0xDF10, 0x05D0 };
+    if (U_FAILURE(status) || outLen != 4 || u_strncmp(dest, expectedDest, 4) != 0) {
+        log_err("testUBidiWriteReverseInternalRunsOnlyOverflow actual chars failed: status=%s, outLen=%d\n",
+                u_errorName(status), outLen);
+    }
+}
+

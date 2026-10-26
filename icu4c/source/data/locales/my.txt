@@ -212,7 +212,7 @@ my{
                 Hv{"v HH'h'"}
                 MEd{"MM-dd၊ E"}
                 MMMEd{"MMM d E"}
-                MMMMEd{"MMMM d Eနေ့"}
+                MMMMEd{"MMMM d၊ E"}
                 Md{"d/M"}
                 h{"a h"}
                 hm{"a h:mm"}
@@ -313,7 +313,7 @@ my{
                 "z HH:mm:ss",
                 "H:mm:ss",
                 "H:mm",
-                "y MMMM d EEEE",
+                "y MMMM d၊ EEEE",
                 "y MMMM d",
                 "y MMM d",
                 "d/M/yy",
@@ -347,15 +347,17 @@ my{
                 Eh{"E a h"}
                 Ehm{"E a h:mm"}
                 Ehms{"E a h:mm:ss"}
-                GyMEd{"G y-MM-dd၊ E"}
+                GyM{"G y/MM"}
+                GyMEd{"G y/MM/dd/ E"}
                 GyMMMEd{"G y MMM d၊ E"}
+                GyMMMMEd{"G y MMMM d၊ E"}
                 GyMd{"G y/M/d"}
                 Hmsv{"v HH:mm:ss"}
                 Hmv{"v HH:mm"}
                 Hv{"v HH"}
                 MEd{"d/M E"}
-                MMMEd{"MMM d E"}
-                MMMMEd{"MMMM d E"}
+                MMMEd{"MMM d၊ E"}
+                MMMMEd{"MMMM d၊ E"}
                 MMMMW{
                     other{"MMMM လ W ပတ်မြောက်"}
                 }
@@ -366,8 +368,11 @@ my{
                 hmsv{"v a h:mm:ss"}
                 hmv{"v a h:mm"}
                 hv{"v a h"}
+                yM{"y/MM"}
                 yMEd{"d/M/y E"}
-                yMMMEd{"y MMM d E"}
+                yMMMEd{"y MMM d၊ E"}
+                yMMMMEd{"y MMMM d၊ E"}
+                yMMMMd{"y MMMM d"}
                 yMd{"d/M/y"}
                 yw{
                     other{"Y ခု w ပတ်မြောက်"}
@@ -421,7 +426,7 @@ my{
             eras{
                 abbreviated{
                     0{"ဘီစီ"}
-                    1{"အဒေီ"}
+                    1{"အေဒီ"}
                 }
                 abbreviated%variant{
                     0{"ဘီစီအီး"}
@@ -749,6 +754,9 @@ my{
         dayperiod{
             dn{"နံနက်/ညနေ"}
         }
+        dayperiod-narrow{
+            dn{"AM/PM"}
+        }
         era{
             dn{"ခေတ်"}
         }
@@ -993,22 +1001,52 @@ my{
         or{
             2{"{0} သို့မဟုတ် {1}"}
             end{"{0} သို့မဟုတ် {1}"}
-            middle{"{0} - {1}"}
-            start{"{0} - {1}"}
+            middle{"{0}၊ {1}"}
+            start{"{0}၊ {1}"}
+        }
+        or-narrow{
+            middle{"{0}၊ {1}"}
+            start{"{0}၊ {1}"}
+        }
+        or-short{
+            middle{"{0}၊ {1}"}
+            start{"{0}၊ {1}"}
         }
         standard{
-            2{"{0}နှင့် {1}"}
-            end{"{0}နှင့် {1}"}
-            middle{"{0} - {1}"}
-            start{"{0} - {1}"}
+            2{"{0} နှင့် {1}"}
+            end{"{0} နှင့် {1}"}
+            middle{"{0}၊ {1}"}
+            start{"{0}၊ {1}"}
+        }
+        standard-narrow{
+            2{"{0} နှင့် {1}"}
+            end{"{0} နှင့် {1}"}
+            middle{"{0}၊ {1}"}
+            start{"{0}၊ {1}"}
+        }
+        standard-short{
+            2{"{0} နှင့် {1}"}
+            end{"{0} နှင့် {1}"}
+            middle{"{0}၊ {1}"}
+            start{"{0}၊ {1}"}
         }
         unit{
-            middle{"{0}- {1}"}
-            start{"{0}- {1}"}
+            2{"{0}၊ {1}"}
+            end{"{0}၊ {1}"}
+            middle{"{0}၊ {1}"}
+            start{"{0}၊ {1}"}
         }
         unit-narrow{
-            middle{"{0} {1}"}
-            start{"{0} {1}"}
+            2{"{0}၊ {1}"}
+            end{"{0}၊ {1}"}
+            middle{"{0}၊ {1}"}
+            start{"{0}၊ {1}"}
+        }
+        unit-short{
+            2{"{0}၊ {1}"}
+            end{"{0}၊ {1}"}
+            middle{"{0}၊ {1}"}
+            start{"{0}၊ {1}"}
         }
     }
     measurementSystemNames{

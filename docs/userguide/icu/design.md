@@ -46,9 +46,9 @@ to programming language restrictions. These features include the following:
 
 Locale IDs are composed of language, country, and variant information. The
 following links provide additional useful information regarding ISO standards:
-[ISO-639](http://lcweb.loc.gov/standards/iso639-2/englangn.html), and an ISO
+[ISO-639](https://www.iso.org/iso-639-language-code), and an ISO
 Country Code,
-[ISO-3166](http://www.iso.org/iso/en/prods-services/iso3166ma/02iso-3166-code-lists/list-en1.html).
+[ISO-3166](https://www.iso.org/iso-3166-country-codes.html).
 For example, Italian, Italy, and Euro are designated as: it_IT_EURO.
 
 ### Data-driven Services
@@ -211,7 +211,7 @@ the pool.
 ICU4C APIs are designed to allow separate heaps for its libraries vs. the
 application. This is achieved by providing functions to allocate and release
 objects owned by ICU4C using only ICU4C library functions. For more details see
-the Memory Usage section in the [Coding Guidelines](dev/codingguidelines.md#memory-usage).
+the Memory Usage section in the [Coding Guidelines](../dev/codingguidelines.md#memory-usage).
 
 ### ICU4C Initialization and Termination
 
@@ -229,7 +229,7 @@ any other use of ICU. This functionality is not commonly used.
 `u_setAppData()`. One or more of these functions will be required when ICU is
 configured to load its data directly from files rather than taking it from the
 default data DLL, and the files are not in the default location. Again, this is
-not common. See [ICU Data](icudata#icu-data-directory).
+not common. See [ICU Data](../icu_data/index#icu-data-directory).
 
 3. Sanity check that ICU is functioning and able to access data. This is
 important because configuration or installation problems that leave ICU unable
@@ -367,7 +367,7 @@ There are 3 major extensibility elements in ICU:
    chapter for more information.
 2. **Code Extensibility**:
    The classes, data, and design are fully extensible. Examples of this
-   extensibility include the BreakIterator , RuleBasedBreakIterator and
+   extensibility include the BreakIterator, RuleBasedBreakIterator and
    DictionaryBasedBreakIterator classes.
 3. **Error Handling Extensibility**:
    There are mechanisms available to enhance the built-in error handling when
@@ -607,7 +607,7 @@ Starting with ICU 49, the dependencies of code files (.o files compiled from
 .c/.cpp) are documented in
 [source/test/depstest/dependencies.txt](https://github.com/unicode-org/icu/blob/main/icu4c/source/test/depstest/dependencies.txt).
 Adjacent Python code is used to parse this file and to
-[verify](https://icu.unicode.org/processes/release/tasks/healthy-code#TOC-Check-library-dependencies)
+[verify](https://icu.unicode.org/processes/release/tasks/healthy-code#h.cqdl8quqth1a)
 that it matches the actual dependencies of the code files.
 
 The dependency list can be used to build subset libraries. In addition, by
@@ -797,6 +797,36 @@ For example, here is how an API might be tagged in various versions:
   ```text
   @obsolete ICU 1.4. Use g(x,y,z) instead.
   f(xbase, y)
+  ```
+
+#### Tagging JDK overrides
+
+At times an ICU class might override a method that comes from the
+JDK itself and is already implemented by a class which ICU extends, or even
+by `Object` itself (for example `clone()` or `toString()`).
+
+These overrides should still have javadoc and be annotated with an ICU status
+and version.
+
+Because the method already existed (implemented by JDK) when the ICU class was
+created, it means that the status and ICU version in the method annotation
+should be the same as the ICU annotation of the class:
+
+  ```java
+  /**
+   * ...
+   * @draft ICU 78
+   */
+  public static final class SomeIcuClass {
+      /**
+       * {@inheritDoc}
+       *
+       * @draft ICU 78
+       */
+      @Override public String toString() {
+          ...
+      }
+  }
   ```
 
 ### ICU Binary Compatibility

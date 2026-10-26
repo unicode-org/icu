@@ -11,19 +11,35 @@ tr{
         colCaseLevel{"Büyük/Küçük Harfe Duyarlı Sıralama"}
         colNormalization{"Normalleştirilmiş Sıralama"}
         colNumeric{"Sayısal Sıralama"}
+        colReorder{"Alfabe/Blok Yeniden Sıralama"}
         colStrength{"Sıralama Gücü"}
         collation{"Sıralama Düzeni"}
         currency{"Para Birimi"}
+        d0{"Dönüşüm Hedefi"}
+        dx{"Sözlük Bölme İstisnaları"}
         em{"Emoji Gösterimi"}
+        fw{"Haftanın ilk günü"}
+        h0{"Karıştırılmış"}
         hc{"Saat Sistemi (12 - 24)"}
+        i0{"Giriş Yöntemi"}
+        k0{"Klavye"}
+        kv{"En Yüksek Düzeyde Yok Sayılanlar"}
         lb{"Satır Sonu Stili"}
         lw{"Sözcükler İçindeki Satır Sonları"}
+        m0{"Dönüşüm Kuralları"}
         ms{"Ölçü Sistemi"}
+        mu{"Ölçü Birimi"}
         numbers{"Rakamlar"}
+        rg{"Ek Veriler İçin Bölge"}
+        s0{"Dönüşüm Kaynağı"}
+        sd{"Bölge Alt Bölümü"}
         ss{"Kısaltmadan Sonra Cümle Sonu"}
+        t{"Dönüşüm"}
+        t0{"Makine Çevirisi"}
         timezone{"Saat Dilimi"}
         va{"Yerel Varyant"}
         x{"Özel Kullanım"}
+        x0{"Özel Kullanım Dönüşümü"}
     }
     Languages{
         aa{"Afar"}
@@ -912,10 +928,13 @@ tr{
             ethiopic-amete-alem{"Etiyopik Amete Alem"}
             gregorian{"Miladi"}
             hebrew{"İbrani"}
+            indian{"Ulusal Hint"}
             islamic{"Hicri"}
             islamic-civil{"Hicri (16 Temmuz 622)"}
+            islamic-rgsa{"Hicri, Suudi Arabistan hilal gözlemi"}
             islamic-tbla{"Hicri (15 Temmuz 622)"}
             islamic-umalqura{"Hicri (Ümmü-l Kurra Takvimi)"}
+            iso8601{"Miladi"}
             japanese{"Japon"}
             persian{"İran"}
             roc{"Çin Cumhuriyeti"}
@@ -941,6 +960,11 @@ tr{
             no{"Normal Büyük/Küçük Harf Düzeninde Sıralama"}
             upper{"Önce Büyük Harfleri Sıralama"}
         }
+        colCaseFirst%core{
+            lower{"Küçük Harf"}
+            no{"Küçük Harf"}
+            upper{"Büyük Harf"}
+        }
         colCaseLevel{
             no{"Büyük/Küçük Harfe Duyarlı Olmadan Sıralama"}
             yes{"Büyük/Küçük Harfe Duyarla Sıralama"}
@@ -953,12 +977,26 @@ tr{
             no{"Rakamları Ayrı Sıralama"}
             yes{"Rakamları Sayısal Olarak Sıralama"}
         }
+        colReorder%core{
+            currency{"Para Birimi"}
+            digit{"Rakamlar"}
+            punct{"Noktalama"}
+            space{"Boşluk"}
+            symbol{"Sembol"}
+        }
         colStrength{
             identical{"Tümünü Sıralama"}
             primary{"Yalnızca Taban Harflerini Sıralama"}
             quaternary{"Aksanları/Büyük-Küçük Harfleri/Genişliği/Kana’yı Sıralama"}
             secondary{"Aksanları Sıralama"}
             tertiary{"Aksanları/Büyük-Küçük Harfleri/Genişliği Sıralama"}
+        }
+        colStrength%core{
+            identical{"Tümü"}
+            primary{"Yalnızca Temel Harfler"}
+            quaternary{"Temel, Aksanlar, Büyük ve Küçük Harfler, Türler, Kana"}
+            secondary{"Temel, Aksanlar"}
+            tertiary{"Temel, Aksanlar, Büyük ve Küçük Harfler, Türler"}
         }
         collation{
             compat{"Önceki Sıralama Düzeni (uyumluluk için)"}
@@ -981,10 +1019,13 @@ tr{
             compat{"Uyumluluk"}
             dictionary{"Sözlük"}
             ducet{"Saptanmış Unicode"}
+            emoji{"Emoji"}
+            eor{"Avrupa kuralları"}
             phonebook{"Telefon Defteri"}
             phonetic{"Fonetik"}
             pinyin{"Pinyin"}
             search{"Arama"}
+            searchjl{"Korece ilk ünsüz"}
             standard{"Standart"}
             stroke{"Vuruş"}
             traditional{"Geleneksel"}
@@ -1002,16 +1043,26 @@ tr{
             text{"Metin"}
         }
         hc{
+            c12{"12 Saat Sistemi"}
+            c24{"24 Saat Sistemi"}
             h11{"12 Saat Sistemi (0–11)"}
             h12{"12 Saat Sistemi (1–12)"}
             h23{"24 Saat Sistemi (0–23)"}
             h24{"24 Saat Sistemi (1–24)"}
         }
         hc%core{
+            c12{"12"}
+            c24{"24"}
             h11{"12 (0–11)"}
             h12{"12 (1–12)"}
             h23{"24 (0–23)"}
             h24{"24 (1–24)"}
+        }
+        kv%core{
+            currency{"Boşlukları, noktalamayı, tüm sembolleri kaydır"}
+            punct{"Boşlukları, noktalamayı kaydır"}
+            space{"Boşlukları, noktalamayı kaydır"}
+            symbol{"Boşlukları, noktalamayı, para birimi olmayan sembolleri kaydır"}
         }
         lb{
             loose{"Serbest Satır Sonu Stili"}
@@ -1122,9 +1173,48 @@ tr{
             vaii{"Vai Rakamları"}
             wara{"Warang Citi Rakamları"}
         }
+        numbers%core{
+            arabext{"Genişletilmiş Hint-Arap"}
+            armnlow{"Ermeni küçük harf"}
+            finance{"Finansal"}
+            fullwide{"Tam genişlikte"}
+            greklow{"Yunan küçük harf"}
+            hanidays{"Geleneksel takvimler için Han karakterli ay günü numaralandırması"}
+            hanidec{
+                "Çin sayı ideograflarını rakam olarak kullanan konumsal ondalık siste"
+                "m"
+            }
+            hansfin{"Finansal Basitleştirilmiş Çin"}
+            hantfin{"Finansal Geleneksel Çin"}
+            jpanfin{"Finansal Japon"}
+            jpanyear{"İlk yılın Gannen olduğu Japon numaralandırması"}
+            lanatham{"Tai Tham Tham (dini)"}
+            mathbold{"Matematiksel kalın"}
+            mathdbl{"Matematiksel çift çizgili"}
+            mathmono{"Matematiksel tek aralıklı"}
+            mathsanb{"Matematiksel sans-serif kalın"}
+            mathsans{"Matematiksel sans-serif"}
+            mymrepka{"Myanmar Doğu Pwo Karen"}
+            mymrpao{"Myanmar Pao"}
+            mymrshan{"Myanmar Şan"}
+            mymrtlng{"Myanmar Tai Laing"}
+            native{"Yerel rakamlar"}
+            outlined{"Çizgili"}
+            roman{"Roma büyük harf"}
+            romanlow{"Roma küçük harf"}
+            segment{"Segmentli"}
+            tamldec{"Modern Tamil"}
+            traditional{"Geleneksel rakamlar"}
+        }
         ss%core{
             none{"Kapalı"}
             standard{"Açık"}
+        }
+        t0{
+            und{"Belirtilmemiş Makine Çevirisi"}
+        }
+        va%core{
+            posix{"POSIX varyantı"}
         }
     }
     Variants{

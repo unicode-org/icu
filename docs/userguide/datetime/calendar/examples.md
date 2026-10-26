@@ -22,7 +22,7 @@ License & terms of use: http://www.unicode.org/copyright.html
 
 ## Calendar for Default Time Zone
 
-These C++, C , and Java examples get a Calendar based on the default time zone
+These C++, C, and Java examples get a Calendar based on the default time zone
 and add days to a date.
 
 **C++**
@@ -133,7 +133,7 @@ for (int i = 0; i < 30; i++) {
 
 ## Converting dates between calendars
 
-These C++, C , and Java examples demonstrates converting dates from one calendar
+These C++, C, and Java examples demonstrates converting dates from one calendar
 (Gregorian) to another calendar (Japanese).
 
 **C++**

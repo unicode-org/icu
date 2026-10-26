@@ -3,8 +3,14 @@
 // Generated using tools/cldr/cldr-to-icu/
 es_419{
     zoneStrings{
-        "Africa:Conakry"{
-            ec{"Conakry"}
+        "Africa:Kinshasa"{
+            ec{"Kinsasa"}
+        }
+        "Africa:Mbabane"{
+            ec{"Babane"}
+        }
+        "Africa:Porto-Novo"{
+            ec{"Porto Novo"}
         }
         "America:Fort_Nelson"{
             ec{"Fuerte Nelson"}
@@ -18,8 +24,14 @@ es_419{
         "America:St_Thomas"{
             ec{"Santo Tomás"}
         }
+        "Asia:Bishkek"{
+            ec{"Biskek"}
+        }
         "Asia:Khandyga"{
             ec{"Khandyga"}
+        }
+        "Asia:Rangoon"{
+            ec{"Rangún"}
         }
         "Atlantic:Canary"{
             ec{"Islas Canarias"}
@@ -27,27 +39,27 @@ es_419{
         "Etc:UTC"{
             ls{"hora universal coordinada"}
         }
-        "Europe:Dublin"{
-            ld{"hora estándar de Irlanda"}
-        }
         "Europe:Guernsey"{
             ec{"Guernsey"}
         }
         "Pacific:Wake"{
             ec{"Isla Wake"}
         }
+        "Pacific:Wallis"{
+            ec{"Wallis y Futuna"}
+        }
+        "meta:Africa_Southern"{
+            ls{"hora estándar de Sudáfrica"}
+        }
         "meta:America_Mountain"{
             ld{"hora de verano de la montaña"}
             lg{"hora de la montaña"}
             ls{"hora estándar de la montaña"}
         }
-        "meta:Cocos"{
-            ls{"hora de Islas Cocos"}
-        }
         "meta:Cook"{
-            ld{"hora de verano media de las islas Cook"}
-            lg{"hora de las islas Cook"}
-            ls{"hora estándar de las islas Cook"}
+            ld{"hora de verano de las Islas Cook"}
+            lg{"hora de las Islas Cook"}
+            ls{"hora estándar de las Islas Cook"}
         }
         "meta:Easter"{
             ld{"hora de verano de la Isla de Pascua"}
@@ -68,7 +80,7 @@ es_419{
             ss{"∅∅∅"}
         }
         "meta:Europe_Further_Eastern"{
-            ls{"horario del lejano este de Europa"}
+            ls{"hora del lejano este de Europa"}
         }
         "meta:Europe_Western"{
             ld{"hora de verano de Europa del Oeste"}
@@ -92,11 +104,8 @@ es_419{
         "meta:Gilbert_Islands"{
             ls{"hora de Islas Gilbert"}
         }
-        "meta:India"{
-            ls{"hora de India"}
-        }
-        "meta:Marshall_Islands"{
-            ls{"hora de Islas Marshall"}
+        "meta:Hawaii"{
+            ls{"hora de Hawái"}
         }
         "meta:Myanmar"{
             ls{"hora de Myanmar (Birmania)"}
@@ -109,8 +118,11 @@ es_419{
         "meta:Pyongyang"{
             ls{"hora de Pionyang"}
         }
-        "meta:Solomon"{
-            ls{"hora de Islas Salomón"}
+        "meta:Samoa"{
+            ls{"hora de Samoa Americana"}
+        }
+        "meta:Singapore"{
+            ls{"hora estándar de Singapur"}
         }
         "meta:Wake"{
             ls{"hora de Isla Wake"}

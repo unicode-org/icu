@@ -7,13 +7,12 @@ ig{
             ls{"Nhazi Oge Ụwa Niile"}
         }
         "Etc:Unknown"{
-            ec{"Obodo Amaghị"}
+            ec{"Ebe Amaghị"}
         }
-        "Europe:Dublin"{
-            ld{"Oge Okpomọkụ Ireland"}
-        }
-        "Europe:London"{
-            ld{"Oge Okpomọkụ Britain"}
+        "meta:Acre"{
+            ld{"Oge Okpomọkụ nke Acre"}
+            lg{"Oge Acre"}
+            ls{"Oge Ọkọlọtọ Acre"}
         }
         "meta:Afghanistan"{
             ls{"Oge Afghanistan"}
@@ -136,6 +135,10 @@ ig{
             lg{"Oge Brasilia"}
             ls{"Oge Izugbe Brasilia"}
         }
+        "meta:British"{
+            ld{"Oge Okpomọkụ Britain"}
+            lg{"Oge Britain"}
+        }
         "meta:Brunei"{
             ls{"Oge Brunei Darussalam"}
         }
@@ -211,7 +214,7 @@ ig{
             ls{"Oge Izugbe Mpaghara Ọwụwa Anyanwụ Europe"}
         }
         "meta:Europe_Further_Eastern"{
-            ls{"Further-eastern European Time"}
+            ls{"Oge Ọwụwa Anyanwụ Europe"}
         }
         "meta:Europe_Western"{
             ld{"Oge Okpomọkụ Mpaghara Ọdịda Anyanwụ Europe"}
@@ -235,7 +238,7 @@ ig{
             ls{"Oge French Southern & Antarctic"}
         }
         "meta:GMT"{
-            ls{"Oge Mpaghara Greemwich Mean"}
+            ls{"Oge Mpaghara Greenwich Etịtị"}
         }
         "meta:Galapagos"{
             ls{"Oge Galapagos"}
@@ -250,6 +253,11 @@ ig{
         }
         "meta:Gilbert_Islands"{
             ls{"Oge Gilbert Islands"}
+        }
+        "meta:Greenland"{
+            ld{"Oge Okpomọkụ nke Greenland"}
+            lg{"Oge Greenland"}
+            ls{"Oge Ọkọlọtọ Greenland"}
         }
         "meta:Greenland_Eastern"{
             ld{"Oge Okpomọkụ Mpaghara Ọwụwa Anyanwụ Greenland"}
@@ -273,7 +281,7 @@ ig{
         "meta:Hawaii_Aleutian"{
             ld{"Oge Ihe Hawaii-Aleutian"}
             lg{"Oge Hawaii-Aleutian"}
-            ls{"Oge Izugbe Hawaii-Aleutian"}
+            ls{"Oge Izugbe Hawaii Aleutian"}
         }
         "meta:Hong_Kong"{
             ld{"Oge Okpomọkụ Hong Kong"}
@@ -308,6 +316,10 @@ ig{
             lg{"Oge Iran"}
             ls{"Oge Izugbe Iran"}
         }
+        "meta:Irish"{
+            ld{"Oge Okpomọkụ Ireland"}
+            lg{"Oge Ireland"}
+        }
         "meta:Irkutsk"{
             ld{"Oge Okpomọkụ Irkutsk"}
             lg{"Oge Irkutsk"}
@@ -322,6 +334,11 @@ ig{
             ld{"Oge Ihe Japan"}
             lg{"Oge Japan"}
             ls{"Oge Izugbe Japan"}
+        }
+        "meta:Kamchatka"{
+            ld{"Oge Okpomọkụ Kamchatka"}
+            lg{"Oge Kamchatka"}
+            ls{"Oge Izugbe Kamchatka"}
         }
         "meta:Kazakhstan"{
             ls{"Oge Kazakhstan"}
@@ -497,9 +514,12 @@ ig{
             lg{"Oge Sakhalin"}
             ls{"Oge Izugbe Sakhalin"}
         }
+        "meta:Samara"{
+            ld{"Oge Okpomọkụ nke Samara"}
+            lg{"Oge Samara"}
+            ls{"Oge Izugbe Samara"}
+        }
         "meta:Samoa"{
-            ld{"Oge Ihe Samoa"}
-            lg{"Oge Samoa"}
             ls{"Oge Izugbe Samoa"}
         }
         "meta:Seychelles"{
@@ -542,6 +562,11 @@ ig{
         "meta:Truk"{
             ls{"Oge Chuuk"}
         }
+        "meta:Turkey"{
+            ld{"Oge Okpomọkụ Türkiye"}
+            lg{"Oge Türkiye"}
+            ls{"Oge Izugbe Türkiye"}
+        }
         "meta:Turkmenistan"{
             ld{"Oge Okpomọkụ Turkmenist"}
             lg{"Oge Turkmenist"}
@@ -554,6 +579,9 @@ ig{
             ld{"Oge Okpomọkụ Uruguay"}
             lg{"Oge Uruguay"}
             ls{"Oge Izugbe Uruguay"}
+        }
+        "meta:Urumqi"{
+            ls{"Oge Ürümqi"}
         }
         "meta:Uzbekistan"{
             ld{"Oge Okpomọkụ Uzbekist"}

@@ -267,10 +267,6 @@ tr{
             "CNH",
             "Çin yuanı (offshore)",
         }
-        CNX{
-            "CNX",
-            "Çin Halk Cumhuriyeti Merkez Bankası Doları",
-        }
         CNY{
             "CN¥",
             "Çin yuanı",
@@ -1280,10 +1276,6 @@ tr{
             one{"Şili esküdosu"}
             other{"Şili esküdosu"}
         }
-        CNX{
-            one{"Çin Halk Cumhuriyeti Merkez Bankası doları"}
-            other{"Çin Halk Cumhuriyeti Merkez Bankası doları"}
-        }
         ILR{
             one{"İsrail şekeli (1980–1985)"}
             other{"İsrail şekeli (1980–1985)"}
@@ -1340,10 +1332,6 @@ tr{
             one{"Vietnam dongu (1978–1985)"}
             other{"Vietnam dongu (1978–1985)"}
         }
-        XCG{
-            one{"Karayip guldeni"}
-            other{"Karayip guldeni"}
-        }
         XUA{
             one{"ADB hesap birimi"}
             other{"ADB hesap birimi"}
@@ -1355,10 +1343,6 @@ tr{
         YUR{
             one{"İyileştirilmiş Yugoslav dinarı (1992–1993)"}
             other{"İyileştirilmiş Yugoslav dinarı (1992–1993)"}
-        }
-        ZWG{
-            one{"Zimbabve altını"}
-            other{"Zimbabve altını"}
         }
         ZWR{
             one{"Zimbabve doları (2008)"}

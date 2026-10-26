@@ -44,6 +44,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 import org.junit.Assert;
@@ -1764,13 +1765,14 @@ public class MeasureUnitTest extends CoreTestFmwk {
     }
 
     @Test
+    @SuppressWarnings("ReferenceEquality")
     public void TestParseBuiltIns() {
         for (MeasureUnit unit : MeasureUnit.getAvailable()) {
             if (DEBUG) {
                 System.out.println(
                         "unit ident: " + unit.getIdentifier() + ", type: " + unit.getType());
             }
-            if (unit.getType() == "currency") {
+            if (Objects.equals(unit.getType(), "currency")) {
                 continue;
             }
 
@@ -1855,7 +1857,7 @@ public class MeasureUnitTest extends CoreTestFmwk {
         verifySingleUnit(
                 overQuarticKilometer1, MeasureUnit.MeasurePrefix.KILO, -4, "per-pow4-kilometer");
 
-        assertTrue("power inequality", quarticKilometer != overQuarticKilometer1);
+        assertNotSame("power inequality", quarticKilometer, overQuarticKilometer1);
 
         MeasureUnit overQuarticKilometer2 = quarticKilometer.reciprocal();
         MeasureUnit overQuarticKilometer3 =

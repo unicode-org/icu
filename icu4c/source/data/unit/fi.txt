@@ -2679,11 +2679,6 @@ fi{
                 one{"{0} solmu"}
                 other{"{0} solmua"}
             }
-            light-speed{
-                dnam{"valon nopeus"}
-                one{"{0} valon nopeus"}
-                other{"{0} valon nopeus"}
-            }
             meter-per-second{
                 case{
                     elative{
@@ -2950,8 +2945,6 @@ fi{
             }
             cup{
                 dnam{"kupit"}
-                one{"{0} kuppi"}
-                other{"{0} kuppia"}
             }
             cup-metric{
                 case{
@@ -3020,9 +3013,9 @@ fi{
                 other{"{0} br. nesteunssia"}
             }
             fluid-ounce-metric{
-                dnam{"nesteunssit"}
-                one{"{0} nesteunssi"}
-                other{"{0} nesteunssia"}
+                dnam{"nesteunssit – m"}
+                one{"{0} nesteunssi – m"}
+                other{"{0} nesteunssia – m"}
             }
             gallon{
                 dnam{"am. gallonat"}
@@ -3199,6 +3192,10 @@ fi{
                 one{"{0}rev"}
                 other{"{0}rev"}
             }
+            steradian{
+                one{"{0} sr"}
+                other{"{0} sr"}
+            }
         }
         area{
             acre{
@@ -3251,6 +3248,10 @@ fi{
                 one{"{0}ka"}
                 other{"{0}ka"}
             }
+            katal{
+                one{"{0} kat"}
+                other{"{0} kat"}
+            }
             milligram-ofglucose-per-deciliter{
                 one{"{0}mg/dl"}
                 other{"{0}mg/dl"}
@@ -3265,14 +3266,8 @@ fi{
                 other{"{0}mol"}
             }
             ofglucose{
-                dnam{"gluk"}
                 one{"{0} gluk"}
                 other{"{0} gluk"}
-            }
-            part{
-                dnam{"osa"}
-                one{"{0} osa"}
-                other{"{0} osa"}
             }
             part-per-1e6{
                 one{"{0}ppm"}
@@ -3412,6 +3407,18 @@ fi{
                 one{"{0}A"}
                 other{"{0}A"}
             }
+            coulomb{
+                one{"{0} C"}
+                other{"{0} C"}
+            }
+            farad{
+                one{"{0} F"}
+                other{"{0} F"}
+            }
+            henry{
+                one{"{0} H"}
+                other{"{0} H"}
+            }
             milliampere{
                 one{"{0}mA"}
                 other{"{0}mA"}
@@ -3420,12 +3427,20 @@ fi{
                 one{"{0}Ω"}
                 other{"{0}Ω"}
             }
+            siemens{
+                one{"{0} S"}
+                other{"{0} S"}
+            }
             volt{
                 one{"{0}V"}
                 other{"{0}V"}
             }
         }
         energy{
+            becquerel{
+                one{"{0} Bq"}
+                other{"{0} Bq"}
+            }
             british-thermal-unit{
                 one{"{0}Btu"}
                 other{"{0}Btu"}
@@ -3435,7 +3450,8 @@ fi{
                 other{"{0}cal"}
             }
             calorie-it{
-                dnam{"cal-IT"}
+                one{"{0} cal-IT"}
+                other{"{0} cal-IT"}
             }
             electronvolt{
                 dnam{"eV"}
@@ -3445,6 +3461,10 @@ fi{
             foodcalorie{
                 one{"{0}kcal"}
                 other{"{0}kcal"}
+            }
+            gray{
+                one{"{0} Gy"}
+                other{"{0} Gy"}
             }
             joule{
                 one{"{0}J"}
@@ -3462,6 +3482,10 @@ fi{
                 one{"{0}kWh"}
                 other{"{0}kWh"}
             }
+            sievert{
+                one{"{0} Sv"}
+                other{"{0} Sv"}
+            }
             therm-us{
                 one{"{0}US therm"}
                 other{"{0}US therm"}
@@ -3469,7 +3493,6 @@ fi{
         }
         force{
             kilogram-force{
-                dnam{"kp"}
                 one{"{0} kp"}
                 other{"{0} kp"}
             }
@@ -3653,6 +3676,16 @@ fi{
                 other{"{0}L☉"}
             }
         }
+        magnetic{
+            tesla{
+                one{"{0} T"}
+                other{"{0} T"}
+            }
+            weber{
+                one{"{0} Wb"}
+                other{"{0} Wb"}
+            }
+        }
         mass{
             carat{
                 one{"{0}ka"}
@@ -3778,6 +3811,10 @@ fi{
                 one{"{0}mmHg"}
                 other{"{0}mmHg"}
             }
+            ofhg{
+                one{"{0} Hg"}
+                other{"{0} Hg"}
+            }
             pascal{
                 one{"{0}Pa"}
                 other{"{0}Pa"}
@@ -3797,7 +3834,6 @@ fi{
                 other{"{0}kn"}
             }
             light-speed{
-                dnam{"valon nopeus"}
                 one{"{0}valon nopeus"}
                 other{"{0}valon nopeus"}
             }
@@ -4387,7 +4423,7 @@ fi{
                 other{"{0} cl"}
             }
             cup{
-                dnam{"kp"}
+                dnam{"akp"}
                 one{"{0} kuppi"}
                 other{"{0} kuppia"}
             }

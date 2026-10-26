@@ -1296,14 +1296,6 @@ pt{
             millimole-per-liter{
                 dnam{"mmol/l"}
             }
-            ofglucose{
-                dnam{"Glc"}
-            }
-            part{
-                dnam{"parte"}
-                one{"{0} parte"}
-                other{"{0} parte"}
-            }
             part-per-1e6{
                 dnam{"ppm"}
             }
@@ -1405,9 +1397,6 @@ pt{
             }
         }
         energy{
-            calorie-it{
-                dnam{"cal-IT"}
-            }
             electronvolt{
                 dnam{"eV"}
             }
@@ -1526,17 +1515,8 @@ pt{
                 one{"{0} mb"}
                 other{"{0} mb"}
             }
-            ofhg{
-                dnam{"de Hg"}
-                one{"{0} de Hg"}
-                other{"{0} de Hg"}
-            }
         }
         speed{
-            kilometer-per-hour{
-                one{"{0}km/h"}
-                other{"{0}km/h"}
-            }
             meter-per-second{
                 dnam{"m/s"}
             }
@@ -1575,8 +1555,6 @@ pt{
             }
             liter{
                 dnam{"litro"}
-                one{"{0}l"}
-                other{"{0}l"}
             }
             pint{
                 dnam{"pt"}
@@ -1592,7 +1570,7 @@ pt{
                 dnam{"força g"}
             }
             meter-per-square-second{
-                dnam{"metros/seg²"}
+                dnam{"metros/s²"}
             }
         }
         angle{

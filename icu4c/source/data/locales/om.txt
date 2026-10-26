@@ -364,6 +364,7 @@ om{
                 Ehms{"E h:mm:ss a"}
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, MMM d, y G"}
+                GyMMMMEd{"E, MMMM d, y G"}
                 GyMMMd{"MMM d, y G"}
                 MEd{"E, M/d"}
                 MMMEd{"E, MMM d"}
@@ -382,8 +383,10 @@ om{
                 yMMM{"MMM y"}
                 yMMMEd{"E, MMM d, y"}
                 yMMMM{"MMMM y"}
+                yMMMMEd{"E, MMMM d, y"}
+                yMMMMd{"MMMM d, y"}
                 yMMMd{"MMM d, y"}
-                yMd{"M/d/y"}
+                yMd{"d/M/y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
@@ -541,7 +544,7 @@ om{
                 }
                 yMd{
                     M{"M/d/y – M/d/y"}
-                    d{"M/d/y – M/d/y"}
+                    d{"d/M/y – d/M/y"}
                     y{"M/d/y – M/d/y"}
                 }
             }

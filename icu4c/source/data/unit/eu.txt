@@ -157,8 +157,6 @@ eu{
             }
             katal{
                 dnam{"katalak"}
-                one{"{0} katal"}
-                other{"{0} katal"}
             }
             milligram-ofglucose-per-deciliter{
                 dnam{"miligramo dezilitro bakoitzeko"}
@@ -175,13 +173,9 @@ eu{
             }
             ofglucose{
                 dnam{"glukosa-unitateak"}
-                one{"{0} glukosa-unitate"}
-                other{"{0} glukosa-unitate"}
             }
             part{
                 dnam{"zatiak"}
-                one{"{0} zati"}
-                other{"{0} zati"}
             }
             part-per-1e6{
                 dnam{"zati milioi bakoitzeko"}
@@ -361,18 +355,12 @@ eu{
             }
             coulomb{
                 dnam{"coulombak"}
-                one{"{0} coulomb"}
-                other{"{0} coulomb"}
             }
             farad{
                 dnam{"faradak"}
-                one{"{0} farad"}
-                other{"{0} farad"}
             }
             henry{
                 dnam{"henryak"}
-                one{"{0} henry"}
-                other{"{0} henry"}
             }
             milliampere{
                 dnam{"miliampereak"}
@@ -386,8 +374,6 @@ eu{
             }
             siemens{
                 dnam{"siemensak"}
-                one{"{0} siemens"}
-                other{"{0} siemens"}
             }
             volt{
                 dnam{"voltak"}
@@ -398,8 +384,6 @@ eu{
         energy{
             becquerel{
                 dnam{"becquerelak"}
-                one{"{0} becquerel"}
-                other{"{0} becquerel"}
             }
             calorie{
                 dnam{"kaloriak"}
@@ -408,8 +392,6 @@ eu{
             }
             calorie-it{
                 dnam{"kaloriak [IT]"}
-                one{"{0} kaloria [IT]"}
-                other{"{0} kaloria [IT]"}
             }
             foodcalorie{
                 dnam{"kaloriak"}
@@ -418,8 +400,6 @@ eu{
             }
             gray{
                 dnam{"grayak"}
-                one{"{0} gray"}
-                other{"{0} gray"}
             }
             joule{
                 dnam{"joule-ak"}
@@ -443,8 +423,6 @@ eu{
             }
             sievert{
                 dnam{"sievertak"}
-                one{"{0} sievert"}
-                other{"{0} sievert"}
             }
             therm-us{
                 dnam{"AEBko termiak"}
@@ -453,8 +431,6 @@ eu{
         force{
             kilogram-force{
                 dnam{"kilopondak"}
-                one{"{0} kilopond"}
-                other{"{0} kilopond"}
             }
             kilowatt-hour-per-100-kilometer{
                 dnam{"kilowatt-ordu 100 kilometroko"}
@@ -656,8 +632,6 @@ eu{
         magnetic{
             tesla{
                 dnam{"teslak"}
-                one{"{0} tesla"}
-                other{"{0} tesla"}
             }
             weber{
                 dnam{"weberrak"}
@@ -787,8 +761,6 @@ eu{
             }
             ofhg{
                 dnam{"merkurio-unitateak"}
-                one{"{0} merkurio-unitate"}
-                other{"{0} merkurio-unitate"}
             }
             pascal{
                 dnam{"pascal"}
@@ -929,8 +901,6 @@ eu{
             }
             fluid-ounce-metric{
                 dnam{"likido-ontza metrikoak"}
-                one{"{0} likido-ontza metriko"}
-                other{"{0} likido-ontza metriko"}
             }
             gallon{
                 per{"{0} galoi bakoitzeko"}
@@ -988,11 +958,6 @@ eu{
                 one{"{0}″"}
                 other{"{0}″"}
             }
-            steradian{
-                dnam{"estereorradian"}
-                one{"{0} sr"}
-                other{"{0} sr"}
-            }
         }
         area{
             acre{
@@ -1002,7 +967,6 @@ eu{
         }
         concentr{
             katal{
-                dnam{"katal"}
                 one{"{0} kat"}
                 other{"{0} kat"}
             }
@@ -1010,14 +974,8 @@ eu{
                 dnam{"mmol/l"}
             }
             ofglucose{
-                dnam{"glukosa-unitate"}
                 one{"{0} Glc"}
                 other{"{0} Glc"}
-            }
-            part{
-                dnam{"zati"}
-                one{"{0} zati"}
-                other{"{0} zati"}
             }
             part-per-1e9{
                 dnam{"zati / m. m."}
@@ -1064,44 +1022,36 @@ eu{
         }
         electric{
             coulomb{
-                dnam{"coulomb"}
                 one{"{0} C"}
                 other{"{0} C"}
             }
             farad{
-                dnam{"farad"}
                 one{"{0} F"}
                 other{"{0} F"}
             }
             henry{
-                dnam{"henry"}
                 one{"{0} H"}
                 other{"{0} H"}
             }
             siemens{
-                dnam{"siemens"}
                 one{"{0} S"}
                 other{"{0} S"}
             }
         }
         energy{
             becquerel{
-                dnam{"becquerel"}
                 one{"{0} Bq"}
                 other{"{0} Bq"}
             }
             calorie-it{
-                dnam{"kaloria [IT]"}
                 one{"{0} cal [IT]"}
                 other{"{0} cal [IT]"}
             }
             gray{
-                dnam{"gray"}
                 one{"{0} Gy"}
                 other{"{0} Gy"}
             }
             sievert{
-                dnam{"sievert"}
                 one{"{0} Sv"}
                 other{"{0} Sv"}
             }
@@ -1112,7 +1062,6 @@ eu{
         }
         force{
             kilogram-force{
-                dnam{"kilopond"}
                 one{"{0} kgf"}
                 other{"{0} kgf"}
             }
@@ -1151,12 +1100,8 @@ eu{
         }
         magnetic{
             tesla{
-                dnam{"tesla"}
                 one{"{0} T"}
                 other{"{0} T"}
-            }
-            weber{
-                dnam{"weber"}
             }
         }
         mass{
@@ -1190,7 +1135,6 @@ eu{
                 other{"{0} atm"}
             }
             ofhg{
-                dnam{"merkurio-unitate"}
                 one{"{0} Hg unitate"}
                 other{"{0} Hg unitate"}
             }
@@ -1252,9 +1196,6 @@ eu{
             fluid-ounce-imperial{
                 one{"{0}fl oz Im"}
                 other{"{0}fl oz Im"}
-            }
-            fluid-ounce-metric{
-                dnam{"likido-ontza metriko"}
             }
             liter{
                 dnam{"litro"}

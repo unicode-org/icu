@@ -108,7 +108,7 @@ There are two ways to select scientific or engineering notation: using long-form
 
 Start with the stem `scientific` or `engineering`.  Those stems take the following optional options:
 
-- `/sign-xxx` sets the sign display option for the exponent; see [Sign](#sign).
+- `/sign-xxx` sets the sign display option for the exponent; see [Sign Display](#sign-display).
 - `/*ee` sets exponent digits to "at least 2"; use `/*eee` for at least 3 digits, etc.
     - ***Prior to ICU 67***, use `/+ee` instead of `/*ee`.
 

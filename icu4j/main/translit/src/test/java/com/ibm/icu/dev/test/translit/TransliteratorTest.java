@@ -37,7 +37,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-/***********************************************************************
+/*
+ **********************************************************************
  *
  * HOW TO USE THIS TEST FILE
  * -or-
@@ -80,7 +81,8 @@ import org.junit.runners.JUnit4;
  *
  * Thank you.
  * The Management
- ***********************************************************************/
+ **********************************************************************
+ */
 
 /**
  * @test
@@ -709,9 +711,9 @@ public class TransliteratorTest extends TestFmwk {
         String[] DATA = {
             "$abe = ab;"
                     + "$pat = x[yY]z;"
-                    + "$ll  = 'a-z';"
+                    + "$ll  = [a-z];"
                     + "$llZ = [$ll];"
-                    + "$llY = [$ll$pat];"
+                    + "$llY = [$ll Y];"
                     + "$emp = ;"
                     + "$abe > ABE;"
                     + "$pat > END;"

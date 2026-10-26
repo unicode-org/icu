@@ -71,8 +71,8 @@ from the Chrome Web Store.
 
 Configuration Options:
 
-*   Jira instance url: https://unicode-org.atlassian.net/
-*   Locations: https://github.com/
+*   Jira instance url: <https://unicode-org.atlassian.net/>
+*   Locations: <https://github.com/>
 
 ### Safari extension from SRL
 

@@ -5,15 +5,41 @@ az{
     Keys{
         calendar{"Təqvim"}
         cf{"Valyuta Formatı"}
+        colAlternate{"Simvol çeşidlənməsini iqnor edin"}
+        colBackwards{"Tərs vurğulu çeşidləmə"}
+        colCaseFirst{"Böyük/kiçik hərflərlə sıralama"}
+        colCaseLevel{"Hərf ölçüsünə həssas çeşidləmə"}
+        colNormalization{"Normallaşdırılmış çeşidləmə"}
+        colNumeric{"Rəqəmsal çeşidləmə"}
+        colReorder{"Skript/blok təkrar sıralanması"}
+        colStrength{"Çeşidləmə gücü"}
         collation{"Sıralama"}
         currency{"Valyuta"}
+        d0{"Təyinatın transformasiyası"}
+        dx{"Sözlüyün pozulması istisnaları"}
         em{"Emojilərin təqdim edilməsi"}
+        fw{"Həftənin ilk günü"}
+        h0{"Qarışıq"}
         hc{"Saat Sikli (12 / 24)"}
+        i0{"Daxiletmə metodu"}
+        k0{"Klaviatura"}
+        kv{"Ən yüksək dərəcəli iqnor"}
         lb{"Sətirdən sətrə keçirmə üslubu"}
         lw{"Sözlərin bölünərək sətirdən-sətrə keçirilməsi"}
+        m0{"Transformasiya qaydaları"}
         ms{"Ölçü Sistemi"}
+        mu{"Ölçü vahidi"}
         numbers{"Rəqəmlər"}
+        rg{"Əlavə məlumat üçün yer"}
+        s0{"Mənbə çevrilməsi"}
+        sd{"Regional alt bölmə"}
         ss{"Abreviaturadan sonra cümlə kəsintisi"}
+        t{"Transformasiya"}
+        t0{"Maşın tərcüməsi"}
+        timezone{"Saat qurşağı"}
+        va{"Yerli variant"}
+        x{"Şəxsi istifadə"}
+        x0{"Şəxsi istifadə transformasiyası"}
     }
     Languages{
         aa{"afar"}
@@ -123,6 +149,7 @@ az{
         dav{"taita"}
         de{"alman"}
         de_AT{"Avstriya almancası"}
+        de_CH{"İsveçrə yüksək almancası"}
         del{"delaver"}
         den{"slavey"}
         dgr{"doqrib"}
@@ -411,6 +438,7 @@ az{
         pi{"pali"}
         pis{"picin"}
         pl{"polyak"}
+        pms{"Pyemont"}
         pon{"ponpey"}
         pqm{"malesit-passamakvodi"}
         prg{"pruss"}
@@ -598,11 +626,12 @@ az{
     }
     Languages%variant{
         ckb{"Kürdcə, sorani"}
+        hi_Latn{"Hinqliş"}
     }
     Scripts{
         Adlm{"adlam"}
         Arab{"ərəb"}
-        Aran{"aran"}
+        Aran{"nəstəliq"}
         Armi{"armi"}
         Armn{"erməni"}
         Avst{"avestan"}
@@ -733,8 +762,8 @@ az{
         Zzzz{"tanınmayan yazı"}
     }
     Scripts%stand-alone{
-        Hans{"Sadələşmiş Han"}
-        Hant{"Ənənəvi Han"}
+        Hans{"Sadələşmiş han"}
+        Hant{"Ənənəvi han"}
     }
     Types{
         calendar{
@@ -765,10 +794,13 @@ az{
             ethiopic-amete-alem{"Efiop Amete Alem"}
             gregorian{"Qriqori"}
             hebrew{"Yəhudi"}
+            indian{"Hind milli"}
             islamic{"Hicri"}
             islamic-civil{"Hicri (cədvəl, mülki dövr)"}
+            islamic-rgsa{"Hicri, Səudiyyə Ərəbistanının müşahidəsi"}
             islamic-tbla{"Hicri (cədvəl, astronomik dövr)"}
             islamic-umalqura{"Hicri (Umm əl-Qura)"}
+            iso8601{"Qreqorian"}
             japanese{"Yapon"}
             persian{"İran"}
             roc{"Minquo"}
@@ -781,6 +813,25 @@ az{
             account{"Valyuta formatı: Uçot"}
             standard{"Valyuta formatı: Standart"}
         }
+        colCaseFirst%core{
+            lower{"Kiçik hərflər"}
+            no{"Kiçik hərflər"}
+            upper{"Böyük hərflər"}
+        }
+        colReorder%core{
+            currency{"Valyuta"}
+            digit{"Rəqəmlər"}
+            punct{"Punktuasiya"}
+            space{"Boşluq"}
+            symbol{"İşarə"}
+        }
+        colStrength%core{
+            identical{"Hamısı"}
+            primary{"Yalnız təməl hərflər"}
+            quaternary{"Təməl, vurğular, korpus, variantlar, kana"}
+            secondary{"Təməl, vurğular"}
+            tertiary{"Təməl, vurğular, korpus, variantlar"}
+        }
         collation{
             ducet{"Standart Unicode Sıralama"}
             pinyin{"Pinyin təqvimi"}
@@ -788,9 +839,25 @@ az{
             standard{"Standart Sıralama"}
         }
         collation%core{
+            compat{"Uyğunluq"}
+            dictionary{"Sözlük"}
             ducet{"Defolt unikod"}
+            emoji{"Emoji"}
+            eor{"Avropa qaydaları"}
+            phonebook{"Telefon bloknotu"}
+            phonetic{"Fonetik"}
+            pinyin{"Pinyin"}
             search{"Axtarış"}
+            searchjl{"Koreya başlanğıc samiti"}
             standard{"Standart"}
+            stroke{"Ştrix"}
+            traditional{"Ənənəvi"}
+            unihan{"Radikal ştrix"}
+            zhuyin{"Cuyin"}
+        }
+        d0{
+            fwidth{"Tam eninə"}
+            hwidth{"Yarım eninə"}
         }
         em%core{
             default{"Emojilərin təqdim edilməsi: Standart"}
@@ -798,16 +865,26 @@ az{
             text{"Mətn"}
         }
         hc{
+            c12{"12 Saatlıq Sistem"}
+            c24{"24 Saatlıq Sistem"}
             h11{"12 Saatlıq Sistem (0–11)"}
             h12{"12 Saatlıq Sistem (0–12)"}
             h23{"24 Saatlıq Sistem (0–23)"}
             h24{"24 Saatlıq Sistem (0–23)"}
         }
         hc%core{
+            c12{"12"}
+            c24{"24"}
             h11{"12 (0–11)"}
             h12{"12 (1–12)"}
             h23{"24 (0–23)"}
             h24{"24 (1–24)"}
+        }
+        kv%core{
+            currency{"Boşluqları, punktuasiyanı, bütün işarələri dəyişin"}
+            punct{"Boşluqları, punktuasiyanı dəyişin"}
+            space{"Boşluqları, punktuasiyanı dəyişin"}
+            symbol{"Boşluqları, punktuasiyanı, valyuta olmayan işarələri dəyişin"}
         }
         lb{
             loose{"Sərbəst sətirdən sətrə keçirmə üslubu"}
@@ -824,6 +901,10 @@ az{
             keepall{"Hamısını saxla"}
             normal{"Normal"}
             phrase{"İfadələrdə saxla"}
+        }
+        m0{
+            bgn{"US BGN transliterasiyası"}
+            ungegn{"UN GEGN transliterasiyası"}
         }
         ms{
             metric{"Metrik Sistem"}
@@ -866,6 +947,7 @@ az{
             mlym{"Malayalam Rəqəmləri"}
             mtei{"Mitei Mayek rəqəmləri"}
             mymr{"Myanma Rəqəmləri"}
+            native{"Yerli Rəqəmlər"}
             olck{"Ol Çiki rəqəmləri"}
             orya{"Oriya Rəqəmləri"}
             roman{"Rum Rəqəmləri"}
@@ -877,9 +959,48 @@ az{
             tibt{"Tibet Rəqəmləri"}
             vaii{"Vai rəqəmləri"}
         }
+        numbers%core{
+            arabext{"Genişləndirilmiş ərəb-hind"}
+            armnlow{"Erməni kiçik hərfləri"}
+            finance{"Maliyyə"}
+            fullwide{"Tam geniş"}
+            greklow{"Yunan kiçik hərfləri"}
+            hanidays{"Ənənəvi təqvimlər üçün ay günlərinin han hərfləri ilə nömrələnməsi"}
+            hanidec{
+                "Çin rəqəm ideoqraflarından rəqəm kimi istifadə edən mövqeli onluq si"
+                "stem"
+            }
+            hansfin{"Sadələşdirilmiş Çin maliyyə"}
+            hantfin{"Ənənəvi Çin maliyyə"}
+            jpanfin{"Yapon maliyyə"}
+            jpanyear{"Yapon birinci il Gannen nömrələməsi"}
+            lanatham{"Tai Tham Tham (ekkleziastik)"}
+            mathbold{"Riyazi qalınlıq"}
+            mathdbl{"Riyazi ikiqat zərbə"}
+            mathmono{"Riyazi monoboşluq"}
+            mathsanb{"Riyazi sans-serif qalın"}
+            mathsans{"Riyazi sans-serif"}
+            mymrepka{"Myanma Şərqi Puo Karen"}
+            mymrpao{"Myanma Pao"}
+            mymrshan{"Myanma Şan"}
+            mymrtlng{"Myanma Tay Lainq"}
+            native{"Yerli rəqəmlər"}
+            outlined{"Konturlanmış"}
+            roman{"Roma böyük hərfləri"}
+            romanlow{"Roma kiçik hərfləri"}
+            segment{"Seqmentli"}
+            tamldec{"Modern tamil"}
+            traditional{"Ənənəvi rəqəmlər"}
+        }
         ss%core{
             none{"Deaktiv"}
             standard{"Aktiv"}
+        }
+        t0{
+            und{"Qeyri-müəyyən maşın tərcüməsi"}
+        }
+        va%core{
+            posix{"POSIX variantı"}
         }
     }
     characterLabelPattern{

@@ -34,9 +34,9 @@ public final class CollationTailoring {
             assert (baseSettings.readOnly().reorderCodes.length == 0);
             assert (baseSettings.readOnly().reorderTable == null);
             assert (baseSettings.readOnly().minHighNoReorder == 0);
-            settings = baseSettings.clone();
+            settings = new SharedObject.Reference<>(baseSettings);
         } else {
-            settings = new SharedObject.Reference<CollationSettings>(new CollationSettings());
+            settings = new SharedObject.Reference<>(new CollationSettings());
         }
     }
 
@@ -119,7 +119,7 @@ public final class CollationTailoring {
     CollationData ownedData;
     Trie2_32 trie;
     UnicodeSet unsafeBackwardSet;
-    public Map<Integer, Integer> maxExpansions;
+    public volatile Map<Integer, Integer> maxExpansions;
 
     /*
      * Not Cloneable: A CollationTailoring cannot be copied.

@@ -1512,12 +1512,22 @@ public final class UScript {
     public static final int TRADITIONAL_HAN_WITH_LATIN = 212; /* Hntl */
 
     /**
+     * @stable ICU 79
+     */
+    public static final int PROTO_CUNEIFORM = 213; /* Pcun */
+
+    /**
+     * @stable ICU 79
+     */
+    public static final int SEAL = 214; /* Seal */
+
+    /**
      * One more than the highest normal UScript code. The highest value is available via
      * UCharacter.getIntPropertyMaxValue(UProperty.SCRIPT).
      *
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
-    @Deprecated public static final int CODE_LIMIT = 213;
+    @Deprecated public static final int CODE_LIMIT = 215;
 
     private static int[] getCodesFromLocale(ULocale locale) {
         // Multi-script languages, equivalent to the LocaleScript data
@@ -1963,7 +1973,7 @@ public final class UScript {
             0x112BE | EXCLUSION, // Sind
             0x118B4 | EXCLUSION | CASED, // Wara
             0,
-            0,
+            0x18F1A | EXCLUSION | LB_LETTERS, // Jurc
             0x16A4F | EXCLUSION, // Mroo
             0x1B1C4 | EXCLUSION | LB_LETTERS, // Nshu
             0x11183 | EXCLUSION, // Shrd
@@ -2027,6 +2037,9 @@ public final class UScript {
             0x10950 | EXCLUSION | RTL, // Sidt
             0x1E6D5 | EXCLUSION | LB_LETTERS, // Tayo
             0x11DC6 | EXCLUSION, // Tols
+            0,
+            0x125AD | EXCLUSION, // Pcun
+            0x3EA10 | EXCLUSION | LB_LETTERS, // Seal
             // End copy-paste from parsescriptmetadata.py
         };
 
@@ -2150,8 +2163,6 @@ public final class UScript {
         return (ScriptMetadata.getScriptProps(script) & ScriptMetadata.CASED) != 0;
     }
 
-    /// CLOVER:OFF
     /** Private Constructor. Never default construct */
     private UScript() {}
-    /// CLOVER:ON
 }

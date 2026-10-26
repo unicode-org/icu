@@ -290,8 +290,8 @@ third column, punctuation characters are ignored in the first 3 levels and the
 fourth level is not considered. In the last column, punctuated terms are
 equivalent to the identical terms without punctuation.
 
-For more options and details see the [“Ignore Punctuation”
-Options](customization/ignorepunct.md) page.
+For more options and details see the
+[“Ignore Punctuation” Options](customization/ignorepunct.md) page.
 
 Non-ignorable | Ignorable and Quaternary strength | Ignorable and Tertiary strength
 ------------- | --------------------------------- | -------------------------------
@@ -529,8 +529,7 @@ of contractions followed by expansions (see
 This causes all the Hiragana and Katakana codepoints to be treated as
 contractions, which reduces performance. The solution we adopted introduces the
 prefix concept which allows us to improve the performance of Japanese sorting.
-More about this can be found in the [customization
-chapter](customization/index.md) .
+More about this can be found in the [customization chapter](customization/).
 
 ## Thai/Lao reordering
 
@@ -611,18 +610,18 @@ otherwise stated, the examples use the UCA alone with default settings.
 ### Main References
 
 1.  For a full list of supported locales in ICU, see [Locale
-    Explorer](https://icu4c-demos.unicode.org/icu-bin/locexp) , which also contains
+    Explorer](https://icu4c-demos.unicode.org/icu-bin/locexp), which also contains
     an on-line demo showing sorting for each locale. The demo allows you to try
     different attribute values, to see how they affect sorting.
 
 2.  To see tabular results for the UCA table itself, see the [Unicode Collation
-    Charts](http://www.unicode.org/charts/collation/) .
+    Charts](http://www.unicode.org/charts/collation/).
 
 3.  For the UCA specification, see [UTS #10: Unicode Collation
-    Algorithm](http://www.unicode.org/reports/tr10/) .
+    Algorithm](http://www.unicode.org/reports/tr10/).
 
-4.  For more detail on the precise effects of these options, see [Collation
-    Customization](customization/index.md) .
+4.  For more detail on the precise effects of these options, see
+    [Collation Customization](customization/index.md).
 
 #### Collator Naming Attributes
 

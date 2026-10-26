@@ -124,18 +124,8 @@ vi{
                 other{"{0} katal"}
             }
             ofglucose{
+                dnam{"glucose"}
                 other{"{0} glucose"}
-            }
-            part{
-                dnam{"phần"}
-                other{"{0} phần"}
-            }
-            part-per-1e6{
-                dnam{"phần triệu"}
-                other{"{0} phần triệu"}
-            }
-            part-per-1e9{
-                other{"{0} phần tỷ"}
             }
             permyriad{
                 other{"{0} phần vạn"}
@@ -200,6 +190,12 @@ vi{
             terabyte{
                 dnam{"terabyte"}
                 other{"{0} terabyte"}
+            }
+        }
+        duration{
+            hour{
+                dnam{"tiếng"}
+                other{"{0} tiếng"}
             }
         }
         electric{
@@ -558,10 +554,6 @@ vi{
                 dnam{"hải lý/giờ"}
                 other{"{0} hải lý/giờ"}
             }
-            light-speed{
-                dnam{"ánh sáng"}
-                other{"{0} ánh sáng"}
-            }
             meter-per-second{
                 dnam{"mét/giây"}
                 other{"{0} mét/giây"}
@@ -702,35 +694,12 @@ vi{
                 other{"{0}G"}
             }
         }
-        angle{
-            steradian{
-                other{"{0} sr"}
-            }
-        }
         area{
             hectare{
                 other{"{0}ha"}
             }
         }
         concentr{
-            katal{
-                other{"{0} kat"}
-            }
-            ofglucose{
-                dnam{"Glc"}
-                other{"{0} Glc"}
-            }
-            part{
-                dnam{"phần"}
-                other{"{0} phần"}
-            }
-            part-per-1e6{
-                dnam{"phần triệu"}
-                other{"{0} phần triệu"}
-            }
-            part-per-1e9{
-                other{"{0} phần tỷ"}
-            }
             permyriad{
                 dnam{"‱"}
             }
@@ -744,42 +713,18 @@ vi{
                 dnam{"PB"}
             }
         }
-        electric{
-            coulomb{
-                other{"{0} C"}
-            }
-            farad{
-                other{"{0} F"}
-            }
-            henry{
-                other{"{0} H"}
-            }
-            siemens{
-                other{"{0} S"}
+        duration{
+            hour{
+                dnam{"tiếng"}
+                other{"{0} tiếng"}
             }
         }
         energy{
-            becquerel{
-                other{"{0} Bq"}
-            }
-            calorie-it{
-                dnam{"cal-IT"}
-                other{"{0} cal-IT"}
-            }
             electronvolt{
                 dnam{"eV"}
             }
-            gray{
-                other{"{0} Gy"}
-            }
-            sievert{
-                other{"{0} Sv"}
-            }
         }
         force{
-            kilogram-force{
-                other{"{0} kgf"}
-            }
             newton{
                 dnam{"N"}
             }
@@ -829,14 +774,6 @@ vi{
                 dnam{"L☉"}
             }
         }
-        magnetic{
-            tesla{
-                other{"{0} T"}
-            }
-            weber{
-                other{"{0} Wb"}
-            }
-        }
         mass{
             dalton{
                 dnam{"Da"}
@@ -867,16 +804,6 @@ vi{
             millibar{
                 other{"{0} mb"}
             }
-            ofhg{
-                dnam{"of Hg"}
-                other{"{0} of Hg"}
-            }
-        }
-        speed{
-            light-speed{
-                dnam{"ánh sáng"}
-                other{"{0} ánh sáng"}
-            }
         }
         volume{
             cubic-kilometer{
@@ -887,9 +814,6 @@ vi{
             }
             fluid-ounce-imperial{
                 other{"{0} fl ozIm"}
-            }
-            fluid-ounce-metric{
-                other{"{0} fl oz m."}
             }
             gallon{
                 per{"{0}/gal"}
@@ -1002,8 +926,8 @@ vi{
                 other{"{0} thập kỷ"}
             }
             hour{
-                dnam{"giờ"}
-                other{"{0} giờ"}
+                dnam{"tiếng"}
+                other{"{0} tiếng"}
                 per{"{0}/giờ"}
             }
             microsecond{

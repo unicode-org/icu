@@ -41,7 +41,7 @@ ca{
                 other{"{0} radiants"}
             }
             revolution{
-                dnam{"revolució"}
+                dnam{"revolucions"}
                 gender{"feminine"}
                 one{"{0} revolució"}
                 other{"{0} revolucions"}
@@ -179,6 +179,7 @@ ca{
         }
         concentr{
             item{
+                dnam{"ítems"}
                 gender{"masculine"}
             }
             karat{
@@ -571,25 +572,25 @@ ca{
         }
         frequency{
             gigahertz{
-                dnam{"gigahertz"}
+                dnam{"gigahertzs"}
                 gender{"masculine"}
                 one{"{0} gigahertz"}
                 other{"{0} gigahertzs"}
             }
             hertz{
-                dnam{"hertz"}
+                dnam{"hertzs"}
                 gender{"masculine"}
                 one{"{0} hertz"}
                 other{"{0} hertzs"}
             }
             kilohertz{
-                dnam{"quilohertz"}
+                dnam{"quilohertzs"}
                 gender{"masculine"}
                 one{"{0} quilohertz"}
                 other{"{0} quilohertzs"}
             }
             megahertz{
-                dnam{"megahertz"}
+                dnam{"megahertzs"}
                 gender{"masculine"}
                 one{"{0} megahertz"}
                 other{"{0} megahertzs"}
@@ -656,7 +657,7 @@ ca{
                 other{"{0} decímetres"}
             }
             earth-radius{
-                dnam{"radi terrestre"}
+                dnam{"radis terrestres"}
                 one{"{0} radi terrestre"}
                 other{"{0} radis terrestres"}
             }
@@ -758,18 +759,19 @@ ca{
         }
         light{
             candela{
-                dnam{"candela"}
+                dnam{"candeles"}
                 gender{"feminine"}
                 one{"{0} candela"}
                 other{"{0} candeles"}
             }
             lumen{
-                dnam{"lumen"}
+                dnam{"lúmens"}
                 gender{"masculine"}
                 one{"{0} lumen"}
-                other{"{0} lumens"}
+                other{"{0} lúmens"}
             }
             lux{
+                dnam{"luxs"}
                 gender{"masculine"}
                 one{"{0} lux"}
                 other{"{0} luxs"}
@@ -810,6 +812,8 @@ ca{
             }
             grain{
                 dnam{"grans"}
+                one{"{0} gra"}
+                other{"{0} grans"}
             }
             gram{
                 gender{"masculine"}
@@ -994,8 +998,6 @@ ca{
             }
             light-speed{
                 gender{"feminine"}
-                one{"{0} llums"}
-                other{"{0} llums"}
             }
             meter-per-second{
                 dnam{"metres per segon"}
@@ -1022,7 +1024,7 @@ ca{
                 other{"{0} graus Fahrenheit"}
             }
             generic{
-                dnam{"grau"}
+                dnam{"graus"}
                 gender{"masculine"}
                 one{"{0} grau"}
                 other{"{0} graus"}
@@ -1049,7 +1051,7 @@ ca{
         }
         volume{
             acre-foot{
-                dnam{"acre-peu"}
+                dnam{"acres-peus"}
                 one{"{0} acre-peu"}
                 other{"{0} acres-peus"}
             }
@@ -1124,7 +1126,7 @@ ca{
                 other{"{0} decilitres"}
             }
             dessert-spoon{
-                dnam{"culleradeta de postres"}
+                dnam{"culleradetes de postres"}
                 one{"{0} culleradeta de postres"}
                 other{"{0} culleradetes de postres"}
             }
@@ -1248,10 +1250,6 @@ ca{
             radian{
                 dnam{"rad"}
             }
-            steradian{
-                one{"{0} sr"}
-                other{"{0} sr"}
-            }
         }
         area{
             acre{
@@ -1271,15 +1269,8 @@ ca{
             karat{
                 dnam{"quirat"}
             }
-            katal{
-                one{"{0} kat"}
-                other{"{0} kat"}
-            }
             millimole-per-liter{
                 dnam{"mM/l"}
-            }
-            ofglucose{
-                dnam{"Glc"}
             }
             part-per-1e6{
                 dnam{"ppm"}
@@ -1328,28 +1319,7 @@ ca{
                 per{"{0}/any"}
             }
         }
-        electric{
-            coulomb{
-                one{"{0} C"}
-                other{"{0} C"}
-            }
-            farad{
-                one{"{0} F"}
-                other{"{0} F"}
-            }
-        }
         energy{
-            becquerel{
-                one{"{0} Bq"}
-                other{"{0} Bq"}
-            }
-            calorie-it{
-                dnam{"cal-IT"}
-            }
-            sievert{
-                one{"{0} Sv"}
-                other{"{0} Sv"}
-            }
             therm-us{
                 dnam{"thm"}
             }
@@ -1413,8 +1383,6 @@ ca{
         mass{
             grain{
                 dnam{"gr"}
-                one{"{0} gr"}
-                other{"{0} gr"}
             }
             gram{
                 dnam{"g"}
@@ -1435,17 +1403,6 @@ ca{
             millibar{
                 one{"{0} mbar"}
                 other{"{0} mbars"}
-            }
-            ofhg{
-                dnam{"d‘Hg"}
-                one{"{0} d‘Hg"}
-                other{"{0} d‘Hg"}
-            }
-        }
-        speed{
-            light-speed{
-                one{"{0} llums"}
-                other{"{0} llums"}
             }
         }
         temperature{

@@ -12,6 +12,7 @@ import com.ibm.icu.impl.Assert;
 import com.ibm.icu.impl.ICUBinary;
 import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.impl.RBBIDataWrapper;
+import com.ibm.icu.text.UnicodeSet.XSymbolTable;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -141,13 +142,13 @@ class RBBIRuleBuilder {
     //  Constructor.
     //
     // ----------------------------------------------------------------------------------------
-    RBBIRuleBuilder(String rules) {
+    RBBIRuleBuilder(String rules, XSymbolTable customProperties) {
         fDebugEnv = ICUDebug.enabled("rbbi") ? ICUDebug.value("rbbi") : null;
         fRules = rules;
         fStrippedRules = new StringBuilder(rules);
         fUSetNodes = new ArrayList<>();
         fRuleStatusVals = new ArrayList<>();
-        fScanner = new RBBIRuleScanner(this);
+        fScanner = new RBBIRuleScanner(this, customProperties);
         fSetBuilder = new RBBISetBuilder(this);
     }
 
@@ -277,12 +278,13 @@ class RBBIRuleBuilder {
     //                        The compiled form is identical to that from ICU4C (Big Endian).
     //
     // ----------------------------------------------------------------------------------------
-    static void compileRules(String rules, OutputStream os) throws IOException {
+    static void compileRules(String rules, OutputStream os, XSymbolTable customProperties)
+            throws IOException {
         //
         // Read the input rules, generate a parse tree, symbol table,
         // and list of all Unicode Sets referenced by the rules.
         //
-        RBBIRuleBuilder builder = new RBBIRuleBuilder(rules);
+        RBBIRuleBuilder builder = new RBBIRuleBuilder(rules, customProperties);
         builder.build(os);
     }
 
@@ -339,12 +341,14 @@ class RBBIRuleBuilder {
 
     void optimizeTables() {
         boolean didSomething;
+        fForwardTable.minimizeLookaheads();
         do {
             didSomething = false;
             // Begin looking for duplicates with char class 3.
-            // Classes 0, 1 and 2 are special; they are unused, {bof} and {eof} respectively,
-            // and should not have other categories merged into them.
-            IntPair duplPair = new IntPair(3, 0);
+            // Class 0 is unused and should not have other categories merged into
+            // it. We allow merging categories *into* class 1 {eof} (but not the
+            // reverse, so that eof remains in class 1).
+            IntPair duplPair = new IntPair(1, 0);
             while (fForwardTable.findDuplCharClassFrom(duplPair)) {
                 fSetBuilder.mergeCategories(duplPair);
                 fForwardTable.removeColumn(duplPair.second);

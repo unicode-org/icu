@@ -51,7 +51,7 @@ The following steps must be completed in order:
 
 1.  Build and install a complete ICU with the **`--disable-layout` `--disable-layoutex`**
     switches passed to configure
-3.  Build and install HarfBuzz - http://harfbuzz.org (HarfBuzz's use of ICU may
+3.  Build and install HarfBuzz - <http://harfbuzz.org> (HarfBuzz's use of ICU may
     be enabled or disabled at your choice)
 4.  Build and install the [icu-le-hb](https://github.com/harfbuzz/icu-le-hb) library.
 5.  Now, rerun "configure" on the exact **same** ICU workspace used above:

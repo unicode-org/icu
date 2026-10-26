@@ -267,10 +267,6 @@ eu{
             "CNH",
             "yuan txinatarra (itsasoz haraindikoa)",
         }
-        CNX{
-            "CNX",
-            "Txinako Herri Bankuaren dolarra",
-        }
         CNY{
             "CN¥",
             "yuan txinatarra",
@@ -1502,10 +1498,6 @@ eu{
             one{"yuan txinatar (itsasoz haraindikoa)"}
             other{"yuan txinatar (itsasoz haraindikoa)"}
         }
-        CNX{
-            one{"Txinako Herri Bankuaren dolar"}
-            other{"Txinako Herri Bankuaren dolar"}
-        }
         CNY{
             one{"yuan txinatar"}
             other{"yuan txinatar"}
@@ -2318,10 +2310,6 @@ eu{
             one{"dolar ekikaribear"}
             other{"dolar ekikaribear"}
         }
-        XCG{
-            one{"florin karibetarra"}
-            other{"florin karibetarra"}
-        }
         XDR{
             one{"igorpen-eskubide berezi"}
             other{"igorpen-eskubide berezi"}
@@ -2417,10 +2405,6 @@ eu{
         ZWD{
             one{"dolar zimbabwetar (1980–2008)"}
             other{"dolar zimbabwetar (1980–2008)"}
-        }
-        ZWG{
-            one{"urre zimbabwetarra"}
-            other{"urre zimbabwetarra"}
         }
         ZWL{
             one{"dolar zimbabwetar (2009)"}

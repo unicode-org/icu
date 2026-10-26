@@ -205,7 +205,7 @@ tr{
             ec{"Sahalin"}
         }
         "Asia:Samarkand"{
-            ec{"Semerkand"}
+            ec{"Semerkant"}
         }
         "Asia:Seoul"{
             ec{"Seul"}
@@ -279,9 +279,6 @@ tr{
         "Europe:Copenhagen"{
             ec{"Kopenhag"}
         }
-        "Europe:Dublin"{
-            ld{"İrlanda Standart Saati"}
-        }
         "Europe:Gibraltar"{
             ec{"Cebelitarık"}
         }
@@ -299,7 +296,6 @@ tr{
         }
         "Europe:London"{
             ec{"Londra"}
-            ld{"İngiltere Yaz Saati"}
         }
         "Europe:Luxembourg"{
             ec{"Lüksemburg"}
@@ -386,11 +382,6 @@ tr{
             lg{"Alaska Saati"}
             ls{"Alaska Standart Saati"}
         }
-        "meta:Almaty"{
-            ld{"Almatı Yaz Saati"}
-            lg{"Almatı Saati"}
-            ls{"Almatı Standart Saati"}
-        }
         "meta:Amazon"{
             ld{"Amazon Yaz Saati"}
             lg{"Amazon Saati"}
@@ -425,16 +416,6 @@ tr{
             ld{"Apia Yaz Saati"}
             lg{"Apia Saati"}
             ls{"Apia Standart Saati"}
-        }
-        "meta:Aqtau"{
-            ld{"Aktav Yaz Saati"}
-            lg{"Aktav Saati"}
-            ls{"Aktav Standart Saati"}
-        }
-        "meta:Aqtobe"{
-            ld{"Aktöbe Yaz Saati"}
-            lg{"Aktöbe Saati"}
-            ls{"Aktöbe Standart Saati"}
         }
         "meta:Arabian"{
             ld{"Arabistan Yaz Saati"}
@@ -506,6 +487,10 @@ tr{
             ld{"Brasilia Yaz Saati"}
             lg{"Brasilia Saati"}
             ls{"Brasilia Standart Saati"}
+        }
+        "meta:British"{
+            ld{"İngiltere Yaz Saati"}
+            lg{"İngiltere Saati"}
         }
         "meta:Brunei"{
             ls{"Brunei Darü’s-Selam Saati"}
@@ -625,6 +610,11 @@ tr{
         "meta:Gilbert_Islands"{
             ls{"Gilbert Adaları Saati"}
         }
+        "meta:Greenland"{
+            ld{"Grönland Yaz Saati"}
+            lg{"Grönland Saati"}
+            ls{"Grönland Standart Saati"}
+        }
         "meta:Greenland_Eastern"{
             ld{"Doğu Grönland Yaz Saati"}
             lg{"Doğu Grönland Saati"}
@@ -635,9 +625,6 @@ tr{
             lg{"Batı Grönland Saati"}
             ls{"Batı Grönland Standart Saati"}
         }
-        "meta:Guam"{
-            ls{"Guam Standart Saati"}
-        }
         "meta:Gulf"{
             ls{"Körfez Saati"}
         }
@@ -645,7 +632,7 @@ tr{
             ls{"Guyana Saati"}
         }
         "meta:Hawaii"{
-            ls{"Hawaii-Aleut Standart Saati"}
+            ls{"Hawaii Standart Saati"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"Hawaii-Aleut Yaz Saati"}
@@ -684,6 +671,10 @@ tr{
             ld{"İran Yaz Saati"}
             lg{"İran Saati"}
             ls{"İran Standart Saati"}
+        }
+        "meta:Irish"{
+            ld{"İrlanda Standart Saati"}
+            lg{"İrlanda Saati"}
         }
         "meta:Irkutsk"{
             ld{"İrkutsk Yaz Saati"}
@@ -730,9 +721,6 @@ tr{
         "meta:Kyrgystan"{
             ls{"Kırgızistan Saati"}
         }
-        "meta:Lanka"{
-            ls{"Lanka Saati"}
-        }
         "meta:Line_Islands"{
             ls{"Line Adaları Saati"}
         }
@@ -740,11 +728,6 @@ tr{
             ld{"Lord Howe Yaz Saati"}
             lg{"Lord Howe Saati"}
             ls{"Lord Howe Standart Saati"}
-        }
-        "meta:Macau"{
-            ld{"Makao Yaz Saati"}
-            lg{"Makao Saati"}
-            ls{"Makao Standart Saati"}
         }
         "meta:Magadan"{
             ld{"Magadan Yaz Saati"}
@@ -823,9 +806,6 @@ tr{
             lg{"Fernando de Noronha Saati"}
             ls{"Fernando de Noronha Standart Saati"}
         }
-        "meta:North_Mariana"{
-            ls{"Kuzey Mariana Adaları Saati"}
-        }
         "meta:Novosibirsk"{
             ld{"Novosibirsk Yaz Saati"}
             lg{"Novosibirsk Saati"}
@@ -879,11 +859,6 @@ tr{
         "meta:Pyongyang"{
             ls{"Pyongyang Saati"}
         }
-        "meta:Qyzylorda"{
-            ld{"Kızılorda Yaz Saati"}
-            lg{"Kızılorda Saati"}
-            ls{"Kızılorda Standart Saati"}
-        }
         "meta:Reunion"{
             ls{"Reunion Saati"}
         }
@@ -901,8 +876,6 @@ tr{
             ls{"Samara Standart Saati"}
         }
         "meta:Samoa"{
-            ld{"Samoa Yaz Saati"}
-            lg{"Samoa Saati"}
             ls{"Samoa Standart Saati"}
         }
         "meta:Seychelles"{
@@ -949,7 +922,9 @@ tr{
             ld{"Türkiye Yaz Saati"}
             lg{"Türkiye Saati"}
             ls{"Türkiye Standart Saati"}
+            sd{"TSİ Yaz"}
             sg{"TSİ"}
+            ss{"TSİ"}
         }
         "meta:Turkmenistan"{
             ld{"Türkmenistan Yaz Saati"}
@@ -963,6 +938,9 @@ tr{
             ld{"Uruguay Yaz Saati"}
             lg{"Uruguay Saati"}
             ls{"Uruguay Standart Saati"}
+        }
+        "meta:Urumqi"{
+            ls{"Urumçi Saati"}
         }
         "meta:Uzbekistan"{
             ld{"Özbekistan Yaz Saati"}

@@ -102,7 +102,7 @@ class LowercaseTransliterator extends Transliterator {
     }
 
     // NOTE: normally this would be static, but because the results vary by locale....
-    SourceTargetUtility sourceTargetUtility = null;
+    volatile SourceTargetUtility sourceTargetUtility = null;
 
     /* (non-Javadoc)
      * @see com.ibm.icu.text.Transliterator#addSourceTargetSet(com.ibm.icu.text.UnicodeSet, com.ibm.icu.text.UnicodeSet, com.ibm.icu.text.UnicodeSet)

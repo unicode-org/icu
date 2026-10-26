@@ -72,8 +72,15 @@ sat{
         "meta:GMT"{
             ls{"ᱜᱨᱤᱱᱣᱤᱪ ᱢᱤᱱ ᱚᱠᱛᱚ"}
         }
+        "meta:Hawaii"{
+            ls{"ᱦᱟᱣᱟᱭᱤ ᱢᱟᱱᱚᱠ ᱚᱠᱛᱚ"}
+        }
+        "meta:Hawaii_Aleutian"{
+            ld{"ᱦᱟᱣᱟᱭᱤ ᱟᱞᱮᱣᱴᱤᱭᱟᱱ ᱥᱤᱧᱟᱜ ᱚᱠᱛᱚ"}
+            lg{"ᱦᱟᱣᱟᱭᱤ ᱟᱞᱮᱣᱴᱤᱭᱟᱱ ᱚᱠᱛᱚ"}
+            ls{"ᱦᱟᱣᱟᱭᱤ ᱟᱞᱮᱣᱴᱤᱭᱟᱱ ᱢᱟᱱᱚᱠ ᱚᱠᱛᱚ"}
+        }
         gmtFormat{"ᱡᱤᱮᱢᱴᱤ{0}"}
-        gmtZeroFormat{"ᱡᱤᱮᱢᱴᱤ"}
         regionFormat{"{0} ᱚᱠᱛᱚ"}
         regionFormatDaylight{"{0} ᱫᱤᱱᱵᱮᱲᱟ ᱚᱠᱛᱚ"}
         regionFormatStandard{"{0} ᱢᱟᱱᱚᱠ ᱚᱠᱛᱚ"}

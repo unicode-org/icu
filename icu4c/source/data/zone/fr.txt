@@ -284,6 +284,7 @@ fr{
         }
         "Etc:UTC"{
             ls{"temps universel coordonné"}
+            ss{"TU"}
         }
         "Etc:Unknown"{
             ec{"lieu inconnu"}
@@ -303,9 +304,6 @@ fr{
         "Europe:Copenhagen"{
             ec{"Copenhague"}
         }
-        "Europe:Dublin"{
-            ld{"heure d’été irlandaise"}
-        }
         "Europe:Guernsey"{
             ec{"Guernesey"}
         }
@@ -320,7 +318,6 @@ fr{
         }
         "Europe:London"{
             ec{"Londres"}
-            ld{"heure d’été britannique"}
         }
         "Europe:Malta"{
             ec{"Malte"}
@@ -392,11 +389,6 @@ fr{
             lg{"heure de l’Alaska"}
             ls{"heure normale de l’Alaska"}
         }
-        "meta:Almaty"{
-            ld{"heure d’été d’Alma Ata"}
-            lg{"heure d’Alma Ata"}
-            ls{"heure normale d’Alma Ata"}
-        }
         "meta:Amazon"{
             ld{"heure d’été de l’Amazonie"}
             lg{"heure de l’Amazonie"}
@@ -428,19 +420,9 @@ fr{
             ls{"heure normale d’Anadyr"}
         }
         "meta:Apia"{
-            ld{"heure d’été d’Apia"}
-            lg{"heure d’Apia"}
-            ls{"heure normale d’Apia"}
-        }
-        "meta:Aqtau"{
-            ld{"heure d’été d’Aktaou"}
-            lg{"heure d’Aktaou"}
-            ls{"heure normale d’Aktaou"}
-        }
-        "meta:Aqtobe"{
-            ld{"heure d’été d’Aqtöbe"}
-            lg{"heure d’Aqtöbe"}
-            ls{"heure normale d’Aqtöbe"}
+            ld{"heure d’été des Samoa occidentales"}
+            lg{"heure des Samoa occidentales"}
+            ls{"heure normale des Samoa occidentales"}
         }
         "meta:Arabian"{
             ld{"heure d’été de l’Arabie"}
@@ -512,6 +494,10 @@ fr{
             ld{"heure d’été de Brasilia"}
             lg{"heure de Brasilia"}
             ls{"heure normale de Brasilia"}
+        }
+        "meta:British"{
+            ld{"heure d’été britannique"}
+            lg{"heure britannique"}
         }
         "meta:Brunei"{
             ls{"heure du Brunei"}
@@ -613,6 +599,7 @@ fr{
         }
         "meta:GMT"{
             ls{"heure moyenne de Greenwich"}
+            ss{"GMT"}
         }
         "meta:Galapagos"{
             ls{"heure des îles Galápagos"}
@@ -628,6 +615,11 @@ fr{
         "meta:Gilbert_Islands"{
             ls{"heure des îles Gilbert"}
         }
+        "meta:Greenland"{
+            ld{"heure d’été du Groenland"}
+            lg{"heure du Groenland"}
+            ls{"heure normale du Groenland"}
+        }
         "meta:Greenland_Eastern"{
             ld{"heure d’été de l’Est du Groenland"}
             lg{"heure de l’Est du Groenland"}
@@ -638,9 +630,6 @@ fr{
             lg{"heure de l’Ouest du Groenland"}
             ls{"heure normale de l’Ouest du Groenland"}
         }
-        "meta:Guam"{
-            ls{"heure de Guam"}
-        }
         "meta:Gulf"{
             ls{"heure du Golfe"}
         }
@@ -648,7 +637,7 @@ fr{
             ls{"heure du Guyana"}
         }
         "meta:Hawaii"{
-            ls{"heure normale d’Hawaï - Aléoutiennes"}
+            ls{"heure d’Hawaï"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"heure d’été d’Hawaï - Aléoutiennes"}
@@ -688,6 +677,10 @@ fr{
             lg{"heure de l’Iran"}
             ls{"heure normale d’Iran"}
         }
+        "meta:Irish"{
+            ld{"heure d’été irlandaise"}
+            lg{"heure irlandaise"}
+        }
         "meta:Irkutsk"{
             ld{"heure d’été d’Irkoutsk"}
             lg{"heure d’Irkoutsk"}
@@ -704,9 +697,9 @@ fr{
             ls{"heure normale du Japon"}
         }
         "meta:Kamchatka"{
-            ld{"heure d’été de Petropavlovsk-Kamchatski"}
-            lg{"heure de Petropavlovsk-Kamchatski"}
-            ls{"heure normale de Petropavlovsk-Kamchatski"}
+            ld{"heure d’été du Kamtchatka"}
+            lg{"heure du Kamtchatka"}
+            ls{"heure normale du Kamtchatka"}
         }
         "meta:Kazakhstan"{
             ls{"heure du Kazakhstan"}
@@ -818,9 +811,6 @@ fr{
             lg{"heure de Fernando de Noronha"}
             ls{"heure normale de Fernando de Noronha"}
         }
-        "meta:North_Mariana"{
-            ls{"heure des îles Mariannes du Nord"}
-        }
         "meta:Novosibirsk"{
             ld{"heure d’été de Novossibirsk"}
             lg{"heure de Novossibirsk"}
@@ -891,8 +881,6 @@ fr{
             ls{"heure normale de Samara"}
         }
         "meta:Samoa"{
-            ld{"heure d’été des Samoa"}
-            lg{"heure des Samoa"}
             ls{"heure normale des Samoa"}
         }
         "meta:Seychelles"{
@@ -936,7 +924,7 @@ fr{
             ls{"heure de Chuuk"}
         }
         "meta:Turkey"{
-            ld{"heure avancée de Turquie"}
+            ld{"heure d’été de Turquie"}
             lg{"heure de Turquie"}
             ls{"heure normale de Turquie"}
         }
@@ -952,6 +940,9 @@ fr{
             ld{"heure d’été de l’Uruguay"}
             lg{"heure de l’Uruguay"}
             ls{"heure normale de l’Uruguay"}
+        }
+        "meta:Urumqi"{
+            ls{"heure d’Ürümqi"}
         }
         "meta:Uzbekistan"{
             ld{"heure d’été de l’Ouzbékistan"}
@@ -999,7 +990,6 @@ fr{
             ls{"heure normale du Yukon"}
         }
         gmtFormat{"UTC{0}"}
-        gmtZeroFormat{"UTC"}
         hourFormat{"+HH:mm;−HH:mm"}
         regionFormat{"heure : {0}"}
         regionFormatDaylight{"{0} (heure d’été)"}

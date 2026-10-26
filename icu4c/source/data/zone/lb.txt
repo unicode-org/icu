@@ -183,17 +183,11 @@ lb{
         "Europe:Copenhagen"{
             ec{"Kopenhagen"}
         }
-        "Europe:Dublin"{
-            ld{"Iresch Summerzäit"}
-        }
         "Europe:Kiev"{
             ec{"Kiew"}
         }
         "Europe:Lisbon"{
             ec{"Lissabon"}
-        }
-        "Europe:London"{
-            ld{"Britesch Summerzäit"}
         }
         "Europe:Luxembourg"{
             ec{"Lëtzebuerg"}
@@ -270,11 +264,6 @@ lb{
             ld{"Alaska-Summerzäit"}
             lg{"Alaska-Zäit"}
             ls{"Alaska-Normalzäit"}
-        }
-        "meta:Almaty"{
-            ld{"Almaty-Summerzäit"}
-            lg{"Almaty-Zäit"}
-            ls{"Almaty-Normalzäit"}
         }
         "meta:Amazon"{
             ld{"Amazonas-Summerzäit"}
@@ -376,6 +365,10 @@ lb{
             ld{"Brasília-Summerzäit"}
             lg{"Brasília-Zäit"}
             ls{"Brasília-Normalzäit"}
+        }
+        "meta:British"{
+            ld{"Britesch Summerzäit"}
+            lg{"Britesch-zäit"}
         }
         "meta:Brunei"{
             ls{"Brunei-Zäit"}
@@ -499,9 +492,6 @@ lb{
             lg{"Westgrönland-Zäit"}
             ls{"Westgrönland-Normalzäit"}
         }
-        "meta:Guam"{
-            ls{"Guam-Zäit"}
-        }
         "meta:Gulf"{
             ls{"Golf-Zäit"}
         }
@@ -509,7 +499,7 @@ lb{
             ls{"Guyana-Zäit"}
         }
         "meta:Hawaii"{
-            ls{"Hawaii-Aleuten-Normalzäit"}
+            ls{"Hawaii-Normalzäit"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"Hawaii-Aleuten-Summerzäit"}
@@ -548,6 +538,10 @@ lb{
             ld{"Iranesch Summerzäit"}
             lg{"Iranesch Zäit"}
             ls{"Iranesch Normalzäit"}
+        }
+        "meta:Irish"{
+            ld{"Iresch Summerzäit"}
+            lg{"Iresch-zäit"}
         }
         "meta:Irkutsk"{
             ld{"Irkutsk-Summerzäit"}
@@ -743,8 +737,6 @@ lb{
             ls{"Samara-Normalzäit"}
         }
         "meta:Samoa"{
-            ld{"Samoa-Summerzäit"}
-            lg{"Samoa-Zäit"}
             ls{"Samoa-Normalzäit"}
         }
         "meta:Seychelles"{

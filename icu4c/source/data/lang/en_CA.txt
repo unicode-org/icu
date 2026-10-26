@@ -59,6 +59,8 @@ en_CA{
             wed{"First day of week is Wednesday"}
         }
         hc{
+            c12{"12-hour system"}
+            c24{"24-hour system"}
             h11{"12-hour system (0–11)"}
             h12{"12-hour system (1–12)"}
             h23{"24-hour system (0–23)"}

@@ -256,6 +256,7 @@ pt_PT{
                 "GyMd",
             }
             availableFormats{
+                GyM{"MM/y G"}
                 GyMEd{"E, d/M/y G"}
                 yyyyMMM{"MM/y G"}
                 yyyyMMMEEEEd{"EEEE, d/MM/y"}
@@ -376,18 +377,17 @@ pt_PT{
             }
             availableFormats{
                 GyMEd{"E, dd/MM/y G"}
+                GyMMMM{"MMMM 'de' y G"}
+                GyMMMMEd{"ccc, d 'de' MMMM 'de' y G"}
                 GyMd{"dd/MM/y G"}
+                M{"MM"}
                 MMMEd{"E, d/MM"}
-                MMMMEd{"ccc, d 'de' MMMM"}
                 MMMMW{
                     one{"W.'ª' 'semana' 'de' MMMM"}
                     other{"W.'ª' 'semana' 'de' MMMM"}
                 }
-                MMMd{"d/MM"}
-                yMMM{"MM/y"}
                 yMMMEEEEd{"EEEE, d/MM/y"}
                 yMMMEd{"E, d/MM/y"}
-                yMMMMEd{"ccc, d 'de' MMMM 'de' y"}
                 yMMMd{"d/MM/y"}
                 yQQQ{"QQQQ 'de' y"}
                 yw{
@@ -497,12 +497,6 @@ pt_PT{
                 }
                 d{
                     d{"d–d"}
-                }
-                h{
-                    h{"h–h a"}
-                }
-                hv{
-                    h{"h–h a v"}
                 }
                 y{
                     y{"y–y"}

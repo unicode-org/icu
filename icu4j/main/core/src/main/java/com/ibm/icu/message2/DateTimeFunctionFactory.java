@@ -44,7 +44,7 @@ class DateTimeFunctionFactory implements FunctionFactory {
      *     invalid option values, etc.)
      */
     @Override
-    public Function create(Locale locale, Map<String, Object> fixedOptions) {
+    public Function create(Locale locale, Map<String, ?> fixedOptions) {
         locale = OptUtils.getBestLocale(fixedOptions, locale);
         Directionality dir = OptUtils.getBestDirectionality(fixedOptions, locale);
 
@@ -149,7 +149,7 @@ class DateTimeFunctionFactory implements FunctionFactory {
                     Map.entry("second::false", "Hms"));
 
     private static String getDateFieldOptions(
-            Map<String, Object> options, String fieldName, String lengthName) {
+            Map<String, ?> options, String fieldName, String lengthName) {
         StringBuilder skeleton = new StringBuilder();
         String opt;
 
@@ -169,7 +169,7 @@ class DateTimeFunctionFactory implements FunctionFactory {
         return skeleton.toString();
     }
 
-    private static String getTimeFieldOptions(Map<String, Object> options, String precisionName) {
+    private static String getTimeFieldOptions(Map<String, ?> options, String precisionName) {
         StringBuilder skeleton = new StringBuilder();
         String opt;
 
@@ -214,7 +214,7 @@ class DateTimeFunctionFactory implements FunctionFactory {
 
         /** {@inheritDoc} */
         @Override
-        public FormattedPlaceholder format(Object toFormat, Map<String, Object> variableOptions) {
+        public FormattedPlaceholder format(Object toFormat, Map<String, ?> variableOptions) {
             // TODO: use a special type to indicate function without input argument.
             if (toFormat == null) {
                 return null;
@@ -248,7 +248,7 @@ class DateTimeFunctionFactory implements FunctionFactory {
 
         /** {@inheritDoc} */
         @Override
-        public String formatToString(Object toFormat, Map<String, Object> variableOptions) {
+        public String formatToString(Object toFormat, Map<String, ?> variableOptions) {
             FormattedPlaceholder result = format(toFormat, variableOptions);
             return result != null ? result.toString() : null;
         }

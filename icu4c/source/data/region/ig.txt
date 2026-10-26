@@ -3,7 +3,7 @@
 // Generated using tools/cldr/cldr-to-icu/
 ig{
     Countries{
-        001{"Uwa"}
+        001{"uwa"}
         002{"Afrika"}
         003{"Mpaghara Ugwu Amerịka"}
         005{"Mpaghara Mgbada Ugwu America"}
@@ -317,5 +317,6 @@ ig{
         NZ{"Aotearoa New Zealand"}
         SZ{"Swaziland"}
         TL{"East Timor"}
+        TR{"Turkey"}
     }
 }

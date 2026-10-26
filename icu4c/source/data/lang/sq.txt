@@ -5,15 +5,41 @@ sq{
     Keys{
         calendar{"Kalendari"}
         cf{"Formati valutor"}
-        collation{"Radhitja"}
+        colAlternate{"Renditje me shpërfillje të simboleve"}
+        colBackwards{"Renditje me anasjellë të theksit"}
+        colCaseFirst{"Renditja sipas shkronjave të mëdha/të vogla"}
+        colCaseLevel{"Renditje sipas ndjeshmërisë ndaj shkronjave të mëdha/të vogla"}
+        colNormalization{"Renditje me normalizim"}
+        colNumeric{"Renditje numerike"}
+        colReorder{"Rirenditja e skripteve/blloqeve"}
+        colStrength{"Shkalla e renditjes"}
+        collation{"Mënyra e renditjes"}
         currency{"Valuta"}
+        d0{"Destinacioni i transformimit"}
+        dx{"Përjashtime nga ndarja sipas fjalorit"}
         em{"Prezantimi i emoji-ve"}
+        fw{"Dita e parë e javës"}
+        h0{"E përzier"}
         hc{"Cikli orar (12 - 24)"}
+        i0{"Metoda e hyrjes"}
+        k0{"Tastiera"}
+        kv{"më e larta e shpërfillur"}
         lb{"Stili i gjerësisë së rreshtave"}
         lw{"Ndarja e rreshtit brenda fjalëve"}
+        m0{"Rregullat e transformimit"}
         ms{"Sistemi i njësive matëse"}
+        mu{"Njësia e matjes"}
         numbers{"Numrat/shifrat"}
+        rg{"Rajoni për të dhëna suplementare"}
+        s0{"Burimi i transformimit"}
+        sd{"Nënndarja e rajonit"}
         ss{"Ndërprerja e fjalisë pas shkurtimit"}
+        t{"Transformimi"}
+        t0{"përkthyer mekanikisht"}
+        timezone{"Brezi orar"}
+        va{"varianti lokal"}
+        x{"për përdorim privat"}
+        x0{"transformim për përdorim privat"}
     }
     Languages{
         aa{"afarisht"}
@@ -336,6 +362,7 @@ sq{
         pcm{"pixhinishte nigeriane"}
         pis{"pixhinisht"}
         pl{"polonisht"}
+        pms{"piedmontezisht"}
         pqm{"malisit-pasamakuadisht"}
         prg{"prusisht"}
         ps{"pashtoisht"}
@@ -710,10 +737,13 @@ sq{
             ethiopic-amete-alem{"etiopik amete-alem"}
             gregorian{"gregorian"}
             hebrew{"hebraik"}
+            indian{"kombëtar indian"}
             islamic{"islam"}
             islamic-civil{"islam (tabelor, epoka civile)"}
+            islamic-rgsa{"hixhri, sipas hënës në Arabinë Saudite"}
             islamic-tbla{"islam (tabelor, epoka astronomike)"}
             islamic-umalqura{"islam (um al-qura)"}
+            iso8601{"gregorian"}
             japanese{"japonez"}
             persian{"persian"}
             roc{"minguo"}
@@ -725,6 +755,25 @@ sq{
         cf%core{
             account{"llogaritës"}
             standard{"standard"}
+        }
+        colCaseFirst%core{
+            lower{"të vogla"}
+            no{"të vogla"}
+            upper{"të mëdha"}
+        }
+        colReorder%core{
+            currency{"monedha"}
+            digit{"shifrat"}
+            punct{"pikësimi"}
+            space{"hapësira"}
+            symbol{"simboli"}
+        }
+        colStrength%core{
+            identical{"të gjitha"}
+            primary{"vetëm germat bazë"}
+            quaternary{"bazë, thekset, shkronjat e mëdha/të vogla, variantet, Kana"}
+            secondary{"bazë, thekset"}
+            tertiary{"bazë, thekset, shkronjat e mëdha/të vogla, variantet"}
         }
         collation{
             compat{"Radhitja e mëparshme, për pajtueshmëri"}
@@ -743,9 +792,25 @@ sq{
             zhuyin{"radhitje zhujin"}
         }
         collation%core{
+            compat{"përputhshmëria"}
+            dictionary{"fjalori"}
             ducet{"unikode e parazgjedhur"}
+            emoji{"emoji"}
+            eor{"rregullat evropiane"}
+            phonebook{"numëratori telefonik"}
+            phonetic{"fonetike"}
+            pinyin{"sistemi Pinyin"}
             search{"kërkim"}
+            searchjl{"bashkëtingëllorja fillestare koreane"}
             standard{"standarde"}
+            stroke{"vija"}
+            traditional{"tradicionale"}
+            unihan{"radikale e vija"}
+            zhuyin{"sistemi Zhuyin"}
+        }
+        d0{
+            fwidth{"në gjerësi të plotë"}
+            hwidth{"në gjysmëgjerësi"}
         }
         em%core{
             default{"e parazgjedhur"}
@@ -753,16 +818,32 @@ sq{
             text{"mesazh me tekst"}
         }
         hc{
+            c12{"sistem 12-orësh"}
+            c24{"sistem 24-orësh"}
             h11{"sistem 12-orësh (0 - 11)"}
             h12{"sistem 12-orësh (1 - 12)"}
             h23{"sistem 24-orësh (0 - 23)"}
             h24{"sistem 24-orësh (1 - 24)"}
         }
         hc%core{
+            c12{"12-orësh"}
+            c24{"24-orësh"}
             h11{"12-orësh (0 - 11)"}
             h12{"12-orësh (0 - 12)"}
             h23{"24-orësh (0 - 23)"}
             h24{"24-orësh (0 - 24)"}
+        }
+        kv%core{
+            currency{
+                "zhvendosje e hapësirave, shenjave të pikësimit dhe të gjitha simbole"
+                "ve"
+            }
+            punct{"zhvendosje e hapësirave dhe shenjave të pikësimit"}
+            space{"zhvendosje e hapësirave dhe shenjave të pikësimit"}
+            symbol{
+                "zhvendosje e hapësirave, shenjave të pikësimit dhe simboleve jo të m"
+                "onedhave"
+            }
         }
         lb{
             loose{"stil i gjerësisë së rreshtave - i larguar"}
@@ -780,6 +861,10 @@ sq{
             normal{"ndarje normale"}
             phrase{"jo ndarje e frazave"}
         }
+        m0{
+            bgn{"transliterimi BGN i SHBA-së"}
+            ungegn{"transliterimi UNGEGN i OKB-së"}
+        }
         ms{
             metric{"sistem metrik"}
             uksystem{"sistem imperial (britanik) i njësive matëse"}
@@ -793,9 +878,9 @@ sq{
         numbers{
             ahom{"shifra ahom"}
             arab{"shifra indo-arabe"}
-            arabext{"shifra indo-arabe të zgjatura"}
+            arabext{"shifra indo-arabe të zgjeruara"}
             armn{"numra armenë"}
-            armnlow{"numra armenë të vegjël"}
+            armnlow{"numra armenë me shkronja të vogla"}
             bali{"shifra bali"}
             beng{"shifra bengali"}
             brah{"shifra brahmi"}
@@ -805,12 +890,12 @@ sq{
             deva{"shifra devanagari"}
             diak{"shifra dives akuru"}
             ethi{"numra etiopianë"}
-            fullwide{"shifra me largësi të brendshme"}
+            fullwide{"shifra me gjerësi të plotë"}
             geor{"numra gjeorgjianë"}
             gong{"shifra gunxhala gondi"}
             gonm{"shifra masaram gondi"}
             grek{"numra grekë"}
-            greklow{"numra grekë të vegjël"}
+            greklow{"numra grekë me shkronja të vogla"}
             gujr{"shifra guxharati"}
             guru{"shifra gurmuki"}
             hanidec{"numra dhjetorë kinezë"}
@@ -831,7 +916,7 @@ sq{
             lana{"shifra tai tam hora"}
             lanatham{"shifra tai tam tam"}
             laoo{"shifra lao"}
-            latn{"shifra latino-perëndimore"}
+            latn{"shifra perëndimore"}
             lepc{"shifra lepça"}
             limb{"shifra limbu"}
             mathbold{"shifra të trasha matematike"}
@@ -848,13 +933,14 @@ sq{
             mymrshan{"shifra mianmar-shan"}
             mymrtlng{"shifra mianmar tai lang"}
             nagm{"shifra nag mundan"}
+            native{"shifra vendase"}
             nkoo{"shifra nko"}
             olck{"shifra ol-çikike"}
             orya{"shifra orije"}
             osma{"shifra osmania"}
             rohg{"shifra hanifi rohingia"}
             roman{"numra romakë"}
-            romanlow{"numra romakë të vegjël"}
+            romanlow{"numra romakë me shkronja të vogla"}
             saur{"shifra saurashtra"}
             shrd{"shifra sharada"}
             sind{"shifra kudavadi"}
@@ -874,9 +960,51 @@ sq{
             wara{"shifra varang citi"}
             wcho{"shifra vanço"}
         }
+        numbers%core{
+            arabext{"indo-arabe të zgjeruara"}
+            armnlow{"armenë me shkronja të vogla"}
+            finance{"financiarë"}
+            fullwide{"gjerësi e plotë"}
+            greklow{"grekë me shkronja të vogla"}
+            hanidays{
+                "numërimi i ditëve të muajit me karaktere Han për kalendarët tradicio"
+                "nalë"
+            }
+            hanidec{
+                "sistem dhjetor pozicional që përdor ideografet e numrave kinezë si s"
+                "hifra"
+            }
+            hansfin{"financiarë të kinezishtes së thjeshtuar"}
+            hantfin{"financiarë të kinezishtes tradicionale"}
+            jpanfin{"financiarë japonezë"}
+            jpanyear{"numërimi japonez i vitit të parë Gannen"}
+            lanatham{"Tai Tham Tham (kishtarë)"}
+            mathbold{"i trashësuar matematikor"}
+            mathdbl{"me goditje të dyfishtë matematikor"}
+            mathmono{"me hapësirë fikse matematikor"}
+            mathsanb{"sans-serif i trashësuar matematikor"}
+            mathsans{"sans-serif matematikor"}
+            mymrepka{"Pwo Karen lindor i Mianmarit"}
+            mymrpao{"Pao i Mianmarit"}
+            mymrshan{"Shan i Mianmarit"}
+            mymrtlng{"Tai Laing i Mianmarit"}
+            native{"shifra vendase"}
+            outlined{"me kontur"}
+            roman{"shkronja të mëdha romake"}
+            romanlow{"romakë me shkronja të vogla"}
+            segment{"të segmentuar"}
+            tamldec{"tamile moderne"}
+            traditional{"numra tradicionalë"}
+        }
         ss%core{
             none{"joaktive"}
             standard{"aktive"}
+        }
+        t0{
+            und{"përkthim mekanik i paspecifikuar"}
+        }
+        va%core{
+            posix{"varianti i POSIX"}
         }
     }
     characterLabelPattern{

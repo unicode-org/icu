@@ -703,11 +703,6 @@ mn{
             knot{
                 dnam{"зангилаа"}
             }
-            light-speed{
-                dnam{"гэрэл"}
-                one{"{0} гэрэл"}
-                other{"{0} гэрэл"}
-            }
             meter-per-second{
                 dnam{"секундэд ногдох метр"}
                 one{"секундэд {0} метр"}
@@ -928,14 +923,6 @@ mn{
             }
         }
         concentr{
-            katal{
-                dnam{"кат"}
-                one{"{0} кат"}
-                other{"{0} кат"}
-            }
-            ofglucose{
-                dnam{"Glc"}
-            }
             part-per-1e6{
                 dnam{"ppm"}
                 one{"{0}ppm"}
@@ -996,18 +983,7 @@ mn{
                 other{"{0}ж"}
             }
         }
-        energy{
-            calorie-it{
-                dnam{"кал-IT"}
-                one{"{0} кал-IT"}
-                other{"{0} кал-IT"}
-            }
-        }
         force{
-            kilogram-force{
-                one{"{0} kgf"}
-                other{"{0} kgf"}
-            }
             kilowatt-hour-per-100-kilometer{
                 one{"{0}кВт.ц/100км"}
                 other{"{0}кВт.ц/100км"}
@@ -1102,11 +1078,6 @@ mn{
         speed{
             kilometer-per-hour{
                 dnam{"км/ц"}
-            }
-            light-speed{
-                dnam{"гэрэл"}
-                one{"{0} гэрэл"}
-                other{"{0} гэрэл"}
             }
             meter-per-second{
                 dnam{"м/с"}

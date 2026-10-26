@@ -7,14 +7,18 @@ nn{
         colAlternate{"ignorer sortering etter symbol"}
         colCaseFirst{"organisering av store og små bokstavar"}
         colCaseLevel{"sortering av store og små bokstavar"}
-        colNormalization{"normalisert sortering"}
-        colNumeric{"numerisk sortering"}
-        colStrength{"sorteringsstyrke"}
         collation{"sorteringsrekkjefølgje"}
         em{"emojivising"}
+        fw{"første vekedag"}
+        h0{"blanda inn"}
+        kv{"høgste ignorerte"}
         lb{"lineskiftstil"}
         lw{"lineskift innanfor ord"}
+        m0{"transformasjonsreglar"}
+        mu{"måleining"}
         numbers{"tal"}
+        s0{"transformasjonskjelde"}
+        t0{"maskinomsett"}
     }
     Languages{
         alt{"sør-altaj"}
@@ -87,7 +91,6 @@ nn{
         tog{"tonga (Nyasa)"}
         ttm{"nordleg tutchone"}
         tvl{"tuvalu"}
-        tyv{"tuvinisk"}
         tzm{"sentral-tamazight"}
         udm{"udmurt"}
         war{"waray"}
@@ -142,20 +145,45 @@ nn{
         cf%core{
             account{"rekneskapsføring"}
         }
+        colCaseFirst%core{
+            lower{"små bokstavar"}
+            no{"små bokstavar"}
+            upper{"store bokstavar"}
+        }
+        colReorder%core{
+            digit{"siffer"}
+            punct{"teiknsetjing"}
+        }
+        colStrength%core{
+            primary{"kun grunnbokstavar"}
+            quaternary{"grunnbokstavar, aksentar, kasus, variantar, kana"}
+            secondary{"grunnbokstavar, aksentar"}
+            tertiary{"grunnbokstavar, aksentar, kasus, variantar"}
+        }
         collation{
             ducet{"standard Unicode-sorteringsrekkjefølgje"}
             pinyin{"pinyin-sortering"}
-            standard{"standard sorteringsrekkjefølgje"}
+        }
+        collation%core{
+            eor{"europeiske reglar"}
         }
         d0{
             fwidth{"full breidd"}
             hwidth{"halv breidd"}
         }
         hc{
+            c12{"12-timarssystem"}
+            c24{"24-timarssystem"}
             h11{"12-timarssystem (0–11)"}
             h12{"12-timarssystem (1–12)"}
             h23{"24-timarssystem (0–23)"}
             h24{"24-timarssystem (1–24)"}
+        }
+        kv%core{
+            currency{"forskyv mellomrom, teiknsetjing, alle symbol"}
+            punct{"forskyv mellomrom, teiknsetjing"}
+            space{"forskyv mellomrom, teiknsetjing"}
+            symbol{"forskyv mellomrom, teiknsetjing, ikkje-valutasymbol"}
         }
         lb{
             loose{"laus lineskiftstil"}
@@ -209,6 +237,30 @@ nn{
             thai{"thailandske siffer"}
             tibt{"tibetanske siffer"}
             vaii{"vai-siffer"}
+        }
+        numbers%core{
+            arabext{"utvida arabisk-indisk"}
+            finance{"finans"}
+            fullwide{"full breidd"}
+            hanidays{
+                "han-teikn for nummerering av dagar i månaden i tradisjonelle kalendr"
+                "arar"
+            }
+            hanidec{"posisjonelt desimalsystem med kinesiske talteikn som siffer"}
+            hansfin{"forenkla kinesisk finans"}
+            lanatham{"tai tham tham (kyrkjeleg)"}
+            mathbold{"matematisk halvfeit"}
+            mathdbl{"matematisk dobbelstreka"}
+            mathmono{"matematisk fastbreiddeskrift"}
+            mathsanb{"matematisk sans-serif halvfeit"}
+            mymrepka{"myanmarsk austleg pwo-karen"}
+            native{"språkspesifikke siffer"}
+            roman{"store romartal"}
+            romanlow{"små romartal"}
+            traditional{"tradisjonelle tal"}
+        }
+        t0{
+            und{"uspesifisert maskinomsetting"}
         }
     }
     Variants{

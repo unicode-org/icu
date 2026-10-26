@@ -12,19 +12,35 @@ yue_Hans{
         colCaseLevel{"区分大小写排序"}
         colNormalization{"正规化排序"}
         colNumeric{"数字排序"}
+        colReorder{"语系文字/区块重新排序"}
         colStrength{"排序强度"}
         collation{"排序"}
         currency{"货币"}
+        d0{"转换目的地"}
+        dx{"字典断词排除项目"}
         em{"Emoji 显示方式"}
+        fw{"一星期嘅第一日"}
+        h0{"混合"}
         hc{"时间周期（12 小时制与 24 小时制）"}
+        i0{"输入法"}
+        k0{"键盘"}
+        kv{"略过嘅最高级别项目"}
         lb{"换行样式"}
         lw{"单字强制换行"}
+        m0{"转换规则"}
         ms{"度量单位系统"}
+        mu{"度量单位"}
         numbers{"数字"}
+        rg{"补充资料专用区域"}
+        s0{"转换来源"}
+        sd{"区域次分区"}
         ss{"缩写后断句"}
+        t{"转换"}
+        t0{"机器翻译"}
         timezone{"时区"}
         va{"区域变异"}
         x{"专用区"}
+        x0{"专用区转换"}
     }
     Languages{
         aa{"阿法文"}
@@ -887,9 +903,13 @@ yue_Hans{
             ethiopic-amete-alem{"埃塞俄比亚阿美德阿莱姆"}
             gregorian{"公历"}
             hebrew{"希伯来历"}
+            indian{"印度国定历"}
             islamic{"伊斯兰历"}
             islamic-civil{"伊斯兰民用历 (表格式)"}
+            islamic-rgsa{"伊斯兰新月历"}
+            islamic-tbla{"伊斯兰天文历"}
             islamic-umalqura{"伊斯兰历 (乌姆库拉)"}
+            iso8601{"公历"}
             japanese{"日本历"}
             persian{"波斯历"}
             roc{"民国历"}
@@ -915,6 +935,11 @@ yue_Hans{
             no{"正常大小写顺序排序"}
             upper{"优先排序大写"}
         }
+        colCaseFirst%core{
+            lower{"细楷"}
+            no{"细楷"}
+            upper{"大楷"}
+        }
         colCaseLevel{
             no{"不分大小写排序"}
             yes{"依大小写排序"}
@@ -927,12 +952,26 @@ yue_Hans{
             no{"个别排序数字"}
             yes{"依数字顺序排序数字"}
         }
+        colReorder%core{
+            currency{"货币"}
+            digit{"数字"}
+            punct{"标点符号"}
+            space{"空白字元"}
+            symbol{"符号"}
+        }
         colStrength{
             identical{"全部排序"}
             primary{"仅排序基础字母"}
             quaternary{"排序重音/大小写/全半形/假名"}
             secondary{"排序重音"}
             tertiary{"排序重音/大小写/全半形"}
+        }
+        colStrength%core{
+            identical{"全部"}
+            primary{"只限基础字母"}
+            quaternary{"基础、重音、大细楷、变体、假名"}
+            secondary{"基础、重音"}
+            tertiary{"基础、重音、大细写、变体"}
         }
         collation{
             dictionary{"字典排序"}
@@ -950,9 +989,21 @@ yue_Hans{
             zhuyin{"注音排序"}
         }
         collation%core{
+            compat{"相容性"}
+            dictionary{"字典"}
             ducet{"预设 Unicode"}
+            emoji{"Emoji"}
+            eor{"欧洲规则"}
+            phonebook{"电话簿"}
+            phonetic{"发音"}
+            pinyin{"拼音"}
             search{"搜寻"}
+            searchjl{"韩文初声子音"}
             standard{"标准"}
+            stroke{"笔画"}
+            traditional{"传统"}
+            unihan{"部首笔画"}
+            zhuyin{"注音"}
         }
         d0{
             fwidth{"全形"}
@@ -965,16 +1016,26 @@ yue_Hans{
             text{"文字"}
         }
         hc{
+            c12{"12 小时制"}
+            c24{"24 小时制"}
             h11{"12 小时制 (0–11)"}
             h12{"12 小时制 (1–12)"}
             h23{"24 小时制 (0–23)"}
             h24{"24 小时制 (1–24)"}
         }
         hc%core{
+            c12{"12"}
+            c24{"24"}
             h11{"12 (0–11)"}
             h12{"12 (1–12)"}
             h23{"24 (0–23)"}
             h24{"24 (1–24)"}
+        }
+        kv%core{
+            currency{"Shift、空格、标点符号、所有符号"}
+            punct{"Shift、空格、标点符号"}
+            space{"Shift、空格、标点符号"}
+            symbol{"Shift、空格、标点符号、非货币符号"}
         }
         lb{
             loose{"宽松换行样式"}
@@ -1069,9 +1130,45 @@ yue_Hans{
             traditional{"传统数字"}
             vaii{"瓦伊文数字"}
         }
+        numbers%core{
+            arabext{"阿拉伯-印度扩充"}
+            armnlow{"小写亚美尼亚"}
+            finance{"财务"}
+            fullwide{"全形"}
+            greklow{"小写希腊"}
+            hanidays{"传统历法汉字月日写法"}
+            hanidec{"使用汉字数字计数的位置十进制"}
+            hansfin{"大写简体中文"}
+            hantfin{"大写繁体中文"}
+            jpanfin{"大写日文"}
+            jpanyear{"日本元年纪年法"}
+            lanatham{"兰纳文 (教会用语)"}
+            mathbold{"数学粗体"}
+            mathdbl{"数学双线体"}
+            mathmono{"数学等宽字体"}
+            mathsanb{"数学无衬线粗体"}
+            mathsans{"数学无衬线字体"}
+            mymrepka{"缅甸东部波克伦族"}
+            mymrpao{"缅甸巴欧族"}
+            mymrshan{"缅甸掸族"}
+            mymrtlng{"缅甸红傣族"}
+            native{"原始数字"}
+            outlined{"大纲"}
+            roman{"大写罗马数字"}
+            romanlow{"小写罗马数字"}
+            segment{"分段"}
+            tamldec{"现代泰米尔"}
+            traditional{"传统数字"}
+        }
         ss%core{
             none{"闩"}
             standard{"开"}
+        }
+        t0{
+            und{"未指定嘅机器翻译"}
+        }
+        va%core{
+            posix{"POSIX 变体"}
         }
     }
     Variants{

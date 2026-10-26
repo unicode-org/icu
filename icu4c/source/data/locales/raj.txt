@@ -46,6 +46,10 @@ raj{
                 "yMMMd",
                 "yMMdd",
             }
+            availableFormats{
+                yMMMMEd{"E, d MMMM y"}
+                yMMMMd{"d MMMM y"}
+            }
             dayNames{
                 format{
                     wide{

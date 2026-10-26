@@ -5,22 +5,65 @@ en_001{
     Keys{
         colCaseLevel{"Case-Sensitive Sorting"}
         colNormalization{"Normalised Sorting"}
+        lw{"Line Breaks Within Words"}
     }
     Languages{
         bla{"Siksika"}
         mus{"Creek"}
         nds_NL{"West Low German"}
     }
+    Scripts{
+        Hrkt{"Japanese Syllabaries"}
+    }
     Types{
+        calendar%core{
+            islamic-rgsa{"Hijri, Saudi Arabia Sighting"}
+        }
         colNormalization{
             no{"Sort Without Normalisation"}
             yes{"Sort Unicode Normalised"}
         }
+        collation%core{
+            eor{"European Rules"}
+            searchjl{"Korean Initial Consonant"}
+        }
         hc{
+            c12{"12-Hour System"}
+            c24{"24-Hour System"}
             h11{"12-Hour System (0–11)"}
             h12{"12-Hour System (1–12)"}
             h23{"24-Hour System (0–23)"}
             h24{"24-Hour System (1–24)"}
+        }
+        kv%core{
+            currency{"Shift Spaces, Punctuation, All Symbols"}
+            punct{"Shift Spaces, Punctuation"}
+            space{"Shift Spaces, Punctuation"}
+            symbol{"Shift Spaces, Punctuation, Non-currency Symbols"}
+        }
+        numbers%core{
+            armnlow{"Armenian Lowercase"}
+            fullwide{"Full-Width"}
+            greklow{"Greek Lowercase"}
+            hanidays{"Han-Character Day-of-Month Numbering for Traditional Calendars"}
+            hansfin{"Simplified Chinese Financial"}
+            hantfin{"Traditional Chinese Financial"}
+            jpanfin{"Japanese Financial"}
+            jpanyear{"Japanese First-Year Gannen Numbering"}
+            lanatham{"Tai Tham Tham (Ecclesiastical)"}
+            mathbold{"Mathematical Bold"}
+            mathdbl{"Mathematical Double-Struck"}
+            mathmono{"Mathematical Monospace"}
+            mathsanb{"Mathematical Sans-Serif Bold"}
+            mathsans{"Mathematical Sans Serif"}
+            mymrpao{"Myanmar Pa’O"}
+            native{"Native Digits"}
+            roman{"Roman Uppercase"}
+            romanlow{"Roman Lowercase"}
+            traditional{"Traditional Numerals"}
+        }
+        va%core{
+            posix{"POSIX Variant"}
         }
     }
     characterLabelPattern{

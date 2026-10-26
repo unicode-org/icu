@@ -21,14 +21,8 @@ hsb{
         "Africa:Djibouti"{
             ec{"Dźibuti"}
         }
-        "Africa:El_Aaiun"{
-            ec{"El Aaiún"}
-        }
         "Africa:Khartoum"{
             ec{"Khartum"}
-        }
-        "Africa:Lome"{
-            ec{"Lomé"}
         }
         "Africa:Mogadishu"{
             ec{"Mogadišu"}
@@ -41,9 +35,6 @@ hsb{
         }
         "Africa:Tripoli"{
             ec{"Tripolis"}
-        }
-        "America:Bogota"{
-            ec{"Bogotá"}
         }
         "America:Cayman"{
             ec{"Kaimanske kupy"}
@@ -68,9 +59,6 @@ hsb{
         }
         "America:Port_of_Spain"{
             ec{"Port-of-Spain"}
-        }
-        "America:Sao_Paulo"{
-            ec{"São Paulo"}
         }
         "America:St_Barthelemy"{
             ec{"St.Barthélemy"}
@@ -210,26 +198,17 @@ hsb{
         "Europe:Bucharest"{
             ec{"Bukarest"}
         }
-        "Europe:Busingen"{
-            ec{"Büsingen"}
-        }
         "Europe:Chisinau"{
             ec{"Kišinjow"}
         }
         "Europe:Copenhagen"{
             ec{"Kopenhagen"}
         }
-        "Europe:Dublin"{
-            ld{"Irski lětni čas"}
-        }
         "Europe:Kiev"{
             ec{"Kiew"}
         }
         "Europe:Lisbon"{
             ec{"Lissabon"}
-        }
-        "Europe:London"{
-            ld{"Britiski lětni čas"}
         }
         "Europe:Luxembourg"{
             ec{"Luxemburg"}
@@ -242,9 +221,6 @@ hsb{
         }
         "Europe:Rome"{
             ec{"Rom"}
-        }
-        "Europe:Tirane"{
-            ec{"Tirana"}
         }
         "Europe:Vatican"{
             ec{"Vatikan"}
@@ -275,6 +251,11 @@ hsb{
         }
         "Pacific:Fiji"{
             ec{"Fidźi"}
+        }
+        "meta:Acre"{
+            ld{"Acre-lětni čas"}
+            lg{"Acre-čas"}
+            ls{"Acre-standardny čas"}
         }
         "meta:Afghanistan"{
             ls{"afghanski čas"}
@@ -396,6 +377,9 @@ hsb{
             ld{"Brasiliski lětni čas"}
             lg{"Brasiliski čas"}
             ls{"Brasiliski standardny čas"}
+        }
+        "meta:British"{
+            ld{"Britiski lětni čas"}
         }
         "meta:Brunei"{
             ls{"bruneiski čas"}
@@ -521,6 +505,11 @@ hsb{
         "meta:Gilbert_Islands"{
             ls{"čas Gilbertowych kupow"}
         }
+        "meta:Greenland"{
+            ld{"Grönlandski lětni čas"}
+            lg{"Grönlandski čas"}
+            ls{"Grönlandski standardny čas"}
+        }
         "meta:Greenland_Eastern"{
             ld{"wuchodogrönlandski lětni čas"}
             lg{"wuchodogrönlandski čas"}
@@ -538,7 +527,7 @@ hsb{
             ls{"guyanski čas"}
         }
         "meta:Hawaii"{
-            ls{"hawaiisko-aleutski standardny čas"}
+            ls{"hawaiiski standardny čas"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"hawaiisko-aleutski lětni čas"}
@@ -578,6 +567,9 @@ hsb{
             lg{"iranski čas"}
             ls{"iranski standardny čas"}
         }
+        "meta:Irish"{
+            ld{"Irski lětni čas"}
+        }
         "meta:Irkutsk"{
             ld{"Irkutski lětni čas"}
             lg{"Irkutski čas"}
@@ -592,6 +584,11 @@ hsb{
             ld{"japanski lětni čas"}
             lg{"japanski čas"}
             ls{"japanski standardny čas"}
+        }
+        "meta:Kamchatka"{
+            ld{"Kamčatkaski lětni čas"}
+            lg{"Kamčatkaski čas"}
+            ls{"Kamčatkaski standardny čas"}
         }
         "meta:Kazakhstan"{
             ls{"kazachski čas"}
@@ -767,9 +764,12 @@ hsb{
             lg{"sachalinski čas"}
             ls{"sachalinski standardny čas"}
         }
+        "meta:Samara"{
+            ld{"Samaraski lětni čas"}
+            lg{"Samaraski čas"}
+            ls{"Samaraski standardny čas"}
+        }
         "meta:Samoa"{
-            ld{"samoaski lětni čas"}
-            lg{"samoaski čas"}
             ls{"samoaski standardny čas"}
         }
         "meta:Seychelles"{
@@ -812,6 +812,11 @@ hsb{
         "meta:Truk"{
             ls{"chuukski čas"}
         }
+        "meta:Turkey"{
+            ld{"Turkowski lětni čas"}
+            lg{"Turkowski čas"}
+            ls{"Turkowski standardny čas"}
+        }
         "meta:Turkmenistan"{
             ld{"turkmenski lětni čas"}
             lg{"turkmenski čas"}
@@ -824,6 +829,9 @@ hsb{
             ld{"uruguayski lětni čas"}
             lg{"uruguayski čas"}
             ls{"uruguayski standardny čas"}
+        }
+        "meta:Urumqi"{
+            ls{"Ürümqi čas"}
         }
         "meta:Uzbekistan"{
             ld{"uzbekski lětni čas"}

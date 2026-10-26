@@ -469,7 +469,7 @@ public class JapaneseTest extends CalendarTestFmwk {
         c.set(Calendar.MONTH, Calendar.JANUARY);
         c.set(Calendar.DATE, 1);
 
-        int expectedC[] = {Calendar.ERA, JapaneseCalendar.MEIJI - 1};
+        int expectedC[] = {Calendar.ERA, JapaneseCalendar.AD};
         checkExpected(c, expectedC);
 
         logln("test setting  year and month and date THEN era");

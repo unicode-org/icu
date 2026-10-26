@@ -407,6 +407,8 @@ ia{
                 yMMM{"MMM y"}
                 yMMMEd{"E d MMM y"}
                 yMMMM{"MMMM y"}
+                yMMMMEd{"E 'le' d 'de' MMMM y"}
+                yMMMMd{"d 'de' MMMM y"}
                 yMMMd{"d MMM y"}
                 yMd{"dd-MM-y"}
                 yQQQ{"QQQ y"}

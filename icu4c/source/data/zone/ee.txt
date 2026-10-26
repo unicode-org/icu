@@ -24,14 +24,8 @@ ee{
         "Etc:Unknown"{
             ec{"Du manya"}
         }
-        "Europe:Dublin"{
-            ld{"Ireland nutome gaƒoƒo me"}
-        }
         "Europe:Kiev"{
             ec{"Kiev"}
-        }
-        "Europe:London"{
-            ld{"British dzomeŋɔli gaƒoƒo me"}
         }
         "Pacific:Honolulu"{
             ec{"Honolulu"}
@@ -160,6 +154,10 @@ ee{
             ld{"Brasilia dzomeŋɔli gaƒoƒo me"}
             lg{"Brasilia gaƒoƒo me"}
             ls{"Brasilia nutome gaƒoƒo me"}
+        }
+        "meta:British"{
+            ld{"British dzomeŋɔli gaƒoƒo me"}
+            lg{"Britain gaƒoƒo"}
         }
         "meta:Brunei"{
             ls{"Brunei Darussalam gaƒoƒo me"}
@@ -290,7 +288,7 @@ ee{
             ls{"Guyana gaƒoƒo me"}
         }
         "meta:Hawaii"{
-            ls{"Hawaii-Aleutia nutome gaƒoƒo me"}
+            ls{"Hawaii nutome gaƒoƒo me"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"Hawaii-Aleutia kele gaƒoƒo me"}
@@ -329,6 +327,10 @@ ee{
             ld{"Iran kele gaƒoƒo me"}
             lg{"Iran gaƒoƒo me"}
             ls{"Iran nutome gaƒoƒo me"}
+        }
+        "meta:Irish"{
+            ld{"Ireland nutome gaƒoƒo me"}
+            lg{"Ireland gaƒoƒo"}
         }
         "meta:Irkutsk"{
             ld{"Irkutsk dzomeŋɔli gaƒoƒo me"}
@@ -517,8 +519,6 @@ ee{
             ls{"Sakhalin nutome gaƒoƒo me"}
         }
         "meta:Samoa"{
-            ld{"Samoa kele gaƒoƒo me"}
-            lg{"Samoa gaƒoƒo me"}
             ls{"Samoa nutome gaƒoƒo me"}
         }
         "meta:Seychelles"{

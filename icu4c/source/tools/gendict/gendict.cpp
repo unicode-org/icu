@@ -206,7 +206,7 @@ public:
     }
 
     // if we are a bytestrie, give back the StringPiece representing the serialized version of us
-    StringPiece serializeBytes(UErrorCode &status) {
+    StringPiece serializeBytes(UErrorCode& status) U_LIFETIME_BOUND {
         return bt->buildStringPiece(USTRINGTRIE_BUILD_SMALL, status);
     }
 

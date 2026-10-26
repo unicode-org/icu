@@ -48,32 +48,36 @@ public final class ZoneMeta {
 
     private static final String kWorld = "001";
 
-    private static SoftReference<Set<String>> REF_SYSTEM_ZONES;
-    private static SoftReference<Set<String>> REF_CANONICAL_SYSTEM_ZONES;
-    private static SoftReference<Set<String>> REF_CANONICAL_SYSTEM_LOCATION_ZONES;
+    private static volatile SoftReference<Set<String>> REF_SYSTEM_ZONES;
+    private static volatile SoftReference<Set<String>> REF_CANONICAL_SYSTEM_ZONES;
+    private static volatile SoftReference<Set<String>> REF_CANONICAL_SYSTEM_LOCATION_ZONES;
 
     /**
      * Returns an immutable set of system time zone IDs. Etc/Unknown is excluded.
      *
      * @return An immutable set of system time zone IDs.
      */
-    private static synchronized Set<String> getSystemZIDs() {
-        Set<String> systemZones = null;
-        if (REF_SYSTEM_ZONES != null) {
-            systemZones = REF_SYSTEM_ZONES.get();
-        }
+    private static Set<String> getSystemZIDs() {
+        SoftReference<Set<String>> ref = REF_SYSTEM_ZONES;
+        Set<String> systemZones = (ref != null) ? ref.get() : null;
         if (systemZones == null) {
-            Set<String> systemIDs = new TreeSet<>();
-            String[] allIDs = getZoneIDs();
-            for (String id : allIDs) {
-                // exclude Etc/Unknown
-                if (id.equals(TimeZone.UNKNOWN_ZONE_ID)) {
-                    continue;
+            synchronized (ZoneMeta.class) {
+                ref = REF_SYSTEM_ZONES;
+                systemZones = (ref != null) ? ref.get() : null;
+                if (systemZones == null) {
+                    Set<String> systemIDs = new TreeSet<>();
+                    String[] allIDs = getZoneIDs();
+                    for (String id : allIDs) {
+                        // exclude Etc/Unknown
+                        if (id.equals(TimeZone.UNKNOWN_ZONE_ID)) {
+                            continue;
+                        }
+                        systemIDs.add(id);
+                    }
+                    systemZones = Set.copyOf(systemIDs);
+                    REF_SYSTEM_ZONES = new SoftReference<>(systemZones);
                 }
-                systemIDs.add(id);
             }
-            systemZones = Collections.unmodifiableSet(systemIDs);
-            REF_SYSTEM_ZONES = new SoftReference<>(systemZones);
         }
         return systemZones;
     }
@@ -84,26 +88,30 @@ public final class ZoneMeta {
      *
      * @return An immutable set of canonical system time zone IDs.
      */
-    private static synchronized Set<String> getCanonicalSystemZIDs() {
-        Set<String> canonicalSystemZones = null;
-        if (REF_CANONICAL_SYSTEM_ZONES != null) {
-            canonicalSystemZones = REF_CANONICAL_SYSTEM_ZONES.get();
-        }
+    private static Set<String> getCanonicalSystemZIDs() {
+        SoftReference<Set<String>> ref = REF_CANONICAL_SYSTEM_ZONES;
+        Set<String> canonicalSystemZones = (ref != null) ? ref.get() : null;
         if (canonicalSystemZones == null) {
-            Set<String> canonicalSystemIDs = new TreeSet<>();
-            String[] allIDs = getZoneIDs();
-            for (String id : allIDs) {
-                // exclude Etc/Unknown
-                if (id.equals(TimeZone.UNKNOWN_ZONE_ID)) {
-                    continue;
-                }
-                String canonicalID = getCanonicalCLDRID(id);
-                if (id.equals(canonicalID)) {
-                    canonicalSystemIDs.add(id);
+            synchronized (ZoneMeta.class) {
+                ref = REF_CANONICAL_SYSTEM_ZONES;
+                canonicalSystemZones = (ref != null) ? ref.get() : null;
+                if (canonicalSystemZones == null) {
+                    Set<String> canonicalSystemIDs = new TreeSet<>();
+                    String[] allIDs = getZoneIDs();
+                    for (String id : allIDs) {
+                        // exclude Etc/Unknown
+                        if (id.equals(TimeZone.UNKNOWN_ZONE_ID)) {
+                            continue;
+                        }
+                        String canonicalID = getCanonicalCLDRID(id);
+                        if (id.equals(canonicalID)) {
+                            canonicalSystemIDs.add(id);
+                        }
+                    }
+                    canonicalSystemZones = Set.copyOf(canonicalSystemIDs);
+                    REF_CANONICAL_SYSTEM_ZONES = new SoftReference<>(canonicalSystemZones);
                 }
             }
-            canonicalSystemZones = Collections.unmodifiableSet(canonicalSystemIDs);
-            REF_CANONICAL_SYSTEM_ZONES = new SoftReference<>(canonicalSystemZones);
         }
         return canonicalSystemZones;
     }
@@ -116,29 +124,34 @@ public final class ZoneMeta {
      * @return An immutable set of canonical system time zone IDs that are associated with actual
      *     locations.
      */
-    private static synchronized Set<String> getCanonicalSystemLocationZIDs() {
-        Set<String> canonicalSystemLocationZones = null;
-        if (REF_CANONICAL_SYSTEM_LOCATION_ZONES != null) {
-            canonicalSystemLocationZones = REF_CANONICAL_SYSTEM_LOCATION_ZONES.get();
-        }
+    private static Set<String> getCanonicalSystemLocationZIDs() {
+        SoftReference<Set<String>> ref = REF_CANONICAL_SYSTEM_LOCATION_ZONES;
+        Set<String> canonicalSystemLocationZones = (ref != null) ? ref.get() : null;
         if (canonicalSystemLocationZones == null) {
-            Set<String> canonicalSystemLocationIDs = new TreeSet<>();
-            String[] allIDs = getZoneIDs();
-            for (String id : allIDs) {
-                // exclude Etc/Unknown
-                if (id.equals(TimeZone.UNKNOWN_ZONE_ID)) {
-                    continue;
-                }
-                String canonicalID = getCanonicalCLDRID(id);
-                if (id.equals(canonicalID)) {
-                    String region = getRegion(id);
-                    if (region != null && !region.equals(kWorld)) {
-                        canonicalSystemLocationIDs.add(id);
+            synchronized (ZoneMeta.class) {
+                ref = REF_CANONICAL_SYSTEM_LOCATION_ZONES;
+                canonicalSystemLocationZones = (ref != null) ? ref.get() : null;
+                if (canonicalSystemLocationZones == null) {
+                    Set<String> canonicalSystemLocationIDs = new TreeSet<>();
+                    String[] allIDs = getZoneIDs();
+                    for (String id : allIDs) {
+                        // exclude Etc/Unknown
+                        if (id.equals(TimeZone.UNKNOWN_ZONE_ID)) {
+                            continue;
+                        }
+                        String canonicalID = getCanonicalCLDRID(id);
+                        if (id.equals(canonicalID)) {
+                            String region = getRegion(id);
+                            if (region != null && !region.equals(kWorld)) {
+                                canonicalSystemLocationIDs.add(id);
+                            }
+                        }
                     }
+                    canonicalSystemLocationZones = Set.copyOf(canonicalSystemLocationIDs);
+                    REF_CANONICAL_SYSTEM_LOCATION_ZONES =
+                            new SoftReference<>(canonicalSystemLocationZones);
                 }
             }
-            canonicalSystemLocationZones = Collections.unmodifiableSet(canonicalSystemLocationIDs);
-            REF_CANONICAL_SYSTEM_LOCATION_ZONES = new SoftReference<>(canonicalSystemLocationZones);
         }
         return canonicalSystemLocationZones;
     }
@@ -214,7 +227,7 @@ public final class ZoneMeta {
      *     equivalent zones.
      * @see #getEquivalentID
      */
-    public static synchronized int countEquivalentIDs(String id) {
+    public static int countEquivalentIDs(String id) {
         int count = 0;
         UResourceBundle res = openOlsonResource(null, id);
         if (res != null) {
@@ -245,7 +258,7 @@ public final class ZoneMeta {
      *     string if 'id' is not a valid system ID or 'index' is out of range
      * @see #countEquivalentIDs
      */
-    public static synchronized String getEquivalentID(String id, int index) {
+    public static String getEquivalentID(String id, int index) {
         String result = "";
         if (index >= 0) {
             UResourceBundle res = openOlsonResource(null, id);
@@ -271,26 +284,33 @@ public final class ZoneMeta {
         return result;
     }
 
-    private static String[] ZONEIDS = null;
+    private static volatile String[] ZONEIDS = null;
 
     /*
      * ICU frequently refers the zone ID array in zoneinfo resource
      */
-    private static synchronized String[] getZoneIDs() {
-        if (ZONEIDS == null) {
-            try {
-                UResourceBundle top =
-                        UResourceBundle.getBundleInstance(
-                                ICUData.ICU_BASE_NAME,
-                                ZONEINFORESNAME,
-                                ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-                ZONEIDS = top.getStringArray(kNAMES);
-            } catch (MissingResourceException ex) {
-                // throw away..
+    private static String[] getZoneIDs() {
+        String[] ids = ZONEIDS;
+        if (ids == null) {
+            synchronized (ZoneMeta.class) {
+                ids = ZONEIDS;
+                if (ids == null) {
+                    try {
+                        UResourceBundle top =
+                                UResourceBundle.getBundleInstance(
+                                        ICUData.ICU_BASE_NAME,
+                                        ZONEINFORESNAME,
+                                        ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+                        ids = top.getStringArray(kNAMES);
+                    } catch (MissingResourceException ex) {
+                        // throw away..
+                    }
+                    if (ids == null) {
+                        ids = new String[0];
+                    }
+                    ZONEIDS = ids;
+                }
             }
-        }
-        if (ZONEIDS == null) {
-            ZONEIDS = new String[0];
         }
         return ZONEIDS;
     }

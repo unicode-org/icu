@@ -225,8 +225,6 @@ es{
             }
             part{
                 dnam{"partes"}
-                one{"{0} parte"}
-                other{"{0} partes"}
             }
             part-per-1e6{
                 dnam{"partes por millón"}
@@ -1412,11 +1410,7 @@ es{
                 one{"{0}mol"}
                 other{"{0}mol"}
             }
-            ofglucose{
-                dnam{"Glc"}
-            }
             part{
-                dnam{"parte"}
                 one{"{0} parte"}
                 other{"{0} partes"}
             }
@@ -1609,7 +1603,8 @@ es{
                 other{"{0}cal"}
             }
             calorie-it{
-                dnam{"cal-IT"}
+                one{"{0} cal-IT"}
+                other{"{0} cal-IT"}
             }
             electronvolt{
                 one{"{0}eV"}
@@ -1641,6 +1636,10 @@ es{
             }
         }
         force{
+            kilogram-force{
+                one{"{0} kgf"}
+                other{"{0} kgf"}
+            }
             kilowatt-hour-per-100-kilometer{
                 one{"{0}kWh/100km"}
                 other{"{0}kWh/100km"}
@@ -1938,11 +1937,6 @@ es{
                 one{"{0}mmHg"}
                 other{"{0}mmHg"}
             }
-            ofhg{
-                dnam{"de Hg"}
-                one{"{0} de Hg"}
-                other{"{0} de Hg"}
-            }
             pascal{
                 one{"{0}Pa"}
                 other{"{0}Pa"}
@@ -2160,6 +2154,10 @@ es{
             degree{
                 dnam{"grad."}
             }
+            steradian{
+                one{"{0} sr"}
+                other{"{0} sr"}
+            }
         }
         area{
             acre{
@@ -2185,8 +2183,14 @@ es{
                 one{"{0} ct"}
                 other{"{0} ct"}
             }
+            katal{
+                one{"{0} kat"}
+                other{"{0} kat"}
+            }
             ofglucose{
                 dnam{"Glc"}
+                one{"{0} Glc"}
+                other{"{0} Glc"}
             }
             part{
                 dnam{"parte"}
@@ -2406,6 +2410,16 @@ es{
                 dnam{"ptos."}
                 one{"{0} pto."}
                 other{"{0} ptos."}
+            }
+        }
+        magnetic{
+            tesla{
+                one{"{0} T"}
+                other{"{0} T"}
+            }
+            weber{
+                one{"{0} Wb"}
+                other{"{0} Wb"}
             }
         }
         mass{

@@ -984,7 +984,6 @@ zh_Hant{
         }
         "Europe:Dublin"{
             ec{"都柏林"}
-            ld{"愛爾蘭標準時間"}
         }
         "Europe:Gibraltar"{
             ec{"直布羅陀"}
@@ -1021,7 +1020,6 @@ zh_Hant{
         }
         "Europe:London"{
             ec{"倫敦"}
-            ld{"英國夏令時間"}
         }
         "Europe:Luxembourg"{
             ec{"盧森堡"}
@@ -1290,14 +1288,6 @@ zh_Hant{
             ld{"阿拉斯加夏令時間"}
             lg{"阿拉斯加時間"}
             ls{"阿拉斯加標準時間"}
-            sd{"AKDT"}
-            sg{"AKT"}
-            ss{"AKST"}
-        }
-        "meta:Almaty"{
-            ld{"阿拉木圖夏令時間"}
-            lg{"阿拉木圖時間"}
-            ls{"阿拉木圖標準時間"}
         }
         "meta:Amazon"{
             ld{"亞馬遜夏令時間"}
@@ -1308,33 +1298,21 @@ zh_Hant{
             ld{"中部夏令時間"}
             lg{"中部時間"}
             ls{"中部標準時間"}
-            sd{"CDT"}
-            sg{"CT"}
-            ss{"CST"}
         }
         "meta:America_Eastern"{
             ld{"東部夏令時間"}
             lg{"東部時間"}
             ls{"東部標準時間"}
-            sd{"EDT"}
-            sg{"ET"}
-            ss{"EST"}
         }
         "meta:America_Mountain"{
             ld{"山區夏令時間"}
             lg{"山區時間"}
             ls{"山區標準時間"}
-            sd{"MDT"}
-            sg{"MT"}
-            ss{"MST"}
         }
         "meta:America_Pacific"{
             ld{"太平洋夏令時間"}
             lg{"太平洋時間"}
             ls{"太平洋標準時間"}
-            sd{"PDT"}
-            sg{"PT"}
-            ss{"PST"}
         }
         "meta:Anadyr"{
             ld{"阿那底河夏令時間"}
@@ -1345,16 +1323,6 @@ zh_Hant{
             ld{"阿皮亞夏令時間"}
             lg{"阿皮亞時間"}
             ls{"阿皮亞標準時間"}
-        }
-        "meta:Aqtau"{
-            ld{"阿克陶夏令時間"}
-            lg{"阿克陶時間"}
-            ls{"阿克陶標準時間"}
-        }
-        "meta:Aqtobe"{
-            ld{"阿克托比夏令時間"}
-            lg{"阿克托比時間"}
-            ls{"阿克托比標準時間"}
         }
         "meta:Arabian"{
             ld{"阿拉伯夏令時間"}
@@ -1380,9 +1348,6 @@ zh_Hant{
             ld{"大西洋夏令時間"}
             lg{"大西洋時間"}
             ls{"大西洋標準時間"}
-            sd{"ADT"}
-            sg{"AT"}
-            ss{"AST"}
         }
         "meta:Australia_Central"{
             ld{"澳洲中部夏令時間"}
@@ -1429,6 +1394,10 @@ zh_Hant{
             ld{"巴西利亞夏令時間"}
             lg{"巴西利亞時間"}
             ls{"巴西利亞標準時間"}
+        }
+        "meta:British"{
+            ld{"英國夏令時間"}
+            lg{"英國時間"}
         }
         "meta:Brunei"{
             ls{"汶萊時間"}
@@ -1549,6 +1518,11 @@ zh_Hant{
         "meta:Gilbert_Islands"{
             ls{"吉爾伯特群島時間"}
         }
+        "meta:Greenland"{
+            ld{"格陵蘭夏令時間"}
+            lg{"格陵蘭時間"}
+            ls{"格陵蘭標準時間"}
+        }
         "meta:Greenland_Eastern"{
             ld{"格陵蘭東部夏令時間"}
             lg{"格陵蘭東部時間"}
@@ -1559,9 +1533,6 @@ zh_Hant{
             lg{"格陵蘭西部時間"}
             ls{"格陵蘭西部標準時間"}
         }
-        "meta:Guam"{
-            ls{"關島標準時間"}
-        }
         "meta:Gulf"{
             ls{"波斯灣海域標準時間"}
         }
@@ -1569,16 +1540,12 @@ zh_Hant{
             ls{"蓋亞那時間"}
         }
         "meta:Hawaii"{
-            ls{"夏威夷-阿留申標準時間"}
-            ss{"HAST"}
+            ls{"夏威夷時間"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"夏威夷-阿留申夏令時間"}
             lg{"夏威夷-阿留申時間"}
             ls{"夏威夷-阿留申標準時間"}
-            sd{"HADT"}
-            sg{"HAT"}
-            ss{"HAST"}
         }
         "meta:Hong_Kong"{
             ld{"香港夏令時間"}
@@ -1612,6 +1579,10 @@ zh_Hant{
             ld{"伊朗夏令時間"}
             lg{"伊朗時間"}
             ls{"伊朗標準時間"}
+        }
+        "meta:Irish"{
+            ld{"愛爾蘭標準時間"}
+            lg{"愛爾蘭時間"}
         }
         "meta:Irkutsk"{
             ld{"伊爾庫次克夏令時間"}
@@ -1658,9 +1629,6 @@ zh_Hant{
         "meta:Kyrgystan"{
             ls{"吉爾吉斯時間"}
         }
-        "meta:Lanka"{
-            ls{"蘭卡時間"}
-        }
         "meta:Line_Islands"{
             ls{"萊恩群島時間"}
         }
@@ -1668,11 +1636,6 @@ zh_Hant{
             ld{"豪勳爵島夏令時間"}
             lg{"豪勳爵島時間"}
             ls{"豪勳爵島標準時間"}
-        }
-        "meta:Macau"{
-            ld{"澳門夏令時間"}
-            lg{"澳門時間"}
-            ls{"澳門標準時間"}
         }
         "meta:Magadan"{
             ld{"馬加丹夏令時間"}
@@ -1751,9 +1714,6 @@ zh_Hant{
             lg{"費爾南多 - 迪諾羅尼亞時間"}
             ls{"費爾南多 - 迪諾羅尼亞標準時間"}
         }
-        "meta:North_Mariana"{
-            ls{"北馬里亞納群島時間"}
-        }
         "meta:Novosibirsk"{
             ld{"新西伯利亞夏令時間"}
             lg{"新西伯利亞時間"}
@@ -1807,11 +1767,6 @@ zh_Hant{
         "meta:Pyongyang"{
             ls{"平壤時間"}
         }
-        "meta:Qyzylorda"{
-            ld{"克孜勒奧爾達夏令時間"}
-            lg{"克孜勒奧爾達時間"}
-            ls{"克孜勒奧爾達標準時間"}
-        }
         "meta:Reunion"{
             ls{"留尼旺時間"}
         }
@@ -1829,8 +1784,6 @@ zh_Hant{
             ls{"薩馬拉標準時間"}
         }
         "meta:Samoa"{
-            ld{"薩摩亞夏令時間"}
-            lg{"薩摩亞時間"}
             ls{"薩摩亞標準時間"}
         }
         "meta:Seychelles"{
@@ -1890,6 +1843,9 @@ zh_Hant{
             ld{"烏拉圭夏令時間"}
             lg{"烏拉圭時間"}
             ls{"烏拉圭標準時間"}
+        }
+        "meta:Urumqi"{
+            ls{"烏魯木齊時間"}
         }
         "meta:Uzbekistan"{
             ld{"烏茲別克夏令時間"}

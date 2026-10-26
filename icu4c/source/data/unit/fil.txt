@@ -164,12 +164,16 @@ fil{
             }
             katal{
                 dnam{"katals"}
+                one{"{0} katal"}
+                other{"{0} na katal"}
             }
             milligram-ofglucose-per-deciliter{
-                one{"{0} milligram per deciliter"}
-                other{"{0} milligrams per deciliter"}
+                dnam{"mga miligramo kada desilitro"}
+                one{"{0} miligramo kada desilitro"}
+                other{"{0} na miligramo kada desilitro"}
             }
             millimole-per-liter{
+                dnam{"mga millimole kada litro"}
                 one{"{0} millimole per liter"}
                 other{"{0} millimoles per liter"}
             }
@@ -184,7 +188,7 @@ fil{
             }
             part{
                 dnam{"parts"}
-                one{"{0} part"}
+                one{"{0} part"}
                 other{"{0} parts"}
             }
             part-per-1e6{
@@ -661,6 +665,7 @@ fil{
                 other{"{0} na lux"}
             }
             solar-luminosity{
+                dnam{"mga solar luminosity"}
                 one{"{0} solar luminosity"}
                 other{"{0} solar luminosity"}
             }
@@ -668,8 +673,11 @@ fil{
         magnetic{
             tesla{
                 dnam{"teslas"}
+                one{"{0} tesla"}
+                other{"{0} na tesla"}
             }
             weber{
+                dnam{"mga weber"}
                 one{"{0} weber"}
                 other{"{0} webers"}
             }
@@ -878,7 +886,7 @@ fil{
             pound-force-foot{
                 dnam{"pound-force-feet"}
                 one{"{0} pound-force-foot"}
-                other{"{0} pound-feet"}
+                other{"{0} na pound-force-foot"}
             }
         }
         volume{
@@ -976,6 +984,11 @@ fil{
                 one{"{0} Imp. fluid ounce"}
                 other{"{0} Imp. fluid ounce"}
             }
+            fluid-ounce-metric{
+                dnam{"mga metric fluid ounce"}
+                one{"{0} metric fluid ounce"}
+                other{"{0} na metric fluid ounce"}
+            }
             gallon{
                 dnam{"galon"}
                 one{"{0} galon"}
@@ -1017,7 +1030,7 @@ fil{
             quart{
                 dnam{"quarts"}
                 one{"{0} quart"}
-                other{"{0} na quarts"}
+                other{"{0} na quart"}
             }
             quart-imperial{
                 dnam{"Imp. na kuwart"}
@@ -1059,8 +1072,11 @@ fil{
             }
             degree{
                 dnam{"deg"}
+                one{"{0}°"}
+                other{"{0}°"}
             }
             radian{
+                dnam{"rad"}
                 one{"{0}rad"}
                 other{"{0}rad"}
             }
@@ -1108,13 +1124,15 @@ fil{
             mole{
                 dnam{"mol"}
             }
-            ofglucose{
-                dnam{"Glc"}
+            part{
+                one{"{0} part"}
+                other{"{0} na part"}
             }
             part-per-1e6{
                 dnam{"ppm"}
             }
             part-per-1e9{
+                dnam{"ppb"}
                 one{"{0}ppb"}
                 other{"{0}ppb"}
             }
@@ -1137,8 +1155,8 @@ fil{
             }
             mile-per-gallon-imperial{
                 dnam{"mpg UK"}
-                one{"{0}mpg"}
-                other{"{0}mpg"}
+                one{"{0}m/gUK"}
+                other{"{0}m/gUK"}
             }
         }
         digital{
@@ -1158,6 +1176,21 @@ fil{
             }
             kilobyte{
                 dnam{"kB"}
+            }
+            megabit{
+                dnam{"Mb"}
+            }
+            megabyte{
+                dnam{"MB"}
+            }
+            petabyte{
+                dnam{"PB"}
+            }
+            terabit{
+                dnam{"Tb"}
+            }
+            terabyte{
+                dnam{"TB"}
             }
         }
         duration{
@@ -1201,19 +1234,47 @@ fil{
             }
         }
         electric{
+            ampere{
+                dnam{"amp"}
+            }
+            coulomb{
+                one{"{0} C"}
+                other{"{0} C"}
+            }
+            farad{
+                one{"{0} F"}
+                other{"{0} F"}
+            }
+            henry{
+                one{"{0} H"}
+                other{"{0} H"}
+            }
             milliampere{
                 dnam{"mA"}
             }
         }
         energy{
+            becquerel{
+                one{"{0} Bq"}
+                other{"{0} Bq"}
+            }
             calorie-it{
-                dnam{"cal-IT"}
+                one{"{0} cal-IT"}
+                other{"{0} cal-IT"}
             }
             electronvolt{
                 dnam{"eV"}
             }
+            gray{
+                one{"{0} Gy"}
+                other{"{0} Gy"}
+            }
             kilowatt-hour{
                 dnam{"kWh"}
+            }
+            sievert{
+                one{"{0} Sv"}
+                other{"{0} Sv"}
             }
         }
         force{
@@ -1316,6 +1377,11 @@ fil{
                 other{"{0}yd"}
             }
         }
+        light{
+            solar-luminosity{
+                dnam{"L☉"}
+            }
+        }
         mass{
             carat{
                 one{"{0}CD"}
@@ -1408,7 +1474,6 @@ fil{
                 other{"{0}mmHg"}
             }
             ofhg{
-                dnam{"ng Hg"}
                 one{"{0} ng Hg"}
                 other{"{0} ng Hg"}
             }
@@ -1473,6 +1538,10 @@ fil{
             cubic-yard{
                 dnam{"yd³"}
             }
+            cup-metric{
+                one{"{0} mc"}
+                other{"{0}mc"}
+            }
             dessert-spoon{
                 dnam{"kutsaritang panghimagas"}
                 one{"{0} dsp"}
@@ -1505,10 +1574,16 @@ fil{
             pinch{
                 dnam{"kurot"}
             }
+            pint{
+                dnam{"pt"}
+            }
             pint-metric{
                 dnam{"pt"}
                 one{"{0} mpt"}
                 other{"{0} mpt"}
+            }
+            quart{
+                dnam{"qt"}
             }
             quart-imperial{
                 dnam{"qt Imp"}
@@ -1556,6 +1631,10 @@ fil{
                 one{"{0} rev"}
                 other{"{0} na rev"}
             }
+            steradian{
+                one{"{0} sr"}
+                other{"{0} sr"}
+            }
         }
         area{
             acre{
@@ -1593,11 +1672,24 @@ fil{
             karat{
                 dnam{"karat"}
             }
+            katal{
+                one{"{0} kat"}
+                other{"{0} kat"}
+            }
+            millimole-per-liter{
+                dnam{"millimol/litro"}
+            }
             mole{
                 dnam{"mole"}
             }
             ofglucose{
                 dnam{"Glc"}
+                one{"{0} Glc"}
+                other{"{0} Glc"}
+            }
+            part{
+                one{"{0} part"}
+                other{"{0} na part"}
             }
             part-per-1e6{
                 dnam{"parts/million"}
@@ -1793,6 +1885,10 @@ fil{
             }
         }
         force{
+            kilogram-force{
+                one{"{0} kgf"}
+                other{"{0} kgf"}
+            }
             newton{
                 dnam{"newton"}
             }
@@ -1880,11 +1976,27 @@ fil{
             }
         }
         light{
+            candela{
+                dnam{"candela"}
+            }
+            lumen{
+                dnam{"lumen"}
+            }
             lux{
                 dnam{"lux"}
             }
             solar-luminosity{
-                dnam{"solar luminosity"}
+                dnam{"mga solar luminosity"}
+            }
+        }
+        magnetic{
+            tesla{
+                one{"{0} T"}
+                other{"{0} T"}
+            }
+            weber{
+                one{"{0} Wb"}
+                other{"{0} Wb"}
             }
         }
         mass{
@@ -2007,6 +2119,10 @@ fil{
                 dnam{"fl oz"}
                 one{"{0} fl oz"}
                 other{"{0} fl oz"}
+            }
+            fluid-ounce-metric{
+                one{"{0} fl oz m."}
+                other{"{0} fl oz m."}
             }
             gallon{
                 dnam{"gal"}

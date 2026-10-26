@@ -252,7 +252,6 @@ he{
                 two{"{0} מול"}
             }
             ofglucose{
-                dnam{"גלוקוז"}
                 one{"{0} גלוקוז"}
                 other{"{0} גלוקוז"}
                 two{"{0} גלוקוז"}
@@ -542,7 +541,6 @@ he{
                 two{"{0} מיליאמפר"}
             }
             ohm{
-                dnam{"אוהם"}
                 gender{"masculine"}
                 many{"{0} אוהם"}
                 one{"{0} אוהם"}
@@ -581,9 +579,6 @@ he{
                 one{"{0} קלוריה"}
                 other{"{0} קלוריות"}
                 two{"{0} קלוריות"}
-            }
-            calorie-it{
-                dnam{"קלוריה-IT"}
             }
             electronvolt{
                 dnam{"אלקטרון וולט"}
@@ -730,24 +725,17 @@ he{
             pixel{
                 dnam{"פיקסלים"}
                 gender{"masculine"}
-                one{"px ‏{0}"}
-                other{"px ‏{0}"}
-                two{"px ‏{0}"}
             }
             pixel-per-centimeter{
                 dnam{"פיקסלים לסנטימטר"}
                 gender{"masculine"}
-                many{"ppcm ‏{0}"}
-                one{"ppcm ‏{0}"}
-                other{"ppcm ‏{0}"}
-                two{"ppcm ‏{0}"}
             }
             pixel-per-inch{
                 dnam{"פיקסלים לאינץ׳"}
-                many{"{0} פיקסלים לאינץ'"}
-                one{"{0} פיקסל לאינץ'"}
-                other{"{0} פיקסלים לאינץ'"}
-                two{"{0} פיקסלים לאינץ'"}
+                many{"{0} פיקסלים לאינץ׳"}
+                one{"{0} פיקסל לאינץ׳"}
+                other{"{0} פיקסלים לאינץ׳"}
+                two{"{0} פיקסלים לאינץ׳"}
             }
         }
         length{
@@ -1370,10 +1358,10 @@ he{
             }
             dessert-spoon-imperial{
                 dnam{"כפית קינוחים בארה״ב"}
-                many{"{0} כפיות קינוחים בארה\u0022ב"}
+                many{"{0} כפיות קינוחים בארה״ב"}
                 one{"{0} כפית קינוחים בארה״ב"}
-                other{"{0} כפיות קינוחים בארה\u0022ב"}
-                two{"{0} כפיות קינוחים בארה\u0022ב"}
+                other{"{0} כפיות קינוחים בארה״ב"}
+                two{"{0} כפיות קינוחים בארה״ב"}
             }
             dram{
                 dnam{"דראם אלכוהול"}
@@ -1430,10 +1418,10 @@ he{
             }
             jigger{
                 dnam{"ג׳יגר"}
-                many{"{0} ג'יגר"}
+                many{"{0} ג׳יגר"}
                 one{"{0} ג׳יגר"}
-                other{"{0} ג'יגר"}
-                two{"{0} ג'יגר"}
+                other{"{0} ג׳יגר"}
+                two{"{0} ג׳יגר"}
             }
             liter{
                 gender{"masculine"}
@@ -1458,11 +1446,6 @@ he{
                 one{"{0} מיליליטר"}
                 other{"{0} מיליליטר"}
                 two{"{0} מיליליטר"}
-            }
-            pinch{
-                one{"{0} פינץ׳"}
-                other{"{0} פינץ'"}
-                two{"{0} פינץ'"}
             }
             pint{
                 many{"{0} פינט"}
@@ -1528,19 +1511,12 @@ he{
         }
         concentr{
             item{
-                many{"{0} פר'"}
+                many{"{0} פר׳"}
                 one{"{0} פריט"}
-                other{"{0} פר'"}
-                two{"{0} פר'"}
-            }
-            ofglucose{
-                dnam{"גלוקוז"}
-                one{"{0} גלוקוז"}
-                other{"{0} Glc"}
-                two{"{0} Glc"}
+                other{"{0} פר׳"}
+                two{"{0} פר׳"}
             }
             part{
-                dnam{"חלק"}
                 one{"{0} חלק"}
                 other{"{0} חלקים"}
                 two{"{0} חלקים"}
@@ -1566,38 +1542,6 @@ he{
                 one{"B‏{0}"}
                 other{"B‏{0}"}
                 two{"B‏{0}"}
-            }
-            gigabyte{
-                one{"GB‏{0}"}
-                other{"{0} GB"}
-                two{"{0} GB"}
-            }
-            kilobyte{
-                one{"kB‏{0}"}
-                other{"{0} kB"}
-                two{"{0} kB"}
-            }
-            megabit{
-                one{"Mb‏{0}"}
-                other{"{0} Mb"}
-                two{"{0} Mb"}
-            }
-            megabyte{
-                one{"MB‏{0}"}
-                other{"{0} MB"}
-                two{"{0} MB"}
-            }
-            petabyte{
-                many{"PB‏{0}"}
-                one{"PB‏{0}"}
-                other{"PB‏{0}"}
-                two{"PB‏{0}"}
-            }
-            terabit{
-                many{"Tb‏{0}"}
-                one{"Tb‏{0}"}
-                other{"Tb‏{0}"}
-                two{"Tb‏{0}"}
             }
             terabyte{
                 many{"TB‏{0}"}
@@ -1642,26 +1586,12 @@ he{
                 two{"{0} ש′"}
             }
         }
-        electric{
-            ohm{
-                dnam{"אוהם"}
-            }
-        }
         energy{
             calorie-it{
                 dnam{"קל׳-IT"}
             }
-            foodcalorie{
-                dnam{"קל׳"}
-            }
         }
         force{
-            kilogram-force{
-                dnam{"ק״ג-כוח"}
-                one{"{0} ק\u0022ג כוח"}
-                other{"{0} ק\u0022ג כוח"}
-                two{"{0} ק\u0022ג כוח"}
-            }
             kilowatt-hour-per-100-kilometer{
                 dnam{"kWh/100km"}
                 many{"{0} kWh/100km"}
@@ -1673,41 +1603,18 @@ he{
         graphics{
             dot{
                 dnam{"נקודה"}
-                many{"{0} נק' קטנות"}
-                one{"נק' קטנה אחת ({0})"}
-                other{"{0} נק' קטנות"}
-                two{"{0} נק' קטנות"}
             }
             dot-per-centimeter{
-                dnam{"dpcm"}
                 many{"‎dpcm‏{0}"}
                 one{"‎dpcm‏{0}"}
                 other{"‎dpcm‏{0}"}
                 two{"‎dpcm‏{0}"}
-            }
-            megapixel{
-                many{"MP ‏{0}"}
-                one{"MP ‏{0}"}
-                other{"MP ‏{0}"}
-                two{"MP ‏{0}"}
-            }
-            pixel{
-                many{"px ‏{0}"}
-                one{"px ‏{0}"}
-                other{"px ‏{0}"}
-                two{"px ‏{0}"}
             }
             pixel-per-centimeter{
                 many{"ppcm‏{0}"}
                 one{"ppcm‏{0}"}
                 other{"ppcm‏{0}"}
                 two{"ppcm‏{0}"}
-            }
-            pixel-per-inch{
-                many{"ppi ‏{0}"}
-                one{"ppi ‏{0}"}
-                other{"ppi ‏{0}"}
-                two{"ppi ‏{0}"}
             }
         }
         length{
@@ -1761,12 +1668,6 @@ he{
             }
         }
         volume{
-            cubic-meter{
-                many{"{0} מ\u0022ק"}
-                one{"{0} מ\u0022ק"}
-                other{"{0} מ\u0022ק"}
-                two{"{0} מ\u0022ק"}
-            }
             dessert-spoon-imperial{
                 many{"{0}dsp-Imp"}
                 one{"{0}dsp-Imp"}
@@ -1988,13 +1889,11 @@ he{
                 two{"{0} MB"}
             }
             petabyte{
-                many{"PB‏{0}"}
                 one{"PB‏{0}"}
                 other{"PB‏{0}"}
                 two{"PB‏{0}"}
             }
             terabit{
-                many{"Tb‏{0}"}
                 one{"Tb‏{0}"}
                 other{"Tb‏{0}"}
                 two{"Tb‏{0}"}
@@ -2125,9 +2024,9 @@ he{
         force{
             kilogram-force{
                 dnam{"ק״ג-כוח"}
-                one{"{0} ק\u0022ג כוח"}
-                other{"{0} ק\u0022ג כוח"}
-                two{"{0} ק\u0022ג כוח"}
+                one{"{0} ק״ג כוח"}
+                other{"{0} ק״ג כוח"}
+                two{"{0} ק״ג כוח"}
             }
             kilowatt-hour-per-100-kilometer{
                 dnam{"קוט״ש/100 ק״מ"}
@@ -2139,10 +2038,10 @@ he{
         graphics{
             dot{
                 dnam{"נקודה קטנה"}
-                many{"{0} נק' קטנות"}
-                one{"נק' קטנה אחת ({0})"}
-                other{"{0} נק' קטנות"}
-                two{"{0} נק' קטנות"}
+                many{"{0} נק׳ קטנות"}
+                one{"נק׳ קטנה אחת ({0})"}
+                other{"{0} נק׳ קטנות"}
+                two{"{0} נק׳ קטנות"}
             }
             dot-per-centimeter{
                 dnam{"dpcm"}
@@ -2169,13 +2068,11 @@ he{
                 two{"px ‏{0}"}
             }
             pixel-per-centimeter{
-                many{"ppcm ‏{0}"}
                 one{"ppcm ‏{0}"}
                 other{"ppcm ‏{0}"}
                 two{"ppcm ‏{0}"}
             }
             pixel-per-inch{
-                many{"ppi ‏{0}"}
                 one{"ppi ‏{0}"}
                 other{"ppi ‏{0}"}
                 two{"ppi ‏{0}"}
@@ -2244,13 +2141,13 @@ he{
             picometer{
                 dnam{"פ״מ"}
                 one{"{0} פ“מ"}
-                other{"{0} פ\u0022מ"}
+                other{"{0} פ״מ"}
                 two{"{0} פ״מ"}
             }
             point{
                 dnam{"נקודות"}
                 one{"{0} נק׳"}
-                other{"{0} נק'"}
+                other{"{0} נק׳"}
                 two{"{0} נק׳"}
             }
             solar-radius{
@@ -2397,10 +2294,9 @@ he{
                 two{"{0} קמ״ק"}
             }
             cubic-meter{
-                many{"{0} מ\u0022ק"}
-                one{"{0} מ\u0022ק"}
-                other{"{0} מ\u0022ק"}
-                two{"{0} מ\u0022ק"}
+                one{"{0} מ״ק"}
+                other{"{0} מ״ק"}
+                two{"{0} מ״ק"}
             }
             cup{
                 dnam{"כוסות"}
@@ -2455,9 +2351,9 @@ he{
             }
             pinch{
                 dnam{"פינץ׳"}
-                one{"{0} פינץ'"}
-                other{"{0} פינץ'"}
-                two{"{0} פינץ'"}
+                one{"{0} פינץ׳"}
+                other{"{0} פינץ׳"}
+                two{"{0} פינץ׳"}
             }
             pint{
                 dnam{"פינט"}

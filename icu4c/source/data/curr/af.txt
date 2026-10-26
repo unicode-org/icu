@@ -702,6 +702,7 @@ af{
     }
     Currencies%narrow{
         BYN{"р."}
+        CHF{"fr"}
         RON{"leu"}
         TWD{"NT$"}
     }
@@ -717,45 +718,17 @@ af{
             one{"Brasillianse reaal"}
             other{"Brasillianse reaal"}
         }
-        BYN{
-            one{"Belarussiese roebel"}
-            other{"Belarussiese roebel"}
-        }
-        EUR{
-            one{"euro"}
-            other{"euro"}
-        }
-        INR{
-            one{"Indiese roepee"}
-            other{"Indiese roepee"}
-        }
-        LSL{
-            one{"Lesotho-loti"}
-            other{"Lesotho-loti"}
-        }
         QAR{
             one{"Katarese rial"}
             other{"Katarese rial"}
-        }
-        SLL{
-            one{"Sierra Leoniese leone (1964–2022)"}
-            other{"Sierra Leoniese leone (1964–2022)"}
         }
         VEF{
             one{"Venezolaanse bolívar (2008–2018)"}
             other{"Venezolaanse bolívare (2008–2018)"}
         }
-        XCG{
-            one{"Karibiese gulde"}
-            other{"Karibiese gulde"}
-        }
         XXX{
             one{"(onbekende geldeenheid)"}
             other{"(onbekende geldeenheid)"}
-        }
-        ZWG{
-            one{"Zimbabwiese goud"}
-            other{"Zimbabwiese goud"}
         }
     }
 }

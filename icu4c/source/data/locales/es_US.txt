@@ -147,9 +147,6 @@ es_US{
                 MMMd{
                     d{"d–d 'de' MMM"}
                 }
-                h{
-                    a{"h a – h a"}
-                }
                 hm{
                     h{"h:mm–h:mm a"}
                     m{"h:mm–h:mm a"}

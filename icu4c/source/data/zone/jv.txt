@@ -12,131 +12,41 @@ jv{
         "Africa:Conakry"{
             ec{"Konakri"}
         }
-        "America:Bahia_Banderas"{
-            ec{"Bahia Banderas"}
-        }
-        "America:Belize"{
-            ec{"Belise"}
-        }
         "America:Cambridge_Bay"{
             ec{"Teluk Cambridge"}
-        }
-        "America:Campo_Grande"{
-            ec{"Kampo Grande"}
         }
         "America:Cancun"{
             ec{"Cancun"}
         }
-        "America:Caracas"{
-            ec{"Karakas"}
-        }
-        "America:Catamarca"{
-            ec{"Katamarka"}
-        }
-        "America:Cayenne"{
-            ec{"Kayenne"}
-        }
-        "America:Cayman"{
-            ec{"Caiman"}
-        }
-        "America:Ciudad_Juarez"{
-            ec{"Ciudad Juáres"}
-        }
-        "America:Cordoba"{
-            ec{"Kordoba"}
-        }
         "America:Costa_Rica"{
             ec{"Kosta Rika"}
-        }
-        "America:Cuiaba"{
-            ec{"Kuiaba"}
         }
         "America:Dominica"{
             ec{"Dominika"}
         }
-        "America:Fort_Nelson"{
-            ec{"Benteng Nelson"}
-        }
         "America:Glace_Bay"{
             ec{"Teluk Glace"}
-        }
-        "America:Goose_Bay"{
-            ec{"Teluk Goose"}
         }
         "America:Halifax"{
             ec{"Halifak"}
         }
-        "America:Indiana:Knox"{
-            ec{"Knox [Indiana]"}
-        }
-        "America:Indiana:Marengo"{
-            ec{"Marengo [Indiana]"}
-        }
-        "America:Indiana:Petersburg"{
-            ec{"Petersburg [Indiana]"}
-        }
-        "America:Indiana:Tell_City"{
-            ec{"Tell City [Indiana]"}
-        }
-        "America:Indiana:Vevay"{
-            ec{"Vevay [Indiana]"}
-        }
-        "America:Indiana:Vincennes"{
-            ec{"Vincennes [Indiana]"}
-        }
-        "America:Indiana:Winamac"{
-            ec{"Winamac [Indiana]"}
-        }
-        "America:Kentucky:Monticello"{
-            ec{"Monticello [Kentucky]"}
-        }
-        "America:Martinique"{
-            ec{"Martinik"}
-        }
-        "America:Mendoza"{
-            ec{"Mendosa"}
-        }
-        "America:Merida"{
-            ec{"Merida"}
+        "America:Jamaica"{
+            ec{"Jamaika"}
         }
         "America:Mexico_City"{
-            ec{"Kutho Meksiko"}
+            ec{"Kutha Meksiko"}
         }
         "America:North_Dakota:Beulah"{
-            ec{"Beulah [Dakota Lor]"}
+            ec{"Beulah, Dakota Lor"}
         }
         "America:North_Dakota:Center"{
-            ec{"Tengah [Dakota Lor]"}
+            ec{"Center, Dakota Lor"}
         }
         "America:North_Dakota:New_Salem"{
-            ec{"Salem Anyar [Dakota Lor]"}
-        }
-        "America:Port_of_Spain"{
-            ec{"Palabuhan Spanyol"}
+            ec{"New Salem, Dakota Lor"}
         }
         "America:Puerto_Rico"{
             ec{"Puerto Riko"}
-        }
-        "America:St_Barthelemy"{
-            ec{"Santa Barthelemy"}
-        }
-        "America:St_Johns"{
-            ec{"Santa John"}
-        }
-        "America:St_Kitts"{
-            ec{"Santa Kitts"}
-        }
-        "America:St_Lucia"{
-            ec{"Santa Lucia"}
-        }
-        "America:St_Thomas"{
-            ec{"Santa Thomas"}
-        }
-        "America:St_Vincent"{
-            ec{"Santa Vincent"}
-        }
-        "America:Swift_Current"{
-            ec{"Arus Banter"}
         }
         "Asia:Calcutta"{
             ec{"Kalkuta"}
@@ -153,9 +63,6 @@ jv{
         "Asia:Macau"{
             ec{"Macau"}
         }
-        "Asia:Makassar"{
-            ec{"Makasar"}
-        }
         "Asia:Qostanay"{
             ec{"Kostanai"}
         }
@@ -166,10 +73,10 @@ jv{
             ec{"Teheran"}
         }
         "Atlantic:Canary"{
-            ec{"Kanari"}
+            ec{"Kanaria"}
         }
         "Atlantic:Cape_Verde"{
-            ec{"Kape Verde"}
+            ec{"Tanjung Verde"}
         }
         "Atlantic:South_Georgia"{
             ec{"Georgia Kidul"}
@@ -189,29 +96,32 @@ jv{
         "Europe:Copenhagen"{
             ec{"Kopenhagen"}
         }
-        "Europe:Dublin"{
-            ld{"Wektu Standar Irlandia"}
-        }
         "Europe:Isle_of_Man"{
             ec{"Pulo Man"}
         }
         "Europe:Kiev"{
             ec{"Kiev"}
         }
-        "Europe:London"{
-            ld{"Wektu Ketigo Inggris"}
-        }
         "Europe:Luxembourg"{
-            ec{"Luksemburk"}
+            ec{"Luksemburg"}
         }
         "Europe:Monaco"{
             ec{"Monako"}
+        }
+        "Europe:Prague"{
+            ec{"Praha"}
         }
         "Europe:Rome"{
             ec{"Roma"}
         }
         "Europe:Vatican"{
             ec{"Vatikan"}
+        }
+        "Europe:Vienna"{
+            ec{"Wina"}
+        }
+        "Europe:Warsaw"{
+            ec{"Warsawa"}
         }
         "Indian:Chagos"{
             ec{"Khagos"}
@@ -226,10 +136,15 @@ jv{
             ec{"Maladewa"}
         }
         "Pacific:Easter"{
-            ec{"Paskah"}
+            ec{"Pulo Paskah"}
         }
         "Pacific:Port_Moresby"{
             ec{"Pelabuhan Moresby"}
+        }
+        "meta:Acre"{
+            ld{"Wektu Ketiga Acre"}
+            lg{"Wektu Acre"}
+            ls{"Wektu Standar Acre"}
         }
         "meta:Afghanistan"{
             ls{"Wektu Afghanistan"}
@@ -247,32 +162,32 @@ jv{
             ls{"Wektu Afrika Kulon"}
         }
         "meta:Alaska"{
-            ld{"Wektu Ketigo Alaska"}
+            ld{"Wektu Ketiga Alaska"}
             lg{"Wektu Alaska"}
             ls{"Wektu Standar Alaska"}
         }
         "meta:Amazon"{
-            ld{"Wektu Ketigo Amazon"}
+            ld{"Wektu Ketiga Amazon"}
             lg{"Wektu Amazon"}
             ls{"Wektu Standar Amazon"}
         }
         "meta:America_Central"{
-            ld{"Wektu Ketigo Tengah"}
+            ld{"Wektu Ketiga Tengah"}
             lg{"Wektu Tengah"}
             ls{"Wektu Standar Tengah"}
         }
         "meta:America_Eastern"{
-            ld{"Wektu Ketigo sisih Wetah"}
+            ld{"Wektu Ketiga sisih Wetan"}
             lg{"Wektu sisih Wetan"}
             ls{"Wektu Standar sisih Wetan"}
         }
         "meta:America_Mountain"{
-            ld{"Wektu Ketigo Giri"}
-            lg{"Wektu Giri"}
-            ls{"Wektu Standar Giri"}
+            ld{"Wektu Ketiga Pagunungan"}
+            lg{"Wektu Pagunungan"}
+            ls{"Wektu Standar Pagunungan"}
         }
         "meta:America_Pacific"{
-            ld{"Wektu Ketigo Pasifik"}
+            ld{"Wektu Ketiga Pasifik"}
             lg{"Wektu Pasifik"}
             ls{"Wektu Standar Pasifik"}
         }
@@ -287,12 +202,12 @@ jv{
             ls{"Wektu Standar Arab"}
         }
         "meta:Argentina"{
-            ld{"Wektu Ketigo Argentina"}
+            ld{"Wektu Ketiga Argentina"}
             lg{"Wektu Argentina"}
             ls{"Wektu Standar Argentina"}
         }
         "meta:Argentina_Western"{
-            ld{"Wektu Ketigo Argentina sisih Kulon"}
+            ld{"Wektu Ketiga Argentina sisih Kulon"}
             lg{"Wektu Argentina sisih Kulon"}
             ls{"Wektu Standar Argentina sisih Kulon"}
         }
@@ -302,7 +217,7 @@ jv{
             ls{"Wektu Standar Armenia"}
         }
         "meta:Atlantic"{
-            ld{"Wektu Ketigo Atlantik"}
+            ld{"Wektu Ketiga Atlantik"}
             lg{"Wektu Atlantik"}
             ls{"Wektu Standar Atlantik"}
         }
@@ -332,7 +247,7 @@ jv{
             ls{"Wektu Standar Azerbaijan"}
         }
         "meta:Azores"{
-            ld{"Wektu Ketigo Azores"}
+            ld{"Wektu Ketiga Azores"}
             lg{"Wektu Azores"}
             ls{"Wektu Standar Azores"}
         }
@@ -348,9 +263,13 @@ jv{
             ls{"Wektu Bolivia"}
         }
         "meta:Brasilia"{
-            ld{"Wektu Ketigo Brasilia"}
+            ld{"Wektu Ketiga Brasilia"}
             lg{"Wektu Brasilia"}
             ls{"Wektu Standar Brasilia"}
+        }
+        "meta:British"{
+            ld{"Wektu Ketiga Inggris"}
+            lg{"Wektu Inggris"}
         }
         "meta:Brunei"{
             ls{"Wektu Brunei"}
@@ -369,7 +288,7 @@ jv{
             ls{"Wektu Standar Chatham"}
         }
         "meta:Chile"{
-            ld{"Wektu Ketigo Chili"}
+            ld{"Wektu Ketiga Chili"}
             lg{"Wektu Chili"}
             ls{"Wektu Standar Chili"}
         }
@@ -385,7 +304,7 @@ jv{
             ls{"Wektu Kepuloan Cocos"}
         }
         "meta:Colombia"{
-            ld{"Wektu Ketigo Kolombia"}
+            ld{"Wektu Ketiga Kolombia"}
             lg{"Wektu Kolombia"}
             ls{"Wektu Standar Kolombia"}
         }
@@ -395,7 +314,7 @@ jv{
             ls{"Wektu Standar Kepuloan Cook"}
         }
         "meta:Cuba"{
-            ld{"Wektu Ketigo Kuba"}
+            ld{"Wektu Ketiga Kuba"}
             lg{"Wektu Kuba"}
             ls{"Wektu Standar Kuba"}
         }
@@ -409,7 +328,7 @@ jv{
             ls{"Wektu Timor-Leste"}
         }
         "meta:Easter"{
-            ld{"Wektu Ketigo Pulo Paskah"}
+            ld{"Wektu Ketiga Pulo Paskah"}
             lg{"Wektu Pulo Paskah"}
             ls{"Wektu Standar Pulo Paskah"}
         }
@@ -417,27 +336,27 @@ jv{
             ls{"Wektu Ekuador"}
         }
         "meta:Europe_Central"{
-            ld{"Wektu Ketigo Eropa Tengah"}
+            ld{"Wektu Ketiga Eropa Tengah"}
             lg{"Wektu Eropa Tengah"}
             ls{"Wektu Standar Eropa Tengah"}
         }
         "meta:Europe_Eastern"{
-            ld{"Wektu Ketigo Eropa sisih Wetan"}
-            lg{"Wektu Eropa sisih Wetan"}
-            ls{"Wektu Standar Eropa sisih Wetan"}
+            ld{"Wektu Ketiga Eropa Wetan"}
+            lg{"Wektu Eropa Wetan"}
+            ls{"Wektu Standar Eropa Wetan"}
         }
         "meta:Europe_Further_Eastern"{
-            ls{"Wektu Eropa sisih Wetan seng Luwih Adoh"}
+            ls{"Wektu Eropa sisih Wetan Adoh"}
         }
         "meta:Europe_Western"{
-            ld{"Wektu Ketigo Eropa sisih Kulon"}
+            ld{"Wektu Ketiga Eropa sisih Kulon"}
             lg{"Wektu Eropa sisih Kulon"}
             ls{"Wektu Standar Eropa sisih Kulon"}
         }
         "meta:Falkland"{
-            ld{"Wektu Ketigo Kepuloan Falkland"}
-            lg{"Wektu Kepuloan Falkland"}
-            ls{"Wektu Standar Kepuloan Falkland"}
+            ld{"Wektu Ketiga Kapuloan Falkland"}
+            lg{"Wektu Kapuloan Falkland"}
+            ls{"Wektu Standar Kapuloan Falkland"}
         }
         "meta:Fiji"{
             ld{"Wektu Ketigo Fiji"}
@@ -445,7 +364,7 @@ jv{
             ls{"Wektu Standar Fiji"}
         }
         "meta:French_Guiana"{
-            ls{"Wektu Guiana Prancis"}
+            ls{"Wektu Guyana Prancis"}
         }
         "meta:French_Southern"{
             ls{"Wektu Antartika lan Prancis sisih Kidul"}
@@ -467,15 +386,20 @@ jv{
         "meta:Gilbert_Islands"{
             ls{"Wektu Kepuloan Gilbert"}
         }
+        "meta:Greenland"{
+            ld{"Wektu Ketiga Greenland"}
+            lg{"Wektu Greenland"}
+            ls{"Wektu Standar Greenland"}
+        }
         "meta:Greenland_Eastern"{
-            ld{"Wektu Ketigo Grinland Wetan"}
-            lg{"Wektu Grinland Wetan"}
-            ls{"Wektu Standar Grinland Wetan"}
+            ld{"Wektu Ketiga Greenland Wetan"}
+            lg{"Wektu Greenland Wetan"}
+            ls{"Wektu Standar Greenland Wetan"}
         }
         "meta:Greenland_Western"{
-            ld{"Wektu Ketigo Grinland Kulon"}
-            lg{"Wektu Grinland Kulon"}
-            ls{"Wektu Standar Grinland Kulon"}
+            ld{"Wektu Ketiga Greenland Kulon"}
+            lg{"Wektu Greenland Kulon"}
+            ls{"Wektu Standar Greenland Kulon"}
         }
         "meta:Gulf"{
             ls{"Wektu Standar Teluk"}
@@ -484,12 +408,12 @@ jv{
             ls{"Wektu Guyana"}
         }
         "meta:Hawaii"{
-            ls{"Wektu Standar Hawaii-Aleutian"}
+            ls{"Wektu Standar Hawaii"}
         }
         "meta:Hawaii_Aleutian"{
-            ld{"Wektu Ketigo Hawaii-Aleutian"}
+            ld{"Wektu Ketiga Hawaii-Aleutian"}
             lg{"Wektu Hawaii-Aleutian"}
-            ls{"Wektu Standar Hawaii-Aleutian"}
+            ls{"Wektu Standar Hawaii-Aleut"}
         }
         "meta:Hong_Kong"{
             ld{"Wektu Ketiga Hong Kong"}
@@ -524,8 +448,12 @@ jv{
             lg{"Wektu Iran"}
             ls{"Wektu Standar Iran"}
         }
+        "meta:Irish"{
+            ld{"Wektu Standar Irlandia"}
+            lg{"Wektu Irlandia"}
+        }
         "meta:Irkutsk"{
-            ld{"Wektu Ketigo Irkutsk"}
+            ld{"Wektu Ketiga Irkutsk"}
             lg{"Wektu Irkutsk"}
             ls{"Wektu Standar Irkutsk"}
         }
@@ -538,6 +466,11 @@ jv{
             ld{"Wektu Ketiga Jepang"}
             lg{"Wektu Jepang"}
             ls{"Wektu Standar Jepang"}
+        }
+        "meta:Kamchatka"{
+            ld{"Wektu Mangsa Panas Kamchatka"}
+            lg{"Wektu Kamchatka"}
+            ls{"Wektu Standar Kamchatka"}
         }
         "meta:Kazakhstan"{
             ls{"Wektu Kazakhstan"}
@@ -557,7 +490,7 @@ jv{
             ls{"Wektu Kosrae"}
         }
         "meta:Krasnoyarsk"{
-            ld{"Wektu Ketigo Krasnoyarsk"}
+            ld{"Wektu Ketiga Krasnoyarsk"}
             lg{"Wektu Krasnoyarsk"}
             ls{"Wektu Standar Krasnoyarsk"}
         }
@@ -573,7 +506,7 @@ jv{
             ls{"Wektu Standar Lord Howe"}
         }
         "meta:Magadan"{
-            ld{"Wektu Ketigo Magadan"}
+            ld{"Wektu Ketiga Magadan"}
             lg{"Wektu Magadan"}
             ls{"Wektu Standar Magadan"}
         }
@@ -590,7 +523,7 @@ jv{
             ls{"Wektu Kepuloan Marshall"}
         }
         "meta:Mauritius"{
-            ld{"Wektu Ketigo Mauritius"}
+            ld{"Wektu Ketiga Mauritius"}
             lg{"Wektu Mauritius"}
             ls{"Wektu Standar Mauritius"}
         }
@@ -598,7 +531,7 @@ jv{
             ls{"Wektu Mawson"}
         }
         "meta:Mexico_Pacific"{
-            ld{"Wektu Ketigo Pasifik Meksiko"}
+            ld{"Wektu Ketiga Pasifik Meksiko"}
             lg{"Wektu Pasifik Meksiko"}
             ls{"Wektu Standar Pasifik Meksiko"}
         }
@@ -608,9 +541,9 @@ jv{
             ls{"Wektu Standar Ulaanbaatar"}
         }
         "meta:Moscow"{
-            ld{"Wektu Ketigo Moscow"}
-            lg{"Wektu Moscow"}
-            ls{"Wektu Standar Moscow"}
+            ld{"Wektu Ketiga Moskow"}
+            lg{"Wektu Moskow"}
+            ls{"Wektu Standar Moskow"}
         }
         "meta:Myanmar"{
             ls{"Wektu Myanmar"}
@@ -632,7 +565,7 @@ jv{
             ls{"Wektu Standar Selandia Anyar"}
         }
         "meta:Newfoundland"{
-            ld{"Wektu Ketigo Newfoundland"}
+            ld{"Wektu Ketiga Newfoundland"}
             lg{"Wektu Newfoundland"}
             ls{"Wektu Standar Newfoundland"}
         }
@@ -645,17 +578,17 @@ jv{
             ls{"Wektu Standar Pulo Norfolk"}
         }
         "meta:Noronha"{
-            ld{"Wektu Ketigo Fernando de Noronha"}
+            ld{"Wektu Ketiga Fernando de Noronha"}
             lg{"Wektu Fernando de Noronha"}
             ls{"Wektu Standar Fernando de Noronha"}
         }
         "meta:Novosibirsk"{
-            ld{"Wektu Ketigo Novosibirsk"}
+            ld{"Wektu Ketiga Novosibirsk"}
             lg{"Wektu Novosibirsk"}
             ls{"Wektu Standar Novosibirsk"}
         }
         "meta:Omsk"{
-            ld{"Wektu Ketigo Omsk"}
+            ld{"Wektu Ketiga Omsk"}
             lg{"Wektu Omsk"}
             ls{"Wektu Standar Omsk"}
         }
@@ -671,12 +604,12 @@ jv{
             ls{"Wektu Papua Nugini"}
         }
         "meta:Paraguay"{
-            ld{"Wektu Ketigo Paraguay"}
+            ld{"Wektu Ketiga Paraguay"}
             lg{"Wektu Paraguay"}
             ls{"Wektu Standar Paraguay"}
         }
         "meta:Peru"{
-            ld{"Wektu Ketigo Peru"}
+            ld{"Wektu Ketiga Peru"}
             lg{"Wektu Peru"}
             ls{"Wektu Standar Peru"}
         }
@@ -689,7 +622,7 @@ jv{
             ls{"Wektu Kepuloan Phoenix"}
         }
         "meta:Pierre_Miquelon"{
-            ld{"Wektu Ketigo Santa Pierre lan Miquelon"}
+            ld{"Wektu Ketiga Santa Pierre lan Miquelon"}
             lg{"Wektu Santa Pierre lan Miquelon"}
             ls{"Wektu Standar Santa Pierre lan Miquelon"}
         }
@@ -709,13 +642,16 @@ jv{
             ls{"Wektu Rothera"}
         }
         "meta:Sakhalin"{
-            ld{"Wektu Ketigo Sakhalin"}
+            ld{"Wektu Ketiga Sakhalin"}
             lg{"Wektu Sakhalin"}
             ls{"Wektu Standar Sakhalin"}
         }
+        "meta:Samara"{
+            ld{"Wektu Mangsa Panas Samara"}
+            lg{"Wektu Samara"}
+            ls{"Wektu Standar Samara"}
+        }
         "meta:Samoa"{
-            ld{"Wektu Ketiga Samoa Amerika"}
-            lg{"Wektu Samoa Amerika"}
             ls{"Wektu Standar Samoa Amerika"}
         }
         "meta:Seychelles"{
@@ -758,6 +694,11 @@ jv{
         "meta:Truk"{
             ls{"Wektu Chuuk"}
         }
+        "meta:Turkey"{
+            ld{"Wektu Mangsa Panas Turki"}
+            lg{"Wektu Turki"}
+            ls{"Wektu Standar Turki"}
+        }
         "meta:Turkmenistan"{
             ld{"Wektu Ketigo Turkmenistan"}
             lg{"Wektu Turkmenistan"}
@@ -767,9 +708,12 @@ jv{
             ls{"Wektu Tuvalu"}
         }
         "meta:Uruguay"{
-            ld{"Wektu Ketigo Uruguay"}
+            ld{"Wektu Ketiga Uruguay"}
             lg{"Wektu Uruguay"}
             ls{"Wektu Standar Uruguay"}
+        }
+        "meta:Urumqi"{
+            ls{"Wektu Urumqi"}
         }
         "meta:Uzbekistan"{
             ld{"Wektu Ketigo Usbekistan"}
@@ -785,12 +729,12 @@ jv{
             ls{"Wektu Venezuela"}
         }
         "meta:Vladivostok"{
-            ld{"Wektu Ketigo Vladivostok"}
+            ld{"Vote Wektu Ketiga Vladivostok"}
             lg{"Wektu Vladivostok"}
             ls{"Wektu Standar Vladivostok"}
         }
         "meta:Volgograd"{
-            ld{"Wektu Ketigo Volgograd"}
+            ld{"Wektu Ketiga Volgograd"}
             lg{"Wektu Volgograd"}
             ls{"Wektu Standar Volgograd"}
         }
@@ -804,12 +748,12 @@ jv{
             ls{"Wektu Wallis lan Futuna"}
         }
         "meta:Yakutsk"{
-            ld{"Wektu Ketigo Yakutsk"}
+            ld{"Wektu Ketiga Yakutsk"}
             lg{"Wektu Yakutsk"}
             ls{"Wektu Standar Yakutsk"}
         }
         "meta:Yekaterinburg"{
-            ld{"Wektu Ketigo Yekaterinburg"}
+            ld{"Wektu Ketiga Yekaterinburg"}
             lg{"Wektu Yekaterinburg"}
             ls{"Wektu Standar Yekaterinburg"}
         }

@@ -21,14 +21,8 @@ dsb{
         "Africa:Djibouti"{
             ec{"Džibuti"}
         }
-        "Africa:El_Aaiun"{
-            ec{"El Aaiún"}
-        }
         "Africa:Khartoum"{
             ec{"Khartum"}
-        }
-        "Africa:Lome"{
-            ec{"Lomé"}
         }
         "Africa:Mogadishu"{
             ec{"Mogadišu"}
@@ -41,9 +35,6 @@ dsb{
         }
         "Africa:Tripoli"{
             ec{"Tripolis"}
-        }
-        "America:Bogota"{
-            ec{"Bogotá"}
         }
         "America:Cayman"{
             ec{"Kaimaniske kupy"}
@@ -59,9 +50,6 @@ dsb{
         }
         "America:Port_of_Spain"{
             ec{"Port-of-Spain"}
-        }
-        "America:Sao_Paulo"{
-            ec{"São Paulo"}
         }
         "America:St_Barthelemy"{
             ec{"St.Barthélemy"}
@@ -201,26 +189,17 @@ dsb{
         "Europe:Bucharest"{
             ec{"Bukarest"}
         }
-        "Europe:Busingen"{
-            ec{"Büsingen"}
-        }
         "Europe:Chisinau"{
             ec{"Kišinau"}
         }
         "Europe:Copenhagen"{
             ec{"Kopenhagen"}
         }
-        "Europe:Dublin"{
-            ld{"Iriski lěśojski cas"}
-        }
         "Europe:Kiev"{
             ec{"Kiew"}
         }
         "Europe:Lisbon"{
             ec{"Lissabon"}
-        }
-        "Europe:London"{
-            ld{"Britiski lěśojski cas"}
         }
         "Europe:Luxembourg"{
             ec{"Luxemburg"}
@@ -233,9 +212,6 @@ dsb{
         }
         "Europe:Rome"{
             ec{"Rom"}
-        }
-        "Europe:Tirane"{
-            ec{"Tirana"}
         }
         "Europe:Vatican"{
             ec{"Vatikan"}
@@ -269,6 +245,11 @@ dsb{
         }
         "Pacific:Fiji"{
             ec{"Fidži"}
+        }
+        "meta:Acre"{
+            ld{"Acre-lěśojski cas"}
+            lg{"Acre-cas"}
+            ls{"Acre-standardny cas"}
         }
         "meta:Afghanistan"{
             ls{"Afghaniski cas"}
@@ -390,6 +371,9 @@ dsb{
             ld{"Brasília lěśojski cas"}
             lg{"Brasília cas"}
             ls{"Brasília standardny cas"}
+        }
+        "meta:British"{
+            ld{"Britiski lěśojski cas"}
         }
         "meta:Brunei"{
             ls{"Bruneiski cas"}
@@ -515,6 +499,11 @@ dsb{
         "meta:Gilbert_Islands"{
             ls{"cas Gilbertowych kupow"}
         }
+        "meta:Greenland"{
+            ld{"Grönlandski lěśojski cas"}
+            lg{"Grönlandski cas"}
+            ls{"Grönlandski standardny cas"}
+        }
         "meta:Greenland_Eastern"{
             ld{"Pódzajtšnogrönlandski lěśojski cas"}
             lg{"Pódzajtšnogrönlandski cas"}
@@ -532,7 +521,7 @@ dsb{
             ls{"Guyański cas"}
         }
         "meta:Hawaii"{
-            ls{"Hawaiisko-aleutski standardny cas"}
+            ls{"Hawaiiski standardny cas"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"Hawaiisko-aleutski lěśojski cas"}
@@ -572,6 +561,9 @@ dsb{
             lg{"Irański cas"}
             ls{"Irański standardny cas"}
         }
+        "meta:Irish"{
+            ld{"Iriski lěśojski cas"}
+        }
         "meta:Irkutsk"{
             ld{"Irkutski lěśojski cas"}
             lg{"Irkutski cas"}
@@ -586,6 +578,11 @@ dsb{
             ld{"Japański lěśojski cas"}
             lg{"Japański cas"}
             ls{"Japański standardny cas"}
+        }
+        "meta:Kamchatka"{
+            ld{"Kamčatkaski lěśojski cas"}
+            lg{"Kamčatkaski cas"}
+            ls{"Kamčatkaski standardny cas"}
         }
         "meta:Kazakhstan"{
             ls{"kazachiski cas"}
@@ -761,9 +758,12 @@ dsb{
             lg{"Sachalinski cas"}
             ls{"Sachalinski standardny cas"}
         }
+        "meta:Samara"{
+            ld{"Samaraski lěśojski cas"}
+            lg{"Samaraski cas"}
+            ls{"Samaraski standardny cas"}
+        }
         "meta:Samoa"{
-            ld{"Samoaski lěśojski cas"}
-            lg{"Samoaski cas"}
             ls{"Samoaski standardny cas"}
         }
         "meta:Seychelles"{
@@ -806,6 +806,11 @@ dsb{
         "meta:Truk"{
             ls{"Chuukski cas"}
         }
+        "meta:Turkey"{
+            ld{"Turkojski lěśojski cas"}
+            lg{"Turkojski cas"}
+            ls{"Turkojski standardny cas"}
+        }
         "meta:Turkmenistan"{
             ld{"Turkmeniski lěśojski cas"}
             lg{"Turkmeniski cas"}
@@ -818,6 +823,9 @@ dsb{
             ld{"Uruguayski lěśojski cas"}
             lg{"Uruguayski cas"}
             ls{"Uruguayski standardny cas"}
+        }
+        "meta:Urumqi"{
+            ls{"Ürumqi cas"}
         }
         "meta:Uzbekistan"{
             ld{"Uzbekiski lěśojski cas"}

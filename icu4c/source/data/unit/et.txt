@@ -181,11 +181,6 @@ et{
                 one{"{0} glükoosi"}
                 other{"{0} glükoosi"}
             }
-            part{
-                dnam{"osa"}
-                one{"{0} osa"}
-                other{"{0} osa"}
-            }
             part-per-1e6{
                 dnam{"osa miljoni kohta"}
                 one{"{0} osa miljoni kohta"}
@@ -864,11 +859,6 @@ et{
                 one{"{0} sõlm"}
                 other{"{0} sõlme"}
             }
-            light-speed{
-                dnam{"valgus"}
-                one{"{0} valgus"}
-                other{"{0} valgust"}
-            }
             meter-per-second{
                 dnam{"meetrid sekundis"}
                 one{"{0} meeter sekundis"}
@@ -1076,23 +1066,9 @@ et{
         }
     }
     unitsNarrow{
-        area{
-            acre{
-                one{"{0} aaker"}
-                other{"{0} aakrit"}
-            }
-        }
         concentr{
             mole{
                 dnam{"mol"}
-            }
-            ofglucose{
-                dnam{"Glc"}
-            }
-            part{
-                dnam{"osa"}
-                one{"{0} osa"}
-                other{"{0} osa"}
             }
         }
         consumption{
@@ -1146,11 +1122,6 @@ et{
                 dnam{"a"}
             }
         }
-        energy{
-            calorie-it{
-                dnam{"cal-IT"}
-            }
-        }
         force{
             kilowatt-hour-per-100-kilometer{
                 one{"{0}kWh/100km"}
@@ -1161,24 +1132,8 @@ et{
             }
         }
         length{
-            foot{
-                one{"{0} jalg"}
-                other{"{0} jalga"}
-            }
-            inch{
-                one{"{0} toll"}
-                other{"{0} tolli"}
-            }
-            mile{
-                one{"{0} miil"}
-                other{"{0} miili"}
-            }
             point{
                 dnam{"punktid"}
-            }
-            yard{
-                one{"{0} jard"}
-                other{"{0} jardi"}
             }
         }
         mass{
@@ -1199,7 +1154,6 @@ et{
                 other{"B{0}"}
             }
             light-speed{
-                dnam{"valgus"}
                 one{"{0} valg."}
                 other{"{0} valg."}
             }

@@ -267,10 +267,6 @@ kgp{
             "CNH",
             "Sĩnỹ Yvỹn (offshore)",
         }
-        CNX{
-            "CNX",
-            "Nórar vẽnhkar mỹ máko mĩ Sĩnỹ tá",
-        }
         CNY{
             "CN¥",
             "Sĩnỹ Yvỹn",
@@ -1474,10 +1470,6 @@ kgp{
         CNH{
             one{"Sĩnỹ Yuãn (offshore)"}
             other{"Sĩnỹ Yuãn ag (offshore)"}
-        }
-        CNX{
-            one{"Nórar vẽnhkar mỹ máko mĩ Sĩnỹ tá"}
-            other{"Nórar vẽnhkar mỹ máko mĩ Sĩnỹ tá ag"}
         }
         CNY{
             one{"Sĩnỹ Yvỹn"}

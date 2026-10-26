@@ -6,12 +6,6 @@ om{
         "Etc:UTC"{
             ls{"Sa’aatii Idil-Addunyaa Qindaa’e"}
         }
-        "Europe:Dublin"{
-            ld{"Sa’aatii Istaandaardii Aayiriish"}
-        }
-        "Europe:London"{
-            ld{"Sa’aatii Bonaa Biritish"}
-        }
         "meta:Afghanistan"{
             ls{"Sa’aatii Afgaanistaan"}
         }
@@ -31,9 +25,6 @@ om{
             ld{"Sa’aatii Guyyaa Alaaskaa"}
             lg{"Sa’aatii Alaaskaa"}
             ls{"Sa’aatii Istaandaardii Alaaskaa"}
-            sd{"AKDT"}
-            sg{"AKT"}
-            ss{"AKST"}
         }
         "meta:Amazon"{
             ld{"Sa’aatii Bonaa Amazoon"}
@@ -44,33 +35,21 @@ om{
             ld{"Sa’aatii Guyyaa Gidduugaleessaa"}
             lg{"Sa’aatii Gidduugaleessaa"}
             ls{"Sa’aatii Istaandaardii Gidduugaleessaa"}
-            sd{"CDT"}
-            sg{"CT"}
-            ss{"CST"}
         }
         "meta:America_Eastern"{
             ld{"Sa’aatii Guyyaa Bahaa"}
             lg{"Sa’aatii Bahaa"}
             ls{"Sa’aatii Istaandaardii Bahaa"}
-            sd{"EDT"}
-            sg{"ET"}
-            ss{"EST"}
         }
         "meta:America_Mountain"{
             ld{"Sa’aatii Guyyaa Maawonteen"}
             lg{"Sa’aatii Maawonteen"}
             ls{"Sa’aatii Istaandaardii Maawonteen"}
-            sd{"MDT"}
-            sg{"MT"}
-            ss{"MST"}
         }
         "meta:America_Pacific"{
             ld{"Sa’aatii Guyyaa Paasfiik"}
             lg{"Sa’aatii Paasfiik"}
             ls{"Sa’aatii Istaandaardii Paasfiik"}
-            sd{"PDT"}
-            sg{"PT"}
-            ss{"PST"}
         }
         "meta:Apia"{
             ld{"Sa’aatii Guyyaa Apia"}
@@ -101,9 +80,6 @@ om{
             ld{"Sa’aatii Guyyaa Atilaantiik"}
             lg{"Sa’aatii Atilaantiik"}
             ls{"Sa’aatii Istaandaardii Atilaantiik"}
-            sd{"ADT"}
-            sg{"AT"}
-            ss{"AST"}
         }
         "meta:Australia_Central"{
             ld{"Sa’aatii Guyyaa Awustiraaliyaa Gidduugaleessaa"}
@@ -153,6 +129,10 @@ om{
             ld{"Sa’aatii Bonaa Biraaziliyaa"}
             lg{"Sa’aatii Biraaziliyaa"}
             ls{"Sa’aatii Istaandaardii Biraaziliyaa"}
+        }
+        "meta:British"{
+            ld{"Sa’aatii Bonaa Biritish"}
+            lg{"Sa’aatii Biritish"}
         }
         "meta:Brunei"{
             ls{"Sa’aatii Bruunee Darusalaam"}
@@ -279,9 +259,6 @@ om{
             lg{"Sa’aatii Giriinlaand Dhihaa"}
             ls{"Sa’aatii Istaandaardii Giriinlaand Dhihaa"}
         }
-        "meta:Guam"{
-            ls{"Sa’aatii Istaandaardii Guwaam"}
-        }
         "meta:Gulf"{
             ls{"Sa’aatii Istaandaardii Gaalfii"}
         }
@@ -289,16 +266,12 @@ om{
             ls{"Sa’aatii Guyaanaa"}
         }
         "meta:Hawaii"{
-            ls{"Sa’aatii Istaandaardii Haawayi-Alewutiyan"}
-            ss{"HAS"}
+            ls{"Sa’aatii Istaandardii Hawaayi"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"Sa’aatii Guyyaa Haawayi-Alewutiyan"}
             lg{"Sa’aatii Haawayi-Alewutiyan"}
-            ls{"Sa’aatii Istaandaardii Haawayi-Alewutiyan"}
-            sd{"HADT"}
-            sg{"HAT"}
-            ss{"HAS"}
+            ls{"Sa’aatii Istaandardii Hawaayi-Alushiyaa"}
         }
         "meta:Hong_Kong"{
             ld{"Sa’aatii Bonaa Hoong Koong"}
@@ -332,6 +305,10 @@ om{
             ld{"Sa’aatii Guyyaa Iraan"}
             lg{"Sa’aatii Iraan"}
             ls{"Sa’aatii Istaandaardii Iraan"}
+        }
+        "meta:Irish"{
+            ld{"Sa’aatii Istaandaardii Aayiriish"}
+            lg{"Sa’aatii Aayiriish"}
         }
         "meta:Irkutsk"{
             ld{"Sa’aatii Bonaa Irkutsk"}
@@ -372,9 +349,6 @@ om{
         }
         "meta:Kyrgystan"{
             ls{"Sa’aatii Kiyirigiyistan"}
-        }
-        "meta:Lanka"{
-            ls{"Sa’aatii Laankaa"}
         }
         "meta:Line_Islands"{
             ls{"Sa’aatii Odoloota Line"}
@@ -461,9 +435,6 @@ om{
             lg{"Sa’aatii Fernando de Noronha"}
             ls{"Sa’aatii Istaandaardii Fernando de Noronha"}
         }
-        "meta:North_Mariana"{
-            ls{"Sa’aatii Odoloota Maariyaanaa Kaabaa"}
-        }
         "meta:Novosibirsk"{
             ld{"Sa’aatii Bonaa Novosibirisk"}
             lg{"Sa’aatii Novosibirisk"}
@@ -529,8 +500,6 @@ om{
             ls{"Sa’aatii Istaandaardii Sakhalin"}
         }
         "meta:Samoa"{
-            ld{"Sa’aatii Guyyaa Saamowaa"}
-            lg{"Sa’aatii Saamowaa"}
             ls{"Sa’aatii Istaandaardii Saamowaa"}
         }
         "meta:Seychelles"{

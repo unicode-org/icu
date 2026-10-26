@@ -33,6 +33,7 @@ cc_binary(
         "//icu4c/source/common:errorcode",
         "//icu4c/source/common:ucharstriebuilder",
         "//icu4c/source/common:uniset",
+        "//icu4c/source/common:uset",
         "//icu4c/source/common:uvector32",
 
         "//icu4c/source/common:platform",

@@ -117,7 +117,6 @@ public final class ArabicShaping {
             throw new IllegalArgumentException("Wrong Tashkeel argument");
         }
 
-        /// CLOVER:OFF
         // According to Steven Loomis, the code is unreachable when you OR all the constants within
         // the if statements
         if (((options & LAMALEF_MASK) != 0)
@@ -128,7 +127,6 @@ public final class ArabicShaping {
                         || ((options & LAMALEF_MASK) == LAMALEF_NEAR))) {
             throw new IllegalArgumentException("Wrong Lam Alef argument");
         }
-        /// CLOVER:ON
 
         /* Validate Tashkeel (Tashkeel replacement options should be enabled in shaping mode only)*/
         if (((options & TASHKEEL_MASK) != 0) && (options & LETTERS_MASK) == LETTERS_UNSHAPE) {
@@ -553,7 +551,7 @@ public final class ArabicShaping {
      */
     public static final int DIGITS_EN2AN_INIT_AL = 0x80;
 
-    /** Not a valid option value. */
+    /* Not a valid option value. */
     // private static final int DIGITS_RESERVED = 0xa0;
 
     /**
@@ -616,7 +614,6 @@ public final class ArabicShaping {
     /**
      * @stable ICU 2.0
      */
-    /// CLOVER:OFF
     @Override
     public int hashCode() {
         return options;
@@ -723,8 +720,6 @@ public final class ArabicShaping {
 
         return buf.toString();
     }
-
-    /// CLOVER:ON
 
     //
     // ported api
@@ -1127,7 +1122,6 @@ public final class ArabicShaping {
     };
 
     private static int[] convertFEto06 = {
-        /***********0******1******2******3******4******5******6******7******8******9******A******B******C******D******E******F***/
         /*FE7*/ 0x64B,
         0x64B,
         0x64C,

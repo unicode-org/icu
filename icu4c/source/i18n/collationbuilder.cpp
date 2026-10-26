@@ -254,7 +254,12 @@ CollationBuilder::parseAndBuild(const UnicodeString &ruleString,
     variableTop = base->settings->variableTop;
     parser.setSink(this);
     parser.setImporter(importer);
-    CollationSettings &ownedSettings = *SharedObject::copyOnWrite(tailoring->settings);
+    CollationSettings *ownedSettingsPtr = SharedObject::copyOnWrite(tailoring->settings);
+    if (ownedSettingsPtr == nullptr) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
+    CollationSettings &ownedSettings = *ownedSettingsPtr;
     parser.parse(ruleString, ownedSettings, outParseError, errorCode);
     errorReason = parser.getErrorReason();
     if(U_FAILURE(errorCode)) { return nullptr; }
@@ -1121,7 +1126,7 @@ CollationBuilder::addWithClosure(const UnicodeString &nfdPrefix, const UnicodeSt
 // This value is needed for compiling a rule with eight Hangul syllables such as
 // "&a=b쫊쫊쫊쫊쫊쫊쫊" without error, which should be more than realistic
 // usage.
-static constexpr int32_t kClosureLoopLimit = 3000;
+static constexpr int32_t kClosureLoopLimit = 2400;
 
 uint32_t
 CollationBuilder::addOnlyClosure(const UnicodeString &nfdPrefix, const UnicodeString &nfdString,
@@ -1201,7 +1206,7 @@ CollationBuilder::addTailComposites(const UnicodeString &nfdPrefix, const Unicod
     UnicodeString newNFDString, newString;
     int64_t newCEs[Collation::MAX_EXPANSION_LENGTH];
     UnicodeSetIterator iter(composites);
-    while(iter.next()) {
+    while(iter.next() && U_SUCCESS(errorCode)) {
         U_ASSERT(!iter.isString());
         UChar32 composite = iter.getCodepoint();
         nfd.getDecomposition(composite, decomp);
@@ -1353,7 +1358,7 @@ CollationBuilder::closeOverComposites(UErrorCode &errorCode) {
     UnicodeString prefix;  // empty
     UnicodeString nfdString;
     UnicodeSetIterator iter(composites);
-    while(iter.next()) {
+    while(iter.next() && U_SUCCESS(errorCode)) {
         U_ASSERT(!iter.isString());
         nfd.getDecomposition(iter.getCodepoint(), nfdString);
         cesLength = dataBuilder->getCEs(nfdString, ces, 0);

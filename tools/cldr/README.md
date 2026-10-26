@@ -1,13 +1,26 @@
-<!--- © 2020 and later: Unicode, Inc. and others. ---> 
+<!--- © 2020 and later: Unicode, Inc. and others. --->
 <!--- License & terms of use: http://www.unicode.org/copyright.html --->
 
 # Tools and build scripts for updating data originating from CLDR
 
 ## CLDR test data
 
+The Python [build.py](build.py) file takes care of copying some CLDR
+test data directories to both the ICU4C and ICU4J source trees. To add
+more directories to the list, modify the `cldr_test_data` fileset.
+
+You can run `build.py --help` to list options.
+
+ANT-TO-REMOVE-START
+
+WARNING: Ant support WILL BE REMOVED.
+Only use this (and report) if the step above fails.
+
 The ant [build.xml](build.xml) file takes care of copying some CLDR
 test data directories to both the ICU4C and ICU4J source trees. To add
 more directories to the list, modify the `cldrTestData` fileset.
+
+ANT-TO-REMOVE-END
 
 ## cldr-to-icu
 

@@ -1,5 +1,5 @@
 # Test data for Person Name Data
-#  Copyright © 1991-2025 Unicode, Inc.
+#  Copyright © 1991-2026 Unicode, Inc.
 #  For terms of use, see http://www.unicode.org/copyright.html
 #  SPDX-License-Identifier: Unicode-3.0
 #  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
@@ -138,6 +138,8 @@ parameters; surnameFirst; long; referring; formal
 parameters; surnameFirst; long; referring; informal
 parameters; surnameFirst; medium; referring; formal
 parameters; surnameFirst; medium; referring; informal
+parameters; surnameFirst; short; referring; informal
+parameters; surnameFirst; short; addressing; formal
 
 expectedResult; বৰুৱা, ন.
 
@@ -154,7 +156,6 @@ parameters; givenFirst; short; referring; informal
 expectedResult; বৰুৱা ন.
 
 parameters; surnameFirst; short; referring; formal
-parameters; surnameFirst; short; referring; informal
 
 expectedResult; নমিতা
 
@@ -172,7 +173,6 @@ parameters; givenFirst; medium; addressing; formal
 parameters; givenFirst; short; addressing; formal
 parameters; surnameFirst; long; addressing; formal
 parameters; surnameFirst; medium; addressing; formal
-parameters; surnameFirst; short; addressing; formal
 
 expectedResult; নব
 
@@ -217,6 +217,8 @@ parameters; givenFirst; long; referring; formal
 expectedResult; শৰ্মা ৰুলা কলিতা যতীন
 
 parameters; surnameFirst; long; referring; formal
+parameters; surnameFirst; short; referring; informal
+parameters; surnameFirst; short; addressing; formal
 
 expectedResult; শৰ্মা, ৰুলা কলিতা য.
 
@@ -262,10 +264,6 @@ expectedResult; ৰুলা কলিতা শ.
 
 parameters; givenFirst; short; referring; informal
 
-expectedResult; শৰ্মা ৰু. ক.
-
-parameters; surnameFirst; short; referring; informal
-
 expectedResult; ৰুলা কলিতা
 
 parameters; givenFirst; long; addressing; informal
@@ -282,7 +280,6 @@ parameters; givenFirst; medium; addressing; formal
 parameters; givenFirst; short; addressing; formal
 parameters; surnameFirst; long; addressing; formal
 parameters; surnameFirst; medium; addressing; formal
-parameters; surnameFirst; short; addressing; formal
 
 expectedResult; ৰুযশ
 
@@ -329,6 +326,8 @@ name ; locale; as_AQ
 expectedResult; কাকতি নৰেন কলিতা ৰুমী বৰুৱা এম. পি.
 
 parameters; surnameFirst; long; referring; formal
+parameters; surnameFirst; short; referring; informal
+parameters; surnameFirst; short; addressing; formal
 
 expectedResult; নৰেন কলিতা ৰুমী বৰুৱা কাকতি এম. পি.
 
@@ -362,10 +361,6 @@ expectedResult; ন. ক. ৰু. ব. কাকতি
 
 parameters; givenFirst; short; referring; formal
 
-expectedResult; কাকতি ন. ক.
-
-parameters; surnameFirst; short; referring; informal
-
 expectedResult; কাকতি, নমী
 
 parameters; sorting; long; referring; informal
@@ -379,7 +374,6 @@ parameters; givenFirst; medium; addressing; formal
 parameters; givenFirst; short; addressing; formal
 parameters; surnameFirst; long; addressing; formal
 parameters; surnameFirst; medium; addressing; formal
-parameters; surnameFirst; short; addressing; formal
 
 expectedResult; কাকতি নমী
 
@@ -516,6 +510,8 @@ parameters; surnameFirst; long; referring; formal
 parameters; surnameFirst; long; referring; informal
 parameters; surnameFirst; medium; referring; formal
 parameters; surnameFirst; medium; referring; informal
+parameters; surnameFirst; short; referring; informal
+parameters; surnameFirst; short; addressing; formal
 
 expectedResult; নগেন ব.
 
@@ -532,7 +528,6 @@ parameters; givenFirst; short; referring; formal
 expectedResult; বৰা ন.
 
 parameters; surnameFirst; short; referring; formal
-parameters; surnameFirst; short; referring; informal
 
 expectedResult; নগেন
 
@@ -550,7 +545,6 @@ parameters; givenFirst; medium; addressing; formal
 parameters; givenFirst; short; addressing; formal
 parameters; surnameFirst; long; addressing; formal
 parameters; surnameFirst; medium; addressing; formal
-parameters; surnameFirst; short; addressing; formal
 
 expectedResult; নব
 
@@ -591,6 +585,8 @@ parameters; sorting; long; referring; formal
 expectedResult; বৰুৱা মণিমালা অজিত
 
 parameters; surnameFirst; long; referring; formal
+parameters; surnameFirst; short; referring; informal
+parameters; surnameFirst; short; addressing; formal
 
 expectedResult; মণিমালা অজিত বৰুৱা
 
@@ -640,10 +636,6 @@ expectedResult; মণিমালা ব.
 
 parameters; givenFirst; short; referring; informal
 
-expectedResult; বৰুৱা ম.
-
-parameters; surnameFirst; short; referring; informal
-
 expectedResult; মণিমালা
 
 parameters; givenFirst; long; addressing; informal
@@ -660,7 +652,6 @@ parameters; givenFirst; medium; addressing; formal
 parameters; givenFirst; short; addressing; formal
 parameters; surnameFirst; long; addressing; formal
 parameters; surnameFirst; medium; addressing; formal
-parameters; surnameFirst; short; addressing; formal
 
 expectedResult; বমঅ
 
@@ -713,6 +704,8 @@ parameters; givenFirst; long; referring; formal
 expectedResult; ভেন ডেন কুকুৰনেচীয়া আডা কৰ্ণেলিয়া ইভা চ’ফিয়া এম. ডি. ডি. ডি. এছ
 
 parameters; surnameFirst; long; referring; formal
+parameters; surnameFirst; short; referring; informal
+parameters; surnameFirst; short; addressing; formal
 
 expectedResult; আডা কৰ্ণেলিয়া ই. চ. ভেন ডেন কুকুৰনেচীয়া এম. ডি. ডি. ডি. এছ
 
@@ -749,11 +742,6 @@ parameters; givenFirst; medium; addressing; formal
 parameters; givenFirst; short; addressing; formal
 parameters; surnameFirst; long; addressing; formal
 parameters; surnameFirst; medium; addressing; formal
-parameters; surnameFirst; short; addressing; formal
-
-expectedResult; ভেন ডেন কুকুৰনেচীয়া আ. ক.
-
-parameters; surnameFirst; short; referring; informal
 
 expectedResult; ভেন ডেন কুকুৰনেচীয়া, নীলে
 

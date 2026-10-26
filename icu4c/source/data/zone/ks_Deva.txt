@@ -6,6 +6,7 @@ ks_Deva{
     zoneStrings{
         "Etc:UTC"{
             ls{"कोऑर्डनैटिड यूनवर्सल वख"}
+            ss{"यू टी सी"}
         }
         "Etc:Unknown"{
             ec{"नमोलुम शहर"}
@@ -54,7 +55,6 @@ ks_Deva{
             ls{"ग्रीनविच ओसत वख"}
         }
         gmtFormat{"जी एम टी {0}"}
-        gmtZeroFormat{"जी एम टी"}
         regionFormat{"{0} वख"}
         regionFormatDaylight{"{0} डे लाइट वख"}
         regionFormatStandard{"{0} मयॉरी वख"}

@@ -385,8 +385,9 @@ mr{
                 Bhms{"B h:mm:ss"}
                 EBhm{"E B h:mm"}
                 EBhms{"E B h:mm:ss"}
-                Ed{"E d"}
                 Gy{"y G"}
+                GyM{"G MM-y"}
+                GyMEd{"E, dd-MM-G y,"}
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, d MMM, y G"}
                 GyMMMd{"d MMM, y G"}
@@ -502,6 +503,12 @@ mr{
                 "{1}, {0}",
                 "{1}, {0}",
             }
+            DateTimePatterns%relative{
+                "{1}, {0} वाजता",
+                "{1}, {0} वाजता",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
             DateTimeSkeletons{
                 "ahmmsszzzz",
                 "ahmmssz",
@@ -527,6 +534,7 @@ mr{
                 Hms{"H:mm:ss"}
                 MEd{"E, d/M"}
                 MMMEd{"E, d MMM"}
+                MMMMEd{"d MMMM E"}
                 MMMMW{
                     one{"MMMM चा W रा आठवडा"}
                     other{"MMMM चा W रा आठवडा"}
@@ -541,6 +549,8 @@ mr{
                 yMMM{"MMM y"}
                 yMMMEd{"E, d, MMM y"}
                 yMMMM{"MMMM y"}
+                yMMMMEd{"EEE, d, MMMM y"}
+                yMMMMd{"d MMMM, y"}
                 yMMMd{"d MMM, y"}
                 yMd{"d/M/y"}
                 yQQQ{"QQQ y"}
@@ -635,12 +645,11 @@ mr{
                     1{"ख्रि. यु."}
                 }
                 wide{
-                    0{"ईसवीसनपूर्व"}
                     1{"ईसवीसन"}
                 }
                 wide%variant{
-                    0{"ईसापूर्व युग"}
-                    1{"ख्रिस्तयुग"}
+                    0{"ई. स. पू. कालखंड"}
+                    1{"इ. स. कालखंड"}
                 }
             }
             intervalFormats{
@@ -1447,16 +1456,6 @@ mr{
                 "-1"{"मागील गु"}
                 "0"{"हा गु"}
                 "1"{"पुढील गु"}
-            }
-            relativeTime{
-                future{
-                    one{"येत्या {0} गुरुवारी"}
-                    other{"येत्या {0} गुरुवारी"}
-                }
-                past{
-                    one{"{0} गुरुवारपूर्वी"}
-                    other{"{0} गुरुवारांपूर्वी"}
-                }
             }
         }
         thu-short{

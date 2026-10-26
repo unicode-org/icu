@@ -220,6 +220,26 @@ ml{
         native{"mlym"}
     }
     calendar{
+        chinese{
+            DateTimePatterns{
+                "zzzz h:mm:ss a",
+                "z h:mm:ss a",
+                "h:mm:ss a",
+                "h:mm a",
+                "r(U) MMMM d, EEEE",
+                "r(U) MMMM d",
+                "r MMM d",
+                "d/M/r",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                yyyyMd{"d/M/r"}
+            }
+        }
         coptic{
             monthNames{
                 format{
@@ -305,7 +325,7 @@ ml{
                 "G y MMMM d, EEEE",
                 "G y MMMM d",
                 "G y MMM d",
-                "G y-MM-dd",
+                "G y/M/d",
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
@@ -334,18 +354,35 @@ ml{
                 GyM{"G y/M"}
                 GyMEd{"G y/M/d, E"}
                 GyMd{"G y/M/d"}
-                Hv{"v HH'h'"}
+                Hv{"v HH"}
                 MEd{"d/M, E"}
                 MMMMEd{"MMMM d, E"}
                 MMdd{"dd-MM"}
                 Md{"d/M"}
                 hv{"v h a"}
                 yyyyM{"G y/M"}
-                yyyyMEd{"G d/M/y, E"}
+                yyyyMEd{"G y/M/d, E"}
                 yyyyMM{"MM-y G"}
-                yyyyMd{"G d/M/y"}
+                yyyyMd{"G y/M/d"}
             }
             intervalFormats{
+                GyM{
+                    G{"G y/M – G y/M"}
+                    M{"G y/M – y/M"}
+                    y{"G y/M – y/M"}
+                }
+                GyMEd{
+                    G{"G y/M/d, E – G y/M/d, E"}
+                    M{"G y/M/d, E – y/M/d, E"}
+                    d{"G y/M/d, E – y/M/d, E"}
+                    y{"G y/M/d, E – y/M/d, E"}
+                }
+                GyMd{
+                    G{"G y/M/d – G y/M/d"}
+                    M{"G y/M/d – y/M/d"}
+                    d{"G y/M/d – y/M/d"}
+                    y{"G y/M/d – y/M/d"}
+                }
                 M{
                     M{"M – M"}
                 }
@@ -422,24 +459,27 @@ ml{
                 "yMMMd",
                 "yyMd",
             }
+            appendItems{
+                Day-Of-Week{"{0}, {1}"}
+            }
             availableFormats{
                 Bh{"B h"}
                 Bhm{"B h:mm"}
                 Bhms{"B h:mm:ss"}
+                EBh{"E, B h"}
                 EBhm{"E, B h:mm"}
                 EBhms{"E, B h:mm:ss"}
                 Eh{"E, h a"}
-                GyM{"G y/M"}
-                GyMEd{"G d/M/y, E"}
+                GyM{"y/M G"}
+                GyMEd{"G y/M/d, E"}
                 GyMd{"G y/M/d"}
                 Hmsv{"v HH:mm:ss"}
                 Hmv{"v HH:mm"}
-                Hv{"v HH'h'"}
+                Hv{"v HH"}
                 MEd{"d/M, E"}
-                MMMMEd{"MMMM d, E"}
                 MMMMW{
-                    one{"MMMM - ആഴ്ച W"}
-                    other{"MMMM - ആഴ്ച W"}
+                    one{"MMMM - W-ാം വാരം"}
+                    other{"MMMM - W-ാം വാരം"}
                 }
                 MMdd{"dd/MM"}
                 Md{"d/M"}
@@ -449,10 +489,12 @@ ml{
                 yM{"M/y"}
                 yMEd{"d/M/y, E"}
                 yMM{"MM/y"}
+                yMMMMEd{"y MMMM d, EEE"}
+                yMMMMd{"y MMMM d"}
                 yMd{"d/M/y"}
                 yw{
-                    one{"Y-ലെ ആഴ്ച w"}
-                    other{"Y-ലെ ആഴ്ച w"}
+                    one{"Y-ലെ w-ാമത്തെ ആഴ്ച"}
+                    other{"Y-ലെ w-ാമത്തെ ആഴ്ച"}
                 }
             }
             dayNames{
@@ -1017,9 +1059,6 @@ ml{
         era{
             dn{"കാലഘട്ടം"}
         }
-        era-narrow{
-            dn{"കാല."}
-        }
         fri{
             relative{
                 "-1"{"കഴിഞ്ഞ വെള്ളിയാഴ്ച"}
@@ -1287,7 +1326,7 @@ ml{
         week{
             dn{"ആഴ്ച"}
             relative{
-                "-1"{"കഴിഞ്ഞ ആഴ്‌ച"}
+                "-1"{"കഴിഞ്ഞ ആഴ്ച"}
                 "0"{"ഈ ആഴ്ച"}
                 "1"{"അടുത്ത ആഴ്ച"}
             }
@@ -1328,7 +1367,7 @@ ml{
             dn{"വർഷം"}
             relative{
                 "-1"{"കഴിഞ്ഞ വർഷം"}
-                "0"{"ഈ വർ‌ഷം"}
+                "0"{"ഈ വർഷം"}
                 "1"{"അടുത്തവർഷം"}
             }
             relativeTime{
@@ -1357,21 +1396,10 @@ ml{
             2{"{0} അല്ലെങ്കിൽ {1}"}
             end{"{0}, അല്ലെങ്കിൽ {1}"}
         }
-        standard-narrow{
-            2{"{0}, {1}"}
-        }
-        standard-short{
-            2{"{0}, {1}"}
-            end{"{0}, {1}"}
-        }
         unit-narrow{
             end{"{0} {1}"}
             middle{"{0} {1}"}
             start{"{0} {1}"}
-        }
-        unit-short{
-            2{"{0}, {1}"}
-            end{"{0}, {1}"}
         }
     }
     measurementSystemNames{

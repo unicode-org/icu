@@ -596,22 +596,22 @@ so{
                 "MMMM d, y G",
                 "MMM d, y G",
                 "M/d/y GGGGG",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
                 "{1} {0}",
             }
             DateTimePatterns%atTime{
-                "{1} {0}",
-                "{1} {0}",
+                "{1}, {0}",
+                "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
             }
             DateTimePatterns%relative{
                 "{1} 'ee' {0}",
                 "{1} 'ee' {0}",
-                "{1} {0}",
+                "{1}, {0}",
                 "{1} {0}",
             }
             DateTimeSkeletons{
@@ -625,18 +625,19 @@ so{
                 "GGGGGyMd",
             }
             availableFormats{
+                Ed{"d E"}
                 Gy{"y G"}
                 GyM{"M/y G"}
                 GyMEd{"E, M/d/y G"}
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, MMM d, y G"}
                 GyMMMd{"MMM d, y G"}
-                GyMd{"M/d/y GGGGG"}
+                GyMd{"M/d/y G"}
                 MEd{"E, M/d"}
                 MMMEd{"E, MMM d"}
                 MMMMEd{"E, MMMM d"}
                 Md{"M/d"}
-                y{"y"}
+                y{"y G"}
                 yM{"M/y"}
                 yMEd{"E, M/d/y"}
                 yMMM{"MMM y"}
@@ -645,13 +646,13 @@ so{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yyyy{"y G"}
-                yyyyM{"M/y GGGGG"}
-                yyyyMEd{"E, M/d/y GGGGG"}
+                yyyyM{"M/y G"}
+                yyyyMEd{"E, M/d/y G"}
                 yyyyMMM{"MMM y G"}
                 yyyyMMMEd{"E, MMM d, y G"}
                 yyyyMMMM{"MMMM y G"}
                 yyyyMMMd{"MMM d, y G"}
-                yyyyMd{"M/d/y GGGGG"}
+                yyyyMd{"M/d/y G"}
                 yyyyQQQ{"QQQ y G"}
                 yyyyQQQQ{"QQQQ y G"}
             }
@@ -661,15 +662,15 @@ so{
                     y{"y – y G"}
                 }
                 GyM{
-                    G{"M/y GGGGG – M/y GGGGG"}
+                    G{"M/y G – M/y G"}
                     M{"M/y – M/y GGGGG"}
-                    y{"M/y – M/y GGGGG"}
+                    y{"M/y – M/y G"}
                 }
                 GyMEd{
-                    G{"E, M/d/y GGGGG – E, M/d/y GGGGG"}
-                    M{"E, M/d/y – E, M/d/y GGGGG"}
-                    d{"E, M/d/y – E, M/d/y GGGGG"}
-                    y{"E, M/d/y – E, M/d/y GGGGG"}
+                    G{"E, M/d/y G – E, M/d/y G"}
+                    M{"E, M/d/y – E, M/d/y G"}
+                    d{"E, M/d/y – E, M/d/y G"}
+                    y{"E, M/d/y – E, M/d/y G"}
                 }
                 GyMMM{
                     G{"MMM y G – MMM y G"}
@@ -689,10 +690,10 @@ so{
                     y{"MMM d, y – MMM d, y G"}
                 }
                 GyMd{
-                    G{"M/d/y GGGGG – M/d/y GGGGG"}
-                    M{"M/d/y – M/d/y GGGGG"}
-                    d{"M/d/y – M/d/y GGGGG"}
-                    y{"M/d/y – M/d/y GGGGG"}
+                    G{"M/d/y G – M/d/y G"}
+                    M{"M/d/y – M/d/y G"}
+                    d{"M/d/y – M/d/y G"}
+                    y{"M/d/y – M/d/y G"}
                 }
                 H{
                     H{"HH – HH"}
@@ -723,7 +724,6 @@ so{
                     d{"E, MMM d – E, MMM d"}
                 }
                 MMMd{
-                    M{"MMM d – MMM d"}
                     d{"MMM d – d"}
                 }
                 Md{
@@ -734,13 +734,13 @@ so{
                     y{"y – y G"}
                 }
                 yM{
-                    M{"M/y – M/y GGGGG"}
-                    y{"M/y – M/y GGGGG"}
+                    M{"M/y – M/y G"}
+                    y{"M/y – M/y G"}
                 }
                 yMEd{
-                    M{"E, M/d/y – E, M/d/y GGGGG"}
-                    d{"E, M/d/y – E, M/d/y GGGGG"}
-                    y{"E, M/d/y – E, M/d/y GGGGG"}
+                    M{"E, M/d/y – E, M/d/y G"}
+                    d{"E, M/d/y – E, M/d/y G"}
+                    y{"E, M/d/y – E, M/d/y G"}
                 }
                 yMMM{
                     M{"MMM – MMM y G"}
@@ -761,9 +761,9 @@ so{
                     y{"MMM d, y – MMM d, y G"}
                 }
                 yMd{
-                    M{"M/d/y – M/d/y GGGGG"}
-                    d{"M/d/y – M/d/y GGGGG"}
-                    y{"M/d/y – M/d/y GGGGG"}
+                    M{"M/d/y – M/d/y G"}
+                    d{"M/d/y – M/d/y G"}
+                    y{"M/d/y – M/d/y G"}
                 }
             }
         }
@@ -813,12 +813,19 @@ so{
                 "yMMMdd",
                 "yyMMdd",
             }
+            appendItems{
+                Day-Of-Week{"{1}, {0}"}
+                Time-Day-Of-Week{"{1}, {0}"}
+            }
             availableFormats{
                 Gy{"y G"}
                 GyM{"M/y G"}
                 GyMEd{"E, M/d/y G"}
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, MMM d, y G"}
+                GyMMMM{"MMMM y G"}
+                GyMMMMEd{"E, MMMM d, y G"}
+                GyMMMMd{"MMMM d, y G"}
                 GyMMMd{"MMM d, y G"}
                 GyMd{"M/d/y GGGGG"}
                 MEd{"E, M/d"}
@@ -835,6 +842,8 @@ so{
                 yMMM{"MMM y"}
                 yMMMEd{"E, MMM d, y"}
                 yMMMM{"MMMM y"}
+                yMMMMEd{"E, MMMM d, y"}
+                yMMMMd{"MMMM d, y"}
                 yMMMd{"MMM d, y"}
                 yMd{"M/d/y"}
                 yQQQ{"QQQ y"}
@@ -951,6 +960,9 @@ so{
                 MMMEd{
                     M{"E, dd MMM – E, dd MMM"}
                     d{"E, MMM d – E, MMM d"}
+                }
+                MMMMd{
+                    d{"MMMM d – d"}
                 }
                 MMMd{
                     M{"dd MMM – dd MMM"}
@@ -1135,10 +1147,6 @@ so{
             }
         }
         islamic{
-            availableFormats{
-                GyM{"M/y G"}
-                GyMEd{"E, M/d/y G"}
-            }
             intervalFormats{
                 Bh{
                     B{"h B – h B"}
@@ -1385,9 +1393,6 @@ so{
         }
         dayOfYear{
             dn{"maalinta sannadka"}
-        }
-        dayOfYear-narrow{
-            dn{"maalinta sndka"}
         }
         dayOfYear-short{
             dn{"maalinta sndka"}
@@ -1830,9 +1835,6 @@ so{
         }
         weekday{
             dn{"maalinta toddobaadka"}
-        }
-        weekday-narrow{
-            dn{"maalinta tdbdka"}
         }
         weekday-short{
             dn{"maalinta tdbdka"}

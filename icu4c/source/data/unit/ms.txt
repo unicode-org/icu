@@ -134,10 +134,6 @@ ms{
                 dnam{"glukosa"}
                 other{"{0} glukosa"}
             }
-            part{
-                dnam{"bahagian"}
-                other{"{0} bahagian"}
-            }
             part-per-1e6{
                 dnam{"bahagian setiap juta"}
                 other{"{0} bahagian setiap juta"}
@@ -849,13 +845,6 @@ ms{
             mole{
                 other{"{0}mol"}
             }
-            ofglucose{
-                dnam{"Glc"}
-            }
-            part{
-                dnam{"bahagian"}
-                other{"{0} bahagian"}
-            }
             part-per-1e9{
                 dnam{"ppb"}
             }
@@ -946,7 +935,6 @@ ms{
                 other{"{0}kal"}
             }
             calorie-it{
-                dnam{"kal-IT"}
                 other{"{0} kal-IT"}
             }
             electronvolt{
@@ -1186,6 +1174,9 @@ ms{
             part{
                 dnam{"bahagian"}
                 other{"{0} bahagian"}
+            }
+            part-per-1e6{
+                dnam{"bahagian/juta"}
             }
             part-per-1e9{
                 dnam{"bahagian/bilion"}

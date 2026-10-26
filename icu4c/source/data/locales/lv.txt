@@ -18,7 +18,6 @@ lv{
     NumberElements{
         latn{
             patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
                 currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
             }
@@ -153,50 +152,62 @@ lv{
                     1000{
                         one{"0 tūkst'.'"}
                         other{"0 tūkst'.'"}
+                        zero{"0 tūkst'.'"}
                     }
                     10000{
                         one{"00 tūkst'.'"}
                         other{"00 tūkst'.'"}
+                        zero{"00 tūkst'.'"}
                     }
                     100000{
                         one{"000 tūkst'.'"}
                         other{"000 tūkst'.'"}
+                        zero{"000 tūkst'.'"}
                     }
                     1000000{
                         one{"0 milj'.'"}
                         other{"0 milj'.'"}
+                        zero{"0 milj'.'"}
                     }
                     10000000{
                         one{"00 milj'.'"}
                         other{"00 milj'.'"}
+                        zero{"00 milj'.'"}
                     }
                     100000000{
                         one{"000 milj'.'"}
                         other{"000 milj'.'"}
+                        zero{"000 milj'.'"}
                     }
                     1000000000{
                         one{"0 mljrd'.'"}
                         other{"0 mljrd'.'"}
+                        zero{"0 mljrd'.'"}
                     }
                     10000000000{
                         one{"00 mljrd'.'"}
                         other{"00 mljrd'.'"}
+                        zero{"00 mljrd'.'"}
                     }
                     100000000000{
                         one{"000 mljrd'.'"}
                         other{"000 mljrd'.'"}
+                        zero{"000 mljrd'.'"}
                     }
                     1000000000000{
                         one{"0 trilj'.'"}
                         other{"0 trilj'.'"}
+                        zero{"0 trilj'.'"}
                     }
                     10000000000000{
                         one{"00 trilj'.'"}
                         other{"00 trilj'.'"}
+                        zero{"00 trilj'.'"}
                     }
                     100000000000000{
                         one{"000 trilj'.'"}
                         other{"000 trilj'.'"}
+                        zero{"000 trilj'.'"}
                     }
                 }
             }
@@ -327,7 +338,6 @@ lv{
                 GyMMMEd{"E, y. 'g'. d. MMM G"}
                 GyMMMd{"y. 'g'. d. MMM G"}
                 GyMd{"dd-MM-y GGGGG"}
-                Hv{"HH 'h' v"}
                 MEd{"E, dd.MM."}
                 MMMEd{"E, d. MMM"}
                 MMMMEd{"E, d. MMMM"}
@@ -460,6 +470,10 @@ lv{
                 "yMMMd",
                 "yyMMdd",
             }
+            appendItems{
+                Day-Of-Week{"{1}, {0}"}
+                Time-Day-Of-Week{"{1}, {0}"}
+            }
             availableFormats{
                 EBhm{"E, h:mm B"}
                 EBhms{"E, h:mm:ss B"}
@@ -470,9 +484,12 @@ lv{
                 Ehms{"E, h:mm:ss a"}
                 Gy{"G y. 'g'."}
                 GyMMM{"G y. 'g'. MMM"}
-                GyMMMEd{"E, G y. 'g'. d. MMM"}
+                GyMMMEd{"E, y. 'g'. d. MMM, G"}
+                GyMMMM{"y. 'gada' MMMM, G"}
+                GyMMMMEd{"E, y. 'gada' d. MMMM, G"}
+                GyMMMMd{"y. 'gada' d. MMMM, G"}
                 GyMMMd{"G y. 'g'. d. MMM"}
-                GyMd{"GGGGG dd-MM-y"}
+                GyMd{"d.M.y. G"}
                 MEd{"E, dd.MM."}
                 MMMEd{"E, d. MMM"}
                 MMMMEd{"E, d. MMMM"}
@@ -494,7 +511,9 @@ lv{
                 yMEd{"E, d.MM.y."}
                 yMMM{"y. 'g'. MMM"}
                 yMMMEd{"E, y. 'g'. d. MMM"}
-                yMMMM{"y. 'g'. MMMM"}
+                yMMMM{"y. 'gada'. MMMM"}
+                yMMMMEd{"E, y. 'gada' d. MMMM"}
+                yMMMMd{"y. 'gada' d. MMMM"}
                 yMMMd{"y. 'g'. d. MMM"}
                 yMd{"d.MM.y."}
                 yQQQ{"y. 'g'. QQQ"}
@@ -668,6 +687,9 @@ lv{
                 MMMEd{
                     M{"E, d. MMM – E, d. MMM"}
                     d{"E, d. MMM – E, d. MMM"}
+                }
+                MMMMd{
+                    M{"d. MMMM – d. MMMM"}
                 }
                 MMMd{
                     M{"d. MMM – d. MMM"}

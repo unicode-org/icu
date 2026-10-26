@@ -11,19 +11,35 @@ hr{
         colCaseLevel{"razvrstavanje po veličini slova"}
         colNormalization{"normalno razvrstavanje"}
         colNumeric{"brojčano ravrstavanje"}
+        colReorder{"promjena redoslijeda pisma/bloka"}
         colStrength{"jačina razvrstavanja"}
         collation{"redoslijed razvrstavanja"}
         currency{"valuta"}
+        d0{"transformacija odredišta"}
+        dx{"iznimke od pretraživanja rječnika"}
         em{"Prezentacija emojija"}
+        fw{"prvi dan u tjednu"}
+        h0{"mješovito"}
         hc{"format vremena (12 ili 24)"}
+        i0{"način unosa"}
+        k0{"tipkovnica"}
+        kv{"najviše ignorirano"}
         lb{"stil prijeloma retka"}
         lw{"Prijelomi redaka unutar riječi"}
+        m0{"transformacija pravila"}
         ms{"sustav mjernih jedinica"}
+        mu{"mjerna jedinica"}
         numbers{"brojevi"}
+        rg{"Područje za dodatne podatke"}
+        s0{"Transformacija izvora"}
+        sd{"Pododjeljak područja"}
         ss{"Prijelom rečenice nakon kratice"}
+        t{"Transformacija"}
+        t0{"Strojno prevedeno"}
         timezone{"Vremenska zona"}
         va{"Varijanta zemlje/jezika"}
         x{"Privatna upotreba"}
+        x0{"Transformacija za privatnu uporabu"}
     }
     Languages{
         aa{"afarski"}
@@ -434,6 +450,7 @@ hr{
         pi{"pali"}
         pis{"pijin"}
         pl{"poljski"}
+        pms{"pijemontski"}
         pon{"pohnpeian"}
         pqm{"maliseet-Passamaquoddy"}
         prg{"pruski"}
@@ -812,9 +829,9 @@ hr{
             gregorian{"gregorijanski kalendar"}
             hebrew{"hebrejski kalendar"}
             indian{"indijski nacionalni kalendar"}
-            islamic{"hijri kalendar"}
-            islamic-civil{"hijri kalendar (tabularni, civilna epoha)"}
-            islamic-umalqura{"hijri kalendar (Umm al-Qura)"}
+            islamic{"hidžretski kalendar"}
+            islamic-civil{"hidžretski kalendar (tabularni, civilna epoha)"}
+            islamic-umalqura{"hidžretski kalendar (Umm al-Qura)"}
             iso8601{"ISO-8601 kalendar"}
             japanese{"japanski kalendar"}
             persian{"perzijski kalendar"}
@@ -829,9 +846,13 @@ hr{
             ethiopic-amete-alem{"etiopski \u0022Amete Alem\u0022"}
             gregorian{"gregorijanski"}
             hebrew{"hebrejski"}
-            islamic{"hijri"}
-            islamic-civil{"hijri (tabularni, civilna epoha)"}
-            islamic-umalqura{"hijri (Umm al-Qura)"}
+            indian{"indijski nacionalni"}
+            islamic{"hidžretski"}
+            islamic-civil{"hidžretski (tabularni, civilna epoha)"}
+            islamic-rgsa{"hidžretski, Saudijska Arabija"}
+            islamic-tbla{"hidžretski (tabularni, astronomska epoha)"}
+            islamic-umalqura{"hidžretski (Umm al-Qura)"}
+            iso8601{"gregorijanski"}
             japanese{"japanski"}
             persian{"perzijski"}
             roc{"minguo"}
@@ -857,6 +878,11 @@ hr{
             no{"Poredaj po normalnom poretku veličine slova"}
             upper{"Poredaj prvo velika slova"}
         }
+        colCaseFirst%core{
+            lower{"mala slova"}
+            no{"mala slova"}
+            upper{"velika slova"}
+        }
         colCaseLevel{
             no{"Poredaj zanemarujući veličinu"}
             yes{"Poredaj u skladu s veličinom slova"}
@@ -869,12 +895,26 @@ hr{
             no{"Poredaj znamenke pojedinačno"}
             yes{"Poredaj znamenke numerički"}
         }
+        colReorder%core{
+            currency{"valuta"}
+            digit{"znamenke"}
+            punct{"interpunkcija"}
+            space{"praznina"}
+            symbol{"simbol"}
+        }
         colStrength{
             identical{"Poredaj sve"}
             primary{"Poredaj samo po osnovnim slovima"}
             quaternary{"Poredaj po naglascima/veličini/širini/pismu kana"}
             secondary{"Poredaj po naglasku"}
             tertiary{"Poredaj po naglascima/veličini/širini"}
+        }
+        colStrength%core{
+            identical{"sve"}
+            primary{"samo osnovna slova"}
+            quaternary{"osnova, naglasci, veličina, varijante, kana"}
+            secondary{"osnova, naglasci"}
+            tertiary{"osnova, naglasci, veličina, varijante"}
         }
         collation{
             compat{"prethodni redoslijed razvrstavanja, radi kompatibilnosti"}
@@ -896,10 +936,13 @@ hr{
             compat{"kompatibilnost"}
             dictionary{"rječnik"}
             ducet{"standardni Unicode"}
+            emoji{"emoji"}
+            eor{"europska pravila"}
             phonebook{"telefonski imenik"}
             phonetic{"fonetski"}
             pinyin{"pinyin"}
             search{"pretraživanje"}
+            searchjl{"korejski početni suglasnik"}
             standard{"standardno"}
             stroke{"potez"}
             traditional{"tradicionalno"}
@@ -917,16 +960,29 @@ hr{
             text{"tekst"}
         }
         hc{
+            c12{"12-satni format"}
+            c24{"24-satni format"}
             h11{"12-satni format (0 – 11)"}
             h12{"12-satni format (0 – 12)"}
             h23{"24-satni format (0 – 23)"}
             h24{"24-satni format (1 – 24)"}
         }
         hc%core{
+            c12{"12"}
+            c24{"24"}
             h11{"12 (0 – 11)"}
             h12{"12 (1 – 12)"}
             h23{"24 (0 – 23)"}
             h24{"24 (0 – 24)"}
+        }
+        kv%core{
+            currency{"prebacivanje praznina, interpunkcija, svi simboli"}
+            punct{"prebacivanje praznina, interpunkcija"}
+            space{"prebacivanje praznina, interpunkcija"}
+            symbol{
+                "prebacivanje praznina, interpunkcija, simboli koji ne predstavljaju "
+                "valute"
+            }
         }
         lb{
             loose{"slobodni stil prijeloma retka"}
@@ -1004,9 +1060,48 @@ hr{
             traditional{"Tradicionalni brojevi"}
             vaii{"vai znamenke"}
         }
+        numbers%core{
+            arabext{"prošireno arapsko-indijski"}
+            armnlow{"armenski mali"}
+            finance{"financijski"}
+            fullwide{"puna širina"}
+            greklow{"grčki mali"}
+            hanidays{"numeracija han znakova dana u mjesecu za tradicionalne kalendare"}
+            hanidec{
+                "pozicijski decimalni sustav koji koristi ideografe kineskih brojeva "
+                "kao znamenke"
+            }
+            hansfin{"pojednostavljeni kineski financijski"}
+            hantfin{"tradicionalni kineski financijski"}
+            jpanfin{"japanski financijski"}
+            jpanyear{"japansko označavanje prve godine ere (Gannen)"}
+            lanatham{"Tai Tham (liturgijsko pismo)"}
+            mathbold{"matematički podebljano"}
+            mathdbl{"matematički s dvostrukim crtama"}
+            mathmono{"matematički font fiksne širine"}
+            mathsanb{"matematički podebljani sans-serif"}
+            mathsans{"matematički sans-serif"}
+            mymrepka{"istočni Pwo Karen iz Mjanmara"}
+            mymrpao{"mjanmarski Pao"}
+            mymrshan{"mjanmarski Shan"}
+            mymrtlng{"mjanmarski Tai Laing"}
+            native{"izvorne znamenke"}
+            outlined{"obrubljeno"}
+            roman{"rimski veliki"}
+            romanlow{"rimski mali"}
+            segment{"segmentirano"}
+            tamldec{"moderni tamilski"}
+            traditional{"tradicionalni brojevi"}
+        }
         ss%core{
             none{"isključeno"}
             standard{"uključeno"}
+        }
+        t0{
+            und{"Neodređeni strojni prijevod"}
+        }
+        va%core{
+            posix{"Varijanta POSIX-a"}
         }
     }
     Variants{

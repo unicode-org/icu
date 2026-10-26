@@ -90,6 +90,7 @@ public:
     void TestCollatorPredicateTypes();
     void TestUCollatorPredicateTypes();
     void TestCollatorMap();
+    void TestColItrInfiniteLoop22511();
 
 private:
     void checkFCD(const char *name, CollationIterator &ci, CodePointIterator &cpi);
@@ -168,6 +169,7 @@ void CollationTest::runIndexedTest(int32_t index, UBool exec, const char *&name,
     TESTCASE_AUTO(TestCollatorPredicateTypes);
     TESTCASE_AUTO(TestUCollatorPredicateTypes);
     TESTCASE_AUTO(TestCollatorMap);
+    TESTCASE_AUTO(TestColItrInfiniteLoop22511);
     TESTCASE_AUTO_END;
 }
 
@@ -1529,7 +1531,8 @@ namespace {
  * Replaces unpaired surrogates with U+FFFD.
  * Returns s if no replacement was made, otherwise buffer.
  */
-const UnicodeString &surrogatesToFFFD(const UnicodeString &s, UnicodeString &buffer) {
+const UnicodeString &surrogatesToFFFD(const UnicodeString &s U_LIFETIME_BOUND,
+                                      UnicodeString &buffer U_LIFETIME_BOUND) {
     int32_t i = 0;
     while(i < s.length()) {
         UChar32 c = s.char32At(i);
@@ -1911,6 +1914,7 @@ void CollationTest::TestHang22414() {
         errorCode.reset();
     }
 }
+
 void CollationTest::TestBuilderContextsOverflow() {
     IcuTestErrorCode errorCode(*this, "TestBuilderContextsOverflow");
     // ICU-20715: Bad memory access in what looks like a bogus CharsTrie after
@@ -2121,5 +2125,59 @@ void CollationTest::TestCollatorMap() {
     assertEquals("u16m.size()", 2, um.size());
     assertEquals(R"(u16m["a"])", 2, um[u"a"]);
 }
+
+void CollationTest::TestColItrInfiniteLoop22511() {
+    IcuTestErrorCode errorCode(*this, "TestColItrInfiniteLoop22511");
+    const char16_t* testCases[][2] = {
+        {
+            u"\u0100\u032a\u01e0\U00011100\u031c",
+            u"A\u0304\u032a\u01e0\U00011100\u031c"  // Equivalent to above, but U+0100 is decomposed to U+0041 U+0304.
+        },
+        {
+            u"\u0100\u032a\u01e0\xdd00\u031c",      // High surrogate 0xd804 is dropped
+            u"A\u0304\u032a\u01e0\xdd00\u031c"      // Equivalent to above, but U+0100 is decomposed
+        },
+        {
+            u"\u0100\u032a\u01e0\xd804\u031c",      // Low surrogate 0xdd00 is dropped
+            u"A\u0304\u032a\u01e0\xd804\u031c"      // Equivalent to above, but U+0100 is decomposed
+        },
+        {
+            u"\U000105D2\u0F82\U0001D16D\u0344",
+            u"\U000105D2\u0F82\U0001D16D\u0308\u0301"
+        },
+        {nullptr, nullptr}
+    };
+
+    StringPiece sp1 = u8"\u0100\u032a\u01e0\U00011100\u031c";   // UTF-8 equivalent to str1a
+    StringPiece sp2 = u8"A\u0304\u032a\u01e0\U00011100\u031c";  // UTF-8 equivalent to str1b
+
+    int32_t num_locales = 0;
+    const icu::Locale* locales = icu::Locale::getAvailableLocales(num_locales);
+    for (int32_t i = 0; i < num_locales; i++) {
+        errorCode.reset();
+        icu::Locale l = locales[i];
+        LocalPointer<Collator> coll(Collator::createInstance(l, errorCode));
+        errorCode.assertSuccess();
+        coll->setStrength(icu::Collator::IDENTICAL);
+        for (int j = 0; testCases[j][0] != nullptr; j++) {
+            UCollationResult result = coll->compare(testCases[j][0], -1, testCases[j][1], -1, errorCode);
+            errorCode.assertSuccess();
+            assertEquals(UnicodeString("Locale ") + l.getName() + "UTF16 case:" + j, UCOL_EQUAL, result);
+
+            UCharIterator iter1, iter2;
+            uiter_setString(&iter1, testCases[j][0], -1);
+            uiter_setString(&iter2, testCases[j][1], -1);
+            result = coll->compare(iter1, iter2, errorCode);
+            errorCode.assertSuccess();
+            assertEquals(UnicodeString("Locale ") + l.getName() + "UCharIterator case:" + j, UCOL_EQUAL, result);
+        }
+
+        // Also test the UTF-8 versions
+        UCollationResult result = coll->compareUTF8(sp1, sp2, errorCode);
+        errorCode.assertSuccess();
+        assertEquals(UnicodeString("Locale ") + l.getName() + " UTF-8", UCOL_EQUAL, result);
+    }
+}
+
 
 #endif  // !UCONFIG_NO_COLLATION

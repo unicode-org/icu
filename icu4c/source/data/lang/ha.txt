@@ -5,15 +5,41 @@ ha{
     Keys{
         calendar{"Kalanda"}
         cf{"Yanayin Kudi"}
+        colAlternate{"Watsar da Ware Alamomi"}
+        colBackwards{"Ware Lafazi da aka Juya"}
+        colCaseFirst{"Tsarin Babban baƙi/Ƙaramin baƙi"}
+        colCaseLevel{"Ware Ƙaramin baƙi da Babban baƙi"}
+        colNormalization{"Warewa da aka Saba"}
+        colNumeric{"Warewa na Lambobi"}
+        colReorder{"Rikodi na Rubutu/Gungu"}
+        colStrength{"Ƙarfin Warewa"}
         collation{"Tsarin Rabewa"}
         currency{"Kudin Kasa"}
+        d0{"Canza Wurin Zuwa"}
+        dx{"Kalmomi da Aka Ware Daga Shigarwa Cikin Ƙamus"}
         em{"Gabatar da Imoji"}
+        fw{"Ranar farko ta mako"}
+        h0{"Cakuɗawa"}
         hc{"Zagayen Awowi (12 da 24)"}
+        i0{"Hanyar Sakawa"}
+        k0{"Allon madannai"}
+        kv{"Wanda aka fi watsi da shi"}
         lb{"Salo na Raba Layi"}
         lw{"Layi Zai Karye tsakanin Kalmomi"}
+        m0{"Dokokin Sauaywa"}
         ms{"Tsarin Awo"}
+        mu{"Kaso na Awo"}
         numbers{"Lambobi"}
+        rg{"Bayanin Shiyya Domin na Wucin-gadi"}
+        s0{"Sauya Tushe"}
+        sd{"Ƙaramin Sashi na Shiyya"}
         ss{"Jimlar ta Karye Bayan Gajarcewa."}
+        t{"Sauya"}
+        t0{"Fassarar Inji"}
+        timezone{"Lokacin Shiyya"}
+        va{"Launi na Wuri"}
+        x{"Keɓantaccen Amfani"}
+        x0{"Sauyi na Keɓantaccen Amfani"}
     }
     Languages{
         ab{"Abkhazian"}
@@ -326,6 +352,7 @@ ha{
         pcm{"Pidgin na Najeriya"}
         pis{"Pijin"}
         pl{"Harshen Polan"}
+        pms{"Harshen Piedmontese"}
         pqm{"Maliseet-Passamaquoddy"}
         prg{"Yaren Prussia"}
         ps{"Pashtanci"}
@@ -470,6 +497,9 @@ ha{
     Languages%short{
         az{"Azeri"}
     }
+    Languages%variant{
+        hi_Latn{"Harshen Hindi (Gambiza da Turanci)"}
+    }
     Scripts{
         Adlm{"Adlam"}
         Arab{"Larabci"}
@@ -560,10 +590,13 @@ ha{
             ethiopic-amete-alem{"Ethiopic Amete Alem"}
             gregorian{"Gregori"}
             hebrew{"Yaren Hebrew"}
+            indian{"Na ƙasar Indiya"}
             islamic{"Kaladar Musulunci"}
             islamic-civil{"Kaladar Musulunci (ta ciki teburi, shekarar jamaʼa)"}
+            islamic-rgsa{"Kalandar Musulunci, kallon Saudiyya"}
             islamic-tbla{"Kalandar Musulunci (ta cikin teburi, shekarar taurari)"}
             islamic-umalqura{"Kalandar Musulunci (Ummu al-Qura"}
+            iso8601{"Ta Gregory"}
             japanese{"Ta ƙasar Japan"}
             persian{"Ta ƙasar Fasha"}
             roc{"Minguo"}
@@ -576,15 +609,50 @@ ha{
             account{"Lissafin kuɗi"}
             standard{"Daidaitacce"}
         }
+        colCaseFirst%core{
+            lower{"Ƙaramin baƙi"}
+            no{"Ƙaramin baƙi"}
+            upper{"Babban baƙi"}
+        }
+        colReorder%core{
+            currency{"Kuɗi"}
+            digit{"Lamba"}
+            punct{"Alamar rubutu"}
+            space{"Farin sarari"}
+            symbol{"Alama"}
+        }
+        colStrength%core{
+            identical{"Duka"}
+            primary{"Harufan Tushe Kawai"}
+            quaternary{"Tushe, Lafazi, Yanayin rubutu, Mabanbanta, Kana"}
+            secondary{"Tushe, Lafazi"}
+            tertiary{"Tushe, Lafazi, Yanayin rubutu, Mabanbanta"}
+        }
         collation{
             ducet{"Tsarin Rabewa na Dan-maƙalu na Asali"}
             search{"Bincike na Dalilai-Gamagari"}
             standard{"Daidaitaccen Kasawa"}
         }
         collation%core{
+            compat{"Dacewa"}
+            dictionary{"Ƙamus"}
             ducet{"Tsararren Unicode"}
+            emoji{"Emoji"}
+            eor{"Dokokin Turai"}
+            phonebook{"Littafin waya"}
+            phonetic{"Sautin murya"}
+            pinyin{"Pinyin"}
             search{"Bincike"}
+            searchjl{"Baƙin farko na Korea"}
             standard{"Daidaitacce"}
+            stroke{"Karan tsaye"}
+            traditional{"Na gargajiya"}
+            unihan{"Tsarin Rubutun Ƙasar Sin"}
+            zhuyin{"Zhuyin"}
+        }
+        d0{
+            fwidth{"Zuwa Haruffa Masu Ruɓin Girma"}
+            hwidth{"Zuwa Haruffa Masu Rabin Girma"}
         }
         em%core{
             default{"Tsararre"}
@@ -592,16 +660,26 @@ ha{
             text{"Rubutu"}
         }
         hc{
+            c12{"Tsarin Awowi 12"}
+            c24{"Tsarin Awowi 24"}
             h11{"Tsarin Awowi 12 (0–11)"}
             h12{"Tsarin Awowi 12(1–12)"}
             h23{"Tsarin Awowi 24(0–23)"}
             h24{"Tsarin Awowi 24(1–24)"}
         }
         hc%core{
+            c12{"12"}
+            c24{"24"}
             h11{"12 (0–11)"}
             h12{"12 (1–12)"}
             h23{"24 (0–23)"}
             h24{"24 (1–24)"}
+        }
+        kv%core{
+            currency{"Madannin tazara, alamar rubutu, dukkan alamomi"}
+            punct{"Madannin tazara, alamar rubutu"}
+            space{"Madannin tazara, alamar rubutu"}
+            symbol{"Madannin tazara, alamar rubutu, alamomi waɗanda ba alamomin kuɗi ba"}
         }
         lb{
             loose{"Salo na Raba Layi Sakakke"}
@@ -618,6 +696,10 @@ ha{
             keepall{"A bar duka"}
             normal{"Na kodayaushe"}
             phrase{"A bari cikin magana"}
+        }
+        m0{
+            bgn{"Rubutun US BGN"}
+            ungegn{"Rubutun UN GEGN"}
         }
         ms{
             metric{"Tsarin Awo na Metric"}
@@ -660,6 +742,7 @@ ha{
             mlym{"Lambobin Yaren Malayalam"}
             mtei{"Lambobin Meetei Mayek"}
             mymr{"Lambobin Myanmar"}
+            native{"Lambobi na Ɗan ƙasa"}
             olck{"Lambobin Ol Chiki"}
             orya{"Lambobin Yaren Odia"}
             roman{"Lambobin Rumawa"}
@@ -671,9 +754,51 @@ ha{
             tibt{"Lambobin yaren Tibet"}
             vaii{"Lambobin Vai"}
         }
+        numbers%core{
+            arabext{"Fitattun Lambobin Larabci"}
+            armnlow{"Ƙananan haruffa na Armeniya"}
+            finance{"Na kuɗi"}
+            fullwide{"Cikakken-faɗi"}
+            greklow{"Ƙananan haruffa na Girka"}
+            hanidays{
+                "Tsarin rubuta lambobin kwanan wata na Daular Han domin kalandu na ga"
+                "rgajiya"
+            }
+            hanidec{
+                "Tsarin rubuta desimal ta amfani da alamomi na lambobin Ƙasan Sin a m"
+                "atsayin lamba"
+            }
+            hansfin{"Lambobin Ƙirga na Yaren Ƙasar Sin wanda aka sauƙaƙa"}
+            hantfin{"Lambobin Ƙirga na Yaren Ƙasar Sin na Alʼada"}
+            jpanfin{"Lambobin ƙirga na Jafananci"}
+            jpanyear{"Tsarin lambobin Japan na shekarar farko na Gannen"}
+            lanatham{"Tai Tham Tham (na mujamiʼa)"}
+            mathbold{"Gwaragwaran alamomin lissafi"}
+            mathdbl{"Tagwayen karan-tsaye na lissafi"}
+            mathmono{"Tilon sarari na lissafi"}
+            mathsanb{"Gwaragwaran rubutun sans-serif na lissafi"}
+            mathsans{"Sans-serif na lissafi"}
+            mymrepka{"Gabacin Pwo Karen na Myanmar"}
+            mymrpao{"Pao na Myanmar"}
+            mymrshan{"Shan na Myanmar"}
+            mymrtlng{"Tai Laing na Myanmar"}
+            native{"Lambobi na ɗan ƙasa"}
+            outlined{"An bayyana"}
+            roman{"Babban baƙi na Rumawa"}
+            romanlow{"Ƙaramin baƙi na Rumawa"}
+            segment{"An daskarar"}
+            tamldec{"Sabon Tamil"}
+            traditional{"Lambobi na gargajiya"}
+        }
         ss%core{
             none{"Kashe"}
             standard{"Kunna"}
+        }
+        t0{
+            und{"Fassarar Inji da ba a Fayyace ba"}
+        }
+        va%core{
+            posix{"Launin POSIX"}
         }
     }
     characterLabelPattern{
@@ -682,6 +807,7 @@ ha{
         enclosed{"{0} — a kewaye"}
         extended{"{0} — faɗaɗaɗɗe"}
         facing-left{"{0} kallon gefe"}
+        facing-right{"{0} kallon dama"}
         historic{"{0} — na tarihi"}
         miscellaneous{"{0} — daban-daban"}
         other{"{0} — wani dabam"}

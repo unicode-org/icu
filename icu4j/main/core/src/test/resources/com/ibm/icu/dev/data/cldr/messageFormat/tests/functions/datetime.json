@@ -1,0 +1,64 @@
+{
+  "$schema": "../../schemas/v0/tests.schema.json",
+  "scenario": "Datetime function",
+  "description": "The built-in formatter for datetimes.",
+  "defaultTestProperties": {
+    "bidiIsolation": "none",
+    "locale": "en-US",
+    "expErrors": []
+  },
+  "tests": [
+    {
+      "src": "{:datetime}",
+      "exp": "{:datetime}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ]
+    },
+    {
+      "src": "{$x :datetime}",
+      "exp": "{$x}",
+      "params": [
+        {
+          "name": "x",
+          "value": true
+        }
+      ],
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ]
+    },
+    {
+      "src": "{horse :datetime}",
+      "exp": "{|horse|}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ]
+    },
+    {
+      "src": "{|2006-01-02T15:04:06| :datetime}"
+    },
+    {
+      "src": "{|2006-01-02T15:04:06| :datetime dateLength=long}"
+    },
+    {
+      "src": "{|2006-01-02T15:04:06| :datetime timePrecision=second}"
+    },
+    {
+      "src": "{$dt :datetime}",
+      "params": [
+        {
+          "type": "datetime",
+          "name": "dt",
+          "value": "2006-01-02T15:04:06"
+        }
+      ]
+    }
+  ]
+}

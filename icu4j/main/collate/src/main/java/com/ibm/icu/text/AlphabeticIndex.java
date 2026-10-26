@@ -432,6 +432,9 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * @stable ICU 4.8
      */
     public AlphabeticIndex<V> setMaxLabelCount(int maxLabelCount) {
+        if (maxLabelCount <= 0) {
+            throw new IllegalArgumentException("Maximum number of labels must be greater than 0");
+        }
         this.maxLabelCount = maxLabelCount;
         buckets = null;
         return this;

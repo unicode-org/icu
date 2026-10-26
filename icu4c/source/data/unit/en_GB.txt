@@ -3,4 +3,46 @@
 // Generated using tools/cldr/cldr-to-icu/
 en_GB{
     %%Parent{"en_001"}
+    units{
+        volume{
+            cup-imperial{
+                dnam{"cups"}
+                one{"{0} cup"}
+                other{"{0} cups"}
+            }
+            pint-imperial{
+                dnam{"pints"}
+                one{"{0} pint"}
+                other{"{0} pints"}
+            }
+        }
+    }
+    unitsNarrow{
+        volume{
+            cup-imperial{
+                dnam{"cup"}
+                one{"{0} cup"}
+                other{"{0} cup"}
+            }
+            pint-imperial{
+                dnam{"pt"}
+                one{"{0} pt"}
+                other{"{0} pt"}
+            }
+        }
+    }
+    unitsShort{
+        volume{
+            cup-imperial{
+                dnam{"cup"}
+                one{"{0} cup"}
+                other{"{0} cup"}
+            }
+            pint-imperial{
+                dnam{"pt"}
+                one{"{0} pt"}
+                other{"{0} pt"}
+            }
+        }
+    }
 }

@@ -92,8 +92,9 @@
       <!-- We always want to treat wchar_t as a "real" C++ type, instead of a typedef. -->
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <!-- Set the source encoding and runtime encoding to UTF-8 by default. -->
-      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <!-- Set the source encoding and runtime encoding to UTF-8 by default.
+           Treat C4715 (not all control paths return a value) as an error.-->
+      <AdditionalOptions>/utf-8 /we4715 %(AdditionalOptions)</AdditionalOptions>
       <!-- Enable parallel compilation for faster builds. -->
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <!-- Set the C/C++ versions supported. -->

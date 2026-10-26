@@ -102,7 +102,7 @@ yo_BJ{
         VI{"Etikun Fagini ti Amɛrika"}
         VN{"Fɛtinami"}
         WS{"Samɔ"}
-        XA{"ìsɔ̀rɔ̀sí irɔ́"}
+        XA{"Ìsɔ̀rɔ̀sí irɔ́"}
         XB{"Agbègbè irɔ́"}
         ZA{"Gúúshù Áfíríkà"}
         ZM{"Shamibia"}

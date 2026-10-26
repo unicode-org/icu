@@ -120,6 +120,7 @@ public class CompactData implements MultiplierProducer {
         return multipliers[magnitude];
     }
 
+    @SuppressWarnings("ReferenceEquality")
     public String getPattern(int magnitude, PluralRules rules, DecimalQuantity dq) {
         if (magnitude < 0) {
             return null;

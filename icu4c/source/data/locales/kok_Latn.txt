@@ -478,6 +478,8 @@ kok_Latn{
                 yMMM{"MMM y"}
                 yMMMEd{"E, d MMM, y"}
                 yMMMM{"MMMM y"}
+                yMMMMEd{"E, d MMMM, y"}
+                yMMMMd{"d MMMM, y"}
                 yMMMd{"d MMM, y"}
                 yMd{"d-M-y"}
                 yQQQ{"QQQ y"}
@@ -554,13 +556,6 @@ kok_Latn{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        afternoon1{"donpar"}
-                        evening1{"sanj"}
-                        midnight{"modhyan"}
-                        morning1{"sokall"}
-                        night1{"rat"}
-                    }
                     narrow{
                         afternoon1{"dp"}
                         evening1{"sj"}
@@ -793,13 +788,40 @@ kok_Latn{
                         "4them timhoinallem",
                     }
                 }
-                stand-alone{
-                    wide{
-                        "1lem timhoinallem",
-                        "2rem timhoinallem",
-                        "3rem timhoinallem",
-                        "4them timhoinallem",
-                    }
+            }
+        }
+        iso8601{
+            availableFormats{
+                Bh{"h 'vaztam' B"}
+                H{"HH'v'"}
+                MMMMW{
+                    one{"MMMM 'suman' W"}
+                    other{"MMMM 'suman' W"}
+                }
+                h{"h 'vaztam' a"}
+                yw{
+                    one{"Y 'suman' w"}
+                    other{"Y 'suman' w"}
+                }
+            }
+            intervalFormats{
+                Bh{
+                    B{"h 'vaztam' B – h 'vaztam' B"}
+                    h{"h–h 'vaztam' a"}
+                }
+                H{
+                    H{"HH–HH'v'"}
+                }
+                Hv{
+                    H{"HH–HH'v' v"}
+                }
+                h{
+                    a{"h 'vaztam' a – h 'vaztam' a"}
+                    h{"h–h 'vaztam' a"}
+                }
+                hv{
+                    a{"h 'vaztam' a – h 'vaztam' a v"}
+                    h{"h–h 'vaztam' a v"}
                 }
             }
         }
@@ -841,14 +863,6 @@ kok_Latn{
                 }
             }
         }
-        day-short{
-            relativeTime{
-                future{
-                    one{"{0} disan"}
-                    other{"{0} disanim"}
-                }
-            }
-        }
         dayOfYear{
             dn{"vorsacho dis"}
         }
@@ -885,10 +899,6 @@ kok_Latn{
                 "1"{"fuddlo Su"}
             }
             relativeTime{
-                future{
-                    one{"{0} Sukraran"}
-                    other{"{0} Sukraranim"}
-                }
                 past{
                     one{"{0} Su adim"}
                     other{"{0} Su adim"}
@@ -902,10 +912,6 @@ kok_Latn{
                 "1"{"fuddlo Suk."}
             }
             relativeTime{
-                future{
-                    one{"{0} Sukraran"}
-                    other{"{0} Sukraranim"}
-                }
                 past{
                     one{"{0} Suk. adim"}
                     other{"{0} Suk. adim"}
@@ -937,18 +943,6 @@ kok_Latn{
                 past{
                     one{"{0}vor adim"}
                     other{"{0}voram adim"}
-                }
-            }
-        }
-        hour-short{
-            relativeTime{
-                future{
-                    one{"{0} voran"}
-                    other{"{0} voranim"}
-                }
-                past{
-                    one{"{0} vor adim"}
-                    other{"{0} voram adim"}
                 }
             }
         }
@@ -1024,10 +1018,6 @@ kok_Latn{
                 "1"{"fuddlo Sm"}
             }
             relativeTime{
-                future{
-                    one{"{0} Somaran"}
-                    other{"{0} Somaranim"}
-                }
                 past{
                     one{"{0} Sm adim"}
                     other{"{0} Sm adim"}
@@ -1041,10 +1031,6 @@ kok_Latn{
                 "1"{"fuddlo Som."}
             }
             relativeTime{
-                future{
-                    one{"{0} Somaran"}
-                    other{"{0} Somaranim"}
-                }
                 past{
                     one{"{0} Som. adim"}
                     other{"{0} Som. adim"}
@@ -1095,10 +1081,6 @@ kok_Latn{
                 "1"{"fuddlo mho."}
             }
             relativeTime{
-                future{
-                    one{"{0} mhoinean"}
-                    other{"{0} mhoineanim"}
-                }
                 past{
                     one{"{0} mho. adim"}
                     other{"{0} mho. adim"}
@@ -1149,10 +1131,6 @@ kok_Latn{
                 "1"{"fuddlem timho."}
             }
             relativeTime{
-                future{
-                    one{"{0} timhoinallean"}
-                    other{"{0} timhoinalleanim"}
-                }
                 past{
                     one{"{0} timho. adim"}
                     other{"{0} timho. adim"}
@@ -1183,10 +1161,6 @@ kok_Latn{
                 "1"{"fuddlo Sn"}
             }
             relativeTime{
-                future{
-                    one{"{0} Sonvaran"}
-                    other{"{0} Sonvaranim"}
-                }
                 past{
                     one{"{0} Sn adim"}
                     other{"{0} Sn adim"}
@@ -1200,10 +1174,6 @@ kok_Latn{
                 "1"{"fuddlo Son."}
             }
             relativeTime{
-                future{
-                    one{"{0} Sonvaran"}
-                    other{"{0} Sonvaranim"}
-                }
                 past{
                     one{"{0} Son. adim"}
                     other{"{0} Son. adim"}
@@ -1242,10 +1212,6 @@ kok_Latn{
         second-short{
             dn{"sek."}
             relativeTime{
-                future{
-                    one{"{0} sekondan"}
-                    other{"{0} sekondanim"}
-                }
                 past{
                     one{"{0} sek. adim"}
                     other{"{0} sek. adim"}
@@ -1276,10 +1242,6 @@ kok_Latn{
                 "1"{"fuddlo Ai"}
             }
             relativeTime{
-                future{
-                    one{"{0} Aitaran"}
-                    other{"{0} Aitaranim"}
-                }
                 past{
                     one{"{0} Ai adim"}
                     other{"{0} Ai adim"}
@@ -1293,10 +1255,6 @@ kok_Latn{
                 "1"{"fuddlo Ait."}
             }
             relativeTime{
-                future{
-                    one{"{0} Aitaran"}
-                    other{"{0} Aitaranim"}
-                }
                 past{
                     one{"{0} Ait. adim"}
                     other{"{0} Ait. adim"}
@@ -1327,10 +1285,6 @@ kok_Latn{
                 "1"{"fuddlo Br"}
             }
             relativeTime{
-                future{
-                    one{"{0} Birestaran"}
-                    other{"{0} Birestaranim"}
-                }
                 past{
                     one{"{0} Br adim"}
                     other{"{0} Br adim"}
@@ -1344,10 +1298,6 @@ kok_Latn{
                 "1"{"fuddlo Bre."}
             }
             relativeTime{
-                future{
-                    one{"{0} Birestaran"}
-                    other{"{0} Birestaranim"}
-                }
                 past{
                     one{"{0} Bre. adim"}
                     other{"{0} Bre. adim"}
@@ -1378,10 +1328,6 @@ kok_Latn{
                 "1"{"fuddlo Mg"}
             }
             relativeTime{
-                future{
-                    one{"{0} Mongllaran"}
-                    other{"{0} Mongllaranim"}
-                }
                 past{
                     one{"{0} Mg adim"}
                     other{"{0} Mg adim"}
@@ -1395,10 +1341,6 @@ kok_Latn{
                 "1"{"fuddlo Mon."}
             }
             relativeTime{
-                future{
-                    one{"{0} Mongllaran"}
-                    other{"{0} Mongllaranim"}
-                }
                 past{
                     one{"{0} Mon. adim"}
                     other{"{0} Mon. adim"}
@@ -1429,10 +1371,6 @@ kok_Latn{
                 "1"{"fuddlo Bu"}
             }
             relativeTime{
-                future{
-                    one{"{0} Budhvaran"}
-                    other{"{0} Budhvaranim"}
-                }
                 past{
                     one{"{0} Bu adim"}
                     other{"{0} Bu adim"}
@@ -1446,10 +1384,6 @@ kok_Latn{
                 "1"{"fuddlo Bud."}
             }
             relativeTime{
-                future{
-                    one{"{0} Budhvaran"}
-                    other{"{0} Budhvaranim"}
-                }
                 past{
                     one{"{0} Bud. adim"}
                     other{"{0} Bud. adim"}
@@ -1494,14 +1428,6 @@ kok_Latn{
                 }
             }
         }
-        week-short{
-            relativeTime{
-                future{
-                    one{"{0} sumanan"}
-                    other{"{0} sumananim"}
-                }
-            }
-        }
         weekOfMonth{
             dn{"mhoineacho suman"}
         }
@@ -1515,12 +1441,6 @@ kok_Latn{
             dn{"sumanacho d."}
         }
         weekdayOfMonth{
-            dn{"mhoineant disacho prosong"}
-        }
-        weekdayOfMonth-narrow{
-            dn{"mhoineant disacho prosong"}
-        }
-        weekdayOfMonth-short{
             dn{"mhoineant disacho prosong"}
         }
         year{
@@ -1542,11 +1462,6 @@ kok_Latn{
             }
         }
         year-narrow{
-            relative{
-                "-1"{"porum"}
-                "0"{"ondum"}
-                "1"{"fuddlem voros"}
-            }
             relativeTime{
                 future{
                     one{"{0}vorsan"}
@@ -1555,23 +1470,6 @@ kok_Latn{
                 past{
                     one{"{0}voros adim"}
                     other{"{0}vorsam adim"}
-                }
-            }
-        }
-        year-short{
-            relative{
-                "-1"{"porum"}
-                "0"{"ondum"}
-                "1"{"fuddlem voros"}
-            }
-            relativeTime{
-                future{
-                    one{"{0} vorsan"}
-                    other{"{0} vorsanim"}
-                }
-                past{
-                    one{"{0} voros adim"}
-                    other{"{0} vorsam adim"}
                 }
             }
         }
@@ -1587,30 +1485,31 @@ kok_Latn{
             2{"{0} vo {1}"}
             end{"{0}, vo {1}"}
         }
-        or-narrow{
-            2{"{0} vo {1}"}
-            end{"{0}, vo {1}"}
-        }
-        or-short{
-            2{"{0} vo {1}"}
-            end{"{0}, vo {1}"}
-        }
         standard{
             2{"{0} ani {1}"}
             end{"{0}, ani {1}"}
+        }
+        standard-narrow{
+            2{"{0}, {1}"}
+            end{"{0}, {1}"}
         }
         standard-short{
             2{"{0} & {1}"}
             end{"{0}, & {1}"}
         }
         unit{
-            2{"{0} ani {1}"}
+            2{"{0}, {1}"}
+            end{"{0}, {1}"}
         }
         unit-narrow{
             2{"{0} {1}"}
             end{"{0} {1}"}
             middle{"{0} {1}"}
             start{"{0} {1}"}
+        }
+        unit-short{
+            2{"{0}, {1}"}
+            end{"{0}, {1}"}
         }
     }
     measurementSystemNames{

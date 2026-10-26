@@ -258,18 +258,22 @@ public class JapaneseCalendar extends GregorianCalendar {
     protected int handleGetExtendedYear() {
         // EXTENDED_YEAR in JapaneseCalendar is a Gregorian year
         // The default value of EXTENDED_YEAR is 1970 (Showa 45)
-        int year;
         if (newerField(EXTENDED_YEAR, YEAR) == EXTENDED_YEAR
                 && newerField(EXTENDED_YEAR, ERA) == EXTENDED_YEAR) {
-            year = internalGet(EXTENDED_YEAR, GREGORIAN_EPOCH);
-        } else {
-            // extended year is a gregorian year, where 1 = 1AD,  0 = 1BC, -1 = 2BC, etc
-            year =
-                    internalGet(YEAR, 1) // pin to minimum of year 1 (first year)
-                            + ERA_RULES.getStartYear(
-                                    internalGet(ERA, CURRENT_ERA)) // add gregorian starting year
-                            - 1; // Subtract one because year starts at 1
+            return internalGet(EXTENDED_YEAR, GREGORIAN_EPOCH);
         }
+
+        // extended year is a gregorian year, where 1 = 1AD,  0 = 1BC, -1 = 2BC, etc
+        int era = internalGet(ERA, CURRENT_ERA);
+        int year = internalGet(YEAR, 1);
+        if (era == 0) {
+            // era 0 in Japanese calendar is Gregorian BC
+            year = 1 - year;
+        } else {
+            int eraStartYear = ERA_RULES.getStartYear(era);
+            year = eraStartYear + year - 1; // Subtract one because year starts at 1
+        }
+
         return year;
     }
 
@@ -288,14 +292,17 @@ public class JapaneseCalendar extends GregorianCalendar {
         // computeFields(status); // No need to compute fields here - expect the caller already did
         // so.
 
+        if (era == 0) {
+            // era 0 in Japanese calendar is Gregorian BC
+            return super.getDefaultMonthInYear(extendedYear);
+        }
+
         // Find out if we are at the edge of an era
         int[] eraStart = ERA_RULES.getStartDate(era, null);
         if (extendedYear == eraStart[0]) {
-            return eraStart[1] // month..
-                    - 1; // return 0-based month
-        } else {
-            return super.getDefaultMonthInYear(extendedYear);
+            return eraStart[1] - 1; // return 0-based month
         }
+        return 0;
     }
 
     /**
@@ -311,15 +318,18 @@ public class JapaneseCalendar extends GregorianCalendar {
     @Override
     protected int getDefaultDayInMonth(int extendedYear, int month) {
         int era = internalGet(ERA, CURRENT_ERA);
-        int[] eraStart = ERA_RULES.getStartDate(era, null);
+        if (era == 0) {
+            // era 0 in Japanese calendar is Gregorian BC
+            return super.getDefaultDayInMonth(extendedYear, month);
+        }
 
+        int[] eraStart = ERA_RULES.getStartDate(era, null);
         if (extendedYear == eraStart[0]) { // if it is year 1..
             if (month == (eraStart[1] - 1)) { // if it is the emperor's first month..
                 return eraStart[2]; // return the D_O_M of accession
             }
         }
-
-        return super.getDefaultDayInMonth(extendedYear, month);
+        return 1;
     }
 
     /**
@@ -328,13 +338,26 @@ public class JapaneseCalendar extends GregorianCalendar {
     @Override
     protected void handleComputeFields(int julianDay) {
         super.handleComputeFields(julianDay);
-        int year = internalGet(EXTENDED_YEAR);
+        int extendedYear = internalGet(EXTENDED_YEAR);
         int eraCode =
                 ERA_RULES.getEraCode(
-                        year, internalGet(MONTH) + 1 /* 1-base */, internalGet(DAY_OF_MONTH));
+                        extendedYear,
+                        internalGet(MONTH) + 1 /* 1-base */,
+                        internalGet(DAY_OF_MONTH));
 
         internalSet(ERA, eraCode);
-        internalSet(YEAR, year - ERA_RULES.getStartYear(eraCode) + 1);
+        int year;
+        if (eraCode == 0) {
+            // Gregorian BC
+            year = 1 - extendedYear;
+        } else if (eraCode == 1) {
+            // Gregorian AD
+            year = extendedYear;
+        } else {
+            // Japanese era since Meiji
+            year = extendedYear - ERA_RULES.getStartYear(eraCode) + 1;
+        }
+        internalSet(YEAR, year);
     }
 
     // -------------------------------------------------------------------------
@@ -458,26 +481,35 @@ public class JapaneseCalendar extends GregorianCalendar {
      */
     @Override
     public int getActualMaximum(int field) {
-        if (field == YEAR) {
-            int era = get(Calendar.ERA);
-            if (era == ERA_RULES.getMaxEraCode()) {
-                // TODO: Investigate what value should be used here - revisit after 4.0.
-                return handleGetLimit(YEAR, MAXIMUM);
-            } else {
-                int[] nextEraStart = ERA_RULES.getStartDate(era + 1, null);
-                int nextEraYear = nextEraStart[0];
-                int nextEraMonth = nextEraStart[1]; // 1-base
-                int nextEraDate = nextEraStart[2];
-
-                int maxYear = nextEraYear - ERA_RULES.getStartYear(era) + 1; // 1-base
-                if (nextEraMonth == 1 && nextEraDate == 1) {
-                    // Substract 1, because the next era starts at Jan 1
-                    maxYear--;
-                }
-                return maxYear;
-            }
+        if (field != YEAR) {
+            return super.getActualMaximum(field);
         }
-        return super.getActualMaximum(field);
+
+        int era = get(Calendar.ERA);
+        if (era >= ERA_RULES.getMaxEraCode()) {
+            // TODO: Investigate what value should be used here - revisit after 4.0.
+            return handleGetLimit(YEAR, MAXIMUM);
+        }
+
+        if (era == 0) {
+            // era 0 is Gregorian BC and has no era start year data.
+            return super.getActualMaximum(YEAR);
+        }
+
+        // Use getNextEraCode() instead of +1, because there might be gaps between eras.
+        int nextEra = ERA_RULES.getNextEraCode(era);
+        assert nextEra != era; // already checked (era) is not a max era code
+        int[] nextEraStart = ERA_RULES.getStartDate(nextEra, null);
+        int nextEraYear = nextEraStart[0];
+        int nextEraMonth = nextEraStart[1]; // 1-base
+        int nextEraDate = nextEraStart[2];
+
+        int maxYear = nextEraYear - ERA_RULES.getStartYear(era) + 1; // 1-base
+        if (nextEraMonth == 1 && nextEraDate == 1) {
+            // Substract 1, because the next era starts at Jan 1
+            maxYear--;
+        }
+        return maxYear;
     }
 
     /**
@@ -489,6 +521,6 @@ public class JapaneseCalendar extends GregorianCalendar {
     @Override
     @Deprecated
     protected boolean isEra0CountingBackward() {
-        return false;
+        return true;
     }
 }

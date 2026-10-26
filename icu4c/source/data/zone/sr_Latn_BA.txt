@@ -66,12 +66,6 @@ sr_Latn_BA{
         "Etc:UTC"{
             ls{"Koordinisano univerzalno vrijeme"}
         }
-        "Europe:Dublin"{
-            ld{"Irska, standardno vrijeme"}
-        }
-        "Europe:London"{
-            ld{"Britanija, ljetnje vrijeme"}
-        }
         "Pacific:Niue"{
             ec{"Nijue"}
         }
@@ -195,6 +189,9 @@ sr_Latn_BA{
             ld{"Brazilija, ljetnje vrijeme"}
             lg{"Brazilija vrijeme"}
             ls{"Brazilija, standardno vrijeme"}
+        }
+        "meta:British"{
+            ld{"Britanija, ljetnje vrijeme"}
         }
         "meta:Brunei"{
             ls{"Brunej Darusalum vrijeme"}
@@ -364,6 +361,9 @@ sr_Latn_BA{
             ld{"Iran, ljetnje vrijeme"}
             lg{"Iran vrijeme"}
             ls{"Iran, standardno vrijeme"}
+        }
+        "meta:Irish"{
+            ld{"Irska, standardno vrijeme"}
         }
         "meta:Irkutsk"{
             ld{"Irkuck, ljetnje vrijeme"}
@@ -555,8 +555,6 @@ sr_Latn_BA{
             ls{"Sahalin, standardno vrijeme"}
         }
         "meta:Samoa"{
-            ld{"Samoa, ljetnje vrijeme"}
-            lg{"Samoa vrijeme"}
             ls{"Samoa, standardno vrijeme"}
         }
         "meta:Seychelles"{

@@ -66,7 +66,7 @@ public class DateTimePatternGeneratorSample {
             }
             System.out.println("\n");
         }
-        /**
+        /*
          * output of the sample code:
          * ************************************************************************************************************
          * Skeleton en_US fr_FR zh_CN
@@ -102,7 +102,7 @@ public class DateTimePatternGeneratorSample {
             System.out.println("\n");
         }
 
-        /**
+        /*
          * output of the sample code:
          * ***********************************************************************************************************
          * Skeleton en_US fr_FR zh_CN
@@ -140,7 +140,7 @@ public class DateTimePatternGeneratorSample {
         System.out.println("New Pattern for FRENCH: " + format.toPattern());
         System.out.println("Date Time in new Pattern: " + format.format(date));
 
-        /**
+        /*
          * output of the sample code:
          * *************************************************************************************************
          * New Pattern for FRENCH: dd. 'von' MMMM HH:mm Date Time in new Pattern: 13. von octobre
@@ -181,7 +181,7 @@ public class DateTimePatternGeneratorSample {
         System.out.println("Date/Time format in fr_FR:");
         System.out.println(format.format(date));
 
-        /**
+        /*
          * output of the sample code:
          * **************************************************************************************************
          * Pattern before replacement: EEEE d MMMM y HH:mm:ss zzzz Date/Time format in fr_FR: jeudi

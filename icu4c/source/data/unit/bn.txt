@@ -74,7 +74,6 @@ bn{
                 per{"প্রতি বর্গ মাইলে {0}"}
             }
             square-yard{
-                dnam{"yd²"}
                 one{"{0} বর্গ গজ"}
                 other{"{0} বর্গ গজ"}
             }
@@ -155,11 +154,6 @@ bn{
                 dnam{"গ্লুকোজ"}
                 one{"{0} গ্লুকোজ"}
                 other{"{0} গ্লুকোজ"}
-            }
-            part{
-                dnam{"পার্ট"}
-                one{"{0} পার্ট"}
-                other{"{0} পার্ট"}
             }
             part-per-1e6{
                 dnam{"ভাগ, প্রতি মিলিয়নে"}
@@ -261,15 +255,7 @@ bn{
             }
         }
         duration{
-            century{
-                dnam{"শতাব্দী"}
-                one{"{0} শতাব্দী"}
-                other{"{0} শতাব্দী"}
-            }
             hour{
-                dnam{"ঘণ্টা"}
-                one{"{0} ঘণ্টা"}
-                other{"{0} ঘণ্টা"}
                 per{"{0} প্রতি ঘণ্টা"}
             }
             microsecond{
@@ -517,7 +503,6 @@ bn{
                 other{"{0} নটিক্যাল মাইল"}
             }
             parsec{
-                dnam{"পারসেক"}
                 one{"{0} পারসেক"}
                 other{"{0} পারসেক"}
             }
@@ -533,7 +518,6 @@ bn{
         }
         light{
             candela{
-                dnam{"ক্যান্ডেলা"}
                 one{"{0} ক্যান্ডেলা"}
                 other{"{0} ক্যান্ডেলা"}
             }
@@ -549,7 +533,7 @@ bn{
             }
             solar-luminosity{
                 one{"{0} সৌর ঔজ্জ্বল্য"}
-                other{"{0} সৌর ঔজ্জ্বল্যতাগুলি"}
+                other{"{0} সৌর ঔজ্জ্বল্য"}
             }
         }
         magnetic{
@@ -711,11 +695,6 @@ bn{
                 one{"{0} নট"}
                 other{"{0} নট"}
             }
-            light-speed{
-                dnam{"আলোক"}
-                one{"{0} আলোক"}
-                other{"{0} আলোক"}
-            }
             meter-per-second{
                 one{"{0} মিটার প্রতি সেকেন্ড"}
                 other{"{0} মিটার প্রতি সেকেন্ড"}
@@ -752,7 +731,7 @@ bn{
             pound-force-foot{
                 dnam{"পাউন্ড-ফিট"}
                 one{"{0} পাউন্ড-ফোর্স-ফিট"}
-                other{"{0} পাউন্ড-ফিট"}
+                other{"{0} পাউন্ড-ফোর্স-ফিট"}
             }
         }
         volume{
@@ -843,8 +822,8 @@ bn{
                 other{"{0} ফ্লুইড আউন্স"}
             }
             fluid-ounce-imperial{
-                one{"{0} Imp. fl oz"}
-                other{"{0} Imp. fluid ounces"}
+                one{"{0} ইম্পেরিয়াল ফ্লুইড আউন্স"}
+                other{"{0} ইম্পেরিয়াল ফ্লুইড আউন্স"}
             }
             fluid-ounce-metric{
                 dnam{"মেট্রিক ফ্লুইড আউন্স"}
@@ -969,11 +948,7 @@ bn{
             10p9{"গি{0}"}
         }
         concentr{
-            ofglucose{
-                dnam{"Glc"}
-            }
             part{
-                dnam{"পার্ট"}
                 one{"{0} পার্ট"}
                 other{"{0} পার্ট"}
             }
@@ -999,7 +974,6 @@ bn{
         }
         duration{
             hour{
-                dnam{"ঘণ্টা"}
                 one{"{0} ঘঃ"}
                 other{"{0} ঘঃ"}
                 per{"{0}/ঘ:"}
@@ -1040,11 +1014,6 @@ bn{
                 per{"{0}/বছর"}
             }
         }
-        energy{
-            calorie-it{
-                dnam{"cal-IT"}
-            }
-        }
         force{
             kilowatt-hour-per-100-kilometer{
                 one{"{0}kWh/100km"}
@@ -1073,10 +1042,14 @@ bn{
             centimeter{
                 per{"{0}/সেমি"}
             }
+            foot{
+                per{"{0}/ফুট"}
+            }
             inch{
                 per{"{0}/ইঞ্চি"}
             }
             kilometer{
+                dnam{"কিমি"}
                 per{"{0}/কিমি"}
             }
             meter{
@@ -1084,9 +1057,6 @@ bn{
             }
             micrometer{
                 dnam{"μm"}
-            }
-            parsec{
-                dnam{"পারসেক"}
             }
             point{
                 dnam{"pts"}
@@ -1146,18 +1116,12 @@ bn{
                 one{"{0}kph"}
                 other{"{0}kph"}
             }
-            light-speed{
-                dnam{"আলোক"}
-                one{"{0} আলোক"}
-                other{"{0} আলোক"}
-            }
             meter-per-second{
                 dnam{"মি/সেক"}
                 one{"{0}m/s"}
                 other{"{0}m/s"}
             }
             mile-per-hour{
-                dnam{"মাইল/ঘণ্টা"}
                 one{"{0}mph"}
                 other{"{0}mph"}
             }
@@ -1210,8 +1174,8 @@ bn{
                 per{"{0}/gal"}
             }
             gallon-imperial{
-                one{"{0}galIm"}
-                other{"{0}galIm"}
+                one{"{0}gal-Im"}
+                other{"{0}gal-Im"}
                 per{"{0}/galIm"}
             }
             pint-metric{
@@ -1547,11 +1511,14 @@ bn{
                 one{"{0} ডেমি"}
                 other{"{0} ডেমি"}
             }
+            earth-radius{
+                dnam{"পৃথিবীর ব্যাসার্ধ"}
+            }
             foot{
                 dnam{"ফুট"}
                 one{"{0} ফুট"}
                 other{"{0} ফুট"}
-                per{"{0} প্রতি ফুট"}
+                per{"{0}/ফুট"}
             }
             furlong{
                 dnam{"ফার্লং"}
@@ -1562,13 +1529,13 @@ bn{
                 dnam{"ইঞ্চি"}
                 one{"{0} ইঞ্চি"}
                 other{"{0} ইঞ্চি"}
-                per{"{0} প্রতি ইঞ্চি"}
+                per{"{0}/ইঞ্চি"}
             }
             kilometer{
                 dnam{"কিলোমিটার"}
                 one{"{0} কিমি"}
                 other{"{0} কিমি"}
-                per{"{0} প্রতি কিমি"}
+                per{"{0}/কিমি"}
             }
             light-year{
                 dnam{"আলোকবর্ষ"}
@@ -1579,7 +1546,7 @@ bn{
                 dnam{"মিটার"}
                 one{"{0} মি"}
                 other{"{0} মি"}
-                per{"{0} প্রতি মি"}
+                per{"{0}/মি"}
             }
             micrometer{
                 dnam{"μmeters"}

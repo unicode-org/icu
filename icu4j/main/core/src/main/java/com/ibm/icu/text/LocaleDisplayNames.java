@@ -10,7 +10,6 @@ package com.ibm.icu.text;
 
 import com.ibm.icu.impl.ICUConfig;
 import com.ibm.icu.lang.UScript;
-import com.ibm.icu.text.DisplayContext.Type;
 import com.ibm.icu.util.IllformedLocaleException;
 import com.ibm.icu.util.ULocale;
 import java.lang.reflect.InvocationTargetException;
@@ -540,7 +539,7 @@ public abstract class LocaleDisplayNames {
         }
 
         @Override
-        public DisplayContext getContext(Type type) {
+        public DisplayContext getContext(DisplayContext.Type type) {
             DisplayContext result = DisplayContext.STANDARD_NAMES; // final fallback
             for (DisplayContext context : contexts) {
                 if (context.type() == type) {

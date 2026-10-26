@@ -9,7 +9,9 @@
 
 #if !UCONFIG_NO_MF2
 
+#include "unicode/ubidi.h"
 #include "unicode/gregocal.h"
+#include "unicode/messageformat2.h"
 #include "messageformat2test.h"
 
 using namespace icu::message2;
@@ -24,10 +26,14 @@ TestMessageFormat2::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO(testAPISimple);
     TESTCASE_AUTO(testDataModelAPI);
     TESTCASE_AUTO(testFormatterAPI);
+    TESTCASE_AUTO(testBidiAPI);
     TESTCASE_AUTO(testHighLoneSurrogate);
     TESTCASE_AUTO(testLowLoneSurrogate);
     TESTCASE_AUTO(testLoneSurrogateInQuotedLiteral);
     TESTCASE_AUTO(dataDrivenTests);
+    TESTCASE_AUTO(testOverrideFunctions);
+    TESTCASE_AUTO(testComposeInternalFunctions);
+	TESTCASE_AUTO(testCrasherOnSelect);
     TESTCASE_AUTO_END;
 }
 
@@ -132,6 +138,86 @@ void TestMessageFormat2::testFormatterAPI() {
                  result, "hello");
 }
 
+void TestMessageFormat2::testBidiAPI() {
+
+    IcuTestErrorCode errorCode(*this, "testBidiAPI");
+    UParseError parseError;
+    UnicodeString result;
+
+    UnicodeString pattern = u"{{{1 :number u:dir=ltr}{2 :number u:dir=rtl}{3 :number}}}";
+    MessageFormatter::Builder mfBuilder(errorCode);
+    mfBuilder.setPattern(pattern, parseError, errorCode);
+    errorCode.errIfFailureAndReset("testBidiAPI: expected success setting pattern");
+
+    // Bidi off, directionality LTR => no controls
+    mfBuilder.setBidiIsolationStrategy(U_MF_BIDI_OFF);
+    mfBuilder.setBidiContext(MessageFormatter::U_MF_BIDI_CONTEXT_LTR);
+    MessageFormatter mf = mfBuilder.build(errorCode);
+    result = mf.formatToString(MessageArguments(), errorCode);
+    errorCode.errIfFailureAndReset("testBidiAPI: expected success from builder, bidi off and LTR directionality");
+    assertEquals("testBidiAPI: bidi off and LTR directionality", u"123", result);
+
+    // Bidi off, directionality RTL => no controls
+    mfBuilder.setBidiContext(MessageFormatter::U_MF_BIDI_CONTEXT_RTL);
+    mf = mfBuilder.build(errorCode);
+    result = mf.formatToString(MessageArguments(), errorCode);
+    errorCode.errIfFailureAndReset("testBidiAPI: expected success from builder, bidi off and RTL directionality");
+    assertEquals("testBidiAPI: bidi off and RTL directionality", u"123", result);
+
+    // Bidi off, directionality auto => no controls
+    mfBuilder.setBidiContext(MessageFormatter::U_MF_BIDI_CONTEXT_AUTO);
+    mf = mfBuilder.build(errorCode);
+    result = mf.formatToString(MessageArguments(), errorCode);
+    errorCode.errIfFailureAndReset("testBidiAPI: expected success from builder, bidi off and auto directionality");
+    assertEquals("testBidiAPI: bidi off and auto directionality", u"123", result);
+
+    // Bidi auto, directionality LTR, style CONTROL => controls
+    mfBuilder.setBidiContext(MessageFormatter::U_MF_BIDI_CONTEXT_LTR);
+    mfBuilder.setBidiIsolationStrategy(U_MF_BIDI_AUTO);
+    mf = mfBuilder.build(errorCode);
+    result = mf.formatToString(MessageArguments(), errorCode);
+    errorCode.errIfFailureAndReset("testBidiAPI: expected success from builder, bidi auto and LTR directionality");
+    assertEquals("testBidiAPI: bidi auto and LTR directionality", u"\u20661\u2069\u20672\u20693", result);
+
+    // Bidi auto, directionality LTR, style HTML => html
+    mfBuilder.setBidiIsolationStyle(U_MF_BIDI_STYLE_HTML);
+    mf = mfBuilder.build(errorCode);
+    result = mf.formatToString(MessageArguments(), errorCode);
+    errorCode.errIfFailureAndReset("testBidiAPI: expected success from builder, bidi auto, LTR directionality and style HTML");
+    assertEquals("testBidiAPI: bidi auto, LTR directionality and style HTML", u"<bdi>1</bdi><bdi>2</bdi>3", result);
+
+    // Bidi auto, directionality RTL => controls
+    mfBuilder.setBidiIsolationStyle(U_MF_BIDI_STYLE_CONTROL);
+    mfBuilder.setBidiContext(MessageFormatter::U_MF_BIDI_CONTEXT_RTL);
+    mf = mfBuilder.build(errorCode);
+    result = mf.formatToString(MessageArguments(), errorCode);
+    errorCode.errIfFailureAndReset("testBidiAPI: expected success from builder, bidi auto, RTL directionality");
+    assertEquals("testBidiAPI: bidi auto, RTL directionality", u"\u20661\u2069\u20672\u2069\u20663\u2069", result);
+
+    // Bidi auto, directionality auto, RTL locale
+    mfBuilder.setBidiContext(MessageFormatter::U_MF_BIDI_CONTEXT_AUTO);
+    mfBuilder.setLocale(Locale("ar"));
+    mf = mfBuilder.build(errorCode);
+    result = mf.formatToString(MessageArguments(), errorCode);
+    errorCode.errIfFailureAndReset("testBidiAPI: expected success from builder, bidi auto, auto directionality, RTL locale");
+    assertEquals("testBidiAPI: bidi auto, auto directionality, RTL locale", u"\u20661\u2069\u20672\u2069\u20673\u2069", result);
+
+    // Bidi auto, directionality LTR => controls
+    mfBuilder.setBidiContext(MessageFormatter::U_MF_BIDI_CONTEXT_LTR);
+    mfBuilder.setLocale(Locale("en-US"));
+    mf = mfBuilder.build(errorCode);
+    result = mf.formatToString(MessageArguments(), errorCode);
+    errorCode.errIfFailureAndReset("testBidiAPI: expected success from builder, bidi auto, LTR directionality");
+    assertEquals("testBidiAPI: bidi auto, LTR directionality", u"\u20661\u2069\u20672\u20693", result);
+
+    // Bidi auto, directionality auto, LTR locale -- same as above
+    mfBuilder.setBidiContext(MessageFormatter::U_MF_BIDI_CONTEXT_AUTO);
+    mf = mfBuilder.build(errorCode);
+    result = mf.formatToString(MessageArguments(), errorCode);
+    errorCode.errIfFailureAndReset("testBidiAPI: expected success from builder, bidi auto, auto directionality, LTR locale");
+    assertEquals("testBidiAPI: bidi auto, auto directionality, LTR locale", u"\u20661\u2069\u20672\u20693", result);
+}
+
 // Example for design doc -- version without null and error checks
 void TestMessageFormat2::testAPISimple() {
     IcuTestErrorCode errorCode1(*this, "testAPI");
@@ -144,6 +230,8 @@ void TestMessageFormat2::testAPISimple() {
     // To be used in the test suite, it should include those checks
     // Null checks and error checks elided
     MessageFormatter::Builder builder(errorCode);
+    builder.setBidiIsolationStrategy(U_MF_BIDI_OFF);
+
     MessageFormatter mf = builder.setPattern(u"Hello, {$userName}!", parseError, errorCode)
         .build(errorCode);
 
@@ -202,6 +290,7 @@ void TestMessageFormat2::testAPI() {
                   .setArgument("userName", "John")
                   .setExpected("Hello, John!")
                   .setLocale("en_US")
+                  .setBidiIsolationStrategy(U_MF_BIDI_OFF)
                   .build());
     TestUtils::runTestCase(*this, test, errorCode);
 
@@ -274,7 +363,7 @@ void TestMessageFormat2::testAPICustomFunctions() {
     // Set up custom function registry
     MFFunctionRegistry::Builder builder(errorCode);
     MFFunctionRegistry functionRegistry =
-        builder.adoptFormatter(data_model::FunctionName("person"), new PersonNameFormatterFactory(), errorCode)
+        builder.adoptFunction(data_model::FunctionName("person"), new PersonNameFunction(), errorCode)
                .build();
 
     Person* person = new Person(UnicodeString("Mr."), UnicodeString("John"), UnicodeString("Doe"));
@@ -290,6 +379,7 @@ void TestMessageFormat2::testAPICustomFunctions() {
                                    .setPattern("Hello {$name :person formality=informal}",
                                                parseError, errorCode)
                                    .setLocale(locale)
+                                   .setBidiIsolationStrategy(U_MF_BIDI_OFF)
                                    .build(errorCode);
     result = mf.formatToString(arguments, errorCode);
     assertEquals("testAPICustomFunctions", U_MF_UNKNOWN_FUNCTION_ERROR, errorCode);
@@ -314,13 +404,13 @@ void TestMessageFormat2::testAPICustomFunctions() {
 
     // By type
     MFFunctionRegistry::Builder builderByType(errorCode);
-    FunctionName personFormatterName("person");
+    FunctionName personFunctionName("person");
     MFFunctionRegistry functionRegistryByType =
-        builderByType.adoptFormatter(personFormatterName,
-                                   new PersonNameFormatterFactory(),
-                                   errorCode)
+        builderByType.adoptFunction(personFunctionName,
+                                    new PersonNameFunction(),
+                                    errorCode)
                      .setDefaultFormatterNameByType("person",
-                                                    personFormatterName,
+                                                    personFunctionName,
                                                     errorCode)
                      .build();
     mfBuilder.setFunctionRegistry(functionRegistryByType);
@@ -332,8 +422,11 @@ void TestMessageFormat2::testAPICustomFunctions() {
     // Expect "Hello John" because in the custom function we registered,
     // "informal" is the default formality and "length" is the default length
     assertEquals("testAPICustomFunctions", "Hello John", result);
+
     delete person;
 }
+
+PersonNameFunction::~PersonNameFunction() {}
 
 // ICU-22890 lone surrogate cause infinity loop
 void TestMessageFormat2::testHighLoneSurrogate() {
@@ -375,6 +468,7 @@ void TestMessageFormat2::testLoneSurrogateInQuotedLiteral() {
     UnicodeString expectedResult({0xdc02, 0});
     icu::message2::MessageFormatter msgfmt2 =
       icu::message2::MessageFormatter::Builder(errorCode)
+      .setBidiIsolationStrategy(U_MF_BIDI_OFF)
       .setPattern(literal, pe, errorCode)
       .build(errorCode);
     UnicodeString result = msgfmt2.formatToString({}, errorCode);
@@ -386,6 +480,274 @@ void TestMessageFormat2::dataDrivenTests() {
     IcuTestErrorCode errorCode(*this, "jsonTests");
 
     jsonTestsFromFiles(errorCode);
+}
+
+class FixedDateValue : public FunctionValue {
+    public:
+    UnicodeString formatToString(UErrorCode&) const override;
+    FixedDateValue();
+    virtual ~FixedDateValue();
+    private:
+    friend class FixedDateFunction;
+
+    UnicodeString formattedString;
+    FixedDateValue(const FunctionValue&, const FunctionOptions&, UErrorCode&);
+};
+
+UnicodeString FixedDateValue::formatToString(UErrorCode& status) const {
+    (void) status;
+    // This is a test class, it just outputs a silly fixed value.
+    return u"A Day ending in Y";
+}
+FixedDateValue::~FixedDateValue() {}
+
+FixedDateValue::FixedDateValue(const FunctionValue& arg,
+                                 const FunctionOptions& options,
+                                 UErrorCode& errorCode) {
+    (void)arg;
+    (void)options;
+    if (U_FAILURE(errorCode)) {
+        return;
+    }
+
+    // no input, no options
+}
+
+class FixedDateFunction : public Function {
+  public:
+    FixedDateFunction(UErrorCode& status);
+    LocalPointer<FunctionValue> call(const FunctionContext &, const FunctionValue &,
+                                     const FunctionOptions &, UErrorCode &) const override;
+    virtual ~FixedDateFunction();
+};
+
+FixedDateFunction::FixedDateFunction(UErrorCode& status) {
+    (void)status;
+}
+
+LocalPointer<FunctionValue> FixedDateFunction::call(const FunctionContext &context,
+                                                 const FunctionValue &arg,
+                                                 const FunctionOptions &opts,
+                                                 UErrorCode &errorCode) const {
+    (void)context;
+
+    if (U_FAILURE(errorCode)) {
+        return LocalPointer<FunctionValue>();
+    }
+    LocalPointer<FunctionValue> v(new FixedDateValue(arg, std::move(opts), errorCode));
+    return v;
+}
+
+FixedDateFunction::~FixedDateFunction() {}
+
+void TestMessageFormat2::testOverrideFunctions() {
+    IcuTestErrorCode errorCode(*this, "testOverrideFunctions");
+    UParseError parseError;
+    std::map<UnicodeString, icu::message2::Formattable> argsBuilder;
+    argsBuilder["count"] = message2::Formattable((int64_t)13);
+    argsBuilder["name"] = message2::Formattable("US");
+    argsBuilder["birthday"] = message2::Formattable("1776-07-04");
+    icu::message2::MessageArguments args(argsBuilder, errorCode);
+    UnicodeString expectedResult(u"PASS 13 @ \u2068A Day ending in Y\u2069");
+
+    const UnicodeString orig_pattern(
+        u""
+        ".input {$count :number} .input {$name :string} .input {$birthday :date}\n"
+        ".match $count\n"
+        "many {{PASS {$count} @ {$birthday :date style=short}}}\n"
+        "* {{FAIL wrong bucket {$count} @ {$birthday :date style=short}}}\n");
+
+    {
+        // build the function registry
+        icu::message2::MFFunctionRegistry::Builder builder(errorCode);
+        MFFunctionRegistry functionRegistry =
+            builder
+                .adoptFunction(data_model::FunctionName("date"), // override
+                               new FixedDateFunction(errorCode), errorCode)
+                .build();
+
+        icu::message2::MessageFormatter mf =
+            MessageFormatter::Builder(errorCode)
+                .setErrorHandlingBehavior(MessageFormatter::U_MF_BEST_EFFORT)
+                .setPattern(orig_pattern, parseError, errorCode)
+                .setFunctionRegistry(functionRegistry)
+                .setLocale(Locale("pl"))
+                .build(errorCode);
+
+        if (errorCode.errIfFailureAndReset("build")) {
+            errln("UParseError = %d:%d", parseError.line, parseError.offset);
+            return;
+        }
+
+        UnicodeString result = mf.formatToString(args, errorCode);
+        if (errorCode.errIfFailureAndReset("formatToString")) {
+            return;
+        }
+        assertEquals("testSetFormatLocale", expectedResult, result);
+    }
+}
+
+namespace ComposableFunctionTest {
+
+  class LocaleOverrideFunction : public Function {
+
+  public:
+    LocaleOverrideFunction(const Locale &loc, UErrorCode &status);
+    LocalPointer<FunctionValue> call(const FunctionContext &, const FunctionValue &,
+                                     const FunctionOptions &, UErrorCode &) const override;
+    virtual ~LocaleOverrideFunction();
+
+  private:
+    Locale overrideLocale;
+  };
+
+  LocaleOverrideFunction::LocaleOverrideFunction(const Locale &loc, UErrorCode &/*status*/)
+    : overrideLocale(loc) {}
+
+  LocalPointer<FunctionValue> LocaleOverrideFunction::call(const FunctionContext &context,
+                                                 const FunctionValue &arg,
+                                                 const FunctionOptions &opts,
+                                                 UErrorCode &errorCode) const {
+    const FunctionName& myFunction = context.getCalledFunctionName();
+    const FunctionName& stdFunction = myFunction.tempSubString(1); // _date -> date
+
+    const MFFunctionRegistry* standardRegistry = MFFunctionRegistry::getStandardFunctionsRegistry(errorCode);
+
+    if (U_FAILURE(errorCode)) {
+      return LocalPointer<FunctionValue>();
+    }
+    const Function *delegateFunction = standardRegistry->getFunction(stdFunction);
+
+    if (delegateFunction == nullptr && U_SUCCESS(errorCode)) {
+      errorCode = U_MF_UNKNOWN_FUNCTION_ERROR;  // function not found
+    }
+    if (U_FAILURE(errorCode)) {
+      return LocalPointer<FunctionValue>();
+    }
+    // create a new context, with our overridden locale
+    FunctionContext myContext = context.withLocale(overrideLocale);
+    // call the delegated function with the fixed-locale context
+    return delegateFunction->call(myContext, arg, opts, errorCode);
+  }
+
+  LocaleOverrideFunction::~LocaleOverrideFunction() {}
+} // namespace ComposableFunctionTest
+
+void TestMessageFormat2::testComposeInternalFunctions() {
+    IcuTestErrorCode errorCode(*this, "testComposeInternalFunctions");
+    UParseError parseError;
+    std::map<UnicodeString, icu::message2::Formattable> argsBuilder;
+    argsBuilder["pop"] = message2::Formattable((int64_t)2148076);
+    argsBuilder["count"] = message2::Formattable((int64_t)13);
+    argsBuilder["name"] = message2::Formattable("US");
+    argsBuilder["birthday"] = message2::Formattable("1776-07-04");
+    icu::message2::MessageArguments args(argsBuilder, errorCode);
+    if (errorCode.errIfFailureAndReset("args")) {
+        errln("%s:%d: err %s", __FILE__, __LINE__, errorCode.errorName());
+        return;
+    }
+
+    // Note on what's happening here:
+    // - 'pl' plurals are used (thus PASS)
+    // - US date format 7/4/76
+    // - US number format 2,148,076
+    UnicodeString expectedResult(u"PASS 13 2,148,076 @ 7/4/76");
+
+    // Function _number and _date turn around and call number and date, but with the fixed Locale
+    // myLocale. Overriding standard functions is another concern, in a separate PR.
+    const UnicodeString orig_pattern(
+        u""
+        ".input {$count :number} .input {$name :string} .input {$birthday :date} .input {$pop "
+        ":number}\n"
+        ".match $count\n"
+        "many {{PASS {$count :_number} {$pop :_number} @ {$birthday :_date style=short}}}\n"
+        "* {{FAIL wrong bucket {$count :_number} {$pop :_number} @ {$birthday :_date "
+        "style=short}}}\n");
+
+    // try with a modified pattern
+    // build the function registry
+    const Locale myLocale(Locale::getUS());
+    icu::message2::MFFunctionRegistry::Builder builder(errorCode);
+    if (errorCode.errIfFailureAndReset("MFFunctionRegistry::Builder")) {
+        errln("%s:%d: err %s", __FILE__, __LINE__, errorCode.errorName());
+        return;
+    }
+    MFFunctionRegistry functionRegistry =
+        builder
+            .adoptFunction(data_model::FunctionName("_date"),
+                           new ComposableFunctionTest::LocaleOverrideFunction(myLocale, errorCode),
+                           errorCode)
+            .adoptFunction(data_model::FunctionName("_number"),
+                           new ComposableFunctionTest::LocaleOverrideFunction(myLocale, errorCode),
+                           errorCode)
+            .build();
+    if (errorCode.errIfFailureAndReset("something")) {
+        errln("%s:%d: err %s", __FILE__, __LINE__, errorCode.errorName());
+        return;
+    }
+
+    icu::message2::MessageFormatter mf =
+        MessageFormatter::Builder(errorCode)
+            .setErrorHandlingBehavior(MessageFormatter::U_MF_BEST_EFFORT)
+            .setPattern(orig_pattern, parseError, errorCode)
+            .setFunctionRegistry(functionRegistry)
+            .setLocale(Locale("pl"))
+            .build(errorCode);
+
+    if (errorCode.errIfFailureAndReset("build")) {
+        errln("UParseError = %d:%d", parseError.line, parseError.offset);
+        return;
+    }
+
+    UnicodeString result = mf.formatToString(args, errorCode);
+    if (errorCode.errIfFailureAndReset("formatToString")) {
+        return;
+    }
+    assertEquals("testComposeInternalFunctions", expectedResult, result);
+}
+
+void TestMessageFormat2::testCrasherOnSelect() {
+    const icu::UnicodeString SELECT_CRASHER(".input {$count :number} .match $count many {{ many {$count} }} * {{ "
+                            "star {$count} }}");
+    std::map<UnicodeString, icu::message2::Formattable> argsBuilder;
+    // "count" is missing, but we shouldn't crash
+    // argsBuilder["count"] = message2::Formattable((int64_t)13);
+    // The issue exercised needed at least *one* arg.
+    argsBuilder["IGNORED"] = message2::Formattable((int64_t)999);
+
+    // U_MF_BEST_EFFORT - should fallback
+    {
+        IcuTestErrorCode errorCode(*this, "testCrasherOnSelect-U_MF_BEST_EFFORT");
+        UParseError parseError;
+        icu::message2::MessageFormatter mf =
+            MessageFormatter::Builder(errorCode)
+                .setErrorHandlingBehavior(MessageFormatter::U_MF_BEST_EFFORT)
+                .setPattern(SELECT_CRASHER, parseError, errorCode)
+                .setLocale(Locale("pl"))
+                .build(errorCode);
+        icu::message2::MessageArguments args(argsBuilder, errorCode);
+        UnicodeString result = mf.formatToString(args, errorCode);
+        if (errorCode.errIfFailureAndReset("formatToString")) {
+            return;
+        }
+        UnicodeString expectedResult(" star {$count} ");
+        assertEquals("testCrasherOnSelect-U_MF_BEST_EFFORT", expectedResult, result);
+    }
+    // U_MF_STRICT - will error out
+    {
+        IcuTestErrorCode errorCode(*this, "testCrasherOnSelect-U_MF_STRICT");
+        UParseError parseError;
+        icu::message2::MessageFormatter mf =
+            MessageFormatter::Builder(errorCode)
+                .setErrorHandlingBehavior(MessageFormatter::U_MF_STRICT)
+                .setPattern(SELECT_CRASHER, parseError, errorCode)
+                .setLocale(Locale("pl"))
+                .build(errorCode);
+        icu::message2::MessageArguments args(argsBuilder, errorCode);
+        UnicodeString result = mf.formatToString(args, errorCode);
+        errorCode.expectErrorAndReset(U_MF_UNRESOLVED_VARIABLE_ERROR, "testCrasherOnSelect-U_MF_STRICT: expect error");
+        (void)result; // ignored
+    }
 }
 
 TestCase::~TestCase() {}

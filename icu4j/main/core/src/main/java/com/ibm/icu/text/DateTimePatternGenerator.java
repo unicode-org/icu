@@ -24,7 +24,6 @@ import com.ibm.icu.util.ULocale.Category;
 import com.ibm.icu.util.UResourceBundle;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.BitSet;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
@@ -223,18 +222,6 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
             calendarTypeToUse = "gregorian"; // fallback
         }
         return calendarTypeToUse;
-    }
-
-    private void consumeShortTimePattern(String shortTimePattern, PatternInfo returnInfo) {
-        // keep this pattern to populate other time field
-        // combination patterns by hackTimes later in this method.
-        // ICU-20383 No longer set defaultHourFormatChar to the hour format character from
-        // this pattern; instead it is set from LOCALE_TO_ALLOWED_HOUR which now
-        // includes entries for both preferred and allowed formats.
-
-        // some languages didn't add mm:ss or HH:mm, so put in a hack to compute that from the short
-        // time.
-        hackTimes(returnInfo, shortTimePattern);
     }
 
     private class AppendItemFormatsSink extends UResource.Sink {
@@ -535,71 +522,6 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     @Deprecated
     public void setDefaultHourFormatChar(char defaultHourFormatChar) {
         this.defaultHourFormatChar = defaultHourFormatChar;
-    }
-
-    private void hackTimes(PatternInfo returnInfo, String shortTimePattern) {
-        fp.set(shortTimePattern);
-        StringBuilder mmss = new StringBuilder();
-        // to get mm:ss, we strip all but mm literal ss
-        boolean gotMm = false;
-        for (int i = 0; i < fp.items.size(); ++i) {
-            Object item = fp.items.get(i);
-            if (item instanceof String) {
-                if (gotMm) {
-                    mmss.append(fp.quoteLiteral(item.toString()));
-                }
-            } else {
-                char ch = item.toString().charAt(0);
-                if (ch == 'm') {
-                    gotMm = true;
-                    mmss.append(item);
-                } else if (ch == 's') {
-                    if (!gotMm) {
-                        break; // failed
-                    }
-                    mmss.append(item);
-                    addPattern(mmss.toString(), false, returnInfo);
-                    break;
-                } else if (gotMm || ch == 'z' || ch == 'Z' || ch == 'v' || ch == 'V') {
-                    break; // failed
-                }
-            }
-        }
-        // to get hh:mm, we strip (literal ss) and (literal S)
-        // the easiest way to do this is to mark the stuff we want to nuke, then remove it in a
-        // second pass.
-        BitSet variables = new BitSet();
-        BitSet nuke = new BitSet();
-        for (int i = 0; i < fp.items.size(); ++i) {
-            Object item = fp.items.get(i);
-            if (item instanceof VariableField) {
-                variables.set(i);
-                char ch = item.toString().charAt(0);
-                if (ch == 's' || ch == 'S') {
-                    nuke.set(i);
-                    for (int j = i - 1; j >= 0; ++j) {
-                        if (variables.get(j)) break;
-                        nuke.set(i);
-                    }
-                }
-            }
-        }
-        String hhmm = getFilteredPattern(fp, nuke);
-        addPattern(hhmm, false, returnInfo);
-    }
-
-    private static String getFilteredPattern(FormatParser fp, BitSet nuke) {
-        StringBuilder result = new StringBuilder();
-        for (int i = 0; i < fp.items.size(); ++i) {
-            if (nuke.get(i)) continue;
-            Object item = fp.items.get(i);
-            if (item instanceof String) {
-                result.append(fp.quoteLiteral(item.toString()));
-            } else {
-                result.append(item.toString());
-            }
-        }
-        return result.toString();
     }
 
     /*private static int getAppendNameNumber(String string) {
@@ -1355,7 +1277,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                     output.add(pattern);
                 }
             }
-            /// CLOVER:OFF
+
             // The following would never be called since the parameter is false
             // Eclipse stated the following is "dead code"
             /*if (false) { // ordered
@@ -1375,7 +1297,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                     }
                 }
             }*/
-            /// CLOVER:ON
+
             return output;
         }
     }
@@ -1752,7 +1674,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     @Override
     public DateTimePatternGenerator cloneAsThawed() {
         DateTimePatternGenerator result = this.clone();
-        frozen = false;
+        result.frozen = false;
         return result;
     }
 
@@ -1781,9 +1703,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
             result.frozen = false;
             return result;
         } catch (CloneNotSupportedException e) {
-            /// CLOVER:OFF
             throw new ICUCloneNotSupportedException("Internal Error", e);
-            /// CLOVER:ON
         }
     }
 
@@ -2431,6 +2351,23 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         }
     }
 
+    /**
+     * A pattern whose skeleton specifies a two-digit year (such as the en availableFormats entry
+     * yyMMMd{"MMM d, ’yy"}) can contain literal text that only makes sense with a two-digit year,
+     * so it's only a valid match for a request that also asks for a two-digit year. Without this
+     * check, a request for "yyyyMMMd" would match the "yyMMMd" entry-- its year field length is
+     * closer to the requested 4 than the "yMMMd" entry's is --and produce "MMM d, ’yyyy".
+     */
+    private static boolean yearLengthIsCompatible(DateTimeMatcher request, DateTimeMatcher trial) {
+        // we only do this for numeric years (y/Y/u/r, as opposed to the cyclic year U); we don't
+        // want to interfere with matching of the non-numeric years
+        if (!request.fieldIsNumeric(YEAR) || !trial.fieldIsNumeric(YEAR)) {
+            return true;
+        }
+        return trial.original.getFieldLength(YEAR) != 2
+                || request.original.getFieldLength(YEAR) == 2;
+    }
+
     private PatternWithMatcher getBestRaw(
             DateTimeMatcher source,
             int includeMask,
@@ -2444,6 +2381,9 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         DistanceInfo tempInfo = new DistanceInfo();
         for (DateTimeMatcher trial : skeleton2pattern.keySet()) {
             if (trial.equals(skipMatcher)) {
+                continue;
+            }
+            if (!yearLengthIsCompatible(source, trial)) {
                 continue;
             }
             int distance = source.getDistance(trial, includeMask, tempInfo);
@@ -2880,6 +2820,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         {'e', WEEKDAY, NARROW - DELTA, 5},
         {'e', WEEKDAY, SHORTER - DELTA, 6},
         {'d', DAY, NUMERIC, 1, 2},
+        {'d', DAY, SHORT, 3},
         {'g', DAY, NUMERIC + DELTA, 1, 20}, // really internal use, so we don't care
         {'D', DAY_OF_YEAR, NUMERIC, 1, 3},
         {'F', DAY_OF_WEEK_IN_MONTH, NUMERIC, 1},

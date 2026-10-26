@@ -72,7 +72,7 @@ Changes in previous releases can also be found on the main [ICU download page](h
 There are two ways to download ICU releases:
 
 *   **Official Release Snapshot:**
-    If you want to use ICU (as opposed to developing it), you should download an official packaged version of the ICU source code. These versions are tested more thoroughly than day-to-day development builds of the system, and they are packaged in zip and tar files for convenient download. These packaged files can be found at [https://unicode-org.github.io/icu/download](https://unicode-org.github.io/icu/download).
+    If you want to use ICU (as opposed to developing it), you should download an official packaged version of the ICU source code. These versions are tested more thoroughly than day-to-day development builds of the system, and they are packaged in zip and tar files for convenient download. These packaged files can be found at <https://unicode-org.github.io/icu/download>.
     The packaged snapshots are named `icu-nnnn.zip` or `icu-nnnn.tgz`, where `nnnn` is the version number. The .zip file is used for Windows platforms, while the .tgz file is preferred on most other platforms.
     Please unzip this file.
     > :point_right: **Note**: There may be additional commits on the `maint-*` branch for a particular version that are not included in the prepackaged download files.
@@ -346,7 +346,7 @@ ICU 2.4 and earlier versions were not prepared for multithreaded use on multi-CP
 
 #### Using ICU in a Multithreaded Environment on HP-UX
 
-When ICU is built with aCC on HP-UX, the [`-AA`](http://h21007.www2.hp.com/portal/site/dspp/menuitem.863c3e4cbcdc3f3515b49c108973a801?ciid=eb08b3f1eee02110b3f1eee02110275d6e10RCRD) compiler flag is used. It is required in order to use the latest `<iostream>` API in a thread safe manner. This compiler flag affects the version of the C++ library being used. Your applications will also need to be compiled with `-AA` in order to use ICU.
+When ICU is built with aCC on HP-UX, the `-AA` compiler flag is used. It is required in order to use the latest `<iostream>` API in a thread safe manner. This compiler flag affects the version of the C++ library being used. Your applications will also need to be compiled with `-AA` in order to use ICU.
 
 #### Using ICU in a Multithreaded Environment on Solaris
 
@@ -361,10 +361,10 @@ In order to avoid synchronization and threading issues, developers are **suggest
 Failure to do this may cause spurious lock conflicts, recursive mutex failure, and deadlock.
 
 Source: "_Multithreaded Programming Guide, Compiling and Debugging_", Sun Microsystems, 2002
-[https://docs.oracle.com/cd/E19683-01/806-6867/compile-74765/index.html](https://docs.oracle.com/cd/E19683-01/806-6867/compile-74765/index.html)
+<https://docs.oracle.com/cd/E19683-01/806-6867/compile-74765/index.html>
 
 Note, a version of that chapter from a 2008 document update covering both Solaris 9 and Solaris 10 is available here:
-[http://docs.oracle.com/cd/E19253-01/816-5137/compile-94179/index.html](http://docs.oracle.com/cd/E19253-01/816-5137/compile-94179/index.html)
+<http://docs.oracle.com/cd/E19253-01/816-5137/compile-94179/index.html>
 
 ### Windows Platform
 
@@ -406,7 +406,8 @@ ICU 3.6 removes the requirement that ICU be completely built in the native opera
 
 #### Adapting Makefiles For a New Platform
 
-Try to follow the build steps from the [UNIX](#how-to-build-and-install-on-unix) build instructions. If the configure script fails, then you will need to modify some files. Here are the usual steps for porting to a new platform:
+Try to follow the build steps from the [UNIX](build.md#how-to-build-and-install-on-unix) build instructions.
+If the configure script fails, then you will need to modify some files. Here are the usual steps for porting to a new platform:
 
 1.  Create an mh file in `<ICU>/source/config/`. You can use mh-linux or a similar mh file as your base configuration.
 2.  Modify `<ICU>/source/aclocal.m4` to recognize your platform's mh file.
@@ -436,5 +437,5 @@ The platform dependencies have been mostly isolated into the following files in 
 
 * * *
 
-Copyright © 2016 and later: Unicode, Inc. and others. License & terms of use: [http://www.unicode.org/copyright.html](http://www.unicode.org/copyright.html)
+Copyright © 2016 and later: Unicode, Inc. and others. License & terms of use: <http://www.unicode.org/copyright.html>
 Copyright © 1997-2016 International Business Machines Corporation and others. All Rights Reserved.

@@ -507,7 +507,7 @@ void Normalizer2DataBuilder::writeNorm16(UMutableCPTrie *norm16Trie, UChar32 sta
     default:  // Should not occur.
         exit(U_INTERNAL_PROGRAM_ERROR);
     }
-    U_ASSERT((norm16&1)==0);
+    U_ASSERT((norm16&1)==0 || norm16==Normalizer2Impl::INERT);
     if(norm.hasCompBoundaryAfter) {
         norm16|=Normalizer2Impl::HAS_COMP_BOUNDARY_AFTER;
     }

@@ -497,8 +497,6 @@ public final class RelativeDateTimeFormatter {
      * <p>There is no public constructor to this class; the only instances are the constants defined
      * here.
      *
-     * <p>
-     *
      * @stable ICU 64
      */
     public static class Field extends Format.Field {
@@ -776,7 +774,10 @@ public final class RelativeDateTimeFormatter {
             ((DecimalFormat) numberFormat).toNumberFormatter().formatImpl(dq, output);
             pluralKeyword = pluralRules.select(dq);
         } else {
-            String result = numberFormat.format(quantity);
+            String result;
+            synchronized (numberFormat) {
+                result = numberFormat.format(quantity);
+            }
             output.append(result, null);
             pluralKeyword = pluralRules.select(quantity);
         }

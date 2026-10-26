@@ -1,7 +1,6 @@
 // © 2021 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 //
-/** A LSTMBreakEngine */
 package com.ibm.icu.impl.breakiter;
 
 import com.ibm.icu.impl.ICUData;
@@ -146,7 +145,7 @@ public class LSTMBreakEngine extends DictionaryBreakEngine {
     // Minimum number of characters for two words
     private static final byte MIN_WORD_SPAN = MIN_WORD * 2;
 
-    abstract class Vectorizer {
+    abstract static class Vectorizer {
         public Vectorizer(Map<String, Integer> dict) {
             this.fDict = dict;
         }
@@ -166,7 +165,7 @@ public class LSTMBreakEngine extends DictionaryBreakEngine {
         private Map<String, Integer> fDict;
     }
 
-    class CodePointsVectorizer extends Vectorizer {
+    static class CodePointsVectorizer extends Vectorizer {
         public CodePointsVectorizer(Map<String, Integer> dict) {
             super(dict);
         }
@@ -188,7 +187,7 @@ public class LSTMBreakEngine extends DictionaryBreakEngine {
         }
     }
 
-    class GraphemeClusterVectorizer extends Vectorizer {
+    static class GraphemeClusterVectorizer extends Vectorizer {
         public GraphemeClusterVectorizer(Map<String, Integer> dict) {
             super(dict);
         }
@@ -267,13 +266,6 @@ public class LSTMBreakEngine extends DictionaryBreakEngine {
             for (int j = 0; j < a.length; j++) {
                 result[i] += a[j] * b[j][i];
             }
-        }
-    }
-
-    private static void addTo(final float[] a, float[] result) {
-        assert a.length == result.length;
-        for (int i = 0; i < result.length; i++) {
-            result[i] += a[i];
         }
     }
 

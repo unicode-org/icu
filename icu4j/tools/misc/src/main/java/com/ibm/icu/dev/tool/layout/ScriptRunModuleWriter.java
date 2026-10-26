@@ -9,7 +9,7 @@
 package com.ibm.icu.dev.tool.layout;
 
 import com.ibm.icu.impl.Utility;
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class ScriptRunModuleWriter extends ScriptModuleWriter {
     public ScriptRunModuleWriter(ScriptData theScriptData) {
@@ -53,21 +53,22 @@ public class ScriptRunModuleWriter extends ScriptModuleWriter {
         output.print(Utility.hex(extra, 4));
         output.println(";");
 
-        Vector[] scriptRangeOffsets = new Vector[maxScript - minScript + 1];
-
-        for (int script = minScript; script <= maxScript; script += 1) {
-            scriptRangeOffsets[script - minScript] = new Vector();
+        int scriptRangeCount = maxScript - minScript + 1;
+        ArrayList<ArrayList<Integer>> scriptRangeOffsets = new ArrayList<>(scriptRangeCount);
+        for (int s = 0; s < scriptRangeCount; s += 1) {
+            scriptRangeOffsets.add(new ArrayList<>());
         }
 
         for (int record = 0; record < recordCount; record += 1) {
-            scriptRangeOffsets[scriptData.getRecord(record).scriptCode() - minScript].addElement(
-                    record);
+            scriptRangeOffsets
+                    .get(scriptData.getRecord(record).scriptCode() - minScript)
+                    .add(record);
         }
 
         output.println();
 
         for (int script = minScript; script <= maxScript; script += 1) {
-            Vector offsets = scriptRangeOffsets[script - minScript];
+            ArrayList<Integer> offsets = scriptRangeOffsets.get(script - minScript);
 
             output.print("le_int16 ");
             output.print(scriptData.getTag(script));
@@ -75,7 +76,7 @@ public class ScriptRunModuleWriter extends ScriptModuleWriter {
             output.print("    ");
 
             for (int offset = 0; offset < offsets.size(); offset += 1) {
-                Integer i = (Integer) offsets.elementAt(offset);
+                Integer i = offsets.get(offset);
 
                 output.print(i.intValue());
                 output.print(", ");

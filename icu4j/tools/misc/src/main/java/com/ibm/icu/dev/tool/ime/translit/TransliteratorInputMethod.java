@@ -34,7 +34,6 @@ import java.awt.im.spi.InputMethod;
 import java.awt.im.spi.InputMethodContext;
 import java.text.AttributedString;
 import java.text.Collator;
-import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -70,7 +69,7 @@ public class TransliteratorInputMethod implements InputMethod {
     private static Rectangle attachedLimits;
 
     // convenience of access, to reflect the current state
-    private static JComboBox choices;
+    private static JComboBox<JLabel> choices;
 
     //
     // per-instance state
@@ -133,11 +132,13 @@ public class TransliteratorInputMethod implements InputMethod {
             Window sw = context.createInputMethodWindow(title, false);
 
             // get all the ICU Transliterators
-            Enumeration en = Transliterator.getAvailableIDs();
-            TreeSet types = new TreeSet(new LabelComparator());
+            Enumeration<String> en = Transliterator.getAvailableIDs();
+            final Collator collator = Collator.getInstance();
+            TreeSet<JLabel> types =
+                    new TreeSet<>((obj1, obj2) -> collator.compare(obj1.getText(), obj1.getText()));
 
             while (en.hasMoreElements()) {
-                String id = (String) en.nextElement();
+                String id = en.nextElement();
                 String name = Transliterator.getDisplayName(id);
                 JLabel label = new JLabel(name);
                 label.setName(id);
@@ -146,7 +147,7 @@ public class TransliteratorInputMethod implements InputMethod {
 
             // add the transliterators to the combo box
 
-            choices = new JComboBox(types.toArray());
+            choices = new JComboBox<>(types.toArray(new JLabel[0]));
 
             choices.setEditable(false);
             choices.setSelectedIndex(0);
@@ -155,6 +156,7 @@ public class TransliteratorInputMethod implements InputMethod {
 
             choices.addActionListener(
                     new ActionListener() {
+                        @Override
                         public void actionPerformed(ActionEvent e) {
                             if (statusWindowOwner != null) {
                                 statusWindowOwner.statusWindowAction(e);
@@ -183,7 +185,8 @@ public class TransliteratorInputMethod implements InputMethod {
 
     private void statusWindowAction(ActionEvent e) {
         if (TRACE_MESSAGES) dumpStatus(">>status window action");
-        JComboBox cb = (JComboBox) e.getSource();
+        @SuppressWarnings("unchecked")
+        JComboBox<JLabel> cb = (JComboBox<JLabel>) e.getSource();
         int si = cb.getSelectedIndex();
         if (si != selectedIndex) { // otherwise, we don't need to change
             if (TRACE_MESSAGES)
@@ -695,15 +698,20 @@ public class TransliteratorInputMethod implements InputMethod {
     }
 }
 
-class NameRenderer extends JLabel implements ListCellRenderer {
+class NameRenderer extends JLabel implements ListCellRenderer<JLabel> {
 
     /** For serialization */
     private static final long serialVersionUID = -210152863798631747L;
 
+    @Override
     public Component getListCellRendererComponent(
-            JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            JList<? extends JLabel> list,
+            JLabel value,
+            int index,
+            boolean isSelected,
+            boolean cellHasFocus) {
 
-        String s = ((JLabel) value).getText();
+        String s = value.getText();
         setText(s);
 
         if (isSelected) {
@@ -718,16 +726,5 @@ class NameRenderer extends JLabel implements ListCellRenderer {
         setFont(list.getFont());
         setOpaque(true);
         return this;
-    }
-}
-
-class LabelComparator implements Comparator {
-    public int compare(Object obj1, Object obj2) {
-        Collator collator = Collator.getInstance();
-        return collator.compare(((JLabel) obj1).getText(), ((JLabel) obj2).getText());
-    }
-
-    public boolean equals(Object obj1) {
-        return obj1 instanceof LabelComparator;
     }
 }

@@ -65,7 +65,7 @@ DEFS += -DU_COMMON_IMPLEMENTATION
 LDFLAGS += $(LDFLAGSICUUC)
 
 # for plugin configuration
-CPPFLAGS += "-DDEFAULT_ICU_PLUGINS=\"$(libdir)/icu\" "
+CPPFLAGS += "-DDEFAULT_ICU_PLUGINS=\"$(libdir)/icu\""
 
 # for icu data location
 ifeq ($(PKGDATA_MODE),common)

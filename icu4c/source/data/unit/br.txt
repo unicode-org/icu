@@ -150,7 +150,9 @@ br{
             10p-2{"santi{0}"}
             10p-21{"zepto{0}"}
             10p-24{"yokto{0}"}
+            10p-27{"ronto{0}"}
             10p-3{"mili{0}"}
+            10p-30{"kwekto{0}"}
             10p-6{"mikro{0}"}
             10p-9{"nano{0}"}
             10p1{"deka{0}"}
@@ -160,7 +162,9 @@ br{
             10p2{"hekto{0}"}
             10p21{"zeta{0}"}
             10p24{"yota{0}"}
+            10p27{"ronna{0}"}
             10p3{"kilo{0}"}
+            10p30{"kweta{0}"}
             10p6{"mega{0}"}
             10p9{"giga{0}"}
             per{"{0} dre {1}"}
@@ -485,6 +489,15 @@ br{
                 other{"{0} nanoeilenn"}
                 two{"{0} nanoeilenn"}
             }
+            night{
+                dnam{"nozvezhioù"}
+                few{"{0} nozvezh"}
+                many{"{0} a nozvezhioù"}
+                one{"{0} nozvezh"}
+                other{"{0} nozvezh"}
+                per{"{0} dre nozvezh"}
+                two{"{0} nozvezh"}
+            }
             quarter{
                 dnam{"trimiziadoù"}
                 few{"{0} zrimiziad"}
@@ -574,12 +587,20 @@ br{
                 two{"{0} galorienn"}
             }
             electronvolt{
-                dnam{"elektronvoltoù"}
+                dnam{"elektron-voltoù"}
                 few{"{0} elektronvolt"}
-                many{"{0} a elektronvoltoù"}
+                many{"{0} a elektron-voltoù"}
                 one{"{0} elektronvolt"}
                 other{"{0} elektronvolt"}
                 two{"{0} elektronvolt"}
+            }
+            foodcalorie{
+                dnam{"kaloriennoù bras"}
+                few{"{0} c'halorienn vras"}
+                many{"{0} a galoriennoù bras"}
+                one{"{0} galorienn vras"}
+                other{"{0} kalorienn vras"}
+                two{"{0} galorienn vras"}
             }
             joule{
                 dnam{"jouloù"}
@@ -667,8 +688,32 @@ br{
             }
         }
         graphics{
+            dot{
+                dnam{"pikoù"}
+                few{"{0} fik"}
+                many{"{0} a bikoù"}
+                one{"{0} pik"}
+                other{"{0} pik"}
+                two{"{0} bik"}
+            }
+            dot-per-centimeter{
+                dnam{"pikoù dre santimetr"}
+                few{"{0} fik dre santimetr"}
+                many{"{0} a bikoù dre santimetr"}
+                one{"{0} pik dre santimetr"}
+                other{"{0} pik dre santimetr"}
+                two{"{0} bik dre santimetr"}
+            }
+            dot-per-inch{
+                dnam{"pikoù dre veutad"}
+                few{"{0} fik dre veutad"}
+                many{"{0} a bikoù dre veutad"}
+                one{"{0} pik dre veutad"}
+                other{"{0} pik dre veutad"}
+                two{"{0} bik dre veutad"}
+            }
             em{
-                dnam{"esaouenn em"}
+                dnam{"esaouennoù em"}
                 few{"{0} esaouenn em"}
                 many{"{0} a esaouennoù em"}
                 one{"{0} esaouenn em"}
@@ -915,6 +960,14 @@ br{
                 one{"{0} luks"}
                 other{"{0} luks"}
                 two{"{0} luks"}
+            }
+            solar-luminosity{
+                dnam{"sked heol"}
+                few{"{0} sked heol"}
+                many{"{0} a skedoù heol"}
+                one{"{0} sked heol"}
+                other{"{0} sked heol"}
+                two{"{0} sked heol"}
             }
         }
         mass{
@@ -1885,6 +1938,15 @@ br{
                 other{"{0}ns"}
                 two{"{0}ns"}
             }
+            night{
+                dnam{"nozv."}
+                few{"{0}nozv."}
+                many{"{0}nozv."}
+                one{"{0}nozv."}
+                other{"{0}nozv."}
+                per{"{0}/nozv."}
+                two{"{0}nozv."}
+            }
             quarter{
                 dnam{"t"}
                 few{"{0}t"}
@@ -1970,6 +2032,13 @@ br{
                 other{"{0}eV"}
                 two{"{0}eV"}
             }
+            foodcalorie{
+                few{"{0}Cal"}
+                many{"{0}Cal"}
+                one{"{0}Cal"}
+                other{"{0}Cal"}
+                two{"{0}Cal"}
+            }
             joule{
                 few{"{0}J"}
                 many{"{0}J"}
@@ -2054,6 +2123,27 @@ br{
             }
         }
         graphics{
+            dot{
+                few{"{0}pik"}
+                many{"{0}pik"}
+                one{"{0}pik"}
+                other{"{0}pik"}
+                two{"{0}pik"}
+            }
+            dot-per-centimeter{
+                few{"{0}pdcm"}
+                many{"{0}pdcm"}
+                one{"{0}pdcm"}
+                other{"{0}pdcm"}
+                two{"{0}pdcm"}
+            }
+            dot-per-inch{
+                few{"{0}pdm"}
+                many{"{0}pdm"}
+                one{"{0}pdm"}
+                other{"{0}pdm"}
+                two{"{0}pdm"}
+            }
             em{
                 few{"{0}em"}
                 many{"{0}em"}
@@ -2273,6 +2363,7 @@ br{
                 two{"{0}lx"}
             }
             solar-luminosity{
+                dnam{"sked heol"}
                 few{"{0}L☉"}
                 many{"{0}L☉"}
                 one{"{0}L☉"}
@@ -2713,12 +2804,12 @@ br{
             }
             gallon-imperial{
                 dnam{"galIm"}
-                few{"{0}galIm"}
-                many{"{0}galIm"}
-                one{"{0}galIm"}
-                other{"{0}galIm"}
+                few{"{0}gal-Im"}
+                many{"{0}gal-Im"}
+                one{"{0}gal-Im"}
+                other{"{0}gal-Im"}
                 per{"{0}/galIm"}
-                two{"{0}galIm"}
+                two{"{0}gal-Im"}
             }
             hectoliter{
                 few{"{0}hl"}
@@ -3045,6 +3136,15 @@ br{
                 per{"{0}/m."}
                 two{"{0} m."}
             }
+            night{
+                dnam{"nozv."}
+                few{"{0} nozv."}
+                many{"{0} a nozv."}
+                one{"{0} nozv."}
+                other{"{0} nozv."}
+                per{"{0}/nozvezh"}
+                two{"{0} nozv."}
+            }
             quarter{
                 dnam{"trim."}
                 few{"{0} trim."}
@@ -3088,6 +3188,14 @@ br{
             }
         }
         energy{
+            foodcalorie{
+                dnam{"Cal"}
+                few{"{0} Cal"}
+                many{"{0} Cal"}
+                one{"{0} Cal"}
+                other{"{0} Cal"}
+                two{"{0} Cal"}
+            }
             joule{
                 dnam{"J"}
             }
@@ -3101,6 +3209,30 @@ br{
             }
         }
         graphics{
+            dot{
+                dnam{"pik"}
+                few{"{0} pik"}
+                many{"{0} pik"}
+                one{"{0} pik"}
+                other{"{0} pik"}
+                two{"{0} pik"}
+            }
+            dot-per-centimeter{
+                dnam{"pdcm"}
+                few{"{0} pdcm"}
+                many{"{0} pdcm"}
+                one{"{0} pdcm"}
+                other{"{0} pdcm"}
+                two{"{0} pdcm"}
+            }
+            dot-per-inch{
+                dnam{"pdm"}
+                few{"{0} pdm"}
+                many{"{0} pdm"}
+                one{"{0} pdm"}
+                other{"{0} pdm"}
+                two{"{0} pdm"}
+            }
             megapixel{
                 dnam{"Mpx"}
                 few{"{0} Mpx"}
@@ -3140,6 +3272,11 @@ br{
             }
             meter{
                 dnam{"m"}
+            }
+        }
+        light{
+            solar-luminosity{
+                dnam{"sked heol"}
             }
         }
         mass{

@@ -67,7 +67,7 @@ public class DateIntervalFormatSample {
                     "%-35s%-35s\n", dtitvfmtEn.format(dtitv[i]), dtitvfmtJa.format(dtitv[i]));
             i++;
         }
-        /**
+        /*
          * output of the sample code:
          * ********************************************************************************************************************************************************
          * Skeleton from to Date Interval in en_US Date Interval in Ja yMMMd Sat Nov 10 10:10:10 EST
@@ -126,7 +126,7 @@ public class DateIntervalFormatSample {
                         "%-45s%-35s\n", dtitvfmtEn.format(dtitv[i]), dtitvfmtJa.format(dtitv[i]));
             }
         }
-        /**
+        /*
          * output of the sample code:
          * ************************************************************************************************************************************************************************
          * Skeleton from to Date Interval in en_US Date Interval in Ja yMMMd Wed Oct 10 10:10:10 EDT

@@ -551,6 +551,14 @@ sc{
             }
         }
         ethiopic{
+            eras{
+                abbreviated{
+                    0{"a.m."}
+                }
+                wide{
+                    0{"annu de su mundu"}
+                }
+            }
             intervalFormats{
                 Bh{
                     B{"h B – h B"}
@@ -612,16 +620,6 @@ sc{
                         "nehasse",
                         "pagumen",
                     }
-                }
-            }
-        }
-        ethiopic-amete-alem{
-            eras{
-                abbreviated{
-                    0{"a.m."}
-                }
-                wide{
-                    0{"annu de su mundu"}
                 }
             }
         }

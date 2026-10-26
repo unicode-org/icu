@@ -197,6 +197,7 @@ tt{
         }
         calendar%core{
             gregorian{"милади"}
+            iso8601{"Gregoriano sutiyuq runa"}
         }
         collation{
             standard{"гадәти тәртипләү ысулы"}

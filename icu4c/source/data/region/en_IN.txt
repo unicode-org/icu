@@ -3,4 +3,7 @@
 // Generated using tools/cldr/cldr-to-icu/
 en_IN{
     %%Parent{"en_001"}
+    Countries{
+        SH{"St. Helena, Ascension & Tristan da Cunha"}
+    }
 }

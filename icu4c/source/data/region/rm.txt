@@ -15,7 +15,7 @@ rm{
         017{"Africa Centrala"}
         018{"Africa Meridiunala"}
         019{"America"}
-        021{"America dal nord"}
+        021{"America Settentriunala"}
         029{"Caribica"}
         030{"Asia da l’Ost"}
         034{"Asia dal Sid"}

@@ -15,7 +15,9 @@ import java.util.Objects;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class Row<C0, C1, C2, C3, C4>
-        implements java.lang.Comparable, Cloneable, Freezable<Row<C0, C1, C2, C3, C4>> {
+        implements Comparable<Row<C0, C1, C2, C3, C4>>,
+                Cloneable,
+                Freezable<Row<C0, C1, C2, C3, C4>> {
     protected Object[] items;
     protected volatile boolean frozen;
 
@@ -144,16 +146,14 @@ public class Row<C0, C1, C2, C3, C4>
     }
 
     @Override
-    public int compareTo(Object other) {
-        int result;
-        Row<C0, C1, C2, C3, C4> that = (Row<C0, C1, C2, C3, C4>) other;
-        result = items.length - that.items.length;
+    public int compareTo(Row<C0, C1, C2, C3, C4> other) {
+        int result = items.length - other.items.length;
         if (result != 0) {
             return result;
         }
         int i = 0;
         for (Object item : items) {
-            result = Utility.checkCompare(((Comparable) item), ((Comparable) that.items[i++]));
+            result = Utility.checkCompare(((Comparable) item), ((Comparable) other.items[i++]));
             if (result != 0) {
                 return result;
             }

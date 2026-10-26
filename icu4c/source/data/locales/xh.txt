@@ -38,16 +38,16 @@ xh{
                         other{"¤000M"}
                     }
                     1000000000{
-                        one{"¤0G"}
-                        other{"¤0G"}
+                        one{"¤0B"}
+                        other{"¤0B"}
                     }
                     10000000000{
-                        one{"¤00G"}
-                        other{"¤00G"}
+                        one{"¤00B"}
+                        other{"¤00B"}
                     }
                     100000000000{
-                        one{"¤000G"}
-                        other{"¤000G"}
+                        one{"¤000B"}
+                        other{"¤000B"}
                     }
                     1000000000000{
                         one{"¤0T"}
@@ -229,6 +229,9 @@ xh{
                     M{"E, MMM d – E, MMM d"}
                     d{"E, MMM d – E, MMM d"}
                 }
+                MMMMd{
+                    d{"MMMM d – d"}
+                }
                 MMMd{
                     d{"MMM d – d"}
                 }
@@ -320,6 +323,8 @@ xh{
                 yMMM{"MMM y"}
                 yMMMEd{"E, MMM d, y"}
                 yMMMM{"MMMM y"}
+                yMMMMEd{"EEE, MMMM d, y"}
+                yMMMMd{"MMMM d, y"}
                 yMMMd{"MMM d, y"}
                 yMd{"M/d/y"}
                 yQQQ{"QQQ y"}
@@ -483,20 +488,6 @@ xh{
                         "Nov",
                         "Dis",
                     }
-                    narrow{
-                        "J",
-                        "F",
-                        "M",
-                        "A",
-                        "M",
-                        "J",
-                        "J",
-                        "A",
-                        "S",
-                        "O",
-                        "N",
-                        "D",
-                    }
                     wide{
                         "Janyuwari",
                         "Februwari",
@@ -597,20 +588,6 @@ xh{
                 "1"{"ngoLwesihlanu ozayo"}
             }
         }
-        fri-narrow{
-            relative{
-                "-1"{"ngoLwesihlanu odlulileyo"}
-                "0"{"ngalo Lwesihlanu"}
-                "1"{"ngoLwesihlanu ozayo"}
-            }
-        }
-        fri-short{
-            relative{
-                "-1"{"ngoLwesihlanu odlulileyo"}
-                "0"{"ngalo Lwesihlanu"}
-                "1"{"ngoLwesihlanu ozayo"}
-            }
-        }
         hour{
             dn{"iyure"}
             relative{
@@ -636,20 +613,6 @@ xh{
             dn{"umz."}
         }
         mon{
-            relative{
-                "-1"{"uMvulo odlulileyo"}
-                "0"{"ngalo Mvulo"}
-                "1"{"ngoMvulo ozayi"}
-            }
-        }
-        mon-narrow{
-            relative{
-                "-1"{"uMvulo odlulileyo"}
-                "0"{"ngalo Mvulo"}
-                "1"{"ngoMvulo ozayi"}
-            }
-        }
-        mon-short{
             relative{
                 "-1"{"uMvulo odlulileyo"}
                 "0"{"ngalo Mvulo"}
@@ -701,20 +664,6 @@ xh{
                 "1"{"ngoMgqibelo ozayo"}
             }
         }
-        sat-narrow{
-            relative{
-                "-1"{"ngoMgqibelo odlulileyo"}
-                "0"{"ngalo Mgqibelo"}
-                "1"{"ngoMgqibelo ozayo"}
-            }
-        }
-        sat-short{
-            relative{
-                "-1"{"ngoMgqibelo odlulileyo"}
-                "0"{"ngalo Mgqibelo"}
-                "1"{"ngoMgqibelo ozayo"}
-            }
-        }
         second{
             dn{"umzuzwana"}
             relative{
@@ -734,20 +683,6 @@ xh{
                 "1"{"kwiCawa ezayo"}
             }
         }
-        sun-narrow{
-            relative{
-                "-1"{"kwiCawa edlulileyo"}
-                "0"{"kule iCawa"}
-                "1"{"kwiCawa ezayo"}
-            }
-        }
-        sun-short{
-            relative{
-                "-1"{"kwiCawa edlulileyo"}
-                "0"{"kule iCawa"}
-                "1"{"kwiCawa ezayo"}
-            }
-        }
         thu{
             relative{
                 "-1"{"ngoLwesine odlulileyo"}
@@ -755,35 +690,7 @@ xh{
                 "1"{"ngoLwesine ozayo"}
             }
         }
-        thu-narrow{
-            relative{
-                "-1"{"ngoLwesine odlulileyo"}
-                "0"{"ngalo Lwesine"}
-                "1"{"ngoLwesine ozayo"}
-            }
-        }
-        thu-short{
-            relative{
-                "-1"{"ngoLwesine odlulileyo"}
-                "0"{"ngalo Lwesine"}
-                "1"{"ngoLwesine ozayo"}
-            }
-        }
         tue{
-            relative{
-                "-1"{"ngoLwesibini odlulileyo"}
-                "0"{"ngalo uLwesibini"}
-                "1"{"ngoLwesibini ozayo"}
-            }
-        }
-        tue-narrow{
-            relative{
-                "-1"{"ngoLwesibini odlulileyo"}
-                "0"{"ngalo uLwesibini"}
-                "1"{"ngoLwesibini ozayo"}
-            }
-        }
-        tue-short{
             relative{
                 "-1"{"ngoLwesibini odlulileyo"}
                 "0"{"ngalo uLwesibini"}
@@ -802,13 +709,6 @@ xh{
                 "-1"{"ngoLwesithathu odlulileyo"}
                 "0"{"ngalo Lwesithathu"}
                 "1"{"lwest ozay"}
-            }
-        }
-        wed-short{
-            relative{
-                "-1"{"ngoLwesithathu odlulileyo"}
-                "0"{"ngalo Lwesithathu"}
-                "1"{"ngoLwesithathu ozayo"}
             }
         }
         week{

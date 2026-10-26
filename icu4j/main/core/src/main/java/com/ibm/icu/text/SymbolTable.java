@@ -53,6 +53,18 @@ public interface SymbolTable {
     char[] lookup(String s);
 
     /**
+     * Returns a pre-parsed set associated with the variable with the given name, or null if there
+     * is no such set (as is the case for an undefined or string-valued variable).
+     *
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    default UnicodeSet lookupSet(String name) {
+        return null;
+    }
+
+    /**
      * Lookup the UnicodeMatcher associated with the given character, and return it. Return {@code
      * null} if not found.
      *

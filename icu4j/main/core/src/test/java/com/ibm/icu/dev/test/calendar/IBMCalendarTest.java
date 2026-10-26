@@ -30,6 +30,7 @@ import java.text.FieldPosition;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Set;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -1473,6 +1474,9 @@ public class IBMCalendarTest extends CalendarTestFmwk {
 
         @Override
         public boolean equals(Object other) {
+            if (this == other) {
+                return true;
+            }
             if (other instanceof CalFields) {
                 CalFields otr = (CalFields) other;
                 return (year == otr.year
@@ -1484,6 +1488,11 @@ public class IBMCalendarTest extends CalendarTestFmwk {
                         && ms == otr.ms);
             }
             return false;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(year, month, day, hour, min, sec, ms);
         }
 
         boolean isEquivalentTo(Calendar cal) {
@@ -2455,8 +2464,9 @@ public class IBMCalendarTest extends CalendarTestFmwk {
             "en@calendar=gregorian",
             "en@calendar=roc",
             "en@calendar=coptic",
-            // calendars with non-modern era 0 that goes forwards, max era > 1
+            // calendars with non-modern era 0 that goes backwards, max era > 1
             "en@calendar=japanese",
+            // calendars with non-modern era 0 that goes forwards, max era > 1
             "en@calendar=chinese",
             // calendars with non-modern era 0 that goes forwards, max era == 1
             "en@calendar=ethiopic",
@@ -2474,6 +2484,7 @@ public class IBMCalendarTest extends CalendarTestFmwk {
             String calType = ucalTest.getType();
             boolean era0YearsGoBackwards =
                     (calType.equals("gregorian")
+                            || calType.equals("japanese")
                             || calType.equals("roc")
                             || calType.equals("coptic"));
             int yrBefore, yrAfter, yrMax, eraAfter, eraMax, eraNow;

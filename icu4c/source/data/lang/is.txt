@@ -11,19 +11,35 @@ is{
         colCaseLevel{"Stafrétt röðun"}
         colNormalization{"Stöðluð röðun"}
         colNumeric{"Talnaröðun"}
+        colReorder{"Endurröðun skrifleturs/sérstafahópa"}
         colStrength{"Röðunarstyrkur"}
         collation{"Röðun"}
         currency{"Gjaldmiðill"}
+        d0{"Markmið umbreytingar"}
+        dx{"Undanþágur frá línuskiptingu úr orðabók"}
         em{"Framsetning emoji"}
+        fw{"Fyrsti dagur viku"}
+        h0{"Blandað"}
         hc{"Tímakerfi (12 eða 24)"}
+        i0{"Innsláttaraðferð"}
+        k0{"Lyklaborð"}
+        kv{"Efri mörk fyrir undanskilið"}
         lb{"Línuskipting"}
         lw{"Línuskil innan orða"}
+        m0{"Umbreytingarreglur"}
         ms{"Mælingakerfi"}
+        mu{"Mælieining"}
         numbers{"Tölur"}
+        rg{"Svæði fyrir viðbótargögn"}
+        s0{"Uppruni umbreytingar"}
+        sd{"Undirsvæði"}
         ss{"Hindranir á línuskiptingu"}
+        t{"Umbreyting"}
+        t0{"Vélþýtt"}
         timezone{"Tímabelti"}
         va{"Landsstaðalsafbrigði"}
         x{"Einkanotkun"}
+        x0{"Umbreyting til einkanota"}
     }
     Languages{
         aa{"afár"}
@@ -422,6 +438,7 @@ is{
         pi{"palí"}
         pis{"pijin"}
         pl{"pólska"}
+        pms{"piedmontíska"}
         pon{"ponpeiska"}
         pqm{"maliseet-passamaquoddy"}
         prg{"prússneska"}
@@ -711,9 +728,13 @@ is{
             ethiopic-amete-alem{"Eþíópískt ‘amete alem’"}
             gregorian{"Gregorískt"}
             hebrew{"Hebreskt"}
+            indian{"Indverskt þjóðartímatal"}
             islamic{"Íslamskt tímatal"}
             islamic-civil{"Íslamskt borgaradagatal"}
+            islamic-rgsa{"Hijri, tungl séð í Sádi-Arabíu"}
+            islamic-tbla{"Hijri (töfluform, stjarnfræðilegt tímabil)"}
             islamic-umalqura{"Íslamskt dagatal (Umm al-Qura)"}
+            iso8601{"Gregorískt"}
             japanese{"Japanskt"}
             persian{"Persneskt"}
             roc{"Minguo"}
@@ -739,6 +760,11 @@ is{
             no{"Raða eðlilega eftir hástöfum og lágstöfum"}
             upper{"Raða hástöfum fyrst"}
         }
+        colCaseFirst%core{
+            lower{"Lágstafir"}
+            no{"Lágstafir"}
+            upper{"Hástafir"}
+        }
         colCaseLevel{
             no{"Raða óháð hástöfum og lágstöfum"}
             yes{"Raða stafrétt"}
@@ -751,12 +777,26 @@ is{
             no{"Raða tölustöfum sér"}
             yes{"Raða tölustöfum tölulega"}
         }
+        colReorder%core{
+            currency{"Gjaldmiðill"}
+            digit{"Tölustafir"}
+            punct{"Greinarmerki"}
+            space{"Bil"}
+            symbol{"Tákn"}
+        }
         colStrength{
             identical{"Raða öllu"}
             primary{"Raða aðeins grunnstöfum"}
             quaternary{"Raða áherslum/hástaf eða lágstaf/breidd/Kana"}
             secondary{"Raða áherslum"}
             tertiary{"Raða áherslum/hástaf eða lágstaf/breidd"}
+        }
+        colStrength%core{
+            identical{"Allt"}
+            primary{"Aðeins grunnstafir"}
+            quaternary{"Grunnstafir, áherslutákn, há- og lágstafir, afbrigði, kana"}
+            secondary{"Grunnstafir, áherslutákn"}
+            tertiary{"Grunnstafir, áherslutákn, há- og lágstafir, afbrigði"}
         }
         collation{
             compat{"Fyrri röðun, til samræmis"}
@@ -774,9 +814,21 @@ is{
             unihan{"Röðun eftir grunnstrikum"}
         }
         collation%core{
+            compat{"Samhæfi"}
+            dictionary{"Orðabók"}
             ducet{"Sjálfgefin Unicode"}
+            emoji{"Emoji"}
+            eor{"Evrópskar reglur"}
+            phonebook{"Símaskrá"}
+            phonetic{"Hljóðritun"}
+            pinyin{"Pinyin"}
             search{"Leit"}
+            searchjl{"Kóresk röðun eftir fyrsta samhljóða"}
             standard{"Stöðluð"}
+            stroke{"Stroka"}
+            traditional{"Hefðbundin"}
+            unihan{"Táknrót-stroka"}
+            zhuyin{"Zhuyin"}
         }
         d0{
             fwidth{"Full breidd"}
@@ -789,16 +841,26 @@ is{
             text{"Texti"}
         }
         hc{
+            c12{"12 tíma kerfi"}
+            c24{"24 tíma kerfi"}
             h11{"12 tíma kerfi (0–11)"}
             h12{"12 tíma kerfi (1–12)"}
             h23{"24 tíma kerfi (0–23)"}
             h24{"24 tíma kerfi (1–24)"}
         }
         hc%core{
+            c12{"12"}
+            c24{"24"}
             h11{"12 (0–11)"}
             h12{"12 (1–12)"}
             h23{"24 (0–23)"}
             h24{"24 (1–24)"}
+        }
+        kv%core{
+            currency{"Sleppa eyðum, greinarmerkjum, öllum táknum"}
+            punct{"Sleppa eyðum, greinarmerkjum"}
+            space{"Sleppa eyðum, greinarmerkjum"}
+            symbol{"Sleppa eyðum, greinarmerkjum, öllum táknum nema gjaldmiðilstáknum"}
         }
         lb{
             loose{"Laus línuskipting"}
@@ -877,9 +939,45 @@ is{
             traditional{"Hefðbundin tölutákn"}
             vaii{"Vai-tölustafir"}
         }
+        numbers%core{
+            arabext{"Auknar arabískar-indverskar"}
+            armnlow{"Armenskir lágstafir"}
+            finance{"Fjármálatölur"}
+            fullwide{"Full breidd"}
+            greklow{"Grískir lágstafir"}
+            hanidays{"Tölusetning mánaðardaga með Han-táknum fyrir hefðbundin dagatöl"}
+            hanidec{"Stöðutugakerfi með kínverskum tölumyndtáknum sem tölustöfum"}
+            hansfin{"Einfaldaðar kínverskar fjármálatölur"}
+            hantfin{"Hefðbundnar kínverskar fjármálatölur"}
+            jpanfin{"Japanskar fjármálatölur"}
+            jpanyear{"Japönsk Gannen-talning út frá fyrsta ári"}
+            lanatham{"Tai Tham Tham (kirkjulegt)"}
+            mathbold{"Feitletraðar tölur fyrir stærðfræði"}
+            mathdbl{"Tvöfaldar tölur fyrir stærðfræði"}
+            mathmono{"Jafnstafasnið fyrir stærðfræði"}
+            mathsanb{"Blokkstafa feitletur fyrir stærðfræði"}
+            mathsans{"Blokkstafir fyrir stærðfræði"}
+            mymrepka{"Mjanmarskar austur Pwo Karen-tölur"}
+            mymrpao{"Mjanmarskar Pao-tölur"}
+            mymrshan{"Mjanmarskar Shan-tölur"}
+            mymrtlng{"Mjanmarskar Tai Laing-tölur"}
+            native{"Upprunalegir tölustafir"}
+            outlined{"Holar tölur"}
+            roman{"Rómverskir hástafir"}
+            romanlow{"Rómverskir lágstafir"}
+            segment{"Reiknivélatölustafir"}
+            tamldec{"Tamílskar nútímatölur"}
+            traditional{"Hefðbundnir tölustafir"}
+        }
         ss%core{
             none{"Slökkt"}
             standard{"Kveikt"}
+        }
+        t0{
+            und{"Ótilgreind vélþýðing"}
+        }
+        va%core{
+            posix{"POSIX-afbrigði"}
         }
     }
     characterLabelPattern{

@@ -192,8 +192,6 @@ mk{
             }
             part{
                 dnam{"делови"}
-                one{"{0} дел"}
-                other{"{0} делови"}
             }
             part-per-1e6{
                 dnam{"делови на милион"}
@@ -878,11 +876,6 @@ mk{
                 one{"{0} јазол"}
                 other{"{0} јазли"}
             }
-            light-speed{
-                dnam{"светлосна"}
-                one{"{0} светлосна"}
-                other{"{0} светлосни"}
-            }
             meter-per-second{
                 dnam{"метри во секунда"}
                 one{"{0} метар во секунда"}
@@ -1044,10 +1037,6 @@ mk{
                 one{"{0} хектолитар"}
                 other{"{0} хектолитри"}
             }
-            jigger{
-                one{"{0} џигер"}
-                other{"{0} џигери"}
-            }
             liter{
                 one{"{0} литар"}
                 other{"{0} литри"}
@@ -1145,11 +1134,7 @@ mk{
             }
         }
         concentr{
-            ofglucose{
-                dnam{"Glc"}
-            }
             part{
-                dnam{"дел"}
                 one{"{0} дел"}
                 other{"{0} делови"}
             }
@@ -1249,7 +1234,6 @@ mk{
         }
         energy{
             calorie-it{
-                dnam{"cal [IT]"}
                 one{"{0} cal [IT]"}
                 other{"{0} cal [IT]"}
             }
@@ -1317,11 +1301,6 @@ mk{
             kilometer-per-hour{
                 dnam{"km/hr"}
             }
-            light-speed{
-                dnam{"светлосна"}
-                one{"{0} светлосна"}
-                other{"{0} светлосни"}
-            }
             meter-per-second{
                 dnam{"m/s"}
             }
@@ -1383,10 +1362,6 @@ mk{
                 one{"{0} galIm"}
                 other{"{0} galIm"}
                 per{"{0}/galIm"}
-            }
-            jigger{
-                one{"{0} џигер"}
-                other{"{0} џигери"}
             }
             liter{
                 dnam{"литар"}

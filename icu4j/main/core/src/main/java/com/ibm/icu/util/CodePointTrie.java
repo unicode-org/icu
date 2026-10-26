@@ -131,7 +131,7 @@ public abstract class CodePointTrie extends CodePointMap {
             }
 
             // struct UCPTrieHeader
-            /** "Tri3" in big-endian US-ASCII (0x54726933) */
+            /* "Tri3" in big-endian US-ASCII (0x54726933) */
             int signature = bytes.getInt();
 
             // Check the signature.
@@ -151,26 +151,26 @@ public abstract class CodePointTrie extends CodePointMap {
             }
 
             // struct UCPTrieHeader continued
-            /**
+            /*
              * Options bit field: Bits 15..12: Data length bits 19..16. Bits 11..8: Data null block
              * offset bits 19..16. Bits 7..6: UCPTrieType Bits 5..3: Reserved (0). Bits 2..0:
              * UCPTrieValueWidth
              */
             int options = bytes.getChar();
 
-            /** Total length of the index tables. */
+            /* Total length of the index tables. */
             int indexLength = bytes.getChar();
 
-            /** Data length bits 15..0. */
+            /* Data length bits 15..0. */
             int dataLength = bytes.getChar();
 
-            /** Index-3 null block offset, 0x7fff or 0xffff if none. */
+            /* Index-3 null block offset, 0x7fff or 0xffff if none. */
             int index3NullOffset = bytes.getChar();
 
-            /** Data null block offset bits 15..0, 0xfffff if none. */
+            /* Data null block offset bits 15..0, 0xfffff if none. */
             int dataNullOffset = bytes.getChar();
 
-            /**
+            /*
              * First code point of the single-value range ending with U+10ffff, rounded up and then
              * shifted right by SHIFT_2.
              */

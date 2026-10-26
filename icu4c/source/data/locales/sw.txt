@@ -128,7 +128,7 @@ sw{
                         other{"elfu 000;elfu -000"}
                     }
                     1000000{
-                        one{"0M;-0M"}
+                        one{"0M"}
                         other{"0M"}
                     }
                     10000000{
@@ -177,6 +177,40 @@ sw{
         }
     }
     calendar{
+        chinese{
+            monthNames{
+                stand-alone{
+                    abbreviated{
+                        "M01",
+                        "M02",
+                        "M03",
+                        "M04",
+                        "M05",
+                        "M06",
+                        "M07",
+                        "M08",
+                        "M09",
+                        "M10",
+                        "Mw11",
+                        "Mw12",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "Mw3",
+                        "4",
+                        "5",
+                        "6",
+                        "Mw7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                }
+            }
+        }
         generic{
             DateTimePatterns{
                 "HH:mm:ss zzzz",
@@ -303,6 +337,9 @@ sw{
                     M{"E, d MMM – E, d MMM"}
                     d{"E, d MMM – E, d MMM"}
                 }
+                MMMMd{
+                    M{"d MMMM – d MMMM"}
+                }
                 MMMd{
                     M{"d MMM – d MMM"}
                     d{"d – d MMM"}
@@ -404,6 +441,9 @@ sw{
                 GyMEd{"E, d/M/y G"}
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, d MMM y G"}
+                GyMMMM{"MMMM y G"}
+                GyMMMMEd{"E, d MMMM y G"}
+                GyMMMMd{"d MMMM y G"}
                 GyMMMd{"d MMM y G"}
                 GyMd{"d/M/y GGGGG"}
                 MEd{"E, d/M"}
@@ -425,6 +465,8 @@ sw{
                 yMMM{"MMM y"}
                 yMMMEd{"E, d MMM y"}
                 yMMMM{"MMMM y"}
+                yMMMMEd{"E d, MMMM y"}
+                yMMMMd{"d MMMM y"}
                 yMMMd{"d MMM y"}
                 yMd{"d/M/y"}
                 yQQQ{"QQQ y"}
@@ -499,7 +541,6 @@ sw{
                         morning1{"alfajiri"}
                         morning2{"asubuhi"}
                         night1{"usiku"}
-                        noon{"saa sita za mchana"}
                     }
                 }
             }
@@ -577,9 +618,16 @@ sw{
                     M{"E, d/M – E, d/M"}
                     d{"E, d/M – E, d/M"}
                 }
+                MMM{
+                    M{"MMM – MMM"}
+                }
                 MMMEd{
                     M{"E, d MMM – E, d MMM"}
                     d{"E, d MMM – E, d MMM"}
+                }
+                MMMMd{
+                    M{"d MMMM – d MMMM"}
+                    d{"d–d MMMM"}
                 }
                 MMMd{
                     M{"d MMM – d MMM"}
@@ -697,6 +745,14 @@ sw{
                         "Robo ya 3",
                         "Robo ya 4",
                     }
+                }
+            }
+        }
+        iso8601{
+            availableFormats{
+                yw{
+                    one{"Y 'wiki' 'ya' w"}
+                    other{"Y 'wiki' 'ya' w"}
                 }
             }
         }
@@ -965,12 +1021,6 @@ sw{
         }
         second-short{
             dn{"sek"}
-            relativeTime{
-                past{
-                    one{"sekunde {0} iliyopita"}
-                    other{"sekunde {0} zilizopita"}
-                }
-            }
         }
         sun{
             relative{
@@ -1180,6 +1230,9 @@ sw{
             surnameFirst-short-monogram-informal{"{given-informal-monogram-allCaps}"}
             surnameFirst-short-referring-formal{"{surname} {given-initial} {given2-initial}"}
             surnameFirst-short-referring-informal{"{surname} {given-initial}"}
+        }
+        parameterDefault{
+            formality{"informal"}
         }
     }
 }

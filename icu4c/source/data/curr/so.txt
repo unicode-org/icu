@@ -1252,10 +1252,6 @@ so{
             one{"Kawaja Sambiya"}
             other{"Kawajada Sambiya"}
         }
-        ZWG{
-            one{"Dahabka Zimbabwe"}
-            other{"Dahabka Zimbabwe"}
-        }
     }
     CurrencyUnitPatterns{
         one{"{0} {1}"}

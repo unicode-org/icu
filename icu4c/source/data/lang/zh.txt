@@ -11,19 +11,35 @@ zh{
         colCaseLevel{"区分大小写的排序"}
         colNormalization{"规范化排序"}
         colNumeric{"数字排序"}
+        colReorder{"文字/区块顺序重排"}
         colStrength{"排序强度"}
         collation{"排序"}
         currency{"货币"}
+        d0{"切换"}
+        dx{"字典断字例外情况"}
         em{"表情符号表示法"}
+        fw{"一周起始日"}
+        h0{"混合型"}
         hc{"小时制（12或24）"}
+        i0{"输入法"}
+        k0{"键盘"}
+        kv{"最高忽略"}
         lb{"中文、日文及韩语换行规则"}
         lw{"词内换行规则"}
+        m0{"转换规则"}
         ms{"度量衡制"}
+        mu{"度量衡单位"}
         numbers{"数字"}
+        rg{"补充数据的区域"}
+        s0{"转换源"}
+        sd{"区域分区"}
         ss{"在缩写后断句"}
+        t{"转换"}
+        t0{"机器翻译"}
         timezone{"时区"}
-        va{"语言区域别名"}
+        va{"语言区域变体"}
         x{"专用"}
+        x0{"专用转换"}
     }
     Languages{
         aa{"阿法尔语"}
@@ -436,6 +452,7 @@ zh{
         pi{"巴利语"}
         pis{"皮京语"}
         pl{"波兰语"}
+        pms{"皮埃蒙特语"}
         pon{"波纳佩语"}
         pqm{"马利塞-帕萨马科迪语"}
         prg{"普鲁士语"}
@@ -871,10 +888,13 @@ zh{
             ethiopic-amete-alem{"埃塞俄比亚阿米特阿莱姆日历"}
             gregorian{"公历"}
             hebrew{"希伯来历"}
+            indian{"印度国定历"}
             islamic{"伊斯兰历"}
             islamic-civil{"表格式伊斯兰历（民用纪元）"}
+            islamic-rgsa{"伊斯兰历（沙特阿拉伯观月）"}
             islamic-tbla{"表格式伊斯兰历（天文纪元）"}
             islamic-umalqura{"伊斯兰历（乌姆库拉）"}
+            iso8601{"阳历"}
             japanese{"和历"}
             persian{"波斯历"}
             roc{"民国纪年"}
@@ -900,6 +920,11 @@ zh{
             no{"对正常大小写顺序进行排序"}
             upper{"先对大写字母进行排序"}
         }
+        colCaseFirst%core{
+            lower{"小写字母"}
+            no{"小写字母"}
+            upper{"大写字母"}
+        }
         colCaseLevel{
             no{"不区分大小写进行排序"}
             yes{"区分大小写进行排序"}
@@ -912,12 +937,26 @@ zh{
             no{"对数字进行单独排序"}
             yes{"按数字顺序对数字进行排序"}
         }
+        colReorder%core{
+            currency{"货币"}
+            digit{"数字"}
+            punct{"标点符号"}
+            space{"空白字符"}
+            symbol{"符号"}
+        }
         colStrength{
             identical{"对所有内容进行排序"}
             primary{"只对基本字母进行排序"}
             quaternary{"对重音/大小写/长度/假名进行排序"}
             secondary{"对重音进行排序"}
             tertiary{"对重音/大小写/长度进行排序"}
+        }
+        colStrength%core{
+            identical{"全部"}
+            primary{"仅限基础字母"}
+            quaternary{"基础字符、重音、大小写、变体、假名"}
+            secondary{"基础字符、重音"}
+            tertiary{"基础字符、重音、大小写、变体"}
         }
         collation{
             compat{"基于兼容性沿用既往排序"}
@@ -940,10 +979,13 @@ zh{
             compat{"兼容性"}
             dictionary{"字典"}
             ducet{"默认Unicode"}
+            emoji{"表情符号"}
+            eor{"欧洲规则"}
             phonebook{"电话簿"}
             phonetic{"语音"}
             pinyin{"拼音"}
             search{"搜索"}
+            searchjl{"韩语初声"}
             standard{"标准"}
             stroke{"笔画"}
             traditional{"传统"}
@@ -961,16 +1003,26 @@ zh{
             text{"文字"}
         }
         hc{
+            c12{"12小时制"}
+            c24{"24小时制"}
             h11{"12小时制（0–11）"}
             h12{"12小时制（1–12）"}
             h23{"24小时制（0–23）"}
             h24{"24小时制（1–24）"}
         }
         hc%core{
+            c12{"12"}
+            c24{"24"}
             h11{"12 (0–11)"}
             h12{"12 (1–12)"}
             h23{"24 (0–23)"}
             h24{"24 (1–24)"}
+        }
+        kv%core{
+            currency{"Shift+Space、标点符号、所有符号"}
+            punct{"Shift+Space、标点符号"}
+            space{"Shift+Space、标点符号"}
+            symbol{"Shift+Space、标点符号、非货币符号"}
         }
         lb{
             loose{"宽松换行样式"}
@@ -1088,9 +1140,45 @@ zh{
             wara{"瓦郎奇蒂数字"}
             wcho{"万秋数字"}
         }
+        numbers%core{
+            arabext{"扩展阿拉伯-印度数字"}
+            armnlow{"亚美尼亚小写体"}
+            finance{"财务"}
+            fullwide{"全角"}
+            greklow{"希腊小写体"}
+            hanidays{"传统历法的汉字日期编号"}
+            hanidec{"中文数字十进制记数法"}
+            hansfin{"简体中文财务"}
+            hantfin{"繁体中文财务"}
+            jpanfin{"日文财务"}
+            jpanyear{"日本元年纪年法"}
+            lanatham{"傣昙文（宗教用）"}
+            mathbold{"数学粗体"}
+            mathdbl{"数学双线体"}
+            mathmono{"数学等宽体"}
+            mathsanb{"数学无衬线粗体"}
+            mathsans{"数学无衬线体"}
+            mymrepka{"缅甸东波克伦文"}
+            mymrpao{"缅甸勃欧文"}
+            mymrshan{"缅甸掸文"}
+            mymrtlng{"缅甸傣亮文"}
+            native{"当地数字"}
+            outlined{"轮廓体"}
+            roman{"罗马大写体"}
+            romanlow{"罗马小写体"}
+            segment{"数码管"}
+            tamldec{"现代泰米尔文"}
+            traditional{"传统数字"}
+        }
         ss%core{
             none{"关闭"}
             standard{"开启"}
+        }
+        t0{
+            und{"未特别指明的机器翻译"}
+        }
+        va%core{
+            posix{"POSIX 变体"}
         }
     }
     Variants{

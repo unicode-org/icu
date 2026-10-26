@@ -136,7 +136,7 @@ en{
         GW{"Guinea-Bissau"}
         GY{"Guyana"}
         HK{"Hong Kong SAR China"}
-        HM{"Heard & McDonald Islands"}
+        HM{"Heard Island & McDonald Islands"}
         HN{"Honduras"}
         HR{"Croatia"}
         HT{"Haiti"}
@@ -241,7 +241,7 @@ en{
         SD{"Sudan"}
         SE{"Sweden"}
         SG{"Singapore"}
-        SH{"St. Helena"}
+        SH{"St. Helena, Ascension & Tristan da Cunha"}
         SI{"Slovenia"}
         SJ{"Svalbard & Jan Mayen"}
         SK{"Slovakia"}
@@ -259,7 +259,7 @@ en{
         TA{"Tristan da Cunha"}
         TC{"Turks & Caicos Islands"}
         TD{"Chad"}
-        TF{"French Southern Territories"}
+        TF{"French Southern and Antarctic Lands"}
         TG{"Togo"}
         TH{"Thailand"}
         TJ{"Tajikistan"}
@@ -307,10 +307,13 @@ en{
         CC{"Cocos Islands"}
         GB{"UK"}
         HK{"Hong Kong"}
+        HM{"Heard & McDonald Islands"}
         MM{"Myanmar"}
         MO{"Macao"}
         PN{"Pitcairn"}
         PS{"Palestine"}
+        SH{"St. Helena"}
+        TF{"French Southern Territories"}
         UN{"UN"}
         US{"US"}
     }
@@ -321,6 +324,7 @@ en{
         CV{"Cabo Verde"}
         CZ{"Czech Republic"}
         FK{"Falkland Islands (Islas Malvinas)"}
+        NR{"Naoero"}
         NZ{"Aotearoa New Zealand"}
         SZ{"Swaziland"}
         TL{"East Timor"}

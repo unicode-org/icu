@@ -7,23 +7,39 @@ de{
         cf{"Währungsformat"}
         colAlternate{"Sortierung ohne Symbole"}
         colBackwards{"Umgekehrte Sortierung von Akzenten"}
-        colCaseFirst{"Sortierung nach Groß- bzw. Kleinbuchstaben"}
+        colCaseFirst{"Sortierung nach Groß- oder Kleinschreibung"}
         colCaseLevel{"Sortierung nach Groß- oder Kleinschreibung"}
         colNormalization{"Normierte Sortierung"}
         colNumeric{"Sortierung nach Zahlen"}
+        colReorder{"Änderung der Reihenfolge nach Schrift/Kästchen"}
         colStrength{"Sortierstärke"}
         collation{"Sortierung"}
         currency{"Währung"}
+        d0{"Umwandlungsziel"}
+        dx{"In Wörterbüchern nicht umgebrochen"}
         em{"Emojidarstellung"}
+        fw{"Erster Tag der Woche"}
+        h0{"Eingebunden"}
         hc{"Stundenformat (12h/24h)"}
+        i0{"Eingabemethode"}
+        k0{"Tastatur"}
+        kv{"Größter ignorierter Umfang"}
         lb{"Zeilenumbruchstil"}
         lw{"Zeilenumbruch im Wortinneren"}
+        m0{"Tranformationsregeln"}
         ms{"Maßsystem"}
-        numbers{"Ziffern"}
+        mu{"Maßeinheit"}
+        numbers{"Zahlen"}
+        rg{"Bereich für ergänzende Daten"}
+        s0{"Ausgangsdaten umwandeln"}
+        sd{"Gliederung nach Regionen"}
         ss{"Satzabbruch nach Abk."}
+        t{"Transformieren"}
+        t0{"Maschinell übersetzt"}
         timezone{"Zeitzone"}
         va{"Lokale Variante"}
         x{"Privatnutzung"}
+        x0{"Transformation für private Nutzung"}
     }
     Languages{
         aa{"Afar"}
@@ -351,6 +367,7 @@ de{
         lil{"Lillooet"}
         liv{"Livisch"}
         lkt{"Lakota"}
+        lld{"Ladinisch"}
         lmo{"Lombardisch"}
         ln{"Lingala"}
         lo{"Laotisch"}
@@ -685,9 +702,6 @@ de{
         yue{"Chinesisch (Kantonesisch)"}
         zh{"Chinesisch (Mandarin)"}
     }
-    Languages%short{
-        en_GB{"Englisch (GB)"}
-    }
     Languages%variant{
         hi_Latn{"Hinglish"}
     }
@@ -894,9 +908,13 @@ de{
             ethiopic-amete-alem{"äthiopisch (Amätä Aläm)"}
             gregorian{"gregorianisch"}
             hebrew{"jüdisch"}
+            indian{"Indischer Nationalkalender"}
             islamic{"Hidschra"}
             islamic-civil{"Hidschra (tabellarisch, nicht-astronomisch)"}
+            islamic-rgsa{"Hidschra, Sichtung Saudi-Arabien"}
+            islamic-tbla{"Hidschra (tabellarisch, astronomisch)"}
             islamic-umalqura{"Hidschra (Umm al-Qura)"}
+            iso8601{"gregorianisch"}
             japanese{"japanisch"}
             persian{"persisch"}
             roc{"Minguo"}
@@ -922,6 +940,11 @@ de{
             no{"Normal sortieren"}
             upper{"Großbuchstaben zuerst aufführen"}
         }
+        colCaseFirst%core{
+            lower{"Kleinschreibung"}
+            no{"Kleinschreibung"}
+            upper{"Großschreibung"}
+        }
         colCaseLevel{
             no{"Ohne Groß-/Kleinschreibung sortieren"}
             yes{"Nach Groß-/Kleinschreibung sortieren"}
@@ -934,12 +957,26 @@ de{
             no{"Ziffern einzeln sortieren"}
             yes{"Ziffern numerisch sortieren"}
         }
+        colReorder%core{
+            currency{"Währung"}
+            digit{"Ziffern"}
+            punct{"Satzzeichen"}
+            space{"Leerraum"}
+            symbol{"Sonderzeichen"}
+        }
         colStrength{
             identical{"Alle sortieren"}
             primary{"Nur Basisbuchstaben sortieren"}
             quaternary{"Akzente/Fall/Breite/Kana sortieren"}
             secondary{"Akzente sortieren"}
             tertiary{"Akzente/Fall/Breite sortieren"}
+        }
+        colStrength%core{
+            identical{"Alle"}
+            primary{"Grundzeichen"}
+            quaternary{"Grundzeichen, Akzente, Fälle, Varianten, Kana"}
+            secondary{"Grundzeichen, Akzente"}
+            tertiary{"Grundzeichen, Akzente, Fälle, Varianten"}
         }
         collation{
             compat{"Vorherige Sortierung, Kompatibilität"}
@@ -961,10 +998,13 @@ de{
             compat{"Kompatibilität"}
             dictionary{"lexikografisch"}
             ducet{"Standard-Unicode"}
+            emoji{"Emoji"}
+            eor{"Europäische Regeln"}
             phonebook{"Telefonbuch"}
             phonetic{"phonetisch"}
             pinyin{"Pinyin"}
             search{"Suche"}
+            searchjl{"Koreanischer Anlautkonsonant"}
             standard{"Standard"}
             stroke{"Striche"}
             traditional{"traditionell"}
@@ -982,16 +1022,26 @@ de{
             text{"Text"}
         }
         hc{
+            c12{"12-Stunden-Format"}
+            c24{"24-Stunden-Format"}
             h11{"12-Stunden-Format (0–11)"}
             h12{"12-Stunden-Format (1-12)"}
             h23{"24-Stunden-Format (0-23)"}
             h24{"24-Stunden-Format (1-24)"}
         }
         hc%core{
+            c12{"12"}
+            c24{"24"}
             h11{"12 (0–11)"}
             h12{"12 (1–12)"}
             h23{"24 (0–23)"}
             h24{"24 (1–24)"}
+        }
+        kv%core{
+            currency{"Speziell: Leerzeichen, Satzzeichen, alle Sonderzeichen"}
+            punct{"Speziell: Leerzeichen, Satzzeichen"}
+            space{"Speziell: Leerzeichen, Satzzeichen"}
+            symbol{"Speziell: Leerzeichen, Satzzeichen, Nicht-Währungssymbole"}
         }
         lb{
             loose{"Lockerer Zeilenumbruch"}
@@ -1027,7 +1077,7 @@ de{
             arab{"Arabisch-indische Ziffern"}
             arabext{"Erweiterte arabisch-indische Ziffern"}
             armn{"Armenische Ziffern"}
-            armnlow{"Armenische Ziffern in Kleinschrift"}
+            armnlow{"Armenische Ziffern in Kleinschreibung"}
             bali{"Balinesische Ziffern"}
             beng{"Bengalische Ziffern"}
             brah{"Brahmi-Ziffern"}
@@ -1039,7 +1089,7 @@ de{
             fullwide{"Vollbreite Ziffern"}
             geor{"Georgische Ziffern"}
             grek{"Griechische Ziffern"}
-            greklow{"Griechische Ziffern in Kleinschrift"}
+            greklow{"Griechische Ziffern in Kleinschreibung"}
             gujr{"Gujarati-Ziffern"}
             guru{"Gurmukhi-Ziffern"}
             hanidec{"Chinesische Dezimalzahlen"}
@@ -1077,7 +1127,7 @@ de{
             sund{"Sundanesische Ziffern"}
             takr{"Takri-Ziffern"}
             talu{"Neue Tai-Lü-Ziffern"}
-            taml{"Tamilische Ziffern"}
+            taml{"Traditionelle tamilische Ziffern"}
             tamldec{"Tamil-Ziffern"}
             telu{"Telugu-Ziffern"}
             thai{"Thai-Ziffern"}
@@ -1085,9 +1135,48 @@ de{
             traditional{"Traditionelle Zahlen"}
             vaii{"Vai-Ziffern"}
         }
+        numbers%core{
+            arabext{"Erweitert arabisch-indisch"}
+            armnlow{"Armenische Zahlzeichen in Kleinschreibung"}
+            finance{"Finanzen"}
+            fullwide{"Vollbreit"}
+            greklow{"Griechische Zeichen in Kleinschreibung"}
+            hanidays{"Nummerierung der Monatstage in Hanzi in traditionellen Kalendern"}
+            hanidec{
+                "Dezimales Stellenwertsystem mit chinesischen Zahlen-Ideogrammen als "
+                "Ziffern"
+            }
+            hansfin{"Vereinfacht-chinesische Finanzzeichen"}
+            hantfin{"Traditionell-chinesische Finanzzeichen"}
+            jpanfin{"Japanische Finanzzeichen"}
+            jpanyear{"Japanische Gannen-Jahreszählung des ersten Jahres"}
+            lanatham{"Lan Na (religiös)"}
+            mathbold{"Mathematisch fett mit Doppelstrich"}
+            mathdbl{"Mathematisch mit Doppelstrich"}
+            mathmono{"Mathematisch Monospace"}
+            mathsanb{"Mathematisch Sans Serif fett"}
+            mathsans{"Mathematisch Sans Serif"}
+            mymrepka{"Östliche Pwo Karen in Myanmar"}
+            mymrpao{"Pa’o in Myanmar"}
+            mymrshan{"Shan in Myanmar"}
+            mymrtlng{"Tai Laing in Myanmar"}
+            native{"Native Ziffern"}
+            outlined{"Umriss"}
+            roman{"Römisch, in Großbuchstaben"}
+            romanlow{"Römisch, in Kleinbuchstaben"}
+            segment{"Segmentiert"}
+            tamldec{"Moderne tamilische Zahlzeichen"}
+            traditional{"Traditionelle Zahlzeichen"}
+        }
         ss%core{
             none{"Aus"}
             standard{"Ein"}
+        }
+        t0{
+            und{"Nicht näher bezeichnete maschinelle Übersetzung"}
+        }
+        va%core{
+            posix{"POSIX-Variante"}
         }
     }
     Variants{

@@ -10,7 +10,9 @@ br{
         hc{"kelcʼhiad eurioù"}
         lb{"stil torr linenn"}
         ms{"reizhiad vuzuliañ"}
+        mu{"unvez muzuliañ"}
         numbers{"niveroù"}
+        ss{"torr frazenn goude ur berradur"}
     }
     Languages{
         aa{"afar"}
@@ -66,6 +68,7 @@ br{
         bem{"bemba"}
         bez{"bena"}
         bg{"bulgareg"}
+        bgc{"haryanveg"}
         bgn{"baloutchi ar Cʼhornôg"}
         bho{"bhojpureg"}
         bi{"bislama"}
@@ -212,8 +215,8 @@ br{
         haw{"hawaieg"}
         hax{"haideg ar Su"}
         he{"hebraeg"}
-        hi{"hindieg"}
-        hi_Latn{"hindieg (latin)"}
+        hi{"hindeg"}
+        hi_Latn{"hindeg (latin)"}
         hil{"hiligaynon"}
         hmn{"hmong"}
         ho{"hiri motu"}
@@ -293,6 +296,7 @@ br{
         kv{"komieg"}
         kw{"kerneveureg"}
         kwk{"kwakwaleg"}
+        kxv{"kouveg"}
         ky{"kirgizeg"}
         la{"latin"}
         lad{"ladino"}
@@ -307,6 +311,7 @@ br{
         lij{"ligurieg"}
         lil{"lillooet"}
         lkt{"lakota"}
+        lmo{"lombardeg"}
         ln{"lingala"}
         lo{"laoseg"}
         lol{"mongo"}
@@ -553,6 +558,7 @@ br{
         vep{"vepseg"}
         vi{"vietnameg"}
         vls{"flandrezeg ar c’hornôg"}
+        vmw{"makuaeg"}
         vo{"volapük"}
         vot{"votyakeg"}
         vro{"voroeg"}
@@ -567,6 +573,7 @@ br{
         xal{"kalmouk"}
         xh{"xhosaeg"}
         xmf{"megreleg"}
+        xnr{"kangreg"}
         xog{"sogaeg"}
         yao{"yao"}
         yap{"yapeg"}
@@ -616,6 +623,7 @@ br{
     Scripts{
         Adlm{"adlam"}
         Arab{"arabek"}
+        Aran{"nastaliq"}
         Armi{"arameek impalaerel"}
         Armn{"armenianek"}
         Avst{"avestek"}
@@ -671,12 +679,15 @@ br{
         Maya{"hieroglifoù mayaek"}
         Mlym{"malayalam"}
         Mong{"mongolek"}
+        Mtei{"meitei mayek"}
         Mymr{"myanmar"}
         Narb{"henarabek an Norzh"}
-        Nkoo{"nkoek"}
+        Nkoo{"n’ko"}
         Ogam{"ogam"}
+        Olck{"ol Chiki"}
         Orya{"oriya"}
         Phnx{"fenikianek"}
+        Rohg{"hanifi"}
         Runr{"runek"}
         Samr{"samaritek"}
         Sarb{"henarabek ar Su"}
@@ -688,6 +699,7 @@ br{
         Syrn{"siriek ar Reter"}
         Taml{"tamilek"}
         Telu{"telougou"}
+        Tfng{"tifinagh"}
         Tglg{"tagalog"}
         Thaa{"thaana"}
         Thai{"thai"}
@@ -696,6 +708,7 @@ br{
         Vaii{"vai"}
         Xpeo{"persek kozh"}
         Xsux{"gennheñvel"}
+        Yiii{"Yi"}
         Zinh{"hêrezh"}
         Zmth{"notadur jedoniel"}
         Zsye{"fromlunioù"}
@@ -719,7 +732,7 @@ br{
             gregorian{"deiziadur gregorian"}
             hebrew{"deiziadur hebraek"}
             indian{"deiziadur indian"}
-            iso8601{"deiziadur ISO-8601"}
+            iso8601{"deiziadur gregorian (ISO-8601)"}
             japanese{"deiziadur japanat"}
             persian{"deiziadur persek"}
             roc{"deiziadur Republik Sina"}
@@ -733,15 +746,17 @@ br{
             ethiopic-amete-alem{"etiopiat Amete Alem"}
             gregorian{"gregorian"}
             hebrew{"hebraek"}
+            iso8601{"gregorian"}
             japanese{"japanat"}
             persian{"persek"}
             roc{"Republik Sina"}
         }
         cf{
-            account{"furmad unanenn jediñ"}
+            account{"furmad moneiz kontouriezh"}
             standard{"furmad moneiz standart"}
         }
         cf%core{
+            account{"kontouriezh"}
             standard{"standart"}
         }
         collation{
@@ -768,12 +783,16 @@ br{
             text{"skrid"}
         }
         hc{
+            c12{"reizhiad 12 eurvezh"}
+            c24{"reizhiad 24 eurvezh"}
             h11{"reizhiad 12 eurvezh (0–11)"}
             h12{"reizhiad 12 eurvezh (1–12)"}
             h23{"reizhiad 24 eurvezh (0–23)"}
             h24{"reizhiad 24 eurvezh (1–24)"}
         }
         hc%core{
+            c12{"12"}
+            c24{"24"}
             h11{"12 (0–11)"}
             h12{"12 (1–12)"}
             h23{"24 (0–23)"}
@@ -873,6 +892,18 @@ br{
             vaii{"sifroù vai"}
             wara{"sifroù warang"}
             wcho{"sifroù wantcho"}
+        }
+        numbers%core{
+            arabext{"arabek indian astennet"}
+            armnlow{"armenianek bihan"}
+            greklow{"gresianek bihan"}
+            hansfin{"sinaek eeunaet an arcʼhant"}
+            hantfin{"sinaek hengounel an arcʼhant"}
+            jpanfin{"japanek an arcʼhant"}
+            roman{"roman bras"}
+            romanlow{"roman bihan"}
+            tamldec{"tamilek modern"}
+            traditional{"niveroù hengounel"}
         }
     }
     Variants{
@@ -993,6 +1024,8 @@ br{
         compatibility{"{0} — kenglotusted"}
         enclosed{"{0} — kelcʼhiet"}
         extended{"{0} — astennet"}
+        facing-left{"{0} tu kleiz"}
+        facing-right{"{0} tu dehoù"}
         historic{"{0} — istorel"}
         miscellaneous{"{0} — liesseurt"}
         other{"{0} — all"}

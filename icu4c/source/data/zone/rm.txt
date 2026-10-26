@@ -198,9 +198,6 @@ rm{
         "Europe:Bucharest"{
             ec{"Bucarest"}
         }
-        "Europe:Dublin"{
-            ld{"temp da stad da l’Irlanda"}
-        }
         "Europe:Isle_of_Man"{
             ec{"Insla da Man"}
         }
@@ -212,7 +209,6 @@ rm{
         }
         "Europe:London"{
             ec{"Londra"}
-            ld{"temp da stad da la Gronda Britannia"}
         }
         "Europe:Luxembourg"{
             ec{"Luxemburg"}
@@ -252,6 +248,11 @@ rm{
         }
         "Pacific:Norfolk"{
             ec{"Insla Norfolk"}
+        }
+        "meta:Acre"{
+            ld{"temp da stad dad Acre"}
+            lg{"temp dad Acre"}
+            ls{"temp normal dad Acre"}
         }
         "meta:Afghanistan"{
             ls{"temp da l’Afganistan"}
@@ -374,6 +375,10 @@ rm{
             lg{"temp da la Brasilia"}
             ls{"temp normal da la Brasilia"}
         }
+        "meta:British"{
+            ld{"temp da stad da la Gronda Britannia"}
+            lg{"temp da la Gronda Britannia"}
+        }
         "meta:Brunei"{
             ls{"temp dal Brunei"}
         }
@@ -489,6 +494,11 @@ rm{
         "meta:Gilbert_Islands"{
             ls{"temp da las Inslas Gilbert"}
         }
+        "meta:Greenland"{
+            ld{"temp da stad da la Grönlanda"}
+            lg{"temp da la Grönlanda"}
+            ls{"temp normal da la Grönlanda"}
+        }
         "meta:Greenland_Eastern"{
             ld{"temp da stad da la Grönlanda orientala"}
             lg{"temp da la Grönlanda orientala"}
@@ -506,7 +516,7 @@ rm{
             ls{"temp da la Guyana"}
         }
         "meta:Hawaii"{
-            ls{"temp normal dal Hawai e las Aleutinas"}
+            ls{"temp normal da Hawai-Aleutinas"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"temp da stad dal Hawai e da las Aleutinas"}
@@ -546,6 +556,10 @@ rm{
             lg{"temp da l’Iran"}
             ls{"temp normal da l’Iran"}
         }
+        "meta:Irish"{
+            ld{"temp normal da l’Irlanda"}
+            lg{"temp da l’Irlanda"}
+        }
         "meta:Irkutsk"{
             ld{"temp da stad dad Irkutsk"}
             lg{"temp dad Irkutsk"}
@@ -560,6 +574,11 @@ rm{
             ld{"temp da stad dal Giapun"}
             lg{"temp dal Giapun"}
             ls{"temp normal dal Giapun"}
+        }
+        "meta:Kamchatka"{
+            ld{"temp da stad da Kamtschatka"}
+            lg{"temp da Kamtschatka"}
+            ls{"temp normal da Kamtschatka"}
         }
         "meta:Kazakhstan"{
             ls{"temp dal Kasachstan"}
@@ -735,9 +754,12 @@ rm{
             lg{"temp da Sachalin"}
             ls{"temp normal da Sachalin"}
         }
+        "meta:Samara"{
+            ld{"temp da stad da Samara"}
+            lg{"temp da Samara"}
+            ls{"temp normal da Samara"}
+        }
         "meta:Samoa"{
-            ld{"temp da stad da la Samoa Americana"}
-            lg{"temp da la Samoa Americana"}
             ls{"temp normal da la Samoa Americana"}
         }
         "meta:Seychelles"{
@@ -780,6 +802,11 @@ rm{
         "meta:Truk"{
             ls{"temp da Chuuk"}
         }
+        "meta:Turkey"{
+            ld{"temp da stad da la Tirchia"}
+            lg{"temp da la Tirchia"}
+            ls{"temp normal da la Tirchia"}
+        }
         "meta:Turkmenistan"{
             ld{"temp da stad dal Turkmenistan"}
             lg{"temp dal Turkmenistan"}
@@ -792,6 +819,9 @@ rm{
             ld{"temp da stad da l’Uruguai"}
             lg{"temp da l’Uruguai"}
             ls{"temp normal da l’Uruguai"}
+        }
+        "meta:Urumqi"{
+            ls{"temp dad Ürümqi"}
         }
         "meta:Uzbekistan"{
             ld{"temp da stad da l’Usbekistan"}

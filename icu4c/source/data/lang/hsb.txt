@@ -5,15 +5,41 @@ hsb{
     Keys{
         calendar{"protyka"}
         cf{"format měny"}
+        colAlternate{"rjadowanje bjez symbolow"}
+        colBackwards{"nawopačne rjadowanje akcentow"}
+        colCaseFirst{"rjadowanje po wulkich a małych pismikach"}
+        colCaseLevel{"rjadowanje po wulkopisanju a małopisanju"}
+        colNormalization{"norměrowane rjadowanje"}
+        colNumeric{"numeriske rjadowanje"}
+        colReorder{"noworjadowanje pismikow abo blokow"}
+        colStrength{"intensiwnosć sortěrowanja"}
         collation{"rjadowanski slěd"}
         currency{"měna"}
+        d0{"cil transformacije"}
+        dx{"słownikarske wuwzaća w dźělenju"}
         em{"předstajenje emojija"}
+        fw{"prěni dźeń tydźenja"}
+        h0{"měšana forma"}
         hc{"hodźinowy cyklus (12 vs 24)"}
+        i0{"metoda zapodawanja"}
+        k0{"tastatura"}
+        kv{"najwyši stopjeń ignorowanja"}
         lb{"system łamanja linkow"}
         lw{"łamanje linki w słowje"}
+        m0{"prawidła transformacije"}
         ms{"system měrow"}
+        mu{"měritkowa jednotka"}
         numbers{"ličby"}
+        rg{"městno za wudospołnjace daty"}
+        s0{"žórło transformować"}
+        sd{"rozrjadowanje na regiony"}
         ss{"přetorhnjenje sady po skrótšence"}
+        t{"transformować"}
+        t0{"z mašinu přełožene"}
+        timezone{"časowe pasmo"}
+        va{"lokalna warianta"}
+        x{"za priwatne wužiwanje"}
+        x0{"za priwatne wužiwanje transformować"}
     }
     Languages{
         aa{"afaršćina"}
@@ -335,6 +361,7 @@ hsb{
         pcm{"nigerijanski pidgin"}
         pis{"pijinšćina"}
         pl{"pólšćina"}
+        pms{"piemonšćina"}
         pqm{"maliseet-passamaquoddyšćina"}
         prg{"prušćina"}
         ps{"paštunšćina"}
@@ -580,9 +607,13 @@ hsb{
             ethiopic-amete-alem{"etiopiska Amete-Alem"}
             gregorian{"gregorianiska"}
             hebrew{"hebrejska"}
+            indian{"indiska protyka"}
             islamic{"hijri"}
             islamic-civil{"islamska ciwilna"}
+            islamic-rgsa{"islamska protyka hijri"}
+            islamic-tbla{"tabelariska islamska protyka hijri z astronomiskimi dobami"}
             islamic-umalqura{"islamska Umm al-Qura"}
+            iso8601{"gregorianska protyka"}
             japanese{"japanska"}
             persian{"persiska"}
             roc{"minguo"}
@@ -595,15 +626,53 @@ hsb{
             account{"knihiwjednistwo"}
             standard{"standard"}
         }
+        colCaseFirst%core{
+            lower{"małe pismiki"}
+            no{"małe pismiki"}
+            upper{"wulke pismiki"}
+        }
+        colReorder%core{
+            currency{"měna"}
+            digit{"ličby"}
+            punct{"interpunkcija"}
+            space{"prózdnota"}
+            symbol{"symbol"}
+        }
+        colStrength%core{
+            identical{"wšitke"}
+            primary{"jenož zakładne pismiki"}
+            quaternary{
+                "zakładne pismiki, akcenty, wulkopisanje a małopisanje, warianty, kan"
+                "a"
+            }
+            secondary{"zakładne pismiki, akcenty"}
+            tertiary{"zakładne pismiki, akcenty, wulkopisanje a małopisanje, warianty"}
+        }
         collation{
             ducet{"rjadowanski slěd po Unicode"}
             search{"powšitkowne pytanje"}
             standard{"standardowy rjadowanski slěd"}
         }
         collation%core{
+            compat{"kompatibilnosć"}
+            dictionary{"słownik"}
             ducet{"standardne unicode-rjadowanje"}
+            emoji{"emoji"}
+            eor{"europske prawidła"}
+            phonebook{"telefonska kniha"}
+            phonetic{"fonetisce"}
+            pinyin{"pinyin"}
             search{"pytaj"}
+            searchjl{"koreanski spočatny konsonant"}
             standard{"standardne"}
+            stroke{"smužka"}
+            traditional{"trandicionelny"}
+            unihan{"po radikalach a smužkach"}
+            zhuyin{"zhuyin"}
+        }
+        d0{
+            fwidth{"w połnej šěrokosći"}
+            hwidth{"napoł šěroke"}
         }
         em%core{
             default{"default"}
@@ -611,16 +680,26 @@ hsb{
             text{"tekst"}
         }
         hc{
+            c12{"12-hodźinowy cyklus"}
+            c24{"24-hodźinowy cyklus"}
             h11{"12-hodźinowy cyklus (0-11)"}
             h12{"12-hodźinowy cyklus (1-12)"}
             h23{"24-hodźinowy cyklus (0-23)"}
             h24{"24-hodźinowy cyklus (1-24)"}
         }
         hc%core{
+            c12{"12"}
+            c24{"24"}
             h11{"12 (0–11)"}
             h12{"12 (1–12)"}
             h23{"24 (0–23)"}
             h24{"24 (1–24)"}
+        }
+        kv%core{
+            currency{"shift prózdnota, interpunkcija, wšitke symbole"}
+            punct{"shift prózdnota, interpunkcija"}
+            space{"shift prózdnota, interpunkcija"}
+            symbol{"shift prózdnota, interpunkcija, symbole bjez woznama měnow"}
         }
         lb{
             loose{"swobodny stil łamanja linkow"}
@@ -637,6 +716,10 @@ hsb{
             keepall{"zdźerž wšitko"}
             normal{"normalne"}
             phrase{"w sadach"}
+        }
+        m0{
+            bgn{"US-BGN-transliteracija"}
+            ungegn{"UN-GEGN-transliteracija"}
         }
         ms{
             metric{"metriski system"}
@@ -679,6 +762,7 @@ hsb{
             mlym{"malayalamske cyfry"}
             mtei{"meetei-mayekske cyfry"}
             mymr{"burmaske cyfry"}
+            native{"za kraj charakteristiske ličby"}
             olck{"ol-chikiske cyfry"}
             orya{"oriya-cyfry"}
             roman{"romske cyfry"}
@@ -690,9 +774,48 @@ hsb{
             tibt{"tibetske cyfry"}
             vaii{"vaiske cyfry"}
         }
+        numbers%core{
+            arabext{"rozšěrjena arabsko-indišćina"}
+            armnlow{"armeniske małe pismiki"}
+            finance{"financny"}
+            fullwide{"połna šěrokosć"}
+            greklow{"grjekske małe pismiki"}
+            hanidays{"han-numerowanje dnja měsaca za tradicionelne protyki"}
+            hanidec{
+                "decimalny system na zakładźe pozicije wužiwajo chinske ideografy jak"
+                "o cyfry"
+            }
+            hansfin{"zjednorjena chinšćina financnistwa"}
+            hantfin{"tradicionelna chinšćina financnistwa"}
+            jpanfin{"japanšćina financnistwa"}
+            jpanyear{"japanske ličenje gannen wot prěnjeho lěta"}
+            lanatham{"tai tham tham (cyrkwinske)"}
+            mathbold{"matematisce tołste"}
+            mathdbl{"matematisce dwójce podšmórnjene"}
+            mathmono{"matematisce monospace"}
+            mathsanb{"matematisce bjez serifow tołste"}
+            mathsans{"matematisce bjez serifow"}
+            mymrepka{"Myanmarska wuchodna pwo-karenšćina"}
+            mymrpao{"Myanmarska paošćina"}
+            mymrshan{"Myanmarska shanšćina"}
+            mymrtlng{"Myanmarska tai-laingšćina"}
+            native{"za kraj charakteristiske ličby"}
+            outlined{"zaramikowane"}
+            roman{"romske wulke pismiki"}
+            romanlow{"romske małe pismiki"}
+            segment{"segmentěrowane"}
+            tamldec{"moderna tamilšćina"}
+            traditional{"tradicionelne ličby"}
+        }
         ss%core{
             none{"ně"}
             standard{"haj"}
+        }
+        t0{
+            und{"njespecifiski přełožk z mašinu"}
+        }
+        va%core{
+            posix{"POSIX-warianta"}
         }
     }
     characterLabelPattern{

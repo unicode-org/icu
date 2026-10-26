@@ -109,7 +109,7 @@ zu{
         ES{"i-Spain"}
         ET{"i-Ethiopia"}
         EU{"i-European Union"}
-        EZ{"I-Eurozone"}
+        EZ{"i-Eurozone"}
         FI{"i-Finland"}
         FJ{"i-Fiji"}
         FK{"i-Falkland Islands"}
@@ -136,7 +136,7 @@ zu{
         GW{"i-Guinea-Bissau"}
         GY{"i-Guyana"}
         HK{"i-Hong Kong SAR China"}
-        HM{"I-Heard & McDonald Island"}
+        HM{"i-Heard & McDonald Island"}
         HN{"i-Honduras"}
         HR{"i-Croatia"}
         HT{"i-Haiti"}
@@ -275,8 +275,8 @@ zu{
         TZ{"i-Tanzania"}
         UA{"i-Ukraine"}
         UG{"i-Uganda"}
-        UM{"I-U.S. Outlying Islands"}
-        UN{"I-United Nations"}
+        UM{"i-U.S. Outlying Islands"}
+        UN{"i-United Nations"}
         US{"i-United States"}
         UY{"i-Uruguay"}
         UZ{"i-Uzbekistan"}

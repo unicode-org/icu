@@ -80,7 +80,6 @@ public final class Punycode {
         }
     }
 
-    /// CLOVER:OFF
     private static char asciiCaseMap(char b, boolean uppercase) {
         if (uppercase) {
             if (SMALL_A <= b && b <= SMALL_Z) {
@@ -94,7 +93,6 @@ public final class Punycode {
         return b;
     }
 
-    /// CLOVER:ON
     /**
      * digitToBasic() returns the basic code point whose value (when used for representing integers)
      * is d, which must be in the range 0 to BASE-1. The lowercase form is used unless the uppercase
@@ -217,7 +215,7 @@ public final class Punycode {
                     /* Represent delta as a generalized variable-length integer: */
                     for (q = delta, k = BASE; /* no condition */ ; k += BASE) {
 
-                        /**
+                        /*
                          * RAM: comment out the old code for conformance with
                          * draft-ietf-idn-punycode-03.txt
                          *
@@ -256,12 +254,10 @@ public final class Punycode {
         return (ch < INITIAL_N);
     }
 
-    /// CLOVER:OFF
     private static boolean isBasicUpperCase(int ch) {
         return (CAPITAL_A <= ch && ch >= CAPITAL_Z);
     }
 
-    /// CLOVER:ON
     private static boolean isSurrogate(int ch) {
         return (((ch) & 0xfffff800) == 0xd800);
     }

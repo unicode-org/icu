@@ -73,5 +73,9 @@ es_US{
             one{"kwacha zambiano"}
             other{"kwachas zambianos"}
         }
+        ZWG{
+            one{"oro de Zimbabue"}
+            other{"oro de Zimbabue"}
+        }
     }
 }

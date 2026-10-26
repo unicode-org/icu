@@ -52,7 +52,7 @@ static UBreakIterator *EN_CHARACTERBREAKER_;
 /**
 * Opening all static collators and break iterators
 */
-static void open(UErrorCode* status)
+static void openStaticCollators(UErrorCode* status)
 {
     if (TOCLOSE_) {
         UChar      rules[1024];
@@ -96,7 +96,7 @@ static void open(UErrorCode* status)
 static void TestStart(void)
 {
     UErrorCode status = U_ZERO_ERROR;
-    open(&status);
+    openStaticCollators(&status);
     if (U_FAILURE(status)) {
         log_err_status(status, "Unable to open static collators %s\n", u_errorName(status));
         return;
@@ -107,7 +107,7 @@ static void TestStart(void)
 /**
 * Closing all static collators and break iterators
 */
-static void close(void)
+static void closeStaticCollators(void)
 {
     if (TOCLOSE_) {
         ucol_close(EN_US_);
@@ -128,7 +128,7 @@ static void close(void)
 static void TestEnd(void)
 {
     TOCLOSE_ = true;
-    close();
+    closeStaticCollators();
     TOCLOSE_ = true;
 }
 
@@ -252,7 +252,7 @@ static void TestOpenClose(void)
     else {
         usearch_close(result);
     }
-    open(&status);
+    openStaticCollators(&status);
     if (U_FAILURE(status)) {
         log_err_status(status, "Unable to open static collators %s\n", u_errorName(status));
         return;
@@ -297,7 +297,7 @@ static void TestOpenClose(void)
     }
     ubrk_close(breakiter);
 #endif
-    close();
+    closeStaticCollators();
 }
 
 static void TestInitialization(void) 
@@ -311,7 +311,7 @@ static void TestInitialization(void)
     /* simple test on the pattern ce construction */
     pattern[0] = 0x41;
     pattern[1] = 0x42;
-    open(&status);
+    openStaticCollators(&status);
     if (U_FAILURE(status)) {
         log_err_status(status, "Unable to open static collators %s\n", u_errorName(status));
         return;
@@ -343,7 +343,7 @@ static void TestInitialization(void)
     }
     usearch_close(result);
 
-    close();
+    closeStaticCollators();
 }
 
 static UBool assertEqualWithUStringSearch(      UStringSearch *strsrch,
@@ -662,7 +662,7 @@ static void TestBasic(void)
 {
     int count = 0;
     UErrorCode status = U_ZERO_ERROR;
-    open(&status);
+    openStaticCollators(&status);
     if (U_FAILURE(status)) {
         log_err_status(status, "Unable to open static collators %s\n", u_errorName(status));
         return;
@@ -673,14 +673,14 @@ static void TestBasic(void)
         }
         count ++;
     }
-    close();
+    closeStaticCollators();
 }
 
 static void TestNormExact(void) 
 {
     int count = 0;
     UErrorCode status = U_ZERO_ERROR;
-    open(&status);
+    openStaticCollators(&status);
     if (U_FAILURE(status)) {
         log_err_status(status, "Unable to open static collators %s\n", u_errorName(status));
         return;
@@ -711,14 +711,14 @@ static void TestNormExact(void)
         }
         count ++;
     }
-    close();
+    closeStaticCollators();
 }
 
 static void TestStrength(void) 
 {
     int count = 0;
     UErrorCode status = U_ZERO_ERROR;
-    open(&status);
+    openStaticCollators(&status);
     if (U_FAILURE(status)) {
         log_err_status(status, "Unable to open static collators %s\n", u_errorName(status));
         return;
@@ -729,7 +729,7 @@ static void TestStrength(void)
         }
         count ++;
     }
-    close();
+    closeStaticCollators();
 }
 
 static void TestBreakIterator(void) {
@@ -742,7 +742,7 @@ static void TestBreakIterator(void) {
     CHECK_BREAK("x");
 
 #if !UCONFIG_NO_BREAK_ITERATION
-    open(&status);
+    openStaticCollators(&status);
     if (U_FAILURE(status)) {
         log_err_status(status, "Unable to open static collators %s\n", u_errorName(status));
         return;
@@ -833,7 +833,7 @@ static void TestBreakIterator(void) {
     }
     
 ENDTESTBREAKITERATOR:
-    close();
+    closeStaticCollators();
 #endif
 }
 
@@ -841,7 +841,7 @@ static void TestVariable(void)
 {
     int count = 0;
     UErrorCode status = U_ZERO_ERROR;
-    open(&status);
+    openStaticCollators(&status);
     if (U_FAILURE(status)) {
         log_err_status(status, "Unable to open static collators %s\n", u_errorName(status));
         return;
@@ -860,14 +860,14 @@ static void TestVariable(void)
     }
     ucol_setAttribute(EN_US_, UCOL_ALTERNATE_HANDLING, 
                       UCOL_NON_IGNORABLE, &status);
-    close();
+    closeStaticCollators();
 }
 
 static void TestOverlap(void)
 {
     int count = 0;
     UErrorCode status = U_ZERO_ERROR;
-    open(&status);
+    openStaticCollators(&status);
     if (U_FAILURE(status)) {
         log_err_status(status, "Unable to open static collators %s\n", u_errorName(status));
         return;
@@ -931,7 +931,7 @@ static void TestOverlap(void)
         count ++;
         usearch_close(strsrch);
     }
-    close();
+    closeStaticCollators();
 }
 
 static void TestCollator(void) 
@@ -970,7 +970,7 @@ static void TestCollator(void)
     }
     usearch_close(strsrch);
 
-    open(&status);
+    openStaticCollators(&status);
 
     if (usearch_getCollator(NULL) != NULL) {
         log_err("Expected NULL collator from NULL string search\n");
@@ -1017,7 +1017,7 @@ ENDTESTCOLLATOR:
     if (tailored != NULL) {
         ucol_close(tailored);
     }
-    close();
+    closeStaticCollators();
 }
 
 static void TestPattern(void)
@@ -1030,7 +1030,7 @@ static void TestPattern(void)
           int32_t        templength;
           UErrorCode     status = U_ZERO_ERROR;
 
-    open(&status);
+    openStaticCollators(&status);
     if (U_FAILURE(status)) {
         log_err_status(status, "Unable to open static collators %s\n", u_errorName(status));
         return;
@@ -1124,7 +1124,7 @@ ENDTESTPATTERN:
     if (strsrch != NULL) {
         usearch_close(strsrch);
     }
-    close();
+    closeStaticCollators();
 }
 
 static void TestText(void) 
@@ -1139,7 +1139,7 @@ static void TestText(void)
     u_unescape(TEXT[0].text, text, 128);
     u_unescape(TEXT[0].pattern, pattern, 32);
 
-    open(&status);
+    openStaticCollators(&status);
     if (U_FAILURE(status)) {
         log_err_status(status, "Unable to open static collators %s\n", u_errorName(status));
         return;
@@ -1201,14 +1201,14 @@ ENDTESTPATTERN:
     if (strsrch != NULL) {
         usearch_close(strsrch);
     }
-    close();
+    closeStaticCollators();
 }
 
 static void TestCompositeBoundaries(void) 
 {
     int count = 0;
     UErrorCode status = U_ZERO_ERROR;
-    open(&status);
+    openStaticCollators(&status);
     if (U_FAILURE(status)) {
         log_err_status(status, "Unable to open static collators %s\n", u_errorName(status));
         return;
@@ -1220,7 +1220,7 @@ static void TestCompositeBoundaries(void)
         }
         count ++;
     } 
-    close();
+    closeStaticCollators();
 }
 
 static void TestGetSetOffset(void)
@@ -1233,7 +1233,7 @@ static void TestGetSetOffset(void)
     memset(pattern, 0, 32*sizeof(UChar));
     memset(text, 0, 128*sizeof(UChar));
 
-    open(&status);
+    openStaticCollators(&status);
     if (U_FAILURE(status)) {
         log_err_status(status, "Unable to open static collators %s\n", u_errorName(status));
         return;
@@ -1322,7 +1322,7 @@ static void TestGetSetOffset(void)
     }
     ucol_setStrength(usearch_getCollator(strsrch), UCOL_TERTIARY);
     usearch_close(strsrch);
-    close();
+    closeStaticCollators();
 }
 
 static void TestGetSetAttribute(void) 
@@ -1335,7 +1335,7 @@ static void TestGetSetAttribute(void)
     memset(pattern, 0, 32*sizeof(UChar));
     memset(text, 0, 128*sizeof(UChar));
           
-    open(&status);
+    openStaticCollators(&status);
     if (U_FAILURE(status)) {
         log_err_status(status, "Unable to open static collators %s\n", u_errorName(status));
         return;
@@ -1408,7 +1408,7 @@ static void TestGetSetAttribute(void)
     }
 
     usearch_close(strsrch);
-    close();
+    closeStaticCollators();
 }
 
 static void TestGetMatch(void)
@@ -1423,7 +1423,7 @@ static void TestGetMatch(void)
     int32_t        textlength;
     UChar          matchtext[128];
     
-    open(&status);
+    openStaticCollators(&status);
     if (U_FAILURE(status)) {
         log_err_status(status, "Unable to open static collators %s\n", u_errorName(status));
         return;
@@ -1508,14 +1508,14 @@ static void TestGetMatch(void)
         log_err("Error getting null matches\n");
     }
     usearch_close(strsrch);
-    close();
+    closeStaticCollators();
 }
 
 static void TestSetMatch(void)
 {
     int            count       = 0;
     UErrorCode status = U_ZERO_ERROR;
-    open(&status);
+    openStaticCollators(&status);
     if (U_FAILURE(status)) {
         log_err_status(status, "Unable to open static collators %s\n", u_errorName(status));
         return;
@@ -1590,7 +1590,7 @@ static void TestSetMatch(void)
         count ++;
         usearch_close(strsrch);
     }
-    close();
+    closeStaticCollators();
 }
 
 static void TestReset(void)
@@ -1601,7 +1601,7 @@ static void TestReset(void)
     UChar          pattern[] = {0x73};
     UStringSearch *strsrch;
     
-    open(&status);
+    openStaticCollators(&status);
     if (U_FAILURE(status)) {
         log_err_status(status, "Unable to open static collators %s\n", u_errorName(status));
         return;
@@ -1639,14 +1639,14 @@ static void TestReset(void)
         }
     }
     usearch_close(strsrch);
-    close();
+    closeStaticCollators();
 }
 
 static void TestSupplementary(void)
 {
     int count = 0;
     UErrorCode status = U_ZERO_ERROR;
-    open(&status);
+    openStaticCollators(&status);
     if (U_FAILURE(status)) {
         log_err_status(status, "Unable to open static collators %s\n", u_errorName(status));
         return;
@@ -1657,7 +1657,7 @@ static void TestSupplementary(void)
         }
         count ++;
     }
-    close();
+    closeStaticCollators();
 }
 
 static void TestContraction(void) 
@@ -1804,7 +1804,7 @@ static void TestCanonical(void)
 {
     int count = 0;
     UErrorCode status = U_ZERO_ERROR;
-    open(&status);
+    openStaticCollators(&status);
     if (U_FAILURE(status)) {
         log_err_status(status, "Unable to open static collators %s\n", u_errorName(status));
         return;
@@ -1815,14 +1815,14 @@ static void TestCanonical(void)
         }
         count ++;
     }
-    close();
+    closeStaticCollators();
 }
 
 static void TestNormCanonical(void) 
 {
     int count = 0;
     UErrorCode status = U_ZERO_ERROR;
-    open(&status);
+    openStaticCollators(&status);
     if (U_FAILURE(status)) {
         log_err_status(status, "Unable to open static collators %s\n", u_errorName(status));
         return;
@@ -1836,14 +1836,14 @@ static void TestNormCanonical(void)
         count ++;
     }
     ucol_setAttribute(EN_US_, UCOL_NORMALIZATION_MODE, UCOL_OFF, &status);
-    close();
+    closeStaticCollators();
 }
 
 static void TestStrengthCanonical(void) 
 {
     int count = 0;
     UErrorCode status = U_ZERO_ERROR;
-    open(&status);
+    openStaticCollators(&status);
     if (U_FAILURE(status)) {
         log_err_status(status, "Unable to open static collators %s\n", u_errorName(status));
         return;
@@ -1854,7 +1854,7 @@ static void TestStrengthCanonical(void)
         }
         count ++;
     }
-    close();
+    closeStaticCollators();
 }
 
 static void TestBreakIteratorCanonical(void) {
@@ -1865,7 +1865,7 @@ static void TestBreakIteratorCanonical(void) {
 
 #if !UCONFIG_NO_BREAK_ITERATION
 
-    open(&status);
+    openStaticCollators(&status);
     if (U_FAILURE(status)) {
         log_err_status(status, "Unable to open static collators %s\n", u_errorName(status));
         return;
@@ -1934,7 +1934,7 @@ static void TestBreakIteratorCanonical(void) {
     }
     
 ENDTESTBREAKITERATOR:
-    close();
+    closeStaticCollators();
 #endif
 }
 
@@ -1942,7 +1942,7 @@ static void TestVariableCanonical(void)
 {
     int count = 0;
     UErrorCode status = U_ZERO_ERROR;
-    open(&status);
+    openStaticCollators(&status);
     if (U_FAILURE(status)) {
         log_err_status(status, "Unable to open static collators %s\n", u_errorName(status));
         return;
@@ -1961,14 +1961,14 @@ static void TestVariableCanonical(void)
     }
     ucol_setAttribute(EN_US_, UCOL_ALTERNATE_HANDLING, 
                       UCOL_NON_IGNORABLE, &status);
-    close();
+    closeStaticCollators();
 }
 
 static void TestOverlapCanonical(void)
 {
     int count = 0;
     UErrorCode status = U_ZERO_ERROR;
-    open(&status);
+    openStaticCollators(&status);
     if (U_FAILURE(status)) {
         log_err_status(status, "Unable to open static collators %s\n", u_errorName(status));
         return;
@@ -2034,7 +2034,7 @@ static void TestOverlapCanonical(void)
         count ++;
         usearch_close(strsrch);
     }
-    close();
+    closeStaticCollators();
 }
 
 static void TestCollatorCanonical(void) 
@@ -2047,7 +2047,7 @@ static void TestCollatorCanonical(void)
           UChar          text[128];
           UStringSearch *strsrch; 
           
-    open(&status);
+    openStaticCollators(&status);
     if (U_FAILURE(status)) {
         log_err_status(status, "Unable to open static collators %s\n", u_errorName(status));
         return;
@@ -2107,7 +2107,7 @@ ENDTESTCOLLATOR:
     if (tailored != NULL) {
         ucol_close(tailored);
     }
-    close();
+    closeStaticCollators();
 }
 
 static void TestPatternCanonical(void)
@@ -2119,7 +2119,7 @@ static void TestPatternCanonical(void)
           int32_t        templength;
           UErrorCode     status = U_ZERO_ERROR;
 
-    open(&status);
+    openStaticCollators(&status);
     if (U_FAILURE(status)) {
         log_err_status(status, "Unable to open static collators %s\n", u_errorName(status));
         return;
@@ -2182,7 +2182,7 @@ ENDTESTPATTERN:
     if (strsrch != NULL) {
         usearch_close(strsrch);
     }
-    close();
+    closeStaticCollators();
 }
 
 static void TestTextCanonical(void) 
@@ -2197,7 +2197,7 @@ static void TestTextCanonical(void)
     u_unescape(TEXTCANONICAL[0].text, text, 128);
     u_unescape(TEXTCANONICAL[0].pattern, pattern, 32);
 
-    open(&status);
+    openStaticCollators(&status);
     if (U_FAILURE(status)) {
         log_err_status(status, "Unable to open static collators %s\n", u_errorName(status));
         return;
@@ -2250,14 +2250,14 @@ ENDTESTPATTERN:
     if (strsrch != NULL) {
         usearch_close(strsrch);
     }
-    close();
+    closeStaticCollators();
 }
 
 static void TestCompositeBoundariesCanonical(void) 
 {
     int count = 0;
     UErrorCode status = U_ZERO_ERROR;
-    open(&status);
+    openStaticCollators(&status);
     if (U_FAILURE(status)) {
         log_err_status(status, "Unable to open static collators %s\n", u_errorName(status));
         return;
@@ -2269,7 +2269,7 @@ static void TestCompositeBoundariesCanonical(void)
         }
         count ++;
     } 
-    close();
+    closeStaticCollators();
 }
 
 static void TestGetSetOffsetCanonical(void)
@@ -2284,7 +2284,7 @@ static void TestGetSetOffsetCanonical(void)
     memset(pattern, 0, 32*sizeof(UChar));
     memset(text, 0, 128*sizeof(UChar));
 
-    open(&status);
+    openStaticCollators(&status);
     if (U_FAILURE(status)) {
         log_err_status(status, "Unable to open static collators %s\n", u_errorName(status));
         return;
@@ -2367,14 +2367,14 @@ static void TestGetSetOffsetCanonical(void)
 bail:
     ucol_setAttribute(collator, UCOL_NORMALIZATION_MODE, UCOL_OFF, &status);
     usearch_close(strsrch);
-    close();
+    closeStaticCollators();
 }
 
 static void TestSupplementaryCanonical(void)
 {
     int count = 0;
     UErrorCode status = U_ZERO_ERROR;
-    open(&status);
+    openStaticCollators(&status);
     if (U_FAILURE(status)) {
         log_err_status(status, "Unable to open static collators %s\n", u_errorName(status));
         return;
@@ -2385,7 +2385,7 @@ static void TestSupplementaryCanonical(void)
         }
         count ++;
     }
-    close();
+    closeStaticCollators();
 }
 
 static void TestContractionCanonical(void) 
@@ -3041,7 +3041,7 @@ static void TestIndicPrefixMatch(void)
 {
     int count = 0;
     UErrorCode status = U_ZERO_ERROR;
-    open(&status);
+    openStaticCollators(&status);
     if (U_FAILURE(status)) {
         log_err_status(status, "Unable to open static collators %s\n", u_errorName(status));
         return;
@@ -3052,7 +3052,7 @@ static void TestIndicPrefixMatch(void)
         }
         count ++;
     }
-    close();
+    closeStaticCollators();
 }
 
 /**

@@ -194,7 +194,6 @@ it{
         }
         "Europe:Dublin"{
             ec{"Dublino"}
-            ld{"Ora legale dell’Irlanda"}
         }
         "Europe:Gibraltar"{
             ec{"Gibilterra"}
@@ -213,7 +212,6 @@ it{
         }
         "Europe:London"{
             ec{"Londra"}
-            ld{"Ora legale del Regno Unito"}
         }
         "Europe:Luxembourg"{
             ec{"Lussemburgo"}
@@ -269,6 +267,11 @@ it{
         "Pacific:Marquesas"{
             ec{"Marchesi"}
         }
+        "meta:Acre"{
+            ld{"Ora legale dell’Acre"}
+            lg{"Ora dell’Acre"}
+            ls{"Ora standard dell’Acre"}
+        }
         "meta:Afghanistan"{
             ls{"Ora dell’Afghanistan"}
         }
@@ -320,9 +323,9 @@ it{
             ls{"Ora standard di Anadyr"}
         }
         "meta:Apia"{
-            ld{"Ora legale di Apia"}
-            lg{"Ora di Apia"}
-            ls{"Ora standard di Apia"}
+            ld{"Ora legale delle Samoa occidentali"}
+            lg{"Ora delle Samoa occidentali"}
+            ls{"Ora standard delle Samoa occidentali"}
         }
         "meta:Arabian"{
             ld{"Ora legale araba"}
@@ -394,6 +397,10 @@ it{
             ld{"Ora legale di Brasilia"}
             lg{"Ora di Brasilia"}
             ls{"Ora standard di Brasilia"}
+        }
+        "meta:British"{
+            ld{"Ora legale del Regno Unito"}
+            lg{"Ora del Regno Unito"}
         }
         "meta:Brunei"{
             ls{"Ora del Brunei Darussalam"}
@@ -519,6 +526,11 @@ it{
         "meta:Gilbert_Islands"{
             ls{"Ora delle isole Gilbert"}
         }
+        "meta:Greenland"{
+            ld{"Ora legale della Groenlandia"}
+            lg{"Ora della Groenlandia"}
+            ls{"Ora standard della Groenlandia"}
+        }
         "meta:Greenland_Eastern"{
             ld{"Ora legale della Groenlandia orientale"}
             lg{"Ora della Groenlandia orientale"}
@@ -536,7 +548,7 @@ it{
             ls{"Ora della Guyana"}
         }
         "meta:Hawaii"{
-            ls{"Ora standard delle Isole Hawaii-Aleutine"}
+            ls{"Ora standard delle Hawaii"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"Ora legale delle Isole Hawaii-Aleutine"}
@@ -576,6 +588,10 @@ it{
             lg{"Ora dell’Iran"}
             ls{"Ora standard dell’Iran"}
         }
+        "meta:Irish"{
+            ld{"Ora legale dell’Irlanda"}
+            lg{"Ora dell’Irlanda"}
+        }
         "meta:Irkutsk"{
             ld{"Ora legale di Irkutsk"}
             lg{"Ora di Irkutsk"}
@@ -592,9 +608,9 @@ it{
             ls{"Ora standard del Giappone"}
         }
         "meta:Kamchatka"{
-            ld{"Ora legale di Petropavlovsk-Kamchatski"}
-            lg{"Ora di Petropavlovsk-Kamchatski"}
-            ls{"Ora standard di Petropavlovsk-Kamchatski"}
+            ld{"Ora legale della Kamchatka"}
+            lg{"Ora della Kamchatka"}
+            ls{"Ora standard della Kamchatka"}
         }
         "meta:Kazakhstan"{
             ls{"Ora del Kazakistan"}
@@ -628,11 +644,6 @@ it{
             ld{"Ora legale di Lord Howe"}
             lg{"Ora di Lord Howe"}
             ls{"Ora standard di Lord Howe"}
-        }
-        "meta:Macau"{
-            ld{"Ora legale di Macao"}
-            lg{"Ora di Macao"}
-            ls{"Ora standard di Macao"}
         }
         "meta:Magadan"{
             ld{"Ora legale di Magadan"}
@@ -781,8 +792,6 @@ it{
             ls{"Ora standard di Samara"}
         }
         "meta:Samoa"{
-            ld{"Ora legale di Samoa"}
-            lg{"Ora di Samoa"}
             ls{"Ora standard di Samoa"}
         }
         "meta:Seychelles"{
@@ -825,6 +834,11 @@ it{
         "meta:Truk"{
             ls{"Ora del Chuuk"}
         }
+        "meta:Turkey"{
+            ld{"Ora legale della Turchia"}
+            lg{"Ora della Turchia"}
+            ls{"Ora standard della Turchia"}
+        }
         "meta:Turkmenistan"{
             ld{"Ora legale del Turkmenistan"}
             lg{"Ora del Turkmenistan"}
@@ -837,6 +851,9 @@ it{
             ld{"Ora legale dell’Uruguay"}
             lg{"Ora dell’Uruguay"}
             ls{"Ora standard dell’Uruguay"}
+        }
+        "meta:Urumqi"{
+            ls{"Ora di Ürümqi"}
         }
         "meta:Uzbekistan"{
             ld{"Ora legale dell’Uzbekistan"}

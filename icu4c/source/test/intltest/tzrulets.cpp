@@ -140,6 +140,7 @@ void TimeZoneRuleTest::runIndexedTest( int32_t index, UBool exec, const char* &n
         CASE(15, TestT6669);
         CASE(16, TestVTimeZoneWrapper);
         CASE(17, TestT8943);
+        CASE(18, TestVTimeZoneRruleUntil);
         default: name = ""; break;
     }
 }
@@ -2654,6 +2655,24 @@ TimeZoneRuleTest::TestT8943() {
     }
 
     delete rbtz;
+}
+
+// ICU-23325 UNTIL value in RRULE should be in ISO 8601 UTC format (e.g. 20211031T080000Z)
+// instead of local time (e.g. 20211031T020000).
+void
+TimeZoneRuleTest::TestVTimeZoneRruleUntil() {
+    IcuTestErrorCode ec(*this, "TestVTimeZoneRruleUntil");
+    LocalPointer<VTimeZone> vtz(VTimeZone::createVTimeZoneByID("America/Chihuahua"));
+    UDate start = getUTCMillis(2020, UCAL_JANUARY, 1);
+    // // RRULE lines for rule changes in 2022
+    UnicodeString rrule1 = u"RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU;UNTIL=20211031T080000Z";
+    UnicodeString rrule2 = u"RRULE:FREQ=YEARLY;BYMONTH=4;BYDAY=1SU;UNTIL=20220403T090000Z";
+
+    UnicodeString vtzData;
+    vtz->write(start, vtzData, ec);
+    ec.assertSuccess();
+    assertTrue("Should contain rrule1", vtzData.indexOf(rrule1) > 0);
+    assertTrue("Should contain rrule2", vtzData.indexOf(rrule2) > 0);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

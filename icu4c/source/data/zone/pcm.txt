@@ -813,6 +813,9 @@ pcm{
         "Asia:Tokyo"{
             ec{"Tókyo"}
         }
+        "Asia:Tomsk"{
+            ec{"Tọmsk"}
+        }
         "Asia:Ulaanbaatar"{
             ec{"Ulanbáta"}
         }
@@ -947,7 +950,6 @@ pcm{
         }
         "Europe:Dublin"{
             ec{"Dọ́blin"}
-            ld{"Aírísh Fíksd Taim"}
         }
         "Europe:Gibraltar"{
             ec{"Jibrọ́lta"}
@@ -984,7 +986,6 @@ pcm{
         }
         "Europe:London"{
             ec{"Lọ́ndọn"}
-            ld{"Brítísh Họ́t Sízin Taim"}
         }
         "Europe:Luxembourg"{
             ec{"Lọ́ksẹ́mbọg"}
@@ -1208,6 +1209,11 @@ pcm{
         "Pacific:Wallis"{
             ec{"Wáli"}
         }
+        "meta:Acre"{
+            ld{"Ẹ́ka Họ́t Sízin Taim"}
+            lg{"Ẹ́ka"}
+            ls{"Ẹ́ka Fíksd Taim"}
+        }
         "meta:Afghanistan"{
             ls{"Afgánístan Taim"}
         }
@@ -1254,9 +1260,9 @@ pcm{
             ls{"Nọ́t Amẹ́ríká Pasífík Ériá Fíksd Taim"}
         }
         "meta:Apia"{
-            ld{"Ápia Délaít Taim"}
-            lg{"Ápia Taim"}
-            ls{"Ápia Fíksd Taim"}
+            ld{"Wést Samọa Délaít Taim"}
+            lg{"Wést Samọa Taim"}
+            ls{"Wést Samọa Fíksd Taim"}
         }
         "meta:Arabian"{
             ld{"Arébiá Délaít Taim"}
@@ -1328,6 +1334,10 @@ pcm{
             ld{"Brasília Họ́t Sízín Taim"}
             lg{"Brasília Taim"}
             ls{"Brasília Fíksd Taim"}
+        }
+        "meta:British"{
+            ld{"Brítísh Họ́t Sízin Taim"}
+            lg{"Brítísh Taim"}
         }
         "meta:Brunei"{
             ls{"Brunẹi Darúsalam Taim"}
@@ -1444,6 +1454,11 @@ pcm{
         "meta:Gilbert_Islands"{
             ls{"Gílbat Aílands Taim"}
         }
+        "meta:Greenland"{
+            ld{"Grínlánd Họ́t Sízin Taim"}
+            lg{"Grínlánd Taim"}
+            ls{"Grínlánd Fíksd Taim"}
+        }
         "meta:Greenland_Eastern"{
             ld{"Íist Grínlánd Họ́t Sízin Taim"}
             lg{"Íist Grínlánd Taim"}
@@ -1461,7 +1476,7 @@ pcm{
             ls{"Gayána Taim"}
         }
         "meta:Hawaii"{
-            ls{"Hawaií-Elúshián Fíksd Taim"}
+            ls{"Hawaií Taim"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"Hawaií-Elúshián Délaít Taim"}
@@ -1501,6 +1516,10 @@ pcm{
             lg{"Iran Taim"}
             ls{"Iran Fíksd Taim"}
         }
+        "meta:Irish"{
+            ld{"Aírísh Fíksd Taim"}
+            lg{"Aírísh Taim"}
+        }
         "meta:Irkutsk"{
             ld{"Irkútsk Họ́t Sízin Taim"}
             lg{"Irkútsk Taim"}
@@ -1515,6 +1534,11 @@ pcm{
             ld{"Japan Délaít Taim"}
             lg{"Japan Taim"}
             ls{"Japan Fíksd Taim"}
+        }
+        "meta:Kamchatka"{
+            ld{"Kamchátka Họ́t Sízin Taim"}
+            lg{"Kamchátka Taim"}
+            ls{"Kamchátka Fíksd Taim"}
         }
         "meta:Kazakhstan"{
             ls{"Kazékstan Taim"}
@@ -1690,9 +1714,12 @@ pcm{
             lg{"Sákhalin Taim"}
             ls{"Sákhalin Fíksd Taim"}
         }
+        "meta:Samara"{
+            ld{"Samára Họ́t Sízin Taim"}
+            lg{"Samára Taim"}
+            ls{"Samára Fíksd Taim"}
+        }
         "meta:Samoa"{
-            ld{"Sámoá Délaít Taim"}
-            lg{"Sámoá Taim"}
             ls{"Sámoá Fíksd Taim"}
         }
         "meta:Seychelles"{
@@ -1735,6 +1762,11 @@ pcm{
         "meta:Truk"{
             ls{"Chuk Taim"}
         }
+        "meta:Turkey"{
+            ld{"Türkiye Họ́t Sízin Taim"}
+            lg{"Türkiye Taim"}
+            ls{"Türkiye Fíksd Taim"}
+        }
         "meta:Turkmenistan"{
             ld{"Tọkmẹnistan Họ́t Sízin Taim"}
             lg{"Tọkmẹnistan Taim"}
@@ -1747,6 +1779,9 @@ pcm{
             ld{"Yúrugwue Họ́t Sízín Taim"}
             lg{"Yúrugwue Taim"}
             ls{"Yúrugwue Fíksd Taim"}
+        }
+        "meta:Urumqi"{
+            ls{"Ürümqi Taim"}
         }
         "meta:Uzbekistan"{
             ld{"Uzbẹkistan Họ́t Sízin Taim"}

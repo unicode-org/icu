@@ -241,7 +241,7 @@ eo{
         SD{"Sudano"}
         SE{"Svedujo"}
         SG{"Singapuro"}
-        SH{"Sankta Heleno"}
+        SH{"Sankta Heleno, Ascension kaj Tristan da Cunha"}
         SI{"Slovenujo"}
         SJ{"Svalbardo kaj Janmajeno"}
         SK{"Slovakujo"}
@@ -259,7 +259,7 @@ eo{
         TA{"Tristan da Cunha"}
         TC{"Turkoj kaj Kajkoj"}
         TD{"Ĉado"}
-        TF{"Francaj Sudaj Teritorioj"}
+        TF{"Francaj Sudaj kaj Antarktaj Teritorioj"}
         TG{"Togolando"}
         TH{"Tajlando"}
         TJ{"Taĝikujo"}
@@ -304,6 +304,8 @@ eo{
     }
     Countries%short{
         GB{"Britujo"}
+        MO{"Makao"}
+        PS{"Palestino"}
     }
     Countries%variant{
         CD{"Demokratia Respubliko Kongo"}

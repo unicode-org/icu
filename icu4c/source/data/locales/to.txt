@@ -101,6 +101,7 @@ to{
                 }
             }
             symbols{
+                group{" "}
                 nan{"TF"}
             }
         }
@@ -157,23 +158,22 @@ to{
                 MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
                 Md{"d/M"}
-                h{"h a"}
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
                 y{"y G"}
-                yM{"M-y"}
+                yM{"M/y"}
                 yMEd{"E d/M/y"}
                 yMM{"MM-y"}
                 yMMM{"MMM y"}
                 yMMMEd{"E d MMM y"}
                 yMMMM{"MMMM y"}
                 yMMMd{"d MMM y"}
-                yMd{"d-M-y"}
+                yMd{"d/M/y"}
                 yQQQ{"y QQQ"}
                 yQQQQ{"y QQQQ"}
                 yyyy{"y G"}
-                yyyyM{"y/MM GGGGG"}
-                yyyyMEd{"E dd-MM-y GGGGG"}
+                yyyyM{"MM-y GGGGG"}
+                yyyyMEd{"E dd/MM/y GGGGG"}
                 yyyyMMM{"MMM y G"}
                 yyyyMMMEd{"E d MMM y G"}
                 yyyyMMMM{"MMMM y G"}
@@ -246,10 +246,6 @@ to{
                 d{
                     d{"d – d"}
                 }
-                h{
-                    a{"h a – h a"}
-                    h{"h–h a"}
-                }
                 hm{
                     a{"h:mm a – h:mm a"}
                     h{"h:mm–h:mm a"}
@@ -259,10 +255,6 @@ to{
                     a{"h:mm a – h:mm a v"}
                     h{"h:mm–h:mm a v"}
                     m{"h:mm–h:mm a v"}
-                }
-                hv{
-                    a{"h a – h a v"}
-                    h{"h–h a v"}
                 }
                 y{
                     y{"y – y G"}
@@ -353,7 +345,6 @@ to{
                 MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
                 Md{"d/M"}
-                h{"h a"}
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
                 hmsv{"h:mm:ss a v"}
@@ -461,6 +452,10 @@ to{
                     H{"HH:mm – HH:mm"}
                     m{"HH:mm – HH:mm"}
                 }
+                Hmv{
+                    H{"HH:mm – HH:mm v"}
+                    m{"HH:mm – HH:mm v"}
+                }
                 Hv{
                     H{"HH – HH v"}
                 }
@@ -490,7 +485,6 @@ to{
                     d{"d – d"}
                 }
                 h{
-                    a{"h a – h a"}
                     h{"h – h a"}
                 }
                 hm{
@@ -504,7 +498,6 @@ to{
                     m{"h:mm–h:mm a v"}
                 }
                 hv{
-                    a{"h a – h a v"}
                     h{"h – h a v"}
                 }
                 y{
@@ -588,20 +581,6 @@ to{
                         "ʻO",
                         "N",
                         "T",
-                    }
-                    wide{
-                        "Sānuali",
-                        "Fēpueli",
-                        "Maʻasi",
-                        "ʻEpeleli",
-                        "Mē",
-                        "Sune",
-                        "Siulai",
-                        "ʻAokosi",
-                        "Sepitema",
-                        "ʻOkatopa",
-                        "Nōvema",
-                        "Tīsema",
                     }
                 }
             }
@@ -1216,7 +1195,9 @@ to{
     listPattern{
         or{
             2{"{0} pē {1}"}
-            end{"{0}, pē {1}"}
+            end{"{0} pē {1}"}
+            middle{"{0} pē {1}"}
+            start{"{0} pē {1}"}
         }
         standard{
             2{"{0} mo {1}"}
@@ -1225,12 +1206,13 @@ to{
             start{"{0} mo {1}"}
         }
         unit-narrow{
+            end{"{0} {1}"}
             middle{"{0} {1}"}
             start{"{0} {1}"}
         }
         unit-short{
             2{"{0} mo e {1}"}
-            end{"{0} mo e {1}"}
+            end{"{0}, {1}"}
             middle{"{0}, {1}"}
             start{"{0}, {1}"}
         }

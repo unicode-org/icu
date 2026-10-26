@@ -24,14 +24,12 @@ License & terms of use: http://www.unicode.org/copyright.html
 
 When building an [ICU data filter specification](buildtool.md), it is useful to
 see what resources are being used by your application so that you can select
-those resources and discard the others. This guide describes how to use
-*utrace.h* to inspect resource access in real time in ICU4C.
+those resources and discard the others. 
+This guide describes how to inspect resource access in real time in ICU4C and ICU4J.
 
-**Note:** This feature is only available in ICU4C at this time. If you are
-interested in ICU4J, please see
-[ICU-20656](https://unicode-org.atlassian.net/browse/ICU-20656).
+## ICU4C
 
-## Quick Start
+### Quick Start
 
 First, you *must* have a copy of ICU4C configured with tracing enabled.
 
@@ -96,7 +94,7 @@ What this means:
 Based on that information, you can make a more informed decision when writing
 resource filter rules for this simple program.
 
-## Data Tracing API
+### Data Tracing API
 
 The `traceData` function shown above takes five arguments. The following two
 are most important for data tracing:
@@ -108,7 +106,7 @@ are most important for data tracing:
 scope of your `traceData` function. You should make copies of the strings if
 you intend to save them for further processing.
 
-### UTRACE_UDATA_RESOURCE
+#### UTRACE_UDATA_RESOURCE
 
 UTRACE_UDATA_RESOURCE is used to indicate that a value inside of a resource
 bundle was read by ICU code.
@@ -131,7 +129,7 @@ const char* resPath = va_arg(args, const char*);
 As stated above, you should copy the strings if you intend to save them. The
 pointers will not be valid after the tracing function returns.
 
-### UTRACE_UDATA_BUNDLE
+#### UTRACE_UDATA_BUNDLE
 
 UTRACE_UDATA_BUNDLE is used to indicate that a resource bundle was opened by
 ICU code.
@@ -139,13 +137,13 @@ ICU code.
 For the purposes of making your ICU data filter, the specific resource paths
 provided by UTRACE_UDATA_RESOURCE are more precise and useful.
 
-### UTRACE_UDATA_DATA_FILE
+#### UTRACE_UDATA_DATA_FILE
 
 UTRACE_UDATA_DATA_FILE is used to indicate that a non-resource-bundle binary
 data file was opened by ICU code. Such files are used for break iteration,
 conversion, confusables, and a handful of other ICU services.
 
-### UTRACE_UDATA_RES_FILE
+#### UTRACE_UDATA_RES_FILE
 
 UTRACE_UDATA_RES_FILE is used to indicate that a binary resource bundle file
 was opened by ICU code. This can be helpful to debug locale fallbacks. This
@@ -154,3 +152,14 @@ opened only once per application runtime.
 
 For the purposes of making your ICU data filter, the specific resource paths
 provided by UTRACE_UDATA_RESOURCE are more precise and useful.
+
+## ICU4J
+
+Starting in ICU4J v79.0.1, 
+you can turn on resource and data tracing in your java application 
+by including `dataTracing` in the `ICUDebug` system property. 
+This will result in entries like the following being logged 
+to the `com.ibm.icu.impl.ICUData.tracing` logger at `info` level:
+```
+Using resource file com/ibm/icu/impl/data/icudata/ucase.icu (required)
+```

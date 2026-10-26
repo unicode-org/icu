@@ -12,7 +12,6 @@ import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.text.ConstrainedFieldPosition;
 import com.ibm.icu.text.ListFormatter;
 import com.ibm.icu.text.ListFormatter.FormattedList;
-import com.ibm.icu.text.ListFormatter.Type;
 import com.ibm.icu.text.ListFormatter.Width;
 import com.ibm.icu.util.ULocale;
 import java.util.ArrayList;
@@ -248,7 +247,9 @@ public class ListFormatterTest extends CoreTestFmwk {
         }
 
         {
-            ListFormatter fmt = ListFormatter.getInstance(ULocale.CHINESE, Type.UNITS, Width.SHORT);
+            ListFormatter fmt =
+                    ListFormatter.getInstance(
+                            ULocale.CHINESE, ListFormatter.Type.UNITS, Width.SHORT);
             String message = "Field position test 2 (ICU-21340)";
             String expectedString = "aabbbbbbbccc";
             String inputs[] = {"aa", "bbbbbbb", "ccc"};
@@ -272,7 +273,9 @@ public class ListFormatterTest extends CoreTestFmwk {
         }
 
         {
-            ListFormatter fmt = ListFormatter.getInstance(ULocale.ENGLISH, Type.UNITS, Width.SHORT);
+            ListFormatter fmt =
+                    ListFormatter.getInstance(
+                            ULocale.ENGLISH, ListFormatter.Type.UNITS, Width.SHORT);
             String message = "ICU-21383 Long list";
             String expectedString = "a, b, c, d, e, f, g, h, i";
             String inputs[] = {
@@ -317,29 +320,29 @@ public class ListFormatterTest extends CoreTestFmwk {
     public void TestCreateStyled() {
         // Locale en has interesting data
         Object[][] cases = {
-            {"pt", Type.AND, Width.WIDE, "A, B e C"},
-            {"pt", Type.AND, Width.SHORT, "A, B e C"},
-            {"pt", Type.AND, Width.NARROW, "A, B, C"},
-            {"pt", Type.OR, Width.WIDE, "A, B ou C"},
-            {"pt", Type.OR, Width.SHORT, "A, B ou C"},
-            {"pt", Type.OR, Width.NARROW, "A, B ou C"},
-            {"pt", Type.UNITS, Width.WIDE, "A, B e C"},
-            {"pt", Type.UNITS, Width.SHORT, "A, B e C"},
-            {"pt", Type.UNITS, Width.NARROW, "A B C"},
-            {"en", Type.AND, Width.WIDE, "A, B, and C"},
-            {"en", Type.AND, Width.SHORT, "A, B, & C"},
-            {"en", Type.AND, Width.NARROW, "A, B, C"},
-            {"en", Type.OR, Width.WIDE, "A, B, or C"},
-            {"en", Type.OR, Width.SHORT, "A, B, or C"},
-            {"en", Type.OR, Width.NARROW, "A, B, or C"},
-            {"en", Type.UNITS, Width.WIDE, "A, B, C"},
-            {"en", Type.UNITS, Width.SHORT, "A, B, C"},
-            {"en", Type.UNITS, Width.NARROW, "A B C"},
+            {"pt", ListFormatter.Type.AND, Width.WIDE, "A, B e C"},
+            {"pt", ListFormatter.Type.AND, Width.SHORT, "A, B e C"},
+            {"pt", ListFormatter.Type.AND, Width.NARROW, "A, B, C"},
+            {"pt", ListFormatter.Type.OR, Width.WIDE, "A, B ou C"},
+            {"pt", ListFormatter.Type.OR, Width.SHORT, "A, B ou C"},
+            {"pt", ListFormatter.Type.OR, Width.NARROW, "A, B ou C"},
+            {"pt", ListFormatter.Type.UNITS, Width.WIDE, "A, B e C"},
+            {"pt", ListFormatter.Type.UNITS, Width.SHORT, "A, B e C"},
+            {"pt", ListFormatter.Type.UNITS, Width.NARROW, "A B C"},
+            {"en", ListFormatter.Type.AND, Width.WIDE, "A, B, and C"},
+            {"en", ListFormatter.Type.AND, Width.SHORT, "A, B, & C"},
+            {"en", ListFormatter.Type.AND, Width.NARROW, "A, B, C"},
+            {"en", ListFormatter.Type.OR, Width.WIDE, "A, B, or C"},
+            {"en", ListFormatter.Type.OR, Width.SHORT, "A, B, or C"},
+            {"en", ListFormatter.Type.OR, Width.NARROW, "A, B, or C"},
+            {"en", ListFormatter.Type.UNITS, Width.WIDE, "A, B, C"},
+            {"en", ListFormatter.Type.UNITS, Width.SHORT, "A, B, C"},
+            {"en", ListFormatter.Type.UNITS, Width.NARROW, "A B C"},
         };
         for (Object[] cas : cases) {
             Locale loc = new Locale((String) cas[0]);
             ULocale uloc = new ULocale((String) cas[0]);
-            Type type = (Type) cas[1];
+            ListFormatter.Type type = (ListFormatter.Type) cas[1];
             Width width = (Width) cas[2];
             String expected = (String) cas[3];
             ListFormatter fmt1 = ListFormatter.getInstance(loc, type, width);
@@ -360,53 +363,71 @@ public class ListFormatterTest extends CoreTestFmwk {
         String[] he = {"he", "he_IL", "iw", "iw_IL"};
         Width[] widths = {Width.WIDE, Width.SHORT, Width.NARROW};
         Object[][] cases = {
-            {es, Type.AND, "fascinante e incre\u00EDblemente", "fascinante", "incre\u00EDblemente"},
             {
                 es,
-                Type.AND,
+                ListFormatter.Type.AND,
+                "fascinante e incre\u00EDblemente",
+                "fascinante",
+                "incre\u00EDblemente"
+            },
+            {
+                es,
+                ListFormatter.Type.AND,
                 "Comunicaciones Industriales e IIoT",
                 "Comunicaciones Industriales",
                 "IIoT"
             },
-            {es, Type.AND, "Espa\u00F1a e Italia", "Espa\u00F1a", "Italia"},
+            {es, ListFormatter.Type.AND, "Espa\u00F1a e Italia", "Espa\u00F1a", "Italia"},
             {
                 es,
-                Type.AND,
+                ListFormatter.Type.AND,
                 "hijas intr\u00E9pidas e hijos solidarios",
                 "hijas intr\u00E9pidas",
                 "hijos solidarios"
             },
-            {es, Type.AND, "a un hombre e hirieron a otro", "a un hombre", "hirieron a otro"},
-            {es, Type.AND, "hija e hijo", "hija", "hijo"},
-            {es, Type.AND, "esposa, hija e hijo", "esposa", "hija", "hijo"},
+            {
+                es,
+                ListFormatter.Type.AND,
+                "a un hombre e hirieron a otro",
+                "a un hombre",
+                "hirieron a otro"
+            },
+            {es, ListFormatter.Type.AND, "hija e hijo", "hija", "hijo"},
+            {es, ListFormatter.Type.AND, "esposa, hija e hijo", "esposa", "hija", "hijo"},
             // For 'y' exception
-            {es, Type.AND, "oro y hierro", "oro", "hierro"},
-            {es, Type.AND, "agua y hielo", "agua", "hielo"},
-            {es, Type.AND, "col\u00E1geno y hialur\u00F3nico", "col\u00E1geno", "hialur\u00F3nico"},
-            {es, Type.OR, "desierto u oasis", "desierto", "oasis"},
-            {es, Type.OR, "oasis, desierto u océano", "oasis", "desierto", "océano"},
-            {es, Type.OR, "7 u 8", "7", "8"},
-            {es, Type.OR, "7 u 80", "7", "80"},
-            {es, Type.OR, "7 u 800", "7", "800"},
-            {es, Type.OR, "6, 7 u 8", "6", "7", "8"},
-            {es, Type.OR, "10 u 11", "10", "11"},
-            {es, Type.OR, "10 o 111", "10", "111"},
-            {es, Type.OR, "10 o 11.2", "10", "11.2"},
-            {es, Type.OR, "9, 10 u 11", "9", "10", "11"},
-            {he, Type.AND, "a, b \u05D5-c", "a", "b", "c"},
-            {he, Type.AND, "a \u05D5-b", "a", "b"},
-            {he, Type.AND, "1, 2 \u05D5-3", "1", "2", "3"},
-            {he, Type.AND, "1 \u05D5-2", "1", "2"},
+            {es, ListFormatter.Type.AND, "oro y hierro", "oro", "hierro"},
+            {es, ListFormatter.Type.AND, "agua y hielo", "agua", "hielo"},
+            {
+                es,
+                ListFormatter.Type.AND,
+                "col\u00E1geno y hialur\u00F3nico",
+                "col\u00E1geno",
+                "hialur\u00F3nico"
+            },
+            {es, ListFormatter.Type.OR, "desierto u oasis", "desierto", "oasis"},
+            {es, ListFormatter.Type.OR, "oasis, desierto u océano", "oasis", "desierto", "océano"},
+            {es, ListFormatter.Type.OR, "7 u 8", "7", "8"},
+            {es, ListFormatter.Type.OR, "7 u 80", "7", "80"},
+            {es, ListFormatter.Type.OR, "7 u 800", "7", "800"},
+            {es, ListFormatter.Type.OR, "6, 7 u 8", "6", "7", "8"},
+            {es, ListFormatter.Type.OR, "10 u 11", "10", "11"},
+            {es, ListFormatter.Type.OR, "10 o 111", "10", "111"},
+            {es, ListFormatter.Type.OR, "10 o 11.2", "10", "11.2"},
+            {es, ListFormatter.Type.OR, "9, 10 u 11", "9", "10", "11"},
+            {he, ListFormatter.Type.AND, "a, b \u05D5-c", "a", "b", "c"},
+            {he, ListFormatter.Type.AND, "a \u05D5-b", "a", "b"},
+            {he, ListFormatter.Type.AND, "1, 2 \u05D5-3", "1", "2", "3"},
+            {he, ListFormatter.Type.AND, "1 \u05D5-2", "1", "2"},
             {
                 he,
-                Type.AND,
+                ListFormatter.Type.AND,
                 "\u05D0\u05D4\u05D1\u05D4 \u05D5\u05DE\u05E7\u05D5\u05D5\u05D4",
                 "\u05D0\u05D4\u05D1\u05D4",
                 "\u05DE\u05E7\u05D5\u05D5\u05D4"
             },
             {
                 he,
-                Type.AND,
+                ListFormatter.Type.AND,
                 "\u05D0\u05D4\u05D1\u05D4, \u05DE\u05E7\u05D5\u05D5\u05D4 \u05D5\u05D0\u05DE\u05D5\u05E0\u05D4",
                 "\u05D0\u05D4\u05D1\u05D4",
                 "\u05DE\u05E7\u05D5\u05D5\u05D4",
@@ -416,7 +437,7 @@ public class ListFormatterTest extends CoreTestFmwk {
         for (Width width : widths) {
             for (Object[] cas : cases) {
                 String[] locales = (String[]) cas[0];
-                Type type = (Type) cas[1];
+                ListFormatter.Type type = (ListFormatter.Type) cas[1];
                 String expected = (String) cas[2];
                 for (String locale : locales) {
                     ULocale uloc = new ULocale(locale);
@@ -442,7 +463,8 @@ public class ListFormatterTest extends CoreTestFmwk {
 
     @Test
     public void Test21871() {
-        ListFormatter fmt = ListFormatter.getInstance(ULocale.ENGLISH, Type.AND, Width.WIDE);
+        ListFormatter fmt =
+                ListFormatter.getInstance(ULocale.ENGLISH, ListFormatter.Type.AND, Width.WIDE);
         {
             FormattedList result = fmt.formatToValue("A", "");
             ConstrainedFieldPosition cfp = new ConstrainedFieldPosition();

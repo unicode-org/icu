@@ -27,10 +27,10 @@ import java.text.Format.Field;
  */
 public class ScientificNotation extends Notation {
 
-    int engineeringInterval;
-    boolean requireMinInt;
-    int minExponentDigits;
-    SignDisplay exponentSignDisplay;
+    final int engineeringInterval;
+    final boolean requireMinInt;
+    final int minExponentDigits;
+    final SignDisplay exponentSignDisplay;
 
     /* package-private */ ScientificNotation(
             int engineeringInterval,
@@ -58,9 +58,11 @@ public class ScientificNotation extends Notation {
      */
     public ScientificNotation withMinExponentDigits(int minExponentDigits) {
         if (minExponentDigits >= 1 && minExponentDigits <= RoundingUtils.MAX_INT_FRAC_SIG) {
-            ScientificNotation other = createCopy();
-            other.minExponentDigits = minExponentDigits;
-            return other;
+            return new ScientificNotation(
+                    this.engineeringInterval,
+                    this.requireMinInt,
+                    minExponentDigits,
+                    this.exponentSignDisplay);
         } else {
             throw new IllegalArgumentException(
                     "Integer digits must be between 1 and "
@@ -82,15 +84,11 @@ public class ScientificNotation extends Notation {
      * @see NumberFormatter
      */
     public ScientificNotation withExponentSignDisplay(SignDisplay exponentSignDisplay) {
-        ScientificNotation other = createCopy();
-        other.exponentSignDisplay = exponentSignDisplay;
-        return other;
-    }
-
-    /** Package-private clone method */
-    ScientificNotation createCopy() {
         return new ScientificNotation(
-                engineeringInterval, requireMinInt, minExponentDigits, exponentSignDisplay);
+                this.engineeringInterval,
+                this.requireMinInt,
+                this.minExponentDigits,
+                exponentSignDisplay);
     }
 
     /* package-private */ MicroPropsGenerator withLocaleData(

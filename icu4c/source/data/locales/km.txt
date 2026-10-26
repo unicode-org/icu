@@ -209,11 +209,11 @@ km{
                 "d MMMM y G",
                 "d MMM y G",
                 "d/M/y GGGGG",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
             }
             DateTimePatterns%atTime{
                 "{1} នៅ​ម៉ោង {0}",
@@ -238,14 +238,14 @@ km{
                 "GGGGGyMd",
             }
             availableFormats{
-                Ed{"d E"}
+                Ed{"E d"}
                 Gy{"y G"}
                 GyM{"M/y G"}
                 GyMEd{"E d/M/y G"}
                 GyMMM{"MMM y G"}
-                GyMMMEd{"E, d MMM y G"}
+                GyMMMEd{"E d MMM y G"}
                 GyMMMd{"d MMM y G"}
-                Hv{"ម៉HH v"}
+                Hv{"HH v"}
                 MEd{"E d/M"}
                 MMMEd{"E d MMM"}
                 MMMMd{"d MMMM"}
@@ -256,7 +256,8 @@ km{
                 yyyyM{"M/y GGGGG"}
                 yyyyMEd{"E d/M/y GGGGG"}
                 yyyyMMM{"MMM y G"}
-                yyyyMMMEd{"E, d MMM y G"}
+                yyyyMMMEd{"E d MMM y G"}
+                yyyyMMMM{"MMMM y G"}
                 yyyyMMMd{"d MMM y G"}
                 yyyyMd{"d/M/y GGGGG"}
                 yyyyQQQ{"QQQ y G"}
@@ -335,6 +336,10 @@ km{
                 MMMEd{
                     M{"E, d MMM – E, d MMM"}
                     d{"E, d MMM – E, d MMM"}
+                }
+                MMMMd{
+                    M{"d MMMM – d MMMM"}
+                    d{"d – d MMMM"}
                 }
                 MMMd{
                     M{"d MMM – d MMM"}
@@ -434,10 +439,14 @@ km{
                 GyMEd{"E d/M/y G"}
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E d MMM y G"}
+                GyMMMM{"MMMM y G"}
+                GyMMMMEd{"E d MMMM y G"}
+                GyMMMMd{"d MMMM y G"}
                 GyMMMd{"d MMM y G"}
-                Hv{"ម៉HH v"}
+                GyMd{"d/M/y G"}
                 MEd{"E d/M"}
                 MMMEd{"E d MMM"}
+                MMMMEd{"E d MMMM"}
                 MMMMW{
                     other{"សប្តាហ៍ទី W នៃខែ MMMM"}
                 }
@@ -449,6 +458,8 @@ km{
                 yMMM{"MMM y"}
                 yMMMEd{"E d MMM y"}
                 yMMMM{"MMMM y"}
+                yMMMMEd{"E d MMMM y"}
+                yMMMMd{"d MMMM y"}
                 yMMMd{"d MMM y"}
                 yMd{"d/M/y"}
                 yQQQ{"QQQ y"}
@@ -616,6 +627,10 @@ km{
                 MMMEd{
                     M{"E d MMM – E d MMM"}
                     d{"E d MMM – E d MMM"}
+                }
+                MMMMd{
+                    M{"d MMMM – d MMMM"}
+                    d{"d – d MMMM"}
                 }
                 MMMd{
                     M{"d MMM – d MMM"}

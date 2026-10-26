@@ -1895,15 +1895,11 @@ public abstract class DateFormat extends UFormat {
      *
      * @stable ICU 2.0
      */
-    /// CLOVER:OFF
-    // turn off code coverage since all subclasses override this
     @Override
     public int hashCode() {
         return numberFormat.hashCode();
         // just enough fields for a reasonable distribution
     }
-
-    /// CLOVER:ON
 
     /**
      * Overrides equals.
@@ -1974,10 +1970,8 @@ public abstract class DateFormat extends UFormat {
                     cal.getLocale(ULocale.VALID_LOCALE), cal.getLocale(ULocale.ACTUAL_LOCALE));
             return result;
         } catch (MissingResourceException e) {
-            /// CLOVER:OFF
-            // coverage requires separate run with no data, so skip
+            // coverage requires separate run with no data
             return new SimpleDateFormat("M/d/yy h:mm a");
-            /// CLOVER:ON
         }
     }
 
@@ -2022,8 +2016,6 @@ public abstract class DateFormat extends UFormat {
      * Creates a {@link DateFormat} object that can be used to format dates in the calendar system
      * specified by <code>cal</code>.
      *
-     * <p>
-     *
      * @param cal The calendar system for which a date format is desired.
      * @param dateStyle The type of date format desired. This can be {@link DateFormat#SHORT},
      *     {@link DateFormat#MEDIUM}, etc.
@@ -2037,8 +2029,6 @@ public abstract class DateFormat extends UFormat {
     /**
      * Creates a {@link DateFormat} object that can be used to format dates in the calendar system
      * specified by <code>cal</code>.
-     *
-     * <p>
      *
      * @param cal The calendar system for which a date format is desired.
      * @param dateStyle The type of date format desired. This can be {@link DateFormat#SHORT},
@@ -2155,8 +2145,6 @@ public abstract class DateFormat extends UFormat {
     /**
      * Creates a {@link DateFormat} object for the default locale that can be used to format dates
      * in the calendar system specified by <code>cal</code>.
-     *
-     * <p>
      *
      * @param cal The calendar system for which a date format is desired.
      * @param dateStyle The type of date format desired. This can be {@link DateFormat#SHORT},
@@ -2363,8 +2351,6 @@ public abstract class DateFormat extends UFormat {
      *
      * <p>There is no public constructor to this class, the only instances are the constants defined
      * here.
-     *
-     * <p>
      *
      * @stable ICU 3.8
      */
@@ -2664,18 +2650,14 @@ public abstract class DateFormat extends UFormat {
          */
         @Override
         protected Object readResolve() throws InvalidObjectException {
-            /// CLOVER:OFF
             if (this.getClass() != DateFormat.Field.class) {
                 throw new InvalidObjectException(
                         "A subclass of DateFormat.Field must implement readResolve.");
             }
-            /// CLOVER:ON
             Object o = FIELD_NAME_MAP.get(this.getName());
-            /// CLOVER:OFF
             if (o == null) {
                 throw new InvalidObjectException("Unknown attribute name.");
             }
-            /// CLOVER:ON
             return o;
         }
     }

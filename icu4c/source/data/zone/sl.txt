@@ -312,9 +312,6 @@ sl{
         "Europe:Copenhagen"{
             ec{"Köbenhavn"}
         }
-        "Europe:Dublin"{
-            ld{"Irski standardni čas"}
-        }
         "Europe:Isle_of_Man"{
             ec{"Otok Man"}
         }
@@ -323,9 +320,6 @@ sl{
         }
         "Europe:Lisbon"{
             ec{"Lizbona"}
-        }
-        "Europe:London"{
-            ld{"Britanski poletni čas"}
         }
         "Europe:Luxembourg"{
             ec{"Luksemburg"}
@@ -393,6 +387,11 @@ sl{
         "Pacific:Honolulu"{
             ec{"Honolulu"}
         }
+        "meta:Acre"{
+            ld{"Acrejski poletni čas"}
+            lg{"Acrejski čas"}
+            ls{"Acrejski standardni čas"}
+        }
         "meta:Afghanistan"{
             ls{"Afganistanski čas"}
         }
@@ -444,9 +443,9 @@ sl{
             ls{"Anadirski standardni čas"}
         }
         "meta:Apia"{
-            ld{"Poletni čas: Apia"}
-            lg{"Čas: Apia"}
-            ls{"Standardni čas: Apia"}
+            ld{"Zahodnosamojski poletni čas"}
+            lg{"Zahodnosamojski čas"}
+            ls{"Zahodnosamojski standardni čas"}
         }
         "meta:Arabian"{
             ld{"Arabski poletni čas"}
@@ -518,6 +517,10 @@ sl{
             ld{"Brasilski poletni čas"}
             lg{"Brasilski čas"}
             ls{"Brasilski standardni čas"}
+        }
+        "meta:British"{
+            ld{"Britanski poletni čas"}
+            lg{"Britanski čas"}
         }
         "meta:Brunei"{
             ls{"Brunejski čas"}
@@ -634,6 +637,11 @@ sl{
         "meta:Gilbert_Islands"{
             ls{"Čas: Gilbertovi otoki"}
         }
+        "meta:Greenland"{
+            ld{"Grenlandski poletni čas"}
+            lg{"Grenlandski čas"}
+            ls{"Grenlandski standardni čas"}
+        }
         "meta:Greenland_Eastern"{
             ld{"Vzhodnogrenlandski poletni čas"}
             lg{"Vzhodnogrenlandski čas"}
@@ -651,7 +659,7 @@ sl{
             ls{"Gvajanski čas"}
         }
         "meta:Hawaii"{
-            ls{"Havajski aleutski standardni čas"}
+            ls{"Havajski standardni čas"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"Havajski aleutski poletni čas"}
@@ -691,6 +699,10 @@ sl{
             lg{"Iranski čas"}
             ls{"Iranski standardni čas"}
         }
+        "meta:Irish"{
+            ld{"Irski standardni čas"}
+            lg{"Irski čas"}
+        }
         "meta:Irkutsk"{
             ld{"Irkutski poletni čas"}
             lg{"Irkutski čas"}
@@ -707,9 +719,9 @@ sl{
             ls{"Japonski standardni čas"}
         }
         "meta:Kamchatka"{
-            ld{"Petropavlovsk-Kamčatski poletni čas"}
-            lg{"Petropavlovsk-Kamčatski čas"}
-            ls{"Petropavlovsk-Kamčatski standardni čas"}
+            ld{"Kamčatski poletni čas"}
+            lg{"Kamčatski čas"}
+            ls{"Kamčatski standardni čas"}
         }
         "meta:Kazakhstan"{
             ls{"Kazahstanski čas"}
@@ -762,9 +774,9 @@ sl{
             ls{"Čas: Marshallovi otoki"}
         }
         "meta:Mauritius"{
-            ld{"Mauricijski poletni čas"}
-            lg{"Mauricijski čas"}
-            ls{"Mauricijski standardni čas"}
+            ld{"Mavricijski poletni čas"}
+            lg{"Mavricijski čas"}
+            ls{"Mavricijski standardni čas"}
         }
         "meta:Mawson"{
             ls{"Mawsonski čas"}
@@ -891,8 +903,6 @@ sl{
             ls{"Samarski standardni čas"}
         }
         "meta:Samoa"{
-            ld{"Samoanski poletni čas"}
-            lg{"Samoanski čas"}
             ls{"Samoanski standardni čas"}
         }
         "meta:Seychelles"{
@@ -952,6 +962,9 @@ sl{
             ld{"Urugvajski poletni čas"}
             lg{"Urugvajski čas"}
             ls{"Urugvajski standardni čas"}
+        }
+        "meta:Urumqi"{
+            ls{"Urumški čas"}
         }
         "meta:Uzbekistan"{
             ld{"Uzbekistanski poletni čas"}

@@ -11,19 +11,35 @@ nl{
         colCaseLevel{"Hoofdlettergevoelig sorteren"}
         colNormalization{"Genormaliseerd sorteren"}
         colNumeric{"Numeriek sorteren"}
+        colReorder{"Script/Blok herordenen"}
         colStrength{"Sorteervoorrang"}
         collation{"sorteervolgorde"}
         currency{"valuta"}
+        d0{"Bestemming transformeren"}
+        dx{"Afbreekuitzonderingen"}
         em{"Emoji-presentatie"}
+        fw{"eerste dag van de week"}
+        h0{"Ingevoegd"}
         hc{"uursysteem (12 of 24)"}
+        i0{"invoermethode"}
+        k0{"toetsenbord"}
+        kv{"Hoogste genegeerd"}
         lb{"stijl regelafbreking"}
         lw{"Regelafbreking binnen woorden"}
+        m0{"Transformatieregels"}
         ms{"maatsysteem"}
+        mu{"meeteenheid"}
         numbers{"cijfers"}
+        rg{"regio voor aanvullende gegevens"}
+        s0{"bron transformeren"}
+        sd{"regionale onderverdeling"}
         ss{"Zinsafbreking na afk."}
+        t{"transformeren"}
+        t0{"machinevertaald"}
         timezone{"Tijdzone"}
         va{"Landvariant"}
         x{"Privégebruik"}
+        x0{"Transformeren voor privégebruik"}
     }
     Languages{
         aa{"Afar"}
@@ -942,8 +958,10 @@ nl{
             indian{"Indiaas nationaal"}
             islamic{"Islamitisch"}
             islamic-civil{"Islamitisch (cyclisch)"}
+            islamic-rgsa{"Islamitisch, waarneming in Saoedi-Arabië"}
             islamic-tbla{"Hijri (tabulair, astronomische epoche)"}
             islamic-umalqura{"Islamitisch (Umm al-Qura)"}
+            iso8601{"ISO-8601"}
             japanese{"Japans"}
             persian{"Perzisch"}
             roc{"van de Chinese Republiek"}
@@ -969,6 +987,11 @@ nl{
             no{"Sorteervolgorde algemeen hoofdlettergebruik"}
             upper{"Eerst sorteren op hoofdletters"}
         }
+        colCaseFirst%core{
+            lower{"kleine letters"}
+            no{"kleine letters"}
+            upper{"hoofdletters"}
+        }
         colCaseLevel{
             no{"Niet hoofdlettergevoelig sorteren"}
             yes{"Hoofdlettergevoelig sorteren"}
@@ -981,12 +1004,29 @@ nl{
             no{"Cijfers afzonderlijk sorteren"}
             yes{"Cijfers numeriek sorteren"}
         }
+        colReorder%core{
+            currency{"valuta"}
+            digit{"getallen"}
+            punct{"leestekens"}
+            space{"witruimte"}
+            symbol{"symbool"}
+        }
         colStrength{
             identical{"Alles sorteren"}
             primary{"Alleen sorteren op letters"}
             quaternary{"Sorteren op accenten/hoofdlettergebruik/breedte/Kana"}
             secondary{"Sorteren op accenten"}
             tertiary{"Sorteren op accenten/hoofdlettergebruik/breedte"}
+        }
+        colStrength%core{
+            identical{"alles"}
+            primary{"alleen basisletters"}
+            quaternary{
+                "basis, accenten, hoofd-/kleine letters, varianten, lettergreepschrif"
+                "t"
+            }
+            secondary{"basis, accenten"}
+            tertiary{"basis, accenten, hoofd-/kleine letters, varianten"}
         }
         collation{
             compat{"vorige sorteervolgorde, voor compatibiliteit"}
@@ -1009,10 +1049,13 @@ nl{
             compat{"Compatibiliteit"}
             dictionary{"Woordenboek"}
             ducet{"standaard Unicode"}
+            emoji{"emoji"}
+            eor{"Europese regels"}
             phonebook{"Telefoonboek"}
             phonetic{"Fonetisch"}
             pinyin{"Pinyin"}
             search{"zoeken"}
+            searchjl{"Koreaanse beginconsonant"}
             standard{"standaard"}
             stroke{"streek"}
             traditional{"traditioneel"}
@@ -1030,16 +1073,26 @@ nl{
             text{"tekst"}
         }
         hc{
+            c12{"12-uursysteem"}
+            c24{"24-uursysteem"}
             h11{"12-uursysteem (0-11)"}
             h12{"12-uursysteem (1-12)"}
             h23{"24-uursysteem (0-23)"}
             h24{"24-uursysteem (1-24)"}
         }
         hc%core{
+            c12{"12"}
+            c24{"24"}
             h11{"12 (0–11)"}
             h12{"12 (1–12)"}
             h23{"24 (0–23)"}
             h24{"24 (1–24)"}
+        }
+        kv%core{
+            currency{"Spaties, interpunctie, alle symbolen verschuiven"}
+            punct{"Spaties, interpunctie verschuiven"}
+            space{"Spaties, interpunctie verschuiven"}
+            symbol{"Spaties, interpunctie, niet-valutasymbolen verschuiven"}
         }
         lb{
             loose{"losse stijl regelafbreking"}
@@ -1158,9 +1211,45 @@ nl{
             wara{"Warang Citi cijfers"}
             wcho{"Wancho cijfers"}
         }
+        numbers%core{
+            arabext{"uitgebreid Arabisch-Indisch"}
+            armnlow{"Armeens klein"}
+            finance{"financieel"}
+            fullwide{"volledige breedte"}
+            greklow{"Grieks klein"}
+            hanidays{"Han-tekens voor dagnummering in traditionele kalenders"}
+            hanidec{"Chinees decimaal"}
+            hansfin{"vereenvoudigd Chinees financieel"}
+            hantfin{"traditioneel Chinees financieel"}
+            jpanfin{"Japans financieel"}
+            jpanyear{"Gannen-nummering voor het eerste Japanse jaar"}
+            lanatham{"Tai Tham Tham (religieus)"}
+            mathbold{"wiskundig vet"}
+            mathdbl{"wiskundig dubbellijnig"}
+            mathmono{"wiskundig monospace"}
+            mathsanb{"wiskundig schreefloos vet"}
+            mathsans{"wiskundig schreefloos"}
+            mymrepka{"Myanmarese Oost-Pwo Karen"}
+            mymrpao{"Myanmarese Pa’o"}
+            mymrshan{"Myanmarese Shan"}
+            mymrtlng{"Myanmarese Tai Laing"}
+            native{"binnenlands"}
+            outlined{"omlijnd"}
+            roman{"Romeins"}
+            romanlow{"Romeins klein"}
+            segment{"gesegmenteerd"}
+            tamldec{"Tamil"}
+            traditional{"traditioneel"}
+        }
         ss%core{
             none{"uit"}
             standard{"aan"}
+        }
+        t0{
+            und{"niet-gespecificeerde machinevertaling"}
+        }
+        va%core{
+            posix{"POSIX"}
         }
     }
     Variants{

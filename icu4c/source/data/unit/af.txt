@@ -500,10 +500,6 @@ af{
             }
         }
         graphics{
-            dot{
-                one{"{0} stippel"}
-                other{"{0} stippels"}
-            }
             dot-per-centimeter{
                 dnam{"stippels per sentimeter"}
                 one{"{0} stippel per sentimeter"}
@@ -700,14 +696,14 @@ af{
             }
             ounce{
                 dnam{"onse"}
-                one{"{0} ons"}
-                other{"{0} onse"}
+                one{"{0} ons"}
+                other{"{0} onse"}
                 per{"{0} per ons"}
             }
             ounce-troy{
-                dnam{"troy-onse"}
-                one{"{0} troy-ons"}
-                other{"{0} troy-onse"}
+                dnam{"ons troois"}
+                one{"{0} ons troois"}
+                other{"{0} ons troois"}
             }
             pound{
                 one{"{0} pond"}
@@ -964,11 +960,6 @@ af{
                 one{"{0} Br. vloeistofons"}
                 other{"{0} Br. vloeistofonse"}
             }
-            fluid-ounce-metric{
-                dnam{"m. vl. ons"}
-                one{"{0} m. vl. ons"}
-                other{"{0} m. vl. ons"}
-            }
             gallon{
                 dnam{"gelling"}
                 one{"{0} gelling"}
@@ -986,7 +977,6 @@ af{
                 other{"{0} hektoliter"}
             }
             liter{
-                dnam{"liter"}
                 one{"{0} liter"}
                 other{"{0} liter"}
                 per{"{0} per liter"}
@@ -1106,16 +1096,6 @@ af{
             mole{
                 one{"{0}mol"}
                 other{"{0}mol"}
-            }
-            ofglucose{
-                dnam{"Glk"}
-                one{"{0} Glk"}
-                other{"{0} Glk"}
-            }
-            part{
-                dnam{"deel"}
-                one{"{0} deel"}
-                other{"{0} deel"}
             }
             part-per-1e6{
                 dnam{"d.p.m."}
@@ -1282,11 +1262,6 @@ af{
                 one{"{0}kal."}
                 other{"{0}kal."}
             }
-            calorie-it{
-                dnam{"IT-kal."}
-                one{"{0} IT-kal."}
-                other{"{0} IT-kal."}
-            }
             electronvolt{
                 dnam{"eV"}
                 one{"{0}eV"}
@@ -1354,8 +1329,6 @@ af{
         graphics{
             dot{
                 dnam{"stippel"}
-                one{"{0} stippel"}
-                other{"{0} stippels"}
             }
             dot-per-centimeter{
                 one{"{0}dpcm"}
@@ -1445,70 +1418,69 @@ af{
             }
         }
         mass{
-            carat{
-                one{"{0}kar."}
-                other{"{0}kar."}
-            }
             dalton{
                 dnam{"Da"}
-                one{"{0}Da"}
-                other{"{0}Da"}
+                one{"{0} DA"}
+                other{"{0} DA"}
             }
             earth-mass{
                 dnam{"M⊕"}
-                one{"{0}M⊕"}
-                other{"{0}M⊕"}
+                one{"{0} M⊕"}
+                other{"{0} M⊕"}
             }
             grain{
-                one{"{0}korrelg."}
-                other{"{0}korrelg."}
+                one{"{0} korrelg."}
+                other{"{0} korrelg."}
             }
             gram{
-                one{"{0}g"}
-                other{"{0}g"}
+                one{"{0} g"}
+                other{"{0} g"}
             }
             kilogram{
-                one{"{0}kg"}
-                other{"{0}kg"}
+                one{"{0} kg"}
+                other{"{0} kg"}
             }
             microgram{
-                one{"{0}μg"}
-                other{"{0}μg"}
+                one{"{0} μg"}
+                other{"{0} μg"}
             }
             milligram{
-                one{"{0}ng"}
-                other{"{0}mg"}
+                one{"{0} mg"}
+                other{"{0} mg"}
             }
             ounce{
-                one{"{0}ons."}
-                other{"{0}ons."}
+                dnam{"oz."}
+                one{"{0} oz."}
+                other{"{0} oz."}
+                per{"{0}/oz."}
             }
             ounce-troy{
-                dnam{"ons.t."}
-                one{"{0}ons.t."}
-                other{"{0}ons.t."}
+                dnam{"oz. ts."}
+                one{"{0} oz. ts."}
+                other{"{0} oz. ts."}
             }
             pound{
                 dnam{"lb"}
-                one{"{0}#"}
-                other{"{0}#"}
+                one{"{0} #"}
+                other{"{0} #"}
             }
             solar-mass{
                 dnam{"M☉"}
-                one{"{0}M☉"}
-                other{"{0}M☉"}
+                one{"{0} M☉"}
+                other{"{0} M☉"}
             }
             stone{
                 one{"{0}st"}
                 other{"{0}st"}
             }
             ton{
-                one{"{0}VSA-t."}
-                other{"{0}VSA-t."}
+                one{"{0} VSA-t."}
+                other{"{0} VSA-t."}
             }
             tonne{
-                one{"{0}t"}
-                other{"{0}t"}
+                dnam{"t."}
+                one{"{0} t."}
+                other{"{0} t."}
             }
         }
         power{
@@ -1643,8 +1615,8 @@ af{
             }
             cubic-inch{
                 dnam{"dm³"}
-                one{"{0}dm³"}
-                other{"{0}dm³"}
+                one{"{0} dm³"}
+                other{"{0} dm³"}
             }
             cubic-mile{
                 one{"{0}myl³"}
@@ -1664,8 +1636,6 @@ af{
             }
             dessert-spoon-imperial{
                 dnam{"Br. dl."}
-                one{"{0} Br. dl."}
-                other{"{0} Br. dl."}
             }
             dram{
                 dnam{"vl. dr."}
@@ -1680,16 +1650,6 @@ af{
                 one{"{0}vl.oz."}
                 other{"{0}vl.oz."}
             }
-            fluid-ounce-imperial{
-                dnam{"Br. vl. oz."}
-                one{"{0} Br. vl. oz."}
-                other{"{0} Br. vl. oz."}
-            }
-            fluid-ounce-metric{
-                dnam{"m. vl. ons"}
-                one{"{0} m. vl. ons"}
-                other{"{0} m. vl. ons"}
-            }
             gallon{
                 one{"{0}gell."}
                 other{"{0}gell."}
@@ -1702,9 +1662,6 @@ af{
             jigger{
                 one{"{0}sopie"}
                 other{"{0}sopies"}
-            }
-            liter{
-                dnam{"liter"}
             }
             pinch{
                 dnam{"kn."}
@@ -1732,9 +1689,7 @@ af{
                 other{"{0}e."}
             }
             teaspoon{
-                dnam{"t."}
-                one{"{0}tl."}
-                other{"{0}tl."}
+                dnam{"tl."}
             }
         }
     }
@@ -2133,15 +2088,15 @@ af{
                 other{"{0} korrelgewig"}
             }
             ounce{
-                dnam{"ons."}
-                one{"{0} ons."}
-                other{"{0} ons."}
-                per{"{0}/ons."}
+                dnam{"oz."}
+                one{"{0} oz."}
+                other{"{0} oz."}
+                per{"{0}/oz."}
             }
             ounce-troy{
-                dnam{"troy-ons"}
-                one{"{0} ons.t."}
-                other{"{0} ons.t."}
+                dnam{"oz. troois"}
+                one{"{0} oz. ts."}
+                other{"{0} oz. ts."}
             }
             pound{
                 dnam{"pond"}
@@ -2157,8 +2112,13 @@ af{
             }
             ton{
                 dnam{"VSA-ton"}
-                one{"{0} VSA-t."}
-                other{"{0} VSA-t."}
+                one{"{0} VSA-t."}
+                other{"{0} VSA-t."}
+            }
+            tonne{
+                dnam{"t."}
+                one{"{0} t."}
+                other{"{0} t."}
             }
         }
         power{
@@ -2386,7 +2346,7 @@ af{
                 other{"{0} e."}
             }
             teaspoon{
-                dnam{"t."}
+                dnam{"tl."}
                 one{"{0} tl."}
                 other{"{0} tl."}
             }

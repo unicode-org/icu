@@ -1588,10 +1588,6 @@ gl{
             one{"dólar do Caribe Oriental"}
             other{"dólares do Caribe Oriental"}
         }
-        XCG{
-            one{"florín caribeño"}
-            other{"florín caribeño"}
-        }
         XOF{
             one{"franco CFA (BCEAO)"}
             other{"francos CFA (BCEAO)"}
@@ -1615,10 +1611,6 @@ gl{
         ZMW{
             one{"kwacha zambiano"}
             other{"kwachas zambianos"}
-        }
-        ZWG{
-            one{"ouro de Zimbabwe"}
-            other{"ouro de Zimbabwe"}
         }
     }
 }

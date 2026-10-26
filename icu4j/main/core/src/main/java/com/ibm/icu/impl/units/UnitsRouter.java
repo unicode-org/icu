@@ -181,7 +181,7 @@ public class UnitsRouter {
         }
     }
 
-    public class RouteResult {
+    public static class RouteResult {
         public final ComplexUnitsConverter.ComplexConverterResult complexConverterResult;
 
         // The output unit for this RouteResult. This may be a MIXED unit - for

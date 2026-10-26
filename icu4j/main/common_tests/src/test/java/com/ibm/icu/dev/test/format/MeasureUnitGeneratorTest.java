@@ -68,7 +68,7 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
         }
     }
 
-    private static final Set<String> DRAFT_VERSION_SET = Set.of("76", "77", "78");
+    private static final Set<String> DRAFT_VERSION_SET = Set.of("77", "78", "79");
 
     private static final Set<String> TIME_CODES =
             Set.of("year", "month", "week", "day", "hour", "minute", "second");
@@ -312,6 +312,9 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
         {"SAI", "78"},
         {"SHAKU", "78"},
         {"TO_JP", "78"},
+        {"DYNE", "79"},
+        {"POUNDAL", "79"},
+        {"MILLIINCH", "79"},
     };
 
     private static final HashMap<String, String> JAVA_VERSION_MAP = new HashMap<>();
@@ -595,6 +598,7 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
         return allUnits;
     }
 
+    @SuppressWarnings("ReferenceEquality")
     private static void generateCXXConstants() throws IOException {
         String fullOutputPath = "${icuroot}/icu4c/source/i18n/measunit.cpp";
         try (PrintStream out = createAndStartOutputFile(fullOutputPath)) {

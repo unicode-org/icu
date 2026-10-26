@@ -68,7 +68,7 @@ public class TransliterationChart {
         String testString = "\u0946\u093E";
 
         UnicodeSet failNorm = new UnicodeSet();
-        Set latinFail = new TreeSet();
+        Set<String> latinFail = new TreeSet<>();
 
         for (int i = 0; i < indicScripts.length; ++i) {
             if (indicScripts[i] == UScript.LATIN) continue;
@@ -112,12 +112,12 @@ public class TransliterationChart {
         }
         pw.println("</tr>");
 
-        Iterator rit = eq.getSetIterator(new MyComparator());
+        Iterator<Set<String>> rit = eq.getSetIterator(new MyComparator());
         while (rit.hasNext()) {
-            Set equivs = (Set) rit.next();
+            Set<String> equivs = rit.next();
             pw.print("<tr>");
-            Iterator sit = equivs.iterator();
-            String source = (String) sit.next();
+            Iterator<String> sit = equivs.iterator();
+            String source = sit.next();
             String item = anyToLatin.transliterate(source);
             if (item.equals("") || source.equals(item)) item = "&nbsp;";
             pw.print("<td>" + item + "</td>");
@@ -125,7 +125,7 @@ public class TransliterationChart {
                 sit = equivs.iterator();
                 item = "";
                 while (sit.hasNext()) {
-                    String trial = (String) sit.next();
+                    String trial = sit.next();
                     if (!sets[i].containsAll(trial)) continue;
                     item = trial;
                     break;
@@ -184,9 +184,8 @@ public class TransliterationChart {
             pw.println(pieces);
 
             pw.println("<h2>Failed Round-Trip</h2>");
-            Iterator cit = latinFail.iterator();
-            while (cit.hasNext()) {
-                pw.println(cit.next() + "<br>");
+            for (String failMsg : latinFail) {
+                pw.println(failMsg + "<br>");
             }
         }
 
@@ -230,13 +229,13 @@ public class TransliterationChart {
         return sb.toString();
     }
 
-    static class MyComparator implements Comparator {
-        public int compare(Object o1, Object o2) {
-            Iterator i1 = ((TreeSet) o1).iterator();
-            Iterator i2 = ((TreeSet) o2).iterator();
+    static class MyComparator implements Comparator<Set<String>> {
+        public int compare(Set<String> o1, Set<String> o2) {
+            Iterator<String> i1 = o1.iterator();
+            Iterator<String> i2 = o2.iterator();
             while (i1.hasNext() && i2.hasNext()) {
-                String a = (String) i1.next();
-                String b = (String) i2.next();
+                String a = i1.next();
+                String b = i2.next();
                 int result = a.compareTo(b);
                 if (result != 0) return result;
             }
@@ -246,11 +245,9 @@ public class TransliterationChart {
         }
     }
 
-    static class ReverseComparator implements Comparator {
-        public int compare(Object o1, Object o2) {
-            String a = o1.toString();
+    static class ReverseComparator implements Comparator<String> {
+        public int compare(String a, String b) {
             char a1 = a.charAt(0);
-            String b = o2.toString();
             char b1 = b.charAt(0);
             if (a1 < 0x900 && b1 > 0x900) return -1;
             if (a1 > 0x900 && b1 < 0x900) return +1;
@@ -259,18 +256,18 @@ public class TransliterationChart {
     }
 
     static class EquivClass {
-        EquivClass(Comparator c) {
+        EquivClass(Comparator<String> c) {
             comparator = c;
         }
 
-        private HashMap itemToSet = new HashMap();
-        private Comparator comparator;
+        private HashMap<String, Set<String>> itemToSet = new HashMap<>();
+        private Comparator<String> comparator;
 
-        void add(Object a, Object b) {
-            Set sa = (Set) itemToSet.get(a);
-            Set sb = (Set) itemToSet.get(b);
+        void add(String a, String b) {
+            Set<String> sa = itemToSet.get(a);
+            Set<String> sb = itemToSet.get(b);
             if (sa == null && sb == null) { // new set!
-                Set s = new TreeSet(comparator);
+                Set<String> s = new TreeSet<>(comparator);
                 s.add(a);
                 s.add(b);
                 itemToSet.put(a, s);
@@ -281,36 +278,38 @@ public class TransliterationChart {
                 sa.add(b);
             } else { // merge sets, dumping sb
                 sa.addAll(sb);
-                Iterator it = sb.iterator();
-                while (it.hasNext()) {
-                    itemToSet.put(it.next(), sa);
+                for (String sbItem : sb) {
+                    itemToSet.put(sbItem, sa);
                 }
             }
         }
 
-        private class MyIterator implements Iterator {
-            private Iterator it;
+        private class MyIterator implements Iterator<Set<String>> {
+            private Iterator<Set<String>> it;
 
-            MyIterator(Comparator comp) {
-                TreeSet values = new TreeSet(comp);
+            MyIterator(Comparator<Set<String>> comp) {
+                TreeSet<Set<String>> values = new TreeSet<>(comp);
                 values.addAll(itemToSet.values());
                 it = values.iterator();
             }
 
+            @Override
             public boolean hasNext() {
                 return it.hasNext();
             }
 
-            public Object next() {
+            @Override
+            public Set<String> next() {
                 return it.next();
             }
 
+            @Override
             public void remove() {
                 throw new IllegalArgumentException("can't remove");
             }
         }
 
-        public Iterator getSetIterator(Comparator comp) {
+        public Iterator<Set<String>> getSetIterator(Comparator<Set<String>> comp) {
             return new MyIterator(comp);
         }
     }

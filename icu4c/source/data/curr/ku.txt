@@ -267,10 +267,6 @@ ku{
             "CNH",
             "yûanê çînî (offshore)",
         }
-        CNX{
-            "CNX",
-            "dolarê Banka Xelkî ya çînî",
-        }
         CNY{
             "CN¥",
             "yûanê çînî",
@@ -1492,10 +1488,6 @@ ku{
         CNH{
             one{"yûanê çînî (offshore)"}
             other{"yûanên çînî (offshore)"}
-        }
-        CNX{
-            one{"dolarê Banka Xelkî ya çînî"}
-            other{"dolarên Banka Xelkî ya çînî"}
         }
         CNY{
             one{"yûanê çînî"}

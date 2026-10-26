@@ -37,7 +37,6 @@ to{
         ann{"lea fakaʻopolo"}
         anp{"lea fakaʻangika"}
         ar{"lea fakaʻalepea"}
-        ar_001{"lea fakaʻalepea (māmani)"}
         arc{"lea fakaʻalāmiti"}
         arn{"lea fakamapuse"}
         aro{"lea fakaʻalaona"}
@@ -142,8 +141,6 @@ to{
         dar{"lea fakatalakuā"}
         dav{"lea fakataita"}
         de{"lea fakasiamane"}
-        de_AT{"lea fakasiamane-ʻaositulia"}
-        de_CH{"lea fakasiamane-hake-suisilani"}
         del{"lea fakatelauale"}
         den{"lea fakasilave"}
         dgr{"lea fakatōkelipi"}
@@ -168,16 +165,9 @@ to{
         el{"lea fakakalisi"}
         elx{"lea fakaʻelamite"}
         en{"lea fakapālangi"}
-        en_AU{"lea fakapālangi-ʻaositelēlia"}
-        en_CA{"lea fakapālangi-kānata"}
-        en_GB{"lea fakapilitānia"}
-        en_US{"lea fakapālangi-ʻamelika"}
         enm{"lea fakapālangi-lotoloto"}
         eo{"lea fakaʻesipulanito"}
         es{"lea fakasipēnisi"}
-        es_419{"lea fakasipeini-lātini-ʻamelika"}
-        es_ES{"lea fakasipeini-ʻeulope"}
-        es_MX{"lea fakasipeini-mekisikou"}
         esu{"lea fakaiūpiki-loloto"}
         et{"lea fakaʻesitōnia"}
         eu{"lea fakapāsiki"}
@@ -195,8 +185,6 @@ to{
         fo{"lea fakafaloe"}
         fon{"lea fakafōngi"}
         fr{"lea fakafalanisē"}
-        fr_CA{"lea fakafalanisē-kānata"}
-        fr_CH{"lea fakafalanisē-suisilani"}
         frc{"lea fakafalanisē-kasuni"}
         frm{"lea fakafalanisē-lotoloto"}
         fro{"lea fakafalanisē-motuʻa"}
@@ -239,7 +227,6 @@ to{
         hax{"lea fakahaita-tonga"}
         he{"lea fakahepelū"}
         hi{"lea fakahinitī"}
-        hi_Latn{"lea fakahinitī (fakalatina)"}
         hif{"lea fakahinitī-fisi"}
         hil{"lea fakahilikainoni"}
         hit{"lea fakahitite"}
@@ -423,7 +410,6 @@ to{
         niu{"lea fakaniuē"}
         njo{"lea fakaʻaonasa"}
         nl{"lea fakahōlani"}
-        nl_BE{"lea fakahōlani-pelesiume"}
         nmg{"lea fakakuasio"}
         nn{"lea fakanoauē-ninosiki"}
         nnh{"lea fakangiemipōni"}
@@ -655,7 +641,6 @@ to{
         zen{"lea fakasenaka"}
         zgh{"lea fakatamasaiti-moloko"}
         zh{"lea fakasiaina"}
-        zh_Hans{"lea fakasiaina-fakafaingofua"}
         zh_Hant{"lea fakasiaina-tukufakaholo"}
         zu{"lea fakasulu"}
         zun{"lea fakasuni"}
@@ -663,8 +648,8 @@ to{
         zza{"lea fakasāsā"}
     }
     Languages%long{
-        zh_Hans{"lea fakasiaina-mānitali-fakafaingofua"}
-        zh_Hant{"lea fakasiaina-mānitali-tukufakaholo"}
+        zh_Hans{"lea fakasiaina-mānitali (fakafaingofua)"}
+        zh_Hant{"lea fakasiaina-mānitali (tukufakaholo)"}
     }
     Languages%menu{
         yue{"lea fakakuangitongi (Siaina)"}
@@ -676,7 +661,6 @@ to{
     }
     Languages%variant{
         ckb{"lea fakakūtisi-solani"}
-        hi_Latn{"lea fakahinitī (fakapilitānia)"}
     }
     Scripts{
         Adlm{"tohinima fakaʻatilami"}
@@ -862,16 +846,20 @@ to{
             dangi{"fakataniki"}
             ethiopic{"fakaʻītiōpia"}
             ethiopic-amete-alem{"fakaʻītiōpia-ʻamete-ʻalemi"}
-            gregorian{"fakakelekolia"}
+            gregorian{"tohi māhina fakakelekolia"}
             hebrew{"fakahepelū"}
             indian{"fakaʻinitia"}
             islamic{"fakamohameti"}
             islamic-civil{"fakamohameti-sivile"}
             islamic-umalqura{"fakamohameti-ʻumalakula"}
-            iso8601{"faka-iso8601"}
+            iso8601{"tohi māhina faka-iso8601"}
             japanese{"fakasiapani"}
             persian{"fakapēsia"}
             roc{"fakalepupelika siaina"}
+        }
+        calendar%core{
+            gregorian{"fakakelekolia"}
+            iso8601{"fakakelekolia (iso8601)"}
         }
         cf{
             account{"anga paʻanga-kalake"}
@@ -881,8 +869,11 @@ to{
             ducet{"ʻunikōti"}
             phonebook{"fika telefoni"}
             search{"fakakumi ʻi hono anga lahi"}
-            standard{"fakasīpinga"}
+            standard{"fili fakasīpinga"}
             traditional{"tukufakaholo"}
+        }
+        collation%core{
+            standard{"fakasīpinga"}
         }
         hc{
             h11{"takai houa 0–11"}

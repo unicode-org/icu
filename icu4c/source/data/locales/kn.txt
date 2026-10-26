@@ -346,6 +346,9 @@ kn{
                 MMM{
                     M{"MMM–MMM"}
                 }
+                MMMMd{
+                    d{"MMMM d – d"}
+                }
                 MMMd{
                     M{"d MMM – d MMM"}
                     d{"d –d MMM"}
@@ -419,6 +422,7 @@ kn{
                 Ed{"d E"}
                 MEd{"d/M, E"}
                 MMMEd{"E, d MMM"}
+                MMMMEd{"E, d MMMM"}
                 MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
                 MMdd{"dd-MM"}
@@ -429,7 +433,9 @@ kn{
                 yMMM{"MMM y"}
                 yMMMEd{"E, MMM d, y"}
                 yMMMM{"MMMM y"}
-                yMMMd{"MMM d,y"}
+                yMMMMEd{"E, d MMMM y"}
+                yMMMMd{"d MMMM y"}
+                yMMMd{"d MMM y"}
                 yMd{"d/M/y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
@@ -525,6 +531,10 @@ kn{
                 }
                 MMM{
                     M{"MMM–MMM"}
+                }
+                MMMMd{
+                    M{"d MMMM – d MMMM"}
+                    d{"MMMM d – d"}
                 }
                 MMMd{
                     M{"d MMM – d MMM"}

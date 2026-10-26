@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
 import java.nio.charset.spi.CharsetProvider;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,11 +24,31 @@ import java.util.List;
  */
 public final class CharsetProviderICU extends CharsetProvider {
     /**
-     * List of available ICU Charsets, empty during static initialization. Not a Set or Map, so that
-     * we can add different Charset objects with the same name(), which means that they are
-     * .equals(). See ICU ticket #11493.
+     * Holds the list of available ICU Charsets, loaded once. Uses the holder class idiom (JLS
+     * 12.4.2) for thread-safe lazy initialization. Not a Set or Map, so that we can add different
+     * Charset objects with the same name(), which means that they are .equals(). See ICU ticket
+     * #11493.
      */
-    private static List<Charset> icuCharsets = Collections.<Charset>emptyList();
+    private static final class AvailableCharsetsHolder {
+        static final List<Charset> CHARSETS;
+
+        static {
+            List<Charset> icucs = new LinkedList<Charset>();
+            int num = UConverterAlias.countAvailable();
+            for (int i = 0; i < num; ++i) {
+                String name = UConverterAlias.getAvailableName(i);
+                try {
+                    Charset cs = getCharset(name, "");
+                    icucs.add(cs);
+                } catch (UnsupportedCharsetException ex) {
+                } catch (IOException e) {
+                }
+                // add only charsets that can be created!
+            }
+            // Unmodifiable so that charsets().next().remove() cannot change it.
+            CHARSETS = List.copyOf(icucs);
+        }
+    }
 
     /**
      * Default constructor
@@ -264,28 +283,8 @@ public final class CharsetProviderICU extends CharsetProvider {
         return (ret);
     }
 
-    /**
-     * Lazy-init the icuCharsets list. Could be done during static initialization if constructing
-     * all of the Charsets were cheap enough. See ICU ticket #11481.
-     */
-    private static final synchronized void loadAvailableICUCharsets() {
-        if (!icuCharsets.isEmpty()) {
-            return;
-        }
-        List<Charset> icucs = new LinkedList<Charset>();
-        int num = UConverterAlias.countAvailable();
-        for (int i = 0; i < num; ++i) {
-            String name = UConverterAlias.getAvailableName(i);
-            try {
-                Charset cs = getCharset(name, "");
-                icucs.add(cs);
-            } catch (UnsupportedCharsetException ex) {
-            } catch (IOException e) {
-            }
-            // add only charsets that can be created!
-        }
-        // Unmodifiable so that charsets().next().remove() cannot change it.
-        icuCharsets = Collections.unmodifiableList(icucs);
+    private static List<Charset> getAvailableICUCharsets() {
+        return AvailableCharsetsHolder.CHARSETS;
     }
 
     /**
@@ -297,8 +296,7 @@ public final class CharsetProviderICU extends CharsetProvider {
      */
     @Override
     public final Iterator<Charset> charsets() {
-        loadAvailableICUCharsets();
-        return icuCharsets.iterator();
+        return getAvailableICUCharsets().iterator();
     }
 
     /**
@@ -310,10 +308,10 @@ public final class CharsetProviderICU extends CharsetProvider {
      */
     @Deprecated
     public static final String[] getAvailableNames() {
-        loadAvailableICUCharsets();
-        String[] names = new String[icuCharsets.size()];
+        List<Charset> charsets = getAvailableICUCharsets();
+        String[] names = new String[charsets.size()];
         int i = 0;
-        for (Charset cs : icuCharsets) {
+        for (Charset cs : charsets) {
             names[i++] = cs.name();
         }
         return names;

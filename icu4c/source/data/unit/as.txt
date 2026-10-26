@@ -15,6 +15,10 @@ as{
             }
         }
         angle{
+            radian{
+                one{"{0} ৰে."}
+                other{"{0} ৰে."}
+            }
             steradian{
                 dnam{"ষ্টেৰাডিয়ান"}
                 one{"{0} ষ্টেৰাঃ"}
@@ -116,8 +120,6 @@ as{
             }
             katal{
                 dnam{"কাটাল"}
-                one{"{0} কাটাঃ"}
-                other{"{0} কাটাঃ"}
             }
             milligram-ofglucose-per-deciliter{
                 dnam{"প্ৰতি ডেচিলিটাৰত মিলিগ্ৰাম"}
@@ -133,11 +135,6 @@ as{
                 dnam{"গ্লুক’জ"}
                 one{"{0} গ্লুঃ"}
                 other{"{0}গ্লুঃ"}
-            }
-            part{
-                dnam{"অংশ"}
-                one{"{0} অংশ"}
-                other{"{0} অংশ"}
             }
             part-per-1e6{
                 dnam{"প্ৰতি মিলিয়নত ভাগ"}
@@ -286,8 +283,6 @@ as{
             }
             coulomb{
                 dnam{"কুলম্ব"}
-                one{"{0} কুঃ"}
-                other{"{0} কুঃ"}
             }
             farad{
                 dnam{"ফাৰাড"}
@@ -309,8 +304,6 @@ as{
             }
             siemens{
                 dnam{"ছিয়েমেন"}
-                one{"{0} ছিয়েঃ"}
-                other{"{0} ছিয়েঃ"}
             }
             volt{
                 one{"{0} ভল্ট"}
@@ -329,7 +322,6 @@ as{
                 other{"{0} ব্ৰিটিশ্ব থাৰ্মেল ইউনিট"}
             }
             calorie-it{
-                dnam{"কেল’ৰি-আইটি"}
                 one{"{0}কেল-আইটি"}
                 other{"{0} কেল-আইটি"}
             }
@@ -338,7 +330,6 @@ as{
                 other{"{0} ইলেক্ট্ৰ’নভ’ল্ট"}
             }
             gray{
-                dnam{"গ্ৰে"}
                 one{"{0} গ্ৰে"}
                 other{"{0} গ্ৰে"}
             }
@@ -357,15 +348,11 @@ as{
             }
             sievert{
                 dnam{"চিয়েভাৰ্ট"}
-                one{"{0} এচভিঃ"}
-                other{"{0} এচভিঃ"}
             }
         }
         force{
             kilogram-force{
                 dnam{"কিলোগ্ৰাম-বল"}
-                one{"{0} কিঃগ্ৰাঃবঃ"}
-                other{"{0} কিঃগ্ৰাঃবঃ"}
             }
             kilowatt-hour-per-100-kilometer{
                 dnam{"প্ৰতি 100 কিলোমিটাৰত কিলোৱাট-ঘণ্টা"}
@@ -415,8 +402,6 @@ as{
             }
             pixel-per-centimeter{
                 dnam{"প্ৰতি চেণ্টিমিটাৰত পিক্সেল"}
-                one{"{0} পিপিচিএম"}
-                other{"প্ৰতি চেণ্টিমিটাৰত {0} পিক্সেল"}
             }
             pixel-per-inch{
                 dnam{"প্ৰতি ইঞ্চিত পিক্সেল"}
@@ -528,13 +513,9 @@ as{
         magnetic{
             tesla{
                 dnam{"টেচলা"}
-                one{"{0} টেঃ"}
-                other{"{0} টেঃ"}
             }
             weber{
                 dnam{"ৱেবাৰ"}
-                one{"{0} ৱেঃ"}
-                other{"{0} ৱেঃ"}
             }
         }
         mass{
@@ -608,8 +589,6 @@ as{
         pressure{
             atmosphere{
                 dnam{"বতৰ"}
-                one{"{0} বতৰ"}
-                other{"{0} atm"}
             }
             hectopascal{
                 dnam{"হেক্টোপাস্কেল"}
@@ -623,8 +602,6 @@ as{
             }
             kilopascal{
                 dnam{"কিল’পাস্কেল"}
-                one{"{0} কিল’পাস্কেল"}
-                other{"{0} কি. পা."}
             }
             megapascal{
                 one{"{0} মেগাপাস্কেল"}
@@ -639,11 +616,6 @@ as{
                 dnam{"মিলিমিটাৰ মাৰ্কিউৰী"}
                 one{"{0} মিলিমিটাৰ মাৰ্কিউৰী"}
                 other{"{0} মিলিমিটাৰ মাৰ্কিউৰী"}
-            }
-            ofhg{
-                dnam{"মাৰ্কিঃ"}
-                one{"{0} মাৰ্কিঃ"}
-                other{"{0} মাৰ্কিঃ"}
             }
             pascal{
                 dnam{"পাস্কেল"}
@@ -789,7 +761,6 @@ as{
                 other{"{0} ইম্পেৰিয়েল ফ্লুইড আউন্স"}
             }
             fluid-ounce-metric{
-                dnam{"ফ্লুঃ আঃ মেঃ"}
                 one{"{0} ফ্লুঃ আঃ মেঃ"}
                 other{"{0}ফ্লুঃ আঃ মেঃ"}
             }
@@ -837,7 +808,6 @@ as{
     unitsNarrow{
         angle{
             arc-minute{
-                dnam{"আঃ মিঃ"}
                 one{"{0}′"}
                 other{"{0}′"}
             }
@@ -849,10 +819,10 @@ as{
                 one{"{0}°"}
                 other{"{0}°"}
             }
-            steradian{
-                dnam{"ষ্টেৰাঃ"}
-                one{"{0} ষ্টেৰাঃ"}
-                other{"{0}ষ্টেৰাঃ"}
+            radian{
+                dnam{"ৰে."}
+                one{"{0} ৰে."}
+                other{"{0} ৰে."}
             }
         }
         compound{
@@ -861,42 +831,16 @@ as{
             1024p5{"পে{0}"}
             1024p7{"জে{0}"}
             1024p8{"য়ো{0}"}
-            10p-1{"ডেচি{0}"}
-            10p-12{"পিকো{0}"}
             10p-15{"ফেমটো{0}"}
             10p-18{"অটো{0}"}
-            10p-2{"চেণ্টি{0}"}
             10p-21{"জেপ্টো{0}"}
             10p-24{"য়ক্টো{0}"}
-            10p-3{"মিলি{0}"}
-            10p-9{"নেনো{0}"}
             10p1{"ডেকা{0}"}
-            10p12{"টেৰা{0}"}
-            10p15{"পেটা{0}"}
             10p18{"এক্সা{0}"}
-            10p2{"হেক্টো{0}"}
             10p21{"জেতা{0}"}
             10p24{"য়োটা{0}"}
-            10p3{"কিলো{0}"}
-            10p6{"মেগা{0}"}
-            10p9{"গিগা{0}"}
         }
         concentr{
-            katal{
-                dnam{"কাটাঃ"}
-                one{"{0} কাটাঃ"}
-                other{"{0} কাটাঃ"}
-            }
-            ofglucose{
-                dnam{"গ্লুঃ"}
-                one{"{0} গ্লুঃ"}
-                other{"{0} গ্লুঃ"}
-            }
-            part{
-                dnam{"অংশ"}
-                one{"{0} অংশ"}
-                other{"{0} অংশ"}
-            }
             part-per-1e6{
                 dnam{"ppm"}
                 one{"{0}ppm"}
@@ -917,9 +861,6 @@ as{
             }
         }
         consumption{
-            liter-per-100-kilometer{
-                dnam{"ল/১০০ ক.ম."}
-            }
             mile-per-gallon{
                 one{"{0}mpg"}
                 other{"{0}mpg"}
@@ -971,61 +912,22 @@ as{
                 one{"{0}কো"}
                 other{"{0}কো"}
             }
-        }
-        electric{
-            coulomb{
-                dnam{"কুঃ"}
-                one{"{0} কুঃ"}
-                other{"{0} কুঃ"}
-            }
-            farad{
-                dnam{"ফাঃ"}
-                one{"{0} ফাঃ"}
-                other{"{0} ফাঃ"}
-            }
-            henry{
-                dnam{"হেনঃ"}
-                one{"{0} হেনঃ"}
-                other{"{0} হেনঃ"}
-            }
-            siemens{
-                dnam{"ছিয়েঃ"}
-                one{"{0} ছিয়েঃ"}
-                other{"{0} ছিয়েঃ"}
+            second{
+                one{"{0} ছে."}
+                other{"{0} ছে."}
             }
         }
         energy{
-            becquerel{
-                dnam{"বেঃ"}
-                one{"{0}বেঃ"}
-                other{"{0}বেঃ"}
-            }
-            calorie-it{
-                dnam{"কেল’ৰি-আইটি"}
-                one{"{0} কেল-আইটি"}
-                other{"{0} কেল-আইটি"}
-            }
             foodcalorie{
                 one{"{0}কেলৰি"}
                 other{"{0}কেলৰি"}
             }
             gray{
-                dnam{"গ্ৰে"}
                 one{"{0} গ্ৰে"}
                 other{"{0}গ্ৰে"}
             }
-            sievert{
-                dnam{"এচভিঃ"}
-                one{"{0} এচভিঃ"}
-                other{"{0} এচভিঃ"}
-            }
         }
         force{
-            kilogram-force{
-                dnam{"কিঃগ্ৰাঃবঃ"}
-                one{"{0} কিঃগ্ৰাঃবঃ"}
-                other{"{0} কিঃগ্ৰাঃবঃ"}
-            }
             kilowatt-hour-per-100-kilometer{
                 one{"{0}kWh/100km"}
                 other{"{0} kWh/100km"}
@@ -1072,16 +974,14 @@ as{
                 dnam{"L☉"}
             }
         }
-        magnetic{
-            tesla{
-                dnam{"টেঃ"}
-                one{"{0} টেঃ"}
-                other{"{0} টেঃ"}
+        mass{
+            dalton{
+                one{"{0} ড.ট’."}
+                other{"{0} ড.ট’."}
             }
-            weber{
-                dnam{"ৱেঃ"}
-                one{"{0} ৱেঃ"}
-                other{"{0} ৱেঃ"}
+            kilogram{
+                one{"{0} কিগ্ৰা"}
+                other{"{0} কিগ্ৰা"}
             }
         }
         pressure{
@@ -1093,15 +993,6 @@ as{
             millibar{
                 one{"{0}mb"}
                 other{"{0}mb"}
-            }
-            millimeter-ofhg{
-                one{"{0} মিঃমিঃমাৰ্কিঃ"}
-                other{"{0}মিঃমিঃমাৰ্কিঃ"}
-            }
-            ofhg{
-                dnam{"মাৰ্কিঃ"}
-                one{"{0} মাৰ্কিঃ"}
-                other{"{0} মাৰ্কিঃ"}
             }
         }
         speed{
@@ -1127,6 +1018,11 @@ as{
                 one{"{0}°"}
                 other{"{0}°"}
             }
+            kelvin{
+                dnam{"কে."}
+                one{"{0} কে."}
+                other{"{0} কে."}
+            }
         }
         volume{
             dessert-spoon{
@@ -1137,11 +1033,6 @@ as{
                 dnam{"dsp Imp"}
                 one{"{0}dsp-Imp"}
                 other{"{0}dsp-Imp"}
-            }
-            fluid-ounce-metric{
-                dnam{"ফ্লুঃ আঃ মেঃ"}
-                one{"{0}ফ্লুঃ আঃ মেঃ"}
-                other{"{0} ফ্লুঃ আঃ মেঃ"}
             }
             teaspoon{
                 one{"{0}টিস্পুন"}
@@ -1178,8 +1069,8 @@ as{
             }
             radian{
                 dnam{"ৰেডিয়েন"}
-                one{"{0} ৰেডিয়েন"}
-                other{"{0} ৰেডিয়েন"}
+                one{"{0} ৰে."}
+                other{"{0} ৰে."}
             }
             revolution{
                 dnam{"ঘূৰ্ণন"}
@@ -1467,8 +1358,8 @@ as{
             }
             second{
                 dnam{"ছেকেণ্ড"}
-                one{"{0} ছেকেণ্ড"}
-                other{"{0} ছেকেণ্ড"}
+                one{"{0} ছে."}
+                other{"{0} ছে."}
                 per{"{0}/ছেকেণ্ড"}
             }
             week{
@@ -1809,8 +1700,8 @@ as{
             }
             dalton{
                 dnam{"ডলট’ন"}
-                one{"{0} ডলট’ন"}
-                other{"{0} ডলট’ন"}
+                one{"{0} ড.ট’."}
+                other{"{0} ড.ট’."}
             }
             earth-mass{
                 dnam{"আৰ্থ মাছ"}
@@ -1828,8 +1719,8 @@ as{
             }
             kilogram{
                 dnam{"কিঃ গ্ৰাঃ"}
-                one{"{0} কিঃ গ্ৰাঃ"}
-                other{"{0} কিঃ গ্ৰাঃ"}
+                one{"{0} কিগ্ৰা"}
+                other{"{0} কিগ্ৰা"}
                 per{"{0}/কিঃ গ্ৰাঃ"}
             }
             microgram{
@@ -1981,9 +1872,9 @@ as{
                 other{"{0}°ফা."}
             }
             kelvin{
-                dnam{"কেলভিন"}
-                one{"{0} কেলভিন"}
-                other{"{0} কেলভিন"}
+                dnam{"কে."}
+                one{"{0} কে."}
+                other{"{0} কে."}
             }
         }
         torque{

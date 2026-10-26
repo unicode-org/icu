@@ -944,9 +944,6 @@ yo{
         XCD{
             other{"àwọn dọ́là Ilà Oòrùn Karíbíà"}
         }
-        XCG{
-            other{"Owó ìlú Kùrásọ̀ àti Saint Mátìnì"}
-        }
         XOF{
             other{"àwọn faransì ìwọ̀-oorùn Afíríkà"}
         }
@@ -955,9 +952,6 @@ yo{
         }
         ZMW{
             other{"àwọn kàwasà Sámbíà"}
-        }
-        ZWG{
-            other{"Owó ìlú Sìnbábúwè"}
         }
     }
 }

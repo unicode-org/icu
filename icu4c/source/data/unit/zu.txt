@@ -42,7 +42,6 @@ zu{
             10p-2{"centi{0}"}
             10p-21{"i-zepto{0}"}
             10p-24{"i-yocto{0}"}
-            10p-3{"milli{0}"}
             10p-6{"micro{0}"}
             10p-9{"nano{0}"}
             10p1{"deka{0}"}
@@ -52,9 +51,6 @@ zu{
             10p2{"hecto{0}"}
             10p21{"zetta{0}"}
             10p24{"yotta{0}"}
-            10p3{"kilo{0}"}
-            10p6{"mega{0}"}
-            10p9{"giga{0}"}
             per{"{0} nge-{1}"}
             power2{
                 one{
@@ -102,8 +98,6 @@ zu{
         digital{
             bit{
                 dnam{"bits"}
-                one{"{0} i-bit"}
-                other{"{0} ama-bits"}
             }
             byte{
                 dnam{"bytes"}
@@ -172,14 +166,12 @@ zu{
             }
             joule{
                 dnam{"joule"}
-                one{"{0} i-joule"}
-                other{"{0} J"}
             }
         }
         graphics{
             dot-per-centimeter{
                 dnam{"amachashazi ngesenthimitha"}
-                one{"{0} ichashazi ngesenthimitha"}
+                one{"{0} ichashazi ngesentimitha"}
                 other{"{0} amachashazi ngesethimitha"}
             }
             dot-per-inch{
@@ -219,14 +211,6 @@ zu{
             }
         }
         volume{
-            dessert-spoon{
-                one{"{0} sipuni dessert"}
-                other{"{0} dstspn"}
-            }
-            dessert-spoon-imperial{
-                one{"{0} Imp. isipuni dessert"}
-                other{"{0} dstspn Imp"}
-            }
             quart-imperial{
                 one{"{0} Imp. quart"}
                 other{"{0} qt Imp."}
@@ -927,7 +911,7 @@ zu{
             }
             second{
                 dnam{"amasekhondi"}
-                one{"{0} sekhondi"}
+                one{"{0} sec"}
                 other{"{0} sec"}
             }
             week{

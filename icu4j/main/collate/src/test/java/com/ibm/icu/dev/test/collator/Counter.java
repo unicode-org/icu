@@ -18,7 +18,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-public class Counter<T> implements Iterable<T>, Comparable<Counter<T>> {
+public class Counter<T extends Comparable<T>> implements Iterable<T>, Comparable<Counter<T>> {
     Map<T, RWLong> map;
     Comparator<T> comparator;
 
@@ -211,7 +211,7 @@ public class Counter<T> implements Iterable<T>, Comparable<Counter<T>> {
             }
             T ii = i.next();
             T jj = i.next();
-            int result = ((Comparable<T>) ii).compareTo(jj);
+            int result = ii.compareTo(jj);
             if (result != 0) {
                 return result;
             }

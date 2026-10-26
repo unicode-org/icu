@@ -73,6 +73,10 @@ public final class ICUData {
 
     private static final Logger logger =
             logBinaryDataFromInputStream ? Logger.getLogger(ICUData.class.getName()) : null;
+    private static final Logger tracingLogger =
+            ICUDebug.enabled("dataTracing")
+                    ? Logger.getLogger(ICUData.class.getName() + ".tracing")
+                    : null;
 
     public static boolean exists(final String resourceName) {
         URL i = null;
@@ -120,6 +124,13 @@ public final class ICUData {
     /** Should be called only from ICUBinary.getData() or from convenience overloads here. */
     static InputStream getStream(
             final ClassLoader loader, final String resourceName, boolean required) {
+        if (tracingLogger != null) {
+            tracingLogger.info(
+                    "Using resource file "
+                            + resourceName
+                            + (required ? " (required)" : " (optional)"));
+        }
+
         InputStream i = null;
         if (System.getSecurityManager() != null) {
             i =

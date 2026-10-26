@@ -1104,22 +1104,8 @@ bg{
             }
         }
         concentr{
-            katal{
-                one{"{0} kat"}
-                other{"{0} kat"}
-            }
             mole{
                 dnam{"mol"}
-                one{"{0} mol"}
-                other{"{0} mol"}
-            }
-            ofglucose{
-                dnam{"Glc"}
-            }
-            part{
-                dnam{"част"}
-                one{"{0} част"}
-                other{"{0} част"}
             }
             part-per-1e9{
                 dnam{"ppb"}
@@ -1170,23 +1156,6 @@ bg{
                 other{"{0} г."}
             }
         }
-        energy{
-            calorie-it{
-                dnam{"cal-IT"}
-                one{"{0} cal-IT"}
-                other{"{0} cal-IT"}
-            }
-            gray{
-                one{"{0} Gy"}
-                other{"{0} Gy"}
-            }
-        }
-        force{
-            kilogram-force{
-                one{"{0} kgf"}
-                other{"{0} kgf"}
-            }
-        }
         graphics{
             dot{
                 dnam{"точка"}
@@ -1196,16 +1165,6 @@ bg{
             inch{
                 one{"{0}\u0022"}
                 other{"{0}\u0022"}
-            }
-        }
-        magnetic{
-            tesla{
-                one{"{0} T"}
-                other{"{0} T"}
-            }
-            weber{
-                one{"{0} Wb"}
-                other{"{0} Wb"}
             }
         }
         mass{
@@ -1299,8 +1258,6 @@ bg{
             }
             mole{
                 dnam{"мол"}
-                one{"{0} mol"}
-                other{"{0} mol"}
             }
             ofglucose{
                 dnam{"Glc"}

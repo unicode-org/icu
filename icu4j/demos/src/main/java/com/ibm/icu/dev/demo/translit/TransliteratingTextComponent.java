@@ -225,17 +225,6 @@ public class TransliteratingTextComponent extends DumbTextComponent {
         return translit;
     }
 
-    /**
-     * Reset the start point at which transliteration begins. This needs to be done when the user
-     * moves the cursor or when the current {@link com.ibm.icu.text.Transliterator} is changed.
-     */
-    /*
-    private void resetTransliterationStart() {
-        start = getSelectionStart();
-        cursor = start;
-    }
-    */
-
     /** Escape non-ASCII characters as Unicode. JUST FOR DEBUGGING OUTPUT. */
     public static final String escape(String s) {
         StringBuffer buf = new StringBuffer();

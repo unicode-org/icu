@@ -689,14 +689,6 @@ ak{
             one{"Swiss franc"}
             other{"Swiss francs"}
         }
-        CNY{
-            one{"Kyaena yuan"}
-            other{"Kyaena yuan"}
-        }
-        EUR{
-            one{"yuro"}
-            other{"yuro"}
-        }
         HRK{
             one{"Krohyia kuna"}
             other{"Krohyia kunas"}
@@ -725,10 +717,6 @@ ak{
             one{"Sweden krona"}
             other{"Sweden kronor"}
         }
-        SZL{
-            one{"Swazi lilangeni"}
-            other{"Swazi lilangeni"}
-        }
         TOP{
             one{"Tonga paʻanga"}
             other{"Tonga paʻanga"}
@@ -756,10 +744,6 @@ ak{
         XXX{
             one{"(sika a yɛnnim)"}
             other{"(sika a yɛnnim)"}
-        }
-        ZWG{
-            one{"Zimbabwe sika kᴐkᴐᴐ"}
-            other{"Zimbabwe sika kᴐkᴐᴐ"}
         }
     }
 }

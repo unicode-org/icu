@@ -19,7 +19,6 @@ cs{
     NumberElements{
         latn{
             patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
                 currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
                 currencyPatternAppendISO{"{0} ¤¤"}
@@ -178,50 +177,74 @@ cs{
                 }
                 decimalFormat{
                     1000{
+                        few{"0 tis'.'"}
+                        many{"0 tis'.'"}
                         one{"0 tis'.'"}
                         other{"0 tis'.'"}
                     }
                     10000{
+                        few{"00 tis'.'"}
+                        many{"00 tis'.'"}
                         one{"00 tis'.'"}
                         other{"00 tis'.'"}
                     }
                     100000{
+                        few{"000 tis'.'"}
+                        many{"000 tis'.'"}
                         one{"000 tis'.'"}
                         other{"000 tis'.'"}
                     }
                     1000000{
+                        few{"0 mil'.'"}
+                        many{"0 mil'.'"}
                         one{"0 mil'.'"}
                         other{"0 mil'.'"}
                     }
                     10000000{
+                        few{"00 mil'.'"}
+                        many{"00 mil'.'"}
                         one{"00 mil'.'"}
                         other{"00 mil'.'"}
                     }
                     100000000{
+                        few{"000 mil'.'"}
+                        many{"000 mil'.'"}
                         one{"000 mil'.'"}
                         other{"000 mil'.'"}
                     }
                     1000000000{
+                        few{"0 mld'.'"}
+                        many{"0 mld'.'"}
                         one{"0 mld'.'"}
                         other{"0 mld'.'"}
                     }
                     10000000000{
+                        few{"00 mld'.'"}
+                        many{"00 mld'.'"}
                         one{"00 mld'.'"}
                         other{"00 mld'.'"}
                     }
                     100000000000{
+                        few{"000 mld'.'"}
+                        many{"000 mld'.'"}
                         one{"000 mld'.'"}
                         other{"000 mld'.'"}
                     }
                     1000000000000{
+                        few{"0 bil'.'"}
+                        many{"0 bil'.'"}
                         one{"0 bil'.'"}
                         other{"0 bil'.'"}
                     }
                     10000000000000{
+                        few{"00 bil'.'"}
+                        many{"00 bil'.'"}
                         one{"00 bil'.'"}
                         other{"00 bil'.'"}
                     }
                     100000000000000{
+                        few{"000 bil'.'"}
+                        many{"000 bil'.'"}
                         one{"000 bil'.'"}
                         other{"000 bil'.'"}
                     }
@@ -487,7 +510,7 @@ cs{
                 H{"H"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
-                Hv{"H 'h' v"}
+                Hv{"H v"}
                 MEd{"E d. M."}
                 MMMEd{"E d. M."}
                 MMMMEd{"E d. MMMM"}
@@ -584,6 +607,10 @@ cs{
                 MMMEd{
                     M{"E d. M. – E d. M."}
                     d{"E d. M. – E d. M."}
+                }
+                MMMMd{
+                    M{"d. MMMM – d. MMMM"}
+                    d{"d.–d. MMMM"}
                 }
                 MMMd{
                     M{"d. M. – d. M."}
@@ -696,9 +723,10 @@ cs{
                 Ehms{"E h:mm:ss a"}
                 Gy{"y G"}
                 GyM{"M/y G"}
-                GyMEd{"E, d. M. y G"}
+                GyMEd{"E d. M. y G"}
                 GyMMM{"LLLL y G"}
                 GyMMMEd{"E d. M. y G"}
+                GyMMMM{"LLLL y G"}
                 GyMMMMEd{"E d. MMMM y G"}
                 GyMMMMd{"d. MMMM y G"}
                 GyMMMd{"d. M. y G"}
@@ -710,7 +738,7 @@ cs{
                 Hmsvvvv{"H:mm:ss, vvvv"}
                 Hmv{"H:mm v"}
                 Hmvvvv{"H:mm, vvvv"}
-                Hv{"H 'h' v"}
+                Hv{"H v"}
                 MEd{"E d. M."}
                 MMMEd{"E d. M."}
                 MMMMEd{"E d. MMMM"}
@@ -920,6 +948,10 @@ cs{
                 MMMEd{
                     M{"E d. M. – E d. M."}
                     d{"E d. M. – E d. M."}
+                }
+                MMMMd{
+                    M{"d. MMMM – d. MMMM"}
+                    d{"d.–d. MMMM"}
                 }
                 MMMd{
                     M{"d. M. – d. M."}
@@ -1146,28 +1178,6 @@ cs{
                 "{1} {0}",
                 "{1} {0}",
             }
-            eras{
-                abbreviated{
-                    11{"Tenpyō-kampō (749-749)"}
-                    12{"Tenpyō-shōhō (749-757)"}
-                    13{"Tenpyō-hōji (757-765)"}
-                    14{"Tenpyō-jingo (765-767)"}
-                    15{"Jingo-keiun (767-770)"}
-                    17{"Ten-ō (781-782)"}
-                    26{"Ten-an (857-859)"}
-                    78{"Ten-ei (1110-1113)"}
-                }
-                narrow{
-                    11{"Tenpyō-kampō (749-749)"}
-                    12{"Tenpyō-shōhō (749-757)"}
-                    13{"Tenpyō-hōji (757-765)"}
-                    14{"Tenpyō-jingo (765-767)"}
-                    15{"Jingo-keiun (767-770)"}
-                    17{"Ten-ō (781-782)"}
-                    26{"Ten-an (857-859)"}
-                    78{"Ten-ei (1110-1113)"}
-                }
-            }
         }
         persian{
             monthNames{
@@ -1193,7 +1203,6 @@ cs{
             eras{
                 abbreviated{
                     0{"před ROC"}
-                    1{"ROC"}
                 }
             }
         }

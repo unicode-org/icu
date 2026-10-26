@@ -9,9 +9,13 @@
 package com.ibm.icu.dev.test.rbbi;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
+import com.ibm.icu.dev.test.lang.UnicodeSetTest.ShakespeareanSymbolTable;
 import com.ibm.icu.impl.RBBIDataWrapper;
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.RuleBasedBreakIterator;
+import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.CodePointTrie;
 import com.ibm.icu.util.ULocale;
 import java.text.CharacterIterator;
@@ -767,14 +771,18 @@ public class RBBITest extends CoreTestFmwk {
         }
         String text = builder.toString();
 
-        // Generate rule which will caused length+4 character classes and
-        // length+3 states
+        // Generate rules which result in numChar+4 character classes and numChar+3 states.
 
         builder = new StringBuilder(100 + 6 * numChar);
         builder.append("!!quoted_literals_only;");
         for (char c = 0x4e00; c < 0x4e00 + numChar; c++) {
+            // Each rule in this loop creates a new class [c] and a new state (reached by
+            // transitioning on [c] from the start state).
             builder.append("\'").append(c).append(c).append("';");
         }
+        // This one does not create new states, but creates a transition on a new class between the
+        // state reached by [\u4E00] and the accepting state.
+        builder.append('\'').append('\u4E00').append((char) (0x4e00 + numChar)).append("';");
         builder.append(".;");
         String rules = builder.toString();
 
@@ -1038,6 +1046,212 @@ public class RBBITest extends CoreTestFmwk {
         assertEquals("Wrong number of breaks found", 2, breaksFound);
     }
 
+    private String shortLB(int cp) {
+        return UCharacter.getPropertyValueName(
+                UProperty.LINE_BREAK,
+                UCharacter.getIntPropertyValue(cp, UProperty.LINE_BREAK),
+                UProperty.NameChoice.SHORT);
+    }
+
+    private String showPairAt(String text, int i) {
+        final var result = new StringBuilder();
+        final var classes = new StringBuilder();
+        if (i < 0) {
+            result.append("(sot)");
+            i = 0;
+        } else {
+            int first = text.codePointAt(i);
+            result.append(hex(first));
+            result.append(" ");
+            result.append(UCharacter.getName(first));
+            classes.append(shortLB(first));
+            i += Character.charCount(first);
+        }
+        result.append(", ");
+        if (i >= text.length()) {
+            result.append("(eot)");
+        } else {
+            int second = text.codePointAt(i);
+            result.append(hex(second));
+            result.append(" ");
+            result.append(UCharacter.getName(second));
+            classes.append(" ");
+            classes.append(shortLB(second));
+        }
+        result.append(" (");
+        result.append(classes);
+        result.append(")");
+        return result.toString();
+    }
+
+    /* Regression test for ICU-23478: make sure normal text contains lots of safe positions. */
+    @Test
+    public void TestSafePairDensity() {
+        final var lb = (RuleBasedBreakIterator) BreakIterator.getLineInstance();
+        {
+            final String alphabeticText =
+                    "Ἄνδρα μοι ἔννεπε, Μοῦσα, πολύτροπον, ὃς μάλα πολλὰ πλάγχθη, / "
+                            + "ἐπεὶ Τροίης ἱερὸν πτολίεθρον ἔπερσε· πολλῶν δ’ ἀνθρώπων ἴδεν ἄστεα καὶ νόον ἔγνω, / "
+                            + "πολλὰ δ’ ὅ γ’ ἐν πόντῳ πάθεν ἄλγεα ὃν κατὰ θυμόν, / "
+                            + "ἀρνύμενος ἥν τε ψυχὴν καὶ νόστον ἑταίρων.";
+            lb.setText(alphabeticText);
+            for (int i = 0; ; i += Character.charCount(alphabeticText.codePointAt(i))) {
+                final int safePrevious = lb.handleSafePrevious(i);
+                int expectedSafePrevious;
+                // All pairs are safe.
+                if (i == 0) {
+                    expectedSafePrevious = -1;
+                } else if (i == 1) {
+                    expectedSafePrevious = 0;
+                } else {
+                    expectedSafePrevious = i - 2;
+                }
+                if (safePrevious != expectedSafePrevious) {
+                    errln(
+                            "alphabetic handleSafePrevious("
+                                    + i
+                                    + ")="
+                                    + safePrevious
+                                    + "; expected pair "
+                                    + showPairAt(alphabeticText, expectedSafePrevious)
+                                    + ", actual pair "
+                                    + showPairAt(alphabeticText, safePrevious));
+                }
+                if (i == alphabeticText.length()) {
+                    break;
+                }
+            }
+        }
+        {
+            final String ideographicText = "子曰：「學而時習之，不亦說乎？有朋自遠方來，不亦樂乎？人不知而不慍，不亦君子乎？」";
+            lb.setText(ideographicText);
+            for (int i = 0; ; i += Character.charCount(ideographicText.codePointAt(i))) {
+                final int safePrevious = lb.handleSafePrevious(i);
+                int expectedSafePrevious;
+                // All pairs are safe.
+                if (i == 0) {
+                    expectedSafePrevious = -1;
+                } else if (i == 1) {
+                    expectedSafePrevious = 0;
+                } else {
+                    expectedSafePrevious = i - 2;
+                }
+                if (safePrevious != expectedSafePrevious) {
+                    errln(
+                            "ideographic handleSafePrevious("
+                                    + i
+                                    + ")="
+                                    + safePrevious
+                                    + "; expected pair "
+                                    + showPairAt(ideographicText, expectedSafePrevious)
+                                    + ", actual pair "
+                                    + showPairAt(ideographicText, safePrevious));
+                }
+                if (i == ideographicText.length()) {
+                    break;
+                }
+            }
+        }
+        {
+            // First line of the Calcutta-Bairat inscription, see the transliterations in
+            // https://archive.org/details/InscriptionsOfAsoka.NewEditionByE.Hultzsch/page/n349/mode/2up.
+            // The first aksara 𑀧𑁆𑀭𑀺 (pri) has two consonants joined by a virama.
+            final String aksaraText =
+                    "𑀧𑁆𑀭𑀺𑀬𑀤𑀲𑀺𑀮𑀸𑀚𑀸𑀫𑀸𑀕𑀥𑁂𑀲𑀁𑀖𑀅𑀪𑀺𑀯𑀸𑀤𑁂𑀢𑀽𑀦𑀁𑀆𑀳𑀸𑀅𑀧𑀸𑀩𑀸𑀥𑀢𑀁𑀘𑀨𑀸𑀲𑀼𑀯𑀺𑀳𑀸𑀮𑀢𑀁𑀘𑀸";
+            final int[] expectedSafePositions = {102, 84, 78, 78, 68, 62, 40, 38, 28, 10, 8, 2, 0};
+            lb.setText(aksaraText);
+            for (int i = 0; ; i += Character.charCount(aksaraText.codePointAt(i))) {
+                final int safePrevious = lb.handleSafePrevious(i);
+                int expectedSafePrevious;
+                if (i < 2) {
+                    expectedSafePrevious = -1;
+                } else {
+                    expectedSafePrevious =
+                            Math.max(0, i - 4); // All SMP, move two code points back.
+                    for (final int j : expectedSafePositions) {
+                        if (j <= expectedSafePrevious) {
+                            expectedSafePrevious = j;
+                            break;
+                        }
+                    }
+                }
+                if (safePrevious != expectedSafePrevious) {
+                    errln(
+                            "aksara handleSafePrevious("
+                                    + i
+                                    + ")="
+                                    + safePrevious
+                                    + "; expected pair "
+                                    + showPairAt(aksaraText, expectedSafePrevious)
+                                    + ", actual pair "
+                                    + showPairAt(aksaraText, safePrevious));
+                }
+                if (i == aksaraText.length()) {
+                    break;
+                }
+            }
+        }
+        {
+            // A line from the Rigveda, book 8, hymn 67, first half of verse 9,
+            //     मा नो मृचा रिपूणां वृजिनानामविष्यवः ।
+            //     mā nō mr̥cā ripūṇāṁ vr̥jinānāmaviṣyavaḥ.
+            // transliterated to Brahmi, stripping spaces.  This is reasonable text (not attested in
+            // Brahmi, but it is actual Sanskrit written in a script that makes sense for Sanskrit),
+            // which at the same time is remarkable in having a long string of lb=AK consonants
+            // separated by lb=CM vowels or other marks, namely
+            // 𑀫𑀸𑀦𑁄𑀫𑀾𑀘𑀸𑀭𑀺𑀧𑀽𑀡𑀸𑀁𑀯𑀾𑀚𑀺𑀦𑀸𑀦𑀸𑀫 at UTF-16 indices
+            // [0, 48[, in transliteration:
+            //     मा नो मृचा रिपूणां वृजिनानाम
+            //     mā nō mr̥cā ripūṇāṁ vr̥jinānāma
+            // If safe pair detection considers both AK CM and CM AK unsafe, which a naïve
+            // implementation might (because AK AK leads to a different state from AK, so that AK AK
+            // VF
+            // can be glued together), this causes severe backtracking.  Note that AK CM should be
+            // safe:
+            // AK AK CM [^VF] breaks after the first AK and revisits the pair from the start state,
+            // and
+            // AK CM VF ends up in the same state as AK AK CM VF.  However, determining this
+            // requires a
+            // proper equivalence analysis (probably similar to the one used in the state
+            // minimization
+            // algorithm), as opposed to checking for identical states.
+            final String aksaraTextWithDenseCM =
+                    "𑀫𑀸𑀦𑁄𑀫𑀾𑀘𑀸𑀭𑀺𑀧𑀽𑀡𑀸𑀁𑀯𑀾𑀚𑀺𑀦𑀸𑀦𑀸𑀫𑀯𑀺𑀱𑁆𑀬𑀯𑀂𑁇";
+            final int[] expectedSafePositions = {60, 56, 54, 52, 46, 0};
+            lb.setText(aksaraTextWithDenseCM);
+            for (int i = 0; ; i += Character.charCount(aksaraTextWithDenseCM.codePointAt(i))) {
+                final int safePrevious = lb.handleSafePrevious(i);
+                int expectedSafePrevious;
+                if (i < 2) {
+                    expectedSafePrevious = -1;
+                } else {
+                    expectedSafePrevious =
+                            Math.max(0, i - 4); // All SMP, move two code points back.
+                    for (final int j : expectedSafePositions) {
+                        if (j <= expectedSafePrevious) {
+                            expectedSafePrevious = j;
+                            break;
+                        }
+                    }
+                }
+                if (safePrevious != expectedSafePrevious) {
+                    errln(
+                            "aksara CM handleSafePrevious("
+                                    + i
+                                    + ")="
+                                    + safePrevious
+                                    + "; expected pair "
+                                    + showPairAt(aksaraTextWithDenseCM, expectedSafePrevious)
+                                    + ", actual pair "
+                                    + showPairAt(aksaraTextWithDenseCM, safePrevious));
+                }
+                if (i == aksaraTextWithDenseCM.length()) {
+                    break;
+                }
+            }
+        }
+    }
+
     /* Test handling of unpaired surrogate.
      */
     @Test
@@ -1225,6 +1439,272 @@ public class RBBITest extends CoreTestFmwk {
             assertEquals("following" + idx, fns.expectedFollow(idx), bi.following(idx));
             idx = fns.randomStringIndex();
             assertEquals("preceding" + idx, fns.expectedPreceding(idx), bi.preceding(idx));
+        }
+    }
+
+    /** Tests some rule sets that require the lookaheads to occupy different slots. */
+    @Test
+    public void TestLookaheadPolychromy() {
+
+        // The first lookahead must occupy a different slot from the other two, because after
+        // encountering x y two different break positions can be returned depending on the third
+        // character: the graph of lookahead reachability is a cherry (🍒, the first one with an
+        // edge from the other two, the last two with no edge between each other).  Its chromatic
+        // number is 2.
+        final var lookaheadCherry =
+                new RuleBasedBreakIterator(
+                        ""
+                                + "[x] / [wy]   [z];"
+                                + "[x]   [y]  / [t];"
+                                + "[x]   [w]  / [u];"
+                                + ".*;");
+        assertEquals(
+                "lookaheadCherry chromatic number",
+                2,
+                lookaheadCherry.fRData.fFTable.fLookAheadResultsSize
+                        - lookaheadCherry.fRData.ACCEPTING_UNCONDITIONAL
+                        - 1);
+        for (final var textAndFirstSegment :
+                new String[][] {
+                    // If lookaheads 1 and 2 use the same slot, 2 stomps over 1 and we get xy
+                    // instead of x here.
+                    {"xyz", "x"},
+                    // If lookaheads 1 and 3 use the same slot, 3 stomps over 1 and we get xw
+                    // instead of x here.
+                    {"xwz", "x"},
+                    {"xyt", "xy"},
+                    {"xwt", "xwt"},
+                    {"xyu", "xyu"},
+                    {"xwu", "xw"},
+                }) {
+            String text = textAndFirstSegment[0];
+            String firstSegment = textAndFirstSegment[1];
+            lookaheadCherry.setText(text);
+            final var actual = text.substring(0, lookaheadCherry.next());
+            if (!actual.equals(firstSegment))
+                errln(
+                        "First segment of "
+                                + text
+                                + " with lookaheadCherry: expected "
+                                + firstSegment
+                                + ", got "
+                                + actual);
+        }
+        // The state that accepts lookahead 1 is reachable from those that set lookaheads 2 and 3,
+        // and the state that accepts lookahead 2 is reachable from the one that sets lookahead 3:
+        // the graph of lookaheads is a triangle, its chromatic number is 3; the lookaheads all need
+        // different slots.
+        final var lookaheadTriangle =
+                new RuleBasedBreakIterator(
+                        ""
+                                + "[x] / [y]   [z]    [1];"
+                                + "[x]   [y] / [z]    [2];"
+                                + "[x]   [y]   [z] /  [3];"
+                                + ".*;");
+        assertEquals(
+                "lookaheadTriangle chromatic number",
+                3,
+                lookaheadTriangle.fRData.fFTable.fLookAheadResultsSize
+                        - lookaheadTriangle.fRData.ACCEPTING_UNCONDITIONAL
+                        - 1);
+        for (final var textAndFirstSegment :
+                new String[][] {
+                    {"xyz1", "x"},
+                    {"xyz2", "xy"},
+                    {"xyz3", "xyz"},
+                    {"xyzn", "xyzn"},
+                }) {
+            String text = textAndFirstSegment[0];
+            String firstSegment = textAndFirstSegment[1];
+            lookaheadTriangle.setText(text);
+            final var actual = text.substring(0, lookaheadTriangle.next());
+            if (!actual.equals(firstSegment))
+                errln(
+                        "First segment of "
+                                + text
+                                + " with lookaheadTriangle: expected "
+                                + firstSegment
+                                + ", got "
+                                + actual);
+        }
+        // Consecutive lookaheads must occupy different slots ; the graph of lookahead reachability
+        // is a path graph.  Its chromatic number is 2.
+        final var lookaheadPath =
+                new RuleBasedBreakIterator(
+                        ""
+                                + "[x]  / [y]   [z]   [1];"
+                                + "[x]?   [y] / [z]   [2];"
+                                + "[y]   [z] / [t]   [1];"
+                                + "[y]   [z]   [t] / [2];"
+                                + ".*;");
+        assertEquals(
+                "lookaheadPath chromatic number",
+                2,
+                lookaheadPath.fRData.fFTable.fLookAheadResultsSize
+                        - lookaheadPath.fRData.ACCEPTING_UNCONDITIONAL
+                        - 1);
+        for (final var textAndFirstSegment :
+                new String[][] {
+                    {"xyz1", "x"},
+                    {"xyz2", "xy"},
+                    {"yz2", "y"},
+                    {"yzt1", "yz"},
+                    {"yzt2", "yzt"},
+                }) {
+            String text = textAndFirstSegment[0];
+            String firstSegment = textAndFirstSegment[1];
+            lookaheadPath.setText(text);
+            final var actual = text.substring(0, lookaheadPath.next());
+            if (!actual.equals(firstSegment))
+                errln(
+                        "First segment of "
+                                + text
+                                + " with lookaheadPath: expected "
+                                + firstSegment
+                                + ", got "
+                                + actual);
+        }
+        // The graph of lookaheads here is obviously an edge, with chromatic number 2.
+        // Because of the chaining, the first rule is really .* a / b a, which encompasses both
+        // a / b a; and a redundant a b a / b a; in turn this means that the state reached from a b
+        // a both accepts the lookahead of the first rule and (pointlessly) sets it.
+        // Thus, starting from the state reached from "ab", which sets lookahead 2, it is possible
+        // to reach a state that accepts lookahead 1 without *going through* a state that sets
+        // lookahead 1 (transition on 'a'), but in so doing one *reaches* a state that sets
+        // lookahead 1.
+        // If “going through an excluded state” in the computation of lookahead reachability is
+        // replaced by “reaching an excluded state”, the lookaheads will erroneously be found to be
+        // mergeable.
+        final var selfAccepting =
+                new RuleBasedBreakIterator(
+                        "" //
+                                + "!!chain;"
+                                + "[a] / [b]   [a];"
+                                + "[a]   [b] / [c];"
+                                + ". .;");
+        assertEquals(
+                "selfAccepting chromatic number",
+                2,
+                selfAccepting.fRData.fFTable.fLookAheadResultsSize
+                        - selfAccepting.fRData.ACCEPTING_UNCONDITIONAL
+                        - 1);
+        for (final var textAndFirstSegment :
+                new String[][] {
+                    {"aba", "a"},
+                    {"abc", "ab"},
+                }) {
+            String text = textAndFirstSegment[0];
+            String firstSegment = textAndFirstSegment[1];
+            selfAccepting.setText(text);
+            final var actual = text.substring(0, selfAccepting.next());
+            if (!actual.equals(firstSegment))
+                errln(
+                        "First segment of "
+                                + text
+                                + " with selfAccepting: expected "
+                                + firstSegment
+                                + ", got "
+                                + actual);
+        }
+        // Same as above, with the self accepting state two transitions away from the state that
+        // sets the second lookahead, so we cover both the initialization of the boundary and the
+        // traversal loop.
+        final var longSelfAccepting =
+                new RuleBasedBreakIterator(
+                        "" //
+                                + "!!chain;"
+                                + "[a] / [b]   [x]   [a];"
+                                + "[a]   [b] / [c];"
+                                + ". .;");
+        assertEquals(
+                "longSelfAccepting chromatic number",
+                2,
+                longSelfAccepting.fRData.fFTable.fLookAheadResultsSize
+                        - longSelfAccepting.fRData.ACCEPTING_UNCONDITIONAL
+                        - 1);
+        for (final var textAndFirstSegment :
+                new String[][] {
+                    {"abxa", "a"},
+                    {"abc", "ab"},
+                }) {
+            String text = textAndFirstSegment[0];
+            String firstSegment = textAndFirstSegment[1];
+            longSelfAccepting.setText(text);
+            final var actual = text.substring(0, longSelfAccepting.next());
+            if (!actual.equals(firstSegment))
+                errln(
+                        "First segment of "
+                                + text
+                                + " with longSelfAccepting: expected "
+                                + firstSegment
+                                + ", got "
+                                + actual);
+        }
+    }
+
+    @Test
+    public void TestCustomProperties() {
+        final var shakespeareanSymbolTable = new ShakespeareanSymbolTable();
+        final var s = new UnicodeSet();
+        shakespeareanSymbolTable.applyPropertyAlias("Name", "Theſeus", s);
+        final String theseus = Character.toString(s.charAt(0));
+        s.clear();
+        shakespeareanSymbolTable.applyPropertyAlias("Name", "Hippolita", s);
+        final String hippolyta = Character.toString(s.charAt(0));
+        s.clear();
+        shakespeareanSymbolTable.applyPropertyAlias("Name", "Moth", s);
+        final String moth = Character.toString(s.charAt(0));
+        final var it =
+                new RuleBasedBreakIterator(
+                        "[\\N{Theſeus}] [\\N{Hippolita}]; .;", shakespeareanSymbolTable);
+        it.setText(moth + theseus + hippolyta + moth);
+        assertEquals("First break", it.next(), 1);
+        assertEquals("Second break", it.next(), 3);
+        // Check that we only get the properties from the XSymbolTable, not the variables.
+        try {
+            new RuleBasedBreakIterator(
+                    "[$AMidsummerNightsDream] [$AMidsummerNightsDream]; .;",
+                    shakespeareanSymbolTable);
+            errln(
+                    "Expected IllegalArgumentException to be thrown: "
+                            + "$AMidsummerNightsDream should not be defined");
+        } catch (IllegalArgumentException e) {
+            // 1020F is U_BRK_MALFORMED_SET (not visible from here).
+            assertEquals(
+                    "Exception message",
+                    "Error " + 0x1020F + " at line 1 column 1",
+                    e.getMessage());
+        }
+        try {
+            new RuleBasedBreakIterator(
+                    "$AMidsummerNightsDream $AMidsummerNightsDream; .;", shakespeareanSymbolTable);
+            errln(
+                    "Expected IllegalArgumentException to be thrown: "
+                            + "$AMidsummerNightsDream should not be defined");
+        } catch (IllegalArgumentException e) {
+            // 1020A is U_BRK_UNDEFINED_VARIABLE (not visible from here).
+            assertEquals(
+                    "Exception message",
+                    "Error " + 0x1020A + " at line 1 column 24",
+                    e.getMessage());
+        }
+    }
+
+    @Test
+    public void TestBug23449() {
+        StringBuilder rules = new StringBuilder();
+        int length = 3600;
+        for (int i = 0; i < length; ++i) {
+            rules.append("[a]");
+        }
+        rules.append(";");
+
+        try {
+            new RuleBasedBreakIterator(rules.toString());
+            fail("Expected IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+            // Expected
+            assertEquals("Exception message", "The input is too long", e.getMessage());
         }
     }
 }

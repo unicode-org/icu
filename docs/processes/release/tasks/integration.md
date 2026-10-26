@@ -372,8 +372,7 @@ Instructions for verifying the XLIFF conversion tools.
 ## Test sample and demo programs
 
 Build and run all of the sample and demo apps that are included with ICU, on
-each of the reference platforms. A list of them is in the
-[readme](http://icu.sanjose.ibm.com/internal/checklist/icu-progs-list.html).
+each of the reference platforms. A list of them [here](../../../demos/index.md).
 Also see the build system.
 
 Another worthy test: Test suites and demos *from the previous release* should

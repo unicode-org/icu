@@ -168,7 +168,12 @@ abstract class AbstractPathValueMapper {
                             r.getValues().size() == 1,
                             "explicit aliases must be singleton values: %s",
                             r);
-                    map.put(rbPath, ValueOrAlias.value(Iterables.getOnlyElement(r.getValues())));
+                    // An alias path must have exactly one value. If a duplicate arises (e.g. from
+                    // a parent-level dateTimeFormats alias and a child-level appendItems alias both
+                    // emitting the same path), keep the first and skip subsequent duplicates.
+                    if (!map.containsKey(rbPath)) {
+                        map.put(rbPath, ValueOrAlias.value(Iterables.getOnlyElement(r.getValues())));
+                    }
                 } else {
                     // Ungrouped results are one value per entry, but might later be expanded into
                     // grouped results if they are a path referencing a grouped entry.
@@ -177,7 +182,12 @@ abstract class AbstractPathValueMapper {
             }
         }
         // This works because insertion order is maintained for values of each path.
-        map.forEach((p, v) -> icuData.add(p, v.resolve(map)));
+        map.forEach((p, v) -> {
+            RbValue resolved = v.resolve(map);
+            if (resolved != null) {
+                icuData.add(p, resolved);
+            }
+        });
     }
 
     /*
@@ -224,7 +234,13 @@ abstract class AbstractPathValueMapper {
             return src -> {
                 checkState(src != null, "recursive alias resolution is not supported");
                 List<ValueOrAlias> values = src.get(path);
-                checkArgument(!values.isEmpty(), "no such alias value: /%s", path);
+                // If the referenced path doesn't exist in the map, return null to skip
+                // this entry. This handles unresolvable paths like the whole-calendar
+                // alias marker ("$1lo") whose value "/LOCALE/calendar/<target>" cannot
+                // be resolved against the local map.
+                if (values.isEmpty()) {
+                    return null;
+                }
                 checkArgument(
                         index < values.size(),
                         "index for alias /%s[%s] is out of bounds",

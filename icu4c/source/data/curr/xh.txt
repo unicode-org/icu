@@ -1253,10 +1253,6 @@ xh{
             one{"East Caribbean dollar"}
             other{"East Caribbean dollars"}
         }
-        XCG{
-            one{"ICaribbean guilder"}
-            other{"ICaribbean guilder"}
-        }
         XOF{
             one{"ICFA franc yaseWest Africa"}
             other{"IiCFA franc zaseWest Africa"}

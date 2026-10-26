@@ -13,7 +13,6 @@ import com.ibm.icu.impl.ICULocaleService;
 import com.ibm.icu.impl.ICULocaleService.LocaleKeyFactory;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.ICUService;
-import com.ibm.icu.impl.ICUService.Factory;
 import com.ibm.icu.impl.coll.CollationLoader;
 import com.ibm.icu.impl.coll.CollationTailoring;
 import com.ibm.icu.text.Collator.CollatorFactory;
@@ -36,16 +35,12 @@ final class CollatorServiceShim extends Collator.ServiceShim {
             ULocale[] actualLoc = new ULocale[1];
             Collator coll = (Collator) service.get(locale, actualLoc);
             if (coll == null) {
-                /// CLOVER:OFF
                 // Can't really change coll after it's been initialized
                 throw new MissingResourceException("Could not locate Collator data", "", "");
-                /// CLOVER:ON
             }
             return coll.clone();
         } catch (CloneNotSupportedException e) {
-            /// CLOVER:OFF
             throw new ICUCloneNotSupportedException(e);
-            /// CLOVER:ON
         }
     }
 
@@ -91,7 +86,7 @@ final class CollatorServiceShim extends Collator.ServiceShim {
 
     @Override
     boolean unregister(Object registryKey) {
-        return service.unregisterFactory((Factory) registryKey);
+        return service.unregisterFactory((ICUService.Factory) registryKey);
     }
 
     @Override
@@ -160,7 +155,6 @@ final class CollatorServiceShim extends Collator.ServiceShim {
             return "";
         }
 
-        /// CLOVER:OFF
         // The following method can not be reached by testing
         @Override
         protected Object handleDefault(Key key, String[] actualIDReturn) {
@@ -173,7 +167,6 @@ final class CollatorServiceShim extends Collator.ServiceShim {
                 return null;
             }
         }
-        /// CLOVER:ON
     }
 
     // Ported from C++ Collator::makeInstance().

@@ -482,6 +482,11 @@ en_CA{
                 one{"{0}qt"}
                 other{"{0}qt"}
             }
+            tablespoon{
+                dnam{"tbsp"}
+                one{"{0}tbsp"}
+                other{"{0}tbsp"}
+            }
         }
     }
     unitsShort{
@@ -751,6 +756,11 @@ en_CA{
                 dnam{"qt"}
                 one{"{0} qt"}
                 other{"{0} qt"}
+            }
+            tablespoon{
+                dnam{"tbsp"}
+                one{"{0} tbsp"}
+                other{"{0} tbsp"}
             }
         }
     }

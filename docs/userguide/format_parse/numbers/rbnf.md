@@ -132,7 +132,7 @@ you can see, the rules are designed to accommodate recursive processing of
 numbers, and so are best suited for formatting numbers in ways that are
 inherently recursive.
 
-A full explanation of this example can be found in the [RuleBasedNumberFormat
-examples](rbnf-examples.md). A complete description of the rule syntax can be
-found in the [RuleBasedNumberFormat API
+A full explanation of this example can be found in the
+[RuleBasedNumberFormat examples](rbnf-examples.md). A complete description of
+the rule syntax can be found in the [RuleBasedNumberFormat API
 Documentation](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classRuleBasedNumberFormat.html).

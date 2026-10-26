@@ -11,28 +11,6 @@ cv{
         " #]"
     }
     NumberElements{
-        adlm{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        ahom{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
         arab{
             patterns{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
@@ -45,309 +23,6 @@ cv{
             }
         }
         arabext{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        bali{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        beng{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        bhks{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        brah{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        cakm{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        cham{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        deva{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        diak{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        fullwide{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        gara{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        gong{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        gonm{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        gujr{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        gukh{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        guru{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        hanidec{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        hmng{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        hmnp{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        java{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        kali{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        kawi{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        khmr{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        knda{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        krai{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        lana{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        lanatham{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        laoo{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
             symbols{
                 nan{"хисеп мар"}
             }
@@ -495,133 +170,68 @@ cv{
                     1000{
                         one{"0 пин"}
                         other{"0 пин"}
+                        zero{"0 пин"}
                     }
                     10000{
                         one{"00 пин"}
                         other{"00 пин"}
+                        zero{"00 пин"}
                     }
                     100000{
                         one{"000 пин"}
                         other{"000 пин"}
+                        zero{"000 пин"}
                     }
                     1000000{
                         one{"0 млн"}
                         other{"0 млн"}
+                        zero{"0 млн"}
                     }
                     10000000{
                         one{"00 млн"}
                         other{"00 млн"}
+                        zero{"00 млн"}
                     }
                     100000000{
                         one{"000 млн"}
                         other{"000 млн"}
+                        zero{"000 млн"}
                     }
                     1000000000{
                         one{"0 млрд"}
                         other{"0 млрд"}
+                        zero{"0 млрд"}
                     }
                     10000000000{
                         one{"00 млрд"}
                         other{"00 млрд"}
+                        zero{"00 млрд"}
                     }
                     100000000000{
                         one{"000 млрд"}
                         other{"000 млрд"}
+                        zero{"000 млрд"}
                     }
                     1000000000000{
                         one{"0 трлн"}
                         other{"0 трлн"}
+                        zero{"0 трлн"}
                     }
                     10000000000000{
                         one{"00 трлн"}
                         other{"00 трлн"}
+                        zero{"00 трлн"}
                     }
                     100000000000000{
                         one{"000 трлн"}
                         other{"000 трлн"}
+                        zero{"000 трлн"}
                     }
                 }
             }
             symbols{
                 decimal{","}
                 group{" "}
-                nan{"хисеп мар"}
-            }
-        }
-        lepc{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        limb{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        mathbold{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        mathdbl{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        mathmono{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        mathsanb{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        mathsans{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
                 nan{"хисеп мар"}
             }
         }
@@ -633,435 +243,6 @@ cv{
                 one{"{0} пан улми пур. Ӑна илесшӗн-и?"}
                 other{"{0} пан улми пур. Вӗсене илесшӗн-и?"}
                 zero{"Пан улми ҫук."}
-            }
-        }
-        mlym{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        modi{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        mong{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        mroo{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        mtei{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        mymr{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        mymrepka{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        mymrpao{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        mymrshan{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        mymrtlng{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        nagm{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        newa{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        nkoo{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        olck{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        onao{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        orya{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        osma{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        outlined{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        rohg{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        saur{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        segment{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        shrd{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        sind{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        sinh{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        sora{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        sund{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        sunu{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        takr{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        talu{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        tamldec{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        telu{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        thai{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        tibt{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        tirh{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        tnsa{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        tols{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        vaii{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        wara{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
-            }
-        }
-        wcho{
-            patterns{
-                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
-                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            symbols{
-                nan{"хисеп мар"}
             }
         }
     }
@@ -1082,37 +263,8 @@ cv{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            availableFormats{
-                Ed{"d, E"}
-                Gy{"G y"}
-                GyM{"G y.MM"}
-                GyMEd{"G y.MM.dd (E)"}
-                GyMMM{"G y, MMM"}
-                GyMMMEd{"G y, MMM, d, E"}
-                GyMMMd{"G y, MMM, d"}
-                GyMd{"G y.MM.dd"}
-                MEd{"MM.dd (E)"}
-                MMMEd{"MMM, d, E"}
-                MMMMd{"MMMM, d"}
-                MMMd{"MMM, d"}
-                Md{"MM.dd"}
-                y{"G y"}
-                yyyy{"G y"}
-                yyyyM{"G y.MM"}
-                yyyyMEd{"G y.MM.dd (E)"}
-                yyyyMMM{"G y, MMM"}
-                yyyyMMMEd{"G y, MMM, d, E"}
-                yyyyMMMM{"G y, MMMM"}
-                yyyyMMMd{"G y, MMM, d"}
-                yyyyMd{"G y.MM.dd"}
-                yyyyQQQ{"G y, QQQ"}
-                yyyyQQQQ{"G y, QQQQ"}
-            }
             eras{
                 abbreviated{
-                    0{"б. с."}
-                }
-                narrow{
                     0{"б. с."}
                 }
                 wide{
@@ -1120,134 +272,8 @@ cv{
                 }
             }
             intervalFormats{
-                Bh{
-                    B{"B h – B h"}
-                    h{"B h–h"}
-                }
-                Bhm{
-                    B{"B h:mm – B h:mm"}
-                    h{"B h:mm–h:mm"}
-                    m{"B h:mm–h:mm"}
-                }
-                Gy{
-                    G{"G y – G y"}
-                    y{"G y–y"}
-                }
-                GyM{
-                    G{"G y.MM – G y.MM"}
-                    M{"G y.MM – y.MM"}
-                    y{"G y.MM – y.MM"}
-                }
-                GyMEd{
-                    G{"G y.MM.dd (E) – G y.MM.dd (E)"}
-                    M{"G y.MM.dd (E) – y.MM.dd (E)"}
-                    d{"G y.MM.dd (E) – y.MM.dd (E)"}
-                    y{"G y.MM.dd (E) – y.MM.dd (E)"}
-                }
-                GyMMM{
-                    G{"G y, MMM – G y, MMM"}
-                    M{"G y, MMM – MMM"}
-                    y{"G y, MMM – y, MMM"}
-                }
-                GyMMMEd{
-                    G{"G y, MMM, d, E – G y, MMM, d, E"}
-                    M{"G y, MMM, d, E – MMM, d, E"}
-                    d{"G y, MMM, d, E – MMM, d, E"}
-                    y{"G y, MMM, d, E – y, MMM, d, E"}
-                }
-                GyMMMd{
-                    G{"G y, MMM, d – G y, MMM, d"}
-                    M{"G y, MMM, d – MMM, d"}
-                    d{"G y, MMM, d–d"}
-                    y{"G y, MMM, d – y, MMM, d"}
-                }
-                GyMd{
-                    G{"G y.MM.dd – G y.MM.dd"}
-                    M{"G y.MM.dd – y.MM.dd"}
-                    d{"G y.MM.dd – y.MM.dd"}
-                    y{"G y.MM.dd – y.MM.dd"}
-                }
-                H{
-                    H{"HH–HH 'сех'"}
-                }
-                Hmv{
-                    H{"HH:mm–HH:mm (v)"}
-                    m{"HH:mm–HH:mm (v)"}
-                }
                 Hv{
                     H{"HH–HH (v)"}
-                }
-                MEd{
-                    M{"MM.dd (E) – MM.dd (E)"}
-                    d{"MM.dd (E) – MM.dd (E)"}
-                }
-                MMM{
-                    M{"MMM – MMM"}
-                }
-                MMMEd{
-                    M{"MMM, d, E – MMM, d, E"}
-                    d{"MMM, d, E – MMM, d, E"}
-                }
-                MMMd{
-                    M{"MMM, d – MMM, d"}
-                    d{"MMM, d–d"}
-                }
-                Md{
-                    M{"MM.dd – MM.dd"}
-                    d{"MM.dd – MM.dd"}
-                }
-                h{
-                    a{"a h – a h"}
-                    h{"a h–h"}
-                }
-                hm{
-                    a{"a h:mm – a h:mm"}
-                    h{"a h:mm–h:mm"}
-                    m{"a h:mm–h:mm"}
-                }
-                hmv{
-                    a{"a h:mm – a h:mm (v)"}
-                    h{"a h:mm–h:mm (v)"}
-                    m{"a h:mm–h:mm (v)"}
-                }
-                hv{
-                    a{"a h – a h (v)"}
-                    h{"a h–h (v)"}
-                }
-                y{
-                    y{"G y–y"}
-                }
-                yM{
-                    M{"G y.MM – y.MM"}
-                    y{"G y.MM – y.MM"}
-                }
-                yMEd{
-                    M{"G y.MM.dd (E) – y.MM.dd (E)"}
-                    d{"G y.MM.dd (E) – y.MM.dd (E)"}
-                    y{"G y.MM.dd (E) – y.MM.dd (E)"}
-                }
-                yMMM{
-                    M{"G y, MMM – MMM"}
-                    y{"G y, MMM – y, MMM"}
-                }
-                yMMMEd{
-                    M{"G y, MMM, d, E – MMM, d, E"}
-                    d{"G y, MMM, d, E – MMM, d, E"}
-                    y{"G y, MMM, d, E – y, MMM, d, E"}
-                }
-                yMMMM{
-                    M{"G y, MMMM – MMMM"}
-                    y{"G y, MMMM – y, MMMM"}
-                }
-                yMMMd{
-                    M{"G y, MMM, d – MMM, d"}
-                    d{"G y, MMM, d–d"}
-                    y{"G y, MMM, d – y, MMM, d"}
-                }
-                yMd{
-                    M{"G y.MM.dd – y.MM.dd"}
-                    d{"G y.MM.dd – y.MM.dd"}
-                    y{"G y.MM.dd – y.MM.dd"}
                 }
             }
         }
@@ -1262,18 +288,6 @@ cv{
                 "r, MMM, d",
                 "r.MM.dd",
                 "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-            }
-            DateTimePatterns%atTime{
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-            }
-            DateTimePatterns%relative{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
@@ -1339,471 +353,11 @@ cv{
                             "сюй",
                             "хай",
                         }
-                        narrow{
-                            "цзы",
-                            "чоу",
-                            "инь",
-                            "мао",
-                            "чэнь",
-                            "сы",
-                            "у",
-                            "вэй",
-                            "шэнь",
-                            "ю",
-                            "сюй",
-                            "хай",
-                        }
-                        wide{
-                            "цзы",
-                            "чоу",
-                            "инь",
-                            "мао",
-                            "чэнь",
-                            "сы",
-                            "у",
-                            "вэй",
-                            "шэнь",
-                            "ю",
-                            "сюй",
-                            "хай",
-                        }
-                    }
-                }
-                days{
-                    format{
-                        abbreviated{
-                            "цзя-цзы",
-                            "и-чоу",
-                            "бин-инь",
-                            "дин-мао",
-                            "у-чэнь",
-                            "цзи-сы",
-                            "гэн-у",
-                            "синь-вэй",
-                            "жэнь-шэнь",
-                            "гуй-ю",
-                            "цзя-сюй",
-                            "и-хай",
-                            "бин-цзы",
-                            "дин-чоу",
-                            "у-инь",
-                            "цзи-мао",
-                            "гэн-чэнь",
-                            "синь-сы",
-                            "жэнь-у",
-                            "гуй-вэй",
-                            "цзя-шэнь",
-                            "и-ю",
-                            "бин-сюй",
-                            "дин-хай",
-                            "у-цзы",
-                            "цзи-чоу",
-                            "гэн-инь",
-                            "синь-мао",
-                            "жэнь-чэнь",
-                            "гуй-сы",
-                            "цзя-у",
-                            "и-вэй",
-                            "бин-шэнь",
-                            "дин-ю",
-                            "у-сюй",
-                            "цзи-хай",
-                            "гэн-цзы",
-                            "синь-чоу",
-                            "жэнь-инь",
-                            "гуй-мао",
-                            "цзя-чэнь",
-                            "и-сы",
-                            "бин-у",
-                            "дин-вэй",
-                            "у-шэнь",
-                            "цзи-ю",
-                            "гэн-сюй",
-                            "синь-хай",
-                            "жэнь-цзы",
-                            "гуй-чоу",
-                            "цзя-инь",
-                            "и-мао",
-                            "бин-чэнь",
-                            "дин-сы",
-                            "у-у",
-                            "цзи-вэй",
-                            "гэн-шэнь",
-                            "синь-ю",
-                            "жэнь-сюй",
-                            "гуй-хай",
-                        }
-                        narrow{
-                            "цзя-цзы",
-                            "и-чоу",
-                            "бин-инь",
-                            "дин-мао",
-                            "у-чэнь",
-                            "цзи-сы",
-                            "гэн-у",
-                            "синь-вэй",
-                            "жэнь-шэнь",
-                            "гуй-ю",
-                            "цзя-сюй",
-                            "и-хай",
-                            "бин-цзы",
-                            "дин-чоу",
-                            "у-инь",
-                            "цзи-мао",
-                            "гэн-чэнь",
-                            "синь-сы",
-                            "жэнь-у",
-                            "гуй-вэй",
-                            "цзя-шэнь",
-                            "и-ю",
-                            "бин-сюй",
-                            "дин-хай",
-                            "у-цзы",
-                            "цзи-чоу",
-                            "гэн-инь",
-                            "синь-мао",
-                            "жэнь-чэнь",
-                            "гуй-сы",
-                            "цзя-у",
-                            "и-вэй",
-                            "бин-шэнь",
-                            "дин-ю",
-                            "у-сюй",
-                            "цзи-хай",
-                            "гэн-цзы",
-                            "синь-чоу",
-                            "жэнь-инь",
-                            "гуй-мао",
-                            "цзя-чэнь",
-                            "и-сы",
-                            "бин-у",
-                            "дин-вэй",
-                            "у-шэнь",
-                            "цзи-ю",
-                            "гэн-сюй",
-                            "синь-хай",
-                            "жэнь-цзы",
-                            "гуй-чоу",
-                            "цзя-инь",
-                            "и-мао",
-                            "бин-чэнь",
-                            "дин-сы",
-                            "у-у",
-                            "цзи-вэй",
-                            "гэн-шэнь",
-                            "синь-ю",
-                            "жэнь-сюй",
-                            "гуй-хай",
-                        }
-                        wide{
-                            "цзя-цзы",
-                            "и-чоу",
-                            "бин-инь",
-                            "дин-мао",
-                            "у-чэнь",
-                            "цзи-сы",
-                            "гэн-у",
-                            "синь-вэй",
-                            "жэнь-шэнь",
-                            "гуй-ю",
-                            "цзя-сюй",
-                            "и-хай",
-                            "бин-цзы",
-                            "дин-чоу",
-                            "у-инь",
-                            "цзи-мао",
-                            "гэн-чэнь",
-                            "синь-сы",
-                            "жэнь-у",
-                            "гуй-вэй",
-                            "цзя-шэнь",
-                            "и-ю",
-                            "бин-сюй",
-                            "дин-хай",
-                            "у-цзы",
-                            "цзи-чоу",
-                            "гэн-инь",
-                            "синь-мао",
-                            "жэнь-чэнь",
-                            "гуй-сы",
-                            "цзя-у",
-                            "и-вэй",
-                            "бин-шэнь",
-                            "дин-ю",
-                            "у-сюй",
-                            "цзи-хай",
-                            "гэн-цзы",
-                            "синь-чоу",
-                            "жэнь-инь",
-                            "гуй-мао",
-                            "цзя-чэнь",
-                            "и-сы",
-                            "бин-у",
-                            "дин-вэй",
-                            "у-шэнь",
-                            "цзи-ю",
-                            "гэн-сюй",
-                            "синь-хай",
-                            "жэнь-цзы",
-                            "гуй-чоу",
-                            "цзя-инь",
-                            "и-мао",
-                            "бин-чэнь",
-                            "дин-сы",
-                            "у-у",
-                            "цзи-вэй",
-                            "гэн-шэнь",
-                            "синь-ю",
-                            "жэнь-сюй",
-                            "гуй-хай",
-                        }
-                    }
-                }
-                months{
-                    format{
-                        abbreviated{
-                            "цзя-цзы",
-                            "и-чоу",
-                            "бин-инь",
-                            "дин-мао",
-                            "у-чэнь",
-                            "цзи-сы",
-                            "гэн-у",
-                            "синь-вэй",
-                            "жэнь-шэнь",
-                            "гуй-ю",
-                            "цзя-сюй",
-                            "и-хай",
-                            "бин-цзы",
-                            "дин-чоу",
-                            "у-инь",
-                            "цзи-мао",
-                            "гэн-чэнь",
-                            "синь-сы",
-                            "жэнь-у",
-                            "гуй-вэй",
-                            "цзя-шэнь",
-                            "и-ю",
-                            "бин-сюй",
-                            "дин-хай",
-                            "у-цзы",
-                            "цзи-чоу",
-                            "гэн-инь",
-                            "синь-мао",
-                            "жэнь-чэнь",
-                            "гуй-сы",
-                            "цзя-у",
-                            "и-вэй",
-                            "бин-шэнь",
-                            "дин-ю",
-                            "у-сюй",
-                            "цзи-хай",
-                            "гэн-цзы",
-                            "синь-чоу",
-                            "жэнь-инь",
-                            "гуй-мао",
-                            "цзя-чэнь",
-                            "и-сы",
-                            "бин-у",
-                            "дин-вэй",
-                            "у-шэнь",
-                            "цзи-ю",
-                            "гэн-сюй",
-                            "синь-хай",
-                            "жэнь-цзы",
-                            "гуй-чоу",
-                            "цзя-инь",
-                            "и-мао",
-                            "бин-чэнь",
-                            "дин-сы",
-                            "у-у",
-                            "цзи-вэй",
-                            "гэн-шэнь",
-                            "синь-ю",
-                            "жэнь-сюй",
-                            "гуй-хай",
-                        }
-                        narrow{
-                            "цзя-цзы",
-                            "и-чоу",
-                            "бин-инь",
-                            "дин-мао",
-                            "у-чэнь",
-                            "цзи-сы",
-                            "гэн-у",
-                            "синь-вэй",
-                            "жэнь-шэнь",
-                            "гуй-ю",
-                            "цзя-сюй",
-                            "и-хай",
-                            "бин-цзы",
-                            "дин-чоу",
-                            "у-инь",
-                            "цзи-мао",
-                            "гэн-чэнь",
-                            "синь-сы",
-                            "жэнь-у",
-                            "гуй-вэй",
-                            "цзя-шэнь",
-                            "и-ю",
-                            "бин-сюй",
-                            "дин-хай",
-                            "у-цзы",
-                            "цзи-чоу",
-                            "гэн-инь",
-                            "синь-мао",
-                            "жэнь-чэнь",
-                            "гуй-сы",
-                            "цзя-у",
-                            "и-вэй",
-                            "бин-шэнь",
-                            "дин-ю",
-                            "у-сюй",
-                            "цзи-хай",
-                            "гэн-цзы",
-                            "синь-чоу",
-                            "жэнь-инь",
-                            "гуй-мао",
-                            "цзя-чэнь",
-                            "и-сы",
-                            "бин-у",
-                            "дин-вэй",
-                            "у-шэнь",
-                            "цзи-ю",
-                            "гэн-сюй",
-                            "синь-хай",
-                            "жэнь-цзы",
-                            "гуй-чоу",
-                            "цзя-инь",
-                            "и-мао",
-                            "бин-чэнь",
-                            "дин-сы",
-                            "у-у",
-                            "цзи-вэй",
-                            "гэн-шэнь",
-                            "синь-ю",
-                            "жэнь-сюй",
-                            "гуй-хай",
-                        }
-                        wide{
-                            "цзя-цзы",
-                            "и-чоу",
-                            "бин-инь",
-                            "дин-мао",
-                            "у-чэнь",
-                            "цзи-сы",
-                            "гэн-у",
-                            "синь-вэй",
-                            "жэнь-шэнь",
-                            "гуй-ю",
-                            "цзя-сюй",
-                            "и-хай",
-                            "бин-цзы",
-                            "дин-чоу",
-                            "у-инь",
-                            "цзи-мао",
-                            "гэн-чэнь",
-                            "синь-сы",
-                            "жэнь-у",
-                            "гуй-вэй",
-                            "цзя-шэнь",
-                            "и-ю",
-                            "бин-сюй",
-                            "дин-хай",
-                            "у-цзы",
-                            "цзи-чоу",
-                            "гэн-инь",
-                            "синь-мао",
-                            "жэнь-чэнь",
-                            "гуй-сы",
-                            "цзя-у",
-                            "и-вэй",
-                            "бин-шэнь",
-                            "дин-ю",
-                            "у-сюй",
-                            "цзи-хай",
-                            "гэн-цзы",
-                            "синь-чоу",
-                            "жэнь-инь",
-                            "гуй-мао",
-                            "цзя-чэнь",
-                            "и-сы",
-                            "бин-у",
-                            "дин-вэй",
-                            "у-шэнь",
-                            "цзи-ю",
-                            "гэн-сюй",
-                            "синь-хай",
-                            "жэнь-цзы",
-                            "гуй-чоу",
-                            "цзя-инь",
-                            "и-мао",
-                            "бин-чэнь",
-                            "дин-сы",
-                            "у-у",
-                            "цзи-вэй",
-                            "гэн-шэнь",
-                            "синь-ю",
-                            "жэнь-сюй",
-                            "гуй-хай",
-                        }
                     }
                 }
                 solarTerms{
                     format{
                         abbreviated{
-                            "личунь",
-                            "юйшуй",
-                            "цзинчжэ",
-                            "чуньфэнь",
-                            "цинмин",
-                            "гуюй",
-                            "лися",
-                            "сяомань",
-                            "манчжун",
-                            "сячжи",
-                            "сяошу",
-                            "дашу",
-                            "лицю",
-                            "чушу",
-                            "байлу",
-                            "цюфэнь",
-                            "ханьлу",
-                            "шуанцзян",
-                            "лидун",
-                            "сяосюэ",
-                            "дасюэ",
-                            "дунчжи",
-                            "сяохань",
-                            "дахань",
-                        }
-                        narrow{
-                            "личунь",
-                            "юйшуй",
-                            "цзинчжэ",
-                            "чуньфэнь",
-                            "цинмин",
-                            "гуюй",
-                            "лися",
-                            "сяомань",
-                            "манчжун",
-                            "сячжи",
-                            "сяошу",
-                            "дашу",
-                            "лицю",
-                            "чушу",
-                            "байлу",
-                            "цюфэнь",
-                            "ханьлу",
-                            "шуанцзян",
-                            "лидун",
-                            "сяосюэ",
-                            "дасюэ",
-                            "дунчжи",
-                            "сяохань",
-                            "дахань",
-                        }
-                        wide{
                             "личунь",
                             "юйшуй",
                             "цзинчжэ",
@@ -1894,176 +448,6 @@ cv{
                             "синь-ю",
                             "жэнь-сюй",
                             "гуй-хай",
-                        }
-                        narrow{
-                            "цзя-цзы",
-                            "и-чоу",
-                            "бин-инь",
-                            "дин-мао",
-                            "у-чэнь",
-                            "цзи-сы",
-                            "гэн-у",
-                            "синь-вэй",
-                            "жэнь-шэнь",
-                            "гуй-ю",
-                            "цзя-сюй",
-                            "и-хай",
-                            "бин-цзы",
-                            "дин-чоу",
-                            "у-инь",
-                            "цзи-мао",
-                            "гэн-чэнь",
-                            "синь-сы",
-                            "жэнь-у",
-                            "гуй-вэй",
-                            "цзя-шэнь",
-                            "и-ю",
-                            "бин-сюй",
-                            "дин-хай",
-                            "у-цзы",
-                            "цзи-чоу",
-                            "гэн-инь",
-                            "синь-мао",
-                            "жэнь-чэнь",
-                            "гуй-сы",
-                            "цзя-у",
-                            "и-вэй",
-                            "бин-шэнь",
-                            "дин-ю",
-                            "у-сюй",
-                            "цзи-хай",
-                            "гэн-цзы",
-                            "синь-чоу",
-                            "жэнь-инь",
-                            "гуй-мао",
-                            "цзя-чэнь",
-                            "и-сы",
-                            "бин-у",
-                            "дин-вэй",
-                            "у-шэнь",
-                            "цзи-ю",
-                            "гэн-сюй",
-                            "синь-хай",
-                            "жэнь-цзы",
-                            "гуй-чоу",
-                            "цзя-инь",
-                            "и-мао",
-                            "бин-чэнь",
-                            "дин-сы",
-                            "у-у",
-                            "цзи-вэй",
-                            "гэн-шэнь",
-                            "синь-ю",
-                            "жэнь-сюй",
-                            "гуй-хай",
-                        }
-                        wide{
-                            "цзя-цзы",
-                            "и-чоу",
-                            "бин-инь",
-                            "дин-мао",
-                            "у-чэнь",
-                            "цзи-сы",
-                            "гэн-у",
-                            "синь-вэй",
-                            "жэнь-шэнь",
-                            "гуй-ю",
-                            "цзя-сюй",
-                            "и-хай",
-                            "бин-цзы",
-                            "дин-чоу",
-                            "у-инь",
-                            "цзи-мао",
-                            "гэн-чэнь",
-                            "синь-сы",
-                            "жэнь-у",
-                            "гуй-вэй",
-                            "цзя-шэнь",
-                            "и-ю",
-                            "бин-сюй",
-                            "дин-хай",
-                            "у-цзы",
-                            "цзи-чоу",
-                            "гэн-инь",
-                            "синь-мао",
-                            "жэнь-чэнь",
-                            "гуй-сы",
-                            "цзя-у",
-                            "и-вэй",
-                            "бин-шэнь",
-                            "дин-ю",
-                            "у-сюй",
-                            "цзи-хай",
-                            "гэн-цзы",
-                            "синь-чоу",
-                            "жэнь-инь",
-                            "гуй-мао",
-                            "цзя-чэнь",
-                            "и-сы",
-                            "бин-у",
-                            "дин-вэй",
-                            "у-шэнь",
-                            "цзи-ю",
-                            "гэн-сюй",
-                            "синь-хай",
-                            "жэнь-цзы",
-                            "гуй-чоу",
-                            "цзя-инь",
-                            "и-мао",
-                            "бин-чэнь",
-                            "дин-сы",
-                            "у-у",
-                            "цзи-вэй",
-                            "гэн-шэнь",
-                            "синь-ю",
-                            "жэнь-сюй",
-                            "гуй-хай",
-                        }
-                    }
-                }
-                zodiacs{
-                    format{
-                        abbreviated{
-                            "цзы",
-                            "чоу",
-                            "инь",
-                            "мао",
-                            "чэнь",
-                            "сы",
-                            "у",
-                            "вэй",
-                            "шэнь",
-                            "ю",
-                            "сюй",
-                            "хай",
-                        }
-                        narrow{
-                            "цзы",
-                            "чоу",
-                            "инь",
-                            "мао",
-                            "чэнь",
-                            "сы",
-                            "у",
-                            "вэй",
-                            "шэнь",
-                            "ю",
-                            "сюй",
-                            "хай",
-                        }
-                        wide{
-                            "цзы",
-                            "чоу",
-                            "инь",
-                            "мао",
-                            "чэнь",
-                            "сы",
-                            "у",
-                            "вэй",
-                            "шэнь",
-                            "ю",
-                            "сюй",
-                            "хай",
                         }
                     }
                 }
@@ -2195,45 +579,9 @@ cv{
                         "вун иккӗмӗш уйӑх",
                     }
                 }
-                stand-alone{
-                    abbreviated{
-                        "1-мӗш уйӑх",
-                        "2-мӗш уйӑх",
-                        "3-мӗш уйӑх",
-                        "4-мӗш уйӑх",
-                        "5-мӗш уйӑх",
-                        "6-мӗш уйӑх",
-                        "7-мӗш уйӑх",
-                        "8-мӗш уйӑх",
-                        "9-мӗш уйӑх",
-                        "10-мӗш уйӑх",
-                        "11-мӗш уйӑх",
-                        "12-мӗш уйӑх",
-                    }
-                    wide{
-                        "пӗрремӗш уйӑх",
-                        "иккӗмӗш уйӑх",
-                        "виҫҫӗмӗш уйӑх",
-                        "тӑваттӑмӗш уйӑх",
-                        "пиллӗкмӗш уйӑх",
-                        "улттӑмӗш уйӑх",
-                        "ҫиччӗмӗш уйӑх",
-                        "саккӑрмӗш уйӑх",
-                        "тӑххӑрмӗш уйӑх",
-                        "вуннӑмӗш уйӑх",
-                        "вун пӗрмӗш уйӑх",
-                        "вун иккӗмӗш уйӑх",
-                    }
-                }
             }
             monthPatterns{
                 format{
-                    abbreviated{
-                        leap{"йӗкӗр {0}"}
-                    }
-                    narrow{
-                        leap{"йӗкӗр {0}"}
-                    }
                     wide{
                         leap{"йӗкӗр {0}"}
                     }
@@ -2244,60 +592,13 @@ cv{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        leap{"йӗкӗр {0}"}
-                    }
                     narrow{
-                        leap{"йӗкӗр {0}"}
-                    }
-                    wide{
                         leap{"йӗкӗр {0}"}
                     }
                 }
             }
         }
         coptic{
-            DateTimePatterns{
-                "HH:mm:ss (zzzz)",
-                "HH:mm:ss (z)",
-                "HH:mm:ss",
-                "HH:mm",
-                "G y, MMMM, d, EEEE",
-                "G y, MMMM, d",
-                "G y, MMM, d",
-                "GGGGG y.MM.dd",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-            }
-            availableFormats{
-                Ed{"d, E"}
-                Gy{"G y"}
-                GyM{"G y.MM"}
-                GyMEd{"G y.MM.dd (E)"}
-                GyMMM{"G y, MMM"}
-                GyMMMEd{"G y, MMM, d, E"}
-                GyMMMd{"G y, MMM, d"}
-                GyMd{"G y.MM.dd"}
-                MEd{"MM.dd (E)"}
-                MMMEd{"MMM, d, E"}
-                MMMMd{"MMMM, d"}
-                MMMd{"MMM, d"}
-                Md{"MM.dd"}
-                y{"G y"}
-                yyyy{"G y"}
-                yyyyM{"G y.MM"}
-                yyyyMEd{"G y.MM.dd (E)"}
-                yyyyMMM{"G y, MMM"}
-                yyyyMMMEd{"G y, MMM, d, E"}
-                yyyyMMMM{"G y, MMMM"}
-                yyyyMMMd{"G y, MMM, d"}
-                yyyyMd{"G y.MM.dd"}
-                yyyyQQQ{"G y, QQQ"}
-                yyyyQQQQ{"G y, QQQQ"}
-            }
             eras{
                 abbreviated{
                     1{"Диокл-т."}
@@ -2307,137 +608,6 @@ cv{
                 }
                 wide{
                     1{"Диоклетиантан"}
-                }
-            }
-            intervalFormats{
-                Bh{
-                    B{"B h – B h"}
-                    h{"B h–h"}
-                }
-                Bhm{
-                    B{"B h:mm – B h:mm"}
-                    h{"B h:mm–h:mm"}
-                    m{"B h:mm–h:mm"}
-                }
-                Gy{
-                    G{"G y – G y"}
-                    y{"G y–y"}
-                }
-                GyM{
-                    G{"G y.MM – G y.MM"}
-                    M{"G y.MM – y.MM"}
-                    y{"G y.MM – y.MM"}
-                }
-                GyMEd{
-                    G{"G y.MM.dd (E) – G y.MM.dd (E)"}
-                    M{"G y.MM.dd (E) – y.MM.dd (E)"}
-                    d{"G y.MM.dd (E) – y.MM.dd (E)"}
-                    y{"G y.MM.dd (E) – y.MM.dd (E)"}
-                }
-                GyMMM{
-                    G{"G y, MMM – G y, MMM"}
-                    M{"G y, MMM – MMM"}
-                    y{"G y, MMM – y, MMM"}
-                }
-                GyMMMEd{
-                    G{"G y, MMM, d, E – G y, MMM, d, E"}
-                    M{"G y, MMM, d, E – MMM, d, E"}
-                    d{"G y, MMM, d, E – MMM, d, E"}
-                    y{"G y, MMM, d, E – y, MMM, d, E"}
-                }
-                GyMMMd{
-                    G{"G y, MMM, d – G y, MMM, d"}
-                    M{"G y, MMM, d – MMM, d"}
-                    d{"G y, MMM, d–d"}
-                    y{"G y, MMM, d – y, MMM, d"}
-                }
-                GyMd{
-                    G{"G y.MM.dd – G y.MM.dd"}
-                    M{"G y.MM.dd – y.MM.dd"}
-                    d{"G y.MM.dd – y.MM.dd"}
-                    y{"G y.MM.dd – y.MM.dd"}
-                }
-                H{
-                    H{"HH–HH 'сех'"}
-                }
-                Hmv{
-                    H{"HH:mm–HH:mm (v)"}
-                    m{"HH:mm–HH:mm (v)"}
-                }
-                Hv{
-                    H{"HH–HH 'сех' (v)"}
-                }
-                MEd{
-                    M{"MM.dd (E) – MM.dd (E)"}
-                    d{"MM.dd (E) – MM.dd (E)"}
-                }
-                MMM{
-                    M{"MMM – MMM"}
-                }
-                MMMEd{
-                    M{"MMM, d, E – MMM, d, E"}
-                    d{"MMM, d, E – MMM, d, E"}
-                }
-                MMMd{
-                    M{"MMM, d – MMM, d"}
-                    d{"MMM, d–d"}
-                }
-                Md{
-                    M{"MM.dd – MM.dd"}
-                    d{"MM.dd – MM.dd"}
-                }
-                h{
-                    a{"a h – a h"}
-                    h{"a h–h"}
-                }
-                hm{
-                    a{"a h:mm – a h:mm"}
-                    h{"a h:mm–h:mm"}
-                    m{"a h:mm–h:mm"}
-                }
-                hmv{
-                    a{"a h:mm – a h:mm (v)"}
-                    h{"a h:mm–h:mm (v)"}
-                    m{"a h:mm–h:mm (v)"}
-                }
-                hv{
-                    a{"a h – a h (v)"}
-                    h{"a h–h (v)"}
-                }
-                y{
-                    y{"G y–y"}
-                }
-                yM{
-                    M{"G y.MM – y.MM"}
-                    y{"G y.MM – y.MM"}
-                }
-                yMEd{
-                    M{"G y.MM.dd (E) – y.MM.dd (E)"}
-                    d{"G y.MM.dd (E) – y.MM.dd (E)"}
-                    y{"G y.MM.dd (E) – y.MM.dd (E)"}
-                }
-                yMMM{
-                    M{"G y, MMM – MMM"}
-                    y{"G y, MMM – y, MMM"}
-                }
-                yMMMEd{
-                    M{"G y, MMM, d, E – MMM, d, E"}
-                    d{"G y, MMM, d, E – MMM, d, E"}
-                    y{"G y, MMM, d, E – y, MMM, d, E"}
-                }
-                yMMMM{
-                    M{"G y, MMMM – MMMM"}
-                    y{"G y, MMMM – y, MMMM"}
-                }
-                yMMMd{
-                    M{"G y, MMM, d – MMM, d"}
-                    d{"G y, MMM, d–d"}
-                    y{"G y, MMM, d – y, MMM, d"}
-                }
-                yMd{
-                    M{"G y.MM.dd – y.MM.dd"}
-                    d{"G y.MM.dd – y.MM.dd"}
-                    y{"G y.MM.dd – y.MM.dd"}
                 }
             }
             monthNames{
@@ -2461,64 +631,6 @@ cv{
             }
         }
         dangi{
-            DateTimePatterns{
-                "HH:mm:ss (zzzz)",
-                "HH:mm:ss (z)",
-                "HH:mm:ss",
-                "HH:mm",
-                "r (U), MMMM, d, EEEE",
-                "r (U), MMMM, d",
-                "r, MMM, d",
-                "r.MM.dd",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-            }
-            DateTimePatterns%atTime{
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-            }
-            DateTimePatterns%relative{
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-            }
-            availableFormats{
-                Gy{"r (U)"}
-                GyMMM{"r, MMM"}
-                GyMMMEd{"r, MMM, d, E"}
-                GyMMMM{"r (U), MMMM"}
-                GyMMMMEd{"r (U), MMMM, d, E"}
-                GyMMMMd{"r (U), MMMM, d"}
-                GyMMMd{"r, MMM, d"}
-                MEd{"MM.dd (E)"}
-                MMMEd{"MMM, d, E"}
-                MMMMd{"MMMM, d"}
-                MMMd{"MMM, d"}
-                Md{"MM.dd"}
-                UM{"U, MM"}
-                UMMM{"U, MMM"}
-                UMMMd{"U, MMM, d"}
-                UMd{"U, MM.dd"}
-                y{"r (U)"}
-                yyyy{"r (U)"}
-                yyyyM{"r.MM"}
-                yyyyMEd{"r.MM.dd (E)"}
-                yyyyMMM{"r, MMM"}
-                yyyyMMMEd{"r, MMM, d, E"}
-                yyyyMMMM{"r (U), MMMM"}
-                yyyyMMMMEd{"r (U), MMMM, d, E"}
-                yyyyMMMMd{"r (U), MMMM, d"}
-                yyyyMMMd{"r, MMM, d"}
-                yyyyMd{"r.MM.dd"}
-                yyyyQQQ{"r (U), QQQ"}
-                yyyyQQQQ{"r (U), QQQQ"}
-            }
             cyclicNameSets{
                 dayParts{
                     format{
@@ -3265,376 +1377,20 @@ cv{
                     }
                 }
             }
-            intervalFormats{
-                Bh{
-                    B{"B h – B h"}
-                    h{"B h–h"}
-                }
-                Bhm{
-                    B{"B h:mm – B h:mm"}
-                    h{"B h:mm–h:mm"}
-                    m{"B h:mm–h:mm"}
-                }
-                H{
-                    H{"HH–HH 'сех'"}
-                }
-                Hmv{
-                    H{"HH:mm–HH:mm (v)"}
-                    m{"HH:mm–HH:mm (v)"}
-                }
-                Hv{
-                    H{"HH–HH 'сех' v"}
-                }
-                M{
-                    M{"M–M"}
-                }
-                MEd{
-                    M{"MM.dd (E) – MM.dd (E)"}
-                    d{"MM.dd (E) – MM.dd (E)"}
-                }
-                MMM{
-                    M{"MMM – MMM"}
-                }
-                MMMEd{
-                    M{"MMM, d, E – MMM, d, E"}
-                    d{"MMM, d, E – MMM, d, E"}
-                }
-                MMMd{
-                    M{"MMM, d – MMM, d"}
-                    d{"MMM, d–d"}
-                }
-                Md{
-                    M{"MM.dd – MM.dd"}
-                    d{"MM.dd – MM.dd"}
-                }
-                h{
-                    a{"a h – a h"}
-                    h{"a h–h"}
-                }
-                hm{
-                    a{"a h:mm – a h:mm"}
-                    h{"a h:mm–h:mm"}
-                    m{"a h:mm–h:mm"}
-                }
-                hmv{
-                    a{"a h:mm – a h:mm (v)"}
-                    h{"a h:mm–h:mm (v)"}
-                    m{"a h:mm–h:mm (v)"}
-                }
-                hv{
-                    a{"a h – a h (v)"}
-                    h{"a h–h (v)"}
-                }
-                y{
-                    y{"U – U"}
-                }
-                yM{
-                    M{"y.MM – y.MM"}
-                    y{"y.MM – y.MM"}
-                }
-                yMEd{
-                    M{"y.MM.dd (E) – y.MM.dd (E)"}
-                    d{"y.MM.dd (E) – y.MM.dd (E)"}
-                    y{"y.MM.dd (E) – y.MM.dd (E)"}
-                }
-                yMMM{
-                    M{"U, MMM – MMM"}
-                    y{"U, MMM – U, MMM"}
-                }
-                yMMMEd{
-                    M{"U, MMM, d, E – MMM, d, E"}
-                    d{"U, MMM, d, E – MMM, d, E"}
-                    y{"U, MMM, d, E – U, MMM, d, E"}
-                }
-                yMMMM{
-                    M{"U, MMMM – MMMM"}
-                    y{"U, MMMM – U, MMMM"}
-                }
-                yMMMd{
-                    M{"U, MMM, d – MMM, d"}
-                    d{"U, MMM, d–d"}
-                    y{"U, MMM, d – U, MMM, d"}
-                }
-                yMd{
-                    M{"y.MM.dd – y.MM.dd"}
-                    d{"y.MM.dd – y.MM.dd"}
-                    y{"y.MM.dd – y.MM.dd"}
-                }
-            }
-            monthNames{
-                format{
-                    abbreviated{
-                        "1-мӗш уйӑх",
-                        "2-мӗш уйӑх",
-                        "3-мӗш уйӑх",
-                        "4-мӗш уйӑх",
-                        "5-мӗш уйӑх",
-                        "6-мӗш уйӑх",
-                        "7-мӗш уйӑх",
-                        "8-мӗш уйӑх",
-                        "9-мӗш уйӑх",
-                        "10-мӗш уйӑх",
-                        "11-мӗш уйӑх",
-                        "12-мӗш уйӑх",
-                    }
-                    wide{
-                        "пӗрремӗш уйӑх",
-                        "иккӗмӗш уйӑх",
-                        "виҫҫӗмӗш уйӑх",
-                        "тӑваттӑмӗш уйӑх",
-                        "пиллӗкмӗш уйӑх",
-                        "улттӑмӗш уйӑх",
-                        "ҫиччӗмӗш уйӑх",
-                        "саккӑрмӗш уйӑх",
-                        "тӑххӑрмӗш уйӑх",
-                        "вуннӑмӗш уйӑх",
-                        "вун пӗрмӗш уйӑх",
-                        "вун иккӗмӗш уйӑх",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "1-мӗш уйӑх",
-                        "2-мӗш уйӑх",
-                        "3-мӗш уйӑх",
-                        "4-мӗш уйӑх",
-                        "5-мӗш уйӑх",
-                        "6-мӗш уйӑх",
-                        "7-мӗш уйӑх",
-                        "8-мӗш уйӑх",
-                        "9-мӗш уйӑх",
-                        "10-мӗш уйӑх",
-                        "11-мӗш уйӑх",
-                        "12-мӗш уйӑх",
-                    }
-                    wide{
-                        "пӗрремӗш уйӑх",
-                        "иккӗмӗш уйӑх",
-                        "виҫҫӗмӗш уйӑх",
-                        "тӑваттӑмӗш уйӑх",
-                        "пиллӗкмӗш уйӑх",
-                        "улттӑмӗш уйӑх",
-                        "ҫиччӗмӗш уйӑх",
-                        "саккӑрмӗш уйӑх",
-                        "тӑххӑрмӗш уйӑх",
-                        "вуннӑмӗш уйӑх",
-                        "вун пӗрмӗш уйӑх",
-                        "вун иккӗмӗш уйӑх",
-                    }
-                }
-            }
-            monthPatterns{
-                format{
-                    abbreviated{
-                        leap{"йӗкӗр {0}"}
-                    }
-                    narrow{
-                        leap{"йӗкӗр {0}"}
-                    }
-                    wide{
-                        leap{"йӗкӗр {0}"}
-                    }
-                }
-                numeric{
-                    all{
-                        leap{"йӗкӗр {0}"}
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        leap{"йӗкӗр {0}"}
-                    }
-                    narrow{
-                        leap{"йӗкӗр {0}"}
-                    }
-                    wide{
-                        leap{"йӗкӗр {0}"}
-                    }
-                }
-            }
         }
         ethiopic{
-            DateTimePatterns{
-                "HH:mm:ss (zzzz)",
-                "HH:mm:ss (z)",
-                "HH:mm:ss",
-                "HH:mm",
-                "G y, MMMM, d, EEEE",
-                "G y, MMMM, d",
-                "G y, MMM, d",
-                "GGGGG y.MM.dd",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-            }
-            availableFormats{
-                Ed{"d, E"}
-                Gy{"G y"}
-                GyM{"G y.MM"}
-                GyMEd{"G y.MM.dd (E)"}
-                GyMMM{"G y, MMM"}
-                GyMMMEd{"G y, MMM, d, E"}
-                GyMMMd{"G y, MMM, d"}
-                GyMd{"G y.MM.dd"}
-                MEd{"MM.dd (E)"}
-                MMMEd{"MMM, d, E"}
-                MMMMd{"MMMM, d"}
-                MMMd{"MMM, d"}
-                Md{"MM.dd"}
-                y{"G y"}
-                yyyy{"G y"}
-                yyyyM{"G y.MM"}
-                yyyyMEd{"G y.MM.dd (E)"}
-                yyyyMMM{"G y, MMM"}
-                yyyyMMMEd{"G y, MMM, d, E"}
-                yyyyMMMM{"G y, MMMM"}
-                yyyyMMMd{"G y, MMM, d"}
-                yyyyMd{"G y.MM.dd"}
-                yyyyQQQ{"G y, QQQ"}
-                yyyyQQQQ{"G y, QQQQ"}
-            }
             eras{
                 abbreviated{
-                    0{"т. п-р."}
+                    0{"Х. ҫ-ч."}
+                    1{"Х. ҫ-р."}
                 }
                 narrow{
-                    0{"т. п-р."}
+                    0{"Х. ҫ-ч."}
+                    1{"Х. ҫ-р."}
                 }
                 wide{
-                    0{"тӗнче пуҫланнӑран"}
-                }
-            }
-            intervalFormats{
-                Bh{
-                    B{"B h – B h"}
-                    h{"B h–h"}
-                }
-                Bhm{
-                    B{"B h:mm – B h:mm"}
-                    h{"B h:mm–h:mm"}
-                    m{"B h:mm–h:mm"}
-                }
-                Gy{
-                    G{"G y – G y"}
-                    y{"G y–y"}
-                }
-                GyM{
-                    G{"G y.MM – G y.MM"}
-                    M{"G y.MM – y.MM"}
-                    y{"G y.MM – y.MM"}
-                }
-                GyMEd{
-                    G{"G y.MM.dd (E) – G y.MM.dd (E)"}
-                    M{"G y.MM.dd (E) – y.MM.dd (E)"}
-                    d{"G y.MM.dd (E) – y.MM.dd (E)"}
-                    y{"G y.MM.dd (E) – y.MM.dd (E)"}
-                }
-                GyMMM{
-                    G{"G y, MMM – G y, MMM"}
-                    M{"G y, MMM – MMM"}
-                    y{"G y, MMM – y, MMM"}
-                }
-                GyMMMEd{
-                    G{"G y, MMM, d, E – G y, MMM, d, E"}
-                    M{"G y, MMM, d, E – MMM, d, E"}
-                    d{"G y, MMM, d, E – MMM, d, E"}
-                    y{"G y, MMM, d, E – y, MMM, d, E"}
-                }
-                GyMMMd{
-                    G{"G y, MMM, d – G y, MMM, d"}
-                    M{"G y, MMM, d – MMM, d"}
-                    d{"G y, MMM, d–d"}
-                    y{"G y, MMM, d – y, MMM, d"}
-                }
-                GyMd{
-                    G{"G y.MM.dd – G y.MM.dd"}
-                    M{"G y.MM.dd – y.MM.dd"}
-                    d{"G y.MM.dd – y.MM.dd"}
-                    y{"G y.MM.dd – y.MM.dd"}
-                }
-                H{
-                    H{"HH–HH 'сех'"}
-                }
-                Hmv{
-                    H{"HH:mm–HH:mm (v)"}
-                    m{"HH:mm–HH:mm (v)"}
-                }
-                Hv{
-                    H{"HH–HH 'сех' (v)"}
-                }
-                MEd{
-                    M{"MM.dd (E) – MM.dd (E)"}
-                    d{"MM.dd (E) – MM.dd (E)"}
-                }
-                MMM{
-                    M{"MMM – MMM"}
-                }
-                MMMEd{
-                    M{"MMM, d, E – MMM, d, E"}
-                    d{"MMM, d, E – MMM, d, E"}
-                }
-                MMMd{
-                    M{"MMM, d – MMM, d"}
-                    d{"MMM, d–d"}
-                }
-                Md{
-                    M{"MM.dd – MM.dd"}
-                    d{"MM.dd – MM.dd"}
-                }
-                h{
-                    a{"a h – a h"}
-                    h{"a h–h"}
-                }
-                hm{
-                    a{"a h:mm – a h:mm"}
-                    h{"a h:mm–h:mm"}
-                    m{"a h:mm–h:mm"}
-                }
-                hmv{
-                    a{"a h:mm – a h:mm (v)"}
-                    h{"a h:mm–h:mm (v)"}
-                    m{"a h:mm–h:mm (v)"}
-                }
-                hv{
-                    a{"a h – a h (v)"}
-                    h{"a h–h (v)"}
-                }
-                y{
-                    y{"G y–y"}
-                }
-                yM{
-                    M{"G y.MM – y.MM"}
-                    y{"G y.MM – y.MM"}
-                }
-                yMEd{
-                    M{"G y.MM.dd (E) – y.MM.dd (E)"}
-                    d{"G y.MM.dd (E) – y.MM.dd (E)"}
-                    y{"G y.MM.dd (E) – y.MM.dd (E)"}
-                }
-                yMMM{
-                    M{"G y, MMM – MMM"}
-                    y{"G y, MMM – y, MMM"}
-                }
-                yMMMEd{
-                    M{"G y, MMM, d, E – MMM, d, E"}
-                    d{"G y, MMM, d, E – MMM, d, E"}
-                    y{"G y, MMM, d, E – y, MMM, d, E"}
-                }
-                yMMMM{
-                    M{"G y, MMMM – MMMM"}
-                    y{"G y, MMMM – y, MMMM"}
-                }
-                yMMMd{
-                    M{"G y, MMM, d – MMM, d"}
-                    d{"G y, MMM, d–d"}
-                    y{"G y, MMM, d – y, MMM, d"}
-                }
-                yMd{
-                    M{"G y.MM.dd – y.MM.dd"}
-                    d{"G y.MM.dd – y.MM.dd"}
-                    y{"G y.MM.dd – y.MM.dd"}
+                    0{"Христос ҫураличченхи"}
+                    1{"Христос ҫуралнӑран"}
                 }
             }
             monthNames{
@@ -3654,19 +1410,6 @@ cv{
                         "нахасэ",
                         "эпагомен",
                     }
-                }
-            }
-        }
-        ethiopic-amete-alem{
-            eras{
-                abbreviated{
-                    0{"т. п-р."}
-                }
-                narrow{
-                    0{"т. п-р."}
-                }
-                wide{
-                    0{"тӗнче пуҫланнӑран"}
                 }
             }
         }
@@ -3704,8 +1447,7 @@ cv{
                 GyMMMEd{"G y, MMM, d, E"}
                 GyMMMd{"G y, MMM, d"}
                 GyMd{"G y.MM.dd"}
-                H{"HH 'сех'"}
-                Hv{"HH 'сех' (v)"}
+                Hv{"HH (v)"}
                 MEd{"MM.dd (E)"}
                 MMMEd{"MMM, d, E"}
                 MMMMd{"MMMM, d"}
@@ -3854,15 +1596,7 @@ cv{
             }
         }
         gregorian{
-            AmPmMarkers{
-                "к. у.",
-                "к. х.",
-            }
             AmPmMarkersAbbr{
-                "к. у.",
-                "к. х.",
-            }
-            AmPmMarkersNarrow{
                 "к. у.",
                 "к. х.",
             }
@@ -3901,6 +1635,9 @@ cv{
                 GyMEd{"G y.MM.dd (E)"}
                 GyMMM{"G y, MMM"}
                 GyMMMEd{"G y, MMM, d, E"}
+                GyMMMM{"G y, MMMM"}
+                GyMMMMEd{"G y, MMMM, d, E"}
+                GyMMMMd{"G y, MMMM, d"}
                 GyMMMd{"G y, MMM, d"}
                 GyMd{"G y.MM.dd"}
                 H{"HH 'сех'"}
@@ -3909,6 +1646,7 @@ cv{
                 Hv{"HH 'сех' (v)"}
                 MEd{"MM.dd (E)"}
                 MMMEd{"MMM, d, E"}
+                MMMMEd{"MMMM, d, E"}
                 MMMMW{
                     one{"MMMM, W-'мӗш' 'эрне'"}
                     other{"MMMM, W-'мӗш' 'эрне'"}
@@ -3928,6 +1666,8 @@ cv{
                 yMMM{"y, MMM"}
                 yMMMEd{"y, MMM, d, E"}
                 yMMMM{"y, MMMM"}
+                yMMMMEd{"y, MMMM, d, E"}
+                yMMMMd{"y, MMMM, d"}
                 yMMMd{"y, MMM, d"}
                 yMd{"y.MM.dd"}
                 yQQQ{"y, QQQ"}
@@ -3949,15 +1689,6 @@ cv{
                         "эр",
                         "шм",
                     }
-                    short{
-                        "вр",
-                        "тн",
-                        "ыт",
-                        "юн",
-                        "кҫ",
-                        "эр",
-                        "шм",
-                    }
                     wide{
                         "вырсарни кун",
                         "тунти кун",
@@ -3969,15 +1700,6 @@ cv{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        "вр",
-                        "тн",
-                        "ыт",
-                        "юн",
-                        "кҫ",
-                        "эр",
-                        "шм",
-                    }
                     narrow{
                         "В",
                         "Т",
@@ -3987,52 +1709,10 @@ cv{
                         "Э",
                         "Ш",
                     }
-                    short{
-                        "вр",
-                        "тн",
-                        "ыт",
-                        "юн",
-                        "кҫ",
-                        "эр",
-                        "шм",
-                    }
-                    wide{
-                        "вырсарни кун",
-                        "тунти кун",
-                        "ытлари кун",
-                        "юн кун",
-                        "кӗҫнерни кун",
-                        "эрне кун",
-                        "шӑмат кун",
-                    }
-                }
-            }
-            dayPeriod{
-                stand-alone{
-                    abbreviated{
-                        am{"к. у."}
-                        pm{"к. х."}
-                    }
-                    narrow{
-                        am{"к. у."}
-                        pm{"к. х."}
-                    }
-                    wide{
-                        am{"к. у."}
-                        pm{"к. х."}
-                    }
                 }
             }
             eras{
                 abbreviated{
-                    0{"х. с-ч."}
-                    1{"х. с."}
-                }
-                narrow{
-                    0{"х. с-ч."}
-                    1{"х. с."}
-                }
-                narrow%variant{
                     0{"х. с-ч."}
                     1{"х. с."}
                 }
@@ -4204,20 +1884,6 @@ cv{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        "кӑр.",
-                        "нар.",
-                        "пуш",
-                        "ака",
-                        "ҫу",
-                        "ҫӗрт.",
-                        "утӑ",
-                        "ҫур.",
-                        "авӑн",
-                        "юпа",
-                        "чӳк",
-                        "раш.",
-                    }
                     narrow{
                         "К",
                         "Н",
@@ -4249,208 +1915,35 @@ cv{
                         "4-мӗш чӗрӗк",
                     }
                 }
-                stand-alone{
-                    abbreviated{
-                        "1-мӗш чӗр.",
-                        "2-мӗш чӗр.",
-                        "3-мӗш чӗр.",
-                        "4-мӗш чӗр.",
-                    }
-                    wide{
-                        "1-мӗш чӗрӗк",
-                        "2-мӗш чӗрӗк",
-                        "3-мӗш чӗрӗк",
-                        "4-мӗш чӗрӗк",
-                    }
-                }
             }
         }
         hebrew{
-            DateTimePatterns{
-                "HH:mm:ss (zzzz)",
-                "HH:mm:ss (z)",
-                "HH:mm:ss",
-                "HH:mm",
-                "G y, MMMM, d, EEEE",
-                "G y, MMMM, d",
-                "G y, MMM, d",
-                "GGGGG y.MM.dd",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-            }
-            availableFormats{
-                Ed{"d, E"}
-                Gy{"G y"}
-                GyM{"G y.MM"}
-                GyMEd{"G y.MM.dd (E)"}
-                GyMMM{"G y, MMM"}
-                GyMMMEd{"G y, MMM, d, E"}
-                GyMMMd{"G y, MMM, d"}
-                GyMd{"G y.MM.dd"}
-                MEd{"MM.dd (E)"}
-                MMMEd{"MMM, d, E"}
-                MMMMd{"MMMM, d"}
-                MMMd{"MMM, d"}
-                Md{"MM.dd"}
-                y{"G y"}
-                yyyy{"G y"}
-                yyyyM{"G y.MM"}
-                yyyyMEd{"G y.MM.dd (E)"}
-                yyyyMMM{"G y, MMM"}
-                yyyyMMMEd{"G y, MMM, d, E"}
-                yyyyMMMM{"G y, MMMM"}
-                yyyyMMMd{"G y, MMM, d"}
-                yyyyMd{"G y.MM.dd"}
-                yyyyQQQ{"G y, QQQ"}
-                yyyyQQQQ{"G y, QQQQ"}
-            }
             eras{
                 abbreviated{
-                    0{"т. п-р."}
-                }
-                narrow{
                     0{"т. п-р."}
                 }
                 wide{
                     0{"тӗнче пуҫланнӑран"}
                 }
             }
-            intervalFormats{
-                Bh{
-                    B{"B h – B h"}
-                    h{"B h–h"}
-                }
-                Bhm{
-                    B{"B h:mm – B h:mm"}
-                    h{"B h:mm–h:mm"}
-                    m{"B h:mm–h:mm"}
-                }
-                Gy{
-                    G{"G y – G y"}
-                    y{"G y–y"}
-                }
-                GyM{
-                    G{"G y.MM – G y.MM"}
-                    M{"G y.MM – y.MM"}
-                    y{"G y.MM – y.MM"}
-                }
-                GyMEd{
-                    G{"G y.MM.dd (E) – G y.MM.dd (E)"}
-                    M{"G y.MM.dd (E) – y.MM.dd (E)"}
-                    d{"G y.MM.dd (E) – y.MM.dd (E)"}
-                    y{"G y.MM.dd (E) – y.MM.dd (E)"}
-                }
-                GyMMM{
-                    G{"G y, MMM – G y, MMM"}
-                    M{"G y, MMM – MMM"}
-                    y{"G y, MMM – y, MMM"}
-                }
-                GyMMMEd{
-                    G{"G y, MMM, d, E – G y, MMM, d, E"}
-                    M{"G y, MMM, d, E – MMM, d, E"}
-                    d{"G y, MMM, d, E – MMM, d, E"}
-                    y{"G y, MMM, d, E – y, MMM, d, E"}
-                }
-                GyMMMd{
-                    G{"G y, MMM, d – G y, MMM, d"}
-                    M{"G y, MMM, d – MMM, d"}
-                    d{"G y, MMM, d–d"}
-                    y{"G y, MMM, d – y, MMM, d"}
-                }
-                GyMd{
-                    G{"G y.MM.dd – G y.MM.dd"}
-                    M{"G y.MM.dd – y.MM.dd"}
-                    d{"G y.MM.dd – y.MM.dd"}
-                    y{"G y.MM.dd – y.MM.dd"}
-                }
-                H{
-                    H{"HH–HH 'сех'"}
-                }
-                Hmv{
-                    H{"HH:mm–HH:mm (v)"}
-                    m{"HH:mm–HH:mm (v)"}
-                }
-                Hv{
-                    H{"HH–HH 'сех' (v)"}
-                }
-                MEd{
-                    M{"MM.dd (E) – MM.dd (E)"}
-                    d{"MM.dd (E) – MM.dd (E)"}
-                }
-                MMM{
-                    M{"MMM – MMM"}
-                }
-                MMMEd{
-                    M{"MMM, d, E – MMM, d, E"}
-                    d{"MMM, d, E – MMM, d, E"}
-                }
-                MMMd{
-                    M{"MMM, d – MMM, d"}
-                    d{"MMM, d–d"}
-                }
-                Md{
-                    M{"MM.dd – MM.dd"}
-                    d{"MM.dd – MM.dd"}
-                }
-                h{
-                    a{"a h – a h"}
-                    h{"a h–h"}
-                }
-                hm{
-                    a{"a h:mm – a h:mm"}
-                    h{"a h:mm–h:mm"}
-                    m{"a h:mm–h:mm"}
-                }
-                hmv{
-                    a{"a h:mm – a h:mm (v)"}
-                    h{"a h:mm–h:mm (v)"}
-                    m{"a h:mm–h:mm (v)"}
-                }
-                hv{
-                    a{"a h – a h (v)"}
-                    h{"a h–h (v)"}
-                }
-                y{
-                    y{"G y–y"}
-                }
-                yM{
-                    M{"G y.MM – y.MM"}
-                    y{"G y.MM – y.MM"}
-                }
-                yMEd{
-                    M{"G y.MM.dd (E) – y.MM.dd (E)"}
-                    d{"G y.MM.dd (E) – y.MM.dd (E)"}
-                    y{"G y.MM.dd (E) – y.MM.dd (E)"}
-                }
-                yMMM{
-                    M{"G y, MMM – MMM"}
-                    y{"G y, MMM – y, MMM"}
-                }
-                yMMMEd{
-                    M{"G y, MMM, d, E – MMM, d, E"}
-                    d{"G y, MMM, d, E – MMM, d, E"}
-                    y{"G y, MMM, d, E – y, MMM, d, E"}
-                }
-                yMMMM{
-                    M{"G y, MMMM – MMMM"}
-                    y{"G y, MMMM – y, MMMM"}
-                }
-                yMMMd{
-                    M{"G y, MMM, d – MMM, d"}
-                    d{"G y, MMM, d–d"}
-                    y{"G y, MMM, d – y, MMM, d"}
-                }
-                yMd{
-                    M{"G y.MM.dd – y.MM.dd"}
-                    d{"G y.MM.dd – y.MM.dd"}
-                    y{"G y.MM.dd – y.MM.dd"}
-                }
-            }
             monthNames{
                 format{
+                    abbreviated{
+                        "тишрей",
+                        "хешван",
+                        "кислев",
+                        "тевет",
+                        "шеват",
+                        "адар I",
+                        "адар",
+                        "нисан",
+                        "ияр",
+                        "сиван",
+                        "таммуз",
+                        "ав",
+                        "элул",
+                        "адар II",
+                    }
                     wide{
                         "тишрей",
                         "хешван",
@@ -4469,13 +1962,13 @@ cv{
                     }
                 }
                 stand-alone{
-                    wide{
+                    abbreviated{
                         "тишрей",
                         "хешван",
                         "кислев",
                         "тевет",
                         "шеват",
-                        "адар-алеф",
+                        "адар I",
                         "адар",
                         "нисан",
                         "ияр",
@@ -4483,193 +1976,18 @@ cv{
                         "таммуз",
                         "ав",
                         "элул",
-                        "адар-бет",
+                        "адар II",
                     }
                 }
             }
         }
         indian{
-            DateTimePatterns{
-                "HH:mm:ss (zzzz)",
-                "HH:mm:ss (z)",
-                "HH:mm:ss",
-                "HH:mm",
-                "G y, MMMM, d, EEEE",
-                "G y, MMMM, d",
-                "G y, MMM, d",
-                "GGGGG y.MM.dd",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-            }
-            availableFormats{
-                Ed{"d, E"}
-                Gy{"G y"}
-                GyM{"G y.MM"}
-                GyMEd{"G y.MM.dd (E)"}
-                GyMMM{"G y, MMM"}
-                GyMMMEd{"G y, MMM, d, E"}
-                GyMMMd{"G y, MMM, d"}
-                GyMd{"G y.MM.dd"}
-                MEd{"MM.dd (E)"}
-                MMMEd{"MMM, d, E"}
-                MMMMd{"MMMM, d"}
-                MMMd{"MMM, d"}
-                Md{"MM.dd"}
-                y{"G y"}
-                yyyy{"G y"}
-                yyyyM{"G y.MM"}
-                yyyyMEd{"G y.MM.dd (E)"}
-                yyyyMMM{"G y, MMM"}
-                yyyyMMMEd{"G y, MMM, d, E"}
-                yyyyMMMM{"G y, MMMM"}
-                yyyyMMMd{"G y, MMM, d"}
-                yyyyMd{"G y.MM.dd"}
-                yyyyQQQ{"G y, QQQ"}
-                yyyyQQQQ{"G y, QQQQ"}
-            }
             eras{
                 abbreviated{
                     0{"Сака с."}
                 }
-                narrow{
-                    0{"Сака с."}
-                }
                 wide{
                     0{"Сака саманари"}
-                }
-            }
-            intervalFormats{
-                Bh{
-                    B{"B h – B h"}
-                    h{"B h–h"}
-                }
-                Bhm{
-                    B{"B h:mm – B h:mm"}
-                    h{"B h:mm–h:mm"}
-                    m{"B h:mm–h:mm"}
-                }
-                Gy{
-                    G{"G y – G y"}
-                    y{"G y–y"}
-                }
-                GyM{
-                    G{"G y.MM – G y.MM"}
-                    M{"G y.MM – y.MM"}
-                    y{"G y.MM – y.MM"}
-                }
-                GyMEd{
-                    G{"G y.MM.dd (E) – G y.MM.dd (E)"}
-                    M{"G y.MM.dd (E) – y.MM.dd (E)"}
-                    d{"G y.MM.dd (E) – y.MM.dd (E)"}
-                    y{"G y.MM.dd (E) – y.MM.dd (E)"}
-                }
-                GyMMM{
-                    G{"G y, MMM – G y, MMM"}
-                    M{"G y, MMM – MMM"}
-                    y{"G y, MMM – y, MMM"}
-                }
-                GyMMMEd{
-                    G{"G y, MMM, d, E – G y, MMM, d, E"}
-                    M{"G y, MMM, d, E – MMM, d, E"}
-                    d{"G y, MMM, d, E – MMM, d, E"}
-                    y{"G y, MMM, d, E – y, MMM, d, E"}
-                }
-                GyMMMd{
-                    G{"G y, MMM, d – G y, MMM, d"}
-                    M{"G y, MMM, d – MMM, d"}
-                    d{"G y, MMM, d–d"}
-                    y{"G y, MMM, d – y, MMM, d"}
-                }
-                GyMd{
-                    G{"G y.MM.dd – G y.MM.dd"}
-                    M{"G y.MM.dd – y.MM.dd"}
-                    d{"G y.MM.dd – y.MM.dd"}
-                    y{"G y.MM.dd – y.MM.dd"}
-                }
-                H{
-                    H{"HH–HH 'сех'"}
-                }
-                Hmv{
-                    H{"HH:mm–HH:mm (v)"}
-                    m{"HH:mm–HH:mm (v)"}
-                }
-                Hv{
-                    H{"HH–HH 'сех' (v)"}
-                }
-                MEd{
-                    M{"MM.dd (E) – MM.dd (E)"}
-                    d{"MM.dd (E) – MM.dd (E)"}
-                }
-                MMM{
-                    M{"MMM – MMM"}
-                }
-                MMMEd{
-                    M{"MMM, d, E – MMM, d, E"}
-                    d{"MMM, d, E – MMM, d, E"}
-                }
-                MMMd{
-                    M{"MMM, d – MMM, d"}
-                    d{"MMM, d–d"}
-                }
-                Md{
-                    M{"MM.dd – MM.dd"}
-                    d{"MM.dd – MM.dd"}
-                }
-                h{
-                    a{"a h – a h"}
-                    h{"a h–h"}
-                }
-                hm{
-                    a{"a h:mm – a h:mm"}
-                    h{"a h:mm–h:mm"}
-                    m{"a h:mm–h:mm"}
-                }
-                hmv{
-                    a{"a h:mm – a h:mm (v)"}
-                    h{"a h:mm–h:mm (v)"}
-                    m{"a h:mm–h:mm (v)"}
-                }
-                hv{
-                    a{"a h – a h (v)"}
-                    h{"a h–h (v)"}
-                }
-                y{
-                    y{"G y–y"}
-                }
-                yM{
-                    M{"G y.MM – y.MM"}
-                    y{"G y.MM – y.MM"}
-                }
-                yMEd{
-                    M{"G y.MM.dd (E) – y.MM.dd (E)"}
-                    d{"G y.MM.dd (E) – y.MM.dd (E)"}
-                    y{"G y.MM.dd (E) – y.MM.dd (E)"}
-                }
-                yMMM{
-                    M{"G y, MMM – MMM"}
-                    y{"G y, MMM – y, MMM"}
-                }
-                yMMMEd{
-                    M{"G y, MMM, d, E – MMM, d, E"}
-                    d{"G y, MMM, d, E – MMM, d, E"}
-                    y{"G y, MMM, d, E – y, MMM, d, E"}
-                }
-                yMMMM{
-                    M{"G y, MMMM – MMMM"}
-                    y{"G y, MMMM – y, MMMM"}
-                }
-                yMMMd{
-                    M{"G y, MMM, d – MMM, d"}
-                    d{"G y, MMM, d–d"}
-                    y{"G y, MMM, d – y, MMM, d"}
-                }
-                yMd{
-                    M{"G y.MM.dd – y.MM.dd"}
-                    d{"G y.MM.dd – y.MM.dd"}
-                    y{"G y.MM.dd – y.MM.dd"}
                 }
             }
             monthNames{
@@ -4692,53 +2010,8 @@ cv{
             }
         }
         islamic{
-            DateTimePatterns{
-                "HH:mm:ss (zzzz)",
-                "HH:mm:ss (z)",
-                "HH:mm:ss",
-                "HH:mm",
-                "G y, MMMM, d, EEEE",
-                "G y, MMMM, d",
-                "G y, MMM, d",
-                "GGGGG y.MM.dd",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-            }
-            availableFormats{
-                Ed{"d, E"}
-                Gy{"G y"}
-                GyM{"G y.MM"}
-                GyMEd{"G y.MM.dd (E)"}
-                GyMMM{"G y, MMM"}
-                GyMMMEd{"G y, MMM, d, E"}
-                GyMMMd{"G y, MMM, d"}
-                GyMd{"G y.MM.dd"}
-                MEd{"MM.dd (E)"}
-                MMMEd{"MMM, d, E"}
-                MMMMd{"MMMM, d"}
-                MMMd{"MMM, d"}
-                Md{"MM.dd"}
-                y{"G y"}
-                yyyy{"G y"}
-                yyyyM{"G y.MM"}
-                yyyyMEd{"G y.MM.dd (E)"}
-                yyyyMMM{"G y, MMM"}
-                yyyyMMMEd{"G y, MMM, d, E"}
-                yyyyMMMM{"G y, MMMM"}
-                yyyyMMMd{"G y, MMM, d"}
-                yyyyMd{"G y.MM.dd"}
-                yyyyQQQ{"G y, QQQ"}
-                yyyyQQQQ{"G y, QQQQ"}
-            }
             eras{
                 abbreviated{
-                    0{"х. х."}
-                    1{"х-ч."}
-                }
-                narrow{
                     0{"х. х."}
                     1{"х-ч."}
                 }
@@ -4748,134 +2021,11 @@ cv{
                 }
             }
             intervalFormats{
-                Bh{
-                    B{"B h – B h"}
-                    h{"B h–h"}
-                }
-                Bhm{
-                    B{"B h:mm – B h:mm"}
-                    h{"B h:mm–h:mm"}
-                    m{"B h:mm–h:mm"}
-                }
-                Gy{
-                    G{"G y – G y"}
-                    y{"G y–y"}
-                }
-                GyM{
-                    G{"G y.MM – G y.MM"}
-                    M{"G y.MM – y.MM"}
-                    y{"G y.MM – y.MM"}
-                }
-                GyMEd{
-                    G{"G y.MM.dd (E) – G y.MM.dd (E)"}
-                    M{"G y.MM.dd (E) – y.MM.dd (E)"}
-                    d{"G y.MM.dd (E) – y.MM.dd (E)"}
-                    y{"G y.MM.dd (E) – y.MM.dd (E)"}
-                }
-                GyMMM{
-                    G{"G y, MMM – G y, MMM"}
-                    M{"G y, MMM – MMM"}
-                    y{"G y, MMM – y, MMM"}
-                }
-                GyMMMEd{
-                    G{"G y, MMM, d, E – G y, MMM, d, E"}
-                    M{"G y, MMM, d, E – MMM, d, E"}
-                    d{"G y, MMM, d, E – MMM, d, E"}
-                    y{"G y, MMM, d, E – y, MMM, d, E"}
-                }
-                GyMMMd{
-                    G{"G y, MMM, d – G y, MMM, d"}
-                    M{"G y, MMM, d – MMM, d"}
-                    d{"G y, MMM, d–d"}
-                    y{"G y, MMM, d – y, MMM, d"}
-                }
-                GyMd{
-                    G{"G y.MM.dd – G y.MM.dd"}
-                    M{"G y.MM.dd – y.MM.dd"}
-                    d{"G y.MM.dd – y.MM.dd"}
-                    y{"G y.MM.dd – y.MM.dd"}
-                }
                 H{
                     H{"HH–HH"}
                 }
-                Hmv{
-                    H{"HH:mm–HH:mm (v)"}
-                    m{"HH:mm–HH:mm (v)"}
-                }
                 Hv{
                     H{"HH–HH (v)"}
-                }
-                MEd{
-                    M{"MM.dd (E) – MM.dd (E)"}
-                    d{"MM.dd (E) – MM.dd (E)"}
-                }
-                MMM{
-                    M{"MMM – MMM"}
-                }
-                MMMEd{
-                    M{"MMM, d, E – MMM, d, E"}
-                    d{"MMM, d, E – MMM, d, E"}
-                }
-                MMMd{
-                    M{"MMM, d – MMM, d"}
-                    d{"MMM, d–d"}
-                }
-                Md{
-                    M{"MM.dd – MM.dd"}
-                    d{"MM.dd – MM.dd"}
-                }
-                h{
-                    a{"a h – a h"}
-                    h{"a h–h"}
-                }
-                hm{
-                    a{"a h:mm – a h:mm"}
-                    h{"a h:mm–h:mm"}
-                    m{"a h:mm–h:mm"}
-                }
-                hmv{
-                    a{"a h:mm – a h:mm (v)"}
-                    h{"a h:mm–h:mm (v)"}
-                    m{"a h:mm–h:mm (v)"}
-                }
-                hv{
-                    a{"a h – a h (v)"}
-                    h{"a h–h (v)"}
-                }
-                y{
-                    y{"G y–y"}
-                }
-                yM{
-                    M{"G y.MM – y.MM"}
-                    y{"G y.MM – y.MM"}
-                }
-                yMEd{
-                    M{"G y.MM.dd (E) – y.MM.dd (E)"}
-                    d{"G y.MM.dd (E) – y.MM.dd (E)"}
-                    y{"G y.MM.dd (E) – y.MM.dd (E)"}
-                }
-                yMMM{
-                    M{"G y, MMM – MMM"}
-                    y{"G y, MMM – y, MMM"}
-                }
-                yMMMEd{
-                    M{"G y, MMM, d, E – MMM, d, E"}
-                    d{"G y, MMM, d, E – MMM, d, E"}
-                    y{"G y, MMM, d, E – y, MMM, d, E"}
-                }
-                yMMMM{
-                    M{"G y, MMMM – MMMM"}
-                    y{"G y, MMMM – y, MMMM"}
-                }
-                yMMMd{
-                    M{"G y, MMM, d – MMM, d"}
-                    d{"G y, MMM, d–d"}
-                    y{"G y, MMM, d – y, MMM, d"}
-                }
-                yMd{
-                    M{"G y.MM.dd – y.MM.dd"}
-                    d{"G y.MM.dd – y.MM.dd"}
-                    y{"G y.MM.dd – y.MM.dd"}
                 }
             }
             monthNames{
@@ -4911,6 +2061,173 @@ cv{
                 }
             }
         }
+        iso8601{
+            DateTimePatterns{
+                "HH:mm:ss (zzzz)",
+                "HH:mm:ss (z)",
+                "HH:mm:ss",
+                "HH:mm",
+                "y, MMMM, d, EEEE",
+                "y, MMMM, d",
+                "y, MMM, d",
+                "y.MM.dd",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
+            DateTimePatterns%atTime{
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
+            availableFormats{
+                EBhm{"E, h:mm B"}
+                EBhms{"E, h:mm:ss B"}
+                EHm{"E, HH:mm"}
+                EHms{"E, HH:mm:ss"}
+                Ehm{"E, h:mm a"}
+                Ehms{"E, h:mm:ss a"}
+                GyMMM{"G y, MMM"}
+                GyMMMEd{"G y, MMM, d, E"}
+                GyMMMd{"G y, MMM, d"}
+                GyMd{"G y.MM.dd"}
+                H{"HH 'сех'"}
+                Hmsv{"HH:mm:ss (v)"}
+                Hmv{"HH:mm (v)"}
+                MEd{"MM.dd (E)"}
+                MMMEd{"MMM, d, E"}
+                MMMMW{
+                    one{"MMMM, W-'мӗш' 'эрне'"}
+                    other{"MMMM, W-'мӗш' 'эрне'"}
+                    zero{"MMMM, W-'мӗш' 'эрне'"}
+                }
+                MMMMd{"MMMM, d"}
+                MMMd{"MMM, d"}
+                Md{"MM.dd"}
+                hmsv{"h:mm:ss a (v)"}
+                hmv{"h:mm a (v)"}
+                yM{"y.MM"}
+                yMEd{"y.MM.dd (E)"}
+                yMMM{"y, MMM"}
+                yMMMEd{"y, MMM, d, E"}
+                yMMMM{"y, MMMM"}
+                yMMMd{"y, MMM, d"}
+                yMd{"y.MM.dd"}
+                yQQQ{"y, QQQ"}
+                yQQQQ{"y, QQQQ"}
+                yw{
+                    one{"Y, w-'мӗш' 'эрне'"}
+                    other{"Y, w-'мӗш' 'эрне'"}
+                    zero{"Y, w-'мӗш' 'эрне'"}
+                }
+            }
+            intervalFormats{
+                GyM{
+                    G{"G y.MM – G y.MM"}
+                    M{"G y.MM – y.MM"}
+                    y{"G y.MM – y.MM"}
+                }
+                GyMEd{
+                    G{"G y.MM.dd (E) – G y.MM.dd (E)"}
+                    M{"G y.MM.dd (E) – y.MM.dd (E)"}
+                    d{"G y.MM.dd (E) – y.MM.dd (E)"}
+                    y{"G y.MM.dd (E) – y.MM.dd (E)"}
+                }
+                GyMMM{
+                    G{"G y, MMM – G y, MMM"}
+                    M{"G y, MMM – MMM"}
+                    y{"G y, MMM – y, MMM"}
+                }
+                GyMMMEd{
+                    G{"G y, MMM, d, E – G y, MMM, d, E"}
+                    M{"G y, MMM, d, E – MMM, d, E"}
+                    d{"G y, MMM, d, E – MMM, d, E"}
+                    y{"G y, MMM, d, E – y, MMM, d, E"}
+                }
+                GyMMMd{
+                    G{"G y, MMM, d – G y, MMM, d"}
+                    M{"G y, MMM, d – MMM, d"}
+                    d{"G y, MMM, d–d"}
+                    y{"G y, MMM, d – y, MMM, d"}
+                }
+                GyMd{
+                    G{"G y.MM.dd – G y.MM.dd"}
+                    M{"G y.MM.dd – y.MM.dd"}
+                    d{"G y.MM.dd – y.MM.dd"}
+                    y{"G y.MM.dd – y.MM.dd"}
+                }
+                H{
+                    H{"HH–HH 'сех'"}
+                }
+                Hmv{
+                    H{"HH:mm–HH:mm (v)"}
+                    m{"HH:mm–HH:mm (v)"}
+                }
+                Hv{
+                    H{"HH–HH 'сех' (v)"}
+                }
+                MEd{
+                    M{"MM.dd (E) – MM.dd (E)"}
+                    d{"MM.dd (E) – MM.dd (E)"}
+                }
+                MMMEd{
+                    M{"MMM, d, E – MMM, d, E"}
+                    d{"MMM, d, E – MMM, d, E"}
+                }
+                MMMd{
+                    M{"MMM, d – MMM, d"}
+                    d{"MMM, d–d"}
+                }
+                Md{
+                    M{"MM.dd – MM.dd"}
+                    d{"MM.dd – MM.dd"}
+                }
+                hmv{
+                    a{"h:mm a – h:mm a (v)"}
+                    h{"h:mm–h:mm a (v)"}
+                    m{"h:mm–h:mm a (v)"}
+                }
+                hv{
+                    a{"h a – h a (v)"}
+                    h{"h–h a (v)"}
+                }
+                yM{
+                    M{"y.MM – y.MM"}
+                    y{"y.MM – y.MM"}
+                }
+                yMEd{
+                    M{"y.MM.dd (E) – y.MM.dd (E)"}
+                    d{"y.MM.dd (E) – y.MM.dd (E)"}
+                    y{"y.MM.dd (E) – y.MM.dd (E)"}
+                }
+                yMMM{
+                    M{"y, MMM – MMM"}
+                    y{"y, MMM – y, MMM"}
+                }
+                yMMMEd{
+                    M{"y, MMM, d, E – MMM, d, E"}
+                    d{"y, MMM, d, E – MMM, d, E"}
+                    y{"y, MMM, d, E – y, MMM, d, E"}
+                }
+                yMMMM{
+                    M{"y, MMMM – MMMM"}
+                    y{"y, MMMM – y, MMMM"}
+                }
+                yMMMd{
+                    M{"y, MMM, d – MMM, d"}
+                    d{"y, MMM, d–d"}
+                    y{"y, MMM, d – y, MMM, d"}
+                }
+                yMd{
+                    M{"y.MM.dd – y.MM.dd"}
+                    d{"y.MM.dd – y.MM.dd"}
+                    y{"y.MM.dd – y.MM.dd"}
+                }
+            }
+        }
         japanese{
             DateTimePatterns{
                 "HH:mm:ss (zzzz)",
@@ -4928,7 +2245,6 @@ cv{
                 "{1}, {0}",
             }
             availableFormats{
-                Ed{"d, E"}
                 Gy{"G, y"}
                 GyM{"G, y.MM"}
                 GyMEd{"G, y.MM.dd (E)"}
@@ -4936,11 +2252,6 @@ cv{
                 GyMMMEd{"G, y, MMM, d, E"}
                 GyMMMd{"G, y, MMM, d"}
                 GyMd{"G, y.MM.dd"}
-                MEd{"MM.dd (E)"}
-                MMMEd{"MMM, d, E"}
-                MMMMd{"MMMM, d"}
-                MMMd{"MMM, d"}
-                Md{"MM.dd"}
                 y{"G, y"}
                 yyyy{"G, y"}
                 yyyyM{"G, y.MM"}
@@ -4955,733 +2266,21 @@ cv{
             }
             eras{
                 abbreviated{
-                    0{"Тайка (645–650)"}
-                    1{"Хакути (650–671)"}
-                    10{"Тэмпьё (729–749)"}
-                    100{"Као (1169–1171)"}
-                    101{"Дзёан (1171–1175)"}
-                    102{"Ангэн (1175–1177)"}
-                    103{"Дзисё (1177–1181)"}
-                    104{"Ёва (1181–1182)"}
-                    105{"Дзюэй (1182–1184)"}
-                    106{"Гэнрюку (1184–1185)"}
-                    107{"Бундзи (1185–1190)"}
-                    108{"Кэнкю (1190–1199)"}
-                    109{"Сёдзи (1199–1201)"}
-                    11{"Тэмпьё-Канпо (749–749)"}
-                    110{"Кэннин (1201–1204)"}
-                    111{"Гэнкю (1204–1206)"}
-                    112{"Кэнъэй (1206–1207)"}
-                    113{"Дзёгэн (1207–1211)"}
-                    114{"Кэнряку (1211–1213)"}
-                    115{"Кэмпо (1213–1219)"}
-                    116{"Дзёкю (1219–1222)"}
-                    117{"Дзёо (1222–1224)"}
-                    118{"Гэннин (1224–1225)"}
-                    119{"Кароку (1225–1227)"}
-                    12{"Тэмпьё-Сёхо (749-757)"}
-                    120{"Антэй (1227–1229)"}
-                    121{"Канги (1229–1232)"}
-                    122{"Дзёэй (1232–1233)"}
-                    123{"Тэмпуку (1233–1234)"}
-                    124{"Бунряку (1234–1235)"}
-                    125{"Катэй (1235–1238)"}
-                    126{"Рякунин (1238–1239)"}
-                    127{"Энъо (1239–1240)"}
-                    128{"Ниндзи (1240–1243)"}
-                    129{"Кангэн (1243–1247)"}
-                    13{"Тэмпьё-Ходзи (757-765)"}
-                    130{"Ходзи (1247–1249)"}
-                    131{"Кэнтё (1249–1256)"}
-                    132{"Когэн (1256–1257)"}
-                    133{"Сёка (1257–1259)"}
-                    134{"Сёгэн (1259–1260)"}
-                    135{"Бунъо (1260–1261)"}
-                    136{"Котё (1261–1264)"}
-                    137{"Бунъэй (1264–1275)"}
-                    138{"Кэндзи (1275–1278)"}
-                    139{"Коан (1278–1288)"}
-                    14{"Тэмпьё-Дзинго (765-767)"}
-                    140{"Сёо (1288–1293)"}
-                    141{"Эйнин (1293–1299)"}
-                    142{"Сёан (1299–1302)"}
-                    143{"Кэнгэн (1302–1303)"}
-                    144{"Кагэн (1303–1306)"}
-                    145{"Токудзи (1306–1308)"}
-                    146{"Энкё (1308–1311)"}
-                    147{"Отё (1311–1312)"}
-                    148{"Сёва (1312–1317)"}
-                    149{"Бумпо (1317–1319)"}
-                    15{"Дзинго-Кёун (767-770)"}
-                    150{"Гэнъо (1319–1321)"}
-                    151{"Гэнко (1321–1324)"}
-                    152{"Сётю (1324–1326)"}
-                    153{"Каряку (1326–1329)"}
-                    154{"Гэнтоку (1329–1331)"}
-                    155{"Гэнко (1331–1334)"}
-                    156{"Кэнму (1334–1336)"}
-                    157{"Энгэн (1336–1340)"}
-                    158{"Кококу (1340–1346)"}
-                    159{"Сёхэй (1346–1370)"}
-                    16{"Хоки (770–781)"}
-                    160{"Кэнтоку (1370–1372)"}
-                    161{"Бунтю (1372–1375)"}
-                    162{"Тэндзю (1375–1379)"}
-                    163{"Коряку (1379–1381)"}
-                    164{"Кова (1381–1384)"}
-                    165{"Гэнтю (1384–1392)"}
-                    166{"Ситоку (1384–1387)"}
-                    167{"Какэй (1387–1389)"}
-                    168{"Коо (1389–1390)"}
-                    169{"Мэйтоку (1390–1394)"}
-                    17{"Тэнъо (781–782)"}
-                    170{"Оэй (1394–1428)"}
-                    171{"Сётё (1428–1429)"}
-                    172{"Эйкё (1429–1441)"}
-                    173{"Какицу (1441–1444)"}
-                    174{"Бунъан (1444–1449)"}
-                    175{"Хотоку (1449–1452)"}
-                    176{"Кётоку (1452–1455)"}
-                    177{"Кёсё (1455–1457)"}
-                    178{"Тёроку (1457–1460)"}
-                    179{"Кансё (1460–1466)"}
-                    18{"Энряку (782–806)"}
-                    180{"Бунсё (1466–1467)"}
-                    181{"Онин (1467–1469)"}
-                    182{"Бунмэй (1469–1487)"}
-                    183{"Тёкё (1487–1489)"}
-                    184{"Энтоку (1489–1492)"}
-                    185{"Мэйо (1492–1501)"}
-                    186{"Бунки (1501–1504)"}
-                    187{"Эйсё (1504–1521)"}
-                    188{"Дайэй (1521–1528)"}
-                    189{"Кёроку (1528–1532)"}
-                    19{"Дайдо (806–810)"}
-                    190{"Тэнбун (1532–1555)"}
-                    191{"Кодзи (1555–1558)"}
-                    192{"Эйроку (1558–1570)"}
-                    193{"Гэнки (1570–1573)"}
-                    194{"Тэнсё (1573–1592)"}
-                    195{"Бунроку (1592–1596)"}
-                    196{"Кэйтё (1596–1615)"}
-                    197{"Гэнна (1615–1624)"}
-                    198{"Канъэй (1624–1644)"}
-                    199{"Сёхё (1644–1648)"}
-                    2{"Хакухо (672–686)"}
-                    20{"Конин (810–824)"}
-                    200{"Кэйан (1648–1652)"}
-                    201{"Дзёо (1652–1655)"}
-                    202{"Мэйрэки (1655–1658)"}
-                    203{"Мандзи (1658–1661)"}
-                    204{"Камбун (1661–1673)"}
-                    205{"Эмпо (1673–1681)"}
-                    206{"Тэнна (1681–1684)"}
-                    207{"Дзёкё (1684–1688)"}
-                    208{"Гэнроку (1688–1704)"}
-                    209{"Хоэй (1704–1711)"}
-                    21{"Тэнтьё (824–834)"}
-                    210{"Сётоку (1711–1716)"}
-                    211{"Кёхо (1716–1736)"}
-                    212{"Гэмбун (1736–1741)"}
-                    213{"Кампо (1741–1744)"}
-                    214{"Энкё (1744–1748)"}
-                    215{"Канъэн (1748–1751)"}
-                    216{"Хореки (1751–1764)"}
-                    217{"Мэйва (1764–1772)"}
-                    218{"Анъэй (1772–1781)"}
-                    219{"Тэнмэй (1781–1789)"}
-                    22{"Дзёва (834–848)"}
-                    220{"Кансэй (1789–1801)"}
-                    221{"Кёва (1801–1804)"}
-                    222{"Бунка (1804–1818)"}
-                    223{"Бунсэй (1818–1830)"}
-                    224{"Тэнпо (1830–1844)"}
-                    225{"Кока (1844–1848)"}
-                    226{"Каэй (1848–1854)"}
-                    227{"Ансэй (1854–1860)"}
-                    228{"Манъэн (1860–1861)"}
-                    229{"Бункю (1861–1864)"}
-                    23{"Касё (848–851)"}
-                    230{"Гэндзи (1864–1865)"}
-                    231{"Кейо (1865–1868)"}
                     232{"Мэйдзи"}
                     233{"Тайсё"}
                     234{"Сёва"}
                     235{"Хэйсэй"}
                     236{"Рэйва"}
-                    24{"Ниндзю (851–854)"}
-                    25{"Сайко (854–857)"}
-                    26{"Тэнъан (857–859)"}
-                    27{"Дзёган (859–877)"}
-                    28{"Гангё (877–885)"}
-                    29{"Нинна (885–889)"}
-                    3{"Сютё (686–701)"}
-                    30{"Канпё (889–898)"}
-                    31{"Сётай (898–901)"}
-                    32{"Энги (901–923)"}
-                    33{"Энтё (923–931)"}
-                    34{"Дзёхей (931–938)"}
-                    35{"Тэнгё (938–947)"}
-                    36{"Тэнряку (947–957)"}
-                    37{"Тэнтоку (957–961)"}
-                    38{"Ова (961–964)"}
-                    39{"Кохо (964–968)"}
-                    4{"Тайхо (701–704)"}
-                    40{"Анна (968–970)"}
-                    41{"Тэнроку (970–973)"}
-                    42{"Тэнъэн (973–976)"}
-                    43{"Дзёгэн (976–978)"}
-                    44{"Тэнгэн (978–983)"}
-                    45{"Эйкан (983–985)"}
-                    46{"Канна (985–987)"}
-                    47{"Эйэн (987–989)"}
-                    48{"Эйсо (989–990)"}
-                    49{"Сёряку (990–995)"}
-                    5{"Кёун (704–708)"}
-                    50{"Тётоку (995–999)"}
-                    51{"Тёхо (999–1004)"}
-                    52{"Канко (1004–1012)"}
-                    53{"Тёва (1012–1017)"}
-                    54{"Каннин (1017–1021)"}
-                    55{"Дзиан (1021–1024)"}
-                    56{"Мандзю (1024–1028)"}
-                    57{"Тёгэн (1028–1037)"}
-                    58{"Тёряку (1037–1040)"}
-                    59{"Тёкю (1040–1044)"}
-                    6{"Вадо (708–715)"}
-                    60{"Кантоку (1044–1046)"}
-                    61{"Эйсё (1046–1053)"}
-                    62{"Тэнги (1053–1058)"}
-                    63{"Кохэй (1058–1065)"}
-                    64{"Дзиряку (1065–1069)"}
-                    65{"Энкю (1069–1074)"}
-                    66{"Дзюхо (1074–1077)"}
-                    67{"Дзёряку (1077–1081)"}
-                    68{"Эйхо (1081–1084)"}
-                    69{"Отоку (1084–1087)"}
-                    7{"Рэйки (715–717)"}
-                    70{"Кандзи (1087–1094)"}
-                    71{"Кахо (1094–1096)"}
-                    72{"Эйтё (1096–1097)"}
-                    73{"Дзётоку (1097–1099)"}
-                    74{"Кова (1099–1104)"}
-                    75{"Тёдзи (1104–1106)"}
-                    76{"Кадзё (1106–1108)"}
-                    77{"Тэннин (1108–1110)"}
-                    78{"Тэнъэй (1110–1113)"}
-                    79{"Эйкю (1113–1118)"}
-                    8{"Ёро (717–724)"}
-                    80{"Гэнъэй (1118–1120)"}
-                    81{"Хоан (1120–1124)"}
-                    82{"Тэндзи (1124–1126)"}
-                    83{"Дайдзи (1126–1131)"}
-                    84{"Тэнсё (1131–1132)"}
-                    85{"Тёсё (1132–1135)"}
-                    86{"Хоэн (1135–1141)"}
-                    87{"Эйдзи (1141–1142)"}
-                    88{"Кодзи (1142–1144)"}
-                    89{"Тэнъё (1144–1145)"}
-                    9{"Дзинки (724–729)"}
-                    90{"Кюан (1145–1151)"}
-                    91{"Нимпэй (1151–1154)"}
-                    92{"Кюдзю (1154–1156)"}
-                    93{"Хогэн (1156–1159)"}
-                    94{"Хэйдзи (1159–1160)"}
-                    95{"Эйряку (1160–1161)"}
-                    96{"Охо (1161–1163)"}
-                    97{"Тёкан (1163–1165)"}
-                    98{"Эйман (1165–1166)"}
-                    99{"Нинъан (1166–1169)"}
                 }
                 narrow{
-                    0{"Тайка"}
-                    1{"Хакути"}
-                    10{"Тэмпьё"}
-                    100{"Као"}
-                    101{"Дзёан"}
-                    102{"Ангэн"}
-                    103{"Дзисё"}
-                    104{"Ёва"}
-                    105{"Дзюэй"}
-                    106{"Гэнрюку"}
-                    107{"Бундзи"}
-                    108{"Кэнкю"}
-                    109{"Сёдзи"}
-                    11{"Тэмпьё-Канпо"}
-                    110{"Кэннин"}
-                    111{"Гэнкю"}
-                    112{"Кэнъэй"}
-                    113{"Дзёгэн"}
-                    114{"Кэнряку"}
-                    115{"Кэмпо"}
-                    116{"Дзёкю"}
-                    117{"Дзёо"}
-                    118{"Гэннин"}
-                    119{"Кароку"}
-                    12{"Тэмпьё-Сёхо"}
-                    120{"Антэй"}
-                    121{"Канги"}
-                    122{"Дзёэй"}
-                    123{"Тэмпуку"}
-                    124{"Бунряку"}
-                    125{"Катэй"}
-                    126{"Рякунин"}
-                    127{"Энъо"}
-                    128{"Ниндзи"}
-                    129{"Кангэн"}
-                    13{"Тэмпьё-Ходзи"}
-                    130{"Ходзи"}
-                    131{"Кэнтё"}
-                    132{"Когэн"}
-                    133{"Сёка"}
-                    134{"Сёгэн"}
-                    135{"Бунъо"}
-                    136{"Котё"}
-                    137{"Бунъэй"}
-                    138{"Кэндзи"}
-                    139{"Коан"}
-                    14{"Тэмпьё-Дзинго"}
-                    140{"Сёо"}
-                    141{"Эйнин"}
-                    142{"Сёан"}
-                    143{"Кэнгэн"}
-                    144{"Кагэн"}
-                    145{"Токудзи"}
-                    146{"Энкё"}
-                    147{"Отё"}
-                    148{"Сёва"}
-                    149{"Бумпо"}
-                    15{"Дзинго-Кэйун"}
-                    150{"Гэнъо"}
-                    151{"Гэнко"}
-                    152{"Сётю"}
-                    153{"Каряку"}
-                    154{"Гэнтоку"}
-                    155{"Гэнко"}
-                    156{"Кэнму"}
-                    157{"Энгэн"}
-                    158{"Кококу"}
-                    159{"Сёхэй"}
-                    16{"Хоки"}
-                    160{"Кэнтоку"}
-                    161{"Бунтю"}
-                    162{"Тэндзю"}
-                    163{"Коряку"}
-                    164{"Кова"}
-                    165{"Гэнтю"}
-                    166{"Ситоку"}
-                    167{"Какэй"}
-                    168{"Коо"}
-                    169{"Мэйтоку"}
-                    17{"Тэнъо"}
-                    170{"Оэй"}
-                    171{"Сётё"}
-                    172{"Эйкё"}
-                    173{"Какицу"}
-                    174{"Бунъан"}
-                    175{"Хотоку"}
-                    176{"Кётоку"}
-                    177{"Кёсё"}
-                    178{"Тёроку"}
-                    179{"Кансё"}
-                    18{"Энряку"}
-                    180{"Бунсё"}
-                    181{"Онин"}
-                    182{"Бунмэй"}
-                    183{"Тёкё"}
-                    184{"Энтоку"}
-                    185{"Мэйо"}
-                    186{"Бунки"}
-                    187{"Эйсё"}
-                    188{"Дайэй"}
-                    189{"Кёроку"}
-                    19{"Дайдо"}
-                    190{"Тэнбун"}
-                    191{"Кодзи"}
-                    192{"Эйроку"}
-                    193{"Гэнки"}
-                    194{"Тэнсё"}
-                    195{"Бунроку"}
-                    196{"Кэйтё"}
-                    197{"Гэнна"}
-                    198{"Канъэй"}
-                    199{"Сёхё"}
-                    2{"Хакухо"}
-                    20{"Конин"}
-                    200{"Кэйан"}
-                    201{"Дзёо"}
-                    202{"Мэйрэки"}
-                    203{"Мандзи"}
-                    204{"Камбун"}
-                    205{"Эмпо"}
-                    206{"Тэнна"}
-                    207{"Дзёкё"}
-                    208{"Гэнроку"}
-                    209{"Хоэй"}
-                    21{"Тэнтьё"}
-                    210{"Сётоку"}
-                    211{"Кёхо"}
-                    212{"Гэмбун"}
-                    213{"Кампо"}
-                    214{"Энкё"}
-                    215{"Канъэн"}
-                    216{"Хореки"}
-                    217{"Мэйва"}
-                    218{"Анъэй"}
-                    219{"Тэнмэй"}
-                    22{"Дзёва"}
-                    220{"Кансэй"}
-                    221{"Кёва"}
-                    222{"Бунка"}
-                    223{"Бунсэй"}
-                    224{"Тэнпо"}
-                    225{"Кока"}
-                    226{"Каэй"}
-                    227{"Ансэй"}
-                    228{"Манъэн"}
-                    229{"Бункю"}
-                    23{"Касё"}
-                    230{"Гэндзи"}
-                    231{"Кейо"}
                     232{"Мэйдзи"}
                     233{"Тайсё"}
                     234{"Сёва"}
                     235{"Хэйсэй"}
                     236{"Рэйва"}
-                    24{"Ниндзю"}
-                    25{"Сайко"}
-                    26{"Тэнъан"}
-                    27{"Дзёган"}
-                    28{"Гангё"}
-                    29{"Нинна"}
-                    3{"Сютё"}
-                    30{"Канпё"}
-                    31{"Сётай"}
-                    32{"Энги"}
-                    33{"Энтё"}
-                    34{"Дзёхей"}
-                    35{"Тэнгё"}
-                    36{"Тэнряку"}
-                    37{"Тэнтоку"}
-                    38{"Ова"}
-                    39{"Кохо"}
-                    4{"Тайхо"}
-                    40{"Анна"}
-                    41{"Тэнроку"}
-                    42{"Тэнъэн"}
-                    43{"Дзёгэн"}
-                    44{"Тэнгэн"}
-                    45{"Эйкан"}
-                    46{"Канна"}
-                    47{"Эйэн"}
-                    48{"Эйсо"}
-                    49{"Сёряку"}
-                    5{"Кэйун"}
-                    50{"Тётоку"}
-                    51{"Тёхо"}
-                    52{"Канко"}
-                    53{"Тёва"}
-                    54{"Каннин"}
-                    55{"Дзиан"}
-                    56{"Мандзю"}
-                    57{"Тёгэн"}
-                    58{"Тёряку"}
-                    59{"Тёкю"}
-                    6{"Вадо"}
-                    60{"Кантоку"}
-                    61{"Эйсё"}
-                    62{"Тэнги"}
-                    63{"Кохэй"}
-                    64{"Дзиряку"}
-                    65{"Энкю"}
-                    66{"Дзюхо"}
-                    67{"Дзёряку"}
-                    68{"Эйхо"}
-                    69{"Отоку"}
-                    7{"Рэйки"}
-                    70{"Кандзи"}
-                    71{"Кахо"}
-                    72{"Эйтё"}
-                    73{"Дзётоку"}
-                    74{"Кова"}
-                    75{"Тёдзи"}
-                    76{"Кадзё"}
-                    77{"Тэннин"}
-                    78{"Тэнъэй"}
-                    79{"Эйкю"}
-                    8{"Ёро"}
-                    80{"Гэнъэй"}
-                    81{"Хоан"}
-                    82{"Тэндзи"}
-                    83{"Дайдзи"}
-                    84{"Тэнсё"}
-                    85{"Тёсё"}
-                    86{"Хоэн"}
-                    87{"Эйдзи"}
-                    88{"Кодзи"}
-                    89{"Тэнъё"}
-                    9{"Дзинки"}
-                    90{"Кюан"}
-                    91{"Нимпэй"}
-                    92{"Кюдзю"}
-                    93{"Хогэн"}
-                    94{"Хэйдзи"}
-                    95{"Эйряку"}
-                    96{"Охо"}
-                    97{"Тёкан"}
-                    98{"Эйман"}
-                    99{"Нинъан"}
-                }
-                wide{
-                    0{"Тайка (645–650)"}
-                    1{"Хакути (650–671)"}
-                    10{"Тэмпьё (729–749)"}
-                    100{"Као (1169–1171)"}
-                    101{"Дзёан (1171–1175)"}
-                    102{"Ангэн (1175–1177)"}
-                    103{"Дзисё (1177–1181)"}
-                    104{"Ёва (1181–1182)"}
-                    105{"Дзюэй (1182–1184)"}
-                    106{"Гэнрюку (1184–1185)"}
-                    107{"Бундзи (1185–1190)"}
-                    108{"Кэнкю (1190–1199)"}
-                    109{"Сёдзи (1199–1201)"}
-                    11{"Тэмпьё-Канпо (749–749)"}
-                    110{"Кэннин (1201–1204)"}
-                    111{"Гэнкю (1204–1206)"}
-                    112{"Кэнъэй (1206–1207)"}
-                    113{"Дзёгэн (1207–1211)"}
-                    114{"Кэнряку (1211–1213)"}
-                    115{"Кэмпо (1213–1219)"}
-                    116{"Дзёкю (1219–1222)"}
-                    117{"Дзёо (1222–1224)"}
-                    118{"Гэннин (1224–1225)"}
-                    119{"Кароку (1225–1227)"}
-                    12{"Тэмпьё-Сёхо (749-757)"}
-                    120{"Антэй (1227–1229)"}
-                    121{"Канги (1229–1232)"}
-                    122{"Дзёэй (1232–1233)"}
-                    123{"Тэмпуку (1233–1234)"}
-                    124{"Бунряку (1234–1235)"}
-                    125{"Катэй (1235–1238)"}
-                    126{"Рякунин (1238–1239)"}
-                    127{"Энъо (1239–1240)"}
-                    128{"Ниндзи (1240–1243)"}
-                    129{"Кангэн (1243–1247)"}
-                    13{"Тэмпьё-Ходзи (757-765)"}
-                    130{"Ходзи (1247–1249)"}
-                    131{"Кэнтё (1249–1256)"}
-                    132{"Когэн (1256–1257)"}
-                    133{"Сёка (1257–1259)"}
-                    134{"Сёгэн (1259–1260)"}
-                    135{"Бунъо (1260–1261)"}
-                    136{"Котё (1261–1264)"}
-                    137{"Бунъэй (1264–1275)"}
-                    138{"Кэндзи (1275–1278)"}
-                    139{"Коан (1278–1288)"}
-                    14{"Тэмпьё-Дзинго (765-767)"}
-                    140{"Сёо (1288–1293)"}
-                    141{"Эйнин (1293–1299)"}
-                    142{"Сёан (1299–1302)"}
-                    143{"Кэнгэн (1302–1303)"}
-                    144{"Кагэн (1303–1306)"}
-                    145{"Токудзи (1306–1308)"}
-                    146{"Энкё (1308–1311)"}
-                    147{"Отё (1311–1312)"}
-                    148{"Сёва (1312–1317)"}
-                    149{"Бумпо (1317–1319)"}
-                    15{"Дзинго-Кёун (767-770)"}
-                    150{"Гэнъо (1319–1321)"}
-                    151{"Гэнко (1321–1324)"}
-                    152{"Сётю (1324–1326)"}
-                    153{"Каряку (1326–1329)"}
-                    154{"Гэнтоку (1329–1331)"}
-                    155{"Гэнко (1331–1334)"}
-                    156{"Кэнму (1334–1336)"}
-                    157{"Энгэн (1336–1340)"}
-                    158{"Кококу (1340–1346)"}
-                    159{"Сёхэй (1346–1370)"}
-                    16{"Хоки (770–781)"}
-                    160{"Кэнтоку (1370–1372)"}
-                    161{"Бунтю (1372–1375)"}
-                    162{"Тэндзю (1375–1379)"}
-                    163{"Коряку (1379–1381)"}
-                    164{"Кова (1381–1384)"}
-                    165{"Гэнтю (1384–1392)"}
-                    166{"Ситоку (1384–1387)"}
-                    167{"Какэй (1387–1389)"}
-                    168{"Коо (1389–1390)"}
-                    169{"Мэйтоку (1390–1394)"}
-                    17{"Тэнъо (781–782)"}
-                    170{"Оэй (1394–1428)"}
-                    171{"Сётё (1428–1429)"}
-                    172{"Эйкё (1429–1441)"}
-                    173{"Какицу (1441–1444)"}
-                    174{"Бунъан (1444–1449)"}
-                    175{"Хотоку (1449–1452)"}
-                    176{"Кётоку (1452–1455)"}
-                    177{"Кёсё (1455–1457)"}
-                    178{"Тёроку (1457–1460)"}
-                    179{"Кансё (1460–1466)"}
-                    18{"Энряку (782–806)"}
-                    180{"Бунсё (1466–1467)"}
-                    181{"Онин (1467–1469)"}
-                    182{"Бунмэй (1469–1487)"}
-                    183{"Тёкё (1487–1489)"}
-                    184{"Энтоку (1489–1492)"}
-                    185{"Мэйо (1492–1501)"}
-                    186{"Бунки (1501–1504)"}
-                    187{"Эйсё (1504–1521)"}
-                    188{"Дайэй (1521–1528)"}
-                    189{"Кёроку (1528–1532)"}
-                    19{"Дайдо (806–810)"}
-                    190{"Тэнбун (1532–1555)"}
-                    191{"Кодзи (1555–1558)"}
-                    192{"Эйроку (1558–1570)"}
-                    193{"Гэнки (1570–1573)"}
-                    194{"Тэнсё (1573–1592)"}
-                    195{"Бунроку (1592–1596)"}
-                    196{"Кэйтё (1596–1615)"}
-                    197{"Гэнна (1615–1624)"}
-                    198{"Канъэй (1624–1644)"}
-                    199{"Сёхё (1644–1648)"}
-                    2{"Хакухо (672–686)"}
-                    20{"Конин (810–824)"}
-                    200{"Кэйан (1648–1652)"}
-                    201{"Дзёо (1652–1655)"}
-                    202{"Мэйрэки (1655–1658)"}
-                    203{"Мандзи (1658–1661)"}
-                    204{"Камбун (1661–1673)"}
-                    205{"Эмпо (1673–1681)"}
-                    206{"Тэнна (1681–1684)"}
-                    207{"Дзёкё (1684–1688)"}
-                    208{"Гэнроку (1688–1704)"}
-                    209{"Хоэй (1704–1711)"}
-                    21{"Тэнтьё (824–834)"}
-                    210{"Сётоку (1711–1716)"}
-                    211{"Кёхо (1716–1736)"}
-                    212{"Гэмбун (1736–1741)"}
-                    213{"Кампо (1741–1744)"}
-                    214{"Энкё (1744–1748)"}
-                    215{"Канъэн (1748–1751)"}
-                    216{"Хореки (1751–1764)"}
-                    217{"Мэйва (1764–1772)"}
-                    218{"Анъэй (1772–1781)"}
-                    219{"Тэнмэй (1781–1789)"}
-                    22{"Дзёва (834–848)"}
-                    220{"Кансэй (1789–1801)"}
-                    221{"Кёва (1801–1804)"}
-                    222{"Бунка (1804–1818)"}
-                    223{"Бунсэй (1818–1830)"}
-                    224{"Тэнпо (1830–1844)"}
-                    225{"Кока (1844–1848)"}
-                    226{"Каэй (1848–1854)"}
-                    227{"Ансэй (1854–1860)"}
-                    228{"Манъэн (1860–1861)"}
-                    229{"Бункю (1861–1864)"}
-                    23{"Касё (848–851)"}
-                    230{"Гэндзи (1864–1865)"}
-                    231{"Кейо (1865–1868)"}
-                    232{"Мэйдзи"}
-                    233{"Тайсё"}
-                    234{"Сёва"}
-                    235{"Хэйсэй"}
-                    236{"Рэйва"}
-                    24{"Ниндзю (851–854)"}
-                    25{"Сайко (854–857)"}
-                    26{"Тэнъан (857–859)"}
-                    27{"Дзёган (859–877)"}
-                    28{"Гангё (877–885)"}
-                    29{"Нинна (885–889)"}
-                    3{"Сютё (686–701)"}
-                    30{"Канпё (889–898)"}
-                    31{"Сётай (898–901)"}
-                    32{"Энги (901–923)"}
-                    33{"Энтё (923–931)"}
-                    34{"Дзёхей (931–938)"}
-                    35{"Тэнгё (938–947)"}
-                    36{"Тэнряку (947–957)"}
-                    37{"Тэнтоку (957–961)"}
-                    38{"Ова (961–964)"}
-                    39{"Кохо (964–968)"}
-                    4{"Тайхо (701–704)"}
-                    40{"Анна (968–970)"}
-                    41{"Тэнроку (970–973)"}
-                    42{"Тэнъэн (973–976)"}
-                    43{"Дзёгэн (976–978)"}
-                    44{"Тэнгэн (978–983)"}
-                    45{"Эйкан (983–985)"}
-                    46{"Канна (985–987)"}
-                    47{"Эйэн (987–989)"}
-                    48{"Эйсо (989–990)"}
-                    49{"Сёряку (990–995)"}
-                    5{"Кёун (704–708)"}
-                    50{"Тётоку (995–999)"}
-                    51{"Тёхо (999–1004)"}
-                    52{"Канко (1004–1012)"}
-                    53{"Тёва (1012–1017)"}
-                    54{"Каннин (1017–1021)"}
-                    55{"Дзиан (1021–1024)"}
-                    56{"Мандзю (1024–1028)"}
-                    57{"Тёгэн (1028–1037)"}
-                    58{"Тёряку (1037–1040)"}
-                    59{"Тёкю (1040–1044)"}
-                    6{"Вадо (708–715)"}
-                    60{"Кантоку (1044–1046)"}
-                    61{"Эйсё (1046–1053)"}
-                    62{"Тэнги (1053–1058)"}
-                    63{"Кохэй (1058–1065)"}
-                    64{"Дзиряку (1065–1069)"}
-                    65{"Энкю (1069–1074)"}
-                    66{"Дзюхо (1074–1077)"}
-                    67{"Дзёряку (1077–1081)"}
-                    68{"Эйхо (1081–1084)"}
-                    69{"Отоку (1084–1087)"}
-                    7{"Рэйки (715–717)"}
-                    70{"Кандзи (1087–1094)"}
-                    71{"Кахо (1094–1096)"}
-                    72{"Эйтё (1096–1097)"}
-                    73{"Дзётоку (1097–1099)"}
-                    74{"Кова (1099–1104)"}
-                    75{"Тёдзи (1104–1106)"}
-                    76{"Кадзё (1106–1108)"}
-                    77{"Тэннин (1108–1110)"}
-                    78{"Тэнъэй (1110–1113)"}
-                    79{"Эйкю (1113–1118)"}
-                    8{"Ёро (717–724)"}
-                    80{"Гэнъэй (1118–1120)"}
-                    81{"Хоан (1120–1124)"}
-                    82{"Тэндзи (1124–1126)"}
-                    83{"Дайдзи (1126–1131)"}
-                    84{"Тэнсё (1131–1132)"}
-                    85{"Тёсё (1132–1135)"}
-                    86{"Хоэн (1135–1141)"}
-                    87{"Эйдзи (1141–1142)"}
-                    88{"Кодзи (1142–1144)"}
-                    89{"Тэнъё (1144–1145)"}
-                    9{"Дзинки (724–729)"}
-                    90{"Кюан (1145–1151)"}
-                    91{"Нимпэй (1151–1154)"}
-                    92{"Кюдзю (1154–1156)"}
-                    93{"Хогэн (1156–1159)"}
-                    94{"Хэйдзи (1159–1160)"}
-                    95{"Эйряку (1160–1161)"}
-                    96{"Охо (1161–1163)"}
-                    97{"Тёкан (1163–1165)"}
-                    98{"Эйман (1165–1166)"}
-                    99{"Нинъан (1166–1169)"}
                 }
             }
             intervalFormats{
-                Bh{
-                    B{"B h – B h"}
-                    h{"B h–h"}
-                }
-                Bhm{
-                    B{"B h:mm – B h:mm"}
-                    h{"B h:mm–h:mm"}
-                    m{"B h:mm–h:mm"}
-                }
                 Gy{
                     G{"G, y – G, y"}
                     y{"G, y–y"}
@@ -5719,53 +2318,6 @@ cv{
                     M{"G, y.MM.dd – y.MM.dd"}
                     d{"G, y.MM.dd – y.MM.dd"}
                     y{"G, y.MM.dd – y.MM.dd"}
-                }
-                H{
-                    H{"HH–HH 'сех'"}
-                }
-                Hmv{
-                    H{"HH:mm–HH:mm (v)"}
-                    m{"HH:mm–HH:mm (v)"}
-                }
-                Hv{
-                    H{"HH–HH 'сех' (v)"}
-                }
-                MEd{
-                    M{"MM.dd (E) – MM.dd (E)"}
-                    d{"MM.dd (E) – MM.dd (E)"}
-                }
-                MMM{
-                    M{"MMM – MMM"}
-                }
-                MMMEd{
-                    M{"MMM, d, E – MMM, d, E"}
-                    d{"MMM, d, E – MMM, d, E"}
-                }
-                MMMd{
-                    M{"MMM, d – MMM, d"}
-                    d{"MMM, d–d"}
-                }
-                Md{
-                    M{"MM.dd – MM.dd"}
-                    d{"MM.dd – MM.dd"}
-                }
-                h{
-                    a{"a h – a h"}
-                    h{"a h–h"}
-                }
-                hm{
-                    a{"a h:mm – a h:mm"}
-                    h{"a h:mm–h:mm"}
-                    m{"a h:mm–h:mm"}
-                }
-                hmv{
-                    a{"a h:mm – a h:mm (v)"}
-                    h{"a h:mm–h:mm (v)"}
-                    m{"a h:mm–h:mm (v)"}
-                }
-                hv{
-                    a{"a h – a h (v)"}
-                    h{"a h–h (v)"}
                 }
                 y{
                     y{"G, y–y"}
@@ -5805,187 +2357,12 @@ cv{
             }
         }
         persian{
-            DateTimePatterns{
-                "HH:mm:ss (zzzz)",
-                "HH:mm:ss (z)",
-                "HH:mm:ss",
-                "HH:mm",
-                "G y, MMMM, d, EEEE",
-                "G y, MMMM, d",
-                "G y, MMM, d",
-                "GGGGG y.MM.dd",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-            }
-            availableFormats{
-                Ed{"d, E"}
-                Gy{"G y"}
-                GyM{"G y.MM"}
-                GyMEd{"G y.MM.dd (E)"}
-                GyMMM{"G y, MMM"}
-                GyMMMEd{"G y, MMM, d, E"}
-                GyMMMd{"G y, MMM, d"}
-                GyMd{"G y.MM.dd"}
-                MEd{"MM.dd (E)"}
-                MMMEd{"MMM, d, E"}
-                MMMMd{"MMMM, d"}
-                MMMd{"MMM, d"}
-                Md{"MM.dd"}
-                y{"G y"}
-                yyyy{"G y"}
-                yyyyM{"G y.MM"}
-                yyyyMEd{"G y.MM.dd (E)"}
-                yyyyMMM{"G y, MMM"}
-                yyyyMMMEd{"G y, MMM, d, E"}
-                yyyyMMMM{"G y, MMMM"}
-                yyyyMMMd{"G y, MMM, d"}
-                yyyyMd{"G y.MM.dd"}
-                yyyyQQQ{"G y, QQQ"}
-                yyyyQQQQ{"G y, QQQQ"}
-            }
             eras{
                 abbreviated{
                     0{"х. х."}
                 }
-                narrow{
-                    0{"х. х."}
-                }
                 wide{
                     0{"хиджра хыҫҫӑнхи"}
-                }
-            }
-            intervalFormats{
-                Bh{
-                    B{"B h – B h"}
-                    h{"B h–h"}
-                }
-                Bhm{
-                    B{"B h:mm – B h:mm"}
-                    h{"B h:mm–h:mm"}
-                    m{"B h:mm–h:mm"}
-                }
-                Gy{
-                    G{"G y – G y"}
-                    y{"G y–y"}
-                }
-                GyM{
-                    G{"G y.MM – G y.MM"}
-                    M{"G y.MM – y.MM"}
-                    y{"G y.MM – y.MM"}
-                }
-                GyMEd{
-                    G{"G y.MM.dd (E) – G y.MM.dd (E)"}
-                    M{"G y.MM.dd (E) – y.MM.dd (E)"}
-                    d{"G y.MM.dd (E) – y.MM.dd (E)"}
-                    y{"G y.MM.dd (E) – y.MM.dd (E)"}
-                }
-                GyMMM{
-                    G{"G y, MMM – G y, MMM"}
-                    M{"G y, MMM – MMM"}
-                    y{"G y, MMM – y, MMM"}
-                }
-                GyMMMEd{
-                    G{"G y, MMM, d, E – G y, MMM, d, E"}
-                    M{"G y, MMM, d, E – MMM, d, E"}
-                    d{"G y, MMM, d, E – MMM, d, E"}
-                    y{"G y, MMM, d, E – y, MMM, d, E"}
-                }
-                GyMMMd{
-                    G{"G y, MMM, d – G y, MMM, d"}
-                    M{"G y, MMM, d – MMM, d"}
-                    d{"G y, MMM, d–d"}
-                    y{"G y, MMM, d – y, MMM, d"}
-                }
-                GyMd{
-                    G{"G y.MM.dd – G y.MM.dd"}
-                    M{"G y.MM.dd – y.MM.dd"}
-                    d{"G y.MM.dd – y.MM.dd"}
-                    y{"G y.MM.dd – y.MM.dd"}
-                }
-                H{
-                    H{"HH–HH 'сех'"}
-                }
-                Hmv{
-                    H{"HH:mm–HH:mm (v)"}
-                    m{"HH:mm–HH:mm (v)"}
-                }
-                Hv{
-                    H{"HH–HH 'сех' (v)"}
-                }
-                MEd{
-                    M{"MM.dd (E) – MM.dd (E)"}
-                    d{"MM.dd (E) – MM.dd (E)"}
-                }
-                MMM{
-                    M{"MMM – MMM"}
-                }
-                MMMEd{
-                    M{"MMM, d, E – MMM, d, E"}
-                    d{"MMM, d, E – MMM, d, E"}
-                }
-                MMMd{
-                    M{"MMM, d – MMM, d"}
-                    d{"MMM, d–d"}
-                }
-                Md{
-                    M{"MM.dd – MM.dd"}
-                    d{"MM.dd – MM.dd"}
-                }
-                h{
-                    a{"a h – a h"}
-                    h{"a h–h"}
-                }
-                hm{
-                    a{"a h:mm – a h:mm"}
-                    h{"a h:mm–h:mm"}
-                    m{"a h:mm–h:mm"}
-                }
-                hmv{
-                    a{"a h:mm – a h:mm (v)"}
-                    h{"a h:mm–h:mm (v)"}
-                    m{"a h:mm–h:mm (v)"}
-                }
-                hv{
-                    a{"a h – a h (v)"}
-                    h{"a h–h (v)"}
-                }
-                y{
-                    y{"G y–y"}
-                }
-                yM{
-                    M{"G y.MM – y.MM"}
-                    y{"G y.MM – y.MM"}
-                }
-                yMEd{
-                    M{"G y.MM.dd (E) – y.MM.dd (E)"}
-                    d{"G y.MM.dd (E) – y.MM.dd (E)"}
-                    y{"G y.MM.dd (E) – y.MM.dd (E)"}
-                }
-                yMMM{
-                    M{"G y, MMM – MMM"}
-                    y{"G y, MMM – y, MMM"}
-                }
-                yMMMEd{
-                    M{"G y, MMM, d, E – MMM, d, E"}
-                    d{"G y, MMM, d, E – MMM, d, E"}
-                    y{"G y, MMM, d, E – y, MMM, d, E"}
-                }
-                yMMMM{
-                    M{"G y, MMMM – MMMM"}
-                    y{"G y, MMMM – y, MMMM"}
-                }
-                yMMMd{
-                    M{"G y, MMM, d – MMM, d"}
-                    d{"G y, MMM, d–d"}
-                    y{"G y, MMM, d – y, MMM, d"}
-                }
-                yMd{
-                    M{"G y.MM.dd – y.MM.dd"}
-                    d{"G y.MM.dd – y.MM.dd"}
-                    y{"G y.MM.dd – y.MM.dd"}
                 }
             }
             monthNames{
@@ -6008,47 +2385,6 @@ cv{
             }
         }
         roc{
-            DateTimePatterns{
-                "HH:mm:ss (zzzz)",
-                "HH:mm:ss (z)",
-                "HH:mm:ss",
-                "HH:mm",
-                "G y, MMMM, d, EEEE",
-                "G y, MMMM, d",
-                "G y, MMM, d",
-                "GGGGG y.MM.dd",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-            }
-            availableFormats{
-                Ed{"d, E"}
-                Gy{"G y"}
-                GyM{"G y.MM"}
-                GyMEd{"G y.MM.dd (E)"}
-                GyMMM{"G y, MMM"}
-                GyMMMEd{"G y, MMM, d, E"}
-                GyMMMd{"G y, MMM, d"}
-                GyMd{"G y.MM.dd"}
-                MEd{"MM.dd (E)"}
-                MMMEd{"MMM, d, E"}
-                MMMMd{"MMMM, d"}
-                MMMd{"MMM, d"}
-                Md{"MM.dd"}
-                y{"G y"}
-                yyyy{"G y"}
-                yyyyM{"G y.MM"}
-                yyyyMEd{"G y.MM.dd (E)"}
-                yyyyMMM{"G y, MMM"}
-                yyyyMMMEd{"G y, MMM, d, E"}
-                yyyyMMMM{"G y, MMMM"}
-                yyyyMMMd{"G y, MMM, d"}
-                yyyyMd{"G y.MM.dd"}
-                yyyyQQQ{"G y, QQQ"}
-                yyyyQQQQ{"G y, QQQQ"}
-            }
             eras{
                 abbreviated{
                     0{"респ. й-ч."}
@@ -6064,134 +2400,11 @@ cv{
                 }
             }
             intervalFormats{
-                Bh{
-                    B{"B h – B h"}
-                    h{"B h–h"}
-                }
-                Bhm{
-                    B{"B h:mm – B h:mm"}
-                    h{"B h:mm–h:mm"}
-                    m{"B h:mm–h:mm"}
-                }
-                Gy{
-                    G{"G y – G y"}
-                    y{"G y–y"}
-                }
-                GyM{
-                    G{"G y.MM – G y.MM"}
-                    M{"G y.MM – y.MM"}
-                    y{"G y.MM – y.MM"}
-                }
-                GyMEd{
-                    G{"G y.MM.dd (E) – G y.MM.dd (E)"}
-                    M{"G y.MM.dd (E) – y.MM.dd (E)"}
-                    d{"G y.MM.dd (E) – y.MM.dd (E)"}
-                    y{"G y.MM.dd (E) – y.MM.dd (E)"}
-                }
-                GyMMM{
-                    G{"G y, MMM – G y, MMM"}
-                    M{"G y, MMM – MMM"}
-                    y{"G y, MMM – y, MMM"}
-                }
-                GyMMMEd{
-                    G{"G y, MMM, d, E – G y, MMM, d, E"}
-                    M{"G y, MMM, d, E – MMM, d, E"}
-                    d{"G y, MMM, d, E – MMM, d, E"}
-                    y{"G y, MMM, d, E – y, MMM, d, E"}
-                }
-                GyMMMd{
-                    G{"G y, MMM, d – G y, MMM, d"}
-                    M{"G y, MMM, d – MMM, d"}
-                    d{"G y, MMM, d–d"}
-                    y{"G y, MMM, d – y, MMM, d"}
-                }
-                GyMd{
-                    G{"G y.MM.dd – G y.MM.dd"}
-                    M{"G y.MM.dd – y.MM.dd"}
-                    d{"G y.MM.dd – y.MM.dd"}
-                    y{"G y.MM.dd – y.MM.dd"}
-                }
                 H{
                     H{"HH–HH"}
                 }
-                Hmv{
-                    H{"HH:mm–HH:mm (v)"}
-                    m{"HH:mm–HH:mm (v)"}
-                }
                 Hv{
                     H{"HH–HH (v)"}
-                }
-                MEd{
-                    M{"MM.dd (E) – MM.dd (E)"}
-                    d{"MM.dd (E) – MM.dd (E)"}
-                }
-                MMM{
-                    M{"MMM – MMM"}
-                }
-                MMMEd{
-                    M{"MMM, d, E – MMM, d, E"}
-                    d{"MMM, d, E – MMM, d, E"}
-                }
-                MMMd{
-                    M{"MMM, d – MMM, d"}
-                    d{"MMM, d–d"}
-                }
-                Md{
-                    M{"MM.dd – MM.dd"}
-                    d{"MM.dd – MM.dd"}
-                }
-                h{
-                    a{"a h – a h"}
-                    h{"a h–h"}
-                }
-                hm{
-                    a{"a h:mm – a h:mm"}
-                    h{"a h:mm–h:mm"}
-                    m{"a h:mm–h:mm"}
-                }
-                hmv{
-                    a{"a h:mm – a h:mm (v)"}
-                    h{"a h:mm–h:mm (v)"}
-                    m{"a h:mm–h:mm (v)"}
-                }
-                hv{
-                    a{"a h – a h (v)"}
-                    h{"a h–h (v)"}
-                }
-                y{
-                    y{"G y–y"}
-                }
-                yM{
-                    M{"G y.MM – y.MM"}
-                    y{"G y.MM – y.MM"}
-                }
-                yMEd{
-                    M{"G y.MM.dd (E) – y.MM.dd (E)"}
-                    d{"G y.MM.dd (E) – y.MM.dd (E)"}
-                    y{"G y.MM.dd (E) – y.MM.dd (E)"}
-                }
-                yMMM{
-                    M{"G y, MMM – MMM"}
-                    y{"G y, MMM – y, MMM"}
-                }
-                yMMMEd{
-                    M{"G y, MMM, d, E – MMM, d, E"}
-                    d{"G y, MMM, d, E – MMM, d, E"}
-                    y{"G y, MMM, d, E – y, MMM, d, E"}
-                }
-                yMMMM{
-                    M{"G y, MMMM – MMMM"}
-                    y{"G y, MMMM – y, MMMM"}
-                }
-                yMMMd{
-                    M{"G y, MMM, d – MMM, d"}
-                    d{"G y, MMM, d–d"}
-                    y{"G y, MMM, d – y, MMM, d"}
-                }
-                yMd{
-                    M{"G y.MM.dd – y.MM.dd"}
-                    d{"G y.MM.dd – y.MM.dd"}
-                    y{"G y.MM.dd – y.MM.dd"}
                 }
             }
         }
@@ -6200,13 +2413,13 @@ cv{
         activities{"активлӑх"}
         african_scripts{"Африка ҫырулӑхӗ"}
         american_scripts{"Америка ҫырулӑхӗ"}
-        animal{"выльӑх"}
-        animals_nature{"выльӑх е ҫутҫанталӑк"}
+        animal{"выльӑх-чӗрлӗх"}
+        animals_nature{"выльӑх-чӗрлӗх е ҫут ҫанталӑк"}
         arrows{"стрелка"}
         body{"ӳт-пӳ"}
         box_drawing{"тӳркӗтеслӗх"}
         braille{"Брайль шрифчӗпе"}
-        building{"ҫурт"}
+        building{"ҫурт-йӗр"}
         bullets_stars{"пуля е ҫӑлтӑр"}
         consonantal_jamo{"хупӑ та уҫӑ сасӑсем"}
         currency_symbols{"валюта символӗ"}
@@ -6216,13 +2429,13 @@ cv{
         divination_symbols{"юмӑҫ символӗ"}
         downwards_arrows{"йӗппи аялалла"}
         downwards_upwards_arrows{"йӗппи аялалла ҫӳлелле"}
-        east_asian_scripts{"Тухӑҫ алфавичӗ"}
+        east_asian_scripts{"Тухӑҫ Ази ҫырулӑхӗ"}
         emoji{"эмодзи"}
         european_scripts{"Европа ҫырулӑхӗ"}
-        female{"хӗрарӑм"}
+        female{"хӗр арӑм"}
         flag{"ялав"}
         flags{"ялавсем"}
-        food_drink{"ҫимелли"}
+        food_drink{"ӗҫме-ҫиме"}
         format{"формат"}
         format_whitespace{"форматпа пробелӑсем"}
         full_width_form_variant{"экран сарлакӑшӗ"}
@@ -6236,53 +2449,53 @@ cv{
         heart{"чӗре"}
         historic_scripts{"историлле шрифт"}
         ideographic_desc_characters{"идеографи сӑнав палли"}
-        japanese_kana{"Япони канӗ"}
+        japanese_kana{"япон кани"}
         kanbun{"камбун (китай ҫырӑвӗ)"}
-        kanji{"кандзи (иероглиф)"}
+        kanji{"кандзи"}
         keycap{"брелок"}
         leftwards_arrows{"стрелка сулахаялла"}
         leftwards_rightwards_arrows{"стрелка сулахаялла сылтӑмалла"}
         letterlike_symbols{"саспалли символӗ"}
         limited_use{"пӳлӗнчӗк усӑ курни"}
-        male{"арҫын"}
+        male{"ар ҫын"}
         math_symbols{"математика символӗ"}
         middle_eastern_scripts{"Ҫывӑх Хӗвелтухӑҫ чӗлхисем"}
         miscellaneous{"тӗрлӗрен"}
-        modern_scripts{"хальхи шрифт"}
+        modern_scripts{"хальхи ҫырулӑхӗ"}
         modifier{"модификатор"}
-        musical_symbols{"музыка символӗ"}
-        nature{"ҫутҫанталӑк"}
+        musical_symbols{"юрӑ-кӗвӗ палли"}
+        nature{"ҫут ҫанталӑк"}
         nonspacing{"пробелӑсӑр"}
         numbers{"цифрӑсем"}
-        objects{"объект"}
-        other{"урӑх"}
+        objects{"япала"}
+        other{"урӑххи"}
         paired{"мӑшӑр"}
         person{"ҫын"}
         phonetic_alphabet{"фонетика алфавичӗ"}
         pictographs{"пиктограмма"}
         place{"вырӑн"}
-        plant{"ӳсентӑран"}
+        plant{"ӳсен-тӑран"}
         punctuation{"пунктуаци"}
         rightwards_arrows{"стрелка сылтӑмалла"}
         sign_standard_symbols{"символ е паллӑ"}
         small_form_variant{"пӗчӗк вариантсем"}
         smiley{"смайлик"}
         smileys_people{"смайлик е ҫын"}
-        south_asian_scripts{"Кӑнтӑр Азири чӗлхесем"}
-        southeast_asian_scripts{"Кӑнтӑр-Хӗвелтухӑҫ Ази чӗлхисем"}
+        south_asian_scripts{"Кӑнтӑр Ази ҫырулӑхӗ"}
+        southeast_asian_scripts{"Кӑнтӑр Анӑҫ Ази ҫырулӑхӗ"}
         spacing{"интервал"}
         sport{"спорт"}
         symbols{"символ"}
         technical_symbols{"техника символӗ"}
         tone_marks{"тонна палли"}
-        travel{"ҫулҫӳрев"}
-        travel_places{"ҫулҫӳрев е вырӑн"}
+        travel{"ҫул ҫӳрев"}
+        travel_places{"ҫул ҫӳрев е вырӑн"}
         upwards_arrows{"стрелоксем ҫӳлелле"}
         variant_forms{"вариант"}
         vocalic_jamo{"уҫӑ сасӑ"}
         weather{"ҫанталӑк"}
         western_asian_scripts{"Анӑҫ Ази ҫырулӑхӗ"}
-        whitespace{"пробел"}
+        whitespace{"пушлӑх"}
     }
     delimiters{
         alternateQuotationEnd{"”"}
@@ -6311,35 +2524,6 @@ cv{
                 }
             }
         }
-        day-narrow{
-            dn{"кун"}
-            relativeTime{
-                future{
-                    one{"{0} кунтан"}
-                    other{"{0} кунтан"}
-                    zero{"{0} кунтан"}
-                }
-                past{
-                    one{"{0} кун каялла"}
-                    other{"{0} кун каялла"}
-                    zero{"{0} кун каялла"}
-                }
-            }
-        }
-        day-short{
-            relativeTime{
-                future{
-                    one{"{0} кунтан"}
-                    other{"{0} кунтан"}
-                    zero{"{0} кунтан"}
-                }
-                past{
-                    one{"{0} кун каялла"}
-                    other{"{0} кун каялла"}
-                    zero{"{0} кун каялла"}
-                }
-            }
-        }
         dayOfYear{
             dn{"ҫулталӑкӑн кунӗ"}
         }
@@ -6352,14 +2536,8 @@ cv{
         dayperiod-narrow{
             dn{"КУ/КХ"}
         }
-        dayperiod-short{
-            dn{"к. у./к. х."}
-        }
         era{
             dn{"самана"}
-        }
-        era-narrow{
-            dn{"сам."}
         }
         era-short{
             dn{"сам."}
@@ -6384,21 +2562,16 @@ cv{
             }
         }
         fri-narrow{
-            relative{
-                "-1"{"иртнӗ эр"}
-                "0"{"ку эр"}
-                "1"{"ҫитес эр"}
-            }
             relativeTime{
                 future{
-                    one{"{0} эрне кунтан"}
+                    one{"{0} эр-тан"}
                     other{"{0} эр-тан"}
-                    zero{"{0} эрне кунтан"}
+                    zero{"{0} эр-тан"}
                 }
                 past{
-                    one{"{0} эрне кун каялла"}
+                    one{"{0} эр каялла"}
                     other{"{0} эр каялла"}
-                    zero{"{0} эрне кун каялла"}
+                    zero{"{0} эр каялла"}
                 }
             }
         }
@@ -6410,14 +2583,14 @@ cv{
             }
             relativeTime{
                 future{
-                    one{"{0} эрне кунтан"}
+                    one{"{0} эр-тан"}
                     other{"{0} эр-тан"}
-                    zero{"{0} эрне кунтан"}
+                    zero{"{0} эр-тан"}
                 }
                 past{
-                    one{"{0} эрне кун каялла"}
+                    one{"{0} эр каялла"}
                     other{"{0} эр каялла"}
-                    zero{"{0} эрне кун каялла"}
+                    zero{"{0} эр каялла"}
                 }
             }
         }
@@ -6441,21 +2614,6 @@ cv{
         }
         hour-narrow{
             dn{"сех"}
-            relative{
-                "0"{"ку сех."}
-            }
-            relativeTime{
-                future{
-                    one{"{0} сехетрен"}
-                    other{"{0} сехетрен"}
-                    zero{"{0} сехетрен"}
-                }
-                past{
-                    one{"{0} сехет каялла"}
-                    other{"{0} сех. каялла"}
-                    zero{"{0} сехет каялла"}
-                }
-            }
         }
         hour-short{
             dn{"сех."}
@@ -6463,11 +2621,6 @@ cv{
                 "0"{"ку сех."}
             }
             relativeTime{
-                future{
-                    one{"{0} сехетрен"}
-                    other{"{0} сехетрен"}
-                    zero{"{0} сехетрен"}
-                }
                 past{
                     one{"{0} сехет каялла"}
                     other{"{0} сех. каялла"}
@@ -6495,21 +2648,6 @@ cv{
         }
         minute-narrow{
             dn{"мин"}
-            relative{
-                "0"{"ку мин."}
-            }
-            relativeTime{
-                future{
-                    one{"{0} минутран"}
-                    other{"{0} минутран"}
-                    zero{"{0} минутран"}
-                }
-                past{
-                    one{"{0} минут каялла"}
-                    other{"{0} мин. каялла"}
-                    zero{"{0} минут каялла"}
-                }
-            }
         }
         minute-short{
             dn{"мин."}
@@ -6517,11 +2655,6 @@ cv{
                 "0"{"ку мин."}
             }
             relativeTime{
-                future{
-                    one{"{0} минутран"}
-                    other{"{0} минутран"}
-                    zero{"{0} минутран"}
-                }
                 past{
                     one{"{0} минут каялла"}
                     other{"{0} мин. каялла"}
@@ -6549,21 +2682,16 @@ cv{
             }
         }
         mon-narrow{
-            relative{
-                "-1"{"иртнӗ тн"}
-                "0"{"ку тн"}
-                "1"{"ҫитес тн"}
-            }
             relativeTime{
                 future{
-                    one{"{0} тунти кунтан"}
+                    one{"{0} тн-тан"}
                     other{"{0} тн-тан"}
-                    zero{"{0} тунти кунтан"}
+                    zero{"{0} тн-тан"}
                 }
                 past{
-                    one{"{0} тунти кун каялла"}
+                    one{"{0} тн каялла"}
                     other{"{0} тн каялла"}
-                    zero{"{0} тунти кун каялла"}
+                    zero{"{0} тн каялла"}
                 }
             }
         }
@@ -6575,14 +2703,14 @@ cv{
             }
             relativeTime{
                 future{
-                    one{"{0} тунти кунтан"}
+                    one{"{0} тн-тан"}
                     other{"{0} тн-тан"}
-                    zero{"{0} тунти кунтан"}
+                    zero{"{0} тн-тан"}
                 }
                 past{
-                    one{"{0} тунти кун каялла"}
+                    one{"{0} тн каялла"}
                     other{"{0} тн каялла"}
-                    zero{"{0} тунти кун каялла"}
+                    zero{"{0} тн каялла"}
                 }
             }
         }
@@ -6607,27 +2735,14 @@ cv{
             }
         }
         month-narrow{
-            dn{"уйӑх"}
-            relativeTime{
-                future{
-                    one{"{0} уйӑхран"}
-                    other{"{0} уйӑхран"}
-                    zero{"{0} уйӑхран"}
-                }
-                past{
-                    one{"{0} уйӑх каялла"}
-                    other{"{0} уй. каялла"}
-                    zero{"{0} уйӑх каялла"}
-                }
+            relative{
+                "-1"{"иртнӗ уй."}
+                "0"{"ку уй."}
+                "1"{"ҫитес уй."}
             }
         }
         month-short{
             relativeTime{
-                future{
-                    one{"{0} уйӑхран"}
-                    other{"{0} уйӑхран"}
-                    zero{"{0} уйӑхран"}
-                }
                 past{
                     one{"{0} уйӑх каялла"}
                     other{"{0} уй. каялла"}
@@ -6655,26 +2770,6 @@ cv{
                 }
             }
         }
-        quarter-narrow{
-            dn{"чӗр."}
-            relative{
-                "-1"{"иртнӗ чӗр."}
-                "0"{"ку чӗр."}
-                "1"{"ҫитес чӗр."}
-            }
-            relativeTime{
-                future{
-                    one{"{0} чӗрӗкрен"}
-                    other{"{0} чӗрӗкрен"}
-                    zero{"{0} чӗрӗкрен"}
-                }
-                past{
-                    one{"{0} чӗрӗк каялла"}
-                    other{"{0} чӗр. каялла"}
-                    zero{"{0} чӗрӗк каялла"}
-                }
-            }
-        }
         quarter-short{
             dn{"чӗр."}
             relative{
@@ -6683,11 +2778,6 @@ cv{
                 "1"{"ҫитес чӗр."}
             }
             relativeTime{
-                future{
-                    one{"{0} чӗрӗкрен"}
-                    other{"{0} чӗрӗкрен"}
-                    zero{"{0} чӗрӗкрен"}
-                }
                 past{
                     one{"{0} чӗрӗк каялла"}
                     other{"{0} чӗр. каялла"}
@@ -6715,21 +2805,16 @@ cv{
             }
         }
         sat-narrow{
-            relative{
-                "-1"{"иртнӗ шм"}
-                "0"{"ку шм"}
-                "1"{"ҫитес шм"}
-            }
             relativeTime{
                 future{
-                    one{"{0} шӑмат кунтан"}
+                    one{"{0} шм-тан"}
                     other{"{0} шм-тан"}
-                    zero{"{0} шӑмат кунтан"}
+                    zero{"{0} шм-тан"}
                 }
                 past{
-                    one{"{0} шӑмат кун каялла"}
+                    one{"{0} шм каялла"}
                     other{"{0} шм каялла"}
-                    zero{"{0} шӑмат кун каялла"}
+                    zero{"{0} шм каялла"}
                 }
             }
         }
@@ -6741,14 +2826,14 @@ cv{
             }
             relativeTime{
                 future{
-                    one{"{0} шӑмат кунтан"}
+                    one{"{0} шм-тан"}
                     other{"{0} шм-тан"}
-                    zero{"{0} шӑмат кунтан"}
+                    zero{"{0} шм-тан"}
                 }
                 past{
-                    one{"{0} шӑмат кун каялла"}
+                    one{"{0} шм-тан"}
                     other{"{0} шм каялла"}
-                    zero{"{0} шӑмат кун каялла"}
+                    zero{"{0} шм-тан"}
                 }
             }
         }
@@ -6772,37 +2857,26 @@ cv{
         }
         second-narrow{
             dn{"ҫ"}
-            relative{
-                "0"{"халь"}
-            }
             relativeTime{
                 future{
-                    one{"{0} ҫеккунтран"}
+                    one{"{0} ҫ-ран"}
                     other{"{0} ҫ-ран"}
-                    zero{"{0} ҫеккунтран"}
+                    zero{"{0} ҫ-ран"}
                 }
                 past{
-                    one{"{0} ҫеккунт каялла"}
+                    one{"{0} ҫ каялла"}
                     other{"{0} ҫ каялла"}
-                    zero{"{0} ҫеккунт каялла"}
+                    zero{"{0} ҫ каялла"}
                 }
             }
         }
         second-short{
             dn{"ҫек."}
-            relative{
-                "0"{"халь"}
-            }
             relativeTime{
-                future{
-                    one{"{0} ҫеккунтран"}
-                    other{"{0} ҫеккунтран"}
-                    zero{"{0} ҫеккунтран"}
-                }
                 past{
-                    one{"{0} ҫеккунт каялла"}
+                    one{"{0} ҫек. каялла"}
                     other{"{0} ҫек. каялла"}
-                    zero{"{0} ҫеккунт каялла"}
+                    zero{"{0} ҫек. каялла"}
                 }
             }
         }
@@ -6826,21 +2900,16 @@ cv{
             }
         }
         sun-narrow{
-            relative{
-                "-1"{"иртнӗ вр"}
-                "0"{"ку вр"}
-                "1"{"ҫитес вр"}
-            }
             relativeTime{
                 future{
-                    one{"{0} вырсарни кунтан"}
+                    one{"{0} вр-тан"}
                     other{"{0} вр-тан"}
-                    zero{"{0} вырсарни кунтан"}
+                    zero{"{0} вр-тан"}
                 }
                 past{
-                    one{"{0} вырсарни кун каялла"}
+                    one{"{0} вр каялла"}
                     other{"{0} вр каялла"}
-                    zero{"{0} вырсарни кун каялла"}
+                    zero{"{0} вр каялла"}
                 }
             }
         }
@@ -6852,14 +2921,14 @@ cv{
             }
             relativeTime{
                 future{
-                    one{"{0} вырсарни кунтан"}
+                    one{"{0} вр-тан"}
                     other{"{0} вр-тан"}
-                    zero{"{0} вырсарни кунтан"}
+                    zero{"{0} вр-тан"}
                 }
                 past{
-                    one{"{0} вырсарни кун каялла"}
+                    one{"{0} вр каялла"}
                     other{"{0} вр каялла"}
-                    zero{"{0} вырсарни кун каялла"}
+                    zero{"{0} вр каялла"}
                 }
             }
         }
@@ -6883,21 +2952,16 @@ cv{
             }
         }
         thu-narrow{
-            relative{
-                "-1"{"иртнӗ кҫ"}
-                "0"{"ку кҫ"}
-                "1"{"ҫитес кҫ"}
-            }
             relativeTime{
                 future{
-                    one{"{0} кӗҫнерни кунтан"}
+                    one{"{0} кҫ-тан"}
                     other{"{0} кҫ-тан"}
-                    zero{"{0} кӗҫнерни кунтан"}
+                    zero{"{0} кҫ-тан"}
                 }
                 past{
-                    one{"{0} кӗҫнерни кун каялла"}
+                    one{"{0} кҫ каялла"}
                     other{"{0} кҫ каялла"}
-                    zero{"{0} кӗҫнерни кун каялла"}
+                    zero{"{0} кҫ каялла"}
                 }
             }
         }
@@ -6909,14 +2973,14 @@ cv{
             }
             relativeTime{
                 future{
-                    one{"{0} кӗҫнерни кунтан"}
+                    one{"{0} кҫ-тан"}
                     other{"{0} кҫ-тан"}
-                    zero{"{0} кӗҫнерни кунтан"}
+                    zero{"{0} кҫ-тан"}
                 }
                 past{
-                    one{"{0} кӗҫнерни кун каялла"}
+                    one{"{0} кҫ каялла"}
                     other{"{0} кҫ каялла"}
-                    zero{"{0} кӗҫнерни кун каялла"}
+                    zero{"{0} кҫ каялла"}
                 }
             }
         }
@@ -6940,21 +3004,16 @@ cv{
             }
         }
         tue-narrow{
-            relative{
-                "-1"{"иртнӗ ыт"}
-                "0"{"ку ыт"}
-                "1"{"ҫитес ыт"}
-            }
             relativeTime{
                 future{
-                    one{"{0} ытлари кунтан"}
+                    one{"{0} ыт-тан"}
                     other{"{0} ыт-тан"}
-                    zero{"{0} ытлари кунтан"}
+                    zero{"{0} ыт-тан"}
                 }
                 past{
-                    one{"{0} ытлари кун каялла"}
+                    one{"{0} ыт каялла"}
                     other{"{0} ыт каялла"}
-                    zero{"{0} ытлари кун каялла"}
+                    zero{"{0} ыт каялла"}
                 }
             }
         }
@@ -6966,14 +3025,14 @@ cv{
             }
             relativeTime{
                 future{
-                    one{"{0} ытлари кунтан"}
+                    one{"{0} ыт-тан"}
                     other{"{0} ыт-тан"}
-                    zero{"{0} ытлари кунтан"}
+                    zero{"{0} ыт-тан"}
                 }
                 past{
-                    one{"{0} ытлари кун каялла"}
+                    one{"{0} ыт каялла"}
                     other{"{0} ыт каялла"}
-                    zero{"{0} ытлари кун каялла"}
+                    zero{"{0} ыт каялла"}
                 }
             }
         }
@@ -6999,14 +3058,14 @@ cv{
         wed-narrow{
             relativeTime{
                 future{
-                    one{"{0} юн кунтан"}
+                    one{"{0} юн-тан"}
                     other{"{0} юн-тан"}
-                    zero{"{0} юн кунтан"}
+                    zero{"{0} юн-тан"}
                 }
                 past{
-                    one{"{0} юн кун каялла"}
+                    one{"{0} юн каялла"}
                     other{"{0} юн каялла"}
-                    zero{"{0} юн кун каялла"}
+                    zero{"{0} юн каялла"}
                 }
             }
         }
@@ -7018,14 +3077,14 @@ cv{
             }
             relativeTime{
                 future{
-                    one{"{0} юн кунтан"}
+                    one{"{0} юн-тан"}
                     other{"{0} юн-тан"}
-                    zero{"{0} юн кунтан"}
+                    zero{"{0} юн-тан"}
                 }
                 past{
-                    one{"{0} юн кун каялла"}
+                    one{"{0} юн каялла"}
                     other{"{0} юн каялла"}
-                    zero{"{0} юн кун каялла"}
+                    zero{"{0} юн каялла"}
                 }
             }
         }
@@ -7051,23 +3110,11 @@ cv{
             }
         }
         week-narrow{
-            dn{"эрне"}
-            relative{
-                "-1"{"иртнӗ эрн."}
-                "0"{"ку эрн."}
-                "1"{"ҫитес эрн."}
-            }
-            relativePeriod{"{0} эрнинче"}
             relativeTime{
-                future{
-                    one{"{0} эрнерен"}
-                    other{"{0} эрнерен"}
-                    zero{"{0} эрнерен"}
-                }
                 past{
-                    one{"{0} эрне каялла"}
+                    one{"{0} эрн. каялла"}
                     other{"{0} эрн. каялла"}
-                    zero{"{0} эрне каялла"}
+                    zero{"{0} эрн. каялла"}
                 }
             }
         }
@@ -7077,13 +3124,7 @@ cv{
                 "0"{"ку эрн."}
                 "1"{"ҫитес эрн."}
             }
-            relativePeriod{"{0} эрнинче"}
             relativeTime{
-                future{
-                    one{"{0} эрнерен"}
-                    other{"{0} эрнерен"}
-                    zero{"{0} эрнерен"}
-                }
                 past{
                     one{"{0} эрне каялла"}
                     other{"{0} эрн. каялла"}
@@ -7094,11 +3135,11 @@ cv{
         weekOfMonth{
             dn{"уйӑхӑн эрни"}
         }
+        weekOfMonth-narrow{
+            dn{"уй. эрни"}
+        }
         weekday{
             dn{"эрнен кунӗ"}
-        }
-        weekday-narrow{
-            dn{"эрн. кунӗ"}
         }
         weekday-short{
             dn{"эрн. кунӗ"}
@@ -7108,9 +3149,6 @@ cv{
         }
         weekdayOfMonth-narrow{
             dn{"уй. кунӗ"}
-        }
-        weekdayOfMonth-short{
-            dn{"уйӑхӑн кунӗ"}
         }
         year{
             dn{"ҫул"}
@@ -7132,50 +3170,8 @@ cv{
                 }
             }
         }
-        year-narrow{
-            dn{"ҫул"}
-            relative{
-                "-1"{"пӗлтӗр"}
-                "0"{"кӑҫал"}
-                "1"{"ҫитес ҫулта"}
-            }
-            relativeTime{
-                future{
-                    one{"{0} ҫултан"}
-                    other{"{0} ҫултан"}
-                    zero{"{0} ҫултан"}
-                }
-                past{
-                    one{"{0} ҫул каялла"}
-                    other{"{0} ҫул каялла"}
-                    zero{"{0} ҫул каялла"}
-                }
-            }
-        }
-        year-short{
-            relative{
-                "-1"{"пӗлтӗр"}
-                "0"{"кӑҫал"}
-                "1"{"ҫитес ҫулта"}
-            }
-            relativeTime{
-                future{
-                    one{"{0} ҫултан"}
-                    other{"{0} ҫултан"}
-                    zero{"{0} ҫултан"}
-                }
-                past{
-                    one{"{0} ҫул каялла"}
-                    other{"{0} ҫул каялла"}
-                    zero{"{0} ҫул каялла"}
-                }
-            }
-        }
         zone{
             dn{"вӑхӑт тӑрӑхӗ"}
-        }
-        zone-narrow{
-            dn{"вӑх. тӑрӑхӗ"}
         }
         zone-short{
             dn{"вӑх. тӑрӑхӗ"}

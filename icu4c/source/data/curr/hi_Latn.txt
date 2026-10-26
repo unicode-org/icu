@@ -58,10 +58,6 @@ hi_Latn{
             one{"Sao Tome & Principe dobra"}
             other{"Sao Tome & Principe dobras"}
         }
-        VES{
-            one{"Venezuelan bolivar"}
-            other{"Venezuelan bolivars"}
-        }
         XXX{
             one{"currency ki unknown unit"}
             other{"(unknown currency)"}

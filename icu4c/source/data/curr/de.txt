@@ -267,10 +267,6 @@ de{
             "CNH",
             "Renminbi-Yuan (Offshore)",
         }
-        CNX{
-            "CNX",
-            "Dollar der Chinesischen Volksbank",
-        }
         CNY{
             "CN¥",
             "Renminbi Yuan",
@@ -1723,10 +1719,6 @@ de{
             one{"Malediven-Rupie (alt)"}
             other{"Malediven-Rupien (alt)"}
         }
-        MVR{
-            one{"Malediven-Rufiyaa"}
-            other{"Malediven-Rufiyaa"}
-        }
         MXN{
             one{"Mexikanischer Peso"}
             other{"Mexikanische Pesos"}
@@ -2078,10 +2070,6 @@ de{
         ZRN{
             one{"Zaire-Neuer Zaïre (1993–1998)"}
             other{"Zaire-Neue Zaïre (1993–1998)"}
-        }
-        ZWG{
-            one{"Simbabwe-Gold"}
-            other{"Simbabwe-Gold"}
         }
     }
 }

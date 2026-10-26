@@ -63,12 +63,6 @@ en{
         "Etc:Unknown"{
             ec{"Unknown Location"}
         }
-        "Europe:Dublin"{
-            ld{"Irish Standard Time"}
-        }
-        "Europe:London"{
-            ld{"British Summer Time"}
-        }
         "Indian:Chagos"{
             ec{"Chagos Archipelago"}
         }
@@ -142,11 +136,6 @@ en{
             sg{"AKT"}
             ss{"AKST"}
         }
-        "meta:Almaty"{
-            ld{"Almaty Summer Time"}
-            lg{"Almaty Time"}
-            ls{"Almaty Standard Time"}
-        }
         "meta:Amazon"{
             ld{"Amazon Summer Time"}
             lg{"Amazon Time"}
@@ -190,19 +179,9 @@ en{
             ls{"Anadyr Standard Time"}
         }
         "meta:Apia"{
-            ld{"Samoa Daylight Time"}
-            lg{"Samoa Time"}
-            ls{"Samoa Standard Time"}
-        }
-        "meta:Aqtau"{
-            ld{"Aqtau Summer Time"}
-            lg{"Aqtau Time"}
-            ls{"Aqtau Standard Time"}
-        }
-        "meta:Aqtobe"{
-            ld{"Aqtobe Summer Time"}
-            lg{"Aqtobe Time"}
-            ls{"Aqtobe Standard Time"}
+            ld{"West Samoa Daylight Time"}
+            lg{"West Samoa Time"}
+            ls{"West Samoa Standard Time"}
         }
         "meta:Arabian"{
             ld{"Arabian Daylight Time"}
@@ -277,6 +256,10 @@ en{
             ld{"Brasilia Summer Time"}
             lg{"Brasilia Time"}
             ls{"Brasilia Standard Time"}
+        }
+        "meta:British"{
+            ld{"British Summer Time"}
+            lg{"British Time"}
         }
         "meta:Brunei"{
             ls{"Brunei Time"}
@@ -377,7 +360,7 @@ en{
             ls{"French Guiana Time"}
         }
         "meta:French_Southern"{
-            ls{"French Southern & Antarctic Time"}
+            ls{"French Southern Territories Time"}
         }
         "meta:GMT"{
             ls{"Greenwich Mean Time"}
@@ -412,9 +395,6 @@ en{
             lg{"West Greenland Time"}
             ls{"West Greenland Standard Time"}
         }
-        "meta:Guam"{
-            ls{"Guam Standard Time"}
-        }
         "meta:Gulf"{
             ls{"Gulf Standard Time"}
         }
@@ -422,7 +402,7 @@ en{
             ls{"Guyana Time"}
         }
         "meta:Hawaii"{
-            ls{"Hawaii-Aleutian Standard Time"}
+            ls{"Hawaii Time"}
             ss{"HST"}
         }
         "meta:Hawaii_Aleutian"{
@@ -465,6 +445,10 @@ en{
             ld{"Iran Daylight Time"}
             lg{"Iran Time"}
             ls{"Iran Standard Time"}
+        }
+        "meta:Irish"{
+            ld{"Irish Standard Time"}
+            lg{"Irish Time"}
         }
         "meta:Irkutsk"{
             ld{"Irkutsk Summer Time"}
@@ -511,9 +495,6 @@ en{
         "meta:Kyrgystan"{
             ls{"Kyrgyzstan Time"}
         }
-        "meta:Lanka"{
-            ls{"Lanka Time"}
-        }
         "meta:Line_Islands"{
             ls{"Line Islands Time"}
         }
@@ -521,11 +502,6 @@ en{
             ld{"Lord Howe Daylight Time"}
             lg{"Lord Howe Time"}
             ls{"Lord Howe Standard Time"}
-        }
-        "meta:Macau"{
-            ld{"Macao Summer Time"}
-            lg{"Macao Time"}
-            ls{"Macao Standard Time"}
         }
         "meta:Magadan"{
             ld{"Magadan Summer Time"}
@@ -604,9 +580,6 @@ en{
             lg{"Fernando de Noronha Time"}
             ls{"Fernando de Noronha Standard Time"}
         }
-        "meta:North_Mariana"{
-            ls{"Northern Mariana Islands Time"}
-        }
         "meta:Novosibirsk"{
             ld{"Novosibirsk Summer Time"}
             lg{"Novosibirsk Time"}
@@ -660,11 +633,6 @@ en{
         "meta:Pyongyang"{
             ls{"North Korea Time"}
         }
-        "meta:Qyzylorda"{
-            ld{"Kyzylorda Summer Time"}
-            lg{"Kyzylorda Time"}
-            ls{"Kyzylorda Standard Time"}
-        }
         "meta:Reunion"{
             ls{"Réunion Time"}
         }
@@ -682,9 +650,7 @@ en{
             ls{"Samara Standard Time"}
         }
         "meta:Samoa"{
-            ld{"American Samoa Daylight Time"}
-            lg{"American Samoa Time"}
-            ls{"American Samoa Standard Time"}
+            ls{"American Samoa Time"}
         }
         "meta:Seychelles"{
             ls{"Seychelles Time"}
@@ -743,6 +709,9 @@ en{
             ld{"Uruguay Summer Time"}
             lg{"Uruguay Time"}
             ls{"Uruguay Standard Time"}
+        }
+        "meta:Urumqi"{
+            ls{"Ürümqi Time"}
         }
         "meta:Uzbekistan"{
             ld{"Uzbekistan Summer Time"}

@@ -495,6 +495,9 @@ sq{
         "Asia:Hong_Kong"{
             ec{"Hong-Kong"}
         }
+        "Asia:Hovd"{
+            ec{"Kovd"}
+        }
         "Asia:Jakarta"{
             ec{"Xhakartë"}
         }
@@ -597,6 +600,9 @@ sq{
         "Asia:Ulaanbaatar"{
             ec{"Ulanbatar"}
         }
+        "Asia:Urumqi"{
+            ec{"Urumqi"}
+        }
         "Asia:Vientiane"{
             ec{"Vjentianë"}
         }
@@ -696,9 +702,6 @@ sq{
         "Europe:Copenhagen"{
             ec{"Kopenhagen"}
         }
-        "Europe:Dublin"{
-            ld{"Ora strandarde e Irlandës"}
-        }
         "Europe:Gibraltar"{
             ec{"Gjibraltar"}
         }
@@ -725,7 +728,6 @@ sq{
         }
         "Europe:London"{
             ec{"Londër"}
-            ld{"Ora verore britanike"}
         }
         "Europe:Luxembourg"{
             ec{"Luksemburg"}
@@ -899,11 +901,6 @@ sq{
             lg{"Ora e Alaskës"}
             ls{"Ora standarde e Alaskës"}
         }
-        "meta:Almaty"{
-            ld{"Ora verore e Almatit"}
-            lg{"Ora e Almatit"}
-            ls{"Ora standarde e Almatit"}
-        }
         "meta:Amazon"{
             ld{"Ora verore e Amazonës"}
             lg{"Ora e Amazonës"}
@@ -935,19 +932,9 @@ sq{
             ls{"Ora standarde e Anadirit"}
         }
         "meta:Apia"{
-            ld{"Ora verore e Apias"}
-            lg{"Ora e Apias"}
-            ls{"Ora standarde e Apias"}
-        }
-        "meta:Aqtau"{
-            ld{"Ora verore e Aktaut"}
-            lg{"Ora e Aktaut"}
-            ls{"Ora standarde e Aktaut"}
-        }
-        "meta:Aqtobe"{
-            ld{"Ora verore e Aktobit"}
-            lg{"Ora e Aktobit"}
-            ls{"Ora standarde e Aktobit"}
+            ld{"Ora verore e Samoas Perëndimore"}
+            lg{"Ora e Samoas Perëndimore"}
+            ls{"Ora standarde e Samoas Perëndimore"}
         }
         "meta:Arabian"{
             ld{"Ora verore arabe"}
@@ -1019,6 +1006,10 @@ sq{
             ld{"Ora verore e Brazilisë"}
             lg{"Ora e Brazilisë"}
             ls{"Ora standarde e Brazilisë"}
+        }
+        "meta:British"{
+            ld{"Ora verore e Britanisë"}
+            lg{"Ora e Britanisë"}
         }
         "meta:Brunei"{
             ls{"Ora e Brunei-Durasalamit"}
@@ -1138,18 +1129,20 @@ sq{
         "meta:Gilbert_Islands"{
             ls{"Ora e Ishujve Gilbert"}
         }
+        "meta:Greenland"{
+            ld{"Ora verore e Groenlandës"}
+            lg{"Ora e Groenlandës"}
+            ls{"Ora standarde e Groenlandës"}
+        }
         "meta:Greenland_Eastern"{
-            ld{"Ora verore e Grenlandës Lindore"}
-            lg{"Ora e Grenlandës Lindore"}
-            ls{"Ora standarde e Grenlandës Lindore"}
+            ld{"Ora verore e Groenlandës Lindore"}
+            lg{"Ora e Groenlandës Lindore"}
+            ls{"Ora standarde e Groenlandës Lindore"}
         }
         "meta:Greenland_Western"{
-            ld{"Ora verore e Grënlandës Perëndimore"}
-            lg{"Ora e Grënlandës Perëndimore"}
-            ls{"Ora standarde e Grënlandës Perëndimore"}
-        }
-        "meta:Guam"{
-            ls{"Ora e Guamit"}
+            ld{"Ora verore e Groenlandës Perëndimore"}
+            lg{"Ora e Groenlandës Perëndimore"}
+            ls{"Ora standarde e Groenlandës Perëndimore"}
         }
         "meta:Gulf"{
             ls{"Ora e Gjirit"}
@@ -1163,7 +1156,7 @@ sq{
         "meta:Hawaii_Aleutian"{
             ld{"Ora verore e Ishujve Hauai-Aleutian"}
             lg{"Ora e Ishujve Hauai-Aleutian"}
-            ls{"Ora standarde e Ishujve Hauai-Aleutian"}
+            ls{"Ora standarde e Hauai-Aleutian"}
         }
         "meta:Hong_Kong"{
             ld{"Ora verore e Hong-Kongut"}
@@ -1197,6 +1190,10 @@ sq{
             ld{"Ora verore e Iranit"}
             lg{"Ora e Iranit"}
             ls{"Ora standarde e Iranit"}
+        }
+        "meta:Irish"{
+            ld{"Ora strandarde e Irlandës"}
+            lg{"Ora e Irlandës"}
         }
         "meta:Irkutsk"{
             ld{"Ora verore e Irkutskut"}
@@ -1243,9 +1240,6 @@ sq{
         "meta:Kyrgystan"{
             ls{"Ora e Kirgizisë"}
         }
-        "meta:Lanka"{
-            ls{"Ora e Lankasë"}
-        }
         "meta:Line_Islands"{
             ls{"Ora e Ishujve Sporadikë Ekuatorialë"}
         }
@@ -1253,11 +1247,6 @@ sq{
             ld{"Ora verore e Lord-Houit"}
             lg{"Ora e Lord-Houit"}
             ls{"Ora standarde e Lord-Houit"}
-        }
-        "meta:Macau"{
-            ld{"Ora verore e Makaos"}
-            lg{"Ora e Makaos"}
-            ls{"Ora standarde e Makaos"}
         }
         "meta:Magadan"{
             ld{"Ora verore e Magadanit"}
@@ -1336,9 +1325,6 @@ sq{
             lg{"Ora e Fernando-de-Noronjës"}
             ls{"Ora standarde e Fernando-de-Noronjës"}
         }
-        "meta:North_Mariana"{
-            ls{"Ora e Ishujve të Marianës së Veriut"}
-        }
         "meta:Novosibirsk"{
             ld{"Ora verore e Novosibirskut"}
             lg{"Ora e Novosibirskut"}
@@ -1392,11 +1378,6 @@ sq{
         "meta:Pyongyang"{
             ls{"Ora e Penianit"}
         }
-        "meta:Qyzylorda"{
-            ld{"Ora verore e Kizilordit"}
-            lg{"Ora e Kizilordit"}
-            ls{"Ora standarde e Kizilordit"}
-        }
         "meta:Reunion"{
             ls{"Ora e Reunionit"}
         }
@@ -1414,8 +1395,6 @@ sq{
             ls{"Ora standarde e Samarës"}
         }
         "meta:Samoa"{
-            ld{"Ora verore e Samoas"}
-            lg{"Ora e Samoas"}
             ls{"Ora standarde e Samoas"}
         }
         "meta:Seychelles"{
@@ -1458,6 +1437,11 @@ sq{
         "meta:Truk"{
             ls{"Ora e Çukut"}
         }
+        "meta:Turkey"{
+            ld{"Ora verore e Turqisë"}
+            lg{"Ora e Turqisë"}
+            ls{"Ora standarde e Turqisë"}
+        }
         "meta:Turkmenistan"{
             ld{"Ora verore e Turkmenistanit"}
             lg{"Ora e Turkmenistanit"}
@@ -1470,6 +1454,9 @@ sq{
             ld{"Ora verore e Uruguait"}
             lg{"Ora e Uruguait"}
             ls{"Ora standarde e Uruguait"}
+        }
+        "meta:Urumqi"{
+            ls{"Ora e Urumqisë"}
         }
         "meta:Uzbekistan"{
             ld{"Ora verore e Uzbekistanit"}

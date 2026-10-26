@@ -11,19 +11,35 @@ ko{
         colCaseLevel{"대/소문자 구분 정렬"}
         colNormalization{"표준 정렬"}
         colNumeric{"숫자 정렬"}
+        colReorder{"스크립트/블록 순서 변경"}
         colStrength{"정렬 강도"}
         collation{"정렬 순서"}
         currency{"통화"}
+        d0{"변환 대상"}
+        dx{"사전 단어 분리 제외"}
         em{"이모티콘 표시"}
+        fw{"일주일의 첫날"}
+        h0{"혼합"}
         hc{"시간표시법(12시, 24시)"}
+        i0{"입력기"}
+        k0{"키보드"}
+        kv{"최상위 무시 항목"}
         lb{"줄바꿈 스타일"}
         lw{"단어의 줄바꿈"}
+        m0{"변환 규칙"}
         ms{"계량법"}
+        mu{"측정 단위"}
         numbers{"숫자"}
+        rg{"추가 데이터용 지역"}
+        s0{"변환 원본"}
+        sd{"지역 하위 구분"}
         ss{"약어 뒤 문장 구분"}
+        t{"변환"}
+        t0{"기계 번역"}
         timezone{"시간대"}
         va{"방언"}
-        x{"공개 여부"}
+        x{"사용자 정의"}
+        x0{"사용자 정의 변환"}
     }
     Languages{
         aa{"아파르어"}
@@ -436,6 +452,7 @@ ko{
         pi{"팔리어"}
         pis{"피진어"}
         pl{"폴란드어"}
+        pms{"피에몬테어"}
         pnt{"폰틱어"}
         pon{"폼페이어"}
         pqm{"말리시트 파사마쿼디어"}
@@ -820,23 +837,27 @@ ko{
             islamic{"히즈라력"}
             islamic-civil{"히즈라 상용력"}
             islamic-umalqura{"히즈라력(움 알 쿠라)"}
-            iso8601{"ISO-8601 달력"}
+            iso8601{"양력(ISO-8601)"}
             japanese{"일본력"}
             persian{"페르시안력"}
             roc{"대만력"}
         }
         calendar%core{
             buddhist{"불교"}
-            chinese{"음"}
+            chinese{"음력"}
             coptic{"콥트"}
             dangi{"단기"}
             ethiopic{"에티오피아"}
             ethiopic-amete-alem{"에티오피아 아메테 알렘"}
-            gregorian{"양"}
+            gregorian{"양력"}
             hebrew{"히브리"}
+            indian{"인도 국정력"}
             islamic{"히즈라"}
             islamic-civil{"히즈라 상용"}
+            islamic-rgsa{"히즈라력(사우디아라비아 초승달 관측)"}
+            islamic-tbla{"히즈라력(표 계산 방식, 천문학적 기준)"}
             islamic-umalqura{"히즈라(움 알 쿠라)"}
+            iso8601{"양력"}
             japanese{"일본"}
             persian{"페르시안"}
             roc{"대만"}
@@ -862,6 +883,11 @@ ko{
             no{"일반 대/소문자 정렬 순서"}
             upper{"대문자 우선 정렬"}
         }
+        colCaseFirst%core{
+            lower{"소문자"}
+            no{"소문자"}
+            upper{"대문자"}
+        }
         colCaseLevel{
             no{"대/소문자 무시 정렬"}
             yes{"대/소문자 구분 정렬"}
@@ -874,6 +900,13 @@ ko{
             no{"숫자별 정렬"}
             yes{"숫자 정렬"}
         }
+        colReorder%core{
+            currency{"통화"}
+            digit{"숫자"}
+            punct{"구두점"}
+            space{"공백"}
+            symbol{"기호"}
+        }
         colStrength{
             identical{"모두 정렬"}
             primary{"기본 문자만 정렬"}
@@ -881,30 +914,40 @@ ko{
             secondary{"악센트 정렬"}
             tertiary{"악센트/대소문자/전반각 정렬"}
         }
+        colStrength%core{
+            identical{"모두"}
+            primary{"기본 문자만"}
+            quaternary{"기본, 악센트, 대소문자, 변형, 가나"}
+            secondary{"기본, 악센트"}
+            tertiary{"기본, 악센트, 대소문자, 변형"}
+        }
         collation{
             compat{"호환성을 위해 이전 정렬 순서"}
-            dictionary{"사전 정렬순"}
+            dictionary{"사전 정렬 순서"}
             ducet{"기본 유니코드 정렬 순서"}
             eor{"유럽 정렬 규칙"}
-            phonebook{"전화번호부순"}
-            phonetic{"소리나는 대로 정렬 순서"}
-            pinyin{"병음순"}
+            phonebook{"전화번호부 정렬 순서"}
+            phonetic{"발음 정렬 순서"}
+            pinyin{"병음 정렬 순서"}
             search{"범용 검색"}
             searchjl{"한글 자음으로 검색"}
             standard{"표준 정렬 순서"}
-            stroke{"자획순"}
-            traditional{"전통 역법"}
-            unihan{"부수순"}
-            zhuyin{"주음순"}
+            stroke{"자획 정렬 순서"}
+            traditional{"전통 역법 정렬 순서"}
+            unihan{"부수 정렬 순서"}
+            zhuyin{"주음 정렬 순서"}
         }
         collation%core{
             compat{"호환성"}
             dictionary{"사전"}
             ducet{"기본 유니코드"}
+            emoji{"이모티콘"}
+            eor{"유럽 규칙"}
             phonebook{"전화번호부"}
-            phonetic{"소리나는 대로"}
+            phonetic{"발음"}
             pinyin{"병음"}
             search{"검색"}
+            searchjl{"한글 초성"}
             standard{"표준"}
             stroke{"자획"}
             traditional{"전통"}
@@ -922,16 +965,26 @@ ko{
             text{"텍스트"}
         }
         hc{
-            h11{"12시간제(0–11)"}
-            h12{"12시간제(1–12)"}
-            h23{"24시간제(0–23)"}
-            h24{"24시간제(1–24)"}
+            c12{"12시간제"}
+            c24{"24시간제"}
+            h11{"12시간제(0~11)"}
+            h12{"12시간제(1~12)"}
+            h23{"24시간제(0~23)"}
+            h24{"24시간제(1~24)"}
         }
         hc%core{
-            h11{"12(0–11)"}
-            h12{"12(1–12)"}
-            h23{"24(0–23)"}
-            h24{"24(1–24)"}
+            c12{"12"}
+            c24{"24"}
+            h11{"12(0~11)"}
+            h12{"12(1~12)"}
+            h23{"24(0~23)"}
+            h24{"24(1~24)"}
+        }
+        kv%core{
+            currency{"공백, 구두점, 모든 기호"}
+            punct{"공백, 구두점"}
+            space{"공백, 구두점"}
+            symbol{"공백, 구두점, 통화 이외의 기호"}
         }
         lb{
             loose{"줄바꿈 - 넓게"}
@@ -984,13 +1037,13 @@ ko{
             guru{"굴묵키 숫자"}
             hanidec{"중국어 십진 숫자"}
             hans{"중국어 간체 숫자"}
-            hansfin{"중국어 간체 재무 숫자"}
+            hansfin{"중국어 간체 금융 회계용 숫자"}
             hant{"중국어 번체 숫자"}
-            hantfin{"중국어 번체 재무 숫자"}
+            hantfin{"중국어 번체 금융 회계용 숫자"}
             hebr{"히브리 숫자"}
             java{"자바 숫자"}
             jpan{"일본 숫자"}
-            jpanfin{"일본 재무 숫자"}
+            jpanfin{"일본어 금융 회계용 숫자"}
             kali{"카야 리식 숫자"}
             khmr{"크메르 숫자"}
             knda{"칸나다 숫자"}
@@ -1005,7 +1058,7 @@ ko{
             mtei{"메이테이 마옉 숫자"}
             mymr{"미얀마 숫자"}
             mymrshan{"미얀마 샨 숫자"}
-            native{"기본 숫자"}
+            native{"고유 숫자"}
             olck{"올치키 숫자"}
             orya{"오리야 숫자"}
             osma{"오스마냐 숫자"}
@@ -1022,9 +1075,45 @@ ko{
             traditional{"전통적인 숫자"}
             vaii{"바이 숫자"}
         }
+        numbers%core{
+            arabext{"확장형 아라비아-인도식"}
+            armnlow{"아르메니아 소문자"}
+            finance{"재무"}
+            fullwide{"전자"}
+            greklow{"그리스어 소문자"}
+            hanidays{"전통 달력용 한자 날짜 표기"}
+            hanidec{"중국 숫자 한자 기반 십진법 표기 체계"}
+            hansfin{"중국어 간체 금융 회계용"}
+            hantfin{"중국어 번체 금융 회계용"}
+            jpanfin{"일본어 금융 회계용"}
+            jpanyear{"일본 연호 원년 표기"}
+            lanatham{"타이탐 문자(종교용)"}
+            mathbold{"수학용 굵은체"}
+            mathdbl{"수학용 이중 획"}
+            mathmono{"수학용 고정폭"}
+            mathsanb{"수학용 산세리프 굵은체"}
+            mathsans{"수학용 산세리프"}
+            mymrepka{"미얀마 동부 포 카렌어"}
+            mymrpao{"미얀마 파오어"}
+            mymrshan{"미얀마 샨어"}
+            mymrtlng{"미얀마 타이 라잉어"}
+            native{"고유 숫자"}
+            outlined{"윤곽선"}
+            roman{"로마 대문자"}
+            romanlow{"로마 소문자"}
+            segment{"구획형"}
+            tamldec{"현대 타밀어"}
+            traditional{"전통 숫자"}
+        }
         ss%core{
             none{"끔"}
             standard{"켬"}
+        }
+        t0{
+            und{"지정되지 않은 기계 번역"}
+        }
+        va%core{
+            posix{"POSIX 변형"}
         }
     }
     Variants{

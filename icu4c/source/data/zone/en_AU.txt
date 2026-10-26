@@ -55,11 +55,6 @@ en_AU{
             sg{"NZT"}
             ss{"NZST"}
         }
-        "meta:Samoa"{
-            ld{"Samoa Summer Time"}
-            lg{"American Samoa Time"}
-            ls{"American Samoa Standard Time"}
-        }
         "meta:Taipei"{
             ld{"Taipei Summer Time"}
             lg{"Taiwan Time"}

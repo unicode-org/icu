@@ -300,7 +300,7 @@ bs{
         ZZ{"Nepoznata oblast"}
     }
     Countries%chagos{
-        IO{"arhipelag Chagos"}
+        IO{"Arhipelag Chagos"}
     }
     Countries%short{
         GB{"UK"}

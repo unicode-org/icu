@@ -13,10 +13,10 @@
 package com.ibm.icu.dev.tool.layout;
 
 import java.io.PrintStream;
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class ThaiStateTable {
-    static Vector stateTable = null;
+    static ArrayList<ThaiStateTransition[]> stateTable = null;
     static int nextState = 0;
 
     private static final int newState() {
@@ -26,7 +26,7 @@ public class ThaiStateTable {
             stateRow[c] = null;
         }
 
-        stateTable.addElement(stateRow);
+        stateTable.add(stateRow);
 
         return nextState++;
     }
@@ -65,10 +65,10 @@ public class ThaiStateTable {
     }
 
     private static final void fixNextStates() {
-        ThaiStateTransition[] groundState = (ThaiStateTransition[]) stateTable.elementAt(0);
+        ThaiStateTransition[] groundState = stateTable.get(0);
 
         for (int s = 1; s < stateTable.size(); s += 1) {
-            ThaiStateTransition[] state = (ThaiStateTransition[]) stateTable.elementAt(s);
+            ThaiStateTransition[] state = stateTable.get(s);
 
             for (int c = 0; c < ThaiCharacterClasses.cCount; c += 1) {
                 ThaiStateTransition transition = state[c];
@@ -82,7 +82,7 @@ public class ThaiStateTable {
 
     private static final int addState(int prevClass, int prevPrevClass) {
         int state = newState();
-        ThaiStateTransition[] stateRow = (ThaiStateTransition[]) stateTable.elementAt(state);
+        ThaiStateTransition[] stateRow = stateTable.get(state);
 
         for (int c = 0; c < ThaiCharacterClasses.cCount; c += 1) {
             char pairAction = ThaiCharacterClasses.getPairAction(prevClass, c);
@@ -129,7 +129,7 @@ public class ThaiStateTable {
     }
 
     static {
-        stateTable = new Vector();
+        stateTable = new ArrayList<>();
 
         addState(ThaiCharacterClasses.NON, ThaiCharacterClasses.NON);
 
@@ -137,7 +137,7 @@ public class ThaiStateTable {
     }
 
     public static ThaiStateTransition getTransition(int state, int currClass) {
-        ThaiStateTransition[] row = (ThaiStateTransition[]) stateTable.elementAt(state);
+        ThaiStateTransition[] row = stateTable.get(state);
 
         return row[currClass];
     }
@@ -162,7 +162,7 @@ public class ThaiStateTable {
         output.println(header1);
 
         for (int state = 0; state < stateTable.size(); state += 1) {
-            ThaiStateTransition[] row = (ThaiStateTransition[]) stateTable.elementAt(state);
+            ThaiStateTransition[] row = stateTable.get(state);
 
             output.print("    /*");
 

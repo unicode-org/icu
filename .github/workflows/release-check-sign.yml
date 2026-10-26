@@ -2,10 +2,12 @@ name: Release - Create checksums and GPG sign
 
 on:
   workflow_dispatch:
-    inputs:
+    inputs: &all_inputs
       gitReleaseTag:
         description: 'Release tag to upload to. Must start with "release-"'
         type: string
+  workflow_call:
+    inputs: *all_inputs
 
 env:
   RELEASE_FOLDER: '${{ github.workspace }}/releaseDist'
@@ -16,7 +18,7 @@ permissions:
 jobs:
   sign_and_checksums:
     if: ${{ inputs.gitReleaseTag && startsWith(inputs.gitReleaseTag, 'release-') }}
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     environment: release-env
 
     permissions:
@@ -25,10 +27,12 @@ jobs:
     steps:
 
     - name: Checkout and setup
-      uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        persist-credentials: false
 
     - name: Set up JDK
-      uses: actions/setup-java@f2beeb24e141e01a676f977032f5a29d81c9e27e # v5.1.0
+      uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
       with:
         java-version: '11'
         distribution: 'temurin'
@@ -39,10 +43,11 @@ jobs:
       run: |
         mkdir -p ${RELEASE_FOLDER}
         pushd ${RELEASE_FOLDER}
-        gh release download ${{ inputs.gitReleaseTag }} -p "*.zip" -p "*.tgz" -p "*.jar" --repo=${{ github.repository }}
+        gh release download ${INPUTS_GITRELEASETAG} -p "*.zip" -p "*.tgz" -p "*.jar" --repo=${{ github.repository }}
         popd
       env:
         GH_TOKEN: ${{ github.token }}
+        INPUTS_GITRELEASETAG: ${{ inputs.gitReleaseTag }}
 
     - name: Checksums and sign
       run: |
@@ -59,16 +64,17 @@ jobs:
 
     - name: Upload to release
       run: |
-        gh release upload ${{ inputs.gitReleaseTag }} LICENSE --clobber --repo=${{ github.repository }}
-        gh release upload ${{ inputs.gitReleaseTag }} ${RELEASE_FOLDER}/*.md5         --clobber --repo=${{ github.repository }}
-        gh release upload ${{ inputs.gitReleaseTag }} ${RELEASE_FOLDER}/*.asc         --clobber --repo=${{ github.repository }}
-        gh release upload ${{ inputs.gitReleaseTag }} ${RELEASE_FOLDER}/SHASUM512.txt --clobber --repo=${{ github.repository }}
+        gh release upload ${INPUTS_GITRELEASETAG} LICENSE --clobber --repo=${{ github.repository }}
+        gh release upload ${INPUTS_GITRELEASETAG} ${RELEASE_FOLDER}/*.md5         --clobber --repo=${{ github.repository }}
+        gh release upload ${INPUTS_GITRELEASETAG} ${RELEASE_FOLDER}/*.asc         --clobber --repo=${{ github.repository }}
+        gh release upload ${INPUTS_GITRELEASETAG} ${RELEASE_FOLDER}/SHASUM512.txt --clobber --repo=${{ github.repository }}
       env:
         GH_TOKEN: ${{ github.token }}
+        INPUTS_GITRELEASETAG: ${{ inputs.gitReleaseTag }}
 
   sign_and_checksums_icu4x:
     if: ${{ inputs.gitReleaseTag && startsWith(inputs.gitReleaseTag, 'icu4x/') }}
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     environment: release-env
 
     permissions:
@@ -77,10 +83,12 @@ jobs:
     steps:
 
     - name: Checkout and setup
-      uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        persist-credentials: false
 
     - name: Set up JDK
-      uses: actions/setup-java@f2beeb24e141e01a676f977032f5a29d81c9e27e # v5.1.0
+      uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
       with:
         java-version: '11'
         distribution: 'temurin'
@@ -91,10 +99,11 @@ jobs:
       run: |
         mkdir -p ${RELEASE_FOLDER}
         pushd ${RELEASE_FOLDER}
-        gh release download ${{ inputs.gitReleaseTag }} -p "*.zip" --repo=${{ github.repository }}
+        gh release download ${INPUTS_GITRELEASETAG} -p "*.zip" --repo=${{ github.repository }}
         popd
       env:
         GH_TOKEN: ${{ github.token }}
+        INPUTS_GITRELEASETAG: ${{ inputs.gitReleaseTag }}
 
     - name: Checksums and sign
       run: |
@@ -106,6 +115,7 @@ jobs:
 
     - name: Upload to release
       run: |
-        gh release upload ${{ inputs.gitReleaseTag }} ${RELEASE_FOLDER}/*.asc         --clobber --repo=${{ github.repository }}
+        gh release upload ${INPUTS_GITRELEASETAG} ${RELEASE_FOLDER}/*.asc         --clobber --repo=${{ github.repository }}
       env:
         GH_TOKEN: ${{ github.token }}
+        INPUTS_GITRELEASETAG: ${{ inputs.gitReleaseTag }}

@@ -3,11 +3,131 @@
 // Generated using tools/cldr/cldr-to-icu/
 lij{
     zoneStrings{
+        "America:Costa_Rica"{
+            ec{"Còsta Rica"}
+        }
+        "America:Grenada"{
+            ec{"Granada"}
+        }
+        "America:Guadeloupe"{
+            ec{"Guadaluppa"}
+        }
+        "America:Martinique"{
+            ec{"Martinica"}
+        }
+        "America:Mexico_City"{
+            ec{"Çittæ do Mescico"}
+        }
+        "America:St_Barthelemy"{
+            ec{"San Bertomê"}
+        }
+        "Etc:UTC"{
+            ls{"tempo universale coordinou"}
+        }
+        "Etc:Unknown"{
+            ec{"pòsto desconosciuo"}
+        }
+        "meta:Alaska"{
+            ld{"oa de stæ de l’Alaska"}
+            lg{"oa de l’Alaska"}
+            ls{"oa standard de l’Alaska"}
+        }
+        "meta:Apia"{
+            ld{"oa de stæ de Samoa"}
+            lg{"oa de Samoa"}
+            ls{"oa standard de Samoa"}
+        }
+        "meta:British"{
+            ld{"oa de stæ britannica"}
+            lg{"oa britannica"}
+        }
+        "meta:Brunei"{
+            ls{"oa do Brunei"}
+        }
+        "meta:Cape_Verde"{
+            ld{"oa de stæ de Cao Verde"}
+            lg{"oa de Cao Verde"}
+            ls{"oa standard de Cao Verde"}
+        }
+        "meta:DumontDUrville"{
+            ls{"oa de Dumont d’Urville"}
+        }
+        "meta:East_Timor"{
+            ls{"oa de Timor-Leste"}
+        }
         "meta:GMT"{
             ls{"oa do meridian de Greenwich"}
         }
-        gmtFormat{"UTC{0}"}
-        gmtZeroFormat{"UTC"}
+        "meta:Greenland"{
+            ld{"oa de stæ da Groenlandia"}
+            lg{"oa da Groenlandia"}
+            ls{"oa standard da Groenlandia"}
+        }
+        "meta:Greenland_Eastern"{
+            ld{"oa de stæ da Groenlandia de levante"}
+            lg{"oa da Groenlandia de levante"}
+            ls{"oa standard da Groenlandia de levante"}
+        }
+        "meta:Greenland_Western"{
+            ld{"oa de stæ da Groenlandia de ponente"}
+            lg{"oa da Groenlandia de ponente"}
+            ls{"oa standard da Groenlandia de ponente"}
+        }
+        "meta:Hawaii"{
+            ls{"oa standard de Hawaii"}
+        }
+        "meta:Hawaii_Aleutian"{
+            ld{"oa de stæ de Hawaii-Aleutiñe"}
+            lg{"oa de Hawaii-Aleutiñe"}
+            ls{"oa standard de Hawaii-Aleutiñe"}
+        }
+        "meta:Hovd"{
+            ld{"oa de stæ de Khovd"}
+            lg{"oa de Khovd"}
+            ls{"oa standard de Khovd"}
+        }
+        "meta:Irish"{
+            ld{"oa de stæ d’Irlanda"}
+            lg{"oa d’Irlanda"}
+        }
+        "meta:Japan"{
+            ld{"oa de stæ do Giapon"}
+            lg{"oa do Giapon"}
+            ls{"oa standard do Giapon"}
+        }
+        "meta:Kazakhstan"{
+            ls{"oa do Kazakistan"}
+        }
+        "meta:Mexico_Pacific"{
+            ld{"oa de stæ do Paçifico mescicaña"}
+            lg{"oa do Paçifico mescicaña"}
+            ls{"oa standard do Paçifico mescicaña"}
+        }
+        "meta:Newfoundland"{
+            ld{"oa de stæ de Tæraneuva"}
+            lg{"oa de Tæraneuva"}
+            ls{"oa standard de Tæraneuva"}
+        }
+        "meta:Pierre_Miquelon"{
+            ld{"oa de stæ de San Pê e Miquelon"}
+            lg{"oa de San Pê e Miquelon"}
+            ls{"oa standard de San Pê e Miquelon"}
+        }
+        "meta:Pyongyang"{
+            ls{"oa da Corea do Nòrd"}
+        }
+        "meta:Samoa"{
+            ls{"oa standard de Samoa americañe"}
+        }
+        "meta:Taipei"{
+            ld{"oa de stæ de Taiwan"}
+            lg{"oa de Taiwan"}
+            ls{"oa standard de Taiwan"}
+        }
+        "meta:Yukon"{
+            ls{"oa do Yukon"}
+        }
+        gmtUnknownFormat{"UTC+?"}
         hourFormat{"+HH:mm;−HH:mm"}
         regionFormat{"oa: {0}"}
         regionFormatDaylight{"oa de stæ: {0}"}

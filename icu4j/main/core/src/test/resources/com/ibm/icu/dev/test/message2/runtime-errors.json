@@ -8,20 +8,17 @@
     {
         "src": ".local $h = {|horse| :date} .match $h\n   1 {{The value is one.}}\n  * {{Formatter used as selector.}}",
         "exp": "Formatter used as selector.",
-        "expErrors": [{"type": "bad-selector"}],
-        "ignoreJava": "ICU4J doesn't signal runtime errors?"
+        "expErrors": [{"type": "bad-selector"}]
     },
     {
         "src": ".local $h = {|horse| :number} .match $h\n  1 {{The value is one.}}\n  * {{horse is not a number.}}",
         "exp": "horse is not a number.",
-        "expErrors": [{"type": "bad-selector"}],
-        "ignoreJava": "ICU4J doesn't signal runtime errors?"
+        "expErrors": [{"type": "bad-selector"}]
     },
     {
         "src": ".local $sel = {|horse| :number}\n  .match $sel\n    1 {{The value is one.}}\n   * {{horse is not a number.}}",
         "exp": "horse is not a number.",
-        "expErrors": [{"type": "bad-selector"}],
-        "ignoreJava": "ICU4J doesn't signal runtime errors?"
+        "expErrors": [{"type": "bad-selector"}]
     }
   ]
 }

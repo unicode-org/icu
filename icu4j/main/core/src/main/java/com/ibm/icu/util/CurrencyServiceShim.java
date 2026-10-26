@@ -11,7 +11,6 @@ package com.ibm.icu.util;
 import com.ibm.icu.impl.ICULocaleService;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.ICUService;
-import com.ibm.icu.impl.ICUService.Factory;
 import java.util.Locale;
 
 /**
@@ -55,7 +54,7 @@ final class CurrencyServiceShim extends Currency.ServiceShim {
 
     @Override
     boolean unregister(Object registryKey) {
-        return service.unregisterFactory((Factory) registryKey);
+        return service.unregisterFactory((ICUService.Factory) registryKey);
     }
 
     private static class CFService extends ICULocaleService {

@@ -5,7 +5,18 @@ de_CH{
     Keys{
         colCaseFirst{"Sortierung nach Gross- bzw. Kleinbuchstaben"}
         colCaseLevel{"Sortierung nach Gross- oder Kleinschreibung"}
+        d0{"Transformationsziel"}
+        dx{"Wörterbuchtrennung ausgenommen"}
+        kv{"Höchste ignorierte"}
+        m0{"Transformationsregeln"}
         ms{"Mass-System"}
+        mu{"Masseinheit"}
+        rg{"Region für Zusatzdaten"}
+        s0{"Transformationsquelle"}
+        sd{"Regionale Unterteilung"}
+        t{"Transformation"}
+        t0{"Maschinenübersetzung"}
+        x0{"Transformation in Private Use"}
     }
     Languages{
         ach{"Acholi-Sprache"}
@@ -31,26 +42,83 @@ de_CH{
             ethiopic-amete-alem{"Äthiopisch Amäta Aläm"}
             gregorian{"Gregorianisch"}
             hebrew{"Hebräisch"}
+            islamic-rgsa{"Hidschra, saudi-arabische Ansicht"}
+            islamic-tbla{"Hidschra (tabellarisch, astronomische Epoche)"}
+            iso8601{"Gregorianisch"}
             japanese{"Japanisch"}
             persian{"Persisch"}
         }
         colCaseFirst{
             upper{"Grossbuchstaben zuerst aufführen"}
         }
+        colCaseFirst%core{
+            lower{"Kleinbuchstaben"}
+            no{"Kleinbuchstaben"}
+            upper{"Grossbuchstaben"}
+        }
         colCaseLevel{
             no{"Ohne Gross-/Kleinschreibung sortieren"}
             yes{"Nach Gross-/Kleinschreibung sortieren"}
+        }
+        colReorder%core{
+            punct{"Interpunktion"}
+            symbol{"Symbol"}
         }
         collation%core{
             dictionary{"Lexikografisch"}
             ducet{"Unicode (Standard)"}
             phonetic{"Phonetisch"}
+            searchjl{"Choseong"}
             stroke{"Strichfolge"}
             traditional{"Traditionell"}
+        }
+        kv%core{
+            currency{"Leerzeichen, Interpunktion, alle Symbole"}
+            punct{"Leerzeichen, Interpunktion"}
+            space{"Leerzeichen, Interpunktion"}
+            symbol{"Leerzeichen, Interpunktion, Nicht-Währungs-Symbole"}
         }
         ms{
             uksystem{"britisches Mass-System"}
             ussystem{"US Mass-System"}
+        }
+        numbers%core{
+            arabext{"erweitert arabisch-indisch"}
+            armnlow{"armenisch, Kleinschrift"}
+            finance{"Finanzwesen"}
+            fullwide{"vollbreit"}
+            greklow{"griechisch, Kleinschrift"}
+            hanidays{
+                "Han-Zeichen-Nummerierung für den Tag des Monats in traditionellen Ka"
+                "lendern"
+            }
+            hanidec{
+                "dezimales Positionssystem mit chinesischen Schriftzeichen als Ziffer"
+                "n"
+            }
+            hansfin{"vereinfacht-chinesisches Finanzwesen"}
+            hantfin{"traditionell-chinesisches Finanzwesen"}
+            jpanfin{"japanisches Finanzwesen"}
+            jpanyear{"japanisch Gannen-Erstjahresnummerierung"}
+            lanatham{"Tai Tham Tham (ekklesiastisch)"}
+            mathbold{"mathematisch fett"}
+            mathdbl{"mathematisch mit Doppelstrich"}
+            mathmono{"mathematisch Monospace"}
+            mathsanb{"mathematische, fette Sans-Serif"}
+            mathsans{"mathematische Sans-Serif"}
+            mymrepka{"Myanmar östliche Pwo Karen"}
+            mymrpao{"Myanmar Pao"}
+            mymrshan{"Myanmar Shan"}
+            mymrtlng{"Myanmar Tai Laing"}
+            outlined{"umrandet"}
+            roman{"römisch, Grossschrift"}
+            romanlow{"römisch, Kleinschrift"}
+            segment{"segmentiert"}
+            tamldec{"modern tamilisch"}
+            traditional{"Traditionelle Ziffern"}
+        }
+        t0{
+            und{"Nicht spezifizierte Maschinenübersetzung"}
         }
     }
 }

@@ -1,7 +1,7 @@
 ---
 layout: default
 title: UTF-8
-nav_order: 1
+nav_order: 10
 parent: Chars and Strings
 ---
 <!--
@@ -24,9 +24,9 @@ UTF-16 and UTF-8.
 For UTF-8 strings, ICU normally uses `(const) char *` pointers and `int32_t`
 lengths, normally with semantics parallel to UTF-16 handling. (Input length=-1
 means NUL-terminated, output is NUL-terminated if there is space, output
-overflow is handled with preflighting; for details see the parent [Strings
-page](index.md).) Some newer APIs take an `icu::StringPiece` argument and write
-to an `icu::ByteSink` or to a string class object like `std::string`.
+overflow is handled with preflighting; for details see the parent
+[Strings page](index.md).) Some newer APIs take an `icu::StringPiece` argument
+and write to an `icu::ByteSink` or to a string class object like `std::string`.
 
 ## Conversion Between UTF-8 and UTF-16
 
@@ -68,6 +68,12 @@ libraries and may allow the use of `UCONFIG_NO_LEGACY_CONVERSION` or even
 `UCONFIG_NO_CONVERSION` \[see `unicode/uconfig.h`\].)
 
 ## Low-Level UTF-8 String Operations
+
+Starting with ICU 78, ICU4C has [C++ header-only APIs](../icu4c/header-only.md)
+for conveniently iterating over the code points of a Unicode string in any standard encoding form (UTF-8/16/32).
+See [C++ Code Point Iterators](cpp-code-point-iterator.md).
+
+ICU 77 and earlier provide C macros for iteration:
 
 `unicode/utf8.h` defines macros for UTF-8 with semantics parallel to the UTF-16
 macros in `unicode/utf16.h`. The macros handle many cases inline, but call

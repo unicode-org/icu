@@ -280,28 +280,46 @@ ga{
                 }
                 decimalFormat{
                     1000{
+                        few{"0k"}
+                        many{"0k"}
                         one{"0k"}
                         other{"0k"}
+                        two{"0k"}
                     }
                     10000{
+                        few{"00k"}
+                        many{"00k"}
                         one{"00k"}
                         other{"00k"}
+                        two{"00k"}
                     }
                     100000{
+                        few{"000k"}
+                        many{"000k"}
                         one{"000k"}
                         other{"000k"}
+                        two{"000k"}
                     }
                     1000000000{
+                        few{"0B"}
+                        many{"0B"}
                         one{"0B"}
                         other{"0B"}
+                        two{"0B"}
                     }
                     10000000000{
+                        few{"00B"}
+                        many{"00B"}
                         one{"00B"}
                         other{"00B"}
+                        two{"00B"}
                     }
                     100000000000{
+                        few{"000B"}
+                        many{"000B"}
                         one{"000B"}
                         other{"000B"}
+                        two{"000B"}
                     }
                 }
             }
@@ -463,6 +481,9 @@ ga{
                     M{"E d MMM – E d MMM"}
                     d{"E d MMM – E d MMM"}
                 }
+                MMMMd{
+                    d{"MMMM d – d"}
+                }
                 MMMd{
                     M{"d MMM – d MMM"}
                     d{"d – d MMM"}
@@ -555,6 +576,9 @@ ga{
                 "{1}, {0}",
                 "{1}, {0}",
             }
+            appendItems{
+                Era{"{0} {1}"}
+            }
             availableFormats{
                 Ed{"E d"}
                 Ehm{"E h:mm a"}
@@ -564,11 +588,15 @@ ga{
                 GyMEd{"E, d/M/y G"}
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E d MMM y G"}
+                GyMMMM{"MMMM y G"}
+                GyMMMMEd{"E, MMMM d, y G"}
+                GyMMMMd{"MMMM d, y G"}
                 GyMMMd{"d MMM y G"}
                 GyMd{"dd/MM/y GGGGG"}
                 M{"LL"}
                 MEd{"E dd/MM"}
                 MMMEd{"E d MMM"}
+                MMMMEd{"E, MMMM d"}
                 MMMMW{
                     few{"MMMM: 'seachtain' W"}
                     many{"MMMM: 'seachtain' W"}
@@ -588,6 +616,8 @@ ga{
                 yMMM{"MMM y"}
                 yMMMEd{"E d MMM y"}
                 yMMMM{"MMMM y"}
+                yMMMMEd{"E, MMMM d, y"}
+                yMMMMd{"MMMM d, y"}
                 yMMMd{"d MMM y"}
                 yMd{"dd/MM/y"}
                 yQQQ{"QQQ y"}
@@ -733,6 +763,9 @@ ga{
                 MMMEd{
                     M{"E d MMM – E d MMM"}
                     d{"E d MMM – E d MMM"}
+                }
+                MMMMd{
+                    d{"MMMM d – d"}
                 }
                 MMMd{
                     M{"d MMM – d MMM"}

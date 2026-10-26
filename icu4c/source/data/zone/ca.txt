@@ -42,6 +42,9 @@ ca{
         "America:Cayman"{
             ec{"Caiman"}
         }
+        "America:Guadeloupe"{
+            ec{"Guadalupe"}
+        }
         "America:Martinique"{
             ec{"Martinica"}
         }
@@ -242,7 +245,6 @@ ca{
         }
         "Europe:Dublin"{
             ec{"Dublín"}
-            ld{"Hora estàndard d’Irlanda"}
         }
         "Europe:Helsinki"{
             ec{"Hèlsinki"}
@@ -261,7 +263,6 @@ ca{
         }
         "Europe:London"{
             ec{"Londres"}
-            ld{"Hora d’estiu britànica"}
         }
         "Europe:Luxembourg"{
             ec{"Luxemburg"}
@@ -325,6 +326,11 @@ ca{
         }
         "Pacific:Tahiti"{
             ec{"Tahití"}
+        }
+        "meta:Acre"{
+            ld{"Hora d’estiu d’Acre"}
+            lg{"Hora d’Acre"}
+            ls{"Hora estàndard d’Acre"}
         }
         "meta:Afghanistan"{
             ls{"Hora de l’Afganistan"}
@@ -392,9 +398,9 @@ ca{
             ls{"Hora estàndard de l’Argentina"}
         }
         "meta:Argentina_Western"{
-            ld{"Hora d’estiu de l’oest de l’Argentina"}
-            lg{"Hora de l’oest de l’Argentina"}
-            ls{"Hora estàndard de l’oest de l’Argentina"}
+            ld{"Hora d’estiu de l’Argentina occidental"}
+            lg{"Hora de l’Argentina occidental"}
+            ls{"Hora estàndard de l’Argentina occidental"}
         }
         "meta:Armenia"{
             ld{"Hora d’estiu d’Armènia"}
@@ -452,6 +458,10 @@ ca{
             lg{"Hora de Brasília"}
             ls{"Hora estàndard de Brasília"}
         }
+        "meta:British"{
+            ld{"Hora d’estiu del Regne Unit"}
+            lg{"Hora del Regne Unit"}
+        }
         "meta:Brunei"{
             ls{"Hora de Brunei Darussalam"}
         }
@@ -506,7 +516,7 @@ ca{
             ls{"Hora de Dumont d’Urville"}
         }
         "meta:East_Timor"{
-            ls{"Hora de Timor Oriental"}
+            ls{"Hora de Timor-Leste"}
         }
         "meta:Easter"{
             ld{"Hora d’estiu de l’illa de Pasqua"}
@@ -577,15 +587,20 @@ ca{
         "meta:Gilbert_Islands"{
             ls{"Hora de les illes Gilbert"}
         }
+        "meta:Greenland"{
+            ld{"Hora d’estiu de Groenlàndia"}
+            lg{"Hora de Groenlàndia"}
+            ls{"Hora estàndard de Groenlàndia"}
+        }
         "meta:Greenland_Eastern"{
-            ld{"Hora d’estiu de l’Est de Groenlàndia"}
-            lg{"Hora de l’Est de Groenlàndia"}
-            ls{"Hora estàndard de l’Est de Groenlàndia"}
+            ld{"Hora d’estiu de Groenlàndia oriental"}
+            lg{"Hora de Groenlàndia oriental"}
+            ls{"Hora estàndard de Groenlàndia oriental"}
         }
         "meta:Greenland_Western"{
-            ld{"Hora d’estiu de l’Oest de Groenlàndia"}
-            lg{"Hora de l’Oest de Groenlàndia"}
-            ls{"Hora estàndard de l’Oest de Groenlàndia"}
+            ld{"Hora d’estiu de Groenlàndia occidental"}
+            lg{"Hora de Groenlàndia occidental"}
+            ls{"Hora estàndard de Groenlàndia occidental"}
         }
         "meta:Gulf"{
             ls{"Hora estàndard del Golf"}
@@ -594,7 +609,7 @@ ca{
             ls{"Hora de Guyana"}
         }
         "meta:Hawaii"{
-            ls{"Hora estàndard de Hawaii-Aleutianes"}
+            ls{"Hora estàndard de Hawaii"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"Hora d’estiu de Hawaii-Aleutianes"}
@@ -624,15 +639,19 @@ ca{
             ls{"Hora central d’Indonèsia"}
         }
         "meta:Indonesia_Eastern"{
-            ls{"Hora de l’est d’Indonèsia"}
+            ls{"Hora d’Indonèsia oriental"}
         }
         "meta:Indonesia_Western"{
-            ls{"Hora de l’oest d’Indonèsia"}
+            ls{"Hora d’Indonèsia occidental"}
         }
         "meta:Iran"{
             ld{"Hora d’estiu de l’Iran"}
             lg{"Hora de l’Iran"}
             ls{"Hora estàndard de l’Iran"}
+        }
+        "meta:Irish"{
+            ld{"Hora estàndard d’Irlanda"}
+            lg{"Hora d’Irlanda"}
         }
         "meta:Irkutsk"{
             ld{"Hora d’estiu d’Irkutsk"}
@@ -650,18 +669,18 @@ ca{
             ls{"Hora estàndard del Japó"}
         }
         "meta:Kamchatka"{
-            ld{"Horari d’estiu de Petropavlovsk de Kamtxatka"}
+            ld{"Hora d’estiu de Kamtxatka"}
             lg{"Hora de Kamtxatka"}
-            ls{"Hora estàndard de Petropavlovsk de Kamtxatka"}
+            ls{"Hora estàndard de Kamtxatka"}
         }
         "meta:Kazakhstan"{
             ls{"Hora del Kazakhstan"}
         }
         "meta:Kazakhstan_Eastern"{
-            ls{"Hora de l’est del Kazakhstan"}
+            ls{"Hora del Kazakhstan oriental"}
         }
         "meta:Kazakhstan_Western"{
-            ls{"Hora de l’oest del Kazakhstan"}
+            ls{"Hora del Kazakhstan occidental"}
         }
         "meta:Korea"{
             ld{"Hora d’estiu de Corea"}
@@ -686,11 +705,6 @@ ca{
             ld{"Horari d’estiu de Lord Howe"}
             lg{"Hora de Lord Howe"}
             ls{"Hora estàndard de Lord Howe"}
-        }
-        "meta:Macau"{
-            ld{"Hora d’estiu de Macau"}
-            lg{"Hora de Macau"}
-            ls{"Hora estàndard de Macau"}
         }
         "meta:Magadan"{
             ld{"Hora d’estiu de Magadan"}
@@ -839,8 +853,6 @@ ca{
             ls{"Hora estàndard de Samara"}
         }
         "meta:Samoa"{
-            ld{"Hora d’estiu de Samoa"}
-            lg{"Hora de Samoa"}
             ls{"Hora estàndard de Samoa"}
         }
         "meta:Seychelles"{
@@ -900,6 +912,9 @@ ca{
             ld{"Hora d’estiu de l’Uruguai"}
             lg{"Hora de l’Uruguai"}
             ls{"Hora estàndard de l’Uruguai"}
+        }
+        "meta:Urumqi"{
+            ls{"Hora d’Ürümchi"}
         }
         "meta:Uzbekistan"{
             ld{"Hora d’estiu de l’Uzbekistan"}

@@ -16,6 +16,18 @@ sv_FI{
     }
     calendar{
         gregorian{
+            AmPmMarkers{
+                "fm.",
+                "em.",
+            }
+            AmPmMarkersAbbr{
+                "fm.",
+                "em.",
+            }
+            AmPmMarkersNarrow{
+                "fm.",
+                "em.",
+            }
             DateTimePatterns{
                 "HH.mm.ss zzzz",
                 "H.mm.ss z",
@@ -61,6 +73,22 @@ sv_FI{
                 yMEd{"E d.M.y"}
                 yMM{"M.y"}
                 yMd{"d.M.y"}
+            }
+            dayPeriod{
+                stand-alone{
+                    abbreviated{
+                        am{"fm."}
+                        pm{"em."}
+                    }
+                    narrow{
+                        am{"fm."}
+                        pm{"em."}
+                    }
+                    wide{
+                        am{"fm."}
+                        pm{"em."}
+                    }
+                }
             }
             intervalFormats{
                 Bhm{
@@ -120,32 +148,6 @@ sv_FI{
                     d{"d–d.M.y"}
                     y{"d.M.y–d.M.y"}
                 }
-            }
-            quarters{
-                stand-alone{
-                    abbreviated{
-                        "K1",
-                        "K2",
-                        "K3",
-                        "K4",
-                    }
-                }
-            }
-        }
-    }
-    fields{
-        year-narrow{
-            relative{
-                "-1"{"förra året"}
-                "0"{"i år"}
-                "1"{"nästa år"}
-            }
-        }
-        year-short{
-            relative{
-                "-1"{"förra året"}
-                "0"{"i år"}
-                "1"{"nästa år"}
             }
         }
     }

@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -79,13 +80,9 @@ public final class GenerateCodeTask extends Task {
                     Files.createDirectories(javaOutPath.getParent());
 
                     try (PrintWriter cOut =
-                                    new PrintWriter(
-                                            new OutputStreamWriter(
-                                                    new FileOutputStream(cOutPath.toFile())));
+                                    new PrintWriter(cOutPath.toFile(), StandardCharsets.UTF_8);
                             PrintWriter javaOut =
-                                    new PrintWriter(
-                                            new OutputStreamWriter(
-                                                    new FileOutputStream(javaOutPath.toFile())))) {
+                                    new PrintWriter(javaOutPath.toFile(), StandardCharsets.UTF_8)) {
 
                         log("Generating " + cOutPath + " and " + javaOutPath + "...");
                         task.generator.generateCode(cldrPath, cOut, javaOut);

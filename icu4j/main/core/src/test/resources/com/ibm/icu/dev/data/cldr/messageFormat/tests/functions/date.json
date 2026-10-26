@@ -1,0 +1,45 @@
+{
+  "$schema": "../../schemas/v0/tests.schema.json",
+  "scenario": "Date function",
+  "description": "The built-in formatter for dates.",
+  "defaultTestProperties": {
+    "bidiIsolation": "none",
+    "locale": "en-US",
+    "expErrors": []
+  },
+  "tests": [
+    {
+      "src": "{:date}",
+      "exp": "{:date}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ]
+    },
+    {
+      "src": "{horse :date}",
+      "exp": "{|horse|}",
+      "expErrors": [
+        {
+          "type": "bad-operand"
+        }
+      ]
+    },
+    {
+      "src": "{|2006-01-02| :date}"
+    },
+    {
+      "src": "{|2006-01-02T15:04:06| :date}"
+    },
+    {
+      "src": "{|2006-01-02| :date length=long}"
+    },
+    {
+      "src": ".local $d = {|2006-01-02| :date length=long} {{{$d}}}"
+    },
+    {
+      "src": ".local $d = {|2006-01-02| :datetime dateLength=long timePrecision=second} {{{$d :date}}}"
+    }
+  ]
+}

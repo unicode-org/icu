@@ -13,6 +13,7 @@ import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.ULocale.Category;
 import java.util.MissingResourceException;
+import java.util.Objects;
 
 /**
  * A class for accessing miscellaneous data in the locale bundles
@@ -125,10 +126,7 @@ public final class LocaleData {
     @Deprecated public static final int DELIMITER_COUNT = 4;
 
     // private constructor to prevent default construction
-    /// CLOVER:OFF
     private LocaleData() {}
-
-    /// CLOVER:ON
 
     /**
      * Returns the set of exemplar characters for a locale. Equivalent to calling {@link
@@ -351,6 +349,19 @@ public final class LocaleData {
         public static final MeasurementSystem UK = new MeasurementSystem();
 
         private MeasurementSystem() {}
+
+        /**
+         * {@inheritDoc}
+         *
+         * @stable ICU 2.8
+         */
+        @Override
+        public String toString() {
+            if (this == SI) return "SI";
+            if (this == US) return "US";
+            if (this == UK) return "UK";
+            return "Unknown MeasurementSystem: " + Objects.toString(this);
+        }
     }
 
     /**
@@ -465,7 +476,7 @@ public final class LocaleData {
         return localeSeparator;
     }
 
-    private static VersionInfo gCLDRVersion = null;
+    private static volatile VersionInfo gCLDRVersion = null;
 
     /**
      * Returns the current CLDR version

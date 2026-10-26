@@ -3,6 +3,7 @@
 
 package com.ibm.icu.dev.test.message2;
 
+import java.util.Arrays;
 import java.util.StringJoiner;
 
 // Class corresponding to the json test files.
@@ -13,21 +14,13 @@ class Unit {
     final String locale;
     final Param[] params;
     final String exp;
-    final String ignoreJava;
     final ExpErrors expErrors;
 
-    Unit(
-            Sources src,
-            String locale,
-            Param[] params,
-            String exp,
-            String ignoreJava,
-            ExpErrors expErrors) {
+    Unit(Sources src, String locale, Param[] params, String exp, ExpErrors expErrors) {
         this.src = src;
         this.locale = locale;
         this.params = params;
         this.exp = exp;
-        this.ignoreJava = ignoreJava;
         this.expErrors = expErrors;
     }
 
@@ -55,14 +48,17 @@ class Unit {
         if (src != null) {
             result.add("src=" + src.sources.toString());
         }
+        if (locale != null) {
+            result.add("locale=" + locale);
+        }
         if (params != null) {
-            result.add("params=" + params);
+            result.add("params=" + Arrays.toString(params));
         }
         if (exp != null) {
             result.add("exp=" + escapeString(exp));
         }
-        if (ignoreJava != null) {
-            result.add("ignoreJava=" + ignoreJava);
+        if (expErrors != null) {
+            result.add("expErrors=" + expErrors);
         }
         return result.toString();
     }
@@ -80,9 +76,8 @@ class Unit {
         String newLocale = other.locale != null ? other.locale : this.locale;
         Param[] newParams = other.params != null ? other.params : this.params;
         String newExp = other.exp != null ? other.exp : this.exp;
-        String newIgnore = other.ignoreJava != null ? other.ignoreJava : this.ignoreJava;
         ExpErrors newExpErrors = other.expErrors != null ? other.expErrors : this.expErrors;
-        return new Unit(newSrc, newLocale, newParams, newExp, newIgnore, newExpErrors);
+        return new Unit(newSrc, newLocale, newParams, newExp, newExpErrors);
     }
 
     private static String escapeString(String str) {

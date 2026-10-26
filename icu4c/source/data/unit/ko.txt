@@ -849,23 +849,6 @@ ko{
         }
     }
     unitsNarrow{
-        angle{
-            steradian{
-                other{"{0}sr"}
-            }
-        }
-        concentr{
-            katal{
-                other{"{0}kat"}
-            }
-            ofglucose{
-                dnam{"Glc"}
-                other{"{0}Glc"}
-            }
-            part{
-                other{"{0}part"}
-            }
-        }
         digital{
             byte{
                 dnam{"B"}
@@ -885,54 +868,12 @@ ko{
                 per{"{0}/초"}
             }
         }
-        electric{
-            coulomb{
-                other{"{0}C"}
-            }
-            farad{
-                other{"{0}F"}
-            }
-            henry{
-                other{"{0}H"}
-            }
-            siemens{
-                other{"{0}S"}
-            }
-        }
-        energy{
-            becquerel{
-                other{"{0}Bq"}
-            }
-            calorie-it{
-                dnam{"cal-IT"}
-                other{"{0}cal-IT"}
-            }
-            gray{
-                other{"{0}Gy"}
-            }
-            sievert{
-                other{"{0}Sv"}
-            }
-        }
-        force{
-            kilogram-force{
-                other{"{0}kgf"}
-            }
-        }
         length{
             foot{
                 other{"{0}′"}
             }
             inch{
                 other{"{0}″"}
-            }
-        }
-        magnetic{
-            tesla{
-                other{"{0}T"}
-            }
-            weber{
-                other{"{0}Wb"}
             }
         }
         mass{
@@ -945,17 +886,9 @@ ko{
                 other{"{0}HP"}
             }
         }
-        pressure{
-            ofhg{
-                other{"{0}Hg"}
-            }
-        }
         speed{
             beaufort{
                 other{"B{0}"}
-            }
-            light-speed{
-                other{"{0}light"}
             }
             mile-per-hour{
                 other{"{0}mph"}
@@ -965,9 +898,6 @@ ko{
             dessert-spoon-imperial{
                 dnam{"dsp Imp"}
                 other{"{0}dsp-Imp"}
-            }
-            fluid-ounce-metric{
-                other{"{0}fl oz m."}
             }
         }
     }

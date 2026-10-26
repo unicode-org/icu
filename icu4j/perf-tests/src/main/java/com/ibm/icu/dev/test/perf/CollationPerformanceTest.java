@@ -167,7 +167,7 @@ public class CollationPerformanceTest {
     static com.ibm.icu.text.Collator icuCol = null;
     static NumberFormat nf = null;
     static NumberFormat percent = null;
-    ArrayList list = null;
+    ArrayList<String> list = null;
     String[] tests = null;
     int globalCount = 0;
 
@@ -214,7 +214,7 @@ public class CollationPerformanceTest {
     void doDump() {
         for (int i = 0; i < list.size(); i++) {
             // print the line
-            String line = com.ibm.icu.impl.Utility.escape((String) list.get(i));
+            String line = com.ibm.icu.impl.Utility.escape(list.get(i));
             System.out.println(line);
 
             System.out.print("  CEs:  ");
@@ -1134,7 +1134,7 @@ public class CollationPerformanceTest {
 
         int counter = 0;
 
-        list = new ArrayList();
+        list = new ArrayList<>();
         while (true) {
             String line = null;
             try {
@@ -1157,7 +1157,7 @@ public class CollationPerformanceTest {
         tests = new String[size];
 
         for (int i = 0; i < size; ++i) {
-            tests[i] = (String) list.get(i);
+            tests[i] = list.get(i);
         }
     }
 
@@ -1252,7 +1252,7 @@ public class CollationPerformanceTest {
         }
     }
 
-    void qSortImpl_nokeys(String src[], int fromIndex, int toIndex, Comparator c) {
+    void qSortImpl_nokeys(String src[], int fromIndex, int toIndex, Comparator<? super String> c) {
         int low = fromIndex;
         int high = toIndex;
         String middle = "";
@@ -1283,7 +1283,7 @@ public class CollationPerformanceTest {
         }
     }
 
-    int compare(String source, String target, Comparator c) {
+    int compare(String source, String target, Comparator<? super String> c) {
         globalCount++;
         return c.compare(source, target);
     }

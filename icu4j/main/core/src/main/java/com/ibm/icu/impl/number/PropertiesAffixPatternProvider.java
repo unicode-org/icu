@@ -128,7 +128,7 @@ public class PropertiesAffixPatternProvider implements AffixPatternProvider {
 
     @Override
     public boolean hasNegativeSubpattern() {
-        return (negSuffix != posSuffix
+        return (!negSuffix.equals(posSuffix)
                 || negPrefix.length() != posPrefix.length() + 1
                 || !negPrefix.regionMatches(1, posPrefix, 0, posPrefix.length())
                 || negPrefix.charAt(0) != '-');

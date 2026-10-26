@@ -267,10 +267,6 @@ sv{
             "CNH",
             "kinesisk yuan (offshore)",
         }
-        CNX{
-            "CNX",
-            "kinesisk dollar",
-        }
         CNY{
             "CNY",
             "kinesisk yuan",
@@ -1479,10 +1475,6 @@ sv{
             one{"chilensk peso"}
             other{"chilenska pesos"}
         }
-        CNX{
-            one{"kinesisk dollar"}
-            other{"kinesiska dollar"}
-        }
         CNY{
             one{"kinesisk yuan"}
             other{"kinesiska yuan"}
@@ -1716,7 +1708,7 @@ sv{
             other{"italienska lire"}
         }
         JMD{
-            one{"Jamaica-dollar"}
+            one{"jamaicansk dollar"}
             other{"jamaicanska dollar"}
         }
         JOD{
@@ -2279,10 +2271,6 @@ sv{
             one{"östkaribisk dollar"}
             other{"östkaribiska dollar"}
         }
-        XCG{
-            one{"karibisk gulden"}
-            other{"karibisk gulden"}
-        }
         XDR{
             one{"IMF särskild dragningsrätt"}
             other{"IMF särskilda dragningsrätter"}
@@ -2370,10 +2358,6 @@ sv{
         ZRZ{
             one{"zaïrisk zaïre"}
             other{"zaïriska zaïre"}
-        }
-        ZWG{
-            one{"zimbabwiskt guld"}
-            other{"zimbabwiskt guld"}
         }
     }
 }

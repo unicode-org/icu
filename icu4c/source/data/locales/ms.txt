@@ -381,6 +381,10 @@ ms{
                     M{"E, d MMM – E, d MMM"}
                     d{"E, d MMM – E, d MMM"}
                 }
+                MMMMd{
+                    M{"d MMMM – d MMMM"}
+                    d{"d–d MMMM"}
+                }
                 MMMd{
                     M{"d MMM – d MMM"}
                     d{"d–d MMM"}
@@ -487,9 +491,13 @@ ms{
                 GyMEd{"E, d/M/y G"}
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, d MMM y G"}
+                GyMMMM{"MMMM y G"}
+                GyMMMMEd{"E, d MMMM y G"}
+                GyMMMMd{"d MMMM y G"}
                 GyMMMd{"d MMM y G"}
                 MEd{"E, d-M"}
                 MMMEd{"E, d MMM"}
+                MMMMEd{"E, d MMMM"}
                 MMMMW{
                     other{"'minggu' W 'daripada' MMMM"}
                 }
@@ -506,6 +514,8 @@ ms{
                 yMMM{"MMM y"}
                 yMMMEd{"E, d MMM y"}
                 yMMMM{"MMMM y"}
+                yMMMMEd{"E, d MMMM y"}
+                yMMMMd{"d MMMM y"}
                 yMMMd{"d MMM y"}
                 yMd{"d/M/y"}
                 yQQQ{"QQQ y"}
@@ -787,9 +797,6 @@ ms{
         }
         islamic{
             availableFormats{
-                GyM{"M/y G"}
-                GyMEd{"E, d/M/y G"}
-                GyMd{"d/M/y GGGGG"}
                 yyyyM{"M/y GGGGG"}
                 yyyyMEd{"E, d/M/y GGGGG"}
                 yyyyMd{"d/M/y GGGGG"}
@@ -837,9 +844,6 @@ ms{
         }
         roc{
             eras{
-                narrow{
-                    0{"Sblm R.O.C"}
-                }
                 wide{
                     0{"Sebelum R.O.C"}
                 }

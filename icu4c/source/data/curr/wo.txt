@@ -1043,9 +1043,6 @@ wo{
         XCD{
             other{"East Caribbean dollars"}
         }
-        XCG{
-            other{"Gildiye Karayib"}
-        }
         XOF{
             other{"Franc CFA yu Afrik Sowwu-jant"}
         }
@@ -1057,9 +1054,6 @@ wo{
         }
         ZMW{
             other{"Zambian kwachas"}
-        }
-        ZWG{
-            other{"Zimbabwean ZiG"}
         }
     }
 }

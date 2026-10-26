@@ -2080,11 +2080,6 @@ ro{
             one{"dolar Zimbabwe (1980–2008)"}
             other{"dolari Zimbabwe (1980–2008)"}
         }
-        ZWG{
-            few{"Zimbabwe Gold"}
-            one{"Zimbabwe Gold"}
-            other{"Zimbabwe Gold"}
-        }
     }
     CurrencyUnitPatterns{
         few{"{0} {1}"}

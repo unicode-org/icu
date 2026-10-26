@@ -221,6 +221,10 @@ mr{
                         one{"{0} परिभ्रमणाशी"}
                         other{"{0} परिभ्रमणांचा"}
                     }
+                    oblique{
+                        one{"{0} रिव्हॉल्यूशन"}
+                        other{"{0} रिव्हॉल्यूशन्स"}
+                    }
                 }
                 dnam{"परिभ्रमण"}
                 gender{"neuter"}
@@ -228,6 +232,7 @@ mr{
                 other{"{0} परिभ्रमणे"}
             }
             steradian{
+                dnam{"स्टेराडियन्स"}
                 one{"{0} स्टेराडियन"}
                 other{"{0} sr"}
             }
@@ -699,9 +704,6 @@ mr{
                         one{"{0} मोलशी"}
                         other{"{0} मोल्सचा"}
                     }
-                    oblique{
-                        other{"{0} मोल्स"}
-                    }
                 }
                 gender{"masculine"}
                 one{"{0} मोल"}
@@ -711,8 +713,9 @@ mr{
                 dnam{"ग्लुकोजचा । ग्लुकोजची । ग्लुकोजचे । ग्लुकोजच्या"}
             }
             part{
+                dnam{"पार्ट्स"}
                 one{"{0} पार्ट"}
-                other{"{0} part"}
+                other{"{0} पार्ट"}
             }
             part-per-1e6{
                 case{
@@ -739,6 +742,10 @@ mr{
                     locative{
                         one{"{0} भाग प्रति दशलक्षाशी"}
                         other{"{0} भाग प्रति दशलक्षांचा"}
+                    }
+                    oblique{
+                        one{"{0} ppm"}
+                        other{"{0} ppm"}
                     }
                 }
                 dnam{"भाग प्रति दशलक्ष"}
@@ -1526,7 +1533,7 @@ mr{
                         other{"{0} मिनिटांचा"}
                     }
                 }
-                gender{"masculine"}
+                gender{"neuter"}
                 one{"{0} मिनिट"}
                 other{"{0} मिनिटे"}
                 per{"{0} दर मिनिट"}
@@ -1799,9 +1806,9 @@ mr{
                 other{"{0} फॅरड्स"}
             }
             henry{
-                dnam{"हे"}
-                one{"{0} हे"}
-                other{"{0} हे"}
+                dnam{"हेन्री"}
+                one{"{0} हेन्री"}
+                other{"{0} हेन्रीज"}
             }
             milliampere{
                 case{
@@ -1905,7 +1912,6 @@ mr{
         }
         energy{
             becquerel{
-                dnam{"बेकरल्स"}
                 one{"{0} बेकरल"}
                 other{"{0} बेकरल्स"}
             }
@@ -1941,13 +1947,15 @@ mr{
                         other{"{0} कॅलरीजचा"}
                     }
                 }
-                dnam{"कॅलरीज"}
+                dnam{"कॅलरी"}
                 gender{"feminine"}
                 one{"{0} कॅलरी"}
                 other{"{0} कॅलरीज"}
             }
             calorie-it{
                 dnam{"कॅलरी [IT]"}
+                one{"{0} कॅलरी-IT"}
+                other{"{0} कॅ-IT"}
             }
             electronvolt{
                 dnam{"इलेक्ट्रॉनव्होल्ट्स"}
@@ -1958,11 +1966,6 @@ mr{
                 dnam{"कॅलरीज"}
                 one{"{0} कॅलरी"}
                 other{"{0} कॅलरीज"}
-            }
-            gray{
-                dnam{"ग्रे"}
-                one{"{0} ग्रे"}
-                other{"{0} ग्रेज"}
             }
             joule{
                 case{
@@ -2091,13 +2094,13 @@ mr{
                 other{"{0} किलोवॉट-तास"}
             }
             sievert{
-                dnam{"सिव्हर्ट"}
                 one{"{0} सिव्हर्ट"}
                 other{"{0} सिव्हर्ट्स"}
             }
         }
         force{
             kilogram-force{
+                dnam{"किलोग्रॅम्स-फोर्स"}
                 one{"{0} किलोग्रॅम्स-फोर्स"}
                 other{"{0} kgf"}
             }
@@ -2914,6 +2917,7 @@ mr{
         }
         magnetic{
             tesla{
+                dnam{"टेस्लाज"}
                 one{"{0} टेस्ला"}
                 other{"{0} टेस्लाज"}
             }
@@ -4080,8 +4084,6 @@ mr{
             }
             fluid-ounce-metric{
                 dnam{"मेट्रिक फ्लुइड औंसेस"}
-                one{"{0} मेट्रिक फ्लुइड औंस"}
-                other{"{0} मेट्रिक फ्लुइड औंसेस"}
             }
             gallon{
                 dnam{"गॅलन"}
@@ -4345,18 +4347,15 @@ mr{
                 one{"{0}आयटम"}
                 other{"{0}आयटम"}
             }
-            katal{
-                dnam{"कॅ"}
-                one{"{0} कॅ"}
-                other{"{0} कॅ"}
-            }
             millimole-per-liter{
                 dnam{"मिलीमो./लि."}
                 one{"{0}मिलीमो./लि."}
                 other{"{0}मिलीमो./लि."}
             }
-            ofglucose{
-                dnam{"Glc"}
+            part{
+                dnam{"पार्ट"}
+                one{"{0} पार्ट"}
+                other{"{0} पार्ट"}
             }
             part-per-1e6{
                 dnam{"ppm"}
@@ -4447,6 +4446,7 @@ mr{
             minute{
                 one{"{0}मि"}
                 other{"{0}मि"}
+                per{"{0}/मि."}
             }
             month{
                 dnam{"महिना"}
@@ -4479,44 +4479,24 @@ mr{
         electric{
             coulomb{
                 dnam{"कूलोम"}
-                one{"{0} कू"}
-                other{"{0} कू"}
-            }
-            farad{
-                dnam{"फॅ"}
-                one{"{0} फॅ"}
-                other{"{0} फॅ"}
             }
             henry{
-                dnam{"हे"}
-                one{"{0} हे"}
-                other{"{0} हे"}
-            }
-            siemens{
-                dnam{"सि"}
-                one{"{0} सि"}
-                other{"{0} सि"}
+                dnam{"हेन्री"}
+                one{"{0} हेन्रीज"}
+                other{"{0} हेन्रीज"}
             }
         }
         energy{
             becquerel{
                 dnam{"बेक"}
-                one{"{0} बेक"}
-                other{"{0} बेक"}
             }
             british-thermal-unit{
                 one{"{0}Btu"}
                 other{"{0}Btu"}
             }
             calorie-it{
-                dnam{"कॅल-IT"}
-                one{"{0} कॅल-IT"}
-                other{"{0} कॅल-IT"}
-            }
-            gray{
-                dnam{"ग्रे"}
-                one{"{0} ग्रे"}
-                other{"{0} ग्रेज"}
+                one{"{0} कॅ-IT"}
+                other{"{0} कॅ-IT"}
             }
             kilocalorie{
                 dnam{"किकॅल"}
@@ -4599,6 +4579,11 @@ mr{
                 dnam{"L☉"}
             }
         }
+        magnetic{
+            tesla{
+                dnam{"टेस्ला"}
+            }
+        }
         mass{
             earth-mass{
                 dnam{"M⊕"}
@@ -4677,6 +4662,7 @@ mr{
                 other{"{0}किप्रता"}
             }
             meter-per-second{
+                dnam{"मी./से."}
                 one{"{0}मी/से"}
                 other{"{0}मी/से"}
             }
@@ -4854,7 +4840,7 @@ mr{
                 dnam{"कॅरेट्स"}
             }
             katal{
-                dnam{"कॅ"}
+                dnam{"कॅट"}
                 one{"{0} कॅ"}
                 other{"{0} कॅ"}
             }
@@ -4870,6 +4856,11 @@ mr{
             }
             ofglucose{
                 dnam{"Glc"}
+            }
+            part{
+                dnam{"पार्ट"}
+                one{"{0} पार्ट"}
+                other{"{0} पार्ट"}
             }
             part-per-1e6{
                 dnam{"भाग/दशलक्ष"}
@@ -4985,9 +4976,9 @@ mr{
             }
             minute{
                 dnam{"मिनिटे"}
-                one{"{0} मिनि"}
-                other{"{0} मिनि"}
-                per{"{0}/मिनि"}
+                one{"{0} मि."}
+                other{"{0} मि."}
+                per{"{0}/मि."}
             }
             month{
                 dnam{"महिने"}
@@ -5046,9 +5037,9 @@ mr{
                 other{"{0} फॅ"}
             }
             henry{
-                dnam{"हे"}
-                one{"{0} हे"}
-                other{"{0} हे"}
+                dnam{"हेन्री"}
+                one{"{0} हेन्रीज"}
+                other{"{0} हेन्रीज"}
             }
             milliampere{
                 dnam{"मिलिअँप्स"}
@@ -5077,10 +5068,12 @@ mr{
                 other{"{0} बिटीयू"}
             }
             calorie{
-                dnam{"कॅ"}
+                dnam{"कॅल"}
             }
             calorie-it{
                 dnam{"कॅल-IT"}
+                one{"{0} कॅ-IT"}
+                other{"{0} कॅ-IT"}
             }
             electronvolt{
                 dnam{"इलेक्ट्रॉनव्होल्ट"}
@@ -5116,6 +5109,9 @@ mr{
             }
         }
         force{
+            kilogram-force{
+                dnam{"किग्रॅ-फोर्स"}
+            }
             newton{
                 dnam{"न्यूटन"}
             }

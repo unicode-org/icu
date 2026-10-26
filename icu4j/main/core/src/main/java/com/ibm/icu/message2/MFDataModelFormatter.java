@@ -22,13 +22,7 @@ import com.ibm.icu.message2.MFDataModel.VariableRef;
 import com.ibm.icu.message2.MFDataModel.Variant;
 import com.ibm.icu.message2.MessageFormatter.BidiIsolation;
 import com.ibm.icu.message2.MessageFormatter.ErrorHandlingBehavior;
-import com.ibm.icu.util.Calendar;
-import com.ibm.icu.util.CurrencyAmount;
-import java.time.DayOfWeek;
-import java.time.Month;
-import java.time.temporal.Temporal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -51,8 +45,9 @@ class MFDataModelFormatter {
     private final BidiIsolation bidiIsolation;
     private final MFDataModel.Message dm;
 
-    private final MFFunctionRegistry standardFunctions;
     private final MFFunctionRegistry customFunctions;
+    private static final MFFunctionRegistry standardFunctions =
+            MFFunctionRegistry.getStandardFunctionsRegistry();
     private static final MFFunctionRegistry EMPTY_REGISTY = MFFunctionRegistry.builder().build();
 
     MFDataModelFormatter(
@@ -70,42 +65,9 @@ class MFDataModelFormatter {
         this.dm = dm;
         this.customFunctions =
                 customFunctionRegistry == null ? EMPTY_REGISTY : customFunctionRegistry;
-
-        standardFunctions =
-                MFFunctionRegistry.builder()
-                        // Date/time formatting. No selection.
-                        .setFunction("datetime", new DateTimeFunctionFactory("datetime"))
-                        .setFunction("date", new DateTimeFunctionFactory("date"))
-                        .setFunction("time", new DateTimeFunctionFactory("time"))
-                        .setDefaultFunctionNameForType(Date.class, "datetime")
-                        .setDefaultFunctionNameForType(Calendar.class, "datetime")
-                        .setDefaultFunctionNameForType(java.util.Calendar.class, "datetime")
-                        .setDefaultFunctionNameForType(Temporal.class, "datetime")
-                        .setDefaultFunctionNameForType(DayOfWeek.class, "date")
-                        .setDefaultFunctionNameForType(Month.class, "date")
-
-                        // Number formatting and selection
-                        .setFunction("number", new NumberFunctionFactory("number"))
-                        .setFunction("integer", new NumberFunctionFactory("integer"))
-                        .setFunction("currency", new NumberFunctionFactory("currency"))
-                        .setFunction("percent", new NumberFunctionFactory("percent"))
-                        .setFunction("offset", new NumberFunctionFactory("offset"))
-                        .setDefaultFunctionNameForType(Integer.class, "number")
-                        .setDefaultFunctionNameForType(Double.class, "number")
-                        .setDefaultFunctionNameForType(Number.class, "number")
-                        .setDefaultFunctionNameForType(CurrencyAmount.class, "currency")
-
-                        // Function that returns "to string" and selects on string equality
-                        .setFunction("string", new TextFunctionFactory())
-                        .setDefaultFunctionNameForType(String.class, "string")
-                        .setDefaultFunctionNameForType(CharSequence.class, "string")
-
-                        // Register some custom selector
-                        .setFunction("icu:gender", new TextFunctionFactory())
-                        .build();
     }
 
-    String format(Map<String, Object> arguments) {
+    String format(Map<String, ?> arguments) {
         MFDataModel.Pattern patternToRender = null;
         MapWithNfcKeys nfcArguments = new MapWithNfcKeys(arguments);
 
@@ -221,9 +183,9 @@ class MFDataModelFormatter {
                     functionName = ((FunctionRef) le.function).name;
                 }
             }
-            FunctionFactory funcFactory = standardFunctions.getFunction(functionName);
+            FunctionFactory funcFactory = customFunctions.getFunction(functionName);
             if (funcFactory == null) {
-                funcFactory = customFunctions.getFunction(functionName);
+                funcFactory = standardFunctions.getFunction(functionName);
             }
             // spec: If selection is supported for `rv`:
             if (funcFactory != null) {
@@ -463,9 +425,9 @@ class MFDataModelFormatter {
                 return null;
             }
             Class<?> clazz = toFormat.getClass();
-            functionName = standardFunctions.getDefaultFunctionNameForType(clazz);
+            functionName = customFunctions.getDefaultFunctionNameForType(clazz);
             if (functionName == null) {
-                functionName = customFunctions.getDefaultFunctionNameForType(clazz);
+                functionName = standardFunctions.getDefaultFunctionNameForType(clazz);
             }
             if (functionName == null) {
                 fatalFormattingError(
@@ -474,9 +436,9 @@ class MFDataModelFormatter {
             }
         }
 
-        FunctionFactory func = standardFunctions.getFunction(functionName);
+        FunctionFactory func = customFunctions.getFunction(functionName);
         if (func == null) {
-            func = customFunctions.getFunction(functionName);
+            func = standardFunctions.getFunction(functionName);
         }
         return func;
     }
@@ -614,10 +576,9 @@ class MFDataModelFormatter {
     static class ResolvedExpression implements Expression {
         final Object argument;
         final String functionName;
-        final Map<String, Object> options;
+        final Map<String, ?> options;
 
-        public ResolvedExpression(
-                Object argument, String functionName, Map<String, Object> options) {
+        public ResolvedExpression(Object argument, String functionName, Map<String, ?> options) {
             this.argument = argument;
             this.functionName = StringUtils.toNfc(functionName);
             this.options = options;
@@ -682,7 +643,7 @@ class MFDataModelFormatter {
     private static class MapWithNfcKeys {
         private final Map<String, Object> theMap = new HashMap<>();
 
-        Map<String, Object> getMap() {
+        Map<String, ?> getMap() {
             return theMap;
         }
 
@@ -695,10 +656,10 @@ class MFDataModelFormatter {
             theMap.putAll(org.getMap());
         }
 
-        MapWithNfcKeys(Map<String, Object> orgMap) {
+        MapWithNfcKeys(Map<String, ?> orgMap) {
             super();
             if (orgMap != null) {
-                for (Map.Entry<String, Object> e : orgMap.entrySet()) {
+                for (Map.Entry<String, ?> e : orgMap.entrySet()) {
                     this.put(StringUtils.toNfc(e.getKey()), e.getValue());
                 }
             }
@@ -708,7 +669,7 @@ class MFDataModelFormatter {
             return theMap.put(StringUtils.toNfc(key), value);
         }
 
-        public void putAll(Map<? extends String, ? extends Object> m) {
+        public void putAll(Map<? extends String, ?> m) {
             theMap.putAll(m);
         }
 

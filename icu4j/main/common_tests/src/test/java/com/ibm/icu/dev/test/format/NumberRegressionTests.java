@@ -1,25 +1,15 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
-/*****************************************************************************************
- *
- * Copyright (C) 1996-2016, International Business Machines
- * Corporation and others.  All Rights Reserved.
- **/
-
-/**
- * Port From: JDK 1.4b1 : java.text.Format.NumberRegression Source File:
- * java/text/format/NumberRegression.java
+/*
+ **************************************************************************
+ * Copyright (C) 1996-2016, International Business Machines Corporation   *
+ * and others. All Rights Reserved.                                       *
+ **************************************************************************
  */
 
-/**
- * @test 1.49 01/05/21
- * @bug 4052223 4059870 4061302 4062486 4066646 4068693 4070798 4071005 4071014 4071492 4071859
- *     4074454 4074620 4075713 4083018 4086575 4087244 4087245 4087251 4087535 4088161 4088503
- *     4090489 4090504 4092480 4092561 4095713 4098741 4099404 4101481 4106658 4106662 4106664
- *     4108738 4110936 4122840 4125885 4134034 4134300 4140009 4141750 4145457 4147295 4147706
- *     4162198 4162852 4167494 4170798 4176114 4179818 4185761 4212072 4212073 4216742 4217661
- *     4243011 4243108 4330377 4233840
- * @summary Regression tests for NumberFormat and associated classes
+/*
+ * Port From: JDK 1.4b1 : java.text.Format.NumberRegression Source File:
+ * java/text/format/NumberRegression.java
  */
 package com.ibm.icu.dev.test.format;
 
@@ -46,11 +36,22 @@ import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+/**
+ * @test 1.49 01/05/21
+ * @bug 4052223 4059870 4061302 4062486 4066646 4068693 4070798 4071005 4071014 4071492 4071859
+ *     4074454 4074620 4075713 4083018 4086575 4087244 4087245 4087251 4087535 4088161 4088503
+ *     4090489 4090504 4092480 4092561 4095713 4098741 4099404 4101481 4106658 4106662 4106664
+ *     4108738 4110936 4122840 4125885 4134034 4134300 4140009 4141750 4145457 4147295 4147706
+ *     4162198 4162852 4167494 4170798 4176114 4179818 4185761 4212072 4212073 4216742 4217661
+ *     4243011 4243108 4330377 4233840
+ * @summary Regression tests for NumberFormat and associated classes
+ */
 @RunWith(JUnit4.class)
 public class NumberRegressionTests extends CoreTestFmwk {
     private static final char EURO = '\u20ac';
@@ -79,7 +80,6 @@ public class NumberRegressionTests extends CoreTestFmwk {
 
         if (nf1.equals(nf2)) errln("Test for bug 4074620 failed");
         else logln("Test for bug 4074620 passed.");
-        return;
     }
 
     /** DecimalFormat.format() incorrectly uses maxFractionDigits setting. */
@@ -1415,7 +1415,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
         }
         sym.setInternationalCurrencySymbol("USD");
 
-        if (VersionInfo.ICU_VERSION == VersionInfo.getInstance(2, 2)) {
+        if (VersionInfo.ICU_VERSION.equals(VersionInfo.getInstance(2, 2))) {
             // bug in 2.2 that fails this test
             // to be fixed in the later versions
             System.out.println("\n        Test skipped for release 2.2");
@@ -1445,7 +1445,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
                 String pat = df.toPattern();
                 DecimalFormatSymbols symb = new DecimalFormatSymbols(avail[i]);
                 DecimalFormat f2 = new DecimalFormat(pat, symb);
-                if (df.getCurrency() != Currency.getInstance("XXX") && j == 1) {
+                if (!Objects.equals(df.getCurrency(), Currency.getInstance("XXX")) && j == 1) {
                     // Currency does not travel with the pattern string
                     f2.setCurrency(df.getCurrency());
                 }

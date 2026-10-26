@@ -35,8 +35,6 @@
 3600/60: <#,##0<:>>>;
 %duration:
 0: =%in-numerals=;
-%%lenient-parse:
-& ':' = '.' = ' ' = '-';
 ]]></rbnfRules>
         </rulesetGrouping>
    </rbnf>

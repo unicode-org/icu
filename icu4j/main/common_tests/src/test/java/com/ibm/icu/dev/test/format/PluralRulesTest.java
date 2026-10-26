@@ -948,12 +948,12 @@ public class PluralRulesTest extends CoreTestFmwk {
     @Test
     public void TestParseDescription() {
         try {
-            if (PluralRules.DEFAULT != PluralRules.parseDescription("")) {
-                errln(
-                        "PluralRules.parseDescription(String) was suppose "
-                                + "to return PluralRules.DEFAULT when String is of "
-                                + "length 0.");
-            }
+            assertSame(
+                    "PluralRules.parseDescription(String) was suppose "
+                            + "to return PluralRules.DEFAULT when String is of "
+                            + "length 0.",
+                    PluralRules.DEFAULT,
+                    PluralRules.parseDescription(""));
         } catch (ParseException e) {
             errln(
                     "PluralRules.parseDescription(String) was not suppose "
@@ -1074,7 +1074,7 @@ public class PluralRulesTest extends CoreTestFmwk {
             PluralRules rules = factory.forLocale(locale);
             logln(
                     "\nlocale: "
-                            + (locale == ULocale.ROOT ? "root" : locale.toString())
+                            + (locale.equals(ULocale.ROOT) ? "root" : locale.toString())
                             + ", rules: "
                             + rules);
             Set<String> keywords = rules.getKeywords();
@@ -1138,6 +1138,7 @@ public class PluralRulesTest extends CoreTestFmwk {
      * the actual return plural keyword matches what we expect based on the plural rule string.
      */
     @Test
+    @SuppressWarnings("ReferenceEquality")
     public void TestGetDecimalQuantitySamples() {
         Set<ULocale> uniqueRuleSet = new HashSet<>();
         for (ULocale locale : factory.getAvailableULocales()) {
@@ -1147,7 +1148,7 @@ public class PluralRulesTest extends CoreTestFmwk {
             PluralRules rules = factory.forLocale(locale);
             logln(
                     "\nlocale: "
-                            + (locale == ULocale.ROOT ? "root" : locale.toString())
+                            + (locale.equals(ULocale.ROOT) ? "root" : locale.toString())
                             + ", rules: "
                             + rules);
             Set<String> keywords = rules.getKeywords();
@@ -1481,6 +1482,7 @@ public class PluralRulesTest extends CoreTestFmwk {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void TestKeywords() {
         Set<String> possibleKeywords =
                 new LinkedHashSet<>(Arrays.asList("zero", "one", "two", "few", "many", "other"));
@@ -1901,7 +1903,7 @@ public class PluralRulesTest extends CoreTestFmwk {
         // [one, other]
         "am,as,bn,doi,fa,gu,hi,kn,pcm,zu; one: @integer 0, 1; other: @integer 2~17, 100, 1000, 10000, 100000, 1000000, …",
         "ff,hy,kab; one: @integer 0, 1; other: @integer 2~17, 100, 1000, 10000, 100000, 1000000, …",
-        "ast,de,en,et,fi,fy,gl,ia,io,lij,nl,sc,sv,sw,ur,yi; one: @integer 1; other: @integer 0, 2~16, 100, 1000, 10000, 100000, 1000000, …",
+        "ast,de,en,et,fi,fy,ia,io,lij,nl,sc,sv,sw,ur,yi; one: @integer 1; other: @integer 0, 2~16, 100, 1000, 10000, 100000, 1000000, …",
         "si; one: @integer 0, 1; other: @integer 2~17, 100, 1000, 10000, 100000, 1000000, …",
         "ak,bho,guw,ln,mg,nso,pa,ti,wa; one: @integer 0, 1; other: @integer 2~17, 100, 1000, 10000, 100000, 1000000, …",
         "tzm; one: @integer 0, 1, 11~24; other: @integer 2~10, 100~106, 1000, 10000, 100000, 1000000, …",
@@ -1928,7 +1930,7 @@ public class PluralRulesTest extends CoreTestFmwk {
         // [one, many, other]
         "fr; one: @integer 0, 1; many: @integer 1000000, 1c6, 2c6, 3c6, 4c6, 5c6, 6c6, …; other: @integer 2~17, 100, 1000, 10000, 100000, 1c3, 2c3, 3c3, 4c3, 5c3, 6c3, …",
         "pt; one: @integer 0, 1; many: @integer 1000000, 1c6, 2c6, 3c6, 4c6, 5c6, 6c6, …; other: @integer 2~17, 100, 1000, 10000, 100000, 1c3, 2c3, 3c3, 4c3, 5c3, 6c3, …",
-        "ca,it,pt_PT,scn,vec; one: @integer 1; many: @integer 1000000, 1c6, 2c6, 3c6, 4c6, 5c6, 6c6, …; other: @integer 0, 2~16, 100, 1000, 10000, 100000, 1c3, 2c3, 3c3, 4c3, 5c3, 6c3, …",
+        "ca,gl,it,pt_PT,scn,vec; one: @integer 1; many: @integer 1000000, 1c6, 2c6, 3c6, 4c6, 5c6, 6c6, …; other: @integer 0, 2~16, 100, 1000, 10000, 100000, 1c3, 2c3, 3c3, 4c3, 5c3, 6c3, …",
         "es; one: @integer 1; many: @integer 1000000, 1c6, 2c6, 3c6, 4c6, 5c6, 6c6, …; other: @integer 0, 2~16, 100, 1000, 10000, 100000, 1c3, 2c3, 3c3, 4c3, 5c3, 6c3, …",
 
         // [one, two, few, other]
@@ -1955,6 +1957,7 @@ public class PluralRulesTest extends CoreTestFmwk {
         "cy; zero: @integer 0; one: @integer 1; two: @integer 2; few: @integer 3; many: @integer 6; other: @integer 4, 5, 7~20, 100, 1000, 10000, 100000, 1000000, …",
     };
 
+    @SuppressWarnings("unchecked")
     private <T extends Serializable> T serializeAndDeserialize(T original, Output<Integer> size) {
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();

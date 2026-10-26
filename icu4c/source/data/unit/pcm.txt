@@ -1029,12 +1029,6 @@ pcm{
                 one{"{0} kárá"}
                 other{"{0} kárá"}
             }
-            ofglucose{
-                dnam{"glúcọs"}
-            }
-            part{
-                dnam{"párt"}
-            }
             part-per-1e6{
                 dnam{"Pfim"}
             }

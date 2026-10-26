@@ -29,6 +29,7 @@ import com.ibm.icu.impl.breakiter.UnhandledBreakEngine;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
+import com.ibm.icu.text.UnicodeSet.XSymbolTable;
 import com.ibm.icu.util.CodePointTrie;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -135,14 +136,28 @@ public class RuleBasedBreakIterator extends BreakIterator implements Cloneable {
      * @stable ICU 2.2
      */
     public RuleBasedBreakIterator(String rules) {
+        this(rules, /* customProperties= */ null);
+    }
+
+    /**
+     * Construct a RuleBasedBreakIterator from a set of rules supplied as a string, using custom
+     * properties.
+     *
+     * @param rules The break rules to be used.
+     * @param customProperties An XSymbolTable that supplies the properties to use in the rules, or
+     *     null to use ICU properties.
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public RuleBasedBreakIterator(String rules, XSymbolTable customProperties) {
         this();
         try {
             ByteArrayOutputStream ruleOS = new ByteArrayOutputStream();
-            compileRules(rules, ruleOS);
+            RBBIRuleBuilder.compileRules(rules, ruleOS, customProperties);
             fRData = RBBIDataWrapper.get(ByteBuffer.wrap(ruleOS.toByteArray()));
             fLookAheadMatches = new int[fRData.fFTable.fLookAheadResultsSize];
         } catch (IOException e) {
-            /// CLOVER:OFF
             // An IO exception can only arrive here if there is a bug in the RBBI Rule compiler,
             //  causing bogus compiled rules to be produced, but with no compile error raised.
             RuntimeException rte =
@@ -150,7 +165,6 @@ public class RuleBasedBreakIterator extends BreakIterator implements Cloneable {
                             "RuleBasedBreakIterator rule compilation internal error: "
                                     + e.getMessage());
             throw rte;
-            /// CLOVER:ON
         }
     }
 
@@ -364,7 +378,7 @@ public class RuleBasedBreakIterator extends BreakIterator implements Cloneable {
      * @stable ICU 4.8
      */
     public static void compileRules(String rules, OutputStream ruleBinary) throws IOException {
-        RBBIRuleBuilder.compileRules(rules, ruleBinary);
+        RBBIRuleBuilder.compileRules(rules, ruleBinary, /* customProperties= */ null);
     }
 
     // =======================================================================
@@ -585,8 +599,6 @@ public class RuleBasedBreakIterator extends BreakIterator implements Cloneable {
      *
      * <p>Note that <code>getRuleStatus()</code> returns the value corresponding to <code>current()
      * </code> index even after <code>next()</code> has returned DONE.
-     *
-     * <p>
      *
      * @return the status from the break rule that determined the boundary at the current iteration
      *     position.
@@ -817,20 +829,8 @@ public class RuleBasedBreakIterator extends BreakIterator implements Cloneable {
         int state = START_STATE;
         int row = fRData.getRowIndex(state);
         short category = 3;
-        int flagsState = fRData.fFTable.fFlags;
         int dictStart = fRData.fFTable.fDictCategoriesStart;
         int mode = RBBI_RUN;
-        if ((flagsState & RBBIDataWrapper.RBBI_BOF_REQUIRED) != 0) {
-            category = 2;
-            mode = RBBI_START;
-            if (TRACE) {
-                System.out.print("            " + RBBIDataWrapper.intToString(text.getIndex(), 5));
-                System.out.print(RBBIDataWrapper.intToHexString(c, 10));
-                System.out.println(
-                        RBBIDataWrapper.intToString(state, 7)
-                                + RBBIDataWrapper.intToString(category, 6));
-            }
-        }
 
         // loop until we reach the end of the text or transition to state 0
         while (state != STOP_STATE) {
@@ -961,8 +961,10 @@ public class RuleBasedBreakIterator extends BreakIterator implements Cloneable {
      *
      * @param fromPosition the position in the input text to begin the iteration.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
-    private int handleSafePrevious(int fromPosition) {
+    @Deprecated
+    public int handleSafePrevious(int fromPosition) {
         char state;
         short category = 0;
         int result = 0;
@@ -1069,6 +1071,11 @@ public class RuleBasedBreakIterator extends BreakIterator implements Cloneable {
             fFirstRuleStatusIndex = 0;
             fOtherRuleStatusIndex = 0;
             fBreaks.removeAllElements();
+            int maxStatus = 0;
+            for (int status : fRData.fStatusTable) {
+                maxStatus = Math.max(status, maxStatus);
+            }
+            isWordLike = maxStatus > 100;
         }
         ;
 
@@ -1092,7 +1099,7 @@ public class RuleBasedBreakIterator extends BreakIterator implements Cloneable {
                 r = fBreaks.elementAt(fPositionInCache);
                 assert (r > fromPos);
                 fBoundary = r;
-                fStatusIndex = fOtherRuleStatusIndex;
+                fStatusIndex = isWordLike || r == fLimit ? fOtherRuleStatusIndex : 0;
                 return true;
             }
 
@@ -1102,7 +1109,7 @@ public class RuleBasedBreakIterator extends BreakIterator implements Cloneable {
                 r = fBreaks.elementAt(fPositionInCache);
                 if (r > fromPos) {
                     fBoundary = r;
-                    fStatusIndex = fOtherRuleStatusIndex;
+                    fStatusIndex = isWordLike || r == fLimit ? fOtherRuleStatusIndex : 0;
                     return true;
                 }
             }
@@ -1135,7 +1142,10 @@ public class RuleBasedBreakIterator extends BreakIterator implements Cloneable {
                 r = fBreaks.elementAt(fPositionInCache);
                 assert (r < fromPos);
                 fBoundary = r;
-                fStatusIndex = (r == fStart) ? fFirstRuleStatusIndex : fOtherRuleStatusIndex;
+                fStatusIndex =
+                        (r == fStart)
+                                ? fFirstRuleStatusIndex
+                                : isWordLike ? fOtherRuleStatusIndex : 0;
                 return true;
             }
 
@@ -1148,7 +1158,10 @@ public class RuleBasedBreakIterator extends BreakIterator implements Cloneable {
                 r = fBreaks.elementAt(fPositionInCache);
                 if (r < fromPos) {
                     fBoundary = r;
-                    fStatusIndex = (r == fStart) ? fFirstRuleStatusIndex : fOtherRuleStatusIndex;
+                    fStatusIndex =
+                            (r == fStart)
+                                    ? fFirstRuleStatusIndex
+                                    : isWordLike ? fOtherRuleStatusIndex : 0;
                     return true;
                 }
             }
@@ -1289,6 +1302,15 @@ public class RuleBasedBreakIterator extends BreakIterator implements Cloneable {
         int fOtherRuleStatusIndex; // Rule status info for 2nd through last boundaries.
         int fBoundary; // Current boundary. Set by preceding(), following().
         int fStatusIndex; // Current rule status index. Set by preceding, following().
+
+        /**
+         * If `this.isWordLike`, the status of dictionary breaks is equal to the status of the final
+         * break of the rule-based segment they refine (fOtherRuleStatusIndex); otherwise,
+         * dictionary breaks have status 0. For compatibility, this property is determined by the
+         * largest status value used by the rules: rules that have a largest status greater than 100
+         * are considered word-like.
+         */
+        private boolean isWordLike;
     }
     ;
 
@@ -1355,7 +1377,6 @@ public class RuleBasedBreakIterator extends BreakIterator implements Cloneable {
             fDone = (fBufIdx == initialBufIdx);
             fPosition = fTextIdx;
             fRuleStatusIndex = fStatuses[fBufIdx];
-            return;
         }
         ;
 
@@ -1389,7 +1410,6 @@ public class RuleBasedBreakIterator extends BreakIterator implements Cloneable {
                     current();
                 }
             }
-            return;
         }
         ;
 

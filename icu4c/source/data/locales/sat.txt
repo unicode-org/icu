@@ -54,6 +54,10 @@ sat{
                 "yMMMd",
                 "yyMd",
             }
+            availableFormats{
+                yMMMMEd{"y MMMM d, EEE"}
+                yMMMMd{"y MMMM d"}
+            }
             dayNames{
                 format{
                     abbreviated{

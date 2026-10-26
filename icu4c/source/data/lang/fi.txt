@@ -11,19 +11,35 @@ fi{
         colCaseLevel{"aakkoslajien lajittelu"}
         colNormalization{"normalisoitu lajittelu"}
         colNumeric{"numeroiden lajittelu"}
+        colReorder{"skriptin/lohkon uudelleenjärjestys"}
         colStrength{"lajittelun taso"}
         collation{"lajittelujärjestys"}
         currency{"valuutta"}
+        d0{"muunnoksen kohde"}
+        dx{"kielletyt sanojen katkaisut"}
         em{"emojin esitys"}
+        fw{"viikon ensimmäinen päivä"}
+        h0{"yhdistetty"}
         hc{"tuntijärjestelmä"}
+        i0{"syöttötapa"}
+        k0{"näppäimistö"}
+        kv{"ylin ohitettu"}
         lb{"rivinvaihtotyyli"}
         lw{"rivi vaihtuu sanojen sisällä"}
+        m0{"muunnossäännöt"}
         ms{"mittajärjestelmä"}
+        mu{"mittayksikkö"}
         numbers{"numerot"}
+        rg{"alueen täydentävät tiedot"}
+        s0{"muunnoslähde"}
+        sd{"alueen alaosasto"}
         ss{"lause vaihtuu lyhenteen jälkeen"}
+        t{"muunnos"}
+        t0{"konekäännetty"}
         timezone{"aikavyöhyke"}
         va{"maavalinnan muunnelma"}
         x{"yksityiskäyttö"}
+        x0{"yksityiskäyttöinen muunnos"}
     }
     Languages{
         aa{"afar"}
@@ -553,6 +569,9 @@ fi{
         shu{"tšadinarabia"}
         si{"sinhala"}
         sid{"sidamo"}
+        sjd{"kiltinänsaame"}
+        sje{"piitimensaame"}
+        sju{"uumajansaame"}
         sk{"slovakki"}
         skr{"saraiki"}
         sl{"sloveeni"}
@@ -662,6 +681,7 @@ fi{
         wo{"wolof"}
         wuu{"wu-kiina"}
         xal{"kalmukki"}
+        xdq{"kaitag"}
         xh{"xhosa"}
         xmf{"mingreli"}
         xnr{"kangri"}
@@ -852,6 +872,7 @@ fi{
         Ougr{"vanha uiguurilainen"}
         Palm{"palmyralainen"}
         Pauc{"zotuallai"}
+        Pcun{"protonuolenpääkirjoitus"}
         Perm{"muinaispermiläinen"}
         Phag{"phags-pa"}
         Phli{"piirtokirjoituspahlavilainen"}
@@ -966,9 +987,13 @@ fi{
             ethiopic-amete-alem{"etiopialainen amete alem"}
             gregorian{"gregoriaaninen"}
             hebrew{"juutalainen"}
+            indian{"saka samvat -kalenteri"}
             islamic{"hidžra-kalenteri"}
             islamic-civil{"hidžra-kalenteri (taulukkomuoto, perjantaiepookki)"}
+            islamic-rgsa{"hidžra-kalenteri, Saudi-Arabia, kuun havainnointi"}
+            islamic-tbla{"hidžra-kalenteri (taulukkomuoto, astronominen epookki)"}
             islamic-umalqura{"Umm al Qura -kalenteri"}
+            iso8601{"gregoriaaninen kalenteri"}
             japanese{"japanilainen"}
             persian{"persialainen"}
             roc{"Minguo-kalenteri"}
@@ -994,6 +1019,11 @@ fi{
             no{"isojen ja pienten kirjainten normaalijärjestys"}
             upper{"isot kirjaimet edeltävät pieniä"}
         }
+        colCaseFirst%core{
+            lower{"pienet kirjaimet"}
+            no{"pienet kirjaimet"}
+            upper{"isot kirjaimet"}
+        }
         colCaseLevel{
             no{"isojen ja pienten kirjainten lajittelu yhdessä"}
             yes{"isojen ja pienten kirjainten lajittelu erikseen"}
@@ -1006,6 +1036,13 @@ fi{
             no{"numero-numerolta lajittelu"}
             yes{"numeroden lajittelu lukuina"}
         }
+        colReorder%core{
+            currency{"valuutta"}
+            digit{"numerot"}
+            punct{"välimerkit"}
+            space{"tyhjämerkki"}
+            symbol{"symboli"}
+        }
         colStrength{
             identical{"kaikkien merkkien lajittelu"}
             primary{"vain peruskirjainten lajittelu"}
@@ -1015,6 +1052,13 @@ fi{
             }
             secondary{"painomerkit huomioiva lajittelu"}
             tertiary{"painomerkit ja aakkoslajit tai merkkileveydet huomioiva lajittelu"}
+        }
+        colStrength%core{
+            identical{"kaikki"}
+            primary{"vain peruskirjaimet"}
+            quaternary{"peruskirjaimet, aksenttimerkit, sija, versiot, kana"}
+            secondary{"peruskirjaimet, aksenttimerkit"}
+            tertiary{"peruskirjaimet, aksenttimerkit, sija, versiot"}
         }
         collation{
             compat{"aiempi lajittelujärjestys yhteensopivuutta varten"}
@@ -1037,10 +1081,13 @@ fi{
             compat{"yhteensopivuus"}
             dictionary{"sanakirja"}
             ducet{"oletusarvoinen unicode"}
+            emoji{"emoji"}
+            eor{"eurooppalaiset säännöt"}
             phonebook{"puhelinluettelo"}
             phonetic{"äänteellinen"}
             pinyin{"pinyin-järjestelmä"}
             search{"haku"}
+            searchjl{"korean alkukonsonantit"}
             standard{"normaali"}
             stroke{"piirto"}
             traditional{"perinteinen"}
@@ -1058,16 +1105,26 @@ fi{
             text{"teksti"}
         }
         hc{
+            c12{"12 tunnin järjestelmä"}
+            c24{"24 tunnin järjestelmä"}
             h11{"12 tunnin järjestelmä (0–11)"}
             h12{"12 tunnin järjestelmä (1–12)"}
             h23{"24 tunnin järjestelmä (0–23)"}
             h24{"24 tunnin järjestelmä (1–24)"}
         }
         hc%core{
+            c12{"12"}
+            c24{"24"}
             h11{"12 (0–11)"}
             h12{"12 (1–12)"}
             h23{"24 (0–23)"}
             h24{"24 (1–24)"}
+        }
+        kv%core{
+            currency{"vaihto: välilyönnit, välimerkit, kaikki symbolit"}
+            punct{"vaihto: välilyönnit, välimerkit"}
+            space{"vaihto: välilyönnit, välimerkit"}
+            symbol{"vaihto: välilyönnit, välimerkit, muut kuin valuuttasymbolit"}
         }
         lb{
             loose{"väljä rivinvaihto"}
@@ -1186,9 +1243,51 @@ fi{
             wara{"varang kshiti -numerot"}
             wcho{"wancholaiset numerot"}
         }
+        numbers%core{
+            arabext{"laajennettu arabi-intialainen"}
+            armnlow{"armenialaiset pienet"}
+            finance{"talousnumerot"}
+            fullwide{"täysleveät"}
+            greklow{"kreikkalaiset pienet"}
+            hanidays{"han-symbolien kuukauden päivänumerot perinteisille kalentereille"}
+            hanidec{
+                "paikkasidonnainen desimaalijärjestelmä, joka käyttää numeroiden kiin"
+                "alaisia ideografeja"
+            }
+            hansfin{"yksinkertaistetut kiinalaiset taloudelliset"}
+            hantfin{"perinteiset kiinalaiset taloudelliset"}
+            jpanfin{"japanilaiset taloudelliset"}
+            jpanyear{
+                "japanilainen keisarin aikakauden ensimmäinen vuosi, Gannen-numeroint"
+                "i"
+            }
+            lanatham{"tai tham tham (kirkollinen)"}
+            mathbold{"matemaattinen (lihavoitu)"}
+            mathdbl{"matemaattinen (kaksoisviivallinen)"}
+            mathmono{"matemaattinen (kiinteävälinen)"}
+            mathsanb{"matemaattinen (lihavoitu, pääteviivaton)"}
+            mathsans{"matemaattinen (pääteviivaton)"}
+            mymrepka{"myanmarilaiset itäiset pwo karen -numerot"}
+            mymrpao{"myanmarilaiset pao-numerot"}
+            mymrshan{"myanmarilaiset shan-numerot"}
+            mymrtlng{"myanmarilaiset tai laing -numerot"}
+            native{"kielen omat"}
+            outlined{"rajatut"}
+            roman{"roomalaiset isot numerot"}
+            romanlow{"roomalaiset pienet"}
+            segment{"segmentoidut"}
+            tamldec{"modernit tamilinumerot"}
+            traditional{"perinteiset numerot"}
+        }
         ss%core{
             none{"pois"}
             standard{"päällä"}
+        }
+        t0{
+            und{"määrittämätön konekäännös"}
+        }
+        va%core{
+            posix{"POSIX-variantti"}
         }
     }
     Variants{
@@ -1199,6 +1298,7 @@ fi{
         1994{"sloveenin resian murteen yhdenmukaistettu oikeinkirjoitus"}
         1996{"saksan uusi oikeinkirjoitus"}
         ABL1943{"portugalin oikeinkirjoitus 1943"}
+        AKHMIMIC{"akhimimic"}
         AKUAPEM{"akanin akuapem-murre"}
         ALALC97{"amerikkalainen kirjastolatinaistus 1997"}
         ALUKU{"alukun kreolimurre"}

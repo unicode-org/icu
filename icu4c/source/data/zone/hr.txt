@@ -243,9 +243,6 @@ hr{
         "Europe:Copenhagen"{
             ec{"Kopenhagen"}
         }
-        "Europe:Dublin"{
-            ld{"irsko standardno vrijeme"}
-        }
         "Europe:Isle_of_Man"{
             ec{"Otok Man"}
         }
@@ -257,9 +254,6 @@ hr{
         }
         "Europe:Lisbon"{
             ec{"Lisabon"}
-        }
-        "Europe:London"{
-            ld{"britansko ljetno vrijeme"}
         }
         "Europe:Luxembourg"{
             ec{"Luksemburg"}
@@ -319,9 +313,9 @@ hr{
             ec{"Markižansko otočje"}
         }
         "meta:Acre"{
-            ld{"Acre ljetno vrijeme"}
-            lg{"Acre vrijeme"}
-            ls{"Acre standardno vrijeme"}
+            ld{"ljetno vrijeme Akre"}
+            lg{"vrijeme Akre"}
+            ls{"standardno vrijeme Akre"}
         }
         "meta:Afghanistan"{
             ls{"afganistansko vrijeme"}
@@ -342,11 +336,6 @@ hr{
             ld{"aljaško ljetno vrijeme"}
             lg{"aljaško vrijeme"}
             ls{"aljaško standardno vrijeme"}
-        }
-        "meta:Almaty"{
-            ld{"altmajsko ljetno vrijeme"}
-            lg{"altmajsko vrijeme"}
-            ls{"altmajsko standardno vrijeme"}
         }
         "meta:Amazon"{
             ld{"amazonsko ljetno vrijeme"}
@@ -382,16 +371,6 @@ hr{
             ld{"ljetno vrijeme Apije"}
             lg{"vrijeme Apije"}
             ls{"standardno vrijeme Apije"}
-        }
-        "meta:Aqtau"{
-            ld{"ljetno vrijeme grada Aktau"}
-            lg{"vrijeme grada Aktau"}
-            ls{"standardno vrijeme grada Aktau"}
-        }
-        "meta:Aqtobe"{
-            ld{"ljetno vrijeme grada Aktobe"}
-            lg{"vrijeme grada Aktobe"}
-            ls{"standardno vrijeme grada Aktobe"}
         }
         "meta:Arabian"{
             ld{"arapsko ljetno vrijeme"}
@@ -463,6 +442,10 @@ hr{
             ld{"brazilsko ljetno vrijeme"}
             lg{"brazilsko vrijeme"}
             ls{"brazilsko standardno vrijeme"}
+        }
+        "meta:British"{
+            ld{"britansko ljetno vrijeme"}
+            lg{"britansko vrijeme"}
         }
         "meta:Brunei"{
             ls{"vrijeme za Brunej Darussalam"}
@@ -592,6 +575,11 @@ hr{
         "meta:Gilbert_Islands"{
             ls{"vrijeme Gilbertovih otoka"}
         }
+        "meta:Greenland"{
+            ld{"grenlandsko ljetno vrijeme"}
+            lg{"grenlandsko vrijeme"}
+            ls{"grenlandsko standardno vrijeme"}
+        }
         "meta:Greenland_Eastern"{
             ld{"istočnogrenlandsko ljetno vrijeme"}
             lg{"istočnogrenlandsko vrijeme"}
@@ -602,9 +590,6 @@ hr{
             lg{"zapadnogrenlandsko vrijeme"}
             ls{"zapadnogrenlandsko standardno vrijeme"}
         }
-        "meta:Guam"{
-            ls{"guamsko standardno vrijeme"}
-        }
         "meta:Gulf"{
             ls{"zaljevsko standardno vrijeme"}
         }
@@ -612,7 +597,7 @@ hr{
             ls{"gvajansko vrijeme"}
         }
         "meta:Hawaii"{
-            ls{"havajsko-aleutsko standardno vrijeme"}
+            ls{"havajsko vrijeme"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"havajsko-aleutsko ljetno vrijeme"}
@@ -652,6 +637,10 @@ hr{
             lg{"iransko vrijeme"}
             ls{"iransko standardno vrijeme"}
         }
+        "meta:Irish"{
+            ld{"irsko standardno vrijeme"}
+            lg{"irsko vrijeme"}
+        }
         "meta:Irkutsk"{
             ld{"irkutsko ljetno vrijeme"}
             lg{"irkutsko vrijeme"}
@@ -668,9 +657,9 @@ hr{
             ls{"japansko standardno vrijeme"}
         }
         "meta:Kamchatka"{
-            ld{"Petropavlovsk-kamčatsko ljetno vrijeme"}
-            lg{"Petropavlovsk-kamčatsko vrijeme"}
-            ls{"Petropavlovsk-kamčatsko standardno vrijeme"}
+            ld{"kamčatsko ljetno vrijeme"}
+            lg{"kamčatsko vrijeme"}
+            ls{"kamčatsko standardno vrijeme"}
         }
         "meta:Kazakhstan"{
             ls{"kazahstansko vrijeme"}
@@ -697,9 +686,6 @@ hr{
         "meta:Kyrgystan"{
             ls{"kirgistansko vrijeme"}
         }
-        "meta:Lanka"{
-            ls{"lankansko vrijeme"}
-        }
         "meta:Line_Islands"{
             ls{"vrijeme Ekvatorskih otoka"}
         }
@@ -707,11 +693,6 @@ hr{
             ld{"ljetno vrijeme otoka Lord Howe"}
             lg{"vrijeme otoka Lord Howe"}
             ls{"standardno vrijeme otoka Lord Howe"}
-        }
-        "meta:Macau"{
-            ld{"ljetno makaosko vrijeme"}
-            lg{"makaosko vrijeme"}
-            ls{"standardno makaosko vrijeme"}
         }
         "meta:Magadan"{
             ld{"magadansko ljetno vrijeme"}
@@ -790,9 +771,6 @@ hr{
             lg{"vrijeme grada Fernando de Noronha"}
             ls{"standardno vrijeme grada Fernando de Noronha"}
         }
-        "meta:North_Mariana"{
-            ls{"vrijeme Sjevernomarijanskih Otoka"}
-        }
         "meta:Novosibirsk"{
             ld{"novosibirsko ljetno vrijeme"}
             lg{"novosibirsko vrijeme"}
@@ -846,11 +824,6 @@ hr{
         "meta:Pyongyang"{
             ls{"pjongjanško vrijeme"}
         }
-        "meta:Qyzylorda"{
-            ld{"ljetno vrijeme grada Kizilorde"}
-            lg{"vrijeme grada Kizilorde"}
-            ls{"standardno vrijeme grada Kizilorde"}
-        }
         "meta:Reunion"{
             ls{"vrijeme Reuniona"}
         }
@@ -868,8 +841,6 @@ hr{
             ls{"samarsko standardno vrijeme"}
         }
         "meta:Samoa"{
-            ld{"samoansko ljetno vrijeme"}
-            lg{"samoansko vrijeme"}
             ls{"samoansko standardno vrijeme"}
         }
         "meta:Seychelles"{
@@ -929,6 +900,9 @@ hr{
             ld{"urugvajsko ljetno vrijeme"}
             lg{"urugvajsko vrijeme"}
             ls{"urugvajsko standardno vrijeme"}
+        }
+        "meta:Urumqi"{
+            ls{"vrijeme Urumqija"}
         }
         "meta:Uzbekistan"{
             ld{"uzbekistansko ljetno vrijeme"}

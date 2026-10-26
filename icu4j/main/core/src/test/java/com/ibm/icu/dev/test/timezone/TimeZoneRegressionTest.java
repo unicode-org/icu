@@ -7,7 +7,7 @@
  *******************************************************************************
  */
 
-/**
+/*
  * @test 1.18 99/09/21
  * @bug 4052967 4073209 4073215 4084933 4096952 4109314 4126678 4151406 4151429
  * @bug 4154525 4154537 4154542 4154650 4159922 4162593 4173604 4176686 4184229 4208960
@@ -15,6 +15,7 @@
 package com.ibm.icu.dev.test.timezone;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
+import com.ibm.icu.impl.locale.XCldrStub;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.Calendar;
@@ -58,7 +59,7 @@ public class TimeZoneRegressionTest extends CoreTestFmwk {
     public void Test4073209() {
         TimeZone z1 = TimeZone.getTimeZone("PST");
         TimeZone z2 = TimeZone.getTimeZone("PST");
-        if (z1 == z2) errln("Fail: TimeZone should return clones");
+        assertNotSame("Fail: TimeZone should return clones", z1, z2);
     }
 
     @Test
@@ -1434,11 +1435,7 @@ public class TimeZoneRegressionTest extends CoreTestFmwk {
             wk.start();
         }
         for (Thread wk : workers) {
-            try {
-                wk.join();
-            } catch (InterruptedException ie) {
-
-            }
+            XCldrStub.joinUninterruptibly(wk);
         }
     }
 

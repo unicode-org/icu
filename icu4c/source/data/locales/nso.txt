@@ -13,6 +13,10 @@ nso{
     }
     calendar{
         gregorian{
+            AmPmMarkers{
+                "mesong",
+                "thapama",
+            }
             AmPmMarkersNarrow{
                 "a",
                 "p",
@@ -44,6 +48,8 @@ nso{
                 hms{"h:mm:ss a"}
                 hmsv{"h:mm:ss a v"}
                 hmv{"h:mm a v"}
+                yMMMMEd{"y MMMM d, EEE"}
+                yMMMMd{"d MMMM y"}
                 yMMMd{"d MMM y"}
                 yMd{"dd-MM-y"}
                 yw{

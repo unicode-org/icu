@@ -14,7 +14,6 @@ be{
                 atLeast{"{0}+"}
             }
             patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
                 currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
                 percentFormat{"#,##0 %"}
@@ -172,50 +171,74 @@ be{
                 }
                 decimalFormat{
                     1000{
+                        few{"0 тыс'.'"}
+                        many{"0 тыс'.'"}
                         one{"0 тыс'.'"}
                         other{"0 тыс'.'"}
                     }
                     10000{
+                        few{"00 тыс'.'"}
+                        many{"00 тыс'.'"}
                         one{"00 тыс'.'"}
                         other{"00 тыс'.'"}
                     }
                     100000{
+                        few{"000 тыс'.'"}
+                        many{"000 тыс'.'"}
                         one{"000 тыс'.'"}
                         other{"000 тыс'.'"}
                     }
                     1000000{
+                        few{"0 млн"}
+                        many{"0 млн"}
                         one{"0 млн"}
                         other{"0 млн"}
                     }
                     10000000{
+                        few{"00 млн"}
+                        many{"00 млн"}
                         one{"00 млн"}
                         other{"00 млн"}
                     }
                     100000000{
+                        few{"000 млн"}
+                        many{"000 млн"}
                         one{"000 млн"}
                         other{"000 млн"}
                     }
                     1000000000{
+                        few{"0 млрд"}
+                        many{"0 млрд"}
                         one{"0 млрд"}
                         other{"0 млрд"}
                     }
                     10000000000{
+                        few{"00 млрд"}
+                        many{"00 млрд"}
                         one{"00 млрд"}
                         other{"00 млрд"}
                     }
                     100000000000{
+                        few{"000 млрд"}
+                        many{"000 млрд"}
                         one{"000 млрд"}
                         other{"000 млрд"}
                     }
                     1000000000000{
+                        few{"0 трлн"}
+                        many{"0 трлн"}
                         one{"0 трлн"}
                         other{"0 трлн"}
                     }
                     10000000000000{
+                        few{"00 трлн"}
+                        many{"00 трлн"}
                         one{"00 трлн"}
                         other{"00 трлн"}
                     }
                     100000000000000{
+                        few{"000 трлн"}
+                        many{"000 трлн"}
                         one{"000 трлн"}
                         other{"000 трлн"}
                     }
@@ -378,7 +401,7 @@ be{
                 yyyyMEd{"E, d.M.y G"}
                 yyyyMMM{"LLL y G"}
                 yyyyMMMEd{"E, d MMM y G"}
-                yyyyMMMM{"LLLL y G"}
+                yyyyMMMM{"MMMM y 'г'. G"}
                 yyyyMMMd{"d MMM y G"}
                 yyyyMd{"d.M.y G"}
                 yyyyQQQ{"QQQ y G"}
@@ -448,6 +471,9 @@ be{
                 MMMEd{
                     M{"E, d MMM – E, d MMM"}
                     d{"E, d MMM – E, d MMM"}
+                }
+                MMMMd{
+                    M{"d MMMM – d MMMM"}
                 }
                 MMMd{
                     M{"d MMM – d MMM"}
@@ -545,16 +571,22 @@ be{
                 "yMMd",
                 "yyMMd",
             }
+            appendItems{
+                Day-Of-Week{"{1}, {0}"}
+                Time-Day-Of-Week{"{1}, {0}"}
+            }
             availableFormats{
                 Ehm{"E h:mm a"}
                 Ehms{"E h:mm:ss a"}
                 Gy{"y 'г'. G"}
                 GyMMM{"LLL y 'г'. G"}
                 GyMMMEd{"E, d MMM y 'г'. G"}
+                GyMMMM{"MMM y 'г'. G"}
+                GyMMMMEd{"E, d MMMM y 'г'. G"}
+                GyMMMMd{"d MMMM y 'г'. G"}
                 GyMMMd{"d MMM y 'г'. G"}
                 GyMd{"dd.MM.y GGGGG"}
                 H{"H"}
-                Hv{"HH 'г' v"}
                 MEd{"E, d.M"}
                 MMMEd{"E, d MMM"}
                 MMMMEd{"E, d MMMM"}
@@ -578,6 +610,8 @@ be{
                 yMMM{"LLL y"}
                 yMMMEd{"E, d MMM y"}
                 yMMMM{"LLLL y"}
+                yMMMMEd{"E, d MMMM y 'г'."}
+                yMMMMd{"d MMMM y 'г'."}
                 yMMMd{"d MMM y"}
                 yMd{"d.M.y"}
                 yQQQ{"QQQ y"}
@@ -700,6 +734,10 @@ be{
                 MMMEd{
                     M{"E, d MMM – E, d MMM"}
                     d{"E, d – E, d MMM"}
+                }
+                MMMMd{
+                    M{"d MMMM – d MMMM"}
+                    d{"d–d MMMM"}
                 }
                 MMMd{
                     M{"d MMM – d MMM"}

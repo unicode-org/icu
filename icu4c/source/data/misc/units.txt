@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/
 units:table(nofallback){
-    cldrVersion{"48"}
+    cldrVersion{"49"}
     convertUnits{
         acre{
             factor{"ft2_to_m2 * 43560"}
@@ -207,6 +207,11 @@ units:table(nofallback){
             factor{"1000"}
             systems{"metric_adjacent"}
             target{"square-meter"}
+        }
+        dyne{
+            factor{"1/1000*100"}
+            systems{"metric_adjacent"}
+            target{"kilogram-meter-per-square-second"}
         }
         earth-mass{
             factor{"5.9722E+24"}
@@ -592,6 +597,11 @@ units:table(nofallback){
         }
         pound-force{
             factor{"lb_to_kg * gravity"}
+            systems{"ussystem uksystem"}
+            target{"kilogram-meter-per-square-second"}
+        }
+        poundal{
+            factor{"lb_to_kg*ft_to_m"}
             systems{"ussystem uksystem"}
             target{"kilogram-meter-per-square-second"}
         }
@@ -1458,6 +1468,15 @@ units:table(nofallback){
                 US{
                     {
                         unit{"foodcalorie"}
+                    }
+                }
+            }
+        }
+        "force"{
+            "default"{
+                001{
+                    {
+                        unit{"newton"}
                     }
                 }
             }

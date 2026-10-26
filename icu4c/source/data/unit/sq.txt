@@ -190,11 +190,6 @@ sq{
             ofglucose{
                 dnam{"glukoze"}
             }
-            part{
-                dnam{"pjesë"}
-                one{"{0} pjesë"}
-                other{"{0} pjesë"}
-            }
             part-per-1e6{
                 dnam{"pjesë për milion"}
                 one{"{0} pjesë për milion"}
@@ -851,11 +846,6 @@ sq{
                 one{"{0} milje nautike në orë"}
                 other{"{0} milje nautike në orë"}
             }
-            light-speed{
-                dnam{"dritë"}
-                one{"{0} dritë"}
-                other{"{0} dritë"}
-            }
             meter-per-second{
                 dnam{"metra në sekondë"}
                 one{"{0} metër në sekondë"}
@@ -1101,20 +1091,6 @@ sq{
                 one{"{0} mol"}
                 other{"{0} molë"}
             }
-            ofglucose{
-                dnam{"Glc"}
-            }
-            part{
-                dnam{"pjesë"}
-                one{"{0} pjesë"}
-                other{"{0} pjesë"}
-            }
-            part-per-1e6{
-                dnam{"pjesë/milion"}
-            }
-            part-per-1e9{
-                dnam{"pjesë/miliard"}
-            }
         }
         consumption{
             mile-per-gallon{
@@ -1178,9 +1154,6 @@ sq{
             }
         }
         energy{
-            calorie-it{
-                dnam{"cal-IT"}
-            }
             therm-us{
                 one{"{0} UStu"}
                 other{"{0} UStu"}
@@ -1221,13 +1194,6 @@ sq{
             millibar{
                 one{"{0} mb"}
                 other{"{0} mb"}
-            }
-        }
-        speed{
-            light-speed{
-                dnam{"dritë"}
-                one{"{0} dritë"}
-                other{"{0} dritë"}
             }
         }
         temperature{

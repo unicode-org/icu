@@ -13,22 +13,23 @@
 package com.ibm.icu.dev.tool.layout;
 
 import com.ibm.icu.impl.Utility;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LigatureTreeWalker extends TreeWalker implements LookupSubtable {
     protected int[] componentChars;
     protected int componentCount;
     protected int lastFirstComponent;
 
-    protected Vector ligatureSets;
-    protected Vector ligatureSet;
+    protected List<List<LigatureEntry>> ligatureSets;
+    protected ArrayList<LigatureEntry> ligatureSet;
 
     public LigatureTreeWalker() {
         componentChars = new int[30];
         componentCount = 0;
         lastFirstComponent = -1;
         ligatureSet = null;
-        ligatureSets = new Vector();
+        ligatureSets = new ArrayList<>();
     }
 
     public void down(int ch) {
@@ -47,25 +48,25 @@ public class LigatureTreeWalker extends TreeWalker implements LookupSubtable {
 
         if (lastFirstComponent != firstComponent) {
             if (ligatureSet != null) {
-                ligatureSets.addElement(ligatureSet);
+                ligatureSets.add(ligatureSet);
             }
 
-            ligatureSet = new Vector();
+            ligatureSet = new ArrayList<>();
             lastFirstComponent = firstComponent;
         }
 
-        ligatureSet.addElement(new LigatureEntry(lig, componentChars, componentCount));
+        ligatureSet.add(new LigatureEntry(lig, componentChars, componentCount));
     }
 
     public void done() {
         if (ligatureSet != null) {
-            ligatureSets.addElement(ligatureSet);
+            ligatureSets.add(ligatureSet);
         }
     }
 
     protected int firstComponentChar(int ligatureSetIndex) {
-        Vector aLigatureSet = (Vector) ligatureSets.elementAt(ligatureSetIndex);
-        LigatureEntry firstEntry = (LigatureEntry) aLigatureSet.elementAt(0);
+        List<LigatureEntry> aLigatureSet = ligatureSets.get(ligatureSetIndex);
+        LigatureEntry firstEntry = aLigatureSet.get(0);
 
         return firstEntry.getComponentChar(0);
     }
@@ -103,7 +104,7 @@ public class LigatureTreeWalker extends TreeWalker implements LookupSubtable {
         for (int set = 0; set < ligatureSetCount; set += 1) {
             System.out.print(Utility.hex(firstComponentChar(set), 6) + ": ");
 
-            Vector aLigatureSet = (Vector) ligatureSets.elementAt(set);
+            List<LigatureEntry> aLigatureSet = ligatureSets.get(set);
             int ligatureCount = aLigatureSet.size();
             int ligatureSetAddress = writer.getOutputIndex();
 
@@ -118,7 +119,7 @@ public class LigatureTreeWalker extends TreeWalker implements LookupSubtable {
             }
 
             for (int lig = 0; lig < ligatureCount; lig += 1) {
-                LigatureEntry entry = (LigatureEntry) aLigatureSet.elementAt(lig);
+                LigatureEntry entry = aLigatureSet.get(lig);
                 int compCount = entry.getComponentCount();
 
                 writer.fixOffset(ligatureTableOffset++, ligatureSetAddress);

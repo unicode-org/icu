@@ -35,11 +35,8 @@ The first task in building a script transform is to determine which system of
 transliteration to use as a model. There are dozens of different systems for
 each language and script.
 
-The International Organization for Standardization
-([ISO](http://www.elot.gr/tc46sc2/)) uses a strict definition of
-transliteration, which requires it to be reversible. Although the goal for ICU
-script transforms is to be reversible, they do not have to adhere to this
-definition. In general, most transliteration systems in use are not reversible.
+Although the goal for ICU script transforms is to be reversible, they do not have to be.
+In general, most transliteration systems in use are not reversible.
 This tutorial will describe the process for building a reversible transform
 since it illustrates more of the issues involved in the rules. (For guidelines
 in building transforms, see "Guidelines for Designing Script Transliterations"
@@ -60,7 +57,7 @@ transliterate the Greek accents that are no longer in use in modern Greek.
 > :point_right: **Note**: *Some of the characters may not be visible on the screen unless you have a
 Unicode font with all the Greek letters. If you have a licensed copy of
 Microsoft® Office, you can use the "Arial Unicode MS" font, or you can download
-the [CODE2000](http://www.code2000.net/) font for free. For more information,
+the [Noto fonts](https://fonts.google.com/noto) for free. For more information,
 see [Display Problems?](http://www.unicode.org/help/display_problems.html) on
 the Unicode web site.*
 

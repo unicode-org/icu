@@ -17,7 +17,6 @@ import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.util.Currency;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -43,7 +42,7 @@ public class CurrencyDemo {
 
         // ugly work-around for 2.4
         DecimalFormat result = (DecimalFormat) NumberFormat.getCurrencyInstance(displayLocale);
-        HackCurrencyInfo hack = (HackCurrencyInfo) (hackData.get(currency.getCurrencyCode()));
+        HackCurrencyInfo hack = HACK_DATA.get(currency.getCurrencyCode());
         result.setMinimumFractionDigits(hack.decimals);
         result.setMaximumFractionDigits(hack.decimals);
         result.setRoundingIncrement(hack.rounding);
@@ -53,7 +52,12 @@ public class CurrencyDemo {
         return result;
     }
 
-    static Map hackData = new HashMap();
+    static final Map<String, HackCurrencyInfo> HACK_DATA =
+            Map.of(
+                    "USD", new HackCurrencyInfo(2, 0, "$"),
+                    "GBP", new HackCurrencyInfo(2, 0, "\u00A3"),
+                    "JPY", new HackCurrencyInfo(0, 0, "\u00A5"),
+                    "EUR", new HackCurrencyInfo(2, 0, "\u20AC"));
 
     static class HackCurrencyInfo {
         int decimals;
@@ -65,13 +69,6 @@ public class CurrencyDemo {
             this.rounding = rounding;
             this.symbol = symbol;
         }
-    }
-
-    static {
-        hackData.put("USD", new HackCurrencyInfo(2, 0, "$"));
-        hackData.put("GBP", new HackCurrencyInfo(2, 0, "\u00A3"));
-        hackData.put("JPY", new HackCurrencyInfo(0, 0, "\u00A5"));
-        hackData.put("EUR", new HackCurrencyInfo(2, 0, "\u20AC"));
     }
 
     /**

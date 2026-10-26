@@ -399,8 +399,6 @@ el{
             }
             part{
                 dnam{"μέρη"}
-                one{"{0} μέρος"}
-                other{"{0} μέρη"}
             }
             part-per-1e6{
                 case{
@@ -2481,18 +2479,6 @@ el{
             10p9{"γιγ-{0}"}
         }
         concentr{
-            katal{
-                one{"{0} kat"}
-                other{"{0} kat"}
-            }
-            ofglucose{
-                dnam{"Glc"}
-            }
-            part{
-                dnam{"μέρος"}
-                one{"{0} μέρος"}
-                other{"{0} μέρη"}
-            }
             part-per-1e6{
                 dnam{"ppm"}
             }
@@ -2589,9 +2575,6 @@ el{
             }
         }
         energy{
-            calorie-it{
-                dnam{"cal-IT"}
-            }
             electronvolt{
                 dnam{"eV"}
             }
@@ -2789,7 +2772,6 @@ el{
                 dnam{"δρ. όγκου"}
             }
             fluid-ounce-metric{
-                dnam{"μ. ουγγιά υγρ."}
                 one{"{0} μ. ουγγιά υγρ."}
                 other{"{0} μ. ουγγιές υγρ."}
             }

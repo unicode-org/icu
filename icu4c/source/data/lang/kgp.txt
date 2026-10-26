@@ -777,6 +777,8 @@ kgp{
             npinyin{"Nĩkrer"}
         }
         hc{
+            c12{"12 óra tuke"}
+            c24{"24 óra tuke"}
             h11{"12 óra tuke (0–11)"}
             h12{"12 óra tuke (1–12)"}
             h23{"24 óra tuke (0–23)"}

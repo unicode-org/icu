@@ -102,8 +102,8 @@ names for a currency, then the 3-letter ISO code itself is displayed.
 The locale ID and the currency code are effectively independent: The locale ID
 defines the general format for the numbers, and whether the currency symbol or
 name is displayed before or after the number, while the currency code selects
-the actual currency with its symbol, name, number of digits, and [rounding
-mode](rounding-modes.md).
+the actual currency with its symbol, name, number of digits, and
+[rounding mode](rounding-modes.md).
 
 In ICU and Java, the currency is specified in the form of a 3-letter ISO 4217
 code. For example, the code "USD" represents the US Dollar and "EUR" represents
@@ -130,10 +130,6 @@ number format object appropriately, i.e., it sets not only the currency symbol
 and display name, but also the correct number of fraction digits and the correct
 [rounding mode](rounding-modes.md). This is not the case with the base JDK. See
 the API references for more details.
-
-There is ICU4C sample code at
-[icu4c/source/samples/numfmt/main.cpp](https://github.com/unicode-org/icu/blob/main/icu4c/source/samples/numfmt/main.cpp)
-which illustrates the use of `NumberFormat.setCurrency()`.
 
 #### Displaying Numbers
 
@@ -206,10 +202,3 @@ locale data. The `DecimalFormatSymbols` can be adopted by a `DecimalFormat`
 instance, or it can be specified when a `DecimalFormat` is created. If you need to
 change any of these symbols, can get the `DecimalFormatSymbols` object from your
 `DecimalFormat` and then modify it.
-
-## Additional Sample Code
-
-C/C++: See
-[icu4c/source/samples/numfmt/](https://github.com/unicode-org/icu/blob/main/icu4c/source/samples/numfmt/)
-in the ICU source distribution for code samples showing the use of ICU number
-formatting.

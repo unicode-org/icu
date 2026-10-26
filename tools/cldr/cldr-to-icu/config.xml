@@ -133,8 +133,6 @@
             <forcedAlias source="yue_CN" target="zh_Hans"/>
             <forcedAlias source="yue_Hans" target="zh_Hans"/>
             <forcedAlias source="yue_Hans_CN" target="zh_Hans"/>
-            <!-- TODO: Find out and document this properly. -->
-            <forcedAlias source="sr_ME" target="sr_Cyrl_ME"/>
 
             <localeIds>
                 root,
@@ -178,18 +176,19 @@
                 root,
 
                 // A-E
-                af, ak, am, ars, ar, az, be, bg, bs, ca, ccp, chr, cs, cy,
+                af, ak, am, ars, ar, az, ba, be, bg, bn, bs, ca, ccp, chr, cs, cv, cy,
                 da, de_CH, de, ee, el, en_001, en_IN, en, eo, es_419, es_DO,
                 es_GT, es_HN, es_MX, es_NI, es_PA, es_PR, es_SV, es, es_US, et,
 
                 // F-P
                 fa_AF, fa, ff, fil, fi, fo, fr_BE, fr_CH, fr, ga, gu, he, hi, hr,
-                hu, hy, id, in, is, it, iw, ja, ka, kk, kl, km, ko, ky, lb,
-                lo, lrc, lt, lv, mk, ms, mt, my, nb, ne, nl, nn, no, pl, pt_PT, pt,
+                hu, hy, id, in, is, it, iw, ja, ka, kk, kl, km, kn, ko, ky, lb,
+                lo, lrc, lt, lv, mk, ml, mr, ms, mt, my, nb, ne, nl, nn, no,
+                or, pa, pl, pt_PT, pt,
 
                 // Q-Z
-                qu, ro, ru, se, sh, sk, sl, sq, sr_Latn, sr, su, sv, sw, ta, th, tr,
-                uk, vec, vi, yue_Hans, yue, zh_Hant_HK, zh_Hant, zh_HK, zh_MO, zh_TW, zh
+                qu, ro, ru, se, sh, sk, sl, sq, sr_Latn, sr, su, sv, sw, ta, te, th, tr,
+                uk, ur, vec, vi, yue_Hans, yue, zh_Hant_HK, zh_Hant, zh_HK, zh_MO, zh_TW, zh
             </localeIds>
         </directory>
 
@@ -285,6 +284,8 @@
             <retain path="en.txt"/>
             <retain path="el.txt"/>
         </dir>
+        <!-- Not ICU runtime data: only read offline by the "tz2icu" tool. -->
+        <dir name="tzdata"/>
         <dir name="unit"/>
         <dir name="zone">
             <!-- Manually edited to support TZ database name compatibility. -->

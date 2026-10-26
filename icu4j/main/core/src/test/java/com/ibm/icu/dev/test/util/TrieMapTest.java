@@ -622,6 +622,7 @@ public class TrieMapTest extends CoreTestFmwk {
         Option option;
 
         @Override
+        @SuppressWarnings("unchecked")
         public void init(Object... params) {
             if (params.length > 0) {
                 keys = (ArrayList<String>) params[0];

@@ -10,12 +10,21 @@ sd_Deva{
     }
     ExemplarCharactersPunctuation{"[\\- ‐‑ – — , ; \\: ! ? . … '‘’ \u0022“” ( ) \\[ \\] § @ * / \\& # † ‡ ′ ″]"}
     NumberElements{
+        arab{
+            symbols{
+                minusSign{"-"}
+                percentSign{"%"}
+                plusSign{"+"}
+            }
+        }
         arabext{
             patterns{
                 percentFormat{"0%"}
             }
             symbols{
                 decimal{"."}
+                minusSign{"-"}
+                plusSign{"+"}
             }
         }
         deva{
@@ -56,6 +65,9 @@ sd_Deva{
                 "GyMMMMd",
                 "GyMMMd",
                 "GGGGGyMd",
+            }
+            availableFormats{
+                yyyyMd{"G d/M/y"}
             }
             intervalFormats{
                 fallback{"{0} – {1}"}
@@ -112,6 +124,8 @@ sd_Deva{
                 yMMM{"MMM y"}
                 yMMMEd{"E, MMM d, y"}
                 yMMMM{"MMMM y"}
+                yMMMMEd{"E, d MMMM y"}
+                yMMMMd{"d MMMM y"}
                 yMMMd{"MMM d, y"}
                 yMd{"M/d/y"}
                 yQQQ{"QQQ y"}
@@ -188,7 +202,9 @@ sd_Deva{
                 }
             }
             intervalFormats{
-                fallback{"{0} – {1}"}
+                yMMMd{
+                    d{"d–d MMM y"}
+                }
             }
             monthNames{
                 format{

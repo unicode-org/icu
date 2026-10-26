@@ -1478,10 +1478,6 @@ ca{
             one{"iuan xinès extracontinental"}
             other{"iuans xinesos extracontinentals"}
         }
-        CNX{
-            one{"dòlar del Banc Popular Xinès"}
-            other{"dòlars del Banc Popular Xinès"}
-        }
         CNY{
             one{"iuan"}
             other{"iuans"}
@@ -2377,10 +2373,6 @@ ca{
         ZWD{
             one{"dòlar zimbabuès (1980–2008)"}
             other{"dòlars zimbabuesos (1980–2008)"}
-        }
-        ZWG{
-            one{"or de Zimbàbue"}
-            other{"or de Zimbàbue"}
         }
         ZWL{
             one{"dòlar zimbabuès (2009)"}

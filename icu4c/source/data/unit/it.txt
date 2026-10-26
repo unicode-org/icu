@@ -179,6 +179,7 @@ it{
                     }
                 }
             }
+            times{"{0} {1}"}
         }
         concentr{
             item{
@@ -223,8 +224,6 @@ it{
             }
             part{
                 dnam{"parti"}
-                one{"{0} parte"}
-                other{"{0} parti"}
             }
             part-per-1e6{
                 dnam{"parti per milione"}
@@ -1019,7 +1018,6 @@ it{
                 other{"{0} nodi"}
             }
             light-speed{
-                dnam{"luce"}
                 gender{"feminine"}
             }
             meter-per-second{
@@ -1378,12 +1376,10 @@ it{
                 other{"{0}mol"}
             }
             ofglucose{
-                dnam{"Glc"}
                 one{"{0}Glc"}
                 other{"{0}Glc"}
             }
             part{
-                dnam{"parte"}
                 one{"{0}parte"}
                 other{"{0}parti"}
             }
@@ -1409,8 +1405,9 @@ it{
                 other{"{0}mpg"}
             }
             mile-per-gallon-imperial{
-                one{"{0}mi/Imp gal"}
-                other{"{0}mi/Imp gal"}
+                dnam{"mpg imp."}
+                one{"{0}mpg imp."}
+                other{"{0}mpg imp."}
             }
         }
         digital{
@@ -1575,7 +1572,6 @@ it{
                 other{"{0}cal"}
             }
             calorie-it{
-                dnam{"cal-IT"}
                 one{"{0}cal-IT"}
                 other{"{0}cal-IT"}
             }
@@ -1930,11 +1926,6 @@ it{
                 one{"{0}mm Hg"}
                 other{"{0}mm Hg"}
             }
-            ofhg{
-                dnam{"di Hg"}
-                one{"{0} di Hg"}
-                other{"{0} di Hg"}
-            }
             pascal{
                 one{"{0}Pa"}
                 other{"{0}Pa"}
@@ -1958,7 +1949,6 @@ it{
                 other{"{0}kn"}
             }
             light-speed{
-                dnam{"luce"}
                 one{"{0}l"}
                 other{"{0}l"}
             }
@@ -2060,9 +2050,9 @@ it{
                 other{"{0}dstspn"}
             }
             dessert-spoon-imperial{
-                dnam{"dstspn im"}
-                one{"{0}dstspn im"}
-                other{"{0}dstspn im"}
+                dnam{"cd imp."}
+                one{"{0}cd imp."}
+                other{"{0}cd imp."}
             }
             dram{
                 dnam{"dr liq"}
@@ -2133,8 +2123,9 @@ it{
                 other{"{0}qt"}
             }
             quart-imperial{
-                one{"{0}imp qt"}
-                other{"{0}imp qt"}
+                dnam{"qt imp."}
+                one{"{0}qt imp."}
+                other{"{0}qt imp."}
             }
             tablespoon{
                 one{"{0}tbsp"}
@@ -2229,9 +2220,9 @@ it{
                 other{"{0} mpg"}
             }
             mile-per-gallon-imperial{
-                dnam{"mi/Imp gal"}
-                one{"{0} mi/Imp gal"}
-                other{"{0} mi/Imp gal"}
+                dnam{"miglia/gal imp."}
+                one{"{0} mpg imp."}
+                other{"{0} mpg imp."}
             }
         }
         coordinate{
@@ -2523,6 +2514,11 @@ it{
                 one{"{0} dl"}
                 other{"{0} dl"}
             }
+            dessert-spoon-imperial{
+                dnam{"cucchiaini dessert imp."}
+                one{"{0} cd imp."}
+                other{"{0} cd imp."}
+            }
             dram{
                 dnam{"dramma liquida"}
                 one{"{0} dr liq"}
@@ -2583,9 +2579,9 @@ it{
                 other{"{0} pizzichi"}
             }
             quart-imperial{
-                dnam{"imp qt"}
-                one{"{0} imp qt"}
-                other{"{0} imp qt"}
+                dnam{"quarti imp."}
+                one{"{0} qt imp."}
+                other{"{0} qt imp."}
             }
         }
     }

@@ -997,7 +997,7 @@ LocaleTest::TestGetLangsAndCountries()
       ;
 
     /* TODO: Change this test to be more like the cloctst version? */
-    if (testCount != 601)
+    if (testCount != 645)
         errln("Expected getISOLanguages() to return 601 languages; it returned %d", testCount);
     else {
         for (i = 0; i < 15; i++) {
@@ -5395,6 +5395,11 @@ void LocaleTest::TestCanonicalize()
         // alias of tvalue should be replaced
         { "en-t-m0-NaMeS", "en-t-m0-prprname" },
         { "en-t-s0-ascii-d0-NaMe", "en-t-d0-charname-s0-ascii" },
+
+        // ICU-23561
+        { "sh-Qaai-840-heploc-polytoni", "sr-Zinh-US-alalc97-polyton" },
+        { "sh-Qaai-840-aaland-arevela-arevmda-bokmal-hakka-lojban-nynorsk-saaho-xiang-heploc-polytoni",
+          "sr-Zinh-US-alalc97-polyton" },
     };
     int32_t i;
     for (i=0; i < UPRV_LENGTHOF(testCases); i++) {

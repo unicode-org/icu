@@ -11,19 +11,35 @@ af{
         colCaseLevel{"Kassensitiewe rangskikking"}
         colNormalization{"Genormaliseerde rangskikking"}
         colNumeric{"Numeriese rangskikking"}
+        colReorder{"Skrip-/blokherrangskikking"}
         colStrength{"Rangskiksterkte"}
         collation{"Rangskikvolgorde"}
         currency{"Geldeenheid"}
+        d0{"Transformasiebestemming"}
+        dx{"Woordeboekwoordbreukuitsonderings"}
         em{"Emoji-voorstelling"}
+        fw{"Eerste dag van die week"}
+        h0{"Ingemeng"}
         hc{"Uursiklus (12 vs. 24)"}
+        i0{"Invoermetode"}
+        k0{"Sleutelbord"}
+        kv{"Meeste geïgnoreer"}
         lb{"Reëlafbreek-styl"}
         lw{"Lynafbrekingsteken in woorde"}
+        m0{"Transformasiereëls"}
         ms{"Maatstelsel"}
+        mu{"Maateenheid"}
         numbers{"Syfers"}
+        rg{"Streek vir aanvullende data"}
+        s0{"Transformasiebron"}
+        sd{"Streeksonderverdeling"}
         ss{"Afbrekingsteken ná afkorting"}
+        t{"Transformasie"}
+        t0{"Masjienvertaling"}
         timezone{"Tydsone"}
         va{"Lokaalvariant"}
         x{"Privaat gebruik"}
+        x0{"Privaatgebruiktransformasie"}
     }
     Languages{
         aa{"Afar"}
@@ -171,6 +187,7 @@ af{
         hax{"Suid-Haida"}
         he{"Hebreeus"}
         hi{"Hindi"}
+        hi_Latn{"Hindi (Latynse alfabet)"}
         hil{"Hiligaynon"}
         hit{"Hetities"}
         hmn{"Hmong"}
@@ -347,6 +364,7 @@ af{
         phn{"Fenisies"}
         pis{"Pijin"}
         pl{"Pools"}
+        pms{"Piëmontees"}
         pqm{"Maliseet-Passamaquoddy"}
         prg{"Pruisies"}
         ps{"Pasjtoe"}
@@ -594,9 +612,13 @@ af{
             ethiopic-amete-alem{"Etiopiese Amete Alem"}
             gregorian{"Gregoriaans"}
             hebrew{"Hebreeus"}
+            indian{"Indies nasionaal"}
             islamic{"Hijri"}
             islamic-civil{"Hijri (tabelvormige burgerlike kalender)"}
+            islamic-rgsa{"Hijri, Saoedi-Arabië-maanwaarneming"}
+            islamic-tbla{"Hijri (tabellariese, astronomiese epog)"}
             islamic-umalqura{"Hijri (Umm al-Qura)"}
+            iso8601{"Gregoriaans"}
             japanese{"Japannees"}
             persian{"Persies"}
             roc{"Minguo"}
@@ -622,6 +644,11 @@ af{
             no{"Sorteer gewone letterorde"}
             upper{"Sorteer hoofletters eerste"}
         }
+        colCaseFirst%core{
+            lower{"Kleinletters"}
+            no{"Onderkas"}
+            upper{"Hoofletters"}
+        }
         colCaseLevel{
             no{"Sorteer nie kassensitief nie"}
             yes{"Sorteer kassensitief"}
@@ -634,12 +661,26 @@ af{
             no{"Sorteer syfers individueel"}
             yes{"Sorteer syfers numeries"}
         }
+        colReorder%core{
+            currency{"Geldeenheid"}
+            digit{"Syfers"}
+            punct{"Leestekens"}
+            space{"Witspasie"}
+            symbol{"Simbool"}
+        }
         colStrength{
             identical{"Sorteer almal"}
             primary{"Sorteer slegs basisletters"}
             quaternary{"Sorteer aksente/kas/breedte/Kana"}
             secondary{"Sorteer aksente"}
             tertiary{"Sorteer aksente/kas/breedte"}
+        }
+        colStrength%core{
+            identical{"Alle"}
+            primary{"Slegs basisletters"}
+            quaternary{"Basis, aksente, kas, variante, kana"}
+            secondary{"Basis, aksente"}
+            tertiary{"Basis, assente, kas, variante"}
         }
         collation{
             dictionary{"Woordeboek-sorteervolgorde"}
@@ -655,9 +696,21 @@ af{
             unihan{"Radikale-slag-sorteervolgorde"}
         }
         collation%core{
+            compat{"Versoenbaarheid"}
+            dictionary{"Woordeboek"}
             ducet{"Verstek Unicode"}
+            emoji{"Emoji"}
+            eor{"Europese reëls"}
+            phonebook{"Foonboek"}
+            phonetic{"Foneties"}
+            pinyin{"Pinjin"}
             search{"Soektog"}
+            searchjl{"Koreaanse aanvangskonsonant"}
             standard{"Standaard"}
+            stroke{"Streep"}
+            traditional{"Tradisioneel"}
+            unihan{"Radikale streep"}
+            zhuyin{"Zhujin"}
         }
         d0{
             fwidth{"Vollewydte"}
@@ -670,16 +723,26 @@ af{
             text{"Teks"}
         }
         hc{
+            c12{"12-uur-stelsel"}
+            c24{"24-uur-stelsel"}
             h11{"12-uur-stelsel (0-11)"}
             h12{"12-uur-stelsel (1-12)"}
             h23{"24-uur-stelsel (0-23)"}
             h24{"24-uur-stelsel (1-24)"}
         }
         hc%core{
+            c12{"12"}
+            c24{"24"}
             h11{"12 (0–11)"}
             h12{"12 (1–12)"}
             h23{"24 (0–23)"}
             h24{"24 (1–24)"}
+        }
+        kv%core{
+            currency{"Shift-spasies, leestekens, alle simbole"}
+            punct{"Shift-spasies, leestekens"}
+            space{"Shift-spasies, leestekens"}
+            symbol{"Shift-spasies, leestekens, niegeldeenheidsimbole"}
         }
         lb{
             loose{"Losse reëlafbreek-styl"}
@@ -757,9 +820,51 @@ af{
             traditional{"Tradisionele syfers"}
             vaii{"Vai-syfers"}
         }
+        numbers%core{
+            arabext{"Uitgebreide Arabies-Indies"}
+            armnlow{"Armeense kleinletter"}
+            finance{"Finansieel"}
+            fullwide{"Vollewydte"}
+            greklow{"Griekse kleinletter"}
+            hanidays{
+                "Han-karakter vir dag-van-die-maand-numering vir tradisionele kalende"
+                "rs"
+            }
+            hanidec{
+                "Posisionele desimale stelsel wat Chinese nommerideogramme gebruik as"
+                " syfers"
+            }
+            hansfin{"Vereenvoudigde Chinese finansiële syfers"}
+            hantfin{"Tradisionele Chinese finansiële syfers"}
+            jpanfin{"Japannese finansiële syfers"}
+            jpanyear{"Japannese eerstejaar- Gannen-numering"}
+            lanatham{"Tai Tham Tham (ekklesiasties)"}
+            mathbold{"Wiskundige vetdruk"}
+            mathdbl{"Wiskundige dubbledruk"}
+            mathmono{"Wiskundige enkelspasie"}
+            mathsanb{"Wiskundige sans-serif-vetdruk"}
+            mathsans{"Wiskundige sans-serif"}
+            mymrepka{"Mianmar se Oosterlike Pwo-Karen"}
+            mymrpao{"Mianmar Pao"}
+            mymrshan{"Mianmar Shan"}
+            mymrtlng{"Mianmar Tai Laing"}
+            native{"Inheemse syfers"}
+            outlined{"Omlynd"}
+            roman{"Romeinse hoofletter"}
+            romanlow{"Romeinse kleinletter"}
+            segment{"Gesegmenteerde"}
+            tamldec{"Moderne Tamil"}
+            traditional{"Tradisionele syfers"}
+        }
         ss%core{
             none{"Af"}
             standard{"Aan"}
+        }
+        t0{
+            und{"Ongespesifiseerde masjienvertaling"}
+        }
+        va%core{
+            posix{"POSIX-variant"}
         }
     }
     characterLabelPattern{

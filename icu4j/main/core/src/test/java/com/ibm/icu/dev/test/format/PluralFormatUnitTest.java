@@ -92,10 +92,10 @@ public class PluralFormatUnitTest extends CoreTestFmwk {
         PluralFormat de_fee_2 = new PluralFormat(ULocale.GERMAN, PluralType.CARDINAL, "other{fee}");
         PluralFormat de_fi = new PluralFormat(ULocale.GERMAN, PluralType.CARDINAL, "other{fi}");
         PluralFormat fr_fee = new PluralFormat(ULocale.FRENCH, PluralType.CARDINAL, "other{fee}");
-        assertTrue("different de_fee objects", de_fee_1 != de_fee_2);
-        assertTrue("equal de_fee objects", de_fee_1.equals(de_fee_2));
-        assertFalse("different pattern strings", de_fee_1.equals(de_fi));
-        assertFalse("different locales", de_fee_1.equals(fr_fee));
+        assertNotSame("different de_fee objects", de_fee_1, de_fee_2);
+        assertEquals("equal de_fee objects", de_fee_1, de_fee_2);
+        assertNotEquals("different pattern strings", de_fee_1, de_fi);
+        assertNotEquals("different locales", de_fee_1, fr_fee);
     }
 
     @Test

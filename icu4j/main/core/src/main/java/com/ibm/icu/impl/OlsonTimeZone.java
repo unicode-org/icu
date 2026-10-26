@@ -385,6 +385,7 @@ public class OlsonTimeZone extends BasicTimeZone implements Cloneable {
      * @see com.ibm.icu.util.TimeZone#hasSameRules(com.ibm.icu.util.TimeZone)
      */
     @Override
+    @SuppressWarnings("ReferenceEquality")
     public boolean hasSameRules(TimeZone other) {
         if (this == other) {
             return true;

@@ -283,7 +283,6 @@ hi{
                 other{"{0} ग्लूकोज़"}
             }
             part{
-                dnam{"भाग"}
                 one{"{0} भाग"}
                 other{"{0} भागों"}
             }
@@ -302,13 +301,13 @@ hi{
                 case{
                     oblique{
                         one{"{0} पार्ट प्रति बिलियन"}
-                        other{"{0} पार्ट्स प्रति बिलियन"}
+                        other{"{0} पार्ट प्रति बिलियन"}
                     }
                 }
                 dnam{"पार्ट्स प्रति बिलियन"}
                 gender{"masculine"}
                 one{"{0} पार्ट प्रति बिलियन"}
-                other{"{0} पार्ट्स प्रति बिलियन"}
+                other{"{0} पार्ट प्रति बिलियन"}
             }
             percent{
                 case{
@@ -622,7 +621,15 @@ hi{
                 other{"{0} नैनो सेकंड"}
             }
             night{
+                case{
+                    oblique{
+                        one{"{0} रात"}
+                        other{"{0} रातों"}
+                    }
+                }
                 gender{"feminine"}
+                one{"{0} रात"}
+                other{"{0} रातें"}
                 per{"{0} प्रति रात"}
             }
             quarter{
@@ -1120,13 +1127,12 @@ hi{
             yard{
                 case{
                     oblique{
-                        one{"{0} यार्ड"}
+                        one{"{0} गज़"}
                         other{"{0} गज़"}
                     }
                 }
-                dnam{"यार्ड"}
                 gender{"masculine"}
-                one{"{0} यार्ड"}
+                one{"{0} गज़"}
                 other{"{0} गज़"}
             }
         }
@@ -1486,6 +1492,11 @@ hi{
             }
         }
         speed{
+            beaufort{
+                dnam{"बोफ़र्ट"}
+                one{"बोफ़र्ट {0}"}
+                other{"बोफ़र्ट {0}"}
+            }
             kilometer-per-hour{
                 case{
                     oblique{
@@ -1675,7 +1686,15 @@ hi{
                 gender{"masculine"}
             }
             cup-metric{
+                case{
+                    oblique{
+                        one{"{0} मेट्रिक कप"}
+                        other{"{0} मेट्रिक कप"}
+                    }
+                }
                 gender{"masculine"}
+                one{"{0} मीट्रिक कप"}
+                other{"{0} मीट्रिक कप"}
             }
             deciliter{
                 case{
@@ -1743,7 +1762,6 @@ hi{
                 other{"{0} इम्पी॰ फ़्लुइड आउंस"}
             }
             fluid-ounce-metric{
-                dnam{"मेट्रिक फ़्लूड आउंस"}
                 one{"{0} मेट्रिक फ़्लूड आउंस"}
                 other{"{0} मेट्रिक फ़्लूड आउंस"}
             }
@@ -1821,7 +1839,16 @@ hi{
                 gender{"masculine"}
             }
             pint-metric{
+                case{
+                    oblique{
+                        one{"{0} मेट्रिक पाइंट"}
+                        other{"{0} मेट्रिक पाइंट"}
+                    }
+                }
+                dnam{"मेट्रिक पाइंट"}
                 gender{"masculine"}
+                one{"{0} मेट्रिक पाइंट"}
+                other{"{0} मेट्रिक पाइंट"}
             }
             quart{
                 gender{"masculine"}
@@ -1927,8 +1954,8 @@ hi{
             }
         }
         compound{
-            1024p1{"किबी.{0}"}
-            1024p2{"मेबी.{0}"}
+            1024p1{"Ki {0}"}
+            1024p2{"Mi {0}"}
             1024p3{"जीबी.{0}"}
             1024p4{"टेबी.{0}"}
             1024p5{"पेबी.{0}"}
@@ -1942,29 +1969,24 @@ hi{
             10p-2{"से {0}"}
             10p-21{"ज़े {0}"}
             10p-24{"यो {0}"}
+            10p-27{"r {0}"}
             10p-3{"मि {0}"}
+            10p-30{"q {0}"}
             10p-9{"नै {0}"}
             10p1{"डे {0}"}
             10p12{"टे {0}"}
-            10p15{"पे {0}"}
+            10p15{"P{0}"}
             10p18{"ए {0}"}
             10p2{"हे {0}"}
             10p21{"ज़े {0}"}
             10p24{"यो {0}"}
+            10p27{"R {0}"}
             10p3{"कि {0}"}
-            10p30{"क्वे{0}"}
+            10p30{"Q {0}"}
             10p6{"मे {0}"}
             10p9{"गी {0}"}
         }
         concentr{
-            ofglucose{
-                dnam{"Glc"}
-            }
-            part{
-                dnam{"भाग"}
-                one{"{0} भाग"}
-                other{"{0} भाग"}
-            }
             part-per-1e6{
                 dnam{"ppm"}
             }
@@ -2034,37 +2056,20 @@ hi{
                 per{"{0}/व"}
             }
         }
+        electric{
+            ampere{
+                one{"{0} A"}
+                other{"{0} A"}
+            }
+            milliampere{
+                one{"{0} mA"}
+                other{"{0} mA"}
+            }
+        }
         energy{
-            becquerel{
-                one{"{0} Bq"}
-                other{"{0} Bq"}
-            }
-            calorie{
-                one{"{0} कै"}
-                other{"{0} कै"}
-            }
-            calorie-it{
-                dnam{"cal-IT"}
-            }
             foodcalorie{
                 one{"{0} कै"}
                 other{"{0} कै"}
-            }
-            gray{
-                one{"{0} Gy"}
-                other{"{0} Gy"}
-            }
-            joule{
-                one{"{0} जू"}
-                other{"{0} जू"}
-            }
-            kilojoule{
-                one{"{0} किजू"}
-                other{"{0} किजू"}
-            }
-            sievert{
-                one{"{0} Sv"}
-                other{"{0} Sv"}
             }
         }
         graphics{
@@ -2140,8 +2145,10 @@ hi{
             }
             picometer{
                 dnam{"pm"}
-                one{"{0}पि॰मी॰"}
-                other{"{0}पि॰मी॰"}
+            }
+            yard{
+                one{"{0} गज़"}
+                other{"{0} गज़"}
             }
         }
         mass{
@@ -2177,39 +2184,34 @@ hi{
                 other{"{0} ट"}
             }
         }
-        power{
-            horsepower{
-                one{"{0} एचपी"}
-                other{"{0} एचपी"}
-            }
-            kilowatt{
-                one{"{0} किवॉ"}
-                other{"{0} किवॉ"}
-            }
-            watt{
-                one{"{0} वॉ"}
-                other{"{0} वॉ"}
-            }
-        }
         pressure{
             inch-ofhg{
                 dnam{"″ Hg"}
                 one{"{0}\u0022 Hg"}
                 other{"{0}\u0022 Hg"}
             }
+            kilopascal{
+                one{"{0} kPa"}
+                other{"{0} kPa"}
+            }
+            megapascal{
+                one{"{0} MPa"}
+                other{"{0} MPa"}
+            }
             millibar{
                 one{"{0}mb"}
                 other{"{0}mb"}
             }
-            ofhg{
-                one{"{0} Hg"}
-                other{"{0} Hg"}
+            pascal{
+                one{"{0} Pa"}
+                other{"{0} Pa"}
             }
         }
         speed{
             beaufort{
-                one{"ब्यूफ़ोर्ट{0}"}
-                other{"ब्यूफ़ोर्ट{0}"}
+                dnam{"Bft"}
+                one{"B {0}"}
+                other{"B {0}"}
             }
             kilometer-per-hour{
                 one{"{0} किमी/घं"}
@@ -2293,9 +2295,6 @@ hi{
                 one{"{0} fl oz Im"}
                 other{"{0} fl oz Im"}
             }
-            fluid-ounce-metric{
-                dnam{"मेट्रिक फ़्लूड आउंस"}
-            }
             gallon{
                 dnam{"गै"}
                 one{"{0} गै"}
@@ -2327,10 +2326,10 @@ hi{
                 one{"{0} मिली"}
                 other{"{0} मिली"}
             }
-            pint{
-                dnam{"पा"}
-                one{"{0} पा"}
-                other{"{0} पा"}
+            pint-metric{
+                dnam{"pt"}
+                one{"{0} mpt"}
+                other{"{0} mpt"}
             }
             quart-imperial{
                 dnam{"qt Imp"}
@@ -2447,14 +2446,10 @@ hi{
             }
         }
         compound{
-            1024p1{"कि.बी.{0}"}
-            1024p2{"मे.बी.{0}"}
-            1024p3{"जी.बी.{0}"}
-            1024p4{"टे.बी.{0}"}
-            1024p5{"पे.बी.{0}"}
-            1024p6{"एक्ज़.बी.{0}"}
-            1024p7{"ज़े.बी.{0}"}
-            1024p8{"यो.बी.{0}"}
+            1024p1{"Ki {0}"}
+            1024p2{"Mi {0}"}
+            1024p3{"Gi {0}"}
+            1024p4{"Ti {0}"}
             10p-1{"डे.{0}"}
             10p-12{"पि.{0}"}
             10p-15{"फ़े.{0}"}
@@ -2462,22 +2457,12 @@ hi{
             10p-2{"से.{0}"}
             10p-21{"ज़ेे.{0}"}
             10p-24{"यो.{0}"}
-            10p-27{"रो{0}"}
+            10p-27{"r {0}"}
             10p-3{"मि.{0}"}
-            10p-30{"क्वे{0}"}
+            10p-30{"q {0}"}
             10p-9{"नै.{0}"}
-            10p1{"डेका {0}"}
-            10p12{"टे.{0}"}
-            10p15{"पे.{0}"}
-            10p18{"ए.{0}"}
-            10p2{"हे.{0}"}
-            10p21{"ज़े.{0}"}
-            10p24{"योटा {0}"}
-            10p27{"रोन{0}"}
-            10p3{"कि.{0}"}
-            10p30{"क्वेटा{0}"}
-            10p6{"मे.{0}"}
-            10p9{"गी.{0}"}
+            10p27{"R {0}"}
+            10p30{"Q {0}"}
         }
         concentr{
             item{
@@ -2646,8 +2631,8 @@ hi{
         electric{
             ampere{
                 dnam{"एम्पी॰"}
-                one{"{0} ए॰"}
-                other{"{0} ए॰"}
+                one{"{0} A"}
+                other{"{0} A"}
             }
             coulomb{
                 one{"{0} C"}
@@ -2663,8 +2648,8 @@ hi{
             }
             milliampere{
                 dnam{"मि॰ ए॰"}
-                one{"{0} मि॰ ए॰"}
-                other{"{0} मि॰ ए॰"}
+                one{"{0} mA"}
+                other{"{0} mA"}
             }
             ohm{
                 dnam{"ओम"}
@@ -2839,8 +2824,8 @@ hi{
             }
             yard{
                 dnam{"गज़"}
-                one{"{0} यार्ड"}
-                other{"{0} यार्ड"}
+                one{"{0} गज़"}
+                other{"{0} गज़"}
             }
         }
         light{
@@ -2930,13 +2915,13 @@ hi{
             }
             kilopascal{
                 dnam{"किपा॰"}
-                one{"{0} किपा॰"}
-                other{"{0} किपा॰"}
+                one{"{0} kPa"}
+                other{"{0} kPa"}
             }
             megapascal{
                 dnam{"मेपा॰"}
-                one{"{0} मेपा॰"}
-                other{"{0} मेपा॰"}
+                one{"{0} MPa"}
+                other{"{0} MPa"}
             }
             ofhg{
                 one{"{0} Hg"}
@@ -2944,15 +2929,15 @@ hi{
             }
             pascal{
                 dnam{"पा॰"}
-                one{"{0} पा॰"}
-                other{"{0} पा॰"}
+                one{"{0} Pa"}
+                other{"{0} Pa"}
             }
         }
         speed{
             beaufort{
-                dnam{"ब्यूफ़ोर्ट"}
-                one{"ब्यूफ़ोर्ट {0}"}
-                other{"ब्यूफ़ोर्ट {0}"}
+                dnam{"बोफ़र्ट"}
+                one{"बोफ़र्ट {0}"}
+                other{"बोफ़र्ट {0}"}
             }
             kilometer-per-hour{
                 dnam{"कि॰मी॰/घं॰"}
@@ -3151,9 +3136,8 @@ hi{
                 other{"{0} पाइंट"}
             }
             pint-metric{
-                dnam{"मीट्रिक पिंट"}
-                one{"{0} मीट्रिक पिंट"}
-                other{"{0} मीट्रिक पिंट"}
+                one{"{0} mpt"}
+                other{"{0} mpt"}
             }
             quart{
                 dnam{"क्वार्ट"}

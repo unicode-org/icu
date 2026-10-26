@@ -69,7 +69,6 @@ es_MX{
             ducet{"orden de clasificación de Unicode predeterminado"}
         }
         collation%core{
-            phonetic{"fonético"}
             stroke{"trazos"}
             unihan{"trazos radicales"}
         }

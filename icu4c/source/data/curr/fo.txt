@@ -461,7 +461,7 @@ fo{
         }
         QAR{
             "QAR",
-            "Katar rial",
+            "Katar rialur",
         }
         RON{
             "RON",
@@ -855,6 +855,10 @@ fo{
         PLN{
             one{"pólskur zloty"}
             other{"pólskir zloty"}
+        }
+        QAR{
+            one{"Katar rialur"}
+            other{"Katar rialar"}
         }
         RON{
             one{"Rumenia leu"}

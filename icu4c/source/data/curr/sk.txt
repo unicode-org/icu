@@ -267,10 +267,6 @@ sk{
             "CNH",
             "čínsky jüan (pobrežný)",
         }
-        CNX{
-            "CNX",
-            "čínsky dolár ČĽB",
-        }
         CNY{
             "CNY",
             "čínsky jüan",
@@ -1628,12 +1624,6 @@ sk{
             many{"čínskeho jüana (pobrežného)"}
             one{"čínsky jüan (pobrežný)"}
             other{"čínskych jüanov (pobrežných)"}
-        }
-        CNX{
-            few{"čínske doláre ČĽB"}
-            many{"čínskeho dolára ČĽB"}
-            one{"čínsky dolár ČĽB"}
-            other{"čínskych dolárov ČĽB"}
         }
         CNY{
             few{"čínske jüany"}

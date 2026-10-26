@@ -684,17 +684,9 @@ uz{
             one{"Yordaniya dinori"}
             other{"Iordaniya dinori"}
         }
-        XCG{
-            one{"Karib guldeni"}
-            other{"Karib guldeni"}
-        }
         XXX{
             one{"(noma’lum valyuta)"}
             other{"(noma’lum valyuta)"}
-        }
-        ZWG{
-            one{"Zimbabve oltini"}
-            other{"Zimbabve oltini"}
         }
     }
 }

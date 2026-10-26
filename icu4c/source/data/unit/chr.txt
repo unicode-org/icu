@@ -186,7 +186,6 @@ chr{
                 other{"{0} ᎾᎿ ᎦᎷᎪᏏ"}
             }
             part{
-                dnam{"ᎢᎦᏛ"}
                 one{"{0} ᎢᎦᏛ"}
                 other{"{0} ᎢᎦᏛᎭ"}
             }
@@ -523,7 +522,9 @@ chr{
                 other{"{0} ᏧᏓᏓᎸ ᎢᏏᎳᏗᏍᏗ ᎢᏳᏓᎵ"}
             }
             em{
-                dnam{"ᎪᏪᎸ em"}
+                dnam{"ᎪᏪᎸ ems"}
+                one{"{0} em"}
+                other{"{0} ems"}
             }
             megapixel{
                 one{"{0} ᎤᏔᎾ ᏇᎦᏎᎵ"}
@@ -617,7 +618,7 @@ chr{
             }
             millimeter{
                 dnam{"ᏌᏉ ᎢᏯᎦᎨᎵᏁᎢ ᏗᏟᎶᏍᏗ"}
-                one{"ᏌᏉ ᎢᏯᎦᎨᎵᏁᎢ ᎠᏟᎶᏍᏗ"}
+                one{"{0} ᏌᏉ ᎢᏯᎦᎨᎵᏁᎢ ᎠᏟᎶᏍᏗ"}
                 other{"{0} ᏌᏉ ᎢᏯᎦᎨᎵᏁᎢ ᏗᏟᎶᏍᏗ"}
             }
             nanometer{
@@ -989,7 +990,7 @@ chr{
             }
             fluid-ounce-metric{
                 dnam{"ᎠᏂᎩᎸᏥ ᏂᏓᏳᏓᎴᏅᎯ ᏗᏎᏍᏗ ᎤᏓᏁᎯ ᎢᏯᎣᏂᏏ"}
-                one{"ᎠᏂᎩᎸᏥ ᏂᏓᏳᏓᎴᏅᎯ ᏗᏎᏍᏗ ᎤᏓᏁᎯ ᎣᏂᏏ"}
+                one{"{0} ᎠᏂᎩᎸᏥ ᏂᏓᏳᏓᎴᏅᎯ ᏗᏎᏍᏗ ᎤᏓᏁᎯ ᎣᏂᏏ"}
                 other{"{0} ᎠᏂᎩᎸᏥ ᏂᏓᏳᏓᎴᏅᎯ ᏗᏎᏍᏗ ᎤᏓᏁᎯ ᎢᏯᎣᏂᏏ"}
             }
             gallon{
@@ -1146,10 +1147,6 @@ chr{
                 one{"{0}kt"}
                 other{"{0}kt"}
             }
-            katal{
-                one{"{0} kat"}
-                other{"{0} kat"}
-            }
             milligram-ofglucose-per-deciliter{
                 one{"{0}mg/dL"}
                 other{"{0}mg/dL"}
@@ -1163,11 +1160,6 @@ chr{
                 dnam{"mol"}
                 one{"{0}mol"}
                 other{"{0}mol"}
-            }
-            part{
-                dnam{"ᎢᎦᏛ"}
-                one{"{0} ᎢᎦᏛ"}
-                other{"{0} ᎢᎦᏛ"}
             }
             part-per-1e6{
                 dnam{"ppm"}
@@ -1293,8 +1285,8 @@ chr{
                 other{"{0}Ꮡ"}
             }
             microsecond{
-                one{"{0}μs"}
-                other{"{0}μs"}
+                one{"{0}μᏗ"}
+                other{"{0}μᏗ"}
             }
             millisecond{
                 dnam{"ᏌᎠ"}
@@ -1369,11 +1361,6 @@ chr{
             calorie{
                 one{"{0}cal"}
                 other{"{0}cal"}
-            }
-            calorie-it{
-                dnam{"cal-IT"}
-                one{"{0} cal-IT"}
-                other{"{0} cal-IT"}
             }
             electronvolt{
                 dnam{"eV"}
@@ -1451,6 +1438,10 @@ chr{
                 one{"{0}dpi"}
                 other{"{0}dpi"}
             }
+            em{
+                one{"{0}em"}
+                other{"{0}em"}
+            }
             megapixel{
                 dnam{"MP"}
                 one{"{0}MP"}
@@ -1476,14 +1467,17 @@ chr{
                 other{"{0}au"}
             }
             centimeter{
-                one{"{0}cm"}
-                other{"{0}cm"}
+                dnam{"ᎢᏳ"}
+                one{"{0}ᎢᏳ"}
+                other{"{0}ᎢᏳ"}
+                per{"{0}/ᎢᏳ"}
             }
             decimeter{
                 one{"{0}ᏌᏟ"}
                 other{"{0}ᏌᏟ"}
             }
             earth-radius{
+                dnam{"ᎡᎶᎯ ᏯᏗ"}
                 one{"{0}R⊕"}
                 other{"{0}R⊕"}
             }
@@ -1849,8 +1843,8 @@ chr{
             }
             dessert-spoon-imperial{
                 dnam{"dsp Imp"}
-                one{"{0}dsp-Imp"}
-                other{"{0}dsp-Imp"}
+                one{"{0}ᏂᎬᎾᏛᎢ ᎤᏓᏤᎵᎦᏯ ᎤᎦᎾᏍᏓ-ᎠᏗᏙᏗ"}
+                other{"{0}ᏂᎬᎾᏛᎢ ᎤᏓᏤᎵᎦᏯ ᎤᎦᎾᏍᏓ-ᎠᏗᏙᏗ"}
             }
             dram{
                 dnam{"fl.dr."}
@@ -1872,16 +1866,16 @@ chr{
                 other{"{0}fl oz Im"}
             }
             gallon{
-                dnam{"gal"}
+                dnam{"ᎢᏧ"}
                 one{"{0}gal"}
                 other{"{0}gal"}
                 per{"{0}/gal"}
             }
             gallon-imperial{
                 dnam{"Imp gal"}
-                one{"{0}galIm"}
-                other{"{0}galIm"}
-                per{"{0}/galIm"}
+                one{"{0} ᏂᎬᎾᏛᎢ ᎤᏓᏤᎵᎦᏯ-ᎢᏧᎵᎶᏓ"}
+                other{"{0}ᏂᎬᎾᏛᎢ ᎤᏓᏤᎵᎦᏯ ᎢᏧᎵᎶᏓ"}
+                per{"{0}/ᏂᎬᎾᏛᎢ ᎤᏓᏤᎵᎦᏯ ᎢᏧᎵᎶᏓ"}
             }
             hectoliter{
                 one{"{0}hL"}
@@ -1906,9 +1900,9 @@ chr{
                 other{"{0}mL"}
             }
             pinch{
-                dnam{"pn"}
-                one{"{0}pn"}
-                other{"{0}pn"}
+                dnam{"ᏗᏓᏇ"}
+                one{"{0}ᏗᏓᏇ"}
+                other{"{0}ᏗᏓᏇ"}
             }
             pint{
                 dnam{"pt"}
@@ -1916,8 +1910,8 @@ chr{
                 other{"{0}pt"}
             }
             pint-metric{
-                one{"{0}mp"}
-                other{"{0}mp"}
+                one{"{0}mpt"}
+                other{"{0}mpt"}
             }
             quart{
                 dnam{"qt"}
@@ -1925,8 +1919,9 @@ chr{
                 other{"{0}qt"}
             }
             quart-imperial{
-                one{"{0}qt-Imp."}
-                other{"{0}qt-Imp."}
+                dnam{"ᏂᎬᎾᏛᎢ ᎤᏓᏤᎵᎦᏯ ᏅᎩ ᎢᏗᎧᎵᎢ"}
+                one{"{0}ᏂᎬᎾᏛᎢ ᎤᏓᏤᎵᎦᏯ ᏅᎩ ᎢᏗᎧᎵᎢ"}
+                other{"{0}ᏂᎬᎾᏛᎢ ᎤᏓᏤᎵᎦᏯ ᏅᎩ ᎢᏗᎧᎵᎢ"}
             }
             tablespoon{
                 one{"{0}tbsp"}
@@ -2135,6 +2130,8 @@ chr{
             }
             microsecond{
                 dnam{"μᏗᏎᏢ"}
+                one{"{0} μᏗ"}
+                other{"{0} μᏗ"}
             }
             millisecond{
                 dnam{"ᏌᏉ ᎢᏯᎦᎨᎵᏁᎢ ᏗᏎᏢ"}
@@ -2262,10 +2259,19 @@ chr{
             }
         }
         length{
+            centimeter{
+                dnam{"ᎢᏳ"}
+                one{"{0} ᎢᏳ"}
+                other{"{0} ᎢᏳ"}
+                per{"{0}/ᎢᏳ"}
+            }
             decimeter{
                 dnam{"ᏌᏟ"}
                 one{"{0} ᏌᏟ"}
                 other{"{0} ᏌᏟ"}
+            }
+            earth-radius{
+                dnam{"ᎡᎶᎯ ᏯᏗ"}
             }
             fathom{
                 dnam{"ᏑᏓᎵ ᎢᏗᎳᏏᏗ ᎠᏯᏱ"}
@@ -2424,9 +2430,19 @@ chr{
             cup{
                 dnam{"ᏧᎵᏍᏈᏗ"}
             }
+            dessert-spoon{
+                dnam{"ᎤᎦᎾᏍᏓ ᎠᏗᏙᏗ"}
+                one{"{0} dsp"}
+                other{"{0} dsp"}
+            }
+            dessert-spoon-imperial{
+                dnam{"ᏂᎬᎾᏛᎢ ᎤᏓᏤᎵᎦᏯ ᎤᎦᎾᏍᏓ ᎠᏗᏙᏗ"}
+                one{"{0} ᏂᎬᎾᏛᎢ ᎤᏓᏤᎵᎦᏯ ᎤᎦᎾᏍᏓ-ᎠᏗᏙᏗ"}
+                other{"{0} ᏂᎬᎾᏛᎢ ᎤᏓᏤᎵᎦᏯ ᎤᎦᎾᏍᏓ-ᎠᏗᏙᏗ"}
+            }
             dram{
                 dnam{"ᏜᎹ ᎠᎹ"}
-                one{"{0} ᏜᎹ ᎠᎹ"}
+                one{"{0} ᏜᎹ"}
                 other{"{0} ᏜᎹ ᎠᎹ"}
             }
             drop{
@@ -2439,13 +2455,21 @@ chr{
                 one{"{0} fl oz"}
                 other{"{0} fl oz"}
             }
+            fluid-ounce-imperial{
+                dnam{"Imp. ᎤᏓᏁᎯ ᎣᏂᏏ"}
+                one{"{0} Imp. ᎤᏓᏁᎯ ᎣᏂᏏ"}
+                other{"{0} Imp. ᎤᏓᏁᎯ ᎣᏂᏏ"}
+            }
             gallon{
-                dnam{"ᎢᏧᎵᎶᏓ"}
+                dnam{"ᎢᏧ"}
                 one{"{0} gal"}
                 other{"{0} gal"}
             }
             gallon-imperial{
                 dnam{"ᏂᎬᎾᏛᎢ ᎤᏓᏤᎵᎦᏯ ᎢᏳᎵᎶᏓ ᎢᏳᏓᎵ"}
+                one{"{0} ᏂᎬᎾᏛᎢ ᎤᏓᏤᎵᎦᏯ ᎢᏧᎵᎶᏓ"}
+                other{"{0} ᏂᎬᎾᏛᎢ ᎤᏓᏤᎵᎦᏯ ᎢᏧᎵᎶᏓ"}
+                per{"{0}/ᏂᎬᎾᏛᎢ ᎤᏓᏤᎵᎦᏯ ᎢᏳᎵᎶᏓ ᎢᏳᏓᎵ"}
             }
             jigger{
                 dnam{"ᏥᎩᎳ"}
@@ -2456,17 +2480,23 @@ chr{
                 dnam{"ᎢᏧᏆᏗᏅᏛ"}
                 one{"{0} L"}
                 other{"{0} L"}
+                per{"{0}/L"}
             }
             pinch{
                 dnam{"ᏗᏓᏇᏄᎩᏍᏗ"}
-                one{"{0} ᏗᏓᏇᏄᎩᏍᏗ"}
-                other{"{0} ᏗᏓᏇᏄᎩᏍᏗ"}
+                one{"{0} ᏗᏓᏇ"}
+                other{"{0} ᏗᏓᏇ"}
             }
             pint{
                 dnam{"ᏔᎵ ᏧᎵᏍᏈᏗ ᎠᎧᎵ"}
             }
             quart{
                 dnam{"qts"}
+            }
+            quart-imperial{
+                dnam{"ᏂᎬᎾᏛᎢ ᎤᏓᏤᎵᎦᏯ ᏅᎩ ᎢᏗᎧᎵᎢ"}
+                one{"{0} ᏂᎬᎾᏛᎢ ᎤᏓᏤᎵᎦᏯ ᏅᎩ ᎢᏗᎧᎵᎢ"}
+                other{"{0} ᏂᎬᎾᏛᎢ ᎤᏓᏤᎵᎦᏯ ᏅᎩ ᎢᏗᎧᎵᎢ"}
             }
         }
     }

@@ -5,12 +5,41 @@ ak{
     Keys{
         calendar{"Kalɛnna"}
         cf{"Sika Fɔmate"}
+        colAlternate{"Mfa Nyiyimu Ahyεnsodeε Nyε Adwuma"}
+        colBackwards{"Asεnte Akyisan Nyiyimu"}
+        colCaseFirst{"Atwerεdeε Akεseε/Nketewa Nhyehyεeε"}
+        colCaseLevel{"Nyiyimu a εgyina Atwerεdeε Kεseyε so"}
+        colNormalization{"Nyiyimu a Yεgye Tom"}
+        colNumeric{"Nᴐma Nyiyimu"}
+        colReorder{"Krataa/Blᴐᴐko Hyehyε Foforᴐε"}
+        colStrength{"Nyiyimu Ahoᴐden"}
         collation{"Nyiyie Kwan"}
         currency{"Sika"}
+        d0{"Dane Kᴐbea mu"}
+        dx{"Deε εnka Dihyinari ho"}
+        em{"Yimogyi Adida"}
+        fw{"Nnawᴐtwe Da a εdi kan"}
+        h0{"Afrafra"}
         hc{"Dɔnhwere Nkɔmmaeɛ (12 anaa 24)"}
+        i0{"Kwan a Yεfa So De Tom"}
+        k0{"Kiibᴐᴐdo"}
+        kv{"Dodoᴐ a Yεabu Ani Agu So"}
         lb{"Line Break Nhyehyɛeɛ Ketee"}
+        lw{"Nsensaneeε Nkyekyεmu wᴐ Nsεmfua mu"}
+        m0{"Nsakramu Nhyehyεeε"}
         ms{"Nsusudeɛ Sestɛm"}
+        mu{"Susudua din"}
         numbers{"Nɔma"}
+        rg{"Baabi a Ntosoᴐnsεm Wᴐ"}
+        s0{"Sesa Baabi a εfiri"}
+        sd{"Mantam nkyekyεmu"}
+        ss{"Abbr. akyi Kasamu Nkyekyεmu"}
+        t{"Sakramu"}
+        t0{"Afidie Akyerε Aseε"}
+        timezone{"Berε Fam"}
+        va{"Kasa mu Sonobi"}
+        x{"Ankorεankorε de di dwuma"}
+        x0{"Ankorεankorε Dwumadie Nsakramu"}
     }
     Languages{
         af{"Afrikaans"}
@@ -21,6 +50,7 @@ ak{
         as{"Asamese"}
         ast{"Asturiani"}
         az{"Asabegyanni"}
+        ba{"Bashke"}
         bal{"Balukyi"}
         be{"Belarus kasa"}
         bg{"Bɔlgeria kasa"}
@@ -47,6 +77,8 @@ ak{
         ee{"Ayigbe"}
         el{"Greek kasa"}
         en{"Borɔfo"}
+        en_AU{"Borɔfo (Australia)"}
+        en_CA{"Borɔfo Canada"}
         en_GB{"Ngresi Borɔfo"}
         en_US{"Amɛrika Borɔfo"}
         eo{"Esperanto"}
@@ -78,6 +110,7 @@ ak{
         id{"Indonihyia kasa"}
         ie{"Kasa afrafra"}
         ig{"Igbo kasa"}
+        ii{"Sichuan Yi"}
         is{"Aeslande kasa"}
         it{"Italy kasa"}
         ja{"Gyapan kasa"}
@@ -118,14 +151,19 @@ ak{
         nn{"Nɔwefoɔ Ninɔso"}
         no{"Nɔwefoɔ kasa"}
         nqo{"Nko"}
+        nso{"Soto Atifi"}
         oc{"Osita kasa"}
+        om{"Oromo"}
         or{"Odia"}
         pa{"Pungyabi kasa"}
         pcm{"Nigeriafoɔ Pigyin"}
         pl{"Pɔland kasa"}
+        pms{"Piedmontese"}
         prg{"Prusia kasa"}
         ps{"Pahyito"}
         pt{"Pɔɔtugal kasa"}
+        pt_BR{"Portugal Kasa (Brazil)"}
+        pt_PT{"Portugal Kasa (Yuropu)"}
         qu{"Kwɛkya"}
         raj{"Ragyasitan kasa"}
         rm{"Romanhye kasa"}
@@ -136,13 +174,16 @@ ak{
         sah{"Yakut Kasa"}
         sat{"Santal kasa"}
         sc{"Saadinia kasa"}
+        scn{"Sicilian"}
         sd{"Sindi"}
+        shn{"Shan"}
         si{"Sinhala"}
         sk{"Slovak Kasa"}
         sl{"Slovɛniafoɔ Kasa"}
         so{"Somalia kasa"}
         sq{"Aabeniani"}
         sr{"Sɛbia Kasa"}
+        st{"Sotho Anaafoɔ"}
         su{"Sunda Kasa"}
         sv{"Sweden kasa"}
         sw{"Swahili"}
@@ -154,9 +195,11 @@ ak{
         th{"Taeland kasa"}
         ti{"Tigrinya kasa"}
         tk{"Tɛkmɛnistan Kasa"}
+        tn{"Tswana"}
         to{"Tonga kasa"}
         tr{"Tɛɛki kasa"}
         tt{"Tata kasa"}
+        tyv{"Tuvinian"}
         ug{"Yugaa Kasa"}
         uk{"Ukren kasa"}
         und{"kasa a yɛnnim"}
@@ -177,6 +220,12 @@ ak{
         zh_Hant{"Tete Kyaena kasa"}
         zu{"Zulu"}
         zxx{"Lengwestese biara nnim"}
+    }
+    Languages%core{
+        ku{"Kεεde kasa"}
+    }
+    Languages%extension{
+        ku{"Kurumannyi"}
     }
     Languages%long{
         zh_Hans{"Mandarin Kyaena kasa a emu yɛ mmrɛ"}
@@ -271,11 +320,51 @@ ak{
             roc{"Minguo Kalɛnda"}
         }
         calendar%core{
-            gregorian{"Gregorian"}
+            buddhist{"Budani"}
+            chinese{"Kyaenani"}
+            coptic{"Kɔputese"}
+            dangi{"Dangyi"}
+            ethiopic{"Yitiopia"}
+            ethiopic-amete-alem{"Yitiopia Amete Alem"}
+            gregorian{"Grigoriani"}
+            hebrew{"Hibruni"}
+            indian{"Indiani"}
+            islamic{"Hijiri"}
+            islamic-civil{"Hijiri (bere bi mu)"}
+            islamic-rgsa{"Hijiri, Saudi Arabia ahunuiε"}
+            islamic-tbla{"Hijiri pono so bere bi"}
+            islamic-umalqura{"Hijiri (Umm al-Qura"}
+            iso8601{"Gregoriani"}
+            japanese{"Japanni"}
+            persian{"Persiani"}
+            roc{"Minguo"}
         }
         cf{
             account{"Sika Nkotabuo Fɔmate"}
             standard{"Sika Fɔmate Susudua"}
+        }
+        cf%core{
+            account{"Nseseε"}
+            standard{"Susudua"}
+        }
+        colCaseFirst%core{
+            lower{"Ketewa"}
+            no{"Ketewa"}
+            upper{"Kεseε"}
+        }
+        colReorder%core{
+            currency{"Karεnsi"}
+            digit{"Degyete"}
+            punct{"Atwerε mu agyinaehyεdeε"}
+            space{"Deε hwee nni"}
+            symbol{"Ahyεnsodeε"}
+        }
+        colStrength%core{
+            identical{"Nyinaa"}
+            primary{"Mfiaseε Atwerεdeε Nko Ara"}
+            quaternary{"Mfiaseε, Asεnte, Atwerεdeε, Sonobi, Kana"}
+            secondary{"Mfiaseε, Asεnte"}
+            tertiary{"Mfiaseε, Asεnte, Atwerεdeε, Sonobi"}
         }
         collation{
             ducet{"Koodu Korɔ Nyiyie Kwan a ɛdi Kan"}
@@ -283,23 +372,82 @@ ak{
             standard{"Nyiyie Kwan Susudua"}
         }
         collation%core{
+            compat{"Deε εne no kᴐ"}
+            dictionary{"Dihyinari"}
+            ducet{"Mfiaseε Unicode"}
+            emoji{"Yimogyi"}
+            eor{"Yuropu nhyehyεeε"}
+            phonebook{"Fonbuuku"}
+            phonetic{"Fonεtese"}
+            pinyin{"Pinyin"}
+            search{"Hwehwε"}
+            searchjl{"Koria konsonante mfiaseε"}
             standard{"Susudua"}
+            stroke{"Nnwodwoeε"}
+            traditional{"Tetedeε"}
+            unihan{"Nnwodwoeε a ano yε den"}
+            zhuyin{"Suyin"}
+        }
+        d0{
+            fwidth{"Rekᴐ Muayᴐ Mu"}
+            hwidth{"Rekᴐ Fayᴐ Mu"}
+        }
+        em%core{
+            default{"Mfiasedeε"}
+            emoji{"Yimogyi"}
+            text{"Atwerε"}
         }
         hc{
+            c12{"Nnɔnhwere 12 Sestɛm"}
+            c24{"Nnɔnhwere 24 Sestɛm"}
             h11{"Nnɔnhwere 12 Sestɛm (0–11)"}
-            h12{"Nnɔnhwere 12 Sestɛm (1–12"}
+            h12{"Nnɔnhwere 12 Sestɛm (1–12)"}
             h23{"Nnɔnhwere 24 Sestɛm (0–23)"}
             h24{"Nnɔnhwere 24 Sestɛm (0–24)"}
+        }
+        hc%core{
+            c12{"12"}
+            c24{"24"}
+            h11{"12 (0 NDASH11)"}
+            h12{"12 (1NDASH 12"}
+            h23{"24 (0 NDASH 23)"}
+            h24{"24 (1 NDASH 24)"}
+        }
+        kv%core{
+            currency{"Akwan a εdeda mu, atwerε mu agyinaehyεdeε, ahyεnsodeε"}
+            punct{"Akwan a εdeda mu, atwerε mu agyinaehyεdeε"}
+            space{"Akwan a εdeda mu, atwerε mu agyinaehyεdeε"}
+            symbol{"Akwan a εdeda mu, atwerε mu agyinaehyεdeε, ahyεnsodeε a εnyε karnsiε"}
         }
         lb{
             loose{"Line Break Nhyehyɛeɛ a Emu Yɛ Mmrɛ"}
             normal{"Daa Line Break Nhyehyɛeɛ"}
             strict{"Line Break Nhyehyɛeɛ Ferenkyemm"}
         }
+        lb%core{
+            loose{"Yε mmrε"}
+            normal{"Nᴐᴐmaa"}
+            strict{"Ferenkyemm"}
+        }
+        lw%core{
+            breakall{"Nkyekyε ne nyinaa mu"}
+            keepall{"Gya ne nyinaa"}
+            normal{"Nᴐᴐmaa"}
+            phrase{"Gya no kasasin mu"}
+        }
+        m0{
+            bgn{"US BGN Nkyerεasetraa"}
+            ungegn{"UN GEGN Nkyerεasetraa"}
+        }
         ms{
             metric{"Mɛtreke Nhyehyɛeɛ"}
             uksystem{"Imperial Nsusudeɛ Sestɛm"}
             ussystem{"US Nsusudeɛ Sestɛm"}
+        }
+        ms%core{
+            metric{"Mεtreke"}
+            uksystem{"UK"}
+            ussystem{"US"}
         }
         numbers{
             arab{"Arabeke Digyete"}
@@ -332,6 +480,7 @@ ak{
             mlym{"Malayalam Digyete"}
             mtei{"Meeti Mayɛke Digyete"}
             mymr{"Mayaama Digyete"}
+            native{"Kuro no ara Degyete"}
             olck{"Ol Kyiki Digyete"}
             orya{"Odia Digyete"}
             roman{"Roman Nɔma"}
@@ -342,6 +491,45 @@ ak{
             thai{"Taelanfoɔ Digyete"}
             tibt{"Tibɛtan Digyete"}
             vaii{"Vai Gigyete"}
+        }
+        numbers%core{
+            arabext{"Arabic-Indic a Wᴐatrεm"}
+            armnlow{"Armenia atwerεdeε ketewa"}
+            finance{"Sikasεm"}
+            fullwide{"Ntrεmu nyinaa"}
+            greklow{"Griiki atwerεdeε nketewa"}
+            hanidays{
+                "Ha-atwerεdeε sεdeε yεde nᴐma ma nna a εwᴐ bosome mu wᴐ tete kalεnna "
+                "so"
+            }
+            hanidec{"Dεsimaa gyinabea nhyehyεeε wᴐ Kyaenafoᴐ nᴐma atwerε mu"}
+            hansfin{"Kyaenafoᴐ sikasεm ngomu"}
+            hantfin{"Tete Kyaena sikasεm"}
+            jpanfin{"Gyapanfoᴐ sikasεm"}
+            jpanyear{"Gyapanfoᴐ afe a εdi kan Gannan nᴐma"}
+            lanatham{"Tai Tham Tham (ecclesiastical)"}
+            mathbold{"Nkontabudeε duruduru"}
+            mathdbl{"Nkontabudeε san-prenu"}
+            mathmono{"Nkontabudeε kwankoro"}
+            mathsanb{"Nkontabudeε sans-serif duruduru"}
+            mathsans{"Nkontabudeε sans-serif"}
+            mymrepka{"Myanmar Apueiε Pwo Karen"}
+            mymrpao{"Myanmar Pao"}
+            mymrshan{"Myanmar Shan"}
+            mymrtlng{"Myanmar Tai Laing"}
+            native{"Kuro no ara degyete"}
+            outlined{"Yεawae anim"}
+            roman{"Roman atwerεdeε akεseε"}
+            romanlow{"Roman atwerεdeε nkumaa"}
+            segment{"Yεakyekyεm"}
+            tamldec{"Tamil Foforᴐ"}
+            traditional{"Tete nᴐma"}
+        }
+        t0{
+            und{"Afidie Nkyerεseε a Yεnkyerεeε"}
+        }
+        va%core{
+            posix{"POSIX sonobi"}
         }
     }
     characterLabelPattern{

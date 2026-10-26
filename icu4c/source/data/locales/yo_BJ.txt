@@ -110,6 +110,9 @@ yo_BJ{
                 }
             }
             eras{
+                wide{
+                    0{"Sháájú Kírístì"}
+                }
                 wide%variant{
                     0{"Sáájú ìgbà mímɔ̀"}
                 }
@@ -215,7 +218,21 @@ yo_BJ{
             relative{
                 "-1"{"ɔjɔ́ Ajé tó kɔjá"}
                 "0"{"ɔjɔ́ Ajé yìí"}
-                "1"{"next Monday"}
+                "1"{"Ɔjɔ́ ajé tó ń bɔ̀"}
+            }
+        }
+        mon-narrow{
+            relative{
+                "-1"{"ɔjɔ́ Ajé tó kɔjá"}
+                "0"{"ɔjɔ́ Ajé yìí"}
+                "1"{"Ɔjɔ́ ajé tó ń bɔ̀"}
+            }
+        }
+        mon-short{
+            relative{
+                "-1"{"ɔjɔ́ Ajé tó kɔjá"}
+                "0"{"ɔjɔ́ Ajé yìí"}
+                "1"{"Ɔjɔ́ ajé tó ń bɔ̀"}
             }
         }
         month{
@@ -230,6 +247,11 @@ yo_BJ{
         }
         quarter{
             dn{"Ìdá mɛ́rin"}
+            relative{
+                "-1"{"ìdámɛ́rin tó kɔjá"}
+                "0"{"ìdámɛ́rin yìí"}
+                "1"{"ìdamɛ́ri tó ń bɔ̀"}
+            }
         }
         second{
             dn{"Ìsɛ́jú Ààyá"}
@@ -365,11 +387,20 @@ yo_BJ{
         weekday{
             dn{"Ɔjɔ́ tó wà láàárín ɔ̀sɛ̀"}
         }
+        weekday-narrow{
+            dn{"Ɔjɔ́ inú ɔ̀shɛ̀"}
+        }
         weekday-short{
-            dn{"ɔjɔ́ inú ɔshɛ̀."}
+            dn{"Ɔjɔ́ inú ɔ̀shɛ̀"}
         }
         weekdayOfMonth{
-            dn{"ɔjɔ́ ɔshɛ̀ inú oshù"}
+            dn{"Ɔjɔ́ ɔ̀shɛ̀ inú oshù"}
+        }
+        weekdayOfMonth-narrow{
+            dn{"Ɔjɔ́ ɔ̀shɛ̀ inú oshù"}
+        }
+        weekdayOfMonth-short{
+            dn{"Ɔjɔ́ ɔ̀shɛ̀ inú oshù"}
         }
         year{
             dn{"Ɔdún"}

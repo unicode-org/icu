@@ -44,7 +44,7 @@ public class Launcher extends DemoApplet {
                     "rbnf.RbnfDemo",
                     "translit.Demo");
 
-    public class LauncherFrame extends Frame implements ActionListener {
+    public static class LauncherFrame extends Frame implements ActionListener {
         private static final long serialVersionUID = -8054963875776183878L;
 
         public Button buttonList[] = new Button[demoList.size()]; // one button for each demo
@@ -142,9 +142,9 @@ public class Launcher extends DemoApplet {
                     String demo = demoBase + '.' + demoShort;
                     showStatus(demoShort, "launching");
                     try {
-                        Class c = Class.forName(demo);
+                        Class<?> c = Class.forName(demo);
                         String args[] = new String[0];
-                        Class params[] = new Class[1];
+                        Class<?>[] params = new Class[1];
                         params[0] = args.getClass();
                         Method m = c.getMethod("main", params);
                         Object[] argList = {args};

@@ -34,13 +34,13 @@ public class Mf2IcuTest extends CoreTestFmwk {
         assertEquals(
                 "format",
                 "There are abc files on def",
-                form.formatToString(Args.of("count", "abc", "where", "def")));
+                form.formatToString(Map.of("count", "abc", "where", "def")));
     }
 
     @Test
     public void testStaticFormat() {
-        Map<String, Object> arguments =
-                Args.of(
+        var arguments =
+                Map.of(
                         "planet",
                         7,
                         "when",
@@ -63,9 +63,9 @@ public class Mf2IcuTest extends CoreTestFmwk {
 
     @Test
     public void testSimpleFormat() {
-        Map<String, Object> testArgs1 = Args.of("fileCount", 0, "diskName", "MyDisk");
-        Map<String, Object> testArgs2 = Args.of("fileCount", 1, "diskName", "MyDisk");
-        Map<String, Object> testArgs3 = Args.of("fileCount", 12, "diskName", "MyDisk");
+        var testArgs1 = Map.of("fileCount", 0, "diskName", "MyDisk");
+        var testArgs2 = Map.of("fileCount", 1, "diskName", "MyDisk");
+        var testArgs3 = Map.of("fileCount", 12, "diskName", "MyDisk");
 
         MessageFormatter form =
                 MessageFormatter.builder()
@@ -103,15 +103,15 @@ public class Mf2IcuTest extends CoreTestFmwk {
         assertEquals(
                 "old icu test",
                 "Charlotte est allée à Paris.",
-                mf.formatToString(Args.of("userName", "Charlotte", "userGender", "female")));
+                mf.formatToString(Map.of("userName", "Charlotte", "userGender", "female")));
         assertEquals(
                 "old icu test",
                 "Guillaume est allé à Paris.",
-                mf.formatToString(Args.of("userName", "Guillaume", "userGender", "male")));
+                mf.formatToString(Map.of("userName", "Guillaume", "userGender", "male")));
         assertEquals(
                 "old icu test",
                 "Dominique est allé à Paris.",
-                mf.formatToString(Args.of("userName", "Dominique", "userGender", "unnown")));
+                mf.formatToString(Map.of("userName", "Dominique", "userGender", "unnown")));
     }
 
     private static void doTheRealDateTimeSkeletonTesting(
@@ -119,7 +119,7 @@ public class Mf2IcuTest extends CoreTestFmwk {
 
         MessageFormatter msgf =
                 MessageFormatter.builder().setPattern(messagePattern).setLocale(locale).build();
-        assertEquals(messagePattern, expected, msgf.formatToString(Args.of("when", date)));
+        assertEquals(messagePattern, expected, msgf.formatToString(Map.of("when", date)));
     }
 
     @Test
@@ -188,8 +188,8 @@ public class Mf2IcuTest extends CoreTestFmwk {
     @Test
     public void checkMf1Behavior() {
         Date testDate = new Date(1671782400000L); // 2022-12-23
-        Map<String, Object> goodArg = Args.of("user", "John", "today", testDate);
-        Map<String, Object> badArg = Args.of("userX", "John", "todayX", testDate);
+        var goodArg = Map.of("user", "John", "today", testDate);
+        var badArg = Map.of("userX", "John", "todayX", testDate);
 
         MessageFormat mf1 = new MessageFormat("Hello {user}, today is {today,date,long}.");
         assertEquals("old icu test", "Hello {user}, today is {today}.", mf1.format(badArg));

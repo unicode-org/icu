@@ -1219,9 +1219,6 @@ id{
         MXP{
             other{"Peso Perak Meksiko"}
         }
-        XCG{
-            other{"Guilder Karibia"}
-        }
         XXX{
             other{"(mata uang tidak dikenal)"}
         }

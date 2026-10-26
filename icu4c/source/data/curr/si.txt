@@ -674,6 +674,7 @@ si{
     }
     Currencies%narrow{
         BYN{"р."}
+        CHF{"ෆ්‍රෑ."}
         LKR{"රු."}
         TWD{"NT$"}
     }
@@ -700,10 +701,6 @@ si{
         XXX{
             one{"(නොදත් මුදල් ඒකකය)"}
             other{"(නොදත් මුදල්)"}
-        }
-        ZWG{
-            one{"සිම්බාබ්වේ රත්තරන්"}
-            other{"සිම්බාබ්වේ රත්තරන්"}
         }
     }
     CurrencyUnitPatterns{

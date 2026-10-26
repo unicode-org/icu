@@ -1453,10 +1453,10 @@ hsb{
             }
             fluid-ounce-metric{
                 dnam{"metriske běžite uncy"}
-                few{"{0} běžite uncy"}
-                one{"{0} běžita unca"}
+                few{"{0} metriske běžite uncy"}
+                one{"{0} metriska běžita unca"}
                 other{"{0} metriskich běžitych uncow"}
-                two{"{0} běžitej uncy"}
+                two{"{0} metriskej běžitej uncy"}
             }
             gallon{
                 dnam{"galony"}

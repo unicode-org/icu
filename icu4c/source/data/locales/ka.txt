@@ -188,9 +188,9 @@ ka{
         }
         minimalPairs{
             ordinal{
-                many{"მე-{0}"}
-                one{"{0}-ლი"}
-                other{"{0}-ე"}
+                many{"შეუხვიეთ მარჯვნივ {0}-ე შესახვევში."}
+                one{"შეუხვიეთ მარჯვნივ {0}-ელ შესახვევში."}
+                other{"შეუხვიეთ {0}-ე შესახვევში მარჯვნივ."}
             }
             plural{
                 one{"კალათში {0} X-ია. შეიძენთ მას?"}
@@ -229,27 +229,40 @@ ka{
             }
             availableFormats{
                 Ed{"d E"}
-                Gy{"y G"}
                 GyMMM{"MMM, y G"}
-                GyMMMEd{"E, d MMM, y G"}
+                GyMMMEd{"G E, d MMM, y"}
+                GyMMMEddd{"G E, ddd MMM, y"}
                 GyMMMd{"d MMM, y G"}
-                GyMd{"d.M.y GGGGG"}
+                GyMMMddd{"G ddd MMM, y"}
+                GyMd{"GGGGG d.M.y"}
                 MEd{"E, d.M"}
                 MMMEd{"E, d MMM"}
+                MMMEddd{"E, MMM ddd"}
                 MMMMd{"d MMMM"}
+                MMMMddd{"ddd MMMM"}
                 MMMd{"d MMM"}
+                MMMddd{"ddd MMM"}
                 Md{"d.M"}
-                y{"y G"}
-                yyyy{"y G"}
-                yyyyM{"M.y G"}
-                yyyyMEd{"E, d.M.y G"}
-                yyyyMMM{"MMM, y G"}
-                yyyyMMMEd{"E, d MMM, y G"}
+                yyyyM{"G M.y"}
+                yyyyMEd{"G E, d.M.y"}
+                yyyyMMM{"G MMM, y"}
+                yyyyMMMEd{"G E, d MMM, y"}
+                yyyyMMMEddd{"G E, ddd MMM, y"}
                 yyyyMMMM{"MMMM y G"}
-                yyyyMMMd{"d MMM, y G"}
-                yyyyMd{"d.M.y G"}
+                yyyyMMMd{"G d MMM, y"}
+                yyyyMMMddd{"G ddd MMM, y"}
+                yyyyMd{"G d.M.y"}
                 yyyyQQQ{"QQQ, y G"}
                 yyyyQQQQ{"QQQQ, y G"}
+            }
+            dayOfMonthNames{
+                format{
+                    abbreviated{
+                        many{"{0}"}
+                        one{"{0}-ლი"}
+                        other{"{0}"}
+                    }
+                }
             }
             intervalFormats{
                 Bh{
@@ -269,8 +282,12 @@ ka{
                     M{"MMM–MMM"}
                 }
                 MMMEd{
-                    M{"E, d MMM – E, d MMM"}
+                    M{"E, d MMM ‑ E, d MMM"}
                     d{"E, d – E, d MMM"}
+                }
+                MMMMd{
+                    M{"d MMMM ‑ d MMMM"}
+                    d{"d‑d MMMM"}
                 }
                 MMMd{
                     M{"d MMM – d MMM"}
@@ -348,6 +365,9 @@ ka{
                 "yMMMd",
                 "yyMMdd",
             }
+            appendItems{
+                Time-Day-Of-Week{"{1}, {0}"}
+            }
             availableFormats{
                 EHm{"E, HH:mm"}
                 EHms{"E, HH:mm:ss"}
@@ -355,25 +375,43 @@ ka{
                 Ehm{"E, h:mm a"}
                 Ehms{"E, h:mm:ss a"}
                 Gy{"y G"}
-                GyMMM{"MMM. y G"}
-                GyMMMEd{"E, d MMM. y G"}
-                GyMMMd{"d MMM. y G"}
+                GyMMM{"G MMM. y"}
+                GyMMMEd{"G E, d MMM. y"}
+                GyMMMEddd{"G E, ddd MMM. y"}
+                GyMMMM{"G MMMM, y"}
+                GyMMMMEd{"G E, d MMMM, y"}
+                GyMMMMEddd{"G E, ddd MMMM, y"}
+                GyMMMMd{"G d MMMM, y"}
+                GyMMMMddd{"G ddd MMMM, y"}
+                GyMMMd{"G d MMM. y"}
+                GyMMMddd{"G ddd MMM y"}
                 GyMd{"d.M.y GGGGG"}
                 MEd{"E, d.M"}
                 MMMEd{"E, d MMM"}
+                MMMEddd{"E, ddd MMM"}
+                MMMMEd{"E, d MMMM"}
+                MMMMEddd{"E, ddd MMMM"}
                 MMMMW{
                     one{"MMMMს კვირა W"}
                     other{"MMMMს კვირა W"}
                 }
                 MMMMd{"d MMMM"}
+                MMMMddd{"ddd MMMM"}
                 MMMd{"d MMM"}
+                MMMddd{"ddd MMM"}
                 Md{"d.M"}
                 yM{"M.y"}
                 yMEd{"E, d.M.y"}
                 yMMM{"MMM. y"}
                 yMMMEd{"E, d MMM. y"}
+                yMMMEddd{"E, ddd MMM y"}
                 yMMMM{"MMMM, y"}
+                yMMMMEd{"E, MMMM d, y"}
+                yMMMMEddd{"E, MMMM ddd, y"}
+                yMMMMd{"d MMMM, y"}
+                yMMMMddd{"ddd MMMM, y"}
                 yMMMd{"d MMM. y"}
+                yMMMddd{"ddd MMM y"}
                 yMd{"d.M.y"}
                 yQQQ{"QQQ, y"}
                 yQQQQ{"QQQQ, y"}
@@ -424,6 +462,15 @@ ka{
                     }
                 }
             }
+            dayOfMonthNames{
+                format{
+                    abbreviated{
+                        many{"{0}"}
+                        one{"{0}-ლი"}
+                        other{"{0}"}
+                    }
+                }
+            }
             dayPeriod{
                 format{
                     abbreviated{
@@ -460,7 +507,6 @@ ka{
                     1{"ახ. წ."}
                 }
                 abbreviated%variant{
-                    0{"ჩვ. ერამდე"}
                     1{"ჩვ. ერა"}
                 }
                 wide{
@@ -473,6 +519,10 @@ ka{
                 }
             }
             intervalFormats{
+                Bh{
+                    B{"h B ‑ h B"}
+                    h{"h‑h B"}
+                }
                 M{
                     M{"M–M"}
                 }
@@ -486,6 +536,10 @@ ka{
                 MMMEd{
                     M{"E, d MMM – E, d MMM"}
                     d{"E, d – E, d MMM"}
+                }
+                MMMMd{
+                    M{"MMMM d ‑ MMMM d"}
+                    d{"MMMM d‑d"}
                 }
                 MMMd{
                     M{"d MMM – d MMM"}
@@ -616,7 +670,7 @@ ka{
         downwards_arrows{"ქვემოთ მიმართული ისრები"}
         downwards_upwards_arrows{"ქვემოთ და ზემოთ მიმართული ისრები"}
         east_asian_scripts{"აღმოსავლეთ აზიური დამწერლობები"}
-        emoji{"Emoji"}
+        emoji{"ემოჯი"}
         european_scripts{"ევროპული დამწერლობები"}
         female{"ქალი"}
         flag{"დროშა"}

@@ -5,15 +5,41 @@ tk{
     Keys{
         calendar{"Senenama"}
         cf{"Pul birliginiň formaty"}
+        colAlternate{"Simwollar hasaba alynmazdan tertipleme"}
+        colBackwards{"Nygtalýana görä ters tertipleme"}
+        colCaseFirst{"Baş harp/setir harpa görä tertipleme"}
+        colCaseLevel{"Harp registrine görä tertipleme"}
+        colNormalization{"Adatylaşdyrylan tertipleme"}
+        colNumeric{"Sana görä tertipleme"}
+        colReorder{"Hat-blok gaýtadan tertipleme"}
+        colStrength{"Tertiplemäniň täsiri"}
         collation{"Tertip rejesi"}
         currency{"Pul birligi"}
+        d0{"Özgertmäniň bolmaly ýeri"}
+        dx{"Sözlükdäki setirden setire geçiş kadalaryndan çykmalar"}
         em{"Emoji aňlatmasy"}
+        fw{"Hepdäniň birinji güni"}
+        h0{"garyşyk"}
         hc{"Sagat aýlawy (12–24 sagat)"}
+        i0{"Giriziş usuly"}
+        k0{"Klawiatura"}
+        kv{"Iň ýokary derejede ähmiýet bermezlik"}
         lb{"Setirden setire geçiş stili"}
         lw{"Sözleriň içinde setir bölünmeleri"}
+        m0{"Özgerdiş kadalary"}
         ms{"Ölçeg ulgamy"}
+        mu{"Ölçeg birligi"}
         numbers{"Sanlar"}
+        rg{"Goşmaça maglumatlar üçin sebit"}
+        s0{"Özgerdiş çeşmesi"}
+        sd{"Sebit bölümi"}
         ss{"Gysgaltmadan soň sözlemi bölmek"}
+        t{"Özgerdiş"}
+        t0{"Maşyn terjimesi"}
+        timezone{"Sagat guşaklygy"}
+        va{"Sebit sazlamalarynyň warianty"}
+        x{"Hususy ulanylýan"}
+        x0{"Hususy ulanylýan özgerdiş"}
     }
     Languages{
         aa{"afar dili"}
@@ -158,7 +184,7 @@ tk{
         hil{"hiligaýnon dili"}
         hmn{"hmong dili"}
         hr{"horwat dili"}
-        hsb{"ýokarky lužits dili"}
+        hsb{"ýokarky lužisa dili"}
         ht{"gaiti kreol dili"}
         hu{"wenger dili"}
         hup{"hupa"}
@@ -296,7 +322,7 @@ tk{
         nl{"niderland dili"}
         nl_BE{"flamand dili"}
         nmg{"kwasio dili"}
-        nn{"norwegiýa nýunorsk dili"}
+        nn{"norweg nýunorsk dili"}
         nnh{"ngembun dili"}
         no{"norweg dili"}
         nog{"nogaý dili"}
@@ -324,6 +350,7 @@ tk{
         pcm{"nigeriýa-pijin dili"}
         pis{"pijin dili"}
         pl{"polýak dili"}
+        pms{"pýemont dili"}
         pqm{"malisit-passamakwodi dili"}
         prg{"prus dili"}
         ps{"puştu dili"}
@@ -571,10 +598,13 @@ tk{
             ethiopic-amete-alem{"Efiopiýa amete alem"}
             gregorian{"Grigorian"}
             hebrew{"Ýewreý"}
+            indian{"Milli hindi senenamasy"}
             islamic{"Hijri-kamary"}
             islamic-civil{"Hijri-kamary (tablisaly, raýat eýýamy)"}
-            islamic-tbla{"Hijri-kamary (tablisaly, astronomil eýýam)"}
+            islamic-rgsa{"Hijri-kamary (Saud Arabystany, täze dogan aýa görä)"}
+            islamic-tbla{"Hijri-kamary (tablisaly, astronomik eýýam)"}
             islamic-umalqura{"Hijri-kamary (Umm al-Kura)"}
+            iso8601{"ISO-8601"}
             japanese{"Ýapon"}
             persian{"Pars"}
             roc{"Minguo"}
@@ -587,15 +617,50 @@ tk{
             account{"Buhgalterçilik"}
             standard{"Standart"}
         }
+        colCaseFirst%core{
+            lower{"Setir harp"}
+            no{"Setir harpa görä"}
+            upper{"Baş harpa görä"}
+        }
+        colReorder%core{
+            currency{"Pul birligi"}
+            digit{"Sifrler"}
+            punct{"Dyngy belgileri"}
+            space{"Boşluk"}
+            symbol{"Simwol"}
+        }
+        colStrength%core{
+            identical{"Hemmesi"}
+            primary{"Diňe esasy harplar"}
+            quaternary{"Esasylar, nygtalýanlar, registr, wariantlar, Kana"}
+            secondary{"Esasylar, nygtalýanlar"}
+            tertiary{"Esasylar, nygtalýanlar, registr, wariantlar"}
+        }
         collation{
             ducet{"Deslapky Ýunikod tertip rejesi"}
             search{"Umumy maksatly gözleg"}
             standard{"Standart tertip rejesi"}
         }
         collation%core{
+            compat{"Ylalaşyjy"}
+            dictionary{"Sözlük"}
             ducet{"Deslapky ýunikod"}
+            emoji{"Emoji"}
+            eor{"Ýewropa düzgünleri"}
+            phonebook{"Telefon kitaby"}
+            phonetic{"Fonetik"}
+            pinyin{"Pinýin"}
             search{"Gözleg"}
+            searchjl{"Koreý başdaky çekimsizler"}
             standard{"Standart"}
+            stroke{"Çyzyga görä"}
+            traditional{"Adaty"}
+            unihan{"Açara we çyzyga görä"}
+            zhuyin{"Çžuin"}
+        }
+        d0{
+            fwidth{"Doly giňlikdäki simwollar"}
+            hwidth{"Ýarym giňlikdäki simwollar"}
         }
         em%core{
             default{"Deslapky"}
@@ -603,16 +668,26 @@ tk{
             text{"Tekst"}
         }
         hc{
+            c12{"12 sagat ulgamy"}
+            c24{"24 sagat ulgamy"}
             h11{"12 sagat ulgamy (0–11)"}
             h12{"12 sagat ulgamy (1–12)"}
             h23{"24 sagat ulgamy (0–23)"}
             h24{"24 sagat ulgamy (1–24)"}
         }
         hc%core{
+            c12{"12"}
+            c24{"24"}
             h11{"12 (0–11)"}
             h12{"12 (1–12)"}
             h23{"24 (0–23)"}
             h24{"24 (1–24)"}
+        }
+        kv%core{
+            currency{"Boşluklar, dyngy belgileri, ähli simwollar"}
+            punct{"Boşluklar, dyngy belgileri"}
+            space{"Boşluklar, dyngy belgileri"}
+            symbol{"Boşluklar, dyngy belgileri, pul birligi bolmadyk simwollar"}
         }
         lb{
             loose{"Setirden setire geçişiň gowşak stili"}
@@ -629,6 +704,10 @@ tk{
             keepall{"Hemmesi galsyn"}
             normal{"Adaty"}
             phrase{"Sözlemler galsyn"}
+        }
+        m0{
+            bgn{"ABŞ BGN transliterasiýasy"}
+            ungegn{"BMG GEGN transliterasiýasy"}
         }
         ms{
             metric{"Metrik ulgam"}
@@ -671,6 +750,7 @@ tk{
             mlym{"Malaýalam sanlary"}
             mtei{"Miteý Maýek sanlary"}
             mymr{"Mýanma sanlary"}
+            native{"Ýerli halklaryň sanlary"}
             olck{"Ol Çiki sanlary"}
             orya{"Oriýa sanlary"}
             roman{"Rim sanlary"}
@@ -682,9 +762,54 @@ tk{
             tibt{"Tibet sanlary"}
             vaii{"Waý sanlary"}
         }
+        numbers%core{
+            arabext{"Giňeldiler arap-hindi"}
+            armnlow{"Ermeni setir"}
+            finance{"Maliýe görnüşi"}
+            fullwide{"Doly giňlikdäki"}
+            greklow{"Grek setir"}
+            hanidays{
+                "Adaty senenamalar üçin aýdaky günleriň Han iýeroglifleri arkaly san "
+                "ýazgysy"
+            }
+            hanidec{
+                "Sifr hökmünde hytaý san iýeroglifleri ulanylýan pozisiýa görä onluk "
+                "san ulgamy"
+            }
+            hansfin{"Ýönekeýleşdirilen hytaý maliýe"}
+            hantfin{"Adaty hytaý maliýe"}
+            jpanfin{"Ýapon maliýe"}
+            jpanyear{
+                "Ýapon erasynyň birinji ýyly \u0022Gannen\u0022 diýlip görkezilýän sa"
+                "n ýazgysy"
+            }
+            lanatham{"Taý Tam Tam (dini)"}
+            mathbold{"Matematik goýy"}
+            mathdbl{"Matematik iki çyzykly"}
+            mathmono{"Matematik monogiňlikdäki"}
+            mathsanb{"Matematik kertiksiz goýy"}
+            mathsans{"Matematik kertiksiz"}
+            mymrepka{"Gündogar Pwo mýanma karen"}
+            mymrpao{"Mýanma Pao"}
+            mymrshan{"Mýanma Şan"}
+            mymrtlng{"Mýanma Taý-laý"}
+            native{"Ýerli halklaryň sanlary"}
+            outlined{"Daşy çyzylan"}
+            roman{"Rim baş registrli"}
+            romanlow{"Rim setir registrli"}
+            segment{"Segmentlere bölünen"}
+            tamldec{"Häzirkizaman tamil"}
+            traditional{"Adaty sanlar"}
+        }
         ss%core{
             none{"öçürilen"}
             standard{"açyk"}
+        }
+        t0{
+            und{"Kesgitlenmedik maşyn terjimesi"}
+        }
+        va%core{
+            posix{"POSIX warianty"}
         }
     }
     characterLabelPattern{

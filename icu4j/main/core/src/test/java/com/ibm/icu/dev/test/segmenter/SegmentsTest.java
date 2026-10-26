@@ -12,6 +12,7 @@ import com.ibm.icu.segmenter.LocalizedSegmenter.SegmentationType;
 import com.ibm.icu.segmenter.Segment;
 import com.ibm.icu.segmenter.Segmenter;
 import com.ibm.icu.segmenter.Segments;
+import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.util.ULocale;
 import java.util.Arrays;
 import java.util.BitSet;
@@ -144,6 +145,70 @@ public class SegmentsTest extends CoreTestFmwk {
                                         segments1.isBoundary(i));
                             }
                         });
+    }
+
+    @Test
+    public void testRuleStatus() {
+        final Segmenter frWordSegmenter =
+                LocalizedSegmenter.builder()
+                        .setLocale(ULocale.FRENCH)
+                        .setSegmentationType(LocalizedSegmenter.SegmentationType.WORD)
+                        .build();
+
+        final String source = "Portez ce vieux whisky au juge blond qui fume.";
+        final Segments segments = frWordSegmenter.segment(source);
+
+        assertThat(segments.segmentAt(0).getSubSequence(), is("Portez"));
+        assertTrue(
+                "segmentAt(0) is a word",
+                segments.segmentAt(0).ruleStatus > BreakIterator.WORD_NONE_LIMIT);
+        assertThat(segments.segmentAt(1).getSubSequence(), is("Portez"));
+        assertTrue(
+                "segmentAt(1) is a word",
+                segments.segmentAt(1).ruleStatus > BreakIterator.WORD_NONE_LIMIT);
+        assertThat(segments.segmentAt(6).getSubSequence(), is(" "));
+        assertTrue(
+                "segmentAt(6) is not a word",
+                segments.segmentAt(6).ruleStatus < BreakIterator.WORD_NONE_LIMIT);
+        assertThat(segments.segmentAt(16).getSubSequence(), is("whisky"));
+        assertTrue(
+                "segmentAt(16) is a word",
+                segments.segmentAt(16).ruleStatus > BreakIterator.WORD_NONE_LIMIT);
+        assertThat(segments.segmentAt(21).getSubSequence(), is("whisky"));
+        assertTrue(
+                "segmentAt(21) is a word",
+                segments.segmentAt(21).ruleStatus > BreakIterator.WORD_NONE_LIMIT);
+
+        List<CharSequence> words =
+                segments.segments()
+                        .filter(s -> s.ruleStatus > BreakIterator.WORD_NONE_LIMIT)
+                        .map(Segment::getSubSequence)
+                        .collect(Collectors.toList());
+        assertThat(
+                words,
+                is(
+                        List.of(
+                                "Portez", "ce", "vieux", "whisky", "au", "juge", "blond", "qui",
+                                "fume")));
+
+        List<CharSequence> nonWords =
+                segments.segments()
+                        .filter(s -> s.ruleStatus <= BreakIterator.WORD_NONE_LIMIT)
+                        .map(Segment::getSubSequence)
+                        .collect(Collectors.toList());
+        assertThat(nonWords, is(List.of(" ", " ", " ", " ", " ", " ", " ", " ", ".")));
+
+        List<CharSequence> wordsBackward =
+                segments.segmentsBefore(source.length())
+                        .filter(s -> s.ruleStatus > BreakIterator.WORD_NONE_LIMIT)
+                        .map(Segment::getSubSequence)
+                        .collect(Collectors.toList());
+        assertThat(
+                wordsBackward,
+                is(
+                        List.of(
+                                "fume", "qui", "blond", "juge", "au", "whisky", "vieux", "ce",
+                                "Portez")));
     }
 
     @Test

@@ -2,25 +2,47 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/
 xh{
+    Keys{
+        calendar{"Khalenda"}
+        colAlternate{"Ungahoyi Ukuhlela Ngeesimboli"}
+        colBackwards{"Ukihlela Okubuyela Umva Ngobukhulu"}
+        colCaseFirst{"Ukuhlel Ngokoonobumba Abancinci/Abakhulu"}
+        colCaseLevel{"Unobumba omkhulu"}
+    }
     Languages{
         af{"IsiBhulu"}
+        ak{"IsiAkan"}
         am{"IsiAmharic"}
         ar{"Isi-Arabhu"}
         ar_001{"Isi-Arabhu (Sale mihla)"}
         as{"IsiAssamese"}
+        ast{"IsiAsturian"}
         az{"Isi-Azerbaijani"}
+        ba{"IsiBashkir"}
+        bal{"IsiBaluchi"}
         be{"Isi-Belarusian"}
         bg{"Isi-Bulgaria"}
+        bgc{"IsiHaryanvi"}
+        bho{"IsiBhojpuri"}
+        blo{"IsiAnii"}
         bn{"IsiBangla"}
         br{"IsiBreton"}
+        brx{"IsiBodo"}
         bs{"Isi-Bosnia"}
         ca{"Isi-Calatan"}
+        ceb{"IsiCebuano"}
+        chr{"IsiCherokee"}
         cs{"Isi-Czech"}
+        csw{"IsiSwampy Cree"}
+        cv{"IsiChuvash"}
         cy{"Isi-Welsh"}
         da{"Isi-Danish"}
         de{"IsiJamani"}
         de_AT{"IsiJamani Sase-Austria"}
         de_CH{"IsiJamani Esiyi-High Swiss"}
+        doi{"IsiDogri"}
+        dsb{"IsiLower Sorbian"}
+        ee{"IsiEwe"}
         el{"Isi-Greek"}
         en{"IsiNgesi"}
         en_AU{"IsiNgesi Sase-Australia"}
@@ -35,6 +57,7 @@ xh{
         et{"Isi-Estonian"}
         eu{"Isi-Basque"}
         fa{"Isi-Persia"}
+        ff{"IsiFula"}
         fi{"Isi-Finnish"}
         fil{"Isi-Taglog"}
         fo{"Isi-Faroese"}
@@ -43,54 +66,89 @@ xh{
         fr_CH{"IsiFrentshi SaseSwitzerland"}
         fy{"Isi-Frisian"}
         ga{"Isi-Irish"}
+        gaa{"IsiGa"}
         gd{"Scots Gaelic"}
         gl{"Isi-Galician"}
         gu{"Isi-Gujarati"}
+        ha{"IsiHausa"}
         he{"Isi-Hebrew"}
         hi{"IsiHindi"}
         hi_Latn{"IsiHindi (Latin)"}
         hr{"Isi-Croatia"}
+        hsb{"IsiUpper Sorbian"}
         hu{"Isi-Hungarian"}
         hy{"IsiArmenia"}
         ia{"Isi-Interlingua"}
         id{"Isi-Indonesia"}
         ie{"Isi-Interlingue"}
+        ig{"Isi-Igbo"}
+        ii{"IsiSichuan Yi"}
         is{"Isi-Icelandic"}
         it{"IsiTaliyane"}
         ja{"IsiJapan"}
         jv{"Isi-Javanese"}
         ka{"Isi-Georgia"}
+        kea{"IsiKabuverdianu"}
+        kgp{"IsiKaingang"}
+        kk{"IsiKazakh"}
         km{"IsiCambodia"}
         kn{"Isi-Kannada"}
         ko{"Isi-Korean"}
+        kok{"IsiKonkani"}
+        ks{"IsiKashmiri"}
         ku{"IsiKurdish"}
+        kxv{"IsiKuvi"}
         ky{"IsiKyrgz"}
+        lb{"IsiLuxembourgish"}
+        lij{"IsiLigurian"}
+        lmo{"IsiLombard"}
         lo{"IsiLoathian"}
         lt{"Isi-Lithuanian"}
         lv{"Isi-Latvian"}
+        mai{"IsiMaithili"}
+        mi{"IsiMāori"}
         mk{"Isi-Macedonian"}
         ml{"Isi-Malayalam"}
         mn{"IsiMongolian"}
+        mni{"IsiManipuri"}
         mr{"Isi-Marathi"}
         ms{"Isi-Malay"}
         mt{"Isi-Maltese"}
+        mul{"Iilwimi Ezininzi"}
+        my{"IsiBurmese"}
+        nds{"IsiLow German"}
         ne{"Isi-Nepali"}
         nl{"IsiDatshi"}
         nl_BE{"IsiFlemish"}
         nn{"Isi-Norwegia (Nynorsk)"}
         no{"Isi-Norwegian"}
+        nqo{"IsiN’Ko"}
+        nso{"IsiPedi"}
         oc{"Iso-Occitan"}
+        om{"IsiOromo"}
         or{"Oriya"}
         pa{"Isi-Punjabi"}
+        pcm{"IsiNigerian Pidgin"}
         pl{"Isi-Polish"}
+        pms{"IsiPiedmontese"}
+        prg{"IsiPrussian"}
         ps{"IsiPashto"}
         pt{"IsiPhuthukezi"}
         pt_BR{"IsiPhuthukezi SaseBrazil"}
         pt_PT{"IsiPhuthukezi SasePortugal"}
+        qu{"IsiQuechua"}
+        raj{"IsiRajasthani"}
+        rm{"IsiRomansh"}
         ro{"Isi-Romanian"}
         ru{"Isi-Russian"}
+        rw{"IsiKinyarwanda"}
         sa{"IsiSanskrit"}
+        sah{"IsiYakut"}
+        sat{"IsiSantali"}
+        sc{"IsiSardinian"}
+        scn{"IsiSicilian"}
         sd{"IsiSindhi"}
+        shn{"IsiShan"}
         si{"Isi-Sinhalese"}
         sk{"Isi-Slovak"}
         sl{"Isi-Slovenian"}
@@ -101,29 +159,52 @@ xh{
         su{"Isi-Sudanese"}
         sv{"Isi-Swedish"}
         sw{"Isi-Swahili"}
+        syr{"IsiSyriac"}
+        szl{"IsiSilesian"}
         ta{"Isi-Tamil"}
         te{"Isi-Telegu"}
+        tg{"IsiTajik"}
         th{"Isi-Thai"}
         ti{"Isi-Tigrinya"}
         tk{"IsiTurkmen"}
+        tn{"IsiTswana"}
+        to{"IsiTonga"}
         tr{"Isi-Turkish"}
+        tt{"IsiTatar"}
+        tyv{"IsiTuvinian"}
         ug{"Isi Uighur"}
         uk{"Isi-Ukranian"}
         und{"Ulwimi olungaziwayo"}
         ur{"IsiUrdu"}
         uz{"Isi-Uzbek"}
+        vec{"IsiVenetian"}
         vi{"Isi-Vietnamese"}
+        vmw{"IsiMakhuwa"}
+        wo{"IsiWolof"}
         xh{"IsiXhosa"}
+        xnr{"IsiKangri"}
+        yo{"IsiYoruba"}
+        yrl{"IsiNheengatu"}
+        yue{"IsiCantonese"}
+        za{"IsiZhuang"}
         zh{"IsiMandarin"}
         zh_Hans{"IsiTshayina Esenziwe Lula"}
         zh_Hant{"IsiTshayina Esiqhelekileyo"}
         zu{"IsiZulu"}
+        zxx{"Akukho Khontenti"}
+    }
+    Languages%core{
+        ku{"IsiKurdish"}
+    }
+    Languages%extension{
+        ku{"IsiKurmanji"}
     }
     Languages%long{
         zh_Hans{"IsiMandarin Esenziwe Lula"}
         zh_Hant{"IsiMandarin Esiqhelekileyo"}
     }
     Languages%menu{
+        yue{"IsiTshayina, isiCantonse"}
         zh{"IsiTshayina, IsiMandarin"}
     }
     Languages%short{
@@ -134,14 +215,63 @@ xh{
         hi_Latn{"IsiHinglish"}
     }
     Scripts{
+        Adlm{"IsiAdlam"}
         Arab{"Isi-Arabhu"}
+        Aran{"IsiNastaliq"}
+        Armn{"IsiArmenian"}
+        Beng{"IsiBangla"}
+        Bopo{"IsiBopomofo"}
+        Brai{"IBraille"}
+        Cakm{"IsiChakma"}
+        Cans{"IUnified Canadian Aboriginal Syllabics"}
+        Cher{"IsiCherokee"}
         Cyrl{"IsiCyrillic"}
+        Deva{"IsiDevanagari"}
+        Ethi{"IsiEthiopic"}
+        Geor{"IsiGeorgian"}
+        Grek{"IsiGreek"}
+        Gujr{"IsiGujarati"}
+        Guru{"IsiGurmukhi"}
+        Hanb{"IsiHan with Bopomofo"}
+        Hang{"IsiHangul"}
+        Hani{"IsiHan"}
         Hans{"IsiHans Esenziwe Lula"}
         Hant{"IsiHant Esiqhelekileyo"}
+        Hebr{"IsiHebrew"}
+        Hira{"IsiHirgana"}
+        Hrkt{"IJapanese syllabaries"}
+        Jamo{"IsiJamo"}
         Jpan{"IsiJapanese"}
+        Kana{"IsiKatakana"}
+        Khmr{"IsiKhmer"}
+        Knda{"IsiKannada"}
         Kore{"IsiKorean"}
+        Laoo{"IsiLao"}
         Latn{"IsiLatin"}
+        Mlym{"IsiMalayalam"}
+        Mong{"IsiMongolian"}
+        Mtei{"IsiMeitei Mayek"}
+        Mymr{"IsiMyanmar"}
+        Nkoo{"IsiN’Ko"}
+        Olck{"IsiOl Chiki"}
+        Orya{"IsiOdia"}
+        Rohg{"IsiHanifi"}
+        Sinh{"IsiSinhala"}
+        Sund{"IsiSundanese"}
+        Syrc{"IsiSyriac"}
+        Taml{"IsiTamil"}
+        Telu{"IsiTelugu"}
+        Tfng{"IsiTifinagh"}
+        Thaa{"IsiThaana"}
+        Thai{"IsiThai"}
+        Tibt{"IsiTibetan"}
+        Vaii{"IsiVai"}
+        Yiii{"IsiYi"}
+        Zmth{"IMathematical Notation"}
+        Zsye{"I-Emoji"}
+        Zsym{"Amaphawu"}
         Zxxx{"Engabhalwanga"}
+        Zyyy{"Eziqhelekileyo"}
         Zzzz{"Ulwimi Olungaziwayo"}
     }
     Scripts%stand-alone{
@@ -150,11 +280,46 @@ xh{
     }
     Types{
         calendar{
+            buddhist{"Ikhalenda yamaBhuda"}
+            chinese{"Ikhalenda yamaTshayina"}
+            coptic{"I-Coptic Calendar"}
+            dangi{"IKhalenda yesiDangi"}
+            ethiopic{"I-Ethiopic Calendar"}
+            ethiopic-amete-alem{"I-Ethiopic Amete Alem Calendar"}
             gregorian{"Ngokwekhalenda KaGregorian"}
+            hebrew{"IKhalenda yamaHebhere"}
+            islamic{"I-Hijri Calendar"}
+            islamic-civil{"I-Hijri Calendar (tabular, civil epoch)"}
+            islamic-umalqura{"I-Hijri Calendar (Umm al-Qura)"}
             iso8601{"Ikhalenda kaGregorian"}
+            japanese{"IJapanese Calendar"}
+            persian{"I-Persian Calendar"}
+            roc{"I-Minguo Calendar"}
         }
         calendar%core{
+            buddhist{"EyamaBhuda"}
+            chinese{"IsiTshayina"}
+            coptic{"I-Coptic"}
+            dangi{"IsiDangi"}
+            ethiopic{"I-Ethiopic"}
+            ethiopic-amete-alem{"I-Ethiopic Amete Alem"}
             gregorian{"IGregorian"}
+            hebrew{"IsiHebere"}
+            indian{"EyeIndian National"}
+            islamic{"I-Hijri"}
+            islamic-civil{"I-Hijri (tabular, civil epoch)"}
+            islamic-rgsa{"I-Hijri, Saudi Arabia sighting"}
+            islamic-tbla{"I-Hijri (tabular, astronomical epoch)"}
+            islamic-umalqura{"I-Hijri (Umm al-Qura)"}
+            iso8601{"IGregorian"}
+            japanese{"IJapanese"}
+            persian{"I-Persian"}
+            roc{"-Minguo"}
+        }
+        colCaseFirst%core{
+            lower{"Unobumba omncinci"}
+            no{"Unobumba omncinci"}
+            upper{"Unobumba omkhulu"}
         }
         collation{
             standard{"Standard Sort Order"}

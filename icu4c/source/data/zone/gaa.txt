@@ -3,8 +3,27 @@
 // Generated using tools/cldr/cldr-to-icu/
 gaa{
     zoneStrings{
+        "Etc:UTC"{
+            ls{"Be Ni Maji Ni Yɔɔ Jeŋ Fɛɛ Kɛtsuɔ Nii"}
+        }
+        "meta:British"{
+            ld{"Be Ni Britainbii Kɛtsuɔ Nii Yɛ Latsa Beiaŋ"}
+            lg{"Britin Be tsɔɔmɔ"}
+        }
         "meta:GMT"{
-            ls{"Betsɔɔmɔ ni ka ŋɛlɛ kome nɔ"}
+            ls{"Greenwich Be Tsɔɔmɔ"}
+        }
+        "meta:Hawaii"{
+            ls{"Hawaii Be Yɛ Fɛi Beiaŋ"}
+        }
+        "meta:Hawaii_Aleutian"{
+            ld{"Hawaii-Aleutia Be Yɛ Latsa Beiaŋ"}
+            lg{"Hawaii-Aleutia Be"}
+            ls{"Hawaii-Aleutia Be Yɛ Fɛi Beiaŋ"}
+        }
+        "meta:Irish"{
+            ld{"Be Ni Irelandbii Kɛtsuɔ Nii"}
+            lg{"Ireland Be tsɔɔmɔ"}
         }
         regionFormat{"{0} Be"}
         regionFormatDaylight{"{0} Be Yɛ Latsa Beiaŋ"}

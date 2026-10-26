@@ -16,8 +16,7 @@ import com.ibm.icu.text.RbnfLenientScanner;
 import com.ibm.icu.text.RbnfLenientScannerProvider;
 import com.ibm.icu.text.RuleBasedCollator;
 import com.ibm.icu.util.ULocale;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Returns RbnfLenientScanners that use the old RuleBasedNumberFormat implementation behind
@@ -29,7 +28,7 @@ import java.util.Map;
 @Deprecated
 public class RbnfScannerProviderImpl implements RbnfLenientScannerProvider {
     private static final boolean DEBUG = ICUDebug.enabled("rbnf");
-    private Map<String, RbnfLenientScanner> cache;
+    private final ConcurrentHashMap<String, RbnfLenientScanner> cache;
 
     /**
      * @internal
@@ -37,7 +36,7 @@ public class RbnfScannerProviderImpl implements RbnfLenientScannerProvider {
      */
     @Deprecated
     public RbnfScannerProviderImpl() {
-        cache = new HashMap<String, RbnfLenientScanner>();
+        cache = new ConcurrentHashMap<>();
     }
 
     /**
@@ -73,17 +72,16 @@ public class RbnfScannerProviderImpl implements RbnfLenientScannerProvider {
     public RbnfLenientScanner get(ULocale locale, String extras) {
         RbnfLenientScanner result = null;
         String key = locale.toString() + "/" + extras;
-        synchronized (cache) {
-            result = cache.get(key);
-            if (result != null) {
-                return result;
-            }
+        // Avoid computeIfAbsent: createScanner() constructs a RuleBasedCollator (expensive)
+        // and would hold the ConcurrentHashMap bin lock for the entire duration. Using
+        // get-then-putIfAbsent allows parallel construction with first-write-wins.
+        result = cache.get(key);
+        if (result != null) {
+            return result;
         }
         result = createScanner(locale, extras);
-        synchronized (cache) {
-            cache.put(key, result);
-        }
-        return result;
+        RbnfLenientScanner existing = cache.putIfAbsent(key, result);
+        return existing != null ? existing : result;
     }
 
     /**
@@ -107,13 +105,11 @@ public class RbnfScannerProviderImpl implements RbnfLenientScannerProvider {
         } catch (Exception e) {
             // If we get here, it means we have a malformed set of
             // collation rules, which hopefully won't happen
-            /// CLOVER:OFF
             if (DEBUG) { // debug hook
                 e.printStackTrace();
                 System.out.println("++++");
             }
             collator = null;
-            /// CLOVER:ON
         }
 
         return new RbnfLenientScannerImpl(collator);
@@ -161,7 +157,6 @@ public class RbnfScannerProviderImpl implements RbnfLenientScannerProvider {
             return new int[] {-1, 0};
         }
 
-        /// CLOVER:OFF
         // The following method contains the same signature as findText
         //  and has never been used by anything once.
         @SuppressWarnings("unused")
@@ -212,8 +207,6 @@ public class RbnfScannerProviderImpl implements RbnfLenientScannerProvider {
 
             return new int[] {keyStart, strIter.getOffset() - keyStart};
         }
-
-        /// CLOVER:ON
 
         public int prefixLength(String str, String prefix) {
             // Create two collation element iterators, one over the target string

@@ -320,8 +320,6 @@ sv{
             }
             part{
                 dnam{"delar"}
-                one{"{0} del"}
-                other{"{0} delar"}
             }
             part-per-1e6{
                 case{
@@ -983,8 +981,9 @@ sv{
         }
         graphics{
             dot{
-                one{"{0} punkt"}
-                other{"{0} punkter"}
+                dnam{"bildpunkt"}
+                one{"{0} bildpunkt"}
+                other{"{0} bildpunkter"}
             }
             dot-per-centimeter{
                 dnam{"punkter per centimeter"}
@@ -1047,7 +1046,7 @@ sv{
             pixel-per-inch{
                 dnam{"pixel per tum"}
                 one{"{0} pixel per tum"}
-                other{"{0} pixel per tum"}
+                other{"{0} pixlar per tum"}
             }
         }
         length{
@@ -2020,12 +2019,10 @@ sv{
                 other{"{0}mol"}
             }
             ofglucose{
-                dnam{"glc"}
                 one{"{0} glc"}
                 other{"{0} glc"}
             }
             part{
-                dnam{"del"}
                 one{"{0} del"}
                 other{"{0} del"}
             }
@@ -2141,6 +2138,7 @@ sv{
                 dnam{"h"}
                 one{"{0}h"}
                 other{"{0}h"}
+                per{"{0}/h"}
             }
             microsecond{
                 one{"{0}μs"}
@@ -2177,6 +2175,7 @@ sv{
                 other{"{0}k"}
             }
             second{
+                dnam{"s"}
                 one{"{0}s"}
                 other{"{0}s"}
             }
@@ -2195,10 +2194,6 @@ sv{
                 one{"{0}A"}
                 other{"{0}A"}
             }
-            henry{
-                one{"{0} H"}
-                other{"{0} H"}
-            }
             milliampere{
                 one{"{0}mA"}
                 other{"{0}mA"}
@@ -2207,10 +2202,6 @@ sv{
                 dnam{"Ω"}
                 one{"{0}Ω"}
                 other{"{0}Ω"}
-            }
-            siemens{
-                one{"{0} S"}
-                other{"{0} S"}
             }
             volt{
                 dnam{"V"}
@@ -2311,9 +2302,17 @@ sv{
                 one{"{0}mpx"}
                 other{"{0}mpx"}
             }
+            pixel{
+                one{"{0}px"}
+                other{"{0} px"}
+            }
             pixel-per-centimeter{
                 one{"{0}px/cm"}
                 other{"{0}px/cm"}
+            }
+            pixel-per-inch{
+                one{"{0}px/tum"}
+                other{"{0}px/tum"}
             }
         }
         length{
@@ -2387,7 +2386,6 @@ sv{
                 other{"{0}naut. mil"}
             }
             parsec{
-                dnam{"parsek"}
                 one{"{0}parsek"}
                 other{"{0}parsek"}
             }
@@ -2547,10 +2545,6 @@ sv{
                 one{"{0}mmHg"}
                 other{"{0}mmHg"}
             }
-            ofhg{
-                one{"{0} Hg"}
-                other{"{0} Hg"}
-            }
             pascal{
                 one{"{0}Pa"}
                 other{"{0}Pa"}
@@ -2693,10 +2687,6 @@ sv{
                 dnam{"Imp fl oz"}
                 one{"{0}fl oz Im"}
                 other{"{0}fl oz Im"}
-            }
-            fluid-ounce-metric{
-                one{"{0} fl oz m."}
-                other{"{0} fl oz m."}
             }
             gallon{
                 one{"{0}gal"}
@@ -3009,9 +2999,9 @@ sv{
         }
         graphics{
             dot{
-                dnam{"punkt"}
-                one{"{0} p"}
-                other{"{0} p"}
+                dnam{"bildpunkt"}
+                one{"{0} bildpunkt"}
+                other{"{0} bildpunkter"}
             }
             dot-per-centimeter{
                 dnam{"dpcm"}
@@ -3289,10 +3279,6 @@ sv{
                 dnam{"fl oz"}
                 one{"{0} fl oz"}
                 other{"{0} fl oz"}
-            }
-            fluid-ounce-imperial{
-                one{"{0} fl oz Imp."}
-                other{"{0} fl oz Imp."}
             }
             fluid-ounce-metric{
                 one{"{0} fl oz m."}

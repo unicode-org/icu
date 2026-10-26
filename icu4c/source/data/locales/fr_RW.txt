@@ -2,4 +2,12 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/
 fr_RW{
+    NumberElements{
+        latn{
+            symbols{
+                decimal{"."}
+                group{","}
+            }
+        }
+    }
 }

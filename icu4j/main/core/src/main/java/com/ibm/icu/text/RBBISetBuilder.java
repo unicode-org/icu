@@ -132,8 +132,6 @@ class RBBISetBuilder {
      */
     int fDictCategoriesStart;
 
-    boolean fSawBOF;
-
     // ------------------------------------------------------------------------
     //
     //       RBBISetBuilder Constructor
@@ -276,25 +274,17 @@ class RBBISetBuilder {
 
         // Handle input sets that contain the special string {eof}.
         //   Column 1 of the state table is reserved for EOF on input.
-        //   Column 2 is reserved for before-the-start-input.
-        //            (This column can be optimized away later if there are no rule
-        //             references to {bof}.)
-        //   Add this column value (1 or 2) to the equivalent expression
+        //   Add this column value (1) to the equivalent expression
         //     subtree for each UnicodeSet that contains the string {eof}
-        //   Because {bof} and {eof} are not a characters in the normal sense,
-        //   they doesn't affect the computation of ranges or TRIE.
+        //   Because {eof} is not a character in the normal sense,
+        //   it doesn’t affect the computation of ranges or TRIE.
 
         String eofString = "eof";
-        String bofString = "bof";
 
         for (RBBINode usetNode : fRB.fUSetNodes) {
             UnicodeSet inputSet = usetNode.fInputSet;
             if (inputSet.contains(eofString)) {
                 addValToSet(usetNode, 1);
-            }
-            if (inputSet.contains(bofString)) {
-                addValToSet(usetNode, 2);
-                fSawBOF = true;
             }
         }
 
@@ -450,15 +440,6 @@ class RBBISetBuilder {
 
     // ------------------------------------------------------------------------
     //
-    //           sawBOF
-    //
-    // ------------------------------------------------------------------------
-    boolean sawBOF() {
-        return fSawBOF;
-    }
-
-    // ------------------------------------------------------------------------
-    //
     //           getFirstChar      Given a runtime RBBI character category, find
     //                             the first UChar32 that is in the set of chars
     //                             in the category.
@@ -481,7 +462,6 @@ class RBBISetBuilder {
     //                              dump out all of the range definitions.
     //
     // ------------------------------------------------------------------------
-    /// CLOVER:OFF
     void printRanges() {
         RangeDescriptor rlRange;
         int i;
@@ -507,15 +487,12 @@ class RBBISetBuilder {
         }
     }
 
-    /// CLOVER:ON
-
     // ------------------------------------------------------------------------
     //
     //           printRangeGroups     A debugging function.
     //                                dump out all of the range groups.
     //
     // ------------------------------------------------------------------------
-    /// CLOVER:OFF
     void printRangeGroups() {
         int i;
 
@@ -563,15 +540,12 @@ class RBBISetBuilder {
         System.out.print("\n");
     }
 
-    /// CLOVER:ON
-
     // ------------------------------------------------------------------------
     //
     //           printSets          A debugging function.
     //                              dump out all of the set definitions.
     //
     // ------------------------------------------------------------------------
-    /// CLOVER:OFF
     void printSets() {
         int i;
         System.out.print("\n\nUnicode Sets List\n------------------\n");
@@ -603,5 +577,4 @@ class RBBISetBuilder {
         }
         System.out.print("\n");
     }
-    /// CLOVER:ON
 }

@@ -126,10 +126,6 @@ de_CH{
     }
     unitsNarrow{
         concentr{
-            katal{
-                one{"{0} kat"}
-                other{"{0} kat"}
-            }
             part{
                 dnam{"Punkt"}
                 one{"{0} Punkt"}

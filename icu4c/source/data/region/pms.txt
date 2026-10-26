@@ -3,6 +3,11 @@
 // Generated using tools/cldr/cldr-to-icu/
 pms{
     Countries{
+        AT{"Àustria"}
+        CH{"Svìssera"}
+        FR{"Fransa"}
         IT{"Italia"}
+        SI{"Slovenia"}
+        SM{"Repùblica ëd San Marin"}
     }
 }

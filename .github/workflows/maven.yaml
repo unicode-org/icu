@@ -21,8 +21,10 @@ jobs:
       version: ${{ steps.mvn-proj-version.outputs.version }}
       version-type: ${{ steps.mvn-proj-version-type.outputs.version-type }}
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
-      - uses: actions/setup-java@f2beeb24e141e01a676f977032f5a29d81c9e27e # v5.1.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
         with:
           distribution: 'temurin'
           java-version: '11'
@@ -38,10 +40,12 @@ jobs:
       - name: Assess Maven version release/snapshot
         id: mvn-proj-version-type
         run: |
-          if echo "${{ steps.mvn-proj-version.outputs.version }}" | grep -E "\-|SNAPSHOT"
+          if echo "${STEPS_MVN_PROJ_VERSION_OUTPUTS_VERSION}" | grep -E "\-|SNAPSHOT"
           then echo "version-type=snapshot" >> "$GITHUB_OUTPUT"
           else echo "version-type=release" >> "$GITHUB_OUTPUT"
           fi
+        env:
+          STEPS_MVN_PROJ_VERSION_OUTPUTS_VERSION: ${{ steps.mvn-proj-version.outputs.version }}
       - name: Prevent manual deployment attempts of full release
         if: github.event_name == 'workflow_dispatch' && steps.mvn-proj-version-type.outputs.version-type == 'release'
         run: |

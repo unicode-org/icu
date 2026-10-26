@@ -428,11 +428,6 @@ ml{
                 one{"{0} ഗ്ലൂക്കോസ്"}
                 other{"{0} ഗ്ലൂക്കോസ്"}
             }
-            part{
-                dnam{"പാർട്ട്"}
-                one{"{0} പാർട്ട്"}
-                other{"{0} പാർട്ട്"}
-            }
             part-per-1e6{
                 case{
                     accusative{
@@ -448,7 +443,7 @@ ml{
                         other{"{0} പാർട്ട്സ് / മില്ല്യണിന്റെ"}
                     }
                     instrumental{
-                        one{"{0} പാർട്ട് / മില്ല്യൺ കൊണ്ട്"}
+                        one{"{0} പാർട്ട് / മില്ല്യണിനാൽ"}
                         other{"{0} പാർട്ട്സ് / മില്ല്യണിനാൽ"}
                     }
                     locative{
@@ -900,9 +895,6 @@ ml{
                 one{"{0} നാനോസെക്കൻഡ്"}
                 other{"{0} നാനോസെക്കൻഡ്"}
             }
-            quarter{
-                dnam{"പാദങ്ങൾ"}
-            }
             second{
                 case{
                     accusative{
@@ -1028,6 +1020,7 @@ ml{
                         other{"{0} ആമ്പിയറിനോട്"}
                     }
                 }
+                dnam{"ആമ്പിയർ"}
                 gender{"neuter"}
                 one{"{0} ആമ്പിയർ"}
                 other{"{0} ആമ്പിയർ"}
@@ -1083,9 +1076,9 @@ ml{
                 other{"{0} ഓം"}
             }
             siemens{
-                dnam{"സീമൺസ്"}
-                one{"{0} സീമൺസ്"}
-                other{"{0} സീമൺസ്"}
+                dnam{"സീമൻസ്"}
+                one{"{0} സീമൻസ്"}
+                other{"{0} സീമൻസ്"}
             }
             volt{
                 case{
@@ -1558,6 +1551,11 @@ ml{
                 one{"{0} പോയിന്റ്"}
                 other{"{0} പോയിന്റ്"}
             }
+            yard{
+                dnam{"യാർഡ്"}
+                one{"{0} യാർഡ്"}
+                other{"{0} യാർഡ്"}
+            }
         }
         light{
             candela{
@@ -1648,6 +1646,8 @@ ml{
                     }
                 }
                 gender{"neuter"}
+                one{"{0} ലക്സ്"}
+                other{"{0} ലക്സ്"}
             }
             solar-luminosity{
                 one{"{0} സോളാർ ലുമിനോസിറ്റി"}
@@ -1699,8 +1699,9 @@ ml{
                 other{"{0} കാരറ്റ്"}
             }
             dalton{
+                dnam{"ഡാൽട്ടൺ"}
                 one{"{0} ഡാൽട്ടൺ"}
-                other{"{0} ഡാൽട്ടണുകൾ"}
+                other{"{0} ഡാൽട്ടൺ"}
             }
             earth-mass{
                 one{"{0} ഭൂപിണ്ഡം"}
@@ -1953,7 +1954,6 @@ ml{
                         other{"{0} ബാറിനോട്"}
                     }
                 }
-                dnam{"ബാറുകൾ"}
                 gender{"neuter"}
             }
             hectopascal{
@@ -2039,11 +2039,6 @@ ml{
                 dnam{"കിലോമീറ്റർ/മണിക്കൂർ"}
                 one{"{0} കിലോമീറ്റർ/മണിക്കൂർ"}
                 other{"{0} കിലോമീറ്റർ/മണിക്കൂർ"}
-            }
-            light-speed{
-                dnam{"പ്രകാശം"}
-                one{"{0} പ്രകാശ"}
-                other{"{0} പ്രകാശ"}
             }
             meter-per-second{
                 dnam{"മീറ്റർ/സെക്കൻഡ്"}
@@ -2394,20 +2389,30 @@ ml{
     }
     unitsNarrow{
         acceleration{
+            g-force{
+                one{"{0}G"}
+                other{"{0}Gs"}
+            }
             meter-per-square-second{
-                dnam{"മീ/സെ²"}
-                one{"{0}മീ/സെ²"}
-                other{"{0}മീ/സെ²"}
+                dnam{"m/s²"}
+                one{"{0}m/s²"}
+                other{"{0}m/s²"}
             }
         }
         angle{
             arc-minute{
+                dnam{"arcmin"}
                 one{"{0}′"}
                 other{"{0}′"}
             }
             arc-second{
+                dnam{"arcsec"}
                 one{"{0}″"}
                 other{"{0}″"}
+            }
+            degree{
+                one{"{0}°"}
+                other{"{0}°"}
             }
             radian{
                 dnam{"rad"}
@@ -2415,38 +2420,62 @@ ml{
                 other{"{0}rad"}
             }
             revolution{
-                dnam{"rev"}
                 one{"{0}rev"}
                 other{"{0}rev"}
             }
         }
         area{
             acre{
-                one{"{0} ഏ"}
-                other{"{0} ഏക്ക"}
+                one{"{0}ac"}
+                other{"{0}ac"}
             }
             dunam{
                 dnam{"ദുനം"}
             }
             hectare{
-                one{"{0} ഹെ"}
-                other{"{0} ഹെ"}
+                dnam{"ha"}
+                one{"{0}ha"}
+                other{"{0}ha"}
+            }
+            square-centimeter{
+                dnam{"cm²"}
+                one{"{0}cm²"}
+                other{"{0}cm²"}
+                per{"{0}/cm²"}
             }
             square-foot{
-                one{"{0} ച. അടി"}
-                other{"{0} ച.അടി"}
+                dnam{"ft²"}
+                one{"{0}ft²"}
+                other{"{0}ft²"}
+            }
+            square-inch{
+                dnam{"in²"}
+                one{"{0}in²"}
+                other{"{0}in²"}
+                per{"{0}/in²"}
             }
             square-kilometer{
-                one{"{0} ച.കിമീ"}
-                other{"{0} ച.കിമീ"}
+                dnam{"km²"}
+                one{"{0}km²"}
+                other{"{0}km²"}
+                per{"{0}/km²"}
             }
             square-meter{
-                one{"{0} ച.മീ"}
-                other{"{0} ച.മീ"}
+                dnam{"m²"}
+                one{"{0}m²"}
+                other{"{0}m²"}
+                per{"{0}/m²"}
             }
             square-mile{
-                one{"{0} ച.മൈ"}
-                other{"{0} ച.മൈ"}
+                dnam{"mi²"}
+                one{"{0}mi²"}
+                other{"{0}mi²"}
+                per{"{0}/mi²"}
+            }
+            square-yard{
+                dnam{"yd²"}
+                one{"{0}yd²"}
+                other{"{0}yd²"}
             }
         }
         concentr{
@@ -2454,21 +2483,33 @@ ml{
                 one{"{0}kt"}
                 other{"{0}kt"}
             }
-            ofglucose{
-                dnam{"Glc"}
+            milligram-ofglucose-per-deciliter{
+                dnam{"mg/dL"}
+                one{"{0}mg/dL"}
+                other{"{0}mg/dL"}
+            }
+            millimole-per-liter{
+                dnam{"mmol/L"}
+                one{"{0}mmol/L"}
+                other{"{0}mmol/L"}
+            }
+            mole{
+                one{"{0}mol"}
+                other{"{0}mol"}
             }
             part{
-                dnam{"പാർട്ട്"}
                 one{"{0} പാർട്ട്"}
                 other{"{0} പാർട്ട്"}
             }
             part-per-1e6{
-                dnam{"പാർട്ട്സ്/മില്ല്യൺ"}
+                dnam{"ppm"}
+                one{"{0}ppm"}
+                other{"{0}ppm"}
             }
             part-per-1e9{
-                dnam{"പി.പി.ബി."}
-                one{"{0}പി.പി.ബി."}
-                other{"{0}പി.പി.ബി."}
+                dnam{"ppb"}
+                one{"{0}ppb"}
+                other{"{0}ppb"}
             }
             permyriad{
                 dnam{"‱"}
@@ -2476,12 +2517,18 @@ ml{
         }
         consumption{
             liter-per-100-kilometer{
-                one{"{0}ലി/100കി.മീ."}
-                other{"{0}ലി/100കി.മീ"}
+                dnam{"L/100km"}
+                one{"{0}L/100km"}
+                other{"{0}L/100km"}
+            }
+            liter-per-kilometer{
+                dnam{"L/km"}
+                one{"{0}L/km"}
+                other{"{0}L/km"}
             }
             mile-per-gallon{
                 dnam{"mpg"}
-                one{"{0} mpg"}
+                one{"{0}mpg"}
                 other{"{0} mpg"}
             }
             mile-per-gallon-imperial{
@@ -2497,6 +2544,10 @@ ml{
             west{"{0}പ."}
         }
         digital{
+            bit{
+                one{"{0}bit"}
+                other{"{0}bit"}
+            }
             byte{
                 dnam{"B"}
                 one{"{0}B"}
@@ -2524,8 +2575,6 @@ ml{
             }
             megabit{
                 dnam{"Mb"}
-                one{"{0} Mb"}
-                other{"{0} Mb"}
             }
             megabyte{
                 dnam{"MB"}
@@ -2533,7 +2582,6 @@ ml{
                 other{"{0}MB"}
             }
             petabyte{
-                dnam{"PB"}
                 one{"{0}PB"}
                 other{"{0}PB"}
             }
@@ -2558,22 +2606,46 @@ ml{
                 one{"{0}ദശാ."}
                 other{"{0}ദശാ."}
             }
+            hour{
+                dnam{"h"}
+                one{"{0}h"}
+                other{"{0}h"}
+                per{"{0}/h"}
+            }
+            microsecond{
+                dnam{"μsec"}
+                one{"{0}μs"}
+                other{"{0}μs"}
+            }
             millisecond{
-                dnam{"മി.സെ."}
+                dnam{"msec"}
+                one{"{0}ms"}
+                other{"{0}ms"}
+            }
+            minute{
+                dnam{"min"}
+                one{"{0}m"}
+                other{"{0}m"}
+                per{"{0}/min"}
             }
             month{
                 one{"{0} മാ"}
                 other{"{0} മാ"}
             }
             nanosecond{
-                dnam{"നാ.സെ."}
+                dnam{"ns"}
+                one{"{0}ns"}
+                other{"{0}ns"}
             }
             night{
                 one{"{0}രാത്രി"}
                 other{"{0}രാത്രികൾ"}
             }
             second{
-                dnam{"സെ."}
+                dnam{"s"}
+                one{"{0}s"}
+                other{"{0}s"}
+                per{"{0}/s"}
             }
             week{
                 dnam{"ആ"}
@@ -2584,7 +2656,6 @@ ml{
         }
         electric{
             ampere{
-                dnam{"amp"}
                 one{"{0}A"}
                 other{"{0}A"}
             }
@@ -2599,8 +2670,37 @@ ml{
             }
         }
         energy{
-            calorie-it{
-                dnam{"cal-IT"}
+            calorie{
+                dnam{"cal"}
+                one{"{0}cal"}
+                other{"{0}cal"}
+            }
+            electronvolt{
+                dnam{"eV"}
+            }
+            foodcalorie{
+                dnam{"Cal"}
+                one{"{0}Cal"}
+                other{"{0}Cal"}
+            }
+            joule{
+                one{"{0}J"}
+                other{"{0}J"}
+            }
+            kilocalorie{
+                dnam{"kcal"}
+                one{"{0}kcal"}
+                other{"{0}kcal"}
+            }
+            kilojoule{
+                dnam{"kJ"}
+                one{"{0}kJ"}
+                other{"{0}kJ"}
+            }
+            kilowatt-hour{
+                dnam{"kWh"}
+                one{"{0}kWh"}
+                other{"{0}kWh"}
             }
         }
         force{
@@ -2615,24 +2715,16 @@ ml{
         }
         frequency{
             gigahertz{
-                dnam{"GHz"}
                 one{"{0}GHz"}
                 other{"{0}GHz"}
             }
             hertz{
-                dnam{"Hz"}
                 one{"{0}Hz"}
                 other{"{0}Hz"}
             }
             kilohertz{
-                dnam{"kHz"}
                 one{"{0}kHz"}
                 other{"{0}kHz"}
-            }
-            megahertz{
-                dnam{"MHz"}
-                one{"{0} MHz"}
-                other{"{0} MHz"}
             }
         }
         graphics{
@@ -2644,62 +2736,106 @@ ml{
         }
         length{
             astronomical-unit{
-                one{"{0}ജ്യോ.യൂ"}
-                other{"{0}ജ്യോ.യൂ"}
+                dnam{"au"}
+                one{"{0}au"}
+                other{"{0}au"}
+            }
+            centimeter{
+                dnam{"cm"}
+                one{"{0}cm"}
+                other{"{0}cm"}
+                per{"{0}/cm"}
+            }
+            decimeter{
+                dnam{"dm"}
+                one{"{0}dm"}
+                other{"{0}dm"}
             }
             fathom{
                 one{"{0}ഫാ."}
                 other{"{0}ഫാ."}
             }
             foot{
+                dnam{"ft"}
                 one{"{0}′"}
                 other{"{0}′"}
+                per{"{0}/ft"}
             }
             furlong{
                 one{"{0}ഫർ."}
                 other{"{0}ഫർ."}
             }
             inch{
+                dnam{"in"}
                 one{"{0}″"}
                 other{"{0}″"}
+                per{"{0}/in"}
+            }
+            kilometer{
+                dnam{"km"}
+                one{"{0}km"}
+                other{"{0}km"}
+                per{"{0}/km"}
             }
             light-year{
-                dnam{"പ്ര.വ."}
-                one{"{0} പ്ര.വ"}
-                other{"{0} പ്ര.വ"}
+                dnam{"ly"}
+                one{"{0}ly"}
+                other{"{0}ly"}
+            }
+            meter{
+                dnam{"m"}
+                one{"{0}m"}
+                other{"{0}m"}
+                per{"{0}/m"}
             }
             micrometer{
-                dnam{"μമീ."}
-                one{"{0}μമീ."}
-                other{"{0}μമീ."}
+                dnam{"μm"}
+                one{"{0}μm"}
+                other{"{0}μm"}
             }
             mile{
-                one{"{0} മൈ"}
-                other{"{0} മൈ"}
+                dnam{"mi"}
+                one{"{0} mi"}
+                other{"{0}mi"}
             }
             mile-scandinavian{
-                one{"{0}സ്.മൈ."}
-                other{"{0}സ്.മൈ."}
+                dnam{"smi"}
+                one{"{0}smi"}
+                other{"{0}smi"}
             }
             millimeter{
-                dnam{"മി.മീ."}
+                dnam{"mm"}
+                one{"{0}mm"}
+                other{"{0}mm"}
+            }
+            nanometer{
+                dnam{"nm"}
+                one{"{0}nm"}
+                other{"{0}nm"}
             }
             nautical-mile{
-                one{"{0}ന.മൈ."}
-                other{"{0}ന.മൈ."}
+                dnam{"nmi"}
+                one{"{0}nmi"}
+                other{"{0}nmi"}
+            }
+            parsec{
+                one{"{0}pc"}
+                other{"{0}pc"}
             }
             picometer{
-                one{"{0} പൈ.മീ"}
-                other{"{0} പൈ.മീ"}
+                dnam{"pm"}
+                one{"{0}pm"}
+                other{"{0}pm"}
             }
             point{
-                dnam{"പോ."}
-                one{"{0}പോ."}
-                other{"{0}പോ."}
+                dnam{"pt"}
+                one{"{0}pt"}
+                other{"{0}pt"}
             }
             yard{
-                one{"{0} യാ"}
-                other{"{0} യാ"}
+                dnam{"yd"}
+                one{"{0} yd"}
+                other{"{0} yd"}
             }
         }
         light{
@@ -2727,7 +2863,7 @@ ml{
                 other{"{0}CD"}
             }
             dalton{
-                dnam{"ഡാ."}
+                dnam{"Da"}
                 one{"{0}Da"}
                 other{"{0}Da"}
             }
@@ -2737,24 +2873,43 @@ ml{
             grain{
                 dnam{"grain"}
             }
+            gram{
+                one{"{0}g"}
+                other{"{0}g"}
+                per{"{0}/g"}
+            }
             kilogram{
-                one{"{0}കി.ഗ്രാം"}
-                other{"{0}കി.ഗ്രാം"}
+                dnam{"kg"}
+                one{"{0}kg"}
+                other{"{0}kg"}
+                per{"{0}/kg"}
             }
             microgram{
-                one{"{0}μ.ഗ്രാം."}
-                other{"{0}μ.ഗ്രാം."}
+                dnam{"μg"}
+                one{"{0}μg"}
+                other{"{0}μg"}
             }
             milligram{
-                one{"{0}മി.ഗ്രാം."}
-                other{"{0}മി.ഗ്രാം."}
+                dnam{"mg"}
+                one{"{0}mg"}
+                other{"{0}mg"}
             }
             ounce{
-                one{"{0} ഔ"}
-                other{"{0} ഔ"}
+                dnam{"oz"}
+                one{"{0}oz"}
+                other{"{0}oz"}
+                per{"{0}/oz"}
+            }
+            ounce-troy{
+                dnam{"oz t"}
+                one{"{0}oz t"}
+                other{"{0}oz t"}
             }
             pound{
-                dnam{"പൗ"}
+                dnam{"lb"}
+                one{"{0}#"}
+                other{"{0}#"}
+                per{"{0}/lb"}
             }
             solar-mass{
                 dnam{"M☉"}
@@ -2764,22 +2919,45 @@ ml{
                 other{"{0}സ്റ്റോ."}
             }
             ton{
-                one{"{0}ടൺ"}
-                other{"{0}ടൺ"}
+                one{"{0}tn"}
+                other{"{0}tn"}
             }
             tonne{
-                one{"{0}ട."}
-                other{"{0}ട."}
+                dnam{"t"}
+                one{"{0}t"}
+                other{"{0}t"}
             }
         }
         power{
+            gigawatt{
+                dnam{"GW"}
+                one{"{0}GW"}
+                other{"{0}GW"}
+            }
+            horsepower{
+                dnam{"hp"}
+                one{"{0}hp"}
+                other{"{0}hp"}
+            }
             kilowatt{
+                dnam{"kW"}
                 one{"{0}kW"}
                 other{"{0}kW"}
             }
+            megawatt{
+                dnam{"MW"}
+                one{"{0}MW"}
+                other{"{0}MW"}
+            }
+            milliwatt{
+                dnam{"mW"}
+                one{"{0}mW"}
+                other{"{0}mW"}
+            }
             watt{
-                one{"{0} വാ"}
-                other{"{0} വാ"}
+                dnam{"W"}
+                one{"{0}W"}
+                other{"{0}W"}
             }
         }
         pressure{
@@ -2788,18 +2966,18 @@ ml{
                 other{"{0}atm"}
             }
             bar{
-                one{"{0} ബാർ"}
-                other{"{0}ബാർ"}
+                dnam{"bar"}
+                one{"{0}bar"}
+                other{"{0}bar"}
             }
             hectopascal{
-                dnam{"hPa"}
                 one{"{0}hPa"}
                 other{"{0}hPa"}
             }
             inch-ofhg{
                 dnam{"″ Hg"}
-                one{"{0}\u0022 Hg"}
-                other{"{0}\u0022 Hg"}
+                one{"{0}″ Hg"}
+                other{"{0}″ Hg"}
             }
             kilopascal{
                 one{"{0}kPa"}
@@ -2810,53 +2988,60 @@ ml{
                 other{"{0}MPa"}
             }
             millibar{
-                one{"{0} മിബാ"}
-                other{"{0} മിബാ"}
+                dnam{"mbar"}
+                one{"{0}mb"}
+                other{"{0}mb"}
             }
             millimeter-ofhg{
-                dnam{"mmHg"}
                 one{"{0}mmHg"}
                 other{"{0}mmHg"}
             }
             pascal{
-                dnam{"Pa"}
                 one{"{0}Pa"}
                 other{"{0}Pa"}
+            }
+            pound-force-per-square-inch{
+                dnam{"psi"}
+                one{"{0}psi"}
+                other{"{0}psi"}
             }
         }
         speed{
             kilometer-per-hour{
-                one{"{0}കി.മീ/മ."}
-                other{"{0}കി.മീ/മ."}
+                dnam{"km/h"}
+                one{"{0}km/h"}
+                other{"{0}km/h"}
             }
             knot{
-                one{"{0}നോട്ട്"}
-                other{"{0}നോട്ട്"}
+                dnam{"kn"}
+                one{"{0}kn"}
+                other{"{0}kn"}
             }
             light-speed{
-                dnam{"പ്രകാശം"}
                 one{"{0}പ്രകാശ"}
                 other{"{0}പ്രകാശ"}
             }
             meter-per-second{
-                dnam{"മീ/സെ."}
-                one{"{0} മീ/സെ"}
-                other{"{0} മീ/സെ"}
+                dnam{"m/s"}
+                one{"{0}m/s"}
+                other{"{0}m/s"}
             }
             mile-per-hour{
-                dnam{"മൈ/മ."}
-                one{"{0} മൈ/മ"}
-                other{"{0} മൈ/മ"}
+                dnam{"mi/hr"}
+                one{"{0}mph"}
+                other{"{0}mph"}
             }
         }
         temperature{
             celsius{
-                dnam{"°സെ"}
+                dnam{"°C"}
+                one{"{0}°C"}
+                other{"{0}°C"}
             }
             fahrenheit{
-                dnam{"°ഫാ"}
-                one{"{0}°ഫാ"}
-                other{"{0}°ഫാ"}
+                dnam{"°F"}
+                one{"{0}°F"}
+                other{"{0}°F"}
             }
             kelvin{
                 one{"{0}K"}
@@ -2870,13 +3055,73 @@ ml{
             }
         }
         volume{
+            acre-foot{
+                dnam{"ac ft"}
+                one{"{0}ac ft"}
+                other{"{0}ac ft"}
+            }
+            barrel{
+                dnam{"bbl"}
+            }
             bushel{
                 one{"{0} പറ"}
                 other{"{0} bu"}
             }
+            centiliter{
+                dnam{"cL"}
+                one{"{0}cL"}
+                other{"{0}cL"}
+            }
+            cubic-centimeter{
+                dnam{"cm³"}
+                one{"{0}cm³"}
+                other{"{0}cm³"}
+                per{"{0}/cm³"}
+            }
+            cubic-foot{
+                dnam{"ft³"}
+                one{"{0}ft³"}
+                other{"{0}ft³"}
+            }
+            cubic-inch{
+                dnam{"in³"}
+                one{"{0}in³"}
+                other{"{0}in³"}
+            }
             cubic-kilometer{
-                one{"{0} കിമീ³"}
-                other{"{0} കിമീ³"}
+                dnam{"km³"}
+                one{"{0}km³"}
+                other{"{0}km³"}
+            }
+            cubic-meter{
+                dnam{"m³"}
+                one{"{0}m³"}
+                other{"{0}m³"}
+                per{"{0}/m³"}
+            }
+            cubic-mile{
+                dnam{"mi³"}
+                one{"{0}mi³"}
+                other{"{0}mi³"}
+            }
+            cubic-yard{
+                dnam{"yd³"}
+                one{"{0}yd³"}
+                other{"{0}yd³"}
+            }
+            cup{
+                one{"{0}c"}
+                other{"{0}c"}
+            }
+            cup-metric{
+                dnam{"mcup"}
+                one{"{0}mc"}
+                other{"{0}mc"}
+            }
+            deciliter{
+                dnam{"dL"}
+                one{"{0}dL"}
+                other{"{0}dL"}
             }
             dessert-spoon{
                 dnam{"dsp"}
@@ -2898,14 +3143,82 @@ ml{
                 one{"{0}തു"}
                 other{"{0}തു"}
             }
+            fluid-ounce{
+                dnam{"fl oz"}
+                one{"{0}fl oz"}
+                other{"{0}fl oz"}
+            }
             fluid-ounce-imperial{
+                dnam{"Imp fl oz"}
                 one{"{0}fl oz Im"}
                 other{"{0}fl oz Im"}
             }
             fluid-ounce-metric{
-                dnam{"ഫ്ലൂ ഔ മെ."}
-                one{"{0} ഫ്ലൂ ഔ മെ."}
-                other{"{0} ഫ്ലൂ ഔ മെ."}
+                dnam{"fl oz m."}
+                one{"{0} fl oz m."}
+                other{"{0} fl oz m."}
+            }
+            gallon{
+                dnam{"gal"}
+                one{"{0}gal"}
+                other{"{0}gal"}
+                per{"{0}/gal"}
+            }
+            gallon-imperial{
+                dnam{"Imp gal"}
+                one{"{0}gal-Im"}
+                other{"{0}gal-Im"}
+                per{"{0}/galIm"}
+            }
+            hectoliter{
+                dnam{"hL"}
+                one{"{0}hL"}
+                other{"{0}hL"}
+            }
+            liter{
+                one{"{0}L"}
+                other{"{0}L"}
+                per{"{0}/L"}
+            }
+            megaliter{
+                dnam{"ML"}
+                one{"{0}ML"}
+                other{"{0}ML"}
+            }
+            milliliter{
+                dnam{"mL"}
+                one{"{0}mL"}
+                other{"{0}mL"}
+            }
+            pinch{
+                dnam{"pn"}
+                one{"{0}pn"}
+                other{"{0}pn"}
+            }
+            pint{
+                dnam{"pt"}
+                one{"{0}pt"}
+                other{"{0}pt"}
+            }
+            pint-metric{
+                dnam{"pt"}
+                one{"{0}mpt"}
+                other{"{0}mpt"}
+            }
+            quart{
+                dnam{"qt"}
+                one{"{0}qt"}
+                other{"{0}qt"}
+            }
+            tablespoon{
+                dnam{"Tbsp"}
+                one{"{0}Tbsp"}
+                other{"{0}Tbsp"}
+            }
+            teaspoon{
+                dnam{"tsp"}
+                one{"{0}tsp"}
+                other{"{0}tsp"}
             }
         }
     }
@@ -2913,25 +3226,22 @@ ml{
         acceleration{
             g-force{
                 dnam{"ജി-ഫോഴ്‌സ്"}
-                one{"{0} ജി"}
-                other{"{0} ജി"}
+                one{"{0} G"}
+                other{"{0} G"}
             }
             meter-per-square-second{
-                dnam{"മീറ്റർ/സെക്കൻഡ്²"}
-                one{"{0} മീ/സെ²"}
-                other{"{0} മീ/സെ²"}
+                one{"{0} m/s²"}
+                other{"{0} m/s²"}
             }
         }
         angle{
             arc-minute{
-                dnam{"ആർക്ക്.മി."}
-                one{"{0} ആർക്ക്.മി."}
-                other{"{0} ആർക്ക്.മി."}
+                one{"{0} arcmin"}
+                other{"{0} arcmins"}
             }
             arc-second{
-                dnam{"ആർക്ക്.സെ."}
-                one{"{0} ആർക്ക്.സെ."}
-                other{"{0} ആർക്ക്.സെ."}
+                one{"{0} arcsec"}
+                other{"{0} arcsecs"}
             }
             degree{
                 dnam{"ഡിഗ്രി"}
@@ -2940,19 +3250,13 @@ ml{
             }
             radian{
                 dnam{"റേഡിയൻ"}
-                one{"{0} rad"}
-                other{"{0} rad"}
-            }
-            revolution{
-                one{"{0} rev"}
-                other{"{0} rev"}
             }
         }
         area{
             acre{
                 dnam{"ഏക്കർ"}
-                one{"{0} ഏക്ക."}
-                other{"{0} ഏക്ക."}
+                one{"{0} ac"}
+                other{"{0} ac"}
             }
             dunam{
                 dnam{"ദുനങ്ങൾ"}
@@ -2960,49 +3264,37 @@ ml{
                 other{"{0} ദുനം"}
             }
             hectare{
-                dnam{"ഹെക്‌ടർ"}
-                one{"{0} ഹെക്."}
-                other{"{0} ഹെക്."}
+                dnam{"ha"}
+                one{"{0} ha"}
+                other{"{0} ha"}
             }
             square-centimeter{
-                dnam{"സെ.മീ²"}
-                one{"{0} സെ.മീ²"}
-                other{"{0} സെ.മീ²"}
-                per{"{0}/സെ.മീ²"}
+                one{"{0} cm²"}
+                other{"{0} cm²"}
             }
             square-foot{
-                dnam{"ചതു.അടി"}
-                one{"{0} ചതു.അടി"}
-                other{"{0} ചതു.അടി"}
+                one{"{0} ft²"}
+                other{"{0} ft²"}
             }
             square-inch{
-                dnam{"ഇഞ്ച്²"}
-                one{"{0} ഇഞ്ച്²"}
-                other{"{0} ഇഞ്ച്²"}
-                per{"{0}/ഇഞ്ച്²"}
+                one{"{0} in²"}
+                other{"{0} in²"}
             }
             square-kilometer{
-                dnam{"കി.മീ²"}
-                one{"{0} കി.മീ²"}
-                other{"{0} കി.മീ²"}
-                per{"{0}/കി.മീ²"}
+                one{"{0} km²"}
+                other{"{0} km²"}
             }
             square-meter{
-                dnam{"മീറ്റർ²"}
-                one{"{0} മീ²"}
-                other{"{0} മീ²"}
-                per{"{0}/മീ²"}
+                one{"{0} m²"}
+                other{"{0} m²"}
             }
             square-mile{
-                dnam{"ചതു.മൈൽ"}
-                one{"{0} ചതു.മൈ"}
-                other{"{0} ചതു.മൈ"}
-                per{"{0}/മൈ²"}
+                one{"{0} mi²"}
+                other{"{0} mi²"}
             }
             square-yard{
-                dnam{"വാര²"}
-                one{"{0} വാ²"}
-                other{"{0} വാ²"}
+                one{"{0} yd²"}
+                other{"{0} yd²"}
             }
         }
         compound{
@@ -3018,23 +3310,19 @@ ml{
             }
             karat{
                 dnam{"കാരറ്റ്"}
-                one{"{0} kt"}
-                other{"{0} kt"}
             }
             milligram-ofglucose-per-deciliter{
-                dnam{"മി.ഗ്രാം/ഡെ.ലി."}
-                one{"{0} മി.ഗ്രാം/ഡെ.ലി."}
-                other{"{0} മി.ഗ്രാം/ഡെ.ലി."}
+                one{"{0} mg/dL"}
+                other{"{0} mg/dL"}
             }
             millimole-per-liter{
-                dnam{"മില്ലിമോൾ/ലിറ്റർ"}
-                one{"{0} മി.മോ/ലി."}
-                other{"{0} മി.മോ/ലി."}
+                one{"{0} mmol/L"}
+                other{"{0} mmol/L"}
             }
             mole{
                 dnam{"മോൾ"}
-                one{"{0} മോൾ"}
-                other{"{0} മോൾ"}
+                one{"{0} mol"}
+                other{"{0} mol"}
             }
             ofglucose{
                 dnam{"Glc"}
@@ -3045,14 +3333,12 @@ ml{
                 other{"{0} പാർട്ട്"}
             }
             part-per-1e6{
-                dnam{"പാർട്ട്സ്/മില്ല്യൺ"}
-                one{"{0} പാ.പെ.മി."}
-                other{"{0} പാ.പെ.മി."}
+                one{"{0} ppm"}
+                other{"{0} ppm"}
             }
             part-per-1e9{
-                dnam{"പാർട്ട്സ്/ബില്ല്യൺ"}
-                one{"{0} പി.പി.ബി."}
-                other{"{0} പി.പി.ബി."}
+                one{"{0} ppb"}
+                other{"{0} ppb"}
             }
             permyriad{
                 dnam{"പെ൪മിറിയാഡ്"}
@@ -3060,14 +3346,13 @@ ml{
         }
         consumption{
             liter-per-100-kilometer{
-                dnam{"ലി./100 കി.മീ."}
-                one{"{0} ലി./100 കി.മീ."}
-                other{"{0} ലി./100 കി.മീ."}
+                dnam{"L/100 km"}
+                one{"{0} L/100 km"}
+                other{"{0} L/100 km"}
             }
             liter-per-kilometer{
-                dnam{"ലിറ്റർ/കി.മീ."}
-                one{"{0} ലി/കി.മീ."}
-                other{"{0} ലി/കി.മീ."}
+                one{"{0} L/km"}
+                other{"{0} L/km"}
             }
             mile-per-gallon{
                 dnam{"മൈൽ/ഗാ."}
@@ -3076,8 +3361,6 @@ ml{
             }
             mile-per-gallon-imperial{
                 dnam{"മൈൽ/ഗാ. ഇംപീ."}
-                one{"{0} mpg Imp."}
-                other{"{0} mpg Imp."}
             }
         }
         coordinate{
@@ -3090,55 +3373,13 @@ ml{
         digital{
             bit{
                 dnam{"ബിറ്റ്"}
-                one{"{0} ബിറ്റ്"}
-                other{"{0} ബിറ്റ്"}
+                one{"{0} bit"}
+                other{"{0} bit"}
             }
             byte{
                 dnam{"ബൈറ്റ്"}
                 one{"{0} ബൈറ്റ്"}
                 other{"{0} ബൈറ്റ്"}
-            }
-            gigabit{
-                dnam{"ജി.ബിറ്റ്"}
-            }
-            gigabyte{
-                dnam{"ജി.ബൈറ്റ്"}
-                one{"{0} GB"}
-                other{"{0} GB"}
-            }
-            kilobit{
-                dnam{"കി.ബിറ്റ്"}
-                one{"{0} kb"}
-                other{"{0} kb"}
-            }
-            kilobyte{
-                dnam{"കി.ബൈറ്റ്"}
-                one{"{0} kB"}
-                other{"{0} kB"}
-            }
-            megabit{
-                dnam{"മെ.ബിറ്റ്"}
-                one{"{0} Mb"}
-                other{"{0} Mb"}
-            }
-            megabyte{
-                dnam{"മെ.ബൈറ്റ്"}
-                one{"{0} MB"}
-                other{"{0} MB"}
-            }
-            petabyte{
-                one{"{0} PB"}
-                other{"{0} PB"}
-            }
-            terabit{
-                dnam{"ടെ.ബിറ്റ്"}
-                one{"{0} Tb"}
-                other{"{0} Tb"}
-            }
-            terabyte{
-                dnam{"ടെ.ബൈറ്റ്"}
-                one{"{0} TB"}
-                other{"{0} TB"}
             }
         }
         duration{
@@ -3159,26 +3400,21 @@ ml{
                 other{"{0} ദശാബ്‌ദം"}
             }
             hour{
-                dnam{"മണിക്കൂർ"}
-                one{"{0} മ"}
-                other{"{0} മ"}
-                per{"{0}/മ."}
+                one{"{0} hr"}
+                other{"{0} hr"}
             }
             microsecond{
-                dnam{"μ.സെ."}
-                one{"{0} μ.സെ."}
-                other{"{0} μ.സെ."}
+                dnam{"μsec"}
+                one{"{0} μs"}
+                other{"{0} μs"}
             }
             millisecond{
-                dnam{"മില്ലിസെക്കൻഡ്"}
-                one{"{0} മി.സെ."}
-                other{"{0} മി.സെ."}
+                one{"{0} ms"}
+                other{"{0} ms"}
             }
             minute{
-                dnam{"മി."}
-                one{"{0} മി."}
-                other{"{0} മി."}
-                per{"{0}/മി."}
+                one{"{0} min"}
+                other{"{0} min"}
             }
             month{
                 dnam{"മാസം"}
@@ -3187,9 +3423,8 @@ ml{
                 per{"{0}/മാ."}
             }
             nanosecond{
-                dnam{"നാനോസെക്കൻഡ്"}
-                one{"{0} നാ.സെ."}
-                other{"{0} നാ.സെ."}
+                one{"{0} ns"}
+                other{"{0} ns"}
             }
             night{
                 dnam{"രാത്രികൾ"}
@@ -3204,10 +3439,8 @@ ml{
                 per{"{0}/പാദം"}
             }
             second{
-                dnam{"സെക്കൻഡ്"}
-                one{"{0} സെ."}
-                other{"{0} സെ."}
-                per{"{0}/സെ."}
+                one{"{0} sec"}
+                other{"{0} sec"}
             }
             week{
                 dnam{"ആഴ്ച"}
@@ -3223,14 +3456,8 @@ ml{
             }
         }
         electric{
-            ampere{
-                one{"{0} A"}
-                other{"{0} A"}
-            }
             milliampere{
                 dnam{"മില്ലിആമ്പിയർ"}
-                one{"{0} mA"}
-                other{"{0} mA"}
             }
             ohm{
                 dnam{"ഓം"}
@@ -3244,40 +3471,33 @@ ml{
                 dnam{"BTU"}
             }
             calorie{
-                dnam{"കലോ."}
-                one{"{0} കലോ."}
-                other{"{0} കലോ."}
+                one{"{0} cal"}
+                other{"{0} cal"}
             }
             calorie-it{
                 dnam{"cal-IT"}
             }
-            electronvolt{
-                dnam{"ഇലക്ട്രോൺവോൾട്ട്"}
-            }
             foodcalorie{
-                dnam{"കലോ."}
-                one{"{0} കലോ."}
-                other{"{0} കലോ."}
+                dnam{"Cal"}
+                one{"{0} Cal"}
+                other{"{0} Cal"}
             }
             joule{
                 dnam{"ജൂൾ"}
-                one{"{0} ജൂ."}
-                other{"{0} ജൂ."}
+                one{"{0} J"}
+                other{"{0} J"}
             }
             kilocalorie{
-                dnam{"കി.കലോ."}
-                one{"{0} കി.കലോ."}
-                other{"{0} കി.കലോ."}
+                one{"{0} kcal"}
+                other{"{0} kcal"}
             }
             kilojoule{
-                dnam{"കി.ജൂ."}
-                one{"{0} കി.ജൂ."}
-                other{"{0} കി.ജൂ."}
+                one{"{0} kJ"}
+                other{"{0} kJ"}
             }
             kilowatt-hour{
-                dnam{"കി.വാ/മ."}
-                one{"{0} കി.വാ/മ."}
-                other{"{0} കി.വാ/മ."}
+                one{"{0} kWh"}
+                other{"{0} kWh"}
             }
             therm-us{
                 dnam{"US തേം"}
@@ -3291,24 +3511,6 @@ ml{
             }
             pound-force{
                 dnam{"പൗണ്ട് ഫോഴ്സ്"}
-            }
-        }
-        frequency{
-            gigahertz{
-                one{"{0} GHz"}
-                other{"{0} GHz"}
-            }
-            hertz{
-                one{"{0} Hz"}
-                other{"{0} Hz"}
-            }
-            kilohertz{
-                one{"{0} kHz"}
-                other{"{0} kHz"}
-            }
-            megahertz{
-                one{"{0} MHz"}
-                other{"{0} MHz"}
             }
         }
         graphics{
@@ -3330,20 +3532,16 @@ ml{
         }
         length{
             astronomical-unit{
-                dnam{"ജ്യോ.യൂ."}
-                one{"{0} ജ്യോ.യൂ."}
-                other{"{0} ജ്യോ.യൂ."}
+                one{"{0} au"}
+                other{"{0} au"}
             }
             centimeter{
-                dnam{"സെ.മീ."}
-                one{"{0} സെ.മീ."}
-                other{"{0} സെ.മീ."}
-                per{"{0}/സെ.മീ."}
+                one{"{0} cm"}
+                other{"{0} cm"}
             }
             decimeter{
-                dnam{"ഡെ.മീ."}
-                one{"{0} ഡെ.മീ."}
-                other{"{0} ഡെ.മീ"}
+                one{"{0} dm"}
+                other{"{0} dm"}
             }
             fathom{
                 dnam{"ഫാതം"}
@@ -3352,9 +3550,8 @@ ml{
             }
             foot{
                 dnam{"അടി"}
-                one{"{0} അടി"}
-                other{"{0} അടി"}
-                per{"{0}/അടി"}
+                one{"{0} ft"}
+                other{"{0} ft"}
             }
             furlong{
                 dnam{"ഫർലോങ്"}
@@ -3363,83 +3560,70 @@ ml{
             }
             inch{
                 dnam{"ഇഞ്ച്"}
-                one{"{0} ഇഞ്ച്"}
-                other{"{0} ഇഞ്ച്"}
-                per{"{0}/ഇഞ്ച്"}
+                one{"{0} in"}
+                other{"{0} in"}
             }
             kilometer{
-                dnam{"കി.മീ."}
-                one{"{0} കി.മീ."}
-                other{"{0} കി.മീ."}
-                per{"{0}/കി.മീ."}
+                one{"{0} km"}
+                other{"{0} km"}
             }
             light-year{
                 dnam{"പ്രകാശവർഷം"}
-                one{"{0} പ്ര.വ."}
-                other{"{0} പ്ര.വ."}
+                one{"{0} ly"}
+                other{"{0} ly"}
             }
             meter{
-                dnam{"മീറ്റർ"}
-                one{"{0} മീ."}
-                other{"{0} മീ."}
-                per{"{0}/മീ."}
+                dnam{"m"}
+                one{"{0} m"}
+                other{"{0} m"}
             }
             micrometer{
-                dnam{"μമീറ്റർ"}
-                one{"μമീ."}
-                other{"{0} μമീ."}
+                one{"{0} μm"}
+                other{"{0} μm"}
             }
             mile{
                 dnam{"മൈൽ"}
-                one{"{0} മൈൽ"}
-                other{"{0} മൈൽ"}
+                one{"{0} mi"}
+                other{"{0} mi"}
             }
             mile-scandinavian{
-                dnam{"സ്.മൈ."}
-                one{"{0} സ്.മൈ."}
-                other{"{0} സ്.മൈ."}
+                one{"{0} smi"}
+                other{"{0} smi"}
             }
             millimeter{
-                dnam{"മില്ലീമീറ്റർ"}
-                one{"{0} മി.മീ."}
-                other{"{0} മി.മീ."}
+                one{"{0} mm"}
+                other{"{0} mm"}
             }
             nanometer{
-                dnam{"നാ.മീ."}
-                one{"{0} നാ.മീ."}
-                other{"{0} നാ.മീ."}
+                one{"{0} nm"}
+                other{"{0} nm"}
             }
             nautical-mile{
-                dnam{"നോ.മൈ."}
-                one{"{0} നോ.മൈ."}
-                other{"{0} നോ.മൈ."}
+                one{"{0} nmi"}
+                other{"{0} nmi"}
             }
             parsec{
                 dnam{"പാർസെക്"}
-                one{"{0} പാ.സെ."}
-                other{"{0} പാ.സെ."}
+                one{"{0} pc"}
+                other{"{0} pc"}
             }
             picometer{
-                dnam{"പൈ.മീ."}
-                one{"{0} പൈ.മീ."}
-                other{"{0} പൈ.മീ."}
+                one{"{0} pm"}
+                other{"{0} pm"}
             }
             point{
-                dnam{"പോയിന്റ്"}
-                one{"{0} പോ."}
-                other{"{0} പോ."}
+                one{"{0} pt"}
+                other{"{0} pt"}
             }
             yard{
-                dnam{"വാര"}
-                one{"{0} വാര"}
-                other{"{0} വാര"}
+                dnam{"യാർഡ്"}
+                one{"{0} yd"}
+                other{"{0} yd"}
             }
         }
         light{
             lux{
                 dnam{"ലക്സ്"}
-                one{"{0} lx"}
-                other{"{0} lx"}
             }
             solar-luminosity{
                 dnam{"സോളാർ ലുമിനോസിറ്റീസ്"}
@@ -3450,9 +3634,7 @@ ml{
                 dnam{"കാരറ്റ്"}
             }
             dalton{
-                dnam{"ഡാൽട്ടണുകൾ"}
-                one{"{0} Da"}
-                other{"{0} Da"}
+                dnam{"ഡാൽട്ടൺ"}
             }
             earth-mass{
                 dnam{"ഭൂപിണ്ഡം"}
@@ -3464,42 +3646,33 @@ ml{
             }
             gram{
                 dnam{"ഗ്രാം"}
-                one{"{0} ഗ്രാം"}
-                other{"{0} ഗ്രാം"}
-                per{"{0}/ഗ്രാം"}
+                one{"{0} g"}
+                other{"{0} g"}
             }
             kilogram{
-                dnam{"കി.ഗ്രാം"}
-                one{"{0} കി.ഗ്രാം"}
-                other{"{0} കി.ഗ്രാം"}
-                per{"{0}/കി.ഗ്രാം"}
+                one{"{0} kg"}
+                other{"{0} kg"}
             }
             microgram{
-                dnam{"μ.ഗ്രാം."}
-                one{"{0} μ.ഗ്രാം."}
-                other{"{0} μ.ഗ്രാം."}
+                one{"{0} μg"}
+                other{"{0} μg"}
             }
             milligram{
-                dnam{"മി.ഗ്രാം."}
-                one{"{0} മി.ഗ്രാം."}
-                other{"{0} മി.ഗ്രാം."}
+                one{"{0} mg"}
+                other{"{0} mg"}
             }
             ounce{
-                dnam{"ഔ."}
-                one{"{0} ഔ."}
-                other{"{0} ഔ."}
-                per{"{0}/ഔ."}
+                one{"{0} oz"}
+                other{"{0} oz"}
             }
             ounce-troy{
-                dnam{"ട്രോ.ഔ."}
-                one{"{0} ട്രോ.ഔ."}
-                other{"{0} ട്രോ.ഔ."}
+                one{"{0} oz t"}
+                other{"{0} oz t"}
             }
             pound{
                 dnam{"പൗണ്ട്"}
-                one{"{0} പൗ"}
-                other{"{0} പൗ"}
-                per{"{0}/പൗ."}
+                one{"{0} lb"}
+                other{"{0} lb"}
             }
             solar-mass{
                 dnam{"സൂര്യപിണ്ഡം"}
@@ -3511,91 +3684,68 @@ ml{
             }
             ton{
                 dnam{"ടൺ"}
-                one{"{0} ടൺ"}
-                other{"{0} ടൺ"}
+                one{"{0} tn"}
+                other{"{0} tn"}
             }
             tonne{
-                dnam{"ട."}
-                one{"{0} ട."}
-                other{"{0} ട."}
+                one{"{0} t"}
+                other{"{0} t"}
             }
         }
         power{
             gigawatt{
-                dnam{"ഗി.വാ."}
-                one{"{0} ഗി.വാ."}
-                other{"{0} ഗി.വാ."}
+                one{"{0} GW"}
+                other{"{0} GW"}
             }
             horsepower{
-                dnam{"എച്ച്.പി."}
-                one{"{0} എച്ച്.പി."}
-                other{"{0} എച്ച്.പി."}
+                one{"{0} hp"}
+                other{"{0} hp"}
             }
             kilowatt{
-                dnam{"കി.വാ."}
-                one{"{0} കി.വാ."}
-                other{"{0} കി.വാ."}
+                one{"{0} kW"}
+                other{"{0} kW"}
             }
             megawatt{
-                dnam{"മെ.വാ."}
-                one{"{0} മെ.വാ."}
-                other{"{0} മെ.വാ."}
+                one{"{0} MW"}
+                other{"{0} MW"}
             }
             milliwatt{
-                dnam{"മി.വാ."}
-                one{"{0} മി.വാ."}
-                other{"{0} മി.വാ."}
+                one{"{0} mW"}
+                other{"{0} mW"}
             }
             watt{
-                dnam{"വാട്ട്"}
-                one{"{0} വാ."}
-                other{"{0} വാ."}
+                dnam{"W"}
+                one{"{0} W"}
+                other{"{0} W"}
             }
         }
         pressure{
             bar{
-                dnam{"ബാർ"}
-                one{"{0} ബാർ"}
-                other{"{0} ബാർ"}
-            }
-            hectopascal{
-                one{"{0} hPa"}
-                other{"{0} hPa"}
-            }
-            inch-ofhg{
-                one{"{0} inHg"}
-                other{"{0} inHg"}
+                one{"{0} bar"}
+                other{"{0} bar"}
             }
             millibar{
-                dnam{"മി.ബാ"}
-                one{"{0} മി.ബാ"}
-                other{"{0} മി.ബാ"}
+                one{"{0} mbar"}
+                other{"{0} mbar"}
             }
             millimeter-ofhg{
                 dnam{"mmHg"}
                 one{"{0} mmHg"}
                 other{"{0} mmHg"}
             }
-            pascal{
-                one{"{0} Pa"}
-                other{"{0} Pa"}
-            }
             pound-force-per-square-inch{
-                dnam{"പിഎസ്ഐ"}
-                one{"{0} പിഎസ്ഐ"}
-                other{"{0} പിഎസ്ഐ"}
+                one{"{0} psi"}
+                other{"{0} psi"}
             }
         }
         speed{
             kilometer-per-hour{
-                dnam{"കി.മീ/മ."}
-                one{"{0} കി.മീ/മ."}
-                other{"{0} കി.മീ/മ."}
+                one{"{0} km/h"}
+                other{"{0} km/h"}
             }
             knot{
-                dnam{"നോട്ട്"}
-                one{"{0} നോട്ട്"}
-                other{"{0} നോട്ട്"}
+                one{"{0} kn"}
+                other{"{0} kn"}
             }
             light-speed{
                 dnam{"പ്രകാശം"}
@@ -3603,93 +3753,77 @@ ml{
                 other{"{0} പ്രകാശ"}
             }
             meter-per-second{
-                dnam{"മീറ്റർ/സെ."}
-                one{"{0} മീ/സെ."}
-                other{"{0} മീ/സെ."}
+                one{"{0} m/s"}
+                other{"{0} m/s"}
             }
             mile-per-hour{
-                dnam{"മൈൽ/മ."}
-                one{"{0} മൈ/മ."}
-                other{"{0} മൈ/മ."}
+                one{"{0} mph"}
+                other{"{0} mph"}
             }
         }
         temperature{
             celsius{
-                dnam{"ഡിഗ്രി.സെ."}
-                one{"{0}°സെ"}
-                other{"{0}°സെ"}
+                one{"{0}°C"}
+                other{"{0}°C"}
             }
             fahrenheit{
-                dnam{"ഡിഗ്രി.ഫാ."}
-                one{"{0}° ഫാ"}
-                other{"{0}°ഫാ"}
+                one{"{0}°F"}
+                other{"{0}°F"}
             }
         }
         volume{
             acre-foot{
-                dnam{"ഏ. അടി"}
-                one{"{0} ഏ. അടി"}
-                other{"{0} ഏ. അടി"}
-            }
-            barrel{
-                dnam{"ബാരൽ"}
+                one{"{0} ac ft"}
+                other{"{0} ac ft"}
             }
             centiliter{
-                dnam{"സെ.ലി."}
-                one{"{0} സെ.ലി."}
-                other{"{0} സെ.ലി."}
+                one{"{0} cL"}
+                other{"{0} cL"}
             }
             cubic-centimeter{
-                dnam{"സെ.മീ³"}
-                one{"{0} സെ.മീ³"}
-                other{"{0} സെ.മീ³"}
-                per{"{0}/സെ.മീ³"}
+                one{"{0} cm³"}
+                other{"{0} cm³"}
             }
             cubic-foot{
-                dnam{"അടി³"}
-                one{"{0} അടി³"}
-                other{"{0} അടി³"}
+                one{"{0} ft³"}
+                other{"{0} ft³"}
             }
             cubic-inch{
-                dnam{"ഇഞ്ച്³"}
-                one{"{0} ഇഞ്ച്³"}
-                other{"{0} ഇഞ്ച്³"}
+                one{"{0} in³"}
+                other{"{0} in³"}
             }
             cubic-kilometer{
-                dnam{"കി.മീ³"}
-                one{"{0} കി.മീ³"}
-                other{"{0} കി.മീ³"}
+                one{"{0} km³"}
+                other{"{0} km³"}
             }
             cubic-meter{
-                dnam{"മീ³"}
-                one{"{0} മീ³"}
-                other{"{0} മീ³"}
-                per{"{0}/മീ³"}
+                one{"{0} m³"}
+                other{"{0} m³"}
             }
             cubic-mile{
-                dnam{"മൈ³"}
-                one{"{0} മൈ³"}
-                other{"{0} മൈ³"}
+                one{"{0} mi³"}
+                other{"{0} mi³"}
             }
             cubic-yard{
-                dnam{"വാര³"}
-                one{"{0} വാ³"}
-                other{"{0} വാ³"}
+                one{"{0} yd³"}
+                other{"{0} yd³"}
             }
             cup{
                 dnam{"കപ്പ്"}
-                one{"{0} കപ്പ്"}
-                other{"{0} കപ്പ്"}
+                one{"{0} c"}
+                other{"{0} c"}
             }
             cup-metric{
-                dnam{"മെ. ക."}
-                one{"{0} മെ. ക."}
-                other{"{0} മെ. ക."}
+                one{"{0} mc"}
+                other{"{0} mc"}
             }
             deciliter{
-                dnam{"ഡെ.ലി."}
-                one{"{0} ഡെ.ലി."}
-                other{"{0} ഡെ.ലി."}
+                one{"{0} dL"}
+                other{"{0} dL"}
+            }
+            dessert-spoon{
+                one{"{0} dsp"}
+                other{"{0} dsp"}
             }
             drop{
                 dnam{"തുള്ളി"}
@@ -3697,31 +3831,27 @@ ml{
                 other{"{0} തുള്ളി"}
             }
             fluid-ounce{
-                dnam{"ഫ്ലൂ. ഔ."}
-                one{"{0} ഫ്ലൂ. ഔ."}
-                other{"{0} ഫ്ലൂ. ഔ."}
+                dnam{"fl oz"}
+                one{"{0} fl oz"}
+                other{"{0} fl oz"}
             }
             fluid-ounce-metric{
-                dnam{"ഫ്ലൂ ഔ മെ."}
-                one{"{0} ഫ്ലൂ ഔ മെ."}
-                other{"{0} ഫ്ലൂ ഔ മെ."}
+                one{"{0} fl oz m."}
+                other{"{0} fl oz m."}
             }
             gallon{
-                dnam{"ഗാ."}
-                one{"{0} ഗാ."}
-                other{"{0} ഗാ."}
-                per{"{0}/ഗാ."}
+                dnam{"gal"}
+                one{"{0} gal"}
+                other{"{0} gal"}
             }
             gallon-imperial{
-                dnam{"ഇംപീ. ഗാലൺ"}
-                one{"{0} ഗാ. ഇംപീ."}
-                other{"{0} ഗാ. ഇംപീ."}
-                per{"{0}/ഗാ. ഇംപീ."}
+                one{"{0} gal Imp."}
+                other{"{0} gal Imp."}
+                per{"{0}/galImp"}
             }
             hectoliter{
-                dnam{"ഹെ.ലി."}
-                one{"{0} ഹെ.ലി."}
-                other{"{0} ഹെ.ലി."}
+                one{"{0} hL"}
+                other{"{0} hL"}
             }
             jigger{
                 dnam{"ജിഗർ"}
@@ -3730,49 +3860,44 @@ ml{
             }
             liter{
                 dnam{"ലിറ്റർ"}
-                one{"{0} ലി."}
-                other{"{0} ലി."}
-                per{"{0}/ലി."}
+                one{"{0} L"}
+                other{"{0} L"}
+                per{"{0}/L"}
             }
             megaliter{
-                dnam{"മെ.ലി."}
-                one{"{0} മെ.ലി."}
-                other{"{0} മെ.ലി."}
+                one{"{0} ML"}
+                other{"{0} ML"}
             }
             milliliter{
-                dnam{"മി.ലി."}
-                one{"{0} മി.ലി."}
-                other{"{0} മി.ലി."}
+                one{"{0} mL"}
+                other{"{0} mL"}
             }
             pinch{
                 dnam{"നുള്ള്"}
-                one{"{0} നുള്ള്"}
-                other{"{0} നുള്ള്"}
+                one{"{0} pn"}
+                other{"{0} pn"}
             }
             pint{
                 dnam{"പൈ."}
-                one{"{0} പൈ."}
-                other{"{0} പൈ."}
+                one{"{0} pt"}
+                other{"{0} pt"}
             }
             pint-metric{
-                dnam{"മെ. പൈ."}
-                one{"{0} മെ. പൈ."}
-                other{"{0} മെ. പൈ."}
+                one{"{0} mpt"}
+                other{"{0} mpt"}
             }
             quart{
-                dnam{"ക്വാ."}
-                one{"{0} ക്വാ."}
-                other{"{0} ക്വാ."}
+                one{"{0} qt"}
+                other{"{0} qt"}
             }
             tablespoon{
-                dnam{"ടേ.സ്‌പൂ."}
-                one{"{0} ടേ.സ്‌പൂ."}
-                other{"{0} ടേ.സ്‌പൂ."}
+                dnam{"Tbsp"}
+                one{"{0} Tbsp"}
+                other{"{0} Tbsp"}
             }
             teaspoon{
-                dnam{"ടീ.സ്‌പൂ."}
-                one{"{0} ടീ.സ്‌പൂ."}
-                other{"{0} ടീ.സ്‌പൂ."}
+                one{"{0} tsp"}
+                other{"{0} tsp"}
             }
         }
     }

@@ -183,6 +183,11 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         // block id corresponding to icu4c -----------------------------------
 
         /**
+         * @stable ICU 79
+         */
+        public static final int NO_BLOCK_ID = 0;
+
+        /**
          * @stable ICU 2.4
          */
         public static final int INVALID_CODE_ID = -1;
@@ -1982,13 +1987,50 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          */
         public static final int TOLONG_SIKI_ID = 346; /*[11DB0]*/
 
+        // New blocks in Unicode 18.0.0
+
+        /**
+         * @stable ICU 79
+         */
+        public static final int ARCHAIC_CUNEIFORM_NUMERALS_ID = 347; /*[12550]*/
+
+        /**
+         * @stable ICU 79
+         */
+        public static final int BENGALI_SUPPLEMENT_ID = 348; /*[11DF0]*/
+
+        /**
+         * @stable ICU 79
+         */
+        public static final int JURCHEN_ID = 349; /*[18E00]*/
+
+        /**
+         * @stable ICU 79
+         */
+        public static final int JURCHEN_RADICALS_ID = 350; /*[191A0]*/
+
+        /**
+         * @stable ICU 79
+         */
+        public static final int MISCELLANEOUS_SYMBOLS_AND_ARROWS_EXTENDED_ID = 351; /*[1DB00]*/
+
+        /**
+         * @stable ICU 79
+         */
+        public static final int MUSICAL_SYMBOLS_SUPPLEMENT_ID = 352; /*[1D250]*/
+
+        /**
+         * @stable ICU 79
+         */
+        public static final int SEAL_ID = 353; /*[3D000]*/
+
         /**
          * One more than the highest normal UnicodeBlock value. The highest value is available via
          * UCharacter.getIntPropertyMaxValue(UProperty.BLOCK).
          *
          * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
          */
-        @Deprecated public static final int COUNT = 347;
+        @Deprecated public static final int COUNT = 354;
 
         // blocks objects ---------------------------------------------------
 
@@ -1998,7 +2040,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         /**
          * @stable ICU 2.6
          */
-        public static final UnicodeBlock NO_BLOCK = new UnicodeBlock("NO_BLOCK", 0);
+        public static final UnicodeBlock NO_BLOCK = new UnicodeBlock("NO_BLOCK", NO_BLOCK_ID);
 
         /**
          * @stable ICU 2.4
@@ -4136,6 +4178,50 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         public static final UnicodeBlock TOLONG_SIKI =
                 new UnicodeBlock("TOLONG_SIKI", TOLONG_SIKI_ID);
 
+        // New blocks in Unicode 18.0.0
+
+        /**
+         * @stable ICU 79
+         */
+        public static final UnicodeBlock ARCHAIC_CUNEIFORM_NUMERALS =
+                new UnicodeBlock("ARCHAIC_CUNEIFORM_NUMERALS", ARCHAIC_CUNEIFORM_NUMERALS_ID);
+
+        /**
+         * @stable ICU 79
+         */
+        public static final UnicodeBlock BENGALI_SUPPLEMENT =
+                new UnicodeBlock("BENGALI_SUPPLEMENT", BENGALI_SUPPLEMENT_ID);
+
+        /**
+         * @stable ICU 79
+         */
+        public static final UnicodeBlock JURCHEN = new UnicodeBlock("JURCHEN", JURCHEN_ID);
+
+        /**
+         * @stable ICU 79
+         */
+        public static final UnicodeBlock JURCHEN_RADICALS =
+                new UnicodeBlock("JURCHEN_RADICALS", JURCHEN_RADICALS_ID);
+
+        /**
+         * @stable ICU 79
+         */
+        public static final UnicodeBlock MISCELLANEOUS_SYMBOLS_AND_ARROWS_EXTENDED =
+                new UnicodeBlock(
+                        "MISCELLANEOUS_SYMBOLS_AND_ARROWS_EXTENDED",
+                        MISCELLANEOUS_SYMBOLS_AND_ARROWS_EXTENDED_ID);
+
+        /**
+         * @stable ICU 79
+         */
+        public static final UnicodeBlock MUSICAL_SYMBOLS_SUPPLEMENT =
+                new UnicodeBlock("MUSICAL_SYMBOLS_SUPPLEMENT", MUSICAL_SYMBOLS_SUPPLEMENT_ID);
+
+        /**
+         * @stable ICU 79
+         */
+        public static final UnicodeBlock SEAL = new UnicodeBlock("SEAL", SEAL_ID);
+
         /**
          * @stable ICU 2.4
          */
@@ -4221,7 +4307,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             return b;
         }
 
-        private static SoftReference<Map<String, UnicodeBlock>> mref;
+        private static volatile SoftReference<Map<String, UnicodeBlock>> mref;
 
         private static String trimBlockName(String name) {
             String upper = name.toUpperCase(Locale.ENGLISH);
@@ -5010,12 +5096,62 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         public static final int THIN_NOON = 105;
 
         /**
+         * @stable ICU 79
+         */
+        public static final int CROWN_AIN = 106;
+
+        /**
+         * @stable ICU 79
+         */
+        public static final int CROWN_BEH = 107;
+
+        /**
+         * @stable ICU 79
+         */
+        public static final int CROWN_FEH = 108;
+
+        /**
+         * @stable ICU 79
+         */
+        public static final int CROWN_HAH = 109;
+
+        /**
+         * @stable ICU 79
+         */
+        public static final int CROWN_HEH = 110;
+
+        /**
+         * @stable ICU 79
+         */
+        public static final int CROWN_KAF = 111;
+
+        /**
+         * @stable ICU 79
+         */
+        public static final int CROWN_MEEM = 112;
+
+        /**
+         * @stable ICU 79
+         */
+        public static final int CROWN_SAD = 113;
+
+        /**
+         * @stable ICU 79
+         */
+        public static final int CROWN_SEEN = 114;
+
+        /**
+         * @stable ICU 79
+         */
+        public static final int CROWN_TAH = 115;
+
+        /**
          * One more than the highest normal JoiningGroup value. The highest value is available via
          * UCharacter.getIntPropertyMaxValue(UProperty.JoiningGroup).
          *
          * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
          */
-        @Deprecated public static final int COUNT = 106;
+        @Deprecated public static final int COUNT = 116;
     }
 
     /**
@@ -8125,7 +8261,6 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
-    /// CLOVER:OFF
     public static String getStringPropertyValue(int propertyEnum, int codepoint, int nameChoice) {
         if ((propertyEnum >= UProperty.BINARY_START && propertyEnum < UProperty.BINARY_LIMIT)
                 || (propertyEnum >= UProperty.INT_START && propertyEnum < UProperty.INT_LIMIT)) {
@@ -8166,8 +8301,6 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         }
         throw new IllegalArgumentException("Illegal Property Enum");
     }
-
-    /// CLOVER:ON
 
     /**
      * {@icu} Returns the minimum value for an integer/binary Unicode property type. Can be used
@@ -8387,7 +8520,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     }
 
     /**
-     * {@icu} Returns an IterableOfInt over all Unicode scalar values U+0000..U+D7FF &
+     * {@icu} Returns an IterableOfInt over all Unicode scalar values U+0000..U+D7FF &amp;
      * U+E000..U+10FFFF. See <a
      * href="https://www.unicode.org/glossary/#unicode_scalar_value">Unicode Glossary: Unicode
      * Scalar Value</a>.
@@ -8419,9 +8552,10 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     }
 
     /**
-     * {@icu} Returns an IntStream over all Unicode scalar values U+0000..U+D7FF & U+E000..U+10FFFF.
-     * See <a href="https://www.unicode.org/glossary/#unicode_scalar_value">Unicode Glossary:
-     * Unicode Scalar Value</a>.
+     * {@icu} Returns an IntStream over all Unicode scalar values U+0000..U+D7FF &amp;
+     * U+E000..U+10FFFF. See <a
+     * href="https://www.unicode.org/glossary/#unicode_scalar_value">Unicode Glossary: Unicode
+     * Scalar Value</a>.
      *
      * <p>Intended for test and builder code.
      *
@@ -8989,8 +9123,6 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     private static final int CJK_IDEOGRAPH_HUNDRED_MILLION_ = 0x5104;
 
     // private constructor -----------------------------------------------
-    /// CLOVER:OFF
     /** Private constructor to prevent instantiation */
     private UCharacter() {}
-    /// CLOVER:ON
 }

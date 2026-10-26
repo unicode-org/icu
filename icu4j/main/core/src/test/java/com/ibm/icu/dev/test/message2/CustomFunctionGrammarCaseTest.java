@@ -24,7 +24,7 @@ public class CustomFunctionGrammarCaseTest extends CoreTestFmwk {
     static class GrammarCasesFunctionFactory implements FunctionFactory {
 
         @Override
-        public Function create(Locale locale, Map<String, Object> fixedOptions) {
+        public Function create(Locale locale, Map<String, ?> fixedOptions) {
             Object grammarCase = fixedOptions.get("case");
             return new GrammarCasesFunctionImpl(grammarCase == null ? "" : grammarCase.toString());
         }
@@ -54,13 +54,12 @@ public class CustomFunctionGrammarCaseTest extends CoreTestFmwk {
             }
 
             @Override
-            public String formatToString(Object toFormat, Map<String, Object> variableOptions) {
+            public String formatToString(Object toFormat, Map<String, ?> variableOptions) {
                 return format(toFormat, variableOptions).toString();
             }
 
             @Override
-            public FormattedPlaceholder format(
-                    Object toFormat, Map<String, Object> variableOptions) {
+            public FormattedPlaceholder format(Object toFormat, Map<String, ?> variableOptions) {
                 String result;
                 if (toFormat == null) {
                     result = null;
@@ -98,15 +97,13 @@ public class CustomFunctionGrammarCaseTest extends CoreTestFmwk {
                         .build();
 
         assertEquals(
-                "case - genitive", "Cartea Mariei", mf.formatToString(Args.of("owner", "Maria")));
+                "case - genitive", "Cartea Mariei", mf.formatToString(Map.of("owner", "Maria")));
         assertEquals(
-                "case - genitive", "Cartea Rodicăi", mf.formatToString(Args.of("owner", "Rodica")));
+                "case - genitive", "Cartea Rodicăi", mf.formatToString(Map.of("owner", "Rodica")));
         assertEquals(
-                "case - genitive", "Cartea Ilenei", mf.formatToString(Args.of("owner", "Ileana")));
+                "case - genitive", "Cartea Ilenei", mf.formatToString(Map.of("owner", "Ileana")));
         assertEquals(
-                "case - genitive",
-                "Cartea lui Petre",
-                mf.formatToString(Args.of("owner", "Petre")));
+                "case - genitive", "Cartea lui Petre", mf.formatToString(Map.of("owner", "Petre")));
 
         mf =
                 MessageFormatter.builder()
@@ -118,18 +115,18 @@ public class CustomFunctionGrammarCaseTest extends CoreTestFmwk {
         assertEquals(
                 "case - nominative",
                 "M-a sunat Maria",
-                mf.formatToString(Args.of("owner", "Maria")));
+                mf.formatToString(Map.of("owner", "Maria")));
         assertEquals(
                 "case - nominative",
                 "M-a sunat Rodica",
-                mf.formatToString(Args.of("owner", "Rodica")));
+                mf.formatToString(Map.of("owner", "Rodica")));
         assertEquals(
                 "case - nominative",
                 "M-a sunat Ileana",
-                mf.formatToString(Args.of("owner", "Ileana")));
+                mf.formatToString(Map.of("owner", "Ileana")));
         assertEquals(
                 "case - nominative",
                 "M-a sunat Petre",
-                mf.formatToString(Args.of("owner", "Petre")));
+                mf.formatToString(Map.of("owner", "Petre")));
     }
 }

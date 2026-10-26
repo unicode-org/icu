@@ -171,6 +171,7 @@ void StringSearchTest::runIndexedTest(int32_t index, UBool exec,
         CASE(35, TestCoverage)
         CASE(36, TestDiacriticMatch)
         CASE(37, TestBug22775)
+        CASE(38, TestCEIndexOverflow)
         default: name = ""; break;
     }
 #else
@@ -2471,6 +2472,41 @@ void StringSearchTest::TestBug22775() {
     StringCharacterIterator text(u" ");
     StringSearch stringSearch(pattern, text, collator.getAlias(), nullptr, errorCode);
     stringSearch.next(errorCode);
+}
+
+void StringSearchTest::TestCEIndexOverflow() {
+    IcuTestErrorCode errorCode(*this, "TestCEIndexOverflow()");
+    LocalPointer<RuleBasedCollator> collator(
+        dynamic_cast<RuleBasedCollator *>(
+            Collator::createInstance(Locale("en@collation=search"), errorCode)),
+        errorCode);
+    if (errorCode.errDataIfFailureAndReset()) { return; }
+    collator->setAttribute(UCOL_STRENGTH, UCOL_PRIMARY, errorCode);
+    collator->setAttribute(UCOL_ALTERNATE_HANDLING, UCOL_NON_IGNORABLE, errorCode);
+
+    // U+FDFA expands to 18 nonzero primary CEs; 119,304,647 * 18 == 2,147,483,646 (INT32_MAX - 1).
+    int32_t repetitions = quick ? 1000 : 119304647;
+    UnicodeString pattern(65, u'A', 65);
+    {
+        UnicodeString text(repetitions + pattern.length() + 1, 0xfdfa, repetitions);
+        text.append(pattern).append(u'!');
+        if (!assertFalse("forward text allocation", text.isBogus())) { return; }
+        StringSearch search(pattern, text, collator.getAlias(), nullptr, errorCode);
+        if (errorCode.errIfFailureAndReset()) { return; }
+        assertEquals("forward match", repetitions, search.first(errorCode));
+        assertEquals("forward match length", pattern.length(), search.getMatchedLength());
+        if (errorCode.errIfFailureAndReset()) { return; }
+    }
+    {
+        UnicodeString shortPattern(u"XYZ");
+        UnicodeString text(repetitions + shortPattern.length(), 0xfdfa, repetitions);
+        text.insert(0, shortPattern);
+        if (!assertFalse("backward text allocation", text.isBogus())) { return; }
+        StringSearch search(shortPattern, text, collator.getAlias(), nullptr, errorCode);
+        if (errorCode.errIfFailureAndReset()) { return; }
+        assertEquals("backward match", 0, search.last(errorCode));
+        assertEquals("backward match length", shortPattern.length(), search.getMatchedLength());
+    }
 }
 
 #endif /* !UCONFIG_NO_BREAK_ITERATION */

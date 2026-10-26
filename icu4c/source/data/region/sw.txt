@@ -3,7 +3,7 @@
 // Generated using tools/cldr/cldr-to-icu/
 sw{
     Countries{
-        001{"Dunia"}
+        001{"dunia"}
         002{"Afrika"}
         003{"Amerika Kaskazini"}
         005{"Amerika Kusini"}
@@ -24,7 +24,7 @@ sw{
         053{"Australasia"}
         054{"Melanesia"}
         057{"Eneo la Mikronesia"}
-        061{"Polynesia"}
+        061{"Polinesia"}
         142{"Asia"}
         143{"Asia ya Kati"}
         145{"Asia ya Magharibi"}
@@ -59,18 +59,18 @@ sw{
         BG{"Bulgaria"}
         BH{"Bahareni"}
         BI{"Burundi"}
-        BJ{"Benin"}
+        BJ{"Benini"}
         BL{"St. Barthelemy"}
         BM{"Bermuda"}
         BN{"Brunei"}
         BO{"Bolivia"}
         BQ{"Uholanzi ya Karibiani"}
-        BR{"Brazil"}
+        BR{"Brazili"}
         BS{"Bahama"}
         BT{"Bhutan"}
         BV{"Kisiwa cha Bouvet"}
         BW{"Botswana"}
-        BY{"Belarus"}
+        BY{"Belarusi"}
         BZ{"Belize"}
         CA{"Kanada"}
         CC{"Visiwa vya Cocos (Keeling)"}
@@ -101,7 +101,7 @@ sw{
         DO{"Jamhuri ya Dominika"}
         DZ{"Aljeria"}
         EA{"Ceuta na Melilla"}
-        EC{"Ecuador"}
+        EC{"Ekwado"}
         EE{"Estonia"}
         EG{"Misri"}
         EH{"Sahara Magharibi"}
@@ -116,7 +116,7 @@ sw{
         FM{"Mikronesia"}
         FO{"Visiwa vya Faroe"}
         FR{"Ufaransa"}
-        GA{"Gabon"}
+        GA{"Goboni"}
         GB{"Ufalme wa Muungano"}
         GD{"Grenada"}
         GE{"Jojia"}
@@ -175,11 +175,11 @@ sw{
         LR{"Liberia"}
         LS{"Lesoto"}
         LT{"Lithuania"}
-        LU{"Luxembourg"}
+        LU{"Lasembagi"}
         LV{"Latvia"}
         LY{"Libya"}
-        MA{"Morocco"}
-        MC{"Monaco"}
+        MA{"Moroko"}
+        MC{"Monako"}
         MD{"Moldova"}
         ME{"Montenegro"}
         MF{"St. Martin"}
@@ -213,22 +213,22 @@ sw{
         NR{"Nauru"}
         NU{"Niue"}
         NZ{"Nyuzilandi"}
-        OM{"Oman"}
+        OM{"Omani"}
         PA{"Panama"}
         PE{"Peru"}
         PF{"Polynesia ya Ufaransa"}
         PG{"Papua New Guinea"}
         PH{"Ufilipino"}
         PK{"Pakistani"}
-        PL{"Poland"}
+        PL{"Polandi"}
         PM{"Santapierre na Miquelon"}
         PN{"Visiwa vya Pitcairn"}
         PR{"Puerto Rico"}
         PS{"Maeneo ya Palestina"}
         PT{"Ureno"}
         PW{"Palau"}
-        PY{"Paraguay"}
-        QA{"Qatar"}
+        PY{"Paragwai"}
+        QA{"Katari"}
         QO{"Oceania ya Nje"}
         RE{"Reunion"}
         RO{"Romania"}
@@ -238,7 +238,7 @@ sw{
         SA{"Saudia"}
         SB{"Visiwa vya Solomon"}
         SC{"Ushelisheli"}
-        SD{"Sudan"}
+        SD{"Sudani"}
         SE{"Uswidi"}
         SG{"Singapore"}
         SH{"St. Helena"}
@@ -254,11 +254,11 @@ sw{
         ST{"Sao Tome na Principe"}
         SV{"El Salvador"}
         SX{"Sint Maarten"}
-        SY{"Syria"}
+        SY{"Siria"}
         SZ{"Eswatini"}
         TA{"Tristan da Cunha"}
         TC{"Visiwa vya Turks na Caicos"}
-        TD{"Chad"}
+        TD{"Chadi"}
         TF{"Himaya za Kusini za Kifaranza"}
         TG{"Togo"}
         TH{"Tailandi"}
@@ -278,7 +278,7 @@ sw{
         UM{"Visiwa Vidogo vya Nje vya Marekani"}
         UN{"Umoja wa Mataifa"}
         US{"Marekani"}
-        UY{"Uruguay"}
+        UY{"Urugwai"}
         UZ{"Uzibekistani"}
         VA{"Mji wa Vatican"}
         VC{"St. Vincent na Grenadines"}
@@ -307,7 +307,7 @@ sw{
     Countries%variant{
         CD{"Kongo (DRC)"}
         CG{"Jamhuri ya Kongo"}
-        CI{"Ivory Coast"}
+        CI{"Kodivaa"}
         CZ{"Jamhuri ya Cheki"}
         FK{"Visiwa vya Falkland (Islas Malvinas)"}
         NZ{"Aotearoa Nyuzilandi"}

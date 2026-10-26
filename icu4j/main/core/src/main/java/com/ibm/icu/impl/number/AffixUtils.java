@@ -389,6 +389,7 @@ public class AffixUtils {
      * @param affixPattern The string to check for currency symbols.
      * @return true if the literal has at least one unquoted currency symbol; false otherwise.
      */
+    @SuppressWarnings("ReferenceEquality")
     public static boolean hasCurrencySymbols(CharSequence affixPattern) {
         if (affixPattern == null || affixPattern.length() == 0) return false;
         long tag = 0L;

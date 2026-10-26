@@ -104,8 +104,8 @@ fully interoperable with most Unicode-aware software. See [UTF-16 for
 Processing](http://www.unicode.org/notes/tn12/). In the case of ICU4J, this is
 naturally the case because the Java language and the JDK use UTF-16.
 
-ICU uses and/or provides direct access to all of the [Unicode
-properties](../strings/properties.md) which provide a much finer-grained
+ICU uses and/or provides direct access to all of the
+[Unicode properties](../strings/properties.md) which provide a much finer-grained
 classification of characters than [C/POSIX character
 classes](https://htmlpreview.github.io/?https://github.com/unicode-org/icu-docs/blob/main/design/posix_classes.html).
 
@@ -207,11 +207,11 @@ locale's respective character class.
 
 #### ICU
 
-ICU provides locale-independent access to all [Unicode
-properties](../strings/properties.md) (except Unihan.txt properties), as well as to
-the POSIX character classes, via functions defined in `uchar.h` and in ICU4J's
-`UCharacter` class (see API references) as well as via `UnicodeSet`. The POSIX
-character classes are implemented according to the recommendations in UTS #18.
+ICU provides locale-independent access to all
+[Unicode properties](../strings/properties.md) (except Unihan.txt properties),
+as well as to the POSIX character classes, via functions defined in `uchar.h`
+and in ICU4J's `UCharacter` class (see API references) as well as via `UnicodeSet`.
+The POSIX character classes are implemented according to the recommendations in UTS #18.
 
 The Unicode Character Database defines more than 70 character properties, their
 values are designed for the large character set as well as for real text
@@ -254,5 +254,5 @@ resembling what `printf()` uses.
 
 ICU number formatting APIs have separate, orthogonal settings for the number
 format, which can be selected with a locale ID, and the currency, which is
-specified with an ISO code. See the [Formatting
-Numbers](../format_parse/numbers/index.md) chapter for details.
+specified with an ISO code. See the
+[Formatting Numbers](../format_parse/numbers/index.md) chapter for details.

@@ -291,9 +291,11 @@ struct Locale::Heap::Alloc : public UMemory {
     FixedString baseName;
     int32_t variantBegin;
 
-    const char* getVariant() const { return variantBegin == 0 ? "" : getBaseName() + variantBegin; }
-    const char* getFullName() const { return fullName.data(); }
-    const char* getBaseName() const {
+    const char* getVariant() const U_LIFETIME_BOUND {
+        return variantBegin == 0 ? "" : getBaseName() + variantBegin;
+    }
+    const char* getFullName() const U_LIFETIME_BOUND { return fullName.data(); }
+    const char* getBaseName() const U_LIFETIME_BOUND {
         if (baseName.isEmpty()) {
             if (const char* name = fullName.data(); *name != '@') {
                 return name;
@@ -329,9 +331,9 @@ struct Locale::Heap::Alloc : public UMemory {
     ~Alloc() = default;
 };
 
-const char* Locale::Heap::getVariant() const { return ptr->getVariant(); }
-const char* Locale::Heap::getFullName() const { return ptr->getFullName(); }
-const char* Locale::Heap::getBaseName() const { return ptr->getBaseName(); }
+const char* Locale::Heap::getVariant() const U_LIFETIME_BOUND { return ptr->getVariant(); }
+const char* Locale::Heap::getFullName() const U_LIFETIME_BOUND { return ptr->getFullName(); }
+const char* Locale::Heap::getBaseName() const U_LIFETIME_BOUND { return ptr->getBaseName(); }
 
 Locale::Heap::Heap(std::string_view language,
                    std::string_view script,
@@ -353,7 +355,7 @@ Locale::Heap::~Heap() {
     delete ptr;
 }
 
-Locale::Heap& Locale::Heap::operator=(const Heap& other) {
+Locale::Heap& Locale::Heap::operator=(const Heap& other) U_LIFETIME_BOUND {
     U_ASSERT(type == eBOGUS);
     UErrorCode status = U_ZERO_ERROR;
     ptr = new Alloc(*other.ptr, status);
@@ -368,7 +370,7 @@ Locale::Heap& Locale::Heap::operator=(const Heap& other) {
     return *this;
 }
 
-Locale::Heap& Locale::Heap::operator=(Heap&& other) noexcept {
+Locale::Heap& Locale::Heap::operator=(Heap&& other) noexcept U_LIFETIME_BOUND {
     U_ASSERT(type == eBOGUS);
     ptr = other.ptr;
     type = eHEAP;
@@ -415,7 +417,7 @@ Locale::Payload::~Payload() {
 Locale::Payload::Payload(const Payload& other) : type{eBOGUS} { copy(other); }
 Locale::Payload::Payload(Payload&& other) noexcept : type{eBOGUS} { move(std::move(other)); }
 
-Locale::Payload& Locale::Payload::operator=(const Payload& other) {
+Locale::Payload& Locale::Payload::operator=(const Payload& other) U_LIFETIME_BOUND {
     if (this != &other) {
         setToBogus();
         copy(other);
@@ -423,7 +425,7 @@ Locale::Payload& Locale::Payload::operator=(const Payload& other) {
     return *this;
 }
 
-Locale::Payload& Locale::Payload::operator=(Payload&& other) noexcept {
+Locale::Payload& Locale::Payload::operator=(Payload&& other) noexcept U_LIFETIME_BOUND {
     if (this != &other) {
         setToBogus();
         move(std::move(other));
@@ -436,7 +438,7 @@ void Locale::Payload::setToBogus() {
     type = eBOGUS;
 }
 
-template <typename T, typename... Args> T& Locale::Payload::emplace(Args&&... args) {
+template <typename T, typename... Args> T& Locale::Payload::emplace(Args&&... args) U_LIFETIME_BOUND {
     if constexpr (std::is_same_v<T, Nest>) {
         this->~Payload();
         ::new (&nest) Nest(std::forward<Args>(args)...);
@@ -449,8 +451,12 @@ template <typename T, typename... Args> T& Locale::Payload::emplace(Args&&... ar
     }
 }
 
-template <> Locale::Nest* Locale::Payload::get() { return type == eNEST ? &nest : nullptr; }
-template <> Locale::Heap* Locale::Payload::get() { return type == eHEAP ? &heap : nullptr; }
+template <> Locale::Nest* Locale::Payload::get() U_LIFETIME_BOUND {
+    return type == eNEST ? &nest : nullptr;
+}
+template <> Locale::Heap* Locale::Payload::get() U_LIFETIME_BOUND {
+    return type == eHEAP ? &heap : nullptr;
+}
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(Locale)
 
@@ -594,8 +600,8 @@ Locale::Locale( const   char * newLanguage,
 Locale::Locale(const Locale&) = default;
 Locale::Locale(Locale&&) noexcept = default;
 
-Locale& Locale::operator=(const Locale&) = default;
-Locale& Locale::operator=(Locale&&) noexcept = default;
+Locale& Locale::operator=(const Locale&) U_LIFETIME_BOUND = default;
+Locale& Locale::operator=(Locale&&) noexcept U_LIFETIME_BOUND = default;
 
 Locale *
 Locale::clone() const {
@@ -757,11 +763,11 @@ public:
         return gSingleton;
     }
 
-    const CharStringMap& languageMap() const { return language; }
-    const CharStringMap& scriptMap() const { return script; }
-    const CharStringMap& territoryMap() const { return territory; }
-    const CharStringMap& variantMap() const { return variant; }
-    const CharStringMap& subdivisionMap() const { return subdivision; }
+    const CharStringMap& languageMap() const U_LIFETIME_BOUND { return language; }
+    const CharStringMap& scriptMap() const U_LIFETIME_BOUND { return script; }
+    const CharStringMap& territoryMap() const U_LIFETIME_BOUND { return territory; }
+    const CharStringMap& variantMap() const U_LIFETIME_BOUND { return variant; }
+    const CharStringMap& subdivisionMap() const U_LIFETIME_BOUND { return subdivision; }
 
     static void U_CALLCONV loadData(UErrorCode &status);
     static UBool U_CALLCONV cleanup();
@@ -1232,8 +1238,9 @@ private:
      *    nullptr || ""   CCC        nullptr     CCC
      *    nullptr || ""   *          DDD         nullptr
      */
-    inline const char* deleteOrReplace(
-            const char* input, const char* type, const char* replacement) {
+    inline const char* deleteOrReplace(const char* input U_LIFETIME_BOUND,
+                                       const char* type,
+                                       const char* replacement U_LIFETIME_BOUND) {
         return notEmpty(replacement) ?
             ((input == nullptr) ?  replacement : input) :
             ((type == nullptr) ? input  : nullptr);
@@ -1251,11 +1258,11 @@ private:
     }
 
     // Gather fields and generate locale ID into out.
-    CharString& outputToString(CharString& out, UErrorCode& status);
+    CharString& outputToString(CharString& out U_LIFETIME_BOUND, UErrorCode& status);
 
     // Generate the lookup key.
     CharString& generateKey(const char* language, const char* region,
-                            const char* variant, CharString& out,
+                            const char* variant, CharString& out U_LIFETIME_BOUND,
                             UErrorCode& status);
 
     void parseLanguageReplacement(const char* replacement,
@@ -1293,7 +1300,7 @@ private:
 CharString&
 AliasReplacer::generateKey(
         const char* language, const char* region, const char* variant,
-        CharString& out, UErrorCode& status)
+        CharString& out U_LIFETIME_BOUND, UErrorCode& status)
 {
     if (U_FAILURE(status)) { return out; }
     out.append(language, status);
@@ -1330,14 +1337,13 @@ AliasReplacer::parseLanguageReplacement(
         return;
     }
     // We have multiple field so we have to allocate and parse
-    CharString* str =
-        new CharString(replacement, static_cast<int32_t>(uprv_strlen(replacement)), status);
-    LocalPointer<CharString> lpStr(str, status);
-    toBeFreed.adoptElement(lpStr.orphan(), status);
+    auto str = prv::make_unique<CharString>(
+        replacement, static_cast<int32_t>(uprv_strlen(replacement)), status, status);
+    char* data = str->data();
+    toBeFreed.adoptElement(str.release(), status);
     if (U_FAILURE(status)) {
         return;
     }
-    char* data = str->data();
     replacedLanguage = (const char*) data;
     char* endOfField = uprv_strchr(data, '_');
     *endOfField = '\0'; // null terminiate it.
@@ -1523,7 +1529,7 @@ AliasReplacer::replaceTerritory(UVector& toBeFreed, UErrorCode& status)
             .build(status);
         l.addLikelySubtags(status);
         const char* likelyRegion = l.getCountry();
-        LocalPointer<CharString> item;
+        prv::unique_ptr<CharString> item;
         if (likelyRegion != nullptr && uprv_strlen(likelyRegion) > 0) {
             size_t len = uprv_strlen(likelyRegion);
             const char* foundInReplacement = uprv_strstr(replacement,
@@ -1535,18 +1541,17 @@ AliasReplacer::replaceTerritory(UVector& toBeFreed, UErrorCode& status)
                          *(foundInReplacement-1) == ' ');
                 U_ASSERT(foundInReplacement[len] == ' ' ||
                          foundInReplacement[len] == '\0');
-                item.adoptInsteadAndCheckErrorCode(
-                    new CharString(foundInReplacement, static_cast<int32_t>(len), status), status);
+                item = prv::make_unique<CharString>(
+                    foundInReplacement, static_cast<int32_t>(len), status, status);
             }
         }
-        if (item.isNull() && U_SUCCESS(status)) {
-            item.adoptInsteadAndCheckErrorCode(
-                new CharString(replacement,
-                               static_cast<int32_t>(firstSpace - replacement), status), status);
+        if (!item && U_SUCCESS(status)) {
+            item = prv::make_unique<CharString>(
+                replacement, static_cast<int32_t>(firstSpace - replacement), status, status);
         }
         if (U_FAILURE(status)) { return false; }
         replacedRegion = item->data();
-        toBeFreed.adoptElement(item.orphan(), status);
+        toBeFreed.adoptElement(item.release(), status);
         if (U_FAILURE(status)) { return false; }
     }
     U_ASSERT(!same(region, replacedRegion));
@@ -1712,7 +1717,7 @@ AliasReplacer::replaceTransformedExtensions(
 
 CharString&
 AliasReplacer::outputToString(
-    CharString& out, UErrorCode& status)
+    CharString& out U_LIFETIME_BOUND, UErrorCode& status)
 {
     if (U_FAILURE(status)) { return out; }
     out.append(language, status);
@@ -1800,15 +1805,17 @@ AliasReplacer::replace(const Locale& locale, CharString& out, UErrorCode& status
     }, status);
 
     // A changed count to assert when loop too many times.
-    int changed = 0;
+    int32_t changed = 0;
+    const int32_t maxChanged = 4 + variants.size();
+    (void)maxChanged; // avoid unused-variable warning when U_ASSERT is a no-op
     // A UVector to to hold CharString allocated by the replace* method
     // and freed when out of scope from his function.
     UVector stringsToBeFreed([](void *obj) { delete static_cast<CharString*>(obj); },
                              nullptr, 10, status);
     while (U_SUCCESS(status)) {
-        // Something wrong with the data cause looping here more than 10 times
-        // already.
-        U_ASSERT(changed < 5);
+        // Something wrong with the data cause looping here more than maxChanged
+        // times already.
+        U_ASSERT(changed <= maxChanged);
         // From observation of key in data/misc/metadata.txt
         // we know currently we only need to search in the following combination
         // of fields for type in languageAlias:
@@ -1956,13 +1963,13 @@ ulocimp_isCanonicalizedLocaleForTest(const char* localeName)
 
 U_NAMESPACE_BEGIN
 
-Locale& Locale::init(const char* localeID, UBool canonicalize)
+Locale& Locale::init(const char* localeID, UBool canonicalize) U_LIFETIME_BOUND
 {
     return localeID == nullptr ? *this = getDefault() : init(StringPiece{localeID}, canonicalize);
 }
 
 /*This function initializes a Locale from a C locale ID*/
-Locale& Locale::init(StringPiece localeID, UBool canonicalize)
+Locale& Locale::init(StringPiece localeID, UBool canonicalize) U_LIFETIME_BOUND
 {
     /* Free our current storage */
     Nest& nest = payload.emplace<Nest>();
@@ -2587,7 +2594,7 @@ public:
         return result;
     }
 
-    virtual const char* next(int32_t* resultLength, UErrorCode& status) override {
+    virtual const char* next(int32_t* resultLength, UErrorCode& status) U_LIFETIME_BOUND override {
         const char* result;
         int32_t len;
         if(U_SUCCESS(status) && *current != 0) {
@@ -2606,7 +2613,7 @@ public:
         return result;
     }
 
-    virtual const UnicodeString* snext(UErrorCode& status) override {
+    virtual const UnicodeString* snext(UErrorCode& status) U_LIFETIME_BOUND override {
         if (U_FAILURE(status)) { return nullptr; }
         int32_t resultLength = 0;
         const char *s = next(&resultLength, status);
@@ -2631,7 +2638,7 @@ public:
     using KeywordEnumeration::KeywordEnumeration;
     virtual ~UnicodeKeywordEnumeration();
 
-    virtual const char* next(int32_t* resultLength, UErrorCode& status) override {
+    virtual const char* next(int32_t* resultLength, UErrorCode& status) U_LIFETIME_BOUND override {
         const char* legacy_key = KeywordEnumeration::next(nullptr, status);
         while (U_SUCCESS(status) && legacy_key != nullptr) {
             const char* key = uloc_toUnicodeLocaleKey(legacy_key);
@@ -2885,38 +2892,38 @@ Locale::setUnicodeKeywordValue(StringPiece keywordName,
 }
 
 const char*
-Locale::getCountry() const {
+Locale::getCountry() const U_LIFETIME_BOUND {
     return getField<&Nest::getRegion, &Heap::getRegion>();
 }
 
 const char*
-Locale::getLanguage() const {
+Locale::getLanguage() const U_LIFETIME_BOUND {
     return getField<&Nest::getLanguage, &Heap::getLanguage>();
 }
 
 const char*
-Locale::getScript() const {
+Locale::getScript() const U_LIFETIME_BOUND {
     return getField<&Nest::getScript, &Heap::getScript>();
 }
 
 const char*
-Locale::getVariant() const {
+Locale::getVariant() const U_LIFETIME_BOUND {
     return getField<&Nest::getVariant, &Heap::getVariant>();
 }
 
 const char*
-Locale::getName() const {
+Locale::getName() const U_LIFETIME_BOUND {
     return getField<&Nest::getBaseName, &Heap::getFullName>();
 }
 
 const char*
-Locale::getBaseName() const {
+Locale::getBaseName() const U_LIFETIME_BOUND {
     return getField<&Nest::getBaseName, &Heap::getBaseName>();
 }
 
 template <const char* (Locale::Nest::*const NEST)() const,
           const char* (Locale::Heap::*const HEAP)() const>
-const char* Locale::getField() const {
+const char* Locale::getField() const U_LIFETIME_BOUND {
     return payload.visit([] { return ""; },
                          [](const Nest& nest) { return (nest.*NEST)(); },
                          [](const Heap& heap) { return (heap.*HEAP)(); });

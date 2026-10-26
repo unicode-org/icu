@@ -151,11 +151,6 @@ si{
                 one{"ග්ලූකෝස් {0}"}
                 other{"ග්ලූකෝස් {0}"}
             }
-            part{
-                dnam{"කොටස"}
-                one{"කොටස {0}"}
-                other{"කොටස {0}"}
-            }
             part-per-1e6{
                 dnam{"මිලියනයට කොටස්"}
                 one{"මිලියනයට කොටස් {0}"}
@@ -372,11 +367,6 @@ si{
                 dnam{"කැලරි"}
                 one{"කැලරි {0}"}
                 other{"කැලරි {0}"}
-            }
-            gray{
-                dnam{"අළු"}
-                one{"අළු {0}"}
-                other{"අළු {0}"}
             }
             joule{
                 one{"ජුල් {0}"}
@@ -1000,11 +990,6 @@ si{
                 one{"{0}°"}
                 other{"{0}°"}
             }
-            steradian{
-                dnam{"ස්ට"}
-                one{"ස්ට {0}"}
-                other{"ස්ට {0}"}
-            }
         }
         area{
             hectare{
@@ -1056,20 +1041,10 @@ si{
             10p9{"ගි{0}"}
         }
         concentr{
-            katal{
-                dnam{"කැට"}
-                one{"කැට {0}"}
-                other{"කැට {0}"}
-            }
             ofglucose{
                 dnam{"ග්ලූ"}
                 one{"ග්ලූ {0}"}
                 other{"ග්ලූ {0}"}
-            }
-            part{
-                dnam{"කොටස"}
-                one{"කොටස {0}"}
-                other{"කොටස {0}"}
             }
             part-per-1e6{
                 dnam{"මිලිකො"}
@@ -1132,36 +1107,11 @@ si{
             ampere{
                 dnam{"ඇ"}
             }
-            coulomb{
-                dnam{"කූ"}
-                one{"කූ {0}"}
-                other{"කූ {0}"}
-            }
-            farad{
-                dnam{"ෆැ"}
-                one{"ෆැ {0}"}
-                other{"ෆැ {0}"}
-            }
-            henry{
-                dnam{"හෙ"}
-                one{"හෙ {0}"}
-                other{"හෙ {0}"}
-            }
             milliampere{
                 dnam{"මිඇ"}
             }
-            siemens{
-                dnam{"සී"}
-                one{"සී {0}"}
-                other{"සී {0}"}
-            }
         }
         energy{
-            becquerel{
-                dnam{"බෙක"}
-                one{"බෙක {0}"}
-                other{"බෙක {0}"}
-            }
             calorie-it{
                 dnam{"කැ [IT]"}
                 one{"කැ [IT] {0}"}
@@ -1174,18 +1124,8 @@ si{
                 one{"කැල{0}"}
                 other{"කැල{0}"}
             }
-            gray{
-                dnam{"අළු"}
-                one{"අළු {0}"}
-                other{"අළු {0}"}
-            }
             kilojoule{
                 dnam{"කිජු"}
-            }
-            sievert{
-                dnam{"සීව"}
-                one{"සීව {0}"}
-                other{"සීව {0}"}
             }
             therm-us{
                 dnam{"එජ තාප ඒකක"}
@@ -1194,11 +1134,6 @@ si{
             }
         }
         force{
-            kilogram-force{
-                dnam{"කිග්‍රෑබ"}
-                one{"කිග්‍රෑබ {0}"}
-                other{"කිග්‍රෑබ {0}"}
-            }
             kilowatt-hour-per-100-kilometer{
                 one{"{0}කිවොපැ/100කිමී"}
                 other{"{0} කිවොපැ/100කිමී"}
@@ -1237,18 +1172,6 @@ si{
             }
             solar-radius{
                 dnam{"අ☉"}
-            }
-        }
-        magnetic{
-            tesla{
-                dnam{"ටෙ"}
-                one{"ටෙ {0}"}
-                other{"ටෙ {0}"}
-            }
-            weber{
-                dnam{"වේබ"}
-                one{"වේබ {0}"}
-                other{"වේබ {0}"}
             }
         }
         mass{
@@ -1294,11 +1217,6 @@ si{
                 one{"මි.බා. {0}"}
                 other{"මි.බා. {0}"}
             }
-            ofhg{
-                dnam{"ර"}
-                one{"ර {0}"}
-                other{"ර {0}"}
-            }
         }
         speed{
             beaufort{
@@ -1316,6 +1234,7 @@ si{
         }
         temperature{
             celsius{
+                dnam{"°C"}
                 one{"{0}°"}
                 other{"{0}°"}
             }

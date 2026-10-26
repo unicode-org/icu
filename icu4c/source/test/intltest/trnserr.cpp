@@ -27,6 +27,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "cmemory.h"
 #include "unicode/rep.h"
 #include "unicode/locid.h"
 
@@ -37,16 +38,19 @@
 void
 TransliteratorErrorTest::runIndexedTest(int32_t index, UBool exec,
                                       const char* &name, char* /*par*/) {
-    switch (index) {
-        TESTCASE(0,TestTransliteratorErrors);
-        TESTCASE(1, TestUnicodeSetErrors);
-        TESTCASE(2, TestRBTErrors);
-        TESTCASE(3, TestCoverage);
-        //TESTCASE(3, TestUniToHexErrors);
-        //TESTCASE(4, TestHexToUniErrors);
-        // TODO: Add a subclass to test clone().
-        default: name = ""; break;
+    if(exec) {
+        logln("TestSuite TransliteratorErrorTest: ");
     }
+    TESTCASE_AUTO_BEGIN;
+    TESTCASE_AUTO(TestTransliteratorErrors);
+    TESTCASE_AUTO(TestUnicodeSetErrors);
+    TESTCASE_AUTO(TestRBTErrors);
+    TESTCASE_AUTO(TestCoverage);
+    // TESTCASE_AUTO(TestUniToHexErrors);
+    // TESTCASE_AUTO(TestHexToUniErrors);
+    TESTCASE_AUTO(test23365Initialization);
+    // TODO: Add a subclass to test clone().
+    TESTCASE_AUTO_END;
 }
 
 
@@ -260,6 +264,22 @@ void TransliteratorErrorTest::TestRBTErrors() {
 //    }
 //    delete t;
 //}
+
+void TransliteratorErrorTest::test23365Initialization() {
+    // ICU-23365 destructor could try to delete uninitialized pointers
+    IcuTestErrorCode errorCode(*this, "test23365Initialization");
+    constexpr char16_t badRules[] = { 0x1c00, 0, 1, 0x1818, 0x24, 0x1818, 0x2b };
+    UnicodeString rules(false, badRules, UPRV_LENGTHOF(badRules));
+    UParseError pe;
+    LocalPointer<Transliterator> trans(
+        Transliterator::createFromRules(u"id", rules, UTRANS_REVERSE, pe, errorCode));
+    // We expect this to fail but not crash.
+    if (errorCode.expectErrorAndReset(U_MEMORY_ALLOCATION_ERROR)) {
+        return;
+    }
+    // If we fail as expected, we won't get here.
+    // Either way the Transliterator will be deleted/destructed.
+}
 
 class StubTransliterator: public Transliterator{
 public:

@@ -7,7 +7,6 @@ oc{
             ls{"ora al meridian de Greenwich"}
         }
         gmtFormat{"UTC{0}"}
-        gmtZeroFormat{"UTC"}
         regionFormat{"ora de {0}"}
         regionFormatDaylight{"{0} (ora d’estiu)"}
         regionFormatStandard{"{0} (ora estandard)"}

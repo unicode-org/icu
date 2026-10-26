@@ -7,7 +7,6 @@ nds{
             ls{"Gröönwisch-Welttiet"}
         }
         gmtFormat{"UTC{0}"}
-        gmtZeroFormat{"UTC"}
         hourFormat{"+HH.mm;-HH.mm"}
         regionFormat{"{0}-Tiet"}
         regionFormatDaylight{"{0}-Summertiet"}

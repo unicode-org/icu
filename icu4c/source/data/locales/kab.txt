@@ -202,33 +202,6 @@ kab{
             }
             dayNames{
                 format{
-                    abbreviated{
-                        "Acer",
-                        "Arim",
-                        "Aram",
-                        "Ahad",
-                        "Amhad",
-                        "Sem",
-                        "Sed",
-                    }
-                    narrow{
-                        "C",
-                        "R",
-                        "R",
-                        "H",
-                        "M",
-                        "S",
-                        "S",
-                    }
-                    short{
-                        "Acer",
-                        "Arim",
-                        "Aram",
-                        "Ahad",
-                        "Amhad",
-                        "Sem",
-                        "Sed",
-                    }
                     wide{
                         "Acer",
                         "Arim",
@@ -240,15 +213,6 @@ kab{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        "Acer",
-                        "Arim",
-                        "Aram",
-                        "Ahad",
-                        "Amhad",
-                        "Sem",
-                        "Sed",
-                    }
                     narrow{
                         "C",
                         "R",
@@ -257,15 +221,6 @@ kab{
                         "M",
                         "S",
                         "S",
-                    }
-                    short{
-                        "Acer",
-                        "Arim",
-                        "Aram",
-                        "Ahad",
-                        "Amhad",
-                        "Sem",
-                        "Sed",
                     }
                     wide{
                         "Acer",

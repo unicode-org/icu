@@ -146,7 +146,7 @@ public abstract class TestFmwk extends AbstractTestLog {
      * std::minstd_rand, with the same algorithm & constants. Provided for compatibility with ICU4C.
      * Get & set of the seed allows for reproducible monkey tests.
      */
-    protected class ICU_Rand {
+    protected static class ICU_Rand {
         private int fLast;
 
         public ICU_Rand(int seed) {

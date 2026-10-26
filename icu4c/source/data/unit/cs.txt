@@ -965,10 +965,6 @@ cs{
             }
             part{
                 dnam{"díly"}
-                few{"{0} díly"}
-                many{"{0} dílu"}
-                one{"{0} díl"}
-                other{"{0} dílů"}
             }
             part-per-1e6{
                 case{
@@ -5634,28 +5630,6 @@ cs{
                 one{"{0} pol."}
                 other{"{0} pol."}
             }
-            katal{
-                few{"{0} kat"}
-                many{"{0} kat"}
-                one{"{0} kat"}
-                other{"{0} kat"}
-            }
-            ofglucose{
-                dnam{"Glc"}
-            }
-            part{
-                dnam{"díl"}
-                few{"{0} díly"}
-                many{"{0} dílu"}
-                one{"{0} díl"}
-                other{"{0} dílů"}
-            }
-            part-per-1e9{
-                few{"{0} částice na mld"}
-                many{"{0} částice na mld"}
-                one{"{0} částice na mld"}
-                other{"{0} částic na mld"}
-            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -5737,19 +5711,6 @@ cs{
             }
         }
         energy{
-            becquerel{
-                few{"{0} Bq"}
-                many{"{0} Bq"}
-                one{"{0} Bq"}
-                other{"{0} Bq"}
-            }
-            calorie-it{
-                dnam{"cal-IT"}
-                few{"{0} cal-IT"}
-                many{"{0} cal-IT"}
-                one{"{0} cal-IT"}
-                other{"{0} cal-IT"}
-            }
             sievert{
                 few{"{0} Sv"}
                 many{"{0} Sv"}

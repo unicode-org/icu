@@ -272,6 +272,9 @@ ca{
                 "UMMMd",
                 "yMd",
             }
+            availableFormats{
+                yyyyMd{"dd-MM-r"}
+            }
             monthNames{
                 format{
                     wide{
@@ -346,7 +349,7 @@ ca{
                 H{"H"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
-                Hv{"H 'h' v"}
+                Hv{"H v"}
                 MEd{"E, d/M"}
                 MMMEd{"E, d MMM"}
                 MMMMEd{"E, d MMMM"}
@@ -427,6 +430,10 @@ ca{
                 MMMEd{
                     M{"E, d MMM – E, d MMM"}
                     d{"E, d – E, d MMM"}
+                }
+                MMMMd{
+                    M{"d MMMM – d MMMM"}
+                    d{"d – d MMMM"}
                 }
                 MMMd{
                     M{"d MMM – d MMM"}
@@ -539,6 +546,10 @@ ca{
                 "yMMMd",
                 "yyMd",
             }
+            appendItems{
+                Era{"{0} {1}"}
+                Time-Day-Of-Week{"{1}, {0}"}
+            }
             availableFormats{
                 EHm{"E H:mm"}
                 EHms{"E H:mm:ss"}
@@ -562,7 +573,7 @@ ca{
                 Hmsvvvv{"H:mm:ss (vvvv)"}
                 Hmv{"H:mm v"}
                 Hmvvvv{"H:mm (vvvv)"}
-                Hv{"H 'h' v"}
+                Hv{"H v"}
                 MEd{"E d/M"}
                 MMMEd{"E, d MMM"}
                 MMMMEd{"E, d MMMM"}
@@ -731,6 +742,10 @@ ca{
                 MMMEd{
                     M{"E, d MMM – E, d MMM"}
                     d{"E, d – E, d MMM"}
+                }
+                MMMMd{
+                    M{"d MMMM – d MMMM"}
+                    d{"d–d MMMM"}
                 }
                 MMMd{
                     M{"d MMM – d MMM"}
@@ -915,7 +930,6 @@ ca{
             eras{
                 wide{
                     0{"Abans de ROC"}
-                    1{"ROC"}
                 }
             }
         }

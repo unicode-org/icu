@@ -21,7 +21,6 @@ fi{
                 atLeast{"vähintään {0}"}
             }
             patterns{
-                accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
                 currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
                 percentFormat{"#,##0 %"}
@@ -234,7 +233,7 @@ fi{
                 "Hmmssz",
                 "Hmmss",
                 "Hmm",
-                "yMccccd",
+                "yMEEEEd",
                 "yMd",
                 "yMd",
                 "yMd",
@@ -397,7 +396,7 @@ fi{
                 "Hmmssz",
                 "Hmmss",
                 "Hmm",
-                "GyMMMMccccd",
+                "GyMMMMEEEEd",
                 "GyMMMMd",
                 "GyMd",
                 "GGGGGyMd",
@@ -422,7 +421,7 @@ fi{
                 H{"H"}
                 Hm{"H.mm"}
                 Hms{"H.mm.ss"}
-                Hv{"HH 'h' v"}
+                Hv{"H v"}
                 MEd{"E d.M."}
                 MMMEd{"ccc d. MMM"}
                 MMMMd{"d. MMMM"}
@@ -439,7 +438,7 @@ fi{
                 yyyyMMM{"LLL y G"}
                 yyyyMMMEd{"E d. MMM y G"}
                 yyyyMMMM{"LLLL y G"}
-                yyyyMMMMccccd{"cccc d. MMMM y G"}
+                yyyyMMMMEEEEd{"cccc d. MMMM y G"}
                 yyyyMMMd{"d. MMM y G"}
                 yyyyMd{"d.M.y G"}
                 yyyyQQQ{"QQQ y G"}
@@ -537,6 +536,9 @@ fi{
                 MMMM{
                     M{"LLL–LLLL"}
                 }
+                MMMMd{
+                    M{"MMMM d–MMMM d"}
+                }
                 MMMd{
                     M{"d. MMMM – d. MMMM"}
                     d{"d.–d. MMMM"}
@@ -633,10 +635,13 @@ fi{
                 "Hmmssz",
                 "Hmmss",
                 "Hmm",
-                "yMMMMccccd",
+                "yMMMMEEEEd",
                 "yMMMMd",
                 "yMd",
                 "yMd",
+            }
+            appendItems{
+                Era{"{0} {1}"}
             }
             availableFormats{
                 Bhm{"h.mm B"}
@@ -649,20 +654,21 @@ fi{
                 Ehm{"E h.mm a"}
                 Ehms{"E h.mm.ss a"}
                 Gy{"y G"}
-                GyM{"M.y G"}
+                GyM{"L.y G"}
                 GyMEd{"E d.M.y G"}
                 GyMMM{"LLL y G"}
                 GyMMMEd{"E d.M.y G"}
+                GyMMMM{"LLLL y G"}
                 GyMMMMEd{"E d. MMMM y G"}
                 GyMMMMd{"d. MMMM y G"}
                 GyMMMd{"d.M.y G"}
-                GyMd{"M.d.y G"}
+                GyMd{"d.M.y G"}
                 H{"H"}
                 Hm{"H.mm"}
                 Hms{"H.mm.ss"}
                 Hmsv{"H.mm.ss v"}
                 Hmv{"H.mm v"}
-                Hv{"H 'h' v"}
+                Hv{"H v"}
                 MEd{"E d.M."}
                 MMMEd{"ccc d.M."}
                 MMMMEd{"ccc d. MMMM"}
@@ -684,8 +690,8 @@ fi{
                 yMMM{"LLL y"}
                 yMMMEd{"E d.M.y"}
                 yMMMM{"LLLL y"}
+                yMMMMEEEEd{"cccc d. MMMM y"}
                 yMMMMEd{"E d. MMMM y"}
-                yMMMMccccd{"cccc d. MMMM y"}
                 yMMMMd{"d. MMMM y"}
                 yMMMd{"d.M.y"}
                 yMd{"d.M.y"}
@@ -1221,6 +1227,26 @@ fi{
                         "dhu-l-hiddža",
                     }
                 }
+            }
+        }
+        iso8601{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH.mm",
+                "y MMMM d, EEEE",
+                "y MMMM d",
+                "y MMM d",
+                "y-MM-dd",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Hms{"HH.mm.ss"}
             }
         }
         persian{

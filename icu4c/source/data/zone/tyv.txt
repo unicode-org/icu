@@ -3,8 +3,92 @@
 // Generated using tools/cldr/cldr-to-icu/
 tyv{
     zoneStrings{
+        "Etc:UTC"{
+            ls{"Бүгү-делегейниң дугурушкан үези"}
+        }
+        "Europe:Amsterdam"{
+            ec{"Амстердам"}
+        }
+        "Europe:Andorra"{
+            ec{"Андорра"}
+        }
+        "Europe:Belgrade"{
+            ec{"Белград"}
+        }
+        "Europe:Berlin"{
+            ec{"Берлин"}
+        }
+        "Europe:Bratislava"{
+            ec{"Братислава"}
+        }
+        "Europe:Copenhagen"{
+            ec{"Копенгаген"}
+        }
+        "Europe:Dublin"{
+            ec{"Дублин"}
+        }
+        "Europe:Ljubljana"{
+            ec{"Любляна"}
+        }
+        "Europe:London"{
+            ec{"Лондон"}
+        }
+        "Europe:Luxembourg"{
+            ec{"Люксенбург"}
+        }
+        "Europe:Madrid"{
+            ec{"Мадрид"}
+        }
+        "Europe:Malta"{
+            ec{"Мальта"}
+        }
+        "Europe:Minsk"{
+            ec{"Минск"}
+        }
+        "Europe:Oslo"{
+            ec{"Осло"}
+        }
+        "Europe:Paris"{
+            ec{"Париж"}
+        }
+        "Europe:Riga"{
+            ec{"Рига"}
+        }
+        "Europe:Rome"{
+            ec{"Рим"}
+        }
+        "Europe:Sarajevo"{
+            ec{"Сараево"}
+        }
+        "Europe:Simferopol"{
+            ec{"Симферополь"}
+        }
+        "Europe:Vatican"{
+            ec{"Ватикан"}
+        }
+        "Europe:Vienna"{
+            ec{"Вена"}
+        }
+        "meta:British"{
+            ld{"Великобритания, чайгы үе"}
+            lg{"Британ үе"}
+        }
+        "meta:Europe_Central"{
+            ld{"Төп Европаның чайгы үези"}
+            lg{"Төп Европа үези"}
+            ls{"Төп Европаның стандарт үези"}
+        }
+        "meta:Europe_Eastern"{
+            ld{"Чөөн Европаның чайгы үези"}
+            lg{"Чөөн Европа үези"}
+            ls{"Чөөн Европаның стандарт үези"}
+        }
         "meta:GMT"{
             ls{"Гринвичтиң ортаа үези"}
+        }
+        "meta:Irish"{
+            ld{"Ирландия, стандарт үе"}
+            lg{"Ирланд үе"}
         }
         regionFormatDaylight{"{0}, чайгы үе"}
         regionFormatStandard{"{0}, стандарт үе"}

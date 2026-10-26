@@ -267,10 +267,6 @@ cs{
             "CNH",
             "čínský jüan (offshore)",
         }
-        CNX{
-            "CNX",
-            "čínský dolar ČLB",
-        }
         CNY{
             "CN¥",
             "čínský jüan",
@@ -1622,12 +1618,6 @@ cs{
             many{"čínského jüanu (offshore)"}
             one{"čínský jüan (offshore)"}
             other{"čínských jüanů (offshore)"}
-        }
-        CNX{
-            few{"čínské dolary ČLB"}
-            many{"čínského dolaru ČLB"}
-            one{"čínský dolar ČLB"}
-            other{"čínských dolarů ČLB"}
         }
         CNY{
             few{"čínské jüany"}

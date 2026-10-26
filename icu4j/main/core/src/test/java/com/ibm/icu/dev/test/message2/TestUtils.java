@@ -102,7 +102,7 @@ public class TestUtils {
             Param pair = params[i];
             if (pair.value instanceof Map<?, ?>) {
                 @SuppressWarnings("unchecked")
-                Map<String, Object> innerMap = (Map<String, Object>) pair.value;
+                Map<String, ?> innerMap = (Map<String, ?>) pair.value;
                 if (innerMap.size() == 1
                         && innerMap.containsKey("date")
                         && innerMap.get("date") instanceof Double) {
@@ -123,7 +123,7 @@ public class TestUtils {
             Param pair = params[i];
             if (pair.value instanceof Map<?, ?>) {
                 @SuppressWarnings("unchecked")
-                Map<String, Object> innerMap = (Map<String, Object>) pair.value;
+                Map<String, ?> innerMap = (Map<String, ?>) pair.value;
                 if (innerMap.size() == 1
                         && innerMap.containsKey("decimal")
                         && innerMap.get("decimal") instanceof String) {
@@ -134,11 +134,11 @@ public class TestUtils {
         }
     }
 
-    static Map<String, Object> paramsToMap(Param[] params) {
+    static Map<String, ?> paramsToMap(Param[] params) {
         if (params == null) {
             return null;
         }
-        TreeMap<String, Object> result = new TreeMap<String, Object>();
+        Map<String, Object> result = new TreeMap<>();
         for (Param pair : params) {
             result.put(pair.name, pair.value);
         }
@@ -155,7 +155,7 @@ public class TestUtils {
     }
 
     static void runTestCase(DefaultTestProperties defaults, Unit unit, Param[] params) {
-        if (unit == null || unit.ignoreJava != null) {
+        if (unit == null) {
             return;
         }
 
@@ -235,16 +235,24 @@ public class TestUtils {
         return unit.toString();
     }
 
-    static Reader jsonReader(String jsonFileName) throws URISyntaxException, IOException {
-        Path json = getTestFile(TestUtils.class, jsonFileName);
+    static Reader jsonReader(boolean isCldrTest, String jsonFileName)
+            throws URISyntaxException, IOException {
+        Path json = getTestFile(TestUtils.class, isCldrTest, jsonFileName);
         return Files.newBufferedReader(json, StandardCharsets.UTF_8);
     }
 
-    private static Path getTestFile(Class<?> cls, String fileName)
+    private static Path getTestFile(Class<?> cls, boolean isCldrTest, String fileName)
             throws URISyntaxException, IOException {
-        String packageName = cls.getPackage().getName().replace('.', '/');
-        URI getPath = cls.getClassLoader().getResource(packageName).toURI();
-        Path filePath = Paths.get(getPath);
+        Path filePath;
+        if (isCldrTest) {
+            URI getPath = cls.getClassLoader().getResource(".").toURI();
+            filePath = Paths.get(getPath).resolve("com/ibm/icu/dev/data/cldr/messageFormat/tests");
+        } else {
+            String packageName = cls.getPackage().getName().replace('.', '/');
+            URI getPath = cls.getClassLoader().getResource(packageName).toURI();
+            filePath = Paths.get(getPath);
+        }
+
         Path json = Paths.get(fileName);
         return filePath.resolve(json);
     }

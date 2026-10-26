@@ -29,7 +29,6 @@ ti{
             }
             patterns{
                 currencyFormat{"¤#,##0.00"}
-                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
             }
             patternsLong{
                 decimalFormat{
@@ -251,53 +250,6 @@ ti{
         ethiopic{
             monthNames{
                 format{
-                    abbreviated{
-                        "መስከረም",
-                        "ጥቅምቲ",
-                        "ሕዳር",
-                        "ታሕሳስ",
-                        "ጥሪ",
-                        "ለካቲት",
-                        "መጋቢት",
-                        "ሚያዚያ",
-                        "ጉንበት",
-                        "ሰነ",
-                        "ሓምለ",
-                        "ነሓሰ",
-                        "ጷጉሜ",
-                    }
-                    wide{
-                        "መስከረም",
-                        "ጥቅምቲ",
-                        "ሕዳር",
-                        "ታሕሳስ",
-                        "ጥሪ",
-                        "ለካቲት",
-                        "መጋቢት",
-                        "ሚያዚያ",
-                        "ጉንበት",
-                        "ሰነ",
-                        "ሓምለ",
-                        "ነሓሰ",
-                        "ጷጉሜ",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "መስከረም",
-                        "ጥቅምቲ",
-                        "ሕዳር",
-                        "ታሕሳስ",
-                        "ጥሪ",
-                        "ለካቲት",
-                        "መጋቢት",
-                        "ሚያዚያ",
-                        "ጉንበት",
-                        "ሰነ",
-                        "ሓምለ",
-                        "ነሓሰ",
-                        "ጷጉሜ",
-                    }
                     wide{
                         "መስከረም",
                         "ጥቅምቲ",
@@ -362,7 +314,7 @@ ti{
                 GyMMMEd{"E፣ d MMM y G"}
                 GyMMMd{"MMM d, y G"}
                 GyMd{"M/d/y GGGGG"}
-                Hv{"HHሰ v"}
+                Hv{"HH v"}
                 MEd{"E፣ d/M"}
                 MMMEd{"E, MMM d"}
                 MMMMd{"d MMMM"}
@@ -437,9 +389,6 @@ ti{
                 MMMEd{
                     M{"E, MMM d – E, MMM d"}
                     d{"E, MMM d – E, MMM d"}
-                }
-                MMMd{
-                    M{"MMM d – MMM d"}
                 }
                 Md{
                     M{"M/d – M/d"}
@@ -557,6 +506,8 @@ ti{
                 yMMM{"MMM y"}
                 yMMMEd{"E, MMM d, y"}
                 yMMMM{"MMMM y"}
+                yMMMMEd{"EEE, MMMM d, y"}
+                yMMMMd{"d MMMM y"}
                 yMMMd{"d MMM y"}
                 yMd{"M/d/y"}
                 yQQQ{"QQQ y"}
@@ -758,20 +709,6 @@ ti{
                         "ሕ",
                         "ታ",
                     }
-                    wide{
-                        "ጥሪ",
-                        "ለካቲት",
-                        "መጋቢት",
-                        "ሚያዝያ",
-                        "ጉንበት",
-                        "ሰነ",
-                        "ሓምለ",
-                        "ነሓሰ",
-                        "መስከረም",
-                        "ጥቅምቲ",
-                        "ሕዳር",
-                        "ታሕሳስ",
-                    }
                 }
             }
             quarters{
@@ -792,33 +729,9 @@ ti{
             }
         }
         islamic{
-            DateTimePatterns{
-                "h:mm:ss a zzzz",
-                "h:mm:ss a z",
-                "h:mm:ss a",
-                "h:mm a",
-                "EEEE, MMMM d, y G",
-                "MMMM d, y G",
-                "MMM d, y G",
-                "M/d/y GGGGG",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
             availableFormats{
-                Ed{"d E"}
-                GyMEd{"G y-MM-dd፣ E"}
-                GyMMMd{"MMM d, y G"}
-                GyMd{"M/d/y GGGGG"}
-                MMMEd{"E, MMM d"}
                 MMMMd{"MMMM d"}
                 MMMd{"MMM d"}
-                Md{"M/d"}
-                yyyyMMMEd{"E, MMM d, y G"}
-                yyyyMMMd{"MMM d, y G"}
-                yyyyMd{"M/d/y GGGGG"}
             }
         }
     }
@@ -952,12 +865,6 @@ ti{
         dayperiod{
             dn{"ኤ.ኤም/ፒ.ኤም"}
         }
-        dayperiod-narrow{
-            dn{"ኤ.ኤም/ፒ.ኤም"}
-        }
-        dayperiod-short{
-            dn{"ኤ.ኤም/ፒ.ኤም"}
-        }
         era{
             dn{"ዘመን"}
         }
@@ -972,14 +879,6 @@ ti{
                     one{"ኣብ {0} ዓርቢ"}
                     other{"ኣብ {0} ዓርቢ"}
                 }
-                past{
-                    one{"ቅድሚ {0} ዓርቢ"}
-                    other{"ቅድሚ {0} ዓርቢ"}
-                }
-            }
-        }
-        fri-short{
-            relativeTime{
                 past{
                     one{"ቅድሚ {0} ዓርቢ"}
                     other{"ቅድሚ {0} ዓርቢ"}
@@ -1107,12 +1006,6 @@ ti{
                 }
             }
         }
-        second-narrow{
-            dn{"ሴኮንድ"}
-        }
-        second-short{
-            dn{"ሴኮንድ"}
-        }
         sun{
             relative{
                 "-1"{"ዝሓለፈ ሰንበት"}
@@ -1237,11 +1130,6 @@ ti{
             }
         }
         year-narrow{
-            relative{
-                "-1"{"ዝሓለፈ ዓመት"}
-                "0"{"ሎሚ ዓመት"}
-                "1"{"ዝመጽእ ዓመት"}
-            }
             relativeTime{
                 past{
                     one{"ቅድሚ {0} ዓ"}
@@ -1250,11 +1138,6 @@ ti{
             }
         }
         year-short{
-            relative{
-                "-1"{"ዝሓለፈ ዓመት"}
-                "0"{"ሎሚ ዓመት"}
-                "1"{"ዝመጽእ ዓመት"}
-            }
             relativeTime{
                 past{
                     one{"ቅድሚ -{0} ዓ"}
@@ -1283,9 +1166,6 @@ ti{
             start{"{0}፣ {1}"}
         }
         standard-narrow{
-            2{"{0}፣ {1}"}
-        }
-        unit{
             2{"{0}፣ {1}"}
         }
         unit-narrow{
@@ -1331,8 +1211,6 @@ ti{
             sorting-long-referring-informal{"{surname}፣ {given-informal}"}
             sorting-medium-referring-formal{"{surname-core}፣ {given} {given2-initial} {surname-prefix}"}
             sorting-medium-referring-informal{"{surname}፣ {given-informal}"}
-            sorting-short-referring-formal{"{surname-core}፣ {given} {given2} {surname-prefix}"}
-            sorting-short-referring-informal{"{surname-core}፣ {given} {given2} {surname-prefix}"}
             surnameFirst-long-addressing-formal{"{title} {surname}"}
             surnameFirst-long-addressing-informal{"{given-informal}"}
             surnameFirst-long-monogram-informal{"{surname-monogram-allCaps}{given-informal-monogram-allCaps}"}

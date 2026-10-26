@@ -35,8 +35,7 @@ source and build trees in parallel folders.
 are visible as environment variables in the runConfigureICU shell script, rather
 than just options text.) See the sample runConfigureICU invocations below.
 
-See the ICU4C readme's [Recommended Build
-Options](https://htmlpreview.github.io/?https://github.com/unicode-org/icu/blob/master/icu4c/readme.html#RecBuild).
+See the ICU4C readme's [Recommended Build Options](../../userguide/icu4c/build).
 
 For example:
 
@@ -101,11 +100,12 @@ For example:
 
 ### Run individual test suites
 
-*   `cd ~/icu/mine/icu4c/dbg/test/intltest`
+*   `cd ~/icu/mine/icu4c/source/test/intltest`
     *   `export LD_LIBRARY_PATH=../../lib:../../stubdata:../../tools/ctestfw`
+    *   `export DYLD_LIBRARY_PATH=$LD_LIBRARY_PATH
     *   `make -j5 && ./intltest utility/ByteTrieTest utility/UCharTrieTest`
-*   `cd ~/icu/mine/icu4c/dbg/test/cintltst`
-    *   same relative `LD_LIBRARY_PATH` as for intltest
+*   `cd ~/icu/mine/icu4c/source/test/cintltst`
+    *   same relative `LD_LIBRARY_PATH` and `DYLD_LIBRARY_PATH` as for intltest
     *   `make -j5 && ./cintltst`
 
 ## gdb pretty-printing

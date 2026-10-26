@@ -3,6 +3,9 @@
 // Generated using tools/cldr/cldr-to-icu/
 st{
     zoneStrings{
+        "Etc:UTC"{
+            ls{"Coordinated Universal Time"}
+        }
         "meta:GMT"{
             ls{"Greenwich Mean Time"}
         }

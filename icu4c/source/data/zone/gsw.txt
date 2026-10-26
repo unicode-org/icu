@@ -256,11 +256,6 @@ gsw{
             lg{"Alaska-Ziit"}
             ls{"Alaska-Schtandardziit"}
         }
-        "meta:Almaty"{
-            ld{"Almaty-Summerziit"}
-            lg{"Almaty-Ziit"}
-            ls{"Almaty-Schtandardziit"}
-        }
         "meta:Amazon"{
             ld{"Amazonas-Summerziit"}
             lg{"Amazonas-Ziit"}

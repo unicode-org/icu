@@ -219,10 +219,6 @@ br{
             "CNH",
             "yuan Sina (diavaez)",
         }
-        CNX{
-            "CNX",
-            "dollar Bank poblel Sina",
-        }
         CNY{
             "CNY",
             "yuan Sina",
@@ -991,6 +987,10 @@ br{
             "XCD",
             "dollar Karib ar reter",
         }
+        XCG{
+            "Cg.",
+            "florin karibean",
+        }
         XDR{
             "XDR",
             "gwirioù tennañ arbennik",
@@ -1070,6 +1070,10 @@ br{
         ZWD{
             "ZWD",
             "dollar Zimbabwe (1980–2008)",
+        }
+        ZWG{
+            "ZWG",
+            "aour Zimbabwe",
         }
         ZWL{
             "ZWL",
@@ -1465,13 +1469,6 @@ br{
             one{"yuan Sina (diavaez)"}
             other{"yuan Sina (diavaez)"}
             two{"yuan Sina (diavaez)"}
-        }
-        CNX{
-            few{"dollar Bank poblel Sina"}
-            many{"a zollaroù Bank poblel Sina"}
-            one{"dollar Bank poblel Sina"}
-            other{"dollar Bank poblel Sina"}
-            two{"zollar Bank poblel Sina"}
         }
         CNY{
             few{"yuan Sina"}
@@ -2761,6 +2758,13 @@ br{
             other{"dollar Karib ar reter"}
             two{"zollar Karib ar reter"}
         }
+        XCG{
+            few{"florin karibean"}
+            many{"a florinoù karibean"}
+            one{"florin karibean"}
+            other{"florin karibean"}
+            two{"florin karibean"}
+        }
         XEU{
             few{"unanenn jediñ europat"}
             many{"a unanennoù jediñ europat"}
@@ -2893,6 +2897,13 @@ br{
             one{"dollar Zimbabwe (1980–2008)"}
             other{"dollar Zimbabwe (1980–2008)"}
             two{"zollar Zimbabwe (1980–2008)"}
+        }
+        ZWG{
+            few{"aour Zimbabwe"}
+            many{"a aour Zimbabwe"}
+            one{"aour Zimbabwe"}
+            other{"aour Zimbabwe"}
+            two{"aour Zimbabwe"}
         }
         ZWL{
             few{"dollar Zimbabwe (2009)"}

@@ -44,16 +44,18 @@ jobs:
   # This job is created according to the cache strategy of reuse from a single job:
   # https://github.com/actions/cache/blob/main/caching-strategies.md#make-cache-read-only--reuse-cache-from-centralized-job
   icu4j-mvn-init-cache:
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     steps:
       - name: Checkout and setup
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Cache local Maven repository
-        uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-      - uses: actions/setup-java@f2beeb24e141e01a676f977032f5a29d81c9e27e # v5.1.0
+      - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
         with:
           distribution: 'temurin'
           java-version: '11'
@@ -74,11 +76,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout and setup
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0  # fetch all branches so that Spotless can resolve `origin/main`
+          persist-credentials: false
       - name: Restore read-only cache of local Maven repository
-        uses: actions/cache/restore@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         id: cache
         with:
           path: ~/.m2/repository
@@ -86,7 +89,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
           lookup-only: true
-      - uses: actions/setup-java@f2beeb24e141e01a676f977032f5a29d81c9e27e # v5.1.0
+      - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
         with:
           distribution: 'temurin'
           java-version: '21'
@@ -102,11 +105,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout and setup
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
+          persist-credentials: false
       - name: Restore read-only cache of local Maven repository
-        uses: actions/cache/restore@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         id: cache
         with:
           path: ~/.m2/repository
@@ -114,7 +118,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
           lookup-only: true
-      - uses: actions/setup-java@f2beeb24e141e01a676f977032f5a29d81c9e27e # v5.1.0
+      - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
         with:
           distribution: 'temurin'
           java-version: '21'
@@ -134,8 +138,8 @@ jobs:
             grep '^\[ERROR\] ' /tmp/errorprone.log
             # We need to build this sub-project. If maven fails in a previous sub-project the
             # whole build stops and we never get to build the report tool, so we can't run it.
-            mvn install -f icu4j/tools/build/ -q
-            mvn exec:java -f icu4j/tools/build/ -P errorprone_report -DlogFile=/tmp/errorprone.log
+            mvn install -f icu4j/tools/errorprone_report/ -q
+            mvn exec:java -f icu4j/tools/errorprone_report/ -P errorprone_report -DlogFile=/tmp/errorprone.log
             # Output messages and the error-prone report as workflow job summary
             echo '**Run this command locally and fix all errors:**' >> $GITHUB_STEP_SUMMARY
             echo '```' >> $GITHUB_STEP_SUMMARY
@@ -158,19 +162,21 @@ jobs:
       fail-fast: false
       matrix:
         java-version: [ '11', '17', '21', '25' ]
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     steps:
       - name: Checkout and setup
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Restore read-only cache of local Maven repository
-        uses: actions/cache/restore@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         id: cache
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-      - uses: actions/setup-java@f2beeb24e141e01a676f977032f5a29d81c9e27e # v5.1.0
+      - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
         with:
           distribution: 'temurin'
           java-version: ${{ matrix.java-version }}
@@ -187,12 +193,12 @@ jobs:
   lstm-icu4j-build-and-test:
     if: false  # TODO(ICU-22505)
     needs: icu4j-mvn-init-cache
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     steps:
       - name: Checkout and setup
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Restore read-only cache of local Maven repository
-        uses: actions/cache/restore@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         id: cache
         with:
           path: ~/.m2/repository
@@ -200,7 +206,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
           lookup-only: true
-      - uses: actions/setup-java@f2beeb24e141e01a676f977032f5a29d81c9e27e # v5.1.0
+      - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
         with:
           distribution: 'temurin'
           java-version: '11'
@@ -224,12 +230,12 @@ jobs:
   adaboost-icu4j-build-and-test:
     if: false # Temporary disable, until we disable the .jar creation from C and distribute the individual files
     needs: icu4j-mvn-init-cache
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     steps:
       - name: Checkout and setup
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Restore read-only cache of local Maven repository
-        uses: actions/cache/restore@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         id: cache
         with:
           path: ~/.m2/repository
@@ -237,7 +243,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
           lookup-only: true
-      - uses: actions/setup-java@f2beeb24e141e01a676f977032f5a29d81c9e27e # v5.1.0
+      - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
         with:
           distribution: 'temurin'
           java-version: '11'

@@ -36,15 +36,9 @@ fr_CA{
                     _{
                         _{"{0} cube"}
                     }
-                    feminine{
-                        _{"{0} cube"}
-                    }
                 }
                 other{
                     _{
-                        _{"{0} cubes"}
-                    }
-                    feminine{
                         _{"{0} cubes"}
                     }
                 }
@@ -64,7 +58,7 @@ fr_CA{
                 other{"{0} de glucose"}
             }
             part{
-                one{"{0} part"}
+                one{"{0} part"}
                 other{"{0} parts"}
             }
             part-per-1e9{
@@ -111,8 +105,6 @@ fr_CA{
                 other{"{0} minutes"}
             }
             night{
-                one{"{0} nuit"}
-                other{"{0} nuits"}
                 per{"{0} par nuit"}
             }
             quarter{
@@ -334,10 +326,6 @@ fr_CA{
             }
         }
         pressure{
-            bar{
-                one{"{0} bar"}
-                other{"{0} bars"}
-            }
             ofhg{
                 one{"{0} de mercure"}
                 other{"{0} de mercure"}
@@ -398,10 +386,6 @@ fr_CA{
                 one{"{0} verge cube"}
                 other{"{0} verges cubes"}
             }
-            cup{
-                one{"{0} tasse"}
-                other{"{0} tasses"}
-            }
             cup-metric{
                 one{"{0} tasse métrique"}
                 other{"{0} tasses métriques"}
@@ -445,8 +429,6 @@ fr_CA{
             }
             jigger{
                 dnam{"gobelet doseur"}
-                one{"{0} gobelet doseur"}
-                other{"{0} gobelets doseurs"}
             }
             milliliter{
                 one{"{0} millilitre"}
@@ -454,8 +436,6 @@ fr_CA{
             }
             pinch{
                 dnam{"pincée"}
-                one{"{0} pincée"}
-                other{"{0} pincées"}
             }
             pint{
                 dnam{"chopine"}
@@ -719,9 +699,6 @@ fr_CA{
             }
         }
         speed{
-            beaufort{
-                dnam{"Bf"}
-            }
             knot{
                 one{"{0}nd"}
                 other{"{0}nd"}
@@ -1037,10 +1014,6 @@ fr_CA{
             millisecond{
                 one{"{0} ms"}
                 other{"{0} ms"}
-            }
-            minute{
-                one{"{0} min"}
-                other{"{0} min"}
             }
             month{
                 one{"{0} m."}

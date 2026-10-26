@@ -267,10 +267,6 @@ lt{
             "CNH",
             "Kinijos Užsienio juanis",
         }
-        CNX{
-            "CNX",
-            "Kinijos \u0022People\u0022 banko doleris",
-        }
         CNY{
             "CNY",
             "Kinijos ženminbi juanis",
@@ -1625,12 +1621,6 @@ lt{
             one{"Kinijos Užsienio juanis"}
             other{"Kinijos Užsienio juanių"}
         }
-        CNX{
-            few{"Kinijos \u0022People\u0022 banko doleriai"}
-            many{"Kinijos \u0022People\u0022 banko dolerio"}
-            one{"Kinijos \u0022People\u0022 banko doleris"}
-            other{"Kinijos \u0022People\u0022 banko dolerių"}
-        }
         CNY{
             few{"Kinijos ženminbi juaniai"}
             many{"Kinijos ženminbi juanio"}
@@ -2974,12 +2964,6 @@ lt{
             many{"Zimbabvės dolerio (1980–2008)"}
             one{"Zimbabvės doleris (1980–2008)"}
             other{"Zimbabvės dolerių (1980–2008)"}
-        }
-        ZWG{
-            few{"Zimbabvės auksas"}
-            many{"Zimbabvės auksas"}
-            one{"Zimbabvės auksas"}
-            other{"Zimbabvės auksas"}
         }
         ZWL{
             few{"Zimbabvės doleriai (2009)"}

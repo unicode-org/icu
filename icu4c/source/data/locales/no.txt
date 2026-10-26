@@ -277,7 +277,6 @@ no{
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
                 currencyFormat{"#,##0.00 ¤;-#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-                currencyFormat%noCurrency{"#,##0.00"}
                 percentFormat{"#,##0 %"}
             }
             patternsLong{
@@ -1025,8 +1024,6 @@ no{
                 GyMMMEd{"E d. MMM y G"}
                 GyMMMd{"d. MMM y G"}
                 GyMd{"dd.MM.y G"}
-                H{"H"}
-                Hv{"HH't' v"}
                 M{"L."}
                 MEd{"E d.M"}
                 MMMEd{"E d. MMM"}
@@ -1062,15 +1059,15 @@ no{
                     y{"y–y G"}
                 }
                 GyM{
-                    G{"MM.y GGGGG–MM.y GGGGG"}
-                    M{"MM.y–MM.y GGGGG"}
-                    y{"MM.y–MM.y GGGGG"}
+                    G{"MM.y G–MM.y G"}
+                    M{"MM.y–MM.y G"}
+                    y{"MM.y–MM.y G"}
                 }
                 GyMEd{
-                    G{"E dd.MM.y GGGGG–E dd.MM.y GGGGG"}
-                    M{"E dd.MM.y–E dd.MM.y GGGGG"}
-                    d{"E dd.MM.y–E dd.MM.y GGGGG"}
-                    y{"E dd.MM.y–E dd.MM.y GGGGG"}
+                    G{"E dd.MM.y G–E dd.MM.y G"}
+                    M{"E dd.MM.y–E dd.MM.y G"}
+                    d{"E dd.MM.y–E dd.MM.y G"}
+                    y{"E dd.MM.y–E dd.MM.y G"}
                 }
                 GyMMM{
                     G{"MMM y G–MMM y G"}
@@ -1090,10 +1087,10 @@ no{
                     y{"d. MMM y–d. MMM y G"}
                 }
                 GyMd{
-                    G{"dd.MM.y GGGGG–dd.MM.y GGGGG"}
-                    M{"dd.MM.y–dd.MM.y GGGGG"}
-                    d{"dd.MM.y–dd.MM.y GGGGG"}
-                    y{"dd.MM.y–dd.MM.y GGGGG"}
+                    G{"dd.MM.y G–dd.MM.y G"}
+                    M{"dd.MM.y–dd.MM.y G"}
+                    d{"dd.MM.y–dd.MM.y G"}
+                    y{"dd.MM.y–dd.MM.y G"}
                 }
                 M{
                     M{"M.–M."}
@@ -1108,6 +1105,10 @@ no{
                 MMMEd{
                     M{"E d. MMM–E d. MMM"}
                     d{"E d. MMM–E d. MMM"}
+                }
+                MMMMd{
+                    M{"d. MMMM–d. MMMM"}
+                    d{"d.–d. MMMM"}
                 }
                 MMMd{
                     M{"d. MMM–d. MMM"}
@@ -1210,7 +1211,11 @@ no{
                 "{1}, {0}",
                 "{1}, {0}",
             }
+            appendItems{
+                Era{"{0} {1}"}
+            }
             availableFormats{
+                E{"cccccc"}
                 EHm{"E 'kl'. HH:mm"}
                 EHms{"E 'kl'. HH:mm:ss"}
                 Ed{"E d."}
@@ -1221,12 +1226,15 @@ no{
                 GyMEd{"E d.M.y G"}
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E d. MMM y G"}
+                GyMMMM{"MMMM y G"}
+                GyMMMMEd{"E d. MMMM y G"}
+                GyMMMMd{"d. MMMM y G"}
                 GyMMMd{"d. MMM y G"}
                 GyMd{"d.M.y G"}
-                Hv{"HH v"}
                 M{"L."}
                 MEd{"E d.M."}
                 MMMEd{"E d. MMM"}
+                MMMMEd{"E d MMMM"}
                 MMMMW{
                     one{"'den' W. 'uken' 'i' MMMM"}
                     other{"'den' W. 'uken' 'i' MMMM"}
@@ -1246,6 +1254,8 @@ no{
                 yMMM{"MMM y"}
                 yMMMEd{"E d. MMM y"}
                 yMMMM{"MMMM y"}
+                yMMMMEd{"E d. MMMM y"}
+                yMMMMd{"d. MMMM y"}
                 yMMMd{"d. MMM y"}
                 yMd{"d.M.y"}
                 yQQQ{"QQQ y"}
@@ -1409,9 +1419,6 @@ no{
                     d{"dd.MM.y–dd.MM.y GGGGG"}
                     y{"dd.MM.y–dd.MM.y GGGGG"}
                 }
-                H{
-                    H{"HH–HH 't'"}
-                }
                 M{
                     M{"M.–M."}
                 }
@@ -1425,6 +1432,10 @@ no{
                 MMMEd{
                     M{"E d. MMM–E d. MMM"}
                     d{"E d.–E d. MMM"}
+                }
+                MMMMd{
+                    M{"d. MMMM–d. MMMM"}
+                    d{"d.–d. MMMM"}
                 }
                 MMMd{
                     M{"d. MMM–d. MMM"}
@@ -1710,18 +1721,6 @@ no{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
-            }
-            eras{
-                abbreviated{
-                    11{"Tenpyō-kampō (749-749)"}
-                    12{"Tenpyō-shōhō (749-757)"}
-                    13{"Tenpyō-hōji (757-765)"}
-                    14{"Tenpyō-jingo (765-767)"}
-                    15{"Jingo-keiun (767-770)"}
-                    17{"Ten-ō (781-782)"}
-                    26{"Ten-an (857-859)"}
-                    78{"Ten-ei (1110-1113)"}
-                }
             }
             intervalFormats{
                 h{
@@ -2050,7 +2049,6 @@ no{
             }
         }
         minute-narrow{
-            dn{"m"}
             relativeTime{
                 future{
                     one{"+{0} min"}
@@ -2158,7 +2156,7 @@ no{
             }
         }
         month-short{
-            dn{"mnd."}
+            dn{"md."}
             relative{
                 "-1"{"forrige md."}
                 "0"{"denne md."}
@@ -2562,7 +2560,7 @@ no{
             dn{"uke i md."}
         }
         weekOfMonth-short{
-            dn{"uke i mnd."}
+            dn{"uke i md."}
         }
         weekday{
             dn{"ukedag"}
@@ -2577,7 +2575,7 @@ no{
             dn{"uked. i md."}
         }
         weekdayOfMonth-short{
-            dn{"uked. i mnd."}
+            dn{"uked. i md."}
         }
         year{
             dn{"år"}

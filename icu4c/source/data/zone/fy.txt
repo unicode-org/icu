@@ -177,6 +177,9 @@ fy{
         "Atlantic:St_Helena"{
             ec{"Sint-Helena"}
         }
+        "Etc:UTC"{
+            ls{"Koördinearre Wrâldtiid"}
+        }
         "Etc:Unknown"{
             ec{"Unbekende stêd"}
         }
@@ -201,9 +204,6 @@ fy{
         "Europe:Copenhagen"{
             ec{"Kopenhagen"}
         }
-        "Europe:Dublin"{
-            ld{"Ierse simmertiid"}
-        }
         "Europe:Istanbul"{
             ec{"Istanboel"}
         }
@@ -212,7 +212,6 @@ fy{
         }
         "Europe:London"{
             ec{"Londen"}
-            ld{"Britse simmertiid"}
         }
         "Europe:Luxembourg"{
             ec{"Luxemburg"}
@@ -305,11 +304,6 @@ fy{
             lg{"Alaska-tiid"}
             ls{"Alaska-standerttiid"}
         }
-        "meta:Almaty"{
-            ld{"Alma-Ata-simmertiid"}
-            lg{"Alma-Ata-tiid"}
-            ls{"Alma-Ata-standerttiid"}
-        }
         "meta:Amazon"{
             ld{"Amazone-simmertiid"}
             lg{"Amazone-tiid"}
@@ -339,16 +333,6 @@ fy{
             ld{"Anadyr-simmertiid"}
             lg{"Anadyr-tiid"}
             ls{"Anadyr-standerttiid"}
-        }
-        "meta:Aqtau"{
-            ld{"Aqtau-simmertiid"}
-            lg{"Aqtau-tiid"}
-            ls{"Aqtau-standerttiid"}
-        }
-        "meta:Aqtobe"{
-            ld{"Aqtöbe-simmertiid"}
-            lg{"Aqtöbe-tiid"}
-            ls{"Aqtöbe-standerttiid"}
         }
         "meta:Arabian"{
             ld{"Arabyske simmertiid"}
@@ -420,6 +404,10 @@ fy{
             ld{"Brazyljaanske simmertiid"}
             lg{"Brazyljaanske tiid"}
             ls{"Brazyljaanske standerttiid"}
+        }
+        "meta:British"{
+            ld{"Britse simmertiid"}
+            lg{"Britse tiid"}
         }
         "meta:Brunei"{
             ls{"Bruneise tiid"}
@@ -552,9 +540,6 @@ fy{
             lg{"West-Groenlânske tiid"}
             ls{"West-Groenlânske standerttiid"}
         }
-        "meta:Guam"{
-            ls{"Guamese standerttiid"}
-        }
         "meta:Gulf"{
             ls{"Golf standerttiid"}
         }
@@ -562,7 +547,7 @@ fy{
             ls{"Guyaanske tiid"}
         }
         "meta:Hawaii"{
-            ls{"Hawaii-Aleoetyske standerttiid"}
+            ls{"Hawaii tiid"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"Hawaii-Aleoetyske simmertiid"}
@@ -601,6 +586,10 @@ fy{
             ld{"Iraanske simmertiid"}
             lg{"Iraanske tiid"}
             ls{"Iraanske standerttiid"}
+        }
+        "meta:Irish"{
+            ld{"Ierse simmertiid"}
+            lg{"Ierse tiid"}
         }
         "meta:Irkutsk"{
             ld{"Irkoetsk-simmertiid"}
@@ -644,9 +633,6 @@ fy{
         "meta:Kyrgystan"{
             ls{"Kirgizyske tiid"}
         }
-        "meta:Lanka"{
-            ls{"Lanka-tiid"}
-        }
         "meta:Line_Islands"{
             ls{"Line-eilânske tiid"}
         }
@@ -654,11 +640,6 @@ fy{
             ld{"Lord Howe-eilânske simmertiid"}
             lg{"Lord Howe-eilânske tiid"}
             ls{"Lord Howe-eilânske standerttiid"}
-        }
-        "meta:Macau"{
-            ld{"Macause simmertiid"}
-            lg{"Macause tiid"}
-            ls{"Macause standerttiid"}
         }
         "meta:Magadan"{
             ld{"Magadan-simmertiid"}
@@ -732,9 +713,6 @@ fy{
             lg{"Fernando de Noronha-tiid"}
             ls{"Fernando de Noronha-standerttiid"}
         }
-        "meta:North_Mariana"{
-            ls{"Noardlike Mariaanske tiid"}
-        }
         "meta:Novosibirsk"{
             ld{"Novosibirsk-simmertiid"}
             lg{"Novosibirsk-tiid"}
@@ -785,11 +763,6 @@ fy{
         "meta:Ponape"{
             ls{"Pohnpei tiid"}
         }
-        "meta:Qyzylorda"{
-            ld{"Qyzylorda-simmertiid"}
-            lg{"Qyzylorda-tiid"}
-            ls{"Qyzylorda-standerttiid"}
-        }
         "meta:Reunion"{
             ls{"Réunionse tiid"}
         }
@@ -807,8 +780,6 @@ fy{
             ls{"Samara-standerttiid"}
         }
         "meta:Samoa"{
-            ld{"Samoaanske simmertiid"}
-            lg{"Samoaanske tiid"}
             ls{"Samoaanske standerttiid"}
         }
         "meta:Seychelles"{

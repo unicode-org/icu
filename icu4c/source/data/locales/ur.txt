@@ -23,14 +23,13 @@ ur{
                 decimal{"،"}
                 exponential{"E"}
                 group{","}
+                percentSign{"٪"}
                 plusSign{"+"}
             }
         }
         arabext{
             symbols{
                 list{";"}
-                perMille{"‰"}
-                percentSign{"%"}
             }
         }
         latn{
@@ -246,6 +245,7 @@ ur{
             }
             symbols{
                 minusSign{"‎-"}
+                percentSign{"٪"}
                 plusSign{"‎+"}
             }
         }
@@ -433,6 +433,10 @@ ur{
                     M{"E، d MMM – E، d MMM"}
                     d{"E، d MMM – E، d MMM"}
                 }
+                MMMMd{
+                    M{"d MMMM – d MMMM"}
+                    d{"d – d MMMM"}
+                }
                 MMMd{
                     M{"d MMM – d MMM"}
                     d{"d–d MMM"}
@@ -500,14 +504,14 @@ ur{
                 "{1} {0}",
             }
             DateTimePatterns%atTime{
-                "{1} کو {0}",
-                "{1} کو {0}",
+                "{1} {0}",
+                "{1} {0}",
                 "{1}، {0}",
                 "{1}، {0}",
             }
             DateTimePatterns%relative{
-                "{1} {0} پر",
-                "{1} کو {0}",
+                "{1} {0}",
+                "{1} {0}",
                 "{1}، {0}",
                 "{1}، {0}",
             }
@@ -521,6 +525,11 @@ ur{
                 "yMMMd",
                 "yyMd",
             }
+            appendItems{
+                Day-Of-Week{"{1}، {0}"}
+                Era{"{0} {1}"}
+                Time-Day-Of-Week{"{1}, {0}"}
+            }
             availableFormats{
                 Ed{"d E"}
                 Gy{"y G"}
@@ -528,10 +537,14 @@ ur{
                 GyMEd{"E، d/M/y G"}
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E، d MMM، y G"}
+                GyMMMM{"MMMM y G"}
+                GyMMMMEd{"E، d MMMM، y G"}
+                GyMMMMd{"d MMMM، y G"}
                 GyMMMd{"d MMM، y G"}
                 GyMd{"d/M/y GGGGG"}
                 MEd{"E، d/M"}
                 MMMEd{"E، d MMM"}
+                MMMMEd{"E، d MMMM"}
                 MMMMW{
                     one{"MMMM کا ہفتہ W"}
                     other{"MMMM کا ہفتہ W"}
@@ -544,6 +557,8 @@ ur{
                 yMMM{"MMM y"}
                 yMMMEd{"E، d MMM، y"}
                 yMMMM{"MMMM y"}
+                yMMMMEd{"E، d MMMM، y"}
+                yMMMMd{"d MMMM، y"}
                 yMMMd{"d MMM، y"}
                 yMd{"d/M/y"}
                 yQQQ{"QQQ y"}
@@ -555,6 +570,15 @@ ur{
             }
             dayNames{
                 format{
+                    narrow{
+                        "ا",
+                        "پ",
+                        "م",
+                        "ب",
+                        "ج",
+                        "ج",
+                        "ہ",
+                    }
                     wide{
                         "اتوار",
                         "پیر",
@@ -563,6 +587,17 @@ ur{
                         "جمعرات",
                         "جمعہ",
                         "ہفتہ",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "ا",
+                        "پ",
+                        "م",
+                        "ب",
+                        "ج",
+                        "ج",
+                        "ہ",
                     }
                 }
             }
@@ -668,6 +703,10 @@ ur{
                     M{"E، d MMM – E، d MMM"}
                     d{"E، d MMM – E، d MMM"}
                 }
+                MMMMd{
+                    M{"d MMMM – d MMMM"}
+                    d{"d–d MMMM"}
+                }
                 MMMd{
                     M{"d MMM – d MMM"}
                     d{"d–d MMM"}
@@ -712,6 +751,20 @@ ur{
             }
             monthNames{
                 format{
+                    narrow{
+                        "ج",
+                        "ف",
+                        "م",
+                        "ا",
+                        "م",
+                        "ج",
+                        "ج",
+                        "ا",
+                        "س",
+                        "ا",
+                        "ن",
+                        "د",
+                    }
                     wide{
                         "جنوری",
                         "فروری",
@@ -729,18 +782,18 @@ ur{
                 }
                 stand-alone{
                     narrow{
-                        "J",
-                        "F",
-                        "M",
-                        "A",
-                        "M",
-                        "J",
-                        "J",
-                        "A",
-                        "S",
-                        "O",
+                        "ج",
+                        "ف",
+                        "م",
+                        "ا",
+                        "م",
+                        "ج",
+                        "ج",
+                        "ا",
+                        "س",
+                        "ا",
                         "N",
-                        "D",
+                        "د",
                     }
                 }
             }
@@ -834,7 +887,6 @@ ur{
         }
         islamic{
             availableFormats{
-                GyM{"M/y G"}
                 GyMEd{"E، d/M/y G"}
             }
             eras{
@@ -1018,7 +1070,7 @@ ur{
         day{
             dn{"دن"}
             relative{
-                "-1"{"گزشتہ کل"}
+                "-1"{"کل"}
                 "-2"{"گزشتہ پرسوں"}
                 "0"{"آج"}
                 "1"{"آئندہ کل"}
@@ -1035,7 +1087,19 @@ ur{
                 }
             }
         }
+        day-narrow{
+            relative{
+                "-1"{"کل"}
+                "0"{"آج"}
+                "1"{"آئندہ کل"}
+            }
+        }
         day-short{
+            relative{
+                "-1"{"کل"}
+                "0"{"آج"}
+                "1"{"آئندہ کل"}
+            }
             relativeTime{
                 past{
                     one{"{0} دن پہلے"}

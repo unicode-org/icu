@@ -11,7 +11,6 @@ package com.ibm.icu.dev.test.util;
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.util.IllformedLocaleException;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.ULocale.Builder;
 import java.util.Arrays;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -256,13 +255,13 @@ public class LocaleBuilderTest extends CoreTestFmwk {
             {"B", "fr-u-attr1-cu-eur", "D", "attribute1", "X"},
         };
 
-        Builder bld_st = new Builder();
+        ULocale.Builder bld_st = new ULocale.Builder();
 
         for (int tidx = 0; tidx < TESTCASE.length; tidx++) {
             int i = 0;
             String[] expected = null;
 
-            Builder bld = bld_st;
+            ULocale.Builder bld = bld_st;
 
             bld.clear();
 
@@ -359,7 +358,7 @@ public class LocaleBuilderTest extends CoreTestFmwk {
     @Test
     public void TestSetLocale() {
         ULocale loc = new ULocale("th_TH@calendar=gregorian");
-        Builder bld = new Builder();
+        ULocale.Builder bld = new ULocale.Builder();
         try {
             bld.setLocale(loc);
             ULocale loc1 = bld.build();

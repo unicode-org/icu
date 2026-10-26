@@ -36,6 +36,8 @@ void NumberSkeletonTest::runIndexedTest(int32_t index, UBool exec, const char*& 
         TESTCASE_AUTO(perUnitToSkeleton);
         TESTCASE_AUTO(measurementSystemOverride);
         TESTCASE_AUTO(longSkeletonCrash);
+        TESTCASE_AUTO(unitAliases);
+        TESTCASE_AUTO(testIssue23144);
     TESTCASE_AUTO_END;
 }
 
@@ -579,6 +581,45 @@ void NumberSkeletonTest::longSkeletonCrash() {
     UnicodeString skeleton(u"K\n%\nusage/");
     skeleton.padTrailing(65535, 0);
     UnlocalizedNumberFormatter nf = NumberFormatter::forSkeleton(skeleton, err);
+}
+
+void NumberSkeletonTest::unitAliases() {
+    IcuTestErrorCode status(*this, "unitAliases");
+
+    struct TestCase {
+        const char16_t* skeleton;
+        const char16_t* expectedResult;
+    } testCases[] = {
+        { u"measure-unit/concentr-part-per-1e6", u"3.14 ppm" },
+        { u"measure-unit/concentr-part-per-million", u"3.14 ppm" },
+        { u"measure-unit/concentr-permillion", u"3.14 ppm" },
+        { u"measure-unit/concentr-milligram-ofglucose-per-deciliter", u"3.14 mg/dL" },
+        { u"measure-unit/concentr-milligram-per-deciliter", u"3.14 mg/dL" },
+        { u"measure-unit/mass-tonne", u"3.14 t" },
+        { u"measure-unit/mass-metric-ton", u"3.14 t" },
+    };
+    
+    for (const auto& testCase : testCases) {
+        LocalizedNumberFormatter nf = NumberFormatter::forSkeleton(testCase.skeleton, status).locale(Locale::getUS());
+        UnicodeString actualResult = nf.formatDouble(3.14, status).toString(status);
+        
+        status.setScope(testCase.skeleton);
+        if (!status.errIfFailureAndReset()) {
+            assertEquals(testCase.skeleton, testCase.expectedResult, actualResult);
+        }
+    }
+}
+
+void NumberSkeletonTest::testIssue23144() {
+    IcuTestErrorCode status(*this, "testIssue23144");
+    UErrorCode err = U_ZERO_ERROR;
+    UnlocalizedNumberFormatter nf = NumberFormatter::forSkeleton(u"scale/1e200000000", err);
+    if (!assertSuccess("forSkeleton", err)) {
+        return;
+    }
+    FormattedNumber fn = nf.locale("en").formatDouble(1.0, err);
+    assertEquals("Expected U_ILLEGAL_ARGUMENT_ERROR when formatting hugely out-of-bounds magnitude",
+                 U_ILLEGAL_ARGUMENT_ERROR, err);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

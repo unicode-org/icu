@@ -1012,12 +1012,6 @@ so{
         }
     }
     unitsNarrow{
-        angle{
-            steradian{
-                one{"{0} sr"}
-                other{"{0} sr"}
-            }
-        }
         area{
             square-yard{
                 dnam{"yd²"}
@@ -1028,19 +1022,11 @@ so{
                 one{"{0}shay"}
                 other{"{0}shay"}
             }
-            katal{
-                one{"{0} kat"}
-                other{"{0} kat"}
-            }
             milligram-ofglucose-per-deciliter{
                 one{"{0}mg/dL"}
                 other{"{0}mg/dL"}
             }
-            ofglucose{
-                dnam{"Glc"}
-            }
             part{
-                dnam{"qeyb"}
                 one{"{0} qeyb"}
                 other{"{0} qeyb"}
             }
@@ -1126,13 +1112,6 @@ so{
             }
         }
         energy{
-            becquerel{
-                one{"{0} Bq"}
-                other{"{0} Bq"}
-            }
-            calorie-it{
-                dnam{"cal-IT"}
-            }
             foodcalorie{
                 one{"{0}Kal"}
                 other{"{0}Kal"}
@@ -1197,12 +1176,6 @@ so{
                 other{"{0}lm"}
             }
         }
-        magnetic{
-            weber{
-                one{"{0} Wb"}
-                other{"{0} Wb"}
-            }
-        }
         mass{
             grain{
                 dnam{"gr"}
@@ -1224,17 +1197,28 @@ so{
             }
         }
         pressure{
+            hectopascal{
+                dnam{"hPa"}
+                one{"{0}hPa"}
+                other{"{0}hPa"}
+            }
             inch-ofhg{
                 dnam{"″ Hg"}
                 one{"{0}″ Hg"}
                 other{"{0}″ Hg"}
+            }
+            kilopascal{
+                dnam{"kPa"}
+            }
+            millibar{
+                one{"{0}mb"}
+                other{"{0}mb"}
             }
             millimeter-ofhg{
                 one{"{0}mmHg"}
                 other{"{0}mmHg"}
             }
             ofhg{
-                dnam{"ee Hg"}
                 one{"{0} ee Hg"}
                 other{"{0} ee Hg"}
             }
@@ -1259,6 +1243,11 @@ so{
         temperature{
             celsius{
                 dnam{"°C"}
+            }
+            fahrenheit{
+                dnam{"°F"}
+                one{"{0}°"}
+                other{"{0}°"}
             }
         }
         torque{
@@ -1805,13 +1794,11 @@ so{
                 other{"{0} ha"}
             }
             hectopascal{
-                dnam{"hBa"}
-                one{"{0} hBa"}
-                other{"{0} hBa"}
+                one{"{0} hPa"}
+                other{"{0} hPa"}
             }
             kilopascal{
-                dnam{"kBa"}
-                one{"{0} kBa"}
+                one{"{0} kPa"}
                 other{"{0} kBa"}
             }
             megapascal{

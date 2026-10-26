@@ -455,14 +455,6 @@ public abstract class CollationIterator {
     }
 
     /**
-     * Called when handleNextCE32() returns with c==0, to see whether it is a NUL terminator. (Not
-     * needed in Java.)
-     */
-    /*protected boolean foundNULTerminator() {
-        return false;
-    }*/
-
-    /**
      * @return false if surrogate code points U+D800..U+DFFF map to their own implicit primary
      *     weights (for UTF-16), or true if they map to CE(U+FFFD) (for UTF-8)
      */

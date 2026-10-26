@@ -58,16 +58,7 @@ pa{
                 other{"{0} ਰੇਡੀਅਨ"}
             }
             revolution{
-                case{
-                    oblique{
-                        one{"{0} ਚੱਕਰ"}
-                        other{"{0} ਚੱਕਰ"}
-                    }
-                }
-                dnam{"ਚੱਕਰ"}
                 gender{"feminine"}
-                one{"{0} ਚੱਕਰ"}
-                other{"{0} ਚੱਕਰ"}
             }
             steradian{
                 dnam{"ਸਟਰੇਡੀਅਨ"}
@@ -267,11 +258,6 @@ pa{
                 one{"{0} ਗੁਲੂਕੋਜ਼"}
                 other{"{0} ਗੁਲੂਕੋਜ਼"}
             }
-            part{
-                dnam{"ਹਿੱਸਾ"}
-                one{"{0} ਹਿੱਸਾ"}
-                other{"{0} ਹਿੱਸੇ"}
-            }
             part-per-1e6{
                 case{
                     oblique{
@@ -303,7 +289,6 @@ pa{
                         other{"{0} ਪ੍ਰਤਿਸ਼ਤ"}
                     }
                 }
-                dnam{"ਪ੍ਰਤਿਸ਼ਤ"}
                 gender{"masculine"}
                 one{"{0} ਪ੍ਰਤਿਸ਼ਤ"}
                 other{"{0} ਪ੍ਰਤਿਸ਼ਤ"}
@@ -1043,11 +1028,6 @@ pa{
                 one{"{0} ਨੋਟੀਕਲ ਮੀਲ"}
                 other{"{0} ਨੋਟੀਕਲ ਮੀਲ"}
             }
-            parsec{
-                dnam{"ਪਾਰਸੈਕ"}
-                one{"{0} ਪਾਰਸੈਕ"}
-                other{"{0} ਪਾਰਸੈਕ"}
-            }
             picometer{
                 dnam{"ਪਿਕੋਮੀਟਰ"}
                 gender{"masculine"}
@@ -1315,11 +1295,6 @@ pa{
                 gender{"masculine"}
                 one{"{0} ਮਿਲੀਮੀਟਰ ਪਾਰਾ"}
                 other{"{0} ਮਿਲੀਮੀਟਰ ਪਾਰਾ"}
-            }
-            ofhg{
-                dnam{"ਪਾਰਾ"}
-                one{"{0} ਪਾਰਾ"}
-                other{"{0} ਪਾਰਾ"}
             }
             pascal{
                 case{
@@ -1662,11 +1637,6 @@ pa{
                 one{"{0}°"}
                 other{"{0}°"}
             }
-            revolution{
-                dnam{"ਚੱਕਰ"}
-                one{"{0} ਚੱਕਰ"}
-                other{"{0} ਚੱਕਰ"}
-            }
         }
         area{
             acre{
@@ -1685,9 +1655,6 @@ pa{
                 one{"{0}ਇੰਚ²"}
                 other{"{0}ਇੰਚ²"}
             }
-            square-meter{
-                per{"{0} ਪ੍ਰਤਿ ਮੀ²"}
-            }
             square-mile{
                 one{"{0}ਮੀਲ²"}
                 other{"{0}ਮੀਲ²"}
@@ -1701,14 +1668,6 @@ pa{
             milligram-ofglucose-per-deciliter{
                 one{"{0}mg/dL"}
                 other{"{0}mg/dL"}
-            }
-            ofglucose{
-                dnam{"Glc"}
-            }
-            part{
-                dnam{"ਹਿੱਸਾ"}
-                one{"{0} ਹਿੱਸਾ"}
-                other{"{0} ਹਿੱਸੇ"}
             }
             part-per-1e6{
                 dnam{"ppm"}
@@ -1790,9 +1749,6 @@ pa{
             }
         }
         energy{
-            calorie-it{
-                dnam{"cal-IT"}
-            }
             kilocalorie{
                 one{"{0}ਕਿ.ਕੈਲੋਰੀਆਂ"}
                 other{"{0}ਕਿ.ਕੈਲੋਰੀਆਂ"}
@@ -1869,11 +1825,6 @@ pa{
                 one{"{0}\u0022"}
                 other{"{0}\u0022"}
             }
-            parsec{
-                dnam{"ਪਾਰਸੈਕ"}
-                one{"{0} ਪਾਰਸੈਕ"}
-                other{"{0} ਪਾਰਸੈਕ"}
-            }
             picometer{
                 one{"{0} ਪਿ.ਮੀ."}
                 other{"{0} ਪਿ.ਮੀ."}
@@ -1916,7 +1867,6 @@ pa{
                 other{"{0} ਮਿ.ਬਾ."}
             }
             ofhg{
-                dnam{"ਪਾਰਾ"}
                 one{"{0} ਪਾਰਾ"}
                 other{"{0} ਪਾਰਾ"}
             }

@@ -19,7 +19,6 @@ es_419{
         AC{"Isla Ascensión"}
         AX{"Islas Åland"}
         BA{"Bosnia-Herzegovina"}
-        CG{"República del Congo"}
         CI{"Costa de Marfil"}
         EZ{"Eurozona"}
         GS{"Islas Georgia del Sur y Sándwich del Sur"}
@@ -29,12 +28,13 @@ es_419{
         SA{"Arabia Saudita"}
         TL{"Timor Oriental"}
         UM{"Islas Ultramarinas de EE.UU."}
+        VI{"Islas Vírgenes de EE.UU."}
     }
     Countries%short{
-        GB{"R. U."}
+        GB{"R.U."}
+        US{"EE.UU."}
     }
     Countries%variant{
-        CD{"Congo (República Democrática del Congo)"}
         TR{"Türkiye"}
     }
 }

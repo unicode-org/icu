@@ -11,19 +11,35 @@ id{
         colCaseLevel{"Pengurutan Peka Huruf Besar"}
         colNormalization{"Pengurutan Dinormalisasi"}
         colNumeric{"Pengurutan Numerik"}
+        colReorder{"Pengurutan Ulang Aksara/Blok"}
         colStrength{"Kekuatan Pengurutan"}
         collation{"Aturan Pengurutan"}
         currency{"Mata Uang"}
+        d0{"Tujuan Transformasi"}
+        dx{"Pengecualian Pemenggalan Kamus"}
         em{"Tampilan Emoji"}
+        fw{"Hari pertama"}
+        h0{"Campuran"}
         hc{"Siklus Jam (12 vs 24)"}
+        i0{"Metode Input"}
+        k0{"Keyboard"}
+        kv{"Paling Sering Diabaikan"}
         lb{"Gaya Pemisah Baris"}
         lw{"Pemisah Baris di antara Kata"}
+        m0{"Aturan Transformasi"}
         ms{"Sistem Pengukuran"}
+        mu{"Unit Pengukuran"}
         numbers{"Angka"}
+        rg{"Wilayah untuk Data Tambahan"}
+        s0{"Sumber Transformasi"}
+        sd{"Subdivisi Wilayah"}
         ss{"Pemisah Kalimat Setelah Singkatan"}
+        t{"Transformasi"}
+        t0{"Diterjemahkan Mesin"}
         timezone{"Zona Waktu"}
         va{"Varian Lokal"}
         x{"Penggunaan Pribadi"}
+        x0{"Transformasi Penggunaan Pribadi"}
     }
     Languages{
         aa{"Afar"}
@@ -438,6 +454,7 @@ id{
         pi{"Pali"}
         pis{"Pijin"}
         pl{"Polski"}
+        pms{"Piemonte"}
         pon{"Pohnpeia"}
         pqm{"Maliseet-Passamaquoddy"}
         prg{"Prusia"}
@@ -866,10 +883,13 @@ id{
             ethiopic-amete-alem{"Amete Alem Etiopia"}
             gregorian{"Gregorian"}
             hebrew{"Ibrani"}
+            indian{"Nasional India"}
             islamic{"Hijriah"}
             islamic-civil{"Hijri (tabular, epoch sipil)"}
+            islamic-rgsa{"Hijriah, pengamatan hilal Arab Saudi"}
             islamic-tbla{"Hijriah (tabular, epoch astronomi)"}
             islamic-umalqura{"Hijriah (tabular, Umm al-Qura)"}
+            iso8601{"Masehi"}
             japanese{"Jepang"}
             persian{"Persia"}
             roc{"Min-guo"}
@@ -895,6 +915,11 @@ id{
             no{"Sortir Urutan Ukuran Huruf Normal"}
             upper{"Sortir Huruf Besar Dahulu"}
         }
+        colCaseFirst%core{
+            lower{"Huruf Kecil"}
+            no{"Huruf Kecil"}
+            upper{"Huruf Besar"}
+        }
         colCaseLevel{
             no{"Sortir Tidak Peka Huruf Besar"}
             yes{"Sortir Peka Huruf Besar"}
@@ -907,12 +932,26 @@ id{
             no{"Sortir Digit Satu Per Satu"}
             yes{"Sortir Digit Secara Numerik"}
         }
+        colReorder%core{
+            currency{"Mata Uang"}
+            digit{"Digit"}
+            punct{"Tanda Baca"}
+            space{"Spasi Kosong"}
+            symbol{"Simbol"}
+        }
         colStrength{
             identical{"Sortir Semua"}
             primary{"Sortir Huruf Dasar Saja"}
             quaternary{"Sortir Aksen/Ukuran Huruf/Lebar/Kana"}
             secondary{"Sortir Aksen"}
             tertiary{"Sortir Aksen/Ukuran Huruf/Lebar"}
+        }
+        colStrength%core{
+            identical{"Semua"}
+            primary{"Huruf Dasar Saja"}
+            quaternary{"Karakter Dasar, Diakritik, Huruf Besar/Kecil, Varian, Kana"}
+            secondary{"Karakter Dasar, Diakritik"}
+            tertiary{"Karakter Dasar, Diakritik, Varian"}
         }
         collation{
             compat{"Aturan Pengurutan Sebelumnya, untuk kompatibilitas"}
@@ -935,10 +974,13 @@ id{
             compat{"Kompatibilitas"}
             dictionary{"Kamus"}
             ducet{"Unicode Default"}
+            emoji{"Emoji"}
+            eor{"Aturan Eropa"}
             phonebook{"Buku Telepon"}
             phonetic{"Fonetik"}
             pinyin{"Pinyin"}
             search{"Pencarian"}
+            searchjl{"Konsonan awal Hangul"}
             standard{"Standar"}
             stroke{"Guratan"}
             traditional{"Tradisional"}
@@ -956,16 +998,26 @@ id{
             text{"Teks"}
         }
         hc{
+            c12{"Sistem 12 Jam"}
+            c24{"Sistem 24 Jam"}
             h11{"Sistem 12 Jam (0–11)"}
             h12{"Sistem 12 Jam (1–12)"}
             h23{"Sistem 24 Jam (0–23)"}
             h24{"Sistem 24 Jam (1–24)"}
         }
         hc%core{
+            c12{"12"}
+            c24{"24"}
             h11{"12 (0–11)"}
             h12{"12 (1–12)"}
             h23{"24 (0–23)"}
             h24{"24 (1–24)"}
+        }
+        kv%core{
+            currency{"Shift Spasi, tanda baca, semua simbol"}
+            punct{"Shift spasi, tanda baca"}
+            space{"Shift spasi, tanda baca"}
+            symbol{"Shift spasi, tanda baca, simbol non-mata uang"}
         }
         lb{
             loose{"Gaya Pemisah Baris Renggang"}
@@ -1081,9 +1133,48 @@ id{
             wara{"Angka Warang Citi"}
             wcho{"Angka Wancho"}
         }
+        numbers%core{
+            arabext{"Arab Timur Diperluas"}
+            armnlow{"Huruf Kecil Armenia"}
+            finance{"Keuangan"}
+            fullwide{"Lebar penuh"}
+            greklow{"Huruf kecil Yunani"}
+            hanidays{"Penomoran tanggal dengan karakter Han untuk kalender tradisional"}
+            hanidec{
+                "Sistem desimal posisional menggunakan karakter angka Tionghoa sebaga"
+                "i angka"
+            }
+            hansfin{"Keuangan Tionghoa Sederhana"}
+            hantfin{"Keuangan Tionghoa Tradisional"}
+            jpanfin{"Keuangan Jepang"}
+            jpanyear{"Penomoran Gannen untuk tahun pertama Jepang"}
+            lanatham{"Tai Tham Tham (keagamaan)"}
+            mathbold{"Tebal matematika"}
+            mathdbl{"Double-struck matematika"}
+            mathmono{"Monospace matematika"}
+            mathsanb{"Sans-serif matematika tebal"}
+            mathsans{"Sans-serif matematika"}
+            mymrepka{"Karen Pwo Timur Myanmar"}
+            mymrpao{"Pao Myanmar"}
+            mymrshan{"Shan Myanmar"}
+            mymrtlng{"Tai Laing Myanmar"}
+            native{"Angka Asli"}
+            outlined{"Hierarkis"}
+            roman{"Huruf besar Romawi"}
+            romanlow{"Huruf kecil Romawi"}
+            segment{"Tersegmentasi"}
+            tamldec{"Tamil Modern"}
+            traditional{"Angka tradisional"}
+        }
         ss%core{
             none{"Nonaktif"}
             standard{"Aktif"}
+        }
+        t0{
+            und{"Terjemahan Mesin Tidak Spesifik"}
+        }
+        va%core{
+            posix{"Varian POSIX"}
         }
     }
     Variants{

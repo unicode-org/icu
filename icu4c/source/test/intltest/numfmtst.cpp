@@ -256,6 +256,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(Test21556_CurrencyAsDecimal);
   TESTCASE_AUTO(Test22088_Ethiopic);
   TESTCASE_AUTO(Test22983_LongFraction);
+  TESTCASE_AUTO(TestParseCurrencyLongLocale);
   TESTCASE_AUTO_END;
 }
 
@@ -8298,7 +8299,7 @@ void NumberFormatTest::TestCurrencyUsage() {
 
         UnicodeString PKR_changed;
         fmt->format(agent, PKR_changed);
-        assertEquals("Test Currency Usage 6", u"PKR\u00A0124", PKR_changed);
+        assertEquals("Test Currency Usage 6", u"PKR\u00A0123.57", PKR_changed);
         delete fmt;
     }
 }
@@ -10207,6 +10208,26 @@ void NumberFormatTest::Test22088_Ethiopic() {
 void NumberFormatTest::Test22983_LongFraction() {
     IcuTestErrorCode status(*this, "Test22983_LongFraction");
     DecimalFormat df(u"0.0000000000000001", status);
+}
+
+void NumberFormatTest::TestParseCurrencyLongLocale() {
+    IcuTestErrorCode status(*this, "TestParseCurrencyLongLocale");
+    // Locale IDs have no length limit. Parsing a foreign currency looks up
+    // currency names by locale ID, which must not overflow the name cache key.
+    CharString localeID("en_US@x=", status);
+    for (int32_t i = 0; i < 40; i++) {
+        localeID.append("abcdefgh-", status);
+    }
+    localeID.append("abcdefgh", status);
+    Locale locale(localeID.data());
+    assertTrue("Locale ID is longer than ULOC_FULLNAME_CAPACITY",
+               uprv_strlen(locale.getName()) >= ULOC_FULLNAME_CAPACITY);
+    LocalPointer<NumberFormat> nf(NumberFormat::createInstance(locale, UNUM_CURRENCY, status));
+    if (status.errIfFailureAndReset("Could not create currency formatter")) {
+        return;
+    }
+    ParsePosition ppos(0);
+    LocalPointer<CurrencyAmount> result(nf->parseCurrency(u"\u20AC1.00", ppos));
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

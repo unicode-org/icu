@@ -26,7 +26,6 @@ import java.util.concurrent.atomic.AtomicLongFieldUpdater;
  *
  * @see NumberFormatter
  * @stable ICU 60
- * @see NumberFormatter
  */
 public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedNumberFormatter> {
 

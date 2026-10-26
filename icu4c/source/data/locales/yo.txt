@@ -150,6 +150,11 @@ yo{
         }
     }
     calendar{
+        buddhist{
+            availableFormats{
+                yyyyMd{"G dd-MM-y"}
+            }
+        }
         generic{
             DateTimePatterns{
                 "HH:mm:ss zzzz",
@@ -189,20 +194,46 @@ yo{
                 "GyMMdd",
             }
             availableFormats{
+                GyM{"M/y G"}
+                GyMEd{"E, d/M/y G"}
+                GyMMM{"MMM y G"}
+                GyMMMd{"d MMM y G"}
                 GyMd{"d/M/y GGGGG"}
-                MEd{"E, M/d"}
-                MMMEd{"E, MMM d"}
-                MMMMEd{"E, MMMM d"}
-                Md{"M/d"}
+                MEd{"E, d/M"}
+                MMMEd{"E, d MMM"}
+                MMMMEd{"E, d MMMM"}
+                MMMMd{"d MMMM"}
+                MMMd{"d MMM"}
+                Md{"d/M"}
                 hm{"h:mm a"}
                 y{"y"}
                 yM{"M/y"}
-                yMEd{"E, M/d/y"}
+                yMEd{"E, d/M/y"}
                 yMMM{"MMM y"}
-                yMMMEd{"E, MMM d, y"}
+                yMMMEd{"E, d MMM y"}
                 yMMMM{"MMMM y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
+                yyyy{"y G"}
+                yyyyM{"MM/y G"}
+                yyyyMEd{"E, d/M/y G"}
+                yyyyMMM{"MMM y G"}
+                yyyyMMMEd{"E, d MMM y G"}
+                yyyyMMMd{"d MMM y G"}
+                yyyyMd{"d/M/y G"}
+            }
+            intervalFormats{
+                MMMMd{
+                    M{"d MMMM – d MMMM"}
+                    d{"d–d MMMM"}
+                }
+                yM{
+                    M{"G MM-y – MM-y"}
+                    y{"G MM -y–MM-y"}
+                }
+                yMd{
+                    d{"G -dd-MM -y– dd-MM-y"}
+                }
             }
         }
         gregorian{
@@ -247,16 +278,27 @@ yo{
                 "yMMd",
                 "yMd",
             }
+            appendItems{
+                Day-Of-Week{"{1}, {0}"}
+                Era{"{0} {1}"}
+                Time-Day-Of-Week{"{1}, {0}"}
+            }
             availableFormats{
                 Ed{"E, d"}
                 Ehm{"E h:mm a"}
                 Ehms{"E h:mm:ss a"}
-                GyM{"MM-y G"}
+                GyM{"M/y G"}
                 GyMEd{"E, d/M/y G"}
+                GyMMM{"MMM y G"}
+                GyMMMEd{"E, d MMM, y G"}
+                GyMMMM{"MMMM y G"}
+                GyMMMMEd{"E, d MMMM, y G"}
+                GyMMMMd{"d MMMM, y G"}
+                GyMMMd{"d MMM, y G"}
                 GyMd{"d/M/y GGGGG"}
                 MEd{"E, d/M"}
                 MMMEd{"d MMM, E"}
-                MMMMEd{"d, MMMM E"}
+                MMMMEd{"E, d MMMM"}
                 MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
                 Md{"d/M"}
@@ -269,6 +311,8 @@ yo{
                 yMMM{"MMM y"}
                 yMMMEd{"E, d MMM , y"}
                 yMMMM{"MMMM y"}
+                yMMMMEd{"E, d MMMM y"}
+                yMMMMd{"d MMMM, y"}
                 yMMMd{"d MMM y"}
                 yMd{"d/M/y"}
                 yQQQ{"QQQ y"}
@@ -324,7 +368,7 @@ yo{
                     1{"CE"}
                 }
                 wide{
-                    0{"Saju Kristi"}
+                    0{"Ṣáájú Kírístì"}
                     1{"Lehin Kristi"}
                 }
                 wide%variant{
@@ -341,10 +385,10 @@ yo{
                     y{"M/y – M/y G"}
                 }
                 GyMEd{
-                    G{"E, M/d/y G – E, M/d/y G"}
-                    M{"E, M/d/y – E, M/d/y G"}
-                    d{"E, M/d/y – E, M/d/y G"}
-                    y{"E, M/d/y – E, M/d/y G"}
+                    G{"E, d/M/y G – E, d/M/y G"}
+                    M{"E, d/M/y – E, d/M/y G"}
+                    d{"E, d/M/y – E, d/M/y G"}
+                    y{"E, d/M/y – E, d/M/y G"}
                 }
                 GyMMM{
                     G{"MMM y G – MMM y G"}
@@ -352,22 +396,26 @@ yo{
                     y{"MMM y – MMM y G"}
                 }
                 GyMMMEd{
-                    G{"E, MMM d, y G – E, MMM d, y G"}
-                    M{"E, MMM d – E, MMM d, y G"}
-                    d{"E, MMM d – E, MMM d, y G"}
-                    y{"E, MMM d, y – E, MMM d, y G"}
+                    G{"E, d MMM y G – E, d MMM y G"}
+                    M{"E, d MMM – E, d MMM y G"}
+                    d{"E, d MMM – E, d MMM y G"}
+                    y{"E, d MMM y – E, d MMM y G"}
                 }
                 GyMMMd{
-                    G{"MMM d, y G – MMM d, y G"}
-                    M{"MMM d – MMM d, y G"}
-                    d{"MMM d – d, y G"}
-                    y{"MMM d, y – MMM d, y G"}
+                    G{"d MMM y G – d MMM y G"}
+                    M{"d MMM –d MMM y G"}
+                    d{"d–d, MMM y G"}
+                    y{"d MMM y – d MMM y G"}
                 }
                 GyMd{
-                    G{"M/d/y G – M/d/y G"}
-                    M{"M/d/y – M/d/y G"}
-                    d{"M/d/y – M/d/y G"}
-                    y{"M/d/y – M/d/y G"}
+                    G{"d/M/y G – d/M/y G"}
+                    M{"d/M/y – d/M/y G"}
+                    d{"d/M/y – d/M/y G"}
+                    y{"d/M/y – d/M/y G"}
+                }
+                Md{
+                    M{"d/M – d/M"}
+                    d{"d/M – d/M"}
                 }
                 hm{
                     a{"h:mm a – h:mm a"}
@@ -383,20 +431,26 @@ yo{
                     M{"MM-y – MM-y"}
                 }
                 yMEd{
-                    d{"E, dd-MM-y – E dd-MM-y, E"}
+                    M{"E, d/M/y – E, d/M/y"}
+                    d{"E, dd/MM/y – E, dd/MM/y, E"}
                 }
                 yMMMEd{
-                    M{"MMM d, E – MMM d, E y"}
-                    d{"MMM d, E – MMM d, E y"}
-                    y{"y MMM d y, E – MMM d, E y"}
+                    M{"E, d MMM – E, d MMM y"}
+                    d{"E, d MMM – E, d MMM y"}
+                    y{"E, d MMM y – E, d MMM y"}
                 }
                 yMMMM{
                     M{"MMMM–MMMM y"}
                     y{"MMMM – y MMMM y"}
                 }
                 yMMMd{
-                    M{"MMM d – MMM d y"}
-                    d{"MMM d–d y"}
+                    M{"d MMM – d MMM y"}
+                    d{"d–d MMM y"}
+                }
+                yMd{
+                    M{"d/M/y – d/M/y"}
+                    d{"d/M/y – d/M/y"}
+                    y{"d/M/y – d/M/y"}
                 }
             }
             monthNames{
@@ -557,9 +611,12 @@ yo{
             dn{"Àárọ̀/ọ̀sán"}
         }
         era{
-            dn{"sáà"}
+            dn{"Sáà"}
         }
         era-narrow{
+            dn{"Sáà"}
+        }
+        era-short{
             dn{"Sáà"}
         }
         fri{
@@ -615,7 +672,21 @@ yo{
             relative{
                 "-1"{"ọjọ́ Ajé tó kọjá"}
                 "0"{"ọjọ́ Ajé yìí"}
-                "1"{"next Monday"}
+                "1"{"Ọjọ́ ajé tó ń bọ̀"}
+            }
+        }
+        mon-narrow{
+            relative{
+                "-1"{"ọjọ́ Ajé tó kọjá"}
+                "0"{"ọjọ́ Ajé yìí"}
+                "1"{"Ọjọ́ ajé tó ń bọ̀"}
+            }
+        }
+        mon-short{
+            relative{
+                "-1"{"ọjọ́ Ajé tó kọjá"}
+                "0"{"ọjọ́ Ajé yìí"}
+                "1"{"Ọjọ́ ajé tó ń bọ̀"}
             }
         }
         month{
@@ -631,6 +702,11 @@ yo{
         }
         quarter{
             dn{"Ìdá mẹ́rin"}
+            relative{
+                "-1"{"ìdámẹ́rin tó kọjá"}
+                "0"{"ìdámẹ́rin yìí"}
+                "1"{"ìdamẹ́ri tó ń bọ̀"}
+            }
         }
         sat{
             relative{
@@ -802,11 +878,20 @@ yo{
         weekday{
             dn{"Ọjọ́ tó wà láàárín ọ̀sẹ̀"}
         }
+        weekday-narrow{
+            dn{"Ọjọ́ inú ọ̀ṣẹ̀"}
+        }
         weekday-short{
-            dn{"ọjọ́ inú ọṣẹ̀."}
+            dn{"Ọjọ́ inú ọ̀ṣẹ̀"}
         }
         weekdayOfMonth{
-            dn{"ọjọ́ ọṣẹ̀ inú oṣù"}
+            dn{"Ọjọ́ ọ̀ṣẹ̀ inú oṣù"}
+        }
+        weekdayOfMonth-narrow{
+            dn{"Ọjọ́ ọ̀ṣẹ̀ inú oṣù"}
+        }
+        weekdayOfMonth-short{
+            dn{"Ọjọ́ ọ̀ṣẹ̀ inú oṣù"}
         }
         year{
             dn{"Ọdún"}

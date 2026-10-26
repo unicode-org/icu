@@ -11,19 +11,35 @@ it{
         colCaseLevel{"Ordinamento Distinzione fra maiuscole e minuscole"}
         colNormalization{"Ordinamento normalizzato"}
         colNumeric{"Ordinamento numerico"}
-        colStrength{"Sicurezza ordinamento"}
+        colReorder{"Riordinamento scritture/blocchi"}
+        colStrength{"Criteri ordinamento"}
         collation{"Ordinamento"}
         currency{"Valuta"}
+        d0{"Destinazione trasformazione"}
+        dx{"Esclusioni di interruzioni basate sul dizionario"}
         em{"Presentazione emoji"}
+        fw{"Primo giorno della settimana"}
+        h0{"Incorporato"}
         hc{"Sistema orario (12 o 24 ore)"}
+        i0{"Metodo di inserimento"}
+        k0{"Tastiera"}
+        kv{"Livello massimo ignorato"}
         lb{"Tipo di interruzione di riga"}
         lw{"Interruzioni di riga all’interno delle parole"}
+        m0{"Regole di trasformazione"}
         ms{"Sistema di misurazione"}
+        mu{"Unità di misura"}
         numbers{"Numeri"}
+        rg{"Area geografica per i dati supplementari"}
+        s0{"Origine trasformazione"}
+        sd{"Suddivisione dell’area geografica"}
         ss{"Interruzione frase dopo abbreviaz."}
+        t{"Trasformazione"}
+        t0{"Tradotto automaticamente"}
         timezone{"Fuso orario"}
         va{"Variante lingua"}
         x{"Uso privato"}
+        x0{"Trasformazione a uso privato"}
     }
     Languages{
         aa{"afar"}
@@ -752,7 +768,7 @@ it{
         Hira{"hiragana"}
         Hluw{"geroglifici anatolici"}
         Hmng{"pahawn hmong"}
-        Hrkt{"katanaka o hiragana"}
+        Hrkt{"katakana o hiragana"}
         Hung{"antico ungherese"}
         Inds{"indu"}
         Ital{"italico antico"}
@@ -900,9 +916,13 @@ it{
             ethiopic-amete-alem{"Etiope Amete Alem"}
             gregorian{"Gregoriano"}
             hebrew{"Ebraico"}
+            indian{"Nazionale indiano"}
             islamic{"Hijri"}
             islamic-civil{"Hijri (tabulare, epoca civile)"}
+            islamic-rgsa{"Hijri, avvistamento in Arabia Saudita"}
+            islamic-tbla{"Hijri (tabulare, epoca astronomica)"}
             islamic-umalqura{"Hijri (Umm al-Qura)"}
+            iso8601{"Gregoriano"}
             japanese{"Giapponese"}
             persian{"Persiano"}
             roc{"Minguo"}
@@ -928,6 +948,11 @@ it{
             no{"Ordina lettere maiuscole/minuscole normalmente"}
             upper{"Ordina prima lettere minuscole"}
         }
+        colCaseFirst%core{
+            lower{"Minuscolo"}
+            no{"Minuscolo"}
+            upper{"Maiuscolo"}
+        }
         colCaseLevel{
             no{"Ordina senza distinzione tra maiuscole e minuscole"}
             yes{"Ordina distinzione tra maiuscole e minuscole"}
@@ -940,12 +965,26 @@ it{
             no{"Ordina cifre individualmente"}
             yes{"Ordina cifre numericamente"}
         }
+        colReorder%core{
+            currency{"Valuta"}
+            digit{"Cifre"}
+            punct{"Punteggiatura"}
+            space{"Spazio"}
+            symbol{"Simbolo"}
+        }
         colStrength{
             identical{"Ordina tutto"}
             primary{"Ordina solo lettere di base"}
             quaternary{"Ordina accenti/lettere/larghezza/Kana"}
             secondary{"Ordina accenti"}
             tertiary{"Ordina accenti/lettere/larghezza"}
+        }
+        colStrength%core{
+            identical{"Tutti"}
+            primary{"Solo lettere base"}
+            quaternary{"Base, accenti, maiuscole/minuscole, varianti, kana"}
+            secondary{"Base, accenti"}
+            tertiary{"Base, accenti, maiuscole/minuscole, varianti"}
         }
         collation{
             compat{"Ordinamento precedente, per compatibilità"}
@@ -966,10 +1005,13 @@ it{
             compat{"Compatibilità"}
             dictionary{"Dizionario"}
             ducet{"Unicode predefinito"}
+            emoji{"Emoji"}
+            eor{"Regole europee"}
             phonebook{"Elenco telefonico"}
             phonetic{"Fonetico"}
             pinyin{"Pinyin"}
             search{"Ricerca"}
+            searchjl{"Consonante iniziale coreana"}
             standard{"Standard"}
             stroke{"Tratti"}
             traditional{"Tradizionale"}
@@ -987,16 +1029,26 @@ it{
             text{"Testo"}
         }
         hc{
+            c12{"Sistema orario a 12 ore"}
+            c24{"Sistema orario a 24 ore"}
             h11{"Sistema orario a 12 ore (0–11)"}
             h12{"Sistema orario a 12 ore (1–12)"}
             h23{"Sistema orario a 24 ore (0–23)"}
             h24{"Sistema orario a 24 ore (1–24)"}
         }
         hc%core{
+            c12{"12 ore"}
+            c24{"24 ore"}
             h11{"12 ore (0–11)"}
             h12{"12 ore (1–12)"}
             h23{"24 ore (0–23)"}
             h24{"24 ore (1–24)"}
+        }
+        kv%core{
+            currency{"Spazi, punteggiatura, tutti i simboli"}
+            punct{"Spazi, punteggiatura"}
+            space{"Spazi, punteggiatura"}
+            symbol{"Spazi, punteggiatura, simboli diversi dalle valute"}
         }
         lb{
             loose{"Interruzione di riga facoltativa"}
@@ -1091,9 +1143,51 @@ it{
             traditional{"Numeri tradizionali"}
             vaii{"Cifre Vai"}
         }
+        numbers%core{
+            arabext{"Indo-arabi estesi"}
+            armnlow{"Armeni minuscoli"}
+            finance{"Finanziari"}
+            fullwide{"Larghezza intera"}
+            greklow{"Greci minuscoli"}
+            hanidays{
+                "Numerazione dei giorni del mese in caratteri Han per i calendari tra"
+                "dizionali"
+            }
+            hanidec{
+                "Sistema decimale posizionale che utilizza gli ideogrammi numerici ci"
+                "nesi come cifre"
+            }
+            hansfin{"Finanziari in cinese semplificato"}
+            hantfin{"Finanziari in cinese tradizionale"}
+            jpanfin{"Finanziari giapponesi"}
+            jpanyear{"Numerazione Gannen per il primo anno giapponese"}
+            lanatham{"Tai Tham Tham (ecclesiastici)"}
+            mathbold{"Grassetto (matematica)"}
+            mathdbl{"Grassetto da lavagna (matematica)"}
+            mathmono{"Monospazio (matematica)"}
+            mathsanb{"Grassetto senza grazie (matematica)"}
+            mathsans{"Senza grazie (matematica)"}
+            mymrepka{"Karen Pwo orientale, Myanmar"}
+            mymrpao{"Pa’o, Myanmar"}
+            mymrshan{"Shan, Myanmar"}
+            mymrtlng{"Tai Laing, Myanmar"}
+            native{"Cifre native"}
+            outlined{"Contornati"}
+            roman{"Romani maiuscoli"}
+            romanlow{"Romani minuscoli"}
+            segment{"Segmentati"}
+            tamldec{"Tamil moderni"}
+            traditional{"Numeri tradizionali"}
+        }
         ss%core{
             none{"Off"}
             standard{"On"}
+        }
+        t0{
+            und{"Traduzione automatica non specificata"}
+        }
+        va%core{
+            posix{"Variante POSIX"}
         }
     }
     Variants{

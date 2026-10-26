@@ -5515,11 +5515,6 @@ sk{
                 dnam{"ha"}
             }
         }
-        concentr{
-            ofglucose{
-                dnam{"Glc"}
-            }
-        }
         consumption{
             liter-per-100-kilometer{
                 dnam{"l/100 km"}
@@ -5556,20 +5551,6 @@ sk{
                 per{"{0}/t."}
             }
         }
-        energy{
-            calorie-it{
-                dnam{"cal-IT"}
-            }
-        }
-        force{
-            kilogram-force{
-                dnam{"kp"}
-                few{"{0} kp"}
-                many{"{0} kp"}
-                one{"{0} kp"}
-                other{"{0} kp"}
-            }
-        }
         graphics{
             dot{
                 dnam{"bod"}
@@ -5595,15 +5576,6 @@ sk{
                 many{"{0} mb"}
                 one{"{0} mb"}
                 other{"{0} mb"}
-            }
-        }
-        volume{
-            fluid-ounce-metric{
-                dnam{"fl oz m"}
-                few{"{0} fl oz m"}
-                many{"{0} fl oz m"}
-                one{"{0} fl oz m"}
-                other{"{0} fl oz m"}
             }
         }
     }

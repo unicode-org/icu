@@ -5,15 +5,41 @@ so{
     Keys{
         calendar{"Habeentiris"}
         cf{"Habka Lacagta"}
+        colAlternate{"Iska-indhatir Kala Soocidda Calaamaddaha"}
+        colBackwards{"Kala-soocid Leh Lahjado Rogan"}
+        colCaseFirst{"Kala-horeysiinta Xarfaha Waaweyn/Yaryar"}
+        colCaseLevel{"Kala-soocidda Tixgelisa Xarfaha Waaweyn iyo Kuwa Yaryar"}
+        colNormalization{"Kala-soocid Caadiyeeysan"}
+        colNumeric{"Kala-soocid Tirooyin"}
+        colReorder{"Dib-u-habeynta Far-qoraalka/Qaybta"}
+        colStrength{"Xoogga Kala-soocidda"}
         collation{"Kala Soocidda Dalabka"}
         currency{"Lacagta"}
+        d0{"Goobta Wax Loo Beddelaayo"}
+        dx{"Waxyaabaha Laga Reebayo Kala-qeybinta Qaamuuska"}
         em{"Soo bandhiga Imoji"}
+        fw{"Maalinta koowaad ee toddobaadka"}
+        h0{"Lagu-qasay"}
         hc{"Wareegga Saacadda (12 ilaa 24)"}
+        i0{"Habka Gelinta"}
+        k0{"Kiiboodh"}
+        kv{"Inta ugu Sarreysa La Iska Indha-tiray"}
         lb{"Habka Jebinta Xariiqda"}
         lw{"Bar Dhamaadyada Khadadka ee gudaha Erayada"}
+        m0{"Beddel Xeerarka"}
         ms{"Nidaamka Cabbiraadda"}
+        mu{"Unugga Cabbirka"}
         numbers{"Tirooyinka"}
+        rg{"Gobolka Xogta Dheeraadka ah"}
+        s0{"Beddel Isha"}
+        sd{"Qeyb-hoosaadka Gobolka"}
         ss{"Bar Dhamaadka Jumlada Kadib Xarfo Soo Gaabinta"}
+        t{"Beddel"}
+        t0{"Waxaa Turjumay Mashiin"}
+        timezone{"Wakhtiga Aagga"}
+        va{"Nooca Degaanka"}
+        x{"Isticmaal-Gaar ah"}
+        x0{"Beddelka Isticmaalka-Gaarka ah"}
     }
     Languages{
         ab{"U dhashay Abkhazia"}
@@ -330,6 +356,7 @@ so{
         pcm{"Bidjinka Nayjeeriya"}
         pis{"Pijin"}
         pl{"Boolish"}
+        pms{"Piedmontiis"}
         pqm{"Maliseet-Passamaquoddy"}
         prg{"Brashiyaan"}
         ps{"Bashtuu"}
@@ -686,10 +713,13 @@ so{
             ethiopic-amete-alem{"Ethiopic Amete Alem"}
             gregorian{"Gregorian"}
             hebrew{"Hebrew"}
+            indian{"Muwaadin Hindi ah"}
             islamic{"Taariikhda Islaamiga"}
             islamic-civil{"Taariikhda Islaamiga (shax ahaan, taariikh madaniyeed jaan go’an)"}
+            islamic-rgsa{"Hijriga, aragtida dayaxa ee Sacuudi Carabiya"}
             islamic-tbla{"Taariikh Islaamiyeed (shax ahaan, waayo xiddigeed)"}
             islamic-umalqura{"Taariikhda Islaamiga (Umm al-Qura)"}
+            iso8601{"Taariikhda Miilaadiga"}
             japanese{"Jabaniis"}
             persian{"U dhashay Faariis"}
             roc{"Minguo"}
@@ -701,6 +731,25 @@ so{
         cf%core{
             account{"Xisaabaadka"}
             standard{"Heerka"}
+        }
+        colCaseFirst%core{
+            lower{"Xarfaha Yaryar"}
+            no{"Xarfaha Yaryar"}
+            upper{"Xarfaha Waaweyn"}
+        }
+        colReorder%core{
+            currency{"Lacagta"}
+            digit{"Tirooyinka"}
+            punct{"Calaamadaha xarakeynta"}
+            space{"Goobaha banaan ee gudaha qoraalka"}
+            symbol{"Calaamad"}
+        }
+        colStrength%core{
+            identical{"Dhamaan"}
+            primary{"Xarfaha Aasaasiga ah oo Keliya"}
+            quaternary{"Aasaasiga, Lahjadaha, Xarfaha Waaweyn/Yaryar, Noocyada, Kana"}
+            secondary{"Aasaasiga, Lahjadaha"}
+            tertiary{"Aasaasiga, Lahjadaha, Xarfaha Waaweyn/Yaryar, Noocyada"}
         }
         collation{
             compat{"Iswaafajinta Isku hajintii hore"}
@@ -719,9 +768,25 @@ so{
             zhuyin{"Isku hagaajinta Farta Zhuyin"}
         }
         collation%core{
+            compat{"Iswaafajinta"}
+            dictionary{"Qaamuus"}
             ducet{"Lambar Sireedka Caalamiga ee Asaliga ah"}
+            emoji{"Imoji"}
+            eor{"Xeerarka Yurub"}
+            phonebook{"Buugga-taleefanka"}
+            phonetic{"Cod-higgaadin"}
+            pinyin{"Pinyin"}
             search{"Raadi"}
+            searchjl{"Shibbanaha bilowga ee Af-Kuuriyaanka"}
             standard{"Caadiga"}
+            stroke{"Xariiq"}
+            traditional{"Qadiimi"}
+            unihan{"Qaybta Asalka ah iyo Xarriiqyada"}
+            zhuyin{"Zhuyin"}
+        }
+        d0{
+            fwidth{"Loogu Beddelo Ballac Buuxa"}
+            hwidth{"Loogu Beddelo Ballac Nus ah"}
         }
         em%core{
             default{"Asaliga"}
@@ -729,16 +794,29 @@ so{
             text{"Qoraal"}
         }
         hc{
+            c12{"12 Saac ee Nidaamka Saacadda"}
+            c24{"24 Saac ee Nidaamka Saacadda"}
             h11{"12 Saac ee Nidaamka Saacadda (0–12)"}
             h12{"12 Saac ee Nidaamka Saacadda (1–12)"}
             h23{"24 Saac ee Nidaamka Saacadda (0–23)"}
             h24{"24 Saac ee Nidaamka Saacadda (1–24)"}
         }
         hc%core{
+            c12{"12"}
+            c24{"24"}
             h11{"12 (0–11)"}
             h12{"12 (1–12)"}
             h23{"24 (0–23)"}
             h24{"24 (1–24)"}
+        }
+        kv%core{
+            currency{"Wareejinta Boosaska, calaamadaha xarakeynta, iyo dhammaan astaamaha"}
+            punct{"Wareejinta boosaska, calaamadaha xarakeynta"}
+            space{"Wareejinta boosaska, calaamadaha xarakeynta"}
+            symbol{
+                "Wareejinta boosaska, calaamadaha xarakeynta, astaamaha aan ahayn kuw"
+                "a lacagta"
+            }
         }
         lb{
             loose{"Habka Jabinta Xariiqda Dabacsan"}
@@ -755,6 +833,10 @@ so{
             keepall{"Heyso dhamaan"}
             normal{"Caadi ah"}
             phrase{"Weedho ahaan ku heyso"}
+        }
+        m0{
+            bgn{"Qoraal-u-rogidda La Adeegsanayo Xarfaha Luuqad Kale ee US BGN"}
+            ungegn{"Qoraal-u-rogidda La Adeegsanayo Xarfaha Luuqad Kale ee UN GEGN"}
         }
         ms{
             metric{"Nidaamka Metric"}
@@ -797,16 +879,16 @@ so{
             hebr{"Nidaam Tireedka Cibraanka"}
             hmng{"Nidaam Tireedka Hebrew"}
             hmnp{"Godadka Nyiakeng Puachue Hmong"}
-            java{"Godadka Javanese"}
+            java{"Tirooyinka Javanese"}
             jpan{"Nidaam Tireedka Jabbaanka"}
             jpanfin{"Nidaam Tireedka Dhaqaalaha Jabbaanka"}
             kali{"Godadka Kayah Li"}
-            khmr{"Godadka Khamer"}
-            knda{"Godadka Kanada"}
+            khmr{"Tirooyinka Khmer"}
+            knda{"Tirooyinka Kannada"}
             lana{"Godadka Tai Tham Hora"}
             lanatham{"Godadka Tai Tham"}
-            laoo{"Godadka Laao"}
-            latn{"Godadka Ree Galbeedka"}
+            laoo{"Tirooyinka Lao"}
+            latn{"Tirooyinka Reer Galbeedka"}
             lepc{"Godadka Lepcha"}
             limb{"Godadka Limbu"}
             mathbold{"Godad Xisaabeedka Waaweeyn"}
@@ -814,17 +896,18 @@ so{
             mathmono{"Godad Xisaabeedka Monospace"}
             mathsanb{"Godad xisaabeedka waaweeyn ee Sans-Serif"}
             mathsans{"Godad xisaabeedka Sans-Serif"}
-            mlym{"Godadka Malayalam"}
+            mlym{"Tirooyinka Malayalam"}
             modi{"Godadka Modi"}
             mong{"Godadka Mongooliyaanka"}
             mroo{"Godadka Mro"}
-            mtei{"Godadka Meetei Mayek"}
-            mymr{"Godadka Mayanmaar"}
+            mtei{"Tirooyinka Meetei Mayek"}
+            mymr{"Tirooyinka Myanmar"}
             mymrshan{"Godadka Myanmar Shan"}
             mymrtlng{"Godadka Myanmar Tai Laing"}
+            native{"Tirooyinka Asaliga ah"}
             nkoo{"Godadka N’Ko"}
-            olck{"Godadka Ol Chiki"}
-            orya{"Godadka Oodhiya"}
+            olck{"Tirooyinka Ol Chiki"}
+            orya{"Tirooyinka Odia"}
             osma{"Godadka Osmanya"}
             rohg{"Godadka Hanifi Rohingya"}
             roman{"Nidaam Tireedka Roomaanka"}
@@ -838,18 +921,60 @@ so{
             takr{"Godadka Takri"}
             talu{"Godadka cusub ee Tai Lue"}
             taml{"Nidaam Tireedki Hore ee Taaamiil"}
-            tamldec{"Godka Tirada Taamiil"}
-            telu{"Godka Tirada Telugu"}
-            thai{"Godka Tirada Thai"}
-            tibt{"Godka Tirada Tibetan"}
+            tamldec{"Tirooyinka Tamil"}
+            telu{"Tirooyinka Telugu"}
+            thai{"Tirooyinka Thai"}
+            tibt{"Tirooyinka Tibetan"}
             tirh{"Godadka Tirhuta"}
-            vaii{"Godadka Vai"}
+            vaii{"Tirooyinka Vai"}
             wara{"Godadka Warang Citi"}
             wcho{"Godadka Wancho"}
+        }
+        numbers%core{
+            arabext{"Carabi-Hindiga ee La Dheereeyay"}
+            armnlow{"Xarfaha yaryar ee Armeniyaanka"}
+            finance{"Maaliyadeed"}
+            fullwide{"Ballaca-buuxa"}
+            greklow{"Xarfaha hoose Giriigga"}
+            hanidays{
+                "Habka xarfaha Han loogu qoro maalmaha bisha ee taariikh-jadwaleedyad"
+                "a dhaqameed"
+            }
+            hanidec{
+                "Nidaamka tirooyinka tobanlaha ee ku salaysan meelaynta, kaas oo u ad"
+                "eegsada astaamaha tirooyinka Af-shiinees lambar ahaan"
+            }
+            hansfin{"Maaliyadda Shiinaha Oo La Fududeeyay"}
+            hantfin{"Maaliyadda Shiinaha ee Dhaqameedka ah"}
+            jpanfin{"Maaliyadda Jabaniiska"}
+            jpanyear{"Nidaamka tireeynta ee Gannen ee sannadka koowaad ee Af-Jabaaniiska"}
+            lanatham{"Tai Tham Tham (diineed)"}
+            mathbold{"Xuruuf xisaabeed dhumuc leh"}
+            mathdbl{"Xaruuf xisaabeed laba xariiq leh"}
+            mathmono{"Xuruuf xisaabeedka balac siman leh"}
+            mathsanb{"Xuruuf xisaabeed sans-serif oo dhumuc leh"}
+            mathsans{"Xuruuf xisaabeed sans-serif leh"}
+            mymrepka{"Myanmar Eastern Pwo Karen"}
+            mymrpao{"Myanmar Pao"}
+            mymrshan{"Myanmar Shan"}
+            mymrtlng{"Myanmar Tai Laing"}
+            native{"Tirooyinka asaliga ah"}
+            outlined{"La qeexay"}
+            roman{"Xarfaha waaweyn ee Roomaanka"}
+            romanlow{"Xarfaha yaryar ee Roomaanka"}
+            segment{"La kala qeybiyay"}
+            tamldec{"Taamiilka Casriga ah"}
+            traditional{"Tirooyinka qadiimeed"}
         }
         ss%core{
             none{"Dami"}
             standard{"Daar"}
+        }
+        t0{
+            und{"Turjumaad Mashiin Oo Aan La Qeexin"}
+        }
+        va%core{
+            posix{"Nooca POSIX"}
         }
     }
     Variants{

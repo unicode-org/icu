@@ -24,13 +24,16 @@ public class EraRules {
     private static final int MONTH_MASK = 0x0000FF00;
     private static final int DAY_MASK = 0x000000FF;
 
+    private String calTypeId;
     private int[] startDates;
     private int minEra; // minimum valid era code, for first entry in startDates[]
     private int
             numEras; // number of valid era codes (not necessarily the same as startDates.length)
     private int currentEra;
+    private EraRules inheritEraRules;
 
-    private EraRules(int[] startDates, int minEra, int numEras) {
+    private EraRules(String calTypeId, int[] startDates, int minEra, int numEras) {
+        this.calTypeId = calTypeId;
         this.startDates = startDates;
         this.minEra = minEra;
         this.numEras = numEras;
@@ -49,6 +52,13 @@ public class EraRules {
                         ICUResourceBundle.ICU_DATA_CLASS_LOADER);
         UResourceBundle calendarDataRes = supplementalDataRes.get("calendarData");
         UResourceBundle calendarTypeRes = calendarDataRes.get(calId);
+
+        // Check they key "inheritEras" to see if this calendar inherits eras from another calendar.
+        String inheritCalType = null;
+        if (calendarTypeRes.containsKey("inheritEras")) {
+            inheritCalType = calendarTypeRes.getString("inheritEras");
+        }
+
         UResourceBundle erasRes = calendarTypeRes.get("eras");
 
         int numEras = erasRes.getSize();
@@ -183,8 +193,33 @@ public class EraRules {
         for (int eraIdx = 0; eraIdx < eraStartDates.size(); eraIdx++) {
             startDates[eraIdx] = eraStartDates.get(eraIdx).intValue();
         }
-        ;
-        return new EraRules(startDates, minEra, numEras);
+
+        EraRules eraRules = new EraRules(calId, startDates, minEra, numEras);
+
+        // Initialize era rules from inherited calendar
+        if (inheritCalType != null) {
+            eraRules.inheritEraRules = getInstance(inheritCalType, includeTentativeEra);
+        }
+
+        return eraRules;
+    }
+
+    /**
+     * Gets calendar type ID
+     *
+     * @return calendar type ID
+     */
+    public String getCalendarTypeId() {
+        return calTypeId;
+    }
+
+    /**
+     * Gets inherit EraRules
+     *
+     * @return calendar type ID
+     */
+    public EraRules getInheritEraRules() {
+        return inheritEraRules;
     }
 
     /**
@@ -193,7 +228,7 @@ public class EraRules {
      * @return number of effective eras (not the same as max era code)
      */
     public int getNumberOfEras() {
-        return numEras;
+        return inheritEraRules == null ? numEras : numEras + inheritEraRules.getNumberOfEras();
     }
 
     /**
@@ -206,7 +241,47 @@ public class EraRules {
     }
 
     /**
-     * Gets start date of an era
+     * Gets minimum defined era code for the current calendar
+     *
+     * @return minimum defined era code
+     */
+    public int getMinEraCode() {
+        int minEraCode = minEra;
+        if (inheritEraRules != null) {
+            minEraCode = inheritEraRules.getMinEraCode();
+        }
+        return minEraCode;
+    }
+
+    /**
+     * Gets next era code
+     *
+     * @param eraCode Current era code
+     * @return Next era code. If not available, maximum era code is returned.
+     */
+    public int getNextEraCode(int eraCode) {
+        int nextEra = eraCode + 1;
+        if (nextEra < minEra) {
+            if (inheritEraRules != null) {
+                if (nextEra > inheritEraRules.getMaxEraCode()) {
+                    nextEra = minEra;
+                } else {
+                    nextEra = inheritEraRules.getNextEraCode(eraCode);
+                }
+            } else {
+                nextEra = minEra;
+            }
+        } else {
+            int maxEra = getMaxEraCode();
+            if (nextEra > maxEra) {
+                nextEra = maxEra;
+            }
+        }
+        return nextEra;
+    }
+
+    /**
+     * Gets start date of an era in proleptic Gregorian calendar
      *
      * @param eraCode Era code
      * @param fillIn Receives date fields if supplied. If null, or size of array is less than 3,
@@ -216,7 +291,11 @@ public class EraRules {
      */
     public int[] getStartDate(int eraCode, int[] fillIn) {
         int startDate = 0;
-        if (eraCode >= minEra) {
+        if (eraCode < minEra) {
+            if (inheritEraRules != null) {
+                return inheritEraRules.getStartDate(eraCode, fillIn);
+            }
+        } else {
             int startIdx = eraCode - minEra;
             if (startIdx < startDates.length) {
                 startDate = startDates[startIdx];
@@ -230,30 +309,19 @@ public class EraRules {
     }
 
     /**
-     * Gets start year of an era
+     * Gets start year of an era in proleptic Gregorian calendar
      *
      * @param eraCode Era code
      * @return The first year of an era. When a era has no start date, minimum integer value is
      *     returned.
      */
     public int getStartYear(int eraCode) {
-        int startDate = 0;
-        if (eraCode >= minEra) {
-            int startIdx = eraCode - minEra;
-            if (startIdx < startDates.length) {
-                startDate = startDates[startIdx];
-            }
-        }
-        if (isSet(startDate)) {
-            int[] fields = decodeDate(startDate, null);
-            return fields[0];
-        }
-        // We did not find the requested eraCode in our data
-        throw new IllegalArgumentException("eraCode is not found in our data");
+        int[] date = getStartDate(eraCode, null);
+        return date[0];
     }
 
     /**
-     * Returns era code for the specified year/month/day.
+     * Returns era code for the specified year/month/day in proleptic Gregorian calendar.
      *
      * @param year Year
      * @param month Month (1-base)
@@ -276,7 +344,9 @@ public class EraRules {
                     return minEra + startIdx;
                 }
             }
+            return minEra + startDates.length - 1;
         }
+
         // Linear search from the end, which should hit the most likely eras first.
         // Also this is the most efficient for any era if we have < 8 or so eras, so only less
         // efficient for early eras in Japanese calendar (while we still have them). Formerly
@@ -291,6 +361,12 @@ public class EraRules {
                 return minEra + startIdx;
             }
         }
+
+        // Note: Inherit era rules should be only applied to date before the start of minEra.
+        if (inheritEraRules != null) {
+            return inheritEraRules.getEraCode(year, month, day);
+        }
+
         return minEra;
     }
 
@@ -306,6 +382,8 @@ public class EraRules {
     }
 
     private void initCurrentEra() {
+        // Note: This implementation assumes current era is the primary era rules,
+        // not in inherited era rules.
         long localMillis = System.currentTimeMillis();
         TimeZone zone = TimeZone.getDefault();
         localMillis += zone.getOffset(localMillis);

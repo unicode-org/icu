@@ -124,16 +124,16 @@ tk{
             10p30{"kwetta{0}"}
             10p6{"mega{0}"}
             10p9{"giga{0}"}
-            per{"{1} başyna {0}"}
+            per{"{0} {1} başyna"}
             power2{
                 one{
                     _{
-                        _{"kwadrat {0}"}
+                        _{"inedördül {0}"}
                     }
                 }
                 other{
                     _{
-                        _{"kwadrat {0}"}
+                        _{"inedördül {0}"}
                     }
                 }
             }
@@ -169,18 +169,10 @@ tk{
                 one{"{0} millimol/litr"}
                 other{"{0} millimol/litr"}
             }
-            mole{
-                dnam{"mollar"}
-            }
             ofglucose{
                 dnam{"gýukoza"}
                 one{"{0} glýukoza"}
                 other{"{0} glýukoza"}
-            }
-            part{
-                dnam{"bölek"}
-                one{"{0} bölek"}
-                other{"{0} bölek"}
             }
             part-per-1e6{
                 one{"{0} bölejik/million"}
@@ -521,13 +513,13 @@ tk{
             }
             pixel-per-centimeter{
                 dnam{"santimetr başyna piksel"}
-                one{"{0} santimetr başyna piksel"}
-                other{"{0} santimetr başyna piksel"}
+                one{"{0} piksel santimetr başyna"}
+                other{"{0} piksel santimetr başyna"}
             }
             pixel-per-inch{
                 dnam{"dýuým başyna piksel"}
-                one{"{0} dýuým başyna piksel"}
-                other{"{0} dýuým başyna piksel"}
+                one{"{0} piksel dýuým başyna"}
+                other{"{0} piksel dýuým başyna"}
             }
         }
         length{
@@ -775,9 +767,6 @@ tk{
                 one{"{0} atmosfera"}
                 other{"{0} atmosfera"}
             }
-            bar{
-                dnam{"barlar"}
-            }
             hectopascal{
                 dnam{"gektopaskal"}
                 one{"{0} gektopaskal"}
@@ -809,7 +798,6 @@ tk{
                 other{"{0} millimetr simap sütüni"}
             }
             ofhg{
-                dnam{"simap sütüni"}
                 one{"{0} simap sütüni"}
                 other{"{0} simap sütüni"}
             }
@@ -966,9 +954,8 @@ tk{
                 other{"{0} Imp. süýji çemçesi"}
             }
             dram{
-                dnam{"dram"}
-                one{"{0} dram"}
-                other{"{0} dram"}
+                one{"{0} dram suwuklyk"}
+                other{"{0} dram suwuklyk"}
             }
             fluid-ounce{
                 dnam{"suwuklyk unsiýasy"}
@@ -1067,14 +1054,8 @@ tk{
         }
         concentr{
             ofglucose{
-                dnam{"Glýuk"}
                 one{"{0} Glýuk"}
                 other{"{0} Glýuk"}
-            }
-            part{
-                dnam{"bölek"}
-                one{"{0} bölek"}
-                other{"{0} bölek"}
             }
             part-per-1e6{
                 dnam{"bmln"}
@@ -1150,34 +1131,31 @@ tk{
         }
         electric{
             coulomb{
-                dnam{"Kl"}
                 one{"{0} Kl"}
                 other{"{0} Kl"}
             }
             henry{
-                dnam{"Gn"}
                 one{"{0} Gn"}
                 other{"{0} Gn"}
             }
             siemens{
-                dnam{"Sm"}
                 one{"{0} Sm"}
                 other{"{0} Sm"}
             }
         }
         energy{
             becquerel{
-                dnam{"Bk"}
                 one{"{0} Bk"}
                 other{"{0} Bk"}
             }
             calorie-it{
-                dnam{"kal-IT"}
                 one{"{0} kal-IT"}
                 other{"{0} kal-IT"}
             }
+            electronvolt{
+                dnam{"eW"}
+            }
             gray{
-                dnam{"Gr"}
                 one{"{0} Gr"}
                 other{"{0} Gr"}
             }
@@ -1187,14 +1165,12 @@ tk{
                 other{"{0}kWs"}
             }
             sievert{
-                dnam{"Zw"}
                 one{"{0} Zw"}
                 other{"{0} Zw"}
             }
         }
         force{
             kilogram-force{
-                dnam{"kgg"}
                 one{"{0} kgg"}
                 other{"{0} kgg"}
             }
@@ -1262,16 +1238,12 @@ tk{
                 other{"{0}mmHg"}
             }
             ofhg{
-                dnam{"simap süt."}
+                dnam{"sim. süt."}
                 one{"{0} sim. süt."}
                 other{"{0} sim. süt."}
             }
         }
         speed{
-            beaufort{
-                one{"Bft {0}"}
-                other{"Bft {0}"}
-            }
             kilometer-per-hour{
                 dnam{"km/sag"}
                 one{"{0}km/sag"}
@@ -1288,14 +1260,14 @@ tk{
                 other{"{0} s. ç."}
             }
             dessert-spoon-imperial{
-                dnam{"dsp Imp"}
-                one{"{0}dsp-Imp"}
-                other{"{0}dsp-Imp"}
+                dnam{"sçm Imp"}
+                one{"{0}sçm Imp"}
+                other{"{0}sçm Imp"}
             }
             dram{
-                dnam{"fl.dr."}
-                one{"{0}fl.dr."}
-                other{"{0}fl.dr."}
+                dnam{"dr. suw."}
+                one{"{0}dr. suw."}
+                other{"{0}dr. suw."}
             }
             fluid-ounce{
                 dnam{"s.uns."}
@@ -1308,7 +1280,6 @@ tk{
                 other{"{0}fl oz Im"}
             }
             fluid-ounce-metric{
-                dnam{"suw uns m."}
                 one{"{0} suw uns m."}
                 other{"{0} suw uns m."}
             }
@@ -1321,13 +1292,13 @@ tk{
                 other{"{0}l"}
             }
             pinch{
-                dnam{"pn"}
-                one{"{0}pn"}
-                other{"{0}pn"}
+                dnam{"çm"}
+                one{"{0}çm"}
+                other{"{0}çm"}
             }
             quart-imperial{
-                one{"{0} kt-Imp."}
-                other{"{0} kt-Imp."}
+                one{"{0} kt Imp"}
+                other{"{0} kt Imp"}
             }
         }
     }
@@ -1389,6 +1360,7 @@ tk{
         }
         compound{
             1024p8{"Ýi{0}"}
+            10p-2{"s{0}"}
             times{"{0}.{1}"}
         }
         concentr{
@@ -1612,7 +1584,7 @@ tk{
                 other{"{0} kal-IT"}
             }
             electronvolt{
-                dnam{"electronwolt"}
+                dnam{"elektronwolt"}
                 one{"{0} eW"}
                 other{"{0} eW"}
             }
@@ -1718,14 +1690,14 @@ tk{
                 other{"{0} pks"}
             }
             pixel-per-centimeter{
-                dnam{"sbp"}
-                one{"{0} sbp"}
-                other{"{0} sbp"}
+                dnam{"psb"}
+                one{"{0} psb"}
+                other{"{0} psb"}
             }
             pixel-per-inch{
-                dnam{"dbp"}
-                one{"{0} dbp"}
-                other{"{0} dbp"}
+                dnam{"pdb"}
+                one{"{0} pdb"}
+                other{"{0} pdb"}
             }
         }
         length{
@@ -1895,7 +1867,7 @@ tk{
                 other{"{0} mmHg"}
             }
             ofhg{
-                dnam{"simap sütüni"}
+                dnam{"simap süt."}
                 one{"{0} simap süt."}
                 other{"{0} simap süt."}
             }
@@ -1977,8 +1949,20 @@ tk{
                 one{"{0} dl"}
                 other{"{0} dl"}
             }
+            dessert-spoon{
+                dnam{"sj. çmç."}
+                one{"{0} sj. çmç."}
+                other{"{0} sj. çmç."}
+            }
+            dessert-spoon-imperial{
+                dnam{"Imp. sj. çmç."}
+                one{"{0} Imp. sj. çmç."}
+                other{"{0} Imp. sj. çmç."}
+            }
             dram{
-                dnam{"dram suwuklyk"}
+                dnam{"dram"}
+                one{"{0} dram"}
+                other{"{0} dram"}
             }
             drop{
                 dnam{"damja"}
@@ -1991,7 +1975,7 @@ tk{
                 other{"{0} suw. uns."}
             }
             fluid-ounce-imperial{
-                dnam{"imp. suw. uns."}
+                dnam{"Imp. suw. uns."}
                 one{"{0} imp. suw. uns."}
                 other{"{0} imp. suw. uns."}
             }
@@ -2040,7 +2024,7 @@ tk{
                 other{"{0} kwt"}
             }
             quart-imperial{
-                dnam{"kt Imp"}
+                dnam{"kt Imp."}
                 one{"{0} kt Imp."}
                 other{"{0} kt Imp."}
             }

@@ -13,10 +13,12 @@ su{
                 other{"{0}m/gUK"}
             }
         }
-        volume{
-            dessert-spoon-imperial{
-                other{"{0}dsp-Imp"}
+        force{
+            kilowatt-hour-per-100-kilometer{
+                other{"{0} kWh/100 km"}
             }
+        }
+        volume{
             fluid-ounce-imperial{
                 other{"{0}fl oz Im"}
             }

@@ -957,10 +957,6 @@ sl{
             }
             part{
                 dnam{"deli"}
-                few{"{0} deli"}
-                one{"{0} del"}
-                other{"{0} delov"}
-                two{"{0} dela"}
             }
             part-per-1e6{
                 case{
@@ -4686,41 +4682,42 @@ sl{
             light-speed{
                 case{
                     accusative{
-                        few{"{0} svetlobe"}
-                        one{"{0} svetlobo"}
-                        other{"{0} svetlob"}
-                        two{"{0} svetlobi"}
+                        few{"{0} sv."}
+                        one{"{0} sv."}
+                        other{"{0} sv."}
+                        two{"{0} sv."}
                     }
                     dative{
-                        few{"{0} svetlobam"}
-                        one{"{0} svetlobi"}
-                        other{"{0} svetlobam"}
-                        two{"{0} svetlobama"}
+                        few{"{0} sv."}
+                        one{"{0} sv."}
+                        other{"{0} sv."}
+                        two{"{0} sv."}
                     }
                     genitive{
-                        few{"{0} svetlob"}
-                        one{"{0} svetlobe"}
-                        other{"{0} svetlob"}
-                        two{"{0} svetlob"}
+                        few{"{0} sv."}
+                        one{"{0} sv."}
+                        other{"{0} sv."}
+                        two{"{0} sv."}
                     }
                     instrumental{
-                        few{"{0} svetlobami"}
-                        one{"{0} svetlobo"}
-                        other{"{0} svetlobami"}
-                        two{"{0} svetlobama"}
+                        few{"{0} sv."}
+                        one{"{0} sv."}
+                        other{"{0} sv."}
+                        two{"{0} sv."}
                     }
                     locative{
-                        few{"{0} svetlobah"}
-                        one{"{0} svetlobi"}
-                        other{"{0} svetlobah"}
-                        two{"{0} svetlobah"}
+                        few{"{0} sv."}
+                        one{"{0} sv."}
+                        other{"{0} sv."}
+                        two{"{0} sv."}
                     }
                 }
-                few{"{0} svetlobe"}
-                gender{"feminine"}
-                one{"{0} svetloba"}
-                other{"{0} svetlob"}
-                two{"{0} svetlobi"}
+                dnam{"svetloben"}
+                few{"{0} sv."}
+                gender{"masculine"}
+                one{"{0} sv."}
+                other{"{0} sv."}
+                two{"{0} sv."}
             }
             meter-per-second{
                 case{
@@ -5534,16 +5531,6 @@ sl{
             }
         }
         concentr{
-            ofglucose{
-                dnam{"Glc"}
-            }
-            part{
-                dnam{"del"}
-                few{"{0} deli"}
-                one{"{0} del"}
-                other{"{0} delov"}
-                two{"{0} dela"}
-            }
             percent{
                 dnam{"%"}
             }
@@ -5599,29 +5586,9 @@ sl{
                 dnam{"let"}
             }
         }
-        energy{
-            calorie-it{
-                dnam{"cal-IT"}
-            }
-        }
-        force{
-            kilogram-force{
-                dnam{"kp"}
-                few{"{0} kp"}
-                one{"{0} kp"}
-                other{"{0} kp"}
-                two{"{0} kp"}
-            }
-        }
         graphics{
             dot{
                 dnam{"pika"}
-            }
-            em{
-                few{"{0} emi"}
-                one{"{0} em"}
-                other{"{0} emov"}
-                two{"{0} ema"}
             }
         }
         length{
@@ -5630,6 +5597,15 @@ sl{
                 one{"{0} sv. l."}
                 other{"{0} sv. l."}
                 two{"{0} sv. l."}
+            }
+        }
+        speed{
+            light-speed{
+                dnam{"sv."}
+                few{"{0} sv."}
+                one{"{0} sv."}
+                other{"{0} sv."}
+                two{"{0} sv."}
             }
         }
         temperature{
@@ -5660,13 +5636,6 @@ sl{
                 one{"{0} imp. des. žl."}
                 other{"{0} imp. des. žl."}
                 two{"{0} imp. des. žl."}
-            }
-            fluid-ounce-metric{
-                dnam{"m. fl. oz."}
-                few{"{0} m. fl. oz."}
-                one{"{0} m. fl. oz."}
-                other{"{0} m. fl. oz."}
-                two{"{0} m. fl. oz."}
             }
             pint-metric{
                 dnam{"pt"}
@@ -6020,11 +5989,11 @@ sl{
                 two{"{0} Bf"}
             }
             light-speed{
-                dnam{"svetloba"}
-                few{"{0} svetlobe"}
-                one{"{0} svetloba"}
-                other{"{0} svetlob"}
-                two{"{0} svetlobi"}
+                dnam{"sv."}
+                few{"{0} sv."}
+                one{"{0} sv."}
+                other{"{0} sv."}
+                two{"{0} sv."}
             }
         }
         temperature{

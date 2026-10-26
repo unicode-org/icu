@@ -1078,83 +1078,83 @@ Calls to xxx will return an implementor of this interface.  \u2029•</data>
 
 # 2b  Always break at end of text
 
-<data>•  •\u00A1•</data>
-<data>•  •\u0041•</data>
-<data>•  •\u0009•</data>
-<data>•  •\u00B4•</data>
+<data>•  •\u00A1<100></data>
+<data>•  •\u0041<100></data>
+<data>•  •\u0009<100></data>
+<data>•  •\u00B4<100></data>
 <data>•    \u000C<100></data>    # LB3C  × BK
-<data>•  •\u2014•</data>
-<data>•  •\uFFFC•</data>
-<data>•   \u0029•</data>    # LB 8   × CL
+<data>•  •\u2014<100></data>
+<data>•  •\uFFFC<100></data>
+<data>•   \u0029<100></data>    # LB 8   × CL
 # <data>• • \u0301•</data>    # LB 7a   Treat SP CM* as if it were ID  #TODO:  SP CM
-<data>•   \u0021•</data>    # LB 8   × EX
+<data>•   \u0021<100></data>    # LB 8   × EX
 #<data>•   \u00A0•</data>    # LB 11b   × GL   TODO:  fix.
-<data>•  •\u002D•</data>
-<data>•  •\u4E00•</data>
-<data>•  •\u2024•</data>
-<data>•   \u002C•</data>    # LB 8   × IS
+<data>•  •\u002D<100></data>
+<data>•  •\u4E00<100></data>
+<data>•  •\u2024<100></data>
+<data>•   \u002C<100></data>    # LB 8   × IS
 <data>•   \u000A<100></data>    # LB3C   × ( BK | CR | LF | NL )
-<data>•  •\u0E5A•</data>
-<data>•  •\u0032•</data>
-<data>•  •\u0028•</data>
-<data>•  •\u0025•</data>
-<data>•  •\u0024•</data>
-<data>•  •\u0022•</data>
-<data>•  •\u0E01•</data>
-<data>•  •\uDB7F•</data>
-<data>•   \u0020•</data>     # LB4 - don't break before space.
-<data>•   \u002F•</data>     # LB 8  × SY
-<data>•  •\uF8FF•</data>
-<data>•   \u200B•</data>     # LB4 - don't break before ZA
+<data>•  •\u0E5A<100></data>
+<data>•  •\u0032<100></data>
+<data>•  •\u0028<100></data>
+<data>•  •\u0025<100></data>
+<data>•  •\u0024<100></data>
+<data>•  •\u0022<100></data>
+<data>•  •\u0E01<100></data>
+<data>•  •\uDB7F<100></data>
+<data>•   \u0020<100></data>     # LB4 - don't break before space.
+<data>•   \u002F<100></data>     # LB 8  × SY
+<data>•  •\uF8FF<100></data>
+<data>•   \u200B<100></data>     # LB4 - don't break before ZA
 
 
 # 3a  Always break after hard line breaks.
 # 3c  Never break before hard line breaks.
 
-<data>•  •\u00A1\u2028<100>\u00A1•</data>
-<data>•  •\u0041\u2028<100>\u0041•</data>
-<data>•  •\u0009\u2028<100>\u0009•</data>
-<data>•  •\u00B4\u2028<100>\u00B4•</data>
+<data>•  •\u00A1\u2028<100>\u00A1<100></data>
+<data>•  •\u0041\u2028<100>\u0041<100></data>
+<data>•  •\u0009\u2028<100>\u0009<100></data>
+<data>•  •\u00B4\u2028<100>\u00B4<100></data>
 <data>•   \u000C<100>\u2028<100>\u000C<100></data>
-<data>•  •\u2014\u2028<100>\u2014•</data>
-<data>•  •\uFFFC\u2028<100>\uFFFC•</data>
-<data>•   \u0029\u2028<100>\u0029•</data>
-<data>•  •\u0301\u2028<100>\u0301•</data>
-<data>•   \u0021\u2028<100>\u0021•</data>
-<data>•  •\u00A0\u2028<100>\u00A0•</data>
-<data>•  •\u002D\u2028<100>\u002D•</data>
-<data>•  •\u4E00\u2028<100>\u4E00•</data>
-<data>•  •\u2024\u2028<100>\u2024•</data>
-<data>•   \u002C\u2028<100>\u002C•</data>
+<data>•  •\u2014\u2028<100>\u2014<100></data>
+<data>•  •\uFFFC\u2028<100>\uFFFC<100></data>
+<data>•   \u0029\u2028<100>\u0029<100></data>
+<data>•  •\u0301\u2028<100>\u0301<100></data>
+<data>•   \u0021\u2028<100>\u0021<100></data>
+<data>•  •\u00A0\u2028<100>\u00A0<100></data>
+<data>•  •\u002D\u2028<100>\u002D<100></data>
+<data>•  •\u4E00\u2028<100>\u4E00<100></data>
+<data>•  •\u2024\u2028<100>\u2024<100></data>
+<data>•   \u002C\u2028<100>\u002C<100></data>
 <data>•   \u000A<100>\u2028<100>\u000A<100></data>
-<data>•  •\u0E5A\u2028<100>\u0E5A•</data>
-<data>•  •\u0032\u2028<100>\u0032•</data>
-<data>•  •\u0028\u2028<100>\u0028•</data>
-<data>•  •\u0025\u2028<100>\u0025•</data>
-<data>•  •\u0024\u2028<100>\u0024•</data>
-<data>•  •\u0022\u2028<100>\u0022•</data>
-<data>•  •\u0E01\u2028<100>\u0E01•</data>
-<data>•  •\uDB7F\u2028<100>\uDB7F•</data>
-<data>•   \u0020\u2028<100>\u0020•</data>
-<data>•   \u002F\u2028<100>\u002F•</data>
-<data>•  •\uF8FF\u2028<100>\uF8FF•</data>
-<data>•   \u200B\u2028<100>\u200B•</data>
+<data>•  •\u0E5A\u2028<100>\u0E5A<100></data>
+<data>•  •\u0032\u2028<100>\u0032<100></data>
+<data>•  •\u0028\u2028<100>\u0028<100></data>
+<data>•  •\u0025\u2028<100>\u0025<100></data>
+<data>•  •\u0024\u2028<100>\u0024<100></data>
+<data>•  •\u0022\u2028<100>\u0022<100></data>
+<data>•  •\u0E01\u2028<100>\u0E01<100></data>
+<data>•  •\uDB7F\u2028<100>\uDB7F<100></data>
+<data>•   \u0020\u2028<100>\u0020<100></data>
+<data>•   \u002F\u2028<100>\u002F<100></data>
+<data>•  •\uF8FF\u2028<100>\uF8FF<100></data>
+<data>•   \u200B\u2028<100>\u200B<100></data>
 
 # Regional Indicator sequences. They group in pairs.
 #    Sequences are long enough that the non-exaustive monkey test won't reliably pick up problems.
 
-<data>•\U0001F1E6\U0001F1E6•\U0001F1E6\U0001F1E6•\U0001F1E6\U0001F1E6•\U0001F1E6\U0001F1E6•</data>
-<data>•\U0001F1E6\U0001F1E6•\U0001F1E6\U0001F1E6•\U0001F1E6\U0001F1E6•\U0001F1E6\U0001F1E6•\U0001F1E6•</data>
+<data>•\U0001F1E6\U0001F1E6•\U0001F1E6\U0001F1E6•\U0001F1E6\U0001F1E6•\U0001F1E6\U0001F1E6<100></data>
+<data>•\U0001F1E6\U0001F1E6•\U0001F1E6\U0001F1E6•\U0001F1E6\U0001F1E6•\U0001F1E6\U0001F1E6•\U0001F1E6<100></data>
 
-<data>•\U0001F1E6\U0001F1E6•\U0001F1E6\U0001F1E6\u00a0\U0001F1E6\U0001F1E6•\U0001F1E6\U0001F1E6•</data>
-<data>•\U0001F1E6\U0001F1E6•\U0001F1E6\U0001F1E6\u00a0\U0001F1E6\U0001F1E6•\U0001F1E6\U0001F1E6•\U0001F1E6•</data>
-<data>•\U0001F1E6\U0001F1E6•\U0001F1E6\u00a0\U0001F1E6\U0001F1E6•\U0001F1E6\U0001F1E6•</data>
-<data>•\U0001F1E6\U0001F1E6•\U0001F1E6\u00a0\U0001F1E6\U0001F1E6•\U0001F1E6\U0001F1E6•\U0001F1E6•</data>
+<data>•\U0001F1E6\U0001F1E6•\U0001F1E6\U0001F1E6\u00a0\U0001F1E6\U0001F1E6•\U0001F1E6\U0001F1E6<100></data>
+<data>•\U0001F1E6\U0001F1E6•\U0001F1E6\U0001F1E6\u00a0\U0001F1E6\U0001F1E6•\U0001F1E6\U0001F1E6•\U0001F1E6<100></data>
+<data>•\U0001F1E6\U0001F1E6•\U0001F1E6\u00a0\U0001F1E6\U0001F1E6•\U0001F1E6\U0001F1E6<100></data>
+<data>•\U0001F1E6\U0001F1E6•\U0001F1E6\u00a0\U0001F1E6\U0001F1E6•\U0001F1E6\U0001F1E6•\U0001F1E6<100></data>
 
 
 # User Guide example
 
-<data>•Parlez-•vous •français ?•</data>
+<data>•Parlez-•vous •français ?<100></data>
 
 #
 #  Old Line Break Test data.  Originally located in RBBITest::TestDefaultRuleBasedLineIteration()
@@ -1163,18 +1163,18 @@ Calls to xxx will return an implementor of this interface.  \u2029•</data>
 <line>
 
 <data>•Multi-•Level •example •of •a •semi-•idiotic •non-•sensical •(non-•important) •sentence.
-<100>Hi  •Hello •How\n<100>are\r<100>you\u2028<100>fine.\t•good.  •Now\r<100>is\n<100>the\r\n<100>time\n<100>\r<100>for\r<100>\r<100>all•</data>
+<100>Hi  •Hello •How\n<100>are\r<100>you\u2028<100>fine.\t•good.  •Now\r<100>is\n<100>the\r\n<100>time\n<100>\r<100>for\r<100>\r<100>all<100></data>
 
 <line>
 <data>•Hello! •how\r\n<100> •(are)\r<100> •you? •I'am •fine- •Thankyou. •foo\u00a0bar
-<100>How, •are, •you? •This, •costs •$20,00,000.•</data>
+<100>How, •are, •you? •This, •costs •$20,00,000.<100></data>
 
 #     test for bug #4068133
 #
-<data>•\u96f6•\u4e00\u3002•\u4e8c\u3001•\u4e09\u3002\u3001•\u56db\u3001\u3002\u3001•\u4e94,•\u516d.•\u4e03.\u3001,\u3002•\u516b•</data>
+<data>•\u96f6•\u4e00\u3002•\u4e8c\u3001•\u4e09\u3002\u3001•\u56db\u3001\u3002\u3001•\u4e94,•\u516d.•\u4e03.\u3001,\u3002•\u516b<100></data>
 
 #     to test for bug #4086052
-<data>•foo\u00a0bar•</data>
+<data>•foo\u00a0bar<100></data>
 
 #     to test for bug #4097920
 <data>•dog,cat,mouse •(one)•(two)\n<100></data>
@@ -1190,69 +1190,69 @@ Calls to xxx will return an implementor of this interface.  \u2029•</data>
 #      Both sequences should be semantically identical and break the same way.
 #      precomposed syllables...  (I == Rich Gillam?)
 #
-<data>•\uc0c1•\ud56d •\ud55c•\uc778 •\uc5f0•\ud569 •\uc7a5•\ub85c•\uad50•\ud68c•</data>
+<data>•\uc0c1•\ud56d •\ud55c•\uc778 •\uc5f0•\ud569 •\uc7a5•\ub85c•\uad50•\ud68c<100></data>
 
 #      Bug 4450804 estLineBreakContractions
 #
 <line>
-<data>•These •are •'foobles'. •Don't •you •like •them?•</data>
+<data>•These •are •'foobles'. •Don't •you •like •them?<100></data>
 
 
 #      conjoining jamo...
-<data>•\u1109\u1161\u11bc•\u1112\u1161\u11bc •\u1112\u1161\u11ab•\u110b\u1175\u11ab •\u110b\u1167\u11ab•\u1112\u1161\u11b8 •\u110c\u1161\u11bc•\u1105\u1169•\u1100\u116d•\u1112\u116c•</data>
+<data>•\u1109\u1161\u11bc•\u1112\u1161\u11bc •\u1112\u1161\u11ab•\u110b\u1175\u11ab •\u110b\u1167\u11ab•\u1112\u1161\u11b8 •\u110c\u1161\u11bc•\u1105\u1169•\u1100\u116d•\u1112\u116c<100></data>
 
 #      to test for bug #4117554: Fullwidth .!? should be treated as postJwrd
-<data>•\u4e01\uff0e•\u4e02\uff01•\u4e03\uff1f•</data>
+<data>•\u4e01\uff0e•\u4e02\uff01•\u4e03\uff1f<100></data>
 
 #      Surrogate line break tests.
 #
-<data>•\u4e01•\ud840\udc01•\u4e02•abc •\ue000 •\udb80\udc01•</data>  #This line and the following are equivalent.
-<data>•\u4e01•\U00020001•\u4e02•abc •\ue000 •\U000f0001•</data>
+<data>•\u4e01•\ud840\udc01•\u4e02•abc •\ue000 •\udb80\udc01<100></data>  #This line and the following are equivalent.
+<data>•\u4e01•\U00020001•\u4e02•abc •\ue000 •\U000f0001<100></data>
 
 #      Regression for bug 836
 #        Note:  Unicode 5.1 changed this behavior
 #               Unicode 5.2 changed it again, there is no break following the '('
-<data>•AAA(AAA •</data>
+<data>•AAA(AAA <100></data>
 
 #       Try some words from other scripts.
 #          Greek, Cyrillic, Hebrew, Arabic, Arabic, Georgian, Latin
 #
-<data>•ΑΒΓ •БВГ •אבג֓ •ابت •١٢٣ •\u10A0\u10A1\u10A2 •ABC •</data>
+<data>•ΑΒΓ •БВГ •אבג֓ •ابت •١٢٣ •\u10A0\u10A1\u10A2 •ABC <100></data>
 
 #
 #       ticket #4853:  unpaired surrogates should behave like AL
 #
-<data>•abc\ud801xyz•</data>
+<data>•abc\ud801xyz<100></data>
 
 #   a character sequence such as "X11" or "30F3" or "native2ascii" should
 #   be kept together as a single word.
-<data>•X11 •30F3 •native2ascii•</data>
+<data>•X11 •30F3 •native2ascii<100></data>
 
 #
 #     Regression tests for failures that originally came from the monkey test.
 #     Monkey test failure lines can, with slight reformatting, be copied into this section
 #     as test cases.  The error display from here is more informative.
 #
-<data>•\ufffc•\u30e3\u000c<100>\u1b39•\u300a\u002f\u203a\u200b•\ufffc•\uaf64•\udcfb•</data>
-<data>•\u114d\u31f3•\ube44\u002d•\u0362\u24e2\u276e\u2014\u205f\ufe16•\uc877•\u0fd0\u000a<100>\u20a3•</data>
-<data>•\u080a\u215b\U0001d7d3\u002c\u2025\U000e012e•\u02df\u118d\u0029\ua8d6\u0085<100>\u6cc4\u2024\u202f\ufffc•</data>
+<data>•\ufffc•\u30e3\u000c<100>\u1b39•\u300a\u002f\u203a\u200b•\ufffc•\uaf64•\udcfb<100></data>
+<data>•\u114d\u31f3•\ube44\u002d•\u0362\u24e2\u276e\u2014\u205f\ufe16•\uc877•\u0fd0\u000a<100>\u20a3<100></data>
+<data>•\u080a\u215b\U0001d7d3\u002c\u2025\U000e012e•\u02df\u118d\u0029\ua8d6\u0085<100>\u6cc4\u2024\u202f\ufffc<100></data>
 
 # Test for #10176 (in root)
 <line>
-<data>•abc/•s •def•</data>
-<data>•abc/\u05D9 •def•</data>
-<data>•\u05E7\u05D7/\u05D9 •\u05DE\u05E2\u05D9\u05DC•</data>
-<data>•\u05D3\u05E8\u05D5\u05E9\u05D9\u05DD •\u05E9\u05D7\u05E7\u05E0\u05D9\u05DD/\u05D9\u05D5\u05EA•</data>
+<data>•abc/•s •def<100></data>
+<data>•abc/\u05D9 •def<100></data>
+<data>•\u05E7\u05D7/\u05D9 •\u05DE\u05E2\u05D9\u05DC<100></data>
+<data>•\u05D3\u05E8\u05D5\u05E9\u05D9\u05DD •\u05E9\u05D7\u05E7\u05E0\u05D9\u05DD/\u05D9\u05D5\u05EA<100></data>
 
 # Ticket #11556 don't break "R$" or "JP¥"
 <locale en>
 <line>
-<data>•R$ •JP¥ •a9 •3a •H% •CA$ •Travi$ •Scott •Ke$ha •Curren$y •A$AP •Rocky•</data>
+<data>•R$ •JP¥ •a9 •3a •H% •CA$ •Travi$ •Scott •Ke$ha •Curren$y •A$AP •Rocky<100></data>
 
 # Test Bug 4146175 Lines
 # the fullwidth comma should stick to the preceding Japanese character
 <line>
-<data>•\u7d42\uff0c•\u308f•</data>
+<data>•\u7d42\uff0c•\u308f<100></data>
 
 # Empty String
 <line>
@@ -1266,22 +1266,22 @@ Daen •Lao •Range •(ทิว•เขา•แดน•ลาว), •in �
 north/•south •direction, •the •Dawna •Range •(ทิว•เขา•ดอย•มอน•กุ•จู) •forming •the •western •border •of •Thailand •\
 between •Mae •Hong •Son •and •the •Salween •River, •the •Thanon •Thong •Chai •Range •(เทือก•เขา•ถนน•ธงชัย), •\
 the •Khun •Tan •Range •(ดอย•ขุน•ตาน), •the •Phi •Pan •Nam •Range •(ทิว•เขา•ผี•ปัน•น้ำ), •as •well •as •the •western •\
-part •of •the •Luang •Prabang •Range •(ทิว•เขา•หลวง•พระ•บาง).•</data>
+part •of •the •Luang •Prabang •Range •(ทิว•เขา•หลวง•พระ•บาง).<100></data>
 
 # Breaking around numbers that begin with a decimal point.
 # Bug ICU-12017
 
 <line>
-<data>•start •.789 •end•</data>
-<data>•start .abc •end•</data>
-<data>•start •( .789 •end)•</data>
-<data>•start •.\u0301789 •end•</data>     # \u0301 is a CM (COMBINING ACUTE ACCENT)
-<data>•start •.\u200D789 •end•</data>     # \u200D is ZWJ
-<data>•start •.\u200D\u0301789 •end•</data>
-<data>•start •.\u0301\u200D789 •end•</data>
-<data>•start .\u0301\u200D•</data>
-<data>•start .\u0301\u200D •</data>
-<data>•start ; •end •</data>
+<data>•start •.789 •end<100></data>
+<data>•start .abc •end<100></data>
+<data>•start •( .789 •end)<100></data>
+<data>•start •.\u0301789 •end<100></data>     # \u0301 is a CM (COMBINING ACUTE ACCENT)
+<data>•start •.\u200D789 •end<100></data>     # \u200D is ZWJ
+<data>•start •.\u200D\u0301789 •end<100></data>
+<data>•start •.\u0301\u200D789 •end<100></data>
+<data>•start .\u0301\u200D<100></data>
+<data>•start .\u0301\u200D <100></data>
+<data>•start ; •end <100></data>
 
 ########################################################################################
 #
@@ -1331,7 +1331,7 @@ part •of •the •Luang •Prabang •Range •(ทิว•เขา•ห�
 <line>
 <data>•0E01\u0E39\u0020•\u0E01\u0E34\u0E19•\u0E01\u0E38\u0E49\u0E07\
 \u0020•\u0E1B\u0E34\u0E49\u0E48•\u0E07\u0E2D•\u0E22\u0E39\u0E48•\
-\u0E43\u0E19•\u0E16\u0E49\u0E33•</data>
+\u0E43\u0E19•\u0E16\u0E49\u0E33<100></data>
 
 # Data originally from intltest RBBITest::TestThaiLineBreak()
 #
@@ -1357,7 +1357,7 @@ part •of •the •Luang •Prabang •Range •(ทิว•เขา•ห�
 \u0e40\u0e15\u0e47\u0e21•\
 \u0e2f\u0e25\u0e2f•\
 \u0e17\u0e35\u0e48•\
-\u0e19\u0e31\u0e49\u0e19•</data>
+\u0e19\u0e31\u0e49\u0e19<100></data>
 
 # Data originally from RBBITest::TestMixedThaiLineBreak()
 #   @suwit -- Test Arabic numerals, Thai numerals, Punctuation and English characters start
@@ -1378,7 +1378,7 @@ part •of •the •Luang •Prabang •Range •(ทิว•เขา•ห�
 \u0E23\u0E31\u0E15\u0E19\u0E42\u0E01\u0E2A\u0E34\u0E19\u0E17\u0E23\u0E4C •\
 (\u0E01\u0E23\u0E38\u0E07\u0E40\u0E17\u0E1e\u0E2F•\
 \u0E2B\u0E23\u0E37\u0E2D •\
-Bangkok)•</data>
+Bangkok)<100></data>
 
 # Data originally from RBBITest::TestMaiyamok()
 #   The Thai maiyamok character is a shorthand symbol that means "repeat the previous
@@ -1394,35 +1394,35 @@ Bangkok)•</data>
 \u0e41\u0e25\u0e30•\
 \u0e40\u0e03\u0e35•\
 \u0e22\u0e07•\
-\u0e43\u0e2b\u0e21\u0e48•</data>
+\u0e43\u0e2b\u0e21\u0e48<100></data>
 
 # Test for #10296
 <line>
-<data>•ใช•มั้ย•</data>
-<data>•มั๊ยล่ะ•ที่รัก•</data>
+<data>•ใช•มั้ย<100></data>
+<data>•มั๊ยล่ะ•ที่รัก<100></data>
 
 # Test for #10593
 <line>
-<data>•เล่น•ผ่าน•ทาง•บลูทูธ•บน•อุปกรณ์•</data>
+<data>•เล่น•ผ่าน•ทาง•บลูทูธ•บน•อุปกรณ์<100></data>
 
 # Test for city names #10691
 <line>
-<data>•ไป•ที่•ซานฟรานซิสโก•</data>
+<data>•ไป•ที่•ซานฟรานซิสโก<100></data>
 
 # Test for #10630, #10631
 <line>
-<data>•แท็ก•แอปพลิเคชัน•เป็น•พิเศษ•</data>
+<data>•แท็ก•แอปพลิเคชัน•เป็น•พิเศษ<100></data>
 
 # Test for #11019
 <line>
-<data>•เบ•เบราว์เซอร์•โพ•โพสต์•โพสท์•</data>
+<data>•เบ•เบราว์เซอร์•โพ•โพสต์•โพสท์<100></data>
 
 # Test for #11688
 <line>
-<data>•อัปเดต•อีเวนต์•</data>
+<data>•อัปเดต•อีเวนต์<100></data>
 
 <line>
-<data>•แอป์•นี้•ไม่•รองรับ •Android •เวอร์ชัน•ล่าสุด •หาก•แอป•นี้•เข้า•ถึง•ไฟล์•เพลง•และ•ไฟล์•เสียง•ได้ •ก็•จะ•ได้•รับ•อนุญาต•ให้•เข้า•ถึง•รูปภาพ•และ•วิดีโอ•ด้วย•</data>
+<data>•แอป์•นี้•ไม่•รองรับ •Android •เวอร์ชัน•ล่าสุด •หาก•แอป•นี้•เข้า•ถึง•ไฟล์•เพลง•และ•ไฟล์•เสียง•ได้ •ก็•จะ•ได้•รับ•อนุญาต•ให้•เข้า•ถึง•รูปภาพ•และ•วิดีโอ•ด้วย<100></data>
 
 ##########################################################################################
 #
@@ -1432,19 +1432,19 @@ Bangkok)•</data>
 <locale en>
 # Basic check for #7647
 <line>
-<data>•ສະບາຍດີ•</data>
-<data>•ດີ•ຂອບໃຈ•</data>
-<data>•ເຈົ້າ•ເວົ້າ•ພາສາ•ອັງກິດ•ໄດ້•ບໍ່•</data>
-<data>•ກະລຸນາ•ເວົ້າ•ຊ້າ•ໆ•</data>
+<data>•ສະບາຍດີ<100></data>
+<data>•ດີ•ຂອບໃຈ<100></data>
+<data>•ເຈົ້າ•ເວົ້າ•ພາສາ•ອັງກິດ•ໄດ້•ບໍ່<100></data>
+<data>•ກະລຸນາ•ເວົ້າ•ຊ້າ•ໆ<100></data>
 # More checks for ICU-21413 (check both moved and added entries)
 <line>
-<data>•ກໍ•ກໍ່•ກໍ້•</data>
-<data>•ກວາກຊວາກ•ກະເຈາະກະຈອກ•</data>
-<data>•ກະຊວງປ້ອງກັນຄວາມສະຫງົບ•</data>
-<data>•ໄຮ•ໄຮ່•ໄຮ້•</data>
+<data>•ກໍ•ກໍ່•ກໍ້<100></data>
+<data>•ກວາກຊວາກ•ກະເຈາະກະຈອກ<100></data>
+<data>•ກະຊວງປ້ອງກັນຄວາມສະຫງົບ<100></data>
+<data>•ໄຮ•ໄຮ່•ໄຮ້<100></data>
 # Checks for ICU-21409 (and ICU-21384)
 <line>
-<data>•ຣະຄັງ•ຣະມາ•ລູຊີເຟີ•</data>
+<data>•ຣະຄັງ•ຣະມາ•ລູຊີເຟີ<100></data>
 
 ##########################################################################################
 #
@@ -1454,10 +1454,10 @@ Bangkok)•</data>
 <locale en>
 # Basic sanity check for #10326 (some text from http://www.unicode.org/udhr/d/udhr_mya.txt)
 <line>
-<data>•လူ•တိုင်း•သည် •တူညီ •လွတ်လပ်•သော •ဂုဏ်•သိ•က္•ခါ•ဖြ•င့် •လည်းကောင်း၊ •</data>
-<data>•တူညီ•လွတ်လပ်•သော •အ•ခွ•င့်•အရေး•များ•ဖြ•င့် •လည်းကောင်း၊ •မွေး•ဖွား•လာ•သူများ •ဖြစ်သည်။•</data>
-<data>•ထို•သူ•တို့၌ •ပိုင်းခြား •ဝေဖန်•တတ်•သော •ဉာဏ်•နှ•င့် •ကျ•င့်•ဝတ် •သိတတ်•သော •စိတ်•တို့•ရှိ•ကြ၍ •</data>
-<data>•ထို•သူ•တို့သည် •အချင်းချင်း •မေတ္တာ•ထား၍ •ဆက်ဆံ•ကျ•င့်•သုံး•</data>
+<data>•လူ•တိုင်း•သည် •တူညီ •လွတ်လပ်•သော •ဂုဏ်•သိ•က္•ခါ•ဖြ•င့် •လည်းကောင်း၊ <100></data>
+<data>•တူညီ•လွတ်လပ်•သော •အ•ခွ•င့်•အရေး•များ•ဖြ•င့် •လည်းကောင်း၊ •မွေး•ဖွား•လာ•သူများ •ဖြစ်သည်။<100></data>
+<data>•ထို•သူ•တို့၌ •ပိုင်းခြား •ဝေဖန်•တတ်•သော •ဉာဏ်•နှ•င့် •ကျ•င့်•ဝတ် •သိတတ်•သော •စိတ်•တို့•ရှိ•ကြ၍ <100></data>
+<data>•ထို•သူ•တို့သည် •အချင်းချင်း •မေတ္တာ•ထား၍ •ဆက်ဆံ•ကျ•င့်•သုံး<100></data>
 
 ##########################################################################################
 #
@@ -1520,10 +1520,10 @@ Bangkok)•</data>
 
 <locale ja>
 <line>
-<data>•\u3041•\u3043•\u3045•\u31f1•</data>
+<data>•\u3041•\u3043•\u3045•\u31f1<100></data>
 <locale en>
 <line>
-<data>•\u3041\u3043\u3045\u31f1•</data>
+<data>•\u3041\u3043\u3045\u31f1<100></data>
 
 # The following data was originally in RBBITest::TestJapaneseWordBreak()
 <locale ja>
@@ -1541,10 +1541,10 @@ Bangkok)•</data>
 
 # Test for #10176 (in ja)
 <line>
-<data>•abc/•s •def•</data>
-<data>•abc/\u05D9 •def•</data>
-<data>•\u05E7\u05D7/\u05D9 •\u05DE\u05E2\u05D9\u05DC•</data>
-<data>•\u05D3\u05E8\u05D5\u05E9\u05D9\u05DD •\u05E9\u05D7\u05E7\u05E0\u05D9\u05DD/\u05D9\u05D5\u05EA•</data>
+<data>•abc/•s •def<100></data>
+<data>•abc/\u05D9 •def<100></data>
+<data>•\u05E7\u05D7/\u05D9 •\u05DE\u05E2\u05D9\u05DC<100></data>
+<data>•\u05D3\u05E8\u05D5\u05E9\u05D9\u05DD •\u05E9\u05D7\u05E7\u05E0\u05D9\u05DD/\u05D9\u05D5\u05EA<100></data>
 
 
 <locale root>
@@ -1628,20 +1628,20 @@ Bangkok)•</data>
 
 <locale root>
 <line>
-<data>•abc •- •def    •abc •-def    •abc- •def   •abc-•def•</data>   # With ASCII hyphen
-<data>•abc •‐ •def    •abc •‐def    •abc‐ •def   •abc‐•def•</data>   # With Unicode u2010 hyphen
+<data>•abc •- •def    •abc •-def    •abc- •def   •abc-•def<100></data>   # With ASCII hyphen
+<data>•abc •‐ •def    •abc •‐def    •abc‐ •def   •abc‐•def<100></data>   # With Unicode u2010 hyphen
 
 <locale fi>
 <line>
-<data>•abc •- •def    •abc •-def    •abc- •def   •abc-•def•</data>   # With ASCII hyphen
-<data>•abc •‐ •def    •abc •‐def    •abc‐ •def   •abc‐•def•</data>   # With Unicode u2010 hyphen
+<data>•abc •- •def    •abc •-def    •abc- •def   •abc-•def<100></data>   # With ASCII hyphen
+<data>•abc •‐ •def    •abc •‐def    •abc‐ •def   •abc‐•def<100></data>   # With Unicode u2010 hyphen
 
 # Test for #10176 (in fi)
 <line>
-<data>•abc/•s •def•</data>
-<data>•abc/\u05D9 •def•</data>
-<data>•\u05E7\u05D7/\u05D9 •\u05DE\u05E2\u05D9\u05DC•</data>
-<data>•\u05D3\u05E8\u05D5\u05E9\u05D9\u05DD •\u05E9\u05D7\u05E7\u05E0\u05D9\u05DD/\u05D9\u05D5\u05EA•</data>
+<data>•abc/•s •def<100></data>
+<data>•abc/\u05D9 •def<100></data>
+<data>•\u05E7\u05D7/\u05D9 •\u05DE\u05E2\u05D9\u05DC<100></data>
+<data>•\u05D3\u05E8\u05D5\u05E9\u05D9\u05DD •\u05E9\u05D7\u05E7\u05E0\u05D9\u05DD/\u05D9\u05D5\u05EA<100></data>
 
 ####################################################################################
 #
@@ -1652,38 +1652,42 @@ Bangkok)•</data>
 <locale ja@lb=strict>
 <line>
 #     •no brk before 3063              •no brk before 301C•no brk btw 2026   •no brk before FF01•
-<data>•\u3084\u3063•\u3071•\u308A\u0020•\u0031\u301C\u0020•\u2026\u2026\u0020•\u30A2\uFF01\u0020•</data>
+<data>•\u3084\u3063•\u3071•\u308A\u0020•\u0031\u301C\u0020•\u2026\u2026\u0020•\u30A2\uFF01\u0020<100></data>
 
 <locale ja@lb=normal>
 <line>
 #     •brk OK before 3063               •brk OK before 301C •no brk btw 2026   •no brk before FF01•
-<data>•\u3084•\u3063•\u3071•\u308A\u0020•\u0031•\u301C\u0020•\u2026\u2026\u0020•\u30A2\uFF01\u0020•</data>
+<data>•\u3084•\u3063•\u3071•\u308A\u0020•\u0031•\u301C\u0020•\u2026\u2026\u0020•\u30A2\uFF01\u0020<100></data>
 
 #     •no brk before 2010                                 •
-<data>•\u3042\u2010•\u0031\u0020•\u0061\u2010•\u0031\u0020•</data>
+<data>•\u3042\u2010•\u0031\u0020•\u0061\u2010•\u0031\u0020<100></data>
+#     •nor 2013                                           •
+<data>•\u3042\u2013•\u0031\u0020•\u0061\u2010•\u0031\u0020<100></data>
 
 <locale ja@lb=loose>
 <line>
 #     •brk OK before 3063               •brk OK before 301C •brk OK btw 2026    •brk OK before FF01•
-<data>•\u3084•\u3063•\u3071•\u308A\u0020•\u0031•\u301C\u0020•\u2026•\u2026\u0020•u30A2•\uFF01\u0020•</data>
+<data>•\u3084•\u3063•\u3071•\u308A\u0020•\u0031•\u301C\u0020•\u2026•\u2026\u0020•u30A2•\uFF01\u0020<100></data>
 
 #     •no brk before 2010 except ok after ID               •
-<data>•\u3042•\u2010•\u0031\u0020•\u0061\u2010•\u0031\u0020•</data>
+<data>•\u3042•\u2010•\u0031\u0020•\u0061\u2010•\u0031\u0020<100></data>
+#     •same for 2013                                       •
+<data>•\u3042•\u2013•\u0031\u0020•\u0061\u2013•\u0031\u0020<100></data>
 
 <locale en@lb=strict>
 <line>
 #     •no brk before 3063              •no brk before 301C•no brk btw 2026   •no brk before FF01•
-<data>•\u3084\u3063•\u3071•\u308A\u0020•\u0031\u301C\u0020•\u2026\u2026\u0020•\u30A2\uFF01\u0020•</data>
+<data>•\u3084\u3063•\u3071•\u308A\u0020•\u0031\u301C\u0020•\u2026\u2026\u0020•\u30A2\uFF01\u0020<100></data>
 
 <locale en@lb=normal>
 <line>
 #     •brk OK before 3063               •no brk before 301C •no brk btw 2026  •no brk before FF01•
-<data>•\u3084•\u3063•\u3071•\u308A\u0020•\u0031\u301C\u0020•\u2026\u2026\u0020•\u30A2\uFF01\u0020•</data>
+<data>•\u3084•\u3063•\u3071•\u308A\u0020•\u0031\u301C\u0020•\u2026\u2026\u0020•\u30A2\uFF01\u0020<100></data>
 
 <locale en@lb=loose>
 <line>
 #     •brk OK before 3063               •no brk before 301C •brk OK btw 2026   •no brk before FF01•
-<data>•\u3084•\u3063•\u3071•\u308A\u0020•\u0031\u301C\u0020•\u2026•\u2026\u0020•u30A2\uFF01\u0020•</data>
+<data>•\u3084•\u3063•\u3071•\u308A\u0020•\u0031\u301C\u0020•\u2026•\u2026\u0020•u30A2\uFF01\u0020<100></data>
 
 ####################################################################################
 #
@@ -1843,168 +1847,168 @@ Bangkok)•</data>
 
 <line>
 # woman zwj woman zwj girl zwj girl
-<data>•\U0001F469\u200D\U0001F469\u200D\U0001F467\u200D\U0001F467•</data>
+<data>•\U0001F469\u200D\U0001F469\u200D\U0001F467\u200D\U0001F467<100></data>
 # woman zwj baby/fitz-3, older_woman/fitz-5, runner/fitz-4, raised_fist/fitz-3, fuel_pump, fitz-3
-<data>•\U0001F469\u200D\U0001F476\U0001F3FC•\U0001F475\U0001F3FE•\U0001F3C3\U0001F3FD•\u270A\U0001F3FC•\u26FD•\U0001F3FC•</data>
+<data>•\U0001F469\u200D\U0001F476\U0001F3FC•\U0001F475\U0001F3FE•\U0001F3C3\U0001F3FD•\u270A\U0001F3FC•\u26FD•\U0001F3FC<100></data>
 # man zwj hvy_blk_heart zwj man, woman, man zwj hvy_blk_heart/evar zwj man, woman
-<data>•\U0001F468\u200D\u2764\u200D\U0001F468•\U0001F469•\U0001F468\u200D\u2764\uFE0F\u200D\U0001F468•\U0001F469•</data>
+<data>•\U0001F468\u200D\u2764\u200D\U0001F468•\U0001F469•\U0001F468\u200D\u2764\uFE0F\u200D\U0001F468•\U0001F469<100></data>
 # woman zwj hvy_blk_heart/evar zwj kiss_mark zwj woman, sleuth/fitz-4, horse_racing/fitz-5
-<data>•\U0001F469\u200D\u2764\uFE0F\u200D\U0001F48B\u200D\U0001F469•\U0001F575\U0001F3FD•\U0001F3C7\U0001F3FE•</data>
+<data>•\U0001F469\u200D\u2764\uFE0F\u200D\U0001F48B\u200D\U0001F469•\U0001F575\U0001F3FD•\U0001F3C7\U0001F3FE<100></data>
 # victory_hand/evar, victory_hand/evar/fitz-1-2, victory_hand/fitz-1-2, rowboat/fitz-4, vulcan_salute/fitz-5 space,
-<data>•\u270C\uFE0F•\u270C\uFE0F\U0001F3FB•\u270C\U0001F3FB•\U0001F6A3\U0001F3FD•\U0001F596\U0001F3FE\u0020•</data>
+<data>•\u270C\uFE0F•\u270C\uFE0F\U0001F3FB•\u270C\U0001F3FB•\U0001F6A3\U0001F3FD•\U0001F596\U0001F3FE\u0020<100></data>
 # writing_hand fitz-1-2, splayed_hand/fitz-3, middle_finger/fitz-4, sign_of_horns/fitz-5, eye zwj left_speech_bubble, space
-<data>•\u270D\U0001F3FB•\U0001F590\U0001F3FC•\U0001F595\U0001F3FD•\U0001F918\U0001F3FE•\U0001F441\u200D\U0001F5E8\u0020•</data>
+<data>•\u270D\U0001F3FB•\U0001F590\U0001F3FC•\U0001F595\U0001F3FD•\U0001F918\U0001F3FE•\U0001F441\u200D\U0001F5E8\u0020<100></data>
 # family (man, boy, boy), family (woman, girl), space
-<data>•\U0001F468\u200D\U0001F466\u200D\U0001F466•\U0001F469\u200D\U0001F467\u0020•</data>
+<data>•\U0001F468\u200D\U0001F466\u200D\U0001F466•\U0001F469\u200D\U0001F467\u0020<100></data>
 # rainbow flag using evar, rainbow flag no evar, space
-<data>•\U0001F3F3\uFE0F\u200D\U0001F308•\U0001F3F3\u200D\U0001F308\u0020•</data>
+<data>•\U0001F3F3\uFE0F\u200D\U0001F308•\U0001F3F3\u200D\U0001F308\u0020<100></data>
 # woman with ball using evar, woman with ball no evar, woman with ball fitz 4 using evar, woman with ball fitz 4 no evar, space
-<data>•\u26F9\uFE0F\u200D\u2640\uFE0F•\u26F9\u200D\u2640•\u26F9\U0001F3FD\u200D\u2640\uFE0F•\u26F9\U0001F3FD\u200D\u2640\u0020•</data>
+<data>•\u26F9\uFE0F\u200D\u2640\uFE0F•\u26F9\u200D\u2640•\u26F9\U0001F3FD\u200D\u2640\uFE0F•\u26F9\U0001F3FD\u200D\u2640\u0020<100></data>
 # woman runner using evar, woman runner no evar, woman runner fitz 4 using evar, woman runner fitz 4 no evar, space
-<data>•\U0001F3C3\u200D\u2640\uFE0F•\U0001F3C3\u200D\u2640•\U0001F3C3\U0001F3FD\u200D\u2640\uFE0F•\U0001F3C3\U0001F3FD\u200D\u2640\u0020•</data>
+<data>•\U0001F3C3\u200D\u2640\uFE0F•\U0001F3C3\u200D\u2640•\U0001F3C3\U0001F3FD\u200D\u2640\uFE0F•\U0001F3C3\U0001F3FD\u200D\u2640\u0020<100></data>
 # 9.0 + professions
 # black heart, fitz 4, squid, fitz4, man dancing /fitz4, mother xmas /fitz4
-<data>•\U0001F5A4•\U0001F3FD•\U0001F991•\U0001F3FD•\U0001F57A\U0001F3FD•\U0001F936\U0001F3FD\u0020•</data>
+<data>•\U0001F5A4•\U0001F3FD•\U0001F991•\U0001F3FD•\U0001F57A\U0001F3FD•\U0001F936\U0001F3FD\u0020<100></data>
 # facepalm, facepalm / fitz4, facepalm + woman +evar, facepalm + woman -evar, facepalm/fitz4 + woman +evar, facepalm/fitz4 + woman -evar
-<data>•\U0001F926•\U0001F926\U0001F3FD•\U0001F926\u200D\u2640\uFE0F•\U0001F926\u200D\u2640•\U0001F926\U0001F3FD\u200D\u2640\uFE0F•\U0001F926\U0001F3FD\u200D\u2640\u0020•</data>
+<data>•\U0001F926•\U0001F926\U0001F3FD•\U0001F926\u200D\u2640\uFE0F•\U0001F926\u200D\u2640•\U0001F926\U0001F3FD\u200D\u2640\uFE0F•\U0001F926\U0001F3FD\u200D\u2640\u0020<100></data>
 # handball, handball / fitz4, handball + man +evar, handball + man -evar, handball/fitz4 + man +evar, handball/fitz4 + man -evar
-<data>•\U0001F93E•\U0001F93E\U0001F3FD•\U0001F93E\u200D\u2642\uFE0F•\U0001F93E\u200D\u2642•\U0001F93E\U0001F3FD\u200D\u2642\uFE0F•\U0001F93E\U0001F3FD\u200D\u2642\u0020•</data>
+<data>•\U0001F93E•\U0001F93E\U0001F3FD•\U0001F93E\u200D\u2642\uFE0F•\U0001F93E\u200D\u2642•\U0001F93E\U0001F3FD\u200D\u2642\uFE0F•\U0001F93E\U0001F3FD\u200D\u2642\u0020<100></data>
 # man health worker +evar, man health worker -evar, man health worker / fitz4 +evar, man health worker / fitz4 -evar
-<data>•\U0001F468\u200D\u2695\uFE0F•\U0001F468\u200D\u2695•\U0001F468\U0001F3FD\u200D\u2695\uFE0F•\U0001F468\U0001F3FD\u200D\u2695\u0020•</data>
+<data>•\U0001F468\u200D\u2695\uFE0F•\U0001F468\u200D\u2695•\U0001F468\U0001F3FD\u200D\u2695\uFE0F•\U0001F468\U0001F3FD\u200D\u2695\u0020<100></data>
 # woman astronaut, woman astronaut / fitz4
-<data>•\U0001F469\u200D\U0001F680•\U0001F469\U0001F3FD\u200D\U0001F680\u0020•</data>
+<data>•\U0001F469\u200D\U0001F680•\U0001F469\U0001F3FD\u200D\U0001F680\u0020<100></data>
 # modifier bases added in emoji 4.0
 # SNOWBOARDER/fitz-3, HORSE RACING/fitz-4, GOLFER/fitz-5, MAN IN BUSINESS SUIT LEVITATING/fitz-6, SLEEPING ACCOMMODATION/fitz-12 space
-<data>•\U0001F3C2\U0001F3FC•\U0001F3C7\U0001F3FD•\U0001F3CC\U0001F3FE•\U0001F574\U0001F3FF•\U0001F6CC\U0001F3FB\u0020•</data>
+<data>•\U0001F3C2\U0001F3FC•\U0001F3C7\U0001F3FD•\U0001F3CC\U0001F3FE•\U0001F574\U0001F3FF•\U0001F6CC\U0001F3FB\u0020<100></data>
 
 <locale ja@lb=loose>
 <line>
 # woman zwj woman zwj girl zwj girl
-<data>•\U0001F469\u200D\U0001F469\u200D\U0001F467\u200D\U0001F467•</data>
+<data>•\U0001F469\u200D\U0001F469\u200D\U0001F467\u200D\U0001F467<100></data>
 # woman zwj baby/fitz-3, older_woman/fitz-5, runner/fitz-4, raised_fist/fitz-3, fuel_pump, fitz-3
-<data>•\U0001F469\u200D\U0001F476\U0001F3FC•\U0001F475\U0001F3FE•\U0001F3C3\U0001F3FD•\u270A\U0001F3FC•\u26FD•\U0001F3FC•</data>
+<data>•\U0001F469\u200D\U0001F476\U0001F3FC•\U0001F475\U0001F3FE•\U0001F3C3\U0001F3FD•\u270A\U0001F3FC•\u26FD•\U0001F3FC<100></data>
 # man zwj hvy_blk_heart zwj man, woman, man zwj hvy_blk_heart/evar zwj man, woman
-<data>•\U0001F468\u200D\u2764\u200D\U0001F468•\U0001F469•\U0001F468\u200D\u2764\uFE0F\u200D\U0001F468•\U0001F469•</data>
+<data>•\U0001F468\u200D\u2764\u200D\U0001F468•\U0001F469•\U0001F468\u200D\u2764\uFE0F\u200D\U0001F468•\U0001F469<100></data>
 # woman zwj hvy_blk_heart/evar zwj kiss_mark zwj woman, sleuth/fitz-4, horseRacing/fitz-5
-<data>•\U0001F469\u200D\u2764\uFE0F\u200D\U0001F48B\u200D\U0001F469•\U0001F575\U0001F3FD•\U0001F3C7\U0001F3FE•</data>
+<data>•\U0001F469\u200D\u2764\uFE0F\u200D\U0001F48B\u200D\U0001F469•\U0001F575\U0001F3FD•\U0001F3C7\U0001F3FE<100></data>
 # victory_hand/evar, victory_hand/evar/fitz-1-2, victory_hand/fitz-1-2, rowboat/fitz-4, vulcan_salute/fitz-5 space,
-<data>•\u270C\uFE0F•\u270C\uFE0F\U0001F3FB•\u270C\U0001F3FB•\U0001F6A3\U0001F3FD•\U0001F596\U0001F3FE\u0020•</data>
+<data>•\u270C\uFE0F•\u270C\uFE0F\U0001F3FB•\u270C\U0001F3FB•\U0001F6A3\U0001F3FD•\U0001F596\U0001F3FE\u0020<100></data>
 # writing_hand fitz-1-2, splayed_hand/fitz-3, middle_finger/fitz-4, sign_of_horns/fitz-5, eye zwj left_speech_bubble, space
-<data>•\u270D\U0001F3FB•\U0001F590\U0001F3FC•\U0001F595\U0001F3FD•\U0001F918\U0001F3FE•\U0001F441\u200D\U0001F5E8\u0020•</data>
+<data>•\u270D\U0001F3FB•\U0001F590\U0001F3FC•\U0001F595\U0001F3FD•\U0001F918\U0001F3FE•\U0001F441\u200D\U0001F5E8\u0020<100></data>
 # 9.0 + professions
 # black heart, fitz 4, squid, fitz4, man dancing /fitz4, mother xmas /fitz4
-<data>•\U0001F5A4•\U0001F3FD•\U0001F991•\U0001F3FD•\U0001F57A\U0001F3FD•\U0001F936\U0001F3FD\u0020•</data>
+<data>•\U0001F5A4•\U0001F3FD•\U0001F991•\U0001F3FD•\U0001F57A\U0001F3FD•\U0001F936\U0001F3FD\u0020<100></data>
 # facepalm, facepalm / fitz4, facepalm + woman +evar, facepalm + woman -evar, facepalm/fitz4 + woman +evar, facepalm/fitz4 + woman -evar
-<data>•\U0001F926•\U0001F926\U0001F3FD•\U0001F926\u200D\u2640\uFE0F•\U0001F926\u200D\u2640•\U0001F926\U0001F3FD\u200D\u2640\uFE0F•\U0001F926\U0001F3FD\u200D\u2640\u0020•</data>
+<data>•\U0001F926•\U0001F926\U0001F3FD•\U0001F926\u200D\u2640\uFE0F•\U0001F926\u200D\u2640•\U0001F926\U0001F3FD\u200D\u2640\uFE0F•\U0001F926\U0001F3FD\u200D\u2640\u0020<100></data>
 # handball, handball / fitz4, handball + man +evar, handball + man -evar, handball/fitz4 + man +evar, handball/fitz4 + man -evar
-<data>•\U0001F93E•\U0001F93E\U0001F3FD•\U0001F93E\u200D\u2642\uFE0F•\U0001F93E\u200D\u2642•\U0001F93E\U0001F3FD\u200D\u2642\uFE0F•\U0001F93E\U0001F3FD\u200D\u2642\u0020•</data>
+<data>•\U0001F93E•\U0001F93E\U0001F3FD•\U0001F93E\u200D\u2642\uFE0F•\U0001F93E\u200D\u2642•\U0001F93E\U0001F3FD\u200D\u2642\uFE0F•\U0001F93E\U0001F3FD\u200D\u2642\u0020<100></data>
 # man health worker +evar, man health worker -evar, man health worker / fitz4 +evar, man health worker / fitz4 -evar
-<data>•\U0001F468\u200D\u2695\uFE0F•\U0001F468\u200D\u2695•\U0001F468\U0001F3FD\u200D\u2695\uFE0F•\U0001F468\U0001F3FD\u200D\u2695\u0020•</data>
+<data>•\U0001F468\u200D\u2695\uFE0F•\U0001F468\u200D\u2695•\U0001F468\U0001F3FD\u200D\u2695\uFE0F•\U0001F468\U0001F3FD\u200D\u2695\u0020<100></data>
 # woman astronaut, woman astronaut / fitz4
-<data>•\U0001F469\u200D\U0001F680•\U0001F469\U0001F3FD\u200D\U0001F680\u0020•</data>
+<data>•\U0001F469\u200D\U0001F680•\U0001F469\U0001F3FD\u200D\U0001F680\u0020<100></data>
 
 <locale ja@lw=phrase>
 #phrase breaking test cases for the ML solution
 <lineML>
 #９月に東京から友達が遊びに来た -> ９月に•東京から•友達が•遊びに•来た•
-<data>•\uff19\u6708\u306b•\u6771\u4eac\u304b\u3089•\u53cb\u9054\u304c•\u904a\u3073\u306b•\u6765\u305f•</data>
+<data>•\uff19\u6708\u306b•\u6771\u4eac\u304b\u3089•\u53cb\u9054\u304c•\u904a\u3073\u306b•\u6765\u305f<100></data>
 #る文字「そうだ、京都」-> る•文字•「そうだ、•京都」•
-<data>•\u308b•\u6587\u5b57•\u300c\u305d\u3046\u3060\u3001•\u4eac\u90fd\u300d•</data>
+<data>•\u308b•\u6587\u5b57•\u300c\u305d\u3046\u3060\u3001•\u4eac\u90fd\u300d<100></data>
 #Kana supplement: 𛁛 (U+1B05B), 𛂦(U+1B0A6)
 #生 𛁛𛂦゙をいただく。-> 生 𛁛𛂦゙を•いただく。
-<data>•\u751F\U0001B05B\U0001B0A6\u3099\u3092•\u3044\u305F\u3060\u304F\u3002•</data>
+<data>•\u751F\U0001B05B\U0001B0A6\u3099\u3092•\u3044\u305F\u3060\u304F\u3002<100></data>
 #中国の携帯は約５００元から５０００元です -> 中国の▁携帯は▁約▁５００元から▁５０００元です
-<data>•\u4E2D\u56FD\u306E•\u643A\u5E2F\u306F•\u7D04•\uFF15\uFF10\uFF10\u5143\u304B\u3089•\uFF15\uFF10\uFF10\uFF10\u5143\u3067\u3059•</data>
+<data>•\u4E2D\u56FD\u306E•\u643A\u5E2F\u306F•\u7D04•\uFF15\uFF10\uFF10\u5143\u304B\u3089•\uFF15\uFF10\uFF10\uFF10\u5143\u3067\u3059<100></data>
 #しかもロゴがＵｎｉｃｏｄｅ！！ -> しかも▁ロゴが▁Ｕｎｉｃｏｄｅ！！
-<data>•\u3057\u304B\u3082•\u30ED\u30B4\u304C•\uFF35\uFF4E\uFF49\uFF43\uFF4F\uFF44\uFF45\uFF01\uFF01•</data>
+<data>•\u3057\u304B\u3082•\u30ED\u30B4\u304C•\uFF35\uFF4E\uFF49\uFF43\uFF4F\uFF44\uFF45\uFF01\uFF01<100></data>
 #バッテリーを長持ちさせ、充電を最適化します -> バッテリーを▁長持ちさせ、▁充電を▁最適化します
-<data>•\u30D0\u30C3\u30C6\u30EA\u30FC\u3092•\u9577\u6301\u3061\u3055\u305B\u3001•\u5145\u96FB\u3092•\u6700\u9069\u5316\u3057\u307E\u3059•</data>
+<data>•\u30D0\u30C3\u30C6\u30EA\u30FC\u3092•\u9577\u6301\u3061\u3055\u305B\u3001•\u5145\u96FB\u3092•\u6700\u9069\u5316\u3057\u307E\u3059<100></data>
 #データのコピー、スマートフォンでのお支払いなど -> データの▁コピー、▁スマートフォンでの▁お支払いなど
-<data>•\u30C7\u30FC\u30BF\u306E•\u30B3\u30D4\u30FC\u3001•\u30B9\u30DE\u30FC\u30C8\u30D5\u30A9\u30F3\u3067\u306E•\u304A\u652F\u6255\u3044\u306A\u3069•</data>
+<data>•\u30C7\u30FC\u30BF\u306E•\u30B3\u30D4\u30FC\u3001•\u30B9\u30DE\u30FC\u30C8\u30D5\u30A9\u30F3\u3067\u306E•\u304A\u652F\u6255\u3044\u306A\u3069<100></data>
 
 <locale ja@lw=phrase>
 #phrase breaking test cases for the dictionary based solution
 <line>
 #[京都観光］時雨殿に行った。-> [京都•観光］•時雨•殿に•行った。•
-<data>•\uff3b\u4eac\u90fd•\u89b3\u5149\uff3d•\u6642\u96e8•\u6bbf\u306b•\u884c\u3063\u305f\u3002•</data>
+<data>•\uff3b\u4eac\u90fd•\u89b3\u5149\uff3d•\u6642\u96e8•\u6bbf\u306b•\u884c\u3063\u305f\u3002<100></data>
 #９月に東京から友達が遊びに来た -> ９月に•東京から•友達が•遊びに•来た•
-<data>•\uff19\u6708\u306b•\u6771\u4eac\u304b\u3089•\u53cb\u9054\u304c•\u904a\u3073\u306b•\u6765\u305f•</data>
+<data>•\uff19\u6708\u306b•\u6771\u4eac\u304b\u3089•\u53cb\u9054\u304c•\u904a\u3073\u306b•\u6765\u305f<100></data>
 #る文字「そうだ、京都」-> る•文字•「そうだ、•京都」•
-<data>•\u308b•\u6587\u5b57•\u300c\u305d\u3046\u3060\u3001•\u4eac\u90fd\u300d•</data>
+<data>•\u308b•\u6587\u5b57•\u300c\u305d\u3046\u3060\u3001•\u4eac\u90fd\u300d<100></data>
 #乗車率９０％程度だろうか。 -> 乗車•率•９０％•程度だろうか。•
-<data>•\u4e57\u8eca•\u7387•\uff19\uff10\uff05•\u7a0b\u5ea6\u3060\u308d\u3046\u304b\u3002•</data>
+<data>•\u4e57\u8eca•\u7387•\uff19\uff10\uff05•\u7a0b\u5ea6\u3060\u308d\u3046\u304b\u3002<100></data>
 #［携帯電話］正しい選択 -> ［携帯•電話］•正しい•選択•
-<data>•\uff3b\u643a\u5e2f•\u96fb\u8a71\uff3d•\u6b63\u3057\u3044•\u9078\u629e•</data>
+<data>•\uff3b\u643a\u5e2f•\u96fb\u8a71\uff3d•\u6b63\u3057\u3044•\u9078\u629e<100></data>
 #純金製百人一首にサッカーボール -> 純金•製•百人一首に•サッカーボール
-<data>•\u7D14\u91D1•\u88FD•\u767E\u4EBA\u4E00\u9996\u306B•\u30B5\u30C3\u30AB\u30FC\u30DC\u30FC\u30EB•</data>
+<data>•\u7D14\u91D1•\u88FD•\u767E\u4EBA\u4E00\u9996\u306B•\u30B5\u30C3\u30AB\u30FC\u30DC\u30FC\u30EB<100></data>
 #Kana supplement: 𛁈(U+1B048) -> \uD82C\uDC48, 𛀸(U+1B038) -> \uD82C\uDC38, 𛀙(U+1B019)-> \uD82C\uDC19</data>
 #𛁈る𛀸（しるこ）、あ𛀙よろし（あかよろし） -> 𛁈る𛀸•（しるこ）、•あ𛀙よろし•（あ•かよろし）
-<data>•\uD82C\uDC48\u308B\uD82C\uDC38•\uFF08\u3057\u308B\u3053\uFF09\u3001•\u3042\uD82C\uDC19\u3088\u308D\u3057•\uFF08\u3042•\u304B\u3088\u308D\u3057\uFF09•</data>
+<data>•\uD82C\uDC48\u308B\uD82C\uDC38•\uFF08\u3057\u308B\u3053\uFF09\u3001•\u3042\uD82C\uDC19\u3088\u308D\u3057•\uFF08\u3042•\u304B\u3088\u308D\u3057\uFF09<100></data>
 #最初に目に入るのは、「許諾なき写真禁止」のサインである。 -> 最初に▁目に▁入るのは、▁「許諾なき▁写真▁禁止」▁の▁サインで▁ある。
-<data>•\u6700\u521D\u306B•\u76EE\u306B•\u5165\u308B\u306E\u306F\u3001•\u300C\u8A31\u8AFE\u306A\u304D•\u5199\u771F•\u7981\u6B62\u300D•\u306E•\u30B5\u30A4\u30F3\u3067•\u3042\u308B\u3002•</data>
+<data>•\u6700\u521D\u306B•\u76EE\u306B•\u5165\u308B\u306E\u306F\u3001•\u300C\u8A31\u8AFE\u306A\u304D•\u5199\u771F•\u7981\u6B62\u300D•\u306E•\u30B5\u30A4\u30F3\u3067•\u3042\u308B\u3002<100></data>
 #ｄｏｃｏｍｏのサイト情報によると、７８０００パケット以上▁使うならパケ放題がいいとか -> ｄｏｃｏｍｏの▁サイト▁情報によると、▁７８０００パケット▁以上▁使うなら▁パケ▁放題が▁いい▁とか
-<data>•\uFF44\uFF4F\uFF43\uFF4F\uFF4D\uFF4F\u306E•\u30B5\u30A4\u30C8•\u60C5\u5831\u306B\u3088\u308B\u3068\u3001•\uFF17\uFF18\uFF10\uFF10\uFF10\u30D1\u30B1\u30C3\u30C8•\u4EE5\u4E0A•\u4F7F\u3046\u306A\u3089•\u30D1\u30B1•\u653E\u984C\u304C•\u3044\u3044•\u3068\u304B•</data>
+<data>•\uFF44\uFF4F\uFF43\uFF4F\uFF4D\uFF4F\u306E•\u30B5\u30A4\u30C8•\u60C5\u5831\u306B\u3088\u308B\u3068\u3001•\uFF17\uFF18\uFF10\uFF10\uFF10\u30D1\u30B1\u30C3\u30C8•\u4EE5\u4E0A•\u4F7F\u3046\u306A\u3089•\u30D1\u30B1•\u653E\u984C\u304C•\u3044\u3044•\u3068\u304B<100></data>
 #日本の携帯はＣＤＭＡの形だといわれています -> 日本の▁携帯は▁ＣＤＭＡの▁形だと▁いわれ▁ています
-<data>•\u65E5\u672C\u306E•\u643A\u5E2F\u306F•\uFF23\uFF24\uFF2D\uFF21\u306E•\u5F62\u3060\u3068•\u3044\u308F\u308C•\u3066\u3044\u307E\u3059•</data>
+<data>•\u65E5\u672C\u306E•\u643A\u5E2F\u306F•\uFF23\uFF24\uFF2D\uFF21\u306E•\u5F62\u3060\u3068•\u3044\u308F\u308C•\u3066\u3044\u307E\u3059<100></data>
 #中国の携帯は約５００元から５０００元です -> 中国の▁携帯は▁約▁５００元から▁５０００元です
-<data>•\u4E2D\u56FD\u306E•\u643A\u5E2F\u306F•\u7D04•\uFF15\uFF10\uFF10\u5143\u304B\u3089•\uFF15\uFF10\uFF10\uFF10\u5143\u3067\u3059•</data>
+<data>•\u4E2D\u56FD\u306E•\u643A\u5E2F\u306F•\u7D04•\uFF15\uFF10\uFF10\u5143\u304B\u3089•\uFF15\uFF10\uFF10\uFF10\u5143\u3067\u3059<100></data>
 #プリペイドカード携帯布教 -> プリペイドカード▁携帯▁布教
-<data>•\u30D7\u30EA\u30DA\u30A4\u30C9\u30AB\u30FC\u30C9•\u643A\u5E2F•\u5E03\u6559•</data>
+<data>•\u30D7\u30EA\u30DA\u30A4\u30C9\u30AB\u30FC\u30C9•\u643A\u5E2F•\u5E03\u6559<100></data>
 #しかもロゴがＵｎｉｃｏｄｅ！！ -> しかも▁ロゴが▁Ｕｎｉｃｏｄｅ！！
-<data>•\u3057\u304B\u3082•\u30ED\u30B4\u304C•\uFF35\uFF4E\uFF49\uFF43\uFF4F\uFF44\uFF45\uFF01\uFF01•</data>
+<data>•\u3057\u304B\u3082•\u30ED\u30B4\u304C•\uFF35\uFF4E\uFF49\uFF43\uFF4F\uFF44\uFF45\uFF01\uFF01<100></data>
 #しかし、これらのサービスは６年間使ってこなかった自分にとっては特に必要でないものであり、これからこの機能が加わったからといって特別ハッピーなわけでもない。
 #-> しかし、▁これらの▁サービスは▁６年間▁使ってこなかった▁自分にとっては▁特に▁必要でない▁もので▁あり、▁これから▁この▁機能が▁加わったから▁といって▁特別▁ハッピーな▁わけでもない。
-<data>•\u3057\u304B\u3057\u3001•\u3053\u308C\u3089\u306E•\u30B5\u30FC\u30D3\u30B9\u306F•\uFF16\u5E74\u9593•\u4F7F\u3063\u3066\u3053\u306A\u304B\u3063\u305F•\u81EA\u5206\u306B\u3068\u3063\u3066\u306F•\u7279\u306B•\u5FC5\u8981\u3067\u306A\u3044•\u3082\u306E\u3067•\u3042\u308A\u3001•\u3053\u308C\u304B\u3089•\u3053\u306E•\u6A5F\u80FD\u304C•\u52A0\u308F\u3063\u305F\u304B\u3089•\u3068\u3044\u3063\u3066•\u7279\u5225•\u30CF\u30C3\u30D4\u30FC\u306A•\u308F\u3051\u3067\u3082\u306A\u3044\u3002•</data>
+<data>•\u3057\u304B\u3057\u3001•\u3053\u308C\u3089\u306E•\u30B5\u30FC\u30D3\u30B9\u306F•\uFF16\u5E74\u9593•\u4F7F\u3063\u3066\u3053\u306A\u304B\u3063\u305F•\u81EA\u5206\u306B\u3068\u3063\u3066\u306F•\u7279\u306B•\u5FC5\u8981\u3067\u306A\u3044•\u3082\u306E\u3067•\u3042\u308A\u3001•\u3053\u308C\u304B\u3089•\u3053\u306E•\u6A5F\u80FD\u304C•\u52A0\u308F\u3063\u305F\u304B\u3089•\u3068\u3044\u3063\u3066•\u7279\u5225•\u30CF\u30C3\u30D4\u30FC\u306A•\u308F\u3051\u3067\u3082\u306A\u3044\u3002<100></data>
 #自由が丘での三ヶ月の生活を通して得られる経験 -> 自由が丘での▁三ヶ月の▁生活を通して▁得られる▁経験
-<data>•\u81EA\u7531\u304C\u4E18\u3067\u306E•\u4E09\u30F6\u6708\u306E•\u751F\u6D3B\u3092\u901A\u3057\u3066•\u5F97\u3089\u308C\u308B•\u7D4C\u9A13•</data>
+<data>•\u81EA\u7531\u304C\u4E18\u3067\u306E•\u4E09\u30F6\u6708\u306E•\u751F\u6D3B\u3092\u901A\u3057\u3066•\u5F97\u3089\u308C\u308B•\u7D4C\u9A13<100></data>
 #幕の内弁当がよく買われるらしいです。 -> 幕の内▁弁当が▁よく▁買われるらしいです。
-<data>•\u5E55\u306E\u5185•\u5F01\u5F53\u304C•\u3088\u304F•\u8CB7\u308F\u308C\u308B\u3089\u3057\u3044\u3067\u3059\u3002•</data>
+<data>•\u5E55\u306E\u5185•\u5F01\u5F53\u304C•\u3088\u304F•\u8CB7\u308F\u308C\u308B\u3089\u3057\u3044\u3067\u3059\u3002<100></data>
 #その名の通りに伝われと望まれています。 -> その▁名の通りに▁伝われと▁望まれ▁ています。
-<data>•\u305D\u306E•\u540D\u306E\u901A\u308A\u306B•\u4F1D\u308F\u308C\u3068•\u671B\u307E\u308C•\u3066\u3044\u307E\u3059\u3002•</data>
+<data>•\u305D\u306E•\u540D\u306E\u901A\u308A\u306B•\u4F1D\u308F\u308C\u3068•\u671B\u307E\u308C•\u3066\u3044\u307E\u3059\u3002<100></data>
 #下鴨神社の糺の森は、静かだし、ちょっとした空き時間の散歩にいいですよ♪  -> 下鴨▁神社の▁糺の森は、▁静か▁だし、▁ちょっとした▁空き▁時間の▁散歩に▁いいですよ♪
-<data>•\u4E0B\u9D28•\u795E\u793E\u306E•\u7CFA\u306E\u68EE\u306F\u3001•\u9759\u304B•\u3060\u3057\u3001•\u3061\u3087\u3063\u3068\u3057\u305F•\u7A7A\u304D•\u6642\u9593\u306E•\u6563\u6B69\u306B•\u3044\u3044\u3067\u3059\u3088\u266A•</data>
+<data>•\u4E0B\u9D28•\u795E\u793E\u306E•\u7CFA\u306E\u68EE\u306F\u3001•\u9759\u304B•\u3060\u3057\u3001•\u3061\u3087\u3063\u3068\u3057\u305F•\u7A7A\u304D•\u6642\u9593\u306E•\u6563\u6B69\u306B•\u3044\u3044\u3067\u3059\u3088\u266A<100></data>
 #この論理は、別の弱点から逃避するためによく使われるので注意が必要ですが。 ->  この▁論理は、▁別の▁弱点から▁逃避▁する▁ために▁よく▁使われるので▁注意が▁必要▁ですが。
-<data>•\u3053\u306E•\u8AD6\u7406\u306F\u3001•\u5225\u306E•\u5F31\u70B9\u304B\u3089•\u9003\u907F•\u3059\u308B•\u305F\u3081\u306B•\u3088\u304F•\u4F7F\u308F\u308C\u308B\u306E\u3067•\u6CE8\u610F\u304C•\u5FC5\u8981•\u3067\u3059\u304C\u3002•</data>
+<data>•\u3053\u306E•\u8AD6\u7406\u306F\u3001•\u5225\u306E•\u5F31\u70B9\u304B\u3089•\u9003\u907F•\u3059\u308B•\u305F\u3081\u306B•\u3088\u304F•\u4F7F\u308F\u308C\u308B\u306E\u3067•\u6CE8\u610F\u304C•\u5FC5\u8981•\u3067\u3059\u304C\u3002<100></data>
 #バッテリーを長持ちさせ、充電を最適化します -> バッテリーを▁長持ちさせ、▁充電を▁最適化します
-<data>•\u30D0\u30C3\u30C6\u30EA\u30FC\u3092•\u9577\u6301\u3061\u3055\u305B\u3001•\u5145\u96FB\u3092•\u6700\u9069\u5316\u3057\u307E\u3059•</data>
+<data>•\u30D0\u30C3\u30C6\u30EA\u30FC\u3092•\u9577\u6301\u3061\u3055\u305B\u3001•\u5145\u96FB\u3092•\u6700\u9069\u5316\u3057\u307E\u3059<100></data>
 #開発者サービス -> 開発者▁サービス
-<data>•\u958B\u767A\u8005•\u30B5\u30FC\u30D3\u30B9•</data>
+<data>•\u958B\u767A\u8005•\u30B5\u30FC\u30D3\u30B9<100></data>
 #長さを選択して感度を調整し、電源ボタンを長押しします。 -> 長さを▁選択して▁感度を▁調整し、▁電源▁ボタンを▁長押しします。
-<data>•\u9577\u3055\u3092•\u9078\u629E\u3057\u3066•\u611F\u5EA6\u3092•\u8ABF\u6574\u3057\u3001•\u96FB\u6E90•\u30DC\u30BF\u30F3\u3092•\u9577\u62BC\u3057\u3057\u307E\u3059\u3002•</data>
+<data>•\u9577\u3055\u3092•\u9078\u629E\u3057\u3066•\u611F\u5EA6\u3092•\u8ABF\u6574\u3057\u3001•\u96FB\u6E90•\u30DC\u30BF\u30F3\u3092•\u9577\u62BC\u3057\u3057\u307E\u3059\u3002<100></data>
 #データのコピー、スマートフォンでのお支払いなど -> データの▁コピー、▁スマートフォンでの▁お支払いなど
-<data>•\u30C7\u30FC\u30BF\u306E•\u30B3\u30D4\u30FC\u3001•\u30B9\u30DE\u30FC\u30C8\u30D5\u30A9\u30F3\u3067\u306E•\u304A\u652F\u6255\u3044\u306A\u3069•</data>
+<data>•\u30C7\u30FC\u30BF\u306E•\u30B3\u30D4\u30FC\u3001•\u30B9\u30DE\u30FC\u30C8\u30D5\u30A9\u30F3\u3067\u306E•\u304A\u652F\u6255\u3044\u306A\u3069<100></data>
 #データ使用量を節約します -> データ▁使用量を▁節約します
-<data>•\u30C7\u30FC\u30BF•\u4F7F\u7528\u91CF\u3092•\u7BC0\u7D04\u3057\u307E\u3059•</data>
+<data>•\u30C7\u30FC\u30BF•\u4F7F\u7528\u91CF\u3092•\u7BC0\u7D04\u3057\u307E\u3059<100></data>
 #スマートフォンで設定できる最低限の明るさよりも画面を暗くします -> スマートフォンで▁設定▁できる▁最低限の▁明るさよりも▁画面を▁暗くします
-<data>•\u30B9\u30DE\u30FC\u30C8\u30D5\u30A9\u30F3\u3067•\u8A2D\u5B9A•\u3067\u304D\u308B•\u6700\u4F4E\u9650\u306E•\u660E\u308B\u3055\u3088\u308A\u3082•\u753B\u9762\u3092•\u6697\u304F\u3057\u307E\u3059•</data>
+<data>•\u30B9\u30DE\u30FC\u30C8\u30D5\u30A9\u30F3\u3067•\u8A2D\u5B9A•\u3067\u304D\u308B•\u6700\u4F4E\u9650\u306E•\u660E\u308B\u3055\u3088\u308A\u3082•\u753B\u9762\u3092•\u6697\u304F\u3057\u307E\u3059<100></data>
 #寝転んでいても -> 寝転んでいても
-<data>•\u5BDD\u8EE2\u3093\u3067\u3044\u3066\u3082•</data>
+<data>•\u5BDD\u8EE2\u3093\u3067\u3044\u3066\u3082<100></data>
 #周囲の状況にもご注意ください -> 周囲の▁状況にも▁ご注意▁くだ▁さい
-<data>•\u5468\u56F2\u306E•\u72B6\u6CC1\u306B\u3082•\u3054\u6CE8\u610F•\u304F\u3060•\u3055\u3044•</data>
+<data>•\u5468\u56F2\u306E•\u72B6\u6CC1\u306B\u3082•\u3054\u6CE8\u610F•\u304F\u3060•\u3055\u3044<100></data>
 #国や地域によってはご利用いただけない場合があります -> 国や▁地域によっては▁ご利用いただけない▁場合が▁あります
-<data>•\u56FD\u3084•\u5730\u57DF\u306B\u3088\u3063\u3066\u306F•\u3054\u5229\u7528\u3044\u305F\u3060\u3051\u306A\u3044•\u5834\u5408\u304C•\u3042\u308A\u307E\u3059•</data>
+<data>•\u56FD\u3084•\u5730\u57DF\u306B\u3088\u3063\u3066\u306F•\u3054\u5229\u7528\u3044\u305F\u3060\u3051\u306A\u3044•\u5834\u5408\u304C•\u3042\u308A\u307E\u3059<100></data>
 #前回停止した場所からお楽しみいただけます -> 前回▁停止した▁場所から▁お楽しみいただけます
-<data>•\u524D\u56DE•\u505C\u6B62\u3057\u305F•\u5834\u6240\u304B\u3089•\u304A\u697D\u3057\u307F\u3044\u305F\u3060\u3051\u307E\u3059•</data>
+<data>•\u524D\u56DE•\u505C\u6B62\u3057\u305F•\u5834\u6240\u304B\u3089•\u304A\u697D\u3057\u307F\u3044\u305F\u3060\u3051\u307E\u3059<100></data>
 #聞き逃したくない音をスマートフォンで常時検出できます -> 聞き逃したくない▁音を▁スマートフォンで▁常時▁検出▁できます
-<data>•\u805E\u304D\u9003\u3057\u305F\u304F\u306A\u3044•\u97F3\u3092•\u30B9\u30DE\u30FC\u30C8\u30D5\u30A9\u30F3\u3067•\u5E38\u6642•\u691C\u51FA•\u3067\u304D\u307E\u3059•</data>
+<data>•\u805E\u304D\u9003\u3057\u305F\u304F\u306A\u3044•\u97F3\u3092•\u30B9\u30DE\u30FC\u30C8\u30D5\u30A9\u30F3\u3067•\u5E38\u6642•\u691C\u51FA•\u3067\u304D\u307E\u3059<100></data>
 #メニューのボタンを大きくする -> メニューの▁ボタンを▁大きく▁する
-<data>•\u30E1\u30CB\u30E5\u30FC\u306E•\u30DC\u30BF\u30F3\u3092•\u5927\u304D\u304F•\u3059\u308B•</data>
+<data>•\u30E1\u30CB\u30E5\u30FC\u306E•\u30DC\u30BF\u30F3\u3092•\u5927\u304D\u304F•\u3059\u308B<100></data>
 #これらの連絡先はデバイスをロック解除しなくても表示され -> これらの▁連絡先は▁デバイスを▁ロック▁解除しなくても▁表示され
-<data>•\u3053\u308C\u3089\u306E•\u9023\u7D61\u5148\u306F•\u30C7\u30D0\u30A4\u30B9\u3092•\u30ED\u30C3\u30AF•\u89E3\u9664\u3057\u306A\u304F\u3066\u3082•\u8868\u793A\u3055\u308C•</data>
+<data>•\u3053\u308C\u3089\u306E•\u9023\u7D61\u5148\u306F•\u30C7\u30D0\u30A4\u30B9\u3092•\u30ED\u30C3\u30AF•\u89E3\u9664\u3057\u306A\u304F\u3066\u3082•\u8868\u793A\u3055\u308C<100></data>
 
 # Test the differences in ko with or without lw=phrase.
 <locale ko@lw=phrase>
 <line>
 #1948년 7월 12일에 제정되고 8차에 국민투표에 의하여 개정한다.
-<data>•1948년 •7월 •12일에 •제정되고 •8차에 •국민투표에 •의하여 •개정한다.•</data>
+<data>•1948년 •7월 •12일에 •제정되고 •8차에 •국민투표에 •의하여 •개정한다.<100></data>
 #대한민국은 민주공화국이다.
-<data>•대한민국은 •민주공화국이다.•</data>
+<data>•대한민국은 •민주공화국이다.<100></data>
 #서울에서 부산까지 London까지
-<data>•서울에서 •부산까지 •London까지•</data>
+<data>•서울에서 •부산까지 •London까지<100></data>
 #LTE가 안 되면 WiFi를
-<data>•LTE가 •안 •되면 •WiFi를•</data>
+<data>•LTE가 •안 •되면 •WiFi를<100></data>
 #<님의 침묵>을 읽고 느낀 점은?
-<data>•\u003c님의 •침묵\u003e을 •읽고 •느낀 •점은?•</data>
+<data>•\u003c님의 •침묵\u003e을 •읽고 •느낀 •점은?<100></data>
 # The following entry passes in ICU4C but fails in ICU4J for an unknown reason.
 #"님의 침묵"을 읽고
 #<data>•"님의 •침묵"을 •읽고•</data>
@@ -2017,32 +2021,32 @@ Bangkok)•</data>
 #<data>•大韓民國은 •民主•共和國이다•</data>
 # All the tests for ja@lw=phrase should also work in Korean.
 #る文字「そうだ、京都」-> る•文字•「そうだ、•京都」•
-<data>•\u308b•\u6587\u5b57•\u300c\u305d\u3046\u3060\u3001•\u4eac\u90fd\u300d•</data>
+<data>•\u308b•\u6587\u5b57•\u300c\u305d\u3046\u3060\u3001•\u4eac\u90fd\u300d<100></data>
 #９月に東京から友達が遊びに来た -> ９月に•東京から•友達が•遊びに•来た•
-<data>•\uff19\u6708\u306b•\u6771\u4eac\u304b\u3089•\u53cb\u9054\u304c•\u904a\u3073\u306b•\u6765\u305f•</data>
+<data>•\uff19\u6708\u306b•\u6771\u4eac\u304b\u3089•\u53cb\u9054\u304c•\u904a\u3073\u306b•\u6765\u305f<100></data>
 
 <locale ko>
 <line>
 #1948년 7월 12일에 제정되고 8차에 국민투표에 의하여 개정한다.
-<data>•1948•년 •7•월 •12•일•에 •제•정•되•고 •8•차•에 •국•민•투•표•에 •의•하•여•개•정•한•다.•</data>
+<data>•1948•년 •7•월 •12•일•에 •제•정•되•고 •8•차•에 •국•민•투•표•에 •의•하•여•개•정•한•다.<100></data>
 #대한민국은 민주공화국이다.
-<data>•대•한•민•국•은 •민•주•공•화•국•이•다.•</data>
+<data>•대•한•민•국•은 •민•주•공•화•국•이•다.<100></data>
 #서울에서 부산까지 London까지
-<data>•서•울•에•서 •부•산•까•지 •London•까•지•</data>
+<data>•서•울•에•서 •부•산•까•지 •London•까•지<100></data>
 #LTE가 안 되면 WiFi를
-<data>•LTE•가 •안 •되•면 •WiFi•를•</data>
+<data>•LTE•가 •안 •되•면 •WiFi•를<100></data>
 #<님의 침묵>을 읽고 느낀 점은?
-<data>•\u003c•님•의 •침•묵•\u003e•을 •읽•고 •느•낀 •점•은?•</data>
+<data>•\u003c•님•의 •침•묵•\u003e•을 •읽•고 •느•낀 •점•은?<100></data>
 #"님의 침묵"을 읽고
-<data>•"님•의 •침•묵"을 •읽•고•</data>
+<data>•"님•의 •침•묵"을 •읽•고<100></data>
 #“님의 침묵”을 읽고
-<data>•“님•의 •침•묵”•을 •읽•고•</data>
+<data>•“님•의 •침•묵”•을 •읽•고<100></data>
 #『님의 침묵』을 읽고
-<data>•『님•의 •침•묵』•을 •읽•고•</data>
+<data>•『님•의 •침•묵』•을 •읽•고<100></data>
 #『foo bar』load
-<data>•『foo •bar』•load•</data>
+<data>•『foo •bar』•load<100></data>
 #《님의 침묵》을 읽고
-<data>•《님•의 •침•묵》•을 •읽•고•</data>
+<data>•《님•의 •침•묵》•을 •읽•고<100></data>
 
 ####################################################################################
 #
@@ -2194,27 +2198,27 @@ Bangkok)•</data>
 
 <locale en>
 <line>
-<data>•\U00011F26•\U00011F02\U00011F2D•\U00011F26\U00011F42\U00011F26•\U00011F31\U00011F41•</data>
-<data>•\u1BD7\u1BEC•\u1BD2\u1BEA\u1BC9\u1BF3•\u1BC2\u1BE7\u1BC9\u1BF3•</data>
-<data>•\u1B18•\u1B27\u1B44\u200C\u1B2B\u1B38•\u1B31\u1B44\u1B1D\u1B36•</data>
+<data>•\U00011F26•\U00011F02\U00011F2D•\U00011F26\U00011F42\U00011F26•\U00011F31\U00011F41<100></data>
+<data>•\u1BD7\u1BEC•\u1BD2\u1BEA\u1BC9\u1BF3•\u1BC2\u1BE7\u1BC9\u1BF3<100></data>
+<data>•\u1B18•\u1B27\u1B44\u200C\u1B2B\u1B38•\u1B31\u1B44\u1B1D\u1B36<100></data>
 
 # Line breaking around quotation marks (LB 15a and LB 15b).
 <locale en>
 <line>
-<data>•Some •« basic » •quoting•</data>
-<data>•Some •»German« •quoting•</data>
-<data>•( « bracketed » ) •quoting•</data>
-<data>•« « Nesting » »•</data>
-<data>•子•曰：•“学•而•时•习•之，•不•亦•说•乎？•有•朋•自•远•方•来，•不•亦•乐•乎？•人•不•知•而•不•愠，•不•亦•君•子•乎？”•</data>
-<data>•子•贡•曰：•“贫•而•无•谄，•富•而•无•骄，•何•如？”•子•曰：•“可•也。•未•若•贫•而•乐，•富•而•好•礼•者•也”。•子•贡•曰：•“《诗》•云：•‘如•切•如•磋，•如•琢•如•磨。’•其•斯•之•谓•与？”•子•曰：•“赐•也，•始•可•与•言•《诗》•已•矣！•吿•诸•往•而•知•来•者。”•</data>
-<data>•哪•一•所•中•国•学•校•乃•“为•各•省•派•往•日•本•游•学•之•首•倡”？•</data>
-<data>•哪•个•商•标•以•人•名•为•名，•因•特•色•小•吃•“五•台•杂•烩•汤”•而•入•选•“新•疆•老•字•号”？•</data>
-<data>•毕•士•悌•（1901•年•—•1936•年）•又•名•“杨•林”，•朝•鲜•籍•红•军•将•领•</data>
-<data>•Anmerkung: •„White“ •bzw. •‚白•人‘ •– •in •der •Amtlichen •Statistik•</data>
-<data>•« Complex »« chaining » •</data>
-<data>•« .618 »•</data>  # Interaction with the ICU tailoring to break before such numbers.
+<data>•Some •« basic » •quoting<100></data>
+<data>•Some •»German« •quoting<100></data>
+<data>•( « bracketed » ) •quoting<100></data>
+<data>•« « Nesting » »<100></data>
+<data>•子•曰：•“学•而•时•习•之，•不•亦•说•乎？•有•朋•自•远•方•来，•不•亦•乐•乎？•人•不•知•而•不•愠，•不•亦•君•子•乎？”<100></data>
+<data>•子•贡•曰：•“贫•而•无•谄，•富•而•无•骄，•何•如？”•子•曰：•“可•也。•未•若•贫•而•乐，•富•而•好•礼•者•也”。•子•贡•曰：•“《诗》•云：•‘如•切•如•磋，•如•琢•如•磨。’•其•斯•之•谓•与？”•子•曰：•“赐•也，•始•可•与•言•《诗》•已•矣！•吿•诸•往•而•知•来•者。”<100></data>
+<data>•哪•一•所•中•国•学•校•乃•“为•各•省•派•往•日•本•游•学•之•首•倡”？<100></data>
+<data>•哪•个•商•标•以•人•名•为•名，•因•特•色•小•吃•“五•台•杂•烩•汤”•而•入•选•“新•疆•老•字•号”？<100></data>
+<data>•毕•士•悌•（1901•年•—•1936•年）•又•名•“杨•林”，•朝•鲜•籍•红•军•将•领<100></data>
+<data>•Anmerkung: •„White“ •bzw. •‚白•人‘ •– •in •der •Amtlichen •Statistik<100></data>
+<data>•« Complex »« chaining » <100></data>
+<data>•« .618 »<100></data>  # Interaction with the ICU tailoring to break before such numbers.
 
 # A hyphen following non-breaking space that carries an intervening combining
 # mark is treated as word-initial; by LB20a it has no break opportunity after
 # it.  A bug in ICU 76 incorrectly handled that case (ICU-22986).
-<data>• ̄-k•</data>
+<data>• ̄-k<100></data>

@@ -958,7 +958,7 @@ public class MessageFormat extends UFormat implements Cloneable {
      * @stable ICU 3.8
      */
     public final StringBuffer format(
-            Map<String, Object> arguments, StringBuffer result, FieldPosition pos) {
+            Map<String, ?> arguments, StringBuffer result, FieldPosition pos) {
         format(null, arguments, new AppendableWrapper(result), pos);
         return result;
     }
@@ -990,8 +990,6 @@ public class MessageFormat extends UFormat implements Cloneable {
      * Creates a MessageFormat with the given pattern and uses it to format the given arguments. The
      * pattern must identifyarguments by name instead of by number.
      *
-     * <p>
-     *
      * @throws IllegalArgumentException if the pattern is invalid
      * @throws IllegalArgumentException if a value in the <code>arguments</code> array is not of the
      *     type expected by the corresponding argument or custom Format object.
@@ -999,7 +997,7 @@ public class MessageFormat extends UFormat implements Cloneable {
      * @see #format(String, Object[])
      * @stable ICU 3.8
      */
-    public static String format(String pattern, Map<String, Object> arguments) {
+    public static String format(String pattern, Map<String, ?> arguments) {
         MessageFormat temp = new MessageFormat(pattern);
         return temp.format(arguments);
     }
@@ -1583,7 +1581,7 @@ public class MessageFormat extends UFormat implements Cloneable {
             int msgStart,
             PluralSelectorContext pluralNumber,
             Object[] args,
-            Map<String, Object> argsMap,
+            Map<String, ?> argsMap,
             AppendableWrapper dest,
             FieldPosition fp) {
         String msgString = msgPattern.getPatternString();
@@ -1757,7 +1755,7 @@ public class MessageFormat extends UFormat implements Cloneable {
             int msgStart,
             PluralSelectorContext pluralNumber,
             Object[] args,
-            Map<String, Object> argsMap,
+            Map<String, ?> argsMap,
             AppendableWrapper dest) {
         if (!msgPattern.jdkAposMode()) {
             format(msgStart, pluralNumber, args, argsMap, dest, null);
@@ -2131,7 +2129,7 @@ public class MessageFormat extends UFormat implements Cloneable {
     @SuppressWarnings("unchecked")
     private void format(Object arguments, AppendableWrapper result, FieldPosition fp) {
         if ((arguments == null || arguments instanceof Map)) {
-            format(null, (Map<String, Object>) arguments, result, fp);
+            format(null, (Map<String, ?>) arguments, result, fp);
         } else {
             format((Object[]) arguments, null, result, fp);
         }
@@ -2144,10 +2142,7 @@ public class MessageFormat extends UFormat implements Cloneable {
      *     the type expected by the format element(s) that use it.
      */
     private void format(
-            Object[] arguments,
-            Map<String, Object> argsMap,
-            AppendableWrapper dest,
-            FieldPosition fp) {
+            Object[] arguments, Map<String, ?> argsMap, AppendableWrapper dest, FieldPosition fp) {
         if (arguments != null && msgPattern.hasNamedArguments()) {
             throw new IllegalArgumentException(
                     "This method is not available in MessageFormat objects "
@@ -2554,10 +2549,8 @@ public class MessageFormat extends UFormat implements Cloneable {
                             break;
                     }
                     break;
-                /// CLOVER:OFF
                 default: // Never happens.
                     break;
-                    /// CLOVER:ON
             }
             buf.append(c);
         }

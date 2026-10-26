@@ -1,6 +1,6 @@
 
 # Test data for unit region preferences
-#  Copyright © 1991-2025 Unicode, Inc.
+#  Copyright © 1991-2026 Unicode, Inc.
 #  For terms of use, see http://www.unicode.org/copyright.html
 #  SPDX-License-Identifier: Unicode-3.0
 #  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
@@ -133,6 +133,10 @@ energy;	food;	US;	18828/5;	3765.6;	kilogram-square-meter-per-square-second;	9/10
 energy;	food;	001;	23012/5;	4602.4;	kilogram-square-meter-per-square-second;	11/10;	1.1;	kilocalorie
 energy;	food;	001;	4184;	4184.0;	kilogram-square-meter-per-square-second;	1;	1.0;	kilocalorie
 energy;	food;	001;	18828/5;	3765.6;	kilogram-square-meter-per-square-second;	9/10;	0.9;	kilocalorie
+
+force;	default;	001;	11/10;	1.1;	kilogram-meter-per-square-second;	11/10;	1.1;	newton
+force;	default;	001;	1;	1.0;	kilogram-meter-per-square-second;	1;	1.0;	newton
+force;	default;	001;	9/10;	0.9;	kilogram-meter-per-square-second;	9/10;	0.9;	newton
 
 length;	default;	001;	1100;	1100.0;	meter;	11/10;	1.1;	kilometer
 length;	default;	001;	1000;	1000.0;	meter;	1;	1.0;	kilometer

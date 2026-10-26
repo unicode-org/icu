@@ -23,51 +23,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         ahom{
@@ -78,51 +34,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         arab{
@@ -138,48 +50,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
             }
         }
         bali{
@@ -190,51 +61,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         beng{
@@ -245,51 +72,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         bhks{
@@ -300,51 +83,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         brah{
@@ -355,51 +94,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         cakm{
@@ -410,51 +105,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         cham{
@@ -465,51 +116,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         deva{
@@ -520,51 +127,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         diak{
@@ -575,51 +138,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         fullwide{
@@ -630,51 +149,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         gara{
@@ -685,51 +160,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         gong{
@@ -740,51 +171,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         gonm{
@@ -795,51 +182,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         gujr{
@@ -850,51 +193,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         gukh{
@@ -905,51 +204,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         guru{
@@ -960,51 +215,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         hanidec{
@@ -1015,51 +226,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         hmng{
@@ -1070,51 +237,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         hmnp{
@@ -1125,51 +248,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         java{
@@ -1180,51 +259,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         kali{
@@ -1235,51 +270,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         kawi{
@@ -1290,51 +281,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         khmr{
@@ -1345,51 +292,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         knda{
@@ -1400,51 +303,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         krai{
@@ -1455,51 +314,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         lana{
@@ -1512,49 +327,6 @@ ba{
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
             }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
-            }
         }
         lanatham{
             miscPatterns{
@@ -1566,49 +338,6 @@ ba{
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
             }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
-            }
         }
         laoo{
             miscPatterns{
@@ -1618,56 +347,11 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         latn{
             patterns{
-                accountingFormat{"#,##0.00 ¤"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤"}
                 currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
@@ -1791,7 +475,9 @@ ba{
                 }
             }
             symbols{
+                decimal{","}
                 group{" "}
+                nan{"һан түгел"}
             }
         }
         lepc{
@@ -1802,51 +488,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         limb{
@@ -1857,51 +499,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         mathbold{
@@ -1912,51 +510,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         mathdbl{
@@ -1967,51 +521,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         mathmono{
@@ -2022,51 +532,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         mathsanb{
@@ -2077,51 +543,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         mathsans{
@@ -2132,51 +554,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         minimalPairs{
@@ -2195,51 +573,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         modi{
@@ -2250,51 +584,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         mong{
@@ -2305,51 +595,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         mroo{
@@ -2360,51 +606,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         mtei{
@@ -2415,51 +617,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         mymr{
@@ -2470,51 +628,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         mymrepka{
@@ -2525,51 +639,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         mymrpao{
@@ -2580,51 +650,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         mymrshan{
@@ -2635,51 +661,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         mymrtlng{
@@ -2690,51 +672,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         nagm{
@@ -2745,51 +683,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         newa{
@@ -2800,51 +694,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         nkoo{
@@ -2855,51 +705,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         olck{
@@ -2910,51 +716,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         onao{
@@ -2965,51 +727,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         orya{
@@ -3020,51 +738,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         osma{
@@ -3075,51 +749,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         outlined{
@@ -3130,51 +760,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         rohg{
@@ -3185,51 +771,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         saur{
@@ -3240,51 +782,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         segment{
@@ -3297,49 +795,6 @@ ba{
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
             }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
-            }
         }
         shrd{
             miscPatterns{
@@ -3351,49 +806,6 @@ ba{
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
             }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
-            }
         }
         sind{
             miscPatterns{
@@ -3403,51 +815,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         sinh{
@@ -3460,49 +828,6 @@ ba{
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
             }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
-            }
         }
         sora{
             miscPatterns{
@@ -3513,49 +838,6 @@ ba{
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         sund{
@@ -3568,49 +850,6 @@ ba{
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
             }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
-            }
         }
         sunu{
             miscPatterns{
@@ -3621,49 +860,6 @@ ba{
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         takr{
@@ -3676,49 +872,6 @@ ba{
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
             }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
-            }
         }
         talu{
             miscPatterns{
@@ -3728,51 +881,7 @@ ba{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
-                currencyFormat{"#,##0.00 ¤"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         tamldec{
@@ -3785,49 +894,6 @@ ba{
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
             }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
-            }
         }
         telu{
             miscPatterns{
@@ -3838,49 +904,6 @@ ba{
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         thai{
@@ -3893,49 +916,6 @@ ba{
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
             }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
-            }
         }
         tibt{
             miscPatterns{
@@ -3946,49 +926,6 @@ ba{
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
         tirh{
@@ -4001,49 +938,6 @@ ba{
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
             }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
-            }
         }
         tnsa{
             miscPatterns{
@@ -4054,54 +948,6 @@ ba{
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
-            }
-        }
-        tols{
-            symbols{
-                group{" "}
             }
         }
         vaii{
@@ -4114,49 +960,6 @@ ba{
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
             }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
-            }
         }
         wara{
             miscPatterns{
@@ -4168,49 +971,6 @@ ba{
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
             }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
-            }
         }
         wcho{
             miscPatterns{
@@ -4221,49 +981,6 @@ ba{
                 accountingFormat%alphaNextToNumber{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
                 currencyFormat%alphaNextToNumber{"#,##0.00 ¤"}
-            }
-            patternsShort{
-                currencyFormat{
-                    1000{
-                        other{"0 мең ¤"}
-                    }
-                    10000{
-                        other{"00 мең ¤"}
-                    }
-                    100000{
-                        other{"000 мең ¤"}
-                    }
-                    1000000{
-                        other{"0 млн ¤"}
-                    }
-                    10000000{
-                        other{"00 млн ¤"}
-                    }
-                    100000000{
-                        other{"000 млн ¤"}
-                    }
-                    1000000000{
-                        other{"0 млрд ¤"}
-                    }
-                    10000000000{
-                        other{"00 млрд ¤"}
-                    }
-                    100000000000{
-                        other{"000 млрд ¤"}
-                    }
-                    1000000000000{
-                        other{"0 трлн ¤"}
-                    }
-                    10000000000000{
-                        other{"00 трлн ¤"}
-                    }
-                    100000000000000{
-                        other{"000 трлн ¤"}
-                    }
-                }
-            }
-            symbols{
-                group{" "}
             }
         }
     }
@@ -4425,23 +1142,11 @@ ba{
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
-                "d MMMM, EEEE, y 'й'.",
+                "EEEE, d MMMM y 'й'.",
                 "d MMMM, y 'й'.",
                 "d MMM, y 'й'.",
                 "dd.MM.y",
                 "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-            }
-            DateTimePatterns%atTime{
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-            }
-            DateTimePatterns%relative{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
@@ -4458,6 +1163,7 @@ ba{
                 GyM{"G MM.y"}
                 GyMMM{"MMM, G y 'й'."}
                 GyMMMEd{"d MMM, E, G y 'й'."}
+                GyMMMM{"MMMM, G y"}
                 GyMMMd{"d MMM, G y 'й'."}
                 GyMd{"G dd.MM.y"}
                 H{"HH 'сәғ'."}
@@ -4497,15 +1203,6 @@ ba{
                         "йом.",
                         "шәм.",
                     }
-                    narrow{
-                        "Й",
-                        "Д",
-                        "Ш",
-                        "Ш",
-                        "К",
-                        "Й",
-                        "Ш",
-                    }
                     short{
                         "йш",
                         "дш",
@@ -4526,15 +1223,6 @@ ba{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        "йәк.",
-                        "дүш.",
-                        "шиш.",
-                        "шар.",
-                        "кес.",
-                        "йом.",
-                        "шәм.",
-                    }
                     narrow{
                         "Й",
                         "Д",
@@ -4544,36 +1232,10 @@ ba{
                         "Й",
                         "Ш",
                     }
-                    short{
-                        "йш",
-                        "дш",
-                        "шш",
-                        "шр",
-                        "кс",
-                        "йм",
-                        "шб",
-                    }
-                    wide{
-                        "йәкшәмбе",
-                        "дүшәмбе",
-                        "шишәмбе",
-                        "шаршамбы",
-                        "кесаҙна",
-                        "йома",
-                        "шәмбе",
-                    }
                 }
             }
             eras{
                 abbreviated{
-                    0{"б.э.т."}
-                    1{"б.э."}
-                }
-                narrow{
-                    0{"б.э.т."}
-                    1{"б.э."}
-                }
-                narrow%variant{
                     0{"б.э.т."}
                     1{"б.э."}
                 }
@@ -4713,20 +1375,6 @@ ba{
                         "нояб.",
                         "дек.",
                     }
-                    narrow{
-                        "Ғ",
-                        "Ф",
-                        "М",
-                        "А",
-                        "М",
-                        "И",
-                        "И",
-                        "А",
-                        "С",
-                        "О",
-                        "Н",
-                        "Д",
-                    }
                     wide{
                         "ғинуар",
                         "февраль",
@@ -4743,20 +1391,6 @@ ba{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        "ғин.",
-                        "фев.",
-                        "мар.",
-                        "апр.",
-                        "май",
-                        "июн.",
-                        "июл.",
-                        "авг.",
-                        "сент.",
-                        "окт.",
-                        "нояб.",
-                        "дек.",
-                    }
                     narrow{
                         "Ғ",
                         "Ф",
@@ -4770,39 +1404,11 @@ ba{
                         "О",
                         "Н",
                         "Д",
-                    }
-                    wide{
-                        "ғинуар",
-                        "февраль",
-                        "март",
-                        "апрель",
-                        "май",
-                        "июнь",
-                        "июль",
-                        "август",
-                        "сентябрь",
-                        "октябрь",
-                        "ноябрь",
-                        "декабрь",
                     }
                 }
             }
             quarters{
                 format{
-                    abbreviated{
-                        "1-се кв.",
-                        "2-се кв.",
-                        "3-сө кв.",
-                        "4-се кв.",
-                    }
-                    wide{
-                        "1-се квартал",
-                        "2-се квартал",
-                        "3-сө квартал",
-                        "4-се квартал",
-                    }
-                }
-                stand-alone{
                     abbreviated{
                         "1-се кв.",
                         "2-се кв.",
@@ -4827,36 +1433,6 @@ ba{
             }
             monthNames{
                 format{
-                    abbreviated{
-                        "мөх.",
-                        "сәф.",
-                        "раб. I",
-                        "раб. II",
-                        "йом. I",
-                        "йом. II",
-                        "рәж.",
-                        "шәғ.",
-                        "рам.",
-                        "шәү.",
-                        "зөлҡ.",
-                        "зөлх.",
-                    }
-                    wide{
-                        "мөхәррәм",
-                        "сәфәр",
-                        "рабиғүл әүүәл",
-                        "рабиғүл ахыр",
-                        "йомадиәл әүүәл",
-                        "йомадиәл ахыр",
-                        "рәжәб",
-                        "шәғбан",
-                        "рамаҙан",
-                        "шәүүәл",
-                        "зөлҡәғиҙә",
-                        "зөлхизә",
-                    }
-                }
-                stand-alone{
                     abbreviated{
                         "мөх.",
                         "сәф.",
@@ -4994,63 +1570,13 @@ ba{
                 }
             }
         }
-        day-narrow{
-            dn{"көн"}
-            relative{
-                "-1"{"кисә"}
-                "0"{"бөгөн"}
-                "1"{"иртәгә"}
-            }
-            relativeTime{
-                future{
-                    other{"{0} көндән"}
-                }
-                past{
-                    other{"{0} көн элек"}
-                }
-            }
-        }
-        day-short{
-            dn{"көн"}
-            relative{
-                "-1"{"кисә"}
-                "0"{"бөгөн"}
-                "1"{"иртәгә"}
-            }
-            relativeTime{
-                future{
-                    other{"{0} көндән"}
-                }
-                past{
-                    other{"{0} көн элек"}
-                }
-            }
-        }
         dayOfYear{
-            dn{"йыл көнө"}
-        }
-        dayOfYear-narrow{
-            dn{"йыл көнө"}
-        }
-        dayOfYear-short{
             dn{"йыл көнө"}
         }
         dayperiod{
             dn{"AM/PM"}
         }
-        dayperiod-narrow{
-            dn{"AM/PM"}
-        }
-        dayperiod-short{
-            dn{"AM/PM"}
-        }
         era{
-            dn{"эра"}
-        }
-        era-narrow{
-            dn{"эра"}
-        }
-        era-short{
             dn{"эра"}
         }
         fri{
@@ -5114,27 +1640,10 @@ ba{
         }
         hour-narrow{
             dn{"сәғ"}
-            relative{
-                "0"{"был сәғәттә"}
-            }
-            relativeTime{
-                future{
-                    other{"{0} сәғәттән"}
-                }
-                past{
-                    other{"{0} сәғ. элек"}
-                }
-            }
         }
         hour-short{
             dn{"сәғ."}
-            relative{
-                "0"{"был сәғәттә"}
-            }
             relativeTime{
-                future{
-                    other{"{0} сәғәттән"}
-                }
                 past{
                     other{"{0} сәғ. элек"}
                 }
@@ -5156,27 +1665,10 @@ ba{
         }
         minute-narrow{
             dn{"мин"}
-            relative{
-                "0"{"был минутта"}
-            }
-            relativeTime{
-                future{
-                    other{"{0} минуттан"}
-                }
-                past{
-                    other{"{0} мин. элек"}
-                }
-            }
         }
         minute-short{
             dn{"мин."}
-            relative{
-                "0"{"был минутта"}
-            }
             relativeTime{
-                future{
-                    other{"{0} минуттан"}
-                }
                 past{
                     other{"{0} мин. элек"}
                 }
@@ -5243,38 +1735,6 @@ ba{
                 }
             }
         }
-        month-narrow{
-            dn{"ай"}
-            relative{
-                "-1"{"үткән айҙа"}
-                "0"{"был айҙа"}
-                "1"{"киләһе айҙа"}
-            }
-            relativeTime{
-                future{
-                    other{"{0} айҙан"}
-                }
-                past{
-                    other{"{0} ай элек"}
-                }
-            }
-        }
-        month-short{
-            dn{"ай"}
-            relative{
-                "-1"{"үткән айҙа"}
-                "0"{"был айҙа"}
-                "1"{"киләһе айҙа"}
-            }
-            relativeTime{
-                future{
-                    other{"{0} айҙан"}
-                }
-                past{
-                    other{"{0} ай элек"}
-                }
-            }
-        }
         quarter{
             dn{"квартал"}
             relative{
@@ -5288,22 +1748,6 @@ ba{
                 }
                 past{
                     other{"{0} квартал элек"}
-                }
-            }
-        }
-        quarter-narrow{
-            dn{"кв."}
-            relative{
-                "-1"{"үткән кв."}
-                "0"{"был кв."}
-                "1"{"киләһе кв."}
-            }
-            relativeTime{
-                future{
-                    other{"{0} кв. һуң"}
-                }
-                past{
-                    other{"{0} кв. элек"}
                 }
             }
         }
@@ -5384,27 +1828,10 @@ ba{
         }
         second-narrow{
             dn{"сек"}
-            relative{
-                "0"{"хәҙер"}
-            }
-            relativeTime{
-                future{
-                    other{"{0} секундтан"}
-                }
-                past{
-                    other{"{0} сек. элек"}
-                }
-            }
         }
         second-short{
             dn{"сек."}
-            relative{
-                "0"{"хәҙер"}
-            }
             relativeTime{
-                future{
-                    other{"{0} секундтан"}
-                }
                 past{
                     other{"{0} сек. элек"}
                 }
@@ -5608,34 +2035,14 @@ ba{
             }
         }
         week-narrow{
-            dn{"аҙна"}
-            relative{
-                "-1"{"үткән аҙнала"}
-                "0"{"был аҙнала"}
-                "1"{"киләһе аҙнала"}
-            }
-            relativePeriod{"{0} аҙнаһында"}
             relativeTime{
-                future{
-                    other{"{0} аҙнанан"}
-                }
                 past{
                     other{"{0} аҙна элек"}
                 }
             }
         }
         week-short{
-            dn{"аҙна"}
-            relative{
-                "-1"{"үткән аҙнала"}
-                "0"{"был аҙнала"}
-                "1"{"киләһе аҙнала"}
-            }
-            relativePeriod{"{0} аҙнаһында"}
             relativeTime{
-                future{
-                    other{"{0} аҙнанан"}
-                }
                 past{
                     other{"{0} аҙн. элек"}
                 }
@@ -5644,26 +2051,14 @@ ba{
         weekOfMonth{
             dn{"ай аҙнаһы"}
         }
-        weekOfMonth-narrow{
-            dn{"ай аҙн."}
-        }
         weekOfMonth-short{
             dn{"ай аҙн."}
         }
         weekday{
             dn{"аҙна көнө"}
         }
-        weekday-narrow{
-            dn{"аҙна көнө"}
-        }
-        weekday-short{
-            dn{"аҙна көнө"}
-        }
         weekdayOfMonth{
             dn{"айҙың аҙна көнө"}
-        }
-        weekdayOfMonth-narrow{
-            dn{"айҙ. аҙн. к."}
         }
         weekdayOfMonth-short{
             dn{"айҙ. аҙн. к."}
@@ -5684,43 +2079,11 @@ ba{
                 }
             }
         }
-        year-narrow{
-            dn{"й."}
-            relative{
-                "-1"{"былтыр"}
-                "0"{"быйыл"}
-                "1"{"киләһе йылда"}
-            }
-            relativeTime{
-                future{
-                    other{"{0} йылдан"}
-                }
-                past{
-                    other{"{0} йыл элек"}
-                }
-            }
-        }
         year-short{
             dn{"й."}
-            relative{
-                "-1"{"былтыр"}
-                "0"{"быйыл"}
-                "1"{"киләһе йылда"}
-            }
-            relativeTime{
-                future{
-                    other{"{0} йылдан"}
-                }
-                past{
-                    other{"{0} йыл элек"}
-                }
-            }
         }
         zone{
             dn{"сәғәт бүлкәте"}
-        }
-        zone-narrow{
-            dn{"бүлкәт"}
         }
         zone-short{
             dn{"бүлкәт"}
@@ -5731,35 +2094,7 @@ ba{
             2{"{0} йәки {1}"}
             end{"{0} йәки {1}"}
         }
-        or-narrow{
-            2{"{0} йәки {1}"}
-            end{"{0} йәки {1}"}
-        }
-        or-short{
-            2{"{0} йәки {1}"}
-            end{"{0} йәки {1}"}
-        }
         standard{
-            2{"{0} һәм {1}"}
-            end{"{0} һәм {1}"}
-        }
-        standard-narrow{
-            2{"{0} һәм {1}"}
-            end{"{0} һәм {1}"}
-        }
-        standard-short{
-            2{"{0} һәм {1}"}
-            end{"{0} һәм {1}"}
-        }
-        unit{
-            2{"{0} һәм {1}"}
-            end{"{0} һәм {1}"}
-        }
-        unit-narrow{
-            2{"{0} һәм {1}"}
-            end{"{0} һәм {1}"}
-        }
-        unit-short{
             2{"{0} һәм {1}"}
             end{"{0} һәм {1}"}
         }

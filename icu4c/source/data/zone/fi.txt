@@ -204,9 +204,6 @@ fi{
         "Europe:Copenhagen"{
             ec{"Kööpenhamina"}
         }
-        "Europe:Dublin"{
-            ld{"Irlannin kesäaika"}
-        }
         "Europe:Isle_of_Man"{
             ec{"Mansaari"}
         }
@@ -218,7 +215,6 @@ fi{
         }
         "Europe:London"{
             ec{"Lontoo"}
-            ld{"Britannian kesäaika"}
         }
         "Europe:Luxembourg"{
             ec{"Luxemburg"}
@@ -330,11 +326,6 @@ fi{
             lg{"Alaskan aika"}
             ls{"Alaskan normaaliaika"}
         }
-        "meta:Almaty"{
-            ld{"Almatyn kesäaika"}
-            lg{"Almatyn aika"}
-            ls{"Almatyn normaaliaika"}
-        }
         "meta:Amazon"{
             ld{"Amazonin kesäaika"}
             lg{"Amazonin aika"}
@@ -369,16 +360,6 @@ fi{
             ld{"Apian kesäaika"}
             lg{"Apian aika"}
             ls{"Apian normaaliaika"}
-        }
-        "meta:Aqtau"{
-            ld{"Aqtaw’n kesäaika"}
-            lg{"Aqtaw’n aika"}
-            ls{"Aqtaw’n normaaliaika"}
-        }
-        "meta:Aqtobe"{
-            ld{"Aqtöben kesäaika"}
-            lg{"Aqtöben aika"}
-            ls{"Aqtöben normaaliaika"}
         }
         "meta:Arabian"{
             ld{"Saudi-Arabian kesäaika"}
@@ -450,6 +431,10 @@ fi{
             ld{"Brasilian kesäaika"}
             lg{"Brasilian aika"}
             ls{"Brasilian normaaliaika"}
+        }
+        "meta:British"{
+            ld{"Ison-Britannian kesäaika"}
+            lg{"Ison-Britannian aika"}
         }
         "meta:Brunei"{
             ls{"Brunein aika"}
@@ -569,6 +554,11 @@ fi{
         "meta:Gilbert_Islands"{
             ls{"Gilbertsaarten aika"}
         }
+        "meta:Greenland"{
+            ld{"Grönlannin kesäaika"}
+            lg{"Grönlannin aika"}
+            ls{"Grönlannin normaaliaika"}
+        }
         "meta:Greenland_Eastern"{
             ld{"Itä-Grönlannin kesäaika"}
             lg{"Itä-Grönlannin aika"}
@@ -579,9 +569,6 @@ fi{
             lg{"Länsi-Grönlannin aika"}
             ls{"Länsi-Grönlannin normaaliaika"}
         }
-        "meta:Guam"{
-            ls{"Guamin aika"}
-        }
         "meta:Gulf"{
             ls{"Arabiemiirikuntien normaaliaika"}
         }
@@ -589,7 +576,7 @@ fi{
             ls{"Guyanan aika"}
         }
         "meta:Hawaii"{
-            ls{"Havaijin-Aleuttien normaaliaika"}
+            ls{"Havaijin normaaliaika"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"Havaijin-Aleuttien kesäaika"}
@@ -628,6 +615,10 @@ fi{
             ld{"Iranin kesäaika"}
             lg{"Iranin aika"}
             ls{"Iranin normaaliaika"}
+        }
+        "meta:Irish"{
+            ld{"Irlannin kesäaika"}
+            lg{"Irlannin aika"}
         }
         "meta:Irkutsk"{
             ld{"Irkutskin kesäaika"}
@@ -674,9 +665,6 @@ fi{
         "meta:Kyrgystan"{
             ls{"Kirgisian aika"}
         }
-        "meta:Lanka"{
-            ls{"Sri Lankan aika"}
-        }
         "meta:Line_Islands"{
             ls{"Linesaarten aika"}
         }
@@ -684,11 +672,6 @@ fi{
             ld{"Lord Howen kesäaika"}
             lg{"Lord Howen aika"}
             ls{"Lord Howen normaaliaika"}
-        }
-        "meta:Macau"{
-            ld{"Macaon kesäaika"}
-            lg{"Macaon aika"}
-            ls{"Macaon normaaliaika"}
         }
         "meta:Magadan"{
             ld{"Magadanin kesäaika"}
@@ -767,9 +750,6 @@ fi{
             lg{"Fernando de Noronhan aika"}
             ls{"Fernando de Noronhan normaaliaika"}
         }
-        "meta:North_Mariana"{
-            ls{"Pohjois-Mariaanien aika"}
-        }
         "meta:Novosibirsk"{
             ld{"Novosibirskin kesäaika"}
             lg{"Novosibirskin aika"}
@@ -823,11 +803,6 @@ fi{
         "meta:Pyongyang"{
             ls{"Pjongjangin aika"}
         }
-        "meta:Qyzylorda"{
-            ld{"Qızılordan kesäaika"}
-            lg{"Qızılordan aika"}
-            ls{"Qızılordan normaaliaika"}
-        }
         "meta:Reunion"{
             ls{"Réunionin aika"}
         }
@@ -845,8 +820,6 @@ fi{
             ls{"Samaran normaaliaika"}
         }
         "meta:Samoa"{
-            ld{"Samoan kesäaika"}
-            lg{"Samoan aika"}
             ls{"Samoan normaaliaika"}
         }
         "meta:Seychelles"{
@@ -907,6 +880,9 @@ fi{
             lg{"Uruguayn aika"}
             ls{"Uruguayn normaaliaika"}
         }
+        "meta:Urumqi"{
+            ls{"Ürümqin aika"}
+        }
         "meta:Uzbekistan"{
             ld{"Uzbekistanin kesäaika"}
             lg{"Uzbekistanin aika"}
@@ -953,7 +929,6 @@ fi{
             ls{"Yukonin aika"}
         }
         gmtFormat{"UTC{0}"}
-        gmtZeroFormat{"UTC"}
         hourFormat{"+H.mm;-H.mm"}
         regionFormat{"aikavyöhyke: {0}"}
         regionFormatDaylight{"{0} (kesäaika)"}

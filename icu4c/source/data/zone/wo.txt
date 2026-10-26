@@ -9,11 +9,10 @@ wo{
         "Etc:Unknown"{
             ec{"Dëkk buñ xamul"}
         }
-        "Europe:Dublin"{
-            ld{"waxtu Irlande"}
-        }
-        "Europe:London"{
-            ld{"Waxtu ete bu Grande Bretagne"}
+        "meta:Acre"{
+            ld{"Waxtu ete bu Acre"}
+            lg{"Jamonoy Acre"}
+            ls{"Acre waxtu buñ miin"}
         }
         "meta:Afghanistan"{
             ls{"waxtu Afganistan"}
@@ -136,6 +135,10 @@ wo{
             lg{"Waxtu Bresil"}
             ls{"Brasilia time"}
         }
+        "meta:British"{
+            ld{"Waxtu ete bu Grande Bretagne"}
+            lg{"Waxtu Grande Bretagne"}
+        }
         "meta:Brunei"{
             ls{"Brunei Darussalam"}
         }
@@ -251,6 +254,11 @@ wo{
         "meta:Gilbert_Islands"{
             ls{"waxtu ile Gilbert"}
         }
+        "meta:Greenland"{
+            ld{"Àm Samhraidh Ghraonlainn"}
+            lg{"Àm Ghraonlainn"}
+            ls{"Àm Coitcheann Ghraonlainn"}
+        }
         "meta:Greenland_Eastern"{
             ld{"Waxtu ete bu penku Greenland"}
             lg{"waxtu penku Greenland"}
@@ -268,7 +276,7 @@ wo{
             ls{"Waxtu Guyana"}
         }
         "meta:Hawaii"{
-            ls{"Waxtu buñ jagleel Hawaii-Aleutian"}
+            ls{"Waxtu Hawaii"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"Waxtu bëccëg bu Hawaii-Aleutian"}
@@ -308,6 +316,10 @@ wo{
             lg{"Waxtu Iran"}
             ls{"Iran waxtu buñ miin"}
         }
+        "meta:Irish"{
+            ld{"Waxtu estàndaaru Irlande"}
+            lg{"Waxtu Irlande"}
+        }
         "meta:Irkutsk"{
             ld{"Waxtu ete bu Irkutsk"}
             lg{"Waxtu rkutsk"}
@@ -322,6 +334,11 @@ wo{
             ld{"Japon waxtu bëccëg"}
             lg{"Japon"}
             ls{"Waxtu japon"}
+        }
+        "meta:Kamchatka"{
+            ld{"Jamonoy ete ci Kamchatka"}
+            lg{"Waxtu Kamchatka"}
+            ls{"Kamchatka waxtu"}
         }
         "meta:Kazakhstan"{
             ls{"Waxtu Kazakhstaan"}
@@ -497,9 +514,12 @@ wo{
             lg{"waxtu Saxalin"}
             ls{"Saxalin"}
         }
+        "meta:Samara"{
+            ld{"Waxtu été bu Samara"}
+            lg{"Waxtu Samara"}
+            ls{"Samara Waxtu"}
+        }
         "meta:Samoa"{
-            ld{"Samoa waxtu bëccëg"}
-            lg{"waxtu Samoa"}
             ls{"Samoa Standard Time"}
         }
         "meta:Seychelles"{
@@ -542,6 +562,11 @@ wo{
         "meta:Truk"{
             ls{"Waxtu Chuuk"}
         }
+        "meta:Turkey"{
+            ld{"Jamonoy ete ci Turki"}
+            lg{"Waxtu Turki"}
+            ls{"Jamonoy Turki"}
+        }
         "meta:Turkmenistan"{
             ld{"Waxtu ete bu Turkmenistan"}
             lg{"Waxtu Turkmenistan"}
@@ -554,6 +579,9 @@ wo{
             ld{"Uruguay waxtu ete"}
             lg{"Waxtu Urugway"}
             ls{"Uruguay waxtu buñ miin"}
+        }
+        "meta:Urumqi"{
+            ls{"Waxtu Urumqi"}
         }
         "meta:Uzbekistan"{
             ld{"Waxtu ete bu Ouzbékistan"}

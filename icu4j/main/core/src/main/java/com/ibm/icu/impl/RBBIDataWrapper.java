@@ -159,6 +159,7 @@ public final class RBBIDataWrapper {
     }
 
     /** Equals helper for state tables, including null handling. */
+    @SuppressWarnings("ReferenceEquality")
     public static boolean equals(RBBIStateTable left, RBBIStateTable right) {
         if (left == right) {
             return true;
@@ -184,7 +185,7 @@ public final class RBBIDataWrapper {
     public int[] fStatusTable;
 
     public static final int DATA_FORMAT = 0x42726b20; // "Brk "
-    public static final int FORMAT_VERSION = 0x06000000; // 6.0.0.0
+    public static final int FORMAT_VERSION = 0x07000000; // 7.0.0.0
 
     private static final class IsAcceptable implements Authenticate {
         @Override
@@ -239,7 +240,8 @@ public final class RBBIDataWrapper {
     //     enum RBBIStateTableFlags in the C version.
     //
     public static final int RBBI_LOOKAHEAD_HARD_BREAK = 1;
-    public static final int RBBI_BOF_REQUIRED = 2;
+    // No longer used since ICU 79:
+    // public static final int RBBI_BOF_REQUIRED = 2;
     public static final int RBBI_8BITS_ROWS = 4;
 
     /**

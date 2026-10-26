@@ -923,7 +923,6 @@ yrl{
         }
         "Europe:Dublin"{
             ec{"Dubirĩ"}
-            ld{"Hurariyu Retewa Irãdei"}
         }
         "Europe:Gibraltar"{
             ec{"Gibarautá"}
@@ -960,7 +959,6 @@ yrl{
         }
         "Europe:London"{
             ec{"Londres"}
-            ld{"Hurariyu Kurasí Ara Biritãniku"}
         }
         "Europe:Luxembourg"{
             ec{"Ruxẽbugu"}
@@ -1197,11 +1195,6 @@ yrl{
             lg{"Alasika Hurariyu"}
             ls{"Alasika Hurariyu Eté"}
         }
-        "meta:Almaty"{
-            ld{"Aumati Kurasí Ara Hurariyu"}
-            lg{"Aumati Hurariyu"}
-            ls{"Aumati Hurariyu Eté"}
-        }
         "meta:Amazon"{
             ld{"Amasuna Kurasí Ara Hurariyu"}
             lg{"Amasuna Hurariyu"}
@@ -1239,16 +1232,6 @@ yrl{
             ld{"Apiya Kurasí Ara Hurariyu"}
             lg{"Apiya Hurariyu"}
             ls{"Apiya Uraruiyu Retewa"}
-        }
-        "meta:Aqtau"{
-            ld{"Akitau Kurasí Ara Hurariyu"}
-            lg{"Akitau Hurariyu"}
-            ls{"Akitau Hurariyu Retewa"}
-        }
-        "meta:Aqtobe"{
-            ld{"Akitubi Kurasí Ara Hurariyu"}
-            lg{"Akitubi Hurariyu"}
-            ls{"Akitubi Hurariyu Retewa"}
         }
         "meta:Arabian"{
             ld{"Arabiya Kurasí Ara Hurariyu"}
@@ -1323,6 +1306,9 @@ yrl{
             sd{"BRST"}
             sg{"BRT"}
             ss{"BRT"}
+        }
+        "meta:British"{
+            ld{"Hurariyu Kurasí Ara Biritãniku"}
         }
         "meta:Brunei"{
             ls{"Burunei Darusaram Hurariyu"}
@@ -1449,9 +1435,6 @@ yrl{
             lg{"Guruẽrãdiya Usidẽtawara Hurariyu"}
             ls{"Guruẽrãdiya Usidẽtawara Hurariyu Retewa"}
         }
-        "meta:Guam"{
-            ls{"Guwã Hurariyu Retewa"}
-        }
         "meta:Gulf"{
             ls{"Golfo Hurariyu"}
         }
@@ -1499,6 +1482,9 @@ yrl{
             lg{"Irã Hurariyu"}
             ls{"Irã Hurariyu Retewa"}
         }
+        "meta:Irish"{
+            ld{"Hurariyu Retewa Irãdei"}
+        }
         "meta:Irkutsk"{
             ld{"Irkutisiki Kurasí Ara Hurariyu"}
             lg{"Irkutisiki Hurariyu"}
@@ -1541,9 +1527,6 @@ yrl{
         "meta:Kyrgystan"{
             ls{"Kirigiretãma Hurariyu"}
         }
-        "meta:Lanka"{
-            ls{"Rãka Hurariyu"}
-        }
         "meta:Line_Islands"{
             ls{"Kapuã-ita Inĩbu Hurariyu"}
         }
@@ -1551,11 +1534,6 @@ yrl{
             ld{"Lurudi Howe Kurasí Ara Hurariyu"}
             lg{"Lurudi Howe Hurariyu"}
             ls{"Lurudi Howe Hurariyu Retewa"}
-        }
-        "meta:Macau"{
-            ld{"Makau Kurasí Ara Hurariyu"}
-            lg{"Makau Hurariyu"}
-            ls{"Makau Hurariyu Retewa"}
         }
         "meta:Magadan"{
             ld{"Magadã Kurasí Ara Hurariyu"}
@@ -1634,9 +1612,6 @@ yrl{
             lg{"Fenãdu Nuruyã Hurariyu"}
             ls{"Fenãdu Nuruyã Hurariyu Retewa"}
         }
-        "meta:North_Mariana"{
-            ls{"Kapuã-ita Mariyãna Nuti suí Hurariyu"}
-        }
         "meta:Novosibirsk"{
             ld{"Sibirisiki Pisasú Kurasí Ara Hurariyu"}
             lg{"Sibirisiki Pisasú Hurariyu"}
@@ -1690,11 +1665,6 @@ yrl{
         "meta:Pyongyang"{
             ls{"Piúgiãgi Hurariyu"}
         }
-        "meta:Qyzylorda"{
-            ld{"Kisiroda Kurasí Ara Hurariyu"}
-            lg{"Kisiroda Hurariyu"}
-            ls{"Kisiroda Hurariyu Retewa"}
-        }
         "meta:Reunion"{
             ls{"Yumuatirisawa Hurariyu"}
         }
@@ -1712,8 +1682,6 @@ yrl{
             ls{"Samara Hurariyu Retewa"}
         }
         "meta:Samoa"{
-            ld{"Samowa Kurasí Ara Hurariyu"}
-            lg{"Samowa Hurariyu"}
             ls{"Samowa Hurariyu Retewa"}
         }
         "meta:Seychelles"{

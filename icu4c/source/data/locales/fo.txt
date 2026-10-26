@@ -145,8 +145,8 @@ fo{
                         other{"00 mió'.'"}
                     }
                     100000000{
-                        one{"000 mió'.'"}
-                        other{"000 mió'.'"}
+                        one{"000 mió"}
+                        other{"000 mió"}
                     }
                     1000000000{
                         one{"0 mia'.'"}
@@ -157,8 +157,8 @@ fo{
                         other{"00 mia'.'"}
                     }
                     100000000000{
-                        one{"000 mia'.'"}
-                        other{"000 mia'.'"}
+                        one{"000 mia"}
+                        other{"000 mia"}
                     }
                     1000000000000{
                         one{"0 bió'.'"}
@@ -568,15 +568,15 @@ fo{
                     y{"y–y G"}
                 }
                 GyM{
-                    G{"MM.y GGGGG – MM.y GGGGG"}
-                    M{"MM.y–MM.y GGGGG"}
-                    y{"MM.y–MM.y GGGGG"}
+                    G{"MM.y G – MM.y G"}
+                    M{"MM.y–MM.y G"}
+                    y{"MM.y–MM.y G"}
                 }
                 GyMEd{
-                    G{"E, dd.MM.y GGGGG – E, dd.MM.y GGGGG"}
-                    M{"E, dd.MM.y – E, dd.MM.y GGGGG"}
-                    d{"E, dd.MM.y – E, dd.MM.y GGGGG"}
-                    y{"E, dd.MM.y – E, dd.MM.y GGGGG"}
+                    G{"E, dd.MM.y G – E, dd.MM.y G"}
+                    M{"E, dd.MM.y – E, dd.MM.y G"}
+                    d{"E, dd.MM.y – E, dd.MM.y G"}
+                    y{"E, dd.MM.y – E, dd.MM.y G"}
                 }
                 GyMMM{
                     G{"MMM y G – MMM y G"}
@@ -596,10 +596,10 @@ fo{
                     y{"d. MMM y – d. MMM y G"}
                 }
                 GyMd{
-                    G{"dd.MM.y GGGGG – dd.MM.y GGGGG"}
-                    M{"dd.MM.y – dd.MM.y GGGGG"}
-                    d{"dd.MM.y–dd.MM.y GGGGG"}
-                    y{"dd.MM.y – dd.MM.y GGGGG"}
+                    G{"dd.MM.y G – dd.MM.y G"}
+                    M{"dd.MM.y – dd.MM.y G"}
+                    d{"dd.MM.y–dd.MM.y G"}
+                    y{"dd.MM.y – dd.MM.y G"}
                 }
                 MEd{
                     M{"E dd.MM–E dd.MM"}

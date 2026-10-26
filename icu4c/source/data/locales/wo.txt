@@ -102,6 +102,9 @@ wo{
             ordinal{
                 other{"Jël {0} ci ndeyjoor."}
             }
+            plural{
+                other{"{0} fan"}
+            }
         }
     }
     calendar{
@@ -220,6 +223,8 @@ wo{
                 yMMM{"MMM y"}
                 yMMMEd{"E, d MMM y"}
                 yMMMM{"MMMM y"}
+                yMMMMEd{"EEE, d MMMM y"}
+                yMMMMd{"d MMMM y"}
                 yMMMd{"d MMM y"}
                 yMd{"dd-MM-y"}
                 yQQQ{"QQQ y"}

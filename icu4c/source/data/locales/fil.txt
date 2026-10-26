@@ -189,11 +189,12 @@ fil{
         }
         minimalPairs{
             ordinal{
-                other{"Kunin ang ika-{0} (na) kanan."}
+                one{"Lumiko sa ika-{0} kanan."}
+                other{"Lumiko sa ika-{0} (na) kanan."}
             }
             plural{
-                one{"{0} mansanas"}
-                other{"{0} na mansanas"}
+                one{"{0} araw"}
+                other{"{0} na araw"}
             }
         }
     }
@@ -326,6 +327,9 @@ fil{
                     M{"E, MMM d – E, MMM d"}
                     d{"E, MMM d – E, MMM d"}
                 }
+                MMMMd{
+                    d{"MMMM d – d"}
+                }
                 Md{
                     M{"M/d – M/d"}
                     d{"M/d – M/d"}
@@ -413,6 +417,11 @@ fil{
                 "yMMMd",
                 "yyMd",
             }
+            appendItems{
+                Day-Of-Week{"{1}, {0}"}
+                Era{"{0} {1}"}
+                Time-Day-Of-Week{"{1}, {0}"}
+            }
             availableFormats{
                 Ed{"d E"}
                 Ehm{"E h:mm a"}
@@ -422,6 +431,9 @@ fil{
                 GyMEd{"E, M/d/y G"}
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, MMM d, y G"}
+                GyMMMM{"MMMM y G"}
+                GyMMMMEd{"E, MMMM d, y G"}
+                GyMMMMd{"MMMM d, y G"}
                 GyMMMd{"MMM d, y G"}
                 GyMd{"M/d/y G"}
                 MEd{"E, M/d"}
@@ -442,6 +454,8 @@ fil{
                 yMMM{"MMM y"}
                 yMMMEd{"E, MMM d, y"}
                 yMMMM{"MMMM y"}
+                yMMMMEd{"E, MMMM d, y"}
+                yMMMMd{"MMMM d, y"}
                 yMMMd{"MMM d, y"}
                 yMd{"M/d/y"}
                 yQQQ{"QQQ y"}
@@ -583,6 +597,9 @@ fil{
                 MMMEd{
                     M{"E, MMM d – E, MMM d"}
                     d{"E, MMM d – E, MMM d"}
+                }
+                MMMMd{
+                    d{"MMMM d – d"}
                 }
                 Md{
                     M{"M/d – M/d"}

@@ -26,13 +26,14 @@ public class Segment {
     /**
      * @draft ICU 78
      */
-    public final int ruleStatus = 0;
+    public final int ruleStatus;
 
     private final CharSequence source;
 
-    Segment(int start, int limit, CharSequence source) {
+    Segment(int start, int limit, int ruleStatus, CharSequence source) {
         this.start = start;
         this.limit = limit;
+        this.ruleStatus = ruleStatus;
         this.source = source;
     }
 

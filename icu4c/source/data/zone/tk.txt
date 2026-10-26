@@ -79,7 +79,7 @@ tk{
             ec{"Naýrobi"}
         }
         "Africa:Ndjamena"{
-            ec{"Jamena"}
+            ec{"Njamena"}
         }
         "Africa:Niamey"{
             ec{"Niameý"}
@@ -103,7 +103,7 @@ tk{
             ec{"Adak adasy"}
         }
         "America:Anchorage"{
-            ec{"Ankoridž"}
+            ec{"Ankorij"}
         }
         "America:Anguilla"{
             ec{"Angilýa"}
@@ -286,7 +286,7 @@ tk{
             ec{"Žužuý"}
         }
         "America:Juneau"{
-            ec{"Džuno"}
+            ec{"Juno"}
         }
         "America:Kentucky:Monticello"{
             ec{"Montisello, Kentuki"}
@@ -500,9 +500,6 @@ tk{
         }
         "Asia:Brunei"{
             ec{"Bruneý"}
-        }
-        "Asia:Calcutta"{
-            ec{"Kalkutta"}
         }
         "Asia:Chita"{
             ec{"Çita"}
@@ -738,9 +735,6 @@ tk{
         "Europe:Copenhagen"{
             ec{"Kopengagen"}
         }
-        "Europe:Dublin"{
-            ld{"Irlandiýa standart wagty"}
-        }
         "Europe:Guernsey"{
             ec{"Gernsi"}
         }
@@ -764,9 +758,6 @@ tk{
         }
         "Europe:Ljubljana"{
             ec{"Lýublýana"}
-        }
-        "Europe:London"{
-            ld{"Beýik Britaniýa tomusky wagty"}
         }
         "Europe:Luxembourg"{
             ec{"Lýuksemburg"}
@@ -992,6 +983,7 @@ tk{
         "meta:Anadyr"{
             ld{"Anadyr tomusky wagty"}
             lg{"Anadyr wagty"}
+            ls{"Anadyr standart wagty"}
         }
         "meta:Apia"{
             ld{"Apia tomusky wagty"}
@@ -1068,6 +1060,10 @@ tk{
             ld{"Braziliýa tomusky wagty"}
             lg{"Braziliýa wagty"}
             ls{"Braziliýa standart wagty"}
+        }
+        "meta:British"{
+            ld{"Beýik Britaniýa tomusky wagty"}
+            lg{"Beýik Britaniýa wagty"}
         }
         "meta:Brunei"{
             ls{"Bruneý-Darussalam wagty"}
@@ -1184,6 +1180,11 @@ tk{
         "meta:Gilbert_Islands"{
             ls{"Gilbert adalary wagty"}
         }
+        "meta:Greenland"{
+            ld{"Grenlandiýa tomusky wagty"}
+            lg{"Grenlandiýa wagty"}
+            ls{"Grenlandiýa standart wagty"}
+        }
         "meta:Greenland_Eastern"{
             ld{"Gündogar Grenlandiýa tomusky wagty"}
             lg{"Gündogar Grenlandiýa wagty"}
@@ -1201,7 +1202,7 @@ tk{
             ls{"Gaýana wagty"}
         }
         "meta:Hawaii"{
-            ls{"Gawaý-Aleut standart wagty"}
+            ls{"Gawaý standart wagty"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"Gawaý-Aleut tomusky wagty"}
@@ -1241,6 +1242,10 @@ tk{
             lg{"Eýran wagty"}
             ls{"Eýran standart wagty"}
         }
+        "meta:Irish"{
+            ld{"Irlandiýa standart wagty"}
+            lg{"Irlandiýa wagty"}
+        }
         "meta:Irkutsk"{
             ld{"Irkutsk tomusky wagty"}
             lg{"Irkutsk wagty"}
@@ -1257,8 +1262,9 @@ tk{
             ls{"Ýaponiýa standart wagty"}
         }
         "meta:Kamchatka"{
-            ld{"Kamçatka tomusky wagty"}
-            lg{"Petropavlowsk-Kamçatskiý wagty"}
+            ld{"Petropawlowsk-Kamçatskiý tomusky wagty"}
+            lg{"Petropawlowsk-Kamçatskiý wagty"}
+            ls{"Petropawlowsk-Kamçatskiý standart wagty"}
         }
         "meta:Kazakhstan"{
             ls{"Gazagystan wagty"}
@@ -1437,10 +1443,9 @@ tk{
         "meta:Samara"{
             ld{"Samara tomusky wagty"}
             lg{"Samara wagty"}
+            ls{"Samara standart wagty"}
         }
         "meta:Samoa"{
-            ld{"Samoa tomusky wagty"}
-            lg{"Samoa wagty"}
             ls{"Samoa standart wagty"}
         }
         "meta:Seychelles"{
@@ -1483,6 +1488,11 @@ tk{
         "meta:Truk"{
             ls{"Çuuk wagty"}
         }
+        "meta:Turkey"{
+            ld{"Türkiýe tomusky wagty"}
+            lg{"Türkiýe wagty"}
+            ls{"Türkiýe standart wagty"}
+        }
         "meta:Turkmenistan"{
             ld{"Türkmenistan tomusky wagty"}
             lg{"Türkmenistan wagty"}
@@ -1495,6 +1505,9 @@ tk{
             ld{"Urugwaý tomusky wagty"}
             lg{"Urugwaý wagty"}
             ls{"Urugwaý standart wagty"}
+        }
+        "meta:Urumqi"{
+            ls{"Urumçi wagty"}
         }
         "meta:Uzbekistan"{
             ld{"Özbegistan tomusky wagty"}

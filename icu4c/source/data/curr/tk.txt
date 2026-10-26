@@ -205,7 +205,7 @@ tk{
         }
         GHS{
             "GHS",
-            "Gano sedisi",
+            "Gana sedisi",
         }
         GIP{
             "GIP",
@@ -417,7 +417,7 @@ tk{
         }
         NOK{
             "NOK",
-            "Norwegiýa kronasy",
+            "Norweg kronasy",
         }
         NPR{
             "NPR",
@@ -861,8 +861,8 @@ tk{
             other{"gruzin larisi"}
         }
         GHS{
-            one{"gano sedisi"}
-            other{"gano sedisi"}
+            one{"gana sedisi"}
+            other{"gana sedisi"}
         }
         GIP{
             one{"gibraltar funty"}
@@ -1069,8 +1069,8 @@ tk{
             other{"nikaragua kordobasy"}
         }
         NOK{
-            one{"norwegiýa kronasy"}
-            other{"norwegiýa kronasy"}
+            one{"norweg kronasy"}
+            other{"norweg kronasy"}
         }
         NPR{
             one{"nepal rupiýasy"}
@@ -1272,10 +1272,6 @@ tk{
             one{"gündogar karib dollary"}
             other{"gündogar karib dollary"}
         }
-        XCG{
-            one{"karib guldeni"}
-            other{"karib guldeni"}
-        }
         XPF{
             one{"fransuz ýuwaş umman franky"}
             other{"fransuz ýuwaş umman franky"}
@@ -1295,10 +1291,6 @@ tk{
         ZMW{
             one{"zambiýa kwaçasy"}
             other{"zambiýa kwaçasy"}
-        }
-        ZWG{
-            one{"Zimbabwe altyny"}
-            other{"Zimbabwe altyny"}
         }
     }
 }

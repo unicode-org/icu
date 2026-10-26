@@ -1220,4 +1220,3 @@ public final class BytesTrie implements Cloneable, Iterable<BytesTrie.Entry> {
     // Remaining length of a linear-match node, minus 1. Negative if not in such a node.
     private int remainingMatchLength_;
 }
-;

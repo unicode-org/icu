@@ -29,7 +29,7 @@ pluralRanges:table(nofallback){
         fil{"set05"}
         fr{"set13"}
         ga{"set19"}
-        gl{"set03"}
+        gl{"set14"}
         gsw{"set03"}
         gu{"set01"}
         he{"set10"}
@@ -83,6 +83,7 @@ pluralRanges:table(nofallback){
         sw{"set03"}
         ta{"set03"}
         te{"set03"}
+        tg{"set07"}
         th{"set00"}
         tk{"set03"}
         tr{"set03"}
@@ -90,7 +91,7 @@ pluralRanges:table(nofallback){
         uk{"set18"}
         ur{"set04"}
         uz{"set03"}
-        vi{"set00"}
+        vi{"set04"}
         yue{"set00"}
         zh{"set00"}
         zu{"set01"}

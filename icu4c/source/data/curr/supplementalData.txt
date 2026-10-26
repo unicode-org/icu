@@ -1074,18 +1074,6 @@ supplementalData:table(nofallback){
             }
             {
                 from:intvector{
-                    66,
-                    528958464,
-                }
-                id{"CNX"}
-                tender{"false"}
-                to:intvector{
-                    213,
-                    320765951,
-                }
-            }
-            {
-                from:intvector{
                     297,
                     -402654208,
                 }
@@ -5139,6 +5127,12 @@ supplementalData:table(nofallback){
             0,
             0,
         }
+        MRU:intvector{
+            2,
+            0,
+            2,
+            20,
+        }
         MUR:intvector{
             2,
             0,
@@ -5158,7 +5152,7 @@ supplementalData:table(nofallback){
             0,
         }
         PKR:intvector{
-            0,
+            2,
             0,
             0,
             0,
@@ -5170,7 +5164,7 @@ supplementalData:table(nofallback){
             0,
         }
         RSD:intvector{
-            0,
+            2,
             0,
             0,
             0,

@@ -23,10 +23,6 @@ es_419{
             "KZT",
             "tenge kazajo",
         }
-        MWK{
-            "MWK",
-            "kwacha malauí",
-        }
         NIO{
             "NIO",
             "córdoba nicaragüense",
@@ -79,10 +75,6 @@ es_419{
         KZT{
             one{"tenge kazajo"}
             other{"tengues kazajos"}
-        }
-        MWK{
-            one{"kwacha malauí"}
-            other{"kwachas malauíes"}
         }
         NIO{
             one{"córdoba nicaragüense"}

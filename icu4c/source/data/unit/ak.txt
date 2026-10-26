@@ -204,6 +204,7 @@ ak{
                 other{"dɔnhwere {0}"}
             }
             microsecond{
+                dnam{"simasini kumaa"}
                 one{"{0} mikrosɛkɛn"}
                 other{"{0} mikrosɛkɛns"}
             }
@@ -311,7 +312,6 @@ ak{
                 other{"asaase radiɔs{0}"}
             }
             fathom{
-                dnam{"fatɔmse"}
                 one{"fatɔmse {0}"}
                 other{"fatɔmse {0}"}
             }
@@ -321,7 +321,6 @@ ak{
                 per{"ananmɔn biara {0}"}
             }
             furlong{
-                dnam{"fɛɛlɔɔne"}
                 one{"fɛɛlɔɔne {0}"}
                 other{"fɛɛlɔɔne {0}"}
             }
@@ -475,10 +474,9 @@ ak{
             }
         }
         pressure{
-            bar{
-                dnam{"poma"}
-                one{"{0}poma"}
-                other{"{0}poma"}
+            ofhg{
+                one{"Mεεkuri {0}"}
+                other{"{0} Hg"}
             }
         }
         speed{
@@ -489,7 +487,6 @@ ak{
         }
         temperature{
             generic{
-                dnam{"hyew°"}
                 one{"{0} hyew digrii"}
                 other{"{0} hyew digrii"}
             }
@@ -520,6 +517,7 @@ ak{
                 other{"atere {0}"}
             }
             dram{
+                dnam{"drᴐm ahodoᴐ"}
                 one{"drɔm fl {0}"}
                 other{"drɔm fl {0}"}
             }
@@ -572,20 +570,11 @@ ak{
             microsecond{
                 dnam{"μsec"}
             }
-            second{
-                dnam{"simasini"}
-            }
         }
         length{
-            fathom{
-                dnam{"fatɔmse"}
-            }
             foot{
                 one{"{0}′"}
                 other{"{0} ft"}
-            }
-            furlong{
-                dnam{"fɛɛlɔɔne"}
             }
             inch{
                 one{"{0}″"}
@@ -602,11 +591,9 @@ ak{
                 other{"{0}gr"}
             }
         }
-        pressure{
-            bar{
-                dnam{"poma"}
-                one{"{0}poma"}
-                other{"{0}poma"}
+        temperature{
+            generic{
+                dnam{"°"}
             }
         }
         volume{

@@ -370,6 +370,8 @@ tt{
                 yMMM{"y 'ел', MMM"}
                 yMMMEd{"y 'ел', d MMM, E"}
                 yMMMM{"y 'ел', MMMM"}
+                yMMMMEd{"y 'ел', d MMMM, EEE"}
+                yMMMMd{"y 'ел', d MMMM"}
                 yMMMd{"y 'ел', d MMM"}
                 yMd{"dd.MM.y"}
                 yQQQ{"y 'ел', QQQ"}

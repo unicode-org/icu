@@ -830,46 +830,54 @@ public final class UCharacterCaseTest extends CoreTestFmwk {
                 chstr[1] = lowerbuffer.toString();
                 chstr[3] = upperbuffer.toString();
                 if (locale == null) {
-                    if (!UCharacter.toLowerCase(chstr[0]).equals(chstr[1])) {
-                        errln(s);
+                    String lower = UCharacter.toLowerCase(chstr[0]);
+                    if (!lower.equals(chstr[1])) {
                         errln(
-                                "Fail: toLowerCase for character "
+                                "Fail: "
+                                        + s
+                                        + "\n    toLowerCase for character "
                                         + Utility.escape(chstr[0])
                                         + ", expected "
                                         + Utility.escape(chstr[1])
                                         + " but resulted in "
-                                        + Utility.escape(UCharacter.toLowerCase(chstr[0])));
+                                        + Utility.escape(lower));
                     }
-                    if (!UCharacter.toUpperCase(chstr[0]).equals(chstr[3])) {
-                        errln(s);
+                    String upper = UCharacter.toUpperCase(chstr[0]);
+                    if (!upper.equals(chstr[3])) {
                         errln(
-                                "Fail: toUpperCase for character "
+                                "Fail: "
+                                        + s
+                                        + "\n    toUpperCase for character "
                                         + Utility.escape(chstr[0])
                                         + ", expected "
                                         + Utility.escape(chstr[3])
                                         + " but resulted in "
-                                        + Utility.escape(UCharacter.toUpperCase(chstr[0])));
+                                        + Utility.escape(upper));
                     }
                 } else {
-                    if (!UCharacter.toLowerCase(locale, chstr[0]).equals(chstr[1])) {
-                        errln(s);
+                    String lower = UCharacter.toLowerCase(locale, chstr[0]);
+                    if (!lower.equals(chstr[1])) {
                         errln(
-                                "Fail: toLowerCase for character "
+                                "Fail: "
+                                        + s
+                                        + "\n    toLowerCase for character "
                                         + Utility.escape(chstr[0])
                                         + ", expected "
                                         + Utility.escape(chstr[1])
                                         + " but resulted in "
-                                        + Utility.escape(UCharacter.toLowerCase(locale, chstr[0])));
+                                        + Utility.escape(lower));
                     }
-                    if (!UCharacter.toUpperCase(locale, chstr[0]).equals(chstr[3])) {
-                        errln(s);
+                    String upper = UCharacter.toUpperCase(locale, chstr[0]);
+                    if (!upper.equals(chstr[3])) {
                         errln(
-                                "Fail: toUpperCase for character "
+                                "Fail: "
+                                        + s
+                                        + "\n    toUpperCase for character "
                                         + Utility.escape(chstr[0])
                                         + ", expected "
                                         + Utility.escape(chstr[3])
                                         + " but resulted in "
-                                        + Utility.escape(UCharacter.toUpperCase(locale, chstr[0])));
+                                        + Utility.escape(upper));
                     }
                 }
             }
@@ -2050,15 +2058,15 @@ public final class UCharacterCaseTest extends CoreTestFmwk {
         for (int casecount = 4; casecount > 0; casecount--) {
             int end = str.indexOf("; ", start);
             String casestr = str.substring(start, end);
-            StringBuffer buffer = new StringBuffer();
+            StringBuilder buffer = new StringBuilder();
             int spaceoffset = 0;
             while (spaceoffset < casestr.length()) {
                 int nextspace = casestr.indexOf(' ', spaceoffset);
                 if (nextspace == -1) {
                     nextspace = casestr.length();
                 }
-                buffer.append(
-                        (char) Integer.parseInt(casestr.substring(spaceoffset, nextspace), 16));
+                var sub = casestr.substring(spaceoffset, nextspace);
+                buffer.appendCodePoint(Integer.parseInt(sub, 16));
                 spaceoffset = nextspace + 1;
             }
             start = end + 2;

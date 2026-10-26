@@ -198,9 +198,9 @@ public class PatternStringParser {
         public long paddingEndpoints = 0;
     }
 
-    /////////////////////////////////////////////////////
-    /// BEGIN RECURSIVE DESCENT PARSER IMPLEMENTATION ///
-    /////////////////////////////////////////////////////
+    // /////////////////////////////////////////////
+    // BEGIN RECURSIVE DESCENT PARSER IMPLEMENTATION
+    // /////////////////////////////////////////////
 
     /** An internal class used for tracking the cursor during parsing of a pattern string. */
     private static class ParserState {
@@ -552,9 +552,9 @@ public class PatternStringParser {
         }
     }
 
-    ///////////////////////////////////////////////////
-    /// END RECURSIVE DESCENT PARSER IMPLEMENTATION ///
-    ///////////////////////////////////////////////////
+    // ///////////////////////////////////////////
+    // END RECURSIVE DESCENT PARSER IMPLEMENTATION
+    // ///////////////////////////////////////////
 
     private static void parseToExistingPropertiesImpl(
             String pattern, DecimalFormatProperties properties, int ignoreRounding) {

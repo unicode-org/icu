@@ -149,7 +149,11 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
       if (checkVisual) {
         testVisual(bidi);
       } else {
-        ubidi_writeReordered(bidi, reorderedText, reorderedTextLength+1, options2, &status);
+        int32_t secondSize = reorderedTextLength + 1;
+        if (secondSize > MAXLEN) {
+          secondSize = MAXLEN;
+        }
+        ubidi_writeReordered(bidi, reorderedText, secondSize, options2, &status);
       }
     }
   }

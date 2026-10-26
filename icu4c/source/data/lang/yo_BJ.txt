@@ -5,12 +5,31 @@ yo_BJ{
     Keys{
         calendar{"Kàlɛ́ńdà"}
         cf{"Ònà Ìgbekalɛ̀ owó"}
+        colBackwards{"Títo Àmì Ohùn Láti Ɛ̀yìn"}
+        colCaseFirst{"Ìshètò Lɛ́tà ńlá/lɛ́tà kéreré"}
+        colCaseLevel{"Títò nípasɛ̀ shíshe ìyàtɔ̀ láàárín àwɔn lɛ́tà ńlá àti kékeré"}
+        colNormalization{"Ètò tó she déédéé"}
+        colNumeric{"Shíshètò nípasɛ̀ nɔ́ńbà"}
+        colReorder{"Àtúntò ɔ̀nà ìkɔ̀wé/Lɛ́tà ńlá"}
         collation{"Ètò Ɛlɛ́sɛɛsɛ"}
+        d0{"She àyípadà ibùdó"}
+        dx{"Ìyɔkúrò Àlàfo Ìwé Atúmɔ̀ Èdè"}
         em{"Ìgbékalɛ̀ Ɛ̀mójì"}
+        fw{"Ɔjɔ́ kìíní ɔ̀sɛ̀"}
+        h0{"Àdàpɔ̀"}
+        i0{"Ɔ̀nà Ìgbéwɔlé"}
+        k0{"Àtɛ bɔ́tìnì"}
+        kv{"púpɔ̀ jùlɔ tí a fojúfò"}
         lw{"Àwɔn Ìdá Ìlà Láàárín Àwɔn Ɔ̀rɔ̀"}
+        m0{"She àyípadà àwɔn Òfin"}
         ms{"Èto Ìdiwɔ̀n"}
+        mu{"Ìwɔ̀n Òshùwɔ̀n"}
         numbers{"Àwɔn nɔ́ńbà"}
+        s0{"She àyípadà Orísun"}
         ss{"Ìdá Gbólóhùn Lɛ́yìn Ìgékúrú"}
+        t{"She àyípadà"}
+        t0{"Tí Ɛ̀rɔ Túmɔ̀"}
+        va{"Ɛ̀dà ìbílɛ̀"}
     }
     Languages{
         agq{"Èdè Ágɛ̀ɛ̀mù"}
@@ -59,6 +78,7 @@ yo_BJ{
         oc{"Èdè Ɔ̀kísítáànì"}
         om{"Òròmɔ́"}
         os{"Ɔshɛ́tíìkì"}
+        pms{"Èdè Pídímɔ̀ntísì"}
         prg{"Púrúshíànù"}
         pt{"Èdè Pɔtogí"}
         pt_BR{"Èdè Pɔtogí (Orilɛ̀-èdè Bràsíl)"}
@@ -89,6 +109,9 @@ yo_BJ{
     }
     Languages%core{
         ku{"Èdè Kɔ́dìshì"}
+    }
+    Languages%extension{
+        ku{"Èdè Kùmáǹjì"}
     }
     Languages%long{
         zh_Hans{"Èdè Mandárínì Sháínà Onírɔ̀rùn"}
@@ -144,7 +167,10 @@ yo_BJ{
             chinese{"Ti Sháínà"}
             coptic{"Kɔ́pítíìkì"}
             ethiopic-amete-alem{"Kàlɛ́ńdà Etiópíà"}
+            indian{"Ti orílɛ́-èdè India"}
             islamic-civil{"Híjìrí (kàlɛ́ńdà oní-àtòkɔ ti arà-ìlú)"}
+            islamic-rgsa{"Híjrí, rírí òshùpá Saudi"}
+            islamic-tbla{"Híjìrì (oní tábìlì, ìgbà ìbílɛ̀)"}
             persian{"Ti Páshíà"}
             roc{"Kàlɛ́ńdà Sháínà"}
         }
@@ -156,17 +182,44 @@ yo_BJ{
             account{"Ìshirò owó"}
             standard{"Àjùmɔ̀lò"}
         }
+        colCaseFirst%core{
+            lower{"Lɛ́tà kéreré"}
+            no{"Lɛ́tà kéreré"}
+            upper{"Lɛ́tà ńlá"}
+        }
+        colStrength%core{
+            primary{"Àwɔn Lɛ́tà Ìpìlɛ̀ Nìkan"}
+            quaternary{"Ìpìlɛ̀, Àwɔn àmì ohùn, Irú lɛ́tà, Àwɔn oríshi, Kana"}
+            secondary{"Ìpìlɛ̀, Àwɔn àmì ohùn"}
+            tertiary{"Ìpìlɛ̀, Àwɔn àmì ohùn, Irú lɛ́tà, Àwɔn oríshi"}
+        }
         collation{
             ducet{"Ètò Ɛlɛ́sɛɛsɛ Àkùàyàn Unicode"}
             search{"Ìshàwárí Ète-Gbogbogbò"}
         }
         collation%core{
+            dictionary{"Ìwé atúmɔ̀ èdè"}
+            phonebook{"Ìwé nɔ́ńbà tɛlifóònù"}
+            phonetic{"Ìró ɔ̀rɔ̀"}
             search{"Shàwárí"}
+            searchjl{"Kɔ́ńsónáǹtì Kòríà àkɔ́kɔ́"}
             standard{"Àjùmɔ̀lò"}
+            traditional{"Ti ìbílɛ̀"}
+            unihan{"Ètò Ìkɔ̀wé Orílɛ̀-Èdè Sháínà"}
+        }
+        d0{
+            fwidth{"Sí Ìwɔ̀n fífɛ̀ kíkún"}
+            hwidth{"Shí Ààbɔ̀ ìwɔ́n fífɛ̀"}
         }
         em%core{
             emoji{"Ɛ̀mójì"}
             text{"àtɛ̀jíshɛ́"}
+        }
+        kv%core{
+            currency{"Sún àwɔn àyè, àmì ìpín gbólóhùn, gbogbo àmi"}
+            punct{"Sún àwɔn àyè, àmì ìpín gbólóhùn"}
+            space{"Sún àwɔn àyè, àmì ìpín gbólóhùn"}
+            symbol{"Sún àwɔn àyè, àmì ìpín gbólóhùn, àmì tí kìí she ti owó"}
         }
         lb%core{
             loose{"Tó dɛ̀"}
@@ -175,6 +228,10 @@ yo_BJ{
             breakall{"Fɔ́ gbogbo ɛ̀"}
             keepall{"Pa gbogbo ɛ̀ mɔ́"}
             phrase{"Fi sílɛ̀ ní àpólà"}
+        }
+        m0{
+            bgn{"Àtúnkɔ àwɔn lɛ́tà sí èdè mìíràn ti US BGN"}
+            ungegn{"Àtúnkɔ àwɔn lɛ́tà sí èdè mìíràn ti UN GEGN"}
         }
         ms{
             metric{"Èto Mɛ́tíríìkì"}
@@ -200,7 +257,7 @@ yo_BJ{
             gujr{"Àwɔn díjíìtì Gùjárátì"}
             guru{"Àwɔn Díjíìtì Gurumukì"}
             hanidec{"Àwɔn nɔ́ńbà Dɛ́símà Sháìnà"}
-            hans{"Àwɔn nɔ́ńbà Ìrɔ̀rùn ti Sháìnà"}
+            hans{"Àwɔn nɔ́ńbà Ìrɔ̀rùn ti Sháínà"}
             hansfin{"Àwɔn nɔ́ńbà Ìshúná Ìrɔ̀rùn Sháìnà"}
             hant{"Àwɔn nɔ́ńbà Ìbílɛ̀ Sháìnà"}
             hantfin{"Àwɔn nɔ́ńbà Ìshúná Ìbílɛ̀ Sháìnà"}
@@ -215,6 +272,7 @@ yo_BJ{
             mlym{"Àwɔn díjíìtì Málàyálámù"}
             mtei{"Àwɔn díjíìtì Mete Mayeki"}
             mymr{"Àwɔn díjíìtì Myánmarí"}
+            native{"Àwɔn Díjíìtì ìbílɛ̀"}
             olck{"Àwɔn díjíìtì Shiki"}
             orya{"Àwɔn díjíìtì Òdíà"}
             roman{"Àwɔn díjíìtì Rómánù"}
@@ -225,6 +283,36 @@ yo_BJ{
             thai{"Àwɔn díjíìtì Thai"}
             tibt{"Àwɔn díjíìtì Tibetán"}
             vaii{"Àwɔn díjíìtì Fai"}
+        }
+        numbers%core{
+            arabext{"Nɔ́ńbà Lárúbáwá tó gbòòrò"}
+            armnlow{"Lɛ́tà kékeré ti Àmɛ́níà"}
+            finance{"Ìshúná"}
+            fullwide{"Ìwɔ̀n fífɛ̀ kíkún"}
+            greklow{"Lɛ́tà kékéré ti Gíríìkì"}
+            hanidays{"kàlɛ́ńdà òshùpá Han fún àwɔn kàlɛ́ńdà ìbílɛ̀"}
+            hanidec{
+                "Ètò nɔ́ńbà tí ó ń lo àwɔn àwòrán ìshirò tí ó jɛ́ ti èdè Sháínà gɛ́gɛ"
+                "́ bí iye."
+            }
+            hansfin{"Ìshúná owó Sháínà ìrɔ̀rùn"}
+            hantfin{"Ìshúná owó Sháínà ìbílɛ̀"}
+            jpanfin{"Ìshúná owó Jàpáànù"}
+            jpanyear{"Ìlànà kíkɔ nɔ́ńbà ɔdún àkɔ́kɔ́ ti Gannen"}
+            lanatham{"Ìkɔ̀wé Tai Tham Tham (ti ìjɔ Krístì)"}
+            mathsanb{"Sans-serif matimátíìkì tó nípɔn"}
+            mymrepka{"Èdè Ìbílɛ̀ Karen Ti Ìlà Oòrùn Myanmar"}
+            native{"Àwɔn díjíìtì ìbílɛ̀"}
+            outlined{"Tí wɔ́n fa ilà yíká"}
+            roman{"Lɛ́tà ńlá ti Rómánù"}
+            romanlow{"lɛ́tà kéreré ti Rómánù"}
+            traditional{"Àwɔn nɔ́ńbà ìbìlɛ̀"}
+        }
+        t0{
+            und{"Ìtumɔ̀ èdè Ɛ̀rɔ tí a kò sɔ ní pàtó"}
+        }
+        va%core{
+            posix{"ɛ̀yà POSIX"}
         }
     }
     characterLabelPattern{

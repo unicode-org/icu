@@ -2,8 +2,8 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/
 af{
-    AuxExemplarCharacters{"[àåäã æ ç íì óò úùü ý]"}
-    ExemplarCharacters{"[aáâ b c d eéèêë f g h iîï j k l m n oôö p q r s t uû v w x y z]"}
+    AuxExemplarCharacters{"[áàâåäã æ ç éèêë íìîï óòôö úùûü ý]"}
+    ExemplarCharacters{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]"}
     ExemplarCharactersPunctuation{"[\\- ‐‑ – — , ; \\: ! ? . … '‘’ \u0022“” ( ) \\[ \\] § @ * / \\& # † ‡ ′ ″]"}
     NumberElements{
@@ -84,90 +84,40 @@ af{
                         other{"¤000 k"}
                     }
                     1000000{
-                        one{"¤0 m"}
-                        other{"¤0 m"}
+                        one{"¤0 m'.'"}
+                        other{"¤0 m'.'"}
                     }
                     10000000{
-                        one{"¤00 m"}
-                        other{"¤00 m"}
+                        one{"¤00 m'.'"}
+                        other{"¤00 m'.'"}
                     }
                     100000000{
-                        one{"¤000 m"}
-                        other{"¤000 m"}
+                        one{"¤000 m'.'"}
+                        other{"¤000 m'.'"}
                     }
                     1000000000{
-                        one{"¤0 mjd"}
-                        other{"¤0 mjd"}
+                        one{"¤0 mjd'.'"}
+                        other{"¤0 mjd'.'"}
                     }
                     10000000000{
-                        one{"¤00 mjd"}
-                        other{"¤00 mjd"}
+                        one{"¤00 mjd'.'"}
+                        other{"¤00 mjd'.'"}
                     }
                     100000000000{
-                        one{"¤000 mjd"}
-                        other{"¤000 mjd"}
+                        one{"¤000 mjd'.'"}
+                        other{"¤000 mjd'.'"}
                     }
                     1000000000000{
-                        one{"¤0 bn"}
-                        other{"¤0 bn"}
+                        one{"¤0 bn'.'"}
+                        other{"¤0 bn'.'"}
                     }
                     10000000000000{
-                        one{"¤00 bn"}
-                        other{"¤00 bn"}
+                        one{"¤00 bn'.'"}
+                        other{"¤00 bn'.'"}
                     }
                     100000000000000{
-                        one{"¤000 bn"}
-                        other{"¤000 bn"}
-                    }
-                }
-                currencyFormat%alphaNextToNumber{
-                    1000{
-                        one{"¤ 0 k"}
-                        other{"¤ 0 k"}
-                    }
-                    10000{
-                        one{"¤ 00 k"}
-                        other{"¤ 00 k"}
-                    }
-                    100000{
-                        one{"¤ 000 k"}
-                        other{"¤ 000 k"}
-                    }
-                    1000000{
-                        one{"¤ 0 m"}
-                        other{"¤ 0 m"}
-                    }
-                    10000000{
-                        one{"¤ 00 m"}
-                        other{"¤ 00 m"}
-                    }
-                    100000000{
-                        one{"¤ 000 m"}
-                        other{"¤ 000 m"}
-                    }
-                    1000000000{
-                        one{"¤ 0 mjd"}
-                        other{"¤ 0 mjd"}
-                    }
-                    10000000000{
-                        one{"¤ 00 mjd"}
-                        other{"¤ 00 mjd"}
-                    }
-                    100000000000{
-                        one{"¤ 000 mjd"}
-                        other{"¤ 000 mjd"}
-                    }
-                    1000000000000{
-                        one{"¤ 0 bn"}
-                        other{"¤ 0 bn"}
-                    }
-                    10000000000000{
-                        one{"¤ 00 bn"}
-                        other{"¤ 00 bn"}
-                    }
-                    100000000000000{
-                        one{"¤ 000 bn"}
-                        other{"¤ 000 bn"}
+                        one{"¤000 bn'.'"}
+                        other{"¤000 bn'.'"}
                     }
                 }
                 decimalFormat{
@@ -184,40 +134,40 @@ af{
                         other{"000 k"}
                     }
                     1000000{
-                        one{"0 m"}
-                        other{"0 m"}
+                        one{"0 m'.'"}
+                        other{"0 m'.'"}
                     }
                     10000000{
-                        one{"00 m"}
-                        other{"00 m"}
+                        one{"00 m'.'"}
+                        other{"00 m'.'"}
                     }
                     100000000{
-                        one{"000 m"}
-                        other{"000 m"}
+                        one{"000 m'.'"}
+                        other{"000 m'.'"}
                     }
                     1000000000{
-                        one{"0 mjd"}
-                        other{"0 mjd"}
+                        one{"0 mjd'.'"}
+                        other{"0 mjd'.'"}
                     }
                     10000000000{
-                        one{"00 mjd"}
-                        other{"00 mjd"}
+                        one{"00 mjd'.'"}
+                        other{"00 mjd'.'"}
                     }
                     100000000000{
-                        one{"000 mjd"}
-                        other{"000 mjd"}
+                        one{"000 mjd'.'"}
+                        other{"000 mjd'.'"}
                     }
                     1000000000000{
-                        one{"0 bn"}
-                        other{"0 bn"}
+                        one{"0 bn'.'"}
+                        other{"0 bn'.'"}
                     }
                     10000000000000{
-                        one{"00 bn"}
-                        other{"00 bn"}
+                        one{"00 bn'.'"}
+                        other{"00 bn'.'"}
                     }
                     100000000000000{
-                        one{"000 bn"}
-                        other{"000 bn"}
+                        one{"000 bn'.'"}
+                        other{"000 bn'.'"}
                     }
                 }
             }
@@ -228,6 +178,7 @@ af{
         }
         minimalPairs{
             ordinal{
+                few{"Neem die {0}e regter afdraai."}
                 other{"Neem die {0}e afdraai na regs."}
             }
             plural{
@@ -246,7 +197,7 @@ af{
                 "EEEE dd MMMM y G",
                 "dd MMMM y G",
                 "dd MMM y G",
-                "y-MM-dd GGGGG",
+                "y-MM-dd G",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -287,7 +238,7 @@ af{
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E d MMM y G"}
                 GyMMMd{"d MMM y G"}
-                GyMd{"M/d/y GGGGG"}
+                GyMd{"M-d-y G"}
                 MEd{"E, d/M"}
                 MMMEd{"E d MMM"}
                 MMMMEd{"E d MMMM"}
@@ -361,6 +312,10 @@ af{
                     M{"E d MMM – E d MMM"}
                     d{"E d MMM – E d MMM"}
                 }
+                MMMMd{
+                    M{"d MMMM – d MMMM"}
+                    d{"d – d MMMM"}
+                }
                 MMMd{
                     M{"d MMM – d MMM"}
                     d{"d – d MMM"}
@@ -398,7 +353,7 @@ af{
                     y{"M/y – M/y GGGGG"}
                 }
                 yMEd{
-                    M{"E d/M/y – E d/M/y GGGGG"}
+                    M{"E d/M/y – E d/M/y G"}
                     d{"E d/M/y – E d/M/y GGGGG"}
                     y{"E d/M/y – E d/M/y GGGGG"}
                 }
@@ -473,6 +428,9 @@ af{
                 "yMMMdd",
                 "yMMdd",
             }
+            appendItems{
+                Era{"{0} {1}"}
+            }
             availableFormats{
                 Bhm{"hh:mm B"}
                 Bhms{"hh:mm:ss B"}
@@ -482,9 +440,15 @@ af{
                 Ehm{"E hh:mm a"}
                 Ehms{"E hh:mm:ss a"}
                 Gy{"y G"}
+                GyM{"y-MM G"}
+                GyMEd{"E y-MM-dd G"}
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E dd MMM y G"}
+                GyMMMM{"MMMM y G"}
+                GyMMMMEd{"E d MMMM y G"}
+                GyMMMMd{"d MMMM y G"}
                 GyMMMd{"dd MMM y G"}
+                GyMd{"y-MM-dd G"}
                 MEd{"E d/M"}
                 MMMEd{"E d MMM"}
                 MMMMEd{"E d MMMM"}
@@ -504,6 +468,8 @@ af{
                 yMMM{"MMM y"}
                 yMMMEd{"E d MMM y"}
                 yMMMM{"MMMM y"}
+                yMMMMEd{"E d MMMM y"}
+                yMMMMd{"d MMMM y"}
                 yMMMd{"d MMM y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
@@ -555,11 +521,11 @@ af{
                         night1{"die nag"}
                     }
                     narrow{
-                        afternoon1{"in die middag"}
-                        evening1{"in die aand"}
+                        afternoon1{"die middag"}
+                        evening1{"die aand"}
                         midnight{"mn"}
                         morning1{"die oggend"}
-                        night1{"in die nag"}
+                        night1{"die nag"}
                     }
                 }
                 stand-alone{

@@ -12,6 +12,9 @@ class SegmentIterator implements Iterator<Segment> {
     private final IterationDirection direction;
     private int start;
     private int limit;
+    // This needs to be stored for backward iteration: `breakIter` will then correspond to `start`,
+    // whereas the status for the segment is that of `limit`.
+    private int limitRuleStatus;
     private final CharSequence source;
 
     SegmentIterator(
@@ -31,11 +34,13 @@ class SegmentIterator implements Iterator<Segment> {
             if (startIdxIsBoundary) {
                 start = startIdx;
                 limit = breakIter.next();
+                limitRuleStatus = breakIter.getRuleStatus();
             } else {
                 // if startIdx wasn't on a boundary, then the call to isBoundary will have advanced
                 // it to
                 // the next boundary, which is the limit of the segment
                 limit = breakIter.current();
+                limitRuleStatus = breakIter.getRuleStatus();
                 // go back to get the start of the segment
                 start = breakIter.previous();
                 // reset current position of BreakIterator to be limit of segment
@@ -45,6 +50,7 @@ class SegmentIterator implements Iterator<Segment> {
             assert direction == IterationDirection.BACKWARDS;
             if (startIdxIsBoundary) {
                 limit = breakIter.current();
+                limitRuleStatus = breakIter.getRuleStatus();
             } else {
                 // if startIdx was not on boundary, then the breakIter state moved forward past
                 // startIdx
@@ -52,6 +58,7 @@ class SegmentIterator implements Iterator<Segment> {
                 // boundary
                 // before startIdx to start the iteration
                 limit = breakIter.previous();
+                limitRuleStatus = breakIter.getRuleStatus();
             }
             start = breakIter.previous();
         }
@@ -68,14 +75,16 @@ class SegmentIterator implements Iterator<Segment> {
 
     @Override
     public Segment next() {
-        Segment result = new Segment(start, limit, source);
+        final Segment result = new Segment(start, limit, limitRuleStatus, source);
 
         if (direction == IterationDirection.FORWARDS) {
             start = limit;
             limit = breakIter.next();
+            limitRuleStatus = breakIter.getRuleStatus();
         } else {
             assert direction == IterationDirection.BACKWARDS;
             limit = start;
+            limitRuleStatus = breakIter.getRuleStatus();
             start = breakIter.previous();
         }
 

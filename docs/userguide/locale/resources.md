@@ -145,7 +145,7 @@ section on APIs). A lot of ICU frameworks (collation, formatting etc.) relies on
 the data stored in resource bundles.
 
 Resource bundles rely on the ICU data framework. For more information on the
-functioning of ICU data, see the appropriate [section](../icudata.md).
+functioning of ICU data, see the appropriate [section](../icu_data/index.md).
 
 Users of the ICU library can also use the resource bundle framework to store and
 retrieve localizable data in their projects.
@@ -796,16 +796,13 @@ steps:
 6.  However, you might want to have only one file containing all the data. In
     that case you need to use the package data tool. It can produce either a
     memory mapped file or a dynamically linked library. For more information on
-    how to use package data tool, see the appropriate [section](../icudata.md).
+    how to use package data tool, see the appropriate [section](../icu_data/index.md).
 
 Rolling out your own data takes some practice, especially if you want to package
 it all together. You might want to take a look at how we package data. Good
 places to start (except of course ICU's own
 [data](https://github.com/unicode-org/icu/blob/main/icu4c/source/data/)) are
-[source/test/testdata/](https://github.com/unicode-org/icu/blob/main/icu4c/source/test/testdata/)
-and
-[source/samples/ufortune/resources/](https://github.com/unicode-org/icu/blob/main/icu4c/source/samples/ufortune/resources/)
-directories.
+[source/test/testdata/](https://github.com/unicode-org/icu/blob/main/icu4c/source/test/testdata/) directory.
 
 Also, here is a sample Windows batch file that does compiling and packing of
 several resources:

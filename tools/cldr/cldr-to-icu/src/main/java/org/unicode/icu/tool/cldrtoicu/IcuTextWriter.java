@@ -46,7 +46,16 @@ final class IcuTextWriter {
             IcuData icuData, Path outDir, List<String> header, boolean allowOverwrite) {
 
         try {
-            Files.createDirectories(outDir);
+            try {
+                Files.createDirectories(outDir);
+            } catch (IOException e) {
+                // On Windows, concurrent directory creation by parallel threads can transiently
+                // produce AccessDeniedException even when the directory already exists. If the
+                // directory is now present (created by another thread), treat it as success.
+                if (!Files.isDirectory(outDir)) {
+                    throw e;
+                }
+            }
             Path file = outDir.resolve(icuData.getName() + ".txt");
             OpenOption[] fileOptions = allowOverwrite ? OVERWRITE_FILES : ONLY_NEW_FILES;
             try (Writer w = Files.newBufferedWriter(file, UTF_8, fileOptions);
@@ -176,7 +185,8 @@ final class IcuTextWriter {
         static FormatOptions forPath(RbPath rbPath) {
             return new FormatOptions(
                     !rbPath.isIntPath() && !rbPath.isBinPath(),
-                    !rbPath.endsWith(RB_SEQUENCE) && !rbPath.isBinPath(),
+                    !rbPath.endsWith(RB_SEQUENCE) && !rbPath.isBinPath()
+                            && !rbPath.startsWith(RB_RBNF_RULES),
                     !rbPath.isBinPath());
         }
 
@@ -252,6 +262,7 @@ final class IcuTextWriter {
     private static final RbPath RB_NAMED = RbPath.of("named");
     private static final RbPath RB_CALENDAR_PREFERENCE_DATA = RbPath.of("calendarPreferenceData");
     private static final RbPath RB_METAZONE_INFO = RbPath.of("metazoneInfo");
+    private static final RbPath RB_RBNF_RULES = RbPath.of("RBNFRules");
 
     /**
      * Wrapper for a hack to determine if the given rb path should always present its values as an

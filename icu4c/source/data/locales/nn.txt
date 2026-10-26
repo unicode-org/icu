@@ -3,6 +3,8 @@
 // Generated using tools/cldr/cldr-to-icu/
 nn{
     %%Parent{"no"}
+    AuxExemplarCharacters{"[áǎäã čç đ í ńñ ŋ ö š ŧ úü ž]"}
+    ExemplarCharacters{"[aàå æ b c d eéèê f g h i j k l m n oóòôø p q r s t u v w x y z]"}
     NumberElements{
         latn{
             patternsLong{
@@ -65,6 +67,11 @@ nn{
         }
     }
     calendar{
+        generic{
+            intervalFormats{
+                fallback{"{0} – {1}"}
+            }
+        }
         gregorian{
             AmPmMarkersAbbr{
                 "f.m.",
@@ -127,17 +134,6 @@ nn{
                         "laurdag",
                     }
                 }
-                stand-alone{
-                    abbreviated{
-                        "søn",
-                        "mån",
-                        "tys",
-                        "ons",
-                        "tor",
-                        "fre",
-                        "lau",
-                    }
-                }
             }
             dayPeriod{
                 format{
@@ -164,12 +160,6 @@ nn{
                 wide%variant{
                     0{"før vår tidsrekning"}
                     1{"etter vår tidsrekning"}
-                }
-            }
-            intervalFormats{
-                Md{
-                    M{"dd.MM–dd.MM"}
-                    d{"dd.MM–dd.MM"}
                 }
             }
             quarters{
@@ -364,6 +354,7 @@ nn{
             }
         }
         minute-narrow{
+            dn{"min"}
             relativeTime{
                 past{
                     one{"–{0} min"}
@@ -457,7 +448,6 @@ nn{
             }
         }
         month-short{
-            dn{"md."}
             relative{
                 "-1"{"førre md."}
                 "0"{"denne md."}

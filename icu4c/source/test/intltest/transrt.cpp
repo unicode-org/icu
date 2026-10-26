@@ -268,8 +268,8 @@ namespace {
  * If abbreviated=true, returns a set which only a sampling of the original code points.
  * density is the approximate total number of code points to returned for the entire set.
  */
-const UnicodeSet &abbreviateSet(const UnicodeSet &set, bool abbreviated, int density,
-                                UnicodeSet &copy) {
+const UnicodeSet &abbreviateSet(const UnicodeSet &set U_LIFETIME_BOUND, bool abbreviated, int density,
+                                UnicodeSet &copy U_LIFETIME_BOUND) {
     if (!abbreviated) {
         return set;
     }

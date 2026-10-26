@@ -15,9 +15,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * {@icu} BasicTimeZone extends <code>TimeZone</code> with additional methods to access time zone
- * transitions and rules. All ICU <code>TimeZone</code> concrete subclasses extend this class. APIs
- * added to <code>java.util.TimeZone</code> by <code>BasicTimeZone</code> are annotated with
+ * {@icu _usage_} BasicTimeZone extends <code>TimeZone</code> with additional methods to access time
+ * zone transitions and rules. All ICU <code>TimeZone</code> concrete subclasses extend this class.
+ * APIs added to <code>java.util.TimeZone</code> by <code>BasicTimeZone</code> are annotated with
  * <strong>'<span style="color:red">[icu]</span>'</strong>.
  *
  * @see com.ibm.icu.util.TimeZoneRule
@@ -172,6 +172,7 @@ public abstract class BasicTimeZone extends TimeZone {
      *     is not a <code>BasicTimeZone</code>, this method returns false.
      * @stable ICU 3.8
      */
+    @SuppressWarnings("ReferenceEquality")
     public boolean hasEquivalentTransitions(
             TimeZone tz, long start, long end, boolean ignoreDstAmount) {
         if (this == tz) {
@@ -679,9 +680,9 @@ public abstract class BasicTimeZone extends TimeZone {
     }
 
     /**
-     * {@icu} Options used by {@link #getOffsetFromLocal(long, LocalOption, LocalOption, int[])} to
-     * specify how to interpret an input time when it does not exist, or when it is ambiguous,
-     * around a time zone transition.
+     * {@icu _usage_} Options used by {@link #getOffsetFromLocal(long, LocalOption, LocalOption,
+     * int[])} to specify how to interpret an input time when it does not exist, or when it is
+     * ambiguous, around a time zone transition.
      *
      * @stable ICU 69
      */

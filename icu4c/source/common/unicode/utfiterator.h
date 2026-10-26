@@ -12,6 +12,9 @@
 #if U_SHOW_CPLUSPLUS_API || U_SHOW_CPLUSPLUS_HEADER_API || !defined(UTYPES_H)
 
 #include <iterator>
+#if __has_include(<version>)
+#include <version>
+#endif
 #if defined(__cpp_lib_ranges)
 #include <ranges>
 #endif
@@ -25,6 +28,9 @@
 /**
  * \file
  * \brief C++ header-only API: C++ iterators over Unicode strings (=UTF-8/16/32 if well-formed).
+ *
+ * See the User Guide chapter about
+ * <a href="https://unicode-org.github.io/icu/userguide/strings/cpp-code-point-iterator.html">C++ Code Point Iterators</a>.
  *
  * Sample code:
  * \code
@@ -268,7 +274,7 @@ public:
     /** @internal */
     inline CP32 operator*() const { return c_; }
     /** @internal */
-    inline CodePointsIterator &operator++() {  // pre-increment
+    inline CodePointsIterator& operator++() U_LIFETIME_BOUND {  // pre-increment
         ++c_;
         if (skipSurrogates && c_ == 0xd800) {
             c_ = 0xe000;
@@ -557,9 +563,11 @@ class UTFImpl<
 public:
     // Handle ill-formed UTF-8
     U_FORCE_INLINE static CP32 sub() {
-        switch (behavior) {
-            case UTF_BEHAVIOR_NEGATIVE: return U_SENTINEL;
-            case UTF_BEHAVIOR_FFFD: return 0xfffd;
+        if constexpr (behavior == UTF_BEHAVIOR_NEGATIVE) {
+            return U_SENTINEL;
+        } else {
+            static_assert(behavior == UTF_BEHAVIOR_FFFD);
+            return 0xfffd;
         }
     }
 
@@ -736,10 +744,13 @@ class UTFImpl<
 public:
     // Handle ill-formed UTF-16: One unpaired surrogate.
     U_FORCE_INLINE static CP32 sub(CP32 surrogate) {
-        switch (behavior) {
-            case UTF_BEHAVIOR_NEGATIVE: return U_SENTINEL;
-            case UTF_BEHAVIOR_FFFD: return 0xfffd;
-            case UTF_BEHAVIOR_SURROGATE: return surrogate;
+        if constexpr (behavior == UTF_BEHAVIOR_NEGATIVE) {
+            return U_SENTINEL;
+        } else if constexpr (behavior == UTF_BEHAVIOR_FFFD) {
+            return 0xfffd;
+        } else {
+            static_assert(behavior == UTF_BEHAVIOR_SURROGATE);
+            return surrogate;
         }
     }
 
@@ -822,10 +833,13 @@ class UTFImpl<
 public:
     // Handle ill-formed UTF-32
     U_FORCE_INLINE static CP32 sub(bool forSurrogate, CP32 surrogate) {
-        switch (behavior) {
-            case UTF_BEHAVIOR_NEGATIVE: return U_SENTINEL;
-            case UTF_BEHAVIOR_FFFD: return 0xfffd;
-            case UTF_BEHAVIOR_SURROGATE: return forSurrogate ? surrogate : 0xfffd;
+        if constexpr (behavior == UTF_BEHAVIOR_NEGATIVE) {
+            return U_SENTINEL;
+        } else if constexpr (behavior == UTF_BEHAVIOR_FFFD) {
+            return 0xfffd;
+        } else {
+            static_assert(behavior == UTF_BEHAVIOR_SURROGATE);
+            return forSurrogate ? surrogate : 0xfffd;
         }
     }
 
@@ -1100,8 +1114,8 @@ class UTFIterator {
     class Proxy {
     public:
         explicit Proxy(CodeUnits<CP32, UnitIter> &units) : units_(units) {}
-        CodeUnits<CP32, UnitIter> &operator*() { return units_; }
-        CodeUnits<CP32, UnitIter> *operator->() { return &units_; }
+        CodeUnits<CP32, UnitIter>& operator*() U_LIFETIME_BOUND { return units_; }
+        CodeUnits<CP32, UnitIter>* operator->() U_LIFETIME_BOUND { return &units_; }
     private:
         CodeUnits<CP32, UnitIter> units_;
     };
@@ -1184,7 +1198,7 @@ public:
      * @draft ICU 78
      */
     U_FORCE_INLINE bool operator==(const UTFIterator &other) const {
-        return getLogicalPosition() == other.getLogicalPosition();
+        return base() == other.base();
     }
     /**
      * @param other Another iterator
@@ -1206,7 +1220,7 @@ public:
         !std::is_same_v<Sentinel, UTFIterator> && !std::is_same_v<Sentinel, UnitIter>,
         bool>
     operator==(const UTFIterator &iter, const Sentinel &s) {
-        return iter.getLogicalPosition() == s;
+        return iter.base() == s;
     }
 
 #if U_CPLUSPLUS_VERSION < 20
@@ -1225,7 +1239,7 @@ public:
         !std::is_same_v<Sentinel, UTFIterator> && !std::is_same_v<Sentinel, UnitIter>,
         bool>
     operator==(const Sentinel &s, const UTFIterator &iter) {
-        return iter.getLogicalPosition() == s;
+        return iter.base() == s;
     }
     /**
      * @param iter A UTFIterator
@@ -1250,6 +1264,18 @@ public:
         bool>
     operator!=(const Sentinel &s, const UTFIterator &iter) { return !(iter == s); }
 #endif  // C++17
+
+    /**
+     * Returns the current position as a code unit iterator.
+     * Similar to iter->begin() but also works at the exclusive end().
+     *
+     * @return current position as a code unit iterator
+     * @draft ICU 79
+     */
+    U_FORCE_INLINE UnitIter base() const {
+        // Return the logical position.
+        return state_ <= 0 ? p_ : units_.begin();
+    }
 
     /**
      * Decodes the code unit sequence at the current position.
@@ -1289,7 +1315,7 @@ public:
      * @return this iterator
      * @draft ICU 78
      */
-    U_FORCE_INLINE UTFIterator &operator++() {  // pre-increment
+    U_FORCE_INLINE UTFIterator& operator++() U_LIFETIME_BOUND {  // pre-increment
         if (state_ > 0) {
             // operator*() called readAndInc() so p_ is already ahead.
             state_ = 0;
@@ -1340,10 +1366,10 @@ public:
      * @return this iterator
      * @draft ICU 78
      */
-    template<typename Iter = UnitIter>
+    template <typename Iter = UnitIter>
     U_FORCE_INLINE
-    std::enable_if_t<prv::bidirectional_iterator<Iter>, UTFIterator &>
-    operator--() {  // pre-decrement
+    std::enable_if_t<prv::bidirectional_iterator<Iter>, UTFIterator&>
+    operator--() U_LIFETIME_BOUND {  // pre-decrement
         if (state_ > 0) {
             // operator*() called readAndInc() so p_ is ahead of the logical position.
             p_ = units_.begin();
@@ -1371,10 +1397,6 @@ public:
 
 private:
     friend class std::reverse_iterator<UTFIterator<CP32, behavior, UnitIter>>;
-
-    U_FORCE_INLINE UnitIter getLogicalPosition() const {
-        return state_ <= 0 ? p_ : units_.begin();
-    }
 
     // operator*() etc. are logically const.
     mutable UnitIter p_;
@@ -1408,8 +1430,8 @@ class UTFIterator<
     class Proxy {
     public:
         explicit Proxy(CodeUnits<CP32, UnitIter> &units) : units_(units) {}
-        CodeUnits<CP32, UnitIter> &operator*() { return units_; }
-        CodeUnits<CP32, UnitIter> *operator->() { return &units_; }
+        CodeUnits<CP32, UnitIter>& operator*() U_LIFETIME_BOUND { return units_; }
+        CodeUnits<CP32, UnitIter>* operator->() U_LIFETIME_BOUND { return &units_; }
     private:
         CodeUnits<CP32, UnitIter> units_;
     };
@@ -1486,7 +1508,7 @@ public:
         return Proxy(units_);
     }
 
-    U_FORCE_INLINE UTFIterator &operator++() {  // pre-increment
+    U_FORCE_INLINE UTFIterator& operator++() U_LIFETIME_BOUND {  // pre-increment
         if (ahead_) {
             // operator*() called readAndInc() so p_ is already ahead.
             ahead_ = false;
@@ -1540,8 +1562,8 @@ class std::reverse_iterator<U_HEADER_ONLY_NAMESPACE::UTFIterator<CP32, behavior,
     class Proxy {
     public:
         explicit Proxy(CodeUnits_ units) : units_(units) {}
-        CodeUnits_ &operator*() { return units_; }
-        CodeUnits_ *operator->() { return &units_; }
+        CodeUnits_& operator*() U_LIFETIME_BOUND { return units_; }
+        CodeUnits_* operator->() U_LIFETIME_BOUND { return &units_; }
     private:
         CodeUnits_ units_;
     };
@@ -1554,7 +1576,7 @@ public:
     using iterator_category = std::bidirectional_iterator_tag;
 
     U_FORCE_INLINE explicit reverse_iterator(U_HEADER_ONLY_NAMESPACE::UTFIterator<CP32, behavior, UnitIter> iter) :
-            p_(iter.getLogicalPosition()), start_(iter.start_), limit_(iter.limit_),
+            p_(iter.base()), start_(iter.start_), limit_(iter.limit_),
             units_(0, 0, false, p_, p_) {}
     U_FORCE_INLINE reverse_iterator() : p_{}, start_{}, limit_{}, units_(0, 0, false, p_, p_) {}
 
@@ -1568,6 +1590,11 @@ public:
         return getLogicalPosition() == other.getLogicalPosition();
     }
     U_FORCE_INLINE bool operator!=(const reverse_iterator &other) const { return !operator==(other); }
+
+    U_FORCE_INLINE U_HEADER_ONLY_NAMESPACE::UTFIterator<CP32, behavior, UnitIter> base() const {
+        return U_HEADER_ONLY_NAMESPACE::UTFIterator<CP32, behavior, UnitIter>(
+            start_, getLogicalPosition(), limit_);
+    }
 
     U_FORCE_INLINE CodeUnits_ operator*() const {
         if (state_ == 0) {
@@ -1585,7 +1612,7 @@ public:
         return Proxy(units_);
     }
 
-    U_FORCE_INLINE reverse_iterator &operator++() {  // pre-increment
+    U_FORCE_INLINE reverse_iterator& operator++() U_LIFETIME_BOUND {  // pre-increment
         if (state_ < 0) {
             // operator*() called decAndRead() so p_ is already behind.
             state_ = 0;
@@ -1620,7 +1647,7 @@ public:
         }
     }
 
-    U_FORCE_INLINE reverse_iterator &operator--() {  // pre-decrement
+    U_FORCE_INLINE reverse_iterator& operator--() U_LIFETIME_BOUND {  // pre-decrement
         if (state_ < 0) {
             // operator*() called decAndRead() so p_ is behind the logical position.
             p_ = units_.end();
@@ -1774,6 +1801,9 @@ auto utfIterator(UnitIter p) {
  * @see utfStringCodePoints
  */
 template<typename CP32, UTFIllFormedBehavior behavior, typename Range>
+#if defined(__cpp_lib_ranges)
+    requires std::ranges::range<Range>
+#endif
 class UTFStringCodePoints {
     static_assert(sizeof(CP32) == 4, "CP32 must be a 32-bit type to hold a code point");
 public:
@@ -1799,7 +1829,7 @@ public:
      * @draft ICU 78
      */
     template<typename R = Range, typename = std::enable_if_t<std::is_reference_v<R>>, typename = void>
-    explicit UTFStringCodePoints(Range unitRange) : unitRange(unitRange) {}
+    explicit UTFStringCodePoints(Range unitRange U_LIFETIME_BOUND) : unitRange(unitRange) {}
 
     /** Copy constructor. @draft ICU 78 */
     UTFStringCodePoints(const UTFStringCodePoints &other) = default;
@@ -1875,6 +1905,28 @@ public:
      */
     auto rend() const {
         return std::make_reverse_iterator(begin());
+    }
+
+    /**
+     * Returns the CodeUnits for the first character/code point.
+     * Requires that the range is not empty.
+     *
+     * @return the CodeUnits for the first character/code point.
+     * @draft ICU 79
+     */
+    auto front() const {
+        return *begin();
+    }
+
+    /**
+     * Returns the CodeUnits for the last character/code point.
+     * Requires that the range is not empty.
+     *
+     * @return the CodeUnits for the last character/code point.
+     * @draft ICU 79
+     */
+    auto back() const {
+        return *(--end());
     }
 
 private:
@@ -1958,8 +2010,8 @@ class UnsafeUTFIterator {
     class Proxy {
     public:
         explicit Proxy(UnsafeCodeUnits<CP32, UnitIter> &units) : units_(units) {}
-        UnsafeCodeUnits<CP32, UnitIter> &operator*() { return units_; }
-        UnsafeCodeUnits<CP32, UnitIter> *operator->() { return &units_; }
+        UnsafeCodeUnits<CP32, UnitIter>& operator*() U_LIFETIME_BOUND { return units_; }
+        UnsafeCodeUnits<CP32, UnitIter>* operator->() U_LIFETIME_BOUND { return &units_; }
     private:
         UnsafeCodeUnits<CP32, UnitIter> units_;
     };
@@ -2012,7 +2064,7 @@ public:
      * @draft ICU 78
      */
     U_FORCE_INLINE bool operator==(const UnsafeUTFIterator &other) const {
-        return getLogicalPosition() == other.getLogicalPosition();
+        return base() == other.base();
     }
     /**
      * @param other Another iterator
@@ -2032,7 +2084,7 @@ public:
         !std::is_same_v<Sentinel, UnsafeUTFIterator> && !std::is_same_v<Sentinel, UnitIter>,
         bool>
     operator==(const UnsafeUTFIterator &iter, const Sentinel &s) {
-        return iter.getLogicalPosition() == s;
+        return iter.base() == s;
     }
 
 #if U_CPLUSPLUS_VERSION < 20
@@ -2047,7 +2099,7 @@ public:
         !std::is_same_v<Sentinel, UnsafeUTFIterator> && !std::is_same_v<Sentinel, UnitIter>,
         bool>
     operator==(const Sentinel &s, const UnsafeUTFIterator &iter) {
-        return iter.getLogicalPosition() == s;
+        return iter.base() == s;
     }
     /**
      * @param iter An UnsafeUTFIterator
@@ -2072,6 +2124,18 @@ public:
         bool>
     operator!=(const Sentinel &s, const UnsafeUTFIterator &iter) { return !(iter == s); }
 #endif  // C++17
+
+    /**
+     * Returns the current position as a code unit iterator.
+     * Similar to iter->begin() but also works at the exclusive end().
+     *
+     * @return current position as a code unit iterator
+     * @draft ICU 79
+     */
+    U_FORCE_INLINE UnitIter base() const {
+        // Return the logical position.
+        return state_ <= 0 ? p_ : units_.begin();
+    }
 
     /**
      * Decodes the code unit sequence at the current position.
@@ -2111,7 +2175,7 @@ public:
      * @return this iterator
      * @draft ICU 78
      */
-    U_FORCE_INLINE UnsafeUTFIterator &operator++() {  // pre-increment
+    U_FORCE_INLINE UnsafeUTFIterator& operator++() U_LIFETIME_BOUND {  // pre-increment
         if (state_ > 0) {
             // operator*() called readAndInc() so p_ is already ahead.
             state_ = 0;
@@ -2162,10 +2226,10 @@ public:
      * @return this iterator
      * @draft ICU 78
      */
-    template<typename Iter = UnitIter>
+    template <typename Iter = UnitIter>
     U_FORCE_INLINE
-    std::enable_if_t<prv::bidirectional_iterator<Iter>, UnsafeUTFIterator &>
-    operator--() {  // pre-decrement
+    std::enable_if_t<prv::bidirectional_iterator<Iter>, UnsafeUTFIterator&>
+    operator--() U_LIFETIME_BOUND {  // pre-decrement
         if (state_ > 0) {
             // operator*() called readAndInc() so p_ is ahead of the logical position.
             p_ = units_.begin();
@@ -2193,10 +2257,6 @@ public:
 
 private:
     friend class std::reverse_iterator<UnsafeUTFIterator<CP32, UnitIter>>;
-
-    U_FORCE_INLINE UnitIter getLogicalPosition() const {
-        return state_ <= 0 ? p_ : units_.begin();
-    }
 
     // operator*() etc. are logically const.
     mutable UnitIter p_;
@@ -2226,8 +2286,8 @@ class UnsafeUTFIterator<
     class Proxy {
     public:
         explicit Proxy(UnsafeCodeUnits<CP32, UnitIter> &units) : units_(units) {}
-        UnsafeCodeUnits<CP32, UnitIter> &operator*() { return units_; }
-        UnsafeCodeUnits<CP32, UnitIter> *operator->() { return &units_; }
+        UnsafeCodeUnits<CP32, UnitIter>& operator*() U_LIFETIME_BOUND { return units_; }
+        UnsafeCodeUnits<CP32, UnitIter>* operator->() U_LIFETIME_BOUND { return &units_; }
     private:
         UnsafeCodeUnits<CP32, UnitIter> units_;
     };
@@ -2300,7 +2360,7 @@ public:
         return Proxy(units_);
     }
 
-    U_FORCE_INLINE UnsafeUTFIterator &operator++() {  // pre-increment
+    U_FORCE_INLINE UnsafeUTFIterator& operator++() U_LIFETIME_BOUND {  // pre-increment
         if (ahead_) {
             // operator*() called readAndInc() so p_ is already ahead.
             ahead_ = false;
@@ -2351,8 +2411,8 @@ class std::reverse_iterator<U_HEADER_ONLY_NAMESPACE::UnsafeUTFIterator<CP32, Uni
     class Proxy {
     public:
         explicit Proxy(UnsafeCodeUnits_ units) : units_(units) {}
-        UnsafeCodeUnits_ &operator*() { return units_; }
-        UnsafeCodeUnits_ *operator->() { return &units_; }
+        UnsafeCodeUnits_& operator*() U_LIFETIME_BOUND { return units_; }
+        UnsafeCodeUnits_* operator->() U_LIFETIME_BOUND { return &units_; }
     private:
         UnsafeCodeUnits_ units_;
     };
@@ -2365,7 +2425,7 @@ public:
     using iterator_category = std::bidirectional_iterator_tag;
 
     U_FORCE_INLINE explicit reverse_iterator(U_HEADER_ONLY_NAMESPACE::UnsafeUTFIterator<CP32, UnitIter> iter) :
-            p_(iter.getLogicalPosition()), units_(0, 0, p_, p_) {}
+            p_(iter.base()), units_(0, 0, p_, p_) {}
     U_FORCE_INLINE reverse_iterator() : p_{}, units_(0, 0, p_, p_) {}
 
     U_FORCE_INLINE reverse_iterator(reverse_iterator &&src) noexcept = default;
@@ -2378,6 +2438,11 @@ public:
         return getLogicalPosition() == other.getLogicalPosition();
     }
     U_FORCE_INLINE bool operator!=(const reverse_iterator &other) const { return !operator==(other); }
+
+    U_FORCE_INLINE U_HEADER_ONLY_NAMESPACE::UnsafeUTFIterator<CP32, UnitIter> base() const {
+        return U_HEADER_ONLY_NAMESPACE::UnsafeUTFIterator<CP32, UnitIter>(
+            getLogicalPosition());
+    }
 
     U_FORCE_INLINE UnsafeCodeUnits_ operator*() const {
         if (state_ == 0) {
@@ -2395,7 +2460,7 @@ public:
         return Proxy(units_);
     }
 
-    U_FORCE_INLINE reverse_iterator &operator++() {  // pre-increment
+    U_FORCE_INLINE reverse_iterator& operator++() U_LIFETIME_BOUND {  // pre-increment
         if (state_ < 0) {
             // operator*() called decAndRead() so p_ is already behind.
             state_ = 0;
@@ -2430,7 +2495,7 @@ public:
         }
     }
 
-    U_FORCE_INLINE reverse_iterator &operator--() {  // pre-decrement
+    U_FORCE_INLINE reverse_iterator& operator--() U_LIFETIME_BOUND {  // pre-decrement
         if (state_ < 0) {
             // operator*() called decAndRead() so p_ is behind the logical position.
             p_ = units_.end();
@@ -2515,6 +2580,9 @@ auto unsafeUTFIterator(UnitIter iter) {
  * @see unsafeUTFStringCodePoints
  */
 template<typename CP32, typename Range>
+#if defined(__cpp_lib_ranges)
+    requires std::ranges::range<Range>
+#endif
 class UnsafeUTFStringCodePoints {
     static_assert(sizeof(CP32) == 4, "CP32 must be a 32-bit type to hold a code point");
 public:
@@ -2540,7 +2608,7 @@ public:
      * @draft ICU 78
      */
     template<typename R = Range, typename = std::enable_if_t<std::is_reference_v<R>>, typename = void>
-    explicit UnsafeUTFStringCodePoints(Range unitRange) : unitRange(unitRange) {}
+    explicit UnsafeUTFStringCodePoints(Range unitRange U_LIFETIME_BOUND) : unitRange(unitRange) {}
 
     /** Copy constructor. @draft ICU 78 */
     UnsafeUTFStringCodePoints(const UnsafeUTFStringCodePoints &other) = default;
@@ -2610,6 +2678,28 @@ public:
      */
     auto rend() const {
         return std::make_reverse_iterator(begin());
+    }
+
+    /**
+     * Returns the CodeUnits for the first character/code point.
+     * Requires that the range is not empty.
+     *
+     * @return the CodeUnits for the first character/code point.
+     * @draft ICU 79
+     */
+    auto front() const {
+        return *begin();
+    }
+
+    /**
+     * Returns the CodeUnits for the last character/code point.
+     * Requires that the range is not empty.
+     *
+     * @return the CodeUnits for the last character/code point.
+     * @draft ICU 79
+     */
+    auto back() const {
+        return *(--end());
     }
 
 private:

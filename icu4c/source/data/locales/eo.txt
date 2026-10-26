@@ -10,7 +10,10 @@ eo{
     ExemplarCharacters{"[a b c ĉ d e f g ĝ h ĥ i j ĵ k l m n o p r s ŝ t u ŭ v z]"}
     ExemplarCharactersIndex{"[A B C Ĉ D E F G Ĝ H Ĥ I J Ĵ K L M N O P R S Ŝ T U V Z]"}
     ExemplarCharactersNumbers{"[  , % ‰ + − 0 1 2 3 4 5 6 7 8 9]"}
-    ExemplarCharactersPunctuation{"[\\- ‐‑ – — , ; \\: ! ? . … '‘’ \u0022“” ( ) \\[ \\] \\{ \\} /]"}
+    ExemplarCharactersPunctuation{
+        "[\\- ‐‑ – — , ; \\: ! ? . … '‘’ \u0022“” « » ( ) \\[ \\] \\{ \\} § @ * / \\&"
+        " # † ‡ ′ ″ ° ~]"
+    }
     NumberElements{
         latn{
             miscPatterns{
@@ -159,16 +162,66 @@ eo{
         }
     }
     calendar{
+        buddhist{
+            eras{
+                wide{
+                    0{"de budaisma erao"}
+                }
+            }
+        }
+        coptic{
+            eras{
+                wide{
+                    1{"de erao de martiroj"}
+                }
+            }
+            monthNames{
+                format{
+                    wide{
+                        "Toto",
+                        "Paofio",
+                        "Hatoro",
+                        "Ĥojako",
+                        "Tobio",
+                        "Meĥiro",
+                        "Famenuto",
+                        "Farmutio",
+                        "Pahono",
+                        "Paonio",
+                        "Epifio",
+                        "Misorio",
+                        "Nasio",
+                    }
+                }
+                stand-alone{
+                    wide{
+                        "Toto",
+                        "Paofio",
+                        "Hatoro",
+                        "Ĥojako",
+                        "Tobio",
+                        "Meĥiro",
+                        "Famenuto",
+                        "Farmutio",
+                        "Pahono",
+                        "Paonio",
+                        "Epifio",
+                        "Misorio",
+                        "Nasio",
+                    }
+                }
+            }
+        }
         generic{
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
-                "EEEE, 'la' d-'a' 'de' MMMM y G",
-                "G y-MMMM-dd",
-                "G y-MMM-dd",
-                "G y-MM-dd",
+                "EEEE, 'la' d-'a' 'de' MMMM y GGGG",
+                "d MMMM y G",
+                "d MMM y G",
+                "y-MM-dd G",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -201,11 +254,12 @@ eo{
                 Ehm{"E h:mm a"}
                 Ehms{"E h:mm:ss a"}
                 Gy{"y G"}
-                GyMEd{"E, d MMM y G"}
+                GyM{"y-MM G"}
+                GyMEd{"E, y-MM-dd G"}
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, d MMM y G"}
                 GyMMMd{"d MMM y G"}
-                GyMd{"d MMM y G"}
+                GyMd{"y-MM-dd G"}
                 Hv{"HH'H' v"}
                 MEd{"E, dd-MM"}
                 MMMEd{"E, d MMM"}
@@ -215,13 +269,13 @@ eo{
                 hms{"h:mm:ss a"}
                 y{"y G"}
                 yyyy{"y G"}
-                yyyyM{"M y GGGGG"}
-                yyyyMEd{"E, y-MM-dd GGGGG"}
+                yyyyM{"y-MM G"}
+                yyyyMEd{"E, y-MM-dd G"}
                 yyyyMMM{"MMM y G"}
                 yyyyMMMEd{"E, d MMM y G"}
                 yyyyMMMM{"MMMM y G"}
                 yyyyMMMd{"d MMM y G"}
-                yyyyMd{"y-MM-dd GGGGG"}
+                yyyyMd{"y-MM-dd G"}
                 yyyyQQQ{"QQQ 'de' y G"}
                 yyyyQQQQ{"QQQQ 'de' y G"}
             }
@@ -238,15 +292,15 @@ eo{
                     y{"y – y G"}
                 }
                 GyM{
-                    G{"MMM y GGGGG – MMM y GGGGG"}
-                    M{"MMM – MMM y GGGGG"}
-                    y{"MMM y – MMM y GGGGG"}
+                    G{"y-MM G – y-MM G"}
+                    M{"y-MM – y-MM G"}
+                    y{"y-MM – y-MM G"}
                 }
                 GyMEd{
-                    G{"E, d MMM y GGGGG – E, d MMM y GGGGG"}
-                    M{"E, d MMM – E, d MMM y GGGGG"}
-                    d{"E, d – E, d MMM y GGGGG"}
-                    y{"E, d MMM y – E, d MMM y GGGGG"}
+                    G{"E, y-MM-dd G – E, y-MM-dd G"}
+                    M{"E, y-MM-dd – E, y-MM-dd G"}
+                    d{"E, y-MM-dd – E, y-MM-dd G"}
+                    y{"E, y-MM-dd – E, y-MM-dd G"}
                 }
                 GyMMM{
                     G{"MMM y G – MMM y G"}
@@ -266,10 +320,10 @@ eo{
                     y{"d MMM y – d MMM y G"}
                 }
                 GyMd{
-                    G{"d MMM y GGGGG – d MMM y GGGGG"}
-                    M{"d MMM – d MMM y GGGGG"}
-                    d{"d – d MMM y GGGGG"}
-                    y{"d MMM y – d MMM y GGGGG"}
+                    G{"y-MM-dd G – y-MM-dd G"}
+                    M{"y-MM-dd – y-MM-dd G"}
+                    d{"y-MM-dd – y-MM-dd G"}
+                    y{"y-MM-dd – y-MM-dd G"}
                 }
                 M{
                     M{"M – M"}
@@ -285,6 +339,10 @@ eo{
                     M{"E, d MMM – E, d MMM"}
                     d{"E, d – E, d MMM"}
                 }
+                MMMMd{
+                    M{"d MMMM – d MMMM"}
+                    d{"d – d MMMM"}
+                }
                 MMMd{
                     M{"d MMM – d MMM"}
                     d{"d – d MMM"}
@@ -296,13 +354,13 @@ eo{
                     y{"y – y G"}
                 }
                 yM{
-                    M{"y-MM – y-MM GGGGG"}
-                    y{"y-MM – y-MM GGGGG"}
+                    M{"y-MM – y-MM G"}
+                    y{"y-MM – y-MM G"}
                 }
                 yMEd{
-                    M{"E, y-MM-dd – E, y-MM-dd GGGGG"}
-                    d{"E, y-MM-dd – E, y-MM-dd GGGGG"}
-                    y{"E, y-MM-dd – E, y-MM-dd GGGGG"}
+                    M{"E, y-MM-dd – E, y-MM-dd G"}
+                    d{"E, y-MM-dd – E, y-MM-dd G"}
+                    y{"E, y-MM-dd – E, y-MM-dd G"}
                 }
                 yMMM{
                     M{"MMM – MMM y G"}
@@ -323,9 +381,9 @@ eo{
                     y{"d MMM y – d MMM y G"}
                 }
                 yMd{
-                    M{"y-MM-dd – y-MM-dd GGGGG"}
-                    d{"y-MM-dd – y-MM-dd GGGGG"}
-                    y{"y-MM-dd – y-MM-dd GGGGG"}
+                    M{"y-MM-dd – y-MM-dd G"}
+                    d{"y-MM-dd – y-MM-dd G"}
+                    y{"y-MM-dd – y-MM-dd G"}
                 }
             }
         }
@@ -344,9 +402,9 @@ eo{
                 "HH:mm:ss",
                 "HH:mm",
                 "EEEE, 'la' d-'a' 'de' MMMM y",
-                "y-MMMM-dd",
-                "y-MMM-dd",
-                "yy-MM-dd",
+                "d MMMM y",
+                "d MMM y",
+                "y-MM-dd",
                 "{1}, {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -375,20 +433,30 @@ eo{
                 "yMMMdd",
                 "yyMMdd",
             }
+            appendItems{
+                Day-Of-Week{"{1}, {0}"}
+                Era{"{0} {1}"}
+                Time-Day-Of-Week{"{1}, {0}"}
+            }
             availableFormats{
                 Ehm{"E h:mm a"}
                 Ehms{"E h:mm:ss a"}
                 Gy{"y G"}
-                GyMEd{"E, d MMM y G"}
+                GyM{"y-MM G"}
+                GyMEd{"E, y-MM-dd G"}
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, d MMM y G"}
+                GyMMMM{"MMMM y G"}
+                GyMMMMEd{"E, d MMMM y G"}
+                GyMMMMd{"d MMMM y G"}
                 GyMMMd{"d MMM y G"}
-                GyMd{"d MMM y G"}
+                GyMd{"y-MM-dd G"}
                 H{"HH'H'"}
                 Hv{"HH'H' v"}
                 MEd{"E, MM-dd"}
                 MMM{"MMM"}
                 MMMEd{"E, d MMM"}
+                MMMMEd{"E, d MMMM"}
                 MMMMW{
                     one{"W-'a' 'semajno' 'de' MMMM"}
                     other{"W-'a' 'semajno' 'de' MMMM"}
@@ -403,6 +471,8 @@ eo{
                 yMMM{"MMM y"}
                 yMMMEd{"E, d MMM y"}
                 yMMMM{"MMMM y"}
+                yMMMMEd{"E, d MMMM y"}
+                yMMMMd{"d MMMM y"}
                 yMMMd{"d MMM y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ 'de' y"}
@@ -471,6 +541,13 @@ eo{
                 }
             }
             intervalFormats{
+                Bh{
+                    h{"h – h B"}
+                }
+                Bhm{
+                    h{"h:mm – h:mm B"}
+                    m{"h:mm – h:mm B"}
+                }
                 Gy{
                     G{"y G – y G"}
                     y{"y – y G"}
@@ -481,10 +558,10 @@ eo{
                     y{"MMM y – MMM y G"}
                 }
                 GyMEd{
-                    G{"E, d MMM y G – E, d MMM y G"}
-                    M{"E, d MMM – E, d MMM y G"}
-                    d{"E, d – E, d MMM y G"}
-                    y{"E, d MMM y – E, d MMM y G"}
+                    G{"E, y-MM-dd G – E, y-MM-dd G"}
+                    M{"E, y-MM-dd – E, y-MM-dd G"}
+                    d{"E, y-MM-dd – E, y-MM-dd G"}
+                    y{"E, y-MM-dd – E, y-MM-dd G"}
                 }
                 GyMMM{
                     G{"MMM y G – MMM y G"}
@@ -510,7 +587,7 @@ eo{
                     y{"d MMM y – d MMM y G"}
                 }
                 H{
-                    H{"HH – HH"}
+                    H{"HH'H' – HH'H'"}
                 }
                 Hm{
                     H{"HH:mm – HH:mm"}
@@ -523,16 +600,23 @@ eo{
                 Hv{
                     H{"HH–HH'H' v"}
                 }
+                M{
+                    M{"MM – MM"}
+                }
                 MEd{
                     M{"E, MM-dd – E, MM-dd"}
                     d{"E, MM-dd – E, MM-dd"}
                 }
                 MMM{
-                    M{"MMM–MMM"}
+                    M{"MMM – MMM"}
                 }
                 MMMEd{
                     M{"E, d MMM – E, d MMM"}
                     d{"E, d – E, d MMM"}
+                }
+                MMMMd{
+                    M{"d MMMM – d MMMM"}
+                    d{"d – d MMMM"}
                 }
                 MMMd{
                     M{"d MMM – d MMM"}
@@ -572,7 +656,7 @@ eo{
                 yMMMEd{
                     M{"E, d MMM – E, d MMM y"}
                     d{"E, d – E, d MMM y"}
-                    y{"E, d MMM y – E, d MMM y"}
+                    y{"E, d MMM y – E, d MMM y"}
                 }
                 yMMMM{
                     M{"MMMM – MMMM y"}
@@ -580,7 +664,7 @@ eo{
                 }
                 yMMMd{
                     M{"d MMM – d MMM y"}
-                    d{"d–d MMM y"}
+                    d{"d – d MMM y"}
                     y{"d MMM y – d MMM y"}
                 }
             }
@@ -649,6 +733,250 @@ eo{
                 }
             }
         }
+        hebrew{
+            eras{
+                wide{
+                    0{"de juda erao"}
+                }
+            }
+            monthNames{
+                format{
+                    wide{
+                        "Tiŝrio",
+                        "Ĥeŝvano",
+                        "Kislevo",
+                        "Tebeto",
+                        "Ŝebato",
+                        "Adaro I",
+                        "Adaro",
+                        "Nisano",
+                        "Ijaro",
+                        "Sivano",
+                        "Tamuzo",
+                        "Abo",
+                        "Elulo",
+                        "Adaro II",
+                    }
+                }
+                stand-alone{
+                    wide{
+                        "Tiŝrio",
+                        "Ĥeŝvano",
+                        "Kislevo",
+                        "Tebeto",
+                        "Ŝebato",
+                        "Adaro I",
+                        "Adaro",
+                        "Nisano",
+                        "Ijaro",
+                        "Sivano",
+                        "Tamuzo",
+                        "Abo",
+                        "Elulo",
+                        "Adaro II",
+                    }
+                }
+            }
+        }
+        indian{
+            eras{
+                wide{
+                    0{"de erao Śaka"}
+                }
+            }
+            monthNames{
+                format{
+                    wide{
+                        "Ĉaitra",
+                        "Vaiŝakha",
+                        "Ĝjaiŝtha",
+                        "Aŝadha",
+                        "Ŝravana",
+                        "Bhadra",
+                        "Aŝvina",
+                        "Kartika",
+                        "Agrahajana",
+                        "Paŭŝa",
+                        "Magha",
+                        "Phalguna",
+                    }
+                }
+                stand-alone{
+                    wide{
+                        "Ĉaitra",
+                        "Vaiŝakha",
+                        "Ĝjaiŝtha",
+                        "Aŝadha",
+                        "Ŝravana",
+                        "Bhadra",
+                        "Aŝvina",
+                        "Kartika",
+                        "Agrahajana",
+                        "Paŭŝa",
+                        "Magha",
+                        "Phalguna",
+                    }
+                }
+            }
+        }
+        islamic{
+            eras{
+                wide{
+                    0{"de araba erao"}
+                    1{"antaŭ heĝiro"}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Muh.",
+                        "Saf.",
+                        "Rab. I",
+                        "Rab. II",
+                        "Ĝum. I",
+                        "Ĝum. II",
+                        "Raĝ.",
+                        "Ŝab.",
+                        "Ram.",
+                        "Ŝav.",
+                        "Dulk.",
+                        "Dulh.",
+                    }
+                    wide{
+                        "Muharamo",
+                        "Safaro",
+                        "Rabio I",
+                        "Rabio II",
+                        "Ĝumado I",
+                        "Ĝumado II",
+                        "Raĝabo",
+                        "Ŝabano",
+                        "Ramadano",
+                        "Ŝavalo",
+                        "Dulkago",
+                        "Dulhiĝo",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "Muh.",
+                        "Saf.",
+                        "Rab. I",
+                        "Rab. II",
+                        "Ĝum. I",
+                        "Ĝum. II",
+                        "Raĝ.",
+                        "Ŝab.",
+                        "Ram.",
+                        "Ŝav.",
+                        "Dulk.",
+                        "Dulh.",
+                    }
+                    wide{
+                        "Muharamo",
+                        "Safaro",
+                        "Rabio I",
+                        "Rabio II",
+                        "Ĝumado I",
+                        "Ĝumado II",
+                        "Raĝabo",
+                        "Ŝabano",
+                        "Ramadano",
+                        "Ŝavalo",
+                        "Dulkago",
+                        "Dulhiĝo",
+                    }
+                }
+            }
+        }
+    }
+    characterLabel{
+        activities{"aktivecoj"}
+        african_scripts{"afrikaj skribsistemoj"}
+        american_scripts{"amerikaj skribsistemoj"}
+        animal{"bestoj"}
+        animals_nature{"bestoj kaj naturo"}
+        arrows{"sagetoj"}
+        body{"korpo"}
+        box_drawing{"kestetaj eroj"}
+        braille{"brajlo"}
+        building{"konstruaĵoj"}
+        bullets_stars{"bulmarkoj kaj steletoj"}
+        consonantal_jamo{"jamo-konsonantoj"}
+        currency_symbols{"valut-simboloj"}
+        dash_connector{"haltostreko/streketo"}
+        digits{"ciferoj"}
+        dingbats{"vinjetoj"}
+        divination_symbols{"aŭguraj simboloj"}
+        downwards_arrows{"sagetoj malsupren"}
+        downwards_upwards_arrows{"sagetoj supren-malsupren"}
+        east_asian_scripts{"orientaziaj skribsistemoj"}
+        emoji{"miensimboloj"}
+        european_scripts{"eŭropaj skribsistemoj"}
+        female{"ina"}
+        flag{"flago"}
+        flags{"flagoj"}
+        food_drink{"manĝaĵoj kaj trinkaĵoj"}
+        format{"tekstaranĝaj signoj"}
+        format_whitespace{"tekstaranĝaj signoj kaj blankspacoj"}
+        full_width_form_variant{"plenlarĝaj variaĵoj"}
+        geometric_shapes{"geometriaj formoj"}
+        half_width_form_variant{"duonlarĝaj variaĵoj"}
+        han_characters{"ĉinaj signoj"}
+        han_radicals{"ĉinaj radikaloj"}
+        hanja{"ĉinkoreaj signoj"}
+        hanzi_simplified{"ĉinaj signoj (simpligitaj)"}
+        hanzi_traditional{"ĉinaj signoj (tradiciaj)"}
+        heart{"koro"}
+        historic_scripts{"historiaj skribsistemoj"}
+        ideographic_desc_characters{"skribsignoj priskribantaj ideografiaĵojn"}
+        japanese_kana{"japanaj kanaoj"}
+        kanbun{"japanaj klasikĉintekstaj helpsignoj"}
+        kanji{"ĉin-japanaj signoj"}
+        keycap{"klavo"}
+        leftwards_arrows{"sagetoj maldekstren"}
+        leftwards_rightwards_arrows{"sagetoj dekstren-maldekstren"}
+        letterlike_symbols{"litersimilaj simboloj"}
+        limited_use{"limigita uzo"}
+        male{"vira"}
+        math_symbols{"matematikaj simboloj"}
+        middle_eastern_scripts{"okcidentaziaj skribsistemoj"}
+        miscellaneous{"diversaj"}
+        modern_scripts{"modernaj skribsistemoj"}
+        modifier{"modifaj literoj"}
+        musical_symbols{"muzikaj simboloj"}
+        nature{"naturo"}
+        nonspacing{"kombinaj signoj"}
+        numbers{"numeroj"}
+        objects{"objektoj"}
+        other{"aliaj"}
+        paired{"paraj"}
+        person{"personoj"}
+        phonetic_alphabet{"fonetika alfabeto"}
+        pictographs{"bildsimboloj"}
+        place{"ejoj"}
+        plant{"kreskaĵoj"}
+        punctuation{"helpsignoj"}
+        rightwards_arrows{"sagetoj dekstren"}
+        sign_standard_symbols{"normitaj simboloj/signoj"}
+        small_form_variant{"etaj variaĵoj"}
+        smiley{"mienoj"}
+        smileys_people{"mienoj kaj personoj"}
+        south_asian_scripts{"sudaziaj skribsistemoj"}
+        southeast_asian_scripts{"sudorientaziaj skribsistemoj"}
+        spacing{"interspacoj"}
+        sport{"sporto"}
+        symbols{"simboloj"}
+        technical_symbols{"teĥnikaj simboloj"}
+        tone_marks{"indikiloj de tonoj"}
+        travel{"vojaĝo"}
+        travel_places{"vojaĝo kaj ejoj"}
+        upwards_arrows{"sagetoj supren"}
+        variant_forms{"variaĵoj"}
+        vocalic_jamo{"jamo-vokaloj"}
+        weather{"vetero"}
+        western_asian_scripts{"okcidentaziaj skribsistemoj"}
+        whitespace{"blankspacoj"}
     }
     delimiters{
         alternateQuotationEnd{"»"}
@@ -694,19 +1022,10 @@ eo{
         dayOfYear{
             dn{"tago de jaro"}
         }
-        dayOfYear-narrow{
-            dn{"jartago"}
-        }
         dayOfYear-short{
             dn{"jartago"}
         }
         dayperiod{
-            dn{"tagtempo"}
-        }
-        dayperiod-narrow{
-            dn{"tagtempo"}
-        }
-        dayperiod-short{
             dn{"tagtempo"}
         }
         era{

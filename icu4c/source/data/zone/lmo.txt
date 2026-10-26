@@ -3,6 +3,9 @@
 // Generated using tools/cldr/cldr-to-icu/
 lmo{
     zoneStrings{
+        "Etc:UTC"{
+            ls{"Temp Universàl Coordinàa"}
+        }
         "meta:GMT"{
             ls{"Temp Medi de Greenwich"}
         }

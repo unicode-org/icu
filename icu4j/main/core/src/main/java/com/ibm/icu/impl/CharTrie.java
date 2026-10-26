@@ -206,7 +206,6 @@ public class CharTrie extends Trie {
      * @param other Trie to check
      * @return true if the argument Trie has the same data as this Trie, false otherwise
      */
-    /// CLOVER:OFF
     @Override
     public boolean equals(Object other) {
         boolean result = super.equals(other);
@@ -222,8 +221,6 @@ public class CharTrie extends Trie {
         assert false : "hashCode not designed";
         return 42;
     }
-
-    /// CLOVER:ON
 
     // protected methods -----------------------------------------------
 

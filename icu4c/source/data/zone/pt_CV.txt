@@ -6,7 +6,7 @@ pt_CV{
     zoneStrings{
         "meta:Azores"{
             sd{"∅∅∅"}
-            sg{"AZOT"}
+            sg{"∅∅∅"}
             ss{"∅∅∅"}
         }
         "meta:Europe_Central"{

@@ -235,7 +235,11 @@ or{
         }
         minimalPairs{
             ordinal{
+                few{"{0}ୟ ଡାହାଣପଟ ରାସ୍ତାରେ ଯାଆନ୍ତୁ।"}
+                many{"{0}ତମ ଡାହାଣପଟ ରାସ୍ତାରେ ଯାଆନ୍ତୁ।"}
+                one{"{0}ମ ଡାହାଣପଟ ରାସ୍ତାରେ ଯାଆନ୍ତୁ।"}
                 other{"ଡାହାଣରେ ଥିବା {0} ନିଅନ୍ତୁ"}
+                two{"{0} ଡାହାଣପଟ ରାସ୍ତାରେ ଯାଆନ୍ତୁ।"}
             }
             plural{
                 one{"{0} ଦିନ"}
@@ -428,6 +432,10 @@ or{
                 "yMMMd",
                 "yyMd",
             }
+            appendItems{
+                Day-Of-Week{"{0} {1}"}
+                Era{"{0} {1}"}
+            }
             availableFormats{
                 Ed{"d E"}
                 Gy{"y G"}
@@ -450,6 +458,8 @@ or{
                 yMMM{"MMM y"}
                 yMMMEd{"E, MMM d, y"}
                 yMMMM{"MMMM y"}
+                yMMMMEd{"E, d MMMM y"}
+                yMMMMd{"d MMMM y"}
                 yMMMd{"MMM d, y"}
                 yMd{"M/d/y"}
                 yQQQ{"QQQ y"}
@@ -489,18 +499,6 @@ or{
                         "ଗୁ",
                         "ଶୁ",
                         "ଶ",
-                    }
-                }
-            }
-            dayPeriod{
-                stand-alone{
-                    narrow{
-                        am{"AM"}
-                        pm{"PM"}
-                    }
-                    wide{
-                        am{"AM"}
-                        pm{"PM"}
                     }
                 }
             }
@@ -657,14 +655,6 @@ or{
                         "2ୟ ତ୍ରୟମାସ",
                         "3ୟ ତ୍ରୟମାସ",
                         "4ର୍ଥ ତ୍ରୟମାସ",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
                     }
                 }
             }

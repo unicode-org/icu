@@ -2027,10 +2027,6 @@ az{
             one{"Şərqi Karib dolları"}
             other{"Şərqi Karib dolları"}
         }
-        XCG{
-            one{"Karib gilderi"}
-            other{"Karib gilderi"}
-        }
         XFO{
             one{"Fransız gızıl frankı"}
             other{"Fransız gızıl frankı"}

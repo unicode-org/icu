@@ -1087,7 +1087,7 @@ mi{
             other{"tāra Karapīana Rāwhiti"}
         }
         XCG{
-            other{"Guilder Karapīana"}
+            other{"guilder Karapīana"}
         }
         XOF{
             other{"franc CFA Āwherika ki te Uru"}
@@ -1108,7 +1108,7 @@ mi{
             other{"kwacha Tāmipia"}
         }
         ZWG{
-            other{"Kino Tāone o Timuwawe"}
+            other{"kōura Timuwawe"}
         }
     }
 }

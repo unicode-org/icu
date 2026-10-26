@@ -3,6 +3,7 @@
 // Generated using tools/cldr/cldr-to-icu/
 lij{
     Countries{
+        CQ{"Sark"}
         FR{"Fransa"}
         IT{"Italia"}
         MC{"Monego"}

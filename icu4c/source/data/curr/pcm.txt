@@ -1028,10 +1028,6 @@ pcm{
             one{"Sẹ́ntrál Áfríká frank"}
             other{"Sẹ́ntrál Áfríká franks"}
         }
-        XCG{
-            one{"Karíbíen Gílda"}
-            other{"Karíbíen Gílda"}
-        }
         XOF{
             one{"Wẹ́st Afríká Sẹ́fa frank"}
             other{"Wẹ́st Afríká Sẹ́fa franks"}
@@ -1055,10 +1051,6 @@ pcm{
         ZMW{
             one{"Zámbiá kwácha"}
             other{"Zámbiá kwáchas"}
-        }
-        ZWG{
-            one{"Zimbábwẹn Gọ́ld"}
-            other{"Zimbábwẹn Gọ́ld"}
         }
     }
 }

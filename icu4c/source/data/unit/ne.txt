@@ -118,7 +118,6 @@ ne{
                 dnam{"वस्तुहरू"}
             }
             karat{
-                dnam{"क्यारेट"}
                 one{"{0} क्यारेट"}
                 other{"{0} क्यारेट"}
             }
@@ -539,7 +538,6 @@ ne{
                 other{"{0} पिकोमिटर"}
             }
             point{
-                dnam{"पोइन्ट"}
                 one{"{0} पोइन्ट"}
                 other{"{0} पोइन्ट"}
             }
@@ -576,8 +574,6 @@ ne{
             }
             weber{
                 dnam{"वेबर्स"}
-                one{"{0} Wb"}
-                other{"{0} Wb"}
             }
         }
         mass{
@@ -705,7 +701,6 @@ ne{
                 other{"{0}डिग्री फरेनहाइट"}
             }
             generic{
-                dnam{"डिग्री तापक्रम"}
                 one{"{0} डिग्री तापक्रम"}
                 other{"{0} डिग्री तापक्रम"}
             }
@@ -770,14 +765,11 @@ ne{
                 other{"{0} डेजर्ट चम्चा"}
             }
             dessert-spoon-imperial{
-                dnam{"इम्पिरियल डेजर्ट चम्चा"}
                 one{"{0} इम्पिरियल डेजर्ट चम्चा"}
                 other{"{0} इम्पिरियल डेजर्ट चम्चा"}
             }
             dram{
                 dnam{"ड्राम"}
-                one{"{0} ड्राम"}
-                other{"{0} ड्राम"}
             }
             fluid-ounce{
                 dnam{"तरल आउन्स"}
@@ -897,20 +889,9 @@ ne{
             10p9{"गिगा{0}"}
         }
         concentr{
-            karat{
-                dnam{"क्यारेट"}
-            }
-            katal{
-                dnam{"काट"}
-                one{"{0} काट"}
-                other{"{0} काट"}
-            }
             millimole-per-liter{
                 one{"{0}mmol/L"}
                 other{"{0}mmol/L"}
-            }
-            ofglucose{
-                dnam{"Glc"}
             }
             part{
                 dnam{"भाग"}
@@ -1132,10 +1113,6 @@ ne{
                 one{"{0}smi"}
                 other{"{0}smi"}
             }
-            millimeter{
-                one{"{0}मि.मि."}
-                other{"{0}मि.मि."}
-            }
             nanometer{
                 one{"{0}nm"}
                 other{"{0}nm"}
@@ -1289,7 +1266,6 @@ ne{
                 other{"{0}dsp"}
             }
             dessert-spoon-imperial{
-                dnam{"इम्पिरियल डेजर्ट चम्चा"}
                 one{"{0}इम्पिरियल डेजर्ट चम्चा"}
                 other{"{0} इम्पिरियल डेजर्ट चम्चा"}
             }
@@ -1314,8 +1290,9 @@ ne{
                 other{"{0}mpt"}
             }
             quart-imperial{
-                one{"{0}qt-Imp."}
-                other{"{0}qt-Imp."}
+                dnam{"इम्पेरियल क्वार्ट्स"}
+                one{"{0} इम्पेरियल क्वार्ट्स"}
+                other{"{0} इम्पेरियल क्वार्ट्स"}
             }
         }
     }
@@ -2025,6 +2002,9 @@ ne{
                 one{"{0}mc"}
                 other{"{0} mc"}
             }
+            dessert-spoon{
+                dnam{"डेजर्ट चम्चा"}
+            }
             dessert-spoon-imperial{
                 dnam{"इम्पिरियल डेजर्ट चम्चा"}
                 one{"{0} इम्पिरियल डेजर्ट चम्चा"}
@@ -2076,6 +2056,11 @@ ne{
             }
             quart{
                 dnam{"क्वार्ट्स"}
+            }
+            quart-imperial{
+                dnam{"इम्पेरियल क्वार्ट्स"}
+                one{"{0} इम्पेरियल क्वार्ट्स"}
+                other{"{0} इम्पेरियल क्वार्ट्स"}
             }
         }
     }

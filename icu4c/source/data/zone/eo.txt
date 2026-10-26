@@ -707,7 +707,6 @@ eo{
         }
         "Europe:Dublin"{
             ec{"Dublino"}
-            ld{"irlanda norma tempo"}
         }
         "Europe:Gibraltar"{
             ec{"Ĝibraltaro"}
@@ -741,7 +740,6 @@ eo{
         }
         "Europe:London"{
             ec{"Londono"}
-            ld{"brita somera tempo"}
         }
         "Europe:Luxembourg"{
             ec{"Luksemburgo"}
@@ -929,6 +927,11 @@ eo{
         "Pacific:Wallis"{
             ec{"Valiso"}
         }
+        "meta:Acre"{
+            ld{"Akro (somera tempo)"}
+            lg{"tempo: Akro"}
+            ls{"Akro (norma tempo)"}
+        }
         "meta:Afghanistan"{
             ls{"afgana tempo"}
         }
@@ -1050,6 +1053,10 @@ eo{
             lg{"brazilja tempo"}
             ls{"brazilja norma tempo"}
         }
+        "meta:British"{
+            ld{"brita somera tempo"}
+            lg{"brita tempo"}
+        }
         "meta:Brunei"{
             ls{"bruneja tempo"}
         }
@@ -1149,7 +1156,7 @@ eo{
             ls{"tempo: Francaj Sudaj Teritorioj"}
         }
         "meta:GMT"{
-            ls{"universala tempo kunordigita"}
+            ls{"grenviĉa meza tempo"}
         }
         "meta:Galapagos"{
             ls{"galapaga tempo"}
@@ -1164,6 +1171,11 @@ eo{
         }
         "meta:Gilbert_Islands"{
             ls{"gilbertinsula tempo"}
+        }
+        "meta:Greenland"{
+            ld{"gronlanda somera tempo"}
+            lg{"gronlanda tempo"}
+            ls{"gronlanda norma tempo"}
         }
         "meta:Greenland_Eastern"{
             ld{"orienta gronlanda somera tempo"}
@@ -1182,7 +1194,7 @@ eo{
             ls{"gujana tempo"}
         }
         "meta:Hawaii"{
-            ls{"Havajo-Aleutoj (norma tempo)"}
+            ls{"havaja tempo"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"Havajo-Aleutoj (somera tempo)"}
@@ -1222,6 +1234,10 @@ eo{
             lg{"irana tempo"}
             ls{"irana norma tempo"}
         }
+        "meta:Irish"{
+            ld{"irlanda norma tempo"}
+            lg{"irlanda tempo"}
+        }
         "meta:Irkutsk"{
             ld{"irkutska somera tempo"}
             lg{"irkutska tempo"}
@@ -1236,6 +1252,11 @@ eo{
             ld{"japana somera tempo"}
             lg{"japana tempo"}
             ls{"japana norma tempo"}
+        }
+        "meta:Kamchatka"{
+            ld{"kamĉatka somera tempo"}
+            lg{"kamĉatka tempo"}
+            ls{"kamĉatka norma tempo"}
         }
         "meta:Kazakhstan"{
             ls{"kazaĥa tempo"}
@@ -1411,9 +1432,12 @@ eo{
             lg{"saĥalena tempo"}
             ls{"saĥalena norma tempo"}
         }
+        "meta:Samara"{
+            ld{"Samara (somera tempo)"}
+            lg{"tempo: Samara"}
+            ls{"Samara (norma tempo)"}
+        }
         "meta:Samoa"{
-            ld{"uson-samoa somera tempo"}
-            lg{"uson-samoa tempo"}
             ls{"uson-samoa norma tempo"}
         }
         "meta:Seychelles"{
@@ -1456,6 +1480,11 @@ eo{
         "meta:Truk"{
             ls{"tempo: Ĉuuk"}
         }
+        "meta:Turkey"{
+            ld{"turka somera tempo"}
+            lg{"turka tempo"}
+            ls{"turka norma tempo"}
+        }
         "meta:Turkmenistan"{
             ld{"turkmena somera tempo"}
             lg{"turkmena tempo"}
@@ -1468,6 +1497,9 @@ eo{
             ld{"urugvaja somera tempo"}
             lg{"urugvaja tempo"}
             ls{"urugvaja norma tempo"}
+        }
+        "meta:Urumqi"{
+            ls{"tempo: Urumĉio"}
         }
         "meta:Uzbekistan"{
             ld{"uzbeka somera tempo"}
@@ -1516,7 +1548,6 @@ eo{
         }
         gmtFormat{"UTC{0}"}
         gmtUnknownFormat{"UTC+?"}
-        gmtZeroFormat{"UTC"}
         regionFormat{"tempo: {0}"}
         regionFormatDaylight{"{0} (somera tempo)"}
         regionFormatStandard{"{0} (norma tempo)"}

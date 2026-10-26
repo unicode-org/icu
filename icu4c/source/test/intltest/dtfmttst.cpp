@@ -143,6 +143,10 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
     TESTCASE_AUTO(TestChineseCalendar23043);
     TESTCASE_AUTO(TestAmPmLengths23114);
 
+    TESTCASE_AUTO(TestDayPeriodFallback);
+    TESTCASE_AUTO(TestInvalidStyles);
+    TESTCASE_AUTO(TestDayNames);
+
     TESTCASE_AUTO_END;
 }
 
@@ -588,7 +592,7 @@ void DateFormatTest::TestFieldPosition() {
         "",
 #endif
 
-        "Anno Domini", "1997", "August", "0013", "0014", "0014", "0034", "0012", "5130", "Wednesday",
+        "Anno Domini", "1997", "August", "13th", "0014", "0014", "0034", "0012", "5130", "Wednesday",
         "0225", "0002", "0033", "0003", "PM", "0002", "0002", "Pacific Daylight Time", "1997", "Wednesday",
         "1997", "2450674", "52452513", "GMT-07:00", "Pacific Time",  "Wednesday", "August", "3rd quarter", "3rd quarter", "Los Angeles Time",
         "1997", "GMT-07:00", "-0700", "-0700", "1997", "PM", "in the afternoon",
@@ -2747,15 +2751,15 @@ void DateFormatTest::TestTimeZoneDisplayName()
 
         { "en", "Europe/London", "2004-01-15T00:00:00Z", "Z", "+0000", "+0:00" },
         { "en", "Europe/London", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+00:00", "+0:00" },
-        { "en", "Europe/London", "2004-01-15T00:00:00Z", "z", "GMT", "+0:00" },
-        { "en", "Europe/London", "2004-01-15T00:00:00Z", "zzzz", "Greenwich Mean Time", "+0:00" },
+        { "en", "Europe/London", "2004-01-15T00:00:00Z", "z", "GMT+0", "+0:00" },
+        { "en", "Europe/London", "2004-01-15T00:00:00Z", "zzzz", "GMT+00:00", "+0:00" },
         { "en", "Europe/London", "2004-07-15T00:00:00Z", "Z", "+0100", "+1:00" },
         { "en", "Europe/London", "2004-07-15T00:00:00Z", "ZZZZ", "GMT+01:00", "+1:00" },
         { "en", "Europe/London", "2004-07-15T00:00:00Z", "z", "GMT+1", "Europe/London" },
         { "en", "Europe/London", "2004-07-15T00:00:00Z", "zzzz", "British Summer Time", "Europe/London" },
     // icu en.txt has exemplar city for this time zone
         { "en", "Europe/London", "2004-07-15T00:00:00Z", "v", "United Kingdom Time", "Europe/London" },
-        { "en", "Europe/London", "2004-07-15T00:00:00Z", "vvvv", "United Kingdom Time", "Europe/London" },
+        { "en", "Europe/London", "2004-07-15T00:00:00Z", "vvvv", "British Time", "Europe/London" },
         { "en", "Europe/London", "2004-07-15T00:00:00Z", "VVVV", "United Kingdom Time", "Europe/London" },
 
         { "en", "Etc/GMT+3", "2004-01-15T00:00:00Z", "Z", "-0300", "-3:00" },
@@ -2859,13 +2863,13 @@ void DateFormatTest::TestTimeZoneDisplayName()
         { "de", "Europe/London", "2004-01-15T00:00:00Z", "Z", "+0000", "+0:00" },
         { "de", "Europe/London", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+00:00", "+0:00" },
         { "de", "Europe/London", "2004-01-15T00:00:00Z", "z", "GMT+0", "+0:00" },
-        { "de", "Europe/London", "2004-01-15T00:00:00Z", "zzzz", "Mittlere Greenwich-Zeit", "+0:00" },
+        { "de", "Europe/London", "2004-01-15T00:00:00Z", "zzzz", "GMT+00:00", "+0:00" },
         { "de", "Europe/London", "2004-07-15T00:00:00Z", "Z", "+0100", "+1:00" },
         { "de", "Europe/London", "2004-07-15T00:00:00Z", "ZZZZ", "GMT+01:00", "+1:00" },
         { "de", "Europe/London", "2004-07-15T00:00:00Z", "z", "GMT+1", "+1:00" },
         { "de", "Europe/London", "2004-07-15T00:00:00Z", "zzzz", "Britische Sommerzeit", "+1:00" },
         { "de", "Europe/London", "2004-07-15T00:00:00Z", "v", "Vereinigtes K\\u00f6nigreich (Ortszeit)", "Europe/London" },
-        { "de", "Europe/London", "2004-07-15T00:00:00Z", "vvvv", "Vereinigtes K\\u00f6nigreich (Ortszeit)", "Europe/London" },
+        { "de", "Europe/London", "2004-07-15T00:00:00Z", "vvvv", "Britische Zeit", "Europe/London" },
 
         { "de", "Etc/GMT+3", "2004-01-15T00:00:00Z", "Z", "-0300", "-3:00" },
         { "de", "Etc/GMT+3", "2004-01-15T00:00:00Z", "ZZZZ", "GMT-03:00", "-3:00" },
@@ -2965,7 +2969,7 @@ void DateFormatTest::TestTimeZoneDisplayName()
         { "zh", "Europe/London", "2004-01-15T00:00:00Z", "z", "GMT+0", "+0:00" },
         { "zh", "Europe/London", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+00:00", "+0:00" },
         { "zh", "Europe/London", "2004-01-15T00:00:00Z", "z", "GMT+0", "+0:00" },
-        { "zh", "Europe/London", "2004-01-15T00:00:00Z", "zzzz", "\\u683C\\u6797\\u5C3C\\u6CBB\\u6807\\u51C6\\u65F6\\u95F4", "+0:00" },
+        { "zh", "Europe/London", "2004-01-15T00:00:00Z", "zzzz", "GMT+00:00", "+0:00" },
         { "zh", "Europe/London", "2004-07-15T00:00:00Z", "Z", "+0100", "+1:00" },
         { "zh", "Europe/London", "2004-07-15T00:00:00Z", "ZZZZ", "GMT+01:00", "+1:00" },
         { "zh", "Europe/London", "2004-07-15T00:00:00Z", "z", "GMT+1", "+1:00" },
@@ -3068,13 +3072,13 @@ void DateFormatTest::TestTimeZoneDisplayName()
         { "hi", "Europe/London", "2004-01-15T00:00:00Z", "Z", "+0000", "+0:00" },
         { "hi", "Europe/London", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+00:00", "+0:00" },
         { "hi", "Europe/London", "2004-01-15T00:00:00Z", "z", "GMT+0", "+0:00" },
-        { "hi", "Europe/London", "2004-01-15T00:00:00Z", "zzzz", "\\u0917\\u094d\\u0930\\u0940\\u0928\\u0935\\u093f\\u091a \\u092e\\u0940\\u0928 \\u091f\\u093e\\u0907\\u092e", "+0:00" },
+        { "hi", "Europe/London", "2004-01-15T00:00:00Z", "zzzz", "GMT+00:00", "+0:00" },
         { "hi", "Europe/London", "2004-07-15T00:00:00Z", "Z", "+0100", "+1:00" },
         { "hi", "Europe/London", "2004-07-15T00:00:00Z", "ZZZZ", "GMT+01:00", "+1:00" },
         { "hi", "Europe/London", "2004-07-15T00:00:00Z", "z", "GMT+1", "+1:00" },
         { "hi", "Europe/London", "2004-07-15T00:00:00Z", "zzzz", "\\u092c\\u094d\\u0930\\u093f\\u091f\\u093f\\u0936 \\u0917\\u094d\\u0930\\u0940\\u0937\\u094d\\u092e\\u0915\\u093e\\u0932\\u0940\\u0928 \\u0938\\u092e\\u092f", "+1:00" },
         { "hi", "Europe/London", "2004-07-15T00:00:00Z", "v", "\\u092f\\u0942\\u0928\\u093e\\u0907\\u091f\\u0947\\u0921 \\u0915\\u093f\\u0902\\u0917\\u0921\\u092e \\u0938\\u092e\\u092f", "Europe/London" },
-        { "hi", "Europe/London", "2004-07-15T00:00:00Z", "vvvv", "\\u092f\\u0942\\u0928\\u093e\\u0907\\u091f\\u0947\\u0921 \\u0915\\u093f\\u0902\\u0917\\u0921\\u092e \\u0938\\u092e\\u092f", "Europe/London" },
+        { "hi", "Europe/London", "2004-07-15T00:00:00Z", "vvvv", "\\u092c\\u094d\\u0930\\u093f\\u091f\\u093f\\u0936 \\u0938\\u092e\\u092f", "Europe/London" },
 
         { "hi", "Etc/GMT+3", "2004-01-15T00:00:00Z", "Z", "-0300", "-3:00" },
         { "hi", "Etc/GMT+3", "2004-01-15T00:00:00Z", "ZZZZ", "GMT-03:00", "-3:00" },
@@ -3172,13 +3176,13 @@ void DateFormatTest::TestTimeZoneDisplayName()
         { "bg", "Europe/London", "2004-01-15T00:00:00Z", "Z", "+0000", "+0:00" },
         { "bg", "Europe/London", "2004-01-15T00:00:00Z", "ZZZZ", "\\u0413\\u0440\\u0438\\u043D\\u0443\\u0438\\u0447+00:00", "+0:00" },
         { "bg", "Europe/London", "2004-01-15T00:00:00Z", "z", "\\u0413\\u0440\\u0438\\u043D\\u0443\\u0438\\u0447+0", "+0:00" },
-        { "bg", "Europe/London", "2004-01-15T00:00:00Z", "zzzz", "\\u0421\\u0440\\u0435\\u0434\\u043d\\u043e \\u0433\\u0440\\u0438\\u043d\\u0443\\u0438\\u0447\\u043a\\u043e \\u0432\\u0440\\u0435\\u043c\\u0435", "+0:00" },
+        { "bg", "Europe/London", "2004-01-15T00:00:00Z", "zzzz", "\\u0413\\u0440\\u0438\\u043d\\u0443\\u0438\\u0447+00:00", "+0:00" },
         { "bg", "Europe/London", "2004-07-15T00:00:00Z", "Z", "+0100", "+1:00" },
         { "bg", "Europe/London", "2004-07-15T00:00:00Z", "ZZZZ", "\\u0413\\u0440\\u0438\\u043D\\u0443\\u0438\\u0447+01:00", "+1:00" },
         { "bg", "Europe/London", "2004-07-15T00:00:00Z", "z", "\\u0413\\u0440\\u0438\\u043D\\u0443\\u0438\\u0447+1", "+1:00" },
         { "bg", "Europe/London", "2004-07-15T00:00:00Z", "zzzz", "\\u0411\\u0440\\u0438\\u0442\\u0430\\u043d\\u0441\\u043a\\u043e \\u043b\\u044f\\u0442\\u043d\\u043e \\u0447\\u0430\\u0441\\u043e\\u0432\\u043e \\u0432\\u0440\\u0435\\u043c\\u0435", "+1:00" },
         { "bg", "Europe/London", "2004-07-15T00:00:00Z", "v", "\\u041E\\u0431\\u0435\\u0434\\u0438\\u043D\\u0435\\u043D\\u043E\\u0442\\u043E \\u043A\\u0440\\u0430\\u043B\\u0441\\u0442\\u0432\\u043E", "Europe/London" },
-        { "bg", "Europe/London", "2004-07-15T00:00:00Z", "vvvv", "\\u041E\\u0431\\u0435\\u0434\\u0438\\u043D\\u0435\\u043D\\u043E\\u0442\\u043E \\u043A\\u0440\\u0430\\u043B\\u0441\\u0442\\u0432\\u043E", "Europe/London" },
+        { "bg", "Europe/London", "2004-07-15T00:00:00Z", "vvvv", "\\u0411\\u0440\\u0438\\u0442\\u0430\\u043D\\u0441\\u043A\\u043E \\u0432\\u0440\\u0435\\u043C\\u0435", "Europe/London" },
 
         { "bg", "Etc/GMT+3", "2004-01-15T00:00:00Z", "Z", "-0300", "-3:00" },
         { "bg", "Etc/GMT+3", "2004-01-15T00:00:00Z", "ZZZZ", "\\u0413\\u0440\\u0438\\u043D\\u0443\\u0438\\u0447-03:00", "-3:00" },
@@ -3277,13 +3281,13 @@ void DateFormatTest::TestTimeZoneDisplayName()
         { "ja", "Europe/London", "2004-01-15T00:00:00Z", "Z", "+0000", "+0:00" },
         { "ja", "Europe/London", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+00:00", "+0:00" },
         { "ja", "Europe/London", "2004-01-15T00:00:00Z", "z", "GMT+0", "+0:00" },
-        { "ja", "Europe/London", "2004-01-15T00:00:00Z", "zzzz", "\\u30B0\\u30EA\\u30CB\\u30C3\\u30B8\\u6A19\\u6E96\\u6642", "+0:00" },
+        { "ja", "Europe/London", "2004-01-15T00:00:00Z", "zzzz", "GMT+00:00", "+0:00" },
         { "ja", "Europe/London", "2004-07-15T00:00:00Z", "Z", "+0100", "+1:00" },
         { "ja", "Europe/London", "2004-07-15T00:00:00Z", "ZZZZ", "GMT+01:00", "+1:00" },
         { "ja", "Europe/London", "2004-07-15T00:00:00Z", "z", "GMT+1", "+1:00" },
         { "ja", "Europe/London", "2004-07-15T00:00:00Z", "zzzz", "\\u82f1\\u56fd\\u590f\\u6642\\u9593", "+1:00" },
         { "ja", "Europe/London", "2004-07-15T00:00:00Z", "v", "\\u30a4\\u30ae\\u30ea\\u30b9\\u6642\\u9593", "Europe/London" },
-        { "ja", "Europe/London", "2004-07-15T00:00:00Z", "vvvv", "\\u30a4\\u30ae\\u30ea\\u30b9\\u6642\\u9593", "Europe/London" },
+        { "ja", "Europe/London", "2004-07-15T00:00:00Z", "vvvv", "\\u82f1\\u56fd\\u6642\\u9593", "Europe/London" },
         { "ja", "Europe/London", "2004-07-15T00:00:00Z", "VVVV", "\\u30a4\\u30ae\\u30ea\\u30b9\\u6642\\u9593", "Europe/London" },
 
         { "ja", "Etc/GMT+3", "2004-01-15T00:00:00Z", "Z", "-0300", "-3:00" },
@@ -3380,13 +3384,13 @@ void DateFormatTest::TestTimeZoneDisplayName()
         { "ti", "Europe/London", "2004-01-15T00:00:00Z", "Z", "+0000", "+0:00" },
         { "ti", "Europe/London", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+00:00", "+0:00" },
         { "ti", "Europe/London", "2004-01-15T00:00:00Z", "z", "GMT+0", "+0:00" },
-        { "ti", "Europe/London", "2004-01-15T00:00:00Z", "zzzz", "GMT", "+0:00" },
+        { "ti", "Europe/London", "2004-01-15T00:00:00Z", "zzzz", "GMT+00:00", "+0:00" },
         { "ti", "Europe/London", "2004-07-15T00:00:00Z", "Z", "+0100", "+1:00" },
         { "ti", "Europe/London", "2004-07-15T00:00:00Z", "ZZZZ", "GMT+01:00", "+1:00" },
         { "ti", "Europe/London", "2004-07-15T00:00:00Z", "z", "GMT+1", "+1:00" },
         { "ti", "Europe/London", "2004-07-15T00:00:00Z", "zzzz", "\\u130D\\u12DC \\u12AD\\u1228\\u121D\\u1272 \\u1265\\u122A\\u1323\\u1295\\u12EB", "+1:00" },
         { "ti", "Europe/London", "2004-07-15T00:00:00Z", "v", "\\u130d\\u12d8 \\u1265\\u122a\\u1323\\u1295\\u12eb", "Europe/London" },
-        { "ti", "Europe/London", "2004-07-15T00:00:00Z", "vvvv", "\\u130d\\u12d8 \\u1265\\u122a\\u1323\\u1295\\u12eb", "Europe/London" },
+        { "ti", "Europe/London", "2004-07-15T00:00:00Z", "vvvv", "\\u1265\\u130d\\u12dc \\u12a5\\u1295\\u130d\\u120a\\u12dd", "Europe/London" },
 
         { "ti", "Etc/GMT+3", "2004-01-15T00:00:00Z", "Z", "-0300", "-3:00" },
         { "ti", "Etc/GMT+3", "2004-01-15T00:00:00Z", "ZZZZ", "GMT-03:00", "-3:00" },
@@ -6035,6 +6039,147 @@ void DateFormatTest::TestAmPmLengths23114() {
     dfs->setAmPmStrings(amPmStrings.data(), 2, ignoredContext, DateFormatSymbols::NARROW);
     borrowedAmPm = dfs->getAmPmStrings(countAmPm, ignoredContext, DateFormatSymbols::NARROW);
     assertEquals("DateFormatSymbols narrow after set", u"am!", borrowedAmPm[0]);
+}
+
+void DateFormatTest::TestDayPeriodFallback() {
+    IcuTestErrorCode status(*this, "TestDayPeriodFallback");
+    
+    Locale locale(Locale::forLanguageTag("nv", status)); // Navajo is used because it doesn't have day period rules
+    status.assertSuccess();
+    
+    LocalPointer<DateTimePatternGenerator> dtpg(
+            DateTimePatternGenerator::createInstance(locale, status));
+    UnicodeString pattern = dtpg->getBestPattern(u"Bhm", status);
+    SimpleDateFormat sdf(pattern, locale, status);
+    
+    UnicodeString formattedDate;
+    UDate sampleDate = LocaleTest::date(99, 9, 13, 23, 58, 59);
+    sdf.format(sampleDate, formattedDate);
+    
+    if (assertSuccess("Failed to set up date formatter", status)) {
+        assertEquals("Wrong formatting result", u"11:58 PM", formattedDate);
+    }
+}
+
+void DateFormatTest::TestInvalidStyles() {
+    DateFormat* df1 = DateFormat::createDateTimeInstance((DateFormat::EStyle)100000, (DateFormat::EStyle)100000);
+    if (df1 != nullptr) {
+        errln("FAIL: createDateTimeInstance with invalid styles should return nullptr");
+        delete df1;
+    }
+    
+    DateFormat* df2 = DateFormat::createDateTimeInstance((DateFormat::EStyle)-100, (DateFormat::EStyle)-100);
+    if (df2 != nullptr) {
+        errln("FAIL: createDateTimeInstance with invalid styles should return nullptr");
+        delete df2;
+    }
+    
+    DateFormat* df3 = DateFormat::createDateTimeInstance((DateFormat::EStyle)2147483644, (DateFormat::EStyle)2147483644);
+    if (df3 != nullptr) {
+        errln("FAIL: createDateTimeInstance with invalid styles should return nullptr");
+        delete df3;
+    }
+}
+
+void DateFormatTest::TestDayNames() {
+    UErrorCode status = U_ZERO_ERROR;
+
+    struct TestCase {
+        const char* locale;
+        const char16_t* skeleton;
+        int32_t year;
+        int32_t month;
+        int32_t day;
+        const char16_t* expected;
+    } testCases[] = {
+        // test ordinal dates in English
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  1,  u"Jan 1st, 2026"  },
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  2,  u"Jan 2nd, 2026"  },
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  3,  u"Jan 3rd, 2026"  },
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  4,  u"Jan 4th, 2026"  },
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  5,  u"Jan 5th, 2026"  },
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  7,  u"Jan 7th, 2026"  },
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  9,  u"Jan 9th, 2026"  },
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  11, u"Jan 11th, 2026" },
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  12, u"Jan 12th, 2026" },
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  13, u"Jan 13th, 2026" },
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  21, u"Jan 21st, 2026" },
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  22, u"Jan 22nd, 2026" },
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  23, u"Jan 23rd, 2026" },
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  30, u"Jan 30th, 2026" },
+        { "en", u"yMMMddd", 2026, UCAL_JANUARY,  31, u"Jan 31st, 2026" },
+        // double-check that "dddd" and "ddddd" work the same as "ddd"
+        { "en", u"yMMMdddd",  2026, UCAL_JANUARY,  31, u"Jan 31st, 2026" },
+        { "en", u"yMMMddddd", 2026, UCAL_JANUARY,  31, u"Jan 31st, 2026" },
+        // test partial ordinal dates in French
+        // French ordinal "one" applies to day 1 only ("1er"); all others are plain numeric
+        { "fr", u"yMMMddd", 2026, UCAL_APRIL,    1,  u"1er avr. 2026" },
+        { "fr", u"yMMMddd", 2026, UCAL_APRIL,    2,  u"2 avr. 2026"   },
+        { "fr", u"yMMMddd", 2026, UCAL_APRIL,    3,  u"3 avr. 2026"   },
+        { "fr", u"yMMMddd", 2026, UCAL_APRIL,    5,  u"5 avr. 2026"   },
+        { "fr", u"yMMMddd", 2026, UCAL_APRIL,    10, u"10 avr. 2026"  },
+        { "fr", u"yMMMddd", 2026, UCAL_APRIL,    11, u"11 avr. 2026"  },
+        { "fr", u"yMMMddd", 2026, UCAL_APRIL,    21, u"21 avr. 2026"  },
+    };
+
+    for (int32_t i = 0; i < UPRV_LENGTHOF(testCases); i++) {
+        status = U_ZERO_ERROR;
+        LocalPointer<DateTimePatternGenerator> dtpg(
+            DateTimePatternGenerator::createInstance(testCases[i].locale, status));
+        if (!assertSuccess("Creating DTPG", status, true)) {
+            continue;
+        }
+        UnicodeString pattern = dtpg->getBestPattern(UnicodeString(testCases[i].skeleton), status);
+        SimpleDateFormat sdf(pattern, Locale(testCases[i].locale), status);
+        if (!assertSuccess("Creating SimpleDateFormat", status, true)) {
+            continue;
+        }
+        sdf.setTimeZone(*TimeZone::getGMT());
+
+        Calendar* cal = Calendar::createInstance(*TimeZone::getGMT(), Locale(testCases[i].locale), status);
+        if (!assertSuccess("Creating Calendar", status, true)) {
+            continue;
+        }
+        cal->clear();
+        cal->set(UCAL_EXTENDED_YEAR, testCases[i].year);
+        cal->set(UCAL_MONTH, testCases[i].month);
+        cal->set(UCAL_DATE, testCases[i].day);
+        UDate date = cal->getTime(status);
+        delete cal;
+
+        UnicodeString result;
+        sdf.format(date, result, status);
+
+        if (assertSuccess("Formatting date", status)) {
+            CharString msg;
+            msg.append("Wrong formatting result for ", status);
+            msg.append(testCases[i].locale, status);
+            msg.append(" ", status);
+            msg.appendNumber(testCases[i].year, status);
+            msg.append("/", status);
+            msg.appendNumber(testCases[i].month + 1, status);
+            msg.append("/", status);
+            msg.appendNumber(testCases[i].day, status);
+            assertEquals(msg.data(), testCases[i].expected, result);
+
+            // uppercase the result to make sure parsing is case-insensitive
+            result.toUpper();
+            
+            // parse the formatted result back and verify it round-trips
+            ParsePosition parsePos(0);
+            UDate parsedDate = sdf.parse(result, parsePos);
+            msg.clear();
+            msg.append("Round-trip parse failed for ", status);
+            msg.append(testCases[i].locale, status);
+            msg.append(" ", status);
+            msg.appendNumber(testCases[i].year, status);
+            msg.append("/", status);
+            msg.appendNumber(testCases[i].month + 1, status);
+            msg.append("/", status);
+            msg.appendNumber(testCases[i].day, status);
+            assertTrue(msg.data(), parsedDate == date);
+        }
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

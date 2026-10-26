@@ -1,0 +1,28 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/
+sv_FI{
+    zoneStrings{
+        "Asia:Aqtobe"{
+            ec{"Aktobe"}
+        }
+        "Asia:Oral"{
+            ec{"Uralsk"}
+        }
+        "Asia:Qostanay"{
+            ec{"Kustanaj"}
+        }
+        "Asia:Qyzylorda"{
+            ec{"Kyzylorda"}
+        }
+        "Asia:Saigon"{
+            ec{"Hô Chi Minh-staden"}
+        }
+        "Europe:Astrakhan"{
+            ec{"Astrahan"}
+        }
+        "meta:Cocos"{
+            ls{"Kokosöarnas tid"}
+        }
+    }
+}

@@ -45,10 +45,10 @@ You can **report a bug or request a new feature** with the [bug tracking system]
 
 The following mailing lists preserve archived discussions. They are closed for new discussion.
 
-https://groups.google.com/a/unicode.org/g/icu-charsets
+<https://groups.google.com/a/unicode.org/g/icu-charsets>
 
 An archived list about ICU conversion data and API. (inactive list; active 2001-2003)
 
-https://groups.google.com/a/unicode.org/g/icu-issues
+<https://groups.google.com/a/unicode.org/g/icu-issues>
 
 An archived list of pre-issue-tracker ICU issues (inactive list; active 2001-2004)

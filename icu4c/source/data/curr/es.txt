@@ -2139,9 +2139,5 @@ es{
             one{"kuacha zambiano"}
             other{"kuachas zambianos"}
         }
-        ZWG{
-            one{"oro zimbabuense"}
-            other{"oro zimbabuense"}
-        }
     }
 }

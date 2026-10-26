@@ -53,10 +53,6 @@ zh_Hant_HK{
                 dnam{"等份"}
                 other{"{0} 等份"}
             }
-            part-per-1e6{
-                dnam{"百萬分比"}
-                other{"{0} 百萬分比"}
-            }
             part-per-1e9{
                 dnam{"十億分比"}
                 other{"十億分之{0}"}
@@ -280,10 +276,6 @@ zh_Hant_HK{
             revolution{
                 other{"{0} 周"}
             }
-            steradian{
-                dnam{"球面度"}
-                other{"{0}球面度"}
-            }
         }
         area{
             square-foot{
@@ -297,18 +289,11 @@ zh_Hant_HK{
             item{
                 other{"{0} 個項目"}
             }
-            katal{
-                other{"{0}開特"}
-            }
-            ofglucose{
-                other{"{0}葡萄糖"}
-            }
             part{
                 dnam{"等份"}
                 other{"{0}等份"}
             }
             part-per-1e6{
-                dnam{"百萬分比"}
                 other{"{0} ppm"}
             }
             part-per-1e9{
@@ -364,17 +349,8 @@ zh_Hant_HK{
                 other{"{0}年"}
             }
         }
-        electric{
-            coulomb{
-                other{"{0} 庫侖"}
-            }
-            farad{
-                other{"{0} 法拉"}
-            }
-        }
         energy{
             becquerel{
-                dnam{"貝克"}
                 other{"{0}貝克"}
             }
             calorie-it{
@@ -384,26 +360,21 @@ zh_Hant_HK{
                 other{"{0}千卡"}
             }
             gray{
-                dnam{"戈"}
                 other{"{0}戈"}
             }
             kilojoule{
                 other{"{0}千焦"}
             }
             sievert{
-                dnam{"希"}
                 other{"{0}希"}
-            }
-        }
-        force{
-            kilogram-force{
-                dnam{"公斤力"}
-                other{"{0}公斤力"}
             }
         }
         length{
             centimeter{
                 other{"{0}厘米"}
+            }
+            foot{
+                per{"{0} 每呎"}
             }
             meter{
                 other{"{0}米"}
@@ -421,16 +392,6 @@ zh_Hant_HK{
         light{
             candela{
                 other{"{0}坎德拉"}
-            }
-        }
-        magnetic{
-            tesla{
-                dnam{"特斯拉"}
-                other{"{0}特斯拉"}
-            }
-            weber{
-                dnam{"韋伯"}
-                other{"{0}韋伯"}
             }
         }
         mass{
@@ -478,6 +439,7 @@ zh_Hant_HK{
             }
             fluid-ounce-metric{
                 dnam{"公制液穴士"}
+                other{"{0} 公制液安士"}
             }
             liter{
                 per{"{0} 每升"}

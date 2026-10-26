@@ -185,7 +185,6 @@ br{
         }
         "Europe:Dublin"{
             ec{"Dulenn"}
-            ld{"eur cʼhoañv Iwerzhon"}
         }
         "Europe:Gibraltar"{
             ec{"Jibraltar"}
@@ -207,7 +206,6 @@ br{
         }
         "Europe:London"{
             ec{"Londrez"}
-            ld{"eur hañv Breizh-Veur"}
         }
         "Europe:Luxembourg"{
             ec{"Luksembourg"}
@@ -287,6 +285,11 @@ br{
         "Pacific:Wallis"{
             ec{"Wallis-ha-Futuna"}
         }
+        "meta:Acre"{
+            ld{"eur hañv Acre"}
+            lg{"eur Acre"}
+            ls{"eur cʼhoañv Acre"}
+        }
         "meta:Afghanistan"{
             ls{"eur Afghanistan"}
         }
@@ -306,11 +309,6 @@ br{
             ld{"eur hañv Alaska"}
             lg{"eur Alaska"}
             ls{"eur cʼhoañv Alaska"}
-        }
-        "meta:Almaty"{
-            ld{"eur hañv Almaty"}
-            lg{"eur Almaty"}
-            ls{"eur cʼhoañv Almaty"}
         }
         "meta:Amazon"{
             ld{"eur hañv an Amazon"}
@@ -418,6 +416,10 @@ br{
             lg{"eur Brasília"}
             ls{"eur cʼhoañv Brasília"}
         }
+        "meta:British"{
+            ld{"eur hañv Breizh-Veur"}
+            lg{"eur Breizh-Veur"}
+        }
         "meta:Brunei"{
             ls{"eur Brunei"}
         }
@@ -472,7 +474,7 @@ br{
             ls{"eur Dumont-d’Urville"}
         }
         "meta:East_Timor"{
-            ls{"eur Timor ar Reter"}
+            ls{"eur Timor-Leste"}
         }
         "meta:Easter"{
             ld{"eur hañv Enez Pask"}
@@ -533,6 +535,11 @@ br{
         "meta:Gilbert_Islands"{
             ls{"eur Inizi Gilbert"}
         }
+        "meta:Greenland"{
+            ld{"eur hañv Greunland"}
+            lg{"eur Greunland"}
+            ls{"eur cʼhoañv Greunland"}
+        }
         "meta:Greenland_Eastern"{
             ld{"eur hañv Greunland ar Reter"}
             lg{"eur Greunland ar Reter"}
@@ -543,9 +550,6 @@ br{
             lg{"eur Greunland ar Cʼhornôg"}
             ls{"eur cʼhoañv Greunland ar Cʼhornôg"}
         }
-        "meta:Guam"{
-            ls{"eur cʼhoañv Guam"}
-        }
         "meta:Gulf"{
             ls{"eur cʼhoañv ar Pleg-mor Arab-ha-Pers"}
         }
@@ -553,7 +557,7 @@ br{
             ls{"eur Guyana"}
         }
         "meta:Hawaii"{
-            ls{"eur cʼhoañv Hawaii hag an Aleouted"}
+            ls{"eur Hawaii"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"eur hañv Hawaii hag an Aleouted"}
@@ -593,6 +597,10 @@ br{
             lg{"eur Iran"}
             ls{"eur cʼhoañv Iran"}
         }
+        "meta:Irish"{
+            ld{"eur cʼhoañv Iwerzhon"}
+            lg{"eur Iwerzhon"}
+        }
         "meta:Irkutsk"{
             ld{"eur hañv Irkutsk"}
             lg{"eur Irkutsk"}
@@ -607,6 +615,11 @@ br{
             ld{"eur hañv Japan"}
             lg{"eur Japan"}
             ls{"eur cʼhoañv Japan"}
+        }
+        "meta:Kamchatka"{
+            ld{"eur hañv Kamchatka"}
+            lg{"eur Kamchatka"}
+            ls{"eur cʼhoañv Kamchatka"}
         }
         "meta:Kazakhstan"{
             ls{"eur Kazakstan"}
@@ -633,9 +646,6 @@ br{
         "meta:Kyrgystan"{
             ls{"eur Kyrgyzstan"}
         }
-        "meta:Lanka"{
-            ls{"eur Sri Lanka"}
-        }
         "meta:Line_Islands"{
             ls{"eur Line Islands"}
         }
@@ -643,11 +653,6 @@ br{
             ld{"eur hañv Lord Howe"}
             lg{"eur Lord Howe"}
             ls{"eur cʼhoañv Lord Howe"}
-        }
-        "meta:Macau"{
-            ld{"eur hañv Macau"}
-            lg{"eur Macau"}
-            ls{"eur cʼhoañv Macau"}
         }
         "meta:Magadan"{
             ld{"eur hañv Magadan"}
@@ -726,9 +731,6 @@ br{
             lg{"eur Fernando de Noronha"}
             ls{"eur cʼhoañv Fernando de Noronha"}
         }
-        "meta:North_Mariana"{
-            ls{"eur Mariana an Norzh"}
-        }
         "meta:Novosibirsk"{
             ld{"eur hañv Novosibirsk"}
             lg{"eur Novosibirsk"}
@@ -793,9 +795,12 @@ br{
             lg{"eur Sakhalin"}
             ls{"eur cʼhoañv Sakhalin"}
         }
+        "meta:Samara"{
+            ld{"eur hañv Samara"}
+            lg{"eur Samara"}
+            ls{"eur cʼhoañv Samara"}
+        }
         "meta:Samoa"{
-            ld{"eur hañv Samoa Amerikan"}
-            lg{"eur Samoa Amerikan"}
             ls{"eur cʼhoañv Samoa Amerikan"}
         }
         "meta:Seychelles"{
@@ -838,6 +843,11 @@ br{
         "meta:Truk"{
             ls{"eur Chuuk"}
         }
+        "meta:Turkey"{
+            ld{"eur hañv Turkia"}
+            lg{"eur Turkia"}
+            ls{"eur cʼhoañv Turkia"}
+        }
         "meta:Turkmenistan"{
             ld{"eur hañv Turkmenistan"}
             lg{"eur Turkmenistan"}
@@ -850,6 +860,9 @@ br{
             ld{"eur hañv Uruguay"}
             lg{"eur Uruguay"}
             ls{"eur cʼhoañv Uruguay"}
+        }
+        "meta:Urumqi"{
+            ls{"eur Ürümqi"}
         }
         "meta:Uzbekistan"{
             ld{"eur hañv Ouzbekistan"}
@@ -898,7 +911,6 @@ br{
         }
         gmtFormat{"UTC{0}"}
         gmtUnknownFormat{"UTC+?"}
-        gmtZeroFormat{"UTC"}
         regionFormat{"eur {0}"}
         regionFormatDaylight{"eur hañv {0}"}
         regionFormatStandard{"eur cʼhoañv {0}"}

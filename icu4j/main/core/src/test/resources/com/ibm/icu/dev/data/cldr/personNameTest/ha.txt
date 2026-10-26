@@ -1,5 +1,5 @@
 # Test data for Person Name Data
-#  Copyright © 1991-2025 Unicode, Inc.
+#  Copyright © 1991-2026 Unicode, Inc.
 #  For terms of use, see http://www.unicode.org/copyright.html
 #  SPDX-License-Identifier: Unicode-3.0
 #  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
@@ -306,6 +306,7 @@ name ; title; Malam
 name ; given; Shehu
 name ; given2; Bello
 name ; surname-core; Modibbo
+name ; generation; ƙarami
 name ; credentials; MP
 name ; locale; ha_AQ
 
@@ -318,6 +319,10 @@ expectedResult; Modibbo Malam Shehu Bello MP
 
 parameters; surnameFirst; long; referring; formal
 
+expectedResult; Modibbo Shehu B. ƙarami, MP
+
+parameters; surnameFirst; medium; referring; formal
+
 expectedResult; Modibbo, Shehu Bello
 
 parameters; sorting; long; referring; formal
@@ -325,10 +330,6 @@ parameters; sorting; medium; referring; formal
 parameters; sorting; medium; referring; informal
 parameters; sorting; short; referring; formal
 parameters; sorting; short; referring; informal
-
-expectedResult; Modibbo Shehu B. MP
-
-parameters; surnameFirst; medium; referring; formal
 
 expectedResult; Modibbo, Shehu
 
@@ -654,28 +655,28 @@ endName
 name ; title; Farf. Dr.
 name ; given; Ada Cornelia
 name ; given-informal; Neele
-name ; given2; Eva Sophia
-name ; surname-prefix; van den
-name ; surname-core; Wolf
-name ; surname2; Becker Schmidt
+name ; given2; Kabiru Malami
+name ; surname-prefix; Bala
+name ; surname-core; Buhari
+name ; surname2; Garba Dauda
 name ; generation; Ƙarami
 name ; credentials; M.D. Ph.D.
 name ; locale; ko_AQ
 
-expectedResult; Farf. Dr. Ada Cornelia Eva Sophia van den Wolf Becker Schmidt M.D. Ph.D.
+expectedResult; Bala Buhari Garba Dauda Farf. Dr. Ada Cornelia Kabiru Malami M.D. Ph.D.
+
+parameters; surnameFirst; long; referring; formal
+
+expectedResult; Farf. Dr. Ada Cornelia Kabiru Malami Bala Buhari Garba Dauda M.D. Ph.D.
 
 parameters; givenFirst; long; referring; formal
 parameters; givenFirst; medium; referring; formal
 
-expectedResult; van den Wolf Becker Schmidt Farf. Dr. Ada Cornelia Eva Sophia M.D. Ph.D.
-
-parameters; surnameFirst; long; referring; formal
-
-expectedResult; van den Wolf Ada Cornelia E. S. Ƙarami, M.D. Ph.D.
+expectedResult; Bala Buhari Ada Cornelia K. M. Ƙarami, M.D. Ph.D.
 
 parameters; surnameFirst; medium; referring; formal
 
-expectedResult; Wolf, Ada Cornelia Eva Sophia van den
+expectedResult; Buhari, Ada Cornelia Kabiru Malami Bala
 
 parameters; sorting; long; referring; formal
 parameters; sorting; medium; referring; formal
@@ -683,15 +684,15 @@ parameters; sorting; medium; referring; informal
 parameters; sorting; short; referring; formal
 parameters; sorting; short; referring; informal
 
-expectedResult; A. C. E. S. van den Wolf
+expectedResult; A. C. K. M. Bala Buhari
 
 parameters; givenFirst; short; referring; formal
 
-expectedResult; van den Wolf A. C. E. S.
+expectedResult; Bala Buhari A. C. K. M.
 
 parameters; surnameFirst; short; referring; formal
 
-expectedResult; Farf. Dr. van den Wolf
+expectedResult; Farf. Dr. Bala Buhari
 
 parameters; givenFirst; long; addressing; formal
 parameters; givenFirst; medium; addressing; formal
@@ -700,25 +701,25 @@ parameters; surnameFirst; long; addressing; formal
 parameters; surnameFirst; medium; addressing; formal
 parameters; surnameFirst; short; addressing; formal
 
-expectedResult; van den Wolf, Neele
+expectedResult; Bala Buhari, Neele
 
 parameters; sorting; long; referring; informal
 
-expectedResult; Neele van den Wolf
-
-parameters; givenFirst; long; referring; informal
-parameters; givenFirst; medium; referring; informal
-
-expectedResult; van den Wolf A. C.
+expectedResult; Bala Buhari A. C.
 
 parameters; surnameFirst; short; referring; informal
 
-expectedResult; van den Wolf Neele
+expectedResult; Bala Buhari Neele
 
 parameters; surnameFirst; long; referring; informal
 parameters; surnameFirst; medium; referring; informal
 
-expectedResult; Neele v. d. W.
+expectedResult; Neele Bala Buhari
+
+parameters; givenFirst; long; referring; informal
+parameters; givenFirst; medium; referring; informal
+
+expectedResult; Neele B. B.
 
 parameters; givenFirst; short; referring; informal
 
@@ -731,31 +732,31 @@ parameters; surnameFirst; long; addressing; informal
 parameters; surnameFirst; medium; addressing; informal
 parameters; surnameFirst; short; addressing; informal
 
-expectedResult; AEV
+expectedResult; AKB
 
 parameters; givenFirst; long; monogram; formal
 parameters; givenFirst; long; monogram; informal
 parameters; givenFirst; medium; monogram; formal
 parameters; givenFirst; medium; monogram; informal
 
-expectedResult; VAE
+expectedResult; BAK
 
 parameters; surnameFirst; long; monogram; formal
 
-expectedResult; VN
+expectedResult; BN
 
 parameters; surnameFirst; long; monogram; informal
+
+expectedResult; B
+
+parameters; givenFirst; short; monogram; formal
+parameters; surnameFirst; medium; monogram; formal
+parameters; surnameFirst; short; monogram; formal
 
 expectedResult; N
 
 parameters; givenFirst; short; monogram; informal
 parameters; surnameFirst; medium; monogram; informal
 parameters; surnameFirst; short; monogram; informal
-
-expectedResult; V
-
-parameters; givenFirst; short; monogram; formal
-parameters; surnameFirst; medium; monogram; formal
-parameters; surnameFirst; short; monogram; formal
 
 endName

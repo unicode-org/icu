@@ -243,10 +243,6 @@ cy{
             "CNH",
             "Yuan Tsieina (ar y môr)",
         }
-        CNX{
-            "CNX",
-            "Doler Banc Pobl Tsieina",
-        }
         CNY{
             "CN¥",
             "Yuan Tsieina",
@@ -1545,14 +1541,6 @@ cy{
             other{"yuan Tsieina (ar y môr)"}
             two{"yuan Tsieina (ar y môr)"}
             zero{"yuan Tsieina (ar y môr)"}
-        }
-        CNX{
-            few{"doler Banc Pobl Tsieina"}
-            many{"doler Banc Pobl Tsieina"}
-            one{"ddoler Banc Pobl Tsieina"}
-            other{"doler Banc Pobl Tsieina"}
-            two{"ddoler Banc Pobl Tsieina"}
-            zero{"doler Banc Pobl Tsieina"}
         }
         CNY{
             few{"yuan Tsieina"}
@@ -2986,14 +2974,6 @@ cy{
             two{"ddoler Dwyrain y Caribî"}
             zero{"doler Dwyrain y Caribî"}
         }
-        XCG{
-            few{"guilder Caribïaidd"}
-            many{"guilder Caribïaidd"}
-            one{"guilder Caribïaidd"}
-            other{"guilder Caribïaidd"}
-            two{"guilder Caribïaidd"}
-            zero{"guilder Caribïaidd"}
-        }
         XEU{
             few{"uned arian cyfred Ewropeaidd"}
             many{"uned arian cyfred Ewropeaidd"}
@@ -3105,14 +3085,6 @@ cy{
             other{"doler Zimbabwe (1980–2008)"}
             two{"ddoler Zimbabwe (1980–2008)"}
             zero{"doler Zimbabwe (1980–2008)"}
-        }
-        ZWG{
-            few{"Zimbabwean Gold"}
-            many{"Zimbabwean Gold"}
-            one{"Zimbabwean Gold"}
-            other{"Zimbabwean Gold"}
-            two{"Zimbabwean Gold"}
-            zero{"Zimbabwean Gold"}
         }
         ZWL{
             few{"doler Zimbabwe (2009)"}

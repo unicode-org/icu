@@ -46,6 +46,7 @@ public class UnitsConverter {
      * @param target represents the target unit.
      * @param conversionRates contains all the needed conversion rates.
      */
+    @SuppressWarnings("ReferenceEquality")
     public UnitsConverter(
             MeasureUnitImpl source, MeasureUnitImpl target, ConversionRates conversionRates) {
         Convertibility convertibility = extractConvertibility(source, target, conversionRates);
@@ -135,6 +136,7 @@ public class UnitsConverter {
     }
 
     // Convert inputValue (source) to base then to target
+    @SuppressWarnings("ReferenceEquality")
     public BigDecimal convert(BigDecimal inputValue) {
         BigDecimal result = inputValue;
         if (this.specialSource != null || this.specialTarget != null) {
@@ -179,6 +181,7 @@ public class UnitsConverter {
     }
 
     // Convert inputValue (target) to base then to source
+    @SuppressWarnings("ReferenceEquality")
     public BigDecimal convertInverse(BigDecimal inputValue) {
         BigDecimal result = inputValue;
         if (this.specialSource != null || this.specialTarget != null) {

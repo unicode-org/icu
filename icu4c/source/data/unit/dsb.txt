@@ -1451,10 +1451,10 @@ dsb{
             }
             fluid-ounce-metric{
                 dnam{"metriske žydke unce"}
-                few{"{0} žydke unce"}
-                one{"{0} žydka unca"}
+                few{"{0} metriske žydke unce"}
+                one{"{0} metriska žydka unca"}
                 other{"{0} metriskich žydkich uncow"}
-                two{"{0} žydkej uncy"}
+                two{"{0} metriskej žydkej uncy"}
             }
             gallon{
                 dnam{"gallony"}

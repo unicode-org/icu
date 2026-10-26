@@ -228,5 +228,44 @@ final class IcuFunctions {
         }
     }
 
+    // For DATE_ROUND_SEC_FN
+    private enum RoundingType {
+        UP,
+        DOWN
+    }
+
+    private static final Pattern DATE_WITH_SECONDS_PATTERN = Pattern.compile("(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}):(\\d{2})");
+
+    /**
+     * For rounding up/down useMetaZone from/to date. Older version of ICU cannot
+     * handle metazone mapping from/to date with second field. For example,
+     * Africa/Monrovia maps to metazone GMT starting 1970-01-07T00:44:30.
+     * This function round up/down second field to drop the second field.
+     * For 'from' attribute with non-zero seconds, we want to round up to next
+     * minute. For 'to' attribute with non-zero seconds, we want to round off.
+     * At this moment, we only have the Monrovia / 'from' requires this rounding
+     * operation.
+     */
+    static final NamedFunction DATE_ROUND_SEC_FN =
+        NamedFunction.create(
+            "date_round_sec",
+            2,
+            args -> {
+                String dateStr = args.get(0);
+                Matcher matcher = DATE_WITH_SECONDS_PATTERN.matcher(dateStr);
+                if (matcher.matches()) {
+                    RoundingType roundingType = RoundingType.valueOf(args.get(1));
+                    String secStr = matcher.group(2);
+                    if (secStr.equals("00") || roundingType == RoundingType.DOWN) {
+                        dateStr = dateStr.substring(0, dateStr.length() - 3);
+                    } else {
+                        LocalDateTime ldt = LocalDateTime.parse(matcher.group(1).replace(' ', 'T') + ":00");
+                        ldt = ldt.plusMinutes(1);
+                        dateStr = ldt.toString().replace('T', ' ').substring(0, dateStr.length() - 3);
+                    }
+                }
+                return dateStr;
+            });
+
     private IcuFunctions() {}
 }

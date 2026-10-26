@@ -317,4 +317,3 @@ public class FilteredNormalizer2 extends Normalizer2 {
     private Normalizer2 norm2;
     private UnicodeSet set;
 }
-;

@@ -6,5 +6,10 @@ fr_GF{
         "meta:French_Guiana"{
             ss{"GFT"}
         }
+        "meta:Pierre_Miquelon"{
+            sd{"∅∅∅"}
+            sg{"∅∅∅"}
+            ss{"∅∅∅"}
+        }
     }
 }

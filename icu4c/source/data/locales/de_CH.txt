@@ -7,11 +7,8 @@ de_CH{
     NumberElements{
         latn{
             patterns{
-                accountingFormat%alphaNextToNumber{"¤ #,##0.00;¤-#,##0.00"}
-                accountingFormat%noCurrency{"#,##0.00"}
                 currencyFormat{"¤ #,##0.00;¤-#,##0.00"}
                 currencyFormat%alphaNextToNumber{"¤ #,##0.00;¤-#,##0.00"}
-                currencyFormat%noCurrency{"#,##0.00"}
                 percentFormat{"#,##0%"}
             }
             patternsShort{
@@ -53,12 +50,6 @@ de_CH{
                         other{"¤ 000 Bio'.'"}
                     }
                 }
-                currencyFormat%alphaNextToNumber{
-                    100000{
-                        one{"0"}
-                        other{"0"}
-                    }
-                }
             }
             symbols{
                 decimal{"."}
@@ -89,6 +80,9 @@ de_CH{
             intervalFormats{
                 M{
                     M{"M – M"}
+                }
+                MMMMd{
+                    d{"MMMM d.–d."}
                 }
             }
         }

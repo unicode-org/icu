@@ -105,9 +105,6 @@ ia{
         "Europe:Bucharest"{
             ec{"Bucarest"}
         }
-        "Europe:Dublin"{
-            ld{"Hora estive irlandese"}
-        }
         "Europe:Isle_of_Man"{
             ec{"Insula de Man"}
         }
@@ -116,9 +113,6 @@ ia{
         }
         "Europe:Lisbon"{
             ec{"Lisbona"}
-        }
-        "Europe:London"{
-            ld{"Hora estive britannic"}
         }
         "Europe:Luxembourg"{
             ec{"Luxemburg"}
@@ -279,6 +273,10 @@ ia{
             lg{"hora de Brasilia"}
             ls{"hora normal de Brasilia"}
         }
+        "meta:British"{
+            ld{"Hora estive britannic"}
+            lg{"Hora britannic"}
+        }
         "meta:Brunei"{
             ls{"hora de Brunei"}
         }
@@ -409,9 +407,6 @@ ia{
             lg{"hora de Groenlandia occidental"}
             ls{"hora normal de Groenlandia occidental"}
         }
-        "meta:Guam"{
-            ls{"hora normal de Guam"}
-        }
         "meta:Gulf"{
             ls{"hora normal del Golfo"}
         }
@@ -419,7 +414,7 @@ ia{
             ls{"hora de Guyana"}
         }
         "meta:Hawaii"{
-            ls{"hora normal de Hawaii-Aleutianas"}
+            ls{"hora normal de Hawaii"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"hora estive de Hawaii-Aleutianas"}
@@ -458,6 +453,10 @@ ia{
             ld{"hora estive de Iran"}
             lg{"hora de Iran"}
             ls{"hora normal de Iran"}
+        }
+        "meta:Irish"{
+            ld{"Hora estive irlandese"}
+            lg{"Hora irlandese"}
         }
         "meta:Irkutsk"{
             ld{"hora estive de Irkutsk"}
@@ -649,8 +648,6 @@ ia{
             ls{"hora normal de Sachalin"}
         }
         "meta:Samoa"{
-            ld{"hora estive de Samoa american"}
-            lg{"hora de Samoa american"}
             ls{"hora normal de Samoa american"}
         }
         "meta:Seychelles"{

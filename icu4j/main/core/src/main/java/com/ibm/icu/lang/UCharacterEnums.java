@@ -16,7 +16,6 @@ package com.ibm.icu.lang;
 public class UCharacterEnums {
 
     /** This is just a namespace, it is not instantiable. */
-    /// CLOVER:OFF
     private UCharacterEnums() {}
 
     /**

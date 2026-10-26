@@ -267,10 +267,6 @@ sc{
             "CNH",
             "renminbi tzinesu (extracontinentale)",
         }
-        CNX{
-            "CNX",
-            "dòllaru de sa Banca Popolare Tzinesa",
-        }
         CNY{
             "CN¥",
             "renminbi tzinesu",
@@ -1492,10 +1488,6 @@ sc{
         CNH{
             one{"yuan tzinesu (extracontinentale)"}
             other{"yuans tzinesos (extracontinentales)"}
-        }
-        CNX{
-            one{"dòllaru de sa Banca Popolare Tzinesa"}
-            other{"dòllaros de sa Banca Popolare Tzinesa"}
         }
         CNY{
             one{"yuan tzinesu"}

@@ -983,7 +983,6 @@ zh{
         }
         "Europe:Dublin"{
             ec{"都柏林"}
-            ld{"爱尔兰标准时间"}
         }
         "Europe:Gibraltar"{
             ec{"直布罗陀"}
@@ -1020,7 +1019,6 @@ zh{
         }
         "Europe:London"{
             ec{"伦敦"}
-            ld{"英国夏令时间"}
         }
         "Europe:Luxembourg"{
             ec{"卢森堡"}
@@ -1290,11 +1288,6 @@ zh{
             lg{"阿拉斯加时间"}
             ls{"阿拉斯加标准时间"}
         }
-        "meta:Almaty"{
-            ld{"阿拉木图夏令时间"}
-            lg{"阿拉木图时间"}
-            ls{"阿拉木图标准时间"}
-        }
         "meta:Amazon"{
             ld{"亚马逊夏令时间"}
             lg{"亚马逊时间"}
@@ -1329,16 +1322,6 @@ zh{
             ld{"阿皮亚夏令时间"}
             lg{"阿皮亚时间"}
             ls{"阿皮亚标准时间"}
-        }
-        "meta:Aqtau"{
-            ld{"阿克套夏令时间"}
-            lg{"阿克套时间"}
-            ls{"阿克套标准时间"}
-        }
-        "meta:Aqtobe"{
-            ld{"阿克托别夏令时间"}
-            lg{"阿克托别时间"}
-            ls{"阿克托别标准时间"}
         }
         "meta:Arabian"{
             ld{"阿拉伯夏令时间"}
@@ -1410,6 +1393,10 @@ zh{
             ld{"巴西利亚夏令时间"}
             lg{"巴西利亚时间"}
             ls{"巴西利亚标准时间"}
+        }
+        "meta:British"{
+            ld{"英国夏令时间"}
+            lg{"英国时间"}
         }
         "meta:Brunei"{
             ls{"文莱达鲁萨兰时间"}
@@ -1529,6 +1516,11 @@ zh{
         "meta:Gilbert_Islands"{
             ls{"吉尔伯特群岛时间"}
         }
+        "meta:Greenland"{
+            ld{"格陵兰岛夏令时间"}
+            lg{"格陵兰岛时间"}
+            ls{"格陵兰岛标准时间"}
+        }
         "meta:Greenland_Eastern"{
             ld{"格陵兰岛东部夏令时间"}
             lg{"格陵兰岛东部时间"}
@@ -1539,9 +1531,6 @@ zh{
             lg{"格陵兰岛西部时间"}
             ls{"格陵兰岛西部标准时间"}
         }
-        "meta:Guam"{
-            ls{"关岛时间"}
-        }
         "meta:Gulf"{
             ls{"海湾标准时间"}
         }
@@ -1549,7 +1538,7 @@ zh{
             ls{"圭亚那时间"}
         }
         "meta:Hawaii"{
-            ls{"夏威夷-阿留申标准时间"}
+            ls{"夏威夷-阿留申标准时"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"夏威夷-阿留申夏令时间"}
@@ -1588,6 +1577,10 @@ zh{
             ld{"伊朗夏令时间"}
             lg{"伊朗时间"}
             ls{"伊朗标准时间"}
+        }
+        "meta:Irish"{
+            ld{"爱尔兰标准时间"}
+            lg{"爱尔兰时间"}
         }
         "meta:Irkutsk"{
             ld{"伊尔库茨克夏令时间"}
@@ -1634,9 +1627,6 @@ zh{
         "meta:Kyrgystan"{
             ls{"吉尔吉斯斯坦时间"}
         }
-        "meta:Lanka"{
-            ls{"兰卡时间"}
-        }
         "meta:Line_Islands"{
             ls{"莱恩群岛时间"}
         }
@@ -1644,11 +1634,6 @@ zh{
             ld{"豪勋爵岛夏令时间"}
             lg{"豪勋爵岛时间"}
             ls{"豪勋爵岛标准时间"}
-        }
-        "meta:Macau"{
-            ld{"澳门夏令时间"}
-            lg{"澳门时间"}
-            ls{"澳门标准时间"}
         }
         "meta:Magadan"{
             ld{"马加丹夏令时间"}
@@ -1727,9 +1712,6 @@ zh{
             lg{"费尔南多-迪诺罗尼亚岛时间"}
             ls{"费尔南多-迪诺罗尼亚岛标准时间"}
         }
-        "meta:North_Mariana"{
-            ls{"北马里亚纳群岛时间"}
-        }
         "meta:Novosibirsk"{
             ld{"新西伯利亚夏令时间"}
             lg{"新西伯利亚时间"}
@@ -1783,11 +1765,6 @@ zh{
         "meta:Pyongyang"{
             ls{"平壤时间"}
         }
-        "meta:Qyzylorda"{
-            ld{"克孜洛尔达夏令时间"}
-            lg{"克孜洛尔达时间"}
-            ls{"克孜洛尔达标准时间"}
-        }
         "meta:Reunion"{
             ls{"留尼汪时间"}
         }
@@ -1805,8 +1782,6 @@ zh{
             ls{"萨马拉标准时间"}
         }
         "meta:Samoa"{
-            ld{"萨摩亚夏令时间"}
-            lg{"萨摩亚时间"}
             ls{"萨摩亚标准时间"}
         }
         "meta:Seychelles"{
@@ -1866,6 +1841,9 @@ zh{
             ld{"乌拉圭夏令时间"}
             lg{"乌拉圭时间"}
             ls{"乌拉圭标准时间"}
+        }
+        "meta:Urumqi"{
+            ls{"乌鲁木齐时间"}
         }
         "meta:Uzbekistan"{
             ld{"乌兹别克斯坦夏令时间"}

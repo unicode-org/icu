@@ -307,10 +307,6 @@ public class JacocoReportCheck {
         int missed() {
             return missed;
         }
-
-        int covered() {
-            return covered;
-        }
     }
 
     private static class Method {
@@ -351,26 +347,6 @@ public class JacocoReportCheck {
             return desc;
         }
 
-        int line() {
-            return line;
-        }
-
-        Counter instructionCounter() {
-            return instructionCnt;
-        }
-
-        Counter branchCounter() {
-            return branchCnt;
-        }
-
-        Counter lineCounter() {
-            return lineCnt;
-        }
-
-        Counter complexityCounter() {
-            return complexityCnt;
-        }
-
         Counter methodCounter() {
             return methodCnt;
         }
@@ -389,10 +365,6 @@ public class JacocoReportCheck {
 
         String key() {
             return key;
-        }
-
-        String cls() {
-            return cls;
         }
 
         Method method() {

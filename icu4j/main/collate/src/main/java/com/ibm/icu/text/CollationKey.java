@@ -120,9 +120,7 @@ public final class CollationKey implements Comparable<CollationKey> {
         @Deprecated public static final int COUNT = 3;
 
         /** Private Constructor */
-        /// CLOVER:OFF
         private BoundMode() {}
-        /// CLOVER:ON
     }
 
     // public constructor ---------------------------------------------------
@@ -286,6 +284,7 @@ public final class CollationKey implements Comparable<CollationKey> {
      * @exception NullPointerException is thrown when the argument is null.
      * @stable ICU 2.8
      */
+    @SuppressWarnings("ReferenceEquality")
     public boolean equals(CollationKey target) {
         if (this == target) {
             return true;

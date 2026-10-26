@@ -20,7 +20,6 @@ import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.zip.GZIPInputStream;
@@ -50,7 +49,7 @@ public final class APIData {
             data.base = APIInfo.readToken(br); // base
             br.readLine();
 
-            data.set = new TreeSet(APIInfo.defaultComparator());
+            data.set = new TreeSet<>(APIInfo.defaultComparator());
             for (APIInfo info = new APIInfo(); info.read(br); info = new APIInfo()) {
                 if (internal || !info.isInternal()) {
                     data.set.add(info);
@@ -65,46 +64,43 @@ public final class APIData {
         }
     }
 
+    private static APIData read(InputStream is, boolean internal) throws IOException {
+        try (InputStreamReader isr = new InputStreamReader(is, StandardCharsets.UTF_8);
+                BufferedReader br = new BufferedReader(isr)) {
+            return read(br, internal);
+        }
+    }
+
     public static APIData read(File file, boolean internal) {
         String fileName = file.getName();
-        ZipFile zf = null;
         try {
-            InputStream is;
             if (fileName.endsWith(".zip")) {
-                zf = new ZipFile(file);
-                Enumeration<? extends ZipEntry> entryEnum = zf.entries();
-                if (entryEnum.hasMoreElements()) {
-                    ZipEntry entry = entryEnum.nextElement();
-                    is = zf.getInputStream(entry);
-                    // we only handle one!!!
-                } else {
-                    throw new IOException("zip file is empty");
+                try (ZipFile zf = new ZipFile(file)) {
+                    Enumeration<? extends ZipEntry> entryEnum = zf.entries();
+                    if (entryEnum.hasMoreElements()) {
+                        ZipEntry entry = entryEnum.nextElement();
+                        // we only handle one!!!
+                        try (InputStream is = zf.getInputStream(entry)) {
+                            return read(is, internal);
+                        }
+                    } else {
+                        throw new IOException("zip file is empty");
+                    }
+                }
+            } else if (fileName.endsWith(".gz")) {
+                try (InputStream fis = new FileInputStream(file);
+                        InputStream is = new GZIPInputStream(fis)) {
+                    return read(is, internal);
                 }
             } else {
-                is = new FileInputStream(file);
-                if (fileName.endsWith(".gz")) {
-                    is = new GZIPInputStream(is);
+                try (InputStream is = new FileInputStream(file)) {
+                    return read(is, internal);
                 }
-            }
-            try (InputStreamReader isr = new InputStreamReader(is, StandardCharsets.UTF_8);
-                    BufferedReader br = new BufferedReader(isr)) {
-                return read(br, internal);
             }
         } catch (IOException e) {
-            RuntimeException re = new RuntimeException("error getting info stream: " + fileName);
-            re.initCause(e);
+            RuntimeException re =
+                    new RuntimeException("error getting info stream: " + file.getName(), e);
             throw re;
-        } finally {
-            if (zf != null) {
-                try {
-                    zf.close();
-                } catch (IOException e) {
-                    RuntimeException re =
-                            new RuntimeException("failed to close the zip file: " + fileName);
-                    re.initCause(e);
-                    throw re;
-                }
-            }
         }
     }
 
@@ -123,10 +119,7 @@ public final class APIData {
 
         int[] stats = new int[catnames.length * stanames.length];
 
-        Iterator iter = set.iterator();
-        while (iter.hasNext()) {
-            APIInfo info = (APIInfo) iter.next();
-
+        for (APIInfo info : set) {
             if (info.isPublic() || info.isProtected()) {
                 int sta = info.getVal(APIInfo.STA);
                 int cat = info.getVal(APIInfo.CAT);

@@ -899,8 +899,8 @@ class CharsetISO2022 extends CharsetICU {
     // private UConverterSharedData _ISO2022KRData;
     // private UConverterSharedData _ISO2022CNData;
 
-    /******************** to unicode ********************/
-    /****************************************************
+    /*
+     * ******************* to unicode ********************
      * Recognized escape sequenes are
      * <ESC>(B  ASCII
      * <ESC>.A  ISO-8859-1

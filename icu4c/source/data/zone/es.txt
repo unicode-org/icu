@@ -356,7 +356,6 @@ es{
         }
         "Europe:Dublin"{
             ec{"Dublín"}
-            ld{"hora de verano de Irlanda"}
         }
         "Europe:Guernsey"{
             ec{"Guernesey"}
@@ -384,7 +383,6 @@ es{
         }
         "Europe:London"{
             ec{"Londres"}
-            ld{"hora de verano británica"}
         }
         "Europe:Luxembourg"{
             ec{"Luxemburgo"}
@@ -483,9 +481,9 @@ es{
             ec{"Tahití"}
         }
         "meta:Acre"{
-            ld{"Hora de verano de Acre"}
-            lg{"Hora de Acre"}
-            ls{"Hora estándar de Acre"}
+            ld{"hora de verano de Acre"}
+            lg{"hora de Acre"}
+            ls{"hora estándar de Acre"}
         }
         "meta:Afghanistan"{
             ls{"hora de Afganistán"}
@@ -541,16 +539,6 @@ es{
             ld{"horario de verano de Apia"}
             lg{"hora de Apia"}
             ls{"hora estándar de Apia"}
-        }
-        "meta:Aqtau"{
-            ld{"Hora de verano de Aktau"}
-            lg{"Hora de Aktau"}
-            ls{"Hora estándar de Aktau"}
-        }
-        "meta:Aqtobe"{
-            ld{"Hora de verano de Aktobe"}
-            lg{"Hora de Aktobe"}
-            ls{"Hora estándar de Aktobe"}
         }
         "meta:Arabian"{
             ld{"hora de verano de Arabia"}
@@ -622,6 +610,10 @@ es{
             ld{"hora de verano de Brasilia"}
             lg{"hora de Brasilia"}
             ls{"hora estándar de Brasilia"}
+        }
+        "meta:British"{
+            ld{"hora de verano británica"}
+            lg{"hora británica"}
         }
         "meta:Brunei"{
             ls{"hora de Brunéi"}
@@ -748,6 +740,11 @@ es{
         "meta:Gilbert_Islands"{
             ls{"hora de las islas Gilbert"}
         }
+        "meta:Greenland"{
+            ld{"hora de verano de Groenlandia"}
+            lg{"hora de Groenlandia"}
+            ls{"hora estándar de Groenlandia"}
+        }
         "meta:Greenland_Eastern"{
             ld{"hora de verano de Groenlandia oriental"}
             lg{"hora de Groenlandia oriental"}
@@ -758,9 +755,6 @@ es{
             lg{"hora de Groenlandia occidental"}
             ls{"hora estándar de Groenlandia occidental"}
         }
-        "meta:Guam"{
-            ls{"Hora estándar de Guam"}
-        }
         "meta:Gulf"{
             ls{"hora estándar del Golfo"}
         }
@@ -768,7 +762,7 @@ es{
             ls{"hora de Guyana"}
         }
         "meta:Hawaii"{
-            ls{"hora estándar de Hawái-Aleutianas"}
+            ls{"hora estándar de Hawái y Aleutianas"}
         }
         "meta:Hawaii_Aleutian"{
             ld{"hora de verano de Hawái-Aleutianas"}
@@ -807,6 +801,10 @@ es{
             ld{"hora de verano de Irán"}
             lg{"hora de Irán"}
             ls{"hora estándar de Irán"}
+        }
+        "meta:Irish"{
+            ld{"hora estándar de Irlanda"}
+            lg{"hora de Irlanda"}
         }
         "meta:Irkutsk"{
             ld{"hora de verano de Irkutsk"}
@@ -853,9 +851,6 @@ es{
         "meta:Kyrgystan"{
             ls{"hora de Kirguistán"}
         }
-        "meta:Lanka"{
-            ls{"Hora de Sri Lanka"}
-        }
         "meta:Line_Islands"{
             ls{"hora de las Espóradas Ecuatoriales"}
         }
@@ -863,11 +858,6 @@ es{
             ld{"hora de verano de Lord Howe"}
             lg{"hora de Lord Howe"}
             ls{"hora estándar de Lord Howe"}
-        }
-        "meta:Macau"{
-            ld{"Hora de verano de Macao"}
-            lg{"Hora de Macao"}
-            ls{"Hora estándar de Macao"}
         }
         "meta:Magadan"{
             ld{"hora de verano de Magadán"}
@@ -946,9 +936,6 @@ es{
             lg{"hora de Fernando de Noronha"}
             ls{"hora estándar de Fernando de Noronha"}
         }
-        "meta:North_Mariana"{
-            ls{"Hora de las Islas Marianas del Norte"}
-        }
         "meta:Novosibirsk"{
             ld{"hora de verano de Novosibirsk"}
             lg{"hora de Novosibirsk"}
@@ -1002,11 +989,6 @@ es{
         "meta:Pyongyang"{
             ls{"hora de Pyongyang"}
         }
-        "meta:Qyzylorda"{
-            ld{"Hora de verano de Qyzylorda"}
-            lg{"Hora de Qyzylorda"}
-            ls{"Hora estándar de Qyzylorda"}
-        }
         "meta:Reunion"{
             ls{"hora de Reunión"}
         }
@@ -1024,8 +1006,6 @@ es{
             ls{"hora estándar de Samara"}
         }
         "meta:Samoa"{
-            ld{"hora de verano de Samoa"}
-            lg{"hora de Samoa"}
             ls{"hora estándar de Samoa"}
         }
         "meta:Seychelles"{
@@ -1069,9 +1049,9 @@ es{
             ls{"hora de Chuuk"}
         }
         "meta:Turkey"{
-            ld{"Hora de verano de Turquía"}
-            lg{"Hora de Turquía"}
-            ls{"Hora estándar de Turquía"}
+            ld{"hora de verano de Turquía"}
+            lg{"hora de Turquía"}
+            ls{"hora estándar de Turquía"}
         }
         "meta:Turkmenistan"{
             ld{"hora de verano de Turkmenistán"}
@@ -1085,6 +1065,9 @@ es{
             ld{"hora de verano de Uruguay"}
             lg{"hora de Uruguay"}
             ls{"hora estándar de Uruguay"}
+        }
+        "meta:Urumqi"{
+            ls{"hora de Urumqi"}
         }
         "meta:Uzbekistan"{
             ld{"hora de verano de Uzbekistán"}

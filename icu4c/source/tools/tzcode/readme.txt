@@ -78,6 +78,19 @@ HOWTO
 
 3. Build ICU normally. You will see a notice "updating zoneinfo.txt..."
 
+   Note: besides the tzdata archive, tz2icu also reads the metazone standard /
+   DST offsets from
+
+     {path_to}/icu/source/data/tzdata/metazoneOffsets.txt
+
+   Those are the offsets CLDR records in metaZones.xml, which occasionally
+   differ from the TZ database, and they are used to fix up the generated
+   zoneinfo64.txt.  That file is generated into the ICU source tree by the
+   CLDR-to-ICU conversion tool (see ../../../../tools/cldr/cldr-to-icu/), so
+   there is nothing to do here; it is deliberately not packaged into ICU's
+   runtime data, since it is only needed by this tool.
+
+
 ### Following instructions for ICU maintainers only ###
 
 4. Obtain the current version of tzcodeYYYY.tar.gz from the FTP site to
