@@ -333,26 +333,7 @@ DateTimePatternGenerator::createEmptyInstance(UErrorCode& status) {
     return U_SUCCESS(status) ? result.orphan() : nullptr;
 }
 
-DateTimePatternGenerator::DateTimePatternGenerator(UErrorCode &status) :
-    UObject()
-{
-    emptyString.getTerminatedBuffer();
-    fp = new FormatParser();
-    dtMatcher = new DateTimeMatcher();
-    distanceInfo = new DistanceInfo();
-    patternMap = new PatternMap();
-    if (fp == nullptr || dtMatcher == nullptr || distanceInfo == nullptr || patternMap == nullptr) {
-        internalErrorCode = status = U_MEMORY_ALLOCATION_ERROR;
-    }
-}
-
-DateTimePatternGenerator::DateTimePatternGenerator(const Locale& locale, UErrorCode &status, UBool skipStdPatterns) :
-    DateTimePatternGenerator(status)
-{
-    initData(locale, status, skipStdPatterns);
-}
-
-DateTimePatternGenerator::DateTimePatternGenerator(const DateTimePatternGenerator& other) :
+DateTimePatternGenerator::DateTimePatternGenerator() :
     UObject()
 {
     emptyString.getTerminatedBuffer();
@@ -363,13 +344,60 @@ DateTimePatternGenerator::DateTimePatternGenerator(const DateTimePatternGenerato
     if (fp == nullptr || dtMatcher == nullptr || distanceInfo == nullptr || patternMap == nullptr) {
         internalErrorCode = U_MEMORY_ALLOCATION_ERROR;
     }
-    *this=other;
+}
+
+DateTimePatternGenerator::DateTimePatternGenerator(UErrorCode &status) :
+    DateTimePatternGenerator()
+{
+    if (U_FAILURE(internalErrorCode) && U_SUCCESS(status)) {
+        status = internalErrorCode;
+    }
+}
+
+DateTimePatternGenerator::DateTimePatternGenerator(const Locale& locale, UErrorCode &status, UBool skipStdPatterns) :
+    DateTimePatternGenerator(status)
+{
+    initData(locale, status, skipStdPatterns);
+}
+
+DateTimePatternGenerator::DateTimePatternGenerator(const DateTimePatternGenerator& other) :
+    DateTimePatternGenerator()
+{
+    *this = other;
 }
 
 DateTimePatternGenerator&
 DateTimePatternGenerator::operator=(const DateTimePatternGenerator& other) {
     // reflexive case
     if (&other == this) {
+        return *this;
+    }
+    // Don't try to copy a broken source object: bail out cleanly instead of
+    // crashing on `*fp = *(other.fp);` etc., and avoid falsely "healing" by
+    // copying a failed internalErrorCode below.
+    if (U_FAILURE(other.internalErrorCode)) {
+        return *this;
+    }
+
+
+    // Heal a previously-broken object: if any of the core helpers are missing
+    // (e.g. from a prior OOM during construction), try to allocate them now.
+    // If (re)allocation still fails, leave internalErrorCode set and bail out
+    // without dereferencing null pointers below.
+    if (fp == nullptr) {
+        fp = new FormatParser();
+    }
+    if (dtMatcher == nullptr) {
+        dtMatcher = new DateTimeMatcher();
+    }
+    if (distanceInfo == nullptr) {
+        distanceInfo = new DistanceInfo();
+    }
+    if (patternMap == nullptr) {
+        patternMap = new PatternMap();
+    }
+    if (fp == nullptr || dtMatcher == nullptr || distanceInfo == nullptr || patternMap == nullptr) {
+        internalErrorCode = U_MEMORY_ALLOCATION_ERROR;
         return *this;
     }
     internalErrorCode = other.internalErrorCode;
