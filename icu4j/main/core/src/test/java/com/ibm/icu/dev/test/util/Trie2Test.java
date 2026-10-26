@@ -771,6 +771,28 @@ public class Trie2Test extends CoreTestFmwk {
         checkTrieRanges("set2-overlap.withClone", "setRanges2", true, setRanges2, checkRanges2);
     }
 
+    @Test
+    public void TestMalformedSerializedTrie2() {
+        // Crafted UTrie2 data with dataNullOffset and dataLength that cause
+        // out-of-bounds array access. Must throw an exception, not crash.
+        byte[] data = {
+            0x54, 0x72, 0x69, 0x32,  // signature "Tri2" (big-endian)
+            0x00, 0x00,              // options: 16-bit values
+            0x00, 0x00,              // indexLength = 0 (invalid)
+            0x00, 0x00,              // shiftedDataLength = 0 (invalid)
+            0x00, 0x00,              // index2NullOffset
+            0x76, 0x76,              // dataNullOffset = 0x7676 (OOB)
+            0x00, 0x00               // shiftedHighStart
+        };
+        ByteBuffer buf = ByteBuffer.wrap(data);
+        try {
+            Trie2.createFromSerialized(buf);
+            errln("Expected exception from malformed UTrie2 data");
+        } catch (IOException | IllegalArgumentException e) {
+            // Expected
+        }
+    }
+
     private String where() {
         StackTraceElement[] st = new Throwable().getStackTrace();
         String w = "File: " + st[1].getFileName() + ", Line " + st[1].getLineNumber();
