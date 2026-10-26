@@ -121,53 +121,63 @@ calendar:table(nofallback) {
                // (0-based months)
                {
                     "en_US@calendar=dangi",
-                    "EXTENDED_YEAR=1964,MONTH=6,DATE=29,IS_LEAP_MONTH=0", // dangi
+                    "EXTENDED_YEAR=4297,MONTH=8,DATE=5,IS_LEAP_MONTH=0", // dangi
                     "YEAR=1964,MONTH=8,DATE=5",   // greg
                },
                {
                     "en_US@calendar=dangi",
-                     "EXTENDED_YEAR=1964,MONTH=7,DATE=1,IS_LEAP_MONTH=0", // dangi
+                     "EXTENDED_YEAR=4297,MONTH=8,DATE=6,IS_LEAP_MONTH=0", // dangi
                     "YEAR=1964,MONTH=8,DATE=6",   // greg
                },
                {
                     "en_US@calendar=dangi",
-                     "EXTENDED_YEAR=1961,MONTH=10,DATE=18,IS_LEAP_MONTH=0", // dangi
+                     "EXTENDED_YEAR=4294,MONTH=11,DATE=25,IS_LEAP_MONTH=0", // dangi
                     "YEAR=1961,MONTH=11,DATE=25",   // greg
                },
                {
                     "en_US@calendar=dangi",
-                     "EXTENDED_YEAR=1990,MONTH=4,DATE=30,IS_LEAP_MONTH=0", // dangi
+                     "EXTENDED_YEAR=4323,MONTH=5,DATE=22,IS_LEAP_MONTH=0", // dangi
                     "YEAR=1990,MONTH=5,DATE=22",   // greg
                },
                {
                     "en_US@calendar=dangi",
-                     "EXTENDED_YEAR=1990,MONTH=4,DATE=1,IS_LEAP_MONTH=1", // dangi
+                     "EXTENDED_YEAR=4323,MONTH=5,DATE=23,IS_LEAP_MONTH=0", // dangi
                     "YEAR=1990,MONTH=5,DATE=23",   // greg
                },
                {
                     "en_US@calendar=dangi",
-                     "EXTENDED_YEAR=1990,MONTH=4,DATE=29,IS_LEAP_MONTH=1", // dangi
+                     "EXTENDED_YEAR=4323,MONTH=6,DATE=21,IS_LEAP_MONTH=0", // dangi
                     "YEAR=1990,MONTH=6,DATE=21",   // greg
                },
                {
                     "en_US@calendar=dangi",
-                     "EXTENDED_YEAR=1990,MONTH=5,DATE=1,IS_LEAP_MONTH=0", // dangi
+                     "EXTENDED_YEAR=4323,MONTH=6,DATE=22,IS_LEAP_MONTH=0", // dangi
                     "YEAR=1990,MONTH=6,DATE=22",   // greg
                },
                {
                     "en_US@calendar=dangi",
-                     "EXTENDED_YEAR=1880,MONTH=9,DATE=1,IS_LEAP_MONTH=0", // dangi
+                     "EXTENDED_YEAR=4213,MONTH=9,DATE=1,IS_LEAP_MONTH=0", // dangi
                     "YEAR=1880,MONTH=10,DATE=3",   // greg
                },
                {
                     "en_US@calendar=dangi",
-                     "EXTENDED_YEAR=1882,MONTH=10,DATE=1,IS_LEAP_MONTH=0", // dangi
+                     "EXTENDED_YEAR=4215,MONTH=10,DATE=1,IS_LEAP_MONTH=0", // dangi
                     "YEAR=1882,MONTH=11,DATE=10",   // greg
                },
                {
                     "en_US@calendar=dangi",
-                     "EXTENDED_YEAR=1897,MONTH=6,DATE=1,IS_LEAP_MONTH=0", // dangi
-                    "YEAR=1897,MONTH=6,DATE=29",   // greg
+                     "EXTENDED_YEAR=4230,MONTH=6,DATE=1,IS_LEAP_MONTH=0", // dangi
+                    "YEAR=1897,MONTH=6,DATE=1",   // greg
+               },
+               {
+                    "en_US@calendar=dangi",
+                     "EXTENDED_YEAR=4230,MONTH=8,DATE=16,IS_LEAP_MONTH=0", // dangi
+                    "YEAR=1897,MONTH=8,DATE=16",   // greg
+               },
+               {
+                    "en_US@calendar=dangi",
+                     "EXTENDED_YEAR=4230,MONTH=9,DATE=12,IS_LEAP_MONTH=0", // dangi
+                    "YEAR=1897,MONTH=9,DATE=12",   // greg
                },
             }
         }
@@ -400,38 +410,38 @@ calendar:table(nofallback) {
                //dangi add tests
                { // normal
                     "en_US@calendar=dangi",         
-                    "EXTENDED_YEAR=2005,MONTH=2,DATE=15,IS_LEAP_MONTH=0",  // dangi  
+                    "EXTENDED_YEAR=4338,MONTH=2,DATE=15,IS_LEAP_MONTH=0",  // dangi
                     "add",
                     "MONTH=3", // month + 3
-                    "EXTENDED_YEAR=2005,MONTH=5,DATE=15,IS_LEAP_MONTH=0",  // dangi  
+                    "EXTENDED_YEAR=4338,MONTH=5,DATE=15,IS_LEAP_MONTH=0",  // dangi
                },
                { // across year
                     "en_US@calendar=dangi",         
-                    "EXTENDED_YEAR=2002,MONTH=11,DATE=15,IS_LEAP_MONTH=0",  // dangi  
+                    "EXTENDED_YEAR=4335,MONTH=11,DATE=15,IS_LEAP_MONTH=0",  // dangi
                     "add",
                     "MONTH=1", // month + 1
-                    "EXTENDED_YEAR=2003,MONTH=0,DATE=15,IS_LEAP_MONTH=0",  // dangi  
-               },
-               { // 4 = leap
-                    "en_US@calendar=dangi",         
-                    "EXTENDED_YEAR=2001,MONTH=2,DATE=15,IS_LEAP_MONTH=0",  // dangi  
-                    "add",
-                    "MONTH=3", // month + 3
-                    "EXTENDED_YEAR=2001,MONTH=4,DATE=15,IS_LEAP_MONTH=0",  // dangi  
-               },
-               { // 4 = leap
-                    "en_US@calendar=dangi",         
-                    "EXTENDED_YEAR=2001,MONTH=2,DATE=15,IS_LEAP_MONTH=0",  // dangi  
-                    "add",
-                    "MONTH=2", // month + 2
-                    "EXTENDED_YEAR=2001,MONTH=3,DATE=15,IS_LEAP_MONTH=1",  // dangi  
+                    "EXTENDED_YEAR=4336,MONTH=0,DATE=15,IS_LEAP_MONTH=0",  // dangi
                },
                { // dom should pin
                     "en_US@calendar=dangi",         
-                    "EXTENDED_YEAR=2001,MONTH=2,DATE=30,IS_LEAP_MONTH=0",  // dangi  
+                    "EXTENDED_YEAR=4334,MONTH=0,DATE=31,IS_LEAP_MONTH=0",  // dangi
                     "add",
-                    "MONTH=2", // month + 2
-                    "EXTENDED_YEAR=2001,MONTH=3,DATE=29,IS_LEAP_MONTH=1",  // dangi  
+                    "MONTH=1", // month + 1
+                    "EXTENDED_YEAR=4334,MONTH=1,DATE=28,IS_LEAP_MONTH=0",  // dangi
+               },
+               { // Gregorian leap year
+                    "en_US@calendar=dangi",         
+                    "EXTENDED_YEAR=4337,MONTH=0,DATE=31,IS_LEAP_MONTH=0",  // dangi
+                    "add",
+                    "MONTH=1", // month + 1
+                    "EXTENDED_YEAR=4337,MONTH=1,DATE=29,IS_LEAP_MONTH=0",  // dangi
+               },
+               { // solar cutover date
+                    "en_US@calendar=dangi",         
+                    "EXTENDED_YEAR=4229,MONTH=0,DATE=1,IS_LEAP_MONTH=0",  // dangi
+                    "add",
+                    "MONTH=1", // month + 1
+                    "EXTENDED_YEAR=4229,MONTH=1,DATE=1,IS_LEAP_MONTH=0",  // dangi
                },
                {
                     "en_US@calendar=hebrew",         

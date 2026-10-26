@@ -249,7 +249,95 @@ public class OrdinalMonthTest extends CoreTestFmwk {
 
     @Test
     public void TestDangiCalendarSet() {
-        RunTestChineseCalendarSet("dangi", 1954, 1955);
+        Calendar cc1 = Calendar.getInstance(ULocale.ROOT.setKeywordValue("calendar", "dangi"));
+        Calendar cc2 = cc1.clone();
+        Calendar cc3 = cc1.clone();
+
+        int notLeapYear = 4227; // 1894
+        int leapMayYear = 4228; // 1895
+
+        cc1.set(Calendar.EXTENDED_YEAR, leapMayYear);
+        cc2.set(Calendar.EXTENDED_YEAR, leapMayYear);
+        cc3.set(Calendar.EXTENDED_YEAR, leapMayYear);
+
+        cc1.set(Calendar.MONTH, Calendar.MAY);
+        cc1.set(Calendar.IS_LEAP_MONTH, 1);
+        cc2.set(Calendar.ORDINAL_MONTH, 5);
+        cc3.setTemporalMonthCode("M05L");
+        cc1.set(Calendar.DATE, 1);
+        cc2.set(Calendar.DATE, 1);
+        cc3.set(Calendar.DATE, 1);
+        assertEquals(
+                "" + leapMayYear + " M05L cc2==cc1 set month by Calendar.MONTH and Calendar.ORDINAL_MONTH",
+                cc1,
+                cc2);
+        assertEquals(
+                "" + leapMayYear + " M05L cc2==cc3 set month by Calendar.ORDINAL_MONTH and setTemporalMonthCode",
+                cc2,
+                cc3);
+        VerifyMonth("" + leapMayYear + " M05L cc1", cc1, Calendar.MAY, 5, true, "M05L");
+        VerifyMonth("" + leapMayYear + " M05L cc2", cc2, Calendar.MAY, 5, true, "M05L");
+        VerifyMonth("" + leapMayYear + " M05L cc3", cc3, Calendar.MAY, 5, true, "M05L");
+
+        cc1.set(Calendar.EXTENDED_YEAR, notLeapYear);
+        cc2.set(Calendar.EXTENDED_YEAR, notLeapYear);
+        cc3.set(Calendar.EXTENDED_YEAR, notLeapYear);
+        cc1.set(Calendar.ORDINAL_MONTH, 5);
+        cc2.setTemporalMonthCode("M06");
+        cc3.set(Calendar.MONTH, Calendar.JUNE);
+        cc3.set(Calendar.IS_LEAP_MONTH, 0);
+        assertEquals(
+                "" + notLeapYear + " M06 cc1==cc2 set month by Calendar.ORDINAL_MONTH and setTemporalMonthCode",
+                cc1,
+                cc2);
+        assertEquals(
+                "" + notLeapYear + " M06 cc2==cc3 set month by Calendar.MONTH and setTemporalMonthCode",
+                cc2,
+                cc3);
+        VerifyMonth("" + notLeapYear + " M06 cc1", cc1, Calendar.JUNE, 5, false, "M06");
+        VerifyMonth("" + notLeapYear + " M06 cc2", cc2, Calendar.JUNE, 5, false, "M06");
+        VerifyMonth("" + notLeapYear + " M06 cc3", cc3, Calendar.JUNE, 5, false, "M06");
+
+        cc1.set(Calendar.EXTENDED_YEAR, leapMayYear);
+        cc2.set(Calendar.EXTENDED_YEAR, leapMayYear);
+        cc3.set(Calendar.EXTENDED_YEAR, leapMayYear);
+        cc1.setTemporalMonthCode("M06");
+        cc2.set(Calendar.MONTH, Calendar.JUNE);
+        cc2.set(Calendar.IS_LEAP_MONTH, 0);
+        cc3.set(Calendar.ORDINAL_MONTH, 6);
+        assertEquals(
+                "" + leapMayYear + " M06 cc2==cc1 set month by setTemporalMonthCode and Calendar.MONTH",
+                cc1,
+                cc2);
+        assertEquals(
+                "" + leapMayYear + " M06 cc2==cc3 set month by Calendar.MONTH and Calendar.ORDINAL_MONTH",
+                cc2,
+                cc3);
+        VerifyMonth("" + leapMayYear + " M06 cc1", cc1, Calendar.JUNE, 6, false, "M06");
+        VerifyMonth("" + leapMayYear + " M06 cc2", cc2, Calendar.JUNE, 6, false, "M06");
+        VerifyMonth("" + leapMayYear + " M06 cc3", cc3, Calendar.JUNE, 6, false, "M06");
+
+        cc1.set(Calendar.EXTENDED_YEAR, notLeapYear);
+        cc2.set(Calendar.EXTENDED_YEAR, notLeapYear);
+        cc3.set(Calendar.EXTENDED_YEAR, notLeapYear);
+        cc1.setTemporalMonthCode("M04");
+        cc2.set(Calendar.MONTH, Calendar.APRIL);
+        cc2.set(Calendar.IS_LEAP_MONTH, 0);
+        cc3.set(Calendar.ORDINAL_MONTH, 3);
+        assertEquals(
+                "" + notLeapYear + " M04 cc2==cc1 set month by setTemporalMonthCode and Calendar.MONTH",
+                cc1,
+                cc2);
+        assertEquals(
+                "" + notLeapYear + " M04 cc2==cc3 set month by Calendar.MONTH and Calendar.ORDINAL_MONTH",
+                cc2,
+                cc3);
+        VerifyMonth("" + notLeapYear + " M04 cc1", cc1, Calendar.APRIL, 3, false, "M04");
+        VerifyMonth("" + notLeapYear + " M04 cc2", cc2, Calendar.APRIL, 3, false, "M04");
+        VerifyMonth("" + notLeapYear + " M04 cc3", cc3, Calendar.APRIL, 3, false, "M04");
+
+        String[] invalidMonthCodes = {"M00", "M13", "M14"};
+        assertSetTemporalMonthCodeThrowIllegalArgumentException(cc1, invalidMonthCodes);
     }
 
     @Test
@@ -496,9 +584,9 @@ public class OrdinalMonthTest extends CoreTestFmwk {
             {"chinese", 4645, 0, 11},
             {"chinese", 4646, 0, 12},
             {"chinese", 4647, 0, 11},
-            {"dangi", 4645 + 304, 0, 11},
-            {"dangi", 4646 + 304, 0, 12},
-            {"dangi", 4647 + 304, 0, 11},
+            {"dangi", 4227, 0, 11},
+            {"dangi", 4228, 0, 12},
+            {"dangi", 4231, 0, 11},
             {"indian", 1944, 0, 11},
             {"indian", 1945, 0, 11},
             {"indian", 1946, 0, 11},

@@ -2940,8 +2940,8 @@ void CalendarTest::TestBasicConversionDangi() {
     }
     AsssertCalendarFieldValue(
         cal.getAlias(), test_time, "dangi",
-        78, 39, 9, 40, 2, 8, 274, 3, 2, 0, 4, 4, 44, 51,
-        323, 0, 0, 2022, 3, 2022, 2459885, 17091323, 0);
+        0, 4355, 10, 45, 1, 1, 305, 3, 1, 0, 4, 4, 44, 51,
+        323, 0, 0, 4355, 3, 4355, 2459885, 17091323, 0);
 }
 void CalendarTest::TestBasicConversionIndian() {
     UErrorCode status = U_ZERO_ERROR;
@@ -4026,7 +4026,34 @@ void CalendarTest::TestDangiCalendarInTemporalLeapYear() {
     l.setKeywordValue("calendar", "dangi", status);
     LocalPointer<Calendar> cal(Calendar::createInstance(l, status));
     if (failure(status, "construct DangiCalendar")) return;
-    RunChineseCalendarInTemporalLeapYearTest(cal.getAlias());
+
+    cal->clear();
+    cal->set(UCAL_EXTENDED_YEAR, 4228);
+    cal->set(UCAL_MONTH, UCAL_JANUARY);
+    cal->set(UCAL_DATE, 1);
+    assertTrue("pre-cutover Dangi leap-month year", cal->inTemporalLeapYear(status));
+    if (failure(status, "pre-cutover inTemporalLeapYear")) return;
+
+    cal->clear();
+    cal->set(UCAL_EXTENDED_YEAR, 4227);
+    cal->set(UCAL_MONTH, UCAL_JANUARY);
+    cal->set(UCAL_DATE, 1);
+    assertFalse("pre-cutover Dangi non-leap-month year", cal->inTemporalLeapYear(status));
+    if (failure(status, "pre-cutover inTemporalLeapYear")) return;
+
+    cal->clear();
+    cal->set(UCAL_EXTENDED_YEAR, 4237);
+    cal->set(UCAL_MONTH, UCAL_FEBRUARY);
+    cal->set(UCAL_DATE, 1);
+    assertTrue("post-cutover Dangi Gregorian leap year", cal->inTemporalLeapYear(status));
+    if (failure(status, "post-cutover inTemporalLeapYear")) return;
+
+    cal->clear();
+    cal->set(UCAL_EXTENDED_YEAR, 4238);
+    cal->set(UCAL_MONTH, UCAL_FEBRUARY);
+    cal->set(UCAL_DATE, 1);
+    assertFalse("post-cutover Dangi Gregorian common year", cal->inTemporalLeapYear(status));
+    if (failure(status, "post-cutover inTemporalLeapYear")) return;
 }
 
 void CalendarTest::TestHebrewCalendarInTemporalLeapYear() {
@@ -5045,26 +5072,26 @@ void CalendarTest::TestDangiCalendarOrdinalMonthSet() {
     LocalPointer<Calendar> cc2(cc1->clone());
     LocalPointer<Calendar> cc3(cc1->clone());
 
-    constexpr int32_t notLeapYear = 1954;
-    constexpr int32_t leapMarchYear = 1955;
+    constexpr int32_t notLeapYear = 4227;
+    constexpr int32_t leapMayYear = 4228;
 
-    cc1->set(UCAL_EXTENDED_YEAR, leapMarchYear);
-    cc2->set(UCAL_EXTENDED_YEAR, leapMarchYear);
-    cc3->set(UCAL_EXTENDED_YEAR, leapMarchYear);
+    cc1->set(UCAL_EXTENDED_YEAR, leapMayYear);
+    cc2->set(UCAL_EXTENDED_YEAR, leapMayYear);
+    cc3->set(UCAL_EXTENDED_YEAR, leapMayYear);
 
-    cc1->set(UCAL_MONTH, UCAL_MARCH); cc1->set(UCAL_IS_LEAP_MONTH, 1);
-    cc2->set(UCAL_ORDINAL_MONTH, 3);
-    cc3->setTemporalMonthCode("M03L", status);
+    cc1->set(UCAL_MONTH, UCAL_MAY); cc1->set(UCAL_IS_LEAP_MONTH, 1);
+    cc2->set(UCAL_ORDINAL_MONTH, 5);
+    cc3->setTemporalMonthCode("M05L", status);
     if (failure(status, "setTemporalMonthCode failure")) return;
     cc1->set(UCAL_DATE, 1);
     cc2->set(UCAL_DATE, 1);
     cc3->set(UCAL_DATE, 1);
-    assertTrue("1955 M03L cc2==cc1 set month by UCAL_MONTH and UCAL_UCAL_ORDINAL_MONTH", cc2->equals(*cc1, status));
-    assertTrue("1955 M03L cc2==cc3 set month by UCAL_MONTH and setTemporalMonthCode", cc2->equals(*cc3, status));
+    assertTrue("4228 M05L cc2==cc1 set month by UCAL_MONTH and UCAL_UCAL_ORDINAL_MONTH", cc2->equals(*cc1, status));
+    assertTrue("4228 M05L cc2==cc3 set month by UCAL_MONTH and setTemporalMonthCode", cc2->equals(*cc3, status));
     if (failure(status, "equals failure")) return;
-    VerifyMonth(this, "1955 M03L cc1", cc1.getAlias(), UCAL_MARCH, 3, true, "M03L");
-    VerifyMonth(this, "1955 M03L cc2", cc2.getAlias(), UCAL_MARCH, 3, true, "M03L");
-    VerifyMonth(this, "1955 M03L cc3", cc3.getAlias(), UCAL_MARCH, 3, true, "M03L");
+    VerifyMonth(this, "4228 M05L cc1", cc1.getAlias(), UCAL_MAY, 5, true, "M05L");
+    VerifyMonth(this, "4228 M05L cc2", cc2.getAlias(), UCAL_MAY, 5, true, "M05L");
+    VerifyMonth(this, "4228 M05L cc3", cc3.getAlias(), UCAL_MAY, 5, true, "M05L");
 
     cc1->set(UCAL_EXTENDED_YEAR, notLeapYear);
     cc2->set(UCAL_EXTENDED_YEAR, notLeapYear);
@@ -5073,38 +5100,40 @@ void CalendarTest::TestDangiCalendarOrdinalMonthSet() {
     cc2->setTemporalMonthCode("M06", status);
     if (failure(status, "setTemporalMonthCode failure")) return;
     cc3->set(UCAL_MONTH, UCAL_JUNE); cc3->set(UCAL_IS_LEAP_MONTH, 0);
-    assertTrue("1955 M06 cc2==cc1 set month by UCAL_MONTH and UCAL_UCAL_ORDINAL_MONTH", cc2->equals(*cc1, status));
-    assertTrue("1955 M06 cc2==cc3 set month by UCAL_MONTH and setTemporalMonthCode", cc2->equals(*cc3, status));
+    assertTrue("4227 M06 cc2==cc1 set month by UCAL_MONTH and UCAL_UCAL_ORDINAL_MONTH", cc2->equals(*cc1, status));
+    assertTrue("4227 M06 cc2==cc3 set month by UCAL_MONTH and setTemporalMonthCode", cc2->equals(*cc3, status));
     if (failure(status, "equals failure")) return;
-    VerifyMonth(this, "1955 M06 cc1", cc1.getAlias(), UCAL_JUNE, 5, false, "M06");
-    VerifyMonth(this, "1955 M06 cc2", cc2.getAlias(), UCAL_JUNE, 5, false, "M06");
-    VerifyMonth(this, "1955 M06 cc3", cc3.getAlias(), UCAL_JUNE, 5, false, "M06");
+    VerifyMonth(this, "4227 M06 cc1", cc1.getAlias(), UCAL_JUNE, 5, false, "M06");
+    VerifyMonth(this, "4227 M06 cc2", cc2.getAlias(), UCAL_JUNE, 5, false, "M06");
+    VerifyMonth(this, "4227 M06 cc3", cc3.getAlias(), UCAL_JUNE, 5, false, "M06");
 
-    cc1->set(UCAL_EXTENDED_YEAR, leapMarchYear);
-    cc2->set(UCAL_EXTENDED_YEAR, leapMarchYear);
-    cc3->set(UCAL_EXTENDED_YEAR, leapMarchYear);
-    cc1->setTemporalMonthCode("M04", status);
+    cc1->set(UCAL_EXTENDED_YEAR, leapMayYear);
+    cc2->set(UCAL_EXTENDED_YEAR, leapMayYear);
+    cc3->set(UCAL_EXTENDED_YEAR, leapMayYear);
+    cc1->setTemporalMonthCode("M06", status);
     if (failure(status, "setTemporalMonthCode failure")) return;
-    cc2->set(UCAL_MONTH, UCAL_APRIL); cc2->set(UCAL_IS_LEAP_MONTH, 0);
-    cc3->set(UCAL_ORDINAL_MONTH, 4);
-    assertTrue("1955 M04 cc2==cc1 set month by UCAL_MONTH and UCAL_UCAL_ORDINAL_MONTH", cc2->equals(*cc1, status));
-    assertTrue("1955 M04 cc2==cc3 set month by UCAL_MONTH and setTemporalMonthCode", cc2->equals(*cc3, status));
+    cc2->set(UCAL_MONTH, UCAL_JUNE); cc2->set(UCAL_IS_LEAP_MONTH, 0);
+    cc3->set(UCAL_ORDINAL_MONTH, 6);
+    assertTrue("4228 M06 cc2==cc1 set month by UCAL_MONTH and UCAL_UCAL_ORDINAL_MONTH", cc2->equals(*cc1, status));
+    assertTrue("4228 M06 cc2==cc3 set month by UCAL_MONTH and setTemporalMonthCode", cc2->equals(*cc3, status));
     if (failure(status, "equals failure")) return;
-    // 4592 has leap March so April is the 5th month in that year.
-    VerifyMonth(this, "1955 M04 cc1", cc1.getAlias(), UCAL_APRIL, 4, false, "M04");
-    VerifyMonth(this, "1955 M04 cc2", cc2.getAlias(), UCAL_APRIL, 4, false, "M04");
-    VerifyMonth(this, "1955 M04 cc3", cc3.getAlias(), UCAL_APRIL, 4, false, "M04");
+    VerifyMonth(this, "4228 M06 cc1", cc1.getAlias(), UCAL_JUNE, 6, false, "M06");
+    VerifyMonth(this, "4228 M06 cc2", cc2.getAlias(), UCAL_JUNE, 6, false, "M06");
+    VerifyMonth(this, "4228 M06 cc3", cc3.getAlias(), UCAL_JUNE, 6, false, "M06");
 
     cc1->set(UCAL_EXTENDED_YEAR, notLeapYear);
     cc2->set(UCAL_EXTENDED_YEAR, notLeapYear);
     cc3->set(UCAL_EXTENDED_YEAR, notLeapYear);
-    assertTrue("1954 M04 no leap month before cc2==cc1 set month by UCAL_MONTH and UCAL_UCAL_ORDINAL_MONTH", cc2->equals(*cc1, status));
-    assertTrue("1954 M04 no leap month before cc2==cc3 set month by UCAL_MONTH and setTemporalMonthCode", cc2->equals(*cc3, status));
+    cc1->setTemporalMonthCode("M04", status);
+    if (failure(status, "setTemporalMonthCode failure")) return;
+    cc2->set(UCAL_MONTH, UCAL_APRIL); cc2->set(UCAL_IS_LEAP_MONTH, 0);
+    cc3->set(UCAL_ORDINAL_MONTH, 3);
+    assertTrue("4227 M04 no leap month before cc2==cc1 set month by UCAL_MONTH and UCAL_UCAL_ORDINAL_MONTH", cc2->equals(*cc1, status));
+    assertTrue("4227 M04 no leap month before cc2==cc3 set month by UCAL_MONTH and setTemporalMonthCode", cc2->equals(*cc3, status));
     if (failure(status, "equals failure")) return;
-    // 4592 has no leap month before April so April is the 4th month in that year.
-    VerifyMonth(this, "1954 M04 cc1", cc1.getAlias(), UCAL_APRIL, 3, false, "M04");
-    VerifyMonth(this, "1954 M04 cc2", cc2.getAlias(), UCAL_APRIL, 3, false, "M04");
-    VerifyMonth(this, "1954 M04 cc3", cc3.getAlias(), UCAL_APRIL, 3, false, "M04");
+    VerifyMonth(this, "4227 M04 cc1", cc1.getAlias(), UCAL_APRIL, 3, false, "M04");
+    VerifyMonth(this, "4227 M04 cc2", cc2.getAlias(), UCAL_APRIL, 3, false, "M04");
+    VerifyMonth(this, "4227 M04 cc3", cc3.getAlias(), UCAL_APRIL, 3, false, "M04");
 
     // Out of bound monthCodes should return error.
     // These are not valid for calendar do not have a leap month
