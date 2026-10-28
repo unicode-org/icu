@@ -310,6 +310,8 @@ private:
 
     int64_t ces[Collation::MAX_EXPANSION_LENGTH];
     int32_t cesLength;
+    int32_t totalClosureLoops = 0;
+    int64_t totalClosureWork = 0;
 
     /**
      * Indexes of nodes with root primary weights, sorted by primary.

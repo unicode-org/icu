@@ -260,6 +260,8 @@ CollationBuilder::parseAndBuild(const UnicodeString &ruleString,
         return nullptr;
     }
     CollationSettings &ownedSettings = *ownedSettingsPtr;
+    totalClosureLoops = 0;
+    totalClosureWork = 0;
     parser.parse(ruleString, ownedSettings, outParseError, errorCode);
     errorReason = parser.getErrorReason();
     if(U_FAILURE(errorCode)) { return nullptr; }
@@ -1127,6 +1129,9 @@ CollationBuilder::addWithClosure(const UnicodeString &nfdPrefix, const UnicodeSt
 // "&a=b쫊쫊쫊쫊쫊쫊쫊" without error, which should be more than realistic
 // usage.
 static constexpr int32_t kClosureLoopLimit = 2400;
+static constexpr int32_t kTotalClosureLoopLimit = 4800;
+static constexpr int64_t kClosureWorkLimit = 160000;
+static constexpr int64_t kTotalClosureWorkLimit = 320000;
 
 uint32_t
 CollationBuilder::addOnlyClosure(const UnicodeString &nfdPrefix, const UnicodeString &nfdString,
@@ -1135,6 +1140,7 @@ CollationBuilder::addOnlyClosure(const UnicodeString &nfdPrefix, const UnicodeSt
     if(U_FAILURE(errorCode)) { return ce32; }
 
     int32_t loop = 0;
+    int64_t work = 0;
     // Map from canonically equivalent input to the CEs. (But not from the all-NFD input.)
     if(nfdPrefix.isEmpty()) {
         CanonicalIterator stringIter(nfdString, errorCode);
@@ -1143,12 +1149,19 @@ CollationBuilder::addOnlyClosure(const UnicodeString &nfdPrefix, const UnicodeSt
         for(;;) {
             UnicodeString str = stringIter.next();
             if(str.isBogus()) { break; }
-            if (loop++ > kClosureLoopLimit) {
-                // To avoid hang as in ICU-22517, return with error.
+            if(str == nfdString) { continue; }
+            work += str.length();
+            totalClosureWork += str.length();
+            if (loop++ > kClosureLoopLimit || totalClosureLoops++ > kTotalClosureLoopLimit ||
+                    work > kClosureWorkLimit || totalClosureWork > kTotalClosureWorkLimit) {
+                // To avoid hang as in ICU-22517 / ICU-23592, return with error.
                 errorCode = U_INPUT_TOO_LONG_ERROR;
                 return ce32;
             }
-            if(ignoreString(str, errorCode) || str == nfdString) { continue; }
+            if(ignoreString(str, errorCode)) {
+                if(U_FAILURE(errorCode)) { return ce32; }
+                continue;
+            }
             ce32 = addIfDifferent(prefix, str, newCEs, newCEsLength, ce32, errorCode);
             if(U_FAILURE(errorCode)) { return ce32; }
         }
@@ -1159,17 +1172,36 @@ CollationBuilder::addOnlyClosure(const UnicodeString &nfdPrefix, const UnicodeSt
         for(;;) {
             UnicodeString prefix = prefixIter.next();
             if(prefix.isBogus()) { break; }
-            if(ignorePrefix(prefix, errorCode)) { continue; }
             UBool samePrefix = prefix == nfdPrefix;
-            for(;;) {
-                UnicodeString str = stringIter.next();
-                if(str.isBogus()) { break; }
-                if (loop++ > kClosureLoopLimit) {
-                    // To avoid hang as in ICU-22517, return with error.
+            if(!samePrefix && ignorePrefix(prefix, errorCode)) {
+                if(U_FAILURE(errorCode)) { return ce32; }
+                work += prefix.length();
+                totalClosureWork += prefix.length();
+                if (loop++ > kClosureLoopLimit || totalClosureLoops++ > kTotalClosureLoopLimit ||
+                        work > kClosureWorkLimit || totalClosureWork > kTotalClosureWorkLimit) {
                     errorCode = U_INPUT_TOO_LONG_ERROR;
                     return ce32;
                 }
-                if(ignoreString(str, errorCode) || (samePrefix && str == nfdString)) { continue; }
+                continue;
+            }
+            if(U_FAILURE(errorCode)) { return ce32; }
+            for(;;) {
+                UnicodeString str = stringIter.next();
+                if(str.isBogus()) { break; }
+                if(samePrefix && str == nfdString) { continue; }
+                int64_t stepWork = static_cast<int64_t>(prefix.length()) + str.length();
+                work += stepWork;
+                totalClosureWork += stepWork;
+                if (loop++ > kClosureLoopLimit || totalClosureLoops++ > kTotalClosureLoopLimit ||
+                        work > kClosureWorkLimit || totalClosureWork > kTotalClosureWorkLimit) {
+                    // To avoid hang as in ICU-22517 / ICU-23592, return with error.
+                    errorCode = U_INPUT_TOO_LONG_ERROR;
+                    return ce32;
+                }
+                if(ignoreString(str, errorCode)) {
+                    if(U_FAILURE(errorCode)) { return ce32; }
+                    continue;
+                }
                 ce32 = addIfDifferent(prefix, str, newCEs, newCEsLength, ce32, errorCode);
                 if(U_FAILURE(errorCode)) { return ce32; }
             }

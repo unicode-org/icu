@@ -1475,6 +1475,7 @@ void CollationRegressionTest::runIndexedTest(int32_t index, UBool exec, const ch
     TESTCASE_AUTO(TestICU22555InfinityLoop);
     TESTCASE_AUTO(TestICU23280IntOverFlow);
     TESTCASE_AUTO(TestICU23467);
+    TESTCASE_AUTO(TestICU23592);
     TESTCASE_AUTO(TestICU21992);
     TESTCASE_AUTO_END;
 }
@@ -1489,6 +1490,32 @@ void CollationRegressionTest::TestICU23467() {
     if (status != U_INPUT_TOO_LONG_ERROR && status != U_BUFFER_OVERFLOW_ERROR && U_SUCCESS(status)) {
         // Either error or fast completion is acceptable without hanging
     }
+}
+
+void CollationRegressionTest::TestICU23592() {
+    icu::UnicodeString rule(u"&x=");
+    for (int32_t i = 0; i < 200; ++i) {
+        rule.append(u"\u7523\u030F", 2);
+    }
+    for (int32_t i = 0; i < 60; ++i) {
+        rule.append(static_cast<char16_t>(0xC2C2));
+    }
+    rule.append(u"|\u7523\u030F\u7523\u030F", 5);
+    UErrorCode status = U_ZERO_ERROR;
+    icu::LocalPointer<icu::RuleBasedCollator> col(new icu::RuleBasedCollator(rule, status));
+    assertEquals("Long prefix + contraction closure should fail with U_INPUT_TOO_LONG_ERROR",
+                 U_INPUT_TOO_LONG_ERROR, status);
+
+    icu::UnicodeString multiRule(u"&x");
+    for (int32_t i = 0; i < 16; ++i) {
+        multiRule.append(u'=')
+                 .append(static_cast<char16_t>(u'a' + i))
+                 .append(u"\u212B\u212B\u212B\u212B\u212B\u212B", 6);
+    }
+    status = U_ZERO_ERROR;
+    icu::LocalPointer<icu::RuleBasedCollator> col2(new icu::RuleBasedCollator(multiRule, status));
+    assertEquals("Cumulative multi-rule closure should fail with U_INPUT_TOO_LONG_ERROR",
+                 U_INPUT_TOO_LONG_ERROR, status);
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
