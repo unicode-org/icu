@@ -751,6 +751,9 @@ class RBBITableBuilder {
     // -----------------------------------------------------------------------------
 
     void minimizeStates() {
+        if (fDStates.size() <= 1) {
+            return;
+        }
         class StateType {
             int fAccepting;
             int fLookAhead;
@@ -791,6 +794,7 @@ class RBBITableBuilder {
         for (final var part : initialPartition.values()) {
             partition.add(part);
         }
+        final var oldStateToPart = new int[fDStates.size()];
         // Given the index of a state 𝑠 in `fDStates`, returns a List of integers
         // σ(𝑠) such that 𝑠.fDtran[i] (the index of the state reached by the
         // transition from 𝑠 on the character class with index i) is in Π[σ(𝑠)[i]].
@@ -800,21 +804,19 @@ class RBBITableBuilder {
         Function<Integer, List<Integer>> partitionSignature =
                 (Integer stateIndex) -> {
                     RBBIStateDescriptor state = fDStates.get(stateIndex);
-                    ArrayList<Integer> result = new ArrayList<>();
+                    ArrayList<Integer> result = new ArrayList<>(state.fDtran.length);
                     for (int i = 0; i < state.fDtran.length; ++i) {
-                        int toState = state.fDtran[i];
-                        for (int partIndex = 0; partIndex < partition.size(); ++partIndex) {
-                            final List<Integer> part = partition.get(partIndex);
-                            if (part.contains(toState)) {
-                                result.add(partIndex);
-                                break;
-                            }
-                        }
+                        result.add(oldStateToPart[state.fDtran[i]]);
                     }
                     return result;
                 };
         // The loop between steps 2. and 3. of Algorithm 3.6.
         for (; ; ) {
+            for (int i = 0; i < partition.size(); ++i) {
+                for (final var state : partition.get(i)) {
+                    oldStateToPart[state] = i;
+                }
+            }
             // Π_new.
             List<List<Integer>> partitionNew = new ArrayList<>();
             // The procedure from Figure 3.45, Construction of Π_new.
@@ -834,10 +836,7 @@ class RBBITableBuilder {
                 }
             }
             if (refined) {
-                // This cannot be `partition = partitionNew` because `partition` is captured in
-                // `partitionSignature`.
-                partition.clear();
-                partition.addAll(partitionNew);
+                partition = partitionNew;
             } else {
                 break;
             }
@@ -855,7 +854,6 @@ class RBBITableBuilder {
                 partition.set(1, part_i);
             }
         }
-        final var oldStateToPart = new int[fDStates.size()];
         for (int i = 0; i < partition.size(); ++i) {
             final var part = partition.get(i);
             for (final var state : part) {
@@ -1033,7 +1031,7 @@ class RBBITableBuilder {
     int removeDuplicateStates() {
         int oldStateCount = fDStates.size();
         minimizeStates();
-        return fDStates.size() - oldStateCount;
+        return oldStateCount - fDStates.size();
     }
 
     /**

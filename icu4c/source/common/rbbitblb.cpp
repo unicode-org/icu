@@ -1029,7 +1029,7 @@ void  RBBITableBuilder::mergeRuleStatusVals() {
 //-----------------------------------------------------------------------------
 
 void RBBITableBuilder::minimizeStates() {
-    if (U_FAILURE(*fStatus)) {
+    if (U_FAILURE(*fStatus) || fDStates->size() <= 1) {
         return;
     }
 
@@ -1107,13 +1107,17 @@ void RBBITableBuilder::minimizeStates() {
             static_cast<TypeToStates*>(initialPartition.elementAt(i))->states.release(),
             *fStatus);
     }
+    auto oldStateToPart = prv::make_unique_for_overwrite<int32_t[]>(fDStates->size(), *fStatus);
+    if (U_FAILURE(*fStatus)) {
+        return;
+    }
     // Given the index of a state 𝑠 in `fDStates`, returns a UVector of integers
     // σ(𝑠) such that 𝑠.fDtran[i] (the index of the state reached by the
     // transition from 𝑠 on the character class with index i) is in Π[σ(𝑠)[i]].
     // We then have σ(𝑠) == σ(𝑡) if and only if “for all input symbols 𝑎, states
     // 𝑠 and 𝑡 have transitions on 𝑎 to states in the same group of Π” (which is
     // what defines the refinement of 𝐺 in Fig. 3.45).
-    auto partition_signature = [&partition, this](int32_t stateIndex) -> prv::unique_ptr<UVector> {
+    auto partition_signature = [&oldStateToPart, this](int32_t stateIndex) -> prv::unique_ptr<UVector> {
         const RBBIStateDescriptor &state =
             *static_cast<RBBIStateDescriptor *>(fDStates->elementAt(stateIndex));
         auto result = prv::make_unique<UVector>(state.fDtran->size(), *fStatus, *fStatus);
@@ -1121,14 +1125,7 @@ void RBBITableBuilder::minimizeStates() {
             return nullptr;
         }
         for (int32_t i = 0; i < state.fDtran->size(); ++i) {
-            int32_t toState = state.fDtran->elementAti(i);
-            for (int32_t partIndex = 0; partIndex < partition->size(); ++partIndex) {
-                const UVector &part = *static_cast<UVector *>(partition->elementAt(partIndex));
-                if (part.contains(toState)) {
-                    result->addElement(partIndex, *fStatus);
-                    break;
-                }
-            }
+            result->addElement(oldStateToPart[state.fDtran->elementAti(i)], *fStatus);
         }
         result->setComparer([](const UElement left, const UElement right) -> UBool {
             return left.integer == right.integer;
@@ -1137,6 +1134,12 @@ void RBBITableBuilder::minimizeStates() {
     };
     // The loop between steps 2. and 3. of Algorithm 3.6.
     for (;;) {
+        for (int32_t i = 0; i < partition->size(); ++i) {
+            const UVector &part = *static_cast<UVector *>(partition->elementAt(i));
+            for (int32_t j = 0; j < part.size(); ++j) {
+                oldStateToPart[part.elementAti(j)] = i;
+            }
+        }
         // Π_new.
         auto partitionNew = prv::make_unique<UVector>(*fStatus, *fStatus);
         if (U_FAILURE(*fStatus)) {
@@ -1163,6 +1166,9 @@ void RBBITableBuilder::minimizeStates() {
                 // Index of a state in the group.
                 const int32_t s = group.elementAti(j);
                 auto signature = partition_signature(s);
+                if (U_FAILURE(*fStatus)) {
+                    return;
+                }
                 int32_t k = 0;
                 for (; k < groupRefinement.size(); ++k) {
                     const auto &[subgroupSignature, subgroup] =
@@ -1219,10 +1225,6 @@ void RBBITableBuilder::minimizeStates() {
             partition->setDeleter(deleter);
         }
     }
-    if (U_FAILURE(*fStatus)) {
-        return;
-    }
-    auto oldStateToPart = prv::make_unique_for_overwrite<uint16_t[]>(fDStates->size(), *fStatus);
     if (U_FAILURE(*fStatus)) {
         return;
     }
@@ -1507,9 +1509,12 @@ void RBBITableBuilder::removeSafeState(IntPair duplStates) {
  * RemoveDuplicateStates
  */
 int32_t RBBITableBuilder::removeDuplicateStates() {
+    if (U_FAILURE(*fStatus)) {
+        return 0;
+    }
     const int32_t oldStateCount = fDStates->size();
     minimizeStates();
-    return fDStates->size() - oldStateCount;
+    return U_SUCCESS(*fStatus) ? oldStateCount - fDStates->size() : 0;
 }
 
 

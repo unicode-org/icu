@@ -177,6 +177,7 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
     TESTCASE_AUTO(TestBug22636);
     TESTCASE_AUTO(TestLookaheadPolychromy);
     TESTCASE_AUTO(TestBug23449);
+    TESTCASE_AUTO(TestICU23593);
 
 #if U_ENABLE_TRACING
     TESTCASE_AUTO(TestTraceCreateCharacter);
@@ -5266,6 +5267,31 @@ void RBBITest::TestBug23449() {
     
     if (status != U_INPUT_TOO_LONG_ERROR) {
         errln("Expected U_INPUT_TOO_LONG_ERROR, but got: %s", u_errorName(status));
+    }
+}
+
+void RBBITest::TestICU23593() {
+    UnicodeString rules(u"!!chain;!!quoted_literals_only;'a' 'z';'b' 'z';");
+    UnicodeString text;
+    for (int32_t i = 0; i < 150; ++i) {
+        char16_t c = static_cast<char16_t>(0x4e00 + i);
+        text.append(c);
+        if (i + 1 < 150) {
+            rules.append(u'\'').append(c).append(static_cast<char16_t>(c + 1)).append(u"';");
+        }
+    }
+    text.append(u"!azbz");
+    UParseError parseError;
+    UErrorCode status = U_ZERO_ERROR;
+    RuleBasedBreakIterator bi(rules, parseError, status);
+    if (assertSuccess(WHERE, status)) {
+        bi.setText(text);
+        assertEquals(WHERE, 0, bi.first());
+        assertEquals(WHERE, 150, bi.next());
+        assertEquals(WHERE, 151, bi.next());
+        assertEquals(WHERE, 153, bi.next());
+        assertEquals(WHERE, 155, bi.next());
+        assertEquals(WHERE, UBRK_DONE, bi.next());
     }
 }
 

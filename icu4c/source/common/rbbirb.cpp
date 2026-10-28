@@ -336,11 +336,9 @@ RBBIDataHeader *RBBIRuleBuilder::build(UErrorCode &status) {
 }
 
 void RBBIRuleBuilder::optimizeTables() {
-    bool didSomething;
+    bool minimized = false;
     fForwardTable->minimizeLookaheads();
-    do {
-        didSomething = false;
-
+    for (;;) {
         // Begin looking for duplicates with char class 3.
         // Class 0 is unused and should not have other categories merged into
         // it. We allow merging categories *into* class 1 {eof} (but not the
@@ -349,13 +347,13 @@ void RBBIRuleBuilder::optimizeTables() {
         while (fForwardTable->findDuplCharClassFrom(&duplPair)) {
             fSetBuilder->mergeCategories(duplPair);
             fForwardTable->removeColumn(duplPair.second);
-            didSomething = true;
         }
 
-        while (fForwardTable->removeDuplicateStates() > 0) {
-            didSomething = true;
+        if (minimized || fForwardTable->removeDuplicateStates() <= 0) {
+            break;
         }
-    } while (didSomething);
+        minimized = true;
+    }
 }
 
 U_NAMESPACE_END
