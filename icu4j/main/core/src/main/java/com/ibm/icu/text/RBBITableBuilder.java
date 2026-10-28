@@ -791,6 +791,16 @@ class RBBITableBuilder {
         for (final var part : initialPartition.values()) {
             partition.add(part);
         }
+        final var stateToPart = new int[fDStates.size()];
+        Runnable updateStateToPart =
+                () -> {
+                    for (int i = 0; i < partition.size(); ++i) {
+                        for (final var state : partition.get(i)) {
+                            stateToPart[state] = i;
+                        }
+                    }
+                };
+        updateStateToPart.run();
         // Given the index of a state 𝑠 in `fDStates`, returns a List of integers
         // σ(𝑠) such that 𝑠.fDtran[i] (the index of the state reached by the
         // transition from 𝑠 on the character class with index i) is in Π[σ(𝑠)[i]].
@@ -802,14 +812,7 @@ class RBBITableBuilder {
                     RBBIStateDescriptor state = fDStates.get(stateIndex);
                     ArrayList<Integer> result = new ArrayList<>();
                     for (int i = 0; i < state.fDtran.length; ++i) {
-                        int toState = state.fDtran[i];
-                        for (int partIndex = 0; partIndex < partition.size(); ++partIndex) {
-                            final List<Integer> part = partition.get(partIndex);
-                            if (part.contains(toState)) {
-                                result.add(partIndex);
-                                break;
-                            }
-                        }
+                        result.add(stateToPart[state.fDtran[i]]);
                     }
                     return result;
                 };
@@ -835,9 +838,10 @@ class RBBITableBuilder {
             }
             if (refined) {
                 // This cannot be `partition = partitionNew` because `partition` is captured in
-                // `partitionSignature`.
+                // `updateStateToPart`.
                 partition.clear();
                 partition.addAll(partitionNew);
+                updateStateToPart.run();
             } else {
                 break;
             }
@@ -855,20 +859,14 @@ class RBBITableBuilder {
                 partition.set(1, part_i);
             }
         }
-        final var oldStateToPart = new int[fDStates.size()];
-        for (int i = 0; i < partition.size(); ++i) {
-            final var part = partition.get(i);
-            for (final var state : part) {
-                oldStateToPart[state] = i;
-            }
-        }
+        updateStateToPart.run();
         List<RBBIStateDescriptor> oldStates = fDStates;
         fDStates = new ArrayList<>();
         for (final var part : partition) {
             RBBIStateDescriptor state = oldStates.get(part.get(0));
             fDStates.add(state);
             for (int j = 0; j < state.fDtran.length; ++j) {
-                state.fDtran[j] = oldStateToPart[state.fDtran[j]];
+                state.fDtran[j] = stateToPart[state.fDtran[j]];
             }
         }
     }
