@@ -2377,4 +2377,33 @@ public class RbnfTest extends CoreTestFmwk {
             // Expected exception or parse failure is fine, but not others like NPE.
         }
     }
+
+    @Test
+    public void TestICU23590() {
+        String rulesStr =
+                "=-\u8f31\u00ff\u12c4\u0000\u6762\uff63\uffff\uffff\u7eff;"
+                        + "\u31279\u8f31\u00ff\u0000;=>\u023e\u0000>>=>>=>\uc23e"
+                        + "\u9c9c\u9c9c\u9c9c\u9c9c\u9c9c\u9c9c\u009c\u8f31\u00ff\u0000;"
+                        + "=>\u023e\u0000>>=>>=>\uc23e\u9c9c\u9c9c\u9c9c\u9c9c\u9c9c"
+                        + "\u9c9c\u9c9c\u9c9c\u9c9c\u009c\u9c30\u3100\u6d34\u65629>=9"
+                        + "\u293a\u0000";
+        try {
+            RuleBasedNumberFormat rbfmt =
+                    new RuleBasedNumberFormat(rulesStr, new ULocale("bgc_IN"));
+            rbfmt.parse(rulesStr);
+        } catch (IllegalArgumentException | IllegalStateException | ParseException e) {
+            // Expected exception or parse failure is fine, but must not hang.
+        }
+
+        RuleBasedNumberFormat branchFmt =
+                new RuleBasedNumberFormat(
+                        "%a:\n0: z;\n1: a=%b=;\n2: a=%b=;\n%b:\n0: z;\n1: a=%a=;\n2: a=%a=;",
+                        ULocale.US);
+        try {
+            branchFmt.parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaX");
+            fail("Expected ParseException when parse step budget is exhausted");
+        } catch (ParseException expected) {
+            // Expected fast termination without exponential hang.
+        }
+    }
 }

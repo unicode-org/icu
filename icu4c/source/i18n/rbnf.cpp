@@ -1233,14 +1233,19 @@ RuleBasedNumberFormat::parse(const UnicodeString& text,
 
     ParsePosition high_pp(0);
     Formattable high_result;
+    // Reset stepCount per public rule set so non-matching sets cannot starve later ones, while
+    // capping total steps across locales with many grammatical-case sets (e.g., lt, de, ru).
+    int32_t totalSteps = 0;
 
-    for (NFRuleSet** p = fRuleSets; *p; ++p) {
+    for (NFRuleSet** p = fRuleSets; *p && totalSteps < 16 * NFRuleSet::PARSE_STEP_LIMIT; ++p) {
         NFRuleSet *rp = *p;
         if (rp->isPublic() && rp->isParseable()) {
             ParsePosition working_pp(0);
             Formattable working_result;
+            int32_t stepCount = 0;
 
-            rp->parse(workingText, working_pp, kMaxDouble, 0, 0, working_result);
+            rp->parse(workingText, working_pp, kMaxDouble, 0, 0, stepCount, working_result);
+            totalSteps += stepCount;
             if (working_pp.getIndex() > high_pp.getIndex()) {
                 high_pp = working_pp;
                 high_result = working_result;

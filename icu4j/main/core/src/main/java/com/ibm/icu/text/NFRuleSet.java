@@ -711,6 +711,15 @@ final class NFRuleSet {
     // -----------------------------------------------------------------------
 
     /**
+     * Bounds cumulative rule/delimiter parse attempts per public rule-set parse() call. Separate
+     * from RECURSION_LIMIT (64), which only bounds call-stack depth and resets across sibling
+     * rules/delimiters, allowing O(B^D) backtracking below depth 64. 16384 gives >4x headroom over
+     * valid CLDR spellout matches (~4k steps in en verbose; up to ~16k in non-matching
+     * ordinal/inflected sets) while bounding worst-case backtracking latency.
+     */
+    static final int PARSE_STEP_LIMIT = 16384;
+
+    /**
      * Parses a string. Matches the string to be parsed against each of its rules (with a base value
      * less than upperBound) and returns the value produced by the rule that matched the most
      * characters in the source string.
@@ -733,7 +742,8 @@ final class NFRuleSet {
             ParsePosition parsePosition,
             double upperBound,
             int nonNumericalExecutedRuleMask,
-            int recursionCount) {
+            int recursionCount,
+            int[] stepCount) {
         // try matching each rule in the rule set against the text being
         // parsed.  Whichever one matches the most characters is the one
         // that determines the value we return.
@@ -755,7 +765,7 @@ final class NFRuleSet {
 
         // Try each of the negative rules, fraction rules, infinity rules and NaN rules
         for (int nonNumericalRuleIdx = 0;
-                nonNumericalRuleIdx < nonNumericalRules.length;
+                nonNumericalRuleIdx < nonNumericalRules.length && stepCount[0] < PARSE_STEP_LIMIT;
                 nonNumericalRuleIdx++) {
             NFRule nonNumericalRule = nonNumericalRules[nonNumericalRuleIdx];
             if (nonNumericalRule != null
@@ -770,7 +780,8 @@ final class NFRuleSet {
                                 false,
                                 upperBound,
                                 nonNumericalExecutedRuleMask,
-                                recursionCount + 1);
+                                recursionCount + 1,
+                                stepCount);
                 if (parsePosition.getIndex() > highWaterMark.getIndex()) {
                     result = tempResult;
                     highWaterMark.setIndex(parsePosition.getIndex());
@@ -791,7 +802,11 @@ final class NFRuleSet {
         // base values are higher than the upper bound (again, this helps
         // limit ambiguity by making sure the rules that match a rule's
         // are less significant than the rule containing the substitutions)/
-        for (int i = rules.length - 1; i >= 0 && highWaterMark.getIndex() < text.length(); i--) {
+        for (int i = rules.length - 1;
+                i >= 0
+                        && highWaterMark.getIndex() < text.length()
+                        && stepCount[0] < PARSE_STEP_LIMIT;
+                i--) {
             if (!isFractionRuleSet && rules[i].getBaseValue() >= upperBound) {
                 continue;
             }
@@ -803,7 +818,8 @@ final class NFRuleSet {
                             isFractionRuleSet,
                             upperBound,
                             nonNumericalExecutedRuleMask,
-                            recursionCount + 1);
+                            recursionCount + 1,
+                            stepCount);
             if (parsePosition.getIndex() > highWaterMark.getIndex()) {
                 result = tempResult;
                 highWaterMark.setIndex(parsePosition.getIndex());

@@ -78,6 +78,7 @@ public:
                   double upperBound,
                   uint32_t nonNumericalExecutedRuleMask,
                   int32_t recursionCount,
+                  int32_t& stepCount,
                   Formattable& result) const;
 
     UBool shouldRollBack(int64_t number) const;
@@ -100,6 +101,7 @@ private:
                             const UnicodeString& delimiter, ParsePosition& pp, const NFSubstitution* sub, 
                             uint32_t nonNumericalExecutedRuleMask,
                             int32_t recursionCount,
+                            int32_t& stepCount,
                             double upperBound) const;
     void stripPrefix(UnicodeString& text, const UnicodeString& prefix, ParsePosition& pp) const;
 

@@ -55,7 +55,13 @@ public:
     void  format(int64_t number, UnicodeString& toAppendTo, int32_t pos, int32_t recursionCount, UErrorCode& status) const;
     void  format(double number, UnicodeString& toAppendTo, int32_t pos, int32_t recursionCount, UErrorCode& status) const;
 
-    UBool parse(const UnicodeString& text, ParsePosition& pos, double upperBound, uint32_t nonNumericalExecutedRuleMask, int32_t recursionCount, Formattable& result) const;
+    // Bounds cumulative rule/delimiter parse attempts per public rule-set parse() call.
+    // Separate from RECURSION_LIMIT (64), which only bounds call-stack depth and resets across
+    // sibling rules/delimiters, allowing O(B^D) backtracking below depth 64.
+    // 16384 gives >4x headroom over valid CLDR spellout matches (~4k steps in en verbose; up to
+    // ~16k in non-matching ordinal/inflected sets) while bounding worst-case backtracking latency.
+    static constexpr int32_t PARSE_STEP_LIMIT = 16384;
+    UBool parse(const UnicodeString& text, ParsePosition& pos, double upperBound, uint32_t nonNumericalExecutedRuleMask, int32_t recursionCount, int32_t& stepCount, Formattable& result) const;
 
     void appendRules(UnicodeString& result) const; // toString
 
