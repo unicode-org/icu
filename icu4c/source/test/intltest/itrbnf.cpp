@@ -89,6 +89,7 @@ void IntlTestRBNF::runIndexedTest(int32_t index, UBool exec, const char* &name, 
         TESTCASE(39, TestDividedByZero);
         TESTCASE(40, TestTurkishSpellout);
         TESTCASE(41, TestNumeratorSubstitutionOverflow);
+        TESTCASE(42, TestICU23590);
 #else
         TESTCASE(0, TestRBNFDisabled);
 #endif
@@ -2883,6 +2884,35 @@ IntlTestRBNF::TestNumeratorSubstitutionOverflow() {
     if (U_SUCCESS(status)) {
         Formattable result;
         rbfmt.parse(rulesStr, result, status);
+    }
+}
+
+void
+IntlTestRBNF::TestICU23590() {
+    UnicodeString rulesStr(
+        u"=-\u8f31\u00ff\u12c4\u0000\u6762\uff63\uffff\uffff\u7eff;"
+        u"\u31279\u8f31\u00ff\u0000;=>\u023e\u0000>>=>>=>\uc23e"
+        u"\u9c9c\u9c9c\u9c9c\u9c9c\u9c9c\u9c9c\u009c\u8f31\u00ff\u0000;"
+        u"=>\u023e\u0000>>=>>=>\uc23e\u9c9c\u9c9c\u9c9c\u9c9c\u9c9c"
+        u"\u9c9c\u9c9c\u9c9c\u9c9c\u009c\u9c30\u3100\u6d34\u65629>=9"
+        u"\u293a\u0000",
+        73);
+    UParseError perror;
+    UErrorCode status = U_ZERO_ERROR;
+    RuleBasedNumberFormat rbfmt(rulesStr, Locale("bgc_IN"), perror, status);
+    if (U_SUCCESS(status)) {
+        Formattable result;
+        rbfmt.parse(rulesStr, result, status);
+    }
+
+    status = U_ZERO_ERROR;
+    RuleBasedNumberFormat branchFmt(
+        u"%a:\n0: z;\n1: a=%b=;\n2: a=%b=;\n%b:\n0: z;\n1: a=%a=;\n2: a=%a=;",
+        Locale::getUS(), perror, status);
+    if (assertSuccess(WHERE, status)) {
+        Formattable result;
+        branchFmt.parse(u"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaX", result, status);
+        assertEquals(WHERE, U_INVALID_FORMAT_ERROR, status);
     }
 }
 
