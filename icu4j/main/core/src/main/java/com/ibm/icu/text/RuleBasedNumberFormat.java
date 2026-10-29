@@ -1302,12 +1302,16 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
         // the various trials, and the result that corresponds to it
         Number result = NFRule.ZERO;
         ParsePosition highWaterMark = new ParsePosition(workingPos.getIndex());
+        int totalSteps = 0;
+        int[] stepCount = new int[1];
 
         // iterate over the public rule sets (beginning with the default one)
         // and try parsing the text with each of them.  Keep track of which
         // one consumes the most characters: that's the one that determines
         // the result we return
-        for (int i = ruleSets.length - 1; i >= 0; i--) {
+        for (int i = ruleSets.length - 1;
+                i >= 0 && totalSteps < 16 * NFRuleSet.PARSE_STEP_LIMIT;
+                i--) {
             // skip private or unparseable rule sets
             if (!ruleSets[i].isPublic() || !ruleSets[i].isParseable()) {
                 continue;
@@ -1315,7 +1319,10 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
 
             // try parsing the string with the rule set.  If it gets past the
             // high-water mark, update the high-water mark and the result
-            tempResult = ruleSets[i].parse(workingText, workingPos, Double.MAX_VALUE, 0, 0);
+            stepCount[0] = 0;
+            tempResult =
+                    ruleSets[i].parse(workingText, workingPos, Double.MAX_VALUE, 0, 0, stepCount);
+            totalSteps += stepCount[0];
             if (workingPos.getIndex() > highWaterMark.getIndex()) {
                 result = tempResult;
                 highWaterMark.setIndex(workingPos.getIndex());

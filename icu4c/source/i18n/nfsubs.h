@@ -193,6 +193,7 @@ public:
         UBool lenientParse,
         uint32_t nonNumericalExecutedRuleMask,
         int32_t recursionCount,
+        int32_t& stepCount,
         Formattable& result) const;
     
     /**

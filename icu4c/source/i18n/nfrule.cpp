@@ -966,8 +966,14 @@ NFRule::doParse(const UnicodeString& text,
                 double upperBound,
                 uint32_t nonNumericalExecutedRuleMask,
                 int32_t recursionCount,
+                int32_t& stepCount,
                 Formattable& resVal) const
 {
+    if (stepCount >= NFRuleSet::PARSE_STEP_LIMIT) {
+        return false;
+    }
+    ++stepCount;
+
     // internally we operate on a copy of the string being parsed
     // (because we're going to change it) and use our own ParsePosition
     ParsePosition pp;
@@ -1070,6 +1076,7 @@ NFRule::doParse(const UnicodeString& text,
             temp, pp, sub1,
             nonNumericalExecutedRuleMask,
             recursionCount,
+            stepCount,
             upperBound);
 
         // if we got a successful match (or were trying to match a
@@ -1092,6 +1099,7 @@ NFRule::doParse(const UnicodeString& text,
                 temp, pp2, sub2,
                 nonNumericalExecutedRuleMask,
                 recursionCount,
+                stepCount,
                 upperBound);
 
             // if we got a successful match on this second
@@ -1228,6 +1236,7 @@ NFRule::matchToDelimiter(const UnicodeString& text,
                          const NFSubstitution* sub,
                          uint32_t nonNumericalExecutedRuleMask,
                          int32_t recursionCount,
+                         int32_t& stepCount,
                          double upperBound) const
 {
     UErrorCode status = U_ZERO_ERROR;
@@ -1245,7 +1254,7 @@ NFRule::matchToDelimiter(const UnicodeString& text,
         double bestResult = 0.0;
         UBool bestResultSet = false;
 
-        for (;;) {
+        for (; stepCount < NFRuleSet::PARSE_STEP_LIMIT; ) {
             // use findText() to search for "delimiter".  It returns a two-
             // element array: element 0 is the position of the match, and
             // element 1 is the number of characters that matched
@@ -1257,6 +1266,7 @@ NFRule::matchToDelimiter(const UnicodeString& text,
             if (dPos < 0) {
                 break;
             }
+            ++stepCount;
             // if findText() succeeded, isolate the text preceding the
             // match, and use "sub" to match that text
             UnicodeString subText;
@@ -1266,6 +1276,7 @@ NFRule::matchToDelimiter(const UnicodeString& text,
                     formatter->isLenient(),
                     nonNumericalExecutedRuleMask,
                     recursionCount,
+                    stepCount,
                     result);
 
                 // if the substitution could match all the text up to
@@ -1324,6 +1335,7 @@ NFRule::matchToDelimiter(const UnicodeString& text,
             formatter->isLenient(),
             nonNumericalExecutedRuleMask,
             recursionCount,
+            stepCount,
             result);
         if (success && (tempPP.getIndex() != 0)) {
             // if there's a successful match (or it's a null
