@@ -74,6 +74,8 @@ public final class CollationBuilder extends CollationRuleParser.Sink {
         // In C++, the importer is a parameter for this method.
         parser.setImporter(new BundleImporter());
         CollationSettings ownedSettings = tailoring.settings.copyOnWrite();
+        totalClosureLoops = 0;
+        totalClosureWork = 0;
         parser.parse(ruleString, ownedSettings);
         if (dataBuilder.hasMappings()) {
             makeTailoredCEs();
@@ -913,7 +915,10 @@ public final class CollationBuilder extends CollationRuleParser.Sink {
     // This value is needed for compiling a rule with eight Hangul syllables such as
     // "&a=b쫊쫊쫊쫊쫊쫊쫊쫊" without error, which should be more than realistic
     // usage.
-    private static int kClosureLoopLimit = 2400;
+    private static final int kClosureLoopLimit = 2400;
+    private static final int kTotalClosureLoopLimit = 4800;
+    private static final long kClosureWorkLimit = 160000;
+    private static final long kTotalClosureWorkLimit = 320000;
 
     private int addOnlyClosure(
             CharSequence nfdPrefix,
@@ -925,6 +930,7 @@ public final class CollationBuilder extends CollationRuleParser.Sink {
         // TODO: make CanonicalIterator work with CharSequence, or maybe change arguments here to
         // String
         int loop = 0;
+        long work = 0;
         if (nfdPrefix.length() == 0) {
             CanonicalIterator stringIter = new CanonicalIterator(nfdString.toString());
             String prefix = "";
@@ -933,11 +939,19 @@ public final class CollationBuilder extends CollationRuleParser.Sink {
                 if (str == null) {
                     break;
                 }
-                if (ignoreString(str) || str.contentEquals(nfdString)) {
+                if (str.contentEquals(nfdString)) {
                     continue;
                 }
-                if (loop++ > kClosureLoopLimit) {
+                work += str.length();
+                totalClosureWork += str.length();
+                if (loop++ > kClosureLoopLimit
+                        || totalClosureLoops++ > kTotalClosureLoopLimit
+                        || work > kClosureWorkLimit
+                        || totalClosureWork > kTotalClosureWorkLimit) {
                     throw new ICUInputTooLongException("Too many closure");
+                }
+                if (ignoreString(str)) {
+                    continue;
                 }
                 ce32 = addIfDifferent(prefix, str, newCEs, newCEsLength, ce32);
             }
@@ -949,20 +963,37 @@ public final class CollationBuilder extends CollationRuleParser.Sink {
                 if (prefix == null) {
                     break;
                 }
-                if (ignorePrefix(prefix)) {
+                boolean samePrefix = prefix.contentEquals(nfdPrefix);
+                if (!samePrefix && ignorePrefix(prefix)) {
+                    work += prefix.length();
+                    totalClosureWork += prefix.length();
+                    if (loop++ > kClosureLoopLimit
+                            || totalClosureLoops++ > kTotalClosureLoopLimit
+                            || work > kClosureWorkLimit
+                            || totalClosureWork > kTotalClosureWorkLimit) {
+                        throw new ICUInputTooLongException("Too many closure");
+                    }
                     continue;
                 }
-                boolean samePrefix = prefix.contentEquals(nfdPrefix);
                 for (; ; ) {
                     String str = stringIter.next();
                     if (str == null) {
                         break;
                     }
-                    if (ignoreString(str) || (samePrefix && str.contentEquals(nfdString))) {
+                    if (samePrefix && str.contentEquals(nfdString)) {
                         continue;
                     }
-                    if (loop++ > kClosureLoopLimit) {
+                    long stepWork = (long) prefix.length() + str.length();
+                    work += stepWork;
+                    totalClosureWork += stepWork;
+                    if (loop++ > kClosureLoopLimit
+                            || totalClosureLoops++ > kTotalClosureLoopLimit
+                            || work > kClosureWorkLimit
+                            || totalClosureWork > kTotalClosureWorkLimit) {
                         throw new ICUInputTooLongException("Too many closure");
+                    }
+                    if (ignoreString(str)) {
+                        continue;
                     }
                     ce32 = addIfDifferent(prefix, str, newCEs, newCEsLength, ce32);
                 }
@@ -1653,6 +1684,8 @@ public final class CollationBuilder extends CollationRuleParser.Sink {
 
     private long[] ces = new long[Collation.MAX_EXPANSION_LENGTH];
     private int cesLength;
+    private int totalClosureLoops = 0;
+    private long totalClosureWork = 0;
 
     /**
      * Indexes of nodes with root primary weights, sorted by primary. Compact form of a TreeMap from
