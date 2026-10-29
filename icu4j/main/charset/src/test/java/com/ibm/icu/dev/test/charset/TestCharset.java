@@ -7540,4 +7540,44 @@ public class TestCharset extends TestFmwk {
             }
         }
     }
+
+    // A reset must return x11-compound-text to its initial charset (ISO 8859-1),
+    // and the encoders and decoders of one Charset must not share that state.
+    // See ICU4C cintltst/nucnvtst.c TestCompoundTextReset.
+    @Test
+    public void TestCompoundTextReset() {
+        String greek = "\u03b1\u03b2\u03b3";
+        // ESC - F designates ISO 8859-7
+        byte[] greekBytes = {0x1b, 0x2d, 0x46, (byte) 0xe1, (byte) 0xe2, (byte) 0xe3};
+        byte[] latin1Bytes = {(byte) 0xe1, (byte) 0xe2, (byte) 0xe3};
+        String latin1 = "\u00e1\u00e2\u00e3";
+        Charset cs = CharsetICU.forNameICU("x11-compound-text");
+        try {
+            // encode() resets the encoder, so each call must emit the designation again,
+            // and so must a new encoder.
+            CharsetEncoder encoder = cs.newEncoder();
+            CharsetEncoder[] encoders = {encoder, encoder, cs.newEncoder()};
+            for (int i = 0; i < encoders.length; ++i) {
+                ByteBuffer out = encoders[i].encode(CharBuffer.wrap(greek));
+                byte[] bytes = new byte[out.remaining()];
+                out.get(bytes);
+                if (!Arrays.equals(bytes, greekBytes)) {
+                    errln("x11-compound-text encode call " + i + ": wrong output");
+                }
+            }
+
+            // A new decoder must not see the encoders' state, and decode() resets the decoder,
+            // so bytes without a designation are in the default charset again.
+            CharsetDecoder decoder = cs.newDecoder();
+            for (int i = 0; i < 2; ++i) {
+                String result = decoder.decode(ByteBuffer.wrap(latin1Bytes)).toString();
+                if (!result.equals(latin1)) {
+                    errln("x11-compound-text decode call " + i + ": wrong output");
+                }
+                decoder.decode(ByteBuffer.wrap(greekBytes));
+            }
+        } catch (CharacterCodingException e) {
+            errln("x11-compound-text conversion failed: " + e);
+        }
+    }
 }
