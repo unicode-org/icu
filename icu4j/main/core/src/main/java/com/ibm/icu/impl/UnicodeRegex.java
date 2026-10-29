@@ -348,7 +348,8 @@ public class UnicodeRegex implements Cloneable, Freezable<UnicodeRegex>, StringT
             pos.setIndex(i);
             UnicodeSet x = temp.clear().applyPattern(regex, pos, symbolTable, 0);
             x.complement().complement(); // hack to fix toPattern
-            String pattern = x.toPattern(false);
+            // Java's COMMENTS mode treats # as a comment even inside character classes (ICU-22305).
+            String pattern = x.toPattern(false).replace("#", "\\x{23}");
             // Escaping of supplementary code points differs between ICU UnicodeSet and Java regex.
             if (pattern.contains("\\U")) {
                 pattern = SUPP_ESCAPE.matcher(pattern).replaceAll("\\\\x{$1}");
