@@ -1707,4 +1707,26 @@ public class RBBITest extends CoreTestFmwk {
             assertEquals("Exception message", "The input is too long", e.getMessage());
         }
     }
+
+    @Test
+    public void TestICU23593() {
+        StringBuilder rules = new StringBuilder("!!chain;!!quoted_literals_only;'a' 'z';'b' 'z';");
+        StringBuilder text = new StringBuilder();
+        for (int i = 0; i < 150; ++i) {
+            char c = (char) (0x4e00 + i);
+            text.append(c);
+            if (i + 1 < 150) {
+                rules.append('\'').append(c).append((char) (c + 1)).append("';");
+            }
+        }
+        text.append("!azbz");
+        RuleBasedBreakIterator bi = new RuleBasedBreakIterator(rules.toString());
+        bi.setText(text.toString());
+        assertEquals("first()", 0, bi.first());
+        assertEquals("next() 150", 150, bi.next());
+        assertEquals("next() 151", 151, bi.next());
+        assertEquals("next() 153", 153, bi.next());
+        assertEquals("next() 155", 155, bi.next());
+        assertEquals("next() DONE", BreakIterator.DONE, bi.next());
+    }
 }

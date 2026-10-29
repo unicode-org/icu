@@ -340,10 +340,9 @@ class RBBIRuleBuilder {
     }
 
     void optimizeTables() {
-        boolean didSomething;
+        boolean minimized = false;
         fForwardTable.minimizeLookaheads();
-        do {
-            didSomething = false;
+        for (; ; ) {
             // Begin looking for duplicates with char class 3.
             // Class 0 is unused and should not have other categories merged into
             // it. We allow merging categories *into* class 1 {eof} (but not the
@@ -352,12 +351,11 @@ class RBBIRuleBuilder {
             while (fForwardTable.findDuplCharClassFrom(duplPair)) {
                 fSetBuilder.mergeCategories(duplPair);
                 fForwardTable.removeColumn(duplPair.second);
-                didSomething = true;
             }
-            while (fForwardTable.removeDuplicateStates() > 0) {
-                didSomething = true;
+            if (minimized || fForwardTable.removeDuplicateStates() <= 0) {
+                break;
             }
-            ;
-        } while (didSomething);
+            minimized = true;
+        }
     }
 }
