@@ -8,7 +8,7 @@
  */
 package com.ibm.icu.dev.test;
 
-public interface TestLog {
+public interface ITestLog {
     // --------------------------------------------------
     // Simple logging methods used for logging in test codes.
     // Any of these methods won't throw an AssertionError, unlike

@@ -3,6 +3,7 @@
 package com.ibm.icu.dev.test.number;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.format.FormattedValueTest;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
@@ -901,9 +902,14 @@ public class NumberRangeFormatterTest extends CoreTestFmwk {
 
     static final String[] allNSNames = NumberingSystem.getAvailableNames();
 
-    private class RangePatternSink extends UResource.Sink {
+    private static class RangePatternSink extends UResource.Sink {
+        private final TestFmwk fmwk;
         Map<String, String> rangePatterns = new HashMap<>();
         Map<String, String> approxPatterns = new HashMap<>();
+
+        RangePatternSink(TestFmwk fmwk) {
+            this.fmwk = fmwk;
+        }
 
         // NumberElements{ latn{ miscPatterns{ range{"{0}-{1}"} } } }
         @Override
@@ -946,14 +952,14 @@ public class NumberRangeFormatterTest extends CoreTestFmwk {
 
             Set<String> allRangePatterns = new HashSet<>();
             allRangePatterns.addAll(rangePatterns.values());
-            assertEquals(
+            fmwk.assertEquals(
                     "Should have only one unique range pattern: " + locale + ": " + rangePatterns,
                     1,
                     allRangePatterns.size());
 
             Set<String> allApproxPatterns = new HashSet<>();
             allApproxPatterns.addAll(approxPatterns.values());
-            assertEquals(
+            fmwk.assertEquals(
                     "Should have only one unique approximately pattern: "
                             + locale
                             + ": "
@@ -968,7 +974,7 @@ public class NumberRangeFormatterTest extends CoreTestFmwk {
 
     @Test
     public void testNumberingSystemRangeData() {
-        RangePatternSink sink = new RangePatternSink();
+        RangePatternSink sink = new RangePatternSink(this);
         for (ULocale locale : ULocale.getAvailableLocales()) {
             ICUResourceBundle resource =
                     (ICUResourceBundle)

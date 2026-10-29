@@ -135,8 +135,7 @@ public abstract class TestBoilerplate<T> extends TestFmwk {
     }
 
     /* Utilities */
-    public static boolean verifySetsIdentical(
-            AbstractTestLog here, UnicodeSet set1, UnicodeSet set2) {
+    public static boolean verifySetsIdentical(TestFmwk here, UnicodeSet set1, UnicodeSet set2) {
         if (set1.equals(set2)) return true;
 
         StringBuilder msg = new StringBuilder();
@@ -151,8 +150,7 @@ public abstract class TestBoilerplate<T> extends TestFmwk {
         return false;
     }
 
-    public static <T> boolean verifySetsIdentical(
-            AbstractTestLog here, Set<T> values1, Set<T> values2) {
+    public static <T> boolean verifySetsIdentical(TestFmwk here, Set<T> values1, Set<T> values2) {
         if (values1.equals(values2)) return true;
 
         Set<T> temp;

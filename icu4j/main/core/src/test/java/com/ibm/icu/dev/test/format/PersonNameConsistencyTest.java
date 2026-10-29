@@ -3,6 +3,7 @@
 package com.ibm.icu.dev.test.format;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.text.PersonName;
 import com.ibm.icu.text.PersonNameFormatter;
@@ -82,7 +83,7 @@ public class PersonNameConsistencyTest extends CoreTestFmwk {
                                 TestUtil.class.getResourceAsStream(DATA_PATH + filename),
                                 StandardCharsets.UTF_8))) {
             String line = null;
-            PersonNameTester tester = new PersonNameTester(filename);
+            PersonNameTester tester = new PersonNameTester(this, filename);
 
             int errors = 0;
             try {
@@ -119,14 +120,16 @@ public class PersonNameConsistencyTest extends CoreTestFmwk {
         }
     }
 
-    private class PersonNameTester {
+    private static class PersonNameTester {
+        final TestFmwk fmwk;
         SimplePersonName name = null;
         SimplePersonName.Builder nameBuilder = null;
         String expectedResult = null;
         Locale formatterLocale = null;
         int errorCount = 0;
 
-        public PersonNameTester(String testFileName) {
+        public PersonNameTester(TestFmwk fmwk, String testFileName) {
+            this.fmwk = fmwk;
             formatterLocale =
                     Locale.forLanguageTag(
                             testFileName
@@ -273,7 +276,7 @@ public class PersonNameConsistencyTest extends CoreTestFmwk {
         }
 
         private void reportError(String error, String file, int lineNumber) {
-            logln(file + ":" + lineNumber + ": " + error);
+            fmwk.logln(file + ":" + lineNumber + ": " + error);
             if (VERBOSE_OUTPUT) {
                 System.out.println(file + ":" + lineNumber + ": " + error);
             }
@@ -281,7 +284,7 @@ public class PersonNameConsistencyTest extends CoreTestFmwk {
         }
 
         private void reportError(String error, int lineNumber) {
-            logln("    " + error + " at line " + lineNumber);
+            fmwk.logln("    " + error + " at line " + lineNumber);
             if (VERBOSE_OUTPUT) {
                 System.out.println("    " + error + " at line " + lineNumber);
             }

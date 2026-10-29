@@ -4,6 +4,7 @@
 package com.ibm.icu.dev.test.rbbi;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.UCharacterName;
 import com.ibm.icu.impl.UCharacterNameChoice;
 import com.ibm.icu.text.BreakIterator;
@@ -813,7 +814,12 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
         REVERSE
     };
 
-    class RBBIMonkeyImpl extends Thread {
+    static class RBBIMonkeyImpl extends Thread {
+        private final TestFmwk fmwk;
+
+        RBBIMonkeyImpl(TestFmwk fmwk) {
+            this.fmwk = fmwk;
+        }
 
         void setup(String ruleFile) {
             fRuleFileName = ruleFile;
@@ -832,7 +838,7 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
             try {
                 is = RBBIMonkeyImpl.class.getResourceAsStream(filePath);
                 if (is == null) {
-                    errln("Could not open test data file " + fileName);
+                    fmwk.errln("Could not open test data file " + fileName);
                     return;
                 }
                 InputStreamReader isr = new InputStreamReader(is, "UTF-8");
@@ -859,12 +865,12 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
                     is.close();
                 } catch (IOException ignored) {
                 }
-                errln(e.toString());
+                fmwk.errln(e.toString());
             }
             fRuleCharBuffer = testFileBuf.toString(); /* the file as a String */
         }
 
-        class MonkeyException extends RuntimeException {
+        static class MonkeyException extends RuntimeException {
             private static final long serialVersionUID = 1L;
             public int fPosition; // Position of the failure in the test data.
 
@@ -1119,7 +1125,7 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
         for (String testName : tests) {
             logln(String.format("beginning testing of %s", testName));
 
-            RBBIMonkeyImpl test = new RBBIMonkeyImpl();
+            RBBIMonkeyImpl test = new RBBIMonkeyImpl(this);
 
             test.fDumpExpansions = dumpExpansions;
             test.fVerbose = verbose;

@@ -1805,7 +1805,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
         // spotless:on
 
         for (int i = 0; i < DATA.length; ++i) {
-            TokenSymbolTable sym = new TokenSymbolTable();
+            TokenSymbolTable sym = new TokenSymbolTable(this);
 
             // Set up variables
             while (DATA[i + 2] != null) {
@@ -1966,7 +1966,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
                                     + " (Expected depth <= 100, got depth = 101 [a⋯[a☞[a]]⋯])."
                                     + " See usage of $deep: [a⋯[a$deep☜]⋯]"),
                 }) {
-            final var symbols = new TokenSymbolTable();
+            final var symbols = new TokenSymbolTable(this);
             for (var variable : testCase.variables) {
                 symbols.add(variable.name, variable.value);
             }
@@ -2546,8 +2546,13 @@ public class UnicodeSetTest extends CoreTestFmwk {
     //        return string.substring(0,97) + "...";
     //    }
 
-    public class TokenSymbolTable implements SymbolTable {
+    public static class TokenSymbolTable implements SymbolTable {
+        private final TestFmwk fmwk;
         HashMap<String, char[]> contents = new HashMap<>();
+
+        public TokenSymbolTable(TestFmwk fmwk) {
+            this.fmwk = fmwk;
+        }
 
         /**
          * (Non-SymbolTable API) Add the given variable and value to the table. Variable should NOT
@@ -2564,7 +2569,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
          * contain leading '$'.
          */
         public void add(String var, char[] body) {
-            logln("TokenSymbolTable: add \"" + var + "\" => \"" + new String(body) + "\"");
+            fmwk.logln("TokenSymbolTable: add \"" + var + "\" => \"" + new String(body) + "\"");
             contents.put(var, body);
         }
 
@@ -2573,7 +2578,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
          */
         @Override
         public char[] lookup(String s) {
-            logln(
+            fmwk.logln(
                     "TokenSymbolTable: lookup \""
                             + s
                             + "\" => \""
@@ -2605,7 +2610,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
                     break;
                 }
             }
-            logln(
+            fmwk.logln(
                     "TokenSymbolTable: parse \""
                             + text
                             + "\" from "

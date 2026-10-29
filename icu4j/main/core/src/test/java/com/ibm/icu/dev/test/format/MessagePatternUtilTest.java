@@ -12,6 +12,7 @@
 package com.ibm.icu.dev.test.format;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.MessagePattern;
 import com.ibm.icu.text.MessagePatternUtil;
 import com.ibm.icu.text.MessagePatternUtil.ArgNode;
@@ -38,29 +39,35 @@ public final class MessagePatternUtilTest extends CoreTestFmwk {
     // a tree structure parallel to what the MessagePatternUtil class builds.
     // These nested test classes are not static so that they have access to TestFmwk methods.
 
-    private class ExpectMessageNode {
+    private static class ExpectMessageNode {
+        protected final TestFmwk fmwk;
+
+        ExpectMessageNode(TestFmwk fmwk) {
+            this.fmwk = fmwk;
+        }
+
         private ExpectMessageNode expectTextThatContains(String s) {
-            contents.add(new ExpectTextNode(s));
+            contents.add(new ExpectTextNode(fmwk, s));
             return this;
         }
 
         private ExpectMessageNode expectReplaceNumber() {
-            contents.add(new ExpectMessageContentsNode());
+            contents.add(new ExpectMessageContentsNode(fmwk));
             return this;
         }
 
         private ExpectMessageNode expectNoneArg(Object name) {
-            contents.add(new ExpectArgNode(name));
+            contents.add(new ExpectArgNode(fmwk, name));
             return this;
         }
 
         private ExpectMessageNode expectSimpleArg(Object name, String type) {
-            contents.add(new ExpectArgNode(name, type));
+            contents.add(new ExpectArgNode(fmwk, name, type));
             return this;
         }
 
         private ExpectMessageNode expectSimpleArg(Object name, String type, String style) {
-            contents.add(new ExpectArgNode(name, type, style));
+            contents.add(new ExpectArgNode(fmwk, name, type, style));
             return this;
         }
 
@@ -98,7 +105,7 @@ public final class MessagePatternUtilTest extends CoreTestFmwk {
         private boolean matches(MessageNode msg) {
             List<MessageContentsNode> msgContents = msg.getContents();
             boolean ok =
-                    assertEquals(
+                    fmwk.assertEquals(
                             "different numbers of MessageContentsNode",
                             contents.size(),
                             msgContents.size());
@@ -109,7 +116,7 @@ public final class MessagePatternUtilTest extends CoreTestFmwk {
                 }
             }
             if (!ok) {
-                errln("error in message: " + msg.toString());
+                fmwk.errln("error in message: " + msg.toString());
             }
             return ok;
         }
@@ -123,24 +130,31 @@ public final class MessagePatternUtilTest extends CoreTestFmwk {
      * Base class for message contents nodes. Used directly for REPLACE_NUMBER nodes, subclassed for
      * others.
      */
-    private class ExpectMessageContentsNode {
+    private static class ExpectMessageContentsNode {
+        protected final TestFmwk fmwk;
+
+        private ExpectMessageContentsNode(TestFmwk fmwk) {
+            this.fmwk = fmwk;
+        }
+
         protected boolean matches(MessageContentsNode c) {
-            return assertEquals(
+            return fmwk.assertEquals(
                     "not a REPLACE_NUMBER node",
                     MessageContentsNode.Type.REPLACE_NUMBER,
                     c.getType());
         }
     }
 
-    private class ExpectTextNode extends ExpectMessageContentsNode {
-        private ExpectTextNode(String subString) {
+    private static class ExpectTextNode extends ExpectMessageContentsNode {
+        private ExpectTextNode(TestFmwk fmwk, String subString) {
+            super(fmwk);
             this.subString = subString;
         }
 
         @Override
         protected boolean matches(MessageContentsNode c) {
-            return assertEquals("not a TextNode", MessageContentsNode.Type.TEXT, c.getType())
-                    && assertTrue(
+            return fmwk.assertEquals("not a TextNode", MessageContentsNode.Type.TEXT, c.getType())
+                    && fmwk.assertTrue(
                             "TextNode does not contain \"" + subString + "\"",
                             ((TextNode) c).getText().contains(subString));
         }
@@ -148,16 +162,17 @@ public final class MessagePatternUtilTest extends CoreTestFmwk {
         private String subString;
     }
 
-    private class ExpectArgNode extends ExpectMessageContentsNode {
-        private ExpectArgNode(Object name) {
-            this(name, null, null);
+    private static class ExpectArgNode extends ExpectMessageContentsNode {
+        private ExpectArgNode(TestFmwk fmwk, Object name) {
+            this(fmwk, name, null, null);
         }
 
-        private ExpectArgNode(Object name, String type) {
-            this(name, type, null);
+        private ExpectArgNode(TestFmwk fmwk, Object name, String type) {
+            this(fmwk, name, type, null);
         }
 
-        private ExpectArgNode(Object name, String type, String style) {
+        private ExpectArgNode(TestFmwk fmwk, Object name, String type, String style) {
+            super(fmwk);
             if (name instanceof String) {
                 this.name = (String) name;
                 this.number = -1;
@@ -176,19 +191,20 @@ public final class MessagePatternUtilTest extends CoreTestFmwk {
 
         @Override
         protected boolean matches(MessageContentsNode c) {
-            boolean ok = assertEquals("not an ArgNode", MessageContentsNode.Type.ARG, c.getType());
+            boolean ok =
+                    fmwk.assertEquals("not an ArgNode", MessageContentsNode.Type.ARG, c.getType());
             if (!ok) {
                 return ok;
             }
             ArgNode arg = (ArgNode) c;
-            ok &= assertEquals("unexpected ArgNode argType", argType, arg.getArgType());
-            ok &= assertEquals("unexpected ArgNode arg name", name, arg.getName());
-            ok &= assertEquals("unexpected ArgNode arg number", number, arg.getNumber());
-            ok &= assertEquals("unexpected ArgNode arg type name", type, arg.getTypeName());
-            ok &= assertEquals("unexpected ArgNode arg style", style, arg.getSimpleStyle());
+            ok &= fmwk.assertEquals("unexpected ArgNode argType", argType, arg.getArgType());
+            ok &= fmwk.assertEquals("unexpected ArgNode arg name", name, arg.getName());
+            ok &= fmwk.assertEquals("unexpected ArgNode arg number", number, arg.getNumber());
+            ok &= fmwk.assertEquals("unexpected ArgNode arg type name", type, arg.getTypeName());
+            ok &= fmwk.assertEquals("unexpected ArgNode arg style", style, arg.getSimpleStyle());
             if (argType == MessagePattern.ArgType.NONE
                     || argType == MessagePattern.ArgType.SIMPLE) {
-                ok &= assertNull("unexpected non-null complex style", arg.getComplexStyle());
+                ok &= fmwk.assertNull("unexpected non-null complex style", arg.getComplexStyle());
             }
             return ok;
         }
@@ -200,10 +216,10 @@ public final class MessagePatternUtilTest extends CoreTestFmwk {
         private String style;
     }
 
-    private class ExpectComplexArgNode extends ExpectArgNode {
+    private static class ExpectComplexArgNode extends ExpectArgNode {
         private ExpectComplexArgNode(
                 ExpectMessageNode parent, Object name, MessagePattern.ArgType argType) {
-            super(name, argType.toString().toLowerCase(Locale.ENGLISH));
+            super(parent.fmwk, name, argType.toString().toLowerCase(Locale.ENGLISH));
             this.argType = argType;
             this.parent = parent;
         }
@@ -238,22 +254,24 @@ public final class MessagePatternUtilTest extends CoreTestFmwk {
             }
             ArgNode arg = (ArgNode) c;
             ComplexArgStyleNode complexStyle = arg.getComplexStyle();
-            ok &= assertNotNull("unexpected null complex style", complexStyle);
+            ok &= parent.fmwk.assertNotNull("unexpected null complex style", complexStyle);
             if (!ok) {
                 return ok;
             }
             ok &=
-                    assertEquals(
+                    parent.fmwk.assertEquals(
                             "unexpected complex-style argType", argType, complexStyle.getArgType());
             ok &=
-                    assertEquals(
+                    fmwk.assertEquals(
                             "unexpected complex-style hasExplicitOffset()",
                             explicitOffset,
                             complexStyle.hasExplicitOffset());
-            ok &= assertEquals("unexpected complex-style offset", offset, complexStyle.getOffset());
+            ok &=
+                    parent.fmwk.assertEquals(
+                            "unexpected complex-style offset", offset, complexStyle.getOffset());
             List<VariantNode> complexVariants = complexStyle.getVariants();
             ok &=
-                    assertEquals(
+                    fmwk.assertEquals(
                             "different number of variants",
                             variants.size(),
                             complexVariants.size());
@@ -273,7 +291,7 @@ public final class MessagePatternUtilTest extends CoreTestFmwk {
         private List<ExpectVariantNode> variants = new ArrayList<ExpectVariantNode>();
     }
 
-    private class ExpectVariantNode {
+    private static class ExpectVariantNode {
         private ExpectVariantNode(ExpectComplexArgNode parent, String selector) {
             this(parent, selector, MessagePattern.NO_NUMERIC_VALUE);
         }
@@ -281,18 +299,22 @@ public final class MessagePatternUtilTest extends CoreTestFmwk {
         private ExpectVariantNode(ExpectComplexArgNode parent, String selector, double value) {
             this.selector = selector;
             numericValue = value;
-            msg = new ExpectMessageNode();
+            msg = new ExpectMessageNode(parent.fmwk);
             msg.parent = parent;
         }
 
         private boolean matches(VariantNode v) {
-            boolean ok = assertEquals("different selector strings", selector, v.getSelector());
+            boolean ok =
+                    msg.parent.fmwk.assertEquals(
+                            "different selector strings", selector, v.getSelector());
             ok &=
-                    assertEquals(
+                    msg.parent.fmwk.assertEquals(
                             "different selector strings",
                             isSelectorNumeric(),
                             v.isSelectorNumeric());
-            ok &= assertEquals("different selector strings", numericValue, v.getSelectorValue());
+            ok &=
+                    msg.parent.fmwk.assertEquals(
+                            "different selector strings", numericValue, v.getSelectorValue());
             return ok & msg.matches(v.getMessage());
         }
 
@@ -312,7 +334,7 @@ public final class MessagePatternUtilTest extends CoreTestFmwk {
     public void TestHello() {
         // No syntax.
         MessageNode msg = MessagePatternUtil.buildMessageNode("Hello!");
-        ExpectMessageNode expect = new ExpectMessageNode().expectTextThatContains("Hello");
+        ExpectMessageNode expect = new ExpectMessageNode(this).expectTextThatContains("Hello");
         expect.checkMatches(msg);
     }
 
@@ -320,7 +342,7 @@ public final class MessagePatternUtilTest extends CoreTestFmwk {
     public void TestHelloWithApos() {
         // Literal ASCII apostrophe.
         MessageNode msg = MessagePatternUtil.buildMessageNode("Hel'lo!");
-        ExpectMessageNode expect = new ExpectMessageNode().expectTextThatContains("Hel'lo");
+        ExpectMessageNode expect = new ExpectMessageNode(this).expectTextThatContains("Hel'lo");
         expect.checkMatches(msg);
     }
 
@@ -328,14 +350,14 @@ public final class MessagePatternUtilTest extends CoreTestFmwk {
     public void TestHelloWithQuote() {
         // Apostrophe starts quoted literal text.
         MessageNode msg = MessagePatternUtil.buildMessageNode("Hel'{o!");
-        ExpectMessageNode expect = new ExpectMessageNode().expectTextThatContains("Hel{o");
+        ExpectMessageNode expect = new ExpectMessageNode(this).expectTextThatContains("Hel{o");
         expect.checkMatches(msg);
         // Terminating the quote should yield the same result.
         msg = MessagePatternUtil.buildMessageNode("Hel'{'o!");
         expect.checkMatches(msg);
         // Double apostrophe inside quoted literal text still encodes a single apostrophe.
         msg = MessagePatternUtil.buildMessageNode("a'{bc''de'f");
-        expect = new ExpectMessageNode().expectTextThatContains("a{bc'def");
+        expect = new ExpectMessageNode(this).expectTextThatContains("a{bc'def");
         expect.checkMatches(msg);
     }
 
@@ -344,7 +366,7 @@ public final class MessagePatternUtilTest extends CoreTestFmwk {
         // Numbered argument.
         MessageNode msg = MessagePatternUtil.buildMessageNode("abc{0}def");
         ExpectMessageNode expect =
-                new ExpectMessageNode()
+                new ExpectMessageNode(this)
                         .expectTextThatContains("abc")
                         .expectNoneArg(0)
                         .expectTextThatContains("def");
@@ -352,7 +374,7 @@ public final class MessagePatternUtilTest extends CoreTestFmwk {
         // Named argument.
         msg = MessagePatternUtil.buildMessageNode("abc{ arg }def");
         expect =
-                new ExpectMessageNode()
+                new ExpectMessageNode(this)
                         .expectTextThatContains("abc")
                         .expectNoneArg("arg")
                         .expectTextThatContains("def");
@@ -360,7 +382,7 @@ public final class MessagePatternUtilTest extends CoreTestFmwk {
         // Numbered and named arguments.
         msg = MessagePatternUtil.buildMessageNode("abc{1}def{arg}ghi");
         expect =
-                new ExpectMessageNode()
+                new ExpectMessageNode(this)
                         .expectTextThatContains("abc")
                         .expectNoneArg(1)
                         .expectTextThatContains("def")
@@ -373,7 +395,7 @@ public final class MessagePatternUtilTest extends CoreTestFmwk {
     public void TestSimpleArg() {
         MessageNode msg = MessagePatternUtil.buildMessageNode("a'{bc''de'f{0,number,g'hi''jk'l#}");
         ExpectMessageNode expect =
-                new ExpectMessageNode()
+                new ExpectMessageNode(this)
                         .expectTextThatContains("a{bc'def")
                         .expectSimpleArg(0, "number", "g'hi''jk'l#");
         expect.checkMatches(msg);
@@ -385,7 +407,7 @@ public final class MessagePatternUtilTest extends CoreTestFmwk {
                 MessagePatternUtil.buildMessageNode(
                         "abc{2, number}ghi{3, select, xx {xxx} other {ooo}} xyz");
         ExpectMessageNode expect =
-                new ExpectMessageNode()
+                new ExpectMessageNode(this)
                         .expectTextThatContains("abc")
                         .expectSimpleArg(2, "number")
                         .expectTextThatContains("ghi")
@@ -408,7 +430,7 @@ public final class MessagePatternUtilTest extends CoreTestFmwk {
                 MessagePatternUtil.buildMessageNode(
                         "abc{num_people, plural, offset:17 few{fff} other {oooo}}xyz");
         ExpectMessageNode expect =
-                new ExpectMessageNode()
+                new ExpectMessageNode(this)
                         .expectTextThatContains("abc")
                         .expectPluralArg("num_people")
                         .expectOffset(17)
@@ -426,7 +448,7 @@ public final class MessagePatternUtilTest extends CoreTestFmwk {
                 MessagePatternUtil.buildMessageNode(
                         "abc{ num , plural , offset: 2 =1 {1} =-1 {-1} =3.14 {3.14} other {oo} }xyz");
         expect =
-                new ExpectMessageNode()
+                new ExpectMessageNode(this)
                         .expectTextThatContains("abc")
                         .expectPluralArg("num")
                         .expectOffset(2)
@@ -450,7 +472,7 @@ public final class MessagePatternUtilTest extends CoreTestFmwk {
                 MessagePatternUtil.buildMessageNode(
                         "a_{0,plural,other{num=#'#'=#'#'={1,number,##}!}}_z");
         expect =
-                new ExpectMessageNode()
+                new ExpectMessageNode(this)
                         .expectTextThatContains("a_")
                         .expectPluralArg(0)
                         .expectVariant("other")
@@ -468,7 +490,7 @@ public final class MessagePatternUtilTest extends CoreTestFmwk {
         // Plural with explicit offset:0.
         msg = MessagePatternUtil.buildMessageNode("a_{0,plural,offset:0 other{num=#!}}_z");
         expect =
-                new ExpectMessageNode()
+                new ExpectMessageNode(this)
                         .expectTextThatContains("a_")
                         .expectPluralArg(0)
                         .expectOffset(0)
@@ -488,7 +510,7 @@ public final class MessagePatternUtilTest extends CoreTestFmwk {
                 MessagePatternUtil.buildMessageNode(
                         "abc{num, selectordinal, offset:17 =0{null} few{fff} other {oooo}}xyz");
         ExpectMessageNode expect =
-                new ExpectMessageNode()
+                new ExpectMessageNode(this)
                         .expectTextThatContains("abc")
                         .expectSelectOrdinalArg("num")
                         .expectOffset(17)
@@ -512,7 +534,7 @@ public final class MessagePatternUtilTest extends CoreTestFmwk {
                 MessagePatternUtil.buildMessageNode(
                         "a_{0,choice,-∞ #-inf|  5≤ five | 99 # ninety'|'nine  }_z");
         ExpectMessageNode expect =
-                new ExpectMessageNode()
+                new ExpectMessageNode(this)
                         .expectTextThatContains("a_")
                         .expectChoiceArg(0)
                         .expectVariant("#", Double.NEGATIVE_INFINITY)
@@ -538,7 +560,7 @@ public final class MessagePatternUtilTest extends CoreTestFmwk {
                                 + "{c,choice,0#can't'|'}"
                                 + "{z,number,#'#'###.00'}'}.");
         ExpectMessageNode expect =
-                new ExpectMessageNode()
+                new ExpectMessageNode(this)
                         .expectTextThatContains("I don't ")
                         .expectPluralArg("a")
                         .expectVariant("other")
@@ -578,7 +600,7 @@ public final class MessagePatternUtilTest extends CoreTestFmwk {
                 MessagePatternUtil.buildMessageNode(
                         "{p,plural,a{A}other{O}=4{iv}b{B}other{U}=2{ii}}");
         ExpectMessageNode expect =
-                new ExpectMessageNode()
+                new ExpectMessageNode(this)
                         .expectPluralArg("p")
                         .expectVariant("a")
                         .expectTextThatContains("A")
@@ -637,7 +659,7 @@ public final class MessagePatternUtilTest extends CoreTestFmwk {
         MessageNode msg =
                 MessagePatternUtil.buildMessageNode("{s,select,a{A}other{O}b{B}other{U}}");
         ExpectMessageNode expect =
-                new ExpectMessageNode()
+                new ExpectMessageNode(this)
                         .expectSelectArg("s")
                         .expectVariant("a")
                         .expectTextThatContains("A")

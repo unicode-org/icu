@@ -356,12 +356,11 @@
             </includes>
             <systemPropertyVariables>
               <org.slf4j.simpleLogger.logFile>${project.build.directory}/test.log</org.slf4j.simpleLogger.logFile>
+              <org.slf4j.simpleLogger.defaultLogLevel>${testLogLevel}</org.slf4j.simpleLogger.defaultLogLevel>
               <!--
                 To enable logging for certain classes you can do this (replace with your class):
                 <org.slf4j.simpleLogger.log.com.ibm.icu.foo.BarTest>debug</org.slf4j.simpleLogger.log.com.ibm.icu.foo.BarTest>
-                To enable logging for all test classes change the `defaultLogLevel` above to `debug` or `trace`.
               -->
-              <org.slf4j.simpleLogger.defaultLogLevel>${testLogLevel}</org.slf4j.simpleLogger.defaultLogLevel>
             </systemPropertyVariables>
           </configuration>
         </plugin>
