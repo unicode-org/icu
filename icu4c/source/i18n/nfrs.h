@@ -32,6 +32,8 @@ U_NAMESPACE_BEGIN
 
 class NFRuleSet : public UMemory {
 public:
+    static constexpr int32_t RECURSION_LIMIT = 64;
+
     NFRuleSet(RuleBasedNumberFormat *owner, UnicodeString* descriptions, int32_t index, UErrorCode& status);
     void parseRules(UnicodeString& rules, UErrorCode& status);
     void setNonNumericalRule(NFRule *rule);

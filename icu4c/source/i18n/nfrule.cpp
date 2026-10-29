@@ -538,7 +538,7 @@ NFRule::extractSubstitution(const NFRuleSet* owner,
 
     // special-case the ">>>" token, since searching for the > at the
     // end will actually find the > in the middle
-    if (ruleText.indexOf(gGreaterGreaterGreater, 3, 0) == subStart) {
+    if (ruleText.indexOf(gGreaterGreaterGreater, 3, subStart) == subStart) {
         subEnd = subStart + 2;
 
         // otherwise the substitution token ends with the same character
@@ -656,7 +656,7 @@ NFRule::indexOfAnyRulePrefix() const
 {
     int result = -1;
     for (int i = 0; RULE_PREFIXES[i]; i++) {
-        int32_t pos = ruleText.indexOf(*RULE_PREFIXES[i]);
+        int32_t pos = ruleText.indexOf(RULE_PREFIXES[i], 2, 0);
         if (pos != -1 && (result == -1 || pos < result)) {
             result = pos;
         }
@@ -1021,6 +1021,9 @@ NFRule::doParse(const UnicodeString& text,
         parsePosition.setIndex(pp.getIndex());
         resVal.setDouble(uprv_getNaN());
         return true;
+    }
+    if (recursionCount > NFRuleSet::RECURSION_LIMIT) {
+        return false;
     }
 
     // this is the fun part.  The basic guts of the rule-matching

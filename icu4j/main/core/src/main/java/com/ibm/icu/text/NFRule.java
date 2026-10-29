@@ -928,6 +928,9 @@ final class NFRule {
             parsePosition.setIndex(pp.getIndex());
             return Double.NaN;
         }
+        if (recursionCount > NFRuleSet.RECURSION_LIMIT) {
+            return ZERO;
+        }
 
         // this is the fun part.  The basic guts of the rule-matching
         // logic is matchToDelimiter(), which is called twice.  The first
