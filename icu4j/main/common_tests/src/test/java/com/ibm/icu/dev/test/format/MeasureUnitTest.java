@@ -1002,6 +1002,19 @@ public class MeasureUnitTest extends CoreTestFmwk {
     }
 
     @Test
+    public void testHashCodeOfBuiltInUnitsIsUnchanged() {
+        // Built-in units still hash their type and subtype.
+        assertEquals(
+                "METER hash code",
+                31 * "length".hashCode() + "meter".hashCode(),
+                MeasureUnit.METER.hashCode());
+        assertEquals(
+                "USD hash code",
+                31 * "currency".hashCode() + "USD".hashCode(),
+                Currency.getInstance("USD").hashCode());
+    }
+
+    @Test
     public void testGetLocale() {
         MeasureFormat mf = MeasureFormat.getInstance(ULocale.GERMAN, FormatWidth.SHORT);
         assertEquals("", ULocale.GERMAN, mf.getLocale(ULocale.VALID_LOCALE));
