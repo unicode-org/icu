@@ -9,7 +9,6 @@
 package com.ibm.icu.dev.test.format;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
-import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.impl.Utility;
 import java.io.BufferedReader;
@@ -317,7 +316,7 @@ public class DataDrivenNumberFormatTestUtility extends CoreTestFmwk {
     }
 
     private void showError(String message) {
-        TestFmwk.errln(
+        errln(
                 String.format(
                         "line %d: %s\n%s\n%s",
                         fileLineNumber, Utility.escape(message), fileTestName, fileLine));

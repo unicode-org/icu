@@ -49,22 +49,22 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
     public void Test4029195() {
         Calendar cal = Calendar.getInstance();
         Date today = cal.getTime();
-        logln("today: " + today);
+        logDebug("today: " + today);
         SimpleDateFormat sdf = (SimpleDateFormat) DateFormat.getDateInstance();
         String pat = sdf.toPattern();
-        logln("pattern: " + pat);
+        logDebug("pattern: " + pat);
         StringBuffer fmtd = new StringBuffer("");
         FieldPosition pos = new FieldPosition(0);
         fmtd = sdf.format(today, fmtd, pos);
-        logln("today: " + fmtd);
+        logDebug("today: " + fmtd);
 
         sdf.applyPattern("G yyyy DDD");
         StringBuffer todayS = new StringBuffer("");
         todayS = sdf.format(today, todayS, pos);
-        logln("today: " + todayS);
+        logDebug("today: " + todayS);
         try {
             today = sdf.parse(todayS.toString());
-            logln("today date: " + today);
+            logDebug("today date: " + today);
         } catch (Exception e) {
             errln("Error reparsing date: " + e.getMessage());
         }
@@ -72,7 +72,7 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
         try {
             StringBuffer rt = new StringBuffer("");
             rt = sdf.format(sdf.parse(todayS.toString()), rt, pos);
-            logln("round trip: " + rt);
+            logDebug("round trip: " + rt);
             if (!rt.toString().equals(todayS.toString()))
                 errln("Fail: Want " + todayS + " Got " + rt);
         } catch (ParseException e) {
@@ -94,7 +94,7 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
         cal.set(97 + 1900, Calendar.MAY, 3, 8, 55);
         Date dt = cal.getTime();
         String str = fmt.format(dt);
-        logln(str);
+        logDebug(str);
 
         if (!str.equals("5/3/97, 8:55\u202FAM"))
             errln("Fail: Test broken; Want 5/3/97, 8:55\u202FAM Got " + str);
@@ -148,7 +148,7 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
             // char[] dst = new char[pos.getEndIndex() - pos.getBeginIndex()];
             String dst = buf.substring(pos.getBeginIndex(), pos.getEndIndex());
             str = dst;
-            log(
+            String s =
                     i
                             + ": "
                             + fieldNames[i]
@@ -157,11 +157,11 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
                             + "\", "
                             + pos.getBeginIndex()
                             + ", "
-                            + pos.getEndIndex());
+                            + pos.getEndIndex();
             String exp = expected[i];
-            if ((exp.length() == 0 && str.length() == 0) || str.equals(exp)) logln(" ok");
+            if ((exp.length() == 0 && str.length() == 0) || str.equals(exp)) logDebug(s + " ok");
             else {
-                logln(" expected " + exp);
+                logDebug(s + " expected " + exp);
                 pass = false;
             }
         }
@@ -203,7 +203,7 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
                 String s = strings[i];
                 Date exp = dates[i];
                 Date got = fmt.parse(s);
-                logln(s + " . " + got + "; exp " + exp);
+                logDebug(s + " . " + got + "; exp " + exp);
                 if (got.getTime() != exp.getTime()) errln("set2DigitYearStart broken");
             }
         } catch (ParseException e) {
@@ -230,8 +230,8 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
     public void aux917(SimpleDateFormat fmt, String str) {
 
         String pat = fmt.toPattern();
-        logln("==================");
-        logln("testIt: pattern=" + pat + " string=" + str);
+        logDebug("==================");
+        logDebug("testIt: pattern=" + pat + " string=" + str);
         ParsePosition pos = new ParsePosition(0);
         Object o = fmt.parseObject(str, pos);
         // logln( UnicodeString("Parsed object: ") + o );
@@ -240,7 +240,7 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
         FieldPosition poss = new FieldPosition(0);
         formatted = fmt.format(o, formatted, poss);
 
-        logln("Formatted string: " + formatted);
+        logDebug("Formatted string: " + formatted);
         if (!formatted.toString().equals(str)) errln("Fail: Want " + str + " Got " + formatted);
     }
 
@@ -250,25 +250,25 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
     @Test
     public void Test4060212() {
         String dateString = "1995-040.05:01:29";
-        logln("dateString= " + dateString);
-        logln("Using yyyy-DDD.hh:mm:ss");
+        logDebug("dateString= " + dateString);
+        logDebug("Using yyyy-DDD.hh:mm:ss");
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-DDD.hh:mm:ss");
         ParsePosition pos = new ParsePosition(0);
         Date myDate = formatter.parse(dateString, pos);
         DateFormat fmt = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.LONG);
         String myString = fmt.format(myDate);
-        logln(myString);
+        logDebug(myString);
         Calendar cal = new GregorianCalendar();
         cal.setTime(myDate);
         if ((cal.get(Calendar.DAY_OF_YEAR) != 40))
             errln("Fail: Got " + cal.get(Calendar.DAY_OF_YEAR) + " Want 40");
 
-        logln("Using yyyy-ddd.hh:mm:ss");
+        logDebug("Using yyyy-ddd.hh:mm:ss");
         formatter = new SimpleDateFormat("yyyy-ddd.hh:mm:ss");
         pos.setIndex(0);
         myDate = formatter.parse(dateString, pos);
         myString = fmt.format(myDate);
-        logln(myString);
+        logDebug(myString);
         cal.setTime(myDate);
         if ((cal.get(Calendar.DAY_OF_YEAR) != 40))
             errln("Fail: Got " + cal.get(Calendar.DAY_OF_YEAR) + " Want 40");
@@ -282,7 +282,7 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
 
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         try {
-            logln(df.parse("35/01/1971").toString());
+            logDebug(df.parse("35/01/1971").toString());
         } catch (ParseException e) {
             errln("Fail: " + e);
             e.printStackTrace();
@@ -290,7 +290,7 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
         df.setLenient(false);
         boolean ok = false;
         try {
-            logln(df.parse("35/01/1971").toString());
+            logDebug(df.parse("35/01/1971").toString());
         } catch (ParseException e) {
             ok = true;
         }
@@ -328,8 +328,8 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
             String temp2 = fulldate.format(curDate);
             strFullDate += temp2;
 
-            logln(strShortDate);
-            logln(strFullDate);
+            logDebug(strShortDate);
+            logDebug(strFullDate);
 
             // {sfb} What to do with resource bundle stuff?????
 
@@ -347,7 +347,7 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
                 logln("*** FOR LOCALE de OR de_DE IS MISSING ***");
             }*/
         } catch (Exception e) {
-            logln(e.getMessage());
+            logDebug(e.getMessage());
         } finally {
             Locale.setDefault(saveLocale);
             TimeZone.setDefault(saveZone);
@@ -384,7 +384,7 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
         calB.set(1961, Calendar.DECEMBER, 25);
         if (calA.equals(calB)) errln("Fail: Can't complete test; Calendar instances equal");
         if (!fmtA.equals(fmtB)) errln("Fail: DateFormat unequal when Calendars equivalent");
-        logln("DateFormat.equals ok");
+        logDebug("DateFormat.equals ok");
     }
 
     /* The java.text.DateFormat.parse(String) method expects for the
@@ -414,7 +414,7 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
                 ss = fmt.format(dd);
                 if (d.getTime() != dd.getTime()) errln("Fail: " + d + " != " + dd);
                 if (!s.equals(ss)) errln("Fail: " + s + " != " + ss);
-                logln("Ok: " + s + " " + d);
+                logDebug("Ok: " + s + " " + d);
             }
         } catch (ParseException e) {
             errln("Fail: " + e);
@@ -487,12 +487,12 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
                 Object o = ois.readObject();
                 if (!format.equals(o)) {
                     pass = false;
-                    logln(
+                    logDebug(
                             "DateFormat instance for locale "
                                     + locales[i]
                                     + " is incorrectly serialized/deserialized.");
                 } else {
-                    logln("DateFormat instance for locale " + locales[i] + " is OKAY.");
+                    logDebug("DateFormat instance for locale " + locales[i] + " is OKAY.");
                 }
             }
             if (!pass) errln("Fail: DateFormat serialization/equality bug");
@@ -515,9 +515,9 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
         Date d = new Date(9234567890L);
         StringBuffer buf = new StringBuffer("");
         sdf.format(d, buf, fp);
-        logln(sdf.format(d, buf, fp).toString());
-        logln("beginIndex = " + fp.getBeginIndex());
-        logln("endIndex = " + fp.getEndIndex());
+        logDebug(sdf.format(d, buf, fp).toString());
+        logDebug("beginIndex = " + fp.getBeginIndex());
+        logDebug("endIndex = " + fp.getEndIndex());
         if (fp.getBeginIndex() == fp.getEndIndex()) errln("Fail: Empty field");
     }
 
@@ -541,8 +541,8 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
         StringBuffer s2 = new StringBuffer("");
         FieldPosition pos = new FieldPosition(0);
         s2 = df.format(d, s2, pos);
-        logln("Date=" + s);
-        logln("DF=" + s2);
+        logDebug("Date=" + s);
+        logDebug("DF=" + s2);
         String substr = s2.substring(0, 2);
         if (s.indexOf(substr) == -1) errln("Months should match");
     }
@@ -573,7 +573,7 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
         SimpleDateFormat sdf = new SimpleDateFormat();
         String pattern = "'time' hh:mm";
         sdf.applyPattern(pattern);
-        logln("pattern: \"" + pattern + "\"");
+        logDebug("pattern: \"" + pattern + "\"");
         String strings[] = {"time 10:30", "time 10:x", "time 10x"};
         ParsePosition ppos[] = {new ParsePosition(10), new ParsePosition(0), new ParsePosition(0)};
         Calendar cal = Calendar.getInstance();
@@ -586,9 +586,9 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
             Date exp = dates[i];
             ParsePosition pos = new ParsePosition(0);
             Date d = sdf.parse(text, pos);
-            logln(" text: \"" + text + "\"");
-            logln(" index: %d" + pos.getIndex());
-            logln(" result: " + d);
+            logDebug(" text: \"" + text + "\"");
+            logDebug(" index: %d" + pos.getIndex());
+            logDebug(" result: " + d);
             if (pos.getIndex() != finish.getIndex())
                 errln("Fail: Expected pos " + finish.getIndex());
             if (!((d == null && exp.equals(new Date(-1))) || (d.equals(exp))))
@@ -605,17 +605,17 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
         SimpleDateFormat sdf = new SimpleDateFormat();
         String pattern = "'time' hh:mm";
         sdf.applyPattern(pattern);
-        logln("pattern: \"" + pattern + "\"");
+        logDebug("pattern: \"" + pattern + "\"");
         // works correctly
         ParsePosition pp = new ParsePosition(0);
         String text = "time ";
         Date dt = sdf.parse(text, pp);
-        logln(" text: \"" + text + "\"" + " date: " + dt);
+        logDebug(" text: \"" + text + "\"" + " date: " + dt);
         // works wrong
         pp.setIndex(0);
         text = "time";
         dt = sdf.parse(text, pp);
-        logln(" text: \"" + text + "\"" + " date: " + dt);
+        logDebug(" text: \"" + text + "\"" + " date: " + dt);
     }
 
     /**
@@ -655,15 +655,15 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
                 StringBuffer fmtd = new StringBuffer("");
                 FieldPosition pos = new FieldPosition(0);
                 fmtd = df.format(dt, fmtd, pos);
-                logln(fmtd.toString());
+                logDebug(fmtd.toString());
                 // logln(df.format(dt));
                 gc.setTime(dt);
-                logln("" + gc.get(Calendar.ZONE_OFFSET));
+                logDebug("" + gc.get(Calendar.ZONE_OFFSET));
                 StringBuffer s = new StringBuffer("");
                 s = format.format(dt, s, pos);
-                logln(s.toString());
+                logDebug(s.toString());
             } catch (ParseException e) {
-                logln("No way Jose");
+                logDebug("No way Jose");
             }
         }
     }
@@ -706,7 +706,7 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
 
         ParsePosition p0 = new ParsePosition(0);
         Date d = fmt.parse("01/22/92 04:52:00 GMT", p0);
-        logln(d.toString());
+        logDebug(d.toString());
         if (p0.equals(new ParsePosition(0))) errln("Fail: failed to parse 'GMT'");
         // In the failure case an exception is thrown by parse();
         // if no exception is thrown, the test passes.
@@ -718,7 +718,7 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
     @Test
     public void Test4151631() {
         String pattern = "'TO_DATE('''dd'-'MM'-'yyyy HH:mm:ss''' , ''DD-MM-YYYY HH:MI:SS'')'";
-        logln("pattern=" + pattern);
+        logDebug("pattern=" + pattern);
         SimpleDateFormat format = new SimpleDateFormat(pattern, Locale.US);
         StringBuffer result = new StringBuffer("");
         FieldPosition pos = new FieldPosition(0);
@@ -730,7 +730,7 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
         if (!result.toString().equals("TO_DATE('30-06-1998 13:30:00' , 'DD-MM-YYYY HH:MI:SS')")) {
             errln("Fail: result=" + result);
         } else {
-            logln("Pass: result=" + result);
+            logDebug("Pass: result=" + result);
         }
     }
 
@@ -755,7 +755,7 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
         }
         StringBuffer temp = new StringBuffer("");
         FieldPosition pos = new FieldPosition(0);
-        logln(dateString + " . " + fmt.format(d, temp, pos));
+        logDebug(dateString + " . " + fmt.format(d, temp, pos));
     }
 
     /**
@@ -771,7 +771,7 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
             Date x = df.parse(dateString);
             StringBuffer temp = new StringBuffer("");
             FieldPosition pos = new FieldPosition(0);
-            logln(dateString + " -> " + df.format(x, temp, pos));
+            logDebug(dateString + " -> " + df.format(x, temp, pos));
         } catch (Exception e) {
             errln("Parse format \"" + format + "\" failed.");
         }
@@ -858,9 +858,9 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
             }
         }
         if (pass) {
-            log(out);
+            logDebug(out);
         } else {
-            err(out);
+            errln(out);
         }
     }
 
@@ -879,11 +879,11 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
         calendar.set(2000, Calendar.FEBRUARY, 29);
         Date d = calendar.getTime();
         String s = fmt.format(d);
-        logln(disp.format(d) + " f> " + pattern + " => \"" + s + "\"");
+        logDebug(disp.format(d) + " f> " + pattern + " => \"" + s + "\"");
         ParsePosition pos = new ParsePosition(0);
         d = fmt.parse(s, pos);
-        logln("\"" + s + "\" p> " + pattern + " => " + (d != null ? disp.format(d) : "null"));
-        logln("Parse pos = " + pos.getIndex() + ", error pos = " + pos.getErrorIndex());
+        logDebug("\"" + s + "\" p> " + pattern + " => " + (d != null ? disp.format(d) : "null"));
+        logDebug("Parse pos = " + pos.getIndex() + ", error pos = " + pos.getErrorIndex());
         if (pos.getErrorIndex() != -1) {
             errln("FAIL: Error index should be -1");
         }
@@ -896,7 +896,7 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
         cal.setLenient(false);
         cal.set(2000, Calendar.FEBRUARY, 29); // This should work!
         d = cal.getTime();
-        logln("Attempt to set Calendar to Feb 29 2000: " + disp.format(d));
+        logDebug("Attempt to set Calendar to Feb 29 2000: " + disp.format(d));
     }
 
     @Test
@@ -914,7 +914,7 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
         if (!s.equals(tests)) {
             errln("Fail: " + s + " != " + tests);
         } else {
-            logln("OK: " + s + " == " + tests);
+            logDebug("OK: " + s + " == " + tests);
         }
     }
 
@@ -1009,7 +1009,7 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
                             new GregorianCalendar(), new ULocale("hi_IN@numbers=deva"));
             what = "Gregorian Calendar, hindi";
             s = df.format(new Date(0)); /* 31/12/1969 */
-            logln(what + "=" + s);
+            logDebug(what + "=" + s);
             first = s.charAt(0);
             if (first < kHindiZero || first > (kHindiZero + 9)) {
                 errln(
@@ -1025,7 +1025,7 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
             DateFormat df = DateFormat.getInstance(new IslamicCalendar(), new Locale("ar", "IQ"));
             s = df.format(new Date(0)); /* 21/10/1989 */
             what = "Islamic Calendar, Arabic";
-            logln(what + ": " + s);
+            logDebug(what + ": " + s);
             first = s.charAt(0);
             if (first < kArabicZero || first > (kArabicZero + 9)) {
                 errln(
@@ -1041,7 +1041,7 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
             DateFormat df = DateFormat.getInstance(new GregorianCalendar(), new Locale("ar", "IQ"));
             s = df.format(new Date(0)); /* 31/12/1969 */
             what = "Gregorian,  ar_IQ, df.getInstance";
-            logln(what + ": " + s);
+            logDebug(what + ": " + s);
             first = s.charAt(0);
             if (first < kArabicZero || first > (kArabicZero + 9)) {
                 errln(
@@ -1056,7 +1056,7 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
             DateFormat df = DateFormat.getInstance(new GregorianCalendar(), new Locale("mt", "MT"));
             s = df.format(new Date(0)); /* 31/12/1969 */
             what = "Gregorian,  mt_MT, df.getInstance";
-            logln(what + ": " + s);
+            logDebug(what + ": " + s);
             first = s.charAt(0);
             if (first < kLatinZero || first > (kLatinZero + 9)) {
                 errln(
@@ -1072,7 +1072,7 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
             DateFormat df = DateFormat.getInstance(new IslamicCalendar(), new Locale("ar", "IQ"));
             s = df.format(new Date(0)); /* 31/12/1969 */
             what = "Islamic calendar, ar_IQ, df.getInstance";
-            logln(what + ": " + s);
+            logDebug(what + ": " + s);
             first = s.charAt(0);
             if (first < kArabicZero || first > (kArabicZero + 9)) {
                 errln(
@@ -1090,7 +1090,7 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
                             DateFormat.SHORT, DateFormat.SHORT, new Locale("ar", "IQ"));
             s = df.format(new Date(0)); /* 31/12/1969 */
             what = "ar_IQ, getDateTimeInstance";
-            logln(what + ": " + s);
+            logDebug(what + ": " + s);
             first = s.charAt(0);
             if (first < kArabicZero || first > (kArabicZero + 9)) {
                 errln(
@@ -1106,7 +1106,7 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
             DateFormat df = DateFormat.getInstance(new JapaneseCalendar(), new Locale("ar", "IQ"));
             s = df.format(new Date(0)); /* 31/12/1969 */
             what = "ar_IQ, Japanese Calendar, getInstance";
-            logln(what + ": " + s);
+            logDebug(what + ": " + s);
             first = s.charAt(0);
             if (first < kArabicZero || first > (kArabicZero + 9)) {
                 errln(
@@ -1281,7 +1281,7 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
             String islamicCivilTwelfthMonth = islamicCivilTwelfthMonthLocalized[i];
             String islamicTwelfthMonth = islamicTwelfthMonthLocalized[i];
 
-            logln(
+            logDebug(
                     locales[i]
                             + ": g:"
                             + gregorianTwelfthMonth
@@ -1501,7 +1501,7 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
                                 + "  but result was - "
                                 + result);
             } else {
-                logln("formatted results match! - " + result.toString());
+                logDebug("formatted results match! - " + result.toString());
             }
         }
     }
@@ -1542,12 +1542,12 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
         format.applyPattern(pattern);
         StringBuffer formattedString = new StringBuffer();
         formattedString = format.format(referenceDate, formattedString, fp);
-        logln("ref date: " + formattedString);
+        logDebug("ref date: " + formattedString);
 
         pattern = new String("YYYY LLL dd eee ccc qqq QQQ");
         text = new String("2013 12 10 03 3 04 04");
         format.applyPattern(pattern);
-        logln(format.format(referenceDate));
+        logDebug(format.format(referenceDate));
 
         format.setBooleanAttribute(DateFormat.BooleanAttribute.PARSE_ALLOW_NUMERIC, true);
         ParsePosition pp = new ParsePosition(0);
@@ -1662,7 +1662,7 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
                                 + "  but result was - "
                                 + result);
             } else {
-                logln("formatted results match! - " + result.toString());
+                logDebug("formatted results match! - " + result.toString());
             }
         }
     }

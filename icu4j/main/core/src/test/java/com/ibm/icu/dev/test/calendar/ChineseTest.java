@@ -73,7 +73,7 @@ public class ChineseTest extends CalendarTestFmwk {
         ChineseCalendar cal = new ChineseCalendar();
         StringBuffer buf = new StringBuffer();
 
-        logln("Gregorian -> Chinese");
+        logDebug("Gregorian -> Chinese");
         // java.util.Calendar grego = java.util.Calendar.getInstance();
         Calendar grego = Calendar.getInstance();
         grego.clear();
@@ -93,7 +93,7 @@ public class ChineseTest extends CalendarTestFmwk {
             buf.append(date + " -> ");
             buf.append(y + "/" + m + (L == 1 ? "(leap)" : "") + "/" + d);
             if (y == yE && m == mE && L == LE && d == dE) {
-                logln("OK: " + buf.toString());
+                logDebug("OK: " + buf.toString());
             } else {
                 errln(
                         "Fail: "
@@ -108,7 +108,7 @@ public class ChineseTest extends CalendarTestFmwk {
             }
         }
 
-        logln("Chinese -> Gregorian");
+        logDebug("Chinese -> Gregorian");
         for (int i = 0; i < DATA.length; ) {
             grego.set(DATA[i++], DATA[i++] - 1, DATA[i++]);
             Date dexp = grego.getTime();
@@ -127,7 +127,7 @@ public class ChineseTest extends CalendarTestFmwk {
                     cyear + "/" + cmonth + (cisleapmonth == 1 ? "(leap)" : "") + "/" + cdayofmonth);
             buf.append(" -> " + date);
             if (date.equals(dexp)) {
-                logln("OK: " + buf.toString());
+                logDebug("OK: " + buf.toString());
             } else {
                 errln("Fail: " + buf.toString() + ", expected " + dexp);
             }
@@ -142,7 +142,7 @@ public class ChineseTest extends CalendarTestFmwk {
     public void TestZeroDOM() {
         ChineseCalendar cal = new ChineseCalendar();
         GregorianCalendar greg = new GregorianCalendar(1989, Calendar.SEPTEMBER, 1);
-        logln("Start: " + greg.getTime());
+        logDebug("Start: " + greg.getTime());
         for (int i = 0; i < 1000; ++i) {
             cal.setTimeInMillis(greg.getTimeInMillis());
             if (cal.get(Calendar.DAY_OF_MONTH) == 0) {
@@ -159,7 +159,7 @@ public class ChineseTest extends CalendarTestFmwk {
             }
             greg.add(Calendar.DAY_OF_YEAR, 1);
         }
-        logln("End: " + greg.getTime());
+        logDebug("End: " + greg.getTime());
     }
 
     /** Test minimum and maximum functions. */
@@ -268,7 +268,7 @@ public class ChineseTest extends CalendarTestFmwk {
             try {
                 Date e = fmt.parse(s);
                 if (e.equals(DATA[i])) {
-                    logln("Ok: " + DATA[i] + " -> " + s + " -> " + e);
+                    logDebug("Ok: " + DATA[i] + " -> " + s + " -> " + e);
                 } else {
                     errln("FAIL: " + DATA[i] + " -> " + s + " -> " + e);
                 }
@@ -375,7 +375,7 @@ public class ChineseTest extends CalendarTestFmwk {
             int isLeapMonth = cal.get(Calendar.IS_LEAP_MONTH);
             int dom = cal.get(Calendar.DAY_OF_MONTH);
             if (expMonth == month && expIsLeapMonth == isLeapMonth && dom == expDOM) {
-                logln("OK: " + buf + " => " + fmt.format(cal.getTime()));
+                logDebug("OK: " + buf + " => " + fmt.format(cal.getTime()));
             } else {
                 String s = fmt.format(cal.getTime());
                 cal.clear();
@@ -455,7 +455,7 @@ public class ChineseTest extends CalendarTestFmwk {
                                 + "/"
                                 + d2);
             } else if (isVerbose()) {
-                logln(
+                logDebug(
                         "OK: "
                                 + y1
                                 + "/"
@@ -566,7 +566,7 @@ public class ChineseTest extends CalendarTestFmwk {
                                 + ", got "
                                 + ymdToString(cal));
             } else if (isVerbose()) {
-                logln(
+                logDebug(
                         "OK: "
                                 + name
                                 + " "
@@ -724,7 +724,7 @@ public class ChineseTest extends CalendarTestFmwk {
             DateFormat fmt2 = DateFormat.getDateInstance(ccal2, DateFormat.DEFAULT, ULocale.CHINA);
             Date time2 = getDate(2001, Calendar.MAY, 23);
             String str2 = fmt2.format(time2);
-            logln("Chinese calendar time: " + time2 + " result: " + str2);
+            logDebug("Chinese calendar time: " + time2 + " result: " + str2);
         }
     }
 
@@ -756,12 +756,12 @@ public class ChineseTest extends CalendarTestFmwk {
         if (uloInd == null) {
             errln("did not get the expected ULocale");
         }
-        logln(uloInd.toString());
+        logDebug(uloInd.toString());
         Locale locInd = uloInd.toLocale();
         if (locInd == null) {
             errln("did not get the expected result");
         }
-        logln(locInd.toString());
+        logDebug(locInd.toString());
     }
 
     @Test

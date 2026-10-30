@@ -35,11 +35,11 @@ public final class CompactArrayTest extends CoreTestFmwk {
         }
         CompactByteArray cba3 = cba.clone();
 
-        logln("equals null: " + cba.equals(null));
-        logln("equals self: " + cba.equals(cba));
-        logln("equals clone: " + cba.equals(cba3));
-        logln("equals bogus: " + cba.equals(new Object()));
-        logln("hash: " + cba.hashCode());
+        logDebug("equals null: " + cba.equals(null));
+        logDebug("equals self: " + cba.equals(cba));
+        logDebug("equals clone: " + cba.equals(cba3));
+        logDebug("equals bogus: " + cba.equals(new Object()));
+        logDebug("hash: " + cba.hashCode());
 
         cba.compact(true);
         cba.compact(true);
@@ -52,36 +52,36 @@ public final class CompactArrayTest extends CoreTestFmwk {
         String vs = Utility.arrayToRLEString(va);
         CompactByteArray cba5 = new CompactByteArray(xs, vs);
 
-        logln("equals: " + cba4.equals(cba5));
-        logln("equals: " + cba.equals(cba4));
+        logDebug("equals: " + cba4.equals(cba5));
+        logDebug("equals: " + cba.equals(cba4));
 
         cba4.compact(false);
-        logln("equals: " + cba4.equals(cba5));
+        logDebug("equals: " + cba4.equals(cba5));
 
         cba5.compact(true);
-        logln("equals: " + cba4.equals(cba5));
+        logDebug("equals: " + cba4.equals(cba5));
 
         cba.setElementAt((char) 0x405, (byte) 0xdf); // force expand
-        logln("modified equals clone: " + cba.equals(cba3));
+        logDebug("modified equals clone: " + cba.equals(cba3));
 
         cba3.setElementAt((char) 0x405, (byte) 0xdf); // equivalent modification
-        logln("modified equals modified clone: " + cba.equals(cba3));
+        logDebug("modified equals modified clone: " + cba.equals(cba3));
 
         cba3.setElementAt((char) 0x405, (byte) 0xee); // different modification
-        logln("different mod equals: " + cba.equals(cba3));
+        logDebug("different mod equals: " + cba.equals(cba3));
 
         cba.compact();
         CompactByteArray cba6 = cba.clone();
-        logln("cloned compact equals: " + cba.equals(cba6));
+        logDebug("cloned compact equals: " + cba.equals(cba6));
 
         cba6.setElementAt((char) 0x405, (byte) 0xee);
-        logln("modified clone: " + cba3.equals(cba6));
+        logDebug("modified clone: " + cba3.equals(cba6));
 
         cba6.setElementAt((char) 0x100, (char) 0x104, (byte) 0xfe);
         for (int i = 0x100; i < 0x105; ++i) {
             cba3.setElementAt((char) i, (byte) 0xfe);
         }
-        logln("double modified: " + cba3.equals(cba6));
+        logDebug("double modified: " + cba3.equals(cba6));
     }
 
     @Test
@@ -101,11 +101,11 @@ public final class CompactArrayTest extends CoreTestFmwk {
         }
         CompactCharArray cca3 = cca.clone();
 
-        logln("equals null: " + cca.equals(null));
-        logln("equals self: " + cca.equals(cca));
-        logln("equals clone: " + cca.equals(cca3));
-        logln("equals bogus: " + cca.equals(new Object()));
-        logln("hash: " + cca.hashCode());
+        logDebug("equals null: " + cca.equals(null));
+        logDebug("equals self: " + cca.equals(cca));
+        logDebug("equals clone: " + cca.equals(cca3));
+        logDebug("equals bogus: " + cca.equals(new Object()));
+        logDebug("hash: " + cca.hashCode());
 
         cca.compact(EXTENSIVE);
         cca.compact(EXTENSIVE);
@@ -118,46 +118,46 @@ public final class CompactArrayTest extends CoreTestFmwk {
         String vs = Utility.arrayToRLEString(va);
         CompactCharArray cca5 = new CompactCharArray(xs, vs);
 
-        logln("equals: " + cca4.equals(cca5));
-        logln("equals: " + cca.equals(cca4));
+        logDebug("equals: " + cca4.equals(cca5));
+        logDebug("equals: " + cca.equals(cca4));
 
         cca4.compact(false);
-        logln("equals: " + cca4.equals(cca5));
+        logDebug("equals: " + cca4.equals(cca5));
 
         cca5.compact(EXTENSIVE);
-        logln("equals: " + cca4.equals(cca5));
+        logDebug("equals: " + cca4.equals(cca5));
 
         cca.setElementAt((char) 0x405, (char) 0xdf); // force expand
-        logln("modified equals clone: " + cca.equals(cca3));
+        logDebug("modified equals clone: " + cca.equals(cca3));
 
         cca3.setElementAt((char) 0x405, (char) 0xdf); // equivalent modification
-        logln("modified equals modified clone: " + cca.equals(cca3));
+        logDebug("modified equals modified clone: " + cca.equals(cca3));
 
         cca3.setElementAt((char) 0x405, (char) 0xee); // different modification
-        logln("different mod equals: " + cca.equals(cca3));
+        logDebug("different mod equals: " + cca.equals(cca3));
 
         // after setElementAt isCompact is set to false
         cca3.compact(true);
-        logln("different mod equals: " + cca.equals(cca3));
+        logDebug("different mod equals: " + cca.equals(cca3));
 
         cca3.setElementAt((char) 0x405, (char) 0xee); // different modification
-        logln("different mod equals: " + cca.equals(cca3));
+        logDebug("different mod equals: " + cca.equals(cca3));
         // after setElementAt isCompact is set to false
         cca3.compact();
-        logln("different mod equals: " + cca.equals(cca3));
+        logDebug("different mod equals: " + cca.equals(cca3));
 
         // v1.8 fails with extensive compaction, and defaults extensive, so don't compact
         // cca.compact();
         CompactCharArray cca6 = cca.clone();
-        logln("cloned compact equals: " + cca.equals(cca6));
+        logDebug("cloned compact equals: " + cca.equals(cca6));
 
         cca6.setElementAt((char) 0x405, (char) 0xee);
-        logln("modified clone: " + cca3.equals(cca6));
+        logDebug("modified clone: " + cca3.equals(cca6));
 
         cca6.setElementAt((char) 0x100, (char) 0x104, (char) 0xfe);
         for (int i = 0x100; i < 0x105; ++i) {
             cca3.setElementAt((char) i, (char) 0xfe);
         }
-        logln("double modified: " + cca3.equals(cca6));
+        logDebug("double modified: " + cca3.equals(cca6));
     }
 }

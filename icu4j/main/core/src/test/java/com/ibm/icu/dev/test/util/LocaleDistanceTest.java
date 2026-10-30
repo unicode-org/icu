@@ -116,12 +116,12 @@ public class LocaleDistanceTest extends CoreTestFmwk {
         }
         final long oldTime = oldTimeMinusLikely + likelyTime;
         final long newTime = newLikelyTime + newTimeMinusLikely;
-        logln("\n");
-        logln("\tlikelyTime:\t" + likelyTime / maxIterations);
-        logln("\toldTime-likelyTime:\t" + oldTimeMinusLikely / maxIterations);
-        logln("totalOld:\t" + oldTime / maxIterations);
-        logln("\tnewLikelyTime:\t" + newLikelyTime / maxIterations);
-        logln("totalNew:\t" + newTime / maxIterations);
+        logDebug("\n");
+        logDebug("\tlikelyTime:\t" + likelyTime / maxIterations);
+        logDebug("\toldTime-likelyTime:\t" + oldTimeMinusLikely / maxIterations);
+        logDebug("totalOld:\t" + oldTime / maxIterations);
+        logDebug("\tnewLikelyTime:\t" + newLikelyTime / maxIterations);
+        logDebug("totalNew:\t" + newTime / maxIterations);
         assertTrue("newTime < 20% of oldTime", newTime * 5 < oldTime);
         // logln("\tnewIntTime-newLikelyTime-extractTime:\t" + intTime/maxIterations);
         // logln("totalInt:\t" + (intTime)/maxIterations);

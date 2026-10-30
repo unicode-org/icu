@@ -87,22 +87,24 @@ public class BidiFmwk extends CoreTestFmwk {
         if (expected.equals(actual)) {
             return true;
         }
-        errln("");
-        errcontln(message);
+
+        StringBuilder msgBuf = new StringBuilder();
+        msgBuf.append(message);
         if (src != null) {
-            errcontln("source            : \"" + Utility.escape(src) + "\"");
+            msgBuf.append("source            : \"").append(Utility.escape(src)).append("\"\n");
         }
-        errcontln("expected          : \"" + Utility.escape(expected) + "\"");
-        errcontln("actual            : \"" + Utility.escape(actual) + "\"");
+        msgBuf.append("expected          : \"").append(Utility.escape(expected)).append("\"\n");
+        msgBuf.append("actual            : \"").append(Utility.escape(actual)).append("\"\n");
         if (mode != null) {
-            errcontln("reordering mode   : " + mode);
+            msgBuf.append("reordering mode   : ").append(mode).append('\n');
         }
         if (option != null) {
-            errcontln("reordering option : " + option);
+            msgBuf.append("reordering option : ").append(option).append('\n');
         }
         if (level != null) {
-            errcontln("paragraph level   : " + level);
+            msgBuf.append("paragraph level   : ").append(level).append('\n');
         }
+        logDebug(msgBuf.toString());
         return false;
     }
 
@@ -374,22 +376,18 @@ public class BidiFmwk extends CoreTestFmwk {
         return new String(output);
     }
 
-    void errcont(String message) {
-        msg(message, ERR, false, false);
-    }
-
-    void errcontln(String message) {
-        msg(message, ERR, false, true);
-    }
-
     void printCaseInfo(Bidi bidi, String src, String dst) {
         int length = bidi.getProcessedLength();
         byte[] levels = bidi.getLevels();
         char[] levelChars = new char[length];
         byte lev;
         int runCount = bidi.countRuns();
-        errcontln("========================================");
-        errcontln("Processed length: " + length);
+
+        StringBuilder msg = new StringBuilder();
+        msg.append("========================================\n")
+                .append("Processed length: ")
+                .append(length)
+                .append('\n');
         for (int i = 0; i < length; i++) {
             lev = levels[i];
             if (lev < 0) {
@@ -400,20 +398,40 @@ public class BidiFmwk extends CoreTestFmwk {
                 levelChars[i] = '+';
             }
         }
-        errcontln("Levels: " + new String(levelChars));
-        errcontln("Source: " + src);
-        errcontln("Result: " + dst);
-        errcontln("Direction: " + bidi.getDirection());
-        errcontln("paraLevel: " + Byte.toString(bidi.getParaLevel()));
-        errcontln("reorderingMode: " + modeToString(bidi.getReorderingMode()));
-        errcontln("reorderingOptions: " + spOptionsToString(bidi.getReorderingOptions()));
-        errcont("Runs: " + runCount + " => logicalStart.length/level: ");
+        msg.append("Levels: ")
+                .append(levelChars)
+                .append('\n')
+                .append("Source: ")
+                .append(src)
+                .append('\n')
+                .append("Result: ")
+                .append(dst)
+                .append('\n')
+                .append("Direction: ")
+                .append(bidi.getDirection())
+                .append('\n')
+                .append("paraLevel: ")
+                .append(Byte.toString(bidi.getParaLevel()))
+                .append('\n')
+                .append("reorderingMode: ")
+                .append(modeToString(bidi.getReorderingMode()))
+                .append('\n')
+                .append("reorderingOptions: ")
+                .append(spOptionsToString(bidi.getReorderingOptions()))
+                .append('\n');
+        msg.append("Runs: ").append(runCount).append(" => logicalStart.length/level: ");
         for (int i = 0; i < runCount; i++) {
             BidiRun run;
             run = bidi.getVisualRun(i);
-            errcont(" " + run.getStart() + "." + run.getLength() + "/" + run.getEmbeddingLevel());
+            msg.append(" ")
+                    .append(run.getStart())
+                    .append('.')
+                    .append(run.getLength())
+                    .append('/')
+                    .append(run.getEmbeddingLevel());
         }
-        errcont("\n");
+        msg.append('\n');
+        logDebug(msg.toString());
     }
 
     static final String mates1 = "<>()[]{}";
@@ -483,22 +501,29 @@ public class BidiFmwk extends CoreTestFmwk {
                 printCaseInfo(bidi, src, dst);
                 testOK = false;
             }
-            errln("Mismatch between getLogicalMap() and getVisualIndex()");
-            errcont("Map    :" + valueOf(logMap));
-            errcont("\n");
-            errcont("Indexes:");
+            StringBuilder msg = new StringBuilder();
+            msg.append("Mismatch between getLogicalMap() and getVisualIndex()\n")
+                    .append("Map    :")
+                    .append(valueOf(logMap))
+                    .append('\n')
+                    .append("Indexes:");
             for (i = 0; i < logLimit; i++) {
-                errcont(" " + bidi.getVisualIndex(i));
+                msg.append(" ").append(bidi.getVisualIndex(i));
             }
-            errcont("\n");
+            msg.append('\n');
+            errln(msg.toString());
         }
         if (errDst) {
             if (testOK) {
                 printCaseInfo(bidi, src, dst);
                 testOK = false;
             }
-            errln("Source does not map to Result");
-            errcontln("We got: " + new String(accumDst));
+            StringBuilder msg = new StringBuilder();
+            msg.append("Source does not map to Result\n")
+                    .append("We got: ")
+                    .append(accumDst)
+                    .append('\n');
+            errln(msg.toString());
         }
 
         errMap = errDst = false;
@@ -526,22 +551,29 @@ public class BidiFmwk extends CoreTestFmwk {
                 printCaseInfo(bidi, src, dst);
                 testOK = false;
             }
-            errln("Mismatch between getVisualMap() and getLogicalIndex()");
-            errcont("Map    :" + valueOf(visMap));
-            errcont("\n");
-            errcont("Indexes:");
+            StringBuilder msg = new StringBuilder();
+            msg.append("Mismatch between getVisualMap() and getLogicalIndex()\n")
+                    .append("Map    :")
+                    .append(valueOf(visMap))
+                    .append('\n');
+            msg.append("Indexes:");
             for (i = 0; i < visLimit; i++) {
-                errcont(" " + bidi.getLogicalIndex(i));
+                msg.append(" ").append(bidi.getLogicalIndex(i));
             }
-            errcont("\n");
+            msg.append('\n');
+            errln(msg.toString());
         }
         if (errDst) {
             if (testOK) {
                 printCaseInfo(bidi, src, dst);
                 testOK = false;
             }
-            errln("Result does not map to Source");
-            errcontln("We got: " + new String(accumSrc));
+            StringBuilder msg = new StringBuilder();
+            msg.append("Result does not map to Source\n")
+                    .append("We got: ")
+                    .append(accumSrc)
+                    .append('\n');
+            errln(msg.toString());
         }
         return testOK;
     }

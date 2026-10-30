@@ -2290,7 +2290,7 @@ public class SearchTest extends TestFmwk {
         strsrch.reset();
         strsrch.setCanonical(true);
         if (!assertEqualWithStringSearch(strsrch, COLLATORCANONICAL[1])) {
-            logln("COLLATORCANONICAL[1] failed"); // Error should already be reported.
+            logDebug("COLLATORCANONICAL[1] failed"); // Error should already be reported.
         }
         strsrch.setCollator(m_en_us_);
         strsrch.reset();
@@ -2298,7 +2298,7 @@ public class SearchTest extends TestFmwk {
             errln("Error setting rule based collator");
         }
         if (!assertEqualWithStringSearch(strsrch, COLLATORCANONICAL[0])) {
-            logln("COLLATORCANONICAL[0] failed"); // Error should already be reported.
+            logDebug("COLLATORCANONICAL[0] failed"); // Error should already be reported.
         }
     }
 
@@ -2494,14 +2494,14 @@ public class SearchTest extends TestFmwk {
             strsrch.setIndex(-1);
             errln("Error expecting set offset error");
         } catch (IndexOutOfBoundsException e) {
-            logln("PASS: strsrch.setIndex(-1) failed as expected");
+            logDebug("PASS: strsrch.setIndex(-1) failed as expected");
         }
 
         try {
             strsrch.setIndex(128);
             errln("Error expecting set offset error");
         } catch (IndexOutOfBoundsException e) {
-            logln("PASS: strsrch.setIndex(128) failed as expected");
+            logDebug("PASS: strsrch.setIndex(128) failed as expected");
         }
 
         for (int index = 0; index < BASIC.length; index++) {
@@ -2577,13 +2577,13 @@ public class SearchTest extends TestFmwk {
             strsrch.setIndex(-1);
             errln("Error expecting set offset error");
         } catch (IndexOutOfBoundsException e) {
-            logln("PASS: strsrch.setIndex(-1) failed as expected");
+            logDebug("PASS: strsrch.setIndex(-1) failed as expected");
         }
         try {
             strsrch.setIndex(128);
             errln("Error expecting set offset error");
         } catch (IndexOutOfBoundsException e) {
-            logln("PASS: strsrch.setIndex(128) failed as expected");
+            logDebug("PASS: strsrch.setIndex(128) failed as expected");
         }
 
         for (int index = 0; index < BASICCANONICAL.length; index++) {
@@ -2693,7 +2693,7 @@ public class SearchTest extends TestFmwk {
         }
         try {
             result = new StringSearch(pattern, new StringCharacterIterator(text), m_en_us_, null);
-            logln("pattern:" + result.getPattern());
+            logDebug("pattern:" + result.getPattern());
         } catch (Exception e) {
             errln("Fail: an extremely large pattern will fail the initialization");
             return;
@@ -2748,7 +2748,7 @@ public class SearchTest extends TestFmwk {
             result = new StringSearch(pattern, new StringCharacterIterator(text), null, null);
             errln("Error: null arguments should produce an error");
         } catch (Exception e) {
-            logln("PASS: null arguments failed as expected");
+            logDebug("PASS: null arguments failed as expected");
         }
 
         chariter.setText(text);
@@ -2756,7 +2756,7 @@ public class SearchTest extends TestFmwk {
             result = new StringSearch(pattern, chariter, null, null);
             errln("Error: null arguments should produce an error");
         } catch (Exception e) {
-            logln("PASS: null arguments failed as expected");
+            logDebug("PASS: null arguments failed as expected");
         }
 
         text = String.valueOf(0x1);
@@ -2764,7 +2764,7 @@ public class SearchTest extends TestFmwk {
             result = new StringSearch(pattern, new StringCharacterIterator(text), null, null);
             errln("Error: Empty pattern should produce an error");
         } catch (Exception e) {
-            logln("PASS: Empty pattern failed as expected");
+            logDebug("PASS: Empty pattern failed as expected");
         }
 
         chariter.setText(text);
@@ -2772,7 +2772,7 @@ public class SearchTest extends TestFmwk {
             result = new StringSearch(pattern, chariter, null, null);
             errln("Error: Empty pattern should produce an error");
         } catch (Exception e) {
-            logln("PASS: Empty pattern failed as expected");
+            logDebug("PASS: Empty pattern failed as expected");
         }
 
         text = "";
@@ -2781,7 +2781,7 @@ public class SearchTest extends TestFmwk {
             result = new StringSearch(pattern, new StringCharacterIterator(text), null, null);
             errln("Error: Empty text should produce an error");
         } catch (Exception e) {
-            logln("PASS: Empty text failed as expected");
+            logDebug("PASS: Empty text failed as expected");
         }
 
         chariter.setText(text);
@@ -2789,7 +2789,7 @@ public class SearchTest extends TestFmwk {
             result = new StringSearch(pattern, chariter, null, null);
             errln("Error: Empty text should produce an error");
         } catch (Exception e) {
-            logln("PASS: Empty text failed as expected");
+            logDebug("PASS: Empty text failed as expected");
         }
 
         text += temp;
@@ -2797,7 +2797,7 @@ public class SearchTest extends TestFmwk {
             result = new StringSearch(pattern, new StringCharacterIterator(text), null, null);
             errln("Error: null arguments should produce an error");
         } catch (Exception e) {
-            logln("PASS: null arguments failed as expected");
+            logDebug("PASS: null arguments failed as expected");
         }
 
         chariter.setText(text);
@@ -2805,7 +2805,7 @@ public class SearchTest extends TestFmwk {
             result = new StringSearch(pattern, chariter, null, null);
             errln("Error: null arguments should produce an error");
         } catch (Exception e) {
-            logln("PASS: null arguments failed as expected");
+            logDebug("PASS: null arguments failed as expected");
         }
 
         try {
@@ -2842,7 +2842,7 @@ public class SearchTest extends TestFmwk {
 
         try {
             result = new StringSearch(pattern, chariter, m_en_us_, null);
-            logln("pattern:" + result.getPattern());
+            logDebug("pattern:" + result.getPattern());
         } catch (Exception e) {
             errln("Error: Break iterator is valid for opening search");
         }

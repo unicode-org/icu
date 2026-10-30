@@ -28,15 +28,18 @@ public class UPropertyAliasesTest extends CoreTestFmwk {
     @Test
     public void TestPropertyNames() {
         int p, v, choice, rev;
+        StringBuilder msg = new StringBuilder();
         for (p = 0; ; ++p) {
             boolean sawProp = false;
             for (choice = 0; ; ++choice) {
                 String name = null;
                 try {
                     name = UCharacter.getPropertyName(p, choice);
-                    if (!sawProp) log("prop " + p + ":");
+                    msg.setLength(0);
+                    if (!sawProp) msg.append("prop " + p + ":");
                     String n = (name != null) ? ("\"" + name + '"') : "null";
-                    log(" " + choice + "=" + n);
+                    msg.append(" " + choice + "=" + n);
+                    logDebug(msg.toString());
                     sawProp = true;
                 } catch (IllegalArgumentException e) {
                     if (choice > 0) break;
@@ -63,7 +66,7 @@ public class UPropertyAliasesTest extends CoreTestFmwk {
                     /* UBlockCodes, unlike other values, start at 1 */
                     max = 1;
                 }
-                logln("");
+                logDebug("");
                 for (v = -1; ; ++v) {
                     boolean sawValue = false;
                     for (choice = 0; ; ++choice) {
@@ -71,8 +74,10 @@ public class UPropertyAliasesTest extends CoreTestFmwk {
                         try {
                             vname = UCharacter.getPropertyValueName(p, v, choice);
                             String n = (vname != null) ? ("\"" + vname + '"') : "null";
-                            if (!sawValue) log(" " + pname + ", value " + v + ":");
-                            log(" " + choice + "=" + n);
+                            msg.setLength(0);
+                            if (!sawValue) msg.append(" " + pname + ", value " + v + ":");
+                            msg.append(" " + choice + "=" + n);
+                            logDebug(msg.toString());
                             sawValue = true;
                         } catch (IllegalArgumentException e) {
                             if (choice > 0) break;
@@ -94,7 +99,7 @@ public class UPropertyAliasesTest extends CoreTestFmwk {
                         }
                     }
                     if (sawValue) {
-                        logln("");
+                        logDebug("");
                     }
                     if (!sawValue && v >= max) break;
                 }

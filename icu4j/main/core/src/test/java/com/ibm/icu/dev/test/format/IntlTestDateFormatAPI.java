@@ -73,13 +73,13 @@ public class IntlTestDateFormatAPI extends CoreTestFmwk {
     public void TestAPI() {
         Locale startLocale = Locale.getDefault();
 
-        logln("DateFormat API test---");
-        logln("");
+        logDebug("DateFormat API test---");
+        logDebug("");
         Locale.setDefault(Locale.ENGLISH);
 
         // ======= Test constructors
 
-        logln("Testing DateFormat constructors");
+        logDebug("Testing DateFormat constructors");
 
         DateFormat def = DateFormat.getInstance();
         DateFormat fr = DateFormat.getTimeInstance(DateFormat.FULL, Locale.FRENCH);
@@ -89,7 +89,7 @@ public class IntlTestDateFormatAPI extends CoreTestFmwk {
 
         // ======= Test equality
 
-        logln("Testing equality operator");
+        logDebug("Testing equality operator");
 
         if (fr.equals(it)) {
             errln("ERROR: equals failed");
@@ -97,7 +97,7 @@ public class IntlTestDateFormatAPI extends CoreTestFmwk {
 
         // ======= Test various format() methods
 
-        logln("Testing various format() methods");
+        logDebug("Testing various format() methods");
 
         Date d = new Date((long) 837039928046.0);
 
@@ -108,17 +108,17 @@ public class IntlTestDateFormatAPI extends CoreTestFmwk {
         FieldPosition pos2 = new FieldPosition(0);
 
         res1 = fr.format(d, res1, pos1);
-        logln("" + d.getTime() + " formatted to " + res1);
+        logDebug("" + d.getTime() + " formatted to " + res1);
 
         res2 = it.format(d, res2, pos2);
-        logln("" + d.getTime() + " formatted to " + res2);
+        logDebug("" + d.getTime() + " formatted to " + res2);
 
         res3 = de.format(d);
-        logln("" + d.getTime() + " formatted to " + res3);
+        logDebug("" + d.getTime() + " formatted to " + res3);
 
         // ======= Test parse()
 
-        logln("Testing parse()");
+        logDebug("Testing parse()");
 
         String text = new String("02/03/76, 2:50 AM, CST");
         Object result1 = new Date();
@@ -131,28 +131,28 @@ public class IntlTestDateFormatAPI extends CoreTestFmwk {
         if (result1 == null) {
             errln("ERROR: parseObject() failed for " + text);
         }
-        logln(text + " parsed into " + ((Date) result1).getTime());
+        logDebug(text + " parsed into " + ((Date) result1).getTime());
 
         try {
             result2 = def.parse(text);
         } catch (ParseException e) {
             errln("ERROR: parse() failed");
         }
-        logln(text + " parsed into " + result2.getTime());
+        logDebug(text + " parsed into " + result2.getTime());
 
         result3 = def.parse(text, pos01);
         if (result3 == null) {
             errln("ERROR: parse() failed for " + text);
         }
-        logln(text + " parsed into " + result3.getTime());
+        logDebug(text + " parsed into " + result3.getTime());
 
         // ======= Test getters and setters
 
-        logln("Testing getters and setters");
+        logDebug("Testing getters and setters");
 
         final Locale[] locales = DateFormat.getAvailableLocales();
         long count = locales.length;
-        logln("Got " + count + " locales");
+        logDebug("Got " + count + " locales");
 
         // These test cases used to check Locales without a script tag.
         // Java 6 Locale did not support script tags, such as zh_CN and zh_TW.
@@ -169,7 +169,7 @@ public class IntlTestDateFormatAPI extends CoreTestFmwk {
         for (int i = 0; i < count; i++) {
             String name;
             name = locales[i].getDisplayName();
-            logln(name);
+            logDebug(name);
             for (int j = 0; j < samples.length; j++) {
                 if (locales[i].equals(samples[j])) {
                     available[j] = true;

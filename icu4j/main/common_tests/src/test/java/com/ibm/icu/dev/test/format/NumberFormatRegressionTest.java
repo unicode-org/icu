@@ -42,7 +42,7 @@ public class NumberFormatRegressionTest extends CoreTestFmwk {
         nf.setMaximumFractionDigits(1);
         double a = -0.09;
         String s = nf.format(a);
-        logln(a + " x " + ((DecimalFormat) nf).toPattern() + " = " + s);
+        logDebug(a + " x " + ((DecimalFormat) nf).toPattern() + " = " + s);
         if (!s.equals("-0.1")) {
             errln("FAIL");
         }
@@ -185,7 +185,7 @@ public class NumberFormatRegressionTest extends CoreTestFmwk {
                         "Deserialization new version should read old version", expected[i], result);
             } catch (Exception e) {
                 e.printStackTrace();
-                warnln("FAIL: " + e);
+                errln("FAIL: " + e);
             }
         }
     }
@@ -337,7 +337,7 @@ public class NumberFormatRegressionTest extends CoreTestFmwk {
                             + aNumber
                             + "\n");
         } else {
-            logln(
+            logDebug(
                     "PASS: "
                             + testcase
                             + ": formatted "

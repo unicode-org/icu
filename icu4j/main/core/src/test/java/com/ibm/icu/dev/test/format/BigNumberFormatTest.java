@@ -77,14 +77,14 @@ public class BigNumberFormatTest extends CoreTestFmwk {
             apad = pad;
         }
         if (apos == pos && awidth == width && apad == pad) {
-            logln(
+            logDebug(
                     "Ok   \""
                             + pat
                             + "\" pos="
                             + apos
                             + ((pos == -1) ? "" : " width=" + awidth + " pad=" + apad));
         } else {
-            logln(
+            logDebug(
                     "FAIL \""
                             + pat
                             + "\" pos="
@@ -158,7 +158,7 @@ public class BigNumberFormatTest extends CoreTestFmwk {
     private void expectPat(DecimalFormat fmt, String exp) {
         String pat = fmt.toPattern();
         if (pat.equals(exp)) {
-            logln("Ok   \"" + pat + '"');
+            logDebug("Ok   \"" + pat + '"');
         } else {
             errln("FAIL \"" + pat + "\", expected \"" + exp + '"');
         }
@@ -352,7 +352,7 @@ public class BigNumberFormatTest extends CoreTestFmwk {
         String saw = fmt.format(n);
         String pat = ((DecimalFormat) fmt).toPattern();
         if (saw.equals(exp)) {
-            logln("Ok   " + showNumber(n) + " x " + pat + " = " + Utility.escape(saw));
+            logDebug("Ok   " + showNumber(n) + " x " + pat + " = " + Utility.escape(saw));
         } else {
             errln(
                     "FAIL "
@@ -375,7 +375,7 @@ public class BigNumberFormatTest extends CoreTestFmwk {
         }
         String pat = ((DecimalFormat) fmt).toPattern();
         if (saw.equals(exp)) {
-            logln("Ok   \"" + str + "\" x " + pat + " = " + showNumber(saw));
+            logDebug("Ok   \"" + str + "\" x " + pat + " = " + showNumber(saw));
         } else {
             errln(
                     "FAIL \""
@@ -412,7 +412,7 @@ public class BigNumberFormatTest extends CoreTestFmwk {
         f.setMaximumFractionDigits(1);
         double a = -0.09;
         String s = f.format(a);
-        logln(a + " x " + ((DecimalFormat) f).toPattern() + " = " + s);
+        logDebug(a + " x " + ((DecimalFormat) f).toPattern() + " = " + s);
         if (!s.equals("-0.1")) {
             errln("FAIL");
         }
@@ -429,14 +429,14 @@ public class BigNumberFormatTest extends CoreTestFmwk {
             "0.73e-7", "7.3E-8",
         };
         NumberFormat fmt = NumberFormat.getScientificInstance(Locale.US);
-        logln("Pattern: " + ((DecimalFormat) fmt).toPattern());
+        logDebug("Pattern: " + ((DecimalFormat) fmt).toPattern());
         for (int i = 0; i < DATA.length; i += 2) {
             String input = DATA[i];
             String exp = DATA[i + 1];
             com.ibm.icu.math.BigDecimal bd = new com.ibm.icu.math.BigDecimal(input);
             String output = fmt.format(bd);
             if (output.equals(exp)) {
-                logln("input=" + input + " num=" + bd + " output=" + output);
+                logDebug("input=" + input + " num=" + bd + " output=" + output);
             } else {
                 errln(
                         "FAIL: input="
@@ -463,8 +463,8 @@ public class BigNumberFormatTest extends CoreTestFmwk {
             java.math.BigDecimal bd = new java.math.BigDecimal(val);
             String jdk = jdkFormat.format(bd);
             String icu = icuFormat.format(bd);
-            logln("Format of BigDecimal " + val + " by JDK is " + jdk);
-            logln("Format of BigDecimal " + val + " by ICU is " + icu);
+            logDebug("Format of BigDecimal " + val + " by JDK is " + jdk);
+            logDebug("Format of BigDecimal " + val + " by ICU is " + icu);
             if (!jdk.equals(icu)) {
                 errln("BigDecimal jdk: " + jdk + " != icu: " + icu);
             }
@@ -472,8 +472,8 @@ public class BigNumberFormatTest extends CoreTestFmwk {
             double d = bd.doubleValue();
             jdk = jdkFormat.format(d);
             icu = icuFormat.format(d);
-            logln("Format of double " + val + " by JDK is " + jdk);
-            logln("Format of double " + val + " by ICU is " + icu);
+            logDebug("Format of double " + val + " by JDK is " + jdk);
+            logDebug("Format of double " + val + " by ICU is " + icu);
             if (!jdk.equals(icu)) {
                 errln("double jdk: " + jdk + " != icu: " + icu);
             }

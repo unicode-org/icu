@@ -144,7 +144,7 @@ public class RbnfLenientScannerTest extends TestFmwk {
                     }
 
                     String s = fmt.format(n);
-                    logln(loc.getName() + names[j] + "success format: " + n + " -> " + s);
+                    logDebug(loc.getName() + names[j] + "success format: " + n + " -> " + s);
 
                     if (testParse) {
                         // We do not validate the result in this test case,
@@ -153,13 +153,19 @@ public class RbnfLenientScannerTest extends TestFmwk {
                             // non-lenient parse
                             fmt.setLenientParseMode(false);
                             Number num = fmt.parse(s);
-                            logln(loc.getName() + names[j] + "success parse: " + s + " -> " + num);
+                            logDebug(
+                                    loc.getName()
+                                            + names[j]
+                                            + "success parse: "
+                                            + s
+                                            + " -> "
+                                            + num);
 
                             // lenient parse
                             fmt.setLenientScannerProvider(provider);
                             fmt.setLenientParseMode(true);
                             num = fmt.parse(s);
-                            logln(
+                            logDebug(
                                     loc.getName()
                                             + names[j]
                                             + "success parse (lenient): "
@@ -168,7 +174,7 @@ public class RbnfLenientScannerTest extends TestFmwk {
                                             + num);
                         } catch (ParseException pe) {
                             String msg = loc.getName() + names[j] + "ERROR:" + pe.getMessage();
-                            logln(msg);
+                            logDebug(msg);
                             if (errors == null) {
                                 errors = new StringBuilder();
                             }
@@ -181,7 +187,7 @@ public class RbnfLenientScannerTest extends TestFmwk {
         if (errors != null) {
             // TODO: We need to fix parse problems - see #6895 / #6896
             // errln(errors.toString());
-            logln(errors.toString());
+            logDebug(errors.toString());
         }
     }
 

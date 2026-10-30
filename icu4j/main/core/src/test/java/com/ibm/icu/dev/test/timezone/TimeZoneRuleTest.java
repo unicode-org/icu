@@ -652,7 +652,7 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
                                         + tzids[i]
                                         + " is not equivalent to its OlsonTimeZone corresponding.");
                     } else {
-                        logln(
+                        logDebug(
                                 "VTimeZone for "
                                         + tzids[i]
                                         + " differs from its OlsonTimeZone corresponding with maximum transition time delta - "
@@ -660,7 +660,7 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
                     }
                 }
                 if (!vtz_new.hasEquivalentTransitions(olsontz, tzt.getTime(), endTime, false)) {
-                    logln(
+                    logDebug(
                             "VTimeZone for "
                                     + tzids[i]
                                     + " is not equivalent to its OlsonTimeZone corresponding in strict comparison mode.");
@@ -737,7 +737,7 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
                                             + startTime
                                             + ") is not equivalent to its OlsonTimeZone corresponding.");
                         } else {
-                            logln(
+                            logDebug(
                                     "VTimeZone for "
                                             + tzids[i]
                                             + "(>="
@@ -1038,7 +1038,8 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
             // Try to construct TimeArrayTimeZoneRule with null transition times
             t0 = new TimeArrayTimeZoneRule("nulltimes", -3 * HOUR, 0, null, DateTimeRule.UTC_TIME);
         } catch (IllegalArgumentException iae) {
-            logln("TimeArrayTimeZoneRule constructor throws IllegalArgumentException as expected.");
+            logDebug(
+                    "TimeArrayTimeZoneRule constructor throws IllegalArgumentException as expected.");
             t0 = null;
         }
         if (t0 != null) {
@@ -1052,7 +1053,8 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
                     new TimeArrayTimeZoneRule(
                             "nulltimes", -3 * HOUR, 0, emptytimes, DateTimeRule.UTC_TIME);
         } catch (IllegalArgumentException iae) {
-            logln("TimeArrayTimeZoneRule constructor throws IllegalArgumentException as expected.");
+            logDebug(
+                    "TimeArrayTimeZoneRule constructor throws IllegalArgumentException as expected.");
             t0 = null;
         }
         if (t0 != null) {
@@ -1175,13 +1177,13 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
         if (str == null || str.length() == 0) {
             errln("FAIL: AnnualTimeZoneRule#toString for a1 returns null or empty string");
         } else {
-            logln("AnnualTimeZoneRule a1 : " + str);
+            logDebug("AnnualTimeZoneRule a1 : " + str);
         }
         str = a3.toString();
         if (str == null || str.length() == 0) {
             errln("FAIL: AnnualTimeZoneRule#toString for a3 returns null or empty string");
         } else {
-            logln("AnnualTimeZoneRule a3 : " + str);
+            logDebug("AnnualTimeZoneRule a3 : " + str);
         }
 
         // InitialTimeZoneRule#isEquivalentRule
@@ -1224,7 +1226,7 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
         if (str == null || str.length() == 0) {
             errln("FAIL: InitialTimeZoneRule#toString returns null or empty string");
         } else {
-            logln("InitialTimeZoneRule i1 : " + str);
+            logDebug("InitialTimeZoneRule i1 : " + str);
         }
 
         // TimeArrayTimeZoneRule#getStartTimes
@@ -1310,7 +1312,7 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
         if (str == null || str.length() == 0) {
             errln("FAIL: TimeArrayTimeZoneRule#toString returns null or empty string");
         } else {
-            logln("TimeArrayTimeZoneRule t3 : " + str);
+            logDebug("TimeArrayTimeZoneRule t3 : " + str);
         }
 
         // DateTimeRule#toString
@@ -1318,25 +1320,25 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
         if (str == null || str.length() == 0) {
             errln("FAIL: DateTimeRule#toString for dtr1 returns null or empty string");
         } else {
-            logln("DateTimeRule dtr1 : " + str);
+            logDebug("DateTimeRule dtr1 : " + str);
         }
         str = dtr2.toString();
         if (str == null || str.length() == 0) {
             errln("FAIL: DateTimeRule#toString for dtr2 returns null or empty string");
         } else {
-            logln("DateTimeRule dtr1 : " + str);
+            logDebug("DateTimeRule dtr1 : " + str);
         }
         str = dtr3.toString();
         if (str == null || str.length() == 0) {
             errln("FAIL: DateTimeRule#toString for dtr3 returns null or empty string");
         } else {
-            logln("DateTimeRule dtr1 : " + str);
+            logDebug("DateTimeRule dtr1 : " + str);
         }
         str = dtr4.toString();
         if (str == null || str.length() == 0) {
             errln("FAIL: DateTimeRule#toString for dtr4 returns null or empty string");
         } else {
-            logln("DateTimeRule dtr1 : " + str);
+            logDebug("DateTimeRule dtr1 : " + str);
         }
     }
 
@@ -1382,7 +1384,7 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
             if (str == null || str.length() == 0) {
                 errln("FAIL: TimeZoneTransition#toString returns null or empty string");
             } else {
-                logln(str);
+                logDebug(str);
             }
         }
         tzt1 = stz1.getPreviousTransition(time1, false);
@@ -1463,12 +1465,12 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
         VTimeZone tmpvtz = vtz.clone();
         tmpvtz.setRawOffset(RAW);
         if (tmpvtz.getRawOffset() != RAW) {
-            logln("setRawOffset is implemented");
+            logDebug("setRawOffset is implemented");
         }
 
         // hasSameRules
         boolean bSame = otz.hasSameRules(vtz);
-        logln(
+        logDebug(
                 "OlsonTimeZone#hasSameRules(VTimeZone) should return false always for now - actual: "
                         + bSame);
 
@@ -1608,7 +1610,7 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
             } catch (IOException ioe) {
                 errln("FAIL: IOException is thrown while writing VTIMEZONE data for foo");
             }
-            logln(w.toString());
+            logDebug(w.toString());
         }
     }
 
@@ -1795,7 +1797,7 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
                 errln("Error calling getOffsetFromLocal().");
             }
         } else {
-            logln("Skipping TestBasicTimeZoneCoverage: ICU4J is configured to use JDK TimeZone");
+            logDebug("Skipping TestBasicTimeZoneCoverage: ICU4J is configured to use JDK TimeZone");
         }
     }
 

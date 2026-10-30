@@ -13,7 +13,6 @@
  */
 package com.ibm.icu.dev.test.collator;
 
-import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.text.CollationElementIterator;
 import com.ibm.icu.text.CollationKey;
@@ -29,7 +28,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
-public class CollationThaiTest extends TestFmwk {
+public class CollationThaiTest extends CollationTestBase {
 
     final int MAX_FAILURES_TO_SHOW = -1;
 
@@ -81,7 +80,7 @@ public class CollationThaiTest extends TestFmwk {
         try {
             coll = getThaiCollator();
         } catch (Exception e) {
-            warnln("could not construct Thai collator");
+            errln("could not construct Thai collator");
             return;
         }
         compareArray(coll, TESTS);
@@ -103,7 +102,7 @@ public class CollationThaiTest extends TestFmwk {
             }
             String s1 = tests[i];
             String s2 = tests[i + 2];
-            CollationTest.doTest(this, c, s1, s2, expect);
+            doTest(this, c, s1, s2, expect);
         }
     }
 
@@ -123,7 +122,7 @@ public class CollationThaiTest extends TestFmwk {
         try {
             coll = getThaiCollator();
         } catch (Exception e) {
-            warnln("could not construct Thai collator");
+            errln("could not construct Thai collator");
             return;
         }
 
@@ -152,7 +151,7 @@ public class CollationThaiTest extends TestFmwk {
                 // Show the first 8 words being compared, so we can see what's happening
                 ++wordCount;
                 if (wordCount <= 8) {
-                    logln("Word " + wordCount + ": " + word);
+                    logDebug("Word " + wordCount + ": " + word);
                 }
 
                 if (lastWord.length() > 0) {
@@ -207,7 +206,7 @@ public class CollationThaiTest extends TestFmwk {
             errln("Summary: " + failed + " of " + (line - 1) + " comparisons failed");
         }
 
-        logln("Words checked: " + wordCount);
+        logDebug("Words checked: " + wordCount);
     }
 
     @Test
@@ -227,7 +226,7 @@ public class CollationThaiTest extends TestFmwk {
             collator = getThaiCollator();
             comparator = new StrCmp();
         } catch (Exception e) {
-            warnln("could not construct Thai collator");
+            errln("could not construct Thai collator");
             return;
         }
 
@@ -241,7 +240,7 @@ public class CollationThaiTest extends TestFmwk {
                 }
             }
             CollationElementIterator iterator = collator.getCollationElementIterator(tests[i]);
-            CollationTest.backAndForth(this, iterator);
+            backAndForth(this, iterator);
         }
     }
 
@@ -290,7 +289,7 @@ public class CollationThaiTest extends TestFmwk {
         try {
             collator = getThaiCollator();
         } catch (Exception e) {
-            warnln("could not construct Thai collator");
+            errln("could not construct Thai collator");
             return;
         }
         compareArray(collator, tests);

@@ -203,7 +203,7 @@ public class RegexUtilitiesTest extends TestFmwk {
                         result.replaceAll(
                                 "[0-9]+%", ""); // just so we can use the language subtag stuff
                 String resolved = regex.transform(result);
-                logln(resolved);
+                logDebug(resolved);
                 Matcher m = Pattern.compile(resolved, Pattern.COMMENTS).matcher("");
                 String checks = "";
                 for (int j = 1; j < tests[i].length; ++j) {
@@ -217,7 +217,7 @@ public class RegexUtilitiesTest extends TestFmwk {
                         checks += "\n";
                     }
                 }
-                logln("Result: " + result + "\n" + checks + "\n" + test);
+                logDebug("Result: " + result + "\n" + checks + "\n" + test);
             } catch (Exception e) {
                 if (!expectException) {
                     errln(e.getClass().getName() + ": " + e.getMessage());

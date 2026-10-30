@@ -36,7 +36,7 @@ public final class UCharacterSurrogateTest extends CoreTestFmwk {
         for (int i = 0; i < names.length; ++i) {
             try {
                 UCharacter.UnicodeBlock b = UCharacter.UnicodeBlock.forName(names[i]);
-                logln("found: " + b + " for name: " + names[i]);
+                logDebug("found: " + b + " for name: " + names[i]);
             } catch (Exception e) {
                 errln("could not find block for name: " + names[i]);
                 break;
@@ -296,7 +296,7 @@ public final class UCharacterSurrogateTest extends CoreTestFmwk {
         }
 
         // cover codePointAtBefore with limit
-        logln("Testing codePointAtBefore with limit ...");
+        logDebug("Testing codePointAtBefore with limit ...");
         for (int i = 0; i < avalues.length; ++i) {
             if (UCharacter.codePointAt(c, i, 4) != avalues[i]) errln("chars at: " + i);
             if (UCharacter.codePointBefore(c, i + 1, 0) != bvalues[i]) errln("chars before: " + i);
@@ -339,7 +339,7 @@ public final class UCharacterSurrogateTest extends CoreTestFmwk {
                 } else if (val2 != expected) {
                     errln("String " + str(s, start, limit) + "(" + val2 + ") != " + expected);
                 } else if (isVerbose()) {
-                    logln(str(s, start, limit) + " == " + expected);
+                    logDebug(str(s, start, limit) + " == " + expected);
                 }
             }
 
@@ -349,7 +349,7 @@ public final class UCharacterSurrogateTest extends CoreTestFmwk {
                     errln("unexpected success " + str(s, start, limit));
                 } catch (Throwable e) {
                     if (!exc.isInstance(e)) {
-                        warnln("bad exception " + str(s, start, limit) + e.getClass().getName());
+                        errln("bad exception " + str(s, start, limit) + e.getClass().getName());
                     }
                 }
             }
@@ -424,7 +424,7 @@ public final class UCharacterSurrogateTest extends CoreTestFmwk {
                                     + ") != "
                                     + expected);
                 } else if (isVerbose()) {
-                    logln(str(s, start, count, index, offset) + " == " + expected);
+                    logDebug(str(s, start, count, index, offset) + " == " + expected);
                 }
 
                 if (flip) {
@@ -447,7 +447,7 @@ public final class UCharacterSurrogateTest extends CoreTestFmwk {
                                         + ") != "
                                         + index);
                     } else if (isVerbose()) {
-                        logln(str(s, start, count, expected, -offset) + " == " + index);
+                        logDebug(str(s, start, count, expected, -offset) + " == " + index);
                     }
                 }
             }

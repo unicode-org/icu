@@ -39,19 +39,19 @@ import org.junit.runners.JUnit4;
 public class TimeZoneRegressionTest extends CoreTestFmwk {
     @Test
     public void Test4052967() {
-        logln("*** CHECK TIMEZONE AGAINST HOST OS SETTING ***");
+        logDebug("*** CHECK TIMEZONE AGAINST HOST OS SETTING ***");
         String id = TimeZone.getDefault().getID();
         try {
             try {
-                logln("user.timezone: " + System.getProperty("user.timezone", "<not set>"));
+                logDebug("user.timezone: " + System.getProperty("user.timezone", "<not set>"));
             } catch (AccessControlException e) {
                 // user.timezone is a protected system property - ignore
             }
-            logln("TimeZone.getDefault().getID(): " + id);
-            logln(new Date().toString());
-            logln("*** THE RESULTS OF THIS TEST MUST BE VERIFIED MANUALLY ***");
+            logDebug("TimeZone.getDefault().getID(): " + id);
+            logDebug(new Date().toString());
+            logDebug("*** THE RESULTS OF THIS TEST MUST BE VERIFIED MANUALLY ***");
         } catch (SecurityException e) {
-            warnln("security exception: " + e.toString());
+            errln("security exception: " + e.toString());
         }
     }
 
@@ -136,7 +136,7 @@ public class TimeZoneRegressionTest extends CoreTestFmwk {
                 || offset5 != DToffset
                 || offset6 != SToffset
                 || offset7 != SToffset
-                || offset8 != SToffset) warnln("Fail: TimeZone misbehaving");
+                || offset8 != SToffset) errln("Fail: TimeZone misbehaving");
     }
 
     @Test
@@ -147,7 +147,7 @@ public class TimeZoneRegressionTest extends CoreTestFmwk {
             for (int i = 0; i < ZONES.length; ++i) {
                 TimeZone zone = TimeZone.getTimeZone(ZONES[i]);
                 if (!zone.getID().equals(ZONES[i]))
-                    warnln("Fail: Test broken; zones not instantiating");
+                    errln("Fail: Test broken; zones not instantiating");
 
                 ByteArrayOutputStream baos;
                 ObjectOutputStream ostream =
@@ -161,7 +161,10 @@ public class TimeZoneRegressionTest extends CoreTestFmwk {
                 // logln("Zone:        " + zone);
                 // logln("FrankenZone: " + frankenZone);
                 if (!zone.equals(frankenZone)) {
-                    logln("TimeZone " + zone.getID() + " not equal to serialized/deserialized one");
+                    logDebug(
+                            "TimeZone "
+                                    + zone.getID()
+                                    + " not equal to serialized/deserialized one");
                     pass = false;
                 }
             }
@@ -291,7 +294,7 @@ public class TimeZoneRegressionTest extends CoreTestFmwk {
         if (passed) output += "     ";
         else output += "ERROR";
 
-        if (passed) logln(output);
+        if (passed) logDebug(output);
         else errln(output);
         return passed;
     }
@@ -365,12 +368,12 @@ public class TimeZoneRegressionTest extends CoreTestFmwk {
             try {
                 String[] ids = TimeZone.getAvailableIDs(rawoffset);
                 if (ids.length > max) max = ids.length;
-                logln(hname + ' ' + ids.length + ((ids.length > 0) ? (" e.g. " + ids[0]) : ""));
+                logDebug(hname + ' ' + ids.length + ((ids.length > 0) ? (" e.g. " + ids[0]) : ""));
             } catch (Exception e) {
                 errln(hname + ' ' + "Fail: " + e);
             }
         }
-        logln("Maximum zones per offset = " + max);
+        logDebug("Maximum zones per offset = " + max);
     }
 
     @Test
@@ -435,7 +438,7 @@ public class TimeZoneRegressionTest extends CoreTestFmwk {
                             break;
                     }
                     if (valid) {
-                        logln("Pass: DST savings of " + savings + " accepted by " + method);
+                        logDebug("Pass: DST savings of " + savings + " accepted by " + method);
                     } else {
                         errln("Fail: DST savings of " + savings + " accepted by " + method);
                     }
@@ -443,7 +446,8 @@ public class TimeZoneRegressionTest extends CoreTestFmwk {
                     if (valid) {
                         errln("Fail: DST savings of " + savings + " to " + method + " gave " + e);
                     } else {
-                        logln("Pass: DST savings of " + savings + " to " + method + " gave " + e);
+                        logDebug(
+                                "Pass: DST savings of " + savings + " to " + method + " gave " + e);
                     }
                 }
             }
@@ -847,11 +851,11 @@ public class TimeZoneRegressionTest extends CoreTestFmwk {
             long start = cal.getTime().getTime();
             boolean transitionExpected = ((Boolean) DATA[j + 2]).booleanValue();
 
-            logln(tz.getID() + ":");
+            logDebug(tz.getID() + ":");
             for (int i = 0; i < 4; ++i) {
                 Date d = new Date(start + i * ONE_HOUR);
                 zone[i] = fmt.format(d);
-                logln(
+                logDebug(
                         ""
                                 + i
                                 + ": "
@@ -880,7 +884,7 @@ public class TimeZoneRegressionTest extends CoreTestFmwk {
                                 ms);
                 cal.add(Calendar.HOUR, h);
                 int dstOffset = cal.get(Calendar.DST_OFFSET);
-                logln(
+                logDebug(
                         "h="
                                 + h
                                 + "; dom="
@@ -898,7 +902,7 @@ public class TimeZoneRegressionTest extends CoreTestFmwk {
             if (zone[0].equals(zone[1])
                     && (zone[1].equals(zone[2]) != transitionExpected)
                     && zone[2].equals(zone[3])) {
-                logln("Ok: transition " + transitionExpected);
+                logDebug("Ok: transition " + transitionExpected);
             } else {
                 errln("FAIL: expected " + (transitionExpected ? "transition" : "no transition"));
             }
@@ -940,8 +944,8 @@ public class TimeZoneRegressionTest extends CoreTestFmwk {
                 ++transitions;
                 Calendar t = cal.clone();
                 t.add(Calendar.MINUTE, -delta);
-                logln(t.getTime() + "  " + t.get(Calendar.DST_OFFSET));
-                logln(cal.getTime() + "  " + (lastDST = cal.get(Calendar.DST_OFFSET)));
+                logDebug(t.getTime() + "  " + t.get(Calendar.DST_OFFSET));
+                logDebug(cal.getTime() + "  " + (lastDST = cal.get(Calendar.DST_OFFSET)));
             }
         }
         if (transitions != 4) {
@@ -1034,25 +1038,25 @@ public class TimeZoneRegressionTest extends CoreTestFmwk {
             zone = new SimpleTimeZone(0, "A", 0, -1, 0, 0, 0, 0, 0, 0);
             errln("Failed. No exception has been thrown for DOM -1 startDay");
         } catch (IllegalArgumentException e) {
-            logln("(a) " + e.getMessage());
+            logDebug("(a) " + e.getMessage());
         }
         try {
             zone = new SimpleTimeZone(0, "A", 0, 0, 0, 0, 0, -1, 0, 0);
             errln("Failed. No exception has been thrown for DOM -1 endDay");
         } catch (IllegalArgumentException e) {
-            logln("(b) " + e.getMessage());
+            logDebug("(b) " + e.getMessage());
         }
         try {
             zone = new SimpleTimeZone(0, "A", 0, -1, 0, 0, 0, 0, 0, 0, 1000);
             errln("Failed. No exception has been thrown for DOM -1 startDay +savings");
         } catch (IllegalArgumentException e) {
-            logln("(c) " + e.getMessage());
+            logDebug("(c) " + e.getMessage());
         }
         try {
             zone = new SimpleTimeZone(0, "A", 0, 0, 0, 0, 0, -1, 0, 0, 1000);
             errln("Failed. No exception has been thrown for DOM -1 endDay +savings");
         } catch (IllegalArgumentException e) {
-            logln("(d) " + e.getMessage());
+            logDebug("(d) " + e.getMessage());
         }
         // Make a valid constructor call for subsequent tests.
 
@@ -1062,25 +1066,25 @@ public class TimeZoneRegressionTest extends CoreTestFmwk {
             zone.setStartRule(0, -1, 0, 0);
             errln("Failed. No exception has been thrown for DOM -1 setStartRule +savings");
         } catch (IllegalArgumentException e) {
-            logln("(e) " + e.getMessage());
+            logDebug("(e) " + e.getMessage());
         }
         try {
             zone.setStartRule(0, -1, 0);
             errln("Failed. No exception has been thrown for DOM -1 setStartRule");
         } catch (IllegalArgumentException e) {
-            logln("(f) " + e.getMessage());
+            logDebug("(f) " + e.getMessage());
         }
         try {
             zone.setEndRule(0, -1, 0, 0);
             errln("Failed. No exception has been thrown for DOM -1 setEndRule +savings");
         } catch (IllegalArgumentException e) {
-            logln("(g) " + e.getMessage());
+            logDebug("(g) " + e.getMessage());
         }
         try {
             zone.setEndRule(0, -1, 0);
             errln("Failed. No exception has been thrown for DOM -1 setEndRule");
         } catch (IllegalArgumentException e) {
-            logln("(h) " + e.getMessage());
+            logDebug("(h) " + e.getMessage());
         }
     }
 
@@ -1102,9 +1106,9 @@ public class TimeZoneRegressionTest extends CoreTestFmwk {
             /*int offset =*/ tz.getOffset(
                     GregorianCalendar.AD, 1997, Calendar.FEBRUARY, 29, Calendar.THURSDAY, 0);
             // offset = 0;
-            warnln("FAILED: TimeZone.getOffset(2/29/97) expected to throw Exception.");
+            errln("FAILED: TimeZone.getOffset(2/29/97) expected to throw Exception.");
         } catch (IllegalArgumentException e) {
-            logln("got IllegalArgumentException");
+            logDebug("got IllegalArgumentException");
         }
     }
 
@@ -1131,7 +1135,7 @@ public class TimeZoneRegressionTest extends CoreTestFmwk {
         // Make sure we got valid zones
         if (!(zoneWith.getID().equals(idWithLocaleData)
                 && zoneWithout.getID().equals(idWithoutLocaleData))) {
-            warnln("Fail: Unable to create zones");
+            errln("Fail: Unable to create zones");
         } else {
             GregorianCalendar calWith = new GregorianCalendar(zoneWith);
             GregorianCalendar calWithout = new GregorianCalendar(zoneWithout);
@@ -1142,7 +1146,7 @@ public class TimeZoneRegressionTest extends CoreTestFmwk {
             fmt.setCalendar(calWithout);
             String strWithout = fmt.format(date);
             if (strWith.equals(strWithout)) {
-                logln(
+                logDebug(
                         "Ok: "
                                 + idWithLocaleData
                                 + " -> "
@@ -1246,7 +1250,7 @@ public class TimeZoneRegressionTest extends CoreTestFmwk {
                     // JDK TimeZone#setRawOffset() only update the last rule, and getRawOffset()
                     // returns
                     // the current raw offset. Therefore, they might be different.
-                    logln(
+                    logDebug(
                             "Modified zone("
                                     + tz.getID()
                                     + ") - getRawOffset returns "
@@ -1280,7 +1284,7 @@ public class TimeZoneRegressionTest extends CoreTestFmwk {
             int offsetC = tzClone.getRawOffset();
             if (offsetC != newRawOffset) {
                 if (isJdkZone) {
-                    logln(
+                    logDebug(
                             "Cloned modified zone("
                                     + tz.getID()
                                     + ") - getRawOffset returns "
@@ -1391,7 +1395,7 @@ public class TimeZoneRegressionTest extends CoreTestFmwk {
                             + ", expected "
                             + expectedOffset);
         } else {
-            logln("OK: zone " + j_id + " returned offset in July: " + offset);
+            logDebug("OK: zone " + j_id + " returned offset in July: " + offset);
         }
 
         int offset2 =
@@ -1407,7 +1411,7 @@ public class TimeZoneRegressionTest extends CoreTestFmwk {
                             + ", expected "
                             + expectedOffset);
         } else {
-            logln("OK: zone " + j_id + " returned offset in December: " + offset2);
+            logDebug("OK: zone " + j_id + " returned offset in December: " + offset2);
         }
     }
 

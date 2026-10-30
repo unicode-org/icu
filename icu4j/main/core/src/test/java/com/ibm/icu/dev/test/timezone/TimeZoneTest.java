@@ -9,7 +9,6 @@
 package com.ibm.icu.dev.test.timezone;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
-import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.TimeZoneAdapter;
 import com.ibm.icu.text.SimpleDateFormat;
@@ -116,7 +115,8 @@ public class TimeZoneTest extends CoreTestFmwk {
         // as -7hour fixed offset/no DST.
         boolean isJDKTimeZone = (TimeZone.getDefaultTimeZoneType() == TimeZone.TIMEZONE_JDK);
         if (isJDKTimeZone) {
-            logln("Warning: Using JDK TimeZone.  Some test cases may not return expected results.");
+            logDebug(
+                    "Warning: Using JDK TimeZone.  Some test cases may not return expected results.");
         }
 
         ZoneDescriptor[] REFERENCE_LIST = {
@@ -176,10 +176,10 @@ public class TimeZoneTest extends CoreTestFmwk {
             ZoneDescriptor currentZone =
                     new ZoneDescriptor(TimeZone.getTimeZone(referenceZone.getID()));
             if (referenceZone.equals(currentZone)) {
-                logln("ok " + referenceZone);
+                logDebug("ok " + referenceZone);
             } else {
                 if (!isDevelopmentBuild || isJDKTimeZone) {
-                    logln("Warning: Expected " + referenceZone + "; got " + currentZone);
+                    logDebug("Warning: Expected " + referenceZone + "; got " + currentZone);
                 }
             }
         }
@@ -324,7 +324,7 @@ public class TimeZoneTest extends CoreTestFmwk {
             String gotID = zone.getID();
             int gotOffset = zone.getRawOffset() / 1000;
 
-            logln(id + " -> " + gotID + " " + gotOffset);
+            logDebug(id + " -> " + gotID + " " + gotOffset);
 
             if (offset != gotOffset) {
                 errln(
@@ -337,7 +337,7 @@ public class TimeZoneTest extends CoreTestFmwk {
             }
             if (!expId.equals(gotID)) {
                 if (TimeZone.getDefaultTimeZoneType() != TimeZone.TIMEZONE_ICU) {
-                    logln("ID for " + id + " - returned:" + gotID + " expected:" + expId);
+                    logDebug("ID for " + id + " - returned:" + gotID + " expected:" + expId);
                 } else {
                     errln(
                             "FAIL: Unexpected ID for "
@@ -364,7 +364,7 @@ public class TimeZoneTest extends CoreTestFmwk {
     public void TestDisplayName() {
         TimeZone zone = TimeZone.getTimeZone("PST");
         String name = zone.getDisplayName(Locale.ENGLISH);
-        logln("PST->" + name);
+        logDebug("PST->" + name);
 
         // dlf - we now (3.4.1) return generic time
         if (!name.equals("Pacific Time"))
@@ -418,9 +418,9 @@ public class TimeZoneTest extends CoreTestFmwk {
         SimpleTimeZone zone2 = new SimpleTimeZone(0, "PST");
         zone2.setStartRule(Calendar.JANUARY, 1, 0);
         zone2.setEndRule(Calendar.DECEMBER, 31, 86399999);
-        logln("Modified PST inDaylightTime->" + zone2.inDaylightTime(new Date()));
+        logDebug("Modified PST inDaylightTime->" + zone2.inDaylightTime(new Date()));
         name = zone2.getDisplayName(Locale.ENGLISH);
-        logln("Modified PST->" + name);
+        logDebug("Modified PST->" + name);
         if (!name.equals("Pacific Time")) errln("Fail: Expected \"Pacific Time\"");
 
         // Make sure we get the default display format for Locales
@@ -432,7 +432,7 @@ public class TimeZoneTest extends CoreTestFmwk {
         // THE FOLLOWING LINE MUST BE UPDATED IF THE LOCALE DATA CHANGES
         // THE FOLLOWING LINE MUST BE UPDATED IF THE LOCALE DATA CHANGES
         // *****************************************************************
-        logln("PST(mt_MT)->" + name);
+        logDebug("PST(mt_MT)->" + name);
 
         // Now be smart -- check to see if zh resource is even present.
         // If not, we expect the en fallback behavior.
@@ -445,7 +445,7 @@ public class TimeZoneTest extends CoreTestFmwk {
         boolean noZH = enRB == mtRB;
 
         if (noZH) {
-            logln("Warning: Not testing the mt_MT behavior because resource is absent");
+            logDebug("Warning: Not testing the mt_MT behavior because resource is absent");
             if (!name.equals("Pacific Standard Time"))
                 errln("Fail: Expected Pacific Standard Time for PST in mt_MT but got ");
         }
@@ -469,7 +469,7 @@ public class TimeZoneTest extends CoreTestFmwk {
         // Now try a non-existent zone
         zone2 = new SimpleTimeZone(90 * 60 * 1000, "xyzzy");
         name = zone2.getDisplayName(Locale.ENGLISH);
-        logln("GMT+90min->" + name);
+        logDebug("GMT+90min->" + name);
         if (!name.equals("GMT+01:30")
                 && !name.equals("GMT+1:30")
                 && !name.equals("GMT+0130")
@@ -479,7 +479,7 @@ public class TimeZoneTest extends CoreTestFmwk {
         ULocale save = ULocale.getDefault();
         ULocale.setDefault(ULocale.US);
         name = zone2.getDisplayName();
-        logln("GMT+90min->" + name + "for default display locale");
+        logDebug("GMT+90min->" + name + "for default display locale");
         if (!name.equals("GMT+01:30")
                 && !name.equals("GMT+1:30")
                 && !name.equals("GMT+0130")
@@ -504,7 +504,7 @@ public class TimeZoneTest extends CoreTestFmwk {
                 dt.setTimeZone(tz);
                 String displayName1 =
                         dt.format(now); // date value _does_ matter if we fallback to GMT
-                logln(locale.getDisplayName() + ", " + tz.getID() + ": " + displayName0);
+                logDebug(locale.getDisplayName() + ", " + tz.getID() + ": " + displayName0);
                 if (!displayName1.equals(displayName0)) {
                     // This could happen when the date used is in DST,
                     // because TimeZone.getDisplayName(ULocale) may use
@@ -585,7 +585,7 @@ public class TimeZoneTest extends CoreTestFmwk {
         String tzver = TimeZone.getTZDataVersion();
         if (tzver != null
                 && (tzver.length() == 5 || tzver.length() == 6) /* 4 digits + 1 or 2 letters */) {
-            logln("PASS: tzdata version: " + tzver);
+            logDebug("PASS: tzdata version: " + tzver);
         } else {
             errln("FAIL: getTZDataVersion returned " + tzver);
         }
@@ -625,7 +625,7 @@ public class TimeZoneTest extends CoreTestFmwk {
         long expMarchOne = 636251400000L;
         if (marchOne != expMarchOne) {
             errln("FAIL: Expected start computed as " + marchOne + " = " + new Date(marchOne));
-            logln(
+            logDebug(
                     "      Should be                  "
                             + expMarchOne
                             + " = "
@@ -635,7 +635,11 @@ public class TimeZoneTest extends CoreTestFmwk {
         long expJulyOne = 646793100000L;
         if (julyOne != expJulyOne) {
             errln("FAIL: Expected start computed as " + julyOne + " = " + new Date(julyOne));
-            logln("      Should be                  " + expJulyOne + " = " + new Date(expJulyOne));
+            logDebug(
+                    "      Should be                  "
+                            + expJulyOne
+                            + " = "
+                            + new Date(expJulyOne));
         }
 
         Calendar cal1 = Calendar.getInstance();
@@ -666,7 +670,7 @@ public class TimeZoneTest extends CoreTestFmwk {
         boolean startsInDST = tz.inDaylightTime(new Date(min));
         // if (failure(status, "SimpleTimeZone::inDaylightTime")) return;
         if (tz.inDaylightTime(new Date(max)) == startsInDST) {
-            logln("Error: inDaylightTime(" + new Date(max) + ") != " + (!startsInDST));
+            logDebug("Error: inDaylightTime(" + new Date(max) + ") != " + (!startsInDST));
             return;
         }
         // if (failure(status, "SimpleTimeZone::inDaylightTime")) return;
@@ -679,12 +683,16 @@ public class TimeZoneTest extends CoreTestFmwk {
             }
             // if (failure(status, "SimpleTimeZone::inDaylightTime")) return;
         }
-        logln("Binary Search Before: " + min + " = " + new Date(min));
-        logln("Binary Search After:  " + max + " = " + new Date(max));
+        logDebug("Binary Search Before: " + min + " = " + new Date(min));
+        logDebug("Binary Search After:  " + max + " = " + new Date(max));
         long mindelta = expectedBoundary - min;
         // not used long maxdelta = max - expectedBoundary;
         if (mindelta >= 0 && mindelta <= INTERVAL && mindelta >= 0 && mindelta <= INTERVAL)
-            logln("PASS: Expected bdry:  " + expectedBoundary + " = " + new Date(expectedBoundary));
+            logDebug(
+                    "PASS: Expected bdry:  "
+                            + expectedBoundary
+                            + " = "
+                            + new Date(expectedBoundary));
         else
             errln("FAIL: Expected bdry:  " + expectedBoundary + " = " + new Date(expectedBoundary));
     }
@@ -699,7 +707,7 @@ public class TimeZoneTest extends CoreTestFmwk {
             errln("FAIL: TimeZone(PRT) is null");
         } else {
             if (tz.getRawOffset() != (-4 * millisPerHour))
-                warnln(
+                errln(
                         "FAIL: Offset for PRT should be -4, got "
                                 + tz.getRawOffset() / (double) millisPerHour);
         }
@@ -713,7 +721,7 @@ public class TimeZoneTest extends CoreTestFmwk {
         cal.set(1997, Calendar.APRIL, 30);
         Date d = cal.getTime();
 
-        logln("The timezone is " + time_zone.getID());
+        logDebug("The timezone is " + time_zone.getID());
 
         if (time_zone.inDaylightTime(d) != true) errln("FAIL: inDaylightTime returned false");
 
@@ -744,7 +752,7 @@ public class TimeZoneTest extends CoreTestFmwk {
             buf.append(s[i]);
         }
         buf.append(" };");
-        logln(buf.toString());
+        logDebug(buf.toString());
 
         buf.setLength(0);
         buf.append("TimeZone.getAvailableIDs(GMT+02:00) = { ");
@@ -754,14 +762,14 @@ public class TimeZoneTest extends CoreTestFmwk {
             buf.append(s[i]);
         }
         buf.append(" };");
-        logln(buf.toString());
+        logDebug(buf.toString());
 
         TimeZone tz = TimeZone.getTimeZone("PST");
-        if (tz != null) logln("getTimeZone(PST) = " + tz.getID());
+        if (tz != null) logDebug("getTimeZone(PST) = " + tz.getID());
         else errln("FAIL: getTimeZone(PST) = null");
 
         tz = TimeZone.getTimeZone("America/Los_Angeles");
-        if (tz != null) logln("getTimeZone(America/Los_Angeles) = " + tz.getID());
+        if (tz != null) logDebug("getTimeZone(America/Los_Angeles) = " + tz.getID());
         else errln("FAIL: getTimeZone(PST) = null");
 
         // Bug 4096694
@@ -1127,7 +1135,7 @@ public class TimeZoneTest extends CoreTestFmwk {
                                 + s
                                 + "\", expected valid ID");
             } else {
-                logln("" + i + ":" + s);
+                logDebug("" + i + ":" + s);
             }
         }
 
@@ -1240,7 +1248,7 @@ public class TimeZoneTest extends CoreTestFmwk {
         int dst_icu = tz_icu.getDSTSavings();
 
         if (dst_java != dst_icu) {
-            warnln(
+            errln(
                     "java reports dst savings of "
                             + dst_java
                             + " but icu reports "
@@ -1248,7 +1256,7 @@ public class TimeZoneTest extends CoreTestFmwk {
                             + " for tz "
                             + tz_icu.getID());
         } else {
-            logln(
+            logDebug(
                     "both java and icu report dst savings of "
                             + dst_java
                             + " for tz "
@@ -1306,7 +1314,7 @@ public class TimeZoneTest extends CoreTestFmwk {
                 oos.writeObject(stz);
                 oos.close();
                 byte[] bytes = baos.toByteArray();
-                logln("id: " + stz.getID() + " length: " + bytes.length);
+                logDebug("id: " + stz.getID() + " length: " + bytes.length);
 
                 ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
                 ObjectInputStream ois = new ObjectInputStream(bais);
@@ -1476,7 +1484,7 @@ public class TimeZoneTest extends CoreTestFmwk {
             boolean cdy = ctz.useDaylightTime();
 
             if (!fdn.equals(cdn)) {
-                logln(
+                logDebug(
                         "display name ("
                                 + funkyName
                                 + ", "
@@ -1486,7 +1494,7 @@ public class TimeZoneTest extends CoreTestFmwk {
                                 + " but got: "
                                 + fdn);
             } else if (fro != cro) {
-                logln(
+                logDebug(
                         "offset ("
                                 + funkyName
                                 + ", "
@@ -1496,7 +1504,7 @@ public class TimeZoneTest extends CoreTestFmwk {
                                 + " but got: "
                                 + fro);
             } else if (fds != cds) {
-                logln(
+                logDebug(
                         "daylight ("
                                 + funkyName
                                 + ", "
@@ -1506,7 +1514,7 @@ public class TimeZoneTest extends CoreTestFmwk {
                                 + " but got: "
                                 + fds);
             } else if (fdy != cdy) {
-                logln(
+                logDebug(
                         "uses daylight ("
                                 + funkyName
                                 + ", "
@@ -1571,7 +1579,7 @@ public class TimeZoneTest extends CoreTestFmwk {
         String tzid = "America/Argentina/ComodRivadavia";
         TimeZone tz = TimeZone.getTimeZone(tzid);
         int offset = tz.getOffset(new Date().getTime());
-        logln(tzid + ":\t" + offset);
+        logDebug(tzid + ":\t" + offset);
         List<String> list = Arrays.asList(TimeZone.getAvailableIDs());
         if (!list.contains(tzid)) {
             errln("Could create the time zone but it is not in getAvailableIDs");
@@ -2000,7 +2008,7 @@ public class TimeZoneTest extends CoreTestFmwk {
 
         if (rawOffset != offsets[0] || dstSavings != offsets[1]) {
             // JDK time zone rule is out of sync...
-            logln("Rule for JDK America/Caracas is not same with ICU.  Skipping the rest.");
+            logDebug("Rule for JDK America/Caracas is not same with ICU.  Skipping the rest.");
             isTimeZoneSynchronized = false;
         }
 
@@ -2124,7 +2132,7 @@ public class TimeZoneTest extends CoreTestFmwk {
                                     + ",   Got "
                                     + displayName);
                 } else {
-                    logln(
+                    logDebug(
                             "Incorrect time zone display name.  zone = "
                                     + zoneDisplayTestData[testNum][0]
                                     + ",\n"
@@ -2145,7 +2153,7 @@ public class TimeZoneTest extends CoreTestFmwk {
             }
         }
         if (sawAnError) {
-            logln("Note: Errors could be the result of changes to zoneStrings locale data");
+            logDebug("Note: Errors could be the result of changes to zoneStrings locale data");
         }
     }
 
@@ -2714,7 +2722,7 @@ public class TimeZoneTest extends CoreTestFmwk {
     @Test
     public void Test11619_UnrecognizedTimeZoneID() {
         VTimeZone vzone = VTimeZone.create("ABadTimeZoneId");
-        TestFmwk.assertNull("", vzone);
+        assertNull("", vzone);
     }
 
     private static boolean isDaylightTimeAvailable(TimeZone tz, long start) {

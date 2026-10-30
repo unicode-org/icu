@@ -3,7 +3,6 @@
 
 package com.ibm.icu.dev.test.translit;
 
-import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.CanonicalIterator;
 import com.ibm.icu.text.Normalizer2;
 import com.ibm.icu.text.Transliterator;
@@ -13,7 +12,7 @@ import java.util.Map;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -22,7 +21,10 @@ import org.junit.runner.RunWith;
  * @summary Disordered marks test of Transliterator
  */
 @RunWith(JUnitParamsRunner.class)
-public class TransliteratorDisorderedMarksTest extends TestFmwk {
+public class TransliteratorDisorderedMarksTest extends TransliteratorTestBase {
+    //    private static Logger staticLogger =
+    //            LoggerFactory.getLogger(TransliteratorDisorderedMarksTest.class);
+
     private static UnicodeSet disorderedMarks;
 
     @AfterClass
@@ -30,8 +32,13 @@ public class TransliteratorDisorderedMarksTest extends TestFmwk {
         disorderedMarks = null;
     }
 
-    @BeforeClass
-    public static void disorderedMarksAddAll() {
+    @Before
+    public void disorderedMarksAddAll() {
+        if (disorderedMarks != null) {
+            logInfo("Skip initializing disorderMarks");
+            return;
+        }
+
         Normalizer2 nfc = Normalizer2.getNFCInstance();
         Normalizer2 nfd = Normalizer2.getNFDInstance();
 
@@ -117,7 +124,7 @@ public class TransliteratorDisorderedMarksTest extends TestFmwk {
             disorderedMarks.add(s + "\u0323");
             String xx = nfc.normalize("\u01EC" + s);
             if (!xx.startsWith("\u01EC")) {
-                logln("??");
+                logDebug("'" + xx + "' does not start with U+01EC");
             }
         }
 
@@ -150,9 +157,9 @@ public class TransliteratorDisorderedMarksTest extends TestFmwk {
         //                }
         //            }
         //        }
-        logln("Test cases: " + disorderedMarks.size());
+        logDebug("Test cases: " + disorderedMarks.size());
         disorderedMarks.addAll(0, 0x10FFFF).freeze();
-        logln("isInert \u0104 " + nfc.isInert('\u0104'));
+        logDebug("isInert \u0104 " + nfc.isInert('\u0104'));
     }
 
     @Test
@@ -192,7 +199,7 @@ public class TransliteratorDisorderedMarksTest extends TestFmwk {
         int count = 0; // for debugging
         for (String s : toTest) {
             if (s.equals(test)) {
-                logln(test);
+                logDebug(test);
             }
             String t = trans.transform(s);
             if (!s.equals(t)) {
@@ -223,12 +230,12 @@ public class TransliteratorDisorderedMarksTest extends TestFmwk {
             // See the comment in TestCasing() about the iota subscript.
             empiricalSource.remove(0x345);
         }
-        TransliteratorTest.assertEquals(
+        assertEquals(
                 "getSource(" + ruleDisplay + ")",
                 empiricalSource,
                 actualSource,
                 TransliteratorTest.SetAssert.MISSING_OK);
-        TransliteratorTest.assertEquals(
+        assertEquals(
                 "getTarget(" + ruleDisplay + ")",
                 empiricalTarget,
                 actualTarget,

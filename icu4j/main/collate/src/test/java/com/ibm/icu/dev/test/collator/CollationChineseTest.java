@@ -13,7 +13,6 @@
  */
 package com.ibm.icu.dev.test.collator;
 
-import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.RuleBasedCollator;
 import java.util.Locale;
@@ -22,7 +21,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
-public class CollationChineseTest extends TestFmwk {
+public class CollationChineseTest extends CollationTestBase {
     public CollationChineseTest() {}
 
     @Test
@@ -35,11 +34,11 @@ public class CollationChineseTest extends TestFmwk {
         try {
             collator = (RuleBasedCollator) Collator.getInstance(new Locale("zh", "", "PINYIN"));
         } catch (Exception e) {
-            warnln("ERROR: in creation of collator of zh__PINYIN locale");
+            errln("ERROR: in creation of collator of zh__PINYIN locale");
             return;
         }
         for (int i = 0; i < seq.length - 1; i++) {
-            CollationTest.doTest(this, collator, seq[i], seq[i + 1], -1);
+            doTest(this, collator, seq[i], seq[i + 1], -1);
         }
     }
 }

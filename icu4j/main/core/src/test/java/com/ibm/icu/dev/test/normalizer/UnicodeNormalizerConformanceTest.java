@@ -102,7 +102,7 @@ public class UnicodeNormalizerConformanceTest extends CoreTestFmwk {
                     ++failCount;
                 }
                 if ((count % 1000) == 999) {
-                    logln("Line " + (count + 1));
+                    logDebug("Line " + (count + 1));
                 }
             }
         } catch (IOException ex) {
@@ -126,7 +126,7 @@ public class UnicodeNormalizerConformanceTest extends CoreTestFmwk {
         if (failCount != 0) {
             errln("Total: " + failCount + " lines failed, " + passCount + " lines passed");
         } else {
-            logln("Total: " + passCount + " lines passed");
+            logDebug("Total: " + passCount + " lines passed");
         }
     }
 

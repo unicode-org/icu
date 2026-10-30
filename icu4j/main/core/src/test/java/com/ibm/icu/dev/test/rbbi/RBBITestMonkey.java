@@ -1799,7 +1799,7 @@ public class RBBITestMonkey extends CoreTestFmwk {
         int loopCount = getIntProperty("loop", isQuick() ? 500 : 10000);
         int seed = getIntProperty("seed", 1);
 
-        logln("Word Break Monkey Test");
+        logDebug("Word Break Monkey Test");
         RBBIWordMonkey m = new RBBIWordMonkey();
         BreakIterator bi = BreakIterator.getWordInstance(Locale.US);
         RunMonkey(bi, m, "Word", seed, loopCount);
@@ -1810,7 +1810,7 @@ public class RBBITestMonkey extends CoreTestFmwk {
         int loopCount = getIntProperty("loop", isQuick() ? 500 : 10000);
         int seed = getIntProperty("seed", 1);
 
-        logln("Line Break Monkey Test");
+        logDebug("Line Break Monkey Test");
         RBBILineMonkey m = new RBBILineMonkey();
         BreakIterator bi = BreakIterator.getLineInstance(Locale.US);
         try {
@@ -1832,7 +1832,7 @@ public class RBBITestMonkey extends CoreTestFmwk {
         int loopCount = getIntProperty("loop", isQuick() ? 500 : 3000);
         int seed = getIntProperty("seed", 1);
 
-        logln("Sentence Break Monkey Test");
+        logDebug("Sentence Break Monkey Test");
         RBBISentenceMonkey m = new RBBISentenceMonkey();
         BreakIterator bi = BreakIterator.getSentenceInstance(Locale.US);
         RunMonkey(bi, m, "Sent", seed, loopCount);
@@ -1865,7 +1865,7 @@ public class RBBITestMonkey extends CoreTestFmwk {
         int loopCount = getIntProperty("loop", isQuick() ? 200 : 2000);
         int seed = getIntProperty("seed", 1);
 
-        logln("Word Break Monkey Test");
+        logDebug("Word Break Monkey Test");
         RBBIWordMonkey m = new RBBIWordMonkey();
         BreakIterator bi = BreakIterator.getWordInstance(Locale.US);
         String rules = bi.toString();
@@ -1878,7 +1878,7 @@ public class RBBITestMonkey extends CoreTestFmwk {
         int loopCount = getIntProperty("loop", isQuick() ? 200 : 2000);
         int seed = getIntProperty("seed", 1);
 
-        logln("Line Break Monkey Test");
+        logDebug("Line Break Monkey Test");
         RBBILineMonkey m = new RBBILineMonkey();
         BreakIterator bi = BreakIterator.getLineInstance(Locale.US);
         String rules = bi.toString();
@@ -1902,7 +1902,7 @@ public class RBBITestMonkey extends CoreTestFmwk {
         int loopCount = getIntProperty("loop", isQuick() ? 200 : 1000);
         int seed = getIntProperty("seed", 1);
 
-        logln("Sentence Break Monkey Test");
+        logDebug("Sentence Break Monkey Test");
         RBBISentenceMonkey m = new RBBISentenceMonkey();
         BreakIterator bi = BreakIterator.getSentenceInstance(Locale.US);
         String rules = bi.toString();

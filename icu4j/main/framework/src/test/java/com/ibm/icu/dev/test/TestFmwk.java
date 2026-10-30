@@ -13,6 +13,9 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.security.Policy;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.Random;
@@ -21,7 +24,14 @@ import java.util.TimeZone;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.AssumptionViolatedException;
 import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Rule;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * TestFmwk is a base class for tests that can be run conveniently from the command line as well as
@@ -33,7 +43,7 @@ import org.junit.Before;
  * information may also be added to the log via the log and logln methods. These methods will add
  * their arguments to the log only if the test is being run in verbose mode.
  */
-public abstract class TestFmwk extends AbstractTestLog {
+public abstract class TestFmwk implements ITestLog {
     /** The default time zone for all of our tests. Used in @Before */
     protected static final TimeZone defaultTimeZone = TimeZone.getTimeZone("America/Los_Angeles");
 
@@ -62,7 +72,85 @@ public abstract class TestFmwk extends AbstractTestLog {
         testParams = TestParams.create();
     }
 
-    protected TestFmwk() {}
+    protected Logger logger;
+
+    @Rule public LoggingTestWatcher watcher;
+
+    protected TestFmwk() {
+        this.logger = LoggerFactory.getLogger(getClass());
+        this.watcher = new LoggingTestWatcher(logger);
+    }
+
+    // --------------------------------------------------
+    // Simple logging methods
+    // --------------------------------------------------
+
+    @Override
+    public void logTrace(String message) {
+        logger.trace(message);
+    }
+
+    @Override
+    public void logDebug(String message) {
+        logger.debug(message);
+    }
+
+    @Override
+    public void logInfo(String message) {
+        logger.info(message);
+    }
+
+    @Override
+    public void logWarn(String message) {
+        logger.warn(message);
+    }
+
+    @Override
+    public void logError(String message) {
+        logger.error(message);
+    }
+
+    // --------------------------------------------------
+    // Backward compatible logging methods
+    // --------------------------------------------------
+
+    @Override
+    public void errln(String message) {
+        logger.error(message);
+        Assert.fail(message);
+    }
+
+    /**
+     * Implementing JUnit TestWatcher. When you want to save log into a file and want to include
+     * JUnit progress, set logging level to debug.
+     */
+    static class LoggingTestWatcher extends TestWatcher {
+        Logger logger;
+
+        LoggingTestWatcher(Logger logger) {
+            this.logger = logger;
+        }
+
+        @Override
+        protected void starting(Description description) {
+            logger.debug("Starting: " + description.getDisplayName());
+        }
+
+        @Override
+        protected void succeeded(Description description) {
+            logger.debug("Succeeded: " + description.getDisplayName());
+        }
+
+        @Override
+        protected void failed(Throwable e, Description description) {
+            logger.debug("Failed: " + description.getDisplayName());
+        }
+
+        @Override
+        protected void skipped(AssumptionViolatedException e, Description description) {
+            logger.debug("Skipped: " + description.getDisplayName());
+        }
+    }
 
     @Before
     public final void testInitialize() {
@@ -83,7 +171,7 @@ public abstract class TestFmwk extends AbstractTestLog {
      *
      * <p>Any implementation of the override should be sure to call super.localTestInitialize().
      */
-    protected void localTestInitialize() {}
+    public void localTestInitialize() {}
 
     /**
      * This method is called at the beginning of {@link #testTeardown()}. TestFmwk implementation
@@ -91,7 +179,7 @@ public abstract class TestFmwk extends AbstractTestLog {
      *
      * <p>Any implementation of the override should be sure to call super.localTestTeardown().
      */
-    protected void localTestTeardown() {}
+    public void localTestTeardown() {}
 
     @After
     public final void testTeardown() {
@@ -122,22 +210,22 @@ public abstract class TestFmwk extends AbstractTestLog {
         return testParams;
     }
 
-    protected static boolean isVerbose() {
+    public static boolean isVerbose() {
         return getParams().getLoggingLevel() >= LOGGING_INFO;
     }
 
     /** 0 = fewest tests, 5 is normal build, 10 is most tests */
-    protected static int getExhaustiveness() {
+    public static int getExhaustiveness() {
         return getParams().inclusion;
     }
 
-    protected static boolean isQuick() {
+    public static boolean isQuick() {
         return getParams().getInclusion() == 0;
     }
 
     // use this instead of new random so we get a consistent seed
     // for our tests
-    protected Random createRandom() {
+    public Random createRandom() {
         return new Random(getParams().getSeed());
     }
 
@@ -146,7 +234,8 @@ public abstract class TestFmwk extends AbstractTestLog {
      * std::minstd_rand, with the same algorithm & constants. Provided for compatibility with ICU4C.
      * Get & set of the seed allows for reproducible monkey tests.
      */
-    protected static class ICU_Rand {
+    @Ignore // Prevent this class detected as a JUnit test case class
+    public static class ICU_Rand {
         private int fLast;
 
         public ICU_Rand(int seed) {
@@ -181,7 +270,7 @@ public abstract class TestFmwk extends AbstractTestLog {
      * @param comment Additional comment, or null
      * @return true unless -prop:logKnownIssue=no is specified in the test command line argument.
      */
-    protected static boolean logKnownIssue(String ticket, String comment) {
+    public static boolean logKnownIssue(String ticket, String comment) {
         if (!getBooleanProperty("logKnownIssue", true)) {
             return false;
         }
@@ -194,29 +283,29 @@ public abstract class TestFmwk extends AbstractTestLog {
         return true;
     }
 
-    protected static String getProperty(String key) {
+    public static String getProperty(String key) {
         return getParams().getProperty(key);
     }
 
-    protected static boolean getBooleanProperty(String key) {
+    public static boolean getBooleanProperty(String key) {
         return getParams().getBooleanProperty(key);
     }
 
-    protected static boolean getBooleanProperty(String key, boolean defVal) {
+    public static boolean getBooleanProperty(String key, boolean defVal) {
         return getParams().getBooleanProperty(key, defVal);
     }
 
-    protected static int getIntProperty(String key, int defVal) {
+    public static int getIntProperty(String key, int defVal) {
         return getParams().getIntProperty(key, defVal);
     }
 
-    protected static int getIntProperty(String key, int defVal, int maxVal) {
+    public static int getIntProperty(String key, int defVal, int maxVal) {
         return getParams().getIntProperty(key, defVal, maxVal);
     }
 
     // Utility Methods
 
-    protected static String hex(char[] s) {
+    public static String hex(char[] s) {
         StringJoiner result = new StringJoiner(",");
         for (int i = 0; i < s.length; ++i) {
             result.add(hex(s[i]));
@@ -224,7 +313,7 @@ public abstract class TestFmwk extends AbstractTestLog {
         return result.toString();
     }
 
-    protected static String hex(byte[] s) {
+    public static String hex(byte[] s) {
         StringJoiner result = new StringJoiner(",");
         for (int i = 0; i < s.length; ++i) {
             result.add(hex(s[i]));
@@ -232,7 +321,7 @@ public abstract class TestFmwk extends AbstractTestLog {
         return result.toString();
     }
 
-    protected static String hex(char ch) {
+    public static String hex(char ch) {
         StringBuilder result = new StringBuilder();
         String foo = Integer.toString(ch, 16).toUpperCase();
         for (int i = foo.length(); i < 4; ++i) {
@@ -241,7 +330,7 @@ public abstract class TestFmwk extends AbstractTestLog {
         return result + foo;
     }
 
-    protected static String hex(int ch) {
+    public static String hex(int ch) {
         StringBuilder result = new StringBuilder();
         String foo = Integer.toString(ch, 16).toUpperCase();
         for (int i = foo.length(); i < 4; ++i) {
@@ -250,7 +339,7 @@ public abstract class TestFmwk extends AbstractTestLog {
         return result + foo;
     }
 
-    protected static String hex(CharSequence s) {
+    public static String hex(CharSequence s) {
         StringJoiner result = new StringJoiner(",");
         for (int i = 0; i < s.length(); ++i) {
             result.add(hex(s.charAt(i)));
@@ -258,7 +347,7 @@ public abstract class TestFmwk extends AbstractTestLog {
         return result.toString();
     }
 
-    protected static String prettify(CharSequence s) {
+    public static String prettify(CharSequence s) {
         StringBuilder result = new StringBuilder();
         int ch;
         for (int i = 0; i < s.length(); i += Character.charCount(ch)) {
@@ -290,7 +379,7 @@ public abstract class TestFmwk extends AbstractTestLog {
      * @param dom day of month, 1-based
      * @return a Date object for the given y/m/d
      */
-    protected static synchronized java.util.Date getDate(int year, int month, int dom) {
+    public static synchronized java.util.Date getDate(int year, int month, int dom) {
         if (cal == null) {
             cal = new java.util.GregorianCalendar();
         }
@@ -408,7 +497,7 @@ public abstract class TestFmwk extends AbstractTestLog {
      * @param expected array of strings we expect to see, or null
      * @return the length of 'array', or -1 on error
      */
-    protected static int checkArray(String msg, String array[], String expected[]) {
+    public int checkArray(String msg, String array[], String expected[]) {
         int explen = (expected != null) ? expected.length : 0;
         if (!(explen >= 0 && explen < 31)) { // [sic] 31 not 32
             errln("Internal error");
@@ -426,12 +515,12 @@ public abstract class TestFmwk extends AbstractTestLog {
                 if ((seenMask & bit) == 0) {
                     if (s.equals(expected[j])) {
                         seenMask |= bit;
-                        logln("Ok: \"" + s + "\" seen");
+                        logDebug("Ok: \"" + s + "\" seen");
                     }
                 }
             }
         }
-        logln(msg + " = [" + buf + "] (" + i + ")");
+        logDebug(msg + " = [" + buf + "] (" + i + ")");
         // did we see all expected strings?
         if (((1 << explen) - 1) != seenMask) {
             for (int j = 0, bit = 1; j < expected.length; ++j, bit <<= 1) {
@@ -452,7 +541,7 @@ public abstract class TestFmwk extends AbstractTestLog {
      * @param expected array of locales names we expect to see, or null
      * @return the length of 'array'
      */
-    protected static <T> int checkArray(String msg, T array[], String expected[]) {
+    public <T> int checkArray(String msg, T array[], String expected[]) {
         String strs[] = new String[array.length];
         for (int i = 0; i < array.length; ++i) {
             strs[i] = array[i].toString();
@@ -462,28 +551,27 @@ public abstract class TestFmwk extends AbstractTestLog {
 
     // JUnit-like assertions.
 
-    protected static boolean assertTrue(String message, boolean condition) {
+    public boolean assertTrue(String message, boolean condition) {
         return handleAssert(condition, message, "true", null);
     }
 
-    protected static boolean assertFalse(String message, boolean condition) {
+    public boolean assertFalse(String message, boolean condition) {
         return handleAssert(!condition, message, "false", null);
     }
 
-    protected static boolean assertEquals(String message, boolean expected, boolean actual) {
+    public boolean assertEquals(String message, boolean expected, boolean actual) {
         return handleAssert(
                 expected == actual, message, String.valueOf(expected), String.valueOf(actual));
     }
 
-    protected static boolean assertEquals(String message, long expected, long actual) {
+    public boolean assertEquals(String message, long expected, long actual) {
         return handleAssert(
                 expected == actual, message, String.valueOf(expected), String.valueOf(actual));
     }
 
     // do NaN and range calculations to precision of float, don't rely on
     // promotion to double
-    protected static boolean assertEquals(
-            String message, float expected, float actual, double error) {
+    public boolean assertEquals(String message, float expected, float actual, double error) {
         boolean result =
                 Float.isInfinite(expected)
                         ? expected == actual
@@ -495,8 +583,7 @@ public abstract class TestFmwk extends AbstractTestLog {
                 String.valueOf(actual));
     }
 
-    protected static boolean assertEquals(
-            String message, double expected, double actual, double error) {
+    public boolean assertEquals(String message, double expected, double actual, double error) {
         boolean result =
                 Double.isInfinite(expected)
                         ? expected == actual
@@ -508,47 +595,47 @@ public abstract class TestFmwk extends AbstractTestLog {
                 String.valueOf(actual));
     }
 
-    protected static <T> boolean assertEquals(String message, T[] expected, T[] actual) {
+    public <T> boolean assertEquals(String message, T[] expected, T[] actual) {
         // Use toString on a List to get useful, readable messages
         String expectedString = expected == null ? "null" : Arrays.asList(expected).toString();
         String actualString = actual == null ? "null" : Arrays.asList(actual).toString();
         return assertEquals(message, expectedString, actualString);
     }
 
-    protected static boolean assertEquals(String message, Object expected, Object actual) {
+    public boolean assertEquals(String message, Object expected, Object actual) {
         boolean result = expected == null ? actual == null : expected.equals(actual);
         return handleAssert(result, message, stringFor(expected), stringFor(actual));
     }
 
-    protected static boolean assertNotEquals(String message, Object expected, Object actual) {
+    public boolean assertNotEquals(String message, Object expected, Object actual) {
         boolean result = !(expected == null ? actual == null : expected.equals(actual));
         return handleAssert(
                 result, message, stringFor(expected), stringFor(actual), "not equal to", true);
     }
 
-    protected boolean assertSame(String message, Object expected, Object actual) {
+    public boolean assertSame(String message, Object expected, Object actual) {
         return handleAssert(
                 expected == actual, message, stringFor(expected), stringFor(actual), "==", false);
     }
 
-    protected static boolean assertNotSame(String message, Object expected, Object actual) {
+    public boolean assertNotSame(String message, Object expected, Object actual) {
         return handleAssert(
                 expected != actual, message, stringFor(expected), stringFor(actual), "!=", true);
     }
 
-    protected static boolean assertNull(String message, Object actual) {
+    public boolean assertNull(String message, Object actual) {
         return handleAssert(actual == null, message, null, stringFor(actual));
     }
 
-    protected static boolean assertNotNull(String message, Object actual) {
+    public boolean assertNotNull(String message, Object actual) {
         return handleAssert(actual != null, message, null, stringFor(actual), "!=", true);
     }
 
-    protected static void fail() {
+    public void fail() {
         fail("");
     }
 
-    protected static void fail(String message) {
+    public void fail(String message) {
         if (message == null) {
             message = "";
         }
@@ -558,12 +645,11 @@ public abstract class TestFmwk extends AbstractTestLog {
         errln(sourceLocation() + message);
     }
 
-    private static boolean handleAssert(
-            boolean result, String message, String expected, String actual) {
+    private boolean handleAssert(boolean result, String message, String expected, String actual) {
         return handleAssert(result, message, expected, actual, null, false);
     }
 
-    public static boolean handleAssert(
+    public boolean handleAssert(
             boolean result,
             String message,
             Object expected,
@@ -579,7 +665,7 @@ public abstract class TestFmwk extends AbstractTestLog {
             }
             relation = relation == null ? ", got " : " " + relation + " ";
             if (result) {
-                logln("OK " + message + ": " + (flip ? expected + relation + actual : expected));
+                logDebug("OK " + message + ": " + (flip ? expected + relation + actual : expected));
             } else {
                 // assert must assume errors are true errors and not just warnings
                 // so cannot warnln here
@@ -607,7 +693,7 @@ public abstract class TestFmwk extends AbstractTestLog {
     }
 
     // Return the source code location of the caller located callDepth frames up the stack.
-    protected static String sourceLocation() {
+    public static String sourceLocation() {
         // Walk up the stack to the first call site outside this file
         for (StackTraceElement st : new Throwable().getStackTrace()) {
             String source = st.getFileName();
@@ -626,13 +712,11 @@ public abstract class TestFmwk extends AbstractTestLog {
         throw new InternalError();
     }
 
-    protected static boolean checkDefaultPrivateConstructor(String fullyQualifiedClassName)
-            throws Exception {
+    public boolean checkDefaultPrivateConstructor(String fullyQualifiedClassName) throws Exception {
         return checkDefaultPrivateConstructor(Class.forName(fullyQualifiedClassName));
     }
 
-    protected static boolean checkDefaultPrivateConstructor(Class<?> classToBeTested)
-            throws Exception {
+    public boolean checkDefaultPrivateConstructor(Class<?> classToBeTested) throws Exception {
         Constructor<?> constructor = classToBeTested.getDeclaredConstructor();
 
         // Check that the constructor is private.
@@ -659,7 +743,7 @@ public abstract class TestFmwk extends AbstractTestLog {
      * @return The output of the toString method.
      * @throws Exception
      */
-    protected static String invokeToString(String fullyQualifiedClassName) throws Exception {
+    public static String invokeToString(String fullyQualifiedClassName) throws Exception {
         return invokeToString(fullyQualifiedClassName, new Class<?>[] {}, new Object[] {});
     }
 
@@ -671,7 +755,7 @@ public abstract class TestFmwk extends AbstractTestLog {
      * @return The output of the toString method.
      * @throws Exception
      */
-    protected static String invokeToString(Class<?> classToBeTested) throws Exception {
+    public static String invokeToString(Class<?> classToBeTested) throws Exception {
         return invokeToString(classToBeTested, new Class<?>[] {}, new Object[] {});
     }
 
@@ -683,7 +767,7 @@ public abstract class TestFmwk extends AbstractTestLog {
      * @return The output of the toString method.
      * @throws Exception
      */
-    protected static String invokeToString(
+    public static String invokeToString(
             String fullyQualifiedClassName,
             Class<?>[] constructorParamTypes,
             Object[] constructorParams)
@@ -700,7 +784,7 @@ public abstract class TestFmwk extends AbstractTestLog {
      * @return The output of the toString method.
      * @throws Exception
      */
-    protected static String invokeToString(
+    public static String invokeToString(
             Class<?> classToBeTested, Class<?>[] constructorParamTypes, Object[] constructorParams)
             throws Exception {
         Constructor<?> constructor = classToBeTested.getDeclaredConstructor(constructorParamTypes);
@@ -711,25 +795,13 @@ public abstract class TestFmwk extends AbstractTestLog {
         return (String) toStringMethod.invoke(obj);
     }
 
-    // End JUnit-like assertions
-
-    // TODO (sgill): added to keep errors away
-    /* (non-Javadoc)
-     * @see com.ibm.icu.dev.test.TestLog#msg(java.lang.String, int, boolean, boolean)
-     */
-    // @Override
-    protected static void msg(String message, int level, boolean incCount, boolean newln) {
-        if (level == TestLog.WARN || level == TestLog.ERR) {
-            Assert.fail(message);
+    public static boolean isDateAtLeast(int year, int month, int day) {
+        Date now = new Date();
+        Calendar c = new GregorianCalendar(year, month, day);
+        Date dt = c.getTime();
+        if (now.compareTo(dt) >= 0) {
+            return true;
         }
-        // TODO(stuartg): turned off - causing OOM running under ant
-        //        while (level > 0) {
-        //            System.out.print(" ");
-        //            level--;
-        //        }
-        //        System.out.print(message);
-        //        if (newln) {
-        //            System.out.println();
-        //        }
+        return false;
     }
 }

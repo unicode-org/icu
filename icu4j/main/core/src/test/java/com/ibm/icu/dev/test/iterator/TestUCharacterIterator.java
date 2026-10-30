@@ -204,7 +204,7 @@ public class TestUCharacterIterator extends CoreTestFmwk {
             i = 0;
             if (iter.getIndex() != 0) errln("setToStart failed");
 
-            logln("Testing forward iteration...");
+            logDebug("Testing forward iteration...");
             do {
                 if (c != UCharacterIterator.DONE) c = iter.nextCodePoint();
 

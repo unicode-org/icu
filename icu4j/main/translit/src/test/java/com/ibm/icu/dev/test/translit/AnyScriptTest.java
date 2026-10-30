@@ -46,7 +46,7 @@ public class AnyScriptTest extends TestFmwk {
             }
         }
         String test = testBuffer.toString();
-        logln("Test line: " + test);
+        logDebug("Test line: " + test);
 
         int inclusion = TestFmwk.getExhaustiveness();
         boolean testedUnavailableScript = false;
@@ -79,10 +79,10 @@ public class AnyScriptTest extends TestFmwk {
                 t = Transliterator.getInstance("any-" + scriptName);
             } catch (Exception e) {
                 testedUnavailableScript = true;
-                logln("Skipping unavailable: " + scriptName);
+                logDebug("Skipping unavailable: " + scriptName);
                 continue; // we don't handle all scripts
             }
-            logln("Checking: " + scriptName);
+            logDebug("Checking: " + scriptName);
             if (t != null) {
                 t.transform(test); // just verify we don't crash
             }

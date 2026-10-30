@@ -13,7 +13,6 @@
  */
 package com.ibm.icu.dev.test.collator;
 
-import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.CollationElementIterator;
 import com.ibm.icu.text.Collator;
@@ -29,7 +28,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
-public class CollationIteratorTest extends TestFmwk {
+public class CollationIteratorTest extends CollationTestBase {
 
     String test1 = "What subset of all possible test cases?";
     String test2 = "has the highest probability of detecting";
@@ -43,7 +42,7 @@ public class CollationIteratorTest extends TestFmwk {
         try {
             c = new RuleBasedCollator("&a < b < c & ab = d");
         } catch (Exception e) {
-            warnln("Couldn't create a RuleBasedCollator.");
+            errln("Couldn't create a RuleBasedCollator.");
             return;
         }
 
@@ -101,7 +100,7 @@ public class CollationIteratorTest extends TestFmwk {
         try {
             coll = new RuleBasedCollator(rule);
         } catch (Exception e) {
-            warnln("Fail to create RuleBasedCollator");
+            errln("Fail to create RuleBasedCollator");
             return;
         }
         char ch = 0;
@@ -222,7 +221,7 @@ public class CollationIteratorTest extends TestFmwk {
         try {
             en_us = (RuleBasedCollator) Collator.getInstance(Locale.US);
         } catch (Exception e) {
-            warnln("ERROR: in creation of collator of ENGLISH locale");
+            errln("ERROR: in creation of collator of ENGLISH locale");
             return;
         }
 
@@ -243,7 +242,7 @@ public class CollationIteratorTest extends TestFmwk {
 
         // Run all the way through the iterator, then get the offset
         int[] orders = CollationTest.getOrders(iter);
-        logln("orders.length = " + orders.length);
+        logDebug("orders.length = " + orders.length);
 
         int offset = iter.getOffset();
 
@@ -331,8 +330,8 @@ public class CollationIteratorTest extends TestFmwk {
             }
             count += 1;
         } while (c1 != CollationElementIterator.NULLORDER);
-        CollationTest.backAndForth(this, i1);
-        CollationTest.backAndForth(this, i2);
+        backAndForth(this, i1);
+        backAndForth(this, i2);
     }
 
     /**
@@ -346,7 +345,7 @@ public class CollationIteratorTest extends TestFmwk {
         CollationElementIterator iter = en_us.getCollationElementIterator(test1);
 
         // A basic test to see if it's working at all
-        CollationTest.backAndForth(this, iter);
+        backAndForth(this, iter);
 
         // Test with a contracting character sequence
         String source;
@@ -360,7 +359,7 @@ public class CollationIteratorTest extends TestFmwk {
 
         source = "abchdcba";
         iter = c1.getCollationElementIterator(source);
-        CollationTest.backAndForth(this, iter);
+        backAndForth(this, iter);
 
         // Test with an expanding character sequence
         RuleBasedCollator c2 = null;
@@ -373,7 +372,7 @@ public class CollationIteratorTest extends TestFmwk {
 
         source = "abcd";
         iter = c2.getCollationElementIterator(source);
-        CollationTest.backAndForth(this, iter);
+        backAndForth(this, iter);
 
         // Now try both
         RuleBasedCollator c3 = null;
@@ -387,7 +386,7 @@ public class CollationIteratorTest extends TestFmwk {
 
         source = "abcdbchdc";
         iter = c3.getCollationElementIterator(source);
-        CollationTest.backAndForth(this, iter);
+        backAndForth(this, iter);
 
         source = "\u0e41\u0e02\u0e41\u0e02\u0e27abc";
         Collator c4 = null;
@@ -399,7 +398,7 @@ public class CollationIteratorTest extends TestFmwk {
         }
 
         iter = ((RuleBasedCollator) c4).getCollationElementIterator(source);
-        CollationTest.backAndForth(this, iter);
+        backAndForth(this, iter);
 
         source = "\u0061\u30CF\u3099\u30FC";
         Collator c5 = null;
@@ -411,7 +410,7 @@ public class CollationIteratorTest extends TestFmwk {
         }
         iter = ((RuleBasedCollator) c5).getCollationElementIterator(source);
 
-        CollationTest.backAndForth(this, iter);
+        backAndForth(this, iter);
     }
 
     /** Test for setText() */
@@ -479,7 +478,7 @@ public class CollationIteratorTest extends TestFmwk {
         // source.append("\u04e8\u04e9");
         iter = en_us.getCollationElementIterator(source.toString());
         // A basic test to see if it's working at all
-        CollationTest.backAndForth(this, iter);
+        backAndForth(this, iter);
         for (codepoint = 1; codepoint < 0xFFFE; ) {
             source.delete(0, source.length());
             while (codepoint % 0xFF != 0) {
@@ -508,7 +507,7 @@ public class CollationIteratorTest extends TestFmwk {
             */
             iter = en_us.getCollationElementIterator(source.toString());
             // A basic test to see if it's working at all
-            CollationTest.backAndForth(this, iter);
+            backAndForth(this, iter);
         }
     }
 
@@ -523,13 +522,13 @@ public class CollationIteratorTest extends TestFmwk {
         try {
             th_th = (RuleBasedCollator) Collator.getInstance(new Locale("th", "TH"));
         } catch (Exception e) {
-            warnln("Error creating Thai collator");
+            errln("Error creating Thai collator");
             return;
         }
         StringBuilder source = new StringBuilder();
         source.append('\uFDFA');
         CollationElementIterator iter = th_th.getCollationElementIterator(source.toString());
-        CollationTest.backAndForth(this, iter);
+        backAndForth(this, iter);
         for (char codepoint = 0x1; codepoint < 0xfffe; ) {
             source.delete(0, source.length());
             while (codepoint % 0xFF != 0) {
@@ -558,7 +557,7 @@ public class CollationIteratorTest extends TestFmwk {
             */
             iter = th_th.getCollationElementIterator(source.toString());
             // A basic test to see if it's working at all
-            CollationTest.backAndForth(this, iter);
+            backAndForth(this, iter);
         }
     }
 
@@ -646,11 +645,11 @@ public class CollationIteratorTest extends TestFmwk {
                     s = e + 1;
                 }
                 iter.reset();
-                CollationTest.backAndForth(this, iter);
+                backAndForth(this, iter);
                 count++;
             }
         } catch (Exception e) {
-            warnln("Error running discontiguous tests " + e.toString());
+            errln("Error running discontiguous tests " + e.toString());
         }
     }
 
@@ -679,14 +678,14 @@ public class CollationIteratorTest extends TestFmwk {
             coll = new RuleBasedCollator(rules);
             coll.setDecomposition(Collator.CANONICAL_DECOMPOSITION);
         } catch (Exception e) {
-            warnln("ERROR: in creation of collator using rules " + rules);
+            errln("ERROR: in creation of collator using rules " + rules);
             return;
         }
 
         CollationElementIterator iter = coll.getCollationElementIterator("testing");
         for (int count = 0; count < testdata.length; count++) {
             iter.setText(testdata[count]);
-            CollationTest.backAndForth(this, iter);
+            backAndForth(this, iter);
         }
     }
 
@@ -780,7 +779,7 @@ public class CollationIteratorTest extends TestFmwk {
             do {
                 offset = uce.getOffset();
                 element = uce.next();
-                logln(
+                logDebug(
                         String.format(
                                 "(%s) offset=%2d  ce=%08x\n",
                                 tsceItem.localeString, offset, element));

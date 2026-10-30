@@ -140,7 +140,7 @@ public class CollationRegressionTest extends TestFmwk {
         // but I'm pretty sure that's wrong, so I've changed this to use c.
         c.setDecomposition(Collator.NO_DECOMPOSITION);
         CollationElementIterator i1 = c.getCollationElementIterator(test3);
-        logln("Offset:" + i1.getOffset());
+        logDebug("Offset:" + i1.getOffset());
     }
 
     // @bug 4054734
@@ -186,9 +186,9 @@ public class CollationRegressionTest extends TestFmwk {
 
             int compareResult = 0;
 
-            logln("i = " + i);
-            logln(source);
-            logln(target);
+            logDebug("i = " + i);
+            logDebug(source);
+            logDebug(target);
             try {
                 compareResult = c.compare(source, target);
             } catch (Exception e) {
@@ -254,7 +254,7 @@ public class CollationRegressionTest extends TestFmwk {
             sResult = CollationTest.appendCompareResult(compareResult, sResult);
             sExpect = CollationTest.appendCompareResult(expectedResult, sExpect);
             if (ok1) {
-                logln(msg1 + source + msg2 + target + msg3 + sResult);
+                logDebug(msg1 + source + msg2 + target + msg3 + sResult);
             } else {
                 errln(msg1 + source + msg2 + target + msg3 + sResult + msg4 + sExpect);
             }
@@ -264,7 +264,7 @@ public class CollationRegressionTest extends TestFmwk {
             msg3 = "\")) returned ";
             sResult = CollationTest.appendCompareResult(keyResult, sResult);
             if (ok2) {
-                logln(msg1 + source + msg2 + target + msg3 + sResult);
+                logDebug(msg1 + source + msg2 + target + msg3 + sResult);
             } else {
                 errln(msg1 + source + msg2 + target + msg3 + sResult + msg4 + sExpect);
                 msg1 = "  ";
@@ -283,7 +283,7 @@ public class CollationRegressionTest extends TestFmwk {
             sResult = CollationTest.appendCompareResult(incResult, sResult);
 
             if (ok3) {
-                logln(msg1 + source + msg2 + target + msg3 + sResult);
+                logDebug(msg1 + source + msg2 + target + msg3 + sResult);
             } else {
                 errln(msg1 + source + msg2 + target + msg3 + sResult + msg4 + sExpect);
             }
@@ -761,7 +761,7 @@ public class CollationRegressionTest extends TestFmwk {
         CollationKey key;
         try {
             key = coll.getCollationKey(test);
-            logln(key.getSourceString());
+            logDebug(key.getSourceString());
         } catch (Exception e) {
             errln("CollationKey creation failed.");
         }
@@ -831,7 +831,7 @@ public class CollationRegressionTest extends TestFmwk {
         // this spanish phrase kills it!
         try {
             key = col.getCollationKey("Nombre De Objeto");
-            logln("source:" + key.getSourceString());
+            logDebug("source:" + key.getSourceString());
         } catch (Exception e) {
             errln("Error creating CollationKey for \"Nombre De Ojbeto\"");
         }
@@ -854,7 +854,7 @@ public class CollationRegressionTest extends TestFmwk {
             Collator c = null;
             try {
                 c = Collator.getInstance(locales[i]);
-                logln("source: " + c.getStrength());
+                logDebug("source: " + c.getStrength());
             } catch (Exception e) {
                 String msg = "";
                 msg += "Could not create collator for locale ";
@@ -948,10 +948,10 @@ public class CollationRegressionTest extends TestFmwk {
         };
         Collator english = Collator.getInstance(Locale.ENGLISH);
 
-        logln("Testing English order...");
+        logDebug("Testing English order...");
         checkListOrder(englishList, english);
 
-        logln("Testing English order without decomposition...");
+        logDebug("Testing English order without decomposition...");
         english.setDecomposition(Collator.NO_DECOMPOSITION);
         checkListOrder(englishList, english);
     }
@@ -1052,7 +1052,7 @@ public class CollationRegressionTest extends TestFmwk {
         }
         for (int i = 0; i < nextElements.length; i++) {
             if (nextElements[i].equals(setOffsetElements[i])) {
-                logln(nextElements[i]);
+                logDebug(nextElements[i]);
             } else {
                 errln(
                         "Error: next() yielded "
@@ -1164,16 +1164,16 @@ public class CollationRegressionTest extends TestFmwk {
         CollationElementIterator iter = collator.getCollationElementIterator(stringIter);
 
         int[] elements_next = new int[3];
-        logln("calling next:");
+        logDebug("calling next:");
         for (int i = 0; i < 3; ++i) {
-            logln("[" + i + "] " + (elements_next[i] = iter.next()));
+            logDebug("[" + i + "] " + (elements_next[i] = iter.next()));
         }
 
         int[] elements_fwd = new int[3];
-        logln("calling set/next:");
+        logDebug("calling set/next:");
         for (int i = 0; i < 3; ++i) {
             iter.setOffset(i);
-            logln("[" + i + "] " + (elements_fwd[i] = iter.next()));
+            logDebug("[" + i + "] " + (elements_fwd[i] = iter.next()));
         }
 
         for (int i = 0; i < 3; ++i) {
@@ -1196,7 +1196,7 @@ public class CollationRegressionTest extends TestFmwk {
         Collator coll = Collator.getInstance();
         CollationKey collKey = coll.getCollationKey(s);
         byte[] actualKey = collKey.toByteArray();
-        logln("Pass: " + hex(actualKey) + " generated OK.");
+        logDebug("Pass: " + hex(actualKey) + " generated OK.");
     }
 
     @Test
@@ -1221,7 +1221,7 @@ public class CollationRegressionTest extends TestFmwk {
             errln(printKey(col, str1).toString());
             errln(printKey(col, str2).toString());
         } else {
-            logln("Pass: result is OK.");
+            logDebug("Pass: result is OK.");
         }
     }
 

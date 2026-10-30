@@ -151,7 +151,7 @@ public final class UCharacterTest extends CoreTestFmwk {
                                 + " expected not to be a space character");
                 break;
             }
-            logln(
+            logDebug(
                     "Ok    \\u"
                             + hex(spaces[i])
                             + " and \\u"
@@ -206,12 +206,12 @@ public final class UCharacterTest extends CoreTestFmwk {
                     (UCharacter.getIntPropertyValue(c, UProperty.GENERAL_CATEGORY_MASK) & GC_Z_MASK)
                             != 0;
             if (j != i) {
-                logln(
+                logDebug(
                         String.format(
                                 "isWhitespace(U+%04x) difference: JDK %5b ICU %5b Unicode WS %5b Z Separator %5b",
                                 c, j, i, u, z));
             } else if (j || i || u || z) {
-                logln(
+                logDebug(
                         String.format(
                                 "isWhitespace(U+%04x) FYI:        JDK %5b ICU %5b Unicode WS %5b Z Separator %5b",
                                 c, j, i, u, z));
@@ -224,12 +224,12 @@ public final class UCharacterTest extends CoreTestFmwk {
                     (UCharacter.getIntPropertyValue(c, UProperty.GENERAL_CATEGORY_MASK) & GC_Z_MASK)
                             != 0;
             if (j != i) {
-                logln(
+                logDebug(
                         String.format(
                                 "isSpace(U+%04x) difference: JDK %5b ICU %5b Z Separator %5b",
                                 (int) c, j, i, z));
             } else if (j || i || z) {
-                logln(
+                logDebug(
                         String.format(
                                 "isSpace(U+%04x) FYI:        JDK %5b ICU %5b Z Separator %5b",
                                 (int) c, j, i, z));
@@ -440,7 +440,7 @@ public final class UCharacterTest extends CoreTestFmwk {
                 break;
             }
 
-            logln(
+            logDebug(
                     "Ok    0x"
                             + Integer.toHexString(control[i])
                             + " and 0x"
@@ -566,7 +566,7 @@ public final class UCharacterTest extends CoreTestFmwk {
                                 + " expected not to be a printable character");
                 break;
             }
-            logln("Ok    \\u" + hex(printable[i]) + " and \\u" + hex(nonprintable[i]));
+            logDebug("Ok    \\u" + hex(printable[i]) + " and \\u" + hex(nonprintable[i]));
         }
 
         // test all ISO 8 controls
@@ -912,7 +912,7 @@ public final class UCharacterTest extends CoreTestFmwk {
                 }
             }
             if (numErrors > 0) {
-                warnln("Could not find unames.icu");
+                errln("Could not find unames.icu");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -978,7 +978,7 @@ public final class UCharacterTest extends CoreTestFmwk {
                                 + Utility.hex(ch, 4)
                                 + ") == UCharacterCategory.UNASSIGNED");
             } else if (type != UCharacterCategory.PRIVATE_USE) {
-                logln("PUA override: UCharacter.getType(\\u" + Utility.hex(ch, 4) + ")=" + type);
+                logDebug("PUA override: UCharacter.getType(\\u" + Utility.hex(ch, 4) + ")=" + type);
             }
             if (ch == 0xf8ff) {
                 ch = 0xf0000;
@@ -1189,7 +1189,7 @@ public final class UCharacterTest extends CoreTestFmwk {
                                     + pattern2
                                     + " (too many lowercase a-z are ok)");
                 } else {
-                    logln("Ok: getCharNameCharacters() returned " + pattern1);
+                    logDebug("Ok: getCharNameCharacters() returned " + pattern1);
                 }
             }
             // improve code coverage
@@ -1215,7 +1215,7 @@ public final class UCharacterTest extends CoreTestFmwk {
 
         } catch (IllegalArgumentException e) {
             if (e.getMessage().indexOf("unames.icu") >= 0) {
-                warnln("Could not find unames.icu");
+                errln("Could not find unames.icu");
             } else {
                 throw e;
             }
@@ -1439,7 +1439,7 @@ public final class UCharacterTest extends CoreTestFmwk {
             iterator = UCharacter.getName1_0Iterator();
             old.integer = 0;
             while (iterator.next(element)) {
-                logln(Integer.toHexString(element.integer) + " " + (String) element.value);
+                logDebug(Integer.toHexString(element.integer) + " " + (String) element.value);
                 if (element.integer != 0 && element.integer <= old.integer) {
                     errln(
                             "FAIL next returned a less codepoint \\u"
@@ -1478,7 +1478,7 @@ public final class UCharacterTest extends CoreTestFmwk {
             // this will catch, which this will then rethrow the error.  Just seems
             // cumbersome.
             if (e.getMessage().indexOf("unames.icu") >= 0) {
-                warnln("Could not find unames.icu");
+                errln("Could not find unames.icu");
             } else {
                 errln(e.getMessage());
             }
@@ -1719,7 +1719,7 @@ public final class UCharacterTest extends CoreTestFmwk {
                 int c = result.start;
                 while (c < result.limit) {
                     if (0 == UCharacter.getIntPropertyValue(c, UProperty.LINE_BREAK)) {
-                        logln(
+                        logDebug(
                                 "error UProperty.LINE_BREAK(assigned \\u"
                                         + Utility.hex(c, 4)
                                         + ")=XX");
@@ -2979,7 +2979,7 @@ public final class UCharacterTest extends CoreTestFmwk {
                             }
                         } else {
                             if (expect) {
-                                logln(
+                                logDebug(
                                         "info: "
                                                 + a_name
                                                 + " contains "
@@ -2988,7 +2988,7 @@ public final class UCharacterTest extends CoreTestFmwk {
                                                 + b_name
                                                 + " does not");
                             } else {
-                                logln(
+                                logDebug(
                                         "info: "
                                                 + a_name
                                                 + " and "
@@ -3047,7 +3047,7 @@ public final class UCharacterTest extends CoreTestFmwk {
          * UTC 94 (2003mar) decided to leave it that way and to change UCD.html.
          * Therefore, do not show errors when testing the Hyphen property.
          */
-        logln(
+        logDebug(
                 "Starting with Unicode 4, inconsistencies with [:Hyphen:] are\n"
                         + "known to the UTC and not considered errors.\n");
 
@@ -3092,7 +3092,7 @@ public final class UCharacterTest extends CoreTestFmwk {
 
                 if ((name.indexOf("SMALL") < 0 || name.indexOf("CAPITAL") < -1)
                         && name.indexOf("SMALL CAPITAL") == -1) {
-                    logln(
+                    logDebug(
                             "info: [:Lowercase:] contains U+"
                                     + hex(start)
                                     + " whose name does not suggest lowercase: "

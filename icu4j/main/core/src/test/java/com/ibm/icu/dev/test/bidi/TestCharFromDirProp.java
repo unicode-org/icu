@@ -25,7 +25,7 @@ public class TestCharFromDirProp extends BidiFmwk {
     @Test
     public void testCharFromDirProp() {
 
-        logln("\nEntering TestCharFromDirProp");
+        logDebug("\nEntering TestCharFromDirProp");
         int i = UCharacterDirection.CHAR_DIRECTION_COUNT;
         while (i-- > 0) {
             char c = charFromDirProp[i];
@@ -39,6 +39,6 @@ public class TestCharFromDirProp extends BidiFmwk {
                     i,
                     dir);
         }
-        logln("\nExiting TestCharFromDirProp");
+        logDebug("\nExiting TestCharFromDirProp");
     }
 }

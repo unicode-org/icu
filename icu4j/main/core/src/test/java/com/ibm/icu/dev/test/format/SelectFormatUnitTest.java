@@ -131,7 +131,7 @@ public class SelectFormatUnitTest extends CoreTestFmwk {
             }
         };
 
-        log("SelectFormat Unit test: Testing  applyPattern() and format() ...");
+        logDebug("SelectFormat Unit test: Testing  applyPattern() and format() ...");
         SelectFormat selFmt = new SelectFormat(SIMPLE_PATTERN);
 
         for (int i = 0; i < patternTestData.length; ++i) {

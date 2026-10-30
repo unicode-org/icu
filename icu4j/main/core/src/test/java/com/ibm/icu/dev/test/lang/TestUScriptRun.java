@@ -117,7 +117,7 @@ public class TestUScriptRun extends CoreTestFmwk {
             errln(
                     "new UScriptRun(nullString, 0, 100) did not produce an IllegalArgumentException!");
         } catch (IllegalArgumentException iae) {
-            logln("PASS: UScriptRun failed as expected");
+            logDebug("PASS: UScriptRun failed as expected");
         }
 
         try {
@@ -125,7 +125,7 @@ public class TestUScriptRun extends CoreTestFmwk {
             errln(
                     "new UScriptRun(nullString, 100, 0) did not produce an IllegalArgumentException!");
         } catch (IllegalArgumentException iae) {
-            logln("PASS: UScriptRun failed as expected");
+            logDebug("PASS: UScriptRun failed as expected");
         }
 
         try {
@@ -133,7 +133,7 @@ public class TestUScriptRun extends CoreTestFmwk {
             errln(
                     "new UScriptRun(nullString, 0, -100) did not produce an IllegalArgumentException!");
         } catch (IllegalArgumentException iae) {
-            logln("PASS: UScriptRun failed as expected");
+            logDebug("PASS: UScriptRun failed as expected");
         }
 
         try {
@@ -141,21 +141,21 @@ public class TestUScriptRun extends CoreTestFmwk {
             errln(
                     "new UScriptRun(nullString, -100, 0) did not produce an IllegalArgumentException!");
         } catch (IllegalArgumentException iae) {
-            logln("PASS: UScriptRun failed as expected");
+            logDebug("PASS: UScriptRun failed as expected");
         }
 
         try {
             scriptRun = new UScriptRun(nullChars, 0, 100);
             errln("new UScriptRun(nullChars, 0, 100) did not produce an IllegalArgumentException!");
         } catch (IllegalArgumentException iae) {
-            logln("PASS: UScriptRun failed as expected");
+            logDebug("PASS: UScriptRun failed as expected");
         }
 
         try {
             scriptRun = new UScriptRun(nullChars, 100, 0);
             errln("new UScriptRun(nullChars, 100, 0) did not produce an IllegalArgumentException!");
         } catch (IllegalArgumentException iae) {
-            logln("PASS: UScriptRun failed as expected");
+            logDebug("PASS: UScriptRun failed as expected");
         }
 
         try {
@@ -163,7 +163,7 @@ public class TestUScriptRun extends CoreTestFmwk {
             errln(
                     "new UScriptRun(nullChars, 0, -100) did not produce an IllegalArgumentException!");
         } catch (IllegalArgumentException iae) {
-            logln("PASS: UScriptRun failed as expected");
+            logDebug("PASS: UScriptRun failed as expected");
         }
 
         try {
@@ -171,21 +171,21 @@ public class TestUScriptRun extends CoreTestFmwk {
             errln(
                     "new UScriptRun(nullChars, -100, 0) did not produce an IllegalArgumentException!");
         } catch (IllegalArgumentException iae) {
-            logln("PASS: UScriptRun failed as expected");
+            logDebug("PASS: UScriptRun failed as expected");
         }
 
         try {
             scriptRun = new UScriptRun(dummyString, 0, 6);
             errln("new UScriptRun(dummyString, 0, 6) did not produce an IllegalArgumentException!");
         } catch (IllegalArgumentException iae) {
-            logln("PASS: UScriptRun failed as expected");
+            logDebug("PASS: UScriptRun failed as expected");
         }
 
         try {
             scriptRun = new UScriptRun(dummyString, 6, 0);
             errln("new UScriptRun(dummy, 6, 0) did not produce an IllegalArgumentException!");
         } catch (IllegalArgumentException iae) {
-            logln("PASS: UScriptRun failed as expected");
+            logDebug("PASS: UScriptRun failed as expected");
         }
 
         try {
@@ -193,28 +193,28 @@ public class TestUScriptRun extends CoreTestFmwk {
             errln(
                     "new UScriptRun(dummyString, 0, -100) did not produce an IllegalArgumentException!");
         } catch (IllegalArgumentException iae) {
-            logln("PASS: UScriptRun failed as expected");
+            logDebug("PASS: UScriptRun failed as expected");
         }
 
         try {
             scriptRun = new UScriptRun(dummyString, -100, 0);
             errln("new UScriptRun(dummy, -100, 0) did not produce an IllegalArgumentException!");
         } catch (IllegalArgumentException iae) {
-            logln("PASS: UScriptRun failed as expected");
+            logDebug("PASS: UScriptRun failed as expected");
         }
 
         try {
             scriptRun = new UScriptRun(dummyChars, 0, 6);
             errln("new UScriptRun(dummyChars, 0, 6) did not produce an IllegalArgumentException!");
         } catch (IllegalArgumentException iae) {
-            logln("PASS: UScriptRun failed as expected");
+            logDebug("PASS: UScriptRun failed as expected");
         }
 
         try {
             scriptRun = new UScriptRun(dummyChars, 6, 0);
             errln("new UScriptRun(dummyChars, 6, 0) did not produce an IllegalArgumentException!");
         } catch (IllegalArgumentException iae) {
-            logln("PASS: UScriptRun failed as expected");
+            logDebug("PASS: UScriptRun failed as expected");
         }
 
         try {
@@ -222,14 +222,14 @@ public class TestUScriptRun extends CoreTestFmwk {
             errln(
                     "new UScriptRun(dummyChars, 0, -100) did not produce an IllegalArgumentException!");
         } catch (IllegalArgumentException iae) {
-            logln("PASS: UScriptRun failed as expected");
+            logDebug("PASS: UScriptRun failed as expected");
         }
 
         try {
             scriptRun = new UScriptRun(dummyChars, -100, 0);
             errln("new UScriptRun(dummy, -100, 0) did not produce an IllegalArgumentException!");
         } catch (IllegalArgumentException iae) {
-            logln("PASS: UScriptRun failed as expected");
+            logDebug("PASS: UScriptRun failed as expected");
         }
         if (scriptRun != null) {
             errln("Did not get the expected Exception");
@@ -251,56 +251,56 @@ public class TestUScriptRun extends CoreTestFmwk {
             scriptRun.reset(0, 100);
             errln("scriptRun.reset(0, 100) did not produce an IllegalArgumentException!");
         } catch (IllegalArgumentException iae) {
-            logln("PASS: scriptRun.reset failed as expected");
+            logDebug("PASS: scriptRun.reset failed as expected");
         }
 
         try {
             scriptRun.reset(100, 0);
             errln("scriptRun.reset(100, 0) did not produce an IllegalArgumentException!");
         } catch (IllegalArgumentException iae) {
-            logln("PASS: scriptRun.reset failed as expected");
+            logDebug("PASS: scriptRun.reset failed as expected");
         }
 
         try {
             scriptRun.reset(0, -100);
             errln("scriptRun.reset(0, -100) did not produce an IllegalArgumentException!");
         } catch (IllegalArgumentException iae) {
-            logln("PASS: scriptRun.reset failed as expected");
+            logDebug("PASS: scriptRun.reset failed as expected");
         }
 
         try {
             scriptRun.reset(-100, 0);
             errln("scriptRun.reset(-100, 0) did not produce an IllegalArgumentException!");
         } catch (IllegalArgumentException iae) {
-            logln("PASS: scriptRun.reset failed as expected");
+            logDebug("PASS: scriptRun.reset failed as expected");
         }
 
         try {
             scriptRun.reset(dummy, 0, 6);
             errln("scriptRun.reset(dummy, 0, 6) did not produce an IllegalArgumentException!");
         } catch (IllegalArgumentException iae) {
-            logln("PASS: scriptRun.reset failed as expected");
+            logDebug("PASS: scriptRun.reset failed as expected");
         }
 
         try {
             scriptRun.reset(dummy, 6, 0);
             errln("scriptRun.reset(dummy, 6, 0) did not produce an IllegalArgumentException!");
         } catch (IllegalArgumentException iae) {
-            logln("PASS: scriptRun.reset failed as expected");
+            logDebug("PASS: scriptRun.reset failed as expected");
         }
 
         try {
             scriptRun.reset(dummy, 0, -100);
             errln("scriptRun.reset(dummy, 0, -100) did not produce an IllegalArgumentException!");
         } catch (IllegalArgumentException iae) {
-            logln("PASS: scriptRun.reset failed as expected");
+            logDebug("PASS: scriptRun.reset failed as expected");
         }
 
         try {
             scriptRun.reset(dummy, -100, 0);
             errln("scriptRun.reset(dummy, -100, 0) did not produce an IllegalArgumentException!");
         } catch (IllegalArgumentException iae) {
-            logln("PASS: scriptRun.reset failed as expected");
+            logDebug("PASS: scriptRun.reset failed as expected");
         }
 
         try {
@@ -313,14 +313,14 @@ public class TestUScriptRun extends CoreTestFmwk {
             scriptRun.reset(0, 6);
             errln("scriptRun.reset(0, 6) did not produce an IllegalArgumentException!");
         } catch (IllegalArgumentException iae) {
-            logln("PASS: scriptRun.reset failed as expected");
+            logDebug("PASS: scriptRun.reset failed as expected");
         }
 
         try {
             scriptRun.reset(6, 0);
             errln("scriptRun.reset(6, 0) did not produce an IllegalArgumentException!");
         } catch (IllegalArgumentException iae) {
-            logln("PASS: scriptRun.reset failed as expected");
+            logDebug("PASS: scriptRun.reset failed as expected");
         }
 
         try {

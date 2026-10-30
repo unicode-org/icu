@@ -94,7 +94,7 @@ public class BreakIteratorTest extends CoreTestFmwk {
                 out.append(temp);
             }
         }
-        logln(out.toString());
+        logDebug(out.toString());
     }
 
     // =========================================================================
@@ -182,7 +182,7 @@ public class BreakIteratorTest extends CoreTestFmwk {
         if (ulocList.length == 0) {
             errln("getAvailableULocales() returned an empty list!");
         } else {
-            logln("getAvailableULocales() returned " + ulocList.length + " locales");
+            logDebug("getAvailableULocales() returned " + ulocList.length + " locales");
         }
     }
 
@@ -342,23 +342,23 @@ public class BreakIteratorTest extends CoreTestFmwk {
         String ABBR_CAPT = "Capt.";
 
         {
-            logln("Constructing empty builder\n");
+            logDebug("Constructing empty builder\n");
             builder = FilteredBreakIteratorBuilder.getEmptyInstance();
 
-            logln("Constructing base BI\n");
+            logDebug("Constructing base BI\n");
             baseBI = BreakIterator.getSentenceInstance(Locale.ENGLISH);
 
-            logln("Building new BI\n");
+            logDebug("Building new BI\n");
             filteredBI = builder.wrapIteratorWithFilter(baseBI);
 
             assertDefaultBreakBehavior(filteredBI, text);
         }
 
         {
-            logln("Constructing empty builder\n");
+            logDebug("Constructing empty builder\n");
             builder = FilteredBreakIteratorBuilder.getEmptyInstance();
 
-            logln("Adding Mr. as an exception\n");
+            logDebug("Adding Mr. as an exception\n");
 
             assertEquals("2.1 suppressBreakAfter", true, builder.suppressBreakAfter(ABBR_MR));
             assertEquals("2.2 suppressBreakAfter", false, builder.suppressBreakAfter(ABBR_MR));
@@ -366,13 +366,13 @@ public class BreakIteratorTest extends CoreTestFmwk {
             assertEquals("2.4 unsuppressBreakAfter", false, builder.unsuppressBreakAfter(ABBR_MR));
             assertEquals("2.5 suppressBreakAfter", true, builder.suppressBreakAfter(ABBR_MR));
 
-            logln("Constructing base BI\n");
+            logDebug("Constructing base BI\n");
             baseBI = BreakIterator.getSentenceInstance(Locale.ENGLISH);
 
-            logln("Building new BI\n");
+            logDebug("Building new BI\n");
             filteredBI = builder.wrapIteratorWithFilter(baseBI);
 
-            logln("Testing:");
+            logDebug("Testing:");
             filteredBI.setText(text);
             assertEquals("2nd next", 84, filteredBI.next());
             assertEquals("2nd next", 90, filteredBI.next());
@@ -381,20 +381,20 @@ public class BreakIteratorTest extends CoreTestFmwk {
         }
 
         {
-            logln("Constructing empty builder\n");
+            logDebug("Constructing empty builder\n");
             builder = FilteredBreakIteratorBuilder.getEmptyInstance();
 
-            logln("Adding Mr. and Capt as an exception\n");
+            logDebug("Adding Mr. and Capt as an exception\n");
             assertEquals("3.1 suppressBreakAfter", true, builder.suppressBreakAfter(ABBR_MR));
             assertEquals("3.2 suppressBreakAfter", true, builder.suppressBreakAfter(ABBR_CAPT));
 
-            logln("Constructing base BI\n");
+            logDebug("Constructing base BI\n");
             baseBI = BreakIterator.getSentenceInstance(Locale.ENGLISH);
 
-            logln("Building new BI\n");
+            logDebug("Building new BI\n");
             filteredBI = builder.wrapIteratorWithFilter(baseBI);
 
-            logln("Testing:");
+            logDebug("Testing:");
             filteredBI.setText(text);
             assertEquals("3rd next", 84, filteredBI.next());
             assertEquals("3rd next", 278, filteredBI.next());
@@ -402,20 +402,20 @@ public class BreakIteratorTest extends CoreTestFmwk {
         }
 
         {
-            logln("Constructing English builder\n");
+            logDebug("Constructing English builder\n");
             builder = FilteredBreakIteratorBuilder.getInstance(ULocale.ENGLISH);
 
-            logln("Constructing base BI\n");
+            logDebug("Constructing base BI\n");
             baseBI = BreakIterator.getSentenceInstance(Locale.ENGLISH);
 
-            logln("unsuppressing 'Capt'");
+            logDebug("unsuppressing 'Capt'");
             assertEquals("1st suppressBreakAfter", true, builder.unsuppressBreakAfter(ABBR_CAPT));
 
-            logln("Building new BI\n");
+            logDebug("Building new BI\n");
             filteredBI = builder.wrapIteratorWithFilter(baseBI);
 
             if (filteredBI != null) {
-                logln("Testing:");
+                logDebug("Testing:");
                 filteredBI.setText(text);
                 assertEquals("4th next", 84, filteredBI.next());
                 assertEquals("4th next", 90, filteredBI.next());
@@ -425,13 +425,13 @@ public class BreakIteratorTest extends CoreTestFmwk {
         }
 
         {
-            logln("Constructing English builder\n");
+            logDebug("Constructing English builder\n");
             builder = FilteredBreakIteratorBuilder.getInstance(ULocale.ENGLISH);
 
-            logln("Constructing base BI\n");
+            logDebug("Constructing base BI\n");
             baseBI = BreakIterator.getSentenceInstance(Locale.ENGLISH);
 
-            logln("Building new BI\n");
+            logDebug("Building new BI\n");
             filteredBI = builder.wrapIteratorWithFilter(baseBI);
 
             if (filteredBI != null) {
@@ -440,7 +440,7 @@ public class BreakIteratorTest extends CoreTestFmwk {
         }
 
         {
-            logln("Constructing English @ss=standard\n");
+            logDebug("Constructing English @ss=standard\n");
             filteredBI =
                     BreakIterator.getSentenceInstance(
                             ULocale.forLanguageTag("en-US-u-ss-standard"));
@@ -451,7 +451,7 @@ public class BreakIteratorTest extends CoreTestFmwk {
         }
 
         {
-            logln("Constructing Afrikaans @ss=standard - should be == default\n");
+            logDebug("Constructing Afrikaans @ss=standard - should be == default\n");
             filteredBI =
                     BreakIterator.getSentenceInstance(ULocale.forLanguageTag("af-u-ss-standard"));
 
@@ -459,14 +459,14 @@ public class BreakIteratorTest extends CoreTestFmwk {
         }
 
         {
-            logln("Constructing Japanese @ss=standard - should be == default\n");
+            logDebug("Constructing Japanese @ss=standard - should be == default\n");
             filteredBI =
                     BreakIterator.getSentenceInstance(ULocale.forLanguageTag("ja-u-ss-standard"));
 
             assertDefaultBreakBehavior(filteredBI, text);
         }
         {
-            logln("Constructing tfg @ss=standard - should be == default\n");
+            logDebug("Constructing tfg @ss=standard - should be == default\n");
             filteredBI =
                     BreakIterator.getSentenceInstance(ULocale.forLanguageTag("tfg-u-ss-standard"));
 
@@ -474,13 +474,13 @@ public class BreakIteratorTest extends CoreTestFmwk {
         }
 
         {
-            logln("Constructing French builder");
+            logDebug("Constructing French builder");
             builder = FilteredBreakIteratorBuilder.getInstance(ULocale.FRENCH);
 
-            logln("Constructing base BI\n");
+            logDebug("Constructing base BI\n");
             baseBI = BreakIterator.getSentenceInstance(Locale.FRENCH);
 
-            logln("Building new BI\n");
+            logDebug("Building new BI\n");
             filteredBI = builder.wrapIteratorWithFilter(baseBI);
 
             if (filteredBI != null) {
@@ -494,7 +494,7 @@ public class BreakIteratorTest extends CoreTestFmwk {
      * @param text
      */
     private void assertFrenchBreakBehavior(BreakIterator filteredBI, String text) {
-        logln("Testing French behavior:");
+        logDebug("Testing French behavior:");
         filteredBI.setText(text);
         assertEquals("6th next", 20, filteredBI.next());
         assertEquals("6th next", 84, filteredBI.next());
@@ -506,7 +506,7 @@ public class BreakIteratorTest extends CoreTestFmwk {
      * @param text
      */
     private void assertEnglishBreakBehavior(BreakIterator filteredBI, String text) {
-        logln("Testing English filtered behavior:");
+        logDebug("Testing English filtered behavior:");
         filteredBI.setText(text);
 
         assertEquals("5th next", 84, filteredBI.next());
@@ -519,7 +519,7 @@ public class BreakIteratorTest extends CoreTestFmwk {
      * @param text
      */
     private void assertDefaultBreakBehavior(BreakIterator filteredBI, String text) {
-        logln("Testing Default Behavior:");
+        logDebug("Testing Default Behavior:");
         filteredBI.setText(text);
         assertEquals("1st next", 20, filteredBI.next());
         assertEquals("1st next", 84, filteredBI.next());

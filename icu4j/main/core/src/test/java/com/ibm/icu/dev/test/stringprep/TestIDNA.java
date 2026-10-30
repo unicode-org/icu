@@ -930,7 +930,7 @@ public class TestIDNA extends CoreTestFmwk {
                 toASCII ? "IDNAReference.convertToASCII" : "IDNAReference.convertToUnicode";
         String uIDNAName = toASCII ? "IDNA.convertToASCII" : "IDNA.convertToUnicode";
 
-        logln(
+        logDebug(
                 "Comparing "
                         + refIDNAName
                         + " with "
@@ -993,7 +993,7 @@ public class TestIDNA extends CoreTestFmwk {
                                     + options);
                 }
             } else {
-                logln(
+                logDebug(
                         "Got the same error while comparing "
                                 + refIDNAName
                                 + " with "
@@ -1032,7 +1032,7 @@ public class TestIDNA extends CoreTestFmwk {
                 String ascii = IDNA.convertToASCII(in[i], IDNA.DEFAULT).toString();
                 try {
                     String unicode = IDNA.convertToUnicode(ascii, IDNA.DEFAULT).toString();
-                    logln("result " + unicode);
+                    logDebug("result " + unicode);
                 } catch (StringPrepParseException ex) {
                     errln("Unexpected exception for convertToUnicode: " + ex.getMessage());
                 }
@@ -1075,7 +1075,7 @@ public class TestIDNA extends CoreTestFmwk {
                                 + uni);
             }
         } catch (StringPrepParseException ex) {
-            logln("Unexpected exception: " + ex.getMessage());
+            logDebug("Unexpected exception: " + ex.getMessage());
         }
         try {
             String ascii = IDNA.convertToASCII("\u00AD", IDNA.DEFAULT).toString();
@@ -1083,7 +1083,7 @@ public class TestIDNA extends CoreTestFmwk {
                 errln("Did not get the expected exception");
             }
         } catch (StringPrepParseException ex) {
-            logln("Got the expected exception: " + ex.getMessage());
+            logDebug("Got the expected exception: " + ex.getMessage());
         }
     }
 
@@ -1107,14 +1107,14 @@ public class TestIDNA extends CoreTestFmwk {
         try {
             IDNA.convertIDNToUnicode(domain, IDNA.DEFAULT);
         } catch (StringPrepParseException ex) {
-            logln("Got the expected exception. " + ex.getMessage());
+            logDebug("Got the expected exception. " + ex.getMessage());
         } catch (Exception ex) {
             errln("Unexpected exception: " + ex.getMessage());
         }
         try {
             IDNA.convertIDNToUnicode(domain, IDNA.USE_STD3_RULES);
         } catch (StringPrepParseException ex) {
-            logln("Got the expected exception. " + ex.getMessage());
+            logDebug("Got the expected exception. " + ex.getMessage());
         } catch (Exception ex) {
             errln("Unexpected exception: " + ex.getMessage());
         }
@@ -1165,7 +1165,7 @@ public class TestIDNA extends CoreTestFmwk {
             if (ex.getError() != StringPrepParseException.LABEL_TOO_LONG_ERROR) {
                 errln("IDNA.convertToASCII failed with error: " + ex.toString());
             } else {
-                logln("IDNA.convertToASCII(ul, IDNA.DEFAULT) Succeeded");
+                logDebug("IDNA.convertToASCII(ul, IDNA.DEFAULT) Succeeded");
             }
         }
         try {
@@ -1193,7 +1193,7 @@ public class TestIDNA extends CoreTestFmwk {
             if (ex.getError() != StringPrepParseException.DOMAIN_NAME_TOO_LONG_ERROR) {
                 errln("IDNA.convertToASCII failed with error: " + ex.toString());
             } else {
-                logln("IDNA.convertToASCII(idn, IDNA.DEFAULT) Succeeded");
+                logDebug("IDNA.convertToASCII(idn, IDNA.DEFAULT) Succeeded");
             }
         }
         try {
@@ -1203,7 +1203,7 @@ public class TestIDNA extends CoreTestFmwk {
             if (ex.getError() != StringPrepParseException.DOMAIN_NAME_TOO_LONG_ERROR) {
                 errln("IDNA.convertToUnicode failed with error: " + ex.toString());
             } else {
-                logln("IDNA.convertToUnicode(idn, IDNA.DEFAULT) Succeeded");
+                logDebug("IDNA.convertToUnicode(idn, IDNA.DEFAULT) Succeeded");
             }
         }
     }

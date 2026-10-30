@@ -285,7 +285,7 @@ public class NumberFormatTest extends CoreTestFmwk {
                                 + "; "
                                 + s
                                 + " seen instead");
-                logln("Min integer digits = " + fmt.getMinimumIntegerDigits());
+                logDebug("Min integer digits = " + fmt.getMinimumIntegerDigits());
             }
             // BigInteger 0 - ticket#4731
             s = ((NumberFormat) fmt).format(BigInteger.ZERO);
@@ -298,7 +298,7 @@ public class NumberFormatTest extends CoreTestFmwk {
                                 + "; "
                                 + s
                                 + " seen instead");
-                logln("Min integer digits = " + fmt.getMinimumIntegerDigits());
+                logDebug("Min integer digits = " + fmt.getMinimumIntegerDigits());
             }
         }
     }
@@ -372,25 +372,25 @@ public class NumberFormatTest extends CoreTestFmwk {
         int ival = 0, ilval = 0;
         for (int p = 0; p < pat_length; ++p) {
             DecimalFormat fmt = new DecimalFormat(pat[p], sym);
-            logln("Pattern \"" + pat[p] + "\" -toPattern-> \"" + fmt.toPattern() + "\"");
+            logDebug("Pattern \"" + pat[p] + "\" -toPattern-> \"" + fmt.toPattern() + "\"");
             int v;
             for (v = 0; v < val_length; ++v) {
                 String s;
                 s = ((NumberFormat) fmt).format(val[v]);
-                logln(" " + val[v] + " -format-> " + s);
+                logDebug(" " + val[v] + " -format-> " + s);
                 if (!s.equals(valFormat[v + ival])) errln("FAIL: Expected " + valFormat[v + ival]);
 
                 ParsePosition pos = new ParsePosition(0);
                 double a = fmt.parse(s, pos).doubleValue();
                 if (pos.getIndex() == s.length()) {
-                    logln("  -parse-> " + Double.toString(a));
+                    logDebug("  -parse-> " + Double.toString(a));
                     // Use epsilon comparison as necessary
                 } else errln("FAIL: Partial parse (" + pos.getIndex() + " chars) -> " + a);
             }
             for (v = 0; v < lval_length; ++v) {
                 String s;
                 s = ((NumberFormat) fmt).format(lval[v]);
-                logln(" " + lval[v] + "L -format-> " + s);
+                logDebug(" " + lval[v] + "L -format-> " + s);
                 if (!s.equals(lvalFormat[v + ilval]))
                     errln("ERROR: Expected " + lvalFormat[v + ilval] + " Got: " + s);
 
@@ -400,7 +400,7 @@ public class NumberFormatTest extends CoreTestFmwk {
                 if (A != null) {
                     a = A.longValue();
                     if (pos.getIndex() == s.length()) {
-                        logln("  -parse-> " + a);
+                        logDebug("  -parse-> " + a);
                         if (a != lvalParse[v + ilval])
                             errln("FAIL: Expected " + lvalParse[v + ilval]);
                     } else
@@ -427,16 +427,16 @@ public class NumberFormatTest extends CoreTestFmwk {
         pat = new StringBuffer("a'fo''o'b#");
         DecimalFormat fmt = new DecimalFormat(pat.toString(), sym);
         String s = ((NumberFormat) fmt).format(123);
-        logln("Pattern \"" + pat + "\"");
-        logln(" Format 123 . " + s);
+        logDebug("Pattern \"" + pat + "\"");
+        logDebug(" Format 123 . " + s);
         if (!s.equals("afo'ob123")) errln("FAIL: Expected afo'ob123");
 
         s = "";
         pat = new StringBuffer("a''b#");
         fmt = new DecimalFormat(pat.toString(), sym);
         s = ((NumberFormat) fmt).format(123);
-        logln("Pattern \"" + pat + "\"");
-        logln(" Format 123 . " + s);
+        logDebug("Pattern \"" + pat + "\"");
+        logDebug(" Format 123 . " + s);
         if (!s.equals("a'b123")) errln("FAIL: Expected a'b123");
     }
 
@@ -446,10 +446,10 @@ public class NumberFormatTest extends CoreTestFmwk {
         NumberFormat fmt = NumberFormat.getCurrencyInstance(Locale.GERMANY);
         float val = 12345.67f;
         String str = fmt.format(val);
-        logln("val: " + val + " str: " + str);
+        logDebug("val: " + val + " str: " + str);
         try {
             Number num = fmt.parse(str);
-            logln("num: " + num);
+            logDebug("num: " + num);
         } catch (ParseException e) {
             errln("parse of '" + str + "' threw exception: " + e);
         }
@@ -466,12 +466,12 @@ public class NumberFormatTest extends CoreTestFmwk {
         DecimalFormat fmt = new DecimalFormat(pat.toString(), sym);
         String s = ((NumberFormat) fmt).format(1234.56);
         pat = new StringBuffer();
-        logln("Pattern \"" + fmt.toPattern() + "\"");
-        logln(" Format " + 1234.56 + " . " + s);
+        logDebug("Pattern \"" + fmt.toPattern() + "\"");
+        logDebug(" Format " + 1234.56 + " . " + s);
         assertEquals("symbol, pos", "$1,234.56", s);
 
         s = ((NumberFormat) fmt).format(-1234.56);
-        logln(" Format " + Double.toString(-1234.56) + " . " + s);
+        logDebug(" Format " + Double.toString(-1234.56) + " . " + s);
         assertEquals("symbol, neg", "-$1,234.56", s);
 
         pat.setLength(0);
@@ -484,12 +484,12 @@ public class NumberFormatTest extends CoreTestFmwk {
                 .append(" -#,##0.00");
         fmt = new DecimalFormat(pat.toString(), sym);
         s = ((NumberFormat) fmt).format(1234.56);
-        logln("Pattern \"" + fmt.toPattern() + "\"");
-        logln(" Format " + Double.toString(1234.56) + " . " + s);
+        logDebug("Pattern \"" + fmt.toPattern() + "\"");
+        logDebug(" Format " + Double.toString(1234.56) + " . " + s);
         assertEquals("name, pos", "USD 1,234.56", s);
 
         s = ((NumberFormat) fmt).format(-1234.56);
-        logln(" Format " + Double.toString(-1234.56) + " . " + s);
+        logDebug(" Format " + Double.toString(-1234.56) + " . " + s);
         assertEquals("name, neg", "USD -1,234.56", s);
     }
 
@@ -797,9 +797,9 @@ public class NumberFormatTest extends CoreTestFmwk {
             NumberFormat fmt = NumberFormat.getCurrencyInstance(locale);
             String s = fmt.format(1.50);
             if (s.equals(DATA[i + 1])) {
-                logln("Ok: 1.50 x " + locale + " => " + s);
+                logDebug("Ok: 1.50 x " + locale + " => " + s);
             } else {
-                logln("FAIL: 1.50 x " + locale + " => " + s + ", expected " + DATA[i + 1]);
+                logDebug("FAIL: 1.50 x " + locale + " => " + s + ", expected " + DATA[i + 1]);
             }
         }
 
@@ -808,16 +808,16 @@ public class NumberFormatTest extends CoreTestFmwk {
             Locale locale = new Locale(DATA[i]);
 
             Currency curr = Currency.getInstance(locale);
-            logln(
+            logDebug(
                     "\nName of the currency is: "
                             + curr.getName(locale, Currency.LONG_NAME, new boolean[] {false}));
             CurrencyAmount cAmt = new CurrencyAmount(1.5, curr);
-            logln("CurrencyAmount object's hashCode is: " + cAmt.hashCode()); // cover hashCode
+            logDebug("CurrencyAmount object's hashCode is: " + cAmt.hashCode()); // cover hashCode
 
             NumberFormat fmt = NumberFormat.getCurrencyInstance(locale);
             String sCurr = fmt.format(cAmt);
             if (sCurr.equals(DATA[i + 1])) {
-                logln("Ok: 1.50 x " + locale + " => " + sCurr);
+                logDebug("Ok: 1.50 x " + locale + " => " + sCurr);
             } else {
                 errln("FAIL: 1.50 x " + locale + " => " + sCurr + ", expected " + DATA[i + 1]);
             }
@@ -1347,7 +1347,7 @@ public class NumberFormatTest extends CoreTestFmwk {
         } catch (ParseException e) {
             System.out.println(e);
         }
-        logln("parse(" + arg + ") = " + aNumber);
+        logDebug("parse(" + arg + ") = " + aNumber);
     }
 
     /** Test proper rounding by the format method. */
@@ -1417,7 +1417,7 @@ public class NumberFormatTest extends CoreTestFmwk {
                             + out
                             + "\"");
         } else {
-            logln("Ok    " + l + " x hi_IN . \"" + out + "\"");
+            logDebug("Ok    " + l + " x hi_IN . \"" + out + "\"");
         }
     }
 
@@ -1428,7 +1428,7 @@ public class NumberFormatTest extends CoreTestFmwk {
             NumberFormat nf, double x, int maxFractionDigits, final String expected) {
         nf.setMaximumFractionDigits(maxFractionDigits);
         String out = nf.format(x);
-        logln(x + " formats with " + maxFractionDigits + " fractional digits to " + out);
+        logDebug(x + " formats with " + maxFractionDigits + " fractional digits to " + out);
         if (!out.equals(expected)) errln("FAIL: Expected " + expected);
     }
 
@@ -1466,7 +1466,7 @@ public class NumberFormatTest extends CoreTestFmwk {
             DecimalFormat df = new DecimalFormat(pat, US);
             String pat2 = df.toPattern();
             if (pat.equals(pat2)) {
-                logln("Ok   Pattern rt \"" + pat + "\" . \"" + pat2 + "\"");
+                logDebug("Ok   Pattern rt \"" + pat + "\" . \"" + pat2 + "\"");
             } else {
                 errln("FAIL Pattern rt \"" + pat + "\" . \"" + pat2 + "\"");
             }
@@ -1506,7 +1506,7 @@ public class NumberFormatTest extends CoreTestFmwk {
         // when the pattern problem is finalized, delete comment mark'//'
         // of the following code
         expect2(NumberFormat.getScientificInstance(Locale.US), 12345.678901, "1.2345678901E4");
-        logln("Testing NumberFormat.getScientificInstance(ULocale) ...");
+        logDebug("Testing NumberFormat.getScientificInstance(ULocale) ...");
         expect2(NumberFormat.getScientificInstance(ULocale.US), 12345.678901, "1.2345678901E4");
 
         expect(new DecimalFormat("##0.###E0", US), 12345.0, "12.34E3");
@@ -1516,7 +1516,7 @@ public class NumberFormatTest extends CoreTestFmwk {
         // pattern of NumberFormat.getScientificInstance(Locale.US) = "0.######E0" not "#E0"
         // so result = 1.234568E4 not 1.2345678901E4
         expect2(NumberFormat.getScientificInstance(Locale.FRANCE), 12345.678901, "1,2345678901E4");
-        logln("Testing NumberFormat.getScientificInstance(ULocale) ...");
+        logDebug("Testing NumberFormat.getScientificInstance(ULocale) ...");
         expect2(NumberFormat.getScientificInstance(ULocale.FRANCE), 12345.678901, "1,2345678901E4");
 
         expect(new DecimalFormat("##0.####E0", US), 789.12345e-9, "789.12E-9");
@@ -1781,12 +1781,12 @@ public class NumberFormatTest extends CoreTestFmwk {
         NumberFormat f5 = NumberFormat.getCurrencyInstance(SRC_LOC);
 
         float n = 1234.567f;
-        logln("f0 swap int: " + f0.format(n));
-        logln("f1 src int: " + f1.format(n));
-        logln("f2 src cur: " + f2.format(n));
-        logln("f3 reg cur: " + f3.format(n));
-        logln("f4 reg int: " + f4.format(n));
-        logln("f5 unreg cur: " + f5.format(n));
+        logDebug("f0 swap int: " + f0.format(n));
+        logDebug("f1 src int: " + f1.format(n));
+        logDebug("f2 src cur: " + f2.format(n));
+        logDebug("f3 reg cur: " + f3.format(n));
+        logDebug("f4 reg int: " + f4.format(n));
+        logDebug("f5 unreg cur: " + f5.format(n));
 
         if (!f3.format(n).equals(f0.format(n))) {
             errln("registered service did not match");
@@ -1869,23 +1869,23 @@ public class NumberFormatTest extends CoreTestFmwk {
     @Test
     public void TestCoverage() {
         NumberFormat fmt = NumberFormat.getNumberInstance(); // default locale
-        logln(fmt.format(new BigInteger("1234567890987654321234567890987654321", 10)));
+        logDebug(fmt.format(new BigInteger("1234567890987654321234567890987654321", 10)));
 
         fmt = NumberFormat.getScientificInstance(); // default locale
 
-        logln(fmt.format(PI.INSTANCE));
+        logDebug(fmt.format(PI.INSTANCE));
 
         try {
-            logln(fmt.format("12345"));
+            logDebug(fmt.format("12345"));
             errln("numberformat of string did not throw exception");
         } catch (Exception e) {
-            logln("PASS: numberformat of string failed as expected");
+            logDebug("PASS: numberformat of string failed as expected");
         }
 
         int hash = fmt.hashCode();
-        logln("hash code " + hash);
+        logDebug("hash code " + hash);
 
-        logln("compare to string returns: " + fmt.equals(""));
+        logDebug("compare to string returns: " + fmt.equals(""));
 
         // For ICU 2.6 - alan
         DecimalFormatSymbols US = new DecimalFormatSymbols(Locale.US);
@@ -1955,7 +1955,7 @@ public class NumberFormatTest extends CoreTestFmwk {
         if (allLocales.length == 0) {
             errln("FAIL: Got a empty list for DecimalFormatSymbols.getAvailableLocales");
         } else {
-            logln(
+            logDebug(
                     "PASS: "
                             + allLocales.length
                             + " available locales returned by DecimalFormatSymbols.getAvailableLocales");
@@ -1964,7 +1964,7 @@ public class NumberFormatTest extends CoreTestFmwk {
         if (allULocales.length == 0) {
             errln("FAIL: Got a empty list for DecimalFormatSymbols.getAvailableLocales");
         } else {
-            logln(
+            logDebug(
                     "PASS: "
                             + allULocales.length
                             + " available locales returned by DecimalFormatSymbols.getAvailableULocales");
@@ -2020,7 +2020,7 @@ public class NumberFormatTest extends CoreTestFmwk {
         try {
             value = numfmt.parse(parsetxt, ppos);
             if (value == null) {
-                logln(
+                logDebug(
                         "NumberFormat.parse empty string succeeds (no exception) with null return as expected, ppos "
                                 + ppos.getIndex());
             } else {
@@ -2418,7 +2418,7 @@ public class NumberFormatTest extends CoreTestFmwk {
             }
             String msg = (e == null) ? "success" : e.getMessage();
             if ((e == null) == valid) {
-                logln("Ok: pattern \"" + pat + "\": " + msg);
+                logDebug("Ok: pattern \"" + pat + "\": " + msg);
             } else {
                 errln(
                         "FAIL: pattern \""
@@ -2496,13 +2496,13 @@ public class NumberFormatTest extends CoreTestFmwk {
                         // ref= <reference pattern>
                         ref = new DecimalFormat(tokens.next(), new DecimalFormatSymbols(Locale.US));
                         ref.setParseStrict(strict);
-                        logln("Setting reference pattern to:\t" + ref);
+                        logDebug("Setting reference pattern to:\t" + ref);
                         break;
                     case 1:
                         // loc= <locale>
                         loc = LocaleUtility.getLocaleFromName(tokens.next());
                         pat = ((DecimalFormat) NumberFormat.getInstance(loc)).toPattern();
-                        logln("Setting locale to:\t" + loc + ", \tand pattern to:\t" + pat);
+                        logDebug("Setting locale to:\t" + loc + ", \tand pattern to:\t" + pat);
                         break;
                     case 2: // f:
                     case 3: // fp:
@@ -2605,7 +2605,7 @@ public class NumberFormatTest extends CoreTestFmwk {
                             }
                         } catch (IllegalArgumentException iae2) {
                             if (err) {
-                                logln(
+                                logDebug(
                                         "Ok: "
                                                 + where
                                                 + "Invalid pattern \""
@@ -2677,7 +2677,7 @@ public class NumberFormatTest extends CoreTestFmwk {
                         break;
                     case 9: // strict= true or false
                         strict = "true".equalsIgnoreCase(tokens.next());
-                        logln("Setting strict to:\t" + strict);
+                        logDebug("Setting strict to:\t" + strict);
                         break;
                     case -1:
                         errln("Unknown command \"" + tok + "\" at " + tokens.describePosition());
@@ -3010,7 +3010,7 @@ public class NumberFormatTest extends CoreTestFmwk {
                             + formatedBigDecimal);
 
         } else {
-            logln(
+            logDebug(
                     "Value: "
                             + iValue
                             + ",\tRounding-mode: "
@@ -3118,7 +3118,7 @@ public class NumberFormatTest extends CoreTestFmwk {
         fmt.format(n, saw, pos);
         String pat = ((DecimalFormat) fmt).toPattern();
         if (saw.toString().equals(exp)) {
-            logln("Ok   " + n + " x " + pat + " = \"" + saw + "\"");
+            logDebug("Ok   " + n + " x " + pat + " = \"" + saw + "\"");
             // We should be able to round-trip the formatted string =>
             // number => string (but not the other way around: number
             // => string => number2, might have number2 != number):
@@ -3170,7 +3170,7 @@ public class NumberFormatTest extends CoreTestFmwk {
         FieldPosition pos = new FieldPosition(0);
         fmt.format(n, saw, pos);
         if (saw.toString().equals(exp)) {
-            logln("Ok   " + n + " = \"" + saw + "\"");
+            logDebug("Ok   " + n + " = \"" + saw + "\"");
             // We should be able to round-trip the formatted string =>
             // number => string (but not the other way around: number
             // => string => number2, might have number2 != number):
@@ -3242,7 +3242,7 @@ public class NumberFormatTest extends CoreTestFmwk {
         // A little tricky here -- make sure Double(12345.0) and
         // Long(12345) match.
         if (num.equals(n) || num.doubleValue() == n.doubleValue()) {
-            logln("Ok   \"" + str + "\" x " + pat + " = " + num);
+            logDebug("Ok   \"" + str + "\" x " + pat + " = " + num);
         } else {
             errln(
                     "expect() parse test, locale "
@@ -3270,7 +3270,7 @@ public class NumberFormatTest extends CoreTestFmwk {
         // A little tricky here -- make sure Double(12345.0) and
         // Long(12345) match.
         if (num.equals(n) || num.doubleValue() == n.doubleValue()) {
-            logln("Ok   \"" + str + " = " + num);
+            logDebug("Ok   \"" + str + " = " + num);
         } else {
             errln(
                     "expect_rbnf() parse test, locale "
@@ -3312,7 +3312,7 @@ public class NumberFormatTest extends CoreTestFmwk {
         String s = fmt.format(value).replace('\u00A0', ' ');
 
         if (s.equals(string)) {
-            logln("Ok: " + value + " x " + curr + " => " + s);
+            logDebug("Ok: " + value + " x " + curr + " => " + s);
         } else {
             errln("FAIL: " + value + " x " + curr + " => " + s + ", expected " + string);
         }
@@ -3337,7 +3337,7 @@ public class NumberFormatTest extends CoreTestFmwk {
         }
 
         if (apos == pos && awidth == width && apadStr == pad) {
-            logln(
+            logDebug(
                     "Ok   \""
                             + pat
                             + "\" pos="
@@ -3365,7 +3365,7 @@ public class NumberFormatTest extends CoreTestFmwk {
     public void expectPat(DecimalFormat fmt, final String exp) {
         String pat = fmt.toPattern();
         if (pat.equals(exp)) {
-            logln("Ok   \"" + pat + "\"");
+            logDebug("Ok   \"" + pat + "\"");
         } else {
             errln("FAIL \"" + pat + "\", expected \"" + exp + "\"");
         }
@@ -3383,11 +3383,11 @@ public class NumberFormatTest extends CoreTestFmwk {
         ULocale locale = new ULocale("pt_PT@currency=PTE");
         NumberFormat format = NumberFormat.getCurrencyInstance(locale);
         Currency curr = Currency.getInstance(locale);
-        logln(
+        logDebug(
                 "\nName of the currency is: "
                         + curr.getName(locale, Currency.LONG_NAME, new boolean[] {false}));
         CurrencyAmount cAmt = new CurrencyAmount(1150.50, curr);
-        logln("CurrencyAmount object's hashCode is: " + cAmt.hashCode()); // cover hashCode
+        logDebug("CurrencyAmount object's hashCode is: " + cAmt.hashCode()); // cover hashCode
         String str = format.format(cAmt);
         String expected = "1,150$50\u00a0\u200b";
         if (!expected.equals(str)) {
@@ -3488,9 +3488,9 @@ public class NumberFormatTest extends CoreTestFmwk {
     }
 
     void runStrictParseTests(String msg, DecimalFormat nf, String[] tests, boolean pass) {
-        logln("");
-        logln("pattern: '" + nf.toPattern() + "'");
-        logln(msg);
+        logDebug("");
+        logDebug("pattern: '" + nf.toPattern() + "'");
+        logDebug(msg);
         for (int i = 0; i < tests.length; ++i) {
             String str = tests[i];
             ParsePosition pp = new ParsePosition(0);
@@ -3513,7 +3513,7 @@ public class NumberFormatTest extends CoreTestFmwk {
                 if (err.length() > 0) {
                     err = "got expected " + err;
                 }
-                logln(
+                logDebug(
                         "'"
                                 + str
                                 + "' parsed '"
@@ -4398,7 +4398,7 @@ public class NumberFormatTest extends CoreTestFmwk {
             NumberFormat fmt = NumberFormat.getInstance(locale);
             String s = fmt.format(1250.75);
             if (s.equals(DATA[i + 3])) {
-                logln("Ok: 1250.75 x " + locale + " => " + s);
+                logDebug("Ok: 1250.75 x " + locale + " => " + s);
             } else {
                 errln("FAIL: 1250.75 x " + locale + " => " + s + ", expected " + DATA[i + 3]);
             }
@@ -7952,7 +7952,7 @@ public class NumberFormatTest extends CoreTestFmwk {
         df.format(0); // should not throw or hit infinite loop
         String[] samples = new String[] {"", "123", "$123", "-", "+", "44%", "1E+2.3"};
         for (String sample : samples) {
-            logln("Attempting parse on: " + sample);
+            logDebug("Attempting parse on: " + sample);
             // We don't care about the results, only that we don't throw and don't loop.
             ParsePosition ppos = new ParsePosition(0);
             df.parse(sample, ppos);

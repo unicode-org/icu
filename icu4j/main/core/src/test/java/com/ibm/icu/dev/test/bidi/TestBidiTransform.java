@@ -35,7 +35,7 @@ public class TestBidiTransform extends CoreTestFmwk {
 
     @Test
     public void testBidiTransform() {
-        logln("\nEntering TestBidiTransform\n");
+        logDebug("\nEntering TestBidiTransform\n");
 
         bidi = new Bidi();
         bidiTransform = new BidiTransform();
@@ -43,7 +43,7 @@ public class TestBidiTransform extends CoreTestFmwk {
         autoDirectionTest();
         allTransformOptionsTest();
 
-        logln("\nExiting TestBidiTransform\n");
+        logDebug("\nExiting TestBidiTransform\n");
     }
 
     /**
@@ -62,7 +62,7 @@ public class TestBidiTransform extends CoreTestFmwk {
         };
         final byte[] inLevels = {Bidi.LEVEL_DEFAULT_LTR, Bidi.LEVEL_DEFAULT_RTL};
         final byte[] outLevels = {Bidi.LTR, Bidi.RTL};
-        logln("\nEntering autoDirectionTest\n");
+        logDebug("\nEntering autoDirectionTest\n");
 
         for (String inText : inTexts) {
             for (byte inLevel : inLevels) {
@@ -85,7 +85,7 @@ public class TestBidiTransform extends CoreTestFmwk {
                 }
             }
         }
-        logln("\nExiting autoDirectionTest\n");
+        logDebug("\nExiting autoDirectionTest\n");
     }
 
     /**
@@ -318,7 +318,7 @@ public class TestBidiTransform extends CoreTestFmwk {
 
         char[] expectedChars;
 
-        logln("\nEntering allTransformOptionsTest\n");
+        logDebug("\nEntering allTransformOptionsTest\n");
 
         // Test various combinations of base level, order, mirroring, digits and letters
         for (Object[] test : testCases) {
@@ -360,7 +360,7 @@ public class TestBidiTransform extends CoreTestFmwk {
                 }
             }
         }
-        logln("\nExiting allTransformOptionsTest\n");
+        logDebug("\nExiting allTransformOptionsTest\n");
     }
 
     private void logResultsForDir(

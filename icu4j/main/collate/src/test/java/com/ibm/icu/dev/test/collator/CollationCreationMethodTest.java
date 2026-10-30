@@ -53,10 +53,10 @@ public class CollationCreationMethodTest extends TestFmwk {
                 // this is making the assumption that the only type of collator that will be made is
                 // RBC
                 localeCollator = (RuleBasedCollator) Collator.getInstance(locale);
-                logln("Rules for " + locale + " are: " + localeCollator.getRules());
+                logDebug("Rules for " + locale + " are: " + localeCollator.getRules());
                 ruleCollator = new RuleBasedCollator(localeCollator.getRules());
             } catch (Exception e) {
-                warnln(
+                errln(
                         "ERROR: in creation of collator of locale "
                                 + locale.getDisplayName()
                                 + ": "
@@ -95,7 +95,7 @@ public class CollationCreationMethodTest extends TestFmwk {
         try {
             s = new String(c, StandardCharsets.UTF_16BE);
         } catch (Exception e) {
-            warnln("Error creating random strings");
+            errln("Error creating random strings");
         }
         return s;
     }

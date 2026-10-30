@@ -91,13 +91,13 @@ public class TextTrieMapTest extends CoreTestFmwk {
             map.put((String) TESTDATA[i][0], TESTDATA[i][1]);
         }
 
-        logln("Test for get(String)");
+        logDebug("Test for get(String)");
         for (int i = 0; i < TESTCASES.length; i++) {
             itr = map.get((String) TESTCASES[i][0]);
             checkResult("get(String) case " + i, itr, TESTCASES[i][1]);
         }
 
-        logln("Test for get(String, int)");
+        logDebug("Test for get(String, int)");
         StringBuffer textBuf = new StringBuffer();
         for (int i = 0; i < TESTCASES.length; i++) {
             textBuf.setLength(0);
@@ -109,7 +109,7 @@ public class TextTrieMapTest extends CoreTestFmwk {
             checkResult("get(String, int) case " + i, itr, TESTCASES[i][1]);
         }
 
-        logln("Test for partial match");
+        logDebug("Test for partial match");
         for (Object[] cas : TESTDATA) {
             String str = (String) cas[0];
             for (int i = 0; i < str.length() - 1; i++) {
@@ -126,7 +126,7 @@ public class TextTrieMapTest extends CoreTestFmwk {
         map.get("Sunday", 0, output);
         assertFalse("No partial match on string with no continuation", output.partialMatch);
 
-        logln("Test for LeadCodePoints");
+        logDebug("Test for LeadCodePoints");
         // Note: The 📺 and 📻 have the same lead surrogate
         UnicodeSet expectedLeadCodePoints = new UnicodeSet("[SMTWFL📺📻🃏]");
         UnicodeSet actualLeadCodePoints = new UnicodeSet();
@@ -151,13 +151,13 @@ public class TextTrieMapTest extends CoreTestFmwk {
             map.put((String) TESTDATA[i][0], TESTDATA[i][1]);
         }
 
-        logln("Test for get(String)");
+        logDebug("Test for get(String)");
         for (int i = 0; i < TESTCASES.length; i++) {
             itr = map.get((String) TESTCASES[i][0]);
             checkResult("get(String) case " + i, itr, TESTCASES[i][2]);
         }
 
-        logln("Test for get(String, int)");
+        logDebug("Test for get(String, int)");
         StringBuffer textBuf = new StringBuffer();
         for (int i = 0; i < TESTCASES.length; i++) {
             textBuf.setLength(0);
@@ -169,7 +169,7 @@ public class TextTrieMapTest extends CoreTestFmwk {
             checkResult("get(String, int) case " + i, itr, TESTCASES[i][2]);
         }
 
-        logln("Test for partial match");
+        logDebug("Test for partial match");
         for (Object[] cas : TESTDATA) {
             String str = (String) cas[0];
             for (int i = 0; i < str.length() - 1; i++) {
@@ -186,7 +186,7 @@ public class TextTrieMapTest extends CoreTestFmwk {
         map.get("Sunday", 0, output);
         assertFalse("No partial match on string with no continuation", output.partialMatch);
 
-        logln("Test for LeadCodePoints");
+        logDebug("Test for LeadCodePoints");
         UnicodeSet expectedLeadCodePoints = new UnicodeSet("[smtwfl📺📻🃏]");
         UnicodeSet actualLeadCodePoints = new UnicodeSet();
         map.putLeadCodePoints(actualLeadCodePoints);

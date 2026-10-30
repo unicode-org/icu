@@ -83,7 +83,8 @@ public final class UCharacterCaseTest extends CoreTestFmwk {
                 errln("FAIL upper case conversion test for \\u" + hex(CHARACTER_UPPER_[i]));
                 break;
             }
-            logln("Ok    \\u" + hex(CHARACTER_UPPER_[i]) + " and \\u" + hex(CHARACTER_LOWER_[i]));
+            logDebug(
+                    "Ok    \\u" + hex(CHARACTER_UPPER_[i]) + " and \\u" + hex(CHARACTER_LOWER_[i]));
         }
     }
 
@@ -440,7 +441,7 @@ public final class UCharacterCaseTest extends CoreTestFmwk {
                 }
             }
         } catch (Exception ex) {
-            warnln("Could not find data for BreakIterators");
+            errln("Could not find data for BreakIterators");
         }
     }
 
@@ -918,9 +919,9 @@ public final class UCharacterCaseTest extends CoreTestFmwk {
                                 + Utility.hex(UCharacter.toLowerCase(upper[i]), 4));
             }
         }
-        logln("testing upper lower");
+        logDebug("testing upper lower");
         for (int i = 0; i < upperTest.length(); i++) {
-            logln("testing to upper to lower");
+            logDebug("testing to upper to lower");
             if (UCharacter.isLetter(upperTest.charAt(i))
                     && !UCharacter.isLowerCase(upperTest.charAt(i))) {
                 errln("Failed isLowerCase test at \\u" + Utility.hex(upperTest.charAt(i), 4));
@@ -945,7 +946,7 @@ public final class UCharacterCaseTest extends CoreTestFmwk {
                 errln("Failed case conversion with itself: \\u" + Utility.hex(lowerTest.charAt(i)));
             }
         }
-        logln("done testing upper Lower");
+        logDebug("done testing upper Lower");
     }
 
     private void assertGreekUpper(String s, String expected) {
@@ -1110,7 +1111,7 @@ public final class UCharacterCaseTest extends CoreTestFmwk {
         }
     }
 
-    private static void checkEditsIter(
+    private void checkEditsIter(
             String name,
             Edits.Iterator ei1,
             Edits.Iterator ei2, // two equal iterators

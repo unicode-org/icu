@@ -44,14 +44,14 @@ public class IntlTestSimpleDateFormatAPI extends CoreTestFmwk {
     public void TestAPI() {
         Locale startLocale = Locale.getDefault();
 
-        logln("SimpleDateFormat API test---");
-        logln("");
+        logDebug("SimpleDateFormat API test---");
+        logDebug("");
 
         Locale.setDefault(Locale.ENGLISH);
 
         // ======= Test constructors
 
-        logln("Testing SimpleDateFormat constructors");
+        logDebug("Testing SimpleDateFormat constructors");
 
         SimpleDateFormat def = new SimpleDateFormat();
 
@@ -66,7 +66,7 @@ public class IntlTestSimpleDateFormatAPI extends CoreTestFmwk {
 
         // ======= Test clone() and equality
 
-        logln("Testing clone(), assignment and equality operators");
+        logDebug("Testing clone(), assignment and equality operators");
 
         Format clone = def.clone();
         if (!clone.equals(def)) {
@@ -75,7 +75,7 @@ public class IntlTestSimpleDateFormatAPI extends CoreTestFmwk {
 
         // ======= Test various format() methods
 
-        logln("Testing various format() methods");
+        logDebug("Testing various format() methods");
 
         Date d = new Date((long) 837039928046.0);
 
@@ -85,32 +85,32 @@ public class IntlTestSimpleDateFormatAPI extends CoreTestFmwk {
         FieldPosition pos2 = new FieldPosition(0);
 
         res1 = def.format(d, res1, pos1);
-        logln("" + d.getTime() + " formatted to " + res1);
+        logDebug("" + d.getTime() + " formatted to " + res1);
 
         res2 = cust1.format(d, res2, pos2);
-        logln("" + d.getTime() + " formatted to " + res2);
+        logDebug("" + d.getTime() + " formatted to " + res2);
 
         // ======= Test parse()
 
-        logln("Testing parse()");
+        logDebug("Testing parse()");
 
         String text = new String("02/03/76, 2:50 AM, CST");
         Date result1 = new Date();
         Date result2 = new Date();
         ParsePosition pos = new ParsePosition(0);
         result1 = def.parse(text, pos);
-        logln(text + " parsed into " + result1);
+        logDebug(text + " parsed into " + result1);
 
         try {
             result2 = def.parse(text);
         } catch (ParseException e) {
             errln("ERROR: parse() failed");
         }
-        logln(text + " parsed into " + result2);
+        logDebug(text + " parsed into " + result2);
 
         // ======= Test getters and setters
 
-        logln("Testing getters and setters");
+        logDebug("Testing getters and setters");
 
         final DateFormatSymbols syms = pat.getDateFormatSymbols();
         def.setDateFormatSymbols(syms);
@@ -138,31 +138,31 @@ public class IntlTestSimpleDateFormatAPI extends CoreTestFmwk {
 
         // ======= Test applyPattern()
 
-        logln("Testing applyPattern()");
+        logDebug("Testing applyPattern()");
 
         String p1 = new String("yyyy.MM.dd G 'at' hh:mm:ss z");
-        logln("Applying pattern " + p1);
+        logDebug("Applying pattern " + p1);
         pat.applyPattern(p1);
 
         String s2 = pat.toPattern();
-        logln("Extracted pattern is " + s2);
+        logDebug("Extracted pattern is " + s2);
         if (!s2.equals(p1)) {
             errln("ERROR: toPattern() result did not match pattern applied");
         }
 
-        logln("Applying pattern " + p1);
+        logDebug("Applying pattern " + p1);
         pat.applyLocalizedPattern(p1);
         String s3 = pat.toLocalizedPattern();
-        logln("Extracted pattern is " + s3);
+        logDebug("Extracted pattern is " + s3);
         if (!s3.equals(p1)) {
             errln("ERROR: toLocalizedPattern() result did not match pattern applied");
         }
 
         // ======= Test for Ticket 5684 (Parsing patterns with 'Y' and 'e'
-        logln("Testing parse()");
+        logDebug("Testing parse()");
 
         String p2 = new String("YYYY'W'wwe");
-        logln("Applying pattern " + p2);
+        logDebug("Applying pattern " + p2);
         pat.applyPattern(p2);
         Date dt = pat.parse("2007W014", new ParsePosition(0));
         if (dt == null) {

@@ -49,11 +49,11 @@ public class PluralFormatTest extends CoreTestFmwk {
         }
         System.out.println(lastNumber + "..." + 199 + ": " + lastValue);
         */
-        log("test pattern: '" + testPattern + "'");
+        logDebug("test pattern: '" + testPattern + "'");
         for (int i = 0; i < locales.length; ++i) {
             try {
                 PluralFormat plf = new PluralFormat(new ULocale(locales[i]), testPattern);
-                log("plf: " + plf);
+                logDebug("plf: " + plf);
                 String expected = changes.get(0);
                 for (int n = 0; n < 200; ++n) {
                     String value = changes.get(n);

@@ -79,7 +79,7 @@ public class HebrewTest extends CalendarTestFmwk {
 
         doRollAdd(ROLL, cal, tests);
         //       }catch(MissingResourceException ex){
-        //            warnln("Got Exception: "+ ex.getMessage());
+        //            errln("Got Exception: "+ ex.getMessage());
         //       }
     }
 
@@ -115,7 +115,7 @@ public class HebrewTest extends CalendarTestFmwk {
 
             doRollAdd(ADD, cal, tests);
         } catch (MissingResourceException ex) {
-            warnln("Could not load the locale data");
+            errln("Could not load the locale data");
         }
     }
 
@@ -222,7 +222,7 @@ public class HebrewTest extends CalendarTestFmwk {
             doTestCases(testCases, new HebrewCalendar());
 
         } catch (MissingResourceException ex) {
-            warnln("Got Exception: " + ex.getMessage());
+            errln("Got Exception: " + ex.getMessage());
         }
     }
 
@@ -241,7 +241,7 @@ public class HebrewTest extends CalendarTestFmwk {
                 errln("Fail: HebrewCalendar HOUR_OF_DAY = " + calendar.get(Calendar.HOUR_OF_DAY));
             }
         } catch (MissingResourceException ex) {
-            warnln("Got Exception: " + ex.getMessage());
+            errln("Got Exception: " + ex.getMessage());
         }
     }
 
@@ -273,7 +273,7 @@ public class HebrewTest extends CalendarTestFmwk {
                 }
             }
         } catch (MissingResourceException ex) {
-            warnln("Got Exception: " + ex.getMessage());
+            errln("Got Exception: " + ex.getMessage());
         }
     }
 
@@ -337,11 +337,11 @@ public class HebrewTest extends CalendarTestFmwk {
                     cal.clear();
                     cal.set(Calendar.YEAR, y);
                     cal.set(Calendar.MONTH, m - 1);
-                    logln("Start: " + m + "/" + y);
+                    logDebug("Start: " + m + "/" + y);
                     int delta = monthDelta > 0 ? 1 : -1;
                     for (int c = 0; c != monthDelta; c += delta) {
                         cal.add(Calendar.MONTH, delta);
-                        logln(
+                        logDebug(
                                 "+ "
                                         + delta
                                         + " MONTH -> "
@@ -373,7 +373,7 @@ public class HebrewTest extends CalendarTestFmwk {
                 }
             }
         } catch (MissingResourceException ex) {
-            warnln("Got Exception: " + ex.getMessage());
+            errln("Got Exception: " + ex.getMessage());
         }
     }
 
@@ -402,9 +402,9 @@ public class HebrewTest extends CalendarTestFmwk {
         try {
             HebrewCalendar cal = new HebrewCalendar();
             cal.clear();
-            logln("cal.clear() -> " + cal.getTime());
+            logDebug("cal.clear() -> " + cal.getTime());
         } catch (MissingResourceException ex) {
-            warnln("could not load the locale data");
+            errln("could not load the locale data");
         }
     }
 
@@ -472,12 +472,12 @@ public class HebrewTest extends CalendarTestFmwk {
                         DateFormat format =
                                 DateFormat.getDateTimeInstance(
                                         cal, DateFormat.FULL, DateFormat.FULL, formatLocale);
-                        logln(calLocName + "/" + locName + " --> " + format.format(time));
+                        logDebug(calLocName + "/" + locName + " --> " + format.format(time));
                     }
                 }
             }
         } catch (MissingResourceException ex) {
-            warnln("Could not load the locale data. " + ex.getMessage());
+            errln("Could not load the locale data. " + ex.getMessage());
         }
     }
 
@@ -542,7 +542,7 @@ public class HebrewTest extends CalendarTestFmwk {
             /* Date d = */ cal.getTime();
             errln("Fail: IllegalArgumentException should be thrown for input date 5777 Adar I 1.");
         } catch (IllegalArgumentException e) {
-            logln("Info: IllegalArgumentException, because 5777 Adar I 1 is not a valid date.");
+            logDebug("Info: IllegalArgumentException, because 5777 Adar I 1 is not a valid date.");
         }
     }
 

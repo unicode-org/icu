@@ -144,7 +144,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
                                     + e1.getClass().getName());
                     continue;
                 }
-                logln("Property (" + propNum + "): " + propName);
+                logDebug("Property (" + propNum + "): " + propName);
                 for (int valueNum = UCharacter.getIntPropertyMinValue(propNum);
                         valueNum <= UCharacter.getIntPropertyMaxValue(propNum);
                         ++valueNum) {
@@ -182,7 +182,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
                                         + e1.getClass().getName());
                         continue;
                     }
-                    logln("Value (" + valueNum + "): " + valueName);
+                    logDebug("Value (" + valueNum + "): " + valueName);
                     UnicodeSet testSet;
                     try {
                         testSet = new UnicodeSet("[:" + propName + "=" + valueName + ":]");
@@ -348,7 +348,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
             // if (!checkPat(source + " (in code)", testSet, pat3)) return false;
 
             // logln(source + " => " + pat0 + ", " + pat1 + ", " + pat2 + ", " + pat3);
-            logln(source + " => " + pat0 + ", " + pat2);
+            logDebug(source + " => " + pat0 + ", " + pat2);
         } catch (Exception e) {
             errln("EXCEPTION in toPattern: " + source + " => " + pat);
             return false;
@@ -694,13 +694,13 @@ public class UnicodeSetTest extends CoreTestFmwk {
         UnicodeSet b = new UnicodeSet((char) 7, (char) 15);
         UnicodeSet c = new UnicodeSet();
 
-        logln("a [3-10]: " + a);
-        logln("b [7-15]: " + b);
+        logDebug("a [3-10]: " + a);
+        logDebug("b [7-15]: " + b);
         c.set(a);
         c.addAll(b);
         UnicodeSet exp = new UnicodeSet((char) 3, (char) 15);
         if (c.equals(exp)) {
-            logln("c.set(a).add(b): " + c);
+            logDebug("c.set(a).add(b): " + c);
         } else {
             errln("FAIL: c.set(a).add(b) = " + c + ", expect " + exp);
         }
@@ -708,14 +708,14 @@ public class UnicodeSetTest extends CoreTestFmwk {
         exp.set((char) 0, (char) 2);
         exp.add((char) 16, UnicodeSet.MAX_VALUE);
         if (c.equals(exp)) {
-            logln("c.complement(): " + c);
+            logDebug("c.complement(): " + c);
         } else {
             errln(Utility.escape("FAIL: c.complement() = " + c + ", expect " + exp));
         }
         c.complement();
         exp.set((char) 3, (char) 15);
         if (c.equals(exp)) {
-            logln("c.complement(): " + c);
+            logDebug("c.complement(): " + c);
         } else {
             errln("FAIL: c.complement() = " + c + ", expect " + exp);
         }
@@ -724,7 +724,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
         exp.set((char) 3, (char) 6);
         exp.add((char) 11, (char) 15);
         if (c.equals(exp)) {
-            logln("c.set(a).complement(b): " + c);
+            logDebug("c.set(a).complement(b): " + c);
         } else {
             errln("FAIL: c.set(a).complement(b) = " + c + ", expect " + exp);
         }
@@ -732,7 +732,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
         exp.set(c);
         c = bitsToSet(setToBits(c));
         if (c.equals(exp)) {
-            logln("bitsToSet(setToBits(c)): " + c);
+            logDebug("bitsToSet(setToBits(c)): " + c);
         } else {
             errln("FAIL: bitsToSet(setToBits(c)) = " + c + ", expect " + exp);
         }
@@ -869,11 +869,11 @@ public class UnicodeSetTest extends CoreTestFmwk {
             // Cover addAll(Collection) and addAllTo(Collection)
             //  Seems that there is a bug in addAll(Collection) operation
             //    Ram also add a similar test to UtilityTest.java
-            logln("Testing addAll(Collection) ... ");
+            logDebug("Testing addAll(Collection) ... ");
             String[] array = {"a", "b", "c", "de"};
             List<String> list = Arrays.asList(array);
             Set<String> aset = new HashSet<>(list);
-            logln(" *** The source set's size is: " + aset.size());
+            logDebug(" *** The source set's size is: " + aset.size());
 
             set.clear();
             set.addAll(aset);
@@ -885,21 +885,22 @@ public class UnicodeSetTest extends CoreTestFmwk {
                                 + set.size()
                                 + " seen instead!");
             } else {
-                logln("OK: After addAll, the UnicodeSet size got " + set.size());
+                logDebug("OK: After addAll, the UnicodeSet size got " + set.size());
             }
 
             List<String> list2 = new ArrayList<>();
             set.addAllTo(list2);
 
             // verify the result
-            log(" *** The elements are: ");
+            StringBuilder msg = new StringBuilder();
+            msg.append(" *** The elements are: ");
             String s = set.toPattern(true);
-            logln(s);
+            msg.append(s).append("\n");
             Iterator<String> myiter = list2.iterator();
             while (myiter.hasNext()) {
-                log(myiter.next() + "  ");
+                msg.append(myiter.next() + "  ");
             }
-            logln(""); // a new line
+            logDebug(msg.toString());
         }
     }
 
@@ -981,8 +982,8 @@ public class UnicodeSetTest extends CoreTestFmwk {
 
         int iterations = 1000000 / size;
 
-        logln("Timing comparison of Java vs Utility");
-        logln("For about " + size + " objects that are almost all the same.");
+        logDebug("Timing comparison of Java vs Utility");
+        logDebug("For about " + size + " objects that are almost all the same.");
 
         CheckSpeed(iset, jset, "when a = b", iterations);
 
@@ -1026,7 +1027,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
         double utime = (end - middle) / iterations;
 
         NumberFormat nf = NumberFormat.getPercentInstance();
-        logln(
+        logDebug(
                 "Test contains: "
                         + message
                         + ": Java: "
@@ -1061,7 +1062,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
         double utime = (end - middle) / iterations;
 
         NumberFormat nf = NumberFormat.getPercentInstance();
-        logln(
+        logDebug(
                 "Test equals:   "
                         + message
                         + ": Java: "
@@ -1110,7 +1111,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
             boolean hasRelation = SortedSetRelation.hasRelation(a, i, b);
             boolean dumbHasRelation = dumbHasRelation(a, i, b);
 
-            logln(message + " " + hasRelation + ":\t" + a + "\t" + RELATION_NAME[i] + "\t" + b);
+            logDebug(message + " " + hasRelation + ":\t" + a + "\t" + RELATION_NAME[i] + "\t" + b);
 
             if (hasRelation != dumbHasRelation) {
                 errln(
@@ -1126,7 +1127,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
                                 + b);
             }
         }
-        logln("");
+        logDebug("");
     }
 
     /** Test the [:Latin:] syntax. */
@@ -1289,7 +1290,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
     @Test
     public void TestUnicodeSetStrings() {
         UnicodeSet uset = new UnicodeSet("[a{bc}{cd}pqr\u0000]");
-        logln(uset + " ~ " + uset.getRegexEquivalent());
+        logDebug(uset + " ~ " + uset.getRegexEquivalent());
         String[][] testStrings = {
             {"x", "none"},
             {"bc", "all"},
@@ -1312,12 +1313,12 @@ public class UnicodeSetTest extends CoreTestFmwk {
         if (uset.containsAll(string) != shouldContainAll) {
             errln("containsAll " + string + " should be " + shouldContainAll);
         } else {
-            logln("containsAll " + string + " = " + shouldContainAll);
+            logDebug("containsAll " + string + " = " + shouldContainAll);
         }
         if (uset.containsNone(string) != shouldContainNone) {
             errln("containsNone " + string + " should be " + shouldContainNone);
         } else {
-            logln("containsNone " + string + " = " + shouldContainNone);
+            logDebug("containsNone " + string + " = " + shouldContainNone);
         }
     }
 
@@ -1363,7 +1364,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
         char limit = (char) 128;
 
         for (char i = 0; i < limit; ++i) {
-            logln("Testing " + i + ", " + bitsToSet(i));
+            logDebug("Testing " + i + ", " + bitsToSet(i));
             _testComplement(i);
 
             // AS LONG AS WE ARE HERE, check roundtrip
@@ -1388,7 +1389,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
                     String name = (j == 0) ? UScript.getName(i) : UScript.getShortName(i);
                     pat = "[:" + name + ":]";
                     UnicodeSet set = new UnicodeSet(pat);
-                    logln("Ok: " + pat + " -> " + set.toPattern(false));
+                    logDebug("Ok: " + pat + " -> " + set.toPattern(false));
                 } catch (IllegalArgumentException e) {
                     if (pat.length() == 0) {
                         errln("FAIL (in UScript): No name for script " + i);
@@ -1509,7 +1510,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
             s.closeOver(selector);
             t.applyPattern(exp);
             if (s.equals(t)) {
-                logln("Ok: " + pat + ".closeOver(" + selector + ") => " + exp);
+                logDebug("Ok: " + pat + ".closeOver(" + selector + ") => " + exp);
             } else {
                 errln(
                         "FAIL: "
@@ -1715,7 +1716,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
 
             String newpat = set.toPattern(true);
             if (newpat.equals(exp)) {
-                logln(Utility.escape(pat) + " => " + newpat);
+                logDebug(Utility.escape(pat) + " => " + newpat);
             } else {
                 errln("FAIL: " + Utility.escape(pat) + " => " + newpat);
             }
@@ -1737,7 +1738,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
                 if (set.getRangeStart(i) < 0) {
                     errln("FAIL: " + s);
                 } else {
-                    logln(s);
+                    logDebug(s);
                 }
             }
         }
@@ -1805,7 +1806,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
         // spotless:on
 
         for (int i = 0; i < DATA.length; ++i) {
-            TokenSymbolTable sym = new TokenSymbolTable();
+            TokenSymbolTable sym = new TokenSymbolTable(this);
 
             // Set up variables
             while (DATA[i + 2] != null) {
@@ -1835,7 +1836,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
             if (!us.equals(us2)) {
                 errln("Failed, got " + us + ", expected " + us2);
             } else {
-                logln("Ok, got " + us);
+                logDebug("Ok, got " + us);
             }
 
             // cover Unicode(String,ParsePosition,SymbolTable,int)
@@ -1845,7 +1846,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
             if (!inSet.equals(expSet)) {
                 errln("FAIL: Failed, got " + inSet + ", expected " + expSet);
             } else {
-                logln("OK: got " + inSet);
+                logDebug("OK: got " + inSet);
             }
         }
         final String open = "[a";
@@ -1966,7 +1967,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
                                     + " (Expected depth <= 100, got depth = 101 [a⋯[a☞[a]]⋯])."
                                     + " See usage of $deep: [a⋯[a$deep☜]⋯]"),
                 }) {
-            final var symbols = new TokenSymbolTable();
+            final var symbols = new TokenSymbolTable(this);
             for (var variable : testCase.variables) {
                 symbols.add(variable.name, variable.value);
             }
@@ -2042,10 +2043,10 @@ public class UnicodeSetTest extends CoreTestFmwk {
     public void TestHangulSyllable() {
         final UnicodeSet lvt = new UnicodeSet("[:Hangul_Syllable_Type=LVT_Syllable:]");
         assertNotEquals("LVT count", new UnicodeSet(), lvt);
-        logln(lvt + ": " + lvt.size());
+        logDebug(lvt + ": " + lvt.size());
         final UnicodeSet lv = new UnicodeSet("[:Hangul_Syllable_Type=LV_Syllable:]");
         assertNotEquals("LV count", new UnicodeSet(), lv);
-        logln(lv + ": " + lv.size());
+        logDebug(lv + ": " + lv.size());
     }
 
     /** Test that frozen classes disallow changes. For 4217 */
@@ -2335,7 +2336,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
                         + "\t\t"
                         + percent.format(rangeConstructorTime / patternConstructorTime - 1);
         if (rangeConstructorTime < 2 * patternConstructorTime) {
-            logln(message);
+            logDebug(message);
         } else {
             errln(message);
         }
@@ -2547,7 +2548,12 @@ public class UnicodeSetTest extends CoreTestFmwk {
     //    }
 
     public static class TokenSymbolTable implements SymbolTable {
+        private final TestFmwk fmwk;
         HashMap<String, char[]> contents = new HashMap<>();
+
+        public TokenSymbolTable(TestFmwk fmwk) {
+            this.fmwk = fmwk;
+        }
 
         /**
          * (Non-SymbolTable API) Add the given variable and value to the table. Variable should NOT
@@ -2564,7 +2570,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
          * contain leading '$'.
          */
         public void add(String var, char[] body) {
-            logln("TokenSymbolTable: add \"" + var + "\" => \"" + new String(body) + "\"");
+            fmwk.logDebug("TokenSymbolTable: add \"" + var + "\" => \"" + new String(body) + "\"");
             contents.put(var, body);
         }
 
@@ -2573,7 +2579,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
          */
         @Override
         public char[] lookup(String s) {
-            logln(
+            fmwk.logDebug(
                     "TokenSymbolTable: lookup \""
                             + s
                             + "\" => \""
@@ -2605,7 +2611,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
                     break;
                 }
             }
-            logln(
+            fmwk.logDebug(
                     "TokenSymbolTable: parse \""
                             + text
                             + "\" from "
@@ -2849,7 +2855,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
             "[abc\\uD800\\uDC00]", "[abc\uD800\uDC00]", "[abc\\U00010000]",
         };
         for (int i = 0; i < DATA.length; ++i) {
-            logln("Test pattern " + i + " :" + Utility.escape(DATA[i]));
+            logDebug("Test pattern " + i + " :" + Utility.escape(DATA[i]));
             UnicodeSet set = new UnicodeSet(DATA[i]);
             expectContainment(
                     set,
@@ -2867,7 +2873,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
     public void TestContains() {
         int limit = 256; // combinations to test
         for (int i = 0; i < limit; ++i) {
-            logln("Trying: " + i);
+            logDebug("Trying: " + i);
             UnicodeSet x = bitsToSet(i);
             for (int j = 0; j < limit; ++j) {
                 UnicodeSet y = bitsToSet(j);
@@ -3227,7 +3233,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
                                         + ", expected containment of "
                                         + charsIn));
             } else {
-                logln(Utility.escape("Ok: set " + set + " contains " + charsIn));
+                logDebug(Utility.escape("Ok: set " + set + " contains " + charsIn));
             }
         }
         if (charsOut != null) {
@@ -3250,7 +3256,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
                                         + ", expected non-containment of "
                                         + charsOut));
             } else {
-                logln(Utility.escape("Ok: set " + set + " does not contain " + charsOut));
+                logDebug(Utility.escape("Ok: set " + set + " does not contain " + charsOut));
             }
         }
     }
@@ -3267,7 +3273,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
                             + Utility.escape(expectedPairs)
                             + "\"");
         } else {
-            logln(
+            logDebug(
                     "Ok:   applyPattern(\""
                             + pattern
                             + "\") => pairs \""
@@ -3280,7 +3286,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
     void expectToPattern(UnicodeSet set, String expPat, String[] expStrings) {
         String pat = set.toPattern(true);
         if (pat.equals(expPat)) {
-            logln("Ok:   toPattern() => \"" + pat + "\"");
+            logDebug("Ok:   toPattern() => \"" + pat + "\"");
         } else {
             errln("FAIL: toPattern() => \"" + pat + "\", expected \"" + expPat + "\"");
             return;
@@ -3296,7 +3302,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
             }
             boolean contained = set.contains(expStrings[i]);
             if (contained == in) {
-                logln(
+                logDebug(
                         "Ok: "
                                 + expPat
                                 + (contained ? " contains {" : " does not contain {")
@@ -3372,7 +3378,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
             UnicodeSetIterator it = new UnicodeSetIterator(us);
             for (EntryRange range : us.ranges()) {
                 final String title = range.toString();
-                logln(title);
+                logDebug(title);
                 it.nextRange();
                 assertEquals(title, it.codepoint, range.codepoint);
                 assertEquals(title, it.codepointEnd, range.codepointEnd);
@@ -3511,7 +3517,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
             }
         }
         long end = System.nanoTime();
-        logln("Time for SIMPLE   :\t" + (end - start));
+        logDebug("Time for SIMPLE   :\t" + (end - start));
         start = System.nanoTime();
         for (int i = 1; i < limit; ++i) {
             UnicodeSet us = new UnicodeSet("[" + getCombinations(items, i) + "]");
@@ -3522,7 +3528,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
             }
         }
         end = System.nanoTime();
-        logln("Time for CONTAINED:\t" + (end - start));
+        logDebug("Time for CONTAINED:\t" + (end - start));
     }
 
     /**

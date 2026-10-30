@@ -31,12 +31,8 @@ public class DataDrivenUScriptTest extends CoreTestFmwk {
         return sb.toString();
     }
 
-    private static void assertEqualScripts(String msg, int[] expectedScripts, int[] actualScripts) {
-        assertEquals(msg, scriptsToString(expectedScripts), scriptsToString(actualScripts));
-    }
-
     @RunWith(Parameterized.class)
-    public static class LocaleGetCodeTest {
+    public static class LocaleGetCodeTest extends CoreTestFmwk {
         private ULocale testLocaleName;
         private int expected;
 
@@ -94,7 +90,7 @@ public class DataDrivenUScriptTest extends CoreTestFmwk {
                     errln("Did not get the expected script code for Esperanto");
                 }
             } else {
-                warnln("Could not load the locale data.");
+                errln("Could not load the locale data.");
             }
             ULocale.setDefault(defaultLoc);
 
@@ -135,6 +131,10 @@ public class DataDrivenUScriptTest extends CoreTestFmwk {
                     UScript.getCode("ro-RO")); // String
             // not
             // ULocale
+        }
+
+        private void assertEqualScripts(String msg, int[] expectedScripts, int[] actualScripts) {
+            assertEquals(msg, scriptsToString(expectedScripts), scriptsToString(actualScripts));
         }
     }
 
@@ -184,7 +184,9 @@ public class DataDrivenUScriptTest extends CoreTestFmwk {
                 errln("Error testing UScript.getCode() for locale " + testLocaleName);
             }
 
-            logln("  Testing UScript.getCode(Locale) with locale: " + testLocale.getDisplayName());
+            logDebug(
+                    "  Testing UScript.getCode(Locale) with locale: "
+                            + testLocale.getDisplayName());
             code = UScript.getCode(testLocale);
             if (code != null) {
                 for (int j = 0; j < code.length; j++) {
@@ -309,7 +311,7 @@ public class DataDrivenUScriptTest extends CoreTestFmwk {
     }
 
     @RunWith(Parameterized.class)
-    public static class GetNameTest {
+    public static class GetNameTest extends CoreTestFmwk {
         private int testCode;
         private String expected;
 
@@ -347,7 +349,7 @@ public class DataDrivenUScriptTest extends CoreTestFmwk {
     }
 
     @RunWith(Parameterized.class)
-    public static class GetShortNameTest {
+    public static class GetShortNameTest extends CoreTestFmwk {
         private int testCode;
         private String expected;
 
@@ -388,7 +390,7 @@ public class DataDrivenUScriptTest extends CoreTestFmwk {
     }
 
     @RunWith(Parameterized.class)
-    public static class GetScriptTest {
+    public static class GetScriptTest extends CoreTestFmwk {
         private int codepoint;
         private int expected;
 
