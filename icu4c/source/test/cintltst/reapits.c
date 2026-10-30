@@ -172,6 +172,7 @@ static void TestUTextAPI(void);
 static void TestRefreshInput(void);
 static void TestBug8421(void);
 static void TestBug10815(void);
+void TestRegexPatternTextOOM(void);
 
 void addURegexTest(TestNode** root);
 
@@ -183,6 +184,7 @@ void addURegexTest(TestNode** root)
     addTest(root, &TestRefreshInput, "regex/TestRefreshInput");
     addTest(root, &TestBug8421,   "regex/TestBug8421");
     addTest(root, &TestBug10815,   "regex/TestBug10815");
+    addTest(root, &TestRegexPatternTextOOM, "regex/TestRegexPatternTextOOM");
 }
 
 /*
