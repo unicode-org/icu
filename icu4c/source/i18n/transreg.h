@@ -105,14 +105,14 @@ class TransliteratorAlias : public UMemory {
     //    Here ID is the ID, aliasID is the idBlock, trans is the
     //    contained RBT, and idSplitPoint is the offset in aliasID
     //    where the contained RBT goes.  compoundFilter is the
-    //    compound filter, and it is _not_ owned.
+    //    compound filter, and it is owned (cloned from input).
     // 3. Rules
     //    Here ID is the ID, aliasID is the rules string.
     //    idSplitPoint is the UTransDirection.
     UnicodeString ID;
     UnicodeString aliasesOrRules;
     UVector* transes; // owned
-    const UnicodeSet* compoundFilter; // alias
+    UnicodeSet* compoundFilter; // owned
     UTransDirection direction;
     enum { SIMPLE, COMPOUND, RULES } type;
 
