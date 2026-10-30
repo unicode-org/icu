@@ -40,15 +40,20 @@ typedef unsigned char ICUZoneinfoVersion;
 #define ICU_TZ_RESOURCE_OLD "zoneinfo"
 #define ICU_TZ_RESOURCE "zoneinfo64"
 
-/* File containing custom zone-region mapping. */
-#define ICU_REGIONS "icuregions"
+/* Files generated into the ICU source tree by the CLDR-to-ICU conversion tool
+ * (see tools/cldr/cldr-to-icu/), which are deliberately *not* packaged into
+ * ICU's runtime data, since they are only needed offline, here.  The paths are
+ * normally supplied by the build (see Makefile.in); the defaults below assume
+ * tz2icu is run from the ICU data directory. */
+
+/* File containing the zone/region mapping extracted from CLDR's BCP 47 time
+ * zone identifiers (common/bcp47/timezone.xml). */
+#ifndef ICU_ZONE_REGIONS
+#define ICU_ZONE_REGIONS "tzdata/zoneRegions.txt"
+#endif
 
 /* File containing the metazone standard/DST offsets extracted from CLDR's
- * metaZones.xml.  It is generated into the ICU source tree by the CLDR-to-ICU
- * conversion tool (see tools/cldr/cldr-to-icu/) and is deliberately *not*
- * packaged into ICU's runtime data, since it is only needed offline, here.
- * The path is normally supplied by the build (see Makefile.in); the default
- * below assumes tz2icu is run from the ICU data directory. */
+ * metaZones.xml. */
 #ifndef ICU_METAZONE_OFFSETS
 #define ICU_METAZONE_OFFSETS "tzdata/metazoneOffsets.txt"
 #endif

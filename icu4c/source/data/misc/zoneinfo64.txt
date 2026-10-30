@@ -3,10 +3,10 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 //---------------------------------------------------------
 // Build tool:  tz2icu
-// Build date:  Thu Oct 29 08:07:44 2026
+// Build date:  Fri Oct 30 21:53:46 2026
 // tz database: ftp://ftp.iana.org/tz/
 // tz version:  2026f
-// ICU version: 79.1
+// ICU version: 80.0.1
 //---------------------------------------------------------
 // >> !!! >>   THIS IS A MACHINE-GENERATED FILE   << !!! <<
 // >> !!! >>>            DO NOT EDIT             <<< !!! <<
@@ -3367,7 +3367,7 @@ zoneinfo64:table(nofallback) {
   "HK", //Z#515 Hongkong
   "US", //Z#516 IET
   "IN", //Z#517 IST
-  "CI", //Z#518 Iceland
+  "IS", //Z#518 Iceland
   "MG", //Z#519 Indian/Antananarivo
   "IO", //Z#520 Indian/Chagos
   "CX", //Z#521 Indian/Christmas
@@ -3420,7 +3420,7 @@ zoneinfo64:table(nofallback) {
   "SB", //Z#568 Pacific/Guadalcanal
   "GU", //Z#569 Pacific/Guam
   "US", //Z#570 Pacific/Honolulu
-  "UM", //Z#571 Pacific/Johnston
+  "US", //Z#571 Pacific/Johnston
   "KI", //Z#572 Pacific/Kanton
   "KI", //Z#573 Pacific/Kiritimati
   "FM", //Z#574 Pacific/Kosrae
