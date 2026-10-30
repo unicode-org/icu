@@ -413,9 +413,16 @@ static void iterateTestsWithLevel ( const TestNode* root,
         ctest_xml_testcase(pathToFunction, pathToFunction, timeSeconds, (myERROR_COUNT!=ERROR_COUNT)?"error":NULL);
 
         if (myERROR_COUNT != ERROR_COUNT) {
-          log_testinfo_i("} ---[%d ERRORS in %s] ", ERROR_COUNT - myERROR_COUNT, pathToFunction);
+        #ifdef U_AUTOMAKE_TEST_FORMAT
+          log_testinfo_i("\nFAIL: %s\n} ---[ERRORS: %d]", root->name,ERROR_COUNT - myERROR_COUNT);
+        #else
+          log_testinfo_i("} ---[%d ERRORS in %s] ", ERROR_COUNT - myERROR_COUNT,pathToFunction);
+        #endif
           strcpy(ERROR_LOG[ERRONEOUS_FUNCTION_COUNT++], pathToFunction);
         } else {
+        #ifdef U_AUTOMAKE_TEST_FORMAT
+          log_testinfo_i("\nPASS: %s\n", root->name);
+        #endif
           if(!ON_LINE) { /* had some output */
             int spaces = FLAG_INDENT-(depth-1);
             log_testinfo_i("} %*s[OK] ", spaces, "---");
