@@ -37,6 +37,7 @@
 #include "cmemory.h"
 #include "collation.h"
 #include "collationdata.h"
+#include "collationdatabuilder.h"
 #include "collationfcd.h"
 #include "collationiterator.h"
 #include "collationroot.h"
@@ -83,6 +84,7 @@ public:
     void TestTailoredElements();
     void TestDataDriven();
     void TestLongLocale();
+    void TestBuilderExpansionLimit();
     void TestBuilderContextsOverflow();
     void TestHang22414();
     void TestCollatorPredicates();
@@ -162,6 +164,7 @@ void CollationTest::runIndexedTest(int32_t index, UBool exec, const char *&name,
     TESTCASE_AUTO(TestTailoredElements);
     TESTCASE_AUTO(TestDataDriven);
     TESTCASE_AUTO(TestLongLocale);
+    TESTCASE_AUTO(TestBuilderExpansionLimit);
     TESTCASE_AUTO(TestBuilderContextsOverflow);
     TESTCASE_AUTO(TestHang22414);
     TESTCASE_AUTO(TestCollatorPredicates);
@@ -1913,6 +1916,27 @@ void CollationTest::TestHang22414() {
         LocalPointer<Collator> coll(Collator::createInstance(l, errorCode));
         errorCode.reset();
     }
+}
+
+void CollationTest::TestBuilderExpansionLimit() {
+    // Simulate an accumulated CE count at INT32_MAX without constructing a
+    // multi-gigabyte rule. The next CE must report the limit, not overflow.
+    UErrorCode errorCode = U_ZERO_ERROR;
+    CollationDataBuilder builder(false, errorCode);
+    const CollationData *root = CollationRoot::getData(errorCode);
+    if(U_FAILURE(errorCode)) {
+        dataerrln("Could not load root collation data: %s", u_errorName(errorCode));
+        return;
+    }
+    builder.initForTailoring(root, errorCode);
+    if(U_FAILURE(errorCode)) {
+        errln("Could not initialize collation builder: %s", u_errorName(errorCode));
+        return;
+    }
+    int64_t ces[Collation::MAX_EXPANSION_LENGTH] = {};
+    assertEquals("CE count does not overflow INT32_MAX",
+                 Collation::MAX_EXPANSION_LENGTH + 1,
+                 builder.getCEs(UNICODE_STRING_SIMPLE("c"), ces, INT32_MAX));
 }
 
 void CollationTest::TestBuilderContextsOverflow() {
