@@ -132,7 +132,7 @@ public class ULocaleCollationTest extends TestFmwk {
                         || (expValidActual.equals("ge") && validActual >= 0)
                         || (expValidActual.equals("eq") && validActual == 0);
         if (reqOK && valOK) {
-            logln("Ok: " + label + "; req=" + req + ", valid=" + valid + ", actual=" + actual);
+            logDebug("Ok: " + label + "; req=" + req + ", valid=" + valid + ", actual=" + actual);
         } else {
             errln(
                     "FAIL: "
@@ -220,7 +220,7 @@ public class ULocaleCollationTest extends TestFmwk {
             checkObject(requestedLocale, subobj, "gt", "ge");
         }
         if (reg != null) {
-            logln("Info: Registering service");
+            logDebug("Info: Registering service");
             Object key = reg.register(req, obj);
             Object objReg = svc.create(req);
             checkObject(requestedLocale, objReg, "eq", "eq");
@@ -230,7 +230,7 @@ public class ULocaleCollationTest extends TestFmwk {
                 // their metadata should be structured normally.
                 checkObject(requestedLocale, subobj, "gt", "ge");
             }
-            logln("Info: Unregistering service");
+            logDebug("Info: Unregistering service");
             if (!reg.unregister(key)) {
                 errln("FAIL: unregister failed");
             }
@@ -324,7 +324,7 @@ public class ULocaleCollationTest extends TestFmwk {
                     LocaleDisplayNames.getInstance(
                             french, DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU);
             for (DisplayContext.Type type : DisplayContext.Type.values()) {
-                logln("Contexts: " + names.getContext(type).toString());
+                logDebug("Contexts: " + names.getContext(type).toString());
             }
             Collator collator = Collator.getInstance(french);
 
@@ -375,7 +375,7 @@ public class ULocaleCollationTest extends TestFmwk {
                 names.getUiList(supported, false, collator);
                 assertNull("Failed to detect bogus locale «" + malformed + "»", supported);
             } catch (IllformedLocaleException e) {
-                logln(
+                logDebug(
                         "Successfully detected ill-formed locale «"
                                 + malformed
                                 + "»:"

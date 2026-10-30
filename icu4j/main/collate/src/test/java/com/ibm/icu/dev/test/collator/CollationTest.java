@@ -502,7 +502,7 @@ public class CollationTest extends CollationTestBase {
         CollationWeights cw = new CollationWeights();
 
         // Non-compressible primaries use 254 second bytes 02..FF.
-        logln("CollationWeights.initForPrimary(non-compressible)");
+        logDebug("CollationWeights.initForPrimary(non-compressible)");
         cw.initForPrimary(false);
         // Expect 1 weight 11 and 254 weights 12xx.
         checkAllocWeights(cw, 0x10000000L, 0x13000000L, 255, 1, 1);
@@ -523,7 +523,7 @@ public class CollationTest extends CollationTestBase {
         checkAllocWeights(cw, 0x1020ff00L, 0x10210400L, 2, 3, 2);
 
         // Compressible primaries use 251 second bytes 04..FE.
-        logln("CollationWeights.initForPrimary(compressible)");
+        logDebug("CollationWeights.initForPrimary(compressible)");
         cw.initForPrimary(true);
         // Expect 1 weight 11 and 251 weights 12xx.
         checkAllocWeights(cw, 0x10000000L, 0x13000000L, 252, 1, 1);
@@ -536,12 +536,12 @@ public class CollationTest extends CollationTestBase {
         checkAllocWeights(cw, 0x1020ff00L, 0x10210400L, 2, 3, 2);
 
         // Secondary and tertiary weights use only bytes 3 & 4.
-        logln("CollationWeights.initForSecondary()");
+        logDebug("CollationWeights.initForSecondary()");
         cw.initForSecondary();
         // Expect weights fbxx and all four fc..ff.
         checkAllocWeights(cw, 0xfb20L, 0x10000L, 20, 3, 4);
 
-        logln("CollationWeights.initForTertiary()");
+        logDebug("CollationWeights.initForTertiary()");
         cw.initForTertiary();
         // Expect weights 3dxx and both 3e & 3f.
         checkAllocWeights(cw, 0x3d02L, 0x4000L, 10, 3, 2);
@@ -910,7 +910,7 @@ public class CollationTest extends CollationTestBase {
                     continue;
                 }
                 prevLocales.add(actual.getName());
-                logln(
+                logDebug(
                         "TestTailoredElements(): requested "
                                 + localeWithType.getName()
                                 + " -> actual "
@@ -936,7 +936,7 @@ public class CollationTest extends CollationTestBase {
                     for (int i = 0; i < ces.length; ++i) {
                         long ce = ces[i];
                         if (!isValidCE(rootElements, root, ce)) {
-                            logln(prettify(s));
+                            logDebug(prettify(s));
                             errln(
                                     "invalid tailored CE 0x"
                                             + Utility.hex(ce, 16)
@@ -1025,7 +1025,7 @@ public class CollationTest extends CollationTestBase {
             String tmpPrefix = Utility.unescape(fileLine.substring(start, pipeIndex));
             if (tmpPrefix.length() == 0) {
                 prefix.value = null;
-                logln(fileLine);
+                logDebug(fileLine);
                 throw new ParseException("empty prefix on line " + fileLineNumber, fileLineNumber);
             }
             prefix.value = tmpPrefix;
@@ -1037,7 +1037,7 @@ public class CollationTest extends CollationTestBase {
         String tmp = Utility.unescape(fileLine.substring(start, i));
         if (tmp.length() == 0) {
             s.value = null;
-            logln(fileLine);
+            logDebug(fileLine);
             throw new ParseException("empty string on line " + fileLineNumber, fileLineNumber);
         }
         s.value = tmp;
@@ -1082,7 +1082,7 @@ public class CollationTest extends CollationTestBase {
         }
 
         if (start == 0 || !isSpace(fileLine.charAt(start))) {
-            logln(fileLine);
+            logDebug(fileLine);
             throw new ParseException(
                     "no relation (= < <1 <2 <c <3 <4 <i) at beginning of line " + fileLineNumber,
                     fileLineNumber);
@@ -1092,13 +1092,13 @@ public class CollationTest extends CollationTestBase {
         Output<String> prefixOut = new Output<>();
         start = parseString(start, prefixOut, s);
         if (prefixOut.value != null) {
-            logln(fileLine);
+            logDebug(fileLine);
             throw new ParseException(
                     "prefix string not allowed for test string: on line " + fileLineNumber,
                     fileLineNumber);
         }
         if (start < fileLine.length()) {
-            logln(fileLine);
+            logDebug(fileLine);
             throw new ParseException(
                     "unexpected line contents after test string on line " + fileLineNumber,
                     fileLineNumber);
@@ -1117,7 +1117,7 @@ public class CollationTest extends CollationTestBase {
                 parseAndSetReorderCodes(start + 7);
                 return;
             }
-            logln(fileLine);
+            logDebug(fileLine);
             throw new ParseException("missing '=' on line " + fileLineNumber, fileLineNumber);
         }
 
@@ -1134,7 +1134,7 @@ public class CollationTest extends CollationTestBase {
             } else if (valueString.equals("currency")) {
                 max = ReorderCodes.CURRENCY;
             } else {
-                logln(fileLine);
+                logDebug(fileLine);
                 throw new ParseException(
                         "invalid attribute value name on line " + fileLineNumber, fileLineNumber);
             }
@@ -1214,12 +1214,12 @@ public class CollationTest extends CollationTestBase {
                 parsed = false;
             }
         } else {
-            logln(fileLine);
+            logDebug(fileLine);
             throw new ParseException(
                     "invalid attribute name on line " + fileLineNumber, fileLineNumber);
         }
         if (!parsed) {
-            logln(fileLine);
+            logDebug(fileLine);
             throw new ParseException(
                     "invalid attribute value name or attribute=value combination on line "
                             + fileLineNumber,
@@ -1243,7 +1243,7 @@ public class CollationTest extends CollationTestBase {
                 if (name.equalsIgnoreCase("default")) {
                     code = ReorderCodes.DEFAULT; // -1
                 } else {
-                    logln(fileLine);
+                    logDebug(fileLine);
                     throw new ParseException(
                             "invalid reorder code '" + name + "' on line " + fileLineNumber,
                             fileLineNumber);
@@ -1271,7 +1271,7 @@ public class CollationTest extends CollationTestBase {
         try {
             coll = new RuleBasedCollator(rules.toString());
         } catch (Exception e) {
-            logln(rules.toString());
+            logDebug(rules.toString());
             errln("RuleBasedCollator(rules) failed - " + e.getMessage());
             coll = null;
         }
@@ -1293,12 +1293,12 @@ public class CollationTest extends CollationTestBase {
             }
         }
         if (locale == null) {
-            logln(fileLine);
+            logDebug(fileLine);
             errln("invalid language tag on line " + fileLineNumber);
             return;
         }
 
-        logln("creating a collator for locale ID " + locale.getName());
+        logDebug("creating a collator for locale ID " + locale.getName());
         try {
             coll = Collator.getInstance(locale);
         } catch (Exception e) {
@@ -1339,9 +1339,9 @@ public class CollationTest extends CollationTestBase {
 
         byte[] keyBytes = key.toByteArray();
         if (keyBytes.length == 0 || keyBytes[keyBytes.length - 1] != 0) {
-            logln(fileTestName);
-            logln(line);
-            logln(printCollationKey(key));
+            logDebug(fileTestName);
+            logDebug(line);
+            logDebug(printCollationKey(key));
             errln("Collator(" + norm + ").getCollationKey() wrote an empty or unterminated key");
             return false;
         }
@@ -1359,9 +1359,9 @@ public class CollationTest extends CollationTestBase {
         for (int i = 0; i < (keyBytes.length - 1); ++i) {
             byte b = keyBytes[i];
             if (b == 0) {
-                logln(fileTestName);
-                logln(line);
-                logln(printCollationKey(key));
+                logDebug(fileTestName);
+                logDebug(line);
+                logDebug(printCollationKey(key));
                 errln("Collator(" + norm + ").getCollationKey() contains a 00 byte");
                 return false;
             }
@@ -1370,9 +1370,9 @@ public class CollationTest extends CollationTestBase {
             }
         }
         if (numLevelSeparators != (numLevels - 1)) {
-            logln(fileTestName);
-            logln(line);
-            logln(printCollationKey(key));
+            logDebug(fileTestName);
+            logDebug(line);
+            logDebug(printCollationKey(key));
             errln(
                     "Collator("
                             + norm
@@ -1472,11 +1472,11 @@ public class CollationTest extends CollationTestBase {
 
         int order = coll.compare(prevString, s);
         if (order != expectedOrder) {
-            logln(fileTestName);
-            logln(prevFileLine);
-            logln(fileLine);
-            logln(printCollationKey(prevKey));
-            logln(printCollationKey(key));
+            logDebug(fileTestName);
+            logDebug(prevFileLine);
+            logDebug(fileLine);
+            logDebug(printCollationKey(prevKey));
+            logDebug(printCollationKey(key));
             errln(
                     "line "
                             + fileLineNumber
@@ -1490,11 +1490,11 @@ public class CollationTest extends CollationTestBase {
         }
         order = coll.compare(s, prevString);
         if (order != -expectedOrder) {
-            logln(fileTestName);
-            logln(prevFileLine);
-            logln(fileLine);
-            logln(printCollationKey(prevKey));
-            logln(printCollationKey(key));
+            logDebug(fileTestName);
+            logDebug(prevFileLine);
+            logDebug(fileLine);
+            logDebug(printCollationKey(prevKey));
+            logDebug(printCollationKey(key));
             errln(
                     "line "
                             + fileLineNumber
@@ -1509,11 +1509,11 @@ public class CollationTest extends CollationTestBase {
 
         order = prevKey.compareTo(key);
         if (order != expectedOrder) {
-            logln(fileTestName);
-            logln(prevFileLine);
-            logln(fileLine);
-            logln(printCollationKey(prevKey));
-            logln(printCollationKey(key));
+            logDebug(fileTestName);
+            logDebug(prevFileLine);
+            logDebug(fileLine);
+            logDebug(printCollationKey(prevKey));
+            logDebug(printCollationKey(key));
             errln(
                     "line "
                             + fileLineNumber
@@ -1529,11 +1529,11 @@ public class CollationTest extends CollationTestBase {
         int level = getDifferenceLevel(prevKey, key, order, collHasCaseLevel);
         if (order != Collation.EQUAL && expectedLevel != Collation.NO_LEVEL) {
             if (level != expectedLevel) {
-                logln(fileTestName);
-                logln(prevFileLine);
-                logln(fileLine);
-                logln(printCollationKey(prevKey));
-                logln(printCollationKey(key));
+                logDebug(fileTestName);
+                logDebug(prevFileLine);
+                logDebug(fileLine);
+                logDebug(printCollationKey(prevKey));
+                logDebug(printCollationKey(key));
                 errln(
                         "line "
                                 + fileLineNumber
@@ -1564,7 +1564,7 @@ public class CollationTest extends CollationTestBase {
             key = outKey.value;
             order = prevKey.compareTo(key);
             if (order != expectedOrder) {
-                logln(fileTestName);
+                logDebug(fileTestName);
                 errln(
                         "line "
                                 + fileLineNumber
@@ -1575,16 +1575,16 @@ public class CollationTest extends CollationTestBase {
                                 + order
                                 + " != "
                                 + expectedOrder);
-                logln(prevFileLine);
-                logln(fileLine);
-                logln(printCollationKey(prevKey));
-                logln(printCollationKey(key));
+                logDebug(prevFileLine);
+                logDebug(fileLine);
+                logDebug(printCollationKey(prevKey));
+                logDebug(printCollationKey(key));
                 return false;
             }
             int mergedLevel = getDifferenceLevel(prevKey, key, order, collHasCaseLevel);
             if (order != Collation.EQUAL && expectedLevel != Collation.NO_LEVEL) {
                 if (mergedLevel != level) {
-                    logln(fileTestName);
+                    logDebug(fileTestName);
                     errln(
                             "line "
                                     + fileLineNumber
@@ -1597,10 +1597,10 @@ public class CollationTest extends CollationTestBase {
                                     + mergedLevel
                                     + " != "
                                     + level);
-                    logln(prevFileLine);
-                    logln(fileLine);
-                    logln(printCollationKey(prevKey));
-                    logln(printCollationKey(key));
+                    logDebug(prevFileLine);
+                    logDebug(fileLine);
+                    logDebug(printCollationKey(prevKey));
+                    logDebug(printCollationKey(key));
                     return false;
                 }
             }
@@ -1681,13 +1681,13 @@ public class CollationTest extends CollationTestBase {
             // Sub-parsers leave the first line set that they do not handle.
             while (fileLine != null || readNonEmptyLine(in)) {
                 if (!isSectionStarter(fileLine.charAt(0))) {
-                    logln(fileLine);
+                    logDebug(fileLine);
                     errln("syntax error on line " + fileLineNumber);
                     return;
                 }
                 if (fileLine.startsWith("** test: ")) {
                     fileTestName = fileLine;
-                    logln(fileLine);
+                    logDebug(fileLine);
                     fileLine = null;
                 } else if (fileLine.equals("@ root")) {
                     setRootCollator();
@@ -1704,7 +1704,7 @@ public class CollationTest extends CollationTestBase {
                 } else if (fileLine.equals("* compare")) {
                     checkCompareStrings(in);
                 } else {
-                    logln(fileLine);
+                    logDebug(fileLine);
                     errln("syntax error on line " + fileLineNumber);
                     return;
                 }
@@ -1744,7 +1744,7 @@ public class CollationTest extends CollationTestBase {
         String s = new String(rules);
         try {
             new RuleBasedCollator(s);
-            logln("successfully built the Collator");
+            logDebug("successfully built the Collator");
         } catch (StringIndexOutOfBoundsException e) {
             errln("unhandled StringIndexOutOfBoundsException: " + e);
         } catch (ParseException pe) {
@@ -1752,7 +1752,7 @@ public class CollationTest extends CollationTestBase {
             if (cause != null && cause instanceof StringIndexOutOfBoundsException) {
                 errln("internal parser error: " + pe);
             } else {
-                logln("collation data builder overflow or similar: " + pe);
+                logDebug("collation data builder overflow or similar: " + pe);
             }
         } catch (Exception e) {
             errln("unexpected type of exception: " + e);

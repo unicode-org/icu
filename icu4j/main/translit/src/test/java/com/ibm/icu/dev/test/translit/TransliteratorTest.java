@@ -173,7 +173,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
             Transliterator t = Transliterator.getInstance(ID);
             errln("FAIL: " + ID + " returned " + t);
         } catch (IllegalArgumentException ex) {
-            logln("OK: Bogus ID handled properly");
+            logDebug("OK: Bogus ID handled properly");
         }
     }
 
@@ -388,7 +388,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
             }
             UtilityExtensions.formatInput(log, s, index);
             if (s.toString().equals(DATA[i + 1])) {
-                logln(log.toString());
+                logDebug(log.toString());
             } else {
                 errln("FAIL: " + log.toString() + ", expected " + DATA[i + 1]);
             }
@@ -489,9 +489,9 @@ public class TransliteratorTest extends TransliteratorTestBase {
         String out = hex.transliterate(s);
         String exp = "\\u0061\\u0062c\\u0064\\u0065";
         if (out.equals(exp)) {
-            logln("Ok:   \"" + exp + "\"");
+            logDebug("Ok:   \"" + exp + "\"");
         } else {
-            logln("FAIL: \"" + out + "\", wanted \"" + exp + "\"");
+            logDebug("FAIL: \"" + out + "\", wanted \"" + exp + "\"");
         }
     }
 
@@ -523,7 +523,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
         };
 
         for (int i = 0; i < DATA.length; i += 3) {
-            logln("Pattern: " + Utility.escape(DATA[i]));
+            logDebug("Pattern: " + Utility.escape(DATA[i]));
             Transliterator t =
                     Transliterator.createFromRules("<ID>", DATA[i], Transliterator.FORWARD);
             expect(t, DATA[i + 1], DATA[i + 2]);
@@ -650,7 +650,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
             String desc =
                     (String) DATA[i + 1] + (gotError ? (" -> error: " + err) : " -> no error");
             if ((err != null) == ((Boolean) DATA[i]).booleanValue()) {
-                logln("Ok:   " + desc);
+                logDebug("Ok:   " + desc);
             } else {
                 errln("FAIL: " + desc);
             }
@@ -667,7 +667,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
         };
 
         for (int i = 0; i < DATA.length; i += 3) {
-            logln("Pattern: " + Utility.escape(DATA[i]));
+            logDebug("Pattern: " + Utility.escape(DATA[i]));
             Transliterator t =
                     Transliterator.createFromRules("<ID>", DATA[i], Transliterator.FORWARD);
             expect(t, DATA[i + 1], DATA[i + 2]);
@@ -689,7 +689,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
         };
 
         for (int i = 0; i < DATA.length; i += 3) {
-            logln("Pattern: " + Utility.escape(DATA[i]));
+            logDebug("Pattern: " + Utility.escape(DATA[i]));
             Transliterator t =
                     Transliterator.createFromRules("<ID>", DATA[i], Transliterator.FORWARD);
             expect(t, DATA[i + 1], DATA[i + 2]);
@@ -722,7 +722,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
         };
 
         for (int i = 0; i < DATA.length; i += 3) {
-            logln("Pattern: " + Utility.escape(DATA[i]));
+            logDebug("Pattern: " + Utility.escape(DATA[i]));
             Transliterator t =
                     Transliterator.createFromRules("<ID>", DATA[i], Transliterator.FORWARD);
             expect(t, DATA[i + 1], DATA[i + 2]);
@@ -942,7 +942,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
             try {
                 Transliterator t = Transliterator.getInstance(DATA[i]);
                 if (DATA[i + 1] == null || DATA[i + 1].equals(t.getID())) {
-                    logln(
+                    logDebug(
                             "Ok: "
                                     + DATA[i + 2]
                                     + " create ID \""
@@ -1021,7 +1021,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
                 newID = e.getMessage();
             }
             if (ok) {
-                logln("Ok: createInstance(" + id + "," + DATA[i + 1] + ") => " + newID);
+                logDebug("Ok: createInstance(" + id + "," + DATA[i + 1] + ") => " + newID);
             } else {
                 errln(
                         "FAIL: createInstance("
@@ -1132,7 +1132,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
                 "C.A.t IN tHE H.A.t, .B..A.t ON tHE M.A.t");
         String r = t.toRules(true);
         if (r.equals(rule)) {
-            logln("OK: toRules() => " + r);
+            logDebug("OK: toRules() => " + r);
         } else {
             errln("FAIL: toRules() => " + r + ", expected " + rule);
         }
@@ -1148,7 +1148,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
         if (!r.equals(exp)) {
             errln("FAIL: toRules() => " + r + ", expected " + exp);
         } else {
-            logln("OK: toRules() => " + r);
+            logDebug("OK: toRules() => " + r);
         }
 
         // Round trip the result of toRules
@@ -1157,7 +1157,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
             errln("FAIL: createFromRules #2 failed");
             return;
         } else {
-            logln("OK: createFromRules(" + r + ") succeeded");
+            logDebug("OK: createFromRules(" + r + ") succeeded");
         }
 
         // Test toRules again
@@ -1165,7 +1165,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
         if (!r.equals(exp)) {
             errln("FAIL: toRules() => " + r + ", expected " + exp);
         } else {
-            logln("OK: toRules() => " + r);
+            logDebug("OK: toRules() => " + r);
         }
 
         // Test Foo(Bar) IDs.  Careful with spacing in id; make it conform
@@ -1177,7 +1177,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
             return;
         }
         if (t.getID().equals(id)) {
-            logln("OK: created " + id);
+            logDebug("OK: created " + id);
         } else {
             errln("FAIL: createInstance(" + id + ").getID() => " + t.getID());
         }
@@ -1189,7 +1189,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
         }
         exp = "NFKC();Lower(Upper)";
         if (u.getID().equals(exp)) {
-            logln("OK: createInverse(" + id + ") => " + u.getID());
+            logDebug("OK: createInverse(" + id + ") => " + u.getID());
         } else {
             errln("FAIL: createInverse(" + id + ") => " + u.getID());
         }
@@ -1298,7 +1298,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
                 String expRules = Utility.unescape(DATA[d + 2]);
                 String expEscapedRules = DATA[d + 2];
                 if (rules.equals(expRules)) {
-                    logln("Ok: " + DATA[d + 1] + " => " + Utility.escape(rules));
+                    logDebug("Ok: " + DATA[d + 1] + " => " + Utility.escape(rules));
                 } else {
                     errln(
                             "FAIL: "
@@ -1307,7 +1307,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
                                     + Utility.escape(rules + ", exp " + expRules));
                 }
                 if (escapedRules.equals(expEscapedRules)) {
-                    logln("Ok: " + DATA[d + 1] + " => " + escapedRules);
+                    logDebug("Ok: " + DATA[d + 1] + " => " + escapedRules);
                 } else {
                     errln(
                             "FAIL: "
@@ -1328,7 +1328,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
                 String toPat;
                 toPat = set.toPattern(true);
                 if (expToPat.equals(toPat)) {
-                    logln("Ok: " + pat + " => " + toPat);
+                    logDebug("Ok: " + pat + " => " + toPat);
                 } else {
                     errln(
                             "FAIL: "
@@ -1514,7 +1514,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
         Enumeration<String> es = Transliterator.getAvailableSources();
         for (int i = 0; es.hasMoreElements(); ++i) {
             String source = es.nextElement();
-            logln("" + i + ": " + source);
+            logDebug("" + i + ": " + source);
             if (source.length() == 0) {
                 errln("FAIL: empty source");
                 continue;
@@ -1522,7 +1522,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
             Enumeration<String> et = Transliterator.getAvailableTargets(source);
             for (int j = 0; et.hasMoreElements(); ++j) {
                 String target = et.nextElement();
-                logln(" " + j + ": " + target);
+                logDebug(" " + j + ": " + target);
                 if (target.length() == 0) {
                     errln("FAIL: empty target");
                     continue;
@@ -1531,9 +1531,9 @@ public class TransliteratorTest extends TransliteratorTestBase {
                 for (int k = 0; ev.hasMoreElements(); ++k) {
                     String variant = ev.nextElement();
                     if (variant.length() == 0) {
-                        logln("  " + k + ": <empty>");
+                        logDebug("  " + k + ": <empty>");
                     } else {
-                        logln("  " + k + ": " + variant);
+                        logDebug("  " + k + ": " + variant);
                     }
                 }
             }
@@ -1548,7 +1548,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
             try {
                 Transliterator t = Transliterator.getInstance(IDS[i]);
                 if (t.getID().equals(IDS[i])) {
-                    logln("Ok: Registration/creation succeeded for ID " + IDS[i]);
+                    logDebug("Ok: Registration/creation succeeded for ID " + IDS[i]);
                 } else {
                     errln("FAIL: Registration of ID " + IDS[i] + " creates ID " + t.getID());
                 }
@@ -1562,7 +1562,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
                                     + t.getID());
                 } catch (IllegalArgumentException e2) {
                     // Good; this is what we expect
-                    logln("Ok; Unregistered " + IDS[i]);
+                    logDebug("Ok; Unregistered " + IDS[i]);
                 }
             } catch (IllegalArgumentException e) {
                 errln("FAIL: Registration/creation failed for ID " + IDS[i]);
@@ -1609,7 +1609,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
         }
         String exp = "(Title);Latin-Greek";
         if (t.getID().equals(exp)) {
-            logln("Ok: inverse of \"Greek-Latin; Title()\" is \"" + t.getID());
+            logDebug("Ok: inverse of \"Greek-Latin; Title()\" is \"" + t.getID());
         } else {
             errln(
                     "FAIL: inverse of \"Greek-Latin; Title()\" is \""
@@ -1626,7 +1626,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
         Transliterator t =
                 Transliterator.createFromRules(
                         "TEST", "::NFD; aa > Q; a > q;", Transliterator.FORWARD);
-        logln(t.toRules(true));
+        logDebug(t.toRules(true));
         expect(t, "aa", "Q");
     }
 
@@ -1673,7 +1673,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
         try {
             Transliterator.createFromRules("<ID>", rule, Transliterator.FORWARD);
         } catch (IllegalArgumentException e) {
-            logln("OK: Got exception for " + rule + ", as expected: " + e.getMessage());
+            logDebug("OK: Got exception for " + rule + ", as expected: " + e.getMessage());
             return;
         }
         errln("Fail: bogus rule " + rule + " compiled without error");
@@ -1729,7 +1729,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
             }
             boolean ok = (t != null && e == null);
             if (ok == expOk) {
-                logln("Ok: " + id + " => " + t + (e != null ? (", " + e.getMessage()) : ""));
+                logDebug("Ok: " + id + " => " + t + (e != null ? (", " + e.getMessage()) : ""));
                 if (source != null) {
                     expect(t, source, exp);
                 }
@@ -1835,7 +1835,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
         if (!r.equals(rr)) {
             errln("FAIL: \"" + r + "\" x toRules() => \"" + rr + "\"");
         } else {
-            logln("Ok: \"" + r + "\" x toRules() => \"" + rr + "\"");
+            logDebug("Ok: \"" + r + "\" x toRules() => \"" + rr + "\"");
         }
 
         // Test toRule/toPattern for quantified segment.
@@ -1846,7 +1846,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
         if (!r.equals(rr)) {
             errln("FAIL: \"" + r + "\" x toRules() => \"" + rr + "\"");
         } else {
-            logln("Ok: \"" + r + "\" x toRules() => \"" + rr + "\"");
+            logDebug("Ok: \"" + r + "\" x toRules() => \"" + rr + "\"");
         }
     }
 
@@ -2168,7 +2168,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
             t = Transliterator.getInstance("te_IN-Latin");
             // expect(t, "\u0430", "a");
         } catch (IllegalArgumentException ex) {
-            warnln(
+            errln(
                     "Could not load locale data for obtaining the script used in the locale te_IN. "
                             + ex.getMessage());
         }
@@ -2176,7 +2176,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
             t = Transliterator.getInstance("ru_RU-Latin");
             expect(t, "\u0430", "a");
         } catch (IllegalArgumentException ex) {
-            warnln(
+            errln(
                     "Could not load locale data for obtaining the script used in the locale ru_RU. "
                             + ex.getMessage());
         }
@@ -2184,7 +2184,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
             t = Transliterator.getInstance("en-el");
             expect(t, "a", "\u03B1");
         } catch (IllegalArgumentException ex) {
-            warnln(
+            errln(
                     "Could not load locale data for obtaining the script used in the locale el. "
                             + ex.getMessage());
         }
@@ -2227,7 +2227,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
         } catch (IllegalArgumentException e) {
             String err = e.getMessage();
             if (err.indexOf("d << b") >= 0) {
-                logln("Ok: " + err);
+                logDebug("Ok: " + err);
             } else {
                 errln("FAIL: " + err);
             }
@@ -2247,7 +2247,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
                 errln("FAIL: Did not get the expected exception");
             }
         } catch (IllegalArgumentException e) {
-            logln("Ok: " + e.getMessage());
+            logDebug("Ok: " + e.getMessage());
             return;
         }
         errln("FAIL: No syntax error");
@@ -2266,7 +2266,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
                 errln("FAIL: Did not get the expected exception");
             }
         } catch (IllegalArgumentException e) {
-            logln("Ok: " + e.getMessage());
+            logDebug("Ok: " + e.getMessage());
             return;
         }
         errln("FAIL: No syntax error");
@@ -2284,7 +2284,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
         } catch (IllegalArgumentException e) {
             String msg = e.getMessage();
             if (msg.indexOf("a}b{c") >= 0) {
-                logln("Ok: " + msg);
+                logDebug("Ok: " + msg);
             } else {
                 errln("FAIL: " + msg);
             }
@@ -2365,7 +2365,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
                 Transliterator t = Transliterator.getInstance(ID);
                 Transliterator u = t.getInverse();
                 if (t.getID().equals(expID) && u.getID().equals(expInvID)) {
-                    logln("Ok: " + ID + ".getInverse() => " + expInvID);
+                    logDebug("Ok: " + ID + ".getInverse() => " + expInvID);
                 } else {
                     errln(
                             "FAIL: getInstance("
@@ -2379,7 +2379,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
                 }
             } catch (IllegalArgumentException e) {
                 if (!expValid) {
-                    logln("Ok: getInstance(" + ID + ") => " + e.getMessage());
+                    logDebug("Ok: getInstance(" + ID + ") => " + e.getMessage());
                 } else {
                     errln("FAIL: getInstance(" + ID + ") => " + e.getMessage());
                 }
@@ -2397,8 +2397,8 @@ public class TransliteratorTest extends TransliteratorTestBase {
 
         if (!rules2.equals(testRulesForward)) {
             errln(label);
-            logln("GENERATED RULES: " + rules2);
-            logln("SHOULD BE:       " + testRulesForward);
+            logDebug("GENERATED RULES: " + rules2);
+            logDebug("SHOULD BE:       " + testRulesForward);
         }
     }
 
@@ -2494,7 +2494,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
                                 + ", expected "
                                 + DATA[i + 1]);
             } else {
-                logln("Ok: " + DATA[i] + ".getDisplayName() => " + name);
+                logDebug("Ok: " + DATA[i] + ".getDisplayName() => " + name);
             }
             Transliterator t = Transliterator.getInstance(DATA[i], Transliterator.REVERSE);
             name = Transliterator.getDisplayName(t.getID(), US);
@@ -2507,7 +2507,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
                                 + ", expected "
                                 + DATA[i + 2]);
             } else {
-                logln("Ok: " + t.getID() + ".getDisplayName() => " + name);
+                logDebug("Ok: " + t.getID() + ".getDisplayName() => " + name);
             }
 
             // Cover getDisplayName(String)
@@ -2803,7 +2803,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
 
         String r = t.toRules(true);
         if (r.equals(rule)) {
-            logln("OK: toRules() => " + r);
+            logDebug("OK: toRules() => " + r);
         } else {
             errln("FAIL: toRules() => " + r + ", expected " + rule);
         }
@@ -2822,7 +2822,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
 
         r = t.toRules(true);
         if (r.equals(rule)) {
-            logln("OK: toRules() => " + r);
+            logDebug("OK: toRules() => " + r);
         } else {
             errln("FAIL: toRules() => " + r + ", expected " + rule);
         }
@@ -2847,7 +2847,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
             }
             errln("FAIL: Ok: . > $1; => no error");
         } catch (IllegalArgumentException e) {
-            logln("Ok: . > $1; => " + e.getMessage());
+            logDebug("Ok: . > $1; => " + e.getMessage());
         }
     }
 
@@ -2906,18 +2906,18 @@ public class TransliteratorTest extends TransliteratorTestBase {
                         "RemoveCurly", "[\\{\\}] > ; \\\\N > ;", Transliterator.FORWARD));
         // TestUserFunctionFactory.add("RemoveCurly-Any", Transliterator.getInstance("Any-Null"));
 
-        logln("Trying &hex");
+        logDebug("Trying &hex");
         t = Transliterator.createFromRules("hex2", "(.) > &hex($1);", Transliterator.FORWARD);
-        logln("Registering");
+        logDebug("Registering");
         TestUserFunctionFactory.add("Any-hex2", t);
         t = Transliterator.getInstance("Any-hex2");
         expect(t, "abc", "\\u0061\\u0062\\u0063");
 
-        logln("Trying &gif");
+        logDebug("Trying &gif");
         t =
                 Transliterator.createFromRules(
                         "gif2", "(.) > &Gif(&Hex2($1));", Transliterator.FORWARD);
-        logln("Registering");
+        logDebug("Registering");
         TestUserFunctionFactory.add("Any-gif2", t);
         t = Transliterator.getInstance("Any-gif2");
         expect(
@@ -2992,10 +2992,10 @@ public class TransliteratorTest extends TransliteratorTestBase {
                 if (--count < 0) break;
             }
         }
-        logln("Sample set for Any-Latin: " + testString);
+        logDebug("Sample set for Any-Latin: " + testString);
         Transliterator anyLatin = Transliterator.getInstance("any-Latn");
         String result = anyLatin.transliterate(testString.toString());
-        logln("Sample result for Any-Latin: " + result);
+        logDebug("Sample result for Any-Latin: " + result);
     }
 
     /**
@@ -3018,7 +3018,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
         UnicodeSet trg = t.getTargetSet();
 
         if (src.equals(expSrc) && trg.equals(expTrg)) {
-            logln(
+            logDebug(
                     "Ok: "
                             + r
                             + " => source = "
@@ -3273,7 +3273,7 @@ public class TransliteratorTest extends TransliteratorTestBase {
         c.set(a);
         // Call the toString() API:
         if (a.equals(b) && a.equals(c)) {
-            logln("Ok: " + a + " == " + b + " == " + c);
+            logDebug("Ok: " + a + " == " + b + " == " + c);
         } else {
             errln("FAIL: " + a + " != " + b + " != " + c);
         }
@@ -3730,12 +3730,12 @@ public class TransliteratorTest extends TransliteratorTestBase {
         // Source, target set
         t = Transliterator.getInstance("Latin-Greek", Transliterator.FORWARD);
         t.setFilter(new UnicodeSet("[A-Z]"));
-        logln("source = " + t.getSourceSet());
-        logln("target = " + t.getTargetSet());
+        logDebug("source = " + t.getSourceSet());
+        logDebug("target = " + t.getTargetSet());
 
         t = Transliterator.createFromRules("x", "(.) > &Any-Hex($1);", Transliterator.FORWARD);
-        logln("source = " + t.getSourceSet());
-        logln("target = " + t.getTargetSet());
+        logDebug("source = " + t.getSourceSet());
+        logDebug("target = " + t.getTargetSet());
     }
 
     /*

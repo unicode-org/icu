@@ -111,13 +111,13 @@ public class JapaneseTest extends CalendarTestFmwk {
                     cal.getDateTimeFormat(DateFormat.FULL, DateFormat.FULL, Locale.ENGLISH);
 
             cal.set(Calendar.ERA, JapaneseCalendar.MEIJI);
-            logln("date: " + cal.getTime());
-            logln("min era: " + cal.getMinimum(Calendar.ERA));
-            logln("min year: " + cal.getMinimum(Calendar.YEAR));
+            logDebug("date: " + cal.getTime());
+            logDebug("min era: " + cal.getMinimum(Calendar.ERA));
+            logDebug("min year: " + cal.getMinimum(Calendar.YEAR));
             cal.set(Calendar.YEAR, cal.getActualMaximum(Calendar.YEAR));
-            logln("date: " + fmt.format(cal.getTime()));
+            logDebug("date: " + fmt.format(cal.getTime()));
             cal.add(Calendar.YEAR, 1);
-            logln("date: " + fmt.format(cal.getTime()));
+            logDebug("date: " + fmt.format(cal.getTime()));
         }
 
         {
@@ -139,7 +139,7 @@ public class JapaneseTest extends CalendarTestFmwk {
                     DateFormat format =
                             DateFormat.getDateTimeInstance(
                                     cal, DateFormat.FULL, DateFormat.FULL, formatLocale);
-                    logln(calLocName + "/" + locName + " --> " + format.format(time));
+                    logDebug(calLocName + "/" + locName + " --> " + format.format(time));
                 }
             }
         }
@@ -189,12 +189,12 @@ public class JapaneseTest extends CalendarTestFmwk {
                             + ", == "
                             + inEn);
         } else {
-            logln("Got year " + gotYear + " and era " + gotEra + ", == " + inEn);
+            logDebug("Got year " + gotYear + " and era " + gotEra + ", == " + inEn);
         }
 
         // Test parse with missing era (should default to current era, heisei)
         // Test parse with incomplete information
-        logln("Testing parse w/ just year...");
+        logDebug("Testing parse w/ just year...");
         Calendar cal2 = new JapaneseCalendar(loc);
         SimpleDateFormat fmt = new SimpleDateFormat("y", loc);
         SimpleDateFormat fmt2 =
@@ -202,7 +202,7 @@ public class JapaneseTest extends CalendarTestFmwk {
                         "HH:mm:ss.S MMMM d, yyyy G", new ULocale("en_US@calendar=gregorian"));
         cal2.clear();
         String samplestr = "1";
-        logln("Test Year: " + samplestr);
+        logDebug("Test Year: " + samplestr);
         try {
             aDate = fmt.parse(samplestr);
         } catch (ParseException pe) {
@@ -210,9 +210,9 @@ public class JapaneseTest extends CalendarTestFmwk {
         }
         ParsePosition pp = new ParsePosition(0);
         fmt.parse(samplestr, cal2, pp);
-        logln("cal2 after 1 parse:");
+        logDebug("cal2 after 1 parse:");
         String str = fmt2.format(aDate);
-        logln("as Gregorian Calendar: " + str);
+        logDebug("as Gregorian Calendar: " + str);
 
         cal2.setTime(aDate);
         gotYear = cal2.get(Calendar.YEAR);
@@ -235,7 +235,7 @@ public class JapaneseTest extends CalendarTestFmwk {
                             + str
                             + ")");
         } else {
-            logln(" year: " + gotYear + ", era: " + gotEra);
+            logDebug(" year: " + gotYear + ", era: " + gotEra);
         }
 
         // Tests for formats with gannen numbering Gy年
@@ -340,7 +340,7 @@ public class JapaneseTest extends CalendarTestFmwk {
                 (SimpleDateFormat)
                         c.getDateTimeFormat(1, 1, new ULocale("en_US@calendar=japanese"));
         fmt.applyPattern("G y");
-        logln("fmt's locale = " + fmt.getLocale(ULocale.ACTUAL_LOCALE));
+        logDebug("fmt's locale = " + fmt.getLocale(ULocale.ACTUAL_LOCALE));
         // SimpleDateFormat fmt = new SimpleDateFormat("G y", new
         // ULocale("en_US@calendar=japanese"));
         long aDateLong = -3193229222000L; // 1868-10-23 00:00 Pacific Time (GMT-07:52:58)
@@ -349,12 +349,12 @@ public class JapaneseTest extends CalendarTestFmwk {
             aDateLong = -3193228800000L; // 1868-10-23 00:00 Pacific Time (GMT-08:00)
         }
         Date aDate = new Date(aDateLong);
-        logln("aDate: " + aDate.toString() + ", from " + aDateLong);
+        logDebug("aDate: " + aDate.toString() + ", from " + aDateLong);
         String str;
         str = fmt2.format(aDate);
-        logln("Test Date: " + str);
+        logDebug("Test Date: " + str);
         str = fmt.format(aDate);
-        logln("as Japanese Calendar: " + str);
+        logDebug("as Japanese Calendar: " + str);
         String expected = "Meiji 1";
         if (!str.equals(expected)) {
             errln("FAIL: Expected " + expected + " but got " + str);
@@ -387,7 +387,7 @@ public class JapaneseTest extends CalendarTestFmwk {
                                 + " not "
                                 + dd.toString());
             } else {
-                logln("Parsed OK: " + expected);
+                logDebug("Parsed OK: " + expected);
             }
         } catch (java.text.ParseException pe) {
             errln("FAIL: ParseException: " + pe.toString());
@@ -427,7 +427,7 @@ public class JapaneseTest extends CalendarTestFmwk {
             int actualVal = c.get(fieldNum);
 
             if (expectedVal == actualVal) {
-                logln(FIELD_NAME[fieldNum] + ": " + actualVal);
+                logDebug(FIELD_NAME[fieldNum] + ": " + actualVal);
             } else {
                 errln(
                         "FAIL: "
@@ -442,10 +442,10 @@ public class JapaneseTest extends CalendarTestFmwk {
 
     @Test
     public void Test5345calendar() {
-        logln("** testIncompleteCalendar()");
+        logDebug("** testIncompleteCalendar()");
         // Test calendar with incomplete information
         JapaneseCalendar c = new JapaneseCalendar(TimeZone.getDefault());
-        logln("test clear");
+        logDebug("test clear");
         c.clear();
 
         // Showa 45 = Gregorian 1970
@@ -455,14 +455,14 @@ public class JapaneseTest extends CalendarTestFmwk {
         };
         checkExpected(c, expected0);
 
-        logln("test setting era");
+        logDebug("test setting era");
         c.clear();
         c.set(Calendar.ERA, JapaneseCalendar.MEIJI);
 
         int expectedA[] = {Calendar.ERA, JapaneseCalendar.MEIJI};
         checkExpected(c, expectedA);
 
-        logln("test setting era and year and month and date");
+        logDebug("test setting era and year and month and date");
         c.clear();
         c.set(Calendar.ERA, JapaneseCalendar.MEIJI);
         c.set(Calendar.YEAR, 1);
@@ -472,7 +472,7 @@ public class JapaneseTest extends CalendarTestFmwk {
         int expectedC[] = {Calendar.ERA, JapaneseCalendar.AD};
         checkExpected(c, expectedC);
 
-        logln("test setting  year and month and date THEN era");
+        logDebug("test setting  year and month and date THEN era");
         c.clear();
         c.set(Calendar.YEAR, 1);
         c.set(Calendar.MONTH, Calendar.JANUARY);
@@ -481,7 +481,7 @@ public class JapaneseTest extends CalendarTestFmwk {
 
         checkExpected(c, expectedC);
 
-        logln("test setting era and year");
+        logDebug("test setting era and year");
         c.clear();
         c.set(Calendar.YEAR, 1);
         c.set(Calendar.ERA, JapaneseCalendar.MEIJI);
@@ -497,27 +497,27 @@ public class JapaneseTest extends CalendarTestFmwk {
         JapaneseCalendar jcal = new JapaneseCalendar();
         // jcal.setTime(new Date(1187906308151L));  alternate value
         jcal.setTime(c.getTime());
-        logln("Now is: " + jcal.getTime());
+        logDebug("Now is: " + jcal.getTime());
         c.setTime(jcal.getTime());
         int nowYear = c.get(Calendar.YEAR);
-        logln("Now year: " + nowYear);
+        logDebug("Now year: " + nowYear);
         SimpleDateFormat jdf =
                 (SimpleDateFormat)
                         SimpleDateFormat.getDateInstance(
                                 jcal, SimpleDateFormat.DEFAULT, Locale.getDefault());
         jdf.applyPattern("G yy/MM/dd");
         String text = jdf.format(jcal.getTime());
-        logln("Now is: " + text + " (in Japan)");
+        logDebug("Now is: " + text + " (in Japan)");
         try {
             Date date = jdf.parse(text);
-            logln("But is this not the date?: " + date);
+            logDebug("But is this not the date?: " + date);
             c.setTime(date);
             int thenYear = c.get(Calendar.YEAR);
-            logln("Then year: " + thenYear);
+            logDebug("Then year: " + thenYear);
             if (thenYear != nowYear) {
                 errln("Nowyear " + nowYear + " is not thenyear " + thenYear);
             } else {
-                logln("Nowyear " + nowYear + " == thenyear " + thenYear);
+                logDebug("Nowyear " + nowYear + " == thenyear " + thenYear);
             }
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();

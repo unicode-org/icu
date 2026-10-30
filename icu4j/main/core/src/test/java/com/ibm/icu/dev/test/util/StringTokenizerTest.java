@@ -120,31 +120,31 @@ public final class StringTokenizerTest extends CoreTestFmwk {
             defaultst = new StringTokenizer(null);
             errln("null string should throw an exception");
         } catch (Exception e) {
-            logln("PASS: Constructor with null string failed as expected");
+            logDebug("PASS: Constructor with null string failed as expected");
         }
         try {
             stdelimiter = new StringTokenizer(null, delimiter);
             errln("null string should throw an exception");
         } catch (Exception e) {
-            logln("PASS: Constructor with null string failed as expected");
+            logDebug("PASS: Constructor with null string failed as expected");
         }
         try {
             stdelimiterreturn = new StringTokenizer(null, delimiter, false);
             errln("null string should throw an exception");
         } catch (Exception e) {
-            logln("PASS: Constructor with null string failed as expected");
+            logDebug("PASS: Constructor with null string failed as expected");
         }
         try {
             stdelimiterset = new StringTokenizer(null, delimiterset);
             errln("null string should throw an exception");
         } catch (Exception e) {
-            logln("PASS: Constructor with null string failed as expected");
+            logDebug("PASS: Constructor with null string failed as expected");
         }
         try {
             stdelimitersetreturn = new StringTokenizer(null, delimiterset, false);
             errln("null string should throw an exception");
         } catch (Exception e) {
-            logln("PASS: Constructor with null string failed as expected");
+            logDebug("PASS: Constructor with null string failed as expected");
         }
     }
 
@@ -253,7 +253,7 @@ public final class StringTokenizerTest extends CoreTestFmwk {
             tokenizer.nextElement();
             errln("Empty string should not have any tokens");
         } catch (Exception e) {
-            logln("PASS: empty string failed as expected");
+            logDebug("PASS: empty string failed as expected");
         }
 
         tokenizer = new StringTokenizer(", ,", ", ");
@@ -264,7 +264,7 @@ public final class StringTokenizerTest extends CoreTestFmwk {
             tokenizer.nextElement();
             errln("String with only delimiters should not have any tokens");
         } catch (Exception e) {
-            logln("PASS: String with only delimiters failed as expected");
+            logDebug("PASS: String with only delimiters failed as expected");
         }
 
         tokenizer = new StringTokenizer("q, ,", ", ");
@@ -278,7 +278,7 @@ public final class StringTokenizerTest extends CoreTestFmwk {
             tokenizer.nextElement();
             errln("String has only one token");
         } catch (Exception e) {
-            logln("PASS: String with only one token failed as expected");
+            logDebug("PASS: String with only one token failed as expected");
         }
 
         try {
@@ -286,7 +286,7 @@ public final class StringTokenizerTest extends CoreTestFmwk {
             errln(
                     "StringTokenizer constructed with null source should throw a nullpointerexception");
         } catch (Exception e) {
-            logln("PASS: StringTokenizer constructed with null source failed as expected");
+            logDebug("PASS: StringTokenizer constructed with null source failed as expected");
         }
 
         tokenizer = new StringTokenizer(str, "q");
@@ -373,7 +373,7 @@ public final class StringTokenizerTest extends CoreTestFmwk {
             tokenizer.nextElement();
             errln("Empty string should not have any tokens");
         } catch (Exception e) {
-            logln("PASS: Empty string failed as expected");
+            logDebug("PASS: Empty string failed as expected");
         }
 
         tokenizer = new StringTokenizer(", ,", ", ", true, true);
@@ -400,7 +400,7 @@ public final class StringTokenizerTest extends CoreTestFmwk {
             errln(
                     "StringTokenizer constructed with null source should throw a nullpointerexception");
         } catch (Exception e) {
-            logln("PASS: StringTokenizer constructed with null source failed as expected");
+            logDebug("PASS: StringTokenizer constructed with null source failed as expected");
         }
 
         tokenizer = new StringTokenizer(str, "q", true);
@@ -551,7 +551,7 @@ public final class StringTokenizerTest extends CoreTestFmwk {
         int count = 0;
         while (st.hasMoreTokens()) {
             String t = st.nextToken();
-            logln("[" + count + "] '" + t + "'");
+            logDebug("[" + count + "] '" + t + "'");
             ++count;
         }
         st = new StringTokenizer(str, del, true);
@@ -559,7 +559,7 @@ public final class StringTokenizerTest extends CoreTestFmwk {
         int xcount = 0;
         while (st.hasMoreTokens()) {
             String t = st.nextToken();
-            logln("[" + xcount + "] '" + t + "'");
+            logDebug("[" + xcount + "] '" + t + "'");
             ++xcount;
         }
         if (count != ncount || count != xcount) {

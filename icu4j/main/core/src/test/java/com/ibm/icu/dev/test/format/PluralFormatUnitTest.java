@@ -230,8 +230,8 @@ public class PluralFormatUnitTest extends CoreTestFmwk {
         for (ULocale locale0 : same.keySet()) {
             PluralRules rules = PluralRules.forLocale(locale0);
             String localeName = locale0.toString().length() == 0 ? "root" : locale0.toString();
-            logln(localeName + "\t=\t" + same.get(locale0));
-            logln(localeName + "\ttoString\t" + rules.toString());
+            logDebug(localeName + "\t=\t" + same.get(locale0));
+            logDebug(localeName + "\ttoString\t" + rules.toString());
             Set<String> keywords = rules.getKeywords();
             for (String keyword : keywords) {
                 Collection<DecimalQuantity> list = rules.getDecimalQuantitySamples(keyword);
@@ -243,7 +243,7 @@ public class PluralFormatUnitTest extends CoreTestFmwk {
                 if (list == null || list.size() == 0) {
                     errln("Empty list for " + localeName + " : " + keyword);
                 } else {
-                    logln("\t" + localeName + " : " + keyword + " ; " + list);
+                    logDebug("\t" + localeName + " : " + keyword + " ; " + list);
                 }
             }
         }
@@ -308,17 +308,17 @@ public class PluralFormatUnitTest extends CoreTestFmwk {
         MessageFormat pfmt =
                 new MessageFormat(
                         "The disk ''{0}'' contains {1, plural,  one {one ''''{1, number, #.0}'''' widget} other {# widgets}}.");
-        logln("");
+        logDebug("");
         for (int i = 0; i < 3; ++i) {
             args[1] = i;
-            logln(pfmt.format(args));
+            logDebug(pfmt.format(args));
         }
         /* ICU 4.8 returns null instead of a choice/plural/select Format object
          * (because it does not create an object for any "complex" argument).
         PluralFormat pf = (PluralFormat)pfmt.getFormatsByArgumentIndex()[1];
         logln(pf.toPattern());
          */
-        logln(pfmt.toPattern());
+        logDebug(pfmt.toPattern());
         MessageFormat pfmt2 = new MessageFormat(pfmt.toPattern());
         assertEquals("message formats are equal", pfmt, pfmt2);
     }

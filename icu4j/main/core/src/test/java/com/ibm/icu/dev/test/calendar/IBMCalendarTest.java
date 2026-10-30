@@ -117,7 +117,7 @@ public class IBMCalendarTest extends CalendarTestFmwk {
             Locale loc = (Locale) DATA1[i1];
             int[] data = (int[]) DATA1[i1 + 1];
             Calendar cal = Calendar.getInstance(loc);
-            logln("Locale: " + loc);
+            logDebug("Locale: " + loc);
             for (int i = 0; i < data.length; i += 6) {
                 cal.clear();
                 cal.set(data[i], data[i + 1], data[i + 2], data[i + 3], 0, 0);
@@ -127,7 +127,7 @@ public class IBMCalendarTest extends CalendarTestFmwk {
                 boolean isWeekend = cal.isWeekend();
                 boolean ok = isWeekend == (data[i + 5] != 0);
                 if (ok) {
-                    logln("Ok:   " + fmt.format(cal.getTime()) + " isWeekend=" + isWeekend);
+                    logDebug("Ok:   " + fmt.format(cal.getTime()) + " isWeekend=" + isWeekend);
                 } else {
                     errln(
                             "FAIL: "
@@ -143,13 +143,13 @@ public class IBMCalendarTest extends CalendarTestFmwk {
         for (int i2 = 0; i2 < DATA2.length; i2 += 2) {
             Locale loc = (Locale) DATA2[i2];
             int[] data = (int[]) DATA2[i2 + 1];
-            logln("Locale: " + loc);
+            logDebug("Locale: " + loc);
             Calendar cal = Calendar.getInstance(loc);
             for (int i = 0; i < data.length; i += 2) {
                 int type = cal.getDayOfWeekType(data[i]);
                 int exp = data[i + 1];
                 if (type == exp) {
-                    logln("Ok:   DOW " + data[i] + " type=" + type);
+                    logDebug("Ok:   DOW " + data[i] + " type=" + type);
                 } else {
                     errln("FAIL: DOW " + data[i] + " type=" + type + ", expected=" + exp);
                 }
@@ -185,7 +185,7 @@ public class IBMCalendarTest extends CalendarTestFmwk {
             cal.set(year, month, dayOfMonth);
             Date d = cal.getTime();
             if (d.equals(D)) {
-                logln(
+                logDebug(
                         "OK: "
                                 + era
                                 + ":"
@@ -217,7 +217,7 @@ public class IBMCalendarTest extends CalendarTestFmwk {
             int e = cal.get(Calendar.ERA);
             int y = cal.get(Calendar.YEAR);
             if (y == year && e == era) {
-                logln(
+                logDebug(
                         "OK: "
                                 + D
                                 + " => "
@@ -229,7 +229,7 @@ public class IBMCalendarTest extends CalendarTestFmwk {
                                 + "/"
                                 + cal.get(Calendar.DATE));
             } else {
-                logln(
+                logDebug(
                         "Fail: "
                                 + D
                                 + " => "
@@ -474,7 +474,7 @@ public class IBMCalendarTest extends CalendarTestFmwk {
                     DateFormat format =
                             DateFormat.getDateTimeInstance(
                                     cal, DateFormat.FULL, DateFormat.FULL, formatLocale);
-                    logln(calLocName + "/" + locName + " --> " + format.format(time));
+                    logDebug(calLocName + "/" + locName + " --> " + format.format(time));
                 }
             }
         }
@@ -618,7 +618,7 @@ public class IBMCalendarTest extends CalendarTestFmwk {
                     DateFormat format =
                             DateFormat.getDateTimeInstance(
                                     cal, DateFormat.FULL, DateFormat.FULL, formatLocale);
-                    logln(calLocName + "/" + locName + " --> " + format.format(time));
+                    logDebug(calLocName + "/" + locName + " --> " + format.format(time));
                 }
             }
         }
@@ -678,7 +678,7 @@ public class IBMCalendarTest extends CalendarTestFmwk {
         int y = cal.fieldDifference(date2004, Calendar.YEAR);
         int d = cal.fieldDifference(date2004, Calendar.DAY_OF_YEAR);
         if (d == 0) {
-            logln("Ok: 2004/Feb/29 - 2000/Feb/29 = " + y + " years, " + d + " days");
+            logDebug("Ok: 2004/Feb/29 - 2000/Feb/29 = " + y + " years, " + d + " days");
         } else {
             errln("FAIL: 2004/Feb/29 - 2000/Feb/29 = " + y + " years, " + d + " days");
         }
@@ -686,7 +686,7 @@ public class IBMCalendarTest extends CalendarTestFmwk {
         y = cal.fieldDifference(date2000, Calendar.YEAR);
         d = cal.fieldDifference(date2000, Calendar.DAY_OF_YEAR);
         if (d == 0) {
-            logln("Ok: 2000/Feb/29 - 2004/Feb/29 = " + y + " years, " + d + " days");
+            logDebug("Ok: 2000/Feb/29 - 2004/Feb/29 = " + y + " years, " + d + " days");
         } else {
             errln("FAIL: 2000/Feb/29 - 2004/Feb/29 = " + y + " years, " + d + " days");
         }
@@ -699,9 +699,9 @@ public class IBMCalendarTest extends CalendarTestFmwk {
         cal.setTime(ayl);
         int d2 = cal.fieldDifference(asl, Calendar.DAY_OF_MONTH);
         if (d == -d2 && d == 13359) {
-            logln("Ok: large field difference symmetrical " + d);
+            logDebug("Ok: large field difference symmetrical " + d);
         } else {
-            logln("FAIL: large field difference incorrect " + d + ", " + d2 + ", expect +/- 13359");
+            logDebug("FAIL: large field difference incorrect " + d + ", " + d2 + ", expect +/- 13359");
         }
     }
 
@@ -771,10 +771,10 @@ public class IBMCalendarTest extends CalendarTestFmwk {
             if (!time1.equals(time2)) {
                 errln("FAIL: shifting week should not alter time");
             } else {
-                logln(time1.toString());
+                logDebug(time1.toString());
             }
             if (woy1 == woy2 && wom1 == wom2) {
-                logln("Ok: WEEK_OF_YEAR: " + woy1 + ", WEEK_OF_MONTH: " + wom1);
+                logDebug("Ok: WEEK_OF_YEAR: " + woy1 + ", WEEK_OF_MONTH: " + wom1);
             } else {
                 errln(
                         "FAIL: WEEK_OF_YEAR: "
@@ -941,8 +941,8 @@ public class IBMCalendarTest extends CalendarTestFmwk {
 
         for (int i = 0; i < tests.length; ++i) {
             TestData test = tests[i];
-            log(
-                    "\n-----\nTesting round trip of "
+            logDebug(
+                    "Testing round trip of "
                             + test.year
                             + " "
                             + (test.month + 1)
@@ -963,8 +963,8 @@ public class IBMCalendarTest extends CalendarTestFmwk {
             Date ms2 = cal.getTime();
 
             if (!ms2.equals(ms)) {
-                log(
-                        "\nError: GregorianCalendar.DOM gave "
+                logDebug(
+                        "Error: GregorianCalendar.DOM gave "
                                 + ms
                                 + "\n       GregorianCalendar.WOM gave "
                                 + ms2);
@@ -981,8 +981,8 @@ public class IBMCalendarTest extends CalendarTestFmwk {
             }
 
             if (!ms2.equals(ms)) {
-                log(
-                        "\nError: GregorianCalendar gave      "
+                logDebug(
+                        "Error: GregorianCalendar gave      "
                                 + ms
                                 + "\n       SimpleDateFormat.parse gave "
                                 + ms2);
@@ -993,8 +993,8 @@ public class IBMCalendarTest extends CalendarTestFmwk {
 
             String result = sdf.format(ms);
             if (!result.equals(test.normalized)) {
-                log(
-                        "\nWarning: format of '"
+                logDebug(
+                        "Warning: format of '"
                                 + test.data
                                 + "' gave"
                                 + "\n                   '"
@@ -1017,8 +1017,8 @@ public class IBMCalendarTest extends CalendarTestFmwk {
 
             if (!ms3.equals(ms)) {
                 error++;
-                log(
-                        "\nError: Re-parse of '"
+                logDebug(
+                        "Error: Re-parse of '"
                                 + result
                                 + "' gave time of "
                                 + "\n        "
@@ -1033,7 +1033,7 @@ public class IBMCalendarTest extends CalendarTestFmwk {
         if (error > 0) {
             errln(info);
         } else {
-            logln(info);
+            logDebug(info);
         }
     }
 
@@ -1069,7 +1069,7 @@ public class IBMCalendarTest extends CalendarTestFmwk {
             mask >>= 1;
             // Check bitmask to see if we saw all expected zones
             if (mask == (1 << (COUNTRY[i].length - 1)) - 1) {
-                logln(buf.toString());
+                logDebug(buf.toString());
             } else {
                 errln(buf.toString());
             }
@@ -1090,7 +1090,7 @@ public class IBMCalendarTest extends CalendarTestFmwk {
             buf.append(id);
         }
         if (ok) {
-            logln(buf.toString());
+            logDebug(buf.toString());
         } else {
             errln(buf.toString());
         }
@@ -1139,8 +1139,8 @@ public class IBMCalendarTest extends CalendarTestFmwk {
 
         // ICU 2.6
         Calendar cal = Calendar.getInstance(Locale.US);
-        logln(cal.toString());
-        logln(cal.getDisplayName(Locale.US));
+        logDebug(cal.toString());
+        logDebug(cal.getDisplayName(Locale.US));
         int weekendOnset = -1;
         int weekendCease = -1;
         for (int i = Calendar.SUNDAY; i <= Calendar.SATURDAY; ++i) {
@@ -1165,14 +1165,14 @@ public class IBMCalendarTest extends CalendarTestFmwk {
         if (gcal == null) {
             errln("could not create GregorianCalendar with ULocale");
         } else {
-            logln("Calendar display name: " + gcal.getDisplayName(ULocale.getDefault()));
+            logDebug("Calendar display name: " + gcal.getDisplayName(ULocale.getDefault()));
         }
 
         // cover getAvailableULocales
         final ULocale[] locales = Calendar.getAvailableULocales();
         long count = locales.length;
         if (count == 0) errln("getAvailableULocales return empty list");
-        logln("" + count + " available ulocales in Calendar.");
+        logDebug("" + count + " available ulocales in Calendar.");
 
         // Jitterbug 4451, for coverage
         class StubCalendar extends Calendar {
@@ -1287,11 +1287,11 @@ public class IBMCalendarTest extends CalendarTestFmwk {
         final Date time = new Date();
         for (int i = 0; i < calTypes.length; ++i) {
             ULocale aLoc = loc.setKeywordValue("calendar", calTypes[i]);
-            logln("locale: " + aLoc);
+            logDebug("locale: " + aLoc);
 
             DateFormat df = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL, aLoc);
 
-            logln(
+            logDebug(
                     "df type: "
                             + df.getClass().getName()
                             + " loc: "
@@ -1300,7 +1300,7 @@ public class IBMCalendarTest extends CalendarTestFmwk {
             Calendar cal = df.getCalendar();
             assertEquals("calendar types", cal.getType(), calTypes[i]);
             DateFormat df2 = cal.getDateTimeFormat(DateFormat.FULL, DateFormat.FULL, ULocale.US);
-            logln(
+            logDebug(
                     "df2 type: "
                             + df2.getClass().getName()
                             + " loc: "
@@ -1316,11 +1316,11 @@ public class IBMCalendarTest extends CalendarTestFmwk {
                             DateFormat.FULL,
                             new ULocale("en_US@calendar=chinese"));
 
-            logln("dateformat type: " + df.getClass().getName());
+            logDebug("dateformat type: " + df.getClass().getName());
 
             Calendar cal = Calendar.getInstance(new ULocale("en_US@calendar=chinese"));
 
-            logln("calendar type: " + cal.getClass().getName());
+            logDebug("calendar type: " + cal.getClass().getName());
         }
     }
 

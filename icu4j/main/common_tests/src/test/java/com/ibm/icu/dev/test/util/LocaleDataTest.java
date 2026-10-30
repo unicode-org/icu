@@ -74,7 +74,7 @@ public class LocaleDataTest extends CoreTestFmwk {
                                     + " width: "
                                     + paperSize.getWidth());
                 } else {
-                    logln("PaperSize returned the expected values for locale " + locale);
+                    logDebug("PaperSize returned the expected values for locale " + locale);
                 }
             } else {
                 if (paperSize.getHeight() != 297 || paperSize.getWidth() != 210) {
@@ -87,7 +87,7 @@ public class LocaleDataTest extends CoreTestFmwk {
                                     + " width: "
                                     + paperSize.getWidth());
                 } else {
-                    logln("PaperSize returned the expected values for locale " + locale);
+                    logDebug("PaperSize returned the expected values for locale " + locale);
                 }
             }
         }
@@ -106,20 +106,20 @@ public class LocaleDataTest extends CoreTestFmwk {
             ULocale fullLoc = ULocale.addLikelySubtags(locale);
             if (fullLoc.toString().indexOf("_US") >= 0 || fullLoc.toString().indexOf("_LR") >= 0) {
                 if (ms == LocaleData.MeasurementSystem.US) {
-                    logln("Got the expected measurement system for locale: " + locale);
+                    logDebug("Got the expected measurement system for locale: " + locale);
                 } else {
                     errln("Did not get the expected measurement system for locale: " + locale);
                 }
             } else if (fullLoc.toString().indexOf("_GB") >= 0
                     || fullLoc.toString().indexOf("_MM") >= 0) {
                 if (ms == LocaleData.MeasurementSystem.UK) {
-                    logln("Got the expected measurement system for locale: " + locale);
+                    logDebug("Got the expected measurement system for locale: " + locale);
                 } else {
                     errln("Did not get the expected measurement system for locale: " + locale);
                 }
             } else {
                 if (ms == LocaleData.MeasurementSystem.SI) {
-                    logln("Got the expected measurement system for locale: " + locale);
+                    logDebug("Got the expected measurement system for locale: " + locale);
                 } else {
                     errln("Did not get the expected measurement system for locale: " + locale);
                 }
@@ -284,8 +284,8 @@ public class LocaleDataTest extends CoreTestFmwk {
             }
             // This is expensive, so only do it if it will be visible
             if (isVerbose()) {
-                logln(locale.toString() + " exemplar " + exemplarSets[0]);
-                logln(locale.toString() + " exemplar(case-folded) " + exemplarSets[1]);
+                logDebug(locale.toString() + " exemplar " + exemplarSets[0]);
+                logDebug(locale.toString() + " exemplar(case-folded) " + exemplarSets[1]);
             }
             assertTrue(
                     locale.toString() + " case-folded is a superset",
@@ -370,10 +370,10 @@ public class LocaleDataTest extends CoreTestFmwk {
             }
             // This is expensive, so only do it if it will be visible
             if (isVerbose()) {
-                logln(locale.toString() + " exemplar(ES_STANDARD)" + exemplarSets[0]);
-                logln(locale.toString() + " exemplar(ES_AUXILIARY) " + exemplarSets[1]);
-                logln(locale.toString() + " exemplar(case-folded,ES_STANDARD) " + exemplarSets[2]);
-                logln(locale.toString() + " exemplar(case-folded,ES_AUXILIARY) " + exemplarSets[3]);
+                logDebug(locale.toString() + " exemplar(ES_STANDARD)" + exemplarSets[0]);
+                logDebug(locale.toString() + " exemplar(ES_AUXILIARY) " + exemplarSets[1]);
+                logDebug(locale.toString() + " exemplar(case-folded,ES_STANDARD) " + exemplarSets[2]);
+                logDebug(locale.toString() + " exemplar(case-folded,ES_AUXILIARY) " + exemplarSets[3]);
             }
             assertTrue(
                     locale.toString() + " case-folded is a superset",
@@ -424,10 +424,10 @@ public class LocaleDataTest extends CoreTestFmwk {
                     UnicodeSet set = LocaleData.getExemplarSet(loc, 0, testTypes[i]);
                     if (set == null) {
                         // Not sure null is really OK (#9795)
-                        logln(loc + "(" + testTypeNames[i] + ") returned null");
+                        logDebug(loc + "(" + testTypeNames[i] + ") returned null");
                     } else if (set.isEmpty()) {
                         // This is probably reasonable when data is absent
-                        logln(loc + "(" + testTypeNames[i] + ") returned an empty set");
+                        logDebug(loc + "(" + testTypeNames[i] + ") returned an empty set");
                     }
                 } catch (Exception e) {
                     errln(loc + "(" + testTypeNames[i] + ") Exception:" + e.getMessage());
@@ -443,10 +443,10 @@ public class LocaleDataTest extends CoreTestFmwk {
         ld.setNoSubstitute(t);
         assertEquals("LocaleData get/set NoSubstitute", t, ld.getNoSubstitute());
 
-        logln(ld.getDelimiter(LocaleData.QUOTATION_START));
-        logln(ld.getDelimiter(LocaleData.QUOTATION_END));
-        logln(ld.getDelimiter(LocaleData.ALT_QUOTATION_START));
-        logln(ld.getDelimiter(LocaleData.ALT_QUOTATION_END));
+        logDebug(ld.getDelimiter(LocaleData.QUOTATION_START));
+        logDebug(ld.getDelimiter(LocaleData.QUOTATION_END));
+        logDebug(ld.getDelimiter(LocaleData.ALT_QUOTATION_START));
+        logDebug(ld.getDelimiter(LocaleData.ALT_QUOTATION_END));
     }
 
     @Test
@@ -498,11 +498,11 @@ public class LocaleDataTest extends CoreTestFmwk {
         LocaleData ld = LocaleData.getInstance(locale);
         String pattern = ld.getLocaleDisplayPattern();
         String separator = ld.getLocaleSeparator();
-        logln("LocaleDisplayPattern for locale " + locale + ": " + pattern);
+        logDebug("LocaleDisplayPattern for locale " + locale + ": " + pattern);
         if (!pattern.equals("{0} ({1})")) {
             errln("Unexpected LocaleDisplayPattern for locale: " + locale);
         }
-        logln("LocaleSeparator for locale " + locale + ": " + separator);
+        logDebug("LocaleSeparator for locale " + locale + ": " + separator);
         if (!separator.equals(", ")) {
             errln("Unexpected LocaleSeparator for locale: " + locale);
         }
@@ -511,11 +511,11 @@ public class LocaleDataTest extends CoreTestFmwk {
         ld = LocaleData.getInstance(locale);
         pattern = ld.getLocaleDisplayPattern();
         separator = ld.getLocaleSeparator();
-        logln("LocaleDisplayPattern for locale " + locale + ": " + pattern);
+        logDebug("LocaleDisplayPattern for locale " + locale + ": " + pattern);
         if (!pattern.equals("{0}\uFF08{1}\uFF09")) {
             errln("Unexpected LocaleDisplayPattern for locale: " + locale);
         }
-        logln("LocaleSeparator for locale " + locale + ": " + separator);
+        logDebug("LocaleSeparator for locale " + locale + ": " + separator);
         if (!separator.equals("\uFF0C")) {
             errln("Unexpected LocaleSeparator for locale: " + locale);
         }
@@ -523,8 +523,8 @@ public class LocaleDataTest extends CoreTestFmwk {
         for (int i = 0; i < availableLocales.length; i++) {
             locale = availableLocales[i];
             ld = LocaleData.getInstance(locale);
-            logln(locale.toString() + " LocaleDisplayPattern:" + ld.getLocaleDisplayPattern());
-            logln(locale.toString() + " LocaleSeparator:" + ld.getLocaleSeparator());
+            logDebug(locale.toString() + " LocaleDisplayPattern:" + ld.getLocaleDisplayPattern());
+            logDebug(locale.toString() + " LocaleSeparator:" + ld.getLocaleSeparator());
         }
     }
 }

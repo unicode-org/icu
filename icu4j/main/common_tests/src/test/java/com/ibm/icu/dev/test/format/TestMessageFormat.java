@@ -115,7 +115,7 @@ public class TestMessageFormat extends CoreTestFmwk {
             form.format(myNumber, buffer, pos);
             parsePos.setIndex(0);
             Object result = form.parse(buffer.toString(), parsePos);
-            logln(locale[i].getDisplayName() + " -> " + result);
+            logDebug(locale[i].getDisplayName() + " -> " + result);
             if (parsePos.getIndex() != buffer.length()) {
                 errln("Number format parse failed.");
             }
@@ -135,7 +135,7 @@ public class TestMessageFormat extends CoreTestFmwk {
         // {sfb} use double format in pattern, so result will match (not strictly necessary)
         final String pattern =
                 "There {0,choice,0.0#are no files|1.0#is one file|1.0<are {0, number} files} on disk {1}. ";
-        logln("The input pattern : " + pattern);
+        logDebug("The input pattern : " + pattern);
         try {
             MessageFormat fmt = new MessageFormat(pattern);
             assertEquals("toPattern", pattern, fmt.toPattern());
@@ -335,13 +335,13 @@ public class TestMessageFormat extends CoreTestFmwk {
         MessageFormat z = new MessageFormat("There are {0} files on {1} created");
         MessageFormat y = null;
         y = x.clone();
-        if (x.equals(y) && !x.equals(z) && !y.equals(z)) logln("First test (operator ==): Passed!");
+        if (x.equals(y) && !x.equals(z) && !y.equals(z)) logDebug("First test (operator ==): Passed!");
         else {
             errln("First test (operator ==): Failed!");
         }
         if ((x.equals(y) && y.equals(x))
                 && (!x.equals(z) && !z.equals(x))
-                && (!y.equals(z) && !z.equals(y))) logln("Second test (equals): Passed!");
+                && (!y.equals(z) && !z.equals(y))) logDebug("Second test (equals): Passed!");
         else {
             errln("Second test (equals): Failed!");
         }
@@ -437,7 +437,7 @@ public class TestMessageFormat extends CoreTestFmwk {
         assertEquals("format", compareStrGer, result.toString());
 
         // Cover getULocale()
-        logln("Testing set/get ULocale ...");
+        logDebug("Testing set/get ULocale ...");
         msg.setLocale(ULocale.ENGLISH);
         assertEquals("getULocale", ULocale.ENGLISH, msg.getULocale());
 
@@ -596,7 +596,7 @@ public class TestMessageFormat extends CoreTestFmwk {
             b = formatsCmp[i];
             if ((a != null) && (b != null)) {
                 if (a.equals(b)) {
-                    logln("formatsChg == formatsCmp at index " + i);
+                    logDebug("formatsChg == formatsCmp at index " + i);
                     diff = false;
                 }
             }
@@ -606,7 +606,7 @@ public class TestMessageFormat extends CoreTestFmwk {
             return;
         }
 
-        logln("MSG getFormats tested.");
+        logDebug("MSG getFormats tested.");
 
         msg.setFormats(formatsCmp); // tested function
 
@@ -642,7 +642,7 @@ public class TestMessageFormat extends CoreTestFmwk {
                 return;
             }
         }
-        logln("MSG setFormats tested.");
+        logDebug("MSG setFormats tested.");
 
         // ----
 
@@ -693,7 +693,7 @@ public class TestMessageFormat extends CoreTestFmwk {
                 return;
             }
         }
-        logln("MSG adoptFormats tested.");
+        logDebug("MSG adoptFormats tested.");
 
         // ---- adoptFormat
 
@@ -747,7 +747,7 @@ public class TestMessageFormat extends CoreTestFmwk {
                 return;
             }
         }
-        logln("MSG adoptFormat tested.");
+        logDebug("MSG adoptFormat tested.");
     }
 
     /**
@@ -817,7 +817,7 @@ public class TestMessageFormat extends CoreTestFmwk {
         Number num = null;
         for (int i = 0; i < formats.length; ++i) {
             MessageFormat fmt = new MessageFormat(formats[i], locale);
-            logln("Testing format pattern: '" + formats[i] + "'");
+            logDebug("Testing format pattern: '" + formats[i] + "'");
             for (int j = 0; j < values.length; ++j) {
                 try {
                     num = numFmt.parse(values[j]);
@@ -826,7 +826,7 @@ public class TestMessageFormat extends CoreTestFmwk {
                 }
                 args[0] = num;
                 String result = fmt.format(args);
-                logln("value: " + num + " --> " + result);
+                logDebug("value: " + num + " --> " + result);
 
                 if (i != 3) { // TODO: fix this, for now skip ordinal parsing (format string at
                     // index 3)

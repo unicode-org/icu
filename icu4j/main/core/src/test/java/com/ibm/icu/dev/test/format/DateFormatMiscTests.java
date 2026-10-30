@@ -47,19 +47,19 @@ public class DateFormatMiscTests extends CoreTestFmwk {
 
         SimpleDateFormat formatter;
         SimpleDateFormat resultFormatter = new SimpleDateFormat("yyyy");
-        logln("Format\tSource\tResult");
-        logln("-------\t-------\t-------");
+        logDebug("Format\tSource\tResult");
+        logDebug("-------\t-------\t-------");
         for (int i = 0; i < dstring.length; i++) {
-            log(dformat[i] + "\t" + dstring[i] + "\t");
+            String s = dformat[i] + "\t" + dstring[i] + "\t";
             formatter = new SimpleDateFormat(dformat[i]);
             try {
                 StringBuffer str = new StringBuffer("");
                 FieldPosition pos = new FieldPosition(0);
-                logln(resultFormatter.format(formatter.parse(dstring[i]), str, pos).toString());
+                logDebug(s + resultFormatter.format(formatter.parse(dstring[i]), str, pos).toString());
             } catch (ParseException exception) {
-                errln("exception --> " + exception);
+                errln(s + "exception --> " + exception);
             }
-            logln("");
+            logDebug("");
         }
     }
 
@@ -76,12 +76,12 @@ public class DateFormatMiscTests extends CoreTestFmwk {
             SimpleDateFormat df = new SimpleDateFormat("E hh:mm", symbols);
             SimpleDateFormat dfClone = df.clone();
 
-            logln(df.toLocalizedPattern());
+            logDebug(df.toLocalizedPattern());
             String s0 = df.format(d);
             String s_dfClone = dfClone.format(d);
 
             symbols.setLocalPatternChars("abcdefghijklmonpqr"); // change value of field
-            logln(df.toLocalizedPattern());
+            logDebug(df.toLocalizedPattern());
             String s1 = df.format(d);
 
             if (!s1.equals(s0) || !s1.equals(s_dfClone)) {
@@ -98,12 +98,12 @@ public class DateFormatMiscTests extends CoreTestFmwk {
             df.setDateFormatSymbols(symbols);
             SimpleDateFormat dfClone = df.clone();
 
-            logln(df.toLocalizedPattern());
+            logDebug(df.toLocalizedPattern());
             String s0 = df.format(d);
             String s_dfClone = dfClone.format(d);
 
             symbols.setLocalPatternChars("abcdefghijklmonpqr"); // change value of field
-            logln(df.toLocalizedPattern());
+            logDebug(df.toLocalizedPattern());
             String s1 = df.format(d);
 
             if (!s1.equals(s0) || !s1.equals(s_dfClone)) {

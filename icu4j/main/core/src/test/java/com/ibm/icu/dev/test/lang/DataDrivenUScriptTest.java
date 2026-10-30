@@ -90,7 +90,7 @@ public class DataDrivenUScriptTest extends CoreTestFmwk {
                     errln("Did not get the expected script code for Esperanto");
                 }
             } else {
-                warnln("Could not load the locale data.");
+                errln("Could not load the locale data.");
             }
             ULocale.setDefault(defaultLoc);
 
@@ -184,7 +184,7 @@ public class DataDrivenUScriptTest extends CoreTestFmwk {
                 errln("Error testing UScript.getCode() for locale " + testLocaleName);
             }
 
-            logln("  Testing UScript.getCode(Locale) with locale: " + testLocale.getDisplayName());
+            logDebug("  Testing UScript.getCode(Locale) with locale: " + testLocale.getDisplayName());
             code = UScript.getCode(testLocale);
             if (code != null) {
                 for (int j = 0; j < code.length; j++) {

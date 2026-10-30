@@ -42,7 +42,7 @@ public class CollationIteratorTest extends CollationTestBase {
         try {
             c = new RuleBasedCollator("&a < b < c & ab = d");
         } catch (Exception e) {
-            warnln("Couldn't create a RuleBasedCollator.");
+            errln("Couldn't create a RuleBasedCollator.");
             return;
         }
 
@@ -100,7 +100,7 @@ public class CollationIteratorTest extends CollationTestBase {
         try {
             coll = new RuleBasedCollator(rule);
         } catch (Exception e) {
-            warnln("Fail to create RuleBasedCollator");
+            errln("Fail to create RuleBasedCollator");
             return;
         }
         char ch = 0;
@@ -221,7 +221,7 @@ public class CollationIteratorTest extends CollationTestBase {
         try {
             en_us = (RuleBasedCollator) Collator.getInstance(Locale.US);
         } catch (Exception e) {
-            warnln("ERROR: in creation of collator of ENGLISH locale");
+            errln("ERROR: in creation of collator of ENGLISH locale");
             return;
         }
 
@@ -242,7 +242,7 @@ public class CollationIteratorTest extends CollationTestBase {
 
         // Run all the way through the iterator, then get the offset
         int[] orders = CollationTest.getOrders(iter);
-        logln("orders.length = " + orders.length);
+        logDebug("orders.length = " + orders.length);
 
         int offset = iter.getOffset();
 
@@ -522,7 +522,7 @@ public class CollationIteratorTest extends CollationTestBase {
         try {
             th_th = (RuleBasedCollator) Collator.getInstance(new Locale("th", "TH"));
         } catch (Exception e) {
-            warnln("Error creating Thai collator");
+            errln("Error creating Thai collator");
             return;
         }
         StringBuilder source = new StringBuilder();
@@ -649,7 +649,7 @@ public class CollationIteratorTest extends CollationTestBase {
                 count++;
             }
         } catch (Exception e) {
-            warnln("Error running discontiguous tests " + e.toString());
+            errln("Error running discontiguous tests " + e.toString());
         }
     }
 
@@ -678,7 +678,7 @@ public class CollationIteratorTest extends CollationTestBase {
             coll = new RuleBasedCollator(rules);
             coll.setDecomposition(Collator.CANONICAL_DECOMPOSITION);
         } catch (Exception e) {
-            warnln("ERROR: in creation of collator using rules " + rules);
+            errln("ERROR: in creation of collator using rules " + rules);
             return;
         }
 
@@ -779,7 +779,7 @@ public class CollationIteratorTest extends CollationTestBase {
             do {
                 offset = uce.getOffset();
                 element = uce.next();
-                logln(
+                logDebug(
                         String.format(
                                 "(%s) offset=%2d  ce=%08x\n",
                                 tsceItem.localeString, offset, element));

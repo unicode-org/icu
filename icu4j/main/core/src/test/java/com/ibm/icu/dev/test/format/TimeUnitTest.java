@@ -82,7 +82,7 @@ public class TimeUnitTest extends CoreTestFmwk {
                         TimeUnitAmount source = new TimeUnitAmount(tests[i], timeUnit);
                         String formatted = formats[style].format(source);
                         // System.out.println(formatted);
-                        logln(tests[i] + " => " + formatted);
+                        logDebug(tests[i] + " => " + formatted);
                         try {
                             // Style should not matter when parsing.
                             for (int parseStyle = TimeUnitFormat.FULL_NAME;
@@ -329,7 +329,7 @@ public class TimeUnitTest extends CoreTestFmwk {
                 TimeUnitAmount source = new TimeUnitAmount(tests[i], timeUnit);
                 String formatted = format.format(source);
                 // System.out.println(formatted);
-                logln(tests[i] + " => " + formatted);
+                logDebug(tests[i] + " => " + formatted);
                 try {
                     TimeUnitAmount result = (TimeUnitAmount) format.parseObject(formatted);
                     if (result == null || !source.equals(result)) {

@@ -39,7 +39,7 @@ public final class VersionInfoTest extends CoreTestFmwk {
                 VersionInfo.getInstance(INSTANCE_INVALID_STRING_[i]);
                 errln("\"" + INSTANCE_INVALID_STRING_[i] + "\" should produce an exception");
             } catch (RuntimeException e) {
-                logln("PASS: \"" + INSTANCE_INVALID_STRING_[i] + "\" failed as expected");
+                logDebug("PASS: \"" + INSTANCE_INVALID_STRING_[i] + "\" failed as expected");
             }
         }
         for (int i = 0; i < INSTANCE_VALID_STRING_.length; i++) {
@@ -54,7 +54,7 @@ public final class VersionInfoTest extends CoreTestFmwk {
                 getInstance(INSTANCE_INVALID_INT_[i]);
                 errln("invalid ints should produce an exception");
             } catch (RuntimeException e) {
-                logln(
+                logDebug(
                         "PASS: \""
                                 + Arrays.toString(INSTANCE_INVALID_INT_[i])
                                 + "\" failed as expected");

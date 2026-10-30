@@ -188,7 +188,7 @@ public class ICUDurationTest extends CoreTestFmwk {
         if (!expect.equals(formatted)) {
             errln("Expected " + expect + " but got " + formatted);
         } else {
-            logln("format duration -> " + formatted);
+            logDebug("format duration -> " + formatted);
         }
 
         formatted = df.formatDurationFromNowTo(new Date(0));
@@ -198,7 +198,7 @@ public class ICUDurationTest extends CoreTestFmwk {
         if (!expect.equals(formatted)) {
             errln("Expected " + expect + " but got " + formatted);
         } else {
-            logln("format date  -> " + formatted);
+            logDebug("format date  -> " + formatted);
         }
 
         formatted = df.formatDurationFrom(1000 * 3600 * 24, new Date(0).getTime());
@@ -206,7 +206,7 @@ public class ICUDurationTest extends CoreTestFmwk {
         if (!expect.equals(formatted)) {
             errln("Expected " + expect + " but got " + formatted);
         } else {
-            logln("format date from -> " + formatted);
+            logDebug("format date from -> " + formatted);
         }
 
         formatted = df.format(1000L * 3600 * 24 * 2);
@@ -214,7 +214,7 @@ public class ICUDurationTest extends CoreTestFmwk {
         if (!expect.equals(formatted)) {
             errln("Expected " + expect + " but got " + formatted);
         } else {
-            logln("format long obj -> " + formatted);
+            logDebug("format long obj -> " + formatted);
         }
     }
 
@@ -232,7 +232,7 @@ public class ICUDurationTest extends CoreTestFmwk {
         expected = "2 hours, 46 minutes, and 40 seconds";
         out = df.format(d);
         if (out.equals(expected)) {
-            logln("out=expected: " + expected + " from " + d);
+            logDebug("out=expected: " + expected + " from " + d);
         } else {
             errln("FAIL: got " + out + " wanted " + expected + " from " + d);
         }
@@ -243,7 +243,7 @@ public class ICUDurationTest extends CoreTestFmwk {
         expected = "10 seconds";
         out = df.format(d);
         if (out.equals(expected)) {
-            logln("out=expected: " + expected + " from " + d);
+            logDebug("out=expected: " + expected + " from " + d);
         } else {
             errln("FAIL: got " + out + " wanted " + expected + " from " + d);
         }
@@ -253,7 +253,7 @@ public class ICUDurationTest extends CoreTestFmwk {
         expected = "10 seconds";
         out = df.format(d);
         if (out.equals(expected)) {
-            logln("out=expected: " + expected + " from " + d);
+            logDebug("out=expected: " + expected + " from " + d);
         } else {
             errln("FAIL: got " + out + " wanted " + expected + " from " + d);
         }
@@ -264,10 +264,10 @@ public class ICUDurationTest extends CoreTestFmwk {
         expected2 = "1 day and 0 seconds"; // This is the expected result for Windows with IBM JRE6
         out = df.format(d);
         if (out.equals(expected)) {
-            logln("out=expected: " + expected + " from " + d);
+            logDebug("out=expected: " + expected + " from " + d);
         } else {
             if (out.equals(expected2)) {
-                logln("WARNING: got " + out + " wanted " + expected + " from " + d);
+                logDebug("WARNING: got " + out + " wanted " + expected + " from " + d);
             } else {
                 errln("FAIL: got " + out + " wanted " + expected + " from " + d);
             }
@@ -331,7 +331,7 @@ public class ICUDurationTest extends CoreTestFmwk {
             String output = df.format(d);
 
             if (output.equals(to)) {
-                logln(
+                logDebug(
                         "SUCCESS: locale: "
                                 + loc
                                 + ", from "
@@ -344,7 +344,7 @@ public class ICUDurationTest extends CoreTestFmwk {
                                 + "= "
                                 + output);
             } else {
-                logln(
+                logDebug(
                         "FAIL: locale: "
                                 + loc
                                 + ", from "
@@ -372,7 +372,7 @@ public class ICUDurationTest extends CoreTestFmwk {
                             + output
                             + " ???");
         } catch (IllegalArgumentException iae) {
-            logln("PASS: expected: Caught iae: " + iae.toString());
+            logDebug("PASS: expected: Caught iae: " + iae.toString());
         }
         // try a second time, because it is a different code path for java < 1.5
         try {
@@ -382,7 +382,7 @@ public class ICUDurationTest extends CoreTestFmwk {
                             + output
                             + " ???");
         } catch (IllegalArgumentException iae) {
-            logln("PASS: [#2] expected: Caught iae: " + iae.toString());
+            logDebug("PASS: [#2] expected: Caught iae: " + iae.toString());
         }
     }
 
@@ -391,11 +391,11 @@ public class ICUDurationTest extends CoreTestFmwk {
         try {
             DurationFormat df = DurationFormat.getInstance(new ULocale("und"));
             df.format(new Date());
-            logln("Should have thrown err.");
+            logDebug("Should have thrown err.");
             errln("failed, should have thrown err.");
         } catch (MissingResourceException mre) {
-            logln("PASS: caught missing resource exception on locale 'und'");
-            logln(mre.toString());
+            logDebug("PASS: caught missing resource exception on locale 'und'");
+            logDebug(mre.toString());
         }
     }
 

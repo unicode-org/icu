@@ -51,7 +51,7 @@ public class IntlTestDateFormatAPIC extends CoreTestFmwk {
 
         // DateFormat calling Format API
         {
-            logln("DateFormat");
+            logDebug("DateFormat");
             DateFormat dateFmt = DateFormat.getInstance();
             if (dateFmt != null) {
                 str = dateFmt.format(dateObj);
@@ -63,7 +63,7 @@ public class IntlTestDateFormatAPIC extends CoreTestFmwk {
 
         // SimpleDateFormat calling Format & DateFormat API
         {
-            logln("SimpleDateFormat");
+            logDebug("SimpleDateFormat");
             SimpleDateFormat sdf = new SimpleDateFormat();
             // Format API
             str = sdf.format(dateObj);
@@ -81,7 +81,7 @@ public class IntlTestDateFormatAPIC extends CoreTestFmwk {
 
         // NumberFormat calling Format API
         {
-            logln("NumberFormat");
+            logDebug("NumberFormat");
             NumberFormat fmt = NumberFormat.getInstance();
             if (fmt != null) {
                 str = fmt.format(numObj);
@@ -93,7 +93,7 @@ public class IntlTestDateFormatAPIC extends CoreTestFmwk {
 
         // DecimalFormat calling Format & NumberFormat API
         {
-            logln("DecimalFormat");
+            logDebug("DecimalFormat");
             DecimalFormat fmt = new DecimalFormat();
             // Format API
             str = fmt.format(numObj);

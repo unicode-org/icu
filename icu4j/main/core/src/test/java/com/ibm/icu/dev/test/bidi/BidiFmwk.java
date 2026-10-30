@@ -104,7 +104,7 @@ public class BidiFmwk extends CoreTestFmwk {
         if (level != null) {
             msgBuf.append("paragraph level   : ").append(level).append('\n');
         }
-        logln(msgBuf.toString());
+        logDebug(msgBuf.toString());
         return false;
     }
 
@@ -431,7 +431,7 @@ public class BidiFmwk extends CoreTestFmwk {
                     .append(run.getEmbeddingLevel());
         }
         msg.append('\n');
-        logln(msg.toString());
+        logDebug(msg.toString());
     }
 
     static final String mates1 = "<>()[]{}";

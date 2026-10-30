@@ -51,7 +51,7 @@ public class IncrementalProgressTest extends TestFmwk {
             errln("No Progress, " + t.getID() + ": " + UtilityExtensions.formatInput(test, pos));
             gotError = true;
         } else {
-            logln("PASS Progress, " + t.getID() + ": " + UtilityExtensions.formatInput(test, pos));
+            logDebug("PASS Progress, " + t.getID() + ": " + UtilityExtensions.formatInput(test, pos));
         }
         t.finishTransliteration(test, pos);
         if (pos.start != pos.limit) {
@@ -72,7 +72,7 @@ public class IncrementalProgressTest extends TestFmwk {
             while (variants.hasMoreElements()) {
                 String variant = variants.nextElement();
                 String id = this.lang + "-" + target + "/" + variant;
-                logln("id: " + id);
+                logDebug("id: " + id);
 
                 Transliterator t = Transliterator.getInstance(id);
                 CheckIncrementalAux(t, text);

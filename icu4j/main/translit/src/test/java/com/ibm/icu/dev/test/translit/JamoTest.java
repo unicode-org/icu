@@ -180,7 +180,7 @@ public class JamoTest extends TransliteratorTestBase {
             if (!hangul.equals(hangul2)) {
                 errln("FAIL: " + Utility.escape(buf.toString()));
             } else {
-                logln(Utility.escape(buf.toString()));
+                logDebug(Utility.escape(buf.toString()));
             }
         }
     }
@@ -309,7 +309,7 @@ public class JamoTest extends TransliteratorTestBase {
         if (errors != 0) {
             errln("Test word failures: " + errors + " out of " + total);
         } else {
-            logln("All " + total + " test words passed");
+            logDebug("All " + total + " test words passed");
         }
     }
 
@@ -445,8 +445,9 @@ public class JamoTest extends TransliteratorTestBase {
                     + "\ucc38\uc870\ud558\uc2ed\uc2dc\uc624.";
 
     // TransliteratorTest override
+    @Override
     boolean expectAux(String tag, String summary, boolean pass, String expectedResult) {
-        return expectAux(tag, jamoToName(summary), pass, jamoToName(expectedResult));
+        return super.expectAux(tag, jamoToName(summary), pass, jamoToName(expectedResult));
     }
 
     // UTILITIES

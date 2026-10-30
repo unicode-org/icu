@@ -73,7 +73,7 @@ public class DangiTest extends CalendarTestFmwk {
         Calendar cal = Calendar.getInstance(new ULocale("ko_KR@calendar=dangi"));
         StringBuilder buf = new StringBuilder();
 
-        logln("Gregorian -> Korean Lunar (Dangi)");
+        logDebug("Gregorian -> Korean Lunar (Dangi)");
 
         Calendar grego = Calendar.getInstance();
         grego.clear();
@@ -93,7 +93,7 @@ public class DangiTest extends CalendarTestFmwk {
             buf.append(date + " -> ");
             buf.append(y + "/" + m + (L == 1 ? "(leap)" : "") + "/" + d);
             if (y == yE && m == mE && L == LE && d == dE) {
-                logln("OK: " + buf.toString());
+                logDebug("OK: " + buf.toString());
             } else {
                 errln(
                         "Fail: "
@@ -108,7 +108,7 @@ public class DangiTest extends CalendarTestFmwk {
             }
         }
 
-        logln("Korean Lunar (Dangi) -> Gregorian");
+        logDebug("Korean Lunar (Dangi) -> Gregorian");
         for (int i = 0; i < DATA.length; ) {
             grego.set(DATA[i++], DATA[i++] - 1, DATA[i++]);
             Date dexp = grego.getTime();
@@ -127,7 +127,7 @@ public class DangiTest extends CalendarTestFmwk {
                     cyear + "/" + cmonth + (cisleapmonth == 1 ? "(leap)" : "") + "/" + cdayofmonth);
             buf.append(" -> " + date);
             if (date.equals(dexp)) {
-                logln("OK: " + buf.toString());
+                logDebug("OK: " + buf.toString());
             } else {
                 errln("Fail: " + buf.toString() + ", expected " + dexp);
             }
@@ -142,7 +142,7 @@ public class DangiTest extends CalendarTestFmwk {
     public void TestZeroDOM() {
         Calendar cal = Calendar.getInstance(new ULocale("ko_KR@calendar=dangi"));
         GregorianCalendar greg = new GregorianCalendar(1989, Calendar.SEPTEMBER, 1);
-        logln("Start: " + greg.getTime());
+        logDebug("Start: " + greg.getTime());
         for (int i = 0; i < 1000; ++i) {
             cal.setTimeInMillis(greg.getTimeInMillis());
             if (cal.get(Calendar.DAY_OF_MONTH) == 0) {
@@ -159,7 +159,7 @@ public class DangiTest extends CalendarTestFmwk {
             }
             greg.add(Calendar.DAY_OF_YEAR, 1);
         }
-        logln("End: " + greg.getTime());
+        logDebug("End: " + greg.getTime());
     }
 
     /** Test minimum and maximum functions. */
@@ -264,7 +264,7 @@ public class DangiTest extends CalendarTestFmwk {
             int isLeapMonth = cal.get(Calendar.IS_LEAP_MONTH);
             int dom = cal.get(Calendar.DAY_OF_MONTH);
             if (expMonth == month && expIsLeapMonth == isLeapMonth && dom == expDOM) {
-                logln("OK: " + buf + " => " + fmt.format(cal.getTime()));
+                logDebug("OK: " + buf + " => " + fmt.format(cal.getTime()));
             } else {
                 String s = fmt.format(cal.getTime());
                 cal.clear();
@@ -344,7 +344,7 @@ public class DangiTest extends CalendarTestFmwk {
                                 + "/"
                                 + d2);
             } else if (isVerbose()) {
-                logln(
+                logDebug(
                         "OK: "
                                 + y1
                                 + "/"
@@ -455,7 +455,7 @@ public class DangiTest extends CalendarTestFmwk {
                                 + ", got "
                                 + ymdToString(cal));
             } else if (isVerbose()) {
-                logln(
+                logDebug(
                         "OK: "
                                 + name
                                 + " "

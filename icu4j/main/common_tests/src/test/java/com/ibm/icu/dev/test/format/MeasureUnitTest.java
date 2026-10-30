@@ -428,7 +428,7 @@ public class MeasureUnitTest extends CoreTestFmwk {
             String type = expected.getType();
             String code = expected.getSubtype();
             if (!type.equals(lastType)) {
-                logln(type);
+                logDebug(type);
                 lastType = type;
             }
             MeasureUnit actual = MeasureUnit.internalGetInstance(type, code);
@@ -1219,7 +1219,7 @@ public class MeasureUnitTest extends CoreTestFmwk {
             objectOutputStream.writeObject(item);
             objectOutputStream.close();
             byte[] contents = byteOut.toByteArray();
-            logln(
+            logDebug(
                     "bytes: "
                             + contents.length
                             + "; "

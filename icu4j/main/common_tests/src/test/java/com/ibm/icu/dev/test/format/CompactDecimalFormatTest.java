@@ -563,7 +563,7 @@ public class CompactDecimalFormatTest extends CoreTestFmwk {
             objoutstream.writeObject(cdf);
         } catch (NotSerializableException e) {
             if (logKnownIssue("10494", "PluralRules is not serializable")) {
-                logln("NotSerializableException thrown when serializing CopactDecimalFormat");
+                logDebug("NotSerializableException thrown when serializing CopactDecimalFormat");
             } else {
                 errln("NotSerializableException thrown when serializing CopactDecimalFormat");
             }
@@ -579,7 +579,7 @@ public class CompactDecimalFormatTest extends CoreTestFmwk {
             cdf = (CompactDecimalFormat) objinstream.readObject();
         } catch (NotSerializableException e) {
             if (logKnownIssue("10494", "PluralRules is not de-serializable")) {
-                logln("NotSerializableException thrown when deserializing CopactDecimalFormat");
+                logDebug("NotSerializableException thrown when deserializing CopactDecimalFormat");
             } else {
                 errln("NotSerializableException thrown when deserializing CopactDecimalFormat");
             }

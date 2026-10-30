@@ -16663,6 +16663,6 @@ public class DiagBigDecimalTest extends CoreTestFmwk {
     // this version doesn't heed continuation final character
     private void say(java.lang.String s) {
         if (s == null) s = "  ";
-        logln(s);
+        logDebug(s);
     }
 }

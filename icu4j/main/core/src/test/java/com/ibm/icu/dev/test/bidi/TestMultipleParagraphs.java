@@ -81,7 +81,7 @@ public class TestMultipleParagraphs extends BidiFmwk {
         int count, paraStart, paraLimit, paraIndex, length;
         int i, j, k;
 
-        logln("\nEntering TestMultipleParagraphs\n");
+        logDebug("\nEntering TestMultipleParagraphs\n");
         try {
             bidi.setPara(text, Bidi.LTR, null);
         } catch (IllegalArgumentException e) {
@@ -499,7 +499,7 @@ public class TestMultipleParagraphs extends BidiFmwk {
         assertEquals("\nInvalid output #2", "ab\u05d2\u05d1\n123\u05d4\u05d3", out);
         assertEquals("\nInvalid number of paras", 2, bidi.countParagraphs());
 
-        logln("\nExiting TestMultipleParagraphs\n");
+        logDebug("\nExiting TestMultipleParagraphs\n");
 
         /* check levels in multiple paragraphs with default para level
          */

@@ -93,7 +93,7 @@ public class LotusCollationKoreanTest extends TestFmwk {
             sResult = CollationTest.appendCompareResult(compareResult, sResult);
             sExpect = CollationTest.appendCompareResult(expectedResult, sExpect);
             if (ok1) {
-                logln(msg1 + source + msg2 + target + msg3 + sResult);
+                logDebug(msg1 + source + msg2 + target + msg3 + sResult);
             } else {
                 errln(msg1 + source + msg2 + target + msg3 + sResult + msg4 + sExpect);
             }
@@ -103,7 +103,7 @@ public class LotusCollationKoreanTest extends TestFmwk {
             msg3 = "\")) returned ";
             sResult = CollationTest.appendCompareResult(keyResult, sResult);
             if (ok2) {
-                logln(msg1 + source + msg2 + target + msg3 + sResult);
+                logDebug(msg1 + source + msg2 + target + msg3 + sResult);
             } else {
                 errln(msg1 + source + msg2 + target + msg3 + sResult + msg4 + sExpect);
                 msg1 = "  ";
@@ -122,7 +122,7 @@ public class LotusCollationKoreanTest extends TestFmwk {
             sResult = CollationTest.appendCompareResult(incResult, sResult);
 
             if (ok3) {
-                logln(msg1 + source + msg2 + target + msg3 + sResult);
+                logDebug(msg1 + source + msg2 + target + msg3 + sResult);
             } else {
                 errln(msg1 + source + msg2 + target + msg3 + sResult + msg4 + sExpect);
             }

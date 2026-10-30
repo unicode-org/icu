@@ -50,13 +50,13 @@ public class RBBIAPITest extends CoreTestFmwk {
         biequal.setText(testString);
 
         bi3.setText("hello");
-        logln("Testing equals()");
-        logln("Testing == and !=");
+        logDebug("Testing equals()");
+        logDebug("Testing == and !=");
         if (!bi1.equals(biequal) || bi1.equals(bi2) || bi1.equals(bi3))
             errln("ERROR:1 RBBI's == and !- operator failed.");
         if (bi2.equals(biequal) || bi2.equals(bi1) || biequal.equals(bi3))
             errln("ERROR:2 RBBI's == and != operator  failed.");
-        logln("Testing clone()");
+        logDebug("Testing clone()");
         RuleBasedBreakIterator bi1clone = bi1.clone();
         RuleBasedBreakIterator bi2clone = bi2.clone();
         if (!bi1clone.equals(bi1)
@@ -81,7 +81,7 @@ public class RBBIAPITest extends CoreTestFmwk {
                 (RuleBasedBreakIterator) BreakIterator.getCharacterInstance(Locale.getDefault());
         RuleBasedBreakIterator bi2 =
                 (RuleBasedBreakIterator) BreakIterator.getWordInstance(Locale.getDefault());
-        logln("Testing toString()");
+        logDebug("Testing toString()");
         bi1.setText("Hello there");
         RuleBasedBreakIterator bi3 = bi1.clone();
         String temp = bi1.toString();
@@ -100,7 +100,7 @@ public class RBBIAPITest extends CoreTestFmwk {
                 (RuleBasedBreakIterator) BreakIterator.getCharacterInstance(Locale.getDefault());
         RuleBasedBreakIterator bi2 =
                 (RuleBasedBreakIterator) BreakIterator.getWordInstance(Locale.getDefault());
-        logln("Testing hashCode()");
+        logDebug("Testing hashCode()");
         bi1.setText("Hash code");
         bi2.setText("Hash code");
         bi3.setText("Hash code");
@@ -122,7 +122,7 @@ public class RBBIAPITest extends CoreTestFmwk {
     /** Tests the methods getText() and setText() of RuleBasedBreakIterator */
     @Test
     public void TestGetSetText() {
-        logln("Testing getText setText ");
+        logDebug("Testing getText setText ");
         String str1 = "first string.";
         String str2 = "Second string.";
         // RuleBasedBreakIterator charIter1 = (RuleBasedBreakIterator)
@@ -172,8 +172,8 @@ public class RBBIAPITest extends CoreTestFmwk {
     public void TestFirstNextFollowing() {
         int p, q;
         String testString = "This is a word break. Isn't it? 2.25";
-        logln("Testing first() and next(), following() with custom rules");
-        logln("testing word iterator - string :- \"" + testString + "\"\n");
+        logDebug("Testing first() and next(), following() with custom rules");
+        logDebug("testing word iterator - string :- \"" + testString + "\"\n");
         RuleBasedBreakIterator wordIter1 =
                 (RuleBasedBreakIterator) BreakIterator.getWordInstance(Locale.getDefault());
         wordIter1.setText(testString);
@@ -209,7 +209,7 @@ public class RBBIAPITest extends CoreTestFmwk {
         RuleBasedBreakIterator charIter1 =
                 (RuleBasedBreakIterator) BreakIterator.getCharacterInstance(Locale.getDefault());
         testString = "Write hindi here. ";
-        logln("testing char iter - string:- \"" + testString + "\"");
+        logDebug("testing char iter - string:- \"" + testString + "\"");
         charIter1.setText(testString);
         p = charIter1.first();
         if (p != 0) errln("ERROR: first() returned" + p + "instead of 0");
@@ -241,7 +241,7 @@ public class RBBIAPITest extends CoreTestFmwk {
                 "Hello! how are you? I'am fine. Thankyou. How are you doing? This  costs $20,00,000.";
         RuleBasedBreakIterator sentIter1 =
                 (RuleBasedBreakIterator) BreakIterator.getSentenceInstance(Locale.getDefault());
-        logln("testing sentence iter - String:- \"" + testString + "\"");
+        logDebug("testing sentence iter - String:- \"" + testString + "\"");
         sentIter1.setText(testString);
         p = sentIter1.first();
         if (p != 0) errln("ERROR: first() returned" + p + "instead of 0");
@@ -277,7 +277,7 @@ public class RBBIAPITest extends CoreTestFmwk {
                             + testString.length());
         testString =
                 "Hello! how\r\n (are)\r you? I'am fine- Thankyou. foo\u00a0bar How, are, you? This, costs $20,00,000.";
-        logln("(UnicodeString)testing line iter - String:- \"" + testString + "\"");
+        logDebug("(UnicodeString)testing line iter - String:- \"" + testString + "\"");
         RuleBasedBreakIterator lineIter1 =
                 (RuleBasedBreakIterator) BreakIterator.getLineInstance(Locale.getDefault());
         lineIter1.setText(testString);
@@ -326,8 +326,8 @@ public class RBBIAPITest extends CoreTestFmwk {
     public void TestLastPreviousPreceding() {
         int p, q;
         String testString = "This is a word break. Isn't it? 2.25 dollars";
-        logln("Testing last(),previous(), preceding() with custom rules");
-        logln("testing word iteration for string \"" + testString + "\"");
+        logDebug("Testing last(),previous(), preceding() with custom rules");
+        logDebug("testing word iteration for string \"" + testString + "\"");
         RuleBasedBreakIterator wordIter1 =
                 (RuleBasedBreakIterator) BreakIterator.getWordInstance(Locale.ENGLISH);
         wordIter1.setText(testString);
@@ -352,7 +352,7 @@ public class RBBIAPITest extends CoreTestFmwk {
             errln("ERROR: preceding()  at starting position returned #" + p + " instead of 0");
         testString =
                 "Hello! how are you? I'am fine. Thankyou. How are you doing? This  costs $20,00,000.";
-        logln("testing sentence iter - String:- \"" + testString + "\"");
+        logDebug("testing sentence iter - String:- \"" + testString + "\"");
         RuleBasedBreakIterator sentIter1 =
                 (RuleBasedBreakIterator) BreakIterator.getSentenceInstance(Locale.getDefault());
         sentIter1.setText(testString);
@@ -380,7 +380,7 @@ public class RBBIAPITest extends CoreTestFmwk {
                             + " instead of 0\n");
         testString =
                 "Hello! how are you? I'am fine. Thankyou. How are you doing? This\n costs $20,00,000.";
-        logln("testing line iter - String:- \"" + testString + "\"");
+        logDebug("testing line iter - String:- \"" + testString + "\"");
         RuleBasedBreakIterator lineIter1 =
                 (RuleBasedBreakIterator) BreakIterator.getLineInstance(Locale.getDefault());
         lineIter1.setText(testString);
@@ -476,12 +476,12 @@ public class RBBIAPITest extends CoreTestFmwk {
 
     /* Internal subroutine used by TestIsBoundary() */
     private void doBoundaryTest(BreakIterator bi, String text, int[] boundaries) {
-        logln("testIsBoundary():");
+        logDebug("testIsBoundary():");
         int p = 0;
         boolean isB;
         for (int i = 0; i < text.length(); i++) {
             isB = bi.isBoundary(i);
-            logln("bi.isBoundary(" + i + ") -> " + isB);
+            logDebug("bi.isBoundary(" + i + ") -> " + isB);
             if (i == boundaries[p]) {
                 if (!isB)
                     errln("Wrong result from isBoundary() for " + i + ": expected true, got false");
@@ -511,7 +511,7 @@ public class RBBIAPITest extends CoreTestFmwk {
         }
         if (!selected.equals(expected))
             errln("ERROR:****selected \"" + selected + "\" instead of \"" + expected + "\"");
-        else logln("****selected \"" + selected + "\"");
+        else logDebug("****selected \"" + selected + "\"");
     }
 
     @Test

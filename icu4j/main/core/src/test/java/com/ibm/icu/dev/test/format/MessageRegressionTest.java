@@ -76,21 +76,21 @@ public class MessageRegressionTest extends CoreTestFmwk {
             String tempBuffer = messageFormatter.format(paramArray);
             if (!tempBuffer.equals("Message with param:BUG"))
                 errln("MessageFormat with one param test failed.");
-            logln("Formatted with one extra param : " + tempBuffer);
+            logDebug("Formatted with one extra param : " + tempBuffer);
 
             // Apply pattern without param and print the result
             messageFormatter.applyPattern(pattern[0]);
             tempBuffer = messageFormatter.format(null);
             if (!tempBuffer.equals("Message without param"))
                 errln("MessageFormat with no param test failed.");
-            logln("Formatted with no params : " + tempBuffer);
+            logDebug("Formatted with no params : " + tempBuffer);
 
             tempBuffer = messageFormatter.format(paramArray);
             if (!tempBuffer.equals("Message without param"))
                 errln(
                         "Formatted with arguments > substitution failed. result = "
                                 + tempBuffer.toString());
-            logln("Formatted with extra params : " + tempBuffer);
+            logDebug("Formatted with extra params : " + tempBuffer);
             // This statement gives an exception while formatting...
             // If we use pattern[1] for the message with param,
             // we get an NullPointerException in MessageFormat.java(617)
@@ -130,14 +130,14 @@ public class MessageRegressionTest extends CoreTestFmwk {
         MessageFormat messageFormatter = new MessageFormat("");
 
         try {
-            logln("Apply with pattern : " + pattern1);
+            logDebug("Apply with pattern : " + pattern1);
             messageFormatter.applyPattern(pattern1);
             Object[] paramArray = {7};
             String tempBuffer = messageFormatter.format(paramArray);
             if (!tempBuffer.equals(
                     "Impossible {1} has occurred -- status code is 7 and message is {2}."))
                 errln("Tests arguments < substitution failed");
-            logln("Formatted with 7 : " + tempBuffer);
+            logDebug("Formatted with 7 : " + tempBuffer);
             ParsePosition status = new ParsePosition(0);
             Object[] objs = messageFormatter.parse(tempBuffer, status);
             if (objs[paramArray.length] != null)
@@ -151,22 +151,22 @@ public class MessageRegressionTest extends CoreTestFmwk {
             if (!tempBuffer.equals(
                     "Impossible {1} has occurred -- status code is {0} and message is {2}."))
                 errln("Tests with no arguments failed");
-            logln("Formatted with null : " + tempBuffer);
-            logln("Apply with pattern : " + pattern2);
+            logDebug("Formatted with null : " + tempBuffer);
+            logDebug("Apply with pattern : " + pattern2);
             messageFormatter.applyPattern(pattern2);
             tempBuffer = messageFormatter.format(paramArray);
             if (!tempBuffer.equals(
                     "Double ' Quotes 7 test and quoted {1} test plus 'other {2} stuff'."))
                 errln("quote format test (w/ params) failed.");
-            logln("Formatted with params : " + tempBuffer);
+            logDebug("Formatted with params : " + tempBuffer);
             tempBuffer = messageFormatter.format(null);
             if (!tempBuffer.equals(
                     "Double ' Quotes {0} test and quoted {1} test plus 'other {2} stuff'."))
                 errln("quote format test (w/ null) failed.");
-            logln("Formatted with null : " + tempBuffer);
-            logln("toPattern : " + messageFormatter.toPattern());
+            logDebug("Formatted with null : " + tempBuffer);
+            logDebug("toPattern : " + messageFormatter.toPattern());
         } catch (Exception foo) {
-            warnln("Exception when formatting in bug 4031438. " + foo.getMessage());
+            errln("Exception when formatting in bug 4031438. " + foo.getMessage());
         }
     }
 
@@ -179,7 +179,7 @@ public class MessageRegressionTest extends CoreTestFmwk {
         MessageFormat fmt = new MessageFormat("There are {0} apples growing on the {1} tree.");
         String str = new String("There is one apple growing on the peach tree.");
         Object[] objs = fmt.parse(str, pos);
-        logln("unparsable string , should fail at " + pos.getErrorIndex());
+        logDebug("unparsable string , should fail at " + pos.getErrorIndex());
         if (pos.getErrorIndex() == -1) errln("Bug 4052223 failed : parsing string " + str);
         pos.setErrorIndex(4);
         if (pos.getErrorIndex() != 4)
@@ -217,8 +217,7 @@ public class MessageRegressionTest extends CoreTestFmwk {
         String[] formats = {"xyz", "abc"};
         ChoiceFormat cf = new ChoiceFormat(limits, formats);
         try {
-            log("Compares to null is always false, returned : ");
-            logln(cf.equals(null) ? "true" : "false");
+            logDebug("Compares to null is always false, returned : " + (cf.equals(null) ? "true" : "false"));
         } catch (Exception foo) {
             errln("ChoiceFormat.equals(null) throws exception.");
         }
@@ -236,7 +235,7 @@ public class MessageRegressionTest extends CoreTestFmwk {
         try {
             cf = new ChoiceFormat(limits, formats);
         } catch (Exception foo) {
-            logln("ChoiceFormat constructor should check for the array lengths");
+            logDebug("ChoiceFormat constructor should check for the array lengths");
             cf = null;
         }
         if (cf != null) errln(cf.format(5));
@@ -302,7 +301,7 @@ public class MessageRegressionTest extends CoreTestFmwk {
                             + format2.toPattern()
                             + ")");
         } else {
-            logln("Serialization for MessageFormat is OK.");
+            logDebug("Serialization for MessageFormat is OK.");
         }
     }
 
@@ -330,26 +329,28 @@ public class MessageRegressionTest extends CoreTestFmwk {
     public void Test4116444() {
         String[] patterns = {"", "one", "{0,date,short}"};
         MessageFormat mf = new MessageFormat("");
+        StringBuilder msg = new StringBuilder();
 
         for (int i = 0; i < patterns.length; i++) {
             String pattern = patterns[i];
             mf.applyPattern(pattern);
             try {
                 Object[] array = mf.parse(null, new ParsePosition(0));
-                logln("pattern: \"" + pattern + "\"");
-                log(" parsedObjects: ");
+                logDebug("pattern: \"" + pattern + "\"");
+                msg.setLength(0);
+                msg.append(" parsedObjects: ");
                 if (array != null) {
-                    log("{");
+                    msg.append("{");
                     for (int j = 0; j < array.length; j++) {
-                        if (array[j] != null) err("\"" + array[j].toString() + "\"");
-                        else log("null");
-                        if (j < array.length - 1) log(",");
+                        if (array[j] != null) errln("\"" + array[j].toString() + "\"");
+                        else msg.append("null");
+                        if (j < array.length - 1) msg.append(",");
                     }
-                    log("}");
+                    msg.append("}");
                 } else {
-                    log("null");
+                    msg.append("null");
                 }
-                logln("");
+                logDebug(msg.toString());
             } catch (Exception e) {
                 errln("pattern: \"" + pattern + "\"");
                 errln("  Exception: " + e.getMessage());
@@ -368,13 +369,10 @@ public class MessageRegressionTest extends CoreTestFmwk {
         Object[] objs2 = {};
         Object[] objs3 = {null};
         try {
-            logln("pattern: \"" + mf.toPattern() + "\"");
-            log("format(null) : ");
-            logln("\"" + mf.format(objs1) + "\"");
-            log("format({})   : ");
-            logln("\"" + mf.format(objs2) + "\"");
-            log("format({null}) :");
-            logln("\"" + mf.format(objs3) + "\"");
+            logDebug("pattern: \"" + mf.toPattern() + "\"");
+            logDebug("format(null) : \"" + mf.format(objs1) + "\"");
+            logDebug("format({})   : \"" + mf.format(objs2) + "\"");
+            logDebug("format({null}) :\"" + mf.format(objs3) + "\"");
         } catch (Exception e) {
             errln("Exception thrown for null argument tests.");
         }
@@ -388,8 +386,8 @@ public class MessageRegressionTest extends CoreTestFmwk {
         String originalPattern = "initial pattern";
         MessageFormat mf = new MessageFormat(originalPattern);
         String illegalPattern = "format: {0, xxxYYY}";
-        logln("pattern before: \"" + mf.toPattern() + "\"");
-        logln("illegal pattern: \"" + illegalPattern + "\"");
+        logDebug("pattern before: \"" + mf.toPattern() + "\"");
+        logDebug("illegal pattern: \"" + illegalPattern + "\"");
         try {
             mf.applyPattern(illegalPattern);
             errln("Should have thrown IllegalArgumentException for pattern : " + illegalPattern);
@@ -407,18 +405,18 @@ public class MessageRegressionTest extends CoreTestFmwk {
         ChoiceFormat fmt =
                 new ChoiceFormat(
                         "-1#are negative| 0#are no or fraction | 1#is one |1.0<is 1+ |2#are two |2<are more than 2.");
-        logln("Formatter Pattern : " + fmt.toPattern());
+        logDebug("Formatter Pattern : " + fmt.toPattern());
 
-        logln("Format with -INF : " + fmt.format(Double.NEGATIVE_INFINITY));
-        logln("Format with -1.0 : " + fmt.format(-1.0));
-        logln("Format with 0 : " + fmt.format(0));
-        logln("Format with 0.9 : " + fmt.format(0.9));
-        logln("Format with 1.0 : " + fmt.format(1));
-        logln("Format with 1.5 : " + fmt.format(1.5));
-        logln("Format with 2 : " + fmt.format(2));
-        logln("Format with 2.1 : " + fmt.format(2.1));
-        logln("Format with NaN : " + fmt.format(Double.NaN));
-        logln("Format with +INF : " + fmt.format(Double.POSITIVE_INFINITY));
+        logDebug("Format with -INF : " + fmt.format(Double.NEGATIVE_INFINITY));
+        logDebug("Format with -1.0 : " + fmt.format(-1.0));
+        logDebug("Format with 0 : " + fmt.format(0));
+        logDebug("Format with 0.9 : " + fmt.format(0.9));
+        logDebug("Format with 1.0 : " + fmt.format(1));
+        logDebug("Format with 1.5 : " + fmt.format(1.5));
+        logDebug("Format with 2 : " + fmt.format(2));
+        logDebug("Format with 2.1 : " + fmt.format(2.1));
+        logDebug("Format with NaN : " + fmt.format(Double.NaN));
+        logDebug("Format with +INF : " + fmt.format(Double.POSITIVE_INFINITY));
     }
 
     /* @bug 4094906
@@ -433,14 +431,14 @@ public class MessageRegressionTest extends CoreTestFmwk {
                 .startsWith(
                         "-\u221E<are negative|0.0<are no or fraction|1.0#is one|1.0<is 1+|\u221E<are many."))
             errln("Formatter Pattern : " + fmt.toPattern());
-        logln("Format with -INF : " + fmt.format(Double.NEGATIVE_INFINITY));
-        logln("Format with -1.0 : " + fmt.format(-1.0));
-        logln("Format with 0 : " + fmt.format(0));
-        logln("Format with 0.9 : " + fmt.format(0.9));
-        logln("Format with 1.0 : " + fmt.format(1));
-        logln("Format with 1.5 : " + fmt.format(1.5));
-        logln("Format with 2 : " + fmt.format(2));
-        logln("Format with +INF : " + fmt.format(Double.POSITIVE_INFINITY));
+        logDebug("Format with -INF : " + fmt.format(Double.NEGATIVE_INFINITY));
+        logDebug("Format with -1.0 : " + fmt.format(-1.0));
+        logDebug("Format with 0 : " + fmt.format(0));
+        logDebug("Format with 0.9 : " + fmt.format(0.9));
+        logDebug("Format with 1.0 : " + fmt.format(1));
+        logDebug("Format with 1.5 : " + fmt.format(1.5));
+        logDebug("Format with 2 : " + fmt.format(2));
+        logDebug("Format with +INF : " + fmt.format(Double.POSITIVE_INFINITY));
     }
 
     /* @bug 4118592
@@ -456,10 +454,10 @@ public class MessageRegressionTest extends CoreTestFmwk {
             mf.applyPattern(prefix + pattern);
             prefix += "x";
             Object[] objs = mf.parse(formatted, new ParsePosition(0));
-            logln(i + ". pattern :\"" + mf.toPattern() + "\"");
-            log(" \"" + formatted + "\" parsed as ");
-            if (objs == null) logln("  null");
-            else logln("  " + objs[0]);
+            logDebug(i + ". pattern :\"" + mf.toPattern() + "\"");
+            String s = " \"" + formatted + "\" parsed as ";
+            if (objs == null) logDebug(s + "  null");
+            else logDebug(s + "  " + objs[0]);
         }
     }
 
@@ -471,15 +469,15 @@ public class MessageRegressionTest extends CoreTestFmwk {
         MessageFormat mf = new MessageFormat("{0}, {0}, {0}");
         String forParsing = "x, y, z";
         Object[] objs = mf.parse(forParsing, new ParsePosition(0));
-        logln("pattern: \"" + mf.toPattern() + "\"");
-        logln("text for parsing: \"" + forParsing + "\"");
+        logDebug("pattern: \"" + mf.toPattern() + "\"");
+        logDebug("text for parsing: \"" + forParsing + "\"");
         if (!objs[0].toString().equals("z")) errln("argument0: \"" + objs[0] + "\"");
         mf.setLocale(Locale.US);
         mf.applyPattern("{0,number,#.##}, {0,number,#.#}");
         Object[] oldobjs = {3.1415d};
         String result = mf.format(oldobjs);
-        logln("pattern: \"" + mf.toPattern() + "\"");
-        logln("text for parsing: \"" + result + "\"");
+        logDebug("pattern: \"" + mf.toPattern() + "\"");
+        logDebug("text for parsing: \"" + result + "\"");
         // result now equals "3.14, 3.1"
         if (!result.equals("3.14, 3.1")) errln("result = " + result);
         Object[] newobjs = mf.parse(result, new ParsePosition(0));
@@ -503,8 +501,8 @@ public class MessageRegressionTest extends CoreTestFmwk {
         form1.setFormat(1, fileform);
         form2.setFormat(0, fileform);
         Object[] testArgs = {12373L, "MyDisk"};
-        logln(form1.format(testArgs));
-        logln(form2.format(testArgs));
+        logDebug(form1.format(testArgs));
+        logDebug(form2.format(testArgs));
     }
 
     /* @bug 4120552
@@ -514,16 +512,16 @@ public class MessageRegressionTest extends CoreTestFmwk {
     public void Test4120552() {
         MessageFormat mf = new MessageFormat("pattern");
         String texts[] = {"pattern", "pat", "1234"};
-        logln("pattern: \"" + mf.toPattern() + "\"");
+        logDebug("pattern: \"" + mf.toPattern() + "\"");
         for (int i = 0; i < texts.length; i++) {
             ParsePosition pp = new ParsePosition(0);
             Object[] objs = mf.parse(texts[i], pp);
-            log("  text for parsing: \"" + texts[i] + "\"");
+            String s = "  text for parsing: \"" + texts[i] + "\"";
             if (objs == null) {
-                logln("  (incorrectly formatted string)");
+                logDebug(s + "  (incorrectly formatted string)");
                 if (pp.getErrorIndex() == -1) errln("Incorrect error index: " + pp.getErrorIndex());
             } else {
-                logln("  (correctly formatted string)");
+                logDebug(s + "  (correctly formatted string)");
             }
         }
     }
@@ -603,7 +601,7 @@ public class MessageRegressionTest extends CoreTestFmwk {
                 String pat2 = new ChoiceFormat(pat).toPattern();
                 if (!pat.equals(pat2))
                     errln("Fail: Pattern \"" + DATA[i] + "\" x toPattern -> \"" + pat + '"');
-                else logln("Ok: Pattern \"" + DATA[i] + "\" x toPattern -> \"" + pat + '"');
+                else logDebug("Ok: Pattern \"" + DATA[i] + "\" x toPattern -> \"" + pat + '"');
             } catch (IllegalArgumentException e) {
                 errln("Fail: Pattern \"" + DATA[i] + "\" -> " + e);
             }
@@ -634,10 +632,10 @@ public class MessageRegressionTest extends CoreTestFmwk {
     @Test
     public void Test4169959() {
         // This works
-        logln(MessageFormat.format("This will {0}", new Object[] {"work"}));
+        logDebug(MessageFormat.format("This will {0}", new Object[] {"work"}));
 
         // This fails
-        logln(MessageFormat.format("This will {0}", new Object[] {null}));
+        logDebug(MessageFormat.format("This will {0}", new Object[] {null}));
     }
 
     @Test
@@ -685,7 +683,7 @@ public class MessageRegressionTest extends CoreTestFmwk {
             MessageFormat messageFormatter = new MessageFormat("");
 
             try {
-                logln("Apply with pattern : " + pattern1);
+                logDebug("Apply with pattern : " + pattern1);
                 messageFormatter.applyPattern(pattern1);
                 HashMap<String, Object> paramsMap = new HashMap<>();
                 paramsMap.put("arg0", 7);
@@ -693,7 +691,7 @@ public class MessageRegressionTest extends CoreTestFmwk {
                 if (!tempBuffer.equals(
                         "Impossible {arg1} has occurred -- status code is 7 and message is {arg2}."))
                     errln("Tests arguments < substitution failed");
-                logln("Formatted with 7 : " + tempBuffer);
+                logDebug("Formatted with 7 : " + tempBuffer);
                 ParsePosition status = new ParsePosition(0);
                 Map<String, Object> objs = messageFormatter.parseToMap(tempBuffer, status);
                 if (objs.get("arg1") != null || objs.get("arg2") != null)
@@ -712,8 +710,8 @@ public class MessageRegressionTest extends CoreTestFmwk {
                 if (!tempBuffer.equals(
                         "Impossible {arg1} has occurred -- status code is {arg0} and message is {arg2}."))
                     errln("Tests with no arguments failed");
-                logln("Formatted with null : " + tempBuffer);
-                logln("Apply with pattern : " + pattern2);
+                logDebug("Formatted with null : " + tempBuffer);
+                logDebug("Apply with pattern : " + pattern2);
                 messageFormatter.applyPattern(pattern2);
                 paramsMap.clear();
                 paramsMap.put("ARG_ZERO", 7);
@@ -721,15 +719,15 @@ public class MessageRegressionTest extends CoreTestFmwk {
                 if (!tempBuffer.equals(
                         "Double ' Quotes 7 test and quoted {ARG_ONE} test plus 'other {ARG_TWO} stuff'."))
                     errln("quote format test (w/ params) failed.");
-                logln("Formatted with params : " + tempBuffer);
+                logDebug("Formatted with params : " + tempBuffer);
                 tempBuffer = messageFormatter.format(null);
                 if (!tempBuffer.equals(
                         "Double ' Quotes {ARG_ZERO} test and quoted {ARG_ONE} test plus 'other {ARG_TWO} stuff'."))
                     errln("quote format test (w/ null) failed.");
-                logln("Formatted with null : " + tempBuffer);
-                logln("toPattern : " + messageFormatter.toPattern());
+                logDebug("Formatted with null : " + tempBuffer);
+                logDebug("toPattern : " + messageFormatter.toPattern());
             } catch (Exception foo) {
-                warnln("Exception when formatting in bug 4031438. " + foo.getMessage());
+                errln("Exception when formatting in bug 4031438. " + foo.getMessage());
             }
         }
         { // Taken from Test4052223().
@@ -742,7 +740,7 @@ public class MessageRegressionTest extends CoreTestFmwk {
                             "There are {numberOfApples} apples growing on the {whatKindOfTree} tree.");
             String str = new String("There is one apple growing on the peach tree.");
             Map<String, Object> objs = fmt.parseToMap(str, pos);
-            logln("unparsable string , should fail at " + pos.getErrorIndex());
+            logDebug("unparsable string , should fail at " + pos.getErrorIndex());
             if (pos.getErrorIndex() == -1) errln("Bug 4052223 failed : parsing string " + str);
             pos.setErrorIndex(4);
             if (pos.getErrorIndex() != 4)
@@ -790,39 +788,41 @@ public class MessageRegressionTest extends CoreTestFmwk {
                                 + format2.toPattern()
                                 + ")");
             } else {
-                logln("Serialization for MessageFormat is OK.");
+                logDebug("Serialization for MessageFormat is OK.");
             }
         }
         { // Taken from Test4116444().
             String[] patterns = {"", "one", "{namedArgument,date,short}"};
             MessageFormat mf = new MessageFormat("");
+            StringBuilder msg = new StringBuilder();
 
             for (int i = 0; i < patterns.length; i++) {
                 String pattern = patterns[i];
                 mf.applyPattern(pattern);
+                msg.setLength(0);
                 try {
                     Map<String, Object> objs = mf.parseToMap(null, new ParsePosition(0));
-                    logln("pattern: \"" + pattern + "\"");
-                    log(" parsedObjects: ");
+                    logDebug("pattern: \"" + pattern + "\"");
+                    msg.append(" parsedObjects: ");
                     if (objs != null) {
-                        log("{");
+                        msg.append("{");
                         for (Iterator<String> keyIter = objs.keySet().iterator();
                                 keyIter.hasNext(); ) {
                             String key = keyIter.next();
                             if (objs.get(key) != null) {
-                                err("\"" + objs.get(key).toString() + "\"");
+                                errln("\"" + objs.get(key).toString() + "\"");
                             } else {
-                                log("null");
+                                msg.append("null");
                             }
                             if (keyIter.hasNext()) {
-                                log(",");
+                                msg.append(",");
                             }
                         }
-                        log("}");
+                        msg.append("}");
                     } else {
-                        log("null");
+                        msg.append("null");
                     }
-                    logln("");
+                    logDebug(msg.toString());
                 } catch (Exception e) {
                     errln("pattern: \"" + pattern + "\"");
                     errln("  Exception: " + e.getMessage());
@@ -836,13 +836,10 @@ public class MessageRegressionTest extends CoreTestFmwk {
             Map<String, Object> objs3 = new HashMap<>();
             objs3.put("arg", null);
             try {
-                logln("pattern: \"" + mf.toPattern() + "\"");
-                log("format(null) : ");
-                logln("\"" + mf.format(objs1) + "\"");
-                log("format({})   : ");
-                logln("\"" + mf.format(objs2) + "\"");
-                log("format({null}) :");
-                logln("\"" + mf.format(objs3) + "\"");
+                logDebug("pattern: \"" + mf.toPattern() + "\"");
+                logDebug("format(null) : \"" + mf.format(objs1) + "\"");
+                logDebug("format({})   : \"" + mf.format(objs2) + "\"");
+                logDebug("format({null}) :\"" + mf.format(objs3) + "\"");
             } catch (Exception e) {
                 errln("Exception thrown for null argument tests.");
             }
@@ -853,8 +850,8 @@ public class MessageRegressionTest extends CoreTestFmwk {
                     new MessageFormat("{" + argName + "}, {" + argName + "}, {" + argName + "}");
             String forParsing = "x, y, z";
             Map<String, Object> objs = mf.parseToMap(forParsing, new ParsePosition(0));
-            logln("pattern: \"" + mf.toPattern() + "\"");
-            logln("text for parsing: \"" + forParsing + "\"");
+            logDebug("pattern: \"" + mf.toPattern() + "\"");
+            logDebug("text for parsing: \"" + forParsing + "\"");
             if (!objs.get(argName).toString().equals("z"))
                 errln("argument0: \"" + objs.get(argName) + "\"");
             mf.setLocale(Locale.US);
@@ -862,8 +859,8 @@ public class MessageRegressionTest extends CoreTestFmwk {
             Map<String, Object> oldobjs = new HashMap<>();
             oldobjs.put(argName, 3.1415d);
             String result = mf.format(oldobjs);
-            logln("pattern: \"" + mf.toPattern() + "\"");
-            logln("text for parsing: \"" + result + "\"");
+            logDebug("pattern: \"" + mf.toPattern() + "\"");
+            logDebug("text for parsing: \"" + result + "\"");
             // result now equals "3.14, 3.1"
             if (!result.equals("3.14, 3.1")) errln("result = " + result);
             Map<String, Object> newobjs = mf.parseToMap(result, new ParsePosition(0));
@@ -884,8 +881,8 @@ public class MessageRegressionTest extends CoreTestFmwk {
             Map<String, Object> testArgs = new HashMap<>();
             testArgs.put("diskName", "MyDisk");
             testArgs.put("numberOfFiles", 12373L);
-            logln(form1.format(testArgs));
-            logln(form2.format(testArgs));
+            logDebug(form1.format(testArgs));
+            logDebug(form2.format(testArgs));
         }
         { // Taken from test4293229().
             MessageFormat format =

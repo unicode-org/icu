@@ -401,14 +401,14 @@ public class DataDrivenArabicShapingRegTest extends CoreTestFmwk {
             } catch (MissingResourceException e) {
                 throw e;
             } catch (IllegalStateException ie) {
-                warnln("IllegalStateException: " + ie.toString());
+                errln("IllegalStateException: " + ie.toString());
                 return;
             } catch (Exception e) {
                 ex = e;
             }
 
             if (ex != null) {
-                err(
+                errln(
                         "Error: Shaper "
                                 + shaper
                                 + "\n throws exception '"
@@ -444,7 +444,7 @@ public class DataDrivenArabicShapingRegTest extends CoreTestFmwk {
                     }
                     buf.append("\n");
                 }
-                err(buf.toString());
+                errln(buf.toString());
             }
         }
 
@@ -518,7 +518,7 @@ public class DataDrivenArabicShapingRegTest extends CoreTestFmwk {
             }
 
             if (ex != null) {
-                err(
+                errln(
                         "Error: Shaper "
                                 + shaper
                                 + "\n throws exception '"
@@ -526,7 +526,7 @@ public class DataDrivenArabicShapingRegTest extends CoreTestFmwk {
                                 + "'\n for input '"
                                 + source);
             } else if (length != len) {
-                err(
+                errln(
                         "Error: Shaper "
                                 + shaper
                                 + "\n returns "
@@ -607,7 +607,7 @@ public class DataDrivenArabicShapingRegTest extends CoreTestFmwk {
             }
 
             if (!error.isInstance(ex)) {
-                err(
+                errln(
                         "Error: Shaper "
                                 + shaper
                                 + "\n throws exception '"

@@ -108,10 +108,10 @@ public class IndianTest extends CalendarTestFmwk {
         IndianCalendar cal = new IndianCalendar();
         cal.clear();
         cal.set(1000, 0, 30);
-        logln("1000/0/30-> " + cal.get(YEAR) + "/" + cal.get(MONTH) + "/" + cal.get(DATE));
+        logDebug("1000/0/30-> " + cal.get(YEAR) + "/" + cal.get(MONTH) + "/" + cal.get(DATE));
         cal.clear();
         cal.set(1, 0, 30);
-        logln("1/0/30 -> " + cal.get(YEAR) + "/" + cal.get(MONTH) + "/" + cal.get(DATE));
+        logDebug("1/0/30 -> " + cal.get(YEAR) + "/" + cal.get(MONTH) + "/" + cal.get(DATE));
     }
 
     @Test
@@ -200,7 +200,7 @@ public class IndianTest extends CalendarTestFmwk {
                     DateFormat format =
                             DateFormat.getDateTimeInstance(
                                     cal, DateFormat.FULL, DateFormat.FULL, formatLocale);
-                    logln(calLocName + "/" + locName + " --> " + format.format(cal));
+                    logDebug(calLocName + "/" + locName + " --> " + format.format(cal));
                 }
             }
         }
@@ -214,7 +214,7 @@ public class IndianTest extends CalendarTestFmwk {
         gCal.add(GregorianCalendar.MONTH, 2);
         Date gFuture = gCal.getTime();
         DateFormat gDF = DateFormat.getDateInstance(gCal, DateFormat.FULL);
-        logln("gregorian calendar: " + gDF.format(gToday) + " + 2 months = " + gDF.format(gFuture));
+        logDebug("gregorian calendar: " + gDF.format(gToday) + " + 2 months = " + gDF.format(gFuture));
 
         // Indian Calendar
         IndianCalendar iCal = new IndianCalendar();
@@ -222,7 +222,7 @@ public class IndianTest extends CalendarTestFmwk {
         iCal.add(IndianCalendar.MONTH, 2);
         Date iFuture = iCal.getTime();
         DateFormat iDF = DateFormat.getDateInstance(iCal, DateFormat.FULL);
-        logln("Indian calendar: " + iDF.format(iToday) + " + 2 months = " + iDF.format(iFuture));
+        logDebug("Indian calendar: " + iDF.format(iToday) + " + 2 months = " + iDF.format(iFuture));
     }
 
     /** Test limits of the Indian calendar */

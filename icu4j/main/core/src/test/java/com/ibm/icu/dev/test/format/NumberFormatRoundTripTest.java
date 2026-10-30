@@ -40,17 +40,17 @@ public class NumberFormatRoundTripTest extends CoreTestFmwk {
 
         NumberFormat fmt = null;
 
-        logln("Default Locale");
+        logDebug("Default Locale");
 
-        logln("Default Number format");
+        logDebug("Default Number format");
         fmt = NumberFormat.getInstance();
         _test(fmt);
 
-        logln("Currency Format");
+        logDebug("Currency Format");
         fmt = NumberFormat.getCurrencyInstance();
         _test(fmt);
 
-        logln("Percent Format");
+        logDebug("Percent Format");
         fmt = NumberFormat.getPercentInstance();
         _test(fmt);
 
@@ -58,10 +58,10 @@ public class NumberFormatRoundTripTest extends CoreTestFmwk {
         final Locale[] loc = NumberFormat.getAvailableLocales();
         if (quick) {
             if (locCount > 5) locCount = 5;
-            logln("Quick mode: only _testing first 5 Locales");
+            logDebug("Quick mode: only _testing first 5 Locales");
         }
         for (int i = 0; i < locCount; ++i) {
-            logln(loc[i].getDisplayName());
+            logDebug(loc[i].getDisplayName());
 
             fmt = NumberFormat.getInstance(loc[i]);
             _test(fmt);
@@ -73,7 +73,7 @@ public class NumberFormatRoundTripTest extends CoreTestFmwk {
             _test(fmt);
         }
 
-        logln("Numeric error " + min_numeric_error + " to " + max_numeric_error);
+        logDebug("Numeric error " + min_numeric_error + " to " + max_numeric_error);
     }
 
     /** Return a random value from -range..+range. */
@@ -147,7 +147,7 @@ public class NumberFormatRoundTripTest extends CoreTestFmwk {
     }
 
     private void _test(NumberFormat fmt, Number value) {
-        logln("test data = " + value);
+        logDebug("test data = " + value);
         fmt.setMaximumFractionDigits(999);
         String s, s2;
         if (value.getClass().getName().equalsIgnoreCase("java.lang.Double"))
@@ -156,20 +156,20 @@ public class NumberFormatRoundTripTest extends CoreTestFmwk {
 
         Number n = 0d;
         boolean show = verbose;
-        if (DEBUG) logln(/*value.getString(temp) +*/ " F> " + s);
+        if (DEBUG) logDebug(/*value.getString(temp) +*/ " F> " + s);
         try {
             n = fmt.parse(s);
         } catch (java.text.ParseException e) {
             System.out.println(e);
         }
 
-        if (DEBUG) logln(s + " P> " /*+ n.getString(temp)*/);
+        if (DEBUG) logDebug(s + " P> " /*+ n.getString(temp)*/);
 
         if (value.getClass().getName().equalsIgnoreCase("java.lang.Double"))
             s2 = fmt.format(n.doubleValue());
         else s2 = fmt.format(n.longValue());
 
-        if (DEBUG) logln(/*n.getString(temp) +*/ " F> " + s2);
+        if (DEBUG) logDebug(/*n.getString(temp) +*/ " F> " + s2);
 
         if (STRING_COMPARE) {
             if (!s.equals(s2)) {
@@ -197,7 +197,7 @@ public class NumberFormatRoundTripTest extends CoreTestFmwk {
         }
 
         if (show)
-            logln(
+            logDebug(
                     /*value.getString(temp) +*/ value.getClass().getName()
                             + " F> "
                             + s

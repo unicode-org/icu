@@ -45,7 +45,7 @@ public class ICUServiceTest extends CoreTestFmwk {
 
     public void confirmBoolean(String message, boolean val) {
         if (val) {
-            logln(message);
+            logDebug(message);
         } else {
             errln(message);
         }
@@ -54,7 +54,7 @@ public class ICUServiceTest extends CoreTestFmwk {
     public void confirmEqual(String message, Object lhs, Object rhs) {
         String lrmsg = lrmsg(message, lhs, rhs);
         if (lhs == null ? rhs == null : lhs.equals(rhs)) {
-            logln(lrmsg);
+            logDebug(lrmsg);
         } else {
             errln(lrmsg);
         }
@@ -63,7 +63,7 @@ public class ICUServiceTest extends CoreTestFmwk {
     public void confirmIdentical(String message, Object lhs, Object rhs) {
         String lrmsg = lrmsg(message, lhs, rhs);
         if (lhs == rhs) {
-            logln(lrmsg);
+            logDebug(lrmsg);
         } else {
             errln(lrmsg);
         }
@@ -72,7 +72,7 @@ public class ICUServiceTest extends CoreTestFmwk {
     public void confirmIdentical(String message, int lhs, int rhs) {
         String msg = message + " lhs: " + lhs + " rhs: " + rhs;
         if (lhs == rhs) {
-            logln(msg);
+            logDebug(msg);
         } else {
             errln(msg);
         }
@@ -126,7 +126,7 @@ public class ICUServiceTest extends CoreTestFmwk {
         // create a service using locale keys,
         ICUService service = new TestService();
 
-        logln("service name:" + service.getName());
+        logDebug("service name:" + service.getName());
 
         // register an object with one locale,
         // search for an object with a more specific locale
@@ -267,7 +267,7 @@ public class ICUServiceTest extends CoreTestFmwk {
             while (iter.hasNext()) {
                 ++count;
                 String id = (String) iter.next();
-                logln("  " + id + " --> " + service.get(id));
+                logDebug("  " + id + " --> " + service.get(id));
             }
             // four visible ids
             confirmIdentical("25) visible ids", count, 4);
@@ -281,7 +281,7 @@ public class ICUServiceTest extends CoreTestFmwk {
             while (iter.hasNext()) {
                 ++count;
                 Map.Entry<String, String> e = iter.next();
-                logln("  " + e.getKey() + " -- > " + e.getValue());
+                logDebug("  " + e.getKey() + " -- > " + e.getValue());
             }
             // four display names, in german
             confirmIdentical("26) display names", count, 4);
@@ -312,7 +312,7 @@ public class ICUServiceTest extends CoreTestFmwk {
             while (iter.hasNext()) {
                 ++count;
                 Map.Entry<String, String> e = iter.next();
-                logln("  " + e.getKey() + " --> " + e.getValue());
+                logDebug("  " + e.getKey() + " --> " + e.getValue());
             }
             // seven display names, in spanish
             confirmIdentical("29) display names", count, 7);
@@ -325,13 +325,13 @@ public class ICUServiceTest extends CoreTestFmwk {
             String id = "en_us_surfer_gal";
             String gal = (String) service.get(id, actualID);
             if (gal != null) {
-                logln("actual id: " + actualID[0]);
+                logDebug("actual id: " + actualID[0]);
                 String displayName = service.getDisplayName(actualID[0], ULocale.US);
-                logln("found actual: " + gal + " with display name: " + displayName);
+                logDebug("found actual: " + gal + " with display name: " + displayName);
                 confirmBoolean("30) found display name for actual", displayName != null);
 
                 displayName = service.getDisplayName(id, ULocale.US);
-                logln("found query: " + gal + " with display name: " + displayName);
+                logDebug("found query: " + gal + " with display name: " + displayName);
                 // this is no longer a bug, we want to return display names for anything
                 // that a factory handles.  since we handle it, we should return a display
                 // name.  see jb3549
@@ -345,11 +345,11 @@ public class ICUServiceTest extends CoreTestFmwk {
             String bozo = (String) service.get(id, actualID);
             if (bozo != null) {
                 String displayName = service.getDisplayName(actualID[0], ULocale.US);
-                logln("found actual: " + bozo + " with display name: " + displayName);
+                logDebug("found actual: " + bozo + " with display name: " + displayName);
                 confirmBoolean("32) found display name for actual", displayName != null);
 
                 displayName = service.getDisplayName(id, ULocale.US);
-                logln("found actual: " + bozo + " with display name: " + displayName);
+                logDebug("found actual: " + bozo + " with display name: " + displayName);
                 // see above and jb3549
                 // confirmBoolean("33) found display name for query", displayName == null);
             } else {
@@ -388,13 +388,13 @@ public class ICUServiceTest extends CoreTestFmwk {
             Iterator<String> iter = xids.iterator();
             while (iter.hasNext()) {
                 String xid = (String) iter.next();
-                logln(xid + "?  " + service.get(xid));
+                logDebug(xid + "?  " + service.get(xid));
             }
 
-            logln("valleygirl?  " + service.get("en_US_VALLEY_GIRL"));
-            logln("valleyboy?   " + service.get("en_US_VALLEY_BOY"));
-            logln("valleydude?  " + service.get("en_US_VALLEY_DUDE"));
-            logln("surfergirl?  " + service.get("en_US_SURFER_GIRL"));
+            logDebug("valleygirl?  " + service.get("en_US_VALLEY_GIRL"));
+            logDebug("valleyboy?   " + service.get("en_US_VALLEY_BOY"));
+            logDebug("valleydude?  " + service.get("en_US_VALLEY_DUDE"));
+            logDebug("surfergirl?  " + service.get("en_US_SURFER_GIRL"));
         }
 
         // resource bundle factory.
@@ -403,7 +403,7 @@ public class ICUServiceTest extends CoreTestFmwk {
 
         // list all of the resources
         {
-            logln("all visible ids: " + service.getVisibleIDs());
+            logDebug("all visible ids: " + service.getVisibleIDs());
             /*
             Set xids = service.getVisibleIDs();
             StringBuffer buf = new StringBuffer("{");
@@ -426,18 +426,18 @@ public class ICUServiceTest extends CoreTestFmwk {
         // list only the resources for es, default locale
         // since we're using the default Key, only "es" is matched
         {
-            logln("visible ids for es locale: " + service.getVisibleIDs("es"));
+            logDebug("visible ids for es locale: " + service.getVisibleIDs("es"));
         }
 
         // list only the spanish display names for es, spanish collation order
         // since we're using the default Key, only "es" is matched
         {
-            logln("display names: " + getDisplayNames(service, new ULocale("es"), "es"));
+            logDebug("display names: " + getDisplayNames(service, new ULocale("es"), "es"));
         }
 
         // list the display names in reverse order
         {
-            logln(
+            logDebug(
                     "display names in reverse order: "
                             + service.getDisplayNames(
                                     ULocale.US,
@@ -453,7 +453,7 @@ public class ICUServiceTest extends CoreTestFmwk {
         // get all the display names of these resources
         // this should be fast since the display names were cached.
         {
-            logln("service display names for de_DE");
+            logDebug("service display names for de_DE");
             Map<String, String> names = getDisplayNames(service, new ULocale("de_DE"));
             StringBuffer buf = new StringBuffer("{");
             Iterator<Map.Entry<String, String>> iter = names.entrySet().iterator();
@@ -464,14 +464,14 @@ public class ICUServiceTest extends CoreTestFmwk {
                 buf.append("\n   " + name + " --> " + id);
             }
             buf.append("\n}");
-            logln(buf.toString());
+            logDebug(buf.toString());
         }
 
         CalifornioLanguageFactory califactory = new CalifornioLanguageFactory();
         service.registerFactory(califactory);
         // get all the display names of these resources
         {
-            logln("californio language factory");
+            logDebug("californio language factory");
             StringBuffer buf = new StringBuffer("{");
             String[] idNames = {
                 CalifornioLanguageFactory.californio,
@@ -492,13 +492,13 @@ public class ICUServiceTest extends CoreTestFmwk {
                 }
             }
             buf.append("\n}");
-            logln(buf.toString());
+            logDebug(buf.toString());
         }
 
         // test notification
         // simple registration
         {
-            logln("simple registration notification");
+            logDebug("simple registration notification");
             ICULocaleService ls = new ICULocaleService();
             ServiceListener l1 =
                     new ServiceListener() {
@@ -506,7 +506,7 @@ public class ICUServiceTest extends CoreTestFmwk {
 
                         @Override
                         public void serviceChanged(ICUService s) {
-                            logln("listener 1 report " + n++ + " service changed: " + s);
+                            logDebug("listener 1 report " + n++ + " service changed: " + s);
                         }
                     };
             ls.addListener(l1);
@@ -516,33 +516,33 @@ public class ICUServiceTest extends CoreTestFmwk {
 
                         @Override
                         public void serviceChanged(ICUService s) {
-                            logln("listener 2 report " + n++ + " service changed: " + s);
+                            logDebug("listener 2 report " + n++ + " service changed: " + s);
                         }
                     };
             ls.addListener(l2);
-            logln("registering foo... ");
+            logDebug("registering foo... ");
             ls.registerObject("Foo", "en_FOO");
-            logln("registering bar... ");
+            logDebug("registering bar... ");
             ls.registerObject("Bar", "en_BAR");
-            logln("getting foo...");
-            logln((String) ls.get("en_FOO"));
-            logln("removing listener 2...");
+            logDebug("getting foo...");
+            logDebug((String) ls.get("en_FOO"));
+            logDebug("removing listener 2...");
             ls.removeListener(l2);
-            logln("registering baz...");
+            logDebug("registering baz...");
             ls.registerObject("Baz", "en_BAZ");
-            logln("removing listener 1");
+            logDebug("removing listener 1");
             ls.removeListener(l1);
-            logln("registering burp...");
+            logDebug("registering burp...");
             ls.registerObject("Burp", "en_BURP");
 
             // should only get one notification even if register multiple times
-            logln("... trying multiple registration");
+            logDebug("... trying multiple registration");
             ls.addListener(l1);
             ls.addListener(l1);
             ls.addListener(l1);
             ls.addListener(l2);
             ls.registerObject("Foo", "en_FOO");
-            logln("... registered foo");
+            logDebug("... registered foo");
 
             // since in a separate thread, we can callback and not deadlock
             ServiceListener l3 =
@@ -551,17 +551,17 @@ public class ICUServiceTest extends CoreTestFmwk {
 
                         @Override
                         public void serviceChanged(ICUService s) {
-                            logln("listener 3 report " + n++ + " service changed...");
+                            logDebug("listener 3 report " + n++ + " service changed...");
                             if (s.get("en_BOINK") == null) { // don't recurse on ourselves!!!
-                                logln("registering boink...");
+                                logDebug("registering boink...");
                                 s.registerObject("boink", "en_BOINK");
                             }
                         }
                     };
             ls.addListener(l3);
-            logln("registering boo...");
+            logDebug("registering boo...");
             ls.registerObject("Boo", "en_BOO");
-            logln("...done");
+            logDebug("...done");
 
             try {
                 Thread.sleep(100);
@@ -749,15 +749,15 @@ public class ICUServiceTest extends CoreTestFmwk {
         confirmEqual("test de_US kind 3", "german", target);
 
         LocaleKey lkey = LocaleKey.createWithCanonicalFallback("en", null, 1234);
-        logln("lkey prefix: " + lkey.prefix());
-        logln("lkey descriptor: " + lkey.currentDescriptor());
-        logln("lkey current locale: " + lkey.currentLocale());
+        logDebug("lkey prefix: " + lkey.prefix());
+        logDebug("lkey descriptor: " + lkey.currentDescriptor());
+        logDebug("lkey current locale: " + lkey.currentLocale());
 
         lkey.fallback();
-        logln("lkey descriptor 2: " + lkey.currentDescriptor());
+        logDebug("lkey descriptor 2: " + lkey.currentDescriptor());
 
         lkey.fallback();
-        logln("lkey descriptor 3: " + lkey.currentDescriptor());
+        logDebug("lkey descriptor 3: " + lkey.currentDescriptor());
 
         target = service.get("za_PPP");
         confirmEqual("test zappp", "root", target);
@@ -768,12 +768,12 @@ public class ICUServiceTest extends CoreTestFmwk {
         confirmEqual("test with ja locale", "japanese", target);
 
         for (String id : service.getVisibleIDs()) {
-            logln("id: " + id);
+            logDebug("id: " + id);
         }
 
         ULocale.setDefault(loc);
         for (String id : service.getVisibleIDs()) {
-            logln("id: " + id);
+            logDebug("id: " + id);
         }
 
         target = service.get("za_PPP");
@@ -781,11 +781,10 @@ public class ICUServiceTest extends CoreTestFmwk {
 
         ULocale[] locales = service.getAvailableULocales();
         confirmIdentical("test available locales", locales.length, 6);
-        logln("locales: ");
+        logDebug("locales: ");
         for (int i = 0; i < locales.length; ++i) {
-            log("\n  [" + i + "] " + locales[i]);
+            logDebug("[" + i + "] " + locales[i]);
         }
-        logln(" ");
 
         service.registerFactory(new ICUResourceBundleFactory());
         target = service.get(ULocale.JAPAN);
@@ -795,7 +794,7 @@ public class ICUServiceTest extends CoreTestFmwk {
             List<ICUService.Factory> factories = service.factories();
             Iterator<ICUService.Factory> iter = factories.iterator();
             while (iter.hasNext()) {
-                logln("[" + n++ + "] " + iter.next());
+                logDebug("[" + n++ + "] " + iter.next());
             }
         }
 
@@ -815,7 +814,7 @@ public class ICUServiceTest extends CoreTestFmwk {
                             },
                             "es");
 
-            logln("es display names in reverse order " + map);
+            logDebug("es display names in reverse order " + map);
         }
     }
 
@@ -827,7 +826,7 @@ public class ICUServiceTest extends CoreTestFmwk {
         ICUService service = new ICUService("wrap");
         service.registerObject(greeting, greetingID);
 
-        logln("test one: " + service.get(greetingID));
+        logDebug("test one: " + service.get(greetingID));
 
         class WrapFactory implements ICUService.Factory {
             @Override
@@ -862,10 +861,10 @@ public class ICUServiceTest extends CoreTestFmwk {
     public void TestCoverage() {
         // Key
         ICUService.Key key = new ICUService.Key("foobar");
-        logln("ID: " + key.id());
-        logln("canonicalID: " + key.canonicalID());
-        logln("currentID: " + key.currentID());
-        logln("has fallback: " + key.fallback());
+        logDebug("ID: " + key.id());
+        logDebug("canonicalID: " + key.canonicalID());
+        logDebug("currentID: " + key.currentID());
+        logDebug("has fallback: " + key.fallback());
 
         // SimpleFactory
         Object obj = new Object();
@@ -874,11 +873,11 @@ public class ICUServiceTest extends CoreTestFmwk {
             sf = new SimpleFactory(null, null);
             errln("didn't throw exception");
         } catch (IllegalArgumentException e) {
-            logln("OK: " + e.getMessage());
+            logDebug("OK: " + e.getMessage());
         } catch (Exception e) {
             errln("threw wrong exception" + e);
         }
-        logln(sf.getDisplayName("object", null));
+        logDebug(sf.getDisplayName("object", null));
 
         // ICUService
         ICUService service = new ICUService();
@@ -888,7 +887,7 @@ public class ICUServiceTest extends CoreTestFmwk {
             service.get(null, null);
             errln("didn't throw exception");
         } catch (NullPointerException e) {
-            logln("OK: " + e.getMessage());
+            logDebug("OK: " + e.getMessage());
         }
         /*
         catch (Exception e) {
@@ -899,7 +898,7 @@ public class ICUServiceTest extends CoreTestFmwk {
             service.registerFactory(null);
             errln("didn't throw exception");
         } catch (NullPointerException e) {
-            logln("OK: " + e.getMessage());
+            logDebug("OK: " + e.getMessage());
         } catch (Exception e) {
             errln("threw wrong exception" + e);
         }
@@ -908,14 +907,14 @@ public class ICUServiceTest extends CoreTestFmwk {
             service.unregisterFactory(null);
             errln("didn't throw exception");
         } catch (NullPointerException e) {
-            logln("OK: " + e.getMessage());
+            logDebug("OK: " + e.getMessage());
         } catch (Exception e) {
             errln("threw wrong exception" + e);
         }
 
-        logln("object is: " + service.get("object"));
+        logDebug("object is: " + service.get("object"));
 
-        logln("stats: " + service.stats());
+        logDebug("stats: " + service.stats());
 
         // ICURWLock
 
@@ -927,26 +926,26 @@ public class ICUServiceTest extends CoreTestFmwk {
 
         rwlock.acquireWrite();
         rwlock.releaseWrite();
-        logln("stats: " + rwlock.getStats());
-        logln("stats: " + rwlock.clearStats());
+        logDebug("stats: " + rwlock.getStats());
+        logDebug("stats: " + rwlock.clearStats());
         rwlock.acquireRead();
         rwlock.releaseRead();
         rwlock.acquireWrite();
         rwlock.releaseWrite();
-        logln("stats: " + rwlock.getStats());
+        logDebug("stats: " + rwlock.getStats());
 
         try {
             rwlock.releaseRead();
             errln("no error thrown");
         } catch (Exception e) {
-            logln("OK: " + e.getMessage());
+            logDebug("OK: " + e.getMessage());
         }
 
         try {
             rwlock.releaseWrite();
             errln("no error thrown");
         } catch (Exception e) {
-            logln("OK: " + e.getMessage());
+            logDebug("OK: " + e.getMessage());
         }
 
         // ICULocaleService
@@ -956,28 +955,28 @@ public class ICUServiceTest extends CoreTestFmwk {
         // LocaleKey lkey = LocaleKey.create("en_US", "ja_JP");
         // lkey = LocaleKey.create(null, null);
         LocaleKey lkey = LocaleKey.createWithCanonicalFallback("en_US", "ja_JP");
-        logln("lkey: " + lkey);
+        logDebug("lkey: " + lkey);
 
         lkey = LocaleKey.createWithCanonicalFallback(null, null);
-        logln("lkey from null,null: " + lkey);
+        logDebug("lkey from null,null: " + lkey);
 
         // LocaleKeyFactory
         LocaleKeyFactory lkf = new LKFSubclass(false);
-        logln("lkf: " + lkf);
-        logln("obj: " + lkf.create(lkey, null));
-        logln(lkf.getDisplayName("foo", null));
-        logln(lkf.getDisplayName("bar", null));
+        logDebug("lkf: " + lkf);
+        logDebug("obj: " + lkf.create(lkey, null));
+        logDebug(lkf.getDisplayName("foo", null));
+        logDebug(lkf.getDisplayName("bar", null));
         lkf.updateVisibleIDs(new HashMap<>());
 
         LocaleKeyFactory invisibleLKF = new LKFSubclass(false);
-        logln("obj: " + invisibleLKF.create(lkey, null));
-        logln(invisibleLKF.getDisplayName("foo", null));
-        logln(invisibleLKF.getDisplayName("bar", null));
+        logDebug("obj: " + invisibleLKF.create(lkey, null));
+        logDebug(invisibleLKF.getDisplayName("foo", null));
+        logDebug(invisibleLKF.getDisplayName("bar", null));
         invisibleLKF.updateVisibleIDs(new HashMap<>());
 
         // ResourceBundleFactory
         ICUResourceBundleFactory rbf = new ICUResourceBundleFactory();
-        logln("RB: " + rbf.create(lkey, null));
+        logDebug("RB: " + rbf.create(lkey, null));
 
         // ICUNotifier
         ICUNotifier nf = new ICUNSubclass();
@@ -985,7 +984,7 @@ public class ICUServiceTest extends CoreTestFmwk {
             nf.addListener(null);
             errln("added null listener");
         } catch (NullPointerException e) {
-            logln(e.getMessage());
+            logDebug(e.getMessage());
         } catch (Exception e) {
             errln("got wrong exception");
         }
@@ -994,7 +993,7 @@ public class ICUServiceTest extends CoreTestFmwk {
             nf.addListener(new WrongListener());
             errln("added wrong listener");
         } catch (IllegalStateException e) {
-            logln(e.getMessage());
+            logDebug(e.getMessage());
         } catch (Exception e) {
             errln("got wrong exception");
         }
@@ -1003,7 +1002,7 @@ public class ICUServiceTest extends CoreTestFmwk {
             nf.removeListener(null);
             errln("removed null listener");
         } catch (NullPointerException e) {
-            logln(e.getMessage());
+            logDebug(e.getMessage());
         } catch (Exception e) {
             errln("got wrong exception");
         }

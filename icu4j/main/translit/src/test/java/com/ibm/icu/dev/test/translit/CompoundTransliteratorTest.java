@@ -24,7 +24,7 @@ import org.junit.runners.JUnit4;
 public class CompoundTransliteratorTest extends TestFmwk {
     @Test
     public void TestConstruction() {
-        logln("Testing the construction of the compound Transliterator");
+        logDebug("Testing the construction of the compound Transliterator");
         String names[] = {"Greek-Latin", "Latin-Devanagari", "Devanagari-Latin", "Latin-Greek"};
 
         try {
@@ -100,7 +100,7 @@ public class CompoundTransliteratorTest extends TestFmwk {
 
     @Test
     public void TestGetTransliterator() {
-        logln("Testing the getTransliterator() API of CompoundTransliterator");
+        logDebug("Testing the getTransliterator() API of CompoundTransliterator");
         String ID =
                 "Latin-Greek;Greek-Latin;Latin-Devanagari;Devanagari-Latin;Latin-Cyrillic;Cyrillic-Latin;Any-Hex;Hex-Any";
         Transliterator ct1 = null;
@@ -124,14 +124,14 @@ public class CompoundTransliteratorTest extends TestFmwk {
             if (!child.equals(array[i])) {
                 errln("Error getTransliterator() failed: Expected->" + array[i] + " Got->" + child);
             } else {
-                logln("OK: getTransliterator() passed: Expected->" + array[i] + " Got->" + child);
+                logDebug("OK: getTransliterator() passed: Expected->" + array[i] + " Got->" + child);
             }
         }
     }
 
     @Test
     public void TestTransliterate() {
-        logln("Testing the handleTransliterate() API of CompoundTransliterator");
+        logDebug("Testing the handleTransliterate() API of CompoundTransliterator");
         Transliterator ct1 = null;
         try {
             ct1 = Transliterator.getInstance("Any-Hex;Hex-Any");
@@ -272,7 +272,7 @@ public class CompoundTransliteratorTest extends TestFmwk {
 
     private void expectAux(String tag, String summary, boolean pass, String expectedResult) {
         if (pass) {
-            logln("(" + tag + ") " + Utility.escape(summary));
+            logDebug("(" + tag + ") " + Utility.escape(summary));
         } else {
             errln(
                     "FAIL: ("

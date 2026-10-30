@@ -284,7 +284,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
                         .setSyntaxCharacters(new UnicodeSet("[a-zA-Z]"))
                         .setEscapeCharacters(new UnicodeSet("[b#]"))
                         .setUsingQuote(true);
-        logln("Using Quote");
+        logDebug("Using Quote");
         for (int i = 0; i < patternTestData.length; ++i) {
             String patternTest = (String) patternTestData[i];
             CheckPattern(buffer, pp, patternTest);
@@ -294,7 +294,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
             String patternTest = getRandomString(randomSet, 0, 10);
             CheckPattern(buffer, pp, patternTest);
         }
-        logln("Using Backslash");
+        logDebug("Using Backslash");
         pp.setUsingQuote(false).setUsingSlash(true);
         for (int i = 0; i < patternTestData.length; ++i) {
             String patternTest = (String) patternTestData[i];
@@ -326,7 +326,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
             showItems(buffer, pp, patternTest);
         }
         String normalized = pp.setStart(0).normalize();
-        logln("input:\t<" + patternTest + ">" + "\tnormalized:\t<" + normalized + ">");
+        logDebug("input:\t<" + patternTest + ">" + "\tnormalized:\t<" + normalized + ">");
         String doubleNormalized = pp.setPattern(normalized).normalize();
         if (!normalized.equals(doubleNormalized)) {
             errln(
@@ -348,7 +348,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
     }
 
     private void showItems(StringBuffer buffer, PatternTokenizer pp, String patternTest) {
-        logln("input:\t<" + patternTest + ">");
+        logDebug("input:\t<" + patternTest + ">");
         while (true) {
             buffer.setLength(0);
             int status = pp.next(buffer);
@@ -357,7 +357,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
             if (status != PatternTokenizer.SYNTAX) {
                 lit = "\t<" + pp.quoteLiteral(buffer) + ">";
             }
-            logln("\t" + statusName[status] + "\t<" + buffer + ">" + lit);
+            logDebug("\t" + statusName[status] + "\t<" + buffer + ">" + lit);
         }
     }
 
@@ -374,17 +374,17 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
             if (dateTestData[i] instanceof ULocale) {
                 uLocale = (ULocale) dateTestData[i];
                 dtfg = DateTimePatternGenerator.getInstance(uLocale);
-                if (GENERATE_TEST_DATA) logln("new ULocale(\"" + uLocale.toString() + "\"),");
+                if (GENERATE_TEST_DATA) logDebug("new ULocale(\"" + uLocale.toString() + "\"),");
             } else if (dateTestData[i] instanceof Date) {
                 date = (Date) dateTestData[i];
-                if (GENERATE_TEST_DATA) logln("new Date(" + date.getTime() + "L),");
+                if (GENERATE_TEST_DATA) logDebug("new Date(" + date.getTime() + "L),");
             } else if (dateTestData[i] instanceof String) {
                 String testSkeleton = (String) dateTestData[i];
                 String pattern = dtfg.getBestPattern(testSkeleton);
                 SimpleDateFormat sdf = new SimpleDateFormat(pattern, uLocale);
                 String formatted = sdf.format(date);
                 if (GENERATE_TEST_DATA)
-                    logln(
+                    logDebug(
                             "new String[] {\""
                                     + testSkeleton
                                     + "\", \""
@@ -399,7 +399,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
                 SimpleDateFormat sdf = new SimpleDateFormat(pattern, uLocale);
                 String formatted = sdf.format(date);
                 if (GENERATE_TEST_DATA) {
-                    logln(
+                    logDebug(
                             "new String[] {\""
                                     + testSkeleton
                                     + "\", \""
@@ -649,7 +649,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
 
         // use it to format (or parse)
         String formatted = formatter.format(new Date());
-        logln("formatted=" + formatted);
+        logDebug("formatted=" + formatted);
         // for French, the result is "13 sept."
     }
 
@@ -688,7 +688,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
             if (getExhaustiveness() <= 5 && count % 3 != 0) {
                 continue;
             }
-            logln(locales[i].toString());
+            logDebug(locales[i].toString());
             DateTimePatternGenerator dtpgen = DateTimePatternGenerator.getInstance(locales[i]);
 
             for (int style1 = DateFormat.FULL; style1 <= DateFormat.SHORT; ++style1) {
@@ -736,7 +736,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
                                     + " != "
                                     + testTimeZone.getID());
                 } else {
-                    logln(
+                    logDebug(
                             locales[i]
                                     + ":\t\""
                                     + pattern
@@ -758,7 +758,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
             boolean works = false;
             try {
                 VariableField vf = new VariableField(String.valueOf(c), true);
-                logln("VariableField " + vf.toString());
+                logDebug("VariableField " + vf.toString());
                 works = true;
             } catch (Exception e) {
             }
@@ -784,7 +784,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
         if (!order1.hasSameOrderAs(order2)) {
             // Note: This test case was updated by #6806 and no longer reports
             // ordering difference as an error case.
-            logln(showOrderComparison(uLocale, style1, style2, order1, order2));
+            logDebug(showOrderComparison(uLocale, style1, style2, order1, order2));
         }
     }
 

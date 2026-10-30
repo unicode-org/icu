@@ -94,22 +94,22 @@ public abstract class CollationTestBase extends TestFmwk {
         }
 
         if (index != 0) {
-            String msg = "Didn't get back to beginning - index is ";
-            errln(msg + index);
+            StringBuilder msg = new StringBuilder();
+            msg.append("Didn't get back to beginning - index is ").append(index).append("\n");
 
             iter.reset();
-            err("next: ");
+            msg.append("next: ");
             while ((o = iter.next()) != CollationElementIterator.NULLORDER) {
                 String hexString = "0x" + Utility.hex(o) + " ";
-                err(hexString);
+                msg.append(hexString);
             }
-            errln("");
-            err("prev: ");
+            msg.append("\n");
+            msg.append("prev: ");
             while ((o = iter.previous()) != CollationElementIterator.NULLORDER) {
                 String hexString = "0x" + Utility.hex(o) + " ";
-                err(hexString);
+                msg.append(hexString);
             }
-            errln("");
+            errln(msg.toString());
         }
     }
 

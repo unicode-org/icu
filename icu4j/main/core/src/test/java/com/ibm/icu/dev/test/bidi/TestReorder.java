@@ -116,10 +116,10 @@ public class TestReorder extends BidiFmwk {
         int nTests = logicalOrder.length;
         String src, srcU16, dest = "";
 
-        logln("\nEntering TestReorder\n");
+        logDebug("\nEntering TestReorder\n");
 
         for (testNumber = 0; testNumber < nTests; testNumber++) {
-            logln("Testing L2V #1 for case " + testNumber);
+            logDebug("Testing L2V #1 for case " + testNumber);
             src = logicalOrder[testNumber];
             srcU16 = pseudoToU16(src);
             try {
@@ -156,7 +156,7 @@ public class TestReorder extends BidiFmwk {
         }
 
         for (testNumber = 0; testNumber < nTests; testNumber++) {
-            logln("Testing L2V #2 for case " + testNumber);
+            logDebug("Testing L2V #2 for case " + testNumber);
             src = logicalOrder[testNumber];
             srcU16 = pseudoToU16(src);
             try {
@@ -190,7 +190,7 @@ public class TestReorder extends BidiFmwk {
         }
 
         for (testNumber = 0; testNumber < nTests; testNumber++) {
-            logln("Testing V2L #3 for case " + testNumber);
+            logDebug("Testing V2L #3 for case " + testNumber);
             src = logicalOrder[testNumber];
             srcU16 = pseudoToU16(src);
             bidi.setInverse(true);
@@ -229,7 +229,7 @@ public class TestReorder extends BidiFmwk {
 
         /* Max Explicit level */
         for (testNumber = 0; testNumber < nTests; testNumber++) {
-            logln("Testing V2L #4 for case " + testNumber);
+            logDebug("Testing V2L #4 for case " + testNumber);
             src = logicalOrder[testNumber];
             srcU16 = pseudoToU16(src);
             byte[] levels = new byte[Bidi.MAX_EXPLICIT_LEVEL];
@@ -267,7 +267,7 @@ public class TestReorder extends BidiFmwk {
         }
 
         for (testNumber = 0; testNumber < nTests; testNumber++) {
-            logln("Testing V2L #5 for case " + testNumber);
+            logDebug("Testing V2L #5 for case " + testNumber);
             src = logicalOrder[testNumber];
             srcU16 = pseudoToU16(src);
             byte[] levels = new byte[Bidi.MAX_EXPLICIT_LEVEL];
@@ -306,6 +306,6 @@ public class TestReorder extends BidiFmwk {
                     "Bidi.LEVEL_DEFAULT_LTR");
         }
 
-        logln("\nExiting TestReorder\n");
+        logDebug("\nExiting TestReorder\n");
     }
 }

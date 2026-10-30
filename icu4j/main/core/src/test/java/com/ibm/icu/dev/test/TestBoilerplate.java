@@ -146,7 +146,7 @@ public abstract class TestBoilerplate<T> extends TestFmwk {
                 .append("HashMap - UnicodeMap\n")
                 .append(new UnicodeSet(set2).removeAll(set1).toPattern(true))
                 .append('\n');
-        here.logln(msg.toString());
+        here.logDebug(msg.toString());
         return false;
     }
 
@@ -167,7 +167,7 @@ public abstract class TestBoilerplate<T> extends TestFmwk {
         temp.removeAll(values1);
         msg.append(show(temp));
 
-        here.logln(msg.toString());
+        here.logDebug(msg.toString());
         return false;
     }
 

@@ -205,20 +205,20 @@ public class TestCompatibility extends BidiFmwk {
         if (javaVersion.startsWith("1.4.0")
                 || javaVersion.startsWith("1.4.1")
                 || javaVersion.startsWith("1.7")) {
-            logln(
+            logDebug(
                     "\nSkipping TestCompatibility.  The test case is known to fail on Java "
                             + javaVersion
                             + "\n");
             return;
         }
-        logln("\nEntering TestCompatibility\n");
+        logDebug("\nEntering TestCompatibility\n");
         /* check constant field values */
         int val;
         val = Bidi.DIRECTION_DEFAULT_LEFT_TO_RIGHT;
         val = Bidi.DIRECTION_DEFAULT_RIGHT_TO_LEFT;
         val = Bidi.DIRECTION_LEFT_TO_RIGHT;
         val = Bidi.DIRECTION_RIGHT_TO_LEFT;
-        logln("last val = " + val);
+        logDebug("last val = " + val);
 
         String[] data = {
             "",
@@ -290,7 +290,7 @@ public class TestCompatibility extends BidiFmwk {
         jbidi = new java.text.Bidi(as.getIterator());
         compareBidi(bidi, jbidi);
         String out = bidi.writeReordered(0);
-        logln("Output #1 of Bidi(AttributedCharacterIterator): " + out);
+        logDebug("Output #1 of Bidi(AttributedCharacterIterator): " + out);
 
         as = new AttributedString("HEBREW 123 english MOREHEB");
         as.addAttribute(TextAttribute.RUN_DIRECTION, TextAttribute.RUN_DIRECTION_RTL);
@@ -299,14 +299,14 @@ public class TestCompatibility extends BidiFmwk {
         jbidi = new java.text.Bidi(as.getIterator());
         compareBidi(bidi, jbidi);
         out = bidi.writeReordered(0);
-        logln("Output #2 of Bidi(AttributedCharacterIterator): " + out);
+        logDebug("Output #2 of Bidi(AttributedCharacterIterator): " + out);
 
         as = new AttributedString("HEBREW 123 english MOREHEB");
         bidi = new Bidi(as.getIterator());
         jbidi = new java.text.Bidi(as.getIterator());
         compareBidi(bidi, jbidi);
         out = bidi.writeReordered(0);
-        logln("Output #3 of Bidi(AttributedCharacterIterator): " + out);
+        logDebug("Output #3 of Bidi(AttributedCharacterIterator): " + out);
 
         char[] text = "abc==(123)==>def".toCharArray();
         bidi = new Bidi(text, 3, null, 0, 10, Bidi.DIRECTION_DEFAULT_LEFT_TO_RIGHT);
@@ -315,27 +315,27 @@ public class TestCompatibility extends BidiFmwk {
                         text, 3, null, 0, 10, java.text.Bidi.DIRECTION_DEFAULT_LEFT_TO_RIGHT);
         compareBidi(bidi, jbidi);
         out = bidi.writeReordered(0);
-        logln("Output of Bidi(abc==(123)==>def,3,null,0,10, DEFAULT_LTR): " + out);
+        logDebug("Output of Bidi(abc==(123)==>def,3,null,0,10, DEFAULT_LTR): " + out);
         bidi = new Bidi(text, 3, null, 0, 10, Bidi.DIRECTION_DEFAULT_RIGHT_TO_LEFT);
         jbidi =
                 new java.text.Bidi(
                         text, 3, null, 0, 10, java.text.Bidi.DIRECTION_DEFAULT_RIGHT_TO_LEFT);
         compareBidi(bidi, jbidi);
         out = bidi.writeReordered(0);
-        logln("Output of Bidi(abc==(123)==>def,3,null,0,10, DEFAULT_RTL): " + out);
+        logDebug("Output of Bidi(abc==(123)==>def,3,null,0,10, DEFAULT_RTL): " + out);
         byte[] levels = new byte[] {0, 0, 0, -1, -1, -1, 0, 0, 0, 0};
         bidi = new Bidi(text, 3, levels, 0, 10, Bidi.DIRECTION_LEFT_TO_RIGHT);
         jbidi = new java.text.Bidi(text, 3, levels, 0, 10, java.text.Bidi.DIRECTION_LEFT_TO_RIGHT);
         compareBidi(bidi, jbidi);
         out = bidi.writeReordered(0);
-        logln("Output of Bidi(abc==(123)==>def,3,levels,0,10, LTR): " + out);
+        logDebug("Output of Bidi(abc==(123)==>def,3,levels,0,10, LTR): " + out);
         bidi = new Bidi(text, 3, levels, 0, 10, Bidi.DIRECTION_DEFAULT_RIGHT_TO_LEFT);
         jbidi =
                 new java.text.Bidi(
                         text, 3, levels, 0, 10, java.text.Bidi.DIRECTION_DEFAULT_RIGHT_TO_LEFT);
         compareBidi(bidi, jbidi);
         out = bidi.writeReordered(0);
-        logln("Output of Bidi(abc==(123)==>def,3,levels,0,10, DEFAULT_RTL): " + out);
+        logDebug("Output of Bidi(abc==(123)==>def,3,levels,0,10, DEFAULT_RTL): " + out);
 
         /* test reorderVisually */
         byte[] myLevels = new byte[] {1, 2, 0, 1, 2, 1, 2, 0, 1, 2};
@@ -367,7 +367,7 @@ public class TestCompatibility extends BidiFmwk {
                             + "\n     jbidi: "
                             + strjbidi);
         } else {
-            logln(
+            logDebug(
                     "Correct match in reorderVisually "
                             + "\n      bidi: "
                             + strbidi
@@ -375,6 +375,6 @@ public class TestCompatibility extends BidiFmwk {
                             + strjbidi);
         }
 
-        logln("\nExiting TestCompatibility\n");
+        logDebug("\nExiting TestCompatibility\n");
     }
 }

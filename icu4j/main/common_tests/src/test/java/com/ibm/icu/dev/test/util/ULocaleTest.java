@@ -399,7 +399,7 @@ public class ULocaleTest extends CoreTestFmwk {
                         || (expValidActual.equals("ge") && validActual >= 0)
                         || (expValidActual.equals("eq") && validActual == 0);
         if (reqOK && valOK) {
-            logln("Ok: " + label + "; req=" + req + ", valid=" + valid + ", actual=" + actual);
+            logDebug("Ok: " + label + "; req=" + req + ", valid=" + valid + ", actual=" + actual);
         } else {
             errln(
                     "FAIL: "
@@ -513,7 +513,7 @@ public class ULocaleTest extends CoreTestFmwk {
             checkObject(requestedLocale, subobj, "gt", "ge");
         }
         if (reg != null) {
-            logln("Info: Registering service");
+            logDebug("Info: Registering service");
             Object key = reg.register(req, obj);
             Object objReg = svc.create(req);
             checkObject(requestedLocale, objReg, "eq", "eq");
@@ -523,7 +523,7 @@ public class ULocaleTest extends CoreTestFmwk {
                 // their metadata should be structured normally.
                 checkObject(requestedLocale, subobj, "gt", "ge");
             }
-            logln("Info: Unregistering service");
+            logDebug("Info: Unregistering service");
             if (!reg.unregister(key)) {
                 errln("FAIL: unregister failed");
             }
@@ -750,10 +750,10 @@ public class ULocaleTest extends CoreTestFmwk {
     @Test
     public void TestBasicGetters() {
         int i;
-        logln("Testing Basic Getters\n");
+        logDebug("Testing Basic Getters\n");
         for (i = 0; i < LOCALE_SIZE; i++) {
             String testLocale = (rawData2[NAME][i]);
-            logln("Testing " + testLocale + ".....\n");
+            logDebug("Testing " + testLocale + ".....\n");
 
             String lang = ULocale.getLanguage(testLocale);
             if (0 != lang.compareTo(rawData2[LANG][i])) {
@@ -902,7 +902,7 @@ public class ULocaleTest extends CoreTestFmwk {
 
         for (int row = 0; row < testData.length; row++) {
             loc = testData[row][NAME];
-            logln("Test #" + row + ": " + loc);
+            logDebug("Test #" + row + ": " + loc);
 
             uloc = new ULocale(loc);
 
@@ -945,7 +945,7 @@ public class ULocaleTest extends CoreTestFmwk {
                         buf1 = buf;
                 }
 
-                logln("#" + row + ": " + testTitles[n] + " on " + loc + ": -> [" + buf + "]");
+                logDebug("#" + row + ": " + testTitles[n] + " on " + loc + ": -> [" + buf + "]");
 
                 String expected = testData[row][n];
                 if (expected == null && n == (NAME + 2)) {
@@ -1067,7 +1067,7 @@ public class ULocaleTest extends CoreTestFmwk {
 
         for (int i = 0; i < tests.length; i++) {
             String locale = tests[i][0];
-            logln("** Testing : " + locale);
+            logDebug("** Testing : " + locale);
             String buff, buff1;
             ULocale uloc = new ULocale(locale);
 
@@ -1081,7 +1081,7 @@ public class ULocaleTest extends CoreTestFmwk {
                                 + ",\t expected "
                                 + tests[i][1]);
             } else {
-                logln("   ULocale.getISO3Language(" + locale + ")==" + buff);
+                logDebug("   ULocale.getISO3Language(" + locale + ")==" + buff);
             }
 
             buff1 = uloc.getISO3Language();
@@ -1094,7 +1094,7 @@ public class ULocaleTest extends CoreTestFmwk {
                                 + ",\t expected "
                                 + tests[i][1]);
             } else {
-                logln("   ULocale.getISO3Language(" + locale + ")==" + buff);
+                logDebug("   ULocale.getISO3Language(" + locale + ")==" + buff);
             }
 
             buff = ULocale.getLanguage(locale);
@@ -1107,7 +1107,7 @@ public class ULocaleTest extends CoreTestFmwk {
                                 + ",\t expected "
                                 + tests[i][2]);
             } else {
-                logln("   ULocale.getLanguage(" + locale + ")==" + buff);
+                logDebug("   ULocale.getLanguage(" + locale + ")==" + buff);
             }
 
             buff = ULocale.getISO3Country(locale);
@@ -1120,7 +1120,7 @@ public class ULocaleTest extends CoreTestFmwk {
                                 + ",\t expected "
                                 + tests[i][3]);
             } else {
-                logln("   ULocale.getISO3Country(" + locale + ")==" + buff);
+                logDebug("   ULocale.getISO3Country(" + locale + ")==" + buff);
             }
 
             buff1 = uloc.getISO3Country();
@@ -1133,7 +1133,7 @@ public class ULocaleTest extends CoreTestFmwk {
                                 + ",\t expected "
                                 + tests[i][3]);
             } else {
-                logln("   ULocale.getISO3Country(" + locale + ")==" + buff);
+                logDebug("   ULocale.getISO3Country(" + locale + ")==" + buff);
             }
 
             buff = ULocale.getCountry(locale);
@@ -1146,7 +1146,7 @@ public class ULocaleTest extends CoreTestFmwk {
                                 + ",\t expected "
                                 + tests[i][4]);
             } else {
-                logln("   ULocale.getCountry(" + locale + ")==" + buff);
+                logDebug("   ULocale.getCountry(" + locale + ")==" + buff);
             }
         }
 
@@ -1291,10 +1291,10 @@ public class ULocaleTest extends CoreTestFmwk {
                                     + level1
                                     + "'");
                 } else {
-                    logln("Ulocale.getName for: '" + source + "' returned: '" + level1 + "'");
+                    logDebug("Ulocale.getName for: '" + source + "' returned: '" + level1 + "'");
                 }
             } else {
-                logln("ULocale.getName skipped: '" + source + "'");
+                logDebug("ULocale.getName skipped: '" + source + "'");
             }
 
             if (level2Expected != null) {
@@ -1314,10 +1314,10 @@ public class ULocaleTest extends CoreTestFmwk {
                                     + level2
                                     + "'");
                 } else {
-                    logln("Ulocale.canonicalize for: '" + source + "' returned: '" + level2 + "'");
+                    logDebug("Ulocale.canonicalize for: '" + source + "' returned: '" + level2 + "'");
                 }
             } else {
-                logln("ULocale.canonicalize skipped: '" + source + "'");
+                logDebug("ULocale.canonicalize skipped: '" + source + "'");
             }
         }
     }
@@ -1390,7 +1390,7 @@ public class ULocaleTest extends CoreTestFmwk {
                 ULocale l = locales[i];
                 String name = l.getDisplayName();
 
-                logln(
+                logDebug(
                         l
                                 + " --> "
                                 + name
@@ -1925,12 +1925,12 @@ public class ULocaleTest extends CoreTestFmwk {
             int i, j;
             String localeID = "zh_CN";
             String name, language, script, country, variant;
-            logln("Covering APIs with signature displayXXX(String, String)");
+            logDebug("Covering APIs with signature displayXXX(String, String)");
             for (i = 0; i < LOCALE_SIZE; i++) {
                 // localeID String
                 String testLocale = (rawData2[NAME][i]);
 
-                logln("Testing " + testLocale + ".....");
+                logDebug("Testing " + testLocale + ".....");
                 name = ULocale.getDisplayName(localeID, testLocale);
                 language = ULocale.getDisplayLanguage(localeID, testLocale);
                 script = ULocale.getDisplayScriptInContext(localeID, testLocale);
@@ -1941,12 +1941,12 @@ public class ULocaleTest extends CoreTestFmwk {
                 }
             }
 
-            logln("Covering APIs with signature displayXXX(String, ULocale)\n");
+            logDebug("Covering APIs with signature displayXXX(String, ULocale)\n");
             for (j = 0; j < LOCALE_SIZE; j++) {
                 String testLocale = (rawData2[NAME][j]);
                 ULocale loc = new ULocale(testLocale);
 
-                logln("Testing " + testLocale + ".....");
+                logDebug("Testing " + testLocale + ".....");
                 name = ULocale.getDisplayName(localeID, loc);
                 language = ULocale.getDisplayLanguage(localeID, loc);
                 script = ULocale.getDisplayScriptInContext(localeID, loc);
@@ -2007,8 +2007,8 @@ public class ULocaleTest extends CoreTestFmwk {
 
         for (int i = 0; i < data.length; i++) {
             String localeID = data[i];
-            logln("");
-            logln("Testing locale " + localeID + " ...");
+            logDebug("");
+            logDebug("Testing locale " + localeID + " ...");
             ULocale loc = new ULocale(localeID);
 
             Iterator<String> it = loc.getKeywords();
@@ -2044,7 +2044,7 @@ public class ULocaleTest extends CoreTestFmwk {
                                     + s1
                                     + "\" instead");
                 } else {
-                    logln("OK: getDisplayKeyword for key: " + key + " in English got " + s1);
+                    logDebug("OK: getDisplayKeyword for key: " + key + " in English got " + s1);
                 }
 
                 // display the key in S-Chinese
@@ -2065,7 +2065,7 @@ public class ULocaleTest extends CoreTestFmwk {
                                     + s1
                                     + "\" instead");
                 } else {
-                    logln("OK: getDisplayKeyword for key: " + key + " in Chinese got " + s1);
+                    logDebug("OK: getDisplayKeyword for key: " + key + " in Chinese got " + s1);
                 }
 
                 // To verify display of Keyword values
@@ -2093,7 +2093,7 @@ public class ULocaleTest extends CoreTestFmwk {
                                     + ss1
                                     + "\" instead");
                 } else {
-                    logln("OK: getDisplayKeywordValue for key: " + key + " in English got " + ss1);
+                    logDebug("OK: getDisplayKeywordValue for key: " + key + " in English got " + ss1);
                 }
 
                 // display type in Chinese
@@ -2116,7 +2116,7 @@ public class ULocaleTest extends CoreTestFmwk {
                                     + ss1
                                     + "\" instead");
                 } else {
-                    logln("OK: getDisplayKeywordValue for key: " + key + " in Chinese got " + ss1);
+                    logDebug("OK: getDisplayKeywordValue for key: " + key + " in Chinese got " + ss1);
                 }
             }
         }
@@ -2274,7 +2274,7 @@ public class ULocaleTest extends CoreTestFmwk {
             Boolean expectBoolean = Boolean.valueOf(ACCEPT_LANGUAGE_TESTS[i][1]);
             String expectLocale = ACCEPT_LANGUAGE_TESTS[i][0];
 
-            logln("#" + i + ": expecting: " + expectLocale + " (" + expectBoolean + ")");
+            logDebug("#" + i + ": expecting: " + expectLocale + " (" + expectBoolean + ")");
 
             boolean r[] = {false};
             ULocale n = ULocale.acceptLanguage(ACCEPT_LANGUAGE_HTTP[i], r);
@@ -2283,13 +2283,13 @@ public class ULocaleTest extends CoreTestFmwk {
                 continue;
             }
             if (((n == null) && (expectLocale == null)) || (n.toString().equals(expectLocale))) {
-                logln("#" + i + ": locale: OK.");
+                logDebug("#" + i + ": locale: OK.");
             } else {
                 errln("#" + i + ": locale: expected " + expectLocale + " but got " + n);
             }
             Boolean actualBoolean = r[0];
             if (expectBoolean.equals(actualBoolean)) {
-                logln("#" + i + ": fallback: OK.");
+                logDebug("#" + i + ": fallback: OK.");
             } else {
                 errln("#" + i + ": fallback: was " + actualBoolean + " expected " + expectBoolean);
             }
@@ -2302,7 +2302,7 @@ public class ULocaleTest extends CoreTestFmwk {
             Boolean expectBoolean = Boolean.valueOf(ACCEPT_LANGUAGE_TESTS[i][1]);
             String expectLocale = ACCEPT_LANGUAGE_TESTS[i][0];
 
-            logln("#" + i + ": expecting: " + expectLocale + " (" + expectBoolean + ")");
+            logDebug("#" + i + ": expecting: " + expectLocale + " (" + expectBoolean + ")");
 
             boolean r[] = {false};
             Set<ULocale> desiredSet =
@@ -2314,13 +2314,13 @@ public class ULocaleTest extends CoreTestFmwk {
                 continue;
             }
             if (((n == null) && (expectLocale == null)) || (n.toString().equals(expectLocale))) {
-                logln("#" + i + ": locale: OK.");
+                logDebug("#" + i + ": locale: OK.");
             } else {
                 errln("#" + i + ": expected " + expectLocale + " but got " + n.toString());
             }
             Boolean actualBoolean = r[0];
             if (expectBoolean.equals(actualBoolean)) {
-                logln("#" + i + ": fallback: OK.");
+                logDebug("#" + i + ": fallback: OK.");
             } else {
                 errln("#" + i + ": fallback: was " + actualBoolean + " expected " + expectBoolean);
             }
@@ -3210,7 +3210,7 @@ public class ULocaleTest extends CoreTestFmwk {
 
         cldrVersion = LocaleData.getCLDRVersion();
 
-        logln("uloc_getCLDRVersion() returned: '" + cldrVersion + "'");
+        logDebug("uloc_getCLDRVersion() returned: '" + cldrVersion + "'");
 
         // why isn't this public for tests somewhere?
         final ClassLoader testLoader = ICUResourceBundleTest.class.getClassLoader();
@@ -3221,19 +3221,19 @@ public class ULocaleTest extends CoreTestFmwk {
         testExpect = VersionInfo.getInstance(bundle.getString("ExpectCLDRVersionAtLeast"));
         testCurrent = VersionInfo.getInstance(bundle.getString("CurrentCLDRVersion"));
 
-        logln("(data) ExpectCLDRVersionAtLeast { " + testExpect + "");
+        logDebug("(data) ExpectCLDRVersionAtLeast { " + testExpect + "");
         if (cldrVersion.compareTo(testExpect) < 0) {
             errln("CLDR version is too old, expect at least " + testExpect + ".");
         }
 
         int r = cldrVersion.compareTo(testCurrent);
         if (r < 0) {
-            logln(
+            logDebug(
                     "CLDR version is behind 'current' (for testdata/root.txt) "
                             + testCurrent
                             + ". Some things may fail.\n");
         } else if (r > 0) {
-            logln(
+            logDebug(
                     "CLDR version is ahead of 'current' (for testdata/root.txt) "
                             + testCurrent
                             + ". Some things may fail.\n");

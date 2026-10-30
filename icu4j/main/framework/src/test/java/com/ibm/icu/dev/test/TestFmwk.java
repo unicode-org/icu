@@ -115,39 +115,7 @@ public abstract class TestFmwk implements ITestLog {
     // --------------------------------------------------
 
     @Override
-    public void logln(String message) {
-        logger.debug(message);
-    }
-
-    @Override
-    public void warnln(String message) {
-        logger.warn(message);
-        Assert.fail(message);
-    }
-
-    @Override
     public void errln(String message) {
-        logger.error(message);
-        Assert.fail(message);
-    }
-
-    // --------------------------------------------------
-    // Obsolete logging methods
-    // --------------------------------------------------
-
-    @Override
-    public void log(String message) {
-        logger.debug(message);
-    }
-
-    @Override
-    public void warn(String message) {
-        logger.warn(message);
-        Assert.fail(message);
-    }
-
-    @Override
-    public void err(String message) {
         logger.error(message);
         Assert.fail(message);
     }
@@ -543,12 +511,12 @@ public abstract class TestFmwk implements ITestLog {
                 if ((seenMask & bit) == 0) {
                     if (s.equals(expected[j])) {
                         seenMask |= bit;
-                        logln("Ok: \"" + s + "\" seen");
+                        logDebug("Ok: \"" + s + "\" seen");
                     }
                 }
             }
         }
-        logln(msg + " = [" + buf + "] (" + i + ")");
+        logDebug(msg + " = [" + buf + "] (" + i + ")");
         // did we see all expected strings?
         if (((1 << explen) - 1) != seenMask) {
             for (int j = 0, bit = 1; j < expected.length; ++j, bit <<= 1) {
@@ -693,7 +661,7 @@ public abstract class TestFmwk implements ITestLog {
             }
             relation = relation == null ? ", got " : " " + relation + " ";
             if (result) {
-                logln("OK " + message + ": " + (flip ? expected + relation + actual : expected));
+                logDebug("OK " + message + ": " + (flip ? expected + relation + actual : expected));
             } else {
                 // assert must assume errors are true errors and not just warnings
                 // so cannot warnln here

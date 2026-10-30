@@ -25,8 +25,8 @@ public class TestLocaleNamePackaging extends CoreTestFmwk {
     public TestLocaleNamePackaging() {}
 
     public boolean validate() {
-        logln("language data: " + LocaleDisplayNamesImpl.haveData(LANG));
-        logln("  region data: " + LocaleDisplayNamesImpl.haveData(REGION));
+        logDebug("language data: " + LocaleDisplayNamesImpl.haveData(LANG));
+        logDebug("  region data: " + LocaleDisplayNamesImpl.haveData(REGION));
         return true;
     }
 

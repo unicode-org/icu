@@ -77,7 +77,7 @@ public abstract class DataDrivenTestHelper {
             String comment = comments.get(i);
             if (arguments.isEmpty()) {
                 if (!comment.isEmpty()) {
-                    framework.logln(comment);
+                    framework.logDebug(comment);
                 }
                 continue;
             } else if (arguments.equals(DEBUG_LINE)) {

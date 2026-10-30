@@ -134,7 +134,7 @@ public abstract class TransliteratorTestBase extends TestFmwk {
 
     boolean expectAux(String tag, String[] results, boolean pass, String expectedResult) {
         if (pass) {
-            logln("(" + tag + ")");
+            logDebug("(" + tag + ")");
         } else {
             errln("FAIL: (" + tag + ")");
         }
@@ -151,7 +151,7 @@ public abstract class TransliteratorTestBase extends TestFmwk {
             }
             String msg = "    " + label + results[i];
             if (pass) {
-                logln(msg);
+                logDebug(msg);
             } else {
                 errln(msg);
             }
@@ -195,7 +195,7 @@ public abstract class TransliteratorTestBase extends TestFmwk {
         }
         if (!empirical.containsAll(actual)) {
             UnicodeSet extra = new UnicodeSet(actual).removeAll(empirical);
-            logln(
+            logDebug(
                     "WARNING: "
                             + message
                             + " \tgetXSet > empirical ("
@@ -205,7 +205,7 @@ public abstract class TransliteratorTestBase extends TestFmwk {
             haveError = true;
         }
         if (!haveError) {
-            logln("OK " + message + ' ' + toPattern(empirical));
+            logDebug("OK " + message + ' ' + toPattern(empirical));
         }
     }
 

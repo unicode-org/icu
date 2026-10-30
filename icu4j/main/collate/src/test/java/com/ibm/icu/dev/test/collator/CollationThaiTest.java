@@ -80,7 +80,7 @@ public class CollationThaiTest extends CollationTestBase {
         try {
             coll = getThaiCollator();
         } catch (Exception e) {
-            warnln("could not construct Thai collator");
+            errln("could not construct Thai collator");
             return;
         }
         compareArray(coll, TESTS);
@@ -122,7 +122,7 @@ public class CollationThaiTest extends CollationTestBase {
         try {
             coll = getThaiCollator();
         } catch (Exception e) {
-            warnln("could not construct Thai collator");
+            errln("could not construct Thai collator");
             return;
         }
 
@@ -151,7 +151,7 @@ public class CollationThaiTest extends CollationTestBase {
                 // Show the first 8 words being compared, so we can see what's happening
                 ++wordCount;
                 if (wordCount <= 8) {
-                    logln("Word " + wordCount + ": " + word);
+                    logDebug("Word " + wordCount + ": " + word);
                 }
 
                 if (lastWord.length() > 0) {
@@ -206,7 +206,7 @@ public class CollationThaiTest extends CollationTestBase {
             errln("Summary: " + failed + " of " + (line - 1) + " comparisons failed");
         }
 
-        logln("Words checked: " + wordCount);
+        logDebug("Words checked: " + wordCount);
     }
 
     @Test
@@ -226,7 +226,7 @@ public class CollationThaiTest extends CollationTestBase {
             collator = getThaiCollator();
             comparator = new StrCmp();
         } catch (Exception e) {
-            warnln("could not construct Thai collator");
+            errln("could not construct Thai collator");
             return;
         }
 
@@ -289,7 +289,7 @@ public class CollationThaiTest extends CollationTestBase {
         try {
             collator = getThaiCollator();
         } catch (Exception e) {
-            warnln("could not construct Thai collator");
+            errln("could not construct Thai collator");
             return;
         }
         compareArray(collator, tests);

@@ -64,7 +64,7 @@ public class PersonNameConsistencyTest extends CoreTestFmwk {
                     .forEach(
                             filename -> {
                                 if (!filename.endsWith(".txt")) {
-                                    logln("Skipping " + filename + "...");
+                                    logDebug("Skipping " + filename + "...");
                                     return;
                                 }
                                 tests.add(filename);
@@ -96,7 +96,7 @@ public class PersonNameConsistencyTest extends CoreTestFmwk {
                     logKnownIssue(
                             knownIssue, "Exception thrown on " + filename + ": " + e.toString());
                 } else if (RUN_ALL_TESTS) {
-                    logln("Exception thrown on " + filename + ": " + e.toString());
+                    logDebug("Exception thrown on " + filename + ": " + e.toString());
                 } else {
                     throw e;
                 }
@@ -108,7 +108,7 @@ public class PersonNameConsistencyTest extends CoreTestFmwk {
                             knownIssue,
                             "Failure in " + filename + ": Found " + errors + " errors.");
                 } else if (RUN_ALL_TESTS) {
-                    logln("Failure in " + filename + ": Found " + errors + " errors.");
+                    logDebug("Failure in " + filename + ": Found " + errors + " errors.");
                 } else {
                     errln("Failure in " + filename + ": Found " + errors + " errors.");
                 }
@@ -276,7 +276,7 @@ public class PersonNameConsistencyTest extends CoreTestFmwk {
         }
 
         private void reportError(String error, String file, int lineNumber) {
-            fmwk.logln(file + ":" + lineNumber + ": " + error);
+            fmwk.logDebug(file + ":" + lineNumber + ": " + error);
             if (VERBOSE_OUTPUT) {
                 System.out.println(file + ":" + lineNumber + ": " + error);
             }
@@ -284,7 +284,7 @@ public class PersonNameConsistencyTest extends CoreTestFmwk {
         }
 
         private void reportError(String error, int lineNumber) {
-            fmwk.logln("    " + error + " at line " + lineNumber);
+            fmwk.logDebug("    " + error + " at line " + lineNumber);
             if (VERBOSE_OUTPUT) {
                 System.out.println("    " + error + " at line " + lineNumber);
             }

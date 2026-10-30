@@ -34,7 +34,7 @@ public class CollationChineseTest extends CollationTestBase {
         try {
             collator = (RuleBasedCollator) Collator.getInstance(new Locale("zh", "", "PINYIN"));
         } catch (Exception e) {
-            warnln("ERROR: in creation of collator of zh__PINYIN locale");
+            errln("ERROR: in creation of collator of zh__PINYIN locale");
             return;
         }
         for (int i = 0; i < seq.length - 1; i++) {

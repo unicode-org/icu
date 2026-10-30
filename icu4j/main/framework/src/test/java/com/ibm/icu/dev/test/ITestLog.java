@@ -50,26 +50,9 @@ public interface ITestLog {
     void logError(String message);
 
     // --------------------------------------------------
-    // Traditional test logging methods. These are kept for
+    // Traditional test logging methods. This is kept for
     // backward compatibility support.
     //
-
-    /**
-     * Emits a debug log line. This is equivalent to {@link #logDebug(String)}.
-     *
-     * @param message a log message
-     */
-    void logln(String message);
-
-    /**
-     * Emits a warn line. This methods will throw an AssertionError after the message is emitted.
-     *
-     * @param message a log message
-     * @deprecated Use {@link #errln(String)} instead. The distinction between warning and error is
-     *     obsolete with JUnit.
-     */
-    @Deprecated
-    void warnln(String message);
 
     /**
      * Emits an err line. This methods will through an AssertionError after the message is emitted.
@@ -77,38 +60,4 @@ public interface ITestLog {
      * @param message a log message
      */
     void errln(String message);
-
-    // --------------------------------------------------
-    // Methods previously used for writing a text to log without
-    // new line codes. The latest implementation is not designed
-    // for writing out partial messages. The use of these methods
-    // should be migrated to the new logging methods by composing
-    // a single message text.
-
-    /**
-     * Emits an info text. This is equivalent to {@link #logln(String)}.
-     *
-     * @param message a log text
-     * @deprecated Use {@link #logln(String)} instead.
-     */
-    @Deprecated
-    void log(String message);
-
-    /**
-     * Emits a warn text. This is equivalent to {@link #warnln(String)}.
-     *
-     * @param message a warn text
-     * @deprecated Use {@link #errln(String)} instead.
-     */
-    @Deprecated
-    void warn(String message);
-
-    /**
-     * Emits an err text. This is equivalent to {@link #errln(String)}.
-     *
-     * @param message an error text
-     * @deprecated Use {@link #errln(String)} instead.
-     */
-    @Deprecated
-    void err(String message);
 }

@@ -1123,7 +1123,7 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
         // Each thread/set of rules gets a separate RBBIMonkeyImpl object.
 
         for (String testName : tests) {
-            logln(String.format("beginning testing of %s", testName));
+            logDebug(String.format("beginning testing of %s", testName));
 
             RBBIMonkeyImpl test = new RBBIMonkeyImpl(this);
 

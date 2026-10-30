@@ -196,7 +196,7 @@ public class TransliteratorDisorderedMarksTest extends TransliteratorTestBase {
         int count = 0; // for debugging
         for (String s : toTest) {
             if (s.equals(test)) {
-                logln(test);
+                logDebug(test);
             }
             String t = trans.transform(s);
             if (!s.equals(t)) {

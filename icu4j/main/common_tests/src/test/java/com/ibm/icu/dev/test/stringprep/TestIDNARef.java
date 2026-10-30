@@ -47,9 +47,9 @@ public class TestIDNARef extends CoreTestFmwk {
 
             }
         } catch (java.lang.ExceptionInInitializerError ex) {
-            warnln("Could not load NamePrepTransform data");
+            errln("Could not load NamePrepTransform data");
         } catch (java.lang.NoClassDefFoundError ex) {
-            warnln("Could not load NamePrepTransform data");
+            errln("Could not load NamePrepTransform data");
         }
     }
 
@@ -75,9 +75,9 @@ public class TestIDNARef extends CoreTestFmwk {
 
             }
         } catch (java.lang.ExceptionInInitializerError ex) {
-            warnln("Could not load NamePrepTransform data");
+            errln("Could not load NamePrepTransform data");
         } catch (java.lang.NoClassDefFoundError ex) {
-            warnln("Could not load NamePrepTransform data");
+            errln("Could not load NamePrepTransform data");
         }
     }
 
@@ -130,9 +130,9 @@ public class TestIDNARef extends CoreTestFmwk {
                         null);
             }
         } catch (java.lang.ExceptionInInitializerError ex) {
-            warnln("Could not load NamePrepTransform data");
+            errln("Could not load NamePrepTransform data");
         } catch (java.lang.NoClassDefFoundError ex) {
-            warnln("Could not load NamePrepTransform data");
+            errln("Could not load NamePrepTransform data");
         }
     }
 
@@ -174,9 +174,9 @@ public class TestIDNARef extends CoreTestFmwk {
                         null);
             }
         } catch (java.lang.ExceptionInInitializerError ex) {
-            warnln("Could not load NamePrepTransform data");
+            errln("Could not load NamePrepTransform data");
         } catch (java.lang.NoClassDefFoundError ex) {
-            warnln("Could not load NamePrepTransform data");
+            errln("Could not load NamePrepTransform data");
         }
     }
 
@@ -184,7 +184,7 @@ public class TestIDNARef extends CoreTestFmwk {
             throws Exception {
 
         if (!IDNAReference.isReady()) {
-            logln(
+            logDebug(
                     "Transliterator is not available on this environment.  Skipping doTestToUnicode.");
             return;
         }
@@ -271,7 +271,7 @@ public class TestIDNARef extends CoreTestFmwk {
             String src, String expected, int options, Object expectedException) throws Exception {
 
         if (!IDNAReference.isReady()) {
-            logln(
+            logDebug(
                     "Transliterator is not available on this environment.  Skipping doTestIDNToUnicode.");
             return;
         }
@@ -357,7 +357,7 @@ public class TestIDNARef extends CoreTestFmwk {
             throws Exception {
 
         if (!IDNAReference.isReady()) {
-            logln("Transliterator is not available on this environment.  Skipping doTestToASCII.");
+            logDebug("Transliterator is not available on this environment.  Skipping doTestToASCII.");
             return;
         }
 
@@ -459,7 +459,7 @@ public class TestIDNARef extends CoreTestFmwk {
             String src, String expected, int options, Object expectedException) throws Exception {
 
         if (!IDNAReference.isReady()) {
-            logln(
+            logDebug(
                     "Transliterator is not available on this environment.  Skipping doTestIDNToASCII.");
             return;
         }
@@ -566,9 +566,9 @@ public class TestIDNARef extends CoreTestFmwk {
                 // doTestToUnicode(testCase.input,testCase.output,IDNAReference.DEFAULT,testCase.expected);
             }
         } catch (java.lang.ExceptionInInitializerError ex) {
-            warnln("Could not load NamePrepTransform data");
+            errln("Could not load NamePrepTransform data");
         } catch (java.lang.NoClassDefFoundError ex) {
-            warnln("Could not load NamePrepTransform data");
+            errln("Could not load NamePrepTransform data");
         }
     }
 
@@ -577,7 +577,7 @@ public class TestIDNARef extends CoreTestFmwk {
         try {
             NamePrepTransform namePrep = NamePrepTransform.getInstance();
             if (!namePrep.isReady()) {
-                logln("Transliterator is not available on this environment.");
+                logDebug("Transliterator is not available on this environment.");
                 return;
             }
             for (int i = 0; i < TestData.conformanceTestCases.length; i++) {
@@ -636,9 +636,9 @@ public class TestIDNARef extends CoreTestFmwk {
                 }
             }
         } catch (java.lang.ExceptionInInitializerError e) {
-            warnln("Could not load NamePrepTransformData");
+            errln("Could not load NamePrepTransformData");
         } catch (java.lang.NoClassDefFoundError ex) {
-            warnln("Could not load NamePrepTransform data");
+            errln("Could not load NamePrepTransform data");
         }
     }
 
@@ -714,16 +714,16 @@ public class TestIDNARef extends CoreTestFmwk {
                 }
             }
         } catch (java.lang.ExceptionInInitializerError ex) {
-            warnln("Could not load NamePrepTransform data");
+            errln("Could not load NamePrepTransform data");
         } catch (java.lang.NoClassDefFoundError ex) {
-            warnln("Could not load NamePrepTransform data");
+            errln("Could not load NamePrepTransform data");
         }
     }
 
     private void doTestCompare(String s1, String s2, boolean isEqual) {
 
         if (!IDNAReference.isReady()) {
-            logln("Transliterator is not available on this environment.  Skipping doTestCompare.");
+            logDebug("Transliterator is not available on this environment.  Skipping doTestCompare.");
             return;
         }
 
@@ -851,9 +851,9 @@ public class TestIDNARef extends CoreTestFmwk {
                 }
             }
         } catch (java.lang.ExceptionInInitializerError ex) {
-            warnln("Could not load NamePrepTransform data");
+            errln("Could not load NamePrepTransform data");
         } catch (java.lang.NoClassDefFoundError ex) {
-            warnln("Could not load NamePrepTransform data");
+            errln("Could not load NamePrepTransform data");
         }
     }
 
@@ -862,7 +862,7 @@ public class TestIDNARef extends CoreTestFmwk {
     private void doTestChainingToASCII(String source) throws Exception {
 
         if (!IDNAReference.isReady()) {
-            logln(
+            logDebug(
                     "Transliterator is not available on this environment.  Skipping doTestChainingToASCII.");
             return;
         }
@@ -895,7 +895,7 @@ public class TestIDNARef extends CoreTestFmwk {
     public void doTestChainingToUnicode(String source) throws Exception {
 
         if (!IDNAReference.isReady()) {
-            logln(
+            logDebug(
                     "Transliterator is not available on this environment.  Skipping doTestChainingToUnicode.");
             return;
         }
@@ -933,9 +933,9 @@ public class TestIDNARef extends CoreTestFmwk {
                 doTestChainingToUnicode(TestData.asciiIn[i]);
             }
         } catch (java.lang.ExceptionInInitializerError ex) {
-            warnln("Could not load NamePrepTransform data");
+            errln("Could not load NamePrepTransform data");
         } catch (java.lang.NoClassDefFoundError ex) {
-            warnln("Could not load NamePrepTransform data");
+            errln("Could not load NamePrepTransform data");
         }
     }
 
@@ -989,9 +989,9 @@ public class TestIDNARef extends CoreTestFmwk {
                 }
             }
         } catch (java.lang.ExceptionInInitializerError ex) {
-            warnln("Could not load NamePrepTransform data");
+            errln("Could not load NamePrepTransform data");
         } catch (java.lang.NoClassDefFoundError ex) {
-            warnln("Could not load NamePrepTransform data");
+            errln("Could not load NamePrepTransform data");
         }
     }
 }

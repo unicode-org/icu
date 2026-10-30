@@ -69,12 +69,12 @@ public class CollationMiscTest extends CollationTestBase {
     public void TestComposeDecompose() {
         Tester t[] = new Tester[0x30000];
         t[0] = new Tester();
-        logln("Testing UCA extensively\n");
+        logDebug("Testing UCA extensively\n");
         RuleBasedCollator coll;
         try {
             coll = (RuleBasedCollator) Collator.getInstance(Locale.ENGLISH);
         } catch (Exception e) {
-            warnln("Error opening collator\n");
+            errln("Error opening collator\n");
             return;
         }
 
@@ -108,11 +108,11 @@ public class CollationMiscTest extends CollationTestBase {
             }
         }
 
-        logln("Testing locales, number of cases = " + noCases);
+        logDebug("Testing locales, number of cases = " + noCases);
         Locale loc[] = Collator.getAvailableLocales();
         for (int i = 0; i < loc.length; i++) {
             if (hasCollationElements(loc[i])) {
-                logln("Testing locale " + loc[i].getDisplayName());
+                logDebug("Testing locale " + loc[i].getDisplayName());
                 coll = (RuleBasedCollator) Collator.getInstance(loc[i]);
                 coll.setStrength(Collator.IDENTICAL);
 
@@ -243,7 +243,7 @@ public class CollationMiscTest extends CollationTestBase {
         };
 
         for (int i = 0; i < rules.length; i++) {
-            logln(String.format("rules[%d] = \"%s\"", i, rules[i]));
+            logDebug(String.format("rules[%d] = \"%s\"", i, rules[i]));
             genericRulesStarter(rules[i], data[i]);
         }
     }
@@ -260,7 +260,7 @@ public class CollationMiscTest extends CollationTestBase {
             // logln("Rules starter for " + rules);
             genericOrderingTestWithResult(coll, s, result);
         } catch (Exception e) {
-            warnln("Unable to open collator with rules " + rules + ": " + e);
+            errln("Unable to open collator with rules " + rules + ": " + e);
         }
     }
 
@@ -272,7 +272,7 @@ public class CollationMiscTest extends CollationTestBase {
             genericOptionsSetter(coll, atts, attVals);
             genericOrderingTestWithResult(coll, s, result);
         } catch (Exception e) {
-            warnln("Unable to open collator with rules " + rules);
+            errln("Unable to open collator with rules " + rules);
         }
     }
 
@@ -387,9 +387,9 @@ public class CollationMiscTest extends CollationTestBase {
         String string = rule1;
         try {
             RuleBasedCollator coll = new RuleBasedCollator(string);
-            logln("rule:" + coll.getRules());
+            logDebug("rule:" + coll.getRules());
         } catch (Exception e) {
-            warnln("Error open RuleBasedCollator rule = " + string);
+            errln("Error open RuleBasedCollator rule = " + string);
         }
     }
 
@@ -556,7 +556,7 @@ public class CollationMiscTest extends CollationTestBase {
             coll = (RuleBasedCollator) Collator.getInstance(locale);
 
         } catch (Exception e) {
-            warnln("Unable to open collator for locale " + locale);
+            errln("Unable to open collator for locale " + locale);
             return;
         }
         // logln("Locale starter for " + locale);
@@ -594,7 +594,7 @@ public class CollationMiscTest extends CollationTestBase {
         try {
             coll = (RuleBasedCollator) Collator.getInstance(locale);
         } catch (Exception e) {
-            warnln("Unable to open collator for locale " + locale);
+            errln("Unable to open collator for locale " + locale);
             return;
         }
         // logln("Locale starter for " +locale);
@@ -654,7 +654,7 @@ public class CollationMiscTest extends CollationTestBase {
         try {
             coll = Collator.getInstance(new Locale("en", "US"));
         } catch (Exception e) {
-            warnln("Unable to open collator");
+            errln("Unable to open collator");
             return;
         }
         // logln("Test non characters");
@@ -712,7 +712,7 @@ public class CollationMiscTest extends CollationTestBase {
         Collator coll = Collator.getInstance();
         coll.setStrength(Collator.IDENTICAL);
         CollationKey key = coll.getCollationKey(test);
-        logln("source:" + key.getSourceString());
+        logDebug("source:" + key.getSourceString());
     }
 
     @Test
@@ -763,7 +763,7 @@ public class CollationMiscTest extends CollationTestBase {
         try {
             myCollation = Collator.getInstance(new Locale("en", "US"));
         } catch (Exception e) {
-            warnln("ERROR: in creation of rule based collator ");
+            errln("ERROR: in creation of rule based collator ");
             return;
         }
         // logln("Testing different case settings");
@@ -795,7 +795,7 @@ public class CollationMiscTest extends CollationTestBase {
         try {
             myCollation = new RuleBasedCollator(gRules);
         } catch (Exception e) {
-            warnln("ERROR: in creation of rule based collator");
+            errln("ERROR: in creation of rule based collator");
             return;
         }
         // logln("Testing different case settings with custom rules");
@@ -850,7 +850,7 @@ public class CollationMiscTest extends CollationTestBase {
         try {
             coll = new RuleBasedCollator(temp);
         } catch (Exception e) {
-            warnln("fail to create RuleBasedCollator");
+            errln("fail to create RuleBasedCollator");
             return;
         }
 
@@ -867,7 +867,7 @@ public class CollationMiscTest extends CollationTestBase {
         try {
             coll = new RuleBasedCollator(temp);
         } catch (Exception e) {
-            warnln("fail to create RuleBasedCollator");
+            errln("fail to create RuleBasedCollator");
             return;
         }
 
@@ -965,7 +965,7 @@ public class CollationMiscTest extends CollationTestBase {
         try {
             myCollation = Collator.getInstance(new Locale("en", "US"));
         } catch (Exception e) {
-            warnln("ERROR: in creation of rule based collator");
+            errln("ERROR: in creation of rule based collator");
             return;
         }
         // logln("Testing some A letters, for some reason");
@@ -993,7 +993,7 @@ public class CollationMiscTest extends CollationTestBase {
         try {
             coll = Collator.getInstance(new Locale("cs", ""));
         } catch (Exception e) {
-            warnln("Cannot create Collator");
+            errln("Cannot create Collator");
             return;
         }
         int size = chTest.length;
@@ -1040,7 +1040,7 @@ public class CollationMiscTest extends CollationTestBase {
         try {
             coll = Collator.getInstance();
         } catch (Exception e) {
-            warnln("Can't create collator");
+            errln("Can't create collator");
             return;
         }
 
@@ -1055,9 +1055,9 @@ public class CollationMiscTest extends CollationTestBase {
         String rulez = "";
         try {
             RuleBasedCollator coll = new RuleBasedCollator(rulez);
-            logln("rule:" + coll.getRules());
+            logDebug("rule:" + coll.getRules());
         } catch (Exception e) {
-            warnln(e.getMessage());
+            errln(e.getMessage());
         }
     }
 
@@ -1104,7 +1104,7 @@ public class CollationMiscTest extends CollationTestBase {
             try {
                 rbc = new RuleBasedCollator(rule[i]);
             } catch (Exception e) {
-                warnln(e.getMessage());
+                errln(e.getMessage());
                 continue;
             }
             iter1 = rbc.getCollationElementIterator("CH");
@@ -1177,7 +1177,7 @@ public class CollationMiscTest extends CollationTestBase {
         try {
             coll = new RuleBasedCollator(rlz);
         } catch (Exception e) {
-            warnln("Unable to open collator with rules" + rules);
+            errln("Unable to open collator with rules" + rules);
             return;
         }
         // logln("Using start of korean rules\n");
@@ -1199,7 +1199,7 @@ public class CollationMiscTest extends CollationTestBase {
             try {
                 coll = Collator.getInstance(new Locale("en", "US"));
             } catch (Exception e) {
-                warnln("Cannot get default instance!");
+                errln("Cannot get default instance!");
                 return;
             }
             char baseA = 0x41;
@@ -1376,7 +1376,7 @@ public class CollationMiscTest extends CollationTestBase {
             try {
                 coll = new RuleBasedCollator(rule);
             } catch (Exception e) {
-                warnln("Collator creation failed " + testrules[i]);
+                errln("Collator creation failed " + testrules[i]);
                 return;
             }
             try {
@@ -1494,7 +1494,7 @@ public class CollationMiscTest extends CollationTestBase {
             try {
                 coll = new RuleBasedCollator(rule);
             } catch (Exception e) {
-                warnln("Collator creation failed " + testrules[i]);
+                errln("Collator creation failed " + testrules[i]);
                 return;
             }
 
@@ -1513,7 +1513,7 @@ public class CollationMiscTest extends CollationTestBase {
         try {
             coll = new RuleBasedCollator(rules);
         } catch (Exception e) {
-            warnln("Collator creation failed " + rules);
+            errln("Collator creation failed " + rules);
             return;
         }
         doTest(this, (RuleBasedCollator) coll, src, tgt, 1);
@@ -1567,7 +1567,7 @@ public class CollationMiscTest extends CollationTestBase {
                 }
                 prevrule = rule;
             } catch (Exception e) {
-                warnln("Error retrieving resource bundle for testing: " + e.toString());
+                errln("Error retrieving resource bundle for testing: " + e.toString());
             }
         }
     }
@@ -1597,7 +1597,7 @@ public class CollationMiscTest extends CollationTestBase {
             coll.setStrength(Collator.IDENTICAL);
             doTest(this, coll, strA, strB, 1);
         } catch (Exception e) {
-            warnln(e.getMessage());
+            errln(e.getMessage());
         }
     }
 
@@ -1699,16 +1699,16 @@ public class CollationMiscTest extends CollationTestBase {
                 coll.setVariableTop("");
                 errln("Empty string should throw an IllegalArgumentException");
             } catch (IllegalArgumentException e) {
-                logln("PASS: Empty string failed as expected");
+                logDebug("PASS: Empty string failed as expected");
             }
             try {
                 coll.setVariableTop(null);
                 errln("Null string should throw an IllegalArgumentException");
             } catch (IllegalArgumentException e) {
-                logln("PASS: null string failed as expected");
+                logDebug("PASS: null string failed as expected");
             }
         } catch (Exception e) {
-            warnln("Error creating RuleBasedCollator");
+            errln("Error creating RuleBasedCollator");
         }
     }
 
@@ -1726,12 +1726,12 @@ public class CollationMiscTest extends CollationTestBase {
         String zero = "0"; /* digit */
 
         varTopOriginal = coll.getVariableTop();
-        logln(String.format("coll.getVariableTop(root) -> %08x", varTopOriginal));
+        logDebug(String.format("coll.getVariableTop(root) -> %08x", varTopOriginal));
         ((RuleBasedCollator) coll).setAlternateHandlingShifted(true);
 
         varTop1 = coll.setVariableTop(space);
         varTop2 = coll.getVariableTop();
-        logln(String.format("coll.setVariableTop(space) -> %08x", varTop1));
+        logDebug(String.format("coll.setVariableTop(space) -> %08x", varTop1));
         if (varTop1 != varTop2
                 || !coll.equals(empty, space)
                 || coll.equals(empty, dot)
@@ -1744,7 +1744,7 @@ public class CollationMiscTest extends CollationTestBase {
 
         varTop1 = coll.setVariableTop(dot);
         varTop2 = coll.getVariableTop();
-        logln(String.format("coll.setVariableTop(dot) -> %08x", varTop1));
+        logDebug(String.format("coll.setVariableTop(dot) -> %08x", varTop1));
         if (varTop1 != varTop2
                 || !coll.equals(empty, space)
                 || !coll.equals(empty, dot)
@@ -1757,7 +1757,7 @@ public class CollationMiscTest extends CollationTestBase {
 
         varTop1 = coll.setVariableTop(degree);
         varTop2 = coll.getVariableTop();
-        logln(String.format("coll.setVariableTop(degree) -> %08x", varTop1));
+        logDebug(String.format("coll.setVariableTop(degree) -> %08x", varTop1));
         if (varTop1 != varTop2
                 || !coll.equals(empty, space)
                 || !coll.equals(empty, dot)
@@ -1770,7 +1770,7 @@ public class CollationMiscTest extends CollationTestBase {
 
         varTop1 = coll.setVariableTop(dollar);
         varTop2 = coll.getVariableTop();
-        logln(String.format("coll.setVariableTop(dollar) -> %08x", varTop1));
+        logDebug(String.format("coll.setVariableTop(dollar) -> %08x", varTop1));
         if (varTop1 != varTop2
                 || !coll.equals(empty, space)
                 || !coll.equals(empty, dot)
@@ -1781,14 +1781,14 @@ public class CollationMiscTest extends CollationTestBase {
             errln("coll.setVariableTop(dollar) did not work");
         }
 
-        logln("Testing setting variable top to contractions");
+        logDebug("Testing setting variable top to contractions");
         try {
             coll.setVariableTop("@P");
             errln("Invalid contraction succeeded in setting variable top!");
         } catch (Exception expected) {
         }
 
-        logln("Test restoring variable top");
+        logDebug("Test restoring variable top");
         coll.setVariableTop(varTopOriginal);
         if (varTopOriginal != coll.getVariableTop()) {
             errln("Couldn't restore old variable top");
@@ -1810,12 +1810,12 @@ public class CollationMiscTest extends CollationTestBase {
         Collator coll = Collator.getInstance(ULocale.ROOT);
 
         oldMax = coll.getMaxVariable();
-        logln(String.format("coll.getMaxVariable(root) -> %04x", oldMax));
+        logDebug(String.format("coll.getMaxVariable(root) -> %04x", oldMax));
         ((RuleBasedCollator) coll).setAlternateHandlingShifted(true);
 
         coll.setMaxVariable(Collator.ReorderCodes.SPACE);
         max = coll.getMaxVariable();
-        logln(String.format("coll.setMaxVariable(space) -> %04x", max));
+        logDebug(String.format("coll.setMaxVariable(space) -> %04x", max));
         if (max != Collator.ReorderCodes.SPACE
                 || !coll.equals(empty, space)
                 || coll.equals(empty, dot)
@@ -1828,7 +1828,7 @@ public class CollationMiscTest extends CollationTestBase {
 
         coll.setMaxVariable(Collator.ReorderCodes.PUNCTUATION);
         max = coll.getMaxVariable();
-        logln(String.format("coll.setMaxVariable(punctuation) -> %04x", max));
+        logDebug(String.format("coll.setMaxVariable(punctuation) -> %04x", max));
         if (max != Collator.ReorderCodes.PUNCTUATION
                 || !coll.equals(empty, space)
                 || !coll.equals(empty, dot)
@@ -1841,7 +1841,7 @@ public class CollationMiscTest extends CollationTestBase {
 
         coll.setMaxVariable(Collator.ReorderCodes.SYMBOL);
         max = coll.getMaxVariable();
-        logln(String.format("coll.setMaxVariable(symbol) -> %04x", max));
+        logDebug(String.format("coll.setMaxVariable(symbol) -> %04x", max));
         if (max != Collator.ReorderCodes.SYMBOL
                 || !coll.equals(empty, space)
                 || !coll.equals(empty, dot)
@@ -1854,7 +1854,7 @@ public class CollationMiscTest extends CollationTestBase {
 
         coll.setMaxVariable(Collator.ReorderCodes.CURRENCY);
         max = coll.getMaxVariable();
-        logln(String.format("coll.setMaxVariable(currency) -> %04x", max));
+        logDebug(String.format("coll.setMaxVariable(currency) -> %04x", max));
         if (max != Collator.ReorderCodes.CURRENCY
                 || !coll.equals(empty, space)
                 || !coll.equals(empty, dot)
@@ -1865,7 +1865,7 @@ public class CollationMiscTest extends CollationTestBase {
             errln("coll.setMaxVariable(currency) did not work");
         }
 
-        logln("Test restoring maxVariable");
+        logDebug("Test restoring maxVariable");
         coll.setMaxVariable(oldMax);
         if (oldMax != coll.getMaxVariable()) {
             errln("Couldn't restore old maxVariable");
@@ -1888,7 +1888,7 @@ public class CollationMiscTest extends CollationTestBase {
             }
             coll = new RuleBasedCollator(rule);
         } catch (Exception e) {
-            warnln(e.getMessage());
+            errln(e.getMessage());
         }
     }
 
@@ -1980,7 +1980,7 @@ public class CollationMiscTest extends CollationTestBase {
         // cover setNumericCollationDefault, getNumericCollation
         assertTrue("The Numeric Collation setting is on", coll.getNumericCollation());
         coll.setNumericCollationDefault();
-        logln("After set Numeric to default, the setting is: " + coll.getNumericCollation());
+        logDebug("After set Numeric to default, the setting is: " + coll.getNumericCollation());
     }
 
     @Test
@@ -1989,10 +1989,10 @@ public class CollationMiscTest extends CollationTestBase {
         try {
             RuleBasedCollator coll = new RuleBasedCollator(rule);
             if (coll != null) {
-                logln("Collator did not throw an exception");
+                logDebug("Collator did not throw an exception");
             }
         } catch (Exception e) {
-            warnln("Error creating RuleBasedCollator with " + rule + " failed");
+            errln("Error creating RuleBasedCollator with " + rule + " failed");
         }
     }
 
@@ -2007,7 +2007,7 @@ public class CollationMiscTest extends CollationTestBase {
             }
             doTest(this, (RuleBasedCollator) coll, test[0], test[1], 0);
         } catch (Exception e) {
-            warnln("Error creating UCA collator");
+            errln("Error creating UCA collator");
         }
     }
 
@@ -2020,7 +2020,7 @@ public class CollationMiscTest extends CollationTestBase {
                 errln("Jitterbug 3347 failed");
             }
         } catch (Exception e) {
-            warnln("Error creating UCA collator");
+            errln("Error creating UCA collator");
         }
     }
 
@@ -2112,7 +2112,7 @@ public class CollationMiscTest extends CollationTestBase {
     @Test
     public void TestJB5298() {
         ULocale[] locales = Collator.getAvailableULocales();
-        logln("Number of collator locales returned : " + locales.length);
+        logDebug("Number of collator locales returned : " + locales.length);
         // double-check keywords
         String[] keywords = Collator.getKeywords();
         if (keywords.length != 1 || !keywords[0].equals("collation")) {
@@ -2120,12 +2120,13 @@ public class CollationMiscTest extends CollationTestBase {
         }
 
         String[] values = Collator.getKeywordValues("collation");
-        log("Collator.getKeywordValues returned: ");
+        StringBuilder msg = new StringBuilder();
+        msg.append("Collator.getKeywordValues returned: ");
         for (int i = 0; i < values.length; i++) {
-            log(values[i] + ", ");
+            msg.append(values[i] + ", ");
         }
-        logln("");
-        logln("Number of collation keyword values returned : " + values.length);
+        logDebug(msg.toString());
+        logDebug("Number of collation keyword values returned : " + values.length);
         for (int i = 0; i < values.length; i++) {
             if (values[i].startsWith("private-")) {
                 errln(
@@ -2147,7 +2148,7 @@ public class CollationMiscTest extends CollationTestBase {
                 if (!canon.equals(tryLocale)) {
                     continue; // has a different
                 } else { // functional equivalent, so skip
-                    logln(tryLocale + " : " + canon + ", ");
+                    logDebug(tryLocale + " : " + canon + ", ");
                 }
                 String can = canon.toString();
                 int idx = can.indexOf("@collation=");
@@ -2157,7 +2158,7 @@ public class CollationMiscTest extends CollationTestBase {
                 }
             }
         }
-        logln(" ");
+        logDebug(" ");
     }
 
     @Test
@@ -2206,10 +2207,10 @@ public class CollationMiscTest extends CollationTestBase {
             try {
                 coll = new RuleBasedCollator(rules[i]);
             } catch (Exception e) {
-                warnln("Unable to open collator with rules " + rules[i]);
+                errln("Unable to open collator with rules " + rules[i]);
             }
 
-            logln("Test case[" + i + "]:");
+            logDebug("Test case[" + i + "]:");
             CollationKey expectingKey = coll.getCollationKey(cases[i][0]);
             for (int j = 1; j < cases[i].length; j++) {
                 CollationKey key = coll.getCollationKey(cases[i][j]);
@@ -2217,14 +2218,14 @@ public class CollationMiscTest extends CollationTestBase {
                     errln("Error! Test case[" + i + "]:" + "source:" + key.getSourceString());
                     errln("expecting:" + prettify(expectingKey) + "got:" + prettify(key));
                 }
-                logln("   Key:" + prettify(key));
+                logDebug("   Key:" + prettify(key));
             }
         }
 
         RuleBasedCollator vi_vi = null;
         try {
             vi_vi = (RuleBasedCollator) Collator.getInstance(new Locale("vi", ""));
-            logln("VI sort:");
+            logDebug("VI sort:");
             CollationKey expectingKey = vi_vi.getCollationKey(cases[0][0]);
             for (int j = 1; j < cases[0].length; j++) {
                 CollationKey key = vi_vi.getCollationKey(cases[0][j]);
@@ -2232,14 +2233,14 @@ public class CollationMiscTest extends CollationTestBase {
                     // TODO (claireho): change the logln to errln after vi.res is up-to-date.
                     // errln("source:" + key.getSourceString());
                     // errln("expecting:"+prettify(expectingKey)+ "got:"+  prettify(key));
-                    logln("Error!! in Vietnese sort - source:" + key.getSourceString());
-                    logln("expecting:" + prettify(expectingKey) + "got:" + prettify(key));
+                    logDebug("Error!! in Vietnese sort - source:" + key.getSourceString());
+                    logDebug("expecting:" + prettify(expectingKey) + "got:" + prettify(key));
                 }
                 // logln("source:" + key.getSourceString());
-                logln("   Key:" + prettify(key));
+                logDebug("   Key:" + prettify(key));
             }
         } catch (Exception e) {
-            warnln("Error creating Vietnese collator");
+            errln("Error creating Vietnese collator");
             return;
         }
     }
@@ -2262,38 +2263,38 @@ public class CollationMiscTest extends CollationTestBase {
             try {
                 coll = new RuleBasedCollator(rules[i]);
             } catch (Exception e) {
-                warnln("Unable to open collator with rules " + rules[i] + ": " + e);
+                errln("Unable to open collator with rules " + rules[i] + ": " + e);
                 return;
             }
 
-            logln("Test rule[" + i + "]" + rules[i]);
+            logDebug("Test rule[" + i + "]" + rules[i]);
 
             CollationKey keyA = coll.getCollationKey("a");
-            logln("Key for \"a\":" + prettify(keyA));
+            logDebug("Key for \"a\":" + prettify(keyA));
             if (keyA.compareTo(coll.getCollationKey(lastPrimIgn)) <= 0) {
                 CollationKey key = coll.getCollationKey(lastPrimIgn);
-                logln("Collation key for 0xD800 0xDDFD: " + prettify(key));
+                logDebug("Collation key for 0xD800 0xDDFD: " + prettify(key));
                 errln(
                         "Error! String \"a\" must be greater than \uD800\uDDFD -"
                                 + "[Last Primary Ignorable]");
             }
             if (keyA.compareTo(coll.getCollationKey(firstVariable)) >= 0) {
                 CollationKey key = coll.getCollationKey(firstVariable);
-                logln("Collation key for 0x0009: " + prettify(key));
+                logDebug("Collation key for 0x0009: " + prettify(key));
                 errln("Error! String \"a\" must be less than 0x0009 - [First Variable]");
             }
             CollationKey keyB = coll.getCollationKey("b");
-            logln("Key for \"b\":" + prettify(keyB));
+            logDebug("Key for \"b\":" + prettify(keyB));
             if (keyB.compareTo(coll.getCollationKey(firstPrimIgn)) <= 0) {
                 CollationKey key = coll.getCollationKey(firstPrimIgn);
-                logln("Collation key for 0x0332: " + prettify(key));
+                logDebug("Collation key for 0x0332: " + prettify(key));
                 errln(
                         "Error! String \"b\" must be greater than 0x0332 -"
                                 + "[First Primary Ignorable]");
             }
             if (keyB.compareTo(coll.getCollationKey(firstVariable)) >= 0) {
                 CollationKey key = coll.getCollationKey(firstVariable);
-                logln("Collation key for 0x0009: " + prettify(key));
+                logDebug("Collation key for 0x0009: " + prettify(key));
                 errln("Error! String \"b\" must be less than 0x0009 - [First Variable]");
             }
         }
@@ -2303,18 +2304,18 @@ public class CollationMiscTest extends CollationTestBase {
             try {
                 coll = new RuleBasedCollator(rules[i]);
             } catch (Exception e) {
-                warnln("Unable to open collator with rules " + rules[i]);
+                errln("Unable to open collator with rules " + rules[i]);
             }
 
-            logln("Test rule[" + i + "]" + rules[i]);
+            logDebug("Test rule[" + i + "]" + rules[i]);
 
             CollationKey keyA = coll.getCollationKey("a");
-            logln("Key for \"a\":" + prettify(keyA));
+            logDebug("Key for \"a\":" + prettify(keyA));
             byte[] keyAInBytes = keyA.toByteArray();
             for (int j = 0; j < keyAInBytes.length && j < secIgnKey.length; j++) {
                 if (keyAInBytes[j] != secIgnKey[j]) {
                     if ((char) keyAInBytes[j] <= (char) secIgnKey[j]) {
-                        logln(
+                        logDebug(
                                 "Error! String \"a\" must be greater than [Last Secondary Ignorable]");
                     }
                     break;
@@ -2323,10 +2324,10 @@ public class CollationMiscTest extends CollationTestBase {
             if (keyA.compareTo(coll.getCollationKey(firstVariable)) >= 0) {
                 errln("Error! String \"a\" must be less than 0x0009 - [First Variable]");
                 CollationKey key = coll.getCollationKey(firstVariable);
-                logln("Collation key for 0x0009: " + prettify(key));
+                logDebug("Collation key for 0x0009: " + prettify(key));
             }
             CollationKey keyB = coll.getCollationKey("b");
-            logln("Key for \"b\":" + prettify(keyB));
+            logDebug("Key for \"b\":" + prettify(keyB));
             byte[] keyBInBytes = keyB.toByteArray();
             for (int j = 0; j < keyBInBytes.length && j < secIgnKey.length; j++) {
                 if (keyBInBytes[j] != secIgnKey[j]) {
@@ -2339,7 +2340,7 @@ public class CollationMiscTest extends CollationTestBase {
             }
             if (keyB.compareTo(coll.getCollationKey(firstVariable)) >= 0) {
                 CollationKey key = coll.getCollationKey(firstVariable);
-                logln("Collation key for 0x0009: " + prettify(key));
+                logDebug("Collation key for 0x0009: " + prettify(key));
                 errln("Error! String \"b\" must be less than 0x0009 - [First Variable]");
             }
         }
@@ -2366,7 +2367,7 @@ public class CollationMiscTest extends CollationTestBase {
         // Test en sort
         RuleBasedCollator en = null;
 
-        logln("EN sort:");
+        logDebug("EN sort:");
         try {
             en = (RuleBasedCollator) Collator.getInstance(new Locale("en", ""));
             for (int j = 0; j < cases.length; j++) {
@@ -2388,16 +2389,16 @@ public class CollationMiscTest extends CollationTestBase {
                     errln("expecting:"+prettify(expectingKey)+ "got:"+  prettify(key));
                 }
                 */
-                logln("String:" + cases[j] + "   Key:" + prettify(key));
+                logDebug("String:" + cases[j] + "   Key:" + prettify(key));
             }
         } catch (Exception e) {
-            warnln("Error creating English collator");
+            errln("Error creating English collator");
             return;
         }
 
         // Test ja sort
         RuleBasedCollator ja = null;
-        logln("JA sort:");
+        logDebug("JA sort:");
         try {
             ja = (RuleBasedCollator) Collator.getInstance(new Locale("ja", ""));
             for (int j = 0; j < cases.length; j++) {
@@ -2413,20 +2414,20 @@ public class CollationMiscTest extends CollationTestBase {
                                         + " is not >= previous test string.");
                     }
                 }
-                logln("String:" + cases[j] + "   Key:" + prettify(key));
+                logDebug("String:" + cases[j] + "   Key:" + prettify(key));
             }
         } catch (Exception e) {
-            warnln("Error creating Japanese collator");
+            errln("Error creating Japanese collator");
             return;
         }
         for (int i = 0; i < rules.length; i++) {
 
             RuleBasedCollator coll = null;
-            logln("Tailoring rule:" + rules[i]);
+            logDebug("Tailoring rule:" + rules[i]);
             try {
                 coll = new RuleBasedCollator(rules[i]);
             } catch (Exception e) {
-                warnln("Unable to open collator with rules " + rules[i]);
+                errln("Unable to open collator with rules " + rules[i]);
                 continue;
             }
 
@@ -2458,7 +2459,7 @@ public class CollationMiscTest extends CollationTestBase {
                         }
                     }
                 }
-                logln("String:" + cases[j] + "   Key:" + prettify(key));
+                logDebug("String:" + cases[j] + "   Key:" + prettify(key));
             }
         }
     }
@@ -2498,7 +2499,7 @@ public class CollationMiscTest extends CollationTestBase {
             try {
                 myCollation = new RuleBasedCollator(rule);
             } catch (Exception e) {
-                warnln("ERROR: in creation of rule based collator: " + e);
+                errln("ERROR: in creation of rule based collator: " + e);
                 return;
             }
 
@@ -2730,7 +2731,7 @@ public class CollationMiscTest extends CollationTestBase {
         for (String rule : invalidRules) {
             try {
                 Collator myCollation = new RuleBasedCollator(rule);
-                warnln("ERROR: Creation of collator didn't fail for " + rule + " when it should.");
+                errln("ERROR: Creation of collator didn't fail for " + rule + " when it should.");
                 doTest(this, (RuleBasedCollator) myCollation, "x", "y", -1);
 
             } catch (Exception e) {
@@ -2996,7 +2997,7 @@ public class CollationMiscTest extends CollationTestBase {
             UnicodeSet importTailoredSet = importviescoll.getTailoredSet();
 
             if (!tailoredSet.equals(importTailoredSet)) {
-                warnln("Tailored set not equal");
+                errln("Tailored set not equal");
             }
 
             for (UnicodeSetIterator it = new UnicodeSetIterator(tailoredSet); it.next(); ) {
@@ -3004,12 +3005,12 @@ public class CollationMiscTest extends CollationTestBase {
                 CollationKey sk1 = viescoll.getCollationKey(t);
                 CollationKey sk2 = importviescoll.getCollationKey(t);
                 if (!sk1.equals(sk2)) {
-                    warnln("Collation key's not equal for " + t);
+                    errln("Collation key's not equal for " + t);
                 }
             }
 
         } catch (Exception e) {
-            warnln("ERROR: in creation of rule based collator");
+            errln("ERROR: in creation of rule based collator");
         }
     }
 
@@ -3029,7 +3030,7 @@ public class CollationMiscTest extends CollationTestBase {
             UnicodeSet importTailoredSet = importvidecoll.getTailoredSet();
 
             if (!tailoredSet.equals(importTailoredSet)) {
-                warnln("Tailored set not equal");
+                errln("Tailored set not equal");
             }
 
             for (UnicodeSetIterator it = new UnicodeSetIterator(tailoredSet); it.next(); ) {
@@ -3037,12 +3038,12 @@ public class CollationMiscTest extends CollationTestBase {
                 CollationKey sk1 = videcoll.getCollationKey(t);
                 CollationKey sk2 = importvidecoll.getCollationKey(t);
                 if (!sk1.equals(sk2)) {
-                    warnln("Collation key's not equal for " + t);
+                    errln("Collation key's not equal for " + t);
                 }
             }
 
         } catch (Exception e) {
-            warnln("ERROR: in creation of rule based collator");
+            errln("ERROR: in creation of rule based collator");
         }
     }
 
@@ -3426,13 +3427,13 @@ public class CollationMiscTest extends CollationTestBase {
         try {
             originalCollation = new RuleBasedCollator(rules);
         } catch (Exception e) {
-            warnln("ERROR: in creation of rule based collator");
+            errln("ERROR: in creation of rule based collator");
             return;
         }
         try {
             myCollation = originalCollation.clone();
         } catch (Exception e) {
-            warnln("ERROR: in creation of rule based collator");
+            errln("ERROR: in creation of rule based collator");
             return;
         }
         myCollation.setDecomposition(Collator.CANONICAL_DECOMPOSITION);

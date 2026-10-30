@@ -110,7 +110,7 @@ public class RoundTripTest extends TestFmwk {
 
     public void showElapsed(long start, String name) {
         double dur = (System.currentTimeMillis() - start) / 1000.0;
-        logln(name + " took " + dur + " seconds");
+        logDebug(name + " took " + dur + " seconds");
     }
 
     @Test
@@ -343,7 +343,7 @@ public class RoundTripTest extends TestFmwk {
                 out.close();
             }
         } catch (MissingResourceException ex) {
-            warnln("Could not load the locale data for fetching the exemplar characters.");
+            errln("Could not load the locale data for fetching the exemplar characters.");
         }
     }
 
@@ -359,7 +359,7 @@ public class RoundTripTest extends TestFmwk {
         } else {
             // We temporarily filter against Unicode 4.1, but we only do this
             // before version 3.5.
-            logln(
+            logDebug(
                     "TestGreek needs to be updated to remove delete the section marked [:Age=4.0:] filter");
         }
 
@@ -456,7 +456,7 @@ public class RoundTripTest extends TestFmwk {
         } else {
             // We temporarily filter against Unicode 4.1, but we only do this
             // before version 3.5.
-            logln(
+            logDebug(
                     "TestHebrew needs to be updated to remove delete the section marked [:Age=4.0:] filter");
         }
         long start = System.currentTimeMillis();
@@ -590,7 +590,7 @@ public class RoundTripTest extends TestFmwk {
                     "FAIL: TestDevanagariLatin needs to be updated to remove delete the [:Age=4.1:] filter ");
             return;
         }
-        logln(
+        logDebug(
                 "Warning: TestDevanagariLatin needs to be updated to remove delete the section marked [:Age=4.1:] filter");
 
         String minusDevAbb = logKnownIssue("cldrbug:4375", null) ? "-[\u0970]" : "";
@@ -1081,7 +1081,7 @@ public class RoundTripTest extends TestFmwk {
         long start = System.currentTimeMillis();
         int num = interIndicArray.length;
         if (isQuick()) {
-            logln(
+            logDebug(
                     "Testing only 5 of "
                             + interIndicArray.length
                             + " Skipping rest (use -e for exhaustive)");
@@ -1094,11 +1094,11 @@ public class RoundTripTest extends TestFmwk {
                     "FAIL: TestInterIndic needs to be updated to remove delete the [:Age=4.1:] filter ");
             return;
         }
-        logln(
+        logDebug(
                 "Warning: TestInterIndic needs to be updated to remove delete the section marked [:Age=4.1:] filter");
 
         for (int i = 0; i < num; i++) {
-            logln("Testing " + interIndicArray[i][0] + " at index " + i);
+            logDebug("Testing " + interIndicArray[i][0] + " at index " + i);
             /*TODO: uncomment the line below when the transliterator is fixed
             new Test(interIndicArray[i][0], 50)
                 .test(interIndicArray[i][1],
@@ -1447,10 +1447,10 @@ public class RoundTripTest extends TestFmwk {
 
             log = logger;
 
-            logln(Utility.escape("Source:  " + sourceRange));
-            logln(Utility.escape("Target:  " + targetRange));
-            logln(Utility.escape("Exclude: " + roundtripExclusions));
-            if (TestFmwk.isQuick()) logln("Abbreviated Test");
+            logDebug(Utility.escape("Source:  " + sourceRange));
+            logDebug(Utility.escape("Target:  " + targetRange));
+            logDebug(Utility.escape("Exclude: " + roundtripExclusions));
+            if (TestFmwk.isQuick()) logDebug("Abbreviated Test");
 
             badCharacters = new UnicodeSet("[:other:]");
 
@@ -1498,7 +1498,7 @@ public class RoundTripTest extends TestFmwk {
                                     + transliteratorID.replace('/', '_')
                                     + ".html";
                     File lf = new File(logFileName);
-                    logln("Creating log file " + lf.getAbsoluteFile());
+                    logDebug("Creating log file " + lf.getAbsoluteFile());
                     FileOutputStream fos = new FileOutputStream(lf);
                     fos.write(bast.toByteArray());
                     fos.close();
@@ -1518,7 +1518,7 @@ public class RoundTripTest extends TestFmwk {
                                     + ", no log provided due to protected test domain");
                 }
             } else {
-                logln(transliteratorID + " ok");
+                logDebug(transliteratorID + " ok");
                 //                  new File(logFileName).delete();
             }
         }
@@ -1546,7 +1546,7 @@ public class RoundTripTest extends TestFmwk {
             sourceToTarget = Transliterator.getInstance(transliteratorID);
             targetToSource = sourceToTarget.getInverse();
 
-            logln("Checking that at least one irrevant characters is not NFC'ed");
+            logDebug("Checking that at least one irrevant characters is not NFC'ed");
             out.println("<h3>Checking that at least one irrevant characters is not NFC'ed</h3>");
 
             String irrelevants =
@@ -1560,7 +1560,7 @@ public class RoundTripTest extends TestFmwk {
             }
 
             if (EXTRA_TESTS) {
-                logln("Checking that toRules works");
+                logDebug("Checking that toRules works");
                 String rules = "";
                 Transliterator sourceToTarget2;
                 Transliterator targetToSource2;
@@ -1614,7 +1614,7 @@ public class RoundTripTest extends TestFmwk {
         }
 
         private void checkSourceTargetSource(Transliterator sourceToTarget2) {
-            logln("Checking that source -> target -> source");
+            logDebug("Checking that source -> target -> source");
             out.println("<h3>Checking that source -> target -> source</h3>");
 
             usi.reset(sourceRange);
@@ -1632,7 +1632,7 @@ public class RoundTripTest extends TestFmwk {
         }
 
         private void checkTargetSourceTarget(Transliterator targetToSource2) {
-            logln("Checking that target -> source -> target");
+            logDebug("Checking that target -> source -> target");
             out.println("<h3>Checking that target -> source -> target</h3>");
             usi.reset(targetRange);
             while (usi.next()) {
@@ -1649,7 +1649,7 @@ public class RoundTripTest extends TestFmwk {
         }
 
         private void checkSourceTargetSingles(UnicodeSet failSourceTarg) {
-            logln("Checking that source characters convert to target - Singles");
+            logDebug("Checking that source characters convert to target - Singles");
             out.println("<h3>Checking that source characters convert to target - Singles</h3>");
 
             /*
@@ -1686,7 +1686,7 @@ public class RoundTripTest extends TestFmwk {
         }
 
         private boolean checkSourceTargetDoubles(UnicodeSet failSourceTarg) {
-            logln("Checking that source characters convert to target - Doubles");
+            logDebug("Checking that source characters convert to target - Doubles");
             out.println("<h3>Checking that source characters convert to target - Doubles</h3>");
             long count = 0;
 
@@ -1714,7 +1714,7 @@ public class RoundTripTest extends TestFmwk {
                         !sourceRange.contains(d)) continue;
                     if (failSourceTarg.get(d)) continue;
                  */
-                logln(count + "/" + pairLimit + " Checking starting with " + UTF16.valueOf(c));
+                logDebug(count + "/" + pairLimit + " Checking starting with " + UTF16.valueOf(c));
                 usi2.reset(abbreviateSet(sourceRangeMinusFailures, quickRt, density));
 
                 while (usi2.next()) {
@@ -1747,7 +1747,7 @@ public class RoundTripTest extends TestFmwk {
         }
 
         void checkTargetSourceSingles(UnicodeSet failTargSource, UnicodeSet failRound) {
-            logln("Checking that target characters convert to source and back - Singles");
+            logDebug("Checking that target characters convert to source and back - Singles");
             out.println(
                     "<h3>Checking that target characters convert to source and back - Singles</h3>");
 
@@ -1808,7 +1808,7 @@ public class RoundTripTest extends TestFmwk {
 
         private void checkTargetSourceDoubles(
                 boolean quickRt, UnicodeSet failTargSource, UnicodeSet failRound) {
-            logln("Checking that target characters convert to source and back - Doubles");
+            logDebug("Checking that target characters convert to source and back - Doubles");
             out.println(
                     "<h3>Checking that target characters convert to source and back - Doubles</h3>");
             long count = 0;
@@ -1836,7 +1836,7 @@ public class RoundTripTest extends TestFmwk {
                     if (TestUtility.isUnassigned(d) ||
                         !targetRange.contains(d)) continue;
                  */
-                logln(count + "/" + pairLimit + " Checking starting with " + UTF16.valueOf(c));
+                logDebug(count + "/" + pairLimit + " Checking starting with " + UTF16.valueOf(c));
                 usi2.reset(abbreviateSet(targetRangeMinusFailures, quickRt, density));
 
                 while (usi2.next()) {
@@ -1888,7 +1888,7 @@ public class RoundTripTest extends TestFmwk {
                     }
                 }
             }
-            logln("");
+            logDebug("");
         }
 
         /**

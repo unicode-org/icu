@@ -683,8 +683,8 @@ public class TestCharset extends TestFmwk {
                 char[] finishArray = new char[finish.limit()];
                 for (int i = 0; i < finishArray.length; i++) finishArray[i] = finish.get(i);
 
-                logln("start:  " + hex(in));
-                logln("finish: " + hex(finishArray));
+                logDebug("start:  " + hex(in));
+                logDebug("finish: " + hex(finishArray));
             }
         } catch (CharacterCodingException ex) {
             errln(converter + " roundtrip test failed: " + ex.getMessage());
@@ -924,7 +924,7 @@ public class TestCharset extends TestFmwk {
                 if (!currentlybad) {
                     currentlybad = true;
                     badcount++;
-                    logln("");
+                    logDebug("");
                 }
                 errln(converter + " " + ex.getClass().getName() + ": " + ex.getMessage());
                 continue outer;
@@ -942,7 +942,7 @@ public class TestCharset extends TestFmwk {
                     if (!currentlybad) {
                         currentlybad = true;
                         badcount++;
-                        logln("");
+                        logDebug("");
                     }
                     if (results[i].isMalformed() && cr.isMalformed()) {
                         malfindices[i]++;
@@ -965,7 +965,7 @@ public class TestCharset extends TestFmwk {
                     if (!currentlybad) {
                         currentlybad = true;
                         badcount++;
-                        logln("");
+                        logDebug("");
                     }
                     badposindices[i]++;
                     errln(
@@ -988,7 +988,7 @@ public class TestCharset extends TestFmwk {
                 if (!currentlybad) {
                     currentlybad = true;
                     badcount++;
-                    logln("");
+                    logDebug("");
                 }
                 errln(
                         converter
@@ -1005,7 +1005,7 @@ public class TestCharset extends TestFmwk {
             }
         }
 
-        logln(
+        logDebug(
                 "\n"
                         + badcount
                         + " / "
@@ -1015,28 +1015,40 @@ public class TestCharset extends TestFmwk {
                         + " good, "
                         + badcount
                         + " bad)");
-        log("index\t");
-        for (int i = 0; i < n; i++) log(i + "\t");
-        logln("");
-        log("unmap\t");
-        for (int i = 0; i < n; i++) log(unmapindices[i] + "\t");
-        logln("");
-        log("malf \t");
-        for (int i = 0; i < n; i++) log(malfindices[i] + "\t");
-        logln("");
-        log("pos  \t");
-        for (int i = 0; i < n; i++) log(badposindices[i] + "\t");
-        logln("");
-        log("uhoh \t");
-        for (int i = 0; i < n; i++) log(uhohindices[i] + "\t");
-        logln("");
-        logln("");
-        log("The few that passed: ");
-        for (int i = 0; i < pass.size(); i++) log(pass.get(i) + ", ");
-        logln("");
-        log("The few that are exempt: ");
-        for (int i = 0; i < exempt.size(); i++) log(exempt.get(i) + ", ");
-        logln("");
+        StringBuilder msg = new StringBuilder();
+        msg.append("index\t");
+        for (int i = 0; i < n; i++) msg.append(i + "\t");
+        logDebug(msg.toString());
+
+        msg.setLength(0);
+        msg.append("unmap\t");
+        for (int i = 0; i < n; i++) msg.append(unmapindices[i] + "\t");
+        logDebug(msg.toString());
+
+        msg.setLength(0);
+        msg.append("malf \t");
+        for (int i = 0; i < n; i++) msg.append(malfindices[i] + "\t");
+        logDebug(msg.toString());
+
+        msg.setLength(0);
+        msg.append("pos  \t");
+        for (int i = 0; i < n; i++) msg.append(badposindices[i] + "\t");
+        logDebug(msg.toString());
+
+        msg.setLength(0);
+        msg.append("uhoh \t");
+        for (int i = 0; i < n; i++) msg.append(uhohindices[i] + "\t");
+        logDebug(msg.toString());
+
+        msg.setLength(0);
+        msg.append("The few that passed: ");
+        for (int i = 0; i < pass.size(); i++) msg.append(pass.get(i) + ", ");
+        logDebug(msg.toString());
+
+        msg.setLength(0);
+        msg.append("The few that are exempt: ");
+        for (int i = 0; i < exempt.size(); i++) msg.append(exempt.get(i) + ", ");
+        logDebug(msg.toString());
     }
 
     //    public void TestCharsetCallback() {
@@ -1386,7 +1398,7 @@ public class TestCharset extends TestFmwk {
             decoder = charset.newDecoder();
             encoder = charset.newEncoder();
         } catch (MissingResourceException ex) {
-            warnln("Could not load charset data: " + encoding);
+            errln("Could not load charset data: " + encoding);
             return;
         }
 
@@ -1425,7 +1437,7 @@ public class TestCharset extends TestFmwk {
 
         int rc = 0;
         if (decoder == null) {
-            warnln("Could not load decoder.");
+            errln("Could not load decoder.");
             return;
         }
         decoder.reset();
@@ -1443,10 +1455,7 @@ public class TestCharset extends TestFmwk {
                 rc = 1;
             }
             if (!equals(chars, unistr)) {
-                errln("ToChars does not match");
-                printchars(chars);
-                errln("Expected : ");
-                printchars(unistr);
+                errln("ToChars does not match - " + hexChars(chars) + " Expected : " + hexChars(unistr));
                 rc = 2;
             }
 
@@ -1476,8 +1485,7 @@ public class TestCharset extends TestFmwk {
                 rc = 3;
             }
             if (!equals(chars, unistr)) {
-                errln("ToChars single does not match");
-                printchars(chars);
+                errln("ToChars single does not match - " + hexChars(chars));
                 rc = 4;
             }
         } catch (Exception e) {
@@ -1506,10 +1514,7 @@ public class TestCharset extends TestFmwk {
                 rc = 7;
             }
             if (!equals(chars, unistr)) {
-                errln("ToChars Simple buffer does not match");
-                printchars(chars);
-                err(" Expected : ");
-                printchars(unistr);
+                errln("ToChars Simple buffer does not match - " + hexChars(chars) + " Expected : " + hexChars(unistr));
                 rc = 8;
             }
         } catch (Exception e) {
@@ -1618,7 +1623,8 @@ public class TestCharset extends TestFmwk {
         }
     }
 
-    void printchars(CharBuffer buf) {
+    String hexChars(CharBuffer buf) {
+        StringBuilder hexBuf = new StringBuilder();
         int i;
         char[] chars = new char[buf.limit()];
         // save the current position
@@ -1628,18 +1634,42 @@ public class TestCharset extends TestFmwk {
         // reset to old position
         buf.position(pos);
         for (i = 0; i < chars.length; i++) {
-            err(hex(chars[i]) + " ");
+            hexBuf.append(hex(chars[i]) + " ");
         }
-        errln("");
+        return hexBuf.toString();
     }
 
-    void printchars(String str) {
+    String hexChars(String str) {
+        StringBuilder hexBuf = new StringBuilder();
         char[] chars = str.toCharArray();
         for (int i = 0; i < chars.length; i++) {
-            err(hex(chars[i]) + " ");
+            hexBuf.append(hex(chars[i]) + " ");
         }
-        errln("");
+        return hexBuf.toString();
     }
+
+//    void printchars(CharBuffer buf) {
+//        int i;
+//        char[] chars = new char[buf.limit()];
+//        // save the current position
+//        int pos = buf.position();
+//        buf.position(0);
+//        buf.get(chars);
+//        // reset to old position
+//        buf.position(pos);
+//        for (i = 0; i < chars.length; i++) {
+//            err(hex(chars[i]) + " ");
+//        }
+//        errln("");
+//    }
+//
+//    void printchars(String str) {
+//        char[] chars = str.toCharArray();
+//        for (int i = 0; i < chars.length; i++) {
+//            err(hex(chars[i]) + " ");
+//        }
+//        errln("");
+//    }
 
     void printbytes(ByteBuffer buf) {
         int i;
@@ -1703,7 +1733,7 @@ public class TestCharset extends TestFmwk {
             boolean result = true;
             for (int i = 0; i < chars.length; i++) {
                 if (chars[i] != compareTo[i]) {
-                    logln(
+                    logDebug(
                             "Got: "
                                     + hex(chars[i])
                                     + " Expected: "
@@ -1753,7 +1783,7 @@ public class TestCharset extends TestFmwk {
             boolean result = true;
             for (int i = 0; i < chars.length; i++) {
                 if (chars[i] != compareTo[i]) {
-                    logln(
+                    logDebug(
                             "Got: "
                                     + hex(chars[i])
                                     + " Expected: "
@@ -1825,7 +1855,7 @@ public class TestCharset extends TestFmwk {
             Charset charset = provider.charsetForName(encoding);
             encoder = charset.newEncoder();
         } catch (MissingResourceException ex) {
-            warnln("Could not load charset data: " + encoding);
+            errln("Could not load charset data: " + encoding);
             return;
         }
         if (!encoder.canEncode(new String(mySource))) {
@@ -1839,7 +1869,7 @@ public class TestCharset extends TestFmwk {
         Set<String> keySet = map.keySet();
         Iterator<String> iter = keySet.iterator();
         while (iter.hasNext()) {
-            logln("Charset name: " + iter.next().toString());
+            logDebug("Charset name: " + iter.next().toString());
         }
         Object[] charsets = CharsetProviderICU.getAvailableNames();
         int mapSize = map.size();
@@ -1850,7 +1880,7 @@ public class TestCharset extends TestFmwk {
                             + " JDK: "
                             + mapSize);
         }
-        logln("Total Number of chasets = " + map.size());
+        logDebug("Total Number of chasets = " + map.size());
     }
 
     @Test
@@ -1874,7 +1904,7 @@ public class TestCharset extends TestFmwk {
             try {
                 CharsetEncoder encoder = cs.newEncoder();
                 if (encoder != null) {
-                    logln("Creation of encoder succeeded. " + cs.toString());
+                    logDebug("Creation of encoder succeeded. " + cs.toString());
                 }
             } catch (Exception ex) {
                 errln(
@@ -1886,7 +1916,7 @@ public class TestCharset extends TestFmwk {
             try {
                 CharsetDecoder decoder = cs.newDecoder();
                 if (decoder != null) {
-                    logln("Creation of decoder succeeded. " + cs.toString());
+                    logDebug("Creation of decoder succeeded. " + cs.toString());
                 }
             } catch (Exception ex) {
                 errln(
@@ -1917,7 +1947,7 @@ public class TestCharset extends TestFmwk {
             Charset cs = CharsetICU.forNameICU(encoding);
             CharsetEncoder enc = cs.newEncoder();
             if (enc != null) {
-                logln("Successfully created an encoder for " + encoding + ": " + enc);
+                logDebug("Successfully created an encoder for " + encoding + ": " + enc);
                 if (!(enc instanceof CharsetEncoderICU)) {
                     errln(
                             "Expected "
@@ -1929,7 +1959,7 @@ public class TestCharset extends TestFmwk {
                 errln("Error creating charset encoder for " + encoding);
             }
         } catch (Exception e) {
-            warnln("Error creating charset encoder for " + encoding + ": " + e);
+            errln("Error creating charset encoder for " + encoding + ": " + e);
         }
         // Use Charset.forName() which may return an ICU Charset or some other implementation.
         encoding = "x-ibm-971_P100-1995";
@@ -1937,7 +1967,7 @@ public class TestCharset extends TestFmwk {
             Charset cs = Charset.forName(encoding);
             CharsetEncoder enc = cs.newEncoder();
             if (enc != null) {
-                logln(
+                logDebug(
                         "Successfully created an encoder for "
                                 + encoding
                                 + ": "
@@ -1948,7 +1978,7 @@ public class TestCharset extends TestFmwk {
                 errln("Error creating charset encoder for " + encoding);
             }
         } catch (Exception e) {
-            warnln("Error creating charset encoder for " + encoding + ": " + e);
+            errln("Error creating charset encoder for " + encoding + ": " + e);
         }
     }
 
@@ -1983,7 +2013,7 @@ public class TestCharset extends TestFmwk {
                                 + hex(out.array())
                                 + ")");
             }
-            logln("Output: " + new String(out.array()) + "(" + hex(out.array()) + ")");
+            logDebug("Output: " + new String(out.array()) + "(" + hex(out.array()) + ")");
         } catch (CharacterCodingException ex) {
             errln("Unexpected exception: " + ex.toString());
         }
@@ -2036,7 +2066,7 @@ public class TestCharset extends TestFmwk {
         CoderResult result = encoderICU.encode(in, out, true);
 
         if (result.isMalformed()) {
-            logln("\\ud800 is malformed for ICU4JNI utf-8 encoder");
+            logDebug("\\ud800 is malformed for ICU4JNI utf-8 encoder");
         } else if (result.isUnderflow()) {
             errln("FAIL: \\ud800 is OK for ICU4JNI utf-8 encoder");
         }
@@ -2047,7 +2077,7 @@ public class TestCharset extends TestFmwk {
         CharsetEncoder encoderJDK = Charset.forName("utf-8").newEncoder();
         result = encoderJDK.encode(in, out, true);
         if (result.isMalformed()) {
-            logln("\\ud800 is malformed for JDK utf-8 encoder");
+            logDebug("\\ud800 is malformed for JDK utf-8 encoder");
         } else if (result.isUnderflow()) {
             errln("BAD: \\ud800 is OK for JDK utf-8 encoder");
         }
@@ -2070,7 +2100,7 @@ public class TestCharset extends TestFmwk {
             encoderICU.encode(CharBuffer.wrap("\ud800"));
             errln("\\ud800 is OK for ICU4JNI utf-8 encoder");
         } catch (Exception e) {
-            logln("\\ud800 is malformed for JDK utf-8 encoder");
+            logDebug("\\ud800 is malformed for JDK utf-8 encoder");
             // e.printStackTrace();
         }
 
@@ -2079,7 +2109,7 @@ public class TestCharset extends TestFmwk {
             encoderJDK.encode(CharBuffer.wrap("\ud800"));
             errln("\\ud800 is OK for JDK utf-8 encoder");
         } catch (Exception e) {
-            logln("\\ud800 is malformed for JDK utf-8 encoder");
+            logDebug("\\ud800 is malformed for JDK utf-8 encoder");
             // e.printStackTrace();
         }
     }
@@ -2101,7 +2131,7 @@ public class TestCharset extends TestFmwk {
             errln("The UTF16 encoder did not appended bom. Length returned: " + outBuf.remaining());
         }
         while (outBuf.hasRemaining()) {
-            logln("0x" + hex(outBuf.get()));
+            logDebug("0x" + hex(outBuf.get()));
         }
         CharsetDecoder decoder = cs.newDecoder();
         outBuf.rewind();
@@ -2307,7 +2337,7 @@ public class TestCharset extends TestFmwk {
             boolean backedByArray,
             int targetLimit)
             throws Exception, BufferOverflowException {
-        logln("Running smBufEncode for " + encoding + " with class " + encoder);
+        logDebug("Running smBufEncode for " + encoding + " with class " + encoder);
 
         CharBuffer mySource;
         ByteBuffer myTarget;
@@ -2323,7 +2353,7 @@ public class TestCharset extends TestFmwk {
 
         myTarget.clear();
         {
-            logln("Running tests on small input buffers for " + encoding);
+            logDebug("Running tests on small input buffers for " + encoding);
             encoder.reset();
             myTarget.limit(target.limit());
             mySource.limit(source.limit());
@@ -2351,14 +2381,14 @@ public class TestCharset extends TestFmwk {
                 errln("Test complete buffers while encoding for " + encoding + " failed");
 
             } else {
-                logln("Tests complete buffers for " + encoding + " passed");
+                logDebug("Tests complete buffers for " + encoding + " passed");
             }
         }
         if (isQuick()) {
             return;
         }
         {
-            logln("Running tests on small input buffers for " + encoding);
+            logDebug("Running tests on small input buffers for " + encoding);
             encoder.reset();
             myTarget.clear();
             myTarget.limit(target.limit());
@@ -2382,11 +2412,11 @@ public class TestCharset extends TestFmwk {
             if (!equals(myTarget, target, targetLimit)) {
                 errln("Test small input buffers " + encoding + " From Unicode failed");
             } else {
-                logln("Tests on small input buffers for " + encoding + " passed");
+                logDebug("Tests on small input buffers for " + encoding + " passed");
             }
         }
         {
-            logln("Running tests on small output buffers for " + encoding);
+            logDebug("Running tests on small output buffers for " + encoding);
             encoder.reset();
             myTarget.clear();
             myTarget.limit(target.limit());
@@ -2395,7 +2425,7 @@ public class TestCharset extends TestFmwk {
             mySource.position(0);
             myTarget.position(0);
 
-            logln(
+            logDebug(
                     "myTarget.limit: "
                             + myTarget.limit()
                             + " myTarget.capcity: "
@@ -2405,8 +2435,8 @@ public class TestCharset extends TestFmwk {
                 int pos = myTarget.position();
 
                 CoderResult result = encoder.encode(mySource, myTarget, false);
-                logln("myTarget.Position: " + pos + " myTarget.limit: " + myTarget.limit());
-                logln(
+                logDebug("myTarget.Position: " + pos + " myTarget.limit: " + myTarget.limit());
+                logDebug(
                         "mySource.position: "
                                 + mySource.position()
                                 + " mySource.limit: "
@@ -2432,7 +2462,7 @@ public class TestCharset extends TestFmwk {
             if (!equals(myTarget, target, targetLimit)) {
                 errln("Test small output buffers " + encoding + " From Unicode failed.");
             }
-            logln("Tests on small output buffers for " + encoding + " passed");
+            logDebug("Tests on small output buffers for " + encoding + " passed");
         }
     }
 
@@ -2671,7 +2701,7 @@ public class TestCharset extends TestFmwk {
                             "Did not get the expected result for substitution bytes. Got: "
                                     + hex(out.array()));
                 }
-                logln("Output: " + hex(out.array()));
+                logDebug("Output: " + hex(out.array()));
             } else {
                 errln("Encode operation failed for encoder: " + encoderICU.toString());
             }
@@ -2702,7 +2732,7 @@ public class TestCharset extends TestFmwk {
                             "Did not get the expected result for substitution chars. Got: "
                                     + hex(out.array()));
                 }
-                logln("Output: " + hex(out.array()));
+                logDebug("Output: " + hex(out.array()));
             } else {
                 errln("Decode operation failed for encoder: " + decoderICU.toString());
             }
@@ -2754,7 +2784,7 @@ public class TestCharset extends TestFmwk {
                 for (int j = 0; j < javaAliases.length; j++) {
                     String java = (String) javaAliases[j];
                     if (java.equals(canon)) {
-                        logln("javaAlias: " + java + " canon: " + canon);
+                        logDebug("javaAlias: " + java + " canon: " + canon);
                         inAliasList = true;
                     }
                 }
@@ -2801,10 +2831,10 @@ public class TestCharset extends TestFmwk {
                 decoder.decode(ByteBuffer.wrap(new byte[] {-1, -2, 32, 0, 98}), out, false);
         result = decoder.decode(ByteBuffer.wrap(new byte[] {98}), out, true);
 
-        logln(cs.getClass().toString() + ":" + result.toString());
+        logDebug(cs.getClass().toString() + ":" + result.toString());
         try {
             result = decoder.flush(out);
-            logln(cs.getClass().toString() + ":" + result.toString());
+            logDebug(cs.getClass().toString() + ":" + result.toString());
         } catch (Exception e) {
             errln(e.getMessage() + " " + cs.getClass().toString());
         }
@@ -2818,13 +2848,13 @@ public class TestCharset extends TestFmwk {
         CoderResult result =
                 encoder.encode(
                         CharBuffer.wrap(new char[] {'\uFFFF', '\u2345', 32, 98}), out, false);
-        logln(cs.getClass().toString() + ":" + result.toString());
+        logDebug(cs.getClass().toString() + ":" + result.toString());
         result = encoder.encode(CharBuffer.wrap(new char[] {98}), out, true);
 
-        logln(cs.getClass().toString() + ":" + result.toString());
+        logDebug(cs.getClass().toString() + ":" + result.toString());
         try {
             result = encoder.flush(out);
-            logln(cs.getClass().toString() + ":" + result.toString());
+            logDebug(cs.getClass().toString() + ":" + result.toString());
         } catch (Exception e) {
             errln(e.getMessage() + " " + cs.getClass().toString());
         }
@@ -2891,7 +2921,7 @@ public class TestCharset extends TestFmwk {
         try {
             CharBuffer out = decoder.decode(in);
             if (out != null) {
-                logln(cs.toString() + " encoing succeeded as expected!");
+                logDebug(cs.toString() + " encoing succeeded as expected!");
             }
         } catch (Exception ex) {
             errln("Did not get expected exception for encoding: " + cs.toString());
@@ -2929,7 +2959,7 @@ public class TestCharset extends TestFmwk {
             errln("The UTF32 encoder did not appended bom. Length returned: " + outBuf.remaining());
         }
         while (outBuf.hasRemaining()) {
-            logln("0x" + hex(outBuf.get()));
+            logDebug("0x" + hex(outBuf.get()));
         }
         CharsetDecoder decoder = cs.newDecoder();
         outBuf.limit(outBuf.position());
@@ -7233,7 +7263,7 @@ public class TestCharset extends TestFmwk {
                     "UnsupportedCharsetException should be thrown for charset \"bogus\" - but got charset "
                             + testCharset.name());
         } catch (UnsupportedCharsetException ex) {
-            logln("UnsupportedCharsetException was thrown for CharsetICU.forNameICU(\"bogus\")");
+            logDebug("UnsupportedCharsetException was thrown for CharsetICU.forNameICU(\"bogus\")");
         }
 
         Charset charset = provider.charsetForName("UTF16");

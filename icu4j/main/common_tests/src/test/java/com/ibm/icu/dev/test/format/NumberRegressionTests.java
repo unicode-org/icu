@@ -62,7 +62,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
 
         try {
             MyNumberFormat tmp = new MyNumberFormat();
-            if (!tmp.equals(null)) logln("NumberFormat.equals passed");
+            if (!tmp.equals(null)) logDebug("NumberFormat.equals passed");
         } catch (NullPointerException e) {
             errln("(new MyNumberFormatTest()).equals(null) throws unexpected exception");
         }
@@ -79,7 +79,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
         nf2.setGroupingUsed(true);
 
         if (nf1.equals(nf2)) errln("Test for bug 4074620 failed");
-        else logln("Test for bug 4074620 passed.");
+        else logDebug("Test for bug 4074620 passed.");
     }
 
     /** DecimalFormat.format() incorrectly uses maxFractionDigits setting. */
@@ -91,13 +91,13 @@ public class NumberRegressionTests extends CoreTestFmwk {
         df.setMaximumFractionDigits(16);
         StringBuffer sBuf1 = new StringBuffer("");
         FieldPosition fp1 = new FieldPosition(0);
-        logln("d = " + d);
-        logln("maxFractionDigits = " + df.getMaximumFractionDigits());
-        logln(" format(d) = '" + df.format(d, sBuf1, fp1) + "'");
+        logDebug("d = " + d);
+        logDebug("maxFractionDigits = " + df.getMaximumFractionDigits());
+        logDebug(" format(d) = '" + df.format(d, sBuf1, fp1) + "'");
         df.setMaximumFractionDigits(17);
         StringBuffer sBuf2 = new StringBuffer("");
         FieldPosition fp2 = new FieldPosition(0);
-        logln("maxFractionDigits = " + df.getMaximumFractionDigits());
+        logDebug("maxFractionDigits = " + df.getMaximumFractionDigits());
         df.format(d, sBuf2, fp2);
         if (!sBuf2.toString().equals("100")) errln(" format(d) = '" + sBuf2 + "'");
     }
@@ -113,9 +113,9 @@ public class NumberRegressionTests extends CoreTestFmwk {
         long n = 123;
         StringBuffer buf1 = new StringBuffer();
         StringBuffer buf2 = new StringBuffer();
-        logln("format(" + n + ") = " + df.format(n, buf1, new FieldPosition(0)));
+        logDebug("format(" + n + ") = " + df.format(n, buf1, new FieldPosition(0)));
         symbols.setDecimalSeparator('p'); // change value of field
-        logln("format(" + n + ") = " + df.format(n, buf2, new FieldPosition(0)));
+        logDebug("format(" + n + ") = " + df.format(n, buf2, new FieldPosition(0)));
         if (!buf1.toString().equals(buf2.toString())) errln("Test for bug 4087245 failed");
     }
 
@@ -142,7 +142,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
         StringBuffer sBuf = new StringBuffer("");
         FieldPosition fp = new FieldPosition(0);
         try {
-            logln(df.format(123, sBuf, fp).toString());
+            logDebug(df.format(123, sBuf, fp).toString());
         } catch (Exception foo) {
             errln("Test for bug 4088503 failed: " + foo);
         }
@@ -159,7 +159,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
     }
 
     public float assignFloatValue(float returnfloat) {
-        logln(" VALUE " + returnfloat);
+        logDebug(" VALUE " + returnfloat);
         NumberFormat nfcommon = NumberFormat.getCurrencyInstance(Locale.US);
         nfcommon.setGroupingUsed(false);
 
@@ -174,7 +174,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
     public void Test4059870() {
         DecimalFormat format = new DecimalFormat("00");
         try {
-            logln(format.parse("0").toString());
+            logDebug(format.parse("0").toString());
         } catch (Exception e) {
             errln("Test for bug 4059870 failed : " + e);
         }
@@ -185,7 +185,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
     public void Test4083018() {
         DecimalFormatSymbols dfs = new DecimalFormatSymbols();
         try {
-            if (!dfs.equals(null)) logln("Test Passed!");
+            if (!dfs.equals(null)) logDebug("Test Passed!");
         } catch (Exception foo) {
             errln("Test for bug 4083018 failed => Message : " + foo.getMessage());
         }
@@ -198,7 +198,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
         NumberFormat nf = NumberFormat.getInstance();
         nf.setMaximumFractionDigits(4);
         String out = nf.format(x);
-        logln("0.00159999 formats with 4 fractional digits to " + out);
+        logDebug("0.00159999 formats with 4 fractional digits to " + out);
         String expected = "0.0016";
         if (!out.equals(expected)) errln("FAIL: Expected " + expected);
     }
@@ -211,24 +211,24 @@ public class NumberRegressionTests extends CoreTestFmwk {
     public void Test4086575() {
 
         NumberFormat nf = NumberFormat.getInstance(Locale.FRANCE);
-        logln("nf toPattern1: " + ((DecimalFormat) nf).toPattern());
-        logln("nf toLocPattern1: " + ((DecimalFormat) nf).toLocalizedPattern());
+        logDebug("nf toPattern1: " + ((DecimalFormat) nf).toPattern());
+        logDebug("nf toLocPattern1: " + ((DecimalFormat) nf).toLocalizedPattern());
 
         // No group separator
-        logln("...applyLocalizedPattern ###,00;(###,00) ");
+        logDebug("...applyLocalizedPattern ###,00;(###,00) ");
         ((DecimalFormat) nf).applyLocalizedPattern("###,00;(###,00)");
-        logln("nf toPattern2: " + ((DecimalFormat) nf).toPattern());
-        logln("nf toLocPattern2: " + ((DecimalFormat) nf).toLocalizedPattern());
+        logDebug("nf toPattern2: " + ((DecimalFormat) nf).toPattern());
+        logDebug("nf toLocPattern2: " + ((DecimalFormat) nf).toLocalizedPattern());
 
-        logln("nf: " + nf.format(1234)); // 1234,00
-        logln("nf: " + nf.format(-1234)); // (1234,00)
+        logDebug("nf: " + nf.format(1234)); // 1234,00
+        logDebug("nf: " + nf.format(-1234)); // (1234,00)
 
         // Space as group separator
 
-        logln("...applyLocalizedPattern # ###,00;(# ###,00) ");
+        logDebug("...applyLocalizedPattern # ###,00;(# ###,00) ");
         ((DecimalFormat) nf).applyLocalizedPattern("#\u202f###,00;(#\u202f###,00)");
-        logln("nf toPattern2: " + ((DecimalFormat) nf).toPattern());
-        logln("nf toLocPattern2: " + ((DecimalFormat) nf).toLocalizedPattern());
+        logDebug("nf toPattern2: " + ((DecimalFormat) nf).toPattern());
+        logDebug("nf toLocPattern2: " + ((DecimalFormat) nf).toLocalizedPattern());
         String buffer = nf.format(1234);
         if (!buffer.equals("1\u202f234,00")) errln("nf : " + buffer); // Expect 1 234,00
         buffer = nf.format(-1234);
@@ -243,7 +243,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
     /** DecimalFormat.parse returns wrong value */
     @Test
     public void Test4068693() {
-        logln("----- Test Application -----");
+        logDebug("----- Test Application -----");
         // ParsePosition pos;
         DecimalFormat df = new DecimalFormat();
         Number d = df.parse("123.55456", new ParsePosition(0));
@@ -262,21 +262,21 @@ public class NumberRegressionTests extends CoreTestFmwk {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(baos);
         myformat it = new myformat();
-        logln(it.Now());
+        logDebug(it.Now());
         oos.writeObject(it);
         oos.flush();
         baos.close();
-        logln("Save OK!");
+        logDebug("Save OK!");
         byte[] bytes = baos.toByteArray();
         ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bytes));
         myformat o = (myformat) ois.readObject();
         ois.close();
         it.Now();
-        logln("Load OK!");
+        logDebug("Load OK!");
         if (!o._dateFormat.equals(it._dateFormat)) {
             throw new Exception("The saved and loaded object are not equals!");
         }
-        logln("Compare OK!");
+        logDebug("Compare OK!");
         // } catch (Exception foo) {
         // errln("Test for bug 4069754 or 4057878 failed => Exception: " + foo.getMessage());
         // }
@@ -288,18 +288,18 @@ public class NumberRegressionTests extends CoreTestFmwk {
         DecimalFormat df = new DecimalFormat();
         try {
             df.applyPattern("#.#.#");
-            logln("toPattern() returns \"" + df.toPattern() + "\"");
+            logDebug("toPattern() returns \"" + df.toPattern() + "\"");
             errln("applyPattern(\"#.#.#\") doesn't throw IllegalArgumentException");
         } catch (IllegalArgumentException e) {
-            logln("Caught Illegal Argument Error !");
+            logDebug("Caught Illegal Argument Error !");
         }
         // Second test; added 5/11/98 when reported to fail on 1.2b3
         try {
             df.applyPattern("#0.0#0#0");
-            logln("toPattern() returns \"" + df.toPattern() + "\"");
+            logDebug("toPattern() returns \"" + df.toPattern() + "\"");
             errln("applyPattern(\"#0.0#0#0\") doesn't throw IllegalArgumentException");
         } catch (IllegalArgumentException e) {
-            logln("Ok - IllegalArgumentException for #0.0#0#0");
+            logDebug("Ok - IllegalArgumentException for #0.0#0#0");
         }
     }
 
@@ -313,8 +313,8 @@ public class NumberRegressionTests extends CoreTestFmwk {
         java.math.BigDecimal bd = new java.math.BigDecimal(d);
         StringBuffer sb = new StringBuffer("");
         FieldPosition fp = new FieldPosition(0);
-        logln("d = " + d);
-        logln("BigDecimal.toString():  " + bd.toString());
+        logDebug("d = " + d);
+        logDebug("BigDecimal.toString():  " + bd.toString());
         df.format(d, sb, fp);
         if (!sb.toString().equals("10000000.0000000100")) {
             errln("DecimalFormat.format(): " + sb.toString());
@@ -325,7 +325,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
     @Test
     public void Test4090504() {
         double d = 1;
-        logln("d = " + d);
+        logDebug("d = " + d);
         DecimalFormat df = new DecimalFormat();
         StringBuffer sb;
         FieldPosition fp;
@@ -334,8 +334,8 @@ public class NumberRegressionTests extends CoreTestFmwk {
                 df.setMaximumFractionDigits(i);
                 sb = new StringBuffer("");
                 fp = new FieldPosition(0);
-                logln("  getMaximumFractionDigits() = " + i);
-                logln("  formatted: " + df.format(d, sb, fp));
+                logDebug("  getMaximumFractionDigits() = " + i);
+                logDebug("  formatted: " + df.format(d, sb, fp));
             }
         } catch (Exception foo) {
             errln("Bug 4090504 regression test failed. Message : " + foo.getMessage());
@@ -349,7 +349,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
         String str = "0.1234";
         Double d1 = Double.parseDouble(str);
         Number d2 = df.parse(str, new ParsePosition(0));
-        logln(d1.toString());
+        logDebug(d1.toString());
         if (d2.doubleValue() != d1.doubleValue())
             errln("Bug 4095713 test failed, new double value : " + d2.doubleValue());
     }
@@ -361,7 +361,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
         Locale.setDefault(Locale.US);
         DecimalFormat df = new DecimalFormat();
         String str = Long.toString(Long.MIN_VALUE);
-        logln("Long.MIN_VALUE : " + df.parse(str, new ParsePosition(0)).toString());
+        logDebug("Long.MIN_VALUE : " + df.parse(str, new ParsePosition(0)).toString());
         df.setMultiplier(100);
         Number num = df.parse(str, new ParsePosition(0));
         assertEquals(
@@ -379,22 +379,22 @@ public class NumberRegressionTests extends CoreTestFmwk {
         try {
             dfFoo.applyPattern("0000;-000");
             if (!dfFoo.toPattern().equals("0000")) errln("dfFoo.toPattern : " + dfFoo.toPattern());
-            logln(dfFoo.format(42));
-            logln(dfFoo.format(-42));
+            logDebug(dfFoo.format(42));
+            logDebug(dfFoo.format(-42));
             dfFoo.applyPattern("000;-000");
             if (!dfFoo.toPattern().equals("000")) errln("dfFoo.toPattern : " + dfFoo.toPattern());
-            logln(dfFoo.format(42));
-            logln(dfFoo.format(-42));
+            logDebug(dfFoo.format(42));
+            logDebug(dfFoo.format(-42));
 
             dfFoo.applyPattern("000;-0000");
             if (!dfFoo.toPattern().equals("000")) errln("dfFoo.toPattern : " + dfFoo.toPattern());
-            logln(dfFoo.format(42));
-            logln(dfFoo.format(-42));
+            logDebug(dfFoo.format(42));
+            logDebug(dfFoo.format(-42));
 
             dfFoo.applyPattern("0000;-000");
             if (!dfFoo.toPattern().equals("0000")) errln("dfFoo.toPattern : " + dfFoo.toPattern());
-            logln(dfFoo.format(42));
-            logln(dfFoo.format(-42));
+            logDebug(dfFoo.format(42));
+            logDebug(dfFoo.format(-42));
         } catch (Exception foo) {
             errln("Message " + foo.getMessage());
         }
@@ -427,7 +427,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
             String monStr = "1" + monSep + "23";
             String decStr = "1" + decSep + "23";
             if (str.indexOf(monStr) >= 0 && str.indexOf(decStr) < 0) {
-                logln(
+                logDebug(
                         "OK: 1.23 -> \""
                                 + str
                                 + "\" contains \""
@@ -466,7 +466,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
         tempString = formatter.format(-5789.9876);
 
         if (tempString.equals(expectedDefault)) {
-            logln("Bug 4070798 default test passed.");
+            logDebug("Bug 4070798 default test passed.");
         } else {
             errln("Failed:" + " Expected " + expectedDefault + " Received " + tempString);
         }
@@ -475,7 +475,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
         tempString = formatter.format(5789.9876);
 
         if (tempString.equals(expectedCurrency)) {
-            logln("Bug 4070798 currency test assed.");
+            logDebug("Bug 4070798 currency test assed.");
         } else {
             errln("Failed:" + " Expected " + expectedCurrency + " Received " + tempString);
         }
@@ -484,7 +484,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
         tempString = formatter.format(-5789.9876);
 
         if (tempString.equals(expectedPercent)) {
-            logln("Bug 4070798 percentage test passed.");
+            logDebug("Bug 4070798 percentage test passed.");
         } else {
             errln("Failed:" + " Expected " + expectedPercent + " Received " + tempString);
         }
@@ -508,7 +508,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
         formatter = NumberFormat.getNumberInstance(Locale.CANADA_FRENCH);
         tempString = formatter.format(-5789.9876);
         if (tempString.equals(expectedDefault)) {
-            logln("Bug 4071005 default test passed.");
+            logDebug("Bug 4071005 default test passed.");
         } else {
             errln("Failed:" + " Expected " + expectedDefault + " Received " + tempString);
         }
@@ -517,7 +517,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
         tempString = formatter.format(5789.9876);
 
         if (tempString.equals(expectedCurrency)) {
-            logln("Bug 4071005 currency test passed.");
+            logDebug("Bug 4071005 currency test passed.");
         } else {
             errln("Failed:" + " Expected " + expectedCurrency + " Received " + tempString);
         }
@@ -525,7 +525,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
         tempString = formatter.format(-5789.9876);
 
         if (tempString.equals(expectedPercent)) {
-            logln("Bug 4071005 percentage test passed.");
+            logDebug("Bug 4071005 percentage test passed.");
         } else {
             errln("Failed:" + " Expected " + expectedPercent + " Received " + tempString);
         }
@@ -549,7 +549,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
         tempString = formatter.format(-5789.9876);
 
         if (tempString.equals(expectedDefault)) {
-            logln("Bug 4071014 default test passed.");
+            logDebug("Bug 4071014 default test passed.");
         } else {
             errln("Failed:" + " Expected " + expectedDefault + " Received " + tempString);
         }
@@ -558,7 +558,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
         tempString = formatter.format(5789.9876);
 
         if (tempString.equals(expectedCurrency)) {
-            logln("Bug 4071014 currency test passed.");
+            logDebug("Bug 4071014 currency test passed.");
         } else {
             errln("Failed:" + " Expected " + expectedCurrency + " Received " + tempString);
         }
@@ -567,7 +567,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
         tempString = formatter.format(-5789.9876);
 
         if (tempString.equals(expectedPercent)) {
-            logln("Bug 4071014 percentage test passed.");
+            logDebug("Bug 4071014 percentage test passed.");
         } else {
             errln("Failed:" + " Expected " + expectedPercent + " Received " + tempString);
         }
@@ -594,7 +594,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
         tempString = formatter.format(-5789.9876);
 
         if (tempString.equals(expectedDefault)) {
-            logln("Bug 4071859 default test passed.");
+            logDebug("Bug 4071859 default test passed.");
         } else {
             errln("a) Failed:" + " Expected " + expectedDefault + " Received " + tempString);
         }
@@ -603,7 +603,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
         tempString = formatter.format(-5789.9876);
 
         if (tempString.equals(expectedCurrency)) {
-            logln("Bug 4071859 currency test passed.");
+            logDebug("Bug 4071859 currency test passed.");
         } else {
             errln("b) Failed:" + " Expected " + expectedCurrency + " Received " + tempString);
         }
@@ -612,7 +612,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
         tempString = formatter.format(-5789.9876);
 
         if (tempString.equals(expectedPercent)) {
-            logln("Bug 4071859 percentage test passed.");
+            logDebug("Bug 4071859 percentage test passed.");
         } else {
             errln("c) Failed:" + " Expected " + expectedPercent + " Received " + tempString);
         }
@@ -640,7 +640,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
 
     void roundingTest(DecimalFormat df, double x, String expected) {
         String out = df.format(x);
-        logln("" + x + " formats with 1 fractional digits to " + out);
+        logDebug("" + x + " formats with 1 fractional digits to " + out);
         if (!out.equals(expected)) errln("FAIL: Expected " + expected);
     }
 
@@ -650,9 +650,9 @@ public class NumberRegressionTests extends CoreTestFmwk {
         try {
             NumberFormat fmt = NumberFormat.getPercentInstance();
             fmt.setMaximumFractionDigits(20);
-            logln(fmt.format(.001));
+            logDebug(fmt.format(.001));
         } catch (Exception foo) {
-            warnln("Bug 4098471 failed with exception thrown : " + foo.getMessage());
+            errln("Bug 4098471 failed with exception thrown : " + foo.getMessage());
         }
     }
 
@@ -664,16 +664,16 @@ public class NumberRegressionTests extends CoreTestFmwk {
     public void Test4074454() {
         try {
             DecimalFormat fmt = new DecimalFormat("#,#00.00;-#.#");
-            logln(
+            logDebug(
                     "format 3456.78: "
                             + fmt.format(3456.78)); // fix "The variable 'fmt' is never used"
-            logln("Inconsistent negative pattern is fine.");
+            logDebug("Inconsistent negative pattern is fine.");
             DecimalFormat newFmt = new DecimalFormat("#,#00.00 p''ieces;-#,#00.00 p''ieces");
             String tempString = newFmt.format(3456.78);
             if (!tempString.equals("3,456.78 p'ieces"))
                 errln("Failed!  3456.78 p'ieces expected, but got : " + tempString);
         } catch (Exception foo) {
-            warnln("An exception was thrown for any inconsistent negative pattern.");
+            errln("An exception was thrown for any inconsistent negative pattern.");
         }
     }
 
@@ -692,21 +692,21 @@ public class NumberRegressionTests extends CoreTestFmwk {
     public void Test4099404() {
         try {
             DecimalFormat fmt = new DecimalFormat("000.0#0");
-            logln(
+            logDebug(
                     "format 3456.78: "
                             + fmt.format(3456.78)); // fix "The variable 'fmt' is never used"
             errln("Bug 4099404 failed applying illegal pattern \"000.0#0\"");
         } catch (Exception foo) {
-            logln("Bug 4099404 pattern \"000.0#0\" passed");
+            logDebug("Bug 4099404 pattern \"000.0#0\" passed");
         }
         try {
             DecimalFormat fmt = new DecimalFormat("0#0.000");
-            logln(
+            logDebug(
                     "format 3456.78: "
                             + fmt.format(3456.78)); // fix "The variable 'fmt' is never used"
             errln("Bug 4099404 failed applying illegal pattern \"0#0.000\"");
         } catch (Exception foo) {
-            logln("Bug 4099404 pattern \"0#0.000\" passed");
+            logDebug("Bug 4099404 pattern \"0#0.000\" passed");
         }
     }
 
@@ -726,7 +726,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
             Number num = fmt.parse("abc3");
             errln("Bug 4052223 failed : can't parse string \"a\".  Got " + num);
         } catch (ParseException foo) {
-            logln(
+            logDebug(
                     "Caught expected ParseException : "
                             + foo.getMessage()
                             + " at index : "
@@ -744,7 +744,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
         if (currency.equals("") || intlCurrency.equals("") || monDecSeparator == 0) {
             errln("getCurrencySymbols failed, got empty string.");
         }
-        logln(
+        logDebug(
                 "Before set ==> Currency : "
                         + currency
                         + " Intl Currency : "
@@ -760,7 +760,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
         if (!currency.equals("XYZ") || !intlCurrency.equals("ABC") || monDecSeparator != '*') {
             errln("setCurrencySymbols failed.");
         }
-        logln(
+        logDebug(
                 "After set ==> Currency : "
                         + currency
                         + " Intl Currency : "
@@ -819,7 +819,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
         double d1 = -0.0;
         double d2 = -0.0001;
         StringBuffer buffer = new StringBuffer();
-        logln("pattern: \"" + df.toPattern() + "\"");
+        logDebug("pattern: \"" + df.toPattern() + "\"");
         df.format(d1, buffer, new FieldPosition(0));
         if (!buffer.toString().equals("-0")) { // Corrected; see 4147706
             errln(d1 + "      is formatted as " + buffer);
@@ -839,7 +839,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
         String text = "x";
         ParsePosition pos1 = new ParsePosition(0), pos2 = new ParsePosition(0);
 
-        logln("pattern: \"" + df.toPattern() + "\"");
+        logDebug("pattern: \"" + df.toPattern() + "\"");
         Number num = df.parse(text, pos1);
         if (num != null) {
             errln("Test Failed: \"" + text + "\" is parsed as " + num);
@@ -873,8 +873,8 @@ public class NumberRegressionTests extends CoreTestFmwk {
         bigN = bigN.multiply(BigInteger.valueOf(m));
         df.setMultiplier(m);
         df.setGroupingUsed(false);
-        logln("formatted: " + df.format(n, new StringBuffer(), new FieldPosition(0)));
-        logln("expected: " + bigN.toString());
+        logDebug("formatted: " + df.format(n, new StringBuffer(), new FieldPosition(0)));
+        logDebug("expected: " + bigN.toString());
     }
 
     /** DecimalFormat.format incorrectly formats -0.0. */
@@ -886,7 +886,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
         df.setPositivePrefix("+");
         df.setNegativePrefix("-");
         double d = -0.0;
-        logln("pattern: \"" + df.toPattern() + "\"");
+        logDebug("pattern: \"" + df.toPattern() + "\"");
         StringBuffer buffer = new StringBuffer();
         df.format(d, buffer, new FieldPosition(0));
         if (!buffer.toString().equals("-0")) { // Corrected; see 4147706
@@ -901,7 +901,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
         // NOTE: Starting in ICU 60, the maximum integer digits is fixed at 100
         NumberFormat nf = NumberFormat.getInstance();
         nf.setMaximumIntegerDigits(99);
-        logln("setMaximumIntegerDigits(99)");
+        logDebug("setMaximumIntegerDigits(99)");
         if (nf.getMaximumIntegerDigits() != 99)
             errln("getMaximumIntegerDigits() returns " + nf.getMaximumIntegerDigits());
     }
@@ -1005,13 +1005,13 @@ public class NumberRegressionTests extends CoreTestFmwk {
     public void Test4125885() {
         double rate = 12.34;
         DecimalFormat formatDec = new DecimalFormat("000.00");
-        logln("toPattern: " + formatDec.toPattern());
+        logDebug("toPattern: " + formatDec.toPattern());
         String rateString = formatDec.format(rate);
         if (!rateString.equals("012.34")) errln("result : " + rateString + " expected : 012.34");
         rate = 0.1234;
         formatDec = null;
         formatDec = new DecimalFormat("+000.00%;-000.00%");
-        logln("toPattern: " + formatDec.toPattern());
+        logDebug("toPattern: " + formatDec.toPattern());
         rateString = formatDec.format(rate);
         if (!rateString.equals("+012.34%"))
             errln("result : " + rateString + " expected : +012.34%");
@@ -1023,11 +1023,11 @@ public class NumberRegressionTests extends CoreTestFmwk {
         DecimalFormat nf = new DecimalFormat("##,###,###.00");
 
         String f = nf.format(9.02);
-        if (f.equals("9.02")) logln(f + " ok");
+        if (f.equals("9.02")) logDebug(f + " ok");
         else errln("9.02 -> " + f + "; want 9.02");
 
         f = nf.format(0);
-        if (f.equals(".00")) logln(f + " ok");
+        if (f.equals(".00")) logDebug(f + " ok");
         else errln("0 -> " + f + "; want .00");
     }
 
@@ -1061,7 +1061,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
             if (!result.equals(DATA[i + 1])) {
                 errln("Fail: 1.2 x " + DATA[i] + " = " + result + "; want " + DATA[i + 1]);
             } else {
-                logln("Ok: 1.2 x " + DATA[i] + " = " + result);
+                logDebug("Ok: 1.2 x " + DATA[i] + " = " + result);
             }
         }
     }
@@ -1098,7 +1098,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
             String sd = NumberFormat.getInstance(Locale.US).format(bd);
             if (!sd.endsWith("67")) errln("Fail: " + str + " x format -> " + sd);
         } catch (Exception e) {
-            warnln(e.toString());
+            errln(e.toString());
             // e.printStackTrace();
         }
     }
@@ -1135,10 +1135,10 @@ public class NumberRegressionTests extends CoreTestFmwk {
                                     + "\" vs. \""
                                     + pat2
                                     + "\"");
-                else logln("Ok \"" + PATS[i] + "\" toPattern() -> \"" + pat + '"');
+                else logDebug("Ok \"" + PATS[i] + "\" toPattern() -> \"" + pat + '"');
 
                 if (val == val2 && out.equals(out2)) {
-                    logln(
+                    logDebug(
                             "Ok "
                                     + pi
                                     + " x \""
@@ -1181,7 +1181,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
     public void Test4147295() {
         DecimalFormat sdf = new DecimalFormat();
         String pattern = "#,###";
-        logln("Applying pattern \"" + pattern + "\"");
+        logDebug("Applying pattern \"" + pattern + "\"");
         sdf.applyPattern(pattern);
         int minIntDig = sdf.getMinimumIntegerDigits();
         // In ICU 58 and older, this case returned 0.
@@ -1191,8 +1191,8 @@ public class NumberRegressionTests extends CoreTestFmwk {
             errln(" Minimum integer digits : " + minIntDig);
             errln(" new pattern: " + sdf.toPattern());
         } else {
-            logln("Test passed");
-            logln(" Minimum integer digits : " + minIntDig);
+            logDebug("Test passed");
+            logDebug(" Minimum integer digits : " + minIntDig);
         }
     }
 
@@ -1221,7 +1221,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
         f.setMaximumFractionDigits(Integer.MAX_VALUE);
         f.setMaximumIntegerDigits(Integer.MAX_VALUE);
         String s = f.format(dbl);
-        logln("The number " + dbl + " formatted to " + s);
+        logDebug("The number " + dbl + " formatted to " + s);
         Number n = null;
         try {
             n = f.parse(s);
@@ -1229,7 +1229,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
             errln("Caught a ParseException:");
             e.printStackTrace();
         }
-        logln("The string " + s + " parsed as " + n);
+        logDebug("The string " + s + " parsed as " + n);
         assertEquals("Round trip failure", dbl, n.doubleValue());
     }
 
@@ -1242,9 +1242,9 @@ public class NumberRegressionTests extends CoreTestFmwk {
             double d = -0.0;
             String s = f.format(d);
             double e = f.parse(s).doubleValue();
-            logln("" + d + " -> " + '"' + s + '"' + " -> " + e);
+            logDebug("" + d + " -> " + '"' + s + '"' + " -> " + e);
             if (e != 0.0 || 1.0 / e > 0.0) {
-                logln("Failed to parse negative zero");
+                logDebug("Failed to parse negative zero");
             }
         }
     }
@@ -1259,7 +1259,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
         double b = fmt.parse(s).doubleValue();
         boolean match = a == b;
         if (match) {
-            logln("" + a + " -> \"" + s + "\" -> " + b + " ok");
+            logDebug("" + a + " -> \"" + s + "\" -> " + b + " ok");
         } else {
             errln("" + a + " -> \"" + s + "\" -> " + b + " FAIL");
         }
@@ -1274,7 +1274,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
             b = fmt.parse(s).doubleValue();
             match = a == b;
             if (match) {
-                logln("" + a + " -> \"" + s + "\" -> " + b + " ok");
+                logDebug("" + a + " -> \"" + s + "\" -> " + b + " ok");
             } else {
                 errln("" + a + " -> \"" + s + "\" -> " + b + " FAIL");
             }
@@ -1338,7 +1338,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
             fmt.applyPattern(pat);
             String out = fmt.format(in);
             if (out.equals(exp)) {
-                logln("Ok: " + in + " x " + pat + " = " + out);
+                logDebug("Ok: " + in + " x " + pat + " = " + out);
             } else {
                 errln("FAIL: " + in + " x  " + pat + " = " + out + ", expected " + exp);
             }
@@ -1627,7 +1627,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
         for (int i = 0; i < DATA.length; i++) {
             String result = format.format(DATA[i]);
             if (result.equals(EXPECTED[i])) {
-                logln("OK: got " + result);
+                logDebug("OK: got " + result);
             } else {
                 errln("FAIL: got " + result);
             }
@@ -1640,14 +1640,14 @@ public class NumberRegressionTests extends CoreTestFmwk {
         DecimalFormat f = new DecimalFormat("#.#");
         String result = f.format(0.0);
         if (result.equals("0")) {
-            logln("OK: got " + result);
+            logDebug("OK: got " + result);
         } else {
             errln("FAIL: got " + result);
         }
         try {
             double dResult = f.parse("99.99").doubleValue();
             if (dResult == 99.99) {
-                logln("OK: got " + dResult);
+                logDebug("OK: got " + dResult);
             } else {
                 errln("FAIL: got " + dResult);
             }
@@ -1657,7 +1657,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
         }
         result = f.format(0.0);
         if (result.equals("0")) {
-            logln("OK: got " + result);
+            logDebug("OK: got " + result);
         } else {
             errln("FAIL: got " + result);
         }

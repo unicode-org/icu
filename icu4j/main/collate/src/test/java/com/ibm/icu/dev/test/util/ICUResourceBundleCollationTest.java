@@ -72,7 +72,7 @@ public final class ICUResourceBundleCollationTest extends TestFmwk {
             "f", "nl_NL_EEXT@collation=stroke", "root",
         };
 
-        logln("Testing functional equivalents for collation...");
+        logDebug("Testing functional equivalents for collation...");
         getFunctionalEquivalentTestCases(
                 ICUData.ICU_COLLATION_BASE_NAME,
                 Collator.class.getClassLoader(),
@@ -113,7 +113,7 @@ public final class ICUResourceBundleCollationTest extends TestFmwk {
             }
 
         } catch (MissingResourceException ex) {
-            logln("got the expected exception");
+            logDebug("got the expected exception");
         }
 
         bundle =
@@ -131,18 +131,18 @@ public final class ICUResourceBundleCollationTest extends TestFmwk {
         boolean foundStandard = false;
         int n;
 
-        logln("Testing getting collation values:");
+        logDebug("Testing getting collation values:");
         kwVals =
                 ICUResourceBundle.getKeywordValues(
                         ICUData.ICU_COLLATION_BASE_NAME, COLLATION_RESNAME);
         for (n = 0; n < kwVals.length; n++) {
-            logln(Integer.valueOf(n).toString() + ": " + kwVals[n]);
+            logDebug(Integer.valueOf(n).toString() + ": " + kwVals[n]);
             if (DEFAULT_NAME.equals(kwVals[n])) {
                 errln("getKeywordValues for collation returned 'default' in the list.");
             } else if (STANDARD_NAME.equals(kwVals[n])) {
                 if (foundStandard == false) {
                     foundStandard = true;
-                    logln("found 'standard'");
+                    logDebug("found 'standard'");
                 } else {
                     errln("Error - 'standard' is in the keyword list twice!");
                 }
@@ -152,7 +152,7 @@ public final class ICUResourceBundleCollationTest extends TestFmwk {
         if (foundStandard == false) {
             errln("Error - 'standard' was not in the collation tree as a keyword.");
         } else {
-            logln("'standard' was found as a collation keyword.");
+            logDebug("'standard' was found as a collation keyword.");
         }
     }
 
@@ -255,13 +255,13 @@ public final class ICUResourceBundleCollationTest extends TestFmwk {
         String T_STR = "t";
         boolean isAvail[] = new boolean[1];
 
-        logln("Testing functional equivalents...");
+        logDebug("Testing functional equivalents...");
         for (int i = 0; i < testCases.length; i += 3) {
             boolean expectAvail = T_STR.equals(testCases[i + 0]);
             ULocale inLocale = new ULocale(testCases[i + 1]);
             ULocale expectLocale = new ULocale(testCases[i + 2]);
 
-            logln("" + i / 3 + ": " + expectAvail + "\t\t" + inLocale + "\t\t" + expectLocale);
+            logDebug("" + i / 3 + ": " + expectAvail + "\t\t" + inLocale + "\t\t" + expectLocale);
 
             ULocale equivLocale =
                     ICUResourceBundle.getFunctionalEquivalent(

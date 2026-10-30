@@ -76,18 +76,18 @@ public class HolidayTest extends CoreTestFmwk {
     }
 
     void exerciseHoliday(Holiday h, Locale locale) {
-        logln("holiday: " + h.getDisplayName());
-        logln("holiday in " + locale + ": " + h.getDisplayName(locale));
+        logDebug("holiday: " + h.getDisplayName());
+        logDebug("holiday in " + locale + ": " + h.getDisplayName(locale));
 
         Date first = h.firstAfter(longTimeAgo);
-        logln("firstAfter: " + longTimeAgo + " is " + first);
+        logDebug("firstAfter: " + longTimeAgo + " is " + first);
         if (first == null) {
             first = longTimeAgo;
         }
         first.setTime(first.getTime() + awhile);
 
         Date second = h.firstBetween(first, now);
-        logln("firstBetween: " + first + " and " + now + " is " + second);
+        logDebug("firstBetween: " + first + " and " + now + " is " + second);
         if (second == null) {
             second = now;
         } else {
@@ -104,16 +104,16 @@ public class HolidayTest extends CoreTestFmwk {
             }
         }
 
-        logln("is on " + first + ": " + h.isOn(first));
-        logln("is on " + now + ": " + h.isOn(now));
-        logln("is between " + first + " and " + now + ": " + h.isBetween(first, now));
-        logln("is between " + first + " and " + second + ": " + h.isBetween(first, second));
+        logDebug("is on " + first + ": " + h.isOn(first));
+        logDebug("is on " + now + ": " + h.isOn(now));
+        logDebug("is between " + first + " and " + now + ": " + h.isBetween(first, now));
+        logDebug("is between " + first + " and " + second + ": " + h.isBetween(first, second));
 
         //        logln("rule: " + h.getRule().toString());
 
         //        h.setRule(h.getRule());
 
-        logln("HolidayCalendarDemo test");
+        logDebug("HolidayCalendarDemo test");
         {
             final Calendar c = Calendar.getInstance(TimeZone.GMT_ZONE); // Temporary copy
             c.set(2014, 10, 8); // when this test was hit
@@ -173,7 +173,7 @@ public class HolidayTest extends CoreTestFmwk {
                         break;
                     }
                     c.setTime(d);
-                    logln("New date: " + d);
+                    logDebug("New date: " + d);
                     //                    fHolidays.addElement( new
                     // HolidayInfo(c.get(Calendar.DATE),
                     //                                            fAllHolidays[h],
@@ -229,19 +229,19 @@ public class HolidayTest extends CoreTestFmwk {
         rdr.add(nbd, new SimpleDateRule(Calendar.DECEMBER, 17, Calendar.MONDAY, false));
         rdr.add(ybd, null);
 
-        logln("first after " + mbd + " is " + rdr.firstAfter(mbd));
-        logln("first between " + mbd + " and " + dbd + " is " + rdr.firstBetween(mbd, dbd));
-        logln("first between " + dbd + " and " + nbd + " is " + rdr.firstBetween(dbd, nbd));
-        logln("first between " + nbd + " and " + abd + " is " + rdr.firstBetween(nbd, abd));
-        logln("first between " + abd + " and " + xbd + " is " + rdr.firstBetween(abd, xbd));
-        logln("first between " + abd + " and " + null + " is " + rdr.firstBetween(abd, null));
-        logln("first between " + xbd + " and " + null + " is " + rdr.firstBetween(xbd, null));
+        logDebug("first after " + mbd + " is " + rdr.firstAfter(mbd));
+        logDebug("first between " + mbd + " and " + dbd + " is " + rdr.firstBetween(mbd, dbd));
+        logDebug("first between " + dbd + " and " + nbd + " is " + rdr.firstBetween(dbd, nbd));
+        logDebug("first between " + nbd + " and " + abd + " is " + rdr.firstBetween(nbd, abd));
+        logDebug("first between " + abd + " and " + xbd + " is " + rdr.firstBetween(abd, xbd));
+        logDebug("first between " + abd + " and " + null + " is " + rdr.firstBetween(abd, null));
+        logDebug("first between " + xbd + " and " + null + " is " + rdr.firstBetween(xbd, null));
 
         // getRule, setRule
-        logln("The rule in the holiday: " + h[1].getRule());
+        logDebug("The rule in the holiday: " + h[1].getRule());
         exerciseHoliday(h[1], Locale.getDefault());
         h[1].setRule(rdr);
-        logln("Set the new rule to the SimpleHoliday ...");
+        logDebug("Set the new rule to the SimpleHoliday ...");
         if (!rdr.equals(h[1].getRule())) {
             errln("FAIL: getRule and setRule not matched.");
         }
@@ -302,14 +302,14 @@ public class HolidayTest extends CoreTestFmwk {
         boolean[] isOns = {true, true, false, true, false, false, true, true, false};
         for (int i = 0; i < dates.length; ++i) {
             Date d = dates[i];
-            logln("\ndate: " + d);
+            logDebug("\ndate: " + d);
             boolean isOn = sh.isOn(d);
-            logln("isOnDate: " + isOn);
+            logDebug("isOnDate: " + isOn);
             if (isOn != isOns[i]) {
                 errln("date: " + d + " should be on Doug's Day!");
             }
             Date h = sh.firstAfter(d);
-            logln("firstAfter: " + h);
+            logDebug("firstAfter: " + h);
         }
     }
 

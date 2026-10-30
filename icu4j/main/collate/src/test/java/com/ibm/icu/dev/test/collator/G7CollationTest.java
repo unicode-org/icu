@@ -122,7 +122,7 @@ public class G7CollationTest extends TestFmwk {
     // perform test with added rules " & Z < p, P"
     @Test
     public void TestDemo1() {
-        logln("Demo Test 1 : Create a new table collation with rules \"& Z < p, P\"");
+        logDebug("Demo Test 1 : Create a new table collation with rules \"& Z < p, P\"");
 
         Collator col = Collator.getInstance(Locale.ENGLISH);
 
@@ -148,7 +148,7 @@ public class G7CollationTest extends TestFmwk {
     // perorm test with added rules "& C < ch , cH, Ch, CH"
     @Test
     public void TestDemo2() {
-        logln("Demo Test 2 : Create a new table collation with rules \"& C < ch , cH, Ch, CH\"");
+        logDebug("Demo Test 2 : Create a new table collation with rules \"& C < ch , cH, Ch, CH\"");
         Collator col = Collator.getInstance(Locale.ENGLISH);
 
         String baseRules = ((RuleBasedCollator) col).getRules();
@@ -201,7 +201,7 @@ public class G7CollationTest extends TestFmwk {
     // " & aa ; a'-' & ee ; e'-' & ii ; i'-' & oo ; o'-' & uu ; u'-' "
     @Test
     public void TestDemo4() {
-        logln(
+        logDebug(
                 "Demo Test 4 : Create a new table collation with rules \" & aa ; a'-' & ee ; e'-' & ii ; i'-' & oo ; o'-' & uu ; u'-' \"");
         Collator col = Collator.getInstance(Locale.ENGLISH);
 
@@ -244,7 +244,7 @@ public class G7CollationTest extends TestFmwk {
                 myCollation = Collator.getInstance(locales[i]);
                 tblColl1 = new RuleBasedCollator(((RuleBasedCollator) myCollation).getRules());
             } catch (Exception foo) {
-                warnln(
+                errln(
                         "Exception: "
                                 + foo.getMessage()
                                 + "; Locale : "
@@ -311,7 +311,7 @@ public class G7CollationTest extends TestFmwk {
             sResult = CollationTest.appendCompareResult(compareResult, sResult);
             sExpect = CollationTest.appendCompareResult(expectedResult, sExpect);
             if (ok1) {
-                logln(msg1 + source + msg2 + target + msg3 + sResult);
+                logDebug(msg1 + source + msg2 + target + msg3 + sResult);
             } else {
                 errln(msg1 + source + msg2 + target + msg3 + sResult + msg4 + sExpect);
             }
@@ -321,7 +321,7 @@ public class G7CollationTest extends TestFmwk {
             msg3 = "\")) returned ";
             sResult = CollationTest.appendCompareResult(keyResult, sResult);
             if (ok2) {
-                logln(msg1 + source + msg2 + target + msg3 + sResult);
+                logDebug(msg1 + source + msg2 + target + msg3 + sResult);
             } else {
                 errln(msg1 + source + msg2 + target + msg3 + sResult + msg4 + sExpect);
                 msg1 = "  ";
@@ -340,7 +340,7 @@ public class G7CollationTest extends TestFmwk {
             sResult = CollationTest.appendCompareResult(incResult, sResult);
 
             if (ok3) {
-                logln(msg1 + source + msg2 + target + msg3 + sResult);
+                logDebug(msg1 + source + msg2 + target + msg3 + sResult);
             } else {
                 errln(msg1 + source + msg2 + target + msg3 + sResult + msg4 + sExpect);
             }

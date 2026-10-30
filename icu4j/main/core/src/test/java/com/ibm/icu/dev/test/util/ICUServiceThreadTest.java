@@ -197,7 +197,7 @@ public class ICUServiceThreadTest extends CoreTestFmwk {
         protected void iterate() {
             ICUService.Factory f = new TestFactory(getCLV());
             service.registerFactory(f);
-            fmwk.logln(f.toString());
+            fmwk.logDebug(f.toString());
         }
     }
 
@@ -221,7 +221,7 @@ public class ICUServiceThreadTest extends CoreTestFmwk {
                 int n = r.nextInt(s);
                 ICUService.Factory f = (ICUService.Factory) factories.remove(n);
                 boolean success = service.unregisterFactory(f);
-                logln("factory: " + f + (success ? " succeeded." : " *** failed."));
+                logDebug("factory: " + f + (success ? " succeeded." : " *** failed."));
             }
         }
     }
@@ -246,7 +246,7 @@ public class ICUServiceThreadTest extends CoreTestFmwk {
             if (n < factories.length) {
                 ICUService.Factory f = factories[n++];
                 boolean success = service.unregisterFactory(f);
-                logln("factory: " + f + (success ? " succeeded." : " *** failed."));
+                logDebug("factory: " + f + (success ? " succeeded." : " *** failed."));
             }
         }
     }
@@ -264,7 +264,7 @@ public class ICUServiceThreadTest extends CoreTestFmwk {
             while (--n >= 0 && iter.hasNext()) {
                 String id = iter.next();
                 Object result = service.get(id);
-                logln("iter: " + n + " id: " + id + " result: " + result);
+                logDebug("iter: " + n + " id: " + id + " result: " + result);
             }
         }
     }
@@ -295,7 +295,7 @@ public class ICUServiceThreadTest extends CoreTestFmwk {
                 // int to String out of this statement resolves the issue.
 
                 String num = Integer.toString(n);
-                logln(" iter: " + num + " dname: " + dname + " id: " + id + " result: " + result);
+                logDebug(" iter: " + num + " dname: " + dname + " id: " + id + " result: " + result);
             }
         }
     }
@@ -314,7 +314,7 @@ public class ICUServiceThreadTest extends CoreTestFmwk {
             String id = getCLV();
             Object o = service.get(id, actualID);
             if (o != null) {
-                logln(" id: " + id + " actual: " + actualID[0] + " result: " + o);
+                logDebug(" id: " + id + " actual: " + actualID[0] + " result: " + o);
             }
         }
     }
@@ -336,7 +336,7 @@ public class ICUServiceThreadTest extends CoreTestFmwk {
             }
             String id = list[n];
             Object o = service.get(id);
-            logln(" id: " + id + " result: " + o);
+            logDebug(" id: " + id + " result: " + o);
         }
     }
 

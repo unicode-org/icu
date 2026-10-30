@@ -112,7 +112,7 @@ public class CalendarTestFmwk extends CoreTestFmwk {
 
         // Now iterate through the test cases and see what happens
         for (int i = 0; i < cases.length; i++) {
-            logln("\ntest case: " + i);
+            logDebug("\ntest case: " + i);
             TestCase test = cases[i];
 
             //
@@ -216,7 +216,7 @@ public class CalendarTestFmwk extends CoreTestFmwk {
                                 + ", got "
                                 + ymdToString(cal));
             } else if (isVerbose()) {
-                logln(
+                logDebug(
                         "OK: "
                                 + name
                                 + " "
@@ -261,7 +261,7 @@ public class CalendarTestFmwk extends CoreTestFmwk {
             Calendar cal, int[] fieldsToTest, Date startDate, int testDuration) {
         GregorianCalendar greg = new GregorianCalendar();
         greg.setTime(startDate);
-        logln("Start: " + startDate);
+        logDebug("Start: " + startDate);
 
         if (fieldsToTest == null) {
             fieldsToTest =
@@ -294,7 +294,7 @@ public class CalendarTestFmwk extends CoreTestFmwk {
                 testDuration > 0 ? i < testDuration : System.currentTimeMillis() < millis;
                 ++i) {
             if (System.currentTimeMillis() >= mark) {
-                logln("(" + i + " days)");
+                logDebug("(" + i + " days)");
                 mark += 5000; // 5 sec
             }
             cal.setTimeInMillis(greg.getTimeInMillis());
@@ -400,16 +400,16 @@ public class CalendarTestFmwk extends CoreTestFmwk {
                 buf.append(") range=" + rangeLow + ".." + rangeHigh);
             }
             if (fullRangeSeen) {
-                logln("OK: " + buf.toString());
+                logDebug("OK: " + buf.toString());
             } else {
                 // This may or may not be an error -- if the range of dates
                 // we scan over doesn't happen to contain a minimum or
                 // maximum, it doesn't mean some other range won't.
-                logln("Warning: " + buf.toString());
+                logDebug("Warning: " + buf.toString());
             }
         }
 
-        logln("End: " + greg.getTime());
+        logDebug("End: " + greg.getTime());
     }
 
     /** doLimitsTest with default test duration */

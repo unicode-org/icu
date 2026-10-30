@@ -49,18 +49,18 @@ public class DateFormatRoundTripTest extends CoreTestFmwk {
 
         final Locale[] avail = DateFormat.getAvailableLocales();
         int locCount = avail.length;
-        logln("DateFormat available locales: " + locCount);
+        logDebug("DateFormat available locales: " + locCount);
         if (quick) {
             if (locCount > 5) locCount = 5;
-            logln("Quick mode: only testing first 5 Locales");
+            logDebug("Quick mode: only testing first 5 Locales");
         }
         TimeZone tz = TimeZone.getDefault();
-        logln("Default TimeZone:             " + tz.getID());
+        logDebug("Default TimeZone:             " + tz.getID());
 
         if (INFINITE) {
             // Special infinite loop test mode for finding hard to reproduce errors
             Locale loc = Locale.getDefault();
-            logln("ENTERING INFINITE TEST LOOP FOR Locale: " + loc.getDisplayName());
+            logDebug("ENTERING INFINITE TEST LOOP FOR Locale: " + loc.getDisplayName());
             for (; ; ) {
                 _test(loc);
             }
@@ -89,7 +89,7 @@ public class DateFormatRoundTripTest extends CoreTestFmwk {
 
     private void _test(Locale loc) {
         if (!INFINITE) {
-            logln("Locale: " + loc.getDisplayName());
+            logDebug("Locale: " + loc.getDisplayName());
         }
         // Total possibilities = 24
         //  4 date
@@ -112,7 +112,7 @@ public class DateFormatRoundTripTest extends CoreTestFmwk {
         int style = 0;
         for (style = DateFormat.FULL; style <= DateFormat.SHORT; ++style) {
             if (TEST_TABLE[itable++]) {
-                logln("Testing style " + styleName(style));
+                logDebug("Testing style " + styleName(style));
                 DateFormat df = DateFormat.getDateInstance(style, loc);
                 _test(df, false);
             }
@@ -120,7 +120,7 @@ public class DateFormatRoundTripTest extends CoreTestFmwk {
 
         for (style = DateFormat.FULL; style <= DateFormat.SHORT; ++style) {
             if (TEST_TABLE[itable++]) {
-                logln("Testing style " + styleName(style));
+                logDebug("Testing style " + styleName(style));
                 DateFormat df = DateFormat.getTimeInstance(style, loc);
                 _test(df, true);
             }
@@ -129,7 +129,7 @@ public class DateFormatRoundTripTest extends CoreTestFmwk {
         for (int dstyle = DateFormat.FULL; dstyle <= DateFormat.SHORT; ++dstyle) {
             for (int tstyle = DateFormat.FULL; tstyle <= DateFormat.SHORT; ++tstyle) {
                 if (TEST_TABLE[itable++]) {
-                    logln("Testing dstyle " + styleName(dstyle) + ", tstyle " + styleName(tstyle));
+                    logDebug("Testing dstyle " + styleName(dstyle) + ", tstyle " + styleName(tstyle));
                     DateFormat df = DateFormat.getDateTimeInstance(dstyle, tstyle, loc);
                     _test(df, false);
                 }
@@ -145,7 +145,7 @@ public class DateFormatRoundTripTest extends CoreTestFmwk {
         }
 
         String pat = ((SimpleDateFormat) fmt).toPattern();
-        logln(pat);
+        logDebug(pat);
 
         // NOTE TO MAINTAINER
         // This indexOf check into the pattern needs to be refined to ignore
@@ -237,8 +237,8 @@ public class DateFormatRoundTripTest extends CoreTestFmwk {
                 if (dmatch > maxDmatch || smatch > maxSmatch) {
                     SimpleDateFormat sdf =
                             new SimpleDateFormat("EEEE, MMMM d, yyyy HH:mm:ss, z G", Locale.US);
-                    logln("Date = " + sdf.format(d[0]) + "; ms = " + d[0].getTime());
-                    logln(
+                    logDebug("Date = " + sdf.format(d[0]) + "; ms = " + d[0].getTime());
+                    logDebug(
                             "Dmatch: "
                                     + dmatch
                                     + " maxD: "
@@ -250,7 +250,7 @@ public class DateFormatRoundTripTest extends CoreTestFmwk {
                     for (int j = 0; j <= loop && j < DEPTH; ++j) {
                         StringBuffer temp = new StringBuffer("");
                         FieldPosition pos = new FieldPosition(0);
-                        logln(
+                        logDebug(
                                 (j > 0 ? " P> " : "    ")
                                         + dateFormat.format(d[j], temp, pos)
                                         + " F> "
@@ -265,7 +265,7 @@ public class DateFormatRoundTripTest extends CoreTestFmwk {
             }
         } catch (ParseException e) {
             errln("Exception: " + e.getMessage());
-            logln(e.toString());
+            logDebug(e.toString());
         }
     }
 

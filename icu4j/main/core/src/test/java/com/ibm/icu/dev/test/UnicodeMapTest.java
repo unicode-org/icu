@@ -122,13 +122,13 @@ public class UnicodeMapTest extends TestFmwk {
         for (int i = 0; i < iterations; ++i) {
             switch (rand.nextInt(20)) {
                 case 0:
-                    logln("clear");
+                    logDebug("clear");
                     stayWithMe.clear();
                     me.clear();
                     break;
                 case 1:
                     fillRandomMap(rand, 5, test);
-                    logln("putAll\t" + test);
+                    logDebug("putAll\t" + test);
                     stayWithMe.putAll(test);
                     me.putAll(test);
                     break;
@@ -144,7 +144,7 @@ public class UnicodeMapTest extends TestFmwk {
                     // && me.get(0x10FFFF).equals(me.get(0x10FFFE))) {
                     //                    System.out.println("Remove\t" + other + "\n" + me);
                     //                }
-                    logln("remove\t" + other);
+                    logDebug("remove\t" + other);
                     stayWithMe.remove(other);
                     try {
                         me.remove(other);
@@ -157,7 +157,7 @@ public class UnicodeMapTest extends TestFmwk {
                 default:
                     other = getRandomKey(rand);
                     value = rand.nextInt(50) + 50;
-                    logln("put\t" + other + " = " + value);
+                    logDebug("put\t" + other + " = " + value);
                     stayWithMe.put(other, value);
                     me.put(other, value);
                     break;
@@ -193,8 +193,8 @@ public class UnicodeMapTest extends TestFmwk {
         }
         Set<Map.Entry<String, Integer>> entrySet = stayWithMe.entrySet();
         if (!entrySet.equals(temp)) {
-            logln(me.entrySet().toString());
-            logln(me.toString());
+            logDebug(me.entrySet().toString());
+            logDebug(me.toString());
             assertEquals("are in parallel", entrySet, temp);
             // we failed. Reset and start again
             entrySet.clear();
@@ -277,13 +277,13 @@ public class UnicodeMapTest extends TestFmwk {
             }
             int modCount = count & 0xFF;
             if (modCount == 0 && isVerbose()) {
-                logln("***" + count);
-                logln(unicodeMap.toString());
+                logDebug("***" + count);
+                logDebug(unicodeMap.toString());
             }
             unicodeMap.putAll(start, end, value);
             if (modCount == 1 && isVerbose()) {
-                logln(">>>\t" + Utility.hex(start) + ".." + Utility.hex(end) + "\t" + value);
-                logln(unicodeMap.toString());
+                logDebug(">>>\t" + Utility.hex(start) + ".." + Utility.hex(end) + "\t" + value);
+                logDebug(unicodeMap.toString());
             }
             for (int i = start; i <= end; ++i) {
                 hashMap.put(i, value);
@@ -330,14 +330,14 @@ public class UnicodeMapTest extends TestFmwk {
     public void TestUnicodeMapRandom() {
         // do random change to both, then compare
         random.setSeed(12345); // reproducible results
-        logln("Comparing against HashMap");
+        logDebug("Comparing against HashMap");
         UnicodeMap<String> map1 = new UnicodeMap<>();
         Map<Integer, String> map2 = new HashMap<Integer, String>();
         for (int counter = 0; counter < ITERATIONS; ++counter) {
             int start = random.nextInt(LIMIT);
             String value = TEST_VALUES[random.nextInt(TEST_VALUES.length)];
             String logline = Utility.hex(start) + "\t" + value;
-            if (SHOW_PROGRESS) logln(counter + "\t" + logline);
+            if (SHOW_PROGRESS) logDebug(counter + "\t" + logline);
             log.add(logline);
             if (DEBUG && counter == 144) {
                 System.out.println(" debug");
@@ -353,7 +353,7 @@ public class UnicodeMapTest extends TestFmwk {
 
     @Test
     public void TestUnicodeMapGeneralCategory() {
-        logln("Setting General Category");
+        logDebug("Setting General Category");
         UnicodeMap<String> map1 = new UnicodeMap<>();
         Map<Integer, String> map2 = new HashMap<Integer, String>();
         // Map<Integer, String> map3 = new TreeMap<Integer, String>();
@@ -380,18 +380,18 @@ public class UnicodeMapTest extends TestFmwk {
         }
         checkNext(map1, map2, Integer.MAX_VALUE);
 
-        logln("Comparing General Category");
+        logDebug("Comparing General Category");
         check(map1, map2, -1);
-        logln("Comparing Values");
+        logDebug("Comparing Values");
         Set<String> values1 = map1.getAvailableValues(new TreeSet<String>());
         Set<String> values2 = new TreeSet<String>(map2.values());
         if (!TestBoilerplate.verifySetsIdentical(this, values1, values2)) {
             fail("Two string sets are not identical");
         }
-        logln("Comparing Sets");
+        logDebug("Comparing Sets");
         for (Iterator<String> it = values1.iterator(); it.hasNext(); ) {
             String value = it.next();
-            logln(value == null ? "null" : value);
+            logDebug(value == null ? "null" : value);
             UnicodeSet set1 = map1.keySet(value);
             UnicodeSet set2 = TestBoilerplate.getSet(map2, value);
             if (!TestBoilerplate.verifySetsIdentical(this, set1, set2)) {
@@ -424,11 +424,11 @@ public class UnicodeMapTest extends TestFmwk {
     }
 
     private void checkNext(UnicodeMap<String> map1, Map<Integer, String> map2, int limit) {
-        logln("Comparing nextRange");
+        logDebug("Comparing nextRange");
         Map<Integer, String> localMap = new TreeMap<>();
         UnicodeMapIterator<String> mi = new UnicodeMapIterator<String>(map1);
         while (mi.nextRange()) {
-            logln(
+            logDebug(
                     Utility.hex(mi.codepoint)
                             + ".."
                             + Utility.hex(mi.codepointEnd)
@@ -441,7 +441,7 @@ public class UnicodeMapTest extends TestFmwk {
         }
         checkMap(map2, localMap);
 
-        logln("Comparing next");
+        logDebug("Comparing next");
         mi.reset();
         localMap = new TreeMap<>();
         //        String lastValue = null;

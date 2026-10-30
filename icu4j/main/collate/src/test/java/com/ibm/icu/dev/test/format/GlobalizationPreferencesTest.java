@@ -46,18 +46,18 @@ public class GlobalizationPreferencesTest extends TestFmwk {
             errln("FAIL: The default locale of the test environment must be en_US");
         }
 
-        logln("Default locale: " + defLocale.toString());
+        logDebug("Default locale: " + defLocale.toString());
 
         // First locale is en_US
         ULocale gpLocale0 = gp.getLocale(0);
-        logln("Primary locale: " + gpLocale0.toString());
+        logDebug("Primary locale: " + gpLocale0.toString());
         if (!gpLocale0.equals(defLocale)) {
             errln("FAIL: The primary locale is not en_US");
         }
 
         // Second locale is en
         ULocale gpLocale1 = gp.getLocale(1);
-        logln("Secondary locale: " + gpLocale1.toString());
+        logDebug("Secondary locale: " + gpLocale1.toString());
         if (!gpLocale1.equals(defFallbackLocale)) {
             errln("FAIL: The secondary locale is not en");
         }
@@ -71,7 +71,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         // Calendar locale
         Calendar cal = gp.getCalendar();
         ULocale calLocale = cal.getLocale(ULocale.VALID_LOCALE);
-        logln("Calendar locale: " + calLocale.toString());
+        logDebug("Calendar locale: " + calLocale.toString());
         if (!calLocale.equals(defLocale)) {
             errln("FAIL: The calendar locale must match with the default JVM locale");
         }
@@ -79,7 +79,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         // Collator locale
         Collator coll = gp.getCollator();
         ULocale collLocale = coll.getLocale(ULocale.VALID_LOCALE);
-        logln("Collator locale: " + collLocale.toString());
+        logDebug("Collator locale: " + collLocale.toString());
         if (!collLocale.equals(defLocale)) {
             errln("FAIL: The collator locale must match with the default JVM locale");
         }
@@ -87,7 +87,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         // BreakIterator locale
         BreakIterator brk = gp.getBreakIterator(GlobalizationPreferences.BI_CHARACTER);
         ULocale brkLocale = brk.getLocale(ULocale.VALID_LOCALE);
-        logln("BreakIterator locale: " + brkLocale.toString());
+        logDebug("BreakIterator locale: " + brkLocale.toString());
         if (!brkLocale.equals(defLocale)) {
             errln("FAIL: The break iterator locale must match with the default JVM locale");
         }
@@ -105,7 +105,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         // NumberFormat locale
         NumberFormat nf = gp.getNumberFormat(GlobalizationPreferences.NF_NUMBER);
         ULocale nfLocale = nf.getLocale(ULocale.VALID_LOCALE);
-        logln("NumberFormat locale: " + nfLocale.toString());
+        logDebug("NumberFormat locale: " + nfLocale.toString());
         if (!nfLocale.equals(defLocale)) {
             errln("FAIL: The number format locale must match with the default JVM locale");
         }
@@ -113,13 +113,13 @@ public class GlobalizationPreferencesTest extends TestFmwk {
 
     @Test
     public void TestFreezable() {
-        logln("Create a new GlobalizationPreference object");
+        logDebug("Create a new GlobalizationPreference object");
         GlobalizationPreferences gp = new GlobalizationPreferences();
         if (gp.isFrozen()) {
             errln("FAIL: This object is not yet frozen");
         }
 
-        logln("Call reset()");
+        logDebug("Call reset()");
         boolean bSet = true;
         try {
             gp.reset();
@@ -131,14 +131,14 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // Freeze the object
-        logln("Freeze the object");
+        logDebug("Freeze the object");
         gp.freeze();
         if (!gp.isFrozen()) {
             errln("FAIL: This object is already fronzen");
         }
 
         // reset()
-        logln("Call reset() after frozen");
+        logDebug("Call reset() after frozen");
         bSet = true;
         try {
             gp.reset();
@@ -150,7 +150,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // setLocales(ULocale[])
-        logln("Call setLocales(ULocale[]) after frozen");
+        logDebug("Call setLocales(ULocale[]) after frozen");
         bSet = true;
         try {
             gp.setLocales(new ULocale[] {new ULocale("fr_FR")});
@@ -162,7 +162,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // setLocales(ULocale[])
-        logln("Call setLocales(List) after frozen");
+        logDebug("Call setLocales(List) after frozen");
         bSet = true;
         ArrayList<ULocale> list = new ArrayList<>(1);
         list.add(new ULocale("fr_FR"));
@@ -176,7 +176,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // setLocales(String)
-        logln("Call setLocales(String) after frozen");
+        logDebug("Call setLocales(String) after frozen");
         bSet = true;
         try {
             gp.setLocales("pt-BR,es;q=0.7");
@@ -188,7 +188,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // setLocale(ULocale)
-        logln("Call setLocale(ULocale) after frozen");
+        logDebug("Call setLocale(ULocale) after frozen");
         bSet = true;
         try {
             gp.setLocale(new ULocale("fi_FI"));
@@ -200,7 +200,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // setTerritory(String)
-        logln("Call setTerritory(String) after frozen");
+        logDebug("Call setTerritory(String) after frozen");
         bSet = true;
         try {
             gp.setTerritory("AU");
@@ -212,7 +212,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // Modifiable clone
-        logln("Create a modifiable clone");
+        logDebug("Create a modifiable clone");
         GlobalizationPreferences gp1 = gp.cloneAsThawed();
 
         if (gp1.isFrozen()) {
@@ -220,7 +220,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // setLocale(ULocale)
-        logln("Call setLocale(ULocale) of the modifiable clone");
+        logDebug("Call setLocale(ULocale) of the modifiable clone");
         bSet = true;
         try {
             gp1.setLocale(new ULocale("fr_FR"));
@@ -281,7 +281,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
                 }
                 sb.append(localeStrings[j]);
             }
-            logln("Input locales: " + sb.toString());
+            logDebug("Input locales: " + sb.toString());
 
             gp.reset();
             gp.setLocales(locales);
@@ -297,7 +297,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
 
                 for (int j = 0; j < RESULTS_LOCALEIDS[i].length; j++) {
                     ULocale loc = gp.getLocale(j);
-                    logln("Locale[" + j + "]: " + loc.toString());
+                    logDebug("Locale[" + j + "]: " + loc.toString());
                     if (!gp.getLocale(j).toString().equals(RESULTS_LOCALEIDS[i][j])) {
                         errln(
                                 "FAIL: Locale index("
@@ -323,7 +323,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
                 }
                 sb.append(localeStrings[j]);
             }
-            logln("Input locales: " + sb.toString());
+            logDebug("Input locales: " + sb.toString());
 
             gp.reset();
             gp.setLocales(localeArray);
@@ -339,7 +339,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
 
                 for (int j = 0; j < RESULTS_LOCALEIDS[i].length; j++) {
                     ULocale loc = gp.getLocale(j);
-                    logln("Locale[" + j + "]: " + loc.toString());
+                    logDebug("Locale[" + j + "]: " + loc.toString());
                     if (!gp.getLocale(j).toString().equals(RESULTS_LOCALEIDS[i][j])) {
                         errln(
                                 "FAIL: Locale index("
@@ -356,7 +356,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         // setLocales(String)
         for (int i = 0; i < ACCEPT_LANGUAGES.length; i++) {
             String acceptLanguage = ACCEPT_LANGUAGES[i];
-            logln("Accept language: " + acceptLanguage);
+            logDebug("Accept language: " + acceptLanguage);
 
             gp.reset();
             gp.setLocales(acceptLanguage);
@@ -385,7 +385,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
 
                 for (int j = 0; j < RESULTS_LOCALEIDS[i].length; j++) {
                     ULocale loc = gp.getLocale(j);
-                    logln("Locale[" + j + "]: " + loc.toString());
+                    logDebug("Locale[" + j + "]: " + loc.toString());
                     if (!gp.getLocale(j).toString().equals(RESULTS_LOCALEIDS[i][j])) {
                         errln(
                                 "FAIL: Locale index("
@@ -400,7 +400,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // accept-language without q-value
-        logln("Set accept-language - de,de-AT");
+        logDebug("Set accept-language - de,de-AT");
         gp.setLocales("de,de-AT");
         if (!gp.getLocale(0).toString().equals("de_AT")) {
             errln("FAIL: getLocale(0) returns " + gp.getLocale(0).toString() + " Expected: de_AT");
@@ -432,7 +432,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         String baseName = "com.ibm.icu.dev.data.resources.TestDataElements";
         ResourceBundle rb;
 
-        logln(
+        logDebug(
                 "Get a resource bundle "
                         + baseName
                         + " using GlobalizationPreferences initialized by locales - en_GB, en_US");
@@ -454,7 +454,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
 
         gp.reset();
 
-        logln(
+        logDebug(
                 "Get a resource bundle "
                         + baseName
                         + " using GlobalizationPreferences initialized by locales - ja, en_US_California");
@@ -474,14 +474,14 @@ public class GlobalizationPreferencesTest extends TestFmwk {
             errln("FAIL: Missing resources");
         }
 
-        logln("Get a resource bundle which does not exist");
+        logDebug("Get a resource bundle which does not exist");
         boolean bException = false;
         try {
             rb =
                     gp.getResourceBundle(
                             "foo.bar.XXX", Thread.currentThread().getContextClassLoader());
         } catch (MissingResourceException mre) {
-            logln("Missing resource exception for getting resource bundle - foo.bar.XXX");
+            logDebug("Missing resource exception for getting resource bundle - foo.bar.XXX");
             bException = true;
         }
         if (!bException) {
@@ -494,7 +494,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         GlobalizationPreferences gp = new GlobalizationPreferences();
 
         // Territory for unsupported language locale
-        logln("Set locale - ang");
+        logDebug("Set locale - ang");
         gp.setLocale(new ULocale("ang"));
         String territory = gp.getTerritory();
         if (!territory.equals("US")) {
@@ -502,7 +502,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // Territory for language only locale "fr"
-        logln("Set locale - fr");
+        logDebug("Set locale - fr");
         gp.setLocale(new ULocale("fr"));
         territory = gp.getTerritory();
         if (!territory.equals("FR")) {
@@ -510,7 +510,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // Set explicit territory
-        logln("Set explicit territory - CA");
+        logDebug("Set explicit territory - CA");
         gp.setTerritory("CA");
         territory = gp.getTerritory();
         if (!territory.equals("CA")) {
@@ -518,14 +518,14 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // Freeze
-        logln("Freeze this object");
+        logDebug("Freeze this object");
         gp.freeze();
 
         boolean bFrozen = false;
         try {
             gp.setTerritory("FR");
         } catch (UnsupportedOperationException uoe) {
-            logln("setTerritory is blocked");
+            logDebug("setTerritory is blocked");
             bFrozen = true;
         }
         if (!bFrozen) {
@@ -548,7 +548,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         locales[0] = new ULocale("ja");
         locales[1] = new ULocale("zh_Hant_TW");
 
-        logln("Set locales - ja, zh_Hant_TW");
+        logDebug("Set locales - ja, zh_Hant_TW");
         gp1.setLocales(locales);
 
         territory = gp1.getTerritory();
@@ -562,7 +562,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         GlobalizationPreferences gp = new GlobalizationPreferences();
 
         // Set language only locale - ja
-        logln("Set locale - ja");
+        logDebug("Set locale - ja");
         gp.setLocale(new ULocale("ja"));
         Currency cur = gp.getCurrency();
         String code = cur.getCurrencyCode();
@@ -572,7 +572,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
 
         gp.reset();
         // Set locales with territory
-        logln("Set locale - ja_US");
+        logDebug("Set locale - ja_US");
         gp.setLocale(new ULocale("ja_US"));
         cur = gp.getCurrency();
         code = cur.getCurrencyCode();
@@ -581,7 +581,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // Set locales with territory in the second locale
-        logln("Set locales - it, en_US");
+        logDebug("Set locales - it, en_US");
         ULocale[] locales = new ULocale[2];
         locales[0] = new ULocale("it");
         locales[1] = new ULocale("en_US");
@@ -593,7 +593,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // Set explicit territory
-        logln("Set territory - DE");
+        logDebug("Set territory - DE");
         gp.setTerritory("DE");
         cur = gp.getCurrency();
         code = cur.getCurrencyCode();
@@ -604,7 +604,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         // Set explicit currency
         Currency ecur = Currency.getInstance("BRL");
         gp.setCurrency(ecur);
-        logln("Set explicit currency - BRL");
+        logDebug("Set explicit currency - BRL");
         cur = gp.getCurrency();
         code = cur.getCurrencyCode();
         if (!code.equals("BRL")) {
@@ -612,7 +612,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // Set explicit territory again
-        logln("Set territory - JP");
+        logDebug("Set territory - JP");
         cur = gp.getCurrency();
         code = cur.getCurrencyCode();
         if (!code.equals("BRL")) {
@@ -620,14 +620,14 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // Freeze
-        logln("Freeze this object");
+        logDebug("Freeze this object");
         Currency ecur2 = Currency.getInstance("CHF");
         boolean bFrozen = false;
         gp.freeze();
         try {
             gp.setCurrency(ecur2);
         } catch (UnsupportedOperationException uoe) {
-            logln("setCurrency is blocked");
+            logDebug("setCurrency is blocked");
             bFrozen = true;
         }
         if (!bFrozen) {
@@ -635,7 +635,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // Safe clone
-        logln("cloneAsThawed");
+        logDebug("cloneAsThawed");
         GlobalizationPreferences gp1 = gp.cloneAsThawed();
         cur = gp.getCurrency();
         code = cur.getCurrencyCode();
@@ -657,7 +657,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         GlobalizationPreferences gp = new GlobalizationPreferences();
 
         // Set locale - pt_BR
-        logln("Set locale - pt");
+        logDebug("Set locale - pt");
         gp.setLocale(new ULocale("pt"));
         Calendar cal = gp.getCalendar();
         String calType = cal.getType();
@@ -666,7 +666,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // Set a list of locales
-        logln("Set locales - en, en_JP, en_GB");
+        logDebug("Set locales - en, en_JP, en_GB");
         ULocale[] locales = new ULocale[3];
         locales[0] = new ULocale("en");
         locales[1] = new ULocale("en_JP");
@@ -680,7 +680,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // Set explicit calendar
-        logln("Set Japanese calendar to this object");
+        logDebug("Set Japanese calendar to this object");
         JapaneseCalendar jcal = new JapaneseCalendar();
         gp.setCalendar(jcal);
         cal = gp.getCalendar();
@@ -700,14 +700,14 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // Freeze
-        logln("Freeze this object");
+        logDebug("Freeze this object");
         IslamicCalendar ical = new IslamicCalendar();
         boolean bFrozen = false;
         gp.freeze();
         try {
             gp.setCalendar(ical);
         } catch (UnsupportedOperationException uoe) {
-            logln("setCalendar is blocked");
+            logDebug("setCalendar is blocked");
             bFrozen = true;
         }
         if (!bFrozen) {
@@ -715,7 +715,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // Safe clone
-        logln("cloneAsThawed");
+        logDebug("cloneAsThawed");
         GlobalizationPreferences gp1 = gp.cloneAsThawed();
         cal = gp.getCalendar();
         calType = cal.getType();
@@ -723,7 +723,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
             errln("FAIL: Calendar type afte clone is " + calType + " Expected: japanese");
         }
 
-        logln("Set islamic calendar");
+        logDebug("Set islamic calendar");
         gp1.setCalendar(ical);
         cal = gp1.getCalendar();
         calType = cal.getType();
@@ -738,7 +738,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         GlobalizationPreferences gp = new GlobalizationPreferences();
 
         // Set locale - zh_CN
-        logln("Set locale - zh_CN");
+        logDebug("Set locale - zh_CN");
         gp.setLocale(new ULocale("zh_CN"));
         TimeZone tz = gp.getTimeZone();
         String tzid = tz.getID();
@@ -747,7 +747,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // Set locale - en
-        logln("Set locale - en");
+        logDebug("Set locale - en");
         gp.setLocale(new ULocale("en"));
         tz = gp.getTimeZone();
         tzid = tz.getID();
@@ -756,7 +756,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // Set territory - GB
-        logln("Set territory - GB");
+        logDebug("Set territory - GB");
         gp.setTerritory("GB");
         tz = gp.getTimeZone();
         tzid = tz.getID();
@@ -784,14 +784,14 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // Freeze
-        logln("Freeze this object");
+        logDebug("Freeze this object");
         TimeZone cst = TimeZone.getTimeZone("Europe/Paris");
         boolean bFrozen = false;
         gp.freeze();
         try {
             gp.setTimeZone(cst);
         } catch (UnsupportedOperationException uoe) {
-            logln("setTimeZone is blocked");
+            logDebug("setTimeZone is blocked");
             bFrozen = true;
         }
         if (!bFrozen) {
@@ -799,7 +799,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // Modifiable clone
-        logln("cloneAsThawed");
+        logDebug("cloneAsThawed");
         GlobalizationPreferences gp1 = gp.cloneAsThawed();
         tz = gp1.getTimeZone();
         tzid = tz.getID();
@@ -821,7 +821,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         GlobalizationPreferences gp = new GlobalizationPreferences();
 
         // Set locale - tr
-        logln("Set locale - tr");
+        logDebug("Set locale - tr");
         gp.setLocale(new ULocale("tr"));
         Collator coll = gp.getCollator();
         String locStr = coll.getLocale(ULocale.VALID_LOCALE).toString();
@@ -830,7 +830,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // Unsupported collator locale - zun
-        logln("Set locale - zun");
+        logDebug("Set locale - zun");
         gp.setLocale(new ULocale("zun"));
         coll = gp.getCollator();
         locStr = coll.getLocale(ULocale.VALID_LOCALE).toString();
@@ -839,7 +839,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // Set locales - en_JP, fr, en_US, fr_FR
-        logln("Set locale - en_JP, fr, en_US, fr_FR");
+        logDebug("Set locale - en_JP, fr, en_US, fr_FR");
         ULocale[] locales = new ULocale[4];
         locales[0] = new ULocale("en_JP");
         locales[1] = new ULocale("fr");
@@ -855,7 +855,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         // Set explicit Collator
         Collator coll1 = Collator.getInstance(new ULocale("it"));
         coll1.setDecomposition(Collator.CANONICAL_DECOMPOSITION);
-        logln("Set collator for it in canonical deconposition mode");
+        logDebug("Set collator for it in canonical deconposition mode");
         gp.setCollator(coll1);
         coll1.setStrength(Collator.IDENTICAL);
         coll = gp.getCollator();
@@ -868,13 +868,13 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // Freeze
-        logln("Freeze this object");
+        logDebug("Freeze this object");
         boolean isFrozen = false;
         gp.freeze();
         try {
             gp.setCollator(coll1);
         } catch (UnsupportedOperationException uoe) {
-            logln("setCollator is blocked");
+            logDebug("setCollator is blocked");
             isFrozen = true;
         }
         if (!isFrozen) {
@@ -882,7 +882,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // Modifiable clone
-        logln("cloneAsThawed");
+        logDebug("cloneAsThawed");
         GlobalizationPreferences gp1 = gp.cloneAsThawed();
         coll = gp1.getCollator();
         locStr = coll.getLocale(ULocale.VALID_LOCALE).toString();
@@ -906,7 +906,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         GlobalizationPreferences gp = new GlobalizationPreferences();
 
         // Unsupported break iterator locale - aar
-        logln("Set locale - aar");
+        logDebug("Set locale - aar");
         gp.setLocale(new ULocale("aar"));
         BreakIterator brk = gp.getBreakIterator(GlobalizationPreferences.BI_LINE);
         String locStr = brk.getLocale(ULocale.VALID_LOCALE).toString();
@@ -915,7 +915,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // Set locale - es
-        logln("Set locale - es");
+        logDebug("Set locale - es");
         gp.setLocale(new ULocale("es"));
         brk = gp.getBreakIterator(GlobalizationPreferences.BI_CHARACTER);
         locStr = brk.getLocale(ULocale.VALID_LOCALE).toString();
@@ -924,7 +924,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // Set explicit break sentence iterator
-        logln("Set break iterator for sentence using locale hu_HU");
+        logDebug("Set break iterator for sentence using locale hu_HU");
         BreakIterator brk1 = BreakIterator.getSentenceInstance(new ULocale("hu_HU"));
         gp.setBreakIterator(GlobalizationPreferences.BI_SENTENCE, brk1);
 
@@ -942,23 +942,23 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // Illegal argument
-        logln("Get break iterator type 100");
+        logDebug("Get break iterator type 100");
         boolean illegalArg = false;
         try {
             brk = gp.getBreakIterator(100);
         } catch (IllegalArgumentException iae) {
-            logln("Break iterator type 100 is illegal");
+            logDebug("Break iterator type 100 is illegal");
             illegalArg = true;
         }
         if (!illegalArg) {
             errln("FAIL: getBreakIterator must throw IllegalArgumentException for type 100");
         }
-        logln("Set break iterator type -1");
+        logDebug("Set break iterator type -1");
         illegalArg = false;
         try {
             gp.setBreakIterator(-1, brk1);
         } catch (IllegalArgumentException iae) {
-            logln("Break iterator type -1 is illegal");
+            logDebug("Break iterator type -1 is illegal");
             illegalArg = true;
         }
         if (!illegalArg) {
@@ -966,14 +966,14 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // Freeze
-        logln("Freeze this object");
+        logDebug("Freeze this object");
         BreakIterator brk2 = BreakIterator.getTitleInstance(new ULocale("es_MX"));
         boolean isFrozen = false;
         gp.freeze();
         try {
             gp.setBreakIterator(GlobalizationPreferences.BI_TITLE, brk2);
         } catch (UnsupportedOperationException uoe) {
-            logln("setBreakIterator is blocked");
+            logDebug("setBreakIterator is blocked");
             isFrozen = true;
         }
         if (!isFrozen) {
@@ -981,7 +981,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // Modifiable clone
-        logln("cloneAsThawed");
+        logDebug("cloneAsThawed");
         GlobalizationPreferences gp1 = gp.cloneAsThawed();
         brk = gp1.getBreakIterator(GlobalizationPreferences.BI_WORD);
         /* TODO: JB#5383
@@ -1044,7 +1044,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         locales2.add(loc_peo);
         locales2.add(loc_fr_FR_Paris);
 
-        logln("Locales: <default> | <fr_FR_Paris> | <ain, fr_FR_Paris>");
+        logDebug("Locales: <default> | <fr_FR_Paris> | <ain, fr_FR_Paris>");
 
         // ID_LOCALE
         String id = "zh_Hant_HK";
@@ -1054,7 +1054,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         gp.setLocales(locales2);
         String name3 = gp.getDisplayName(id, GlobalizationPreferences.ID_LOCALE);
 
-        logln("Locale[zh_Hant_HK]: " + name1 + " | " + name2 + " | " + name3);
+        logDebug("Locale[zh_Hant_HK]: " + name1 + " | " + name2 + " | " + name3);
         if (name1.equals(name2) || !name2.equals(name3)) {
             errln("FAIL: Locale ID");
         }
@@ -1068,7 +1068,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         gp.setLocales(locales2);
         name3 = gp.getDisplayName(id, GlobalizationPreferences.ID_LANGUAGE);
 
-        logln("Language[fr]: " + name1 + " | " + name2 + " | " + name3);
+        logDebug("Language[fr]: " + name1 + " | " + name2 + " | " + name3);
         if (name1.equals(name2) || !name2.equals(name3)) {
             errln("FAIL: Language ID");
         }
@@ -1082,7 +1082,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         gp.setLocales(locales2);
         name3 = gp.getDisplayName(id, GlobalizationPreferences.ID_SCRIPT);
 
-        logln("Script[cyrl]: " + name1 + " | " + name2 + " | " + name3);
+        logDebug("Script[cyrl]: " + name1 + " | " + name2 + " | " + name3);
         if (name1.equals(name2) || !name2.equals(name3)) {
             errln("FAIL: Script ID");
         }
@@ -1096,7 +1096,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         gp.setLocales(locales2);
         name3 = gp.getDisplayName(id, GlobalizationPreferences.ID_TERRITORY);
 
-        logln("Territory[JP]: " + name1 + " | " + name2 + " | " + name3);
+        logDebug("Territory[JP]: " + name1 + " | " + name2 + " | " + name3);
         if (name1.equals(name2) || !name2.equals(name3)) {
             errln("FAIL: Territory ID");
         }
@@ -1110,7 +1110,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         gp.setLocales(locales2);
         name3 = gp.getDisplayName(id, GlobalizationPreferences.ID_VARIANT);
 
-        logln("Variant[NEDIS]: " + name1 + " | " + name2 + " | " + name3);
+        logDebug("Variant[NEDIS]: " + name1 + " | " + name2 + " | " + name3);
         if (name1.equals(name2) || !name2.equals(name3)) {
             errln("FAIL: Variant ID");
         }
@@ -1124,7 +1124,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         gp.setLocales(locales2);
         name3 = gp.getDisplayName(id, GlobalizationPreferences.ID_KEYWORD);
 
-        logln("Keyword[collation]: " + name1 + " | " + name2 + " | " + name3);
+        logDebug("Keyword[collation]: " + name1 + " | " + name2 + " | " + name3);
         if (name1.equals(name2) || !name2.equals(name3)) {
             errln("FAIL: Keyword ID");
         }
@@ -1138,7 +1138,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         gp.setLocales(locales2);
         name3 = gp.getDisplayName(id, GlobalizationPreferences.ID_KEYWORD_VALUE);
 
-        logln("Keyword value[traditional]: " + name1 + " | " + name2 + " | " + name3);
+        logDebug("Keyword value[traditional]: " + name1 + " | " + name2 + " | " + name3);
         if (name1.equals(name2) || !name2.equals(name3)) {
             errln("FAIL: Keyword value ID");
         }
@@ -1152,7 +1152,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         gp.setLocales(locales2);
         name3 = gp.getDisplayName(id, GlobalizationPreferences.ID_CURRENCY_SYMBOL);
 
-        logln("Currency symbol[USD]: " + name1 + " | " + name2 + " | " + name3);
+        logDebug("Currency symbol[USD]: " + name1 + " | " + name2 + " | " + name3);
         String dollar = "$";
         String us_dollar = "$US";
         if (!name1.equals(dollar) || !name2.equals(us_dollar) || !name3.equals(us_dollar)) {
@@ -1168,7 +1168,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         gp.setLocales(locales2);
         name3 = gp.getDisplayName(id, GlobalizationPreferences.ID_CURRENCY);
 
-        logln("Currency[USD]: " + name1 + " | " + name2 + " | " + name3);
+        logDebug("Currency[USD]: " + name1 + " | " + name2 + " | " + name3);
         if (name1.equals(name2) || !name2.equals(name3)) {
             errln("FAIL: Currency ID");
         }
@@ -1182,7 +1182,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         gp.setLocales(locales2);
         name3 = gp.getDisplayName(id, GlobalizationPreferences.ID_TIMEZONE);
 
-        logln("Timezone[Europe/Paris]: " + name1 + " | " + name2 + " | " + name3);
+        logDebug("Timezone[Europe/Paris]: " + name1 + " | " + name2 + " | " + name3);
         if (name1.equals(name2) || !name2.equals(name3)) {
             errln("FAIL: Timezone ID");
         }
@@ -1193,7 +1193,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         try {
             name1 = gp.getDisplayName(id, -1);
         } catch (IllegalArgumentException iae) {
-            logln("Illegal type -1");
+            logDebug("Illegal type -1");
             illegalArg = true;
         }
         if (!illegalArg) {
@@ -1204,7 +1204,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         try {
             name1 = gp.getDisplayName(id, 100);
         } catch (IllegalArgumentException iae) {
-            logln("Illegal type 100");
+            logDebug("Illegal type 100");
             illegalArg = true;
         }
         if (!illegalArg) {
@@ -1220,7 +1220,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         DateFormat df;
 
         // Set unsupported locale - ach
-        logln("Set locale - ach");
+        logDebug("Set locale - ach");
         gp.setLocale(new ULocale("ach"));
 
         // Date - short
@@ -1236,7 +1236,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         lcls.add(new ULocale("fr"));
         lcls.add(new ULocale("fr_CA"));
         lcls.add(new ULocale("fr_FR"));
-        logln("Set locales - fr, fr_CA, fr_FR");
+        logDebug("Set locales - fr, fr_CA, fr_FR");
         gp.setLocales(lcls);
         // Date - short
         df = gp.getDateFormat(GlobalizationPreferences.DF_SHORT, GlobalizationPreferences.DF_NONE);
@@ -1247,7 +1247,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // Set locale - en_GB
-        logln("Set locale - en_GB");
+        logDebug("Set locale - en_GB");
         gp.setLocale(new ULocale("en_GB"));
 
         // Date - full
@@ -1321,7 +1321,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         try {
             df = gp.getDateFormat(-1, GlobalizationPreferences.DF_NONE);
         } catch (IllegalArgumentException iae) {
-            logln("Illegal date style -1");
+            logDebug("Illegal date style -1");
             illegalArg = true;
         }
         if (!illegalArg) {
@@ -1334,7 +1334,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
                     gp.getDateFormat(
                             GlobalizationPreferences.DF_NONE, GlobalizationPreferences.DF_NONE);
         } catch (IllegalArgumentException iae) {
-            logln("Illegal style - dateStyle:DF_NONE / timeStyle:DF_NONE");
+            logDebug("Illegal style - dateStyle:DF_NONE / timeStyle:DF_NONE");
             illegalArg = true;
         }
         if (!illegalArg) {
@@ -1343,7 +1343,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // Set explicit time zone
-        logln("Set timezone - America/Sao_Paulo");
+        logDebug("Set timezone - America/Sao_Paulo");
         TimeZone tz = TimeZone.getTimeZone("America/Sao_Paulo");
         gp.setTimeZone(tz);
         df = gp.getDateFormat(GlobalizationPreferences.DF_LONG, GlobalizationPreferences.DF_MEDIUM);
@@ -1353,7 +1353,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // Set explicit calendar
-        logln("Set calendar - japanese");
+        logDebug("Set calendar - japanese");
         Calendar jcal = new JapaneseCalendar();
         jcal.setTimeZone(TimeZone.getTimeZone("Asia/Tokyo"));
         gp.setCalendar(jcal);
@@ -1369,7 +1369,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // Set explicit DateFormat
-        logln("Set explicit date format - full date");
+        logDebug("Set explicit date format - full date");
         DateFormat customFD =
                 DateFormat.getDateInstance(
                         new IslamicCalendar(), DateFormat.FULL, new ULocale("ar_SA"));
@@ -1388,7 +1388,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // Freeze
-        logln("Freeze this object");
+        logDebug("Freeze this object");
         gp.freeze();
         DateFormat customLD =
                 DateFormat.getDateInstance(
@@ -1399,7 +1399,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
             gp.setDateFormat(
                     GlobalizationPreferences.DF_LONG, GlobalizationPreferences.DF_NONE, customLD);
         } catch (UnsupportedOperationException uoe) {
-            logln("setDateFormat is blocked");
+            logDebug("setDateFormat is blocked");
             isFrozen = true;
         }
         if (!isFrozen) {
@@ -1407,7 +1407,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // Modifiable clone
-        logln("cloneAsThawed");
+        logDebug("cloneAsThawed");
         GlobalizationPreferences gp1 = gp.cloneAsThawed();
         gp1.setDateFormat(
                 GlobalizationPreferences.DF_LONG, GlobalizationPreferences.DF_NONE, customLD);
@@ -1446,7 +1446,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         double num = 123456.789;
 
         // Set unsupported locale with supported territory ang_KR
-        logln("Set locale - ang_KR");
+        logDebug("Set locale - ang_KR");
         gp.setLocale(new ULocale("ang_KR"));
         nf = gp.getNumberFormat(GlobalizationPreferences.NF_CURRENCY);
         numStr = nf.format(num);
@@ -1455,11 +1455,11 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // Set locale - de_DE
-        logln("Set locale - de_DE");
+        logDebug("Set locale - de_DE");
         gp.setLocale(new ULocale("de_DE"));
 
         // NF_NUMBER
-        logln("NUMBER type");
+        logDebug("NUMBER type");
         nf = gp.getNumberFormat(GlobalizationPreferences.NF_NUMBER);
         numStr = nf.format(num);
         if (!numStr.equals("123.456,789")) {
@@ -1467,7 +1467,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // NF_CURRENCY
-        logln("CURRENCY type");
+        logDebug("CURRENCY type");
         nf = gp.getNumberFormat(GlobalizationPreferences.NF_CURRENCY);
         numStr = nf.format(num);
         if (!numStr.equals("123.456,79\u00a0\u20AC")) {
@@ -1475,7 +1475,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // NF_PERCENT
-        logln("PERCENT type");
+        logDebug("PERCENT type");
         nf = gp.getNumberFormat(GlobalizationPreferences.NF_PERCENT);
         numStr = nf.format(num);
         if (!numStr.equals("12.345.679\u00a0%")) {
@@ -1483,7 +1483,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // NF_SCIENTIFIC
-        logln("SCIENTIFIC type");
+        logDebug("SCIENTIFIC type");
         nf = gp.getNumberFormat(GlobalizationPreferences.NF_SCIENTIFIC);
         numStr = nf.format(num);
         if (!numStr.equals("1,23456789E5")) {
@@ -1491,7 +1491,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // NF_INTEGER
-        logln("INTEGER type");
+        logDebug("INTEGER type");
         nf = gp.getNumberFormat(GlobalizationPreferences.NF_INTEGER);
         numStr = nf.format(num);
         if (!numStr.equals("123.457")) {
@@ -1499,12 +1499,12 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // Invalid number type
-        logln("INVALID type");
+        logDebug("INVALID type");
         boolean illegalArg = false;
         try {
             nf = gp.getNumberFormat(100);
         } catch (IllegalArgumentException iae) {
-            logln("Illegal number format type 100");
+            logDebug("Illegal number format type 100");
             illegalArg = true;
         }
         if (!illegalArg) {
@@ -1514,7 +1514,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         try {
             nf = gp.getNumberFormat(-1);
         } catch (IllegalArgumentException iae) {
-            logln("Illegal number format type -1");
+            logDebug("Illegal number format type -1");
             illegalArg = true;
         }
         if (!illegalArg) {
@@ -1522,7 +1522,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // Set explicit territory
-        logln("Set territory - US");
+        logDebug("Set territory - US");
         gp.setTerritory("US");
         nf = gp.getNumberFormat(GlobalizationPreferences.NF_CURRENCY);
         numStr = nf.format(num);
@@ -1531,7 +1531,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // Set explicit currency
-        logln("Set currency - GBP");
+        logDebug("Set currency - GBP");
         gp.setCurrency(Currency.getInstance("GBP"));
         nf = gp.getNumberFormat(GlobalizationPreferences.NF_CURRENCY);
         numStr = nf.format(num);
@@ -1540,7 +1540,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // Set exliplicit NumberFormat
-        logln("Set explicit NumberFormat objects");
+        logDebug("Set explicit NumberFormat objects");
         NumberFormat customNum = NumberFormat.getNumberInstance(new ULocale("he_IL"));
         gp.setNumberFormat(GlobalizationPreferences.NF_NUMBER, customNum);
         NumberFormat customCur = NumberFormat.getCurrencyInstance(new ULocale("zh_CN"));
@@ -1576,13 +1576,13 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         NumberFormat customNum1 = NumberFormat.getNumberInstance(new ULocale("hi_IN"));
 
         // Freeze
-        logln("Freeze this object");
+        logDebug("Freeze this object");
         boolean isFrozen = false;
         gp.freeze();
         try {
             gp.setNumberFormat(GlobalizationPreferences.NF_NUMBER, customNum1);
         } catch (UnsupportedOperationException uoe) {
-            logln("setNumberFormat is blocked");
+            logDebug("setNumberFormat is blocked");
             isFrozen = true;
         }
         if (!isFrozen) {
@@ -1598,7 +1598,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
             errln("FAIL: The NumberFormat instance must use locale he_IL");
         }
 
-        logln("Set custom number format using locale hi_IN");
+        logDebug("Set custom number format using locale hi_IN");
         gp1.setNumberFormat(GlobalizationPreferences.NF_NUMBER, customNum1);
         nf = gp1.getNumberFormat(GlobalizationPreferences.NF_NUMBER);
         if (!nf.getLocale(ULocale.VALID_LOCALE).toString().equals("hi_IN")) {
