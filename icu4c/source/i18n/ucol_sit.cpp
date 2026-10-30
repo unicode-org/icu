@@ -358,7 +358,9 @@ int32_t ucol_sit_dumpSpecs(CollatorSpec *s, char *destination, int32_t capacity,
         for(i = 0; i < UCOL_SIT_ITEMS_COUNT; i++) {
             if(!s->entries[i].isEmpty()) {
                 if(len) {
-                    if(len < capacity) {
+                    // uprv_strcat writes the '_' at destination[len] and a NUL
+                    // terminator at destination[len+1], so both must fit.
+                    if(len + 1 < capacity) {
                         uprv_strcat(destination, "_");
                     }
                     len++;
