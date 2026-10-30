@@ -749,7 +749,8 @@ public class MeasureUnit implements Serializable {
      */
     @Override
     public int hashCode() {
-        return 31 * type.hashCode() + subType.hashCode();
+        // Hash what equals() compares. Units that are not built in have no type or subtype.
+        return getIdentifier().hashCode();
     }
 
     /**
