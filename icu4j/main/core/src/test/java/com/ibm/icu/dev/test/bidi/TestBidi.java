@@ -314,7 +314,7 @@ public class TestBidi extends BidiFmwk {
 
             msg.setLength(0);
             msg.append("(" + (run.isOddRun() ? "R" : "L"))
-                .append(" @" + run.getStart() + '[' + run.getLength() + "])");
+                    .append(" @" + run.getStart() + '[' + run.getLength() + "])");
             logDebug(msg.toString());
             if (!odd) {
                 do {

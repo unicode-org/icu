@@ -45,7 +45,8 @@ public class TestFailureRecovery extends BidiFmwk {
             Bidi.writeReverse(null, 0);
             errln("Bidi.writeReverse did not fail when passed a null string");
         } catch (IllegalArgumentException e) {
-            logDebug("OK: Got exception for Bidi.writeReverse(null) as expected: " + e.getMessage());
+            logDebug(
+                    "OK: Got exception for Bidi.writeReverse(null) as expected: " + e.getMessage());
         }
         bidi = new Bidi();
         try {

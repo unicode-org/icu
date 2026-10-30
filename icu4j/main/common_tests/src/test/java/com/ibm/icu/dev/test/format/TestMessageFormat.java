@@ -335,7 +335,8 @@ public class TestMessageFormat extends CoreTestFmwk {
         MessageFormat z = new MessageFormat("There are {0} files on {1} created");
         MessageFormat y = null;
         y = x.clone();
-        if (x.equals(y) && !x.equals(z) && !y.equals(z)) logDebug("First test (operator ==): Passed!");
+        if (x.equals(y) && !x.equals(z) && !y.equals(z))
+            logDebug("First test (operator ==): Passed!");
         else {
             errln("First test (operator ==): Failed!");
         }

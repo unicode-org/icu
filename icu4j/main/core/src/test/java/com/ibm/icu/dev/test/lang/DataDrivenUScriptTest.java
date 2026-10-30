@@ -184,7 +184,9 @@ public class DataDrivenUScriptTest extends CoreTestFmwk {
                 errln("Error testing UScript.getCode() for locale " + testLocaleName);
             }
 
-            logDebug("  Testing UScript.getCode(Locale) with locale: " + testLocale.getDisplayName());
+            logDebug(
+                    "  Testing UScript.getCode(Locale) with locale: "
+                            + testLocale.getDisplayName());
             code = UScript.getCode(testLocale);
             if (code != null) {
                 for (int j = 0; j < code.length; j++) {

@@ -701,7 +701,12 @@ public class IBMCalendarTest extends CalendarTestFmwk {
         if (d == -d2 && d == 13359) {
             logDebug("Ok: large field difference symmetrical " + d);
         } else {
-            logDebug("FAIL: large field difference incorrect " + d + ", " + d2 + ", expect +/- 13359");
+            logDebug(
+                    "FAIL: large field difference incorrect "
+                            + d
+                            + ", "
+                            + d2
+                            + ", expect +/- 13359");
         }
     }
 

@@ -1314,7 +1314,12 @@ public class ULocaleTest extends CoreTestFmwk {
                                     + level2
                                     + "'");
                 } else {
-                    logDebug("Ulocale.canonicalize for: '" + source + "' returned: '" + level2 + "'");
+                    logDebug(
+                            "Ulocale.canonicalize for: '"
+                                    + source
+                                    + "' returned: '"
+                                    + level2
+                                    + "'");
                 }
             } else {
                 logDebug("ULocale.canonicalize skipped: '" + source + "'");
@@ -2093,7 +2098,11 @@ public class ULocaleTest extends CoreTestFmwk {
                                     + ss1
                                     + "\" instead");
                 } else {
-                    logDebug("OK: getDisplayKeywordValue for key: " + key + " in English got " + ss1);
+                    logDebug(
+                            "OK: getDisplayKeywordValue for key: "
+                                    + key
+                                    + " in English got "
+                                    + ss1);
                 }
 
                 // display type in Chinese
@@ -2116,7 +2125,11 @@ public class ULocaleTest extends CoreTestFmwk {
                                     + ss1
                                     + "\" instead");
                 } else {
-                    logDebug("OK: getDisplayKeywordValue for key: " + key + " in Chinese got " + ss1);
+                    logDebug(
+                            "OK: getDisplayKeywordValue for key: "
+                                    + key
+                                    + " in Chinese got "
+                                    + ss1);
                 }
             }
         }

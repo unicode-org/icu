@@ -55,7 +55,11 @@ public class DateFormatMiscTests extends CoreTestFmwk {
             try {
                 StringBuffer str = new StringBuffer("");
                 FieldPosition pos = new FieldPosition(0);
-                logDebug(s + resultFormatter.format(formatter.parse(dstring[i]), str, pos).toString());
+                logDebug(
+                        s
+                                + resultFormatter
+                                        .format(formatter.parse(dstring[i]), str, pos)
+                                        .toString());
             } catch (ParseException exception) {
                 errln(s + "exception --> " + exception);
             }

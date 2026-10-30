@@ -115,7 +115,8 @@ public class TimeZoneTest extends CoreTestFmwk {
         // as -7hour fixed offset/no DST.
         boolean isJDKTimeZone = (TimeZone.getDefaultTimeZoneType() == TimeZone.TIMEZONE_JDK);
         if (isJDKTimeZone) {
-            logDebug("Warning: Using JDK TimeZone.  Some test cases may not return expected results.");
+            logDebug(
+                    "Warning: Using JDK TimeZone.  Some test cases may not return expected results.");
         }
 
         ZoneDescriptor[] REFERENCE_LIST = {
@@ -634,7 +635,11 @@ public class TimeZoneTest extends CoreTestFmwk {
         long expJulyOne = 646793100000L;
         if (julyOne != expJulyOne) {
             errln("FAIL: Expected start computed as " + julyOne + " = " + new Date(julyOne));
-            logDebug("      Should be                  " + expJulyOne + " = " + new Date(expJulyOne));
+            logDebug(
+                    "      Should be                  "
+                            + expJulyOne
+                            + " = "
+                            + new Date(expJulyOne));
         }
 
         Calendar cal1 = Calendar.getInstance();
@@ -683,7 +688,11 @@ public class TimeZoneTest extends CoreTestFmwk {
         long mindelta = expectedBoundary - min;
         // not used long maxdelta = max - expectedBoundary;
         if (mindelta >= 0 && mindelta <= INTERVAL && mindelta >= 0 && mindelta <= INTERVAL)
-            logDebug("PASS: Expected bdry:  " + expectedBoundary + " = " + new Date(expectedBoundary));
+            logDebug(
+                    "PASS: Expected bdry:  "
+                            + expectedBoundary
+                            + " = "
+                            + new Date(expectedBoundary));
         else
             errln("FAIL: Expected bdry:  " + expectedBoundary + " = " + new Date(expectedBoundary));
     }

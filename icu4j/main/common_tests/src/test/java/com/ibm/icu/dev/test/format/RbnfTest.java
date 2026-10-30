@@ -1459,7 +1459,13 @@ public class RbnfTest extends CoreTestFmwk {
                 String s = testData[i][0];
                 Number expectedNumber = decFmt.parse(testData[i][1]);
                 if (isVerbose()) {
-                    logDebug("test[" + i + "] spellout value: (" + s + ") target: " + expectedNumber);
+                    logDebug(
+                            "test["
+                                    + i
+                                    + "] spellout value: ("
+                                    + s
+                                    + ") target: "
+                                    + expectedNumber);
                 }
 
                 Number num = formatter.parse(s);

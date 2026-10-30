@@ -295,7 +295,8 @@ public class ICUServiceThreadTest extends CoreTestFmwk {
                 // int to String out of this statement resolves the issue.
 
                 String num = Integer.toString(n);
-                logDebug(" iter: " + num + " dname: " + dname + " id: " + id + " result: " + result);
+                logDebug(
+                        " iter: " + num + " dname: " + dname + " id: " + id + " result: " + result);
             }
         }
     }

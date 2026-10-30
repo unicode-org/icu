@@ -120,6 +120,10 @@ public abstract class TestFmwk implements ITestLog {
         Assert.fail(message);
     }
 
+    /**
+     * Implementing JUnit TestWatcher. When you want to save log into a file and want to include
+     * JUnit progress, set logging level to debug.
+     */
     static class LoggingTestWatcher extends TestWatcher {
         Logger logger;
 
@@ -129,22 +133,22 @@ public abstract class TestFmwk implements ITestLog {
 
         @Override
         protected void starting(Description description) {
-            logger.info("Starting: " + description.getDisplayName());
+            logger.debug("Starting: " + description.getDisplayName());
         }
 
         @Override
         protected void succeeded(Description description) {
-            logger.info("Succeeded: " + description.getDisplayName());
+            logger.debug("Succeeded: " + description.getDisplayName());
         }
 
         @Override
         protected void failed(Throwable e, Description description) {
-            logger.error("Failed: " + description.getDisplayName());
+            logger.debug("Failed: " + description.getDisplayName());
         }
 
         @Override
         protected void skipped(AssumptionViolatedException e, Description description) {
-            logger.info("Skipped: " + description.getDisplayName());
+            logger.debug("Skipped: " + description.getDisplayName());
         }
     }
 

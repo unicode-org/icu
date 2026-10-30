@@ -656,7 +656,7 @@ public class CalendarRegressionTest extends CoreTestFmwk {
                             calWOY = String.valueOf(actWOY);
                             msg.setLength(0);
                             msg.append(testDesc + " - " + sdf.format(d) + "\t")
-                                .append("\t" + calWOY);
+                                    .append("\t" + calWOY);
                             logDebug(msg.toString());
                             fail = true;
                         }
@@ -732,7 +732,8 @@ public class CalendarRegressionTest extends CoreTestFmwk {
             testCal.set(Calendar.WEEK_OF_YEAR, woy);
             testCal.set(Calendar.DAY_OF_WEEK, dow);
             msg.setLength(0);
-            msg.append(y + "-W" + woy + "-DOW" + dow + " expect:" + exp + " got:" + testCal.getTime());
+            msg.append(
+                    y + "-W" + woy + "-DOW" + dow + " expect:" + exp + " got:" + testCal.getTime());
             if (!testCal.getTime().equals(exp)) {
                 msg.append("  FAIL");
                 fail = true;
@@ -791,7 +792,6 @@ public class CalendarRegressionTest extends CoreTestFmwk {
                 msg.append(" ok");
                 logDebug(msg.toString());
             }
-            
 
             testCal.setTime(after);
             if (ADDROLL[i] == ADD) testCal.add(Calendar.WEEK_OF_YEAR, -amount);

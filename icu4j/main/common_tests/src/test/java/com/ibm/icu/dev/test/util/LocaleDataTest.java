@@ -372,8 +372,14 @@ public class LocaleDataTest extends CoreTestFmwk {
             if (isVerbose()) {
                 logDebug(locale.toString() + " exemplar(ES_STANDARD)" + exemplarSets[0]);
                 logDebug(locale.toString() + " exemplar(ES_AUXILIARY) " + exemplarSets[1]);
-                logDebug(locale.toString() + " exemplar(case-folded,ES_STANDARD) " + exemplarSets[2]);
-                logDebug(locale.toString() + " exemplar(case-folded,ES_AUXILIARY) " + exemplarSets[3]);
+                logDebug(
+                        locale.toString()
+                                + " exemplar(case-folded,ES_STANDARD) "
+                                + exemplarSets[2]);
+                logDebug(
+                        locale.toString()
+                                + " exemplar(case-folded,ES_AUXILIARY) "
+                                + exemplarSets[3]);
             }
             assertTrue(
                     locale.toString() + " case-folded is a superset",

@@ -124,7 +124,8 @@ public class CompoundTransliteratorTest extends TestFmwk {
             if (!child.equals(array[i])) {
                 errln("Error getTransliterator() failed: Expected->" + array[i] + " Got->" + child);
             } else {
-                logDebug("OK: getTransliterator() passed: Expected->" + array[i] + " Got->" + child);
+                logDebug(
+                        "OK: getTransliterator() passed: Expected->" + array[i] + " Got->" + child);
             }
         }
     }

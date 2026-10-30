@@ -1178,7 +1178,8 @@ public class TestConversion extends TestFmwk {
 
         if (res) {
             logDebug("[" + cc.caseNr + "]:" + cc.charset);
-            logDebug("Input:       " + printchars(CharBuffer.wrap(cc.unicode), cc.unicode.length()));
+            logDebug(
+                    "Input:       " + printchars(CharBuffer.wrap(cc.unicode), cc.unicode.length()));
             logDebug("Output:      " + printbytes(output, output.limit()));
             logDebug("Expected:    " + printbytes(expected, expected.limit()));
             logDebug("Passed");

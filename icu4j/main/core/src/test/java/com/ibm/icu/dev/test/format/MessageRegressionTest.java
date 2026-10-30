@@ -217,7 +217,9 @@ public class MessageRegressionTest extends CoreTestFmwk {
         String[] formats = {"xyz", "abc"};
         ChoiceFormat cf = new ChoiceFormat(limits, formats);
         try {
-            logDebug("Compares to null is always false, returned : " + (cf.equals(null) ? "true" : "false"));
+            logDebug(
+                    "Compares to null is always false, returned : "
+                            + (cf.equals(null) ? "true" : "false"));
         } catch (Exception foo) {
             errln("ChoiceFormat.equals(null) throws exception.");
         }

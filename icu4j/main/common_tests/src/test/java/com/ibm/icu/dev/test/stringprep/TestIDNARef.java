@@ -357,7 +357,8 @@ public class TestIDNARef extends CoreTestFmwk {
             throws Exception {
 
         if (!IDNAReference.isReady()) {
-            logDebug("Transliterator is not available on this environment.  Skipping doTestToASCII.");
+            logDebug(
+                    "Transliterator is not available on this environment.  Skipping doTestToASCII.");
             return;
         }
 
@@ -723,7 +724,8 @@ public class TestIDNARef extends CoreTestFmwk {
     private void doTestCompare(String s1, String s2, boolean isEqual) {
 
         if (!IDNAReference.isReady()) {
-            logDebug("Transliterator is not available on this environment.  Skipping doTestCompare.");
+            logDebug(
+                    "Transliterator is not available on this environment.  Skipping doTestCompare.");
             return;
         }
 

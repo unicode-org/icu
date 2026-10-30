@@ -51,7 +51,11 @@ public class IncrementalProgressTest extends TestFmwk {
             errln("No Progress, " + t.getID() + ": " + UtilityExtensions.formatInput(test, pos));
             gotError = true;
         } else {
-            logDebug("PASS Progress, " + t.getID() + ": " + UtilityExtensions.formatInput(test, pos));
+            logDebug(
+                    "PASS Progress, "
+                            + t.getID()
+                            + ": "
+                            + UtilityExtensions.formatInput(test, pos));
         }
         t.finishTransliteration(test, pos);
         if (pos.start != pos.limit) {

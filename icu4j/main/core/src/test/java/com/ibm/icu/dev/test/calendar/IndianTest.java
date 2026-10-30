@@ -214,7 +214,11 @@ public class IndianTest extends CalendarTestFmwk {
         gCal.add(GregorianCalendar.MONTH, 2);
         Date gFuture = gCal.getTime();
         DateFormat gDF = DateFormat.getDateInstance(gCal, DateFormat.FULL);
-        logDebug("gregorian calendar: " + gDF.format(gToday) + " + 2 months = " + gDF.format(gFuture));
+        logDebug(
+                "gregorian calendar: "
+                        + gDF.format(gToday)
+                        + " + 2 months = "
+                        + gDF.format(gFuture));
 
         // Indian Calendar
         IndianCalendar iCal = new IndianCalendar();

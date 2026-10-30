@@ -1455,7 +1455,11 @@ public class TestCharset extends TestFmwk {
                 rc = 1;
             }
             if (!equals(chars, unistr)) {
-                errln("ToChars does not match - " + hexChars(chars) + " Expected : " + hexChars(unistr));
+                errln(
+                        "ToChars does not match - "
+                                + hexChars(chars)
+                                + " Expected : "
+                                + hexChars(unistr));
                 rc = 2;
             }
 
@@ -1514,7 +1518,11 @@ public class TestCharset extends TestFmwk {
                 rc = 7;
             }
             if (!equals(chars, unistr)) {
-                errln("ToChars Simple buffer does not match - " + hexChars(chars) + " Expected : " + hexChars(unistr));
+                errln(
+                        "ToChars Simple buffer does not match - "
+                                + hexChars(chars)
+                                + " Expected : "
+                                + hexChars(unistr));
                 rc = 8;
             }
         } catch (Exception e) {
@@ -1648,28 +1656,28 @@ public class TestCharset extends TestFmwk {
         return hexBuf.toString();
     }
 
-//    void printchars(CharBuffer buf) {
-//        int i;
-//        char[] chars = new char[buf.limit()];
-//        // save the current position
-//        int pos = buf.position();
-//        buf.position(0);
-//        buf.get(chars);
-//        // reset to old position
-//        buf.position(pos);
-//        for (i = 0; i < chars.length; i++) {
-//            err(hex(chars[i]) + " ");
-//        }
-//        errln("");
-//    }
-//
-//    void printchars(String str) {
-//        char[] chars = str.toCharArray();
-//        for (int i = 0; i < chars.length; i++) {
-//            err(hex(chars[i]) + " ");
-//        }
-//        errln("");
-//    }
+    //    void printchars(CharBuffer buf) {
+    //        int i;
+    //        char[] chars = new char[buf.limit()];
+    //        // save the current position
+    //        int pos = buf.position();
+    //        buf.position(0);
+    //        buf.get(chars);
+    //        // reset to old position
+    //        buf.position(pos);
+    //        for (i = 0; i < chars.length; i++) {
+    //            err(hex(chars[i]) + " ");
+    //        }
+    //        errln("");
+    //    }
+    //
+    //    void printchars(String str) {
+    //        char[] chars = str.toCharArray();
+    //        for (int i = 0; i < chars.length; i++) {
+    //            err(hex(chars[i]) + " ");
+    //        }
+    //        errln("");
+    //    }
 
     void printbytes(ByteBuffer buf) {
         int i;

@@ -182,7 +182,8 @@ public class TestReorderRunsOnly extends BidiFmwk {
                 src = testCases[i].textIn;
                 srcU16 = pseudoToU16(src);
                 for (j = 0; j < 2; j++) {
-                    logDebug("Now doing test for option " + option + ", case " + i + ", level " + j);
+                    logDebug(
+                            "Now doing test for option " + option + ", case " + i + ", level " + j);
                     level = (byte) j;
                     bidi.setPara(srcU16, level, null);
                     destU16 = bidi.writeReordered(Bidi.DO_MIRRORING);

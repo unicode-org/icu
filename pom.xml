@@ -355,10 +355,9 @@
               <include>**/*.java</include>
             </includes>
             <systemPropertyVariables>
-              <org.slf4j.simpleLogger.logFile>${project.build.directory}/test.log</org.slf4j.simpleLogger.logFile>
               <org.slf4j.simpleLogger.defaultLogLevel>${testLogLevel}</org.slf4j.simpleLogger.defaultLogLevel>
               <!--
-                To enable logging for certain classes you can do this (replace with your class):
+                To enable debug logging for certain classes you can do this (replace with your class):
                 <org.slf4j.simpleLogger.log.com.ibm.icu.foo.BarTest>debug</org.slf4j.simpleLogger.log.com.ibm.icu.foo.BarTest>
               -->
             </systemPropertyVariables>

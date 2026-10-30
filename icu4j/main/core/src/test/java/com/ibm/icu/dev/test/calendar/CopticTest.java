@@ -340,7 +340,11 @@ public class CopticTest extends CalendarTestFmwk {
         gCal.add(GregorianCalendar.MONTH, 2);
         Date gFuture = gCal.getTime();
         DateFormat gDF = DateFormat.getDateInstance(gCal, DateFormat.FULL);
-        logDebug("gregorian calendar: " + gDF.format(gToday) + " + 2 months = " + gDF.format(gFuture));
+        logDebug(
+                "gregorian calendar: "
+                        + gDF.format(gToday)
+                        + " + 2 months = "
+                        + gDF.format(gFuture));
 
         // Coptic Calendar
         CopticCalendar cCal = new CopticCalendar();
@@ -357,7 +361,11 @@ public class CopticTest extends CalendarTestFmwk {
         eCal.setAmeteAlemEra(false);
         Date eFuture = eCal.getTime();
         DateFormat eDF = DateFormat.getDateInstance(eCal, DateFormat.FULL);
-        logDebug("ethiopic calendar: " + eDF.format(eToday) + " + 2 months = " + eDF.format(eFuture));
+        logDebug(
+                "ethiopic calendar: "
+                        + eDF.format(eToday)
+                        + " + 2 months = "
+                        + eDF.format(eFuture));
     }
 
     @Test

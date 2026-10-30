@@ -153,7 +153,13 @@ public class RbnfLenientScannerTest extends TestFmwk {
                             // non-lenient parse
                             fmt.setLenientParseMode(false);
                             Number num = fmt.parse(s);
-                            logDebug(loc.getName() + names[j] + "success parse: " + s + " -> " + num);
+                            logDebug(
+                                    loc.getName()
+                                            + names[j]
+                                            + "success parse: "
+                                            + s
+                                            + " -> "
+                                            + num);
 
                             // lenient parse
                             fmt.setLenientScannerProvider(provider);

@@ -161,7 +161,10 @@ public class TimeZoneRegressionTest extends CoreTestFmwk {
                 // logln("Zone:        " + zone);
                 // logln("FrankenZone: " + frankenZone);
                 if (!zone.equals(frankenZone)) {
-                    logDebug("TimeZone " + zone.getID() + " not equal to serialized/deserialized one");
+                    logDebug(
+                            "TimeZone "
+                                    + zone.getID()
+                                    + " not equal to serialized/deserialized one");
                     pass = false;
                 }
             }
@@ -443,7 +446,8 @@ public class TimeZoneRegressionTest extends CoreTestFmwk {
                     if (valid) {
                         errln("Fail: DST savings of " + savings + " to " + method + " gave " + e);
                     } else {
-                        logDebug("Pass: DST savings of " + savings + " to " + method + " gave " + e);
+                        logDebug(
+                                "Pass: DST savings of " + savings + " to " + method + " gave " + e);
                     }
                 }
             }

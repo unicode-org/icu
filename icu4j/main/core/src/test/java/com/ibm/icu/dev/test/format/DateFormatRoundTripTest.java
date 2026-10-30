@@ -129,7 +129,11 @@ public class DateFormatRoundTripTest extends CoreTestFmwk {
         for (int dstyle = DateFormat.FULL; dstyle <= DateFormat.SHORT; ++dstyle) {
             for (int tstyle = DateFormat.FULL; tstyle <= DateFormat.SHORT; ++tstyle) {
                 if (TEST_TABLE[itable++]) {
-                    logDebug("Testing dstyle " + styleName(dstyle) + ", tstyle " + styleName(tstyle));
+                    logDebug(
+                            "Testing dstyle "
+                                    + styleName(dstyle)
+                                    + ", tstyle "
+                                    + styleName(tstyle));
                     DateFormat df = DateFormat.getDateTimeInstance(dstyle, tstyle, loc);
                     _test(df, false);
                 }

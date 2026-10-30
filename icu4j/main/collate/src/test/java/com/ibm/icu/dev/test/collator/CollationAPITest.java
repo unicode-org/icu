@@ -1362,9 +1362,9 @@ public class CollationAPITest extends TestFmwk {
         for (int i = 0; i < list.length; ++i) {
             msg.setLength(0);
             msg.append("Locale name: ")
-                .append(list[i].toString())
-                .append(" , the display name is : ")
-                .append(list[i].getDisplayName());
+                    .append(list[i].toString())
+                    .append(" , the display name is : ")
+                    .append(list[i].getDisplayName());
             logDebug(msg.toString());
             try {
                 logDebug("     ...... Or display as: " + Collator.getDisplayName(list[i]));

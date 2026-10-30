@@ -83,7 +83,8 @@ public final class UCharacterCaseTest extends CoreTestFmwk {
                 errln("FAIL upper case conversion test for \\u" + hex(CHARACTER_UPPER_[i]));
                 break;
             }
-            logDebug("Ok    \\u" + hex(CHARACTER_UPPER_[i]) + " and \\u" + hex(CHARACTER_LOWER_[i]));
+            logDebug(
+                    "Ok    \\u" + hex(CHARACTER_UPPER_[i]) + " and \\u" + hex(CHARACTER_LOWER_[i]));
         }
     }
 

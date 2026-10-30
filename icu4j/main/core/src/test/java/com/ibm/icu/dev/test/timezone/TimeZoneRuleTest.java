@@ -1038,7 +1038,8 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
             // Try to construct TimeArrayTimeZoneRule with null transition times
             t0 = new TimeArrayTimeZoneRule("nulltimes", -3 * HOUR, 0, null, DateTimeRule.UTC_TIME);
         } catch (IllegalArgumentException iae) {
-            logDebug("TimeArrayTimeZoneRule constructor throws IllegalArgumentException as expected.");
+            logDebug(
+                    "TimeArrayTimeZoneRule constructor throws IllegalArgumentException as expected.");
             t0 = null;
         }
         if (t0 != null) {
@@ -1052,7 +1053,8 @@ public class TimeZoneRuleTest extends CoreTestFmwk {
                     new TimeArrayTimeZoneRule(
                             "nulltimes", -3 * HOUR, 0, emptytimes, DateTimeRule.UTC_TIME);
         } catch (IllegalArgumentException iae) {
-            logDebug("TimeArrayTimeZoneRule constructor throws IllegalArgumentException as expected.");
+            logDebug(
+                    "TimeArrayTimeZoneRule constructor throws IllegalArgumentException as expected.");
             t0 = null;
         }
         if (t0 != null) {

@@ -12,11 +12,9 @@ import java.util.Map;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @test
@@ -24,8 +22,8 @@ import org.slf4j.LoggerFactory;
  */
 @RunWith(JUnitParamsRunner.class)
 public class TransliteratorDisorderedMarksTest extends TransliteratorTestBase {
-    private static Logger staticLogger =
-            LoggerFactory.getLogger(TransliteratorDisorderedMarksTest.class);
+    //    private static Logger staticLogger =
+    //            LoggerFactory.getLogger(TransliteratorDisorderedMarksTest.class);
 
     private static UnicodeSet disorderedMarks;
 
@@ -34,8 +32,13 @@ public class TransliteratorDisorderedMarksTest extends TransliteratorTestBase {
         disorderedMarks = null;
     }
 
-    @BeforeClass
-    public static void disorderedMarksAddAll() {
+    @Before
+    public void disorderedMarksAddAll() {
+        if (disorderedMarks != null) {
+            logInfo("Skip initializing disorderMarks");
+            return;
+        }
+
         Normalizer2 nfc = Normalizer2.getNFCInstance();
         Normalizer2 nfd = Normalizer2.getNFDInstance();
 
@@ -121,7 +124,7 @@ public class TransliteratorDisorderedMarksTest extends TransliteratorTestBase {
             disorderedMarks.add(s + "\u0323");
             String xx = nfc.normalize("\u01EC" + s);
             if (!xx.startsWith("\u01EC")) {
-                staticLogger.info("??");
+                logDebug("'" + xx + "' does not start with U+01EC");
             }
         }
 
@@ -154,9 +157,9 @@ public class TransliteratorDisorderedMarksTest extends TransliteratorTestBase {
         //                }
         //            }
         //        }
-        staticLogger.info("Test cases: " + disorderedMarks.size());
+        logDebug("Test cases: " + disorderedMarks.size());
         disorderedMarks.addAll(0, 0x10FFFF).freeze();
-        staticLogger.info("isInert \u0104 " + nfc.isInert('\u0104'));
+        logDebug("isInert \u0104 " + nfc.isInert('\u0104'));
     }
 
     @Test
