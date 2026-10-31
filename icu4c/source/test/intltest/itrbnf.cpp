@@ -89,6 +89,7 @@ void IntlTestRBNF::runIndexedTest(int32_t index, UBool exec, const char* &name, 
         TESTCASE(39, TestDividedByZero);
         TESTCASE(40, TestTurkishSpellout);
         TESTCASE(41, TestNumeratorSubstitutionOverflow);
+        TESTCASE(42, TestInfinityRuleLiteralText);
 #else
         TESTCASE(0, TestRBNFDisabled);
 #endif
@@ -2336,6 +2337,58 @@ void IntlTestRBNF::TestInfinityNaN() {
     };
 
     doTest(&enFormatter2, enDefaultTestData, true);
+}
+
+void IntlTestRBNF::TestInfinityRuleLiteralText() {
+    // The Inf and NaN rules are end states: their text is literal and
+    // never contains substitutions. A caller-supplied rule such as
+    // "Inf: infinite <<;" must format +Inf as the literal text
+    // "infinite <<", not recurse into formatting infinity again.
+    // Before this fix, the "<<" was parsed as a MultiplierSubstitution
+    // that formatted infinity again on every hop, recursing without
+    // bound until the stack overflowed.
+    UErrorCode status = U_ZERO_ERROR;
+    UParseError parseError;
+    UnicodeString rules("%default:"
+            "-x: minus >>;"
+            "Inf: infinite <<;"
+            "NaN: not a number >>;"
+            "0: =#,##0=;");
+    RuleBasedNumberFormat formatter(rules, Locale::getEnglish(), parseError, status);
+    if (U_FAILURE(status)) {
+        errln("Unable to create RuleBasedNumberFormat - " + UnicodeString(u_errorName(status)));
+        return;
+    }
+
+    // Finite values are unaffected.
+    UnicodeString finiteResult;
+    formatter.format(1.0, finiteResult, status);
+    assertEquals("finite formatting", UnicodeString("1"), finiteResult);
+
+    // +Inf: the "<<" is literal text, not a substitution.
+    UnicodeString infResult;
+    formatter.format(uprv_getInfinity(), infResult, status);
+    assertEquals("infinity rule text is literal", UnicodeString("infinite <<"), infResult);
+
+    // -Inf: the minus rule prepends "minus ", then the infinity rule
+    // contributes its literal text.
+    UnicodeString negInfResult;
+    formatter.format(-uprv_getInfinity(), negInfResult, status);
+    assertEquals("negative-infinity rule text is literal", UnicodeString("minus infinite <<"), negInfResult);
+
+    // NaN: the ">>" is literal text, not a substitution.
+    UnicodeString nanResult;
+    formatter.format(uprv_getNaN(), nanResult, status);
+    assertEquals("NaN rule text is literal", UnicodeString("not a number >>"), nanResult);
+
+    // Parsing the literal text back gives the same values.
+    Formattable parsed;
+    formatter.parse("infinite <<", parsed, status);
+    assertTrue("parse infinite <<", U_SUCCESS(status) && parsed.getDouble() == uprv_getInfinity());
+    formatter.parse("minus infinite <<", parsed, status);
+    assertTrue("parse minus infinite <<", U_SUCCESS(status) && parsed.getDouble() == -uprv_getInfinity());
+    formatter.parse("not a number >>", parsed, status);
+    assertTrue("parse not a number >>", U_SUCCESS(status) && uprv_isNaN(parsed.getDouble()));
 }
 
 void IntlTestRBNF::TestVariableDecimalPoint() {
