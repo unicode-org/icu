@@ -464,12 +464,14 @@ static void
 countSpaces(char16_t *dest, int32_t size, uint32_t /*options*/, int32_t *spacesCountl, int32_t *spacesCountr) {
     int32_t i = 0;
     int32_t countl = 0,countr = 0;
-    while((dest[i] == SPACE_CHAR) && (countl < size)) {
+    /* Check the bound before indexing: the old condition order read
+     * dest[size] on an all-space buffer (ICU-22790). */
+    while((countl < size) && (dest[i] == SPACE_CHAR)) {
        countl++;
        i++;
     }
     if (countl < size) {  /* the entire buffer is not all space */
-        while(dest[size-1] == SPACE_CHAR) {
+        while((size > 0) && (dest[size-1] == SPACE_CHAR)) {
             countr++;
             size--;
         }
@@ -822,7 +824,7 @@ handleGeneratedSpaces(char16_t *dest, int32_t sourceLength,
     if(lamAlefOption || tashkeelOption){
         uprv_memset(tempbuffer, 0, (sourceLength+1)*U_SIZEOF_UCHAR);
         
-        i = j = sourceLength; count = 0;
+        i = j = sourceLength-1; count = 0;
         
         while(i >= 0) {
             if ( (lamAlefOption && dest[i] == LAMALEF_SPACE_SUB) ||
@@ -1055,7 +1057,7 @@ expandCompositCharAtNear(char16_t *dest, int32_t sourceLength, int32_t destSize,
 
                     *pErrorCode=U_NO_SPACE_AVAILABLE;
                 }
-            }else if(lamAlefOption && isLamAlefChar(dest[i+1])) {
+            }else if(lamAlefOption && (i < sourceLength-1) && isLamAlefChar(dest[i+1])) {
                 if(dest[i] == SPACE_CHAR){
                     lamalefChar = dest[i+1];
                     dest[i+1] = LAM_CHAR;
