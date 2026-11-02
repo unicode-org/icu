@@ -969,6 +969,71 @@ public class MeasureUnitTest extends CoreTestFmwk {
     }
 
     @Test
+    public void testEqHashCodeOfUnitsNotBuiltIn() {
+        // Units that are not built in have no type or subtype.
+        verifyEqualsHashCode(
+                MeasureUnit.forIdentifier("square-foot-per-second"),
+                MeasureUnit.forIdentifier("square-foot-per-second"),
+                MeasureUnit.forIdentifier("square-foot-per-minute"));
+        verifyEqualsHashCode(
+                MeasureUnit.METER.product(MeasureUnit.SECOND),
+                MeasureUnit.forIdentifier("meter-second"),
+                MeasureUnit.METER);
+        verifyEqualsHashCode(
+                MeasureUnit.KILOMETER.reciprocal(),
+                MeasureUnit.forIdentifier("per-kilometer"),
+                MeasureUnit.KILOMETER);
+        verifyEqualsHashCode(
+                MeasureUnit.forIdentifier("foot-and-inch"),
+                MeasureUnit.forIdentifier("foot-and-inch"),
+                MeasureUnit.forIdentifier("yard-and-foot"));
+
+        Set<MeasureUnit> units = new HashSet<>();
+        units.add(MeasureUnit.forIdentifier("square-foot-per-second"));
+        assertTrue(
+                "HashSet contains square-foot-per-second",
+                units.contains(MeasureUnit.forIdentifier("square-foot-per-second")));
+    }
+
+    @Test
+    public void testEqHashCodeOfMeasureWithUnitNotBuiltIn() {
+        MeasureUnit unit = MeasureUnit.forIdentifier("square-foot-per-second");
+        verifyEqualsHashCode(new Measure(3.0, unit), new Measure(3, unit), new Measure(4, unit));
+    }
+
+    @Test
+    public void testHashCodeOfBuiltInUnitsIsUnchanged() {
+        // Built-in units still hash their type and subtype.
+        assertEquals(
+                "METER hash code",
+                31 * "length".hashCode() + "meter".hashCode(),
+                MeasureUnit.METER.hashCode());
+        assertEquals(
+                "USD hash code",
+                31 * "currency".hashCode() + "USD".hashCode(),
+                Currency.getInstance("USD").hashCode());
+    }
+
+    @Test
+    public void testFormatUnitNotBuiltIn() {
+        // MeasureFormat caches its number formatters by unit, so it hashes the unit.
+        MeasureUnit unit = MeasureUnit.forIdentifier("square-foot-per-second");
+        MeasureFormat mf = MeasureFormat.getInstance(ULocale.ENGLISH, FormatWidth.SHORT);
+        assertEquals("short", "5 sq ft/s", mf.formatMeasures(new Measure(5, unit)));
+    }
+
+    @Test
+    public void testFormatNumericWithUnitNotBuiltIn() {
+        // In NUMERIC width, MeasureFormat looks up each unit in a map of hours, minutes, seconds.
+        MeasureUnit unit = MeasureUnit.forIdentifier("square-foot-per-second");
+        MeasureFormat mf = MeasureFormat.getInstance(ULocale.ENGLISH, FormatWidth.NUMERIC);
+        assertEquals(
+                "numeric",
+                "5h 3ft²/s",
+                mf.formatMeasures(new Measure(5, MeasureUnit.HOUR), new Measure(3, unit)));
+    }
+
+    @Test
     public void testGetLocale() {
         MeasureFormat mf = MeasureFormat.getInstance(ULocale.GERMAN, FormatWidth.SHORT);
         assertEquals("", ULocale.GERMAN, mf.getLocale(ULocale.VALID_LOCALE));
