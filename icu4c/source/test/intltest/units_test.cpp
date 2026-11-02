@@ -55,6 +55,7 @@ class UnitsTest : public IntlTest {
     void testMeasureUnit_withConstantDenominator();
     void testUnitsConstantsDenomenator_getIdentifier();
     void testConverter();
+    void testIdentifierWithEmbeddedNul();
 };
 
 extern IntlTest *createUnitsTest() { return new UnitsTest(); }
@@ -75,6 +76,7 @@ void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO(testMeasureUnit_withConstantDenominator);
     TESTCASE_AUTO(testUnitsConstantsDenomenator_getIdentifier);
     TESTCASE_AUTO(testConverter);
+    TESTCASE_AUTO(testIdentifierWithEmbeddedNul);
     TESTCASE_AUTO_END;
 }
 
@@ -271,6 +273,32 @@ void UnitsTest::testConversionInfo() {
         assertEquals(message + ", reciprocal: ", testCase.expectedConversionInfo.reciprocal,
                      actualConversionInfo.reciprocal);
     }
+}
+
+// ICU-23392: an identifier with an embedded NUL reaches
+// Token::parseStringToLong, whose StringToDoubleConverter was built with
+// empty-string Inf/NaN symbols; the empty literal's terminator matched the
+// embedded NUL and the symbol matcher read past the literal.  The parser
+// must reject these identifiers without touching the Inf/NaN path.
+void UnitsTest::testIdentifierWithEmbeddedNul() {
+    IcuTestErrorCode status(*this, "testIdentifierWithEmbeddedNul");
+
+    (void)MeasureUnit::forIdentifier(StringPiece("\0", 1), status);
+    assertEquals("identifier of a single NUL must be rejected",
+                 U_ILLEGAL_ARGUMENT_ERROR, status.get());
+    status.reset();
+
+    const char midNul[] = { 'm', 'e', 't', '\0', 'e', 'r' };
+    (void)MeasureUnit::forIdentifier(StringPiece(midNul, sizeof midNul), status);
+    assertEquals("identifier with an embedded NUL must be rejected",
+                 U_ILLEGAL_ARGUMENT_ERROR, status.get());
+    status.reset();
+
+    const char constDenom[] = { 'x', '<', '\0', '>', 0 };
+    (void)MeasureUnit::forIdentifier(StringPiece(constDenom, 4), status);
+    assertEquals("constant-denominator token with a NUL must be rejected",
+                 U_ILLEGAL_ARGUMENT_ERROR, status.get());
+    status.reset();
 }
 
 void UnitsTest::testConverter() {
