@@ -64,7 +64,7 @@
     <commons-cli.version>1.11.0</commons-cli.version>
     <error_prone.version>2.49.0</error_prone.version>
     <gson.version>2.13.2</gson.version>
-    <guava.version>33.5.0-jre</guava.version>
+    <guava.version>33.7.1-jre</guava.version>
     <jmh.version>1.37</jmh.version>
     <junit.version>4.13.2</junit.version>
     <junitparams.version>1.1.1</junitparams.version>
