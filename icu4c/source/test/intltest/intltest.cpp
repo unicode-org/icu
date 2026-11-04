@@ -25,8 +25,10 @@
 
 #include "unicode/ctest.h" // for str_timeDelta
 #include "unicode/curramt.h"
+#include "unicode/dtptngen.h"
 #include "unicode/locid.h"
 #include "unicode/putil.h"
+#include "unicode/region.h"
 #include "unicode/smpdtfmt.h"
 #include "unicode/timezone.h"
 #include "unicode/uclean.h"
@@ -40,6 +42,7 @@
 #include "caltztst.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "dayperiodrules.h"
 #include "itmajor.h"
 #include "lstmbe.h"
 #include "mutex.h"
@@ -1240,6 +1243,65 @@ IntlTest::run_phase2( char* name, char* par ) // supports reporting memory leaks
 U_CAPI void unistr_printLengths();
 #endif
 
+// ICU-23353 regression: verify that u_cleanup() leaves the service singletons in
+// their initial state, so that the contract documented in uclean.h holds ("After
+// calling u_cleanup(), an application may continue to use ICU by calling u_init()")
+// and so that a second u_cleanup() is safe. Called at the very end of the test
+// suite only (see main), never mid-suite.
+//
+// How it works: this touches each affected service once so that its singleton and
+// the paired UInitOnce are initialised. main() calls it, then u_cleanup() + u_init(),
+// then calls it again. Without the fix, the cleanup callbacks free (or null) the
+// singleton data without resetting the UInitOnce, so the second call skips the
+// reload and dereferences freed or null data.
+//
+// Ownership: the Region and DayPeriodRules pointers returned below point into
+// singleton tables owned by ICU and freed by u_cleanup(); they must not be deleted
+// here, and this is not a leak. Only the DateTimePatternGenerator is caller-owned.
+static bool
+touchServicesForCleanupReinitTest()
+{
+    bool ok = true;
+#if !UCONFIG_NO_FORMATTING
+    UErrorCode status = U_ZERO_ERROR;
+    const Region *us = Region::getInstance("US", status);
+    const Region *vi = Region::getInstance("VI", status);
+    const Region *viParent = (vi != nullptr) ? vi->getContainingRegion() : nullptr;
+    if (U_FAILURE(status) || us == nullptr || vi == nullptr || viParent == nullptr ||
+            !viParent->contains(*vi)) {
+        fprintf(stderr, "cleanup-reinit: Region::getInstance failed: %s\n", u_errorName(status));
+        ok = false;
+    }
+    status = U_ZERO_ERROR;
+    const DayPeriodRules *dayPeriods = DayPeriodRules::getInstance(Locale("en"), status);
+    if (U_FAILURE(status) || dayPeriods == nullptr) {
+        fprintf(stderr, "cleanup-reinit: DayPeriodRules::getInstance failed: %s\n", u_errorName(status));
+        ok = false;
+    }
+    status = U_ZERO_ERROR;
+    DateTimePatternGenerator *dpg =
+        DateTimePatternGenerator::createInstance(Locale("en"), status);
+    if (U_FAILURE(status) || dpg == nullptr) {
+        fprintf(stderr, "cleanup-reinit: DateTimePatternGenerator::createInstance failed: %s\n",
+                u_errorName(status));
+        ok = false;
+    }
+    delete dpg;
+#endif
+    Locale fr = Locale::createCanonical("fr_CA");
+    if (uprv_strcmp(fr.getName(), "fr_CA") != 0) {
+        fprintf(stderr, "cleanup-reinit: createCanonical(fr_CA) returned %s\n", fr.getName());
+        ok = false;
+    }
+    Locale iw = Locale::createCanonical("iw_IL");
+    if (uprv_strcmp(iw.getName(), "he_IL") != 0) {
+        fprintf(stderr, "cleanup-reinit: createCanonical(iw_IL) returned %s\n", iw.getName());
+        ok = false;
+    }
+    fflush(stdout);
+    return ok;
+}
+
 int
 main(int argc, char* argv[])
 {
@@ -1564,6 +1626,28 @@ main(int argc, char* argv[])
       fprintf(stdout, " To run suppressed tests, use the -K option. \n");
     }
     if (major.getErrors() == 0) {
+        /* ICU-23353: at the very end of the suite (never mid-suite), verify the
+         * u_cleanup() teardown + u_init() re-initialization contract documented in
+         * uclean.h, and that a repeated u_cleanup() is safe. This answers the
+         * question in the unicode-org/icu#3922 review: does the problem reproduce
+         * if we call u_cleanup() twice at the end of the test suite? */
+        // Round 1: initialise the services. Round 2 (after u_cleanup() + u_init()) must
+        // find them re-initialised: stale UInitOnce state would crash or fail there.
+        if (!touchServicesForCleanupReinitTest()) {
+            major.errln("FAILURE: ICU services were not usable before cleanup.");
+        }
+        fflush(stdout);
+        u_cleanup();
+        UErrorCode reinitStatus = U_ZERO_ERROR;
+        u_init(&reinitStatus);
+        if (U_FAILURE(reinitStatus)) {
+            major.errln("FAILURE: u_init() after u_cleanup() failed: %s",
+                        u_errorName(reinitStatus));
+        }
+        fflush(stdout);
+        if (!touchServicesForCleanupReinitTest()) {
+            major.errln("FAILURE: ICU services were not re-initialized after u_cleanup() + u_init().");
+        }
         /* Call it twice to make sure that the defaults were reset. */
         /* Call it before the OK message to verify proper cleanup. */
         u_cleanup();

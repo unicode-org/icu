@@ -467,7 +467,11 @@ U_CFUNC void U_CALLCONV deleteAllowedHourFormats(void *ptr) {
 
 // Close hashmap at cleanup.
 U_CFUNC UBool U_CALLCONV allowedHourFormatsCleanup() {
-    uhash_close(localeToAllowedHourFormatsMap);
+    if (localeToAllowedHourFormatsMap != nullptr) {
+        uhash_close(localeToAllowedHourFormatsMap);
+        localeToAllowedHourFormatsMap = nullptr;
+    }
+    initOnce.reset();
     return true;
 }
 
