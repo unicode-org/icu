@@ -160,6 +160,10 @@ U_CAPI int32_t U_EXPORT2 getCurrentYear() {
     if(currentYear == -1) {
         time_t now = time(nullptr);
         tm *fields = gmtime(&now);
+        if(fields==nullptr) {  
+            fprintf(stderr, "error: gmtime() returned null\n");
+            exit(U_INTERNAL_PROGRAM_ERROR);
+        }
         currentYear = 1900 + fields->tm_year;
     }
     return currentYear;
