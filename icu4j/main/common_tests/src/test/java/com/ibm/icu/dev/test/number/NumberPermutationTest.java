@@ -136,7 +136,7 @@ public class NumberPermutationTest extends CoreTestFmwk {
 
                 // Quick mode: test all fields at least once but stop early.
                 if (quick) {
-                    logln("Quick mode: stopped after " + resultLines.size() + " lines");
+                    logDebug("Quick mode: stopped after " + resultLines.size() + " lines");
                     break outer;
                 }
             }

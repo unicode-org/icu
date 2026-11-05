@@ -261,7 +261,7 @@ public class TestCharsetDetector extends CoreTestFmwk {
         for (int i = 0; i < shortBytes.length; i++) {
             det.setText(shortBytes[i]);
             m = det.detect();
-            logln("i=" + i + " -> " + m.getName());
+            logDebug("i=" + i + " -> " + m.getName());
         }
     }
 
@@ -394,7 +394,7 @@ public class TestCharsetDetector extends CoreTestFmwk {
                 if (testResults[idx] != null) {
                     errln("Unexpectedly got no results at index " + idx);
                 } else {
-                    logln("Got no result as expected at index " + idx);
+                    logDebug("Got no result as expected at index " + idx);
                 }
                 continue;
             }
@@ -559,7 +559,7 @@ public class TestCharsetDetector extends CoreTestFmwk {
         if (encoding.equals("ISO-2022-KR")
                 && TestUtil.getJavaVendor() == JavaVendor.IBM
                 && TestUtil.getJavaVersion() == 8) {
-            logln("Skipping roundtrip check on IBM Java 8: " + id + ", " + encoding);
+            logDebug("Skipping roundtrip check on IBM Java 8: " + id + ", " + encoding);
             return;
         }
 
@@ -589,12 +589,12 @@ public class TestCharsetDetector extends CoreTestFmwk {
             } catch (UnsupportedOperationException uoe) {
                 // Ignore any converters that can't
                 // convert from Unicode.
-                logln("Unsupported encoding for conversion from Unicode: " + encoding);
+                logDebug("Unsupported encoding for conversion from Unicode: " + encoding);
                 return;
             } catch (UnsupportedEncodingException uee) {
                 // Ignore any encodings that this runtime
                 // doesn't support.
-                logln("Unsupported encoding: " + encoding);
+                logDebug("Unsupported encoding: " + encoding);
                 return;
             }
         }

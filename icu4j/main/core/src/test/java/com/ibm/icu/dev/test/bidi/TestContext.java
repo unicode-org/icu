@@ -73,7 +73,7 @@ public class TestContext extends BidiFmwk {
         int tc;
         ContextCase cc;
 
-        logln("\nEntering TestContext\n");
+        logDebug("\nEntering TestContext\n");
 
         bidi.orderParagraphsLTR(true);
 
@@ -106,6 +106,6 @@ public class TestContext extends BidiFmwk {
                     dest);
         }
 
-        logln("\nExiting TestContext\n");
+        logDebug("\nExiting TestContext\n");
     }
 }

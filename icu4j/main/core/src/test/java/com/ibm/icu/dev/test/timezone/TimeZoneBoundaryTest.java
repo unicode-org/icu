@@ -57,7 +57,7 @@ public class TimeZoneBoundaryTest extends CoreTestFmwk {
         // and end.  The given date should be 1/1/xx in some year.
 
         if (d.toString().indexOf(startMode) == -1) {
-            logln("Error: " + startMode + " not present in " + d);
+            logDebug("Error: " + startMode + " not present in " + d);
         }
 
         // Use a binary search, assuming that we have a Standard
@@ -76,12 +76,12 @@ public class TimeZoneBoundaryTest extends CoreTestFmwk {
             }
         }
 
-        logln("Date Before: " + showDate(min));
-        logln("Date After:  " + showDate(max));
+        logDebug("Date Before: " + showDate(min));
+        logDebug("Date After:  " + showDate(max));
         long mindelta = expectedBoundary - min;
         // not used long maxdelta = max - expectedBoundary;
         if (mindelta >= 0 && mindelta <= INTERVAL && mindelta >= 0 && mindelta <= INTERVAL)
-            logln("PASS: Expected boundary at " + expectedBoundary);
+            logDebug("PASS: Expected boundary at " + expectedBoundary);
         else errln("FAIL: Expected boundary at " + expectedBoundary);
     }
 
@@ -162,15 +162,15 @@ public class TimeZoneBoundaryTest extends CoreTestFmwk {
             }
         }
 
-        logln(tz.getID() + " Before: " + showDate(min, tz));
-        logln(tz.getID() + " After:  " + showDate(max, tz));
+        logDebug(tz.getID() + " Before: " + showDate(min, tz));
+        logDebug(tz.getID() + " After:  " + showDate(max, tz));
 
         long mindelta = expectedBoundary - min;
         // not used long maxdelta = max - expectedBoundary;
         DateFormat fmt = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG);
         fmt.setTimeZone(tz);
         if (mindelta >= 0 && mindelta <= INTERVAL && mindelta >= 0 && mindelta <= INTERVAL)
-            logln(
+            logDebug(
                     "PASS: Expected boundary at "
                             + expectedBoundary
                             + " = "
@@ -251,7 +251,7 @@ public class TimeZoneBoundaryTest extends CoreTestFmwk {
             int expOffset) {
         Date d = cal.getTime();
 
-        logln(
+        logDebug(
                 "-- "
                         + tag
                         + ": "
@@ -263,15 +263,15 @@ public class TimeZoneBoundaryTest extends CoreTestFmwk {
                         + ")");
 
         if (time_zone.inDaylightTime(d) == expInDaylightTime)
-            logln("PASS: inDaylightTime = " + time_zone.inDaylightTime(d));
+            logDebug("PASS: inDaylightTime = " + time_zone.inDaylightTime(d));
         else errln("FAIL: inDaylightTime = " + time_zone.inDaylightTime(d));
 
         if (time_zone.useDaylightTime() == expUseDaylightTime)
-            logln("PASS: useDaylightTime = " + time_zone.useDaylightTime());
+            logDebug("PASS: useDaylightTime = " + time_zone.useDaylightTime());
         else errln("FAIL: useDaylightTime = " + time_zone.useDaylightTime());
 
         if (time_zone.getRawOffset() == expRawOffset)
-            logln("PASS: getRawOffset() = " + expRawOffset / (double) ONE_HOUR);
+            logDebug("PASS: getRawOffset() = " + expRawOffset / (double) ONE_HOUR);
         else
             errln(
                     "FAIL: getRawOffset() = "
@@ -292,9 +292,9 @@ public class TimeZoneBoundaryTest extends CoreTestFmwk {
                                                 + cal.get(Calendar.SECOND))
                                         * 1000
                                 + cal.get(Calendar.MILLISECOND));
-        if (offset == expOffset) logln("PASS: getOffset() = " + offset / (double) ONE_HOUR);
+        if (offset == expOffset) logDebug("PASS: getOffset() = " + offset / (double) ONE_HOUR);
         else {
-            logln(
+            logDebug(
                     "era="
                             + cal.get(Calendar.ERA)
                             + ", year="
@@ -335,7 +335,7 @@ public class TimeZoneBoundaryTest extends CoreTestFmwk {
         double e = d.getTime() / H;
         Date ed = new Date((long) (epochHours * H));
         if (e == epochHours) {
-            logln(
+            logDebug(
                     "Ok: "
                             + year
                             + "/"
@@ -375,7 +375,7 @@ public class TimeZoneBoundaryTest extends CoreTestFmwk {
                 && cal.get(Calendar.MONTH) == month
                 && cal.get(Calendar.DATE) == dom
                 && cal.get(Calendar.MILLISECONDS_IN_DAY) == hour * 3600000) {
-            logln(
+            logDebug(
                     "Ok: "
                             + epochHours
                             + " ("
@@ -527,10 +527,10 @@ public class TimeZoneBoundaryTest extends CoreTestFmwk {
             if (TestUtil.getJavaVendor() == JavaVendor.Android || TestUtil.getJavaVersion() > 3) {
                 // This only works in PST/PDT
                 TimeZone.setDefault(safeGetTimeZone("PST"));
-                logln("========================================");
+                logDebug("========================================");
                 tempcal.set(1997, 0, 1);
                 findDaylightBoundaryUsingDate(tempcal.getTime(), "PST", PST_1997_BEG);
-                logln("========================================");
+                logDebug("========================================");
                 tempcal.set(1997, 6, 1);
                 findDaylightBoundaryUsingDate(tempcal.getTime(), "PDT", PST_1997_END);
             }
@@ -548,20 +548,20 @@ public class TimeZoneBoundaryTest extends CoreTestFmwk {
 
         if (true) {
             // Southern hemisphere test
-            logln("========================================");
+            logDebug("========================================");
             TimeZone z = safeGetTimeZone(AUSTRALIA);
             tempcal.set(1997, 0, 1);
             findDaylightBoundaryUsingTimeZone(tempcal.getTime(), true, AUSTRALIA_1997_END, z);
-            logln("========================================");
+            logDebug("========================================");
             tempcal.set(1997, 6, 1);
             findDaylightBoundaryUsingTimeZone(tempcal.getTime(), false, AUSTRALIA_1997_BEG, z);
         }
 
         if (true) {
-            logln("========================================");
+            logDebug("========================================");
             tempcal.set(1997, 0, 1);
             findDaylightBoundaryUsingTimeZone(tempcal.getTime(), false, PST_1997_BEG);
-            logln("========================================");
+            logDebug("========================================");
             tempcal.set(1997, 6, 1);
             findDaylightBoundaryUsingTimeZone(tempcal.getTime(), true, PST_1997_END);
         }
@@ -571,13 +571,13 @@ public class TimeZoneBoundaryTest extends CoreTestFmwk {
         if (false) {
             TimeZone z = TimeZone.getDefault();
             tempcal.set(1997, 3, 4);
-            logln(z.getOffset(1, 97, 3, 4, 6, 0) + " " + tempcal.getTime());
+            logDebug(z.getOffset(1, 97, 3, 4, 6, 0) + " " + tempcal.getTime());
             tempcal.set(1997, 3, 5);
-            logln(z.getOffset(1, 97, 3, 5, 7, 0) + " " + tempcal.getTime());
+            logDebug(z.getOffset(1, 97, 3, 5, 7, 0) + " " + tempcal.getTime());
             tempcal.set(1997, 3, 6);
-            logln(z.getOffset(1, 97, 3, 6, 1, 0) + " " + tempcal.getTime());
+            logDebug(z.getOffset(1, 97, 3, 6, 1, 0) + " " + tempcal.getTime());
             tempcal.set(1997, 3, 7);
-            logln(z.getOffset(1, 97, 3, 7, 2, 0) + " " + tempcal.getTime());
+            logDebug(z.getOffset(1, 97, 3, 7, 2, 0) + " " + tempcal.getTime());
         }
     }
 
@@ -751,13 +751,13 @@ public class TimeZoneBoundaryTest extends CoreTestFmwk {
             }
         }
 
-        logln("Binary Search Before: " + showDate(min));
-        logln("Binary Search After:  " + showDate(max));
+        logDebug("Binary Search Before: " + showDate(min));
+        logDebug("Binary Search After:  " + showDate(max));
 
         long mindelta = expectedBoundary - min;
         // not used long maxdelta = max - expectedBoundary;
         if (mindelta >= 0 && mindelta <= INTERVAL && mindelta >= 0 && mindelta <= INTERVAL)
-            logln("PASS: Expected boundary at " + expectedBoundary);
+            logDebug("PASS: Expected boundary at " + expectedBoundary);
         else errln("FAIL: Expected boundary at " + expectedBoundary);
     }
 
@@ -800,8 +800,8 @@ public class TimeZoneBoundaryTest extends CoreTestFmwk {
             java.util.Calendar tempcal = java.util.Calendar.getInstance();
             tempcal.clear();
 
-            logln("-----------------------------------------------------------------");
-            logln("Aug 2ndTues .. Mar 15");
+            logDebug("-----------------------------------------------------------------");
+            logDebug("Aug 2ndTues .. Mar 15");
             tz =
                     new SimpleTimeZone(
                             -8 * ONE_HOUR,
@@ -815,15 +815,15 @@ public class TimeZoneBoundaryTest extends CoreTestFmwk {
                             0,
                             2 * ONE_HOUR);
             // logln(tz.toString());
-            logln("========================================");
+            logDebug("========================================");
             tempcal.set(1997, 0, 1);
             _testUsingBinarySearch(tz, tempcal.getTime(), 858416400000L);
-            logln("========================================");
+            logDebug("========================================");
             tempcal.set(1997, 6, 1);
             _testUsingBinarySearch(tz, tempcal.getTime(), 871380000000L);
 
-            logln("-----------------------------------------------------------------");
-            logln("Apr Wed>=14 .. Sep Sun<=20");
+            logDebug("-----------------------------------------------------------------");
+            logDebug("Apr Wed>=14 .. Sep Sun<=20");
             tz =
                     new SimpleTimeZone(
                             -8 * ONE_HOUR,
@@ -837,10 +837,10 @@ public class TimeZoneBoundaryTest extends CoreTestFmwk {
                             -Calendar.SUNDAY,
                             2 * ONE_HOUR);
             // logln(tz.toString());
-            logln("========================================");
+            logDebug("========================================");
             tempcal.set(1997, 0, 1);
             _testUsingBinarySearch(tz, tempcal.getTime(), 861184800000L);
-            logln("========================================");
+            logDebug("========================================");
             tempcal.set(1997, 6, 1);
             _testUsingBinarySearch(tz, tempcal.getTime(), 874227600000L);
         }
@@ -894,20 +894,20 @@ public class TimeZoneBoundaryTest extends CoreTestFmwk {
         long limit = time + ONE_YEAR + ONE_DAY;
         boolean lastState = z.inDaylightTime(d);
         int changes = 0;
-        logln("-- Zone " + z.getID() + " starts in " + year + " with DST = " + lastState);
-        logln("useDaylightTime = " + z.useDaylightTime());
+        logDebug("-- Zone " + z.getID() + " starts in " + year + " with DST = " + lastState);
+        logDebug("useDaylightTime = " + z.useDaylightTime());
         while (time < limit) {
             d.setTime(time);
             boolean state = z.inDaylightTime(d);
             if (state != lastState) {
-                logln((state ? "Entry " : "Exit ") + "at " + d);
+                logDebug((state ? "Entry " : "Exit ") + "at " + d);
                 lastState = state;
                 ++changes;
             }
             time += interval;
         }
         if (changes == 0) {
-            if (!lastState && !z.useDaylightTime()) logln("No DST");
+            if (!lastState && !z.useDaylightTime()) logDebug("No DST");
             else errln("FAIL: DST all year, or no DST with true useDaylightTime");
         } else if (changes != 2) {
             errln("FAIL: " + changes + " changes seen; should see 0 or 2");
@@ -930,14 +930,14 @@ public class TimeZoneBoundaryTest extends CoreTestFmwk {
         findBoundariesStepwise(1997, ONE_DAY, safeGetTimeZone(AUSTRALIA), 2);
     }
 
-    private static TimeZone safeGetTimeZone(String id) {
+    private TimeZone safeGetTimeZone(String id) {
         TimeZone tz = TimeZone.getTimeZone(id);
         if (tz == null) {
             // should never happen
             errln("FAIL: TimeZone.getTimeZone(" + id + ") => null");
         }
         if (!tz.getID().equals(id)) {
-            warnln("FAIL: TimeZone.getTimeZone(" + id + ") => " + tz.getID());
+            errln("FAIL: TimeZone.getTimeZone(" + id + ") => " + tz.getID());
         }
         return tz;
     }

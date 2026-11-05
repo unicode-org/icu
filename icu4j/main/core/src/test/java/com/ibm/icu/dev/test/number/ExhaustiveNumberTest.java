@@ -4,7 +4,6 @@ package com.ibm.icu.dev.test.number;
 
 import static com.ibm.icu.impl.StaticUnicodeSets.get;
 
-import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.impl.StaticUnicodeSets;
 import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
 import com.ibm.icu.lang.UCharacter;
@@ -26,7 +25,7 @@ import org.junit.Test;
  *
  * @author sffc
  */
-public class ExhaustiveNumberTest extends CoreTestFmwk {
+public class ExhaustiveNumberTest extends NumberTestBase {
     @Before
     public void beforeMethod() {
         // Disable this test class except for exhaustive mode.
@@ -83,7 +82,7 @@ public class ExhaustiveNumberTest extends CoreTestFmwk {
         }
     }
 
-    static void assertInSet(ULocale locale, UnicodeSet set, String str) {
+    void assertInSet(ULocale locale, UnicodeSet set, String str) {
         if (str.codePointCount(0, str.length()) != 1) {
             // Ignore locale strings with more than one code point (usually a bidi mark)
             return;
@@ -91,7 +90,7 @@ public class ExhaustiveNumberTest extends CoreTestFmwk {
         assertInSet(locale, set, str.codePointAt(0));
     }
 
-    static void assertInSet(ULocale locale, UnicodeSet set, int cp) {
+    void assertInSet(ULocale locale, UnicodeSet set, int cp) {
         // If this test case fails, add the specified code point to the corresponding set in
         // UnicodeSetStaticCache.java and numparse_unisets.cpp
         assertTrue(
@@ -210,7 +209,7 @@ public class ExhaustiveNumberTest extends CoreTestFmwk {
         }
     }
 
-    private static void checkDoubleBehavior(double d, boolean explicitRequired, String alert) {
+    private void checkDoubleBehavior(double d, boolean explicitRequired, String alert) {
         DecimalQuantity_DualStorageBCD fq = new DecimalQuantity_DualStorageBCD(d);
         if (explicitRequired) {
             assertTrue(alert + "Should be using approximate double", !fq.explicitExactDouble);
@@ -219,9 +218,8 @@ public class ExhaustiveNumberTest extends CoreTestFmwk {
         if (explicitRequired) {
             assertTrue(alert + "Should not be using approximate double", fq.explicitExactDouble);
         }
-        DecimalQuantityTest.assertDoubleEquals(
-                alert + "After conversion to exact BCD (double)", d, fq.toDouble());
-        DecimalQuantityTest.assertBigDecimalEquals(
+        assertDoubleEquals(alert + "After conversion to exact BCD (double)", d, fq.toDouble());
+        assertBigDecimalEquals(
                 alert + "After conversion to exact BCD (BigDecimal)",
                 new BigDecimal(Double.toString(d)),
                 fq.toBigDecimal());

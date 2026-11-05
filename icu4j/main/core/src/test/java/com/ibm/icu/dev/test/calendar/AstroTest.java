@@ -36,7 +36,7 @@ public class AstroTest extends CoreTestFmwk {
             {1980, 7, 27, 00, 00, 2.166442986535465, 2.2070499713207730, 0.3355704075759270},
             {1988, 7, 27, 00, 00, 2.167484927693959, 2.2081183335606176, 0.3353093444275315},
         };
-        logln("");
+        logDebug("");
         for (int i = 0; i < tests.length; i++) {
             gc.clear();
             gc.set(
@@ -51,7 +51,7 @@ public class AstroTest extends CoreTestFmwk {
             double longitude = astro.getSunLongitude();
             if (longitude != tests[i][5]) {
                 if ((float) longitude == (float) tests[i][5]) {
-                    logln(
+                    logDebug(
                             "longitude("
                                     + longitude
                                     + ") !=  tests[i][5]("
@@ -78,7 +78,7 @@ public class AstroTest extends CoreTestFmwk {
         final double tests[][] = {
             {1979, 2, 26, 16, 00, -0.3778379118188744, -0.1399698825594198},
         };
-        logln("");
+        logDebug("");
 
         for (int i = 0; i < tests.length; i++) {
             gc.clear();
@@ -93,7 +93,7 @@ public class AstroTest extends CoreTestFmwk {
             Equatorial result = astro.getMoonPosition();
             if (result.ascension != tests[i][5]) {
                 if ((float) result.ascension == (float) tests[i][5]) {
-                    logln(
+                    logDebug(
                             "result.ascension("
                                     + result.ascension
                                     + ") !=  tests[i][5]("
@@ -112,7 +112,7 @@ public class AstroTest extends CoreTestFmwk {
             }
             if (result.declination != tests[i][6]) {
                 if ((float) result.declination == (float) tests[i][6]) {
-                    logln(
+                    logDebug(
                             "result.declination("
                                     + result.declination
                                     + ") !=  tests[i][6]("
@@ -137,7 +137,7 @@ public class AstroTest extends CoreTestFmwk {
         CalendarAstronomer astro = new CalendarAstronomer();
         Equatorial result =
                 astro.eclipticToEquatorial(139.686111 * PI / 180.0, 4.875278 * PI / 180.0);
-        logln("result is " + result + ";  " + result.toHmsString());
+        logDebug("result is " + result + ";  " + result.toHmsString());
     }
 
     @Test
@@ -159,10 +159,10 @@ public class AstroTest extends CoreTestFmwk {
         for (int i = 0; i < astronomers.length; ++i) {
             CalendarAstronomer astro = astronomers[i];
 
-            logln("astro: " + astro);
-            logln("   time: " + astro.getTime());
-            logln("   date: " + astro.getDate());
-            logln("   equ long: " + astro.eclipticToEquatorial(eclLat, eclLong));
+            logDebug("astro: " + astro);
+            logDebug("   time: " + astro.getTime());
+            logDebug("   date: " + astro.getDate());
+            logDebug("   equ long: " + astro.eclipticToEquatorial(eclLat, eclLong));
         }
     }
 
@@ -181,7 +181,7 @@ public class AstroTest extends CoreTestFmwk {
         double jd = astro.getJulianDay() - 2447891.5;
         double exp = -3444;
         if (jd == exp) {
-            logln(d3.format(cal3.getTime()) + " => " + jd);
+            logDebug(d3.format(cal3.getTime()) + " => " + jd);
         } else {
             errln("FAIL: " + d3.format(cal3.getTime()) + " => " + jd + ", expected " + exp);
         }
@@ -253,11 +253,11 @@ public class AstroTest extends CoreTestFmwk {
             CalendarAstronomer calastro = new CalendarAstronomer(gc.getTimeInMillis());
             double expectedAge = (angle[i] * PI) / 180;
             double got = calastro.getMoonAge();
-            logln(testString);
+            logDebug(testString);
             if (!(got > expectedAge - precision && got < expectedAge + precision)) {
                 errln("FAIL: expected " + expectedAge + " got " + got);
             } else {
-                logln("PASS: expected " + expectedAge + " got " + got);
+                logDebug("PASS: expected " + expectedAge + " got " + got);
             }
         }
     }

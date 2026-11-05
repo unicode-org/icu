@@ -4,6 +4,7 @@
 package com.ibm.icu.dev.test.rbbi;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.UCharacterName;
 import com.ibm.icu.impl.UCharacterNameChoice;
 import com.ibm.icu.text.BreakIterator;
@@ -808,8 +809,17 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
     // class RBBIMonkeyImpl     holds (some indirectly) everything associated with running a monkey
     //                          test for one set of break rules.
     //
+    enum CheckDirection {
+        FORWARD,
+        REVERSE
+    };
 
     static class RBBIMonkeyImpl extends Thread {
+        private final TestFmwk fmwk;
+
+        RBBIMonkeyImpl(TestFmwk fmwk) {
+            this.fmwk = fmwk;
+        }
 
         void setup(String ruleFile) {
             fRuleFileName = ruleFile;
@@ -828,7 +838,7 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
             try {
                 is = RBBIMonkeyImpl.class.getResourceAsStream(filePath);
                 if (is == null) {
-                    errln("Could not open test data file " + fileName);
+                    fmwk.errln("Could not open test data file " + fileName);
                     return;
                 }
                 InputStreamReader isr = new InputStreamReader(is, "UTF-8");
@@ -855,7 +865,7 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
                     is.close();
                 } catch (IOException ignored) {
                 }
-                errln(e.toString());
+                fmwk.errln(e.toString());
             }
             fRuleCharBuffer = testFileBuf.toString(); /* the file as a String */
         }
@@ -908,11 +918,6 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
                 }
             }
         }
-
-        enum CheckDirection {
-            FORWARD,
-            REVERSE
-        };
 
         void testForwards() {
             fTestData.clearActualBreaks();
@@ -1118,9 +1123,9 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
         // Each thread/set of rules gets a separate RBBIMonkeyImpl object.
 
         for (String testName : tests) {
-            logln(String.format("beginning testing of %s", testName));
+            logDebug(String.format("beginning testing of %s", testName));
 
-            RBBIMonkeyImpl test = new RBBIMonkeyImpl();
+            RBBIMonkeyImpl test = new RBBIMonkeyImpl(this);
 
             test.fDumpExpansions = dumpExpansions;
             test.fVerbose = verbose;

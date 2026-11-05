@@ -72,8 +72,8 @@ public class DateFormatRegressionTestJ extends CoreTestFmwk {
 
         for (int i = 0; i < ISOPattern.length; i++) {
             aSimpleDF.applyPattern(ISOPattern[i]);
-            logln("Pattern = " + aSimpleDF.toPattern());
-            logln("Format = " + aSimpleDF.format(d));
+            logDebug("Pattern = " + aSimpleDF.toPattern());
+            logDebug("Format = " + aSimpleDF.format(d));
         }
     }
 
@@ -87,8 +87,8 @@ public class DateFormatRegressionTestJ extends CoreTestFmwk {
             d = df2.format(someDate);
             errln("we should catch an exception here");
         } catch (Exception e) {
-            logln("dateStyle = 2" + "\t timeStyle = -2");
-            logln("Exception caught!");
+            logDebug("dateStyle = 2" + "\t timeStyle = -2");
+            logDebug("Exception caught!");
         }
 
         try {
@@ -96,9 +96,9 @@ public class DateFormatRegressionTestJ extends CoreTestFmwk {
             d = df3.format(someDate);
             errln("we should catch an exception here");
         } catch (Exception e) {
-            logln("dateStyle = 4" + "\t timeStyle = 2");
-            logln("Exception caught!");
-            logln("********************************************");
+            logDebug("dateStyle = 4" + "\t timeStyle = 2");
+            logDebug("Exception caught!");
+            logDebug("********************************************");
         }
 
         try {
@@ -106,9 +106,9 @@ public class DateFormatRegressionTestJ extends CoreTestFmwk {
             d = df4.format(someDate);
             errln("we should catch an exception here");
         } catch (Exception e) {
-            logln("dateStyle = -12" + "\t timeStyle = -12");
-            logln("Exception caught!");
-            logln("********************************************");
+            logDebug("dateStyle = -12" + "\t timeStyle = -12");
+            logDebug("Exception caught!");
+            logDebug("********************************************");
         }
 
         try {
@@ -116,13 +116,13 @@ public class DateFormatRegressionTestJ extends CoreTestFmwk {
             d = df5.format(someDate);
             errln("we should catch an exception here");
         } catch (Exception e) {
-            logln("dateStyle = 2" + "\t timeStyle = 123");
-            logln("Exception caught!");
-            logln("********************************************");
+            logDebug("dateStyle = 2" + "\t timeStyle = 123");
+            logDebug("Exception caught!");
+            logDebug("********************************************");
         }
         // read the value in d to get rid of the warning
         if (d != null) {
-            logln("The value of d: " + d);
+            logDebug("The value of d: " + d);
         }
     }
 
@@ -161,8 +161,8 @@ public class DateFormatRegressionTestJ extends CoreTestFmwk {
         SimpleDateFormat aSimpleDF = (SimpleDateFormat) DateFormat.getDateTimeInstance();
         for (int i = 0; i < ISOPattern.length; i++) {
             aSimpleDF.applyPattern(ISOPattern[i]);
-            logln("Pattern = " + aSimpleDF.toPattern());
-            logln("Format = " + aSimpleDF.format(d));
+            logDebug("Pattern = " + aSimpleDF.toPattern());
+            logDebug("Format = " + aSimpleDF.format(d));
         }
     }
 
@@ -177,9 +177,9 @@ public class DateFormatRegressionTestJ extends CoreTestFmwk {
         SimpleDateFormat fmt = new SimpleDateFormat(dateFormat);
 
         ParsePosition p0 = new ParsePosition(0);
-        logln("Under  " + loc + "  locale");
+        logDebug("Under  " + loc + "  locale");
         Date d = fmt.parse("01/22/92 04:52:00 GMT", p0);
-        logln(d.toString());
+        logDebug(d.toString());
 
         Locale.setDefault(startLocale);
     }
@@ -194,18 +194,18 @@ public class DateFormatRegressionTestJ extends CoreTestFmwk {
         Date today = cal.getTime();
 
         sdf.applyPattern("MM d y");
-        logln(sdf.format(today));
+        logDebug(sdf.format(today));
         sdf.applyPattern("MM d yy");
-        logln(sdf.format(today));
+        logDebug(sdf.format(today));
 
         sdf.applyPattern("MM d yyy");
-        logln(sdf.format(today));
+        logDebug(sdf.format(today));
 
         sdf.applyPattern("MM d yyyy");
-        logln(sdf.format(today));
+        logDebug(sdf.format(today));
 
         sdf.applyPattern("MM d yyyyy");
-        logln(sdf.format(today));
+        logDebug(sdf.format(today));
     }
 
     // Parse invalid string
@@ -218,7 +218,7 @@ public class DateFormatRegressionTestJ extends CoreTestFmwk {
                     sdf.parse(
                             "vggf 20  01.0 9.29 ap. J.-C. at 05:26:33 GMT+08:00",
                             new ParsePosition(0));
-            if (currentTime == null) logln("parse right");
+            if (currentTime == null) logDebug("parse right");
         } catch (Exception e) {
             errln("Error");
         }
@@ -246,21 +246,21 @@ public class DateFormatRegressionTestJ extends CoreTestFmwk {
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
 
         if (sdf.getTimeZone().useDaylightTime()) {
-            logln("original date: " + origin_d.toString());
+            logDebug("original date: " + origin_d.toString());
             str = sdf.format(d);
-            logln(" after format----->" + str);
+            logDebug(" after format----->" + str);
 
             d = sdf.parse(str, new ParsePosition(0));
-            logln(" after parse----->" + d.toString());
+            logDebug(" after parse----->" + d.toString());
 
             str = sdf.format(d);
-            logln(" after format----->" + str);
+            logDebug(" after format----->" + str);
 
             d = sdf.parse(str, new ParsePosition(0));
-            logln(" after parse----->" + d.toString());
+            logDebug(" after parse----->" + d.toString());
 
             str = sdf.format(d);
-            logln(" after format----->" + str);
+            logDebug(" after format----->" + str);
         }
     }
 

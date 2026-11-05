@@ -155,8 +155,7 @@ public class JavaTimeConvertersTest extends CoreTestFmwk {
     }
 
     // Compare the expected / actual calendar, but using an allowlist
-    private static void assertCalendarsEquals(
-            Calendar exected, Calendar actual, int[] fieldsToCheck) {
+    private void assertCalendarsEquals(Calendar exected, Calendar actual, int[] fieldsToCheck) {
         for (int field : fieldsToCheck) {
             assertEquals("Bad conversion", exected.get(field), actual.get(field));
         }

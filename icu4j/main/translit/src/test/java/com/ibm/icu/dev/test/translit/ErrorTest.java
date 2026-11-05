@@ -62,7 +62,7 @@ public class ErrorTest extends TestFmwk {
             t.transliterate(testString, pos);
             errln("FAIL: Start offset is out of bounds, error not reported.");
         } catch (IllegalArgumentException e) {
-            logln("Start offset is out of bounds and detected.");
+            logDebug("Start offset is out of bounds and detected.");
         }
         pos.limit = 100;
         pos.start = 0;
@@ -71,7 +71,7 @@ public class ErrorTest extends TestFmwk {
             t.transliterate(testString, pos);
             errln("FAIL: Limit offset is out of bounds, error not reported.\n");
         } catch (IllegalArgumentException e) {
-            logln("Start offset is out of bounds and detected.");
+            logDebug("Start offset is out of bounds and detected.");
         }
         len = pos.contextLimit = testString.length();
         pos.contextStart = 0;
@@ -110,7 +110,7 @@ public class ErrorTest extends TestFmwk {
                 errln("FAIL: The input string was modified though the offsets were out of bounds.");
             }
         } catch (IllegalArgumentException e) {
-            logln("Insertion test with out of bounds indexes.");
+            logDebug("Insertion test with out of bounds indexes.");
         }
         Transliterator t1 = null;
         try {
@@ -158,13 +158,13 @@ public class ErrorTest extends TestFmwk {
             set.applyPattern(badPattern);
             errln("FAIL: Applied a bad pattern to the UnicodeSet object okay.");
         } catch (IllegalArgumentException e) {
-            logln("Test applying with the bad pattern.");
+            logDebug("Test applying with the bad pattern.");
         }
         try {
             new UnicodeSet(badPattern);
             errln("FAIL: Created a UnicodeSet based on bad patterns.");
         } catch (IllegalArgumentException e) {
-            logln("Test constructing with the bad pattern.");
+            logDebug("Test constructing with the bad pattern.");
         }
     }
 

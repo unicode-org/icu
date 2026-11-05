@@ -92,7 +92,7 @@ public class CollationServiceTest extends TestFmwk {
                     errln("found " + name + " for fu_FU");
                 }
             } catch (MissingResourceException ex) {
-                warnln("Could not load locale data.");
+                errln("Could not load locale data.");
             }
             try {
                 String name = Collator.getDisplayName(fu_FU, fu_FU);
@@ -101,7 +101,7 @@ public class CollationServiceTest extends TestFmwk {
                     errln("found " + name + " for fu_FU");
                 }
             } catch (MissingResourceException ex) {
-                warnln("Could not load locale data.");
+                errln("Could not load locale data.");
             }
 
             if (!Collator.unregister(key)) {
@@ -250,7 +250,7 @@ public class CollationServiceTest extends TestFmwk {
         try {
             factory = new TestFactory(info);
         } catch (MissingResourceException ex) {
-            warnln("Could not load locale data.");
+            errln("Could not load locale data.");
         }
         // coverage
         {
@@ -263,9 +263,9 @@ public class CollationServiceTest extends TestFmwk {
                 try {
                     name = Collator.getDisplayName(fu_FU, fu_FU_FOO);
                 } catch (MissingResourceException ex) {
-                    warnln("Could not load locale data.");
+                    errln("Could not load locale data.");
                 }
-                logln("*** default name: " + name);
+                logDebug("*** default name: " + name);
                 Collator.unregister(key);
                 key = null;
             } finally {
@@ -450,7 +450,7 @@ public class CollationServiceTest extends TestFmwk {
                                 + " avail "
                                 + expectAvailable);
             } else {
-                logln(
+                logDebug(
                         "#"
                                 + i
                                 + ": Collator.getFunctionalEquivalent("

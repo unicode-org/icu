@@ -111,10 +111,10 @@ public class TestReorderArabicMathSymbols extends BidiFmwk {
         int nTests = logicalOrder.length;
         String srcU16, dest = "";
 
-        logln("\nEntering TestReorderArabicMathSymbols\n");
+        logDebug("\nEntering TestReorderArabicMathSymbols\n");
 
         for (testNumber = 0; testNumber < nTests; testNumber++) {
-            logln("Testing L2V #1 for case " + testNumber);
+            logDebug("Testing L2V #1 for case " + testNumber);
             srcU16 = logicalOrder[testNumber];
             try {
                 bidi.setPara(srcU16, Bidi.LEVEL_DEFAULT_LTR, null);
@@ -148,6 +148,6 @@ public class TestReorderArabicMathSymbols extends BidiFmwk {
             }
         }
 
-        logln("\nExiting TestReorderArabicMathSymbols\n");
+        logDebug("\nExiting TestReorderArabicMathSymbols\n");
     }
 }

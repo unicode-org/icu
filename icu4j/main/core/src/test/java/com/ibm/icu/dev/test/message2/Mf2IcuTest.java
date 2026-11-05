@@ -114,7 +114,7 @@ public class Mf2IcuTest extends CoreTestFmwk {
                 mf.formatToString(Map.of("userName", "Dominique", "userGender", "unnown")));
     }
 
-    private static void doTheRealDateTimeSkeletonTesting(
+    private void doTheRealDateTimeSkeletonTesting(
             Date date, String messagePattern, Locale locale, String expected) {
 
         MessageFormatter msgf =

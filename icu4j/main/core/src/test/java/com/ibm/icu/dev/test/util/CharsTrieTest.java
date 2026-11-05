@@ -111,7 +111,7 @@ public class CharsTrieTest extends CoreTestFmwk {
             new StringAndValue("zz", 0x80000000)
         };
         for (int length = 2; length <= data.length; ++length) {
-            logln("TestBranches length=" + length);
+            logDebug("TestBranches length=" + length);
             checkData(data, length);
         }
     }
@@ -333,9 +333,9 @@ public class CharsTrieTest extends CoreTestFmwk {
             builder_.add(gen.getString(), gen.getValue());
             gen.next();
         }
-        logln("buildLargeTrie(" + numUniqueFirst + ") added " + gen.getIndex() + " strings");
+        logDebug("buildLargeTrie(" + numUniqueFirst + ") added " + gen.getIndex() + " strings");
         CharSequence trieChars = builder_.buildCharSequence(StringTrieBuilder.Option.FAST);
-        logln("serialized trie size: " + trieChars.length() + " chars\n");
+        logDebug("serialized trie size: " + trieChars.length() + " chars\n");
         return new CharsTrie(trieChars, 0);
     }
 
@@ -536,7 +536,7 @@ public class CharsTrieTest extends CoreTestFmwk {
         };
         checkIterator(iter, data);
         // Reset, and we should get the same result.
-        logln("after iter.reset()");
+        logDebug("after iter.reset()");
         checkIterator(iter.reset(), data);
     }
 
@@ -555,7 +555,7 @@ public class CharsTrieTest extends CoreTestFmwk {
         final StringAndValue[] data = {new StringAndValue("r", 1), new StringAndValue("ry", 1)};
         checkIterator(iter, data);
         // Reset, and we should get the same result.
-        logln("after iter.reset()");
+        logDebug("after iter.reset()");
         checkIterator(iter.reset(), data);
     }
 
@@ -595,7 +595,7 @@ public class CharsTrieTest extends CoreTestFmwk {
         };
         checkIterator(iter, data);
         // Reset, and we should get the same result.
-        logln("after iter.reset()");
+        logDebug("after iter.reset()");
         checkIterator(iter.reset(), data);
     }
 
@@ -615,7 +615,7 @@ public class CharsTrieTest extends CoreTestFmwk {
         final StringAndValue[] expected = {new StringAndValue("cd", -1)};
         checkIterator(iter, expected);
         // Reset, and we should get the same result.
-        logln("after iter.reset()");
+        logDebug("after iter.reset()");
         checkIterator(iter.reset(), expected);
     }
 
@@ -640,7 +640,7 @@ public class CharsTrieTest extends CoreTestFmwk {
         };
         checkIterator(iter, expected);
         // Reset, and we should get the same result.
-        logln("after iter.reset()");
+        logDebug("after iter.reset()");
         checkIterator(iter.reset(), expected);
     }
 
@@ -685,9 +685,9 @@ public class CharsTrieTest extends CoreTestFmwk {
     }
 
     private void checkData(StringAndValue data[], int dataLength) {
-        logln("checkData(dataLength=" + dataLength + ", fast)");
+        logDebug("checkData(dataLength=" + dataLength + ", fast)");
         checkData(data, dataLength, StringTrieBuilder.Option.FAST);
-        logln("checkData(dataLength=" + dataLength + ", small)");
+        logDebug("checkData(dataLength=" + dataLength + ", small)");
         checkData(data, dataLength, StringTrieBuilder.Option.SMALL);
     }
 
@@ -731,7 +731,7 @@ public class CharsTrieTest extends CoreTestFmwk {
             // good
         }
         CharSequence trieChars = builder_.buildCharSequence(buildOption);
-        logln("serialized trie size: " + trieChars.length() + " chars");
+        logDebug("serialized trie size: " + trieChars.length() + " chars");
         // Tries from either build() method should be identical but
         // CharsTrie does not implement equals().
         // We just return either one.

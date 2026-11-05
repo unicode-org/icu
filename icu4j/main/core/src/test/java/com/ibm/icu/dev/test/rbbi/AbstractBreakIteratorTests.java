@@ -3,7 +3,6 @@
 package com.ibm.icu.dev.test.rbbi;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
-import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.BreakIterator;
 import java.text.CharacterIterator;
 import org.junit.Before;
@@ -88,19 +87,18 @@ public class AbstractBreakIteratorTests extends CoreTestFmwk {
     @Test
     public void testPreceding() {
         int pos = bi.preceding(0);
-        TestFmwk.assertEquals(
-                "BreakIterator preceding position not correct", BreakIterator.DONE, pos);
+        assertEquals("BreakIterator preceding position not correct", BreakIterator.DONE, pos);
 
         pos = bi.preceding(5);
-        TestFmwk.assertEquals("BreakIterator preceding position not correct", 4, pos);
+        assertEquals("BreakIterator preceding position not correct", 4, pos);
     }
 
     @Test
     public void testIsBoundary() {
         boolean b = bi.isBoundary(0);
-        TestFmwk.assertTrue("BreakIterator is boundary not correct", b);
+        assertTrue("BreakIterator is boundary not correct", b);
 
         b = bi.isBoundary(5);
-        TestFmwk.assertTrue("BreakIterator is boundary not correct", b);
+        assertTrue("BreakIterator is boundary not correct", b);
     }
 }

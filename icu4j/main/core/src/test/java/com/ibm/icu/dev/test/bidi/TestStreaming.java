@@ -78,7 +78,7 @@ public class TestStreaming extends BidiFmwk {
         boolean mismatch, testOK = true;
         StringBuilder processedLenStr = new StringBuilder(MAXLOOPS * 5);
 
-        logln("\nEntering TestStreaming\n");
+        logDebug("\nEntering TestStreaming\n");
 
         bidi = new Bidi();
 
@@ -92,7 +92,7 @@ public class TestStreaming extends BidiFmwk {
                 nPortions = testCases[i].nPortions[levelIndex];
                 level = paraLevels[levelIndex];
                 processedLenStr.setLength(0);
-                logln("Testing level " + level + ", case " + i);
+                logDebug("Testing level " + level + ", case " + i);
 
                 mismatch = false;
 
@@ -139,8 +139,8 @@ public class TestStreaming extends BidiFmwk {
             }
         }
         if (testOK) {
-            logln("\nBidi streaming test OK");
+            logDebug("\nBidi streaming test OK");
         }
-        logln("\nExiting TestStreaming\n");
+        logDebug("\nExiting TestStreaming\n");
     }
 }

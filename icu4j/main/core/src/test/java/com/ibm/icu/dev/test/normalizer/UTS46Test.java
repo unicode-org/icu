@@ -889,12 +889,12 @@ public class UTS46Test extends CoreTestFmwk {
             }
             if (isVerbose()) {
                 char m = mode == 'B' ? mode : 'N';
-                logln(
+                logDebug(
                         String.format(
                                 "%c.nameToASCII([%d] %s) (errors %s) result string: %s",
                                 m, i, testCase.s, aNInfo.getErrors(), prettify(aN.toString())));
                 if (mode != 'B') {
-                    logln(
+                    logDebug(
                             String.format(
                                     "T.nameToASCII([%d] %s) (errors %s) result string: %s",
                                     i, testCase.s, aTInfo.getErrors(), prettify(aT.toString())));

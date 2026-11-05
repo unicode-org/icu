@@ -171,7 +171,7 @@ public class TestReorderRunsOnly extends BidiFmwk {
         int option, i, j, nCases;
         byte level;
 
-        logln("\nEntering TestReorderRunsOnly\n");
+        logDebug("\nEntering TestReorderRunsOnly\n");
         bidi.setReorderingMode(Bidi.REORDER_RUNS_ONLY);
         bidiL2V.setReorderingOptions(Bidi.OPTION_REMOVE_CONTROLS);
 
@@ -182,7 +182,8 @@ public class TestReorderRunsOnly extends BidiFmwk {
                 src = testCases[i].textIn;
                 srcU16 = pseudoToU16(src);
                 for (j = 0; j < 2; j++) {
-                    logln("Now doing test for option " + option + ", case " + i + ", level " + j);
+                    logDebug(
+                            "Now doing test for option " + option + ", case " + i + ", level " + j);
                     level = (byte) j;
                     bidi.setPara(srcU16, level, null);
                     destU16 = bidi.writeReordered(Bidi.DO_MIRRORING);
@@ -235,6 +236,6 @@ public class TestReorderRunsOnly extends BidiFmwk {
         paras = bidi.countParagraphs();
         assertEquals("\nInvalid number of paras #4 (should be 0): ", 0, paras);
 
-        logln("\nExiting TestReorderRunsOnly\n");
+        logDebug("\nExiting TestReorderRunsOnly\n");
     }
 }

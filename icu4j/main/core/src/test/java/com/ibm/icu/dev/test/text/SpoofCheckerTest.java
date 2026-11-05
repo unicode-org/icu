@@ -88,7 +88,7 @@ public class SpoofCheckerTest extends CoreTestFmwk {
     public void TestOpenFromSourceRules() {
         if (TestUtil.getJavaVendor() == JavaVendor.IBM && TestUtil.getJavaVersion() == 5) {
             // Note: IBM Java 5 has a bug reading a large UTF-8 text contents
-            logln("Skip this test case because of the IBM Java 5 bug");
+            logDebug("Skip this test case because of the IBM Java 5 bug");
             return;
         }
         String fileName;
@@ -814,7 +814,7 @@ public class SpoofCheckerTest extends CoreTestFmwk {
     public void testConfData() {
         if (TestUtil.getJavaVendor() == JavaVendor.IBM && TestUtil.getJavaVersion() == 5) {
             // Note: IBM Java 5 has a bug reading a large UTF-8 text contents
-            logln("Skip this test case because of the IBM Java 5 bug");
+            logDebug("Skip this test case because of the IBM Java 5 bug");
             return;
         }
         try {

@@ -8,7 +8,7 @@
  */
 package com.ibm.icu.dev.test.calendar;
 
-import com.ibm.icu.dev.test.TestLog;
+import com.ibm.icu.dev.test.ITestLog;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.SimpleTimeZone;
@@ -194,7 +194,7 @@ public class TestCase {
      *
      * @see #applyTime
      */
-    public boolean fieldsEqual(Calendar c, TestLog log) {
+    public boolean fieldsEqual(Calendar c, ITestLog log) {
         for (int i = 0; i < c.getFieldCount(); i++) {
             if (isSet(i) && get(i) != c.get(i)) {
                 StringBuffer buf = new StringBuffer();

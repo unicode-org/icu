@@ -130,7 +130,7 @@ public class TestStringPrep extends CoreTestFmwk {
                     errln("Did not get the expected exception");
                 }
             } catch (Exception e) {
-                logln("mixed_prepare for string: " + src + " passed with " + e.toString());
+                logDebug("mixed_prepare for string: " + src + " passed with " + e.toString());
             }
         }
     }

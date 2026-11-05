@@ -124,7 +124,7 @@ public class LocaleMatcherTest extends CoreTestFmwk {
                                 .add(ULocale.UK)
                                 .add(ULocale.ENGLISH)
                                 .build());
-        logln(matcher.toString());
+        logDebug(matcher.toString());
 
         assertEquals(ULocale.UK, matcher.getBestMatch(ULocale.UK));
         assertEquals(ULocale.ENGLISH, matcher.getBestMatch(ULocale.US));
@@ -306,7 +306,7 @@ public class LocaleMatcherTest extends CoreTestFmwk {
     public void TestLocaleMatcherCoverage() {
         // Add tests for better code coverage
         LocaleMatcher matcher = newLocaleMatcher(LocalePriorityList.add(null, 0).build());
-        logln(matcher.toString());
+        logDebug(matcher.toString());
     }
 
     private void assertEquals(Object expected, Object string) {
@@ -549,7 +549,7 @@ public class LocaleMatcherTest extends CoreTestFmwk {
                         ULocale.addLikelySubtags(desired2),
                         supported2,
                         ULocale.addLikelySubtags(supported2));
-        logln(desired + " to " + supported + " :\t" + distance);
+        logDebug(desired + " to " + supported + " :\t" + distance);
     }
 
     /** If all the base languages are the same, then each sublocale matches itself most closely */
@@ -586,7 +586,7 @@ public class LocaleMatcherTest extends CoreTestFmwk {
      * @param sorted
      */
     private void check2(Set<ULocale> sorted) {
-        logln("Checking: " + sorted);
+        logDebug("Checking: " + sorted);
         LocaleMatcher matcher =
                 newLocaleMatcher(
                         LocalePriorityList.add(sorted.toArray(new ULocale[sorted.size()])).build());

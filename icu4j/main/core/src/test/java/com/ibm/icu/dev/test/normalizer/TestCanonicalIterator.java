@@ -62,7 +62,7 @@ public class TestCanonicalIterator extends CoreTestFmwk {
                     || type == Character.PRIVATE_USE
                     || type == Character.SURROGATE) continue;
 
-            if ((++counter % 5000) == 0) logln("Testing " + Utility.hex(i, 0));
+            if ((++counter % 5000) == 0) logDebug("Testing " + Utility.hex(i, 0));
 
             String s = UTF16.valueOf(i);
             characterTest(s, i, it);
@@ -112,7 +112,7 @@ public class TestCanonicalIterator extends CoreTestFmwk {
         }
         end = System.currentTimeMillis();
         double fastDelta = (end - start) / iterations;
-        logln(
+        logDebug(
                 "Fast iteration: "
                         + fastDelta
                         + (slowDelta != 0 ? ", " + (fastDelta / slowDelta) : ""));
@@ -182,9 +182,9 @@ public class TestCanonicalIterator extends CoreTestFmwk {
             errln("\t" + getReadable(a));
             errln("\t" + getReadable(b));
         } else {
-            logln("Checked: " + message + getReadable(item));
-            logln("\t" + getReadable(a));
-            logln("\t" + getReadable(b));
+            logDebug("Checked: " + message + getReadable(item));
+            logDebug("\t" + getReadable(a));
+            logDebug("\t" + getReadable(b));
         }
     }
 
@@ -224,10 +224,10 @@ public class TestCanonicalIterator extends CoreTestFmwk {
             if (item.equals(comp)) gotComp = true;
             if ((mixedCounter & 0x7F) == 0 && (ch < 0xAD00 || ch > 0xAC00 + 11172)) {
                 if (lastMixedCounter != mixedCounter) {
-                    logln("");
+                    logDebug("");
                     lastMixedCounter = mixedCounter;
                 }
-                logln(
+                logDebug(
                         "\t"
                                 + mixedCounter
                                 + "\t"
@@ -265,10 +265,11 @@ public class TestCanonicalIterator extends CoreTestFmwk {
         if (!gotSource || !gotDecomp || !gotComp) {
             errln("FAIL CanonicalIterator: " + s + " decomp: " + decomp + " comp: " + comp);
             it.reset();
+            StringBuilder msg = new StringBuilder();
             for (String item = it.next(); item != null; item = it.next()) {
-                err(item + "    ");
+                msg.append(item + "    ");
             }
-            errln("");
+            errln(msg.toString());
         }
     }
 

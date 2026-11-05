@@ -135,10 +135,10 @@ public class IslamicTest extends CalendarTestFmwk {
         IslamicCalendar cal = newCivil();
         cal.clear();
         cal.set(1000, 0, 30);
-        logln("1000/0/30 -> " + cal.get(YEAR) + "/" + cal.get(MONTH) + "/" + cal.get(DATE));
+        logDebug("1000/0/30 -> " + cal.get(YEAR) + "/" + cal.get(MONTH) + "/" + cal.get(DATE));
         cal.clear();
         cal.set(1, 0, 30);
-        logln("1/0/30 -> " + cal.get(YEAR) + "/" + cal.get(MONTH) + "/" + cal.get(DATE));
+        logDebug("1/0/30 -> " + cal.get(YEAR) + "/" + cal.get(MONTH) + "/" + cal.get(DATE));
     }
 
     /** Test limits of the Islamic calendar */
@@ -265,13 +265,13 @@ public class IslamicTest extends CalendarTestFmwk {
                 errln("get/set time failed with non-civil islamic calendar");
             }
 
-            logln(then.toString());
+            logDebug(then.toString());
 
             cal.add(Calendar.MONTH, 1);
             cal.add(Calendar.DAY_OF_MONTH, 1);
             cal.add(Calendar.YEAR, 1);
 
-            logln(cal.getTime().toString());
+            logDebug(cal.getTime().toString());
         }
 
         {
@@ -296,7 +296,7 @@ public class IslamicTest extends CalendarTestFmwk {
                     DateFormat format =
                             DateFormat.getDateTimeInstance(
                                     cal, DateFormat.FULL, DateFormat.FULL, formatLocale);
-                    logln(calLocName + "/" + locName + " --> " + format.format(time));
+                    logDebug(calLocName + "/" + locName + " --> " + format.format(time));
                 }
             }
         }
@@ -937,16 +937,16 @@ public class IslamicTest extends CalendarTestFmwk {
             long expectMillis = 1187912520931L; // with seconds (not ms) cleared.
             tstCalendar.setTimeInMillis(expectMillis);
 
-            logln("instantiated: " + tstCalendar);
-            logln("getMillis: " + tstCalendar.getTimeInMillis());
+            logDebug("instantiated: " + tstCalendar);
+            logDebug("getMillis: " + tstCalendar.getTimeInMillis());
             tstCalendar.set(IslamicCalendar.SECOND, 0);
-            logln("setSecond=0: " + tstCalendar);
+            logDebug("setSecond=0: " + tstCalendar);
             {
                 long gotMillis = tstCalendar.getTimeInMillis();
                 if (gotMillis != expectMillis) {
                     errln("expect millis " + expectMillis + " but got " + gotMillis);
                 } else {
-                    logln("getMillis: " + gotMillis);
+                    logDebug("getMillis: " + gotMillis);
                 }
             }
             ObjectOutputStream icuOut = new ObjectOutputStream(icuStream);
@@ -959,19 +959,19 @@ public class IslamicTest extends CalendarTestFmwk {
             tstCalendar = null;
             tstCalendar = (IslamicCalendar) icuIn.readObject();
 
-            logln("serialized back in: " + tstCalendar);
+            logDebug("serialized back in: " + tstCalendar);
             {
                 long gotMillis = tstCalendar.getTimeInMillis();
                 if (gotMillis != expectMillis) {
                     errln("expect millis " + expectMillis + " but got " + gotMillis);
                 } else {
-                    logln("getMillis: " + gotMillis);
+                    logDebug("getMillis: " + gotMillis);
                 }
             }
 
             tstCalendar.set(IslamicCalendar.SECOND, 0);
 
-            logln("setSecond=0: " + tstCalendar);
+            logDebug("setSecond=0: " + tstCalendar);
             {
                 long gotMillis = tstCalendar.getTimeInMillis();
                 if (gotMillis != expectMillis) {
@@ -981,7 +981,7 @@ public class IslamicTest extends CalendarTestFmwk {
                                     + " after stream and setSecond but got "
                                     + gotMillis);
                 } else {
-                    logln("getMillis after stream and setSecond: " + gotMillis);
+                    logDebug("getMillis after stream and setSecond: " + gotMillis);
                 }
             }
         } catch (IOException e) {

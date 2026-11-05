@@ -114,12 +114,12 @@ public class BasicTest extends CoreTestFmwk {
     @Test
     public void TestHangulCompose() throws Exception {
         // Make sure that the static composition methods work
-        logln("Canonical composition...");
+        logDebug("Canonical composition...");
         staticTest(Normalizer.NFC, hangulCanon, 2);
-        logln("Compatibility composition...");
+        logDebug("Compatibility composition...");
         staticTest(Normalizer.NFKC, hangulCompat, 2);
         // Now try iterative composition....
-        logln("Iterative composition...");
+        logDebug("Iterative composition...");
         Normalizer norm = new Normalizer("", Normalizer.NFC, 0);
         iterateTest(norm, hangulCanon, 2);
 
@@ -127,7 +127,7 @@ public class BasicTest extends CoreTestFmwk {
         iterateTest(norm, hangulCompat, 2);
 
         // And finally, make sure you can do it in reverse too
-        logln("Reverse iteration...");
+        logDebug("Reverse iteration...");
         norm.setMode(Normalizer.NFC);
         backAndForth(norm, hangulCanon);
     }
@@ -135,13 +135,13 @@ public class BasicTest extends CoreTestFmwk {
     @Test
     public void TestHangulDecomp() throws Exception {
         // Make sure that the static decomposition methods work
-        logln("Canonical decomposition...");
+        logDebug("Canonical decomposition...");
         staticTest(Normalizer.NFD, hangulCanon, 1);
-        logln("Compatibility decomposition...");
+        logDebug("Compatibility decomposition...");
         staticTest(Normalizer.NFKD, hangulCompat, 1);
 
         // Now the iterative decomposition methods...
-        logln("Iterative decomposition...");
+        logDebug("Iterative decomposition...");
         Normalizer norm = new Normalizer("", Normalizer.NFD, 0);
         iterateTest(norm, hangulCanon, 1);
 
@@ -149,7 +149,7 @@ public class BasicTest extends CoreTestFmwk {
         iterateTest(norm, hangulCompat, 1);
 
         // And finally, make sure you can do it in reverse too
-        logln("Reverse iteration...");
+        logDebug("Reverse iteration...");
         norm.setMode(Normalizer.NFD);
         backAndForth(norm, hangulCanon);
     }
@@ -268,7 +268,7 @@ public class BasicTest extends CoreTestFmwk {
                                 + " x COMPOSE => "
                                 + hex(c));
             } else if (isVerbose()) {
-                logln(
+                logDebug(
                         "Ok: "
                                 + hex(a)
                                 + " x DECOMP_COMPAT => "
@@ -332,7 +332,7 @@ public class BasicTest extends CoreTestFmwk {
             String b = Normalizer.normalize(a, Normalizer.NFKC);
             String exp = DATA[i + 1];
             if (b.equals(exp)) {
-                logln("Ok: " + hex(a) + " x COMPOSE_COMPAT => " + hex(b));
+                logDebug("Ok: " + hex(a) + " x COMPOSE_COMPAT => " + hex(b));
             } else {
                 errln(
                         "FAIL: "
@@ -345,7 +345,7 @@ public class BasicTest extends CoreTestFmwk {
             a = Normalizer.normalize(b, Normalizer.NFD);
             exp = DATA[i + 2];
             if (a.equals(exp)) {
-                logln("Ok: " + hex(b) + " x DECOMP => " + hex(a));
+                logDebug("Ok: " + hex(b) + " x DECOMP => " + hex(a));
             } else {
                 errln("FAIL: " + hex(b) + " x DECOMP => " + hex(a) + ", expect " + hex(exp));
             }
@@ -773,7 +773,7 @@ public class BasicTest extends CoreTestFmwk {
                                 + ", backward: "
                                 + hex(reverse));
             } else if (isVerbose()) {
-                logln(
+                logDebug(
                         "Ok: Forward/reverse for input "
                                 + hex(tests[i][0])
                                 + ", forward: "
@@ -789,7 +789,7 @@ public class BasicTest extends CoreTestFmwk {
             String input = Utility.unescape(tests[i][0]);
             String expect = Utility.unescape(tests[i][outCol]);
 
-            logln("Normalizing '" + input + "' (" + hex(input) + ")");
+            logDebug("Normalizing '" + input + "' (" + hex(input) + ")");
 
             String output = Normalizer.normalize(input, mode);
 
@@ -814,7 +814,7 @@ public class BasicTest extends CoreTestFmwk {
             char[] input = Utility.unescape(tests[i][0]).toCharArray();
             String expect = Utility.unescape(tests[i][outCol]);
 
-            logln("Normalizing '" + new String(input) + "' (" + hex(new String(input)) + ")");
+            logDebug("Normalizing '" + new String(input) + "' (" + hex(new String(input)) + ")");
             int reqLength = 0;
             while (true) {
                 try {
@@ -851,7 +851,7 @@ public class BasicTest extends CoreTestFmwk {
             String input = Utility.unescape(tests[i][0]);
             String expect = Utility.unescape(tests[i][outCol]);
 
-            logln("Normalizing '" + input + "' (" + hex(input) + ")");
+            logDebug("Normalizing '" + input + "' (" + hex(input) + ")");
 
             String output = Normalizer.decompose(input, mode == Normalizer.NFKD);
 
@@ -876,7 +876,7 @@ public class BasicTest extends CoreTestFmwk {
             char[] input = Utility.unescape(tests[i][0]).toCharArray();
             String expect = Utility.unescape(tests[i][outCol]);
 
-            logln("Normalizing '" + new String(input) + "' (" + hex(new String(input)) + ")");
+            logDebug("Normalizing '" + new String(input) + "' (" + hex(new String(input)) + ")");
             int reqLength = 0;
             while (true) {
                 try {
@@ -910,7 +910,7 @@ public class BasicTest extends CoreTestFmwk {
             char[] input = Utility.unescape(tests[i][0]).toCharArray();
             String expect = Utility.unescape(tests[i][outCol]);
 
-            logln("Normalizing '" + new String(input) + "' (" + hex(new String(input)) + ")");
+            logDebug("Normalizing '" + new String(input) + "' (" + hex(new String(input)) + ")");
             int reqLength = 0;
             while (true) {
                 try {
@@ -960,7 +960,7 @@ public class BasicTest extends CoreTestFmwk {
                             mode == Normalizer.NFKC,
                             0);
             if (retLength != reqLength) {
-                logln(
+                logDebug(
                         "FAIL: Normalizer.compose did not return the expected length. Expected: "
                                 + reqLength
                                 + " Got: "
@@ -974,7 +974,7 @@ public class BasicTest extends CoreTestFmwk {
             String input = Utility.unescape(tests[i][0]);
             String expect = Utility.unescape(tests[i][outCol]);
 
-            logln("Normalizing '" + input + "' (" + hex(input) + ")");
+            logDebug("Normalizing '" + input + "' (" + hex(input) + ")");
 
             String output = Normalizer.compose(input, mode == Normalizer.NFKC);
 
@@ -999,7 +999,7 @@ public class BasicTest extends CoreTestFmwk {
             char[] input = Utility.unescape(tests[i][0]).toCharArray();
             String expect = Utility.unescape(tests[i][outCol]);
 
-            logln("Normalizing '" + new String(input) + "' (" + hex(new String(input)) + ")");
+            logDebug("Normalizing '" + new String(input) + "' (" + hex(new String(input)) + ")");
             int reqLength = 0;
             while (true) {
                 try {
@@ -1033,7 +1033,7 @@ public class BasicTest extends CoreTestFmwk {
             char[] input = Utility.unescape(tests[i][0]).toCharArray();
             String expect = Utility.unescape(tests[i][outCol]);
 
-            logln("Normalizing '" + new String(input) + "' (" + hex(new String(input)) + ")");
+            logDebug("Normalizing '" + new String(input) + "' (" + hex(new String(input)) + ")");
             int reqLength = 0;
             while (true) {
                 try {
@@ -1084,7 +1084,7 @@ public class BasicTest extends CoreTestFmwk {
                             mode == Normalizer.NFKC,
                             0);
             if (retLength != reqLength) {
-                logln(
+                logDebug(
                         "FAIL: Normalizer.compose did not return the expected length. Expected: "
                                 + reqLength
                                 + " Got: "
@@ -1098,7 +1098,7 @@ public class BasicTest extends CoreTestFmwk {
             String input = Utility.unescape(tests[i][0]);
             String expect = Utility.unescape(tests[i][outCol]);
 
-            logln("Normalizing '" + input + "' (" + hex(input) + ")");
+            logDebug("Normalizing '" + input + "' (" + hex(input) + ")");
 
             iter.setText(input);
             assertEqual(expect, iter, "case " + i + " ");
@@ -1343,7 +1343,7 @@ public class BasicTest extends CoreTestFmwk {
             errln("FAIL: " + "Only got " + index + " chars, expected " + expected.length());
         }
 
-        logln("Reverse Iteration\n");
+        logDebug("Reverse Iteration\n");
         iter.setIndexOnly(iter.endIndex());
         got.setLength(0);
         for (ch = iter.previous(); ch != Normalizer.DONE; ch = iter.previous()) {
@@ -1900,13 +1900,13 @@ public class BasicTest extends CoreTestFmwk {
             int nfdsize = 0;
             while (size != 19) {
                 data[size] = datachar[rand.nextInt(RAND_MAX) * 50 / RAND_MAX];
-                logln("0x" + data[size]);
+                logDebug("0x" + data[size]);
                 normStart +=
                         Normalizer.normalize(
                                 data, size, size + 1, norm, normStart, 100, Normalizer.NFD, 0);
                 size++;
             }
-            logln("\n");
+            logDebug("\n");
 
             nfdsize = Normalizer.normalize(data, 0, size, nfd, 0, nfd.length, Normalizer.NFD, 0);
             //    nfdsize = unorm_normalize(data, size, UNORM_NFD, UCOL_IGNORE_HANGUL,
@@ -1916,9 +1916,9 @@ public class BasicTest extends CoreTestFmwk {
                 testresult = Normalizer.NO;
             }
             if (testresult == Normalizer.YES) {
-                logln("result Normalizer.YES\n");
+                logDebug("result Normalizer.YES\n");
             } else {
-                logln("result Normalizer.NO\n");
+                logDebug("result Normalizer.NO\n");
             }
 
             if (Normalizer.quickCheck(data, 0, data.length, Normalizer.FCD, 0) != testresult) {
@@ -2436,7 +2436,7 @@ public class BasicTest extends CoreTestFmwk {
         int category;
         boolean isNFD;
 
-        logln(
+        logDebug(
                 "Test if case folding may un-FCD a string (folding options 0x)"
                         + hex(foldingOptions));
 
@@ -2515,7 +2515,7 @@ public class BasicTest extends CoreTestFmwk {
             }
         }
 
-        logln(
+        logDebug(
                 "There are "
                         + hex(count)
                         + " code points for which case-folding may un-FCD a string (folding options"

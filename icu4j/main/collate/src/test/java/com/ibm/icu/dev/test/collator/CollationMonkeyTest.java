@@ -44,7 +44,7 @@ public class CollationMonkeyTest extends TestFmwk {
         try {
             myCollator = Collator.getInstance(new Locale("en", "US"));
         } catch (Exception e) {
-            warnln("ERROR: in creation of collator of ENGLISH locale");
+            errln("ERROR: in creation of collator of ENGLISH locale");
             return;
         }
 
@@ -123,7 +123,7 @@ public class CollationMonkeyTest extends TestFmwk {
         try {
             myCollator = Collator.getInstance(new Locale("en", "US"));
         } catch (Exception e) {
-            warnln("ERROR: in creation of collator of ENGLISH locale");
+            errln("ERROR: in creation of collator of ENGLISH locale");
             return;
         }
 
@@ -206,7 +206,7 @@ public class CollationMonkeyTest extends TestFmwk {
         };
 
         int i = 0;
-        logln("Demo Test 1 : Create a new table collation with rules \"& z < 0x00e4\"");
+        logDebug("Demo Test 1 : Create a new table collation with rules \"& z < 0x00e4\"");
         Collator col = Collator.getInstance(new Locale("en", "US"));
         String baseRules = ((RuleBasedCollator) col).getRules();
         String newRules = " & z < ";
@@ -215,14 +215,14 @@ public class CollationMonkeyTest extends TestFmwk {
         try {
             myCollation = new RuleBasedCollator(newRules);
         } catch (Exception e) {
-            warnln("Demo Test 1 Table Collation object creation failed.");
+            errln("Demo Test 1 Table Collation object creation failed.");
             return;
         }
 
         for (i = 0; i < 2; i++) {
             doTest(myCollation, testSourceCases[i], testTargetCases[i], -1);
         }
-        logln("Demo Test 2 : Create a new table collation with rules \"& z < a 0x0308\"");
+        logDebug("Demo Test 2 : Create a new table collation with rules \"& z < a 0x0308\"");
         newRules = "";
         newRules = baseRules + " & z < a" + String.valueOf(0x0308);
         try {
@@ -287,7 +287,7 @@ public class CollationMonkeyTest extends TestFmwk {
             sResult = CollationTest.appendCompareResult(compareResult, sResult);
             sExpect = CollationTest.appendCompareResult(expectedResult, sExpect);
             if (ok1) {
-                logln(msg1 + src + msg2 + target + msg3 + sResult);
+                logDebug(msg1 + src + msg2 + target + msg3 + sResult);
             } else {
                 errln(msg1 + src + msg2 + target + msg3 + sResult + msg4 + sExpect);
             }
@@ -296,7 +296,7 @@ public class CollationMonkeyTest extends TestFmwk {
             msg3 = "\")) returned ";
             sResult = CollationTest.appendCompareResult(keyResult, sResult);
             if (ok2) {
-                logln(msg1 + src + msg2 + target + msg3 + sResult);
+                logDebug(msg1 + src + msg2 + target + msg3 + sResult);
             } else {
                 errln(msg1 + src + msg2 + target + msg3 + sResult + msg4 + sExpect);
                 msg1 = "  ";
@@ -312,7 +312,7 @@ public class CollationMonkeyTest extends TestFmwk {
             msg3 = "\") returned ";
             sResult = CollationTest.appendCompareResult(incResult, sResult);
             if (ok3) {
-                logln(msg1 + src + msg2 + target + msg3 + sResult);
+                logDebug(msg1 + src + msg2 + target + msg3 + sResult);
             } else {
                 errln(msg1 + src + msg2 + target + msg3 + sResult + msg4 + sExpect);
             }

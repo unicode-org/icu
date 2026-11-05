@@ -34,7 +34,7 @@ public class Test_ja extends LanguageTestFmwk implements TimeUnitConstants {
         // explicit test that japanese doesn't use both seconds
         // and milliseconds when formatting.  if both appear,
         // force decimal3 seconds and merge millis with it.
-        logln("test disabled");
+        logDebug("test disabled");
         /*
         PeriodFormatter pf = pff.getFormatter();
         Period p = Period.at(1, MILLISECOND);

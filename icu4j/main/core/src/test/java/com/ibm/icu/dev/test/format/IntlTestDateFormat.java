@@ -145,7 +145,7 @@ public class IntlTestDateFormat extends CoreTestFmwk {
 
         // Assume it's a SimpleDateFormat and get some info
         SimpleDateFormat s = (SimpleDateFormat) fFormat;
-        logln(fTestName + " Pattern " + s.toPattern());
+        logDebug(fTestName + " Pattern " + s.toPattern());
     }
 
     private void tryDate(Date theDate) {
@@ -204,7 +204,7 @@ public class IntlTestDateFormat extends CoreTestFmwk {
 
         if (dump) {
             for (int k = 0; k <= i; ++k) {
-                logln("" + k + ": " + date[k] + " F> " + string[k] + " P> ");
+                logDebug("" + k + ": " + date[k] + " F> " + string[k] + " P> ");
             }
         }
     }
@@ -241,14 +241,14 @@ public class IntlTestDateFormat extends CoreTestFmwk {
     public void TestAvailableLocales() {
         final ULocale[] locales = DateFormat.getAvailableULocales();
         long count = locales.length;
-        logln("" + count + " available locales");
+        logDebug("" + count + " available locales");
         if (locales != null && count != 0) {
             StringBuffer all = new StringBuffer();
             for (int i = 0; i < count; ++i) {
                 if (i != 0) all.append(", ");
                 all.append(locales[i].getDisplayName());
             }
-            logln(all.toString());
+            logDebug(all.toString());
         } else errln("********** FAIL: Zero available locales or null array pointer");
     }
 
@@ -271,7 +271,7 @@ public class IntlTestDateFormat extends CoreTestFmwk {
         if (locales != null && count != 0) {
             for (int i = 0; i < count; ++i) {
                 String name = locales[i].getDisplayName();
-                logln("Testing " + name + "...");
+                logDebug("Testing " + name + "...");
                 try {
                     localeTest(locales[i], name);
                 } catch (Exception e) {

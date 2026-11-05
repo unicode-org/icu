@@ -92,7 +92,7 @@ public class IDNAConformanceTest extends CoreTestFmwk {
                         printInfo(
                                 desc, namebase, nameutf8, namezone, failzone1, failzone2, result,
                                 type, passfail);
-                        logln("\tpassed");
+                        logDebug("\tpassed");
                     }
                 }
 
@@ -101,7 +101,7 @@ public class IDNAConformanceTest extends CoreTestFmwk {
                         printInfo(
                                 desc, namebase, nameutf8, namezone, failzone1, failzone2, result,
                                 type, passfail);
-                        logln("passed");
+                        logDebug("passed");
                     } else {
                         printInfo(
                                 desc, namebase, nameutf8, namezone, failzone1, failzone2, result,
@@ -139,7 +139,7 @@ public class IDNAConformanceTest extends CoreTestFmwk {
                         printInfo(
                                 desc, namebase, nameutf8, namezone, failzone1, failzone2, result,
                                 type, passfail);
-                        logln("\tpassed");
+                        logDebug("\tpassed");
                     }
                 }
 
@@ -149,7 +149,7 @@ public class IDNAConformanceTest extends CoreTestFmwk {
                                 desc, namebase, nameutf8, namezone, failzone1, failzone2, result,
                                 type, passfail);
 
-                        logln("\tpassed");
+                        logDebug("\tpassed");
                     } else {
                         printInfo(
                                 desc, namebase, nameutf8, namezone, failzone1, failzone2, result,
@@ -185,23 +185,42 @@ public class IDNAConformanceTest extends CoreTestFmwk {
             String result,
             String type,
             String passfail) {
-        logln("desc:\t" + desc);
-        log("\t");
-        logln("type:\t" + type);
-        log("\t");
-        logln("pass fail standard:\t" + passfail);
-        log("\t");
-        logln("namebase:\t" + namebase);
-        log("\t");
-        logln("nameutf8:\t" + nameutf8);
-        log("\t");
-        logln("namezone:\t" + namezone);
-        log("\t");
-        logln("failzone1:\t" + failzone1);
-        log("\t");
-        logln("failzone2:\t" + failzone2);
-        log("\t");
-        logln("result:\t" + result);
+        StringBuilder msg = new StringBuilder();
+        msg.append("desc:\t")
+                .append(desc)
+                .append("\n")
+                .append("\t")
+                .append("type:\t")
+                .append(type)
+                .append("\n")
+                .append("\t")
+                .append("pass fail standard:\t")
+                .append(passfail)
+                .append("\n")
+                .append("\t")
+                .append("namebase:\t")
+                .append(namebase)
+                .append("\n")
+                .append("\t")
+                .append("nameutf8:\t")
+                .append(nameutf8)
+                .append("\n")
+                .append("\t")
+                .append("namezone:\t")
+                .append(namezone)
+                .append("\n")
+                .append("\t")
+                .append("failzone1:\t")
+                .append(failzone1)
+                .append("\n")
+                .append("\t")
+                .append("failzone2:\t")
+                .append(failzone2)
+                .append("\n")
+                .append("\t")
+                .append("result:\t")
+                .append(result);
+        logDebug(msg.toString());
     }
 
     /**

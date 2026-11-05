@@ -194,10 +194,10 @@ public class CopticTest extends CalendarTestFmwk {
         CopticCalendar cal = new CopticCalendar();
         cal.clear();
         cal.set(1000, 0, 30);
-        logln("1000/0/30-> " + cal.get(YEAR) + "/" + cal.get(MONTH) + "/" + cal.get(DATE));
+        logDebug("1000/0/30-> " + cal.get(YEAR) + "/" + cal.get(MONTH) + "/" + cal.get(DATE));
         cal.clear();
         cal.set(1, 0, 30);
-        logln("1/0/30 -> " + cal.get(YEAR) + "/" + cal.get(MONTH) + "/" + cal.get(DATE));
+        logDebug("1/0/30 -> " + cal.get(YEAR) + "/" + cal.get(MONTH) + "/" + cal.get(DATE));
     }
 
     /** Test limits of the Coptic calendar */
@@ -326,7 +326,7 @@ public class CopticTest extends CalendarTestFmwk {
                     DateFormat format =
                             DateFormat.getDateTimeInstance(
                                     cal, DateFormat.FULL, DateFormat.FULL, formatLocale);
-                    logln(calLocName + "/" + locName + " --> " + format.format(time));
+                    logDebug(calLocName + "/" + locName + " --> " + format.format(time));
                 }
             }
         }
@@ -340,7 +340,11 @@ public class CopticTest extends CalendarTestFmwk {
         gCal.add(GregorianCalendar.MONTH, 2);
         Date gFuture = gCal.getTime();
         DateFormat gDF = DateFormat.getDateInstance(gCal, DateFormat.FULL);
-        logln("gregorian calendar: " + gDF.format(gToday) + " + 2 months = " + gDF.format(gFuture));
+        logDebug(
+                "gregorian calendar: "
+                        + gDF.format(gToday)
+                        + " + 2 months = "
+                        + gDF.format(gFuture));
 
         // Coptic Calendar
         CopticCalendar cCal = new CopticCalendar();
@@ -348,7 +352,7 @@ public class CopticTest extends CalendarTestFmwk {
         cCal.add(CopticCalendar.MONTH, 2);
         Date cFuture = cCal.getTime();
         DateFormat cDF = DateFormat.getDateInstance(cCal, DateFormat.FULL);
-        logln("coptic calendar: " + cDF.format(cToday) + " + 2 months = " + cDF.format(cFuture));
+        logDebug("coptic calendar: " + cDF.format(cToday) + " + 2 months = " + cDF.format(cFuture));
 
         // EthiopicCalendar
         EthiopicCalendar eCal = new EthiopicCalendar();
@@ -357,7 +361,11 @@ public class CopticTest extends CalendarTestFmwk {
         eCal.setAmeteAlemEra(false);
         Date eFuture = eCal.getTime();
         DateFormat eDF = DateFormat.getDateInstance(eCal, DateFormat.FULL);
-        logln("ethiopic calendar: " + eDF.format(eToday) + " + 2 months = " + eDF.format(eFuture));
+        logDebug(
+                "ethiopic calendar: "
+                        + eDF.format(eToday)
+                        + " + 2 months = "
+                        + eDF.format(eFuture));
     }
 
     @Test

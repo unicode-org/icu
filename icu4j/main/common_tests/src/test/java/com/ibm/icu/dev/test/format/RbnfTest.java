@@ -127,7 +127,7 @@ public class RbnfTest extends CoreTestFmwk {
             errln("duplicate equality fails");
         }
         String str = fmt0.toString();
-        logln(str);
+        logDebug(str);
 
         RuleBasedNumberFormat fmt3 = new RuleBasedNumberFormat(durationInSecondsRules);
 
@@ -138,7 +138,7 @@ public class RbnfTest extends CoreTestFmwk {
             errln("self equal 2 fails");
         }
         str = fmt3.toString();
-        logln(str);
+        logDebug(str);
 
         String[] names = fmt3.getRuleSetNames();
 
@@ -147,64 +147,64 @@ public class RbnfTest extends CoreTestFmwk {
             fmt3.setDefaultRuleSet("%%foo");
             errln("sdrf %%foo didn't fail");
         } catch (Exception e) {
-            logln("Got the expected exception");
+            logDebug("Got the expected exception");
         }
 
         try {
             fmt3.setDefaultRuleSet("%bogus");
             errln("sdrf %bogus didn't fail");
         } catch (Exception e) {
-            logln("Got the expected exception");
+            logDebug("Got the expected exception");
         }
 
         try {
             str = fmt3.format(2.3, names[0]);
-            logln(str);
+            logDebug(str);
             str = fmt3.format(2.3, "%%foo");
             errln("format double %%foo didn't fail");
         } catch (Exception e) {
-            logln("Got the expected exception");
+            logDebug("Got the expected exception");
         }
 
         try {
             str = fmt3.format(123L, names[0]);
-            logln(str);
+            logDebug(str);
             str = fmt3.format(123L, "%%foo");
             errln("format double %%foo didn't fail");
         } catch (Exception e) {
-            logln("Got the expected exception");
+            logDebug("Got the expected exception");
         }
 
         RuleBasedNumberFormat fmt4 = new RuleBasedNumberFormat(fracRules, Locale.ENGLISH);
         RuleBasedNumberFormat fmt5 = new RuleBasedNumberFormat(fracRules, Locale.ENGLISH);
         str = fmt4.toString();
-        logln(str);
+        logDebug(str);
         if (!fmt4.equals(fmt5)) {
             errln("duplicate 2 equality failed");
         }
         str = fmt4.format(123L);
-        logln(str);
+        logDebug(str);
         try {
             Number num = fmt4.parse(str);
-            logln(num.toString());
+            logDebug(num.toString());
         } catch (Exception e) {
             errln("parse caught exception");
         }
 
         str = fmt4.format(.000123);
-        logln(str);
+        logDebug(str);
         try {
             Number num = fmt4.parse(str);
-            logln(num.toString());
+            logDebug(num.toString());
         } catch (Exception e) {
             errln("parse caught exception");
         }
 
         str = fmt4.format(456.000123);
-        logln(str);
+        logDebug(str);
         try {
             Number num = fmt4.parse(str);
-            logln(num.toString());
+            logDebug(num.toString());
         } catch (Exception e) {
             errln("parse caught exception");
         }
@@ -247,11 +247,11 @@ public class RbnfTest extends CoreTestFmwk {
         NumberFormat decFormat = NumberFormat.getInstance(Locale.US);
         for (int j = 0; j < formatters.length; ++j) {
             com.ibm.icu.text.NumberFormat formatter = formatters[j];
-            logln("formatter[" + j + "]");
+            logDebug("formatter[" + j + "]");
             for (int i = 0; i < data.length; ++i) {
                 try {
                     String result = formatter.format(decFormat.parse(data[i]));
-                    logln("[" + i + "] " + data[i] + " ==> " + result);
+                    logDebug("[" + i + "] " + data[i] + " ==> " + result);
                 } catch (Exception e) {
                     errln(
                             "formatter["
@@ -637,7 +637,7 @@ public class RbnfTest extends CoreTestFmwk {
         };
 
         formatter.setDefaultRuleSet("%spellout-numbering-year");
-        logln("testing year rules");
+        logDebug("testing year rules");
         doTest(formatter, testDataYear, false);
     }
 
@@ -950,7 +950,7 @@ public class RbnfTest extends CoreTestFmwk {
             {"-5.678", "minus fem komma seks sju \u00E5tte"},
         };
 
-        logln("testing default rules");
+        logDebug("testing default rules");
         doTest(noFormatter, testDataDefault, true);
         doTest(nbFormatter, testDataDefault, true);
     }
@@ -992,7 +992,7 @@ public class RbnfTest extends CoreTestFmwk {
             },
         };
 
-        logln("testing default rules");
+        logDebug("testing default rules");
         doTest(formatter, testDataDefault, true);
 
         String[][] testDataNeutrum = {
@@ -1004,7 +1004,7 @@ public class RbnfTest extends CoreTestFmwk {
         };
 
         formatter.setDefaultRuleSet("%spellout-cardinal-neuter");
-        logln("testing neutrum rules");
+        logDebug("testing neutrum rules");
         doTest(formatter, testDataNeutrum, true);
 
         String[][] testDataYear = {
@@ -1019,7 +1019,7 @@ public class RbnfTest extends CoreTestFmwk {
         };
 
         formatter.setDefaultRuleSet("%spellout-numbering-year");
-        logln("testing year rules");
+        logDebug("testing year rules");
         doTest(formatter, testDataYear, true);
     }
 
@@ -1038,7 +1038,7 @@ public class RbnfTest extends CoreTestFmwk {
         };
 
         formatter.setDefaultRuleSet("%spellout-numbering-year-latn");
-        logln("testing year rules");
+        logDebug("testing year rules");
         doTest(formatter, testDataYear, true);
     }
 
@@ -1048,12 +1048,12 @@ public class RbnfTest extends CoreTestFmwk {
         StringBuffer buf = new StringBuffer();
         RuleBasedNumberFormat fmt = new RuleBasedNumberFormat(RuleBasedNumberFormat.SPELLOUT);
         fmt.format(bigI, buf, null);
-        logln("big int: " + buf.toString());
+        logDebug("big int: " + buf.toString());
 
         buf.setLength(0);
         java.math.BigDecimal bigD = new java.math.BigDecimal(bigI);
         fmt.format(bigD, buf, null);
-        logln("big dec: " + buf.toString());
+        logDebug("big dec: " + buf.toString());
     }
 
     @Test
@@ -1286,7 +1286,7 @@ public class RbnfTest extends CoreTestFmwk {
         // get displayName by name
         String[] ruleSetNames = formatter.getRuleSetNames();
         for (int i = 0; i < ruleSetNames.length; i++) {
-            logln("Rule set name: " + ruleSetNames[i]);
+            logDebug("Rule set name: " + ruleSetNames[i]);
             String RSName_defLoc = formatter.getRuleSetDisplayName(ruleSetNames[i]);
             assertEquals("Display name in default locale", localizations[1][i + 1], RSName_defLoc);
             String RSName_loc = formatter.getRuleSetDisplayName(ruleSetNames[i], ULocale.CHINA);
@@ -1301,7 +1301,7 @@ public class RbnfTest extends CoreTestFmwk {
         // get locales of localizations
         ULocale[] locales = formatter.getRuleSetDisplayNameLocales();
         for (int i = 0; i < locales.length; i++) {
-            logln(locales[i].getName());
+            logDebug(locales[i].getName());
         }
 
         // get displayNames
@@ -1366,7 +1366,7 @@ public class RbnfTest extends CoreTestFmwk {
 
                     String s = fmt.format(n);
                     if (isVerbose()) {
-                        logln(loc.getName() + names[j] + "success format: " + n + " -> " + s);
+                        logDebug(loc.getName() + names[j] + "success format: " + n + " -> " + s);
                     }
 
                     for (int k = 0; k < lenientMode.length; k++) {
@@ -1374,7 +1374,7 @@ public class RbnfTest extends CoreTestFmwk {
                             fmt.setLenientParseMode(lenientMode[k]);
                             Number num = fmt.parse(s);
                             if (isVerbose()) {
-                                logln(
+                                logDebug(
                                         loc.getName()
                                                 + names[j]
                                                 + "success parse: "
@@ -1392,7 +1392,7 @@ public class RbnfTest extends CoreTestFmwk {
                             }
                         } catch (IllegalArgumentException | ParseException e) {
                             String msg = loc.getName() + names[j] + "ERROR:" + e.getMessage();
-                            logln(msg);
+                            logDebug(msg);
                             errors.append("\n").append(msg);
                         }
                     }
@@ -1415,7 +1415,7 @@ public class RbnfTest extends CoreTestFmwk {
                 String number = testData[i][0];
                 String expectedWords = testData[i][1];
                 if (isVerbose()) {
-                    logln("test[" + i + "] number: " + number + " target: " + expectedWords);
+                    logDebug("test[" + i + "] number: " + number + " target: " + expectedWords);
                 }
                 Number num = decFmt.parse(number);
                 String actualWords = formatter.format(num);
@@ -1459,12 +1459,18 @@ public class RbnfTest extends CoreTestFmwk {
                 String s = testData[i][0];
                 Number expectedNumber = decFmt.parse(testData[i][1]);
                 if (isVerbose()) {
-                    logln("test[" + i + "] spellout value: (" + s + ") target: " + expectedNumber);
+                    logDebug(
+                            "test["
+                                    + i
+                                    + "] spellout value: ("
+                                    + s
+                                    + ") target: "
+                                    + expectedNumber);
                 }
 
                 Number num = formatter.parse(s);
                 if (isVerbose()) {
-                    logln("success parse: (" + s + ") -> " + num);
+                    logDebug("success parse: (" + s + ") -> " + num);
                 }
 
                 if (expectedNumber.doubleValue() != num.doubleValue()) {

@@ -176,7 +176,7 @@ public class DataDrivenFormatTest extends CoreTestFmwk {
                 }
 
                 if (output.toString().equals(str)) {
-                    logln(caseString + " Success - strings match: " + output);
+                    logDebug(caseString + " Success - strings match: " + output);
                 } else {
                     errln(caseString + " FAIL: got " + output + " expected " + str);
                 }
@@ -187,7 +187,7 @@ public class DataDrivenFormatTest extends CoreTestFmwk {
                 if (useDate) {
                     Date gotDate = cal.getTime();
                     if (gotDate.equals(fromDate)) {
-                        logln(caseString + " SUCCESS: got=parse=" + str);
+                        logDebug(caseString + " SUCCESS: got=parse=" + str);
                     } else {
                         errln(
                                 caseString
@@ -206,7 +206,7 @@ public class DataDrivenFormatTest extends CoreTestFmwk {
                         String diffs = diffSet.diffFrom(fromSet);
                         errln(caseString + " FAIL:  differences: " + diffs);
                     } else {
-                        logln(
+                        logDebug(
                                 caseString
                                         + " SUCCESS: got=parse: "
                                         + str

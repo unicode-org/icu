@@ -78,7 +78,7 @@ public class CompatibilityTest extends CoreTestFmwk {
     @Parameters(method = "generateClassList")
     public void testCompatibility(FileHolder holder) throws ClassNotFoundException, IOException {
         if (holder.skip) {
-            logln("Skipping File = " + holder);
+            logDebug("Skipping File = " + holder);
             return;
         }
 

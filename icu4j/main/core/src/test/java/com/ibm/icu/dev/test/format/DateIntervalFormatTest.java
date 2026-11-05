@@ -2519,7 +2519,7 @@ public class DateIntervalFormatTest extends CoreTestFmwk {
     @Test
     public void TestStress() {
         if (TestFmwk.getExhaustiveness() <= 5) {
-            logln("INFO: Skipping test");
+            logDebug("INFO: Skipping test");
             return;
         }
 
@@ -2696,7 +2696,7 @@ public class DateIntervalFormatTest extends CoreTestFmwk {
         try {
             // ticket#6396 reported toString() throws NullPointerException
             String diiStr = dii.toString();
-            logln("new DateIntervalInfo(new ULocale(\"th_TH\")).toString() - " + diiStr);
+            logDebug("new DateIntervalInfo(new ULocale(\"th_TH\")).toString() - " + diiStr);
 
             // equals also had the similar problem
             DateIntervalInfo dii1 = dii.clone();
@@ -3219,7 +3219,7 @@ public class DateIntervalFormatTest extends CoreTestFmwk {
                 DateIntervalInfo intervalInfo = intervalFormat.getDateIntervalInfo();
 
                 if (skeleton.equals(filterPattern)) {
-                    logln(
+                    logDebug(
                             filterPattern
                                     + " => "
                                     + intervalInfo.getRawPatterns().get(filterPattern));
@@ -3240,7 +3240,7 @@ public class DateIntervalFormatTest extends CoreTestFmwk {
                     if (logKnownIssue(
                             "ICU-11585",
                             "incompatible pattern between date format and date interval format")) {
-                        logln(
+                        logDebug(
                                 "For skeleton "
                                         + skeleton
                                         + "/locale "
@@ -3266,7 +3266,7 @@ public class DateIntervalFormatTest extends CoreTestFmwk {
                     }
                 }
 
-                logln(
+                logDebug(
                         locale
                                 + "\tskeleton: «"
                                 + skeleton

@@ -47,12 +47,12 @@ public class NormalizationMonkeyTest extends CoreTestFmwk {
         int i = 0;
         while (i < loopCount) {
             String source = getTestSource();
-            logln("Test source:" + source);
+            logDebug("Test source:" + source);
             // NFD
             String uncodeNorm = unicode_NFD.normalize(source);
             String icuNorm = Normalizer.normalize(source, Normalizer.NFD);
-            logln("\tNFD(Unicode): " + uncodeNorm);
-            logln("\tNFD(icu4j)  : " + icuNorm);
+            logDebug("\tNFD(Unicode): " + uncodeNorm);
+            logDebug("\tNFD(icu4j)  : " + icuNorm);
             if (!uncodeNorm.equals(icuNorm)) {
                 errln(
                         "NFD: Unicode sample output => "
@@ -63,8 +63,8 @@ public class NormalizationMonkeyTest extends CoreTestFmwk {
             // NFC
             uncodeNorm = unicode_NFC.normalize(source);
             icuNorm = Normalizer.normalize(source, Normalizer.NFC);
-            logln("\tNFC(Unicode): " + uncodeNorm);
-            logln("\tNFC(icu4j)  : " + icuNorm);
+            logDebug("\tNFC(Unicode): " + uncodeNorm);
+            logDebug("\tNFC(icu4j)  : " + icuNorm);
             if (!uncodeNorm.equals(icuNorm)) {
                 errln(
                         "NFC: Unicode sample output => "
@@ -75,8 +75,8 @@ public class NormalizationMonkeyTest extends CoreTestFmwk {
             // NFKD
             uncodeNorm = unicode_NFKD.normalize(source);
             icuNorm = Normalizer.normalize(source, Normalizer.NFKD);
-            logln("\tNFKD(Unicode): " + uncodeNorm);
-            logln("\tNFKD(icu4j)  : " + icuNorm);
+            logDebug("\tNFKD(Unicode): " + uncodeNorm);
+            logDebug("\tNFKD(icu4j)  : " + icuNorm);
             if (!uncodeNorm.equals(icuNorm)) {
                 errln(
                         "NFKD: Unicode sample output => "
@@ -87,8 +87,8 @@ public class NormalizationMonkeyTest extends CoreTestFmwk {
             // NFKC
             uncodeNorm = unicode_NFKC.normalize(source);
             icuNorm = Normalizer.normalize(source, Normalizer.NFKC);
-            logln("\tNFKC(Unicode): " + uncodeNorm);
-            logln("\tNFKC(icu4j)  : " + icuNorm);
+            logDebug("\tNFKC(Unicode): " + uncodeNorm);
+            logDebug("\tNFKC(icu4j)  : " + icuNorm);
             if (!uncodeNorm.equals(icuNorm)) {
                 errln(
                         "NFKC: Unicode sample output => "

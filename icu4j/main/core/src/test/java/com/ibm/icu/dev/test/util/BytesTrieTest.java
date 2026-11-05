@@ -117,7 +117,7 @@ public class BytesTrieTest extends CoreTestFmwk {
             new StringAndValue("zz", 0x80000000)
         };
         for (int length = 2; length <= data.length; ++length) {
-            logln("TestBranches length=" + length);
+            logDebug("TestBranches length=" + length);
             checkData(data, length);
         }
     }
@@ -373,7 +373,7 @@ public class BytesTrieTest extends CoreTestFmwk {
         };
         checkIterator(iter, data);
         // Reset, and we should get the same result.
-        logln("after iter.reset()");
+        logDebug("after iter.reset()");
         checkIterator(iter.reset(), data);
     }
 
@@ -392,7 +392,7 @@ public class BytesTrieTest extends CoreTestFmwk {
         final StringAndValue[] data = {new StringAndValue("r", 1), new StringAndValue("ry", 1)};
         checkIterator(iter, data);
         // Reset, and we should get the same result.
-        logln("after iter.reset()");
+        logDebug("after iter.reset()");
         checkIterator(iter.reset(), data);
     }
 
@@ -432,7 +432,7 @@ public class BytesTrieTest extends CoreTestFmwk {
         };
         checkIterator(iter, data);
         // Reset, and we should get the same result.
-        logln("after iter.reset()");
+        logDebug("after iter.reset()");
         checkIterator(iter.reset(), data);
     }
 
@@ -452,7 +452,7 @@ public class BytesTrieTest extends CoreTestFmwk {
         final StringAndValue[] expected = {new StringAndValue("cd", -1)};
         checkIterator(iter, expected);
         // Reset, and we should get the same result.
-        logln("after iter.reset()");
+        logDebug("after iter.reset()");
         checkIterator(iter.reset(), expected);
     }
 
@@ -477,7 +477,7 @@ public class BytesTrieTest extends CoreTestFmwk {
         };
         checkIterator(iter, expected);
         // Reset, and we should get the same result.
-        logln("after iter.reset()");
+        logDebug("after iter.reset()");
         checkIterator(iter.reset(), expected);
     }
 
@@ -589,9 +589,9 @@ public class BytesTrieTest extends CoreTestFmwk {
     }
 
     private void checkData(StringAndValue data[], int dataLength) {
-        logln("checkData(dataLength=" + dataLength + ", fast)");
+        logDebug("checkData(dataLength=" + dataLength + ", fast)");
         checkData(data, dataLength, StringTrieBuilder.Option.FAST);
-        logln("checkData(dataLength=" + dataLength + ", small)");
+        logDebug("checkData(dataLength=" + dataLength + ", small)");
         checkData(data, dataLength, StringTrieBuilder.Option.SMALL);
     }
 
@@ -635,7 +635,7 @@ public class BytesTrieTest extends CoreTestFmwk {
             // good
         }
         ByteBuffer trieBytes = builder_.buildByteBuffer(buildOption);
-        logln("serialized trie size: " + trieBytes.remaining() + " bytes\n");
+        logDebug("serialized trie size: " + trieBytes.remaining() + " bytes\n");
         // Tries from either build() method should be identical but
         // BytesTrie does not implement equals().
         // We just return either one.

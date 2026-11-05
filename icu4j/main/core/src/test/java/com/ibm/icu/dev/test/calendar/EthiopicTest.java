@@ -266,10 +266,10 @@ public class EthiopicTest extends CalendarTestFmwk {
         EthiopicCalendar cal = new EthiopicCalendar();
         cal.clear();
         cal.set(1000, 0, 30);
-        logln("1000/0/30-> " + cal.get(YEAR) + "/" + cal.get(MONTH) + "/" + cal.get(DATE));
+        logDebug("1000/0/30-> " + cal.get(YEAR) + "/" + cal.get(MONTH) + "/" + cal.get(DATE));
         cal.clear();
         cal.set(1, 0, 30);
-        logln("1/0/30 -> " + cal.get(YEAR) + "/" + cal.get(MONTH) + "/" + cal.get(DATE));
+        logDebug("1/0/30 -> " + cal.get(YEAR) + "/" + cal.get(MONTH) + "/" + cal.get(DATE));
     }
 
     @Test
@@ -281,7 +281,7 @@ public class EthiopicTest extends CalendarTestFmwk {
         if (cal.get(Calendar.EXTENDED_YEAR) == 1567
                 && cal.get(Calendar.MONTH) == 8
                 && cal.get(Calendar.DAY_OF_MONTH) == 9) {
-            logln("EthiopicCalendar.getDateFromJD tested");
+            logDebug("EthiopicCalendar.getDateFromJD tested");
         } else {
             errln("EthiopicCalendar.getDateFromJD failed");
         }
@@ -383,13 +383,13 @@ public class EthiopicTest extends CalendarTestFmwk {
                 errln("get/set time failed with non-civil EthiopicCalendar calendar");
             }
 
-            logln(then.toString());
+            logDebug(then.toString());
 
             cal.add(Calendar.MONTH, 1);
             cal.add(Calendar.DAY_OF_MONTH, 1);
             cal.add(Calendar.YEAR, 1);
 
-            logln(cal.getTime().toString());
+            logDebug(cal.getTime().toString());
         }
 
         {
@@ -411,7 +411,7 @@ public class EthiopicTest extends CalendarTestFmwk {
                     DateFormat format =
                             DateFormat.getDateTimeInstance(
                                     cal, DateFormat.FULL, DateFormat.FULL, formatLocale);
-                    logln(calLocName + "/" + locName + " --> " + format.format(time));
+                    logDebug(calLocName + "/" + locName + " --> " + format.format(time));
                 }
             }
         }

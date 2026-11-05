@@ -97,7 +97,7 @@ public class TimeZoneAliasTest extends CoreTestFmwk {
                 String common = testZone + "\tvs " + last + ":\t";
                 int diff = testZone.findOffsetOrdering(last, diffDate);
                 if (diff != 0) {
-                    logln(
+                    logDebug(
                             "\t"
                                     + common
                                     + "difference at: "
@@ -106,7 +106,7 @@ public class TimeZoneAliasTest extends CoreTestFmwk {
                                     + Zone.formatHours(diff)
                                     + "hr");
                 } else if (testZone.isRealAlias(last)) {
-                    logln("\t" + common + "alias, no difference");
+                    logDebug("\t" + common + "alias, no difference");
                 } else {
                     errln(common + "NOT ALIAS BUT NO DIFFERENCE!");
                 }

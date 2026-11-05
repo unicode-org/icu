@@ -37,20 +37,20 @@ public class IntlTestNumberFormat extends CoreTestFmwk {
     private void _testLocale(Locale locale) {
         String localeName = locale + " (" + locale.getDisplayName() + ")";
 
-        logln("Number test " + localeName);
+        logDebug("Number test " + localeName);
         fNumberFormat = NumberFormat.getInstance(locale);
         _testFormat();
 
-        logln("Currency test " + localeName);
+        logDebug("Currency test " + localeName);
         fNumberFormat = NumberFormat.getCurrencyInstance(locale);
         _testFormat();
 
-        logln("Percent test " + localeName);
+        logDebug("Percent test " + localeName);
         fNumberFormat = NumberFormat.getPercentInstance(locale);
         _testFormat();
 
         if (locale.toString().compareTo("en_US_POSIX") != 0) {
-            logln("Scientific test " + localeName);
+            logDebug("Scientific test " + localeName);
             fNumberFormat = NumberFormat.getScientificInstance(locale);
             _testFormat();
         }
@@ -62,15 +62,15 @@ public class IntlTestNumberFormat extends CoreTestFmwk {
         Locale locale = Locale.getDefault();
         String localeName = locale + " (" + locale.getDisplayName() + ")";
 
-        logln("Number test " + localeName);
+        logDebug("Number test " + localeName);
         fNumberFormat = NumberFormat.getInstance(locale);
         _testFormat();
 
-        logln("Currency test " + localeName);
+        logDebug("Currency test " + localeName);
         fNumberFormat = NumberFormat.getCurrencyInstance(locale);
         _testFormat();
 
-        logln("Percent test " + localeName);
+        logDebug("Percent test " + localeName);
         fNumberFormat = NumberFormat.getPercentInstance(locale);
         _testFormat();
     }
@@ -83,7 +83,7 @@ public class IntlTestNumberFormat extends CoreTestFmwk {
             return;
         }
         DecimalFormat s = (DecimalFormat) fNumberFormat;
-        logln("pattern :" + s.toPattern());
+        logDebug("pattern :" + s.toPattern());
 
         tryIt(-2.02147304840132e-68);
         tryIt(3.88057859588817e-68);
@@ -198,7 +198,7 @@ public class IntlTestNumberFormat extends CoreTestFmwk {
 
             if (dump) {
                 for (int k = 0; k <= i; ++k) {
-                    logln(k + ": " + number[k] + " F> " + string[k] + " P> ");
+                    logDebug(k + ": " + number[k] + " F> " + string[k] + " P> ");
                 }
             }
         }
@@ -236,14 +236,14 @@ public class IntlTestNumberFormat extends CoreTestFmwk {
     public void TestAvailableLocales() {
         final Locale[] locales = NumberFormat.getAvailableLocales();
         int count = locales.length;
-        logln(count + " available locales");
+        logDebug(count + " available locales");
         if (count != 0) {
             String all = "";
             for (int i = 0; i < count; ++i) {
                 if (i != 0) all += ", ";
                 all += locales[i].getDisplayName();
             }
-            logln(all);
+            logDebug(all);
         } else errln("**** FAIL: Zero available locales or null array pointer");
     }
 
@@ -271,11 +271,11 @@ public class IntlTestNumberFormat extends CoreTestFmwk {
                 locales[6] = new Locale("su", "", "");
             }
             for (int i = 0; i < count; ++i) {
-                logln(SEP);
+                logDebug(SEP);
                 _testLocale(locales[i]);
             }
         }
 
-        logln(SEP);
+        logDebug(SEP);
     }
 }
