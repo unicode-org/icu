@@ -9,7 +9,6 @@
 
 package com.ibm.icu.util;
 
-import com.ibm.icu.impl.ICUData;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -569,14 +568,6 @@ public final class VersionInfo implements Comparable<VersionInfo> {
     // private data members ----------------------------------------------
 
     /**
-     * Unicode data version used by the current release. Defined here privately for printing by the
-     * main() method in this class. Should be the same as {@link
-     * com.ibm.icu.lang.UCharacter#getUnicodeVersion()} which gets the version number from a data
-     * file. We do not want VersionInfo to have an import dependency on UCharacter.
-     */
-    private static final VersionInfo UNICODE_VERSION;
-
-    /**
      * Version number stored as a byte for each of the major, minor, milli and micro numbers in the
      * 32 bit int. Most significant for the major and the least significant contains the micro
      * numbers.
@@ -638,7 +629,6 @@ public final class VersionInfo implements Comparable<VersionInfo> {
 
         ICU_VERSION = getInstance(80, 0, 1, 0);
         ICU_DATA_VERSION = ICU_VERSION;
-        UNICODE_VERSION = UNICODE_18_0;
 
         UCOL_RUNTIME_VERSION = getInstance(9);
         UCOL_BUILDER_VERSION = getInstance(9);
@@ -666,107 +656,5 @@ public final class VersionInfo implements Comparable<VersionInfo> {
      */
     private static int getInt(int major, int minor, int milli, int micro) {
         return (major << 24) | (minor << 16) | (milli << 8) | micro;
-    }
-
-    /**
-     * Main method prints out ICU version information
-     *
-     * @param args arguments (currently not used)
-     * @stable ICU 4.6
-     */
-    public static void main(String[] args) {
-        String icuApiVer;
-
-        if (ICU_VERSION.getMajor() <= 4) {
-            if (ICU_VERSION.getMinor() % 2 != 0) {
-                // Development mile stone
-                int major = ICU_VERSION.getMajor();
-                int minor = ICU_VERSION.getMinor() + 1;
-                if (minor >= 10) {
-                    minor -= 10;
-                    major++;
-                }
-                icuApiVer = "" + major + "." + minor + "M" + ICU_VERSION.getMilli();
-            } else {
-                icuApiVer = ICU_VERSION.getVersionString(2, 2);
-            }
-        } else {
-            if (ICU_VERSION.getMinor() == 0) {
-                // Development mile stone
-                icuApiVer = "" + ICU_VERSION.getMajor() + "M" + ICU_VERSION.getMilli();
-            } else {
-                icuApiVer = ICU_VERSION.getVersionString(2, 2);
-            }
-        }
-
-        System.out.println("International Components for Unicode for Java " + icuApiVer);
-
-        System.out.println("");
-        System.out.println("Implementation Version: " + ICU_VERSION.getVersionString(2, 4));
-        System.out.println("Unicode Data Version:   " + UNICODE_VERSION.getVersionString(2, 4));
-        System.out.println(
-                "CLDR Data Version:      " + LocaleData.getCLDRVersion().getVersionString(2, 4));
-        System.out.println("Time Zone Data Version: " + getTZDataVersion());
-    }
-
-    /**
-     * Generate version string separated by dots with the specified digit width. Version digit 0
-     * after <code>minDigits</code> will be trimmed off.
-     *
-     * @param minDigits Minimum number of version digits
-     * @param maxDigits Maximum number of version digits
-     * @return A tailored version string
-     * @internal
-     * @deprecated This API is ICU internal only. (For use in CLDR, etc.)
-     */
-    @Deprecated
-    public String getVersionString(int minDigits, int maxDigits) {
-        if (minDigits < 1
-                || maxDigits < 1
-                || minDigits > 4
-                || maxDigits > 4
-                || minDigits > maxDigits) {
-            throw new IllegalArgumentException("Invalid min/maxDigits range");
-        }
-
-        int[] digits = new int[4];
-        digits[0] = getMajor();
-        digits[1] = getMinor();
-        digits[2] = getMilli();
-        digits[3] = getMicro();
-
-        int numDigits = maxDigits;
-        while (numDigits > minDigits) {
-            if (digits[numDigits - 1] != 0) {
-                break;
-            }
-            numDigits--;
-        }
-
-        StringBuilder verStr = new StringBuilder(7);
-        verStr.append(digits[0]);
-        for (int i = 1; i < numDigits; i++) {
-            verStr.append(".");
-            verStr.append(digits[i]);
-        }
-
-        return verStr.toString();
-    }
-
-    // Moved from TimeZone class
-    private static volatile String TZDATA_VERSION = null;
-
-    static String getTZDataVersion() {
-        if (TZDATA_VERSION == null) {
-            synchronized (VersionInfo.class) {
-                if (TZDATA_VERSION == null) {
-                    UResourceBundle tzbundle =
-                            UResourceBundle.getBundleInstance(
-                                    "com/ibm/icu/impl/" + ICUData.ICU_BUNDLE, "zoneinfo64");
-                    TZDATA_VERSION = tzbundle.getString("TZVersion");
-                }
-            }
-        }
-        return TZDATA_VERSION;
     }
 }
