@@ -111,7 +111,7 @@ public final class ICUBinaryTest extends CoreTestFmwk {
             ICUBinary.readHeader(bytes, formatid, authenticate);
             errln("Failed: Invalid version number should not pass authenticate object");
         } catch (IOException e) {
-            logln("PASS: ICUBinary.readHeader with invalid version number failed as expected");
+            logDebug("PASS: ICUBinary.readHeader with invalid version number failed as expected");
         }
     }
 }

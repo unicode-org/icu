@@ -57,12 +57,12 @@ public class TrieMapTest extends CoreTestFmwk {
     public void init() throws Exception {
         if (unicodeTestMap.size() == 0) {
             if (TestFmwk.getExhaustiveness() < 5) {
-                logln(
+                logDebug(
                         "\tShort version, timing for 1s:\t to get more accurate figures and test for reasonable times, use -e5 or more");
                 t.setTimingPeriod(1 * Timer.SECONDS);
             } else {
                 int seconds = TestFmwk.getExhaustiveness();
-                logln("\tExhaustive version, timing for " + seconds + "s");
+                logDebug("\tExhaustive version, timing for " + seconds + "s");
                 t.setTimingPeriod(seconds * Timer.SECONDS);
                 useSmallList = false;
             }
@@ -109,8 +109,8 @@ public class TrieMapTest extends CoreTestFmwk {
             for (String key : unicodeTestMap.keySet()) {
                 charCount += key.length();
             }
-            logln("\tTest Data Elements:\t\t\t" + nf.format(unicodeTestMap.size()));
-            logln("\tTotal chars:\t\t\t" + nf.format(charCount));
+            logDebug("\tTest Data Elements:\t\t\t" + nf.format(unicodeTestMap.size()));
+            logDebug("\tTotal chars:\t\t\t" + nf.format(charCount));
         }
     }
 
@@ -198,13 +198,13 @@ public class TrieMapTest extends CoreTestFmwk {
                             null,
                             map);
             if (comparisonTime == 0) {
-                logln(
+                logDebug(
                         "\titeration time\tTREEMAP\tn/a\t"
                                 + t.toString(testMap.size())
                                 + "\t\titerations="
                                 + t.getIterations());
             } else {
-                logln(
+                logDebug(
                         "\titeration time\tHASHMAP\tn/a\t"
                                 + t.toString(testMap.size(), comparisonTime)
                                 + "\titerations="
@@ -227,7 +227,7 @@ public class TrieMapTest extends CoreTestFmwk {
                             },
                             null,
                             trieMap);
-            logln(
+            logDebug(
                     "\titeration time\t"
                             + style
                             + "\tn/a\t"
@@ -372,7 +372,7 @@ public class TrieMapTest extends CoreTestFmwk {
                                 },
                                 null,
                                 testmap);
-                logln(
+                logDebug(
                         "\tbuild time\tTREEMAP\tn/a\t"
                                 + t.toString(testmap.size())
                                 + "\t\titerations="
@@ -392,7 +392,7 @@ public class TrieMapTest extends CoreTestFmwk {
                                 },
                                 null,
                                 testmap);
-                logln(
+                logDebug(
                         "\tbuild time\tHASHMAP\tn/a\t"
                                 + t.toString(testmap.size(), comparisonTime)
                                 + "\titerations="
@@ -417,7 +417,7 @@ public class TrieMapTest extends CoreTestFmwk {
                             style,
                             option);
 
-            logln(
+            logDebug(
                     "\tbuild time\t"
                             + style
                             + "\t"
@@ -462,14 +462,14 @@ public class TrieMapTest extends CoreTestFmwk {
             for (Entry<String, Integer> entry : map.entrySet()) {
                 mapKeyByteSize += 8 * ((((entry.getKey().length()) * 2) + 45) / 8);
             }
-            logln("\tkey byte size\tTREEMAP\tn/a\t" + nf.format(mapKeyByteSize));
+            logDebug("\tkey byte size\tTREEMAP\tn/a\t" + nf.format(mapKeyByteSize));
             return mapKeyByteSize;
         } else {
             TrieMap<Integer> trieMap =
                     TrieMap.BytesBuilder.with(style, option, unicodeTestMap).build();
 
             int trieKeyByteSize = trieMap.keyByteSize();
-            logln(
+            logDebug(
                     "\tkey byte size\t"
                             + style
                             + "\t"
@@ -517,7 +517,7 @@ public class TrieMapTest extends CoreTestFmwk {
                 }
             }
         }
-        logln("\tExtra Key Elements\t" + i);
+        logDebug("\tExtra Key Elements\t" + i);
 
         ArrayList<String> keys = new ArrayList<String>(keySet);
 
@@ -558,13 +558,13 @@ public class TrieMapTest extends CoreTestFmwk {
                             keys,
                             map);
             if (comparisonTime == 0) {
-                logln(
+                logDebug(
                         "\tget() time\tTREEMAP\tn/a\t"
                                 + t.toString(keys.size())
                                 + "\t\titerations="
                                 + t.getIterations());
             } else {
-                logln(
+                logDebug(
                         "\tget() time\tHASHMAP\tn/a\t"
                                 + t.toString(keys.size(), comparisonTime)
                                 + "\titerations="
@@ -595,7 +595,7 @@ public class TrieMapTest extends CoreTestFmwk {
             //                }
             //            }
             //            long trieTime = t.getDuration();
-            logln(
+            logDebug(
                     "\tget() time\t"
                             + style
                             + "\tn/a\t"

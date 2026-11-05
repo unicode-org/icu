@@ -56,7 +56,7 @@ public final class ICUResourceBundleTest extends CoreTestFmwk {
             for (; en.hasMoreElements(); ) {
                 URL url = en.nextElement();
                 if (url == null) {
-                    warnln("could not load resource data");
+                    errln("could not load resource data");
                     return;
                 }
                 URLConnection c = url.openConnection();
@@ -64,27 +64,27 @@ public final class ICUResourceBundleTest extends CoreTestFmwk {
                 if (c instanceof JarURLConnection) {
                     JarURLConnection jc = (JarURLConnection) c;
                     JarEntry je = jc.getJarEntry();
-                    logln("jar entry: " + je.toString());
+                    logDebug("jar entry: " + je.toString());
                 } else {
                     try (BufferedReader br =
                             new BufferedReader(
                                     new InputStreamReader(
                                             c.getInputStream(), StandardCharsets.UTF_8))) {
-                        logln("input stream:");
+                        logDebug("input stream:");
                         String line = null;
                         int n = 0;
                         while ((line = br.readLine()) != null) {
-                            logln("  " + ++n + ": " + line);
+                            logDebug("  " + ++n + ": " + line);
                         }
                     }
                 }
             }
         } catch (SecurityException ex) {
-            warnln("could not load resource data: " + ex);
+            errln("could not load resource data: " + ex);
             ex.printStackTrace();
         } catch (NullPointerException ex) {
             // thrown by ibm 1.4.2 windows jvm security manager
-            warnln("could not load resource data: " + ex);
+            errln("could not load resource data: " + ex);
         } catch (Exception ex) {
             ex.printStackTrace();
             errln("Unexpected exception: " + ex);
@@ -97,14 +97,14 @@ public final class ICUResourceBundleTest extends CoreTestFmwk {
                 UResourceBundle.getBundleInstance("com.ibm.icu.impl.data.HolidayBundle", "da_DK");
         Object o = bundle.getObject("holidays");
         if (o instanceof Holiday[]) {
-            logln("wrapper mechanism works for Weekend data");
+            logDebug("wrapper mechanism works for Weekend data");
         } else {
             errln("Did not get the expected output for Weekend data");
         }
 
         bundle = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "bogus");
         if (bundle instanceof UResourceBundle && bundle.getULocale().getName().equals("en_US")) {
-            logln("wrapper mechanism works for bogus locale");
+            logDebug("wrapper mechanism works for bogus locale");
         } else {
             errln("wrapper mechanism failed for bogus locale.");
         }
@@ -115,7 +115,7 @@ public final class ICUResourceBundleTest extends CoreTestFmwk {
                 errln("Did not get the expected exception");
             }
         } catch (MissingResourceException ex) {
-            logln("got the expected exception");
+            logDebug("got the expected exception");
         }
     }
 
@@ -131,7 +131,7 @@ public final class ICUResourceBundleTest extends CoreTestFmwk {
                 errln("could not create the resource bundle");
             }
         } catch (MissingResourceException ex) {
-            warnln("could not load test data: " + ex.getMessage());
+            errln("could not load test data: " + ex.getMessage());
         }
     }
 
@@ -204,7 +204,7 @@ public final class ICUResourceBundleTest extends CoreTestFmwk {
                     UResourceBundle.getBundleInstance(
                             "com/ibm/icu/dev/data/testdata", "testtypes", testLoader);
         } catch (MissingResourceException e) {
-            warnln("could not load test data: " + e.getMessage());
+            errln("could not load test data: " + e.getMessage());
             return;
         }
         {
@@ -365,7 +365,7 @@ public final class ICUResourceBundleTest extends CoreTestFmwk {
                                     + " Got: "
                                     + got);
                 } else {
-                    logln("Got the expected key at index: " + i);
+                    logDebug("Got the expected key at index: " + i);
                 }
             }
         }
@@ -402,7 +402,7 @@ public final class ICUResourceBundleTest extends CoreTestFmwk {
                     UResourceBundle.getBundleInstance(
                             "com/ibm/icu/dev/data/testdata", "testtable32", testLoader);
         } catch (MissingResourceException ex) {
-            warnln("could not load resource data: " + ex.getMessage());
+            errln("could not load resource data: " + ex.getMessage());
             return;
         }
 
@@ -494,13 +494,13 @@ public final class ICUResourceBundleTest extends CoreTestFmwk {
                 UResourceBundle.getBundleInstance(
                         "com/ibm/icu/dev/data/testdata", "testaliases", testLoader);
         if (rb == null) {
-            warnln("could not load testaliases data");
+            errln("could not load testaliases data");
             return;
         }
         UResourceBundle sub = rb.get("simplealias");
         String s1 = sub.getString("simplealias");
         if (s1.equals(simpleAlias)) {
-            logln("Alias mechanism works for simplealias");
+            logDebug("Alias mechanism works for simplealias");
         } else {
             errln("Did not get the expected output for simplealias");
         }
@@ -512,7 +512,7 @@ public final class ICUResourceBundleTest extends CoreTestFmwk {
                 sub = rb.get("nonexisting");
                 errln("Did not get the expected exception for nonexisting");
             } catch (MissingResourceException ex) {
-                logln("Alias mechanism works for nonexisting alias");
+                logDebug("Alias mechanism works for nonexisting alias");
             }
         }
         {
@@ -522,7 +522,7 @@ public final class ICUResourceBundleTest extends CoreTestFmwk {
             sub = rb.get("referencingalias");
             s1 = sub.getString();
             if (s1.equals("H:mm:ss")) {
-                logln("Alias mechanism works for referencingalias");
+                logDebug("Alias mechanism works for referencingalias");
             } else {
                 errln("Did not get the expected output for referencingalias");
             }
@@ -534,33 +534,33 @@ public final class ICUResourceBundleTest extends CoreTestFmwk {
             if (rb1 != rb) {
                 errln("Caching of the resource bundle failed");
             } else {
-                logln("Caching of resource bundle passed");
+                logDebug("Caching of resource bundle passed");
             }
             sub = rb1.get("testGetStringByKeyAliasing");
 
             s1 = sub.get("KeyAlias0PST").getString();
             if (s1.equals("America/Los_Angeles")) {
-                logln("Alias mechanism works for KeyAlias0PST");
+                logDebug("Alias mechanism works for KeyAlias0PST");
             } else {
                 errln("Did not get the expected output for KeyAlias0PST");
             }
 
             s1 = sub.getString("KeyAlias1PacificStandardTime");
             if (s1.equals("Pacific Standard Time")) {
-                logln("Alias mechanism works for KeyAlias1PacificStandardTime");
+                logDebug("Alias mechanism works for KeyAlias1PacificStandardTime");
             } else {
                 errln("Did not get the expected output for KeyAlias1PacificStandardTime");
             }
             s1 = sub.getString("KeyAlias2PDT");
             if (s1.equals("PDT")) {
-                logln("Alias mechanism works for KeyAlias2PDT");
+                logDebug("Alias mechanism works for KeyAlias2PDT");
             } else {
                 errln("Did not get the expected output for KeyAlias2PDT");
             }
 
             s1 = sub.getString("KeyAlias3LosAngeles");
             if (s1.equals("Los Angeles")) {
-                logln("Alias mechanism works for KeyAlias3LosAngeles. Got: " + s1);
+                logDebug("Alias mechanism works for KeyAlias3LosAngeles. Got: " + s1);
             } else {
                 errln("Did not get the expected output for KeyAlias3LosAngeles. Got: " + s1);
             }
@@ -569,7 +569,7 @@ public final class ICUResourceBundleTest extends CoreTestFmwk {
             sub = rb.get("testGetStringByIndexAliasing");
             s1 = sub.getString(0);
             if (s1.equals("America/Los_Angeles")) {
-                logln("Alias mechanism works for testGetStringByIndexAliasing/0. Got: " + s1);
+                logDebug("Alias mechanism works for testGetStringByIndexAliasing/0. Got: " + s1);
             } else {
                 errln(
                         "Did not get the expected output for testGetStringByIndexAliasing/0. Got: "
@@ -577,20 +577,20 @@ public final class ICUResourceBundleTest extends CoreTestFmwk {
             }
             s1 = sub.getString(1);
             if (s1.equals("Pacific Standard Time")) {
-                logln("Alias mechanism works for testGetStringByIndexAliasing/1");
+                logDebug("Alias mechanism works for testGetStringByIndexAliasing/1");
             } else {
                 errln("Did not get the expected output for testGetStringByIndexAliasing/1");
             }
             s1 = sub.getString(2);
             if (s1.equals("PDT")) {
-                logln("Alias mechanism works for testGetStringByIndexAliasing/2");
+                logDebug("Alias mechanism works for testGetStringByIndexAliasing/2");
             } else {
                 errln("Did not get the expected output for testGetStringByIndexAliasing/2");
             }
 
             s1 = sub.getString(3);
             if (s1.equals("Los Angeles")) {
-                logln("Alias mechanism works for testGetStringByIndexAliasing/3. Got: " + s1);
+                logDebug("Alias mechanism works for testGetStringByIndexAliasing/3. Got: " + s1);
             } else {
                 errln(
                         "Did not get the expected output for testGetStringByIndexAliasing/3. Got: "
@@ -630,14 +630,14 @@ public final class ICUResourceBundleTest extends CoreTestFmwk {
             UResourceBundle table = bundle.get("tableT7996");
             try {
                 String s = table.getString("a7996");
-                logln("Alias in nested table referring one in sh worked - " + s);
+                logDebug("Alias in nested table referring one in sh worked - " + s);
             } catch (MissingResourceException e) {
                 errln("Alias in nested table referring one in sh failed");
             }
 
             try {
                 String s = ((ICUResourceBundle) table).getStringWithFallback("b7996");
-                logln(
+                logDebug(
                         "Alias with /LOCALE/ in nested table in root referring back to another key in the current locale bundle worked - "
                                 + s);
             } catch (MissingResourceException e) {
@@ -649,12 +649,12 @@ public final class ICUResourceBundleTest extends CoreTestFmwk {
 
     @Test
     public void TestAlias() {
-        logln("Testing %%ALIAS");
+        logDebug("Testing %%ALIAS");
         UResourceBundle rb = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "iw_IL");
         UResourceBundle b = rb.get("NumberElements");
         if (b != null) {
             if (b.getSize() > 0) {
-                logln("%%ALIAS mechanism works");
+                logDebug("%%ALIAS mechanism works");
             } else {
                 errln("%%ALIAS mechanism failed for iw_IL NumberElements");
             }
@@ -699,9 +699,9 @@ public final class ICUResourceBundleTest extends CoreTestFmwk {
                 errln("Did not get the expected exception");
             }
         } catch (IllegalArgumentException ex) {
-            logln("got expected exception for circular references");
+            logDebug("got expected exception for circular references");
         } catch (MissingResourceException ex) {
-            warnln("could not load resource data: " + ex.getMessage());
+            errln("could not load resource data: " + ex.getMessage());
         }
     }
 
@@ -807,7 +807,7 @@ public final class ICUResourceBundleTest extends CoreTestFmwk {
                 errln("Could not get native localized language for " + locales[i]);
             }
 
-            logln(
+            logDebug(
                     locales[i]
                             + "\t"
                             + locales[i].getDisplayName(ULocale.ENGLISH)
@@ -843,7 +843,7 @@ public final class ICUResourceBundleTest extends CoreTestFmwk {
             "f", "th_TH_Bangkok", "th@calendar=buddhist",
         };
 
-        logln("Testing functional equivalents for calendar...");
+        logDebug("Testing functional equivalents for calendar...");
         getFunctionalEquivalentTestCases(
                 ICUData.ICU_BASE_NAME,
                 Calendar.class.getClassLoader(),
@@ -852,7 +852,7 @@ public final class ICUResourceBundleTest extends CoreTestFmwk {
                 false,
                 calCases);
 
-        logln("Testing error conditions:");
+        logDebug("Testing error conditions:");
         try {
             ClassLoader cl = BreakIterator.class.getClassLoader();
             ICUResourceBundle.getFunctionalEquivalent(
@@ -865,7 +865,7 @@ public final class ICUResourceBundleTest extends CoreTestFmwk {
                     true);
             errln("Err: expected MissingResourceException");
         } catch (MissingResourceException t) {
-            logln("expected MissingResourceException caught (PASS): " + t.toString());
+            logDebug("expected MissingResourceException caught (PASS): " + t.toString());
         }
     }
 
@@ -880,13 +880,13 @@ public final class ICUResourceBundleTest extends CoreTestFmwk {
         String T_STR = "t";
         boolean isAvail[] = new boolean[1];
 
-        logln("Testing functional equivalents...");
+        logDebug("Testing functional equivalents...");
         for (int i = 0; i < testCases.length; i += 3) {
             boolean expectAvail = T_STR.equals(testCases[i + 0]);
             ULocale inLocale = new ULocale(testCases[i + 1]);
             ULocale expectLocale = new ULocale(testCases[i + 2]);
 
-            logln("" + i / 3 + ": " + expectAvail + "\t\t" + inLocale + "\t\t" + expectLocale);
+            logDebug("" + i / 3 + ": " + expectAvail + "\t\t" + inLocale + "\t\t" + expectLocale);
 
             ULocale equivLocale =
                     ICUResourceBundle.getFunctionalEquivalent(
@@ -919,7 +919,7 @@ public final class ICUResourceBundleTest extends CoreTestFmwk {
             UResourceBundle sub = rb.get("Countries");
             String s1 = sub.getString("NO");
             if (s1.equals("Noreg")) {
-                logln("got expected output ");
+                logDebug("got expected output ");
             } else {
                 errln("did not get the expected result");
             }
@@ -946,13 +946,13 @@ public final class ICUResourceBundleTest extends CoreTestFmwk {
                 t = root.getWithFallback("calendar/islamic-civil/eras/abbreviated/0/mikimaus/pera");
                 errln("Second resource does not exist. How did it get here?\n");
             } catch (MissingResourceException ex) {
-                logln("Got the expected exception");
+                logDebug("Got the expected exception");
             }
             if (t != null) {
                 errln("t is not null!");
             }
         } catch (MissingResourceException e) {
-            warnln("Could not load the locale data: " + e.getMessage());
+            errln("Could not load the locale data: " + e.getMessage());
         }
     }
 
@@ -962,7 +962,7 @@ public final class ICUResourceBundleTest extends CoreTestFmwk {
         String expected = null;
         String[] expects = new String[] {"", "a41", "a12", "a03", "ar4"};
 
-        logln("Testing CLDR style aliases......\n");
+        logDebug("Testing CLDR style aliases......\n");
 
         UResourceBundle rb =
                 UResourceBundle.getBundleInstance(
@@ -1101,7 +1101,7 @@ public final class ICUResourceBundleTest extends CoreTestFmwk {
         Enumeration<String> keys = bundle.getKeys();
         int i = 0;
         while (keys.hasMoreElements()) {
-            logln("key: " + keys.nextElement());
+            logDebug("key: " + keys.nextElement());
             i++;
         }
         if (i != 4) {
@@ -1124,10 +1124,10 @@ public final class ICUResourceBundleTest extends CoreTestFmwk {
             ICUResourceBundle b1 =
                     b.getWithFallback("calendar/hebrew/monthNames/format/abbreviated");
             if (b1 != null) {
-                logln("loaded data for abbreviated month names: " + b1.getKey());
+                logDebug("loaded data for abbreviated month names: " + b1.getKey());
             }
         } catch (MissingResourceException ex) {
-            warnln("Failed to load data for abbreviated month names");
+            errln("Failed to load data for abbreviated month names");
         }
     }
 

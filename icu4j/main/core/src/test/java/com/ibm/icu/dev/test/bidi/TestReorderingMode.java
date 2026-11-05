@@ -210,7 +210,7 @@ public class TestReorderingMode extends BidiFmwk {
         String expected;
         boolean testOK = true;
 
-        logln("\nEntering TestReorderingMode\n");
+        logDebug("\nEntering TestReorderingMode\n");
 
         bidi2.setInverse(true);
 
@@ -242,7 +242,7 @@ public class TestReorderingMode extends BidiFmwk {
                     }
 
                     for (level = 0; level < LEVELS_COUNT; level++) {
-                        logln(
+                        logDebug(
                                 "starting test "
                                         + tc
                                         + " mode="
@@ -315,10 +315,10 @@ public class TestReorderingMode extends BidiFmwk {
             }
         }
         if (testOK) {
-            logln("Reordering mode test OK");
+            logDebug("Reordering mode test OK");
         }
 
-        logln("\nExiting TestReorderingMode\n");
+        logDebug("\nExiting TestReorderingMode\n");
     }
 
     String inverseBasic(Bidi bidi, String src, int option, byte level) {
@@ -496,7 +496,7 @@ public class TestReorderingMode extends BidiFmwk {
                                 + "\nParagraph level:    "
                                 + level);
             } else {
-                logln(
+                logDebug(
                         "\nExpected round trip failure for case="
                                 + tc
                                 + " mode="
@@ -703,7 +703,7 @@ public class TestReorderingMode extends BidiFmwk {
         actualLogicalMap = bidi.getLogicalMap();
         srcLen = bidi.getProcessedLength();
         if (!Arrays.equals(expectedLogicalMap, actualLogicalMap)) {
-            err(
+            errln(
                     "Bidi.getLogicalMap returned unexpected map for output "
                             + "string index "
                             + stringIndex
@@ -739,14 +739,13 @@ public class TestReorderingMode extends BidiFmwk {
                             + bidi.getReorderingOptions()
                             + "\n"
                             + "Forward flag     : "
-                            + forward
-                            + "\n");
+                            + forward);
             testOK = false;
         }
         resLen = bidi.getResultLength();
         actualVisualMap = bidi.getVisualMap();
         if (!Arrays.equals(expectedVisualMap, actualVisualMap)) {
-            err(
+            errln(
                     "Bidi.getVisualMap returned unexpected map for output "
                             + "string index "
                             + stringIndex
@@ -782,8 +781,7 @@ public class TestReorderingMode extends BidiFmwk {
                             + bidi.getReorderingOptions()
                             + "\n"
                             + "Forward flag     : "
-                            + forward
-                            + "\n");
+                            + forward);
             testOK = false;
         }
         getIndexMap = new int[srcLen];
@@ -792,7 +790,7 @@ public class TestReorderingMode extends BidiFmwk {
             getIndexMap[i] = index;
         }
         if (!Arrays.equals(actualLogicalMap, getIndexMap)) {
-            err(
+            errln(
                     "Mismatch between getLogicalMap and getVisualIndex for output "
                             + "string index "
                             + stringIndex
@@ -828,8 +826,7 @@ public class TestReorderingMode extends BidiFmwk {
                             + bidi.getReorderingOptions()
                             + "\n"
                             + "Forward flag     : "
-                            + forward
-                            + "\n");
+                            + forward);
             testOK = false;
         }
         getIndexMap = new int[resLen];
@@ -838,7 +835,7 @@ public class TestReorderingMode extends BidiFmwk {
             getIndexMap[i] = index;
         }
         if (!Arrays.equals(actualVisualMap, getIndexMap)) {
-            err(
+            errln(
                     "Mismatch between getVisualMap and getLogicalIndex for output "
                             + "string index "
                             + stringIndex
@@ -874,8 +871,7 @@ public class TestReorderingMode extends BidiFmwk {
                             + bidi.getReorderingOptions()
                             + "\n"
                             + "Forward flag     : "
-                            + forward
-                            + "\n");
+                            + forward);
             testOK = false;
         }
         return testOK;

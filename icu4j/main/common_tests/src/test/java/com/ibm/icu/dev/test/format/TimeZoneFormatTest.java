@@ -129,10 +129,10 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
 
         // Run the roundtrip test
         for (int locidx = 0; locidx < LOCALES.length; locidx++) {
-            logln("Locale: " + LOCALES[locidx].toString());
+            logDebug("Locale: " + LOCALES[locidx].toString());
 
             for (int patidx = 0; patidx < PATTERNS.length; patidx++) {
-                logln("    pattern: " + PATTERNS[patidx]);
+                logDebug("    pattern: " + PATTERNS[patidx]);
                 SimpleDateFormat sdf = new SimpleDateFormat(PATTERNS[patidx], LOCALES[locidx]);
 
                 for (int tzidx = 0; tzidx < tzids.length; tzidx++) {
@@ -170,7 +170,7 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
                                     // Note that some zones do not have
                                     // short zone ID and "unk" is used as the fallback
                                     if (REALLY_VERBOSE_LOG) {
-                                        logln(
+                                        logDebug(
                                                 "Canonical round trip failed (probably as expected); tz="
                                                         + tzids[tzidx]
                                                         + ", locale="
@@ -250,7 +250,7 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
                                                     + ", outtz="
                                                     + outtz.getID());
                                 } else if (REALLY_VERBOSE_LOG) {
-                                    logln(
+                                    logDebug(
                                             "Canonical round trip failed (as expected); tz="
                                                     + tzids[tzidx]
                                                     + ", locale="
@@ -324,7 +324,7 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
                                         // JDK uses rule SystemV for these zones while
                                         // ICU handles these zones as aliases of existing time zones
                                         if (REALLY_VERBOSE_LOG) {
-                                            logln(
+                                            logDebug(
                                                     "Raw offset round trip failed; tz="
                                                             + tzids[tzidx]
                                                             + ", locale="
@@ -455,9 +455,9 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
         boolean[] expectedRoundTrip = new boolean[4];
         int testLen = 0;
         for (int locidx = 0; locidx < LOCALES.length; locidx++) {
-            logln("Locale: " + LOCALES[locidx].toString());
+            logDebug("Locale: " + LOCALES[locidx].toString());
             for (int patidx = 0; patidx < PATTERNS.length; patidx++) {
-                logln("    pattern: " + PATTERNS[patidx]);
+                logDebug("    pattern: " + PATTERNS[patidx]);
                 String pattern = BASEPATTERN + " " + PATTERNS[patidx];
                 SimpleDateFormat sdf = new SimpleDateFormat(pattern, LOCALES[locidx]);
                 boolean minutesOffset = MINUTES_OFFSET.contains(PATTERNS[patidx]);
@@ -585,7 +585,7 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
                                                     testTimes[testidx])) {
                                         errln("FAIL: " + msg.toString());
                                     } else if (REALLY_VERBOSE_LOG) {
-                                        logln(msg.toString());
+                                        logDebug(msg.toString());
                                     }
                                 }
                             } catch (ParseException pe) {
@@ -626,13 +626,13 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
         }
 
         long total = 0;
-        logln("### Elapsed time by patterns ###");
+        logDebug("### Elapsed time by patterns ###");
         for (int i = 0; i < PATTERNS.length; i++) {
-            logln(times[i] + "ms (" + PATTERNS[i] + ")");
+            logDebug(times[i] + "ms (" + PATTERNS[i] + ")");
             total += times[i];
         }
-        logln("Total: " + total + "ms");
-        logln("Iteration: " + testCounts);
+        logDebug("Total: " + total + "ms");
+        logDebug("Iteration: " + testCounts);
     }
 
     // Special exclusions in TestTimeZoneRoundTrip.

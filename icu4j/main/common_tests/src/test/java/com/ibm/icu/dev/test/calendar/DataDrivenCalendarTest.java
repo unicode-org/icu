@@ -99,7 +99,7 @@ public class DataDrivenCalendarTest extends CoreTestFmwk {
                             + ", SOURCE calendar was not set: Differences: "
                             + diffs);
         } else {
-            logln("PASS: " + thisString + " SOURCE calendar match.");
+            logDebug("PASS: " + thisString + " SOURCE calendar match.");
         }
 
         // logln("Set Source calendar: " + from);
@@ -116,7 +116,7 @@ public class DataDrivenCalendarTest extends CoreTestFmwk {
                             + ", SET SOURCE calendar was not set: Differences: "
                             + diffs);
         } else {
-            logln("PASS: " + thisString + " SET SOURCE calendar match.");
+            logDebug("PASS: " + thisString + " SET SOURCE calendar match.");
         }
 
         toCalendar.clear();
@@ -128,9 +128,9 @@ public class DataDrivenCalendarTest extends CoreTestFmwk {
             errln((String) "FAIL: " + thisString + ", Differences: " + diffs);
             DateFormat fmt = new SimpleDateFormat(new String("EEE MMM dd yyyy G"));
             String fromString = fmt.format(fromTime);
-            logln("Source Time: " + fromString + ", Source Calendar: " + fromCalendar.getType());
+            logDebug("Source Time: " + fromString + ", Source Calendar: " + fromCalendar.getType());
         } else {
-            logln("PASS: " + thisString + " match.");
+            logDebug("PASS: " + thisString + " match.");
         }
     }
 
@@ -163,10 +163,10 @@ public class DataDrivenCalendarTest extends CoreTestFmwk {
 
             // now, do it.
             if (forward) {
-                logln(caseString + " " + locale + "/" + from + " >>> " + loc + "/" + to);
+                logDebug(caseString + " " + locale + "/" + from + " >>> " + loc + "/" + to);
                 testConvert(caseString, fromSet, fromCalendar, toSet, toCalendar, forward);
             } else {
-                logln(caseString + " " + locale + "/" + from + " <<< " + loc + "/" + to);
+                logDebug(caseString + " " + locale + "/" + from + " <<< " + loc + "/" + to);
                 testConvert(caseString, toSet, toCalendar, fromSet, fromCalendar, forward);
             }
         }
@@ -250,7 +250,7 @@ public class DataDrivenCalendarTest extends CoreTestFmwk {
                             + paramsSet
                             + " ]]]   >>> "
                             + to;
-            logln(caseString + ": " + caseContentsString);
+            logDebug(caseString + ": " + caseContentsString);
 
             // ------
             // now, do it.
@@ -275,7 +275,7 @@ public class DataDrivenCalendarTest extends CoreTestFmwk {
                                 + ", SET SOURCE calendar was not set: Differences: "
                                 + diffs);
             } else {
-                logln(
+                logDebug(
                         " "
                                 + caseString
                                 + " SET SOURCE calendar match."); // verifies that the requested
@@ -295,7 +295,7 @@ public class DataDrivenCalendarTest extends CoreTestFmwk {
                     } else {
                         errln(caseString + " FAIL: unknown operation " + operation);
                     }
-                    logln(operation + " of " + paramsSet.get(q));
+                    logDebug(operation + " of " + paramsSet.get(q));
                 }
             }
             // now - what's the result?
@@ -305,15 +305,15 @@ public class DataDrivenCalendarTest extends CoreTestFmwk {
 
             if (useDate) {
                 if (toCalendar.getTimeInMillis() == toDate) {
-                    logln(caseString + " SUCCESS: got=expected=" + toDate);
-                    logln("PASS: " + caseString + " matched! ");
+                    logDebug(caseString + " SUCCESS: got=expected=" + toDate);
+                    logDebug("PASS: " + caseString + " matched! ");
                 } else {
                     // Note: With JDK TimeZone implementation, tz offset on dates earlier than
                     // mid-1900 might be different from the TZDB. Following test cases are
                     // failing because of this.
                     if ((caseString.equals("[case 31]") || caseString.equals("[case 36]"))
                             && TimeZone.getDefaultTimeZoneType() == TimeZone.TIMEZONE_JDK) {
-                        logln(
+                        logDebug(
                                 caseString
                                         + " FAIL(expected): got "
                                         + toCalendar.getTimeInMillis()
@@ -338,7 +338,7 @@ public class DataDrivenCalendarTest extends CoreTestFmwk {
                                 + " Differences: "
                                 + diffs);
             } else {
-                logln("PASS: " + caseString + " matched! ");
+                logDebug("PASS: " + caseString + " matched! ");
             }
         }
     }

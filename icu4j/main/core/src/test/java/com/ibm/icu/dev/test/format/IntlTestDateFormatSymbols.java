@@ -41,10 +41,10 @@ public class IntlTestDateFormatSymbols extends CoreTestFmwk {
         month = symbol.getMonths();
         int cnt = month.length;
 
-        logln("size = " + cnt);
+        logDebug("size = " + cnt);
 
         for (int i = 0; i < cnt; ++i) {
-            logln(month[i]);
+            logDebug(month[i]);
         }
     }
 
@@ -63,10 +63,10 @@ public class IntlTestDateFormatSymbols extends CoreTestFmwk {
                 String[] month = symbol.getMonths(context[i], width[j]);
                 int cnt = month.length;
 
-                logln("size = " + cnt);
+                logDebug("size = " + cnt);
 
                 for (int k = 0; k < month.length; k++) {
-                    logln(month[k]);
+                    logDebug(month[k]);
                 }
             }
         }
@@ -87,10 +87,10 @@ public class IntlTestDateFormatSymbols extends CoreTestFmwk {
                 String[] wd = symbol.getWeekdays(context[i], width[j]);
                 int cnt = wd.length;
 
-                logln("size = " + cnt);
+                logDebug("size = " + cnt);
 
                 for (int k = 0; k < wd.length; k++) {
-                    logln(wd[k]);
+                    logDebug(wd[k]);
                 }
             }
         }
@@ -102,7 +102,7 @@ public class IntlTestDateFormatSymbols extends CoreTestFmwk {
         symbol = new DateFormatSymbols(Locale.getDefault());
         String[] s = symbol.getEraNames();
         for (int i = 0; i < s.length; i++) {
-            logln(s[i]);
+            logDebug(s[i]);
         }
     }
 

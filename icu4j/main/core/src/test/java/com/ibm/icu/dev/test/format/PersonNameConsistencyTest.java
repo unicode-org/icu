@@ -3,6 +3,7 @@
 package com.ibm.icu.dev.test.format;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.text.PersonName;
 import com.ibm.icu.text.PersonNameFormatter;
@@ -48,7 +49,7 @@ public class PersonNameConsistencyTest extends CoreTestFmwk {
                 "shn.txt", "ICU-23187");
     }
 
-    static List<String> readTestCases() throws Exception {
+    List<String> readTestCases() throws Exception {
         List<String> tests = new ArrayList<>();
         try (InputStream catalogFileStream =
                         TestUtil.class.getResourceAsStream(DATA_PATH + "catalog.txt");
@@ -63,7 +64,7 @@ public class PersonNameConsistencyTest extends CoreTestFmwk {
                     .forEach(
                             filename -> {
                                 if (!filename.endsWith(".txt")) {
-                                    logln("Skipping " + filename + "...");
+                                    logDebug("Skipping " + filename + "...");
                                     return;
                                 }
                                 tests.add(filename);
@@ -82,7 +83,7 @@ public class PersonNameConsistencyTest extends CoreTestFmwk {
                                 TestUtil.class.getResourceAsStream(DATA_PATH + filename),
                                 StandardCharsets.UTF_8))) {
             String line = null;
-            PersonNameTester tester = new PersonNameTester(filename);
+            PersonNameTester tester = new PersonNameTester(this, filename);
 
             int errors = 0;
             try {
@@ -95,7 +96,7 @@ public class PersonNameConsistencyTest extends CoreTestFmwk {
                     logKnownIssue(
                             knownIssue, "Exception thrown on " + filename + ": " + e.toString());
                 } else if (RUN_ALL_TESTS) {
-                    logln("Exception thrown on " + filename + ": " + e.toString());
+                    logDebug("Exception thrown on " + filename + ": " + e.toString());
                 } else {
                     throw e;
                 }
@@ -107,7 +108,7 @@ public class PersonNameConsistencyTest extends CoreTestFmwk {
                             knownIssue,
                             "Failure in " + filename + ": Found " + errors + " errors.");
                 } else if (RUN_ALL_TESTS) {
-                    logln("Failure in " + filename + ": Found " + errors + " errors.");
+                    logDebug("Failure in " + filename + ": Found " + errors + " errors.");
                 } else {
                     errln("Failure in " + filename + ": Found " + errors + " errors.");
                 }
@@ -120,13 +121,15 @@ public class PersonNameConsistencyTest extends CoreTestFmwk {
     }
 
     private static class PersonNameTester {
+        final TestFmwk fmwk;
         SimplePersonName name = null;
         SimplePersonName.Builder nameBuilder = null;
         String expectedResult = null;
         Locale formatterLocale = null;
         int errorCount = 0;
 
-        public PersonNameTester(String testFileName) {
+        public PersonNameTester(TestFmwk fmwk, String testFileName) {
+            this.fmwk = fmwk;
             formatterLocale =
                     Locale.forLanguageTag(
                             testFileName
@@ -273,7 +276,7 @@ public class PersonNameConsistencyTest extends CoreTestFmwk {
         }
 
         private void reportError(String error, String file, int lineNumber) {
-            logln(file + ":" + lineNumber + ": " + error);
+            fmwk.logDebug(file + ":" + lineNumber + ": " + error);
             if (VERBOSE_OUTPUT) {
                 System.out.println(file + ":" + lineNumber + ": " + error);
             }
@@ -281,7 +284,7 @@ public class PersonNameConsistencyTest extends CoreTestFmwk {
         }
 
         private void reportError(String error, int lineNumber) {
-            logln("    " + error + " at line " + lineNumber);
+            fmwk.logDebug("    " + error + " at line " + lineNumber);
             if (VERBOSE_OUTPUT) {
                 System.out.println("    " + error + " at line " + lineNumber);
             }

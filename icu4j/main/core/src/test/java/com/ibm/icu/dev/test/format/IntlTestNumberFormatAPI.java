@@ -38,13 +38,13 @@ public class IntlTestNumberFormatAPI extends CoreTestFmwk {
     public void TestAPI() {
         Locale startLocale = Locale.getDefault();
 
-        logln("NumberFormat API test---");
-        logln("");
+        logDebug("NumberFormat API test---");
+        logDebug("");
         Locale.setDefault(Locale.ENGLISH);
 
         // ======= Test constructors
 
-        logln("Testing NumberFormat constructors");
+        logDebug("Testing NumberFormat constructors");
 
         NumberFormat def = NumberFormat.getInstance();
 
@@ -63,14 +63,14 @@ public class IntlTestNumberFormatAPI extends CoreTestFmwk {
         NumberFormat int_fr = NumberFormat.getIntegerInstance(Locale.FRENCH);
 
         // Fix "The variable is never used" compilation warnings
-        logln("Currency : " + cur.format(1234.5));
-        logln("Percent : " + per.format(1234.5));
-        logln("Integer : " + integer.format(1234.5));
-        logln("Int_fr : " + int_fr.format(1234.5));
+        logDebug("Currency : " + cur.format(1234.5));
+        logDebug("Percent : " + per.format(1234.5));
+        logDebug("Integer : " + integer.format(1234.5));
+        logDebug("Int_fr : " + int_fr.format(1234.5));
 
         // ======= Test equality
 
-        logln("Testing equality operator");
+        logDebug("Testing equality operator");
 
         if (per_fr.equals(cur_fr)) {
             errln("ERROR: == failed");
@@ -78,7 +78,7 @@ public class IntlTestNumberFormatAPI extends CoreTestFmwk {
 
         // ======= Test various format() methods
 
-        logln("Testing various format() methods");
+        logDebug("Testing various format() methods");
 
         //        final double d = -10456.0037; // this appears as -10456.003700000001 on NT
         //        final double d = -1.04560037e-4; // this appears as -1.0456003700000002E-4 on NT
@@ -97,26 +97,26 @@ public class IntlTestNumberFormatAPI extends CoreTestFmwk {
         FieldPosition pos4 = new FieldPosition(0);
 
         res1 = cur_fr.format(d);
-        logln("" + d + " formatted to " + res1);
+        logDebug("" + d + " formatted to " + res1);
 
         res2 = cur_fr.format(l);
-        logln("" + l + " formatted to " + res2);
+        logDebug("" + l + " formatted to " + res2);
 
         res3 = cur_fr.format(d, res3, pos1);
-        logln("" + d + " formatted to " + res3);
+        logDebug("" + d + " formatted to " + res3);
 
         res4 = cur_fr.format(l, res4, pos2);
-        logln("" + l + " formatted to " + res4);
+        logDebug("" + l + " formatted to " + res4);
 
         res5 = cur_fr.format(d, res5, pos3);
-        logln("" + d + " formatted to " + res5);
+        logDebug("" + d + " formatted to " + res5);
 
         res6 = cur_fr.format(l, res6, pos4);
-        logln("" + l + " formatted to " + res6);
+        logDebug("" + l + " formatted to " + res6);
 
         // ======= Test parse()
 
-        logln("Testing parse()");
+        logDebug("Testing parse()");
 
         //        String text = new String("-10,456.0037");
         String text = new String("-10456,0037");
@@ -126,13 +126,13 @@ public class IntlTestNumberFormatAPI extends CoreTestFmwk {
         if (d1 != d) {
             errln("ERROR: Roundtrip failed (via parse()) for " + text);
         }
-        logln(text + " parsed into " + d1);
+        logDebug(text + " parsed into " + d1);
 
         double d2 = fr.parse(text, pos01).doubleValue();
         if (d2 != d) {
             errln("ERROR: Roundtrip failed (via parse()) for " + text);
         }
-        logln(text + " parsed into " + d2);
+        logDebug(text + " parsed into " + d2);
 
         double d3 = 0;
         try {
@@ -143,19 +143,19 @@ public class IntlTestNumberFormatAPI extends CoreTestFmwk {
         if (d3 != d) {
             errln("ERROR: Roundtrip failed (via parse()) for " + text);
         }
-        logln(text + " parsed into " + d3);
+        logDebug(text + " parsed into " + d3);
 
         // ======= Test getters and setters
 
-        logln("Testing getters and setters");
+        logDebug("Testing getters and setters");
 
         final Locale[] locales = NumberFormat.getAvailableLocales();
         long count = locales.length;
-        logln("Got " + count + " locales");
+        logDebug("Got " + count + " locales");
         for (int i = 0; i < count; i++) {
             String name;
             name = locales[i].getDisplayName();
-            logln(name);
+            logDebug(name);
         }
 
         fr.setParseIntegerOnly(def.isParseIntegerOnly());

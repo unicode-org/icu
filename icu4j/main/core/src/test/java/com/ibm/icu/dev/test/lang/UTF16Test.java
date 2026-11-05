@@ -435,7 +435,7 @@ public final class UTF16Test extends CoreTestFmwk {
                             + "with supplementary characters");
         } catch (Exception e) {
             // this is a success
-            logln("Passed out of bounds codepoint offset");
+            logDebug("Passed out of bounds codepoint offset");
         }
         try {
             UTF16.findOffsetFromCodePoint(str, 4);
@@ -444,7 +444,7 @@ public final class UTF16Test extends CoreTestFmwk {
                             + "with supplementary characters");
         } catch (Exception e) {
             // this is a success
-            logln("Passed out of bounds codepoint offset");
+            logDebug("Passed out of bounds codepoint offset");
         }
         try {
             UTF16.findCodePointOffset(strbuff, 5);
@@ -453,7 +453,7 @@ public final class UTF16Test extends CoreTestFmwk {
                             + "with supplementary characters");
         } catch (Exception e) {
             // this is a success
-            logln("Passed out of bounds codepoint offset");
+            logDebug("Passed out of bounds codepoint offset");
         }
         try {
             UTF16.findOffsetFromCodePoint(strbuff, 4);
@@ -462,7 +462,7 @@ public final class UTF16Test extends CoreTestFmwk {
                             + "with supplementary characters");
         } catch (Exception e) {
             // this is a success
-            logln("Passed out of bounds codepoint offset");
+            logDebug("Passed out of bounds codepoint offset");
         }
         try {
             UTF16.findCodePointOffset(array, 0, limit, 5);
@@ -471,7 +471,7 @@ public final class UTF16Test extends CoreTestFmwk {
                             + "with supplementary characters");
         } catch (Exception e) {
             // this is a success
-            logln("Passed out of bounds codepoint offset");
+            logDebug("Passed out of bounds codepoint offset");
         }
         try {
             UTF16.findOffsetFromCodePoint(array, 0, limit, 4);
@@ -480,7 +480,7 @@ public final class UTF16Test extends CoreTestFmwk {
                             + "with supplementary characters");
         } catch (Exception e) {
             // this is a success
-            logln("Passed out of bounds codepoint offset");
+            logDebug("Passed out of bounds codepoint offset");
         }
 
         if (UTF16.findCodePointOffset(array, 1, 3, 0) != 0
@@ -1725,14 +1725,14 @@ public final class UTF16Test extends CoreTestFmwk {
             errln(
                     "hasMoreCodePointsThan(chararray) with negative indexes has to throw an exception");
         } catch (Exception e) {
-            logln("PASS: UTF16.hasMoreCodePointsThan failed as expected");
+            logDebug("PASS: UTF16.hasMoreCodePointsThan failed as expected");
         }
         try {
             UTF16.hasMoreCodePointsThan(strarray, 5, 2, 5);
             errln(
                     "hasMoreCodePointsThan(chararray) with limit less than start index has to throw an exception");
         } catch (Exception e) {
-            logln("PASS: UTF16.hasMoreCodePointsThan failed as expected");
+            logDebug("PASS: UTF16.hasMoreCodePointsThan failed as expected");
         }
         try {
             if (UTF16.hasMoreCodePointsThan(strarray, -2, 2, 5)) {

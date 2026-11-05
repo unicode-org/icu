@@ -78,7 +78,7 @@ public class UCAConformanceTest extends TestFmwk {
 
     @Test
     public void TestRulesShifted() {
-        logln(
+        logDebug(
                 "This test is currently disabled, as it is impossible to "
                         + "wholly represent fractional UCA using tailoring rules.");
         /*
@@ -101,7 +101,7 @@ public class UCAConformanceTest extends TestFmwk {
             } catch (Exception e1) {
                 try {
                     in = TestUtil.getUtf8DataReader(collationTest + type + "_STUB" + ext);
-                    logln(
+                    logDebug(
                             "INFO: Working with the stub file.\n"
                                     + "If you need the full conformance test, please\n"
                                     + "download the appropriate data files from:\n"
@@ -194,7 +194,7 @@ public class UCAConformanceTest extends TestFmwk {
             skipFlags |= FROM_RULES;
         }
 
-        logln("-prop:ucaconfnosortkeys=1 turns off getSortKey() in UCAConformanceTest");
+        logDebug("-prop:ucaconfnosortkeys=1 turns off getSortKey() in UCAConformanceTest");
         boolean withSortKeys = getProperty("ucaconfnosortkeys") == null;
 
         int lineNo = 0;
@@ -212,7 +212,7 @@ public class UCAConformanceTest extends TestFmwk {
                 buffer = parseString(line);
 
                 if (skipLineBecauseOfBug(buffer, skipFlags)) {
-                    logln("Skipping line " + lineNo + " because of a known bug");
+                    logDebug("Skipping line " + lineNo + " because of a known bug");
                     continue;
                 }
 

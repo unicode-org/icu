@@ -65,7 +65,7 @@ public class ReplaceableTest extends TestFmwk {
                             + shouldProduceStyles
                             + "}!");
         } else {
-            logln("OK: " + transliteratorName + " ( " + original + " ) => " + tr.toString());
+            logDebug("OK: " + transliteratorName + " ( " + original + " ) => " + tr.toString());
         }
 
         if (!tr.hasMetaData() || tr.chars.hasMetaData() || tr.styles.hasMetaData()) {

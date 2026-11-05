@@ -157,7 +157,7 @@ public class RbnfRoundTripTest extends CoreTestFmwk {
             long count = 0;
             long increment = 1;
             for (long i = lowLimit; i <= highLimit; i += increment) {
-                if (count % 1000 == 0) logln(Long.toString(i));
+                if (count % 1000 == 0) logDebug(Long.toString(i));
 
                 if (Math.abs(i) < 5000) increment = 1;
                 else if (Math.abs(i) < 500000) increment = 2737;

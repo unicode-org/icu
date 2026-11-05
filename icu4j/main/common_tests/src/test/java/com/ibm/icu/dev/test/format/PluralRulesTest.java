@@ -76,7 +76,7 @@ public class PluralRulesTest extends CoreTestFmwk {
 
     @Test
     public void testOverUnderflow() {
-        logln(String.valueOf(Long.MAX_VALUE + 1d));
+        logDebug(String.valueOf(Long.MAX_VALUE + 1d));
         for (double[] testDouble :
                 new double[][] {
                     {1E18, 0, 0, 1E18}, // check overflow
@@ -542,7 +542,7 @@ public class PluralRulesTest extends CoreTestFmwk {
             String pattern = parseTestData[i];
             String expected = parseTestData[i + 1];
 
-            logln("pattern[" + i + "] " + pattern);
+            logDebug("pattern[" + i + "] " + pattern);
             try {
                 PluralRules rules = PluralRules.createRules(pattern);
                 String[] targets = getTargetStrings(expected);
@@ -583,12 +583,12 @@ public class PluralRulesTest extends CoreTestFmwk {
             // logln("pattern[" + i + "] " + pattern);
             boolean FAIL_EXPECTED = categoriesAndExpected.equalsIgnoreCase("fail");
             try {
-                logln(pattern);
+                logDebug(pattern);
                 PluralRules rules = PluralRules.createRules(pattern);
                 if (FAIL_EXPECTED) {
                     assertNull("Should fail with 'null' return.", rules);
                 } else {
-                    logln(rules == null ? "null rules" : rules.toString());
+                    logDebug(rules == null ? "null rules" : rules.toString());
                     checkCategoriesAndExpected(pattern, categoriesAndExpected, rules);
                 }
             } catch (Exception e) {
@@ -1072,7 +1072,7 @@ public class PluralRulesTest extends CoreTestFmwk {
         }
         for (ULocale locale : uniqueRuleSet) {
             PluralRules rules = factory.forLocale(locale);
-            logln(
+            logDebug(
                     "\nlocale: "
                             + (locale.equals(ULocale.ROOT) ? "root" : locale.toString())
                             + ", rules: "
@@ -1080,7 +1080,7 @@ public class PluralRulesTest extends CoreTestFmwk {
             Set<String> keywords = rules.getKeywords();
             for (String keyword : keywords) {
                 Collection<Double> list = rules.getSamples(keyword);
-                logln("keyword: " + keyword + ", samples: " + list);
+                logDebug("keyword: " + keyword + ", samples: " + list);
                 // with fractions, the samples can be empty and thus the list null. In that case,
                 // however, there will be
                 // FixedDecimal values.
@@ -1146,7 +1146,7 @@ public class PluralRulesTest extends CoreTestFmwk {
         }
         for (ULocale locale : uniqueRuleSet) {
             PluralRules rules = factory.forLocale(locale);
-            logln(
+            logDebug(
                     "\nlocale: "
                             + (locale.equals(ULocale.ROOT) ? "root" : locale.toString())
                             + ", rules: "
@@ -1154,7 +1154,7 @@ public class PluralRulesTest extends CoreTestFmwk {
             Set<String> keywords = rules.getKeywords();
             for (String keyword : keywords) {
                 Collection<DecimalQuantity> list = rules.getDecimalQuantitySamples(keyword);
-                logln("keyword: " + keyword + ", samples: " + list);
+                logDebug("keyword: " + keyword + ", samples: " + list);
                 // with fractions, the samples can be empty and thus the list null. In that case,
                 // however, there will be
                 // FixedDecimal values.
@@ -1983,7 +1983,7 @@ public class PluralRulesTest extends CoreTestFmwk {
         for (ULocale locale : PluralRules.getAvailableULocales()) {
             PluralRules item = PluralRules.forLocale(locale);
             PluralRules item2 = serializeAndDeserialize(item, size);
-            logln(locale + "\tsize:\t" + size.value);
+            logDebug(locale + "\tsize:\t" + size.value);
             max = Math.max(max, size.value);
             if (!assertEquals(
                     locale + "\tPlural rules before and after serialization", item, item2)) {
@@ -1992,7 +1992,7 @@ public class PluralRulesTest extends CoreTestFmwk {
                 item.equals(item3);
             }
         }
-        logln("max \tsize:\t" + max);
+        logDebug("max \tsize:\t" + max);
     }
 
     public static class FixedDecimalHandler implements SerializableTestUtility.Handler {
@@ -2028,7 +2028,7 @@ public class PluralRulesTest extends CoreTestFmwk {
             objectOutputStream.writeObject(s);
             objectOutputStream.close();
             byte[] contents = byteOut.toByteArray();
-            logln(s.getClass() + ": " + showBytes(contents));
+            logDebug(s.getClass() + ": " + showBytes(contents));
             ByteArrayInputStream byteIn = new ByteArrayInputStream(contents);
             ObjectInputStream objectInputStream = new ObjectInputStream(byteIn);
             Object obj = objectInputStream.readObject();

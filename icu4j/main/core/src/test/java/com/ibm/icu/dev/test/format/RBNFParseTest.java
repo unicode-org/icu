@@ -79,15 +79,15 @@ public class RBNFParseTest extends CoreTestFmwk {
             String[] tests = allrules[j];
             boolean except = tests == exceptrules;
             for (int i = 0; i < tests.length; ++i) {
-                logln("----------");
-                logln("rules: '" + tests[i] + "'");
+                logDebug("----------");
+                logDebug("rules: '" + tests[i] + "'");
                 boolean caughtException = false;
                 try {
                     RuleBasedNumberFormat fmt = new RuleBasedNumberFormat(tests[i], Locale.US);
-                    logln("1.23: " + fmt.format(20));
-                    logln("-123: " + fmt.format(-123));
-                    logln(".123: " + fmt.format(.123));
-                    logln(" 123: " + fmt.format(123));
+                    logDebug("1.23: " + fmt.format(20));
+                    logDebug("-123: " + fmt.format(-123));
+                    logDebug(".123: " + fmt.format(.123));
+                    logDebug(" 123: " + fmt.format(123));
                 } catch (Exception e) {
                     if (!except) {
                         errln("Unexpected exception: " + e.getMessage());
@@ -138,7 +138,7 @@ public class RBNFParseTest extends CoreTestFmwk {
         rbnf_fr.setLenientParseMode(true);
 
         Number n = rbnf_en.parse("1,2 million");
-        logln(n.toString());
+        logDebug(n.toString());
 
         String[][] lists = {
             {"1,2", "one", "un virgule deux"},
@@ -150,15 +150,15 @@ public class RBNFParseTest extends CoreTestFmwk {
         };
 
         Locale.setDefault(Locale.FRANCE);
-        logln("Default locale:" + Locale.getDefault());
-        logln("rbnf_en:" + rbnf_en.getDefaultRuleSetName());
-        logln("rbnf_fr:" + rbnf_en.getDefaultRuleSetName());
+        logDebug("Default locale:" + Locale.getDefault());
+        logDebug("rbnf_en:" + rbnf_en.getDefaultRuleSetName());
+        logDebug("rbnf_fr:" + rbnf_en.getDefaultRuleSetName());
         parseList(rbnf_en, rbnf_fr, lists);
 
         Locale.setDefault(Locale.US);
-        logln("Default locale:" + Locale.getDefault());
-        logln("rbnf_en:" + rbnf_en.getDefaultRuleSetName());
-        logln("rbnf_fr:" + rbnf_en.getDefaultRuleSetName());
+        logDebug("Default locale:" + Locale.getDefault());
+        logDebug("rbnf_en:" + rbnf_en.getDefaultRuleSetName());
+        logDebug("rbnf_fr:" + rbnf_en.getDefaultRuleSetName());
         parseList(rbnf_en, rbnf_fr, lists);
     }
 
@@ -246,7 +246,7 @@ public class RBNFParseTest extends CoreTestFmwk {
         } catch (java.text.ParseException expected) {
             // Success! RECURSION_LIMIT correctly terminated the execution tree before
             // Stack-Overflow.
-            logln(
+            logDebug(
                     "TestICU23144 (Java): Successfully survived 75-depth >>> recursion chain via ParseException.");
         } catch (Exception e) {
             errln("TestICU23144 (Java) failed with unexpected Exception: " + e.getMessage());

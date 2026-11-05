@@ -16,19 +16,16 @@ import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public class DecompressionTest extends CoreTestFmwk {
-    /** Print out a segment of a character array, if in verbose mode */
-    private void log(char[] chars, int start, int count) {
-        log("|");
+    /** Log a segment of a character array, if in debug mode */
+    private void debugLogChars(String prefix, char[] chars, int start, int count) {
+        StringBuilder line = new StringBuilder();
+        line.append(prefix);
+        line.append("|");
         for (int i = start; i < start + count; ++i) {
-            log(String.valueOf(chars[i]));
+            line.append(String.valueOf(chars[i]));
         }
-        log("|");
-    }
-
-    /** Print out a segment of a character array, followed by a newline */
-    private void logln(char[] chars, int start, int count) {
-        log(chars, start, count);
-        logln("");
+        line.append("|");
+        logDebug(line.toString());
     }
 
     /** Decompress the two segments */
@@ -44,17 +41,16 @@ public class DecompressionTest extends CoreTestFmwk {
                 myDecompressor.decompress(
                         segment1, 0, segment1.length, bytesRead, charBuffer, 0, charBuffer.length);
 
-        logln(
+        logDebug(
                 "Segment 1 ("
                         + segment1.length
                         + " bytes) "
                         + "decompressed into "
                         + count1
                         + " chars");
-        logln("Bytes consumed: " + bytesRead[0]);
+        logDebug("Bytes consumed: " + bytesRead[0]);
+        debugLogChars("Got chars: ", charBuffer, 0, count1);
 
-        logln("Got chars: ");
-        logln(charBuffer, 0, count1);
         s.append(charBuffer, 0, count1);
 
         count2 =
@@ -67,23 +63,19 @@ public class DecompressionTest extends CoreTestFmwk {
                         count1,
                         charBuffer.length);
 
-        logln(
+        logDebug(
                 "Segment 2 ("
                         + segment2.length
                         + " bytes) "
                         + "decompressed into "
                         + count2
                         + " chars");
-        logln("Bytes consumed: " + bytesRead[0]);
-
-        logln("Got chars: ");
-        logln(charBuffer, count1, count2);
+        logDebug("Bytes consumed: " + bytesRead[0]);
+        debugLogChars("Got chars: ", charBuffer, count1, count2);
 
         s.append(charBuffer, count1, count2);
 
-        logln("Result: ");
-        logln(charBuffer, 0, count1 + count2);
-        logln("====================");
+        debugLogChars("Result: ", charBuffer, 0, count1 + count2);
 
         return s.toString();
     }

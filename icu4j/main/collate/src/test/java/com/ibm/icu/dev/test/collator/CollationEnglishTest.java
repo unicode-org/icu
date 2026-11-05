@@ -423,7 +423,7 @@ public class CollationEnglishTest extends TestFmwk {
         int expected;
         for (i = 0; i < testAcute.length; i++) {
             for (j = 0; j < testAcute.length; j++) {
-                logln("i = " + i + "; j = " + j);
+                logDebug("i = " + i + "; j = " + j);
                 if (i < j) expected = -1;
                 else if (i == j) expected = 0;
                 else // (i >  j)
@@ -507,7 +507,7 @@ public class CollationEnglishTest extends TestFmwk {
             sResult = CollationTest.appendCompareResult(compareResult, sResult);
             sExpect = CollationTest.appendCompareResult(expectedResult, sExpect);
             if (ok1) {
-                logln(msg1 + source + msg2 + target + msg3 + sResult);
+                logDebug(msg1 + source + msg2 + target + msg3 + sResult);
             } else {
                 errln(msg1 + source + msg2 + target + msg3 + sResult + msg4 + sExpect);
             }
@@ -517,7 +517,7 @@ public class CollationEnglishTest extends TestFmwk {
             msg3 = "\")) returned ";
             sResult = CollationTest.appendCompareResult(keyResult, sResult);
             if (ok2) {
-                logln(msg1 + source + msg2 + target + msg3 + sResult);
+                logDebug(msg1 + source + msg2 + target + msg3 + sResult);
             } else {
                 errln(msg1 + source + msg2 + target + msg3 + sResult + msg4 + sExpect);
                 msg1 = "  ";
@@ -536,7 +536,7 @@ public class CollationEnglishTest extends TestFmwk {
             sResult = CollationTest.appendCompareResult(incResult, sResult);
 
             if (ok3) {
-                logln(msg1 + source + msg2 + target + msg3 + sResult);
+                logDebug(msg1 + source + msg2 + target + msg3 + sResult);
             } else {
                 errln(msg1 + source + msg2 + target + msg3 + sResult + msg4 + sExpect);
             }

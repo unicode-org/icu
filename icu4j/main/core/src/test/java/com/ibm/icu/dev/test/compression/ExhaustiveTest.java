@@ -29,7 +29,7 @@ public class ExhaustiveTest extends CoreTestFmwk {
         byte[] compressed = UnicodeCompressor.compress(s);
         String res = UnicodeDecompressor.decompress(compressed);
         if (logDiffs(s.toCharArray(), s.length(), res.toCharArray(), res.length()) == false) {
-            logln(
+            logDebug(
                     s.length()
                             + " chars ===> "
                             + compressed.length
@@ -37,7 +37,7 @@ public class ExhaustiveTest extends CoreTestFmwk {
                             + res.length()
                             + " chars");
         } else {
-            logln("Compressed:");
+            logDebug("Compressed:");
             printBytes(compressed, compressed.length);
             errln("testSimple did not compress correctly");
         }
@@ -80,9 +80,9 @@ public class ExhaustiveTest extends CoreTestFmwk {
                         myDecompressedSize);
 
         if (logDiffs(chars, len, myDecompressed, myCharCount) == false) {
-            logln(len + " chars ===> " + myByteCount + " bytes ===> " + myCharCount + " chars");
+            logDebug(len + " chars ===> " + myByteCount + " bytes ===> " + myCharCount + " chars");
         } else {
-            logln("Compressed:");
+            logDebug("Compressed:");
             printBytes(myCompressed, myByteCount);
             errln("Iterative test failed");
         }
@@ -166,7 +166,7 @@ public class ExhaustiveTest extends CoreTestFmwk {
                             + len
                             + ")");
         } else {
-            logln("MP: " + len + " chars ===> " + totalBytesWritten + " bytes.");
+            logDebug("MP: " + len + " chars ===> " + totalBytesWritten + " bytes.");
         }
 
         // perform the decompression in a loop
@@ -205,7 +205,7 @@ public class ExhaustiveTest extends CoreTestFmwk {
                             + totalBytesWritten
                             + ")");
         } else {
-            logln("MP: " + totalBytesWritten + " bytes ===> " + totalCharsWritten + " chars.");
+            logDebug("MP: " + totalBytesWritten + " bytes ===> " + totalCharsWritten + " chars.");
         }
 
         if (logDiffs(chars, len, decompressed, totalCharsWritten)) {
@@ -218,11 +218,11 @@ public class ExhaustiveTest extends CoreTestFmwk {
         boolean result = false;
 
         if (s1len != s2len) {
-            logln("====================");
-            logln("Length doesn't match: expected " + s1len + ", got " + s2len);
-            logln("Expected:");
+            logDebug("====================");
+            logDebug("Length doesn't match: expected " + s1len + ", got " + s2len);
+            logDebug("Expected:");
             printChars(s1, s1len);
-            logln("Got:");
+            logDebug("Got:");
             printChars(s2, s2len);
             result = true;
         }
@@ -231,14 +231,14 @@ public class ExhaustiveTest extends CoreTestFmwk {
         for (int i = 0; i < len; ++i) {
             if (s1[i] != s2[i]) {
                 if (result == false) {
-                    logln("====================");
+                    logDebug("====================");
                 }
-                logln("First difference at char " + i);
-                logln("Exp. char: " + Integer.toHexString(s1[i]));
-                logln("Got char : " + Integer.toHexString(s2[i]));
-                logln("Expected:");
+                logDebug("First difference at char " + i);
+                logDebug("Exp. char: " + Integer.toHexString(s1[i]));
+                logDebug("Got char : " + Integer.toHexString(s2[i]));
+                logDebug("Expected:");
                 printChars(s1, s1len);
-                logln("Got:");
+                logDebug("Got:");
                 printChars(s2, s2len);
                 result = true;
                 break;
@@ -392,17 +392,18 @@ public class ExhaustiveTest extends CoreTestFmwk {
     /* Print out an array of characters, with non-printables (for me)
     displayed as hex values */
     private void printChars(char[] chars, int len) {
+        StringBuilder msg = new StringBuilder();
         for (int i = 0; i < len; i++) {
             int c = chars[i];
             if (c < 0x0020 || c >= 0x7f) {
-                log("[0x");
-                log(Integer.toHexString(c));
-                log("]");
+                msg.append("[0x");
+                msg.append(Integer.toHexString(c));
+                msg.append("]");
             } else {
-                log(String.valueOf((char) c));
+                msg.append(String.valueOf((char) c));
             }
         }
-        logln("");
+        logDebug(msg.toString());
     }
 
     private void printBytes(byte[] byteBuffer, int len) {
@@ -412,10 +413,11 @@ public class ExhaustiveTest extends CoreTestFmwk {
         int aByte = 0x00;
 
         if (len > byteBuffer.length) {
-            logln("Warning: printBytes called with length too large. Truncating");
+            logDebug("Warning: printBytes called with length too large. Truncating");
             byteBufferLimit = byteBuffer.length;
         }
 
+        StringBuilder msg = new StringBuilder();
         while (curByteIndex < byteBufferLimit) {
             switch (mode) {
                 case SINGLEBYTEMODE:
@@ -423,18 +425,18 @@ public class ExhaustiveTest extends CoreTestFmwk {
                         aByte = (byteBuffer[curByteIndex++]) & 0xFF;
                         switch (aByte) {
                             default:
-                                log(Integer.toHexString((aByte) & 0xFF) + " ");
+                                msg.append(Integer.toHexString((aByte) & 0xFF) + " ");
                                 break;
                             // quote unicode
                             case SQUOTEU:
-                                log("SQUOTEU ");
+                                msg.append("SQUOTEU ");
                                 if (curByteIndex < byteBufferLimit) {
-                                    log(
+                                    msg.append(
                                             Integer.toHexString((byteBuffer[curByteIndex++]) & 0xFF)
                                                     + " ");
                                 }
                                 if (curByteIndex < byteBufferLimit) {
-                                    log(
+                                    msg.append(
                                             Integer.toHexString((byteBuffer[curByteIndex++]) & 0xFF)
                                                     + " ");
                                 }
@@ -442,7 +444,7 @@ public class ExhaustiveTest extends CoreTestFmwk {
 
                             // switch to Unicode mode
                             case SSWITCHU:
-                                log("SSWITCHU ");
+                                msg.append("SSWITCHU ");
                                 mode = UNICODEMODE;
                                 break;
 
@@ -455,9 +457,9 @@ public class ExhaustiveTest extends CoreTestFmwk {
                             case SQUOTE5:
                             case SQUOTE6:
                             case SQUOTE7:
-                                log("SQUOTE" + (aByte - SQUOTE0) + " ");
+                                msg.append("SQUOTE" + (aByte - SQUOTE0) + " ");
                                 if (curByteIndex < byteBufferLimit) {
-                                    log(
+                                    msg.append(
                                             Integer.toHexString((byteBuffer[curByteIndex++]) & 0xFF)
                                                     + " ");
                                 }
@@ -472,7 +474,7 @@ public class ExhaustiveTest extends CoreTestFmwk {
                             case SSWITCH5:
                             case SSWITCH6:
                             case SSWITCH7:
-                                log("SSWITCH" + (aByte - SSWITCH0) + " ");
+                                msg.append("SSWITCH" + (aByte - SSWITCH0) + " ");
                                 break;
 
                             // handle all define tags
@@ -484,9 +486,9 @@ public class ExhaustiveTest extends CoreTestFmwk {
                             case SDEFINE5:
                             case SDEFINE6:
                             case SDEFINE7:
-                                log("SDEFINE" + (aByte - SDEFINE0) + " ");
+                                msg.append("SDEFINE" + (aByte - SDEFINE0) + " ");
                                 if (curByteIndex < byteBufferLimit) {
-                                    log(
+                                    msg.append(
                                             Integer.toHexString((byteBuffer[curByteIndex++]) & 0xFF)
                                                     + " ");
                                 }
@@ -494,14 +496,14 @@ public class ExhaustiveTest extends CoreTestFmwk {
 
                             // handle define extended tag
                             case SDEFINEX:
-                                log("SDEFINEX ");
+                                msg.append("SDEFINEX ");
                                 if (curByteIndex < byteBufferLimit) {
-                                    log(
+                                    msg.append(
                                             Integer.toHexString((byteBuffer[curByteIndex++]) & 0xFF)
                                                     + " ");
                                 }
                                 if (curByteIndex < byteBufferLimit) {
-                                    log(
+                                    msg.append(
                                             Integer.toHexString((byteBuffer[curByteIndex++]) & 0xFF)
                                                     + " ");
                                 }
@@ -523,9 +525,9 @@ public class ExhaustiveTest extends CoreTestFmwk {
                             case UDEFINE5:
                             case UDEFINE6:
                             case UDEFINE7:
-                                log("UDEFINE" + (aByte - UDEFINE0) + " ");
+                                msg.append("UDEFINE" + (aByte - UDEFINE0) + " ");
                                 if (curByteIndex < byteBufferLimit) {
-                                    log(
+                                    msg.append(
                                             Integer.toHexString((byteBuffer[curByteIndex++]) & 0xFF)
                                                     + " ");
                                 }
@@ -534,14 +536,14 @@ public class ExhaustiveTest extends CoreTestFmwk {
 
                             // handle define extended tag
                             case UDEFINEX:
-                                log("UDEFINEX ");
+                                msg.append("UDEFINEX ");
                                 if (curByteIndex < byteBufferLimit) {
-                                    log(
+                                    msg.append(
                                             Integer.toHexString((byteBuffer[curByteIndex++]) & 0xFF)
                                                     + " ");
                                 }
                                 if (curByteIndex < byteBufferLimit) {
-                                    log(
+                                    msg.append(
                                             Integer.toHexString((byteBuffer[curByteIndex++]) & 0xFF)
                                                     + " ");
                                 }
@@ -556,29 +558,29 @@ public class ExhaustiveTest extends CoreTestFmwk {
                             case USWITCH5:
                             case USWITCH6:
                             case USWITCH7:
-                                log("USWITCH" + (aByte - USWITCH0) + " ");
+                                msg.append("USWITCH" + (aByte - USWITCH0) + " ");
                                 mode = SINGLEBYTEMODE;
                                 break;
 
                             // quote unicode
                             case UQUOTEU:
-                                log("UQUOTEU ");
+                                msg.append("UQUOTEU ");
                                 if (curByteIndex < byteBufferLimit) {
-                                    log(
+                                    msg.append(
                                             Integer.toHexString((byteBuffer[curByteIndex++]) & 0xFF)
                                                     + " ");
                                 }
                                 if (curByteIndex < byteBufferLimit) {
-                                    log(
+                                    msg.append(
                                             Integer.toHexString((byteBuffer[curByteIndex++]) & 0xFF)
                                                     + " ");
                                 }
                                 break;
 
                             default:
-                                log(Integer.toHexString((aByte) & 0xFF) + " ");
+                                msg.append(Integer.toHexString((aByte) & 0xFF) + " ");
                                 if (curByteIndex < byteBufferLimit) {
-                                    log(
+                                    msg.append(
                                             Integer.toHexString((byteBuffer[curByteIndex++]) & 0xFF)
                                                     + " ");
                                 }
@@ -589,6 +591,6 @@ public class ExhaustiveTest extends CoreTestFmwk {
             } // end switch( mode )
         } // end while
 
-        logln("");
+        logDebug(msg.toString());
     }
 }

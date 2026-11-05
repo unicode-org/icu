@@ -3,6 +3,7 @@
 package com.ibm.icu.dev.test.number;
 
 import com.ibm.icu.dev.test.CoreTestFmwk;
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.format.FormattedValueTest;
 import com.ibm.icu.dev.test.serializable.SerializableTestUtility;
 import com.ibm.icu.impl.IllegalIcuArgumentException;
@@ -2628,6 +2629,7 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
     }
 
     public static class UnitInflectionTestCase {
+        private final TestFmwk fmwk;
         public final String unitIdentifier;
         public final String locale;
         public final String unitDisplayCase;
@@ -2635,11 +2637,13 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
         public final String expected;
 
         UnitInflectionTestCase(
+                TestFmwk fmwk,
                 String unitIdentifier,
                 String locale,
                 String unitDisplayCase,
                 double value,
                 String expected) {
+            this.fmwk = fmwk;
             this.unitIdentifier = unitIdentifier;
             this.locale = locale;
             this.unitDisplayCase = unitDisplayCase;
@@ -2659,6 +2663,7 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
                 skel = null;
             }
             assertFormatSingle(
+                    fmwk,
                     "\""
                             + skeleton
                             + "\", locale=\""
@@ -2695,6 +2700,7 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
                 skel = null;
             }
             assertFormatSingle(
+                    fmwk,
                     "\""
                             + skeleton
                             + "\", locale=\""
@@ -2723,12 +2729,15 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
             unf = NumberFormatter.with().unitWidth(UnitWidth.FULL_NAME);
             skeleton = "unit-width-full-name";
             final UnitInflectionTestCase percentCases[] = {
-                new UnitInflectionTestCase("percent", "ru", null, 10, "10 процентов"), // many
-                new UnitInflectionTestCase("percent", "ru", "genitive", 10, "10 процентов"), // many
-                new UnitInflectionTestCase("percent", "ru", null, 33, "33 процента"), // few
-                new UnitInflectionTestCase("percent", "ru", "genitive", 33, "33 процентов"), // few
-                new UnitInflectionTestCase("percent", "ru", null, 1, "1 процент"), // one
-                new UnitInflectionTestCase("percent", "ru", "genitive", 1, "1 процента"), // one
+                new UnitInflectionTestCase(this, "percent", "ru", null, 10, "10 процентов"), // many
+                new UnitInflectionTestCase(
+                        this, "percent", "ru", "genitive", 10, "10 процентов"), // many
+                new UnitInflectionTestCase(this, "percent", "ru", null, 33, "33 процента"), // few
+                new UnitInflectionTestCase(
+                        this, "percent", "ru", "genitive", 33, "33 процентов"), // few
+                new UnitInflectionTestCase(this, "percent", "ru", null, 1, "1 процент"), // one
+                new UnitInflectionTestCase(
+                        this, "percent", "ru", "genitive", 1, "1 процента"), // one
             };
             for (UnitInflectionTestCase t : percentCases) {
                 t.runTest(unf, skeleton);
@@ -2742,18 +2751,18 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
             final UnitInflectionTestCase testCases[] = {
                 // Check up on the basic values that the compound patterns below
                 // are derived from:
-                new UnitInflectionTestCase("meter", "de", null, 1, "1 Meter"),
-                new UnitInflectionTestCase("meter", "de", "genitive", 1, "1 Meters"),
-                new UnitInflectionTestCase("meter", "de", null, 2, "2 Meter"),
-                new UnitInflectionTestCase("meter", "de", "dative", 2, "2 Metern"),
-                new UnitInflectionTestCase("mile", "de", null, 1, "1 Meile"),
-                new UnitInflectionTestCase("mile", "de", null, 2, "2 Meilen"),
-                new UnitInflectionTestCase("day", "de", null, 1, "1 Tag"),
-                new UnitInflectionTestCase("day", "de", "genitive", 1, "1 Tages"),
-                new UnitInflectionTestCase("day", "de", null, 2, "2 Tage"),
-                new UnitInflectionTestCase("day", "de", "dative", 2, "2 Tagen"),
-                new UnitInflectionTestCase("decade", "de", null, 1, "1\u00A0Jahrzehnt"),
-                new UnitInflectionTestCase("decade", "de", null, 2, "2\u00A0Jahrzehnte"),
+                new UnitInflectionTestCase(this, "meter", "de", null, 1, "1 Meter"),
+                new UnitInflectionTestCase(this, "meter", "de", "genitive", 1, "1 Meters"),
+                new UnitInflectionTestCase(this, "meter", "de", null, 2, "2 Meter"),
+                new UnitInflectionTestCase(this, "meter", "de", "dative", 2, "2 Metern"),
+                new UnitInflectionTestCase(this, "mile", "de", null, 1, "1 Meile"),
+                new UnitInflectionTestCase(this, "mile", "de", null, 2, "2 Meilen"),
+                new UnitInflectionTestCase(this, "day", "de", null, 1, "1 Tag"),
+                new UnitInflectionTestCase(this, "day", "de", "genitive", 1, "1 Tages"),
+                new UnitInflectionTestCase(this, "day", "de", null, 2, "2 Tage"),
+                new UnitInflectionTestCase(this, "day", "de", "dative", 2, "2 Tagen"),
+                new UnitInflectionTestCase(this, "decade", "de", null, 1, "1\u00A0Jahrzehnt"),
+                new UnitInflectionTestCase(this, "decade", "de", null, 2, "2\u00A0Jahrzehnte"),
 
                 // Testing de "per" rules:
                 //   <deriveComponent feature="case" structure="per" value0="compound"
@@ -2766,29 +2775,31 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
 
                 // We have a perUnitPattern for "day" in de, so "per" rules are not
                 // applied for these:
-                new UnitInflectionTestCase("meter-per-day", "de", null, 1, "1 Meter pro Tag"),
+                new UnitInflectionTestCase(this, "meter-per-day", "de", null, 1, "1 Meter pro Tag"),
                 new UnitInflectionTestCase(
-                        "meter-per-day", "de", "genitive", 1, "1 Meters pro Tag"),
-                new UnitInflectionTestCase("meter-per-day", "de", null, 2, "2 Meter pro Tag"),
-                new UnitInflectionTestCase("meter-per-day", "de", "dative", 2, "2 Metern pro Tag"),
+                        this, "meter-per-day", "de", "genitive", 1, "1 Meters pro Tag"),
+                new UnitInflectionTestCase(this, "meter-per-day", "de", null, 2, "2 Meter pro Tag"),
+                new UnitInflectionTestCase(
+                        this, "meter-per-day", "de", "dative", 2, "2 Metern pro Tag"),
 
                 // testing code path that falls back to "root" grammaticalFeatures
                 // but does not inflect:
-                new UnitInflectionTestCase("meter-per-day", "af", null, 1, "1 meter per dag"),
-                new UnitInflectionTestCase("meter-per-day", "af", "dative", 1, "1 meter per dag"),
+                new UnitInflectionTestCase(this, "meter-per-day", "af", null, 1, "1 meter per dag"),
+                new UnitInflectionTestCase(
+                        this, "meter-per-day", "af", "dative", 1, "1 meter per dag"),
 
                 // Decade does not have a perUnitPattern at this time (CLDR 39 / ICU
                 // 69), so we can test for the correct form of the per part:
                 // Fragile test cases: these cases will break when whitespace is more
                 // consistently applied.
                 new UnitInflectionTestCase(
-                        "parsec-per-decade", "de", null, 1, "1\u00A0Parsec pro Jahrzehnt"),
+                        this, "parsec-per-decade", "de", null, 1, "1\u00A0Parsec pro Jahrzehnt"),
                 new UnitInflectionTestCase(
-                        "parsec-per-decade", "de", "genitive", 1, "1 Parsec pro Jahrzehnt"),
+                        this, "parsec-per-decade", "de", "genitive", 1, "1 Parsec pro Jahrzehnt"),
                 new UnitInflectionTestCase(
-                        "parsec-per-decade", "de", null, 2, "2\u00A0Parsec pro Jahrzehnt"),
+                        this, "parsec-per-decade", "de", null, 2, "2\u00A0Parsec pro Jahrzehnt"),
                 new UnitInflectionTestCase(
-                        "parsec-per-decade", "de", "dative", 2, "2 Parsec pro Jahrzehnt"),
+                        this, "parsec-per-decade", "de", "dative", 2, "2 Parsec pro Jahrzehnt"),
 
                 // Testing de "times", "power" and "prefix" rules:
                 //
@@ -2810,24 +2821,28 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
                 // value1="compound"/>
 
                 new UnitInflectionTestCase(
+                        this,
                         "square-decimeter-dekameter",
                         "de",
                         null,
                         1,
                         "1 Dekameter⋅Quadratdezimeter"),
                 new UnitInflectionTestCase(
+                        this,
                         "square-decimeter-dekameter",
                         "de",
                         "genitive",
                         1,
                         "1 Dekameter⋅Quadratdezimeter"),
                 new UnitInflectionTestCase(
+                        this,
                         "square-decimeter-dekameter",
                         "de",
                         null,
                         2,
                         "2 Dekameter⋅Quadratdezimeter"),
                 new UnitInflectionTestCase(
+                        this,
                         "square-decimeter-dekameter",
                         "de",
                         "dative",
@@ -2835,9 +2850,9 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
                         "2 Dekameter⋅Quadratdezimeter"),
                 // Feminine "Meile" better demonstrates singular-vs-plural form:
                 new UnitInflectionTestCase(
-                        "cubic-mile-dekamile", "de", null, 1, "1 Dekameile⋅Kubikmeile"),
+                        this, "cubic-mile-dekamile", "de", null, 1, "1 Dekameile⋅Kubikmeile"),
                 new UnitInflectionTestCase(
-                        "cubic-mile-dekamile", "de", null, 2, "2 Dekameile⋅Kubikmeilen"),
+                        this, "cubic-mile-dekamile", "de", null, 2, "2 Dekameile⋅Kubikmeilen"),
 
                 // French handles plural "times" and "power" structures differently:
                 // plural form impacts all "numerator" units (denominator remains
@@ -2847,12 +2862,14 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
                 //   <deriveComponent feature="plural" structure="power" value0="compound"
                 //   value1="compound"/>
                 new UnitInflectionTestCase(
+                        this,
                         "square-decimeter-square-second",
                         "fr",
                         null,
                         1,
                         "1\u00A0décimètre carré-seconde carrée"),
                 new UnitInflectionTestCase(
+                        this,
                         "square-decimeter-square-second",
                         "fr",
                         null,
@@ -2869,25 +2886,47 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
             unf = NumberFormatter.with().unitWidth(UnitWidth.FULL_NAME);
             skeleton = "unit-width-full-name";
             final UnitInflectionTestCase meterPerDayCases[] = {
-                new UnitInflectionTestCase("meter", "de", null, 1, "1 Meter"),
-                new UnitInflectionTestCase("meter", "de", "genitive", 1, "1 Meters"),
-                new UnitInflectionTestCase("meter", "de", "dative", 2, "2 Metern"),
-                new UnitInflectionTestCase("centimeter", "de", null, 1, "1 Zentimeter"),
-                new UnitInflectionTestCase("centimeter", "de", "genitive", 1, "1 Zentimeters"),
-                new UnitInflectionTestCase("centimeter", "de", "dative", 10, "10 Zentimetern"),
+                new UnitInflectionTestCase(this, "meter", "de", null, 1, "1 Meter"),
+                new UnitInflectionTestCase(this, "meter", "de", "genitive", 1, "1 Meters"),
+                new UnitInflectionTestCase(this, "meter", "de", "dative", 2, "2 Metern"),
+                new UnitInflectionTestCase(this, "centimeter", "de", null, 1, "1 Zentimeter"),
+                new UnitInflectionTestCase(
+                        this, "centimeter", "de", "genitive", 1, "1 Zentimeters"),
+                new UnitInflectionTestCase(
+                        this, "centimeter", "de", "dative", 10, "10 Zentimetern"),
                 // TODO(CLDR-14582): check that these inflections are correct, and
                 // whether CLDR needs any rules for them (presumably CLDR spec
                 // should mention it, if it's a consistent rule):
                 new UnitInflectionTestCase(
-                        "meter-and-centimeter", "de", null, 1.01, "1 Meter, 1 Zentimeter"),
+                        this, "meter-and-centimeter", "de", null, 1.01, "1 Meter, 1 Zentimeter"),
                 new UnitInflectionTestCase(
-                        "meter-and-centimeter", "de", "genitive", 1.01, "1 Meters, 1 Zentimeters"),
+                        this,
+                        "meter-and-centimeter",
+                        "de",
+                        "genitive",
+                        1.01,
+                        "1 Meters, 1 Zentimeters"),
                 new UnitInflectionTestCase(
-                        "meter-and-centimeter", "de", "genitive", 1.1, "1 Meters, 10 Zentimeter"),
+                        this,
+                        "meter-and-centimeter",
+                        "de",
+                        "genitive",
+                        1.1,
+                        "1 Meters, 10 Zentimeter"),
                 new UnitInflectionTestCase(
-                        "meter-and-centimeter", "de", "dative", 1.1, "1 Meter, 10 Zentimetern"),
+                        this,
+                        "meter-and-centimeter",
+                        "de",
+                        "dative",
+                        1.1,
+                        "1 Meter, 10 Zentimetern"),
                 new UnitInflectionTestCase(
-                        "meter-and-centimeter", "de", "dative", 2.1, "2 Metern, 10 Zentimetern"),
+                        this,
+                        "meter-and-centimeter",
+                        "de",
+                        "dative",
+                        2.1,
+                        "2 Metern, 10 Zentimetern"),
             };
             for (UnitInflectionTestCase t : meterPerDayCases) {
                 t.runTest(unf, skeleton);
@@ -6785,7 +6824,7 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
                 "Testing default -u-mu- for fr-FR", MeasureUnit.CELSIUS.getIdentifier(), result);
     }
 
-    static void assertFormatDescending(
+    void assertFormatDescending(
             String message,
             String skeleton,
             String conciseSkeleton,
@@ -6797,7 +6836,7 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
         assertFormatDescending(message, skeleton, conciseSkeleton, f, locale, inputs, expected);
     }
 
-    static void assertFormatDescendingBig(
+    void assertFormatDescendingBig(
             String message,
             String skeleton,
             String conciseSkeleton,
@@ -6809,7 +6848,7 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
         assertFormatDescending(message, skeleton, conciseSkeleton, f, locale, inputs, expected);
     }
 
-    static void assertFormatDescending(
+    void assertFormatDescending(
             String message,
             String skeleton,
             String conciseSkeleton,
@@ -6865,7 +6904,20 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
         }
     }
 
+    FormattedNumber assertFormatSingle(
+            String message,
+            String skeleton,
+            String conciseSkeleton,
+            UnlocalizedNumberFormatter f,
+            ULocale locale,
+            Number input,
+            String expected) {
+        return assertFormatSingle(
+                this, message, skeleton, conciseSkeleton, f, locale, input, expected);
+    }
+
     static FormattedNumber assertFormatSingle(
+            TestFmwk fmwk,
             String message,
             String skeleton,
             String conciseSkeleton,
@@ -6877,17 +6929,17 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
         LocalizedNumberFormatter l2 = f.threshold(1L).locale(locale); // all self-regulation
         FormattedNumber result1 = l1.format(input);
         String actual1 = result1.toString();
-        assertEquals(message + ": Unsafe Path: " + input, expected, actual1);
+        fmwk.assertEquals(message + ": Unsafe Path: " + input, expected, actual1);
         String actual2 = l2.format(input).toString();
-        assertEquals(message + ": Safe Path: " + input, expected, actual2);
+        fmwk.assertEquals(message + ": Safe Path: " + input, expected, actual2);
         if (skeleton != null) { // if null, skeleton is declared as undefined.
             // Only compare normalized skeletons: the tests need not provide the normalized forms.
             // Use the normalized form to construct the testing formatter to ensure no loss of info.
             String normalized = NumberFormatter.forSkeleton(skeleton).toSkeleton();
-            assertEquals(message + ": Skeleton:", normalized, f.toSkeleton());
+            fmwk.assertEquals(message + ": Skeleton:", normalized, f.toSkeleton());
             LocalizedNumberFormatter l3 = NumberFormatter.forSkeleton(normalized).locale(locale);
             String actual3 = l3.format(input).toString();
-            assertEquals(message + ": Skeleton Path: " + input, expected, actual3);
+            fmwk.assertEquals(message + ": Skeleton Path: " + input, expected, actual3);
             // Concise skeletons should have same output, and usually round-trip to the normalized
             // skeleton.
             // If the concise skeleton starts with '~', disable the round-trip check.
@@ -6899,20 +6951,20 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
             LocalizedNumberFormatter l4 =
                     NumberFormatter.forSkeleton(conciseSkeleton).locale(locale);
             if (shouldRoundTrip) {
-                assertEquals(message + ": Concise Skeleton:", normalized, l4.toSkeleton());
+                fmwk.assertEquals(message + ": Concise Skeleton:", normalized, l4.toSkeleton());
             }
             String actual4 = l4.format(input).toString();
-            assertEquals(
+            fmwk.assertEquals(
                     message + ": Concise Skeleton Path: '" + normalized + "': " + input,
                     expected,
                     actual4);
         } else {
-            assertUndefinedSkeleton(f);
+            assertUndefinedSkeleton(fmwk, f);
         }
         return result1;
     }
 
-    static void assertFormatSingleMeasure(
+    void assertFormatSingleMeasure(
             String message,
             String skeleton,
             String conciseSkeleton,
@@ -6958,10 +7010,14 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
         }
     }
 
-    static void assertUndefinedSkeleton(UnlocalizedNumberFormatter f) {
+    void assertUndefinedSkeleton(UnlocalizedNumberFormatter f) {
+        assertUndefinedSkeleton(this, f);
+    }
+
+    static void assertUndefinedSkeleton(TestFmwk fmwk, UnlocalizedNumberFormatter f) {
         try {
             String skeleton = f.toSkeleton();
-            fail("Expected toSkeleton to fail, but it passed, producing: " + skeleton);
+            fmwk.fail("Expected toSkeleton to fail, but it passed, producing: " + skeleton);
         } catch (UnsupportedOperationException expected) {
         }
     }

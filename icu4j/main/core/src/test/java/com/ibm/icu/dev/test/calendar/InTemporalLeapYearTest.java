@@ -64,7 +64,7 @@ public class InTemporalLeapYearTest extends CoreTestFmwk {
 
             boolean actualInLeap = cal.inTemporalLeapYear();
             if (hasLeapMonth != actualInLeap) {
-                logln(
+                logDebug(
                         "Gregorian y="
                                 + gc.get(Calendar.YEAR)
                                 + " m="
@@ -131,7 +131,7 @@ public class InTemporalLeapYearTest extends CoreTestFmwk {
             }
             boolean actualInLeap = cal.inTemporalLeapYear();
             if (hasLeapMonth != actualInLeap) {
-                logln(
+                logDebug(
                         "Gregorian y="
                                 + gc.get(Calendar.YEAR)
                                 + " m="
@@ -213,7 +213,7 @@ public class InTemporalLeapYearTest extends CoreTestFmwk {
 
             boolean actualInLeap = cal.inTemporalLeapYear();
             if (hasLeapMonth != actualInLeap) {
-                logln(
+                logDebug(
                         "Gregorian y="
                                 + gc.get(Calendar.YEAR)
                                 + " m="

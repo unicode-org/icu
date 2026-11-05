@@ -135,30 +135,39 @@ public abstract class TestBoilerplate<T> extends TestFmwk {
     }
 
     /* Utilities */
-    public static boolean verifySetsIdentical(
-            AbstractTestLog here, UnicodeSet set1, UnicodeSet set2) {
+    public static boolean verifySetsIdentical(TestFmwk here, UnicodeSet set1, UnicodeSet set2) {
         if (set1.equals(set2)) return true;
-        TestFmwk.errln("Sets differ:");
-        TestFmwk.errln("UnicodeMap - HashMap");
-        TestFmwk.errln(new UnicodeSet(set1).removeAll(set2).toPattern(true));
-        TestFmwk.errln("HashMap - UnicodeMap");
-        TestFmwk.errln(new UnicodeSet(set2).removeAll(set1).toPattern(true));
+
+        StringBuilder msg = new StringBuilder();
+        msg.append("Sets differ:\n")
+                .append("UnicodeMap - HashMap\n")
+                .append(new UnicodeSet(set1).removeAll(set2).toPattern(true))
+                .append('\n')
+                .append("HashMap - UnicodeMap\n")
+                .append(new UnicodeSet(set2).removeAll(set1).toPattern(true))
+                .append('\n');
+        here.logDebug(msg.toString());
         return false;
     }
 
-    public static <T> boolean verifySetsIdentical(
-            AbstractTestLog here, Set<T> values1, Set<T> values2) {
+    public static <T> boolean verifySetsIdentical(TestFmwk here, Set<T> values1, Set<T> values2) {
         if (values1.equals(values2)) return true;
+
         Set<T> temp;
-        TestFmwk.errln("Values differ:");
-        TestFmwk.errln("UnicodeMap - HashMap");
+        StringBuilder msg = new StringBuilder();
+        msg.append("Values differ:\n");
+
+        msg.append("UnicodeMap - HashMap\n");
         temp = new TreeSet<>(values1);
         temp.removeAll(values2);
-        TestFmwk.errln(show(temp));
-        TestFmwk.errln("HashMap - UnicodeMap");
+        msg.append(show(temp));
+
+        msg.append("HashMap - UnicodeMap\n");
         temp = new TreeSet<>(values2);
         temp.removeAll(values1);
-        TestFmwk.errln(show(temp));
+        msg.append(show(temp));
+
+        here.logDebug(msg.toString());
         return false;
     }
 

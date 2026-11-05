@@ -76,13 +76,13 @@ public class CompatibilityTest extends CoreTestFmwk {
         Date c = jdkCal.getTime();
         long b = c.getTime();
         if (a != b) {
-            logln(" " + a + " != " + b);
-            logln("JDK has Gregorian cutover anomaly (1.5?) - skipping this test.");
+            logDebug(" " + a + " != " + b);
+            logDebug("JDK has Gregorian cutover anomaly (1.5?) - skipping this test.");
             return;
         }
 
         Date co = jdkCal.getTime();
-        logln("Change over (Oct 15 1582) = " + co + " (" + co.getTime() + ")");
+        logDebug("Change over (Oct 15 1582) = " + co + " (" + co.getTime() + ")");
         final int ONE_DAY = 24 * 60 * 60 * 1000;
         TimeZone gmt = TimeZone.getTimeZone("GMT");
         GregorianCalendar cal = new GregorianCalendar(gmt);
@@ -115,7 +115,7 @@ public class CompatibilityTest extends CoreTestFmwk {
                     mon = cal.get(Calendar.MONTH) + 1 - Calendar.JANUARY,
                     dom = cal.get(Calendar.DATE),
                     dow = cal.get(Calendar.DAY_OF_WEEK);
-            logln(
+            logDebug(
                     "Changeover "
                             + (i >= 0 ? "+" : "")
                             + i
@@ -253,7 +253,7 @@ public class CompatibilityTest extends CoreTestFmwk {
                                 + dom2;
                 if (delta != 0 || year != year2 || month != month2 || dom != dom2)
                     errln(s + " FAIL");
-                else logln(s);
+                else logDebug(s);
 
                 // Test Julian computation
                 year = DATA[i + 4];
@@ -287,7 +287,7 @@ public class CompatibilityTest extends CoreTestFmwk {
                                 + dom2;
                 if (delta != 0 || year != year2 || month != month2 || dom != dom2)
                     errln(s + " FAIL");
-                else logln(s);
+                else logDebug(s);
             }
 
             java.util.Calendar tempcal = java.util.Calendar.getInstance();
@@ -412,7 +412,7 @@ public class CompatibilityTest extends CoreTestFmwk {
         tempcal.set(1984, 5, 24);
         if (cal.getTime().getTime() != tempcal.getTime().getTime()) {
             errln("FAIL: Calendar.set(3 args) failed");
-            logln(" Got: " + cal.getTime() + "  Expected: " + tempcal.getTime());
+            logDebug(" Got: " + cal.getTime() + "  Expected: " + tempcal.getTime());
         }
 
         cal.clear();
@@ -421,7 +421,7 @@ public class CompatibilityTest extends CoreTestFmwk {
         tempcal.set(1985, 2, 2, 11, 49);
         if (cal.getTime().getTime() != tempcal.getTime().getTime()) {
             errln("FAIL: Calendar.set(5 args) failed");
-            logln(" Got: " + cal.getTime() + "  Expected: " + tempcal.getTime());
+            logDebug(" Got: " + cal.getTime() + "  Expected: " + tempcal.getTime());
         }
 
         cal.clear();
@@ -430,7 +430,7 @@ public class CompatibilityTest extends CoreTestFmwk {
         tempcal.set(1995, 9, 12, 1, 39, 55);
         if (cal.getTime().getTime() != tempcal.getTime().getTime()) {
             errln("FAIL: Calendar.set(6 args) failed");
-            logln(" Got: " + cal.getTime() + "  Expected: " + tempcal.getTime());
+            logDebug(" Got: " + cal.getTime() + "  Expected: " + tempcal.getTime());
         }
 
         cal.getTime();
@@ -573,17 +573,17 @@ public class CompatibilityTest extends CoreTestFmwk {
     public void TestGregorianChange768() {
         boolean b;
         GregorianCalendar c = new GregorianCalendar();
-        logln("With cutoff " + c.getGregorianChange());
-        logln(" isLeapYear(1800) = " + (b = c.isLeapYear(1800)));
-        logln(" (should be false)");
+        logDebug("With cutoff " + c.getGregorianChange());
+        logDebug(" isLeapYear(1800) = " + (b = c.isLeapYear(1800)));
+        logDebug(" (should be false)");
         if (b != false) errln("FAIL");
         java.util.Calendar tempcal = java.util.Calendar.getInstance();
         tempcal.clear();
         tempcal.set(1900, 0, 1);
         c.setGregorianChange(tempcal.getTime()); // Jan 1 1900
-        logln("With cutoff " + c.getGregorianChange());
-        logln(" isLeapYear(1800) = " + (b = c.isLeapYear(1800)));
-        logln(" (should be true)");
+        logDebug("With cutoff " + c.getGregorianChange());
+        logDebug(" isLeapYear(1800) = " + (b = c.isLeapYear(1800)));
+        logDebug(" (should be true)");
         if (b != true) errln("FAIL");
     }
 
@@ -683,7 +683,7 @@ public class CompatibilityTest extends CoreTestFmwk {
         int cm = c.get(Calendar.MONTH);
         int cd = c.get(Calendar.DATE);
         if (cy == year && cm == month && cd == day) {
-            logln("PASS: " + msg + c.getTime());
+            logDebug("PASS: " + msg + c.getTime());
         } else {
             errln(
                     "FAIL: "
@@ -707,7 +707,7 @@ public class CompatibilityTest extends CoreTestFmwk {
     // Called when e expected to be non-null
     void verify765(String msg, IllegalArgumentException e, Calendar c) {
         if (e == null) errln("FAIL: No IllegalArgumentException for " + msg + c.getTime());
-        else logln("PASS: " + msg + "IllegalArgument as expected");
+        else logDebug("PASS: " + msg + "IllegalArgument as expected");
     }
 
     // Test the behavior of GMT vs. local time
@@ -738,7 +738,7 @@ public class CompatibilityTest extends CoreTestFmwk {
         gmtcal.set(Calendar.MILLISECOND, 0);
 
         date = gmtcal.getTime();
-        logln("date = " + date);
+        logDebug("date = " + date);
 
         Calendar cal = Calendar.getInstance();
         cal.setTimeZone(TimeZone.getTimeZone("America/Los_Angels"));
@@ -754,7 +754,7 @@ public class CompatibilityTest extends CoreTestFmwk {
                                 cal.get(Calendar.DAY_OF_WEEK),
                                 cal.get(Calendar.MILLISECOND));
 
-        logln("offset for " + date + "= " + (offset / 1000 / 60 / 60.0) + "hr");
+        logDebug("offset for " + date + "= " + (offset / 1000 / 60 / 60.0) + "hr");
 
         int utc =
                 ((cal.get(Calendar.HOUR_OF_DAY) * 60 + cal.get(Calendar.MINUTE)) * 60
@@ -801,7 +801,7 @@ public class CompatibilityTest extends CoreTestFmwk {
         // ma feb 03 13:11:06 GMT+00:00 1997
         String s2 = cal.getTime().toString();
 
-        if (s.equals(s2)) logln("Pass: " + s + " == " + s2);
+        if (s.equals(s2)) logDebug("Pass: " + s + " == " + s2);
         else errln("FAIL: " + s + " != " + s2);
     }
 
@@ -849,7 +849,7 @@ public class CompatibilityTest extends CoreTestFmwk {
                             + (c.get(Calendar.MONTH) + 1)
                             + "/"
                             + c.get(Calendar.DATE));
-        } else logln("Confirmed: " + y + "/" + (m + 1) + "/" + d);
+        } else logDebug("Confirmed: " + y + "/" + (m + 1) + "/" + d);
     }
 
     // Verify that add works across ZONE_OFFSET and DST_OFFSET transitions
@@ -952,8 +952,8 @@ public class CompatibilityTest extends CoreTestFmwk {
             // At this point the object thinks UTC is NOT set, but fields are set.
             // The following line will result in IllegalArgumentException because
             // it thinks the YEAR is set and it is NOT.
-            if (g2.equals(g)) logln("Same");
-            else logln("Different");
+            if (g2.equals(g)) logDebug("Same");
+            else logDebug("Different");
         } catch (IllegalArgumentException e) {
             errln("Unexpected exception seen: " + e);
         }
@@ -1022,11 +1022,11 @@ public class CompatibilityTest extends CoreTestFmwk {
         {
             Calendar calendar = new GregorianCalendar();
             calendar.set(1993, Calendar.JANUARY, 4);
-            logln("1A) " + value(calendar));
+            logDebug("1A) " + value(calendar));
             calendar.add(Calendar.DATE, 1);
             String v = value(calendar);
-            logln("1B) " + v);
-            logln("--) 1993/0/5");
+            logDebug("1B) " + v);
+            logDebug("--) 1993/0/5");
             if (!v.equals(EXPECTED_0610)) errln("Expected " + EXPECTED_0610 + "; saw " + v);
         }
 
@@ -1038,11 +1038,11 @@ public class CompatibilityTest extends CoreTestFmwk {
 
         {
             Calendar calendar = new GregorianCalendar(1993, Calendar.JANUARY, 4);
-            logln("2A) " + value(calendar));
+            logDebug("2A) " + value(calendar));
             calendar.add(Calendar.DATE, 1);
             String v = value(calendar);
-            logln("2B) " + v);
-            logln("--) 1993/0/5");
+            logDebug("2B) " + v);
+            logDebug("--) 1993/0/5");
             if (!v.equals(EXPECTED_0610)) errln("Expected " + EXPECTED_0610 + "; saw " + v);
         }
 
@@ -1055,12 +1055,12 @@ public class CompatibilityTest extends CoreTestFmwk {
 
         {
             Calendar calendar = new GregorianCalendar(1993, Calendar.JANUARY, 4);
-            logln("3A) " + value(calendar));
+            logDebug("3A) " + value(calendar));
             calendar.getTime();
             calendar.add(Calendar.DATE, 1);
             String v = value(calendar);
-            logln("3B) " + v);
-            logln("--) 1993/0/5");
+            logDebug("3B) " + v);
+            logDebug("--) 1993/0/5");
             if (!v.equals(EXPECTED_0610)) errln("Expected " + EXPECTED_0610 + "; saw " + v);
         }
     }
@@ -1117,7 +1117,7 @@ public class CompatibilityTest extends CoreTestFmwk {
         Calendar c = Calendar.getInstance();
         Date d = new Date(-z.getRawOffset());
         if (z.inDaylightTime(d)) {
-            logln("Warning: Skipping test because " + d + " is in DST.");
+            logDebug("Warning: Skipping test because " + d + " is in DST.");
         } else {
             c.setTime(d);
             c.setMinimalDaysInFirstWeek(1);
@@ -1166,7 +1166,7 @@ public class CompatibilityTest extends CoreTestFmwk {
         int DOW, newDOW = initialDOW;
         do {
             DOW = newDOW;
-            logln("DOW = " + DOW + "  " + cur.getTime());
+            logDebug("DOW = " + DOW + "  " + cur.getTime());
 
             cur.add(Calendar.DAY_OF_WEEK, delta);
             newDOW = cur.get(Calendar.DAY_OF_WEEK);
@@ -1319,45 +1319,45 @@ public class CompatibilityTest extends CoreTestFmwk {
         GregorianCalendar cal = new GregorianCalendar();
         final int MILLIS_IN_DAY = 1000 * 60 * 60 * 24;
 
-        logln("julian day value jumps at changeover");
+        logDebug("julian day value jumps at changeover");
         for (int day = 12; day < 18; ++day) {
             cal.set(1582, 9, day);
-            logln("[" + day + "] " + (cal.getTimeInMillis() / MILLIS_IN_DAY));
+            logDebug("[" + day + "] " + (cal.getTimeInMillis() / MILLIS_IN_DAY));
         }
 
-        logln("\njulian days not accurate before 1 March 0004");
+        logDebug("\njulian days not accurate before 1 March 0004");
         for (int day = 1; day < 3; ++day) {
             cal.set(1, 0, day);
-            logln("[" + day + "] " + (cal.getTimeInMillis() / MILLIS_IN_DAY));
+            logDebug("[" + day + "] " + (cal.getTimeInMillis() / MILLIS_IN_DAY));
         }
 
         DateFormat fmt = cal.getDateTimeFormat(DateFormat.LONG, 0, Locale.getDefault());
 
-        logln("\nswitchover in 1582");
+        logDebug("\nswitchover in 1582");
         cal.set(1582, 9, 4);
-        logln(fmt.format(cal));
+        logDebug(fmt.format(cal));
         cal.add(Calendar.DATE, 1);
-        logln(fmt.format(cal));
+        logDebug(fmt.format(cal));
         cal.set(Calendar.JULIAN_DAY, 1721426);
-        logln(fmt.format(cal));
+        logDebug(fmt.format(cal));
 
-        logln("\nlate switchover - proleptic Julian");
+        logDebug("\nlate switchover - proleptic Julian");
         cal.set(1582, 9, 4);
         cal.setGregorianChange(new Date(Long.MAX_VALUE));
-        logln(fmt.format(cal));
+        logDebug(fmt.format(cal));
         cal.add(Calendar.DATE, 1);
-        logln(fmt.format(cal));
+        logDebug(fmt.format(cal));
         cal.set(Calendar.JULIAN_DAY, 1721426);
-        logln(fmt.format(cal));
+        logDebug(fmt.format(cal));
 
-        logln("\nearly switchover - proleptic Gregorian");
+        logDebug("\nearly switchover - proleptic Gregorian");
         cal.set(1582, 9, 4);
         cal.setGregorianChange(new Date(Long.MIN_VALUE));
-        logln(fmt.format(cal));
+        logDebug(fmt.format(cal));
         cal.add(Calendar.DATE, 1);
-        logln(fmt.format(cal));
+        logDebug(fmt.format(cal));
         cal.set(Calendar.JULIAN_DAY, 1721426);
-        logln(fmt.format(cal));
+        logDebug(fmt.format(cal));
     }
 }
 

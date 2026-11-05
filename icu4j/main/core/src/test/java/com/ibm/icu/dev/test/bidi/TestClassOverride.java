@@ -233,7 +233,7 @@ public class TestClassOverride extends BidiFmwk {
     public void testClassOverride() {
         Bidi bidi;
 
-        logln("\nEntering TestClassOverride\n");
+        logDebug("\nEntering TestClassOverride\n");
 
         bidi = new Bidi();
         verifyClassifier(bidi);
@@ -250,6 +250,6 @@ public class TestClassOverride extends BidiFmwk {
         String out = bidi.writeReordered(Bidi.DO_MIRRORING);
         assertEquals("Actual and expected output mismatch", textOut, out);
 
-        logln("\nExiting TestClassOverride\n");
+        logDebug("\nExiting TestClassOverride\n");
     }
 }

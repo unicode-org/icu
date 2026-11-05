@@ -37,24 +37,24 @@ public class TestInverse extends BidiFmwk {
         Bidi bidi;
         int i;
 
-        logln("\nEntering TestInverse\n");
+        logDebug("\nEntering TestInverse\n");
         bidi = new Bidi();
-        log("inverse Bidi: testInverse(L) with " + testCases.length + " test cases ---\n");
+        logDebug("inverse Bidi: testInverse(L) with " + testCases.length + " test cases ---");
         for (i = 0; i < testCases.length; ++i) {
-            logln("Testing case " + i);
+            logDebug("Testing case " + i);
             _testInverseBidi(bidi, testCases[i], Bidi.DIRECTION_LEFT_TO_RIGHT);
         }
 
-        log("inverse Bidi: testInverse(R) with " + testCases.length + " test cases ---\n");
+        logDebug("inverse Bidi: testInverse(R) with " + testCases.length + " test cases ---");
         for (i = 0; i < testCases.length; ++i) {
-            logln("Testing case " + i);
+            logDebug("Testing case " + i);
             _testInverseBidi(bidi, testCases[i], Bidi.DIRECTION_RIGHT_TO_LEFT);
         }
 
         _testManyInverseBidi(bidi, Bidi.DIRECTION_LEFT_TO_RIGHT);
         _testManyInverseBidi(bidi, Bidi.DIRECTION_RIGHT_TO_LEFT);
 
-        logln(
+        logDebug(
                 "inverse Bidi: roundtrips: "
                         + countRoundtrips
                         + "   non-roundtrips: "
@@ -66,7 +66,7 @@ public class TestInverse extends BidiFmwk {
 
         _testMisc();
 
-        logln("\nExiting TestInverse\n");
+        logDebug("Exiting TestInverse");
     }
 
     private static final char[][] repeatSegments = {
@@ -83,10 +83,10 @@ public class TestInverse extends BidiFmwk {
         char[] text = {0, 0, 0x20, 0, 0, 0x20, 0, 0};
         int i, j, k;
 
-        log(
+        logDebug(
                 "inverse Bidi: testManyInverseBiDi("
                         + (direction == Bidi.DIRECTION_LEFT_TO_RIGHT ? 'L' : 'R')
-                        + ") - test permutations of text snippets ---\n");
+                        + ") - test permutations of text snippets ---");
         for (i = 0; i < COUNT_REPEAT_SEGMENTS; ++i) {
             text[0] = repeatSegments[i][0];
             text[1] = repeatSegments[i][1];
@@ -97,7 +97,7 @@ public class TestInverse extends BidiFmwk {
                     text[6] = repeatSegments[k][0];
                     text[7] = repeatSegments[k][1];
 
-                    log("inverse Bidi: testManyInverseBiDi()[" + i + " " + j + " " + k + "]\n");
+                    logDebug("inverse Bidi: testManyInverseBiDi()[" + i + " " + j + " " + k + "]");
                     _testInverseBidi(bidi, new String(text), direction);
                 }
             }
@@ -106,50 +106,51 @@ public class TestInverse extends BidiFmwk {
 
     private void _testInverseBidi(Bidi bidi, String src, int direction) {
         String visualLTR, logicalDest, visualDest;
+        StringBuilder msg = new StringBuilder();
         try {
             if (direction == Bidi.DIRECTION_LEFT_TO_RIGHT) {
-                log("inverse Bidi: testInverse(L)\n");
+                logDebug("inverse Bidi: testInverse(L)");
 
                 /* convert visual to logical */
                 bidi.setInverse(true);
                 if (!bidi.isInverse()) {
-                    err("Error while doing setInverse(true)\n");
+                    errln("Error while doing setInverse(true)");
                 }
                 bidi.setPara(src, Bidi.LTR, null);
                 if (!Arrays.equals(src.toCharArray(), bidi.getText())) {
-                    err("Wrong value returned by getText\n");
+                    errln("Wrong value returned by getText");
                 }
                 if (!src.equals(bidi.getTextAsString())) {
-                    err("Wrong value returned by getTextAsString\n");
+                    errln("Wrong value returned by getTextAsString");
                 }
                 logicalDest = bidi.writeReordered(Bidi.DO_MIRRORING | Bidi.INSERT_LRM_FOR_NUMERIC);
-                log("  v ");
-                printUnicode(src.toCharArray(), bidi.getLevels());
-                log("\n");
+                msg.append("  v ");
+                printUnicode(src.toCharArray(), bidi.getLevels(), msg);
+                logDebug(msg.toString());
 
                 /* convert back to visual LTR */
                 bidi.setInverse(false);
                 if (bidi.isInverse()) {
-                    err("Error while doing setInverse(false)\n");
+                    errln("Error while doing setInverse(false)");
                 }
                 bidi.setPara(logicalDest, Bidi.LTR, null);
                 visualDest = bidi.writeReordered(Bidi.DO_MIRRORING | Bidi.REMOVE_BIDI_CONTROLS);
             } else {
-                logln("inverse Bidi: testInverse(R)\n");
+                logDebug("inverse Bidi: testInverse(R)\n");
 
                 /* reverse visual from RTL to LTR */
                 visualLTR = Bidi.writeReverse(src, 0);
-                log("  vr");
-                printUnicode(src.toCharArray(), null);
-                log("\n");
+                msg.append("  vr");
+                printUnicode(src.toCharArray(), null, msg);
+                logDebug(msg.toString());
 
                 /* convert visual RTL to logical */
                 bidi.setInverse(true);
                 bidi.setPara(visualLTR, Bidi.LTR, null);
                 logicalDest = bidi.writeReordered(Bidi.DO_MIRRORING | Bidi.INSERT_LRM_FOR_NUMERIC);
-                log("  vl");
-                printUnicode(visualLTR.toCharArray(), bidi.getLevels());
-                log("\n");
+                msg.append("  vl");
+                printUnicode(visualLTR.toCharArray(), bidi.getLevels(), msg);
+                logDebug(msg.toString());
 
                 /* convert back to visual RTL */
                 bidi.setInverse(false);
@@ -160,12 +161,14 @@ public class TestInverse extends BidiFmwk {
                                         | Bidi.REMOVE_BIDI_CONTROLS
                                         | Bidi.OUTPUT_REVERSE);
             }
-            log("  l ");
-            printUnicode(logicalDest.toCharArray(), bidi.getLevels());
-            log("\n");
-            log("  v ");
-            printUnicode(visualDest.toCharArray(), null);
-            log("\n");
+            msg.setLength(0);
+            msg.append("  l ");
+            printUnicode(logicalDest.toCharArray(), bidi.getLevels(), msg);
+            logDebug(msg.toString());
+            msg.setLength(0);
+            msg.append("  v ");
+            printUnicode(visualDest.toCharArray(), null, msg);
+            logDebug(msg.toString());
         } catch (Exception e) {
             errln("\ninverse Bidi: *** failed");
             errln("   error message: " + e.getMessage());
@@ -176,10 +179,10 @@ public class TestInverse extends BidiFmwk {
         /* check and print results */
         if (src.equals(visualDest)) {
             ++countRoundtrips;
-            log(" + roundtripped\n");
+            logDebug(" + roundtripped");
         } else {
             ++countNonRoundtrips;
-            log(" * did not roundtrip\n");
+            logDebug(" * did not roundtrip");
         }
     }
 
@@ -228,18 +231,18 @@ public class TestInverse extends BidiFmwk {
                 null);
     }
 
-    private void printUnicode(char[] chars, byte[] levels) {
+    private void printUnicode(char[] chars, byte[] levels, StringBuilder buf) {
         int i;
 
-        log("{ ");
+        buf.append("{ ");
         for (i = 0; i < chars.length; ++i) {
-            log("0x" + Utility.hex(chars[i]));
+            buf.append("0x" + Utility.hex(chars[i]));
             if (levels != null) {
-                log("." + levels[i]);
+                buf.append("." + levels[i]);
             }
-            log("   ");
+            buf.append("   ");
         }
-        log(" }");
+        buf.append(" }");
     }
 
     private void _testManyAddedPoints() {

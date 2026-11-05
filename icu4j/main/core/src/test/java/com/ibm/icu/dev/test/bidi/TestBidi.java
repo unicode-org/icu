@@ -29,14 +29,14 @@ public class TestBidi extends BidiFmwk {
         Bidi bidi;
         Bidi bidiLine;
 
-        logln("\nEntering TestBidi");
+        logDebug("\nEntering TestBidi");
         bidi = new Bidi(MAXLEN, 0);
         bidiLine = new Bidi();
 
         doTests(bidi, bidiLine, false);
         doTests(bidi, bidiLine, true);
         doMisc();
-        logln("\nExiting TestBidi");
+        logDebug("\nExiting TestBidi");
     }
 
     private void doTests(Bidi bidi, Bidi bidiLine, boolean countRunsFirst) {
@@ -52,7 +52,7 @@ public class TestBidi extends BidiFmwk {
             paraLevel = test.paraLevel;
             try {
                 bidi.setPara(string, paraLevel, null);
-                logln(
+                logDebug(
                         "Bidi.setPara(tests["
                                 + testNumber
                                 + "] OK, direction "
@@ -74,7 +74,7 @@ public class TestBidi extends BidiFmwk {
             } else {
                 try {
                     bidiLine = bidi.setLine(lineStart, test.lineLimit);
-                    logln(
+                    logDebug(
                             "Bidi.setLine("
                                     + lineStart
                                     + ", "
@@ -99,7 +99,7 @@ public class TestBidi extends BidiFmwk {
                 /* do it again using createLineBidi instead of setLine */
                 try {
                     bidiLine = bidi.createLineBidi(lineStart, test.lineLimit);
-                    logln(
+                    logDebug(
                             "Bidi.createLineBidi("
                                     + lineStart
                                     + ", "
@@ -134,20 +134,20 @@ public class TestBidi extends BidiFmwk {
         byte level, level2;
 
         if (countRunsFirst) {
-            logln("Calling Bidi.countRuns() first.");
+            logDebug("Calling Bidi.countRuns() first.");
             try {
                 runCount = bidi.countRuns();
             } catch (IllegalStateException e) {
                 errln("Bidi.countRuns(test[" + testNumber + "]) failed");
             }
         } else {
-            logln("Calling Bidi.getLogicalMap() first.");
+            logDebug("Calling Bidi.getLogicalMap() first.");
         }
 
         _testReordering(bidi, testNumber);
 
         for (i = 0; i < len; ++i) {
-            logln(
+            logDebug(
                     i
                             + "  "
                             + bidi.getLevelAt(i)
@@ -158,22 +158,26 @@ public class TestBidi extends BidiFmwk {
                             + bidi.getVisualIndex(i));
         }
 
-        log("\n-----levels:");
-        for (i = 0; i < len; ++i) {
-            if (i > 0) {
-                log(",");
-            }
-            log(" " + bidi.getLevelAt(i));
-        }
+        StringBuilder msg = new StringBuilder();
 
-        log("\n--reordered:");
+        msg.append("-----levels:");
         for (i = 0; i < len; ++i) {
             if (i > 0) {
-                log(",");
+                msg.append(",");
             }
-            log(" " + bidi.getVisualIndex(i));
+            msg.append(" " + bidi.getLevelAt(i));
         }
-        log("\n");
+        logDebug(msg.toString());
+
+        msg.setLength(0);
+        msg.append("--reordered:");
+        for (i = 0; i < len; ++i) {
+            if (i > 0) {
+                msg.append(",");
+            }
+            msg.append(" " + bidi.getVisualIndex(i));
+        }
+        logDebug(msg.toString());
 
         assertEquals(
                 "\nFailure in Bidi.getDirection(test[" + testNumber + "])",
@@ -239,8 +243,6 @@ public class TestBidi extends BidiFmwk {
                             + "]): wrong number of runs compared to Bidi.countRuns() = "
                             + bidi.countRuns());
         }
-
-        log("\n\n");
     }
 
     private void _testReordering(Bidi bidi, int testNumber) {
@@ -295,7 +297,9 @@ public class TestBidi extends BidiFmwk {
             runCount = 0;
         }
 
-        logln("\n---- " + runCount + " runs");
+        StringBuilder msg = new StringBuilder();
+
+        logDebug("---- " + runCount + " runs");
         visualIndex = 0;
         BidiRun run;
         for (i = 0; i < runCount; ++i) {
@@ -307,8 +311,11 @@ public class TestBidi extends BidiFmwk {
             odd = run.isOddRun();
             logicalStart = run.getStart();
             runLength = run.getLength();
-            log("(" + (run.isOddRun() ? "R" : "L"));
-            log(" @" + run.getStart() + '[' + run.getLength() + "])\n");
+
+            msg.setLength(0);
+            msg.append("(" + (run.isOddRun() ? "R" : "L"))
+                    .append(" @" + run.getStart() + '[' + run.getLength() + "])");
+            logDebug(msg.toString());
             if (!odd) {
                 do {
                     /* LTR */
@@ -322,39 +329,51 @@ public class TestBidi extends BidiFmwk {
                 } while (--runLength > 0);
             }
         }
-        log("\n");
 
         /* print all the maps */
-        logln("logical maps:");
+        logDebug("logical maps:");
+        msg.setLength(0);
         for (i = 0; i < length; ++i) {
-            log(logicalMap1[i] + " ");
+            msg.append(logicalMap1[i] + " ");
         }
-        log("\n");
-        for (i = 0; i < length; ++i) {
-            log(logicalMap2[i] + " ");
-        }
-        log("\n");
-        for (i = 0; i < length; ++i) {
-            log(logicalMap3[i] + " ");
-        }
+        logDebug(msg.toString());
 
-        log("\nvisual maps:\n");
-        for (i = 0; i < destLength; ++i) {
-            log(visualMap1[i] + " ");
-        }
-        log("\n");
-        for (i = 0; i < destLength; ++i) {
-            log(visualMap2[i] + " ");
-        }
-        log("\n");
+        msg.setLength(0);
         for (i = 0; i < length; ++i) {
-            log(visualMap3[i] + " ");
+            msg.append(logicalMap2[i] + " ");
         }
-        log("\n");
+        logDebug(msg.toString());
+
+        msg.setLength(0);
         for (i = 0; i < length; ++i) {
-            log(visualMap4[i] + " ");
+            msg.append(logicalMap3[i] + " ");
         }
-        log("\n");
+        logDebug(msg.toString());
+
+        logDebug("visual maps:");
+        msg.setLength(0);
+        for (i = 0; i < destLength; ++i) {
+            msg.append(visualMap1[i] + " ");
+        }
+        logDebug(msg.toString());
+
+        msg.setLength(0);
+        for (i = 0; i < destLength; ++i) {
+            msg.append(visualMap2[i] + " ");
+        }
+        logDebug(msg.toString());
+
+        msg.setLength(0);
+        for (i = 0; i < length; ++i) {
+            msg.append(visualMap3[i] + " ");
+        }
+        logDebug(msg.toString());
+
+        msg.setLength(0);
+        for (i = 0; i < length; ++i) {
+            msg.append(visualMap4[i] + " ");
+        }
+        logDebug(msg.toString());
 
         /* check that the indexes are the same between these and Bidi.getLogical/VisualIndex() */
         for (i = 0; i < length; ++i) {

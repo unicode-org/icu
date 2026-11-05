@@ -195,12 +195,12 @@ public class UtilityTest extends CoreTestFmwk {
         String[] array = new String[] {"a", "b", "c", "{de}"};
         List<String> list = Arrays.asList(array);
         Set<String> aset = new HashSet<>(list);
-        logln(" *** The source set's size is: " + aset.size());
+        logDebug(" *** The source set's size is: " + aset.size());
         // The size reads 4
         UnicodeSet set = new UnicodeSet();
         set.clear();
         set.addAll(aset);
-        logln(" *** After addAll, the UnicodeSet size is: " + set.size());
+        logDebug(" *** After addAll, the UnicodeSet size is: " + set.size());
         // The size should also read 4, but 0 is seen instead
 
     }
@@ -212,7 +212,7 @@ public class UtilityTest extends CoreTestFmwk {
             errln("FAIL: Assert.assrt(false)");
         } catch (IllegalStateException e) {
             if (e.getMessage().equals("assert failed")) {
-                logln("Assert.assrt(false) works");
+                logDebug("Assert.assrt(false) works");
             } else {
                 errln("FAIL: Assert.assrt(false) returned " + e.getMessage());
             }
@@ -222,7 +222,7 @@ public class UtilityTest extends CoreTestFmwk {
             errln("FAIL: Assert.assrt(false)");
         } catch (IllegalStateException e) {
             if (e.getMessage().equals("assert 'Assert message' failed")) {
-                logln("Assert.assrt(false) works");
+                logDebug("Assert.assrt(false) works");
             } else {
                 errln("FAIL: Assert.assrt(false) returned " + e.getMessage());
             }
@@ -232,7 +232,7 @@ public class UtilityTest extends CoreTestFmwk {
             errln("FAIL: Assert.fail");
         } catch (IllegalStateException e) {
             if (e.getMessage().equals("failure 'Assert message'")) {
-                logln("Assert.fail works");
+                logDebug("Assert.fail works");
             } else {
                 errln("FAIL: Assert.fail returned " + e.getMessage());
             }
@@ -241,7 +241,7 @@ public class UtilityTest extends CoreTestFmwk {
             Assert.fail(new InvalidFormatException());
             errln("FAIL: Assert.fail with an exception");
         } catch (IllegalStateException e) {
-            logln("Assert.fail works");
+            logDebug("Assert.fail works");
         }
     }
 

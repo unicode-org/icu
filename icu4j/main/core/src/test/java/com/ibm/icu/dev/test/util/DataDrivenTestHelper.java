@@ -2,7 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.dev.test.util;
 
-import com.ibm.icu.dev.test.AbstractTestLog;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.locale.XCldrStub.FileUtilities;
 import com.ibm.icu.impl.locale.XCldrStub.Splitter;
@@ -78,7 +77,7 @@ public abstract class DataDrivenTestHelper {
             String comment = comments.get(i);
             if (arguments.isEmpty()) {
                 if (!comment.isEmpty()) {
-                    AbstractTestLog.logln(comment);
+                    framework.logDebug(comment);
                 }
                 continue;
             } else if (arguments.equals(DEBUG_LINE)) {
@@ -95,7 +94,7 @@ public abstract class DataDrivenTestHelper {
                 handle(i, breakpoint, comment, arguments);
             } catch (Exception e) {
                 e.printStackTrace();
-                AbstractTestLog.errln(
+                framework.errln(
                         "Illegal data test file entry (" + i + "): " + arguments + " # " + comment);
             }
             breakpoint = false;
@@ -137,7 +136,7 @@ public abstract class DataDrivenTestHelper {
                 }
                 List<String> arguments = SEMICOLON.splitToList(line);
                 if (arguments.size() < minArgumentCount || arguments.size() > maxArgumentCount) {
-                    AbstractTestLog.errln("Malformed data line:" + line + comment);
+                    framework.errln("Malformed data line:" + line + comment);
                     continue;
                 }
                 addLine(arguments, commentBase);
@@ -151,7 +150,7 @@ public abstract class DataDrivenTestHelper {
     }
 
     protected boolean assertEquals(String message, Object expected, Object actual) {
-        return TestFmwk.handleAssert(
+        return framework.handleAssert(
                 Objects.equals(expected, actual),
                 message,
                 stringFor(expected),

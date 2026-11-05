@@ -150,7 +150,7 @@ public class TestSelection extends TestFmwk {
             errln(
                     "IllegalArgumentException should have been thrown by CharsetSelector when given a bogus mappingType, but it wasn't.");
         } catch (IllegalArgumentException e) {
-            logln(
+            logDebug(
                     "IllegalArgumentException was thrown by CharsetSelector with a bogus mappingType.");
         }
     }

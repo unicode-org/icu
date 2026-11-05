@@ -355,7 +355,7 @@ public class AlphabeticIndexTest extends TestFmwk {
             final String expectedLabel = test[2];
             alphabeticIndex.addRecord(probe, 1);
             List<String> labels = alphabeticIndex.getBucketLabels();
-            logln(labels.toString());
+            logDebug(labels.toString());
             Bucket<Integer> bucket = find(alphabeticIndex, probe);
             assertEquals(
                     "locale " + test[0] + " name=" + probe + " in bucket",
@@ -535,7 +535,7 @@ public class AlphabeticIndexTest extends TestFmwk {
                 }
                 List<Bucket<Double>> buckets = new ArrayList<>(alphabeticIndex.getBucketCount());
                 alphabeticIndex.iterator().forEachRemaining(buckets::add);
-                logln(buckets.toString());
+                logDebug(buckets.toString());
             }
             assertEquals(LabelType.OVERFLOW + "\t" + printList, 1, counter.get(LabelType.OVERFLOW));
         }
@@ -567,7 +567,7 @@ public class AlphabeticIndexTest extends TestFmwk {
         List<String> labels = index.getBucketLabels();
         ImmutableIndex<Integer> immIndex = index.buildImmutableIndex();
 
-        logln(
+        logDebug(
                 desiredLocale
                         + "\t"
                         + desiredLocale.getDisplayName(ULocale.ENGLISH)
@@ -585,7 +585,7 @@ public class AlphabeticIndexTest extends TestFmwk {
                 showLabelAtTop(UI, bucket.getLabel());
             }
         }
-        logln(UI.toString());
+        logDebug(UI.toString());
 
         // Show the buckets with their contents, skipping empty buckets
         int bucketIndex = 0;
@@ -633,7 +633,7 @@ public class AlphabeticIndexTest extends TestFmwk {
                 for (AlphabeticIndex.Record<Integer> item : bucket) {
                     showIndexedItem(UI, item.getName(), item.getData());
                 }
-                logln(UI.toString());
+                logDebug(UI.toString());
             }
             ++bucketIndex;
         }
@@ -650,7 +650,7 @@ public class AlphabeticIndexTest extends TestFmwk {
     }
 
     public <T> void showIndex(AlphabeticIndex<T> index, boolean showEmpty) {
-        logln("Actual");
+        logDebug("Actual");
         StringBuilder UI = new StringBuilder();
         for (Bucket<T> bucket : index) {
             if (showEmpty || bucket.size() != 0) {
@@ -658,7 +658,7 @@ public class AlphabeticIndexTest extends TestFmwk {
                 for (Record<T> item : bucket) {
                     showIndexedItem(UI, item.getName(), item.getData());
                 }
-                logln(UI.toString());
+                logDebug(UI.toString());
             }
         }
     }
@@ -672,7 +672,7 @@ public class AlphabeticIndexTest extends TestFmwk {
             List<String> myBucketLabels,
             ArrayList<Set<R4<RawCollationKey, String, Integer, Double>>> myBucketContents,
             boolean showEmpty) {
-        logln("Alternative");
+        logDebug("Alternative");
         StringBuilder UI = new StringBuilder();
 
         for (int i = 0; i < myBucketLabels.size(); ++i) {
@@ -688,7 +688,7 @@ public class AlphabeticIndexTest extends TestFmwk {
                         .append(ARROW)
                         .append(item.get3().toString());
             }
-            logln(UI.toString());
+            logDebug(UI.toString());
         }
     }
 
@@ -784,13 +784,13 @@ public class AlphabeticIndexTest extends TestFmwk {
                 if (mainCharString.length() > 500) {
                     mainCharString = mainCharString.substring(0, 500) + "...";
                 }
-                logln(
+                logDebug(
                         mainChars.size()
                                 + "\t"
                                 + locale
                                 + "\t"
                                 + locale.getDisplayName(ULocale.ENGLISH));
-                logln("Index:\t" + mainCharString);
+                logDebug("Index:\t" + mainCharString);
                 if (!isUnihan && mainChars.size() > 100) {
                     errln(
                             "Index character set too large: "
@@ -2358,7 +2358,7 @@ public class AlphabeticIndexTest extends TestFmwk {
                             + " (is zh/unihan data available?)");
             return;
         } else {
-            logln("Chinese/unihan has " + bucketCount + " buckets/labels");
+            logDebug("Chinese/unihan has " + bucketCount + " buckets/labels");
         }
         // bucketIndex = radical number, adjusted for simplified radicals in lower buckets.
         // CLDR 46+/ICU 76+ use a radical-stroke order matching UAX #38

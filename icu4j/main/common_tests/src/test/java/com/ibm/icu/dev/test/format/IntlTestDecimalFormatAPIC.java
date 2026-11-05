@@ -43,13 +43,13 @@ public class IntlTestDecimalFormatAPIC extends CoreTestFmwk {
     public void TestAPI() {
         Locale startLocale = Locale.getDefault();
 
-        logln("DecimalFormat API test---");
-        logln("");
+        logDebug("DecimalFormat API test---");
+        logDebug("");
         Locale.setDefault(Locale.ENGLISH);
 
         // ======= Test constructors
 
-        logln("Testing DecimalFormat constructors");
+        logDebug("Testing DecimalFormat constructors");
 
         DecimalFormat def = new DecimalFormat();
 
@@ -83,7 +83,7 @@ public class IntlTestDecimalFormatAPIC extends CoreTestFmwk {
 
         // ======= Test clone(), assignment, and equality
 
-        logln("Testing clone() and equality operators");
+        logDebug("Testing clone() and equality operators");
 
         Format clone = def.clone();
         if (!def.equals(clone)) {
@@ -92,13 +92,13 @@ public class IntlTestDecimalFormatAPIC extends CoreTestFmwk {
 
         // ======= Test various format() methods
 
-        logln("Testing various format() methods");
+        logDebug("Testing various format() methods");
 
         //        final double d = -10456.0037; // this appears as -10456.003700000001 on NT
         //        final double d = -1.04560037e-4; // this appears as -1.0456003700000002E-4 on NT
         final double d = -10456.00370000000000; // this works!
         final long l = 100000000;
-        logln("" + Double.toString(d) + " is the double value");
+        logDebug("" + Double.toString(d) + " is the double value");
 
         StringBuffer res1 = new StringBuffer();
         StringBuffer res2 = new StringBuffer();
@@ -110,20 +110,20 @@ public class IntlTestDecimalFormatAPIC extends CoreTestFmwk {
         FieldPosition pos4 = new FieldPosition(0);
 
         res1 = def.format(d, res1, pos1);
-        logln("" + Double.toString(d) + " formatted to " + res1);
+        logDebug("" + Double.toString(d) + " formatted to " + res1);
 
         res2 = pat.format(l, res2, pos2);
-        logln("" + l + " formatted to " + res2);
+        logDebug("" + l + " formatted to " + res2);
 
         res3 = cust1.format(d, res3, pos3);
-        logln("" + Double.toString(d) + " formatted to " + res3);
+        logDebug("" + Double.toString(d) + " formatted to " + res3);
 
         res4 = cust1.format(l, res4, pos4);
-        logln("" + l + " formatted to " + res4);
+        logDebug("" + l + " formatted to " + res4);
 
         // ======= Test parse()
 
-        logln("Testing parse()");
+        logDebug("Testing parse()");
 
         String text = new String("-10,456.0037");
         ParsePosition pos = new ParsePosition(0);
@@ -139,11 +139,11 @@ public class IntlTestDecimalFormatAPIC extends CoreTestFmwk {
                             + ")) for "
                             + text);
         }
-        logln(text + " parsed into " + (long) d2);
+        logDebug(text + " parsed into " + (long) d2);
 
         // ======= Test getters and setters
 
-        logln("Testing getters and setters");
+        logDebug("Testing getters and setters");
 
         final DecimalFormatSymbols syms = pat.getDecimalFormatSymbols();
         def.setDecimalFormatSymbols(syms);
@@ -154,31 +154,31 @@ public class IntlTestDecimalFormatAPIC extends CoreTestFmwk {
         String posPrefix;
         pat.setPositivePrefix("+");
         posPrefix = pat.getPositivePrefix();
-        logln("Positive prefix (should be +): " + posPrefix);
+        logDebug("Positive prefix (should be +): " + posPrefix);
         assertEquals("ERROR: setPositivePrefix() failed", "+", posPrefix);
 
         String negPrefix;
         pat.setNegativePrefix("-");
         negPrefix = pat.getNegativePrefix();
-        logln("Negative prefix (should be -): " + negPrefix);
+        logDebug("Negative prefix (should be -): " + negPrefix);
         assertEquals("ERROR: setNegativePrefix() failed", "-", negPrefix);
 
         String posSuffix;
         pat.setPositiveSuffix("_");
         posSuffix = pat.getPositiveSuffix();
-        logln("Positive suffix (should be _): " + posSuffix);
+        logDebug("Positive suffix (should be _): " + posSuffix);
         assertEquals("ERROR: setPositiveSuffix() failed", "_", posSuffix);
 
         String negSuffix;
         pat.setNegativeSuffix("~");
         negSuffix = pat.getNegativeSuffix();
-        logln("Negative suffix (should be ~): " + negSuffix);
+        logDebug("Negative suffix (should be ~): " + negSuffix);
         assertEquals("ERROR: setNegativeSuffix() failed", "~", negSuffix);
 
         long multiplier = 0;
         pat.setMultiplier(8);
         multiplier = pat.getMultiplier();
-        logln("Multiplier (should be 8): " + multiplier);
+        logDebug("Multiplier (should be 8): " + multiplier);
         if (multiplier != 8) {
             errln("ERROR: setMultiplier() failed");
         }
@@ -186,25 +186,25 @@ public class IntlTestDecimalFormatAPIC extends CoreTestFmwk {
         int groupingSize = 0;
         pat.setGroupingSize(2);
         groupingSize = pat.getGroupingSize();
-        logln("Grouping size (should be 2): " + (long) groupingSize);
+        logDebug("Grouping size (should be 2): " + (long) groupingSize);
         if (groupingSize != 2) {
             errln("ERROR: setGroupingSize() failed");
         }
 
         pat.setDecimalSeparatorAlwaysShown(true);
         boolean tf = pat.isDecimalSeparatorAlwaysShown();
-        logln("DecimalSeparatorIsAlwaysShown (should be true) is " + (tf ? "true" : "false"));
+        logDebug("DecimalSeparatorIsAlwaysShown (should be true) is " + (tf ? "true" : "false"));
         if (tf != true) {
             errln("ERROR: setDecimalSeparatorAlwaysShown() failed");
         }
 
         String funkyPat;
         funkyPat = pat.toPattern();
-        logln("Pattern is " + funkyPat);
+        logDebug("Pattern is " + funkyPat);
 
         String locPat;
         locPat = pat.toLocalizedPattern();
-        logln("Localized pattern is " + locPat);
+        logDebug("Localized pattern is " + locPat);
 
         pat.setCurrencyPluralInfo(infoInput);
         if (!infoInput.equals(pat.getCurrencyPluralInfo())) {
@@ -218,24 +218,24 @@ public class IntlTestDecimalFormatAPIC extends CoreTestFmwk {
 
         // ======= Test applyPattern()
 
-        logln("Testing applyPattern()");
+        logDebug("Testing applyPattern()");
 
         String p1 = new String("#,##0.0#;(#,##0.0#)");
-        logln("Applying pattern " + p1);
+        logDebug("Applying pattern " + p1);
         pat.applyPattern(p1);
         String s2;
         s2 = pat.toPattern();
-        logln("Extracted pattern is " + s2);
+        logDebug("Extracted pattern is " + s2);
         if (!s2.equals(p1)) {
             errln("ERROR: toPattern() result did not match pattern applied: " + p1 + " vs " + s2);
         }
 
         String p2 = new String("#,##0.0# FF;(#,##0.0# FF)");
-        logln("Applying pattern " + p2);
+        logDebug("Applying pattern " + p2);
         pat.applyLocalizedPattern(p2);
         String s3;
         s3 = pat.toLocalizedPattern();
-        logln("Extracted pattern is " + s3);
+        logDebug("Extracted pattern is " + s3);
         assertEquals("ERROR: toLocalizedPattern() result did not match pattern applied", p2, s3);
 
         // ======= Test getStaticClassID()
@@ -273,7 +273,7 @@ public class IntlTestDecimalFormatAPIC extends CoreTestFmwk {
         DecimalFormat pat = new DecimalFormat();
         String s = "";
         s = pat.toPattern();
-        logln("pattern = " + s);
+        logDebug("pattern = " + s);
         int mode;
         int i = 0;
         String message;
@@ -553,7 +553,7 @@ public class IntlTestDecimalFormatAPIC extends CoreTestFmwk {
 
     /*Helper functions */
     public void verify(String message, String got, double expected) {
-        logln(message + got + " Expected : " + (long) expected);
+        logDebug(message + got + " Expected : " + (long) expected);
         String expectedStr = "";
         expectedStr = expectedStr + (long) expected;
         if (!got.equals(expectedStr)) {

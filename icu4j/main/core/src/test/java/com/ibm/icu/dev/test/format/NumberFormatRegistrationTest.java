@@ -52,14 +52,14 @@ public class NumberFormatRegistrationTest extends CoreTestFmwk {
                 NumberFormat.unregister(null);
                 errln("did not throw exception on null unregister");
             } catch (Exception e) {
-                logln("PASS: null unregister failed as expected");
+                logDebug("PASS: null unregister failed as expected");
             }
 
             try {
                 NumberFormat.registerFactory(null);
                 errln("did not throw exception on null register");
             } catch (Exception e) {
-                logln("PASS: null register failed as expected");
+                logDebug("PASS: null register failed as expected");
             }
 
             try {
@@ -91,12 +91,12 @@ public class NumberFormatRegistrationTest extends CoreTestFmwk {
         NumberFormat.unregister(key2);
 
         float n = 1234.567f;
-        logln("f0 swap int: " + f0.format(n));
-        logln("f1 src int: " + f1.format(n));
-        logln("f2 src cur: " + f2.format(n));
-        logln("f3 reg cur: " + f3.format(n));
-        logln("f4 reg int: " + f4.format(n));
-        logln("f5 unreg cur: " + f5.format(n));
+        logDebug("f0 swap int: " + f0.format(n));
+        logDebug("f1 src int: " + f1.format(n));
+        logDebug("f2 src cur: " + f2.format(n));
+        logDebug("f3 reg cur: " + f3.format(n));
+        logDebug("f4 reg int: " + f4.format(n));
+        logDebug("f5 unreg cur: " + f5.format(n));
 
         if (!f3.format(n).equals(f0.format(n))) {
             errln("registered service did not match");

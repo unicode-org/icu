@@ -21,14 +21,14 @@ public class DebugUtilitiesTest extends CoreTestFmwk {
 
     @Test
     public void TestStrings() {
-        logln("ICU4C version was " + DebugUtilitiesData.ICU4C_VERSION);
+        logDebug("ICU4C version was " + DebugUtilitiesData.ICU4C_VERSION);
         int typeCount = DebugUtilities.typeCount();
         if (typeCount == 0) {
             errln("typecount is 0!");
         }
         for (int j = 0; j < typeCount; j++) {
             int enumCount = DebugUtilities.enumCount(j);
-            logln(
+            logDebug(
                     "Type "
                             + j
                             + "/"
@@ -41,7 +41,7 @@ public class DebugUtilitiesTest extends CoreTestFmwk {
                 String enumString = DebugUtilities.enumString(j, k);
                 int enumValue = DebugUtilities.enumArrayValue(j, k);
                 int enumValueFromString = DebugUtilities.enumByString(j, enumString);
-                logln(
+                logDebug(
                         "     Enum "
                                 + k
                                 + "/"

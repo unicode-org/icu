@@ -102,7 +102,7 @@ public class DisplayNameTest extends CoreTestFmwk {
     }
 
     private void checkLocale(ULocale locale) {
-        logln("Checking " + locale);
+        logDebug("Checking " + locale);
         check(
                 "Language",
                 locale,
@@ -454,7 +454,7 @@ public class DisplayNameTest extends CoreTestFmwk {
                 } else {
                     codeToName.get(k).put(name, code);
                     if (SHOW_ALL)
-                        logln(
+                        logDebug(
                                 type
                                         + " ("
                                         + ((context != null) ? context : "")

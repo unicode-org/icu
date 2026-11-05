@@ -143,7 +143,7 @@ public class TestDeprecatedNormalizerAPI extends CoreTestFmwk {
             String comp = Normalizer.compose(decomp, compat);
 
             if (UCharacter.hasBinaryProperty(ch, UProperty.FULL_COMPOSITION_EXCLUSION)) {
-                logln("Skipped excluded char " + hex(ch) + " (" + UCharacter.getName(ch) + ")");
+                logDebug("Skipped excluded char " + hex(ch) + " (" + UCharacter.getName(ch) + ")");
                 continue;
             }
 

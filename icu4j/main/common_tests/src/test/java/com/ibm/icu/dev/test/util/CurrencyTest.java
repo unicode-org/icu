@@ -75,7 +75,7 @@ public class CurrencyTest extends CoreTestFmwk {
                             + "a NullPointerException, but returned "
                             + nullCurrency);
         } catch (NullPointerException npe) {
-            logln("PASS: getInstance(null) threw a NullPointerException");
+            logDebug("PASS: getInstance(null) threw a NullPointerException");
         }
 
         try {
@@ -85,7 +85,7 @@ public class CurrencyTest extends CoreTestFmwk {
                             + "an IllegalArgumentException, but returned "
                             + bogusCurrency);
         } catch (IllegalArgumentException iae) {
-            logln("PASS: getInstance(\"BOGUS\") threw an IllegalArgumentException");
+            logDebug("PASS: getInstance(\"BOGUS\") threw an IllegalArgumentException");
         }
 
         Locale[] avail = Currency.getAvailableLocales();
@@ -97,7 +97,7 @@ public class CurrencyTest extends CoreTestFmwk {
             usd.getName(ULocale.US, 6, new boolean[1]);
             errln("expected getName with invalid type parameter to throw exception");
         } catch (Exception e) {
-            logln("PASS: getName failed as expected");
+            logDebug("PASS: getName failed as expected");
         }
     }
 
@@ -111,7 +111,7 @@ public class CurrencyTest extends CoreTestFmwk {
             Currency.unregister(null); // should fail, coverage
             errln("expected unregister of null to throw exception");
         } catch (Exception e) {
-            logln("PASS: unregister of null failed as expected");
+            logDebug("PASS: unregister of null failed as expected");
         }
 
         if (Currency.unregister("")) { // coverage
@@ -460,15 +460,15 @@ public class CurrencyTest extends CoreTestFmwk {
 
         CurrencyFilter filter = CurrencyFilter.onRegion("DE"); // must be capitalized
         List<CurrencyInfo> currenciesInGermany = metainfo.currencyInfo(filter);
-        logln("currencies: " + currenciesInGermany.size());
+        logDebug("currencies: " + currenciesInGermany.size());
         DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS z");
         fmt.setTimeZone(TimeZone.getTimeZone("GMT"));
         Date demLastDate = new Date(Long.MAX_VALUE);
         Date eurFirstDate = new Date(Long.MIN_VALUE);
         for (CurrencyInfo info : currenciesInGermany) {
-            logln(info.toString());
-            logln("from: " + fmt.format(info.from) + Long.toHexString(info.from));
-            logln("  to: " + fmt.format(info.to) + Long.toHexString(info.to));
+            logDebug(info.toString());
+            logDebug("from: " + fmt.format(info.from) + Long.toHexString(info.from));
+            logDebug("  to: " + fmt.format(info.to) + Long.toHexString(info.to));
             if (info.code.equals("DEM")) {
                 demLastDate = new Date(info.to);
             } else if (info.code.equals("EUR")) {
@@ -529,14 +529,14 @@ public class CurrencyTest extends CoreTestFmwk {
         List<CurrencyInfo> currenciesInGermany = metainfo.currencyInfo(filter);
         CurrencyFilter filter_br = CurrencyFilter.onRegion("BR"); // must be capitalized
         List<CurrencyInfo> currenciesInBrazil = metainfo.currencyInfo(filter_br);
-        logln("currencies Germany: " + currenciesInGermany.size());
-        logln("currencies Brazil: " + currenciesInBrazil.size());
+        logDebug("currencies Germany: " + currenciesInGermany.size());
+        logDebug("currencies Brazil: " + currenciesInBrazil.size());
         long demFirstDate = Long.MIN_VALUE;
         long demLastDate = Long.MAX_VALUE;
         long eurFirstDate = Long.MIN_VALUE;
         CurrencyInfo demInfo = null;
         for (CurrencyInfo info : currenciesInGermany) {
-            logln(info.toString());
+            logDebug(info.toString());
             if (info.code.equals("DEM")) {
                 demInfo = info;
                 demFirstDate = info.from;
@@ -831,7 +831,7 @@ public class CurrencyTest extends CoreTestFmwk {
                             + "/"
                             + currency);
         } else {
-            logln(
+            logDebug(
                     "for "
                             + locale
                             + " expected "
@@ -932,7 +932,7 @@ public class CurrencyTest extends CoreTestFmwk {
             Currency.isAvailable("USD", d2005, d1995);
             errln("Expected IllegalArgumentException, because lower range is after upper range");
         } catch (IllegalArgumentException e) {
-            logln("IllegalArgumentException, because lower range is after upper range");
+            logDebug("IllegalArgumentException, because lower range is after upper range");
         }
     }
 

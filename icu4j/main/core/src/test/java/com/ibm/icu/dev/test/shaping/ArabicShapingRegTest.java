@@ -61,15 +61,15 @@ public class ArabicShapingRegTest extends CoreTestFmwk {
                                 | LENGTH_FIXED_SPACES_AT_BEGINNING);
 
         if (!as1.equals(as1)) {
-            err("as1: " + as1 + " does not equal itself!\n");
+            errln("as1: " + as1 + " does not equal itself!");
         }
 
         if (!as1.equals(as2)) {
-            err("as1: " + as1 + ", as2: " + as2 + " are not equal, but should be.\n");
+            errln("as1: " + as1 + ", as2: " + as2 + " are not equal, but should be.");
         }
 
         if (as1.equals(as3)) {
-            err("as1: " + as1 + ", as3: " + as3 + " are equal but should not be.\n");
+            errln("as1: " + as1 + ", as3: " + as3 + " are equal but should not be.");
         }
     }
 

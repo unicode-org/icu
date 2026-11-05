@@ -74,7 +74,7 @@ public class PersianTest extends CalendarTestFmwk {
         Calendar cal = Calendar.getInstance(new ULocale("fa_IR@calendar=persian"));
         StringBuilder buf = new StringBuilder();
 
-        logln("Gregorian -> Persian");
+        logDebug("Gregorian -> Persian");
 
         Calendar grego = Calendar.getInstance();
         grego.clear();
@@ -92,13 +92,13 @@ public class PersianTest extends CalendarTestFmwk {
             buf.append(date + " -> ");
             buf.append(y + "/" + m + "/" + d);
             if (y == yE && m == mE && d == dE) {
-                logln("OK: " + buf.toString());
+                logDebug("OK: " + buf.toString());
             } else {
                 errln("Fail: " + buf.toString() + ", expected " + yE + "/" + mE + "/" + dE);
             }
         }
 
-        logln("Persian -> Gregorian");
+        logDebug("Persian -> Gregorian");
         for (int i = 0; i < DATA.length; ) {
             grego.set(DATA[i++], DATA[i++] - 1, DATA[i++]);
             Date dexp = grego.getTime();
@@ -114,7 +114,7 @@ public class PersianTest extends CalendarTestFmwk {
             buf.append(cyear + "/" + cmonth + "/" + cdayofmonth);
             buf.append(" -> " + date);
             if (date.equals(dexp)) {
-                logln("OK: " + buf.toString());
+                logDebug("OK: " + buf.toString());
             } else {
                 errln("Fail: " + buf.toString() + ", expected " + dexp);
             }
