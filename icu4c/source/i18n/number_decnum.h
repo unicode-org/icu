@@ -24,38 +24,39 @@ class U_I18N_API_CLASS DecNum : public UMemory {
     U_I18N_API DecNum();  // leaves object in valid but undefined state
 
     // Copy-like constructor; use the default move operators.
-    DecNum(const DecNum& other, UErrorCode& status);
+    U_I18N_API DecNum(const DecNum &other, UErrorCode &status);
 
     /** Sets the decNumber to the StringPiece. */
-    void setTo(StringPiece str, UErrorCode& status);
+    U_I18N_API void setTo(StringPiece str, UErrorCode &status);
 
     /** Sets the decNumber to the NUL-terminated char string. */
-    void setTo(const char* str, UErrorCode& status);
+    U_I18N_API void setTo(const char *str, UErrorCode &status);
 
     /** Uses double_conversion to set this decNumber to the given double. */
-    void setTo(double d, UErrorCode& status);
+    U_I18N_API void setTo(double d, UErrorCode &status);
 
     /** Sets the decNumber to the BCD representation. */
-    void setTo(const uint8_t* bcd, int32_t length, int32_t scale, bool isNegative, UErrorCode& status);
+    U_I18N_API void setTo(const uint8_t *bcd, int32_t length, int32_t scale, bool isNegative,
+                          UErrorCode &status);
 
-    void normalize();
+    U_I18N_API void normalize();
 
-    void multiplyBy(const DecNum& rhs, UErrorCode& status);
+    U_I18N_API void multiplyBy(const DecNum &rhs, UErrorCode &status);
 
-    void divideBy(const DecNum& rhs, UErrorCode& status);
+    U_I18N_API void divideBy(const DecNum &rhs, UErrorCode &status);
 
-    bool isNegative() const;
+    U_I18N_API bool isNegative() const;
 
-    bool isZero() const;
+    U_I18N_API bool isZero() const;
 
     /** Is infinity or NaN */
-    bool isSpecial() const;
+    U_I18N_API bool isSpecial() const;
 
-    bool isInfinity() const;
+    U_I18N_API bool isInfinity() const;
 
-    bool isNaN() const;
+    U_I18N_API bool isNaN() const;
 
-    void toString(ByteSink& output, UErrorCode& status) const;
+    U_I18N_API void toString(ByteSink &output, UErrorCode &status) const;
 
     inline CharString toCharString(UErrorCode& status) const {
       CharString cstr;

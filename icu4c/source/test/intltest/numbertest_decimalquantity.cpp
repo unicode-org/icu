@@ -5,12 +5,15 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "math.h"
 #include "number_decimalquantity.h"
 #include "number_decnum.h"
-#include "math.h"
-#include <cmath>
 #include "number_utils.h"
 #include "numbertest.h"
+#include "unicode/uclean.h"
+#include "unicode/unumberformatter.h"
+#include <cmath>
+#include <cstdlib>
 
 void DecimalQuantityTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char *) {
     if (exec) {
@@ -34,7 +37,8 @@ void DecimalQuantityTest::runIndexedTest(int32_t index, UBool exec, const char *
         TESTCASE_AUTO(testScientificAndCompactSuppressedExponent);
         TESTCASE_AUTO(testSuppressedExponentUnchangedByInitialScaling);
         TESTCASE_AUTO(testDecimalQuantityParseFormatRoundTrip);
-    TESTCASE_AUTO_END;
+        TESTCASE_AUTO(testDecNumAllocationFailure);
+        TESTCASE_AUTO_END;
 }
 
 void DecimalQuantityTest::assertDoubleEquals(UnicodeString message, double a, double b) {
@@ -771,6 +775,270 @@ void DecimalQuantityTest::testDecimalQuantityParseFormatRoundTrip() {
                 u"1.0",
                 dq.toExponentString());
 
+}
+
+namespace {
+
+struct FailingAllocatorContext {
+    int32_t allocations_remaining = -1;
+};
+
+void *U_CALLCONV TestMemAlloc(const void *context, size_t size) {
+    auto *ctx = const_cast<FailingAllocatorContext *>(
+        static_cast<const FailingAllocatorContext *>(context));
+    if (ctx != nullptr && ctx->allocations_remaining >= 0) {
+        if (ctx->allocations_remaining == 0) {
+            return nullptr;
+        }
+        --ctx->allocations_remaining;
+    }
+    return std::malloc(size);
+}
+
+void *U_CALLCONV TestMemRealloc(const void *context, void *mem, size_t size) {
+    auto *ctx = const_cast<FailingAllocatorContext *>(
+        static_cast<const FailingAllocatorContext *>(context));
+    if (ctx != nullptr && ctx->allocations_remaining >= 0) {
+        if (ctx->allocations_remaining == 0) {
+            return nullptr;
+        }
+        --ctx->allocations_remaining;
+    }
+    return std::realloc(mem, size);
+}
+
+void U_CALLCONV TestMemFree(const void *, void *mem) { std::free(mem); }
+
+class ScopedFailingAllocator {
+  public:
+    ScopedFailingAllocator(FailingAllocatorContext *ctx, UErrorCode &status) : ctx_(ctx) {
+        u_setMemoryFunctions(ctx_, TestMemAlloc, TestMemRealloc, TestMemFree, &status);
+    }
+
+    ~ScopedFailingAllocator() {
+        ctx_->allocations_remaining = -1;
+        UErrorCode status = U_ZERO_ERROR;
+        u_setMemoryFunctions(nullptr, TestMemAlloc, TestMemRealloc, TestMemFree, &status);
+    }
+
+  private:
+    FailingAllocatorContext *ctx_;
+};
+
+} // namespace
+
+void DecimalQuantityTest::testDecNumAllocationFailure() {
+    IcuTestErrorCode status(*this, "testDecNumAllocationFailure");
+
+    // 38 digits (> DECNUM_INITIAL_CAPACITY = 34, fits in CharString's 40-byte stack buffer)
+    // and 200 digits (allocates both CharString and DecNum on the heap).
+    const char kDigits38[39] = "77777777777777777777777777777777777777";
+    const char kLongDigits[201] = "77777777777777777777777777777777777777777777777777"
+                                  "77777777777777777777777777777777777777777777777777"
+                                  "77777777777777777777777777777777777777777777777777"
+                                  "77777777777777777777777777777777777777777777777777";
+    uint8_t bcd[200];
+    for (size_t i = 0; i < sizeof(bcd); ++i) {
+        bcd[i] = 7;
+    }
+
+    // Verify normal >34-digit operations succeed when allocations succeed,
+    // including StringPiece with -1 NUL-terminated length.
+    DecNum validDecNum;
+    validDecNum.setTo({kLongDigits, -1}, status);
+    if (!assertSuccess("validDecNum.setTo", status)) {
+        return;
+    }
+    CharString validStr = validDecNum.toCharString(status);
+    assertSuccess("validDecNum.toCharString", status);
+    assertEquals("validDecNum length", 200, validStr.length());
+
+    // Verify copying a DecNum that was previously resized to 200 digits and then reused
+    // for a <=34-digit number succeeds without overflowing the destination buffer.
+    {
+        DecNum reusedDecNum;
+        reusedDecNum.setTo(kLongDigits, status);
+        reusedDecNum.setTo("1234567890", status);
+        DecNum copiedReused(reusedDecNum, status);
+        assertSuccess("copiedReused DecNum", status);
+        CharString copiedStr = copiedReused.toCharString(status);
+        assertSuccess("copiedReused.toCharString", status);
+        assertEquals("copiedReused value", "1234567890", copiedStr.data());
+    }
+
+    DecimalQuantity validDq;
+    validDq.setToDecNum(validDecNum, status);
+    assertSuccess("validDq.setToDecNum", status);
+
+    Scale validScale = Scale::byDecimal(kDigits38);
+
+    LocalUNumberFormatterPointer uformatter(
+        unumf_openForSkeletonAndLocale(u"", 0, "en_US", status));
+    LocalUFormattedNumberPointer uresult(unumf_openResult(status));
+    if (!assertSuccess("unumf_openForSkeletonAndLocale", status)) {
+        return;
+    }
+    unumf_formatDecimal(uformatter.getAlias(), kLongDigits, -1, uresult.getAlias(), status);
+    assertSuccess("unumf_formatDecimal warmup", status);
+
+    char decBuf[256] = {};
+    int32_t decLen =
+        unumf_resultToDecimalNumber(uresult.getAlias(), decBuf, sizeof(decBuf), status);
+    assertSuccess("unumf_resultToDecimalNumber warmup", status);
+    assertEquals("unumf_resultToDecimalNumber length", 200, decLen);
+
+    const char16_t *kScaleSkeleton = u"scale/77777777777777777777777777777777777777";
+    LocalUNumberFormatterPointer scaleFormatter(
+        unumf_openForSkeletonAndLocale(kScaleSkeleton, -1, "en_US", status));
+    if (!assertSuccess("scaleFormatter open", status)) {
+        return;
+    }
+    // Warm up scaleFormatter past the 3-call compilation threshold so subsequent
+    // unumf_formatInt calls take the compiled MicroProps copy assignment path.
+    for (int i = 0; i < 4; ++i) {
+        unumf_formatInt(scaleFormatter.getAlias(), 1, uresult.getAlias(), status);
+        if (!assertSuccess("scaleFormatter warmup", status)) {
+            return;
+        }
+    }
+
+    FailingAllocatorContext ctx;
+    UErrorCode memStatus = U_ZERO_ERROR;
+    ScopedFailingAllocator scopedAlloc(&ctx, memStatus);
+    if (!assertSuccess("u_setMemoryFunctions", memStatus)) {
+        return;
+    }
+
+    // 1. DecNum::setTo(const char*, status) when fData.resize fails.
+    {
+        ctx.allocations_remaining = 0;
+        UErrorCode err = U_ZERO_ERROR;
+        DecNum dn;
+        dn.setTo(kLongDigits, err);
+        ctx.allocations_remaining = -1;
+        assertEquals("DecNum::setTo(const char*) allocation failure", U_MEMORY_ALLOCATION_ERROR,
+                     err);
+    }
+
+    // 2. DecNum::setTo(StringPiece, status) when CharString fails (alloc 0) or
+    // when CharString succeeds and DecNum::_setTo fData.resize fails (alloc 1).
+    for (int32_t allowedAllocs : {0, 1}) {
+        ctx.allocations_remaining = allowedAllocs;
+        UErrorCode err = U_ZERO_ERROR;
+        DecNum dn;
+        dn.setTo(StringPiece(kLongDigits, 200), err);
+        ctx.allocations_remaining = -1;
+        assertEquals("DecNum::setTo(StringPiece) allocation failure", U_MEMORY_ALLOCATION_ERROR,
+                     err);
+    }
+
+    // 3. DecNum::setTo(bcd, ...) when fData.resize fails, and when length is out of bounds.
+    {
+        ctx.allocations_remaining = 0;
+        UErrorCode err = U_ZERO_ERROR;
+        DecNum dn;
+        dn.setTo(bcd, 200, 0, false, err);
+        ctx.allocations_remaining = -1;
+        assertEquals("DecNum::setTo(bcd) allocation failure", U_MEMORY_ALLOCATION_ERROR, err);
+
+        err = U_ZERO_ERROR;
+        dn.setTo(bcd, 1000000000, 0, false, err);
+        assertEquals("DecNum::setTo(bcd) out-of-range length", U_UNSUPPORTED_ERROR, err);
+    }
+
+    // 4. DecNum copy constructor when fData.resize fails.
+    {
+        ctx.allocations_remaining = 0;
+        UErrorCode err = U_ZERO_ERROR;
+        DecNum copy(validDecNum, err);
+        ctx.allocations_remaining = -1;
+        assertEquals("DecNum copy constructor allocation failure", U_MEMORY_ALLOCATION_ERROR, err);
+    }
+
+    // 5. DecNum::toCharString when MaybeStackArray resize fails.
+    {
+        ctx.allocations_remaining = 0;
+        UErrorCode err = U_ZERO_ERROR;
+        CharString out = validDecNum.toCharString(err);
+        ctx.allocations_remaining = -1;
+        assertEquals("DecNum::toCharString allocation failure", U_MEMORY_ALLOCATION_ERROR, err);
+    }
+
+    // 6. DecimalQuantity::toDecNum when MaybeStackArray(ubcd) or DecNum::setTo fails.
+    for (int32_t allowedAllocs : {0, 1}) {
+        ctx.allocations_remaining = allowedAllocs;
+        UErrorCode err = U_ZERO_ERROR;
+        DecNum out;
+        validDq.toDecNum(out, err);
+        ctx.allocations_remaining = -1;
+        assertEquals("DecimalQuantity::toDecNum allocation failure", U_MEMORY_ALLOCATION_ERROR,
+                     err);
+    }
+
+    // 7. Scale copy constructor and copy assignment when new DecNum (alloc 0 when
+    // U_OVERRIDE_CXX_ALLOCATION is enabled) or DecNum fData.resize fails.
+    constexpr int32_t kMaxScaleCopyAllocs = U_OVERRIDE_CXX_ALLOCATION ? 1 : 0;
+    for (int32_t allowedAllocs = 0; allowedAllocs <= kMaxScaleCopyAllocs; ++allowedAllocs) {
+        ctx.allocations_remaining = allowedAllocs;
+        Scale copiedScale(validScale);
+        ctx.allocations_remaining = -1;
+        UErrorCode err = U_ZERO_ERROR;
+        NumberFormatter::withLocale("en_US").scale(copiedScale).formatInt(1, err);
+        assertEquals("Scale copy constructor allocation failure", U_MEMORY_ALLOCATION_ERROR, err);
+
+        ctx.allocations_remaining = allowedAllocs;
+        Scale assignedScale = Scale::none();
+        assignedScale = validScale;
+        ctx.allocations_remaining = -1;
+        err = U_ZERO_ERROR;
+        NumberFormatter::withLocale("en_US").scale(assignedScale).formatInt(1, err);
+        assertEquals("Scale copy assignment allocation failure", U_MEMORY_ALLOCATION_ERROR, err);
+    }
+
+    // 8. C API unumf_formatDecimal with 38 digits (CharString uses stack buffer,
+    // DecNum::_setTo fData.resize fails) and 200 digits.
+    {
+        ctx.allocations_remaining = 0;
+        UErrorCode err = U_ZERO_ERROR;
+        unumf_formatDecimal(uformatter.getAlias(), kDigits38, 38, uresult.getAlias(), &err);
+        ctx.allocations_remaining = -1;
+        assertEquals("unumf_formatDecimal 38 digits allocation failure", U_MEMORY_ALLOCATION_ERROR,
+                     err);
+    }
+    for (int32_t allowedAllocs : {0, 1}) {
+        ctx.allocations_remaining = allowedAllocs;
+        UErrorCode err = U_ZERO_ERROR;
+        unumf_formatDecimal(uformatter.getAlias(), kLongDigits, 200, uresult.getAlias(), &err);
+        ctx.allocations_remaining = -1;
+        assertEquals("unumf_formatDecimal 200 digits allocation failure", U_MEMORY_ALLOCATION_ERROR,
+                     err);
+    }
+
+    // Re-populate uresult with a valid 200-digit quantity for unumf_resultToDecimalNumber.
+    unumf_formatDecimal(uformatter.getAlias(), kLongDigits, 200, uresult.getAlias(), status);
+    assertSuccess("unumf_formatDecimal repopulate", status);
+
+    // 9. C API unumf_resultToDecimalNumber (MaybeStackArray ubcd, DecNum::setTo,
+    // and MaybeStackArray buffer in DecNum::toString).
+    for (int32_t allowedAllocs : {0, 1, 2}) {
+        ctx.allocations_remaining = allowedAllocs;
+        UErrorCode err = U_ZERO_ERROR;
+        unumf_resultToDecimalNumber(uresult.getAlias(), decBuf, sizeof(decBuf), &err);
+        ctx.allocations_remaining = -1;
+        assertEquals("unumf_resultToDecimalNumber allocation failure", U_MEMORY_ALLOCATION_ERROR,
+                     err);
+    }
+
+    // 10. C API unumf_formatInt on compiled scaleFormatter (MicroProps copy assignment ->
+    // Scale::operator= -> MultiplierFormatHandler::processQuantity error propagation).
+    for (int32_t allowedAllocs = 0; allowedAllocs <= kMaxScaleCopyAllocs; ++allowedAllocs) {
+        ctx.allocations_remaining = allowedAllocs;
+        UErrorCode err = U_ZERO_ERROR;
+        unumf_formatInt(scaleFormatter.getAlias(), 1, uresult.getAlias(), &err);
+        ctx.allocations_remaining = -1;
+        assertEquals("compiled scaleFormatter unumf_formatInt allocation failure",
+                     U_MEMORY_ALLOCATION_ERROR, err);
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
