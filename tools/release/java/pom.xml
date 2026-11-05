@@ -30,25 +30,19 @@
     <dependency>
       <groupId>xml-apis</groupId>
       <artifactId>xml-apis</artifactId>
-      <version>${xml-apis.version}</version>
     </dependency>
     <dependency>
       <groupId>xerces</groupId>
       <artifactId>xercesImpl</artifactId>
       <version>${xerces.version}</version>
-      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>xalan</groupId>
       <artifactId>serializer</artifactId>
-      <version>${xalan.version}</version>
-      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>xalan</groupId>
       <artifactId>xalan</artifactId>
-      <version>${xalan.version}</version>
-      <scope>runtime</scope>
     </dependency>
   </dependencies>
 
