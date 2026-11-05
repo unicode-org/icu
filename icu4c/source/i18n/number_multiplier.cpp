@@ -9,12 +9,13 @@
 // Helpful in toString methods and elsewhere.
 #define UNISTR_FROM_STRING_EXPLICIT
 
-#include "number_decnum.h"
-#include "number_types.h"
-#include "number_multiplier.h"
-#include "numparse_validators.h"
-#include "number_utils.h"
 #include "decNumber.h"
+#include "number_decnum.h"
+#include "number_microprops.h"
+#include "number_multiplier.h"
+#include "number_types.h"
+#include "number_utils.h"
+#include "numparse_validators.h"
 
 using namespace icu;
 using namespace icu::number;
@@ -41,20 +42,30 @@ Scale::Scale(const Scale& other)
         : fMagnitude(other.fMagnitude), fArbitrary(nullptr), fError(other.fError) {
     if (other.fArbitrary != nullptr) {
         UErrorCode localStatus = U_ZERO_ERROR;
-        fArbitrary = new DecNum(*other.fArbitrary, localStatus);
+        LocalPointer<DecNum> decnum(new DecNum(*other.fArbitrary, localStatus), localStatus);
+        if (U_FAILURE(localStatus)) {
+            fError = localStatus;
+            return;
+        }
+        fArbitrary = decnum.orphan();
     }
 }
 
 Scale& Scale::operator=(const Scale& other) {
     if (this == &other) { return *this; }  // self-assignment: no-op
     fMagnitude = other.fMagnitude;
+    delete fArbitrary;
+    fArbitrary = nullptr;
+    fError = other.fError;
     if (other.fArbitrary != nullptr) {
         UErrorCode localStatus = U_ZERO_ERROR;
-        fArbitrary = new DecNum(*other.fArbitrary, localStatus);
-    } else {
-        fArbitrary = nullptr;
+        LocalPointer<DecNum> decnum(new DecNum(*other.fArbitrary, localStatus), localStatus);
+        if (U_FAILURE(localStatus)) {
+            fError = localStatus;
+            return *this;
+        }
+        fArbitrary = decnum.orphan();
     }
-    fError = other.fError;
     return *this;
 }
 
@@ -152,6 +163,10 @@ MultiplierFormatHandler::setAndChain(const Scale& multiplier, const MicroPropsGe
 void MultiplierFormatHandler::processQuantity(DecimalQuantity& quantity, MicroProps& micros,
                                               UErrorCode& status) const {
     fParent->processQuantity(quantity, micros, status);
+    if (U_FAILURE(status) || fMultiplier.copyErrorTo(status) ||
+        micros.helpers.multiplier.fMultiplier.copyErrorTo(status)) {
+        return;
+    }
     fMultiplier.applyTo(quantity);
 }
 

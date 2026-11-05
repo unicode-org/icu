@@ -215,6 +215,7 @@ class DecimalQuantityTest : public IntlTest {
     void testScientificAndCompactSuppressedExponent();
     void testSuppressedExponentUnchangedByInitialScaling();
     void testDecimalQuantityParseFormatRoundTrip();
+    void testDecNumAllocationFailure();
 
     void runIndexedTest(int32_t index, UBool exec, const char*& name, char* par = nullptr) override;
 

@@ -96,15 +96,24 @@ DecNum::DecNum() {
     uprv_decContextDefault(&fContext, DEC_INIT_BASE);
     uprv_decContextSetRounding(&fContext, DEC_ROUND_HALF_EVEN);
     fContext.traps = 0; // no traps, thank you (what does this even mean?)
+    fContext.digits = kDefaultDigits;
+    uprv_decNumberZero(fData.getAlias());
 }
 
 DecNum::DecNum(const DecNum& other, UErrorCode& status)
         : fContext(other.fContext) {
+    if (U_FAILURE(status)) {
+        fContext.digits = kDefaultDigits;
+        uprv_decNumberZero(fData.getAlias());
+        return;
+    }
     // Allocate memory for the new DecNum.
-    U_ASSERT(fContext.digits == other.fData.getCapacity());
+    U_ASSERT(fContext.digits <= other.fData.getCapacity());
     if (fContext.digits > kDefaultDigits) {
         void* p = fData.resize(fContext.digits, 0);
         if (p == nullptr) {
+            fContext.digits = kDefaultDigits;
+            uprv_decNumberZero(fData.getAlias());
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
         }
@@ -112,23 +121,35 @@ DecNum::DecNum(const DecNum& other, UErrorCode& status)
 
     // Copy the data from the old DecNum to the new one.
     uprv_memcpy(fData.getAlias(), other.fData.getAlias(), sizeof(decNumber));
-    uprv_memcpy(fData.getArrayStart(),
-            other.fData.getArrayStart(),
-            other.fData.getArrayLimit() - other.fData.getArrayStart());
+    uprv_memcpy(fData.getArrayStart(), other.fData.getArrayStart(), fData.getCapacity());
 }
 
 void DecNum::setTo(StringPiece str, UErrorCode& status) {
+    if (U_FAILURE(status)) {
+        return;
+    }
     // We need NUL-terminated for decNumber; CharString guarantees this, but not StringPiece.
     CharString cstr(str, status);
     if (U_FAILURE(status)) { return; }
-    _setTo(cstr.data(), str.length(), status);
+    _setTo(cstr.data(), cstr.length(), status);
 }
 
 void DecNum::setTo(const char* str, UErrorCode& status) {
-    _setTo(str, static_cast<int32_t>(uprv_strlen(str)), status);
+    if (U_FAILURE(status)) {
+        return;
+    }
+    size_t length = uprv_strlen(str);
+    if (length > DEC_MAX_DIGITS) {
+        status = U_UNSUPPORTED_ERROR;
+        return;
+    }
+    _setTo(str, static_cast<int32_t>(length), status);
 }
 
 void DecNum::setTo(double d, UErrorCode& status) {
+    if (U_FAILURE(status)) {
+        return;
+    }
     // Need to check for NaN and Infinity before going into DoubleToStringConverter
     if (std::isnan(d) != 0 || std::isfinite(d) == 0) {
         status = U_UNSUPPORTED_ERROR;
@@ -154,6 +175,9 @@ void DecNum::setTo(double d, UErrorCode& status) {
 
     // Read initial result as a string.
     _setTo(buffer, length, status);
+    if (U_FAILURE(status)) {
+        return;
+    }
 
     // Set exponent and bitmask. Note that DoubleToStringConverter does not do negatives.
     fData.getAlias()->exponent += point - length;
@@ -161,8 +185,18 @@ void DecNum::setTo(double d, UErrorCode& status) {
 }
 
 void DecNum::_setTo(const char* str, int32_t maxDigits, UErrorCode& status) {
+    if (U_FAILURE(status)) {
+        return;
+    }
+    if (maxDigits < 0 || maxDigits > DEC_MAX_DIGITS) {
+        status = U_UNSUPPORTED_ERROR;
+        return;
+    }
     if (maxDigits > kDefaultDigits) {
-        fData.resize(maxDigits, 0);
+        if (fData.resize(maxDigits, 0) == nullptr) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
         fContext.digits = maxDigits;
     } else {
         fContext.digits = kDefaultDigits;
@@ -184,13 +218,9 @@ void DecNum::_setTo(const char* str, int32_t maxDigits, UErrorCode& status) {
 
 void
 DecNum::setTo(const uint8_t* bcd, int32_t length, int32_t scale, bool isNegative, UErrorCode& status) {
-    if (length > kDefaultDigits) {
-        fData.resize(length, 0);
-        fContext.digits = length;
-    } else {
-        fContext.digits = kDefaultDigits;
+    if (U_FAILURE(status)) {
+        return;
     }
-
     // "digits is of type int32_t, and must have a value in the range 1 through 999,999,999."
     if (length < 1 || length > 999999999) {
         // Too large for decNumber
@@ -208,6 +238,16 @@ DecNum::setTo(const uint8_t* bcd, int32_t length, int32_t scale, bool isNegative
         return;
     }
 
+    if (length > kDefaultDigits) {
+        if (fData.resize(length, 0) == nullptr) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
+        fContext.digits = length;
+    } else {
+        fContext.digits = kDefaultDigits;
+    }
+
     fData.getAlias()->digits = length;
     fData.getAlias()->exponent = scale;
     fData.getAlias()->bits = static_cast<uint8_t>(isNegative ? DECNEG : 0);
@@ -223,6 +263,9 @@ void DecNum::normalize() {
 }
 
 void DecNum::multiplyBy(const DecNum& rhs, UErrorCode& status) {
+    if (U_FAILURE(status)) {
+        return;
+    }
     uprv_decNumberMultiply(fData, fData, rhs.fData, &fContext);
     if (fContext.status != 0) {
         status = U_INTERNAL_PROGRAM_ERROR;
@@ -230,6 +273,9 @@ void DecNum::multiplyBy(const DecNum& rhs, UErrorCode& status) {
 }
 
 void DecNum::divideBy(const DecNum& rhs, UErrorCode& status) {
+    if (U_FAILURE(status)) {
+        return;
+    }
     uprv_decNumberDivide(fData, fData, rhs.fData, &fContext);
     if ((fContext.status & DEC_Inexact) != 0) {
         // Ignore.
