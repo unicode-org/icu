@@ -102,13 +102,9 @@ public final class FCDIterCollationIterator extends IterCollationIterator {
                     return Collation.SENTINEL_CP;
                 }
                 if (CollationFCD.hasLccc(c)) {
-                    int prev = Collation.SENTINEL_CP;
                     if (CollationFCD.maybeTibetanCompositeVowel(c)
-                            || CollationFCD.hasTccc(prev = iter.previous())) {
+                            || CollationFCD.hasTcccBefore(iter)) {
                         iter.next();
-                        if (prev >= 0) {
-                            iter.next();
-                        }
                         if (!previousSegment()) {
                             return Collation.SENTINEL_CP;
                         }
@@ -116,15 +112,12 @@ public final class FCDIterCollationIterator extends IterCollationIterator {
                     }
                     // hasLccc(trail)=true for all trail surrogates
                     if (isTrailSurrogate(c)) {
-                        if (prev < 0) {
-                            prev = iter.previous();
+                        int lead = iter.previous();
+                        if (isLeadSurrogate(lead)) {
+                            return Character.toCodePoint((char) lead, (char) c);
+                        } else if (lead >= 0) {
+                            iter.next();
                         }
-                        if (isLeadSurrogate(prev)) {
-                            return Character.toCodePoint((char) prev, (char) c);
-                        }
-                    }
-                    if (prev >= 0) {
-                        iter.next();
                     }
                 }
                 return c;
