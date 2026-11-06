@@ -7,8 +7,8 @@ import com.ibm.icu.util.LocaleData;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.VersionInfo;
 
-/** com.ibm.icu.util.Versioninfo Coding Examples */
-public class VersioninfoExample {
+/** com.ibm.icu.util.VersionInfo Coding Examples */
+public class VersionInfoExample {
     /** Main method equivalent to former VersionInfo main method, which was removed in ICU 80. */
     public static void main(String[] args) {
         String icuApiVer;
