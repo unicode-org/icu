@@ -49,7 +49,7 @@ jobs:
   # Jekyll build job
   # Keep in sync with docs test workflow in `icu_docs.yml`
   buildsite:
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -85,7 +85,7 @@ jobs:
 
   # Generate a complete Errorprone report, with all checks enabled, without failing
   errorprone:
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     steps:
       - name: Checkout repo files
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -117,7 +117,7 @@ jobs:
 
   # Generate a JaCoCo coverage report
   coverage:
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     steps:
       - name: Checkout repo files
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -180,7 +180,7 @@ jobs:
 
   # Generate API changes report
   api_changes:
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     steps:
       - name: Checkout repo files
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -211,7 +211,7 @@ jobs:
     permissions:
       pages: write # to deploy to Pages
       id-token: write # to verify the deployment originates from an appropriate source
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     needs: [buildsite, errorprone, coverage, api_changes]
     steps:
       - name: Download artifacts
@@ -233,7 +233,7 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-22.04  # Updated in BRS
+    runs-on: ubuntu-24.04  # Updated in BRS
     needs: merge_artifacts
     steps:
       - name: Deploy to GitHub Pages
