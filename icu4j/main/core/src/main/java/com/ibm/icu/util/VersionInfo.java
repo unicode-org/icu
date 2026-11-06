@@ -657,4 +657,48 @@ public final class VersionInfo implements Comparable<VersionInfo> {
     private static int getInt(int major, int minor, int milli, int micro) {
         return (major << 24) | (minor << 16) | (milli << 8) | micro;
     }
+
+    /**
+     * Generate version string separated by dots with the specified digit width. Version digit 0
+     * after <code>minDigits</code> will be trimmed off.
+     *
+     * @param minDigits Minimum number of version digits
+     * @param maxDigits Maximum number of version digits
+     * @return A tailored version string
+     * @internal
+     * @deprecated This API is ICU internal only. (For use in CLDR, etc.)
+     */
+    @Deprecated
+    public String getVersionString(int minDigits, int maxDigits) {
+        if (minDigits < 1
+                || maxDigits < 1
+                || minDigits > 4
+                || maxDigits > 4
+                || minDigits > maxDigits) {
+            throw new IllegalArgumentException("Invalid min/maxDigits range");
+        }
+
+        int[] digits = new int[4];
+        digits[0] = getMajor();
+        digits[1] = getMinor();
+        digits[2] = getMilli();
+        digits[3] = getMicro();
+
+        int numDigits = maxDigits;
+        while (numDigits > minDigits) {
+            if (digits[numDigits - 1] != 0) {
+                break;
+            }
+            numDigits--;
+        }
+
+        StringBuilder verStr = new StringBuilder(7);
+        verStr.append(digits[0]);
+        for (int i = 1; i < numDigits; i++) {
+            verStr.append(".");
+            verStr.append(digits[i]);
+        }
+
+        return verStr.toString();
+    }
 }

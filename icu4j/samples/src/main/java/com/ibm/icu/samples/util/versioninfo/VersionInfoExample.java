@@ -11,54 +11,23 @@ import com.ibm.icu.util.VersionInfo;
 public class VersionInfoExample {
     /** Main method equivalent to former VersionInfo main method, which was removed in ICU 80. */
     public static void main(String[] args) {
-        String icuApiVer;
-
-        if (VersionInfo.ICU_VERSION.getMajor() <= 4) {
-            if (VersionInfo.ICU_VERSION.getMinor() % 2 != 0) {
-                // Development mile stone
-                int major = VersionInfo.ICU_VERSION.getMajor();
-                int minor = VersionInfo.ICU_VERSION.getMinor() + 1;
-                if (minor >= 10) {
-                    minor -= 10;
-                    major++;
-                }
-                icuApiVer = "" + major + "." + minor + "M" + VersionInfo.ICU_VERSION.getMilli();
-            } else {
-                icuApiVer = getVersionString(VersionInfo.ICU_VERSION, 2, 2);
-            }
-        } else {
-            if (VersionInfo.ICU_VERSION.getMinor() == 0) {
-                // Development mile stone
-                icuApiVer =
-                        ""
-                                + VersionInfo.ICU_VERSION.getMajor()
-                                + "M"
-                                + VersionInfo.ICU_VERSION.getMilli();
-            } else {
-                icuApiVer = getVersionString(VersionInfo.ICU_VERSION, 2, 2);
-            }
-        }
+        String icuApiVer = getVersionString(VersionInfo.ICU_VERSION, 2, 2);
+        String icuImplVer = getVersionString(VersionInfo.ICU_VERSION, 2, 4);
+        String uniDataVer = getVersionString(UCharacter.getUnicodeVersion(), 2, 4);
+        String cldrVer = getVersionString(LocaleData.getCLDRVersion(), 2, 4);
+        String tzdataVer = TimeZone.getTZDataVersion();
 
         System.out.println("International Components for Unicode for Java " + icuApiVer);
-
         System.out.println("");
-        System.out.println(
-                "Implementation Version: " + getVersionString(VersionInfo.ICU_VERSION, 2, 4));
-        System.out.println(
-                "Unicode Data Version:   "
-                        + getVersionString(UCharacter.getUnicodeVersion(), 2, 4));
-        System.out.println(
-                "CLDR Data Version:      " + getVersionString(LocaleData.getCLDRVersion(), 2, 4));
-        System.out.println("Time Zone Data Version: " + TimeZone.getTZDataVersion());
+        System.out.println("Implementation Version: " + icuImplVer);
+        System.out.println("Unicode Data Version:   " + uniDataVer);
+        System.out.println("CLDR Data Version:      " + cldrVer);
+        System.out.println("Time Zone Data Version: " + tzdataVer);
     }
 
     /**
      * Generate version string separated by dots with the specified digit width. Version digit 0
      * after <code>minDigits</code> will be trimmed off.
-     *
-     * @param minDigits Minimum number of version digits
-     * @param maxDigits Maximum number of version digits
-     * @return A tailored version string
      */
     private static String getVersionString(VersionInfo vinf, int minDigits, int maxDigits) {
         if (minDigits < 1
