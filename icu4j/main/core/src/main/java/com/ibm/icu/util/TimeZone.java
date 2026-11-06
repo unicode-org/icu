@@ -14,6 +14,7 @@ import com.ibm.icu.impl.ICUConfig;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.JavaTimeZone;
+import com.ibm.icu.impl.OlsonTimeZone;
 import com.ibm.icu.impl.TimeZoneAdapter;
 import com.ibm.icu.impl.ZoneMeta;
 import com.ibm.icu.text.TimeZoneFormat;
@@ -1113,8 +1114,7 @@ public abstract class TimeZone implements Serializable, Cloneable, Freezable<Tim
      * @stable ICU 3.8
      */
     public static String getTZDataVersion() {
-        // The implementation had been moved to VersionInfo.
-        return VersionInfo.getTZDataVersion();
+        return OlsonTimeZone.getTZDataVersion();
     }
 
     /**
