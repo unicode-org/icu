@@ -41,7 +41,7 @@ u_growAnyBufferFromStatic(void *context,
                        int32_t length, int32_t size) {
     // Use char* not void* to avoid the compiler's strict-aliasing assumptions
     // and related warnings.
-    char *newBuffer=(char *)uprv_malloc(reqCapacity*size);
+    char *newBuffer=(char *)uprv_calloc(reqCapacity, size);
     if(newBuffer!=nullptr) {
         if(length>0) {
             uprv_memcpy(newBuffer, *pBuffer, (size_t)length*size);
@@ -146,7 +146,7 @@ _strToWCS(wchar_t *dest,
      * no more than 2 wchar_ts
      */
     intTargetCapacity =  (count * _BUFFER_CAPACITY_MULTIPLIER + 1) /*for null termination */;
-    intTarget = (wchar_t*)uprv_malloc( intTargetCapacity * sizeof(wchar_t) );
+    intTarget = (wchar_t*)uprv_calloc( intTargetCapacity, sizeof(wchar_t) );
 
     if(intTarget){
 
