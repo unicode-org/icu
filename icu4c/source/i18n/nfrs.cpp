@@ -407,8 +407,6 @@ NFRuleSet::setDecimalFormatSymbols(const DecimalFormatSymbols &newSymbols, UErro
     }
 }
 
-#define RECURSION_LIMIT 64
-
 void
 NFRuleSet::format(int64_t number, UnicodeString& toAppendTo, int32_t pos, int32_t recursionCount, UErrorCode& status) const
 {
@@ -708,6 +706,9 @@ NFRuleSet::parse(const UnicodeString& text, ParsePosition& pos, double upperBoun
     // dump out if we've reached the recursion limit
     if (recursionCount >= RECURSION_LIMIT) {
         // stop recursion
+        return false;
+    }
+    if (!fIsParseable) {
         return false;
     }
 

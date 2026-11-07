@@ -252,4 +252,48 @@ public class RBNFParseTest extends CoreTestFmwk {
             errln("TestICU23144 (Java) failed with unexpected Exception: " + e.getMessage());
         }
     }
+
+    @Test
+    public void TestICU23591() {
+        StringBuilder fuzzBuf =
+                new StringBuilder(
+                        "922E1<\u8686\u8686\u8686\u8686\u8686\u8686\u4400\u00FF\u0000;=>>=>>\u0001>>");
+        for (int i = 0; i < 132; ++i) {
+            fuzzBuf.append(";>>>");
+        }
+        fuzzBuf.append(
+                ";>>\u0008\u0000\u0000\u3132\u3734\u3834\u3633\u3834\u3000\u3C00\u0000\u3B44\u3C00"
+                        + "\u6300\u7275\u6572\u636E\u4D79\u7461\u68630<\u4400;<\u3B30\u3C00\u3000"
+                        + "\u3C00\uC6C6\uC6C6\uC6C6\uC6C6\uC6C6\u0100D\u3B40");
+        String fuzzStr = fuzzBuf.toString();
+        try {
+            RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat(fuzzStr, new ULocale("ba"));
+            rbnf.parse(fuzzStr);
+            errln("Expected exception when parsing fuzzStr");
+        } catch (IllegalArgumentException | IllegalStateException | ParseException expected) {
+            // Expected clean rejection without hang or stack overflow.
+        }
+
+        StringBuilder chainRules = new StringBuilder("0: z;\n");
+        for (int i = 1; i <= 7000; ++i) {
+            chainRules.append(i).append(": >>>;\n");
+        }
+        RuleBasedNumberFormat chainRbnf =
+                new RuleBasedNumberFormat(chainRules.toString(), ULocale.US);
+        try {
+            chainRbnf.parse("a");
+            errln("Expected ParseException when parsing 7000-rule >>> chain");
+        } catch (ParseException expected) {
+            // Expected.
+        }
+
+        RuleBasedNumberFormat selfRef =
+                new RuleBasedNumberFormat("%s:\n0: x;\n1: a=%s=;", ULocale.US);
+        try {
+            selfRef.parse("ax");
+            errln("Expected ParseException for self-referential SameValueSubstitution");
+        } catch (ParseException expected) {
+            // Expected.
+        }
+    }
 }
