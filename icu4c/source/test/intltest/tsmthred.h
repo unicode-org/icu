@@ -46,6 +46,9 @@ public:
     void TestString();
     void TestAnyTranslit();
     void TestUnifiedCache();
+#if !UCONFIG_NO_COLLATION
+    void TestCollationRootCleanupRace();
+#endif
     void TestBreakTranslit();
     void TestIncDec();
     void Test20104();
