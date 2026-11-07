@@ -161,11 +161,14 @@ ICULanguageBreakFactory::getEngineFor(UChar32 c, const char* locale) {
 }
 
 const LanguageBreakEngine *
-ICULanguageBreakFactory::loadEngineFor(UChar32 c, const char*) {
+ICULanguageBreakFactory::loadEngineFor(UChar32 c, const char* locale) {
     UErrorCode status = U_ZERO_ERROR;
     UScriptCode code = uscript_getScript(c, &status);
     if (U_SUCCESS(status)) {
         const LanguageBreakEngine *engine = nullptr;
+        if (DictionaryBreakEngine::suppressScriptBreak(locale, code)) {
+            return nullptr; // -u-dx was requested
+        }
         // Try to use LSTM first
         const LSTMData *data = CreateLSTMDataForScript(code, status);
         if (U_SUCCESS(status)) {
@@ -186,7 +189,7 @@ ICULanguageBreakFactory::loadEngineFor(UChar32 c, const char*) {
         DictionaryMatcher *m = loadDictionaryMatcherFor(code);
         if (m != nullptr) {
             switch(code) {
-            case USCRIPT_THAI:
+            case USCRIPT_THAI:                
                 engine = new ThaiBreakEngine(m, status);
                 break;
             case USCRIPT_LAO:
