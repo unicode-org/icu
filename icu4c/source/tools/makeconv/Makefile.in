@@ -72,6 +72,9 @@ distclean-local: clean-local
 	$(RMV) Makefile
 
 check-local: all-local
+	$(INVOKE) @PYTHON@ $(srcdir)/makeconv_test.py \
+		--makeconv "$(TARGET)" \
+		--testdata-dir "$(top_srcdir)/test/testdata"
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
@@ -94,4 +97,3 @@ ifneq ($(patsubst %clean,,$(MAKECMDGOALS)),)
 -include $(DEPS)
 endif
 endif
-

@@ -23,7 +23,9 @@ SECTION = 1
 MAN_FILES = $(TARGET_STUB_NAME).$(SECTION)
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~ $(DEPS) $(MAN_FILES)
+CLEANFILES = *~ $(DEPS) $(MAN_FILES) $(PKGDATA_TEST_DIR)
+
+PKGDATA_TEST_DIR = pkgdata-test-output
 
 ifneq ($(PKGDATA_DEFS),)
 DEFS += $(PKGDATA_DEFS)
@@ -77,6 +79,14 @@ distclean-local: clean-local
 	$(RMV) Makefile
 
 check-local: all-local
+	$(RMV) $(PKGDATA_TEST_DIR)
+	$(MKINSTALLDIRS) $(PKGDATA_TEST_DIR)
+	: > $(PKGDATA_TEST_DIR)/empty.lst
+	$(PKGDATA_INVOKE) "$(TARGET)" -q -p testrevision -m static \
+		-r 1234567890 -s $(PKGDATA_TEST_DIR) -d $(PKGDATA_TEST_DIR) \
+		-T $(PKGDATA_TEST_DIR) -O "$(top_builddir)/config/pkgdata.inc" \
+		$(PKGDATA_TEST_DIR)/empty.lst
+	$(RMV) $(PKGDATA_TEST_DIR)
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
