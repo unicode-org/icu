@@ -51,6 +51,24 @@ public class RegexUtilitiesTest extends TestFmwk {
         }
     }
 
+    @Test
+    public void TestNumberSignInCharacterClasses() {
+        String[] patterns = {
+            "[#]", "[\\#]", "[!-#]", "[#-%]", "\\p{Po}", "\\p{P}", "[\\p{Po}&\\p{Ascii}]"
+        };
+        for (String pattern : patterns) {
+            for (int flags : new int[] {0, Pattern.COMMENTS}) {
+                checkCharPattern(UnicodeRegex.compile(pattern, flags), pattern, "#", "a");
+            }
+            checkCharPattern(UnicodeRegex.compile("(?x)" + pattern), pattern, "#", "a");
+        }
+        checkCharPattern(
+                UnicodeRegex.compile("[#] # a comment\n [!]", Pattern.COMMENTS),
+                "Comments outside character classes still work",
+                "#!",
+                "#a");
+    }
+
     Transliterator hex = Transliterator.getInstance("hex");
 
     /**
@@ -84,6 +102,7 @@ public class RegexUtilitiesTest extends TestFmwk {
                 expected =
                         new UnicodeSet(expected)
                                 .toPattern(false)
+                                .replace("#", "\\x{23}")
                                 .replaceAll("\\\\U00([0-9a-fA-F]{6})", "\\\\x{$1}");
                 ok = pattern.equals(expected);
             }
