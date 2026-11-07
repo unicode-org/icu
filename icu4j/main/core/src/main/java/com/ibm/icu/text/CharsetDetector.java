@@ -388,7 +388,7 @@ public class CharsetDetector {
     }
 
     /*
-     *  The following items are accessed by individual CharsetRecongizers during
+     *  The following items are accessed by individual CharsetRecognizers during
      *     the recognition process
      *
      */
@@ -443,6 +443,8 @@ public class CharsetDetector {
 
     static {
         List<CSRecognizerInfo> list = new ArrayList<CSRecognizerInfo>();
+
+        list.add(new CSRecognizerInfo(new CharsetRecog_ASCII(), true));
 
         list.add(new CSRecognizerInfo(new CharsetRecog_UTF8(), true));
         list.add(new CSRecognizerInfo(new CharsetRecog_Unicode.CharsetRecog_UTF_16_BE(), true));
