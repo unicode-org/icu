@@ -38,7 +38,7 @@ jobs:
 
   # ICU4C docs build using doxygen..
   icu4c-docs-build:
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -63,7 +63,7 @@ jobs:
   #
   # Invokes test/hdrtst to check public headers compliance.
   gcc-debug-build-and-test:
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -86,7 +86,7 @@ jobs:
   #gcc 14 with c++ 20 and later
   gcc14-cpp20-23:
     # Ubuntu 24.04 Noble Numbat rather than 22.04 Jammy Jellyfish so we can get GCC 14.
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     strategy:
       fail-fast: false
       matrix:
@@ -119,7 +119,7 @@ jobs:
   # (FORCE guards make this tool pass but won't compile to working code.
   # See the testtagsguards.sh script for details.)
   clang-release-build-and-test:
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -170,7 +170,7 @@ jobs:
         build_option:
          [ --enable-static, --enable-static --disable-shared ]
          # --disable-shared has a build problem.
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -190,7 +190,7 @@ jobs:
 
   # Out of source build with gcc 10, c++14, and extra warnings; executes icuinfo.
   gcc-10-stdlib17:
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -214,7 +214,7 @@ jobs:
 
   # Clang Linux with address sanitizer.
   clang-asan:
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -230,7 +230,7 @@ jobs:
           LDFLAGS: -fsanitize=address
   # Clang Linux with leak sanitizer.
   clang-lsan:
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -247,7 +247,7 @@ jobs:
           ASAN_OPTIONS: detect_leaks=1
   # Clang Linux with undefined-behavior sanitizer.
   clang-ubsan:
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -264,7 +264,7 @@ jobs:
           LDFLAGS: -fsanitize=undefined -fsanitize=alignment -fno-sanitize-recover=undefined,alignment
   # Control Flow Integrity.
   clang-cfi:
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -285,7 +285,7 @@ jobs:
 
   # Clang Linux with thread sanitizer.
   clang-tsan:
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -309,7 +309,7 @@ jobs:
   # this check became flaky. The build apparently was not done copying one or another .ucm file before
   # calling makeconv for it, although the Makefile has appropriate dependencies.
   clang-datafilter:
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -333,7 +333,7 @@ jobs:
 
   # Clang Linux with CPP 17
   clang-cpp17:
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -346,7 +346,7 @@ jobs:
 
   # Clang Linux with LANG: en_US@calendar=gregorian;hours=h12
   clang-lang-with-extn-tags:
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -359,7 +359,7 @@ jobs:
 
   # Modern Clang (18 and later) with C++20 and 23 and treat warnings as errors
   clang-18-21-cpp-20-23-warning-as-errors:
-      runs-on: ubuntu-24.04  # Updated in BRS
+      runs-on: ubuntu-26.04  # Updated in BRS
       strategy:
         fail-fast: false
         matrix:
@@ -517,7 +517,7 @@ jobs:
 
   # WebAssembly build using the WASI SDK.
   wasm-wasi-sdk:
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -563,7 +563,7 @@ jobs:
 
   # Run ICU4C tests with stubdata.
   run-with-stubdata:
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -608,7 +608,7 @@ jobs:
 
   # Test U_CHARSET_IS_UTF8
   u-charset-is-utf8-test:
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -620,7 +620,7 @@ jobs:
 
   # Test U_OVERRIDE_CXX_ALLOCATION-is-0-test
   u-override-cxx-allocation-is-0-test:
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -633,7 +633,7 @@ jobs:
 
   # Test LSTM
   lstm-test:
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -646,7 +646,7 @@ jobs:
 
   # Test adaboost
   adaboost-test:
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -659,7 +659,7 @@ jobs:
 
   # Build and run testmap
   testmap:
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -674,7 +674,7 @@ jobs:
 
   # Copyright scan
   copyright-scan:
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -683,7 +683,7 @@ jobs:
 
   # Check compilation of internal headers.
   internal-header-compilation:
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -692,7 +692,7 @@ jobs:
 
   # Check source files for valid UTF-8 and for absence of BOM.
   valid-UTF-8-and-no-BOM-check:
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -701,7 +701,7 @@ jobs:
 
   # Run unit tests with UCONFIG_NO_XXX variations.
   uconfig-unit-tests:
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     strategy:
       # "fail-fast: false" lets other jobs keep running even if the test breaks in some other uconfig.
       fail-fast: false
@@ -750,7 +750,7 @@ jobs:
 
   # Run header tests with UCONFIG_NO_XXX variations.
   uconfig-header-tests:
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     strategy:
       # "fail-fast: false" lets other jobs keep running even if the test breaks in some other uconfig.
       fail-fast: false
@@ -803,7 +803,7 @@ jobs:
 
   # Build Unicode update tools
   unicode-update-tools:
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
     - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
@@ -844,7 +844,7 @@ jobs:
 
 # Build and run ICU4C samples
   icu4c-test-samples:
-      runs-on: ubuntu-24.04  # Updated in BRS
+      runs-on: ubuntu-26.04  # Updated in BRS
       steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -871,7 +871,7 @@ jobs:
 
   # https://unicode-org.github.io/icu/processes/release/tasks/integration.html#verify-that-icu4c-tests-pass-without-collation-rule-strings
   icu4c-without-collation-rule-strings:
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -913,7 +913,7 @@ jobs:
 
   # https://unicode-org.github.io/icu/processes/release/tasks/healthy-code.html#test-uconfig_no_conversion
   icu4c-uconfig-no-conversion:
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:

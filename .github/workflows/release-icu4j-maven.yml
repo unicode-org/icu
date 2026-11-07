@@ -49,7 +49,7 @@ jobs:
   #   - Attached as Github Action artifacts
   #   - Uploaded to the GitHub release (at `gitReleaseTag`)
   publish:
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     environment: release-env
 
     permissions:
@@ -161,7 +161,7 @@ jobs:
   # This job was split from `publish` so that we can use the jdk 26 version of javadoc,
   # which has some really nice improvements.
   javadoc_for_website_publishing:
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     environment: release-env
 
     permissions:

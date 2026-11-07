@@ -44,7 +44,7 @@ jobs:
   # This job is created according to the cache strategy of reuse from a single job:
   # https://github.com/actions/cache/blob/main/caching-strategies.md#make-cache-read-only--reuse-cache-from-centralized-job
   icu4j-mvn-init-cache:
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
       - name: Checkout and setup
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -73,7 +73,7 @@ jobs:
   formatter:
     name: Format checker
     needs: icu4j-mvn-init-cache
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
       - name: Checkout and setup
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -102,7 +102,7 @@ jobs:
   linter:
     name: Linter
     needs: icu4j-mvn-init-cache
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
       - name: Checkout and setup
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -162,7 +162,7 @@ jobs:
       fail-fast: false
       matrix:
         java-version: [ '11', '17', '21', '25', '27' ] # all supported LTS versions + latest version released
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
       - name: Checkout and setup
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -193,7 +193,7 @@ jobs:
   lstm-icu4j-build-and-test:
     if: false  # TODO(ICU-22505)
     needs: icu4j-mvn-init-cache
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
       - name: Checkout and setup
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -230,7 +230,7 @@ jobs:
   adaboost-icu4j-build-and-test:
     if: false # Temporary disable, until we disable the .jar creation from C and distribute the individual files
     needs: icu4j-mvn-init-cache
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
       - name: Checkout and setup
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
