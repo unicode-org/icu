@@ -23,6 +23,8 @@ The script runs in 4 steps.
 
 You will be prompted to download the tarball of the upstream tag/branch. If confirmed, the script will download the file to a temp directory and unpack it there.
 
+Files matching the `ignorelist` in `pull-from-upstream.sh` are skipped during unpacking. These are upstream's CI config (`.github/`) and build-system files (CMake, Bazel, SCons, Make, MSVC, etc.), which ICU does not use. Do not add them to the vendor directory or edit them there. If upstream adds a new build system or CI file, add it to the ignorelist.
+
 At this point, the ICU source tree is still pristine.
 
 ### Step 2: Patch ICU4C
