@@ -706,7 +706,13 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
             // Converting to a BigDecimal requires Double.toString().
             convertToAccurateDouble();
         }
-        return bcdToBigDecimal();
+        BigDecimal result = bcdToBigDecimal();
+        // Preserve trailing zeros recorded by setMinFraction
+        int minScale = -getLowerDisplayMagnitude();
+        if (minScale > result.scale()) {
+            result = result.setScale(minScale);
+        }
+        return result;
     }
 
     private static int safeSubtract(int a, int b) {
