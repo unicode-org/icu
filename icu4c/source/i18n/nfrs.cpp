@@ -697,7 +697,7 @@ static void dumpUS(FILE* f, const UnicodeString& us) {
 #endif
 
 UBool
-NFRuleSet::parse(const UnicodeString& text, ParsePosition& pos, double upperBound, uint32_t nonNumericalExecutedRuleMask, int32_t recursionCount, Formattable& result) const
+NFRuleSet::parse(const UnicodeString& text, ParsePosition& pos, double upperBound, uint32_t nonNumericalExecutedRuleMask, int32_t recursionCount, int32_t& stepCount, Formattable& result) const
 {
     // try matching each rule in the rule set against the text being
     // parsed.  Whichever one matches the most characters is the one
@@ -728,13 +728,13 @@ NFRuleSet::parse(const UnicodeString& text, ParsePosition& pos, double upperBoun
     fprintf(stderr, "  parse negative: %d\n", this, negativeNumberRule != 0);
 #endif
     // Try each of the negative rules, fraction rules, infinity rules and NaN rules
-    for (int i = 0; i < NON_NUMERICAL_RULE_LENGTH; i++) {
+    for (int i = 0; i < NON_NUMERICAL_RULE_LENGTH && stepCount < PARSE_STEP_LIMIT; i++) {
         if (nonNumericalRules[i] && ((nonNumericalExecutedRuleMask >> i) & 1) == 0) {
             // Mark this rule as being executed so that we don't try to execute it again.
             nonNumericalExecutedRuleMask |= 1 << i;
 
             Formattable tempResult;
-            UBool success = nonNumericalRules[i]->doParse(text, workingPos, 0, upperBound, nonNumericalExecutedRuleMask, recursionCount + 1, tempResult);
+            UBool success = nonNumericalRules[i]->doParse(text, workingPos, 0, upperBound, nonNumericalExecutedRuleMask, recursionCount + 1, stepCount, tempResult);
             if (success && (workingPos.getIndex() > highWaterMark.getIndex())) {
                 result = tempResult;
                 highWaterMark = workingPos;
@@ -768,12 +768,13 @@ NFRuleSet::parse(const UnicodeString& text, ParsePosition& pos, double upperBoun
             fprintf(stderr, "ub: %g, i64: %s (%s)\n", upperBound, ubstr, ubstrhex);
         }
 #endif
-        for (int32_t i = rules.size(); --i >= 0 && highWaterMark.getIndex() < text.length();) {
+        for (int32_t i = rules.size();
+             --i >= 0 && highWaterMark.getIndex() < text.length() && stepCount < PARSE_STEP_LIMIT;) {
             if ((!fIsFractionRuleSet) && (rules[i]->getBaseValue() >= ub)) {
                 continue;
             }
             Formattable tempResult;
-            UBool success = rules[i]->doParse(text, workingPos, fIsFractionRuleSet, upperBound, nonNumericalExecutedRuleMask, recursionCount + 1, tempResult);
+            UBool success = rules[i]->doParse(text, workingPos, fIsFractionRuleSet, upperBound, nonNumericalExecutedRuleMask, recursionCount + 1, stepCount, tempResult);
             if (success && workingPos.getIndex() > highWaterMark.getIndex()) {
                 result = tempResult;
                 highWaterMark = workingPos;

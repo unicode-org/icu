@@ -395,7 +395,8 @@ abstract class NFSubstitution {
             double upperBound,
             boolean lenientParse,
             int nonNumericalExecutedRuleMask,
-            int recursionCount) {
+            int recursionCount,
+            int[] stepCount) {
         Number tempResult;
 
         // figure out the highest base value a rule can have and match
@@ -419,8 +420,12 @@ abstract class NFSubstitution {
                             parsePosition,
                             upperBound,
                             nonNumericalExecutedRuleMask,
-                            recursionCount);
-            if (lenientParse && !ruleSet.isFractionSet() && parsePosition.getIndex() == 0) {
+                            recursionCount,
+                            stepCount);
+            if (lenientParse
+                    && !ruleSet.isFractionSet()
+                    && parsePosition.getIndex() == 0
+                    && stepCount[0] < NFRuleSet.PARSE_STEP_LIMIT) {
                 tempResult = ruleSet.owner.getDecimalFormat().parse(text, parsePosition);
             }
 
@@ -1003,7 +1008,8 @@ class ModulusSubstitution extends NFSubstitution {
             double upperBound,
             boolean lenientParse,
             int nonNumericalExecutedRuleMask,
-            int recursionCount) {
+            int recursionCount,
+            int[] stepCount) {
         // if this isn't a >>> substitution, we can just use the
         // inherited parse() routine to do the parsing
         if (ruleToUse == null) {
@@ -1014,7 +1020,8 @@ class ModulusSubstitution extends NFSubstitution {
                     upperBound,
                     lenientParse,
                     nonNumericalExecutedRuleMask,
-                    recursionCount);
+                    recursionCount,
+                    stepCount);
 
         } else {
             // but if it IS a >>> substitution, we have to do it here: we
@@ -1027,7 +1034,8 @@ class ModulusSubstitution extends NFSubstitution {
                             false,
                             upperBound,
                             nonNumericalExecutedRuleMask,
-                            recursionCount + 1);
+                            recursionCount + 1,
+                            stepCount);
 
             if (parsePosition.getIndex() != 0) {
                 double result = tempResult.doubleValue();
@@ -1324,7 +1332,8 @@ class FractionalPartSubstitution extends NFSubstitution {
             double upperBound,
             boolean lenientParse,
             int nonNumericalExecutedRuleMask,
-            int recursionCount) {
+            int recursionCount,
+            int[] stepCount) {
         // if we're not in byDigits mode, we can just use the inherited
         // doParse()
         if (!byDigits) {
@@ -1335,7 +1344,8 @@ class FractionalPartSubstitution extends NFSubstitution {
                     0,
                     lenientParse,
                     nonNumericalExecutedRuleMask,
-                    recursionCount);
+                    recursionCount,
+                    stepCount);
         } else {
             // if we ARE in byDigits mode, parse the text one digit at a time
             // using this substitution's owning rule set (we do this by setting
@@ -1348,7 +1358,9 @@ class FractionalPartSubstitution extends NFSubstitution {
 
             DecimalQuantity_DualStorageBCD fq = new DecimalQuantity_DualStorageBCD();
             int totalDigits = 0;
-            while (workText.length() > 0 && workPos.getIndex() != 0) {
+            while (workText.length() > 0
+                    && workPos.getIndex() != 0
+                    && stepCount[0] < NFRuleSet.PARSE_STEP_LIMIT) {
                 workPos.setIndex(0);
                 digit =
                         ruleSet.parse(
@@ -1356,9 +1368,12 @@ class FractionalPartSubstitution extends NFSubstitution {
                                         workPos,
                                         10,
                                         nonNumericalExecutedRuleMask,
-                                        recursionCount)
+                                        recursionCount,
+                                        stepCount)
                                 .intValue();
-                if (lenientParse && workPos.getIndex() == 0) {
+                if (lenientParse
+                        && workPos.getIndex() == 0
+                        && stepCount[0] < NFRuleSet.PARSE_STEP_LIMIT) {
                     Number n = ruleSet.owner.getDecimalFormat().parse(workText, workPos);
                     if (n != null) {
                         digit = n.intValue();
@@ -1662,7 +1677,8 @@ class NumeratorSubstitution extends NFSubstitution {
             double upperBound,
             boolean lenientParse,
             int nonNumericalExecutedRuleMask,
-            int recursionCount) {
+            int recursionCount,
+            int[] stepCount) {
         // we don't have to do anything special to do the parsing here,
         // but we have to turn lenient parsing off-- if we leave it on,
         // it SERIOUSLY messes up the algorithm
@@ -1682,7 +1698,8 @@ class NumeratorSubstitution extends NFSubstitution {
                                         workPos,
                                         1,
                                         nonNumericalExecutedRuleMask,
-                                        recursionCount)
+                                        recursionCount,
+                                        stepCount)
                                 .intValue(); // parse zero or nothing at all
                 if (workPos.getIndex() == 0) {
                     // we failed, either there were no more zeros, or the number was formatted with
@@ -1713,7 +1730,8 @@ class NumeratorSubstitution extends NFSubstitution {
                         upperBound,
                         false,
                         nonNumericalExecutedRuleMask,
-                        recursionCount);
+                        recursionCount,
+                        stepCount);
 
         if (withZeros && result != null) {
             // any base value will do in this case.  is there a way to
