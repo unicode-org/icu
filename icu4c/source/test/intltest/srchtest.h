@@ -63,6 +63,7 @@ private:
     void TestCollator();
     void TestPattern();
     void TestText();
+    void TestSetTextLifetime();
     void TestCompositeBoundaries();
     void TestGetSetOffset();
     void TestGetSetAttribute();
