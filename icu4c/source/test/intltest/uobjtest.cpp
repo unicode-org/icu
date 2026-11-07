@@ -243,6 +243,7 @@ UObject *UObjectTest::testClassNoClassID(UObject *obj, const char *className, co
 #include "taiwncal.h"
 #include "indiancal.h"
 #include "chnsecal.h"
+#include "myancal.h"
 #include "windtfmt.h"
 #include "winnmfmt.h"
 #include "ustrenum.h"
@@ -389,6 +390,7 @@ void UObjectTest::testIDs()
     TESTCLASSID_FACTORY(IndianCalendar, Calendar::createInstance(Locale("@calendar=indian"), status));
     TESTCLASSID_FACTORY(ChineseCalendar, Calendar::createInstance(Locale("@calendar=chinese"), status));
     TESTCLASSID_FACTORY(TaiwanCalendar, Calendar::createInstance(Locale("@calendar=roc"), status));
+    TESTCLASSID_FACTORY(MyanmarCalendar, Calendar::createInstance(Locale("@calendar=myanmar"), status));
 #if U_PLATFORM_USES_ONLY_WIN32_API
     TESTCLASSID_FACTORY(Win32DateFormat, DateFormat::createDateInstance(DateFormat::kFull, Locale("@compat=host")));
     TESTCLASSID_FACTORY(Win32NumberFormat, NumberFormat::createInstance(Locale("@compat=host"), status));
