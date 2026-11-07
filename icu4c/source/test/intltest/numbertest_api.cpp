@@ -1915,6 +1915,16 @@ void NumberFormatterApiTest::unitUsage() {
                        1,                                                               //
                        "0.019 psi");
 
+    assertFormatSingle(u"meter-second-per-meter simplifies when matching category",             //
+                       u"unit/meter-second-per-meter usage/default",                            //
+                       u"unit/meter-second-per-meter usage/default",                            //
+                       NumberFormatter::with()                                                  //
+                           .unit(MeasureUnit::forIdentifier("meter-second-per-meter", status))  //
+                           .usage("default"),                                                   //
+                       Locale("en-US"),                                                         //
+                       1,                                                                       //
+                       "1 sec");
+
     assertFormatSingle(u"negative temperature conversion",                                 //
                        u"measure-unit/temperature-celsius unit-width-short usage/default", //
                        u"measure-unit/temperature-celsius unit-width-short usage/default", //
