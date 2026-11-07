@@ -32,6 +32,7 @@ static void TestCompareInvEbcdicAsAscii(void);
 static void TestLocaleAtSign(void);
 static void TestNoInvariantAtSign(void);
 static void TestInvCharToAscii(void);
+static void TestIntegerToStringRadix2(void);
 
 void addCStringTest(TestNode** root) {
     addTest(root, &TestAPI, "tsutil/cstrtest/TestAPI");
@@ -40,6 +41,7 @@ void addCStringTest(TestNode** root) {
     addTest(root, &TestLocaleAtSign, "tsutil/cstrtest/TestLocaleAtSign");
     addTest(root, &TestNoInvariantAtSign, "tsutil/cstrtest/TestNoInvariantAtSign");
     addTest(root, &TestInvCharToAscii, "tsutil/cstrtest/TestInvCharToAscii");
+    addTest(root, &TestIntegerToStringRadix2, "tsutil/cstrtest/TestIntegerToStringRadix2");
 }
 
 static void TestAPI(void)
@@ -395,5 +397,50 @@ TestInvCharToAscii(void) {
             log_err("uprv_invCharToAscii('%c') did not convert to ASCII 0x%02x\n", ic, (int)ac);
         }
         if (ic == 0) { break; }
+    }
+}
+
+/* The longest outputs: base 2 needs 32 digits for int32_t and 64 digits for int64_t. */
+static void TestIntegerToStringRadix2(void) {
+    static const struct {
+        int32_t value;
+        int32_t radix;
+        const char *expected;
+    } int32Cases[] = {
+        { INT32_MIN, 10, "-2147483648" },
+        { INT32_MAX, 10, "2147483647" },
+        { INT32_MIN, 2, "10000000000000000000000000000000" },
+        { INT32_MAX, 2, "1111111111111111111111111111111" },
+        { -1, 2, "11111111111111111111111111111111" }
+    };
+    static const struct {
+        int64_t value;
+        uint32_t radix;
+        const char *expected;
+    } int64Cases[] = {
+        { U_INT64_MIN, 10, "-9223372036854775808" },
+        { U_INT64_MIN, 2, "1000000000000000000000000000000000000000000000000000000000000000" },
+        { U_INT64_MAX, 2, "111111111111111111111111111111111111111111111111111111111111111" },
+        { -1, 2, "1111111111111111111111111111111111111111111111111111111111111111" }
+    };
+    char buffer[80];
+    int32_t i, length;
+
+    for (i = 0; i < UPRV_LENGTHOF(int32Cases); ++i) {
+        length = T_CString_integerToString(buffer, int32Cases[i].value, int32Cases[i].radix);
+        if (uprv_strcmp(buffer, int32Cases[i].expected) != 0 ||
+                length != (int32_t)uprv_strlen(int32Cases[i].expected)) {
+            log_err("FAIL: T_CString_integerToString(%ld, %d) = \"%s\" length %d, expected \"%s\"\n",
+                    (long)int32Cases[i].value, (int)int32Cases[i].radix, buffer, (int)length,
+                    int32Cases[i].expected);
+        }
+    }
+    for (i = 0; i < UPRV_LENGTHOF(int64Cases); ++i) {
+        length = T_CString_int64ToString(buffer, int64Cases[i].value, int64Cases[i].radix);
+        if (uprv_strcmp(buffer, int64Cases[i].expected) != 0 ||
+                length != (int32_t)uprv_strlen(int64Cases[i].expected)) {
+            log_err("FAIL: T_CString_int64ToString(case %d, %d) = \"%s\" length %d, expected \"%s\"\n",
+                    (int)i, (int)int64Cases[i].radix, buffer, (int)length, int64Cases[i].expected);
+        }
     }
 }
