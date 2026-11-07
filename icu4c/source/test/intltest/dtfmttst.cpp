@@ -146,6 +146,7 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
     TESTCASE_AUTO(TestDayPeriodFallback);
     TESTCASE_AUTO(TestInvalidStyles);
     TESTCASE_AUTO(TestDayNames);
+    TESTCASE_AUTO(TestLongNumberingSystemOverride);
 
     TESTCASE_AUTO_END;
 }
@@ -6179,6 +6180,28 @@ void DateFormatTest::TestDayNames() {
             msg.appendNumber(testCases[i].day, status);
             assertTrue(msg.data(), parsedDate == date);
         }
+    }
+}
+
+void DateFormatTest::TestLongNumberingSystemOverride() {
+    // A long numbering system name in the override string must not overrun the
+    // "numbers=" keyword buffer, and must behave like the equivalent locale keyword.
+    for (int32_t length : {91, 92, 200}) {
+        UErrorCode status = U_ZERO_ERROR;
+        UErrorCode expectedStatus = U_ZERO_ERROR;
+        std::string name(length, 'a');
+        SimpleDateFormat sdf(u"yyyy-MM-dd", UnicodeString(name.c_str(), -1, US_INV),
+                             Locale::getEnglish(), status);
+        SimpleDateFormat expected(u"yyyy-MM-dd", Locale(("en@numbers=" + name).c_str()), expectedStatus);
+        assertEquals("Long numbering system override", U_FAILURE(expectedStatus), U_FAILURE(status));
+    }
+
+    UErrorCode status = U_ZERO_ERROR;
+    SimpleDateFormat sdf(u"yyyy", u"thai", Locale::getEnglish(), status);
+    SimpleDateFormat expected(u"yyyy", Locale("en@numbers=thai"), status);
+    if (assertSuccess("thai override", status, true)) {
+        UnicodeString result, expectedResult;
+        assertEquals("thai override", expected.format(0.0, expectedResult), sdf.format(0.0, result));
     }
 }
 
