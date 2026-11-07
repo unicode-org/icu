@@ -23,7 +23,6 @@ import java.nio.charset.CoderResult;
 class CharsetCompoundText extends CharsetICU {
     private static final byte[] fromUSubstitution = new byte[] {(byte) 0x3F};
     private CharsetMBCS myConverterArray[];
-    private byte state;
 
     private static final byte INVALID = -2;
     private static final byte DO_SEARCH = -1;
@@ -394,6 +393,7 @@ class CharsetCompoundText extends CharsetICU {
 
     class CharsetEncoderCompoundText extends CharsetEncoderICU {
         CharsetEncoderMBCS gbEncoder[];
+        private byte fromUState = COMPOUND_TEXT_SINGLE_0;
 
         public CharsetEncoderCompoundText(CharsetICU cs) {
             super(cs, fromUSubstitution);
@@ -412,6 +412,7 @@ class CharsetCompoundText extends CharsetICU {
         @Override
         protected void implReset() {
             super.implReset();
+            fromUState = COMPOUND_TEXT_SINGLE_0;
             for (int i = 0; i < NUM_OF_CONVERTERS; i++) {
                 if (gbEncoder[i] != null) {
                     gbEncoder[i].implReset();
@@ -428,7 +429,7 @@ class CharsetCompoundText extends CharsetICU {
             ByteBuffer tmpTargetBuffer = ByteBuffer.allocate(3);
             byte[] targetBytes = new byte[10];
             int targetLength = 0;
-            byte currentState = state;
+            byte currentState = fromUState;
             byte tmpState = 0;
             int i = 0;
             boolean gotoGetTrail = false;
@@ -565,7 +566,7 @@ class CharsetCompoundText extends CharsetICU {
                 }
                 this.errorBufferLength = m;
             }
-            state = currentState;
+            fromUState = currentState;
 
             return err;
         }
@@ -573,6 +574,7 @@ class CharsetCompoundText extends CharsetICU {
 
     class CharsetDecoderCompoundText extends CharsetDecoderICU {
         CharsetDecoderMBCS gbDecoder[];
+        private byte toUState = COMPOUND_TEXT_SINGLE_0;
 
         public CharsetDecoderCompoundText(CharsetICU cs) {
             super(cs);
@@ -590,6 +592,7 @@ class CharsetCompoundText extends CharsetICU {
         @Override
         protected void implReset() {
             super.implReset();
+            toUState = COMPOUND_TEXT_SINGLE_0;
             for (int i = 0; i < NUM_OF_CONVERTERS; i++) {
                 if (gbDecoder[i] != null) {
                     gbDecoder[i].implReset();
@@ -602,7 +605,7 @@ class CharsetCompoundText extends CharsetICU {
                 ByteBuffer source, CharBuffer target, IntBuffer offsets, boolean flush) {
             CoderResult err = CoderResult.UNDERFLOW;
             byte[] sourceChar = {0x00};
-            byte currentState = state;
+            byte currentState = toUState;
             byte tmpState = currentState;
             CharsetDecoderMBCS decoder;
             int sourceLimit = source.limit();
@@ -693,7 +696,7 @@ class CharsetCompoundText extends CharsetICU {
                     break;
                 }
             }
-            state = currentState;
+            toUState = currentState;
             return err;
         }
     }
