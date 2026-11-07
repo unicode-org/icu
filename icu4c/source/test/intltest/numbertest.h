@@ -214,6 +214,7 @@ class DecimalQuantityTest : public IntlTest {
     void testNickelRounding();
     void testScientificAndCompactSuppressedExponent();
     void testSuppressedExponentUnchangedByInitialScaling();
+    void testToFractionLongWithExtremeScale();
     void testDecimalQuantityParseFormatRoundTrip();
     void testDecNumAllocationFailure();
 

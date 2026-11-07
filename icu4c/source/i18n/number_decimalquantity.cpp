@@ -643,6 +643,14 @@ int64_t DecimalQuantity::toLong(bool truncateIfOverflow) const {
 uint64_t DecimalQuantity::toFractionLong(bool includeTrailingZeros) const {
     uint64_t result = 0L;
     int32_t magnitude = -1 - exponent;
+    // Only magnitudes in [scale, scale + precision - 1] map to stored digits;
+    // getDigitPos() returns 0 for everything above that range. Skip the leading
+    // zeros instead of iterating over them, so that a very negative scale
+    // (from a scale multiplier in a number skeleton) cannot make this loop run
+    // for hundreds of millions of iterations. See ICU-23530.
+    if (static_cast<int64_t>(magnitude) - scale > static_cast<int64_t>(precision) - 1) {
+        magnitude = scale + precision - 1;
+    }
     int32_t lowerMagnitude = scale;
     if (includeTrailingZeros) {
         lowerMagnitude = std::min(lowerMagnitude, rReqPos);
