@@ -1383,6 +1383,9 @@ void UnitsTest::testUnitsConstantsDenomenator_getIdentifier() {
         {"meter-per-1e15-kilometer", "meter-per-1e15-kilometer"},
         {"meter-per-1000000000000000000", "meter-per-1e18"},
         {"meter-per-1e18-kilometer", "meter-per-1e18-kilometer"},
+        {"per-100-kilometer", "per-100-kilometer"},
+        {"per-1000-kilometer", "per-1000-kilometer"},
+        {"per-1000000-kilometer", "per-1e6-kilometer"},
         {"meter-per-1000000000000001", "meter-per-1000000000000001"},
         {"meter-per-1000000000000001-kilometer", "meter-per-1000000000000001-kilometer"},
     };
