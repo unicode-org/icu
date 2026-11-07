@@ -16,7 +16,9 @@
 #include "unicode/uchar.h"
 #include "unicode/ures.h"
 #include "cintltst.h"
+#include "cmemory.h"
 #include "unicode/utrace.h"
+#include "unicode/uenum.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -30,6 +32,7 @@ typedef union {
 } ctest_AlignedMemory;
 
 static void TestHeapFunctions(void);
+static void TestEnumerationReallocFailure(void);
 
 void addHeapMutexTest(TestNode **root);
 
@@ -38,6 +41,7 @@ void
 addHeapMutexTest(TestNode** root)
 {
     addTest(root, &TestHeapFunctions,       "hpmufn/TestHeapFunctions"  );
+    addTest(root, &TestEnumerationReallocFailure, "hpmufn/TestEnumerationReallocFailure");
 }
 
 static int32_t gMutexFailures = 0;
@@ -199,4 +203,79 @@ static void TestHeapFunctions(void) {
     ctest_resetICU();
 }
 
+/* ICU-23553: a failed buffer growth must not leak the original allocation. */
+typedef struct {
+    int32_t blockCount;
+    void *failedBlock;
+} EnumMemoryContext;
 
+static void * U_CALLCONV enumMemAlloc(const void *context, size_t size) {
+    EnumMemoryContext *state = (EnumMemoryContext *)context;
+    void *mem = malloc(size);
+    if (mem != NULL) {
+        ++state->blockCount;
+    }
+    return mem;
+}
+
+static void * U_CALLCONV enumMemRealloc(const void *context, void *mem, size_t size) {
+    EnumMemoryContext *state = (EnumMemoryContext *)context;
+    (void)size;
+    state->failedBlock = mem;
+    return NULL;
+}
+
+static void U_CALLCONV enumMemFree(const void *context, void *mem) {
+    EnumMemoryContext *state = (EnumMemoryContext *)context;
+    if (mem != NULL) {
+        --state->blockCount;
+        if (mem == state->failedBlock) {
+            state->failedBlock = NULL;
+        }
+        free(mem);
+    }
+}
+
+static void TestEnumerationReallocFailure(void) {
+    const char *strings[] = { "a", "a string long enough to grow the enumeration buffer" };
+    EnumMemoryContext context = { 0, NULL };
+    UErrorCode status = U_ZERO_ERROR;
+    UEnumeration *en = NULL;
+    const UChar *value;
+    int32_t length;
+    char *icuDataDir = safeGetICUDataDirectory();
+
+    u_cleanup();
+    u_setMemoryFunctions(&context, enumMemAlloc, enumMemRealloc, enumMemFree, &status);
+    TEST_STATUS(status, U_ZERO_ERROR);
+    if (U_FAILURE(status)) {
+        goto cleanup;
+    }
+
+    en = uenum_openCharStringsEnumeration(strings, UPRV_LENGTHOF(strings), &status);
+    TEST_STATUS(status, U_ZERO_ERROR);
+    if (en == NULL) {
+        goto cleanup;
+    }
+    value = uenum_unext(en, &length, &status);
+    TEST_STATUS(status, U_ZERO_ERROR);
+    TEST_ASSERT(value != NULL && length == 1 && value[0] == 0x61 && value[1] == 0);
+    if (value == NULL) {
+        goto cleanup;
+    }
+
+    value = uenum_unext(en, &length, &status);
+    TEST_STATUS(status, U_MEMORY_ALLOCATION_ERROR);
+    TEST_ASSERT(value == NULL);
+    TEST_ASSERT(context.failedBlock != NULL);
+
+cleanup:
+    uenum_close(en);
+    TEST_ASSERT(context.blockCount == 0);
+    /* Keep the test itself leak-free even when running against the broken code. */
+    free(context.failedBlock);
+    u_cleanup();
+    u_setDataDirectory(icuDataDir);
+    free(icuDataDir);
+    ctest_resetICU();
+}
