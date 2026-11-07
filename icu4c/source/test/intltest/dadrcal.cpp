@@ -38,6 +38,17 @@ DataDrivenCalendarTest::~DataDrivenCalendarTest() {
     delete driver;
 }
 
+DataDrivenCalendarTest::DataDrivenCalendarTest(const char* bundleName) {
+    UErrorCode status = U_ZERO_ERROR;
+    driver = TestDataModule::getTestDataModule(bundleName, *this, status);
+}
+
+DataDrivenChineseCalendarTest::DataDrivenChineseCalendarTest() : DataDrivenCalendarTest("chinesecalendar") {
+}
+
+DataDrivenChineseCalendarTest::~DataDrivenChineseCalendarTest() {
+}
+
 void DataDrivenCalendarTest::runIndexedTest(int32_t index, UBool exec,
         const char* &name, char* /*par */) {
     if (driver != nullptr) {
@@ -393,6 +404,9 @@ void DataDrivenCalendarTest::testConvert(TestData *testData,
     int n = 0;
     while (testData->nextCase(currentCase, status)) {
         ++n;
+        if (quick && strcmp(testData->getName(), "TestChineseCalendar") == 0 && (n % 33) != 1) {
+            continue;
+        }
         LocalPointer<Calendar> fromCalendar;
         UnicodeString locale = currentCase->getString("locale", status);
         if (U_SUCCESS(status)) {
