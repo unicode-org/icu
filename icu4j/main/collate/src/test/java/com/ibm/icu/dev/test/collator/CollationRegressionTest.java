@@ -1339,12 +1339,26 @@ public class CollationRegressionTest extends TestFmwk {
         coll.setStrength(Collator.TERTIARY);
         coll.setAlternateHandlingShifted(true);
         coll.setMaxVariable(Collator.ReorderCodes.SPACE);
-
         String str1 = "\u0002\u2000湢";
         String str2 = "ô\u0B00\u0B03";
+        checkCompareAndCollationKeyCompare(coll, str1, str2);
+    }
 
+    @Test
+    public void TestICU21995() {
+        RuleBasedCollator coll =
+                (RuleBasedCollator) Collator.getInstance(Locale.forLanguageTag("zh-u-co-stroke"));
+        coll.setNumericCollation(true);
+        String str1 = "᠘᠘楴";
+        String str2 = "᠘\uFFFF";
+        checkCompareAndCollationKeyCompare(coll, str1, str2);
+    }
+
+    private void checkCompareAndCollationKeyCompare(Collator coll, String str1, String str2) {
+        // Compare the two strings by compare()
         int res1 = coll.compare(str1, str2);
 
+        // Get the collation keys for both strings
         CollationKey key1 = coll.getCollationKey(str1);
         CollationKey key2 = coll.getCollationKey(str2);
         int res2 = key1.compareTo(key2);
