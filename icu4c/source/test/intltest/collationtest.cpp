@@ -2164,10 +2164,11 @@ void CollationTest::TestColItrInfiniteLoop22511() {
             errorCode.assertSuccess();
             assertEquals(UnicodeString("Locale ") + l.getName() + "UTF16 case:" + j, UCOL_EQUAL, result);
 
-            UCharIterator iter1, iter2;
-            uiter_setString(&iter1, testCases[j][0], -1);
-            uiter_setString(&iter2, testCases[j][1], -1);
-            result = coll->compare(iter1, iter2, errorCode);
+            UCharIterator uiter1;
+            UCharIterator uiter2;
+            uiter_setString(&uiter1, testCases[j][0], -1);
+            uiter_setString(&uiter2, testCases[j][1], -1);
+            result = coll->compare(uiter1, uiter2, errorCode);
             errorCode.assertSuccess();
             assertEquals(UnicodeString("Locale ") + l.getName() + "UCharIterator case:" + j, UCOL_EQUAL, result);
         }

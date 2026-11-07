@@ -18,6 +18,7 @@
 
 #if !UCONFIG_NO_COLLATION
 
+#include "unicode/uiter.h"
 #include "unicode/utf16.h"
 
 U_NAMESPACE_BEGIN
@@ -92,6 +93,29 @@ public:
                     return U16_IS_LEAD(prev2) && hasTccc(prev2);
                 }
             } else {
+                return hasTccc(prev);
+            }
+        }
+        return false;
+    }
+
+    static inline UBool hasTcccBefore(UCharIterator &iter) {
+        UChar32 prev = iter.previous(&iter);
+        if (prev >= 0) {
+            if (U16_IS_TRAIL(prev)) {
+                // hasTccc(<low-surrogate>) always returns false.
+                // To test possible trailing ccc, we need to check the high surrogate
+                // (or previous character for unpaired surrogate).
+                UChar32 prev2 = iter.previous(&iter);
+                if (prev2 >= 0) {
+                    iter.next(&iter);
+                    iter.next(&iter);
+                    return U16_IS_LEAD(prev2) && hasTccc(prev2);
+                }
+                iter.next(&iter);
+                return false;
+            } else {
+                iter.next(&iter);
                 return hasTccc(prev);
             }
         }
