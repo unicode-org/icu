@@ -29,6 +29,7 @@ import com.ibm.icu.impl.coll.FCDIterCollationIterator;
 import com.ibm.icu.impl.coll.FCDUTF16CollationIterator;
 import com.ibm.icu.impl.coll.UTF16CollationIterator;
 import com.ibm.icu.impl.coll.UVector32;
+import com.ibm.icu.text.CollationElementIterator;
 import com.ibm.icu.text.CollationKey;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.Collator.ReorderCodes;
@@ -1791,6 +1792,24 @@ public class CollationTest extends CollationTestBase {
                 String[] testCase = testCases[i];
                 int cmp = coll.compare(testCase[0], testCase[1]);
                 assertEquals("Locale " + loc.toString() + " case:" + i, 0, cmp);
+                if (coll instanceof RuleBasedCollator) {
+                    RuleBasedCollator rbc = (RuleBasedCollator) coll;
+                    CollationElementIterator iter0 =
+                            rbc.getCollationElementIterator(
+                                    UCharacterIterator.getInstance(testCase[0]));
+                    CollationElementIterator iter1 =
+                            rbc.getCollationElementIterator(
+                                    UCharacterIterator.getInstance(testCase[1]));
+                    int ce0;
+                    do {
+                        ce0 = iter0.next();
+                        int ce1 = iter1.next();
+                        assertEquals(
+                                "Locale " + loc.toString() + " UCharacterIterator case:" + i,
+                                ce0,
+                                ce1);
+                    } while (ce0 != CollationElementIterator.NULLORDER);
+                }
             }
         }
     }
