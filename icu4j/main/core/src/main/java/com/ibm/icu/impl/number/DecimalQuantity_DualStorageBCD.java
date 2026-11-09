@@ -196,6 +196,7 @@ public final class DecimalQuantity_DualStorageBCD extends DecimalQuantity_Abstra
                 bcdBytes[i] = 0;
             }
         } else {
+            assert numDigits < 16;
             bcdLong >>>= (numDigits * 4);
         }
         scale += numDigits;

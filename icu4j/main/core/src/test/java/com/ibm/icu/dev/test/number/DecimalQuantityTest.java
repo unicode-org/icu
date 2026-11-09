@@ -613,6 +613,7 @@ public class DecimalQuantityTest extends NumberTestBase {
                     {6.75, -1, RoundingMode.DOWN, "6.5"},
                     {7.00, -1, RoundingMode.UNNECESSARY, "7"},
                     {7.50, -1, RoundingMode.UNNECESSARY, "7.5"},
+                    {999999999999999.8, -1, RoundingMode.HALF_EVEN, "1000000000000000"},
                 };
         for (Object[] cas : cases) {
             double input = (Double) cas[0];

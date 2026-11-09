@@ -925,8 +925,8 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
                     compact();
                     return;
                 } else if (trailingDigit >= 5 && !roundDown) {
-                    setDigitPos(0, (byte) 9);
-                    trailingDigit = 9;
+                    shiftRight(1);
+                    trailingDigit = getDigitPos(0);
                     // do not return: use the bubbling logic below
                 } else {
                     setDigitPos(0, (byte) 5);
