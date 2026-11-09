@@ -507,6 +507,7 @@ void DecimalQuantityTest::testNickelRounding() {
         {6.75, -1, UNUM_ROUND_DOWN, u"6.5"},
         {7.00, -1, UNUM_ROUND_UNNECESSARY, u"7"},
         {7.50, -1, UNUM_ROUND_UNNECESSARY, u"7.5"},
+        {999999999999999.8, -1, UNUM_ROUND_HALFEVEN, u"1000000000000000"},
     };
     for (const auto& cas : cases) {
         UnicodeString message = DoubleToUnicodeString(cas.input) + u" @ " + Int64ToUnicodeString(cas.magnitude) + u" / " + Int64ToUnicodeString(cas.roundingMode);

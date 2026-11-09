@@ -918,8 +918,8 @@ void DecimalQuantity::roundToMagnitude(int32_t magnitude, RoundingMode roundingM
                 compact();
                 return;
             } else if (trailingDigit >= 5 && !roundDown) {
-                setDigitPos(0, 9);
-                trailingDigit = 9;
+                shiftRight(1);
+                trailingDigit = getDigitPos(0);
                 // do not return: use the bubbling logic below
             } else {
                 setDigitPos(0, 5);
@@ -1157,6 +1157,7 @@ void DecimalQuantity::shiftRight(int32_t numDigits) {
             fBCD.bcdBytes.ptr[i] = 0;
         }
     } else {
+        U_ASSERT(numDigits < 16);
         fBCD.bcdLong >>= (numDigits * 4);
     }
     scale += numDigits;
