@@ -26,7 +26,7 @@ on:
 permissions: {}
 jobs:
   Fuzzing:
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     permissions:
       security-events: write
     strategy:

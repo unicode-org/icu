@@ -5506,7 +5506,6 @@ void NumberFormatterApiTest::fieldPositionCoverage() {
     }
 
     {
-        // Data: other{"‎{0} K"} == "\u200E{0} K"
         // If that data changes, try to find another example of a non-empty unit prefix/suffix
         // that is also all ignorables (whitespace and bidi control marks).
         const char16_t* message = u"Measure unit field position with fully ignorable prefix";
@@ -5517,7 +5516,7 @@ void NumberFormatterApiTest::fieldPositionCoverage() {
                 NumberFormatter::with().unit(KELVIN),
                 "fa", // locale with the interesting data
                 68,
-                u"‎۶۸ K");
+                u"\u200E۶۸ K");
         static const UFieldPosition expectedFieldPositions[] = {
                 // field, begin index, end index
                 {UNUM_INTEGER_FIELD, 1, 3},

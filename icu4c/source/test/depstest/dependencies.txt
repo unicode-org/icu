@@ -61,6 +61,10 @@ group: c_strings
     __ctype_b_loc  # for <ctype.h>
     # We must not use tolower and toupper because they are system-locale-sensitive (Turkish i).
     strlen strchr strrchr strstr strcmp strncmp strcpy strncpy strcat strncat
+    # gcc 15 vs gcc 13: wcslen is no longer being optimized out or inlined by default.
+    # gcc 15 added vector-based optimization, and wcslen chooses AVX/SSE impl at runtime.
+    # https://github.com/bell-sw/glibc-string
+    wcslen
     memchr memcmp memcpy memmove memset
     # BSD version of memcmp().
     bcmp

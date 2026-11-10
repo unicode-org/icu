@@ -179,6 +179,10 @@ def _Resolve(name, parents):
   item["system_symbols"] = system_symbols
   imports -= exports | system_symbols
   for symbol in imports:
+    # GCC enabled standard library hardening by default (-D_GLIBCXX_ASSERTIONS),
+    # and __glibcxx_assert_fail shows up everywhere
+    if symbol == "std::__glibcxx_assert_fail(char const*, int, char const*, char const*)":
+      continue
     for file_name in files:
       if (file_name, symbol) in allowed_errors:
          sys.stderr.write("Info:  ignoring %s imports %s\n\n" % (file_name, symbol))
