@@ -961,6 +961,44 @@ public class DecimalQuantityTest extends NumberTestBase {
     }
 
     @Test
+    public void testToFractionLongWithExtremeScale() {
+        DecimalQuantity_DualStorageBCD fq = new DecimalQuantity_DualStorageBCD();
+        fq.setToLong(5);
+        fq.roundToInfinity();
+        fq.adjustMagnitude(-993030305);
+        assertEquals("toFractionLong(true) with extreme scale", 5L, fq.toFractionLong(true));
+        assertEquals("toFractionLong(false) with extreme scale", 5L, fq.toFractionLong(false));
+
+        DecimalQuantity_DualStorageBCD fqMin = new DecimalQuantity_DualStorageBCD();
+        fqMin.setToLong(5);
+        fqMin.roundToInfinity();
+        fqMin.adjustMagnitude(Integer.MIN_VALUE);
+        assertEquals(
+                "toFractionLong(true) with Integer.MIN_VALUE scale",
+                5L,
+                fqMin.toFractionLong(true));
+        assertEquals(
+                "toFractionLong(false) with Integer.MIN_VALUE scale",
+                5L,
+                fqMin.toFractionLong(false));
+
+        LocalizedNumberFormatter nf =
+                NumberFormatter.forSkeleton("K % scale/1E-993030305").locale(new ULocale("dsb"));
+        try {
+            nf.format(5);
+            fail(
+                    "Expected IllegalArgumentException when formatting hugely out-of-bounds magnitude");
+        } catch (IllegalArgumentException expected) {
+        }
+        try {
+            nf.format(5.0);
+            fail(
+                    "Expected IllegalArgumentException when formatting hugely out-of-bounds magnitude");
+        } catch (IllegalArgumentException expected) {
+        }
+    }
+
+    @Test
     public void testSuppressedExponentUnchangedByInitialScaling() {
         ULocale locale = new ULocale("fr-FR");
         LocalizedNumberFormatter withLocale = NumberFormatter.withLocale(locale);

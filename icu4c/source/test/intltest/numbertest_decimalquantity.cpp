@@ -36,6 +36,7 @@ void DecimalQuantityTest::runIndexedTest(int32_t index, UBool exec, const char *
         TESTCASE_AUTO(testNickelRounding);
         TESTCASE_AUTO(testScientificAndCompactSuppressedExponent);
         TESTCASE_AUTO(testSuppressedExponentUnchangedByInitialScaling);
+        TESTCASE_AUTO(testToFractionLongWithExtremeScale);
         TESTCASE_AUTO(testDecimalQuantityParseFormatRoundTrip);
         TESTCASE_AUTO(testDecNumAllocationFailure);
         TESTCASE_AUTO_END;
@@ -730,6 +731,54 @@ void DecimalQuantityTest::testSuppressedExponentUnchangedByInitialScaling() {
     }
 }
 
+
+void DecimalQuantityTest::testToFractionLongWithExtremeScale() {
+    IcuTestErrorCode status(*this, "testToFractionLongWithExtremeScale");
+
+    {
+        DecimalQuantity fq;
+        fq.setToLong(5);
+        fq.roundToInfinity();
+        fq.adjustMagnitude(-993030305);
+        assertDoubleEquals(
+            u"toFractionLong(true) with extreme scale",
+            5.0,
+            static_cast<double>(fq.toFractionLong(true)));
+        assertDoubleEquals(
+            u"toFractionLong(false) with extreme scale",
+            5.0,
+            static_cast<double>(fq.toFractionLong(false)));
+    }
+
+    {
+        DecimalQuantity fq;
+        fq.setToLong(5);
+        fq.roundToInfinity();
+        fq.adjustMagnitude(INT32_MIN);
+        assertDoubleEquals(
+            u"toFractionLong(true) with INT32_MIN scale",
+            5.0,
+            static_cast<double>(fq.toFractionLong(true)));
+        assertDoubleEquals(
+            u"toFractionLong(false) with INT32_MIN scale",
+            5.0,
+            static_cast<double>(fq.toFractionLong(false)));
+    }
+
+    {
+        LocalizedNumberFormatter nf =
+            NumberFormatter::forSkeleton(u"K % scale/1E-993030305", status).locale("dsb");
+        assertSuccess("forSkeleton with extreme scale", status);
+        FormattedNumber fnInt = nf.formatInt(5, status);
+        (void) fnInt;
+        assertTrue("formatInt with extreme scale reports an error",
+                   status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR));
+        FormattedNumber fnDouble = nf.formatDouble(5.0, status);
+        (void) fnDouble;
+        assertTrue("formatDouble with extreme scale reports an error",
+                   status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR));
+    }
+}
 
 void DecimalQuantityTest::testDecimalQuantityParseFormatRoundTrip() {
     IcuTestErrorCode status(*this, "testDecimalQuantityParseFormatRoundTrip");
