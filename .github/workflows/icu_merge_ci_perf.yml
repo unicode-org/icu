@@ -32,7 +32,7 @@ jobs:
   # This job is created according to the cache strategy of reuse from a single job:
   # https://github.com/actions/cache/blob/main/caching-strategies.md#make-cache-read-only--reuse-cache-from-centralized-job
   icu4j-mvn-init-cache:
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
       - name: Checkout and setup
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -57,7 +57,7 @@ jobs:
   icu4c-store-perf-libs:
     # Run performance tests only on the main branch of the ICU repository.
     if: github.repository == 'unicode-org/icu' && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -100,7 +100,7 @@ jobs:
       contents: write
       deployments: write
 
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -176,7 +176,7 @@ jobs:
       contents: write
       deployments: write
 
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -243,7 +243,7 @@ jobs:
       contents: write
       deployments: write
 
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -294,7 +294,7 @@ jobs:
       contents: write
       deployments: write
 
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
       - name: Checkout and setup
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -348,7 +348,7 @@ jobs:
       contents: write
       deployments: write
 
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
       - name: Checkout and setup
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -405,7 +405,7 @@ jobs:
       contents: write
       deployments: write
 
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
       - name: Checkout and setup
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -467,7 +467,7 @@ jobs:
       contents: write
       deployments: write
 
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
       - name: Checkout and setup
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -599,7 +599,7 @@ jobs:
       contents: write
       deployments: write
 
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
       - name: Checkout and setup
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -675,7 +675,7 @@ jobs:
       contents: write
       deployments: write
 
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
       - name: Checkout and setup
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -732,7 +732,7 @@ jobs:
     if: github.repository == 'unicode-org/icu' && github.ref == 'refs/heads/main'
     name: Copy perf data to remote repo for visualization
     needs: [icu4c-performance-tests, icu4c-performance-tests-with-files, icu4c-strsrchperf, icu4j-unicodesetperf, icu4j-ucharacterperf, icu4j-decimalformatperf, icu4j-normperf, icu4j-converterperf, icu4j-dateformatperf]
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:

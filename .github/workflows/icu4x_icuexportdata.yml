@@ -37,7 +37,7 @@ jobs:
 
   # Workflow for ICU Export Data for ICU4X
   icu4x-icuexportdata:
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     permissions:
       contents: write # So that we can upload to release
       id-token: write # For artifact attestation

@@ -23,7 +23,7 @@ permissions: read-all
 jobs:
   analysis:
     name: Scorecard analysis
-    runs-on: ubuntu-24.04  # Updated in BRS
+    runs-on: ubuntu-26.04  # Updated in BRS
     permissions:
       # Needed to upload the results to code-scanning dashboard.
       security-events: write

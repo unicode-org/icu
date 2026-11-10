@@ -112,7 +112,7 @@ jobs:
 
   # Windows MSVC ARM64 distribution release
   windows-msvc-arm64-dist-release:
-    runs-on: windows-11-vs2026-arm # Updated in BRS
+    runs-on: windows-11-vs2026-arm  # Updated in BRS
     permissions: *msvc_permissions
     timeout-minutes: 30
     strategy:
