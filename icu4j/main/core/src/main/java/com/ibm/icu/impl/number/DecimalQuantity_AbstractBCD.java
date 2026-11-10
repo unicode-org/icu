@@ -621,15 +621,22 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
      * notation) to return the proper long value represented by the result.
      */
     public long toFractionLong(boolean includeTrailingZeros) {
+        if (precision == 0) {
+            return 0L;
+        }
         long result = 0L;
-        int magnitude = -1 - exponent;
-        int lowerMagnitude = scale;
+        long magnitude = Math.min(-1L - exponent, (long) scale + precision - 1);
+        long lowerMagnitude = scale;
         if (includeTrailingZeros) {
-            lowerMagnitude = Math.min(lowerMagnitude, rReqPos);
+            lowerMagnitude = Math.min(lowerMagnitude, (long) rReqPos);
         }
         // NOTE: Java has only signed longs, so we check result <= 1e17 instead of 1e18
         for (; magnitude >= lowerMagnitude && result <= 1e17; magnitude--) {
-            result = result * 10 + getDigitPos(magnitude - scale);
+            long pos = magnitude - scale;
+            result = result * 10 + (pos >= 0 ? getDigitPos((int) pos) : 0);
+            if (result == 0 && magnitude < scale) {
+                break;
+            }
         }
         // Remove trailing zeros; this can happen during integer overflow cases.
         if (!includeTrailingZeros) {

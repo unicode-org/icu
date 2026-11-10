@@ -641,14 +641,23 @@ int64_t DecimalQuantity::toLong(bool truncateIfOverflow) const {
 }
 
 uint64_t DecimalQuantity::toFractionLong(bool includeTrailingZeros) const {
+    if (precision == 0) {
+        return 0;
+    }
     uint64_t result = 0L;
-    int32_t magnitude = -1 - exponent;
-    int32_t lowerMagnitude = scale;
+    int64_t magnitude = std::min(
+        static_cast<int64_t>(-1) - exponent,
+        static_cast<int64_t>(scale) + precision - 1);
+    int64_t lowerMagnitude = scale;
     if (includeTrailingZeros) {
-        lowerMagnitude = std::min(lowerMagnitude, rReqPos);
+        lowerMagnitude = std::min(lowerMagnitude, static_cast<int64_t>(rReqPos));
     }
     for (; magnitude >= lowerMagnitude && result <= 1e18L; magnitude--) {
-        result = result * 10 + getDigitPos(magnitude - scale);
+        int64_t pos = magnitude - scale;
+        result = result * 10 + (pos >= 0 ? getDigitPos(static_cast<int32_t>(pos)) : 0);
+        if (result == 0 && magnitude < scale) {
+            break;
+        }
     }
     // Remove trailing zeros; this can happen during integer overflow cases.
     if (!includeTrailingZeros) {
