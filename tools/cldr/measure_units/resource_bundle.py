@@ -6,22 +6,33 @@
 This is the format of ICU's .txt data files, for example
 icu4c/source/data/unit/en.txt. The MeasureUnit tool in this directory needs
 only the keys of tables and the targets of aliases, so that is all this
-module returns:
+module returns. For example, parse() turns this text:
+
+  en{
+      units{
+          length{
+              meter{
+                  dnam{"meter"}
+                  other{"{0} meters"}
+              }
+              yard:alias{"/LOCALE/units/length/foot"}
+          }
+      }
+  }
+
+into this:
+
+  {'en': {'units': {'length': {
+      'meter': {'dnam': None, 'other': None},
+      'yard': Alias(path='/LOCALE/units/length/foot'),
+  }}}}
 
 * A table becomes a dict, in file order.
-* An alias, like units:alias{"/LOCALE/unitsShort"}, becomes an Alias.
+* An alias becomes an Alias.
 * Other values (strings, integers, arrays, binary data) become None.
 
 Keys lose their type, like ":alias", ":int", or ":table", and quoted keys lose
 their quotes.
-
-The grammar, as far as this module reads it:
-
-  resource = key "{" value "}"
-  key      = name | name ":" type | quoted-string
-  value    = string+      (when the type is "alias")
-           | resource*    (a table, when the value starts with key "{")
-           | anything     (other values, which are skipped)
 """
 
 from __future__ import annotations
@@ -61,6 +72,20 @@ def _tokens(text: str, path: str) -> list[str]:
   return tokens
 
 
+# The grammar that _Parser reads, as far as this module needs it:
+#
+#   resource = key "{" value "}"
+#   key      = name | name ":" type | quoted-string
+#   value    = string+      (when the type is "alias")
+#            | resource*    (a table, when the value starts with key "{")
+#            | anything     (other values, which are skipped)
+#
+# For example, in yard:alias{"/LOCALE/units/length/foot"}, the key is "yard"
+# with the type "alias", and the value is one string. In meter{dnam{"m"}}, the
+# value of "meter" is a table with one resource, "dnam".
+#
+# Each rule has a method: resource(), key(), and for the value strings(),
+# table(), or skip_value().
 class _Parser:
   """Reads the tokens of one file, with one method for each grammar rule."""
 
