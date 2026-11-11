@@ -41,6 +41,7 @@ public:
     void TestVTimeZoneWrapper();
     void TestT8943();
     void TestVTimeZoneRruleUntil();
+    void TestVTimeZoneWriteTzinfoProp();
 
 private:
     void verifyTransitions(BasicTimeZone& icutz, UDate start, UDate end);
