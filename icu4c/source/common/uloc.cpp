@@ -1271,6 +1271,16 @@ size_t _getRegion(std::string_view localeID, ByteSink* sink) {
     return len;
 }
 
+// Reasonable upper limit for variants
+// There are no strict limitation of the syntax of variant in the legacy
+// locale format. If the locale is constructed from unicode_locale_id
+// as defined in UTS35, then we know each unicode_variant_subtag
+// could have max length of 8 ((alphanum{5,8} | digit alphanum{3})
+// 179 would allow 20 unicode_variant_subtag with sep in the
+// unicode_locale_id
+// 8*20 + 1*(20-1) = 179
+constexpr int32_t MAX_VARIANTS_LENGTH = 179;
+
 /**
  * @param needSeparator if true, then add leading '_' if any variants
  * are added to 'variant'
@@ -1282,16 +1292,6 @@ _getVariant(std::string_view localeID,
             bool needSeparator,
             UErrorCode& status) {
     if (U_FAILURE(status) || localeID.empty()) return 0;
-
-    // Reasonable upper limit for variants
-    // There are no strict limitation of the syntax of variant in the legacy
-    // locale format. If the locale is constructed from unicode_locale_id
-    // as defined in UTS35, then we know each unicode_variant_subtag
-    // could have max length of 8 ((alphanum{5,8} | digit alphanum{3})
-    // 179 would allow 20 unicode_variant_subtag with sep in the
-    // unicode_locale_id
-    // 8*20 + 1*(20-1) = 179
-    constexpr int32_t MAX_VARIANTS_LENGTH = 179;
 
     /* get one or more variant tags and separate them with '_' */
     size_t index = 0;
@@ -1857,6 +1857,10 @@ _canonicalize(std::string_view localeID,
     /* Copy POSIX-style variant, if any [mr@FOO] */
     if (!OPTION_SET(options, _ULOC_CANONICALIZE) &&
         !tmpLocaleID.empty() && keywordAssign == std::string_view::npos) {
+        if (tmpLocaleID.length() - (variant.isEmpty() ? 1 : 0) + variant.length() > MAX_VARIANTS_LENGTH) {
+            err = U_ILLEGAL_ARGUMENT_ERROR;
+            return;
+        }
         tag.append(tmpLocaleID, err);
         tmpLocaleID = {};
     }
@@ -1875,8 +1879,12 @@ _canonicalize(std::string_view localeID,
             CharStringByteSink s(&tag);
             std::string_view sub = tmpLocaleID;
             sub.remove_prefix(1);
-            _getVariant(sub, '@', &s, !variant.isEmpty(), err);
+            size_t len = _getVariant(sub, '@', &s, !variant.isEmpty(), err);
             if (U_FAILURE(err)) { return; }
+            if (!variant.isEmpty() && variant.length() + 1 + len > MAX_VARIANTS_LENGTH) {
+                err = U_ILLEGAL_ARGUMENT_ERROR;
+                return;
+            }
         }
 
         /* Look up the ID in the canonicalization map */

@@ -4682,6 +4682,32 @@ public class ULocaleTest extends CoreTestFmwk {
 
         ULocale locale = new ULocale(valid);
         Assert.assertEquals(valid.substring(2), locale.getVariant());
+
+        String validPosix =
+                "_"
+                        + "@12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678";
+
+        ULocale posixLocale = new ULocale(validPosix);
+        Assert.assertEquals(valid.substring(2), posixLocale.getVariant());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -4709,6 +4735,33 @@ public class ULocaleTest extends CoreTestFmwk {
                         + "_12345678"
                         + "_12345678X"; // One character too long.
         ULocale locale = new ULocale(invalid);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void TestPosixVariantLengthOverLimit() {
+        String invalidPosix =
+                "_"
+                        + "@12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678X"; // One character too long.
+        ULocale locale = new ULocale(invalidPosix);
     }
 
     @Test
