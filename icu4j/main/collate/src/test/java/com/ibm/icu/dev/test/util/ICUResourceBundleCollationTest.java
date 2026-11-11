@@ -198,6 +198,46 @@ public final class ICUResourceBundleCollationTest extends TestFmwk {
                             + " while expecting "
                             + localeExpected.toString());
         }
+
+        String validPosix =
+                "_"
+                        + "@12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678";
+
+        ULocale equivPosixLocale =
+                ICUResourceBundle.getFunctionalEquivalent(
+                        ICUData.ICU_BASE_NAME,
+                        ICUResourceBundle.ICU_DATA_CLASS_LOADER,
+                        "calendar",
+                        "calendar",
+                        new ULocale(validPosix),
+                        new boolean[1],
+                        false);
+        if (!equivPosixLocale.equals(localeExpected)) {
+            errln(
+                    "Get unexpected locale:"
+                            + equivPosixLocale.toString()
+                            + " while expecting "
+                            + localeExpected.toString());
+        }
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -231,6 +271,41 @@ public final class ICUResourceBundleCollationTest extends TestFmwk {
                         "calendar",
                         "calendar",
                         new ULocale(invalid),
+                        new boolean[1],
+                        false);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void TestGetFunctionalEquivalentPosixVariantLengthOverLimit() {
+        String invalidPosix =
+                "_"
+                        + "@12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678"
+                        + "_12345678X"; // One character too long.
+        ULocale equivLocale2 =
+                ICUResourceBundle.getFunctionalEquivalent(
+                        ICUData.ICU_BASE_NAME,
+                        ICUResourceBundle.ICU_DATA_CLASS_LOADER,
+                        "calendar",
+                        "calendar",
+                        new ULocale(invalidPosix),
                         new boolean[1],
                         false);
     }
