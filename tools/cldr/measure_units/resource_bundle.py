@@ -14,6 +14,14 @@ module returns:
 
 Keys lose their type, like ":alias", ":int", or ":table", and quoted keys lose
 their quotes.
+
+The grammar, as far as this module reads it:
+
+  resource = key "{" value "}"
+  key      = name | name ":" type | quoted-string
+  value    = string+      (when the type is "alias")
+           | resource*    (a table, when the value starts with key "{")
+           | anything     (other values, which are skipped)
 """
 
 from __future__ import annotations
@@ -53,66 +61,99 @@ def _tokens(text: str, path: str) -> list[str]:
   return tokens
 
 
+class _Parser:
+  """Reads the tokens of one file, with one method for each grammar rule."""
+
+  def __init__(self, tokens: list[str], path: str):
+    self.tokens = tokens
+    self.pos = 0
+    self.path = path
+
+  def error(self, message: str) -> Error:
+    return Error(f'{self.path}: {message}')
+
+  def peek(self, offset: int = 0) -> str:
+    """Returns a token at or after the current one, without consuming it."""
+    if self.pos + offset >= len(self.tokens):
+      raise self.error('unexpected end of the text')
+    return self.tokens[self.pos + offset]
+
+  def take(self) -> str:
+    """Consumes the current token and returns it."""
+    token = self.peek()
+    self.pos += 1
+    return token
+
+  def expect(self, expected: str):
+    token = self.take()
+    if token != expected:
+      raise self.error(f'expected {expected!r}, found {token!r}')
+
+  def at_key(self) -> bool:
+    """Whether the next tokens are a key and its "{"."""
+    return self.peek() not in ('{', '}', ',') and self.peek(1) == '{'
+
+  def resource(self) -> tuple[str, object]:
+    """resource = key "{" value "}" """
+    if not self.at_key():
+      raise self.error(f'expected a key and "{{", found {self.peek()!r}')
+    name, kind = self.key()
+    self.expect('{')
+    if kind == 'alias':
+      value = Alias(self.strings())
+    elif self.at_key():
+      value = self.table()
+    else:
+      self.skip_value()
+      value = None
+    self.expect('}')
+    return name, value
+
+  def key(self) -> tuple[str, str]:
+    """Returns the name and the type of a key, like ("units", "alias")."""
+    token = self.take()
+    if token.startswith('"'):
+      return token[1:-1], ''
+    name, _, kind = token.partition(':')
+    return name, kind
+
+  def strings(self) -> str:
+    """Reads one or more adjacent strings and joins them, like genrb does."""
+    parts = []
+    while self.peek().startswith('"'):
+      parts.append(self.take()[1:-1])
+    if not parts:
+      raise self.error(f'expected a string, found {self.peek()!r}')
+    return ''.join(parts)
+
+  def table(self) -> dict[str, object]:
+    """Reads the resources of a table, up to its closing brace."""
+    table = {}
+    while self.peek() != '}':
+      name, value = self.resource()
+      table[name] = value
+    return table
+
+  def skip_value(self):
+    """Skips any other value, up to its closing brace."""
+    depth = 0
+    while depth or self.peek() != '}':
+      token = self.take()
+      if token == '{':
+        depth += 1
+      elif token == '}':
+        depth -= 1
+
+
 def parse(text: str, path: str = '<text>') -> dict[str, object]:
   """Parses resource bundle text into {name: value} for its top table.
 
   path is used only in error messages.
   """
-  tokens = _tokens(text, path)
-  pos = 0
-
-  def peek(offset: int) -> str:
-    if pos + offset >= len(tokens):
-      raise Error(f'{path}: unexpected end of the text')
-    return tokens[pos + offset]
-
-  def next_token() -> str:
-    nonlocal pos
-    token = peek(0)
-    pos += 1
-    return token
-
-  def is_key(token: str) -> bool:
-    """Whether a token can be a key: a bare word or a quoted string."""
-    return token not in ('{', '}', ',')
-
-  def resource() -> tuple[str, object]:
-    """Parses a key and its value, from the key to the closing brace."""
-    key = next_token()
-    if not is_key(key) or next_token() != '{':
-      raise Error(f'{path}: expected a key and "{{", found {key!r}')
-    if key.startswith('"'):
-      name, kind = key[1:-1], ''
-    else:
-      name, _, kind = key.partition(':')
-    if kind == 'alias':
-      # The path can be split into adjacent strings, like any string.
-      parts = []
-      while peek(0).startswith('"'):
-        parts.append(next_token()[1:-1])
-      if not parts or next_token() != '}':
-        raise Error(f'{path}: unexpected value of the alias {key}')
-      return name, Alias(''.join(parts))
-    if is_key(peek(0)) and peek(1) == '{':
-      table = {}
-      while peek(0) != '}':
-        item_name, value = resource()
-        table[item_name] = value
-      next_token()
-      return name, table
-    # A string, an integer, an array, or binary data: skip it.
-    depth = 1
-    while depth:
-      token = next_token()
-      if token == '{':
-        depth += 1
-      elif token == '}':
-        depth -= 1
-    return name, None
-
-  name, value = resource()
-  if pos != len(tokens):
-    raise Error(f'{path}: unexpected text after the table {name}')
+  parser = _Parser(_tokens(text, path), path)
+  name, value = parser.resource()
+  if parser.pos != len(parser.tokens):
+    raise parser.error(f'unexpected text after the table {name}')
   return {name: value}
 
 
