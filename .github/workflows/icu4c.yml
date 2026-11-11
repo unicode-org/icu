@@ -179,8 +179,6 @@ jobs:
       - name: Build ICU4C with clang
         run: |
           cd icu4c/source;
-          export AR='/usr/bin/llvm-ar-21';
-          export RANLIB='/usr/bin/llvm-ranlib-21';
           ./runConfigureICU Linux/clang ${{ matrix.build_option }};
           make -j -l4.5 tests;
       - name: Test
