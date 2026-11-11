@@ -141,6 +141,7 @@ void TimeZoneRuleTest::runIndexedTest( int32_t index, UBool exec, const char* &n
         CASE(16, TestVTimeZoneWrapper);
         CASE(17, TestT8943);
         CASE(18, TestVTimeZoneRruleUntil);
+        CASE(19, TestVTimeZoneWriteTzinfoProp);
         default: name = ""; break;
     }
 }
@@ -2673,6 +2674,35 @@ TimeZoneRuleTest::TestVTimeZoneRruleUntil() {
     ec.assertSuccess();
     assertTrue("Should contain rrule1", vtzData.indexOf(rrule1) > 0);
     assertTrue("Should contain rrule2", vtzData.indexOf(rrule2) > 0);
+}
+
+// ICU-22132 VTimeZone::write(UnicodeString&, UErrorCode&) must emit the ICU
+// time zone information as an X-TZINFO property, not as a bare line, which
+// is not valid iCalendar (RFC 5545).
+void
+TimeZoneRuleTest::TestVTimeZoneWriteTzinfoProp() {
+    IcuTestErrorCode ec(*this, "TestVTimeZoneWriteTzinfoProp");
+    LocalPointer<VTimeZone> vtz(VTimeZone::createVTimeZoneByID("America/Los_Angeles"));
+
+    UnicodeString vtzData;
+    vtz->write(vtzData, ec);
+    ec.assertSuccess();
+    assertTrue("Should contain X-TZINFO",
+               vtzData.indexOf(u"\r\nX-TZINFO:America/Los_Angeles[") > 0);
+
+    // Every content line must start with a property name followed by a colon
+    int32_t start = 0;
+    while (start < vtzData.length()) {
+        int32_t end = vtzData.indexOf(u"\r\n", start);
+        if (end < 0) {
+            end = vtzData.length();
+        }
+        UnicodeString line(vtzData, start, end - start);
+        if (line.indexOf(u':') <= 0) {
+            errln(UnicodeString(u"FAIL: Not an iCalendar property: ") + line);
+        }
+        start = end + 2;
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
