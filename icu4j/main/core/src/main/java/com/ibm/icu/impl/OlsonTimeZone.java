@@ -20,6 +20,7 @@ import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.TimeZoneRule;
 import com.ibm.icu.util.TimeZoneTransition;
 import com.ibm.icu.util.UResourceBundle;
+import com.ibm.icu.util.VersionInfo;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.Arrays;
@@ -1239,6 +1240,23 @@ public class OlsonTimeZone extends BasicTimeZone implements Cloneable {
         }
 
         transitionRulesInitialized = true;
+    }
+
+    // Timezone data version API, moved from VersionInfo
+    private static volatile String TZDATA_VERSION = null;
+
+    public static String getTZDataVersion() {
+        if (TZDATA_VERSION == null) {
+            synchronized (VersionInfo.class) {
+                if (TZDATA_VERSION == null) {
+                    UResourceBundle tzbundle =
+                            UResourceBundle.getBundleInstance(
+                                    "com/ibm/icu/impl/" + ICUData.ICU_BUNDLE, "zoneinfo64");
+                    TZDATA_VERSION = tzbundle.getString("TZVersion");
+                }
+            }
+        }
+        return TZDATA_VERSION;
     }
 
     // Note: This class does not support back level serialization compatibility
