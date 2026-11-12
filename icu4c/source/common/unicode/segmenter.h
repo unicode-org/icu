@@ -51,24 +51,22 @@ class SegmentsImpl;
 
 class Segment {
 public:
-    Segment()
-    :start_(BreakIterator::DONE),
-    limit_(BreakIterator::DONE),
-    ruleStatus_(-1),
-    source_(u"")
-    {
+    Segment() :
+        start_(BreakIterator::DONE),
+        limit_(BreakIterator::DONE),
+        ruleStatus_(-1),
+        source_(u"") {
     }
 
     ~Segment()
     {
     }
 
-    Segment(int32_t start, int32_t limit, int32_t ruleStatus, std::u16string_view source)
-    :start_(start),
-    limit_(limit),
-    ruleStatus_(ruleStatus),
-    source_(source)
-    {
+    Segment(int32_t start, int32_t limit, int32_t ruleStatus, std::u16string_view source) :
+        start_(start),
+        limit_(limit),
+        ruleStatus_(ruleStatus),
+        source_(source) {
     }
 
     int32_t getStart() {
