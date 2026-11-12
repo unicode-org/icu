@@ -51,18 +51,51 @@ class SegmentsImpl;
 
 class U_COMMON_API_CLASS Segment : public UObject {
 public:
-    Segment();
-    ~Segment() override;
+    Segment()
+    :start_(BreakIterator::DONE),
+    limit_(BreakIterator::DONE),
+    ruleStatus_(-1),
+    source_(u"")
+    {
+    }
 
-    Segment(int32_t start, int32_t limit, int32_t ruleStatus, std::u16string_view source);
+    ~Segment() override
+    {
+    }
 
-    int32_t getStart();
-    int32_t getLimit();
-    int32_t getRuleStatus();
-    std::u16string_view getSource();
-    std::u16string_view getSubstr();
+    Segment(int32_t start, int32_t limit, int32_t ruleStatus, std::u16string_view source)
+    :start_(start),
+    limit_(limit),
+    ruleStatus_(ruleStatus),
+    source_(source)
+    {
+    }
 
-    static Segment emptySegment();
+    int32_t getStart() {
+       return start_;
+    }
+
+    int32_t getLimit() {
+       return limit_;
+    }
+
+    int32_t getRuleStatus() {
+       return ruleStatus_;
+    }
+
+    std::u16string_view getSource() {
+       return source_.substr(start_, (limit_ - start_));
+    }
+
+    std::u16string_view getSubstr() {
+       return source_.substr(start_, (limit_ - start_));
+    }
+
+    static Segment emptySegment() {
+        Segment s;
+        return s;
+    }
+
 private:
     const int32_t start_;
     const int32_t limit_;
