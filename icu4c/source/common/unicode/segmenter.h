@@ -139,7 +139,6 @@ class SegmentsUTF8 {
 
 class U_COMMON_API_CLASS Segmenter : public UObject {
 public:
-    ~Segmenter() override;
     // TODO: discuss if we want to take input type of UnicodeString or std::u16string_view
     // Note: std::u16string_view is mentioned in the design doc, FWIW
     // Note: Should we take a pointer or a reference?
@@ -157,7 +156,9 @@ public:
     // We *could* do something new and return a
     // LocalPointer<Segments> or std::unique_ptr<Segments> for explicit ownership.
 protected:
-    Segmenter();
+    Segmenter() {}
+    
+    ~Segmenter() {}
 };
 
 

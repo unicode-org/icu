@@ -3,23 +3,14 @@
 
 #include "unicode/brkiter.h"
 #include "unicode/segmenter.h"
-#include "unicode/segmenter_segment_iter.h"
 
 U_NAMESPACE_BEGIN
 
 namespace segmenter {
 
 // ---------------------------------------------
-// Segments
-// ---------------------------------------------
-
-// ---------------------------------------------
 // Segmenter
 // ---------------------------------------------
-
-Segmenter::Segmenter() {}
-
-Segmenter::~Segmenter() {}
 
 std::unique_ptr<Segments> Segmenter::segment(std::u16string_view /*s*/, UErrorCode &errorCode) {
     if (U_SUCCESS(errorCode)) {
