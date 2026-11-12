@@ -49,7 +49,7 @@ class SegmentsImpl;
 // Segment
 // ---------------------------------------------
 
-class U_COMMON_API_CLASS Segment : public UObject {
+class Segment {
 public:
     Segment()
     :start_(BreakIterator::DONE),
@@ -59,7 +59,7 @@ public:
     {
     }
 
-    ~Segment() override
+    ~Segment()
     {
     }
 
@@ -107,7 +107,7 @@ private:
 // Segments
 // ---------------------------------------------
 
-class U_COMMON_API_CLASS Segments : public UObject {
+class Segments {
 public:
     virtual bool isBoundary(int32_t i) = 0;
 
@@ -125,7 +125,7 @@ public:
 // Note: this class is mentioned in the design doc as describing
 // an iterator of `char*`, but no details, such as whether there should be
 // a templated class based on the encoding form / code unit size
-class U_COMMON_API_CLASS SegmentsUTF8 : public UObject {
+class SegmentsUTF8 {
     virtual bool isBoundary(int32_t i) = 0;
 
     // all other APIs the same as Segments

@@ -45,7 +45,7 @@ U_NAMESPACE_BEGIN
 
 namespace segmenter {
 
-class U_COMMON_API_CLASS SegmentsImpl : public Segments {
+class SegmentsImpl : public Segments {
 public:
     bool isBoundary(int32_t i) override;
 

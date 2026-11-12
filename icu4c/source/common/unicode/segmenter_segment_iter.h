@@ -47,7 +47,7 @@ namespace segmenter {
 // SegmentIterator
 // ---------------------------------------------
 
-class U_COMMON_API_CLASS SegmentIterator {
+class SegmentIterator {
 public:
     SegmentIterator() = delete;
     SegmentIterator(std::unique_ptr<BreakIterator> breakIter, int32_t startIdx, std::u16string_view source);
