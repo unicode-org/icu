@@ -791,6 +791,90 @@ static void TestCount(void) {
 #endif
 }
 
+/*
+ * Formats from an exactly-sized heap copy of the pattern, so that the ASan CI
+ * job reports any read past the terminating NUL. (u_sprintf() copies short
+ * patterns into a fixed-size stack buffer, which hides such over-reads.)
+ * expectedRet < 0 means the pattern must be rejected.
+ */
+static void checkPositional(const char *format, int32_t expectedRet, const char *expectedResult, ...) {
+#if !UCONFIG_NO_FORMATTING
+    UChar uBuffer[256];
+    char cBuffer[256];
+    int32_t len = (int32_t)strlen(format);
+    UChar *uFormat = (UChar *)uprv_malloc((len + 1) * sizeof(UChar));
+    int32_t ret;
+    va_list ap;
+
+    if (uFormat == NULL) {
+        log_err("\"%s\": out of memory\n", format);
+        return;
+    }
+    u_uastrncpy(uFormat, format, len + 1);
+    u_memset(uBuffer, 0x2a, UPRV_LENGTHOF(uBuffer));
+
+    va_start(ap, expectedResult);
+    ret = u_vsnprintf_u(uBuffer, UPRV_LENGTHOF(uBuffer), uFormat, ap);
+    va_end(ap);
+    uprv_free(uFormat);
+
+    if (ret != expectedRet) {
+        log_err("\"%s\": returned %d, expected %d\n", format, ret, expectedRet);
+    } else if (expectedRet >= 0) {
+        u_austrncpy(cBuffer, uBuffer, UPRV_LENGTHOF(cBuffer));
+        if (strcmp(cBuffer, expectedResult) != 0) {
+            log_err("\"%s\": got \"%s\", expected \"%s\"\n", format, cBuffer, expectedResult);
+        }
+    }
+#endif
+}
+
+static void TestPositionalFormat(void) {
+#if !UCONFIG_NO_FORMATTING
+    /* Valid positional formats must keep working. */
+    checkPositional("%2$d %1$d", 3, "2 1", 1, 2);
+    checkPositional("%1$d %1$d", 3, "1 1", 1);
+    checkPositional("%10$d%9$d%8$d%7$d%6$d%5$d%4$d%3$d%2$d%1$d", 11, "10987654321",
+                    1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+
+    /* ICU-23616: position 0 used to write before the start of the heap arrays. */
+    checkPositional("%0$d", -1, "", 1);
+    checkPositional("%00$d", -1, "", 1);
+    checkPositional("%1$d %0$d", -1, "", 1, 2);
+    checkPositional("%0$d %1$d", -1, "", 1, 2);
+
+    /* Positions that overflow int32_t, or would need a huge argument array. */
+    checkPositional("%2147483647$d", -1, "", 1);
+    checkPositional("%2147483648$d", -1, "", 1);
+    checkPositional("%4294967297$d", -1, "", 1);
+    checkPositional("%99999999999999999999$d", -1, "", 1);
+
+    /* Gaps: an unreferenced argument's type is unknown, so it can't be skipped. */
+    checkPositional("%2$d", -1, "", 1, 2);
+    checkPositional("%1$d %3$d", -1, "", 1, 2, 3);
+
+    /* %% is fine with positional arguments. */
+    checkPositional("%1$d%%", 2, "5%", 5);
+    checkPositional("%%%1$d", 2, "%5", 5);
+    checkPositional("%2$d%%%1$d", 3, "6%5", 5, 6);
+
+    /* Mixing positional and sequential conversions is rejected, not a NULL dereference. */
+    checkPositional("%1$d %d", -1, "", 1, 2);
+    checkPositional("%d %1$d", -1, "", 1, 2);
+
+    /* Unknown conversions are echoed as written. */
+    checkPositional("abc%y", 5, "abc%y");
+    checkPositional("x%dabc%y", 7, "x1abc%y", 1);
+
+    /* A conversion cut off by the end of the pattern must not read past the NUL. */
+    checkPositional("abc%", 4, "abc%");
+    checkPositional("%(", 2, "%(");
+    checkPositional("%1$", 3, "%1$", 1);
+    checkPositional("%1$h", 4, "%1$h", 1);
+    checkPositional("%1$d%2$l", 5, "1%2$l", 1, 2);
+#endif
+}
+
 U_CFUNC void
 addStringTest(TestNode** root) {
 #if !UCONFIG_NO_FORMATTING
@@ -803,6 +887,7 @@ addStringTest(TestNode** root) {
     addTest(root, &TestBadScanfFormat, "string/TestBadScanfFormat");
     addTest(root, &TestVargs, "string/TestVargs");
     addTest(root, &TestCount, "string/TestCount");
+    addTest(root, &TestPositionalFormat, "string/TestPositionalFormat");
 #endif
 }
 
