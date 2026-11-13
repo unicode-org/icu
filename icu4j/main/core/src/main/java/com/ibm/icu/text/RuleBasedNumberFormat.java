@@ -23,6 +23,7 @@ import java.text.FieldPosition;
 import java.text.ParsePosition;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
@@ -1010,6 +1011,7 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
         locale = temp.locale;
         defaultInfinityRule = temp.defaultInfinityRule;
         defaultNaNRule = temp.defaultNaNRule;
+        unparseable = temp.unparseable;
     }
 
     // -----------------------------------------------------------------------
@@ -1819,6 +1821,10 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
             ruleSets[i].parseRules(ruleSetDescriptions[i]);
         }
 
+        if (!unparseable && hasCyclicRules(ruleSets)) {
+            unparseable = true;
+        }
+
         // Now that the rules are initialized, the 'real' default rule
         // set can be adjusted by the localization data.
 
@@ -1849,6 +1855,362 @@ public class RuleBasedNumberFormat extends NumberFormat implements Cloneable {
         } else {
             publicRuleSetNames = publicRuleSetTemp;
         }
+    }
+
+    private static final class CycleDfsFrame {
+        final int rsIdx;
+        final int ruleIdx;
+        int subIdx;
+        int nextTarget = -1;
+        int targetRsIdx = -1;
+        long edgeLb;
+        long edgeUb; // < 0 means unbounded
+
+        CycleDfsFrame(int rsIdx, int ruleIdx) {
+            this.rsIdx = rsIdx;
+            this.ruleIdx = ruleIdx;
+        }
+    }
+
+    private static boolean substitutionStrictlyDecreases(NFRule rule) {
+        long divisor = rule.getDivisor();
+        return divisor <= 0
+                || (divisor <= rule.getBaseValue()
+                        && divisor < (1L << 62)
+                        && (long) ((double) divisor) <= rule.getBaseValue());
+    }
+
+    /**
+     * Detects cycles among parse-reachable rules whose substitutions do not strictly decrease the
+     * rule upper bound (e.g., cyclic SameValueSubstitution {@code =%x=} rules across overlapping
+     * value ranges, {@code baseValue == 0} {@code <}/{@code >} rules, {@code expectedExponent()}
+     * overestimates, or cycles passing through fraction rule sets). Such rule sets are
+     * ambiguous/cyclic and cannot be parsed.
+     */
+    private static boolean hasCyclicRules(NFRuleSet[] ruleSets) {
+        if (ruleSets == null || ruleSets.length == 0) {
+            return false;
+        }
+
+        int numRuleSets = ruleSets.length;
+        int[] ruleOffsets = new int[numRuleSets + 1];
+        IdentityHashMap<NFRuleSet, Integer> ruleSetIndices = new IdentityHashMap<>(numRuleSets);
+        boolean[] fractionVisited = new boolean[numRuleSets];
+        boolean[] reachableRs = new boolean[numRuleSets];
+        boolean[] canResetUpperBound = new boolean[numRuleSets];
+        boolean[] hasNonMonotonicRule = new boolean[numRuleSets];
+        int[] rsQueue = new int[numRuleSets];
+
+        int totalRules = 0;
+        boolean hasAnyReset = false;
+        for (int i = 0; i < numRuleSets; ++i) {
+            ruleOffsets[i] = totalRules;
+            ruleSetIndices.put(ruleSets[i], i);
+            boolean resetsUb = ruleSets[i].isFractionSet();
+            int count = ruleSets[i].getRuleCount();
+            if (!resetsUb) {
+                for (int r = 0; r < count; ++r) {
+                    NFRule rule = ruleSets[i].getRule(r);
+                    NFSubstitution s1 = rule.getSub1();
+                    NFSubstitution s2 = rule.getSub2();
+                    boolean hasNonEqRuleSetSub =
+                            (s1 != null && s1.ruleSet != null && s1.tokenChar() != '=')
+                                    || (s2 != null && s2.ruleSet != null && s2.tokenChar() != '=');
+                    if (hasNonEqRuleSetSub && !substitutionStrictlyDecreases(rule)) {
+                        resetsUb = true;
+                        hasNonMonotonicRule[i] = true;
+                        break;
+                    }
+                }
+            }
+            if (resetsUb) {
+                canResetUpperBound[i] = true;
+                hasAnyReset = true;
+            }
+            totalRules += count;
+        }
+        ruleOffsets[numRuleSets] = totalRules;
+        if (totalRules == 0) {
+            return false;
+        }
+
+        // Determine which rulesets are reachable from public, parseable entry rulesets
+        // (via normal, non-numerical, and alternate-decimal fraction rules) so cycles in
+        // @noparse or unreferenced private rulesets do not mark valid formatters unparseable.
+        int qHead = 0;
+        int qTail = 0;
+        for (int i = 0; i < numRuleSets; ++i) {
+            if (ruleSets[i].isPublic() && ruleSets[i].isParseable()) {
+                reachableRs[i] = true;
+                rsQueue[qTail++] = i;
+            }
+        }
+        while (qHead < qTail) {
+            NFRuleSet curRS = ruleSets[rsQueue[qHead++]];
+            int ruleCount = curRS.getRuleCount();
+            for (int r = 0; r < ruleCount; ++r) {
+                NFRule rule = curRS.getRule(r);
+                for (int s = 0; s < 2; ++s) {
+                    NFSubstitution sub = (s == 0) ? rule.getSub1() : rule.getSub2();
+                    NFRuleSet tRS = (sub != null) ? sub.ruleSet : null;
+                    Integer tIdx = (tRS != null) ? ruleSetIndices.get(tRS) : null;
+                    if (tIdx != null && !reachableRs[tIdx]) {
+                        reachableRs[tIdx] = true;
+                        rsQueue[qTail++] = tIdx;
+                    }
+                }
+            }
+            int nonNumCount = curRS.getNonNumericalRuleCount();
+            for (int nn = 0; nn < nonNumCount; ++nn) {
+                NFRule rule = curRS.getNonNumericalRule(nn);
+                if (rule == null) {
+                    continue;
+                }
+                for (int s = 0; s < 2; ++s) {
+                    NFSubstitution sub = (s == 0) ? rule.getSub1() : rule.getSub2();
+                    NFRuleSet tRS = (sub != null) ? sub.ruleSet : null;
+                    Integer tIdx = (tRS != null) ? ruleSetIndices.get(tRS) : null;
+                    if (tIdx != null && !reachableRs[tIdx]) {
+                        reachableRs[tIdx] = true;
+                        rsQueue[qTail++] = tIdx;
+                    }
+                }
+            }
+            if (curRS.fractionRules != null) {
+                for (NFRule rule : curRS.fractionRules) {
+                    if (rule == null) {
+                        continue;
+                    }
+                    for (int s = 0; s < 2; ++s) {
+                        NFSubstitution sub = (s == 0) ? rule.getSub1() : rule.getSub2();
+                        NFRuleSet tRS = (sub != null) ? sub.ruleSet : null;
+                        Integer tIdx = (tRS != null) ? ruleSetIndices.get(tRS) : null;
+                        if (tIdx != null && !reachableRs[tIdx]) {
+                            reachableRs[tIdx] = true;
+                            rsQueue[qTail++] = tIdx;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Fraction rule sets and non-fraction rules with divisor > baseValue (or double round-up)
+        // can reset upperBound upward. Precompute which rulesets can reach any such rule set via
+        // normal-rule substitutions so monotonic upper-bound prunings are disabled on edges
+        // entering them.
+        if (hasAnyReset) {
+            int[] revHead = new int[numRuleSets + 1];
+            int[] revCur = new int[numRuleSets];
+            int edgeCount = 0;
+            for (int u = 0; u < numRuleSets; ++u) {
+                NFRuleSet rs = ruleSets[u];
+                int count = rs.getRuleCount();
+                for (int r = 0; r < count; ++r) {
+                    NFRule rule = rs.getRule(r);
+                    for (int s = 0; s < 2; ++s) {
+                        NFSubstitution sub = (s == 0) ? rule.getSub1() : rule.getSub2();
+                        NFRuleSet tRS = (sub != null) ? sub.ruleSet : null;
+                        Integer tIdx = (tRS != null) ? ruleSetIndices.get(tRS) : null;
+                        if (tIdx != null) {
+                            ++revHead[tIdx + 1];
+                            ++edgeCount;
+                        }
+                    }
+                }
+            }
+            for (int i = 0; i < numRuleSets; ++i) {
+                revHead[i + 1] += revHead[i];
+                revCur[i] = revHead[i];
+            }
+            int[] revEdges = new int[edgeCount];
+            for (int u = 0; u < numRuleSets; ++u) {
+                NFRuleSet rs = ruleSets[u];
+                int count = rs.getRuleCount();
+                for (int r = 0; r < count; ++r) {
+                    NFRule rule = rs.getRule(r);
+                    for (int s = 0; s < 2; ++s) {
+                        NFSubstitution sub = (s == 0) ? rule.getSub1() : rule.getSub2();
+                        NFRuleSet tRS = (sub != null) ? sub.ruleSet : null;
+                        Integer tIdx = (tRS != null) ? ruleSetIndices.get(tRS) : null;
+                        if (tIdx != null) {
+                            revEdges[revCur[tIdx]++] = u;
+                        }
+                    }
+                }
+            }
+            qHead = 0;
+            qTail = 0;
+            for (int i = 0; i < numRuleSets; ++i) {
+                if (canResetUpperBound[i]) {
+                    rsQueue[qTail++] = i;
+                }
+            }
+            while (qHead < qTail) {
+                int v = rsQueue[qHead++];
+                for (int e = revHead[v]; e < revHead[v + 1]; ++e) {
+                    int u = revEdges[e];
+                    if (!canResetUpperBound[u]) {
+                        canResetUpperBound[u] = true;
+                        rsQueue[qTail++] = u;
+                    }
+                }
+            }
+        }
+
+        byte[] visitState = new byte[totalRules];
+        CycleDfsFrame[] stack = new CycleDfsFrame[totalRules];
+
+        for (int startRs = 0; startRs < numRuleSets; ++startRs) {
+            if (!reachableRs[startRs]) {
+                continue;
+            }
+            int startCount = ruleSets[startRs].getRuleCount();
+            for (int startRule = 0; startRule < startCount; ++startRule) {
+                int startNode = ruleOffsets[startRs] + startRule;
+                if (visitState[startNode] != 0) {
+                    continue;
+                }
+                visitState[startNode] = 1;
+                int sp = 0;
+                stack[sp++] = new CycleDfsFrame(startRs, startRule);
+
+                while (sp > 0) {
+                    CycleDfsFrame top = stack[sp - 1];
+                    if (top.subIdx >= 2) {
+                        visitState[ruleOffsets[top.rsIdx] + top.ruleIdx] = 2;
+                        --sp;
+                        continue;
+                    }
+
+                    NFRuleSet rs = ruleSets[top.rsIdx];
+                    NFRule rule = rs.getRule(top.ruleIdx);
+
+                    if (top.nextTarget < 0) {
+                        NFSubstitution sub = (top.subIdx == 0) ? rule.getSub1() : rule.getSub2();
+                        NFRuleSet targetRS = (sub != null) ? sub.ruleSet : null;
+                        if (targetRS == null || targetRS.getRuleCount() == 0) {
+                            ++top.subIdx;
+                            continue;
+                        }
+
+                        Integer targetIdxObj = ruleSetIndices.get(targetRS);
+                        if (targetIdxObj == null) {
+                            ++top.subIdx;
+                            continue;
+                        }
+                        int targetIdx = targetIdxObj;
+                        if (targetRS.isFractionSet() && fractionVisited[targetIdx]) {
+                            ++top.subIdx;
+                            continue;
+                        }
+
+                        long edgeLb = 0;
+                        long edgeUb = -1;
+                        if (sub.tokenChar() == '=') {
+                            if (!rs.isFractionSet()) {
+                                edgeLb = canResetUpperBound[targetIdx] ? 0 : rule.getBaseValue();
+                                if (!hasNonMonotonicRule[top.rsIdx]) {
+                                    long ruleUB = rs.getRuleUpperBound(top.ruleIdx);
+                                    if (ruleUB >= 0 && ruleUB <= NFRuleSet.MAX_EXACT_DOUBLE_INT) {
+                                        edgeUb = ruleUB;
+                                    }
+                                }
+                            }
+                        } else if (targetRS.isFractionSet()) {
+                            // Fraction rule sets ignore upperBound in NFRuleSet.parse().
+                        } else if (rs.isFractionSet()) {
+                            // Query calcUpperBound(0) directly so both NumeratorSubstitution and
+                            // forward-declared fraction rules are covered; withZeros also parses
+                            // with ub = 1.
+                            double subUb = sub.calcUpperBound(0);
+                            if (subUb < 1.0) {
+                                subUb = 1.0;
+                            }
+                            if (subUb <= (double) NFRuleSet.MAX_EXACT_DOUBLE_INT) {
+                                edgeUb = (long) Math.ceil(subUb);
+                            }
+                        } else {
+                            // Multiplier/ModulusSubstitution sets upperBound = divisor.
+                            // When targetRS cannot reset upperBound upward and
+                            // (double)divisor <= baseValue, upperBound strictly decreases.
+                            long divisor = rule.getDivisor();
+                            if (!canResetUpperBound[targetIdx]
+                                    && substitutionStrictlyDecreases(rule)) {
+                                ++top.subIdx;
+                                continue;
+                            }
+                            if (divisor <= 0) {
+                                edgeUb = 0;
+                            } else if (divisor <= NFRuleSet.MAX_EXACT_DOUBLE_INT) {
+                                edgeUb = divisor;
+                            }
+                        }
+
+                        top.targetRsIdx = targetIdx;
+                        top.edgeLb = edgeLb;
+                        top.edgeUb = edgeUb;
+
+                        if (targetRS.isFractionSet()) {
+                            top.nextTarget = 0;
+                        } else {
+                            long searchLb = Math.min(edgeLb, NFRuleSet.MAX_EXACT_DOUBLE_INT + 1);
+                            int lo = 0;
+                            int hi = targetRS.getRuleCount();
+                            while (lo < hi) {
+                                int mid = (lo + hi) >>> 1;
+                                if (targetRS.getRule(mid).getBaseValue() < searchLb) {
+                                    lo = mid + 1;
+                                } else {
+                                    hi = mid;
+                                }
+                            }
+                            // A rule at lo - 2 can overlap searchLb if lo - 1 rolls back to it.
+                            top.nextTarget = (lo > 2) ? (lo - 2) : 0;
+                        }
+                    }
+
+                    NFRuleSet targetRS = ruleSets[top.targetRsIdx];
+                    int targetCount = targetRS.getRuleCount();
+                    if (top.nextTarget >= targetCount) {
+                        if (targetRS.isFractionSet()) {
+                            fractionVisited[top.targetRsIdx] = true;
+                        }
+                        ++top.subIdx;
+                        top.nextTarget = -1;
+                        continue;
+                    }
+
+                    int vRuleIdx = top.nextTarget++;
+                    NFRule vRule = targetRS.getRule(vRuleIdx);
+                    if (!targetRS.isFractionSet()) {
+                        long vLb = vRule.getBaseValue();
+                        if (top.edgeUb >= 0 && vLb >= top.edgeUb) {
+                            ++top.subIdx;
+                            top.nextTarget = -1;
+                            continue;
+                        }
+                        long vUb = targetRS.getRuleUpperBound(vRuleIdx);
+                        if (top.edgeLb > 0
+                                && vUb >= 0
+                                && vUb <= NFRuleSet.MAX_EXACT_DOUBLE_INT
+                                && top.edgeLb >= vUb) {
+                            continue;
+                        }
+                    }
+
+                    int vRsIdx = top.targetRsIdx;
+                    int vNode = ruleOffsets[vRsIdx] + vRuleIdx;
+                    if (visitState[vNode] == 1) {
+                        return true;
+                    }
+                    if (visitState[vNode] == 0) {
+                        visitState[vNode] = 1;
+                        stack[sp++] = new CycleDfsFrame(vRsIdx, vRuleIdx);
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     /**

@@ -43,18 +43,17 @@ protected:
         UErrorCode& status);
     
     /**
-     * Get the Ruleset of the object.
-     * @return the Ruleset of the object.
-     */
-    const NFRuleSet* getRuleSet() const { return ruleSet; }
-
-    /**
      * get the NumberFormat of this object.
      * @return the numberformat of this object.
      */
     const DecimalFormat* getNumberFormat() const { return numberFormat; }
     
 public:
+    /**
+     * Get the Ruleset of the object.
+     * @return the Ruleset of the object.
+     */
+    const NFRuleSet* getRuleSet() const { return ruleSet; }
     static NFSubstitution* makeSubstitution(int32_t pos, 
         const NFRule* rule, 
         const NFRule* predecessor,

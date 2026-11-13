@@ -277,7 +277,12 @@ final class NFRule {
                 while (p < descriptorLength) {
                     c = descriptor.charAt(p);
                     if (c >= '0' && c <= '9') {
-                        val = val * 10 + (c - '0');
+                        long digit = c - '0';
+                        if (val > (Long.MAX_VALUE - digit) / 10) {
+                            throw new IllegalArgumentException(
+                                    "Rule base value out of range in descriptor: " + descriptor);
+                        }
+                        val = val * 10 + digit;
                     } else if (c == '/' || c == '>') {
                         break;
                     } else if (!PatternProps.isWhiteSpace(c) && c != ',' && c != '.') {
@@ -300,7 +305,12 @@ final class NFRule {
                     while (p < descriptorLength) {
                         c = descriptor.charAt(p);
                         if (c >= '0' && c <= '9') {
-                            val = val * 10 + (c - '0');
+                            long digit = c - '0';
+                            if (val > (Long.MAX_VALUE - digit) / 10) {
+                                throw new IllegalArgumentException(
+                                        "Rule radix out of range in descriptor: " + descriptor);
+                            }
+                            val = val * 10 + digit;
                         } else if (c == '>') {
                             break;
                         } else if (!PatternProps.isWhiteSpace(c) && c != ',' && c != '.') {
@@ -706,6 +716,14 @@ final class NFRule {
     /** Internal function used by the rounding code in MultiplierSubstitution. */
     boolean hasModulusSubstitution() {
         return (sub1 instanceof ModulusSubstitution) || (sub2 instanceof ModulusSubstitution);
+    }
+
+    NFSubstitution getSub1() {
+        return sub1;
+    }
+
+    NFSubstitution getSub2() {
+        return sub2;
     }
 
     // -----------------------------------------------------------------------
