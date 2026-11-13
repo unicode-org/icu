@@ -669,8 +669,11 @@ public:
     // The input can be in integer or scientific notation.
     static uint64_t parseStringToLong(const StringPiece strNum, UErrorCode &status) {
         // We are processing well-formed input, so we don't need any special options to
-        // StringToDoubleConverter.
-        StringToDoubleConverter converter(0, 0, 0, "", "");
+        // StringToDoubleConverter.  Pass nullptr (not "") for the Inf/NaN symbols:
+        // StringToIeee only NULL-checks them, so an empty literal enters the
+        // symbol-match path, where its terminator matches an embedded NUL in
+        // strNum and ConsumeSubStringImpl reads past the literal (ICU-23392).
+        StringToDoubleConverter converter(0, 0, 0, nullptr, nullptr);
         int32_t count;
         double double_result = converter.StringToDouble(strNum.data(), strNum.length(), &count);
         if (count != strNum.length()) {
