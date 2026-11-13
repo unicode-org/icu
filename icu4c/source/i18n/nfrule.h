@@ -69,6 +69,9 @@ public:
     
     bool hasModulusSubstitution() const;
 
+    const NFSubstitution* getSub1() const { return sub1; }
+    const NFSubstitution* getSub2() const { return sub2; }
+
     void doFormat(int64_t number, UnicodeString& toAppendTo, int32_t pos, int32_t recursionCount, UErrorCode& status) const;
     void doFormat(double  number, UnicodeString& toAppendTo, int32_t pos, int32_t recursionCount, UErrorCode& status) const;
 
@@ -78,7 +81,6 @@ public:
                   double upperBound,
                   uint32_t nonNumericalExecutedRuleMask,
                   int32_t recursionCount,
-                  int32_t& stepCount,
                   Formattable& result) const;
 
     UBool shouldRollBack(int64_t number) const;
@@ -101,7 +103,6 @@ private:
                             const UnicodeString& delimiter, ParsePosition& pp, const NFSubstitution* sub, 
                             uint32_t nonNumericalExecutedRuleMask,
                             int32_t recursionCount,
-                            int32_t& stepCount,
                             double upperBound) const;
     void stripPrefix(UnicodeString& text, const UnicodeString& prefix, ParsePosition& pp) const;
 

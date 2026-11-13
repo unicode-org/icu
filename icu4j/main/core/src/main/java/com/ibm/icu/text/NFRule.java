@@ -277,7 +277,12 @@ final class NFRule {
                 while (p < descriptorLength) {
                     c = descriptor.charAt(p);
                     if (c >= '0' && c <= '9') {
-                        val = val * 10 + (c - '0');
+                        long digit = c - '0';
+                        if (val > (Long.MAX_VALUE - digit) / 10) {
+                            throw new IllegalArgumentException(
+                                    "Rule base value out of range in descriptor: " + descriptor);
+                        }
+                        val = val * 10 + digit;
                     } else if (c == '/' || c == '>') {
                         break;
                     } else if (!PatternProps.isWhiteSpace(c) && c != ',' && c != '.') {
@@ -300,7 +305,12 @@ final class NFRule {
                     while (p < descriptorLength) {
                         c = descriptor.charAt(p);
                         if (c >= '0' && c <= '9') {
-                            val = val * 10 + (c - '0');
+                            long digit = c - '0';
+                            if (val > (Long.MAX_VALUE - digit) / 10) {
+                                throw new IllegalArgumentException(
+                                        "Rule radix out of range in descriptor: " + descriptor);
+                            }
+                            val = val * 10 + digit;
                         } else if (c == '>') {
                             break;
                         } else if (!PatternProps.isWhiteSpace(c) && c != ',' && c != '.') {
@@ -708,6 +718,14 @@ final class NFRule {
         return (sub1 instanceof ModulusSubstitution) || (sub2 instanceof ModulusSubstitution);
     }
 
+    NFSubstitution getSub1() {
+        return sub1;
+    }
+
+    NFSubstitution getSub2() {
+        return sub2;
+    }
+
     // -----------------------------------------------------------------------
     // formatting
     // -----------------------------------------------------------------------
@@ -899,12 +917,7 @@ final class NFRule {
             boolean isFractionRule,
             double upperBound,
             int nonNumericalExecutedRuleMask,
-            int recursionCount,
-            int[] stepCount) {
-        if (stepCount[0] >= NFRuleSet.PARSE_STEP_LIMIT) {
-            return ZERO;
-        }
-        ++stepCount[0];
+            int recursionCount) {
 
         // internally we operate on a copy of the string being parsed
         // (because we're going to change it) and use our own ParsePosition
@@ -985,8 +998,7 @@ final class NFRule {
                                     sub1,
                                     upperBound,
                                     nonNumericalExecutedRuleMask,
-                                    recursionCount,
-                                    stepCount)
+                                    recursionCount)
                             .doubleValue();
 
             // if we got a successful match (or were trying to match a
@@ -1014,8 +1026,7 @@ final class NFRule {
                                         sub2,
                                         upperBound,
                                         nonNumericalExecutedRuleMask,
-                                        recursionCount,
-                                        stepCount)
+                                        recursionCount)
                                 .doubleValue();
 
                 // if we got a successful match on this second
@@ -1144,8 +1155,7 @@ final class NFRule {
             NFSubstitution sub,
             double upperBound,
             int nonNumericalExecutedRuleMask,
-            int recursionCount,
-            int[] stepCount) {
+            int recursionCount) {
         // if "delimiter" contains real (i.e., non-ignorable) text, search
         // it for "delimiter" beginning at "start".  If that succeeds, then
         // use "sub"'s doParse() method to match the text before the
@@ -1155,7 +1165,7 @@ final class NFRule {
             Number bestResult = null;
             int currPos = startPos;
 
-            for (; stepCount[0] < NFRuleSet.PARSE_STEP_LIMIT; ) {
+            for (; ; ) {
                 // use findText() to search for "delimiter". It returns a two-
                 // element array: element 0 is the position of the match, and
                 // element 1 is the number of characters that matched
@@ -1168,7 +1178,6 @@ final class NFRule {
                 if (dPos < 0) {
                     break;
                 }
-                ++stepCount[0];
                 // if findText() succeeded, isolate the text preceding the
                 // match, and use "sub" to match that text
                 String subText = text.substring(0, dPos);
@@ -1181,8 +1190,7 @@ final class NFRule {
                                     upperBound,
                                     formatter.lenientParseEnabled(),
                                     nonNumericalExecutedRuleMask,
-                                    recursionCount,
-                                    stepCount);
+                                    recursionCount);
 
                     // if the substitution could match all the text up to
                     // where we found "delimiter", then this function has
@@ -1238,8 +1246,7 @@ final class NFRule {
                             upperBound,
                             formatter.lenientParseEnabled(),
                             nonNumericalExecutedRuleMask,
-                            recursionCount,
-                            stepCount);
+                            recursionCount);
             if (tempPP.getIndex() != 0) {
                 // if there's a successful match (or it's a null
                 // substitution), update pp to point to the first

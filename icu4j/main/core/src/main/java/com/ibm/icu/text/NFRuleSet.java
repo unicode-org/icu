@@ -184,9 +184,14 @@ final class NFRuleSet {
         // set all those rules' base values.  We also remove any special
         // rules from the list and put them into their own member variables
         long defaultBaseValue = 0;
+        boolean pastMaxBaseValue = false;
 
         for (NFRule rule : tempRules) {
             long baseValue = rule.getBaseValue();
+            if (pastMaxBaseValue) {
+                throw new IllegalArgumentException(
+                        "Rules are not in order, base: " + baseValue + " after " + Long.MAX_VALUE);
+            }
             if (baseValue == 0) {
                 // if the rule's base value is 0, fill in a default
                 // base value (this will be 1 plus the preceding
@@ -208,7 +213,11 @@ final class NFRuleSet {
                 defaultBaseValue = baseValue;
             }
             if (!isFractionRuleSet) {
-                ++defaultBaseValue;
+                if (defaultBaseValue == Long.MAX_VALUE) {
+                    pastMaxBaseValue = true;
+                } else {
+                    ++defaultBaseValue;
+                }
             }
         }
 
@@ -711,15 +720,6 @@ final class NFRuleSet {
     // -----------------------------------------------------------------------
 
     /**
-     * Bounds cumulative rule/delimiter parse attempts per public rule-set parse() call. Separate
-     * from RECURSION_LIMIT (64), which only bounds call-stack depth and resets across sibling
-     * rules/delimiters, allowing O(B^D) backtracking below depth 64. 16384 gives >4x headroom over
-     * valid CLDR spellout matches (~4k steps in en verbose; up to ~16k in non-matching
-     * ordinal/inflected sets) while bounding worst-case backtracking latency.
-     */
-    static final int PARSE_STEP_LIMIT = 16384;
-
-    /**
      * Parses a string. Matches the string to be parsed against each of its rules (with a base value
      * less than upperBound) and returns the value produced by the rule that matched the most
      * characters in the source string.
@@ -742,8 +742,7 @@ final class NFRuleSet {
             ParsePosition parsePosition,
             double upperBound,
             int nonNumericalExecutedRuleMask,
-            int recursionCount,
-            int[] stepCount) {
+            int recursionCount) {
         // try matching each rule in the rule set against the text being
         // parsed.  Whichever one matches the most characters is the one
         // that determines the value we return.
@@ -765,7 +764,7 @@ final class NFRuleSet {
 
         // Try each of the negative rules, fraction rules, infinity rules and NaN rules
         for (int nonNumericalRuleIdx = 0;
-                nonNumericalRuleIdx < nonNumericalRules.length && stepCount[0] < PARSE_STEP_LIMIT;
+                nonNumericalRuleIdx < nonNumericalRules.length;
                 nonNumericalRuleIdx++) {
             NFRule nonNumericalRule = nonNumericalRules[nonNumericalRuleIdx];
             if (nonNumericalRule != null
@@ -780,8 +779,7 @@ final class NFRuleSet {
                                 false,
                                 upperBound,
                                 nonNumericalExecutedRuleMask,
-                                recursionCount + 1,
-                                stepCount);
+                                recursionCount + 1);
                 if (parsePosition.getIndex() > highWaterMark.getIndex()) {
                     result = tempResult;
                     highWaterMark.setIndex(parsePosition.getIndex());
@@ -802,13 +800,19 @@ final class NFRuleSet {
         // base values are higher than the upper bound (again, this helps
         // limit ambiguity by making sure the rules that match a rule's
         // are less significant than the rule containing the substitutions)/
-        for (int i = rules.length - 1;
-                i >= 0
-                        && highWaterMark.getIndex() < text.length()
-                        && stepCount[0] < PARSE_STEP_LIMIT;
-                i--) {
+        for (int i = rules.length - 1; i >= 0 && highWaterMark.getIndex() < text.length(); i--) {
             if (!isFractionRuleSet && rules[i].getBaseValue() >= upperBound) {
                 continue;
+            }
+
+            double nextUpperBound = upperBound;
+            if (!isFractionRuleSet) {
+                long ruleUB = getRuleUpperBound(i);
+                if (ruleUB >= 0
+                        && ruleUB <= MAX_EXACT_DOUBLE_INT
+                        && (double) ruleUB < nextUpperBound) {
+                    nextUpperBound = (double) ruleUB;
+                }
             }
 
             tempResult =
@@ -816,10 +820,9 @@ final class NFRuleSet {
                             text,
                             parsePosition,
                             isFractionRuleSet,
-                            upperBound,
+                            nextUpperBound,
                             nonNumericalExecutedRuleMask,
-                            recursionCount + 1,
-                            stepCount);
+                            recursionCount + 1);
             if (parsePosition.getIndex() > highWaterMark.getIndex()) {
                 result = tempResult;
                 highWaterMark.setIndex(parsePosition.getIndex());
@@ -839,6 +842,44 @@ final class NFRuleSet {
         }
 
         return result;
+    }
+
+    static final long MAX_EXACT_DOUBLE_INT = 1L << 53;
+
+    int getRuleCount() {
+        return rules.length;
+    }
+
+    NFRule getRule(int index) {
+        return rules[index];
+    }
+
+    int getNonNumericalRuleCount() {
+        return nonNumericalRules.length;
+    }
+
+    NFRule getNonNumericalRule(int index) {
+        return nonNumericalRules[index];
+    }
+
+    long getRuleUpperBound(int index) {
+        if (isFractionRuleSet || index < 0) {
+            return -1;
+        }
+        int nextIndex = index + 1;
+        if (nextIndex < rules.length) {
+            NFRule next = rules[nextIndex];
+            if (next.hasModulusSubstitution()) {
+                long divisor = next.getDivisor();
+                if (divisor != 0 && (next.getBaseValue() % divisor) != 0) {
+                    ++nextIndex;
+                }
+            }
+        }
+        if (nextIndex < rules.length) {
+            return rules[nextIndex].getBaseValue();
+        }
+        return -1;
     }
 
     public void setDecimalFormatSymbols(DecimalFormatSymbols newSymbols) {

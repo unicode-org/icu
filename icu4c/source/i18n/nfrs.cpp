@@ -230,6 +230,7 @@ NFRuleSet::parseRules(UnicodeString& description, UErrorCode& status)
     // set all those rules' base values.  We also remove any special
     // rules from the list and put them into their own member variables
     int64_t defaultBaseValue = 0;
+    UBool pastMaxBaseValue = false;
 
     // (this isn't a for loop because we might be deleting items from
     // the vector-- we want to make sure we only increment i when
@@ -239,6 +240,10 @@ NFRuleSet::parseRules(UnicodeString& description, UErrorCode& status)
         NFRule* rule = rules[i];
         int64_t baseValue = rule->getBaseValue();
 
+        if (pastMaxBaseValue) {
+            status = U_PARSE_ERROR;
+            return;
+        }
         if (baseValue == 0) {
             // if the rule's base value is 0, fill in a default
             // base value (this will be 1 plus the preceding
@@ -262,7 +267,11 @@ NFRuleSet::parseRules(UnicodeString& description, UErrorCode& status)
             defaultBaseValue = baseValue;
         }
         if (!fIsFractionRuleSet) {
-            ++defaultBaseValue;
+            if (defaultBaseValue == INT64_MAX) {
+                pastMaxBaseValue = true;
+            } else {
+                ++defaultBaseValue;
+            }
         }
     }
 }
@@ -697,7 +706,7 @@ static void dumpUS(FILE* f, const UnicodeString& us) {
 #endif
 
 UBool
-NFRuleSet::parse(const UnicodeString& text, ParsePosition& pos, double upperBound, uint32_t nonNumericalExecutedRuleMask, int32_t recursionCount, int32_t& stepCount, Formattable& result) const
+NFRuleSet::parse(const UnicodeString& text, ParsePosition& pos, double upperBound, uint32_t nonNumericalExecutedRuleMask, int32_t recursionCount, Formattable& result) const
 {
     // try matching each rule in the rule set against the text being
     // parsed.  Whichever one matches the most characters is the one
@@ -728,13 +737,13 @@ NFRuleSet::parse(const UnicodeString& text, ParsePosition& pos, double upperBoun
     fprintf(stderr, "  parse negative: %d\n", this, negativeNumberRule != 0);
 #endif
     // Try each of the negative rules, fraction rules, infinity rules and NaN rules
-    for (int i = 0; i < NON_NUMERICAL_RULE_LENGTH && stepCount < PARSE_STEP_LIMIT; i++) {
+    for (int i = 0; i < NON_NUMERICAL_RULE_LENGTH; i++) {
         if (nonNumericalRules[i] && ((nonNumericalExecutedRuleMask >> i) & 1) == 0) {
             // Mark this rule as being executed so that we don't try to execute it again.
             nonNumericalExecutedRuleMask |= 1 << i;
 
             Formattable tempResult;
-            UBool success = nonNumericalRules[i]->doParse(text, workingPos, 0, upperBound, nonNumericalExecutedRuleMask, recursionCount + 1, stepCount, tempResult);
+            UBool success = nonNumericalRules[i]->doParse(text, workingPos, 0, upperBound, nonNumericalExecutedRuleMask, recursionCount + 1, tempResult);
             if (success && (workingPos.getIndex() > highWaterMark.getIndex())) {
                 result = tempResult;
                 highWaterMark = workingPos;
@@ -768,13 +777,20 @@ NFRuleSet::parse(const UnicodeString& text, ParsePosition& pos, double upperBoun
             fprintf(stderr, "ub: %g, i64: %s (%s)\n", upperBound, ubstr, ubstrhex);
         }
 #endif
-        for (int32_t i = rules.size();
-             --i >= 0 && highWaterMark.getIndex() < text.length() && stepCount < PARSE_STEP_LIMIT;) {
+        for (int32_t i = rules.size(); --i >= 0 && highWaterMark.getIndex() < text.length();) {
             if ((!fIsFractionRuleSet) && (rules[i]->getBaseValue() >= ub)) {
                 continue;
             }
+            double nextUpperBound = upperBound;
+            if (!fIsFractionRuleSet) {
+                int64_t ruleUB = getRuleUpperBound(i);
+                if (ruleUB >= 0 && ruleUB <= kMaxExactDoubleInt
+                    && static_cast<double>(ruleUB) < nextUpperBound) {
+                    nextUpperBound = static_cast<double>(ruleUB);
+                }
+            }
             Formattable tempResult;
-            UBool success = rules[i]->doParse(text, workingPos, fIsFractionRuleSet, upperBound, nonNumericalExecutedRuleMask, recursionCount + 1, stepCount, tempResult);
+            UBool success = rules[i]->doParse(text, workingPos, fIsFractionRuleSet, nextUpperBound, nonNumericalExecutedRuleMask, recursionCount + 1, tempResult);
             if (success && workingPos.getIndex() > highWaterMark.getIndex()) {
                 result = tempResult;
                 highWaterMark = workingPos;
@@ -791,6 +807,28 @@ NFRuleSet::parse(const UnicodeString& text, ParsePosition& pos, double upperBoun
     pos = highWaterMark;
 
     return 1;
+}
+
+int64_t
+NFRuleSet::getRuleUpperBound(int32_t index) const
+{
+    if (fIsFractionRuleSet || index < 0) {
+        return -1;
+    }
+    uint32_t nextIndex = static_cast<uint32_t>(index) + 1;
+    if (nextIndex < rules.size()) {
+        const NFRule* next = rules[nextIndex];
+        if (next->hasModulusSubstitution()) {
+            int64_t divisor = next->getDivisor();
+            if (divisor != 0 && (next->getBaseValue() % divisor) != 0) {
+                ++nextIndex;
+            }
+        }
+    }
+    if (nextIndex < rules.size()) {
+        return rules[nextIndex]->getBaseValue();
+    }
+    return -1;
 }
 
 void

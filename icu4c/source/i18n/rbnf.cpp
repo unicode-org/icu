@@ -32,9 +32,13 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "patternprops.h"
+#include "putilimp.h"
 #include "uresimp.h"
 #include "nfrs.h"
+#include "nfsubs.h"
 #include "number_decimalquantity.h"
+#include <algorithm>
+#include <functional>
 #include <string_view>
 
 // debugging
@@ -1233,19 +1237,14 @@ RuleBasedNumberFormat::parse(const UnicodeString& text,
 
     ParsePosition high_pp(0);
     Formattable high_result;
-    // Reset stepCount per public rule set so non-matching sets cannot starve later ones, while
-    // capping total steps across locales with many grammatical-case sets (e.g., lt, de, ru).
-    int32_t totalSteps = 0;
 
-    for (NFRuleSet** p = fRuleSets; *p && totalSteps < 16 * NFRuleSet::PARSE_STEP_LIMIT; ++p) {
+    for (NFRuleSet** p = fRuleSets; *p; ++p) {
         NFRuleSet *rp = *p;
         if (rp->isPublic() && rp->isParseable()) {
             ParsePosition working_pp(0);
             Formattable working_result;
-            int32_t stepCount = 0;
 
-            rp->parse(workingText, working_pp, kMaxDouble, 0, 0, stepCount, working_result);
-            totalSteps += stepCount;
+            rp->parse(workingText, working_pp, kMaxDouble, 0, 0, working_result);
             if (working_pp.getIndex() > high_pp.getIndex()) {
                 high_pp = working_pp;
                 high_result = working_result;
@@ -1358,6 +1357,419 @@ RuleBasedNumberFormat::initDefaultRuleSet()
     }
 }
 
+
+namespace {
+
+struct RuleSetEntry {
+    const NFRuleSet* rs;
+    int32_t idx;
+};
+
+int32_t findRuleSetIndex(const RuleSetEntry* sortedRuleSets, int32_t numRuleSets, const NFRuleSet* targetRS) {
+    if (targetRS == nullptr) {
+        return -1;
+    }
+    const RuleSetEntry key = { targetRS, 0 };
+    const RuleSetEntry* it = std::lower_bound(
+        sortedRuleSets, sortedRuleSets + numRuleSets, key,
+        [](const RuleSetEntry& a, const RuleSetEntry& b) {
+            return std::less<const NFRuleSet*>{}(a.rs, b.rs);
+        });
+    if (it == sortedRuleSets + numRuleSets || it->rs != targetRS) {
+        return -1;
+    }
+    return it->idx;
+}
+
+bool substitutionStrictlyDecreases(const NFRule* rule) {
+    int64_t divisor = rule->getDivisor();
+    return divisor <= 0
+        || (divisor <= rule->getBaseValue()
+            && divisor < (int64_t{1} << 62)
+            && static_cast<int64_t>(static_cast<double>(divisor)) <= rule->getBaseValue());
+}
+
+struct CycleDfsFrame {
+    int32_t rsIdx;
+    int32_t ruleIdx;
+    int32_t subIdx;
+    int32_t nextTarget;
+    int32_t targetRsIdx;
+    int64_t edgeLb;
+    int64_t edgeUb; // < 0 means unbounded
+};
+
+// Detects cycles among parse-reachable rules whose substitutions do not strictly decrease the
+// rule upper bound (e.g., cyclic SameValueSubstitution `=%x=` rules across overlapping value
+// ranges, baseValue == 0 `<`/`>` rules, expectedExponent() overestimates, or cycles passing
+// through fraction rule sets). Such rule sets are ambiguous/cyclic and cannot be parsed.
+bool hasCyclicRules(NFRuleSet* const* ruleSets, int32_t numRuleSets, UErrorCode& status) {
+    if (U_FAILURE(status) || ruleSets == nullptr || numRuleSets <= 0) {
+        return false;
+    }
+
+    MaybeStackArray<int32_t, 32> ruleOffsets;
+    if (ruleOffsets.resize(numRuleSets + 1) == nullptr) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return false;
+    }
+    MaybeStackArray<RuleSetEntry, 32> sortedRuleSets;
+    if (sortedRuleSets.resize(numRuleSets) == nullptr) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return false;
+    }
+    MaybeStackArray<int8_t, 32> fractionVisited;
+    if (fractionVisited.resize(numRuleSets) == nullptr) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return false;
+    }
+    MaybeStackArray<int8_t, 32> reachableRs;
+    if (reachableRs.resize(numRuleSets) == nullptr) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return false;
+    }
+    MaybeStackArray<int8_t, 32> canResetUpperBound;
+    if (canResetUpperBound.resize(numRuleSets) == nullptr) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return false;
+    }
+    MaybeStackArray<int8_t, 32> hasNonMonotonicRule;
+    if (hasNonMonotonicRule.resize(numRuleSets) == nullptr) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return false;
+    }
+    MaybeStackArray<int32_t, 32> rsQueue;
+    if (rsQueue.resize(numRuleSets) == nullptr) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return false;
+    }
+
+    int32_t totalRules = 0;
+    bool hasAnyReset = false;
+    for (int32_t i = 0; i < numRuleSets; ++i) {
+        ruleOffsets[i] = totalRules;
+        sortedRuleSets[i] = { ruleSets[i], i };
+        fractionVisited[i] = 0;
+        reachableRs[i] = 0;
+        hasNonMonotonicRule[i] = 0;
+        bool resetsUb = ruleSets[i]->isFractionRuleSet();
+        int32_t count = ruleSets[i]->getRuleCount();
+        if (!resetsUb) {
+            for (int32_t r = 0; r < count; ++r) {
+                const NFRule* rule = ruleSets[i]->getRule(r);
+                const NFSubstitution* s1 = rule->getSub1();
+                const NFSubstitution* s2 = rule->getSub2();
+                bool hasNonEqRuleSetSub =
+                    (s1 != nullptr && s1->getRuleSet() != nullptr && s1->tokenChar() != u'=')
+                    || (s2 != nullptr && s2->getRuleSet() != nullptr && s2->tokenChar() != u'=');
+                if (hasNonEqRuleSetSub && !substitutionStrictlyDecreases(rule)) {
+                    resetsUb = true;
+                    hasNonMonotonicRule[i] = 1;
+                    break;
+                }
+            }
+        }
+        canResetUpperBound[i] = resetsUb ? 1 : 0;
+        if (resetsUb) {
+            hasAnyReset = true;
+        }
+        if (count > INT32_MAX - totalRules) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return false;
+        }
+        totalRules += count;
+    }
+    ruleOffsets[numRuleSets] = totalRules;
+    if (totalRules == 0) {
+        return false;
+    }
+
+    std::sort(sortedRuleSets.getAlias(), sortedRuleSets.getAlias() + numRuleSets,
+        [](const RuleSetEntry& a, const RuleSetEntry& b) {
+            return std::less<const NFRuleSet*>{}(a.rs, b.rs);
+        });
+
+    // Determine which rulesets are reachable from public, parseable entry rulesets
+    // (via normal, non-numerical, and alternate-decimal fraction rules) so cycles in
+    // @noparse or unreferenced private rulesets do not mark valid formatters unparseable.
+    int32_t qHead = 0;
+    int32_t qTail = 0;
+    for (int32_t i = 0; i < numRuleSets; ++i) {
+        if (ruleSets[i]->isPublic() && ruleSets[i]->isParseable()) {
+            reachableRs[i] = 1;
+            rsQueue[qTail++] = i;
+        }
+    }
+    auto markReachableRule = [&](const NFRule* rule) {
+        if (rule == nullptr) {
+            return;
+        }
+        for (int32_t s = 0; s < 2; ++s) {
+            const NFSubstitution* sub = (s == 0) ? rule->getSub1() : rule->getSub2();
+            int32_t tIdx = findRuleSetIndex(
+                sortedRuleSets.getAlias(), numRuleSets, (sub != nullptr) ? sub->getRuleSet() : nullptr);
+            if (tIdx >= 0 && reachableRs[tIdx] == 0) {
+                reachableRs[tIdx] = 1;
+                rsQueue[qTail++] = tIdx;
+            }
+        }
+    };
+    while (qHead < qTail) {
+        const NFRuleSet* curRS = ruleSets[rsQueue[qHead++]];
+        int32_t ruleCount = curRS->getRuleCount();
+        for (int32_t r = 0; r < ruleCount; ++r) {
+            markReachableRule(curRS->getRule(r));
+        }
+        for (int32_t nn = 0; nn < NFRuleSet::kNonNumericalRuleCount; ++nn) {
+            markReachableRule(curRS->getNonNumericalRule(nn));
+        }
+        int32_t fracCount = curRS->getFractionRuleCount();
+        for (int32_t fr = 0; fr < fracCount; ++fr) {
+            markReachableRule(curRS->getFractionRule(fr));
+        }
+    }
+
+    // Fraction rule sets and non-fraction rules with divisor > baseValue (or double round-up)
+    // can reset upperBound upward. Precompute which rulesets can reach any such rule set via
+    // normal-rule substitutions so monotonic upper-bound prunings are disabled on edges entering them.
+    if (hasAnyReset) {
+        MaybeStackArray<int32_t, 32> revHead;
+        if (revHead.resize(numRuleSets + 1) == nullptr) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return false;
+        }
+        MaybeStackArray<int32_t, 32> revCur;
+        if (revCur.resize(numRuleSets) == nullptr) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return false;
+        }
+        uprv_memset(revHead.getAlias(), 0, static_cast<size_t>(numRuleSets + 1) * sizeof(int32_t));
+        int32_t edgeCount = 0;
+        for (int32_t u = 0; u < numRuleSets; ++u) {
+            const NFRuleSet* rs = ruleSets[u];
+            int32_t count = rs->getRuleCount();
+            for (int32_t r = 0; r < count; ++r) {
+                const NFRule* rule = rs->getRule(r);
+                for (int32_t s = 0; s < 2; ++s) {
+                    const NFSubstitution* sub = (s == 0) ? rule->getSub1() : rule->getSub2();
+                    int32_t tIdx = findRuleSetIndex(
+                        sortedRuleSets.getAlias(), numRuleSets, (sub != nullptr) ? sub->getRuleSet() : nullptr);
+                    if (tIdx >= 0) {
+                        if (edgeCount == INT32_MAX) {
+                            status = U_MEMORY_ALLOCATION_ERROR;
+                            return false;
+                        }
+                        ++revHead[tIdx + 1];
+                        ++edgeCount;
+                    }
+                }
+            }
+        }
+        for (int32_t i = 0; i < numRuleSets; ++i) {
+            revHead[i + 1] += revHead[i];
+            revCur[i] = revHead[i];
+        }
+        MaybeStackArray<int32_t, 64> revEdges;
+        if (edgeCount > 0 && revEdges.resize(edgeCount) == nullptr) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return false;
+        }
+        for (int32_t u = 0; u < numRuleSets; ++u) {
+            const NFRuleSet* rs = ruleSets[u];
+            int32_t count = rs->getRuleCount();
+            for (int32_t r = 0; r < count; ++r) {
+                const NFRule* rule = rs->getRule(r);
+                for (int32_t s = 0; s < 2; ++s) {
+                    const NFSubstitution* sub = (s == 0) ? rule->getSub1() : rule->getSub2();
+                    int32_t tIdx = findRuleSetIndex(
+                        sortedRuleSets.getAlias(), numRuleSets, (sub != nullptr) ? sub->getRuleSet() : nullptr);
+                    if (tIdx >= 0) {
+                        revEdges[revCur[tIdx]++] = u;
+                    }
+                }
+            }
+        }
+        qHead = 0;
+        qTail = 0;
+        for (int32_t i = 0; i < numRuleSets; ++i) {
+            if (canResetUpperBound[i] != 0) {
+                rsQueue[qTail++] = i;
+            }
+        }
+        while (qHead < qTail) {
+            int32_t v = rsQueue[qHead++];
+            for (int32_t e = revHead[v]; e < revHead[v + 1]; ++e) {
+                int32_t u = revEdges[e];
+                if (canResetUpperBound[u] == 0) {
+                    canResetUpperBound[u] = 1;
+                    rsQueue[qTail++] = u;
+                }
+            }
+        }
+    }
+
+    MaybeStackArray<int8_t, 64> visitState;
+    if (visitState.resize(totalRules) == nullptr) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return false;
+    }
+    uprv_memset(visitState.getAlias(), 0, static_cast<size_t>(totalRules));
+
+    MaybeStackArray<CycleDfsFrame, 64> stack;
+    if (stack.resize(totalRules) == nullptr) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return false;
+    }
+
+    for (int32_t startRs = 0; startRs < numRuleSets; ++startRs) {
+        if (reachableRs[startRs] == 0) {
+            continue;
+        }
+        int32_t startCount = ruleSets[startRs]->getRuleCount();
+        for (int32_t startRule = 0; startRule < startCount; ++startRule) {
+            int32_t startNode = ruleOffsets[startRs] + startRule;
+            if (visitState[startNode] != 0) {
+                continue;
+            }
+            visitState[startNode] = 1;
+            int32_t sp = 0;
+            stack[sp++] = { startRs, startRule, 0, -1, -1, 0, 0 };
+
+            while (sp > 0) {
+                CycleDfsFrame& top = stack[sp - 1];
+                if (top.subIdx >= 2) {
+                    visitState[ruleOffsets[top.rsIdx] + top.ruleIdx] = 2;
+                    --sp;
+                    continue;
+                }
+
+                const NFRuleSet* rs = ruleSets[top.rsIdx];
+                const NFRule* rule = rs->getRule(top.ruleIdx);
+
+                if (top.nextTarget < 0) {
+                    const NFSubstitution* sub = (top.subIdx == 0) ? rule->getSub1() : rule->getSub2();
+                    const NFRuleSet* targetRS = (sub != nullptr) ? sub->getRuleSet() : nullptr;
+                    if (targetRS == nullptr || targetRS->getRuleCount() == 0) {
+                        ++top.subIdx;
+                        continue;
+                    }
+
+                    int32_t targetIdx = findRuleSetIndex(sortedRuleSets.getAlias(), numRuleSets, targetRS);
+                    if (targetIdx < 0) {
+                        ++top.subIdx;
+                        continue;
+                    }
+                    if (targetRS->isFractionRuleSet() && fractionVisited[targetIdx] != 0) {
+                        ++top.subIdx;
+                        continue;
+                    }
+
+                    int64_t edgeLb = 0;
+                    int64_t edgeUb = -1;
+                    if (sub->tokenChar() == u'=') {
+                        if (!rs->isFractionRuleSet()) {
+                            edgeLb = (canResetUpperBound[targetIdx] != 0) ? 0 : rule->getBaseValue();
+                            if (hasNonMonotonicRule[top.rsIdx] == 0) {
+                                int64_t ruleUB = rs->getRuleUpperBound(top.ruleIdx);
+                                if (ruleUB >= 0 && ruleUB <= NFRuleSet::kMaxExactDoubleInt) {
+                                    edgeUb = ruleUB;
+                                }
+                            }
+                        }
+                    } else if (targetRS->isFractionRuleSet()) {
+                        // Fraction rule sets ignore upperBound in NFRuleSet::parse().
+                    } else if (rs->isFractionRuleSet()) {
+                        // Query calcUpperBound(0) directly so both NumeratorSubstitution and
+                        // forward-declared fraction rules are covered; withZeros also parses with ub = 1.
+                        double subUb = sub->calcUpperBound(0);
+                        if (subUb < 1.0) {
+                            subUb = 1.0;
+                        }
+                        if (subUb <= static_cast<double>(NFRuleSet::kMaxExactDoubleInt)) {
+                            edgeUb = static_cast<int64_t>(uprv_ceil(subUb));
+                        }
+                    } else {
+                        // Multiplier/ModulusSubstitution sets upperBound = divisor.
+                        // When targetRS cannot reset upperBound upward and (double)divisor <= baseValue,
+                        // upperBound strictly decreases below baseValue.
+                        int64_t divisor = rule->getDivisor();
+                        if (canResetUpperBound[targetIdx] == 0 && substitutionStrictlyDecreases(rule)) {
+                            ++top.subIdx;
+                            continue;
+                        }
+                        if (divisor <= 0) {
+                            edgeUb = 0;
+                        } else if (divisor <= NFRuleSet::kMaxExactDoubleInt) {
+                            edgeUb = divisor;
+                        }
+                    }
+
+                    top.targetRsIdx = targetIdx;
+                    top.edgeLb = edgeLb;
+                    top.edgeUb = edgeUb;
+
+                    if (targetRS->isFractionRuleSet()) {
+                        top.nextTarget = 0;
+                    } else {
+                        int64_t searchLb = std::min(edgeLb, NFRuleSet::kMaxExactDoubleInt + 1);
+                        int32_t lo = 0;
+                        int32_t hi = targetRS->getRuleCount();
+                        while (lo < hi) {
+                            int32_t mid = lo + (hi - lo) / 2;
+                            if (targetRS->getRule(mid)->getBaseValue() < searchLb) {
+                                lo = mid + 1;
+                            } else {
+                                hi = mid;
+                            }
+                        }
+                        // A rule at lo - 2 can overlap searchLb if lo - 1 rolls back to it.
+                        top.nextTarget = (lo > 2) ? (lo - 2) : 0;
+                    }
+                }
+
+                const NFRuleSet* targetRS = ruleSets[top.targetRsIdx];
+                int32_t targetCount = targetRS->getRuleCount();
+                if (top.nextTarget >= targetCount) {
+                    if (targetRS->isFractionRuleSet()) {
+                        fractionVisited[top.targetRsIdx] = 1;
+                    }
+                    ++top.subIdx;
+                    top.nextTarget = -1;
+                    continue;
+                }
+
+                int32_t vRuleIdx = top.nextTarget++;
+                const NFRule* vRule = targetRS->getRule(vRuleIdx);
+                if (!targetRS->isFractionRuleSet()) {
+                    int64_t vLb = vRule->getBaseValue();
+                    if (top.edgeUb >= 0 && vLb >= top.edgeUb) {
+                        ++top.subIdx;
+                        top.nextTarget = -1;
+                        continue;
+                    }
+                    int64_t vUb = targetRS->getRuleUpperBound(vRuleIdx);
+                    if (top.edgeLb > 0 && vUb >= 0 && vUb <= NFRuleSet::kMaxExactDoubleInt
+                        && top.edgeLb >= vUb) {
+                        continue;
+                    }
+                }
+
+                int32_t vRsIdx = top.targetRsIdx;
+                int32_t vNode = ruleOffsets[vRsIdx] + vRuleIdx;
+                if (visitState[vNode] == 1) {
+                    return true;
+                }
+                if (visitState[vNode] == 0) {
+                    visitState[vNode] = 1;
+                    stack[sp++] = { vRsIdx, vRuleIdx, 0, -1, -1, 0, 0 };
+                }
+            }
+        }
+    }
+    return false;
+}
+
+} // namespace
 
 void
 RuleBasedNumberFormat::init(const UnicodeString& rules, LocalizationInfo* localizationInfos,
@@ -1517,6 +1929,14 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, LocalizationInfo* locali
         if (U_FAILURE(status)) {
             return;
         }
+    }
+
+    if (!unparseable && hasCyclicRules(fRuleSets, numRuleSets, status)) {
+        unparseable = true;
+        status = U_STATE_OLD_WARNING;
+    }
+    if (U_FAILURE(status)) {
+        return;
     }
 
     // Now that the rules are initialized, the 'real' default rule
