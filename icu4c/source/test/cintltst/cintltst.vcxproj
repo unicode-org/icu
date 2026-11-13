@@ -132,6 +132,7 @@
     <ClCompile Include="cintltst.c" />
     <ClCompile Include="cutiltst.c" />
     <ClCompile Include="hpmufn.c" />
+    <ClCompile Include="regexoomtest.cpp" />
     <ClCompile Include="putiltst.c" />
     <ClCompile Include="tracetst.c" />
     <ClCompile Include="cnormtst.c" />
