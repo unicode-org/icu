@@ -379,17 +379,16 @@ final class NFRule {
      */
     private void extractSubstitutions(NFRuleSet owner, String sourceRuleText, NFRule predecessor) {
         this.ruleText = sourceRuleText;
-        sub1 = extractSubstitution(owner, predecessor);
-        if (sub1 == null) {
-            // Small optimization. There is no need to create a redundant NullSubstitution.
-            sub2 = null;
-        } else {
-            sub2 = extractSubstitution(owner, predecessor);
-        }
-
-        if (sub1 != null && sub2 != null && sub1.getClass().equals(sub2.getClass())) {
-            // Something like << << or >> >> or == == was encountered.
-            owner.owner.unparseable = true;
+        // Inf and NaN rule text is literal and cannot contain substitutions.
+        if (baseValue != INFINITY_RULE && baseValue != NAN_RULE) {
+            sub1 = extractSubstitution(owner, predecessor);
+            if (sub1 != null) {
+                sub2 = extractSubstitution(owner, predecessor);
+                if (sub2 != null && sub1.getClass().equals(sub2.getClass())) {
+                    // Something like << << or >> >> or == == was encountered.
+                    owner.owner.unparseable = true;
+                }
+            }
         }
 
         int pluralRuleStart = ruleText.indexOf("$(");

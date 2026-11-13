@@ -21,6 +21,41 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public class RBNFParseTest extends CoreTestFmwk {
     @Test
+    public void TestInfinityRuleLiteralText() throws ParseException {
+        RuleBasedNumberFormat formatter =
+                new RuleBasedNumberFormat(
+                        "%default:"
+                                + "-x: minus >>;"
+                                + "Inf: infinite <<;"
+                                + "NaN: not a number >>;"
+                                + "0: =#,##0=;",
+                        Locale.ENGLISH);
+
+        assertEquals("finite formatting", "1", formatter.format(1.0));
+        assertEquals(
+                "infinity rule text is literal",
+                "infinite <<",
+                formatter.format(Double.POSITIVE_INFINITY));
+        assertEquals(
+                "negative-infinity rule text is literal",
+                "minus infinite <<",
+                formatter.format(Double.NEGATIVE_INFINITY));
+        assertEquals("NaN rule text is literal", "not a number >>", formatter.format(Double.NaN));
+
+        assertEquals(
+                "parse infinite <<",
+                Double.POSITIVE_INFINITY,
+                formatter.parse("infinite <<").doubleValue());
+        assertEquals(
+                "parse minus infinite <<",
+                Double.NEGATIVE_INFINITY,
+                formatter.parse("minus infinite <<").doubleValue());
+        assertTrue(
+                "parse not a number >>",
+                Double.isNaN(formatter.parse("not a number >>").doubleValue()));
+    }
+
+    @Test
     public void TestParse() {
 
         // these rules make no sense but behave rationally
