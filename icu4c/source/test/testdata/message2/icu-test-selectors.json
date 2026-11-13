@@ -387,6 +387,18 @@
       "params": [{ "name": "price", "value": 4.12345 },
                  { "name": "maxF", "value": 4 }],
       "exp": "4 dollars"
+  },
+  {
+    "comment": "Repeated keys for a :test:select selector",
+    "src": [
+        ".local $x = {1 :test:select decimalPlaces=1}\n",
+        ".local $y = {a :string}\n",
+        ".match $x $y\n",
+        "1.0 b {{1.0 b}}\n",
+        "1.0 a {{1.0 a}}\n",
+        "* * {{other}}"
+      ],
+      "exp": "1.0 a"
   }
  ]
 }
