@@ -64,6 +64,7 @@ import org.unicode.icu.tool.cldrtoicu.mapper.PluralsMapper;
 import org.unicode.icu.tool.cldrtoicu.mapper.RbnfMapper;
 import org.unicode.icu.tool.cldrtoicu.mapper.SupplementalMapper;
 import org.unicode.icu.tool.cldrtoicu.mapper.TransformsMapper;
+import org.unicode.icu.tool.cldrtoicu.mapper.ZoneRegionsMapper;
 import org.unicode.icu.tool.cldrtoicu.regex.RegexTransformer;
 
 /**
@@ -574,6 +575,7 @@ public final class LdmlConverter {
 
                 case KEY_TYPE_DATA:
                     Bcp47Mapper.process(src).forEach(d -> write(d, "misc"));
+                    writeZoneRegions();
                     break;
 
                 default:
@@ -644,6 +646,22 @@ public final class LdmlConverter {
     // Directory for data which lives in the ICU source tree but is not packaged into ICU's
     // runtime data (nothing under here is read by the ICU data build).
     private static final String TZDATA_DIR = "tzdata";
+
+    private static final String ZONE_REGIONS_FILE = "zoneRegions.txt";
+    private static final ImmutableList<String> ZONE_REGIONS_COMMENT =
+            ImmutableList.of(
+                    "",
+                    "Zone/region mapping from CLDR's BCP 47 time zone identifiers.",
+                    "",
+                    "This file is NOT packaged into ICU's data; it is only read offline by the",
+                    "\"tz2icu\" tool (icu4c/source/tools/tzcode/) when generating zoneinfo64.txt.",
+                    "",
+                    "Fields (tab separated):",
+                    "  <zone ID> <region>",
+                    "where <region> is the ISO 3166 2-letter code associated with the zone's short",
+                    "identifier (https://unicode.org/reports/tr35/#Time_Zone_Identifiers), or",
+                    "\"001\" (UN M.49 - World) for zones without an associated region.");
+
     private static final String METAZONE_OFFSETS_FILE = "metazoneOffsets.txt";
     private static final ImmutableList<String> METAZONE_OFFSETS_COMMENT =
             ImmutableList.of(
@@ -658,18 +676,27 @@ public final class LdmlConverter {
                     "where <from> (inclusive) and <to> (exclusive) are UTC date-times formatted",
                     "as \"yyyy-MM-dd HH:mm\", and the offsets are in CLDR's \"[+-]HH[:mm]\" format.");
 
+    private void writeZoneRegions() {
+        writeTzdataFile(ZONE_REGIONS_FILE, ZONE_REGIONS_COMMENT, ZoneRegionsMapper.process(src));
+    }
+
     private void writeMetazoneOffsets() {
-        ImmutableList<String> rows = MetazoneOffsetsMapper.process(src);
+        writeTzdataFile(
+                METAZONE_OFFSETS_FILE, METAZONE_OFFSETS_COMMENT, MetazoneOffsetsMapper.process(src));
+    }
+
+    private void writeTzdataFile(
+            String fileName, ImmutableList<String> comment, ImmutableList<String> rows) {
         Path dir = createDirectory(config.getOutputDir().resolve(TZDATA_DIR));
-        Path file = dir.resolve(METAZONE_OFFSETS_FILE);
+        Path file = dir.resolve(fileName);
         try (BufferedWriter w = Files.newBufferedWriter(file, UTF_8);
                 PrintWriter out = new PrintWriter(w)) {
-            Stream.concat(fileHeader.stream(), METAZONE_OFFSETS_COMMENT.stream())
+            Stream.concat(fileHeader.stream(), comment.stream())
                     .forEach(line -> out.println(line.isEmpty() ? "#" : "# " + line));
             rows.forEach(out::println);
             out.flush();
         } catch (IOException e) {
-            throw new RuntimeException("cannot write metazone offsets file: " + file, e);
+            throw new RuntimeException("cannot write file: " + file, e);
         }
     }
 
