@@ -46,6 +46,10 @@ public:
             if (appended_ < capacity_ || Resize(1, appended_)) {
                 buffer_[appended_] = static_cast<char>(b);
             }
+            if (appended_ == INT32_MAX) {
+                SetNotOk();
+                return;
+            }
             ++appended_;
         }
     }
