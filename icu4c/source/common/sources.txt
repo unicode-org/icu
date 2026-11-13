@@ -70,6 +70,12 @@ resource.cpp
 restrace.cpp
 ruleiter.cpp
 schriter.cpp
+segmenter.cpp
+segmenter_localized.cpp
+segmenter_rulebased.cpp
+segmenter_segment_range.cpp
+segmenter_segment_iter.cpp
+segmenter_segments_impl.cpp
 serv.cpp
 servlk.cpp
 servlkf.cpp
