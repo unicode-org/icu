@@ -48,6 +48,7 @@ static void TestCESU8(void);
 static void TestUTF16(void);
 static void TestUTF16BE(void);
 static void TestUTF16LE(void);
+static void TestUTF16ToUnicodeFlushPendingByte(void);
 static void TestUTF32(void);
 static void TestUTF32BE(void);
 static void TestUTF32LE(void);
@@ -266,6 +267,7 @@ void addTestNewConvert(TestNode** root)
    addTest(root, &TestUTF16, "tsconv/nucnvtst/TestUTF16");
    addTest(root, &TestUTF16BE, "tsconv/nucnvtst/TestUTF16BE");
    addTest(root, &TestUTF16LE, "tsconv/nucnvtst/TestUTF16LE");
+   addTest(root, &TestUTF16ToUnicodeFlushPendingByte, "tsconv/nucnvtst/TestUTF16ToUnicodeFlushPendingByte");
    addTest(root, &TestUTF32, "tsconv/nucnvtst/TestUTF32");
    addTest(root, &TestUTF32BE, "tsconv/nucnvtst/TestUTF32BE");
    addTest(root, &TestUTF32LE, "tsconv/nucnvtst/TestUTF32LE");
@@ -2199,6 +2201,65 @@ TestUTF16LE(void) {
 #endif
 
     ucnv_close(cnv);
+}
+
+static void
+TestUTF16ToUnicodeFlushPendingByte(void) {
+    /*
+     * A lead surrogate followed by a non-trail unit whose first byte
+     * came in an earlier buffer, then an empty flush.
+     */
+    static const struct {
+        const char *name;
+        uint8_t in1[3];
+        uint8_t in2[1];
+    } cases[]={
+        { "UTF-16", { 0xd8, 0x01, 0x00 }, { 0x61 } },
+        { "UTF-16BE", { 0xd8, 0x01, 0x00 }, { 0x61 } },
+        { "UTF-16LE", { 0x01, 0xd8, 0x00 }, { 0x61 } }
+    };
+    int32_t i;
+
+    for(i=0; i<UPRV_LENGTHOF(cases); ++i) {
+        UChar buffer[8];
+        UChar *target;
+        const char *source, *sourceLimit;
+        UErrorCode errorCode=U_ZERO_ERROR;
+        UConverter *cnv=ucnv_open(cases[i].name, &errorCode);
+        if(U_FAILURE(errorCode)) {
+            log_data_err("Unable to open a %s converter: %s\n", cases[i].name, u_errorName(errorCode));
+            continue;
+        }
+        ucnv_setToUCallBack(cnv, UCNV_TO_U_CALLBACK_STOP, NULL, NULL, NULL, &errorCode);
+
+        target=buffer;
+        source=(const char *)cases[i].in1;
+        sourceLimit=source+sizeof(cases[i].in1);
+        ucnv_toUnicode(cnv, &target, buffer+UPRV_LENGTHOF(buffer), &source, sourceLimit, NULL, false, &errorCode);
+        if(U_FAILURE(errorCode) || target!=buffer || source!=sourceLimit) {
+            log_err("%s toUnicode(lead + 1 byte) -> %s, %d units, expected U_ZERO_ERROR and no output\n",
+                    cases[i].name, u_errorName(errorCode), (int)(target-buffer));
+        }
+
+        errorCode=U_ZERO_ERROR;
+        source=(const char *)cases[i].in2;
+        sourceLimit=source+sizeof(cases[i].in2);
+        ucnv_toUnicode(cnv, &target, buffer+UPRV_LENGTHOF(buffer), &source, sourceLimit, NULL, false, &errorCode);
+        if(errorCode!=U_ILLEGAL_CHAR_FOUND || target!=buffer) {
+            log_err("%s toUnicode(non-trail byte) -> %s, %d units, expected U_ILLEGAL_CHAR_FOUND and no output\n",
+                    cases[i].name, u_errorName(errorCode), (int)(target-buffer));
+        }
+
+        errorCode=U_ZERO_ERROR;
+        source=sourceLimit;
+        ucnv_toUnicode(cnv, &target, buffer+UPRV_LENGTHOF(buffer), &source, sourceLimit, NULL, true, &errorCode);
+        if(errorCode!=U_TRUNCATED_CHAR_FOUND || target!=buffer || source!=sourceLimit) {
+            log_err("%s toUnicode(empty, flush) -> %s, %d units, expected U_TRUNCATED_CHAR_FOUND and no output\n",
+                    cases[i].name, u_errorName(errorCode), (int)(target-buffer));
+        }
+
+        ucnv_close(cnv);
+    }
 }
 
 static void TestUTF32(void) {
