@@ -161,7 +161,8 @@ static const uint8_t escSeqCompoundText[NUM_OF_CONVERTERS][5] = {
 
 typedef struct{
     UConverterSharedData *myConverterArray[NUM_OF_CONVERTERS];
-    COMPOUND_TEXT_CONVERTERS state;
+    COMPOUND_TEXT_CONVERTERS fromUState;
+    COMPOUND_TEXT_CONVERTERS toUState;
 } UConverterDataCompoundText;
 
 /*********** Compound Text Converter Protos ***********/
@@ -294,7 +295,8 @@ _CompoundTextOpen(UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *errorC
             return;
         }
 
-        myConverterData->state = (COMPOUND_TEXT_CONVERTERS)0;
+        myConverterData->fromUState = COMPOUND_TEXT_SINGLE_0;
+        myConverterData->toUState = COMPOUND_TEXT_SINGLE_0;
     } else {
         *errorCode = U_MEMORY_ALLOCATION_ERROR;
     }
@@ -321,8 +323,16 @@ _CompoundTextClose(UConverter *converter) {
 
 static void U_CALLCONV
 _CompoundTextReset(UConverter *converter, UConverterResetChoice choice) {
-    (void)converter;
-    (void)choice;
+    UConverterDataCompoundText *myConverterData = (UConverterDataCompoundText *) converter->extraInfo;
+    if (myConverterData == nullptr) {
+        return;
+    }
+    if (choice <= UCNV_RESET_TO_UNICODE) {
+        myConverterData->toUState = COMPOUND_TEXT_SINGLE_0;
+    }
+    if (choice != UCNV_RESET_TO_UNICODE) {
+        myConverterData->fromUState = COMPOUND_TEXT_SINGLE_0;
+    }
 }
 
 static const char* U_CALLCONV
@@ -350,7 +360,7 @@ UConverter_fromUnicode_CompoundText_OFFSETS(UConverterFromUnicodeArgs* args, UEr
 
     UConverterDataCompoundText *myConverterData = (UConverterDataCompoundText *) cnv->extraInfo;
 
-    currentState = myConverterData->state;
+    currentState = myConverterData->fromUState;
 
     /* check if the last codepoint of previous buffer was a lead surrogate*/
     if((sourceChar = cnv->fromUChar32)!=0 && target< targetLimit) {
@@ -457,7 +467,7 @@ getTrail:
     }
 
     /*save the state and return */
-    myConverterData->state = currentState;
+    myConverterData->fromUState = currentState;
     args->source = source;
     args->target = (char*)target;
 }
@@ -489,7 +499,7 @@ UConverter_toUnicode_CompoundText_OFFSETS(UConverterToUnicodeArgs *args,
     uprv_memcpy(&subArgs, args, minArgsSize);
     subArgs.size = (uint16_t)minArgsSize;
 
-    currentState = tmpState =  myConverterData->state;
+    currentState = tmpState =  myConverterData->toUState;
 
     while(mySource < mySourceLimit){
         if(myTarget < args->targetLimit){
@@ -574,7 +584,7 @@ UConverter_toUnicode_CompoundText_OFFSETS(UConverterToUnicodeArgs *args,
             break;
         }
     }
-    myConverterData->state = currentState;
+    myConverterData->toUState = currentState;
     args->target = myTarget;
     args->source = mySource;
 }
