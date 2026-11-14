@@ -1487,6 +1487,17 @@ reconstituteData(UConverterMBCSTable *mbcsTable,
                  UErrorCode *pErrorCode) {
     uint16_t *stage1;
     uint32_t *stage2;
+    /* fullStage2Length comes from the .cnv file header. Compute the size in 64 bits:
+     * a malformed table with a large fullStage2Length wraps the 32-bit sum below to a
+     * small value, leading to an undersized allocation and out-of-bounds writes.
+     * Reject such tables like the other malformed-table checks in ucnv_MBCSLoad(). */
+    uint64_t dataLength64=static_cast<uint64_t>(stage1Length)*2+
+                          static_cast<uint64_t>(fullStage2Length)*4+
+                          mbcsTable->fromUBytesLength;
+    if(dataLength64>0xffffffffUL) {
+        *pErrorCode=U_INVALID_TABLE_FORMAT;
+        return;
+    }
     uint32_t dataLength=stage1Length*2+fullStage2Length*4+mbcsTable->fromUBytesLength;
     mbcsTable->reconstitutedData = static_cast<uint8_t*>(uprv_malloc(dataLength));
     if(mbcsTable->reconstitutedData==nullptr) {
