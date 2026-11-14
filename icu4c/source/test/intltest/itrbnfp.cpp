@@ -41,6 +41,7 @@ void IntlTestRBNFParse::runIndexedTest(int32_t index, UBool exec, const char* &n
         TESTCASE(1, TestNullRuleSet);
         TESTCASE(2, Test23407NullDereferenceREAD);
         TESTCASE(3, TestICU23144);
+        TESTCASE(4, TestICU23591);
 #else
         TESTCASE(0, TestRBNFParseDisabled);
 #endif
@@ -209,6 +210,53 @@ IntlTestRBNFParse::TestICU23144() {
     // 1. In un-patched ICU4C, execution exceeds thread stack memory, aborting with 'Segmentation Fault (SIGSEGV)'.
     // 2. In patched ICU4C (PR #4117), recursion terminates gracefully at frame 64. No crash, safe unwind.
     logln("TestICU23144: Successfully survived and bounded 75-depth >>> recursion chain.");
+}
+
+void
+IntlTestRBNFParse::TestICU23591() {
+    UnicodeString fuzzStr(
+        u"922E1<\u8686\u8686\u8686\u8686\u8686\u8686\u4400\u00FF\000;=>>=>>\001>>", 25);
+    for (int32_t i = 0; i < 132; ++i) {
+        fuzzStr.append(u";>>>", 4);
+    }
+    fuzzStr.append(
+        u";>>\010\000\000\u3132\u3734\u3834\u3633\u3834\u3000\u3C00\000\u3B44\u3C00\u6300"
+        u"\u7275\u6572\u636E\u4D79\u7461\u68630<\u4400;<\u3B30\u3C00\u3000\u3C00\uC6C6\uC6C6"
+        u"\uC6C6\uC6C6\uC6C6\u0100D\u3B40", 40);
+    {
+        UErrorCode status = U_ZERO_ERROR;
+        UParseError perror;
+        RuleBasedNumberFormat rbfmt(fuzzStr, Locale("ba"), perror, status);
+        if (assertSuccess("RBNF construction for fuzzStr", status)) {
+            Formattable result;
+            rbfmt.parse(fuzzStr, result, status);
+            assertEquals(WHERE, U_INVALID_FORMAT_ERROR, status);
+        }
+    }
+    {
+        UnicodeString chainRules(u"0: z;\n");
+        for (int32_t i = 1; i <= 7000; ++i) {
+            chainRules.append(UnicodeString::fromUTF8(std::to_string(i) + ": >>>;\n"));
+        }
+        UErrorCode status = U_ZERO_ERROR;
+        UParseError perror;
+        RuleBasedNumberFormat rbfmt(chainRules, Locale::getUS(), perror, status);
+        if (assertSuccess("RBNF construction for 7000-rule >>> chain", status)) {
+            Formattable parsed;
+            rbfmt.parse(u"a", parsed, status);
+            assertEquals(WHERE, U_INVALID_FORMAT_ERROR, status);
+        }
+    }
+    {
+        UErrorCode status = U_ZERO_ERROR;
+        UParseError perror;
+        RuleBasedNumberFormat rbfmt(u"%s:\n0: x;\n1: a=%s=;", Locale::getUS(), perror, status);
+        if (assertSuccess(WHERE, status)) {
+            Formattable parsed;
+            rbfmt.parse(u"ax", parsed, status);
+            assertEquals(WHERE, U_INVALID_FORMAT_ERROR, status);
+        }
+    }
 }
 
 void
