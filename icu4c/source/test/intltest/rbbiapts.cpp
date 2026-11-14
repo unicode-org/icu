@@ -28,6 +28,7 @@
 #if !UCONFIG_NO_BREAK_ITERATION
 #include "unicode/filteredbrk.h"
 #include <stdio.h> // for snprintf
+#include <memory>
 #endif
 /**
  * API Test the RuleBasedBreakIterator class
@@ -1147,6 +1148,124 @@ void RBBIAPITest::TestGetBinaryRules() {
 }
 
 
+void RBBIAPITest::TestBinaryRuleRowFieldValidation() {
+    // ICU-23531: row fields from a binary rule blob index run-time arrays.
+    // RuleBasedBreakIterator::handleNext() writes to
+    // fLookAheadMatches[row->fLookAhead] with no bounds check in release
+    // builds, and reads row->fNextState[category] and the rule status table
+    // without checking against the table sizes. A blob with out of bounds
+    // values must be rejected when it is opened.
+
+    UErrorCode status = U_ZERO_ERROR;
+    UParseError parseError;
+    UnicodeString rules(u"a* / b*;");
+    RuleBasedBreakIterator bi(rules, parseError, status);
+    if (U_FAILURE(status)) {
+        dataerrln("FAIL: RuleBasedBreakIterator from rules: %s", u_errorName(status));
+        return;
+    }
+    uint32_t ruleLength = 0;
+    const uint8_t *binRules = bi.getBinaryRules(ruleLength);
+    TEST_ASSERT(ruleLength > 0);
+    TEST_ASSERT(binRules != nullptr);
+
+    const RBBIDataHeader *goodData = reinterpret_cast<const RBBIDataHeader *>(binRules);
+    const RBBIStateTable *fTable =
+        reinterpret_cast<const RBBIStateTable *>(binRules + goodData->fFTable);
+    uint32_t rowLen = fTable->fRowLen;
+    bool rowsAre8Bit = (fTable->fFlags & RBBI_8BITS_ROWS) != 0;
+
+    // Find a row that carries a look-ahead slot.
+    uint32_t lookAheadRow = UINT32_MAX;
+    for (uint32_t state = 0; state < fTable->fNumStates && lookAheadRow == UINT32_MAX; state++) {
+        const char *rowBytes = fTable->fTableData + (size_t)rowLen * state;
+        uint32_t lookAhead = rowsAre8Bit
+            ? reinterpret_cast<const RBBIStateTableRow8 *>(rowBytes)->fLookAhead
+            : reinterpret_cast<const RBBIStateTableRow16 *>(rowBytes)->fLookAhead;
+        if (lookAhead > ACCEPTING_UNCONDITIONAL) {
+            lookAheadRow = state;
+        }
+    }
+    TEST_ASSERT(lookAheadRow != UINT32_MAX);
+
+    // Corrupt the look-ahead slot so that it indexes beyond the
+    // look-ahead results array. Before the fix, iterating any text with
+    // such rules wrote past the end of that array.
+    {
+        std::unique_ptr<uint8_t[]> badRules(new uint8_t[ruleLength]);
+        uprv_memcpy(badRules.get(), binRules, ruleLength);
+        RBBIDataHeader *data = reinterpret_cast<RBBIDataHeader *>(badRules.get());
+        RBBIStateTable *table =
+            reinterpret_cast<RBBIStateTable *>(badRules.get() + data->fFTable);
+        char *rowBytes = table->fTableData + (size_t)table->fRowLen * lookAheadRow;
+        if (rowsAre8Bit) {
+            reinterpret_cast<RBBIStateTableRow8 *>(rowBytes)->fLookAhead = 0x7f;
+        } else {
+            reinterpret_cast<RBBIStateTableRow16 *>(rowBytes)->fLookAhead = 0x7fff;
+        }
+
+        status = U_ZERO_ERROR;
+        RuleBasedBreakIterator badBi(badRules.get(), ruleLength, status);
+        assertEquals("look-ahead slot out of bounds is rejected",
+                    static_cast<int32_t>(U_INVALID_FORMAT_ERROR), static_cast<int32_t>(status));
+    }
+
+    // Corrupt a next-state value to point beyond the rows of the table.
+    {
+        std::unique_ptr<uint8_t[]> badRules(new uint8_t[ruleLength]);
+        uprv_memcpy(badRules.get(), binRules, ruleLength);
+        RBBIDataHeader *data = reinterpret_cast<RBBIDataHeader *>(badRules.get());
+        RBBIStateTable *table =
+            reinterpret_cast<RBBIStateTable *>(badRules.get() + data->fFTable);
+        char *rowBytes = table->fTableData + (size_t)table->fRowLen * lookAheadRow;
+        if (rowsAre8Bit) {
+            reinterpret_cast<RBBIStateTableRow8 *>(rowBytes)->fNextState[0] =
+                static_cast<uint8_t>(table->fNumStates);
+        } else {
+            reinterpret_cast<RBBIStateTableRow16 *>(rowBytes)->fNextState[0] =
+                static_cast<uint16_t>(table->fNumStates);
+        }
+
+        status = U_ZERO_ERROR;
+        RuleBasedBreakIterator badBi(badRules.get(), ruleLength, status);
+        assertEquals("next state out of bounds is rejected",
+                    static_cast<int32_t>(U_INVALID_FORMAT_ERROR), static_cast<int32_t>(status));
+    }
+
+    // Corrupt a tag index to point beyond the rule status table.
+    {
+        std::unique_ptr<uint8_t[]> badRules(new uint8_t[ruleLength]);
+        uprv_memcpy(badRules.get(), binRules, ruleLength);
+        RBBIDataHeader *data = reinterpret_cast<RBBIDataHeader *>(badRules.get());
+        RBBIStateTable *table =
+            reinterpret_cast<RBBIStateTable *>(badRules.get() + data->fFTable);
+        char *rowBytes = table->fTableData + (size_t)table->fRowLen * lookAheadRow;
+        if (rowsAre8Bit) {
+            reinterpret_cast<RBBIStateTableRow8 *>(rowBytes)->fTagsIdx = 0x7f;
+        } else {
+            reinterpret_cast<RBBIStateTableRow16 *>(rowBytes)->fTagsIdx = 0x7fff;
+        }
+
+        status = U_ZERO_ERROR;
+        RuleBasedBreakIterator badBi(badRules.get(), ruleLength, status);
+        assertEquals("tag index out of bounds is rejected",
+                    static_cast<int32_t>(U_INVALID_FORMAT_ERROR), static_cast<int32_t>(status));
+    }
+
+    // Corrupt a section offset to point beyond the end of the data.
+    {
+        std::unique_ptr<uint8_t[]> badRules(new uint8_t[ruleLength]);
+        uprv_memcpy(badRules.get(), binRules, ruleLength);
+        RBBIDataHeader *data = reinterpret_cast<RBBIDataHeader *>(badRules.get());
+        data->fTrie = data->fLength;
+
+        status = U_ZERO_ERROR;
+        RuleBasedBreakIterator badBi(badRules.get(), ruleLength, status);
+        assertEquals("section offset out of bounds is rejected",
+                    static_cast<int32_t>(U_INVALID_FORMAT_ERROR), static_cast<int32_t>(status));
+    }
+}
+
 void RBBIAPITest::TestRefreshInputText() {
     /*
      *  RefreshInput changes out the input of a Break Iterator without
@@ -1466,6 +1585,7 @@ void RBBIAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
     TESTCASE_AUTO(TestRuleStatus);
     TESTCASE_AUTO(TestRoundtripRules);
     TESTCASE_AUTO(TestGetBinaryRules);
+        TESTCASE_AUTO(TestBinaryRuleRowFieldValidation);
 #endif
     TESTCASE_AUTO(TestRefreshInputText);
 #if !UCONFIG_NO_BREAK_ITERATION
