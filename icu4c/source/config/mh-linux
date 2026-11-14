@@ -32,7 +32,7 @@ LDFLAGSICUDT=-nodefaultlibs -nostdlib
 #SH# LD_SONAME=
 
 ## Shared library options
-LD_SOOPTIONS= -Wl,-Bsymbolic
+LD_SOOPTIONS=
 
 ## Shared object suffix
 SO = so
