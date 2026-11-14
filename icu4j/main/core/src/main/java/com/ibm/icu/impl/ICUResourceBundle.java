@@ -1548,7 +1548,11 @@ public class ICUResourceBundle extends UResourceBundle {
                                                 localOpenType);
                             } else {
                                 if (localOpenType == OpenType.LOCALE_DEFAULT_ROOT
-                                        && !localeIDStartsWithLangSubtag(defaultID, localeName)) {
+                                        && !localeIDStartsWithLangSubtag(defaultID, localeName)
+                                        // Do not go to the default locale again if we are already
+                                        // there without an originating locale: that call would
+                                        // recurse with identical arguments (ICU-23291).
+                                        && (origLocaleID != null || !defaultID.equals(localeID))) {
                                     // Go to the default locale before root.
                                     b =
                                             instantiateBundle(
