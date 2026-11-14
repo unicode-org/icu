@@ -248,12 +248,6 @@ public final class CopticCalendar extends CECalendar {
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    @Override
-    @Deprecated
-    protected boolean isEra0CountingBackward() {
-        return true;
-    }
-
     /**
      * {@inheritDoc}
      *
@@ -267,13 +261,7 @@ public final class CopticCalendar extends CECalendar {
         if (newerField(EXTENDED_YEAR, YEAR) == EXTENDED_YEAR) {
             eyear = internalGet(EXTENDED_YEAR, 1); // Default to year 1
         } else {
-            // The year defaults to the epoch start, the era to AD
-            int era = internalGet(ERA, CE);
-            if (era == BCE) {
-                eyear = 1 - internalGet(YEAR, 1); // Convert to extended year
-            } else {
-                eyear = internalGet(YEAR, 1); // Default to year 1
-            }
+            eyear = internalGet(YEAR, 1); // Default to year 1
         }
         return eyear;
     }
@@ -287,7 +275,7 @@ public final class CopticCalendar extends CECalendar {
     @Deprecated
     @Override
     protected int extendedYearToEra(int eyear) {
-        return (eyear <= 0) ? BCE : CE;
+        return CE;
     }
 
     /**
@@ -299,7 +287,22 @@ public final class CopticCalendar extends CECalendar {
     @Deprecated
     @Override
     protected int extendedYearToYear(int eyear) {
-        return (eyear <= 0) ? 1 - eyear : eyear;
+        return eyear;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Override
+    @Deprecated
+    protected int handleGetLimit(int field, int limitType) {
+        if (field == ERA) {
+            return CE; // Only one era in this mode, era is always CE
+        }
+        return super.handleGetLimit(field, limitType);
     }
 
     /**
