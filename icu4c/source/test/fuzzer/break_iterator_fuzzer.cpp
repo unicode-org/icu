@@ -31,6 +31,9 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
   std::memcpy(fuzzbuff.get(), data, unistr_size * 2);
 
   UText* fuzzstr = utext_openUChars(nullptr, fuzzbuff.get(), unistr_size, &status);
+  if (U_FAILURE(status) || fuzzstr == nullptr) {
+    return 0;
+  }
 
   const icu::Locale& locale = GetRandomLocale(rnd16);
 
@@ -54,6 +57,11 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
       break;
   }
 
+  if (bi == nullptr || U_FAILURE(status)) {
+    utext_close(fuzzstr);
+    return 0;
+  }
+
   bi->setText(fuzzstr, status);
 
   if (U_FAILURE(status)) {
@@ -64,6 +72,9 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
   for (int32_t p = bi->first(); p != icu::BreakIterator::DONE; p = bi->next()) {}
 
   utext_close(fuzzstr);
+
+  // Reset status before second round of BreakIterator creation.
+  status = U_ZERO_ERROR;
 
   std::string str(reinterpret_cast<const char*>(data), size);
   icu::Locale locale2(str.c_str()); // ensure null-termination by c_str()
