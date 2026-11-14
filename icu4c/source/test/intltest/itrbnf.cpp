@@ -89,6 +89,7 @@ void IntlTestRBNF::runIndexedTest(int32_t index, UBool exec, const char* &name, 
         TESTCASE(39, TestDividedByZero);
         TESTCASE(40, TestTurkishSpellout);
         TESTCASE(41, TestNumeratorSubstitutionOverflow);
+        TESTCASE(42, TestParseRuleDescriptorRadixOverflow);
 #else
         TESTCASE(0, TestRBNFDisabled);
 #endif
@@ -2640,6 +2641,30 @@ IntlTestRBNF::TestParseRuleDescriptorOverflow23002() {
         testStr,
         Locale("as"), perror, status);
     assertEquals("number too large", U_PARSE_ERROR, status);
+}
+
+void
+IntlTestRBNF::TestParseRuleDescriptorRadixOverflow() {
+    // A radix descriptor that fits in int64 but not int32 (2^31) used to be
+    // narrowed to a negative radix, so expectedExponent() took uprv_log() of a
+    // negative number and cast the resulting NaN to int16_t. Reject it instead.
+    {
+        UParseError perror;
+        UErrorCode status = U_ZERO_ERROR;
+        UnicodeString rules(u"1000000000/2147483648: x>>;");
+        RuleBasedNumberFormat rbnf(rules, Locale::getEnglish(), perror, status);
+        assertEquals("radix 2^31 rejected", U_PARSE_ERROR, status);
+    }
+    // A radix at the int32 maximum is still accepted.
+    {
+        UParseError perror;
+        UErrorCode status = U_ZERO_ERROR;
+        UnicodeString rules(u"1000000000/2147483647: x>>;");
+        RuleBasedNumberFormat rbnf(rules, Locale::getEnglish(), perror, status);
+        if (status == U_PARSE_ERROR) {
+            errln("radix 2147483647 should be accepted");
+        }
+    }
 }
 
 void
