@@ -68,6 +68,16 @@ public class ChineseTest extends CalendarTestFmwk {
             1990, 7, 20, 1990, 5, 1, 28,
             1990, 7, 21, 1990, 5, 1, 29,
             1990, 7, 22, 1990, 6, 0, 1,
+            // Edge cases in 2057 and 2097 where New Moon occurs near midnight (00:10 on 2057-09-29
+            // and 23:55 on 2097-08-07).
+            // Highlighted in Y.T. Liu's 200-year ephemeris comparison as near-midnight conjunction
+            // edge cases.
+            2057, 9, 28, 2057, 8, 0, 30,
+            2057, 9, 29, 2057, 9, 0, 1,
+            2057, 9, 30, 2057, 9, 0, 2,
+            2097, 8, 6, 2097, 6, 0, 29,
+            2097, 8, 7, 2097, 7, 0, 1,
+            2097, 8, 8, 2097, 7, 0, 2,
         };
 
         ChineseCalendar cal = new ChineseCalendar();
