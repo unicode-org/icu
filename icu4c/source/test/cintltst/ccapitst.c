@@ -3110,6 +3110,41 @@ static void TestLMBCSMaxChar(void) {
     if(UCNV_GET_MAX_BYTES_FOR_STRING(1, 2)<10) {
         log_err("error UCNV_GET_MAX_BYTES_FOR_STRING(1, 2)<10\n");
     }
+
+    /* The macro promises a buffer size that is "large enough", so its
+     * arithmetic must not wrap.  Compare against 64-bit ground truth: a
+     * product that exceeds INT32_MAX must clamp to INT32_MAX (the
+     * conversion functions take int32_t capacities anyway).  The old
+     * 32-bit formula wrapped, e.g. to 0 for length 536870902 with
+     * maxCharSize 8. */
+    {
+        static const struct {
+            int32_t length;
+            int32_t maxCharSize;
+            int64_t product; /* true (length+10)*maxCharSize */
+        } cases[] = {
+            {          1, 2,           22LL },
+            {       1000, 8,         8080LL },
+            { 268435445, 8, 2147483640LL }, /* largest unclamped product */
+            { 268435446, 8, 2147483648LL }, /* first product past INT32_MAX */
+            { 536870902, 8, 4294967296LL }, /* old macro wrapped to 0 */
+            { 2147483647, 8, 17179869256LL } /* old macro wrapped to 72 */
+        };
+        int32_t i;
+
+        for (i = 0; i < (int32_t)(sizeof(cases) / sizeof(cases[0])); ++i) {
+            int64_t expected = cases[i].product > INT32_MAX
+                ? INT32_MAX : cases[i].product;
+            int32_t got = UCNV_GET_MAX_BYTES_FOR_STRING(
+                cases[i].length, cases[i].maxCharSize);
+            if ((int64_t)got != expected) {
+                log_err("error UCNV_GET_MAX_BYTES_FOR_STRING(%ld, %ld) = %ld, "
+                    "expected %ld (true product %ld)\n",
+                    (long)cases[i].length, (long)cases[i].maxCharSize,
+                    (long)got, (long)expected, (long)cases[i].product);
+            }
+        }
+    }
 }
 #endif
 
