@@ -138,6 +138,7 @@ Building International Components for Unicode requires:
 
 *   Microsoft Windows 7 or newer. (Windows XP and Windows Vista are not  supported)
 *   Microsoft Visual C++ (part of [Visual Studio](https://www.visualstudio.com/)) (from either Visual Studio 2017 or Visual Studio 2019)
+*   [Python 3 interpreter](https://www.python.org/downloads/windows/) accessible from the `PATH` environment variable.
 *   _**Optional:**_ A version of the [Windows 10 SDK](https://developer.microsoft.com/windows/downloads) is needed if you want to build the UWP projects.
 
 Notes regarding Windows specific issues:
