@@ -1621,7 +1621,10 @@ static int32_t _cmpFold(
              */
             next1=next2=nullptr;
             if(level1==0) {
-                next1=s1;
+                /* Do not advance match position in the middle of a surrogate pair. */
+                if(!(U16_IS_LEAD(c1) && s1!=limit1 && U16_IS_TRAIL(*s1))) {
+                    next1=s1;
+                }
             } else if(s1==limit1) {
                 /* Note: This implementation only use a single level of stack.
                  *      If this code needs to be changed to use multiple levels
@@ -1636,7 +1639,9 @@ static int32_t _cmpFold(
 
             if (next1!=nullptr) {
                 if(level2==0) {
-                    next2=s2;
+                    if(!(U16_IS_LEAD(c2) && s2!=limit2 && U16_IS_TRAIL(*s2))) {
+                        next2=s2;
+                    }
                 } else if(s2==limit2) {
                     U_ASSERT(level2==1);
 
@@ -1712,16 +1717,12 @@ static int32_t _cmpFold(
                      * compare this decomposition with the lead surrogate in the other string
                      * remember that this simulates bulk text replacement:
                      * the decomposition would replace the entire code point
+                     *
+                     * Read the shared lead surrogate from *(s1-2) rather than *(s2-1)
+                     * (kept symmetric with the level2 block below).
                      */
-                    if (s2 - start2 >= 2) {
-                        s2 -= 2;
-                    } else {
-                        s2 = start2;
-                    }
-                    if (m2 > org2) {
-                        --m2;
-                    }
-                    c2 = -1;
+                    --s2;
+                    c2=*(s1-2);
                 }
             }
 
@@ -1764,16 +1765,13 @@ static int32_t _cmpFold(
                      * compare this decomposition with the lead surrogate in the other string
                      * remember that this simulates bulk text replacement:
                      * the decomposition would replace the entire code point
+                     *
+                     * Read the shared lead surrogate from *(s2-2) rather than *(s1-1)
+                     * because string 1 may already be at the start of fold1[] (level1==1),
+                     * where --s1 sets s1=fold1 and *(s1-1) would underflow fold1[].
                      */
-                    if (s1 - start1 >= 2) {
-                        s1 -= 2;
-                    } else {
-                        s1 = start1;
-                    }
-                    if (m2 > org2) {
-                        --m2;
-                    }
-                    c1 = -1;
+                    --s1;
+                    c1=*(s2-2);
                 }
             }
 

@@ -1018,6 +1018,24 @@ TestUCaseInsensitivePrefixMatch(void) {
         {"\\u00dfs", "s\\u00df", 2, 2},
         /* U+0130 LATIN CAPITAL LETTER I WITH DOT ABOVE */
         {"XYZ\\u0130i\\u0307xxx", "xyzi\\u0307\\u0130yyy", 6, 6},
+        /* Supplementary characters and unpaired surrogates (ICU-23485) */
+        {"\\U00010401X", "\\U00010429Y", 2, 2},
+        {"\\U00010429X", "\\U00010401Y", 2, 2},
+        {"\\U00010401", "\\U00010428", 0, 0},
+        {"\\U00010428", "\\U00010401", 0, 0},
+        {"\\U00010401", "\\U00010400", 0, 0},
+        {"ab\\U00010401", "ab\\U00010400", 2, 2},
+        {"\\U00010429", "\\U00010428", 0, 0},
+        {"\\U00010428x", "\\ud801y", 0, 0},
+        {"\\ud801x", "\\U00010428y", 0, 0},
+        {"\\ud801x", "\\ud801y", 1, 1},
+        {"\\ud801", "\\ud801", 1, 1},
+        {"\\ud801\\U00010401", "\\U00010401", 0, 0},
+        {"a\\udc01x", "a\\udc02y", 1, 1},
+        {"\\U0001df95x", "ssy", 2, 2},
+        {"\\U0001df95", "s", 0, 0},
+        {"", "abc", 0, 0},
+        {"\\ud801", "", 0, 0},
         {0, 0, 0, 0}
     };
     int32_t i;
@@ -1025,19 +1043,71 @@ TestUCaseInsensitivePrefixMatch(void) {
     for (i = 0; testCases[i].s1 != 0; i++) {
         UErrorCode sts = U_ZERO_ERROR;
         UChar u1[64], u2[64];
+        UChar *buf1, *buf2;
+        int32_t len1, len2;
         int32_t matchLen1, matchLen2;
 
-        u_unescape(testCases[i].s1, u1, 64);
-        u_unescape(testCases[i].s2, u2, 64);
+        len1 = u_unescape(testCases[i].s1, u1, 64);
+        len2 = u_unescape(testCases[i].s2, u2, 64);
 
         u_caseInsensitivePrefixMatch(u1, -1, u2, -1, 0, &matchLen1, &matchLen2, &sts);
         if (U_FAILURE(sts)) {
             log_err("error: %s, s1=%s, s2=%s", u_errorName(sts), testCases[i].s1, testCases[i].s2);
         } else if (matchLen1 != testCases[i].r1 || matchLen2 != testCases[i].r2) {
-            log_err("s1=%s, s2=%2 / match len1=%d, len2=%d / expected len1=%d, len2=%d",
+            log_err("NUL-terminated s1=%s, s2=%s / match len1=%d, len2=%d / expected len1=%d, len2=%d\n",
                 testCases[i].s1, testCases[i].s2,
-                matchLen1, matchLen2,
-                testCases[i].r1, testCases[i].r2);
+                (int)matchLen1, (int)matchLen2,
+                (int)testCases[i].r1, (int)testCases[i].r2);
+        }
+
+        /* Also test exact-length non-NUL-terminated buffers to verify bounds safety. */
+        buf1 = (UChar *)uprv_malloc((size_t)(len1 > 0 ? len1 : 1) * U_SIZEOF_UCHAR);
+        buf2 = (UChar *)uprv_malloc((size_t)(len2 > 0 ? len2 : 1) * U_SIZEOF_UCHAR);
+        if (buf1 == NULL || buf2 == NULL) {
+            log_err("Out of memory\n");
+            uprv_free(buf1);
+            uprv_free(buf2);
+            break;
+        }
+        if (len1 > 0) {
+            uprv_memcpy(buf1, u1, (size_t)len1 * U_SIZEOF_UCHAR);
+        }
+        if (len2 > 0) {
+            uprv_memcpy(buf2, u2, (size_t)len2 * U_SIZEOF_UCHAR);
+        }
+        sts = U_ZERO_ERROR;
+        u_caseInsensitivePrefixMatch(buf1, len1, buf2, len2, 0, &matchLen1, &matchLen2, &sts);
+        if (U_FAILURE(sts)) {
+            log_err("error (explicit len): %s, s1=%s, s2=%s\n",
+                u_errorName(sts), testCases[i].s1, testCases[i].s2);
+        } else if (matchLen1 != testCases[i].r1 || matchLen2 != testCases[i].r2) {
+            log_err("explicit-len s1=%s, s2=%s / match len1=%d, len2=%d / expected len1=%d, len2=%d\n",
+                testCases[i].s1, testCases[i].s2,
+                (int)matchLen1, (int)matchLen2,
+                (int)testCases[i].r1, (int)testCases[i].r2);
+        }
+        uprv_free(buf1);
+        uprv_free(buf2);
+    }
+
+    {
+        /* Explicit length=1 slices ending right before an in-bounds trail surrogate:
+         * deterministically fails even without ASan if s1!=limit1 or s2!=limit2 is omitted. */
+        static const UChar pairBuf[] = { 0xd801, 0xdc28 };
+        static const UChar leadBuf[] = { 0xd801, 0x0078 };
+        UErrorCode sts = U_ZERO_ERROR;
+        int32_t matchLen1 = 0, matchLen2 = 0;
+
+        u_caseInsensitivePrefixMatch(pairBuf, 1, leadBuf, 1, 0, &matchLen1, &matchLen2, &sts);
+        if (U_FAILURE(sts) || matchLen1 != 1 || matchLen2 != 1) {
+            log_err("slice s1!=limit1 check failed: len1=%d, len2=%d, err=%s\n",
+                (int)matchLen1, (int)matchLen2, u_errorName(sts));
+        }
+        sts = U_ZERO_ERROR;
+        u_caseInsensitivePrefixMatch(leadBuf, 1, pairBuf, 1, 0, &matchLen1, &matchLen2, &sts);
+        if (U_FAILURE(sts) || matchLen1 != 1 || matchLen2 != 1) {
+            log_err("slice s2!=limit2 check failed: len1=%d, len2=%d, err=%s\n",
+                (int)matchLen1, (int)matchLen2, u_errorName(sts));
         }
     }
 }
