@@ -1929,8 +1929,8 @@ processPropertySeq(UBiDi *pBiDi, LevState *pLevState, uint8_t _prop,
                 break;
             }
             /* reset previous RTL cont to level for LTR text */
-            for (k=pLevState->lastStrongRTL+1; k<start0; k++)
-            {
+            for (k=pLevState->lastStrongRTL+1; k<start0; k++) {
+                if(k<0) continue;
                 /* reset odd level, leave runLevel+2 as is */
                 levels[k]=(levels[k] - 2) & ~1;
             }
@@ -2018,7 +2018,7 @@ processPropertySeq(UBiDi *pBiDi, LevState *pLevState, uint8_t _prop,
 
         case 12:                        /* L after L+ON/AN */
             level=pLevState->runLevel + addLevel;
-            for(k=pLevState->startON; k<start0; k++) {
+            for(k=pLevState->startON < 0 ? 0 : pLevState->startON; k<start0; k++) {
                 if (levels[k]<level)
                     levels[k]=level;
             }
@@ -2029,15 +2029,18 @@ processPropertySeq(UBiDi *pBiDi, LevState *pLevState, uint8_t _prop,
 
         case 13:                        /* L after L+ON+EN/AN/ON */
             level=pLevState->runLevel;
-            for(k=start0-1; k>=pLevState->startON; k--) {
+            for(k=start0-1; k>=0 && k>=pLevState->startON; k--) {
                 if(levels[k]==level+3) {
-                    while(levels[k]==level+3) {
+                    while(k>=0 && levels[k]==level+3) {
                         levels[k--]-=2;
                     }
-                    while(levels[k]==level) {
+                    if(k<0) break;
+                    while(k>=0 && levels[k]==level) {
                         k--;
                     }
+                    if(k<0) break;
                 }
+                if(k<0) break;
                 if(levels[k]==level+2) {
                     levels[k]=level;
                     continue;
@@ -2048,7 +2051,7 @@ processPropertySeq(UBiDi *pBiDi, LevState *pLevState, uint8_t _prop,
 
         case 14:                        /* R after L+ON+EN/AN/ON */
             level=pLevState->runLevel+1;
-            for(k=start0-1; k>=pLevState->startON; k--) {
+            for(k=start0-1; k>=0 && k>=pLevState->startON; k--) {
                 if(levels[k]>level) {
                     levels[k]-=2;
                 }
