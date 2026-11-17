@@ -178,6 +178,8 @@ _CompoundTextReset(UConverter *converter, UConverterResetChoice choice);
 static const char* U_CALLCONV
 _CompoundTextgetName(const UConverter* cnv);
 
+static UConverter * U_CALLCONV
+_CompoundTextSafeClone(const UConverter *cnv, void *stackBuffer, int32_t *pBufferSize, UErrorCode *status);
 
 static int32_t findNextEsc(const char *source, const char *sourceLimit) {
     int32_t length = static_cast<int32_t>(sourceLimit - source);
@@ -256,6 +258,40 @@ static COMPOUND_TEXT_CONVERTERS findStateFromEscSeq(const char* source, const ch
     }
 
     return state;
+}
+
+struct cloneCompoundTextStruct {
+    UConverter cnv;
+    UConverterDataCompoundText mydata;
+};
+
+static UConverter * U_CALLCONV
+_CompoundTextSafeClone(const UConverter *cnv, void *stackBuffer, int32_t *pBufferSize, UErrorCode *status) {
+    struct cloneCompoundTextStruct *localClone;
+    int32_t i;
+
+    if (U_FAILURE(*status)) {
+        return nullptr;
+    }
+
+    if (*pBufferSize == 0) {
+        *pBufferSize = (int32_t)sizeof(struct cloneCompoundTextStruct);
+        return nullptr;
+    }
+
+    localClone = (struct cloneCompoundTextStruct *)stackBuffer;
+
+    uprv_memcpy(&localClone->mydata, cnv->extraInfo, sizeof(UConverterDataCompoundText));
+    localClone->cnv.extraInfo = &localClone->mydata;
+    localClone->cnv.isExtraLocal = true;
+
+    for (i = 0; i < NUM_OF_CONVERTERS; i++) {
+        if (localClone->mydata.myConverterArray[i] != nullptr) {
+            ucnv_incrementRefCount(localClone->mydata.myConverterArray[i]);
+        }
+    }
+
+    return &localClone->cnv;
 }
 
 static void U_CALLCONV
@@ -618,7 +654,7 @@ static const UConverterImpl _CompoundTextImpl = {
     nullptr,
     _CompoundTextgetName,
     nullptr,
-    nullptr,
+    _CompoundTextSafeClone,
     _CompoundText_GetUnicodeSet,
     nullptr,
     nullptr
