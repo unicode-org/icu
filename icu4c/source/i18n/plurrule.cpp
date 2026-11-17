@@ -876,6 +876,10 @@ PluralRules::getRuleFromResource(const Locale& locale, UPluralType type, UErrorC
     if (s==nullptr) {
         return emptyStr;
     }
+    if (resLen >= 256) {
+        errCode = U_INTERNAL_PROGRAM_ERROR;
+        return emptyStr;
+    }
 
     char setKey[256];
     u_UCharsToChars(s, setKey, resLen + 1);
