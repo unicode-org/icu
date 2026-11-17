@@ -604,7 +604,7 @@ static UResourceDataEntry *init_entry(const char *localeID, const char *path, UE
                 if (aliasres != RES_BOGUS) {
                     // No tracing: called during initial data loading
                     const char16_t *alias = res_getStringNoTrace(&(r->fData), aliasres, &aliasLen);
-                    if(alias != nullptr && aliasLen > 0) { /* if there is actual alias - unload and load new data */
+                    if(alias != nullptr && aliasLen > 0 && aliasLen < (int32_t)sizeof(aliasName)) {
                         u_UCharsToChars(alias, aliasName, aliasLen+1);
                         r->fAlias = init_entry(aliasName, path, status);
                     }
