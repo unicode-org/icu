@@ -363,9 +363,10 @@ void CompoundTransliterator::setTransliterators(Transliterator* const transliter
     if (failed && i > 0) {
         int32_t n;
         for (n = i-1; n >= 0; n--) {
-            uprv_free(a[n]);
+            delete a[n];
             a[n] = nullptr;
         }
+        uprv_free(a);
         return;
     }
     adoptTransliterators(a, transCount);
