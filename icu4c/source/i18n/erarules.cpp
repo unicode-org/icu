@@ -137,7 +137,7 @@ EraRules* EraRules::createInstance(const char *calTypeId, UBool includeTentative
     UErrorCode tmpStatus = U_ZERO_ERROR;
     const UChar *inheritCalTypeStr = ures_getStringByKey(rb.getAlias(), "inheritEras", &inheritCalTypeLen, &tmpStatus);
     if (U_SUCCESS(tmpStatus)) {
-        if (inheritCalTypeLen > MAX_CAL_ID_LENGTH && !uprv_isInvariantUString(inheritCalTypeStr, inheritCalTypeLen)) {
+        if (inheritCalTypeLen > MAX_CAL_ID_LENGTH || !uprv_isInvariantUString(inheritCalTypeStr, inheritCalTypeLen)) {
             // calendar type ID from data is too long or not in ASCII
             status = U_INVALID_FORMAT_ERROR;
             return nullptr;
