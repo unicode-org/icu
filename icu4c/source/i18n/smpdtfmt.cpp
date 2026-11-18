@@ -2470,7 +2470,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
         DayPeriodRules::DayPeriod dayPeriod = static_cast<DayPeriodRules::DayPeriod>(dayPeriodInt);
         const DayPeriodRules *ruleSet = DayPeriodRules::getInstance(this->getSmpFmtLocale(), status);
 
-        if (!cal.isSet(UCAL_HOUR) && !cal.isSet(UCAL_HOUR_OF_DAY)) {
+        if (!workCal->isSet(UCAL_HOUR) && !workCal->isSet(UCAL_HOUR_OF_DAY)) {
             // If hour is not set, set time to the midpoint of current day period, overwriting
             // minutes if it's set.
             double midPoint = ruleSet->getMidPointForDayPeriod(dayPeriod, status);
@@ -2483,17 +2483,17 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
                 int32_t midPointMinute = (midPoint - midPointHour) > 0 ? 30 : 0;
 
                 // No need to set am/pm because hour-of-day is set last therefore takes precedence.
-                cal.set(UCAL_HOUR_OF_DAY, midPointHour);
-                cal.set(UCAL_MINUTE, midPointMinute);
+                workCal->set(UCAL_HOUR_OF_DAY, midPointHour);
+                workCal->set(UCAL_MINUTE, midPointMinute);
             }
         } else {
             int hourOfDay;
 
-            if (cal.isSet(UCAL_HOUR_OF_DAY)) {  // Hour is parsed in 24-hour format.
-                hourOfDay = cal.get(UCAL_HOUR_OF_DAY, status);
+            if (workCal->isSet(UCAL_HOUR_OF_DAY)) {  // Hour is parsed in 24-hour format.
+                hourOfDay = workCal->get(UCAL_HOUR_OF_DAY, status);
             } else {  // Hour is parsed in 12-hour format.
-                hourOfDay = cal.get(UCAL_HOUR, status);
-                // cal.get() turns 12 to 0 for 12-hour time; change 0 to 12
+                hourOfDay = workCal->get(UCAL_HOUR, status);
+                // Calendar::get() turns 12 to 0 for 12-hour time; change 0 to 12
                 // so 0 unambiguously means a 24-hour time from above.
                 if (hourOfDay == 0) { hourOfDay = 12; }
             }
@@ -2503,7 +2503,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
             // If hour-of-day is 0 or 13 thru 23 then input time in unambiguously in 24-hour format.
             if (hourOfDay == 0 || (13 <= hourOfDay && hourOfDay <= 23)) {
                 // Make hour-of-day take precedence over (hour + am/pm) by setting it again.
-                cal.set(UCAL_HOUR_OF_DAY, hourOfDay);
+                workCal->set(UCAL_HOUR_OF_DAY, hourOfDay);
             } else {
                 // We have a 12-hour time and need to choose between am and pm.
                 // Behave as if dayPeriod spanned 6 hours each way from its center point.
@@ -2515,9 +2515,9 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
                 // - Change 12 back to 0 for easier handling of 12am.
                 // - Append minutes as fractional hours because e.g. 8:15 and 8:45 could be parsed
                 // into different half-days if center of dayPeriod is at 14:30.
-                // - cal.get(MINUTE) will return 0 if MINUTE is unset, which works.
+                // - Calendar::get(MINUTE) will return 0 if MINUTE is unset, which works.
                 if (hourOfDay == 12) { hourOfDay = 0; }
-                double currentHour = hourOfDay + (cal.get(UCAL_MINUTE, status)) / 60.0;
+                double currentHour = hourOfDay + (workCal->get(UCAL_MINUTE, status)) / 60.0;
                 double midPointHour = ruleSet->getMidPointForDayPeriod(dayPeriod, status);
 
                 if (U_SUCCESS(status)) {
@@ -2526,9 +2526,9 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
                     // Assume current time is in the AM.
                     if (-6 <= hoursAheadMidPoint && hoursAheadMidPoint < 6) {
                         // Assumption holds; set time as such.
-                        cal.set(UCAL_AM_PM, 0);
+                        workCal->set(UCAL_AM_PM, 0);
                     } else {
-                        cal.set(UCAL_AM_PM, 1);
+                        workCal->set(UCAL_AM_PM, 1);
                     }
                 }
             }
@@ -2571,7 +2571,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
         // stop working if Calendar.clone() is ever rewritten to call complete().
         Calendar *copy;
         if (ambiguousYear[0]) {
-            copy = cal.clone();
+            copy = workCal->clone();
             // Check for failed cloning.
             if (copy == nullptr) {
                 status = U_MEMORY_ALLOCATION_ERROR;
@@ -2581,19 +2581,19 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
             // {sfb} check internalGetDefaultCenturyStart
             if (fHaveDefaultCentury && (parsedDate < fDefaultCenturyStart)) {
                 // We can't use add here because that does a complete() first.
-                cal.set(UCAL_YEAR, fDefaultCenturyStartYear + 100);
+                workCal->set(UCAL_YEAR, fDefaultCenturyStartYear + 100);
             }
             delete copy;
         }
 
         if (tzTimeType != UTZFMT_TIME_TYPE_UNKNOWN) {
-            copy = cal.clone();
+            copy = workCal->clone();
             // Check for failed cloning.
             if (copy == nullptr) {
                 status = U_MEMORY_ALLOCATION_ERROR;
                 goto ExitParse;
             }
-            const TimeZone & tz = cal.getTimeZone();
+            const TimeZone & tz = workCal->getTimeZone();
             BasicTimeZone *btz = nullptr;
 
             if (dynamic_cast<const OlsonTimeZone *>(&tz) != nullptr
@@ -2686,8 +2686,8 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
                     }
                 }
             }
-            cal.set(UCAL_ZONE_OFFSET, raw);
-            cal.set(UCAL_DST_OFFSET, resolvedSavings);
+            workCal->set(UCAL_ZONE_OFFSET, raw);
+            workCal->set(UCAL_DST_OFFSET, resolvedSavings);
             delete copy;
         }
     }

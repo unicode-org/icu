@@ -229,6 +229,7 @@ public:
     void TestTimeZoneInLocale();
 
     void TestRoundtripWithCalendar();
+    void TestParseWithDifferentCalendar();
 
 public:
     /***
