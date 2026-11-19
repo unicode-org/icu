@@ -9483,4 +9483,74 @@ public class DateFormatTest extends CoreTestFmwk {
             assertEquals("Wrong formatting result for " + testCase[0], testCase[1], result);
         }
     }
+
+    @Test
+    public void TestParseWithDifferentCalendar() {
+        class TestCase {
+            String pattern;
+            String text;
+            long expected;
+            String zone;
+
+            TestCase(String pattern, String text, long expected, String zone) {
+                this.pattern = pattern;
+                this.text = text;
+                this.expected = expected;
+                this.zone = zone;
+            }
+        }
+
+        TestCase[] testCases = {
+            new TestCase(
+                    "yyyy-MM-dd HH:mm:ss zzzz",
+                    "2026-10-25 02:44:39 Central European Summer Time",
+                    1792889079000L,
+                    "Europe/Paris"),
+            new TestCase(
+                    "yyyy-MM-dd HH:mm:ss zzzz",
+                    "2026-10-25 02:44:39 Central European Standard Time",
+                    1792892679000L,
+                    "Europe/Paris"),
+            new TestCase(
+                    "yyyy-MM-dd hh:mm B",
+                    "2015-11-13 01:00 in the afternoon",
+                    1447419600000L,
+                    "GMT"),
+            new TestCase(
+                    "yyyy-MM-dd hh:mm B", "2015-11-13 01:00 in the morning", 1447376400000L, "GMT"),
+            // With the century starting in July 1940, January '40 is in 2040.
+            new TestCase("yy-MM-dd", "40-01-01", 2208988800000L, "GMT"),
+            new TestCase("yy-MM-dd", "40-08-01", -928368000000L, "GMT"),
+            new TestCase("yy-MM-dd", "39-01-01", 2177452800000L, "GMT"),
+        };
+
+        ULocale[] locales = {
+            new ULocale("und@calendar=gregorian"),
+            new ULocale("und@calendar=buddhist"),
+            new ULocale("und@calendar=islamic"),
+            new ULocale("und@calendar=japanese"),
+        };
+
+        SimpleDateFormat format = new SimpleDateFormat("", Locale.US);
+        format.set2DigitYearStart(new Date(-931046400000L)); // 1940-07-01 00:00 UTC
+
+        for (ULocale locale : locales) {
+            Calendar calendar = Calendar.getInstance(TimeZone.GMT_ZONE, locale);
+            for (TestCase testCase : testCases) {
+                calendar.setTimeZone(TimeZone.getTimeZone(testCase.zone));
+                calendar.setTimeInMillis(0);
+                format.applyPattern(testCase.pattern);
+                ParsePosition position = new ParsePosition(0);
+                format.parse(testCase.text, calendar, position);
+
+                String message = calendar.getType() + " | " + testCase.text;
+                assertEquals(message + ": error index", -1, position.getErrorIndex());
+                assertEquals(
+                        message + ": parse index", testCase.text.length(), position.getIndex());
+                assertEquals(message + ": time", testCase.expected, calendar.getTimeInMillis());
+                assertEquals(
+                        message + ": time zone", testCase.zone, calendar.getTimeZone().getID());
+            }
+        }
+    }
 }
