@@ -121,6 +121,7 @@
      * test short string and collator identifier functions
      */
     static void TestShortString(void);
+    static void TestNormalizeShortDefinitionStringBufferOverrun(void);
 
     /** 
      * test getContractions and getUnsafeSet
