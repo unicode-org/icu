@@ -2126,3 +2126,84 @@ icu_46::UnicodeString {
 ;;; End ICU Additions
 ;;;
 ```
+
+## Java Testing Notes
+
+### Writing Java Test Cases
+
+An ICU4J unit test case class extends the base test class `com.ibm.icu.dev.test.TestFmwk`.
+`TestFmwk` defines JUnit style assertion methods such as `assertTrue`, `assertEquals` and
+so on. Each test case should use these JUnit style assertion methods to check the test result.
+Many ICU4J unit test case classes extend `com.ibm.icu.dev.test.CoreTestFmwk`. This class
+extends `TestFmwk` and includes ICU4J core module dependency.
+
+The example below is a typical ICU4J unit test case class.
+
+```java
+@RunWith(JUnit4.class) // <== Unit test requires JUnit 4
+public class DisplayOptionsTest extends CoreTestFmwk { // <== CoreTestFmwk is a subclass of TestFmwk 
+
+    @Test // <-- Each unit test case method must have @Test annotation
+    public void TestDisplayOptionsDefault() {
+        DisplayOptions displayOptions = DisplayOptions.builder().build();
+        assertEquals( // <== Use an assertion method defined in TestFmwk class
+                "Test setting parameters",
+                GrammaticalCase.UNDEFINED,
+                displayOptions.getGrammaticalCase());
+        assertEquals("Test default values: ", NounClass.UNDEFINED, displayOptions.getNounClass());
+        ...
+    }
+    ...
+}
+```
+
+### Running the Tests
+
+See [testing](https://unicode-org.github.io/icu/devsetup/java/maven/#testing) in the userguide page
+[Maven Setup for Java](https://unicode-org.github.io/icu/devsetup/java/maven/#maven-setup-for-java).
+
+### Logging
+
+Since ICU4J 80, logging code in ICU4J test suite was integrated with SLF4J. There were 5
+logging methods were added in `TestFmwk` replacing old logging methods.
+
+- logTrace(String)
+- logDebug(String)
+- logInfo(String)
+- logWarn(String)
+- logError(String)
+
+These methods emit a log message at different logging level. These methods **do not trigger**
+any events affecting test execution. For example, `logError(String)` just emits the message
+at 'error' level log, but the test won't fail just by the method call.
+
+Note: Old ICU test codes use `errln(String)` for logging an error and throwing AssertionException
+to report an test failure. New test codes should use JUnit style an assertion method to check
+each test result and use the new logging methods if you want to add more logs beyond the assertion
+error message.
+
+ICU4J test framework uses SLF4J Simple logger. The default logging level is 'info'. If you
+want to embed debug logging code in a test case, you should use `logDebug(String)`. SLF4J
+Simple logger supports custom logging level using system properties.
+
+To change the default logging level, you can set following argument to maven or java command line.
+```
+-Dorg.slf4j.simpleLogger.defaultLogLevel=debug
+```
+
+If you want to change logging level to debug only for a specific package or class,
+you can define a property `org.slf4j.simpleLogger.log.` followed by a package or a class
+with full package name. For example, following argument will set logging level 'debug'
+to all classes in `com.ibm.icu.dev.test.format` package.
+```
+-Dorg.slf4j.simpleLogger.log.com.ibm.icu.dev.test.format=debug
+```
+
+By default, SLF4J Simple logger emits logs on console. If you want to send log output to a file,
+you can set the log file path as below.
+```
+-Dorg.slf4j.simpleLogger.logFile=<log-file-path>
+```
+
+Note: See [SLF4J SimpleLogger API Doc](https://www.slf4j.org/api/org/slf4j/simple/SimpleLogger.html)
+for other configuration properties.
