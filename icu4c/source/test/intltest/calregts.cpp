@@ -107,6 +107,9 @@ CalendarRegressionTest::runIndexedTest( int32_t index, UBool exec, const char* &
         CASE(63,TestWeekOfMonthOutOfRangeMonth3350);
         CASE(64,TestWeekOfMonthDefaultMonth3350);
         CASE(65,TestWeekOfMonthTimeZoneDependentCutover3350);
+        CASE(66,TestRollInCutoverMonth3350);
+        CASE(67,TestRollDstAcrossCutoverMonth3350);
+        CASE(68,TestRollEarlyEraCutover3350);
     default: name = ""; break;
     }
 }
@@ -4124,6 +4127,755 @@ void CalendarRegressionTest::TestWeekOfMonthDefaultMonth3350() {
         errln(UnicodeString("FAIL: Japanese calendar, Meiji year 1, WEEK_OF_MONTH=3, "
                              "DAY_OF_WEEK=Wednesday, MONTH unset: got ") +
               actualStr + ", expected " + expectedStr);
+    }
+}
+
+// Test case for ticket 3350.
+namespace {
+// Independently computes the day (1-based, within a month of length
+// monthLen) that GregorianCalendar::roll(WEEK_OF_MONTH) should land on,
+// starting from day `dom` (1-based, day-of-week `dow`, 0-based with 0 ==
+// firstDayOfWeek) and rolling by `amount` weeks, with the given
+// minimalDaysInFirstWeek and firstDayOfWeek == SUNDAY. This reproduces the
+// "phantom day" block algorithm documented in GregorianCalendar::roll()'s
+// WEEK_OF_MONTH case (calendar-agnostic, driven only by
+// day-of-week/day-of-month/month length), to independently check that
+// cDayOfMonth/cMonthLen are correct for a hybrid month.
+int32_t expectedRolledDom(int32_t dom, int32_t dow, int32_t monthLen, int32_t amount,
+                          int32_t minimalDaysInFirstWeek) {
+    int32_t fdm = (dow - dom + 1) % 7;
+    if (fdm < 0) fdm += 7;
+    int32_t start = ((7 - fdm) < minimalDaysInFirstWeek) ? (8 - fdm) : (1 - fdm);
+    int32_t ldm = (monthLen - dom + dow) % 7;
+    int32_t limit = monthLen + 7 - ldm;
+    int32_t gap = limit - start;
+    // amount*7LL: amount*7 can overflow int32_t for |amount| > 306783378.
+    int32_t newDom = static_cast<int32_t>((dom + amount * 7LL - start) % gap);
+    if (newDom < 0) {
+        newDom += gap;
+    }
+    newDom += start;
+    if (newDom < 1) {
+        newDom = 1;
+    }
+    if (newDom > monthLen) {
+        newDom = monthLen;
+    }
+    return newDom;
+}
+}  // namespace
+
+// Test case for ticket 3350.
+// roll(DAY_OF_MONTH) and roll(WEEK_OF_MONTH) within a month of the cutover
+// year (or of the year immediately before or after it) that is shortened or
+// split by an arbitrary (non-1582) cutover must cycle over exactly that
+// month's existing days, staying within the hybrid month's Julian Day
+// range. For every scenario below the resulting MONTH label also never
+// changes; that stops being guaranteed only for a very early-era cutover
+// whose repeated day labels cross a month boundary (see
+// TestRollEarlyEraCutover3350).
+void CalendarRegressionTest::TestRollInCutoverMonth3350() {
+    struct Scenario {
+        const char* name;
+        UBool useDefaultCutover;
+        int32_t cutY, cutM, cutD;  // Gregorian date of the first Gregorian day
+        int32_t year, month;
+        int32_t firstDOM;  // DAY_OF_MONTH of the hybrid month's first existing day
+        int32_t length;    // expected length, in days, of the hybrid month
+    } const kScenarios[] = {
+        { "1582-10 (default cutover)", true, 0, 0, 0, 1582, UCAL_OCTOBER, 1, 21 },
+        { "Denmark 1700-02", false, 1700, UCAL_MARCH, 1, 1700, UCAL_FEBRUARY, 1, 18 },
+        { "GB 1752-09", false, 1752, UCAL_SEPTEMBER, 14, 1752, UCAL_SEPTEMBER, 1, 19 },
+        { "Russia 1918-02", false, 1918, UCAL_FEBRUARY, 14, 1918, UCAL_FEBRUARY, 14, 15 },
+        // The affected month is DECEMBER OF THE PREVIOUS YEAR, since the
+        // cutover falls on January 1.
+        { "1600-01-01 cutover: Dec 1599", false, 1600, UCAL_JANUARY, 1, 1599, UCAL_DECEMBER, 1, 21 },
+        { "1584-01-05 cutover: Dec 1583", false, 1584, UCAL_JANUARY, 5, 1583, UCAL_DECEMBER, 1, 25 },
+        { "1584-01-05 cutover: Jan 1584", false, 1584, UCAL_JANUARY, 5, 1584, UCAL_JANUARY, 5, 27 },
+    };
+
+    for (int32_t s = 0; s < UPRV_LENGTHOF(kScenarios); ++s) {
+        const Scenario& sc = kScenarios[s];
+        UErrorCode status = U_ZERO_ERROR;
+        GregorianCalendar cal(*TimeZone::getGMT(), status);
+        if (U_FAILURE(status)) {
+            dataerrln("Error creating Calendar: %s", u_errorName(status));
+            return;
+        }
+        if (!sc.useDefaultCutover) {
+            GregorianCalendar cutoverCal(*TimeZone::getGMT(), status);
+            if (U_FAILURE(status)) {
+                dataerrln("Error creating Calendar: %s", u_errorName(status));
+                return;
+            }
+            cutoverCal.clear();
+            cutoverCal.set(sc.cutY, sc.cutM, sc.cutD);
+            UDate cutoverMillis = cutoverCal.getTime(status);
+            cal.setGregorianChange(cutoverMillis, status);
+            if (failure(status, "setGregorianChange")) {
+                continue;
+            }
+        }
+        // Fixed (not locale-default) so that the roll(WEEK_OF_MONTH)
+        // expectations below, computed for firstDayOfWeek == SUNDAY and
+        // minimalDaysInFirstWeek == 1, are deterministic.
+        cal.setFirstDayOfWeek(UCAL_SUNDAY);
+        cal.setMinimalDaysInFirstWeek(1);
+        cal.clear();
+        cal.set(sc.year, sc.month, sc.firstDOM);
+        UDate first = cal.getTime(status);
+        if (failure(status, "computing the first day of the hybrid month")) {
+            continue;
+        }
+
+        // roll(DAY_OF_MONTH, +1) from every existing day visits exactly
+        // length(m) distinct days and returns to the start; it never
+        // changes the YEAR or MONTH.
+        for (int32_t i = 0; i < sc.length; ++i) {
+            status = U_ZERO_ERROR;
+            cal.setTime(first + static_cast<double>(i) * U_MILLIS_PER_DAY, status);
+            cal.roll(UCAL_DAY_OF_MONTH, 1, status);
+            UDate actual = cal.getTime(status);
+            UDate expected = first + static_cast<double>((i + 1) % sc.length) * U_MILLIS_PER_DAY;
+            int32_t rolledYear = cal.get(UCAL_EXTENDED_YEAR, status);
+            int32_t rolledMonth = cal.get(UCAL_MONTH, status);
+            if (failure(status, "roll(DAY_OF_MONTH, +1)")) {
+                continue;
+            }
+            if (actual != expected || rolledYear != sc.year || rolledMonth != sc.month) {
+                errln(UnicodeString("FAIL[") + sc.name + "]: roll(DAY_OF_MONTH,+1) from day " + i +
+                      " landed on extended year " + rolledYear + ", month " + (rolledMonth + 1) +
+                      ", offset " + ((actual - first) / U_MILLIS_PER_DAY) +
+                      " days; expected year " + sc.year + ", month " + (sc.month + 1) +
+                      ", offset " + ((expected - first) / U_MILLIS_PER_DAY) + " days");
+            }
+        }
+
+        // roll(DAY_OF_MONTH, -1) from the first day wraps around to the
+        // last day of the (hybrid) month.
+        {
+            status = U_ZERO_ERROR;
+            cal.setTime(first, status);
+            cal.roll(UCAL_DAY_OF_MONTH, -1, status);
+            UDate actual = cal.getTime(status);
+            UDate expected = first + static_cast<double>(sc.length - 1) * U_MILLIS_PER_DAY;
+            if (failure(status, "roll(DAY_OF_MONTH, -1)")) {
+                continue;
+            }
+            if (actual != expected) {
+                UnicodeString actualStr, expectedStr;
+                SimpleDateFormat sdf(UnicodeString("yyyy-MM-dd"), Locale::getUS(), status);
+                sdf.setTimeZone(*TimeZone::getGMT());
+                sdf.format(actual, actualStr);
+                sdf.format(expected, expectedStr);
+                errln(UnicodeString("FAIL[") + sc.name + "]: roll(DAY_OF_MONTH,-1) from the first day: got " +
+                      actualStr + ", expected " + expectedStr);
+            }
+        }
+
+        // roll(DAY_OF_MONTH, amount) for amounts near the int32_t range
+        // boundary: amount*7 (used internally by the WEEK_OF_MONTH case)
+        // overflows for |amount| > 306783378, so INT32_MAX/INT32_MIN are
+        // exercised for both fields; the DOM computation itself uses
+        // int64_t throughout and is not itself at risk, but is checked
+        // here too since it shares the same starting position.
+        for (int32_t amount : { INT32_MAX, INT32_MIN }) {
+            status = U_ZERO_ERROR;
+            cal.setTime(first, status);  // cDayOfMonth == 1, 0-based position 0
+            cal.roll(UCAL_DAY_OF_MONTH, amount, status);
+            UDate actual = cal.getTime(status);
+            int64_t pos = static_cast<int64_t>(amount) % sc.length;
+            if (pos < 0) {
+                pos += sc.length;
+            }
+            UDate expected = first + static_cast<double>(pos) * U_MILLIS_PER_DAY;
+            if (failure(status, "roll(DAY_OF_MONTH, huge amount)")) {
+                continue;
+            }
+            if (actual != expected) {
+                UnicodeString actualStr, expectedStr;
+                SimpleDateFormat sdf(UnicodeString("yyyy-MM-dd"), Locale::getUS(), status);
+                sdf.setTimeZone(*TimeZone::getGMT());
+                sdf.format(actual, actualStr);
+                sdf.format(expected, expectedStr);
+                errln(UnicodeString("FAIL[") + sc.name + "]: roll(DAY_OF_MONTH," + amount +
+                      ") from day 1: got " + actualStr + ", expected " + expectedStr);
+            }
+        }
+
+        // roll(WEEK_OF_MONTH, amount) from several start days, for several
+        // amounts (not just +-1, and including the int32_t range boundary):
+        // the exact resulting day is pinned via the independent
+        // expectedRolledDom() re-implementation of the documented
+        // algorithm, not just checked to have stayed in the same
+        // year/month (which would pass even with cMonthLen off by a
+        // couple of days).
+        const int32_t startDomIndices[] = { 1, sc.length / 2 + 1, sc.length };
+        const int32_t amounts[] = { -2, -1, 1, 2, INT32_MAX, INT32_MIN };
+        for (int32_t startDom : startDomIndices) {
+            for (int32_t amount : amounts) {
+                status = U_ZERO_ERROR;
+                cal.setTime(first + static_cast<double>(startDom - 1) * U_MILLIS_PER_DAY, status);
+                int32_t dowField = cal.get(UCAL_DAY_OF_WEEK, status);
+                if (failure(status, "getting DAY_OF_WEEK")) {
+                    continue;
+                }
+                int32_t dow0 = dowField - UCAL_SUNDAY;  // 0-based, 0 == firstDayOfWeek
+
+                cal.roll(UCAL_WEEK_OF_MONTH, amount, status);
+                UDate actual = cal.getTime(status);
+                int32_t rolledYear = cal.get(UCAL_EXTENDED_YEAR, status);
+                int32_t rolledMonth = cal.get(UCAL_MONTH, status);
+                if (failure(status, "roll(WEEK_OF_MONTH)")) {
+                    continue;
+                }
+
+                int32_t expectedDom = expectedRolledDom(startDom, dow0, sc.length, amount, 1);
+                UDate expected = first + static_cast<double>(expectedDom - 1) * U_MILLIS_PER_DAY;
+
+                if (actual != expected || rolledYear != sc.year || rolledMonth != sc.month) {
+                    UnicodeString actualStr, expectedStr;
+                    SimpleDateFormat sdf(UnicodeString("yyyy-MM-dd"), Locale::getUS(), status);
+                    sdf.setTimeZone(*TimeZone::getGMT());
+                    sdf.format(actual, actualStr);
+                    sdf.format(expected, expectedStr);
+                    errln(UnicodeString("FAIL[") + sc.name + "]: roll(WEEK_OF_MONTH," + amount +
+                          ") from day " + startDom + ": got " + actualStr +
+                          " (extended year " + rolledYear + ", month " + (rolledMonth + 1) +
+                          "), expected " + expectedStr);
+                }
+            }
+        }
+    }
+
+    // [ICU-3350 code review] set(UCAL_JULIAN_DAY) alone (without complete()) left DAY_OF_MONTH and
+    // other date fields stale, so a subsequent set() of a different field, with no intervening
+    // get(), silently discarded the preceding roll(). Default cutover, GMT, SUNDAY/1 week settings.
+    {
+        UErrorCode status = U_ZERO_ERROR;
+        GregorianCalendar cal(*TimeZone::getGMT(), status);
+        if (failure(status, "creating the calendar")) {
+            return;
+        }
+        cal.setFirstDayOfWeek(UCAL_SUNDAY);
+        cal.setMinimalDaysInFirstWeek(1);
+
+        cal.clear();
+        cal.set(1582, UCAL_OCTOBER, 20);
+        cal.getTime(status);
+        cal.roll(UCAL_DATE, 1, status);
+        cal.set(UCAL_MONTH, UCAL_OCTOBER);
+        int32_t day = cal.get(UCAL_DATE, status);
+        if (failure(status, "roll(DATE,+1) then set(MONTH,OCTOBER)")) {
+            return;
+        }
+        if (day != 21) {
+            errln("FAIL: roll(DATE,+1) then set(MONTH,OCTOBER) from 1582-10-20: got day %d, expected 21", day);
+        }
+
+        cal.clear();
+        cal.set(1582, UCAL_OCTOBER, 20);
+        cal.getTime(status);
+        cal.roll(UCAL_WEEK_OF_MONTH, 1, status);
+        cal.set(UCAL_MONTH, UCAL_OCTOBER);
+        day = cal.get(UCAL_DATE, status);
+        if (failure(status, "roll(WEEK_OF_MONTH,+1) then set(MONTH,OCTOBER)")) {
+            return;
+        }
+        if (day != 27) {
+            errln("FAIL: roll(WEEK_OF_MONTH,+1) then set(MONTH,OCTOBER) from 1582-10-20: got day %d, expected 27", day);
+        }
+    }
+}
+
+// Test case for ticket 3350.
+// roll(DAY_OF_MONTH) and roll(WEEK_OF_MONTH) in a month shortened or split
+// by the cutover must keep local wall time invariant across a DST
+// transition, and must resolve a repeated or skipped wall time exactly
+// like Calendar::roll() does for an ordinary month: honoring
+// getRepeatedWallTimeOption()/getSkippedWallTimeOption().
+void CalendarRegressionTest::TestRollDstAcrossCutoverMonth3350() {
+    UErrorCode status = U_ZERO_ERROR;
+
+    // America/New_York, cutover Gregorian 2000-06-01T00:00Z: March 2000 is
+    // entirely before the cutover, but an intact, ordinary Julian month
+    // (not shortened or split), so this rolls via plain Calendar::roll() --
+    // a control confirming the setup is DST-safe to begin with.
+    LocalPointer<TimeZone> ny(TimeZone::createTimeZone("America/New_York"));
+    UnicodeString nyID;
+    ny->getID(nyID);
+    if (nyID == UnicodeString("Etc/Unknown")) {
+        dataerrln("Unable to create the America/New_York time zone (missing zone data)");
+    } else {
+        GregorianCalendar cutoverCal(*ny, status);
+        cutoverCal.clear();
+        cutoverCal.set(2000, UCAL_JUNE, 1);
+        UDate cutoverMillis = cutoverCal.getTime(status);
+
+        GregorianCalendar cal(*ny, status);
+        cal.setGregorianChange(cutoverMillis, status);
+        if (failure(status, "setGregorianChange")) {
+            return;
+        }
+
+        struct Check {
+            int32_t startMonth, startDay, startHour, startMinute;
+            UCalendarDateFields field;
+            int32_t amount;
+            int32_t expMonth, expDay, expHour, expMinute;
+        } const kChecks[] = {
+            // DST begins 2000-04-02 02:00 local (spring forward).
+            { UCAL_MARCH, 25, 0, 30, UCAL_DATE, -24, UCAL_MARCH, 1, 0, 30 },
+            { UCAL_MARCH, 1, 23, 30, UCAL_DATE, 25, UCAL_MARCH, 26, 23, 30 },
+            { UCAL_MARCH, 4, 0, 30, UCAL_WEEK_OF_MONTH, 3, UCAL_MARCH, 25, 0, 30 },
+        };
+        for (const Check& c : kChecks) {
+            status = U_ZERO_ERROR;
+            cal.clear();
+            cal.set(2000, c.startMonth, c.startDay, c.startHour, c.startMinute);
+            cal.roll(c.field, c.amount, status);
+            if (failure(status, "roll")) {
+                continue;
+            }
+            int32_t month = cal.get(UCAL_MONTH, status);
+            int32_t day = cal.get(UCAL_DATE, status);
+            int32_t hour = cal.get(UCAL_HOUR_OF_DAY, status);
+            int32_t minute = cal.get(UCAL_MINUTE, status);
+            if (month != c.expMonth || day != c.expDay || hour != c.expHour || minute != c.expMinute) {
+                errln(UnicodeString("FAIL: America/New_York, 2000-") + (c.startMonth + 1) + "-" +
+                      c.startDay + " " + c.startHour + ":" + c.startMinute + ", roll(" +
+                      (int32_t)c.field + "," + c.amount + "): got 2000-" + (month + 1) + "-" + day +
+                      " " + hour + ":" + minute + ", expected 2000-" + (c.expMonth + 1) + "-" +
+                      c.expDay + " " + c.expHour + ":" + c.expMinute);
+            }
+        }
+    }
+
+    // Default 1582-10-15 cutover, with a zone whose DST starts the 2nd
+    // Sunday of March: March 1582 is not affected by the cutover (far from
+    // it), so this is again a plain Calendar::roll() control, with a zone
+    // whose DST rules apply even to a date this old.
+    {
+        status = U_ZERO_ERROR;
+        const int32_t kOneHourMs = 60 * 60 * 1000;
+        SimpleTimeZone* stz = new SimpleTimeZone(
+            -5 * kOneHourMs, UnicodeString("StaticDstTest"),
+            UCAL_MARCH, 8, -UCAL_SUNDAY, 2 * kOneHourMs,
+            UCAL_NOVEMBER, 1, -UCAL_SUNDAY, 2 * kOneHourMs, status);
+        GregorianCalendar cal(stz, status);  // adopts stz; default 1582-10-15 cutover
+        if (failure(status, "creating the calendar")) {
+            return;
+        }
+        cal.clear();
+        cal.set(1582, UCAL_MARCH, 25, 0, 30);
+        cal.roll(UCAL_DATE, -24, status);
+        if (failure(status, "roll")) {
+            return;
+        }
+        int32_t year = cal.get(UCAL_YEAR, status);
+        int32_t month = cal.get(UCAL_MONTH, status);
+        int32_t day = cal.get(UCAL_DATE, status);
+        int32_t hour = cal.get(UCAL_HOUR_OF_DAY, status);
+        int32_t minute = cal.get(UCAL_MINUTE, status);
+        if (year != 1582 || month != UCAL_MARCH || day != 1 || hour != 0 || minute != 30) {
+            errln(UnicodeString("FAIL: default cutover, 1582-03-25 00:30, roll(DATE,-24): got ") +
+                  year + "-" + (month + 1) + "-" + day + " " + hour + ":" + minute +
+                  ", expected 1582-3-1 0:30");
+        }
+    }
+
+    // Default 1582-10-15 cutover, with a zone whose DST transition falls
+    // inside October 1582 itself (the split cutover month, Oct 1..4 and
+    // Oct 15..31): rolling across the transition must still preserve local
+    // wall time and land on the correct day of the (21-day) hybrid month.
+    {
+        status = U_ZERO_ERROR;
+        const int32_t kOneHourMs = 60 * 60 * 1000;
+        SimpleTimeZone* stz = new SimpleTimeZone(
+            -5 * kOneHourMs, UnicodeString("SplitMonthDstTest"),
+            UCAL_OCTOBER, 3, UCAL_THURSDAY, 2 * kOneHourMs,
+            UCAL_DECEMBER, 1, UCAL_THURSDAY, 2 * kOneHourMs, status);
+        GregorianCalendar cal(stz, status);  // adopts stz; default 1582-10-15 cutover
+        if (failure(status, "creating the calendar")) {
+            return;
+        }
+        cal.clear();
+        cal.set(1582, UCAL_OCTOBER, 31, 0, 30);
+        cal.roll(UCAL_DATE, -20, status);  // day 21 of 21 -> day 1
+        if (failure(status, "roll")) {
+            return;
+        }
+        int32_t year = cal.get(UCAL_YEAR, status);
+        int32_t month = cal.get(UCAL_MONTH, status);
+        int32_t day = cal.get(UCAL_DATE, status);
+        int32_t hour = cal.get(UCAL_HOUR_OF_DAY, status);
+        int32_t minute = cal.get(UCAL_MINUTE, status);
+        if (year != 1582 || month != UCAL_OCTOBER || day != 1 || hour != 0 || minute != 30) {
+            errln(UnicodeString("FAIL: default cutover, 1582-10-31 00:30, roll(DATE,-20): got ") +
+                  year + "-" + (month + 1) + "-" + day + " " + hour + ":" + minute +
+                  ", expected 1582-10-1 0:30");
+        }
+    }
+
+    // Default 1582-10-15 cutover, rolling across a REPEATED wall time
+    // (fall-back) within the split October 1582 month: DOM and WOM, under
+    // both UCAL_WALLTIME_FIRST and UCAL_WALLTIME_LAST, compared against the
+    // identical roll on an ordinary month (1600) in the same zone.
+    {
+        const int32_t kOneHourMs = 60 * 60 * 1000;
+        for (UCalendarWallTimeOption rep : { UCAL_WALLTIME_LAST, UCAL_WALLTIME_FIRST }) {
+            status = U_ZERO_ERROR;
+            SimpleTimeZone* stzHybrid = new SimpleTimeZone(
+                -5 * kOneHourMs, UnicodeString("RepeatedWallTimeTest"),
+                UCAL_MARCH, 8, -UCAL_SUNDAY, 2 * kOneHourMs,
+                UCAL_OCTOBER, 15, -UCAL_THURSDAY, 2 * kOneHourMs, status);
+            GregorianCalendar hybrid(stzHybrid, status);  // adopts; default 1582-10-15 cutover
+            hybrid.setRepeatedWallTimeOption(rep);
+            hybrid.setFirstDayOfWeek(UCAL_SUNDAY);
+            hybrid.setMinimalDaysInFirstWeek(1);
+            if (failure(status, "creating the calendar")) {
+                return;
+            }
+            SimpleTimeZone* stzOrdinary = new SimpleTimeZone(
+                -5 * kOneHourMs, UnicodeString("RepeatedWallTimeTest"),
+                UCAL_MARCH, 8, -UCAL_SUNDAY, 2 * kOneHourMs,
+                UCAL_OCTOBER, 15, -UCAL_THURSDAY, 2 * kOneHourMs, status);
+            GregorianCalendar ordinary(stzOrdinary, status);
+            ordinary.setRepeatedWallTimeOption(rep);
+            ordinary.setFirstDayOfWeek(UCAL_SUNDAY);
+            ordinary.setMinimalDaysInFirstWeek(1);
+
+            struct Check {
+                const char* name;
+                int32_t startDay;
+                UCalendarDateFields field;
+                int32_t amount;
+                int32_t expDay;
+                int32_t expOffsetHours;  // combined zone+DST offset, in hours
+            } const kChecks[] = {
+                // 1582-10-17 (unambiguous) -> roll to 1582-10-21, which
+                // falls in the repeated hour (DST ends "the Thursday on or
+                // before Oct 15", computed per-year, landing on Oct 21 for
+                // 1582 and Oct 19 for the ordinary month's year 1600).
+                { "DOM", 17, UCAL_DATE, 4, 21, rep == UCAL_WALLTIME_LAST ? -5 : -4 },
+                { "WOM", 28, UCAL_WEEK_OF_MONTH, -1, 21, rep == UCAL_WALLTIME_LAST ? -5 : -4 },
+            };
+            for (const Check& c : kChecks) {
+                status = U_ZERO_ERROR;
+                hybrid.clear();
+                hybrid.set(1582, UCAL_OCTOBER, c.startDay, 1, 30);
+                hybrid.roll(c.field, c.amount, status);
+                if (failure(status, "roll")) {
+                    continue;
+                }
+                int32_t hDay = hybrid.get(UCAL_DATE, status);
+                int32_t hHour = hybrid.get(UCAL_HOUR_OF_DAY, status);
+                int32_t hMinute = hybrid.get(UCAL_MINUTE, status);
+                int32_t hOffset = (hybrid.get(UCAL_ZONE_OFFSET, status) +
+                                    hybrid.get(UCAL_DST_OFFSET, status)) / kOneHourMs;
+
+                status = U_ZERO_ERROR;
+                int32_t ordStartDay = c.startDay - 2;  // 1600's transition falls 2 days earlier
+                ordinary.clear();
+                ordinary.set(1600, UCAL_OCTOBER, ordStartDay, 1, 30);
+                ordinary.roll(c.field, c.amount, status);
+                if (failure(status, "roll")) {
+                    continue;
+                }
+                int32_t oDay = ordinary.get(UCAL_DATE, status);
+                int32_t oHour = ordinary.get(UCAL_HOUR_OF_DAY, status);
+                int32_t oMinute = ordinary.get(UCAL_MINUTE, status);
+                int32_t oOffset = (ordinary.get(UCAL_ZONE_OFFSET, status) +
+                                   ordinary.get(UCAL_DST_OFFSET, status)) / kOneHourMs;
+
+                UnicodeString label = UnicodeString("repeated wall time, rep=") +
+                    (rep == UCAL_WALLTIME_LAST ? "LAST" : "FIRST") + ", " + c.name;
+                if (hDay != c.expDay || hHour != 1 || hMinute != 30 || hOffset != c.expOffsetHours) {
+                    errln(UnicodeString("FAIL[") + label + "]: got 1582-10-" + hDay + " " +
+                          hHour + ":" + hMinute + " off=" + hOffset + "h, expected 1582-10-" +
+                          c.expDay + " 1:30 off=" + c.expOffsetHours + "h");
+                }
+                // The 1582 and 1600 transitions fall on different absolute
+                // days (offset by 2, since the rule is computed per year),
+                // so only wall-clock time and offset -- not the day number
+                // -- must match between the hybrid and ordinary months.
+                if (hHour != oHour || hMinute != oMinute || hOffset != oOffset) {
+                    errln(UnicodeString("FAIL[") + label +
+                          "]: hybrid (affected) month disagrees with the ordinary month: got 1582-10-" +
+                          hDay + " " + hHour + ":" + hMinute + " off=" + hOffset +
+                          "h, ordinary gave 1600-10-" + oDay + " " + oHour + ":" + oMinute +
+                          " off=" + oOffset + "h");
+                }
+            }
+        }
+    }
+
+    // Default 1582-10-15 cutover, rolling across a SKIPPED wall time
+    // (spring-forward) within the split October 1582 month: DOM and WOM,
+    // under all three skipped-wall-time options, compared against the
+    // identical roll on an ordinary month (1600) in the same zone.
+    {
+        const int32_t kOneHourMs = 60 * 60 * 1000;
+        for (UCalendarWallTimeOption sk :
+                { UCAL_WALLTIME_LAST, UCAL_WALLTIME_FIRST, UCAL_WALLTIME_NEXT_VALID }) {
+            status = U_ZERO_ERROR;
+            SimpleTimeZone* stzHybrid = new SimpleTimeZone(
+                -5 * kOneHourMs, UnicodeString("SkippedWallTimeTest"),
+                UCAL_OCTOBER, 15, -UCAL_THURSDAY, 2 * kOneHourMs,
+                UCAL_DECEMBER, 1, -UCAL_SUNDAY, 2 * kOneHourMs, status);
+            GregorianCalendar hybrid(stzHybrid, status);  // adopts; default 1582-10-15 cutover
+            hybrid.setSkippedWallTimeOption(sk);
+            hybrid.setFirstDayOfWeek(UCAL_SUNDAY);
+            hybrid.setMinimalDaysInFirstWeek(1);
+            if (failure(status, "creating the calendar")) {
+                return;
+            }
+            SimpleTimeZone* stzOrdinary = new SimpleTimeZone(
+                -5 * kOneHourMs, UnicodeString("SkippedWallTimeTest"),
+                UCAL_OCTOBER, 15, -UCAL_THURSDAY, 2 * kOneHourMs,
+                UCAL_DECEMBER, 1, -UCAL_SUNDAY, 2 * kOneHourMs, status);
+            GregorianCalendar ordinary(stzOrdinary, status);
+            ordinary.setSkippedWallTimeOption(sk);
+            ordinary.setFirstDayOfWeek(UCAL_SUNDAY);
+            ordinary.setMinimalDaysInFirstWeek(1);
+
+            int32_t expHour, expMinute, expOffsetHours;
+            switch (sk) {
+                case UCAL_WALLTIME_LAST:       expHour = 3; expMinute = 30; expOffsetHours = -4; break;
+                case UCAL_WALLTIME_FIRST:      expHour = 1; expMinute = 30; expOffsetHours = -5; break;
+                default /* NEXT_VALID */:      expHour = 3; expMinute = 0;  expOffsetHours = -4; break;
+            }
+
+            struct Check {
+                const char* name;
+                int32_t startDay;
+                UCalendarDateFields field;
+                int32_t amount;
+            } const kChecks[] = {
+                // The 2:00-3:00 wall-clock hour on 1582-10-21 (1600-10-19
+                // for the ordinary month) does not exist.
+                { "DOM", 25, UCAL_DATE, -4 },
+                { "WOM", 28, UCAL_WEEK_OF_MONTH, -1 },
+            };
+            for (const Check& c : kChecks) {
+                status = U_ZERO_ERROR;
+                hybrid.clear();
+                hybrid.set(1582, UCAL_OCTOBER, c.startDay, 2, 30);
+                hybrid.roll(c.field, c.amount, status);
+                if (failure(status, "roll")) {
+                    continue;
+                }
+                int32_t hDay = hybrid.get(UCAL_DATE, status);
+                int32_t hHour = hybrid.get(UCAL_HOUR_OF_DAY, status);
+                int32_t hMinute = hybrid.get(UCAL_MINUTE, status);
+                int32_t hOffset = (hybrid.get(UCAL_ZONE_OFFSET, status) +
+                                    hybrid.get(UCAL_DST_OFFSET, status)) / kOneHourMs;
+
+                status = U_ZERO_ERROR;
+                ordinary.clear();
+                ordinary.set(1600, UCAL_OCTOBER, c.startDay - 2, 2, 30);
+                ordinary.roll(c.field, c.amount, status);
+                if (failure(status, "roll")) {
+                    continue;
+                }
+                int32_t oDay = ordinary.get(UCAL_DATE, status);
+                int32_t oHour = ordinary.get(UCAL_HOUR_OF_DAY, status);
+                int32_t oMinute = ordinary.get(UCAL_MINUTE, status);
+                int32_t oOffset = (ordinary.get(UCAL_ZONE_OFFSET, status) +
+                                   ordinary.get(UCAL_DST_OFFSET, status)) / kOneHourMs;
+
+                UnicodeString skName = sk == UCAL_WALLTIME_LAST ? "LAST" :
+                    (sk == UCAL_WALLTIME_FIRST ? "FIRST" : "NEXT_VALID");
+                UnicodeString label = UnicodeString("skipped wall time, sk=") + skName + ", " + c.name;
+                if (hDay != 21 || hHour != expHour || hMinute != expMinute || hOffset != expOffsetHours) {
+                    errln(UnicodeString("FAIL[") + label + "]: got 1582-10-" + hDay + " " +
+                          hHour + ":" + hMinute + " off=" + hOffset + "h, expected 1582-10-21 " +
+                          expHour + ":" + expMinute + " off=" + expOffsetHours + "h");
+                }
+                // (See the repeated-wall-time block above: only wall-clock
+                // time and offset need to match, not the day number.)
+                if (hHour != oHour || hMinute != oMinute || hOffset != oOffset) {
+                    errln(UnicodeString("FAIL[") + label +
+                          "]: hybrid (affected) month disagrees with the ordinary month: got 1582-10-" +
+                          hDay + " " + hHour + ":" + hMinute + " off=" + hOffset +
+                          "h, ordinary gave 1600-10-" + oDay + " " + oHour + ":" + oMinute +
+                          " off=" + oOffset + "h");
+                }
+            }
+        }
+    }
+}
+
+// Test case for ticket 3350.
+// Two eras where a cutover does not remove days: a cutover year where the
+// Julian and Gregorian calendars agree on the day count but disagree on
+// leap status (a non-400 century year is a Julian leap year but not a
+// Gregorian one, so an intact Julian February must still roll correctly
+// rather than fall back to Calendar::roll(), which would use the wrong,
+// Gregorian-reported length); and an era where the cutover repeats day
+// labels instead of removing them, giving a month whose hybrid range spans
+// more days than either calendar's own version of that month (year 50's
+// hybrid March is 33 consecutive Julian Days, with some Julian and
+// Gregorian labels repeating). A third case below shows that this label
+// repeat can straddle a month boundary: roll() then moves the MONTH field
+// even though it stays within the hybrid month's own Julian Day range.
+void CalendarRegressionTest::TestRollEarlyEraCutover3350() {
+    struct Scenario {
+        const char* name;
+        int32_t cutY, cutM, cutD;  // Gregorian date of the first Gregorian day
+        int32_t firstJD;           // Julian Day of the hybrid month's first day
+        int32_t length;            // length, in days, of the hybrid month
+    } const kScenarios[] = {
+        // Hybrid March 50 = Julian Mar 1, Mar 2, Gregorian Mar 1..31: 33
+        // consecutive (but label-repeating) Julian Days.
+        { "year 50 cutover (Gregorian 0050-03-01)", 50, UCAL_MARCH, 1, 1739380, 33 },
+        // Hybrid February -100 is an intact, pure Julian February (the
+        // cutover is in June): 29 days, since -100 is a Julian leap year.
+        { "year -100 cutover (Gregorian -100-06-01)", -100, UCAL_JUNE, 1, 1684564, 29 },
+    };
+
+    UErrorCode sdfStatus = U_ZERO_ERROR;
+    SimpleDateFormat sdf(UnicodeString("yyyy-MM-dd"), Locale::getUS(), sdfStatus);
+    if (failure(sdfStatus, "initializing SimpleDateFormat")) {
+        return;
+    }
+
+    for (int32_t s = 0; s < UPRV_LENGTHOF(kScenarios); ++s) {
+        const Scenario& sc = kScenarios[s];
+        UErrorCode status = U_ZERO_ERROR;
+        // A *default*-cutover calendar would misinterpret set(cutY, cutM,
+        // cutD) as Julian for these (pre-1582) years, giving the wrong
+        // instant; force pure-Gregorian interpretation instead with an
+        // extreme (very early) cutover of its own.
+        GregorianCalendar cutoverCal(*TimeZone::getGMT(), status);
+        cutoverCal.setGregorianChange(EARLIEST_SUPPORTED_MILLIS, status);
+        cutoverCal.clear();
+        cutoverCal.set(sc.cutY, sc.cutM, sc.cutD);
+        UDate cutoverMillis = cutoverCal.getTime(status);
+        if (failure(status, "computing the cutover date")) {
+            continue;
+        }
+
+        GregorianCalendar cal(*TimeZone::getGMT(), status);
+        cal.setGregorianChange(cutoverMillis, status);
+        if (failure(status, "setGregorianChange")) {
+            continue;
+        }
+
+        cal.clear();
+        cal.set(UCAL_JULIAN_DAY, sc.firstJD);
+        UDate first = cal.getTime(status);
+        if (failure(status, "computing the first day of the hybrid month")) {
+            continue;
+        }
+
+        // roll(DAY_OF_MONTH, +1) from every existing day visits exactly
+        // length(m) distinct, consecutive Julian Days and returns to the
+        // start.
+        for (int32_t i = 0; i < sc.length; ++i) {
+            status = U_ZERO_ERROR;
+            cal.setTime(first + static_cast<double>(i) * U_MILLIS_PER_DAY, status);
+            cal.roll(UCAL_DAY_OF_MONTH, 1, status);
+            UDate actual = cal.getTime(status);
+            UDate expected = first + static_cast<double>((i + 1) % sc.length) * U_MILLIS_PER_DAY;
+            if (failure(status, "roll(DAY_OF_MONTH, +1)")) {
+                continue;
+            }
+            if (actual != expected) {
+                UnicodeString actualStr, expectedStr;
+                sdf.setTimeZone(*TimeZone::getGMT());
+                sdf.format(actual, actualStr);
+                sdf.format(expected, expectedStr);
+                errln(UnicodeString("FAIL[") + sc.name + "]: roll(DAY_OF_MONTH,+1) from JD " +
+                      (sc.firstJD + i) + ": got " + actualStr + ", expected " + expectedStr);
+            }
+        }
+    }
+
+    // Specific check for year 50: rolling +1 day from the instant labelled
+    // Gregorian March 9 (JD 1739390, offset 10 into the 33-day hybrid
+    // month) lands on the instant labelled Gregorian March 10 (JD 1739391).
+    {
+        UErrorCode status = U_ZERO_ERROR;
+        GregorianCalendar cutoverCal(*TimeZone::getGMT(), status);
+        cutoverCal.setGregorianChange(EARLIEST_SUPPORTED_MILLIS, status);
+        cutoverCal.clear();
+        cutoverCal.set(50, UCAL_MARCH, 1);
+        UDate cutoverMillis = cutoverCal.getTime(status);
+
+        GregorianCalendar cal(*TimeZone::getGMT(), status);
+        cal.setGregorianChange(cutoverMillis, status);
+        cal.clear();
+        cal.set(UCAL_JULIAN_DAY, 1739390);  // Gregorian March 9, 50
+        UDate before = cal.getTime(status);
+        if (failure(status, "computing the starting date")) {
+            return;
+        }
+
+        cal.roll(UCAL_DAY_OF_MONTH, 1, status);
+        UDate after = cal.getTime(status);
+        if (failure(status, "roll(DAY_OF_MONTH, +1)")) {
+            return;
+        }
+
+        UDate expected = before + U_MILLIS_PER_DAY;
+        if (after != expected) {
+            UnicodeString beforeStr, afterStr, expectedStr;
+            sdf.setTimeZone(*TimeZone::getGMT());
+            sdf.format(before, beforeStr);
+            sdf.format(after, afterStr);
+            sdf.format(expected, expectedStr);
+            errln(UnicodeString("FAIL: year 50 cutover, G Mar 9") +
+                  ": roll(DAY_OF_MONTH,+1) from " + beforeStr + " got " + afterStr +
+                  ", expected " + expectedStr);
+        }
+    }
+
+    // The cutover need not fall exactly on a month boundary: with the
+    // cutover one day earlier (Gregorian 0050-02-28), the instant labelled
+    // 0050-03-01 in the hybrid calendar is the LAST JULIAN day (the
+    // repeated Gregorian instant, two days later, is also labelled
+    // 0050-03-01). Rolling DAY_OF_MONTH by +1 from there stays within
+    // hybrid March's own Julian Day range (see computeHybridMonth() above),
+    // but that range extends one Julian Day into what is labelled February,
+    // so the result is 0050-02-28: an early-era repeat that crosses a month
+    // boundary. This is documented, expected behaviour: for a cutover early
+    // enough that the switch repeats day labels (roughly before 200 AD),
+    // roll(DAY_OF_MONTH)/roll(WEEK_OF_MONTH) around the cutover may land on
+    // a day labelled with an adjacent month or year, or skip days; this
+    // test pins this specific case as current behavior, not a general
+    // guarantee that roll() stays within the hybrid month's own JD range.
+    {
+        UErrorCode status = U_ZERO_ERROR;
+        GregorianCalendar cutoverCal(*TimeZone::getGMT(), status);
+        cutoverCal.setGregorianChange(EARLIEST_SUPPORTED_MILLIS, status);
+        cutoverCal.clear();
+        cutoverCal.set(50, UCAL_FEBRUARY, 28);
+        UDate cutoverMillis = cutoverCal.getTime(status);
+
+        GregorianCalendar cal(*TimeZone::getGMT(), status);
+        cal.setGregorianChange(cutoverMillis, status);
+        cal.clear();
+        cal.set(UCAL_JULIAN_DAY, 1739380);  // hybrid-labelled 0050-03-01 (last Julian day)
+        if (failure(status, "computing the starting date")) {
+            return;
+        }
+
+        cal.roll(UCAL_DATE, 1, status);
+        if (failure(status, "roll(DATE, +1)")) {
+            return;
+        }
+
+        int32_t year = cal.get(UCAL_EXTENDED_YEAR, status);
+        int32_t month = cal.get(UCAL_MONTH, status);
+        int32_t day = cal.get(UCAL_DATE, status);
+        int32_t jd = cal.get(UCAL_JULIAN_DAY, status);
+        if (year != 50 || month != UCAL_FEBRUARY || day != 28 || jd != 1739381) {
+            errln(UnicodeString("FAIL: year 50 cutover Gregorian 0050-02-28, roll(DATE,+1) from the "
+                                 "instant labelled 0050-03-01 (JD 1739380): got ") +
+                  year + "-" + (month + 1) + "-" + day + " (JD " + jd +
+                  "), expected 50-2-28 (JD 1739381)");
+        }
     }
 }
 
