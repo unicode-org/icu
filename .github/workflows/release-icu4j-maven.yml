@@ -158,7 +158,7 @@ jobs:
   # The results are:
   #   - Attached as Github Action artifacts
   #   - Uploaded to the GitHub release
-  # This job was split from `publish` so that we can use the jdk 26 version of javadoc,
+  # This job was split from `publish` so that we can use the jdk > 25 version of javadoc,
   # which has some really nice improvements.
   javadoc_for_website_publishing:
     runs-on: ubuntu-26.04  # Updated in BRS
@@ -179,7 +179,7 @@ jobs:
     - name: Set up JDK
       uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
       with:
-        java-version: '26'
+        java-version: '27'
         distribution: 'temurin'
 
     - name: Build and install everything so that `site` can find the artifacts for reporting
