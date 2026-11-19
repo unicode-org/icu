@@ -1583,11 +1583,14 @@ utf8TextClone(UText *dest, const UText *src, UBool deep, UErrorCode *status)
     //
     if (deep && U_SUCCESS(*status)) {
         int32_t  len = (int32_t)utext_nativeLength((UText *)src);
+
+        // The cloned string IS going to be NUL terminated, whether or not the original was.
         char *copyStr = (char *)uprv_malloc(len+1);
         if (copyStr == nullptr) {
             *status = U_MEMORY_ALLOCATION_ERROR;
         } else {
-            uprv_memcpy(copyStr, src->context, len+1);
+            uprv_memcpy(copyStr, src->context, len);
+            copyStr[len] = 0;
             dest->context = copyStr;
             dest->providerProperties |= I32_FLAG(UTEXT_PROVIDER_OWNS_TEXT);
         }
