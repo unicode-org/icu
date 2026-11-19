@@ -149,14 +149,15 @@ T_CString_toUpperCase(char* str)
 
 /*
  * Takes a int32_t and fills in  a char* string with that number "radix"-based.
- * Does not handle negative values (makes an empty string for them).
- * Writes at most 12 chars ("-2147483647" plus NUL).
+ * Only in base 10 are negative values written with a '-' sign.
+ * Writes at most 12 chars in base 10 ("-2147483648" plus NUL),
+ * and at most 33 chars in base 2 (32 digits plus NUL).
  * Returns the length of the string (not including the NUL).
  */
 U_CAPI int32_t U_EXPORT2
 T_CString_integerToString(char* buffer, int32_t v, int32_t radix)
 {
-    char      tbuf[30];
+    char      tbuf[33];  /* 32 binary digits plus NUL; the '-' goes directly into buffer. */
     int32_t   tbx    = sizeof(tbuf);
     uint8_t   digit;
     int32_t   length = 0;
@@ -166,7 +167,7 @@ T_CString_integerToString(char* buffer, int32_t v, int32_t radix)
     uval = (uint32_t) v;
     if(v<0 && radix == 10) {
         /* Only in base 10 do we conside numbers to be signed. */
-        uval = (uint32_t)(-v); 
+        uval = 0u - uval;  /* Unsigned negation is well-defined even for INT32_MIN. */
         buffer[length++] = '-';
     }
     
@@ -188,13 +189,15 @@ T_CString_integerToString(char* buffer, int32_t v, int32_t radix)
 
 /*
  * Takes a int64_t and fills in  a char* string with that number "radix"-based.
- * Writes at most 21: chars ("-9223372036854775807" plus NUL).
+ * Only in base 10 are negative values written with a '-' sign.
+ * Writes at most 21 chars in base 10 ("-9223372036854775808" plus NUL),
+ * and at most 65 chars in base 2 (64 digits plus NUL).
  * Returns the length of the string, not including the terminating NUL.
  */
 U_CAPI int32_t U_EXPORT2
 T_CString_int64ToString(char* buffer, int64_t v, uint32_t radix)
 {
-    char      tbuf[30];
+    char      tbuf[65];  /* 64 binary digits plus NUL; the '-' goes directly into buffer. */
     int32_t   tbx    = sizeof(tbuf);
     uint8_t   digit;
     int32_t   length = 0;
@@ -204,7 +207,7 @@ T_CString_int64ToString(char* buffer, int64_t v, uint32_t radix)
     uval = (uint64_t) v;
     if(v<0 && radix == 10) {
         /* Only in base 10 do we conside numbers to be signed. */
-        uval = (uint64_t)(-v); 
+        uval = 0u - uval;  /* Unsigned negation is well-defined even for INT64_MIN. */
         buffer[length++] = '-';
     }
     

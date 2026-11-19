@@ -143,6 +143,12 @@ ucnv_openCCSID (int32_t codepage,
     if (err == nullptr || U_FAILURE (*err))
         return nullptr;
 
+    /* CCSIDs are 16-bit; reject anything else instead of formatting it into a name. */
+    if (codepage < 0 || codepage > 0xffff) {
+        *err = U_ILLEGAL_ARGUMENT_ERROR;
+        return nullptr;
+    }
+
     /* ucnv_copyPlatformString could return "ibm-" or "cp" */
     myNameLen = ucnv_copyPlatformString(myName, platform);
     T_CString_integerToString(myName + myNameLen, codepage, 10);
