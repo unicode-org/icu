@@ -905,15 +905,29 @@ public final class CollationBuilder extends CollationRuleParser.Sink {
         return ce32;
     }
 
-    // ICU-22517
-    // This constant defines a limit for the addOnlyClosure to return
-    // error, to avoid taking a long time for canonical closure expansion.
-    // Please let us know if you have a reasonable use case that needed
-    // for a practical Collation rule that needs to increase this limit.
-    // This value is needed for compiling a rule with eight Hangul syllables such as
-    // "&a=b쫊쫊쫊쫊쫊쫊쫊쫊" without error, which should be more than realistic
-    // usage.
-    private static int kClosureLoopLimit = 2400;
+    // ICU-22517, ICU-23467, ICU-23592
+    // This constant defines a limit for addOnlyClosure() to return an error, to
+    // avoid taking a long time for canonical closure expansion.
+    // Please let us know if you have a reasonable use case for a practical
+    // Collation rule that needs to increase this limit.
+    // This value allows compiling a rule with seven Hangul syllables such as
+    // "&a=b쫊쫊쫊쫊쫊쫊쫊" (3^7 = 2,187 equivalents) and TestBuilderContextsOverflow
+    // without error, while scaling up the per-step cost for long prefixes and
+    // contractions and counting outer prefix iterations to bound quadratic
+    // context-trie rebuilds within a single closure call.
+    private static final int kClosureLoopLimit = 2400;
+
+    // ICU-23592: UTF-16 code units of prefix length per extra loop count.
+    // Practical tailoring prefixes (e.g., 1-3 units in CLDR) stay well below 16
+    // and pay no extra cost, while long prefixes scale up rapidly because each
+    // distinct prefix adds a ConditionalCE32 node and reversed-prefix trie entry.
+    private static final int kClosurePrefixLengthPerLoop = 16;
+
+    // ICU-23592: UTF-16 code units of contraction string length per extra loop
+    // count. Chosen above 67 so seven Hangul syllables (<= 22 units) and
+    // TestBuilderContextsOverflow (up to 67 units) still count as 1 per candidate,
+    // while very long strings scale down allowed iterations to avoid timeouts.
+    private static final int kClosureStringLengthPerLoop = 80;
 
     private int addOnlyClosure(
             CharSequence nfdPrefix,
@@ -933,11 +947,12 @@ public final class CollationBuilder extends CollationRuleParser.Sink {
                 if (str == null) {
                     break;
                 }
+                loop += 1 + str.length() / kClosureStringLengthPerLoop;
+                if (loop > kClosureLoopLimit) {
+                    throw new ICUInputTooLongException("Too many closure");
+                }
                 if (ignoreString(str) || str.contentEquals(nfdString)) {
                     continue;
-                }
-                if (loop++ > kClosureLoopLimit) {
-                    throw new ICUInputTooLongException("Too many closure");
                 }
                 ce32 = addIfDifferent(prefix, str, newCEs, newCEsLength, ce32);
             }
@@ -949,6 +964,10 @@ public final class CollationBuilder extends CollationRuleParser.Sink {
                 if (prefix == null) {
                     break;
                 }
+                loop += 1 + prefix.length() / kClosurePrefixLengthPerLoop;
+                if (loop > kClosureLoopLimit) {
+                    throw new ICUInputTooLongException("Too many closure");
+                }
                 if (ignorePrefix(prefix)) {
                     continue;
                 }
@@ -958,11 +977,15 @@ public final class CollationBuilder extends CollationRuleParser.Sink {
                     if (str == null) {
                         break;
                     }
+                    loop +=
+                            1
+                                    + prefix.length() / kClosurePrefixLengthPerLoop
+                                    + str.length() / kClosureStringLengthPerLoop;
+                    if (loop > kClosureLoopLimit) {
+                        throw new ICUInputTooLongException("Too many closure");
+                    }
                     if (ignoreString(str) || (samePrefix && str.contentEquals(nfdString))) {
                         continue;
-                    }
-                    if (loop++ > kClosureLoopLimit) {
-                        throw new ICUInputTooLongException("Too many closure");
                     }
                     ce32 = addIfDifferent(prefix, str, newCEs, newCEsLength, ce32);
                 }

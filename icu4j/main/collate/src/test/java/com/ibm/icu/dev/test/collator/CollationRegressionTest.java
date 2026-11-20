@@ -18,6 +18,7 @@ import com.ibm.icu.text.CollationElementIterator;
 import com.ibm.icu.text.CollationKey;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.RuleBasedCollator;
+import com.ibm.icu.util.ICUInputTooLongException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -1313,6 +1314,26 @@ public class CollationRegressionTest extends TestFmwk {
             RuleBasedCollator coll = new RuleBasedCollator(rule);
         } catch (Exception expected) {
             // expected exception or quick completion without hanging
+        }
+    }
+
+    @Test
+    public void TestICU23592() throws Exception {
+        StringBuilder rule = new StringBuilder("&x=");
+        for (int i = 0; i < 200; ++i) {
+            rule.append("\u7523\u030F");
+        }
+        for (int i = 0; i < 60; ++i) {
+            rule.append('\uC2C2');
+        }
+        rule.append("|\u7523\u030F\u7523\u030F");
+        try {
+            new RuleBasedCollator(rule.toString());
+            errln("Expected ParseException for long prefix + contraction closure");
+        } catch (ParseException expected) {
+            assertTrue(
+                    "Expected ICUInputTooLongException cause",
+                    expected.getCause() instanceof ICUInputTooLongException);
         }
     }
 
