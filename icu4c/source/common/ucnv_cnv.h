@@ -171,7 +171,8 @@ typedef void (*UConverterWriteSub) (UConverterFromUnicodeArgs *pArgs, int32_t of
 /**
  * For converter-specific safeClone processing
  * If this function is not set, then ucnv_safeClone assumes that the converter has no private data that changes
- * after the converter is done opening.
+ * after the converter is done opening, and it fails with U_UNSUPPORTED_ERROR for a converter with extraInfo.
+ * A converter that allocates extraInfo must set this function.
  * If this function is set, then it is called just after a memcpy() of
  * converter data to the new, empty converter, and is expected to set up
  * the initial state of the converter.  It is not expected to increment the

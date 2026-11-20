@@ -210,6 +210,13 @@ ucnv_safeClone(const UConverter* cnv,
             return nullptr;
         }
     }
+    else if (cnv->extraInfo != nullptr)
+    {
+        /* private data that is owned by cnv cannot be shared with a bitwise copy */
+        *status = U_UNSUPPORTED_ERROR;
+        UTRACE_EXIT_STATUS(*status);
+        return nullptr;
+    }
     else
     {
         /* inherent sizing */
