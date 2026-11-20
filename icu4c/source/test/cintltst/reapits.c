@@ -172,6 +172,7 @@ static void TestUTextAPI(void);
 static void TestRefreshInput(void);
 static void TestBug8421(void);
 static void TestBug10815(void);
+static void TestEmptyUTF8UText(void);
 
 void addURegexTest(TestNode** root);
 
@@ -183,6 +184,7 @@ void addURegexTest(TestNode** root)
     addTest(root, &TestRefreshInput, "regex/TestRefreshInput");
     addTest(root, &TestBug8421,   "regex/TestBug8421");
     addTest(root, &TestBug10815,   "regex/TestBug10815");
+    addTest(root, &TestEmptyUTF8UText, "regex/TestEmptyUTF8UText");
 }
 
 /*
@@ -2322,4 +2324,49 @@ static void TestBug10815(void) {
 }
 
     
+/*
+ * An empty UTF-8 UText has no chunk buffer until it is first accessed
+ * (chunkContents is NULL). Matching a literal string against it must not do
+ * arithmetic on that null pointer, and uregex_getText() must not leave the
+ * regular expression looking as if no text had been set.
+ */
+static void TestEmptyUTF8UText(void) {
+    static const UChar literalPattern[] = { 0x66, 0x6f, 0x6f, 0x7c, 0x62, 0x61, 0x72, 0 }; /* foo|bar */
+    static const UChar starPattern[] = { 0x61, 0x2a, 0 };                                /* a*      */
+    UErrorCode status = U_ZERO_ERROR;
+    URegularExpression *re;
+    UText *ut;
+    const UChar *text;
+    int32_t textLength = -1;
+
+    re = uregex_open(literalPattern, -1, 0, NULL, &status);
+    ut = utext_openUTF8(NULL, "", 0, &status);
+    uregex_setUText(re, ut, &status);
+    TEST_ASSERT_SUCCESS(status);
+    TEST_ASSERT(uregex_matches(re, 0, &status) == false);
+    TEST_ASSERT(uregex_find(re, 0, &status) == false);
+    TEST_ASSERT_SUCCESS(status);
+    uregex_close(re);
+    utext_close(ut);
+
+    status = U_ZERO_ERROR;
+    re = uregex_open(starPattern, -1, 0, NULL, &status);
+    ut = utext_openUTF8(NULL, "", 0, &status);
+    uregex_setUText(re, ut, &status);
+    text = uregex_getText(re, &textLength, &status);
+    TEST_ASSERT_SUCCESS(status);
+    TEST_ASSERT(text != NULL);
+    TEST_ASSERT(textLength == 0);
+    TEST_ASSERT(uregex_find(re, 0, &status) == true);
+    TEST_ASSERT_SUCCESS(status);
+    uregex_reset(re, 0, &status);
+    TEST_ASSERT_SUCCESS(status);
+    TEST_ASSERT(uregex_regionEnd(re, &status) == 0);
+    TEST_ASSERT(uregex_matches(re, 0, &status) == true);
+    TEST_ASSERT_SUCCESS(status);
+    uregex_close(re);
+    utext_close(ut);
+}
+
 #endif   /*  !UCONFIG_NO_REGULAR_EXPRESSIONS */
+
