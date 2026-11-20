@@ -504,6 +504,13 @@ NFRule::extractSubstitutions(const NFRuleSet* owner,
         }
         rulePatternFormat = formatter->createPluralFormat(pluralType,
                 ruleText.tempSubString(endType + 1, pluralRuleEnd - endType - 1), status);
+        if (U_SUCCESS(status) && getDivisor() <= 0) {
+            // radix^exponent overflowed 64 bits, so doFormat() would divide the
+            // number by a zero (or wrapped-negative) divisor. Reject the rule, like
+            // the modulus and integral-part substitutions already do for a zero divisor.
+            status = U_PARSE_ERROR;
+            return;
+        }
     }
 }
 
