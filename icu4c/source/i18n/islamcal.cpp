@@ -851,7 +851,8 @@ int64_t IslamicUmalquraCalendar::monthStart(int32_t year, int32_t month, UErrorC
 */
 int32_t IslamicUmalquraCalendar::handleGetMonthLength(int32_t extendedYear, int32_t month,
                                                       UErrorCode& status) const {
-    if (extendedYear<UMALQURA_YEAR_START || extendedYear>UMALQURA_YEAR_END) {
+    if (extendedYear<UMALQURA_YEAR_START || extendedYear>UMALQURA_YEAR_END ||
+        month<0 || month>11) {
         return IslamicCivilCalendar::handleGetMonthLength(extendedYear, month, status);
     }
     int32_t length = 29;
