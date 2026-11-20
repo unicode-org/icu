@@ -1413,11 +1413,16 @@ SimpleDateFormat::processOverrideString(const Locale &locale, const UnicodeStrin
         if (!found) {
            LocalPointer<NSOverride> cur(new NSOverride);
            if (!cur.isNull()) {
-               char kw[ULOC_KEYWORD_AND_VALUES_CAPACITY];
-               uprv_strcpy(kw,"numbers=");
-               nsName.extract(0,len,kw+8,ULOC_KEYWORD_AND_VALUES_CAPACITY-8,US_INV);
+               CharString kw("numbers=", status);
+               kw.appendInvariantChars(nsName, status);
+               if (U_FAILURE(status)) {
+                   if (overrideList) {
+                       overrideList->free();
+                   }
+                   return;
+               }
 
-               Locale ovrLoc(locale.getLanguage(),locale.getCountry(),locale.getVariant(),kw);
+               Locale ovrLoc(locale.getLanguage(),locale.getCountry(),locale.getVariant(),kw.data());
                cur->hash = nsNameHash;
                cur->next = overrideList;
                SharedObject::copyPtr(
