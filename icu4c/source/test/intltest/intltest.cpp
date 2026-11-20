@@ -828,11 +828,19 @@ UBool IntlTest::runTestLoop( char* testname, char* par, char *baseName )
             saveBaseLoc[0]=0; /* reset path */
             
             if (lastErrorCount == errorCount) {
-                snprintf( msg, sizeof(msg),  "   } OK:   %s ", name );
+            #ifdef U_AUTOMAKE_TEST_FORMAT
+                snprintf(msg, sizeof(msg), "PASS: %s\n   }", name);
+            #else
+                snprintf(msg, sizeof(msg),  "   } OK:   %s ", name );
+            #endif
                 if(!no_time) str_timeDelta(msg+strlen(msg),timeStop-timeStart);
                 lastTestFailed = false;
             }else{
+            #ifdef U_AUTOMAKE_TEST_FORMAT
+                snprintf(msg, sizeof(msg), "FAIL: %s\n   } (ERRORS: %li)", name, static_cast<long>(errorCount - lastErrorCount));
+            #else
                 snprintf(msg, sizeof(msg), "   } ERRORS (%li) in %s", static_cast<long>(errorCount - lastErrorCount), name);
+            #endif
                 if(!no_time) str_timeDelta(msg+strlen(msg),timeStop-timeStart);
 
                 for(int i=0;i<LL_indentlevel;i++) {
