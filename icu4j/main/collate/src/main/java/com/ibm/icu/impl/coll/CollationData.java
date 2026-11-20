@@ -48,9 +48,15 @@ public final class CollationData {
     }
 
     boolean isDigit(int c) {
-        return c < 0x660
-                ? c <= 0x39 && 0x30 <= c
-                : Collation.hasCE32Tag(getCE32(c), Collation.DIGIT_TAG);
+        if (c < 0x660) {
+            return c <= 0x39 && 0x30 <= c;
+        }
+        int ce32 = getCE32(c);
+        if (ce32 == Collation.FALLBACK_CE32) {
+            assert base != null;
+            return Collation.hasCE32Tag(base.getCE32(c), Collation.DIGIT_TAG);
+        }
+        return Collation.hasCE32Tag(ce32, Collation.DIGIT_TAG);
     }
 
     public boolean isUnsafeBackward(int c, boolean numeric) {
