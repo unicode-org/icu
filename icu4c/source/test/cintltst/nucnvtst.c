@@ -42,6 +42,7 @@ static void TestConverterTypesAndStarters(void);
 static void TestAmbiguous(void);
 static void TestSignatureDetection(void);
 static void TestUTF7(void);
+static void TestUTF7ResetKeepsVersion(void);
 static void TestIMAP(void);
 static void TestUTF8(void);
 static void TestCESU8(void);
@@ -258,6 +259,7 @@ void addTestNewConvert(TestNode** root)
    addTest(root, &TestAmbiguous, "tsconv/nucnvtst/TestAmbiguous");
    addTest(root, &TestSignatureDetection, "tsconv/nucnvtst/TestSignatureDetection");
    addTest(root, &TestUTF7, "tsconv/nucnvtst/TestUTF7");
+   addTest(root, &TestUTF7ResetKeepsVersion, "tsconv/nucnvtst/TestUTF7ResetKeepsVersion");
    addTest(root, &TestIMAP, "tsconv/nucnvtst/TestIMAP");
    addTest(root, &TestUTF8, "tsconv/nucnvtst/TestUTF8");
 
@@ -1808,6 +1810,57 @@ TestSignatureDetection(void){
                 log_err("ucnv_detectUnicodeSignature test2 failed for source : %s at index :%i.Expected Length: %i. Got length: %i\n",source,i,signatureLength,expectedLength[i]);
             }
         }
+    }
+}
+
+/*
+ * A reset must not drop the version option of "UTF-7,version=1":
+ * with version 1, the set O characters !, # and ; are base64-encoded.
+ * ucnv_fromUChars() and ucnv_convertEx() reset the converter first,
+ * and a converter is reset automatically at the end of each stream.
+ */
+static void TestUTF7ResetKeepsVersion(void) {
+    static const UChar text[] = { 0x61, 0x21, 0x62, 0x23, 0x63, 0x3b, 0x64 }; /* a!b#c;d */
+    static const char expected[] = "a+ACE-b+ACM-c+ADs-d";
+    static const char *const cases[] = { "fresh", "resetFromUnicode", "reset", "second stream", "fromUChars" };
+    char out[64];
+    int32_t i;
+    for (i = 0; i < UPRV_LENGTHOF(cases); ++i) {
+        UErrorCode errorCode = U_ZERO_ERROR;
+        UConverter *cnv = ucnv_open("UTF-7,version=1", &errorCode);
+        int32_t length;
+        const char *name;
+        if (U_FAILURE(errorCode)) {
+            log_data_err("ucnv_open(UTF-7,version=1) failed - %s\n", u_errorName(errorCode));
+            return;
+        }
+        if (i == 4) {
+            length = ucnv_fromUChars(cnv, out, UPRV_LENGTHOF(out), text, UPRV_LENGTHOF(text), &errorCode);
+        } else {
+            char *target = out;
+            const UChar *source;
+            if (i == 1) {
+                ucnv_resetFromUnicode(cnv);
+            } else if (i == 2) {
+                ucnv_reset(cnv);
+            } else if (i == 3) {
+                source = text;
+                ucnv_fromUnicode(cnv, &target, out + UPRV_LENGTHOF(out), &source, text + 1, NULL, true, &errorCode);
+                target = out;
+            }
+            source = text;
+            ucnv_fromUnicode(cnv, &target, out + UPRV_LENGTHOF(out), &source, text + UPRV_LENGTHOF(text), NULL, true, &errorCode);
+            length = (int32_t)(target - out);
+        }
+        if (U_FAILURE(errorCode) || length != (int32_t)strlen(expected) || 0 != memcmp(out, expected, length)) {
+            log_err("UTF-7,version=1 %s: got \"%.*s\" (%s), expected \"%s\"\n",
+                    cases[i], (int)length, out, u_errorName(errorCode), expected);
+        }
+        name = ucnv_getName(cnv, &errorCode);
+        if (U_FAILURE(errorCode) || 0 != strcmp(name, "UTF-7,version=1")) {
+            log_err("UTF-7,version=1 %s: ucnv_getName() returns \"%s\"\n", cases[i], name);
+        }
+        ucnv_close(cnv);
     }
 }
 
