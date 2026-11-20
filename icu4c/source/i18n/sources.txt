@@ -37,6 +37,7 @@ cpdtrans.cpp
 csdetect.cpp
 csmatch.cpp
 csr2022.cpp
+csrascii.cpp
 csrecog.cpp
 csrmbcs.cpp
 csrsbcs.cpp
