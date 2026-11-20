@@ -16,6 +16,11 @@ import com.ibm.icu.text.DisplayContext;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.RuleBasedNumberFormat;
 import com.ibm.icu.util.ULocale;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.math.BigInteger;
 import java.text.ParseException;
 import java.util.Locale;
@@ -2185,11 +2190,8 @@ public class RbnfTest extends CoreTestFmwk {
                 try {
                     rbnf.parse("foo");
                     errln("Parse test didn't throw an exception!");
-                } catch (IllegalStateException e) {
-                    // we're supposed to get an IllegalStateException; swallow it and continue
-                } catch (ParseException e) {
-                    // if we don't hit the recursion limit, we'll still fail to parse the number,
-                    // so also swallow this exception and continue
+                } catch (IllegalArgumentException | IllegalStateException | ParseException e) {
+                    // Expected: unparseable ruleset, recursion limit, or parse failure
                 }
             } catch (IllegalArgumentException e) {
                 // ">>>" generates a parse exception when you try to create the formatter (so we
@@ -2382,5 +2384,156 @@ public class RbnfTest extends CoreTestFmwk {
         } catch (IllegalArgumentException | ParseException e) {
             // Expected exception or parse failure is fine, but not others like NPE.
         }
+    }
+
+    @Test
+    public void TestICU23590() throws ParseException, IOException, ClassNotFoundException {
+        String rulesStr =
+                "=-\u8f31\u00ff\u12c4\u0000\u6762\uff63\uffff\uffff\u7eff;"
+                        + "\u31279\u8f31\u00ff\u0000;=>\u023e\u0000>>=>>=>\uc23e"
+                        + "\u9c9c\u9c9c\u9c9c\u9c9c\u9c9c\u9c9c\u009c\u8f31\u00ff\u0000;"
+                        + "=>\u023e\u0000>>=>>=>\uc23e\u9c9c\u9c9c\u9c9c\u9c9c\u9c9c"
+                        + "\u9c9c\u9c9c\u9c9c\u9c9c\u009c\u9c30\u3100\u6d34\u65629>=9"
+                        + "\u293a\u0000";
+        try {
+            RuleBasedNumberFormat rbfmt =
+                    new RuleBasedNumberFormat(rulesStr, new ULocale("bgc_IN"));
+            rbfmt.parse(rulesStr);
+            fail("Expected exception for OSS-Fuzz 458828933 ruleset");
+        } catch (IllegalArgumentException | IllegalStateException | ParseException e) {
+            // Expected: invalid/unparseable ruleset or parse failure, must not hang.
+        }
+
+        // Mutually cyclic SameValueSubstitution rulesets are unparseable.
+        RuleBasedNumberFormat branchFmt =
+                new RuleBasedNumberFormat(
+                        "%a:\n0: z;\n1: a=%b=;\n2: a=%b=;\n%b:\n0: z;\n1: a=%a=;\n2: a=%a=;",
+                        ULocale.US);
+        try {
+            branchFmt.parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaX");
+            fail("Expected IllegalArgumentException for cyclic ruleset");
+        } catch (IllegalArgumentException expected) {
+            // Works as expected
+        }
+
+        // Serialization preserves unparseable flag on cyclic rulesets.
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try (ObjectOutputStream oos = new ObjectOutputStream(baos)) {
+            oos.writeObject(branchFmt);
+        }
+        RuleBasedNumberFormat deserialized;
+        try (ObjectInputStream ois =
+                new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray()))) {
+            deserialized = (RuleBasedNumberFormat) ois.readObject();
+        }
+        try {
+            deserialized.parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaX");
+            fail("Expected IllegalArgumentException after deserialization");
+        } catch (IllegalArgumentException expected) {
+            // Works as expected
+        }
+
+        // 3-hop SameValueSubstitution cycle is unparseable.
+        RuleBasedNumberFormat cycle3Fmt =
+                new RuleBasedNumberFormat(
+                        "%a:\n0: z;\n1: a=%b=;\n%b:\n0: z;\n1: a=%c=;\n%c:\n0: z;\n1: a=%a=;",
+                        ULocale.US);
+        try {
+            cycle3Fmt.parse("aaaaaz");
+            fail("Expected IllegalArgumentException for 3-hop cyclic ruleset");
+        } catch (IllegalArgumentException expected) {
+            // Works as expected
+        }
+
+        // Cycle at baseValue == 0 via MultiplierSubstitution is unparseable.
+        RuleBasedNumberFormat zeroCycleFmt =
+                new RuleBasedNumberFormat("%a:\n0: a<%b<;\n%b:\n0: a<%a<;", ULocale.US);
+        try {
+            zeroCycleFmt.parse("aaaa");
+            fail("Expected IllegalArgumentException for baseValue 0 cyclic ruleset");
+        } catch (IllegalArgumentException expected) {
+            // Works as expected
+        }
+
+        // Disjoint-range mutual SameValueSubstitution (e.g., lt) remains parseable.
+        RuleBasedNumberFormat disjointFmt =
+                new RuleBasedNumberFormat(
+                        "%a:\n0: z;\n4: =%b=i;\n10: ten;\n%b:\n0: z;\n4: four;\n20: =%a=;",
+                        ULocale.US);
+        assertEquals(
+                "disjoint SameValueSubstitution parse", 4L, disjointFmt.parse("fouri").longValue());
+
+        // Rollback from 101 to 20 widens rule 20's range to [20, 1000), creating a cycle with 200.
+        RuleBasedNumberFormat rollbackCycleFmt =
+                new RuleBasedNumberFormat(
+                        "%a:\n0: z;\n20: =%b=s;\n101: << hundred >>;\n1000: thousand;\n%b:\n0: z;\n200: =%a=;",
+                        ULocale.US);
+        try {
+            rollbackCycleFmt.parse("zz");
+            fail("Expected IllegalArgumentException for rollback cyclic ruleset");
+        } catch (IllegalArgumentException expected) {
+            // Works as expected
+        }
+
+        // Fraction ruleset cycles (withZeros at baseValue 0, forward-declared fraction ruleset,
+        // and normal -> fraction -> normal resetting upperBound upward).
+        String[] fracCycleRules = {
+            "%main:\n0: a=%frac=;\n1: one;\nx.x: >%frac>;\n%frac:\n0: a<%main<<;\n0: b<%main<<;",
+            "%frac:\n0: a>%a>;\n%a:\n0: a=%frac=;\n%main:\n0: z;\nx.x: >%frac>;",
+            "%main:\n0: z;\n100: a<%mid<;\nx.x: >%frac>;\n%mid:\n0: z;\n10: a=%frac=;\n20: a=%frac=;\n%frac:\n1000: a<%main<;",
+            "%a:\n0: z;\n10: a=%b=;\n100: x;\nx.x: >%frac>;\n%b:\n0: a=%frac=;\n1: a=%frac=;\n5: five;\n%frac:\n100: a<%a<;",
+        };
+        for (String ruleText : fracCycleRules) {
+            RuleBasedNumberFormat fmt = new RuleBasedNumberFormat(ruleText, ULocale.US);
+            try {
+                fmt.parse("aaaa");
+                fail("Expected IllegalArgumentException for fraction cycle: " + ruleText);
+            } catch (IllegalArgumentException expected) {
+                // Works as expected
+            }
+        }
+
+        // Precision boundary at 2^53: valid rule at 2^53 with next rule 2^53+1 stays parseable.
+        RuleBasedNumberFormat validBigFmt =
+                new RuleBasedNumberFormat(
+                        "%a:\n0: zero;\n9007199254740992: =%b=;\n9007199254740993: x;\n%b:\n0: z;\n9007199254740992: big;",
+                        ULocale.US);
+        assertEquals(
+                "2^53 exact bound parse", 9007199254740992L, validBigFmt.parse("big").longValue());
+
+        // Cycles above 2^53 (double rounding), below 2^53 via expectedExponent() overestimate
+        // (divisor > baseValue, both `<` and `>>>` bypasses), and alternate-decimal fraction rules.
+        String[] bigCycleRules = {
+            "%a:\n0: z;\n9007199254740993: =%b=a;\n9007199254740995: x;\n%b:\n0: z;\n9007199254740995: =%a=a;\n9007199254740997: x;",
+            "%a:\n0: z;\n9273284218074431/191: <<a;",
+            "%a:\n-x: >%a>;\n0: z;\n4503599627370494: a=%b=;\n4503599627370495: a=%b=;\n%b:\n0: z;\n4503599627370469/2: a<%a<;\n4503599627370470/2: a<%a<;\n4503599627370490: x;",
+            "%a:\n-x: >%a>;\n0: z;\n4503599627370468: a=%b=;\n4503599627370469/2: a>>>;\n4503599627370490: a>>;\n%b:\n0: z;\n4503599627370495: a=%a=;",
+            "%main:\n0: zero;\nx.x: one;\nx,x: >%%altfrac>;\n%%altfrac:\n0: a=%%altfrac=;",
+        };
+        for (String ruleText : bigCycleRules) {
+            RuleBasedNumberFormat fmt = new RuleBasedNumberFormat(ruleText, ULocale.US);
+            try {
+                fmt.parse("aaaa");
+                fail("Expected IllegalArgumentException for >2^53 cycle: " + ruleText);
+            } catch (IllegalArgumentException expected) {
+                // Works as expected
+            }
+        }
+
+        // Rule following Long.MAX_VALUE must throw IllegalArgumentException rather than
+        // overflowing.
+        try {
+            new RuleBasedNumberFormat(
+                    "%a:\n9223372036854775807: x;\n1: a=%b=;\n%b:\n0: z;", ULocale.US);
+            fail("Expected IllegalArgumentException after Long.MAX_VALUE rule");
+        } catch (IllegalArgumentException expected) {
+            // Works as expected
+        }
+
+        // Cycle isolated in an unreferenced @noparse ruleset must not break valid public rulesets.
+        RuleBasedNumberFormat noparseCycleFmt =
+                new RuleBasedNumberFormat(
+                        "%good:\n0: zero;\n1: one;\n%bad@noparse:\n0: a=%bad=;", ULocale.US);
+        assertEquals("@noparse isolation", 1L, noparseCycleFmt.parse("one").longValue());
     }
 }

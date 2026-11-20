@@ -62,6 +62,16 @@ public:
     void setDecimalFormatSymbols(const DecimalFormatSymbols &newSymbols, UErrorCode& status);
 
     const RuleBasedNumberFormat *getOwner() const { return owner; }
+
+    static constexpr int32_t kNonNumericalRuleCount = 6;
+    static constexpr int64_t kMaxExactDoubleInt = int64_t{1} << 53;
+
+    int32_t getRuleCount() const { return static_cast<int32_t>(rules.size()); }
+    const NFRule* getRule(int32_t index) const { return rules[static_cast<uint32_t>(index)]; }
+    const NFRule* getNonNumericalRule(int32_t index) const { return nonNumericalRules[index]; }
+    int32_t getFractionRuleCount() const { return static_cast<int32_t>(fractionRules.size()); }
+    const NFRule* getFractionRule(int32_t index) const { return fractionRules[static_cast<uint32_t>(index)]; }
+    int64_t getRuleUpperBound(int32_t index) const;
 private:
     const NFRule * findNormalRule(int64_t number) const;
     const NFRule * findDoubleRule(double number) const;

@@ -184,9 +184,14 @@ final class NFRuleSet {
         // set all those rules' base values.  We also remove any special
         // rules from the list and put them into their own member variables
         long defaultBaseValue = 0;
+        boolean pastMaxBaseValue = false;
 
         for (NFRule rule : tempRules) {
             long baseValue = rule.getBaseValue();
+            if (pastMaxBaseValue) {
+                throw new IllegalArgumentException(
+                        "Rules are not in order, base: " + baseValue + " after " + Long.MAX_VALUE);
+            }
             if (baseValue == 0) {
                 // if the rule's base value is 0, fill in a default
                 // base value (this will be 1 plus the preceding
@@ -208,7 +213,11 @@ final class NFRuleSet {
                 defaultBaseValue = baseValue;
             }
             if (!isFractionRuleSet) {
-                ++defaultBaseValue;
+                if (defaultBaseValue == Long.MAX_VALUE) {
+                    pastMaxBaseValue = true;
+                } else {
+                    ++defaultBaseValue;
+                }
             }
         }
 
@@ -796,12 +805,22 @@ final class NFRuleSet {
                 continue;
             }
 
+            double nextUpperBound = upperBound;
+            if (!isFractionRuleSet) {
+                long ruleUB = getRuleUpperBound(i);
+                if (ruleUB >= 0
+                        && ruleUB <= MAX_EXACT_DOUBLE_INT
+                        && (double) ruleUB < nextUpperBound) {
+                    nextUpperBound = (double) ruleUB;
+                }
+            }
+
             tempResult =
                     rules[i].doParse(
                             text,
                             parsePosition,
                             isFractionRuleSet,
-                            upperBound,
+                            nextUpperBound,
                             nonNumericalExecutedRuleMask,
                             recursionCount + 1);
             if (parsePosition.getIndex() > highWaterMark.getIndex()) {
@@ -823,6 +842,44 @@ final class NFRuleSet {
         }
 
         return result;
+    }
+
+    static final long MAX_EXACT_DOUBLE_INT = 1L << 53;
+
+    int getRuleCount() {
+        return rules.length;
+    }
+
+    NFRule getRule(int index) {
+        return rules[index];
+    }
+
+    int getNonNumericalRuleCount() {
+        return nonNumericalRules.length;
+    }
+
+    NFRule getNonNumericalRule(int index) {
+        return nonNumericalRules[index];
+    }
+
+    long getRuleUpperBound(int index) {
+        if (isFractionRuleSet || index < 0) {
+            return -1;
+        }
+        int nextIndex = index + 1;
+        if (nextIndex < rules.length) {
+            NFRule next = rules[nextIndex];
+            if (next.hasModulusSubstitution()) {
+                long divisor = next.getDivisor();
+                if (divisor != 0 && (next.getBaseValue() % divisor) != 0) {
+                    ++nextIndex;
+                }
+            }
+        }
+        if (nextIndex < rules.length) {
+            return rules[nextIndex].getBaseValue();
+        }
+        return -1;
     }
 
     public void setDecimalFormatSymbols(DecimalFormatSymbols newSymbols) {

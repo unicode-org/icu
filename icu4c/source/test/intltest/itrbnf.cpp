@@ -89,6 +89,7 @@ void IntlTestRBNF::runIndexedTest(int32_t index, UBool exec, const char* &name, 
         TESTCASE(39, TestDividedByZero);
         TESTCASE(40, TestTurkishSpellout);
         TESTCASE(41, TestNumeratorSubstitutionOverflow);
+        TESTCASE(42, TestICU23590);
 #else
         TESTCASE(0, TestRBNFDisabled);
 #endif
@@ -2883,6 +2884,162 @@ IntlTestRBNF::TestNumeratorSubstitutionOverflow() {
     if (U_SUCCESS(status)) {
         Formattable result;
         rbfmt.parse(rulesStr, result, status);
+    }
+}
+
+void
+IntlTestRBNF::TestICU23590() {
+    UnicodeString rulesStr(
+        u"=-\u8f31\u00ff\u12c4\u0000\u6762\uff63\uffff\uffff\u7eff;"
+        u"\u31279\u8f31\u00ff\u0000;=>\u023e\u0000>>=>>=>\uc23e"
+        u"\u9c9c\u9c9c\u9c9c\u9c9c\u9c9c\u9c9c\u009c\u8f31\u00ff\u0000;"
+        u"=>\u023e\u0000>>=>>=>\uc23e\u9c9c\u9c9c\u9c9c\u9c9c\u9c9c"
+        u"\u9c9c\u9c9c\u9c9c\u9c9c\u009c\u9c30\u3100\u6d34\u65629>=9"
+        u"\u293a\u0000",
+        73);
+    UParseError perror;
+    UErrorCode status = U_ZERO_ERROR;
+    RuleBasedNumberFormat rbfmt(rulesStr, Locale("bgc_IN"), perror, status);
+    assertEquals(WHERE, U_STATE_OLD_WARNING, status);
+    if (U_SUCCESS(status)) {
+        Formattable result;
+        rbfmt.parse(rulesStr, result, status);
+        assertEquals(WHERE, U_INVALID_FORMAT_ERROR, status);
+    }
+
+    // Mutually cyclic SameValueSubstitution rulesets are unparseable.
+    status = U_ZERO_ERROR;
+    RuleBasedNumberFormat branchFmt(
+        u"%a:\n0: z;\n1: a=%b=;\n2: a=%b=;\n%b:\n0: z;\n1: a=%a=;\n2: a=%a=;",
+        Locale::getUS(), perror, status);
+    assertEquals(WHERE, U_STATE_OLD_WARNING, status);
+    if (assertSuccess(WHERE, status)) {
+        Formattable result;
+        branchFmt.parse(u"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaX", result, status);
+        assertEquals(WHERE, U_INVALID_FORMAT_ERROR, status);
+    }
+
+    // 3-hop SameValueSubstitution cycle is unparseable.
+    status = U_ZERO_ERROR;
+    RuleBasedNumberFormat cycle3Fmt(
+        u"%a:\n0: z;\n1: a=%b=;\n%b:\n0: z;\n1: a=%c=;\n%c:\n0: z;\n1: a=%a=;",
+        Locale::getUS(), perror, status);
+    assertEquals(WHERE, U_STATE_OLD_WARNING, status);
+    if (assertSuccess(WHERE, status)) {
+        Formattable result;
+        cycle3Fmt.parse(u"aaaaaz", result, status);
+        assertEquals(WHERE, U_INVALID_FORMAT_ERROR, status);
+    }
+
+    // Cycle at baseValue == 0 via MultiplierSubstitution is unparseable.
+    status = U_ZERO_ERROR;
+    RuleBasedNumberFormat zeroCycleFmt(
+        u"%a:\n0: a<%b<;\n%b:\n0: a<%a<;",
+        Locale::getUS(), perror, status);
+    assertEquals(WHERE, U_STATE_OLD_WARNING, status);
+    if (assertSuccess(WHERE, status)) {
+        Formattable result;
+        zeroCycleFmt.parse(u"aaaa", result, status);
+        assertEquals(WHERE, U_INVALID_FORMAT_ERROR, status);
+    }
+
+    // Disjoint-range mutual SameValueSubstitution (e.g., lt) remains parseable.
+    status = U_ZERO_ERROR;
+    RuleBasedNumberFormat disjointFmt(
+        u"%a:\n0: z;\n4: =%b=i;\n10: ten;\n%b:\n0: z;\n4: four;\n20: =%a=;",
+        Locale::getUS(), perror, status);
+    if (assertSuccess(WHERE, status)) {
+        assertTrue(WHERE, status != U_STATE_OLD_WARNING);
+        Formattable result;
+        disjointFmt.parse(u"fouri", result, status);
+        assertSuccess(WHERE, status);
+        assertEquals(WHERE, 4, result.getLong());
+    }
+
+    // Rollback from 101 to 20 widens rule 20's range to [20, 1000), creating a cycle with 200.
+    status = U_ZERO_ERROR;
+    RuleBasedNumberFormat rollbackCycleFmt(
+        u"%a:\n0: z;\n20: =%b=s;\n101: << hundred >>;\n1000: thousand;\n%b:\n0: z;\n200: =%a=;",
+        Locale::getUS(), perror, status);
+    assertEquals(WHERE, U_STATE_OLD_WARNING, status);
+    if (assertSuccess(WHERE, status)) {
+        Formattable result;
+        rollbackCycleFmt.parse(u"zz", result, status);
+        assertEquals(WHERE, U_INVALID_FORMAT_ERROR, status);
+    }
+
+    // Fraction ruleset cycles (withZeros at baseValue 0, forward-declared fraction ruleset,
+    // and normal -> fraction -> normal resetting upperBound upward).
+    const char16_t* const fracCycleRules[] = {
+        u"%main:\n0: a=%frac=;\n1: one;\nx.x: >%frac>;\n%frac:\n0: a<%main<<;\n0: b<%main<<;",
+        u"%frac:\n0: a>%a>;\n%a:\n0: a=%frac=;\n%main:\n0: z;\nx.x: >%frac>;",
+        u"%main:\n0: z;\n100: a<%mid<;\nx.x: >%frac>;\n%mid:\n0: z;\n10: a=%frac=;\n20: a=%frac=;\n%frac:\n1000: a<%main<;",
+        u"%a:\n0: z;\n10: a=%b=;\n100: x;\nx.x: >%frac>;\n%b:\n0: a=%frac=;\n1: a=%frac=;\n5: five;\n%frac:\n100: a<%a<;",
+    };
+    for (const char16_t* ruleText : fracCycleRules) {
+        status = U_ZERO_ERROR;
+        RuleBasedNumberFormat fmt(ruleText, Locale::getUS(), perror, status);
+        assertEquals(WHERE, U_STATE_OLD_WARNING, status);
+        if (U_SUCCESS(status)) {
+            Formattable result;
+            fmt.parse(u"aaaa", result, status);
+            assertEquals(WHERE, U_INVALID_FORMAT_ERROR, status);
+        }
+    }
+
+    // Precision boundary at 2^53: valid rule at 2^53 with next rule 2^53+1 stays parseable
+    // (C++ top-level parse uses kMaxDouble = 2^44, so verify formatting/status and parse < 2^44).
+    status = U_ZERO_ERROR;
+    RuleBasedNumberFormat validBigFmt(
+        u"%a:\n0: zero;\n17592186044414: =%b=;\n9007199254740993: x;\n%b:\n0: z;\n17592186044414: big;",
+        Locale::getUS(), perror, status);
+    if (assertSuccess(WHERE, status)) {
+        assertTrue(WHERE, status != U_STATE_OLD_WARNING);
+        Formattable result;
+        validBigFmt.parse(u"big", result, status);
+        assertSuccess(WHERE, status);
+        assertEquals(WHERE, int64_t{17592186044414LL}, result.getInt64(status));
+        assertSuccess(WHERE, status);
+    }
+
+    // Cycles above 2^53 (double rounding) and below 2^53 via expectedExponent() overestimate
+    // (divisor > baseValue, both `<` and `>>>` bypasses) and alternate-decimal fraction rules.
+    const char16_t* const bigCycleRules[] = {
+        u"%a:\n0: z;\n9007199254740993: =%b=a;\n9007199254740995: x;\n%b:\n0: z;\n9007199254740995: =%a=a;\n9007199254740997: x;",
+        u"%a:\n0: z;\n9273284218074431/191: <<a;",
+        u"%a:\n-x: >%a>;\n0: z;\n4503599627370494: a=%b=;\n4503599627370495: a=%b=;\n%b:\n0: z;\n4503599627370469/2: a<%a<;\n4503599627370470/2: a<%a<;\n4503599627370490: x;",
+        u"%a:\n-x: >%a>;\n0: z;\n4503599627370468: a=%b=;\n4503599627370469/2: a>>>;\n4503599627370490: a>>;\n%b:\n0: z;\n4503599627370495: a=%a=;",
+        u"%main:\n0: zero;\nx.x: one;\nx,x: >%%altfrac>;\n%%altfrac:\n0: a=%%altfrac=;",
+    };
+    for (const char16_t* ruleText : bigCycleRules) {
+        status = U_ZERO_ERROR;
+        RuleBasedNumberFormat fmt(ruleText, Locale::getUS(), perror, status);
+        assertEquals(WHERE, U_STATE_OLD_WARNING, status);
+        if (U_SUCCESS(status)) {
+            Formattable result;
+            fmt.parse(u"aaaa", result, status);
+            assertEquals(WHERE, U_INVALID_FORMAT_ERROR, status);
+        }
+    }
+
+    // Rule following INT64_MAX must fail with U_PARSE_ERROR rather than overflowing defaultBaseValue.
+    status = U_ZERO_ERROR;
+    RuleBasedNumberFormat overflowOrderFmt(
+        u"%a:\n9223372036854775807: x;\n1: a=%b=;\n%b:\n0: z;",
+        Locale::getUS(), perror, status);
+    assertEquals(WHERE, U_PARSE_ERROR, status);
+
+    // Cycle isolated in an unreferenced @noparse ruleset must not break valid public rulesets.
+    status = U_ZERO_ERROR;
+    RuleBasedNumberFormat noparseCycleFmt(
+        u"%good:\n0: zero;\n1: one;\n%bad@noparse:\n0: a=%bad=;",
+        Locale::getUS(), perror, status);
+    if (assertSuccess(WHERE, status)) {
+        assertTrue(WHERE, status != U_STATE_OLD_WARNING);
+        Formattable result;
+        noparseCycleFmt.parse(u"one", result, status);
+        assertSuccess(WHERE, status);
+        assertEquals(WHERE, 1, result.getLong());
     }
 }
 
