@@ -1522,6 +1522,7 @@ UResourceBundle* ures_copyResb(UResourceBundle* r U_LIFETIME_BOUND,
             ures_closeBundle(r, false);
         }
         uprv_memcpy(r, original, sizeof(UResourceBundle));
+        r->fVersion = nullptr;
         r->fResPath = nullptr;
         r->fResPathLen = 0;
         if(original->fResPath) {
