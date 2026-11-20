@@ -72,6 +72,7 @@ public:
     void TestInPlaceTitle();
     void TestCaseMapEditsIteratorDocs();
     void TestCaseMapGreekExtended();
+    void TestCmpFoldStackBufferUnderflow();
 
 private:
     void assertGreekUpper(const char16_t *s, const char16_t *expected);
@@ -122,6 +123,7 @@ StringCaseTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
 #endif
     TESTCASE_AUTO(TestCaseMapEditsIteratorDocs);
     TESTCASE_AUTO(TestCaseMapGreekExtended);
+    TESTCASE_AUTO(TestCmpFoldStackBufferUnderflow);
     TESTCASE_AUTO_END;
 }
 
@@ -1844,6 +1846,92 @@ void StringCaseTest::TestCaseMapGreekExtended() {
     result.toTitle(nullptr, Locale::getRoot());
     assertEquals(u"title", u"\u1F88\u1F80\u1FF3", result);
 #endif
+}
+
+
+void StringCaseTest::TestCmpFoldStackBufferUnderflow() {
+    static constexpr char16_t s1_chars[] = {
+        0xd801,          // Standalone / Intervening Lead Surrogate
+        0xd801, 0xdc01,  // U+10401 (Lead + Trail) -> Generates 'fold' entry at absolute zero-index boundary
+        0xd801, 0xdc01,
+        0xdc02,          // Trail Surrogate boundary anchor
+        0
+    };
+
+    static constexpr char16_t s2_chars[] = {
+        0xd801, 0xdc01,
+        0xd801, 0xdc01,
+        0xd801, 0xdc02,
+        0
+    };
+
+    UnicodeString s1 = UnicodeString::readOnlyAlias(s1_chars);
+    UnicodeString s2 = UnicodeString::readOnlyAlias(s2_chars);
+
+    // s1 folds to {0xd801, 0xd801, 0xdc29, ...}, s2 folds to {0xd801, 0xdc29, ...};
+    // at index 1, 0xd801 < 0xdc29, so s1 < s2 (-1).
+    assertEquals("s1.caseCompare(s2, U_FOLD_CASE_DEFAULT)",
+                 -1, s1.caseCompare(s2, U_FOLD_CASE_DEFAULT));
+    assertEquals("s2.caseCompare(s1, U_FOLD_CASE_DEFAULT)",
+                 1, s2.caseCompare(s1, U_FOLD_CASE_DEFAULT));
+
+    // Regression and mutation-coverage cases for trail-surrogate rewind in _cmpFold
+    // (both Block 1 isTrail(c1) and Block 2 isTrail(c2), at level 0 and level 1).
+    struct TestCase {
+        const char16_t *lhs;
+        const char16_t *rhs;
+        int32_t expectedDefault;
+        int32_t expectedCodePoint;
+    };
+    static constexpr TestCase testCases[] = {
+        // Block 2 isTrail(c2) with level1 == 1 (fold1 active at index 0):
+        {u"\\ud801\\U00010401", u"\\U00010401",   -1, -1},
+        {u"\\ud801\\U00010421", u"\\U00010401",   -1, -1},
+        {u"\\ud801\\uff21",     u"\\U00010401",    1, -1},
+        {u"\\ud837A",           u"\\U0001df95",    1,  1},
+        {u"\\ud837\\u00df",     u"\\U0001df95",    1,  1},
+        // Block 1 isTrail(c1) with level2 == 0:
+        {u"\\U00010401",        u"\\U00010429",    0,  0},
+        {u"\\U00010c80",        u"\\U00010cc0",    0,  0},
+        {u"\\U0001df95",        u"\\ud837ss",     -1, -1},
+        // Block 2 isTrail(c2) with level1 == 0:
+        {u"\\U00010429",        u"\\U00010401",    0,  0},
+        {u"\\U00010cc0",        u"\\U00010c80",    0,  0},
+        {u"\\ud837ss",          u"\\U0001df95",    1,  1},
+        // Block 1 isTrail(c1) followed by Block 2 isTrail(c2):
+        {u"\\U00010400",        u"\\U00010401",   -1, -1},
+        {u"ab\\U00010400",      u"ab\\U00010401", -1, -1},
+    };
+
+    auto signOf = [](int32_t v) -> int32_t {
+        return v < 0 ? -1 : (v > 0 ? 1 : 0);
+    };
+
+    for (const auto &[lhs, rhs, expectedDefault, expectedCodePoint] : testCases) {
+        UnicodeString a = UnicodeString(lhs).unescape();
+        UnicodeString b = UnicodeString(rhs).unescape();
+        UnicodeString label = UnicodeString(lhs) + u" vs " + UnicodeString(rhs);
+
+        assertEquals(label + u" (default a vs b)",
+                     expectedDefault, a.caseCompare(b, U_FOLD_CASE_DEFAULT));
+        assertEquals(label + u" (default b vs a)",
+                     -expectedDefault, b.caseCompare(a, U_FOLD_CASE_DEFAULT));
+
+        assertEquals(label + u" (code point order a vs b)",
+                     expectedCodePoint, a.caseCompare(b, U_COMPARE_CODE_POINT_ORDER));
+        assertEquals(label + u" (code point order b vs a)",
+                     -expectedCodePoint, b.caseCompare(a, U_COMPARE_CODE_POINT_ORDER));
+
+        IcuTestErrorCode errorCode(*this, "TestCmpFoldStackBufferUnderflow");
+        int32_t cResLen = u_strCaseCompare(
+            a.getBuffer(), a.length(), b.getBuffer(), b.length(), U_FOLD_CASE_DEFAULT, errorCode);
+        assertEquals(label + u" (u_strCaseCompare explicit len)",
+                     expectedDefault, signOf(cResLen));
+        int32_t cResNul = u_strCaseCompare(
+            a.getTerminatedBuffer(), -1, b.getTerminatedBuffer(), -1, U_FOLD_CASE_DEFAULT, errorCode);
+        assertEquals(label + u" (u_strCaseCompare NUL-terminated)",
+                     expectedDefault, signOf(cResNul));
+    }
 }
 
 //#endif
