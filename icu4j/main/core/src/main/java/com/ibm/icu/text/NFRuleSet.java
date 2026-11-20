@@ -70,10 +70,10 @@ final class NFRuleSet {
     private boolean isFractionRuleSet = false;
 
     /** True if the rule set is parseable. */
-    private final boolean isParseable;
+    boolean isParseable;
 
     /** Limit of recursion. It's about a 64 bit number formatted in base 2. */
-    private static final int RECURSION_LIMIT = 64;
+    static final int RECURSION_LIMIT = 64;
 
     // -----------------------------------------------------------------------
     // construction
@@ -746,6 +746,9 @@ final class NFRuleSet {
         if (recursionCount >= RECURSION_LIMIT) {
             throw new IllegalStateException(
                     "Recursion limit exceeded when applying ruleSet " + name);
+        }
+        if (!isParseable) {
+            return result;
         }
 
         // dump out if there's no text to parse

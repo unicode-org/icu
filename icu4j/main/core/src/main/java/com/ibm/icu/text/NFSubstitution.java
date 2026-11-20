@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.text;
 
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
 import com.ibm.icu.math.BigDecimal;
 import java.text.ParsePosition;
@@ -140,6 +141,7 @@ abstract class NFSubstitution {
     NFSubstitution(int pos, NFRuleSet ruleSet, String description) {
         // initialize the substitution's position in its parent rule
         this.pos = pos;
+        String originalDescription = description;
         int descriptionLen = description.length();
 
         // the description should begin and end with the same character.
@@ -173,7 +175,7 @@ abstract class NFSubstitution {
             this.ruleSet = null;
             this.numberFormat = ruleSet.owner.getDecimalFormat().clone();
             this.numberFormat.applyPattern(description);
-        } else if (description.charAt(0) == '>') {
+        } else if (originalDescription.equals(">>>")) {
             // if the description is ">>>", this substitution bypasses the
             // usual rule-search process and always uses the rule that precedes
             // it in its own rule set's rule list (this is used for place-value
@@ -553,6 +555,9 @@ class SameValueSubstitution extends NFSubstitution {
         super(pos, ruleSet, description);
         if (description.equals("==")) {
             throw new IllegalArgumentException("== is not a legal token");
+        }
+        if (Utility.sameObjects(this.ruleSet, ruleSet) && ruleSet != null) {
+            ruleSet.isParseable = false;
         }
     }
 
