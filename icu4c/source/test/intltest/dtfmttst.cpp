@@ -94,6 +94,7 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
     TESTCASE_AUTO(TestTimeZoneDisplayName);
     TESTCASE_AUTO(TestTimeZoneInLocale);
     TESTCASE_AUTO(TestRoundtripWithCalendar);
+    TESTCASE_AUTO(TestParseWithDifferentCalendar);
     TESTCASE_AUTO(Test6338);
     TESTCASE_AUTO(Test6726);
     TESTCASE_AUTO(TestGMTParsing);
@@ -3666,6 +3667,63 @@ void DateFormatTest::TestRoundtripWithCalendar() {
     }
     for (int i = 0; formatters[i] != nullptr; i++) {
         delete formatters[i];
+    }
+}
+
+void DateFormatTest::TestParseWithDifferentCalendar() {
+    static const struct {
+        const char16_t* pattern;
+        const char16_t* text;
+        UDate expected;
+        const char16_t* zone;
+    } cases[] = {
+        // The same wall time occurs twice when daylight saving time ends.
+        {u"yyyy-MM-dd HH:mm:ss zzzz", u"2026-10-25 02:44:39 Central European Summer Time",
+         1792889079000.0, u"Europe/Paris"},
+        {u"yyyy-MM-dd HH:mm:ss zzzz", u"2026-10-25 02:44:39 Central European Standard Time",
+         1792892679000.0, u"Europe/Paris"},
+        {u"yyyy-MM-dd hh:mm B", u"2015-11-13 01:00 in the afternoon",
+         1447419600000.0, u"GMT"},
+        {u"yyyy-MM-dd hh:mm B", u"2015-11-13 01:00 in the morning",
+         1447376400000.0, u"GMT"},
+        // With the century starting in July 1940, January '40 is in 2040.
+        {u"yy-MM-dd", u"40-01-01", 2208988800000.0, u"GMT"},
+        {u"yy-MM-dd", u"40-08-01", -928368000000.0, u"GMT"},
+        {u"yy-MM-dd", u"39-01-01", 2177452800000.0, u"GMT"},
+    };
+    static const char* const locales[] = {
+        "und@calendar=gregorian", "und@calendar=buddhist",
+        "und@calendar=islamic", "und@calendar=japanese"
+    };
+
+    UErrorCode status = U_ZERO_ERROR;
+    SimpleDateFormat format(UnicodeString(), Locale::getUS(), status);
+    if (failure(status, "SimpleDateFormat constructor", true)) { return; }
+    format.setTimeZone(*TimeZone::getGMT());
+    format.set2DigitYearStart(-931046400000.0, status);  // 1940-07-01 00:00 UTC
+    if (failure(status, "set2DigitYearStart")) { return; }
+
+    for (const char* locale : locales) {
+        LocalPointer<Calendar> calendar(Calendar::createInstance(*TimeZone::getGMT(), Locale(locale), status));
+        if (failure(status, "Calendar::createInstance", true)) { return; }
+        for (const auto& testCase : cases) {
+            status = U_ZERO_ERROR;
+            calendar->setTimeZone(*TimeZone::getGMT());
+            calendar->setTime(0, status);
+            format.applyPattern(testCase.pattern);
+            UnicodeString text(testCase.text);
+            ParsePosition position;
+            format.parse(text, *calendar, position);
+
+            UnicodeString message = UnicodeString(calendar->getType()) + u" | " + text;
+            assertEquals(message + u": error index", -1, position.getErrorIndex());
+            assertEquals(message + u": parse index", text.length(), position.getIndex());
+            assertEquals(message + u": time", testCase.expected, calendar->getTime(status));
+            assertSuccess(message, status);
+            UnicodeString zone;
+            calendar->getTimeZone().getID(zone);
+            assertEquals(message + u": time zone", testCase.zone, zone);
+        }
     }
 }
 

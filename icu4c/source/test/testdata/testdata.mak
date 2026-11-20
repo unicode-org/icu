@@ -32,10 +32,17 @@ CREATE_DIRS :
 	@if not exist "$(TESTDATABLD)\$(NULL)" mkdir "$(TESTDATABLD)"
 	@if not exist "$(TESTDATATMP)\$(NULL)" mkdir "$(TESTDATATMP)"
 
+PYTHON=python
+!IF [$(PYTHON) -c "import sys; sys.exit(0 if sys.version_info.major >= 3 else 1)"] != 0
+!ERROR Python 3.0 or higher is required to build this project!
+!ELSE
+!MESSAGE Found a valid Python 3+ installation.
+!ENDIF
+
 "$(TESTDATAOUT)\testdata.dat" :
 	@echo Building test data
 	set PYTHONPATH=$(ICUP)\source\python;%PYTHONPATH%
-	py -3 -B -m icutools.databuilder \
+	$(PYTHON) -B -m icutools.databuilder \
 		--mode windows-exec \
 		--tool_dir "$(ICUTOOLS)" \
 		--tool_cfg "$(CFG)" \

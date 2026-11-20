@@ -33,8 +33,11 @@ ICU_LIB_TARGET=$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll
 !ENDIF
 !MESSAGE ICU data make path is $(ICUMAKE)
 
-!IF [py -3 -c "exit(0)"]!=0
-!MESSAGE Information: Unable to find Python 3. Data will fail to build from source.
+PYTHON=python
+!IF [$(PYTHON) -c "import sys; sys.exit(0 if sys.version_info.major >= 3 else 1)"] != 0
+!ERROR Python 3.0 or higher is required to build this project!
+!ELSE
+!MESSAGE Found a valid Python 3+ installation.
 !ENDIF
 
 # Suffixes for data files
@@ -305,7 +308,7 @@ $(TOOLS_TS): "$(ICUTOOLS)\genrb\$(CFGTOOLS)\genrb.exe" "$(ICUTOOLS)\gencnval\$(C
 $(COREDATA_TS):
 	@cd "$(ICUSRCDATA)"
 	set PYTHONPATH=$(ICUP)\source\python;%PYTHONPATH%
-	py -3 -B -m icutools.databuilder \
+	$(PYTHON) -B -m icutools.databuilder \
 		--mode windows-exec \
 		--src_dir "$(ICUSRCDATA)" \
 		--tool_dir "$(ICUTOOLS)" \
