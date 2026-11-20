@@ -487,6 +487,8 @@ public class UnitsTest {
             new TestCase("cubic-meter-per-meter", "consumption"),
             new TestCase("meter-per-cubic-meter", "consumption"),
             new TestCase("kilogram-meter-per-square-meter-square-second", "pressure"),
+            new TestCase("meter-second-per-meter", "duration"),
+            new TestCase("kilogram-meter-per-meter-cubic-meter", "mass-density"),
         };
 
         UnitsData data = new UnitsData();
