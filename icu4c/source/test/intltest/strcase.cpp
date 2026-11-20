@@ -1875,49 +1875,48 @@ void StringCaseTest::TestCmpFoldStackBufferUnderflow() {
     assertEquals("s2.caseCompare(s1, U_FOLD_CASE_DEFAULT)",
                  1, s2.caseCompare(s1, U_FOLD_CASE_DEFAULT));
 
-    // Regression and mutation-coverage pairs for trail-surrogate rewind in _cmpFold
+    // Regression and mutation-coverage cases for trail-surrogate rewind in _cmpFold
     // (both Block 1 isTrail(c1) and Block 2 isTrail(c2), at level 0 and level 1).
-    static const char16_t *const pairs[][2] = {
+    struct TestCase {
+        const char16_t *lhs;
+        const char16_t *rhs;
+        int32_t expectedDefault;
+        int32_t expectedCodePoint;
+    };
+    static constexpr TestCase testCases[] = {
         // Block 2 isTrail(c2) with level1 == 1 (fold1 active at index 0):
-        {u"\\ud801\\U00010401", u"\\U00010401"},
-        {u"\\ud801\\U00010421", u"\\U00010401"},
-        {u"\\ud801\\uff21",     u"\\U00010401"},
-        {u"\\ud837A",           u"\\U0001df95"},
-        {u"\\ud837\\u00df",     u"\\U0001df95"},
+        {u"\\ud801\\U00010401", u"\\U00010401",   -1, -1},
+        {u"\\ud801\\U00010421", u"\\U00010401",   -1, -1},
+        {u"\\ud801\\uff21",     u"\\U00010401",    1, -1},
+        {u"\\ud837A",           u"\\U0001df95",    1,  1},
+        {u"\\ud837\\u00df",     u"\\U0001df95",    1,  1},
         // Block 1 isTrail(c1) with level2 == 0:
-        {u"\\U00010401",        u"\\U00010429"},
-        {u"\\U00010c80",        u"\\U00010cc0"},
-        {u"\\U0001df95",        u"\\ud837ss"},
+        {u"\\U00010401",        u"\\U00010429",    0,  0},
+        {u"\\U00010c80",        u"\\U00010cc0",    0,  0},
+        {u"\\U0001df95",        u"\\ud837ss",     -1, -1},
         // Block 2 isTrail(c2) with level1 == 0:
-        {u"\\U00010429",        u"\\U00010401"},
-        {u"\\U00010cc0",        u"\\U00010c80"},
-        {u"\\ud837ss",          u"\\U0001df95"},
+        {u"\\U00010429",        u"\\U00010401",    0,  0},
+        {u"\\U00010cc0",        u"\\U00010c80",    0,  0},
+        {u"\\ud837ss",          u"\\U0001df95",    1,  1},
         // Block 1 isTrail(c1) followed by Block 2 isTrail(c2):
-        {u"\\U00010400",        u"\\U00010401"},
-        {u"ab\\U00010400",      u"ab\\U00010401"},
+        {u"\\U00010400",        u"\\U00010401",   -1, -1},
+        {u"ab\\U00010400",      u"ab\\U00010401", -1, -1},
     };
 
     auto signOf = [](int32_t v) -> int32_t {
         return v < 0 ? -1 : (v > 0 ? 1 : 0);
     };
 
-    for (const auto &pair : pairs) {
-        UnicodeString a = UnicodeString(pair[0]).unescape();
-        UnicodeString b = UnicodeString(pair[1]).unescape();
-        UnicodeString foldedA(a);
-        foldedA.foldCase(U_FOLD_CASE_DEFAULT);
-        UnicodeString foldedB(b);
-        foldedB.foldCase(U_FOLD_CASE_DEFAULT);
+    for (const auto &[lhs, rhs, expectedDefault, expectedCodePoint] : testCases) {
+        UnicodeString a = UnicodeString(lhs).unescape();
+        UnicodeString b = UnicodeString(rhs).unescape();
+        UnicodeString label = UnicodeString(lhs) + u" vs " + UnicodeString(rhs);
 
-        UnicodeString label = UnicodeString(pair[0]) + u" vs " + UnicodeString(pair[1]);
-
-        int32_t expectedDefault = foldedA.compare(foldedB);
         assertEquals(label + u" (default a vs b)",
                      expectedDefault, a.caseCompare(b, U_FOLD_CASE_DEFAULT));
         assertEquals(label + u" (default b vs a)",
                      -expectedDefault, b.caseCompare(a, U_FOLD_CASE_DEFAULT));
 
-        int32_t expectedCodePoint = foldedA.compareCodePointOrder(foldedB);
         assertEquals(label + u" (code point order a vs b)",
                      expectedCodePoint, a.caseCompare(b, U_COMPARE_CODE_POINT_ORDER));
         assertEquals(label + u" (code point order b vs a)",
