@@ -73,7 +73,7 @@ final class NFRuleSet {
     private final boolean isParseable;
 
     /** Limit of recursion. It's about a 64 bit number formatted in base 2. */
-    private static final int RECURSION_LIMIT = 64;
+    static final int RECURSION_LIMIT = 64;
 
     // -----------------------------------------------------------------------
     // construction
