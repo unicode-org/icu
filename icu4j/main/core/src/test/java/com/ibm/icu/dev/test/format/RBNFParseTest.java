@@ -45,11 +45,13 @@ public class RBNFParseTest extends CoreTestFmwk {
         assertEquals(
                 "parse infinite <<",
                 Double.POSITIVE_INFINITY,
-                formatter.parse("infinite <<").doubleValue());
+                formatter.parse("infinite <<").doubleValue(),
+                0.0);
         assertEquals(
                 "parse minus infinite <<",
                 Double.NEGATIVE_INFINITY,
-                formatter.parse("minus infinite <<").doubleValue());
+                formatter.parse("minus infinite <<").doubleValue(),
+                0.0);
         assertTrue(
                 "parse not a number >>",
                 Double.isNaN(formatter.parse("not a number >>").doubleValue()));
