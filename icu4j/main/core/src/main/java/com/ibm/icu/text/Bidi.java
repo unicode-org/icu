@@ -973,6 +973,10 @@ public class Bidi {
     static final byte PDI = UCharacterDirection.POP_DIRECTIONAL_ISOLATE; /* 22 */
     static final byte ENL = PDI + 1; /* EN after W7 */ /* 23 */
     static final byte ENR = ENL + 1; /* EN not subject to W7 */ /* 24 */
+    static final byte PDIL = ENR + 1; /* matched PDI overridden to L */ /* 25 */
+    static final byte PDIR = PDIL + 1; /* matched PDI overridden to R */ /* 26 */
+    static final byte WSL = PDIR + 1; /* unmatched/overflow PDI overridden to L */ /* 27 */
+    static final byte WSR = WSL + 1; /* unmatched/overflow PDI overridden to R */ /* 28 */
 
     /**
      * Value returned by <code>BidiClassifier</code> when there is no need to override the standard
@@ -1192,14 +1196,20 @@ public class Bidi {
     static final int MASK_BN_EXPLICIT = DirPropFlag(BN) | MASK_EXPLICIT;
 
     /* explicit isolate codes */
-    static final int MASK_ISO =
-            DirPropFlag(LRI) | DirPropFlag(RLI) | DirPropFlag(FSI) | DirPropFlag(PDI);
+    static final int MASK_PDI = DirPropFlag(PDI) | DirPropFlag(PDIL) | DirPropFlag(PDIR);
+    static final int MASK_ISO = DirPropFlag(LRI) | DirPropFlag(RLI) | DirPropFlag(FSI) | MASK_PDI;
 
     /* paragraph and segment separators */
     static final int MASK_B_S = DirPropFlag(B) | DirPropFlag(S);
 
     /* all types that are counted as White Space or Neutral in some steps */
-    static final int MASK_WS = MASK_B_S | DirPropFlag(WS) | MASK_BN_EXPLICIT | MASK_ISO;
+    static final int MASK_WS =
+            MASK_B_S
+                    | DirPropFlag(WS)
+                    | DirPropFlag(WSL)
+                    | DirPropFlag(WSR)
+                    | MASK_BN_EXPLICIT
+                    | MASK_ISO;
 
     /* types that are neutrals or could becomes neutrals in (Wn) */
     static final int MASK_POSSIBLE_N =
@@ -2163,6 +2173,10 @@ public class Bidi {
         byte dirProp, newProp;
         byte level;
         dirProp = dirProps[position];
+        /* Preserve the stored PDI/WS identity for X10 and L1. */
+        if (dirProp == PDIL || dirProp == WSL) dirProp = L;
+        else if (dirProp == PDIR || dirProp == WSR) dirProp = R;
+
         if (dirProp == ON) {
             char c, match;
             int idx;
@@ -2534,6 +2548,13 @@ public class Bidi {
                     flags |= DirPropFlag(ON) | DirPropFlagLR(embeddingLevel);
                     previousLevel = embeddingLevel;
                     levels[i] = NoOverride(embeddingLevel);
+                    if ((embeddingLevel & LEVEL_OVERRIDE) != 0) {
+                        /* X6a: apply the override, retaining the PDI's X10/L1 identity. */
+                        dirProps[i] =
+                                (byte) ((dirProps[i] == PDI ? PDIL : WSL) + (embeddingLevel & 1));
+                        flags |= DirPropFlag(dirProps[i]);
+                        bracketProcessChar(bracketData, i);
+                    }
                     break;
                 case B:
                     flags |= DirPropFlag(B);
@@ -3120,7 +3141,7 @@ public class Bidi {
         int isolateCount = 0, k;
         for (k = start; k < limit; k++) {
             dirProp = dirProps[k];
-            if (dirProp == PDI) isolateCount--;
+            if ((DirPropFlag(dirProp) & MASK_PDI) != 0) isolateCount--;
             if (isolateCount == 0) levels[k] = level;
             if (dirProp == LRI || dirProp == RLI) isolateCount++;
         }
@@ -3424,7 +3445,7 @@ public class Bidi {
         /* The isolates[] entries contain enough information to
         resume the bidi algorithm in the same state as it was
         when it was interrupted by an isolate sequence. */
-        if (dirProps[start] == PDI) {
+        if ((DirPropFlag(dirProps[start]) & MASK_PDI) != 0) {
             levState.startON = isolates[isolateCount].startON;
             start1 = isolates[isolateCount].start1;
             stateImp = isolates[isolateCount].stateImp;
@@ -3479,6 +3500,8 @@ public class Bidi {
                         }
                     }
                 }
+                if (prop == PDIL || prop == WSL) prop = L;
+                else if (prop == PDIR || prop == WSR) prop = R;
                 gprop = groupProp[prop];
             }
             oldStateImp = stateImp;
