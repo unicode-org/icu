@@ -189,7 +189,7 @@ _UTF7Reset(UConverter *cnv, UConverterResetChoice choice) {
     }
     if(choice!=UCNV_RESET_TO_UNICODE) {
         /* reset fromUnicode */
-        cnv->fromUnicodeStatus=(cnv->fromUnicodeStatus&0xf0000000)|0x1000000; /* keep version, inDirectMode=true */
+        cnv->fromUnicodeStatus=((uint32_t)UCNV_GET_VERSION(cnv)<<28)|0x1000000; /* version from the options, inDirectMode=true */
     }
 }
 
