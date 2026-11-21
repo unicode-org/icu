@@ -791,6 +791,35 @@ static void TestCount(void) {
 #endif
 }
 
+static void TestScanfPointerLimit(void) {
+#if !UCONFIG_NO_FORMATTING
+    /* Only the first 4 code units belong to the UFILE; the rest must not be read. */
+    static const UChar zeros[] = { 0x30, 0x30, 0x30, 0x30, 0x30, 0x37, 0 };
+    UChar testStr[UPRV_LENGTHOF(zeros)];
+    void *ptr = NULL;
+    int32_t count = -1;
+    UFILE *strFile;
+
+    u_memcpy(testStr, zeros, UPRV_LENGTHOF(zeros));
+    strFile = u_fstropen(testStr, 4, NULL);
+    if (strFile == NULL) {
+        log_err("u_fstropen failed to work\n");
+        return;
+    }
+    u_fscanf(strFile, "%p%n", &ptr, &count);
+    u_fclose(strFile);
+    if (count != 4) {
+        log_err("%%p read past the end of the UFILE: consumed %d instead of 4\n", count);
+    }
+
+    count = -1;
+    u_sscanf(zeros, "%2p%n", &ptr, &count);
+    if (count != 2) {
+        log_err("%%2p consumed %d characters instead of 2\n", count);
+    }
+#endif
+}
+
 U_CFUNC void
 addStringTest(TestNode** root) {
 #if !UCONFIG_NO_FORMATTING
@@ -803,6 +832,7 @@ addStringTest(TestNode** root) {
     addTest(root, &TestBadScanfFormat, "string/TestBadScanfFormat");
     addTest(root, &TestVargs, "string/TestVargs");
     addTest(root, &TestCount, "string/TestCount");
+    addTest(root, &TestScanfPointerLimit, "string/TestScanfPointerLimit");
 #endif
 }
 
