@@ -36,6 +36,7 @@
 #include "uresimp.h"
 
 static void TestOpenDirect(void);
+static void TestOpenDirectParentFallback(void);
 static void TestFallback(void);
 static void TestTable32(void);
 static void TestFileStream(void);
@@ -115,6 +116,7 @@ void addResourceBundleTest(TestNode** root)
 #if !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
     addTest(root, &TestConstruction1, "tsutil/crestst/TestConstruction1");
     addTest(root, &TestOpenDirect, "tsutil/crestst/TestOpenDirect");
+    addTest(root, &TestOpenDirectParentFallback, "tsutil/crestst/TestOpenDirectParentFallback");
     addTest(root, &TestResourceBundles, "tsutil/crestst/TestResourceBundles");
     addTest(root, &TestTable32, "tsutil/crestst/TestTable32");
     addTest(root, &TestFileStream, "tsutil/crestst/TestFileStream");
@@ -650,6 +652,42 @@ TestOpenDirect(void) {
     errorCode = U_ZERO_ERROR;
     defaultLocale = ures_openDirect(NULL, NULL, &errorCode);
     ures_close(defaultLocale);
+}
+
+static void
+TestOpenDirectParentFallback(void) {
+    static const char *locales[] = { "nb", "nn" };
+    for (int32_t i = 0; i < UPRV_LENGTHOF(locales); ++i) {
+        // ICU-23536: Opening the bundle directly must not cache the wrong parent.
+        if (!ctest_resetICU()) {
+            return;
+        }
+        UErrorCode status = U_ZERO_ERROR;
+        UResourceBundle *bundle = ures_openDirect(NULL, locales[i], &status);
+        if (U_FAILURE(status)) {
+            log_data_err("ures_openDirect(\"%s\") failed: %s\n", locales[i], u_errorName(status));
+            ures_close(bundle);
+            return;
+        }
+
+        // Direct access must still exclude items inherited from the explicit parent, no.
+        ures_getStringByKey(bundle, "ExemplarCharactersNumbers", NULL, &status);
+        if (status != U_MISSING_RESOURCE_ERROR) {
+            log_err("ures_openDirect(\"%s\") inherited a parent item: %s\n",
+                    locales[i], u_errorName(status));
+        }
+        ures_close(bundle);
+
+        status = U_ZERO_ERROR;
+        bundle = ures_open(NULL, locales[i], &status);
+        UResourceBundle *item = ures_getByKey(bundle, "ExemplarCharactersNumbers", NULL, &status);
+        if (assertSuccess("ures_getByKey(ExemplarCharactersNumbers) after ures_openDirect", &status)) {
+            assertEquals("explicit parent after ures_openDirect", "no",
+                         ures_getLocaleByType(item, ULOC_ACTUAL_LOCALE, &status));
+        }
+        ures_close(item);
+        ures_close(bundle);
+    }
 }
 
 static int32_t
