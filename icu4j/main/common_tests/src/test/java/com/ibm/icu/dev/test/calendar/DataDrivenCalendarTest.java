@@ -144,9 +144,13 @@ public class DataDrivenCalendarTest extends CoreTestFmwk {
         //        DateFormat fmt = new SimpleDateFormat("EEE MMM dd yyyy / YYYY'-W'ww-ee");
         // Start the processing
         int n = 0;
+        boolean quick = getExhaustiveness() <= 5;
         for (Iterator<DataMap> iter = testData.getDataIterator(); iter.hasNext(); ) {
             ++n;
             DataMap currentCase = iter.next();
+            if (quick && testData.getName().equals("TestChineseCalendar") && (n % 33) != 1) {
+                continue;
+            }
 
             String caseString = "[" + testData.getName() + "#" + n + " " + "]";
             String locale = testSetting = currentCase.getString("locale");
