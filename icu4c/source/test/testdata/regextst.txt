@@ -1502,6 +1502,16 @@
 "(?<=(?:(?<=(?:(?<=(?:(?<=)){2})){3})){4}"   E  "<0></0>"  # orig failure from bug report, w mismatched parens.
 "(?:(?<=(?:(?<=)){2}))"            "<0></0>"               # Simplified case, with a valid pattern.
 
+# Bug ICU-23630 \b and \B at the end of UText (e.g. UTF-8) input, after a failed look-behind,
+#   tested the character before a stale input position instead of the one before the end.
+#
+"a(?:(?<=\W)|\b)"                 "-<0>a</0>"
+"a(?:(?<=\W)|\b)"                 " <0>a</0>"
+"a(?:(?<=x)|\b)"                  "--<0>a</0>"
+"a(?:(?<=x)|\B)"                  "-a"
+"a(?:(?<=\W)|\b)"                 "<r>-<0>a</0></r>b"     # end of region, opaque bounds.
+"a(?:(?<=\W)|\b)"                 "-<0>a</0>-"            # not at the end: already correct.
+
 #  Random debugging, Temporary
 #
 
