@@ -385,6 +385,12 @@ utext_previous32From(UText *ut, int64_t index) {
     //
     UChar32     cPrev;    // The character preceding cCurr, which is what we will return.
 
+    // The index may point into the middle of a multi-unit character (a UTF-8 trail byte).
+    // Move it to the start of that character first: the chunk tests and the index mapping
+    // below only hold for code point boundaries.
+    utext_setNativeIndex(ut, index);
+    index = utext_getNativeIndex(ut);
+
     // Address the chunk containing the position preceding the incoming index
     // A tricky edge case:
     //   We try to test the requested native index against the chunkNativeStart to determine
@@ -1857,7 +1863,9 @@ repTextAccess(UText *ut, int64_t index, UBool forward) {
     // Use fast indexing for get/setNativeIndex()
     ut->nativeIndexingLimit = ut->chunkLength;
 
-    return true;
+    // At either end of the text there is no character in the requested direction:
+    // report that, as the other providers do, even when a new chunk had to be loaded.
+    return forward ? index32 < length : index32 > 0;
 }
 
 
@@ -2891,6 +2899,10 @@ utext_openCharacterIterator(UText* ut U_LIFETIME_BOUND,
         ut->chunkNativeLimit     = 0;
         ut->chunkLength          = 0;
         ut->nativeIndexingLimit  = ut->chunkOffset;  // enables native indexing
+
+        // Fault in the first chunk right away: the placeholder state above (start -1, offset 1)
+        // looks like a chunk holding one character to the functions that step backwards.
+        charIterTextAccess(ut, 0, true);
     }
     return ut;
 }

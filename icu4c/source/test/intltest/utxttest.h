@@ -40,6 +40,9 @@ public:
     void Ticket12130();
     void Ticket13344();
     void Ticket23508();
+    void ReplaceableEnds();
+    void Previous32FromUTF8TrailByte();
+    void CharacterIteratorFreshPrevious();
     void AccessChangesChunkSize();
 
 private:

@@ -66,6 +66,9 @@ UTextTest::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO(Ticket12130);
     TESTCASE_AUTO(Ticket13344);
     TESTCASE_AUTO(Ticket23508);
+    TESTCASE_AUTO(ReplaceableEnds);
+    TESTCASE_AUTO(Previous32FromUTF8TrailByte);
+    TESTCASE_AUTO(CharacterIteratorFreshPrevious);
     TESTCASE_AUTO(AccessChangesChunkSize);
     TESTCASE_AUTO_END;
 }
@@ -1646,6 +1649,87 @@ void UTextTest::Ticket23508() {
             "UTextTest::Ticket23508-UnicodeString-independent",
             0x41,
             utext_char32At(stringClone.getAlias(), 0));
+}
+
+// At either end of a Replaceable UText, utext_next32From() and utext_previous32From()
+// must return U_SENTINEL even when the current chunk is elsewhere in the text.
+void UTextTest::ReplaceableEnds() {
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString str(u"abcdefghijklmnop");
+    LocalUTextPointer ut(utext_openReplaceable(nullptr, &str, &status));
+    assertSuccess("UTextTest::ReplaceableEnds-open", status);
+
+    // A fresh UText has its chunk at the start of the text.
+    assertEquals("UTextTest::ReplaceableEnds-next32From-end", U_SENTINEL,
+                 utext_next32From(ut.getAlias(), str.length()));
+    assertEquals("UTextTest::ReplaceableEnds-index-end", str.length(),
+                 utext_getNativeIndex(ut.getAlias()));
+
+    // Move the chunk to the end of the text, then go back to the start.
+    utext_setNativeIndex(ut.getAlias(), str.length());
+    utext_previous32(ut.getAlias());
+    assertEquals("UTextTest::ReplaceableEnds-previous32From-start", U_SENTINEL,
+                 utext_previous32From(ut.getAlias(), 0));
+    assertEquals("UTextTest::ReplaceableEnds-index-start", 0,
+                 utext_getNativeIndex(ut.getAlias()));
+}
+
+// utext_previous32From() with an index on a UTF-8 trail byte returns the character
+// before the one containing the index, also when that character starts a chunk.
+void UTextTest::Previous32FromUTF8TrailByte() {
+    UErrorCode status = U_ZERO_ERROR;
+    char text[80];
+    for (int32_t i = 0; i < 40; ++i) {  // 40 x U+00E9
+        text[2 * i] = (char)0xc3;
+        text[2 * i + 1] = (char)0xa9;
+    }
+    LocalUTextPointer ut(utext_openUTF8(nullptr, text, 80, &status));
+    assertSuccess("UTextTest::Previous32FromUTF8TrailByte-open", status);
+
+    // The current chunk starts in the middle of the text.
+    utext_setNativeIndex(ut.getAlias(), 80);
+    utext_previous32(ut.getAlias());
+    utext_previous32(ut.getAlias());
+    int64_t chunkStart = ut->chunkNativeStart;
+    assertTrue("UTextTest::Previous32FromUTF8TrailByte-chunk", chunkStart > 0);
+    assertEquals("UTextTest::Previous32FromUTF8TrailByte-current", 0xe9,
+                 utext_previous32From(ut.getAlias(), chunkStart + 1));
+    assertEquals("UTextTest::Previous32FromUTF8TrailByte-current-index", chunkStart - 2,
+                 utext_getNativeIndex(ut.getAlias()));
+
+    // The character containing the index starts the alternate buffer.
+    utext_setNativeIndex(ut.getAlias(), 40);
+    utext_previous32(ut.getAlias());
+    assertEquals("UTextTest::Previous32FromUTF8TrailByte-alternate", 0xe9,
+                 utext_previous32From(ut.getAlias(), 41));
+    assertEquals("UTextTest::Previous32FromUTF8TrailByte-alternate-index", 38,
+                 utext_getNativeIndex(ut.getAlias()));
+
+    // The character containing the index is the first one in the text.
+    static const char head[] = "\xc3\xa9" "bc";
+    LocalUTextPointer ut2(utext_openUTF8(nullptr, head, 4, &status));
+    assertSuccess("UTextTest::Previous32FromUTF8TrailByte-open-2", status);
+    assertEquals("UTextTest::Previous32FromUTF8TrailByte-start", U_SENTINEL,
+                 utext_previous32From(ut2.getAlias(), 1));
+    assertEquals("UTextTest::Previous32FromUTF8TrailByte-start-index", 0,
+                 utext_getNativeIndex(ut2.getAlias()));
+}
+
+// On a fresh UText for a CharacterIterator, there is no character before the start.
+void UTextTest::CharacterIteratorFreshPrevious() {
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString str(u"abcdefghijklmnopqrstuvwxyz");
+    for (int32_t i = 0; i < 2; ++i) {
+        UCharCharacterIterator ci(str.getBuffer(), str.length());
+        LocalUTextPointer ut(utext_openCharacterIterator(nullptr, &ci, &status));
+        assertSuccess("UTextTest::CharacterIteratorFreshPrevious-open", status);
+        UChar32 c = (i == 0) ? utext_previous32(ut.getAlias()) : utext_previous32From(ut.getAlias(), 0);
+        assertEquals("UTextTest::CharacterIteratorFreshPrevious-previous", U_SENTINEL, c);
+        assertEquals("UTextTest::CharacterIteratorFreshPrevious-index", 0,
+                     utext_getNativeIndex(ut.getAlias()));
+        assertEquals("UTextTest::CharacterIteratorFreshPrevious-next", 0x61,
+                     utext_next32(ut.getAlias()));
+    }
 }
 
 // ICU-21653 UText does not handle access callback that changes chunk size
