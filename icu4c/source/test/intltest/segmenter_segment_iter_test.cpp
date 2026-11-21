@@ -11,7 +11,6 @@
 #include "unicode/segmenter.h"
 #include "unicode/segmenter_localized.h"
 #include "unicode/segmenter_segment_iter.h"
-#include "unicode/segmenter_segment_range.h"
 
 //---------------------------------------------
 //
@@ -76,10 +75,9 @@ void SegmentIterTest::testSegments() {
 
     // Create new Segments for source1
     auto segments1 = enWordSegmenter.segment(source1, errorCode);
-    auto segmentRange = segments1->segments();
 
     std::vector<icu::segmenter::Segment> segmentVec;
-    for (auto segmentIter = segmentRange.begin(); segmentIter != segmentRange.end(); ++segmentIter) {
+    for (auto segmentIter = segments1->begin(); segmentIter != segments1->end(); ++segmentIter) {
         segmentVec.push_back(*segmentIter);
     }
     assertEquals("first segment start", 0, segmentVec[0].getStart());
@@ -152,9 +150,8 @@ void SegmentIterTest::testMultipleSegmentObjectsFromSegmenter() {
 
     // Create new Segments for source1
     auto segments1 = enWordSegmenter.segment(source1, errorCode);
-    auto segmentRange1 = segments1->segments();
     std::vector<std::u16string_view> segmentStrVec1;
-    for (auto segmentIter = segmentRange1.begin(); segmentIter != segmentRange1.end(); ++segmentIter) {
+    for (auto segmentIter = segments1->begin(); segmentIter != segments1->end(); ++segmentIter) {
         // TODO: replace with operator->
         segmentStrVec1.push_back((*segmentIter).getSubstr());
     }   
@@ -162,9 +159,8 @@ void SegmentIterTest::testMultipleSegmentObjectsFromSegmenter() {
 
     // Create new Segments for source2
     auto segments2 = enWordSegmenter.segment(source2, errorCode);
-    auto segmentRange2 = segments2->segments();
     std::vector<std::u16string_view> segmentStrVec2;
-    for (auto segmentIter = segmentRange2.begin(); segmentIter != segmentRange2.end(); ++segmentIter) {
+    for (auto segmentIter = segments2->begin(); segmentIter != segments2->end(); ++segmentIter) {
         // TODO: replace with operator->
         segmentStrVec2.push_back((*segmentIter).getSubstr());
     }   
@@ -172,7 +168,7 @@ void SegmentIterTest::testMultipleSegmentObjectsFromSegmenter() {
 
     // Check that Segments for source1 is unaffected
     segmentStrVec1.clear();
-    for (auto segmentIter = segmentRange1.begin(); segmentIter != segmentRange1.end(); ++segmentIter) {
+    for (auto segmentIter = segments1->begin(); segmentIter != segments1->end(); ++segmentIter) {
         // TODO: replace with operator->
         segmentStrVec1.push_back((*segmentIter).getSubstr());
     }   
@@ -180,9 +176,8 @@ void SegmentIterTest::testMultipleSegmentObjectsFromSegmenter() {
 
     // Create new Segments for source3
     auto segments3 = enWordSegmenter.segment(source3, errorCode);
-    auto segmentRange3 = segments3->segments();
     std::vector<std::u16string_view> segmentStrVec3;
-    for (auto segmentIter = segmentRange3.begin(); segmentIter != segmentRange3.end(); ++segmentIter) {
+    for (auto segmentIter = segments3->begin(); segmentIter != segments3->end(); ++segmentIter) {
         // TODO: replace with operator->
         segmentStrVec3.push_back((*segmentIter).getSubstr());
     }
@@ -190,7 +185,7 @@ void SegmentIterTest::testMultipleSegmentObjectsFromSegmenter() {
 
     // Check that Segments for source1 is unaffected
     segmentStrVec1.clear();
-    for (auto segmentIter = segmentRange1.begin(); segmentIter != segmentRange1.end(); ++segmentIter) {
+    for (auto segmentIter = segments1->begin(); segmentIter != segments1->end(); ++segmentIter) {
         // TODO: replace with operator->
         segmentStrVec1.push_back((*segmentIter).getSubstr());
     }   
@@ -198,7 +193,7 @@ void SegmentIterTest::testMultipleSegmentObjectsFromSegmenter() {
 
     // Check that Segments for source2 is unaffected
     segmentStrVec2.clear();
-    for (auto segmentIter = segmentRange2.begin(); segmentIter != segmentRange2.end(); ++segmentIter) {
+    for (auto segmentIter = segments2->begin(); segmentIter != segments2->end(); ++segmentIter) {
         // TODO: replace with operator->
         segmentStrVec2.push_back((*segmentIter).getSubstr());
     }   
@@ -238,12 +233,10 @@ void SegmentIterTest::testRuleStatus() {
             "segmentAt(21) is a word",
             segments->segmentAt(21, errorCode).getRuleStatus() > UBRK_WORD_NONE_LIMIT);
 
-    auto segmentRange = segments->segments();
-
     // words
 
     std::vector<std::u16string_view> words;
-    for (auto segmentIter = segmentRange.begin(); segmentIter != segmentRange.end(); ++segmentIter) {
+    for (auto segmentIter = segments->begin(); segmentIter != segments->end(); ++segmentIter) {
         // filter (keep) words where ruleStatus > UBRK_WORD_NONE_LIMIT
         // TODO: replace with operator->
         if ((*segmentIter).getRuleStatus() > UBRK_WORD_NONE_LIMIT) {
@@ -257,7 +250,7 @@ void SegmentIterTest::testRuleStatus() {
     // non words
 
     std::vector<std::u16string_view> nonWords;
-    for (auto segmentIter = segmentRange.begin(); segmentIter != segmentRange.end(); ++segmentIter) {
+    for (auto segmentIter = segments->begin(); segmentIter != segments->end(); ++segmentIter) {
         // filter (keep) words where ruleStatus <= UBRK_WORD_NONE_LIMIT
         // TODO: replace with operator->
         if ((*segmentIter).getRuleStatus() <= UBRK_WORD_NONE_LIMIT) {
@@ -271,7 +264,7 @@ void SegmentIterTest::testRuleStatus() {
     // words backward
 
     std::vector<std::u16string_view> wordsBackward;
-    for (auto segmentIter = segmentRange.end(); segmentIter != segmentRange.begin(); ) {
+    for (auto segmentIter = segments->end(); segmentIter != segments->begin(); ) {
         --segmentIter;
         // filter (keep) words where ruleStatus > UBRK_WORD_NONE_LIMIT
         // TODO: replace with operator->
@@ -299,9 +292,8 @@ void SegmentIterTest::testSegmentsFromMiddleOfSegment() {
 
     // Create new Segments for source1
     auto segments1 = enWordSegmenter.segment(source1, errorCode);
-    auto segmentRange1 = segments1->segments();
     std::vector<icu::segmenter::Segment> segmentVec1;
-    for (auto segmentIter = segments1->segmentsFrom(startIdx); segmentIter != segmentRange1.end(); ++segmentIter) {
+    for (auto segmentIter = segments1->segmentsFrom(startIdx); segmentIter != segments1->end(); ++segmentIter) {
         segmentVec1.push_back(*segmentIter);
     }
 
@@ -325,9 +317,8 @@ void SegmentIterTest::testSegmentsFromOnBoundary() {
 
     // Create new Segments for source1
     auto segments1 = enWordSegmenter.segment(source1, errorCode);
-    auto segmentRange1 = segments1->segments();
     std::vector<icu::segmenter::Segment> segmentVec1;
-    for (auto segmentIter = segments1->segmentsFrom(startIdx); segmentIter != segmentRange1.end(); ++segmentIter) {
+    for (auto segmentIter = segments1->segmentsFrom(startIdx); segmentIter != segments1->end(); ++segmentIter) {
         segmentVec1.push_back(*segmentIter);
     }
 
@@ -351,9 +342,8 @@ void SegmentIterTest::testSegmentsBeforeMiddleOfSegment() {
 
     // Create new Segments for source1
     auto segments1 = enWordSegmenter.segment(source1, errorCode);
-    auto segmentRange1 = segments1->segments();
     std::vector<icu::segmenter::Segment> segmentVec1;
-    for (auto segmentIter = segments1->segmentsFrom(startIdx); segmentIter != segmentRange1.begin(); ) {
+    for (auto segmentIter = segments1->segmentsFrom(startIdx); segmentIter != segments1->begin(); ) {
         --segmentIter;
         segmentVec1.push_back(*segmentIter);
     }
@@ -378,9 +368,8 @@ void SegmentIterTest::testSegmentsBeforeOnBoundary() {
 
     // Create new Segments for source1
     auto segments1 = enWordSegmenter.segment(source1, errorCode);
-    auto segmentRange1 = segments1->segments();
     std::vector<icu::segmenter::Segment> segmentVec1;
-    for (auto segmentIter = segments1->segmentsFrom(startIdx); segmentIter != segmentRange1.begin(); ) {
+    for (auto segmentIter = segments1->segmentsFrom(startIdx); segmentIter != segments1->begin(); ) {
         --segmentIter;
         segmentVec1.push_back(*segmentIter);
     }
@@ -404,8 +393,7 @@ void SegmentIterTest::testPreIncrementOp() {
 
     // Create new Segments for source1
     auto segments1 = enWordSegmenter.segment(source1, errorCode);
-    auto segmentRange1 = segments1->segments();
-    auto segmentIter = segmentRange1.begin();
+    auto segmentIter = segments1->begin();
 
     auto expInitialSubstr = u"The";
     assertEquals("segmentIter[0] * substr", expInitialSubstr, (*segmentIter).getSubstr());
@@ -432,8 +420,7 @@ void SegmentIterTest::testPreIncrementOpModifiesOriginal() {
 
     // Create new Segments for source1
     auto segments1 = enWordSegmenter.segment(source1, errorCode);
-    auto segmentRange1 = segments1->segments();
-    auto segmentIter = segmentRange1.begin();
+    auto segmentIter = segments1->begin();
 
     auto expInitialSubstr = u"The";
     assertEquals("segmentIter[0] * substr", expInitialSubstr, (*segmentIter).getSubstr());
@@ -459,8 +446,7 @@ void SegmentIterTest::testPostIncrementOp() {
 
     // Create new Segments for source1
     auto segments1 = enWordSegmenter.segment(source1, errorCode);
-    auto segmentRange1 = segments1->segments();
-    auto segmentIter = segmentRange1.begin();
+    auto segmentIter = segments1->begin();
 
     assertEquals("segmentIter[0] * substr", u"The", (*segmentIter).getSubstr());
     // TODO: replace with operator->
@@ -486,8 +472,7 @@ void SegmentIterTest::testPostIncrementOpCopiesOriginal() {
 
     // Create new Segments for source1
     auto segments1 = enWordSegmenter.segment(source1, errorCode);
-    auto segmentRange1 = segments1->segments();
-    auto segmentIter = segmentRange1.begin();
+    auto segmentIter = segments1->begin();
 
     auto expInitialSubstr = u"The";
     assertEquals("segmentIter[0] * substr", expInitialSubstr, (*segmentIter).getSubstr());

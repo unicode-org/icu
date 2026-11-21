@@ -58,16 +58,19 @@ Segment SegmentsImpl::segmentAt(int32_t i, UErrorCode &errorCode) {
     return s;
 }
 
-SegmentRange SegmentsImpl::segments() {
-    SegmentRange range(*breakIterPrototype_, source_);
-    return range;
-}
-
 SegmentIterator SegmentsImpl::segmentsFrom(int32_t i) {
     auto breakIter = std::unique_ptr<BreakIterator>(breakIterPrototype_->clone());
     SegmentIterator segIter(std::move(breakIter), i, source_);
 
     return segIter;
+}
+
+SegmentIterator SegmentsImpl::begin() {
+    return segmentsFrom(0);
+}
+
+SegmentIterator SegmentsImpl::end() {
+    return segmentsFrom(this->source_.length());
 }
 
 

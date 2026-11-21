@@ -33,7 +33,6 @@ U_NAMESPACE_END
 #include "unicode/segmenter.h"
 #include "unicode/segmenter_rulebased.h"
 #include "unicode/segmenter_segment_iter.h"
-#include "unicode/segmenter_segment_range.h"
 #include "unicode/uobject.h"
 #include "unicode/unistr.h"
 
@@ -51,14 +50,18 @@ public:
 
     Segment segmentAt(int32_t i, UErrorCode &errorCode) override;
 
-    SegmentRange segments() override;
-
     SegmentIterator segmentsFrom(int32_t i) override;
+
+    SegmentIterator begin() override;
+    
+    SegmentIterator end() override;
 
 private:
 
     friend class RuleBasedSegmenter;
     friend class LocalizedSegmenter;
+
+    SegmentsImpl() = default;
 
     SegmentsImpl(const BreakIterator & breakIter, std::u16string_view source);
 

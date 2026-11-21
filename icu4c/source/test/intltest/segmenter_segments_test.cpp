@@ -11,7 +11,6 @@
 #include "unicode/segmenter_localized.h"
 #include "unicode/segmenter_rulebased.h"
 #include "unicode/segmenter_segment_iter.h"
-#include "unicode/segmenter_segment_range.h"
 #include "segmenter_segments_test.h"
 
 #include <iostream>
@@ -182,8 +181,7 @@ void SegmentsTest::testSegments() {
 
     // Create new Segments for source1
     auto segments1 = enWordSegmenter.segment(source1, errorCode);
-    auto segmentRange = segments1->segments();
-    auto segmentIter = segmentRange.begin();
+    auto segmentIter = segments1->begin();
 
     icu::segmenter::Segment firstSegment = *segmentIter;
     assertEquals("first segment start", 0, firstSegment.getStart());
@@ -209,8 +207,7 @@ void SegmentsTest::testSubstr() {
 
     // Create new Segments for source1
     auto segments1 = enWordSegmenter.segment(source1, errorCode);
-    auto segmentRange = segments1->segments();
-    auto segmentIter = segmentRange.begin();
+    auto segmentIter = segments1->begin();
 
     icu::segmenter::Segment firstSegment = *segmentIter;
     assertEquals("first segment substr", u"The", firstSegment.getSubstr());

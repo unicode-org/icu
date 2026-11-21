@@ -42,7 +42,6 @@ U_NAMESPACE_BEGIN
 namespace segmenter {
 
 class SegmentIterator;
-class SegmentRange;
 class SegmentsImpl;
 
 // ---------------------------------------------
@@ -111,9 +110,11 @@ public:
 
     virtual Segment segmentAt(int32_t i, UErrorCode &errorCode) = 0;
 
-    virtual SegmentRange segments() = 0;
-
     virtual SegmentIterator segmentsFrom(int32_t i) = 0;
+
+    virtual SegmentIterator begin() = 0;
+
+    virtual SegmentIterator end() = 0;
 };
 
 // ---------------------------------------------
