@@ -1099,6 +1099,11 @@ static ufmt_args* parseArguments(const char16_t *alias, va_list ap, UErrorCode *
             if(*alias != SPEC_DOLLARSIGN) {
                 return nullptr;
             }
+            /* positional index 0 is invalid; reject before it affects size */
+            if (pos <= 0) {
+                *status = U_ILLEGAL_ARGUMENT_ERROR;
+                return nullptr;
+            }
         } else {
             return nullptr;
         }
@@ -1155,8 +1160,24 @@ static ufmt_args* parseArguments(const char16_t *alias, va_list ap, UErrorCode *
                 pos += *alias++ - DIGIT_ZERO;
             }
         }
+        /* positional index 0 is invalid (would underflow to -1 after decrement) */
+        if (pos <= 0) {
+            *status = U_ILLEGAL_ARGUMENT_ERROR;
+            uprv_free(typelist);
+            uprv_free(islonglong);
+            uprv_free(arglist);
+            return nullptr;
+        }
         /* offset position by 1 */
         pos--;
+        /* bounds check: pos must index into the allocated arrays */
+        if (pos < 0 || pos >= size) {
+            *status = U_ILLEGAL_ARGUMENT_ERROR;
+            uprv_free(typelist);
+            uprv_free(islonglong);
+            uprv_free(arglist);
+            return nullptr;
+        }
 
         /* skip over everything except for the type */
         while (ISMOD(*alias) || ISFLAG(*alias) || ISDIGIT(*alias) || 
