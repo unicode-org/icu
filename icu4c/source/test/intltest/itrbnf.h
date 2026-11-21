@@ -154,6 +154,7 @@ public:
     void TestPluralRules();
 
     void TestInfinityNaN();
+    void TestInfinityRuleLiteralText();
     void TestVariableDecimalPoint();
     void TestRounding();
     void TestLargeNumbers();

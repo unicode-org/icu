@@ -467,19 +467,18 @@ NFRule::extractSubstitutions(const NFRuleSet* owner,
         return;
     }
     ruleText = sourceRuleText;
-    sub1 = extractSubstitution(owner, predecessor, status);
-    if (sub1 == nullptr) {
-        // Small optimization. There is no need to create a redundant NullSubstitution.
-        sub2 = nullptr;
-    }
-    else {
-        sub2 = extractSubstitution(owner, predecessor, status);
-    }
-
-    if (sub1 != nullptr && sub2 != nullptr && sub1->getDynamicClassID() == sub2->getDynamicClassID()) {
-        // Something like << << or >> >> or == == was encountered.
-        status = U_STATE_OLD_WARNING;
-        owner->owner->unparseable = true;
+    // Inf and NaN rule text is literal and cannot contain substitutions.
+    auto type = getType();
+    if (type != kInfinityRule && type != kNaNRule) {
+        sub1 = extractSubstitution(owner, predecessor, status);
+        if (sub1 != nullptr) {
+            sub2 = extractSubstitution(owner, predecessor, status);
+            if (sub2 != nullptr && sub1->getDynamicClassID() == sub2->getDynamicClassID()) {
+                // Something like << << or >> >> or == == was encountered.
+                status = U_STATE_OLD_WARNING;
+                owner->owner->unparseable = true;
+            }
+        }
     }
 
     int32_t pluralRuleStart = ruleText.indexOf(gDollarOpenParenthesis, -1, 0);
