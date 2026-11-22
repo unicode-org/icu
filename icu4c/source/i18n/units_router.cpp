@@ -125,6 +125,10 @@ RouteResult UnitsRouter::route(double quantity, icu::number::impl::RoundingImpl 
     if (rounder != nullptr && rounder->fPrecision.isBogus()) {
         if (converterPreference->precision.length() > 0) {
             rounder->fPrecision = parseSkeletonToPrecision(converterPreference->precision, status);
+        } else if (converterPreference->targetUnit.complexity == UMEASURE_UNIT_MIXED) {
+            // Per UTS #35 Part 6 (Mixed Units), the default behavior for mixed
+            // units is to round the lowest unit to the nearest integer.
+            rounder->fPrecision = Precision::integer();
         } else {
             // We use the same rounding mode as COMPACT notation: known to be a
             // human-friendly rounding mode: integers, but add a decimal digit

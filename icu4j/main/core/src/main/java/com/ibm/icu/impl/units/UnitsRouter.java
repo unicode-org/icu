@@ -97,6 +97,11 @@ public class UnitsRouter {
             Precision.BogusRounder bogus = (Precision.BogusRounder) rounder;
             if (converterPreference.precision.length() > 0) {
                 rounder = bogus.into(parseSkeletonToPrecision(converterPreference.precision));
+            } else if (converterPreference.targetUnit.getComplexity()
+                    == MeasureUnit.Complexity.MIXED) {
+                // Per UTS #35 Part 6 (Mixed Units), the default behavior for mixed
+                // units is to round the lowest unit to the nearest integer.
+                rounder = bogus.into(Precision.integer());
             } else {
                 // We use the same rounding mode as COMPACT notation: known to be a
                 // human-friendly rounding mode: integers, but add a decimal digit
