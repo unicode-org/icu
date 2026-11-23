@@ -1431,13 +1431,14 @@ UnicodeSet& UnicodeSet::compact() U_LIFETIME_BOUND {
         capacity = INITIAL_CAPACITY;
     } else if ((len + 7) < capacity) {
         // If we have more than a little unused capacity, shrink it to len.
-        UChar32* temp = static_cast<UChar32*>(uprv_realloc(list, sizeof(UChar32) * len));
+        UChar32* temp = static_cast<UChar32*>(uprv_malloc(sizeof(UChar32) * len));
         if (temp) {
+            uprv_memcpy(temp, list, sizeof(UChar32) * len);
+            uprv_free(list);
             list = temp;
             capacity = len;
         }
-        // else what the heck happened?! We allocated less memory!
-        // Oh well. We'll keep our original array.
+        // else keep our original array
     }
     if (strings_ != nullptr && strings_->isEmpty()) {
         delete strings_;

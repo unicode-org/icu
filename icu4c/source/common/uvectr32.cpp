@@ -256,17 +256,21 @@ void UVector32::setMaxCapacity(int32_t limit) {
     
     // New maximum capacity is smaller than the current size.
     // Realloc the storage to the new, smaller size.
-    int32_t* newElems = static_cast<int32_t*>(uprv_realloc(elements, sizeof(int32_t) * maxCapacity));
+    int32_t* newElems = static_cast<int32_t*>(uprv_malloc(sizeof(int32_t) * maxCapacity));
     if (newElems == nullptr) {
         // Realloc to smaller failed.
         //   Just keep what we had.  No need to call it a failure.
         return;
     }
-    elements = newElems;
     capacity = maxCapacity;
     if (count > capacity) {
         count = capacity;
     }
+    if (count > 0) {
+        uprv_memcpy(newElems, elements, count * sizeof(int32_t));
+    }
+    uprv_free(elements);
+    elements = newElems;
 }
 
 /**

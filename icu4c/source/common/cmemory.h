@@ -105,6 +105,12 @@
 U_CAPI void * U_EXPORT2
 uprv_malloc(size_t s) U_MALLOC_ATTR U_ALLOC_SIZE_ATTR(1);
 
+/**
+ * Do not use realloc() for shrinking memory.
+ * Modern memory allocators do not reliably reallocate to a smaller memory block,
+ * or only when the new size is very significantly smaller than the previous size,
+ * for example half as large.
+ */
 U_CAPI void * U_EXPORT2
 uprv_realloc(void *mem, size_t size) U_ALLOC_SIZE_ATTR(2);
 

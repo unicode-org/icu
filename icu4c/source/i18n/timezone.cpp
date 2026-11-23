@@ -668,11 +668,15 @@ static void U_CALLCONV initMap(USystemTimeZoneType type, UErrorCode& ec) {
                 m[numEntries++] = i;
             }
             if (U_SUCCESS(ec)) {
-                int32_t *tmp = m;
-                m = static_cast<int32_t*>(uprv_realloc(tmp, numEntries * sizeof(int32_t)));
-                if (m == nullptr) {
+                int32_t *tmp = static_cast<int32_t*>(uprv_malloc(numEntries * sizeof(int32_t)));
+                if (tmp == nullptr) {
                     // realloc failed.. use the original one even it has unused
                     // area at the end
+                } else {
+                    if (numEntries > 0) {
+                        uprv_memcpy(tmp, m, numEntries * sizeof(int32_t));
+                    }
+                    uprv_free(m);
                     m = tmp;
                 }
 
