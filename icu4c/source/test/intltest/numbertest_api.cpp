@@ -2272,6 +2272,17 @@ void NumberFormatterApiTest::unitCurrency() {
             444444.55,
             u"444,444$55 PTE");
 
+    // The long name replaces the currency symbol, so the currency's own pattern is not used.
+    // Its separators still are.
+    assertFormatSingle(
+            u"Currency-dependent symbols (Test Long Name)",
+            u"currency/PTE unit-width-full-name",
+            u"currency/PTE unit-width-full-name",
+            NumberFormatter::with().unit(PTE).unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
+            Locale("pt-PT"),
+            444444.55,
+            u"444,444$55 escudos portugueses");
+
     assertFormatSingle(
             u"Plural form depending on visible digits (ICU-20499)",
             u"currency/RON unit-width-full-name",
@@ -2289,6 +2300,28 @@ void NumberFormatterApiTest::unitCurrency() {
             Locale("en-DE"),
             5.43,
             u"5,43 Swiss francs");
+
+    // TRY has its own pattern in tr-TR.
+    assertFormatSingle(
+            u"Turkish long currency (ICU-22955)",
+            u"currency/TRY unit-width-full-name",
+            u"currency/TRY unit-width-full-name",
+            NumberFormatter::with().unit(TRY).unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
+            Locale("tr-TR"),
+            5.43,
+            u"5,43 Türk lirası");
+
+    assertFormatSingle(
+            u"Turkish long currency in compact notation (ICU-22955)",
+            u"compact-short currency/TRY unit-width-full-name",
+            u"K currency/TRY unit-width-full-name",
+            NumberFormatter::with()
+                    .notation(Notation::compactShort())
+                    .unit(TRY)
+                    .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
+            Locale("tr-TR"),
+            5.43,
+            u"5,4 Türk lirası");
 
     assertFormatSingle(
             u"Currency spacing in suffix (ICU-20954)",
