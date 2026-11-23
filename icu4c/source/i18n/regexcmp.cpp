@@ -2423,6 +2423,16 @@ void        RegexCompile::compileSet(UnicodeSet *theSet)
         {
             //  The set contains two or more chars.  (the normal case)
             //  Put it into the compiled pattern as a set.
+            // Avoid storing duplicate sets.
+            // Slot zero of the vector of sets is reserved.
+            for (int32_t i = 1; i < fRXPat->fSets->size(); ++i) {
+                UnicodeSet *existing = static_cast<UnicodeSet *>(fRXPat->fSets->elementAt(i));
+                if (existing != nullptr && *existing == *theSet) {
+                    delete theSet;
+                    appendOp(URX_SETREF, i);
+                    return;
+                }
+            }
             theSet->freeze();
             int32_t setNumber = fRXPat->fSets->size();
             fRXPat->fSets->addElement(theSet, *fStatus);
