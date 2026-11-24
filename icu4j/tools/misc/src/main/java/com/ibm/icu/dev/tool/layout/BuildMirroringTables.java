@@ -25,7 +25,7 @@ public class BuildMirroringTables extends ModuleWriter {
     }
 
     public void dump(String name, int[] array, int length, int valuesPerLine) {
-        StringBuffer line = new StringBuffer("    ");
+        StringBuilder line = new StringBuilder("    ");
 
         output.println("const LEUnicode32 DefaultCharMapper::" + name + "[] = {");
 

@@ -91,7 +91,7 @@ public class Trans {
             }
             if (isHTML) {
                 // Pass tags between < and > unchanged
-                StringBuffer buf = new StringBuffer();
+                StringBuilder buf = new StringBuilder();
                 int right = -1;
                 if (inTag) {
                     right = line.indexOf('>');

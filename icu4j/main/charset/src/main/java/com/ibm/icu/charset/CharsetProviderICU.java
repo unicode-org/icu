@@ -13,8 +13,8 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
 import java.nio.charset.spi.CharsetProvider;
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -33,7 +33,7 @@ public final class CharsetProviderICU extends CharsetProvider {
         static final List<Charset> CHARSETS;
 
         static {
-            List<Charset> icucs = new LinkedList<Charset>();
+            List<Charset> icucs = new ArrayList<Charset>();
             int num = UConverterAlias.countAvailable();
             for (int i = 0; i < num; ++i) {
                 String name = UConverterAlias.getAvailableName(i);

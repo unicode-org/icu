@@ -187,7 +187,7 @@ public abstract class LanguageTestFmwk extends CoreTestFmwk implements TimeUnitC
     }
 
     protected static String timestring(Period ts) {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         if (ts.isMoreThan()) {
             buf.append("mt");
         } else if (ts.isLessThan()) {

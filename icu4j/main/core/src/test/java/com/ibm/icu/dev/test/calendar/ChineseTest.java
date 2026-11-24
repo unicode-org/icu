@@ -71,7 +71,7 @@ public class ChineseTest extends CalendarTestFmwk {
         };
 
         ChineseCalendar cal = new ChineseCalendar();
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
 
         logDebug("Gregorian -> Chinese");
         // java.util.Calendar grego = java.util.Calendar.getInstance();

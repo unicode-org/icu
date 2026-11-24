@@ -776,9 +776,9 @@ public final class UCharacterCaseTest extends CoreTestFmwk {
                 }
 
                 String chstr[] = getUnicodeStrings(s);
-                StringBuffer strbuffer = new StringBuffer(chstr[0]);
-                StringBuffer lowerbuffer = new StringBuffer(chstr[1]);
-                StringBuffer upperbuffer = new StringBuffer(chstr[3]);
+                StringBuilder strbuffer = new StringBuilder(chstr[0]);
+                StringBuilder lowerbuffer = new StringBuilder(chstr[1]);
+                StringBuilder upperbuffer = new StringBuilder(chstr[3]);
                 Locale locale = null;
                 for (int i = 4; i < chstr.length; i++) {
                     String condition = chstr[i];

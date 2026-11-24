@@ -9,9 +9,9 @@
 package com.ibm.icu.util;
 
 import com.ibm.icu.impl.Grego;
+import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -324,7 +324,7 @@ public abstract class BasicTimeZone extends TimeZone {
         }
 
         BitSet isProcessed = new BitSet(all.length);
-        List<TimeZoneRule> filteredRules = new LinkedList<>();
+        List<TimeZoneRule> filteredRules = new ArrayList<>();
 
         // Create initial rule
         TimeZoneRule initial =

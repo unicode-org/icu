@@ -262,7 +262,7 @@ public class PatternTokenizer {
 
     public String normalize() {
         int oldStart = start;
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         StringBuffer buffer = new StringBuffer();
         while (true) {
             buffer.setLength(0);

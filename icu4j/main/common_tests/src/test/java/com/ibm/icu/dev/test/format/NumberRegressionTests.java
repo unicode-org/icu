@@ -952,7 +952,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
             //
             // char decSep = symbols.getDecimalSeparator(); //The variable is never used
             char monSep = symbols.getMonetaryDecimalSeparator();
-            StringBuffer buf = new StringBuffer(pattern);
+            StringBuilder buf = new StringBuilder(pattern);
             for (int j = 0; j < buf.length(); j++) {
                 if (buf.charAt(j) == '\u00a4') {
                     String cur = "'" + symbols.getCurrencySymbol() + "'";

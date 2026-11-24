@@ -191,7 +191,7 @@ public class ICUZDump {
         }
 
         public String format(long time, int offset, boolean isDst) {
-            StringBuffer buf = new StringBuffer();
+            StringBuilder buf = new StringBuilder();
             stz.setRawOffset(offset);
             sdf.setTimeZone(stz);
             buf.append(sdf.format(new Date(time)));

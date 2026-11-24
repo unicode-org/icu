@@ -807,11 +807,11 @@ public class TestIDNARef extends CoreTestFmwk {
     public void TestCompare() throws Exception {
         String www = "www.";
         String com = ".com";
-        StringBuffer source = new StringBuffer(www);
-        StringBuffer uni0 = new StringBuffer(www);
-        StringBuffer uni1 = new StringBuffer(www);
-        StringBuffer ascii0 = new StringBuffer(www);
-        StringBuffer ascii1 = new StringBuffer(www);
+        StringBuilder source = new StringBuilder(www);
+        StringBuilder uni0 = new StringBuilder(www);
+        StringBuilder uni1 = new StringBuilder(www);
+        StringBuilder ascii0 = new StringBuilder(www);
+        StringBuilder ascii1 = new StringBuilder(www);
 
         uni0.append(TestData.unicodeIn[0]);
         uni0.append(com);
@@ -945,11 +945,11 @@ public class TestIDNARef extends CoreTestFmwk {
     public void TestRootLabelSeparator() throws Exception {
         String www = "www.";
         String com = ".com."; /*root label separator*/
-        StringBuffer source = new StringBuffer(www);
-        StringBuffer uni0 = new StringBuffer(www);
-        StringBuffer uni1 = new StringBuffer(www);
-        StringBuffer ascii0 = new StringBuffer(www);
-        StringBuffer ascii1 = new StringBuffer(www);
+        StringBuilder source = new StringBuilder(www);
+        StringBuilder uni0 = new StringBuilder(www);
+        StringBuilder uni1 = new StringBuilder(www);
+        StringBuilder ascii0 = new StringBuilder(www);
+        StringBuilder ascii1 = new StringBuilder(www);
 
         uni0.append(TestData.unicodeIn[0]);
         uni0.append(com);

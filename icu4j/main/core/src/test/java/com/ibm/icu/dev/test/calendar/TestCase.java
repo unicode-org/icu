@@ -197,7 +197,7 @@ public class TestCase {
     public boolean fieldsEqual(Calendar c, ITestLog log) {
         for (int i = 0; i < c.getFieldCount(); i++) {
             if (isSet(i) && get(i) != c.get(i)) {
-                StringBuffer buf = new StringBuffer();
+                StringBuilder buf = new StringBuilder();
                 buf.append(
                         "Fail: "
                                 + CalendarTestFmwk.fieldName(i)

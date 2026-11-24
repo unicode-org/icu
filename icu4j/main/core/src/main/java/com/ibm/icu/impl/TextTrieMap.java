@@ -10,8 +10,8 @@ package com.ibm.icu.impl;
 
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.UnicodeSet;
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -308,7 +308,7 @@ public class TextTrieMap<V> {
             }
 
             if (_children == null) {
-                _children = new LinkedList<Node>();
+                _children = new ArrayList<Node>();
                 Node child = new Node(subArray(text, offset), addValue(null, value), null);
                 _children.add(child);
                 return;
@@ -382,13 +382,13 @@ public class TextTrieMap<V> {
             Node child = new Node(childText, _values, _children);
             _values = null;
 
-            _children = new LinkedList<Node>();
+            _children = new ArrayList<Node>();
             _children.add(child);
         }
 
         private List<V> addValue(List<V> list, V value) {
             if (list == null) {
-                list = new LinkedList<V>();
+                list = new ArrayList<V>();
             }
             list.add(value);
             return list;

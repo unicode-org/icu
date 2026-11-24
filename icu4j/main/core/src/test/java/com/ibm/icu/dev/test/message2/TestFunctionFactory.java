@@ -216,7 +216,7 @@ public class TestFunctionFactory implements FunctionFactory {
             }
             result = new PlainStringFormattedValue("{|" + toFormat + "|}");
         } else {
-            StringBuffer buffer = new StringBuffer();
+            StringBuilder buffer = new StringBuilder();
             if (dblToFormat < 0) {
                 // 1. If `Input` is less than 0, the character `-` U+002D Hyphen-Minus.
                 buffer.append('-');

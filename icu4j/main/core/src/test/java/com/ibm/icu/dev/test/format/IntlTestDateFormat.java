@@ -243,7 +243,7 @@ public class IntlTestDateFormat extends CoreTestFmwk {
         long count = locales.length;
         logDebug("" + count + " available locales");
         if (locales != null && count != 0) {
-            StringBuffer all = new StringBuffer();
+            StringBuilder all = new StringBuilder();
             for (int i = 0; i < count; ++i) {
                 if (i != 0) all.append(", ");
                 all.append(locales[i].getDisplayName());

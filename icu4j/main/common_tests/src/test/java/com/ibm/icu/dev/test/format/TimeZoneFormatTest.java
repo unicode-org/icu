@@ -559,7 +559,7 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
                                                 ? (timeDiff / 60000) * 60000 == 0
                                                 : timeDiff == 0;
                                 if (!bTimeMatch) {
-                                    StringBuffer msg = new StringBuffer();
+                                    StringBuilder msg = new StringBuilder();
                                     msg.append("Time round trip failed for ")
                                             .append("tzid=")
                                             .append(id)

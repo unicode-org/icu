@@ -24,7 +24,7 @@ import org.junit.runners.JUnit4;
 public class DataReadWriteTest extends CoreTestFmwk {
     // strip line ends and trailing spaces
     private String normalize(String str) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         boolean inLine = true;
         for (int i = 0; i < str.length(); ++i) {
             char c = str.charAt(i);

@@ -455,7 +455,7 @@ public class ICUServiceTest extends CoreTestFmwk {
         {
             logDebug("service display names for de_DE");
             Map<String, String> names = getDisplayNames(service, new ULocale("de_DE"));
-            StringBuffer buf = new StringBuffer("{");
+            StringBuilder buf = new StringBuilder("{");
             Iterator<Map.Entry<String, String>> iter = names.entrySet().iterator();
             while (iter.hasNext()) {
                 Map.Entry<String, String> e = iter.next();
@@ -472,7 +472,7 @@ public class ICUServiceTest extends CoreTestFmwk {
         // get all the display names of these resources
         {
             logDebug("californio language factory");
-            StringBuffer buf = new StringBuffer("{");
+            StringBuilder buf = new StringBuilder("{");
             String[] idNames = {
                 CalifornioLanguageFactory.californio,
                 CalifornioLanguageFactory.valley,

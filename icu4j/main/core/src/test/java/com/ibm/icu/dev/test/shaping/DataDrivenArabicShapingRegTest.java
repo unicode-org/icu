@@ -416,7 +416,7 @@ public class DataDrivenArabicShapingRegTest extends CoreTestFmwk {
                                 + "'\n for input '"
                                 + source);
             } else if (!expected.equals(actual)) {
-                StringBuffer buf = new StringBuffer();
+                StringBuilder buf = new StringBuilder();
                 buf.append(
                         "Error: Shaper: "
                                 + shaper
@@ -453,7 +453,7 @@ public class DataDrivenArabicShapingRegTest extends CoreTestFmwk {
                 return null;
             }
 
-            StringBuffer buf = new StringBuffer(str.length() * 6);
+            StringBuilder buf = new StringBuilder(str.length() * 6);
             for (int i = 0; i < str.length(); ++i) {
                 char ch = str.charAt(i);
                 buf.append("\\u");

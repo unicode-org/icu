@@ -742,7 +742,7 @@ public class TimeZoneTest extends CoreTestFmwk {
     // Test getAvailableID API
     @Test
     public void TestGetAvailableIDs913() {
-        StringBuffer buf = new StringBuffer("TimeZone.getAvailableIDs() = { ");
+        StringBuilder buf = new StringBuilder("TimeZone.getAvailableIDs() = { ");
         String[] s = TimeZone.getAvailableIDs();
         for (int i = 0; i < s.length; ++i) {
             if (i > 0) buf.append(", ");

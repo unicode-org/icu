@@ -384,7 +384,7 @@ public class UnicodeRegex implements Cloneable, Freezable<UnicodeRegex>, StringT
     private Map<String, String> getVariables(List<String> lines) {
         Map<String, String> variables = new TreeMap<>(LongestFirst);
         String variable = null;
-        StringBuffer definition = new StringBuffer();
+        StringBuilder definition = new StringBuilder();
         int count = 0;
         for (String line : lines) {
             ++count;

@@ -1511,7 +1511,7 @@ public final class UCharacterTest extends CoreTestFmwk {
         String legalStr = "This is a legal string ";
 
         for (int count = 0; count < illegal.length; count++) {
-            StringBuffer str = new StringBuffer(illegalStr);
+            StringBuilder str = new StringBuilder(illegalStr);
             if (illegal[count] < 0x10000) {
                 str.append((char) illegal[count]);
             } else {
@@ -1526,7 +1526,7 @@ public final class UCharacterTest extends CoreTestFmwk {
         }
 
         for (int count = 0; count < legal.length; count++) {
-            StringBuffer str = new StringBuffer(legalStr);
+            StringBuilder str = new StringBuilder(legalStr);
             if (legal[count] < 0x10000) {
                 str.append((char) legal[count]);
             } else {

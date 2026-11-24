@@ -1712,7 +1712,7 @@ public class TestMessageFormat extends CoreTestFmwk {
                 }
             }
 
-            StringBuffer buf = new StringBuffer();
+            StringBuilder buf = new StringBuilder();
             int index = acit.getBeginIndex();
             int end = acit.getEndIndex();
             int indexExp = expectedAcit.getBeginIndex();

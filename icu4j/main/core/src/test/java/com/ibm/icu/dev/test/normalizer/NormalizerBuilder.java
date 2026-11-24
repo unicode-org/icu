@@ -506,7 +506,7 @@ class NormalizerBuilder {
      * Utility: Supplies a zero-padded hex representation of a Unicode character (without 0x, \\u)
      */
     public static String hex(String s, String sep) {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         for (int i = 0; i < s.length(); ++i) {
             if (i != 0) result.append(sep);
             result.append(hex(s.charAt(i)));

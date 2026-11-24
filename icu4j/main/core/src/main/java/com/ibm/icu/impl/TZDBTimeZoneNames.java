@@ -12,11 +12,11 @@ import com.ibm.icu.impl.TextTrieMap.ResultHandler;
 import com.ibm.icu.text.TimeZoneNames;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -314,7 +314,7 @@ public class TZDBTimeZoneNames extends TimeZoneNames {
                 }
                 MatchInfo minfo = new MatchInfo(ntype, null, match.mzID, matchLength);
                 if (_matches == null) {
-                    _matches = new LinkedList<MatchInfo>();
+                    _matches = new ArrayList<MatchInfo>();
                 }
                 _matches.add(minfo);
             }

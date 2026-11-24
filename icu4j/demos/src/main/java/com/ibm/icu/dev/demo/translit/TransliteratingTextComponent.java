@@ -227,7 +227,7 @@ public class TransliteratingTextComponent extends DumbTextComponent {
 
     /** Escape non-ASCII characters as Unicode. JUST FOR DEBUGGING OUTPUT. */
     public static final String escape(String s) {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         for (int i = 0; i < s.length(); ++i) {
             char c = s.charAt(i);
             if (c >= ' ' && c <= 0x007F) {

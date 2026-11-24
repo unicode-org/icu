@@ -26,10 +26,10 @@ import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -665,7 +665,7 @@ public class TimeZoneGenericNames implements Serializable, Freezable<TimeZoneGen
                 GenericMatchInfo matchInfo =
                         new GenericMatchInfo(info.type, info.tzID, matchLength);
                 if (_matches == null) {
-                    _matches = new LinkedList<GenericMatchInfo>();
+                    _matches = new ArrayList<GenericMatchInfo>();
                 }
                 _matches.add(matchInfo);
                 if (matchLength > _maxMatchLen) {
@@ -792,7 +792,7 @@ public class TimeZoneGenericNames implements Serializable, Freezable<TimeZoneGen
             // transform matches and append them to local matches
             for (MatchInfo match : tznamesMatches) {
                 if (results == null) {
-                    results = new LinkedList<GenericMatchInfo>();
+                    results = new ArrayList<GenericMatchInfo>();
                 }
                 results.add(createGenericMatchInfo(match));
             }

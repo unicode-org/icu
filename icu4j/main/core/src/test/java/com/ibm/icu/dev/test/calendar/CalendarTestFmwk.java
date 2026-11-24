@@ -378,7 +378,7 @@ public class CalendarTestFmwk extends CoreTestFmwk {
 
         // Check actual maxima and minima seen against ranges returned
         // by API.
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         for (int j = 0; j < fieldsToTest.length; ++j) {
             int f = fieldsToTest[j];
             buf.setLength(0);

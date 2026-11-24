@@ -30,7 +30,7 @@ public class BreakIteratorTest extends CoreTestFmwk {
     // =========================================================================
 
     private void doOtherInvariantTest(BreakIterator tb, String testChars) {
-        StringBuffer work = new StringBuffer("a\r\na");
+        StringBuilder work = new StringBuilder("a\r\na");
         int errorCount = 0;
 
         // a break should never occur between CR and LF
@@ -83,7 +83,7 @@ public class BreakIteratorTest extends CoreTestFmwk {
     public void debugLogln(String s) {
         final String zeros = "0000";
         String temp;
-        StringBuffer out = new StringBuffer();
+        StringBuilder out = new StringBuilder();
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
             if (c >= ' ' && c < '\u007f') out.append(c);

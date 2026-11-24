@@ -133,7 +133,7 @@ public class TimeZoneAliasTest extends CoreTestFmwk {
         }
 
         String join(Collection<String> c) {
-            StringBuffer result = new StringBuffer();
+            StringBuilder result = new StringBuilder();
             boolean isFirst = true;
             for (String item : c) {
                 if (!isFirst) result.append(separator);

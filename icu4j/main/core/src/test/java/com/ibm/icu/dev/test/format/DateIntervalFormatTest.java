@@ -38,7 +38,6 @@ import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Locale;
@@ -2058,7 +2057,7 @@ public class DateIntervalFormatTest extends CoreTestFmwk {
         int i = 0;
         String pattern = data[i++];
 
-        List<Throwable> allErrs = new LinkedList<>();
+        List<Throwable> allErrs = new ArrayList<>();
 
         while (i < data_length) {
             String locName = data[i++];

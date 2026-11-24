@@ -459,7 +459,7 @@ public class Demo extends Frame {
 
                         // read stuff into buffer
 
-                        StringBuffer buffer = new StringBuffer();
+                        StringBuilder buffer = new StringBuilder();
                         FileInputStream fis = new FileInputStream(f);
                         InputStreamReader isr = new InputStreamReader(fis, "UTF8");
                         BufferedReader br = new BufferedReader(isr, 32 * 1024);

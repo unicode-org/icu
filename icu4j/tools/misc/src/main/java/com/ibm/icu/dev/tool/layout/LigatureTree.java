@@ -64,7 +64,7 @@ public class LigatureTree {
         }
 
         String ligatureString(int[] chars) {
-            StringBuffer result = new StringBuffer();
+            StringBuilder result = new StringBuilder();
             int len = chars.length - 1;
 
             for (int i = 0; i < len; i += 1) {

@@ -744,7 +744,7 @@ public class NumberFormatTest extends CoreTestFmwk {
     public void TestDecimalFormatCurrencyParse() {
         // Locale.US
         DecimalFormatSymbols sym = new DecimalFormatSymbols(Locale.US);
-        StringBuffer pat = new StringBuffer("");
+        StringBuilder pat = new StringBuilder("");
         char currency = 0x00A4;
         // "\xA4#,##0.00;-\xA4#,##0.00"
         pat.append(currency)

@@ -1956,7 +1956,7 @@ public final class UTF16 {
         String newChar32Str = toString(newChar32);
         int oldChar32Size = 1;
         int newChar32Size = newChar32Str.length();
-        StringBuffer result = new StringBuffer(source);
+        StringBuilder result = new StringBuilder(source);
         int resultIndex = index;
 
         if (oldChar32 >= SUPPLEMENTARY_MIN_VALUE) {
@@ -2008,7 +2008,7 @@ public final class UTF16 {
         }
         int oldStrSize = oldStr.length();
         int newStrSize = newStr.length();
-        StringBuffer result = new StringBuffer(source);
+        StringBuilder result = new StringBuilder(source);
         int resultIndex = index;
 
         while (index != -1) {
