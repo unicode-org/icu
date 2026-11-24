@@ -2536,10 +2536,9 @@ public class CalendarRegressionTest extends CoreTestFmwk {
     @Test
     public void TestT9403() {
         Calendar myCal = Calendar.getInstance();
-        long dateBit1, dateBit2, testMillis = 0L;
         boolean missedException = true;
 
-        testMillis = -184303902611600000L;
+        long testMillis = -184303902611600000L;
         logDebug("Testing invalid setMillis value in lienent mode - using value: " + testMillis);
 
         try {
@@ -2549,7 +2548,7 @@ public class CalendarRegressionTest extends CoreTestFmwk {
             missedException = false;
         }
         assertTrue("Fail: out of bound millis did not trigger exception!", missedException);
-        dateBit1 = myCal.get(Calendar.MILLISECOND);
+        long dateBit1 = myCal.get(Calendar.MILLISECOND);
         assertNotEquals("Fail: millis not changed to MIN_MILLIS", testMillis, dateBit1);
 
         logDebug("Testing invalid setMillis value in strict mode - using value: " + testMillis);
@@ -2561,7 +2560,7 @@ public class CalendarRegressionTest extends CoreTestFmwk {
             missedException = false;
         }
         dateBit1 = myCal.get(Calendar.DAY_OF_MONTH);
-        dateBit2 = myCal.getTimeInMillis();
+        long dateBit2 = myCal.getTimeInMillis();
         assertFalse(
                 "Fail: error in setMillis, allowed invalid value : "
                         + testMillis

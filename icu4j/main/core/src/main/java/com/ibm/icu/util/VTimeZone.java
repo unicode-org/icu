@@ -2077,7 +2077,6 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
             wallt += dstSavings;
         }
 
-        int month = -1, dom = 0, dow = 0, dtype = -1;
         int dshift = 0;
         if (wallt < 0) {
             dshift = -1;
@@ -2087,10 +2086,10 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
             wallt -= Grego.MILLIS_PER_DAY;
         }
 
-        month = rule.getRuleMonth();
-        dom = rule.getRuleDayOfMonth();
-        dow = rule.getRuleDayOfWeek();
-        dtype = rule.getDateRuleType();
+        int month = rule.getRuleMonth();
+        int dom = rule.getRuleDayOfMonth();
+        int dow = rule.getRuleDayOfWeek();
+        int dtype = rule.getDateRuleType();
 
         if (dshift != 0) {
             if (dtype == DateTimeRule.DOW) {

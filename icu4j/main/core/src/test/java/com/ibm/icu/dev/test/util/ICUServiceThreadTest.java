@@ -348,7 +348,6 @@ public class ICUServiceThreadTest extends CoreTestFmwk {
             locales.add(getCLV());
         }
         List<ICUService.Factory> factories = new ArrayList<>(locales.size());
-        Iterator<String> iter = locales.iterator();
         for (String locale : locales) {
             factories.add(new TestFactory(locale));
         }

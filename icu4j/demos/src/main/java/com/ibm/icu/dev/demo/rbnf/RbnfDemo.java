@@ -539,7 +539,6 @@ class DemoTextField extends Component {
         int tempLineEnd = bi.first();
         int lineEnd = 0;
         int maxLineEnd = 0;
-        totalHeight = 0;
 
         while (lineStart < txt.length()) {
             maxLineEnd = txt.indexOf('\n', lineStart);
@@ -556,7 +555,6 @@ class DemoTextField extends Component {
             if (lineEnd > maxLineEnd) lineEnd = maxLineEnd;
             g.drawString(txt.substring(lineStart, lineEnd), 0, penY);
             penY += lineHeight;
-            totalHeight += lineHeight;
             lineStart = lineEnd;
             if (lineStart < txt.length() && txt.charAt(lineStart) == '\n') ++lineStart;
         }
@@ -570,7 +568,6 @@ class DemoTextField extends Component {
     */
 
     private String text;
-    private int totalHeight;
 }
 
 class DemoTextFieldHolder extends Panel {

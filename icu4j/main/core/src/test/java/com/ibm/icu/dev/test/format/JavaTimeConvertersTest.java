@@ -139,11 +139,9 @@ public class JavaTimeConvertersTest extends CoreTestFmwk {
                 EXPECTED_CALENDAR.getTimeZone().getRawOffset(),
                 calendar.getTimeZone().getRawOffset());
 
-        int[] DATE_OF_WEEK_ONLY_FIELD = {Calendar.DAY_OF_WEEK};
         calendar = JavaTimeConverters.dayOfWeekToCalendar(DayOfWeek.MONDAY);
         assertEquals("", Calendar.MONDAY, calendar.get(Calendar.DAY_OF_WEEK));
 
-        int[] MONTH_ONLY_FIELD = {Calendar.MONTH};
         calendar = JavaTimeConverters.monthToCalendar(Month.SEPTEMBER);
         assertEquals("", Calendar.SEPTEMBER, calendar.get(Calendar.MONTH));
     }

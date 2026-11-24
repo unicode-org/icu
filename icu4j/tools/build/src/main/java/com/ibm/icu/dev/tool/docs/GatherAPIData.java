@@ -252,7 +252,6 @@ public class GatherAPIData implements Doclet {
     }
 
     private String trimBase(String arg) {
-        String orgArg = arg;
         if (base != null) {
             for (int n = arg.indexOf(base); n != -1; n = arg.indexOf(base, n)) {
                 arg = arg.substring(0, n) + arg.substring(n + base.length());

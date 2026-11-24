@@ -171,6 +171,7 @@ public class UCAConformanceTest extends TestFmwk {
     private static final int IS_SHIFTED = 1;
     private static final int FROM_RULES = 2;
 
+    @SuppressWarnings("unused")
     private static boolean skipLineBecauseOfBug(String s, int flags) {
         // Add temporary exceptions here if there are ICU bugs, until we can fix them.
         // For examples see the ICU 52 version of this file.

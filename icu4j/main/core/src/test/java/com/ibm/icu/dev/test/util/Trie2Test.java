@@ -566,14 +566,13 @@ public class Trie2Test extends CoreTestFmwk {
     //
     private Trie2Writable genTrieFromSetRanges(int[][] ranges) {
         int i = 0;
-        int initialValue = 0;
         int errorValue = 0x0bad;
 
         if (ranges[i][1] < 0) {
             errorValue = ranges[i][2];
             i++;
         }
-        initialValue = ranges[i++][2];
+        int initialValue = ranges[i++][2];
         Trie2Writable trie = new Trie2Writable(initialValue, errorValue);
 
         for (; i < ranges.length; i++) {
@@ -709,11 +708,7 @@ public class Trie2Test extends CoreTestFmwk {
 
     // Was testTrieRanges in ICU4C.  Renamed to not conflict with ICU4J test framework.
     private void checkTrieRanges(
-            String testName,
-            String serializedName,
-            boolean withClone,
-            int[][] setRanges,
-            int[][] checkRanges)
+            String testName, String serializedName, int[][] setRanges, int[][] checkRanges)
             throws IOException {
 
         // Run tests against Tries that were built by ICU4C and serialized.
@@ -758,17 +753,16 @@ public class Trie2Test extends CoreTestFmwk {
     // Was "TrieTest" in trie2test.c
     @Test
     public void TestRanges() throws IOException {
-        checkTrieRanges("set1", "setRanges1", false, setRanges1, checkRanges1);
-        checkTrieRanges("set2-overlap", "setRanges2", false, setRanges2, checkRanges2);
-        checkTrieRanges("set3-initial-9", "setRanges3", false, setRanges3, checkRanges3);
-        checkTrieRanges("set-empty", "setRangesEmpty", false, setRangesEmpty, checkRangesEmpty);
+        checkTrieRanges("set1", "setRanges1", setRanges1, checkRanges1);
+        checkTrieRanges("set2-overlap", "setRanges2", setRanges2, checkRanges2);
+        checkTrieRanges("set3-initial-9", "setRanges3", setRanges3, checkRanges3);
+        checkTrieRanges("set-empty", "setRangesEmpty", setRangesEmpty, checkRangesEmpty);
         checkTrieRanges(
                 "set-single-value",
                 "setRangesSingleValue",
-                false,
                 setRangesSingleValue,
                 checkRangesSingleValue);
-        checkTrieRanges("set2-overlap.withClone", "setRanges2", true, setRanges2, checkRanges2);
+        checkTrieRanges("set2-overlap.withClone", "setRanges2", setRanges2, checkRanges2);
     }
 
     private String where() {

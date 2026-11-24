@@ -165,9 +165,8 @@ public class RBNFParseTest extends CoreTestFmwk {
     @Test
     public void TestParseRuleDescriptorOverflow23002() {
         try {
-            RuleBasedNumberFormat rbnf =
-                    new RuleBasedNumberFormat(
-                            "0110110/300113001103000113001103000110i/3013033:", new Locale("as"));
+            new RuleBasedNumberFormat(
+                    "0110110/300113001103000113001103000110i/3013033:", new Locale("as"));
         } catch (IllegalArgumentException e) {
             return;
         }
@@ -195,13 +194,13 @@ public class RBNFParseTest extends CoreTestFmwk {
     @Test
     public void Test23184EmptyRuleSet() {
         try {
-            RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat("x00:>%>>;%;<0<<", Locale.US);
+            new RuleBasedNumberFormat("x00:>%>>;%;<0<<", Locale.US);
             errln("Failed: should throw IllegalArgumentException");
         } catch (IllegalArgumentException e) {
             // success!
         }
         try {
-            RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat("x00:>%>>;%:;<0<<", Locale.US);
+            new RuleBasedNumberFormat("x00:>%>>;%:;<0<<", Locale.US);
             errln("Failed: should throw IllegalArgumentException");
         } catch (IllegalArgumentException e) {
             // success!
@@ -211,7 +210,7 @@ public class RBNFParseTest extends CoreTestFmwk {
     @Test
     public void TestNullRuleSet() {
         try {
-            RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat("x00:a>>>b>#>", Locale.US);
+            new RuleBasedNumberFormat("x00:a>>>b>#>", Locale.US);
             errln("Failed: should throw IllegalArgumentException");
         } catch (IllegalArgumentException e) {
             // success!
@@ -221,7 +220,7 @@ public class RBNFParseTest extends CoreTestFmwk {
     @Test
     public void TestDividedByZero() {
         try {
-            RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat("7060920374060940374/4:[]");
+            new RuleBasedNumberFormat("7060920374060940374/4:[]");
             errln("Failed: should throw IllegalArgumentException");
         } catch (IllegalArgumentException e) {
             // success!

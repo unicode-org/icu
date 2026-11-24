@@ -18,18 +18,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class Deprecator {
-    private boolean undep;
     private int log;
 
-    Deprecator(boolean undep, int log) {
-        this.undep = undep;
+    Deprecator(int log) {
         this.log = log;
     }
 
     public static void main(String[] args) {
         String srcPath = null;
         String dstPath = null;
-        boolean undep = false;
 
         int log = 1;
         boolean help = false;
@@ -41,8 +38,6 @@ public final class Deprecator {
                 srcPath = args[++i];
             } else if (arg.equals("-dst")) {
                 dstPath = args[++i];
-            } else if (arg.equals("-undep")) {
-                undep = true;
             } else if (arg.equals("-help")) {
                 help = true;
             } else if (arg.equals("-silent")) {
@@ -94,11 +89,10 @@ public final class Deprecator {
             if (log > 0) {
                 System.out.println("src: " + srcDir.getCanonicalPath());
                 System.out.println("dst: " + dstDir.getCanonicalPath());
-                System.out.println("undep: " + undep);
                 System.out.flush();
             }
 
-            new Deprecator(undep, log).process(srcDir, dstDir);
+            new Deprecator(log).process(srcDir, dstDir);
 
             if (log > 0) {
                 System.out.println("done");
@@ -115,7 +109,6 @@ public final class Deprecator {
         ps.println("  -src path : the root of the tree of files to work on");
         ps.println("  -dst path : the root of the tree to put the resulting files");
         ps.println("  -help     : print this usage message and exit, doing nothing");
-        ps.println("  -undep    : remove deprecation tags if present (default false)");
         ps.println();
         ps.println("  Add or remove warning deprecations for ICU @draft and @internal APIs");
         ps.flush();

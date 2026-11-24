@@ -700,7 +700,6 @@ public class CollationPerformanceTest {
         System.out.println("elapsedTime " + elapsedTime);
 
         // empty loop recalculation
-        int tempgCount = 0;
         count = 0;
         startTime = System.currentTimeMillis();
         while (count < opt_loopCount) {
@@ -708,7 +707,6 @@ public class CollationPerformanceTest {
             strindex = 0;
             iter.setOffset(strindex);
             while (true) {
-                tempgCount++;
                 count5--;
                 if (count5 == 0) {
                     strindex += 10;
@@ -825,14 +823,12 @@ public class CollationPerformanceTest {
 
         // empty loop recalculation
         count = 0;
-        int tempgCount = 0;
         startTime = System.currentTimeMillis();
         while (count < opt_loopCount) {
             int count5 = 5;
             strindex = 5;
             iter.setOffset(strindex);
             while (true) {
-                tempgCount++;
                 count5--;
                 if (count5 == 0) {
                     strindex += 10;

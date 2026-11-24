@@ -440,7 +440,7 @@ public final class Normalizer implements Cloneable {
      */
     public static final class QuickCheckResult {
         // private int resultValue;
-        private QuickCheckResult(int value) {
+        private QuickCheckResult(@SuppressWarnings("unused") int value) {
             // resultValue=value;
         }
 

@@ -983,8 +983,8 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         // Modifiable clone
         logDebug("cloneAsThawed");
         GlobalizationPreferences gp1 = gp.cloneAsThawed();
-        brk = gp1.getBreakIterator(GlobalizationPreferences.BI_WORD);
         /* TODO: JB#5383
+        brk = gp1.getBreakIterator(GlobalizationPreferences.BI_WORD);
         locStr = brk.getLocale(ULocale.VALID_LOCALE).toString();
         if (!locStr.equals("es")) {
             errln("FAIL: Word break iterator locale is " + locStr + " Expected: es");

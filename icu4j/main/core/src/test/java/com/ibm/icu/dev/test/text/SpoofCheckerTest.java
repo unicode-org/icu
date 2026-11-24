@@ -238,21 +238,19 @@ public class SpoofCheckerTest extends CoreTestFmwk {
     @Test
     public void TestAllowedLocales() {
         SpoofChecker sc = new SpoofChecker.Builder().setChecks(SpoofChecker.CHAR_LIMIT).build();
-        Set<ULocale> allowedLocales = null;
-        Set<Locale> allowedJavaLocales = null;
         boolean checkResults;
 
         /* Default allowed locales list should be empty */
-        allowedLocales = sc.getAllowedLocales();
+        Set<ULocale> allowedLocales = sc.getAllowedLocales();
         assertTrue("Empty allowed locales", allowedLocales.isEmpty());
 
-        allowedJavaLocales = sc.getAllowedJavaLocales();
+        Set<Locale> allowedJavaLocales = sc.getAllowedJavaLocales();
         assertTrue("Empty allowed Java locales", allowedJavaLocales.isEmpty());
 
         /* Allow en and ru, which should enable Latin and Cyrillic only to pass */
         ULocale enloc = new ULocale("en");
         ULocale ruloc = new ULocale("ru_RU");
-        allowedLocales = new HashSet<ULocale>();
+        allowedLocales = new HashSet<>();
         allowedLocales.add(enloc);
         allowedLocales.add(ruloc);
         sc =
@@ -267,11 +265,10 @@ public class SpoofCheckerTest extends CoreTestFmwk {
         Locale frlocJ = new Locale("fr");
         allowedJavaLocales = new HashSet<Locale>();
         allowedJavaLocales.add(frlocJ);
-        sc =
-                new SpoofChecker.Builder()
-                        .setChecks(SpoofChecker.CHAR_LIMIT)
-                        .setAllowedJavaLocales(allowedJavaLocales)
-                        .build();
+        new SpoofChecker.Builder()
+                .setChecks(SpoofChecker.CHAR_LIMIT)
+                .setAllowedJavaLocales(allowedJavaLocales)
+                .build();
         assertFalse("no en in allowed Java locales", allowedJavaLocales.contains(new Locale("en")));
         assertTrue("fr in allowed Java locales", allowedJavaLocales.contains(frlocJ));
 

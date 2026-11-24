@@ -212,11 +212,9 @@ public class CollationAPITest extends TestFmwk {
     /** Tests decomposition setting */
     @Test
     public void TestDecomposition() {
-        Collator en_US = null, el_GR = null, vi_VN = null;
-
-        en_US = Collator.getInstance(new Locale("en", "US"));
-        el_GR = Collator.getInstance(new Locale("el", "GR"));
-        vi_VN = Collator.getInstance(new Locale("vi", "VN"));
+        Collator en_US = Collator.getInstance(new Locale("en", "US"));
+        Collator el_GR = Collator.getInstance(new Locale("el", "GR"));
+        Collator vi_VN = Collator.getInstance(new Locale("vi", "VN"));
 
         // there is no reason to have canonical decomposition in en_US OR default locale */
         if (vi_VN.getDecomposition() != Collator.CANONICAL_DECOMPOSITION) {
@@ -279,8 +277,7 @@ public class CollationAPITest extends TestFmwk {
         CollationElementIterator iterator3 =
                 ((RuleBasedCollator) col).getCollationElementIterator(uchariter);
 
-        int offset = 0;
-        offset = iterator1.getOffset();
+        int offset = iterator1.getOffset();
         if (offset != 0) {
             errln("Error in getOffset for collation element iterator");
             return;

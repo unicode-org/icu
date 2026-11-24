@@ -511,7 +511,8 @@ public class ICUCurrencyDisplayInfoProvider implements CurrencyDisplayInfoProvid
              *      ...
              *  }
              */
-            void consumeCurrenciesVariantEntry(UResource.Key key, UResource.Value value) {
+            void consumeCurrenciesVariantEntry(
+                    @SuppressWarnings("unused") UResource.Key key, UResource.Value value) {
                 assert variantSymbol != null;
                 // No extra structure to traverse.
                 if (variantSymbol.symbol == null) {

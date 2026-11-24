@@ -712,7 +712,6 @@ public class Demo extends Frame {
                     if (end == BreakIterator.DONE) break;
                     String coreSentence = line.substring(start, end);
                     // System.out.println("Core: " + hex.transliterate(coreSentence));
-                    end = start;
 
                     int oldPos = 0;
                     while (oldPos < coreSentence.length()) {
@@ -1080,7 +1079,6 @@ public class Demo extends Frame {
                                 + line.substring(end);
                 break;
             }
-            end = start;
         }
         return line;
     }

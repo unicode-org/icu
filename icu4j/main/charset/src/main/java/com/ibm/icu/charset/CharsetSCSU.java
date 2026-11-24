@@ -261,7 +261,7 @@ class CharsetSCSU extends CharsetICU {
                             labelType = singleByteMode(source, target, offsets, ByteMode);
                             break;
                         case EndLoop:
-                            endLoop(source, target, offsets);
+                            endLoop();
                             break;
                     }
                 } else {
@@ -275,7 +275,7 @@ class CharsetSCSU extends CharsetICU {
                             labelType = singleByteMode(source, target, offsets, UnicodeMode);
                             break;
                         case EndLoop:
-                            endLoop(source, target, offsets);
+                            endLoop();
                             break;
                     }
                     // LabelLoop = false;
@@ -598,7 +598,7 @@ class CharsetSCSU extends CharsetICU {
             return label;
         }
 
-        private void endLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets) {
+        private void endLoop() {
             if (cr == CoderResult.OVERFLOW) {
                 state = readCommand;
             } else if (state == readCommand) {
@@ -696,13 +696,13 @@ class CharsetSCSU extends CharsetICU {
                         labelType = loop(source, target, offsets);
                         break;
                     case GetTrailUnicode:
-                        labelType = getTrailUnicode(source, target, offsets);
+                        labelType = getTrailUnicode(source);
                         break;
                     case OutputBytes:
-                        labelType = outputBytes(source, target, offsets);
+                        labelType = outputBytes(target, offsets);
                         break;
                     case EndLoop:
-                        endLoop(source, target, offsets);
+                        endLoop();
                         break;
                 }
             }
@@ -799,7 +799,7 @@ class CharsetSCSU extends CharsetICU {
             int label = 0;
             if (isSingleByteMode) {
                 if (c != 0 && targetCapacity > 0 && !AfterGetTrail) {
-                    label = getTrail(source, target, offsets);
+                    label = getTrail(source);
                     return label;
                 }
                 /*state machine for single byte mode*/
@@ -851,7 +851,7 @@ class CharsetSCSU extends CharsetICU {
                     } else if (AfterGetTrail || UTF16.isSurrogate(c)) {
                         if (!AfterGetTrail) {
                             if (UTF16.isLeadSurrogate(c)) {
-                                label = getTrail(source, target, offsets);
+                                label = getTrail(source);
                                 if (label == EndLoop) {
                                     return label;
                                 }
@@ -1114,7 +1114,7 @@ class CharsetSCSU extends CharsetICU {
             return label;
         }
 
-        private int getTrail(CharBuffer source, ByteBuffer target, IntBuffer offsets) {
+        private int getTrail(CharBuffer source) {
             lead = (char) c;
             int label = Loop;
             if (source.hasRemaining()) {
@@ -1139,7 +1139,7 @@ class CharsetSCSU extends CharsetICU {
             return label;
         }
 
-        private int getTrailUnicode(CharBuffer source, ByteBuffer target, IntBuffer offsets) {
+        private int getTrailUnicode(CharBuffer source) {
             int label = EndLoop;
             AfterGetTrailUnicode = true;
             /*c is surrogate*/
@@ -1215,7 +1215,7 @@ class CharsetSCSU extends CharsetICU {
             }
         }
 
-        private void endLoop(CharBuffer source, ByteBuffer target, IntBuffer offsets) {
+        private void endLoop() {
             /*set the converter state back to UConverter*/
             data.fromUIsSingleByteMode = isSingleByteMode;
             data.fromUDynamicWindow = dynamicWindow;
@@ -1224,7 +1224,7 @@ class CharsetSCSU extends CharsetICU {
         }
 
         @SuppressWarnings("fallthrough")
-        private int outputBytes(CharBuffer source, ByteBuffer target, IntBuffer offsets) {
+        private int outputBytes(ByteBuffer target, IntBuffer offsets) {
             int label;
             // int targetCapacity = target.limit()-target.position();
             /*write the output character byte from c and length*/

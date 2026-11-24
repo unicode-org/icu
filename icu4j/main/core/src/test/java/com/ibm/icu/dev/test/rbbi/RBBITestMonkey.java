@@ -64,7 +64,6 @@ public class RBBITestMonkey extends CoreTestFmwk {
 
         // Set the test text on which subsequent calls to next() will operate
         void setText(StringBuffer s) {
-            text = s;
             prepareAppliedRules(s.length());
             StringBuilder remapped = new StringBuilder(s.toString());
             resolved = new BreakContext[s.length() + 1];
@@ -174,7 +173,6 @@ public class RBBITestMonkey extends CoreTestFmwk {
         List<SegmentationRule> rules;
         UnicodeSet dictionarySet;
         private ArrayList<String> fAppliedRules;
-        private StringBuffer text;
         private SegmentationRule.BreakContext[] resolved;
     }
 

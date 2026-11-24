@@ -124,6 +124,8 @@ class ParseMavenOutForErrorProne {
                 // Known, but not actionable
             } else if (line.startsWith("[ERROR] COMPILATION ERROR")) {
                 // Known, but not actionable
+            } else if (line.startsWith("[WARNING] I/O error reading dependency state:")) {
+                // Known, but not actionable
             } else if (line.startsWith("[INFO]")) {
                 currentError = addErrorToReportAndReset(errorReport, currentError);
             } else {

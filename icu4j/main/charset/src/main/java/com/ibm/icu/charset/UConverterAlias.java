@@ -121,14 +121,11 @@ final class UConverterAlias {
             }
 
             /* load converter alias data from file if necessary */
-            int[] tableArray = null;
-            int tableStart;
-
             ByteBuffer b = ICUBinary.getRequiredData(CNVALIAS_DATA_FILE_NAME);
             UConverterAliasDataReader reader = new UConverterAliasDataReader(b);
-            tableArray = reader.readToc(offsetsCount);
+            int[] tableArray = reader.readToc(offsetsCount);
 
-            tableStart = tableArray[0];
+            int tableStart = tableArray[0];
             if (tableStart < minTocLength) {
                 throw new IOException("Invalid data format.");
             }

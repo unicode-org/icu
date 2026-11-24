@@ -446,7 +446,7 @@ public class SegmentsTest extends CoreTestFmwk {
             if (expStart == null) {
                 try {
                     // this should throw an exception because the index is out of bounds
-                    Segment segment = segments1.segmentAt(startIdx);
+                    Segment unused = segments1.segmentAt(startIdx);
                     // if an exception isn't thrown, then we have a test failure
                     fail("segmentAt should throw for an out of bounds index");
                 } catch (IndexOutOfBoundsException ioobe) {

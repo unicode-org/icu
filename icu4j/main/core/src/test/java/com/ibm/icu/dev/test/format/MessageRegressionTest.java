@@ -923,11 +923,8 @@ public class MessageRegressionTest extends CoreTestFmwk {
 
     @Test
     public void TestSerialization() {
-        MessageFormat format1 = null;
-        MessageFormat format2 = null;
-
-        format1 = new MessageFormat("", ULocale.GERMAN);
-        format2 = serializeAndDeserialize(format1);
+        MessageFormat format1 = new MessageFormat("", ULocale.GERMAN);
+        MessageFormat format2 = serializeAndDeserialize(format1);
         assertEquals(
                 "MessageFormats (empty pattern) before and after serialization are not equal",
                 format1,
@@ -951,7 +948,7 @@ public class MessageRegressionTest extends CoreTestFmwk {
     @Test
     public void TestNumberOverflow() {
         try {
-            MessageFormat format = new MessageFormat("{90000000000}");
+            new MessageFormat("{90000000000}");
             errln("MessageFormat overflow should throw IllegalArgumentException");
         } catch (IllegalArgumentException e) {
             // expeted

@@ -163,7 +163,7 @@ class CharsetUTF16 extends CharsetICU {
 
             // if we have unfinished business
             if (toUnicodeStatus != 0) {
-                CoderResult cr = decodeTrail(source, target, offsets, (char) toUnicodeStatus);
+                CoderResult cr = decodeTrail(source, target, (char) toUnicodeStatus);
                 if (cr != null) return cr;
             }
 
@@ -204,14 +204,13 @@ class CharsetUTF16 extends CharsetICU {
                     toULength = 0;
                     target.put(char16);
                 } else {
-                    CoderResult cr = decodeTrail(source, target, offsets, char16);
+                    CoderResult cr = decodeTrail(source, target, char16);
                     if (cr != null) return cr;
                 }
             }
         }
 
-        private final CoderResult decodeTrail(
-                ByteBuffer source, CharBuffer target, IntBuffer offsets, char lead) {
+        private final CoderResult decodeTrail(ByteBuffer source, CharBuffer target, char lead) {
             if (!UTF16.isLeadSurrogate(lead)) {
                 // 2 bytes, lead malformed
                 toUnicodeStatus = 0;

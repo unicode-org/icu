@@ -218,7 +218,7 @@ class CharsetASCII extends CharsetICU {
                  * need to check for a matching trail character and taking the appropriate action as
                  * dictated by encodeTrail.
                  */
-                cr = encodeTrail(source, (char) fromUChar32, flush);
+                cr = encodeTrail(source, (char) fromUChar32);
             } else {
                 if (source.hasArray() && target.hasArray()) {
                     /* optimized loop */
@@ -354,11 +354,11 @@ class CharsetASCII extends CharsetICU {
              * it up with a trail surrogate. if not, the character is unmappable.
              */
             return (UTF16.isSurrogate(ch))
-                    ? encodeTrail(source, (char) ch, flush)
+                    ? encodeTrail(source, (char) ch)
                     : CoderResult.unmappableForLength(1);
         }
 
-        private final CoderResult encodeTrail(CharBuffer source, char lead, boolean flush) {
+        private final CoderResult encodeTrail(CharBuffer source, char lead) {
             /*
              * ASCII doesn't support characters in the BMP, so if handleSurrogates returns null,
              * we leave fromUChar32 alone (it should store a new codepoint) and call it unmappable.

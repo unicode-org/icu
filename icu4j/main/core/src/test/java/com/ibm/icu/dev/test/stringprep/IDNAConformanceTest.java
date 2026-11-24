@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,7 +46,6 @@ public class IDNAConformanceTest extends CoreTestFmwk {
             return;
         }
 
-        Set<Integer> keyMap = inputData.keySet();
         for (Map<String, String> tempHash : inputData.values()) {
             // get all attributes from input data
             String passfail = (String) tempHash.get("passfail");

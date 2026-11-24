@@ -468,38 +468,26 @@ public class CompatibilityTest extends CoreTestFmwk {
             }
         }
 
-        cal = Calendar.getInstance(TimeZone.getDefault(), Locale.ENGLISH);
-        // delete cal;
+        Calendar unused;
+        unused = Calendar.getInstance(TimeZone.getDefault(), Locale.ENGLISH);
+        unused = Calendar.getInstance(zone, Locale.ENGLISH);
+        unused = new GregorianCalendar(zone);
+        unused = new GregorianCalendar(Locale.ENGLISH);
+        unused = new GregorianCalendar(Locale.ENGLISH);
+        unused = new GregorianCalendar(zone, Locale.ENGLISH);
+        unused = new GregorianCalendar(zone);
+        unused = new GregorianCalendar(1998, 10, 14, 21, 43);
 
-        cal = Calendar.getInstance(zone, Locale.ENGLISH);
-        // delete cal;
-
-        GregorianCalendar gc = new GregorianCalendar(zone);
-        // delete gc;
-
-        gc = new GregorianCalendar(Locale.ENGLISH);
-        // delete gc;
-
-        gc = new GregorianCalendar(Locale.ENGLISH);
-        // delete gc;
-
-        gc = new GregorianCalendar(zone, Locale.ENGLISH);
-        // delete gc;
-
-        gc = new GregorianCalendar(zone);
-        // delete gc;
-
-        gc = new GregorianCalendar(1998, 10, 14, 21, 43);
         tempcal.clear();
         tempcal.set(1998, 10, 14, 21, 43);
-        if (gc.getTime().getTime() != tempcal.getTime().getTime())
+        if (unused.getTime().getTime() != tempcal.getTime().getTime())
             errln("FAIL: new GregorianCalendar(ymdhm) failed");
         // delete gc;
 
-        gc = new GregorianCalendar(1998, 10, 14, 21, 43, 55);
+        unused = new GregorianCalendar(1998, 10, 14, 21, 43, 55);
         tempcal.clear();
         tempcal.set(1998, 10, 14, 21, 43, 55);
-        if (gc.getTime().getTime() != tempcal.getTime().getTime())
+        if (unused.getTime().getTime() != tempcal.getTime().getTime())
             errln("FAIL: new GregorianCalendar(ymdhms) failed");
 
         // C++ only:
@@ -1081,9 +1069,8 @@ public class CompatibilityTest extends CoreTestFmwk {
         int year = 1997;
         int month = java.util.Calendar.OCTOBER; // october
         int dDate = 22; // DAYOFWEEK should return 3 for Wednesday
-        GregorianCalendar calendar = null;
 
-        calendar = new GregorianCalendar(year, month, dDate);
+        GregorianCalendar calendar = new GregorianCalendar(year, month, dDate);
         for (int i = 0; i < EXPECTED_FIELDS.length; ) {
             int field = EXPECTED_FIELDS[i++];
             int expected = EXPECTED_FIELDS[i++];

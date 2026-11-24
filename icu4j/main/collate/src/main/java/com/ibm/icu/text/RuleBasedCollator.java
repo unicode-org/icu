@@ -1113,7 +1113,7 @@ public final class RuleBasedCollator extends Collator implements Cloneable {
             buffer = getCollationBuffer();
             return getCollationKey(source, buffer);
         } finally {
-            releaseCollationBuffer(buffer);
+            releaseCollationBuffer();
         }
     }
 
@@ -1147,7 +1147,7 @@ public final class RuleBasedCollator extends Collator implements Cloneable {
             buffer = getCollationBuffer();
             return getRawCollationKey(source, key, buffer);
         } finally {
-            releaseCollationBuffer(buffer);
+            releaseCollationBuffer();
         }
     }
 
@@ -1282,7 +1282,7 @@ public final class RuleBasedCollator extends Collator implements Cloneable {
             System.arraycopy(iter.getCEs(), 0, ces, 0, length);
             return ces;
         } finally {
-            releaseCollationBuffer(buffer);
+            releaseCollationBuffer();
         }
     }
 
@@ -1793,7 +1793,7 @@ public final class RuleBasedCollator extends Collator implements Cloneable {
                                     buffer.leftFCDUTF16Iter, buffer.rightFCDUTF16Iter, roSettings);
                 }
             } finally {
-                releaseCollationBuffer(buffer);
+                releaseCollationBuffer();
             }
         }
         if (result != Collation.EQUAL || roSettings.getStrength() < Collator.IDENTICAL) {
@@ -1816,7 +1816,7 @@ public final class RuleBasedCollator extends Collator implements Cloneable {
                         nfcImpl, buffer.leftFCDUTF16NFDIter, buffer.rightFCDUTF16NFDIter);
             }
         } finally {
-            releaseCollationBuffer(buffer);
+            releaseCollationBuffer();
         }
     }
 
@@ -1927,7 +1927,7 @@ public final class RuleBasedCollator extends Collator implements Cloneable {
         return collationBuffer;
     }
 
-    private final void releaseCollationBuffer(CollationBuffer buffer) {
+    private final void releaseCollationBuffer() {
         if (isFrozen()) {
             frozenLock.unlock();
         }

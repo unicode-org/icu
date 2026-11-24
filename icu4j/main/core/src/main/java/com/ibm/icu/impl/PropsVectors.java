@@ -61,12 +61,9 @@ public class PropsVectors {
     // The returned index is a multiple of columns, and therefore
     // points to the start of a row.
     private int findRow(int rangeStart) {
-        int index = 0;
-
         // check the vicinity of the last-seen row (start
         // searching with an unrolled loop)
-
-        index = prevRow * columns;
+        int index = prevRow * columns;
         if (rangeStart >= v[index]) {
             if (rangeStart < v[index + 1]) {
                 // same row as last seen

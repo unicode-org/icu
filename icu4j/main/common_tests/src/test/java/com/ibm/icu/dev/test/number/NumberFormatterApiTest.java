@@ -721,7 +721,8 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
             MeasureUnit inputUnit = MeasureUnit.forIdentifier(test[2]);
             double inputValue = Double.parseDouble(test[3]);
             String usage = test[4];
-            MeasureUnit expectedOutputUnit = MeasureUnit.forIdentifier(test[5]);
+            // TODO: ICU-22154
+            // MeasureUnit expectedOutputUnit = MeasureUnit.forIdentifier(test[5]);
             BigDecimal expectedOutputValue = new BigDecimal(test[6]);
             String expectedFormattedMessage = test[7];
 
@@ -735,13 +736,15 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
             }
 
             FormattedNumber fn = nf.format(inputValue);
-            MeasureUnit actualOutputUnit = fn.getOutputUnit();
-            BigDecimal actualOutputValue = fn.toBigDecimal();
-            String actualFormattedMessage = fn.toString();
 
+            String actualFormattedMessage = fn.toString();
             assertEquals(message, expectedFormattedMessage, actualFormattedMessage);
+
             // TODO: ICU-22154
+            // MeasureUnit actualOutputUnit = fn.getOutputUnit();
             // assertEquals(message, expectedOutputUnit, actualOutputUnit);
+
+            BigDecimal actualOutputValue = fn.toBigDecimal();
             assertTrue(
                     message,
                     expectedOutputValue
@@ -4581,8 +4584,6 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
 
     @Test
     public void roundingIncrementRegressionTest() {
-        ULocale locale = ULocale.ENGLISH;
-
         for (int min_fraction_digits = 1; min_fraction_digits < 8; min_fraction_digits++) {
             // pattern is a snprintf pattern string like "precision-increment/%.5f"
             String pattern = String.format("precision-increment/%%.%df", min_fraction_digits);
@@ -4597,8 +4598,6 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
                 }
                 UnlocalizedNumberFormatter f =
                         NumberFormatter.with().precision(Precision.increment(bdIncrement));
-                LocalizedNumberFormatter l = f.locale(locale);
-
                 String skeleton = f.toSkeleton();
 
                 String message =

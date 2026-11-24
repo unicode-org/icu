@@ -4734,7 +4734,7 @@ public class ULocaleTest extends CoreTestFmwk {
                         + "_12345678"
                         + "_12345678"
                         + "_12345678X"; // One character too long.
-        ULocale locale = new ULocale(invalid);
+        new ULocale(invalid);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -4761,7 +4761,7 @@ public class ULocaleTest extends CoreTestFmwk {
                         + "_12345678"
                         + "_12345678"
                         + "_12345678X"; // One character too long.
-        ULocale locale = new ULocale(invalidPosix);
+        new ULocale(invalidPosix);
     }
 
     @Test
@@ -4790,10 +4790,6 @@ public class ULocaleTest extends CoreTestFmwk {
     }
 
     private static final class TestCase implements Cloneable {
-        private static final String ENDL = System.getProperties().getProperty("line.separator");
-
-        int lineNr = 0;
-
         String source = "";
         String addLikely = "";
         String removeFavorScript = "";

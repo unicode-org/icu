@@ -46,7 +46,6 @@ class DateTimeFunctionFactory implements FunctionFactory {
     @Override
     public Function create(Locale locale, Map<String, ?> fixedOptions) {
         locale = OptUtils.getBestLocale(fixedOptions, locale);
-        Directionality dir = OptUtils.getBestDirectionality(fixedOptions, locale);
 
         boolean reportErrors = OptUtils.reportErrors(fixedOptions);
 
@@ -203,11 +202,10 @@ class DateTimeFunctionFactory implements FunctionFactory {
 
     private static class DateTimeFunctionImpl implements Function {
         private final DateFormat icuFormatter;
-        private final Locale locale;
         private final boolean reportErrors;
 
-        private DateTimeFunctionImpl(Locale locale, DateFormat df, boolean reportErrors) {
-            this.locale = locale;
+        private DateTimeFunctionImpl(
+                @SuppressWarnings("unused") Locale locale, DateFormat df, boolean reportErrors) {
             this.icuFormatter = df;
             this.reportErrors = reportErrors;
         }

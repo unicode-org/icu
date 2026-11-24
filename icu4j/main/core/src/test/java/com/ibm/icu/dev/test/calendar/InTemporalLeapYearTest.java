@@ -186,7 +186,6 @@ public class InTemporalLeapYearTest extends CoreTestFmwk {
 
     private void RunXDaysIsLeap(Calendar cal, int x) {
         GregorianCalendar gc = new GregorianCalendar();
-        Calendar leapTest = cal.clone();
         // Start our test from 1900, Jan 1.
         // Check every 29 days in exhausted mode.
         int incrementDays = 29;

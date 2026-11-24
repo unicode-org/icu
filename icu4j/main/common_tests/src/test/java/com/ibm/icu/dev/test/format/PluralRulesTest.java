@@ -1026,8 +1026,6 @@ public class PluralRulesTest extends CoreTestFmwk {
      */
     @Test
     public void TestGetUniqueKeywordValue() {
-        LocalizedNumberFormatter fmtr = NumberFormatter.withLocale(ULocale.ROOT);
-
         assertRuleKeyValue(
                 "a: n is 1",
                 "not_defined",
@@ -1463,8 +1461,8 @@ public class PluralRulesTest extends CoreTestFmwk {
                         continue;
                     }
                     for (String keyword : rules.getKeywords()) {
-                        boolean isLimited = rules.isLimited(keyword, sampleType);
-                        boolean computeLimited = rules.computeLimited(keyword, sampleType);
+                        // boolean isLimited = rules.isLimited(keyword, sampleType);
+                        // boolean computeLimited = rules.computeLimited(keyword, sampleType);
                         Collection<DecimalQuantity> samples =
                                 rules.getDecimalQuantitySamples(keyword, sampleType);
                         assertNotNull(

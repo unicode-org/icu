@@ -22,7 +22,6 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -130,9 +129,8 @@ public class ICUResourceBundle extends UResourceBundle {
         }
 
         // Check top level locale first
-        ICUResourceBundle r = null;
-
-        r = (ICUResourceBundle) UResourceBundle.getBundleInstance(baseName, parent);
+        ICUResourceBundle r =
+                (ICUResourceBundle) UResourceBundle.getBundleInstance(baseName, parent);
         if (isAvailable != null) {
             isAvailable[0] = false;
             ULocale[] availableULocales =
@@ -1368,14 +1366,6 @@ public class ICUResourceBundle extends UResourceBundle {
         return localeID.startsWith(lang)
                 && (localeID.length() == lang.length() || localeID.charAt(lang.length()) == '_');
     }
-
-    private static final Comparator<String[]> COMPARE_FIRST_ELEMENT =
-            new Comparator<String[]>() {
-                @Override
-                public int compare(String[] pair1, String[] pair2) {
-                    return pair1[0].compareTo(pair2[0]);
-                }
-            };
 
     private static String getExplicitParent(String localeID) {
         return LocaleFallbackData.PARENT_LOCALE_TABLE.get(localeID);

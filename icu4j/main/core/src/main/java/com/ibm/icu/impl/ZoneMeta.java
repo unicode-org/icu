@@ -715,7 +715,6 @@ public final class ZoneMeta {
                 && id.length() > kGMT_ID.length()
                 && id.substring(0, 3).equalsIgnoreCase(kGMT_ID)) {
             int sign = 1;
-            int hour = 0;
             int min = 0;
             int sec = 0;
 
@@ -728,7 +727,7 @@ public final class ZoneMeta {
             }
             pos[0]++;
             int start = pos[0];
-            hour = Utility.parseNumber(id, pos, 10);
+            int hour = Utility.parseNumber(id, pos, 10);
             if (pos[0] == id.length()) {
                 // Handle the following cases
                 // HHmmss

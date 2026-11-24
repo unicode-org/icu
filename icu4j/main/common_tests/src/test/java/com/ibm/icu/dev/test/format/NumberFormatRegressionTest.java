@@ -355,11 +355,8 @@ public class NumberFormatRegressionTest extends CoreTestFmwk {
 
     @Test
     public void TestNBSPInPattern() {
-        NumberFormat nf = null;
-        String testcase;
-
-        testcase = "ar_AE UNUM_CURRENCY";
-        nf = NumberFormat.getCurrencyInstance(new ULocale("ar_AE"));
+        String testcase = "ar_AE UNUM_CURRENCY";
+        NumberFormat nf = NumberFormat.getCurrencyInstance(new ULocale("ar_AE"));
         checkNBSPPatternRT(testcase, nf);
         // if we don't have CLDR 1.6 data, bring out the problem anyways
 

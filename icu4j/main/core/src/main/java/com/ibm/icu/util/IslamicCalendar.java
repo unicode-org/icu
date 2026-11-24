@@ -638,7 +638,6 @@ public class IslamicCalendar extends Calendar {
             // linear estimate.
             int year = (int) ((days - (460322.05 + 0.5)) / 354.36720) + UMALQURA_YEAR_START - 1;
             int month = 0;
-            long monthStart;
             long d = 1;
             while (d > 0) {
                 year++;

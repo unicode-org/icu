@@ -2101,8 +2101,7 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
                 break;
             case 3: // 'd' - DATE
                 if (count >= 3 && value >= 1) {
-                    String dayStr =
-                            formatDayOfMonthName(value, currentNumberFormat, count, maxIntCount);
+                    String dayStr = formatDayOfMonthName(value, currentNumberFormat, maxIntCount);
                     if (dayStr != null) {
                         buf.append(dayStr);
                         break;
@@ -3329,8 +3328,8 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
                 allowNegative,
                 ambiguousYear,
                 cal,
-                null,
-                null,
+                numericLeapMonthFormatter,
+                tzTimeType,
                 null);
     }
 
@@ -3372,7 +3371,6 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
             Output<TimeType> tzTimeType,
             Output<DayPeriodRules.DayPeriod> dayPeriod) {
         Number number = null;
-        NumberFormat currentNumberFormat = null;
         int value = 0;
         int i;
         ParsePosition pos = new ParsePosition(0);
@@ -3382,7 +3380,7 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
             return ~start;
         }
 
-        currentNumberFormat = getNumberFormat(ch);
+        NumberFormat currentNumberFormat = getNumberFormat(ch);
 
         int field = PATTERN_INDEX_TO_CALENDAR_FIELD[patternCharIndex]; // -1 if irrelevant
 
@@ -5222,7 +5220,7 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
      * the caller should fall back to numeric formatting.
      */
     private String formatDayOfMonthName(
-            int value, NumberFormat currentNumberFormat, int count, int maxIntCount) {
+            int value, NumberFormat currentNumberFormat, int maxIntCount) {
         // First check for a cardinal element (e.g., Chinese hanidays "\u521D\u4E00",
         // "\u5341\u4E94").
         String[] cardinalNames =

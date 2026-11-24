@@ -276,7 +276,6 @@ public class IBMCalendarTest extends CalendarTestFmwk {
      */
     @Test
     public void TestFirstDayOfWeek() {
-        String l;
         // Test -u-fw- value
         verifyFirstDayOfWeek("en-MV-u-ca-iso8601-fw-sun-rg-mvzzzz-sd-usca", Calendar.SUNDAY);
         verifyFirstDayOfWeek("en-MV-u-ca-iso8601-fw-mon-rg-mvzzzz-sd-usca", Calendar.MONDAY);
@@ -1132,7 +1131,7 @@ public class IBMCalendarTest extends CalendarTestFmwk {
 
         // CalendarAstronomer
         // (This class should probably be made package-private.)
-        CalendarAstronomer astro = new CalendarAstronomer();
+        CalendarAstronomer unused = new CalendarAstronomer();
 
         // ChineseCalendar
         ChineseCalendar ccal = new ChineseCalendar(TimeZone.getDefault(), Locale.getDefault());
@@ -3314,9 +3313,6 @@ public class IBMCalendarTest extends CalendarTestFmwk {
                     logKnownIssue("ICU-22230", "Problem December in Leap Year");
                     continue;
                 }
-                int year = base.get(Calendar.YEAR);
-                int month = base.get(Calendar.MONTH) + 1;
-                int date = base.get(Calendar.DATE);
 
                 errln(
                         "Round trip conversion produces different time from "

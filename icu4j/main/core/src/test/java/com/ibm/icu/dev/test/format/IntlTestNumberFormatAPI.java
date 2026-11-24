@@ -85,8 +85,6 @@ public class IntlTestNumberFormatAPI extends CoreTestFmwk {
         final double d = -10456.00370000000000; // this works!
         final long l = 100000000;
 
-        String res1 = new String();
-        String res2 = new String();
         StringBuffer res3 = new StringBuffer();
         StringBuffer res4 = new StringBuffer();
         StringBuffer res5 = new StringBuffer();
@@ -96,10 +94,10 @@ public class IntlTestNumberFormatAPI extends CoreTestFmwk {
         FieldPosition pos3 = new FieldPosition(0);
         FieldPosition pos4 = new FieldPosition(0);
 
-        res1 = cur_fr.format(d);
+        String res1 = cur_fr.format(d);
         logDebug("" + d + " formatted to " + res1);
 
-        res2 = cur_fr.format(l);
+        String res2 = cur_fr.format(l);
         logDebug("" + l + " formatted to " + res2);
 
         res3 = cur_fr.format(d, res3, pos1);

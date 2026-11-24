@@ -103,7 +103,6 @@ public class IntlTestDateFormatAPI extends CoreTestFmwk {
 
         StringBuffer res1 = new StringBuffer();
         StringBuffer res2 = new StringBuffer();
-        String res3 = new String();
         FieldPosition pos1 = new FieldPosition(0);
         FieldPosition pos2 = new FieldPosition(0);
 
@@ -113,7 +112,7 @@ public class IntlTestDateFormatAPI extends CoreTestFmwk {
         res2 = it.format(d, res2, pos2);
         logDebug("" + d.getTime() + " formatted to " + res2);
 
-        res3 = de.format(d);
+        String res3 = de.format(d);
         logDebug("" + d.getTime() + " formatted to " + res3);
 
         // ======= Test parse()
@@ -121,13 +120,11 @@ public class IntlTestDateFormatAPI extends CoreTestFmwk {
         logDebug("Testing parse()");
 
         String text = new String("02/03/76, 2:50 AM, CST");
-        Object result1 = new Date();
         Date result2 = new Date();
-        Date result3 = new Date();
         ParsePosition pos = new ParsePosition(0);
         ParsePosition pos01 = new ParsePosition(0);
 
-        result1 = def.parseObject(text, pos);
+        Object result1 = def.parseObject(text, pos);
         if (result1 == null) {
             errln("ERROR: parseObject() failed for " + text);
         }
@@ -140,7 +137,7 @@ public class IntlTestDateFormatAPI extends CoreTestFmwk {
         }
         logDebug(text + " parsed into " + result2.getTime());
 
-        result3 = def.parse(text, pos01);
+        Date result3 = def.parse(text, pos01);
         if (result3 == null) {
             errln("ERROR: parse() failed for " + text);
         }

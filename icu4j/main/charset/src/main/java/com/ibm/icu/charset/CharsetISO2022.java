@@ -249,8 +249,7 @@ class CharsetISO2022 extends CharsetICU {
     /* This gets the valid index of the end of buffer when decoding. */
     private static int getEndOfBuffer_2022(ByteBuffer source) {
         int sourceIndex = source.position();
-        byte mySource = 0;
-        mySource = source.get(sourceIndex);
+        byte mySource = source.get(sourceIndex);
 
         while (source.hasRemaining() && mySource != ESC_2022) {
             mySource = source.get();
@@ -2397,7 +2396,6 @@ class CharsetISO2022 extends CharsetICU {
                 CharBuffer source,
                 ByteBuffer target,
                 IntBuffer offsets) {
-            CoderResult err = CoderResult.UNDERFLOW;
             byte[] buffer = new byte[8];
             int i = 0;
             byte[] subchar;
@@ -2421,11 +2419,8 @@ class CharsetISO2022 extends CharsetICU {
 
             buffer[i++] = subchar[0];
 
-            err =
-                    CharsetEncoderICU.fromUWriteBytes(
-                            this, buffer, 0, i, target, offsets, source.position() - 1);
-
-            return err;
+            return CharsetEncoderICU.fromUWriteBytes(
+                    this, buffer, 0, i, target, offsets, source.position() - 1);
         }
 
         @Override
@@ -2974,7 +2969,6 @@ class CharsetISO2022 extends CharsetICU {
                 CharBuffer source,
                 ByteBuffer target,
                 IntBuffer offsets) {
-            CoderResult err = CoderResult.UNDERFLOW;
             byte[] buffer = new byte[8];
             int i = 0;
             byte[] subchar;
@@ -2987,7 +2981,7 @@ class CharsetISO2022 extends CharsetICU {
             }
             buffer[i++] = subchar[0];
 
-            err =
+            CoderResult err =
                     CharsetEncoderICU.fromUWriteBytes(
                             this, buffer, 0, i, target, offsets, source.position() - 1);
 
@@ -3440,10 +3434,9 @@ class CharsetISO2022 extends CharsetICU {
 
         private CoderResult encodeLoopIBM(
                 CharBuffer source, ByteBuffer target, IntBuffer offsets, boolean flush) {
-            CoderResult err = CoderResult.UNDERFLOW;
 
             myConverterData.currentEncoder.fromUChar32 = fromUChar32;
-            err =
+            CoderResult err =
                     myConverterData.currentEncoder.cnvMBCSFromUnicodeWithOffsets(
                             source, target, offsets, flush);
             fromUChar32 = myConverterData.currentEncoder.fromUChar32;

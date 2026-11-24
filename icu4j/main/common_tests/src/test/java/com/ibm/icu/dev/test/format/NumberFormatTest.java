@@ -431,7 +431,6 @@ public class NumberFormatTest extends CoreTestFmwk {
         logDebug(" Format 123 . " + s);
         if (!s.equals("afo'ob123")) errln("FAIL: Expected afo'ob123");
 
-        s = "";
         pat = new StringBuffer("a''b#");
         fmt = new DecimalFormat(pat.toString(), sym);
         s = ((NumberFormat) fmt).format(123);
@@ -1380,9 +1379,8 @@ public class NumberFormatTest extends CoreTestFmwk {
         expectPat(f, "#,####,##0");
         NumberFormat g = NumberFormat.getInstance(new Locale("hi", "IN"));
 
-        String out = "";
         long l = 1876543210L;
-        out = g.format(l);
+        String out = g.format(l);
 
         // expect "1,87,65,43,210", but with Hindi digits
         //         01234567890123
@@ -2847,9 +2845,6 @@ public class NumberFormatTest extends CoreTestFmwk {
         assertEquals("cp end", 14, cp.getEndIndex());
 
         // Negative value with PLURALCURRENCYSTYLE, Arabic digits.
-        nf =
-                (DecimalFormat)
-                        com.ibm.icu.text.NumberFormat.getCurrencyInstance(new Locale("ar", "eg"));
         plCurrencyFmt =
                 NumberFormat.getInstance(new Locale("ar", "eg"), NumberFormat.PLURALCURRENCYSTYLE);
         StringBuffer buffer11 = new StringBuffer();

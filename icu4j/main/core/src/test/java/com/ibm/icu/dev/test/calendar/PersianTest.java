@@ -220,7 +220,6 @@ public class PersianTest extends CalendarTestFmwk {
             int year = PERSIAN_TEST_CASE_1[i++];
             int month = PERSIAN_TEST_CASE_1[i++];
             int day = PERSIAN_TEST_CASE_1[i++];
-            int jday = rd + 1721425;
             cal.clear();
             cal.set(Calendar.YEAR, year);
             cal.set(Calendar.MONTH, month - 1);
@@ -548,6 +547,7 @@ public class PersianTest extends CalendarTestFmwk {
     };
 
     @Test
+    @SuppressWarnings("unused")
     public void TestPersianJan1ToGregorian() {
         Calendar gcal =
                 Calendar.getInstance(TimeZone.getTimeZone("Asia/Tehran"), new ULocale("en"));
@@ -592,6 +592,7 @@ public class PersianTest extends CalendarTestFmwk {
     }
 
     @Test
+    @SuppressWarnings("unused")
     public void TestGregorianToPersian() {
         Calendar gcal =
                 Calendar.getInstance(TimeZone.getTimeZone("Asia/Tehran"), new ULocale("en"));

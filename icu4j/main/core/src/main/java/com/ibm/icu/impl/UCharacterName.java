@@ -72,9 +72,7 @@ public final class UCharacterName {
             return null;
         }
 
-        String result = null;
-
-        result = getAlgName(ch, choice);
+        String result = getAlgName(ch, choice);
 
         // getting normal character name
         if (result == null || result.length() == 0) {
@@ -661,7 +659,6 @@ public final class UCharacterName {
          * @return the algorithmic char or -1 otherwise.
          */
         int getChar(CharacterNameQuery query) {
-            int prefixlen = m_prefix_.length();
             final var matcher = query.matcher();
             if (!matcher.consistentWith(m_prefix_)) {
                 return -1;

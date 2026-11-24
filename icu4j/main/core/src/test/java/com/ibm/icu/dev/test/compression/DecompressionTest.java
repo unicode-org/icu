@@ -35,9 +35,8 @@ public class DecompressionTest extends CoreTestFmwk {
 
         int[] bytesRead = new int[1];
         char[] charBuffer = new char[2 * (segment1.length + segment2.length)];
-        int count1 = 0, count2 = 0;
 
-        count1 =
+        int count1 =
                 myDecompressor.decompress(
                         segment1, 0, segment1.length, bytesRead, charBuffer, 0, charBuffer.length);
 
@@ -53,7 +52,7 @@ public class DecompressionTest extends CoreTestFmwk {
 
         s.append(charBuffer, 0, count1);
 
-        count2 =
+        int count2 =
                 myDecompressor.decompress(
                         segment2,
                         0,

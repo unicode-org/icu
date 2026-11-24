@@ -714,7 +714,7 @@ public class TestCharset extends TestFmwk {
             if (i < 3) {
                 if (!result.isOverflow()) {
                     errln(
-                            "Overflow buffer error should have occurred while encoding HZ ("
+                            "Buffer overflow error should have occurred while encoding HZ ("
                                     + i
                                     + ")");
                 }
@@ -1388,7 +1388,7 @@ public class TestCharset extends TestFmwk {
     //    }
 
     @Test
-    public void TestAPISemantics(/*String encoding*/ ) {
+    public void TestAPISemantics() {
         String encoding = "UTF-16";
         CharsetDecoder decoder = null;
         CharsetEncoder encoder = null;
@@ -1849,7 +1849,7 @@ public class TestCharset extends TestFmwk {
     */
 
     @Test
-    public void TestCanConvert(/*String encoding*/ ) throws Exception {
+    public void TestCanConvert() throws Exception {
         char[] mySource = {
             '\ud800', '\udc00', /*surrogate pair */ '\u22A6', '\u22A7', '\u22A8', '\u22A9',
             '\u22AA', '\u22AB', '\u22AC', '\u22AD', '\u22AE', '\u22AF', '\u22B0', '\u22B1',
@@ -2211,8 +2211,7 @@ public class TestCharset extends TestFmwk {
             myTarget.limit(target.limit());
             mySource.limit(source.limit());
             mySource.position(source.position());
-            CoderResult result = CoderResult.UNDERFLOW;
-            result = decoder.decode(mySource, myTarget, true);
+            CoderResult result = decoder.decode(mySource, myTarget, true);
             if (flush) {
                 result = decoder.flush(myTarget);
             }
@@ -2320,7 +2319,8 @@ public class TestCharset extends TestFmwk {
             boolean throwException,
             boolean flush)
             throws Exception, BufferOverflowException {
-        smBufEncode(encoder, encoding, source, target, throwException, flush, true);
+        smBufEncode(
+                encoder, encoding, source, target, throwException, flush, /*backedByArray*/ true);
     }
 
     private void smBufEncode(
@@ -2332,7 +2332,15 @@ public class TestCharset extends TestFmwk {
             boolean flush,
             boolean backedByArray)
             throws Exception, BufferOverflowException {
-        smBufEncode(encoder, encoding, source, target, throwException, flush, true, -1);
+        smBufEncode(
+                encoder,
+                encoding,
+                source,
+                target,
+                throwException,
+                flush,
+                backedByArray,
+                /*targetLimit*/ -1);
     }
 
     private void smBufEncode(
@@ -2366,9 +2374,8 @@ public class TestCharset extends TestFmwk {
             myTarget.limit(target.limit());
             mySource.limit(source.limit());
             mySource.position(source.position());
-            CoderResult result = null;
 
-            result = encoder.encode(mySource, myTarget, true);
+            CoderResult result = encoder.encode(mySource, myTarget, true);
             if (flush) {
                 result = encoder.flush(myTarget);
             }
@@ -2835,10 +2842,12 @@ public class TestCharset extends TestFmwk {
         decoder.onMalformedInput(CodingErrorAction.REPORT);
         decoder.onUnmappableCharacter(CodingErrorAction.REPORT);
         CharBuffer out = CharBuffer.allocate(10);
+
         CoderResult result =
                 decoder.decode(ByteBuffer.wrap(new byte[] {-1, -2, 32, 0, 98}), out, false);
-        result = decoder.decode(ByteBuffer.wrap(new byte[] {98}), out, true);
+        logDebug(cs.getClass().toString() + ":" + result.toString());
 
+        result = decoder.decode(ByteBuffer.wrap(new byte[] {98}), out, true);
         logDebug(cs.getClass().toString() + ":" + result.toString());
         try {
             result = decoder.flush(out);
@@ -3027,7 +3036,14 @@ public class TestCharset extends TestFmwk {
             ByteBuffer target,
             boolean backedByArray) {
         try {
-            smBufEncode(encoder, encoding, source, target, false, false);
+            smBufEncode(
+                    encoder,
+                    encoding,
+                    source,
+                    target,
+                    /*throwException*/ false,
+                    /*flush*/ false,
+                    backedByArray);
         } catch (Exception ex) {
             System.out.println("!exception!");
         }
@@ -3046,10 +3062,7 @@ public class TestCharset extends TestFmwk {
 
     @Test
     public void TestGetAllNames() {
-        String[] names = null;
-
-        names = CharsetProviderICU.getAllNames();
-
+        String[] names = CharsetProviderICU.getAllNames();
         if (names == null) {
             errln("getAllNames returned a null string.");
         }
@@ -3161,7 +3174,6 @@ public class TestCharset extends TestFmwk {
     // Test CharsetUTF7
     @Test
     public void TestCharsetUTF7() {
-        CoderResult result = CoderResult.UNDERFLOW;
         CharsetProvider provider = new CharsetProviderICU();
         Charset cs = provider.charsetForName("UTF-7");
         CharsetEncoder encoder = cs.newEncoder();
@@ -3664,10 +3676,14 @@ public class TestCharset extends TestFmwk {
         ccus.limit(ccus.position());
         ccus.position(0);
 
-        result = encoder.encode(ccus, ccbs, true);
+        CoderResult result = encoder.encode(ccus, ccbs, true);
+        if (!result.isOverflow()) {
+            errln("Buffer overflow while encoding UTF-7 should have occurred.");
+        }
+
         result = encoder.flush(ccbs);
         if (!result.isOverflow()) {
-            errln("Overflow buffer while encoding UTF-7 should have occurred.");
+            errln("Buffer overflow while encoding UTF-7 should have occurred.");
         }
         // end of charset encoder code coverage code
     }
@@ -4911,7 +4927,6 @@ public class TestCharset extends TestFmwk {
     // Test for charset UTF32LE to provide better code coverage
     @Test
     public void TestCharsetUTF32LE() {
-        CoderResult result = CoderResult.UNDERFLOW;
         CharsetProvider provider = new CharsetProviderICU();
         Charset cs = provider.charsetForName("UTF-32LE");
         CharsetEncoder encoder = cs.newEncoder();
@@ -4948,7 +4963,7 @@ public class TestCharset extends TestFmwk {
         us.limit(us.position());
         us.position(0);
 
-        result = encoder.encode(us, bs, true);
+        CoderResult result = encoder.encode(us, bs, true);
 
         if (!result.isError() && !result.isOverflow()) {
             errln("Error while encoding UTF32LE (2) should have occurred.");
@@ -5039,7 +5054,6 @@ public class TestCharset extends TestFmwk {
     // Test for charset UTF16LE to provide better code coverage
     @Test
     public void TestCharsetUTF16LE() {
-        CoderResult result = CoderResult.UNDERFLOW;
         CharsetProvider provider = new CharsetProviderICU();
         Charset cs = provider.charsetForName("UTF-16LE");
         CharsetEncoder encoder = cs.newEncoder();
@@ -5070,7 +5084,7 @@ public class TestCharset extends TestFmwk {
         bs.limit(1);
         bs.position(0);
 
-        result = encoder.encode(us, bs, true);
+        CoderResult result = encoder.encode(us, bs, true);
 
         if (!result.isMalformed()) {
             // LE should not output BOM, so this should be malformed
@@ -5098,6 +5112,9 @@ public class TestCharset extends TestFmwk {
         bs.position(0);
 
         result = encoder.encode(us, bs, true);
+        if (!result.isMalformed()) {
+            errln("Error while encoding UTF-16LE (3) should have occured.");
+        }
 
         us.limit(6);
         us.position(4);
@@ -5114,7 +5131,6 @@ public class TestCharset extends TestFmwk {
     // provide better code coverage for the generic charset UTF32
     @Test
     public void TestCharsetUTF32() {
-        CoderResult result = CoderResult.UNDERFLOW;
         CharsetProvider provider = new CharsetProviderICU();
         Charset cs = provider.charsetForName("UTF-32");
         CharsetDecoder decoder = cs.newDecoder();
@@ -5231,7 +5247,7 @@ public class TestCharset extends TestFmwk {
         bs.limit(bs.position());
         bs.position(0);
 
-        result = encoder.encode(us, bs, true);
+        CoderResult result = encoder.encode(us, bs, true);
         // must try to output BOM first for UTF-32 (not UTF-32BE or UTF-32LE)
         if (!result.isOverflow()) {
             errln("Buffer overflow error while encoding UTF32 charset (1) should have occurred.");
@@ -5351,7 +5367,6 @@ public class TestCharset extends TestFmwk {
     // this method provides better code coverage decoding UTF32 LE/BE
     @Test
     public void TestDecodeUTF32LEBE() {
-        CoderResult result = CoderResult.UNDERFLOW;
         CharsetProvider provider = new CharsetProviderICU();
         CharsetDecoder decoder;
         CharBuffer us = CharBuffer.allocate(0x10);
@@ -5380,14 +5395,14 @@ public class TestCharset extends TestFmwk {
         bs.position(0);
         us.position(0);
         decoder.reset();
-        result = decoder.decode(bs, us, true);
+        CoderResult result = decoder.decode(bs, us, true);
         if (result.isOverflow()) {
             result = decoder.decode(bs, us, true);
             if (!result.isOverflow()) {
-                errln("Overflow buffer error while decoding UTF32LE should have occurred.");
+                errln("Buffer overflow error while decoding UTF32LE should have occurred.");
             }
         } else {
-            errln("Overflow buffer error while decoding UTF32LE should have occurred.");
+            errln("Buffer overflow error while decoding UTF32LE should have occurred.");
         }
 
         us.clear();
@@ -5599,7 +5614,6 @@ public class TestCharset extends TestFmwk {
     // provide better code coverage for UTF8
     @Test
     public void TestCharsetUTF8() {
-        CoderResult result = CoderResult.UNDERFLOW;
         CharsetProvider provider = new CharsetProviderICU();
         CharsetDecoder decoder = provider.charsetForName("UTF-8").newDecoder();
         CharsetEncoder encoder = provider.charsetForName("UTF-8").newEncoder();
@@ -5635,7 +5649,7 @@ public class TestCharset extends TestFmwk {
         bs2 = bs.asReadOnlyBuffer();
         us2 = us.asReadOnlyBuffer();
 
-        result = decoder.decode(bs2, us, true);
+        CoderResult result = decoder.decode(bs2, us, true);
         if (!result.isUnderflow() || !equals(us, us2)) {
             errln("Error while decoding UTF-8 (1) should not have occured.");
         }
@@ -5823,6 +5837,10 @@ public class TestCharset extends TestFmwk {
         bs2.position(0);
 
         result = decoder.decode(bs2, us, true);
+        if (!result.isMalformed()) {
+            errln("Malform error should have occurred while decoding UTF-8 (1).");
+        }
+
         result = decoder.flush(us);
         if (!result.isMalformed()) {
             errln("Malform error should have occurred while decoding UTF-8 (1).");
@@ -5835,7 +5853,10 @@ public class TestCharset extends TestFmwk {
 
         decoder.reset();
 
-        result = decoder.decode(bs2, us, true);
+        decoder.decode(bs2, us, true);
+        if (!result.isMalformed()) {
+            errln("Malform error should have occurred while decoding UTF-8 (2).");
+        }
         us.limit(1);
         us.position(0);
         bs2.limit(2);
@@ -5947,7 +5968,6 @@ public class TestCharset extends TestFmwk {
     // provide better code coverage for Charset UTF16
     @Test
     public void TestCharsetUTF16() {
-        CoderResult result = CoderResult.UNDERFLOW;
         CharsetProvider provider = new CharsetProviderICU();
         CharsetDecoder decoder = provider.charsetForName("UTF-16").newDecoder();
         CharsetEncoder encoder = provider.charsetForName("UTF-16").newEncoder();
@@ -5964,7 +5984,11 @@ public class TestCharset extends TestFmwk {
         bs.limit(bs.position());
         bs.position(0);
 
-        result = decoder.decode(bs, us, true);
+        CoderResult result = decoder.decode(bs, us, true);
+        if (!result.isMalformed()) {
+            errln("Malform error while decoding UTF-16 should have occurred.");
+        }
+
         result = decoder.flush(us);
         if (!result.isMalformed()) {
             errln("Malform error while decoding UTF-16 should have occurred.");
@@ -5982,14 +6006,14 @@ public class TestCharset extends TestFmwk {
         bs.limit(4);
         bs.position(0);
 
-        result = encoder.encode(us, bs, true);
+        encoder.encode(us, bs, true);
         us.limit(3);
         us.position(0);
         bs.limit(3);
         bs.position(0);
         result = encoder.encode(us, bs, true);
         if (!result.isOverflow()) {
-            errln("Overflow buffer while encoding UTF-16 should have occurred.");
+            errln("Buffer overflow while encoding UTF-16 should have occurred.");
         }
 
         us.clear();
@@ -6010,14 +6034,13 @@ public class TestCharset extends TestFmwk {
 
         result = decoder.decode(bs, us, true);
         if (!result.isOverflow()) {
-            errln("Overflow buffer while decoding UTF-16 should have occurred.");
+            errln("Buffer overflow while decoding UTF-16 should have occurred.");
         }
     }
 
     // provide better code coverage for Charset ISO-2022-KR
     @Test
     public void TestCharsetISO2022KR() {
-        CoderResult result = CoderResult.UNDERFLOW;
         CharsetProvider provider = new CharsetProviderICU();
         CharsetDecoder decoder = provider.charsetForName("ISO-2022-KR").newDecoder();
 
@@ -6028,17 +6051,16 @@ public class TestCharset extends TestFmwk {
         ByteBuffer bb = ByteBuffer.wrap(bytearray);
         CharBuffer cb = CharBuffer.wrap(chararray);
 
-        result = decoder.decode(bb, cb, true);
+        CoderResult result = decoder.decode(bb, cb, true);
 
         if (!result.isOverflow()) {
-            errln("Overflow buffer while decoding ISO-2022-KR should have occurred.");
+            errln("Buffer overflow while decoding ISO-2022-KR should have occurred.");
         }
     }
 
     // provide better code coverage for Charset ISO-2022-JP
     @Test
     public void TestCharsetISO2022JP() {
-        CoderResult result = CoderResult.UNDERFLOW;
         CharsetProvider provider = new CharsetProviderICU();
         CharsetDecoder decoder = provider.charsetForName("ISO-2022-JP-2").newDecoder();
 
@@ -6049,17 +6071,16 @@ public class TestCharset extends TestFmwk {
         ByteBuffer bb = ByteBuffer.wrap(bytearray);
         CharBuffer cb = CharBuffer.wrap(chararray);
 
-        result = decoder.decode(bb, cb, true);
+        CoderResult result = decoder.decode(bb, cb, true);
 
         if (!result.isOverflow()) {
-            errln("Overflow buffer while decoding ISO-2022-KR should have occurred.");
+            errln("Buffer overflow while decoding ISO-2022-KR should have occurred.");
         }
     }
 
     // provide better code coverage for Charset ASCII
     @Test
     public void TestCharsetASCII() {
-        CoderResult result = CoderResult.UNDERFLOW;
         CharsetProvider provider = new CharsetProviderICU();
         CharsetDecoder decoder = provider.charsetForName("US-ASCII").newDecoder();
 
@@ -6069,9 +6090,12 @@ public class TestCharset extends TestFmwk {
         ByteBuffer bb = ByteBuffer.wrap(bytearray);
         CharBuffer cb = CharBuffer.wrap(chararray);
 
-        result = decoder.decode(bb, cb, true);
-        result = decoder.flush(cb);
+        CoderResult result = decoder.decode(bb, cb, true);
+        if (result.isError()) {
+            errln("Error occurred while decoding US-ASCII.");
+        }
 
+        result = decoder.flush(cb);
         if (result.isError()) {
             errln("Error occurred while decoding US-ASCII.");
         }
@@ -6242,7 +6266,6 @@ public class TestCharset extends TestFmwk {
     // Provide better code coverage in CharsetMBCS, CharsetDecoderICU, and CharsetEncoderICU.
     @Test
     public void TestCharsetTestData() {
-        CoderResult result = CoderResult.UNDERFLOW;
         String charsetName = "test4";
         CharsetProvider provider = new CharsetProviderICU();
         Charset charset =
@@ -6269,7 +6292,7 @@ public class TestCharset extends TestFmwk {
 
         bb.limit(4);
         cb.limit(1); // Overflow should occur and is expected
-        result = decoder.decode(bb, cb, false);
+        CoderResult result = decoder.decode(bb, cb, false);
         if (result.isError()) {
             errln("Error occurred while decoding: " + charsetName + " with error: " + result);
         }
@@ -6610,7 +6633,7 @@ public class TestCharset extends TestFmwk {
                     decode.reset();
                     CoderResult status = decode.decode(test, smallBuffer, true);
                     if (status != CoderResult.OVERFLOW) {
-                        errln("Overflow buffer error should have been thrown.");
+                        errln("Buffer overflow error should have been thrown.");
                     }
                 }
             } catch (Exception e) {
@@ -6620,12 +6643,11 @@ public class TestCharset extends TestFmwk {
 
         /* Provide better code coverage */
         /* testing illegal codepoints */
-        CoderResult illegalResult = CoderResult.UNDERFLOW;
         CharBuffer illegalDecoderTrgt = CharBuffer.allocate(10);
 
         byte[] illegalDecoderSrc1 = {(byte) 0x41, (byte) 0xdf, (byte) 0x0c};
         decode.reset();
-        illegalResult =
+        CoderResult illegalResult =
                 decode.decode(ByteBuffer.wrap(illegalDecoderSrc1), illegalDecoderTrgt, true);
         if (illegalResult == CoderResult.OVERFLOW || illegalResult == CoderResult.UNDERFLOW) {
             errln("Malformed error should have been returned for decoder " + charset.name());

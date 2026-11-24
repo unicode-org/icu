@@ -35,7 +35,7 @@ public class TransliteratorDisorderedMarksTest extends TransliteratorTestBase {
     @Before
     public void disorderedMarksAddAll() {
         if (disorderedMarks != null) {
-            logInfo("Skip initializing disorderMarks");
+            logDebug("Skip initializing disorderMarks");
             return;
         }
 

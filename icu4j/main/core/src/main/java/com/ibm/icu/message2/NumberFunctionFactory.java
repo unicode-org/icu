@@ -93,8 +93,6 @@ class NumberFunctionFactory implements FunctionFactory {
                 Locale locale, PluralRules rules, Map<String, ?> fixedOptions, String kind) {
             this.locale = OptUtils.getBestLocale(fixedOptions, locale);
             this.fixedOptions = new HashMap<>(fixedOptions);
-            String skeleton = OptUtils.getString(fixedOptions, "icu:skeleton");
-            boolean fancy = skeleton != null;
             this.icuFormatter = functionForOptions(this.locale, fixedOptions, kind);
             this.kind = kind;
             this.rules = rules;
@@ -218,8 +216,6 @@ class NumberFunctionFactory implements FunctionFactory {
             if (CatchallKey.isCatchAll(key)) {
                 return true;
             }
-
-            boolean reportErrors = OptUtils.reportErrors(fixedOptions);
 
             Number valToCheck = Double.MIN_VALUE;
             if (value instanceof FormattedPlaceholder) {
@@ -553,11 +549,9 @@ class NumberFunctionFactory implements FunctionFactory {
 
     private static class ResolvedOffsetOptions {
         final int operand;
-        final boolean reportErrors;
 
-        ResolvedOffsetOptions(int operand, boolean reportErrors) {
+        ResolvedOffsetOptions(int operand, @SuppressWarnings("unused") boolean reportErrors) {
             this.operand = operand;
-            this.reportErrors = reportErrors;
         }
 
         static ResolvedOffsetOptions of(Map<String, ?> options) {

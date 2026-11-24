@@ -788,7 +788,6 @@ public class SerializableTestUtility {
                 // then getMessage() computes a message string.
                 var a2 = (ICUUncheckedIOException) a;
                 var b2 = (ICUUncheckedIOException) b;
-                String oldMsg = a2.getMessage(); // null if neither message nor cause
                 String newMsg = b2.getMessage(); // never null because there is a cause
                 same =
                         (newMsg.startsWith("java.") || newMsg.equals(a2.getMessage()))

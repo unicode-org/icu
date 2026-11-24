@@ -311,7 +311,6 @@ public class TestConversion extends TestFmwk {
         // do charset encoding from unicode
 
         // testing by steps using charset.encoder(in,out,flush)
-        int resultLength;
         boolean ok;
         String steps[][] = {
             {"0", "bulk"}, // must be first for offsets to be checked
@@ -328,8 +327,8 @@ public class TestConversion extends TestFmwk {
 
             logDebug("Testing step:[" + step + "]");
             try {
-                resultLength = stepFromUnicode(cc, encoder, step);
-                ok = checkFromUnicode(cc, resultLength);
+                stepFromUnicode(cc, encoder, step);
+                ok = checkFromUnicode(cc);
             } catch (Exception ex) {
                 errln(
                         "Test failed: "
@@ -365,7 +364,7 @@ public class TestConversion extends TestFmwk {
                 }
                 cc.fromUnicodeResult = out;
 
-                ok = checkFromUnicode(cc, out.limit());
+                ok = checkFromUnicode(cc);
                 if (!ok) {
                     break;
                 }
@@ -455,7 +454,7 @@ public class TestConversion extends TestFmwk {
         return target.position();
     }
 
-    private boolean checkFromUnicode(ConversionCase cc, int resultLength) {
+    private boolean checkFromUnicode(ConversionCase cc) {
         return checkResultsFromUnicode(cc, cc.bytes, cc.fromUnicodeResult);
     }
 
@@ -621,9 +620,6 @@ public class TestConversion extends TestFmwk {
         }
 
         //      Check the step to unicode
-        boolean ok;
-        int resultLength;
-
         String steps[][] = {
             {"0", "bulk"}, // must be first for offsets to be checked
             {"1", "step=1"},
@@ -639,7 +635,7 @@ public class TestConversion extends TestFmwk {
         { "-12", "toU(5)+getNext" },
         { "-13", "getNext+toU(5)" }};*/
 
-        ok = true;
+        boolean ok = true;
         int step;
         // testing by steps using the CoderResult cr = charset.decoder(in,out,flush) api
         for (int i = 0; i < steps.length && ok; ++i) {
@@ -651,8 +647,8 @@ public class TestConversion extends TestFmwk {
             logDebug("Testing step:[" + step + "]");
 
             try {
-                resultLength = stepToUnicode(cc, decoder, step);
-                ok = checkToUnicode(cc, resultLength);
+                stepToUnicode(cc, decoder, step);
+                ok = checkToUnicode(cc);
             } catch (Exception ex) {
                 errln(
                         "Test failed: "
@@ -691,7 +687,7 @@ public class TestConversion extends TestFmwk {
 
                 cc.toUnicodeResult = out;
 
-                ok = checkToUnicode(cc, out.limit());
+                ok = checkToUnicode(cc);
                 if (!ok) {
                     break;
                 }
@@ -902,7 +898,7 @@ public class TestConversion extends TestFmwk {
         return target.position();
     }
 
-    private boolean checkToUnicode(ConversionCase cc, int resultLength) {
+    private boolean checkToUnicode(ConversionCase cc) {
         return checkResultsToUnicode(cc, cc.unicode, cc.toUnicodeResult);
     }
 

@@ -2209,26 +2209,22 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         narrowWeekdays[0] = ""; // 1-based
         System.arraycopy(nWeekdays, 0, narrowWeekdays, 1, nWeekdays.length);
 
-        String[] swWeekdays = null;
-        swWeekdays = arrays.get("dayNames/stand-alone/wide");
+        String[] swWeekdays = arrays.get("dayNames/stand-alone/wide");
         standaloneWeekdays = new String[8];
         standaloneWeekdays[0] = ""; // 1-based
         System.arraycopy(swWeekdays, 0, standaloneWeekdays, 1, swWeekdays.length);
 
-        String[] saWeekdays = null;
-        saWeekdays = arrays.get("dayNames/stand-alone/abbreviated");
+        String[] saWeekdays = arrays.get("dayNames/stand-alone/abbreviated");
         standaloneShortWeekdays = new String[8];
         standaloneShortWeekdays[0] = ""; // 1-based
         System.arraycopy(saWeekdays, 0, standaloneShortWeekdays, 1, saWeekdays.length);
 
-        String[] ssWeekdays = null;
-        ssWeekdays = arrays.get("dayNames/stand-alone/short");
+        String[] ssWeekdays = arrays.get("dayNames/stand-alone/short");
         standaloneShorterWeekdays = new String[8];
         standaloneShorterWeekdays[0] = ""; // 1-based
         System.arraycopy(ssWeekdays, 0, standaloneShorterWeekdays, 1, ssWeekdays.length);
 
-        String[] snWeekdays = null;
-        snWeekdays = arrays.get("dayNames/stand-alone/narrow");
+        String[] snWeekdays = arrays.get("dayNames/stand-alone/narrow");
         standaloneNarrowWeekdays = new String[8];
         standaloneNarrowWeekdays[0] = ""; // 1-based
         System.arraycopy(snWeekdays, 0, standaloneNarrowWeekdays, 1, snWeekdays.length);

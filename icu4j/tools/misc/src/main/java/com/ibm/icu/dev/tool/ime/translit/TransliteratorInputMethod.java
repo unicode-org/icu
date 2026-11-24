@@ -135,7 +135,7 @@ public class TransliteratorInputMethod implements InputMethod {
             Enumeration<String> en = Transliterator.getAvailableIDs();
             final Collator collator = Collator.getInstance();
             TreeSet<JLabel> types =
-                    new TreeSet<>((obj1, obj2) -> collator.compare(obj1.getText(), obj1.getText()));
+                    new TreeSet<>((obj1, obj2) -> collator.compare(obj1.getText(), obj2.getText()));
 
             while (en.hasMoreElements()) {
                 String id = en.nextElement();
@@ -411,7 +411,7 @@ public class TransliteratorInputMethod implements InputMethod {
     //          ^       ^        ^
     //         cc     start    ctxLim
 
-    private void traceBuffer(String msg, int cc, int off) {
+    private void traceBuffer(String msg, int cc) {
         if (TRACE_BUFFER)
             System.out.println(
                     Utility.escape(
@@ -456,7 +456,7 @@ public class TransliteratorInputMethod implements InputMethod {
                 TextHitInfo.leading(off),
                 null);
 
-        traceBuffer("update", cc, off);
+        traceBuffer("update", cc);
 
         if (cc > 0) {
             buffer.delete(0, cc);
@@ -473,7 +473,7 @@ public class TransliteratorInputMethod implements InputMethod {
                 0,
                 TextHitInfo.leading(index.contextLimit),
                 null);
-        traceBuffer("updateCaret", 0, index.contextLimit);
+        traceBuffer("updateCaret", 0);
     }
 
     private void caretToStart() {

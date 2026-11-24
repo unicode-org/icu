@@ -289,11 +289,11 @@ public final class ICUBinary {
         // Normally com.ibm.icu.impl.ICUBinary.dataPath.
         String dataPath = ICUConfig.get(ICUBinary.class.getName() + ".dataPath");
         if (dataPath != null) {
-            addDataFilesFromPath(dataPath, icuDataFiles);
+            addDataFilesFromPath(dataPath);
         }
     }
 
-    private static void addDataFilesFromPath(String dataPath, List<DataFile> files) {
+    private static void addDataFilesFromPath(String dataPath) {
         // Split the path and find files in each location.
         // This splitting code avoids the regex pattern compilation in String.split()
         // and its array allocation.

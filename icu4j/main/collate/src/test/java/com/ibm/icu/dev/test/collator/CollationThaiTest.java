@@ -102,7 +102,7 @@ public class CollationThaiTest extends CollationTestBase {
             }
             String s1 = tests[i];
             String s2 = tests[i + 2];
-            doTest(this, c, s1, s2, expect);
+            doTest(c, s1, s2, expect);
         }
     }
 
@@ -240,7 +240,7 @@ public class CollationThaiTest extends CollationTestBase {
                 }
             }
             CollationElementIterator iterator = collator.getCollationElementIterator(tests[i]);
-            backAndForth(this, iterator);
+            backAndForth(iterator);
         }
     }
 

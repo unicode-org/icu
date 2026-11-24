@@ -71,8 +71,6 @@ public class LSTMBreakEngine extends DictionaryBreakEngine {
      * @internal
      */
     public static class LSTMData {
-        private LSTMData() {}
-
         public LSTMData(UResourceBundle rb) {
             int embeddings = rb.get("embeddings").getInt();
             int hunits = rb.get("hunits").getInt();
@@ -334,7 +332,6 @@ public class LSTMBreakEngine extends DictionaryBreakEngine {
         // ifco = x * W + h * U + b
         float[] ifco = Arrays.copyOf(B, B.length);
         addDotProductTo(x, W, ifco);
-        float[] hU = new float[B.length];
         addDotProductTo(h, U, ifco);
 
         int hunits = B.length / 4;

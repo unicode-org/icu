@@ -38,7 +38,7 @@ public class CollationChineseTest extends CollationTestBase {
             return;
         }
         for (int i = 0; i < seq.length - 1; i++) {
-            doTest(this, collator, seq[i], seq[i + 1], -1);
+            doTest(collator, seq[i], seq[i + 1], -1);
         }
     }
 }

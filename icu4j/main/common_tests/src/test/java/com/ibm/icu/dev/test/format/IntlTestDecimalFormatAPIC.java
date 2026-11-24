@@ -175,17 +175,15 @@ public class IntlTestDecimalFormatAPIC extends CoreTestFmwk {
         logDebug("Negative suffix (should be ~): " + negSuffix);
         assertEquals("ERROR: setNegativeSuffix() failed", "~", negSuffix);
 
-        long multiplier = 0;
         pat.setMultiplier(8);
-        multiplier = pat.getMultiplier();
+        long multiplier = pat.getMultiplier();
         logDebug("Multiplier (should be 8): " + multiplier);
         if (multiplier != 8) {
             errln("ERROR: setMultiplier() failed");
         }
 
-        int groupingSize = 0;
         pat.setGroupingSize(2);
-        groupingSize = pat.getGroupingSize();
+        int groupingSize = pat.getGroupingSize();
         logDebug("Grouping size (should be 2): " + (long) groupingSize);
         if (groupingSize != 2) {
             errln("ERROR: setGroupingSize() failed");
@@ -271,8 +269,7 @@ public class IntlTestDecimalFormatAPIC extends CoreTestFmwk {
             3, -3
         };
         DecimalFormat pat = new DecimalFormat();
-        String s = "";
-        s = pat.toPattern();
+        String s = pat.toPattern();
         logDebug("pattern = " + s);
         int mode;
         int i = 0;

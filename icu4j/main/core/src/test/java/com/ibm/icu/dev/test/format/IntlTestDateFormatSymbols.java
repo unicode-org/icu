@@ -559,13 +559,12 @@ public class IntlTestDateFormatSymbols extends CoreTestFmwk {
             }
         }
 
-        long rowCount = 0, columnCount = 0;
         final String[][] strings = en.getZoneStrings();
         fr.setZoneStrings(strings);
         final String[][] strings1 = fr.getZoneStrings();
-        rowCount = strings.length;
+        long rowCount = strings.length;
         for (int i = 0; i < rowCount; i++) {
-            columnCount = strings[i].length;
+            long columnCount = strings[i].length;
             for (int j = 0; j < columnCount; j++) {
                 assertSame("ERROR: setZoneStrings() failed", strings[i][j], strings1[i][j]);
             }

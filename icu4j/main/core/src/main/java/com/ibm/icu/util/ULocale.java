@@ -836,10 +836,8 @@ public final class ULocale implements Serializable, Comparable<ULocale>, Cloneab
             return 0;
         }
 
-        int cmp = 0;
-
         // Language
-        cmp = getLanguage().compareTo(other.getLanguage());
+        int cmp = getLanguage().compareTo(other.getLanguage());
         if (cmp == 0) {
             // Script
             cmp = getScript().compareTo(other.getScript());
@@ -3240,8 +3238,6 @@ public final class ULocale implements Serializable, Comparable<ULocale>, Cloneab
     private static String createTagString(
             String lang, String script, String region, String trailing) {
 
-        LocaleIDParser parser = null;
-
         StringBuilder tag = new StringBuilder();
 
         if (!isEmptyString(lang)) {
@@ -4283,14 +4279,13 @@ public final class ULocale implements Serializable, Comparable<ULocale>, Cloneab
 
         public static ULocale toULocale(Locale loc) {
             String language = loc.getLanguage();
-            String script = "";
+            String script = loc.getScript();
             String country = loc.getCountry();
             String variant = loc.getVariant();
 
             Set<String> attributes = null;
             Map<String, String> keywords = null;
 
-            script = loc.getScript();
             Set<Character> extKeys = loc.getExtensionKeys();
             if (!extKeys.isEmpty()) {
                 for (Character extKey : extKeys) {

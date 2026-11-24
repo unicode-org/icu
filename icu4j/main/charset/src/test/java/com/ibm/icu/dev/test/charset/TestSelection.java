@@ -26,7 +26,6 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.Test;
@@ -135,18 +134,13 @@ public class TestSelection extends TestFmwk {
     /* This test is to provide better code coverage for CharsetSelector */
     @Test
     public void TestCharsetSelectorCodeCoverage() {
-        List<String> emptyList = new ArrayList<>();
         UnicodeSet nonEmptySet = new UnicodeSet();
 
         nonEmptySet.add(0x0001, 0x0FFF);
 
-        CharsetSelector sel = null;
-
-        sel = new CharsetSelector(emptyList, nonEmptySet, CharsetICU.ROUNDTRIP_SET);
-
         /* Test bogus mappingType */
         try {
-            sel = new CharsetSelector(null, null, -1);
+            CharsetSelector unused = new CharsetSelector(null, null, -1);
             errln(
                     "IllegalArgumentException should have been thrown by CharsetSelector when given a bogus mappingType, but it wasn't.");
         } catch (IllegalArgumentException e) {

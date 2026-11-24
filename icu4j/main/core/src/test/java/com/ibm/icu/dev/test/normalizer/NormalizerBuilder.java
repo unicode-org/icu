@@ -248,7 +248,7 @@ class NormalizerBuilder {
             IntStringHashtable decompose,
             LongHashtable compose,
             BitSet isCompatibility,
-            BitSet isExcluded) {
+            @SuppressWarnings("unused") BitSet isExcluded) {
         String[] decomposeData = {
             "\u005E", "\u0020\u0302", "K",
             "\u005F", "\u0020\u0332", "K",

@@ -197,7 +197,7 @@ public final class ICUResourceBundleReader {
                     }
                     inBytes = ICUBinary.getByteBufferFromInputStreamAndCloseStream(stream);
                 }
-                return new ICUResourceBundleReader(inBytes, key.baseName, key.localeID, loader);
+                return new ICUResourceBundleReader(inBytes, key.baseName, loader);
             } catch (IOException ex) {
                 throw new ICUUncheckedIOException(
                         "Data file " + fullName + " is corrupt - " + ex.getMessage(), ex);
@@ -210,8 +210,7 @@ public final class ICUResourceBundleReader {
      */
     private ICUResourceBundleReader() {}
 
-    private ICUResourceBundleReader(
-            ByteBuffer inBytes, String baseName, String localeID, ClassLoader loader)
+    private ICUResourceBundleReader(ByteBuffer inBytes, String baseName, ClassLoader loader)
             throws IOException {
         init(inBytes);
 
@@ -266,7 +265,6 @@ public final class ICUResourceBundleReader {
                 || dataLength < ((bundleTop = getIndexesInt(URES_INDEX_BUNDLE_TOP)) << 2)) {
             throw new ICUException("not enough bytes");
         }
-        int maxOffset = bundleTop - 1;
 
         if (majorFormatVersion >= 3) {
             // In formatVersion 1, the indexLength took up this whole int.
@@ -313,7 +311,6 @@ public final class ICUResourceBundleReader {
                 bytes.position(keysTop << 2);
                 b16BitUnits = bytes.asCharBuffer();
                 b16BitUnits.limit(num16BitUnits);
-                maxOffset |= num16BitUnits - 1;
             } else {
                 b16BitUnits = EMPTY_16_BIT_UNITS;
             }
