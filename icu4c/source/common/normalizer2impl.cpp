@@ -353,18 +353,17 @@ UBool ReorderingBuffer::resize(int32_t appendLength, UErrorCode &errorCode) {
     int32_t reorderStartIndex = static_cast<int32_t>(reorderStart - start);
     int32_t length = static_cast<int32_t>(limit - start);
     str.releaseBuffer(length);
-    int32_t newCapacity;
-    auto sumLengths = Length32(length, errorCode) + appendLength;
-    if(sumLengths.isFailure()) {
+    auto [newCapacity, ok] = (Length32(length, errorCode) + appendLength).result();
+    if(!ok) {
         str.setToBogus();
         start=nullptr;
         errorCode=U_MEMORY_ALLOCATION_ERROR;
         return false;
     }
-    newCapacity = sumLengths.get();
-    auto doubleCapacity = Length32(str.getCapacity(), Length32::INTERNAL) * 2;  // 0 if overflow
-    if(newCapacity<doubleCapacity.get()) {
-        newCapacity=doubleCapacity.get();
+    int32_t doubleCapacity = (Length32(str.getCapacity(), Length32::INTERNAL) * 2).get();
+    // 0 if overflow
+    if(newCapacity<doubleCapacity) {
+        newCapacity=doubleCapacity;
     }
     if(newCapacity<256) {
         newCapacity=256;

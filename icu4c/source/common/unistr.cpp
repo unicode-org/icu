@@ -109,32 +109,30 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(UnicodeString)
 
 UnicodeString U_EXPORT2
 operator+ (const UnicodeString &s1, const UnicodeString &s2) {
-  auto sumLengths = Length32(s1.length(), Length32::INTERNAL) + s2.length();
-  if (sumLengths.isFailure()) {
+  auto [sumLengths, ok] = (Length32(s1.length(), Length32::INTERNAL) + s2.length()).result();
+  if (!ok) {
     UnicodeString bogus;
     bogus.setToBogus();
     return bogus;
   }
-  int32_t sum = sumLengths.get();
-  if (sum != INT32_MAX) {
-    ++sum;  // space for a terminating NUL if we need one
+  if (sumLengths != INT32_MAX) {
+    ++sumLengths;  // space for a terminating NUL if we need one
   }
-  return UnicodeString(sum, static_cast<UChar32>(0), 0).append(s1).append(s2);
+  return UnicodeString(sumLengths, static_cast<UChar32>(0), 0).append(s1).append(s2);
 }
 
 U_COMMON_API UnicodeString U_EXPORT2
 unistr_internalConcat(const UnicodeString &s1, std::u16string_view s2) {
-  auto sumLengths = Length32(s1.length(), Length32::INTERNAL) + s2.length();
-  if (sumLengths.isFailure()) {
+  auto [sumLengths, ok] = (Length32(s1.length(), Length32::INTERNAL) + s2.length()).result();
+  if (!ok) {
     UnicodeString bogus;
     bogus.setToBogus();
     return bogus;
   }
-  int32_t sum = sumLengths.get();
-  if (sum != INT32_MAX) {
-    ++sum;  // space for a terminating NUL if we need one
+  if (sumLengths != INT32_MAX) {
+    ++sumLengths;  // space for a terminating NUL if we need one
   }
-  return UnicodeString(sum, static_cast<UChar32>(0), 0).append(s1).append(s2);
+  return UnicodeString(sumLengths, static_cast<UChar32>(0), 0).append(s1).append(s2);
 }
 
 

@@ -355,6 +355,11 @@ public:
         INTERNAL
     };
 
+    struct Result {
+        int32_t value;
+        bool ok;
+    };
+
     Length32(int32_t i, UErrorCode &errorCode) : errorCode_(errorCode) {
         if (U_SUCCESS(errorCode)) {
             if (i >= 0) {
@@ -399,6 +404,8 @@ public:
     // Explicit getter.
     // An operator int32_t() would allow unchecked default arithmetic.
     int32_t get() const { return i_; }
+
+    Result result() const { return {i_, isSuccess()}; }
 
     bool isSuccess() const { return U_SUCCESS(errorCode_); }
     bool isFailure() const { return U_FAILURE(errorCode_); }
