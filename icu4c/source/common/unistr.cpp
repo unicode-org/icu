@@ -115,10 +115,11 @@ operator+ (const UnicodeString &s1, const UnicodeString &s2) {
     bogus.setToBogus();
     return bogus;
   }
-  if (sumLengths != INT32_MAX) {
-    ++sumLengths;  // space for a terminating NUL if we need one
+  int32_t sum = sumLengths.get();
+  if (sum != INT32_MAX) {
+    ++sum;  // space for a terminating NUL if we need one
   }
-  return UnicodeString(sumLengths, static_cast<UChar32>(0), 0).append(s1).append(s2);
+  return UnicodeString(sum, static_cast<UChar32>(0), 0).append(s1).append(s2);
 }
 
 U_COMMON_API UnicodeString U_EXPORT2
@@ -129,10 +130,11 @@ unistr_internalConcat(const UnicodeString &s1, std::u16string_view s2) {
     bogus.setToBogus();
     return bogus;
   }
-  if (sumLengths != INT32_MAX) {
-    ++sumLengths;  // space for a terminating NUL if we need one
+  int32_t sum = sumLengths.get();
+  if (sum != INT32_MAX) {
+    ++sum;  // space for a terminating NUL if we need one
   }
-  return UnicodeString(sumLengths, static_cast<UChar32>(0), 0).append(s1).append(s2);
+  return UnicodeString(sum, static_cast<UChar32>(0), 0).append(s1).append(s2);
 }
 
 
@@ -1681,7 +1683,7 @@ UnicodeString::doAppend(const char16_t* srcChars,
       setToBogus();
       return *this;
     }
-    newLength = sumLengths;
+    newLength = sumLengths.get();
 
     // Check for append onto ourself
     const char16_t* oldArray = getArrayStart();

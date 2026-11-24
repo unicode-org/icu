@@ -98,7 +98,7 @@ public:
                 return first;
             }
             ReorderingBuffer buffer(impl, first);
-            if(buffer.init(destCapacity, errorCode)) {
+            if(buffer.init(destCapacity.get(), errorCode)) {
                 normalizeAndAppend(secondArray, secondArray+second.length(), doNormalize,
                                    safeMiddle, buffer, errorCode);
             }

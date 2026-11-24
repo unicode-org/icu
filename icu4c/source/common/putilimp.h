@@ -388,7 +388,9 @@ public:
     Length32(int64_t i64, UseInternalErrorCode) : Length32(i64, internalErrorCode_) {}
     Length32(size_t s, UseInternalErrorCode) : Length32(s, internalErrorCode_) {}
 
-    operator int32_t() const { return i_; }
+    // Explicit getter.
+    // An operator int32_t() would allow unchecked default arithmetic.
+    int32_t get() const { return i_; }
 
     bool isSuccess() const { return U_SUCCESS(errorCode_); }
     bool isFailure() const { return U_FAILURE(errorCode_); }

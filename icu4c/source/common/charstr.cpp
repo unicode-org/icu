@@ -113,7 +113,7 @@ CharString &CharString::truncate(int32_t newLength) {
 
 CharString &CharString::append(char c, UErrorCode &errorCode) {
     auto newCapacity = Length32(len, errorCode) + 2;
-    if(ensureCapacity(newCapacity, 0, errorCode)) {
+    if(ensureCapacity(newCapacity.get(), 0, errorCode)) {
         buffer[len++]=c;
         buffer[len]=0;
     }
@@ -145,12 +145,12 @@ CharString &CharString::append(const char *s, int32_t sLength, UErrorCode &error
             if(newCapacity.isFailure()) {
                 // pass
             } else if(buffer.getAlias()<=s && s<(buffer.getAlias()+len) &&
-                      newCapacity>buffer.getCapacity()
+                      newCapacity.get()>buffer.getCapacity()
             ) {
                 // (Part of) this string is appended to itself which requires reallocation,
                 // so we have to make a copy of the substring and append that.
                 return append(CharString(s, sLength, errorCode), errorCode);
-            } else if(ensureCapacity(newCapacity, 0, errorCode)) {
+            } else if(ensureCapacity(newCapacity.get(), 0, errorCode)) {
                 uprv_memcpy(buffer.getAlias()+len, s, sLength);
                 buffer[len+=sLength]=0;
             }
@@ -216,10 +216,10 @@ char *CharString::getAppendBuffer(int32_t minCapacity,
     }
     int32_t newDesiredCapacity = 0;
     if(desiredCapacityHint > 0) {
-        newDesiredCapacity = Length32(len, Length32::INTERNAL) + desiredCapacityHint + 1;
+        newDesiredCapacity = (Length32(len, Length32::INTERNAL) + desiredCapacityHint + 1).get();
         // 0 if overflow
     }
-    if(ensureCapacity(newCapacity, newDesiredCapacity, errorCode)) {
+    if(ensureCapacity(newCapacity.get(), newDesiredCapacity, errorCode)) {
         resultCapacity=buffer.getCapacity()-len-1;
         return buffer.getAlias()+len;
     }
@@ -244,7 +244,7 @@ CharString &CharString::appendInvariantChars(const char16_t* uchars, int32_t uch
         return *this;
     }
     auto newCapacity = Length32(len, errorCode) + ucharsLen + 1;
-    if(ensureCapacity(newCapacity, 0, errorCode)) {
+    if(ensureCapacity(newCapacity.get(), 0, errorCode)) {
         u_UCharsToChars(uchars, buffer.getAlias()+len, ucharsLen);
         len += ucharsLen;
         buffer[len] = 0;
@@ -266,7 +266,8 @@ UBool CharString::ensureCapacity(int32_t capacity,
         if(desiredCapacityHint==0) {
             // Default growth heuristic. If it overflows, skip the extra headroom
             // and allocate exactly the requested capacity, which is still valid.
-            desiredCapacityHint = Length32(capacity, Length32::INTERNAL) + buffer.getCapacity();
+            desiredCapacityHint =
+                (Length32(capacity, Length32::INTERNAL) + buffer.getCapacity()).get();
             // 0 if overflow
         }
         if( (desiredCapacityHint<=capacity || buffer.resize(desiredCapacityHint, len+1)==nullptr) &&
