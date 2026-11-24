@@ -412,12 +412,12 @@ public:
                 result64 += b;
                 int32_t result = static_cast<int32_t>(result64);
                 if (result == result64) {
-                    return {result, errorCode_};
+                    return {result, this};
                 }
             }
             errorCode_ = U_ILLEGAL_ARGUMENT_ERROR;
         }
-        return {0, errorCode_};
+        return {0, this};
     }
 
     Length32 operator+(size_t b) const {
@@ -427,12 +427,12 @@ public:
                 result64 += b;
                 int32_t result = static_cast<int32_t>(result64);
                 if (result == result64) {
-                    return {result, errorCode_};
+                    return {result, this};
                 }
             }
             errorCode_ = U_ILLEGAL_ARGUMENT_ERROR;
         }
-        return {0, errorCode_};
+        return {0, this};
     }
 
     // pre-increment
@@ -455,15 +455,22 @@ public:
                 result64 *= b;
                 int32_t result = static_cast<int32_t>(result64);
                 if (result == result64) {
-                    return {result, errorCode_};
+                    return {result, this};
                 }
             }
             errorCode_ = U_ILLEGAL_ARGUMENT_ERROR;
         }
-        return {0, errorCode_};
+        return {0, this};
     }
 
 private:
+    // Internal constructor for returning a result object.
+    // Need not check the value, but must handle the internal error code.
+    Length32(int32_t i, const Length32 *other) :
+            i_(i), internalErrorCode_(other->internalErrorCode_),
+            errorCode_(&other->errorCode_ == &other->internalErrorCode_ ?
+                    internalErrorCode_ : other->errorCode_) {}
+
     int32_t i_ = 0;
     UErrorCode internalErrorCode_ = U_ZERO_ERROR;
     UErrorCode &errorCode_;
