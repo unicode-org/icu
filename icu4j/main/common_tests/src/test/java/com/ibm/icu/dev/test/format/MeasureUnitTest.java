@@ -206,7 +206,7 @@ public class MeasureUnitTest extends CoreTestFmwk {
             {_2y_5M_3w_4d, "2 J, 5 M, 3 W und 4 T"},
             {_0h_0m_17s, "0:00:17"},
             {_6h_56_92m, "6:56,92"},
-            {_3h_5h, "3 Std., 5 Std."}
+            {_3h_5h, "3h, 5h"}
         };
         Object[][] numericDataBn = {
             {_1m_59_9996s, "১:৫৯.৯৯৯৬"},
@@ -249,15 +249,17 @@ public class MeasureUnitTest extends CoreTestFmwk {
         nf = NumberFormat.getNumberInstance(ULocale.GERMAN);
         nf.setMaximumFractionDigits(4);
         mf = MeasureFormat.getInstance(ULocale.GERMAN, FormatWidth.WIDE, nf);
-        verifyFormatPeriod("de FULL", mf, fullDataDe);
+        verifyFormatPeriod("de WIDE", mf, fullDataDe);
         mf = MeasureFormat.getInstance(ULocale.GERMAN, FormatWidth.NUMERIC, nf);
+        verifyFormatPeriod("de NUMERIC", mf, numericDataDe);
 
         // Same tests, with Java Locale
         nf = NumberFormat.getNumberInstance(Locale.GERMAN);
         nf.setMaximumFractionDigits(4);
         mf = MeasureFormat.getInstance(Locale.GERMAN, FormatWidth.WIDE, nf);
-        verifyFormatPeriod("de FULL(Java Locale)", mf, fullDataDe);
+        verifyFormatPeriod("de WIDE(Java Locale)", mf, fullDataDe);
         mf = MeasureFormat.getInstance(Locale.GERMAN, FormatWidth.NUMERIC, nf);
+        verifyFormatPeriod("de NUMERIC", mf, numericDataDe);
 
         ULocale bengali = ULocale.forLanguageTag("bn");
         nf = NumberFormat.getNumberInstance(bengali);

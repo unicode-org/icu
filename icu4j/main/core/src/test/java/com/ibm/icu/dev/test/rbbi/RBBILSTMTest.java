@@ -40,7 +40,6 @@ public class RBBILSTMTest extends CoreTestFmwk {
         org.junit.Assume.assumeTrue(!RBBITstUtils.skipLSTMTest());
 
         BreakIterator bi = BreakIterator.getWordInstance();
-        String testString;
         InputStream is =
                 RBBILSTMTest.class.getResourceAsStream("/com/ibm/icu/dev/test/rbbi/" + filename);
         if (is == null) {
@@ -51,7 +50,6 @@ public class RBBILSTMTest extends CoreTestFmwk {
         int caseNum = 0;
         String expected = "";
         String actual = "";
-        LSTMBreakEngine engine = null;
         String line;
         try {
             while ((line = br.readLine()) != null) {
@@ -69,7 +67,6 @@ public class RBBILSTMTest extends CoreTestFmwk {
                     }
                 } else if (fields[0].equals("Input:")) {
                     caseNum++;
-                    int length = fields[1].length();
                     String input = "prefix " + fields[1] + " suffix";
                     bi.setText(input);
                     System.out.println("Input = " + input);

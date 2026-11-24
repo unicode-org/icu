@@ -730,7 +730,8 @@ public final class CollationFastLatin /* all static */ {
      * Java returns a negative result (use the '~' operator) if sIndex is to be incremented. C++
      * modifies sIndex.
      */
-    private static long nextPair(char[] table, int c, int ce, CharSequence s16, int sIndex) {
+    private static long nextPair(
+            char[] table, @SuppressWarnings("unused") int c, int ce, CharSequence s16, int sIndex) {
         if (ce >= MIN_LONG || ce < CONTRACTION) {
             return ce; // simple or special mini CE
         } else if (ce >= EXPANSION) {

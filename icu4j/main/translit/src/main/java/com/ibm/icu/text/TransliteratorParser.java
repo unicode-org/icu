@@ -1312,7 +1312,7 @@ class TransliteratorParser {
     // (The following method is part of an unimplemented feature.
     // 2003-06-11 ICU 2.6 Alan)
     /** Set the maximum backup to 'backup', in response to a pragma statement. */
-    private void pragmaMaximumBackup(int backup) {
+    private void pragmaMaximumBackup(@SuppressWarnings("unused") int backup) {
         // TODO Finish
         throw new IllegalIcuArgumentException("use maximum backup pragma not implemented yet");
     }
@@ -1320,7 +1320,7 @@ class TransliteratorParser {
     // (The following method is part of an unimplemented feature.
     // 2003-06-11 ICU 2.6 Alan)
     /** Begin normalizing all rules using the given mode, in response to a pragma statement. */
-    private void pragmaNormalizeRules(Normalizer.Mode mode) {
+    private void pragmaNormalizeRules(@SuppressWarnings("unused") Normalizer.Mode mode) {
         // TODO Finish
         throw new IllegalIcuArgumentException("use normalize rules pragma not implemented yet");
     }

@@ -2035,11 +2035,8 @@ public final class ArabicShaping {
      */
     private int deshapeNormalize(char[] dest, int start, int length) {
         int lacount = 0;
-        int yehHamzaComposeEnabled = 0;
-        int seenComposeEnabled = 0;
-
-        yehHamzaComposeEnabled = ((options & YEHHAMZA_MASK) == YEHHAMZA_TWOCELL_NEAR) ? 1 : 0;
-        seenComposeEnabled = ((options & SEEN_MASK) == SEEN_TWOCELL_NEAR) ? 1 : 0;
+        int yehHamzaComposeEnabled = ((options & YEHHAMZA_MASK) == YEHHAMZA_TWOCELL_NEAR) ? 1 : 0;
+        int seenComposeEnabled = ((options & SEEN_MASK) == SEEN_TWOCELL_NEAR) ? 1 : 0;
 
         for (int i = start, e = i + length; i < e; ++i) {
             char ch = dest[i];
@@ -2070,7 +2067,7 @@ public final class ArabicShaping {
      * Function: Converts an Arabic Unicode buffer in 06xx Range into a shaped
      *           arabic Unicode buffer in FExx Range
      */
-    private int shapeUnicode(char[] dest, int start, int length, int destSize, int tashkeelFlag)
+    private int shapeUnicode(char[] dest, int start, int length, int tashkeelFlag)
             throws ArabicShapingException {
 
         int lamalef_count = normalize(dest, start, length);
@@ -2201,7 +2198,7 @@ public final class ArabicShaping {
         // If we found a lam/alef pair in the buffer
         // call handleGeneratedSpaces to remove the spaces that were added
 
-        destSize = length;
+        int destSize = length;
         if (lamalef_found || tashkeel_found) {
             destSize = handleGeneratedSpaces(dest, start, length);
         }
@@ -2267,17 +2264,17 @@ public final class ArabicShaping {
 
         switch (options & LETTERS_MASK) {
             case LETTERS_SHAPE_TASHKEEL_ISOLATED:
-                outputSize = shapeUnicode(temp, 0, sourceLength, destSize, 1);
+                outputSize = shapeUnicode(temp, 0, sourceLength, 1);
                 break;
 
             case LETTERS_SHAPE:
                 if (((options & TASHKEEL_MASK) != 0)
                         && ((options & TASHKEEL_MASK) != TASHKEEL_REPLACE_BY_TATWEEL)) {
                     /* Call the shaping function with tashkeel flag == 2 for removal of tashkeel */
-                    outputSize = shapeUnicode(temp, 0, sourceLength, destSize, 2);
+                    outputSize = shapeUnicode(temp, 0, sourceLength, 2);
                 } else {
                     // default Call the shaping function with tashkeel flag == 1 */
-                    outputSize = shapeUnicode(temp, 0, sourceLength, destSize, 0);
+                    outputSize = shapeUnicode(temp, 0, sourceLength, 0);
 
                     /*After shaping text check if user wants to remove tashkeel and replace it with tatweel*/
                     if ((options & TASHKEEL_MASK) == TASHKEEL_REPLACE_BY_TATWEEL) {

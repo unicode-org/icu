@@ -739,9 +739,7 @@ public final class ICUResourceBundleTest extends CoreTestFmwk {
             errln("Did not get the expected result form getStringWithFallback method.");
         }
         */
-        ICUResourceBundle bundle = null;
-
-        bundle =
+        ICUResourceBundle bundle =
                 (ICUResourceBundle)
                         UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "fr_FR");
         ICUResourceBundle b1 = bundle.getWithFallback("calendar");

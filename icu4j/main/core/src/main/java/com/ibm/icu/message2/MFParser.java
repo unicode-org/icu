@@ -524,7 +524,6 @@ public class MFParser {
      * abnf: s = *bidi ws o
      */
     private int skipRequiredWhitespaces() throws MFParseException {
-        int position = input.getPosition();
         skipOptionalBidi();
         int count = skipWhitespaces();
         checkCondition(count > 0, "Space expected");
@@ -733,11 +732,10 @@ public class MFParser {
                 // abnf: input = %s".input"
                 skipOptionalWhitespaces();
                 expression = getPlaceholder();
-                String inputVarName = null;
                 checkCondition(
                         expression instanceof MFDataModel.VariableExpression,
                         "Variable expression required in .input declaration");
-                inputVarName = ((MFDataModel.VariableExpression) expression).arg.name;
+                String inputVarName = ((MFDataModel.VariableExpression) expression).arg.name;
                 return new MFDataModel.InputDeclaration(
                         inputVarName, (MFDataModel.VariableExpression) expression);
             case "local":

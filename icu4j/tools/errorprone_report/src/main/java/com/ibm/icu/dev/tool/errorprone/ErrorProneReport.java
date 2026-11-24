@@ -314,8 +314,6 @@ class ErrorProneReport {
             wrt.println("| ---------- | -------- | -------- | ------- |");
             for (Map.Entry<String, List<ErrorProneEntry>> e : errors.entrySet()) {
                 String errorType = e.getKey();
-                List<ErrorProneEntry> errorsOfType = e.getValue();
-
                 String errorUrl = ErrorProneUtils.getUrl(errorType);
                 String errTypeWithUrlAndTags = "[`" + errorType + "`](" + errorUrl + ")";
                 String tags = ErrorProneUtils.getTags(errorType);

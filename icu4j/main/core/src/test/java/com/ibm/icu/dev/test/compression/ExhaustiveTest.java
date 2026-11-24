@@ -56,8 +56,6 @@ public class ExhaustiveTest extends CoreTestFmwk {
         UnicodeDecompressor myDecompressor = new UnicodeDecompressor();
 
         // variables for my compressor
-        int myByteCount = 0;
-        int myCharCount = 0;
         int myCompressedSize = Math.max(512, 3 * len);
         byte[] myCompressed = new byte[myCompressedSize];
         int myDecompressedSize = Math.max(2, 2 * len);
@@ -65,11 +63,11 @@ public class ExhaustiveTest extends CoreTestFmwk {
         int[] unicharsRead = new int[1];
         int[] bytesRead = new int[1];
 
-        myByteCount =
+        int myByteCount =
                 myCompressor.compress(
                         chars, 0, len, unicharsRead, myCompressed, 0, myCompressedSize);
 
-        myCharCount =
+        int myCharCount =
                 myDecompressor.decompress(
                         myCompressed,
                         0,

@@ -3,8 +3,6 @@
 
 package com.ibm.icu.dev.test.message2;
 
-import static org.junit.Assert.assertEquals;
-
 import com.ibm.icu.dev.test.CoreTestFmwk;
 import com.ibm.icu.message2.FormattedPlaceholder;
 import com.ibm.icu.message2.Function;

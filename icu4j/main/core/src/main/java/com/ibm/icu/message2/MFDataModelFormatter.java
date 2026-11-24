@@ -139,7 +139,6 @@ class MFDataModelFormatter {
 
     private Pattern findBestMatchingPattern(
             SelectMessage sm, MapWithNfcKeys variables, MapWithNfcKeys arguments) {
-        Pattern patternToRender = null;
 
         // ====================================
         // spec: ### Resolve Selectors
@@ -339,7 +338,7 @@ class MFDataModelFormatter {
         // spec: Let `var` be the _variant_ element of the first element of `sortable`.
         IntVarTuple var = sortable.get(0);
         // spec: Select the _pattern_ of `var`.
-        patternToRender = var.variant.value;
+        Pattern patternToRender = var.variant.value;
 
         // And should do that only once, when building the data model.
         if (patternToRender == null) {

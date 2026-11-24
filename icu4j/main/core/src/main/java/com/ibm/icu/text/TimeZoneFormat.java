@@ -32,7 +32,6 @@ import java.io.IOException;
 import java.io.InvalidObjectException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.ObjectStreamField;
 import java.io.Serializable;
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
@@ -2104,7 +2103,7 @@ public class TimeZoneFormat extends UFormat
             return _width;
         }
 
-        static boolean isValid(char type, int width) {
+        static boolean isValid(int width) {
             return (width == 1 || width == 2);
         }
     }
@@ -2137,7 +2136,7 @@ public class TimeZoneFormat extends UFormat
                 } else {
                     isPrevQuote = true;
                     if (itemType != 0) {
-                        if (GMTOffsetField.isValid(itemType, itemLength)) {
+                        if (GMTOffsetField.isValid(itemLength)) {
                             items.add(new GMTOffsetField(itemType, itemLength));
                         } else {
                             invalidPattern = true;
@@ -2164,7 +2163,7 @@ public class TimeZoneFormat extends UFormat
                                     text.setLength(0);
                                 }
                             } else {
-                                if (GMTOffsetField.isValid(itemType, itemLength)) {
+                                if (GMTOffsetField.isValid(itemLength)) {
                                     items.add(new GMTOffsetField(itemType, itemLength));
                                 } else {
                                     invalidPattern = true;
@@ -2178,7 +2177,7 @@ public class TimeZoneFormat extends UFormat
                     } else {
                         // a string literal
                         if (itemType != 0) {
-                            if (GMTOffsetField.isValid(itemType, itemLength)) {
+                            if (GMTOffsetField.isValid(itemLength)) {
                                 items.add(new GMTOffsetField(itemType, itemLength));
                             } else {
                                 invalidPattern = true;
@@ -2199,7 +2198,7 @@ public class TimeZoneFormat extends UFormat
                     text.setLength(0);
                 }
             } else {
-                if (GMTOffsetField.isValid(itemType, itemLength)) {
+                if (GMTOffsetField.isValid(itemLength)) {
                     items.add(new GMTOffsetField(itemType, itemLength));
                 } else {
                     invalidPattern = true;
@@ -2305,16 +2304,18 @@ public class TimeZoneFormat extends UFormat
      *     string.
      */
     private int parseOffsetLocalizedGMT(
-            String text, ParsePosition pos, boolean isShort, Output<Boolean> hasDigitOffset) {
+            String text,
+            ParsePosition pos,
+            @SuppressWarnings("unused") boolean isShort,
+            Output<Boolean> hasDigitOffset) {
         int start = pos.getIndex();
-        int offset = 0;
         int[] parsedLength = {0};
 
         if (hasDigitOffset != null) {
             hasDigitOffset.value = false;
         }
 
-        offset = parseOffsetLocalizedGMTPattern(text, start, isShort, parsedLength);
+        int offset = parseOffsetLocalizedGMTPattern(text, start, parsedLength);
 
         // For now, parseOffsetLocalizedGMTPattern handles both long and short
         // formats, no matter isShort is true or false. This might be changed in future
@@ -2371,8 +2372,7 @@ public class TimeZoneFormat extends UFormat
      * @param parsedLen the parsed length, or 0 on failure.
      * @return the parsed offset in milliseconds.
      */
-    private int parseOffsetLocalizedGMTPattern(
-            String text, int start, boolean isShort, int[] parsedLen) {
+    private int parseOffsetLocalizedGMTPattern(String text, int start, int[] parsedLen) {
         int idx = start;
         int offset = 0;
         boolean parsed = false;
@@ -2388,7 +2388,7 @@ public class TimeZoneFormat extends UFormat
 
             // Offset part
             int[] offsetLen = new int[1];
-            offset = parseOffsetFields(text, idx, false, offsetLen);
+            offset = parseOffsetFields(text, idx, offsetLen);
             if (offsetLen[0] == 0) {
                 // offset field match failed
                 break;
@@ -2414,11 +2414,10 @@ public class TimeZoneFormat extends UFormat
      *
      * @param text the input text
      * @param start the start index
-     * @param isShort true if this is a short format - currently not used
      * @param parsedLen the parsed length, or 0 on failure.
      * @return the parsed offset in milliseconds.
      */
-    private int parseOffsetFields(String text, int start, boolean isShort, int[] parsedLen) {
+    private int parseOffsetFields(String text, int start, int[] parsedLen) {
         int outLen = 0;
         int offset = 0;
         int sign = 1;
@@ -3288,29 +3287,6 @@ public class TimeZoneFormat extends UFormat
     // ----------------------------------
     // Serialization stuff
     // -----------------------------------
-
-    /**
-     * @serialField _locale ULocale The locale of this TimeZoneFormat object.
-     * @serialField _tznames TimeZoneNames The time zone name data.
-     * @serialField _gmtPattern String The pattern string for localized GMT format.
-     * @serialField _gmtOffsetPatterns String[] The array of GMT offset patterns used by localized
-     *     GMT format (positive hour-min, positive hour-min-sec, negative hour-min, negative
-     *     hour-min-sec).
-     * @serialField _gmtOffsetDigits String[] The array of decimal digits used by localized GMT
-     *     format (the size of array is 10).
-     * @serialField _gmtZeroFormat String The localized GMT string used for GMT(UTC).
-     * @serialField _parseAllStyles boolean <code>true</code> if this TimeZoneFormat object is
-     *     configure for parsing all available names.
-     */
-    private static final ObjectStreamField[] serialPersistentFields = {
-        new ObjectStreamField("_locale", ULocale.class),
-        new ObjectStreamField("_tznames", TimeZoneNames.class),
-        new ObjectStreamField("_gmtPattern", String.class),
-        new ObjectStreamField("_gmtOffsetPatterns", String[].class),
-        new ObjectStreamField("_gmtOffsetDigits", String[].class),
-        new ObjectStreamField("_gmtZeroFormat", String.class),
-        new ObjectStreamField("_parseAllStyles", boolean.class),
-    };
 
     /**
      * @param oos the object output stream

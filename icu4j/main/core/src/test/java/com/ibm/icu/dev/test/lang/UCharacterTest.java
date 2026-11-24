@@ -349,7 +349,6 @@ public final class UCharacterTest extends CoreTestFmwk {
                 break;
             }
 
-        size = digits2.length;
         for (int i = 0; i < 10; i++) {
             if (UCharacter.isDigit(digits2[i]) && UCharacter.digit(digits2[i]) != digitvalues2[i]) {
                 errln(

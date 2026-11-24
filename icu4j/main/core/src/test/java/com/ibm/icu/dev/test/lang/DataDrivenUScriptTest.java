@@ -432,9 +432,7 @@ public class DataDrivenUScriptTest extends CoreTestFmwk {
         @Test
         public void TestGetScript() {
 
-            int code = UScript.INVALID_CODE;
-
-            code = UScript.getScript(codepoint);
+            int code = UScript.getScript(codepoint);
 
             if (code != expected) {
                 errln(

@@ -126,8 +126,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
         df.setMinimumIntegerDigits(0);
 
         double n = 0;
-        String buffer = new String();
-        buffer = df.format(n);
+        String buffer = df.format(n);
         if (buffer.length() == 0) errln(n + ": '" + buffer + "'");
         n = 0.1;
         buffer = df.format(n);
@@ -1763,7 +1762,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
 
     @Test
     public void test22983LongFraction() {
-        DecimalFormat format = new DecimalFormat("0.0000000000000001");
+        DecimalFormat unused = new DecimalFormat("0.0000000000000001");
     }
 }
 

@@ -70,10 +70,6 @@ public class HolidayCalendarDemo extends DemoApplet {
         /** For serialization */
         private static final long serialVersionUID = -7023296782393042761L;
 
-        private static final boolean DEBUG = false;
-
-        // private Locale curLocale = Locale.US; // unused
-
         private DemoApplet applet;
 
         private static final Locale[] calendars = {
@@ -501,7 +497,6 @@ public class HolidayCalendarDemo extends DemoApplet {
                     fHolidays.add(
                             new HolidayInfo(
                                     c.get(Calendar.DATE),
-                                    fAllHolidays[h],
                                     fAllHolidays[h].getDisplayName(fDisplayLocale)));
 
                     d.setTime(d.getTime() + 1000); // "d++"
@@ -675,13 +670,11 @@ public class HolidayCalendarDemo extends DemoApplet {
     }
 
     private static class HolidayInfo {
-        public HolidayInfo(int date, Holiday holiday, String name) {
+        public HolidayInfo(int date, String name) {
             this.date = date;
-            this.holiday = holiday;
             this.name = name;
         }
 
-        public Holiday holiday;
         public int date;
         public String name;
     }

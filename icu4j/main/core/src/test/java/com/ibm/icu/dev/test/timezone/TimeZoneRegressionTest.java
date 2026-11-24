@@ -702,17 +702,15 @@ public class TimeZoneRegressionTest extends CoreTestFmwk {
     /** TimeZone constructors allow null IDs. */
     @Test
     public void Test4159922() {
-        TimeZone z = null;
-
         // TimeZone API.  Only hasSameRules() and setDefault() should
         // allow null.
         try {
-            z = TimeZone.getTimeZone(null);
+            TimeZone.getTimeZone(null);
             errln("FAIL: Null allowed in getTimeZone");
         } catch (NullPointerException e) {
             System.out.print("");
         }
-        z = TimeZone.getTimeZone("GMT");
+        TimeZone z = TimeZone.getTimeZone("GMT");
         try {
             // {dlf} requiring cast for disambiguation is ok for compatibility since null
             // is not a valid argument to this API
@@ -1033,35 +1031,33 @@ public class TimeZoneRegressionTest extends CoreTestFmwk {
 
     @Test
     public void Test4184229() {
-        SimpleTimeZone zone = null;
         try {
-            zone = new SimpleTimeZone(0, "A", 0, -1, 0, 0, 0, 0, 0, 0);
+            new SimpleTimeZone(0, "A", 0, -1, 0, 0, 0, 0, 0, 0);
             errln("Failed. No exception has been thrown for DOM -1 startDay");
         } catch (IllegalArgumentException e) {
             logDebug("(a) " + e.getMessage());
         }
         try {
-            zone = new SimpleTimeZone(0, "A", 0, 0, 0, 0, 0, -1, 0, 0);
+            new SimpleTimeZone(0, "A", 0, 0, 0, 0, 0, -1, 0, 0);
             errln("Failed. No exception has been thrown for DOM -1 endDay");
         } catch (IllegalArgumentException e) {
             logDebug("(b) " + e.getMessage());
         }
         try {
-            zone = new SimpleTimeZone(0, "A", 0, -1, 0, 0, 0, 0, 0, 0, 1000);
+            new SimpleTimeZone(0, "A", 0, -1, 0, 0, 0, 0, 0, 0, 1000);
             errln("Failed. No exception has been thrown for DOM -1 startDay +savings");
         } catch (IllegalArgumentException e) {
             logDebug("(c) " + e.getMessage());
         }
         try {
-            zone = new SimpleTimeZone(0, "A", 0, 0, 0, 0, 0, -1, 0, 0, 1000);
+            new SimpleTimeZone(0, "A", 0, 0, 0, 0, 0, -1, 0, 0, 1000);
             errln("Failed. No exception has been thrown for DOM -1 endDay +savings");
         } catch (IllegalArgumentException e) {
             logDebug("(d) " + e.getMessage());
         }
         // Make a valid constructor call for subsequent tests.
 
-        zone = new SimpleTimeZone(0, "A", 0, 1, 0, 0, 0, 1, 0, 0);
-
+        SimpleTimeZone zone = new SimpleTimeZone(0, "A", 0, 1, 0, 0, 0, 1, 0, 0);
         try {
             zone.setStartRule(0, -1, 0, 0);
             errln("Failed. No exception has been thrown for DOM -1 setStartRule +savings");

@@ -33,7 +33,6 @@ public class ErrorTest extends TestFmwk {
         ReplaceableString testString =
                 new ReplaceableString("A quick fox jumped over the lazy dog.");
         String insertString = "cats and dogs";
-        int stoppedAt = 0, len;
         Transliterator.Position pos = new Transliterator.Position();
 
         Transliterator t = Transliterator.getInstance(trans, Transliterator.FORWARD);
@@ -41,8 +40,8 @@ public class ErrorTest extends TestFmwk {
             errln("FAIL: construction of Latin-Greek");
             return;
         }
-        len = testString.length();
-        stoppedAt = t.transliterate(testString, 0, 100);
+        int len = testString.length();
+        int stoppedAt = t.transliterate(testString, 0, 100);
         if (stoppedAt != -1) {
             errln("FAIL: Out of bounds check failed (1).");
         } else if (testString.length() != len) {

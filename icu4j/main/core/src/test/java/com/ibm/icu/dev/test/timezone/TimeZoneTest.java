@@ -616,9 +616,6 @@ public class TimeZoneTest extends CoreTestFmwk {
         zone.setStartRule(Calendar.MARCH, 1, 0, startHour);
         zone.setEndRule(Calendar.JULY, 1, 0, endHour);
 
-        gc = new GregorianCalendar(zone);
-        // if (failure(status, "new GregorianCalendar")) return;
-
         long marchOne = marchOneStd + startHour;
         long julyOne = julyOneStd + endHour - 3600000; // Adjust from wall to Std time
 
@@ -2854,7 +2851,6 @@ public class TimeZoneTest extends CoreTestFmwk {
 
     @Test
     public void TestRawOffsetAndOffsetConsistency22041() {
-        long now = (new Date()).getTime();
         int[] offsets = new int[2]; // raw = offsets[0], dst = offsets[1]
         for (String id : TimeZone.getAvailableIDs()) {
             TimeZone zone = TimeZone.getTimeZone(id);

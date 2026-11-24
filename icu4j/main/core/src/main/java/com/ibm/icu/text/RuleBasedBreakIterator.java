@@ -259,7 +259,9 @@ public class RuleBasedBreakIterator extends BreakIterator implements Cloneable {
     // RBBIRunMode - the state machine runs an extra iteration at the beginning and end
     //               of user text.  A variable with this enum type keeps track of where we
     //               are.  The state machine only fetches user text input while in RUN mode.
+    @SuppressWarnings("unused")
     private static final int RBBI_START = 0;
+
     private static final int RBBI_RUN = 1;
     private static final int RBBI_END = 2;
 
@@ -967,7 +969,6 @@ public class RuleBasedBreakIterator extends BreakIterator implements Cloneable {
     public int handleSafePrevious(int fromPosition) {
         char state;
         short category = 0;
-        int result = 0;
 
         // caches for quicker access
         CharacterIterator text = fText;
@@ -1020,7 +1021,7 @@ public class RuleBasedBreakIterator extends BreakIterator implements Cloneable {
         }
 
         // The state machine is done.
-        result = text.getIndex();
+        int result = text.getIndex();
         if (TRACE) {
             System.out.println("result = " + result);
         }
@@ -1586,8 +1587,6 @@ public class RuleBasedBreakIterator extends BreakIterator implements Cloneable {
         boolean populateFollowing() {
             int fromPosition = fBoundaries[fEndBufIdx];
             int fromRuleStatusIdx = fStatuses[fEndBufIdx];
-            int pos = 0;
-            int ruleStatusIdx = 0;
 
             if (fDictionaryCache.following(fromPosition)) {
                 addFollowing(
@@ -1598,12 +1597,12 @@ public class RuleBasedBreakIterator extends BreakIterator implements Cloneable {
             }
 
             fPosition = fromPosition;
-            pos = handleNext();
+            int pos = handleNext();
             if (pos == BreakIterator.DONE) {
                 return false;
             }
 
-            ruleStatusIdx = fRuleStatusIndex;
+            int ruleStatusIdx = fRuleStatusIndex;
             if (fDictionaryCharCount > 0) {
                 // The text segment obtained from the rules includes dictionary characters.
                 // Subdivide it, with subdivided results going into the dictionary cache.

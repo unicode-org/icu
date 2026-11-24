@@ -707,15 +707,13 @@ public class Currency extends MeasureUnit {
     @Deprecated
     public static String parse(ULocale locale, String text, int type, ParsePosition pos) {
         List<TextTrieMap<CurrencyStringInfo>> currencyTrieVec = getCurrencyTrieVec(locale);
-        int maxLength = 0;
-        String isoResult = null;
 
         // look for the names
         TextTrieMap<CurrencyStringInfo> currencyNameTrie = currencyTrieVec.get(1);
         CurrencyNameResultHandler handler = new CurrencyNameResultHandler();
         currencyNameTrie.find(text, pos.getIndex(), handler);
-        isoResult = handler.getBestCurrencyISOCode();
-        maxLength = handler.getBestMatchLength();
+        String isoResult = handler.getBestCurrencyISOCode();
+        int maxLength = handler.getBestMatchLength();
 
         if (type != Currency.LONG_NAME) { // not long name only
             TextTrieMap<CurrencyStringInfo> currencySymbolTrie = currencyTrieVec.get(0);

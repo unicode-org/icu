@@ -1332,7 +1332,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
     public void TestClone() {
         DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance();
         DateTimePatternGenerator dtpg2 = dtpg.clone();
-        dtpg = dtpg2.clone();
+        DateTimePatternGenerator unused = dtpg2.clone();
     }
 
     /* Tests the constructor
@@ -1455,7 +1455,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
                             + "for a frozen object.");
         } catch (Exception e) {
         }
-        dt = dt.cloneAsThawed();
+        dt.cloneAsThawed();
     }
 
     // Tests the method

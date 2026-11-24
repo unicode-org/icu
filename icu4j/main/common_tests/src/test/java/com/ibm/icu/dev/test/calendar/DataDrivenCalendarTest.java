@@ -61,7 +61,7 @@ public class DataDrivenCalendarTest extends CoreTestFmwk {
         } else if (type.equals("convert_rev")) {
             testConvert(td, settings, false);
         } else if (type.equals("ops")) {
-            testOps(td, settings);
+            testOps(td);
         } else {
             errln("Unknown type: " + type);
         }
@@ -135,11 +135,10 @@ public class DataDrivenCalendarTest extends CoreTestFmwk {
     }
 
     private void testConvert(TestDataModule.TestData testData, DataMap settings, boolean forward) {
-        Calendar toCalendar = null;
-        // build to calendar
         String testSetting = settings.getString("ToCalendar");
         ULocale loc = new ULocale(testSetting);
-        toCalendar = Calendar.getInstance(loc);
+        // build to calendar
+        Calendar toCalendar = Calendar.getInstance(loc);
         CalendarFieldsSet fromSet = new CalendarFieldsSet(), toSet = new CalendarFieldsSet();
         //        DateFormat fmt = new SimpleDateFormat("EEE MMM dd yyyy / YYYY'-W'ww-ee");
         // Start the processing
@@ -176,7 +175,7 @@ public class DataDrivenCalendarTest extends CoreTestFmwk {
     private static final String kROLL = "roll";
     private static final String kMILLIS = "MILLIS=";
 
-    private void testOps(TestDataModule.TestData testData, DataMap settings) {
+    private void testOps(TestDataModule.TestData testData) {
         // Get 'from' time
         CalendarFieldsSet fromSet = new CalendarFieldsSet(),
                 toSet = new CalendarFieldsSet(),

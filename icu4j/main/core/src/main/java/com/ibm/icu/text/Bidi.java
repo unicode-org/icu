@@ -1063,7 +1063,7 @@ public class Bidi {
     byte paraLevel;
     /* original paraLevel when contextual */
     /* must be one of DEFAULT_xxx or 0 if not contextual */
-    byte defaultParaLevel;
+    byte defaultParaLevel = 0;
 
     /* context data */
     String prologue;
@@ -1752,7 +1752,6 @@ public class Bidi {
         flags = 0; /* collect all directionalities in the text */
         int uchar;
         byte dirProp;
-        byte defaultParaLevel = 0; /* initialize to avoid compiler warnings */
         boolean isDefaultLevel = IsDefaultLevel(paraLevel);
         /* for inverse Bidi, the default para level is set to RTL if there is a
         strong R or AL character at either end of the text                */
@@ -1781,11 +1780,11 @@ public class Bidi {
         int stackLast = -1;
 
         if ((reorderingOptions & OPTION_STREAMING) != 0) length = 0;
-        defaultParaLevel = (byte) (paraLevel & 1);
+        byte localDefaultParaLevel = (byte) (paraLevel & 1);
 
         if (isDefaultLevel) {
-            paras_level[0] = defaultParaLevel;
-            lastStrong = defaultParaLevel;
+            paras_level[0] = localDefaultParaLevel;
+            lastStrong = localDefaultParaLevel;
             if (prologue != null && /* there is a prologue */ (dirProp = firstL_R_AL()) != ON) {
                 /* with a strong character */
                 if (dirProp == L) paras_level[0] = 0; /* set the default para level */
@@ -1897,9 +1896,9 @@ public class Bidi {
                     paraCount++;
                     checkParaCount(); /* check that there is enough memory for a new para entry */
                     if (isDefaultLevel) {
-                        paras_level[paraCount - 1] = defaultParaLevel;
+                        paras_level[paraCount - 1] = localDefaultParaLevel;
                         state = SEEKING_STRONG_FOR_PARA;
-                        lastStrong = defaultParaLevel;
+                        lastStrong = localDefaultParaLevel;
                     } else {
                         paras_level[paraCount - 1] = paraLevel;
                         state = NOT_SEEKING_STRONG;

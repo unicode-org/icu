@@ -355,10 +355,7 @@ public class UnicodeMapTest extends TestFmwk {
     public void TestUnicodeMapGeneralCategory() {
         logDebug("Setting General Category");
         UnicodeMap<String> map1 = new UnicodeMap<>();
-        Map<Integer, String> map2 = new HashMap<Integer, String>();
-        // Map<Integer, String> map3 = new TreeMap<Integer, String>();
-        map1 = new UnicodeMap<String>();
-        map2 = new TreeMap<Integer, String>();
+        Map<Integer, String> map2 = new TreeMap<>();
         for (int cp = 0; ; ) {
             int enumValue = UCharacter.getIntPropertyValue(cp, propEnum);
             // if (enumValue <= 0) continue; // for smaller set
@@ -423,7 +420,10 @@ public class UnicodeMapTest extends TestFmwk {
         assertEquals("", foo1, reverse);
     }
 
-    private void checkNext(UnicodeMap<String> map1, Map<Integer, String> map2, int limit) {
+    private void checkNext(
+            UnicodeMap<String> map1,
+            Map<Integer, String> map2,
+            @SuppressWarnings("unused") int limit) {
         logDebug("Comparing nextRange");
         Map<Integer, String> localMap = new TreeMap<>();
         UnicodeMapIterator<String> mi = new UnicodeMapIterator<String>(map1);

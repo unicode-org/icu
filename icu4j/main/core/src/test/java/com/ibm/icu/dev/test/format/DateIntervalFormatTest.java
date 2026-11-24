@@ -2593,12 +2593,11 @@ public class DateIntervalFormatTest extends CoreTestFmwk {
                     new Locale(
                             testLocale[localeIndex][0],
                             testLocale[localeIndex][1],
-                            testLocale[localeIndex][2]),
-                    testLocale[localeIndex][0] + testLocale[localeIndex][1]);
+                            testLocale[localeIndex][2]));
         }
     }
 
-    private void stress(String[] data, int data_length, Locale loc, String locName) {
+    private void stress(String[] data, int data_length, Locale loc) {
         String[] skeleton = {
             "EEEEdMMMMy",
             "dMMMMy",

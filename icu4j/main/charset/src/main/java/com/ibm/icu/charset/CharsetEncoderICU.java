@@ -817,7 +817,6 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
      */
     CoderResult cbFromUWriteUChars(
             CharsetEncoderICU encoder, CharBuffer source, ByteBuffer target, IntBuffer offsets) {
-        CoderResult cr = CoderResult.UNDERFLOW;
 
         /* This is a fun one.  Recursion can occur - we're basically going to
          * just retry shoving data through the same converter. Note, if you got
@@ -830,7 +829,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
         int oldTargetPosition = target.position();
         int offsetIndex = source.position();
 
-        cr = encoder.encode(source, target, null, false); /* no offsets and no flush */
+        CoderResult cr = encoder.encode(source, target, null, false); /* no offsets and no flush */
 
         if (offsets != null) {
             while (target.position() != oldTargetPosition) {

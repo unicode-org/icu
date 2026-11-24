@@ -52,8 +52,6 @@ public class LSTMBreakEngineTest extends CoreTestFmwk {
     }
 
     private void runTestFromFile(String filename, int script) {
-
-        String testString;
         InputStream is =
                 LSTMBreakEngineTest.class.getResourceAsStream(
                         "/com/ibm/icu/dev/test/rbbi/" + filename);
@@ -77,7 +75,7 @@ public class LSTMBreakEngineTest extends CoreTestFmwk {
                     int length = fields[1].length();
                     CharacterIterator input = new StringCharacterIterator(fields[1]);
                     DictionaryBreakEngine.DequeI foundBreaks = new DictionaryBreakEngine.DequeI();
-                    int ret = engine.findBreaks(input, 0, length, foundBreaks, false);
+                    engine.findBreaks(input, 0, length, foundBreaks, false);
                     StringBuilder sb = new StringBuilder();
                     sb.append('{');
                     for (int i = 0; i < foundBreaks.size(); i++) {

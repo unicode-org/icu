@@ -248,7 +248,6 @@ public class CollationFrozenMonkeyTest extends TestFmwk {
             doTest(myCollation, testSourceCases[i], testTargetCases[i], -1);
         }
         logDebug("Demo Test 2 : Create a new table collation with rules \"& z < a 0x0308\"");
-        newRules = "";
         newRules = baseRules + " & z < a" + String.valueOf(0x0308);
         try {
             myCollation = new RuleBasedCollator(newRules);

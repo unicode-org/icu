@@ -113,8 +113,7 @@ public class DataDrivenNumberFormatTestUtility extends CoreTestFmwk {
      * @param codeUnderTest the code under test
      */
     public static void runSuite(String fileName, CodeUnderTest codeUnderTest) {
-        new DataDrivenNumberFormatTestUtility(codeUnderTest)
-                .run(fileName, RunMode.SKIP_KNOWN_FAILURES);
+        new DataDrivenNumberFormatTestUtility(codeUnderTest).run(RunMode.SKIP_KNOWN_FAILURES);
     }
 
     /**
@@ -127,14 +126,12 @@ public class DataDrivenNumberFormatTestUtility extends CoreTestFmwk {
      */
     public static void runFormatSuiteIncludingKnownFailures(
             String fileName, CodeUnderTest codeUnderTest) {
-        new DataDrivenNumberFormatTestUtility(codeUnderTest)
-                .run(fileName, RunMode.INCLUDE_KNOWN_FAILURES);
+        new DataDrivenNumberFormatTestUtility(codeUnderTest).run(RunMode.INCLUDE_KNOWN_FAILURES);
     }
 
     /** Checks the data file for no unknown IDs in "breaks" columns. */
     public static void checkNoUnknownIDs(String fileName, String allowedIDs) {
-        new DataDrivenNumberFormatTestUtility(allowedIDs)
-                .run(fileName, RunMode.CHECK_FOR_UNKNOWN_IDS);
+        new DataDrivenNumberFormatTestUtility(allowedIDs).run(RunMode.CHECK_FOR_UNKNOWN_IDS);
     }
 
     private DataDrivenNumberFormatTestUtility(CodeUnderTest codeUnderTest) {
@@ -147,7 +144,7 @@ public class DataDrivenNumberFormatTestUtility extends CoreTestFmwk {
         this.allowedIDs = allowedIDs;
     }
 
-    private void run(String fileName, RunMode runMode) {
+    private void run(RunMode runMode) {
         char codeUnderTestId = (codeUnderTest == null) ? 0 : codeUnderTest.Id();
 
         try (BufferedReader in = TestUtil.getUtf8DataReader("numberformattestspecification.txt")) {

@@ -37,13 +37,10 @@ public class NumberFormatRoundTripTest extends CoreTestFmwk {
 
     @Test
     public void TestNumberFormatRoundTrip() {
-
-        NumberFormat fmt = null;
-
         logDebug("Default Locale");
 
         logDebug("Default Number format");
-        fmt = NumberFormat.getInstance();
+        NumberFormat fmt = NumberFormat.getInstance();
         _test(fmt);
 
         logDebug("Currency Format");

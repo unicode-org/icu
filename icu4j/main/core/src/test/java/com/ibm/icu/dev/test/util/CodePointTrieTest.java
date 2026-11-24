@@ -253,7 +253,6 @@ public final class CodePointTrieTest extends CoreTestFmwk {
             String testName,
             CodePointTrie trie,
             CodePointTrie.Type type,
-            CodePointTrie.ValueWidth valueWidth,
             CheckRange checkRanges[]) {
         int value, value2;
         int start, limit;
@@ -376,11 +375,7 @@ public final class CodePointTrieTest extends CoreTestFmwk {
                 && UTF16Plus.isTrailSurrogate(cp);
     }
 
-    private void testTrieUTF16(
-            String testName,
-            CodePointTrie trie,
-            CodePointTrie.ValueWidth valueWidth,
-            CheckRange checkRanges[]) {
+    private void testTrieUTF16(String testName, CodePointTrie trie, CheckRange checkRanges[]) {
         StringBuilder s = new StringBuilder();
         int[] values = new int[16000];
 
@@ -472,12 +467,11 @@ public final class CodePointTrieTest extends CoreTestFmwk {
             String testName,
             CodePointTrie trie,
             CodePointTrie.Type type,
-            CodePointTrie.ValueWidth valueWidth,
             CheckRange checkRanges[]) {
-        testTrieGetters(testName, trie, type, valueWidth, checkRanges);
+        testTrieGetters(testName, trie, type, checkRanges);
         testTrieGetRanges(testName, trie, CodePointMap.RangeOption.NORMAL, 0, checkRanges);
         if (type == CodePointTrie.Type.FAST) {
-            testTrieUTF16(testName, trie, valueWidth, checkRanges);
+            testTrieUTF16(testName, trie, checkRanges);
             // Java: no testTrieUTF8(testName, trie, valueWidth, checkRanges);
         }
     }
@@ -493,7 +487,6 @@ public final class CodePointTrieTest extends CoreTestFmwk {
             MutableCodePointTrie mutableTrie,
             CodePointTrie.Type type,
             CodePointTrie.ValueWidth valueWidth,
-            boolean withSwap,
             CheckRange checkRanges[]) {
         CodePointTrie trie;
         int length1;
@@ -513,7 +506,7 @@ public final class CodePointTrieTest extends CoreTestFmwk {
             ByteBuffer storage = ByteBuffer.wrap(os.toByteArray());
             // Java: no preflighting
 
-            testTrie(testName, trie, type, valueWidth, checkRanges);
+            testTrie(testName, trie, type, checkRanges);
             trie = null;
 
             // Java: There is no code for "swapping" the endianness of data.
@@ -560,7 +553,7 @@ public final class CodePointTrieTest extends CoreTestFmwk {
                 }
             }
 
-            testTrie(testName, trie, type, valueWidth, checkRanges);
+            testTrie(testName, trie, type, checkRanges);
             {
                 /* make a mutable trie from an immutable one */
                 int value, value2;
@@ -582,10 +575,7 @@ public final class CodePointTrieTest extends CoreTestFmwk {
     }
 
     private MutableCodePointTrie testTrieSerializeAllValueWidth(
-            String testName,
-            MutableCodePointTrie mutableTrie,
-            boolean withClone,
-            CheckRange checkRanges[]) {
+            String testName, MutableCodePointTrie mutableTrie, CheckRange checkRanges[]) {
         int oredValues = 0;
         int i;
         for (i = 0; i < checkRanges.length; ++i) {
@@ -601,7 +591,6 @@ public final class CodePointTrieTest extends CoreTestFmwk {
                     mutableTrie,
                     CodePointTrie.Type.FAST,
                     CodePointTrie.ValueWidth.BITS_16,
-                    withClone,
                     checkRanges);
         }
 
@@ -611,7 +600,6 @@ public final class CodePointTrieTest extends CoreTestFmwk {
                 mutableTrie,
                 CodePointTrie.Type.FAST,
                 CodePointTrie.ValueWidth.BITS_32,
-                withClone,
                 checkRanges);
 
         if (oredValues <= 0xff) {
@@ -621,7 +609,6 @@ public final class CodePointTrieTest extends CoreTestFmwk {
                     mutableTrie,
                     CodePointTrie.Type.FAST,
                     CodePointTrie.ValueWidth.BITS_8,
-                    withClone,
                     checkRanges);
         }
 
@@ -632,7 +619,6 @@ public final class CodePointTrieTest extends CoreTestFmwk {
                     mutableTrie,
                     CodePointTrie.Type.SMALL,
                     CodePointTrie.ValueWidth.BITS_16,
-                    withClone,
                     checkRanges);
         }
 
@@ -677,8 +663,7 @@ public final class CodePointTrieTest extends CoreTestFmwk {
         MutableCodePointTrie mutableTrie =
                 makeTrieWithRanges(testName, withClone, setRanges, checkRanges);
         if (mutableTrie != null) {
-            mutableTrie =
-                    testTrieSerializeAllValueWidth(testName, mutableTrie, withClone, checkRanges);
+            mutableTrie = testTrieSerializeAllValueWidth(testName, mutableTrie, checkRanges);
         }
     }
 
@@ -865,7 +850,7 @@ public final class CodePointTrieTest extends CoreTestFmwk {
         mutableTrie.setRange(0x2000, 0x4000 - 1, 3);
         mutableTrie.setRange(0x1000, 0x4000 - 1, 1);
 
-        mutableTrie = testTrieSerializeAllValueWidth(testName, mutableTrie, false, checkRanges);
+        mutableTrie = testTrieSerializeAllValueWidth(testName, mutableTrie, checkRanges);
     }
 
     @Test
@@ -902,7 +887,7 @@ public final class CodePointTrieTest extends CoreTestFmwk {
             mutableTrie.set(i, 5);
         }
 
-        mutableTrie = testTrieSerializeAllValueWidth(testName, mutableTrie, false, checkRanges);
+        mutableTrie = testTrieSerializeAllValueWidth(testName, mutableTrie, checkRanges);
     }
 
     @Test
@@ -931,7 +916,7 @@ public final class CodePointTrieTest extends CoreTestFmwk {
             }
         }
 
-        mutableTrie = testTrieSerializeAllValueWidth(testName, mutableTrie, false, checkRanges);
+        mutableTrie = testTrieSerializeAllValueWidth(testName, mutableTrie, checkRanges);
     }
 
     @Test
@@ -973,7 +958,6 @@ public final class CodePointTrieTest extends CoreTestFmwk {
                 mutableTrie,
                 CodePointTrie.Type.FAST,
                 CodePointTrie.ValueWidth.BITS_16,
-                false,
                 checkRanges);
     }
 
@@ -1134,8 +1118,7 @@ public final class CodePointTrieTest extends CoreTestFmwk {
         }
         checkRanges[0x100] = new CheckRange(0x110000, 0);
 
-        mutableTrie =
-                testTrieSerializeAllValueWidth("short-all-same", mutableTrie, false, checkRanges);
+        testTrieSerializeAllValueWidth("short-all-same", mutableTrie, checkRanges);
     }
 
     private void testIntProperty(String testName, String baseSetPattern, int property) {
@@ -1187,10 +1170,7 @@ public final class CodePointTrieTest extends CoreTestFmwk {
             checkRanges.add(new CheckRange(0x110000, 0));
         }
         testTrieSerializeAllValueWidth(
-                testName,
-                mutableTrie,
-                false,
-                checkRanges.toArray(new CheckRange[checkRanges.size()]));
+                testName, mutableTrie, checkRanges.toArray(new CheckRange[checkRanges.size()]));
     }
 
     @Test

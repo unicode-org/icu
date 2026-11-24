@@ -95,12 +95,11 @@ public class IntlTestSimpleDateFormatAPI extends CoreTestFmwk {
         logDebug("Testing parse()");
 
         String text = new String("02/03/76, 2:50 AM, CST");
-        Date result1 = new Date();
-        Date result2 = new Date();
         ParsePosition pos = new ParsePosition(0);
-        result1 = def.parse(text, pos);
+        Date result1 = def.parse(text, pos);
         logDebug(text + " parsed into " + result1);
 
+        Date result2 = new Date();
         try {
             result2 = def.parse(text);
         } catch (ParseException e) {

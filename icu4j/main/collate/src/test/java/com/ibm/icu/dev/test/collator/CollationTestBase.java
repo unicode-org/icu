@@ -11,20 +11,20 @@ import com.ibm.icu.text.RuleBasedCollator;
 
 public abstract class CollationTestBase extends TestFmwk {
 
-    void doTest(TestFmwk test, RuleBasedCollator col, String source, String target, int result) {
-        doTestVariant(test, col, source, target, result);
+    void doTest(RuleBasedCollator col, String source, String target, int result) {
+        doTestVariant(col, source, target, result);
         if (result == -1) {
-            doTestVariant(test, col, target, source, 1);
+            doTestVariant(col, target, source, 1);
         } else if (result == 1) {
-            doTestVariant(test, col, target, source, -1);
+            doTestVariant(col, target, source, -1);
         } else {
-            doTestVariant(test, col, target, source, 0);
+            doTestVariant(col, target, source, 0);
         }
 
         CollationElementIterator iter = col.getCollationElementIterator(source);
-        backAndForth(test, iter);
+        backAndForth(iter);
         iter.setText(target);
-        backAndForth(test, iter);
+        backAndForth(iter);
     }
 
     /**
@@ -55,7 +55,7 @@ public abstract class CollationTestBase extends TestFmwk {
         return orders;
     }
 
-    void backAndForth(TestFmwk test, CollationElementIterator iter) {
+    void backAndForth(CollationElementIterator iter) {
         // Run through the iterator forwards and stick it into an array
         iter.reset();
         int[] orders = getOrders(iter);
@@ -151,11 +151,7 @@ public abstract class CollationTestBase extends TestFmwk {
     }
 
     private void doTestVariant(
-            TestFmwk test,
-            RuleBasedCollator myCollation,
-            String source,
-            String target,
-            int result) {
+            RuleBasedCollator myCollation, String source, String target, int result) {
         int compareResult = myCollation.compare(source, target);
         if (compareResult != result) {
 

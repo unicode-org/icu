@@ -164,41 +164,29 @@ public class Region implements Comparable<Region> {
 
             availableRegions = new ArrayList<Set<Region>>(RegionType.values().length);
 
-            UResourceBundle metadataAlias = null;
-            UResourceBundle territoryAlias = null;
-            UResourceBundle codeMappings = null;
-            UResourceBundle idValidity = null;
-            UResourceBundle regionList = null;
-            UResourceBundle regionRegular = null;
-            UResourceBundle regionMacro = null;
-            UResourceBundle regionUnknown = null;
-            UResourceBundle worldContainment = null;
-            UResourceBundle territoryContainment = null;
-            UResourceBundle groupingContainment = null;
-
             UResourceBundle metadata =
                     UResourceBundle.getBundleInstance(
                             ICUData.ICU_BASE_NAME,
                             "metadata",
                             ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-            metadataAlias = metadata.get("alias");
-            territoryAlias = metadataAlias.get("territory");
+            UResourceBundle metadataAlias = metadata.get("alias");
+            UResourceBundle territoryAlias = metadataAlias.get("territory");
 
             UResourceBundle supplementalData =
                     UResourceBundle.getBundleInstance(
                             ICUData.ICU_BASE_NAME,
                             "supplementalData",
                             ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-            codeMappings = supplementalData.get("codeMappings");
-            idValidity = supplementalData.get("idValidity");
-            regionList = idValidity.get("region");
-            regionRegular = regionList.get("regular");
-            regionMacro = regionList.get("macroregion");
-            regionUnknown = regionList.get("unknown");
+            UResourceBundle codeMappings = supplementalData.get("codeMappings");
+            UResourceBundle idValidity = supplementalData.get("idValidity");
+            UResourceBundle regionList = idValidity.get("region");
+            UResourceBundle regionRegular = regionList.get("regular");
+            UResourceBundle regionMacro = regionList.get("macroregion");
+            UResourceBundle regionUnknown = regionList.get("unknown");
 
-            territoryContainment = supplementalData.get("territoryContainment");
-            worldContainment = territoryContainment.get("001");
-            groupingContainment = territoryContainment.get("grouping");
+            UResourceBundle territoryContainment = supplementalData.get("territoryContainment");
+            UResourceBundle worldContainment = territoryContainment.get("001");
+            UResourceBundle groupingContainment = territoryContainment.get("grouping");
 
             String[] continentsArr = worldContainment.getStringArray();
             List<String> continents = Arrays.asList(continentsArr);

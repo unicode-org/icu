@@ -526,7 +526,7 @@ public class RBBIAPITest extends CoreTestFmwk {
     @Test
     public void TestBug22580() {
         try {
-            RuleBasedBreakIterator bi = new RuleBasedBreakIterator("'");
+            new RuleBasedBreakIterator("'");
         } catch (IllegalArgumentException e) {
             // nothing.
         }
@@ -539,14 +539,14 @@ public class RBBIAPITest extends CoreTestFmwk {
         for (char u1 = ' '; u1 < '~'; u1++) {
             try {
                 char array[] = {u1};
-                RuleBasedBreakIterator bi = new RuleBasedBreakIterator(new String(array));
+                new RuleBasedBreakIterator(new String(array));
             } catch (IllegalArgumentException e) {
                 // nothing.
             }
             for (char u2 = ' '; u2 < '~'; u2++) {
                 try {
                     char array[] = {u1, u2};
-                    RuleBasedBreakIterator bi = new RuleBasedBreakIterator(new String(array));
+                    new RuleBasedBreakIterator(new String(array));
                 } catch (IllegalArgumentException e) {
                     // nothing.
                 }

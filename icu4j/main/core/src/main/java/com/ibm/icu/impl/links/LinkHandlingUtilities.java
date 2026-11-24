@@ -343,7 +343,7 @@ public class LinkHandlingUtilities {
                                 List<List<String>> cleanList =
                                         Splitter.on(part.structure.sub)
                                                 .splitToStream(partString)
-                                                .map(x -> splitList(part, part.structure.sub2, x))
+                                                .map(x -> splitList(part.structure.sub2, x))
                                                 .collect(Collectors.toList());
                                 result.put(part, cleanList);
                             }
@@ -601,10 +601,7 @@ public class LinkHandlingUtilities {
             toEscape.add(sep2);
         }
         return partParts.stream()
-                .map(
-                        x -> {
-                            return joinListEscaping(sep2, toEscape, x);
-                        })
+                .map(x -> joinListEscaping(sep2, toEscape, x))
                 .collect(Collectors.joining(sep));
     }
 
@@ -612,24 +609,16 @@ public class LinkHandlingUtilities {
             String sep, UnicodeSet toEscape, List<String> partParts) {
         return sep == null
                 ? escape(partParts.get(0), toEscape)
-                : partParts.stream()
-                        .map(
-                                x -> {
-                                    return escape(x, toEscape);
-                                })
-                        .collect(Collectors.joining(sep));
+                : partParts.stream().map(x -> escape(x, toEscape)).collect(Collectors.joining(sep));
     }
 
     private static List<List<String>> cleanList(Part part, String partString) {
-        return splitList(part, part.structure.sub, partString).stream()
-                .map(
-                        x -> {
-                            return List.of(x);
-                        })
+        return splitList(part.structure.sub, partString).stream()
+                .map(List::of)
                 .collect(Collectors.toUnmodifiableList());
     }
 
-    private static List<String> splitList(Part part, String separator, String partString) {
+    private static List<String> splitList(String separator, String partString) {
         return Splitter.on(separator)
                 .splitToStream(partString)
                 .map(x -> unescape(x))

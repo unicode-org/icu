@@ -193,9 +193,7 @@ public class JamoTest extends TransliteratorTestBase {
         String latin = "mic";
         String latin2 = "mich";
 
-        Transliterator t = null;
-
-        t = Transliterator.getInstance("NFD"); // was Hangul-Jamo
+        Transliterator t = Transliterator.getInstance("NFD"); // was Hangul-Jamo
         expect(t, hangul, jamo);
 
         t = Transliterator.getInstance("NFC"); // was Jamo-Hangul

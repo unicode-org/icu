@@ -70,12 +70,11 @@ public class RbnfScannerProviderImpl implements RbnfLenientScannerProvider {
      */
     @Deprecated
     public RbnfLenientScanner get(ULocale locale, String extras) {
-        RbnfLenientScanner result = null;
         String key = locale.toString() + "/" + extras;
         // Avoid computeIfAbsent: createScanner() constructs a RuleBasedCollator (expensive)
         // and would hold the ConcurrentHashMap bin lock for the entire duration. Using
         // get-then-putIfAbsent allows parallel construction with first-write-wins.
-        result = cache.get(key);
+        RbnfLenientScanner result = cache.get(key);
         if (result != null) {
             return result;
         }

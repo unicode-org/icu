@@ -39,10 +39,8 @@ public class SelectFormatAPITest extends CoreTestFmwk {
     /** API tests for equals() method */
     @Test
     public void TestEquals() {
-        SelectFormat selFmt1 = null;
-
         // Check equality for pattern constructed SelectFormats
-        selFmt1 = new SelectFormat(SIMPLE_PATTERN1);
+        SelectFormat selFmt1 = new SelectFormat(SIMPLE_PATTERN1);
         SelectFormat selFmt2 = new SelectFormat(SIMPLE_PATTERN1);
         assertTrue(
                 "Equals test failed while checking equality for "
@@ -67,11 +65,10 @@ public class SelectFormatAPITest extends CoreTestFmwk {
     /** API tests for applyPattern() method */
     @Test
     public void TestApplyPatternToPattern() {
-        SelectFormat selFmt = null;
         String pattern = "masculine{masculineVerbValue} other{otherVerbValue}";
 
         // Check for applyPattern/toPattern
-        selFmt = new SelectFormat(SIMPLE_PATTERN1);
+        SelectFormat selFmt = new SelectFormat(SIMPLE_PATTERN1);
         selFmt.applyPattern(pattern);
         assertEquals(
                 "Failed in applyPattern,toPattern with unexpected output",
@@ -93,10 +90,8 @@ public class SelectFormatAPITest extends CoreTestFmwk {
     /** API tests for toString() method */
     @Test
     public void TestToString() {
-        SelectFormat selFmt = null;
-
         // Check toString for pattern constructed SelectFormat
-        selFmt = new SelectFormat(SIMPLE_PATTERN1);
+        SelectFormat selFmt = new SelectFormat(SIMPLE_PATTERN1);
         String expected = "pattern='feminine {feminineVerbValue1} other{otherVerbValue1}'";
         assertEquals(
                 "Failed in TestToString with unexpected output 2", expected, selFmt.toString());

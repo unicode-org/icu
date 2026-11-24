@@ -317,9 +317,7 @@ public class CollationRegressionTest extends TestFmwk {
         Locale oldDefault = Locale.getDefault();
         Locale.setDefault(new Locale("ko", ""));
 
-        Collator c = null;
-
-        c = Collator.getInstance(new Locale("en", "US"));
+        Collator c = Collator.getInstance(new Locale("en", "US"));
 
         if (c == null) {
             errln("Could not create a Korean collator");
@@ -1276,7 +1274,7 @@ public class CollationRegressionTest extends TestFmwk {
         int length = quick ? (rule.length() - 2) : rule.length();
         for (int i = 4; i <= length; i++) {
             try {
-                RuleBasedCollator coll = new RuleBasedCollator(rule.substring(0, i));
+                RuleBasedCollator unused = new RuleBasedCollator(rule.substring(0, i));
             } catch (Exception e) {
                 // silence ignore.
             }
@@ -1299,7 +1297,7 @@ public class CollationRegressionTest extends TestFmwk {
         };
         String rule = new String(data, 0, data.length);
         try {
-            RuleBasedCollator coll = new RuleBasedCollator(rule);
+            RuleBasedCollator unused = new RuleBasedCollator(rule);
         } catch (Exception expected) {
             // expected exception
         }
@@ -1310,7 +1308,7 @@ public class CollationRegressionTest extends TestFmwk {
         // ICU-23467: RuleBasedCollator constructor timeout/overflow on long closure rules
         String rule = "&㜀=̫&웴=産싂싂싂Į혏훖훖걁";
         try {
-            RuleBasedCollator coll = new RuleBasedCollator(rule);
+            RuleBasedCollator unused = new RuleBasedCollator(rule);
         } catch (Exception expected) {
             // expected exception or quick completion without hanging
         }

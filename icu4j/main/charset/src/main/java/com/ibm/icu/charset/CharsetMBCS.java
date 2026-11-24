@@ -311,7 +311,6 @@ class CharsetMBCS extends CharsetICU {
          * IOException: " + e.getMessage()); pErrorCode[0] = UErrorCode.U_INVALID_FORMAT_ERROR; return; } }
          */
         if (mbcsTable.outputType == MBCS_OUTPUT_EXT_ONLY) {
-            UConverterSharedData baseSharedData = null;
             ByteBuffer extIndexes;
             String baseName;
 
@@ -335,7 +334,7 @@ class CharsetMBCS extends CharsetICU {
             }
 
             // agljport:fix args.size=sizeof(UConverterLoadArgs);
-            baseSharedData = loadConverter(2, baseName, classPath, loader);
+            UConverterSharedData baseSharedData = loadConverter(2, baseName, classPath, loader);
 
             if (baseSharedData.staticData.conversionType != UConverterType.MBCS
                     || baseSharedData.mbcs.baseSharedData != null) {
@@ -2057,10 +2056,9 @@ class CharsetMBCS extends CharsetICU {
                 boolean flush,
                 CoderResult[] cr) {
             int[] value = new int[1];
-            int match = 0;
 
             /* try to match */
-            match =
+            int match =
                     matchToU(
                             (byte) SISO_STATE(sharedData, mode),
                             toUBytesArray,

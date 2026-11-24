@@ -185,7 +185,6 @@ public abstract class DictionaryBreakEngine implements LanguageBreakEngine {
             int endPos,
             DequeI foundBreaks,
             boolean isPhraseBreaking) {
-        int result = 0;
 
         // Find the span of characters included in the set.
         //   The span to break begins at the current position int the text, and
@@ -203,7 +202,8 @@ public abstract class DictionaryBreakEngine implements LanguageBreakEngine {
         rangeStart = start;
         rangeEnd = current;
 
-        result = divideUpDictionaryRange(text, rangeStart, rangeEnd, foundBreaks, isPhraseBreaking);
+        int result =
+                divideUpDictionaryRange(text, rangeStart, rangeEnd, foundBreaks, isPhraseBreaking);
         text.setIndex(current);
 
         return result;

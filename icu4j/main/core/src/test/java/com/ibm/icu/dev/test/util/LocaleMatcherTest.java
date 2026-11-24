@@ -914,8 +914,8 @@ public class LocaleMatcherTest extends CoreTestFmwk {
                         + "zh-CN, zh-TW, zu";
         LocalePriorityList list = LocalePriorityList.add(tags).build();
         int few = 1000;
-        long t = timeMaximize(list, few); // warm up
-        t = timeMaximize(list, few); // measure for scale
+        timeMaximize(list, few); // warm up
+        long t = timeMaximize(list, few); // measure for scale
         long targetTime = 100000000L; // 10^8 ns = 0.1s
         int iterations = (int) ((targetTime * few) / t);
         t = timeMaximize(list, iterations);

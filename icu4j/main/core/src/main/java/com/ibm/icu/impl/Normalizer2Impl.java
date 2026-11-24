@@ -544,7 +544,6 @@ public final class Normalizer2Impl {
             }
 
             // smallFCD: new in formatVersion 2
-            offset = nextOffset;
             smallFCD = new byte[0x100];
             bytes.get(smallFCD);
 

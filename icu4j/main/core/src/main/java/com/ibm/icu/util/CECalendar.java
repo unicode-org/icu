@@ -201,7 +201,6 @@ abstract class CECalendar extends Calendar {
     @Override
     @Deprecated
     protected void handleComputeFields(int julianDay) {
-        int era, year;
         int[] fields = new int[3];
         jdToCE(julianDay, getJDEpochOffset(), fields);
         internalSet(EXTENDED_YEAR, fields[0]);

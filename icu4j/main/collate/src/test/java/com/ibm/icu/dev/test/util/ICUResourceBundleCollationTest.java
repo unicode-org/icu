@@ -264,15 +264,14 @@ public final class ICUResourceBundleCollationTest extends TestFmwk {
                         + "_12345678"
                         + "_12345678"
                         + "_12345678X"; // One character too long.
-        ULocale equivLocale2 =
-                ICUResourceBundle.getFunctionalEquivalent(
-                        ICUData.ICU_BASE_NAME,
-                        ICUResourceBundle.ICU_DATA_CLASS_LOADER,
-                        "calendar",
-                        "calendar",
-                        new ULocale(invalid),
-                        new boolean[1],
-                        false);
+        ICUResourceBundle.getFunctionalEquivalent(
+                ICUData.ICU_BASE_NAME,
+                ICUResourceBundle.ICU_DATA_CLASS_LOADER,
+                "calendar",
+                "calendar",
+                new ULocale(invalid),
+                new boolean[1],
+                false);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -299,15 +298,14 @@ public final class ICUResourceBundleCollationTest extends TestFmwk {
                         + "_12345678"
                         + "_12345678"
                         + "_12345678X"; // One character too long.
-        ULocale equivLocale2 =
-                ICUResourceBundle.getFunctionalEquivalent(
-                        ICUData.ICU_BASE_NAME,
-                        ICUResourceBundle.ICU_DATA_CLASS_LOADER,
-                        "calendar",
-                        "calendar",
-                        new ULocale(invalidPosix),
-                        new boolean[1],
-                        false);
+        ICUResourceBundle.getFunctionalEquivalent(
+                ICUData.ICU_BASE_NAME,
+                ICUResourceBundle.ICU_DATA_CLASS_LOADER,
+                "calendar",
+                "calendar",
+                new ULocale(invalidPosix),
+                new boolean[1],
+                false);
     }
 
     @Test

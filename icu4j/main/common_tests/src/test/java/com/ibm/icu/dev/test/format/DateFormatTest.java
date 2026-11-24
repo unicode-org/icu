@@ -3771,8 +3771,7 @@ public class DateFormatTest extends CoreTestFmwk {
     // internal test subroutine, used by TestRunTogetherPattern917
     private void _testIt917(SimpleDateFormat fmt, String str, Date expected) {
         logDebug("pattern=" + fmt.toPattern() + "   string=" + str);
-        Date o = new Date();
-        o = (Date) ((DateFormat) fmt).parseObject(str, new ParsePosition(0));
+        Date o = (Date) ((DateFormat) fmt).parseObject(str, new ParsePosition(0));
         logDebug("Parsed object: " + o);
         if (o == null || !o.equals(expected)) errln("FAIL: Expected " + expected);
         String formatted = o == null ? "null" : ((DateFormat) fmt).format(o);
@@ -4334,35 +4333,34 @@ public class DateFormatTest extends CoreTestFmwk {
     /** Test DateFormat(Calendar) API */
     @Test
     public void TestDateFormatCalendar() {
-        DateFormat date = null, time = null, full = null;
-        Calendar cal = null;
         ParsePosition pos = new ParsePosition(0);
         String str;
         Date when;
 
         /* Create a formatter for date fields. */
-        date = DateFormat.getDateInstance(DateFormat.SHORT, Locale.US);
+        DateFormat date = DateFormat.getDateInstance(DateFormat.SHORT, Locale.US);
         if (date == null) {
             errln("FAIL: getDateInstance failed");
             return;
         }
 
         /* Create a formatter for time fields. */
-        time = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.US);
+        DateFormat time = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.US);
         if (time == null) {
             errln("FAIL: getTimeInstance failed");
             return;
         }
 
         /* Create a full format for output */
-        full = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL, Locale.US);
+        DateFormat full =
+                DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL, Locale.US);
         if (full == null) {
             errln("FAIL: getInstance failed");
             return;
         }
 
         /* Create a calendar */
-        cal = Calendar.getInstance(Locale.US);
+        Calendar cal = Calendar.getInstance(Locale.US);
         if (cal == null) {
             errln("FAIL: Calendar.getInstance failed");
             return;
@@ -4605,29 +4603,29 @@ public class DateFormatTest extends CoreTestFmwk {
 
         Locale foo = new Locale("fu", "FU", "BAR");
         rb = null;
-        sym = new DateFormatSymbols(GregorianCalendar.class, foo);
+        new DateFormatSymbols(GregorianCalendar.class, foo);
 
-        sym = new ChineseDateFormatSymbols();
-        sym = new ChineseDateFormatSymbols(new Locale("en", "US"));
+        new ChineseDateFormatSymbols();
+        new ChineseDateFormatSymbols(new Locale("en", "US"));
         try {
-            sym = new ChineseDateFormatSymbols(null, new Locale("en", "US"));
+            new ChineseDateFormatSymbols(null, new Locale("en", "US"));
             errln(
                     "ChineseDateFormatSymbols(Calender, Locale) was suppose to return a null "
                             + "pointer exception for a null paramater.");
         } catch (Exception e) {
         }
-        sym = new ChineseDateFormatSymbols(new ChineseCalendar(), new Locale("en", "US"));
+        new ChineseDateFormatSymbols(new ChineseCalendar(), new Locale("en", "US"));
         try {
-            sym = new ChineseDateFormatSymbols(null, new ULocale("en_US"));
+            new ChineseDateFormatSymbols(null, new ULocale("en_US"));
             errln(
                     "ChineseDateFormatSymbols(Calender, ULocale) was suppose to return a null "
                             + "pointer exception for a null paramater.");
         } catch (Exception e) {
         }
-        sym = new ChineseDateFormatSymbols(new ChineseCalendar(), foo);
+        new ChineseDateFormatSymbols(new ChineseCalendar(), foo);
         // cover new ChineseDateFormatSymbols(Calendar, ULocale)
         ChineseCalendar ccal = new ChineseCalendar();
-        sym = new ChineseDateFormatSymbols(ccal, ULocale.CHINA); // gclsh1 add
+        new ChineseDateFormatSymbols(ccal, ULocale.CHINA); // gclsh1 add
 
         StringBuffer buf = new StringBuffer();
         FieldPosition pos = new FieldPosition(0);
@@ -4827,7 +4825,7 @@ public class DateFormatTest extends CoreTestFmwk {
         if (false) {
             SimpleDateFormat fmt = new SimpleDateFormat("aabbcc");
             try {
-                String pat = fmt.toLocalizedPattern();
+                fmt.toLocalizedPattern();
                 errln("whoops, shouldn't have been able to localize aabbcc");
             } catch (IllegalArgumentException e) {
                 logDebug("aabbcc localize ok");
@@ -6025,7 +6023,6 @@ public class DateFormatTest extends CoreTestFmwk {
         SimpleDateFormat ref = new SimpleDateFormat(data[i++], loc);
         SimpleDateFormat gotfmt = new SimpleDateFormat("G yyyy MM dd HH:mm:ss z", loc);
 
-        String currentPat = null;
         while (i < data.length) {
             String pattern = data[i++];
             String input = data[i++];
@@ -6033,13 +6030,11 @@ public class DateFormatTest extends CoreTestFmwk {
 
             if (pattern != null) {
                 fmt.applyPattern(pattern);
-                currentPat = pattern;
             }
-            String gotstr = FAIL_STR;
             Date got;
             try {
                 got = fmt.parse(input);
-                gotstr = gotfmt.format(got);
+                gotfmt.format(got);
             } catch (ParseException e1) {
                 got = FAIL;
             }
@@ -6813,8 +6808,8 @@ public class DateFormatTest extends CoreTestFmwk {
     @Test
     public void TestSimpleDateFormatConstructor_String_String_ULocale() {
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("", "", null);
-            sdf = sdf.clone();
+            SimpleDateFormat unused = new SimpleDateFormat("", "", null);
+            unused = unused.clone();
         } catch (Exception e) {
             errln(
                     "SimpleDateFormat(String pattern, String override, ULocale loc) "
@@ -9314,9 +9309,6 @@ public class DateFormatTest extends CoreTestFmwk {
 
     @Test
     public void TestJdkCalendarFormatting() {
-        long millis = 1758854856581L; // 2025/09/25 19:47:36
-        String skeleton = "EyMMMMdjmz";
-
         oneCalendarTest(
                 Locale.US,
                 "September 25, 2025 at 7:47\u202FPM",
@@ -9477,7 +9469,6 @@ public class DateFormatTest extends CoreTestFmwk {
         Locale locale = Locale.forLanguageTag("en-US-u-ca-iso8601");
         for (String[] testCase : testCases) {
             DateFormat df = new SimpleDateFormat(testCase[0], locale);
-            DateFormatSymbols dfs;
             df.setTimeZone(TimeZone.GMT_ZONE);
             String result = df.format(dateToFormat);
             assertEquals("Wrong formatting result for " + testCase[0], testCase[1], result);

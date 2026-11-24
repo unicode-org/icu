@@ -420,7 +420,7 @@ class CharsetBOCU1 extends CharsetICU {
                         labelType = fastSingle(source, target, offsets);
                         break;
                     case getTrail:
-                        labelType = getTrail(source, target, offsets);
+                        labelType = getTrail(source);
                         break;
                     case regularLoop:
                         labelType = regularLoop(source, target, offsets);
@@ -468,7 +468,7 @@ class CharsetBOCU1 extends CharsetICU {
             return regularLoop;
         }
 
-        private int getTrail(CharBuffer source, ByteBuffer target, IntBuffer offsets) {
+        private int getTrail(CharBuffer source) {
             if (source.hasRemaining()) {
                 /*test the following code unit*/
                 char trail = source.get(source.position());
@@ -522,7 +522,7 @@ class CharsetBOCU1 extends CharsetICU {
                         }
 
                         if (UTF16.isLeadSurrogate(c)) {
-                            getTrail(source, target, offsets);
+                            getTrail(source);
                             if (checkNegative) {
                                 break;
                             }
@@ -832,13 +832,13 @@ class CharsetBOCU1 extends CharsetICU {
                         labelType = fastSingle(source, target, offsets);
                         break;
                     case getTrail:
-                        labelType = getTrail(source, target, offsets);
+                        labelType = getTrail(source);
                         break;
                     case regularLoop:
                         labelType = afterGetTrail(source, target, offsets);
                         break;
                     case endLoop:
-                        endLoop(source, target, offsets);
+                        endLoop();
                         break;
                 }
             }
@@ -889,7 +889,7 @@ class CharsetBOCU1 extends CharsetICU {
             return labelType;
         }
 
-        private int getTrail(ByteBuffer source, CharBuffer target, IntBuffer offsets) {
+        private int getTrail(ByteBuffer source) {
             labelType = regularLoop;
             for (; ; ) {
                 if (source.position() >= source.limit()) {
@@ -1005,7 +1005,7 @@ class CharsetBOCU1 extends CharsetICU {
                         diff = decodeBocu1LeadByte(c);
                         count = diff & 3;
                         diff >>= 2;
-                        getTrail(source, target, offsets);
+                        getTrail(source);
                         if (labelType != regularLoop) {
                             return labelType;
                         }
@@ -1049,7 +1049,7 @@ class CharsetBOCU1 extends CharsetICU {
             return labelType;
         }
 
-        private void endLoop(ByteBuffer source, CharBuffer target, IntBuffer offsets) {
+        private void endLoop() {
             if (cr.isMalformed()) {
                 /* set the converter state in UConverter to deal with the next character */
                 toUnicodeStatus = BOCU1_ASCII_PREV;

@@ -165,7 +165,8 @@ public class ICUCurrencyMetaInfo extends CurrencyMetaInfo {
 
     private static final long MASK = 4294967295L;
 
-    private long getDate(ICUResourceBundle b, long defaultValue, boolean endOfDay) {
+    private long getDate(
+            ICUResourceBundle b, long defaultValue, @SuppressWarnings("unused") boolean endOfDay) {
         if (b == null) {
             return defaultValue;
         }

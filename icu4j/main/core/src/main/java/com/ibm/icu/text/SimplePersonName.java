@@ -265,7 +265,7 @@ public class SimplePersonName implements PersonName {
     private static Set<FieldModifier> makeModifiersFromName(String modifiedName) {
         StringTokenizer tok = new StringTokenizer(modifiedName, "-");
         Set<FieldModifier> result = new HashSet<>();
-        String fieldName = tok.nextToken(); // throw away the field name
+        tok.nextToken(); // throw away the field name
         while (tok.hasMoreTokens()) {
             result.add(PersonName.FieldModifier.forString(tok.nextToken()));
         }

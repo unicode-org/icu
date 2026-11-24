@@ -1522,7 +1522,7 @@ class CharsetISCII extends CharsetICU {
                                     data.contextCharToUnicode = NO_CHAR_MARKER;
                                     this.toUnicodeStatus = UConverterConstants.missingCharMarker;
                                 } else {
-                                    targetUniChar = GetMapping(sourceChar, targetUniChar, data);
+                                    targetUniChar = GetMapping(sourceChar, data);
                                     data.contextCharToUnicode = (char) sourceChar;
                                 }
                                 break;
@@ -1533,7 +1533,7 @@ class CharsetISCII extends CharsetICU {
                                     /* clear context */
                                     data.contextCharToUnicode = NO_CHAR_MARKER;
                                 } else {
-                                    targetUniChar = GetMapping(sourceChar, targetUniChar, data);
+                                    targetUniChar = GetMapping(sourceChar, data);
                                     data.contextCharToUnicode = (char) sourceChar;
                                 }
                                 break;
@@ -1541,7 +1541,7 @@ class CharsetISCII extends CharsetICU {
                             /* fall through */
                             case 0x0D:
                                 data.resetToDefaultToUnicode = true;
-                                targetUniChar = GetMapping(sourceChar, targetUniChar, data);
+                                targetUniChar = GetMapping(sourceChar, data);
                                 data.contextCharToUnicode = (char) sourceChar;
                                 break;
                             case ISCII_VOWEL_SIGN_E:
@@ -1568,7 +1568,7 @@ class CharsetISCII extends CharsetICU {
                                         break;
                                     }
                                 }
-                                targetUniChar = GetMapping(sourceChar, targetUniChar, data);
+                                targetUniChar = GetMapping(sourceChar, data);
                                 data.contextCharToUnicode = (char) sourceChar;
                                 break;
                             case ISCII_NUKTA:
@@ -1680,7 +1680,7 @@ class CharsetISCII extends CharsetICU {
                                 }
 
                             default:
-                                targetUniChar = GetMapping(sourceChar, targetUniChar, data);
+                                targetUniChar = GetMapping(sourceChar, data);
                                 data.contextCharToUnicode = (char) sourceChar;
                                 break;
                         } // end of switch
@@ -1820,6 +1820,7 @@ class CharsetISCII extends CharsetICU {
             return cr;
         }
 
+        @SuppressWarnings("unused")
         private CoderResult WriteToTargetToU(
                 IntBuffer offsets,
                 int offset,
@@ -1850,8 +1851,8 @@ class CharsetISCII extends CharsetICU {
             return cr;
         }
 
-        private int GetMapping(short sourceChar, int targetUniChar, UConverterDataISCII data) {
-            targetUniChar = toUnicodeTable[sourceChar];
+        private int GetMapping(short sourceChar, UConverterDataISCII data) {
+            int targetUniChar = toUnicodeTable[sourceChar];
             /* is the code point valid in current script? */
             if (sourceChar > ASCII_END
                     && (validityTable[targetUniChar & 0x7F] & data.currentMaskToUnicode) == 0) {
@@ -1889,16 +1890,14 @@ class CharsetISCII extends CharsetICU {
             int targetByteUnit = 0x0000;
             int sourceChar = 0x0000;
             UConverterDataISCII converterData;
-            short newDelta = 0;
-            short range = 0;
             boolean deltaChanged = false;
             int tempContextFromUnicode = 0x0000; /* For special handling of the Gurmukhi script. */
             CoderResult cr = CoderResult.UNDERFLOW;
 
             /* initialize data */
             converterData = extraInfo;
-            newDelta = converterData.currentDeltaFromUnicode;
-            range = (short) (newDelta / UniLang.DELTA);
+            short newDelta = converterData.currentDeltaFromUnicode;
+            short range = (short) (newDelta / UniLang.DELTA);
 
             if ((sourceChar = fromUChar32) != 0) {
                 cr = handleSurrogates(source, (char) sourceChar);
@@ -2017,8 +2016,7 @@ class CharsetISCII extends CharsetICU {
                                 /* we are in a script block which is different than
                                  * previous sourceChar's script block write ATR and language codes
                                  */
-                                char temp = 0;
-                                temp = (char) (ATR << 8);
+                                char temp = (char) (ATR << 8);
                                 temp +=
                                         (char)
                                                 (lookupInitialData[range].isciiLang

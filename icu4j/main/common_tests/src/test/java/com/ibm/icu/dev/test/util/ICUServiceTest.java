@@ -191,12 +191,12 @@ public class ICUServiceTest extends CoreTestFmwk {
 
         // should find non-canonical strings
         String[] resultID = new String[1];
-        result = service.get("EN_us_fOo", resultID);
+        Object unused = service.get("EN_us_fOo", resultID);
         confirmEqual("14) find non-canonical", resultID[0], "en_US_FOO");
 
         // should be able to register non-canonical strings and get them canonicalized
         service.registerObject(singleton3, "eN_ca_dUde");
-        result = service.get("En_Ca_DuDe", resultID);
+        unused = service.get("En_Ca_DuDe", resultID);
         confirmEqual("15) register non-canonical", resultID[0], "en_CA_DUDE");
 
         // should be able to register invisible factories, these will not
@@ -729,6 +729,7 @@ public class ICUServiceTest extends CoreTestFmwk {
 
         actualReturn[0] = null;
         target = service.get(de_US, LocaleKey.KIND_ANY, actualReturn);
+        confirmEqual("test de_US 5", "german", target);
         confirmEqual("test de_US 7", actualReturn[0], de);
 
         actualReturn[0] = null;
@@ -787,8 +788,6 @@ public class ICUServiceTest extends CoreTestFmwk {
         }
 
         service.registerFactory(new ICUResourceBundleFactory());
-        target = service.get(ULocale.JAPAN);
-
         {
             int n = 0;
             List<ICUService.Factory> factories = service.factories();

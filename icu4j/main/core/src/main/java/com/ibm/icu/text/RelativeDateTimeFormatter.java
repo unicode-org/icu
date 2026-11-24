@@ -1571,7 +1571,8 @@ public final class RelativeDateTimeFormatter {
             }
         }
 
-        private void handlePlainDirection(UResource.Key key, UResource.Value value) {
+        private void handlePlainDirection(
+                @SuppressWarnings("unused") UResource.Key key, UResource.Value value) {
             AbsoluteUnit absUnit = unit.absUnit;
             if (absUnit == null) {
                 return; // Not interesting.
@@ -1609,7 +1610,10 @@ public final class RelativeDateTimeFormatter {
             }
         }
 
-        private void handleAlias(UResource.Key key, UResource.Value value, boolean noFallback) {
+        private void handleAlias(
+                UResource.Key key,
+                UResource.Value value,
+                @SuppressWarnings("unused") boolean noFallback) {
             Style sourceStyle = styleFromKey(key);
             int limit = key.length() - styleSuffixLength(sourceStyle);
             DateTimeUnit unit = DateTimeUnit.orNullFromString(key.substring(0, limit));

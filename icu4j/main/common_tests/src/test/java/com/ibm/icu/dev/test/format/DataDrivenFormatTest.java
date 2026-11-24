@@ -58,14 +58,11 @@ public class DataDrivenFormatTest extends CoreTestFmwk {
     @Parameters(method = "getTestData")
     public void formatTest(TestDataPair pair) {
         TestData td = pair.td;
-        DataMap settings = pair.dm;
-
-        String type = settings.getString("Type");
-
+        String type = pair.dm.getString("Type");
         if (type.equals("date_format")) {
-            testConvertDate(td, settings, true);
+            testConvertDate(td, true);
         } else if (type.equals("date_parse")) {
-            testConvertDate(td, settings, false);
+            testConvertDate(td, false);
         } else {
             errln("Unknown type: " + type);
         }
@@ -76,7 +73,7 @@ public class DataDrivenFormatTest extends CoreTestFmwk {
     private static final String kRELATIVE_MILLIS = "RELATIVE_MILLIS=";
     private static final String kRELATIVE_ADD = "RELATIVE_ADD:";
 
-    private void testConvertDate(TestDataModule.TestData testData, DataMap settings, boolean fmt) {
+    private void testConvertDate(TestDataModule.TestData testData, boolean fmt) {
         DateFormat basicFmt = new SimpleDateFormat("EEE MMM dd yyyy / YYYY'-W'ww-ee");
 
         int n = 0;

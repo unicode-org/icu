@@ -202,6 +202,7 @@ public final class StringTokenizerTest extends CoreTestFmwk {
         str = "\ud800 \ud800\udc00 \ud800 \ud800\udc00";
         delimiter = "\ud800";
         String expected4[] = {" \ud800\udc00 ", " \ud800\udc00"};
+        tokenizer = new StringTokenizer(str, delimiter);
         i = 0;
         while (tokenizer.hasMoreElements()) {
             if (!tokenizer.nextElement().equals(expected4[i++])) {
@@ -214,6 +215,7 @@ public final class StringTokenizerTest extends CoreTestFmwk {
 
         delimiter = "\ud800\udc00";
         String expected5[] = {"\ud800 ", " \ud800 "};
+        tokenizer = new StringTokenizer(str, delimiter);
         i = 0;
         while (tokenizer.hasMoreElements()) {
             if (!tokenizer.nextElement().equals(expected5[i++])) {

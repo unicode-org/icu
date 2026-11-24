@@ -333,8 +333,7 @@ public class TestMessageFormat extends CoreTestFmwk {
     public void TestClone() {
         MessageFormat x = new MessageFormat("There are {0} files on {1}");
         MessageFormat z = new MessageFormat("There are {0} files on {1} created");
-        MessageFormat y = null;
-        y = x.clone();
+        MessageFormat y = x.clone();
         if (x.equals(y) && !x.equals(z) && !y.equals(z))
             logDebug("First test (operator ==): Passed!");
         else {
@@ -379,8 +378,7 @@ public class TestMessageFormat extends CoreTestFmwk {
 
         MessageFormat x = new MessageFormat("There are {0} files on {1}");
         MessageFormat z = new MessageFormat("There are {0} files on {1}");
-        MessageFormat y = null;
-        y = x.clone();
+        MessageFormat y = x.clone();
         if (x.hashCode() != y.hashCode()) errln("FAIL: identical objects have different hashcodes");
         if (x.hashCode() != z.hashCode()) errln("FAIL: identical objects have different hashcodes");
 
@@ -553,11 +551,6 @@ public class TestMessageFormat extends CoreTestFmwk {
         MessageFormat msgCmp = new MessageFormat(formatStr);
         Format[] formats = msg.getFormats();
         Format[] formatsCmp = msgCmp.getFormats();
-        Format[] formatsChg = null;
-        Format[] formatsAct = null;
-        Format a = null;
-        Format b = null;
-        Format[] formatsToAdopt = null;
 
         if (formats == null
                 || formatsCmp == null
@@ -567,11 +560,9 @@ public class TestMessageFormat extends CoreTestFmwk {
             return;
         }
 
-        int i;
-
-        for (i = 0; i < formats.length; i++) {
-            a = formats[i];
-            b = formatsCmp[i];
+        for (int i = 0; i < formats.length; i++) {
+            Format a = formats[i];
+            Format b = formatsCmp[i];
             if ((a != null) && (b != null)) {
                 if (!a.equals(b)) {
                     errln("a != b");
@@ -584,7 +575,7 @@ public class TestMessageFormat extends CoreTestFmwk {
         }
 
         msg.applyPattern(formatStrChange); // set msg formats to something different
-        formatsChg = msg.getFormats(); // tested function
+        Format[] formatsChg = msg.getFormats(); // tested function
         if (formatsChg == null || (formatsChg.length != formats.length)) {
             errln("Error getting Formats");
             return;
@@ -592,9 +583,9 @@ public class TestMessageFormat extends CoreTestFmwk {
 
         boolean diff;
         diff = true;
-        for (i = 0; i < formats.length; i++) {
-            a = formatsChg[i];
-            b = formatsCmp[i];
+        for (int i = 0; i < formats.length; i++) {
+            Format a = formatsChg[i];
+            Format b = formatsCmp[i];
             if ((a != null) && (b != null)) {
                 if (a.equals(b)) {
                     logDebug("formatsChg == formatsCmp at index " + i);
@@ -611,7 +602,7 @@ public class TestMessageFormat extends CoreTestFmwk {
 
         msg.setFormats(formatsCmp); // tested function
 
-        formatsAct = msg.getFormats();
+        Format[] formatsAct = msg.getFormats();
         if (formatsAct == null
                 || (formatsAct.length <= 0)
                 || (formatsAct.length != formatsCmp.length)) {
@@ -630,9 +621,9 @@ public class TestMessageFormat extends CoreTestFmwk {
             // ok
         }
 
-        for (i = 0; i < formatsAct.length; i++) {
-            a = formatsAct[i];
-            b = formatsCmp[i];
+        for (int i = 0; i < formatsAct.length; i++) {
+            Format a = formatsAct[i];
+            Format b = formatsCmp[i];
             if ((a != null) && (b != null)) {
                 if (!a.equals(b)) {
                     errln("formatsAct != formatsCmp at index " + i);
@@ -649,13 +640,13 @@ public class TestMessageFormat extends CoreTestFmwk {
 
         msg.applyPattern(formatStrChange); // set msg formats to something different
 
-        formatsToAdopt = new Format[formatsCmp.length];
+        Format[] formatsToAdopt = new Format[formatsCmp.length];
         if (formatsToAdopt == null) {
             errln("memory allocation error");
             return;
         }
 
-        for (i = 0; i < formatsCmp.length; i++) {
+        for (int i = 0; i < formatsCmp.length; i++) {
             if (formatsCmp[i] == null) {
                 formatsToAdopt[i] = null;
             } else {
@@ -681,9 +672,9 @@ public class TestMessageFormat extends CoreTestFmwk {
             return;
         }
 
-        for (i = 0; i < formatsAct.length; i++) {
-            a = formatsAct[i];
-            b = formatsCmp[i];
+        for (int i = 0; i < formatsAct.length; i++) {
+            Format a = formatsAct[i];
+            Format b = formatsCmp[i];
             if ((a != null) && (b != null)) {
                 if (!a.equals(b)) {
                     errln("a != b");
@@ -706,7 +697,7 @@ public class TestMessageFormat extends CoreTestFmwk {
             return;
         }
 
-        for (i = 0; i < formatsCmp.length; i++) {
+        for (int i = 0; i < formatsCmp.length; i++) {
             if (formatsCmp[i] == null) {
                 formatsToAdopt[i] = null;
             } else {
@@ -718,7 +709,7 @@ public class TestMessageFormat extends CoreTestFmwk {
             }
         }
 
-        for (i = 0; i < formatsCmp.length; i++) {
+        for (int i = 0; i < formatsCmp.length; i++) {
             msg.setFormat(i, formatsToAdopt[i]); // function to test
         }
 
@@ -735,9 +726,9 @@ public class TestMessageFormat extends CoreTestFmwk {
             return;
         }
 
-        for (i = 0; i < formatsAct.length; i++) {
-            a = formatsAct[i];
-            b = formatsCmp[i];
+        for (int i = 0; i < formatsAct.length; i++) {
+            Format a = formatsAct[i];
+            Format b = formatsCmp[i];
             if ((a != null) && (b != null)) {
                 if (!a.equals(b)) {
                     errln("a != b");
@@ -1376,12 +1367,10 @@ public class TestMessageFormat extends CoreTestFmwk {
     /** This tests SelectFormats used inside MessageFormats. */
     @Test
     public void testSelectFormat() {
-        String pattern = null;
-        MessageFormat msgFmt = null;
-
         // Create the MessageFormat with simple French pattern
-        pattern = "{0} est {1, select, female {all\\u00E9e} other {all\\u00E9}} \\u00E0 Paris.";
-        msgFmt = new MessageFormat(pattern);
+        String pattern =
+                "{0} est {1, select, female {all\\u00E9e} other {all\\u00E9}} \\u00E0 Paris.";
+        MessageFormat msgFmt = new MessageFormat(pattern);
         assertNotNull("ERROR:Failure in constructing with simple French pattern", msgFmt);
 
         // Format

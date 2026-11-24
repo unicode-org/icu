@@ -297,6 +297,8 @@ public class JacocoReportCheck {
 
     private static class Counter {
         final int missed;
+
+        @SuppressWarnings("unused")
         final int covered;
 
         Counter(int missed, int covered) {
@@ -312,12 +314,23 @@ public class JacocoReportCheck {
     private static class Method {
         final String name;
         final String desc;
+
+        @SuppressWarnings("unused")
         final int line;
 
+        @SuppressWarnings("unused")
         final Counter instructionCnt;
+
+        @SuppressWarnings("unused")
         final Counter branchCnt;
+
+        @SuppressWarnings("unused")
         final Counter lineCnt;
+
+        @SuppressWarnings("unused")
         final Counter complexityCnt;
+
+        @SuppressWarnings("unused")
         final Counter methodCnt;
 
         Method(
@@ -353,12 +366,10 @@ public class JacocoReportCheck {
     }
 
     private static class ReportEntry {
-        final String cls;
         final Method method;
         final String key;
 
         ReportEntry(String cls, Method method) {
-            this.cls = cls;
             this.method = method;
             this.key = cls + "#" + method.name() + ":" + method.desc();
         }

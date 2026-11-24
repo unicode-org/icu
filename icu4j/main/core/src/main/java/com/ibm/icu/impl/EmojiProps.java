@@ -79,19 +79,19 @@ public final class EmojiProps {
                 inIndexes[i] = bytes.getInt();
             }
 
-            int i = IX_CPTRIE_OFFSET;
-            int offset = inIndexes[i++];
-            int nextOffset = inIndexes[i];
+            int nextOffset = inIndexes[IX_CPTRIE_OFFSET + 1];
             cpTrie = CodePointTrie.Fast8.fromBinary(bytes);
             int pos = bytes.position() - startPos;
             assert nextOffset >= pos;
             ICUBinary.skipBytes(bytes, nextOffset - pos); // skip padding after trie bytes
 
-            offset = nextOffset;
+            int offset = nextOffset;
             nextOffset = inIndexes[IX_BASIC_EMOJI_TRIE_OFFSET];
             ICUBinary.skipBytes(bytes, nextOffset - offset); // skip unknown bytes
 
-            for (i = IX_BASIC_EMOJI_TRIE_OFFSET; i <= IX_RGI_EMOJI_ZWJ_SEQUENCE_TRIE_OFFSET; ++i) {
+            for (int i = IX_BASIC_EMOJI_TRIE_OFFSET;
+                    i <= IX_RGI_EMOJI_ZWJ_SEQUENCE_TRIE_OFFSET;
+                    ++i) {
                 offset = inIndexes[i];
                 nextOffset = inIndexes[i + 1];
                 // Set/leave null if there is no CharsTrie.
