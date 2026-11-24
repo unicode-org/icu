@@ -387,10 +387,9 @@ normalizeSecondAndAppend(const UNormalizer2 *norm2,
             // Avoid duplicate argument checking and support NUL-terminated src.
             UnicodeString safeMiddle;
             {
-                int32_t destCapacity;
                 ReorderingBuffer buffer(n2wi->impl, firstString);
-                if(uprv_add32_overflow(firstLength, secondLength, &destCapacity) ||
-                        uprv_add32_overflow(destCapacity, 1, &destCapacity)) {
+                auto destCapacity = Length32(firstLength, *pErrorCode) + secondLength + 1;
+                if(destCapacity.isFailure()) {
                     firstString.setToBogus();
                     *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
                 } else if(buffer.init(destCapacity, *pErrorCode)) {  // destCapacity>=-1

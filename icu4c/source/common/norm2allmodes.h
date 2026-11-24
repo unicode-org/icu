@@ -91,8 +91,8 @@ public:
         int32_t firstLength=first.length();
         UnicodeString safeMiddle;
         {
-            int32_t destCapacity;
-            if(uprv_add32_overflow(firstLength, second.length(), &destCapacity)) {
+            auto destCapacity = Length32(firstLength, errorCode) + second.length();
+            if(destCapacity.isFailure()) {
                 first.setToBogus();
                 errorCode=U_MEMORY_ALLOCATION_ERROR;
                 return first;

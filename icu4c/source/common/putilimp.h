@@ -337,6 +337,121 @@ U_CAPI double  U_EXPORT2 uprv_log(double d);
  */
 U_CAPI double  U_EXPORT2 uprv_round(double x);
 
+#ifdef __cplusplus
+U_NAMESPACE_BEGIN
+
+/**
+ * 32-bit length of a string or similar.
+ * Constructors and operators set a failure code when overflow occurs,
+ * and return a 0 value.
+ */
+// NOTE: Some compilers (GCC, Clang) have primitives available,
+// like __builtin_add_overflow() and __builtin_mul_overflow().
+// This class could be optimized by calling those primitives.
+class Length32 /* not : public UObject because this should only be used on the stack */ {
+public:
+    Length32(int32_t i, UErrorCode &errorCode) : errorCode_(errorCode) {
+        if (U_SUCCESS(errorCode)) {
+            if (i >= 0) {
+                i_ = i;
+            } else {
+                errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+            }
+        }
+    }
+    Length32(int64_t i64, UErrorCode &errorCode) : errorCode_(errorCode) {
+        if (U_SUCCESS(errorCode)) {
+            int32_t i;
+            if (i64 >= 0 && (i = static_cast<int32_t>(i64)) == i64) {
+                i_ = i;
+            } else {
+                errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+            }
+        }
+    }
+    Length32(size_t s, UErrorCode &errorCode) : errorCode_(errorCode) {
+        if (U_SUCCESS(errorCode)) {
+            if (s <= INT32_MAX) {
+                i_ = static_cast<int32_t>(s);
+            } else {
+                errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+            }
+        }
+    }
+
+    operator int32_t() const { return i_; }
+
+    bool isSuccess() const { return U_SUCCESS(errorCode_); }
+    bool isFailure() const { return U_FAILURE(errorCode_); }
+
+    // TODO: un-inline
+    Length32 operator+(int32_t b) const {
+        if (isSuccess()) {
+            // TODO: maybe allow negative b but not negative result
+            if (b >= 0) {
+                int64_t result64 = i_;
+                result64 += b;
+                int32_t result = static_cast<int32_t>(result64);
+                if (result == result64) {
+                    return {result, errorCode_};
+                }
+            }
+            errorCode_ = U_ILLEGAL_ARGUMENT_ERROR;
+        }
+        return {0, errorCode_};
+    }
+
+    Length32 operator+(size_t b) const {
+        if (isSuccess()) {
+            if (b <= INT32_MAX) {
+                int64_t result64 = i_;
+                result64 += b;
+                int32_t result = static_cast<int32_t>(result64);
+                if (result == result64) {
+                    return {result, errorCode_};
+                }
+            }
+            errorCode_ = U_ILLEGAL_ARGUMENT_ERROR;
+        }
+        return {0, errorCode_};
+    }
+
+    // pre-increment
+    Length32 &operator++() {
+        if (isSuccess()) {
+            if (i_ != INT32_MAX) {
+                ++i_;
+            } else {
+                errorCode_ = U_ILLEGAL_ARGUMENT_ERROR;
+            }
+        }
+        return *this;
+    }
+
+    // TODO: un-inline
+    Length32 operator*(int32_t b) const {
+        if (isSuccess()) {
+            if (b >= 0) {
+                int64_t result64 = i_;
+                result64 *= b;
+                int32_t result = static_cast<int32_t>(result64);
+                if (result == result64) {
+                    return {result, errorCode_};
+                }
+            }
+            errorCode_ = U_ILLEGAL_ARGUMENT_ERROR;
+        }
+        return {0, errorCode_};
+    }
+
+private:
+    int32_t i_ = 0;
+    UErrorCode &errorCode_;
+};
+
+U_NAMESPACE_END
+#endif  // __cplusplus
+
 /**
  * Adds the signed integers a and b, storing the result in res.
  * Checks for signed integer overflow.
