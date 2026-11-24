@@ -216,8 +216,7 @@ char *CharString::getAppendBuffer(int32_t minCapacity,
     }
     int32_t newDesiredCapacity = 0;
     if(desiredCapacityHint > 0) {
-        UErrorCode localErrorCode = U_ZERO_ERROR;
-        newDesiredCapacity = Length32(len, localErrorCode) + desiredCapacityHint + 1;
+        newDesiredCapacity = Length32(len, Length32::INTERNAL) + desiredCapacityHint + 1;
         // 0 if overflow
     }
     if(ensureCapacity(newCapacity, newDesiredCapacity, errorCode)) {
@@ -267,8 +266,7 @@ UBool CharString::ensureCapacity(int32_t capacity,
         if(desiredCapacityHint==0) {
             // Default growth heuristic. If it overflows, skip the extra headroom
             // and allocate exactly the requested capacity, which is still valid.
-            UErrorCode localErrorCode = U_ZERO_ERROR;
-            desiredCapacityHint = Length32(capacity, localErrorCode) + buffer.getCapacity();
+            desiredCapacityHint = Length32(capacity, Length32::INTERNAL) + buffer.getCapacity();
             // 0 if overflow
         }
         if( (desiredCapacityHint<=capacity || buffer.resize(desiredCapacityHint, len+1)==nullptr) &&

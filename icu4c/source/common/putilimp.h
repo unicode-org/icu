@@ -350,6 +350,11 @@ U_NAMESPACE_BEGIN
 // This class could be optimized by calling those primitives.
 class Length32 /* not : public UObject because this should only be used on the stack */ {
 public:
+    enum UseInternalErrorCode {
+        /** Use an internal UErrorCode. */
+        INTERNAL
+    };
+
     Length32(int32_t i, UErrorCode &errorCode) : errorCode_(errorCode) {
         if (U_SUCCESS(errorCode)) {
             if (i >= 0) {
@@ -378,6 +383,10 @@ public:
             }
         }
     }
+
+    Length32(int32_t i, UseInternalErrorCode) : Length32(i, internalErrorCode_) {}
+    Length32(int64_t i64, UseInternalErrorCode) : Length32(i64, internalErrorCode_) {}
+    Length32(size_t s, UseInternalErrorCode) : Length32(s, internalErrorCode_) {}
 
     operator int32_t() const { return i_; }
 
@@ -446,6 +455,7 @@ public:
 
 private:
     int32_t i_ = 0;
+    UErrorCode internalErrorCode_ = U_ZERO_ERROR;
     UErrorCode &errorCode_;
 };
 

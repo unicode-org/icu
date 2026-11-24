@@ -362,8 +362,7 @@ UBool ReorderingBuffer::resize(int32_t appendLength, UErrorCode &errorCode) {
         return false;
     }
     newCapacity = sumLengths;
-    UErrorCode localErrorCode = U_ZERO_ERROR;
-    auto doubleCapacity = Length32(str.getCapacity(), localErrorCode) * 2;  // 0 if overflow
+    auto doubleCapacity = Length32(str.getCapacity(), Length32::INTERNAL) * 2;  // 0 if overflow
     if(newCapacity<doubleCapacity) {
         newCapacity=doubleCapacity;
     }
