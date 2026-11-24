@@ -220,7 +220,7 @@ public class TransliterationChart {
 
     public static String getName(String s, String separator) {
         int cp;
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < s.length(); i += UTF16.getCharCount(cp)) {
             cp = UTF16.charAt(s, i);
             if (i != 0) sb.append(separator);

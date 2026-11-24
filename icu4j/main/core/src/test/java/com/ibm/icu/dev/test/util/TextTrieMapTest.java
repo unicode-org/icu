@@ -98,7 +98,7 @@ public class TextTrieMapTest extends CoreTestFmwk {
         }
 
         logDebug("Test for get(String, int)");
-        StringBuffer textBuf = new StringBuffer();
+        StringBuilder textBuf = new StringBuilder();
         for (int i = 0; i < TESTCASES.length; i++) {
             textBuf.setLength(0);
             for (int j = 0; j < i; j++) {
@@ -158,7 +158,7 @@ public class TextTrieMapTest extends CoreTestFmwk {
         }
 
         logDebug("Test for get(String, int)");
-        StringBuffer textBuf = new StringBuffer();
+        StringBuilder textBuf = new StringBuilder();
         for (int i = 0; i < TESTCASES.length; i++) {
             textBuf.setLength(0);
             for (int j = 0; j < i; j++) {

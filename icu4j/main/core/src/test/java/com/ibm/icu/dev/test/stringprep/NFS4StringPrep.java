@@ -128,7 +128,7 @@ public final class NFS4StringPrep {
             throws IOException, StringPrepParseException, UnsupportedEncodingException {
         String s = new String(src, StandardCharsets.UTF_8);
         int index = s.indexOf(AT_SIGN);
-        StringBuffer out = new StringBuffer();
+        StringBuilder out = new StringBuilder();
 
         if (index > -1) {
             /* special prefixes must not be followed by suffixes! */

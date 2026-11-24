@@ -1048,7 +1048,7 @@ public class IBMCalendarTest extends CalendarTestFmwk {
 
         // Format: {country, zone1, zone2, ..., zoneN}
         String COUNTRY[][] = {{""}, {"US", "America/Los_Angeles", "PST"}};
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         for (int i = 0; i < COUNTRY.length; ++i) {
             Set<String> a = ZoneMeta.getAvailableIDs(SystemTimeZoneType.ANY, COUNTRY[i][0], null);
             buf.setLength(0);

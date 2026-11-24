@@ -229,7 +229,7 @@ public class IDNAConformanceTest extends CoreTestFmwk {
      */
     private static String stringReplace(String str) {
 
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         char[] chars = str.toCharArray();
         StringBuffer sbTemp = new StringBuffer();
         for (int i = 0; i < chars.length; i++) {

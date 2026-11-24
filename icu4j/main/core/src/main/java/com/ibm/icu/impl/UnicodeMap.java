@@ -743,7 +743,7 @@ public final class UnicodeMap<T>
     }
 
     public String toString(Comparator<T> collected) {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         if (collected == null) {
             for (int i = 0; i < length - 1; ++i) {
                 T value = values[i];
@@ -982,7 +982,7 @@ public final class UnicodeMap<T>
 
         @Override
         public String toString() {
-            StringBuffer b = new StringBuffer();
+            StringBuilder b = new StringBuilder();
             for (Iterator<Map.Entry<String, T>> it = iterator(); it.hasNext(); ) {
                 Map.Entry<String, T> item = it.next();
                 b.append(item.toString()).append(' ');

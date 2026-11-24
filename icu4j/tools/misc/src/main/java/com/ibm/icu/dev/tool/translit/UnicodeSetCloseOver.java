@@ -129,7 +129,7 @@ class UnicodeSetCloseOver {
             ArrayList<String[]> nonpairs,
             List<String> lengths) {
         Iterator<String> i = new TreeSet<>(equivClasses.keySet()).iterator();
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         while (i.hasNext()) {
             String key = i.next();
             ArrayList<String> v = new ArrayList<>(equivClasses.get(key));

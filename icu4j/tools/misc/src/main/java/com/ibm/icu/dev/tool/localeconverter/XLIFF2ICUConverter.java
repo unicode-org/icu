@@ -703,7 +703,7 @@ public final class XLIFF2ICUConverter {
         public String escapeSyntaxChars(String val) {
             // escape the embedded quotes
             char[] str = val.toCharArray();
-            StringBuffer result = new StringBuffer();
+            StringBuilder result = new StringBuilder();
             for (int i = 0; i < str.length; i++) {
                 switch (str[i]) {
                     case '\u0022':

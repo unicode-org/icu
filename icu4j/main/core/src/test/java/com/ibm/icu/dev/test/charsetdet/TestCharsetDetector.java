@@ -59,7 +59,7 @@ public class TestCharsetDetector extends CoreTestFmwk {
     }
 
     private String stringFromReader(Reader reader) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         char[] buffer = new char[1024];
         int bytesRead = 0;
 
@@ -453,7 +453,7 @@ public class TestCharsetDetector extends CoreTestFmwk {
                 Node testCase = testCases.item(n);
                 NamedNodeMap attrs = testCase.getAttributes();
                 NodeList testData = testCase.getChildNodes();
-                StringBuffer testText = new StringBuffer();
+                StringBuilder testText = new StringBuilder();
                 String id = attrs.getNamedItem("id").getNodeValue();
                 String encodings = attrs.getNamedItem("encodings").getNodeValue();
 

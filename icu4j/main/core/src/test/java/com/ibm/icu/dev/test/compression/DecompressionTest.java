@@ -30,7 +30,7 @@ public class DecompressionTest extends CoreTestFmwk {
 
     /** Decompress the two segments */
     private String decompressTest(byte[] segment1, byte[] segment2) {
-        StringBuffer s = new StringBuffer();
+        StringBuilder s = new StringBuilder();
         UnicodeDecompressor myDecompressor = new UnicodeDecompressor();
 
         int[] bytesRead = new int[1];

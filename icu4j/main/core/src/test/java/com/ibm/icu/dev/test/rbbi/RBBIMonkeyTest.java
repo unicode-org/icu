@@ -149,7 +149,7 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
          * corresponding definition.
          */
         CharClass addCharClass(String name, String definition) {
-            StringBuffer expandedDef = new StringBuffer();
+            StringBuilder expandedDef = new StringBuilder();
             fSetRefsMatcher.reset(definition);
             while (fSetRefsMatcher.find()) {
                 String sname = fSetRefsMatcher.group(/*"ClassName"*/ 1);

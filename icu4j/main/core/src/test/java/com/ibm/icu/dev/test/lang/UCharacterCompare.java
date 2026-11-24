@@ -286,7 +286,7 @@ public final class UCharacterCompare {
         } else m_hashtable_.put(method, 1);
 
         String temp = Integer.toHexString(ch);
-        StringBuffer s = new StringBuffer(temp);
+        StringBuilder s = new StringBuilder(temp);
         for (int i = 0; i < 6 - temp.length(); i++) s.append(' ');
         temp = UCharacter.getExtendedName(ch);
         if (temp == null) temp = " ";

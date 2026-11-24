@@ -25,7 +25,6 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
@@ -538,7 +537,7 @@ public class TimeZoneNamesImpl extends TimeZoneNames {
                     minfo = new MatchInfo(ninfo.type, null, ninfo.mzID, matchLength);
                 }
                 if (_matches == null) {
-                    _matches = new LinkedList<MatchInfo>();
+                    _matches = new ArrayList<MatchInfo>();
                 }
                 _matches.add(minfo);
                 if (matchLength > _maxMatchLen) {

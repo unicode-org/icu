@@ -15,7 +15,6 @@ import java.io.Reader;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.MissingResourceException;
 import java.util.StringTokenizer;
@@ -499,7 +498,7 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
     private boolean load(Reader reader) {
         // Read VTIMEZONE block into string array
         try {
-            vtzlines = new LinkedList<>();
+            vtzlines = new ArrayList<>();
             boolean eol = false;
             boolean start = false;
             boolean success = false;
@@ -661,7 +660,7 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
                             break;
                         }
                         if (dates == null) {
-                            dates = new LinkedList<>();
+                            dates = new ArrayList<>();
                         }
                         // RDATE value may contain multiple date delimited
                         // by comma
@@ -676,7 +675,7 @@ public class VTimeZone extends BasicTimeZone implements Cloneable {
                             state = ERR;
                             break;
                         } else if (dates == null) {
-                            dates = new LinkedList<>();
+                            dates = new ArrayList<>();
                         }
                         isRRULE = true;
                         dates.add(value);

@@ -9,11 +9,11 @@
 
 package com.ibm.icu.util;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -290,7 +290,7 @@ public class LocalePriorityList implements Iterable<ULocale> {
                     Double weight = entry.getValue();
                     List<ULocale> s = weightToLanguages.get(weight);
                     if (s == null) {
-                        weightToLanguages.put(weight, s = new LinkedList<>());
+                        weightToLanguages.put(weight, s = new ArrayList<>());
                     }
                     s.add(lang);
                 }

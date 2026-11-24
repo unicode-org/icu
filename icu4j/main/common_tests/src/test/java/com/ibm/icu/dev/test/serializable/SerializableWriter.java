@@ -35,7 +35,7 @@ public class SerializableWriter {
         int minor = VersionInfo.ICU_VERSION.getMinor();
         int milli = VersionInfo.ICU_VERSION.getMilli();
         int micro = VersionInfo.ICU_VERSION.getMicro();
-        StringBuffer result = new StringBuffer("ICU_");
+        StringBuilder result = new StringBuilder("ICU_");
 
         result.append(major);
         result.append(".");

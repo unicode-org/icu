@@ -107,7 +107,7 @@ public class BreakIteratorRegTest extends CoreTestFmwk {
     }
 
     private static String getString(CharacterIterator ci) {
-        StringBuffer buf = new StringBuffer(ci.getEndIndex() - ci.getBeginIndex() + 2);
+        StringBuilder buf = new StringBuilder(ci.getEndIndex() - ci.getBeginIndex() + 2);
         buf.append("'");
         for (char c = ci.first(); c != CharacterIterator.DONE; c = ci.next()) {
             buf.append(c);

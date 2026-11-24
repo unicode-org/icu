@@ -3035,7 +3035,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
      * listed in ascending Unicode order. For example, the set [a-zA-M3] is represented as "33AMaz".
      */
     static String getPairs(UnicodeSet set) {
-        StringBuffer pairs = new StringBuffer();
+        StringBuilder pairs = new StringBuilder();
         for (int i = 0; i < set.getRangeCount(); ++i) {
             int start = set.getRangeStart(i);
             int end = set.getRangeEnd(i);

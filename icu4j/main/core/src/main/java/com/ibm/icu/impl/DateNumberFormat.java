@@ -53,7 +53,7 @@ public final class DateNumberFormat extends NumberFormat implements Cloneable {
     }
 
     public DateNumberFormat(ULocale loc, char zeroDigit, String nsName) {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         for (int i = 0; i < 10; i++) {
             buf.append((char) (zeroDigit + i));
         }

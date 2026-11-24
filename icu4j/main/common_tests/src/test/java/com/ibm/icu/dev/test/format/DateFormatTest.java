@@ -6251,7 +6251,7 @@ public class DateFormatTest extends CoreTestFmwk {
         AttributedCharacterIterator acit;
         final char SEPCHAR = '~';
         String[] patterns = new String[5];
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < patterns.length; i++) {
             sb.setLength(0);
             for (int j = 0; j < PATTERN_CHARS.length(); j++) {
@@ -6479,7 +6479,7 @@ public class DateFormatTest extends CoreTestFmwk {
         SimpleDateFormat[] formatters = new SimpleDateFormat[5];
         for (int i = 0; i < testLocales.length; i++) {
             // Create a locale with no keywords
-            StringBuffer locStrBuf = new StringBuffer();
+            StringBuilder locStrBuf = new StringBuilder();
             if (testLocales[i].getLanguage().length() > 0) {
                 locStrBuf.append(testLocales[i].getLanguage());
             }

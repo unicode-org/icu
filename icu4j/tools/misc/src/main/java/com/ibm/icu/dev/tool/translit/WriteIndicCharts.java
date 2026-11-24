@@ -140,7 +140,7 @@ public class WriteIndicCharts {
                             }
 
                             String name;
-                            StringBuffer nameBuf = new StringBuffer();
+                            StringBuilder nameBuf = new StringBuilder();
                             for (int f = 0; f < str.length(); f++) {
                                 if (f > 0) {
                                     nameBuf.append("+");

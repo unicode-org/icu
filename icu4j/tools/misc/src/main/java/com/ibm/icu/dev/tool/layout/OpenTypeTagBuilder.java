@@ -36,7 +36,7 @@ public class OpenTypeTagBuilder {
     };
 
     private static String tagLabel(String tag) {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         String upperTag = tag.toUpperCase();
 
         for (int i = 0; i < upperTag.length(); i += 1) {

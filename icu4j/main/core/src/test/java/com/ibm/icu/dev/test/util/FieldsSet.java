@@ -81,7 +81,7 @@ public class FieldsSet {
      *     agaainst those fields in other, or, 'null' if there is no difference.
      */
     public String diffFrom(FieldsSet other) {
-        StringBuffer str = new StringBuffer();
+        StringBuilder str = new StringBuilder();
         if (!isSameType(other)) {
             throw new IllegalArgumentException(
                     "U_ILLEGAL_ARGUMENT_ERROR: FieldsSet of a different type!");
