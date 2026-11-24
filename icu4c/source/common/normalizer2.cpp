@@ -388,7 +388,10 @@ normalizeSecondAndAppend(const UNormalizer2 *norm2,
             UnicodeString safeMiddle;
             {
                 ReorderingBuffer buffer(n2wi->impl, firstString);
-                auto destCapacity = Length32(firstLength, *pErrorCode) + secondLength + 1;
+                auto destCapacity =
+                    Length32(firstLength, *pErrorCode) +
+                    (secondLength >= 0 ? secondLength : 0) +
+                    1;
                 if(destCapacity.isFailure()) {
                     firstString.setToBogus();
                     *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
