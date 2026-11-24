@@ -388,6 +388,14 @@ public:
     Length32(int64_t i64, UseInternalErrorCode) : Length32(i64, internalErrorCode_) {}
     Length32(size_t s, UseInternalErrorCode) : Length32(s, internalErrorCode_) {}
 
+    Length32(const Length32 &other) :
+            i_(other.i_), internalErrorCode_(other.internalErrorCode_),
+            errorCode_(&other.errorCode_ == &other.internalErrorCode_ ?
+                    internalErrorCode_ : other.errorCode_) {}
+
+    // no assignment operator (because of the reference member), only copy constructor
+    Length32 &operator=(const Length32 &) = delete;
+
     // Explicit getter.
     // An operator int32_t() would allow unchecked default arithmetic.
     int32_t get() const { return i_; }
