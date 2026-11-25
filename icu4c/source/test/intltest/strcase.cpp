@@ -1877,13 +1877,12 @@ void StringCaseTest::TestCmpFoldStackBufferUnderflow() {
 
     // Regression and mutation-coverage cases for trail-surrogate rewind in _cmpFold
     // (both Block 1 isTrail(c1) and Block 2 isTrail(c2), at level 0 and level 1).
-    struct TestCase {
+    static constexpr struct {
         const char16_t *lhs;
         const char16_t *rhs;
         int32_t expectedDefault;
         int32_t expectedCodePoint;
-    };
-    static constexpr TestCase testCases[] = {
+    } testCases[] = {
         // Block 2 isTrail(c2) with level1 == 1 (fold1 active at index 0):
         {u"\\ud801\\U00010401", u"\\U00010401",   -1, -1},
         {u"\\ud801\\U00010421", u"\\U00010401",   -1, -1},
