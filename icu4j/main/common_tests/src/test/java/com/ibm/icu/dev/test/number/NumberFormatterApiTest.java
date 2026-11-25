@@ -5045,6 +5045,29 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
                 ULocale.ENGLISH,
                 514.23,
                 "GBP 000514.23"); // TODO: This is broken; it renders too wide (13 instead of 12).
+
+        // Both tests render 16 wide because currency spacing is not counted in padding width.
+        assertFormatSingle(
+                "Prefix Currency Spacing with Pad After Suffix (ICU-23645)",
+                null,
+                null,
+                NumberFormatter.with()
+                        .padding(Padder.codePoints('_', 15, PadPosition.AFTER_SUFFIX))
+                        .unit(CHF),
+                ULocale.ENGLISH,
+                123.45,
+                "CHF\u00A0123.45______");
+
+        assertFormatSingle(
+                "Suffix Currency Spacing with Pad After Suffix (ICU-23645)",
+                null,
+                null,
+                NumberFormatter.with()
+                        .padding(Padder.codePoints('_', 15, PadPosition.AFTER_SUFFIX))
+                        .unit(CNY),
+                ULocale.forLanguageTag("lu"),
+                123.12,
+                "123,12\u00A0CN¥______");
     }
 
     @Test

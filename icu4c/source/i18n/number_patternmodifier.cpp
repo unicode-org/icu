@@ -205,7 +205,7 @@ int32_t MutablePatternModifier::apply(FormattedStringBuilder& output, int32_t le
                 kUndefinedField,
                 status);
     }
-    CurrencySpacingEnabledModifier::applyCurrencySpacing(
+    int32_t spacingLen = CurrencySpacingEnabledModifier::applyCurrencySpacing(
             output,
             leftIndex,
             prefixLen,
@@ -213,7 +213,7 @@ int32_t MutablePatternModifier::apply(FormattedStringBuilder& output, int32_t le
             suffixLen,
             *fSymbols,
             status);
-    return prefixLen + overwriteLen + suffixLen;
+    return prefixLen + overwriteLen + suffixLen + spacingLen;
 }
 
 int32_t MutablePatternModifier::getPrefixLength() const {

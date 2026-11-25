@@ -4277,6 +4277,29 @@ void NumberFormatterApiTest::padding() {
             Locale::getEnglish(),
             514.23,
             u"GBP 000514.23"); // TODO: This is broken; it renders too wide (13 instead of 12).
+
+    // Both tests render 16 wide because currency spacing is not counted in padding width.
+    assertFormatSingle(
+            u"Prefix Currency Spacing with Pad After Suffix (ICU-23645)",
+            nullptr,
+            nullptr,
+            NumberFormatter::with()
+                    .padding(Padder::codePoints('_', 15, PadPosition::UNUM_PAD_AFTER_SUFFIX))
+                    .unit(CHF),
+            Locale::getEnglish(),
+            123.45,
+            u"CHF\u00A0123.45______");
+
+    assertFormatSingle(
+            u"Suffix Currency Spacing with Pad After Suffix (ICU-23645)",
+            nullptr,
+            nullptr,
+            NumberFormatter::with()
+                    .padding(Padder::codePoints('_', 15, PadPosition::UNUM_PAD_AFTER_SUFFIX))
+                    .unit(CNY),
+            Locale("lu"),
+            123.12,
+            u"123,12\u00A0CN¥______");
 }
 
 void NumberFormatterApiTest::integerWidth() {
