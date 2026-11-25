@@ -177,6 +177,7 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
     TESTCASE_AUTO(TestBug22636);
     TESTCASE_AUTO(TestLookaheadPolychromy);
     TESTCASE_AUTO(TestBug23449);
+    TESTCASE_AUTO(TestICU23644);
 
 #if U_ENABLE_TRACING
     TESTCASE_AUTO(TestTraceCreateCharacter);
@@ -5266,6 +5267,39 @@ void RBBITest::TestBug23449() {
     
     if (status != U_INPUT_TOO_LONG_ERROR) {
         errln("Expected U_INPUT_TOO_LONG_ERROR, but got: %s", u_errorName(status));
+    }
+}
+
+// Regression test for ICU-23644: BreakCache::populatePreceding() must not go
+// quadratic on long unbroken word/sentence/line/CJK segments.
+void RBBITest::TestICU23644() {
+    IcuTestErrorCode status(*this, "TestICU23644");
+    constexpr int32_t kLen = 100000;
+    UnicodeString longWord(kLen, static_cast<UChar32>(u'a'), kLen);
+    for (int32_t i = 0; i < 20; i += 2) {
+        longWord.setCharAt(i, u' ');
+    }
+
+    LocalPointer<BreakIterator> wb(BreakIterator::createWordInstance(Locale::getEnglish(), status));
+    if (assertSuccess(WHERE, status)) {
+        wb->setText(longWord);
+        assertFalse(WHERE, wb->isBoundary(kLen - 5));
+        assertEquals(WHERE, 19, wb->preceding(kLen - 5));
+        assertEquals(WHERE, kLen, wb->following(kLen - 5));
+    }
+
+    LocalPointer<BreakIterator> sb(BreakIterator::createSentenceInstance(Locale::getEnglish(), status));
+    if (assertSuccess(WHERE, status)) {
+        sb->setText(longWord);
+        assertFalse(WHERE, sb->isBoundary(kLen - 5));
+        assertEquals(WHERE, 0, sb->preceding(kLen - 5));
+    }
+
+    LocalPointer<BreakIterator> lb(BreakIterator::createLineInstance(Locale::getEnglish(), status));
+    if (assertSuccess(WHERE, status)) {
+        lb->setText(longWord);
+        assertFalse(WHERE, lb->isBoundary(kLen - 5));
+        assertEquals(WHERE, 19, lb->preceding(kLen - 5));
     }
 }
 
