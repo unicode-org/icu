@@ -389,14 +389,14 @@ normalizeSecondAndAppend(const UNormalizer2 *norm2,
             UnicodeString safeMiddle;
             {
                 ReorderingBuffer buffer(n2wi->impl, firstString);
-                auto destCapacity =
-                    NonNeg32(firstLength, *pErrorCode) +
+                auto [destCapacity, ok] =
+                    (NonNeg32(firstLength, *pErrorCode) +
                     (secondLength >= 0 ? secondLength : 0) +
-                    1;
-                if(destCapacity.isFailure()) {
+                    1).result();
+                if(!ok) {
                     firstString.setToBogus();
                     *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
-                } else if(buffer.init(destCapacity.get(), *pErrorCode)) {  // destCapacity>=-1
+                } else if(buffer.init(destCapacity, *pErrorCode)) {  // destCapacity>=-1
                     n2wi->normalizeAndAppend(second, secondLength>=0 ? second+secondLength : nullptr,
                                              doNormalize, safeMiddle, buffer, *pErrorCode);
                 }

@@ -92,14 +92,14 @@ public:
         int32_t firstLength=first.length();
         UnicodeString safeMiddle;
         {
-            auto destCapacity = NonNeg32(firstLength, errorCode) + second.length();
-            if(destCapacity.isFailure()) {
+            auto [destCapacity, ok] = (NonNeg32(firstLength, errorCode) + second.length()).result();
+            if(!ok) {
                 first.setToBogus();
                 errorCode=U_MEMORY_ALLOCATION_ERROR;
                 return first;
             }
             ReorderingBuffer buffer(impl, first);
-            if(buffer.init(destCapacity.get(), errorCode)) {
+            if(buffer.init(destCapacity, errorCode)) {
                 normalizeAndAppend(secondArray, secondArray+second.length(), doNormalize,
                                    safeMiddle, buffer, errorCode);
             }
