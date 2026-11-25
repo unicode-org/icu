@@ -377,8 +377,7 @@ public:
 
     Length32(const Length32 &other) :
             internalErrorCode_(other.internalErrorCode_), value_(other.value_),
-            errorCode_(&other.errorCode_ == &other.internalErrorCode_ ?
-                    internalErrorCode_ : other.errorCode_) {}
+            errorCode_(outErrorCode(other)) {}
 
     // no assignment operator (because of the reference member), only copy constructor
     Length32 &operator=(const Length32 &) = delete;
@@ -392,61 +391,46 @@ public:
     bool isSuccess() const { return U_SUCCESS(errorCode_); }
     bool isFailure() const { return U_FAILURE(errorCode_); }
 
-    // TODO: un-inline
-    Length32 operator+(int32_t b) const {
-        if (isSuccess()) {
-            // TODO: maybe allow negative b but not negative result
-            if (b >= 0) {
-                int64_t result64 = value_;
-                result64 += b;
-                int32_t result = static_cast<int32_t>(result64);
-                if (result == result64) {
-                    return {result, this};
-                }
-            }
-            errorCode_ = U_ILLEGAL_ARGUMENT_ERROR;
+    template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
+    Length32 operator+(T b) const {
+        // TODO: maybe allow negative b
+        if (isSuccess() && b >= 0) {
+            return {static_cast<int64_t>(value_) + static_cast<int64_t>(b), this};
         }
-        return {0, this};
+        return {this};
     }
 
-    Length32 operator+(size_t b) const {
-        if (isSuccess()) {
-            if (b <= INT32_MAX) {
-                int64_t result64 = value_;
-                result64 += b;
-                int32_t result = static_cast<int32_t>(result64);
-                if (result == result64) {
-                    return {result, this};
-                }
-            }
-            errorCode_ = U_ILLEGAL_ARGUMENT_ERROR;
+    template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
+    Length32 operator*(T b) const {
+        if (isSuccess() && b >= 0) {
+            return {static_cast<int64_t>(value_) * static_cast<int64_t>(b), this};
         }
-        return {0, this};
-    }
-
-    // TODO: un-inline
-    Length32 operator*(int32_t b) const {
-        if (isSuccess()) {
-            if (b >= 0) {
-                int64_t result64 = value_;
-                result64 *= b;
-                int32_t result = static_cast<int32_t>(result64);
-                if (result == result64) {
-                    return {result, this};
-                }
-            }
-            errorCode_ = U_ILLEGAL_ARGUMENT_ERROR;
-        }
-        return {0, this};
+        return {this};
     }
 
 private:
-    // Internal constructor for returning a result object.
-    // Need not check the value, but must handle the internal error code.
-    Length32(int32_t value, const Length32 *other) :
-            internalErrorCode_(other->internalErrorCode_), value_(value),
-            errorCode_(&other->errorCode_ == &other->internalErrorCode_ ?
-                    internalErrorCode_ : other->errorCode_) {}
+    // Internal constructor for returning a result object;
+    // the constructor checks the value.
+    Length32(int64_t value, const Length32 *other) :
+            internalErrorCode_(other->internalErrorCode_),
+            value_(toInt32(value, outErrorCode(*other))),
+            errorCode_(outErrorCode(*other)) {}
+
+    // Internal constructor for returning a failure result object.
+    Length32(const Length32 *other) :
+            internalErrorCode_(other->internalErrorCode_), value_(0),
+            errorCode_(outErrorCode(*other)) {
+        if (isSuccess()) {
+            errorCode_ = U_ILLEGAL_ARGUMENT_ERROR;
+        }
+    }
+
+    // A Length32 return value must use its own internal error code
+    // if the source object did, or else use the same external one.
+    UErrorCode &outErrorCode(const Length32 &other) {
+        return &other.errorCode_ == &other.internalErrorCode_ ?
+                internalErrorCode_ : other.errorCode_;
+    }
 
     template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
     static int32_t toInt32(T value, UErrorCode &errorCode) {
