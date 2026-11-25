@@ -92,7 +92,7 @@ public:
         int32_t firstLength=first.length();
         UnicodeString safeMiddle;
         {
-            auto destCapacity = Length32(firstLength, errorCode) + second.length();
+            auto destCapacity = NonNeg32(firstLength, errorCode) + second.length();
             if(destCapacity.isFailure()) {
                 first.setToBogus();
                 errorCode=U_MEMORY_ALLOCATION_ERROR;

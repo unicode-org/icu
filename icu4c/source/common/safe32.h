@@ -29,7 +29,7 @@ constexpr UseInternalErrorCode INTERNAL_ERROR;
  * When the value is outside the supported range,
  * it is set to 0, and a failure error code is set.
  */
-class Length32 /* not : public UObject because this should only be used on the stack */ {
+class NonNeg32 /* not : public UObject because this should only be used on the stack */ {
 public:
     struct Result {
         int32_t value;
@@ -38,22 +38,22 @@ public:
 
     /** Constructor, records errors in the external UErrorCode. */
     template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
-    Length32(T value, UErrorCode &errorCode) :
+    NonNeg32(T value, UErrorCode &errorCode) :
             value_(toInt32(value, errorCode)),
             errorCode_(errorCode) {}
 
     /** Constructor, records errors internally. */
     template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
-    Length32(T value, UseInternalErrorCode) :
+    NonNeg32(T value, UseInternalErrorCode) :
             value_(toInt32(value, internalErrorCode_)),
             errorCode_(internalErrorCode_) {}
 
-    Length32(const Length32 &other) :
+    NonNeg32(const NonNeg32 &other) :
             internalErrorCode_(other.internalErrorCode_), value_(other.value_),
             errorCode_(outErrorCode(other)) {}
 
     // no assignment operator (because of the reference member), only copy constructor
-    Length32 &operator=(const Length32 &) = delete;
+    NonNeg32 &operator=(const NonNeg32 &) = delete;
 
     // Explicit getter.
     // An operator int32_t() would allow unchecked default arithmetic.
@@ -67,13 +67,13 @@ public:
 private:
     // Internal constructor for returning a result object;
     // the constructor checks the value.
-    Length32(int64_t value, const Length32 *other) :
+    NonNeg32(int64_t value, const NonNeg32 *other) :
             internalErrorCode_(other->internalErrorCode_),
             value_(toInt32(value, outErrorCode(*other))),
             errorCode_(outErrorCode(*other)) {}
 
     // Internal constructor for returning a failure result object.
-    Length32(const Length32 *other) :
+    NonNeg32(const NonNeg32 *other) :
             internalErrorCode_(other->internalErrorCode_), value_(0),
             errorCode_(outErrorCode(*other)) {
         if (isSuccess()) {
@@ -81,9 +81,9 @@ private:
         }
     }
 
-    // A Length32 return value must use its own internal error code
+    // A NonNeg32 return value must use its own internal error code
     // if the source object did, or else use the same external one.
-    UErrorCode &outErrorCode(const Length32 &other) {
+    UErrorCode &outErrorCode(const NonNeg32 &other) {
         return &other.errorCode_ == &other.internalErrorCode_ ?
                 internalErrorCode_ : other.errorCode_;
     }
@@ -102,7 +102,7 @@ private:
     }
 
     template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
-    Length32 add(T b) const {
+    NonNeg32 add(T b) const {
         // TODO: maybe allow negative b
         if (isSuccess() && b >= 0) {
             return {static_cast<int64_t>(value_) + static_cast<int64_t>(b), this};
@@ -111,13 +111,13 @@ private:
     }
 
     template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
-    friend Length32 operator+(const Length32 &a, T b) { return a.add(b); }
+    friend NonNeg32 operator+(const NonNeg32 &a, T b) { return a.add(b); }
 
     template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
-    friend Length32 operator+(T a, const Length32 &b) { return b.add(a); }
+    friend NonNeg32 operator+(T a, const NonNeg32 &b) { return b.add(a); }
 
     template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
-    Length32 mul(T b) const {
+    NonNeg32 mul(T b) const {
         if (isSuccess() && b >= 0) {
             return {static_cast<int64_t>(value_) * static_cast<int64_t>(b), this};
         }
@@ -125,10 +125,10 @@ private:
     }
 
     template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
-    friend Length32 operator*(const Length32 &a, T b) { return a.mul(b); }
+    friend NonNeg32 operator*(const NonNeg32 &a, T b) { return a.mul(b); }
 
     template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
-    friend Length32 operator*(T a, const Length32 &b) { return b.mul(a); }
+    friend NonNeg32 operator*(T a, const NonNeg32 &b) { return b.mul(a); }
 
     // Error code before value, so that they are initialized in that order.
     UErrorCode internalErrorCode_ = U_ZERO_ERROR;

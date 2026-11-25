@@ -110,7 +110,7 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(UnicodeString)
 
 UnicodeString U_EXPORT2
 operator+ (const UnicodeString &s1, const UnicodeString &s2) {
-  auto [sumLengths, ok] = (Length32(s1.length(), INTERNAL_ERROR) + s2.length()).result();
+  auto [sumLengths, ok] = (NonNeg32(s1.length(), INTERNAL_ERROR) + s2.length()).result();
   if (!ok) {
     UnicodeString bogus;
     bogus.setToBogus();
@@ -124,7 +124,7 @@ operator+ (const UnicodeString &s1, const UnicodeString &s2) {
 
 U_COMMON_API UnicodeString U_EXPORT2
 unistr_internalConcat(const UnicodeString &s1, std::u16string_view s2) {
-  auto [sumLengths, ok] = (Length32(s1.length(), INTERNAL_ERROR) + s2.length()).result();
+  auto [sumLengths, ok] = (NonNeg32(s1.length(), INTERNAL_ERROR) + s2.length()).result();
   if (!ok) {
     UnicodeString bogus;
     bogus.setToBogus();
@@ -1677,7 +1677,7 @@ UnicodeString::doAppend(const char16_t* srcChars,
       return *this;
     }
   } else {
-    auto sumLengths = Length32(oldLength, INTERNAL_ERROR) + srcLength;
+    auto sumLengths = NonNeg32(oldLength, INTERNAL_ERROR) + srcLength;
     if (sumLengths.isFailure()) {
       setToBogus();
       return *this;

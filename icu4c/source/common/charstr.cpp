@@ -113,7 +113,7 @@ CharString &CharString::truncate(int32_t newLength) {
 }
 
 CharString &CharString::append(char c, UErrorCode &errorCode) {
-    auto newCapacity = Length32(len, errorCode) + 2;
+    auto newCapacity = NonNeg32(len, errorCode) + 2;
     if(ensureCapacity(newCapacity.get(), 0, errorCode)) {
         buffer[len++]=c;
         buffer[len]=0;
@@ -142,7 +142,7 @@ CharString &CharString::append(const char *s, int32_t sLength, UErrorCode &error
                 buffer[len+=sLength]=0;
             }
         } else {
-            auto newCapacity = Length32(len, errorCode) + sLength + 1;
+            auto newCapacity = NonNeg32(len, errorCode) + sLength + 1;
             if(newCapacity.isFailure()) {
                 // pass
             } else if(buffer.getAlias()<=s && s<(buffer.getAlias()+len) &&
@@ -210,14 +210,14 @@ char *CharString::getAppendBuffer(int32_t minCapacity,
         resultCapacity=appendCapacity;
         return buffer.getAlias()+len;
     }
-    auto newCapacity = Length32(len, errorCode) + minCapacity + 1;
+    auto newCapacity = NonNeg32(len, errorCode) + minCapacity + 1;
     if(newCapacity.isFailure()) {
         resultCapacity=0;
         return nullptr;
     }
     int32_t newDesiredCapacity = 0;
     if(desiredCapacityHint > 0) {
-        newDesiredCapacity = (Length32(len, INTERNAL_ERROR) + desiredCapacityHint + 1).get();
+        newDesiredCapacity = (NonNeg32(len, INTERNAL_ERROR) + desiredCapacityHint + 1).get();
         // 0 if overflow
     }
     if(ensureCapacity(newCapacity.get(), newDesiredCapacity, errorCode)) {
@@ -244,7 +244,7 @@ CharString &CharString::appendInvariantChars(const char16_t* uchars, int32_t uch
         errorCode = U_INVARIANT_CONVERSION_ERROR;
         return *this;
     }
-    auto newCapacity = Length32(len, errorCode) + ucharsLen + 1;
+    auto newCapacity = NonNeg32(len, errorCode) + ucharsLen + 1;
     if(ensureCapacity(newCapacity.get(), 0, errorCode)) {
         u_UCharsToChars(uchars, buffer.getAlias()+len, ucharsLen);
         len += ucharsLen;
@@ -268,7 +268,7 @@ UBool CharString::ensureCapacity(int32_t capacity,
             // Default growth heuristic. If it overflows, skip the extra headroom
             // and allocate exactly the requested capacity, which is still valid.
             desiredCapacityHint =
-                (Length32(capacity, INTERNAL_ERROR) + buffer.getCapacity()).get();
+                (NonNeg32(capacity, INTERNAL_ERROR) + buffer.getCapacity()).get();
             // 0 if overflow
         }
         if( (desiredCapacityHint<=capacity || buffer.resize(desiredCapacityHint, len+1)==nullptr) &&

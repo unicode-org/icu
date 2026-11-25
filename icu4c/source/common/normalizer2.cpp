@@ -390,7 +390,7 @@ normalizeSecondAndAppend(const UNormalizer2 *norm2,
             {
                 ReorderingBuffer buffer(n2wi->impl, firstString);
                 auto destCapacity =
-                    Length32(firstLength, *pErrorCode) +
+                    NonNeg32(firstLength, *pErrorCode) +
                     (secondLength >= 0 ? secondLength : 0) +
                     1;
                 if(destCapacity.isFailure()) {
