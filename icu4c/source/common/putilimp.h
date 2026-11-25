@@ -341,9 +341,9 @@ U_CAPI double  U_EXPORT2 uprv_round(double x);
 U_NAMESPACE_BEGIN
 
 /**
- * 32-bit length of a string or similar.
- * Constructors and operators set a failure code when overflow occurs,
- * and return a 0 value.
+ * 32-bit non-negative length of a string or similar.
+ * When the value overflows (does not fit into 0..INT32_MAX),
+ * it is set to 0, and a failure error code is set.
  */
 // NOTE: Some compilers (GCC, Clang) have primitives available,
 // like __builtin_add_overflow() and __builtin_mul_overflow().
@@ -360,10 +360,10 @@ public:
         bool ok;
     };
 
-    Length32(int32_t i, UErrorCode &errorCode) : errorCode_(errorCode) {
+    Length32(int32_t value, UErrorCode &errorCode) : errorCode_(errorCode) {
         if (U_SUCCESS(errorCode)) {
-            if (i >= 0) {
-                i_ = i;
+            if (value >= 0) {
+                value_ = value;
             } else {
                 errorCode = U_ILLEGAL_ARGUMENT_ERROR;
             }
@@ -371,9 +371,9 @@ public:
     }
     Length32(int64_t i64, UErrorCode &errorCode) : errorCode_(errorCode) {
         if (U_SUCCESS(errorCode)) {
-            int32_t i;
-            if (i64 >= 0 && (i = static_cast<int32_t>(i64)) == i64) {
-                i_ = i;
+            int32_t value;
+            if (i64 >= 0 && (value = static_cast<int32_t>(i64)) == i64) {
+                value_ = value;
             } else {
                 errorCode = U_ILLEGAL_ARGUMENT_ERROR;
             }
@@ -382,19 +382,19 @@ public:
     Length32(size_t s, UErrorCode &errorCode) : errorCode_(errorCode) {
         if (U_SUCCESS(errorCode)) {
             if (s <= INT32_MAX) {
-                i_ = static_cast<int32_t>(s);
+                value_ = static_cast<int32_t>(s);
             } else {
                 errorCode = U_ILLEGAL_ARGUMENT_ERROR;
             }
         }
     }
 
-    Length32(int32_t i, UseInternalErrorCode) : Length32(i, internalErrorCode_) {}
+    Length32(int32_t value, UseInternalErrorCode) : Length32(value, internalErrorCode_) {}
     Length32(int64_t i64, UseInternalErrorCode) : Length32(i64, internalErrorCode_) {}
     Length32(size_t s, UseInternalErrorCode) : Length32(s, internalErrorCode_) {}
 
     Length32(const Length32 &other) :
-            i_(other.i_), internalErrorCode_(other.internalErrorCode_),
+            value_(other.value_), internalErrorCode_(other.internalErrorCode_),
             errorCode_(&other.errorCode_ == &other.internalErrorCode_ ?
                     internalErrorCode_ : other.errorCode_) {}
 
@@ -403,9 +403,9 @@ public:
 
     // Explicit getter.
     // An operator int32_t() would allow unchecked default arithmetic.
-    int32_t get() const { return i_; }
+    int32_t get() const { return value_; }
 
-    Result result() const { return {i_, isSuccess()}; }
+    Result result() const { return {value_, isSuccess()}; }
 
     bool isSuccess() const { return U_SUCCESS(errorCode_); }
     bool isFailure() const { return U_FAILURE(errorCode_); }
@@ -415,7 +415,7 @@ public:
         if (isSuccess()) {
             // TODO: maybe allow negative b but not negative result
             if (b >= 0) {
-                int64_t result64 = i_;
+                int64_t result64 = value_;
                 result64 += b;
                 int32_t result = static_cast<int32_t>(result64);
                 if (result == result64) {
@@ -430,7 +430,7 @@ public:
     Length32 operator+(size_t b) const {
         if (isSuccess()) {
             if (b <= INT32_MAX) {
-                int64_t result64 = i_;
+                int64_t result64 = value_;
                 result64 += b;
                 int32_t result = static_cast<int32_t>(result64);
                 if (result == result64) {
@@ -445,8 +445,8 @@ public:
     // pre-increment
     Length32 &operator++() {
         if (isSuccess()) {
-            if (i_ != INT32_MAX) {
-                ++i_;
+            if (value_ != INT32_MAX) {
+                ++value_;
             } else {
                 errorCode_ = U_ILLEGAL_ARGUMENT_ERROR;
             }
@@ -458,7 +458,7 @@ public:
     Length32 operator*(int32_t b) const {
         if (isSuccess()) {
             if (b >= 0) {
-                int64_t result64 = i_;
+                int64_t result64 = value_;
                 result64 *= b;
                 int32_t result = static_cast<int32_t>(result64);
                 if (result == result64) {
@@ -473,12 +473,12 @@ public:
 private:
     // Internal constructor for returning a result object.
     // Need not check the value, but must handle the internal error code.
-    Length32(int32_t i, const Length32 *other) :
-            i_(i), internalErrorCode_(other->internalErrorCode_),
+    Length32(int32_t value, const Length32 *other) :
+            value_(value), internalErrorCode_(other->internalErrorCode_),
             errorCode_(&other->errorCode_ == &other->internalErrorCode_ ?
                     internalErrorCode_ : other->errorCode_) {}
 
-    int32_t i_ = 0;
+    int32_t value_ = 0;
     UErrorCode internalErrorCode_ = U_ZERO_ERROR;
     UErrorCode &errorCode_;
 };
