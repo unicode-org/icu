@@ -338,6 +338,9 @@ U_CAPI double  U_EXPORT2 uprv_log(double d);
 U_CAPI double  U_EXPORT2 uprv_round(double x);
 
 #ifdef __cplusplus
+
+#include <type_traits>
+
 U_NAMESPACE_BEGIN
 
 /**
@@ -360,41 +363,20 @@ public:
         bool ok;
     };
 
-    Length32(int32_t value, UErrorCode &errorCode) : errorCode_(errorCode) {
-        if (U_SUCCESS(errorCode)) {
-            if (value >= 0) {
-                value_ = value;
-            } else {
-                errorCode = U_ILLEGAL_ARGUMENT_ERROR;
-            }
-        }
-    }
-    Length32(int64_t i64, UErrorCode &errorCode) : errorCode_(errorCode) {
-        if (U_SUCCESS(errorCode)) {
-            int32_t value;
-            if (i64 >= 0 && (value = static_cast<int32_t>(i64)) == i64) {
-                value_ = value;
-            } else {
-                errorCode = U_ILLEGAL_ARGUMENT_ERROR;
-            }
-        }
-    }
-    Length32(size_t s, UErrorCode &errorCode) : errorCode_(errorCode) {
-        if (U_SUCCESS(errorCode)) {
-            if (s <= INT32_MAX) {
-                value_ = static_cast<int32_t>(s);
-            } else {
-                errorCode = U_ILLEGAL_ARGUMENT_ERROR;
-            }
-        }
-    }
+    /** Constructor, records errors in the provided UErrorCode. */
+    template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
+    Length32(T value, UErrorCode &errorCode) :
+            value_(toInt32(value, errorCode)),
+            errorCode_(errorCode) {}
 
-    Length32(int32_t value, UseInternalErrorCode) : Length32(value, internalErrorCode_) {}
-    Length32(int64_t i64, UseInternalErrorCode) : Length32(i64, internalErrorCode_) {}
-    Length32(size_t s, UseInternalErrorCode) : Length32(s, internalErrorCode_) {}
+    /** Constructor, records errors internally. */
+    template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
+    Length32(T value, UseInternalErrorCode) :
+            value_(toInt32(value, internalErrorCode_)),
+            errorCode_(internalErrorCode_) {}
 
     Length32(const Length32 &other) :
-            value_(other.value_), internalErrorCode_(other.internalErrorCode_),
+            internalErrorCode_(other.internalErrorCode_), value_(other.value_),
             errorCode_(&other.errorCode_ == &other.internalErrorCode_ ?
                     internalErrorCode_ : other.errorCode_) {}
 
@@ -474,12 +456,26 @@ private:
     // Internal constructor for returning a result object.
     // Need not check the value, but must handle the internal error code.
     Length32(int32_t value, const Length32 *other) :
-            value_(value), internalErrorCode_(other->internalErrorCode_),
+            internalErrorCode_(other->internalErrorCode_), value_(value),
             errorCode_(&other->errorCode_ == &other->internalErrorCode_ ?
                     internalErrorCode_ : other->errorCode_) {}
 
-    int32_t value_ = 0;
+    template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
+    static int32_t toInt32(T value, UErrorCode &errorCode) {
+        if (U_SUCCESS(errorCode)) {
+            int32_t v32 = static_cast<int32_t>(value);
+            if (v32 >= 0 && v32 == value) {
+                return v32;
+            } else {
+                errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+            }
+        }
+        return 0;
+    }
+
+    // Error code before value, so that they are initialized in that order.
     UErrorCode internalErrorCode_ = U_ZERO_ERROR;
+    int32_t value_;
     UErrorCode &errorCode_;
 };
 
