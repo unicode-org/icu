@@ -1677,12 +1677,10 @@ UnicodeString::doAppend(const char16_t* srcChars,
       return *this;
     }
   } else {
-    auto sumLengths = NonNeg32(oldLength, INTERNAL_ERROR) + srcLength;
-    if (sumLengths.isFailure()) {
+    if (!(NonNeg32(oldLength, INTERNAL_ERROR) + srcLength).setIfOk(newLength)) {
       setToBogus();
       return *this;
     }
-    newLength = sumLengths.get();
 
     // Check for append onto ourself
     const char16_t* oldArray = getArrayStart();

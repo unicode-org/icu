@@ -46,6 +46,7 @@
 
 #include "unicode/gregocal.h"
 #include "gregoimp.h"
+#include "safe32.h"
 #include "umutex.h"
 #include "uassert.h"
 
@@ -561,8 +562,7 @@ int32_t GregorianCalendar::handleComputeJulianDay(UCalendarDateFields bestField,
                 return 0;
             }
             if (m < 0 || m > 11) {
-                if (uprv_add32_overflow(ClockMath::floorDivide(m, 12, &m), y, &y)) {
-                    status = U_ILLEGAL_ARGUMENT_ERROR;
+                if (!(Int32(ClockMath::floorDivide(m, 12, &m), status) + y).setIfOk(y)) {
                     return 0;
                 }
             }
@@ -577,8 +577,7 @@ int32_t GregorianCalendar::handleComputeJulianDay(UCalendarDateFields bestField,
                 int32_t hybridDow = Calendar::julianDayToDayOfWeek(static_cast<int32_t>(hybridStart));
                 int64_t shift = firstWeekStart(hybridStart, hybridDow, fdow, minDays) -
                     firstWeekStart(baseStart, baseDow, fdow, minDays);
-                if (uprv_add32_overflow(jd, static_cast<int32_t>(shift), &jd)) {
-                    status = U_ILLEGAL_ARGUMENT_ERROR;
+                if (!(Int32(jd, status) + shift).setIfOk(jd)) {
                     return 0;
                 }
             }
@@ -637,9 +636,7 @@ int64_t GregorianCalendar::handleComputeMonthStart(int32_t eyear, int32_t month,
     // If the month is out of range, adjust it into range, and
     // modify the extended year value accordingly.
     if (month < 0 || month > 11) {
-        if (uprv_add32_overflow(ClockMath::floorDivide(month, 12, &month),
-                                eyear, &eyear)) {
-            status = U_ILLEGAL_ARGUMENT_ERROR;
+        if (!(Int32(ClockMath::floorDivide(month, 12, &month), status) + eyear).setIfOk(eyear)) {
             return 0;
         }
     }
@@ -969,9 +966,7 @@ GregorianCalendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode& s
                 isoDoy -= handleGetYearLength(isoYear - 1, status);
             }
         }
-        if (U_FAILURE(status)) return;
-        if (uprv_add32_overflow(woy, amount, &woy)) {
-            status = U_ILLEGAL_ARGUMENT_ERROR;
+        if (!(Int32(woy, status) + amount).setIfOk(woy)) {
             return;
         }
         // Do fast checks to avoid unnecessary computation:

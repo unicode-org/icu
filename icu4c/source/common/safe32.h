@@ -68,6 +68,15 @@ public:
 
     Result result() const { return {value_, isSuccess()}; }
 
+    bool setIfOk(int32_t &dest) const {
+        if (isSuccess()) {
+            dest = value_;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     bool isSuccess() const { return U_SUCCESS(errorCode_); }
     bool isFailure() const { return U_FAILURE(errorCode_); }
 
@@ -136,6 +145,22 @@ private:
 
     template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
     friend Safe32 operator*(T a, const Safe32 &b) { return b.mul(a); }
+
+    template<typename T, typename = std::enable_if_t<bounds == FULL && std::is_integral_v<T>>>
+    friend Safe32 operator-(const Safe32 &a, T b) {
+        if (a.isSuccess()) {
+            return {static_cast<int64_t>(a.value_) - static_cast<int64_t>(b), &a};
+        }
+        return {&a};
+    }
+
+    template<typename T, typename = std::enable_if_t<bounds == FULL && std::is_integral_v<T>>>
+    friend Safe32 operator-(T a, const Safe32 &b) {
+        if (b.isSuccess()) {
+            return {static_cast<int64_t>(a) - static_cast<int64_t>(b.value_), &b};
+        }
+        return {&b};
+    }
 
     // Error code before value, so that they are initialized in that order.
     UErrorCode internalErrorCode_ = U_ZERO_ERROR;
