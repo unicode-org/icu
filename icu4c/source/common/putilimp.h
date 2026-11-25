@@ -424,18 +424,6 @@ public:
         return {0, this};
     }
 
-    // pre-increment
-    Length32 &operator++() {
-        if (isSuccess()) {
-            if (value_ != INT32_MAX) {
-                ++value_;
-            } else {
-                errorCode_ = U_ILLEGAL_ARGUMENT_ERROR;
-            }
-        }
-        return *this;
-    }
-
     // TODO: un-inline
     Length32 operator*(int32_t b) const {
         if (isSuccess()) {
