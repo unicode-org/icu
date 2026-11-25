@@ -19,6 +19,10 @@ U_NAMESPACE_BEGIN
 // like __builtin_add_overflow() and __builtin_mul_overflow().
 // The code below may be able to be optimized by calling those primitives.
 
+struct UseInternalErrorCode {};
+/** Use an internal UErrorCode. */
+constexpr UseInternalErrorCode INTERNAL_ERROR;
+
 /**
  * 32-bit non-negative integer (0..INT32_MAX).
  * Usually used for the length or capacity of a string or buffer or similar.
@@ -27,11 +31,6 @@ U_NAMESPACE_BEGIN
  */
 class Length32 /* not : public UObject because this should only be used on the stack */ {
 public:
-    enum UseInternalErrorCode {
-        /** Use an internal UErrorCode. */
-        INTERNAL
-    };
-
     struct Result {
         int32_t value;
         bool ok;
