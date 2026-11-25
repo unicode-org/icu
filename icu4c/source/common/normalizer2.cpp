@@ -30,6 +30,7 @@
 #include "norm2allmodes.h"
 #include "normalizer2impl.h"
 #include "putilimp.h"
+#include "safe32.h"
 #include "uassert.h"
 #include "ucln_cmn.h"
 

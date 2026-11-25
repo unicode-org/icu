@@ -25,6 +25,7 @@
 #include "cpputils.h"
 #include "normalizer2impl.h"
 #include "putilimp.h"
+#include "safe32.h"
 
 U_NAMESPACE_BEGIN
 

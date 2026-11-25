@@ -22,6 +22,7 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "putilimp.h"
+#include "safe32.h"
 #include "uinvchar.h"
 #include "ustr_imp.h"
 
