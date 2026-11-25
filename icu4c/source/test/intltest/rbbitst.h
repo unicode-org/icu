@@ -111,6 +111,7 @@ public:
     void TestLookaheadPolychromy();
     void TestBug23449();
     void TestICU23593();
+    void TestICU23644();
 
 #if U_ENABLE_TRACING
     void TestTraceCreateCharacter();

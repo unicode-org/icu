@@ -1729,4 +1729,30 @@ public class RBBITest extends CoreTestFmwk {
         assertEquals("next() 155", 155, bi.next());
         assertEquals("next() DONE", BreakIterator.DONE, bi.next());
     }
+
+    @Test
+    public void TestICU23644() {
+        final int len = 100000;
+        StringBuilder sb = new StringBuilder(len);
+        for (int i = 0; i < len; ++i) {
+            sb.append((i < 20 && (i % 2 == 0)) ? ' ' : 'a');
+        }
+        String longWord = sb.toString();
+
+        BreakIterator wb = BreakIterator.getWordInstance(ULocale.ENGLISH);
+        wb.setText(longWord);
+        assertFalse("word isBoundary", wb.isBoundary(len - 5));
+        assertEquals("word preceding", 19, wb.preceding(len - 5));
+        assertEquals("word following", len, wb.following(len - 5));
+
+        BreakIterator sent = BreakIterator.getSentenceInstance(ULocale.ENGLISH);
+        sent.setText(longWord);
+        assertFalse("sentence isBoundary", sent.isBoundary(len - 5));
+        assertEquals("sentence preceding", 0, sent.preceding(len - 5));
+
+        BreakIterator lb = BreakIterator.getLineInstance(ULocale.ENGLISH);
+        lb.setText(longWord);
+        assertFalse("line isBoundary", lb.isBoundary(len - 5));
+        assertEquals("line preceding", 19, lb.preceding(len - 5));
+    }
 }
