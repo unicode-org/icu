@@ -544,14 +544,17 @@ UBool RuleBasedBreakIterator::BreakCache::populatePreceding(UErrorCode &status) 
     }
 
     int32_t backupPosition = fromPosition;
+    int32_t backupStep = 30;
 
     // Find a boundary somewhere preceding the first already-cached boundary
     do {
-        backupPosition = backupPosition - 30;
-        if (backupPosition <= 0) {
+        if (backupPosition <= backupStep) {
             backupPosition = 0;
         } else {
-            backupPosition = fBI->handleSafePrevious(backupPosition);
+            backupPosition = fBI->handleSafePrevious(backupPosition - backupStep);
+        }
+        if (backupStep <= INT32_MAX / 2) {
+            backupStep *= 2;
         }
         if (backupPosition == UBRK_DONE || backupPosition == 0) {
             position = 0;

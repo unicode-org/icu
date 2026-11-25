@@ -1666,14 +1666,17 @@ public class RuleBasedBreakIterator extends BreakIterator implements Cloneable {
             }
 
             int backupPosition = fromPosition;
+            int backupStep = 30;
 
             // Find a boundary somewhere preceding the first already-cached boundary
             do {
-                backupPosition = backupPosition - 30;
-                if (backupPosition <= textBegin) {
+                if (backupPosition - textBegin <= backupStep) {
                     backupPosition = textBegin;
                 } else {
-                    backupPosition = handleSafePrevious(backupPosition);
+                    backupPosition = handleSafePrevious(backupPosition - backupStep);
+                }
+                if (backupStep <= Integer.MAX_VALUE / 2) {
+                    backupStep *= 2;
                 }
                 if (backupPosition == BreakIterator.DONE || backupPosition == textBegin) {
                     position = textBegin;
