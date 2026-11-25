@@ -12,14 +12,19 @@
 
 U_NAMESPACE_BEGIN
 
-/**
- * 32-bit non-negative length of a string or similar.
- * When the value overflows (does not fit into 0..INT32_MAX),
- * it is set to 0, and a failure error code is set.
- */
+// Value types for safe operations on int32_t with bounds checking.
+// These are not full numeric types; they define operators that we need.
+// We can add more over time.
 // NOTE: Some compilers (GCC, Clang) have primitives available,
 // like __builtin_add_overflow() and __builtin_mul_overflow().
-// This class could be optimized by calling those primitives.
+// The code below may be able to be optimized by calling those primitives.
+
+/**
+ * 32-bit non-negative integer (0..INT32_MAX).
+ * Usually used for the length or capacity of a string or buffer or similar.
+ * When the value is outside the supported range,
+ * it is set to 0, and a failure error code is set.
+ */
 class Length32 /* not : public UObject because this should only be used on the stack */ {
 public:
     enum UseInternalErrorCode {
@@ -32,7 +37,7 @@ public:
         bool ok;
     };
 
-    /** Constructor, records errors in the provided UErrorCode. */
+    /** Constructor, records errors in the external UErrorCode. */
     template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
     Length32(T value, UErrorCode &errorCode) :
             value_(toInt32(value, errorCode)),
@@ -59,23 +64,6 @@ public:
 
     bool isSuccess() const { return U_SUCCESS(errorCode_); }
     bool isFailure() const { return U_FAILURE(errorCode_); }
-
-    template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
-    Length32 operator+(T b) const {
-        // TODO: maybe allow negative b
-        if (isSuccess() && b >= 0) {
-            return {static_cast<int64_t>(value_) + static_cast<int64_t>(b), this};
-        }
-        return {this};
-    }
-
-    template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
-    Length32 operator*(T b) const {
-        if (isSuccess() && b >= 0) {
-            return {static_cast<int64_t>(value_) * static_cast<int64_t>(b), this};
-        }
-        return {this};
-    }
 
 private:
     // Internal constructor for returning a result object;
@@ -113,6 +101,35 @@ private:
         }
         return 0;
     }
+
+    template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
+    Length32 add(T b) const {
+        // TODO: maybe allow negative b
+        if (isSuccess() && b >= 0) {
+            return {static_cast<int64_t>(value_) + static_cast<int64_t>(b), this};
+        }
+        return {this};
+    }
+
+    template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
+    friend Length32 operator+(const Length32 &a, T b) { return a.add(b); }
+
+    template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
+    friend Length32 operator+(T a, const Length32 &b) { return b.add(a); }
+
+    template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
+    Length32 mul(T b) const {
+        if (isSuccess() && b >= 0) {
+            return {static_cast<int64_t>(value_) * static_cast<int64_t>(b), this};
+        }
+        return {this};
+    }
+
+    template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
+    friend Length32 operator*(const Length32 &a, T b) { return a.mul(b); }
+
+    template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
+    friend Length32 operator*(T a, const Length32 &b) { return b.mul(a); }
 
     // Error code before value, so that they are initialized in that order.
     UErrorCode internalErrorCode_ = U_ZERO_ERROR;

@@ -361,7 +361,7 @@ UBool ReorderingBuffer::resize(int32_t appendLength, UErrorCode &errorCode) {
         errorCode=U_MEMORY_ALLOCATION_ERROR;
         return false;
     }
-    int32_t doubleCapacity = (Length32(str.getCapacity(), Length32::INTERNAL) * 2).get();
+    int32_t doubleCapacity = (2 * Length32(str.getCapacity(), Length32::INTERNAL)).get();
     // 0 if overflow
     if(newCapacity<doubleCapacity) {
         newCapacity=doubleCapacity;
