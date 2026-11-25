@@ -19,6 +19,7 @@
 #include "double-conversion.h"
 #include "charstr.h"
 #include "number_utils.h"
+#include "safe32.h"
 #include "uassert.h"
 #include "util.h"
 
@@ -251,13 +252,16 @@ int32_t DecimalQuantity::getMagnitude() const {
 
 bool DecimalQuantity::adjustMagnitude(int32_t delta) {
     if (precision != 0) {
+        UErrorCode local = U_ZERO_ERROR;
         // i.e., scale += delta; origDelta += delta
-        bool overflow = uprv_add32_overflow(scale, delta, &scale);
-        overflow = uprv_add32_overflow(origDelta, delta, &origDelta) || overflow;
+        auto newScale = Int32(scale, local) + delta;
+        auto newOrigDelta = Int32(origDelta, local) + delta;
         // Make sure that precision + scale won't overflow, either
-        int32_t dummy;
-        overflow = overflow || uprv_add32_overflow(scale, precision, &dummy);
-        return overflow;
+        if ((newScale + precision).isFailure()) {
+            return true;
+        }
+        scale = newScale.get();
+        origDelta = newOrigDelta.get();
     }
     return false;
 }
