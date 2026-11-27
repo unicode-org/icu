@@ -22,10 +22,7 @@ public class RemapRule extends SegmentationRule {
 
     @Override
     void apply(StringBuilder remapped, BreakContext[] resolved) {
-        // This one has to be a StringBuffer rather than a StringBuilder because the
-        // overload of
-        // AppendReplacement that takes a StringBuilder is new in Java 9.
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         int i = 0;
         int offset = 0;
         // We find all matches of the `pattern_` and replace them according to

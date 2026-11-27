@@ -205,12 +205,12 @@ public abstract class LanguageTestFmwk extends CoreTestFmwk implements TimeUnitC
     }
 
     protected static String asciify(String s) {
-        StringBuffer sb = null;
+        StringBuilder sb = null;
         for (int i = 0, e = s.length(); i < e; ++i) {
             char c = s.charAt(i);
             if (c < 0x20 || c > 0x7e) {
                 if (sb == null) {
-                    sb = new StringBuffer();
+                    sb = new StringBuilder();
                     sb.append(s.substring(0, i));
                 }
                 sb.append("\\u");

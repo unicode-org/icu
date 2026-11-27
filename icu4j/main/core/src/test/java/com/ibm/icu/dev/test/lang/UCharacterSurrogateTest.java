@@ -283,7 +283,7 @@ public final class UCharacterSurrogateTest extends CoreTestFmwk {
             UCharacter.toCodePoint(UCharacter.MIN_HIGH_SURROGATE, UCharacter.MIN_LOW_SURROGATE),
             UCharacter.MIN_LOW_SURROGATE,
         };
-        StringBuffer b = new StringBuffer(s);
+        StringBuilder b = new StringBuilder(s);
         for (int i = 0; i < avalues.length; ++i) {
             if (UCharacter.codePointAt(s, i) != avalues[i]) errln("string at: " + i);
             if (UCharacter.codePointAt(c, i) != avalues[i]) errln("chars at: " + i);

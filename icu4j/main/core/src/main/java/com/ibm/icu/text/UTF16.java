@@ -2036,6 +2036,7 @@ public final class UTF16 {
      */
     public static StringBuffer reverse(StringBuffer source) {
         int length = source.length();
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer result = new StringBuffer(length);
         for (int i = length; i-- > 0; ) {
             char ch = source.charAt(i);

@@ -53,7 +53,8 @@ public class DateFormatMiscTests extends CoreTestFmwk {
             String s = dformat[i] + "\t" + dstring[i] + "\t";
             formatter = new SimpleDateFormat(dformat[i]);
             try {
-                StringBuffer str = new StringBuffer("");
+                @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
+                StringBuffer str = new StringBuffer();
                 FieldPosition pos = new FieldPosition(0);
                 logDebug(
                         s

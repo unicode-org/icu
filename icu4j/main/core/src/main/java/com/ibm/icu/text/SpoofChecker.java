@@ -825,6 +825,7 @@ public class SpoofChecker {
         // An instance of this class exists while the confusable data is being built from source.
         // It encapsulates the intermediate data structures that are used for building.
         // It exports one static function, to do a confusable data build.
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         private static class ConfusabledataBuilder {
 
             private Hashtable<Integer, SPUString> fTable;
@@ -851,6 +852,7 @@ public class SpoofChecker {
 
             void build(Reader confusables, SpoofData dest)
                     throws ParseException, java.io.IOException {
+                @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
                 StringBuffer fInput = new StringBuffer();
 
                 // Convert the user input data from UTF-8 to char (UTF-16)

@@ -89,13 +89,15 @@ public class NumberRegressionTests extends CoreTestFmwk {
         double d = 100;
         df.setMinimumFractionDigits(0);
         df.setMaximumFractionDigits(16);
-        StringBuffer sBuf1 = new StringBuffer("");
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
+        StringBuffer sBuf1 = new StringBuffer();
         FieldPosition fp1 = new FieldPosition(0);
         logDebug("d = " + d);
         logDebug("maxFractionDigits = " + df.getMaximumFractionDigits());
         logDebug(" format(d) = '" + df.format(d, sBuf1, fp1) + "'");
         df.setMaximumFractionDigits(17);
-        StringBuffer sBuf2 = new StringBuffer("");
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
+        StringBuffer sBuf2 = new StringBuffer();
         FieldPosition fp2 = new FieldPosition(0);
         logDebug("maxFractionDigits = " + df.getMaximumFractionDigits());
         df.format(d, sBuf2, fp2);
@@ -107,6 +109,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
      * DecimalFormatSymbols).
      */
     @Test
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public void Test4087245() {
         DecimalFormatSymbols symbols = new DecimalFormatSymbols();
         DecimalFormat df = new DecimalFormat("#,##0.0", symbols);
@@ -138,7 +141,8 @@ public class NumberRegressionTests extends CoreTestFmwk {
     public void Test4088503() {
         DecimalFormat df = new DecimalFormat();
         df.setGroupingSize(0);
-        StringBuffer sBuf = new StringBuffer("");
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
+        StringBuffer sBuf = new StringBuffer();
         FieldPosition fp = new FieldPosition(0);
         try {
             logDebug(df.format(123, sBuf, fp).toString());
@@ -310,7 +314,8 @@ public class NumberRegressionTests extends CoreTestFmwk {
         df.setGroupingUsed(false);
         double d = 1.000000000000001E7;
         java.math.BigDecimal bd = new java.math.BigDecimal(d);
-        StringBuffer sb = new StringBuffer("");
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
+        StringBuffer sb = new StringBuffer();
         FieldPosition fp = new FieldPosition(0);
         logDebug("d = " + d);
         logDebug("BigDecimal.toString():  " + bd.toString());
@@ -322,16 +327,18 @@ public class NumberRegressionTests extends CoreTestFmwk {
 
     /** DecimalFormat.format() loses precision */
     @Test
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public void Test4090504() {
         double d = 1;
         logDebug("d = " + d);
         DecimalFormat df = new DecimalFormat();
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer sb;
         FieldPosition fp;
         try {
             for (int i = 17; i <= 20; i++) {
                 df.setMaximumFractionDigits(i);
-                sb = new StringBuffer("");
+                sb = new StringBuffer();
                 fp = new FieldPosition(0);
                 logDebug("  getMaximumFractionDigits() = " + i);
                 logDebug("  formatted: " + df.format(d, sb, fp));
@@ -775,6 +782,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
     @Test
     public void Test4062486() {
         DecimalFormat fmt = new DecimalFormat("#,##0.00");
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer formatted = new StringBuffer();
         FieldPosition field = new FieldPosition(0);
         Double num = 1234.5;
@@ -817,6 +825,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
         DecimalFormat df = new DecimalFormat(); // Corrected; see 4147706
         double d1 = -0.0;
         double d2 = -0.0001;
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer buffer = new StringBuffer();
         logDebug("pattern: \"" + df.toPattern() + "\"");
         df.format(d1, buffer, new FieldPosition(0));
@@ -864,6 +873,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
 
     /** DecimalFormat.format(long n) fails if n * multiplier > MAX_LONG. */
     @Test
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public void Test4106664() {
         DecimalFormat df = new DecimalFormat();
         long n = 1234567890123456L;
@@ -886,6 +896,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
         df.setNegativePrefix("-");
         double d = -0.0;
         logDebug("pattern: \"" + df.toPattern() + "\"");
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer buffer = new StringBuffer();
         df.format(d, buffer, new FieldPosition(0));
         if (!buffer.toString().equals("-0")) { // Corrected; see 4147706
@@ -1197,6 +1208,7 @@ public class NumberRegressionTests extends CoreTestFmwk {
 
     /** DecimalFormat formats -0.0 as +0.0 See also older related bug 4106658, 4106667 */
     @Test
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public void Test4147706() {
         DecimalFormat df = new DecimalFormat("#,##0.0##");
         df.setDecimalFormatSymbols(new DecimalFormatSymbols(Locale.ENGLISH));
@@ -1780,18 +1792,19 @@ class myformat implements Serializable {
     }
 }
 
+@SuppressWarnings("JdkObsolete") // StringBuffer required by public API
 class MyNumberFormat extends NumberFormat {
     /** For serialization */
     private static final long serialVersionUID = 1251303884737169952L;
 
     @Override
     public StringBuffer format(double number, StringBuffer toAppendTo, FieldPosition pos) {
-        return new StringBuffer("");
+        return new StringBuffer();
     }
 
     @Override
     public StringBuffer format(long number, StringBuffer toAppendTo, FieldPosition pos) {
-        return new StringBuffer("");
+        return new StringBuffer();
     }
 
     @Override
@@ -1802,17 +1815,17 @@ class MyNumberFormat extends NumberFormat {
     @Override
     public StringBuffer format(
             java.math.BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {
-        return new StringBuffer("");
+        return new StringBuffer();
     }
 
     @Override
     public StringBuffer format(BigInteger number, StringBuffer toAppendTo, FieldPosition pos) {
-        return new StringBuffer("");
+        return new StringBuffer();
     }
 
     @Override
     public StringBuffer format(
             com.ibm.icu.math.BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {
-        return new StringBuffer("");
+        return new StringBuffer();
     }
 }

@@ -409,6 +409,7 @@ public final class StringPrep {
         Values val = new Values();
         char result = 0;
         int ch = UCharacterIterator.DONE;
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer dest = new StringBuffer();
         boolean allowUnassigned = ((options & ALLOW_UNASSIGNED) > 0);
 
@@ -459,6 +460,7 @@ public final class StringPrep {
         return dest;
     }
 
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     private StringBuffer normalize(StringBuffer src) {
         return new StringBuffer(
                 Normalizer.normalize(src.toString(), Normalizer.NFKC, Normalizer.UNICODE_3_2));

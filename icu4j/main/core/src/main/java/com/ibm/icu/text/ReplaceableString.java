@@ -28,6 +28,7 @@ public class ReplaceableString implements Replaceable {
      * @param str initial contents
      * @stable ICU 2.0
      */
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public ReplaceableString(String str) {
         buf = new StringBuffer(str);
     }
@@ -49,6 +50,7 @@ public class ReplaceableString implements Replaceable {
      *
      * @stable ICU 2.0
      */
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public ReplaceableString() {
         buf = new StringBuffer();
     }

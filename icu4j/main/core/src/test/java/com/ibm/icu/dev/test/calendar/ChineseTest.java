@@ -357,7 +357,7 @@ public class ChineseTest extends CalendarTestFmwk {
             1, // Expect 4*-1
         };
 
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         for (int i = 0; i < DATA.length; ) {
             cal.clear();
             cal.set(Calendar.EXTENDED_YEAR, THE_YEAR);

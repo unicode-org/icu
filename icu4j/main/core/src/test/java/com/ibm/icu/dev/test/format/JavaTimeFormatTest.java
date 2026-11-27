@@ -407,6 +407,7 @@ public class JavaTimeFormatTest extends CoreTestFmwk {
         String intervalSkeleton = "dMMMMy";
         LocalDate from = LocalDate.of(2024, Month.SEPTEMBER, 17);
         LocalDate to = LocalDate.of(2024, Month.SEPTEMBER, 23);
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer result = new StringBuffer();
 
         result.setLength(0);

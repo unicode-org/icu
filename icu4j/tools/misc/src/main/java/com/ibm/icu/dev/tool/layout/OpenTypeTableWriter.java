@@ -29,7 +29,7 @@ abstract class OpenTypeTableWriter {
             return tableLength;
         }
 
-        void appendValue(StringBuffer line, int index) {
+        void appendValue(StringBuilder line, int index) {
             short value = table[index];
 
             line.append("0x");
@@ -41,7 +41,7 @@ abstract class OpenTypeTableWriter {
         }
 
         void dumpTable(PrintStream output, int valuesPerLine) {
-            StringBuffer line = new StringBuffer("    "); // four spaces
+            StringBuilder line = new StringBuilder("    "); // four spaces
             int maxIndex = length();
 
             for (int i = 0; i < maxIndex; i += 1) {

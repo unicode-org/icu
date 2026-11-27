@@ -115,6 +115,7 @@ public final class TrieTest extends CoreTestFmwk {
     private void _testTrieIteration(IntTrie trie, CheckRange checkRanges[], int countCheckRanges) {
         // write a string
         int countValues = 0;
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer s = new StringBuffer();
         int values[] = new int[30];
         for (int i = 0; i < countCheckRanges; ++i) {

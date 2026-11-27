@@ -812,6 +812,7 @@ public class UnicodeSetStringSpanTest extends CoreTestFmwk {
     // Verify that all implementations represent the same set.
     void verifySpanContents(
             final UnicodeSetWithStrings sets[], int whichSpans, final String testName) {
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer s = new StringBuffer();
         int localWhichSpans;
         int c, first;

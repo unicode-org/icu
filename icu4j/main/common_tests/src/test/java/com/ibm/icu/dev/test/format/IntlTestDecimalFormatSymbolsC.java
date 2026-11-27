@@ -129,7 +129,8 @@ public class IntlTestDecimalFormatSymbolsC extends CoreTestFmwk {
     /** helper functions* */
     public void verify(double value, String pattern, DecimalFormatSymbols sym, String expected) {
         DecimalFormat df = new DecimalFormat(pattern, sym);
-        StringBuffer buffer = new StringBuffer("");
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
+        StringBuffer buffer = new StringBuffer();
         FieldPosition pos = new FieldPosition(-1);
         buffer = df.format(value, buffer, pos);
         if (!buffer.toString().equals(expected)) {

@@ -92,7 +92,7 @@ public class TestDeprecatedNormalizerAPI extends CoreTestFmwk {
 
             // Now make sure that the decompositions for this character
             // make sense
-            String chString = new StringBuffer().append(ch).toString();
+            String chString = new StringBuilder().append(ch).toString();
             String iterDecomp = iter.decomposition();
             String normDecomp = Normalizer.decompose(chString, compat);
 
@@ -115,7 +115,7 @@ public class TestDeprecatedNormalizerAPI extends CoreTestFmwk {
 
     void assertNoDecomp(char start, char limit, boolean compat, int options) {
         for (char x = ++start; x < limit; x++) {
-            String xString = new StringBuffer().append(x).toString();
+            String xString = new StringBuilder().append(x).toString();
             String decomp = Normalizer.decompose(xString, compat);
             if (!decomp.equals(xString)) {
                 errln(

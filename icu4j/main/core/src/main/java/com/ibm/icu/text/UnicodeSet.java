@@ -4854,6 +4854,7 @@ public class UnicodeSet extends UnicodeFilter
         if (preserveSyntaxInPattern) {
             rebuiltPat.append(prettyPrintedPattern);
         } else {
+            @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
             final var sb = new StringBuffer();
             result._generatePattern(sb, /* escapeUnprintable= */ false);
             rebuiltPat.append(sb);

@@ -726,14 +726,14 @@ public class BasicTest extends CoreTestFmwk {
     {
         iter.setText(input);
 
-        // Run through the iterator forwards and stick it into a StringBuffer
-        StringBuffer forward =  new StringBuffer();
+        // Run through the iterator forwards and stick it into a StringBuilder
+        StringBuilder forward =  new StringBuilder();
         for (int ch = iter.first(); ch != Normalizer.DONE; ch = iter.next()) {
             forward.append(ch);
         }
 
         // Now do it backwards
-        StringBuffer reverse = new StringBuffer();
+        StringBuilder reverse = new StringBuilder();
         for (int ch = iter.last(); ch != Normalizer.DONE; ch = iter.previous()) {
             reverse.insert(0, ch);
         }
@@ -752,14 +752,14 @@ public class BasicTest extends CoreTestFmwk {
             iter.setText(tests[i][0]);
 
             // Run through the iterator forwards and stick it into a
-            // StringBuffer
-            StringBuffer forward = new StringBuffer();
+            // StringBuilder
+            StringBuilder forward = new StringBuilder();
             for (int ch = iter.first(); ch != Normalizer.DONE; ch = iter.next()) {
                 forward.append(ch);
             }
 
             // Now do it backwards
-            StringBuffer reverse = new StringBuffer();
+            StringBuilder reverse = new StringBuilder();
             for (int ch = iter.last(); ch != Normalizer.DONE; ch = iter.previous()) {
                 reverse.insert(0, ch);
             }
@@ -1308,7 +1308,7 @@ public class BasicTest extends CoreTestFmwk {
         Normalizer iter =
                 new Normalizer(
                         new StringCharacterIterator(Utility.unescape(input)), Normalizer.NFKC, 0);
-        StringBuffer got = new StringBuffer();
+        StringBuilder got = new StringBuilder();
         for (ch = iter.first(); ch != Normalizer.DONE; ch = iter.next()) {
             if (index >= expected.length()) {
                 errln(
@@ -1639,9 +1639,9 @@ public class BasicTest extends CoreTestFmwk {
             }
 
             // test compose() and decompose()
-            StringBuffer tel;
+            StringBuilder tel;
             String nfkc, nfkd;
-            tel = new StringBuffer("\u2121\u2121\u2121\u2121\u2121\u2121\u2121\u2121\u2121\u2121");
+            tel = new StringBuilder("\u2121\u2121\u2121\u2121\u2121\u2121\u2121\u2121\u2121\u2121");
             tel.insert(1, (char) 0x0301);
 
             nfkc = Normalizer.compose(tel.toString(), true);
@@ -1703,6 +1703,7 @@ public class BasicTest extends CoreTestFmwk {
             }
 
             // test last()/previous() with an internal buffer overflow
+            @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
             StringBuffer buf = new StringBuffer("aaaaaaaaaa");
             buf.setCharAt(10 - 1, '\u0308');
             clone.setText(buf);

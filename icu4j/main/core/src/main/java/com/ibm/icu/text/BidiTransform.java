@@ -307,6 +307,7 @@ public class BidiTransform {
         if ((reorderingOptions & Bidi.DO_MIRRORING) == 0) {
             return;
         }
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer dest = new StringBuffer(text.length() * 2);
         byte[] levels = bidi.getLevels();
         for (int i = 0, n = levels.length; i < n; ) {

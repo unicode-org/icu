@@ -64,7 +64,7 @@ public class ConformanceTest extends CoreTestFmwk {
     public void runConformance(String fileName, int options) throws Exception {
         String line = null;
         String[] fields = new String[5];
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         int passCount = 0;
         int failCount = 0;
         UnicodeSet other = new UnicodeSet(0, 0x10ffff);
@@ -155,7 +155,7 @@ public class ConformanceTest extends CoreTestFmwk {
      */
     private boolean checkConformance(String[] field, String line, int options) throws Exception {
         boolean pass = true;
-        StringBuffer buf = new StringBuffer(); // scratch
+        StringBuilder buf = new StringBuilder(); // scratch
         String out, fcd;
         int i = 0;
         for (i = 0; i < 5; ++i) {
@@ -333,7 +333,7 @@ public class ConformanceTest extends CoreTestFmwk {
             throws Exception {
         String modeString = kModeStrings[getModeNumber(mode)];
         String msg = String.format(kMessages[getModeNumber(mode)], field);
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         String out = Normalizer.normalize(s, mode, options);
         if (!assertEqual(modeString, "", s, out, exp, msg)) {
             return false;
@@ -417,7 +417,7 @@ public class ConformanceTest extends CoreTestFmwk {
      * @param dir either +1 or -1
      */
     private String iterativeNorm(
-            String str, Normalizer.Mode mode, StringBuffer buf, int dir, int options)
+            String str, Normalizer.Mode mode, StringBuilder buf, int dir, int options)
             throws Exception {
         normalizer.setText(str);
         normalizer.setMode(mode);
@@ -448,7 +448,7 @@ public class ConformanceTest extends CoreTestFmwk {
     private String iterativeNorm(
             StringCharacterIterator str,
             Normalizer.Mode mode,
-            StringBuffer buf,
+            StringBuilder buf,
             int dir,
             int options)
             throws Exception {
@@ -500,7 +500,7 @@ public class ConformanceTest extends CoreTestFmwk {
      *
      * @param buf scratch buffer
      */
-    private static void hexsplit(String s, char delimiter, String[] output, StringBuffer buf) {
+    private static void hexsplit(String s, char delimiter, String[] output, StringBuilder buf) {
         int i;
         int pos = 0;
         for (i = 0; i < output.length; ++i) {
@@ -538,7 +538,7 @@ public class ConformanceTest extends CoreTestFmwk {
         }
     }
 
-    public static void appendInt(StringBuffer buf, String strToHex, String s) {
+    public static void appendInt(StringBuilder buf, String strToHex, String s) {
         int hex = Integer.parseInt(strToHex, 16);
         if (hex < 0) {
             throw new IllegalArgumentException("Out of range hex " + hex + " in " + s);
@@ -562,7 +562,7 @@ public class ConformanceTest extends CoreTestFmwk {
 
     private void _testOneLine(String line, int options) throws Exception {
         String[] fields = new String[5];
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         // Parse out the fields
         hexsplit(line, ';', fields, buf);
         checkConformance(fields, line, options);

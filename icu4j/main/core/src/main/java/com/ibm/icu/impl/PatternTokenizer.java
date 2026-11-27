@@ -191,6 +191,7 @@ public class PatternTokenizer {
             if (usingSlash) needingQuoteCharacters.add(BACK_SLASH);
             if (usingQuote) needingQuoteCharacters.add(SINGLE_QUOTE);
         }
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer result = new StringBuffer();
         int quotedChar = NO_QUOTE;
         int cp;
@@ -263,6 +264,7 @@ public class PatternTokenizer {
     public String normalize() {
         int oldStart = start;
         StringBuilder result = new StringBuilder();
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer buffer = new StringBuffer();
         while (true) {
             buffer.setLength(0);

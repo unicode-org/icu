@@ -37,6 +37,7 @@ public final class UTF16Test extends CoreTestFmwk {
 
     /** Testing UTF16 class methods append */
     @Test
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public void TestAppend() {
         StringBuffer strbuff = new StringBuffer("this is a string ");
         char array[] = new char[UCharacter.MAX_VALUE >> 2];
@@ -84,6 +85,7 @@ public final class UTF16Test extends CoreTestFmwk {
     /** Testing UTF16 class methods bounds */
     @Test
     public void TestBounds() {
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer strbuff =
                 // 0     12345     6     7     8     9
                 new StringBuffer("\udc000123\ud800\udc00\ud801\udc01\ud802");
@@ -194,7 +196,7 @@ public final class UTF16Test extends CoreTestFmwk {
     /** Testing UTF16 class methods charAt and charAtCodePoint */
     @Test
     public void TestCharAt() {
-        StringBuffer strbuff = new StringBuffer("12345\ud800\udc0167890\ud800\udc02");
+        StringBuilder strbuff = new StringBuilder("12345\ud800\udc0167890\ud800\udc02");
         if (UTF16.charAt(strbuff, 0) != '1'
                 || UTF16.charAt(strbuff, 2) != '3'
                 || UTF16.charAt(strbuff, 5) != 0x10001
@@ -254,14 +256,15 @@ public final class UTF16Test extends CoreTestFmwk {
             errln("FAIL Getting character from replaceable error");
         }
 
-        StringBuffer strbuffer = new StringBuffer("0xD805");
+        StringBuilder strbuffer = new StringBuilder("0xD805");
         UTF16.charAt((CharSequence) strbuffer, 0);
     }
 
     /** Testing UTF16 class methods countCodePoint */
     @Test
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public void TestCountCodePoint() {
-        StringBuffer strbuff = new StringBuffer("");
+        StringBuffer strbuff = new StringBuffer();
         char array[] = null;
         if (UTF16.countCodePoint(strbuff) != 0
                 || UTF16.countCodePoint("") != 0
@@ -307,6 +310,7 @@ public final class UTF16Test extends CoreTestFmwk {
 
     /** Testing UTF16 class methods delete */
     @Test
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public void TestDelete() { // 01234567890123456
         StringBuffer strbuff = new StringBuffer("these are strings");
         int size = strbuff.length();
@@ -380,6 +384,7 @@ public final class UTF16Test extends CoreTestFmwk {
     public void TestfindOffset() {
         // jitterbug 47
         String str = "a\uD800\uDC00b";
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer strbuff = new StringBuffer(str);
         char array[] = str.toCharArray();
         int limit = str.length();
@@ -533,6 +538,7 @@ public final class UTF16Test extends CoreTestFmwk {
     /** Testing UTF16 class method insert */
     @Test
     public void TestInsert() {
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer strbuff = new StringBuffer("0123456789");
         char array[] = new char[128];
         int srcEnd = strbuff.length();
@@ -652,6 +658,7 @@ public final class UTF16Test extends CoreTestFmwk {
         }
 
         // Test with the StringBuffer flavor of moveCodePointOffset
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer sb = new StringBuffer(s);
         try {
             int result = UTF16.moveCodePointOffset(sb, startIdx, amount);
@@ -920,6 +927,7 @@ public final class UTF16Test extends CoreTestFmwk {
     /** Testing UTF16 class methods setCharAt */
     @Test
     public void TestSetCharAt() {
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer strbuff = new StringBuffer("012345");
         char array[] = new char[128];
         int srcEnd = strbuff.length();
@@ -1003,6 +1011,7 @@ public final class UTF16Test extends CoreTestFmwk {
             errln("FAIL: valueof(char32)");
         }
         String str = new String("01234\ud800\udc0056789");
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer strbuff = new StringBuffer(str);
         char array[] = str.toCharArray();
         int length = str.length();
@@ -1445,6 +1454,7 @@ public final class UTF16Test extends CoreTestFmwk {
     }
 
     @Test
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public void TestReverse() {
         StringBuffer test = new StringBuffer("backwards words say to used I");
 
@@ -1641,6 +1651,7 @@ public final class UTF16Test extends CoreTestFmwk {
         length = str.length();
         while (length >= 0) {
             for (int i = 0; i <= length; ++i) {
+                @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
                 StringBuffer s = new StringBuffer(str.substring(0, i));
                 for (int number = -1; number <= ((length - i) + 2); ++number) {
                     boolean flag = UTF16.hasMoreCodePointsThan(s, number);

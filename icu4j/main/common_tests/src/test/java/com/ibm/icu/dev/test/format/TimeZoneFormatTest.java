@@ -1349,6 +1349,7 @@ public class TimeZoneFormatTest extends CoreTestFmwk {
     // Tests format(Object, StringBuffer, FieldPosition):StringBuffer method
     // inherited from Format class
     @Test
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public void TestInheritedFormat() {
         TimeZone tz = TimeZone.getTimeZone("America/Los_Angeles");
         Calendar cal = Calendar.getInstance(tz);

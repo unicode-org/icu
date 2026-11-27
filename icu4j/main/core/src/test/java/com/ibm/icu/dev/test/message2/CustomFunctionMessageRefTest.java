@@ -102,7 +102,7 @@ public class CustomFunctionMessageRefTest extends CoreTestFmwk {
 
     @Test
     public void test() {
-        StringBuffer browser = new StringBuffer();
+        StringBuilder browser = new StringBuilder();
         Map<String, ?> arguments =
                 Map.of(
                         "browser", browser,

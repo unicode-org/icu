@@ -114,6 +114,7 @@ public class IntlTestDecimalFormatAPI extends CoreTestFmwk {
      * This test checks various generic API methods in DecimalFormat to achieve 100% API coverage.
      */
     @Test
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public void TestAPI() {
         Locale startLocale = Locale.getDefault();
 
@@ -286,6 +287,7 @@ public class IntlTestDecimalFormatAPI extends CoreTestFmwk {
     @Test
     public void testJB6134() {
         DecimalFormat decfmt = new DecimalFormat();
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer buf = new StringBuffer();
 
         FieldPosition fposByInt = new FieldPosition(NumberFormat.INTEGER_FIELD);

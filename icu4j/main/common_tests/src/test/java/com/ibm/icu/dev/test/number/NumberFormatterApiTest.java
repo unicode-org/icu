@@ -6457,6 +6457,7 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
                 NumberFormatter.withLocale(ULocale.FRENCH).precision(Precision.fixedFraction(3));
         Format format = lnf.toFormat();
         FieldPosition fpos = new FieldPosition(NumberFormat.Field.DECIMAL_SEPARATOR);
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer sb = new StringBuffer();
         format.format(514.23, sb, fpos);
         assertEquals("Should correctly format number", "514,230", sb.toString());

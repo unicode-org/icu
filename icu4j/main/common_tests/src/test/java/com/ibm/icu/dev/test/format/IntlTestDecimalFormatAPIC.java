@@ -40,6 +40,7 @@ public class IntlTestDecimalFormatAPIC extends CoreTestFmwk {
 
     // This test checks various generic API methods in DecimalFormat to achieve 100% API coverage.
     @Test
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public void TestAPI() {
         Locale startLocale = Locale.getDefault();
 

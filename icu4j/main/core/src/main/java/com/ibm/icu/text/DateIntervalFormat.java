@@ -780,6 +780,7 @@ public class DateIntervalFormat extends UFormat implements Cloneable {
      * @stable ICU 64
      */
     public FormattedDateInterval formatToValue(DateInterval dtInterval) {
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer sb = new StringBuffer();
         FieldPosition ignore = new FieldPosition(0);
         FormatOutput output = new FormatOutput();
@@ -892,6 +893,7 @@ public class DateIntervalFormat extends UFormat implements Cloneable {
      * @stable ICU 64
      */
     public FormattedDateInterval formatToValue(Calendar fromCalendar, Calendar toCalendar) {
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer sb = new StringBuffer();
         FieldPosition ignore = new FieldPosition(0);
         FormatOutput output = new FormatOutput();

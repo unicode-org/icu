@@ -429,7 +429,7 @@ class NormalizerBuilder {
 
     /** Utility: Parses a sequence of hex Unicode characters separated by spaces */
     public static String fromHex(String source) {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         for (int i = 0; i < source.length(); ++i) {
             char c = source.charAt(i);
             switch (c) {
@@ -466,7 +466,7 @@ class NormalizerBuilder {
                             end = source.length();
                         }
                         value = Integer.parseInt(source.substring(i, end), 16);
-                        UTF16Util.appendCodePoint(result, value);
+                        result.appendCodePoint(value);
                     } catch (Exception e) {
                         System.out.println("i: " + i + ";end:" + end + "source:" + source);
                         // System.out.println(source.substring(i, i + 4) + "************" + source);

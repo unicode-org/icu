@@ -312,6 +312,7 @@ public abstract class NumberFormat extends UFormat implements Cloneable {
      * @see java.text.Format#format(Object)
      * @stable ICU 2.0
      */
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public final String format(double number) {
         return format(number, new StringBuffer(), new FieldPosition(0)).toString();
     }
@@ -322,6 +323,7 @@ public abstract class NumberFormat extends UFormat implements Cloneable {
      * @see java.text.Format#format(Object)
      * @stable ICU 2.0
      */
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public final String format(long number) {
         StringBuffer buf = new StringBuffer(19);
         FieldPosition pos = new FieldPosition(0);
@@ -334,6 +336,7 @@ public abstract class NumberFormat extends UFormat implements Cloneable {
      *
      * @stable ICU 2.0
      */
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public final String format(BigInteger number) {
         return format(number, new StringBuffer(), new FieldPosition(0)).toString();
     }
@@ -343,6 +346,7 @@ public abstract class NumberFormat extends UFormat implements Cloneable {
      *
      * @stable ICU 2.0
      */
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public final String format(java.math.BigDecimal number) {
         return format(number, new StringBuffer(), new FieldPosition(0)).toString();
     }
@@ -352,6 +356,7 @@ public abstract class NumberFormat extends UFormat implements Cloneable {
      *
      * @stable ICU 2.0
      */
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public final String format(com.ibm.icu.math.BigDecimal number) {
         return format(number, new StringBuffer(), new FieldPosition(0)).toString();
     }
@@ -361,6 +366,7 @@ public abstract class NumberFormat extends UFormat implements Cloneable {
      *
      * @stable ICU 3.0
      */
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public final String format(CurrencyAmount currAmt) {
         return format(currAmt, new StringBuffer(), new FieldPosition(0)).toString();
     }

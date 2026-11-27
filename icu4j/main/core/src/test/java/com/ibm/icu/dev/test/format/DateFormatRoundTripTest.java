@@ -252,7 +252,8 @@ public class DateFormatRoundTripTest extends CoreTestFmwk {
                                     + " maxS:"
                                     + maxSmatch);
                     for (int j = 0; j <= loop && j < DEPTH; ++j) {
-                        StringBuffer temp = new StringBuffer("");
+                        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
+                        StringBuffer temp = new StringBuffer();
                         FieldPosition pos = new FieldPosition(0);
                         logDebug(
                                 (j > 0 ? " P> " : "    ")

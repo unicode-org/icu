@@ -490,6 +490,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
      * unchanged.
      */
     public static String unescapeLeniently(String s) {
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer buf = new StringBuffer();
         int[] pos = new int[1];
         for (int i = 0; i < s.length(); ) {
@@ -1722,6 +1723,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
             }
 
             for (int i = 0; i < set.getRangeCount(); ++i) {
+                @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
                 StringBuffer str = new StringBuffer("Range ");
                 str.append((char) (0x30 + i)).append(": ");
                 UTF16.append(str, set.getRangeStart(i));
@@ -3213,6 +3215,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
      * charsOut.
      */
     void expectContainment(UnicodeSet set, String charsIn, String charsOut) {
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer bad = new StringBuffer();
         if (charsIn != null) {
             charsIn = Utility.unescape(charsIn);
@@ -3768,7 +3771,7 @@ public class UnicodeSetTest extends CoreTestFmwk {
         assertEquals("Wrong UnicodeSet pattern", "[ab]", unicodeSet.toPattern(true));
         unicodeSet.addAll("b", "x");
         assertEquals("Wrong UnicodeSet pattern", "[abx]", unicodeSet.toPattern(true));
-        unicodeSet.addAll(new CharSequence[] {new StringBuilder("foo"), new StringBuffer("bar")});
+        unicodeSet.addAll(new CharSequence[] {new StringBuilder("foo"), new StringBuilder("bar")});
         assertEquals("Wrong UnicodeSet pattern", "[abx{bar}{foo}]", unicodeSet.toPattern(true));
     }
 

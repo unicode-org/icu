@@ -1482,6 +1482,7 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
             FieldPosition pos,
             char patternCharToOutput,
             Calendar cal) {
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer buf = new StringBuffer();
         subFormat(
                 buf,
@@ -1699,6 +1700,7 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
                                 DateFormatSymbols.CapitalizationContextUsage.MONTH_STANDALONE;
                     }
                 } else {
+                    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
                     StringBuffer monthNumber = new StringBuffer();
                     zeroPaddingNumber(
                             currentNumberFormat, monthNumber, value + 1, count, maxIntCount);
@@ -4721,6 +4723,7 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
         } else {
             throw new IllegalArgumentException("Cannot format given Object as a Date");
         }
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer toAppendTo = new StringBuffer();
         FieldPosition pos = new FieldPosition(0);
         List<FieldPosition> attributes = new ArrayList<>();
@@ -5250,6 +5253,7 @@ public class SimpleDateFormat extends DateFormat implements Cloneable {
         if (pat == null || pat.isEmpty()) {
             return null;
         }
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer dayNum = new StringBuffer();
         zeroPaddingNumber(currentNumberFormat, dayNum, value, 1, maxIntCount);
         return SimpleFormatter.compile(pat).format(dayNum.toString());

@@ -677,6 +677,7 @@ public final class UnicodeMap<T>
      */
     @Override
     public String transform(String source) {
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer result = new StringBuffer();
         int cp;
         for (int i = 0; i < source.length(); i += UTF16.getCharCount(cp)) {

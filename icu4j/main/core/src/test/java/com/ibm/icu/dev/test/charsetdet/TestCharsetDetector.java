@@ -755,7 +755,7 @@ public class TestCharsetDetector extends CoreTestFmwk {
         {
             // We cannot rely on IBM420 converter in Sun Java
             /*
-            StringBuffer ltrStrBuf = new StringBuffer(s);
+            StringBuilder ltrStrBuf = new StringBuilder(s);
             ltrStrBuf = ltrStrBuf.reverse();
             bytes = ltrStrBuf.toString().getBytes("IBM420");
             */
@@ -881,7 +881,7 @@ public class TestCharsetDetector extends CoreTestFmwk {
     }
 
     private CharsetMatch _test1255_reverse(String s) throws Exception {
-        StringBuffer reverseStrBuf = new StringBuffer(s);
+        StringBuilder reverseStrBuf = new StringBuilder(s);
         reverseStrBuf = reverseStrBuf.reverse();
         byte[] bytes = reverseStrBuf.toString().getBytes("ISO-8859-8");
 
@@ -905,7 +905,7 @@ public class TestCharsetDetector extends CoreTestFmwk {
 
     private CharsetMatch _testIBM424_he_ltr(String s) throws Exception {
         /* transformation of input string to CP420 left to right requires reversing the string */
-        StringBuffer ltrStrBuf = new StringBuffer(s);
+        StringBuilder ltrStrBuf = new StringBuilder(s);
         ltrStrBuf = ltrStrBuf.reverse();
         byte[] bytes = ltrStrBuf.toString().getBytes("IBM424");
 

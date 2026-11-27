@@ -100,6 +100,7 @@ public class TestMessageFormat extends CoreTestFmwk {
             new Locale("zh", "", ""),
             new Locale("zh", "TW", "") // 49
         };
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer buffer = new StringBuffer();
         ParsePosition parsePos = new ParsePosition(0);
         int i;
@@ -210,6 +211,7 @@ public class TestMessageFormat extends CoreTestFmwk {
             // (Too much trouble...)
 
             // it_out << "Pat out: " << form.toPattern(buffer));
+            @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
             StringBuffer result = new StringBuffer();
             FieldPosition fieldpos = new FieldPosition(FieldPosition_DONT_CARE);
             form.format(testArgs, result, fieldpos);
@@ -249,6 +251,7 @@ public class TestMessageFormat extends CoreTestFmwk {
     public void TestSample() // aka sample()
             {
         MessageFormat form = null;
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer buffer2 = new StringBuffer();
         try {
             form = new MessageFormat("There are {0} files on {1}");
@@ -286,6 +289,7 @@ public class TestMessageFormat extends CoreTestFmwk {
 
         MessageFormat form = new MessageFormat("The disk \"{1}\" contains {0} file(s).");
 
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer string = new StringBuffer();
         FieldPosition ignore = new FieldPosition(FieldPosition_DONT_CARE);
         form.format(testArgs1, string, ignore);
@@ -309,6 +313,7 @@ public class TestMessageFormat extends CoreTestFmwk {
         form.setFormat(1, fileform); // NOT zero, see below
 
         FieldPosition ignore = new FieldPosition(FieldPosition_DONT_CARE);
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer string = new StringBuffer();
         Object testArgs1[] = {0, "MyDisk"};
         form.format(testArgs1, string, ignore);
@@ -399,6 +404,7 @@ public class TestMessageFormat extends CoreTestFmwk {
     public void TestSetLocale() {
         Object arguments[] = {456.83d, new Date(871068000000L), "deposit"};
 
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer result = new StringBuffer();
 
         // String formatStr = "At {1,time} on {1,date}, you made a {2} of {0,number,currency}.";
@@ -454,6 +460,7 @@ public class TestMessageFormat extends CoreTestFmwk {
     public void TestFormat() {
         final Object ft_arr[] = {new Date(871068000000L)};
 
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer result = new StringBuffer();
 
         // String formatStr = "At {1,time} on {1,date}, you made a {2} of {0,number,currency}.";
@@ -847,6 +854,7 @@ public class TestMessageFormat extends CoreTestFmwk {
     public void TestSetGetFormats() {
         Object arguments[] = {456.83d, new Date(871068000000L), "deposit"};
 
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer result = new StringBuffer();
 
         String formatStr = "At <time> on {1,date}, you made a {2} of {0,number,currency}.";
@@ -949,6 +957,7 @@ public class TestMessageFormat extends CoreTestFmwk {
     public void testFormatNamedArguments() {
         var arguments = Map.of("startDate", new Date(871068000000L));
 
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer result = new StringBuffer();
 
         String formatStr = "On {startDate,date}, it began.";
@@ -1021,6 +1030,7 @@ public class TestMessageFormat extends CoreTestFmwk {
     // an exception when called on MessageFormat objects created with
     // named arguments.
     @Test
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public void testNumericOnlyMethods() {
         MessageFormat msg = new MessageFormat("Number of files: {numfiles}");
         boolean gotException = false;
@@ -1935,6 +1945,7 @@ public class TestMessageFormat extends CoreTestFmwk {
         m.applyPattern("x { _oOo_ , number , integer } y");
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("_oOo_", 3);
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer result = new StringBuffer();
         assertEquals(
                 "trim-named-arg format() failed",
@@ -1953,6 +1964,7 @@ public class TestMessageFormat extends CoreTestFmwk {
                         ULocale.ENGLISH);
         Object[] args = new Object[] {21};
         FieldPosition ignore = null;
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer result = new StringBuffer();
         assertEquals(
                 "plural-and-ordinal format(21)",
@@ -1988,6 +2000,7 @@ public class TestMessageFormat extends CoreTestFmwk {
                 new MessageFormat("{0,plural,one{one meter}other{# meters}}", ULocale.ENGLISH);
         Object[] args = new Object[] {1};
         FieldPosition ignore = null;
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer result = new StringBuffer();
         assertEquals("simple format(1)", "one meter", m.format(args, result, ignore).toString());
 
@@ -2053,6 +2066,7 @@ public class TestMessageFormat extends CoreTestFmwk {
     }
 
     @Test
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public void TestArgIsPrefixOfAnother() {
         // Ticket #11952
         MessageFormat mf1 =
@@ -2192,6 +2206,7 @@ public class TestMessageFormat extends CoreTestFmwk {
             String expected = (String) cas[3];
 
             MessageFormat msgf = new MessageFormat(messagePattern, locale);
+            @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
             StringBuffer sb = new StringBuffer();
             FieldPosition fpos = new FieldPosition(FieldPosition_DONT_CARE);
             msgf.format(new Object[] {arg}, sb, fpos);
@@ -2204,6 +2219,7 @@ public class TestMessageFormat extends CoreTestFmwk {
             Date date, String messagePattern, ULocale locale, String expected) {
 
         MessageFormat msgf = new MessageFormat(messagePattern, locale);
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer sb = new StringBuffer();
         FieldPosition fpos = new FieldPosition(FieldPosition_DONT_CARE);
         msgf.format(new Object[] {date}, sb, fpos);

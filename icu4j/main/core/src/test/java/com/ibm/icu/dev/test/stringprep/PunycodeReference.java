@@ -223,6 +223,7 @@ public final class PunycodeReference {
         int[] in = new int[input.length()];
         int inLen = 0;
         int ch;
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer result = new StringBuffer();
         UCharacterIterator iter = UCharacterIterator.getInstance(input);
         while ((ch = iter.nextCodePoint()) != UCharacterIterator.DONE) {
@@ -269,6 +270,7 @@ public final class PunycodeReference {
 
     private static final int MAX_BUFFER_SIZE = 100;
 
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public static final StringBuffer decode(StringBuffer input, char[] case_flags)
             throws StringPrepParseException {
         char[] in = input.toString().toCharArray();

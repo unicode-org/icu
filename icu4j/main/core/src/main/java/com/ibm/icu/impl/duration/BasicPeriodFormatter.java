@@ -126,6 +126,7 @@ class BasicPeriodFormatter implements PeriodFormatter {
             }
         }
 
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer sb = new StringBuffer();
 
         // if we've been requested to not display a limit, or there are

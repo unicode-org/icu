@@ -1689,6 +1689,7 @@ public class TimeZoneFormat extends UFormat
      */
     @Override
     public AttributedCharacterIterator formatToCharacterIterator(Object obj) {
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer toAppendTo = new StringBuffer();
         FieldPosition pos = new FieldPosition(0);
         toAppendTo = format(obj, toAppendTo, pos);

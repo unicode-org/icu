@@ -132,7 +132,8 @@ public class CjkBreakEngine extends DictionaryBreakEngine {
 
         int inputLength = endPos - startPos;
         int[] charPositions = new int[inputLength + 1];
-        StringBuffer s = new StringBuffer("");
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
+        StringBuffer s = new StringBuffer();
         inText.setIndex(startPos);
         while (inText.getIndex() < endPos) {
             s.append(inText.current());

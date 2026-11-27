@@ -276,7 +276,8 @@ public class DateFormatTest extends CoreTestFmwk {
             /*
              * Format the output.
              */
-            StringBuffer fmtOffset = new StringBuffer("");
+            @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
+            StringBuffer fmtOffset = new StringBuffer();
             FieldPosition pos = new FieldPosition(0);
 
             try {
@@ -372,6 +373,7 @@ public class DateFormatTest extends CoreTestFmwk {
     @Test
     public void TestFieldPosition() {
         int i, j, exp;
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer buf = new StringBuffer();
 
         // Verify data
@@ -4627,6 +4629,7 @@ public class DateFormatTest extends CoreTestFmwk {
         ChineseCalendar ccal = new ChineseCalendar();
         new ChineseDateFormatSymbols(ccal, ULocale.CHINA); // gclsh1 add
 
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer buf = new StringBuffer();
         FieldPosition pos = new FieldPosition(0);
 
@@ -4689,6 +4692,7 @@ public class DateFormatTest extends CoreTestFmwk {
             Calendar xcal = new GregorianCalendar();
             xcal.set(Calendar.HOUR_OF_DAY, 0);
             DateFormat fmt = new SimpleDateFormat("k");
+            @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
             StringBuffer xbuf = new StringBuffer();
             FieldPosition fpos = new FieldPosition(Calendar.HOUR_OF_DAY);
             fmt.format(xcal, xbuf, fpos);
@@ -6589,6 +6593,7 @@ public class DateFormatTest extends CoreTestFmwk {
         };
 
         Date d = new Date();
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer buf = new StringBuffer();
         FieldPosition fpos = new FieldPosition(0);
         ParsePosition ppos = new ParsePosition(0);
@@ -6676,6 +6681,7 @@ public class DateFormatTest extends CoreTestFmwk {
 
     // based on TestRelativeDateFormat() in icu/trunk/source/test/cintltst/cdattst.c
     @Test
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public void TestRelativeDateFormat() {
         ULocale loc = ULocale.US;
         TimeZone tz = TimeZone.getTimeZone("America/Los_Angeles");
@@ -6968,6 +6974,7 @@ public class DateFormatTest extends CoreTestFmwk {
         cal.clear(Calendar.MILLISECOND);
         cal.set(2009, 6, 28, 0, 0, 0);
         FieldPosition pos = new FieldPosition(0);
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer result = new StringBuffer();
         sdf.format(cal, result, pos);
         String res1 = result.toString();
@@ -7301,6 +7308,7 @@ public class DateFormatTest extends CoreTestFmwk {
                 rootChineseCalendar.set(Calendar.ERA, date.era);
                 rootChineseCalendar.set(date.year, date.month - 1, date.day);
                 rootChineseCalendar.set(Calendar.IS_LEAP_MONTH, date.isLeapMonth);
+                @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
                 StringBuffer result = new StringBuffer();
                 FieldPosition fpos = new FieldPosition(0);
                 dfmt.format(rootChineseCalendar, result, fpos);
@@ -7519,6 +7527,7 @@ public class DateFormatTest extends CoreTestFmwk {
                         caftItem.hour,
                         caftItem.minute,
                         0);
+                @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
                 StringBuffer result = new StringBuffer();
                 FieldPosition fpos = new FieldPosition(0);
                 dfmt.format(cal, result, fpos);
@@ -7626,6 +7635,7 @@ public class DateFormatTest extends CoreTestFmwk {
             cal.setTimeInMillis(date);
             SimpleDateFormat sdfmt =
                     (SimpleDateFormat) DateFormat.getDateInstance(item.style, locale);
+            @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
             StringBuffer getFormat = new StringBuffer();
             FieldPosition fp = new FieldPosition(0);
             sdfmt.format(cal, getFormat, fp);
@@ -7812,6 +7822,7 @@ public class DateFormatTest extends CoreTestFmwk {
                                 + ", sdfmt.clone() != sdfmt (for SimpleDateFormat)");
             }
 
+            @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
             StringBuffer result2 = new StringBuffer();
             FieldPosition fpos2 = new FieldPosition(0);
             sdfmt.format(cal, result2, fpos2);
@@ -7912,6 +7923,7 @@ public class DateFormatTest extends CoreTestFmwk {
             }
 
             cal.setTime(today);
+            @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
             StringBuffer result2 = new StringBuffer();
             FieldPosition fpos2 = new FieldPosition(0);
             dfmt.format(cal, result2, fpos2);
@@ -8239,6 +8251,7 @@ public class DateFormatTest extends CoreTestFmwk {
                     "2013 Oct 22 4th quarter"),
         };
 
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer result = new StringBuffer();
         Date d = new Date();
         GregorianCalendar cal = new GregorianCalendar(TimeZone.getTimeZone("GMT"), Locale.US);
@@ -9077,6 +9090,7 @@ public class DateFormatTest extends CoreTestFmwk {
     }
 
     @Test
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public void test20741_ABFields() {
         String[] skeletons = {"EEEEEBBBBB", "EEEEEbbbbb"};
         ULocale[] locales = ULocale.getAvailableLocales();
@@ -9092,27 +9106,27 @@ public class DateFormatTest extends CoreTestFmwk {
                 calendar.setTime(new Date(0));
 
                 FieldPosition pos_c = new FieldPosition(DateFormat.Field.DAY_OF_WEEK);
-                dateFormat.format(calendar, new StringBuffer(""), pos_c);
+                dateFormat.format(calendar, new StringBuffer(), pos_c);
                 assertFalse(
                         "'Day of week' field was not found",
                         pos_c.getBeginIndex() == 0 && pos_c.getEndIndex() == 0);
 
                 if (skeleton.equals("EEEEEBBBBB")) {
                     FieldPosition pos_B = new FieldPosition(DateFormat.Field.FLEXIBLE_DAY_PERIOD);
-                    dateFormat.format(calendar, new StringBuffer(""), pos_B);
+                    dateFormat.format(calendar, new StringBuffer(), pos_B);
                     assertFalse(
                             "'Flexible day period' field was not found",
                             pos_B.getBeginIndex() == 0 && pos_B.getEndIndex() == 0);
                 } else {
                     FieldPosition pos_b = new FieldPosition(DateFormat.Field.AM_PM_MIDNIGHT_NOON);
-                    dateFormat.format(calendar, new StringBuffer(""), pos_b);
+                    dateFormat.format(calendar, new StringBuffer(), pos_b);
                     assertFalse(
                             "'AM/PM/Midnight/Noon' field was not found",
                             pos_b.getBeginIndex() == 0 && pos_b.getEndIndex() == 0);
                 }
 
                 FieldPosition pos_a = new FieldPosition(DateFormat.Field.AM_PM);
-                dateFormat.format(calendar, new StringBuffer(""), pos_a);
+                dateFormat.format(calendar, new StringBuffer(), pos_a);
                 assertTrue(
                         "'AM/PM' field was found",
                         pos_a.getBeginIndex() == 0 && pos_a.getEndIndex() == 0);
