@@ -1487,6 +1487,13 @@ reconstituteData(UConverterMBCSTable *mbcsTable,
                  UErrorCode *pErrorCode) {
     uint16_t *stage1;
     uint32_t *stage2;
+    /* Guard the size computation against uint32_t overflow: a malformed table with
+       a large fullStage2Length would wrap dataLength to a small value, producing an
+       undersized allocation and out-of-bounds writes below. */
+    if(((uint64_t)stage1Length*2+(uint64_t)fullStage2Length*4+mbcsTable->fromUBytesLength)>0xffffffff) {
+        *pErrorCode=U_INVALID_TABLE_FORMAT;
+        return;
+    }
     uint32_t dataLength=stage1Length*2+fullStage2Length*4+mbcsTable->fromUBytesLength;
     mbcsTable->reconstitutedData = static_cast<uint8_t*>(uprv_malloc(dataLength));
     if(mbcsTable->reconstitutedData==nullptr) {
