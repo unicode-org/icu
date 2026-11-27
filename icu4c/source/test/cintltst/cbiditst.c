@@ -75,6 +75,7 @@ static void doArabicShapingTestForBug9024(void);
 static void _testPresentationForms(const UChar *in);
 
 static void doArabicShapingTestForNewCharacters(void);
+static void doArabicShapingTestForWorkBufferBounds(void);
 
 static void testReorder(void);
 
@@ -164,6 +165,7 @@ addComplexTest(TestNode** root) {
     addTest(root, testReorderArabicMathSymbols, "complex/bidi/bug-9024");
     addTest(root, doArabicShapingTestForBug9024, "complex/arabic-shaping/bug-9024");
     addTest(root, doArabicShapingTestForNewCharacters, "complex/arabic-shaping/shaping2");
+    addTest(root, doArabicShapingTestForWorkBufferBounds, "complex/arabic-shaping/work-buffer-bounds");
 }
 
 static void
@@ -3582,6 +3584,68 @@ doArabicShapingTestForNewCharacters(void) {
 }
 
 /* helpers ------------------------------------------------------------------ */
+
+static void
+doArabicShapingTestForWorkBufferBounds(void) {
+    /* The internal shaping work buffer holds exactly sourceLength UChars
+     * when no resizing option is used, so a length above the 300-element
+     * stack buffer forces a heap allocation of that exact size.  The
+     * lamalef/tashkeel "begin" space handling and the near lamalef
+     * expansion used to read one element past that buffer; exercise both
+     * paths at such a length.  (The out-of-bounds access itself is a
+     * valgrind/ASan-class defect; this test pins the behaviour.)
+     */
+    enum { LEN = 400 };
+    UChar shapeSource[LEN];
+    UChar unshapeSource[LEN];
+    UChar dest[2 * LEN];
+    UErrorCode errorCode;
+    int32_t length;
+    int32_t i;
+
+    for (i = 0; i < LEN; ++i) {
+        static const UChar cycle[4] = { 0x0644, 0x0627, 0x0020, 0xFEFB };
+        shapeSource[i] = cycle[i & 3];
+        unshapeSource[i] = (i & 1) ? 0xFEFB : 0x0020;
+    }
+
+    errorCode = U_ZERO_ERROR;
+    length = u_shapeArabic(shapeSource, LEN, dest, UPRV_LENGTHOF(dest),
+        U_SHAPE_TEXT_DIRECTION_LOGICAL | U_SHAPE_LAMALEF_BEGIN |
+        U_SHAPE_LETTERS_SHAPE, &errorCode);
+    if (U_FAILURE(errorCode) || length != LEN)
+        log_err("failure in u_shapeArabic(LAMALEF_BEGIN, length %d): %s, length %d\n",
+            (int)LEN, u_errorName(errorCode), (int)length);
+
+    errorCode = U_ZERO_ERROR;
+    length = u_shapeArabic(shapeSource, LEN, dest, UPRV_LENGTHOF(dest),
+        U_SHAPE_TEXT_DIRECTION_LOGICAL | U_SHAPE_TASHKEEL_BEGIN |
+        U_SHAPE_LETTERS_SHAPE, &errorCode);
+    if (U_FAILURE(errorCode) || length != LEN)
+        log_err("failure in u_shapeArabic(TASHKEEL_BEGIN, length %d): %s, length %d\n",
+            (int)LEN, u_errorName(errorCode), (int)length);
+
+    errorCode = U_ZERO_ERROR;
+    length = u_shapeArabic(unshapeSource, LEN, dest, UPRV_LENGTHOF(dest),
+        U_SHAPE_LAMALEF_NEAR | U_SHAPE_LETTERS_UNSHAPE, &errorCode);
+    if (U_FAILURE(errorCode) || length != LEN)
+        log_err("failure in u_shapeArabic(UNSHAPE|LAMALEF_NEAR, length %d): %s, length %d\n",
+            (int)LEN, u_errorName(errorCode), (int)length);
+
+    /* countSpaces() (ICU-22790) reads dest[size] on an all-space buffer;
+     * a length above the 300-element stack buffer puts the work buffer on
+     * the heap where the overrun is visible. */
+    for (i = 0; i < LEN; ++i)
+        shapeSource[i] = 0x0020;
+
+    errorCode = U_ZERO_ERROR;
+    length = u_shapeArabic(shapeSource, LEN, dest, UPRV_LENGTHOF(dest),
+        U_SHAPE_TEXT_DIRECTION_LOGICAL | U_SHAPE_LAMALEF_BEGIN |
+        U_SHAPE_LETTERS_SHAPE, &errorCode);
+    if (U_FAILURE(errorCode) || length != LEN)
+        log_err("failure in u_shapeArabic(all spaces, length %d): %s, length %d\n",
+            (int)LEN, u_errorName(errorCode), (int)length);
+}
 
 static void initCharFromDirProps(void) {
     static const UVersionInfo ucd401={ 4, 0, 1, 0 };
