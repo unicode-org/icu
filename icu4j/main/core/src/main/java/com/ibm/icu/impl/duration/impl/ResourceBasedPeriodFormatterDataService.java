@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -54,7 +55,8 @@ public class ResourceBasedPeriodFormatterDataService extends PeriodFormatterData
         List<String> localeNames = new ArrayList<String>(); // of String
         InputStream is = ICUData.getRequiredStream(getClass(), PATH + "index.txt");
         try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+            BufferedReader br =
+                    new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
             String string = null;
             while (null != (string = br.readLine())) {
                 string = string.trim();
@@ -108,7 +110,8 @@ public class ResourceBasedPeriodFormatterDataService extends PeriodFormatterData
                     try {
                         InputStreamReader reader =
                                 new InputStreamReader(
-                                        ICUData.getRequiredStream(getClass(), name), "UTF-8");
+                                        ICUData.getRequiredStream(getClass(), name),
+                                        StandardCharsets.UTF_8);
                         DataRecord dr = DataRecord.read(ln, new XMLRecordReader(reader));
                         reader.close();
                         if (dr != null) {

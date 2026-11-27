@@ -14,6 +14,7 @@ import com.ibm.icu.util.ULocale;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -844,7 +845,7 @@ public class RBBIMonkeyTest extends CoreTestFmwk {
                     fmwk.errln("Could not open test data file " + fileName);
                     return;
                 }
-                InputStreamReader isr = new InputStreamReader(is, "UTF-8");
+                InputStreamReader isr = new InputStreamReader(is, StandardCharsets.UTF_8);
                 try {
                     int c;
                     int count = 0;

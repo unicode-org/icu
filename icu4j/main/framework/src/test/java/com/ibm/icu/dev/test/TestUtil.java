@@ -167,10 +167,10 @@ public final class TestUtil {
     }
 
     public static BufferedReader openUTF8Reader(String dir, String filename) throws IOException {
-        return openReader(dir, filename, "UTF-8");
+        return openReader(dir, filename, StandardCharsets.UTF_8);
     }
 
-    public static BufferedReader openReader(String dir, String filename, String encoding)
+    public static BufferedReader openReader(String dir, String filename, Charset encoding)
             throws IOException {
         File file = new File(dir + filename);
         return new BufferedReader(

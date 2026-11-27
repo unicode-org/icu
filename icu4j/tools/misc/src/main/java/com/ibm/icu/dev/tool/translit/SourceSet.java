@@ -20,6 +20,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 
 /**
@@ -79,7 +80,10 @@ public class SourceSet {
     static void showSourceSet(String ID, Normalizer.Mode m, boolean lowerFirst) throws IOException {
         File f = new File("UnicodeSetClosure.txt");
         String filename = f.getCanonicalFile().toString();
-        out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(filename), "UTF-8"));
+        out =
+                new PrintWriter(
+                        new OutputStreamWriter(
+                                new FileOutputStream(filename), StandardCharsets.UTF_8));
         out.print('\uFEFF'); // BOM
         System.out.println();
         System.out.println("Writing " + filename);

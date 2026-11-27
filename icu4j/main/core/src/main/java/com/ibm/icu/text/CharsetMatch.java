@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.charset.Charset;
 
 /**
  * This class represents a charset that has been identified by a CharsetDetector as a possible
@@ -50,7 +51,7 @@ public class CharsetMatch implements Comparable<CharsetMatch> {
 
         try {
             inputStream.reset();
-            return new InputStreamReader(inputStream, getName());
+            return new InputStreamReader(inputStream, Charset.forName(getName()));
         } catch (IOException e) {
             return null;
         }
@@ -107,7 +108,7 @@ public class CharsetMatch implements Comparable<CharsetMatch> {
             if (startSuffix > 0) {
                 name = name.substring(0, startSuffix);
             }
-            result = new String(fRawInput, name);
+            result = new String(fRawInput, Charset.forName(name));
         }
         return result;
     }

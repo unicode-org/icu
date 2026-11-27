@@ -44,6 +44,7 @@ import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.text.CharacterIterator;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -461,7 +462,7 @@ public class Demo extends Frame {
 
                         StringBuilder buffer = new StringBuilder();
                         FileInputStream fis = new FileInputStream(f);
-                        InputStreamReader isr = new InputStreamReader(fis, "UTF8");
+                        InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
                         BufferedReader br = new BufferedReader(isr, 32 * 1024);
                         while (true) {
                             String line = br.readLine();
@@ -606,7 +607,8 @@ public class Demo extends Frame {
             System.out.println("Reading: " + sourceFile.getCanonicalPath());
             in =
                     new BufferedReader(
-                            new InputStreamReader(new FileInputStream(sourceFile), "UTF-8"));
+                            new InputStreamReader(
+                                    new FileInputStream(sourceFile), StandardCharsets.UTF_8));
             String targetFile = sourceFile.getCanonicalPath();
             int dotPos = targetFile.lastIndexOf('.');
             if (dotPos >= 0) targetFile = targetFile.substring(0, dotPos);
@@ -619,7 +621,8 @@ public class Demo extends Frame {
                     new PrintWriter(
                             new BufferedWriter(
                                     new OutputStreamWriter(
-                                            new FileOutputStream(outFile), "UTF-8")));
+                                            new FileOutputStream(outFile),
+                                            StandardCharsets.UTF_8)));
 
             String direction = "";
             String id = translit.getID();
@@ -746,7 +749,8 @@ public class Demo extends Frame {
                         new PrintWriter(
                                 new BufferedWriter(
                                         new OutputStreamWriter(
-                                                new FileOutputStream(outFile), "UTF-8")));
+                                                new FileOutputStream(outFile),
+                                                StandardCharsets.UTF_8)));
                 out.println(
                         "<head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
                 out.println("<style><!--");
@@ -1109,7 +1113,8 @@ public class Demo extends Frame {
                     new PrintWriter(
                             new BufferedWriter(
                                     new OutputStreamWriter(
-                                            new FileOutputStream(outFile), "UTF-8")));
+                                            new FileOutputStream(outFile),
+                                            StandardCharsets.UTF_8)));
             UnicodeSet main = new UnicodeSet();
 
             UnicodeSet others = new UnicodeSet();

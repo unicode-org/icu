@@ -7539,7 +7539,7 @@ public class TestCharset extends TestFmwk {
 
         try {
             // We don't expect any particular value.
-            var unused = testCase.getBytes(charsetName);
+            var unused = testCase.getBytes(Charset.forName(charsetName));
         } catch (Exception ex) {
             errln("Error calling getBytes(): " + ex);
         }

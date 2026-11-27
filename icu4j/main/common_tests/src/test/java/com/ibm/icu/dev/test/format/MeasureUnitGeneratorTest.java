@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -1057,7 +1058,7 @@ public class MeasureUnitGeneratorTest extends CoreTestFmwk {
                 "%nCopy the generated code fragments from / to\n    %s \\\n    %s%n",
                 outputFile.getAbsoluteFile(), fullOutputFileName);
 
-        return new PrintStream(outputFile, "utf-8");
+        return new PrintStream(outputFile, StandardCharsets.UTF_8);
     }
 
     /*

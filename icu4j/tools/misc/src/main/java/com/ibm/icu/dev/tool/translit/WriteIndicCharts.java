@@ -16,6 +16,7 @@ import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSetIterator;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -85,7 +86,8 @@ public class WriteIndicCharts {
             }
 
             OutputStreamWriter os =
-                    new OutputStreamWriter(new FileOutputStream("comparison-chart.html"), "UTF-8");
+                    new OutputStreamWriter(
+                            new FileOutputStream("comparison-chart.html"), StandardCharsets.UTF_8);
 
             os.write(header);
 
@@ -291,7 +293,8 @@ public class WriteIndicCharts {
             }
 
             OutputStreamWriter os =
-                    new OutputStreamWriter(new FileOutputStream("comparison-chart.html"), "UTF-8");
+                    new OutputStreamWriter(
+                            new FileOutputStream("comparison-chart.html"), StandardCharsets.UTF_8);
 
             os.write(header);
             /*

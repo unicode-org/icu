@@ -21,6 +21,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Map;
@@ -304,7 +305,9 @@ public class WriteCharts {
         File f = new File("transliteration/chart_" + id.replace('/', '_') + ".html");
         String filename = f.getCanonicalFile().toString();
         PrintWriter out =
-                new PrintWriter(new OutputStreamWriter(new FileOutputStream(filename), "UTF-8"));
+                new PrintWriter(
+                        new OutputStreamWriter(
+                                new FileOutputStream(filename), StandardCharsets.UTF_8));
         // out.print('\uFEFF'); // BOM
 
         System.out.println("Writing " + filename);

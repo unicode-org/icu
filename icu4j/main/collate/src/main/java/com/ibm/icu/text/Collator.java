@@ -1021,7 +1021,9 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
     }
 
     private static final class KeywordsSink extends UResource.Sink {
+        @SuppressWarnings("JdkObsolete")
         LinkedList<String> values = new LinkedList<>();
+
         boolean hasDefault = false;
 
         @Override

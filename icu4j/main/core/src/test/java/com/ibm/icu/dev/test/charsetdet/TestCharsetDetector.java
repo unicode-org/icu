@@ -176,13 +176,13 @@ public class TestCharsetDetector extends CoreTestFmwk {
     }
 
     @Test
+    @SuppressWarnings({"StringCharset", "JdkObsolete"})
     public void TestUTF16() throws Exception {
         String source =
                 "u0623\u0648\u0631\u0648\u0628\u0627, \u0628\u0631\u0645\u062c\u064a\u0627\u062a "
                         + "\u0627\u0644\u062d\u0627\u0633\u0648\u0628 \u002b\u0020\u0627\u0646\u062a\u0631\u0646\u064a\u062a";
 
         // The bytes for "UnicodeBig*" contain a BOM, the ones from StandardCharsets.UTF_16* do not
-        @SuppressWarnings("StringCharset")
         byte[] beBytes = source.getBytes("UnicodeBig");
         byte[] leBytes = source.getBytes("UnicodeLittle");
         CharsetDetector det = new CharsetDetector();
@@ -218,6 +218,7 @@ public class TestCharsetDetector extends CoreTestFmwk {
                 "This is another small sample of some English text. Just enough to be sure that it detects correctly. It also includes some \u201CC1\u201D bytes.";
 
         byte[] bISO = sISO.getBytes(StandardCharsets.ISO_8859_1);
+        @SuppressWarnings("JdkObsolete")
         byte[] bWindows = sWindows.getBytes("windows-1252");
 
         CharsetDetector det = new CharsetDetector();
@@ -576,6 +577,7 @@ public class TestCharsetDetector extends CoreTestFmwk {
         }
     }
 
+    @SuppressWarnings("JdkObsolete")
     private void checkEncoding(
             String testString,
             String encoding,
@@ -633,22 +635,19 @@ public class TestCharsetDetector extends CoreTestFmwk {
                         + "\u4E86\u4E88\u4E89\u4E8A\u4E8B\u4E8C";
 
         CharsetDetector det = new CharsetDetector();
-        CharsetMatch m;
-        String charsetMatch;
-        byte[] bytes;
-        {
-            bytes = s.getBytes("EUC-JP");
-            det.setText(bytes);
-            m = det.detect();
-            charsetMatch = m.getName();
-            CheckAssert(charsetMatch.equals("EUC-JP"));
+        @SuppressWarnings("JdkObsolete")
+        byte[] bytes = s.getBytes("EUC-JP");
+        det.setText(bytes);
+        CharsetMatch m = det.detect();
+        String charsetMatch = m.getName();
+        CheckAssert(charsetMatch.equals("EUC-JP"));
 
-            // Tests "public String getLanguage()"
-            CheckAssert(m.getLanguage().equals("ja"));
-        }
+        // Tests "public String getLanguage()"
+        CheckAssert(m.getLanguage().equals("ja"));
     }
 
     @Test
+    @SuppressWarnings("JdkObsolete")
     public void TestArabic() throws Exception {
         String s =
                 "\u0648\u0636\u0639\u062A \u0648\u0646\u0641\u0630\u062A \u0628\u0631\u0627"
@@ -873,6 +872,7 @@ public class TestCharsetDetector extends CoreTestFmwk {
     }
 
     private CharsetMatch _test1255(String s) throws Exception {
+        @SuppressWarnings("JdkObsolete")
         byte[] bytes = s.getBytes("ISO-8859-8");
         CharsetDetector det = new CharsetDetector();
         det.setText(bytes);
@@ -883,6 +883,7 @@ public class TestCharsetDetector extends CoreTestFmwk {
     private CharsetMatch _test1255_reverse(String s) throws Exception {
         StringBuilder reverseStrBuf = new StringBuilder(s);
         reverseStrBuf = reverseStrBuf.reverse();
+        @SuppressWarnings("JdkObsolete")
         byte[] bytes = reverseStrBuf.toString().getBytes("ISO-8859-8");
 
         CharsetDetector det = new CharsetDetector();
@@ -892,6 +893,7 @@ public class TestCharsetDetector extends CoreTestFmwk {
     }
 
     private CharsetMatch _testIBM424_he_rtl(String s) throws Exception {
+        @SuppressWarnings("JdkObsolete")
         byte[] bytes = s.getBytes("IBM424");
         CharsetDetector det = new CharsetDetector();
         det.setDetectableCharset("IBM424_rtl", true);
@@ -907,6 +909,7 @@ public class TestCharsetDetector extends CoreTestFmwk {
         /* transformation of input string to CP420 left to right requires reversing the string */
         StringBuilder ltrStrBuf = new StringBuilder(s);
         ltrStrBuf = ltrStrBuf.reverse();
+        @SuppressWarnings("JdkObsolete")
         byte[] bytes = ltrStrBuf.toString().getBytes("IBM424");
 
         CharsetDetector det = new CharsetDetector();
@@ -1334,6 +1337,7 @@ public class TestCharsetDetector extends CoreTestFmwk {
                         + "It also includes some \u201CC1\u201D bytes.";
 
         byte[] bISO = sISO.getBytes(StandardCharsets.ISO_8859_1);
+        @SuppressWarnings("JdkObsolete")
         byte[] bWindows = sWindows.getBytes("windows-1252");
 
         // First do a plain vanilla detect of 1252 text

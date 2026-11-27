@@ -457,6 +457,7 @@ public class XCldrStub {
     }
 
     public static class RegexUtilities {
+        @SuppressWarnings("JdkObsolete")
         public static int findMismatch(Matcher m, CharSequence s) {
             int i;
             for (i = 1; i < s.length(); ++i) {

@@ -11,7 +11,6 @@ package com.ibm.icu.text;
 import com.ibm.icu.impl.PatternProps;
 import java.text.ParsePosition;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
@@ -38,7 +37,7 @@ final class NFRuleSet {
      * These are a pile of fraction rules in declared order. They may have alternate ways to
      * represent fractions.
      */
-    LinkedList<NFRule> fractionRules;
+    List<NFRule> fractionRules;
 
     /** -x */
     static final int NEGATIVE_RULE_INDEX = 0;
@@ -251,7 +250,7 @@ final class NFRuleSet {
     private void setBestFractionRule(int originalIndex, NFRule newRule, boolean rememberRule) {
         if (rememberRule) {
             if (fractionRules == null) {
-                fractionRules = new LinkedList<>();
+                fractionRules = new ArrayList<>();
             }
             fractionRules.add(newRule);
         }

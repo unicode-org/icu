@@ -19,6 +19,7 @@ import com.ibm.icu.util.ULocale;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -59,7 +60,7 @@ public class RBBITestExtended extends CoreTestFmwk {
                 errln("Could not open test data file rbbitst.txt");
                 return;
             }
-            InputStreamReader isr = new InputStreamReader(is, "UTF-8");
+            InputStreamReader isr = new InputStreamReader(is, StandardCharsets.UTF_8);
             try {
                 int c;
                 int count = 0;

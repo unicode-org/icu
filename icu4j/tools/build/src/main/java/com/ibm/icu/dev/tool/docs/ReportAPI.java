@@ -14,7 +14,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -274,12 +274,9 @@ public class ReportAPI {
             }
         }
 
-        PrintWriter pw = null;
-        try {
-            pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(os, "UTF-8")));
-        } catch (UnsupportedEncodingException e) {
-            throw new IllegalStateException(); // UTF-8 should always be supported
-        }
+        PrintWriter pw =
+                new PrintWriter(
+                        new BufferedWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8)));
 
         // Change names to remove minor, milli, and micro version numbers for the report.
         String oldName = oldData.name;

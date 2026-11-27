@@ -107,6 +107,7 @@ import java.util.NoSuchElementException;
  * @author syn wee
  * @stable ICU 2.4
  */
+@SuppressWarnings("JdkObsolete") // Enumeration is old, but this is public API
 public final class StringTokenizer implements Enumeration<Object> {
     // public constructors ---------------------------------------------
 

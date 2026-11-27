@@ -19,6 +19,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CodingErrorAction;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author emader
@@ -51,7 +52,7 @@ public class InputFile implements NGramList.NGramKeyMapper<Integer> {
     public boolean open() {
         try {
             fileStream = new FileInputStream(file);
-            inputStream = new InputStreamReader(fileStream, "UTF8");
+            inputStream = new InputStreamReader(fileStream, StandardCharsets.UTF_8);
         } catch (Exception e) {
             exceptionError(e);
             return false;

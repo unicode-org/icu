@@ -1121,7 +1121,7 @@ public class CollationPerformanceTest {
         BufferedReader br = null;
         try {
             fis = new FileInputStream(opt_fName);
-            isr = new InputStreamReader(fis, "UTF-8");
+            isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
             br = new BufferedReader(isr, 32 * 1024);
         } catch (Exception e) {
             System.err.println("Error: File access exception: " + e.getMessage() + "!");
