@@ -213,9 +213,12 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
     }
 
     // Load and parse the pattern string. It is used for grouping sizes and affixes only.
-    // If we are formatting currency, check for a currency-specific pattern.
+    // If we are formatting currency, check for a currency-specific pattern. It is a currency
+    // pattern, so it does not apply to FULL_NAME, which uses the decimal pattern and puts
+    // the long name of the currency around the number.
     const char16_t* pattern = nullptr;
-    if (isCurrency && fMicros.simple.symbols->getCurrencyPattern() != nullptr) {
+    if (isCurrency && unitWidth != UNUM_UNIT_WIDTH_FULL_NAME &&
+        fMicros.simple.symbols->getCurrencyPattern() != nullptr) {
         pattern = fMicros.simple.symbols->getCurrencyPattern();
     }
     if (pattern == nullptr) {

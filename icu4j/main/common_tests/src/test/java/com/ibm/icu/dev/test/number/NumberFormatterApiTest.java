@@ -2583,6 +2583,17 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
                 444444.55,
                 "444,444$55 PTE");
 
+        // The long name replaces the currency symbol, so the currency's own pattern is not used.
+        // Its separators still are.
+        assertFormatSingle(
+                "Currency-dependent symbols (Test Long Name)",
+                "currency/PTE unit-width-full-name",
+                "currency/PTE unit-width-full-name",
+                NumberFormatter.with().unit(PTE).unitWidth(UnitWidth.FULL_NAME),
+                ULocale.forLanguageTag("pt-PT"),
+                444444.55,
+                "444,444$55 escudos portugueses");
+
         assertFormatSingle(
                 "Plural form depending on visible digits (ICU-20499)",
                 "currency/RON unit-width-full-name",
@@ -2600,6 +2611,28 @@ public class NumberFormatterApiTest extends CoreTestFmwk {
                 ULocale.forLanguageTag("en-DE"),
                 5.43,
                 "5,43 Swiss francs");
+
+        // TRY has its own pattern in tr-TR.
+        assertFormatSingle(
+                "Turkish long currency (ICU-22955)",
+                "currency/TRY unit-width-full-name",
+                "currency/TRY unit-width-full-name",
+                NumberFormatter.with().unit(TRY).unitWidth(UnitWidth.FULL_NAME),
+                ULocale.forLanguageTag("tr-TR"),
+                5.43,
+                "5,43 Türk lirası");
+
+        assertFormatSingle(
+                "Turkish long currency in compact notation (ICU-22955)",
+                "compact-short currency/TRY unit-width-full-name",
+                "K currency/TRY unit-width-full-name",
+                NumberFormatter.with()
+                        .notation(Notation.compactShort())
+                        .unit(TRY)
+                        .unitWidth(UnitWidth.FULL_NAME),
+                ULocale.forLanguageTag("tr-TR"),
+                5.43,
+                "5,4 Türk lirası");
 
         assertFormatSingle(
                 "Currency spacing in suffix (ICU-20954)",
