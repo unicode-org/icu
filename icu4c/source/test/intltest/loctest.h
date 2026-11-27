@@ -118,6 +118,7 @@ public:
 #endif
 
     void TestCurrencyByDate();
+    void TestCurrencyByDateMissingDates();
 
     void TestGetVariantWithKeywords();
     void TestIsRightToLeft();
