@@ -25,12 +25,13 @@
 #include "unicode/utypes.h"
 #include "unicode/appendable.h"
 #include "unicode/putil.h"
-#include "cstring.h"
-#include "cmemory.h"
 #include "unicode/ustring.h"
 #include "unicode/unistr.h"
 #include "unicode/utf.h"
 #include "unicode/utf16.h"
+#include "cmemory.h"
+#include "cstring.h"
+#include "safe32.h"
 #include "uelement.h"
 #include "ustr_imp.h"
 #include "umutex.h"
@@ -109,8 +110,8 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(UnicodeString)
 
 UnicodeString U_EXPORT2
 operator+ (const UnicodeString &s1, const UnicodeString &s2) {
-  int32_t sumLengths;
-  if (uprv_add32_overflow(s1.length(), s2.length(), &sumLengths)) {
+  auto [sumLengths, ok] = (NonNeg32(s1.length(), INTERNAL_ERROR) + s2.length()).result();
+  if (!ok) {
     UnicodeString bogus;
     bogus.setToBogus();
     return bogus;
@@ -123,9 +124,8 @@ operator+ (const UnicodeString &s1, const UnicodeString &s2) {
 
 U_COMMON_API UnicodeString U_EXPORT2
 unistr_internalConcat(const UnicodeString &s1, std::u16string_view s2) {
-  int32_t sumLengths;
-  if (s2.length() > INT32_MAX ||
-      uprv_add32_overflow(s1.length(), static_cast<int32_t>(s2.length()), &sumLengths)) {
+  auto [sumLengths, ok] = (NonNeg32(s1.length(), INTERNAL_ERROR) + s2.length()).result();
+  if (!ok) {
     UnicodeString bogus;
     bogus.setToBogus();
     return bogus;
@@ -1677,7 +1677,7 @@ UnicodeString::doAppend(const char16_t* srcChars,
       return *this;
     }
   } else {
-    if (uprv_add32_overflow(oldLength, srcLength, &newLength)) {
+    if (!(NonNeg32(oldLength, INTERNAL_ERROR) + srcLength).setIfOk(newLength)) {
       setToBogus();
       return *this;
     }

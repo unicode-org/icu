@@ -25,6 +25,7 @@
 #include "cpputils.h"
 #include "normalizer2impl.h"
 #include "putilimp.h"
+#include "safe32.h"
 
 U_NAMESPACE_BEGIN
 
@@ -91,8 +92,8 @@ public:
         int32_t firstLength=first.length();
         UnicodeString safeMiddle;
         {
-            int32_t destCapacity;
-            if(uprv_add32_overflow(firstLength, second.length(), &destCapacity)) {
+            auto [destCapacity, ok] = (NonNeg32(firstLength, errorCode) + second.length()).result();
+            if(!ok) {
                 first.setToBogus();
                 errorCode=U_MEMORY_ALLOCATION_ERROR;
                 return first;

@@ -23,6 +23,7 @@
 #include <float.h>
 #include "gregoimp.h" // Math
 #include "astro.h" // CalendarAstronomer
+#include "safe32.h"
 #include "uhash.h"
 #include "ucln_in.h"
 #include "uassert.h"
@@ -322,17 +323,9 @@ int64_t IslamicCalendar::yearStart(int32_t year, UErrorCode& status) const {
 * @param month The hijri month, 0-based (assumed to be in range 0..11)
 */
 int64_t IslamicCalendar::monthStart(int32_t year, int32_t month, UErrorCode& status) const {
-    if (U_FAILURE(status)) {
+    if (!((Int32(year, status) - 1) * 12 + month).setIfOk(month)) {
         return 0;
     }
-    int32_t temp;
-    if (uprv_add32_overflow(year, -1, &temp) ||
-        uprv_mul32_overflow(temp, 12, &temp) ||
-        uprv_add32_overflow(temp, month, &month)) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
-    }
-
     return trueMonthStart(month, status);
 }
 

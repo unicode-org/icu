@@ -37,6 +37,7 @@
 #include "mutex.h"
 #include "normalizer2impl.h"
 #include "putilimp.h"
+#include "safe32.h"
 #include "uassert.h"
 #include "ucptrie_impl.h"
 #include "uset_imp.h"
@@ -353,16 +354,15 @@ UBool ReorderingBuffer::resize(int32_t appendLength, UErrorCode &errorCode) {
     int32_t reorderStartIndex = static_cast<int32_t>(reorderStart - start);
     int32_t length = static_cast<int32_t>(limit - start);
     str.releaseBuffer(length);
-    int32_t newCapacity;
-    if(uprv_add32_overflow(length, appendLength, &newCapacity)) {
+    auto [newCapacity, ok] = (NonNeg32(length, errorCode) + appendLength).result();
+    if(!ok) {
         str.setToBogus();
         start=nullptr;
         errorCode=U_MEMORY_ALLOCATION_ERROR;
         return false;
     }
-    int32_t doubleCapacity;
-    if(!uprv_mul32_overflow(2, str.getCapacity(), &doubleCapacity) &&
-            newCapacity<doubleCapacity) {
+    if(auto [doubleCapacity, ok] = (2 * NonNeg32(str.getCapacity(), INTERNAL_ERROR)).result();
+            ok && newCapacity<doubleCapacity) {
         newCapacity=doubleCapacity;
     }
     if(newCapacity<256) {
