@@ -22,6 +22,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -215,7 +216,9 @@ public class TransliterationChart {
 
         return new PrintWriter(
                 new BufferedWriter(
-                        new OutputStreamWriter(new FileOutputStream(fileName), "UTF8"), 4 * 1024));
+                        new OutputStreamWriter(
+                                new FileOutputStream(fileName), StandardCharsets.UTF_8),
+                        4 * 1024));
     }
 
     public static String getName(String s, String separator) {

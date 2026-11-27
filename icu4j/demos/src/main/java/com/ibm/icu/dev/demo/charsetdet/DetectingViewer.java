@@ -306,7 +306,7 @@ public class DetectingViewer extends JFrame implements ActionListener {
                     }
                 }
             } else {
-                isr = new InputStreamReader(inputStream, encoding);
+                isr = new InputStreamReader(inputStream, Charset.forName(encoding));
 
                 while ((bytesRead = isr.read(buffer, 0, 1024)) >= 0) {
                     sb.append(buffer, 0, bytesRead);

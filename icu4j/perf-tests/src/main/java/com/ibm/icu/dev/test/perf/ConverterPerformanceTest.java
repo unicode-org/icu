@@ -65,7 +65,8 @@ public class ConverterPerformanceTest extends PerfTest {
                 try {
                     ByteArrayOutputStream out =
                             new ByteArrayOutputStream(unicodeBuffer.length * 10);
-                    OutputStreamWriter writer = new OutputStreamWriter(out, testName);
+                    OutputStreamWriter writer =
+                            new OutputStreamWriter(out, Charset.forName(testName));
                     writer.write(unicodeBuffer, 0, unicodeBuffer.length);
                     writer.flush();
                 } catch (Exception e) {
@@ -88,7 +89,7 @@ public class ConverterPerformanceTest extends PerfTest {
                 try {
                     ByteArrayInputStream is =
                             new ByteArrayInputStream(encBuffer, 0, encBuffer.length);
-                    InputStreamReader reader = new InputStreamReader(is, testName);
+                    InputStreamReader reader = new InputStreamReader(is, Charset.forName(testName));
                     reader.read(dst, 0, dst.length);
                     reader.close();
                 } catch (Exception e) {

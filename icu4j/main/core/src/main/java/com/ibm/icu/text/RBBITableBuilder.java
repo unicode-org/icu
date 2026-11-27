@@ -12,9 +12,11 @@ package com.ibm.icu.text;
 import com.ibm.icu.impl.Assert;
 import com.ibm.icu.impl.RBBIDataWrapper;
 import com.ibm.icu.text.RBBIRuleBuilder.IntPair;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -22,7 +24,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.SortedSet;
-import java.util.Stack;
 import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -1736,14 +1737,14 @@ class RBBITableBuilder {
      */
     private boolean reachableByTransitions(
             int source, Predicate<Integer> isSink, Predicate<Integer> excludedState) {
-        Stack<Integer> boundary = new Stack<>();
+        Deque<Integer> boundary = new ArrayDeque<>();
         for (final int state : fDStates.get(source).fDtran) {
             if (state != 0) {
                 boundary.push(state);
             }
         }
         final var visited = new boolean[fDStates.size()];
-        while (!boundary.empty()) {
+        while (!boundary.isEmpty()) {
             final int s = boundary.pop();
             if (isSink.test(s)) {
                 return true;

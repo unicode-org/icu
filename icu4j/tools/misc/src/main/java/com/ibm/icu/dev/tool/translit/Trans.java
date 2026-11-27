@@ -17,6 +17,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /**
  * A command-line interface to the ICU4J transliterators.
@@ -62,11 +63,17 @@ public class Trans {
         Transliterator trans = Transliterator.getInstance(transName);
         BufferedReader in = null;
         if (inName != null) {
-            in = new BufferedReader(new InputStreamReader(new FileInputStream(inName), "UTF8"));
+            in =
+                    new BufferedReader(
+                            new InputStreamReader(
+                                    new FileInputStream(inName), StandardCharsets.UTF_8));
         }
         PrintWriter out = null;
         if (outName != null) {
-            out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(outName), "UTF8"));
+            out =
+                    new PrintWriter(
+                            new OutputStreamWriter(
+                                    new FileOutputStream(outName), StandardCharsets.UTF_8));
         } else {
             out = new PrintWriter(System.out, true, Charset.defaultCharset());
         }

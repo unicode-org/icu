@@ -845,7 +845,7 @@ public abstract class PerfTest {
 
     protected String[] readLines(String filename, String srcEncoding, boolean bulkMode) {
         try (FileInputStream fis = new FileInputStream(filename);
-                InputStreamReader isr = new InputStreamReader(fis, srcEncoding);
+                InputStreamReader isr = new InputStreamReader(fis, Charset.forName(srcEncoding));
                 BufferedReader br = new BufferedReader(isr)) {
             ArrayList<String> list = new ArrayList<>();
             while (true) {
@@ -936,7 +936,7 @@ public abstract class PerfTest {
             int bomLength = detectBOMLength(start);
             if (amountRead > bomLength) pushback.unread(start, bomLength, amountRead - bomLength);
 
-            reader = new InputStreamReader(pushback, encoding);
+            reader = new InputStreamReader(pushback, Charset.forName(encoding));
         }
 
         /**

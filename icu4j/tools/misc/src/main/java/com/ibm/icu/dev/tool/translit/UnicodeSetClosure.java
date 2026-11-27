@@ -17,6 +17,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
 // com.ibm.icu.dev.tool.translit.UnicodeSetClosure
@@ -78,7 +79,10 @@ public class UnicodeSetClosure {
     public static void test() throws Exception {
         File f = new File("TestUnicodeSetClosure.txt");
         String filename = f.getCanonicalFile().toString();
-        out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(filename), "UTF-8"));
+        out =
+                new PrintWriter(
+                        new OutputStreamWriter(
+                                new FileOutputStream(filename), StandardCharsets.UTF_8));
         System.out.println("Writing " + filename);
         out.print('\uFEFF'); // BOM
 

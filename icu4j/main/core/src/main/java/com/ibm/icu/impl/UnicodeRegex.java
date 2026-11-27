@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.text.ParsePosition;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -276,7 +278,7 @@ public class UnicodeRegex implements Cloneable, Freezable<UnicodeRegex>, StringT
      * @return filled list
      * @throws IOException If there were problems opening the file for input stream.
      */
-    public static List<String> appendLines(List<String> result, String file, String encoding)
+    public static List<String> appendLines(List<String> result, String file, Charset encoding)
             throws IOException {
         InputStream is = new FileInputStream(file);
         try {
@@ -296,11 +298,12 @@ public class UnicodeRegex implements Cloneable, Freezable<UnicodeRegex>, StringT
      * @throws IOException If there were problems opening the input stream for reading.
      */
     public static List<String> appendLines(
-            List<String> result, InputStream inputStream, String encoding)
+            List<String> result, InputStream inputStream, Charset encoding)
             throws UnsupportedEncodingException, IOException {
         BufferedReader in =
                 new BufferedReader(
-                        new InputStreamReader(inputStream, encoding == null ? "UTF-8" : encoding));
+                        new InputStreamReader(
+                                inputStream, encoding == null ? StandardCharsets.UTF_8 : encoding));
         while (true) {
             String line = in.readLine();
             if (line == null) break;

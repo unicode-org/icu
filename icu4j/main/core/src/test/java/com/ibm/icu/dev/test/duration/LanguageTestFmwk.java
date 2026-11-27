@@ -26,6 +26,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -97,7 +98,7 @@ public abstract class LanguageTestFmwk extends CoreTestFmwk implements TimeUnitC
                 if (is == null) {
                     System.out.println("test data for locale '" + locale + "' is null");
                 }
-                InputStreamReader isr = new InputStreamReader(is, "UTF-8");
+                InputStreamReader isr = new InputStreamReader(is, StandardCharsets.UTF_8);
                 try {
                     data = new FileTestData(isr);
                 } finally {

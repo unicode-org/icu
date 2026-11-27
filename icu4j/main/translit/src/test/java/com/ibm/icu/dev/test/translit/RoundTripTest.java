@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.MissingResourceException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -335,7 +336,8 @@ public class RoundTripTest extends TestFmwk {
                         new PrintWriter(
                                 new BufferedWriter(
                                         new OutputStreamWriter(
-                                                new FileOutputStream(filename), "UTF8"),
+                                                new FileOutputStream(filename),
+                                                StandardCharsets.UTF_8),
                                         4 * 1024));
                 errln("Creating log file " + new File(filename).getAbsoluteFile());
                 out.println("Pinyin:                " + target);
@@ -1471,7 +1473,9 @@ public class RoundTripTest extends TestFmwk {
             ByteArrayOutputStream bast = new ByteArrayOutputStream();
             out =
                     new PrintWriter(
-                            new BufferedWriter(new OutputStreamWriter(bast, "UTF8"), 4 * 1024));
+                            new BufferedWriter(
+                                    new OutputStreamWriter(bast, StandardCharsets.UTF_8),
+                                    4 * 1024));
             // out.write('\uFFEF');    // BOM
             out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">");
             out.println("<HTML><HEAD>");

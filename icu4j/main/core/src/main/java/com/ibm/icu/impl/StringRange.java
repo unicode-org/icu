@@ -10,10 +10,11 @@ package com.ibm.icu.impl;
 
 import com.ibm.icu.lang.CharSequences;
 import com.ibm.icu.util.ICUException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
@@ -104,7 +105,7 @@ public class StringRange {
             }
             // then compact items of each length and emit compacted sets
             for (Entry<Integer, Set<Ranges>> entry : lengthToArrays.keyValuesSet()) {
-                LinkedList<Ranges> compacted = compact(entry.getKey(), entry.getValue());
+                List<Ranges> compacted = compact(entry.getKey(), entry.getValue());
                 for (Ranges ranges : compacted) {
                     adder.add(ranges.start(), ranges.end(shorterPairs));
                 }
@@ -123,8 +124,8 @@ public class StringRange {
         compact(source, adder, shorterPairs, false);
     }
 
-    private static LinkedList<Ranges> compact(int size, Set<Ranges> inputRanges) {
-        LinkedList<Ranges> ranges = new LinkedList<Ranges>(inputRanges);
+    private static List<Ranges> compact(int size, Set<Ranges> inputRanges) {
+        List<Ranges> ranges = new ArrayList<>(inputRanges);
         for (int i = size - 1; i >= 0; --i) {
             Ranges last = null;
             for (Iterator<Ranges> it = ranges.iterator(); it.hasNext(); ) {

@@ -16,6 +16,7 @@ import com.ibm.icu.lang.UProperty.NameChoice;
 import com.ibm.icu.text.Transliterator;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -187,7 +188,9 @@ public class RegexUtilitiesTest extends TestFmwk {
                     java.io.InputStream is = RegexUtilitiesTest.class.getResourceAsStream(test);
                     List<String> lines;
                     try {
-                        lines = UnicodeRegex.appendLines(new ArrayList<>(), is, "UTF-8");
+                        lines =
+                                UnicodeRegex.appendLines(
+                                        new ArrayList<>(), is, StandardCharsets.UTF_8);
                     } finally {
                         is.close();
                     }

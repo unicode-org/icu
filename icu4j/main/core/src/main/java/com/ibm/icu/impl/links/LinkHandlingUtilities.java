@@ -11,6 +11,8 @@ import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSet.SpanCondition;
 import com.ibm.icu.util.Output;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.EnumMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -19,7 +21,6 @@ import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.Objects;
 import java.util.Set;
-import java.util.Stack;
 import java.util.function.Function;
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
@@ -405,7 +406,7 @@ public class LinkHandlingUtilities {
                 }
                 ;
                 int copiedAlready = 0;
-                Stack<Integer> openingStack = new Stack<>();
+                Deque<Integer> openingStack = new ArrayDeque<>();
                 for (int i = 0; i < n; ++i) {
                     final int cp = cps[i];
                     switch (cp) { // was just for test files
@@ -467,7 +468,7 @@ public class LinkHandlingUtilities {
                             copiedAlready = i + 1;
                             continue; // fix
                         case CLOSE: // fix
-                            if (openingStack.empty()) {
+                            if (openingStack.isEmpty()) {
                                 appendCodePointsBetween(output, cps, copiedAlready, i);
                                 appendPercentEscaped(output, cp);
                             } else {
@@ -651,7 +652,7 @@ public class LinkHandlingUtilities {
         int lastSafe = codePointOffset;
         Part part = null;
 
-        Stack<Integer> openingStack = new Stack<>();
+        Deque<Integer> openingStack = new ArrayDeque<>();
         LinkTermination lt = LinkTermination.SOFT;
         for (int i = codePointOffset; i < codePoints.length; ++i) {
             int cp = codePoints[i];
@@ -695,7 +696,7 @@ public class LinkHandlingUtilities {
                     lastSafe = i + 1;
                     break;
                 case CLOSE:
-                    if (openingStack.empty()) {
+                    if (openingStack.isEmpty()) {
                         return lastSafe;
                     }
                     int matchingOpening = getOpening(cp);

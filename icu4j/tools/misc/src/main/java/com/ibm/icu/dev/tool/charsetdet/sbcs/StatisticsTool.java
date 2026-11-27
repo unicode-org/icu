@@ -14,6 +14,7 @@ import com.ibm.icu.impl.Utility;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -171,7 +172,9 @@ public class StatisticsTool
         double cumulative = 0;
 
         try {
-            output = new PrintStream(new FileOutputStream(outputFileName), true, "UTF8");
+            output =
+                    new PrintStream(
+                            new FileOutputStream(outputFileName), true, StandardCharsets.UTF_8);
         } catch (IOException e) {
             System.out.println("? Could not open " + outputFileName + " for writing.");
             return null;
@@ -223,7 +226,9 @@ public class StatisticsTool
         PrintStream output = null;
 
         try {
-            output = new PrintStream(new FileOutputStream(outputFileName), true, "ASCII");
+            output =
+                    new PrintStream(
+                            new FileOutputStream(outputFileName), true, StandardCharsets.US_ASCII);
         } catch (IOException e) {
             System.out.println("? Could not open " + outputFileName + " for writing.");
             return;
