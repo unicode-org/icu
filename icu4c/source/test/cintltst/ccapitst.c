@@ -1681,6 +1681,7 @@ static void TestConvertSafeClone(void)
         "ISCII,version=0",
         "ISO_2022,locale=kr,version=1",
         "ISO_2022,locale=jp,version=2",
+        "x11-compound-text",
 #endif
         "BOCU-1",
         "UTF-7",
@@ -1919,6 +1920,7 @@ static void TestConvertClone(void)
         "ISCII,version=0",
         "ISO_2022,locale=kr,version=1",
         "ISO_2022,locale=jp,version=2",
+        "x11-compound-text",
 #endif
         "BOCU-1",
         "UTF-7",
@@ -2033,6 +2035,35 @@ static void TestConvertClone(void)
         }
         ucnv_close(cnv2);
     }
+
+#if !UCONFIG_NO_LEGACY_CONVERSION
+    /* The clone must keep its own references to the sub-converters of the original. */
+    {
+        static const UChar thai[] = { 0x0e01, 0x0e02 };
+        char expected[16], actual[16];
+        int32_t expectedLength, actualLength;
+
+        err = U_ZERO_ERROR;
+        cnv = ucnv_open("x11-compound-text", &err);
+        if (U_FAILURE(err)) {
+            log_data_err("ucnv_open(x11-compound-text) failed - %s\n", u_errorName(err));
+            return;
+        }
+        cnv2 = ucnv_clone(cnv, &err);
+        expectedLength = ucnv_fromUChars(cnv, expected, (int32_t)sizeof(expected), thai, UPRV_LENGTHOF(thai), &err);
+        ucnv_close(cnv);
+        ucnv_flushCache();
+        if (U_FAILURE(err)) {
+            log_err("FAIL: ucnv_clone(x11-compound-text) failed - %s\n", u_errorName(err));
+        } else {
+            actualLength = ucnv_fromUChars(cnv2, actual, (int32_t)sizeof(actual), thai, UPRV_LENGTHOF(thai), &err);
+            if (U_FAILURE(err) || actualLength != expectedLength || 0 != uprv_memcmp(actual, expected, actualLength)) {
+                log_err("FAIL: cloned x11-compound-text converter after closing the original - %s\n", u_errorName(err));
+            }
+        }
+        ucnv_close(cnv2);
+    }
+#endif
 }
 
 static void TestCCSID(void) {
@@ -3753,6 +3784,23 @@ TestSubstString(void) {
         /* Stateful converter, we expect that the Unicode string was set and that we get an empty char * string now. */
         if(U_FAILURE(errorCode) || len8!=0) {
             log_err("ucnv_getSubstChars(ucnv_setSubstString(HZ, sub[5])) failed - %s\n", u_errorName(errorCode));
+        }
+    }
+    ucnv_close(cnv);
+
+    errorCode=U_ZERO_ERROR;
+    cnv=ucnv_open("x11-compound-text", &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_data_err("ucnv_open(x11-compound-text) failed - %s\n", u_errorName(errorCode));
+        return;
+    }
+    ucnv_setSubstString(cnv, sub, UPRV_LENGTHOF(sub), &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("ucnv_setSubstString(x11-compound-text, sub[5]) failed - %s\n", u_errorName(errorCode));
+    } else {
+        length=ucnv_fromUChars(cnv, buffer, (int32_t)sizeof(buffer), surrogate, 1, &errorCode);
+        if(U_FAILURE(errorCode) || length!=sizeof(subChars) || 0!=uprv_memcmp(buffer, subChars, length)) {
+            log_err("ucnv_fromUChars(ucnv_setSubstString(x11-compound-text, sub[5]), U+D900) failed - %s\n", u_errorName(errorCode));
         }
     }
     ucnv_close(cnv);
