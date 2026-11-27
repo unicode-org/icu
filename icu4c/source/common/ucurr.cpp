@@ -2285,6 +2285,44 @@ ucurr_openISOCurrencies(uint32_t currType, UErrorCode *pErrorCode) {
     return myEnum;
 }
 
+/**
+ * Reads the "from" or "to" date of a CurrencyMap entry into date. Returns
+ * false if the entry has no such date, which happens for some currencies
+ * that are not legal tender, such as USN.
+ */
+static bool
+getCurrencyDate(const UResourceBundle* currencyRes, const char* key, UDate& date)
+{
+    UErrorCode localStatus = U_ZERO_ERROR;
+    LocalUResourceBundlePointer dateRes(ures_getByKey(currencyRes, key, nullptr, &localStatus));
+    int32_t length = 0;
+    const int32_t *dateArray = ures_getIntVector(dateRes.getAlias(), &length, &localStatus);
+    if (U_FAILURE(localStatus) || dateArray == nullptr || length < 2) {
+        return false;
+    }
+    int64_t currDate64 = (int64_t)((uint64_t)dateArray[0] << 32);
+    currDate64 |= ((int64_t)dateArray[1] & (int64_t)INT64_C(0x00000000FFFFFFFF));
+    date = (UDate)currDate64;
+    return true;
+}
+
+/**
+ * Returns true if the CurrencyMap entry is valid on the given date.
+ * A missing "from" or "to" date means that side is unbounded.
+ */
+static bool
+isValidOnDate(const UResourceBundle* currencyRes, UDate date)
+{
+    UDate fromDate, toDate;
+    if (getCurrencyDate(currencyRes, "from", fromDate) && !(fromDate <= date)) {
+        return false;
+    }
+    if (getCurrencyDate(currencyRes, "to", toDate) && !(date < toDate)) {
+        return false;
+    }
+    return true;
+}
+
 U_CAPI int32_t U_EXPORT2
 ucurr_countCurrencies(const char* locale, 
                  UDate date, 
@@ -2327,36 +2365,9 @@ ucurr_countCurrencies(const char* locale,
                 // get the currency resource
                 LocalUResourceBundlePointer currencyRes(ures_getByIndex(countryArray.getAlias(), i, nullptr, &localStatus));
 
-                // get the from date
-                int32_t fromLength = 0;
-                LocalUResourceBundlePointer fromRes(ures_getByKey(currencyRes.getAlias(), "from", nullptr, &localStatus));
-                const int32_t *fromArray = ures_getIntVector(fromRes.getAlias(), &fromLength, &localStatus);
-
-                int64_t currDate64 = (int64_t)((uint64_t)(fromArray[0]) << 32);
-                currDate64 |= ((int64_t)fromArray[1] & (int64_t)INT64_C(0x00000000FFFFFFFF));
-                UDate fromDate = (UDate)currDate64;
-
-                if (ures_getSize(currencyRes.getAlias())> 2)
+                if (U_SUCCESS(localStatus) && isValidOnDate(currencyRes.getAlias(), date))
                 {
-                    int32_t toLength = 0;
-                    LocalUResourceBundlePointer toRes(ures_getByKey(currencyRes.getAlias(), "to", nullptr, &localStatus));
-                    const int32_t *toArray = ures_getIntVector(toRes.getAlias(), &toLength, &localStatus);
-
-                    currDate64 = (int64_t)toArray[0] << 32;
-                    currDate64 |= ((int64_t)toArray[1] & (int64_t)INT64_C(0x00000000FFFFFFFF));
-                    UDate toDate = (UDate)currDate64;
-
-                    if ((fromDate <= date) && (date < toDate))
-                    {
-                        currCount++;
-                    }
-                }
-                else
-                {
-                    if (fromDate <= date)
-                    {
-                        currCount++;
-                    }
+                    currCount++;
                 }
             } // end For loop
         } // end if (U_SUCCESS(localStatus))
@@ -2438,43 +2449,12 @@ ucurr_forLocaleAndDate(const char* locale,
                     LocalUResourceBundlePointer currencyRes(ures_getByIndex(countryArray.getAlias(), i, nullptr, &localStatus));
                     s = ures_getStringByKey(currencyRes.getAlias(), "id", &resLen, &localStatus);
 
-                    // get the from date
-                    int32_t fromLength = 0;
-                    LocalUResourceBundlePointer fromRes(ures_getByKey(currencyRes.getAlias(), "from", nullptr, &localStatus));
-                    const int32_t *fromArray = ures_getIntVector(fromRes.getAlias(), &fromLength, &localStatus);
-
-                    int64_t currDate64 = (int64_t)((uint64_t)fromArray[0] << 32);
-                    currDate64 |= ((int64_t)fromArray[1] & (int64_t)INT64_C(0x00000000FFFFFFFF));
-                    UDate fromDate = (UDate)currDate64;
-
-                    if (ures_getSize(currencyRes.getAlias()) > 2)
+                    if (U_SUCCESS(localStatus) && isValidOnDate(currencyRes.getAlias(), date))
                     {
-                        int32_t toLength = 0;
-                        LocalUResourceBundlePointer toRes(ures_getByKey(currencyRes.getAlias(), "to", nullptr, &localStatus));
-                        const int32_t *toArray = ures_getIntVector(toRes.getAlias(), &toLength, &localStatus);
-
-                        currDate64 = (int64_t)toArray[0] << 32;
-                        currDate64 |= ((int64_t)toArray[1] & (int64_t)INT64_C(0x00000000FFFFFFFF));
-                        UDate toDate = (UDate)currDate64;
-
-                        if ((fromDate <= date) && (date < toDate))
+                        currIndex++;
+                        if (currIndex == index)
                         {
-                            currIndex++;
-                            if (currIndex == index)
-                            {
-                                matchFound = true;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (fromDate <= date)
-                        {
-                            currIndex++;
-                            if (currIndex == index)
-                            {
-                                matchFound = true;
-                            }
+                            matchFound = true;
                         }
                     }
                     // check for loop exit

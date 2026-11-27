@@ -260,6 +260,7 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
     TESTCASE_AUTO(TestVariantWithOutCountry);
     TESTCASE_AUTO(TestCanonicalization);
     TESTCASE_AUTO(TestCurrencyByDate);
+    TESTCASE_AUTO(TestCurrencyByDateMissingDates);
     TESTCASE_AUTO(TestGetVariantWithKeywords);
     TESTCASE_AUTO(TestIsRightToLeft);
     TESTCASE_AUTO(TestBug13277);
@@ -5825,6 +5826,45 @@ void LocaleTest::TestCurrencyByDate()
         errcheckln(status, "Fail: en_US_Q didn't fallback to en_US - %s", u_errorName(status));
     }
     status = U_ZERO_ERROR; // reset
+#endif
+}
+
+// CurrencyMap entries for currencies that are not legal tender may have no
+// "from" date (USN in US) or a "tender" field and no "to" date (CNH in CN).
+// ucurr_countCurrencies() and ucurr_forLocaleAndDate() must treat a missing
+// date as unbounded instead of reading it.
+void LocaleTest::TestCurrencyByDateMissingDates()
+{
+#if !UCONFIG_NO_FORMATTING
+    UDate date = static_cast<UDate>(1767225600000.0); // 2026-01-01
+    static const struct {
+        const char *locale;
+        const char *first;
+    } cases[] = {
+        {"en_US", "USD"},
+        {"zh_CN", "CNY"},
+        {"es_MX", "MXN"},
+        {"de_CH", "CHF"},
+        {"es_BO", "BOB"},
+    };
+    for (const auto &c : cases) {
+        UErrorCode status = U_ZERO_ERROR;
+        int32_t count = ucurr_countCurrencies(c.locale, date, &status);
+        if (U_FAILURE(status) || count < 1) {
+            errln("FAIL: ucurr_countCurrencies(%s) returned %d - %s", c.locale, count, u_errorName(status));
+            continue;
+        }
+        for (int32_t index = 1; index <= count + 1; index++) {
+            char16_t code[4] = {0, 0, 0, 0};
+            status = U_ZERO_ERROR;
+            int32_t len = ucurr_forLocaleAndDate(c.locale, date, index, code, 4, &status);
+            if (U_FAILURE(status) || len != (index <= count ? 3 : 0)) {
+                errln("FAIL: ucurr_forLocaleAndDate(%s, %d) returned %d - %s", c.locale, index, len, u_errorName(status));
+            } else if (index == 1 && UnicodeString(code) != UnicodeString(c.first, -1, US_INV)) {
+                errln("FAIL: first currency of %s is not %s", c.locale, c.first);
+            }
+        }
+    }
 #endif
 }
 
