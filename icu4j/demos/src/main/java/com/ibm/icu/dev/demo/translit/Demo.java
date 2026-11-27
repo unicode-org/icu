@@ -1411,9 +1411,9 @@ public class Demo extends Frame {
         int end = text.getSelectionEnd();
         ReplaceableString s = new ReplaceableString(text.getText().substring(start, end));
 
-        StringBuffer log = null;
+        StringBuilder log = null;
         if (DEBUG) {
-            log = new StringBuffer();
+            log = new StringBuilder();
             log.append('"' + s.toString() + "\" (start " + start + ", end " + end + ") -> \"");
         }
 

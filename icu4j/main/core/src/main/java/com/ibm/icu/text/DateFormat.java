@@ -729,6 +729,7 @@ public abstract class DateFormat extends UFormat {
      * @return the formatted time string.
      * @stable ICU 2.0
      */
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public final String format(Date date) {
         return format(date, new StringBuffer(64), new FieldPosition(0)).toString();
     }
@@ -765,6 +766,7 @@ public abstract class DateFormat extends UFormat {
      * @return the formatted time string.
      * @stable ICU 76
      */
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public final String format(Temporal date) {
         return format(date, new StringBuffer(64), new FieldPosition(0)).toString();
     }

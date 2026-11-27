@@ -273,6 +273,7 @@ public class TestUCharacterIterator extends CoreTestFmwk {
     }
 
     @Test
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public void TestPreviousNext() {
         // src and expect strings
         char src[] = {

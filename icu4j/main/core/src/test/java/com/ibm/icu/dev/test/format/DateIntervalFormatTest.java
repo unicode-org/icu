@@ -2376,6 +2376,7 @@ public class DateIntervalFormatTest extends CoreTestFmwk {
             }
             DateInterval interval = new DateInterval(startDate, startDate + item.deltaDate);
             FieldPosition pos = new FieldPosition(0);
+            @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
             StringBuffer getResult = new StringBuffer();
             difmt.format(interval, getResult, pos);
             if (!getResult.toString().equals(item.expectResult)) {
@@ -2487,7 +2488,8 @@ public class DateIntervalFormatTest extends CoreTestFmwk {
             dtitvinf.setIntervalPattern("yMMMd", Calendar.HOUR_OF_DAY, "yyyy MMMd HH:mm ~ HH:mm");
             dtitvfmt.setDateIntervalInfo(dtitvinf);
             FieldPosition pos = new FieldPosition(0);
-            StringBuffer str = new StringBuffer("");
+            @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
+            StringBuffer str = new StringBuffer();
             DateFormat dtfmt = dtitvfmt.getDateFormat();
             Calendar fromCalendar = dtfmt.getCalendar().clone();
             Calendar toCalendar = dtfmt.getCalendar().clone();
@@ -2675,7 +2677,8 @@ public class DateIntervalFormatTest extends CoreTestFmwk {
             for (int style = DateFormat.FULL; style < 4; ++style) {
                 SimpleDateFormat dtfmt = (SimpleDateFormat) DateFormat.getDateInstance(style, loc);
                 FieldPosition pos = new FieldPosition(0);
-                StringBuffer str = new StringBuffer("");
+                @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
+                StringBuffer str = new StringBuffer();
                 Calendar fromCalendar = dtfmt.getCalendar().clone();
                 Calendar toCalendar = dtfmt.getCalendar().clone();
                 fromCalendar.setTimeInMillis(dtitv.getFromDate());
@@ -2913,6 +2916,7 @@ public class DateIntervalFormatTest extends CoreTestFmwk {
                 "Mar 3, 03:30\u2009\u2013\u200910:30"; // ICU4C result is "Mar 3, 03:30 \u2013
         // 10:30" (does not duplicate day)
 
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer buf = new StringBuffer();
         FieldPosition pos = new FieldPosition(0);
         dtitvfmt.setTimeZone(tzCalif);
@@ -3099,6 +3103,7 @@ public class DateIntervalFormatTest extends CoreTestFmwk {
     }
 
     @Test
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public void TestTicket9919GetInstance() {
         // Creating a DateIntervalFormat with a custom DateIntervalInfo
         // object used to corrupt the cache.
@@ -3130,6 +3135,7 @@ public class DateIntervalFormatTest extends CoreTestFmwk {
     }
 
     @Test
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public void TestTicket9919Setter() {
 
         // Creating a DateIntervalFormat with a custom DateIntervalInfo
@@ -3162,6 +3168,7 @@ public class DateIntervalFormatTest extends CoreTestFmwk {
     }
 
     @Test
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public void TestTicket9914() {
         DateIntervalInfo dateIntervalInfo = new DateIntervalInfo(ULocale.ENGLISH);
 
@@ -3527,6 +3534,7 @@ public class DateIntervalFormatTest extends CoreTestFmwk {
             int dIdx, dCount = deltas.length;
             for (dIdx = 0; dIdx < dCount; dIdx++) {
                 DateInterval di = new DateInterval(startTime, startTime + deltas[dIdx]);
+                @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
                 StringBuffer actual = new StringBuffer(64);
                 FieldPosition pos = new FieldPosition(item.fieldToCheck);
                 String actualString = difmt.format(di, actual, pos).toString();
@@ -3585,6 +3593,7 @@ public class DateIntervalFormatTest extends CoreTestFmwk {
         // Run the formatter single-threaded to create and save the expected results.
         for (DateInterval interval : testIntervals) {
             FieldPosition pos = new FieldPosition(0);
+            @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
             StringBuffer result = new StringBuffer();
             formatter.format(interval, result, pos);
             expectedResults.add(result.toString());
@@ -3600,6 +3609,7 @@ public class DateIntervalFormatTest extends CoreTestFmwk {
                     for (DateInterval interval : testIntervals) {
                         String expected = expectedItr.next();
                         FieldPosition pos = new FieldPosition(0);
+                        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
                         StringBuffer result = new StringBuffer();
                         formatter.format(interval, result, pos);
                         if (!expected.equals(result.toString())) {
@@ -3803,9 +3813,10 @@ public class DateIntervalFormatTest extends CoreTestFmwk {
                 DateIntervalFormat dateFormat = DateIntervalFormat.getInstance(skeleton, locale);
                 Calendar calendar = Calendar.getInstance(tz);
                 calendar.setTime(new Date(1563235200000L));
+                @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
                 StringBuffer resultBuffer =
                         dateFormat.format(
-                                calendar, calendar, new StringBuffer(""), new FieldPosition(0));
+                                calendar, calendar, new StringBuffer(), new FieldPosition(0));
 
                 assertEquals(
                         "Formatted result for " + skeleton + " locale: " + locale.getDisplayName(),
@@ -4334,12 +4345,14 @@ public class DateIntervalFormatTest extends CoreTestFmwk {
                 DateIntervalFormat dtifmt = DateIntervalFormat.getInstance(skeleton, locale);
 
                 FieldPosition pos = DontCareFieldPosition.INSTANCE;
+                @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
                 StringBuffer resultIntervalFormat = new StringBuffer();
                 dtifmt.format(calendar, calendar, resultIntervalFormat, pos);
 
                 String pattern = gen.getBestPattern(skeleton);
                 SimpleDateFormat dateFormat = new SimpleDateFormat(pattern, locale);
 
+                @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
                 StringBuffer resultDateFormat = new StringBuffer();
                 dateFormat.format(calendar, resultDateFormat, pos);
                 assertEquals(

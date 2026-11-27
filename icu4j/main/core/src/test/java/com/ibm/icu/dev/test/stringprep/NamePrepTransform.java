@@ -124,6 +124,7 @@ public class NamePrepTransform {
         return caseMapOut;
     }
 
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public StringBuffer prepare(String src, int options) throws StringPrepParseException {
 
         int ch;

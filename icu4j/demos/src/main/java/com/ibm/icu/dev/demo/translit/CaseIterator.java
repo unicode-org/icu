@@ -841,7 +841,7 @@ public class CaseIterator {
     private int[] counts;
 
     // internal buffer for efficiency
-    private StringBuffer nextBuffer = new StringBuffer();
+    private StringBuilder nextBuffer = new StringBuilder();
 
     // ========================
 

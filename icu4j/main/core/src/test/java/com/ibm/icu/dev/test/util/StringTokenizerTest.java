@@ -575,6 +575,7 @@ public final class StringTokenizerTest extends CoreTestFmwk {
     @Test
     public void Test_GeneratePattern() {
         UnicodeSet us = new UnicodeSet();
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer sb = new StringBuffer();
         try {
             us._generatePattern(sb, true);

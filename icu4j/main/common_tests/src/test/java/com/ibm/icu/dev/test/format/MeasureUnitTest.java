@@ -813,6 +813,7 @@ public class MeasureUnitTest extends CoreTestFmwk {
     }
 
     @Test
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public void testFieldPosition() {
         MeasureFormat fmt = MeasureFormat.getInstance(ULocale.ENGLISH, FormatWidth.SHORT);
         FieldPosition pos = new FieldPosition(NumberFormat.Field.DECIMAL_SEPARATOR);

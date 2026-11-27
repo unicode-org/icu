@@ -29,7 +29,10 @@ public class TokenIterator {
 
     private ResourceReader reader;
     private String line;
+
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     private StringBuffer buf;
+
     private boolean done;
     private int pos;
     private int lastpos;
@@ -39,6 +42,7 @@ public class TokenIterator {
      * lines and comment lines (first non-blank character is '#'). Note that trailing comments on a
      * line, beginning with the first unquoted '#', are recognized.
      */
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public TokenIterator(ResourceReader r) {
         reader = r;
         line = null;

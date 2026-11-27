@@ -192,12 +192,14 @@ public class StringPrepParseException extends ParseException {
      * Textual context before the error. Null-terminated. May be the empty string if not implemented
      * by parser.
      */
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     private StringBuffer preContext = new StringBuffer();
 
     /**
      * Textual context after the error. Null-terminated. May be the empty string if not implemented
      * by parser.
      */
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     private StringBuffer postContext = new StringBuffer();
 
     private static final int PARSE_CONTEXT_LEN = 16;

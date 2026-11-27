@@ -125,7 +125,7 @@ class UnicodeSetCloseOver {
      */
     static void analyzeCaseData(
             Map<String, Set<String>> equivClasses,
-            StringBuffer pairs,
+            StringBuilder pairs,
             ArrayList<String[]> nonpairs,
             List<String> lengths) {
         Iterator<String> i = new TreeSet<>(equivClasses.keySet()).iterator();
@@ -173,7 +173,7 @@ class UnicodeSetCloseOver {
         // Accumulate equivalency classes that consist of exactly
         // two codepoints here.  This is 83+% of the classes.
         // E.g., {"a", "A"}.
-        StringBuffer pairs = new StringBuffer();
+        StringBuilder pairs = new StringBuilder();
 
         // Accumulate other equivalency classes here, as lists
         // of strings.  E,g, {"st", "\uFB05", "\uFB06"}.
@@ -430,6 +430,7 @@ class UnicodeSetCloseOver {
     static void emitUCharRangesArray(PrintStream out, UnicodeSet set, String id) {
         // Store the pairs in a StringBuffer.  This handles surrogate
         // representation.
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer buf = new StringBuffer();
         for (int i = 0; i < set.getRangeCount(); ++i) {
             UTF16.append(buf, set.getRangeStart(i));
@@ -455,6 +456,7 @@ class UnicodeSetCloseOver {
     static void emitRangesString(PrintStream out, UnicodeSet set, String id) {
         // Store the pairs in a StringBuffer.  This handles surrogate
         // representation.
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer buf = new StringBuffer();
         for (int i = 0; i < set.getRangeCount(); ++i) {
             UTF16.append(buf, set.getRangeStart(i));

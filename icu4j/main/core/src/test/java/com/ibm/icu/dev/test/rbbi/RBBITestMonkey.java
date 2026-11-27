@@ -63,7 +63,7 @@ public class RBBITestMonkey extends CoreTestFmwk {
         }
 
         // Set the test text on which subsequent calls to next() will operate
-        void setText(StringBuffer s) {
+        void setText(StringBuilder s) {
             prepareAppliedRules(s.length());
             StringBuilder remapped = new StringBuilder(s.toString());
             resolved = new BreakContext[s.length() + 1];
@@ -1295,7 +1295,7 @@ public class RBBITestMonkey extends CoreTestFmwk {
      * @return The adjusted code unit index, pinned to the string's length, or unchanged if input
      *     index was outside of the string.
      */
-    static int moveIndex32(StringBuffer s, int pos, int amt) {
+    static int moveIndex32(StringBuilder s, int pos, int amt) {
         int i;
         char c;
         if (amt > 0) {
@@ -1350,7 +1350,7 @@ public class RBBITestMonkey extends CoreTestFmwk {
      *
      * @param i the preceding index
      */
-    static int nextCP(StringBuffer s, int i) {
+    static int nextCP(StringBuilder s, int i) {
         if (i == -1) {
             // End of Input indication.  Continue to return end value.
             return -1;
@@ -1383,11 +1383,11 @@ public class RBBITestMonkey extends CoreTestFmwk {
     private static final String[] monkeys = new String[] {"🙈", "🙉", "🙊", "🐵", "🐒"};
 
     // Helper function for formatting error output.
-    //   Append a string into a fixed-size field in a StringBuffer.
+    //   Append a string into a fixed-size field in a StringBuilder.
     //   Blank-pad the string if it is shorter than the field.
     //   Truncate the source string if it is too long.
     //
-    private static void appendToBuf(StringBuffer dest, String src, int fieldLen) {
+    private static void appendToBuf(StringBuilder dest, String src, int fieldLen) {
         int appendLen = src.length();
         if (appendLen >= fieldLen) {
             dest.append(src.substring(0, fieldLen));
@@ -1403,7 +1403,7 @@ public class RBBITestMonkey extends CoreTestFmwk {
     // Helper function for formatting error output.
     // Display a code point in "\\uxxxx" or "\Uxxxxxxxx" format
     @SuppressWarnings("unused")
-    private static void appendCharToBuf(StringBuffer dest, int c, int fieldLen) {
+    private static void appendCharToBuf(StringBuilder dest, int c, int fieldLen) {
         String hexChars = "0123456789abcdef";
         if (c < 0x10000) {
             dest.append("\\u");
@@ -1428,7 +1428,7 @@ public class RBBITestMonkey extends CoreTestFmwk {
      */
     void RunMonkey(BreakIterator bi, RBBIMonkeyKind mk, String name, int seed, int numIterations) {
         int TESTSTRINGLEN = 500;
-        StringBuffer testText = new StringBuffer();
+        StringBuilder testText = new StringBuilder();
         int numCharClasses;
         List<UnicodeSet> chClasses;
         @SuppressWarnings("unused")

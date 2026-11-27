@@ -44,6 +44,7 @@ public class UnicodeNormalizer {
      * @param source the original text, unnormalized
      * @param target the resulting normalized text
      */
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public StringBuffer normalize(String source, StringBuffer target) {
 
         // First decompose the source into target,
@@ -64,6 +65,7 @@ public class UnicodeNormalizer {
      * @param source the original text, unnormalized
      * @return target the resulting normalized text
      */
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public String normalize(String source) {
         return normalize(source, new StringBuffer()).toString();
     }
@@ -85,6 +87,7 @@ public class UnicodeNormalizer {
      * @param target the resulting normalized text
      */
     private void internalDecompose(String source, StringBuffer target) {
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer buffer = new StringBuffer();
         boolean canonical = (form & COMPATIBILITY_MASK) == 0;
         int ch;
@@ -123,6 +126,7 @@ public class UnicodeNormalizer {
      *
      * @param target input: decomposed text. output: the resulting normalized text.
      */
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     private void internalCompose(StringBuffer target) {
 
         int starterPos = 0;

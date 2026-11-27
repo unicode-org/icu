@@ -46,6 +46,7 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
      * @bug 4029195
      */
     @Test
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public void Test4029195() {
         Calendar cal = Calendar.getInstance();
         Date today = cal.getTime();
@@ -53,13 +54,13 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
         SimpleDateFormat sdf = (SimpleDateFormat) DateFormat.getDateInstance();
         String pat = sdf.toPattern();
         logDebug("pattern: " + pat);
-        StringBuffer fmtd = new StringBuffer("");
+        StringBuffer fmtd = new StringBuffer();
         FieldPosition pos = new FieldPosition(0);
         fmtd = sdf.format(today, fmtd, pos);
         logDebug("today: " + fmtd);
 
         sdf.applyPattern("G yyyy DDD");
-        StringBuffer todayS = new StringBuffer("");
+        StringBuffer todayS = new StringBuffer();
         todayS = sdf.format(today, todayS, pos);
         logDebug("today: " + todayS);
         try {
@@ -70,7 +71,7 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
         }
 
         try {
-            StringBuffer rt = new StringBuffer("");
+            StringBuffer rt = new StringBuffer();
             rt = sdf.format(sdf.parse(todayS.toString()), rt, pos);
             logDebug("round trip: " + rt);
             if (!rt.toString().equals(todayS.toString()))
@@ -143,7 +144,8 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
         boolean pass = true;
         for (int i = 0; i <= 17; ++i) {
             FieldPosition pos = new FieldPosition(i);
-            StringBuffer buf = new StringBuffer("");
+            @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
+            StringBuffer buf = new StringBuffer();
             fmt.format(dt, buf, pos);
             // char[] dst = new char[pos.getEndIndex() - pos.getBeginIndex()];
             String dst = buf.substring(pos.getBeginIndex(), pos.getEndIndex());
@@ -236,7 +238,8 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
         Object o = fmt.parseObject(str, pos);
         // logln( UnicodeString("Parsed object: ") + o );
 
-        StringBuffer formatted = new StringBuffer("");
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
+        StringBuffer formatted = new StringBuffer();
         FieldPosition poss = new FieldPosition(0);
         formatted = fmt.format(o, formatted, poss);
 
@@ -513,7 +516,8 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
         SimpleDateFormat sdf = new SimpleDateFormat("z", Locale.US);
         FieldPosition fp = new FieldPosition(DateFormat.TIMEZONE_FIELD);
         Date d = new Date(9234567890L);
-        StringBuffer buf = new StringBuffer("");
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
+        StringBuffer buf = new StringBuffer();
         sdf.format(d, buf, fp);
         logDebug(sdf.format(d, buf, fp).toString());
         logDebug("beginIndex = " + fp.getBeginIndex());
@@ -538,7 +542,8 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
         Date d = cal.getTime();
         SimpleDateFormat df = new SimpleDateFormat("MMMM", Locale.US);
         String s = d.toString();
-        StringBuffer s2 = new StringBuffer("");
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
+        StringBuffer s2 = new StringBuffer();
         FieldPosition pos = new FieldPosition(0);
         s2 = df.format(d, s2, pos);
         logDebug("Date=" + s);
@@ -652,14 +657,16 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
                 dt = format.parse(dateString);
                 // {sfb} some of these parses will fail purposely
 
-                StringBuffer fmtd = new StringBuffer("");
+                @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
+                StringBuffer fmtd = new StringBuffer();
                 FieldPosition pos = new FieldPosition(0);
                 fmtd = df.format(dt, fmtd, pos);
                 logDebug(fmtd.toString());
                 // logln(df.format(dt));
                 gc.setTime(dt);
                 logDebug("" + gc.get(Calendar.ZONE_OFFSET));
-                StringBuffer s = new StringBuffer("");
+                @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
+                StringBuffer s = new StringBuffer();
                 s = format.format(dt, s, pos);
                 logDebug(s.toString());
             } catch (ParseException e) {
@@ -720,7 +727,8 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
         String pattern = "'TO_DATE('''dd'-'MM'-'yyyy HH:mm:ss''' , ''DD-MM-YYYY HH:MI:SS'')'";
         logDebug("pattern=" + pattern);
         SimpleDateFormat format = new SimpleDateFormat(pattern, Locale.US);
-        StringBuffer result = new StringBuffer("");
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
+        StringBuffer result = new StringBuffer();
         FieldPosition pos = new FieldPosition(0);
         Calendar cal = Calendar.getInstance();
         cal.clear();
@@ -753,7 +761,8 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
         } catch (Exception e) {
             errln("Fail: " + e);
         }
-        StringBuffer temp = new StringBuffer("");
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
+        StringBuffer temp = new StringBuffer();
         FieldPosition pos = new FieldPosition(0);
         logDebug(dateString + " . " + fmt.format(d, temp, pos));
     }
@@ -769,7 +778,8 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
         SimpleDateFormat df = new SimpleDateFormat(format, Locale.US);
         try {
             Date x = df.parse(dateString);
-            StringBuffer temp = new StringBuffer("");
+            @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
+            StringBuffer temp = new StringBuffer();
             FieldPosition pos = new FieldPosition(0);
             logDebug(dateString + " -> " + df.format(x, temp, pos));
         } catch (Exception e) {
@@ -960,6 +970,7 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
             PatternAndResult item = tests[i];
             dateFormat.applyPattern(item.getPattern());
             cal.set(2008, 6, 2, 5, 0); // 2008 July 02 5 AM PDT
+            @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
             StringBuffer buf = new StringBuffer(32);
             FieldPosition fp = new FieldPosition(DateFormat.YEAR_FIELD);
             dateFormat.format(cal, buf, fp);
@@ -1458,6 +1469,7 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
             new TestDateFormatItem("S Oct 20 2013", "EEEEE MMM dd yyyy", "S Oct 20 2013"),
         };
 
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer result = new StringBuffer();
         Date d = new Date();
         Calendar cal = GregorianCalendar.getInstance(TimeZone.getTimeZone("GMT"), Locale.US);
@@ -1540,6 +1552,7 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
         FieldPosition fp = new FieldPosition(0);
         pattern = new String("YYYY LL dd ee cc qq QQ");
         format.applyPattern(pattern);
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer formattedString = new StringBuffer();
         formattedString = format.format(referenceDate, formattedString, fp);
         logDebug("ref date: " + formattedString);
@@ -1618,6 +1631,7 @@ public class DateFormatRegressionTest extends CoreTestFmwk {
                     true, "6 Jan 05 2008", "eee MMM dd yyyy", "Sat Jan 05 2008"),
         };
 
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer result = new StringBuffer();
         Date d = new Date();
         Calendar cal = GregorianCalendar.getInstance(TimeZone.getTimeZone("GMT"), Locale.US);

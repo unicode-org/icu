@@ -422,17 +422,16 @@ public class NumberFormatTest extends CoreTestFmwk {
     @Test
     public void TestQuotes() {
 
-        StringBuffer pat;
         DecimalFormatSymbols sym = new DecimalFormatSymbols(Locale.US);
-        pat = new StringBuffer("a'fo''o'b#");
-        DecimalFormat fmt = new DecimalFormat(pat.toString(), sym);
+        String pat = "a'fo''o'b#";
+        DecimalFormat fmt = new DecimalFormat(pat, sym);
         String s = ((NumberFormat) fmt).format(123);
         logDebug("Pattern \"" + pat + "\"");
         logDebug(" Format 123 . " + s);
         if (!s.equals("afo'ob123")) errln("FAIL: Expected afo'ob123");
 
-        pat = new StringBuffer("a''b#");
-        fmt = new DecimalFormat(pat.toString(), sym);
+        pat = "a''b#";
+        fmt = new DecimalFormat(pat, sym);
         s = ((NumberFormat) fmt).format(123);
         logDebug("Pattern \"" + pat + "\"");
         logDebug(" Format 123 . " + s);
@@ -458,13 +457,13 @@ public class NumberFormatTest extends CoreTestFmwk {
     @Test
     public void TestCurrencySign() {
         DecimalFormatSymbols sym = new DecimalFormatSymbols(Locale.US);
-        StringBuffer pat = new StringBuffer("");
+        StringBuilder pat = new StringBuilder();
         char currency = 0x00A4;
         // "\xA4#,##0.00;-\xA4#,##0.00"
         pat.append(currency).append("#,##0.00;-").append(currency).append("#,##0.00");
         DecimalFormat fmt = new DecimalFormat(pat.toString(), sym);
         String s = ((NumberFormat) fmt).format(1234.56);
-        pat = new StringBuffer();
+        pat = new StringBuilder();
         logDebug("Pattern \"" + fmt.toPattern() + "\"");
         logDebug(" Format " + 1234.56 + " . " + s);
         assertEquals("symbol, pos", "$1,234.56", s);
@@ -744,7 +743,7 @@ public class NumberFormatTest extends CoreTestFmwk {
     public void TestDecimalFormatCurrencyParse() {
         // Locale.US
         DecimalFormatSymbols sym = new DecimalFormatSymbols(Locale.US);
-        StringBuilder pat = new StringBuilder("");
+        StringBuilder pat = new StringBuilder();
         char currency = 0x00A4;
         // "\xA4#,##0.00;-\xA4#,##0.00"
         pat.append(currency)
@@ -2326,13 +2325,13 @@ public class NumberFormatTest extends CoreTestFmwk {
 
         class FormatTask implements Runnable {
             DecimalFormat fmt;
-            StringBuffer buf;
+            StringBuilder buf;
             boolean inc;
             float num;
 
             FormatTask(DecimalFormat fmt, int index) {
                 this.fmt = fmt;
-                this.buf = new StringBuffer();
+                this.buf = new StringBuilder();
                 this.inc = (index & 0x1) == 0;
                 this.num = inc ? 0 : 10000;
             }
@@ -2691,6 +2690,7 @@ public class NumberFormatTest extends CoreTestFmwk {
                 (DecimalFormat) com.ibm.icu.text.NumberFormat.getInstance(ULocale.ENGLISH);
         nf.setPositivePrefix("FOO");
         nf.setPositiveSuffix("BA");
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer buffer = new StringBuffer();
         FieldPosition fp = new FieldPosition(NumberFormat.Field.DECIMAL_SEPARATOR);
         nf.format(35.47, buffer, fp);
@@ -2705,6 +2705,7 @@ public class NumberFormatTest extends CoreTestFmwk {
                 (DecimalFormat) com.ibm.icu.text.NumberFormat.getInstance(ULocale.ENGLISH);
         nf.setPositivePrefix("FOO");
         nf.setPositiveSuffix("BA");
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer buffer = new StringBuffer();
         FieldPosition fp = new FieldPosition(NumberFormat.Field.INTEGER);
         nf.format(35.47, buffer, fp);
@@ -2719,6 +2720,7 @@ public class NumberFormatTest extends CoreTestFmwk {
                 (DecimalFormat) com.ibm.icu.text.NumberFormat.getInstance(ULocale.ENGLISH);
         nf.setPositivePrefix("FOO");
         nf.setPositiveSuffix("BA");
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer buffer = new StringBuffer();
         FieldPosition fp = new FieldPosition(NumberFormat.Field.FRACTION);
         nf.format(35, buffer, fp);
@@ -2733,6 +2735,7 @@ public class NumberFormatTest extends CoreTestFmwk {
                 (DecimalFormat) com.ibm.icu.text.NumberFormat.getInstance(ULocale.ENGLISH);
         nf.setPositivePrefix("FOO");
         nf.setPositiveSuffix("BA");
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer buffer = new StringBuffer();
         FieldPosition fp = new FieldPosition(NumberFormat.Field.FRACTION);
         nf.format(35.47, buffer, fp);
@@ -2742,6 +2745,7 @@ public class NumberFormatTest extends CoreTestFmwk {
     }
 
     @Test
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public void TestFieldPositionCurrency() {
         DecimalFormat nf =
                 (DecimalFormat) com.ibm.icu.text.NumberFormat.getCurrencyInstance(Locale.US);
@@ -3108,6 +3112,7 @@ public class NumberFormatTest extends CoreTestFmwk {
 
     /** Format test */
     public void expect(NumberFormat fmt, Number n, String exp, boolean rt) {
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer saw = new StringBuffer();
         FieldPosition pos = new FieldPosition(0);
         fmt.format(n, saw, pos);
@@ -3120,6 +3125,7 @@ public class NumberFormatTest extends CoreTestFmwk {
             if (rt) {
                 try {
                     Number n2 = fmt.parse(exp);
+                    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
                     StringBuffer saw2 = new StringBuffer();
                     fmt.format(n2, saw2, pos);
                     if (!saw2.toString().equals(exp)) {
@@ -3161,6 +3167,7 @@ public class NumberFormatTest extends CoreTestFmwk {
 
     /** RBNF format test */
     public void expect_rbnf(NumberFormat fmt, Number n, String exp, boolean rt) {
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer saw = new StringBuffer();
         FieldPosition pos = new FieldPosition(0);
         fmt.format(n, saw, pos);
@@ -3172,6 +3179,7 @@ public class NumberFormatTest extends CoreTestFmwk {
             if (rt) {
                 try {
                     Number n2 = fmt.parse(exp);
+                    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
                     StringBuffer saw2 = new StringBuffer();
                     fmt.format(n2, saw2, pos);
                     if (!saw2.toString().equals(exp)) {
@@ -3713,7 +3721,7 @@ public class NumberFormatTest extends CoreTestFmwk {
             }
         }
         if (errors.size() != 0) {
-            StringBuffer errBuf = new StringBuffer();
+            StringBuilder errBuf = new StringBuilder();
             for (int i = 0; i < errors.size(); i++) {
                 errBuf.append(errors.get(i));
                 errBuf.append("\n");
@@ -3779,6 +3787,7 @@ public class NumberFormatTest extends CoreTestFmwk {
     @Test
     public void TestFormat() {
         NumberFormat nf = NumberFormat.getInstance();
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer sb = new StringBuffer("dummy");
         FieldPosition fp = new FieldPosition(0);
 
@@ -3865,6 +3874,7 @@ public class NumberFormatTest extends CoreTestFmwk {
      * Coverage tests for the implementation of abstract format methods not being called otherwise
      */
     @Test
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public void TestFormatAbstractImplCoverage() {
         NumberFormat df = DecimalFormat.getInstance(Locale.ENGLISH);
         NumberFormat cdf =
@@ -4055,7 +4065,7 @@ public class NumberFormatTest extends CoreTestFmwk {
     @Test
     public void TestGetAvailableLocales() {
         // Tests when "if (shim == null)" is true
-        @SuppressWarnings("serial")
+        @SuppressWarnings({"serial", "JdkObsolete"}) // StringBuffer required by public API
         class TestGetAvailableLocales extends NumberFormat {
             @Override
             public StringBuffer format(double number, StringBuffer toAppendTo, FieldPosition pos) {
@@ -4140,7 +4150,7 @@ public class NumberFormatTest extends CoreTestFmwk {
      */
     @Test
     public void TestRoundingMode() {
-        @SuppressWarnings("serial")
+        @SuppressWarnings({"serial", "JdkObsolete"}) // StringBuffer required by public API
         class TestRoundingMode extends NumberFormat {
             @Override
             public StringBuffer format(double number, StringBuffer toAppendTo, FieldPosition pos) {
@@ -5803,9 +5813,10 @@ public class NumberFormatTest extends CoreTestFmwk {
 
     // Testing for Issue 11808.
     @Test
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public void TestRoundUnnecessarytIssue11808() {
         DecimalFormat df = (DecimalFormat) DecimalFormat.getInstance();
-        StringBuffer result = new StringBuffer("");
+        StringBuffer result = new StringBuffer();
         df.setRoundingMode(BigDecimal.ROUND_UNNECESSARY);
         df.applyPattern("00.0#E0");
 
@@ -6012,6 +6023,7 @@ public class NumberFormatTest extends CoreTestFmwk {
             Format.Field field,
             int begin,
             int end) {
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer buffer = new StringBuffer();
         FieldPosition pos = new FieldPosition(field);
         format.format(object, buffer, pos);
@@ -6597,6 +6609,7 @@ public class NumberFormatTest extends CoreTestFmwk {
         NumberFormat fmt = NumberFormat.getInstance(new ULocale("en"));
         fmt.setMinimumIntegerDigits(10);
         FieldPosition pos = new FieldPosition(NumberFormat.Field.GROUPING_SEPARATOR);
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer sb = new StringBuffer();
         fmt.format(1234567, sb, pos);
         assertEquals("Should have multiple grouping separators", "0,001,234,567", sb.toString());
@@ -8079,6 +8092,7 @@ public class NumberFormatTest extends CoreTestFmwk {
         assertEquals("GROUPING SEPARATOR", " ", decimalFormatSymbols.getGroupingSeparatorString());
         assertEquals("CURRENCY SYMBOL", "kr", decimalFormatSymbols.getCurrencySymbol());
 
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer sb = new StringBuffer();
         decimalFormat.format(new BigDecimal(12345.12), sb, DontCareFieldPosition.INSTANCE);
         assertEquals("OUTPUT", "12 345.12 kr", sb.toString());
@@ -8301,6 +8315,7 @@ public class NumberFormatTest extends CoreTestFmwk {
         {
             DecimalFormat df = new DecimalFormat("a0¤00b");
             df.setCurrency(Currency.getInstance("EUR"));
+            @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
             StringBuffer result = new StringBuffer();
             FieldPosition fp = new FieldPosition(NumberFormat.Field.CURRENCY);
             df.format(3.141, result, fp);
@@ -8314,6 +8329,7 @@ public class NumberFormatTest extends CoreTestFmwk {
             NumberFormat nf = NumberFormat.getCurrencyInstance(new ULocale("en-GB"));
             DecimalFormat df = (DecimalFormat) nf;
             df.applyPattern("a0¤00b");
+            @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
             StringBuffer result = new StringBuffer();
             FieldPosition fp = new FieldPosition(NumberFormat.Field.CURRENCY);
             df.format(3.141, result, fp);

@@ -138,7 +138,7 @@ public class LocaleDistanceTest extends CoreTestFmwk {
     public void testDataDriven() throws IOException {
         tfh.test();
         if (REFORMAT) {
-            System.out.println(tfh.appendLines(new StringBuffer()));
+            System.out.println(tfh.appendLines(new StringBuilder()));
         }
     }
 

@@ -72,6 +72,7 @@ public class PluralFormatUnitTest extends CoreTestFmwk {
         }
         // Test some bigger numbers.
         // Coverage: Use the format(Object, ...) version.
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer sb = new StringBuffer();
         FieldPosition ignore = new FieldPosition(-1);
         for (int n = 100; n < 113; n++) {

@@ -137,6 +137,7 @@ public class SelectFormatAPITest extends CoreTestFmwk {
 
         // Check format with appendTo for pattern constructed object
         expected = "AppendHere-otherVerbValue1";
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer strBuf = new StringBuffer("AppendHere-");
         assertEquals(
                 "Failed in TestFormat with unexpected output 2",
@@ -146,6 +147,7 @@ public class SelectFormatAPITest extends CoreTestFmwk {
         // Check format throws exception on invalid argument.
         boolean threwException = false;
         try {
+            @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
             StringBuffer buf = new StringBuffer("AppendHere-");
             selFmt1.format(0, buf, new FieldPosition(0));
         } catch (IllegalArgumentException e) {

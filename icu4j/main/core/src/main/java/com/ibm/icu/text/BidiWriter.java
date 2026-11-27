@@ -50,6 +50,7 @@ final class BidiWriter {
                 }
             case Bidi.DO_MIRRORING:
                 {
+                    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
                     StringBuffer dest = new StringBuffer(src.length());
 
                     /* do mirroring */
@@ -80,6 +81,7 @@ final class BidiWriter {
                 }
             default:
                 {
+                    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
                     StringBuffer dest = new StringBuffer(src.length());
 
                     /* remove Bidi control characters and do mirroring */
@@ -120,6 +122,7 @@ final class BidiWriter {
          * whether characters should be replaced by their mirror-image
          * equivalent Unicode characters.
          */
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer dest = new StringBuffer(src.length());
 
         /* optimize for several combinations of options */

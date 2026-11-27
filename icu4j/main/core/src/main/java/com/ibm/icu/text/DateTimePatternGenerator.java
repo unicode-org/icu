@@ -1884,6 +1884,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         public FormatParser set(String string, boolean strict) {
             items.clear();
             if (string.length() == 0) return this;

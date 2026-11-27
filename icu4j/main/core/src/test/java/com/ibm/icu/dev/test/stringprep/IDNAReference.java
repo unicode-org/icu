@@ -59,6 +59,7 @@ public class IDNAReference {
     }
 
     private static StringBuffer toASCIILower(StringBuffer src) {
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer dest = new StringBuffer();
         for (int i = 0; i < src.length(); i++) {
             dest.append(toASCIILower(src.charAt(i)));
@@ -125,6 +126,7 @@ public class IDNAReference {
         return convertToASCII(iter, options);
     }
 
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public static StringBuffer convertToASCII(UCharacterIterator srcIter, int options)
             throws StringPrepParseException {
 
@@ -256,6 +258,7 @@ public class IDNAReference {
     public static StringBuffer convertIDNToASCII(String src, int options)
             throws StringPrepParseException {
         char[] srcArr = src.toCharArray();
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer result = new StringBuffer();
         int sepIndex = 0;
         int oldSepIndex = 0;
@@ -290,6 +293,7 @@ public class IDNAReference {
         return convertToUnicode(iter, options);
     }
 
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public static StringBuffer convertToUnicode(UCharacterIterator iter, int options)
             throws StringPrepParseException {
 
@@ -369,6 +373,7 @@ public class IDNAReference {
             throws StringPrepParseException {
 
         char[] srcArr = src.toCharArray();
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer result = new StringBuffer();
         int sepIndex = 0;
         int oldSepIndex = 0;

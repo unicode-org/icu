@@ -231,10 +231,10 @@ public class IDNAConformanceTest extends CoreTestFmwk {
 
         StringBuilder result = new StringBuilder();
         char[] chars = str.toCharArray();
-        StringBuffer sbTemp = new StringBuffer();
+        StringBuilder sbTemp = new StringBuilder();
         for (int i = 0; i < chars.length; i++) {
             if ('<' == chars[i]) {
-                sbTemp = new StringBuffer();
+                sbTemp = new StringBuilder();
                 while ('>' != chars[i + 1]) {
                     sbTemp.append(chars[++i]);
                 }

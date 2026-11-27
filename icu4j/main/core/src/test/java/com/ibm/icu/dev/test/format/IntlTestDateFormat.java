@@ -148,6 +148,7 @@ public class IntlTestDateFormat extends CoreTestFmwk {
         logDebug(fTestName + " Pattern " + s.toPattern());
     }
 
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     private void tryDate(Date theDate) {
         final int DEPTH = 10;
         Date[] date = new Date[DEPTH];

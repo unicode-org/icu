@@ -44,7 +44,8 @@ public class IntlTestDateFormatAPIC extends CoreTestFmwk {
 
         Date dateObj = new Date(0);
         Number numObj = 3.1415926535897932384626433832795;
-        StringBuffer strBuffer = new StringBuffer("");
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
+        StringBuffer strBuffer = new StringBuffer();
         String str;
         FieldPosition fpos = new FieldPosition(0);
         ParsePosition ppos = new ParsePosition(0);

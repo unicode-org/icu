@@ -1408,6 +1408,7 @@ public class PluralRulesTest extends CoreTestFmwk {
     }
 
     @Test
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public void TestBasicFraction() {
         String[][] tests = {
             {"en", "one: j is 1"}, {"1", "0", "1", "one"}, {"1", "2", "1.00", "other"},

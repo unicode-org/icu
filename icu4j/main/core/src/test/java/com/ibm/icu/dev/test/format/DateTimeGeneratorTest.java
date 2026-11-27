@@ -277,6 +277,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
 
     @Test
     public void TestPatternParser() {
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer buffer = new StringBuffer();
         PatternTokenizer pp =
                 new PatternTokenizer()
@@ -309,6 +310,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
     Random random = new java.util.Random(-1);
 
     private String getRandomString(String[] randomList, int minLen, int maxLen) {
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer result = new StringBuffer();
         int len = random.nextInt(maxLen + 1 - minLen) + minLen;
         for (int i = minLen; i < len; ++i) {
@@ -320,6 +322,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
         return result.toString();
     }
 
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     private void CheckPattern(StringBuffer buffer, PatternTokenizer pp, String patternTest) {
         pp.setPattern(patternTest);
         if (DEBUG && isVerbose()) {
@@ -347,6 +350,7 @@ public class DateTimeGeneratorTest extends CoreTestFmwk {
         }
     }
 
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     private void showItems(StringBuffer buffer, PatternTokenizer pp, String patternTest) {
         logDebug("input:\t<" + patternTest + ">");
         while (true) {

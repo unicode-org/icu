@@ -55,6 +55,7 @@ public final class IDNA2003 {
     }
 
     private static StringBuffer toASCIILower(CharSequence src) {
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer dest = new StringBuffer();
         for (int i = 0; i < src.length(); i++) {
             dest.append(toASCIILower(src.charAt(i)));
@@ -147,6 +148,7 @@ public final class IDNA2003 {
         }
     }
 
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public static StringBuffer convertToASCII(UCharacterIterator src, int options)
             throws StringPrepParseException {
 
@@ -184,6 +186,7 @@ public final class IDNA2003 {
                     "Found zero length label after NamePrep.",
                     StringPrepParseException.ZERO_LENGTH_LABEL);
         }
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer dest = new StringBuffer();
 
         // reset the variable to verify if output of prepare is ASCII or not
@@ -273,6 +276,7 @@ public final class IDNA2003 {
             throws StringPrepParseException {
 
         char[] srcArr = src.toCharArray();
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer result = new StringBuffer();
         int sepIndex = 0;
         int oldSepIndex = 0;
@@ -301,6 +305,7 @@ public final class IDNA2003 {
         return result;
     }
 
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public static StringBuffer convertToUnicode(UCharacterIterator src, int options)
             throws StringPrepParseException {
 
@@ -424,6 +429,7 @@ public final class IDNA2003 {
             throws StringPrepParseException {
 
         char[] srcArr = src.toCharArray();
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer result = new StringBuffer();
         int sepIndex = 0;
         int oldSepIndex = 0;

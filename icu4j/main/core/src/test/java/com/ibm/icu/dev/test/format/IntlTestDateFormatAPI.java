@@ -70,6 +70,7 @@ public class IntlTestDateFormatAPI extends CoreTestFmwk {
 
     // This test checks various generic API methods in DateFormat to achieve 100% API coverage.
     @Test
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public void TestAPI() {
         Locale startLocale = Locale.getDefault();
 

@@ -53,7 +53,7 @@ public class UnicodeNormalizerConformanceTest extends CoreTestFmwk {
     public void TestConformance() throws Exception {
         String line = null;
         String[] fields = new String[5];
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         int passCount = 0;
         int failCount = 0;
         UnicodeSet other = new UnicodeSet(0, 0x10ffff);
@@ -144,7 +144,6 @@ public class UnicodeNormalizerConformanceTest extends CoreTestFmwk {
      */
     private boolean checkConformance(String[] field, String line) throws Exception {
         boolean pass = true;
-        // StringBuffer buf = new StringBuffer(); // scratch
         String out;
         int i = 0;
         for (i = 0; i < 5; ++i) {
@@ -194,7 +193,7 @@ public class UnicodeNormalizerConformanceTest extends CoreTestFmwk {
      *
      * @param buf scratch buffer
      */
-    private static void hexsplit(String s, char delimiter, String[] output, StringBuffer buf) {
+    private static void hexsplit(String s, char delimiter, String[] output, StringBuilder buf) {
         int i;
         int pos = 0;
         for (i = 0; i < output.length; ++i) {
@@ -232,7 +231,7 @@ public class UnicodeNormalizerConformanceTest extends CoreTestFmwk {
         }
     }
 
-    public static void appendInt(StringBuffer buf, String strToHex, String s) {
+    public static void appendInt(StringBuilder buf, String strToHex, String s) {
         int hex = Integer.parseInt(strToHex, 16);
         if (hex < 0) {
             throw new IllegalArgumentException("Out of range hex " + hex + " in " + s);
@@ -256,7 +255,7 @@ public class UnicodeNormalizerConformanceTest extends CoreTestFmwk {
 
     private void _testOneLine(String line) throws Exception {
         String[] fields = new String[5];
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         // Parse out the fields
         hexsplit(line, ';', fields, buf);
         checkConformance(fields, line);

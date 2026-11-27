@@ -29,7 +29,7 @@ public class TestIDNARef extends CoreTestFmwk {
     public void TestToUnicode() throws Exception {
         try {
             for (int i = 0; i < TestData.asciiIn.length; i++) {
-                // test StringBuffer toUnicode
+                // test String toUnicode
                 doTestToUnicode(
                         TestData.asciiIn[i],
                         new String(TestData.unicodeIn[i]),
@@ -57,7 +57,7 @@ public class TestIDNARef extends CoreTestFmwk {
     public void TestToASCII() throws Exception {
         try {
             for (int i = 0; i < TestData.asciiIn.length; i++) {
-                // test StringBuffer toUnicode
+                // test String toUnicode
                 doTestToASCII(
                         new String(TestData.unicodeIn[i]),
                         TestData.asciiIn[i],
@@ -180,6 +180,7 @@ public class TestIDNARef extends CoreTestFmwk {
         }
     }
 
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     private void doTestToUnicode(String src, String expected, int options, Object expectedException)
             throws Exception {
 
@@ -276,10 +277,10 @@ public class TestIDNARef extends CoreTestFmwk {
             return;
         }
 
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer inBuf = new StringBuffer(src);
         UCharacterIterator inIter = UCharacterIterator.getInstance(src);
         try {
-
             StringBuffer out = IDNAReference.convertIDNToUnicode(src, options);
             if (expected != null && out != null && !out.toString().equals(expected)) {
                 errln(
@@ -353,6 +354,7 @@ public class TestIDNARef extends CoreTestFmwk {
         }
     }
 
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     private void doTestToASCII(String src, String expected, int options, Object expectedException)
             throws Exception {
 
@@ -456,6 +458,7 @@ public class TestIDNARef extends CoreTestFmwk {
         }
     }
 
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     private void doTestIDNToASCII(
             String src, String expected, int options, Object expectedException) throws Exception {
 
@@ -585,6 +588,7 @@ public class TestIDNARef extends CoreTestFmwk {
                 TestData.ConformanceTestCase testCase = TestData.conformanceTestCases[i];
                 UCharacterIterator iter = UCharacterIterator.getInstance(testCase.input);
                 try {
+                    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
                     StringBuffer output = namePrep.prepare(iter, NamePrepTransform.NONE);
                     if (testCase.output != null
                             && output != null
@@ -611,6 +615,7 @@ public class TestIDNARef extends CoreTestFmwk {
 
                 try {
                     iter.setToStart();
+                    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
                     StringBuffer output =
                             namePrep.prepare(iter, NamePrepTransform.ALLOW_UNASSIGNED);
                     if (testCase.output != null
@@ -721,6 +726,7 @@ public class TestIDNARef extends CoreTestFmwk {
         }
     }
 
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     private void doTestCompare(String s1, String s2, boolean isEqual) {
 
         if (!IDNAReference.isReady()) {
@@ -869,6 +875,7 @@ public class TestIDNARef extends CoreTestFmwk {
             return;
         }
 
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer expected;
         StringBuffer chained;
 
@@ -902,6 +909,7 @@ public class TestIDNARef extends CoreTestFmwk {
             return;
         }
 
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer expected;
         StringBuffer chained;
 

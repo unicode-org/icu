@@ -330,6 +330,7 @@ public final class CanonicalIterator {
         if (PROGRESS) System.out.println("Adding: " + Utility.hex(segment));
 
         result.add(segment);
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer workingBuffer = new StringBuffer();
         UnicodeSet starts = new UnicodeSet();
 

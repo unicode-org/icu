@@ -32,7 +32,7 @@ public class TestIDNA extends CoreTestFmwk {
     @Test
     public void TestToUnicode() throws Exception {
         for (int i = 0; i < TestData.asciiIn.length; i++) {
-            // test StringBuffer toUnicode
+            // test String toUnicode
             doTestToUnicode(
                     TestData.asciiIn[i], new String(TestData.unicodeIn[i]), IDNA.DEFAULT, null);
             doTestToUnicode(
@@ -56,7 +56,7 @@ public class TestIDNA extends CoreTestFmwk {
     @Test
     public void TestToASCII() throws Exception {
         for (int i = 0; i < TestData.asciiIn.length; i++) {
-            // test StringBuffer toUnicode
+            // test String toUnicode
             doTestToASCII(
                     new String(TestData.unicodeIn[i]), TestData.asciiIn[i], IDNA.DEFAULT, null);
             doTestToASCII(
@@ -135,6 +135,7 @@ public class TestIDNA extends CoreTestFmwk {
         }
     }
 
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     private void doTestToUnicode(String src, String expected, int options, Object expectedException)
             throws Exception {
         StringBuffer inBuf = new StringBuffer(src);
@@ -215,12 +216,12 @@ public class TestIDNA extends CoreTestFmwk {
         }
     }
 
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     private void doTestIDNToUnicode(
             String src, String expected, int options, Object expectedException) throws Exception {
         StringBuffer inBuf = new StringBuffer(src);
         UCharacterIterator inIter = UCharacterIterator.getInstance(src);
         try {
-
             StringBuffer out = IDNA.convertIDNToUnicode(src, options);
             if (expected != null && out != null && !out.toString().equals(expected)) {
                 errln(
@@ -294,6 +295,7 @@ public class TestIDNA extends CoreTestFmwk {
         }
     }
 
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     private void doTestToASCII(String src, String expected, int options, Object expectedException)
             throws Exception {
         StringBuffer inBuf = new StringBuffer(src);
@@ -392,6 +394,7 @@ public class TestIDNA extends CoreTestFmwk {
         }
     }
 
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     private void doTestIDNToASCII(
             String src, String expected, int options, Object expectedException) throws Exception {
         StringBuffer inBuf = new StringBuffer(src);
@@ -496,6 +499,7 @@ public class TestIDNA extends CoreTestFmwk {
             TestData.ConformanceTestCase testCase = TestData.conformanceTestCases[i];
             UCharacterIterator iter = UCharacterIterator.getInstance(testCase.input);
             try {
+                @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
                 StringBuffer output = namePrep.prepare(iter, StringPrep.DEFAULT);
                 if (testCase.output != null
                         && output != null
@@ -521,6 +525,7 @@ public class TestIDNA extends CoreTestFmwk {
 
             try {
                 iter.setToStart();
+                @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
                 StringBuffer output = namePrep.prepare(iter, StringPrep.ALLOW_UNASSIGNED);
                 if (testCase.output != null
                         && output != null
@@ -611,6 +616,7 @@ public class TestIDNA extends CoreTestFmwk {
         }
     }
 
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     private void doTestCompare(String s1, String s2, boolean isEqual) {
         try {
             int retVal = IDNA.compare(s1, s2, IDNA.DEFAULT);
@@ -735,6 +741,7 @@ public class TestIDNA extends CoreTestFmwk {
     //  test and ascertain
     //  func(func(func(src))) == func(src)
     private void doTestChainingToASCII(String source) throws Exception {
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer expected;
         StringBuffer chained;
 
@@ -761,6 +768,7 @@ public class TestIDNA extends CoreTestFmwk {
     //  test and ascertain
     //  func(func(func(src))) == func(src)
     private void doTestChainingToUnicode(String source) throws Exception {
+        @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
         StringBuffer expected;
         StringBuffer chained;
 
@@ -874,6 +882,7 @@ public class TestIDNA extends CoreTestFmwk {
         return (random.nextInt(0x7fff) % (n + 1));
     }
 
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     private StringBuffer getTestSource(StringBuffer fillIn) {
         // use uniform seed value from the framework
         if (random == null) {
@@ -895,6 +904,7 @@ public class TestIDNA extends CoreTestFmwk {
     // TODO(#13294): turned off because monkey test fails approx 1 in 3 times.
     @Ignore
     @Test
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public void MonkeyTest() throws Exception {
         StringBuffer source = new StringBuffer();
         /* do the monkey test   */
@@ -924,6 +934,7 @@ public class TestIDNA extends CoreTestFmwk {
         doTestToASCII(source.toString(), expected.toString(), IDNA.DEFAULT, null);
     }
 
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     private StringBuffer _doTestCompareReferenceImpl(
             StringBuffer src, boolean toASCII, int options) {
         String refIDNAName =
@@ -1008,6 +1019,7 @@ public class TestIDNA extends CoreTestFmwk {
         return exp;
     }
 
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     private void doTestCompareReferenceImpl(StringBuffer src) throws Exception {
         // test toASCII
         StringBuffer asciiLabel = _doTestCompareReferenceImpl(src, true, IDNA.ALLOW_UNASSIGNED);
@@ -1227,6 +1239,7 @@ public class TestIDNA extends CoreTestFmwk {
      * StringBuffer convertIDNToASCII(UCharacterIterator src, int options)
      */
     @Test
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public void TestConvertIDNToASCII() {
         try {
             UCharacterIterator uci = UCharacterIterator.getInstance("dummy");
@@ -1250,6 +1263,7 @@ public class TestIDNA extends CoreTestFmwk {
      * convertToUnicode(StringBuffer src, int options)
      */
     @Test
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public void TestConvertToUnicode() {
         try {
             if (!IDNA.convertToUnicode("dummy", 0).toString().equals("dummy")) {
@@ -1269,6 +1283,7 @@ public class TestIDNA extends CoreTestFmwk {
 
     /* Tests the method public static StringBuffer convertIDNToUnicode(UCharacterIterator src, int options) */
     @Test
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public void TestConvertIDNToUnicode() {
         try {
             UCharacterIterator uci = UCharacterIterator.getInstance("dummy");
@@ -1291,6 +1306,7 @@ public class TestIDNA extends CoreTestFmwk {
 
     /* Tests the method public static int compare */
     @Test
+    @SuppressWarnings("JdkObsolete") // StringBuffer required by public API
     public void TestIDNACompare() {
         // Testing the method public static int compare(String s1, String s2, int options)
         try {
