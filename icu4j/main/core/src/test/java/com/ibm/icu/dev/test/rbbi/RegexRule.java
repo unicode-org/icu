@@ -3,8 +3,6 @@
 
 package com.ibm.icu.dev.test.rbbi;
 
-import java.util.Arrays;
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -50,6 +48,9 @@ class RegexRule extends SegmentationRule {
         final Matcher afterSearch = after_.matcher(remapped);
         beforeSearch.useAnchoringBounds(false);
         afterSearch.useAnchoringBounds(false);
+        // Candidate offsets increase, and the mapping does not change during this rule.
+        // Resume each lookup where the preceding lookup stopped.
+        int resolvedIndex = 0;
         if (beforeSearch.find() && afterSearch.find()) {
             for (; ; ) {
                 if (afterSearch.start() < beforeSearch.start()) {
@@ -68,15 +69,13 @@ class RegexRule extends SegmentationRule {
                         break;
                     }
                 } else {
-                    final Optional<BreakContext> position =
-                            Arrays.stream(resolved)
-                                    .filter(
-                                            r ->
-                                                    r.indexInRemapped != null
-                                                            && r.indexInRemapped
-                                                                    == afterSearch.start())
-                                    .findFirst();
-                    if (!position.isPresent()) {
+                    final int remappedIndex = afterSearch.start();
+                    while (resolvedIndex < resolved.length
+                            && (resolved[resolvedIndex].indexInRemapped == null
+                                    || resolved[resolvedIndex].indexInRemapped != remappedIndex)) {
+                        ++resolvedIndex;
+                    }
+                    if (resolvedIndex == resolved.length) {
                         throw new IllegalArgumentException(
                                 ("Rule "
                                         + name()
@@ -87,13 +86,14 @@ class RegexRule extends SegmentationRule {
                                         + " which does not correspond to an index in "
                                         + "the original string"));
                     }
-                    if (position.get().appliedRule == null
+                    final BreakContext position = resolved[resolvedIndex];
+                    if (position.appliedRule == null
                             && endsWithBefore_
                                     .matcher(remapped)
                                     .useAnchoringBounds(false)
                                     .region(beforeSearch.start(), afterSearch.start())
                                     .matches()) {
-                        position.get().appliedRule = this;
+                        position.appliedRule = this;
                     }
                     if (afterSearch.start() == remapped.length()) {
                         break;
