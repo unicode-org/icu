@@ -411,8 +411,13 @@ NFSubstitution::makeSubstitution(int32_t pos,
 
         // if the description begins with '=', always return a
         // SameValueSubstitution
-    case gEquals:
-        return new SameValueSubstitution(pos, ruleSet, description, status);
+    case gEquals: {
+        NFSubstitution* sub = new SameValueSubstitution(pos, ruleSet, description, status);
+        if (U_SUCCESS(status) && sub != nullptr && sub->getRuleSet() == ruleSet && ruleSet != nullptr) {
+            const_cast<NFRuleSet*>(ruleSet)->fIsParseable = false;
+        }
+        return sub;
+    }
 
         // and if it's anything else, throw an exception
     default:
@@ -480,7 +485,7 @@ NFSubstitution::NFSubstitution(int32_t _pos,
         }
         this->numberFormat = tempNumberFormat;
     }
-    else if (workingDescription.charAt(0) == gGreaterThan) {
+    else if (0 == description.compare(gGreaterGreaterGreaterThan, 3)) {
         // if the description is ">>>", this substitution bypasses the
         // usual rule-search process and always uses the rule that precedes
         // it in its own rule set's rule list (this is used for place-value
