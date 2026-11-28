@@ -16,13 +16,39 @@ filename="$tmpdir/$1.tar.gz"
 upstream_root_tmp="$tmpdir/upstream"
 patch_root_tmp="$tmpdir/patches"
 
+# Upstream files that are not vendored into ICU. ICU does not use upstream's CI
+# config or build systems, and vendoring them tempts people to edit them (edits
+# that are then silently reverted by the next update). Patterns are matched by
+# file/directory name or extension at any depth.
+ignorelist=(
+	# CI and git config
+	".github"
+	".gitignore"
+	# Build systems: Bazel, CMake, SCons, Make, MSVC
+	"BUILD"
+	"MODULE.bazel"
+	"WORKSPACE"
+	"CMakeLists.txt"
+	"cmake"
+	"SConstruct"
+	"SConscript"
+	"Makefile"
+	"msvc"
+	# Build templates (pkg-config, CMake config)
+	"*.in"
+)
+exclude_args=()
+for pattern in "${ignorelist[@]}"; do
+	exclude_args+=("--exclude=$pattern");
+done
+
 echo "Will download $url";
 read -p "Press Enter to continue or s to skip: " ch;
 
 if [ "$ch" != "s" ]; then
 	wget -O "$filename" "$url";
 	mkdir "$upstream_root_tmp";
-	tar zxf $filename --strip 1 -C "$upstream_root_tmp";
+	tar zxf $filename --strip 1 -C "$upstream_root_tmp" "${exclude_args[@]}";
 fi
 
 echo "Will apply diffs to $icu4c_i18n_root";

@@ -41,7 +41,6 @@ icu_directories_to_be_scanned = ["."]
 # Files that are allowed to contain \r line endings. If this list
 # grows too long consider a file instead.
 ignore_cr_in_files = [
-    "vendor/double-conversion/upstream/msvc/testrunner.cmd"
     ]
 
 def runCommand(cmd):
