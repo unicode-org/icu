@@ -43,12 +43,18 @@ SortKeyByteSink::Append(const char *bytes, int32_t n) {
         }
     }
     int32_t length = appended_;
-    appended_ += n;
+    int64_t newAppended = static_cast<int64_t>(length) + static_cast<int64_t>(n);
+    if (newAppended > INT32_MAX) {
+        SetNotOk();
+        appended_ = INT32_MAX;
+        return;
+    }
+    appended_ = static_cast<int32_t>(newAppended);
     if ((buffer_ + length) == bytes) {
         return;  // the caller used GetAppendBuffer() and wrote the bytes already
     }
     int32_t available = capacity_ - length;
-    if (n <= available) {
+    if (available >= 0 && n <= available) {
         uprv_memcpy(buffer_ + length, bytes, n);
     } else {
         AppendBeyondCapacity(bytes, n, length);
