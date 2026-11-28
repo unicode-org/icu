@@ -99,6 +99,7 @@ public:
     void TestBug13590();
     void TestLSTMThai();
     void TestLSTMBurmese();
+    void TestBurmeseVirama();
     void TestRandomAccess();
     void TestExternalBreakEngineWithFakeTaiLe();
     void TestExternalBreakEngineWithFakeYue();
