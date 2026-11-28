@@ -646,6 +646,7 @@ constexpr const char* KNOWN_CANONICALIZED[] = {
 UBool U_CALLCONV cleanupKnownCanonicalized() {
     gKnownCanonicalizedInitOnce.reset();
     if (gKnownCanonicalized) { uhash_close(gKnownCanonicalized); }
+    gKnownCanonicalized = nullptr;
     return true;
 }
 
@@ -814,6 +815,7 @@ AliasData::cleanup()
 {
     gInitOnce.reset();
     delete gSingleton;
+    gSingleton = nullptr;
     return true;
 }
 

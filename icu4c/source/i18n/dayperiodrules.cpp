@@ -305,10 +305,13 @@ namespace {
 UInitOnce initOnce {};
 
 U_CFUNC UBool U_CALLCONV dayPeriodRulesCleanup() {
-    delete[] data->rules;
-    uhash_close(data->localeToRuleSetNumMap);
-    delete data;
-    data = nullptr;
+    if (data != nullptr) {
+        delete[] data->rules;
+        uhash_close(data->localeToRuleSetNumMap);
+        delete data;
+        data = nullptr;
+    }
+    initOnce.reset();
     return true;
 }
 
