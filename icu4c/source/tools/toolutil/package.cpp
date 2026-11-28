@@ -1289,7 +1289,7 @@ void Package::setItemCapacity(int32_t max)
   Item* newItems = static_cast<Item*>(uprv_malloc(max * sizeof(items[0])));
   Item *oldItems = items;
   if(newItems == nullptr) {
-    fprintf(stderr, "icupkg: Out of memory trying to allocate %lu bytes for %d items\n",
+    fprintf(stderr, "icupkg: Out of memory trying to allocate %zu bytes for %d items\n",
         max * sizeof(items[0]), max);
     exit(U_MEMORY_ALLOCATION_ERROR);
   }
