@@ -201,7 +201,7 @@ struct LikelySubtagsData {
 
         if (partitionsLength > 0) {
             distanceData.partitions = static_cast<const char **>(
-                uprv_malloc(partitionsLength * sizeof(const char *)));
+                uprv_calloc(partitionsLength, sizeof(const char *)));
             if (distanceData.partitions == nullptr) {
                 errorCode = U_MEMORY_ALLOCATION_ERROR;
                 return;
