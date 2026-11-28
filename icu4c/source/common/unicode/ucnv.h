@@ -819,12 +819,20 @@ ucnv_getMaxCharSize(const UConverter *converter);
  *                    that will be used.
  * @return Size of a buffer that will be large enough to hold the output bytes of
  *         converting length UChars with the converter that returned the maxCharSize.
+ *         The product is computed in 64 bits and clamped to INT32_MAX: the
+ *         32-bit product wrapped to a small value for large (but legal) inputs
+ *         (for example length 536870902 with maxCharSize 8 wrapped to 0), and
+ *         the buffer-capacity parameters of the conversion functions are
+ *         int32_t anyway. Callers that need to detect the clamp can compare
+ *         the result against INT32_MAX. Both arguments are evaluated twice.
  *
  * @see ucnv_getMaxCharSize
  * @stable ICU 2.8
  */
 #define UCNV_GET_MAX_BYTES_FOR_STRING(length, maxCharSize) \
-     (((int32_t)(length)+10)*(int32_t)(maxCharSize))
+     ((int32_t)(((int64_t)(length)+10)*(int64_t)(maxCharSize) > INT32_MAX \
+        ? INT32_MAX \
+        : ((int64_t)(length)+10)*(int64_t)(maxCharSize)))
 
 /**
  * Returns the minimum byte length (per codepoint) for characters in this codepage.
