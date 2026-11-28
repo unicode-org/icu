@@ -994,13 +994,15 @@ entryOpenDirect(const char* path, const char* localeID, UErrorCode* status) {
     // Some code depends on the ures_openDirect() bundle to have a parent bundle chain,
     // unless it is marked with "nofallback".
     UResourceDataEntry *t1 = r;
-    if(r != nullptr && uprv_strcmp(localeID, kRootLocaleName) != 0 &&  // not root
+    if(r != nullptr && uprv_strcmp(r->fName, kRootLocaleName) != 0 &&  // not root
             r->fParent == nullptr && !r->fData.noFallback &&
             uprv_strlen(localeID) < ULOC_FULLNAME_CAPACITY) {
         char name[ULOC_FULLNAME_CAPACITY];
         uprv_strcpy(name, localeID);
-        if(!chopLocale(name) || uprv_strcmp(name, kRootLocaleName) == 0 ||
-                loadParentsExceptRoot(t1, name, UPRV_LENGTHOF(name), false, nullptr, status)) {
+        if(!chopLocale(name)) {
+            uprv_strcpy(name, kRootLocaleName);
+        }
+        if(loadParentsExceptRoot(t1, name, UPRV_LENGTHOF(name), false, nullptr, status)) {
             if(uprv_strcmp(t1->fName, kRootLocaleName) != 0 && t1->fParent == nullptr) {
                 insertRootBundle(t1, status);
             }
