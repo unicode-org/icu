@@ -4324,6 +4324,11 @@ void RegexMatcher::MatchChunkAt(int32_t startIdx, UBool toEnd, UErrorCode &statu
     UVector             *fSets         = fPattern->fSets;
 
     const char16_t      *inputBuf      = fInputText->chunkContents;
+    if (inputBuf == nullptr) {
+        // An empty UTF-8 UText has no chunk buffer; point at an empty string so that
+        // the pointer arithmetic of the string op codes stays defined.
+        inputBuf = u"";
+    }
 
     fFrameSize = fPattern->fFrameSize;
     REStackFrame        *fp            = resetStack();

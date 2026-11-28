@@ -446,7 +446,9 @@ uregex_getText(URegularExpression *regexp2,
         // need to fill in the text
         UText *inputText = regexp->fMatcher->inputText();
         int64_t inputNativeLength = utext_nativeLength(inputText);
-        if (UTEXT_FULL_TEXT_IN_CHUNK(inputText, inputNativeLength)) {
+        if (UTEXT_FULL_TEXT_IN_CHUNK(inputText, inputNativeLength) && inputText->chunkContents != nullptr) {
+            // An empty UTF-8 UText has no chunk buffer yet; aliasing its null chunkContents with
+            // fOwnsText=false would be indistinguishable from "no text set".
             regexp->fText = inputText->chunkContents;
             regexp->fTextLength = (int32_t)inputNativeLength;
             regexp->fOwnsText = false; // because the UText owns it
