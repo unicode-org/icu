@@ -217,6 +217,7 @@ static void TestCLDRStyleAliases(void);
 static void TestFallbackCodes(void);
 static void TestGetUTF8String(void);
 static void TestCLDRVersion(void);
+static void TestCopyAfterGetVersion(void);
 
 /***************************************************************************************/
 
@@ -255,6 +256,7 @@ void addNEWResourceBundleTest(TestNode** root)
     addTest(root, &TestGetFunctionalEquivalentVariantLengthLimit,
             "tsutil/creststn/TestGetFunctionalEquivalentVariantLengthLimit");
     addTest(root, &TestJB3763,                "tsutil/creststn/TestJB3763");
+    addTest(root, &TestCopyAfterGetVersion,   "tsutil/creststn/TestCopyAfterGetVersion");
 }
 
 
@@ -3183,6 +3185,41 @@ TestGetUTF8String(void) {
     }
 
     ures_close(res);
+}
+
+/*
+ * ures_getNextResource() and ures_getByIndex() on a scalar resource return a copy
+ * of that resource. The copy must not share the version string that
+ * ures_getVersion() allocated in the original: each one is closed separately.
+ */
+static void TestCopyAfterGetVersion(void) {
+    int32_t i;
+    for (i = 0; i < 2; ++i) {
+        UErrorCode status = U_ZERO_ERROR;
+        UVersionInfo versionArray;
+        UResourceBundle *rootBundle = ures_open(NULL, "root", &status);
+        UResourceBundle *string = ures_getByKey(rootBundle, "ExemplarCharacters", NULL, &status);
+        UResourceBundle *copy;
+        if (U_FAILURE(status)) {
+            log_data_err("ures_getByKey(root, ExemplarCharacters) failed - %s\n", u_errorName(status));
+            ures_close(string);
+            ures_close(rootBundle);
+            return;
+        }
+        ures_getVersion(string, versionArray);
+        copy = (i == 0) ? ures_getNextResource(string, NULL, &status) : ures_getByIndex(string, 0, NULL, &status);
+        if (U_FAILURE(status) || copy == NULL) {
+            log_err("%s on a string resource failed - %s\n",
+                    (i == 0) ? "ures_getNextResource" : "ures_getByIndex", u_errorName(status));
+        } else {
+            ures_close(string);
+            string = NULL;
+            ures_getVersion(copy, versionArray);  /* must not read the version string freed with the original */
+        }
+        ures_close(copy);
+        ures_close(string);
+        ures_close(rootBundle);
+    }
 }
 
 static void TestCLDRVersion(void) {
