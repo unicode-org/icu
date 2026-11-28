@@ -107,6 +107,8 @@ CalendarRegressionTest::runIndexedTest( int32_t index, UBool exec, const char* &
         CASE(63,TestWeekOfMonthOutOfRangeMonth3350);
         CASE(64,TestWeekOfMonthDefaultMonth3350);
         CASE(65,TestWeekOfMonthTimeZoneDependentCutover3350);
+        CASE(66,TestDayOfYearWeekOfYearRoundTrip3350);
+        CASE(67,TestDayOfYearWeekOfYearPins3350);
     default: name = ""; break;
     }
 }
@@ -3580,14 +3582,17 @@ void CalendarRegressionTest::TestDayOfYearRoundTripInCutoverYear23489() {
         int32_t year;   // the resulting gregorianCutoverYear
         int32_t month;
         int32_t day;
-        UBool skipJanuary1And2After;
     };
 
     Cutover cutoverDefs[] = {
-        { 1582, UCAL_OCTOBER,   15, true },   // default cutover
-        { 1700, UCAL_MARCH,      1, true },
-        { 1752, UCAL_SEPTEMBER, 14, false },
-        { 1918, UCAL_FEBRUARY,  14, false },
+        { 1582, UCAL_OCTOBER,   15 },   // default cutover
+        // hybrid year 1584 starts on the cutover day itself; 1583 is
+        // truncated on the Julian side
+        { 1584, UCAL_JANUARY,    5 },
+        { 1600, UCAL_JANUARY,    1 },   // cutover year starts on the Gregorian side
+        { 1700, UCAL_MARCH,      1 },
+        { 1752, UCAL_SEPTEMBER, 14 },
+        { 1918, UCAL_FEBRUARY,  14 },
     };
 
     int32_t weekSettings[][2] = {
@@ -3595,27 +3600,12 @@ void CalendarRegressionTest::TestDayOfYearRoundTripInCutoverYear23489() {
         { UCAL_MONDAY, 4 },
     };
 
-    // Known limitation, same in ICU4C and ICU4J, tracked in ICU-3350: with
-    // Monday/4, the WEEK_OF_YEAR round trip fails on January 1-2 after some
-    // cutover years, because the cutover year's length is reported as 365
-    // instead of its true, shorter length. Those two dates are skipped for
-    // the cutovers where this happens, and nothing else is.
     UDate cutoverChanges[UPRV_LENGTHOF(cutoverDefs)];
-    int32_t mondayFourWoySkips[UPRV_LENGTHOF(cutoverDefs)][2];
 
     for (int32_t c = 0; c < UPRV_LENGTHOF(cutoverDefs); ++c) {
         proleptic.clear();
         proleptic.set(cutoverDefs[c].year, cutoverDefs[c].month, cutoverDefs[c].day);
         cutoverChanges[c] = proleptic.getTime(status);
-
-        mondayFourWoySkips[c][0] = mondayFourWoySkips[c][1] = -1;
-        if (cutoverDefs[c].skipJanuary1And2After) {
-            for (int32_t dom = 1; dom <= 2; ++dom) {
-                proleptic.clear();
-                proleptic.set(cutoverDefs[c].year + 1, UCAL_JANUARY, dom);
-                mondayFourWoySkips[c][dom - 1] = proleptic.get(UCAL_JULIAN_DAY, status);
-            }
-        }
     }
     if (failure(status, "computing the cutover instants")) {
         return;
@@ -3623,8 +3613,6 @@ void CalendarRegressionTest::TestDayOfYearRoundTripInCutoverYear23489() {
 
     for (int32_t c = 0; c < UPRV_LENGTHOF(cutoverDefs); ++c) {
         for (int32_t w = 0; w < UPRV_LENGTHOF(weekSettings); ++w) {
-            UBool isMondayFour = weekSettings[w][0] == UCAL_MONDAY && weekSettings[w][1] == 4;
-
             status = U_ZERO_ERROR;
             GregorianCalendar cal(*TimeZone::getGMT(), status);
             if (U_FAILURE(status)) {
@@ -3679,11 +3667,6 @@ void CalendarRegressionTest::TestDayOfYearRoundTripInCutoverYear23489() {
                 snprintf(msg, sizeof(msg), "%s: EXTENDED_YEAR/DAY_OF_YEAR round trip", label);
                 assertEquals(msg, jd, byDoy->get(UCAL_JULIAN_DAY, status));
 
-                if (isMondayFour &&
-                        (jd == mondayFourWoySkips[c][0] || jd == mondayFourWoySkips[c][1])) {
-                    continue;
-                }
-
                 LocalPointer<GregorianCalendar> byWoy(cal.clone());
                 byWoy->clear();
                 byWoy->set(UCAL_YEAR_WOY, yearWoy);
@@ -3722,7 +3705,7 @@ void CalendarRegressionTest::TestDayOfYearRoundTripInCutoverYear23489() {
         dataerrln("Error creating Calendar: %s", u_errorName(status));
         return;
     }
-    britishCal.setGregorianChange(cutoverChanges[2], status);
+    britishCal.setGregorianChange(cutoverChanges[4], status);
     britishCal.clear();
     britishCal.set(1752, UCAL_SEPTEMBER, 14);
     assertEquals("1752-09-14 DAY_OF_YEAR, 1752 cutover", 247,
@@ -4124,6 +4107,461 @@ void CalendarRegressionTest::TestWeekOfMonthDefaultMonth3350() {
         errln(UnicodeString("FAIL: Japanese calendar, Meiji year 1, WEEK_OF_MONTH=3, "
                              "DAY_OF_WEEK=Wednesday, MONTH unset: got ") +
               actualStr + ", expected " + expectedStr);
+    }
+}
+
+namespace {
+
+// Independent Julian Day Number formulas (the Fliegel & Van Flandern algorithm), used only to
+// build TestDayOfYearWeekOfYearRoundTrip3350's traversal range and its third round trip's
+// expected value. These are deliberately not the ClockMath-based arithmetic gregocal.cpp itself
+// uses, so a bug shared between the production code and the test's own arithmetic cannot hide a
+// failure.
+int32_t independentProlepticGregorianJDN3350(int32_t year, int32_t month, int32_t day) {
+    int32_t a = (14 - month) / 12;
+    int32_t y = year + 4800 - a;
+    int32_t m = month + 12 * a - 3;
+    return day + (153 * m + 2) / 5 + 365 * y + y / 4 - y / 100 + y / 400 - 32045;
+}
+int32_t independentProlepticJulianJDN3350(int32_t year, int32_t month, int32_t day) {
+    int32_t a = (14 - month) / 12;
+    int32_t y = year + 4800 - a;
+    int32_t m = month + 12 * a - 3;
+    return day + (153 * m + 2) / 5 + 365 * y + y / 4 - 32083;
+}
+
+// The hybrid year's own first day: the same definition as gregocal.cpp's
+// cutoverMonthStart(cutoverJD, year, 0), computed from the independent JDN formulas above.
+int32_t independentHybridYearStart3350(int32_t cutoverJD, int32_t year) {
+    int32_t julianStart = independentProlepticJulianJDN3350(year, 1, 1);
+    if (julianStart < cutoverJD) {
+        return julianStart;
+    }
+    int32_t gregorianStart = independentProlepticGregorianJDN3350(year, 1, 1);
+    return gregorianStart > cutoverJD ? gregorianStart : cutoverJD;
+}
+
+// The day of week (UCAL_SUNDAY..UCAL_SATURDAY) of a Julian Day: JD 0 is a Monday, independent
+// of Calendar::julianDayToDayOfWeek()'s own formula for the same fixed fact.
+int32_t independentDayOfWeek3350(int32_t jd) {
+    int32_t d = static_cast<int32_t>((static_cast<int64_t>(jd) + 1) % 7);
+    if (d < 0) {
+        d += 7;
+    }
+    return d + UCAL_SUNDAY;
+}
+
+// Independent transcription of the "real year" branch of
+// GregorianCalendar::handleComputeJulianDay()'s WEEK_OF_YEAR resolution (the fix under test),
+// with independentHybridYearStart3350() standing in for the base's "day before Jan 1 of year
+// Y". Used for TestDayOfYearWeekOfYearRoundTrip3350's third round trip, whose expected day is
+// not always the day the fields were read from -- see the "stay in real year" comment in
+// Calendar::handleComputeJulianDay() and the matching one in gregocal.cpp.
+int32_t independentWeekOfYearJD3350(int32_t cutoverJD, int32_t year, int32_t woy, int32_t dow,
+                                     int32_t fdow, int32_t minDays) {
+    auto localDow = [&](int32_t jd) {
+        int32_t d = independentDayOfWeek3350(jd) - fdow;
+        if (d < 0) {
+            d += 7;
+        }
+        return d;
+    };
+    int32_t dowLocal = dow - fdow;
+    if (dowLocal < 0) {
+        dowLocal += 7;
+    }
+
+    int32_t yearStart = independentHybridYearStart3350(cutoverJD, year);
+    int32_t first = localDow(yearStart);
+    int32_t date = 1 - first + dowLocal;
+
+    if (woy == 1) {
+        int32_t nextYearStart = independentHybridYearStart3350(cutoverJD, year + 1);
+        int32_t nextFirst = localDow(nextYearStart);
+        if (nextFirst > 0 && (7 - nextFirst) >= minDays) {
+            yearStart = nextYearStart;
+            first = nextFirst;
+            date = 1 - first + dowLocal;
+        }
+    } else if (woy >= 52) {  // GregorianCalendar's getLeastMaximum(WEEK_OF_YEAR)
+        int32_t testDate = date;
+        if ((7 - first) < minDays) {
+            testDate += 7;
+        }
+        testDate += 7 * (woy - 1);
+        int32_t nextYearStart = independentHybridYearStart3350(cutoverJD, year + 1);
+        if (yearStart + testDate > nextYearStart) {
+            yearStart = independentHybridYearStart3350(cutoverJD, year - 1);
+            first = localDow(yearStart);
+            date = 1 - first + dowLocal;
+        }
+    }
+
+    if ((7 - first) < minDays) {
+        date += 7;
+    }
+    date += 7 * (woy - 1);
+    return yearStart - 1 + date;
+}
+
+}  // namespace
+
+// Test case for ticket 3350.
+// DAY_OF_YEAR and WEEK_OF_YEAR must round-trip through every day of the
+// year before, the cutover year, and the year after, for several real and
+// edge-case cutovers: EXTENDED_YEAR+DAY_OF_YEAR and
+// YEAR_WOY+WEEK_OF_YEAR+DAY_OF_WEEK must both resolve back to the same
+// Julian Day the day itself came from, with no status failures. YEAR (with
+// ERA)+WEEK_OF_YEAR+DAY_OF_WEEK must resolve to the same day, or, where the
+// "stay in real year" rule legitimately maps it elsewhere, to the day an
+// independent transcription of that rule predicts. EXTENDED_YEAR must also
+// never skip or repeat a value as the Julian Day advances one day at a time.
+void CalendarRegressionTest::TestDayOfYearWeekOfYearRoundTrip3350() {
+    struct Scenario {
+        const char* name;
+        UBool useDefaultCutover;
+        int32_t cutY, cutM, cutD;  // Gregorian date of the first Gregorian day
+        int32_t cutoverYear;       // the resulting fGregorianCutoverYear
+    } const kScenarios[] = {
+        { "default 1582-10-15", true, 0, 0, 0, 1582 },
+        { "Denmark 1700-03-01", false, 1700, UCAL_MARCH, 1, 1700 },
+        { "GB 1752-09-14", false, 1752, UCAL_SEPTEMBER, 14, 1752 },
+        { "Russia 1918-02-14", false, 1918, UCAL_FEBRUARY, 14, 1918 },
+        { "1600-01-01", false, 1600, UCAL_JANUARY, 1, 1600 },
+        { "1584-01-05", false, 1584, UCAL_JANUARY, 5, 1584 },
+    };
+
+    UErrorCode status = U_ZERO_ERROR;
+    for (int32_t s = 0; s < UPRV_LENGTHOF(kScenarios); ++s) {
+        const Scenario& sc = kScenarios[s];
+        status = U_ZERO_ERROR;
+        UDate cutoverMillis = 0;
+        // The cutover's own Julian Day, computed independently of the calendar under test, for
+        // the traversal range below and for the third round trip's expected value.
+        int32_t cutoverJD = sc.useDefaultCutover
+            ? independentProlepticGregorianJDN3350(1582, 10, 15)
+            : independentProlepticGregorianJDN3350(sc.cutY, sc.cutM + 1, sc.cutD);
+        if (!sc.useDefaultCutover) {
+            GregorianCalendar cutoverCal(*TimeZone::getGMT(), status);
+            cutoverCal.clear();
+            cutoverCal.set(sc.cutY, sc.cutM, sc.cutD);
+            cutoverMillis = cutoverCal.getTime(status);
+            if (failure(status, "computing the cutover date")) {
+                continue;
+            }
+        }
+
+        // The traversal range: Jan 1 of the year before the cutover year (in the pure Julian
+        // calendar -- always <= that year's real hybrid first day) through Dec 31 of the year
+        // after (in the pure Gregorian calendar -- always >= that year's real hybrid last day).
+        // Computed independently of GregorianCalendar so the range does not depend on the code
+        // under test.
+        int32_t rangeStart = independentProlepticJulianJDN3350(sc.cutoverYear - 1, 1, 1);
+        int32_t rangeEndExclusive = independentProlepticGregorianJDN3350(sc.cutoverYear + 2, 1, 1);
+
+        for (int32_t setting = 0; setting < 2; ++setting) {
+            UCalendarDaysOfWeek fdow = (setting == 0) ? UCAL_SUNDAY : UCAL_MONDAY;
+            uint8_t mdw = (setting == 0) ? 1 : 4;
+            const char* settingName = (setting == 0) ? "Sun/1" : "Mon/4";
+
+            status = U_ZERO_ERROR;
+            GregorianCalendar cal(*TimeZone::getGMT(), status);
+            if (U_FAILURE(status)) {
+                dataerrln("Error creating Calendar: %s", u_errorName(status));
+                return;
+            }
+            if (!sc.useDefaultCutover) {
+                cal.setGregorianChange(cutoverMillis, status);
+                if (failure(status, "setGregorianChange")) {
+                    continue;
+                }
+            }
+            cal.setFirstDayOfWeek(fdow);
+            cal.setMinimalDaysInFirstWeek(mdw);
+
+            int32_t prevEy = INT32_MIN;
+            for (int32_t jd = rangeStart; jd < rangeEndExclusive; ++jd) {
+                status = U_ZERO_ERROR;
+                cal.clear();
+                cal.set(UCAL_JULIAN_DAY, jd);
+                int32_t ey = cal.get(UCAL_EXTENDED_YEAR, status);
+                int32_t doy = cal.get(UCAL_DAY_OF_YEAR, status);
+                int32_t yWoy = cal.get(UCAL_YEAR_WOY, status);
+                int32_t woy = cal.get(UCAL_WEEK_OF_YEAR, status);
+                int32_t dow = cal.get(UCAL_DAY_OF_WEEK, status);
+                if (failure(status, "reading fields for a Julian Day")) {
+                    continue;
+                }
+
+                // EXTENDED_YEAR continuity: it must never skip a value or go backwards as the
+                // Julian Day advances one day at a time.
+                if (prevEy != INT32_MIN && ey != prevEy && ey != prevEy + 1) {
+                    errln(UnicodeString("FAIL[") + sc.name + "/" + settingName + "]: JD " + jd +
+                          " has EXTENDED_YEAR=" + ey + ", but the previous day had " + prevEy);
+                }
+                prevEy = ey;
+
+                status = U_ZERO_ERROR;
+                cal.clear();
+                cal.set(UCAL_EXTENDED_YEAR, ey);
+                cal.set(UCAL_DAY_OF_YEAR, doy);
+                int32_t jdFromDoy = cal.get(UCAL_JULIAN_DAY, status);
+                if (failure(status, "round-tripping EXTENDED_YEAR+DAY_OF_YEAR")) {
+                    continue;
+                }
+                if (jdFromDoy != jd) {
+                    errln(UnicodeString("FAIL[") + sc.name + "/" + settingName +
+                          "]: EXTENDED_YEAR=" + ey + ", DAY_OF_YEAR=" + doy +
+                          " round-trips to JD " + jdFromDoy + ", expected " + jd);
+                }
+
+                status = U_ZERO_ERROR;
+                cal.clear();
+                cal.set(UCAL_YEAR_WOY, yWoy);
+                cal.set(UCAL_WEEK_OF_YEAR, woy);
+                cal.set(UCAL_DAY_OF_WEEK, dow);
+                int32_t jdFromWoy = cal.get(UCAL_JULIAN_DAY, status);
+                if (failure(status, "round-tripping YEAR_WOY+WEEK_OF_YEAR+DAY_OF_WEEK")) {
+                    continue;
+                }
+                if (jdFromWoy != jd) {
+                    errln(UnicodeString("FAIL[") + sc.name + "/" + settingName +
+                          "]: YEAR_WOY=" + yWoy + ", WEEK_OF_YEAR=" + woy +
+                          ", DAY_OF_WEEK=" + dow + " round-trips to JD " + jdFromWoy +
+                          ", expected " + jd);
+                }
+
+                // Third round trip: YEAR (with ERA), not YEAR_WOY, plus WEEK_OF_YEAR and
+                // DAY_OF_WEEK. This does not always reproduce jd -- near a year boundary the
+                // "stay in real year" rule can legitimately map it to a different day than the
+                // one WEEK_OF_YEAR/DAY_OF_WEEK were read from -- so compare against an
+                // independent transcription of that rule rather than against jd.
+                int32_t era = (ey >= 1) ? GregorianCalendar::AD : GregorianCalendar::BC;
+                int32_t year = (ey >= 1) ? ey : 1 - ey;
+                status = U_ZERO_ERROR;
+                cal.clear();
+                cal.set(UCAL_ERA, era);
+                cal.set(UCAL_YEAR, year);
+                cal.set(UCAL_WEEK_OF_YEAR, woy);
+                cal.set(UCAL_DAY_OF_WEEK, dow);
+                int32_t jdFromYearWoy = cal.get(UCAL_JULIAN_DAY, status);
+                if (failure(status, "round-tripping YEAR+WEEK_OF_YEAR+DAY_OF_WEEK")) {
+                    continue;
+                }
+                int32_t expected = independentWeekOfYearJD3350(
+                    cutoverJD, ey, woy, dow, static_cast<int32_t>(fdow), mdw);
+                if (jdFromYearWoy != expected) {
+                    errln(UnicodeString("FAIL[") + sc.name + "/" + settingName +
+                          "]: YEAR=" + year + ", WEEK_OF_YEAR=" + woy + ", DAY_OF_WEEK=" + dow +
+                          " round-trips to JD " + jdFromYearWoy + ", expected " + expected +
+                          " (from JD " + jd + ")");
+                }
+            }
+        }
+    }
+}
+
+// Test case for ticket 3350.
+// Pinned DAY_OF_YEAR / getActualMaximum(DAY_OF_YEAR) / roll(DAY_OF_YEAR)
+// values: the default cutover year 1582 is 355 days long, and a cutover
+// that itself falls on January 1 (1600-01-01) puts the whole cutover year
+// on the Gregorian side, so DAY_OF_YEAR must count from that year's own
+// January 1 rather than from a Julian reference point.
+void CalendarRegressionTest::TestDayOfYearWeekOfYearPins3350() {
+    UErrorCode status = U_ZERO_ERROR;
+
+    {
+        GregorianCalendar cal(*TimeZone::getGMT(), status);
+        if (U_FAILURE(status)) {
+            dataerrln("Error creating Calendar: %s", u_errorName(status));
+            return;
+        }
+        cal.clear();
+        cal.set(1582, UCAL_OCTOBER, 15);
+        int32_t maxDoy = cal.getActualMaximum(UCAL_DAY_OF_YEAR, status);
+        int32_t doy = cal.get(UCAL_DAY_OF_YEAR, status);
+        if (failure(status, "default cutover, 1582-10-15")) {
+            return;
+        }
+        if (maxDoy != 355) {
+            errln(UnicodeString("FAIL: default cutover, getActualMaximum(DAY_OF_YEAR) in 1582: got ") +
+                  maxDoy + ", expected 355");
+        }
+        if (doy != 278) {
+            errln(UnicodeString("FAIL: default cutover, 1582-10-15 DAY_OF_YEAR: got ") +
+                  doy + ", expected 278");
+        }
+    }
+    {
+        status = U_ZERO_ERROR;
+        GregorianCalendar cal(*TimeZone::getGMT(), status);
+        cal.clear();
+        cal.set(1582, UCAL_OCTOBER, 15);
+        int32_t woy = cal.get(UCAL_WEEK_OF_YEAR, status);
+        if (failure(status, "default cutover, 1582-10-15 WEEK_OF_YEAR")) {
+            return;
+        }
+        if (woy != 40) {
+            errln(UnicodeString("FAIL: default cutover, 1582-10-15 WEEK_OF_YEAR: got ") +
+                  woy + ", expected 40");
+        }
+    }
+    {
+        // Regression pin: with the base algorithm's WEEK_OF_YEAR shifted (rather than
+        // resolved) for the hybrid year, this resolved to 1581-12-17 instead.
+        status = U_ZERO_ERROR;
+        GregorianCalendar cal(*TimeZone::getGMT(), status);
+        cal.clear();
+        cal.set(UCAL_YEAR, 1581);
+        cal.set(UCAL_WEEK_OF_YEAR, 1);
+        cal.set(UCAL_DAY_OF_WEEK, UCAL_SUNDAY);
+        int32_t ey = cal.get(UCAL_EXTENDED_YEAR, status);
+        int32_t month = cal.get(UCAL_MONTH, status);
+        int32_t dom = cal.get(UCAL_DAY_OF_MONTH, status);
+        if (failure(status, "default cutover, YEAR=1581/WEEK_OF_YEAR=1/SUNDAY")) {
+            return;
+        }
+        if (ey != 1581 || month != UCAL_DECEMBER || dom != 31) {
+            SimpleDateFormat sdf(UnicodeString("yyyy-MM-dd"), Locale::getUS(), status);
+            sdf.setTimeZone(*TimeZone::getGMT());
+            UnicodeString actualStr;
+            sdf.format(cal.getTime(status), actualStr);
+            errln(UnicodeString("FAIL: default cutover, YEAR=1581/WEEK_OF_YEAR=1/SUNDAY: got ") +
+                  actualStr + ", expected 1581-12-31");
+        }
+    }
+    {
+        status = U_ZERO_ERROR;
+        GregorianCalendar cal(*TimeZone::getGMT(), status);
+        cal.clear();
+        cal.set(1582, UCAL_DECEMBER, 31);
+        int32_t doy = cal.get(UCAL_DAY_OF_YEAR, status);
+        if (failure(status, "default cutover, 1582-12-31")) {
+            return;
+        }
+        if (doy != 355) {
+            errln(UnicodeString("FAIL: default cutover, 1582-12-31 DAY_OF_YEAR: got ") +
+                  doy + ", expected 355");
+        }
+    }
+
+    UDate cutoverMillis = 0;
+    {
+        status = U_ZERO_ERROR;
+        GregorianCalendar cutoverCal(*TimeZone::getGMT(), status);
+        cutoverCal.clear();
+        cutoverCal.set(1600, UCAL_JANUARY, 1);
+        cutoverMillis = cutoverCal.getTime(status);
+        if (failure(status, "computing the 1600-01-01 cutover date")) {
+            return;
+        }
+    }
+    {
+        status = U_ZERO_ERROR;
+        GregorianCalendar cal(*TimeZone::getGMT(), status);
+        cal.setGregorianChange(cutoverMillis, status);
+        cal.clear();
+        cal.set(1600, UCAL_JANUARY, 1);
+        int32_t doy = cal.get(UCAL_DAY_OF_YEAR, status);
+        if (failure(status, "1600-01-01 cutover, 1600-01-01")) {
+            return;
+        }
+        if (doy != 1) {
+            errln(UnicodeString("FAIL: 1600-01-01 cutover, 1600-01-01 DAY_OF_YEAR: got ") +
+                  doy + ", expected 1");
+        }
+    }
+    {
+        status = U_ZERO_ERROR;
+        GregorianCalendar cal(*TimeZone::getGMT(), status);
+        cal.setGregorianChange(cutoverMillis, status);
+        cal.clear();
+        cal.set(UCAL_EXTENDED_YEAR, 1599);
+        cal.set(UCAL_DAY_OF_YEAR, 1);
+        int32_t max1599 = cal.getActualMaximum(UCAL_DAY_OF_YEAR, status);
+        cal.clear();
+        cal.set(UCAL_EXTENDED_YEAR, 1600);
+        cal.set(UCAL_DAY_OF_YEAR, 1);
+        int32_t max1600 = cal.getActualMaximum(UCAL_DAY_OF_YEAR, status);
+        if (failure(status, "1600-01-01 cutover, getActualMaximum(DAY_OF_YEAR)")) {
+            return;
+        }
+        if (max1599 != 355) {
+            errln(UnicodeString("FAIL: 1600-01-01 cutover, getActualMaximum(DAY_OF_YEAR) in 1599: got ") +
+                  max1599 + ", expected 355");
+        }
+        if (max1600 != 366) {
+            errln(UnicodeString("FAIL: 1600-01-01 cutover, getActualMaximum(DAY_OF_YEAR) in 1600: got ") +
+                  max1600 + ", expected 366");
+        }
+    }
+
+    {
+        status = U_ZERO_ERROR;
+        GregorianCalendar cal(*TimeZone::getGMT(), status);
+        cal.clear();
+        cal.set(1582, UCAL_DECEMBER, 31);
+        cal.roll(UCAL_DAY_OF_YEAR, 1, status);
+        if (failure(status, "rolling DAY_OF_YEAR")) {
+            return;
+        }
+        int32_t ey = cal.get(UCAL_EXTENDED_YEAR, status);
+        int32_t month = cal.get(UCAL_MONTH, status);
+        int32_t dom = cal.get(UCAL_DAY_OF_MONTH, status);
+        if (failure(status, "reading the rolled date")) {
+            return;
+        }
+        if (ey != 1582 || month != UCAL_JANUARY || dom != 1) {
+            SimpleDateFormat sdf(UnicodeString("yyyy-MM-dd"), Locale::getUS(), status);
+            sdf.setTimeZone(*TimeZone::getGMT());
+            UnicodeString actualStr;
+            sdf.format(cal.getTime(status), actualStr);
+            errln(UnicodeString("FAIL: default cutover, roll(DAY_OF_YEAR,+1) from 1582-12-31: got ") +
+                  actualStr + ", expected 1582-01-01");
+        }
+    }
+
+    {
+        // inTemporalLeapYear() is defined as getActualMaximum(DAY_OF_YEAR) == 366, so a cutover
+        // year shortened below 366 days is correctly not a "temporal leap year" even though
+        // 1752 is a leap year in both the Julian and Gregorian calendars.
+        UDate gbCutoverMillis = 0;
+        {
+            status = U_ZERO_ERROR;
+            GregorianCalendar cutoverCal(*TimeZone::getGMT(), status);
+            cutoverCal.clear();
+            cutoverCal.set(1752, UCAL_SEPTEMBER, 14);
+            gbCutoverMillis = cutoverCal.getTime(status);
+            if (failure(status, "computing the 1752-09-14 cutover date")) {
+                return;
+            }
+        }
+        status = U_ZERO_ERROR;
+        GregorianCalendar cal(*TimeZone::getGMT(), status);
+        cal.setGregorianChange(gbCutoverMillis, status);
+        cal.clear();
+        cal.set(UCAL_EXTENDED_YEAR, 1752);
+        cal.set(UCAL_DAY_OF_YEAR, 1);
+        UBool leap1752 = cal.inTemporalLeapYear(status);
+        if (failure(status, "GB 1752-09-14 cutover, inTemporalLeapYear(1752)")) {
+            return;
+        }
+        if (leap1752) {
+            errln("FAIL: GB 1752-09-14 cutover, inTemporalLeapYear(1752): got true, expected false");
+        }
+
+        status = U_ZERO_ERROR;
+        GregorianCalendar ordinary(*TimeZone::getGMT(), status);
+        ordinary.clear();
+        ordinary.set(UCAL_EXTENDED_YEAR, 2000);
+        ordinary.set(UCAL_DAY_OF_YEAR, 1);
+        UBool leap2000 = ordinary.inTemporalLeapYear(status);
+        if (failure(status, "default cutover, inTemporalLeapYear(2000)")) {
+            return;
+        }
+        if (!leap2000) {
+            errln("FAIL: default cutover, inTemporalLeapYear(2000): got false, expected true");
+        }
     }
 }
 
