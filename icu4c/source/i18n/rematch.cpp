@@ -2550,12 +2550,14 @@ UBool RegexMatcher::isWordBoundary(int64_t pos) {
     UBool isBoundary = false;
     UBool cIsWord    = false;
 
+    // Set the input position even at the end of the input. The loop below backs up from it,
+    //   and the input may have been left elsewhere, for example by a failed look-behind.
+    UTEXT_SETNATIVEINDEX(fInputText, pos);
     if (pos >= fLookLimit) {
         fHitEnd = true;
     } else {
         // Determine whether char c at current position is a member of the word set of chars.
         // If we're off the end of the string, behave as though we're not at a word char.
-        UTEXT_SETNATIVEINDEX(fInputText, pos);
         UChar32  c = UTEXT_CURRENT32(fInputText);
         if (u_hasBinaryProperty(c, UCHAR_GRAPHEME_EXTEND) || u_charType(c) == U_FORMAT_CHAR) {
             // Current char is a combining one.  Not a boundary.
