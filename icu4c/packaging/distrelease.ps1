@@ -40,8 +40,8 @@ New-Item -Path $source -ItemType "directory" -ErrorAction SilentlyContinue
 # copy required stuff
 if ($arch -eq "x64")
 {
-    Copy-Item -Path "$icuDir\lib64" -Destination $source -Recurse
-    Copy-Item -Path "$icuDir\bin64" -Destination $source -Recurse
+    Copy-Item -Path "$icuDir\lib64" -Destination "$source\lib" -Recurse
+    Copy-Item -Path "$icuDir\bin64" -Destination "$source\bin" -Recurse
 }
 elseif ($arch -eq "x86")
 {
@@ -50,8 +50,8 @@ elseif ($arch -eq "x86")
 }
 elseif ($arch -eq "ARM64")
 {
-    Copy-Item -Path "$icuDir\libARM64" -Destination $source -Recurse
-    Copy-Item -Path "$icuDir\binARM64" -Destination $source -Recurse
+    Copy-Item -Path "$icuDir\libARM64" -Destination "$source\lib" -Recurse
+    Copy-Item -Path "$icuDir\binARM64" -Destination "$source\bin" -Recurse
 }
 else
 {
@@ -68,7 +68,7 @@ Copy-Item -Path "$icuDir\LICENSE" -Destination $source -Recurse
 Copy-Item -Path "$icuDir\readme.html" -Destination $source -Recurse
 
 
-$destination = "$icuDir\source\dist\icu-windows.zip"
+$destination = "$icuDir\source\dist\icu-windows-$arch.zip"
 Remove-Item -Path $destination -ErrorAction Continue
 Echo $source
 Echo $destination
