@@ -66,6 +66,7 @@ UTextTest::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO(Ticket12130);
     TESTCASE_AUTO(Ticket13344);
     TESTCASE_AUTO(Ticket23508);
+    TESTCASE_AUTO(Ticket23556);
     TESTCASE_AUTO(AccessChangesChunkSize);
     TESTCASE_AUTO_END;
 }
@@ -1646,6 +1647,27 @@ void UTextTest::Ticket23508() {
             "UTextTest::Ticket23508-UnicodeString-independent",
             0x41,
             utext_char32At(stringClone.getAlias(), 0));
+}
+
+// ICU-23556 A deep clone of a UTF-8 UText opened with an explicit length copies that many
+// bytes and terminates the copy itself. The byte after the text is not part of it.
+void UTextTest::Ticket23556() {
+    UErrorCode status = U_ZERO_ERROR;
+    char buf[] = "abcX";
+
+    LocalUTextPointer ut(utext_openUTF8(nullptr, buf, 3, &status));
+    assertSuccess("UTextTest::Ticket23556-open", status);
+
+    LocalUTextPointer clone(utext_clone(nullptr, ut.getAlias(), true, false, &status));
+    assertSuccess("UTextTest::Ticket23556-clone", status);
+
+    const char *copy = static_cast<const char *>(clone->context);
+    assertTrue("UTextTest::Ticket23556-own-copy", copy != buf);
+    assertEquals("UTextTest::Ticket23556-length",
+                 static_cast<int64_t>(3), utext_nativeLength(clone.getAlias()));
+    assertEquals("UTextTest::Ticket23556-terminated", 0, copy[3]);
+    assertEquals("UTextTest::Ticket23556-text",
+                 0x63, utext_char32At(clone.getAlias(), 2));
 }
 
 // ICU-21653 UText does not handle access callback that changes chunk size
