@@ -102,6 +102,23 @@ void RBBIDataWrapper::init(const RBBIDataHeader *data, UErrorCode &status) {
     //       that is no longer supported.  At that time fFormatVersion was
     //       an int32_t field, rather than an array of 4 bytes.
 
+    uint32_t totalLen = fHeader->fLength;
+    if (totalLen < sizeof(RBBIDataHeader)) {
+        status = U_INVALID_FORMAT_ERROR;
+        return;
+    }
+
+    // Validate all offset+length pairs against the total data length.
+    // Prevent integer overflow by checking each addend against totalLen first.
+    if (fHeader->fFTable > totalLen || fHeader->fFTableLen > totalLen - fHeader->fFTable ||
+        fHeader->fRTable > totalLen || fHeader->fRTableLen > totalLen - fHeader->fRTable ||
+        fHeader->fTrie > totalLen || fHeader->fTrieLen > totalLen - fHeader->fTrie ||
+        fHeader->fRuleSource > totalLen || fHeader->fRuleSourceLen > totalLen - fHeader->fRuleSource ||
+        fHeader->fStatusTable > totalLen || fHeader->fStatusTableLen > totalLen - fHeader->fStatusTable) {
+        status = U_INVALID_FORMAT_ERROR;
+        return;
+    }
+
     fDontFreeData = false;
     if (data->fFTableLen != 0) {
         fForwardTable = reinterpret_cast<const RBBIStateTable*>(reinterpret_cast<const char*>(data) + fHeader->fFTable);
