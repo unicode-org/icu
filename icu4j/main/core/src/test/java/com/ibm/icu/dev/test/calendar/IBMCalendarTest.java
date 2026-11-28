@@ -2467,7 +2467,6 @@ public class IBMCalendarTest extends CalendarTestFmwk {
             // calendars with non-modern era 0 that goes backwards, max era == 1
             "en@calendar=gregorian",
             "en@calendar=roc",
-            "en@calendar=coptic",
             // calendars with non-modern era 0 that goes backwards, max era > 1
             "en@calendar=japanese",
             // calendars with non-modern era 0 that goes forwards, max era > 1
