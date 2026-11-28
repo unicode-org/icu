@@ -105,6 +105,7 @@ messageformat2_formattable.cpp
 messageformat2_function_registry.cpp
 messageformat2_parser.cpp
 messageformat2_serializer.cpp
+myancal.cpp
 name2uni.cpp
 nfrs.cpp
 nfrule.cpp
