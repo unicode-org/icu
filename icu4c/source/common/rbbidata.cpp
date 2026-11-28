@@ -89,6 +89,118 @@ void RBBIDataWrapper::init0() {
     fDontFreeData = true;
 }
 
+namespace {
+
+// Returns true if an offset plus length, both taken from a rule data header,
+// stays within the total data length.
+UBool
+offsetAndLengthAreValid(const RBBIDataHeader *data, uint32_t offset, uint32_t length) {
+    return (uint64_t)offset + length <= data->fLength;
+}
+
+// Returns true if the row fields of a state table are within bounds.
+//
+// The look-ahead fields index the run-time look-ahead results array that
+// RuleBasedBreakIterator allocates with the size from
+// RBBIStateTable::fLookAheadResultsSize, the tag index indexes the rule
+// status table, and the next-state values index the rows of this same table.
+// All of these values come from the data itself; without this check a
+// malformed binary rule file opened with ubrk_openBinaryRules() leads to out
+// of bounds writes in RuleBasedBreakIterator::handleNext() and out of bounds
+// reads elsewhere. See ICU-23531.
+UBool
+rowIndexesAreValid(const RBBIStateTable *table,
+                   uint32_t catCount,
+                   const int32_t *ruleStatusTable,
+                   int32_t statusMaxIdx) {
+    uint32_t numRows = table->fNumStates;
+    uint32_t rowLen = table->fRowLen;
+    uint32_t lookAheadResultsSize = table->fLookAheadResultsSize;
+    bool rowsAre8Bit = (table->fFlags & RBBI_8BITS_ROWS) != 0;
+    uint32_t wordSize = rowsAre8Bit ? 1 : 2;
+
+    // A row must be able to hold the three fixed fields plus one next-state
+    // entry per character category.
+    if (rowLen < 3 * wordSize + catCount * wordSize) {
+        return false;
+    }
+
+    for (uint32_t state = 0; state < numRows; state++) {
+        const char *rowBytes = table->fTableData + (uint64_t)rowLen * state;
+        uint32_t accepting;
+        uint32_t lookAhead;
+        uint32_t tagsIdx;
+        if (rowsAre8Bit) {
+            const RBBIStateTableRow8 *row =
+                reinterpret_cast<const RBBIStateTableRow8 *>(rowBytes);
+            accepting = row->fAccepting;
+            lookAhead = row->fLookAhead;
+            tagsIdx = row->fTagsIdx;
+            for (uint32_t col = 0; col < catCount; col++) {
+                if (row->fNextState[col] >= numRows) {
+                    return false;
+                }
+            }
+        } else {
+            const RBBIStateTableRow16 *row =
+                reinterpret_cast<const RBBIStateTableRow16 *>(rowBytes);
+            accepting = row->fAccepting;
+            lookAhead = row->fLookAhead;
+            tagsIdx = row->fTagsIdx;
+            for (uint32_t col = 0; col < catCount; col++) {
+                if (row->fNextState[col] >= numRows) {
+                    return false;
+                }
+            }
+        }
+        if (accepting > ACCEPTING_UNCONDITIONAL && accepting >= lookAheadResultsSize) {
+            return false;
+        }
+        if (lookAhead > ACCEPTING_UNCONDITIONAL && lookAhead >= lookAheadResultsSize) {
+            return false;
+        }
+        if (tagsIdx != 0) {
+            if (tagsIdx >= (uint32_t)statusMaxIdx) {
+                return false;
+            }
+            // The status table entry at tagsIdx holds a count followed by that
+            // many values.
+            int32_t numTags = ruleStatusTable[tagsIdx];
+            if (numTags < 0 ||
+                (uint64_t)tagsIdx + numTags + 1 > (uint64_t)statusMaxIdx) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+// Returns true if the state table at the given offset is fully within the
+// data and all of its row fields are within bounds.
+UBool
+stateTableIsValid(const RBBIDataHeader *data,
+                  uint32_t tableOffset,
+                  uint32_t tableLen,
+                  uint32_t catCount,
+                  const int32_t *ruleStatusTable,
+                  int32_t statusMaxIdx) {
+    if (tableLen == 0) {
+        return true;
+    }
+    if (!offsetAndLengthAreValid(data, tableOffset, tableLen)) {
+        return false;
+    }
+    const RBBIStateTable *table =
+        reinterpret_cast<const RBBIStateTable *>(reinterpret_cast<const char *>(data) + tableOffset);
+    if ((uint64_t)table->fNumStates * table->fRowLen +
+            offsetof(RBBIStateTable, fTableData) > tableLen) {
+        return false;
+    }
+    return rowIndexesAreValid(table, catCount, ruleStatusTable, statusMaxIdx);
+}
+
+}  // namespace
+
 void RBBIDataWrapper::init(const RBBIDataHeader *data, UErrorCode &status) {
     if (U_FAILURE(status)) {
         return;
@@ -101,6 +213,18 @@ void RBBIDataWrapper::init(const RBBIDataHeader *data, UErrorCode &status) {
     // Note: in ICU version 3.2 and earlier, there was a formatVersion 1
     //       that is no longer supported.  At that time fFormatVersion was
     //       an int32_t field, rather than an array of 4 bytes.
+
+    // The offset and length fields all come from the data itself. Check them
+    // against the total length before anything is read through them.
+    // See ICU-23531.
+    if (!offsetAndLengthAreValid(data, data->fFTable, data->fFTableLen) ||
+        !offsetAndLengthAreValid(data, data->fRTable, data->fRTableLen) ||
+        !offsetAndLengthAreValid(data, data->fTrie, data->fTrieLen) ||
+        !offsetAndLengthAreValid(data, data->fRuleSource, data->fRuleSourceLen) ||
+        !offsetAndLengthAreValid(data, data->fStatusTable, data->fStatusTableLen)) {
+        status = U_INVALID_FORMAT_ERROR;
+        return;
+    }
 
     fDontFreeData = false;
     if (data->fFTableLen != 0) {
@@ -126,12 +250,43 @@ void RBBIDataWrapper::init(const RBBIDataHeader *data, UErrorCode &status) {
         return;
     }
 
+    // The character categories from the trie index the next-state columns of
+    // the state table rows; any value at or above fCatCount would read out of
+    // bounds. See ICU-23531.
+    {
+        uint32_t value;
+        UChar32 start = 0;
+        while (start <= 0x10ffff) {
+            UChar32 end = ucptrie_getRange(
+                fTrie, start, UCPMAP_RANGE_NORMAL, 0, nullptr, nullptr, &value);
+            if (end < 0) {
+                break;
+            }
+            if (value >= data->fCatCount) {
+                status = U_INVALID_FORMAT_ERROR;
+                return;
+            }
+            if (end >= 0x10ffff) {
+                break;
+            }
+            start = end + 1;
+        }
+    }
+
     fRuleSource   = ((char *)data + fHeader->fRuleSource);
     fRuleString = UnicodeString::fromUTF8(StringPiece(fRuleSource, fHeader->fRuleSourceLen));
     U_ASSERT(data->fRuleSourceLen > 0);
 
     fRuleStatusTable = reinterpret_cast<const int32_t*>(reinterpret_cast<const char*>(data) + fHeader->fStatusTable);
     fStatusMaxIdx    = data->fStatusTableLen / sizeof(int32_t);
+
+    if (!stateTableIsValid(data, data->fFTable, data->fFTableLen,
+                           data->fCatCount, fRuleStatusTable, fStatusMaxIdx) ||
+        !stateTableIsValid(data, data->fRTable, data->fRTableLen,
+                           data->fCatCount, fRuleStatusTable, fStatusMaxIdx)) {
+        status = U_INVALID_FORMAT_ERROR;
+        return;
+    }
 
     fRefCount = 1;
 
