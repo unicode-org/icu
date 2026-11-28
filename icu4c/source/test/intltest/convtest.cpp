@@ -79,6 +79,7 @@ ConversionTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO(TestDefaultIgnorableCallback);
     TESTCASE_AUTO(TestUTF8ToUTF8Overflow);
     TESTCASE_AUTO(TestUTF8ToUTF8Streaming);
+    TESTCASE_AUTO(TestOpenCCSIDOutOfRange);
     TESTCASE_AUTO_END;
 }
 
@@ -896,6 +897,20 @@ ConversionTest::TestUTF8ToUTF8Streaming() {
 
     assertEquals("Full text length match", sourceLen, sizeof(result) - targetLen);
     assertSuccess("UTF-8->UTF-8", errorCode);
+}
+
+// ICU-23585: ucnv_openCCSID() formats the CCSID into a converter name.
+// INT32_MIN used to hit signed negation overflow (undefined behavior).
+void
+ConversionTest::TestOpenCCSIDOutOfRange() {
+    static const int32_t ccsids[] = { INT32_MIN, INT32_MIN + 1, -1, 0x10000, INT32_MAX };
+    for (int32_t ccsid : ccsids) {
+        UErrorCode errorCode = U_ZERO_ERROR;
+        UConverter *cnv = ucnv_openCCSID(ccsid, UCNV_IBM, &errorCode);
+        assertTrue("ucnv_openCCSID(out of range) fails", U_FAILURE(errorCode));
+        assertTrue("ucnv_openCCSID(out of range) returns nullptr", cnv == nullptr);
+        ucnv_close(cnv);
+    }
 }
 
 // open testdata or ICU data converter ------------------------------------- ***
