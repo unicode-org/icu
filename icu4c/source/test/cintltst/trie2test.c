@@ -1425,6 +1425,35 @@ Trie12ConversionTest(void) {
                        checkRanges2, UPRV_LENGTHOF(checkRanges2));
 }
 
+static void
+MalformedSerializedTrieTest(void) {
+    /* Crafted 20-byte serialized UTrie2 with dataNullOffset and dataLength
+       values that cause utrie2_openFromSerialized() to read past the
+       allocated buffer. Before the fix this was a heap OOB read. */
+    static const uint8_t data[] = {
+        0x32, 0x69, 0x72, 0x54, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x14, 0x76, 0x76, 0x76, 0x76, 0x76,
+        0x76, 0x76, 0x76, 0x76
+    };
+    UErrorCode status = U_ZERO_ERROR;
+    int32_t actualLength = 0;
+    UTrie2 *trie = utrie2_openFromSerialized(
+        UTRIE2_16_VALUE_BITS, data, sizeof(data), &actualLength, &status);
+    if (U_SUCCESS(status)) {
+        log_err("utrie2_openFromSerialized(malformed) succeeded, expected U_INVALID_FORMAT_ERROR\n");
+        utrie2_close(trie);
+    }
+
+    /* Also try with 32-bit value bits. */
+    status = U_ZERO_ERROR;
+    trie = utrie2_openFromSerialized(
+        UTRIE2_32_VALUE_BITS, data, sizeof(data), &actualLength, &status);
+    if (U_SUCCESS(status)) {
+        log_err("utrie2_openFromSerialized(malformed, 32-bit) succeeded, expected U_INVALID_FORMAT_ERROR\n");
+        utrie2_close(trie);
+    }
+}
+
 void
 addTrie2Test(TestNode** root) {
     addTest(root, &TrieTest, "tsutil/trie2test/TrieTest");
@@ -1434,4 +1463,5 @@ addTrie2Test(TestNode** root) {
     addTest(root, &FreeBlocksTest, "tsutil/trie2test/FreeBlocksTest");
     addTest(root, &GrowDataArrayTest, "tsutil/trie2test/GrowDataArrayTest");
     addTest(root, &Trie12ConversionTest, "tsutil/trie2test/Trie12ConversionTest");
+    addTest(root, &MalformedSerializedTrieTest, "tsutil/trie2test/MalformedSerializedTrieTest");
 }
