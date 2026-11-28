@@ -585,6 +585,54 @@ public class GregorianCalendar extends Calendar implements Cloneable {
     @Override
     public void roll(int field, int amount) {
 
+        // J81 processing. (gregorian cutover)
+        boolean inAffectedMonth = false;
+        int cMonthLen = 0; // 'c' for cutover; in days
+        // 1-based position of the current day within the hybrid month, in [1, cMonthLen]
+        int cDayOfMonth = 0;
+
+        // Skip this detection when amount == 0: it costs a get(EXTENDED_YEAR), which resolves
+        // pending fields via complete(), and that must not happen for fields untouched by the
+        // cutover-month special case (matching the base Calendar.roll(), which itself no-ops for
+        // amount == 0 before ever calling complete()). When amount == 0, DAY_OF_MONTH/WEEK_OF_MONTH
+        // below simply fall through to super.roll(field, 0), same as every other field -- exactly
+        // matching this class's behavior before it grew the cutover-month special case. (ICU4C
+        // achieves the same thing more simply, by returning at the very top of roll() for amount ==
+        // 0; that isn't done here because it would also skip the WEEK_OF_YEAR case below, which
+        // resolves its own fields unconditionally, regardless of amount, and must keep doing so.)
+        if (amount != 0) {
+            // See if we're in a month that is actually shortened or split by the cutover
+            // ("affected", per computeHybridMonth()). A cutover near a year boundary (e.g. in early
+            // January) can affect December of the *previous* year, hence the +/-1 window instead of
+            // just this year. (This assumes the Julian/Gregorian difference is under a year, true
+            // for |year| below roughly 48000.)
+            int eyear = get(EXTENDED_YEAR);
+            long cutoverYearDelta = (long) eyear - (long) gregorianCutoverYear;
+            if (cutoverYearDelta >= -1 && cutoverYearDelta <= 1) {
+                switch (field) {
+                    case DAY_OF_MONTH:
+                    case WEEK_OF_MONTH:
+                        {
+                            int month = internalGetMonth();
+                            HybridMonth hm =
+                                    computeHybridMonth(
+                                            cutoverJulianDay, gregorianCutoverYear, eyear, month);
+                            if (hm.affected) {
+                                inAffectedMonth = true;
+                                cMonthLen = hm.length;
+                                // internalGet(JULIAN_DAY) is the Julian Day of the current moment
+                                // (already computed by the get() call above), so this is the
+                                // (1-based) position of the current day within the hybrid month.
+                                cDayOfMonth = internalGet(JULIAN_DAY) - hm.first + 1;
+                            }
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
         switch (field) {
             case WEEK_OF_YEAR:
                 {
@@ -629,6 +677,140 @@ public class GregorianCalendar extends Calendar implements Cloneable {
                     }
                     set(WEEK_OF_YEAR, woy);
                     set(YEAR, isoYear); // Why not YEAR_WOY? - Alan 11/6/00
+                    return;
+                }
+
+            case DAY_OF_MONTH:
+                if (!inAffectedMonth) {
+                    super.roll(field, amount);
+                    return;
+                }
+                {
+                    // [j81] special case for DOM in a month shortened or split by the cutover: the
+                    // default computation assumes an ordinary month, so roll within the hybrid
+                    // month's own length instead.
+                    long pos = ((long) cDayOfMonth - 1 + amount) % cMonthLen;
+                    if (pos < 0) {
+                        pos += cMonthLen;
+                    }
+                    int newDom = (int) pos + 1;
+                    // set(JULIAN_DAY) resolves the new day like the base class's set()+complete(),
+                    // honoring the repeated/skipped wall-time options, unlike direct millisecond
+                    // arithmetic. complete() below applies that result to the other fields
+                    // (DAY_OF_MONTH, etc.) immediately, so a later set() of another field, with no
+                    // intervening get(), doesn't discard this roll.
+                    set(JULIAN_DAY, internalGet(JULIAN_DAY) + (newDom - cDayOfMonth));
+                    complete();
+                    return;
+                }
+
+            case WEEK_OF_MONTH:
+                if (!inAffectedMonth) {
+                    super.roll(field, amount);
+                    return;
+                }
+                {
+                    // NOTE: following copied from Calendar.roll()'s WEEK_OF_MONTH case, adapted to
+                    // operate on the hybrid month's own day-of-month and length instead of the
+                    // ordinary ones.
+
+                    // This is tricky, because during the roll we may have to shift to a different
+                    // day of the week. For example:
+
+                    //    s  m  t  w  r  f  s
+                    //          1  2  3  4  5
+                    //    6  7  8  9 10 11 12
+
+                    // When rolling from the 6th or 7th back one week, we go to the 1st (assuming
+                    // that the first partial week counts). The same thing happens at the end of the
+                    // month.
+
+                    // The other tricky thing is that we have to figure out whether the first
+                    // partial week actually counts or not, based on the minimal first days in the
+                    // week. And we have to use the correct first day of the week to delineate the
+                    // week boundaries.
+
+                    // Here's our algorithm. First, we find the real boundaries of the month. Then
+                    // we discard the first partial week if it doesn't count in this locale. Then we
+                    // fill in the ends with phantom days, so that the first partial week and the
+                    // last partial week are full weeks. We then have a nice square block of weeks.
+                    // We do the usual rolling within this block, as is done elsewhere in this
+                    // method. If we wind up on one of the phantom days that we added, we recognize
+                    // this and pin to the first or the last day of the month. Easy, eh?
+
+                    // Another wrinkle: to handle a month shortened or split by the Gregorian
+                    // cutover (any number of days, not necessarily 10, and not necessarily the
+                    // default 1582 cutover), this operates on the hybrid month's
+                    // day-of-month/length
+                    // (cDayOfMonth / cMonthLen) rather than the ordinary
+                    // DAY_OF_MONTH/getActualMaximum().
+
+                    // Normalize the DAY_OF_WEEK so that 0 is the first day of the week in this
+                    // locale. We have dow in 0..6.
+                    int dow = internalGet(DAY_OF_WEEK) - getFirstDayOfWeek();
+                    if (dow < 0) {
+                        dow += 7;
+                    }
+
+                    // Find the day of month, compensating for cutover discontinuity.
+                    int dom = cDayOfMonth;
+
+                    // Find the day of the week (normalized for locale) for the first of the month.
+                    int fdm = (dow - dom + 1) % 7;
+                    if (fdm < 0) {
+                        fdm += 7;
+                    }
+
+                    // Get the first day of the first full week of the month, including phantom
+                    // days, if any. Figure out if the first week counts or not; if it counts, then
+                    // fill in phantom days. If not, advance to the first real full week (skip the
+                    // partial week).
+                    int start;
+                    if ((7 - fdm) < getMinimalDaysInFirstWeek()) {
+                        start = 8 - fdm; // Skip the first partial week
+                    } else {
+                        start = 1 - fdm; // This may be zero or negative
+                    }
+
+                    // Get the day of the week (normalized for locale) for the last day of the
+                    // month.
+                    int monthLen = cMonthLen;
+                    int ldm = (monthLen - dom + dow) % 7;
+                    // We know monthLen >= DAY_OF_MONTH so we skip the += 7 step here.
+
+                    // Get the limit day for the blocked-off rectangular month; that is, the day
+                    // which is one past the last day of the month, after the month has already been
+                    // filled in with phantom days to fill out the last week. This day has a
+                    // normalized DOW of 0.
+                    int limit = monthLen + 7 - ldm;
+
+                    // Now roll between start and (limit - 1). This uses a long for amount*7L, to
+                    // avoid overflowing an int for |amount| > 306783378 (Calendar.roll()'s own
+                    // WEEK_OF_MONTH computation uses a plain int there and is subject to that
+                    // overflow); this mirrors ICU4C's Calendar::roll(), which already uses 64-bit
+                    // arithmetic for this same computation.
+                    int gap = limit - start;
+                    int newDom = (int) ((dom + amount * 7L - start) % gap);
+                    if (newDom < 0) {
+                        newDom += gap;
+                    }
+                    newDom += start;
+
+                    // Finally, pin to the real start and end of the month.
+                    if (newDom < 1) {
+                        newDom = 1;
+                    }
+                    if (newDom > monthLen) {
+                        newDom = monthLen;
+                    }
+
+                    // set(JULIAN_DAY) resolves the new day like the base class's set()+complete(),
+                    // honoring the repeated/skipped wall-time options, unlike direct millisecond
+                    // arithmetic. complete() below applies that result to the other fields
+                    // (DAY_OF_MONTH, etc.) immediately, so a later set() of another field, with no
+                    // intervening get(), doesn't discard this roll.
+                    set(JULIAN_DAY, internalGet(JULIAN_DAY) + (newDom - dom));
+                    complete();
                     return;
                 }
 
@@ -937,9 +1119,11 @@ public class GregorianCalendar extends Calendar implements Cloneable {
     /**
      * Julian day of the first day of the hybrid month (year, month): J1(year, month) if that Julian
      * first day precedes the cutover, else the later of G1(year, month) and the cutover itself.
-     * Computed directly, independent of the hybrid calendar's own month lengths. Requires 0 <=
-     * month <= 11. The sentinel branches below are defensive: the only caller,
-     * handleComputeJulianDay(), already excludes them, so they are unreachable today.
+     * Used by handleComputeJulianDay() (WEEK_OF_MONTH) and computeHybridMonth() below (roll()) as
+     * the one definition of "the hybrid month's first day". Requires 0 <= month <= 11. The sentinel
+     * branches below are defensive: both callers already exclude Integer.MIN_VALUE/MAX_VALUE (pure
+     * Gregorian / Julian calendar) before calling this, so these branches are unreachable in
+     * practice.
      */
     private static int cutoverMonthStart(int cutoverJulianDay, int year, int month) {
         if (cutoverJulianDay == Integer.MAX_VALUE) {
@@ -970,11 +1154,85 @@ public class GregorianCalendar extends Calendar implements Cloneable {
     }
 
     /**
+     * Length, in days, of the given 0-based month of the given extended year, in the pure proleptic
+     * Julian calendar. Grego does not provide this. Requires 0 <= month <= 11.
+     */
+    private static int julianMonthLength(int year, int month) {
+        return MONTH_COUNT[month][(year & 0x3) == 0 ? 1 : 0];
+    }
+
+    /**
      * Julian day of the first day of the given month (0-based) of the given extended year, in the
      * pure proleptic Gregorian calendar, independent of any cutover. Requires 0 <= month <= 11.
      */
     private static int gregorianMonthStart(int year, int month) {
         return (int) (Grego.fieldsToDay(year, month, 1) + kEpochStartAsJulianDay);
+    }
+
+    /**
+     * Length, in days, that handleGetMonthLength() reports for (year, month): the Gregorian leap
+     * rule for every month once year &gt;= gregorianCutoverYear (matching isLeapYear()), the Julian
+     * rule otherwise. This can disagree with the true Julian length only for February of a year
+     * that is a Julian leap year but not a Gregorian one (e.g. a non-400 century year).
+     */
+    private static int hybridReportedMonthLength(int gregorianCutoverYear, int year, int month) {
+        boolean isLeap =
+                (year >= gregorianCutoverYear)
+                        ? ((year % 4 == 0) && ((year % 100 != 0) || (year % 400 == 0)))
+                        : (year % 4 == 0);
+        return MONTH_COUNT[month][isLeap ? 1 : 0];
+    }
+
+    /**
+     * The boundaries of a "hybrid" month, used only by roll(): the JD of its first day (per
+     * cutoverMonthStart() above) and its length, and whether either differs from the ordinary month
+     * of the calendar that labels it ("affected"). roll() falls back to Calendar.roll() when not
+     * affected. For a cutover early enough that the hybrid month repeats day labels (roughly before
+     * 200 AD), rolling within this range can still land on a day labelled with an adjacent month or
+     * year.
+     */
+    private static final class HybridMonth {
+        final int first;
+        final int length;
+        final boolean affected;
+
+        HybridMonth(int first, int length, boolean affected) {
+            this.first = first;
+            this.length = length;
+            this.affected = affected;
+        }
+    }
+
+    private static HybridMonth computeHybridMonth(
+            int cutoverJulianDay, int gregorianCutoverYear, int year, int month) {
+        if (cutoverJulianDay == Integer.MIN_VALUE) {
+            return new HybridMonth(
+                    gregorianMonthStart(year, month), Grego.monthLength(year, month), false);
+        }
+        if (cutoverJulianDay == Integer.MAX_VALUE) {
+            return new HybridMonth(
+                    julianMonthStart(year, month), julianMonthLength(year, month), false);
+        }
+
+        int first = cutoverMonthStart(cutoverJulianDay, year, month);
+        int nextFirst =
+                (month == 11)
+                        ? cutoverMonthStart(cutoverJulianDay, year + 1, 0)
+                        : cutoverMonthStart(cutoverJulianDay, year, month + 1);
+        int length = nextFirst - first;
+
+        // Not affected iff the hybrid range is an intact Julian month entirely before the cutover
+        // and Calendar.roll() would report its true length, or an intact Gregorian month entirely
+        // at/after the cutover (always consistent with what Calendar.roll() reports there).
+        boolean ordinaryJulian =
+                (first == julianMonthStart(year, month))
+                        && (first + length - 1 < cutoverJulianDay)
+                        && (length == hybridReportedMonthLength(gregorianCutoverYear, year, month));
+        boolean ordinaryGregorian =
+                (first == gregorianMonthStart(year, month))
+                        && (length == Grego.monthLength(year, month))
+                        && (first >= cutoverJulianDay);
+        return new HybridMonth(first, length, !(ordinaryJulian || ordinaryGregorian));
     }
 
     /**

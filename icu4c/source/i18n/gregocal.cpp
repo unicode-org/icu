@@ -476,6 +476,13 @@ int64_t julianMonthStart(int32_t year, int32_t month) {
     return dayBeforeJan1 + 1;
 }
 
+// Length, in days, of the given 0-based month of the given extended year,
+// in the pure proleptic Julian calendar. Grego does not provide this.
+int32_t julianMonthLength(int32_t year, int32_t month) {
+    U_ASSERT(0 <= month && month <= 11);
+    return ((year & 0x3) == 0) ? kLeapMonthLength[month] : kMonthLength[month];
+}
+
 // Julian Day of the 1st of the given 0-based month of the given extended
 // year, in the pure proleptic Gregorian calendar.
 int64_t gregorianMonthStart(int32_t year, int32_t month) {
@@ -483,14 +490,27 @@ int64_t gregorianMonthStart(int32_t year, int32_t month) {
     return Grego::fieldsToDay(year, month, 1) + kEpochStartAsJulianDay;
 }
 
+// Length GregorianCalendar::handleGetMonthLength() reports for (year,
+// month): the Gregorian leap rule for every month once year >=
+// fGregorianCutoverYear (matching GregorianCalendar::isLeapYear()), the
+// Julian rule otherwise. This can disagree with the true Julian length only
+// for February of a year that is a Julian leap year but not a Gregorian one
+// (e.g. a non-400 century year).
+int32_t hybridReportedMonthLength(int32_t cutoverYear, int32_t year, int32_t month) {
+    U_ASSERT(0 <= month && month <= 11);
+    UBool isLeap = (year >= cutoverYear) ? Grego::isLeapYear(year) : ((year & 0x3) == 0);
+    return isLeap ? kLeapMonthLength[month] : kMonthLength[month];
+}
+
 // Julian day of the first day of the hybrid month (year, month): the
 // Julian month's own first day if that precedes the cutover (the month's
 // Julian identity survives, possibly truncated at the end); otherwise the
 // later of the Gregorian month's own first day and the cutover itself.
-// Used by handleComputeJulianDay() (WEEK_OF_MONTH) as the definition of
-// "the hybrid month's first day".
+// Shared by handleComputeJulianDay() (WEEK_OF_MONTH) and
+// computeHybridMonth() below (roll()) as the one definition of "the hybrid
+// month's first day".
 int64_t cutoverMonthStart(int32_t cutoverJD, int32_t year, int32_t month) {
-    // The caller already excludes INT32_MIN/INT32_MAX (pure Gregorian/
+    // Both callers already exclude INT32_MIN/INT32_MAX (pure Gregorian/
     // Julian calendar) before calling this, so these branches are
     // unreachable in practice; kept for robustness.
     if (cutoverJD == INT32_MIN) {
@@ -505,6 +525,45 @@ int64_t cutoverMonthStart(int32_t cutoverJD, int32_t year, int32_t month) {
     }
     int64_t gregorianStart = gregorianMonthStart(year, month);
     return gregorianStart > cutoverJD ? gregorianStart : static_cast<int64_t>(cutoverJD);
+}
+
+// The boundaries of a "hybrid" month, used only by roll(): the JD of its
+// first day (per cutoverMonthStart() above) and its length, and whether
+// either differs from the ordinary month of the calendar that labels it
+// ("affected"). roll() falls back to Calendar::roll() when not affected.
+// For a cutover early enough that the hybrid month repeats day labels
+// (roughly before 200 AD), rolling within this range can still land on a
+// day labelled with an adjacent month or year.
+struct HybridMonth {
+    int64_t first;
+    int32_t length;
+    UBool affected;
+};
+
+HybridMonth computeHybridMonth(int32_t cutoverJD, int32_t cutoverYear, int32_t year, int32_t month) {
+    if (cutoverJD == INT32_MIN) {
+        return { gregorianMonthStart(year, month), Grego::monthLength(year, month), false };
+    }
+    if (cutoverJD == INT32_MAX) {
+        return { julianMonthStart(year, month), julianMonthLength(year, month), false };
+    }
+
+    int64_t first = cutoverMonthStart(cutoverJD, year, month);
+    int64_t nextFirst = (month == 11) ? cutoverMonthStart(cutoverJD, year + 1, 0)
+                                       : cutoverMonthStart(cutoverJD, year, month + 1);
+    int32_t length = static_cast<int32_t>(nextFirst - first);
+
+    // Not affected iff the hybrid range is an intact Julian month entirely
+    // before the cutover and Calendar::roll() would report its true
+    // length, or an intact Gregorian month entirely at/after the cutover
+    // (always consistent with what Calendar::roll() reports there).
+    UBool ordinaryJulian = (first == julianMonthStart(year, month)) &&
+        (first + length - 1 < cutoverJD) &&
+        (length == hybridReportedMonthLength(cutoverYear, year, month));
+    UBool ordinaryGregorian = (first == gregorianMonthStart(year, month)) &&
+        (length == Grego::monthLength(year, month)) &&
+        (first >= cutoverJD);
+    return { first, length, !(ordinaryJulian || ordinaryGregorian) };
 }
 
 // JD of the first day of week 1 of a period whose first day is
@@ -909,31 +968,37 @@ GregorianCalendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode& s
     }
 
     // J81 processing. (gregorian cutover)
-    UBool inCutoverMonth = false;
+    UBool inAffectedMonth = false;
     int32_t cMonthLen=0; // 'c' for cutover; in days
-    int32_t cDayOfMonth=0; // no discontinuity: [0, cMonthLen)
-    double cMonthStart=0.0; // in ms
+    int32_t cDayOfMonth=0; // 1-based position of the current day within the hybrid month, in [1, cMonthLen]
 
-    // Common code - see if we're in the cutover month of the cutover year
-    if(get(UCAL_EXTENDED_YEAR, status) == fGregorianCutoverYear) {
+    // See if we're in a month that is actually shortened or split by the
+    // cutover ("affected", per computeHybridMonth()). A cutover near a
+    // year boundary (e.g. in early January) can affect December of the
+    // *previous* year, hence the +/-1 window instead of just this year.
+    // (This assumes the Julian/Gregorian difference is under a year, true
+    // for |year| below roughly 48000.)
+    int32_t eyear = get(UCAL_EXTENDED_YEAR, status);
+    int64_t cutoverYearDelta = static_cast<int64_t>(eyear) - static_cast<int64_t>(fGregorianCutoverYear);
+    if (U_SUCCESS(status) && cutoverYearDelta >= -1 && cutoverYearDelta <= 1) {
         switch (field) {
         case UCAL_DAY_OF_MONTH:
         case UCAL_WEEK_OF_MONTH:
             {
-                int32_t max = monthLength(internalGetMonth(status), status);
+                int32_t month = internalGetMonth(status);
                 if (U_FAILURE(status)) {
                     return;
                 }
-                UDate t = internalGetTime();
-                // We subtract 1 from the DAY_OF_MONTH to make it zero-based, and an
-                // additional 10 if we are after the cutover. Thus the monthStart
-                // value will be correct iff we actually are in the cutover month.
-                cDayOfMonth = internalGet(UCAL_DAY_OF_MONTH) - ((t >= fGregorianCutover) ? 10 : 0);
-                cMonthStart = t - ((cDayOfMonth - 1) * kOneDay);
-                // A month containing the cutover is 10 days shorter.
-                if ((cMonthStart < fGregorianCutover) &&
-                    (cMonthStart + (cMonthLen=(max-10))*kOneDay >= fGregorianCutover)) {
-                        inCutoverMonth = true;
+                HybridMonth hm = computeHybridMonth(fCutoverJulianDay, fGregorianCutoverYear, eyear, month);
+                if (hm.affected) {
+                    inAffectedMonth = true;
+                    cMonthLen = hm.length;
+                    // internalGet(UCAL_JULIAN_DAY) is the Julian Day of the
+                    // current moment (already computed by the get() call
+                    // above), so this is the (1-based) position of the
+                    // current day within the hybrid month.
+                    cDayOfMonth = static_cast<int32_t>(
+                        internalGet(UCAL_JULIAN_DAY) - hm.first) + 1;
                 }
             }
             break;
@@ -997,31 +1062,32 @@ GregorianCalendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode& s
                             }
 
     case UCAL_DAY_OF_MONTH:
-        if( !inCutoverMonth ) { 
+        if( !inAffectedMonth ) {
             Calendar::roll(field, amount, status);
             return;
         }
         {
-            // [j81] 1582 special case for DOM
-            // The default computation works except when the current month
-            // contains the Gregorian cutover.  We handle this special case
-            // here.  [j81 - aliu]
-            double monthLen = cMonthLen * kOneDay;
-            double msIntoMonth = uprv_fmod(internalGetTime() - cMonthStart +
-                amount * kOneDay, monthLen);
-            if (msIntoMonth < 0) {
-                msIntoMonth += monthLen;
+            // [j81] special case for DOM in a month shortened or split by
+            // the cutover: the default computation assumes an ordinary
+            // month, so roll within the hybrid month's own length instead.
+            int64_t pos = (static_cast<int64_t>(cDayOfMonth) - 1 + amount) % cMonthLen;
+            if (pos < 0) {
+                pos += cMonthLen;
             }
-#if defined (U_DEBUG_CAL)
-            fprintf(stderr, "%s:%d: roll DOM %d  -> %.0lf ms  \n", 
-                __FILE__, __LINE__,amount, cMonthLen, cMonthStart+msIntoMonth);
-#endif
-            setTimeInMillis(cMonthStart + msIntoMonth, status);
+            int32_t newDom = static_cast<int32_t>(pos) + 1;
+            // set(UCAL_JULIAN_DAY) resolves the new day like the base
+            // class's set()+complete(), honoring the repeated/skipped
+            // wall-time options, unlike direct millisecond arithmetic.
+            // complete() below applies that result to the other fields
+            // (DAY_OF_MONTH, etc.) immediately, so a later set() of another
+            // field, with no intervening get(), doesn't discard this roll.
+            set(UCAL_JULIAN_DAY, internalGet(UCAL_JULIAN_DAY) + (newDom - cDayOfMonth));
+            complete(status);
             return;
         }
 
     case UCAL_WEEK_OF_MONTH:
-        if( !inCutoverMonth ) { 
+        if( !inAffectedMonth ) {
             Calendar::roll(field, amount, status);
             return;
         }
@@ -1061,10 +1127,9 @@ GregorianCalendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode& s
             // the first or the last day of the month.  Easy, eh?
 
             // Another wrinkle: To fix jitterbug 81, we have to make all this
-            // work in the oddball month containing the Gregorian cutover.
-            // This month is 10 days shorter than usual, and also contains
-            // a discontinuity in the days; e.g., the default cutover month
-            // is Oct 1582, and goes from day of month 4 to day of month 15.
+            // work in a month shortened or split by the Gregorian cutover
+            // (any number of days, not necessarily 10, and not necessarily
+            // the default 1582 cutover).
 
             // Normalize the DAY_OF_WEEK so that 0 is the first day of the week
             // in this locale.  We have dow in 0..6.
@@ -1103,30 +1168,28 @@ GregorianCalendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode& s
             // to fill out the last week.  This day has a normalized DOW of 0.
             int32_t limit = monthLen + 7 - ldm;
 
-            // Now roll between start and (limit - 1).
+            // Now roll between start and (limit - 1). amount*7LL: see
+            // Calendar::roll()'s identical WEEK_OF_MONTH computation.
             int32_t gap = limit - start;
-            int32_t newDom = (dom + amount*7 - start) % gap;
-            if (newDom < 0) 
+            int32_t newDom = static_cast<int32_t>((dom + amount*7LL - start) % gap);
+            if (newDom < 0)
                 newDom += gap;
             newDom += start;
 
             // Finally, pin to the real start and end of the month.
-            if (newDom < 1) 
+            if (newDom < 1)
                 newDom = 1;
-            if (newDom > monthLen) 
+            if (newDom > monthLen)
                 newDom = monthLen;
 
-            // Set the DAY_OF_MONTH.  We rely on the fact that this field
-            // takes precedence over everything else (since all other fields
-            // are also set at this point).  If this fact changes (if the
-            // disambiguation algorithm changes) then we will have to unset
-            // the appropriate fields here so that DAY_OF_MONTH is attended
-            // to.
-
-            // If we are in the cutover month, manipulate ms directly.  Don't do
-            // this in general because it doesn't work across DST boundaries
-            // (details, details).  This takes care of the discontinuity.
-            setTimeInMillis(cMonthStart + (newDom-1)*kOneDay, status);                
+            // set(UCAL_JULIAN_DAY) resolves the new day like the base
+            // class's set()+complete(), honoring the repeated/skipped
+            // wall-time options, unlike direct millisecond arithmetic.
+            // complete() below applies that result to the other fields
+            // (DAY_OF_MONTH, etc.) immediately, so a later set() of another
+            // field, with no intervening get(), doesn't discard this roll.
+            set(UCAL_JULIAN_DAY, internalGet(UCAL_JULIAN_DAY) + (newDom - dom));
+            complete(status);
             return;
         }
 
