@@ -172,6 +172,7 @@ public:
     void TestDividedByZero();
     void TestTurkishSpellout();
     void TestNumeratorSubstitutionOverflow();
+    void TestParseRuleDescriptorRadixOverflow();
 
 protected:
     virtual void doTest(RuleBasedNumberFormat* formatter, const char* const testData[][2], UBool testParsing);
