@@ -1,0 +1,174 @@
+// © 2026 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+
+#ifndef __SEGMENTER_H__
+#define __SEGMENTER_H__
+
+/**
+ * \file
+ * \brief C++ API: Segmenter base class.
+ */
+
+#include "unicode/utypes.h"
+
+#if U_SHOW_CPLUSPLUS_API
+
+#if UCONFIG_NO_BREAK_ITERATION
+
+U_NAMESPACE_BEGIN
+
+/*
+ * Allow the declaration of APIs with pointers to BreakIterator
+ * and Segmenter
+ * even when break iteration is removed from the build.
+ */
+class BreakIterator;
+class Segmenter;
+
+U_NAMESPACE_END
+
+#else
+
+#include "unicode/uobject.h"
+#include "unicode/unistr.h"
+
+#include <memory>
+#include <string_view>
+
+#ifndef U_HIDE_DRAFT_API
+
+U_NAMESPACE_BEGIN
+
+namespace segmenter {
+
+class SegmentIterator;
+class SegmentsImpl;
+
+// ---------------------------------------------
+// Segment
+// ---------------------------------------------
+
+class Segment {
+public:
+    Segment() :
+        start_(BreakIterator::DONE),
+        limit_(BreakIterator::DONE),
+        ruleStatus_(-1),
+        source_(u"") {
+    }
+
+    ~Segment()
+    {
+    }
+
+    Segment(int32_t start, int32_t limit, int32_t ruleStatus, std::u16string_view source) :
+        start_(start),
+        limit_(limit),
+        ruleStatus_(ruleStatus),
+        source_(source) {
+    }
+
+    int32_t getStart() {
+       return start_;
+    }
+
+    int32_t getLimit() {
+       return limit_;
+    }
+
+    int32_t getRuleStatus() {
+       return ruleStatus_;
+    }
+
+    std::u16string_view getSource() {
+       return source_.substr(start_, (limit_ - start_));
+    }
+
+    std::u16string_view getSubstr() {
+       return source_.substr(start_, (limit_ - start_));
+    }
+
+    static Segment emptySegment() {
+        Segment s;
+        return s;
+    }
+
+private:
+    const int32_t start_;
+    const int32_t limit_;
+    const int32_t ruleStatus_;
+    const std::u16string_view source_;
+};
+
+// ---------------------------------------------
+// Segments
+// ---------------------------------------------
+
+class Segments {
+public:
+    virtual bool isBoundary(int32_t i) = 0;
+
+    virtual Segment segmentAt(int32_t i, UErrorCode &errorCode) = 0;
+
+    virtual SegmentIterator segmentsFrom(int32_t i) = 0;
+
+    virtual SegmentIterator begin() = 0;
+
+    virtual SegmentIterator end() = 0;
+};
+
+// ---------------------------------------------
+// SegmentsUTF8
+// ---------------------------------------------
+
+// Note: this class is mentioned in the design doc as describing
+// an iterator of `char*`, but no details, such as whether there should be
+// a templated class based on the encoding form / code unit size
+class SegmentsUTF8 {
+    virtual bool isBoundary(int32_t i) = 0;
+
+    // all other APIs the same as Segments
+    //
+    // (if the class is templated, then that automatically becomes true)
+};
+
+// ---------------------------------------------
+// Segmenter
+// ---------------------------------------------
+
+class U_COMMON_API_CLASS Segmenter : public UObject {
+public:
+    // TODO: discuss if we want to take input type of UnicodeString or std::u16string_view
+    // Note: std::u16string_view is mentioned in the design doc, FWIW
+    // Note: Should we take a pointer or a reference?
+    //   -> UnicodeString take by const reference; [u16]string_view by value
+    virtual std::unique_ptr<Segments> segment(std::u16string_view s, UErrorCode &errorCode);
+    // Note: this API also is mentioned in the design doc
+    //  -> For UTF-8, we should either take ICU StringPiece or C++ string_view
+    //     Let's use StringPiece for now.
+    //     // TODO: discuss whether StringPiece or string_view
+    virtual std::unique_ptr<SegmentsUTF8> segment(StringPiece s, UErrorCode &errorCode);
+    // TODO: need to return a pointer,
+    // so that we don't just return a copy of the
+    // base class *slice* of the implementation.
+    // Classic ICU: return a pointer, and by convention the caller takes ownership.
+    // We *could* do something new and return a
+    // LocalPointer<Segments> or std::unique_ptr<Segments> for explicit ownership.
+protected:
+    Segmenter() {}
+    
+    ~Segmenter() {}
+};
+
+
+}  // namespace segmenter
+
+U_NAMESPACE_END
+
+#endif // U_HIDE_DRAFT_API
+
+#endif /* #if !UCONFIG_NO_BREAK_ITERATION */
+
+#endif /* U_SHOW_CPLUSPLUS_API */
+
+#endif // __SEGMENTER_H__
