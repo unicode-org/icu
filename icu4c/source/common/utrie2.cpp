@@ -173,6 +173,23 @@ utrie2_openFromSerialized(UTrie2ValueBits valueBits,
     tempTrie.index2NullOffset=header->index2NullOffset;
     tempTrie.dataNullOffset=header->dataNullOffset;
 
+    // Validate offset and length fields from the header.
+    if(tempTrie.dataLength<=UTRIE2_BAD_UTF8_DATA_OFFSET) {
+        *pErrorCode=U_INVALID_FORMAT_ERROR;
+        return nullptr;
+    }
+    if(valueBits==UTRIE2_16_VALUE_BITS) {
+        if(tempTrie.dataNullOffset>=(tempTrie.indexLength+tempTrie.dataLength)) {
+            *pErrorCode=U_INVALID_FORMAT_ERROR;
+            return nullptr;
+        }
+    } else {
+        if(tempTrie.dataNullOffset>=tempTrie.dataLength) {
+            *pErrorCode=U_INVALID_FORMAT_ERROR;
+            return nullptr;
+        }
+    }
+
     tempTrie.highStart=header->shiftedHighStart<<UTRIE2_SHIFT_1;
     tempTrie.highValueIndex=tempTrie.dataLength-UTRIE2_DATA_GRANULARITY;
     if(valueBits==UTRIE2_16_VALUE_BITS) {
