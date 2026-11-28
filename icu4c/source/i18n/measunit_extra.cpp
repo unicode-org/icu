@@ -668,9 +668,9 @@ public:
     // The value must be a positive integer within the range [1, INT64_MAX].
     // The input can be in integer or scientific notation.
     static uint64_t parseStringToLong(const StringPiece strNum, UErrorCode &status) {
-        // We are processing well-formed input, so we don't need any special options to
-        // StringToDoubleConverter.
-        StringToDoubleConverter converter(0, 0, 0, "", "");
+        // Pass nullptr (not "") for the infinity/NaN symbols; "" would match an
+        // embedded NUL in strNum and read OOB in ConsumeSubStringImpl (ICU-23392).
+        StringToDoubleConverter converter(0, 0, 0, nullptr, nullptr);
         int32_t count;
         double double_result = converter.StringToDouble(strNum.data(), strNum.length(), &count);
         if (count != strNum.length()) {
