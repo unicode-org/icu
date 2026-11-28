@@ -236,7 +236,7 @@ void StringSearch::setText(const UnicodeString &text, UErrorCode &status)
 {
     if (U_SUCCESS(status)) {
         m_text_ = text;
-        usearch_setText(m_strsrch_, text.getBuffer(), text.length(), &status);
+        usearch_setText(m_strsrch_, m_text_.getBuffer(), m_text_.length(), &status);
     }
 }
 
