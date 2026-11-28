@@ -1020,12 +1020,13 @@ class ModulusSubstitution extends NFSubstitution {
             // but if it IS a >>> substitution, we have to do it here: we
             // use the specific rule's doParse() method, and then we have to
             // do some of the other work of NFRuleSet.parse()
+            double nextUpperBound = Math.min(upperBound, calcUpperBound(upperBound));
             Number tempResult =
                     ruleToUse.doParse(
                             text,
                             parsePosition,
                             false,
-                            upperBound,
+                            nextUpperBound,
                             nonNumericalExecutedRuleMask,
                             recursionCount + 1);
 

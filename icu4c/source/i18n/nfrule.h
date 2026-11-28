@@ -69,6 +69,9 @@ public:
     
     bool hasModulusSubstitution() const;
 
+    const NFSubstitution* getSub1() const { return sub1; }
+    const NFSubstitution* getSub2() const { return sub2; }
+
     void doFormat(int64_t number, UnicodeString& toAppendTo, int32_t pos, int32_t recursionCount, UErrorCode& status) const;
     void doFormat(double  number, UnicodeString& toAppendTo, int32_t pos, int32_t recursionCount, UErrorCode& status) const;
 
