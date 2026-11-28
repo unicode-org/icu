@@ -483,18 +483,10 @@ void RoundingImpl::apply(impl::DecimalQuantity &value, UErrorCode& status) const
                 // withMinDigits + withMaxDigits
                 displayMag = uprv_min(displayMag1, displayMag2);
             } else if (fPrecision.fUnion.fracSig.fPriority == UNUM_ROUNDING_PRIORITY_RELAXED) {
-                if (roundingMag2 <= roundingMag1) {
-                    displayMag = displayMag2;
-                } else {
-                    displayMag = displayMag1;
-                }
+                displayMag = uprv_min(displayMag1, displayMag2);
             } else {
                 U_ASSERT(fPrecision.fUnion.fracSig.fPriority == UNUM_ROUNDING_PRIORITY_STRICT);
-                if (roundingMag2 <= roundingMag1) {
-                    displayMag = displayMag1;
-                } else {
-                    displayMag = displayMag2;
-                }
+                displayMag = uprv_max(displayMag1, displayMag2);
             }
             resolvedMinFraction = uprv_max(0, -displayMag);
 
