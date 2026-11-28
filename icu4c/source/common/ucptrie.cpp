@@ -85,6 +85,12 @@ ucptrie_openFromBinary(UCPTrieType type,
     tempTrie.type = type;
     tempTrie.valueWidth = valueWidth;
 
+    // Validate that dataLength is large enough for the high-value offset fallback.
+    if (tempTrie.dataLength < UCPTRIE_HIGH_VALUE_NEG_DATA_OFFSET) {
+        *pErrorCode = U_INVALID_FORMAT_ERROR;
+        return nullptr;
+    }
+
     // Calculate the actual length.
     int32_t actualLength = (int32_t)sizeof(UCPTrieHeader) + tempTrie.indexLength * 2;
     if (valueWidth == UCPTRIE_VALUE_BITS_16) {
@@ -114,6 +120,22 @@ ucptrie_openFromBinary(UCPTrieType type,
     const uint16_t *p16 = (const uint16_t *)(header + 1);
     trie->index = p16;
     p16 += trie->indexLength;
+
+    // Validate fast index entries against data bounds.
+    int32_t fastIndexLength = (type == UCPTRIE_TYPE_FAST) ?
+        (0x10000 >> UCPTRIE_FAST_SHIFT) : (0x1000 >> UCPTRIE_FAST_SHIFT);
+    if (fastIndexLength > trie->indexLength) {
+        uprv_free(trie);
+        *pErrorCode = U_INVALID_FORMAT_ERROR;
+        return nullptr;
+    }
+    for (int32_t i = 0; i < fastIndexLength; ++i) {
+        if ((int32_t)trie->index[i] + UCPTRIE_FAST_DATA_MASK >= trie->dataLength) {
+            uprv_free(trie);
+            *pErrorCode = U_INVALID_FORMAT_ERROR;
+            return nullptr;
+        }
+    }
 
     // Get the data.
     int32_t nullValueOffset = trie->dataNullOffset;
