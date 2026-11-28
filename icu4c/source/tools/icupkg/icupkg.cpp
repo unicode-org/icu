@@ -57,7 +57,7 @@ printUsage(const char *pname, UBool isHelp) {
 
     fprintf(where,
             "%csage: %s [-h|-?|--help ] [-tl|-tb|-te] [-c] [-C comment]\n"
-            "\t[-a list] [-r list] [-x list] [-l [-o outputListFileName]]\n"
+            "\t[-a list] [-r list] [-x list] [-k list] [-l [-o outputListFileName]]\n"
             "\t[-s path] [-d path] [-w] [-m mode]\n"
             "\t[--ignore-deps]\n"
             "\t[--auto_toc_prefix] [--auto_toc_prefix_with_type] [--toc_prefix]\n"
@@ -108,6 +108,7 @@ printUsage(const char *pname, UBool isHelp) {
             "\t-a list or --add list      add items to the package\n"
             "\t-r list or --remove list   remove items from the package\n"
             "\t-x list or --extract list  extract items from the package\n"
+            "\t-k list or --keep list     keep only certain items from the package\n"
             "\tThe list can be a single item's filename,\n"
             "\tor a .txt filename with a list of item filenames,\n"
             "\tor an ICU .dat package filename.\n");
@@ -208,6 +209,7 @@ static UOption options[]={
     UOPTION_DEF("add", 'a', UOPT_REQUIRES_ARG),
     UOPTION_DEF("remove", 'r', UOPT_REQUIRES_ARG),
     UOPTION_DEF("extract", 'x', UOPT_REQUIRES_ARG),
+    UOPTION_DEF("keep", 'k', UOPT_REQUIRES_ARG),
 
     UOPTION_DEF("list", 'l', UOPT_NO_ARG),
     UOPTION_DEF("outlist", 'o', UOPT_REQUIRES_ARG),
@@ -237,6 +239,7 @@ enum {
     OPT_ADD_LIST,
     OPT_REMOVE_LIST,
     OPT_EXTRACT_LIST,
+    OPT_KEEP_LIST,
 
     OPT_LIST_ITEMS,
     OPT_LIST_FILE,
@@ -400,6 +403,7 @@ main(int argc, char *argv[]) {
             options[OPT_REMOVE_LIST].doesOccur ||
             options[OPT_ADD_LIST].doesOccur ||
             options[OPT_EXTRACT_LIST].doesOccur ||
+            options[OPT_KEEP_LIST].doesOccur ||
             options[OPT_LIST_ITEMS].doesOccur
         ) {
             printUsage(pname, false);
@@ -481,6 +485,23 @@ main(int argc, char *argv[]) {
         if(readList(nullptr, options[OPT_EXTRACT_LIST].value, false, listPkg)) {
             pkg->extractItems(destPath, *listPkg, outType);
             delete listPkg;
+        } else {
+            printUsage(pname, false);
+            return U_ILLEGAL_ARGUMENT_ERROR;
+        }
+    }
+
+    /* keep items */
+    if(options[OPT_KEEP_LIST].doesOccur) {
+        listPkg=new Package();
+        if(listPkg==nullptr) {
+            fprintf(stderr, "icupkg: not enough memory\n");
+            exit(U_MEMORY_ALLOCATION_ERROR);
+        }
+        if(readList(nullptr, options[OPT_KEEP_LIST].value, false, listPkg)) {
+            pkg->keepItems(*listPkg);
+            delete listPkg;
+            isModified=true;
         } else {
             printUsage(pname, false);
             return U_ILLEGAL_ARGUMENT_ERROR;
