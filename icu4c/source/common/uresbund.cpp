@@ -865,8 +865,8 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID,
             UErrorCode usrStatus = U_ZERO_ERROR;
             UResourceDataEntry *u1 = init_entry(t1->fName, usrDataPath, &usrStatus);
             // If we failed due to out-of-memory, report the failure and exit early.
-            if (intStatus == U_MEMORY_ALLOCATION_ERROR) {
-                *status = intStatus;
+            if (usrStatus == U_MEMORY_ALLOCATION_ERROR) {
+                *status = usrStatus;
                 goto finish;
             }
             if ( u1 != nullptr ) {
