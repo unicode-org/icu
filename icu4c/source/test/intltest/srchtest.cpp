@@ -172,6 +172,7 @@ void StringSearchTest::runIndexedTest(int32_t index, UBool exec,
         CASE(36, TestDiacriticMatch)
         CASE(37, TestBug22775)
         CASE(38, TestCEIndexOverflow)
+        CASE(39, TestSetTextLifetime)
         default: name = ""; break;
     }
 #else
@@ -1191,6 +1192,38 @@ void StringSearchTest::TestPattern()
     delete strsrch;
 }
  
+// ICU-22376: setText() handed the caller's buffer to usearch_setText while
+// keeping its own copy in m_text_.  For short (SSO) strings that buffer
+// lives inside the caller's UnicodeString object, so the search dangled
+// once the caller's string was destroyed.  The search must operate on the
+// owned copy instead.
+void StringSearchTest::TestSetTextLifetime() {
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString pattern("needle");
+    StringSearch search(pattern, UnicodeString("unused"),
+                        Locale::getEnglish(), NULL, status);
+    if (U_FAILURE(status)) {
+        errln("StringSearch constructor failed: %s", u_errorName(status));
+        return;
+    }
+
+    UnicodeString *hay = new UnicodeString("a needle in a haystack");
+    search.setText(*hay, status);
+    if (U_FAILURE(status)) {
+        errln("setText failed: %s", u_errorName(status));
+        delete hay;
+        return;
+    }
+    delete hay;  /* the text source is gone; the search must survive it */
+
+    status = U_ZERO_ERROR;
+    int32_t pos = search.first(status);
+    if (U_FAILURE(status) || pos != 2) {
+        errln("search after text-source destruction: pos %d status %s, "
+              "want pos 2 U_ZERO_ERROR", (int)pos, u_errorName(status));
+    }
+}
+
 void StringSearchTest::TestText()
 {
     char16_t temp[128];

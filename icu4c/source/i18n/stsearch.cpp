@@ -236,7 +236,10 @@ void StringSearch::setText(const UnicodeString &text, UErrorCode &status)
 {
     if (U_SUCCESS(status)) {
         m_text_ = text;
-        usearch_setText(m_strsrch_, text.getBuffer(), text.length(), &status);
+        // Use the buffer of the owned copy: text.getBuffer() points into the
+        // caller's UnicodeString object for short (SSO) strings, and the
+        // search would dangle once that object is destroyed (ICU-22376).
+        usearch_setText(m_strsrch_, m_text_.getBuffer(), m_text_.length(), &status);
     }
 }
 
