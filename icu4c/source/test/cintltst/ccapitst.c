@@ -25,10 +25,12 @@
 #include "unicode/ucnv.h"
 #include "unicode/ucnv_err.h"
 #include "unicode/putil.h"
+#include "unicode/udata.h" /* for UDataInfo */
 #include "unicode/uset.h"
 #include "unicode/ustring.h"
 #include "unicode/utf8.h"
 #include "ucnv_bld.h" /* for sizeof(UConverter) */
+#include "ucnvmbcs.h" /* for _MBCSHeader, MBCS_OPT_NO_FROM_U */
 #include "cmemory.h"  /* for UAlignedMemory */
 #include "cintltst.h"
 #include "ccapitst.h"
@@ -84,6 +86,9 @@ static void TestSubstString(void);
 static void InvalidArguments(void);
 static void TestGetName(void);
 static void TestUTFBOM(void);
+#if !UCONFIG_NO_FILE_IO
+static void TestMBCSLoadFullStage2Wrap(void);
+#endif
 
 void addTestConvert(TestNode** root);
 
@@ -122,6 +127,9 @@ void addTestConvert(TestNode** root)
     addTest(root, &InvalidArguments,            "tsconv/ccapitst/InvalidArguments");
     addTest(root, &TestGetName,                 "tsconv/ccapitst/TestGetName");
     addTest(root, &TestUTFBOM,                  "tsconv/ccapitst/TestUTFBOM");
+#if !UCONFIG_NO_FILE_IO
+    addTest(root, &TestMBCSLoadFullStage2Wrap,  "tsconv/ccapitst/TestMBCSLoadFullStage2Wrap");
+#endif
 }
 
 static void ListNames(void) {
@@ -3890,3 +3898,180 @@ static void TestUTFBOM(void) {
         ucnv_close(cnv);
     }
 }
+
+#if !UCONFIG_NO_FILE_IO
+/*
+ * Regression test for the uint32_t size wrap in reconstituteData() (ucnvmbcs.cpp).
+ *
+ * A .cnv table with MBCS_OPT_NO_FROM_U stores only the top of fromUnicode stage 2;
+ * the loader rebuilds the rest in reconstituteData(), which computes
+ *     dataLength = stage1Length*2 + fullStage2Length*4 + fromUBytesLength   (uint32_t)
+ * with fullStage2Length read from the _MBCSHeader. A corrupted large
+ * fullStage2Length wraps that sum to a small value: uprv_malloc() then allocates
+ * a buffer smaller than the stage-1 copy (uprv_memcpy of stage1Length*2 bytes) and
+ * the copy overruns the heap buffer. The loader must reject such tables with
+ * U_INVALID_TABLE_FORMAT instead.
+ *
+ * The test builds a minimal MBCS v5 MBCS_OPT_NO_FROM_U table - the only table
+ * format that reaches reconstituteData() - and loads it with a corrupted
+ * fullStage2Length (must be rejected), with a valid fullStage2Length (must still
+ * load) and a real makeconv-built converter as a control.
+ */
+enum {
+    kTestStage1Length = 0x40,   /* uint16_t units; BMP-only table */
+    kTestStage2Length = 1,      /* uint32_t units; the stored top of stage 2 */
+    kTestCountStates = 1,       /* state table: 1 * 256 int32_t, all final+illegal */
+    /* 0x3fffffff*4 plus the other terms wraps the uint32_t sum to 124
+     * while the stage-1 copy writes 128 bytes: heap buffer overflow. */
+    kTestWrapFullStage2Length = 0x3fffffff
+};
+
+static int32_t buildWrapTestTable(uint8_t *buf, int32_t capacity, uint32_t fullStage2Length) {
+    /* File layout: data-file header, UConverterStaticData, then the MBCS table
+     * (_MBCSHeader + state table + stored stage 1/2 parts). */
+    static const char kName[] = "ccapitst_mbcswrap";
+    const int32_t stateOffset = (int32_t)sizeof(_MBCSHeader);
+    const int32_t fromUTableOffset = stateOffset + kTestCountStates * 256 * (int32_t)sizeof(int32_t);
+    const int32_t fromUBytesOffset = fromUTableOffset + kTestStage1Length * 2 + kTestStage2Length * 4;
+    const int32_t headerSize = 32;
+    const int32_t totalSize = headerSize + (int32_t)sizeof(UConverterStaticData) + fromUBytesOffset;
+    UConverterStaticData *staticData;
+    _MBCSHeader *header;
+    int32_t *stateTable;
+    UDataInfo info;
+    uint16_t headerSizeField;
+    int32_t i;
+
+    if (totalSize > capacity) {
+        return 0;
+    }
+    memset(buf, 0, (size_t)totalSize);
+
+    /* data-file header: see ucmndata.h DataHeader */
+    headerSizeField = (uint16_t)headerSize;
+    memcpy(buf, &headerSizeField, sizeof(headerSizeField));  /* native-endian uint16_t */
+    buf[2] = 0xda;                         /* magic1 */
+    buf[3] = 0x27;                         /* magic2 */
+    memset(&info, 0, sizeof(info));
+    info.size = (uint16_t)sizeof(UDataInfo);
+    info.isBigEndian = (uint8_t)U_IS_BIG_ENDIAN;
+    info.charsetFamily = (uint8_t)U_CHARSET_FAMILY;
+    info.sizeofUChar = (uint8_t)sizeof(UChar);
+    info.dataFormat[0] = 0x63;             /* dataFormat "cnvt" */
+    info.dataFormat[1] = 0x6e;
+    info.dataFormat[2] = 0x76;
+    info.dataFormat[3] = 0x74;
+    info.formatVersion[0] = 6;             /* >= 6.1: unicodeMask is taken from staticData */
+    info.formatVersion[1] = 2;
+    memcpy(buf + 4, &info, sizeof(info));
+
+    /* UConverterStaticData */
+    staticData = (UConverterStaticData *)(buf + headerSize);
+    staticData->structSize = (uint32_t)sizeof(UConverterStaticData);
+    strncpy(staticData->name, kName, UCNV_MAX_CONVERTER_NAME_LENGTH - 1);
+    staticData->conversionType = (int8_t)UCNV_MBCS;
+    staticData->minBytesPerChar = 1;
+    staticData->maxBytesPerChar = 4;
+    staticData->subChar[0] = 0x1a;
+    staticData->subCharLen = 1;
+    staticData->unicodeMask = 0;           /* no UCNV_HAS_SUPPLEMENTARY */
+
+    /* _MBCSHeader */
+    header = (_MBCSHeader *)(buf + headerSize + sizeof(UConverterStaticData));
+    header->version[0] = 5;
+    header->version[1] = 4;
+    header->countStates = kTestCountStates;
+    header->countToUFallbacks = 0;
+    header->offsetToUCodeUnits = (uint32_t)fromUTableOffset;
+    header->offsetFromUTable = (uint32_t)fromUTableOffset;
+    header->offsetFromUBytes = (uint32_t)fromUBytesOffset;
+    header->flags = MBCS_OUTPUT_2;
+    header->fromUBytesLength = 0;
+    header->options = (uint32_t)(MBCS_OPT_NO_FROM_U | sizeof(_MBCSHeader) / 4);
+    header->fullStage2Length = fullStage2Length;
+
+    /* state table: every byte maps to an illegal final entry */
+    stateTable = (int32_t *)((uint8_t *)header + stateOffset);
+    for (i = 0; i < kTestCountStates * 256; ++i) {
+        stateTable[i] = MBCS_ENTRY_FINAL(0, MBCS_STATE_ILLEGAL, 0);
+    }
+    return totalSize;
+}
+
+static void TestMBCSLoadFullStage2Wrap(void) {
+    static const char kName[] = "ccapitst_mbcswrap";
+    /* union keeps the table buffer aligned for the struct casts in the builder */
+    static union { double align; uint8_t bytes[2048]; } table;
+    uint8_t *buf = table.bytes;
+    const char *dataOutDir = ctest_dataOutDir();
+    char dirPath[1024];
+    char filePath[1200];
+    int32_t dirLen, size;
+    FILE *f;
+    UErrorCode errorCode;
+    UConverter *cnv;
+
+    dirLen = (int32_t)strlen(dataOutDir);
+    while (dirLen > 0 && (dataOutDir[dirLen - 1] == '/' || dataOutDir[dirLen - 1] == '\\')) {
+        --dirLen;   /* ucnv_openPackage() takes the directory without a trailing separator */
+    }
+    if (dirLen <= 0 || dirLen >= (int32_t)sizeof(dirPath)) {
+        log_err("test data output directory path unusable\n");
+        return;
+    }
+    memcpy(dirPath, dataOutDir, (size_t)dirLen);
+    dirPath[dirLen] = 0;
+    snprintf(filePath, sizeof(filePath), "%s/%s.cnv", dirPath, kName);
+
+    /* 1. Corrupted table: must be rejected with U_INVALID_TABLE_FORMAT.
+     * (Without the overflow check this overruns the undersized heap buffer.) */
+    size = buildWrapTestTable(buf, (int32_t)sizeof(table.bytes), kTestWrapFullStage2Length);
+    f = fopen(filePath, "wb");
+    if (f == NULL || size <= 0 || fwrite(buf, 1, (size_t)size, f) != (size_t)size) {
+        log_err("unable to write %s\n", filePath);
+        if (f != NULL) {
+            fclose(f);
+        }
+        return;
+    }
+    fclose(f);
+    fflush(NULL);   /* keep the verdict visible if the loader crashes */
+    errorCode = U_ZERO_ERROR;
+    cnv = ucnv_openPackage(dirPath, kName, &errorCode);
+    if (cnv != NULL || errorCode != U_INVALID_TABLE_FORMAT) {
+        log_err("fullStage2Length wrap not rejected: cnv=%p error=%s want U_INVALID_TABLE_FORMAT\n",
+                (void *)cnv, u_errorName(errorCode));
+        ucnv_close(cnv);
+    }
+
+    /* 2. Same table with a valid fullStage2Length must still load. */
+    size = buildWrapTestTable(buf, (int32_t)sizeof(table.bytes), kTestStage2Length);
+    f = fopen(filePath, "wb");
+    if (f == NULL || size <= 0 || fwrite(buf, 1, (size_t)size, f) != (size_t)size) {
+        log_err("unable to write %s\n", filePath);
+        if (f != NULL) {
+            fclose(f);
+        }
+        return;
+    }
+    fclose(f);
+    errorCode = U_ZERO_ERROR;
+    cnv = ucnv_openPackage(dirPath, kName, &errorCode);
+    if (U_FAILURE(errorCode) || cnv == NULL) {
+        log_err("valid MBCS_OPT_NO_FROM_U table failed to load: %s\n", u_errorName(errorCode));
+    }
+    ucnv_close(cnv);
+
+    remove(filePath);
+
+#if !UCONFIG_NO_LEGACY_CONVERSION
+    /* 3. Control: a real makeconv-built converter still loads. */
+    errorCode = U_ZERO_ERROR;
+    cnv = cnv_open("*test4", &errorCode);
+    if (U_FAILURE(errorCode) || cnv == NULL) {
+        log_data_err("test4 converter failed to load: %s\n", u_errorName(errorCode));
+    }
+    ucnv_close(cnv);
+#endif
+}
+#endif
