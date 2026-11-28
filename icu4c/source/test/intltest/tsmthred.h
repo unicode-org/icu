@@ -49,6 +49,9 @@ public:
     void TestBreakTranslit();
     void TestIncDec();
     void Test20104();
+#if !UCONFIG_NO_COLLATION && !UCONFIG_NO_BREAK_ITERATION
+    void TestInitializeFCD();
+#endif
 };
 
 #endif
