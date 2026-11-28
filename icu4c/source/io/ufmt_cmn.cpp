@@ -149,7 +149,7 @@ ufmt_uto64(const char16_t  *buffer,
     result    = 0;
     
     /* iterate through buffer */
-    while(ufmt_isdigit(*buffer, radix) && buffer < limit) {
+    while(buffer < limit && ufmt_isdigit(*buffer, radix)) {
         
         /* read the next digit */
         result *= radix;
@@ -181,7 +181,7 @@ ufmt_utop(const char16_t  *buffer,
     result.ptr = nullptr;
 
     /* Skip the leading zeros */
-    while(buffer[count] == DIGIT_0 || u_isspace(buffer[count])) {
+    while(count < *len && (buffer[count] == DIGIT_0 || u_isspace(buffer[count]))) {
         count++;
         offset++;
     }
